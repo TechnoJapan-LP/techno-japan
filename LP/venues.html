@@ -181,15 +181,16 @@ nav .nav-links a:hover { opacity: 1; }
   transition: background 0.3s ease;
 }
 .map-toggle-btn.active .pin-icon { background: var(--bg); }
-#venue-map-wrap {
+.map-toggle-group { display: flex; gap: 12px; }
+#venue-map-wrap, #osaka-map-wrap, #nagoya-map-wrap, #kyoto-map-wrap, #hakuba-map-wrap {
   display: none; margin: 0 40px 32px; border: 1px solid rgba(240,237,232,0.1);
   overflow: hidden;
 }
-#venue-map-filters {
+#venue-map-filters, #osaka-map-filters, #nagoya-map-filters, #kyoto-map-filters, #hakuba-map-filters {
   display: flex; gap: 8px; padding: 12px 16px; flex-wrap: wrap;
   background: rgba(8,8,8,0.9); border-bottom: 1px solid rgba(240,237,232,0.06);
 }
-#venue-map { height: 420px; background: var(--bg); }
+#venue-map, #osaka-map, #nagoya-map, #kyoto-map, #hakuba-map { height: 420px; background: var(--bg); }
 .leaflet-container { background: var(--bg) !important; }
 .leaflet-control-attribution, .leaflet-control-zoom { display: none !important; }
 .vm-pin {
@@ -285,11 +286,33 @@ footer { padding: 60px 40px 40px; border-top: 1px solid rgba(240,237,232,0.08); 
 <main id="venues-list-view">
   <div class="map-toggle-bar">
     <div></div>
-    <button class="map-toggle-btn" id="venue-map-toggle"><span class="pin-icon"></span> TOKYO MAP</button>
+    <div class="map-toggle-group">
+      <button class="map-toggle-btn" id="venue-map-toggle"><span class="pin-icon"></span> TOKYO</button>
+      <button class="map-toggle-btn" id="osaka-map-toggle"><span class="pin-icon"></span> OSAKA</button>
+      <button class="map-toggle-btn" id="nagoya-map-toggle"><span class="pin-icon"></span> NAGOYA</button>
+      <button class="map-toggle-btn" id="kyoto-map-toggle"><span class="pin-icon"></span> KYOTO</button>
+      <button class="map-toggle-btn" id="hakuba-map-toggle"><span class="pin-icon"></span> HAKUBA</button>
+    </div>
   </div>
   <div id="venue-map-wrap">
     <div id="venue-map-filters"></div>
     <div id="venue-map"></div>
+  </div>
+  <div id="osaka-map-wrap">
+    <div id="osaka-map-filters"></div>
+    <div id="osaka-map"></div>
+  </div>
+  <div id="nagoya-map-wrap" style="display:none">
+    <div id="nagoya-map-filters"></div>
+    <div id="nagoya-map"></div>
+  </div>
+  <div id="kyoto-map-wrap" style="display:none">
+    <div id="kyoto-map-filters"></div>
+    <div id="kyoto-map"></div>
+  </div>
+  <div id="hakuba-map-wrap" style="display:none">
+    <div id="hakuba-map-filters"></div>
+    <div id="hakuba-map"></div>
   </div>
   <div class="venues-grid" id="venues-grid"></div>
 </main>
@@ -313,7 +336,7 @@ footer { padding: 60px 40px 40px; border-top: 1px solid rgba(240,237,232,0.08); 
   </div>
 </footer>
 
-<script src="data.js?v=2"></script>
+<script src="data.js?v=3"></script>
 <script>
 const MONTHS_SHORT = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
 function parseDate(s) { const [y,m,d] = s.split('-').map(Number); return new Date(y,m-1,d); }
@@ -508,13 +531,14 @@ function initVenueMap() {
 
 function renderVmFilters() {
   const bar = document.getElementById('venue-map-filters');
-  const genres = ['ALL','TECHNO','HOUSE','EXPERIMENTAL','LIVE'];
+  const genres = ['ALL','TECHNO','HOUSE','OTHERS'];
   bar.innerHTML = genres.map(g =>
     `<button class="vm-pill${vmGenre===g?' active':''}" data-genre="${g}">${g}</button>`
   ).join('') +
   '<span style="width:1px;height:16px;background:rgba(240,237,232,0.08);margin:0 4px"></span>' +
   `<button class="vm-pill${vmType==='club'?' active':''}" data-type="club">CLUBS</button>` +
-  `<button class="vm-pill${vmType==='bar'?' active':''}" data-type="bar">BARS</button>`;
+  `<button class="vm-pill${vmType==='bar'?' active':''}" data-type="bar">BARS</button>` +
+  `<button class="vm-pill${vmType==='livehouse'?' active':''}" data-type="livehouse">LIVEHOUSE</button>`;
   bar.querySelectorAll('.vm-pill[data-genre]').forEach(p => {
     p.addEventListener('click', () => { vmGenre = p.dataset.genre; renderVmFilters(); renderVmMarkers(); });
   });
@@ -539,18 +563,203 @@ function renderVmMarkers() {
   });
 }
 
-document.getElementById('venue-map-toggle').addEventListener('click', function() {
-  const wrap = document.getElementById('venue-map-wrap');
-  if (vmVisible) {
-    wrap.style.display = 'none';
-    this.classList.remove('active');
-    vmVisible = false;
-  } else {
-    wrap.style.display = 'block';
-    this.classList.add('active');
-    vmVisible = true;
-    setTimeout(() => { initVenueMap(); vmMap.invalidateSize(); }, 50);
-  }
+/* ========== OSAKA MAP ========== */
+const OM_CLUBS = VENUES.filter(v => v.city === 'OSAKA' && v.lat);
+
+let omMap = null;
+let omMarkers = [];
+let omGenre = 'ALL';
+let omType = null;
+let omVisible = false;
+
+function initOsakaMap() {
+  if (omMap) return;
+  omMap = L.map('osaka-map', {
+    center: [34.6700, 135.4980], zoom: 14,
+    minZoom: 11, maxZoom: 18,
+    zoomControl: false, attributionControl: false
+  });
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    subdomains: 'abcd', maxZoom: 19
+  }).addTo(omMap);
+  renderOmFilters();
+  renderOmMarkers();
+}
+
+function renderOmFilters() {
+  const bar = document.getElementById('osaka-map-filters');
+  const genres = ['ALL','TECHNO','HOUSE','OTHERS'];
+  bar.innerHTML = genres.map(g =>
+    `<button class="vm-pill${omGenre===g?' active':''}" data-genre="${g}">${g}</button>`
+  ).join('') +
+  '<span style="width:1px;height:16px;background:rgba(240,237,232,0.08);margin:0 4px"></span>' +
+  `<button class="vm-pill${omType==='club'?' active':''}" data-type="club">CLUBS</button>` +
+  `<button class="vm-pill${omType==='bar'?' active':''}" data-type="bar">BARS</button>` +
+  `<button class="vm-pill${omType==='livehouse'?' active':''}" data-type="livehouse">LIVEHOUSE</button>`;
+  bar.querySelectorAll('.vm-pill[data-genre]').forEach(p => {
+    p.addEventListener('click', () => { omGenre = p.dataset.genre; renderOmFilters(); renderOmMarkers(); });
+  });
+  bar.querySelectorAll('.vm-pill[data-type]').forEach(p => {
+    p.addEventListener('click', () => { omType = omType === p.dataset.type ? null : p.dataset.type; renderOmFilters(); renderOmMarkers(); });
+  });
+}
+
+function renderOmMarkers() {
+  omMarkers.forEach(m => omMap.removeLayer(m));
+  omMarkers = [];
+  let filtered = OM_CLUBS;
+  if (omGenre !== 'ALL') filtered = filtered.filter(c => c.genre.some(g => g.includes(omGenre)));
+  if (omType) filtered = filtered.filter(c => c.type === omType);
+  filtered.forEach(c => {
+    const cls = c.type === 'bar' ? 'vm-pin-bar' : 'vm-pin';
+    const icon = L.divIcon({ className: '', html: `<div class="${cls}"></div>`, iconSize: [9,9], iconAnchor: [4.5,4.5] });
+    const m = L.marker([c.lat, c.lng], { icon }).addTo(omMap);
+    m.bindTooltip(c.name, { className: 'vm-label', direction: 'right', offset: [8,0], permanent: false });
+    m.on('click', () => { window.location.hash = 'venue/' + c.id; });
+    omMarkers.push(m);
+  });
+}
+
+/* ========== NAGOYA MAP ========== */
+const NM_CLUBS = VENUES.filter(v => v.city === 'NAGOYA' && v.lat);
+let nmMap = null, nmMarkers = [], nmGenre = 'ALL', nmType = null, nmVisible = false;
+
+function initNagoyaMap() {
+  if (nmMap) return;
+  nmMap = L.map('nagoya-map', { center: [35.1680, 136.9070], zoom: 14, minZoom: 11, maxZoom: 18, zoomControl: false, attributionControl: false });
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { subdomains: 'abcd', maxZoom: 19 }).addTo(nmMap);
+  renderNmFilters(); renderNmMarkers();
+}
+function renderNmFilters() {
+  const bar = document.getElementById('nagoya-map-filters');
+  const genres = ['ALL','TECHNO','HOUSE','OTHERS'];
+  bar.innerHTML = genres.map(g => `<button class="vm-pill${nmGenre===g?' active':''}" data-genre="${g}">${g}</button>`).join('') +
+  '<span style="width:1px;height:16px;background:rgba(240,237,232,0.08);margin:0 4px"></span>' +
+  `<button class="vm-pill${nmType==='club'?' active':''}" data-type="club">CLUBS</button>` +
+  `<button class="vm-pill${nmType==='bar'?' active':''}" data-type="bar">BARS</button>` +
+  `<button class="vm-pill${nmType==='livehouse'?' active':''}" data-type="livehouse">LIVEHOUSE</button>`;
+  bar.querySelectorAll('.vm-pill[data-genre]').forEach(p => { p.addEventListener('click', () => { nmGenre = p.dataset.genre; renderNmFilters(); renderNmMarkers(); }); });
+  bar.querySelectorAll('.vm-pill[data-type]').forEach(p => { p.addEventListener('click', () => { nmType = nmType === p.dataset.type ? null : p.dataset.type; renderNmFilters(); renderNmMarkers(); }); });
+}
+function renderNmMarkers() {
+  nmMarkers.forEach(m => nmMap.removeLayer(m)); nmMarkers = [];
+  let filtered = NM_CLUBS;
+  if (nmGenre !== 'ALL') filtered = filtered.filter(c => c.genre.some(g => g.includes(nmGenre)));
+  if (nmType) filtered = filtered.filter(c => c.type === nmType);
+  filtered.forEach(c => {
+    const cls = c.type === 'bar' ? 'vm-pin-bar' : 'vm-pin';
+    const icon = L.divIcon({ className: '', html: `<div class="${cls}"></div>`, iconSize: [9,9], iconAnchor: [4.5,4.5] });
+    const m = L.marker([c.lat, c.lng], { icon }).addTo(nmMap);
+    m.bindTooltip(c.name, { className: 'vm-label', direction: 'right', offset: [8,0], permanent: false });
+    m.on('click', () => { window.location.hash = 'venue/' + c.id; });
+    nmMarkers.push(m);
+  });
+}
+
+/* ========== KYOTO MAP ========== */
+const KM_CLUBS = VENUES.filter(v => v.city === 'KYOTO' && v.lat);
+let kmMap = null, kmMarkers = [], kmGenre = 'ALL', kmType = null, kmVisible = false;
+
+function initKyotoMap() {
+  if (kmMap) return;
+  kmMap = L.map('kyoto-map', { center: [35.0090, 135.7750], zoom: 14, minZoom: 11, maxZoom: 18, zoomControl: false, attributionControl: false });
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { subdomains: 'abcd', maxZoom: 19 }).addTo(kmMap);
+  renderKmFilters(); renderKmMarkers();
+}
+function renderKmFilters() {
+  const bar = document.getElementById('kyoto-map-filters');
+  const genres = ['ALL','TECHNO','HOUSE','OTHERS'];
+  bar.innerHTML = genres.map(g => `<button class="vm-pill${kmGenre===g?' active':''}" data-genre="${g}">${g}</button>`).join('') +
+  '<span style="width:1px;height:16px;background:rgba(240,237,232,0.08);margin:0 4px"></span>' +
+  `<button class="vm-pill${kmType==='club'?' active':''}" data-type="club">CLUBS</button>` +
+  `<button class="vm-pill${kmType==='bar'?' active':''}" data-type="bar">BARS</button>` +
+  `<button class="vm-pill${kmType==='livehouse'?' active':''}" data-type="livehouse">LIVEHOUSE</button>`;
+  bar.querySelectorAll('.vm-pill[data-genre]').forEach(p => { p.addEventListener('click', () => { kmGenre = p.dataset.genre; renderKmFilters(); renderKmMarkers(); }); });
+  bar.querySelectorAll('.vm-pill[data-type]').forEach(p => { p.addEventListener('click', () => { kmType = kmType === p.dataset.type ? null : p.dataset.type; renderKmFilters(); renderKmMarkers(); }); });
+}
+function renderKmMarkers() {
+  kmMarkers.forEach(m => kmMap.removeLayer(m)); kmMarkers = [];
+  let filtered = KM_CLUBS;
+  if (kmGenre !== 'ALL') filtered = filtered.filter(c => c.genre.some(g => g.includes(kmGenre)));
+  if (kmType) filtered = filtered.filter(c => c.type === kmType);
+  filtered.forEach(c => {
+    const cls = c.type === 'bar' ? 'vm-pin-bar' : 'vm-pin';
+    const icon = L.divIcon({ className: '', html: `<div class="${cls}"></div>`, iconSize: [9,9], iconAnchor: [4.5,4.5] });
+    const m = L.marker([c.lat, c.lng], { icon }).addTo(kmMap);
+    m.bindTooltip(c.name, { className: 'vm-label', direction: 'right', offset: [8,0], permanent: false });
+    m.on('click', () => { window.location.hash = 'venue/' + c.id; });
+    kmMarkers.push(m);
+  });
+}
+
+/* ========== HAKUBA MAP ========== */
+const HM_CLUBS = VENUES.filter(v => v.city === 'HAKUBA' && v.lat);
+let hmMap = null, hmMarkers = [], hmGenre = 'ALL', hmType = null, hmVisible = false;
+
+function initHakubaMap() {
+  if (hmMap) return;
+  hmMap = L.map('hakuba-map', { center: [36.6980, 137.8300], zoom: 13, minZoom: 11, maxZoom: 18, zoomControl: false, attributionControl: false });
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { subdomains: 'abcd', maxZoom: 19 }).addTo(hmMap);
+  renderHmFilters(); renderHmMarkers();
+}
+function renderHmFilters() {
+  const bar = document.getElementById('hakuba-map-filters');
+  const genres = ['ALL','TECHNO','HOUSE','OTHERS'];
+  bar.innerHTML = genres.map(g => `<button class="vm-pill${hmGenre===g?' active':''}" data-genre="${g}">${g}</button>`).join('') +
+  '<span style="width:1px;height:16px;background:rgba(240,237,232,0.08);margin:0 4px"></span>' +
+  `<button class="vm-pill${hmType==='club'?' active':''}" data-type="club">CLUBS</button>` +
+  `<button class="vm-pill${hmType==='bar'?' active':''}" data-type="bar">BARS</button>` +
+  `<button class="vm-pill${hmType==='livehouse'?' active':''}" data-type="livehouse">LIVEHOUSE</button>`;
+  bar.querySelectorAll('.vm-pill[data-genre]').forEach(p => { p.addEventListener('click', () => { hmGenre = p.dataset.genre; renderHmFilters(); renderHmMarkers(); }); });
+  bar.querySelectorAll('.vm-pill[data-type]').forEach(p => { p.addEventListener('click', () => { hmType = hmType === p.dataset.type ? null : p.dataset.type; renderHmFilters(); renderHmMarkers(); }); });
+}
+function renderHmMarkers() {
+  hmMarkers.forEach(m => hmMap.removeLayer(m)); hmMarkers = [];
+  let filtered = HM_CLUBS;
+  if (hmGenre !== 'ALL') filtered = filtered.filter(c => c.genre.some(g => g.includes(hmGenre)));
+  if (hmType) filtered = filtered.filter(c => c.type === hmType);
+  filtered.forEach(c => {
+    const cls = c.type === 'bar' ? 'vm-pin-bar' : 'vm-pin';
+    const icon = L.divIcon({ className: '', html: `<div class="${cls}"></div>`, iconSize: [9,9], iconAnchor: [4.5,4.5] });
+    const m = L.marker([c.lat, c.lng], { icon }).addTo(hmMap);
+    m.bindTooltip(c.name, { className: 'vm-label', direction: 'right', offset: [8,0], permanent: false });
+    m.on('click', () => { window.location.hash = 'venue/' + c.id; });
+    hmMarkers.push(m);
+  });
+}
+
+/* ========== MAP TOGGLE — mutual exclusivity ========== */
+const ALL_MAPS = [
+  { id: 'venue', toggleId: 'venue-map-toggle', wrapId: 'venue-map-wrap', init: () => { initVenueMap(); vmMap.invalidateSize(); }, getVisible: () => vmVisible, setVisible: v => vmVisible = v },
+  { id: 'osaka', toggleId: 'osaka-map-toggle', wrapId: 'osaka-map-wrap', init: () => { initOsakaMap(); omMap.invalidateSize(); }, getVisible: () => omVisible, setVisible: v => omVisible = v },
+  { id: 'nagoya', toggleId: 'nagoya-map-toggle', wrapId: 'nagoya-map-wrap', init: () => { initNagoyaMap(); nmMap.invalidateSize(); }, getVisible: () => nmVisible, setVisible: v => nmVisible = v },
+  { id: 'kyoto', toggleId: 'kyoto-map-toggle', wrapId: 'kyoto-map-wrap', init: () => { initKyotoMap(); kmMap.invalidateSize(); }, getVisible: () => kmVisible, setVisible: v => kmVisible = v },
+  { id: 'hakuba', toggleId: 'hakuba-map-toggle', wrapId: 'hakuba-map-wrap', init: () => { initHakubaMap(); hmMap.invalidateSize(); }, getVisible: () => hmVisible, setVisible: v => hmVisible = v },
+];
+
+ALL_MAPS.forEach(mapDef => {
+  document.getElementById(mapDef.toggleId).addEventListener('click', function() {
+    // Close all other maps
+    ALL_MAPS.forEach(other => {
+      if (other.id !== mapDef.id && other.getVisible()) {
+        document.getElementById(other.wrapId).style.display = 'none';
+        document.getElementById(other.toggleId).classList.remove('active');
+        other.setVisible(false);
+      }
+    });
+    // Toggle this map
+    const wrap = document.getElementById(mapDef.wrapId);
+    if (mapDef.getVisible()) {
+      wrap.style.display = 'none';
+      this.classList.remove('active');
+      mapDef.setVisible(false);
+    } else {
+      wrap.style.display = 'block';
+      this.classList.add('active');
+      mapDef.setVisible(true);
+      setTimeout(() => mapDef.init(), 50);
+    }
+  });
 });
 
 /* INIT */

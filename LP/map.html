@@ -194,11 +194,11 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
   <button class="filter-pill active" data-genre="ALL">ALL</button>
   <button class="filter-pill" data-genre="TECHNO">TECHNO</button>
   <button class="filter-pill" data-genre="HOUSE">HOUSE</button>
-  <button class="filter-pill" data-genre="EXPERIMENTAL">EXPERIMENTAL</button>
-  <button class="filter-pill" data-genre="LIVE">LIVE</button>
+  <button class="filter-pill" data-genre="OTHERS">OTHERS</button>
   <span style="width:1px;height:20px;background:rgba(240,237,232,0.1);flex-shrink:0;margin:0 6px"></span>
   <button class="filter-pill" data-type="club">CLUBS</button>
   <button class="filter-pill" data-type="bar">BARS</button>
+  <button class="filter-pill" data-type="livehouse">LIVEHOUSE</button>
 </div>
 
 <div id="map"></div>
@@ -223,7 +223,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
 
 <div class="hint-strip" id="hint-strip">SCROLL TO ZOOM &middot; CLICK PIN FOR INFO</div>
 
-<script src="data.js?v=2"></script>
+<script src="data.js?v=3"></script>
 <script>
 /* ==========================================================
    CLUB DATA — derived from shared VENUES in data.js
@@ -379,8 +379,7 @@ const FILTER_MAP = {
   'ALL': null,
   'TECHNO': 'TECHNO',
   'HOUSE': 'HOUSE',
-  'EXPERIMENTAL': 'EXPERIMENTAL',
-  'LIVE': 'LIVE'
+  'OTHERS': 'OTHERS'
 };
 
 document.querySelectorAll('.filter-pill[data-genre]').forEach(pill => {

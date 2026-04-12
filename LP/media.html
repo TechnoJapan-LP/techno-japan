@@ -254,7 +254,16 @@ nav .nav-links a:hover { opacity: 1; }
   animation: mapSlideIn 0.4s cubic-bezier(0.16,1,0.3,1) forwards;
 }
 @keyframes mapSlideIn { from { opacity: 0; max-height: 0; } to { opacity: 1; max-height: 500px; } }
-#venues-map { height: 400px; background: var(--bg); }
+#venues-map, #osaka-map { height: 400px; background: var(--bg); }
+#osaka-map-wrap {
+  margin-bottom: 32px; border: 1px solid rgba(240,237,232,0.1);
+  overflow: hidden; position: relative;
+  animation: mapSlideIn 0.4s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+#osaka-filter-bar {
+  display: flex; gap: 8px; padding: 12px 16px; flex-wrap: wrap;
+  background: rgba(8,8,8,0.9); border-bottom: 1px solid rgba(240,237,232,0.06);
+}
 .leaflet-container { background: var(--bg) !important; }
 .leaflet-control-attribution, .leaflet-control-zoom { display: none !important; }
 .embed-map-pin {
@@ -360,13 +369,18 @@ footer { padding: 60px 40px 40px; border-top: 1px solid rgba(240,237,232,0.08); 
 
 <!-- TABS -->
 <div class="tabs">
-  <button class="tab active" data-tab="events">EVENTS<span class="tab-count" id="count-events"></span></button>
+  <button class="tab active" data-tab="festivals">FESTIVALS<span class="tab-count" id="count-festivals"></span></button>
+  <button class="tab" data-tab="events">EVENTS<span class="tab-count" id="count-events"></span></button>
   <button class="tab" data-tab="artists">ARTISTS<span class="tab-count" id="count-artists"></span></button>
   <button class="tab" data-tab="venues">VENUES<span class="tab-count" id="count-venues"></span></button>
 </div>
 
 <!-- PANELS -->
-<div class="panel active" id="panel-events">
+<div class="panel active" id="panel-festivals">
+  <div class="result-count" id="festivals-result-count"></div>
+  <div id="festivals-list"></div>
+</div>
+<div class="panel" id="panel-events">
   <div class="city-filters" id="event-city-filters"></div>
   <div class="result-count" id="events-result-count"></div>
   <div id="events-list"></div>
@@ -385,6 +399,10 @@ footer { padding: 60px 40px 40px; border-top: 1px solid rgba(240,237,232,0.08); 
     <div id="map-filter-bar"></div>
     <div id="venues-map"></div>
   </div>
+  <div id="osaka-map-wrap" style="display:none">
+    <div id="osaka-filter-bar"></div>
+    <div id="osaka-map"></div>
+  </div>
   <div id="venues-list"></div>
 </div>
 
@@ -401,7 +419,7 @@ footer { padding: 60px 40px 40px; border-top: 1px solid rgba(240,237,232,0.08); 
   </div>
 </footer>
 
-<script src="data.js?v=2"></script>
+<script src="data.js?v=3"></script>
 <script>
 /* ========== HELPERS ========== */
 const MONTHS_S = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
@@ -415,9 +433,9 @@ function getArtistEventCount(id) { return EVENTS.filter(e => e.lineup && e.lineu
 function uniqueCities(arr) { return [...new Set(arr.map(x => x.city))].sort(); }
 
 /* ========== STATE ========== */
-let activeTab = 'events';
+let activeTab = 'festivals';
 let searchQuery = '';
-let cityFilter = { events: 'ALL', artists: 'ALL', venues: 'ALL' };
+let cityFilter = { festivals: 'ALL', events: 'ALL', artists: 'ALL', venues: 'ALL' };
 
 /* ========== TABS ========== */
 document.querySelectorAll('.tab').forEach(tab => {
@@ -448,19 +466,61 @@ function renderCityFilters(containerId, cities, tabKey) {
     cities.map(c => {
       let cls = cityFilter[tabKey]===c ? 'active' : '';
       if (tabKey === 'venues' && c === 'TOKYO' && tokyoMapVisible) cls += ' map-active';
+      if (tabKey === 'venues' && c === 'OSAKA' && osakaMapVisible) cls += ' map-active';
       return `<button class="city-btn ${cls}" data-city="${c}">${c}</button>`;
     }).join('');
   container.querySelectorAll('.city-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       if (tabKey === 'venues' && btn.dataset.city === 'TOKYO') {
+        hideOsakaMap();
         toggleTokyoMap();
         return;
       }
+      if (tabKey === 'venues' && btn.dataset.city === 'OSAKA') {
+        hideTokyoMap();
+        toggleOsakaMap();
+        return;
+      }
       hideTokyoMap();
+      hideOsakaMap();
       cityFilter[tabKey] = btn.dataset.city;
       renderAll();
     });
   });
+}
+
+/* ========== RENDER FESTIVALS ========== */
+function renderFestivals() {
+  const FMONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  function fmtDate(d) {
+    if (d.includes('/')) {
+      const [s, e] = d.split('/');
+      const [sy,sm,sd] = s.split('-').map(Number);
+      const [ey,em,ed] = e.split('-').map(Number);
+      return `${FMONTHS[sm-1]} ${sd}–${ed}, ${sy}`;
+    }
+    const [y,m,dd] = d.split('-').map(Number);
+    return `${FMONTHS[m-1]} ${dd}, ${y}`;
+  }
+  let items = [...FESTIVALS].sort((a,b) => new Date(a.date.split('/')[0]) - new Date(b.date.split('/')[0]));
+  if (cityFilter.festivals !== 'ALL') items = items.filter(f => f.city === cityFilter.festivals);
+  if (searchQuery) items = items.filter(f =>
+    f.name.toLowerCase().includes(searchQuery) ||
+    f.city.toLowerCase().includes(searchQuery) ||
+    f.location.toLowerCase().includes(searchQuery) ||
+    f.genre.join(' ').toLowerCase().includes(searchQuery)
+  );
+  document.getElementById('count-festivals').textContent = ' ' + items.length;
+  document.getElementById('festivals-result-count').textContent = items.length + ' FESTIVALS';
+  document.getElementById('festivals-list').innerHTML = items.map(f => `
+    <a href="festivals.html" class="event-row">
+      <span class="event-row-date">${fmtDate(f.date)}</span>
+      <span class="event-row-name">${f.name}</span>
+      <span class="event-row-venue">${f.location}</span>
+      <span class="event-row-city">${f.city}</span>
+    </a>
+  `).join('');
+  bindCursorExpand();
 }
 
 /* ========== RENDER EVENTS ========== */
@@ -564,7 +624,7 @@ function renderVenues() {
 }
 
 /* ========== RENDER ALL ========== */
-function renderAll() { renderEvents(); renderArtists(); renderVenues(); }
+function renderAll() { renderFestivals(); renderEvents(); renderArtists(); renderVenues(); }
 
 /* ========== CURSOR ========== */
 const dot = document.querySelector('.cursor-dot');
@@ -591,9 +651,10 @@ function bindCursorExpand() {
 document.addEventListener('keydown', (e) => {
   if (e.key === '/') { e.preventDefault(); searchInput.focus(); }
   if (e.key === 'Escape') { searchInput.blur(); }
-  if (e.key === '1') { document.querySelector('[data-tab="events"]').click(); }
-  if (e.key === '2') { document.querySelector('[data-tab="artists"]').click(); }
-  if (e.key === '3') { document.querySelector('[data-tab="venues"]').click(); }
+  if (e.key === '1') { document.querySelector('[data-tab="festivals"]').click(); }
+  if (e.key === '2') { document.querySelector('[data-tab="events"]').click(); }
+  if (e.key === '3') { document.querySelector('[data-tab="artists"]').click(); }
+  if (e.key === '4') { document.querySelector('[data-tab="venues"]').click(); }
 });
 
 /* ========== TOKYO MAP EMBED ========== */
@@ -623,13 +684,14 @@ function initTokyoMap() {
 
 function renderFilterBar() {
   const bar = document.getElementById('map-filter-bar');
-  const genres = ['ALL','TECHNO','HOUSE','EXPERIMENTAL','LIVE'];
+  const genres = ['ALL','TECHNO','HOUSE','OTHERS'];
   bar.innerHTML = genres.map(g =>
     `<button class="map-pill${embedGenreFilter===g?' active':''}" data-genre="${g}">${g}</button>`
   ).join('') +
   '<span style="width:1px;height:16px;background:rgba(240,237,232,0.08);margin:0 4px"></span>' +
   `<button class="map-pill${embedTypeFilter==='club'?' active':''}" data-type="club">CLUBS</button>` +
-  `<button class="map-pill${embedTypeFilter==='bar'?' active':''}" data-type="bar">BARS</button>`;
+  `<button class="map-pill${embedTypeFilter==='bar'?' active':''}" data-type="bar">BARS</button>` +
+  `<button class="map-pill${embedTypeFilter==='livehouse'?' active':''}" data-type="livehouse">LIVEHOUSE</button>`;
 
   bar.querySelectorAll('.map-pill[data-genre]').forEach(p => {
     p.addEventListener('click', () => {
@@ -704,13 +766,122 @@ function hideTokyoMap() {
   }
 }
 
+/* ========== OSAKA MAP EMBED ========== */
+let osakaMapInstance = null;
+let osakaMapVisible = false;
+
+const OSAKA_CLUBS = VENUES.filter(v => v.city === 'OSAKA' && v.lat);
+
+let osakaMapMarkers = [];
+let osakaGenreFilter = 'ALL';
+let osakaTypeFilter = null;
+
+function initOsakaMap() {
+  if (osakaMapInstance) return;
+  osakaMapInstance = L.map('osaka-map', {
+    center: [34.6700, 135.4980],
+    zoom: 14, minZoom: 11, maxZoom: 18,
+    zoomControl: false, attributionControl: false
+  });
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    subdomains: 'abcd', maxZoom: 19
+  }).addTo(osakaMapInstance);
+
+  renderOsakaFilterBar();
+  renderOsakaMarkers();
+}
+
+function renderOsakaFilterBar() {
+  const bar = document.getElementById('osaka-filter-bar');
+  const genres = ['ALL','TECHNO','HOUSE','OTHERS'];
+  bar.innerHTML = genres.map(g =>
+    `<button class="map-pill${osakaGenreFilter===g?' active':''}" data-genre="${g}">${g}</button>`
+  ).join('') +
+  '<span style="width:1px;height:16px;background:rgba(240,237,232,0.08);margin:0 4px"></span>' +
+  `<button class="map-pill${osakaTypeFilter==='club'?' active':''}" data-type="club">CLUBS</button>` +
+  `<button class="map-pill${osakaTypeFilter==='bar'?' active':''}" data-type="bar">BARS</button>` +
+  `<button class="map-pill${osakaTypeFilter==='livehouse'?' active':''}" data-type="livehouse">LIVEHOUSE</button>`;
+
+  bar.querySelectorAll('.map-pill[data-genre]').forEach(p => {
+    p.addEventListener('click', () => {
+      osakaGenreFilter = p.dataset.genre;
+      renderOsakaFilterBar();
+      renderOsakaMarkers();
+    });
+  });
+  bar.querySelectorAll('.map-pill[data-type]').forEach(p => {
+    p.addEventListener('click', () => {
+      osakaTypeFilter = osakaTypeFilter === p.dataset.type ? null : p.dataset.type;
+      renderOsakaFilterBar();
+      renderOsakaMarkers();
+    });
+  });
+}
+
+function renderOsakaMarkers() {
+  osakaMapMarkers.forEach(m => osakaMapInstance.removeLayer(m));
+  osakaMapMarkers = [];
+
+  let filtered = OSAKA_CLUBS;
+  if (osakaGenreFilter !== 'ALL') {
+    filtered = filtered.filter(c => c.genre.some(g => g.includes(osakaGenreFilter)));
+  }
+  if (osakaTypeFilter) {
+    filtered = filtered.filter(c => c.type === osakaTypeFilter);
+  }
+
+  filtered.forEach(c => {
+    const pinClass = c.type === 'bar' ? 'embed-map-pin-bar' : 'embed-map-pin';
+    const icon = L.divIcon({
+      className: '',
+      html: `<div class="${pinClass}"></div>`,
+      iconSize: [9, 9], iconAnchor: [4.5, 4.5]
+    });
+    const m = L.marker([c.lat, c.lng], { icon }).addTo(osakaMapInstance);
+    m.bindTooltip(c.name, {
+      className: 'embed-map-label',
+      direction: 'right', offset: [8, 0], permanent: false
+    });
+    m.on('click', () => { window.location.href = 'venues.html#venue/' + c.id; });
+    osakaMapMarkers.push(m);
+  });
+}
+
+function toggleOsakaMap() {
+  const wrap = document.getElementById('osaka-map-wrap');
+  if (osakaMapVisible) {
+    wrap.style.display = 'none';
+    osakaMapVisible = false;
+    cityFilter.venues = 'ALL';
+    renderAll();
+  } else {
+    osakaMapVisible = true;
+    cityFilter.venues = 'OSAKA';
+    renderAll();
+    wrap.style.display = 'block';
+    setTimeout(() => {
+      initOsakaMap();
+      osakaMapInstance.invalidateSize();
+    }, 50);
+  }
+}
+
+function hideOsakaMap() {
+  const wrap = document.getElementById('osaka-map-wrap');
+  if (osakaMapVisible) {
+    wrap.style.display = 'none';
+    osakaMapVisible = false;
+    document.querySelectorAll('.city-btn.map-active').forEach(b => b.classList.remove('map-active'));
+  }
+}
+
 /* ========== INIT ========== */
 renderAll();
 
 // Handle hash-based tab routing (e.g. media.html#venues)
 (function() {
   const hash = window.location.hash.replace('#', '');
-  if (['events', 'artists', 'venues'].includes(hash)) {
+  if (['festivals', 'events', 'artists', 'venues'].includes(hash)) {
     const tabBtn = document.querySelector('[data-tab="' + hash + '"]');
     if (tabBtn) tabBtn.click();
   }

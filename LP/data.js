@@ -183,6 +183,85 @@ const EVENTS = [
 
 
 /* ----------------------------------------------------------
+   FESTIVALS
+
+   {
+     id:        "unique-id",
+     name:      "FESTIVAL NAME",
+     date:      "2026-07-19",               // or date range "2026-07-19/2026-07-21"
+     location:  "NAEBA SKI RESORT",
+     city:      "NIIGATA",
+     image:     "images/festivals/rural.jpg", // optional
+     genre:     ["TECHNO", "HOUSE"],
+     desc:      "Description...",
+     url:       "https://...",                // optional — official site
+     lineup:    ["dj-nobu", "ken-ishii"],     // artist IDs from ARTISTS array
+   }
+   ---------------------------------------------------------- */
+
+const FESTIVALS = [
+  {
+    id: "rural-festival",
+    name: "RURAL FESTIVAL 2026",
+    date: "2026-07-19/2026-07-21",
+    location: "NAEBA SKI RESORT",
+    city: "NIIGATA",
+    image: "images/festivals/rural.jpg",
+    genre: ["TECHNO", "HOUSE", "AMBIENT"],
+    desc: "Three-day open-air festival deep in the mountains of Niigata. Multiple stages, international headliners, and a community-driven atmosphere that has made it Japan's most revered electronic music gathering.",
+    url: "https://rural-jp.com",
+    lineup: ["ken-ishii", "dj-nobu", "wata-igarashi", "kotsu"]
+  },
+  {
+    id: "labyrinth",
+    name: "LABYRINTH",
+    date: "2026-09-12/2026-09-14",
+    location: "NAEBA",
+    city: "NIIGATA",
+    image: "images/festivals/labyrinth.jpg",
+    genre: ["TECHNO", "HOUSE", "OTHERS"],
+    desc: "Curated by DJ Nobu, Labyrinth is a boutique outdoor festival renowned for its uncompromising sound and intimate scale. Deep in the forest, far from the mainstream.",
+    url: "https://labyrinth-jp.com",
+    lineup: ["dj-nobu", "wata-igarashi"]
+  },
+  {
+    id: "festival-de-frue",
+    name: "FESTIVAL de FRUE",
+    date: "2026-11-07/2026-11-08",
+    location: "TSUKIGASE OUTDOOR STAGE",
+    city: "SHIZUOKA",
+    image: "images/festivals/frue.jpg",
+    genre: ["OTHERS", "AMBIENT", "HOUSE"],
+    desc: "An eclectic gathering at the foothills of Shizuoka. Frue blends electronic, acoustic, and experimental music in a serene natural setting. A festival for listeners and dancers alike.",
+    lineup: ["cabanne"]
+  },
+  {
+    id: "rainbow-disco-club",
+    name: "RAINBOW DISCO CLUB",
+    date: "2026-04-25/2026-04-27",
+    location: "HIGASHI-IZU CROSS COUNTRY COURSE",
+    city: "SHIZUOKA",
+    image: "images/festivals/rdc.jpg",
+    genre: ["HOUSE", "TECHNO", "OTHERS"],
+    desc: "Japan's iconic boutique festival celebrating dance music culture. A sun-soaked weekend of house, techno, and everything in between — overlooking the Pacific Ocean.",
+    url: "https://rainbowdiscoclub.com",
+    lineup: ["mayurashka"]
+  },
+  {
+    id: "fuji-rock",
+    name: "FUJI ROCK FESTIVAL",
+    date: "2026-07-24/2026-07-26",
+    location: "NAEBA SKI RESORT",
+    city: "NIIGATA",
+    image: "images/festivals/fujirock.jpg",
+    genre: ["OTHERS", "TECHNO", "LIVE"],
+    desc: "Japan's largest outdoor music festival. While spanning all genres, Fuji Rock's Red Marquee and Field of Heaven stages have long championed underground electronic music.",
+    url: "https://fujirock-eng.com"
+  }
+];
+
+
+/* ----------------------------------------------------------
    VENUES / CLUBS
 
    {
@@ -242,7 +321,7 @@ const VENUES = [
     area: "SHIBUYA",
     type: "club",
     image: "images/venues/circus-tokyo.jpg",
-    genre: ["TECHNO", "HOUSE", "EXPERIMENTAL"],
+    genre: ["TECHNO", "HOUSE", "OTHERS"],
     capacity: 250,
     address: "3-26-16 Shibuya, Shibuya-ku, Tokyo",
     lat: 35.6530,
@@ -548,7 +627,7 @@ const VENUES = [
     area: "HATAGAYA",
     type: "bar",
     image: "images/venues/forestlimit.jpg",
-    genre: ["EXPERIMENTAL", "AMBIENT"],
+    genre: ["OTHERS", "AMBIENT"],
     capacity: 80,
     address: "1-2-14 Nishihara, Shibuya-ku, Tokyo",
     lat: 35.6725,
@@ -598,16 +677,148 @@ const VENUES = [
   // ── OSAKA ──────────────────────────────────────────────
   {
     id: "circus-osaka",
-    name: "CIRCUS",
+    name: "CIRCUS OSAKA",
     city: "OSAKA",
     area: "SHINSAIBASHI",
     type: "club",
     image: "images/venues/circus-osaka.jpg",
-    genre: ["HOUSE", "TECHNO", "EXPERIMENTAL"],
+    genre: ["HOUSE", "TECHNO", "OTHERS"],
     capacity: 250,
+    address: "1-8-16 Nishi-Shinsaibashi, Chuo-ku, Osaka",
+    lat: 34.6720,
+    lng: 135.4980,
     url: "https://circus-osaka.com",
     instagram: "https://www.instagram.com/circus_osaka/",
     desc: "Osaka's cultural hub for underground electronic music. Intimate setting, impeccable bookings, and a community-driven atmosphere that defines the Kansai scene."
+  },
+  {
+    id: "club-joule",
+    name: "CLUB JOULE",
+    city: "OSAKA",
+    area: "SHINSAIBASHI",
+    type: "club",
+    image: "images/venues/club-joule.jpg",
+    genre: ["TECHNO", "HOUSE"],
+    capacity: 400,
+    address: "2-3-28 Nishi-Shinsaibashi, Chuo-ku, Osaka",
+    lat: 34.6710,
+    lng: 135.4955,
+    url: "https://club-joule.com",
+    desc: "Shinsaibashi's flagship underground club. Two floors of heavy sound, international bookings, and a loyal following that keeps Osaka's techno pulse alive."
+  },
+  {
+    id: "onzieme",
+    name: "ONZIEME",
+    city: "OSAKA",
+    area: "SHINSAIBASHI",
+    type: "club",
+    image: "images/venues/onzieme.jpg",
+    genre: ["HOUSE", "DISCO", "TECHNO"],
+    capacity: 200,
+    address: "1-9-2 Nishi-Shinsaibashi, Chuo-ku, Osaka",
+    lat: 34.6725,
+    lng: 135.4965,
+    desc: "A Shinsaibashi room built for groove. Onzieme leans disco, house, and warm techno — curated nights with a dance-floor-first philosophy."
+  },
+  {
+    id: "compufunk",
+    name: "COMPUFUNK RECORDS",
+    city: "OSAKA",
+    area: "AMERIKAMURA",
+    type: "bar",
+    image: "images/venues/compufunk.jpg",
+    genre: ["TECHNO", "OTHERS", "AMBIENT"],
+    capacity: 60,
+    address: "2-9-28 Nishi-Shinsaibashi, Chuo-ku, Osaka",
+    lat: 34.6715,
+    lng: 135.4945,
+    url: "https://compufunk.com",
+    desc: "Record shop by day, listening bar by night. Compufunk bridges crate-digging culture with intimate live sets and DJ events in the heart of Amerikamura."
+  },
+  {
+    id: "grand-cafe",
+    name: "GRAND CAFE",
+    city: "OSAKA",
+    area: "SHINSAIBASHI",
+    type: "club",
+    image: "images/venues/grand-cafe.jpg",
+    genre: ["HOUSE", "TECHNO"],
+    capacity: 300,
+    address: "2-10-21 Nishi-Shinsaibashi, Chuo-ku, Osaka",
+    lat: 34.6705,
+    lng: 135.4960,
+    desc: "Multi-floor Shinsaibashi venue with a focus on house and techno. Grand Cafe operates at the intersection of club culture and late-night Osaka energy."
+  },
+  {
+    id: "club-pure",
+    name: "CLUB PURE",
+    city: "OSAKA",
+    area: "NAMBA",
+    type: "club",
+    image: "images/venues/club-pure.jpg",
+    genre: ["TECHNO", "TRANCE"],
+    capacity: 500,
+    address: "1-4-16 Namba, Chuo-ku, Osaka",
+    lat: 34.6655,
+    lng: 135.5010,
+    desc: "Namba's large-format electronic music venue. Club Pure delivers scale — big rooms, heavy systems, and lineups that pull from across the spectrum."
+  },
+  {
+    id: "noon",
+    name: "NOON + CAFE",
+    city: "OSAKA",
+    area: "SHINSAIBASHI",
+    type: "bar",
+    image: "images/venues/noon.jpg",
+    genre: ["HOUSE", "JAZZ", "SOUL"],
+    capacity: 80,
+    address: "1-6-8 Nishi-Shinsaibashi, Chuo-ku, Osaka",
+    lat: 34.6730,
+    lng: 135.4970,
+    desc: "A cafe-bar hybrid where vinyl culture meets Osaka hospitality. Deep house, jazz, and soul — always at a volume that invites conversation."
+  },
+  {
+    id: "triangle",
+    name: "TRIANGLE",
+    city: "OSAKA",
+    area: "SHINSAIBASHI",
+    type: "club",
+    image: "images/venues/triangle.jpg",
+    genre: ["TECHNO", "HOUSE", "EDM"],
+    capacity: 800,
+    address: "2-11-7 Nishi-Shinsaibashi, Chuo-ku, Osaka",
+    lat: 34.6700,
+    lng: 135.4950,
+    url: "https://triangle-osaka.jp",
+    desc: "Osaka's mega-club. Triangle operates at full volume — massive production, international headliners, and a capacity that fills every weekend."
+  },
+  {
+    id: "sunhall",
+    name: "SUNHALL",
+    city: "OSAKA",
+    area: "NAMBA",
+    type: "club",
+    image: "images/venues/sunhall.jpg",
+    genre: ["LIVE", "CLUB", "VARIOUS"],
+    capacity: 400,
+    address: "3-6-1 Namba, Chuo-ku, Osaka",
+    lat: 34.6640,
+    lng: 135.5020,
+    desc: "Namba live house with a club soul. Sunhall crosses genres nightly — live bands, DJ events, and everything that refuses a single label."
+  },
+  {
+    id: "ghost",
+    name: "GHOST",
+    city: "OSAKA",
+    area: "AMERIKAMURA",
+    type: "bar",
+    image: "images/venues/ghost.jpg",
+    genre: ["TECHNO", "MINIMAL", "AMBIENT"],
+    capacity: 50,
+    address: "2-8-26 Nishi-Shinsaibashi, Chuo-ku, Osaka",
+    lat: 34.6718,
+    lng: 135.4940,
+    desc: "A hidden room in Amerikamura. Ghost is intimate, intentional, and operates in the margins — ambient, minimal, and deep techno at whisper-level capacity."
   },
 
   // ── KYOTO ──────────────────────────────────────────────
@@ -618,9 +829,159 @@ const VENUES = [
     area: "JINGU-MARUTAMACHI",
     type: "club",
     image: "images/venues/club-metro.jpg",
-    genre: ["TECHNO", "AMBIENT", "EXPERIMENTAL"],
+    genre: ["TECHNO", "AMBIENT", "OTHERS"],
     capacity: 150,
+    address: "Jingu-Marutamachi, Sakyo-ku, Kyoto",
+    lat: 35.0157,
+    lng: 135.7820,
     instagram: "https://www.instagram.com/clubmetrokyoto/",
     desc: "Kyoto's longest-running underground club. A basement institution operating since 1990, known for leftfield and experimental bookings alongside techno and ambient nights."
+  },
+  {
+    id: "world-kyoto",
+    name: "WORLD KYOTO",
+    city: "KYOTO",
+    area: "KIYAMACHI",
+    type: "club",
+    image: "images/venues/world-kyoto.jpg",
+    genre: ["TECHNO", "HOUSE"],
+    capacity: 500,
+    address: "97 Shinmeicho, Shimogyo-ku, Kyoto",
+    lat: 35.0037,
+    lng: 135.7700,
+    url: "https://world-kyoto.com",
+    desc: "Kyoto's largest dance music venue. A multi-floor space that bridges mainstream and underground, hosting both international acts and local talent."
+  },
+  {
+    id: "butter",
+    name: "BUTTER",
+    city: "KYOTO",
+    area: "KIYAMACHI",
+    type: "bar",
+    image: "images/venues/butter.jpg",
+    genre: ["HOUSE", "OTHERS"],
+    capacity: 80,
+    address: "Kiyamachi-dori, Shimogyo-ku, Kyoto",
+    lat: 35.0045,
+    lng: 135.7695,
+    desc: "Intimate bar and listening space on Kiyamachi. House, disco, and jazz-inflected selections in a warm, wood-panelled room."
+  },
+
+  // ── NAGOYA ──────────────────────────────────────────────
+  {
+    id: "club-jbs",
+    name: "CLUB JB'S",
+    city: "NAGOYA",
+    area: "SAKAE",
+    type: "club",
+    image: "images/venues/club-jbs.jpg",
+    genre: ["TECHNO", "HOUSE"],
+    capacity: 350,
+    address: "3-25-38 Nishiki, Naka-ku, Nagoya",
+    lat: 35.1680,
+    lng: 136.9070,
+    url: "https://club-jbs.jp",
+    desc: "Nagoya's flagship underground club. Two decades of uncompromising bookings and a sound system that defines the Tokai region's electronic music scene."
+  },
+  {
+    id: "club-mago",
+    name: "CLUB MAGO",
+    city: "NAGOYA",
+    area: "OSU",
+    type: "club",
+    image: "images/venues/club-mago.jpg",
+    genre: ["TECHNO", "HOUSE", "OTHERS"],
+    capacity: 250,
+    address: "4-1-72 Osu, Naka-ku, Nagoya",
+    lat: 35.1590,
+    lng: 136.9045,
+    desc: "A Nagoya institution blending live music and electronic nights. Raw energy, local community, and a reputation for breaking new talent."
+  },
+  {
+    id: "id-cafe",
+    name: "iD CAFE",
+    city: "NAGOYA",
+    area: "SAKAE",
+    type: "bar",
+    image: "images/venues/id-cafe.jpg",
+    genre: ["HOUSE", "OTHERS"],
+    capacity: 60,
+    address: "3-14-6 Nishiki, Naka-ku, Nagoya",
+    lat: 35.1672,
+    lng: 136.9055,
+    desc: "Cozy DJ bar in the heart of Sakae. Deep house, nu-jazz, and eclectic selections in an intimate setting."
+  },
+  {
+    id: "club-upset",
+    name: "CLUB UPSET",
+    city: "NAGOYA",
+    area: "SAKAE",
+    type: "club",
+    image: "images/venues/club-upset.jpg",
+    genre: ["TECHNO", "HOUSE"],
+    capacity: 300,
+    address: "3-8-26 Nishiki, Naka-ku, Nagoya",
+    lat: 35.1685,
+    lng: 136.9080,
+    url: "https://club-upset.com",
+    desc: "Multi-genre venue with a strong techno and house programme. International guests and Nagoya's best resident DJs share the booth."
+  },
+  {
+    id: "huck-finn",
+    name: "HUCK FINN",
+    city: "NAGOYA",
+    area: "IMAIKE",
+    type: "livehouse",
+    image: "images/venues/huck-finn.jpg",
+    genre: ["OTHERS"],
+    capacity: 200,
+    address: "1-6-5 Imaike, Chikusa-ku, Nagoya",
+    lat: 35.1720,
+    lng: 136.9330,
+    desc: "Live house turned electronic venue on select nights. An Imaike staple bridging indie, noise, and electronic music."
+  },
+
+  // ── HAKUBA ──────────────────────────────────────────────
+  {
+    id: "hakuba-hanazono",
+    name: "THE HANAZONO",
+    city: "HAKUBA",
+    area: "HAKUBA VILLAGE",
+    type: "club",
+    image: "images/venues/hanazono.jpg",
+    genre: ["HOUSE", "TECHNO"],
+    capacity: 200,
+    address: "Hakuba Village, Kitaazumi-gun, Nagano",
+    lat: 36.6980,
+    lng: 137.8610,
+    desc: "Mountain lodge turned dance floor. Après-ski sessions and weekend parties with views of the Northern Alps. House and techno in the snow."
+  },
+  {
+    id: "hakuba-rhythm",
+    name: "RHYTHM BASE",
+    city: "HAKUBA",
+    area: "ECHOLAND",
+    type: "bar",
+    image: "images/venues/rhythm-base.jpg",
+    genre: ["HOUSE", "OTHERS"],
+    capacity: 80,
+    address: "Echoland, Hakuba Village, Nagano",
+    lat: 36.6950,
+    lng: 137.8580,
+    desc: "Echoland's go-to music bar. Vinyl selections, guest DJs, and a laid-back atmosphere where the mountain and music community converge."
+  },
+  {
+    id: "hakuba-refuel",
+    name: "REFUEL BAR",
+    city: "HAKUBA",
+    area: "HAPPO",
+    type: "bar",
+    image: "images/venues/refuel.jpg",
+    genre: ["OTHERS", "HOUSE"],
+    capacity: 100,
+    address: "Happo, Hakuba Village, Nagano",
+    lat: 36.7010,
+    lng: 137.8000,
+    desc: "High-energy bar at the base of Happo-One. Live DJs, international crowd, and the beating heart of Hakuba's nightlife."
   },
 ];

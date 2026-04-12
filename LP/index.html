@@ -364,52 +364,85 @@ section { padding: 120px 40px; }
   text-transform: uppercase;
 }
 
-/* ===================== MEDIA PILLARS ===================== */
-.pillars-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+/* ===================== DISCOVER CARDS (durevie style) ===================== */
+.discover-section {
+  padding: 0 40px 0;
 }
-.pillar {
+.discover-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.discover-card {
   display: block;
   position: relative;
-  padding: 48px 32px;
-  border: 1px solid rgba(240,237,232,0.08);
+  aspect-ratio: 3 / 4;
+  border-radius: 14px;
   overflow: hidden;
-  transition: border-color 0.3s ease;
+  cursor: none;
 }
-.pillar::before {
-  content: '';
+.discover-card-bg {
   position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 100%;
-  background: rgba(240,237,232,0.04);
-  transform: scaleY(0);
-  transform-origin: bottom;
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.pillar:hover::before { transform: scaleY(1); }
-.pillar:hover { border-color: rgba(240,237,232,0.2); }
-.pillar-content { position: relative; z-index: 1; }
-.pillar-index {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  opacity: 0.4;
-  margin-bottom: 24px;
+.discover-card:hover .discover-card-bg { transform: scale(1.06); }
+.discover-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.55) 100%);
+  transition: background 0.4s ease;
 }
-.pillar-title {
+.discover-card:hover .discover-card-overlay {
+  background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.45) 100%);
+}
+.discover-card-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px;
+  text-align: center;
+  z-index: 1;
+}
+.discover-card-title {
   font-family: var(--font-display);
-  font-size: 36px;
+  font-size: 42px;
   text-transform: uppercase;
-  margin-bottom: 16px;
+  line-height: 1;
+  margin-bottom: 12px;
+  text-shadow: 0 2px 16px rgba(0,0,0,0.5);
 }
-.pillar-desc {
+.discover-card-desc {
   font-family: var(--font-body);
   font-weight: 200;
-  font-size: 13px;
-  line-height: 1.8;
-  opacity: 0.5;
+  font-size: 12px;
+  line-height: 1.7;
+  opacity: 0.7;
+  max-width: 220px;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.3);
 }
+.discover-card-arrow {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 32px;
+  height: 32px;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.discover-card:hover .discover-card-arrow { opacity: 1; transform: translateY(0); }
+.discover-card-arrow svg { width: 12px; height: 12px; stroke: var(--text); fill: none; stroke-width: 2; }
 
 /* ===================== INSTAGRAM ===================== */
 .insta-header {
@@ -639,7 +672,9 @@ footer {
   .hero { padding: 0 24px 48px; }
   .about-grid { grid-template-columns: 1fr; gap: 32px; }
   .contact-grid { grid-template-columns: 1fr; gap: 32px; }
-  .pillars-grid { grid-template-columns: 1fr; }
+  .discover-grid { grid-template-columns: repeat(2, 1fr); }
+  .discover-card { aspect-ratio: 1; }
+  .discover-card-title { font-size: 28px; }
   .insta-grid { grid-template-columns: repeat(2, 1fr); }
   .footer-top { flex-direction: column; gap: 24px; text-align: center; }
   .hero-bottom { flex-direction: column; align-items: flex-start; gap: 24px; }
@@ -724,28 +759,51 @@ footer {
 <!-- MEDIA PILLARS -->
 <section id="media">
   <div class="section-label reveal">02 — DISCOVER</div>
-  <div class="pillars-grid">
-    <a href="events.html" class="pillar reveal">
-      <div class="pillar-content">
-        <div class="pillar-index">01</div>
-        <div class="pillar-title">EVENTS</div>
-        <div class="pillar-desc">Festivals, club nights, open-air raves across Japan. Discover the side of Japan's underground you never knew existed.</div>
-      </div>
-    </a>
-    <a href="artists.html" class="pillar reveal">
-      <div class="pillar-content">
-        <div class="pillar-index">02</div>
-        <div class="pillar-title">ARTISTS</div>
-        <div class="pillar-desc">Introductions and spotlights — techno and house from Japan. Emerging talent, established selectors, and the names shaping the sound.</div>
-      </div>
-    </a>
-    <a href="venues.html" class="pillar reveal">
-      <div class="pillar-content">
-        <div class="pillar-index">03</div>
-        <div class="pillar-title">VENUE</div>
-        <div class="pillar-desc">Venues, cities, scene context, editorial storytelling. The spaces, histories, and people that define Japan's underground.</div>
-      </div>
-    </a>
+  <div class="discover-section">
+    <div class="discover-grid">
+
+      <!-- To add images: change background to background-image:url('images/discover/festivals.jpg'); background-size:cover; background-position:center; -->
+      <a href="festivals.html" class="discover-card reveal">
+        <div class="discover-card-bg" style="background:linear-gradient(135deg, #1a0533 0%, #4a1942 40%, #c2185b 100%)"></div>
+        <div class="discover-card-overlay"></div>
+        <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+        <div class="discover-card-content">
+          <div class="discover-card-title">FESTIVALS</div>
+          <div class="discover-card-desc">Open-air gatherings, multi-day adventures, and Japan's most iconic outdoor electronic music festivals.</div>
+        </div>
+      </a>
+
+      <a href="events.html" class="discover-card reveal">
+        <div class="discover-card-bg" style="background:linear-gradient(135deg, #0d1b2a 0%, #1b2838 40%, #415a77 100%)"></div>
+        <div class="discover-card-overlay"></div>
+        <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+        <div class="discover-card-content">
+          <div class="discover-card-title">EVENTS</div>
+          <div class="discover-card-desc">Club nights, open-air raves, warehouse sessions. The heartbeat of Japan's underground scene.</div>
+        </div>
+      </a>
+
+      <a href="artists.html" class="discover-card reveal">
+        <div class="discover-card-bg" style="background:linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%)"></div>
+        <div class="discover-card-overlay"></div>
+        <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+        <div class="discover-card-content">
+          <div class="discover-card-title">ARTISTS</div>
+          <div class="discover-card-desc">Emerging talent, established selectors. The names shaping Japan's sound.</div>
+        </div>
+      </a>
+
+      <a href="venues.html" class="discover-card reveal">
+        <div class="discover-card-bg" style="background:linear-gradient(135deg, #1b1b1b 0%, #2d2d2d 40%, #4a4a4a 100%)"></div>
+        <div class="discover-card-overlay"></div>
+        <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+        <div class="discover-card-content">
+          <div class="discover-card-title">VENUE</div>
+          <div class="discover-card-desc">The clubs, warehouses, and spaces that define Japan's underground.</div>
+        </div>
+      </a>
+
+    </div>
   </div>
 </section>
 
@@ -872,7 +930,7 @@ function animateRing() {
 animateRing();
 
 /* Expand ring on hoverable elements */
-document.querySelectorAll('a, .cta-btn, .pillar, .insta-cell').forEach(el => {
+document.querySelectorAll('a, .cta-btn, .discover-card, .insta-cell').forEach(el => {
   el.addEventListener('mouseenter', () => {
     ring.style.width = '52px';
     ring.style.height = '52px';
