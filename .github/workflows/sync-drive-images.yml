@@ -1,0 +1,60 @@
+name: Sync Drive Images
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Sync images from Google Drive via GAS
+        run: |
+          python3 << 'PYTHON'
+          import urllib.request
+          import json
+          import os
+
+          GAS_URL = "https://script.google.com/macros/s/AKfycbxhJ6rtGoAirNyV5TtBvzWHNOT8RuB0nfDjwglmdu8ClhpWZ-OXSbMM4UyFE_7ZsV-Lpg/exec"
+
+          # 画像一覧を取得
+          with urllib.request.urlopen(f"{GAS_URL}?action=get_images") as res:
+              data = json.loads(res.read().decode('utf-8'))
+
+          if data.get('status') != 'ok':
+              print(f"Error: {data.get('message')}")
+              exit(1)
+
+          images = data.get('images', [])
+          print(f"Found {len(images)} images in Drive")
+
+          os.makedirs('LP/images/venues', exist_ok=True)
+
+          for img in images:
+              file_path = f"LP/images/venues/{img['name']}"
+              try:
+                  urllib.request.urlretrieve(img['url'], file_path)
+                  print(f"Downloaded: {img['name']}")
+              except Exception as e:
+                  print(f"Failed: {img['name']} — {e}")
+
+          print("Sync complete.")
+          PYTHON
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add LP/images/venues/
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "sync: update venue images from Google Drive"
+            git push
+          fi
