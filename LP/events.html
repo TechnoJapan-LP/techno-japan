@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EVENTS — TECHNO JAPAN</title>
+<meta name="description" content="Upcoming and past events from Japan's underground techno and house music scene.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #080808;
+  --text: #f0ede8;
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+  --font-body: 'DM Sans', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  cursor: none;
+  opacity: 0;
+  animation: bodyFadeIn 0.8s ease forwards;
+}
+
+@keyframes bodyFadeIn { to { opacity: 1; } }
+
+a { color: inherit; text-decoration: none; }
+
+/* ===================== CUSTOM CURSOR ===================== */
+.cursor-dot, .cursor-ring {
+  position: fixed;
+  top: 0; left: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  mix-blend-mode: difference;
+}
+.cursor-dot {
+  width: 6px; height: 6px;
+  background: var(--text);
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease;
+}
+.cursor-ring {
+  width: 36px; height: 36px;
+  border: 1px solid var(--text);
+  transform: translate(-50%, -50%);
+  transition: transform 0.15s ease-out, width 0.3s ease, height 0.3s ease;
+}
+
+/* ===================== NAV ===================== */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28px 40px;
+  mix-blend-mode: difference;
+}
+nav .logo {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+nav .nav-links {
+  display: flex;
+  gap: 32px;
+}
+nav .nav-links a {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+nav .nav-links a:hover { opacity: 1; }
+nav .nav-links a.active { opacity: 1; }
+
+/* ===================== PAGE HEADER ===================== */
+.page-header {
+  padding: 160px 40px 80px;
+  border-bottom: 1px solid rgba(240,237,232,0.08);
+}
+.page-header-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.page-title {
+  font-family: var(--font-display);
+  font-size: clamp(64px, 12vw, 180px);
+  line-height: 0.9;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 0.3s;
+}
+.page-subtitle {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  opacity: 0;
+  animation: fadeSlideUp 0.6s ease forwards;
+  animation-delay: 0.5s;
+  color: rgba(240,237,232,0.5);
+  padding-bottom: 12px;
+}
+
+/* ===================== FILTERS ===================== */
+.filters {
+  padding: 24px 40px;
+  border-bottom: 1px solid rgba(240,237,232,0.08);
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.filter-btn {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 8px 20px;
+  border: 1px solid rgba(240,237,232,0.12);
+  background: transparent;
+  color: var(--text);
+  cursor: none;
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  opacity: 0.5;
+}
+.filter-btn:hover { opacity: 1; border-color: rgba(240,237,232,0.3); }
+.filter-btn.active {
+  background: var(--text);
+  color: var(--bg);
+  opacity: 1;
+  border-color: var(--text);
+}
+
+/* ===================== EVENTS LIST ===================== */
+.events-section { padding: 60px 40px 120px; }
+
+.events-month {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.4;
+  padding: 40px 0 20px;
+  border-bottom: 1px solid rgba(240,237,232,0.06);
+}
+.events-month:first-child { padding-top: 0; }
+
+.event-card {
+  display: grid;
+  grid-template-columns: 100px 1fr auto;
+  gap: 40px;
+  align-items: start;
+  padding: 32px 0;
+  border-bottom: 1px solid rgba(240,237,232,0.06);
+  transition: background 0.3s ease;
+  position: relative;
+}
+.event-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 -40px;
+  background: rgba(240,237,232,0.02);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.event-card:hover::before { opacity: 1; }
+
+.event-date {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+.event-day {
+  font-family: var(--font-display);
+  font-size: 48px;
+  line-height: 1;
+}
+.event-weekday {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  opacity: 0.4;
+  margin-top: 4px;
+}
+
+.event-info {
+  position: relative;
+  z-index: 1;
+}
+.event-name {
+  font-family: var(--font-display);
+  font-size: 32px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  line-height: 1.1;
+}
+.event-meta {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.event-meta span {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  opacity: 0.4;
+  text-transform: uppercase;
+}
+.event-desc {
+  font-family: var(--font-body);
+  font-weight: 200;
+  font-size: 13px;
+  line-height: 1.8;
+  opacity: 0.5;
+  margin-top: 12px;
+  max-width: 600px;
+}
+
+.event-tag {
+  position: relative;
+  z-index: 1;
+  align-self: center;
+}
+.tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border: 1px solid rgba(240,237,232,0.15);
+}
+.tag.upcoming { border-color: rgba(240,237,232,0.3); }
+.tag.past { opacity: 0.3; }
+
+.event-lineup {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+.event-lineup a {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border: 1px solid rgba(240,237,232,0.1);
+  opacity: 0.5;
+  transition: opacity 0.3s ease, border-color 0.3s ease;
+}
+.event-lineup a:hover { opacity: 1; border-color: rgba(240,237,232,0.3); }
+
+/* ===================== EMPTY STATE ===================== */
+.no-events {
+  text-align: center;
+  padding: 80px 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  opacity: 0.3;
+  text-transform: uppercase;
+}
+
+/* ===================== BACK LINK ===================== */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+  margin-bottom: 40px;
+}
+.back-link:hover { opacity: 1; }
+.back-link .arrow {
+  width: 24px;
+  height: 1px;
+  background: var(--text);
+  position: relative;
+}
+.back-link .arrow::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: -3px;
+  width: 7px;
+  height: 7px;
+  border-left: 1px solid var(--text);
+  border-bottom: 1px solid var(--text);
+  transform: rotate(45deg);
+}
+
+/* ===================== FOOTER ===================== */
+footer {
+  padding: 60px 40px 40px;
+  border-top: 1px solid rgba(240,237,232,0.08);
+}
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 80px;
+}
+.footer-logo {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+.footer-links {
+  display: flex;
+  gap: 32px;
+}
+.footer-links a {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+.footer-links a:hover { opacity: 1; }
+.footer-copy {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  opacity: 0.3;
+}
+
+/* ===================== REVEAL ===================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===================== ANIMATIONS ===================== */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 900px) {
+  nav { padding: 20px 24px; }
+  .page-header { padding: 140px 24px 60px; }
+  .page-header-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .filters { padding: 20px 24px; }
+  .events-section { padding: 40px 24px 80px; }
+  .event-card {
+    grid-template-columns: 70px 1fr;
+    gap: 20px;
+  }
+  .event-tag { grid-column: 2; }
+  .footer-top { flex-direction: column; gap: 24px; text-align: center; }
+}
+
+@media (max-width: 600px) {
+  nav .nav-links { gap: 16px; }
+  nav .nav-links a { font-size: 9px; }
+  .event-card {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .event-date {
+    text-align: left;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .event-tag { grid-column: 1; }
+  .footer-links { gap: 20px; }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  body { cursor: auto; }
+  .cursor-dot, .cursor-ring { display: none; }
+  .filter-btn { cursor: pointer; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="logo">TECHNO JAPAN</a>
+  <div class="nav-links">
+    <a href="index.html#about">ABOUT</a>
+    <a href="media.html">DISCOVER</a>
+    <a href="index.html#instagram">INSTAGRAM</a>
+    <a href="index.html#contact">CONTACT</a>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<header class="page-header">
+  <a href="index.html" class="back-link"><span class="arrow"></span> BACK TO HOME</a>
+  <div class="page-header-inner">
+    <h1 class="page-title">EVENTS</h1>
+    <div class="page-subtitle">FESTIVALS · CLUB NIGHTS · RAVES · OPEN-AIR</div>
+  </div>
+</header>
+
+<!-- FILTERS -->
+<div class="filters">
+  <button class="filter-btn active" data-filter="all">ALL</button>
+  <button class="filter-btn" data-filter="upcoming">UPCOMING</button>
+  <button class="filter-btn" data-filter="past">PAST</button>
+</div>
+
+<!-- EVENTS -->
+<main class="events-section">
+  <div id="events-container"></div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-logo">TECHNO JAPAN</div>
+    <div class="footer-links">
+      <a href="index.html#about">ABOUT</a>
+      <a href="media.html">DISCOVER</a>
+      <a href="index.html#instagram">INSTAGRAM</a>
+      <a href="index.html#contact">CONTACT</a>
+    </div>
+    <div class="footer-copy">&copy; 2024 TECHNO JAPAN. ALL RIGHTS RESERVED.</div>
+  </div>
+</footer>
+
+<script src="data.js?v=2"></script>
+<script>
+
+/* ========== RENDER LOGIC (no need to edit below) ========== */
+
+function getArtist(id) { return ARTISTS.find(a => a.id === id); }
+
+const WEEKDAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+const MONTHS = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE',
+  'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
+
+function parseDate(str) {
+  const [y, m, d] = str.split('-').map(Number);
+  return new Date(y, m - 1, d);
+}
+
+function isUpcoming(dateStr) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return parseDate(dateStr) >= today;
+}
+
+function renderEvents(filter) {
+  const container = document.getElementById('events-container');
+
+  let events = [...EVENTS].sort((a, b) => {
+    if (filter === 'past') return parseDate(b.date) - parseDate(a.date);
+    return parseDate(a.date) - parseDate(b.date);
+  });
+
+  if (filter === 'upcoming') events = events.filter(e => isUpcoming(e.date));
+  if (filter === 'past') events = events.filter(e => !isUpcoming(e.date));
+
+  if (events.length === 0) {
+    container.innerHTML = '<div class="no-events">NO EVENTS FOUND</div>';
+    return;
+  }
+
+  let html = '';
+  let currentMonth = '';
+
+  events.forEach((event, i) => {
+    const d = parseDate(event.date);
+    const monthKey = MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+    const day = String(d.getDate()).padStart(2, '0');
+    const weekday = WEEKDAYS[d.getDay()];
+    const upcoming = isUpcoming(event.date);
+
+    if (monthKey !== currentMonth) {
+      currentMonth = monthKey;
+      html += `<div class="events-month reveal">${monthKey}</div>`;
+    }
+
+    html += `
+      <div class="event-card reveal" style="transition-delay:${(i % 6) * 80}ms">
+        <div class="event-date">
+          <div class="event-day">${day}</div>
+          <div class="event-weekday">${weekday}</div>
+        </div>
+        <div class="event-info">
+          <div class="event-name">${event.name}</div>
+          <div class="event-meta">
+            <span>${(function(){ const v = typeof VENUES !== 'undefined' ? VENUES.find(x => x.name === event.venue) : null; return v ? '<a href="venues.html#venue/' + v.id + '" style="border-bottom:1px solid rgba(240,237,232,0.15);padding-bottom:1px">' + event.venue + '</a>' : event.venue; })()}</span>
+            <span>${event.city}</span>
+            ${event.time ? `<span>${event.time}</span>` : ''}
+          </div>
+          ${event.desc ? `<div class="event-desc">${event.desc}</div>` : ''}
+          ${event.lineup && event.lineup.length ? `<div class="event-lineup">${event.lineup.map(id => {
+            const artist = typeof getArtist === 'function' ? getArtist(id) : null;
+            const name = artist ? artist.name : id.toUpperCase().replace(/-/g, ' ');
+            return `<a href="artists.html#artist/${id}">${name}</a>`;
+          }).join('')}</div>` : ''}
+        </div>
+        <div class="event-tag">
+          <span class="tag ${upcoming ? 'upcoming' : 'past'}">${upcoming ? 'UPCOMING' : 'PAST'}</span>
+        </div>
+      </div>`;
+  });
+
+  container.innerHTML = html;
+
+  // Re-observe new elements
+  container.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+}
+
+/* ========== FILTERS ========== */
+let currentFilter = 'all';
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    renderEvents(currentFilter);
+  });
+});
+
+/* ========== SCROLL REVEAL ========== */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+/* ========== CURSOR ========== */
+const dot = document.querySelector('.cursor-dot');
+const ring = document.querySelector('.cursor-ring');
+let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  dot.style.left = mouseX + 'px';
+  dot.style.top = mouseY + 'px';
+});
+
+function animateRing() {
+  ringX += (mouseX - ringX) * 0.15;
+  ringY += (mouseY - ringY) * 0.15;
+  ring.style.left = ringX + 'px';
+  ring.style.top = ringY + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+document.querySelectorAll('a, .filter-btn, .event-card').forEach(el => {
+  el.addEventListener('mouseenter', () => { ring.style.width = '52px'; ring.style.height = '52px'; });
+  el.addEventListener('mouseleave', () => { ring.style.width = '36px'; ring.style.height = '36px'; });
+});
+
+/* ========== INIT ========== */
+renderEvents('all');
+</script>
+</body>
+</html>

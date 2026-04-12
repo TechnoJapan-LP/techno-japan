@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TECHNO JAPAN — Underground Dance Music Media</title>
+<meta name="description" content="Japan's underground techno and house music scene. Events, artists, culture.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #080808;
+  --text: #f0ede8;
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+  --font-body: 'DM Sans', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  cursor: none;
+  opacity: 0;
+  animation: bodyFadeIn 1s ease forwards;
+}
+
+@keyframes bodyFadeIn {
+  to { opacity: 1; }
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ===================== CUSTOM CURSOR ===================== */
+.cursor-dot, .cursor-ring {
+  position: fixed;
+  top: 0; left: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  mix-blend-mode: difference;
+}
+.cursor-dot {
+  width: 6px; height: 6px;
+  background: var(--text);
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease;
+}
+.cursor-ring {
+  width: 36px; height: 36px;
+  border: 1px solid var(--text);
+  transform: translate(-50%, -50%);
+  transition: transform 0.15s ease-out, width 0.3s ease, height 0.3s ease;
+}
+body:hover .cursor-dot, body:hover .cursor-ring { opacity: 1; }
+
+/* ===================== NAV ===================== */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28px 40px;
+  mix-blend-mode: difference;
+  opacity: 0;
+  animation: fadeIn 0.6s ease forwards;
+  animation-delay: 0.3s;
+}
+nav .logo {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+nav .nav-links {
+  display: flex;
+  gap: 32px;
+}
+nav .nav-links a {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+nav .nav-links a:hover { opacity: 1; }
+
+/* ===================== HERO ===================== */
+.hero {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 40px 60px;
+  overflow: hidden;
+}
+
+/* Animated grid background */
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+.hero-grid::before, .hero-grid::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+.hero-grid::before {
+  background-image:
+    repeating-linear-gradient(90deg, rgba(240,237,232,0.03) 0, rgba(240,237,232,0.03) 1px, transparent 1px, transparent),
+    repeating-linear-gradient(0deg, rgba(240,237,232,0.03) 0, rgba(240,237,232,0.03) 1px, transparent 1px, transparent);
+  background-size: 80px 80px;
+  animation: gridDrift 20s linear infinite;
+}
+@keyframes gridDrift {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(80px, 80px); }
+}
+
+/* Scan line */
+.scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(240,237,232,0.06);
+  z-index: 1;
+  animation: scanDown 6s linear infinite;
+}
+@keyframes scanDown {
+  0% { top: -2%; }
+  100% { top: 102%; }
+}
+
+.hero-bottom {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 100%;
+}
+
+.hero-eyebrow {
+  position: absolute;
+  top: -60px;
+  left: 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  opacity: 0;
+  animation: fadeSlideUp 0.6s ease forwards;
+  animation-delay: 0.4s;
+  color: rgba(240,237,232,0.5);
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(96px, 18vw, 260px);
+  line-height: 0.85;
+  text-transform: uppercase;
+}
+.hero-title .line {
+  display: block;
+  overflow: hidden;
+}
+.hero-title .line span {
+  display: block;
+  transform: translateY(100%);
+  animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.hero-title .line:nth-child(1) span { animation-delay: 0.5s; }
+.hero-title .line:nth-child(2) span { animation-delay: 0.65s; }
+
+.hero-label {
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  line-height: 2;
+  opacity: 0;
+  animation: fadeIn 0.6s ease forwards;
+  animation-delay: 0.9s;
+  color: rgba(240,237,232,0.5);
+  padding-bottom: 12px;
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  animation: fadeIn 0.6s ease forwards;
+  animation-delay: 1.2s;
+  z-index: 2;
+}
+.scroll-indicator .line {
+  width: 1px;
+  height: 40px;
+  background: rgba(240,237,232,0.3);
+  animation: pulse 2s ease-in-out infinite;
+}
+.scroll-indicator span {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  opacity: 0.4;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+
+/* ===================== MARQUEE ===================== */
+.marquee {
+  border-top: 1px solid rgba(240,237,232,0.08);
+  border-bottom: 1px solid rgba(240,237,232,0.08);
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 16px 0;
+}
+.marquee:hover .marquee-inner { animation-play-state: paused; }
+.marquee-inner {
+  display: inline-block;
+  animation: marqueeScroll 40s linear infinite;
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.25em;
+  opacity: 0.25;
+  text-transform: uppercase;
+}
+@keyframes marqueeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ===================== SECTIONS COMMON ===================== */
+section { padding: 120px 40px; }
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 60px;
+  opacity: 0.5;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(240,237,232,0.12);
+}
+
+/* Scroll animation base */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===================== ABOUT ===================== */
+#about {
+  position: relative;
+  overflow: hidden;
+}
+.about-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+.about-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(90deg, rgba(240,237,232,0.03) 0, rgba(240,237,232,0.03) 1px, transparent 1px, transparent),
+    repeating-linear-gradient(0deg, rgba(240,237,232,0.03) 0, rgba(240,237,232,0.03) 1px, transparent 1px, transparent);
+  background-size: 80px 80px;
+  animation: gridDrift 20s linear infinite;
+}
+.about-scan {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(240,237,232,0.06);
+  z-index: 1;
+  animation: scanDown 6s linear infinite;
+}
+#about > .section-label,
+#about > .about-grid {
+  position: relative;
+  z-index: 2;
+}
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  margin-bottom: 80px;
+}
+.about-headline {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 6vw, 96px);
+  line-height: 1;
+  text-transform: uppercase;
+}
+.about-body p {
+  font-family: var(--font-body);
+  font-weight: 200;
+  font-size: 15px;
+  line-height: 1.9;
+  opacity: 0.7;
+  margin-bottom: 24px;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid rgba(240,237,232,0.1);
+}
+.stat-cell {
+  padding: 32px;
+  border: 1px solid rgba(240,237,232,0.1);
+}
+.stat-cell .stat-value {
+  font-family: var(--font-display);
+  font-size: 32px;
+  margin-bottom: 6px;
+}
+.stat-cell .stat-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  opacity: 0.4;
+  text-transform: uppercase;
+}
+
+/* ===================== MEDIA PILLARS ===================== */
+.pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.pillar {
+  display: block;
+  position: relative;
+  padding: 48px 32px;
+  border: 1px solid rgba(240,237,232,0.08);
+  overflow: hidden;
+  transition: border-color 0.3s ease;
+}
+.pillar::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 100%;
+  background: rgba(240,237,232,0.04);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.pillar:hover::before { transform: scaleY(1); }
+.pillar:hover { border-color: rgba(240,237,232,0.2); }
+.pillar-content { position: relative; z-index: 1; }
+.pillar-index {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  opacity: 0.4;
+  margin-bottom: 24px;
+}
+.pillar-title {
+  font-family: var(--font-display);
+  font-size: 36px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.pillar-desc {
+  font-family: var(--font-body);
+  font-weight: 200;
+  font-size: 13px;
+  line-height: 1.8;
+  opacity: 0.5;
+}
+
+/* ===================== INSTAGRAM ===================== */
+.insta-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+.insta-header a {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+.insta-header a:hover { opacity: 1; }
+
+.insta-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  margin-bottom: 60px;
+}
+.insta-cell {
+  aspect-ratio: 1;
+  background: #1a1a1a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px solid rgba(240,237,232,0.04);
+  transition: border-color 0.3s ease, filter 0.3s ease;
+  padding: 16px;
+  text-align: center;
+}
+.insta-cell:hover {
+  border-color: rgba(240,237,232,0.2);
+  filter: brightness(1.15);
+}
+.insta-cell .cell-type {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.35;
+}
+.insta-cell .cell-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  text-transform: uppercase;
+}
+
+.cta-wrap { text-align: center; }
+.cta-btn {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 16px 40px;
+  border: 1px solid rgba(240,237,232,0.3);
+  background: transparent;
+  color: var(--text);
+  transition: background 0.4s ease, color 0.4s ease;
+  cursor: none;
+}
+.cta-btn:hover {
+  background: var(--text);
+  color: var(--bg);
+}
+
+/* ===================== FOOTER ===================== */
+footer {
+  padding: 60px 40px 40px;
+  border-top: 1px solid rgba(240,237,232,0.08);
+}
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 80px;
+}
+.footer-logo {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+.footer-links {
+  display: flex;
+  gap: 32px;
+}
+.footer-links a {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+.footer-links a:hover { opacity: 1; }
+.footer-copy {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  opacity: 0.3;
+}
+.footer-watermark {
+  position: relative;
+  margin-top: 40px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(240,237,232,0.06);
+  text-align: center;
+  overflow: hidden;
+}
+.footer-watermark span {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 8vw, 120px);
+  opacity: 0.06;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ===================== CONTACT ===================== */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+}
+.contact-headline {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 6vw, 96px);
+  line-height: 1;
+  text-transform: uppercase;
+}
+.contact-body {
+  font-family: var(--font-body);
+  font-weight: 200;
+  font-size: 15px;
+  line-height: 1.9;
+  opacity: 0.7;
+  margin-bottom: 40px;
+}
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.form-group { display: flex; flex-direction: column; gap: 8px; }
+.form-group label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.4;
+}
+.form-group input,
+.form-group textarea,
+.form-group select {
+  background: transparent;
+  border: 1px solid rgba(240,237,232,0.12);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-weight: 200;
+  font-size: 14px;
+  padding: 14px 16px;
+  outline: none;
+  transition: border-color 0.3s ease;
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 0;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: rgba(240,237,232,0.4);
+}
+.form-group textarea { resize: vertical; min-height: 120px; }
+.form-group select {
+  cursor: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(240,237,232,0.4)'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+}
+.form-group select option {
+  background: #080808;
+  color: var(--text);
+}
+.contact-submit {
+  display: inline-block;
+  align-self: flex-start;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 16px 40px;
+  border: 1px solid rgba(240,237,232,0.3);
+  background: transparent;
+  color: var(--text);
+  cursor: none;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+.contact-submit:hover {
+  background: var(--text);
+  color: var(--bg);
+}
+
+/* ===================== ANIMATIONS ===================== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 900px) {
+  nav { padding: 20px 24px; }
+  section { padding: 80px 24px; }
+  .hero { padding: 0 24px 48px; }
+  .about-grid { grid-template-columns: 1fr; gap: 32px; }
+  .contact-grid { grid-template-columns: 1fr; gap: 32px; }
+  .pillars-grid { grid-template-columns: 1fr; }
+  .insta-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-top { flex-direction: column; gap: 24px; text-align: center; }
+  .hero-bottom { flex-direction: column; align-items: flex-start; gap: 24px; }
+  .hero-label { text-align: left; padding-bottom: 0; }
+  .hero-eyebrow { top: -40px; }
+}
+
+@media (max-width: 600px) {
+  nav .nav-links { gap: 16px; }
+  nav .nav-links a { font-size: 9px; }
+  .insta-grid { grid-template-columns: 1fr 1fr; }
+  .stat-grid { grid-template-columns: 1fr; }
+  .footer-links { gap: 20px; }
+  .scroll-indicator { display: none; }
+}
+
+/* Hide custom cursor on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  body { cursor: auto; }
+  .cursor-dot, .cursor-ring { display: none; }
+  .cta-btn { cursor: pointer; }
+}
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">TECHNO JAPAN</div>
+  <div class="nav-links">
+    <a href="#about">ABOUT</a>
+    <a href="media.html">DISCOVER</a>
+    <a href="#instagram">INSTAGRAM</a>
+    <a href="#contact">CONTACT</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="scan-line"></div>
+  <div class="hero-eyebrow">JAPAN / UNDERGROUND DANCE MUSIC / MEDIA</div>
+  <div class="hero-bottom">
+    <h1 class="hero-title">
+      <span class="line"><span>TECHNO</span></span>
+      <span class="line"><span>JAPAN</span></span>
+    </h1>
+    <div class="hero-label">
+      UNDERGROUND DANCE MUSIC<br>
+      JAPAN — EST. 2024
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <div class="line"></div>
+    <span>SCROLL</span>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="marquee-inner">TECHNO &middot; HOUSE &middot; JAPAN &middot; UNDERGROUND &middot; CLUBS &middot; FESTIVALS &middot; CULTURE &middot; RAVES &middot; ARTISTS &middot; VENUES &middot; NIGHTS &middot; OPEN-AIR &middot; SCENE &middot; BILINGUAL &middot; TECHNO &middot; HOUSE &middot; JAPAN &middot; UNDERGROUND &middot; CLUBS &middot; FESTIVALS &middot; CULTURE &middot; RAVES &middot; ARTISTS &middot; VENUES &middot; NIGHTS &middot; OPEN-AIR &middot; SCENE &middot; BILINGUAL &middot;&nbsp;</div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-bg"></div>
+  <div class="about-scan"></div>
+  <div class="section-label reveal">01 — ABOUT</div>
+  <div class="about-grid">
+    <div class="about-headline reveal">JAPAN'S<br>UNDERGROUND,<br>CURATED.</div>
+    <div class="about-body reveal">
+      <p>Techno Japan is a cultural media platform focused on Japan's underground techno and house music scene. We go beyond event listings — introducing artists, venues, festivals, and club culture with editorial perspective and scene credibility.</p>
+      <p>We exist to make Japan's underground more visible and more meaningful, to audiences both inside Japan and across the world.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MEDIA PILLARS -->
+<section id="media">
+  <div class="section-label reveal">02 — DISCOVER</div>
+  <div class="pillars-grid">
+    <a href="events.html" class="pillar reveal">
+      <div class="pillar-content">
+        <div class="pillar-index">01</div>
+        <div class="pillar-title">EVENTS</div>
+        <div class="pillar-desc">Festivals, club nights, open-air raves across Japan. Discover the side of Japan's underground you never knew existed.</div>
+      </div>
+    </a>
+    <a href="artists.html" class="pillar reveal">
+      <div class="pillar-content">
+        <div class="pillar-index">02</div>
+        <div class="pillar-title">ARTISTS</div>
+        <div class="pillar-desc">Introductions and spotlights — techno and house from Japan. Emerging talent, established selectors, and the names shaping the sound.</div>
+      </div>
+    </a>
+    <a href="venues.html" class="pillar reveal">
+      <div class="pillar-content">
+        <div class="pillar-index">03</div>
+        <div class="pillar-title">VENUE</div>
+        <div class="pillar-desc">Venues, cities, scene context, editorial storytelling. The spaces, histories, and people that define Japan's underground.</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- INSTAGRAM -->
+<section id="instagram">
+  <div class="section-label reveal">03 — INSTAGRAM</div>
+  <div class="insta-header reveal">
+    <span style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.15em;opacity:0.5;">LATEST POSTS</span>
+    <a href="https://www.instagram.com/techno.japan_/" target="_blank" rel="noopener">@TECHNO.JAPAN_</a>
+  </div>
+  <div class="insta-grid reveal">
+    <div class="insta-cell">
+      <span class="cell-type">EVENT</span>
+      <span class="cell-title">WAREHOUSE<br>TOKYO</span>
+    </div>
+    <div class="insta-cell">
+      <span class="cell-type">ARTIST</span>
+      <span class="cell-title">DJ NOBU</span>
+    </div>
+    <div class="insta-cell">
+      <span class="cell-type">FESTIVAL</span>
+      <span class="cell-title">RURAL<br>2024</span>
+    </div>
+    <div class="insta-cell">
+      <span class="cell-type">VENUE</span>
+      <span class="cell-title">CONTACT<br>TOKYO</span>
+    </div>
+    <div class="insta-cell">
+      <span class="cell-type">VENUE</span>
+      <span class="cell-title">OSAKA<br>AFTER DARK</span>
+    </div>
+    <div class="insta-cell">
+      <span class="cell-type">EVENT</span>
+      <span class="cell-title">DAWN TO<br>DUSK</span>
+    </div>
+    <div class="insta-cell">
+      <span class="cell-type">ARTIST</span>
+      <span class="cell-title">WATA<br>IGARASHI</span>
+    </div>
+    <div class="insta-cell">
+      <span class="cell-type">VENUE</span>
+      <span class="cell-title">CIRCUS<br>OSAKA</span>
+    </div>
+  </div>
+  <div class="cta-wrap reveal">
+    <a href="https://www.instagram.com/techno.japan_/" target="_blank" rel="noopener" class="cta-btn">FOLLOW ON INSTAGRAM</a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label reveal">04 — CONTACT</div>
+  <div class="contact-grid">
+    <div class="contact-headline reveal">GET IN<br>TOUCH.</div>
+    <div class="reveal">
+      <p class="contact-body">コラボレーション、取材、広告掲載、その他のお問い合わせはこちらからご連絡ください。</p>
+      <form class="contact-form" action="https://formsubmit.co/tatsuya25shibata@gmail.com" method="POST">
+        <div class="form-group">
+          <label>NAME</label>
+          <input type="text" name="name" required placeholder="Your name">
+        </div>
+        <div class="form-group">
+          <label>EMAIL</label>
+          <input type="email" name="email" required placeholder="your@email.com">
+        </div>
+        <div class="form-group">
+          <label>SUBJECT</label>
+          <select name="subject" required>
+            <option value="" disabled selected>Select a topic</option>
+            <option value="collaboration">Collaboration</option>
+            <option value="press">Press / Media</option>
+            <option value="advertising">Advertising</option>
+            <option value="general">General Inquiry</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>MESSAGE</label>
+          <textarea name="message" required placeholder="Your message"></textarea>
+        </div>
+        <button type="submit" class="contact-submit">SEND MESSAGE</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top reveal">
+    <div class="footer-logo">TECHNO JAPAN</div>
+    <div class="footer-links">
+      <a href="#about">ABOUT</a>
+      <a href="media.html">DISCOVER</a>
+      <a href="#instagram">INSTAGRAM</a>
+      <a href="#contact">CONTACT</a>
+    </div>
+    <div class="footer-copy">&copy; 2024 TECHNO JAPAN. ALL RIGHTS RESERVED.</div>
+  </div>
+  <div class="footer-watermark">
+    <span>JAPAN'S UNDERGROUND, CURATED.</span>
+  </div>
+</footer>
+
+<script>
+/* ====== CUSTOM CURSOR ====== */
+const dot = document.querySelector('.cursor-dot');
+const ring = document.querySelector('.cursor-ring');
+let mouseX = 0, mouseY = 0;
+let ringX = 0, ringY = 0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  dot.style.left = mouseX + 'px';
+  dot.style.top = mouseY + 'px';
+});
+
+function animateRing() {
+  ringX += (mouseX - ringX) * 0.15;
+  ringY += (mouseY - ringY) * 0.15;
+  ring.style.left = ringX + 'px';
+  ring.style.top = ringY + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+/* Expand ring on hoverable elements */
+document.querySelectorAll('a, .cta-btn, .pillar, .insta-cell').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    ring.style.width = '52px';
+    ring.style.height = '52px';
+  });
+  el.addEventListener('mouseleave', () => {
+    ring.style.width = '36px';
+    ring.style.height = '36px';
+  });
+});
+
+/* ====== SCROLL REVEAL (IntersectionObserver) ====== */
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      // Stagger children
+      const children = entry.target.querySelectorAll('.reveal');
+      if (children.length) {
+        children.forEach((child, i) => {
+          child.style.transitionDelay = (i * 100) + 'ms';
+          child.classList.add('visible');
+        });
+      }
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+
+reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

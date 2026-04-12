@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VENUES — TECHNO JAPAN</title>
+<meta name="description" content="Clubs and venues from Japan's underground techno and house music scene.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #080808;
+  --text: #f0ede8;
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+  --font-body: 'DM Sans', sans-serif;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--text); font-family: var(--font-body);
+  overflow-x: hidden; cursor: none; opacity: 0; animation: bodyFadeIn 0.8s ease forwards;
+}
+@keyframes bodyFadeIn { to { opacity: 1; } }
+@keyframes fadeSlideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+a { color: inherit; text-decoration: none; }
+
+/* CURSOR */
+.cursor-dot, .cursor-ring { position: fixed; top: 0; left: 0; border-radius: 50%; pointer-events: none; z-index: 99999; mix-blend-mode: difference; }
+.cursor-dot { width: 6px; height: 6px; background: var(--text); transform: translate(-50%, -50%); }
+.cursor-ring { width: 36px; height: 36px; border: 1px solid var(--text); transform: translate(-50%, -50%); transition: transform 0.15s ease-out, width 0.3s ease, height 0.3s ease; }
+
+/* NAV */
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 28px 40px; mix-blend-mode: difference; }
+nav .logo { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; }
+nav .nav-links { display: flex; gap: 32px; }
+nav .nav-links a { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.6; transition: opacity 0.3s ease; }
+nav .nav-links a:hover { opacity: 1; }
+
+/* BACK */
+.back-link { display: inline-flex; align-items: center; gap: 12px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.4; transition: opacity 0.3s ease; margin-bottom: 40px; }
+.back-link:hover { opacity: 1; }
+.back-link .arrow { width: 24px; height: 1px; background: var(--text); position: relative; }
+.back-link .arrow::before { content: ''; position: absolute; left: 0; top: -3px; width: 7px; height: 7px; border-left: 1px solid var(--text); border-bottom: 1px solid var(--text); transform: rotate(45deg); }
+
+/* HEADER */
+.page-header { padding: 160px 40px 80px; border-bottom: 1px solid rgba(240,237,232,0.08); }
+.page-header-inner { display: flex; justify-content: space-between; align-items: flex-end; }
+.page-title { font-family: var(--font-display); font-size: clamp(64px, 12vw, 180px); line-height: 0.9; text-transform: uppercase; opacity: 0; animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; animation-delay: 0.3s; }
+.page-subtitle { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; opacity: 0; animation: fadeSlideUp 0.6s ease forwards; animation-delay: 0.5s; color: rgba(240,237,232,0.5); padding-bottom: 12px; }
+
+/* ===================== VENUES LIST ===================== */
+#venues-list-view { padding: 60px 40px 120px; }
+.venues-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+.venue-card {
+  display: block; position: relative; padding: 48px 32px; min-height: 220px;
+  border: 1px solid rgba(240,237,232,0.06); overflow: hidden; transition: border-color 0.3s ease;
+}
+.venue-card::before {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 100%;
+  background: rgba(240,237,232,0.03); transform: scaleY(0); transform-origin: bottom;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.venue-card:hover::before { transform: scaleY(1); }
+.venue-card:hover { border-color: rgba(240,237,232,0.15); }
+.venue-card-content { position: relative; z-index: 1; }
+.venue-card-city { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.3; margin-bottom: 16px; }
+.venue-card-name { font-family: var(--font-display); font-size: clamp(28px, 3.5vw, 48px); text-transform: uppercase; line-height: 1; margin-bottom: 8px; }
+.venue-card-area { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.3; margin-bottom: 16px; }
+.venue-card-genre { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.2; }
+.venue-card-arrow { position: absolute; right: 32px; bottom: 48px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; opacity: 0; transition: opacity 0.3s ease; z-index: 1; }
+.venue-card:hover .venue-card-arrow { opacity: 0.5; }
+
+/* ===================== VENUE DETAIL ===================== */
+#venue-detail-view { display: none; position: relative; }
+.venue-hero {
+  position: relative;
+  width: 100%;
+  height: 360px;
+  overflow: hidden;
+}
+.venue-hero-img {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+.venue-hero-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--bg) 0%, rgba(8,8,8,0.6) 40%, rgba(8,8,8,0.2) 100%);
+}
+/* Fallback when no image */
+.venue-hero-placeholder {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #1a1a2e 0%, #0f1123 50%, #080808 100%);
+}
+.venue-back {
+  display: inline-flex; align-items: center; gap: 12px; padding: 24px 40px 0;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em;
+  text-transform: uppercase; opacity: 0.4; transition: opacity 0.3s ease; cursor: none;
+  position: relative; z-index: 10;
+}
+.venue-back:hover { opacity: 1; }
+.venue-detail { padding: 40px 40px 120px; }
+
+.venue-detail-header {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+  padding-bottom: 60px; border-bottom: 1px solid rgba(240,237,232,0.08);
+}
+.venue-detail-name { font-family: var(--font-display); font-size: clamp(56px, 8vw, 120px); line-height: 0.9; text-transform: uppercase; }
+.venue-detail-meta { display: flex; flex-direction: column; justify-content: flex-end; gap: 24px; }
+.venue-detail-tags { display: flex; gap: 12px; flex-wrap: wrap; }
+.venue-detail-tags span { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; padding: 6px 16px; border: 1px solid rgba(240,237,232,0.15); }
+.venue-detail-bio { font-family: var(--font-body); font-weight: 200; font-size: 15px; line-height: 1.9; opacity: 0.7; max-width: 600px; }
+.venue-detail-links { display: flex; gap: 24px; margin-top: 8px; }
+.venue-detail-links a { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.4; transition: opacity 0.3s ease; padding-bottom: 2px; border-bottom: 1px solid rgba(240,237,232,0.15); }
+.venue-detail-links a:hover { opacity: 1; }
+
+/* VENUE SECTIONS */
+.venue-section { padding-top: 60px; }
+.venue-section-title {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em;
+  text-transform: uppercase; opacity: 0.4; margin-bottom: 32px;
+  display: flex; align-items: center; gap: 20px;
+}
+.venue-section-title::after { content: ''; flex: 1; height: 1px; background: rgba(240,237,232,0.1); }
+
+.venue-event-row {
+  display: grid; grid-template-columns: 80px 1fr auto; gap: 32px;
+  padding: 24px 0; border-bottom: 1px solid rgba(240,237,232,0.06);
+  align-items: center; position: relative;
+}
+.venue-event-row::before { content: ''; position: absolute; inset: 0 -40px; background: rgba(240,237,232,0.02); opacity: 0; transition: opacity 0.3s ease; }
+.venue-event-row:hover::before { opacity: 1; }
+.venue-event-row * { position: relative; z-index: 1; }
+.ve-date { font-family: var(--font-display); font-size: 28px; }
+.ve-name { font-family: var(--font-display); font-size: 24px; text-transform: uppercase; margin-bottom: 4px; }
+.ve-meta { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; opacity: 0.4; text-transform: uppercase; }
+.ve-lineup { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.ve-lineup a { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.35; transition: opacity 0.2s ease; padding: 3px 10px; border: 1px solid rgba(240,237,232,0.08); }
+.ve-lineup a:hover { opacity: 1; border-color: rgba(240,237,232,0.25); }
+.ve-tag { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; padding: 5px 14px; border: 1px solid rgba(240,237,232,0.12); }
+.ve-tag.past { opacity: 0.25; }
+
+.venue-artist-row {
+  display: grid; grid-template-columns: 1fr 140px auto; gap: 24px;
+  padding: 20px 0; border-bottom: 1px solid rgba(240,237,232,0.06);
+  align-items: center; position: relative;
+}
+.venue-artist-row::before { content: ''; position: absolute; inset: 0 -40px; background: rgba(240,237,232,0.02); opacity: 0; transition: opacity 0.3s ease; }
+.venue-artist-row:hover::before { opacity: 1; }
+.venue-artist-row * { position: relative; z-index: 1; }
+.va-name { font-family: var(--font-display); font-size: 28px; text-transform: uppercase; }
+.va-genre { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.3; }
+.va-count { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; opacity: 0.3; }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* MAP TOGGLE */
+.map-toggle-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px; margin-bottom: 24px;
+}
+.map-toggle-btn {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  padding: 8px 20px; border: 1px solid rgba(240,237,232,0.15); border-radius: 0;
+  background: transparent; color: rgba(240,237,232,0.5); cursor: pointer;
+  transition: all 0.3s ease; display: flex; align-items: center; gap: 10px;
+}
+.map-toggle-btn:hover { border-color: rgba(240,237,232,0.4); color: var(--text); }
+.map-toggle-btn.active { background: #ff2d2d; color: var(--bg); border-color: #ff2d2d; }
+.map-toggle-btn .pin-icon {
+  width: 6px; height: 6px; border-radius: 50%; background: #ff2d2d;
+  transition: background 0.3s ease;
+}
+.map-toggle-btn.active .pin-icon { background: var(--bg); }
+#venue-map-wrap {
+  display: none; margin: 0 40px 32px; border: 1px solid rgba(240,237,232,0.1);
+  overflow: hidden;
+}
+#venue-map-filters {
+  display: flex; gap: 8px; padding: 12px 16px; flex-wrap: wrap;
+  background: rgba(8,8,8,0.9); border-bottom: 1px solid rgba(240,237,232,0.06);
+}
+#venue-map { height: 420px; background: var(--bg); }
+.leaflet-container { background: var(--bg) !important; }
+.leaflet-control-attribution, .leaflet-control-zoom { display: none !important; }
+.vm-pin {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: #ff2d2d; border: 2px solid rgba(8,8,8,0.8);
+  cursor: pointer; transition: all 0.2s ease;
+}
+.vm-pin:hover { width: 13px; height: 13px; border-color: var(--text); margin-left: -2px; margin-top: -2px; }
+.vm-pin-bar {
+  width: 8px; height: 8px; border-radius: 1px;
+  background: #ff2d2d; border: 1.5px solid rgba(8,8,8,0.8);
+  transform: rotate(45deg); cursor: pointer; transition: all 0.2s ease;
+}
+.vm-pin-bar:hover { width: 12px; height: 12px; border-color: var(--text); margin-left: -2px; margin-top: -2px; }
+.vm-label {
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.1em;
+  color: var(--text); text-transform: uppercase; white-space: nowrap;
+  pointer-events: none;
+  background: rgba(8,8,8,0.9); border: 1px solid rgba(240,237,232,0.15);
+  border-radius: 0; padding: 4px 10px; box-shadow: none;
+}
+.vm-label::before { display: none; }
+.vm-pill {
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 4px 12px; border: 1px solid rgba(240,237,232,0.15); border-radius: 0;
+  background: transparent; color: rgba(240,237,232,0.4); cursor: pointer; transition: all 0.2s ease;
+}
+.vm-pill:hover { border-color: rgba(240,237,232,0.4); color: var(--text); }
+.vm-pill.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+
+/* FOOTER */
+footer { padding: 60px 40px 40px; border-top: 1px solid rgba(240,237,232,0.08); }
+.footer-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 80px; }
+.footer-logo { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; }
+.footer-links { display: flex; gap: 32px; }
+.footer-links a { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.5; transition: opacity 0.3s ease; }
+.footer-links a:hover { opacity: 1; }
+.footer-copy { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; opacity: 0.3; }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  nav { padding: 20px 24px; }
+  .page-header { padding: 140px 24px 60px; }
+  .page-header-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
+  #venues-list-view { padding: 40px 24px 80px; }
+  .venues-grid { grid-template-columns: 1fr; }
+  .venue-card { padding: 36px 24px; min-height: auto; }
+  .venue-back { padding: 40px 24px 0; }
+  .venue-detail { padding: 32px 24px 80px; }
+  .venue-detail-header { grid-template-columns: 1fr; gap: 32px; }
+  .venue-event-row { grid-template-columns: 60px 1fr auto; gap: 16px; }
+  .venue-artist-row { grid-template-columns: 1fr auto; gap: 12px; }
+  .va-genre { display: none; }
+  .footer-top { flex-direction: column; gap: 24px; text-align: center; }
+}
+@media (max-width: 600px) {
+  nav .nav-links { gap: 16px; }
+  nav .nav-links a { font-size: 9px; }
+  .venue-event-row { grid-template-columns: 1fr; gap: 8px; }
+  .footer-links { gap: 20px; }
+}
+@media (hover: none) and (pointer: coarse) {
+  body { cursor: auto; }
+  .cursor-dot, .cursor-ring { display: none; }
+  .venue-back { cursor: pointer; }
+
+}
+</style>
+</head>
+<body>
+
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<nav>
+  <a href="index.html" class="logo">TECHNO JAPAN</a>
+  <div class="nav-links">
+    <a href="index.html#about">ABOUT</a>
+    <a href="media.html">DISCOVER</a>
+    <a href="index.html#instagram">INSTAGRAM</a>
+    <a href="index.html#contact">CONTACT</a>
+  </div>
+</nav>
+
+<header class="page-header" id="page-header">
+  <a href="index.html" class="back-link"><span class="arrow"></span> BACK TO HOME</a>
+  <div class="page-header-inner">
+    <h1 class="page-title">VENUES</h1>
+    <div class="page-subtitle">CLUBS · WAREHOUSES · SPACES</div>
+  </div>
+</header>
+
+<main id="venues-list-view">
+  <div class="map-toggle-bar">
+    <div></div>
+    <button class="map-toggle-btn" id="venue-map-toggle"><span class="pin-icon"></span> TOKYO MAP</button>
+  </div>
+  <div id="venue-map-wrap">
+    <div id="venue-map-filters"></div>
+    <div id="venue-map"></div>
+  </div>
+  <div class="venues-grid" id="venues-grid"></div>
+</main>
+
+<div id="venue-detail-view">
+  <div class="venue-hero" id="venue-hero"></div>
+  <a class="venue-back" id="venue-back-btn"><span class="arrow" style="width:24px;height:1px;background:var(--text);position:relative;display:inline-block"><span style="position:absolute;left:0;top:-3px;width:7px;height:7px;border-left:1px solid var(--text);border-bottom:1px solid var(--text);transform:rotate(45deg)"></span></span> ALL VENUES</a>
+  <div class="venue-detail" id="venue-detail"></div>
+</div>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-logo">TECHNO JAPAN</div>
+    <div class="footer-links">
+      <a href="index.html#about">ABOUT</a>
+      <a href="media.html">DISCOVER</a>
+      <a href="index.html#instagram">INSTAGRAM</a>
+      <a href="index.html#contact">CONTACT</a>
+    </div>
+    <div class="footer-copy">&copy; 2024 TECHNO JAPAN. ALL RIGHTS RESERVED.</div>
+  </div>
+</footer>
+
+<script src="data.js?v=2"></script>
+<script>
+const MONTHS_SHORT = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+function parseDate(s) { const [y,m,d] = s.split('-').map(Number); return new Date(y,m-1,d); }
+function isUpcoming(s) { const t = new Date(); t.setHours(0,0,0,0); return parseDate(s) >= t; }
+function getArtist(id) { return ARTISTS.find(a => a.id === id); }
+function getVenue(id) { return VENUES.find(v => v.id === id); }
+function getVenueEvents(venueName) {
+  return EVENTS.filter(e => e.venue === venueName).sort((a,b) => parseDate(a.date) - parseDate(b.date));
+}
+function getVenueArtists(venueName) {
+  const ids = new Set();
+  EVENTS.filter(e => e.venue === venueName && e.lineup).forEach(e => e.lineup.forEach(id => ids.add(id)));
+  return [...ids].map(id => getArtist(id)).filter(Boolean);
+}
+
+/* OBSERVER */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.1 });
+function observeAll() { document.querySelectorAll('.reveal').forEach(el => observer.observe(el)); }
+
+/* RENDER LIST */
+function renderVenuesList() {
+  document.getElementById('venues-grid').innerHTML = VENUES.map((v, i) => {
+    const evCount = getVenueEvents(v.name).length;
+    return `
+      <a href="#venue/${v.id}" class="venue-card reveal" style="transition-delay:${i * 80}ms">
+        <div class="venue-card-content">
+          <div class="venue-card-city">${v.city}${v.area ? ' · ' + v.area : ''}</div>
+          <div class="venue-card-name">${v.name}</div>
+          <div class="venue-card-area">${v.capacity ? '~' + v.capacity : ''}</div>
+          <div class="venue-card-genre">${Array.isArray(v.genre) ? v.genre.join(' / ') : v.genre}</div>
+        </div>
+        <div class="venue-card-arrow">VIEW →</div>
+      </a>`;
+  }).join('');
+  observeAll();
+  bindCursorExpand();
+}
+
+/* RENDER DETAIL */
+function renderVenueDetail(id) {
+  const v = getVenue(id);
+  if (!v) return;
+  const events = getVenueEvents(v.name);
+  const artists = getVenueArtists(v.name);
+
+  const linksArr = [];
+  if (v.url && v.url !== '#') linksArr.push(`<a href="${v.url}" target="_blank" rel="noopener">WEBSITE</a>`);
+  if (v.instagram) linksArr.push(`<a href="${v.instagram}" target="_blank" rel="noopener">INSTAGRAM</a>`);
+  const linksHtml = linksArr.join('');
+
+  const eventsHtml = events.length ? events.map(ev => {
+    const d = parseDate(ev.date);
+    const upcoming = isUpcoming(ev.date);
+    const lineupHtml = ev.lineup && ev.lineup.length
+      ? `<div class="ve-lineup">${ev.lineup.map(aid => { const a = getArtist(aid); return `<a href="artists.html#artist/${aid}">${a ? a.name : aid}</a>`; }).join('')}</div>`
+      : '';
+    return `
+      <div class="venue-event-row">
+        <div class="ve-date">${MONTHS_SHORT[d.getMonth()]} ${String(d.getDate()).padStart(2,'0')}</div>
+        <div>
+          <div class="ve-name">${ev.name}</div>
+          <div class="ve-meta">${ev.time || ''}</div>
+          ${lineupHtml}
+        </div>
+        <span class="ve-tag ${upcoming ? '' : 'past'}">${upcoming ? 'UPCOMING' : 'PAST'}</span>
+      </div>`;
+  }).join('') : '<div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.2em;opacity:0.3;padding:32px 0;">NO EVENTS SCHEDULED</div>';
+
+  const artistsHtml = artists.length ? artists.map(a => {
+    const count = EVENTS.filter(e => e.venue === v.name && e.lineup && e.lineup.includes(a.id)).length;
+    return `
+      <a href="artists.html#artist/${a.id}" class="venue-artist-row">
+        <div class="va-name">${a.name}</div>
+        <div class="va-genre">${a.genre}</div>
+        <div class="va-count">${count} EVENT${count !== 1 ? 'S' : ''}</div>
+      </a>`;
+  }).join('') : '';
+
+  // Render hero image
+  const heroEl = document.getElementById('venue-hero');
+  if (v.image) {
+    heroEl.innerHTML = `<div class="venue-hero-img" style="background-image:url('${v.image}')"></div><div class="venue-hero-gradient"></div>`;
+    heroEl.style.display = 'block';
+  } else {
+    heroEl.innerHTML = `<div class="venue-hero-placeholder"></div><div class="venue-hero-gradient"></div>`;
+    heroEl.style.display = 'block';
+  }
+
+  document.getElementById('venue-detail').innerHTML = `
+    <div class="venue-detail-header reveal">
+      <div class="venue-detail-name">${v.name}</div>
+      <div class="venue-detail-meta">
+        <div class="venue-detail-tags">
+          <span>${v.city}</span>
+          ${v.area ? `<span>${v.area}</span>` : ''}
+          ${v.capacity ? `<span>~${v.capacity}</span>` : ''}
+          <span>${Array.isArray(v.genre) ? v.genre.join(' / ') : v.genre}</span>
+        </div>
+        <div class="venue-detail-bio">${v.desc}</div>
+        ${linksHtml ? `<div class="venue-detail-links">${linksHtml}</div>` : ''}
+      </div>
+    </div>
+    ${artistsHtml ? `<div class="venue-section reveal">
+      <div class="venue-section-title">ARTISTS</div>
+      ${artistsHtml}
+    </div>` : ''}
+    <div class="venue-section reveal">
+      <div class="venue-section-title">EVENTS</div>
+      ${eventsHtml}
+    </div>`;
+
+  observeAll();
+  bindCursorExpand();
+}
+
+/* VIEW SWITCHING */
+function showList() {
+  document.getElementById('venues-list-view').style.display = 'block';
+  document.getElementById('venue-detail-view').style.display = 'none';
+  document.getElementById('page-header').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+function showDetail(id) {
+  document.getElementById('venues-list-view').style.display = 'none';
+  document.getElementById('venue-detail-view').style.display = 'block';
+  document.getElementById('page-header').style.display = 'none';
+  renderVenueDetail(id);
+  window.scrollTo(0, 0);
+}
+
+/* ROUTING */
+function handleRoute() {
+  const hash = window.location.hash;
+  if (hash.startsWith('#venue/')) {
+    showDetail(hash.replace('#venue/', ''));
+  } else {
+    showList();
+  }
+}
+window.addEventListener('hashchange', handleRoute);
+document.getElementById('venue-back-btn').addEventListener('click', (e) => {
+  e.preventDefault();
+  window.location.hash = '';
+  showList();
+});
+
+/* CURSOR */
+const dot = document.querySelector('.cursor-dot');
+const ring = document.querySelector('.cursor-ring');
+let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX; mouseY = e.clientY;
+  dot.style.left = mouseX + 'px'; dot.style.top = mouseY + 'px';
+});
+function animateRing() {
+  ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15;
+  ring.style.left = ringX + 'px'; ring.style.top = ringY + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+function bindCursorExpand() {
+  document.querySelectorAll('a, .venue-card, .venue-back, .venue-artist-row').forEach(el => {
+    el.addEventListener('mouseenter', () => { ring.style.width = '52px'; ring.style.height = '52px'; });
+    el.addEventListener('mouseleave', () => { ring.style.width = '36px'; ring.style.height = '36px'; });
+  });
+}
+
+/* ========== VENUE MAP ========== */
+const VM_CLUBS = VENUES.filter(v => v.city === 'TOKYO' && v.lat);
+
+let vmMap = null;
+let vmMarkers = [];
+let vmGenre = 'ALL';
+let vmType = null;
+let vmVisible = false;
+
+function initVenueMap() {
+  if (vmMap) return;
+  vmMap = L.map('venue-map', {
+    center: [35.6600, 139.6980], zoom: 13,
+    minZoom: 11, maxZoom: 18,
+    zoomControl: false, attributionControl: false
+  });
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    subdomains: 'abcd', maxZoom: 19
+  }).addTo(vmMap);
+  renderVmFilters();
+  renderVmMarkers();
+}
+
+function renderVmFilters() {
+  const bar = document.getElementById('venue-map-filters');
+  const genres = ['ALL','TECHNO','HOUSE','EXPERIMENTAL','LIVE'];
+  bar.innerHTML = genres.map(g =>
+    `<button class="vm-pill${vmGenre===g?' active':''}" data-genre="${g}">${g}</button>`
+  ).join('') +
+  '<span style="width:1px;height:16px;background:rgba(240,237,232,0.08);margin:0 4px"></span>' +
+  `<button class="vm-pill${vmType==='club'?' active':''}" data-type="club">CLUBS</button>` +
+  `<button class="vm-pill${vmType==='bar'?' active':''}" data-type="bar">BARS</button>`;
+  bar.querySelectorAll('.vm-pill[data-genre]').forEach(p => {
+    p.addEventListener('click', () => { vmGenre = p.dataset.genre; renderVmFilters(); renderVmMarkers(); });
+  });
+  bar.querySelectorAll('.vm-pill[data-type]').forEach(p => {
+    p.addEventListener('click', () => { vmType = vmType === p.dataset.type ? null : p.dataset.type; renderVmFilters(); renderVmMarkers(); });
+  });
+}
+
+function renderVmMarkers() {
+  vmMarkers.forEach(m => vmMap.removeLayer(m));
+  vmMarkers = [];
+  let filtered = VM_CLUBS;
+  if (vmGenre !== 'ALL') filtered = filtered.filter(c => c.genre.some(g => g.includes(vmGenre)));
+  if (vmType) filtered = filtered.filter(c => c.type === vmType);
+  filtered.forEach(c => {
+    const cls = c.type === 'bar' ? 'vm-pin-bar' : 'vm-pin';
+    const icon = L.divIcon({ className: '', html: `<div class="${cls}"></div>`, iconSize: [9,9], iconAnchor: [4.5,4.5] });
+    const m = L.marker([c.lat, c.lng], { icon }).addTo(vmMap);
+    m.bindTooltip(c.name, { className: 'vm-label', direction: 'right', offset: [8,0], permanent: false });
+    m.on('click', () => { window.location.hash = 'venue/' + c.id; });
+    vmMarkers.push(m);
+  });
+}
+
+document.getElementById('venue-map-toggle').addEventListener('click', function() {
+  const wrap = document.getElementById('venue-map-wrap');
+  if (vmVisible) {
+    wrap.style.display = 'none';
+    this.classList.remove('active');
+    vmVisible = false;
+  } else {
+    wrap.style.display = 'block';
+    this.classList.add('active');
+    vmVisible = true;
+    setTimeout(() => { initVenueMap(); vmMap.invalidateSize(); }, 50);
+  }
+});
+
+/* INIT */
+renderVenuesList();
+handleRoute();
+</script>
+</body>
+</html>

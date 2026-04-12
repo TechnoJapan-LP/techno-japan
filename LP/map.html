@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOKYO CLUB MAP — TECHNO JAPAN</title>
+<meta name="description" content="Interactive map of Tokyo's underground clubs and venues. Techno Japan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #080808;
+  --text: #f0ede8;
+  --red: #ff2d2d;
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+  --font-body: 'DM Sans', sans-serif;
+}
+html, body { height: 100%; overflow: hidden; }
+body { background: var(--bg); color: var(--text); font-family: var(--font-body); }
+
+/* HEADER */
+.header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  height: 56px; display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px;
+  background: rgba(8,8,8,0.9); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(240,237,232,0.08);
+}
+.header-logo { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; }
+.header-logo a { color: var(--text); text-decoration: none; }
+.header-title { font-family: var(--font-display); font-size: 18px; letter-spacing: 0.1em; text-transform: uppercase; }
+.header-right { display: flex; align-items: center; gap: 28px; }
+.header-nav { display: flex; gap: 20px; }
+.header-nav-link { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(240,237,232,0.5); text-decoration: none; transition: color 0.2s ease; }
+.header-nav-link:hover { color: var(--text); }
+.header-count { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; color: var(--red); }
+
+/* FILTER BAR */
+.filter-bar {
+  position: fixed; top: 56px; left: 0; right: 0; z-index: 1000;
+  height: 44px; display: flex; align-items: center; gap: 10px;
+  padding: 0 28px; overflow-x: auto;
+  background: rgba(8,8,8,0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(240,237,232,0.06);
+  -ms-overflow-style: none; scrollbar-width: none;
+}
+.filter-bar::-webkit-scrollbar { display: none; }
+.filter-pill {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  padding: 6px 16px; border: 1px solid rgba(240,237,232,0.2); border-radius: 0;
+  background: transparent; color: rgba(240,237,232,0.5); cursor: pointer;
+  transition: all 0.3s ease; white-space: nowrap; flex-shrink: 0;
+}
+.filter-pill:hover { border-color: rgba(240,237,232,0.5); color: var(--text); }
+.filter-pill.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+
+/* MAP */
+#map {
+  position: absolute; top: 100px; left: 0; right: 0; bottom: 0;
+  background: var(--bg); z-index: 1;
+}
+
+/* CUSTOM MARKERS — CLUB (circle) */
+.club-pin {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--red); border: 2px solid rgba(8,8,8,0.8);
+  transition: all 0.25s cubic-bezier(0.16,1,0.3,1);
+  cursor: pointer;
+}
+.club-pin:hover { width: 14px; height: 14px; border-color: var(--text); margin-left: -2px; margin-top: -2px; }
+.club-pin.active { background: var(--text); width: 16px; height: 16px; border-color: var(--text); margin-left: -3px; margin-top: -3px; }
+.club-pin.dimmed { opacity: 0.3; }
+
+/* CUSTOM MARKERS — BAR (diamond) */
+.bar-pin {
+  width: 9px; height: 9px; border-radius: 1px;
+  background: var(--red); border: 1.5px solid rgba(8,8,8,0.8);
+  transform: rotate(45deg);
+  transition: all 0.25s cubic-bezier(0.16,1,0.3,1);
+  cursor: pointer;
+}
+.bar-pin:hover { width: 13px; height: 13px; border-color: var(--text); margin-left: -2px; margin-top: -2px; }
+.bar-pin.active { background: var(--text); width: 14px; height: 14px; border-color: var(--text); margin-left: -2.5px; margin-top: -2.5px; }
+.bar-pin.dimmed { opacity: 0.3; }
+
+/* AREA LABELS */
+.area-label {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.25em;
+  color: rgba(240,237,232,0.2); text-transform: uppercase;
+  white-space: nowrap; pointer-events: none;
+}
+
+/* INFO CARD */
+.info-card {
+  position: fixed; bottom: 32px; left: 32px; z-index: 1100;
+  width: 320px; background: #0f0f0f;
+  border: 1px solid rgba(240,237,232,0.15); border-left: 3px solid var(--red);
+  padding: 28px; opacity: 0; transform: translateY(8px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+.info-card.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.info-card-close {
+  position: absolute; top: 16px; right: 16px;
+  font-family: var(--font-mono); font-size: 11px; color: rgba(240,237,232,0.4);
+  cursor: pointer; background: none; border: none; padding: 4px 6px;
+  transition: color 0.2s ease; line-height: 1;
+}
+.info-card-close:hover { color: var(--text); }
+.info-card-area { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; color: var(--red); text-transform: uppercase; }
+.info-card-name { font-family: var(--font-display); font-size: 32px; color: var(--text); line-height: 1; margin-top: 6px; }
+.info-card-genres { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.info-card-genre {
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 3px 8px; border: 1px solid rgba(240,237,232,0.15); color: rgba(240,237,232,0.5);
+}
+.info-card-divider { height: 1px; background: rgba(240,237,232,0.08); margin: 16px 0; }
+.info-card-desc { font-family: var(--font-body); font-size: 13px; font-weight: 200; line-height: 1.8; color: rgba(240,237,232,0.65); }
+.info-card-capacity { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; color: rgba(240,237,232,0.4); margin-top: 12px; text-transform: uppercase; }
+.info-card-address { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.05em; color: rgba(240,237,232,0.35); margin-top: 6px; }
+.info-card-link {
+  display: inline-block; margin-top: 14px;
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--red); text-decoration: none; opacity: 0.7; transition: opacity 0.2s ease;
+}
+.info-card-link:hover { opacity: 1; }
+
+/* LEGEND */
+.map-legend {
+  position: fixed; bottom: 48px; right: 24px; z-index: 1050;
+  display: flex; flex-direction: column; gap: 10px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.15em;
+  text-transform: uppercase; color: rgba(240,237,232,0.35);
+}
+.legend-item { display: flex; align-items: center; gap: 10px; }
+.legend-icon-club {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--red);
+  border: 1.5px solid rgba(8,8,8,0.8); flex-shrink: 0;
+}
+.legend-icon-bar {
+  width: 7px; height: 7px; border-radius: 1px; background: var(--red);
+  border: 1.5px solid rgba(8,8,8,0.8); transform: rotate(45deg); flex-shrink: 0;
+}
+
+/* HINT STRIP */
+.hint-strip {
+  position: fixed; bottom: 16px; right: 24px; z-index: 1050;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.15em;
+  color: rgba(240,237,232,0.2); text-transform: uppercase;
+  transition: opacity 1s ease; pointer-events: none;
+}
+.hint-strip.hidden { opacity: 0; }
+
+/* LEAFLET OVERRIDES */
+.leaflet-control-attribution { display: none !important; }
+.leaflet-control-zoom { display: none !important; }
+.leaflet-container { background: var(--bg) !important; }
+
+/* RESPONSIVE */
+@media (max-width: 640px) {
+  .header { padding: 0 16px; }
+  .header-title { font-size: 14px; }
+  .filter-bar { padding: 0 16px; gap: 8px; }
+  .filter-pill { font-size: 8px; padding: 5px 12px; }
+  .info-card {
+    left: 0; right: 0; bottom: 0; width: 100%;
+    border-left: none; border-top: 3px solid var(--red);
+    border-radius: 0; max-height: 55vh; overflow-y: auto;
+  }
+  .hint-strip { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-logo"><a href="index.html">TECHNO JAPAN</a></div>
+  <div class="header-title">TOKYO CLUB MAP</div>
+  <div class="header-right">
+    <div class="header-nav">
+      <a href="artists.html" class="header-nav-link">ARTISTS</a>
+      <a href="venues.html" class="header-nav-link">VENUE</a>
+    </div>
+    <div class="header-count" id="venue-count">25 VENUES</div>
+  </div>
+</header>
+
+<div class="filter-bar" id="filter-bar">
+  <button class="filter-pill active" data-genre="ALL">ALL</button>
+  <button class="filter-pill" data-genre="TECHNO">TECHNO</button>
+  <button class="filter-pill" data-genre="HOUSE">HOUSE</button>
+  <button class="filter-pill" data-genre="EXPERIMENTAL">EXPERIMENTAL</button>
+  <button class="filter-pill" data-genre="LIVE">LIVE</button>
+  <span style="width:1px;height:20px;background:rgba(240,237,232,0.1);flex-shrink:0;margin:0 6px"></span>
+  <button class="filter-pill" data-type="club">CLUBS</button>
+  <button class="filter-pill" data-type="bar">BARS</button>
+</div>
+
+<div id="map"></div>
+
+<div class="info-card" id="info-card">
+  <button class="info-card-close" id="info-card-close">&times;</button>
+  <div class="info-card-area" id="card-area"></div>
+  <div class="info-card-type" id="card-type" style="font-family:var(--font-mono);font-size:8px;letter-spacing:0.15em;color:rgba(240,237,232,0.3);margin-top:4px;text-transform:uppercase"></div>
+  <div class="info-card-name" id="card-name"></div>
+  <div class="info-card-genres" id="card-genres"></div>
+  <div class="info-card-divider"></div>
+  <div class="info-card-desc" id="card-desc"></div>
+  <div class="info-card-capacity" id="card-capacity"></div>
+  <div class="info-card-address" id="card-address"></div>
+  <a class="info-card-link" id="card-link" href="#" target="_blank" rel="noopener">WEBSITE &rarr;</a>
+</div>
+
+<div class="map-legend">
+  <div class="legend-item"><div class="legend-icon-club"></div> NIGHTCLUB</div>
+  <div class="legend-item"><div class="legend-icon-bar"></div> MUSIC BAR</div>
+</div>
+
+<div class="hint-strip" id="hint-strip">SCROLL TO ZOOM &middot; CLICK PIN FOR INFO</div>
+
+<script src="data.js?v=2"></script>
+<script>
+/* ==========================================================
+   CLUB DATA — derived from shared VENUES in data.js
+   ========================================================== */
+const CLUBS = VENUES.filter(v => v.city === 'TOKYO' && v.lat).map(v => ({
+  ...v, description: v.desc, address: v.address || '', url: v.url || '#'
+}));
+
+/* ==========================================================
+   MAP SETUP
+   ========================================================== */
+const map = L.map('map', {
+  center: [35.6600, 139.6980],
+  zoom: 13,
+  minZoom: 11,
+  maxZoom: 18,
+  zoomControl: false,
+  attributionControl: false
+});
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  subdomains: 'abcd',
+  maxZoom: 19
+}).addTo(map);
+
+/* ==========================================================
+   STATE
+   ========================================================== */
+let markers = [];
+let activeMarkerId = null;
+let activeFilter = 'ALL';
+let activeTypeFilter = null;
+
+/* ==========================================================
+   AREA LABELS
+   ========================================================== */
+const AREA_LABELS = [
+  { name: 'SHIBUYA', lat: 35.6590, lng: 139.6990 },
+  { name: 'DAIKANYAMA', lat: 35.6480, lng: 139.7035 },
+  { name: 'NAKAMEGURO', lat: 35.6430, lng: 139.6950 },
+  { name: 'SHINJUKU', lat: 35.6960, lng: 139.7060 },
+  { name: 'KOTO', lat: 35.6430, lng: 139.8200 },
+  { name: 'EBISU', lat: 35.6465, lng: 139.7130 },
+  { name: 'AOYAMA', lat: 35.6660, lng: 139.7180 },
+  { name: 'HATAGAYA', lat: 35.6735, lng: 139.6750 },
+];
+
+AREA_LABELS.forEach(a => {
+  L.marker([a.lat, a.lng], {
+    icon: L.divIcon({
+      className: 'area-label',
+      html: a.name,
+      iconSize: [0, 0],
+      iconAnchor: [0, 0]
+    }),
+    interactive: false
+  }).addTo(map);
+});
+
+/* ==========================================================
+   RENDER MARKERS
+   ========================================================== */
+function clearMarkers() {
+  markers.forEach(m => map.removeLayer(m.leaflet));
+  markers = [];
+}
+
+function renderMap(clubs) {
+  clearMarkers();
+  clubs.forEach(club => {
+    const pinClass = club.type === 'bar' ? 'bar-pin' : 'club-pin';
+    const icon = L.divIcon({
+      className: '',
+      html: `<div class="${pinClass}" data-id="${club.id}"></div>`,
+      iconSize: [10, 10],
+      iconAnchor: [5, 5]
+    });
+    const m = L.marker([club.lat, club.lng], { icon }).addTo(map);
+    m.on('click', () => openCard(club));
+    markers.push({ id: club.id, leaflet: m, club });
+  });
+  updateCount(clubs.length);
+  if (activeMarkerId) updatePinStates();
+}
+
+function updateCount(n) {
+  document.getElementById('venue-count').textContent = n + ' VENUE' + (n !== 1 ? 'S' : '');
+}
+
+/* ==========================================================
+   INFO CARD
+   ========================================================== */
+const card = document.getElementById('info-card');
+
+function openCard(club) {
+  document.getElementById('card-area').textContent = club.area;
+  document.getElementById('card-type').textContent = club.type === 'bar' ? 'MUSIC BAR' : 'NIGHTCLUB';
+  document.getElementById('card-name').textContent = club.name;
+  document.getElementById('card-genres').innerHTML = club.genre.map(g =>
+    `<span class="info-card-genre">${g}</span>`
+  ).join('');
+  document.getElementById('card-desc').textContent = club.description;
+  document.getElementById('card-capacity').textContent = 'CAPACITY \u2014 ' + club.capacity;
+  document.getElementById('card-address').textContent = club.address;
+  const link = document.getElementById('card-link');
+  if (club.url && club.url !== '#') {
+    link.href = club.url;
+    link.style.display = 'inline-block';
+  } else {
+    link.style.display = 'none';
+  }
+  card.classList.add('visible');
+  activeMarkerId = club.id;
+  updatePinStates();
+}
+
+function closeCard() {
+  card.classList.remove('visible');
+  activeMarkerId = null;
+  updatePinStates();
+}
+
+document.getElementById('info-card-close').addEventListener('click', closeCard);
+
+function updatePinStates() {
+  document.querySelectorAll('.club-pin, .bar-pin').forEach(pin => {
+    const id = pin.dataset.id;
+    if (activeMarkerId) {
+      if (id === activeMarkerId) {
+        pin.classList.add('active');
+        pin.classList.remove('dimmed');
+      } else {
+        pin.classList.remove('active');
+        pin.classList.add('dimmed');
+      }
+    } else {
+      pin.classList.remove('active', 'dimmed');
+    }
+  });
+}
+
+/* ==========================================================
+   MAP CLICK — CLOSE CARD
+   ========================================================== */
+map.on('click', (e) => {
+  if (activeMarkerId) closeCard();
+});
+
+/* ==========================================================
+   GENRE FILTER
+   ========================================================== */
+const FILTER_MAP = {
+  'ALL': null,
+  'TECHNO': 'TECHNO',
+  'HOUSE': 'HOUSE',
+  'EXPERIMENTAL': 'EXPERIMENTAL',
+  'LIVE': 'LIVE'
+};
+
+document.querySelectorAll('.filter-pill[data-genre]').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('.filter-pill[data-genre]').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+    activeFilter = pill.dataset.genre;
+    closeCard();
+    applyFilter();
+  });
+});
+
+document.querySelectorAll('.filter-pill[data-type]').forEach(pill => {
+  pill.addEventListener('click', () => {
+    const type = pill.dataset.type;
+    if (activeTypeFilter === type) {
+      pill.classList.remove('active');
+      activeTypeFilter = null;
+    } else {
+      document.querySelectorAll('.filter-pill[data-type]').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      activeTypeFilter = type;
+    }
+    closeCard();
+    applyFilter();
+  });
+});
+
+function applyFilter() {
+  let filtered = CLUBS;
+  const genre = FILTER_MAP[activeFilter];
+  if (genre) {
+    filtered = filtered.filter(c =>
+      c.genre.some(g => g.toUpperCase().includes(genre))
+    );
+  }
+  if (activeTypeFilter) {
+    filtered = filtered.filter(c => c.type === activeTypeFilter);
+  }
+  renderMap(filtered);
+}
+
+/* ==========================================================
+   HINT STRIP
+   ========================================================== */
+setTimeout(() => {
+  document.getElementById('hint-strip').classList.add('hidden');
+}, 4000);
+
+/* ==========================================================
+   INIT
+   ========================================================== */
+renderMap(CLUBS);
+</script>
+</body>
+</html>
