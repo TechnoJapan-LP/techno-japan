@@ -804,7 +804,8 @@ footer {
 }
 
 @media (max-width: 768px) {
-  .nav-hamburger { display: flex; }
+  .nav-hamburger { display: flex; top: 20px; right: 24px; }
+  .nav-overlay .nav-close { top: 20px; right: 24px; }
   nav .nav-links { display: none; }
   .discover-grid { grid-template-columns: 1fr; }
   .discover-card { aspect-ratio: 3/4; }
@@ -823,6 +824,7 @@ footer {
   body { cursor: auto; }
   .cursor-dot, .cursor-ring { display: none; }
   .cta-btn { cursor: pointer; }
+  .nav-hamburger, .nav-overlay .nav-close, .nav-overlay .nav-back, .nav-overlay a { cursor: pointer; }
 }
 </style>
 </head>

@@ -332,7 +332,8 @@ footer { padding: 60px 40px 40px; border-top: 1px solid rgba(240,237,232,0.08); 
   .footer-top { flex-direction: column; gap: 24px; text-align: center; }
 }
 @media (max-width: 768px) {
-  .nav-hamburger { display: flex; }
+  .nav-hamburger { display: flex; top: 20px; right: 24px; }
+  .nav-overlay .nav-close { top: 20px; right: 24px; }
   nav .nav-links { display: none; }
   .footer-links { gap: 20px; }
 }
@@ -340,6 +341,7 @@ footer { padding: 60px 40px 40px; border-top: 1px solid rgba(240,237,232,0.08); 
   body { cursor: auto; }
   .cursor-dot, .cursor-ring { display: none; }
   .artist-back { cursor: pointer; }
+  .nav-hamburger, .nav-overlay .nav-close, .nav-overlay .nav-back, .nav-overlay a { cursor: pointer; }
 }
 </style>
 </head>

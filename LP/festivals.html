@@ -549,11 +549,13 @@ footer { border-top: 1px solid rgba(240,237,232,0.08); padding: 60px 40px; }
   .detail-flyer-image { width: 100%; max-width: 320px; }
   .edition-row { grid-template-columns: 60px 1fr; gap: 16px; }
   .edition-date { display: none; }
+  .mode-toggle { margin-top: 16px; }
 }
 
 @media (max-width: 768px) {
   nav { padding: 20px 24px; }
-  .nav-hamburger { display: flex; }
+  .nav-hamburger { display: flex; top: 20px; right: 24px; }
+  .nav-overlay .nav-close { top: 20px; right: 24px; }
   nav .nav-links { display: none; }
 }
 
@@ -566,6 +568,7 @@ footer { border-top: 1px solid rgba(240,237,232,0.08); padding: 60px 40px; }
   .cursor-dot, .cursor-ring { display: none; }
   /* Show color images on touch since no hover */
   .festival-image-wrap img { filter: grayscale(0%); }
+  .nav-hamburger, .nav-overlay .nav-close, .nav-overlay .nav-back, .nav-overlay a { cursor: pointer; }
 }
 </style>
 </head>

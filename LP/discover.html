@@ -353,7 +353,7 @@ nav .nav-dropdown-menu-inner a:hover { opacity: 1; background: rgba(240,237,232,
 }
 .load-more-btn:hover { border-color: rgba(240,237,232,0.35); background: rgba(240,237,232,0.03); }
 
-/* ===================== QUICK LINKS ===================== */
+/* ===================== DISCOVER CARDS (index style) ===================== */
 .guide-section {
   padding: 0 40px;
   margin-top: 80px;
@@ -371,36 +371,63 @@ nav .nav-dropdown-menu-inner a:hover { opacity: 1; background: rgba(240,237,232,
   font-family: var(--font-display); font-size: clamp(40px, 6vw, 72px);
   text-transform: uppercase; line-height: 0.9;
 }
-.quick-links {
+.discover-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 2px;
+  gap: 16px;
 }
-.quick-link {
-  position: relative;
-  aspect-ratio: 4/3;
+.discover-card {
+  display: block; position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: 14px;
   overflow: hidden;
-  display: flex; align-items: flex-end;
-  padding: 24px;
-  background: var(--card-bg);
-  transition: background 0.3s ease;
+  cursor: none;
 }
-.quick-link:hover { background: rgba(240,237,232,0.06); }
-.quick-link-label {
-  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase;
-  opacity: 0.25; margin-bottom: 4px;
+.discover-card-bg {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.quick-link-name {
-  font-family: var(--font-display); font-size: clamp(22px, 3vw, 36px);
+.discover-card:hover .discover-card-bg { transform: scale(1.06); }
+.discover-card-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.55) 100%);
+  transition: background 0.4s ease;
+}
+.discover-card:hover .discover-card-overlay {
+  background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.45) 100%);
+}
+.discover-card-content {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 32px 24px;
+  text-align: center;
+  z-index: 1;
+}
+.discover-card-title {
+  font-family: var(--font-display);
+  font-size: 42px;
   text-transform: uppercase; line-height: 1;
+  margin-bottom: 12px;
+  text-shadow: 0 2px 16px rgba(0,0,0,0.5);
 }
-.quick-link-arrow {
+.discover-card-desc {
+  font-family: var(--font-body); font-weight: 200;
+  font-size: 12px; line-height: 1.7;
+  opacity: 0.7; max-width: 220px;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.3);
+}
+.discover-card-arrow {
   position: absolute; top: 20px; right: 20px;
-  font-family: var(--font-mono); font-size: 16px;
-  opacity: 0; transform: translate(-4px, 4px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  width: 32px; height: 32px;
+  border: 1px solid rgba(255,255,255,0.3); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: translateY(6px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
 }
-.quick-link:hover .quick-link-arrow { opacity: 0.4; transform: translate(0, 0); }
+.discover-card:hover .discover-card-arrow { opacity: 1; transform: translateY(0); }
+.discover-card-arrow svg { width: 12px; height: 12px; stroke: var(--text); fill: none; stroke-width: 2; }
 
 /* ===================== SCROLL REVEAL ===================== */
 .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
@@ -430,27 +457,35 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
   .feed-section { padding: 60px 24px 0; margin-top: 60px; }
   .feed-grid { grid-template-columns: 1fr; gap: 40px; }
   .guide-section { padding: 0 24px; }
-  .quick-links { grid-template-columns: repeat(2, 1fr); }
+  .discover-grid { grid-template-columns: repeat(2, 1fr); }
+  .discover-card { aspect-ratio: 1; }
+  .discover-card-title { font-size: 28px; }
   .footer-top { flex-direction: column; gap: 24px; text-align: center; }
   footer { padding: 60px 24px 32px; margin-top: 80px; }
 }
 @media (max-width: 768px) {
-  .nav-hamburger { display: flex; }
+  .nav-hamburger { display: flex; top: 20px; right: 24px; }
+  .nav-overlay .nav-close { top: 20px; right: 24px; }
   nav .nav-links { display: none; }
   .tagline { font-size: 24px; }
   .side-card { padding: 24px 20px; }
   .side-card-arrow { right: 16px; width: 36px; height: 36px; }
-  .side-card-title { padding-right: 48px; }
+  .side-card-title { padding-right: 48px; font-size: 15px; }
   .side-card-excerpt { display: none; }
   .footer-links { gap: 20px; }
+  .sort-tabs { padding: 24px 24px 0; }
+  .featured-card-title { font-size: 20px; }
+  .featured-card-image, .featured-card-image-placeholder { min-height: 240px; }
 }
 @media (max-width: 480px) {
-  .quick-links { grid-template-columns: 1fr; }
+  .discover-grid { grid-template-columns: 1fr; }
+  .discover-card { aspect-ratio: 1; }
 }
 @media (hover: none) and (pointer: coarse) {
   body { cursor: auto; }
   .cursor-dot, .cursor-ring { display: none; }
-  .sort-tab, .cat-btn, .load-more-btn, .quick-link { cursor: pointer; }
+  .sort-tab, .cat-btn, .load-more-btn, .discover-card { cursor: pointer; }
+  .nav-hamburger, .nav-overlay .nav-close, .nav-overlay .nav-back, .nav-overlay a { cursor: pointer; }
 }
 </style>
 </head>
@@ -522,34 +557,42 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
     <div class="guide-label">EXPLORE</div>
     <div class="guide-title">GUIDE</div>
   </div>
-  <div class="quick-links">
-    <a href="festivals.html" class="quick-link">
-      <div>
-        <div class="quick-link-label">FESTIVAL & RAVE</div>
-        <div class="quick-link-name">FESTIVALS</div>
+  <div class="discover-grid">
+    <a href="festivals.html" class="discover-card reveal">
+      <div class="discover-card-bg" style="background:linear-gradient(135deg, #1a0533 0%, #4a1942 40%, #c2185b 100%)"></div>
+      <div class="discover-card-overlay"></div>
+      <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+      <div class="discover-card-content">
+        <div class="discover-card-title">FESTIVALS</div>
+        <div class="discover-card-desc">Open-air gatherings, multi-day adventures, and Japan's most iconic outdoor electronic music festivals.</div>
       </div>
-      <div class="quick-link-arrow">↗</div>
     </a>
-    <a href="events.html" class="quick-link">
-      <div>
-        <div class="quick-link-label">UPCOMING NIGHTS</div>
-        <div class="quick-link-name">EVENTS</div>
+    <a href="events.html" class="discover-card reveal">
+      <div class="discover-card-bg" style="background:linear-gradient(135deg, #0d1b2a 0%, #1b2838 40%, #415a77 100%)"></div>
+      <div class="discover-card-overlay"></div>
+      <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+      <div class="discover-card-content">
+        <div class="discover-card-title">EVENTS</div>
+        <div class="discover-card-desc">Club nights, open-air raves, warehouse sessions. The heartbeat of Japan's underground scene.</div>
       </div>
-      <div class="quick-link-arrow">↗</div>
     </a>
-    <a href="artists.html" class="quick-link">
-      <div>
-        <div class="quick-link-label">LOCAL & INTERNATIONAL</div>
-        <div class="quick-link-name">ARTISTS</div>
+    <a href="artists.html" class="discover-card reveal">
+      <div class="discover-card-bg" style="background:linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%)"></div>
+      <div class="discover-card-overlay"></div>
+      <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+      <div class="discover-card-content">
+        <div class="discover-card-title">ARTISTS</div>
+        <div class="discover-card-desc">Emerging talent, established selectors. The names shaping Japan's sound.</div>
       </div>
-      <div class="quick-link-arrow">↗</div>
     </a>
-    <a href="venues.html" class="quick-link">
-      <div>
-        <div class="quick-link-label">CLUBS & SPACES</div>
-        <div class="quick-link-name">VENUES</div>
+    <a href="venues.html" class="discover-card reveal">
+      <div class="discover-card-bg" style="background:linear-gradient(135deg, #1b1b1b 0%, #2d2d2d 40%, #4a4a4a 100%)"></div>
+      <div class="discover-card-overlay"></div>
+      <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+      <div class="discover-card-content">
+        <div class="discover-card-title">VENUE</div>
+        <div class="discover-card-desc">The clubs, warehouses, and spaces that define Japan's underground.</div>
       </div>
-      <div class="quick-link-arrow">↗</div>
     </a>
   </div>
 </div>
