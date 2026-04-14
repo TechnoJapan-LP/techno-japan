@@ -104,27 +104,28 @@ nav .nav-dropdown-menu-inner a:hover { opacity: 1; background: rgba(240,237,232,
 }
 
 /* ===================== ARTISTS LIST VIEW ===================== */
-#artists-list-view { padding: 60px 0 120px; }
+#artists-list-view { padding: 0 0 120px; }
 
 .artists-carousel {
   display: flex;
-  gap: 20px;
+  gap: 6px;
   overflow-x: auto;
-  scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
-  padding: 0 40px;
+  padding: 0;
   scrollbar-width: none;
+  cursor: grab;
+  user-select: none;
 }
 .artists-carousel::-webkit-scrollbar { display: none; }
+.artists-carousel.dragging { cursor: grabbing; }
+.artists-carousel.dragging .artist-card { pointer-events: none; }
 
 .artist-card {
-  flex: 0 0 320px;
-  aspect-ratio: 1;
+  flex: 0 0 calc(33.333vw - 4px);
+  height: 70vh;
   position: relative;
   overflow: hidden;
-  border-radius: 12px;
   display: block;
-  scroll-snap-align: start;
   cursor: none;
 }
 .artist-card-img {
@@ -134,34 +135,45 @@ nav .nav-dropdown-menu-inner a:hover { opacity: 1; background: rgba(240,237,232,
   background-position: center;
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.artist-card:hover .artist-card-img { transform: scale(1.05); }
+.artist-card:hover .artist-card-img { transform: scale(1.08); }
 
-/* Gradient overlay */
+/* Hover overlay */
 .artist-card::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(8,8,8,0.85) 0%, rgba(8,8,8,0.3) 40%, transparent 70%);
+  background: rgba(0, 0, 0, 0.6);
   z-index: 1;
   pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
 }
+.artist-card:hover::after { opacity: 1; }
 
 .artist-card-content {
   position: absolute;
-  bottom: 0; left: 0; right: 0;
-  padding: 28px;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   z-index: 2;
+  opacity: 0;
+  transition: opacity 0.4s ease;
 }
+.artist-card:hover .artist-card-content { opacity: 1; }
+
 .artist-card-genre {
-  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em;
-  text-transform: uppercase; opacity: 0.5; margin-bottom: 10px;
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.25em;
+  text-transform: uppercase; opacity: 0.6; margin-bottom: 12px;
 }
 .artist-card-name {
-  font-family: var(--font-display); font-size: 36px;
-  text-transform: uppercase; line-height: 1; margin-bottom: 8px;
+  font-family: var(--font-display); font-size: clamp(32px, 3vw, 52px);
+  text-transform: uppercase; line-height: 1; margin-bottom: 10px;
+  text-align: center;
 }
 .artist-card-city {
-  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em;
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em;
   text-transform: uppercase; opacity: 0.5;
 }
 
@@ -295,9 +307,9 @@ footer { padding: 60px 40px 40px; border-top: 1px solid rgba(240,237,232,0.08); 
   nav { padding: 20px 24px; }
   .page-header { padding: 140px 24px 60px; }
   .page-header-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
-  #artists-list-view { padding: 40px 0 80px; }
-  .artists-carousel { padding: 0 24px; gap: 16px; }
-  .artist-card { flex: 0 0 260px; }
+  #artists-list-view { padding: 0 0 80px; }
+  .artists-carousel { gap: 4px; }
+  .artist-card { flex: 0 0 50vw; height: 50vh; }
   .artist-back { padding: 40px 24px 0; }
   .artist-detail { padding: 32px 24px 80px; }
   .artist-detail-header { grid-template-columns: 1fr; gap: 32px; }
@@ -423,7 +435,7 @@ function renderArtistsList() {
       <div class="artist-card-content">
         <div class="artist-card-genre">${a.genre}</div>
         <div class="artist-card-name">${a.name}</div>
-        <div class="artist-card-city">${a.city}</div>
+        <div class="artist-card-city">${a.country}</div>
       </div>
     </a>`;
   }).join('');
@@ -470,7 +482,7 @@ function renderArtistDetail(id) {
       <div class="artist-detail-name">${a.name}</div>
       <div class="artist-detail-meta">
         <div class="artist-detail-tags">
-          <span>${a.city}</span>
+          <span>${a.country}</span>
           <span>${a.genre}</span>
         </div>
         <div class="artist-detail-bio">${a.bio}</div>
@@ -549,8 +561,46 @@ function bindCursorExpand() {
   });
 }
 
+/* ========== DRAG TO SCROLL ========== */
+function initDragScroll() {
+  const carousel = document.getElementById('artists-grid');
+  let isDown = false, startX, scrollLeft, hasDragged = false;
+
+  carousel.addEventListener('mousedown', (e) => {
+    isDown = true; hasDragged = false;
+    carousel.classList.add('dragging');
+    startX = e.pageX - carousel.offsetLeft;
+    scrollLeft = carousel.scrollLeft;
+  });
+
+  carousel.addEventListener('mouseleave', () => {
+    isDown = false;
+    carousel.classList.remove('dragging');
+  });
+
+  carousel.addEventListener('mouseup', () => {
+    isDown = false;
+    carousel.classList.remove('dragging');
+  });
+
+  carousel.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - carousel.offsetLeft;
+    const walk = (x - startX) * 1.5;
+    if (Math.abs(walk) > 5) hasDragged = true;
+    carousel.scrollLeft = scrollLeft - walk;
+  });
+
+  // Prevent click navigation when dragging
+  carousel.addEventListener('click', (e) => {
+    if (hasDragged) { e.preventDefault(); e.stopPropagation(); }
+  }, true);
+}
+
 /* ========== INIT ========== */
 renderArtistsList();
+initDragScroll();
 handleRoute();
 </script>
 </body>

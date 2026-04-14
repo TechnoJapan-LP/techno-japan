@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "LP",
-      "runtimeExecutable": "/usr/bin/ruby",
-      "runtimeArgs": ["-e", "require 'webrick'; s=WEBrick::HTTPServer.new(Port:Integer(ENV['PORT']||8080),DocumentRoot:'/Users/shibatatatsuya/Documents/GitHub/techno-japan/LP'); trap('INT'){s.shutdown}; s.start"],
+      "runtimeExecutable": "/usr/bin/python3",
+      "runtimeArgs": ["/tmp/serve_lp.py"],
       "port": 8080,
       "autoPort": true
     }

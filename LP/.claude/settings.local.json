@@ -1,8 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Bash(mkdir -p /tmp/tj_lp/images/artists)",
-      "Bash(cp /Users/shibatatatsuya/Desktop/Work/Techno.Japan/LP/artists.html /Users/shibatatatsuya/Desktop/Work/Techno.Japan/LP/data.js /tmp/tj_lp/)"
+      "mcp__Claude_Preview__preview_start"
     ]
   }
 }
