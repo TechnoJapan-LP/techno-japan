@@ -408,10 +408,6 @@ body.rave-mode .festival-section:hover .festival-name {
   font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em;
   text-transform: uppercase; opacity: 0.15;
 }
-.detail-flyer-info {
-  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em;
-  opacity: 0.3; line-height: 2; text-transform: uppercase; padding-top: 8px;
-}
 
 .detail-hero-info { display: flex; flex-direction: column; justify-content: center; }
 .detail-date {
@@ -887,11 +883,6 @@ function renderDetail(id) {
           ? `<img src="${f.flyer}" alt="${f.name} Flyer" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
              <div class="detail-flyer-placeholder" style="display:none">FLYER IMAGE</div>`
           : `<div class="detail-flyer-placeholder">FLYER IMAGE</div>`}
-      </div>
-      <div class="detail-flyer-info">
-        ${f.name}<br>
-        ${formatFestDate(f.date)}<br>
-        ${f.location} — ${f.city}
       </div>
     </div>`;
 

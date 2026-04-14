@@ -4,17 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DISCOVER — TECHNO JAPAN</title>
-<meta name="description" content="Explore Japan's underground techno and house scene. Events, artists, venues.">
+<meta name="description" content="Explore Japan's underground techno and house scene. Stories, interviews, reports and more.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
   --bg: #080808;
   --text: #f0ede8;
+  --accent: #ff2d2d;
+  --card-bg: rgba(240,237,232,0.03);
+  --card-border: rgba(240,237,232,0.06);
   --font-display: 'Bebas Neue', sans-serif;
   --font-mono: 'Space Mono', monospace;
   --font-body: 'DM Sans', sans-serif;
@@ -25,7 +26,7 @@ body {
   overflow-x: hidden; cursor: none; opacity: 0; animation: bodyFadeIn 0.8s ease forwards;
 }
 @keyframes bodyFadeIn { to { opacity: 1; } }
-@keyframes fadeSlideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 a { color: inherit; text-decoration: none; }
 
 /* CURSOR */
@@ -46,275 +47,6 @@ nav .nav-dropdown:hover .nav-dropdown-menu { opacity: 1; pointer-events: auto; }
 nav .nav-dropdown-menu-inner { background: rgba(8,8,8,0.95); border: 1px solid rgba(240,237,232,0.1); backdrop-filter: blur(12px); padding: 12px 0; min-width: 160px; display: flex; flex-direction: column; }
 nav .nav-dropdown-menu-inner a { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; padding: 10px 24px; opacity: 0.5; transition: opacity 0.2s ease, background 0.2s ease; white-space: nowrap; }
 nav .nav-dropdown-menu-inner a:hover { opacity: 1; background: rgba(240,237,232,0.05); }
-
-/* BACK */
-.back-link { display: inline-flex; align-items: center; gap: 12px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.4; transition: opacity 0.3s ease; margin-bottom: 40px; }
-.back-link:hover { opacity: 1; }
-.back-link .arrow { width: 24px; height: 1px; background: var(--text); position: relative; }
-.back-link .arrow::before { content: ''; position: absolute; left: 0; top: -3px; width: 7px; height: 7px; border-left: 1px solid var(--text); border-bottom: 1px solid var(--text); transform: rotate(45deg); }
-
-/* HEADER */
-.page-header { padding: 160px 40px 0; }
-.page-title { font-family: var(--font-display); font-size: clamp(64px, 12vw, 180px); line-height: 0.9; text-transform: uppercase; opacity: 0; animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; animation-delay: 0.3s; }
-.page-subtitle { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; opacity: 0; animation: fadeSlideUp 0.6s ease forwards; animation-delay: 0.5s; color: rgba(240,237,232,0.5); margin-top: 16px; }
-
-/* ===================== SEARCH BAR ===================== */
-.search-bar {
-  padding: 40px 40px 0;
-  opacity: 0; animation: fadeSlideUp 0.6s ease forwards; animation-delay: 0.6s;
-}
-.search-input-wrap {
-  position: relative;
-  max-width: 480px;
-}
-.search-input {
-  width: 100%;
-  background: transparent;
-  border: 1px solid rgba(240,237,232,0.12);
-  color: var(--text);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  padding: 14px 16px 14px 40px;
-  outline: none;
-  transition: border-color 0.3s ease;
-  border-radius: 0;
-  -webkit-appearance: none;
-}
-.search-input:focus { border-color: rgba(240,237,232,0.4); }
-.search-input::placeholder { color: rgba(240,237,232,0.25); }
-.search-icon {
-  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-  font-size: 14px; opacity: 0.3; pointer-events: none;
-}
-
-/* ===================== TABS ===================== */
-.tabs {
-  display: flex;
-  padding: 40px 40px 0;
-  border-bottom: 1px solid rgba(240,237,232,0.08);
-  gap: 0;
-}
-.tab {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  padding: 16px 32px;
-  background: transparent;
-  border: none;
-  color: var(--text);
-  cursor: none;
-  opacity: 0.35;
-  transition: opacity 0.3s ease;
-  position: relative;
-}
-.tab:hover { opacity: 0.7; }
-.tab.active { opacity: 1; }
-.tab.active::after {
-  content: '';
-  position: absolute;
-  bottom: -1px; left: 0; right: 0;
-  height: 1px;
-  background: var(--text);
-}
-.tab-count {
-  font-size: 8px;
-  opacity: 0.4;
-  margin-left: 6px;
-}
-
-/* ===================== CONTENT PANELS ===================== */
-.panel { display: none; padding: 40px 40px 120px; }
-.panel.active { display: block; }
-
-/* ===================== CITY FILTER ===================== */
-.city-filters {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 32px;
-  flex-wrap: wrap;
-}
-.city-btn {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  padding: 6px 16px;
-  border: 1px solid rgba(240,237,232,0.1);
-  background: transparent;
-  color: var(--text);
-  cursor: none;
-  opacity: 0.4;
-  transition: opacity 0.3s ease, border-color 0.3s ease, background 0.3s ease, color 0.3s ease;
-}
-.city-btn:hover { opacity: 0.7; border-color: rgba(240,237,232,0.25); }
-.city-btn.active { background: var(--text); color: var(--bg); opacity: 1; border-color: var(--text); }
-
-/* ===================== EVENTS PANEL ===================== */
-.event-row {
-  display: grid;
-  grid-template-columns: 80px 1fr 120px auto;
-  gap: 24px;
-  align-items: center;
-  padding: 20px 0;
-  border-bottom: 1px solid rgba(240,237,232,0.05);
-  transition: background 0.2s ease;
-  position: relative;
-}
-.event-row::before {
-  content: ''; position: absolute; inset: 0 -40px;
-  background: rgba(240,237,232,0.02); opacity: 0; transition: opacity 0.2s ease;
-}
-.event-row:hover::before { opacity: 1; }
-.event-row * { position: relative; z-index: 1; }
-
-.ev-date { font-family: var(--font-display); font-size: 24px; }
-.ev-name { font-family: var(--font-display); font-size: 22px; text-transform: uppercase; }
-.ev-sub { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; opacity: 0.35; margin-top: 2px; }
-.ev-city { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.4; }
-.ev-tag {
-  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
-  padding: 5px 14px; border: 1px solid rgba(240,237,232,0.12);
-}
-.ev-tag.past { opacity: 0.25; }
-
-.ev-lineup {
-  display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px;
-}
-.ev-lineup a {
-  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase;
-  opacity: 0.35; transition: opacity 0.2s ease;
-}
-.ev-lineup a:hover { opacity: 1; }
-.ev-lineup a::before { content: '— '; opacity: 0.3; }
-
-/* ===================== ARTISTS PANEL ===================== */
-.artist-row {
-  display: grid;
-  grid-template-columns: 1fr 140px 160px auto;
-  gap: 24px;
-  align-items: center;
-  padding: 20px 0;
-  border-bottom: 1px solid rgba(240,237,232,0.05);
-  transition: background 0.2s ease;
-  position: relative;
-}
-.artist-row::before {
-  content: ''; position: absolute; inset: 0 -40px;
-  background: rgba(240,237,232,0.02); opacity: 0; transition: opacity 0.2s ease;
-}
-.artist-row:hover::before { opacity: 1; }
-.artist-row * { position: relative; z-index: 1; }
-
-.ar-name { font-family: var(--font-display); font-size: 28px; text-transform: uppercase; }
-.ar-city { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.4; }
-.ar-genre { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.3; }
-.ar-events-count { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; opacity: 0.3; }
-.ar-link {
-  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em;
-  opacity: 0; transition: opacity 0.3s ease;
-}
-.artist-row:hover .ar-link { opacity: 0.5; }
-
-/* ===================== VENUES PANEL ===================== */
-.venue-row {
-  display: grid;
-  grid-template-columns: 1fr 120px 100px auto;
-  gap: 24px;
-  align-items: center;
-  padding: 20px 0;
-  border-bottom: 1px solid rgba(240,237,232,0.05);
-  transition: background 0.2s ease;
-  position: relative;
-}
-.venue-row::before {
-  content: ''; position: absolute; inset: 0 -40px;
-  background: rgba(240,237,232,0.02); opacity: 0; transition: opacity 0.2s ease;
-}
-.venue-row:hover::before { opacity: 1; }
-.venue-row * { position: relative; z-index: 1; }
-
-.vn-name { font-family: var(--font-display); font-size: 28px; text-transform: uppercase; }
-.vn-area { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; opacity: 0.35; margin-top: 2px; }
-.vn-city { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.4; }
-.vn-cap { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; opacity: 0.3; }
-.vn-genre { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.3; }
-.vn-events-count { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; opacity: 0.3; }
-
-/* NO RESULTS */
-.no-results {
-  text-align: center; padding: 80px 0;
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; opacity: 0.25; text-transform: uppercase;
-}
-
-/* RESULT COUNT */
-.result-count {
-  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em;
-  opacity: 0.25; text-transform: uppercase; margin-bottom: 24px;
-}
-
-/* EMBEDDED MAP */
-#venues-map-wrap {
-  margin-bottom: 32px; border: 1px solid rgba(240,237,232,0.1);
-  overflow: hidden; position: relative;
-  animation: mapSlideIn 0.4s cubic-bezier(0.16,1,0.3,1) forwards;
-}
-@keyframes mapSlideIn { from { opacity: 0; max-height: 0; } to { opacity: 1; max-height: 500px; } }
-#venues-map, #osaka-map { height: 400px; background: var(--bg); }
-#osaka-map-wrap {
-  margin-bottom: 32px; border: 1px solid rgba(240,237,232,0.1);
-  overflow: hidden; position: relative;
-  animation: mapSlideIn 0.4s cubic-bezier(0.16,1,0.3,1) forwards;
-}
-#osaka-filter-bar {
-  display: flex; gap: 8px; padding: 12px 16px; flex-wrap: wrap;
-  background: rgba(8,8,8,0.9); border-bottom: 1px solid rgba(240,237,232,0.06);
-}
-.leaflet-container { background: var(--bg) !important; }
-.leaflet-control-attribution, .leaflet-control-zoom { display: none !important; }
-.embed-map-pin {
-  width: 9px; height: 9px; border-radius: 50%;
-  background: #ff2d2d; border: 2px solid rgba(8,8,8,0.8);
-  cursor: pointer; transition: all 0.2s ease;
-}
-.embed-map-pin:hover { width: 13px; height: 13px; border-color: var(--text); margin-left: -2px; margin-top: -2px; }
-.embed-map-pin-bar {
-  width: 8px; height: 8px; border-radius: 1px;
-  background: #ff2d2d; border: 1.5px solid rgba(8,8,8,0.8);
-  transform: rotate(45deg); cursor: pointer; transition: all 0.2s ease;
-}
-.embed-map-pin-bar:hover { width: 12px; height: 12px; border-color: var(--text); margin-left: -2px; margin-top: -2px; }
-.embed-map-label {
-  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.1em;
-  color: var(--text); text-transform: uppercase; white-space: nowrap;
-  pointer-events: none;
-  background: rgba(8,8,8,0.9); border: 1px solid rgba(240,237,232,0.15);
-  border-radius: 0; padding: 4px 10px; box-shadow: none;
-}
-.embed-map-label::before { display: none; }
-.city-btn.map-active { background: #ff2d2d; color: var(--bg); border-color: #ff2d2d; }
-#map-filter-bar {
-  display: flex; gap: 8px; padding: 12px 16px; flex-wrap: wrap;
-  background: rgba(8,8,8,0.9); border-bottom: 1px solid rgba(240,237,232,0.06);
-}
-.map-pill {
-  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase;
-  padding: 4px 12px; border: 1px solid rgba(240,237,232,0.15); border-radius: 0;
-  background: transparent; color: rgba(240,237,232,0.4); cursor: pointer;
-  transition: all 0.2s ease;
-}
-.map-pill:hover { border-color: rgba(240,237,232,0.4); color: var(--text); }
-.map-pill.active { background: var(--text); color: var(--bg); border-color: var(--text); }
-
-/* FOOTER */
-footer { padding: 60px 40px 40px; border-top: 1px solid rgba(240,237,232,0.08); }
-.footer-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 80px; }
-.footer-logo { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; }
-.footer-links { display: flex; gap: 32px; }
-.footer-links a { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.5; transition: opacity 0.3s ease; }
-.footer-links a:hover { opacity: 1; }
-.footer-copy { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; opacity: 0.3; }
 
 /* HAMBURGER */
 .nav-hamburger {
@@ -350,31 +82,375 @@ footer { padding: 60px 40px 40px; border-top: 1px solid rgba(240,237,232,0.08); 
 .nav-overlay .nav-close::after { transform: translate(-50%, -50%) rotate(-45deg); }
 .nav-overlay .nav-close:hover { opacity: 0.6; }
 
-/* RESPONSIVE */
+/* ===================== TOP BAR (tagline) ===================== */
+.top-bar {
+  padding: 120px 40px 0;
+  opacity: 0; animation: fadeSlideUp 0.8s ease forwards; animation-delay: 0.2s;
+}
+.tagline {
+  font-family: var(--font-body);
+  font-size: clamp(28px, 4vw, 52px);
+  font-weight: 500;
+  line-height: 1.2;
+  max-width: 640px;
+}
+
+/* ===================== SORT TABS (populaires / dernieres) ===================== */
+.sort-tabs {
+  padding: 40px 40px 0;
+  display: flex; gap: 0;
+  opacity: 0; animation: fadeSlideUp 0.6s ease forwards; animation-delay: 0.4s;
+}
+.sort-tab {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 12px 0; margin-right: 32px;
+  background: transparent; border: none; color: var(--text);
+  cursor: none; opacity: 0.25; transition: opacity 0.3s ease;
+  position: relative;
+}
+.sort-tab:hover { opacity: 0.5; }
+.sort-tab.active { opacity: 1; }
+.sort-tab.active::after {
+  content: ''; position: absolute; bottom: 0; left: 0;
+  width: 100%; height: 2px; background: var(--accent);
+}
+
+/* ===================== MAIN GRID (durevie style) ===================== */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  padding: 40px 40px 0;
+  min-height: 600px;
+  opacity: 0; animation: fadeSlideUp 0.8s ease forwards; animation-delay: 0.5s;
+}
+
+/* LEFT: Featured big image card */
+.featured-col {
+  position: relative;
+  display: flex; flex-direction: column;
+}
+.featured-card {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  background: var(--card-bg);
+}
+.featured-card-image {
+  position: relative;
+  flex: 1; min-height: 480px;
+  overflow: hidden;
+}
+.featured-card-image img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: grayscale(80%) brightness(0.6);
+  transition: filter 0.6s ease, transform 0.6s ease;
+}
+.featured-card:hover .featured-card-image img {
+  filter: grayscale(30%) brightness(0.7);
+  transform: scale(1.02);
+}
+.featured-card-image-placeholder {
+  width: 100%; height: 100%; min-height: 480px;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, rgba(240,237,232,0.05) 0%, rgba(240,237,232,0.01) 100%);
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; opacity: 0.1; text-transform: uppercase;
+}
+.featured-card-date {
+  position: absolute; bottom: 20px; right: 20px;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em;
+  text-align: right; line-height: 1.6;
+  opacity: 0.6;
+}
+.featured-card-body {
+  padding: 28px 0 0;
+}
+.featured-card-tag {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.featured-card-tag .tag-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+.featured-card-title {
+  font-family: var(--font-body); font-size: clamp(20px, 2.5vw, 30px); font-weight: 400;
+  line-height: 1.35;
+}
+.featured-card-meta {
+  margin-top: 16px;
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em; opacity: 0.25; text-transform: uppercase;
+}
+.featured-card .read-link {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
+  margin-top: 16px; opacity: 0.4; transition: opacity 0.3s ease;
+}
+.featured-card:hover .read-link { opacity: 1; }
+
+/* RIGHT: Stacked article cards */
+.side-col {
+  display: flex; flex-direction: column;
+  border-left: 1px solid var(--card-border);
+}
+.side-card {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 32px 36px;
+  flex: 1;
+  border-bottom: 1px solid var(--card-border);
+  position: relative;
+  transition: background 0.3s ease;
+}
+.side-card:last-child { border-bottom: none; }
+.side-card:hover { background: rgba(240,237,232,0.02); }
+.side-card-tag {
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.side-card-tag .tag-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
+.side-card-title {
+  font-family: var(--font-body); font-size: clamp(16px, 2vw, 22px); font-weight: 400;
+  line-height: 1.4;
+  padding-right: 60px;
+}
+.side-card-excerpt {
+  font-family: var(--font-body); font-size: 12px; font-weight: 300; line-height: 1.6;
+  opacity: 0.3; margin-top: 10px; padding-right: 60px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.side-card-meta {
+  margin-top: 12px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.12em; opacity: 0.2; text-transform: uppercase;
+}
+.side-card-arrow {
+  position: absolute; right: 32px; top: 50%; transform: translateY(-50%);
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid rgba(240,237,232,0.12);
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+.side-card:hover .side-card-arrow { border-color: rgba(240,237,232,0.3); background: rgba(240,237,232,0.03); }
+.side-card-arrow::after {
+  content: '→';
+  font-family: var(--font-mono); font-size: 14px; opacity: 0.4;
+  transition: opacity 0.3s ease;
+}
+.side-card:hover .side-card-arrow::after { opacity: 0.8; }
+
+/* ===================== ARTICLE FEED BELOW ===================== */
+.feed-section {
+  padding: 80px 40px 0;
+  border-top: 1px solid var(--card-border);
+  margin-top: 80px;
+}
+.feed-header {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-bottom: 48px;
+}
+.feed-title {
+  font-family: var(--font-display); font-size: clamp(40px, 6vw, 72px);
+  text-transform: uppercase; line-height: 0.9;
+}
+.feed-label {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+  opacity: 0.3; margin-bottom: 8px;
+}
+
+/* Category nav */
+.category-nav {
+  display: flex; gap: 0; margin-bottom: 40px;
+  border-bottom: 1px solid var(--card-border);
+  overflow-x: auto;
+}
+.category-nav::-webkit-scrollbar { display: none; }
+.cat-btn {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+  padding: 14px 24px;
+  background: transparent; border: none; color: var(--text);
+  cursor: none; opacity: 0.25; transition: opacity 0.3s ease; position: relative; white-space: nowrap;
+}
+.cat-btn:hover { opacity: 0.5; }
+.cat-btn.active { opacity: 1; }
+.cat-btn.active::after {
+  content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 1px; background: var(--text);
+}
+
+/* Feed grid: 2 column cards with image */
+.feed-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px 32px;
+}
+.feed-card {
+  display: flex; flex-direction: column;
+  transition: opacity 0.3s ease;
+}
+.feed-card:hover { opacity: 0.85; }
+.feed-card-image {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--card-bg);
+  margin-bottom: 20px;
+}
+.feed-card-image img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: grayscale(80%) brightness(0.6);
+  transition: filter 0.5s ease, transform 0.5s ease;
+}
+.feed-card:hover .feed-card-image img {
+  filter: grayscale(30%) brightness(0.7);
+  transform: scale(1.02);
+}
+.feed-card-image-placeholder {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  opacity: 0.08;
+  background: linear-gradient(135deg, rgba(240,237,232,0.04) 0%, rgba(240,237,232,0.01) 100%);
+}
+.feed-card-tag {
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 8px;
+  display: flex; align-items: center; gap: 6px;
+}
+.feed-card-tag .tag-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
+.feed-card-title {
+  font-family: var(--font-body); font-size: clamp(16px, 1.8vw, 22px); font-weight: 400;
+  line-height: 1.35;
+}
+.feed-card-excerpt {
+  font-family: var(--font-body); font-size: 12px; font-weight: 300; line-height: 1.6;
+  opacity: 0.3; margin-top: 8px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.feed-card-meta {
+  margin-top: 12px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.12em; opacity: 0.2; text-transform: uppercase;
+  display: flex; gap: 10px; align-items: center;
+}
+.feed-card-meta .meta-dot { width: 2px; height: 2px; border-radius: 50%; background: var(--text); }
+.feed-card .read-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+  margin-top: 14px; opacity: 0; transition: opacity 0.3s ease;
+}
+.feed-card:hover .read-link { opacity: 0.5; }
+
+/* Load more */
+.load-more-wrap {
+  padding: 60px 0;
+  text-align: center;
+}
+.load-more-btn {
+  display: inline-block;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  padding: 14px 56px;
+  border: 1px solid rgba(240,237,232,0.12);
+  background: transparent; color: var(--text);
+  cursor: none;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+.load-more-btn:hover { border-color: rgba(240,237,232,0.35); background: rgba(240,237,232,0.03); }
+
+/* ===================== QUICK LINKS ===================== */
+.guide-section {
+  padding: 0 40px;
+  margin-top: 80px;
+  border-top: 1px solid var(--card-border);
+}
+.guide-header {
+  padding-top: 60px;
+  margin-bottom: 32px;
+}
+.guide-label {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+  opacity: 0.3; margin-bottom: 8px;
+}
+.guide-title {
+  font-family: var(--font-display); font-size: clamp(40px, 6vw, 72px);
+  text-transform: uppercase; line-height: 0.9;
+}
+.quick-links {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+}
+.quick-link {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  display: flex; align-items: flex-end;
+  padding: 24px;
+  background: var(--card-bg);
+  transition: background 0.3s ease;
+}
+.quick-link:hover { background: rgba(240,237,232,0.06); }
+.quick-link-label {
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase;
+  opacity: 0.25; margin-bottom: 4px;
+}
+.quick-link-name {
+  font-family: var(--font-display); font-size: clamp(22px, 3vw, 36px);
+  text-transform: uppercase; line-height: 1;
+}
+.quick-link-arrow {
+  position: absolute; top: 20px; right: 20px;
+  font-family: var(--font-mono); font-size: 16px;
+  opacity: 0; transform: translate(-4px, 4px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.quick-link:hover .quick-link-arrow { opacity: 0.4; transform: translate(0, 0); }
+
+/* ===================== SCROLL REVEAL ===================== */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ===================== FOOTER ===================== */
+footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); margin-top: 120px; }
+.footer-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 80px; }
+.footer-logo { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; }
+.footer-links { display: flex; gap: 32px; }
+.footer-links a { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.5; transition: opacity 0.3s ease; }
+.footer-links a:hover { opacity: 1; }
+.footer-copy { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; opacity: 0.3; }
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 1100px) {
+  .feed-grid { gap: 36px 24px; }
+  .side-card-title { font-size: 16px; }
+}
 @media (max-width: 900px) {
   nav { padding: 20px 24px; }
-  .page-header { padding: 140px 24px 0; }
-  .search-bar { padding: 32px 24px 0; }
-  .tabs { padding: 32px 24px 0; overflow-x: auto; }
-  .panel { padding: 32px 24px 80px; }
-  .event-row { grid-template-columns: 60px 1fr auto; gap: 16px; }
-  .ev-city { display: none; }
-  .artist-row { grid-template-columns: 1fr auto; gap: 12px; }
-  .ar-city, .ar-genre { display: none; }
-  .venue-row { grid-template-columns: 1fr auto; gap: 12px; }
-  .vn-cap, .vn-genre { display: none; }
+  .top-bar { padding: 120px 24px 0; }
+  .sort-tabs { padding: 32px 24px 0; }
+  .main-grid { padding: 32px 24px 0; grid-template-columns: 1fr; gap: 0; }
+  .side-col { border-left: none; border-top: 1px solid var(--card-border); }
+  .featured-card-image, .featured-card-image-placeholder { min-height: 320px; }
+  .feed-section { padding: 60px 24px 0; margin-top: 60px; }
+  .feed-grid { grid-template-columns: 1fr; gap: 40px; }
+  .guide-section { padding: 0 24px; }
+  .quick-links { grid-template-columns: repeat(2, 1fr); }
   .footer-top { flex-direction: column; gap: 24px; text-align: center; }
+  footer { padding: 60px 24px 32px; margin-top: 80px; }
 }
 @media (max-width: 768px) {
   .nav-hamburger { display: flex; }
   nav .nav-links { display: none; }
-  .tab { padding: 12px 16px; font-size: 9px; }
+  .tagline { font-size: 24px; }
+  .side-card { padding: 24px 20px; }
+  .side-card-arrow { right: 16px; width: 36px; height: 36px; }
+  .side-card-title { padding-right: 48px; }
+  .side-card-excerpt { display: none; }
   .footer-links { gap: 20px; }
+}
+@media (max-width: 480px) {
+  .quick-links { grid-template-columns: 1fr; }
 }
 @media (hover: none) and (pointer: coarse) {
   body { cursor: auto; }
   .cursor-dot, .cursor-ring { display: none; }
-  .tab, .city-btn, .search-input { cursor: pointer; }
+  .sort-tab, .cat-btn, .load-more-btn, .quick-link { cursor: pointer; }
 }
 </style>
 </head>
@@ -408,57 +484,74 @@ footer { padding: 60px 40px 40px; border-top: 1px solid rgba(240,237,232,0.08); 
   <button class="nav-back" onclick="document.querySelector('.nav-overlay').classList.remove('active');document.querySelector('.nav-hamburger').classList.remove('active');history.back()">← BACK</button>
 </div>
 
-<header class="page-header">
-  <a href="index.html" class="back-link"><span class="arrow"></span> BACK TO HOME</a>
-  <h1 class="page-title">DISCOVER</h1>
-  <div class="page-subtitle">EXPLORE JAPAN'S UNDERGROUND SCENE</div>
-</header>
+<!-- ===================== TAGLINE ===================== -->
+<div class="top-bar">
+  <h1 class="tagline">The media exploring cultures and electronic music in Japan.</h1>
+</div>
 
-<!-- SEARCH -->
-<div class="search-bar">
-  <div class="search-input-wrap">
-    <span class="search-icon">&#9906;</span>
-    <input type="text" class="search-input" id="search" placeholder="Search events, artists, venues...">
+<!-- ===================== SORT TABS ===================== -->
+<div class="sort-tabs">
+  <button class="sort-tab active" data-sort="latest">Latest</button>
+  <button class="sort-tab" data-sort="popular">Most Popular</button>
+</div>
+
+<!-- ===================== MAIN GRID ===================== -->
+<div class="main-grid" id="main-grid">
+  <div class="featured-col" id="featured-col"></div>
+  <div class="side-col" id="side-col"></div>
+</div>
+
+<!-- ===================== MORE ARTICLES FEED ===================== -->
+<div class="feed-section reveal">
+  <div class="feed-header">
+    <div>
+      <div class="feed-label">ALL STORIES</div>
+      <div class="feed-title">ARCHIVE</div>
+    </div>
+  </div>
+  <div class="category-nav" id="category-nav"></div>
+  <div class="feed-grid" id="feed-grid"></div>
+  <div class="load-more-wrap">
+    <button class="load-more-btn" id="load-more-btn">LOAD MORE</button>
   </div>
 </div>
 
-<!-- TABS -->
-<div class="tabs">
-  <button class="tab active" data-tab="festivals">FESTIVALS<span class="tab-count" id="count-festivals"></span></button>
-  <button class="tab" data-tab="events">EVENTS<span class="tab-count" id="count-events"></span></button>
-  <button class="tab" data-tab="artists">ARTISTS<span class="tab-count" id="count-artists"></span></button>
-  <button class="tab" data-tab="venues">VENUES<span class="tab-count" id="count-venues"></span></button>
-</div>
-
-<!-- PANELS -->
-<div class="panel active" id="panel-festivals">
-  <div class="result-count" id="festivals-result-count"></div>
-  <div id="festivals-list"></div>
-</div>
-<div class="panel" id="panel-events">
-  <div class="city-filters" id="event-city-filters"></div>
-  <div class="result-count" id="events-result-count"></div>
-  <div id="events-list"></div>
-</div>
-
-<div class="panel" id="panel-artists">
-  <div class="city-filters" id="artist-city-filters"></div>
-  <div class="result-count" id="artists-result-count"></div>
-  <div id="artists-list"></div>
-</div>
-
-<div class="panel" id="panel-venues">
-  <div class="city-filters" id="venue-city-filters"></div>
-  <div class="result-count" id="venues-result-count"></div>
-  <div id="venues-map-wrap" style="display:none">
-    <div id="map-filter-bar"></div>
-    <div id="venues-map"></div>
+<!-- ===================== GUIDE LINKS ===================== -->
+<div class="guide-section reveal">
+  <div class="guide-header">
+    <div class="guide-label">EXPLORE</div>
+    <div class="guide-title">GUIDE</div>
   </div>
-  <div id="osaka-map-wrap" style="display:none">
-    <div id="osaka-filter-bar"></div>
-    <div id="osaka-map"></div>
+  <div class="quick-links">
+    <a href="festivals.html" class="quick-link">
+      <div>
+        <div class="quick-link-label">FESTIVAL & RAVE</div>
+        <div class="quick-link-name">FESTIVALS</div>
+      </div>
+      <div class="quick-link-arrow">↗</div>
+    </a>
+    <a href="events.html" class="quick-link">
+      <div>
+        <div class="quick-link-label">UPCOMING NIGHTS</div>
+        <div class="quick-link-name">EVENTS</div>
+      </div>
+      <div class="quick-link-arrow">↗</div>
+    </a>
+    <a href="artists.html" class="quick-link">
+      <div>
+        <div class="quick-link-label">LOCAL & INTERNATIONAL</div>
+        <div class="quick-link-name">ARTISTS</div>
+      </div>
+      <div class="quick-link-arrow">↗</div>
+    </a>
+    <a href="venues.html" class="quick-link">
+      <div>
+        <div class="quick-link-label">CLUBS & SPACES</div>
+        <div class="quick-link-name">VENUES</div>
+      </div>
+      <div class="quick-link-arrow">↗</div>
+    </a>
   </div>
-  <div id="venues-list"></div>
 </div>
 
 <footer>
@@ -466,220 +559,267 @@ footer { padding: 60px 40px 40px; border-top: 1px solid rgba(240,237,232,0.08); 
     <div class="footer-logo">TECHNO JAPAN</div>
     <div class="footer-links">
       <a href="index.html#about">ABOUT</a>
+      <a href="festivals.html">FESTIVALS</a>
       <a href="events.html">EVENTS</a>
       <a href="artists.html">ARTISTS</a>
+      <a href="venues.html">VENUES</a>
       <a href="index.html#contact">CONTACT</a>
     </div>
-    <div class="footer-copy">&copy; 2024 TECHNO JAPAN. ALL RIGHTS RESERVED.</div>
+    <div class="footer-copy">&copy; 2025 TECHNO JAPAN. ALL RIGHTS RESERVED.</div>
   </div>
 </footer>
 
-<script src="data.js?v=3"></script>
 <script>
+/* ========== ARTICLE DATA ========== */
+const ARTICLES = [
+  {
+    id: 'rdc-2026-preview',
+    title: 'Rainbow Disco Club 2026: What to Expect This Year',
+    excerpt: 'As the festival enters its newest chapter in the hills of Higashi-Izu, we look at the lineup, the location, and why RDC remains one of Asia\'s most essential outdoor gatherings.',
+    category: 'FESTIVAL',
+    date: '2026-04-10',
+    image: '',
+    featured: true,
+    views: 2400,
+    readTime: 5
+  },
+  {
+    id: 'tokyo-underground-map',
+    title: 'The Complete Guide to Tokyo\'s Underground Club Scene',
+    excerpt: 'From the tight basements of Shibuya to the industrial spaces of Koenji — a deep guide to where the sound lives in Tokyo.',
+    category: 'CLUB',
+    date: '2026-04-08',
+    image: '',
+    views: 3100,
+    readTime: 8
+  },
+  {
+    id: 'interview-dj-nobu',
+    title: 'DJ Nobu: "The Sound Never Stops Evolving"',
+    excerpt: 'We sit down with the Future Terror founder to discuss two decades of pushing boundaries in Japanese techno and his vision for the next generation.',
+    category: 'INTERVIEW',
+    date: '2026-04-05',
+    image: '',
+    views: 4200,
+    readTime: 7
+  },
+  {
+    id: 'labyrinth-2026',
+    title: 'Labyrinth 2026: Into the Forest Once More',
+    excerpt: 'The legendary rave in the mountains of Niigata returns. What makes Labyrinth different from every other festival on earth?',
+    category: 'RAVE',
+    date: '2026-04-01',
+    image: '',
+    views: 1800,
+    readTime: 6
+  },
+  {
+    id: 'osaka-techno-scene',
+    title: 'Why Osaka\'s Techno Scene Deserves Your Attention',
+    excerpt: 'Circus, Compufunk, and a new generation of promoters are redefining what it means to go out in Japan\'s second city.',
+    category: 'CLUB',
+    date: '2026-03-28',
+    image: '',
+    views: 2100,
+    readTime: 5
+  },
+  {
+    id: 'womb-legacy',
+    title: 'WOMB at 25: The Club That Shaped a Generation',
+    excerpt: 'A quarter-century of nights in Shibuya\'s most iconic space. Former residents and regulars reflect on what WOMB means to them.',
+    category: 'CLUB',
+    date: '2026-03-25',
+    image: '',
+    views: 3600,
+    readTime: 9
+  },
+  {
+    id: 'vinyl-culture-japan',
+    title: 'Crate Digging in Japan: A Vinyl Culture Like No Other',
+    excerpt: 'Record shops, rare pressings, and the obsessive care that makes Japan a paradise for vinyl collectors.',
+    category: 'COLUMN',
+    date: '2026-03-20',
+    image: '',
+    views: 2800,
+    readTime: 6
+  },
+  {
+    id: 'rural-rave-report',
+    title: 'Field Report: 48 Hours at a Mountain Rave in Nagano',
+    excerpt: 'No signal, no sleep, no compromise. We spent a weekend at one of Japan\'s most remote and uncompromising free parties.',
+    category: 'RAVE',
+    date: '2026-03-15',
+    image: '',
+    views: 3400,
+    readTime: 7
+  },
+  {
+    id: 'forestlimit-feature',
+    title: 'Forest Limit: The Tiny Room That Changed Tokyo Nightlife',
+    excerpt: 'A closet-sized venue in Hatagaya became the incubator for some of Japan\'s most experimental electronic music.',
+    category: 'CLUB',
+    date: '2026-03-10',
+    image: '',
+    views: 1500,
+    readTime: 5
+  },
+  {
+    id: 'frue-festival-review',
+    title: 'FRUE 2025: Music Without Borders',
+    excerpt: 'Ambient drones, Afrobeat, and free jazz collided in the hills of Hamamatsu. Our review of last year\'s most eclectic festival.',
+    category: 'FESTIVAL',
+    date: '2026-03-05',
+    image: '',
+    views: 1900,
+    readTime: 6
+  },
+  {
+    id: 'sound-system-culture',
+    title: 'Sound System Culture in Japan: Roots and Evolution',
+    excerpt: 'How dub, reggae, and bass culture found a home in Japan and influenced the underground electronic scene.',
+    category: 'PARTY',
+    date: '2026-02-28',
+    image: '',
+    views: 1200,
+    readTime: 8
+  },
+  {
+    id: 'new-generation-djs',
+    title: '10 Japanese DJs You Need to Know in 2026',
+    excerpt: 'The next wave of talent emerging from Tokyo, Osaka, and beyond. These artists are shaping the future of the scene.',
+    category: 'NEWS',
+    date: '2026-02-20',
+    image: '',
+    views: 5100,
+    readTime: 4
+  }
+];
+
 /* ========== HELPERS ========== */
 const MONTHS_S = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-function parseDate(s) { const [y,m,d] = s.split('-').map(Number); return new Date(y,m-1,d); }
-function isUpcoming(s) { const t = new Date(); t.setHours(0,0,0,0); return parseDate(s) >= t; }
-function getArtist(id) { return ARTISTS.find(a => a.id === id); }
-function getVenueEvents(venueName) {
-  return EVENTS.filter(e => e.venue === venueName).sort((a,b) => parseDate(a.date) - parseDate(b.date));
+function formatDate(dateStr) {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  return `${MONTHS_S[m-1]} ${d}, ${y}`;
 }
-function getArtistEventCount(id) { return EVENTS.filter(e => e.lineup && e.lineup.includes(id)).length; }
-function uniqueCities(arr) { return [...new Set(arr.map(x => x.city))].sort(); }
+function formatDateSplit(dateStr) {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  return `${MONTHS_S[m-1]} ${String(d).padStart(2,'0')}<br>${y}`;
+}
 
 /* ========== STATE ========== */
-let activeTab = 'festivals';
-let searchQuery = '';
-let cityFilter = { festivals: 'ALL', events: 'ALL', artists: 'ALL', venues: 'ALL' };
+let currentSort = 'latest';
+let currentCategory = 'ALL';
+let feedVisible = 4;
 
-/* ========== TABS ========== */
-document.querySelectorAll('.tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    activeTab = tab.dataset.tab;
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-    document.getElementById('panel-' + activeTab).classList.add('active');
-  });
-});
+/* ========== SORT ARTICLES ========== */
+function getSorted(arr) {
+  if (currentSort === 'latest') {
+    return [...arr].sort((a, b) => new Date(b.date) - new Date(a.date));
+  }
+  return [...arr].sort((a, b) => (b.views || 0) - (a.views || 0));
+}
 
-/* ========== SEARCH ========== */
-const searchInput = document.getElementById('search');
-let searchTimeout;
-searchInput.addEventListener('input', () => {
-  clearTimeout(searchTimeout);
-  searchTimeout = setTimeout(() => {
-    searchQuery = searchInput.value.toLowerCase().trim();
-    renderAll();
-  }, 150);
-});
+/* ========== RENDER MAIN GRID ========== */
+function renderMainGrid() {
+  const sorted = getSorted(ARTICLES);
+  const featured = sorted[0];
+  const sideItems = sorted.slice(1, 4);
 
-/* ========== CITY FILTERS ========== */
-function renderCityFilters(containerId, cities, tabKey) {
-  const container = document.getElementById(containerId);
-  container.innerHTML = `<button class="city-btn ${cityFilter[tabKey]==='ALL'?'active':''}" data-city="ALL">ALL</button>` +
-    cities.map(c => {
-      let cls = cityFilter[tabKey]===c ? 'active' : '';
-      if (tabKey === 'venues' && c === 'TOKYO' && tokyoMapVisible) cls += ' map-active';
-      if (tabKey === 'venues' && c === 'OSAKA' && osakaMapVisible) cls += ' map-active';
-      return `<button class="city-btn ${cls}" data-city="${c}">${c}</button>`;
-    }).join('');
-  container.querySelectorAll('.city-btn').forEach(btn => {
+  // Featured left
+  document.getElementById('featured-col').innerHTML = `
+    <a href="#article/${featured.id}" class="featured-card">
+      <div class="featured-card-image">
+        ${featured.image
+          ? `<img src="${featured.image}" alt="${featured.title}">`
+          : `<div class="featured-card-image-placeholder">COMING SOON</div>`}
+        <div class="featured-card-date">${formatDateSplit(featured.date)}</div>
+      </div>
+      <div class="featured-card-body">
+        <div class="featured-card-tag"><span class="tag-dot"></span> ${featured.category}</div>
+        <div class="featured-card-title">${featured.title}</div>
+        <div class="featured-card-meta">${featured.readTime || 5} MIN READ</div>
+        <div class="read-link">READ <span>→</span></div>
+      </div>
+    </a>`;
+
+  // Side right
+  document.getElementById('side-col').innerHTML = sideItems.map(a => `
+    <a href="#article/${a.id}" class="side-card">
+      <div class="side-card-tag"><span class="tag-dot"></span> ${a.category}</div>
+      <div class="side-card-title">${a.title}</div>
+      <div class="side-card-excerpt">${a.excerpt}</div>
+      <div class="side-card-meta">${formatDate(a.date)} · ${a.readTime || 5} MIN READ</div>
+      <div class="side-card-arrow"></div>
+    </a>
+  `).join('');
+}
+
+/* ========== RENDER CATEGORY NAV ========== */
+function renderCategoryNav() {
+  const cats = ['ALL','REPORT','COLUMN','INTERVIEW','NEWS','FESTIVAL','RAVE','PARTY','CLUB'];
+  document.getElementById('category-nav').innerHTML = cats.map(c =>
+    `<button class="cat-btn ${currentCategory === c ? 'active' : ''}" data-cat="${c}">${c}</button>`
+  ).join('');
+  document.querySelectorAll('.cat-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      if (tabKey === 'venues' && btn.dataset.city === 'TOKYO') {
-        hideOsakaMap();
-        toggleTokyoMap();
-        return;
-      }
-      if (tabKey === 'venues' && btn.dataset.city === 'OSAKA') {
-        hideTokyoMap();
-        toggleOsakaMap();
-        return;
-      }
-      hideTokyoMap();
-      hideOsakaMap();
-      cityFilter[tabKey] = btn.dataset.city;
-      renderAll();
+      currentCategory = btn.dataset.cat;
+      feedVisible = 4;
+      renderCategoryNav();
+      renderFeed();
+      bindCursorExpand();
     });
   });
 }
 
-/* ========== RENDER FESTIVALS ========== */
-function renderFestivals() {
-  const FMONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-  function fmtDate(d) {
-    if (d.includes('/')) {
-      const [s, e] = d.split('/');
-      const [sy,sm,sd] = s.split('-').map(Number);
-      const [ey,em,ed] = e.split('-').map(Number);
-      return `${FMONTHS[sm-1]} ${sd}–${ed}, ${sy}`;
-    }
-    const [y,m,dd] = d.split('-').map(Number);
-    return `${FMONTHS[m-1]} ${dd}, ${y}`;
-  }
-  let items = [...FESTIVALS].sort((a,b) => new Date(a.date.split('/')[0]) - new Date(b.date.split('/')[0]));
-  if (cityFilter.festivals !== 'ALL') items = items.filter(f => f.city === cityFilter.festivals);
-  if (searchQuery) items = items.filter(f =>
-    f.name.toLowerCase().includes(searchQuery) ||
-    f.city.toLowerCase().includes(searchQuery) ||
-    f.location.toLowerCase().includes(searchQuery) ||
-    f.genre.join(' ').toLowerCase().includes(searchQuery)
-  );
-  document.getElementById('count-festivals').textContent = ' ' + items.length;
-  document.getElementById('festivals-result-count').textContent = items.length + ' FESTIVALS';
-  document.getElementById('festivals-list').innerHTML = items.map(f => `
-    <a href="festivals.html" class="event-row">
-      <span class="event-row-date">${fmtDate(f.date)}</span>
-      <span class="event-row-name">${f.name}</span>
-      <span class="event-row-venue">${f.location}</span>
-      <span class="event-row-city">${f.city}</span>
+/* ========== RENDER FEED ========== */
+function renderFeed() {
+  const sorted = getSorted(ARTICLES);
+  // Exclude first 4 (already in main grid) unless filtered
+  let items = currentCategory === 'ALL' ? sorted.slice(4) : sorted.filter(a => a.category === currentCategory);
+  const visible = items.slice(0, feedVisible);
+
+  document.getElementById('feed-grid').innerHTML = visible.map(a => `
+    <a href="#article/${a.id}" class="feed-card">
+      <div class="feed-card-image">
+        ${a.image
+          ? `<img src="${a.image}" alt="${a.title}">`
+          : `<div class="feed-card-image-placeholder">COMING SOON</div>`}
+      </div>
+      <div class="feed-card-tag"><span class="tag-dot"></span> ${a.category}</div>
+      <div class="feed-card-title">${a.title}</div>
+      <div class="feed-card-excerpt">${a.excerpt}</div>
+      <div class="feed-card-meta">
+        <span>${formatDate(a.date)}</span>
+        <span class="meta-dot"></span>
+        <span>${a.readTime || 5} MIN READ</span>
+      </div>
+      <div class="read-link">READ <span>→</span></div>
     </a>
   `).join('');
-  bindCursorExpand();
+
+  const btn = document.getElementById('load-more-btn');
+  btn.style.display = visible.length >= items.length ? 'none' : 'inline-block';
 }
 
-/* ========== RENDER EVENTS ========== */
-function renderEvents() {
-  let items = [...EVENTS].sort((a,b) => parseDate(a.date) - parseDate(b.date));
-  if (cityFilter.events !== 'ALL') items = items.filter(e => e.city === cityFilter.events);
-  if (searchQuery) items = items.filter(e =>
-    e.name.toLowerCase().includes(searchQuery) ||
-    e.venue.toLowerCase().includes(searchQuery) ||
-    e.city.toLowerCase().includes(searchQuery) ||
-    (e.desc && e.desc.toLowerCase().includes(searchQuery)) ||
-    (e.lineup && e.lineup.some(id => { const a = getArtist(id); return a && a.name.toLowerCase().includes(searchQuery); }))
-  );
+/* ========== SORT TABS ========== */
+document.querySelectorAll('.sort-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    currentSort = tab.dataset.sort;
+    document.querySelectorAll('.sort-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    renderMainGrid();
+    feedVisible = 4;
+    renderFeed();
+    bindCursorExpand();
+  });
+});
 
-  document.getElementById('count-events').textContent = items.length;
-  document.getElementById('events-result-count').textContent = items.length + ' EVENTS';
-  renderCityFilters('event-city-filters', uniqueCities(EVENTS), 'events');
-
-  if (!items.length) { document.getElementById('events-list').innerHTML = '<div class="no-results">NO EVENTS FOUND</div>'; return; }
-
-  document.getElementById('events-list').innerHTML = items.map(ev => {
-    const d = parseDate(ev.date);
-    const upcoming = isUpcoming(ev.date);
-    const lineupHtml = ev.lineup && ev.lineup.length
-      ? `<div class="ev-lineup">${ev.lineup.map(id => { const a = getArtist(id); return `<a href="artists.html#artist/${id}">${a ? a.name : id}</a>`; }).join('')}</div>`
-      : '';
-    return `
-      <a href="events.html" class="event-row">
-        <div class="ev-date">${MONTHS_S[d.getMonth()]} ${String(d.getDate()).padStart(2,'0')}</div>
-        <div>
-          <div class="ev-name">${ev.name}</div>
-          <div class="ev-sub">${ev.venue}${ev.time ? ' · ' + ev.time : ''}</div>
-          ${lineupHtml}
-        </div>
-        <div class="ev-city">${ev.city}</div>
-        <div class="ev-tag ${upcoming ? '' : 'past'}">${upcoming ? 'UPCOMING' : 'PAST'}</div>
-      </a>`;
-  }).join('');
+/* ========== LOAD MORE ========== */
+document.getElementById('load-more-btn').addEventListener('click', () => {
+  feedVisible += 4;
+  renderFeed();
   bindCursorExpand();
-}
-
-/* ========== RENDER ARTISTS ========== */
-function renderArtists() {
-  let items = [...ARTISTS];
-  if (cityFilter.artists !== 'ALL') items = items.filter(a => a.city === cityFilter.artists);
-  if (searchQuery) items = items.filter(a =>
-    a.name.toLowerCase().includes(searchQuery) ||
-    a.city.toLowerCase().includes(searchQuery) ||
-    a.genre.toLowerCase().includes(searchQuery)
-  );
-
-  document.getElementById('count-artists').textContent = items.length;
-  document.getElementById('artists-result-count').textContent = items.length + ' ARTISTS';
-  renderCityFilters('artist-city-filters', uniqueCities(ARTISTS), 'artists');
-
-  if (!items.length) { document.getElementById('artists-list').innerHTML = '<div class="no-results">NO ARTISTS FOUND</div>'; return; }
-
-  document.getElementById('artists-list').innerHTML = items.map(a => {
-    const evCount = getArtistEventCount(a.id);
-    return `
-      <a href="artists.html#artist/${a.id}" class="artist-row">
-        <div class="ar-name">${a.name}</div>
-        <div class="ar-city">${a.city}</div>
-        <div class="ar-genre">${a.genre}</div>
-        <div class="ar-events-count">${evCount} EVENT${evCount !== 1 ? 'S' : ''}</div>
-      </a>`;
-  }).join('');
-  bindCursorExpand();
-}
-
-/* ========== RENDER VENUES ========== */
-function renderVenues() {
-  let items = [...VENUES];
-  if (cityFilter.venues !== 'ALL') items = items.filter(v => v.city === cityFilter.venues);
-  if (searchQuery) items = items.filter(v =>
-    v.name.toLowerCase().includes(searchQuery) ||
-    v.city.toLowerCase().includes(searchQuery) ||
-    (v.area && v.area.toLowerCase().includes(searchQuery)) ||
-    (Array.isArray(v.genre) ? v.genre.join(' ') : v.genre).toLowerCase().includes(searchQuery)
-  );
-
-  document.getElementById('count-venues').textContent = items.length;
-  document.getElementById('venues-result-count').textContent = items.length + ' VENUES';
-  renderCityFilters('venue-city-filters', uniqueCities(VENUES), 'venues');
-
-  if (!items.length) { document.getElementById('venues-list').innerHTML = '<div class="no-results">NO VENUES FOUND</div>'; return; }
-
-  document.getElementById('venues-list').innerHTML = items.map(v => {
-    return `
-      <a href="venues.html#venue/${v.id}" class="venue-row">
-        <div>
-          <div class="vn-name">${v.name}</div>
-          <div class="vn-area">${v.area || ''}</div>
-        </div>
-        <div class="vn-city">${v.city}</div>
-        <div class="vn-cap">${v.capacity ? '~' + v.capacity : '—'}</div>
-        <div class="vn-genre">${Array.isArray(v.genre) ? v.genre.join(' / ') : v.genre}</div>
-      </a>`;
-  }).join('');
-  bindCursorExpand();
-}
-
-/* ========== RENDER ALL ========== */
-function renderAll() { renderFestivals(); renderEvents(); renderArtists(); renderVenues(); }
+});
 
 /* ========== CURSOR ========== */
 const dot = document.querySelector('.cursor-dot');
@@ -696,251 +836,28 @@ function animateRing() {
 }
 animateRing();
 function bindCursorExpand() {
-  document.querySelectorAll('a, .tab, .city-btn, .event-row, .artist-row, .venue-row').forEach(el => {
+  document.querySelectorAll('a, button, .featured-card, .side-card, .feed-card, .quick-link').forEach(el => {
     el.addEventListener('mouseenter', () => { ring.style.width = '52px'; ring.style.height = '52px'; });
     el.addEventListener('mouseleave', () => { ring.style.width = '36px'; ring.style.height = '36px'; });
   });
 }
 
-/* ========== KEYBOARD NAV ========== */
-document.addEventListener('keydown', (e) => {
-  if (e.key === '/') { e.preventDefault(); searchInput.focus(); }
-  if (e.key === 'Escape') { searchInput.blur(); }
-  if (e.key === '1') { document.querySelector('[data-tab="festivals"]').click(); }
-  if (e.key === '2') { document.querySelector('[data-tab="events"]').click(); }
-  if (e.key === '3') { document.querySelector('[data-tab="artists"]').click(); }
-  if (e.key === '4') { document.querySelector('[data-tab="venues"]').click(); }
-});
-
-/* ========== TOKYO MAP EMBED ========== */
-let tokyoMapInstance = null;
-let tokyoMapVisible = false;
-
-const TOKYO_CLUBS = VENUES.filter(v => v.city === 'TOKYO' && v.lat);
-
-let embedMapMarkers = [];
-let embedGenreFilter = 'ALL';
-let embedTypeFilter = null;
-
-function initTokyoMap() {
-  if (tokyoMapInstance) return;
-  tokyoMapInstance = L.map('venues-map', {
-    center: [35.6600, 139.6980],
-    zoom: 13, minZoom: 11, maxZoom: 18,
-    zoomControl: false, attributionControl: false
+/* ========== SCROLL REVEAL ========== */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
   });
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    subdomains: 'abcd', maxZoom: 19
-  }).addTo(tokyoMapInstance);
-
-  renderFilterBar();
-  renderEmbedMarkers();
-}
-
-function renderFilterBar() {
-  const bar = document.getElementById('map-filter-bar');
-  const genres = ['ALL','TECHNO','HOUSE','OTHERS'];
-  bar.innerHTML = genres.map(g =>
-    `<button class="map-pill${embedGenreFilter===g?' active':''}" data-genre="${g}">${g}</button>`
-  ).join('') +
-  '<span style="width:1px;height:16px;background:rgba(240,237,232,0.08);margin:0 4px"></span>' +
-  `<button class="map-pill${embedTypeFilter==='club'?' active':''}" data-type="club">CLUBS</button>` +
-  `<button class="map-pill${embedTypeFilter==='bar'?' active':''}" data-type="bar">BARS</button>` +
-  `<button class="map-pill${embedTypeFilter==='livehouse'?' active':''}" data-type="livehouse">LIVEHOUSE</button>`;
-
-  bar.querySelectorAll('.map-pill[data-genre]').forEach(p => {
-    p.addEventListener('click', () => {
-      embedGenreFilter = p.dataset.genre;
-      renderFilterBar();
-      renderEmbedMarkers();
-    });
-  });
-  bar.querySelectorAll('.map-pill[data-type]').forEach(p => {
-    p.addEventListener('click', () => {
-      embedTypeFilter = embedTypeFilter === p.dataset.type ? null : p.dataset.type;
-      renderFilterBar();
-      renderEmbedMarkers();
-    });
-  });
-}
-
-function renderEmbedMarkers() {
-  embedMapMarkers.forEach(m => tokyoMapInstance.removeLayer(m));
-  embedMapMarkers = [];
-
-  let filtered = TOKYO_CLUBS;
-  if (embedGenreFilter !== 'ALL') {
-    filtered = filtered.filter(c => c.genre.some(g => g.includes(embedGenreFilter)));
-  }
-  if (embedTypeFilter) {
-    filtered = filtered.filter(c => c.type === embedTypeFilter);
-  }
-
-  filtered.forEach(c => {
-    const pinClass = c.type === 'bar' ? 'embed-map-pin-bar' : 'embed-map-pin';
-    const icon = L.divIcon({
-      className: '',
-      html: `<div class="${pinClass}"></div>`,
-      iconSize: [9, 9], iconAnchor: [4.5, 4.5]
-    });
-    const m = L.marker([c.lat, c.lng], { icon }).addTo(tokyoMapInstance);
-    m.bindTooltip(c.name, {
-      className: 'embed-map-label',
-      direction: 'right', offset: [8, 0], permanent: false
-    });
-    m.on('click', () => { window.location.href = 'venues.html#venue/' + c.id; });
-    embedMapMarkers.push(m);
-  });
-}
-
-function toggleTokyoMap() {
-  const wrap = document.getElementById('venues-map-wrap');
-  if (tokyoMapVisible) {
-    wrap.style.display = 'none';
-    tokyoMapVisible = false;
-    cityFilter.venues = 'ALL';
-    renderAll();
-  } else {
-    tokyoMapVisible = true;
-    cityFilter.venues = 'TOKYO';
-    renderAll();
-    wrap.style.display = 'block';
-    setTimeout(() => {
-      initTokyoMap();
-      tokyoMapInstance.invalidateSize();
-    }, 50);
-  }
-}
-
-function hideTokyoMap() {
-  const wrap = document.getElementById('venues-map-wrap');
-  if (tokyoMapVisible) {
-    wrap.style.display = 'none';
-    tokyoMapVisible = false;
-    document.querySelectorAll('.city-btn.map-active').forEach(b => b.classList.remove('map-active'));
-  }
-}
-
-/* ========== OSAKA MAP EMBED ========== */
-let osakaMapInstance = null;
-let osakaMapVisible = false;
-
-const OSAKA_CLUBS = VENUES.filter(v => v.city === 'OSAKA' && v.lat);
-
-let osakaMapMarkers = [];
-let osakaGenreFilter = 'ALL';
-let osakaTypeFilter = null;
-
-function initOsakaMap() {
-  if (osakaMapInstance) return;
-  osakaMapInstance = L.map('osaka-map', {
-    center: [34.6700, 135.4980],
-    zoom: 14, minZoom: 11, maxZoom: 18,
-    zoomControl: false, attributionControl: false
-  });
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    subdomains: 'abcd', maxZoom: 19
-  }).addTo(osakaMapInstance);
-
-  renderOsakaFilterBar();
-  renderOsakaMarkers();
-}
-
-function renderOsakaFilterBar() {
-  const bar = document.getElementById('osaka-filter-bar');
-  const genres = ['ALL','TECHNO','HOUSE','OTHERS'];
-  bar.innerHTML = genres.map(g =>
-    `<button class="map-pill${osakaGenreFilter===g?' active':''}" data-genre="${g}">${g}</button>`
-  ).join('') +
-  '<span style="width:1px;height:16px;background:rgba(240,237,232,0.08);margin:0 4px"></span>' +
-  `<button class="map-pill${osakaTypeFilter==='club'?' active':''}" data-type="club">CLUBS</button>` +
-  `<button class="map-pill${osakaTypeFilter==='bar'?' active':''}" data-type="bar">BARS</button>` +
-  `<button class="map-pill${osakaTypeFilter==='livehouse'?' active':''}" data-type="livehouse">LIVEHOUSE</button>`;
-
-  bar.querySelectorAll('.map-pill[data-genre]').forEach(p => {
-    p.addEventListener('click', () => {
-      osakaGenreFilter = p.dataset.genre;
-      renderOsakaFilterBar();
-      renderOsakaMarkers();
-    });
-  });
-  bar.querySelectorAll('.map-pill[data-type]').forEach(p => {
-    p.addEventListener('click', () => {
-      osakaTypeFilter = osakaTypeFilter === p.dataset.type ? null : p.dataset.type;
-      renderOsakaFilterBar();
-      renderOsakaMarkers();
-    });
-  });
-}
-
-function renderOsakaMarkers() {
-  osakaMapMarkers.forEach(m => osakaMapInstance.removeLayer(m));
-  osakaMapMarkers = [];
-
-  let filtered = OSAKA_CLUBS;
-  if (osakaGenreFilter !== 'ALL') {
-    filtered = filtered.filter(c => c.genre.some(g => g.includes(osakaGenreFilter)));
-  }
-  if (osakaTypeFilter) {
-    filtered = filtered.filter(c => c.type === osakaTypeFilter);
-  }
-
-  filtered.forEach(c => {
-    const pinClass = c.type === 'bar' ? 'embed-map-pin-bar' : 'embed-map-pin';
-    const icon = L.divIcon({
-      className: '',
-      html: `<div class="${pinClass}"></div>`,
-      iconSize: [9, 9], iconAnchor: [4.5, 4.5]
-    });
-    const m = L.marker([c.lat, c.lng], { icon }).addTo(osakaMapInstance);
-    m.bindTooltip(c.name, {
-      className: 'embed-map-label',
-      direction: 'right', offset: [8, 0], permanent: false
-    });
-    m.on('click', () => { window.location.href = 'venues.html#venue/' + c.id; });
-    osakaMapMarkers.push(m);
-  });
-}
-
-function toggleOsakaMap() {
-  const wrap = document.getElementById('osaka-map-wrap');
-  if (osakaMapVisible) {
-    wrap.style.display = 'none';
-    osakaMapVisible = false;
-    cityFilter.venues = 'ALL';
-    renderAll();
-  } else {
-    osakaMapVisible = true;
-    cityFilter.venues = 'OSAKA';
-    renderAll();
-    wrap.style.display = 'block';
-    setTimeout(() => {
-      initOsakaMap();
-      osakaMapInstance.invalidateSize();
-    }, 50);
-  }
-}
-
-function hideOsakaMap() {
-  const wrap = document.getElementById('osaka-map-wrap');
-  if (osakaMapVisible) {
-    wrap.style.display = 'none';
-    osakaMapVisible = false;
-    document.querySelectorAll('.city-btn.map-active').forEach(b => b.classList.remove('map-active'));
-  }
-}
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
 /* ========== INIT ========== */
-renderAll();
-
-// Handle hash-based tab routing (e.g. discover.html#venues)
-(function() {
-  const hash = window.location.hash.replace('#', '');
-  if (['festivals', 'events', 'artists', 'venues'].includes(hash)) {
-    const tabBtn = document.querySelector('[data-tab="' + hash + '"]');
-    if (tabBtn) tabBtn.click();
-  }
-})();
+renderMainGrid();
+renderCategoryNav();
+renderFeed();
+bindCursorExpand();
 </script>
 </body>
 </html>
