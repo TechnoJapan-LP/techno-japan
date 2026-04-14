@@ -93,6 +93,42 @@ nav .nav-links a {
   transition: opacity 0.3s ease;
 }
 nav .nav-links a:hover { opacity: 1; }
+nav .nav-links .nav-dropdown { position: relative; display: flex; align-items: center; }
+nav .nav-links .nav-dropdown > a { cursor: pointer; }
+nav .nav-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding-top: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+nav .nav-dropdown:hover .nav-dropdown-menu { opacity: 1; pointer-events: auto; }
+nav .nav-dropdown-menu-inner {
+  background: rgba(8,8,8,0.95);
+  border: 1px solid rgba(240,237,232,0.1);
+  backdrop-filter: blur(12px);
+  padding: 12px 0;
+  min-width: 160px;
+  display: flex;
+  flex-direction: column;
+}
+nav .nav-dropdown-menu-inner a {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 10px 24px;
+  opacity: 0.5;
+  transition: opacity 0.2s ease, background 0.2s ease;
+  white-space: nowrap;
+}
+nav .nav-dropdown-menu-inner a:hover {
+  opacity: 1;
+  background: rgba(240,237,232,0.05);
+}
 
 /* ===================== HERO ===================== */
 .hero {
@@ -665,6 +701,64 @@ footer {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* ===================== HAMBURGER ===================== */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 4px;
+  z-index: 10001;
+  background: none;
+  border: none;
+  position: fixed;
+  top: 28px;
+  right: 48px;
+}
+.nav-hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--text);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.nav-hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(4px, 5px); }
+.nav-hamburger.active span:nth-child(2) { opacity: 0; }
+.nav-hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(4px, -5px); }
+
+.nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #080808;
+  z-index: 10000;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+}
+.nav-overlay.active { display: flex; }
+.nav-overlay a {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+.nav-overlay a:hover { opacity: 1; }
+.nav-overlay .nav-overlay-sub {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin-top: -8px;
+}
+.nav-overlay .nav-overlay-sub a {
+  font-size: 10px;
+  opacity: 0.35;
+}
+
 /* ===================== RESPONSIVE ===================== */
 @media (max-width: 900px) {
   nav { padding: 20px 24px; }
@@ -682,13 +776,19 @@ footer {
   .hero-eyebrow { top: -40px; }
 }
 
-@media (max-width: 600px) {
-  nav .nav-links { gap: 16px; }
-  nav .nav-links a { font-size: 9px; }
+@media (max-width: 768px) {
+  .nav-hamburger { display: flex; }
+  nav .nav-links { display: none; }
+  .discover-grid { grid-template-columns: 1fr; }
+  .discover-card { aspect-ratio: 3/4; }
   .insta-grid { grid-template-columns: 1fr 1fr; }
   .stat-grid { grid-template-columns: 1fr; }
-  .footer-links { gap: 20px; }
+  .footer-links { gap: 20px; flex-wrap: wrap; justify-content: center; }
   .scroll-indicator { display: none; }
+  .hero h1 { font-size: clamp(60px, 18vw, 120px); }
+  .section-label { font-size: 9px; }
+  .about-text h2 { font-size: clamp(36px, 10vw, 72px); }
+  .contact-left h2 { font-size: clamp(36px, 10vw, 72px); }
 }
 
 /* Hide custom cursor on touch devices */
@@ -710,11 +810,32 @@ footer {
   <div class="logo">TECHNO JAPAN</div>
   <div class="nav-links">
     <a href="#about">ABOUT</a>
-    <a href="media.html">DISCOVER</a>
+    <div class="nav-dropdown">
+      <a href="discover.html">DISCOVER</a>
+      <div class="nav-dropdown-menu"><div class="nav-dropdown-menu-inner">
+        <a href="festivals.html">FESTIVALS</a>
+        <a href="events.html">EVENTS</a>
+        <a href="artists.html">ARTISTS</a>
+        <a href="venues.html">VENUE</a>
+      </div></div>
+    </div>
     <a href="#instagram">INSTAGRAM</a>
     <a href="#contact">CONTACT</a>
   </div>
+  <button class="nav-hamburger" onclick="document.querySelector('.nav-overlay').classList.toggle('active');this.classList.toggle('active')"><span></span><span></span><span></span></button>
 </nav>
+<div class="nav-overlay">
+  <a href="#about" onclick="document.querySelector('.nav-overlay').classList.remove('active');document.querySelector('.nav-hamburger').classList.remove('active')">ABOUT</a>
+  <a href="discover.html">DISCOVER</a>
+  <div class="nav-overlay-sub">
+    <a href="festivals.html">FESTIVALS</a>
+    <a href="events.html">EVENTS</a>
+    <a href="artists.html">ARTISTS</a>
+    <a href="venues.html">VENUE</a>
+  </div>
+  <a href="#instagram" onclick="document.querySelector('.nav-overlay').classList.remove('active');document.querySelector('.nav-hamburger').classList.remove('active')">INSTAGRAM</a>
+  <a href="#contact" onclick="document.querySelector('.nav-overlay').classList.remove('active');document.querySelector('.nav-hamburger').classList.remove('active')">CONTACT</a>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -895,7 +1016,7 @@ footer {
     <div class="footer-logo">TECHNO JAPAN</div>
     <div class="footer-links">
       <a href="#about">ABOUT</a>
-      <a href="media.html">DISCOVER</a>
+      <a href="discover.html">DISCOVER</a>
       <a href="#instagram">INSTAGRAM</a>
       <a href="#contact">CONTACT</a>
     </div>

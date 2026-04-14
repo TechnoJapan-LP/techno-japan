@@ -2,7 +2,7 @@
    TECHNO JAPAN — SHARED DATA
 
    Edit this file to update artists, events, and venues across all pages.
-   events.html, artists.html, venues.html, media.html, and map.html
+   events.html, artists.html, venues.html, discover.html, and map.html
    all read from here.
    ========================================================== */
 
@@ -207,10 +207,17 @@ const FESTIVALS = [
     location: "NAEBA SKI RESORT",
     city: "NIIGATA",
     image: "images/festivals/rural.jpg",
+    flyer: "images/festivals/rural-flyer.jpg",
+    heroGradient: "linear-gradient(135deg, #0a1a0a 0%, #1a3a2a 40%, #0d2818 70%, #050f08 100%)",
     genre: ["TECHNO", "HOUSE", "AMBIENT"],
     desc: "Three-day open-air festival deep in the mountains of Niigata. Multiple stages, international headliners, and a community-driven atmosphere that has made it Japan's most revered electronic music gathering.",
     url: "https://rural-jp.com",
-    lineup: ["ken-ishii", "dj-nobu", "wata-igarashi", "kotsu"]
+    lineup: ["ken-ishii", "dj-nobu", "wata-igarashi", "kotsu"],
+    editions: [
+      { year: 2025, date: "2025-07-19/2025-07-21", lineup: ["DJ NOBU", "WATA IGARASHI", "GONNO", "CYK"] },
+      { year: 2024, date: "2024-07-20/2024-07-22", lineup: ["KEN ISHII", "KOTSU", "FUMIYA TANAKA", "HARUKA"] },
+      { year: 2023, date: "2023-07-15/2023-07-17", lineup: ["DJ NOBU", "YOSHINORI HAYASHI", "MAMA SNAKE"] }
+    ]
   },
   {
     id: "labyrinth",
@@ -219,10 +226,17 @@ const FESTIVALS = [
     location: "NAEBA",
     city: "NIIGATA",
     image: "images/festivals/labyrinth.jpg",
+    flyer: "images/festivals/labyrinth-flyer.jpg",
+    heroGradient: "linear-gradient(135deg, #0a0a14 0%, #12102a 40%, #1a0e28 70%, #080810 100%)",
     genre: ["TECHNO", "HOUSE", "OTHERS"],
     desc: "Curated by DJ Nobu, Labyrinth is a boutique outdoor festival renowned for its uncompromising sound and intimate scale. Deep in the forest, far from the mainstream.",
     url: "https://labyrinth-jp.com",
-    lineup: ["dj-nobu", "wata-igarashi"]
+    lineup: ["dj-nobu", "wata-igarashi"],
+    editions: [
+      { year: 2025, date: "2025-09-13/2025-09-15", lineup: ["DJ NOBU", "WATA IGARASHI", "MARCEL DETTMANN"] },
+      { year: 2024, date: "2024-09-14/2024-09-16", lineup: ["DJ NOBU", "SURGEON", "DONATO DOZZY"] },
+      { year: 2023, date: "2023-09-09/2023-09-11", lineup: ["DJ NOBU", "OBJEKT", "AURORA HALAL"] }
+    ]
   },
   {
     id: "festival-de-frue",
@@ -231,9 +245,15 @@ const FESTIVALS = [
     location: "TSUKIGASE OUTDOOR STAGE",
     city: "SHIZUOKA",
     image: "images/festivals/frue.jpg",
+    flyer: "images/festivals/frue-flyer.jpg",
+    heroGradient: "linear-gradient(135deg, #14100a 0%, #2a1e0e 40%, #1e1408 70%, #0a0806 100%)",
     genre: ["OTHERS", "AMBIENT", "HOUSE"],
     desc: "An eclectic gathering at the foothills of Shizuoka. Frue blends electronic, acoustic, and experimental music in a serene natural setting. A festival for listeners and dancers alike.",
-    lineup: ["cabanne"]
+    lineup: ["cabanne"],
+    editions: [
+      { year: 2024, date: "2024-11-02/2024-11-03", lineup: ["CABANNE", "YOSHINORI HAYASHI", "CHIHEI HATAKEYAMA"] },
+      { year: 2023, date: "2023-11-04/2023-11-05", lineup: ["VISIBLE CLOAKS", "MIDORI TAKADA", "DJ SPRINKLES"] }
+    ]
   },
   {
     id: "rainbow-disco-club",
@@ -242,10 +262,17 @@ const FESTIVALS = [
     location: "HIGASHI-IZU CROSS COUNTRY COURSE",
     city: "SHIZUOKA",
     image: "images/festivals/rdc.jpg",
+    flyer: "images/festivals/rdc-flyer.jpg",
+    heroGradient: "linear-gradient(135deg, #1a0a1e 0%, #2e1040 40%, #1e0830 70%, #0a0410 100%)",
     genre: ["HOUSE", "TECHNO", "OTHERS"],
     desc: "Japan's iconic boutique festival celebrating dance music culture. A sun-soaked weekend of house, techno, and everything in between — overlooking the Pacific Ocean.",
     url: "https://rainbowdiscoclub.com",
-    lineup: ["mayurashka"]
+    lineup: ["mayurashka"],
+    editions: [
+      { year: 2025, date: "2025-04-26/2025-04-28", lineup: ["MAYURASHKA", "HUNEE", "SOICHI TERADA", "YOUNG MARCO"] },
+      { year: 2024, date: "2024-04-27/2024-04-29", lineup: ["KERRI CHANDLER", "FUMIYA TANAKA", "SAUCE81"] },
+      { year: 2023, date: "2023-04-29/2023-04-30", lineup: ["LARRY HEARD", "ANTAL", "CYK"] }
+    ]
   },
   {
     id: "fuji-rock",
@@ -254,9 +281,16 @@ const FESTIVALS = [
     location: "NAEBA SKI RESORT",
     city: "NIIGATA",
     image: "images/festivals/fujirock.jpg",
+    flyer: "images/festivals/fujirock-flyer.jpg",
+    heroGradient: "linear-gradient(135deg, #0a0e14 0%, #0e1a2a 40%, #0a1420 70%, #060a10 100%)",
     genre: ["OTHERS", "TECHNO", "LIVE"],
     desc: "Japan's largest outdoor music festival. While spanning all genres, Fuji Rock's Red Marquee and Field of Heaven stages have long championed underground electronic music.",
-    url: "https://fujirock-eng.com"
+    url: "https://fujirock-eng.com",
+    editions: [
+      { year: 2025, date: "2025-07-25/2025-07-27", lineup: ["THE CURE", "APHEX TWIN", "KRAFTWERK"] },
+      { year: 2024, date: "2024-07-26/2024-07-28", lineup: ["THE KILLERS", "SKRILLEX", "NOISIA"] },
+      { year: 2023, date: "2023-07-28/2023-07-30", lineup: ["FOO FIGHTERS", "LIZZO", "DANIEL AVERY"] }
+    ]
   }
 ];
 
