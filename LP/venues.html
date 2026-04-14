@@ -170,25 +170,34 @@ nav .nav-dropdown-menu-inner a:hover { opacity: 1; background: rgba(240,237,232,
 .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
-/* MAP TOGGLE */
-.map-toggle-bar {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 40px; margin-bottom: 24px;
+/* AREA FILTER NAV */
+.area-nav {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(8,8,8,0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(240,237,232,0.06);
+  padding: 20px 40px; display: flex; gap: 0; overflow-x: auto; scrollbar-width: none;
+  align-items: center;
 }
-.map-toggle-btn {
+.area-nav::-webkit-scrollbar { display: none; }
+.area-nav a {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  opacity: 0.3; transition: opacity 0.3s ease; padding: 8px 24px; white-space: nowrap; flex-shrink: 0; cursor: pointer;
+}
+.area-nav a:hover { opacity: 0.7; }
+.area-nav a.active { opacity: 1; border-bottom: 1px solid var(--text); }
+.area-nav .area-nav-map {
+  margin-left: auto; flex-shrink: 0;
   font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
-  padding: 8px 20px; border: 1px solid rgba(240,237,232,0.15); border-radius: 0;
-  background: transparent; color: rgba(240,237,232,0.5); cursor: pointer;
-  transition: all 0.3s ease; display: flex; align-items: center; gap: 10px;
+  padding: 6px 16px; border: 1px solid rgba(240,237,232,0.15); background: transparent;
+  color: rgba(240,237,232,0.5); cursor: pointer; transition: all 0.3s ease;
+  display: flex; align-items: center; gap: 8px;
 }
-.map-toggle-btn:hover { border-color: rgba(240,237,232,0.4); color: var(--text); }
-.map-toggle-btn.active { background: #ff2d2d; color: var(--bg); border-color: #ff2d2d; }
-.map-toggle-btn .pin-icon {
-  width: 6px; height: 6px; border-radius: 50%; background: #ff2d2d;
-  transition: background 0.3s ease;
+.area-nav .area-nav-map:hover { border-color: rgba(240,237,232,0.4); color: var(--text); }
+.area-nav .area-nav-map.active { background: #ff2d2d; color: var(--bg); border-color: #ff2d2d; }
+.area-nav .area-nav-map .pin-icon {
+  width: 6px; height: 6px; border-radius: 50%; background: #ff2d2d; transition: background 0.3s ease;
 }
-.map-toggle-btn.active .pin-icon { background: var(--bg); }
-.map-toggle-group { display: flex; gap: 12px; }
+.area-nav .area-nav-map.active .pin-icon { background: var(--bg); }
 #venue-map-wrap, #osaka-map-wrap, #nagoya-map-wrap, #kyoto-map-wrap, #hakuba-map-wrap {
   display: none; margin: 0 40px 32px; border: 1px solid rgba(240,237,232,0.1);
   overflow: hidden;
@@ -277,6 +286,8 @@ footer { padding: 60px 40px 40px; border-top: 1px solid rgba(240,237,232,0.08); 
   .page-header { padding: 140px 24px 60px; }
   .page-header-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
   #venues-list-view { padding: 40px 24px 80px; }
+  .area-nav { padding: 16px 24px; }
+  .area-nav a { padding: 6px 16px; font-size: 9px; }
   .venues-grid { grid-template-columns: 1fr; }
   .venue-card { padding: 36px 24px; min-height: auto; }
   .venue-back { padding: 40px 24px 0; }
@@ -340,16 +351,7 @@ footer { padding: 60px 40px 40px; border-top: 1px solid rgba(240,237,232,0.08); 
 </header>
 
 <main id="venues-list-view">
-  <div class="map-toggle-bar">
-    <div></div>
-    <div class="map-toggle-group">
-      <button class="map-toggle-btn" id="venue-map-toggle"><span class="pin-icon"></span> TOKYO</button>
-      <button class="map-toggle-btn" id="osaka-map-toggle"><span class="pin-icon"></span> OSAKA</button>
-      <button class="map-toggle-btn" id="nagoya-map-toggle"><span class="pin-icon"></span> NAGOYA</button>
-      <button class="map-toggle-btn" id="kyoto-map-toggle"><span class="pin-icon"></span> KYOTO</button>
-      <button class="map-toggle-btn" id="hakuba-map-toggle"><span class="pin-icon"></span> HAKUBA</button>
-    </div>
-  </div>
+  <div class="area-nav" id="area-nav"></div>
   <div id="venue-map-wrap">
     <div id="venue-map-filters"></div>
     <div id="venue-map"></div>
@@ -414,12 +416,74 @@ const observer = new IntersectionObserver(entries => {
 }, { threshold: 0.1 });
 function observeAll() { document.querySelectorAll('.reveal').forEach(el => observer.observe(el)); }
 
+/* AREA FILTER */
+let currentArea = 'ALL';
+let mapCity = null; // which city map is showing
+
+function buildAreaNav() {
+  const cities = [...new Set(VENUES.map(v => v.city))];
+  const nav = document.getElementById('area-nav');
+  nav.innerHTML = `<a href="#" data-area="ALL" class="active">ALL</a>` +
+    cities.map(c => `<a href="#" data-area="${c}">${c}</a>`).join('') +
+    `<button class="area-nav-map" id="area-map-btn"><span class="pin-icon"></span> MAP</button>`;
+
+  nav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      currentArea = link.dataset.area;
+      nav.querySelectorAll('a').forEach(a => a.classList.remove('active'));
+      link.classList.add('active');
+      // Hide map when switching area
+      hideAllMaps();
+      document.getElementById('area-map-btn').classList.remove('active');
+      mapCity = null;
+      applyAreaFilter();
+    });
+  });
+
+  document.getElementById('area-map-btn').addEventListener('click', () => {
+    const btn = document.getElementById('area-map-btn');
+    const city = currentArea === 'ALL' ? 'TOKYO' : currentArea;
+    const cfg = ALL_MAPS_CFG.find(m => m.city === city);
+
+    if (mapCity === city) {
+      hideAllMaps();
+      btn.classList.remove('active');
+      mapCity = null;
+    } else {
+      hideAllMaps();
+      if (cfg) {
+        const wrapEl = document.getElementById(cfg.wrapId);
+        if (wrapEl) {
+          wrapEl.style.display = 'block';
+          if (!cfg.inited) {
+            setTimeout(() => { cfg.init(); cfg.inited = true; }, 50);
+          }
+        }
+      }
+      btn.classList.add('active');
+      mapCity = city;
+    }
+  });
+}
+
+function hideAllMaps() {
+  document.querySelectorAll('[id$="-map-wrap"]').forEach(el => el.style.display = 'none');
+}
+
+function applyAreaFilter() {
+  document.querySelectorAll('.venue-card').forEach(card => {
+    const city = card.dataset.city;
+    card.style.display = (currentArea === 'ALL' || city === currentArea) ? '' : 'none';
+  });
+}
+
 /* RENDER LIST */
 function renderVenuesList() {
   document.getElementById('venues-grid').innerHTML = VENUES.map((v, i) => {
     const evCount = getVenueEvents(v.name).length;
     return `
-      <a href="#venue/${v.id}" class="venue-card reveal" style="transition-delay:${i * 80}ms">
+      <a href="#venue/${v.id}" class="venue-card reveal" data-city="${v.city}" style="transition-delay:${i * 80}ms">
         <div class="venue-card-content">
           <div class="venue-card-city">${v.city}${v.area ? ' · ' + v.area : ''}</div>
           <div class="venue-card-name">${v.name}</div>
@@ -431,6 +495,7 @@ function renderVenuesList() {
   }).join('');
   observeAll();
   bindCursorExpand();
+  applyAreaFilter();
 }
 
 /* RENDER DETAIL */
@@ -784,41 +849,17 @@ function renderHmMarkers() {
   });
 }
 
-/* ========== MAP TOGGLE — mutual exclusivity ========== */
-const ALL_MAPS = [
-  { id: 'venue', toggleId: 'venue-map-toggle', wrapId: 'venue-map-wrap', init: () => { initVenueMap(); vmMap.invalidateSize(); }, getVisible: () => vmVisible, setVisible: v => vmVisible = v },
-  { id: 'osaka', toggleId: 'osaka-map-toggle', wrapId: 'osaka-map-wrap', init: () => { initOsakaMap(); omMap.invalidateSize(); }, getVisible: () => omVisible, setVisible: v => omVisible = v },
-  { id: 'nagoya', toggleId: 'nagoya-map-toggle', wrapId: 'nagoya-map-wrap', init: () => { initNagoyaMap(); nmMap.invalidateSize(); }, getVisible: () => nmVisible, setVisible: v => nmVisible = v },
-  { id: 'kyoto', toggleId: 'kyoto-map-toggle', wrapId: 'kyoto-map-wrap', init: () => { initKyotoMap(); kmMap.invalidateSize(); }, getVisible: () => kmVisible, setVisible: v => kmVisible = v },
-  { id: 'hakuba', toggleId: 'hakuba-map-toggle', wrapId: 'hakuba-map-wrap', init: () => { initHakubaMap(); hmMap.invalidateSize(); }, getVisible: () => hmVisible, setVisible: v => hmVisible = v },
+/* ========== MAP CONFIG ========== */
+const ALL_MAPS_CFG = [
+  { city: 'TOKYO', wrapId: 'venue-map-wrap', init: () => { initVenueMap(); vmMap.invalidateSize(); }, inited: false },
+  { city: 'OSAKA', wrapId: 'osaka-map-wrap', init: () => { initOsakaMap(); omMap.invalidateSize(); }, inited: false },
+  { city: 'NAGOYA', wrapId: 'nagoya-map-wrap', init: () => { initNagoyaMap(); nmMap.invalidateSize(); }, inited: false },
+  { city: 'KYOTO', wrapId: 'kyoto-map-wrap', init: () => { initKyotoMap(); kmMap.invalidateSize(); }, inited: false },
+  { city: 'HAKUBA', wrapId: 'hakuba-map-wrap', init: () => { initHakubaMap(); hmMap.invalidateSize(); }, inited: false },
 ];
 
-ALL_MAPS.forEach(mapDef => {
-  document.getElementById(mapDef.toggleId).addEventListener('click', function() {
-    // Close all other maps
-    ALL_MAPS.forEach(other => {
-      if (other.id !== mapDef.id && other.getVisible()) {
-        document.getElementById(other.wrapId).style.display = 'none';
-        document.getElementById(other.toggleId).classList.remove('active');
-        other.setVisible(false);
-      }
-    });
-    // Toggle this map
-    const wrap = document.getElementById(mapDef.wrapId);
-    if (mapDef.getVisible()) {
-      wrap.style.display = 'none';
-      this.classList.remove('active');
-      mapDef.setVisible(false);
-    } else {
-      wrap.style.display = 'block';
-      this.classList.add('active');
-      mapDef.setVisible(true);
-      setTimeout(() => mapDef.init(), 50);
-    }
-  });
-});
-
 /* INIT */
+buildAreaNav();
 renderVenuesList();
 handleRoute();
 </script>

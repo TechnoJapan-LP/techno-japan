@@ -66,6 +66,7 @@ nav .nav-dropdown-menu-inner a:hover { opacity: 1; background: rgba(240,237,232,
 .page-header {
   padding: 160px 40px 80px;
   border-bottom: 1px solid rgba(240,237,232,0.08);
+  transition: background 0.6s ease;
 }
 .page-header-inner { display: flex; justify-content: space-between; align-items: flex-end; }
 .page-title {
@@ -74,6 +75,7 @@ nav .nav-dropdown-menu-inner a:hover { opacity: 1; background: rgba(240,237,232,
   line-height: 0.9;
   text-transform: uppercase;
   opacity: 0; animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; animation-delay: 0.3s;
+  transition: color 0.4s ease;
 }
 .page-subtitle {
   font-family: var(--font-mono);
@@ -84,6 +86,67 @@ nav .nav-dropdown-menu-inner a:hover { opacity: 1; background: rgba(240,237,232,
   padding-bottom: 12px;
   max-width: 420px;
   line-height: 1.8;
+}
+
+/* ===================== MODE TOGGLE ===================== */
+.mode-toggle {
+  display: flex; align-items: center; gap: 16px;
+  margin-top: 32px;
+}
+.mode-toggle-label {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em;
+  text-transform: uppercase; opacity: 0.35; transition: opacity 0.3s ease; cursor: pointer;
+}
+.mode-toggle-label.active { opacity: 1; }
+.mode-toggle-switch {
+  width: 52px; height: 26px; border-radius: 13px;
+  border: 1px solid rgba(240,237,232,0.2); background: transparent;
+  position: relative; cursor: pointer; transition: all 0.4s ease;
+  flex-shrink: 0;
+}
+.mode-toggle-switch::after {
+  content: ''; position: absolute; top: 3px; left: 3px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--text); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.mode-toggle-switch.rave { border-color: #ff2d2d; }
+.mode-toggle-switch.rave::after {
+  left: 29px; background: #ff2d2d;
+}
+
+/* ===================== RAVE MODE ===================== */
+body.rave-mode {
+  --rave-accent: #ff2d2d;
+}
+body.rave-mode .page-header {
+  background: linear-gradient(180deg, rgba(255,45,45,0.06) 0%, transparent 100%);
+}
+body.rave-mode .page-title { color: #ff2d2d; }
+body.rave-mode .month-nav {
+  background: rgba(20,0,0,0.85);
+  border-bottom-color: rgba(255,45,45,0.1);
+}
+body.rave-mode .month-nav a.active {
+  color: #ff2d2d;
+  border-bottom-color: #ff2d2d;
+}
+body.rave-mode .festival-section:hover {
+  background: rgba(255,45,45,0.03);
+}
+body.rave-mode .festival-image-wrap img {
+  filter: grayscale(100%) contrast(1.2);
+}
+body.rave-mode .festival-section:hover .festival-image-wrap img {
+  filter: grayscale(0%) contrast(1.2) saturate(1.3);
+}
+body.rave-mode .festival-tag {
+  border-color: rgba(255,45,45,0.2);
+}
+body.rave-mode .festival-name {
+  transition: color 0.3s ease;
+}
+body.rave-mode .festival-section:hover .festival-name {
+  color: #ff2d2d;
 }
 
 /* ===================== STICKY MONTH NAV ===================== */
@@ -546,8 +609,15 @@ footer { border-top: 1px solid rgba(240,237,232,0.08); padding: 60px 40px; }
 <header class="page-header" id="page-header">
   <a href="index.html" class="back-link"><span class="arrow"></span> BACK TO HOME</a>
   <div class="page-header-inner">
-    <h1 class="page-title">FESTIVAL<br>GUIDE '26</h1>
-    <div class="page-subtitle">THE DEFINITIVE GUIDE TO JAPAN'S ELECTRONIC MUSIC FESTIVALS AND UNDERGROUND RAVES.</div>
+    <div>
+      <h1 class="page-title" id="page-title">FESTIVAL<br>GUIDE '26</h1>
+      <div class="mode-toggle" id="mode-toggle">
+        <span class="mode-toggle-label active" data-mode="festival">FESTIVAL</span>
+        <div class="mode-toggle-switch" id="mode-switch"></div>
+        <span class="mode-toggle-label" data-mode="rave">RAVE</span>
+      </div>
+    </div>
+    <div class="page-subtitle" id="page-subtitle">THE DEFINITIVE GUIDE TO JAPAN'S ELECTRONIC MUSIC FESTIVALS AND UNDERGROUND RAVES.</div>
   </div>
 </header>
 
@@ -616,10 +686,50 @@ function getArtist(id) {
   return ARTISTS.find(a => a.id === id);
 }
 
+let currentMode = 'festival'; // 'festival' or 'rave'
+
 function getSorted() {
-  return [...FESTIVALS].sort((a, b) =>
-    new Date(a.date.split('/')[0]) - new Date(b.date.split('/')[0])
-  );
+  return [...FESTIVALS]
+    .filter(f => (f.type || 'festival') === currentMode)
+    .sort((a, b) => new Date(a.date.split('/')[0]) - new Date(b.date.split('/')[0]));
+}
+
+/* ========== MODE TOGGLE ========== */
+function initModeToggle() {
+  const sw = document.getElementById('mode-switch');
+  const labels = document.querySelectorAll('.mode-toggle-label');
+
+  function setMode(mode) {
+    currentMode = mode;
+    const isRave = mode === 'rave';
+
+    // Toggle switch visual
+    sw.classList.toggle('rave', isRave);
+
+    // Labels
+    labels.forEach(l => l.classList.toggle('active', l.dataset.mode === mode));
+
+    // Body class
+    document.body.classList.toggle('rave-mode', isRave);
+
+    // Title
+    document.getElementById('page-title').innerHTML = isRave
+      ? 'RAVE<br>GUIDE \'26'
+      : 'FESTIVAL<br>GUIDE \'26';
+
+    // Subtitle
+    document.getElementById('page-subtitle').textContent = isRave
+      ? 'UNDERGROUND RAVES, ILLEGAL PARTIES, AND SECRET GATHERINGS ACROSS JAPAN.'
+      : 'THE DEFINITIVE GUIDE TO JAPAN\'S ELECTRONIC MUSIC FESTIVALS AND UNDERGROUND RAVES.';
+
+    // Re-render content
+    currentMonth = 'ALL';
+    buildMonthNav();
+    renderFestivals();
+  }
+
+  sw.addEventListener('click', () => setMode(currentMode === 'festival' ? 'rave' : 'festival'));
+  labels.forEach(l => l.addEventListener('click', () => setMode(l.dataset.mode)));
 }
 
 /* ========== SCROLL OBSERVER ========== */
@@ -759,6 +869,9 @@ function renderDetail(id) {
   const officialHtml = f.url
     ? `<a href="${f.url}" target="_blank" rel="noopener" class="detail-official">OFFICIAL SITE <span class="link-arrow"></span></a>`
     : '';
+  const ticketHtml = f.ticketUrl
+    ? `<a href="${f.ticketUrl}" target="_blank" rel="noopener" class="detail-official">TICKETS <span class="link-arrow"></span></a>`
+    : '';
 
   const lineupItems = (f.lineup || []).map(id => {
     const a = getArtist(id);
@@ -810,8 +923,10 @@ function renderDetail(id) {
         <div class="detail-location">${f.location} — ${f.city}</div>
         <div class="detail-tags">${f.genre.map(g => `<span class="detail-tag">${g}</span>`).join('')}</div>
         <div class="detail-desc">${f.desc}</div>
-        ${officialHtml}
-        ${f.url ? `<a href="${f.url}" target="_blank" rel="noopener" class="festival-cta">GET TICKETS</a>` : ''}
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          ${officialHtml}
+          ${ticketHtml}
+        </div>
       </div>
     </div>
 
@@ -883,6 +998,7 @@ function bindCursorExpand() {
 }
 
 /* ========== INIT ========== */
+initModeToggle();
 renderFestivals();
 buildMonthNav();
 handleHash();
