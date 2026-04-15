@@ -588,15 +588,14 @@ function renderFestivalPreview(){
   const flyerPath=g('f-flyer');
   const imageUrl=g('f-imageUrl');
   const flyerUrl=g('f-flyerUrl');
-  // Try multiple image sources: uploaded preview > Drive URL > URL input > GitHub raw
+  // Try multiple image sources: uploaded preview > Drive URL > URL input > local path
   const pvImg=document.querySelector('#preview-f-image img');
   const pvFlyer=document.querySelector('#preview-f-flyer img');
-  const REPO_BASE='https://raw.githubusercontent.com/shibatatatsuya/techno-japan/main/LP/';
   const resolveImg=function(path,urlField,pvEl){
     if(pvEl&&pvEl.src)return pvEl.src;
     if(path&&path.startsWith('http'))return path;
     if(urlField)return urlField;
-    if(path)return REPO_BASE+path;
+    if(path)return path;
     return '';
   };
   const imgSrc=resolveImg(imagePath,imageUrl,pvImg);
