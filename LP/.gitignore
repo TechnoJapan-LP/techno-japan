@@ -1,0 +1,6 @@
+# Google Service Account credentials
+techno-japan-493408-4b24cbadf5ec.json
+*.credentials.json
+
+# Update script logs
+update_festivals.log

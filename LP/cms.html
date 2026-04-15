@@ -84,6 +84,8 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
 .lineup-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .lineup-tag{display:flex;align-items:center;gap:6px;padding:4px 10px;background:var(--bg4);border:1px solid var(--border);border-radius:20px;font-size:.8rem}
 .lineup-tag .remove{cursor:pointer;color:var(--accent);font-size:1rem;line-height:1}
+.lineup-tag.unmatched{border-style:dashed;border-color:var(--yellow);color:var(--yellow);opacity:.8}
+.lineup-tag.unmatched .remove{color:var(--yellow)}
 .editions-section{margin-top:4px}
 .edition-block{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px;position:relative}
 .edition-block .remove-edition{position:absolute;top:8px;right:8px;cursor:pointer;color:var(--accent);font-size:1rem;background:none;border:none}
@@ -102,6 +104,20 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
 .toast.success{background:rgba(45,255,110,.15);border:1px solid var(--green);color:var(--green)}
 .toast.error{background:rgba(255,45,45,.15);border:1px solid var(--accent);color:var(--accent)}
 .toast.info{background:rgba(45,143,255,.15);border:1px solid var(--blue);color:var(--blue)}
+.insta-preview{margin-top:10px;display:none}
+.insta-preview img{max-width:300px;max-height:300px;border-radius:var(--radius);border:1px solid var(--border)}
+.insta-preview .insta-info{margin-top:6px;font-size:.75rem;color:var(--text2);font-family:var(--font-mono)}
+.insta-help{background:var(--bg3);border:1px solid var(--yellow);border-radius:var(--radius);padding:16px;font-size:.85rem;color:var(--text)}
+.insta-help p{margin-bottom:8px}
+.insta-help ol{margin:8px 0 8px 20px;line-height:1.8}
+.insta-help code{background:var(--bg4);padding:2px 6px;border-radius:3px;font-family:var(--font-mono);font-size:.75rem}
+.label-hint{font-size:.7rem;color:var(--text3);font-family:var(--font-mono);font-weight:400;margin-left:4px}
+.upload-fallback{opacity:.6;transition:.2s}
+.upload-fallback:hover{opacity:1}
+.upload-fallback .upload-label{font-size:.75rem;color:var(--text3);font-family:var(--font-mono);display:block;margin-bottom:4px}
+.img-preview{margin-top:8px;display:none}
+.img-preview img{max-width:160px;max-height:120px;border-radius:var(--radius);border:1px solid var(--border);object-fit:cover}
+.img-preview .preview-info{font-size:.7rem;color:var(--text3);font-family:var(--font-mono);margin-top:4px}
 .upload-area{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg3);border:1px dashed var(--border);border-radius:var(--radius);cursor:pointer;transition:.2s}
 .upload-area:hover{border-color:var(--text2)}
 .upload-area .icon{font-size:1.2rem;color:var(--text3)}
@@ -128,6 +144,44 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
 .dialog-box h3{font-family:var(--font-display);font-size:1.4rem;letter-spacing:2px;margin-bottom:8px}
 .dialog-box p{color:var(--text2);font-size:.85rem;margin-bottom:20px;line-height:1.5}
 .dialog-box .btn-row{justify-content:flex-end}
+/* ===================== LIVE PREVIEW OVERLAY ===================== */
+.preview-overlay{display:none;position:fixed;inset:0;z-index:600;background:#0a0a0a;overflow-y:auto}
+.preview-overlay.show{display:block}
+.preview-close{position:fixed;top:20px;right:24px;z-index:610;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#f0ede8;font-family:var(--font-mono);font-size:10px;letter-spacing:.15em;padding:10px 20px;cursor:pointer;transition:.2s;text-transform:uppercase}
+.preview-close:hover{background:rgba(255,255,255,.15)}
+.preview-badge{position:fixed;top:20px;left:24px;z-index:610;background:rgba(255,70,70,.15);border:1px solid rgba(255,70,70,.3);color:#ff4646;font-family:var(--font-mono);font-size:9px;letter-spacing:.2em;padding:8px 16px;text-transform:uppercase;pointer-events:none}
+.pv{--pv-text:#f0ede8;--pv-bg:#0a0a0a;color:var(--pv-text);padding:120px 40px 80px;max-width:1200px;margin:0 auto}
+.pv *{box-sizing:border-box}
+.pv-hero{display:grid;grid-template-columns:1fr 1fr;gap:60px;margin-bottom:80px}
+.pv-hero-image{width:100%;aspect-ratio:16/10;overflow:hidden;border-radius:2px}
+.pv-hero-image img{width:100%;height:100%;object-fit:cover}
+.pv-hero-info{display:flex;flex-direction:column;justify-content:center}
+.pv-date{font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;opacity:.5;margin-bottom:16px}
+.pv-name{font-family:'Bebas Neue',var(--font-display),sans-serif;font-size:clamp(48px,6vw,80px);text-transform:uppercase;line-height:.95;margin-bottom:12px}
+.pv-location{font-family:var(--font-mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;opacity:.4;margin-bottom:24px}
+.pv-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.pv-tag{font-family:var(--font-mono);font-size:8px;letter-spacing:.15em;padding:5px 14px;border:1px solid rgba(240,237,232,.12);text-transform:uppercase;opacity:.6}
+.pv-desc{font-family:'DM Sans',var(--font-body),sans-serif;font-weight:200;font-size:14px;line-height:1.9;opacity:.55;max-width:520px;margin-bottom:28px;white-space:pre-line}
+.pv-links{display:flex;gap:12px;flex-wrap:wrap}
+.pv-link{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;opacity:.5;padding:10px 24px;border:1px solid rgba(240,237,232,.15);color:var(--pv-text);text-decoration:none;transition:.2s}
+.pv-link:hover{opacity:1;border-color:rgba(240,237,232,.3)}
+.pv-section{padding:60px 0;border-top:1px solid rgba(240,237,232,.06)}
+.pv-section-label{font-family:var(--font-mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;opacity:.3;margin-bottom:32px}
+.pv-flyer-lineup{display:grid;grid-template-columns:1fr 1fr;gap:48px;padding:60px 0;border-top:1px solid rgba(240,237,232,.06);align-items:start}
+.pv-flyer-image{width:100%;border:1px solid rgba(240,237,232,.08);overflow:hidden;background:rgba(240,237,232,.03)}
+.pv-flyer-image img{width:100%;display:block}
+.pv-flyer-placeholder{width:100%;aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;opacity:.15}
+.pv-lineup-grid{display:flex;flex-wrap:wrap;gap:12px}
+.pv-lineup-item{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:10px 20px;border:1px solid rgba(240,237,232,.1);opacity:.6}
+.pv-edition-row{display:grid;grid-template-columns:80px 160px 1fr;gap:32px;align-items:start;padding:24px 0;border-bottom:1px solid rgba(240,237,232,.04)}
+.pv-edition-year{font-family:'Bebas Neue',var(--font-display),sans-serif;font-size:32px;line-height:1;opacity:.4}
+.pv-edition-date{font-family:var(--font-mono);font-size:9px;letter-spacing:.12em;opacity:.35;padding-top:8px}
+.pv-edition-lineup{display:flex;flex-wrap:wrap;gap:8px;padding-top:6px}
+.pv-edition-artist{font-family:var(--font-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;opacity:.4;padding:4px 10px;border:1px solid rgba(240,237,232,.08)}
+.pv-empty{font-family:var(--font-mono);font-size:9px;letter-spacing:.15em;opacity:.2;text-transform:uppercase}
+.btn-preview{background:rgba(120,80,200,.2);border:1px solid rgba(120,80,200,.4);color:#b088ff}
+.btn-preview:hover{background:rgba(120,80,200,.3);border-color:rgba(120,80,200,.6)}
+@media(max-width:900px){.pv-hero,.pv-flyer-lineup{grid-template-columns:1fr}.pv-edition-row{grid-template-columns:60px 1fr}}
 @media(max-width:768px){
   .sidebar{width:60px}
   .sidebar-logo,.sidebar nav button span,.sidebar-footer{display:none}
@@ -138,6 +192,13 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
 </style>
 </head>
 <body>
+
+<!-- LIVE PREVIEW OVERLAY -->
+<div class="preview-overlay" id="preview-overlay">
+  <div class="preview-badge">● LIVE PREVIEW</div>
+  <button class="preview-close" onclick="closePreview()">✕ CLOSE</button>
+  <div class="pv" id="preview-content"></div>
+</div>
 
 <aside class="sidebar">
   <div class="sidebar-logo">TECHNO JAPAN<span>CMS Admin</span></div>
@@ -180,8 +241,9 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
       <div class="form-group"><label>Lat</label><input type="text" id="v-lat" placeholder="35.xxxx"></div>
       <div class="form-group"><label>Lng</label><input type="text" id="v-lng" placeholder="139.xxxx"></div>
       <div class="form-group"><label>Instagram</label><input type="url" id="v-instagram" placeholder="https://instagram.com/..."></div>
-      <div class="form-group"><label>Image Upload</label><div class="upload-area" onclick="this.querySelector('input').click()"><span class="icon">&#8679;</span><span>Upload to Google Drive</span><input type="file" accept="image/*" onchange="uploadImage(this,'venue','v')"></div></div>
-      <div class="form-group full"><label>Description</label><div class="input-row" style="align-items:flex-end"><textarea id="v-desc" rows="4" placeholder="Venue description..."></textarea><button class="btn btn-green btn-sm" onclick="aiGenerate('venue')">AI Generate</button></div></div>
+      <div class="form-group full"><label>Image from URL</label><div class="input-row"><input type="url" id="v-imageUrl" placeholder="画像の直接URL（公式サイト等から）"><button class="btn btn-sm btn-accent" onclick="uploadFromUrl('v','venue','v-image','v-imageUrl','preview-v-image')">UPLOAD</button></div><div class="img-preview" id="preview-v-image"></div></div>
+      <div class="form-group full upload-fallback"><label>または手動アップロード <span class="label-hint">max 5MB</span></label><div class="upload-area" onclick="this.querySelector('input').click()"><span class="icon">&#8679;</span><span>Upload Image</span><input type="file" accept="image/*" onchange="uploadImage(this,'venue','v')"></div></div>
+      <div class="form-group full"><label>Description</label><textarea id="v-desc" rows="8" placeholder="Venue description..." style="width:100%;margin-bottom:8px"></textarea><button class="btn btn-green btn-sm" onclick="aiGenerate('venue')">AI Generate</button></div>
       <div class="full btn-row" id="venue-btn-new">
         <button class="btn btn-accent" onclick="submitVenue()">Generate Code</button>
         <button class="btn" onclick="submitToSheet('venue')">Save to Spreadsheet</button>
@@ -200,11 +262,14 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
     <button onclick="switchTab('festival','form')">New</button>
   </div>
   <div class="tab-content active" id="festival-tab-list">
-    <div style="margin-bottom:12px;display:flex;justify-content:flex-end"><button class="btn btn-sm" onclick="loadList('festival')">Refresh</button></div>
+    <div style="margin-bottom:12px;display:flex;justify-content:space-between;align-items:center">
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap" id="festival-year-filter"></div>
+      <button class="btn btn-sm" onclick="loadList('festival')">Refresh</button>
+    </div>
     <div class="data-list" id="festival-list"><div class="data-list-empty">Click "Refresh" to load data</div></div>
   </div>
   <div class="tab-content" id="festival-tab-form">
-    <div class="edit-banner" id="festival-edit-banner"><span>Editing: <strong id="festival-edit-name"></strong></span><button class="btn btn-sm btn-yellow" onclick="saveEdit('festival')">Save Changes</button><button class="btn btn-sm" onclick="cancelEdit('festival')">Cancel</button></div>
+    <div class="edit-banner" id="festival-edit-banner"><span>Editing: <strong id="festival-edit-name"></strong></span><button class="btn btn-sm btn-preview" onclick="openPreview('festival')">👁 Preview</button><button class="btn btn-sm btn-yellow" onclick="saveEdit('festival')">Save Changes</button><button class="btn btn-sm" onclick="cancelEdit('festival')">Cancel</button></div>
     <div class="form-grid" id="form-festival">
       <div class="form-group"><label>ID</label><input type="text" id="f-id" placeholder="e.g. rural-festival" oninput="autoFillFestivalImage()"></div>
       <div class="form-group"><label>Type</label><select id="f-type"><option value="festival">Festival</option><option value="rave">Rave</option></select></div>
@@ -213,6 +278,7 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
       <div class="form-group"><label>Location</label><input type="text" id="f-location" placeholder="e.g. NAEBA SKI RESORT"></div>
       <div class="form-group"><label>URL</label><input type="url" id="f-url" placeholder="https://..."></div>
       <div class="form-group"><label>Ticket URL</label><input type="url" id="f-ticketUrl" placeholder="https://..."></div>
+      <div class="form-group"><label>Instagram</label><input type="url" id="f-instagram" placeholder="https://instagram.com/..."></div>
       <div class="form-group full"><label>Address</label><div class="input-row"><input type="text" id="f-address" placeholder="Full address for geocoding"><button class="btn btn-blue btn-sm" onclick="geocode('f')">Geocode</button></div></div>
       <div class="form-group"><label>Lat</label><input type="text" id="f-lat" placeholder="36.xxxx"></div>
       <div class="form-group"><label>Lng</label><input type="text" id="f-lng" placeholder="139.xxxx"></div>
@@ -221,13 +287,29 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
       <div class="form-group full"><label>Genre</label><div class="chip-group" id="f-genre"></div></div>
       <div class="form-group"><label>Image Path</label><input type="text" id="f-image" placeholder="auto-filled" readonly></div>
       <div class="form-group"><label>Flyer Path</label><input type="text" id="f-flyer" placeholder="auto-filled" readonly></div>
-      <div class="form-group"><label>Image Upload</label><div class="upload-area" onclick="this.querySelector('input').click()"><span class="icon">&#8679;</span><span>Upload Image</span><input type="file" accept="image/*" onchange="uploadImage(this,'festival-image','f')"></div></div>
-      <div class="form-group"><label>Flyer Upload</label><div class="upload-area" onclick="this.querySelector('input').click()"><span class="icon">&#8679;</span><span>Upload Flyer</span><input type="file" accept="image/*" onchange="uploadImage(this,'festival-flyer','f')"></div></div>
-      <div class="form-group full"><label>Hero Gradient</label><div class="gradient-presets" id="f-gradientPresets"></div><input type="text" id="f-heroGradient" placeholder="linear-gradient(...)" style="margin-top:8px"></div>
-      <div class="form-group full"><label>Description</label><div class="input-row" style="align-items:flex-end"><textarea id="f-desc" rows="4" placeholder="Festival description..."></textarea><button class="btn btn-green btn-sm" onclick="aiGenerate('festival')">AI Generate</button></div></div>
-      <div class="form-group full"><label>Lineup</label><div class="lineup-section"><div class="lineup-input-wrap"><input type="text" id="f-lineupInput" placeholder="Type artist ID..." oninput="filterArtists('f-lineupInput','f-autocomplete','f')" onkeydown="acKeydown(event,'f-autocomplete','f')"><div class="autocomplete-list" id="f-autocomplete"></div></div><div class="lineup-tags" id="f-lineupTags"></div></div></div>
+      <div class="form-group full"><label>Image from URL</label><div class="input-row"><input type="url" id="f-imageUrl" placeholder="画像の直接URL（公式サイト・RA等から）"><button class="btn btn-sm btn-accent" onclick="uploadFromUrl('f','festival-image','f-image','f-imageUrl','preview-f-image')">UPLOAD</button></div><div class="img-preview" id="preview-f-image"></div></div>
+      <div class="form-group full"><label>Flyer from URL</label><div class="input-row"><input type="url" id="f-flyerUrl" placeholder="画像の直接URL（公式サイト・RA等から）"><button class="btn btn-sm btn-accent" onclick="uploadFromUrl('f','festival-flyer','f-flyer','f-flyerUrl','preview-f-flyer')">UPLOAD</button></div><div class="img-preview" id="preview-f-flyer"></div></div>
+      <div class="form-group full upload-fallback"><label>または手動アップロード <span class="label-hint">max 5MB</span></label><div style="display:flex;gap:16px;flex-wrap:wrap"><div><span class="upload-label">Image</span><div class="upload-area" onclick="this.querySelector('input').click()"><span class="icon">&#8679;</span><span>Upload Image</span><input type="file" accept="image/*" onchange="uploadImage(this,'festival-image','f')"></div></div><div><span class="upload-label">Flyer</span><div class="upload-area" onclick="this.querySelector('input').click()"><span class="icon">&#8679;</span><span>Upload Flyer</span><input type="file" accept="image/*" onchange="uploadImage(this,'festival-flyer','f')"></div></div></div></div>
+      <div class="form-group full"><label>Hero Gradient</label><div class="gradient-presets" id="f-gradientPresets"></div><div id="gradient-preview" style="display:none;margin-top:8px;width:100%;height:80px;border-radius:var(--radius);border:1px solid var(--border)"></div><input type="text" id="f-heroGradient" placeholder="linear-gradient(...)" style="margin-top:8px" oninput="updateGradientPreview(this.value)"></div>
+      <div class="form-group full"><label>Description</label><textarea id="f-desc" rows="8" placeholder="Festival description..." style="width:100%;margin-bottom:8px"></textarea><button class="btn btn-green btn-sm" onclick="aiGenerate('festival')">AI Generate</button></div>
+      <div class="form-group full"><label>Lineup</label>
+        <div class="lineup-section">
+          <div class="lineup-input-wrap"><input type="text" id="f-lineupInput" placeholder="Type artist ID..." oninput="filterArtists('f-lineupInput','f-autocomplete','f')" onkeydown="acKeydown(event,'f-autocomplete','f')"><div class="autocomplete-list" id="f-autocomplete"></div></div>
+          <div class="btn-row" style="margin-top:10px">
+            <button class="btn btn-sm btn-blue" id="btn-fetch-lineup" onclick="fetchLineup()">Fetch Lineup (AI)</button>
+            <button class="btn btn-sm" onclick="toggleBulkLineup()">Bulk Text Input</button>
+          </div>
+          <div id="bulk-lineup-wrap" style="display:none;margin-top:10px">
+            <textarea id="bulk-lineup-text" rows="3" placeholder="Paste artist names (comma or newline separated)..." style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;font-size:.85rem;color:var(--text);resize:vertical"></textarea>
+            <button class="btn btn-sm" onclick="processBulkLineup()" style="margin-top:6px">Add Artists</button>
+          </div>
+          <div id="lineup-fetch-status" style="display:none;margin-top:8px;padding:8px 12px;border-radius:var(--radius);font-family:var(--font-mono);font-size:.7rem;letter-spacing:.5px"></div>
+          <div class="lineup-tags" id="f-lineupTags"></div>
+        </div>
+      </div>
       <div class="form-group full"><label>Editions</label><div class="editions-section" id="f-editions"></div><button class="btn btn-sm" onclick="addEdition()" style="margin-top:8px">+ Add Edition</button></div>
       <div class="full btn-row" id="festival-btn-new">
+        <button class="btn btn-preview" onclick="openPreview('festival')">👁 Preview</button>
         <button class="btn btn-accent" onclick="submitFestival()">Generate Code</button>
         <button class="btn" onclick="submitToSheet('festival')">Save to Spreadsheet</button>
         <button class="btn" onclick="resetForm('festival')">Reset</button>
@@ -257,12 +339,13 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
       <div class="form-group"><label>Country</label><input type="text" id="a-country" placeholder="e.g. JAPAN"></div>
       <div class="form-group"><label>Genre</label><input type="text" id="a-genre" placeholder="e.g. TECHNO / HOUSE"></div>
       <div class="form-group"><label>Image Path</label><input type="text" id="a-image" placeholder="auto-filled" readonly></div>
-      <div class="form-group"><label>Image Upload</label><div class="upload-area" onclick="this.querySelector('input').click()"><span class="icon">&#8679;</span><span>Upload to Google Drive</span><input type="file" accept="image/*" onchange="uploadImage(this,'artist','a')"></div></div>
+      <div class="form-group full"><label>Image from URL</label><div class="input-row"><input type="url" id="a-imageUrl" placeholder="画像の直接URL（公式サイト等から）"><button class="btn btn-sm btn-accent" onclick="uploadFromUrl('a','artist','a-image','a-imageUrl','preview-a-image')">UPLOAD</button></div><div class="img-preview" id="preview-a-image"></div></div>
+      <div class="form-group full upload-fallback"><label>または手動アップロード <span class="label-hint">max 5MB</span></label><div class="upload-area" onclick="this.querySelector('input').click()"><span class="icon">&#8679;</span><span>Upload Image</span><input type="file" accept="image/*" onchange="uploadImage(this,'artist','a')"></div></div>
       <div class="form-group"><label>Instagram</label><input type="url" id="a-instagram" placeholder="https://instagram.com/..."></div>
       <div class="form-group"><label>SoundCloud</label><input type="url" id="a-soundcloud" placeholder="https://soundcloud.com/..."></div>
       <div class="form-group"><label>Bandcamp</label><input type="url" id="a-bandcamp" placeholder="https://...bandcamp.com/"></div>
       <div class="form-group"><label>Website</label><input type="url" id="a-website" placeholder="https://..."></div>
-      <div class="form-group full"><label>Bio</label><div class="input-row" style="align-items:flex-end"><textarea id="a-bio" rows="4" placeholder="Artist biography..."></textarea><button class="btn btn-green btn-sm" onclick="aiGenerate('artist')">AI Generate</button></div></div>
+      <div class="form-group full"><label>Bio</label><textarea id="a-bio" rows="8" placeholder="Artist biography..." style="width:100%;margin-bottom:8px"></textarea><button class="btn btn-green btn-sm" onclick="aiGenerate('artist')">AI Generate</button></div>
       <div class="full btn-row" id="artist-btn-new">
         <button class="btn btn-accent" onclick="submitArtist()">Generate Code</button>
         <button class="btn" onclick="submitToSheet('artist')">Save to Spreadsheet</button>
@@ -327,7 +410,7 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
       <div class="form-group"><label>Read Time (min)</label><input type="number" id="ar-readTime" placeholder="e.g. 5"></div>
       <div class="form-group"><label>Views</label><input type="number" id="ar-views" placeholder="e.g. 1200"></div>
       <div class="form-group"><label>Featured</label><select id="ar-featured"><option value="false">No</option><option value="true">Yes</option></select></div>
-      <div class="form-group full"><label>Excerpt</label><textarea id="ar-excerpt" rows="4" placeholder="Short summary..."></textarea></div>
+      <div class="form-group full"><label>Excerpt</label><textarea id="ar-excerpt" rows="8" placeholder="Short summary..."></textarea></div>
       <div class="full btn-row" id="article-btn-new">
         <button class="btn btn-accent" onclick="submitArticle()">Generate Code</button>
         <button class="btn" onclick="submitToSheet('article')">Save to Spreadsheet</button>
@@ -359,15 +442,30 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbxhJ6rtGoAirNyV5TtBvzWHNOT8RuB0nfDjwglmdu8ClhpWZ-OXSbMM4UyFE_7ZsV-Lpg/exec';
 const GMAPS_KEY = 'AIzaSyDBCrbSFx5rnKZIl3cEP8AO87QdeRDZr1Q';
 const GENRES = ['TECHNO','HOUSE','MINIMAL','AMBIENT','BASS','LIVE','OTHERS'];
-const ARTIST_LIST = [
-  'dj-nobu','wata-igarashi','kotsu','mayurashka','ken-ishii','cabanne',
-  'gonno','yoshinori-hayashi','fumiya-tanaka','cyk','haruka','mama-snake',
-  'takaaki-itoh','dj-sodeyama','keihin','go-hiyama','satoshi-tomiie',
-  'sunju-hargun','dj-masda','dj-shufflemaster','so-inagawa','akiram3n',
-  'casual-treatment','olive-oil','budamunk','sauce81','k-lone',
-  'marcel-dettmann','surgeon','donato-dozzy','objekt','aurora-halal',
-  'risa-taniguchi','cio','powder','sapphire-slows','mars89'
+/* Artist DB — will be enriched from GAS on first load */
+let ARTIST_DB = [
+  {id:'dj-nobu',name:'DJ NOBU'},{id:'wata-igarashi',name:'WATA IGARASHI'},
+  {id:'kotsu',name:'KOTSU'},{id:'mayurashka',name:'MAYURASHKA'},
+  {id:'ken-ishii',name:'KEN ISHII'},{id:'cabanne',name:'CABANNE'},
+  {id:'gonno',name:'GONNO'},{id:'yoshinori-hayashi',name:'YOSHINORI HAYASHI'},
+  {id:'fumiya-tanaka',name:'FUMIYA TANAKA'},{id:'cyk',name:'CYK'},
+  {id:'haruka',name:'HARUKA'},{id:'mama-snake',name:'MAMA SNAKE'},
+  {id:'takaaki-itoh',name:'TAKAAKI ITOH'},{id:'dj-sodeyama',name:'DJ SODEYAMA'},
+  {id:'keihin',name:'KEIHIN'},{id:'go-hiyama',name:'GO HIYAMA'},
+  {id:'satoshi-tomiie',name:'SATOSHI TOMIIE'},{id:'sunju-hargun',name:'SUNJU HARGUN'},
+  {id:'dj-masda',name:'DJ MASDA'},{id:'dj-shufflemaster',name:'DJ SHUFFLEMASTER'},
+  {id:'so-inagawa',name:'SO INAGAWA'},{id:'akiram3n',name:'AKIRAM3N'},
+  {id:'casual-treatment',name:'CASUAL TREATMENT'},{id:'olive-oil',name:'OLIVE OIL'},
+  {id:'budamunk',name:'BUDAMUNK'},{id:'sauce81',name:'SAUCE81'},
+  {id:'k-lone',name:'K-LONE'},{id:'marcel-dettmann',name:'MARCEL DETTMANN'},
+  {id:'surgeon',name:'SURGEON'},{id:'donato-dozzy',name:'DONATO DOZZY'},
+  {id:'objekt',name:'OBJEKT'},{id:'aurora-halal',name:'AURORA HALAL'},
+  {id:'risa-taniguchi',name:'RISA TANIGUCHI'},{id:'cio',name:'CIO'},
+  {id:'powder',name:'POWDER'},{id:'sapphire-slows',name:'SAPPHIRE SLOWS'},
+  {id:'mars89',name:'MARS89'},
 ];
+const ARTIST_LIST = ARTIST_DB.map(a => a.id);
+let artistDbLoaded = false;
 const GRADIENT_PRESETS = [
   {label:'Forest',  val:'linear-gradient(135deg, #0a1a0a 0%, #1a3a2a 40%, #0d2818 70%, #050f08 100%)'},
   {label:'Night',   val:'linear-gradient(135deg, #0a0a14 0%, #12102a 40%, #1a0e28 70%, #080810 100%)'},
@@ -444,9 +542,114 @@ function initGradientPresets() {
       c.querySelectorAll('.gradient-swatch').forEach(x => x.classList.remove('selected'));
       s.classList.add('selected');
       document.getElementById('f-heroGradient').value = p.val;
+      updateGradientPreview(p.val);
     };
     c.appendChild(s);
   });
+}
+
+function updateGradientPreview(val){
+  const el=document.getElementById('gradient-preview');
+  if(val&&val.includes('gradient')){el.style.display='block';el.style.background=val;}
+  else{el.style.display='none';}
+}
+
+/* ==============================================================
+   LIVE PREVIEW
+   ============================================================== */
+function openPreview(section){
+  if(section==='festival') renderFestivalPreview();
+  document.getElementById('preview-overlay').classList.add('show');
+  document.body.style.overflow='hidden';
+}
+function closePreview(){
+  document.getElementById('preview-overlay').classList.remove('show');
+  document.body.style.overflow='';
+}
+function formatPreviewDate(d){
+  if(!d)return '';
+  const parts=d.split('/');
+  const fmt=s=>{const p=s.split('-');if(p.length===3)return p[1]+'.'+p[2];return s;};
+  if(parts.length===2)return fmt(parts[0])+' — '+fmt(parts[1])+' . '+parts[0].split('-')[0];
+  return fmt(parts[0])+' . '+(parts[0].split('-')[0]||'');
+}
+function renderFestivalPreview(){
+  const g=id=>(document.getElementById(id)?.value||'').trim();
+  const name=g('f-name')||'FESTIVAL NAME';
+  const location=g('f-location');
+  const city=g('f-city');
+  const ds=g('f-dateStart'),de=g('f-dateEnd');
+  const dateStr=ds&&de?ds+'/'+de:ds;
+  const url=g('f-url');
+  const ticketUrl=g('f-ticketUrl');
+  const desc=g('f-desc');
+  const heroGrad=g('f-heroGradient')||'linear-gradient(135deg,#0a0a0a 0%,#1a1a2a 40%,#0d0d18 70%,#050508 100%)';
+  const imagePath=g('f-image');
+  const flyerPath=g('f-flyer');
+  const imageUrl=g('f-imageUrl');
+  const flyerUrl=g('f-flyerUrl');
+  // Try multiple image sources: uploaded preview > Drive URL > URL input > GitHub raw
+  const pvImg=document.querySelector('#preview-f-image img');
+  const pvFlyer=document.querySelector('#preview-f-flyer img');
+  const REPO_BASE='https://raw.githubusercontent.com/shibatatatsuya/techno-japan/main/LP/';
+  const resolveImg=function(path,urlField,pvEl){
+    if(pvEl&&pvEl.src)return pvEl.src;
+    if(path&&path.startsWith('http'))return path;
+    if(urlField)return urlField;
+    if(path)return REPO_BASE+path;
+    return '';
+  };
+  const imgSrc=resolveImg(imagePath,imageUrl,pvImg);
+  const flyerSrc=resolveImg(flyerPath,flyerUrl,pvFlyer);
+
+  // Genre
+  const genreEls=document.querySelectorAll('#f-genre .chip.selected');
+  const genres=Array.from(genreEls).map(c=>c.textContent.trim());
+
+  // Lineup
+  const lineupTags=document.querySelectorAll('#f-lineupTags .lineup-tag');
+  const lineup=Array.from(lineupTags).map(t=>t.textContent.replace('×','').trim());
+
+  // Editions
+  const editionsHtml=editions.map(ed=>{
+    const edLineup=(ed.lineup||[]).map(a=>`<span class="pv-edition-artist">${esc(a)}</span>`).join('');
+    return `<div class="pv-edition-row">
+      <div class="pv-edition-year">${esc(ed.year)}</div>
+      <div class="pv-edition-date">${esc(ed.date)}</div>
+      <div class="pv-edition-lineup">${edLineup||'<span class="pv-empty">No lineup</span>'}</div>
+    </div>`;
+  }).join('');
+
+  const imgHtml=imgSrc?`<img src="${esc(imgSrc)}" onerror="this.style.display='none'">`:'';
+  const flyerHtml=flyerSrc?`<img src="${esc(flyerSrc)}" onerror="this.style.display='none'">`:
+    '<div class="pv-flyer-placeholder">FLYER IMAGE</div>';
+  const urlHtml=url?`<a href="${esc(url)}" class="pv-link" target="_blank">OFFICIAL SITE →</a>`:'';
+  const ticketHtml=ticketUrl?`<a href="${esc(ticketUrl)}" class="pv-link" target="_blank">TICKETS →</a>`:'';
+  const tagsHtml=genres.map(g=>`<span class="pv-tag">${esc(g)}</span>`).join('');
+  const lineupHtml=lineup.map(a=>`<span class="pv-lineup-item">${esc(a)}</span>`).join('');
+  const locStr=[location,city].filter(Boolean).join(' — ');
+
+  document.getElementById('preview-content').innerHTML=`
+    <div class="pv-hero">
+      <div class="pv-hero-image" style="background:${heroGrad}">${imgHtml}</div>
+      <div class="pv-hero-info">
+        <div class="pv-date">${esc(formatPreviewDate(dateStr))}</div>
+        <div class="pv-name">${esc(name)}</div>
+        <div class="pv-location">${esc(locStr)}</div>
+        ${tagsHtml?'<div class="pv-tags">'+tagsHtml+'</div>':''}
+        ${desc?'<div class="pv-desc">'+esc(desc)+'</div>':'<div class="pv-empty" style="margin-bottom:28px">No description yet</div>'}
+        <div class="pv-links">${urlHtml}${ticketHtml}</div>
+      </div>
+    </div>
+    <div class="pv-flyer-lineup">
+      <div>
+        <div class="pv-section-label">FLYER</div>
+        <div class="pv-flyer-image">${flyerHtml}</div>
+      </div>
+      ${lineupHtml?'<div><div class="pv-section-label">LINEUP</div><div class="pv-lineup-grid">'+lineupHtml+'</div></div>':''}
+    </div>
+    ${editionsHtml?'<div class="pv-section"><div class="pv-section-label">PAST EDITIONS</div><div>'+editionsHtml+'</div></div>':''}
+  `;
 }
 
 /* ==============================================================
@@ -514,9 +717,13 @@ function addLineup(prefix,id){
 }
 function removeLineup(prefix,id){lineups[prefix]=lineups[prefix].filter(a=>a!==id);renderLineupTags(prefix)}
 function renderLineupTags(prefix){
-  document.getElementById(prefix+'-lineupTags').innerHTML=lineups[prefix].map(a=>
-    '<div class="lineup-tag">'+a+'<span class="remove" onclick="removeLineup(\''+prefix+'\',\''+a+'\')">&times;</span></div>'
-  ).join('');
+  document.getElementById(prefix+'-lineupTags').innerHTML=lineups[prefix].map(a=>{
+    const isUnmatched=a.startsWith('?');
+    const display=isUnmatched?a.substring(1):a;
+    const cls='lineup-tag'+(isUnmatched?' unmatched':'');
+    const escaped=a.replace(/'/g,"\\'");
+    return '<div class="'+cls+'">'+esc(display)+'<span class="remove" onclick="removeLineup(\''+prefix+'\',\''+escaped+'\')">&times;</span></div>';
+  }).join('');
 }
 
 /* ==============================================================
@@ -541,55 +748,281 @@ function renderEditions(){
 }
 
 /* ==============================================================
+   LINEUP — ARTIST DB FROM GAS
+   ============================================================== */
+function loadArtistDB(){
+  if(artistDbLoaded) return Promise.resolve();
+  return fetch(GAS_URL+'?action=get_sheet&sheet=ARTISTS')
+    .then(r=>r.json()).then(d=>{
+      if(d.status==='ok'&&d.rows&&d.rows.length){
+        ARTIST_DB=d.rows.map(r=>({id:r.id||'',name:r.name||''})).filter(a=>a.id);
+        ARTIST_LIST.length=0; ARTIST_DB.forEach(a=>ARTIST_LIST.push(a.id));
+        artistDbLoaded=true;
+      }
+    }).catch(()=>{/* fallback to hardcoded */});
+}
+
+/* ==============================================================
+   LINEUP — MATCH ARTIST NAME → ID
+   ============================================================== */
+function matchArtist(name){
+  const n=name.trim();
+  if(!n) return null;
+  const lower=n.toLowerCase();
+  // exact name match (case-insensitive)
+  const byName=ARTIST_DB.find(a=>a.name.toLowerCase()===lower);
+  if(byName) return byName.id;
+  // exact id match
+  const byId=ARTIST_DB.find(a=>a.id===lower);
+  if(byId) return byId.id;
+  // slug-style match: "DJ Nobu" → "dj-nobu"
+  const slug=lower.replace(/[\s_]+/g,'-').replace(/[^a-z0-9-]/g,'');
+  const bySlug=ARTIST_DB.find(a=>a.id===slug);
+  if(bySlug) return bySlug.id;
+  // partial: name contains or is contained
+  const byPartial=ARTIST_DB.find(a=>a.name.toLowerCase().includes(lower)||lower.includes(a.name.toLowerCase()));
+  if(byPartial) return byPartial.id;
+  return null;
+}
+
+/* ==============================================================
+   LINEUP — AI FETCH
+   ============================================================== */
+function fetchLineup(){
+  const name=g('f-name'), url=g('f-url');
+  if(!name) return toast('Enter festival name first','error');
+  const btn=document.getElementById('btn-fetch-lineup');
+  btn.disabled=true; btn.innerHTML='Fetching<span class="spinner"></span>';
+  const statusEl=document.getElementById('lineup-fetch-status');
+  statusEl.style.display='none';
+
+  loadArtistDB().then(()=>{
+    return fetch(GAS_URL+'?action=get_lineup&name='+encodeURIComponent(name)+'&url='+encodeURIComponent(url));
+  })
+    .then(r=>r.json())
+    .then(d=>{
+      btn.disabled=false; btn.textContent='Fetch Lineup (AI)';
+      if(d.status==='ok'&&d.artists&&d.artists.length){
+        let matched=0, unmatched=0;
+        d.artists.forEach(name=>{
+          const id=matchArtist(name);
+          if(id){
+            if(!lineups.f.includes(id)){lineups.f.push(id);matched++}
+          }else{
+            const tag='?'+name.trim();
+            if(!lineups.f.includes(tag)){lineups.f.push(tag);unmatched++}
+          }
+        });
+        renderLineupTags('f');
+        statusEl.style.display='block';
+        statusEl.style.background='rgba(45,255,110,.1)';statusEl.style.borderLeft='3px solid var(--green)';statusEl.style.color='var(--green)';
+        statusEl.textContent=d.artists.length+' artists fetched — '+matched+' matched, '+unmatched+' unregistered';
+        toast('Lineup fetched','success');
+      }else{
+        statusEl.style.display='block';
+        statusEl.style.background='rgba(255,45,45,.1)';statusEl.style.borderLeft='3px solid var(--accent)';statusEl.style.color='var(--accent)';
+        statusEl.textContent='No artists found'+(d.message?' — '+d.message:'');
+        toast('No lineup found','error');
+      }
+    })
+    .catch(err=>{
+      btn.disabled=false; btn.textContent='Fetch Lineup (AI)';
+      toast('Fetch error: '+err.message,'error');
+    });
+}
+
+/* ==============================================================
+   LINEUP — BULK TEXT INPUT
+   ============================================================== */
+function toggleBulkLineup(){
+  const w=document.getElementById('bulk-lineup-wrap');
+  w.style.display=w.style.display==='none'?'block':'none';
+}
+
+function processBulkLineup(){
+  const text=document.getElementById('bulk-lineup-text').value;
+  if(!text.trim()) return toast('Enter artist names','error');
+  const names=text.split(/[,\n]+/).map(s=>s.trim()).filter(Boolean);
+  loadArtistDB().then(()=>{
+    let matched=0, unmatched=0;
+    names.forEach(name=>{
+      const id=matchArtist(name);
+      if(id){
+        if(!lineups.f.includes(id)){lineups.f.push(id);matched++}
+      }else{
+        const tag='?'+name.trim();
+        if(!lineups.f.includes(tag)){lineups.f.push(tag);unmatched++}
+      }
+    });
+    renderLineupTags('f');
+    const statusEl=document.getElementById('lineup-fetch-status');
+    statusEl.style.display='block';
+    statusEl.style.background='rgba(45,143,255,.1)';statusEl.style.borderLeft='3px solid var(--blue)';statusEl.style.color='var(--blue)';
+    statusEl.textContent=names.length+' processed — '+matched+' matched, '+unmatched+' unregistered';
+    document.getElementById('bulk-lineup-text').value='';
+    toast('Artists added','success');
+  });
+}
+
+/* ==============================================================
    IMAGE UPLOAD
    ============================================================== */
 function uploadImage(input,type,prefix){
   const file=input.files[0]; if(!file)return;
   const id=document.getElementById(prefix+'-id')?.value?.trim();
   if(!id)return toast('Enter ID first','error');
-  toast('Uploading...','info');
+  if(file.size>5*1024*1024)return toast('ファイルサイズが5MBを超えています（max 5MB）','error');
+  const sizeMB=(file.size/1024/1024).toFixed(1);
+  toast('Uploading... ('+sizeMB+'MB)','info');
+  // プレビューID: preview-v-image, preview-f-image, preview-f-flyer, preview-a-image
+  const previewId='preview-'+prefix+'-'+(type==='festival-flyer'?'flyer':'image');
+  const previewEl=document.getElementById(previewId);
   const reader=new FileReader();
   reader.onload=()=>{
-    const base64=reader.result.split(',')[1];
-    fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'uploadImage',type,id,fileName:file.name,mimeType:file.type,data:base64})})
-      .then(r=>r.json()).then(d=>{d.success?toast('Uploaded','success'):toast('Upload failed','error')})
-      .catch(()=>toast('Upload error','error'));
+    const dataUrl=reader.result;
+    // ローカルプレビュー表示
+    if(previewEl){
+      previewEl.style.display='block';
+      previewEl.innerHTML='<img src="'+dataUrl+'" alt="preview"><div class="preview-info">'+esc(file.name)+' ('+sizeMB+'MB) — uploading...</div>';
+    }
+    // festival系は upload_festival_image、それ以外は upload_image
+    const action=type.startsWith('festival')?'upload_festival_image':'upload_image';
+    const filename=type==='festival-flyer'?id+'-flyer.jpg':null;
+    const body={action,imageData:dataUrl,mimeType:file.type,id};
+    if(filename)body.filename=filename;
+    fetch(GAS_URL,{method:'POST',body:JSON.stringify(body)})
+      .then(r=>r.json()).then(d=>{
+        if(d.status==='ok'||d.success){
+          toast('Uploaded','success');
+          if(d.imagePath&&prefix){
+            const target=type==='festival-flyer'?prefix+'-flyer':prefix+'-image';
+            const el=document.getElementById(target);
+            if(el)el.value=d.imagePath;
+          }
+          if(previewEl){const info=previewEl.querySelector('.preview-info');if(info)info.textContent='✓ '+file.name+' ('+sizeMB+'MB)';}
+        } else {
+          toast(d.message||'Upload failed','error');
+          if(previewEl){const info=previewEl.querySelector('.preview-info');if(info)info.textContent='✗ Upload failed';}
+        }
+      })
+      .catch(()=>{toast('Upload error','error');if(previewEl){const info=previewEl.querySelector('.preview-info');if(info)info.textContent='✗ Upload error';}});
   };
   reader.readAsDataURL(file);
+}
+
+/* ==============================================================
+   IMAGE / FLYER FROM URL
+   画像URLを直接指定 → GAS経由でDriveにアップロード
+   汎用関数: 全セクション共通で使用
+   ============================================================== */
+function uploadFromUrl(prefix,type,pathFieldId,urlFieldId,previewId){
+  const url=document.getElementById(urlFieldId).value.trim();
+  if(!url)return toast('画像URLを入力してください','error');
+  if(!url.startsWith('http'))return toast('有効なURLを入力してください','error');
+  // Instagram投稿URLの検知
+  if(url.match(/instagram\.com\/(p|reel)\//)){
+    const pEl=document.getElementById(previewId);
+    if(pEl){pEl.style.display='block';pEl.innerHTML='<div class="insta-help">'
+      +'<p><strong>Instagram投稿URLは直接使えません</strong></p>'
+      +'<p>投稿画像を保存して「手動アップロード」を使うか、画像を右クリック→「画像アドレスをコピー」で画像URLを取得してください。</p></div>';}
+    return toast('Instagram投稿URLではなく画像URLを貼り付けてください','error');
+  }
+  const id=document.getElementById(prefix+'-id')?.value?.trim();
+  if(!id)return toast('先にIDを入力してください','error');
+  const btn=event.target;
+  btn.disabled=true;btn.innerHTML='UPLOADING...<span class="spinner"></span>';
+  const previewEl=document.getElementById(previewId);
+  if(previewEl)previewEl.style.display='none';
+  fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'upload_from_url',imageUrl:url,type:type,id:id})})
+    .then(r=>r.json()).then(d=>{
+      btn.disabled=false;btn.textContent='UPLOAD';
+      if(d.success){
+        toast('Google Driveにアップロード完了','success');
+        document.getElementById(pathFieldId).value=d.path||'';
+        if(previewEl){previewEl.style.display='block';previewEl.innerHTML='<img src="'+esc(d.driveUrl||url)+'" alt="preview"><div class="preview-info">✓ アップロード済み — '+esc(d.path||'')+'</div>';}
+      } else {
+        toast(d.error||'アップロード失敗','error');
+      }
+    })
+    .catch(e=>{btn.disabled=false;btn.textContent='UPLOAD';toast('通信エラー: '+e.message,'error')});
 }
 
 /* ==============================================================
    AI GENERATE
    ============================================================== */
 function aiGenerate(section){
-  let name,city,extraContext='';
-  if(section==='venue'){name=g('v-name');city=g('v-city');extraContext='capacity: '+g('v-capacity')+', type: '+g('v-type')}
-  else if(section==='festival'){name=g('f-name');city=g('f-city');extraContext='location: '+g('f-location')}
-  else if(section==='artist'){name=g('a-name');city=g('a-city');extraContext='genre: '+g('a-genre')+', country: '+g('a-country')}
+  let name,city,extraContext='',url='',instagram='';
+  if(section==='venue'){
+    name=g('v-name');city=g('v-city');url=g('v-url');instagram=g('v-instagram');
+    extraContext='capacity: '+g('v-capacity')+', type: '+g('v-type');
+  } else if(section==='festival'){
+    name=g('f-name');city=g('f-city');url=g('f-url');instagram=g('f-instagram');
+    extraContext='location: '+g('f-location')+', type: '+g('f-type');
+  } else if(section==='artist'){
+    name=g('a-name');city=g('a-city');instagram=g('a-instagram');
+    url=g('a-website');
+    extraContext='genre: '+g('a-genre')+', country: '+g('a-country');
+  }
   if(!name)return toast('Enter name first','error');
   toast('Generating...','info');
-  fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'aiGenerate',section,name,city,context:extraContext})})
+  fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'aiGenerate',section,name,city,context:extraContext,url,instagram})})
     .then(r=>r.json()).then(d=>{
       if(d.success){
         if(section==='venue'){if(d.desc)document.getElementById('v-desc').value=d.desc;if(d.capacity)document.getElementById('v-capacity').value=d.capacity}
         else if(section==='festival'){if(d.desc)document.getElementById('f-desc').value=d.desc}
         else if(section==='artist'){if(d.bio)document.getElementById('a-bio').value=d.bio}
         toast('Generated','success');
-      }else toast('Generation failed','error');
+      }else toast(d.error||'Generation failed','error');
     }).catch(()=>toast('Generation error','error'));
 }
 
 /* ==============================================================
    LIST — LOAD
    ============================================================== */
+let festivalYearFilter = 'ALL';
+
 function loadList(section){
   const container=document.getElementById(section+'-list');
   container.innerHTML='<div class="data-list-loading">Loading<span class="spinner"></span></div>';
   fetch(GAS_URL+'?action=get_sheet&sheet='+SHEET_MAP[section])
     .then(r=>r.json()).then(d=>{
-      if(d.status==='ok'&&d.rows){listCache[section]=d.rows;renderList(section,d.rows)}
+      if(d.status==='ok'&&d.rows){
+        listCache[section]=d.rows;
+        if(section==='festival') buildYearFilter(d.rows);
+        renderList(section, section==='festival' ? filterByYear(d.rows) : d.rows);
+      }
       else{container.innerHTML='<div class="data-list-empty">Failed to load</div>';toast('Load failed','error')}
     }).catch(err=>{container.innerHTML='<div class="data-list-empty">Error: '+err.message+'</div>';toast('Load error','error')});
+}
+
+function buildYearFilter(rows){
+  const years = [...new Set(rows.map(r=>(r.date||'').substring(0,4)).filter(Boolean))].sort().reverse();
+  const c=document.getElementById('festival-year-filter');
+  c.innerHTML='<span style="font-family:var(--font-mono);font-size:.65rem;letter-spacing:1px;color:var(--text3);text-transform:uppercase">Year:</span>';
+  const allBtn=document.createElement('button');
+  allBtn.className='btn btn-sm'+(festivalYearFilter==='ALL'?' btn-accent':'');
+  allBtn.textContent='ALL';
+  allBtn.onclick=()=>{festivalYearFilter='ALL';renderList('festival',listCache.festival);highlightYearBtn()};
+  c.appendChild(allBtn);
+  years.forEach(y=>{
+    const b=document.createElement('button');
+    b.className='btn btn-sm'+(festivalYearFilter===y?' btn-accent':'');
+    b.textContent=y; b.dataset.year=y;
+    b.onclick=()=>{festivalYearFilter=y;renderList('festival',filterByYear(listCache.festival));highlightYearBtn()};
+    c.appendChild(b);
+  });
+}
+
+function highlightYearBtn(){
+  document.querySelectorAll('#festival-year-filter .btn').forEach(b=>{
+    const isActive=(festivalYearFilter==='ALL'&&b.textContent==='ALL')||(b.dataset.year===festivalYearFilter);
+    b.classList.toggle('btn-accent',isActive);
+  });
+}
+
+function filterByYear(rows){
+  if(festivalYearFilter==='ALL') return rows;
+  return rows.filter(r=>(r.date||'').startsWith(festivalYearFilter));
 }
 
 function renderList(section, rows){
@@ -632,7 +1065,7 @@ function editRow(section, rowNum){
     setVal('f-id',row.id); setVal('f-type',row.type||'festival');
     setVal('f-name',row.name); setVal('f-city',row.city);
     setVal('f-location',row.location); setVal('f-url',row.url);
-    setVal('f-ticketUrl',row.ticketUrl); setVal('f-address',row.address);
+    setVal('f-ticketUrl',row.ticketUrl); setVal('f-instagram',row.instagram); setVal('f-address',row.address);
     setVal('f-lat',row.lat); setVal('f-lng',row.lng);
     setVal('f-image',row.image); setVal('f-flyer',row.flyer);
     setVal('f-heroGradient',row.heroGradient); setVal('f-desc',row.desc);
@@ -689,11 +1122,11 @@ function saveEdit(section){
   else if(section==='festival'){
     const ds=g('f-dateStart'),de=g('f-dateEnd');
     Object.assign(payload,{id:g('f-id'),type:g('f-type'),name:g('f-name'),city:g('f-city'),
-      location:g('f-location'),url:g('f-url'),ticketUrl:g('f-ticketUrl'),
+      location:g('f-location'),url:g('f-url'),ticketUrl:g('f-ticketUrl'),instagram:g('f-instagram'),
       address:g('f-address'),lat:g('f-lat'),lng:g('f-lng'),
       date:ds&&de?ds+'/'+de:ds,genre:getSelectedGenres('f-genre').join(', '),
       image:g('f-image'),flyer:g('f-flyer'),heroGradient:g('f-heroGradient'),
-      desc:g('f-desc'),lineup:lineups.f.join(', ')});
+      desc:g('f-desc'),lineup:cleanLineup(lineups.f).join(', ')});
   }
   else if(section==='artist'){
     Object.assign(payload,{id:g('a-id'),name:g('a-name'),city:g('a-city'),country:g('a-country'),
@@ -769,10 +1202,10 @@ function submitToSheet(section){
   else if(section==='festival'){
     const ds=g('f-dateStart'),de=g('f-dateEnd');
     payload={action:'addFestival',id:g('f-id'),type:g('f-type'),name:g('f-name'),city:g('f-city'),
-      location:g('f-location'),url:g('f-url'),ticketUrl:g('f-ticketUrl'),
+      location:g('f-location'),url:g('f-url'),ticketUrl:g('f-ticketUrl'),instagram:g('f-instagram'),
       lat:g('f-lat'),lng:g('f-lng'),date:ds&&de?ds+'/'+de:ds,
       genre:getSelectedGenres('f-genre').join(', '),image:g('f-image'),flyer:g('f-flyer'),
-      heroGradient:g('f-heroGradient'),desc:g('f-desc'),lineup:lineups.f.join(', ')};
+      heroGradient:g('f-heroGradient'),desc:g('f-desc'),lineup:cleanLineup(lineups.f).join(', ')};
     if(!payload.id||!payload.name)return toast('ID and Name required','error');
   }
   else if(section==='artist'){
@@ -817,7 +1250,7 @@ function submitVenue(){
    GENERATE CODE — FESTIVAL
    ============================================================== */
 function submitFestival(){
-  const d={id:g('f-id'),type:g('f-type'),name:g('f-name'),city:g('f-city'),location:g('f-location'),url:g('f-url'),ticketUrl:g('f-ticketUrl'),lat:g('f-lat'),lng:g('f-lng'),dateStart:g('f-dateStart'),dateEnd:g('f-dateEnd'),genre:getSelectedGenres('f-genre'),image:g('f-image'),flyer:g('f-flyer'),heroGradient:g('f-heroGradient'),desc:g('f-desc'),lineup:[...lineups.f],editions:editions.map(e=>({...e}))};
+  const d={id:g('f-id'),type:g('f-type'),name:g('f-name'),city:g('f-city'),location:g('f-location'),url:g('f-url'),ticketUrl:g('f-ticketUrl'),instagram:g('f-instagram'),lat:g('f-lat'),lng:g('f-lng'),dateStart:g('f-dateStart'),dateEnd:g('f-dateEnd'),genre:getSelectedGenres('f-genre'),image:g('f-image'),flyer:g('f-flyer'),heroGradient:g('f-heroGradient'),desc:g('f-desc'),lineup:cleanLineup(lineups.f),editions:editions.map(e=>({...e}))};
   if(!d.id||!d.name)return toast('ID and Name required','error');
   const genreStr=d.genre.map(g=>`"${g}"`).join(', ');
   const lineupStr=d.lineup.map(a=>`"${a}"`).join(', ');
@@ -828,6 +1261,7 @@ function submitFestival(){
   if(d.heroGradient)lines.push(`    heroGradient: "${d.heroGradient}",`);
   lines.push(`    genre: [${genreStr}],`,`    desc: "${escDesc(d.desc)}",`);
   if(d.url)lines.push(`    url: "${d.url}",`);
+  if(d.instagram)lines.push(`    instagram: "${d.instagram}",`);
   lines.push(`    ticketUrl: "${d.ticketUrl||''}",`,`    lineup: [${lineupStr}],`);
   if(d.editions.length){lines.push(`    editions: [`);d.editions.forEach(ed=>{const edL=ed.lineup.map(l=>`"${l}"`).join(', ');lines.push(`      { year: ${ed.year}, date: "${ed.date}", lineup: [${edL}] },`)});lines.push(`    ]`)}
   lines.push(`  },`);
@@ -894,13 +1328,15 @@ function copyOutput(section){navigator.clipboard.writeText(document.getElementBy
    ============================================================== */
 function resetForm(section){
   const fields={
-    venue:['v-id','v-name','v-city','v-area','v-image','v-capacity','v-address','v-lat','v-lng','v-url','v-instagram','v-desc'],
-    festival:['f-id','f-name','f-city','f-location','f-url','f-ticketUrl','f-address','f-lat','f-lng','f-dateStart','f-dateEnd','f-image','f-flyer','f-heroGradient','f-desc'],
-    artist:['a-id','a-name','a-city','a-country','a-genre','a-image','a-bio','a-instagram','a-soundcloud','a-bandcamp','a-website'],
+    venue:['v-id','v-name','v-city','v-area','v-image','v-capacity','v-address','v-lat','v-lng','v-url','v-instagram','v-desc','v-imageUrl'],
+    festival:['f-id','f-name','f-city','f-location','f-url','f-ticketUrl','f-instagram','f-address','f-lat','f-lng','f-dateStart','f-dateEnd','f-image','f-flyer','f-heroGradient','f-desc','f-imageUrl','f-flyerUrl'],
+    artist:['a-id','a-name','a-city','a-country','a-genre','a-image','a-bio','a-instagram','a-soundcloud','a-bandcamp','a-website','a-imageUrl'],
     event:['e-name','e-date','e-venue','e-city','e-time','e-desc','e-link'],
     article:['ar-id','ar-title','ar-category','ar-date','ar-image','ar-readTime','ar-views','ar-excerpt'],
   }[section];
-  fields.forEach(id=>document.getElementById(id).value='');
+  fields.forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  // プレビューをクリア
+  document.querySelectorAll('.img-preview').forEach(p=>{p.style.display='none';p.innerHTML='';});
   if(section==='venue'){document.getElementById('v-type').value='club';document.querySelectorAll('#v-genre .chip').forEach(c=>c.classList.remove('selected'))}
   if(section==='festival'){document.getElementById('f-type').value='festival';document.querySelectorAll('#f-genre .chip').forEach(c=>c.classList.remove('selected'));document.querySelectorAll('#f-gradientPresets .gradient-swatch').forEach(s=>s.classList.remove('selected'));lineups.f=[];renderLineupTags('f');editions.length=0;renderEditions()}
   if(section==='event'){lineups.e=[];renderLineupTags('e')}
@@ -915,6 +1351,7 @@ function g(id){return document.getElementById(id).value.trim()}
 function setVal(id,v){document.getElementById(id).value=v||''}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function escDesc(s){return(s||'').replace(/"/g,'\\"').replace(/\n/g,' ')}
+function cleanLineup(arr){return arr.map(a=>a.startsWith('?')?a.substring(1):a)}
 function toast(msg,type){const t=document.getElementById('toast');t.textContent=msg;t.className='toast '+type+' show';clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),3000)}
 document.addEventListener('click',e=>{if(!e.target.closest('.lineup-input-wrap'))document.querySelectorAll('.autocomplete-list').forEach(l=>l.classList.remove('show'))});
 </script>
