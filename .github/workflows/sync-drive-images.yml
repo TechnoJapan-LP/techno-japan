@@ -23,38 +23,46 @@ jobs:
 
           GAS_URL = "https://script.google.com/macros/s/AKfycbxhJ6rtGoAirNyV5TtBvzWHNOT8RuB0nfDjwglmdu8ClhpWZ-OXSbMM4UyFE_7ZsV-Lpg/exec"
 
-          # 画像一覧を取得
-          with urllib.request.urlopen(f"{GAS_URL}?action=get_images") as res:
-              data = json.loads(res.read().decode('utf-8'))
+          # 各フォルダタイプを同期
+          FOLDERS = ["venues", "festivals", "artists"]
 
-          if data.get('status') != 'ok':
-              print(f"Error: {data.get('message')}")
-              exit(1)
-
-          images = data.get('images', [])
-          print(f"Found {len(images)} images in Drive")
-
-          os.makedirs('LP/images/venues', exist_ok=True)
-
-          for img in images:
-              file_path = f"LP/images/venues/{img['name']}"
+          for folder_type in FOLDERS:
+              print(f"\n--- Syncing {folder_type} ---")
               try:
-                  urllib.request.urlretrieve(img['url'], file_path)
-                  print(f"Downloaded: {img['name']}")
+                  with urllib.request.urlopen(f"{GAS_URL}?action=get_images&type={folder_type}") as res:
+                      data = json.loads(res.read().decode('utf-8'))
               except Exception as e:
-                  print(f"Failed: {img['name']} — {e}")
+                  print(f"Failed to fetch {folder_type}: {e}")
+                  continue
 
-          print("Sync complete.")
+              if data.get('status') != 'ok':
+                  print(f"Error: {data.get('message')}")
+                  continue
+
+              images = data.get('images', [])
+              print(f"Found {len(images)} images in Drive/{folder_type}")
+
+              os.makedirs(f'LP/images/{folder_type}', exist_ok=True)
+
+              for img in images:
+                  file_path = f"LP/images/{folder_type}/{img['name']}"
+                  try:
+                      urllib.request.urlretrieve(img['url'], file_path)
+                      print(f"Downloaded: {img['name']}")
+                  except Exception as e:
+                      print(f"Failed: {img['name']} — {e}")
+
+          print("\nSync complete.")
           PYTHON
 
       - name: Commit and push if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add LP/images/venues/
+          git add LP/images/venues/ LP/images/festivals/ LP/images/artists/
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "sync: update venue images from Google Drive"
+            git commit -m "sync: update images from Google Drive"
             git push
           fi
