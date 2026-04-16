@@ -203,19 +203,20 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
 <aside class="sidebar">
   <div class="sidebar-logo">TECHNO JAPAN<span>CMS Admin</span></div>
   <nav>
-    <button class="active" onclick="switchSection('venue',this)"><span class="icon">&#9675;</span><span>Venue</span></button>
-    <button onclick="switchSection('festival',this)"><span class="icon">&#9670;</span><span>Festival</span></button>
+    <button class="active" onclick="switchSection('festival',this)"><span class="icon">&#9670;</span><span>Festival</span></button>
+    <button onclick="switchSection('venue',this)"><span class="icon">&#9675;</span><span>Venue</span></button>
     <button onclick="switchSection('artist',this)"><span class="icon">&#9651;</span><span>Artist</span></button>
     <button onclick="switchSection('event',this)"><span class="icon">&#9724;</span><span>Event</span></button>
     <button onclick="switchSection('article',this)"><span class="icon">&#9998;</span><span>Article</span></button>
   </nav>
-  <div class="sidebar-footer">v1.2</div>
+  <div style="padding:12px"><button class="btn btn-sm" style="width:100%;font-size:.7rem" onclick="exportDataJs()">⬇ Export data.js</button></div>
+  <div class="sidebar-footer">v1.3</div>
 </aside>
 
 <div class="main">
 
 <!-- ==================== VENUE ==================== -->
-<div id="sec-venue" class="section active">
+<div id="sec-venue" class="section">
   <div class="main-header"><h1>VENUE</h1><p>Manage venues</p></div>
   <div class="tab-bar">
     <button class="active" onclick="switchTab('venue','list')">List</button>
@@ -255,7 +256,7 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
 </div>
 
 <!-- ==================== FESTIVAL ==================== -->
-<div id="sec-festival" class="section">
+<div id="sec-festival" class="section active">
   <div class="main-header"><h1>FESTIVAL</h1><p>Manage festivals and raves</p></div>
   <div class="tab-bar">
     <button class="active" onclick="switchTab('festival','list')">List</button>
@@ -327,7 +328,16 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
     <button onclick="switchTab('artist','form')">New</button>
   </div>
   <div class="tab-content active" id="artist-tab-list">
-    <div style="margin-bottom:12px;display:flex;justify-content:flex-end"><button class="btn btn-sm" onclick="loadList('artist')">Refresh</button></div>
+    <div style="margin-bottom:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <input type="text" id="artist-search" placeholder="Search name / ID..." oninput="filterArtistList()" style="flex:1;min-width:180px;padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);font-size:.85rem;color:var(--text)">
+      <div style="display:flex;gap:4px;align-items:center">
+        <span style="font-family:var(--font-mono);font-size:.65rem;letter-spacing:1px;color:var(--text3)">SORT:</span>
+        <button class="btn btn-sm btn-accent" onclick="sortArtistList('name')">Name</button>
+        <button class="btn btn-sm" onclick="sortArtistList('city')">City</button>
+        <button class="btn btn-sm" onclick="sortArtistList('genre')">Genre</button>
+      </div>
+      <button class="btn btn-sm" onclick="loadList('artist')">Refresh</button>
+    </div>
     <div class="data-list" id="artist-list"><div class="data-list-empty">Click "Refresh" to load data</div></div>
   </div>
   <div class="tab-content" id="artist-tab-form">
@@ -694,9 +704,9 @@ function filterArtists(inputId, listId, prefix) {
   const list = document.getElementById(listId);
   acHighlight = -1;
   if (!val) { list.classList.remove('show'); return; }
-  const matches = ARTIST_LIST.filter(a => a.includes(val) && !lineups[prefix].includes(a));
+  const matches = ARTIST_DB.filter(a => (a.id.toLowerCase().includes(val) || a.name.toLowerCase().includes(val)) && !lineups[prefix].includes(a.id));
   if (!matches.length) { list.classList.remove('show'); return; }
-  list.innerHTML = matches.map(a => '<div class="autocomplete-item" onmousedown="addLineup(\''+prefix+'\',\''+a+'\')">'+a+'</div>').join('');
+  list.innerHTML = matches.map(a => '<div class="autocomplete-item" onmousedown="addLineup(\''+prefix+'\',\''+a.id+'\')"><strong>'+esc(a.id)+'</strong> <span style="opacity:.5;font-size:.8em">'+esc(a.name)+'</span></div>').join('');
   list.classList.add('show');
 }
 function acKeydown(e, listId, prefix) {
@@ -988,6 +998,7 @@ function loadList(section){
       if(d.status==='ok'&&d.rows){
         listCache[section]=d.rows;
         if(section==='festival') buildYearFilter(d.rows);
+        if(section==='artist'){filterArtistList();return}
         renderList(section, section==='festival' ? filterByYear(d.rows) : d.rows);
       }
       else{container.innerHTML='<div class="data-list-empty">Failed to load</div>';toast('Load failed','error')}
@@ -1044,6 +1055,36 @@ function renderList(section, rows){
 }
 
 /* ==============================================================
+   ARTIST LIST — SEARCH & SORT
+   ============================================================== */
+let artistSortKey='name', artistSortAsc=true;
+function filterArtistList(){
+  if(!listCache.artist)return;
+  const q=(document.getElementById('artist-search')?.value||'').toLowerCase();
+  let rows=listCache.artist;
+  if(q) rows=rows.filter(r=>String(r.name||'').toLowerCase().includes(q)||String(r.id||'').toLowerCase().includes(q)||String(r.city||'').toLowerCase().includes(q)||String(r.genre||'').toLowerCase().includes(q));
+  rows=sortRows(rows, artistSortKey, artistSortAsc);
+  renderList('artist', rows);
+}
+function sortArtistList(key){
+  if(artistSortKey===key) artistSortAsc=!artistSortAsc;
+  else { artistSortKey=key; artistSortAsc=true; }
+  // ボタンのハイライト
+  document.querySelectorAll('#artist-tab-list .btn-sm').forEach(b=>{
+    if(b.textContent.toLowerCase()===key) b.className='btn btn-sm btn-accent';
+    else if(['name','city','genre'].includes(b.textContent.toLowerCase())) b.className='btn btn-sm';
+  });
+  filterArtistList();
+}
+function sortRows(rows, key, asc){
+  return [...rows].sort((a,b)=>{
+    const va=String(a[key]||'').toLowerCase();
+    const vb=String(b[key]||'').toLowerCase();
+    return asc?va.localeCompare(vb):vb.localeCompare(va);
+  });
+}
+
+/* ==============================================================
    EDIT ROW
    ============================================================== */
 function editRow(section, rowNum){
@@ -1073,6 +1114,10 @@ function editRow(section, rowNum){
     setSelectedGenres('f-genre',(row.genre||'').split(',').map(s=>s.trim()).filter(Boolean));
     lineups.f=(row.lineup||'').split(',').map(s=>s.trim()).filter(Boolean);
     renderLineupTags('f');
+    document.getElementById('lineup-fetch-status').style.display='none';
+    document.getElementById('bulk-lineup-wrap').style.display='none';
+    document.getElementById('gradient-preview').style.display='none';
+    if(row.heroGradient) updateGradientPreview(row.heroGradient);
   }
   else if(section==='artist'){
     setVal('a-id',row.id); setVal('a-name',row.name); setVal('a-city',row.city);
@@ -1144,10 +1189,18 @@ function saveEdit(section){
       views:g('ar-views'),featured:g('ar-featured'),excerpt:g('ar-excerpt')});
   }
 
+  const unregisteredArtists=(section==='festival')
+    ? lineups.f.filter(a=>a.startsWith('?')).map(a=>a.substring(1))
+    : [];
+
   toast('Updating...','info');
   fetch(GAS_URL,{method:'POST',body:JSON.stringify(payload)})
     .then(r=>r.json()).then(d=>{
-      if(d.status==='ok'||d.success){toast('Updated','success');cancelEdit(section);switchTab(section,'list');loadList(section)}
+      if(d.status==='ok'||d.success){
+        toast('Updated','success');
+        if(unregisteredArtists.length) autoRegisterArtists(unregisteredArtists);
+        cancelEdit(section);switchTab(section,'list');loadList(section);
+      }
       else toast('Update failed: '+(d.message||''),'error');
     }).catch(()=>toast('Update error','error'));
 }
@@ -1224,10 +1277,203 @@ function submitToSheet(section){
       views:g('ar-views'),featured:g('ar-featured'),excerpt:g('ar-excerpt')};
     if(!payload.id||!payload.title)return toast('ID and Title required','error');
   }
+  // Festivalの場合、未登録アーティストを自動でARTISTSに追加
+  const unregisteredArtists=(section==='festival')
+    ? lineups.f.filter(a=>a.startsWith('?')).map(a=>a.substring(1))
+    : [];
+
   toast('Saving...','info');
   fetch(GAS_URL,{method:'POST',body:JSON.stringify(payload)})
-    .then(r=>r.json()).then(r=>{(r.success||r.status==='ok')?toast('Saved','success'):toast('Save failed','error')})
+    .then(r=>r.json()).then(r=>{
+      if(r.success||r.status==='ok'){
+        toast('Saved','success');
+        // 未登録アーティストをARTISTSシートに追加
+        if(unregisteredArtists.length){
+          autoRegisterArtists(unregisteredArtists);
+        }
+      } else toast('Save failed','error');
+    })
     .catch(()=>toast('Save error','error'));
+}
+
+function autoRegisterArtists(artistIds){
+  let done=0;
+  artistIds.forEach(id=>{
+    const name=id.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+    fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'addArtist',id:id,name:name})})
+      .then(r=>r.json()).then(r=>{
+        done++;
+        if(r.status==='ok') {
+          ARTIST_DB.push({id:id,name:name});
+          ARTIST_LIST.push(id);
+        }
+        if(done===artistIds.length){
+          toast(done+' artists auto-registered','success');
+          // ?プレフィックスを除去してタグを更新
+          lineups.f=lineups.f.map(a=>a.startsWith('?')?a.substring(1):a);
+          renderLineupTags('f');
+        }
+      }).catch(()=>{done++});
+  });
+}
+
+/* ==============================================================
+   EXPORT DATA.JS
+   ============================================================== */
+function exportDataJs(){
+  toast('Exporting...','info');
+  Promise.all([
+    fetch(GAS_URL+'?action=get_sheet&sheet=ARTISTS').then(r=>r.json()),
+    fetch(GAS_URL+'?action=get_sheet&sheet=EVENTS').then(r=>r.json()),
+    fetch(GAS_URL+'?action=get_sheet&sheet=FESTIVALS').then(r=>r.json()),
+    fetch(GAS_URL+'?action=get_sheet&sheet=VENUES').then(r=>r.json()),
+  ]).then(([artists,events,festivals,venues])=>{
+    const lines=[];
+    lines.push(dataJsHeader());
+    lines.push(buildArtistsJs(artists.rows||[]));
+    lines.push(buildEventsJs(events.rows||[]));
+    lines.push(buildFestivalsJs(festivals.rows||[]));
+    lines.push(buildVenuesJs(venues.rows||[]));
+    const content=lines.join('\n\n');
+    downloadFile('data.js',content);
+    toast('data.js exported','success');
+  }).catch(e=>toast('Export error: '+e.message,'error'));
+}
+function dataJsHeader(){
+  return `/* ==========================================================
+   TECHNO JAPAN — SHARED DATA
+
+   Edit this file to update artists, events, and venues across all pages.
+   events.html, artists.html, venues.html, discover.html, and map.html
+   all read from here.
+   ========================================================== */`;
+}
+function q(s){return String(s||'').replace(/\\/g,'\\\\').replace(/"/g,'\\"').replace(/\n/g,'\\n')}
+function buildArtistsJs(rows){
+  const items=rows.map(r=>{
+    const l=[];
+    l.push('  {');
+    l.push('    id: "'+q(r.id)+'",');
+    l.push('    name: "'+q(r.name)+'",');
+    if(r.city) l.push('    city: "'+q(r.city)+'",');
+    if(r.country) l.push('    country: "'+q(r.country)+'",');
+    if(r.genre) l.push('    genre: "'+q(r.genre)+'",');
+    if(r.image) l.push('    image: "'+q(r.image)+'",');
+    if(r.bio) l.push('    bio: "'+q(r.bio)+'",');
+    const links=[];
+    if(r.instagram) links.push('      instagram: "'+q(r.instagram)+'"');
+    if(r.soundcloud) links.push('      soundcloud: "'+q(r.soundcloud)+'"');
+    if(r.bandcamp) links.push('      bandcamp: "'+q(r.bandcamp)+'"');
+    if(r.website) links.push('      website: "'+q(r.website)+'"');
+    if(links.length){
+      l.push('    links: {');
+      l.push(links.join(',\n')+',');
+      l.push('    }');
+    }
+    l.push('  },');
+    return l.join('\n');
+  });
+  return 'const ARTISTS = [\n'+items.join('\n')+'\n];';
+}
+function buildEventsJs(rows){
+  const items=rows.map(r=>{
+    const l=[];
+    l.push('  {');
+    l.push('    name: "'+q(r.name)+'",');
+    if(r.date) l.push('    date: "'+q(r.date)+'",');
+    if(r.venue) l.push('    venue: "'+q(r.venue)+'",');
+    if(r.city) l.push('    city: "'+q(r.city)+'",');
+    if(r.time) l.push('    time: "'+q(r.time)+'",');
+    if(r.desc) l.push('    desc: "'+q(r.desc)+'",');
+    if(r.lineup){
+      const arr=String(r.lineup).split(',').map(s=>'"'+q(s.trim())+'"').filter(s=>s!=='""');
+      if(arr.length) l.push('    lineup: ['+arr.join(', ')+'],');
+    }
+    if(r.link) l.push('    link: "'+q(r.link)+'",');
+    l.push('  },');
+    return l.join('\n');
+  });
+  return 'const EVENTS = [\n'+items.join('\n')+'\n];';
+}
+function buildFestivalsJs(rows){
+  const items=rows.map(r=>{
+    const l=[];
+    l.push('  {');
+    l.push('    id: "'+q(r.id)+'",');
+    if(r.type) l.push('    type: "'+q(r.type)+'",');
+    l.push('    name: "'+q(r.name)+'",');
+    if(r.date) l.push('    date: "'+q(r.date)+'",');
+    if(r.location) l.push('    location: "'+q(r.location)+'",');
+    if(r.city) l.push('    city: "'+q(r.city)+'",');
+    if(r.address) l.push('    address: "'+q(r.address)+'",');
+    const lat=parseFloat(r.lat); if(!isNaN(lat)) l.push('    lat: '+lat+',');
+    const lng=parseFloat(r.lng); if(!isNaN(lng)) l.push('    lng: '+lng+',');
+    if(r.image) l.push('    image: "'+q(r.image)+'",');
+    if(r.flyer) l.push('    flyer: "'+q(r.flyer)+'",');
+    if(r.heroGradient) l.push('    heroGradient: "'+q(r.heroGradient)+'",');
+    if(r.genre){
+      const arr=String(r.genre).split(/[,·]/).map(s=>'"'+q(s.trim())+'"').filter(s=>s!=='""');
+      if(arr.length) l.push('    genre: ['+arr.join(', ')+'],');
+    }
+    if(r.desc) l.push('    desc: "'+q(r.desc)+'",');
+    if(r.url) l.push('    url: "'+q(r.url)+'",');
+    if(r.ticketUrl) l.push('    ticketUrl: "'+q(r.ticketUrl)+'",');
+    if(r.instagram) l.push('    instagram: "'+q(r.instagram)+'",');
+    if(r.lineup){
+      const arr=String(r.lineup).split(',').map(s=>'"'+q(s.trim())+'"').filter(s=>s!=='""');
+      if(arr.length) l.push('    lineup: ['+arr.join(', ')+'],');
+    }
+    if(r.editions){
+      try{
+        const eds=typeof r.editions==='string'?JSON.parse(r.editions):r.editions;
+        if(Array.isArray(eds)&&eds.length){
+          l.push('    editions: [');
+          eds.forEach(ed=>{
+            const eLineup=(ed.lineup||[]).map(a=>'"'+q(a)+'"').join(', ');
+            l.push('      { year: '+ed.year+', date: "'+q(ed.date)+'", lineup: ['+eLineup+'] },');
+          });
+          l.push('    ],');
+        }
+      }catch(e){}
+    }
+    l.push('  },');
+    return l.join('\n');
+  });
+  return 'const FESTIVALS = [\n'+items.join('\n')+'\n];';
+}
+function buildVenuesJs(rows){
+  const items=rows.map(r=>{
+    const l=[];
+    l.push('  {');
+    l.push('    id: "'+q(r.id)+'",');
+    l.push('    name: "'+q(r.name)+'",');
+    if(r.city) l.push('    city: "'+q(r.city)+'",');
+    if(r.area) l.push('    area: "'+q(r.area)+'",');
+    if(r.type) l.push('    type: "'+q(r.type)+'",');
+    if(r.image) l.push('    image: "'+q(r.image)+'",');
+    if(r.genre){
+      const arr=String(r.genre).split(/[,·]/).map(s=>'"'+q(s.trim())+'"').filter(s=>s!=='""');
+      if(arr.length) l.push('    genre: ['+arr.join(', ')+'],');
+    }
+    const cap=parseInt(r.capacity); if(!isNaN(cap)) l.push('    capacity: '+cap+',');
+    if(r.address) l.push('    address: "'+q(r.address)+'",');
+    const lat=parseFloat(r.lat); if(!isNaN(lat)) l.push('    lat: '+lat+',');
+    const lng=parseFloat(r.lng); if(!isNaN(lng)) l.push('    lng: '+lng+',');
+    if(r.url) l.push('    url: "'+q(r.url)+'",');
+    if(r.instagram) l.push('    instagram: "'+q(r.instagram)+'",');
+    if(r.desc) l.push('    desc: "'+q(r.desc)+'"');
+    l.push('  },');
+    return l.join('\n');
+  });
+  return 'const VENUES = [\n'+items.join('\n')+'\n];';
+}
+function downloadFile(filename,content){
+  const blob=new Blob([content],{type:'text/javascript'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
 }
 
 /* ==============================================================
@@ -1337,7 +1583,7 @@ function resetForm(section){
   // プレビューをクリア
   document.querySelectorAll('.img-preview').forEach(p=>{p.style.display='none';p.innerHTML='';});
   if(section==='venue'){document.getElementById('v-type').value='club';document.querySelectorAll('#v-genre .chip').forEach(c=>c.classList.remove('selected'))}
-  if(section==='festival'){document.getElementById('f-type').value='festival';document.querySelectorAll('#f-genre .chip').forEach(c=>c.classList.remove('selected'));document.querySelectorAll('#f-gradientPresets .gradient-swatch').forEach(s=>s.classList.remove('selected'));lineups.f=[];renderLineupTags('f');editions.length=0;renderEditions()}
+  if(section==='festival'){document.getElementById('f-type').value='festival';document.querySelectorAll('#f-genre .chip').forEach(c=>c.classList.remove('selected'));document.querySelectorAll('#f-gradientPresets .gradient-swatch').forEach(s=>s.classList.remove('selected'));lineups.f=[];renderLineupTags('f');editions.length=0;renderEditions();document.getElementById('lineup-fetch-status').style.display='none';document.getElementById('gradient-preview').style.display='none';document.getElementById('bulk-lineup-wrap').style.display='none'}
   if(section==='event'){lineups.e=[];renderLineupTags('e')}
   if(section==='article'){document.getElementById('ar-category').value='REPORT';document.getElementById('ar-featured').value='false'}
   document.getElementById('output-'+section).classList.remove('show');
