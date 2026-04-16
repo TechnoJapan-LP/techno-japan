@@ -790,7 +790,7 @@ footer {
 @media (max-width: 900px) {
   nav { padding: 20px 24px; }
   section { padding: 80px 24px; }
-  .hero { padding: 0 24px 48px; }
+  .hero { padding: 0 24px 48px; height: 75vh; }
   .about-grid { grid-template-columns: 1fr; gap: 32px; }
   .contact-grid { grid-template-columns: 1fr; gap: 32px; }
   .discover-grid { grid-template-columns: repeat(2, 1fr); }
@@ -807,8 +807,8 @@ footer {
   .nav-hamburger { display: flex; top: 20px; right: 24px; }
   .nav-overlay .nav-close { top: 20px; right: 24px; }
   nav .nav-links { display: none; }
-  .discover-grid { grid-template-columns: 1fr; }
-  .discover-card { aspect-ratio: 3/4; }
+  .discover-grid { grid-template-columns: repeat(2, 1fr); }
+  .discover-card { aspect-ratio: 1; }
   .insta-grid { grid-template-columns: 1fr 1fr; }
   .stat-grid { grid-template-columns: 1fr; }
   .footer-links { gap: 20px; flex-wrap: wrap; justify-content: center; }
@@ -817,6 +817,11 @@ footer {
   .section-label { font-size: 9px; }
   .about-text h2 { font-size: clamp(36px, 10vw, 72px); }
   .contact-left h2 { font-size: clamp(36px, 10vw, 72px); }
+}
+
+@media (max-width: 480px) {
+  .discover-grid { grid-template-columns: 1fr; }
+  .discover-card { aspect-ratio: 1; }
 }
 
 /* Hide custom cursor on touch devices */

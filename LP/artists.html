@@ -103,26 +103,81 @@ nav .nav-dropdown-menu-inner a:hover { opacity: 1; background: rgba(240,237,232,
   color: rgba(240,237,232,0.5); padding-bottom: 12px;
 }
 
+/* ===================== SEARCH & FILTER ===================== */
+.artists-toolbar {
+  padding: 40px 40px 0;
+  display: flex; flex-direction: column; gap: 24px;
+}
+
+.artists-search-row {
+  display: flex; align-items: center; gap: 16px;
+}
+
+.artists-search {
+  flex: 1; max-width: 400px;
+  background: transparent;
+  border: 1px solid rgba(240,237,232,0.12);
+  color: var(--text);
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em;
+  padding: 12px 20px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+.artists-search::placeholder { color: rgba(240,237,232,0.25); }
+.artists-search:focus { border-color: rgba(240,237,232,0.35); }
+
+.artists-sort {
+  background: transparent;
+  border: 1px solid rgba(240,237,232,0.12);
+  color: var(--text);
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em;
+  padding: 12px 16px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.3s ease;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.artists-sort option { background: #080808; color: var(--text); }
+
+.artists-count {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em;
+  opacity: 0.3; margin-left: auto;
+}
+
+.artists-genre-nav {
+  display: flex; gap: 0; flex-wrap: wrap;
+  border-bottom: 1px solid rgba(240,237,232,0.08);
+}
+
+.genre-tab {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em;
+  text-transform: uppercase; padding: 10px 20px;
+  background: none; border: none; color: var(--text);
+  opacity: 0.3; cursor: pointer;
+  transition: opacity 0.3s ease;
+  position: relative;
+  white-space: nowrap;
+}
+.genre-tab:hover { opacity: 0.7; }
+.genre-tab.active { opacity: 1; }
+.genre-tab.active::after {
+  content: ''; position: absolute; bottom: -1px; left: 0; right: 0;
+  height: 1px; background: var(--text);
+}
+
 /* ===================== ARTISTS LIST VIEW ===================== */
 #artists-list-view { padding: 0 0 120px; }
 
-.artists-carousel {
-  display: flex;
+.artists-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 6px;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  padding: 0;
-  scrollbar-width: none;
-  cursor: grab;
-  user-select: none;
+  padding: 40px;
 }
-.artists-carousel::-webkit-scrollbar { display: none; }
-.artists-carousel.dragging { cursor: grabbing; }
-.artists-carousel.dragging .artist-card { pointer-events: none; }
 
 .artist-card {
-  flex: 0 0 calc(33.333vw - 4px);
-  height: 70vh;
+  aspect-ratio: 3/4;
   position: relative;
   overflow: hidden;
   display: block;
@@ -137,12 +192,23 @@ nav .nav-dropdown-menu-inner a:hover { opacity: 1; background: rgba(240,237,232,
 }
 .artist-card:hover .artist-card-img { transform: scale(1.08); }
 
+/* Bottom gradient always visible */
+.artist-card::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 60%;
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
 /* Hover overlay */
 .artist-card::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.3);
   z-index: 1;
   pointer-events: none;
   opacity: 0;
@@ -152,29 +218,34 @@ nav .nav-dropdown-menu-inner a:hover { opacity: 1; background: rgba(240,237,232,
 
 .artist-card-content {
   position: absolute;
-  inset: 0;
+  bottom: 0; left: 0; right: 0;
+  padding: 20px;
+  z-index: 2;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 2;
-  opacity: 0;
-  transition: opacity 0.4s ease;
 }
-.artist-card:hover .artist-card-content { opacity: 1; }
 
 .artist-card-genre {
-  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.25em;
-  text-transform: uppercase; opacity: 0.6; margin-bottom: 12px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.25em;
+  text-transform: uppercase; opacity: 0.5; margin-bottom: 6px;
 }
 .artist-card-name {
-  font-family: var(--font-display); font-size: clamp(32px, 3vw, 52px);
-  text-transform: uppercase; line-height: 1; margin-bottom: 10px;
-  text-align: center;
+  font-family: var(--font-display); font-size: clamp(20px, 2vw, 32px);
+  text-transform: uppercase; line-height: 1; margin-bottom: 4px;
 }
 .artist-card-city {
-  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em;
-  text-transform: uppercase; opacity: 0.5;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.2em;
+  text-transform: uppercase; opacity: 0.4;
+}
+
+/* No results */
+.artists-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 80px 20px;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.15em;
+  opacity: 0.3;
+  text-transform: uppercase;
 }
 
 /* ===================== ARTIST DETAIL VIEW ===================== */
@@ -317,13 +388,16 @@ footer { padding: 60px 40px 40px; border-top: 1px solid rgba(240,237,232,0.08); 
 .nav-overlay .nav-close:hover { opacity: 0.6; }
 
 /* RESPONSIVE */
+@media (max-width: 1100px) {
+  .artists-grid { grid-template-columns: repeat(3, 1fr); }
+}
 @media (max-width: 900px) {
   nav { padding: 20px 24px; }
   .page-header { padding: 140px 24px 60px; }
   .page-header-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
   #artists-list-view { padding: 0 0 80px; }
-  .artists-carousel { gap: 4px; }
-  .artist-card { flex: 0 0 50vw; height: 50vh; }
+  .artists-toolbar { padding: 32px 24px 0; }
+  .artists-grid { grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 24px; }
   .artist-back { padding: 40px 24px 0; }
   .artist-detail { padding: 32px 24px 80px; }
   .artist-detail-header { grid-template-columns: 1fr; gap: 32px; }
@@ -336,11 +410,28 @@ footer { padding: 60px 40px 40px; border-top: 1px solid rgba(240,237,232,0.08); 
   .nav-overlay .nav-close { top: 20px; right: 24px; }
   nav .nav-links { display: none; }
   .footer-links { gap: 20px; }
+  .artists-grid { grid-template-columns: repeat(2, 1fr); }
+  .artists-search-row { flex-wrap: wrap; }
+  .artists-search { max-width: 100%; }
+  .artists-count { margin-left: 0; width: 100%; }
+  .artists-genre-nav { gap: 0; overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .artists-genre-nav::-webkit-scrollbar { display: none; }
+  .genre-tab { padding: 10px 14px; font-size: 8px; }
+}
+@media (max-width: 480px) {
+  .artists-grid { grid-template-columns: repeat(2, 1fr); gap: 3px; padding: 16px; }
+  .artists-toolbar { padding: 24px 16px 0; gap: 16px; }
+  .artist-card-content { padding: 12px; }
+  .artist-card-name { font-size: 16px; }
+  .artist-card-genre { font-size: 7px; margin-bottom: 3px; }
+  .artist-card-city { font-size: 7px; }
 }
 @media (hover: none) and (pointer: coarse) {
   body { cursor: auto; }
   .cursor-dot, .cursor-ring { display: none; }
+  .artist-card { cursor: pointer; }
   .artist-back { cursor: pointer; }
+  .artists-sort, .genre-tab { cursor: pointer; }
   .nav-hamburger, .nav-overlay .nav-close, .nav-overlay .nav-back, .nav-overlay a { cursor: pointer; }
 }
 </style>
@@ -387,7 +478,18 @@ footer { padding: 60px 40px 40px; border-top: 1px solid rgba(240,237,232,0.08); 
 
 <!-- ARTISTS LIST VIEW -->
 <main id="artists-list-view">
-  <div class="artists-carousel" id="artists-grid"></div>
+  <div class="artists-toolbar">
+    <div class="artists-search-row">
+      <input type="text" class="artists-search" id="artists-search" placeholder="SEARCH ARTISTS...">
+      <select class="artists-sort" id="artists-sort">
+        <option value="a-z">A → Z</option>
+        <option value="z-a">Z → A</option>
+      </select>
+      <span class="artists-count" id="artists-count"></span>
+    </div>
+    <div class="artists-genre-nav" id="genre-nav"></div>
+  </div>
+  <div class="artists-grid" id="artists-grid"></div>
 </main>
 
 <!-- ARTIST DETAIL VIEW -->
@@ -430,30 +532,104 @@ const observer = new IntersectionObserver(entries => {
 
 function observeAll() { document.querySelectorAll('.reveal').forEach(el => observer.observe(el)); }
 
+/* ========== GENRES & STATE ========== */
+let currentGenre = 'ALL';
+let currentSearch = '';
+let currentSort = 'a-z';
+
+const gradients = [
+  'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+  'linear-gradient(135deg, #2d1b2e 0%, #1a1a2e 50%, #0f1123 100%)',
+  'linear-gradient(135deg, #1b2d1e 0%, #0f1a14 50%, #0a1210 100%)',
+  'linear-gradient(135deg, #2e1b1b 0%, #1a0f0f 50%, #120a0a 100%)',
+  'linear-gradient(135deg, #1b1b2e 0%, #0f0f1a 50%, #0a0a12 100%)',
+  'linear-gradient(135deg, #2e2e1b 0%, #1a1a0f 50%, #12120a 100%)',
+];
+
+function getGenreString(a) {
+  if (!a.genre) return '';
+  return Array.isArray(a.genre) ? a.genre.join(' / ') : a.genre;
+}
+
+function getGenreArray(a) {
+  if (!a.genre) return [];
+  return Array.isArray(a.genre) ? a.genre : a.genre.split(/\s*\/\s*/);
+}
+
+function buildGenreNav() {
+  const allGenres = new Set();
+  ARTISTS.forEach(a => getGenreArray(a).forEach(g => allGenres.add(g.trim().toUpperCase())));
+  const sorted = ['ALL', ...['TECHNO','HOUSE','MINIMAL','EXPERIMENTAL','AMBIENT','ELECTRONIC','LIVE'].filter(g => allGenres.has(g))];
+  // Add remaining genres
+  allGenres.forEach(g => { if (!sorted.includes(g)) sorted.push(g); });
+
+  const nav = document.getElementById('genre-nav');
+  nav.innerHTML = sorted.map(g =>
+    `<button class="genre-tab${g === 'ALL' ? ' active' : ''}" data-genre="${g}">${g}</button>`
+  ).join('');
+
+  nav.addEventListener('click', e => {
+    const btn = e.target.closest('.genre-tab');
+    if (!btn) return;
+    currentGenre = btn.dataset.genre;
+    nav.querySelectorAll('.genre-tab').forEach(b => b.classList.toggle('active', b === btn));
+    renderArtistsList();
+  });
+}
+
+function getFilteredArtists() {
+  let list = [...ARTISTS];
+
+  // Filter by genre
+  if (currentGenre !== 'ALL') {
+    list = list.filter(a => getGenreArray(a).some(g => g.trim().toUpperCase() === currentGenre));
+  }
+
+  // Filter by search
+  if (currentSearch) {
+    const q = currentSearch.toLowerCase();
+    list = list.filter(a =>
+      a.name.toLowerCase().includes(q) ||
+      (a.city && a.city.toLowerCase().includes(q)) ||
+      (a.country && a.country.toLowerCase().includes(q)) ||
+      getGenreString(a).toLowerCase().includes(q)
+    );
+  }
+
+  // Sort
+  if (currentSort === 'a-z') {
+    list.sort((a, b) => a.name.localeCompare(b.name));
+  } else {
+    list.sort((a, b) => b.name.localeCompare(a.name));
+  }
+
+  return list;
+}
+
 /* ========== RENDER LIST ========== */
 function renderArtistsList() {
   const grid = document.getElementById('artists-grid');
-  // Unique placeholder gradients per artist (used when no image file exists)
-  const gradients = [
-    'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
-    'linear-gradient(135deg, #2d1b2e 0%, #1a1a2e 50%, #0f1123 100%)',
-    'linear-gradient(135deg, #1b2d1e 0%, #0f1a14 50%, #0a1210 100%)',
-    'linear-gradient(135deg, #2e1b1b 0%, #1a0f0f 50%, #120a0a 100%)',
-    'linear-gradient(135deg, #1b1b2e 0%, #0f0f1a 50%, #0a0a12 100%)',
-    'linear-gradient(135deg, #2e2e1b 0%, #1a1a0f 50%, #12120a 100%)',
-  ];
+  const filtered = getFilteredArtists();
 
-  grid.innerHTML = ARTISTS.map((a, i) => {
+  document.getElementById('artists-count').textContent = filtered.length + ' ARTISTS';
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '<div class="artists-empty">No artists found</div>';
+    return;
+  }
+
+  grid.innerHTML = filtered.map((a, i) => {
     const bg = a.image
       ? `background-image:url('${a.image}')`
       : `background:${gradients[i % gradients.length]}`;
+    const genreLabel = getGenreString(a);
     return `
-    <a href="#artist/${a.id}" class="artist-card reveal" data-id="${a.id}" style="transition-delay:${i * 100}ms">
+    <a href="#artist/${a.id}" class="artist-card reveal" data-id="${a.id}">
       <div class="artist-card-img" style="${bg}"></div>
       <div class="artist-card-content">
-        <div class="artist-card-genre">${a.genre}</div>
+        <div class="artist-card-genre">${genreLabel}</div>
         <div class="artist-card-name">${a.name}</div>
-        <div class="artist-card-city">${a.country}</div>
+        <div class="artist-card-city">${a.country || a.city || ''}</div>
       </div>
     </a>`;
   }).join('');
@@ -520,6 +696,26 @@ function renderArtistDetail(id) {
   bindCursorExpand();
 }
 
+/* ========== SEARCH & SORT BINDINGS ========== */
+function initSearchSort() {
+  const searchInput = document.getElementById('artists-search');
+  const sortSelect = document.getElementById('artists-sort');
+
+  let debounceTimer;
+  searchInput.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      currentSearch = searchInput.value.trim();
+      renderArtistsList();
+    }, 200);
+  });
+
+  sortSelect.addEventListener('change', () => {
+    currentSort = sortSelect.value;
+    renderArtistsList();
+  });
+}
+
 /* ========== VIEW SWITCHING ========== */
 function showList() {
   document.getElementById('artists-list-view').style.display = 'block';
@@ -579,46 +775,10 @@ function bindCursorExpand() {
   });
 }
 
-/* ========== DRAG TO SCROLL ========== */
-function initDragScroll() {
-  const carousel = document.getElementById('artists-grid');
-  let isDown = false, startX, scrollLeft, hasDragged = false;
-
-  carousel.addEventListener('mousedown', (e) => {
-    isDown = true; hasDragged = false;
-    carousel.classList.add('dragging');
-    startX = e.pageX - carousel.offsetLeft;
-    scrollLeft = carousel.scrollLeft;
-  });
-
-  carousel.addEventListener('mouseleave', () => {
-    isDown = false;
-    carousel.classList.remove('dragging');
-  });
-
-  carousel.addEventListener('mouseup', () => {
-    isDown = false;
-    carousel.classList.remove('dragging');
-  });
-
-  carousel.addEventListener('mousemove', (e) => {
-    if (!isDown) return;
-    e.preventDefault();
-    const x = e.pageX - carousel.offsetLeft;
-    const walk = (x - startX) * 1.5;
-    if (Math.abs(walk) > 5) hasDragged = true;
-    carousel.scrollLeft = scrollLeft - walk;
-  });
-
-  // Prevent click navigation when dragging
-  carousel.addEventListener('click', (e) => {
-    if (hasDragged) { e.preventDefault(); e.stopPropagation(); }
-  }, true);
-}
-
 /* ========== INIT ========== */
+buildGenreNav();
+initSearchSort();
 renderArtistsList();
-initDragScroll();
 handleRoute();
 </script>
 </body>
