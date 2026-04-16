@@ -181,6 +181,23 @@ body.rave-mode .festival-section:hover .festival-name {
   opacity: 1;
   border-bottom: 1px solid var(--text);
 }
+.month-nav a.past-month {
+  opacity: 0.2;
+  font-size: 9px;
+}
+.month-nav a.past-month:hover { opacity: 0.5; }
+.month-nav a.past-month.active { opacity: 0.8; }
+.month-nav .past-divider {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  opacity: 0.2;
+  padding: 8px 16px;
+  white-space: nowrap;
+  align-self: center;
+  border-left: 1px solid rgba(240,237,232,0.1);
+  margin-left: 8px;
+}
 
 /* ===================== FESTIVAL SECTIONS ===================== */
 .festivals-main {
@@ -688,9 +705,28 @@ function getArtist(id) {
 let currentMode = 'festival'; // 'festival' or 'rave'
 
 function getSorted() {
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
   return [...FESTIVALS]
     .filter(f => (f.type || 'festival') === currentMode)
-    .sort((a, b) => new Date(a.date.split('/')[0]) - new Date(b.date.split('/')[0]));
+    .sort((a, b) => {
+      const aEnd = new Date(a.date.includes('/') ? a.date.split('/')[1] : a.date);
+      const bEnd = new Date(b.date.includes('/') ? b.date.split('/')[1] : b.date);
+      const aFuture = aEnd >= now;
+      const bFuture = bEnd >= now;
+      // Future festivals first, then past
+      if (aFuture !== bFuture) return aFuture ? -1 : 1;
+      // Within future: earliest first; within past: most recent first
+      if (aFuture) return new Date(a.date.split('/')[0]) - new Date(b.date.split('/')[0]);
+      return new Date(b.date.split('/')[0]) - new Date(a.date.split('/')[0]);
+    });
+}
+
+function isFuture(dateStr) {
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+  const end = new Date(dateStr.includes('/') ? dateStr.split('/')[1] : dateStr);
+  return end >= now;
 }
 
 /* ========== MODE TOGGLE ========== */
@@ -747,12 +783,17 @@ let currentMonth = 'ALL';
 function buildMonthNav() {
   const nav = document.getElementById('month-nav');
   const sorted = getSorted();
-  const months = [...new Set(sorted.map(f => getMonthFromDate(f.date)))].sort((a,b) => a - b);
+  const futureMonths = [...new Set(sorted.filter(f => isFuture(f.date)).map(f => getMonthFromDate(f.date)))].sort((a,b) => a - b);
+  const pastMonths = [...new Set(sorted.filter(f => !isFuture(f.date)).map(f => getMonthFromDate(f.date)))].sort((a,b) => a - b);
 
   nav.innerHTML = `<a href="#" data-month="ALL" class="active">ALL</a>` +
-    months.map(m =>
+    futureMonths.map(m =>
       `<a href="#" data-month="${m}">${MONTHS[m]}</a>`
-    ).join('');
+    ).join('') +
+    (pastMonths.length ? `<span class="past-divider">PAST</span>` +
+      pastMonths.map(m =>
+        `<a href="#" data-month="PAST-${m}" class="past-month">${MONTHS[m]}</a>`
+      ).join('') : '');
 
   // Click handlers for filtering
   nav.querySelectorAll('a').forEach(link => {
@@ -768,14 +809,66 @@ function buildMonthNav() {
 
 function applyMonthFilter() {
   document.querySelectorAll('.festival-month-group').forEach(group => {
+    const gMonth = group.dataset.month;
+    const gTime = group.dataset.time; // 'future' or 'past'
     if (currentMonth === 'ALL') {
-      group.style.display = '';
+      // Show only future festivals
+      group.style.display = gTime === 'future' ? '' : 'none';
+    } else if (currentMonth === 'PAST') {
+      // Show all past festivals
+      group.style.display = gTime === 'past' ? '' : 'none';
+    } else if (currentMonth.startsWith('PAST-')) {
+      // Show specific past month
+      const targetMonth = currentMonth.replace('PAST-', '');
+      group.style.display = (gTime === 'past' && gMonth === targetMonth) ? '' : 'none';
     } else {
-      group.style.display = group.dataset.month === currentMonth ? '' : 'none';
+      // Show specific future month
+      group.style.display = (gTime === 'future' && gMonth === currentMonth) ? '' : 'none';
     }
   });
   // Re-trigger reveal for visible sections
   document.querySelectorAll('.festival-section.reveal:not(.visible)').forEach(el => observer.observe(el));
+}
+
+/* ========== RENDER FESTIVAL CARD ========== */
+function renderFestivalCard(f, m, i) {
+  const imgHtml = f.image
+    ? `<img src="${f.image}" alt="${f.name}" onerror="this.style.display='none'">`
+    : '';
+  const lineupHtml = f.lineup && f.lineup.length
+    ? `<div class="festival-lineup-preview">${f.lineup.slice(0, 4).map(id => {
+        const a = getArtist(id);
+        const name = a ? a.name : id.toUpperCase().replace(/-/g, ' ');
+        return `<a href="artists.html#artist/${id}" onclick="event.stopPropagation()">${name}</a>`;
+      }).join('')}</div>`
+    : '';
+  return `
+    <section class="festival-section reveal" style="transition-delay:${i * 100}ms">
+      <div class="festival-layout" onclick="showDetail('${f.id}')">
+        <div class="festival-image-wrap">
+          ${imgHtml}
+        </div>
+        <div class="festival-info-col">
+          <div class="festival-info-top">
+            <div class="festival-month-label">${String(m + 1).padStart(2, '0')} / ${MONTHS[m]}</div>
+            <div class="festival-name">${f.name}</div>
+            <div class="festival-desc-jp">${f.desc}</div>
+            ${lineupHtml}
+          </div>
+          <div class="festival-info-bottom">
+            <div class="festival-meta-row">
+              <span class="festival-meta-label">LOCATION</span>
+              <span class="festival-meta-value">${f.location || ''}, ${f.city}</span>
+            </div>
+            <div class="festival-meta-row">
+              <span class="festival-meta-label">DATE</span>
+              <span class="festival-meta-value">${formatFestDate(f.date)}</span>
+            </div>
+            <div class="festival-tags">${f.genre.map(g => `<span class="festival-tag">${g}</span>`).join('')}</div>
+          </div>
+        </div>
+      </div>
+    </section>`;
 }
 
 /* ========== RENDER FESTIVALS ========== */
@@ -783,68 +876,40 @@ function renderFestivals() {
   const main = document.getElementById('festivals-main');
   const sorted = getSorted();
 
-  // Group by month
-  const grouped = {};
+  // Group by future/past, then by month
+  const futureGrouped = {};
+  const pastGrouped = {};
   sorted.forEach(f => {
     const m = getMonthFromDate(f.date);
-    if (!grouped[m]) grouped[m] = [];
-    grouped[m].push(f);
+    const target = isFuture(f.date) ? futureGrouped : pastGrouped;
+    if (!target[m]) target[m] = [];
+    target[m].push(f);
   });
 
   let html = '';
-  const monthKeys = Object.keys(grouped).map(Number).sort((a,b) => a - b);
 
-  monthKeys.forEach(m => {
-    html += `<div class="festival-month-group" id="month-${MONTHS[m]}" data-month="${m}">`;
-
-    grouped[m].forEach((f, i) => {
-      const imgHtml = f.image
-        ? `<img src="${f.image}" alt="${f.name}" onerror="this.style.display='none'">`
-        : '';
-
-      const lineupHtml = f.lineup && f.lineup.length
-        ? `<div class="festival-lineup-preview">${f.lineup.slice(0, 4).map(id => {
-            const a = getArtist(id);
-            const name = a ? a.name : id.toUpperCase().replace(/-/g, ' ');
-            return `<a href="artists.html#artist/${id}" onclick="event.stopPropagation()">${name}</a>`;
-          }).join('')}</div>`
-        : '';
-
-      // CTA moved to detail page
-
-      html += `
-        <section class="festival-section reveal" style="transition-delay:${i * 100}ms">
-          <div class="festival-layout" onclick="showDetail('${f.id}')">
-            <div class="festival-image-wrap">
-              ${imgHtml}
-            </div>
-            <div class="festival-info-col">
-              <div class="festival-info-top">
-                <div class="festival-month-label">${String(m + 1).padStart(2, '0')} / ${MONTHS[m]}</div>
-                <div class="festival-name">${f.name}</div>
-                <div class="festival-desc-jp">${f.desc}</div>
-                ${lineupHtml}
-              </div>
-              <div class="festival-info-bottom">
-                <div class="festival-meta-row">
-                  <span class="festival-meta-label">LOCATION</span>
-                  <span class="festival-meta-value">${f.location}, ${f.city}</span>
-                </div>
-                <div class="festival-meta-row">
-                  <span class="festival-meta-label">DATE</span>
-                  <span class="festival-meta-value">${formatFestDate(f.date)}</span>
-                </div>
-                <div class="festival-tags">${f.genre.map(g => `<span class="festival-tag">${g}</span>`).join('')}</div>
-              </div>
-            </div>
-          </div>
-        </section>`;
+  // Render future festivals first
+  const futureKeys = Object.keys(futureGrouped).map(Number).sort((a,b) => a - b);
+  futureKeys.forEach(m => {
+    html += `<div class="festival-month-group" id="month-${MONTHS[m]}" data-month="${m}" data-time="future">`;
+    futureGrouped[m].forEach((f, i) => {
+      html += renderFestivalCard(f, m, i);
     });
+    html += '</div>';
+  });
 
+  // Render past festivals (hidden by default via applyMonthFilter)
+  const pastKeys = Object.keys(pastGrouped).map(Number).sort((a,b) => a - b);
+  pastKeys.forEach(m => {
+    html += `<div class="festival-month-group" data-month="${m}" data-time="past">`;
+    pastGrouped[m].forEach((f, i) => {
+      html += renderFestivalCard(f, m, i);
+    });
     html += '</div>';
   });
 
   main.innerHTML = html;
+  applyMonthFilter();
 
   // Observe reveals
   main.querySelectorAll('.reveal').forEach(el => observer.observe(el));
