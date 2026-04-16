@@ -34,7 +34,7 @@ a { color: inherit; text-decoration: none; }
 .cursor-ring { width: 36px; height: 36px; border: 1px solid var(--text); transform: translate(-50%, -50%); transition: transform 0.15s ease-out, width 0.3s ease, height 0.3s ease; }
 
 /* NAV */
-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 28px 40px; mix-blend-mode: difference; }
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: rgba(8,8,8,0.97); }
 nav .logo { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; }
 nav .nav-links { display: flex; gap: 32px; }
 nav .nav-links a { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.6; transition: opacity 0.3s ease; }
@@ -171,11 +171,16 @@ nav .nav-dropdown-menu-inner a:hover { opacity: 1; background: rgba(240,237,232,
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 /* AREA FILTER NAV */
-.area-nav {
-  position: sticky; top: 0; z-index: 50;
-  background: rgba(8,8,8,0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+.area-nav-wrap {
+  position: sticky; top: 52px; z-index: 50;
+  background: rgba(8,8,8,0.97); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(240,237,232,0.06);
-  padding: 20px 40px; display: flex; gap: 0; overflow-x: auto; scrollbar-width: none;
+  display: flex; align-items: center;
+  padding-right: 40px;
+}
+.area-nav {
+  flex: 1; min-width: 0;
+  padding: 14px 0 14px 40px; display: flex; gap: 0; overflow-x: auto; scrollbar-width: none;
   align-items: center;
 }
 .area-nav::-webkit-scrollbar { display: none; }
@@ -185,19 +190,19 @@ nav .nav-dropdown-menu-inner a:hover { opacity: 1; background: rgba(240,237,232,
 }
 .area-nav a:hover { opacity: 0.7; }
 .area-nav a.active { opacity: 1; border-bottom: 1px solid var(--text); }
-.area-nav .area-nav-map {
-  margin-left: auto; flex-shrink: 0;
+.area-nav-map {
+  flex-shrink: 0; margin-left: 16px;
   font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
   padding: 6px 16px; border: 1px solid rgba(240,237,232,0.15); background: transparent;
   color: rgba(240,237,232,0.5); cursor: pointer; transition: all 0.3s ease;
   display: flex; align-items: center; gap: 8px;
 }
-.area-nav .area-nav-map:hover { border-color: rgba(240,237,232,0.4); color: var(--text); }
-.area-nav .area-nav-map.active { background: #ff2d2d; color: var(--bg); border-color: #ff2d2d; }
-.area-nav .area-nav-map .pin-icon {
+.area-nav-map:hover { border-color: rgba(240,237,232,0.4); color: var(--text); }
+.area-nav-map.active { background: #ff2d2d; color: var(--bg); border-color: #ff2d2d; }
+.area-nav-map .pin-icon {
   width: 6px; height: 6px; border-radius: 50%; background: #ff2d2d; transition: background 0.3s ease;
 }
-.area-nav .area-nav-map.active .pin-icon { background: var(--bg); }
+.area-nav-map.active .pin-icon { background: var(--bg); }
 #venue-map-wrap, #osaka-map-wrap, #nagoya-map-wrap, #kyoto-map-wrap, #hakuba-map-wrap {
   display: none; margin: 0 40px 32px; border: 1px solid rgba(240,237,232,0.1);
   overflow: hidden;
@@ -286,7 +291,8 @@ footer { padding: 60px 40px 40px; border-top: 1px solid rgba(240,237,232,0.08); 
   .page-header { padding: 140px 24px 60px; }
   .page-header-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
   #venues-list-view { padding: 40px 24px 80px; }
-  .area-nav { padding: 16px 24px; }
+  .area-nav-wrap { padding-right: 24px; top: 48px; }
+  .area-nav { padding: 12px 0 12px 24px; }
   .area-nav a { padding: 6px 16px; font-size: 9px; }
   .venues-grid { grid-template-columns: 1fr; }
   .venue-card { padding: 36px 24px; min-height: auto; }
@@ -304,7 +310,7 @@ footer { padding: 60px 40px 40px; border-top: 1px solid rgba(240,237,232,0.08); 
   nav .nav-links { display: none; }
   .venue-event-row { grid-template-columns: 1fr; gap: 8px; }
   .footer-links { gap: 20px; }
-  .area-nav a, .area-nav .area-nav-map { flex-shrink: 0; }
+  .area-nav a { flex-shrink: 0; }
 }
 @media (hover: none) and (pointer: coarse) {
   body { cursor: auto; }
@@ -353,7 +359,10 @@ footer { padding: 60px 40px 40px; border-top: 1px solid rgba(240,237,232,0.08); 
 </header>
 
 <main id="venues-list-view">
-  <div class="area-nav" id="area-nav"></div>
+  <div class="area-nav-wrap">
+    <div class="area-nav" id="area-nav"></div>
+    <button class="area-nav-map" id="area-map-btn"><span class="pin-icon"></span> MAP</button>
+  </div>
   <div id="venue-map-wrap">
     <div id="venue-map-filters"></div>
     <div id="venue-map"></div>
@@ -423,11 +432,10 @@ let currentArea = 'ALL';
 let mapCity = null; // which city map is showing
 
 function buildAreaNav() {
-  const cities = [...new Set(VENUES.map(v => v.city))];
+  const cities = [...new Set(VENUES.map(v => v.city).filter(c => c && c !== 'undefined'))];
   const nav = document.getElementById('area-nav');
   nav.innerHTML = `<a href="#" data-area="ALL" class="active">ALL</a>` +
-    cities.map(c => `<a href="#" data-area="${c}">${c}</a>`).join('') +
-    `<button class="area-nav-map" id="area-map-btn"><span class="pin-icon"></span> MAP</button>`;
+    cities.map(c => `<a href="#" data-area="${c}">${c}</a>`).join('');
 
   nav.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', (e) => {
@@ -482,7 +490,7 @@ function applyAreaFilter() {
 
 /* RENDER LIST */
 function renderVenuesList() {
-  document.getElementById('venues-grid').innerHTML = VENUES.map((v, i) => {
+  document.getElementById('venues-grid').innerHTML = VENUES.filter(v => v.name && v.city && v.city !== 'undefined').map((v, i) => {
     const evCount = getVenueEvents(v.name).length;
     return `
       <a href="#venue/${v.id}" class="venue-card reveal" data-city="${v.city}" style="transition-delay:${i * 80}ms">
@@ -490,7 +498,7 @@ function renderVenuesList() {
           <div class="venue-card-city">${v.city}${v.area ? ' · ' + v.area : ''}</div>
           <div class="venue-card-name">${v.name}</div>
           <div class="venue-card-area">${v.capacity ? '~' + v.capacity : ''}</div>
-          <div class="venue-card-genre">${Array.isArray(v.genre) ? v.genre.join(' / ') : v.genre}</div>
+          <div class="venue-card-genre">${v.genre ? (Array.isArray(v.genre) ? v.genre.join(' / ') : v.genre) : ''}</div>
         </div>
         <div class="venue-card-arrow">VIEW →</div>
       </a>`;

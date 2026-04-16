@@ -184,19 +184,34 @@ body.rave-mode .festival-section:hover .festival-name {
 .month-nav a.past-month {
   opacity: 0.2;
   font-size: 9px;
+  display: none;
 }
+.month-nav a.past-month.year-open { display: inline-block; }
 .month-nav a.past-month:hover { opacity: 0.5; }
 .month-nav a.past-month.active { opacity: 0.8; }
-.month-nav .past-divider {
+.month-nav .year-toggle {
   font-family: var(--font-mono);
-  font-size: 8px;
+  font-size: 9px;
   letter-spacing: 0.15em;
-  opacity: 0.2;
+  opacity: 0.25;
   padding: 8px 16px;
   white-space: nowrap;
   align-self: center;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: var(--text);
+  transition: opacity 0.3s ease;
+  flex-shrink: 0;
+}
+.month-nav .year-toggle:first-of-type {
   border-left: 1px solid rgba(240,237,232,0.1);
   margin-left: 8px;
+}
+.month-nav .year-toggle:hover { opacity: 0.6; }
+.month-nav .year-toggle.active {
+  opacity: 1;
+  border-bottom: 1px solid var(--text);
 }
 
 /* ===================== FESTIVAL SECTIONS ===================== */
@@ -585,7 +600,7 @@ footer { border-top: 1px solid rgba(240,237,232,0.08); padding: 60px 40px; }
   .cursor-dot, .cursor-ring { display: none; }
   /* Show color images on touch since no hover */
   .festival-image-wrap img { filter: grayscale(0%); }
-  .nav-hamburger, .nav-overlay .nav-close, .nav-overlay .nav-back, .nav-overlay a { cursor: pointer; }
+  .nav-hamburger, .nav-overlay .nav-close, .nav-overlay .nav-back, .nav-overlay a, .year-toggle { cursor: pointer; }
 }
 </style>
 </head>
@@ -780,28 +795,93 @@ const observer = new IntersectionObserver((entries) => {
 /* ========== MONTH NAV ========== */
 let currentMonth = 'ALL';
 
+function getYearFromDate(dateStr) {
+  const [start] = dateStr.split('/');
+  return parseInt(start.split('-')[0], 10);
+}
+
+let openYear = null;
+
 function buildMonthNav() {
   const nav = document.getElementById('month-nav');
   const sorted = getSorted();
   const futureMonths = [...new Set(sorted.filter(f => isFuture(f.date)).map(f => getMonthFromDate(f.date)))].sort((a,b) => a - b);
-  const pastMonths = [...new Set(sorted.filter(f => !isFuture(f.date)).map(f => getMonthFromDate(f.date)))].sort((a,b) => a - b);
 
-  nav.innerHTML = `<a href="#" data-month="ALL" class="active">ALL</a>` +
-    futureMonths.map(m =>
-      `<a href="#" data-month="${m}">${MONTHS[m]}</a>`
-    ).join('') +
-    (pastMonths.length ? `<span class="past-divider">PAST</span>` +
-      pastMonths.map(m =>
-        `<a href="#" data-month="PAST-${m}" class="past-month">${MONTHS[m]}</a>`
-      ).join('') : '');
+  // Group past festivals by year → month
+  const pastByYear = {};
+  sorted.filter(f => !isFuture(f.date)).forEach(f => {
+    const y = getYearFromDate(f.date);
+    const m = getMonthFromDate(f.date);
+    if (!pastByYear[y]) pastByYear[y] = new Set();
+    pastByYear[y].add(m);
+  });
+  const pastYears = Object.keys(pastByYear).map(Number).sort((a,b) => b - a); // newest first
 
-  // Click handlers for filtering
+  let html = `<a href="#" data-month="ALL" class="active">ALL</a>`;
+  html += futureMonths.map(m =>
+    `<a href="#" data-month="${m}">${MONTHS[m]}</a>`
+  ).join('');
+
+  // Year toggles + their months
+  pastYears.forEach(y => {
+    html += `<button class="year-toggle" data-year="${y}">${y}</button>`;
+    const months = [...pastByYear[y]].sort((a,b) => a - b);
+    months.forEach(m => {
+      html += `<a href="#" data-month="PAST-${y}-${m}" data-year="${y}" class="past-month">${MONTHS[m]}</a>`;
+    });
+  });
+
+  nav.innerHTML = html;
+
+  // Year toggle click
+  nav.querySelectorAll('.year-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const y = parseInt(btn.dataset.year, 10);
+      if (openYear === y) {
+        // Close this year
+        openYear = null;
+        btn.classList.remove('active');
+        nav.querySelectorAll(`.past-month[data-year="${y}"]`).forEach(a => a.classList.remove('year-open'));
+        // Reset to ALL
+        currentMonth = 'ALL';
+        nav.querySelectorAll('a').forEach(a => a.classList.remove('active'));
+        nav.querySelector('[data-month="ALL"]').classList.add('active');
+        applyMonthFilter();
+      } else {
+        // Close previously open year
+        if (openYear !== null) {
+          nav.querySelector(`.year-toggle[data-year="${openYear}"]`)?.classList.remove('active');
+          nav.querySelectorAll(`.past-month[data-year="${openYear}"]`).forEach(a => {
+            a.classList.remove('year-open');
+            a.classList.remove('active');
+          });
+        }
+        openYear = y;
+        btn.classList.add('active');
+        nav.querySelectorAll(`.past-month[data-year="${y}"]`).forEach(a => a.classList.add('year-open'));
+        // Show all of that year
+        currentMonth = `YEAR-${y}`;
+        nav.querySelectorAll('a').forEach(a => a.classList.remove('active'));
+        applyMonthFilter();
+      }
+    });
+  });
+
+  // Month link click
   nav.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
       currentMonth = link.dataset.month;
       nav.querySelectorAll('a').forEach(a => a.classList.remove('active'));
       link.classList.add('active');
+      // If clicking a future month or ALL, close year toggles
+      if (!link.classList.contains('past-month')) {
+        if (openYear !== null) {
+          nav.querySelector(`.year-toggle[data-year="${openYear}"]`)?.classList.remove('active');
+          nav.querySelectorAll(`.past-month[data-year="${openYear}"]`).forEach(a => a.classList.remove('year-open'));
+          openYear = null;
+        }
+      }
       applyMonthFilter();
     });
   });
@@ -811,16 +891,20 @@ function applyMonthFilter() {
   document.querySelectorAll('.festival-month-group').forEach(group => {
     const gMonth = group.dataset.month;
     const gTime = group.dataset.time; // 'future' or 'past'
+    const gYear = group.dataset.year;
     if (currentMonth === 'ALL') {
       // Show only future festivals
       group.style.display = gTime === 'future' ? '' : 'none';
-    } else if (currentMonth === 'PAST') {
-      // Show all past festivals
-      group.style.display = gTime === 'past' ? '' : 'none';
+    } else if (currentMonth.startsWith('YEAR-')) {
+      // Show all festivals of a specific year
+      const targetYear = currentMonth.replace('YEAR-', '');
+      group.style.display = (gTime === 'past' && gYear === targetYear) ? '' : 'none';
     } else if (currentMonth.startsWith('PAST-')) {
-      // Show specific past month
-      const targetMonth = currentMonth.replace('PAST-', '');
-      group.style.display = (gTime === 'past' && gMonth === targetMonth) ? '' : 'none';
+      // Show specific past year+month (PAST-YYYY-M)
+      const parts = currentMonth.split('-');
+      const targetYear = parts[1];
+      const targetMonth = parts[2];
+      group.style.display = (gTime === 'past' && gYear === targetYear && gMonth === targetMonth) ? '' : 'none';
     } else {
       // Show specific future month
       group.style.display = (gTime === 'future' && gMonth === currentMonth) ? '' : 'none';
@@ -898,12 +982,21 @@ function renderFestivals() {
     html += '</div>';
   });
 
-  // Render past festivals (hidden by default via applyMonthFilter)
-  const pastKeys = Object.keys(pastGrouped).map(Number).sort((a,b) => a - b);
-  pastKeys.forEach(m => {
-    html += `<div class="festival-month-group" data-month="${m}" data-time="past">`;
-    pastGrouped[m].forEach((f, i) => {
-      html += renderFestivalCard(f, m, i);
+  // Render past festivals grouped by year then month (hidden by default via applyMonthFilter)
+  const pastByYearMonth = {};
+  sorted.filter(f => !isFuture(f.date)).forEach(f => {
+    const y = getYearFromDate(f.date);
+    const m = getMonthFromDate(f.date);
+    const key = `${y}-${m}`;
+    if (!pastByYearMonth[key]) pastByYearMonth[key] = { year: y, month: m, festivals: [] };
+    pastByYearMonth[key].festivals.push(f);
+  });
+  // Sort by year desc, then month asc
+  const pastEntries = Object.values(pastByYearMonth).sort((a, b) => b.year - a.year || a.month - b.month);
+  pastEntries.forEach(({ year, month, festivals }) => {
+    html += `<div class="festival-month-group" data-month="${month}" data-year="${year}" data-time="past">`;
+    festivals.forEach((f, i) => {
+      html += renderFestivalCard(f, month, i);
     });
     html += '</div>';
   });
