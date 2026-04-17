@@ -303,6 +303,12 @@ footer { padding: 60px 40px 40px; border-top: 1px solid rgba(240,237,232,0.08); 
   .venue-artist-row { grid-template-columns: 1fr auto; gap: 12px; }
   .va-genre { display: none; }
   .footer-top { flex-direction: column; gap: 24px; text-align: center; }
+  /* Full-width map on mobile — break out of parent padding */
+  #venue-map-wrap, #osaka-map-wrap, #nagoya-map-wrap, #kyoto-map-wrap, #hakuba-map-wrap {
+    margin: 0 -24px 32px;
+    border-left: none; border-right: none;
+  }
+  #venue-map, #osaka-map, #nagoya-map, #kyoto-map, #hakuba-map { height: 220px; }
 }
 @media (max-width: 768px) {
   .nav-hamburger { display: flex; top: 20px; right: 24px; }

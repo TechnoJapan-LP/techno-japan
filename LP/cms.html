@@ -775,21 +775,23 @@ function loadArtistDB(){
    LINEUP — MATCH ARTIST NAME → ID
    ============================================================== */
 function matchArtist(name){
-  const n=name.trim();
+  const n=String(name||'').trim();
   if(!n) return null;
   const lower=n.toLowerCase();
+  const aName=a=>String(a.name||'').toLowerCase();
+  const aId=a=>String(a.id||'').toLowerCase();
   // exact name match (case-insensitive)
-  const byName=ARTIST_DB.find(a=>a.name.toLowerCase()===lower);
+  const byName=ARTIST_DB.find(a=>aName(a)===lower);
   if(byName) return byName.id;
   // exact id match
-  const byId=ARTIST_DB.find(a=>a.id===lower);
+  const byId=ARTIST_DB.find(a=>aId(a)===lower);
   if(byId) return byId.id;
   // slug-style match: "DJ Nobu" → "dj-nobu"
   const slug=lower.replace(/[\s_]+/g,'-').replace(/[^a-z0-9-]/g,'');
-  const bySlug=ARTIST_DB.find(a=>a.id===slug);
+  const bySlug=ARTIST_DB.find(a=>aId(a)===slug);
   if(bySlug) return bySlug.id;
-  // partial: name contains or is contained
-  const byPartial=ARTIST_DB.find(a=>a.name.toLowerCase().includes(lower)||lower.includes(a.name.toLowerCase()));
+  // partial: name contains or is contained (but only for artist names >= 3 chars to avoid false positives)
+  const byPartial=ARTIST_DB.find(a=>{const nm=aName(a);return nm.length>=3&&(nm.includes(lower)||lower.includes(nm))});
   if(byPartial) return byPartial.id;
   return null;
 }
@@ -852,24 +854,36 @@ function processBulkLineup(){
   const text=document.getElementById('bulk-lineup-text').value;
   if(!text.trim()) return toast('Enter artist names','error');
   const names=text.split(/[,\n]+/).map(s=>s.trim()).filter(Boolean);
+  toast('Processing '+names.length+' artists...','info');
   loadArtistDB().then(()=>{
     let matched=0, unmatched=0;
     names.forEach(name=>{
-      const id=matchArtist(name);
-      if(id){
-        if(!lineups.f.includes(id)){lineups.f.push(id);matched++}
-      }else{
+      try{
+        const id=matchArtist(name);
+        if(id){
+          if(!lineups.f.includes(id)){lineups.f.push(id);matched++}
+        }else{
+          const tag='?'+name.trim();
+          if(!lineups.f.includes(tag)){lineups.f.push(tag);unmatched++}
+        }
+      }catch(e){
+        console.error('matchArtist error for "'+name+'":',e);
         const tag='?'+name.trim();
         if(!lineups.f.includes(tag)){lineups.f.push(tag);unmatched++}
       }
     });
     renderLineupTags('f');
     const statusEl=document.getElementById('lineup-fetch-status');
-    statusEl.style.display='block';
-    statusEl.style.background='rgba(45,143,255,.1)';statusEl.style.borderLeft='3px solid var(--blue)';statusEl.style.color='var(--blue)';
-    statusEl.textContent=names.length+' processed — '+matched+' matched, '+unmatched+' unregistered';
+    if(statusEl){
+      statusEl.style.display='block';
+      statusEl.style.background='rgba(45,143,255,.1)';statusEl.style.borderLeft='3px solid var(--blue)';statusEl.style.color='var(--blue)';
+      statusEl.textContent=names.length+' processed — '+matched+' matched, '+unmatched+' unregistered';
+    }
     document.getElementById('bulk-lineup-text').value='';
-    toast('Artists added','success');
+    toast('Added '+(matched+unmatched)+' artists','success');
+  }).catch(err=>{
+    console.error('processBulkLineup error:',err);
+    toast('Error: '+(err.message||err),'error');
   });
 }
 
@@ -948,7 +962,12 @@ function uploadFromUrl(prefix,type,pathFieldId,urlFieldId,previewId){
       if(d.success){
         toast('Google Driveにアップロード完了','success');
         document.getElementById(pathFieldId).value=d.path||'';
-        if(previewEl){previewEl.style.display='block';previewEl.innerHTML='<img src="'+esc(d.driveUrl||url)+'" alt="preview"><div class="preview-info">✓ アップロード済み — '+esc(d.path||'')+'</div>';}
+        if(previewEl){
+          // Google DriveのURLはプレビュー制限があるので、元のURLを優先表示
+          const previewSrc=url.startsWith('http')?url:(d.driveUrl||'');
+          previewEl.style.display='block';
+          previewEl.innerHTML='<img src="'+esc(previewSrc)+'" alt="preview" onerror="this.src=\''+esc(d.driveUrl||'')+'\';this.onerror=null"><div class="preview-info">✓ アップロード済み — '+esc(d.path||'')+'</div>';
+        }
       } else {
         toast(d.error||'アップロード失敗','error');
       }

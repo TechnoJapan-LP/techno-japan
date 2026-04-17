@@ -261,6 +261,27 @@ nav .nav-dropdown-menu-inner a:hover { opacity: 1; background: rgba(240,237,232,
 
 .artist-detail { padding: 40px 40px 120px; }
 
+.artist-detail-image {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto 60px;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: rgba(240,237,232,0.03);
+  opacity: 0;
+  animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 0.1s;
+}
+.artist-detail-image img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: grayscale(100%);
+  transition: filter 0.6s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.artist-detail-image:hover img {
+  filter: grayscale(0%);
+  transform: scale(1.02);
+}
+
 .artist-detail-header {
   display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
   padding-bottom: 60px; border-bottom: 1px solid rgba(240,237,232,0.08);
@@ -399,10 +420,27 @@ footer { padding: 60px 40px 40px; border-top: 1px solid rgba(240,237,232,0.08); 
   .artists-toolbar { padding: 32px 24px 0; }
   .artists-grid { grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 24px; }
   .artist-back { padding: 40px 24px 0; }
-  .artist-detail { padding: 32px 24px 80px; }
-  .artist-detail-header { grid-template-columns: 1fr; gap: 32px; }
-  .artist-event-row { grid-template-columns: 60px 1fr; gap: 16px; }
-  .artist-event-tag { grid-column: 2; }
+  .artist-detail { padding: 32px 20px 80px; }
+  .artist-detail-image { margin-bottom: 32px; aspect-ratio: 4 / 3; }
+  .artist-detail-header { grid-template-columns: 1fr; gap: 24px; padding-bottom: 40px; }
+  .artist-detail-name { font-size: clamp(40px, 12vw, 72px); }
+  .artist-detail-bio { font-size: 14px; line-height: 1.7; }
+  .artist-events { padding-top: 40px; }
+  .artist-events-title { margin-bottom: 20px; }
+  .artist-event-row {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "date tag"
+      "info info";
+    gap: 12px 16px;
+    padding: 20px 0;
+  }
+  .artist-event-row::before { inset: 0 -20px; }
+  .artist-event-date { grid-area: date; font-size: 18px; letter-spacing: 0.05em; }
+  .artist-event-info { grid-area: info; min-width: 0; }
+  .artist-event-name { font-size: 20px; line-height: 1.1; word-break: break-word; }
+  .artist-event-venue { font-size: 8px; margin-top: 4px; }
+  .artist-event-tag { grid-area: tag; align-self: center; font-size: 8px; padding: 4px 10px; white-space: nowrap; }
   .footer-top { flex-direction: column; gap: 24px; text-align: center; }
 }
 @media (max-width: 768px) {
@@ -671,7 +709,12 @@ function renderArtistDetail(id) {
     return `<a href="venues.html#venue/${v.id}" style="font-family:var(--font-mono);font-size:9px;letter-spacing:0.15em;padding:6px 16px;border:1px solid rgba(240,237,232,0.1);opacity:0.4;transition:opacity 0.3s ease;display:inline-block">${v.name} — ${v.city}</a>`;
   }).join('') : '';
 
+  const imageHtml = a.image
+    ? `<div class="artist-detail-image"><img src="${a.image}" alt="${a.name}" onerror="this.parentElement.style.display='none'"></div>`
+    : '';
+
   document.getElementById('artist-detail').innerHTML = `
+    ${imageHtml}
     <div class="artist-detail-header reveal">
       <div class="artist-detail-name">${a.name}</div>
       <div class="artist-detail-meta">
