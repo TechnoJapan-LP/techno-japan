@@ -926,6 +926,8 @@ function renderFestivalCard(f, m, i) {
         return `<a href="artists.html#artist/${id}" onclick="event.stopPropagation()">${name}</a>`;
       }).join('')}</div>`
     : '';
+  const genres = Array.isArray(f.genre) ? f.genre : (f.genre ? [f.genre] : []);
+  const locationText = [f.location, f.city].filter(Boolean).join(', ');
   return `
     <section class="festival-section reveal" style="transition-delay:${i * 100}ms">
       <div class="festival-layout" onclick="showDetail('${f.id}')">
@@ -935,20 +937,20 @@ function renderFestivalCard(f, m, i) {
         <div class="festival-info-col">
           <div class="festival-info-top">
             <div class="festival-month-label">${String(m + 1).padStart(2, '0')} / ${MONTHS[m]}</div>
-            <div class="festival-name">${f.name}</div>
-            <div class="festival-desc-jp">${f.desc}</div>
+            <div class="festival-name">${f.name || ''}</div>
+            <div class="festival-desc-jp">${f.desc || ''}</div>
             ${lineupHtml}
           </div>
           <div class="festival-info-bottom">
             <div class="festival-meta-row">
               <span class="festival-meta-label">LOCATION</span>
-              <span class="festival-meta-value">${f.location || ''}, ${f.city}</span>
+              <span class="festival-meta-value">${locationText}</span>
             </div>
             <div class="festival-meta-row">
               <span class="festival-meta-label">DATE</span>
               <span class="festival-meta-value">${formatFestDate(f.date)}</span>
             </div>
-            <div class="festival-tags">${f.genre.map(g => `<span class="festival-tag">${g}</span>`).join('')}</div>
+            <div class="festival-tags">${genres.map(g => `<span class="festival-tag">${g}</span>`).join('')}</div>
           </div>
         </div>
       </div>
