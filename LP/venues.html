@@ -652,6 +652,35 @@ let vmGenre = 'ALL';
 let vmType = null;
 let vmVisible = false;
 
+/* Mobile: first tap shows tooltip, second tap navigates. Desktop: single click navigates */
+let lastTappedPin = null;
+function isTouchDevice() {
+  return window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+}
+function attachPinBehavior(marker, venueId, map) {
+  marker.on('click', () => {
+    if (isTouchDevice()) {
+      if (lastTappedPin === marker) {
+        window.location.hash = 'venue/' + venueId;
+        lastTappedPin = null;
+      } else {
+        if (lastTappedPin) lastTappedPin.closeTooltip();
+        lastTappedPin = marker;
+        marker.openTooltip();
+      }
+    } else {
+      window.location.hash = 'venue/' + venueId;
+    }
+  });
+  // Reset selection when user taps on the map (not a pin)
+  if (map && !map._pinResetBound) {
+    map.on('click', () => {
+      if (lastTappedPin) { lastTappedPin.closeTooltip(); lastTappedPin = null; }
+    });
+    map._pinResetBound = true;
+  }
+}
+
 function initVenueMap() {
   if (vmMap) return;
   vmMap = L.map('venue-map', {
@@ -695,7 +724,7 @@ function renderVmMarkers() {
     const icon = L.divIcon({ className: '', html: `<div class="${cls}"></div>`, iconSize: [9,9], iconAnchor: [4.5,4.5] });
     const m = L.marker([c.lat, c.lng], { icon }).addTo(vmMap);
     m.bindTooltip(c.name, { className: 'vm-label', direction: 'right', offset: [8,0], permanent: false });
-    m.on('click', () => { window.location.hash = 'venue/' + c.id; });
+    attachPinBehavior(m, c.id, vmMap);
     vmMarkers.push(m);
   });
 }
@@ -752,7 +781,7 @@ function renderOmMarkers() {
     const icon = L.divIcon({ className: '', html: `<div class="${cls}"></div>`, iconSize: [9,9], iconAnchor: [4.5,4.5] });
     const m = L.marker([c.lat, c.lng], { icon }).addTo(omMap);
     m.bindTooltip(c.name, { className: 'vm-label', direction: 'right', offset: [8,0], permanent: false });
-    m.on('click', () => { window.location.hash = 'venue/' + c.id; });
+    attachPinBehavior(m, c.id, omMap);
     omMarkers.push(m);
   });
 }
@@ -788,7 +817,7 @@ function renderNmMarkers() {
     const icon = L.divIcon({ className: '', html: `<div class="${cls}"></div>`, iconSize: [9,9], iconAnchor: [4.5,4.5] });
     const m = L.marker([c.lat, c.lng], { icon }).addTo(nmMap);
     m.bindTooltip(c.name, { className: 'vm-label', direction: 'right', offset: [8,0], permanent: false });
-    m.on('click', () => { window.location.hash = 'venue/' + c.id; });
+    attachPinBehavior(m, c.id, nmMap);
     nmMarkers.push(m);
   });
 }
@@ -824,7 +853,7 @@ function renderKmMarkers() {
     const icon = L.divIcon({ className: '', html: `<div class="${cls}"></div>`, iconSize: [9,9], iconAnchor: [4.5,4.5] });
     const m = L.marker([c.lat, c.lng], { icon }).addTo(kmMap);
     m.bindTooltip(c.name, { className: 'vm-label', direction: 'right', offset: [8,0], permanent: false });
-    m.on('click', () => { window.location.hash = 'venue/' + c.id; });
+    attachPinBehavior(m, c.id, kmMap);
     kmMarkers.push(m);
   });
 }
@@ -860,7 +889,7 @@ function renderHmMarkers() {
     const icon = L.divIcon({ className: '', html: `<div class="${cls}"></div>`, iconSize: [9,9], iconAnchor: [4.5,4.5] });
     const m = L.marker([c.lat, c.lng], { icon }).addTo(hmMap);
     m.bindTooltip(c.name, { className: 'vm-label', direction: 'right', offset: [8,0], permanent: false });
-    m.on('click', () => { window.location.hash = 'venue/' + c.id; });
+    attachPinBehavior(m, c.id, hmMap);
     hmMarkers.push(m);
   });
 }

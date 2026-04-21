@@ -599,8 +599,15 @@ footer { border-top: 1px solid rgba(240,237,232,0.08); padding: 60px 40px; }
   body { cursor: auto; }
   .cursor-dot, .cursor-ring { display: none; }
   /* Show color images on touch since no hover */
-  .festival-image-wrap img { filter: grayscale(0%); }
+  .festival-image-wrap img { filter: grayscale(0%) !important; }
+  /* Tap feedback on mobile (simulates hover) */
+  .festival-section:active { background: rgba(240,237,232,0.03); }
+  .festival-section:active .festival-image-wrap img { transform: scale(1.05); }
   .nav-hamburger, .nav-overlay .nav-close, .nav-overlay .nav-back, .nav-overlay a, .year-toggle { cursor: pointer; }
+}
+/* Fallback for browsers that don't support (hover: none) */
+@media (max-width: 768px) {
+  .festival-image-wrap img { filter: grayscale(0%) !important; }
 }
 </style>
 </head>
