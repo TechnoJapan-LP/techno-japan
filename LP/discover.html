@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DISCOVER — TECHNO JAPAN</title>
 <meta name="description" content="Explore Japan's underground techno and house scene. Stories, interviews, reports and more.">
+<link rel="alternate" type="application/rss+xml" title="TECHNO JAPAN — RSS" href="https://techno-japan.media/rss.xml">
 <link rel="canonical" href="https://techno-japan.media/discover.html">
 
 <!-- Open Graph -->
@@ -581,6 +582,18 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
   .sort-tab, .cat-btn, .load-more-btn, .discover-card { cursor: pointer; }
   .nav-hamburger, .nav-overlay .nav-close, .nav-overlay .nav-back, .nav-overlay a { cursor: pointer; }
 }
+/* NEWSLETTER */
+.newsletter { border-top: 1px solid rgba(240,237,232,0.08); padding: 80px 40px; text-align: center; position: relative; overflow: hidden; }
+.newsletter-eyebrow { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; opacity: 0.4; margin-bottom: 16px; }
+.newsletter-title { font-family: var(--font-display); font-size: clamp(36px, 5vw, 64px); text-transform: uppercase; line-height: 1; margin-bottom: 16px; }
+.newsletter-desc { font-family: var(--font-body); font-weight: 200; font-size: 14px; line-height: 1.8; opacity: 0.5; max-width: 480px; margin: 0 auto 32px; }
+.newsletter-form { display: flex; gap: 0; max-width: 440px; margin: 0 auto; border: 1px solid rgba(240,237,232,0.15); }
+.newsletter-form input { flex: 1; min-width: 0; background: transparent; border: none; outline: none; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; color: var(--text); padding: 14px 20px; }
+.newsletter-form input::placeholder { color: rgba(240,237,232,0.3); }
+.newsletter-form button { background: var(--text); color: var(--bg); border: none; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; padding: 14px 24px; cursor: pointer; transition: opacity 0.3s ease; }
+.newsletter-form button:hover { opacity: 0.85; }
+@media (max-width: 768px) { .newsletter { padding: 60px 24px; } .newsletter-form { flex-direction: column; } .newsletter-form button { padding: 14px; } }
+
 </style>
 <script type="application/ld+json">
 {
@@ -712,6 +725,20 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
     </a>
   </div>
 </div>
+
+<!-- NEWSLETTER -->
+<section class="newsletter">
+  <div class="newsletter-eyebrow">Newsletter</div>
+  <div class="newsletter-title">Stay in the loop.</div>
+  <div class="newsletter-desc">Monthly digest of new festivals, artists, and stories from Japan's underground.</div>
+  <form class="newsletter-form" action="https://formsubmit.co/tatsuya25shibata@gmail.com" method="POST">
+    <input type="email" name="email" required placeholder="your@email.com">
+    <input type="hidden" name="_subject" value="Newsletter signup — TECHNO JAPAN">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_next" value="https://techno-japan.media/?subscribed=1">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
 
 <footer>
   <div class="footer-top">

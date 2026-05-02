@@ -1,4 +1,4 @@
-name: Generate sitemap.xml
+name: Generate sitemap.xml & rss.xml
 
 on:
   push:
@@ -6,6 +6,7 @@ on:
     paths:
       - 'LP/data.js'
       - 'scripts/generate-sitemap.py'
+      - 'scripts/generate-rss.py'
       - '.github/workflows/generate-meta.yml'
   schedule:
     # Run daily at 03:00 UTC (12:00 JST)
@@ -28,14 +29,17 @@ jobs:
       - name: Generate sitemap.xml
         run: python3 scripts/generate-sitemap.py
 
+      - name: Generate rss.xml
+        run: python3 scripts/generate-rss.py
+
       - name: Commit changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet LP/sitemap.xml; then
-            echo "No changes to sitemap.xml"
+          if git diff --quiet LP/sitemap.xml LP/rss.xml; then
+            echo "No changes to sitemap.xml or rss.xml"
           else
-            git add LP/sitemap.xml
-            git commit -m "chore: regenerate sitemap.xml [skip ci]"
+            git add LP/sitemap.xml LP/rss.xml
+            git commit -m "chore: regenerate sitemap.xml & rss.xml [skip ci]"
             git push
           fi
