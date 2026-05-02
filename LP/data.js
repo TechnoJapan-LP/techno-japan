@@ -1557,3 +1557,125 @@ const VENUES = [
     type: "festival-image",
   },
 ];
+/* ==========================================================
+   ARTICLES — Editorial content for DISCOVER page
+
+   Schema:
+   {
+     id: 'unique-slug',           // URL slug (kebab-case)
+     title: 'Article Title',
+     excerpt: 'Short summary (1-2 sentences)',
+     body: '<p>HTML body content</p>',  // Full article HTML
+     category: 'FESTIVAL'|'EVENT'|'CLUB'|'INTERVIEW'|'REPORT'|'COLUMN'|'NEWS'|'PARTY'|'RAVE',
+     date: 'YYYY-MM-DD',          // Publication date
+     author: 'Author Name',       // Optional
+     image: 'images/articles/xxx.jpg', // Hero image (optional)
+     featured: true|false,        // Show in featured slot
+     views: 0,                    // For sorting by popularity
+     readTime: 5,                 // Minutes
+     tags: ['tag1', 'tag2'],      // Optional tags
+     status: 'published',         // 'published' or 'draft'
+   }
+   ========================================================== */
+const ARTICLES = [
+  {
+    id: 'welcome-to-techno-japan',
+    title: 'Welcome to TECHNO JAPAN',
+    excerpt: 'A new editorial home for Japan\'s underground techno and house music scene. Here\'s what we\'re about, and what\'s coming.',
+    body: `
+      <p>TECHNO JAPAN is a cultural media platform built around one simple idea: Japan's underground electronic music scene deserves better documentation.</p>
+
+      <p>For decades, the country has been home to some of the most uncompromising clubs, the most adventurous festivals, and the most talented selectors in the world. Yet much of this story has lived in fragments — Instagram posts, flyers, word of mouth.</p>
+
+      <h2>What we cover</h2>
+      <p>We focus on three pillars:</p>
+      <ul>
+        <li><strong>Festivals</strong> — outdoor gatherings, multi-day adventures, mountain raves</li>
+        <li><strong>Venues</strong> — the clubs and spaces where the sound lives</li>
+        <li><strong>Artists</strong> — DJs, producers, selectors who define the sound</li>
+      </ul>
+
+      <h2>Editorial perspective</h2>
+      <p>This is not a calendar app. We go beyond listings — introducing artists, venues, and festivals with editorial perspective and scene credibility. Every piece is written by people who actually go out, dig deep, and care about getting it right.</p>
+
+      <p>We believe Japan's underground deserves to be more visible — to audiences both inside Japan and across the world.</p>
+
+      <h2>What's next</h2>
+      <p>We're publishing weekly. Subscribe to the newsletter to get monthly digests, or follow us on Instagram <a href="https://www.instagram.com/techno.japan_/" target="_blank" rel="noopener">@techno.japan_</a> for daily updates.</p>
+
+      <p>Welcome aboard.</p>
+    `,
+    category: 'COLUMN',
+    date: '2026-05-01',
+    author: 'TECHNO JAPAN',
+    image: '',
+    featured: true,
+    views: 0,
+    readTime: 3,
+    tags: ['announcement', 'editorial'],
+    status: 'published',
+  },
+  {
+    id: 'tokyo-underground-map',
+    title: 'The Complete Guide to Tokyo\'s Underground Club Scene',
+    excerpt: 'From the tight basements of Shibuya to the industrial spaces of Koenji — a deep guide to where the sound lives in Tokyo.',
+    body: `
+      <p>Tokyo's club scene is sprawling, chaotic, and rewarding for those willing to dig. This guide is built for the curious — whether you live here or you're visiting for a weekend.</p>
+
+      <h2>Shibuya — the epicenter</h2>
+      <p><strong>WOMB</strong> remains the iconic name, with its cathedral-like main floor and uncompromising programming. Newer rooms like <strong>Circus Tokyo</strong> have built a reputation for forward-thinking electronic bookings — a more intimate, sound-system-focused experience.</p>
+
+      <h2>Daikanyama and the periphery</h2>
+      <p><strong>UNIT</strong> in Daikanyama runs three floors with a strong sound system and consistent lineups. SALOON, on Cat Street, has emerged as a go-to spot for house-leaning nights with international guests.</p>
+
+      <h2>Beyond Shibuya</h2>
+      <p>If you only stay in Shibuya, you miss half the scene. <strong>Forest Limit</strong> in Hatagaya is a closet-sized room that has incubated some of Japan's most experimental nights. <strong>SOLFA</strong> in Nakameguro books a different crowd — minimal, deep house, longer sets.</p>
+
+      <h2>How to navigate</h2>
+      <p>Most nights start late (after midnight) and run until first train. Trains stop around 1AM in most lines. Bring cash for entry — many doors don't take cards.</p>
+
+      <p>Check our <a href="venues.html">Venues</a> page for the full list with addresses, capacity, and recent events.</p>
+    `,
+    category: 'CLUB',
+    date: '2026-04-25',
+    author: 'TECHNO JAPAN',
+    image: '',
+    featured: false,
+    views: 0,
+    readTime: 6,
+    tags: ['tokyo', 'clubs', 'guide'],
+    status: 'published',
+  },
+  {
+    id: 'rdc-2026-preview',
+    title: 'Rainbow Disco Club 2026: What to Expect This Year',
+    excerpt: 'As the festival enters its newest chapter in the hills of Higashi-Izu, we look at the lineup, the location, and why RDC remains one of Asia\'s most essential outdoor gatherings.',
+    body: `
+      <p>Rainbow Disco Club has always been about more than music. The Higashi-Izu Cross Country Course transforms each year into something between a campsite, a small village, and a dancefloor.</p>
+
+      <h2>The lineup</h2>
+      <p>This year's edition features a strong international roster (Antal & Hunee, Daphni, Floating Points, Helena Hauff, Four Tet) balanced with Japanese names like DJ Maria, Gonno, and Jonathan Kusuma. The booking philosophy — selectors who play long, deep, and across genres — has remained consistent for over a decade.</p>
+
+      <h2>The location</h2>
+      <p>Higashi-Izu is a 90-minute drive from Tokyo, but it feels like a different country. Mountains on three sides, ocean on the other. The festival uses the natural terrain as the architecture of the dancefloor — no big stages, no neon, just sound and space.</p>
+
+      <h2>Practical notes</h2>
+      <ul>
+        <li>Camping is on-site. Bring layers — nights get cold even in May.</li>
+        <li>The festival starts mid-day and runs until late. Pace yourself.</li>
+        <li>Food vendors are good but expensive. Cash works best.</li>
+      </ul>
+
+      <p>For more info, see the <a href="festivals.html#festival/rainbow-disco-club">festival page</a>.</p>
+    `,
+    category: 'FESTIVAL',
+    date: '2026-04-15',
+    author: 'TECHNO JAPAN',
+    image: '',
+    featured: false,
+    views: 0,
+    readTime: 5,
+    tags: ['rainbow-disco-club', 'festival', 'shizuoka', 'outdoor'],
+    status: 'published',
+  },
+];

@@ -259,6 +259,62 @@ nav .nav-dropdown-menu-inner a:hover { opacity: 1; background: rgba(240,237,232,
 }
 .side-card:hover .side-card-arrow::after { opacity: 0.8; }
 
+/* ===================== ARTICLE DETAIL VIEW ===================== */
+.article-detail { padding: 120px 0 80px; max-width: 760px; margin: 0 auto; }
+.article-detail-inner { padding: 0 40px; }
+.article-back {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em;
+  text-transform: uppercase; opacity: 0.4; transition: opacity 0.3s ease;
+  margin-bottom: 60px;
+}
+.article-back:hover { opacity: 1; }
+.article-back .arrow { width: 24px; height: 1px; background: var(--text); position: relative; display: inline-block; }
+.article-back .arrow::before { content: ''; position: absolute; left: 0; top: -3px; width: 7px; height: 7px; border-left: 1px solid var(--text); border-bottom: 1px solid var(--text); transform: rotate(45deg); }
+.article-meta-top {
+  display: flex; align-items: center; gap: 16px;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em;
+  text-transform: uppercase; opacity: 0.5; margin-bottom: 24px;
+}
+.article-meta-top .cat-pill { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); opacity: 1; }
+.article-meta-top .cat-pill::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+.article-detail h1 {
+  font-family: var(--font-display); font-size: clamp(36px, 6vw, 72px);
+  line-height: 1.05; text-transform: uppercase; margin-bottom: 24px;
+}
+.article-excerpt {
+  font-family: var(--font-body); font-weight: 300;
+  font-size: clamp(16px, 1.6vw, 19px); line-height: 1.7; opacity: 0.7;
+  margin-bottom: 40px; padding-bottom: 32px;
+  border-bottom: 1px solid rgba(240,237,232,0.1);
+}
+.article-hero-img { margin: 0 -40px 48px; aspect-ratio: 16/9; overflow: hidden; background: rgba(240,237,232,0.04); }
+.article-hero-img img { width: 100%; height: 100%; object-fit: cover; }
+.article-body { font-family: var(--font-body); font-weight: 300; font-size: 16px; line-height: 1.85; color: rgba(240,237,232,0.85); }
+.article-body p { margin-bottom: 24px; }
+.article-body h2 { font-family: var(--font-display); font-size: clamp(24px, 3vw, 32px); text-transform: uppercase; line-height: 1.1; margin: 48px 0 16px; color: var(--text); }
+.article-body h3 { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; margin: 36px 0 12px; color: var(--text); }
+.article-body ul, .article-body ol { margin: 0 0 24px 24px; padding: 0; }
+.article-body li { margin-bottom: 8px; }
+.article-body a { color: var(--text); border-bottom: 1px solid rgba(240,237,232,0.3); transition: border-color 0.2s ease; }
+.article-body a:hover { border-bottom-color: var(--text); }
+.article-body strong { color: var(--text); font-weight: 500; }
+.article-body blockquote { border-left: 2px solid var(--accent); padding: 8px 0 8px 24px; margin: 32px 0; font-style: italic; opacity: 0.85; }
+.article-footer { margin-top: 60px; padding-top: 40px; border-top: 1px solid rgba(240,237,232,0.1); }
+.article-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; }
+.article-tag { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; padding: 6px 12px; border: 1px solid rgba(240,237,232,0.15); opacity: 0.6; }
+.article-share { display: flex; gap: 8px; align-items: center; margin-top: 24px; }
+.article-share-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.4; margin-right: 8px; }
+.article-share-btn { width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid rgba(240,237,232,0.12); background: transparent; cursor: pointer; transition: border-color 0.3s ease; color: var(--text); opacity: 0.6; }
+.article-share-btn:hover { border-color: rgba(240,237,232,0.4); opacity: 1; }
+.article-share-btn svg { width: 14px; height: 14px; fill: currentColor; }
+@media (max-width: 768px) {
+  .article-detail { padding: 100px 0 60px; }
+  .article-detail-inner { padding: 0 24px; }
+  .article-hero-img { margin: 0 -24px 32px; }
+  .article-back { margin-bottom: 40px; }
+}
+
 /* ===================== ARTICLE FEED BELOW ===================== */
 .feed-section {
   padding: 80px 40px 0;
@@ -653,6 +709,19 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
   <button class="nav-back" onclick="document.querySelector('.nav-overlay').classList.remove('active');document.querySelector('.nav-hamburger').classList.remove('active');history.back()">← BACK</button>
 </div>
 
+<!-- ===================== ARTICLE DETAIL VIEW ===================== -->
+<article class="article-detail" id="article-detail" style="display:none">
+  <div class="article-detail-inner">
+    <a class="article-back" href="discover.html">
+      <span class="arrow"></span> ALL STORIES
+    </a>
+    <div id="article-content"></div>
+  </div>
+</article>
+
+<!-- ===================== LIST VIEW WRAPPER ===================== -->
+<div id="list-view">
+
 <!-- ===================== TAGLINE ===================== -->
 <div class="top-bar">
   <h1 class="tagline">The media exploring cultures and electronic music in Japan.</h1>
@@ -731,6 +800,8 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
   </div>
 </div>
 
+</div><!-- /#list-view -->
+
 <!-- NEWSLETTER -->
 <section class="newsletter">
   <div class="newsletter-eyebrow">Newsletter</div>
@@ -766,9 +837,10 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
   </div>
 </footer>
 
+<script src="data.js?v=3"></script>
 <script>
-/* ========== ARTICLE DATA ========== */
-const ARTICLES = [
+/* ========== ARTICLE DATA (legacy fallback if data.js missing) ========== */
+const ARTICLES_FALLBACK = [
   {
     id: 'rdc-2026-preview',
     title: 'Rainbow Disco Club 2026: What to Expect This Year',
@@ -891,6 +963,11 @@ const ARTICLES = [
     readTime: 4
   }
 ];
+
+/* Use ARTICLES from data.js if loaded, else fall back to inline placeholders */
+if (typeof ARTICLES === 'undefined' || !ARTICLES.length) {
+  window.ARTICLES = ARTICLES_FALLBACK;
+}
 
 /* ========== HELPERS ========== */
 const MONTHS_S = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
@@ -1050,11 +1127,92 @@ const revealObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
+/* ========== ARTICLE DETAIL ========== */
+function renderArticleDetail(id) {
+  const a = ARTICLES.find(x => x.id === id);
+  const detailEl = document.getElementById('article-detail');
+  const listEl = document.getElementById('list-view');
+  const contentEl = document.getElementById('article-content');
+
+  if (!a) {
+    listEl.style.display = '';
+    detailEl.style.display = 'none';
+    return;
+  }
+
+  // SEO: update title and meta description for this article
+  document.title = `${a.title} — TECHNO JAPAN`;
+  const descTag = document.querySelector('meta[name="description"]');
+  if (descTag) descTag.setAttribute('content', a.excerpt || '');
+
+  const url = `https://techno-japan.media/discover.html#article/${a.id}`;
+  const t = encodeURIComponent(`${a.title} — TECHNO JAPAN`);
+  const u = encodeURIComponent(url);
+
+  const tagsHtml = (a.tags || []).map(t =>
+    `<span class="article-tag">${t}</span>`).join('');
+
+  contentEl.innerHTML = `
+    <div class="article-meta-top">
+      <span class="cat-pill">${a.category}</span>
+      <span>${formatDate(a.date)}</span>
+      <span>${a.readTime || 5} MIN READ</span>
+      ${a.author ? `<span>BY ${a.author}</span>` : ''}
+    </div>
+    <h1>${a.title}</h1>
+    <div class="article-excerpt">${a.excerpt || ''}</div>
+    ${a.image ? `<div class="article-hero-img"><img src="${a.image}" alt="${a.title}" loading="lazy" decoding="async"></div>` : ''}
+    <div class="article-body">${a.body || ''}</div>
+    <div class="article-footer">
+      ${tagsHtml ? `<div class="article-tags">${tagsHtml}</div>` : ''}
+      <div class="article-share">
+        <span class="article-share-label">SHARE</span>
+        <a href="https://twitter.com/intent/tweet?text=${t}&url=${u}" target="_blank" rel="noopener" class="article-share-btn" title="X">
+          <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u=${u}" target="_blank" rel="noopener" class="article-share-btn" title="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647z"/></svg>
+        </a>
+        <a href="https://social-plugins.line.me/lineit/share?url=${u}" target="_blank" rel="noopener" class="article-share-btn" title="LINE">
+          <svg viewBox="0 0 24 24"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zM24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+        </a>
+        <button type="button" class="article-share-btn" data-copy="${url}" title="Copy URL" onclick="navigator.clipboard.writeText(this.dataset.copy);this.style.background='rgba(255,255,255,0.1)';setTimeout(()=>this.style.background='',1000)">
+          <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+        </button>
+      </div>
+    </div>
+  `;
+
+  listEl.style.display = 'none';
+  detailEl.style.display = 'block';
+  window.scrollTo(0, 0);
+  bindCursorExpand();
+}
+
+function showList() {
+  document.getElementById('list-view').style.display = '';
+  document.getElementById('article-detail').style.display = 'none';
+  document.title = 'DISCOVER — TECHNO JAPAN';
+}
+
+function handleHash() {
+  const hash = window.location.hash;
+  if (hash.startsWith('#article/')) {
+    const id = hash.replace('#article/', '');
+    renderArticleDetail(id);
+  } else {
+    showList();
+  }
+}
+
+window.addEventListener('hashchange', handleHash);
+
 /* ========== INIT ========== */
 renderMainGrid();
 renderCategoryNav();
 renderFeed();
 bindCursorExpand();
+handleHash();
 </script>
 <!-- Service Worker registration -->
 <script>
