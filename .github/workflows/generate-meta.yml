@@ -1,0 +1,41 @@
+name: Generate sitemap.xml
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'LP/data.js'
+      - 'scripts/generate-sitemap.py'
+      - '.github/workflows/generate-meta.yml'
+  schedule:
+    # Run daily at 03:00 UTC (12:00 JST)
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Generate sitemap.xml
+        run: python3 scripts/generate-sitemap.py
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet LP/sitemap.xml; then
+            echo "No changes to sitemap.xml"
+          else
+            git add LP/sitemap.xml
+            git commit -m "chore: regenerate sitemap.xml [skip ci]"
+            git push
+          fi

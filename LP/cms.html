@@ -165,6 +165,29 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
 .recent-item{display:block;width:100%;text-align:left;padding:6px 10px;background:none;border:none;color:var(--text2);font-family:var(--font-mono);font-size:.7rem;cursor:pointer;border-radius:var(--radius);margin-bottom:2px;letter-spacing:.5px;transition:.15s}
 .recent-item:hover{background:var(--bg3);color:var(--text)}
 
+/* ===================== PUBLISHING SECTION ===================== */
+.pub-section{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-top:12px}
+.pub-section h3{font-family:var(--font-mono);font-size:.7rem;letter-spacing:1.5px;color:var(--text2);margin-bottom:12px}
+.pub-section .form-group{margin-bottom:10px}
+.pub-section label{display:block;font-size:.7rem;color:var(--text3);font-family:var(--font-mono);margin-bottom:4px;letter-spacing:.5px}
+.status-pill{display:inline-block;font-family:var(--font-mono);font-size:.65rem;letter-spacing:1px;padding:2px 8px;border-radius:10px;text-transform:uppercase;font-weight:700}
+.status-draft{background:rgba(120,120,120,.15);color:#999;border:1px solid #555}
+.status-published{background:rgba(45,255,110,.15);color:var(--green);border:1px solid var(--green)}
+.status-scheduled{background:rgba(45,143,255,.15);color:var(--blue);border:1px solid var(--blue)}
+.status-review{background:rgba(255,200,45,.15);color:var(--yellow);border:1px solid var(--yellow)}
+.completeness-bar{display:inline-block;width:50px;height:5px;background:var(--bg3);border-radius:2px;overflow:hidden;vertical-align:middle;margin-right:6px}
+.completeness-bar div{height:100%;transition:.3s}
+.completeness-low{background:var(--accent)}
+.completeness-mid{background:var(--yellow)}
+.completeness-high{background:var(--green)}
+.tag-input-wrap{display:flex;gap:4px;flex-wrap:wrap;padding:6px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);min-height:36px}
+.tag-input-wrap input{background:none;border:none;outline:none;color:var(--text);flex:1;min-width:80px;font-size:.85rem}
+.tag-chip{display:inline-flex;align-items:center;gap:4px;background:var(--bg4);padding:3px 10px;border-radius:12px;font-size:.7rem;color:var(--text);border:1px solid var(--border)}
+.tag-chip .x{cursor:pointer;color:var(--text3);font-size:.9rem;line-height:1}
+.tag-chip .x:hover{color:var(--accent)}
+.char-count{font-size:.65rem;color:var(--text3);font-family:var(--font-mono);text-align:right;margin-top:2px}
+.char-count.over{color:var(--accent)}
+
 /* ===================== LIVE PREVIEW OVERLAY ===================== */
 .preview-overlay{display:none;position:fixed;inset:0;z-index:600;background:#0a0a0a;overflow-y:auto}
 .preview-overlay.show{display:block}
@@ -229,11 +252,15 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
     <button onclick="switchSection('artist',this)"><span class="icon">&#9651;</span><span>Artist</span></button>
     <button onclick="switchSection('event',this)"><span class="icon">&#9724;</span><span>Event</span></button>
     <button onclick="switchSection('article',this)"><span class="icon">&#9998;</span><span>Article</span></button>
+    <button onclick="switchSection('author',this)"><span class="icon">&#9787;</span><span>Author</span></button>
   </nav>
   <div id="recent-items" style="padding:0 4px;border-top:1px solid var(--border);max-height:240px;overflow-y:auto"></div>
   <div style="padding:12px"><button class="btn btn-sm" style="width:100%;font-size:.7rem" onclick="exportDataJs()">⬇ Export data.js</button></div>
+  <div style="padding:0 12px 8px"><button class="btn btn-sm" style="width:100%;font-size:.7rem" onclick="openImageLibrary()">🖼 Images</button></div>
   <div style="padding:0 12px 8px"><button class="btn btn-sm" style="width:100%;font-size:.7rem" onclick="openTrash()">🗑 Trash <span id="trash-count" style="opacity:.6"></span></button></div>
   <div style="padding:0 12px 8px"><button class="btn btn-sm" style="width:100%;font-size:.7rem" onclick="openStats()">📊 Stats</button></div>
+  <div style="padding:0 12px 8px"><button class="btn btn-sm" style="width:100%;font-size:.7rem" onclick="openHomeDashboard()">🏠 Home</button></div>
+  <div style="padding:0 12px 8px"><button class="btn btn-sm" style="width:100%;font-size:.7rem" onclick="openFindReplace()">🔍 Find & Replace</button></div>
   <div style="padding:0 12px 12px"><button class="btn btn-sm" style="width:100%;font-size:.7rem;color:var(--text3)" onclick="cmsLogout()">🔒 Logout</button></div>
   <div class="sidebar-footer">v1.5</div>
 </aside>
@@ -249,14 +276,14 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
   </div>
   <div class="tab-content active" id="venue-tab-list">
     <div style="margin-bottom:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-      <input type="text" id="venue-search" placeholder="Search name / city / area / type..." oninput="filterVenueList()" style="flex:1;min-width:180px;padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);font-size:.85rem;color:var(--text)">
+      <input type="text" id="venue-search" placeholder="Search name / city / area / type..." oninput="debouncedFilterVenue()" style="flex:1;min-width:180px;padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);font-size:.85rem;color:var(--text)">
       <div style="display:flex;gap:4px;align-items:center">
         <span style="font-family:var(--font-mono);font-size:.65rem;letter-spacing:1px;color:var(--text3)">SORT:</span>
         <button class="btn btn-sm btn-accent" onclick="sortVenueList('name')">Name</button>
         <button class="btn btn-sm" onclick="sortVenueList('city')">City</button>
         <button class="btn btn-sm" onclick="sortVenueList('type')">Type</button>
       </div>
-      <button class="btn btn-sm" onclick="loadList('venue')">Refresh</button>
+      <button class="btn btn-sm" onclick="loadList('venue',{force:true})">Refresh</button>
     </div>
     <div class="data-list" id="venue-list"><div class="data-list-empty">Click "Refresh" to load data</div></div>
   </div>
@@ -300,7 +327,7 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
   </div>
   <div class="tab-content active" id="festival-tab-list">
     <div style="margin-bottom:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-      <input type="text" id="festival-search" placeholder="Search name / city / location..." oninput="filterFestivalList()" style="flex:1;min-width:180px;padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);font-size:.85rem;color:var(--text)">
+      <input type="text" id="festival-search" placeholder="Search name / city / location..." oninput="debouncedFilterFestival()" style="flex:1;min-width:180px;padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);font-size:.85rem;color:var(--text)">
       <div class="view-toggle" id="festival-view-toggle">
         <button class="active" data-view="list" onclick="setFestivalView('list')">📋 List</button>
         <button data-view="calendar" onclick="setFestivalView('calendar')">📅 Calendar</button>
@@ -311,7 +338,7 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
         <button class="btn btn-sm" onclick="sortFestivalList('name')">Name</button>
         <button class="btn btn-sm" onclick="sortFestivalList('city')">City</button>
       </div>
-      <button class="btn btn-sm" onclick="loadList('festival')">Refresh</button>
+      <button class="btn btn-sm" onclick="loadList('festival',{force:true})">Refresh</button>
     </div>
     <div style="margin-bottom:12px;display:flex;gap:6px;align-items:center;flex-wrap:wrap" id="festival-year-filter"></div>
     <div class="data-list" id="festival-list"><div class="data-list-empty">Click "Refresh" to load data</div></div>
@@ -377,14 +404,14 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
   </div>
   <div class="tab-content active" id="artist-tab-list">
     <div style="margin-bottom:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-      <input type="text" id="artist-search" placeholder="Search name / ID..." oninput="filterArtistList()" style="flex:1;min-width:180px;padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);font-size:.85rem;color:var(--text)">
+      <input type="text" id="artist-search" placeholder="Search name / ID..." oninput="debouncedFilterArtist()" style="flex:1;min-width:180px;padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);font-size:.85rem;color:var(--text)">
       <div style="display:flex;gap:4px;align-items:center">
         <span style="font-family:var(--font-mono);font-size:.65rem;letter-spacing:1px;color:var(--text3)">SORT:</span>
         <button class="btn btn-sm btn-accent" onclick="sortArtistList('name')">Name</button>
         <button class="btn btn-sm" onclick="sortArtistList('city')">City</button>
         <button class="btn btn-sm" onclick="sortArtistList('genre')">Genre</button>
       </div>
-      <button class="btn btn-sm" onclick="loadList('artist')">Refresh</button>
+      <button class="btn btn-sm" onclick="loadList('artist',{force:true})">Refresh</button>
     </div>
     <div class="data-list" id="artist-list"><div class="data-list-empty">Click "Refresh" to load data</div></div>
   </div>
@@ -424,7 +451,7 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
   </div>
   <div class="tab-content active" id="event-tab-list">
     <div style="margin-bottom:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-      <input type="text" id="event-search" placeholder="Search name / venue / city..." oninput="filterEventList()" style="flex:1;min-width:180px;padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);font-size:.85rem;color:var(--text)">
+      <input type="text" id="event-search" placeholder="Search name / venue / city..." oninput="debouncedFilterEvent()" style="flex:1;min-width:180px;padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);font-size:.85rem;color:var(--text)">
       <div class="view-toggle" id="event-view-toggle">
         <button class="active" data-view="list" onclick="setEventView('list')">📋 List</button>
         <button data-view="calendar" onclick="setEventView('calendar')">📅 Calendar</button>
@@ -435,7 +462,7 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
         <button class="btn btn-sm" onclick="sortEventList('name')">Name</button>
         <button class="btn btn-sm" onclick="sortEventList('venue')">Venue</button>
       </div>
-      <button class="btn btn-sm" onclick="loadList('event')">Refresh</button>
+      <button class="btn btn-sm" onclick="loadList('event',{force:true})">Refresh</button>
     </div>
     <div class="data-list" id="event-list"><div class="data-list-empty">Click "Refresh" to load data</div></div>
   </div>
@@ -469,14 +496,14 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
   </div>
   <div class="tab-content active" id="article-tab-list">
     <div style="margin-bottom:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-      <input type="text" id="article-search" placeholder="Search title / category..." oninput="filterArticleList()" style="flex:1;min-width:180px;padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);font-size:.85rem;color:var(--text)">
+      <input type="text" id="article-search" placeholder="Search title / category..." oninput="debouncedFilterArticle()" style="flex:1;min-width:180px;padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);font-size:.85rem;color:var(--text)">
       <div style="display:flex;gap:4px;align-items:center">
         <span style="font-family:var(--font-mono);font-size:.65rem;letter-spacing:1px;color:var(--text3)">SORT:</span>
         <button class="btn btn-sm btn-accent" onclick="sortArticleList('date')">Date</button>
         <button class="btn btn-sm" onclick="sortArticleList('title')">Title</button>
         <button class="btn btn-sm" onclick="sortArticleList('category')">Category</button>
       </div>
-      <button class="btn btn-sm" onclick="loadList('article')">Refresh</button>
+      <button class="btn btn-sm" onclick="loadList('article',{force:true})">Refresh</button>
     </div>
     <div class="data-list" id="article-list"><div class="data-list-empty">Click "Refresh" to load data</div></div>
   </div>
@@ -499,6 +526,38 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
       </div>
     </div>
     <div class="output-panel" id="output-article"><div class="output-header"><span>data.js output</span><button class="btn btn-sm" onclick="copyOutput('article')">Copy</button></div><div class="output-code" id="code-article"></div></div>
+  </div>
+</div>
+
+<!-- ==================== AUTHOR ==================== -->
+<div id="sec-author" class="section">
+  <div class="main-header"><h1>AUTHOR</h1><p>執筆者・編集者の管理</p></div>
+  <div class="tab-bar">
+    <button class="active" onclick="switchTab('author','list')">List</button>
+    <button onclick="switchTab('author','form')">New</button>
+  </div>
+  <div class="tab-content active" id="author-tab-list">
+    <div style="margin-bottom:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <input type="text" id="author-search" placeholder="Search name / id..." oninput="debouncedFilterAuthor()" style="flex:1;min-width:180px;padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);font-size:.85rem;color:var(--text)">
+      <button class="btn btn-sm" onclick="loadList('author',{force:true})">Refresh</button>
+    </div>
+    <div class="data-list" id="author-list"><div class="data-list-empty">Click "Refresh" to load data</div></div>
+  </div>
+  <div class="tab-content" id="author-tab-form">
+    <div class="edit-banner" id="author-edit-banner"><span>Editing: <strong id="author-edit-name"></strong></span><button class="btn btn-sm btn-yellow" onclick="saveEdit('author')">Save Changes</button><button class="btn btn-sm" onclick="cancelEdit('author')">Cancel</button></div>
+    <div class="form-grid" id="form-author">
+      <div class="form-group"><label>ID</label><input type="text" id="au-id" placeholder="e.g. john-smith"></div>
+      <div class="form-group"><label>Name</label><input type="text" id="au-name" placeholder="e.g. John Smith"></div>
+      <div class="form-group"><label>Image (URL)</label><input type="url" id="au-image" placeholder="https://..."></div>
+      <div class="form-group"><label>Instagram</label><input type="url" id="au-instagram" placeholder="https://instagram.com/..."></div>
+      <div class="form-group"><label>Twitter / X</label><input type="url" id="au-twitter" placeholder="https://x.com/..."></div>
+      <div class="form-group"><label>Website</label><input type="url" id="au-website" placeholder="https://..."></div>
+      <div class="form-group full"><label>Bio</label><textarea id="au-bio" rows="6" placeholder="Author biography..." style="width:100%"></textarea></div>
+      <div class="full btn-row" id="author-btn-new">
+        <button class="btn btn-accent" onclick="submitToSheet('author')">Save to Spreadsheet</button>
+        <button class="btn" onclick="resetForm('author')">Reset</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -618,7 +677,7 @@ const GRADIENT_PRESETS = [
   {label:'Ocean',   val:'linear-gradient(135deg, #0a0a14 0%, #0e1a2a 40%, #08141e 70%, #06080a 100%)'},
   {label:'Ash',     val:'linear-gradient(135deg, #0e0e0e 0%, #1a1a1a 40%, #121212 70%, #080808 100%)'},
 ];
-const SHEET_MAP = { venue:'VENUES', festival:'FESTIVALS', artist:'ARTISTS', event:'EVENTS', article:'ARTICLES' };
+const SHEET_MAP = { venue:'VENUES', festival:'FESTIVALS', artist:'ARTISTS', event:'EVENTS', article:'ARTICLES', author:'AUTHORS' };
 const PREFIX_MAP = { venue:'v', festival:'f', artist:'a', event:'e', article:'ar' };
 
 /* ==============================================================
@@ -638,10 +697,50 @@ document.addEventListener('DOMContentLoaded', async () => {
   initGenreChips('v-genre');
   initGenreChips('f-genre');
   initGradientPresets();
+  injectPublishingSections();
   renderRecentItems();
   renderTrashCount();
   initKeyboardShortcuts();
+  loadAuthorsForDropdown();
+  // バックグラウンドで全セクションを先読み（キャッシュ未存在のものだけ）
+  scheduleBackgroundPreload();
 });
+
+function scheduleBackgroundPreload(){
+  const sections = ['festival','venue','artist','event','article','author'];
+  // requestIdleCallback または setTimeout でブラウザがアイドルな時に実行
+  const idle = window.requestIdleCallback || (cb => setTimeout(cb, 1500));
+  sections.forEach((s, i) => {
+    idle(() => {
+      // キャッシュにあればスキップ
+      if(readSheetCache(s)){ listCache[s] = readSheetCache(s); return; }
+      // 800ms ずつ間を空けて GAS 負荷を分散
+      setTimeout(() => loadList(s, {silent:true}), i * 800);
+    }, {timeout: 5000});
+  });
+}
+
+function injectPublishingSections(){
+  ['venue','festival','artist','event','article'].forEach(section => {
+    const btnRow = document.getElementById(section+'-btn-new');
+    if(btnRow){
+      btnRow.insertAdjacentHTML('beforebegin', buildPublishingSection(section));
+    }
+  });
+}
+
+function loadAuthorsForDropdown(){
+  fetch(GAS_URL+'?action=get_sheet&sheet=AUTHORS')
+    .then(r=>r.json()).then(d=>{
+      if(d.status==='ok' && d.rows){
+        const sel = document.getElementById('ar-authorId');
+        if(sel){
+          sel.innerHTML = '<option value="">— None —</option>' +
+            d.rows.map(a => `<option value="${esc(a.id)}">${esc(a.name||a.id)}</option>`).join('');
+        }
+      }
+    }).catch(()=>{});
+}
 
 /* ==============================================================
    NAVIGATION
@@ -1108,8 +1207,253 @@ function processBulkLineup(){
    IMAGE UPLOAD
    ============================================================== */
 /* ==============================================================
+   PUBLISHING SECTION (Status, OG, Meta, Tags, Notes)
+   各フォームに動的に挿入
+   ============================================================== */
+const PUB_PREFIXES = {venue:'v', festival:'f', artist:'a', event:'e', article:'ar'};
+function buildPublishingSection(section){
+  const p = PUB_PREFIXES[section];
+  const isArticle = section === 'article';
+  const nameField = section === 'article' ? 'title' : 'name';
+  const descField = section === 'artist' ? 'bio' : section === 'article' ? 'excerpt' : 'desc';
+  const descLabel = section === 'artist' ? 'Bio' : section === 'article' ? 'Excerpt' : 'Description';
+  const enInputType = section === 'artist' || section === 'article' ? 'textarea' : 'textarea';
+  return `
+    <div class="form-group full">
+      <div class="pub-section">
+        <h3>🌐 ENGLISH VERSION</h3>
+        <div class="form-group">
+          <label>${nameField === 'title' ? 'Title' : 'Name'} (EN)</label>
+          <input type="text" id="${p}-${nameField}En" placeholder="English ${nameField}..." style="width:100%">
+          <button class="btn btn-sm" style="margin-top:4px" onclick="autoTranslateField('${p}-${nameField}','${p}-${nameField}En','jp-to-en')">JP → EN (auto)</button>
+        </div>
+        <div class="form-group">
+          <label>${descLabel} (EN)</label>
+          <textarea id="${p}-${descField}En" rows="4" placeholder="English ${descLabel.toLowerCase()}..." style="width:100%"></textarea>
+          <button class="btn btn-sm" style="margin-top:4px" onclick="autoTranslateField('${p}-${descField}','${p}-${descField}En','jp-to-en')">JP → EN (auto)</button>
+        </div>
+      </div>
+      <div class="pub-section">
+        <h3>📤 PUBLISHING & SEO</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="form-group">
+            <label>Status</label>
+            <select id="${p}-status" style="width:100%">
+              <option value="draft">📝 Draft</option>
+              <option value="review">👀 In Review</option>
+              <option value="published" selected>✅ Published</option>
+              <option value="scheduled">⏰ Scheduled</option>
+            </select>
+          </div>
+          ${isArticle ? `<div class="form-group"><label>Author</label><select id="${p}-authorId" style="width:100%"><option value="">— None —</option></select></div>` : `<div class="form-group"><label>Featured</label><select id="${p}-featuredFlag" style="width:100%"><option value="false">No</option><option value="true">⭐ Yes</option></select></div>`}
+        </div>
+        ${isArticle ? `<div class="form-group"><label>Publish At (予約公開)</label><input type="datetime-local" id="${p}-publishAt" style="width:100%"></div>` : ''}
+        <div class="form-group">
+          <label>OG Image URL <span class="label-hint">(SNSシェア用画像)</span></label>
+          <input type="url" id="${p}-ogImage" placeholder="https://... (空ならメイン画像を使用)" style="width:100%">
+        </div>
+        <div class="form-group">
+          <label>Meta Description <span class="label-hint">(SEO用 / 160文字以内推奨)</span></label>
+          <textarea id="${p}-metaDescription" rows="2" placeholder="検索結果に表示される説明文..." style="width:100%" oninput="updateCharCount('${p}-metaDescription',160)"></textarea>
+          <div class="char-count" id="${p}-metaDescription-count">0 / 160</div>
+        </div>
+        <div class="form-group">
+          <label>Tags <span class="label-hint">(Enter または , で追加)</span></label>
+          <div class="tag-input-wrap" id="${p}-tags-wrap" onclick="document.getElementById('${p}-tags-input').focus()">
+            <input type="text" id="${p}-tags-input" placeholder="Add tag..." onkeydown="handleTagKey(event,'${p}')">
+          </div>
+          <input type="hidden" id="${p}-tags" value="">
+        </div>
+        <div class="form-group">
+          <label>Editor Notes <span class="label-hint">(チーム内メモ・公開されません)</span></label>
+          <textarea id="${p}-editorNotes" rows="2" placeholder="例: 画像差し替え予定 / 〇〇さんに確認" style="width:100%"></textarea>
+        </div>
+        <div id="${p}-edit-history" style="font-size:.65rem;color:var(--text3);font-family:var(--font-mono);margin-top:8px"></div>
+      </div>
+    </div>`;
+}
+
+function updateCharCount(id, max){
+  const v = document.getElementById(id)?.value || '';
+  const el = document.getElementById(id+'-count');
+  if(!el) return;
+  el.textContent = v.length + ' / ' + max;
+  el.classList.toggle('over', v.length > max);
+}
+
+/* TAG INPUT */
+const tagState = {};
+function handleTagKey(e, prefix){
+  if(e.key === 'Enter' || e.key === ','){
+    e.preventDefault();
+    const input = e.target;
+    const val = input.value.trim().replace(/,/g,'');
+    if(val){
+      addTag(prefix, val);
+      input.value = '';
+    }
+  } else if(e.key === 'Backspace' && !e.target.value){
+    const tags = (tagState[prefix] || []);
+    if(tags.length){
+      tags.pop();
+      renderTags(prefix);
+    }
+  }
+}
+function addTag(prefix, tag){
+  if(!tagState[prefix]) tagState[prefix] = [];
+  if(!tagState[prefix].includes(tag)) tagState[prefix].push(tag);
+  renderTags(prefix);
+}
+function removeTag(prefix, tag){
+  if(!tagState[prefix]) return;
+  tagState[prefix] = tagState[prefix].filter(t => t !== tag);
+  renderTags(prefix);
+}
+function renderTags(prefix){
+  const wrap = document.getElementById(prefix+'-tags-wrap');
+  const hidden = document.getElementById(prefix+'-tags');
+  if(!wrap) return;
+  const tags = tagState[prefix] || [];
+  hidden.value = tags.join(',');
+  wrap.innerHTML = tags.map(t => `<span class="tag-chip">${esc(t)} <span class="x" onclick="removeTag('${prefix}','${esc(t).replace(/'/g,"\\'")}')">×</span></span>`).join('') +
+    `<input type="text" id="${prefix}-tags-input" placeholder="${tags.length?'':'Add tag...'}" onkeydown="handleTagKey(event,'${prefix}')">`;
+}
+function setTagsValue(prefix, value){
+  tagState[prefix] = String(value||'').split(',').map(s=>s.trim()).filter(Boolean);
+  renderTags(prefix);
+}
+
+/* ==============================================================
+   PUBLISHING FIELDS — payload helpers
+   ============================================================== */
+function getPubFields(section){
+  const p = PUB_PREFIXES[section];
+  if(!p) return {};
+  const fields = {
+    status: g(p+'-status') || 'draft',
+    ogImage: g(p+'-ogImage'),
+    metaDescription: g(p+'-metaDescription'),
+    tags: g(p+'-tags'),
+    editorNotes: g(p+'-editorNotes'),
+    lastEditedAt: new Date().toISOString(),
+    lastEditedBy: 'editor'  // future: multi-user支援時に拡張
+  };
+  if(section === 'article'){
+    fields.publishAt = g(p+'-publishAt');
+    fields.authorId = g(p+'-authorId');
+  }
+  // Multi-language
+  const descField = section === 'artist' ? 'bio' : section === 'article' ? 'excerpt' : 'desc';
+  const nameField = section === 'article' ? 'title' : 'name';
+  fields[descField + '_en'] = g(p+'-'+descField+'En');
+  fields[nameField + '_en'] = g(p+'-'+nameField+'En');
+  return fields;
+}
+function setPubFields(section, row){
+  const p = PUB_PREFIXES[section];
+  if(!p) return;
+  setVal(p+'-status', row.status || 'published');
+  setVal(p+'-ogImage', row.ogImage || '');
+  setVal(p+'-metaDescription', row.metaDescription || '');
+  setVal(p+'-editorNotes', row.editorNotes || '');
+  setTagsValue(p, row.tags || '');
+  // Multi-language fields
+  const descField = section === 'artist' ? 'bio' : section === 'article' ? 'excerpt' : 'desc';
+  const nameField = section === 'article' ? 'title' : 'name';
+  setVal(p+'-'+descField+'En', row[descField+'_en'] || '');
+  setVal(p+'-'+nameField+'En', row[nameField+'_en'] || '');
+  if(section === 'article'){
+    setVal(p+'-publishAt', row.publishAt || '');
+    setVal(p+'-authorId', row.authorId || '');
+  }
+  updateCharCount(p+'-metaDescription', 160);
+  // 編集履歴表示
+  const hist = document.getElementById(p+'-edit-history');
+  if(hist){
+    if(row.lastEditedAt){
+      const d = new Date(row.lastEditedAt);
+      hist.textContent = '⏱ Last edited: ' + d.toLocaleString('ja-JP') + (row.lastEditedBy ? ' by '+row.lastEditedBy : '');
+    } else hist.textContent = '';
+  }
+}
+function clearPubFields(section){
+  const p = PUB_PREFIXES[section];
+  if(!p) return;
+  setVal(p+'-status', 'published');
+  setVal(p+'-ogImage', '');
+  setVal(p+'-metaDescription', '');
+  setVal(p+'-editorNotes', '');
+  tagState[p] = [];
+  renderTags(p);
+  if(section === 'article'){
+    setVal(p+'-publishAt', '');
+    setVal(p+'-authorId', '');
+  }
+  const hist = document.getElementById(p+'-edit-history');
+  if(hist) hist.textContent = '';
+}
+
+/* ==============================================================
+   COMPLETENESS SCORE
+   ============================================================== */
+const REQUIRED_FIELDS = {
+  venue: ['name','city','image','desc','genre'],
+  festival: ['name','city','date','image','desc','genre'],
+  artist: ['name','city','image','bio','genre'],
+  event: ['name','date','venue'],
+  article: ['title','date','image','excerpt']
+};
+const OPTIONAL_FIELDS = {
+  venue: ['url','instagram','address','lat','capacity','metaDescription','tags'],
+  festival: ['url','ticketUrl','instagram','address','lat','flyer','heroGradient','metaDescription','tags','lineup'],
+  artist: ['country','instagram','soundcloud','website','metaDescription','tags'],
+  event: ['city','time','desc','lineup','link'],
+  article: ['category','readTime','featured','metaDescription','tags','ogImage']
+};
+function computeCompleteness(section, row){
+  const required = REQUIRED_FIELDS[section] || [];
+  const optional = OPTIONAL_FIELDS[section] || [];
+  const all = [...required, ...optional];
+  let filled = 0;
+  let requiredMissing = [];
+  all.forEach(f => {
+    const v = row[f];
+    const has = v !== undefined && v !== null && String(v).trim() !== '';
+    if(has) filled++;
+    else if(required.includes(f)) requiredMissing.push(f);
+  });
+  const score = all.length ? Math.round((filled/all.length)*100) : 100;
+  return { score, requiredMissing, total: all.length, filled };
+}
+function completenessBarHtml(score){
+  const cls = score < 50 ? 'completeness-low' : score < 80 ? 'completeness-mid' : 'completeness-high';
+  return `<span class="completeness-bar" title="${score}% complete"><div class="${cls}" style="width:${score}%"></div></span><span style="font-family:var(--font-mono);font-size:.7rem;color:var(--text2)">${score}%</span>`;
+}
+
+/* ==============================================================
    TRANSLATE — JP/EN
    ============================================================== */
+function autoTranslateField(srcId, destId, direction){
+  const src = document.getElementById(srcId);
+  const dest = document.getElementById(destId);
+  if(!src || !dest) return;
+  const text = src.value.trim();
+  if(!text) return toast('Source field is empty','error');
+  const btn = event && event.target;
+  if(btn){btn.disabled=true;btn.dataset.orig=btn.textContent;btn.innerHTML='Translating<span class="spinner"></span>';}
+  fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'translate', text, direction})})
+    .then(r=>r.json()).then(d=>{
+      if(btn){btn.disabled=false;btn.textContent=btn.dataset.orig||'Translate';}
+      if(d.status==='ok'&&d.translated){
+        dest.value=d.translated;
+        toast('Translated','success');
+      } else toast(d.message||'Translation failed','error');
+    }).catch(e=>{
+      if(btn){btn.disabled=false;btn.textContent=btn.dataset.orig||'Translate';}
+      toast('Translation error','error');
+    });
+}
 function translateField(fieldId, direction){
   const el = document.getElementById(fieldId);
   if(!el) return;
@@ -1479,23 +1823,98 @@ function aiGenerate(section){
    ============================================================== */
 let festivalYearFilter = 'ALL';
 
-function loadList(section){
-  const container=document.getElementById(section+'-list');
-  container.innerHTML='<div class="data-list-loading">Loading<span class="spinner"></span></div>';
+/* ==============================================================
+   PERFORMANCE — debounce helper
+   ============================================================== */
+function debounce(fn, wait){
+  let t;
+  return function(){
+    const args = arguments, ctx = this;
+    clearTimeout(t);
+    t = setTimeout(() => fn.apply(ctx, args), wait);
+  };
+}
+// デバウンス版 filter（200ms 待ってから実行）
+const debouncedFilterArtist = debounce(()=>filterArtistList(), 200);
+const debouncedFilterFestival = debounce(()=>filterFestivalList(), 200);
+const debouncedFilterVenue = debounce(()=>filterVenueList(), 200);
+const debouncedFilterEvent = debounce(()=>filterEventList(), 200);
+const debouncedFilterArticle = debounce(()=>filterArticleList(), 200);
+const debouncedFilterAuthor = debounce(()=>filterAuthorList(), 200);
+
+/* ==============================================================
+   PERFORMANCE — localStorage cache layer
+   ============================================================== */
+const SHEET_CACHE_TTL = 5 * 60 * 1000; // 5分
+function readSheetCache(section){
+  try {
+    const raw = localStorage.getItem('sheet_cache_'+section);
+    if(!raw) return null;
+    const {ts, rows} = JSON.parse(raw);
+    if(Date.now() - ts > SHEET_CACHE_TTL) return null;
+    return rows;
+  } catch(e) { return null; }
+}
+function writeSheetCache(section, rows){
+  try { localStorage.setItem('sheet_cache_'+section, JSON.stringify({ts:Date.now(), rows})); }
+  catch(e) { /* localStorage full */ }
+}
+function invalidateSheetCache(section){
+  if(section) localStorage.removeItem('sheet_cache_'+section);
+  else ['venue','festival','artist','event','article','author'].forEach(s=>localStorage.removeItem('sheet_cache_'+s));
+}
+
+function applyLoadedRows(section, rows, container){
+  listCache[section] = rows;
+  if(section==='festival') buildYearFilter(rows);
+  if(section==='artist'){filterArtistList();return}
+  if(section==='festival'){filterFestivalList();return}
+  if(section==='venue'){filterVenueList();return}
+  if(section==='event'){filterEventList();return}
+  if(section==='article'){filterArticleList();return}
+  if(section==='author'){filterAuthorList();return}
+  renderList(section, rows);
+}
+
+function loadList(section, opts){
+  opts = opts || {};
+  const force = !!opts.force;
+  const silent = !!opts.silent; // バックグラウンド先読み用
+  const container = document.getElementById(section+'-list');
+
+  // キャッシュチェック
+  if(!force){
+    const cached = readSheetCache(section);
+    if(cached){
+      if(container && !silent) applyLoadedRows(section, cached, container);
+      else if(silent){ listCache[section] = cached; }
+      // バックグラウンドで再取得（stale-while-revalidate）
+      fetch(GAS_URL+'?action=get_sheet&sheet='+SHEET_MAP[section])
+        .then(r=>r.json()).then(d=>{
+          if(d.status==='ok'&&d.rows){
+            writeSheetCache(section, d.rows);
+            // データに変更があれば再描画
+            if(JSON.stringify(d.rows)!==JSON.stringify(cached) && container && container.offsetParent !== null){
+              applyLoadedRows(section, d.rows, container);
+            } else {
+              listCache[section] = d.rows;
+            }
+          }
+        }).catch(()=>{});
+      return;
+    }
+  }
+
+  if(container && !silent) container.innerHTML='<div class="data-list-loading">Loading<span class="spinner"></span></div>';
   fetch(GAS_URL+'?action=get_sheet&sheet='+SHEET_MAP[section])
     .then(r=>r.json()).then(d=>{
       if(d.status==='ok'&&d.rows){
-        listCache[section]=d.rows;
-        if(section==='festival') buildYearFilter(d.rows);
-        if(section==='artist'){filterArtistList();return}
-        if(section==='festival'){filterFestivalList();return}
-        if(section==='venue'){filterVenueList();return}
-        if(section==='event'){filterEventList();return}
-        if(section==='article'){filterArticleList();return}
-        renderList(section, d.rows);
+        writeSheetCache(section, d.rows);
+        if(silent){ listCache[section] = d.rows; return; }
+        applyLoadedRows(section, d.rows, container);
       }
-      else{container.innerHTML='<div class="data-list-empty">Failed to load</div>';toast('Load failed','error')}
-    }).catch(err=>{container.innerHTML='<div class="data-list-empty">Error: '+err.message+'</div>';toast('Load error','error')});
+      else if(container){container.innerHTML='<div class="data-list-empty">Failed to load</div>';toast('Load failed','error')}
+    }).catch(err=>{if(container && !silent){container.innerHTML='<div class="data-list-empty">Error: '+err.message+'</div>';toast('Load error','error')}});
 }
 
 function buildYearFilter(rows){
@@ -1537,14 +1956,36 @@ function renderList(section, rows){
     artist:  [{k:'name',l:'Name'},{k:'city',l:'City'},{k:'genre',l:'Genre'}],
     event:   [{k:'name',l:'Name'},{k:'date',l:'Date'},{k:'venue',l:'Venue'},{k:'city',l:'City'}],
     article: [{k:'title',l:'Title'},{k:'category',l:'Category'},{k:'date',l:'Date'},{k:'readTime',l:'Read Time'}],
+    author:  [{k:'name',l:'Name'},{k:'id',l:'ID'},{k:'website',l:'Website'}],
   }[section];
-  const ths=cols.map(c=>'<th>'+c.l+'</th>').join('')+'<th></th>';
+  const showStatus = section !== 'author';
+  const ths=(showStatus?'<th style="width:40px">📊</th><th style="width:90px">Status</th>':'')+cols.map(c=>'<th>'+c.l+'</th>').join('')+'<th></th>';
   const trs=rows.map(r=>{
+    let prefix='';
+    if(showStatus){
+      const status=String(r.status||'published').toLowerCase();
+      const statusBadge='<span class="status-pill status-'+esc(status)+'">'+esc(status)+'</span>';
+      const comp=computeCompleteness(section, r);
+      const compHtml=completenessBarHtml(comp.score);
+      const noteIcon=r.editorNotes?' 📝':'';
+      prefix='<td>'+compHtml+'</td><td>'+statusBadge+noteIcon+'</td>';
+    }
     const tds=cols.map(c=>'<td>'+esc(r[c.k])+'</td>').join('');
     const nameVal=esc(r.name||r.title||r.id||'');
-    return '<tr>'+tds+'<td class="actions"><button class="btn btn-sm btn-blue" onclick="editRow(\''+section+'\','+r._row+')">Edit</button><button class="btn btn-sm btn-accent" onclick="confirmDelete(\''+section+'\','+r._row+',\''+nameVal.replace(/'/g,"\\'")+'\')">Delete</button></td></tr>';
+    return '<tr>'+prefix+tds+'<td class="actions"><button class="btn btn-sm btn-blue" onclick="editRow(\''+section+'\','+r._row+')">Edit</button><button class="btn btn-sm btn-accent" onclick="confirmDelete(\''+section+'\','+r._row+',\''+nameVal.replace(/'/g,"\\'")+'\')">Delete</button></td></tr>';
   }).join('');
   c.innerHTML='<table class="data-table"><thead><tr>'+ths+'</tr></thead><tbody>'+trs+'</tbody></table>';
+}
+
+/* ==============================================================
+   AUTHOR LIST — SEARCH
+   ============================================================== */
+function filterAuthorList(){
+  if(!listCache.author)return;
+  const q=(document.getElementById('author-search')?.value||'').toLowerCase();
+  let rows=listCache.author;
+  if(q) rows=rows.filter(r=>String(r.name||'').toLowerCase().includes(q)||String(r.id||'').toLowerCase().includes(q));
+  renderList('author', rows);
 }
 
 /* ==============================================================
@@ -1743,6 +2184,14 @@ function editRow(section, rowNum){
     setVal('ar-views',row.views); setVal('ar-featured',String(row.featured==='true'||row.featured===true));
     setVal('ar-excerpt',row.excerpt);
   }
+  else if(section==='author'){
+    setVal('au-id',row.id); setVal('au-name',row.name); setVal('au-bio',row.bio);
+    setVal('au-image',row.image); setVal('au-instagram',row.instagram);
+    setVal('au-twitter',row.twitter); setVal('au-website',row.website);
+  }
+
+  // Publishing fields をセット（author以外）
+  if(section !== 'author') setPubFields(section, row);
 
   document.getElementById(section+'-edit-name').textContent=row.name||row.title||row.id||'';
   document.getElementById(section+'-edit-banner').classList.add('show');
@@ -1790,6 +2239,12 @@ function saveEdit(section){
       date:g('ar-date'),image:g('ar-image'),readTime:g('ar-readTime'),
       views:g('ar-views'),featured:g('ar-featured'),excerpt:g('ar-excerpt')});
   }
+  else if(section==='author'){
+    Object.assign(payload,{id:g('au-id'),name:g('au-name'),bio:g('au-bio'),
+      image:g('au-image'),instagram:g('au-instagram'),twitter:g('au-twitter'),website:g('au-website')});
+  }
+  // Publishing fields をマージ（author以外）
+  if(section !== 'author') Object.assign(payload, getPubFields(section));
 
   const unregisteredArtists=(section==='festival')
     ? lineups.f.filter(a=>a.startsWith('?')).map(a=>a.substring(1))
@@ -1800,8 +2255,9 @@ function saveEdit(section){
     .then(r=>r.json()).then(d=>{
       if(d.status==='ok'||d.success){
         toast('Updated','success');
-        if(unregisteredArtists.length) autoRegisterArtists(unregisteredArtists);
-        cancelEdit(section);switchTab(section,'list');loadList(section);
+        invalidateSheetCache(section);
+        if(unregisteredArtists.length){autoRegisterArtists(unregisteredArtists);invalidateSheetCache('artist');}
+        cancelEdit(section);switchTab(section,'list');loadList(section, {force:true});
       }
       else toast('Update failed: '+(d.message||''),'error');
     }).catch(()=>toast('Update error','error'));
@@ -1842,9 +2298,290 @@ function executeDelete(){
         if(row) saveDeletedItem(section, row);
         toast('Deleted — undo via "Trash" in sidebar','success');
         renderTrashCount();
-        loadList(section);
+        invalidateSheetCache(section);
+        loadList(section, {force:true});
       } else toast('Delete failed: '+(d.message||''),'error');
     }).catch(()=>toast('Delete error','error'));
+}
+
+/* ==============================================================
+   FIND & REPLACE / BULK EDIT
+   ============================================================== */
+function openFindReplace(){
+  const overlay=document.createElement('div');
+  overlay.className='dialog-overlay show';
+  overlay.style.zIndex=700;
+  overlay.innerHTML=`<div class="dialog-box" style="max-width:560px">
+    <h3>🔍 Find & Replace</h3>
+    <p style="color:var(--text2);font-size:.85rem;margin-bottom:14px">全シートを横断して文字列を検索・置換します。</p>
+    <div class="form-group">
+      <label style="display:block;font-size:.7rem;color:var(--text3);margin-bottom:4px">Find</label>
+      <input type="text" id="fr-find" placeholder="検索する文字列" style="width:100%;padding:8px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--text)">
+    </div>
+    <div class="form-group" style="margin-top:8px">
+      <label style="display:block;font-size:.7rem;color:var(--text3);margin-bottom:4px">Replace with (空なら検索のみ)</label>
+      <input type="text" id="fr-replace" placeholder="置換後の文字列" style="width:100%;padding:8px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--text)">
+    </div>
+    <div class="form-group" style="margin-top:8px">
+      <label style="display:block;font-size:.7rem;color:var(--text3);margin-bottom:4px">Section</label>
+      <select id="fr-section" style="width:100%;padding:8px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--text)">
+        <option value="all">All Sections</option>
+        <option value="venue">Venues</option>
+        <option value="festival">Festivals</option>
+        <option value="artist">Artists</option>
+        <option value="event">Events</option>
+        <option value="article">Articles</option>
+      </select>
+    </div>
+    <div class="form-group" style="margin-top:8px">
+      <label><input type="checkbox" id="fr-case"> Case sensitive</label>
+    </div>
+    <div id="fr-results" style="margin-top:12px;max-height:240px;overflow-y:auto;font-size:.8rem"></div>
+    <div class="btn-row" style="margin-top:16px;justify-content:flex-end">
+      <button class="btn btn-sm" onclick="this.closest('.dialog-overlay').remove()">Close</button>
+      <button class="btn btn-sm btn-blue" onclick="findReplaceSearch()">Find</button>
+      <button class="btn btn-sm btn-yellow" onclick="findReplaceExecute()">Replace All</button>
+    </div>
+  </div>`;
+  document.body.appendChild(overlay);
+}
+async function findReplaceSearch(){
+  const find=document.getElementById('fr-find').value;
+  if(!find) return toast('Enter search text','error');
+  const sectionSel=document.getElementById('fr-section').value;
+  const caseSensitive=document.getElementById('fr-case').checked;
+  const sections=sectionSel==='all'?['venue','festival','artist','event','article']:[sectionSel];
+  document.getElementById('fr-results').innerHTML='<div style="color:var(--text3)">Searching...</div>';
+  // load all needed lists
+  await Promise.all(sections.map(s=>!listCache[s] && new Promise(res=>{
+    fetch(GAS_URL+'?action=get_sheet&sheet='+SHEET_MAP[s]).then(r=>r.json()).then(d=>{
+      if(d.status==='ok')listCache[s]=d.rows||[];
+      res();
+    }).catch(()=>res());
+  })));
+  const results=[];
+  sections.forEach(sec=>{
+    (listCache[sec]||[]).forEach(row=>{
+      Object.entries(row).forEach(([k,v])=>{
+        if(k.startsWith('_'))return;
+        const str=String(v||'');
+        const target=caseSensitive?str:str.toLowerCase();
+        const needle=caseSensitive?find:find.toLowerCase();
+        if(target.includes(needle)){
+          results.push({section:sec,row,field:k,value:str});
+        }
+      });
+    });
+  });
+  const c=document.getElementById('fr-results');
+  if(!results.length){c.innerHTML='<div style="color:var(--text3)">No matches</div>';return;}
+  c.innerHTML='<div style="margin-bottom:8px;color:var(--text2)">'+results.length+' matches found in '+(new Set(results.map(r=>r.section+r.row.id))).size+' items</div>'+
+    results.slice(0,30).map(r=>{
+      const label=r.row.name||r.row.title||r.row.id;
+      const snippet=r.value.length>80?r.value.substring(0,80)+'…':r.value;
+      return '<div style="padding:6px;border-bottom:1px solid var(--border);font-size:.75rem"><strong>'+esc(r.section)+'</strong> · <em style="color:var(--text2)">'+esc(label)+'</em> · '+esc(r.field)+': <span style="color:var(--text3)">'+esc(snippet)+'</span></div>';
+    }).join('') + (results.length>30?'<div style="padding:8px;color:var(--text3)">...and '+(results.length-30)+' more</div>':'');
+  window._frResults=results;
+}
+async function findReplaceExecute(){
+  if(!window._frResults){toast('Search first','error');return findReplaceSearch();}
+  const find=document.getElementById('fr-find').value;
+  const replace=document.getElementById('fr-replace').value;
+  const caseSensitive=document.getElementById('fr-case').checked;
+  if(!find) return toast('Enter search text','error');
+  if(!confirm(`置換を実行しますか?\n${window._frResults.length}件 を "${find}" → "${replace}" に置換します。`)) return;
+  // 行ごとにグループ化して update_row 呼び出し
+  const byRow={};
+  window._frResults.forEach(r=>{
+    const key=r.section+'_'+r.row._row;
+    if(!byRow[key])byRow[key]={section:r.section,row:{...r.row}};
+    const val=String(byRow[key].row[r.field]||'');
+    const re=caseSensitive?new RegExp(escRegExp(find),'g'):new RegExp(escRegExp(find),'gi');
+    byRow[key].row[r.field]=val.replace(re, replace);
+  });
+  toast('Updating '+Object.keys(byRow).length+' items...','info');
+  let done=0,errors=0;
+  for(const k of Object.keys(byRow)){
+    const {section,row}=byRow[k];
+    const payload={action:'update_row',sheet:SHEET_MAP[section],row:row._row,...row};
+    delete payload._row;
+    try {
+      const r=await fetch(GAS_URL,{method:'POST',body:JSON.stringify(payload)}).then(r=>r.json());
+      if(r.status==='ok'||r.success)done++; else errors++;
+    } catch(e){errors++}
+  }
+  toast(`Replaced: ${done} succeeded, ${errors} failed`,errors?'error':'success');
+  window._frResults=null;
+  // 全シートのキャッシュクリア
+  ['venue','festival','artist','event','article'].forEach(s=>{listCache[s]=null});
+}
+function escRegExp(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
+
+/* ==============================================================
+   HOME DASHBOARD
+   ============================================================== */
+function openHomeDashboard(){
+  toast('Loading dashboard...','info');
+  fetchAllSheets(['VENUES','FESTIVALS','ARTISTS','EVENTS','ARTICLES']).then(d=>{
+    const data={
+      artist:d.ARTISTS||[],event:d.EVENTS||[],festival:d.FESTIVALS||[],
+      venue:d.VENUES||[],article:d.ARTICLES||[]
+    };
+    Object.assign(listCache, data);
+    renderHomeDashboard(data);
+  }).catch(err=>toast('Dashboard error: '+err.message,'error'));
+}
+
+/* キャッシュ＋batch 経由で複数シートを取得 */
+function fetchAllSheets(sheetNames){
+  const SECTION_BY_SHEET = {VENUES:'venue',FESTIVALS:'festival',ARTISTS:'artist',EVENTS:'event',ARTICLES:'article',AUTHORS:'author'};
+  const result = {};
+  const missing = [];
+  sheetNames.forEach(s => {
+    const sec = SECTION_BY_SHEET[s];
+    const cached = sec && readSheetCache(sec);
+    if(cached) result[s] = cached;
+    else missing.push(s);
+  });
+  if(!missing.length) return Promise.resolve(result);
+  // 不足分は batch エンドポイントで一括取得
+  return fetch(GAS_URL+'?action=get_all_sheets&sheets='+missing.join(','))
+    .then(r=>r.json()).then(d=>{
+      if(d.status==='ok' && d.sheets){
+        Object.entries(d.sheets).forEach(([sheet,rows])=>{
+          result[sheet] = rows;
+          const sec = SECTION_BY_SHEET[sheet];
+          if(sec) writeSheetCache(sec, rows);
+        });
+      } else {
+        // batch エンドポイント未対応の GAS にフォールバック
+        return Promise.all(missing.map(s=>
+          fetch(GAS_URL+'?action=get_sheet&sheet='+s).then(r=>r.json()).then(d=>{
+            result[s] = d.rows || [];
+            const sec = SECTION_BY_SHEET[s];
+            if(sec) writeSheetCache(sec, d.rows||[]);
+          })
+        )).then(()=>result);
+      }
+      return result;
+    });
+}
+function renderHomeDashboard(data){
+  const overlay=document.createElement('div');
+  overlay.className='dialog-overlay show';
+  overlay.style.zIndex=700;
+  // 各セクションのドラフト・低完成度・最近編集集計
+  const drafts={};
+  const lowQuality={};
+  const recent={};
+  Object.entries(data).forEach(([section,rows])=>{
+    drafts[section]=rows.filter(r=>String(r.status||'').toLowerCase()==='draft');
+    lowQuality[section]=rows.map(r=>({r,c:computeCompleteness(section,r)})).filter(x=>x.c.score<70).slice(0,5);
+    recent[section]=rows.filter(r=>r.lastEditedAt).sort((a,b)=>String(b.lastEditedAt).localeCompare(String(a.lastEditedAt))).slice(0,3);
+  });
+  const totalDrafts=Object.values(drafts).reduce((s,a)=>s+a.length,0);
+  const totalLow=Object.values(lowQuality).reduce((s,a)=>s+a.length,0);
+  const draftHtml=Object.entries(drafts).filter(([_,d])=>d.length).map(([sec,d])=>
+    '<div style="margin-bottom:8px"><strong style="font-size:.7rem;font-family:var(--font-mono);letter-spacing:1px;color:var(--text2)">'+sec.toUpperCase()+' ('+d.length+')</strong>'+
+    d.slice(0,3).map(r=>'<div style="padding:4px 0 4px 12px;font-size:.8rem"><a style="color:var(--text);cursor:pointer;text-decoration:underline" onclick="closeHomeAndEdit(\''+sec+'\','+r._row+')">'+esc(r.name||r.title||r.id)+'</a></div>').join('')+
+    '</div>'
+  ).join('') || '<div style="color:var(--text3);font-size:.8rem">No drafts</div>';
+  const lowHtml=Object.entries(lowQuality).filter(([_,d])=>d.length).map(([sec,items])=>
+    '<div style="margin-bottom:8px"><strong style="font-size:.7rem;font-family:var(--font-mono);letter-spacing:1px;color:var(--text2)">'+sec.toUpperCase()+'</strong>'+
+    items.map(({r,c})=>'<div style="padding:4px 0 4px 12px;font-size:.8rem;display:flex;justify-content:space-between"><a style="color:var(--text);cursor:pointer;text-decoration:underline" onclick="closeHomeAndEdit(\''+sec+'\','+r._row+')">'+esc(r.name||r.title||r.id)+'</a><span style="color:var(--accent);font-size:.7rem">'+c.score+'%</span></div>').join('')+
+    '</div>'
+  ).join('') || '<div style="color:var(--text3);font-size:.8rem">All entries are 70%+ complete 🎉</div>';
+  overlay.innerHTML=`<div class="dialog-box" style="max-width:760px;max-height:85vh;overflow-y:auto" id="home-dashboard">
+    <h3>🏠 Welcome back, editor</h3>
+    <p style="color:var(--text2);margin-bottom:20px">Today's editorial overview</p>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px">
+      ${Object.entries(data).map(([sec,rows])=>`<div style="text-align:center;background:var(--bg3);padding:12px;border-radius:var(--radius)"><div style="font-family:var(--font-display);font-size:1.6rem">${rows.length}</div><div style="font-family:var(--font-mono);font-size:.55rem;color:var(--text3);letter-spacing:1px;text-transform:uppercase">${sec}</div></div>`).join('')}
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div style="background:var(--bg3);padding:14px;border-radius:var(--radius);border-left:3px solid #999">
+        <h4 style="margin-bottom:10px;font-size:.85rem">📝 Drafts (${totalDrafts})</h4>
+        ${draftHtml}
+      </div>
+      <div style="background:var(--bg3);padding:14px;border-radius:var(--radius);border-left:3px solid var(--yellow)">
+        <h4 style="margin-bottom:10px;font-size:.85rem">⚠️ Needs Improvement (${totalLow})</h4>
+        ${lowHtml}
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:20px"><button class="btn" onclick="this.closest('.dialog-overlay').remove()">Close</button></div>
+  </div>`;
+  document.body.appendChild(overlay);
+}
+function closeHomeAndEdit(section, rowNum){
+  document.getElementById('home-dashboard')?.closest('.dialog-overlay')?.remove();
+  const navBtns = document.querySelectorAll('.sidebar nav button');
+  navBtns.forEach(b => { if(b.textContent.toLowerCase().includes(section)) b.click(); });
+  setTimeout(() => { editRow(section, rowNum); }, 300);
+}
+
+/* ==============================================================
+   IMAGE LIBRARY
+   ============================================================== */
+function openImageLibrary(){
+  toast('Loading images...','info');
+  Promise.all([
+    fetch(GAS_URL+'?action=get_images&type=venues').then(r=>r.json()),
+    fetch(GAS_URL+'?action=get_images&type=festivals').then(r=>r.json()),
+    fetch(GAS_URL+'?action=get_images&type=artists').then(r=>r.json())
+  ]).then(([v,f,a])=>{
+    const all=[
+      ...((v.images||[]).map(i=>({...i,type:'venues'}))),
+      ...((f.images||[]).map(i=>({...i,type:'festivals'}))),
+      ...((a.images||[]).map(i=>({...i,type:'artists'})))
+    ];
+    renderImageLibrary(all);
+  }).catch(e=>toast('Image library error: '+e.message,'error'));
+}
+function renderImageLibrary(images){
+  const overlay=document.createElement('div');
+  overlay.className='dialog-overlay show';
+  overlay.style.zIndex=700;
+  overlay.id='img-lib-overlay';
+  overlay.innerHTML=`<div class="dialog-box" style="max-width:900px;max-height:85vh;overflow:hidden;display:flex;flex-direction:column">
+    <h3>🖼 Image Library (${images.length})</h3>
+    <div style="display:flex;gap:8px;margin:12px 0;flex-wrap:wrap">
+      <input type="text" id="img-lib-search" placeholder="Filter by name..." oninput="filterImageLibrary()" style="flex:1;min-width:140px;padding:8px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--text)">
+      <select id="img-lib-type" onchange="filterImageLibrary()" style="padding:8px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--text)">
+        <option value="all">All Types</option>
+        <option value="venues">Venues</option>
+        <option value="festivals">Festivals</option>
+        <option value="artists">Artists</option>
+      </select>
+    </div>
+    <div id="img-lib-grid" style="overflow-y:auto;flex:1;display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;padding:8px"></div>
+    <div class="btn-row" style="margin-top:12px"><button class="btn btn-sm" onclick="this.closest('.dialog-overlay').remove()">Close</button></div>
+  </div>`;
+  document.body.appendChild(overlay);
+  window._imgLibAll = images;
+  filterImageLibrary();
+}
+function filterImageLibrary(){
+  const all=window._imgLibAll||[];
+  const q=(document.getElementById('img-lib-search')?.value||'').toLowerCase();
+  const type=document.getElementById('img-lib-type')?.value||'all';
+  let filtered=all;
+  if(type!=='all') filtered=filtered.filter(i=>i.type===type);
+  if(q) filtered=filtered.filter(i=>String(i.name||'').toLowerCase().includes(q));
+  const grid=document.getElementById('img-lib-grid');
+  if(!grid) return;
+  if(!filtered.length){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text3)">No images</div>';return;}
+  grid.innerHTML=filtered.map(img=>{
+    const path='images/'+img.type+'/'+img.name;
+    return `<div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer" onclick="copyImagePath('${esc(path)}')" title="${esc(path)}">
+      <div style="aspect-ratio:1;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden"><img src="${esc(img.url)}" loading="lazy" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none';this.parentElement.innerHTML='🖼'"></div>
+      <div style="padding:6px;font-size:.65rem;font-family:var(--font-mono);color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(img.name)}</div>
+      <div style="padding:0 6px 6px;font-size:.6rem;color:var(--text3)">${esc(img.type)}</div>
+    </div>`;
+  }).join('');
+}
+function copyImagePath(path){
+  navigator.clipboard.writeText(path).then(()=>{
+    toast('📋 Copied: '+path,'success');
+  }).catch(()=>toast('Copy failed','error'));
 }
 
 /* ==============================================================
@@ -1852,14 +2589,9 @@ function executeDelete(){
    ============================================================== */
 function openStats(){
   toast('Loading stats...','info');
-  Promise.all([
-    fetch(GAS_URL+'?action=get_sheet&sheet=ARTISTS').then(r=>r.json()),
-    fetch(GAS_URL+'?action=get_sheet&sheet=EVENTS').then(r=>r.json()),
-    fetch(GAS_URL+'?action=get_sheet&sheet=FESTIVALS').then(r=>r.json()),
-    fetch(GAS_URL+'?action=get_sheet&sheet=VENUES').then(r=>r.json())
-  ]).then(([a,e,f,v])=>{
+  fetchAllSheets(['VENUES','FESTIVALS','ARTISTS','EVENTS']).then(d=>{
     const stats = computeStats({
-      artists: a.rows||[], events: e.rows||[], festivals: f.rows||[], venues: v.rows||[]
+      artists: d.ARTISTS||[], events: d.EVENTS||[], festivals: d.FESTIVALS||[], venues: d.VENUES||[]
     });
     renderStatsDialog(stats);
   }).catch(err => toast('Stats error: '+err.message,'error'));
@@ -2071,11 +2803,18 @@ function submitToSheet(section){
     if(!payload.name)return toast('Name required','error');
   }
   else if(section==='article'){
-    payload={action:'addArticle',id:g('ar-id'),title:g('ar-title'),category:g('ar-category'),
+    payload={action:'add_article',id:g('ar-id'),title:g('ar-title'),category:g('ar-category'),
       date:g('ar-date'),image:g('ar-image'),readTime:g('ar-readTime'),
       views:g('ar-views'),featured:g('ar-featured'),excerpt:g('ar-excerpt')};
     if(!payload.id||!payload.title)return toast('ID and Title required','error');
   }
+  else if(section==='author'){
+    payload={action:'add_author',id:g('au-id'),name:g('au-name'),bio:g('au-bio'),
+      image:g('au-image'),instagram:g('au-instagram'),twitter:g('au-twitter'),website:g('au-website')};
+    if(!payload.id||!payload.name)return toast('ID and Name required','error');
+  }
+  // Publishing fields をマージ（author以外）
+  if(section !== 'author') Object.assign(payload, getPubFields(section));
   // バリデーション
   const errors = validateBeforeSave(section, payload);
   if(errors.length){
@@ -2092,14 +2831,16 @@ function submitToSheet(section){
       console.log('Save response:',r);
       if(r.success||r.status==='ok'){
         toast('Saved — リフレッシュ中...','success');
+        invalidateSheetCache(section);
         // 未登録アーティストをARTISTSシートに追加
         if(unregisteredArtists.length){
           autoRegisterArtists(unregisteredArtists);
+          invalidateSheetCache('artist');
         }
         // フォームをリセットしてリストに切り替え＆再読み込み
         resetForm(section);
         switchTab(section,'list');
-        loadList(section);
+        loadList(section, {force:true});
       } else {
         const msg=r.message||r.error||'Save failed';
         console.error('Save failed:',r);
@@ -2135,18 +2876,13 @@ function autoRegisterArtists(artistIds){
    ============================================================== */
 function exportDataJs(){
   toast('Exporting...','info');
-  Promise.all([
-    fetch(GAS_URL+'?action=get_sheet&sheet=ARTISTS').then(r=>r.json()),
-    fetch(GAS_URL+'?action=get_sheet&sheet=EVENTS').then(r=>r.json()),
-    fetch(GAS_URL+'?action=get_sheet&sheet=FESTIVALS').then(r=>r.json()),
-    fetch(GAS_URL+'?action=get_sheet&sheet=VENUES').then(r=>r.json()),
-  ]).then(([artists,events,festivals,venues])=>{
+  fetchAllSheets(['VENUES','FESTIVALS','ARTISTS','EVENTS']).then(d=>{
     const lines=[];
     lines.push(dataJsHeader());
-    lines.push(buildArtistsJs(artists.rows||[]));
-    lines.push(buildEventsJs(events.rows||[]));
-    lines.push(buildFestivalsJs(festivals.rows||[]));
-    lines.push(buildVenuesJs(venues.rows||[]));
+    lines.push(buildArtistsJs(d.ARTISTS||[]));
+    lines.push(buildEventsJs(d.EVENTS||[]));
+    lines.push(buildFestivalsJs(d.FESTIVALS||[]));
+    lines.push(buildVenuesJs(d.VENUES||[]));
     const content=lines.join('\n\n');
     downloadFile('data.js',content);
     toast('data.js exported','success');
@@ -2391,6 +3127,7 @@ function resetForm(section){
     artist:['a-id','a-name','a-city','a-country','a-genre','a-image','a-bio','a-instagram','a-soundcloud','a-bandcamp','a-website','a-imageUrl'],
     event:['e-name','e-date','e-venue','e-city','e-time','e-desc','e-link'],
     article:['ar-id','ar-title','ar-category','ar-date','ar-image','ar-readTime','ar-views','ar-excerpt'],
+    author:['au-id','au-name','au-bio','au-image','au-instagram','au-twitter','au-website'],
   }[section];
   fields.forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   // プレビューをクリア
@@ -2399,6 +3136,8 @@ function resetForm(section){
   if(section==='festival'){document.getElementById('f-type').value='festival';document.querySelectorAll('#f-genre .chip').forEach(c=>c.classList.remove('selected'));document.querySelectorAll('#f-gradientPresets .gradient-swatch').forEach(s=>s.classList.remove('selected'));lineups.f=[];renderLineupTags('f');editions.length=0;renderEditions();document.getElementById('lineup-fetch-status').style.display='none';document.getElementById('gradient-preview').style.display='none';document.getElementById('bulk-lineup-wrap').style.display='none'}
   if(section==='event'){lineups.e=[];renderLineupTags('e')}
   if(section==='article'){document.getElementById('ar-category').value='REPORT';document.getElementById('ar-featured').value='false'}
+  // Publishing fields をクリア（author以外）
+  if(section !== 'author') clearPubFields(section);
   document.getElementById('output-'+section).classList.remove('show');
 }
 

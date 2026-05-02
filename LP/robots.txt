@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Disallow CMS / preview pages
+Disallow: /cms.html
+Disallow: /map.html
+
+Sitemap: https://techno-japan.media/sitemap.xml
