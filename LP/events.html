@@ -6,6 +6,11 @@
 <title>EVENTS — TECHNO JAPAN</title>
 <meta name="description" content="Upcoming and past events from Japan's underground techno and house music scene.">
 <link rel="alternate" type="application/rss+xml" title="TECHNO JAPAN — RSS" href="https://techno-japan.media/rss.xml">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#080808">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TECHNO JAPAN">
 <link rel="canonical" href="https://techno-japan.media/events.html">
 
 <!-- Open Graph -->
@@ -800,6 +805,14 @@ document.querySelectorAll('a, .filter-btn, .event-card').forEach(el => {
 
 /* ========== INIT ========== */
 renderEvents('all');
+</script>
+<!-- Service Worker registration -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(err => console.warn('SW registration failed:', err));
+    });
+  }
 </script>
 </body>
 </html>

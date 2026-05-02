@@ -6,6 +6,11 @@
 <title>DISCOVER — TECHNO JAPAN</title>
 <meta name="description" content="Explore Japan's underground techno and house scene. Stories, interviews, reports and more.">
 <link rel="alternate" type="application/rss+xml" title="TECHNO JAPAN — RSS" href="https://techno-japan.media/rss.xml">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#080808">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TECHNO JAPAN">
 <link rel="canonical" href="https://techno-japan.media/discover.html">
 
 <!-- Open Graph -->
@@ -922,7 +927,7 @@ function renderMainGrid() {
     <a href="#article/${featured.id}" class="featured-card">
       <div class="featured-card-image">
         ${featured.image
-          ? `<img src="${featured.image}" alt="${featured.title}">`
+          ? `<img loading="lazy" decoding="async" src="${featured.image}" alt="${featured.title}">`
           : `<div class="featured-card-image-placeholder">COMING SOON</div>`}
         <div class="featured-card-date">${formatDateSplit(featured.date)}</div>
       </div>
@@ -974,7 +979,7 @@ function renderFeed() {
     <a href="#article/${a.id}" class="feed-card">
       <div class="feed-card-image">
         ${a.image
-          ? `<img src="${a.image}" alt="${a.title}">`
+          ? `<img loading="lazy" decoding="async" src="${a.image}" alt="${a.title}">`
           : `<div class="feed-card-image-placeholder">COMING SOON</div>`}
       </div>
       <div class="feed-card-tag"><span class="tag-dot"></span> ${a.category}</div>
@@ -1050,6 +1055,14 @@ renderMainGrid();
 renderCategoryNav();
 renderFeed();
 bindCursorExpand();
+</script>
+<!-- Service Worker registration -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(err => console.warn('SW registration failed:', err));
+    });
+  }
 </script>
 </body>
 </html>

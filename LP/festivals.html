@@ -6,6 +6,11 @@
 <title>FESTIVALS — TECHNO JAPAN</title>
 <meta name="description" content="Music festivals across Japan — techno, house, ambient, and beyond.">
 <link rel="alternate" type="application/rss+xml" title="TECHNO JAPAN — RSS" href="https://techno-japan.media/rss.xml">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#080808">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TECHNO JAPAN">
 <link rel="canonical" href="https://techno-japan.media/festivals.html">
 
 <!-- Open Graph -->
@@ -957,7 +962,7 @@ function buildRelatedFestivals(current) {
 
   const cards = picks.map(f => `
     <a href="#festival/${f.id}" class="related-card">
-      <div class="related-card-img">${f.image ? `<img src="${f.image}" alt="${f.name}" onerror="this.style.display='none'">` : ''}</div>
+      <div class="related-card-img">${f.image ? `<img loading="lazy" decoding="async" src="${f.image}" alt="${f.name}" onerror="this.style.display='none'">` : ''}</div>
       <div class="related-card-info">
         <div class="related-card-date">${formatFestDate(f.date)}</div>
         <div class="related-card-name">${f.name}</div>
@@ -1173,7 +1178,7 @@ function applyMonthFilter() {
 /* ========== RENDER FESTIVAL CARD ========== */
 function renderFestivalCard(f, m, i) {
   const imgHtml = f.image
-    ? `<img src="${f.image}" alt="${f.name}" onerror="this.style.display='none'">`
+    ? `<img loading="lazy" decoding="async" src="${f.image}" alt="${f.name}" onerror="this.style.display='none'">`
     : '';
   const lineupHtml = f.lineup && f.lineup.length
     ? `<div class="festival-lineup-preview">${f.lineup.slice(0, 4).map(id => {
@@ -1279,7 +1284,7 @@ function renderDetail(id) {
   const detail = document.getElementById('festival-detail');
   const heroGrad = f.heroGradient || 'linear-gradient(135deg, rgba(120,80,200,0.3), rgba(200,60,100,0.2))';
   const imgHtml = f.image
-    ? `<img src="${f.image}" alt="${f.name}" onerror="this.style.display='none'">`
+    ? `<img loading="lazy" decoding="async" src="${f.image}" alt="${f.name}" onerror="this.style.display='none'">`
     : '';
   const officialHtml = f.url
     ? `<a href="${f.url}" target="_blank" rel="noopener" class="detail-official">OFFICIAL SITE <span class="link-arrow"></span></a>`
@@ -1299,7 +1304,7 @@ function renderDetail(id) {
       <div class="detail-section-label">FLYER</div>
       <div class="detail-flyer-image">
         ${f.flyer
-          ? `<img src="${f.flyer}" alt="${f.name} Flyer" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          ? `<img loading="lazy" decoding="async" src="${f.flyer}" alt="${f.name} Flyer" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
              <div class="detail-flyer-placeholder" style="display:none">FLYER IMAGE</div>`
           : `<div class="detail-flyer-placeholder">FLYER IMAGE</div>`}
       </div>
@@ -1416,6 +1421,14 @@ renderFestivals();
 buildMonthNav();
 handleHash();
 bindCursorExpand();
+</script>
+<!-- Service Worker registration -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(err => console.warn('SW registration failed:', err));
+    });
+  }
 </script>
 </body>
 </html>

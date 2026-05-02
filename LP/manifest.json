@@ -1,0 +1,27 @@
+{
+  "name": "TECHNO JAPAN",
+  "short_name": "TECHNO JAPAN",
+  "description": "Japan's underground techno and house music media platform.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#080808",
+  "theme_color": "#080808",
+  "orientation": "portrait-primary",
+  "lang": "ja-JP",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/images/festivals/rainbow-disco-club.jpeg",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/festivals/rainbow-disco-club.jpeg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["music", "entertainment", "lifestyle"]
+}
