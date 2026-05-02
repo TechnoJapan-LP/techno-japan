@@ -6,6 +6,8 @@
 <title>CMS — TECHNO JAPAN</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -144,6 +146,25 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
 .dialog-box h3{font-family:var(--font-display);font-size:1.4rem;letter-spacing:2px;margin-bottom:8px}
 .dialog-box p{color:var(--text2);font-size:.85rem;margin-bottom:20px;line-height:1.5}
 .dialog-box .btn-row{justify-content:flex-end}
+/* ===================== LOCATION MAP ===================== */
+.loc-map{height:0;border-radius:var(--radius);border:1px solid var(--border);transition:height .3s;overflow:hidden;background:#0a0a0a}
+.loc-map.show{height:240px}
+.loc-map .leaflet-container{height:100%;background:#0a0a0a}
+
+/* ===================== CALENDAR VIEW ===================== */
+.cal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-top:12px}
+.cal-month{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:10px;min-height:80px;cursor:pointer;transition:.2s}
+.cal-month:hover{border-color:var(--text2);background:var(--bg3)}
+.cal-month-label{font-family:var(--font-mono);font-size:.65rem;letter-spacing:1px;color:var(--text3);margin-bottom:6px}
+.cal-month-count{font-family:var(--font-display);font-size:1.4rem;color:var(--text)}
+.cal-month-items{margin-top:6px;font-size:.7rem;color:var(--text2);line-height:1.3;max-height:60px;overflow:hidden}
+.cal-month-items div{padding:2px 0;border-top:1px solid var(--border)}
+.view-toggle{display:inline-flex;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.view-toggle button{background:none;border:none;padding:6px 12px;font-family:var(--font-mono);font-size:.7rem;color:var(--text2);cursor:pointer;letter-spacing:1px}
+.view-toggle button.active{background:var(--bg4);color:var(--text)}
+.recent-item{display:block;width:100%;text-align:left;padding:6px 10px;background:none;border:none;color:var(--text2);font-family:var(--font-mono);font-size:.7rem;cursor:pointer;border-radius:var(--radius);margin-bottom:2px;letter-spacing:.5px;transition:.15s}
+.recent-item:hover{background:var(--bg3);color:var(--text)}
+
 /* ===================== LIVE PREVIEW OVERLAY ===================== */
 .preview-overlay{display:none;position:fixed;inset:0;z-index:600;background:#0a0a0a;overflow-y:auto}
 .preview-overlay.show{display:block}
@@ -209,9 +230,12 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
     <button onclick="switchSection('event',this)"><span class="icon">&#9724;</span><span>Event</span></button>
     <button onclick="switchSection('article',this)"><span class="icon">&#9998;</span><span>Article</span></button>
   </nav>
+  <div id="recent-items" style="padding:0 4px;border-top:1px solid var(--border);max-height:240px;overflow-y:auto"></div>
   <div style="padding:12px"><button class="btn btn-sm" style="width:100%;font-size:.7rem" onclick="exportDataJs()">⬇ Export data.js</button></div>
+  <div style="padding:0 12px 8px"><button class="btn btn-sm" style="width:100%;font-size:.7rem" onclick="openTrash()">🗑 Trash <span id="trash-count" style="opacity:.6"></span></button></div>
+  <div style="padding:0 12px 8px"><button class="btn btn-sm" style="width:100%;font-size:.7rem" onclick="openStats()">📊 Stats</button></div>
   <div style="padding:0 12px 12px"><button class="btn btn-sm" style="width:100%;font-size:.7rem;color:var(--text3)" onclick="cmsLogout()">🔒 Logout</button></div>
-  <div class="sidebar-footer">v1.4</div>
+  <div class="sidebar-footer">v1.5</div>
 </aside>
 
 <div class="main">
@@ -237,7 +261,7 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
     <div class="data-list" id="venue-list"><div class="data-list-empty">Click "Refresh" to load data</div></div>
   </div>
   <div class="tab-content" id="venue-tab-form">
-    <div class="edit-banner" id="venue-edit-banner"><span>Editing: <strong id="venue-edit-name"></strong></span><button class="btn btn-sm btn-yellow" onclick="saveEdit('venue')">Save Changes</button><button class="btn btn-sm" onclick="cancelEdit('venue')">Cancel</button></div>
+    <div class="edit-banner" id="venue-edit-banner"><span>Editing: <strong id="venue-edit-name"></strong></span><button class="btn btn-sm btn-preview" onclick="openPreview('venue')">👁 Preview</button><button class="btn btn-sm btn-yellow" onclick="saveEdit('venue')">Save Changes</button><button class="btn btn-sm" onclick="cancelEdit('venue')">Cancel</button></div>
     <div class="form-grid" id="form-venue">
       <div class="form-group"><label>ID</label><input type="text" id="v-id" placeholder="e.g. club-metro" oninput="autoFillVenueImage()"></div>
       <div class="form-group"><label>Name</label><input type="text" id="v-name" placeholder="e.g. CLUB METRO"></div>
@@ -249,13 +273,15 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
       <div class="form-group"><label>Capacity</label><input type="number" id="v-capacity" placeholder="e.g. 300"></div>
       <div class="form-group"><label>URL</label><input type="url" id="v-url" placeholder="https://..."></div>
       <div class="form-group full"><label>Address</label><div class="input-row"><input type="text" id="v-address" placeholder="Full address"><button class="btn btn-blue btn-sm" onclick="geocode('v')">Geocode</button></div></div>
-      <div class="form-group"><label>Lat</label><input type="text" id="v-lat" placeholder="35.xxxx"></div>
-      <div class="form-group"><label>Lng</label><input type="text" id="v-lng" placeholder="139.xxxx"></div>
+      <div class="form-group"><label>Lat</label><input type="text" id="v-lat" placeholder="35.xxxx" oninput="updateLocationMap('v')"></div>
+      <div class="form-group"><label>Lng</label><input type="text" id="v-lng" placeholder="139.xxxx" oninput="updateLocationMap('v')"></div>
+      <div class="form-group full"><div id="v-map" class="loc-map"></div></div>
       <div class="form-group"><label>Instagram</label><input type="url" id="v-instagram" placeholder="https://instagram.com/..."></div>
       <div class="form-group full"><label>Image from URL</label><div class="input-row"><input type="url" id="v-imageUrl" placeholder="画像の直接URL（公式サイト等から）"><button class="btn btn-sm btn-accent" onclick="uploadFromUrl('v','venue','v-image','v-imageUrl','preview-v-image')">UPLOAD</button></div><div class="img-preview" id="preview-v-image"></div></div>
       <div class="form-group full upload-fallback"><label>または手動アップロード <span class="label-hint">max 5MB</span></label><div class="upload-area" onclick="this.querySelector('input').click()"><span class="icon">&#8679;</span><span>Upload Image</span><input type="file" accept="image/*" onchange="uploadImage(this,'venue','v')"></div></div>
-      <div class="form-group full"><label>Description</label><textarea id="v-desc" rows="8" placeholder="Venue description..." style="width:100%;margin-bottom:8px"></textarea><button class="btn btn-green btn-sm" onclick="aiGenerate('venue')">AI Generate</button></div>
+      <div class="form-group full"><label>Description</label><textarea id="v-desc" rows="8" placeholder="Venue description..." style="width:100%;margin-bottom:8px"></textarea><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-green btn-sm" onclick="aiGenerate('venue')">AI Generate</button><button class="btn btn-sm" onclick="translateField('v-desc','en-to-jp')">EN→JP</button><button class="btn btn-sm" onclick="translateField('v-desc','jp-to-en')">JP→EN</button></div></div>
       <div class="full btn-row" id="venue-btn-new">
+        <button class="btn btn-preview" onclick="openPreview('venue')">👁 Preview</button>
         <button class="btn btn-accent" onclick="submitVenue()">Generate Code</button>
         <button class="btn" onclick="submitToSheet('venue')">Save to Spreadsheet</button>
         <button class="btn" onclick="resetForm('venue')">Reset</button>
@@ -275,7 +301,11 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
   <div class="tab-content active" id="festival-tab-list">
     <div style="margin-bottom:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
       <input type="text" id="festival-search" placeholder="Search name / city / location..." oninput="filterFestivalList()" style="flex:1;min-width:180px;padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);font-size:.85rem;color:var(--text)">
-      <div style="display:flex;gap:4px;align-items:center">
+      <div class="view-toggle" id="festival-view-toggle">
+        <button class="active" data-view="list" onclick="setFestivalView('list')">📋 List</button>
+        <button data-view="calendar" onclick="setFestivalView('calendar')">📅 Calendar</button>
+      </div>
+      <div style="display:flex;gap:4px;align-items:center" id="festival-sort-buttons">
         <span style="font-family:var(--font-mono);font-size:.65rem;letter-spacing:1px;color:var(--text3)">SORT:</span>
         <button class="btn btn-sm btn-accent" onclick="sortFestivalList('date')">Date</button>
         <button class="btn btn-sm" onclick="sortFestivalList('name')">Name</button>
@@ -298,8 +328,9 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
       <div class="form-group"><label>Ticket URL</label><input type="url" id="f-ticketUrl" placeholder="https://..."></div>
       <div class="form-group"><label>Instagram</label><input type="url" id="f-instagram" placeholder="https://instagram.com/..."></div>
       <div class="form-group full"><label>Address</label><div class="input-row"><input type="text" id="f-address" placeholder="Full address for geocoding"><button class="btn btn-blue btn-sm" onclick="geocode('f')">Geocode</button></div></div>
-      <div class="form-group"><label>Lat</label><input type="text" id="f-lat" placeholder="36.xxxx"></div>
-      <div class="form-group"><label>Lng</label><input type="text" id="f-lng" placeholder="139.xxxx"></div>
+      <div class="form-group"><label>Lat</label><input type="text" id="f-lat" placeholder="36.xxxx" oninput="updateLocationMap('f')"></div>
+      <div class="form-group"><label>Lng</label><input type="text" id="f-lng" placeholder="139.xxxx" oninput="updateLocationMap('f')"></div>
+      <div class="form-group full"><div id="f-map" class="loc-map"></div></div>
       <div class="form-group"><label>Date Start</label><input type="date" id="f-dateStart"></div>
       <div class="form-group"><label>Date End</label><input type="date" id="f-dateEnd"></div>
       <div class="form-group full"><label>Genre</label><div class="chip-group" id="f-genre"></div></div>
@@ -309,7 +340,7 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
       <div class="form-group full"><label>Flyer from URL</label><div class="input-row"><input type="url" id="f-flyerUrl" placeholder="画像の直接URL（公式サイト・RA等から）"><button class="btn btn-sm btn-accent" onclick="uploadFromUrl('f','festival-flyer','f-flyer','f-flyerUrl','preview-f-flyer')">UPLOAD</button></div><div class="img-preview" id="preview-f-flyer"></div></div>
       <div class="form-group full upload-fallback"><label>または手動アップロード <span class="label-hint">max 5MB</span></label><div style="display:flex;gap:16px;flex-wrap:wrap"><div><span class="upload-label">Image</span><div class="upload-area" onclick="this.querySelector('input').click()"><span class="icon">&#8679;</span><span>Upload Image</span><input type="file" accept="image/*" onchange="uploadImage(this,'festival-image','f')"></div></div><div><span class="upload-label">Flyer</span><div class="upload-area" onclick="this.querySelector('input').click()"><span class="icon">&#8679;</span><span>Upload Flyer</span><input type="file" accept="image/*" onchange="uploadImage(this,'festival-flyer','f')"></div></div></div></div>
       <div class="form-group full"><label>Hero Gradient</label><div class="gradient-presets" id="f-gradientPresets"></div><div id="gradient-preview" style="display:none;margin-top:8px;width:100%;height:80px;border-radius:var(--radius);border:1px solid var(--border)"></div><input type="text" id="f-heroGradient" placeholder="linear-gradient(...)" style="margin-top:8px" oninput="updateGradientPreview(this.value)"></div>
-      <div class="form-group full"><label>Description</label><textarea id="f-desc" rows="8" placeholder="Festival description..." style="width:100%;margin-bottom:8px"></textarea><button class="btn btn-green btn-sm" onclick="aiGenerate('festival')">AI Generate</button></div>
+      <div class="form-group full"><label>Description</label><textarea id="f-desc" rows="8" placeholder="Festival description..." style="width:100%;margin-bottom:8px"></textarea><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-green btn-sm" onclick="aiGenerate('festival')">AI Generate</button><button class="btn btn-sm" onclick="translateField('f-desc','en-to-jp')">EN→JP</button><button class="btn btn-sm" onclick="translateField('f-desc','jp-to-en')">JP→EN</button></div></div>
       <div class="form-group full"><label>Lineup</label>
         <div class="lineup-section">
           <div class="lineup-input-wrap"><input type="text" id="f-lineupInput" placeholder="Type artist ID..." oninput="filterArtists('f-lineupInput','f-autocomplete','f')" onkeydown="acKeydown(event,'f-autocomplete','f')"><div class="autocomplete-list" id="f-autocomplete"></div></div>
@@ -358,7 +389,7 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
     <div class="data-list" id="artist-list"><div class="data-list-empty">Click "Refresh" to load data</div></div>
   </div>
   <div class="tab-content" id="artist-tab-form">
-    <div class="edit-banner" id="artist-edit-banner"><span>Editing: <strong id="artist-edit-name"></strong></span><button class="btn btn-sm btn-yellow" onclick="saveEdit('artist')">Save Changes</button><button class="btn btn-sm" onclick="cancelEdit('artist')">Cancel</button></div>
+    <div class="edit-banner" id="artist-edit-banner"><span>Editing: <strong id="artist-edit-name"></strong></span><button class="btn btn-sm btn-preview" onclick="openPreview('artist')">👁 Preview</button><button class="btn btn-sm btn-yellow" onclick="saveEdit('artist')">Save Changes</button><button class="btn btn-sm" onclick="cancelEdit('artist')">Cancel</button></div>
     <div class="form-grid" id="form-artist">
       <div class="form-group"><label>ID</label><input type="text" id="a-id" placeholder="e.g. dj-nobu" oninput="autoFillArtistImage()"></div>
       <div class="form-group"><label>Name</label><input type="text" id="a-name" placeholder="e.g. DJ NOBU"></div>
@@ -372,8 +403,9 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
       <div class="form-group"><label>SoundCloud</label><input type="url" id="a-soundcloud" placeholder="https://soundcloud.com/..."></div>
       <div class="form-group"><label>Bandcamp</label><input type="url" id="a-bandcamp" placeholder="https://...bandcamp.com/"></div>
       <div class="form-group"><label>Website</label><input type="url" id="a-website" placeholder="https://..."></div>
-      <div class="form-group full"><label>Bio</label><textarea id="a-bio" rows="8" placeholder="Artist biography..." style="width:100%;margin-bottom:8px"></textarea><button class="btn btn-green btn-sm" onclick="aiGenerate('artist')">AI Generate</button></div>
+      <div class="form-group full"><label>Bio</label><textarea id="a-bio" rows="8" placeholder="Artist biography..." style="width:100%;margin-bottom:8px"></textarea><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-green btn-sm" onclick="aiGenerate('artist')">AI Generate</button><button class="btn btn-sm" onclick="translateField('a-bio','en-to-jp')">EN→JP</button><button class="btn btn-sm" onclick="translateField('a-bio','jp-to-en')">JP→EN</button></div></div>
       <div class="full btn-row" id="artist-btn-new">
+        <button class="btn btn-preview" onclick="openPreview('artist')">👁 Preview</button>
         <button class="btn btn-accent" onclick="submitArtist()">Generate Code</button>
         <button class="btn" onclick="submitToSheet('artist')">Save to Spreadsheet</button>
         <button class="btn" onclick="resetForm('artist')">Reset</button>
@@ -393,7 +425,11 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
   <div class="tab-content active" id="event-tab-list">
     <div style="margin-bottom:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
       <input type="text" id="event-search" placeholder="Search name / venue / city..." oninput="filterEventList()" style="flex:1;min-width:180px;padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);font-size:.85rem;color:var(--text)">
-      <div style="display:flex;gap:4px;align-items:center">
+      <div class="view-toggle" id="event-view-toggle">
+        <button class="active" data-view="list" onclick="setEventView('list')">📋 List</button>
+        <button data-view="calendar" onclick="setEventView('calendar')">📅 Calendar</button>
+      </div>
+      <div style="display:flex;gap:4px;align-items:center" id="event-sort-buttons">
         <span style="font-family:var(--font-mono);font-size:.65rem;letter-spacing:1px;color:var(--text3)">SORT:</span>
         <button class="btn btn-sm btn-accent" onclick="sortEventList('date')">Date</button>
         <button class="btn btn-sm" onclick="sortEventList('name')">Name</button>
@@ -602,6 +638,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   initGenreChips('v-genre');
   initGenreChips('f-genre');
   initGradientPresets();
+  renderRecentItems();
+  renderTrashCount();
+  initKeyboardShortcuts();
 });
 
 /* ==============================================================
@@ -672,8 +711,82 @@ function updateGradientPreview(val){
    ============================================================== */
 function openPreview(section){
   if(section==='festival') renderFestivalPreview();
+  else if(section==='venue') renderVenuePreview();
+  else if(section==='artist') renderArtistPreview();
   document.getElementById('preview-overlay').classList.add('show');
   document.body.style.overflow='hidden';
+}
+
+function renderVenuePreview(){
+  const g=id=>(document.getElementById(id)?.value||'').trim();
+  const name=g('v-name')||'VENUE NAME';
+  const city=g('v-city');
+  const area=g('v-area');
+  const type=g('v-type');
+  const desc=g('v-desc');
+  const url=g('v-url');
+  const instagram=g('v-instagram');
+  const address=g('v-address');
+  const capacity=g('v-capacity');
+  const imagePath=g('v-image');
+  const imageUrl=g('v-imageUrl');
+  const pvImg=document.querySelector('#preview-v-image img');
+  const imgSrc=(pvImg&&pvImg.src)||(imagePath&&imagePath.startsWith('http')?imagePath:imageUrl||imagePath||'');
+  const genres=Array.from(document.querySelectorAll('#v-genre .chip.selected')).map(c=>c.textContent.trim());
+  const tagsHtml=genres.map(g=>`<span class="pv-tag">${esc(g)}</span>`).join('');
+  const linksHtml=[
+    url?`<a href="${esc(url)}" class="pv-link" target="_blank">OFFICIAL SITE →</a>`:'',
+    instagram?`<a href="${esc(instagram)}" class="pv-link" target="_blank">INSTAGRAM →</a>`:''
+  ].join('');
+  document.getElementById('preview-content').innerHTML=`
+    <div class="pv-hero">
+      <div class="pv-hero-image" style="background:linear-gradient(135deg,#1a1a1a 0%,#2a2a2a 100%)">${imgSrc?`<img src="${esc(imgSrc)}" onerror="this.style.display='none'">`:''}</div>
+      <div class="pv-hero-info">
+        <div class="pv-date">${esc([city,area].filter(Boolean).join(' · '))}</div>
+        <div class="pv-name">${esc(name)}</div>
+        <div class="pv-location">${esc(type||'')}${capacity?' · CAPACITY '+esc(capacity):''}</div>
+        ${tagsHtml?'<div class="pv-tags">'+tagsHtml+'</div>':''}
+        ${desc?'<div class="pv-desc">'+esc(desc)+'</div>':'<div class="pv-empty" style="margin-bottom:28px">No description</div>'}
+        ${address?'<div class="pv-location" style="margin-bottom:16px">📍 '+esc(address)+'</div>':''}
+        <div class="pv-links">${linksHtml}</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderArtistPreview(){
+  const g=id=>(document.getElementById(id)?.value||'').trim();
+  const name=g('a-name')||'ARTIST NAME';
+  const city=g('a-city');
+  const country=g('a-country');
+  const genre=g('a-genre');
+  const bio=g('a-bio');
+  const instagram=g('a-instagram');
+  const soundcloud=g('a-soundcloud');
+  const bandcamp=g('a-bandcamp');
+  const website=g('a-website');
+  const imagePath=g('a-image');
+  const imageUrl=g('a-imageUrl');
+  const pvImg=document.querySelector('#preview-a-image img');
+  const imgSrc=(pvImg&&pvImg.src)||(imagePath&&imagePath.startsWith('http')?imagePath:imageUrl||imagePath||'');
+  const linksHtml=[
+    website?`<a href="${esc(website)}" class="pv-link" target="_blank">WEBSITE →</a>`:'',
+    instagram?`<a href="${esc(instagram)}" class="pv-link" target="_blank">INSTAGRAM →</a>`:'',
+    soundcloud?`<a href="${esc(soundcloud)}" class="pv-link" target="_blank">SOUNDCLOUD →</a>`:'',
+    bandcamp?`<a href="${esc(bandcamp)}" class="pv-link" target="_blank">BANDCAMP →</a>`:''
+  ].filter(Boolean).join('');
+  document.getElementById('preview-content').innerHTML=`
+    <div class="pv-hero">
+      <div class="pv-hero-image" style="background:linear-gradient(135deg,#1a1a1a 0%,#2a2a2a 100%);aspect-ratio:1/1">${imgSrc?`<img src="${esc(imgSrc)}" onerror="this.style.display='none'">`:''}</div>
+      <div class="pv-hero-info">
+        <div class="pv-date">${esc([city,country].filter(Boolean).join(' · '))}</div>
+        <div class="pv-name">${esc(name)}</div>
+        ${genre?'<div class="pv-tags"><span class="pv-tag">'+esc(genre)+'</span></div>':''}
+        ${bio?'<div class="pv-desc">'+esc(bio)+'</div>':'<div class="pv-empty" style="margin-bottom:28px">No bio</div>'}
+        <div class="pv-links">${linksHtml}</div>
+      </div>
+    </div>
+  `;
 }
 function closePreview(){
   document.getElementById('preview-overlay').classList.remove('show');
@@ -794,6 +907,7 @@ function geocode(prefix) {
         const loc=d.results[0].geometry.location;
         document.getElementById(prefix+'-lat').value=loc.lat.toFixed(4);
         document.getElementById(prefix+'-lng').value=loc.lng.toFixed(4);
+        updateLocationMap(prefix);
         toast('Coordinates set','success');
       } else toast('Geocoding failed: '+d.status,'error');
     }).catch(()=>toast('Geocoding error','error'));
@@ -993,47 +1107,300 @@ function processBulkLineup(){
 /* ==============================================================
    IMAGE UPLOAD
    ============================================================== */
+/* ==============================================================
+   TRANSLATE — JP/EN
+   ============================================================== */
+function translateField(fieldId, direction){
+  const el = document.getElementById(fieldId);
+  if(!el) return;
+  const text = el.value.trim();
+  if(!text) return toast('No text to translate','error');
+  const btn = event && event.target;
+  if(btn){btn.disabled=true;btn.dataset.orig=btn.textContent;btn.innerHTML='Translating<span class="spinner"></span>';}
+  toast('Translating...','info');
+  fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'translate', text, direction})})
+    .then(r=>r.json()).then(d=>{
+      if(btn){btn.disabled=false;btn.textContent=btn.dataset.orig||'Translate';}
+      if(d.status==='ok'&&d.translated){
+        el.value=d.translated;
+        toast('Translated','success');
+      } else toast(d.message||'Translation failed','error');
+    }).catch(e=>{
+      if(btn){btn.disabled=false;btn.textContent=btn.dataset.orig||'Translate';}
+      toast('Translation error','error');
+    });
+}
+
+/* ==============================================================
+   KEYBOARD SHORTCUTS
+   ============================================================== */
+function initKeyboardShortcuts(){
+  document.addEventListener('keydown', e => {
+    const cmd = e.metaKey || e.ctrlKey;
+    // Cmd+S: 保存
+    if(cmd && e.key === 's'){
+      e.preventDefault();
+      const activeSection = document.querySelector('.section.active')?.id?.replace('sec-','');
+      if(!activeSection) return;
+      // 編集モード中ならsaveEdit、フォームタブなら新規保存
+      if(editState && editState[activeSection]) saveEdit(activeSection);
+      else if(document.getElementById(activeSection+'-tab-form')?.classList.contains('active')) submitToSheet(activeSection);
+      else toast('Open a form first','info');
+    }
+    // Cmd+K: 検索フォーカス
+    else if(cmd && e.key === 'k'){
+      e.preventDefault();
+      const activeSection = document.querySelector('.section.active')?.id?.replace('sec-','');
+      const searchInput = document.getElementById(activeSection+'-search');
+      if(searchInput){ searchInput.focus(); searchInput.select(); }
+    }
+    // Esc: プレビューを閉じる、編集キャンセル
+    else if(e.key === 'Escape'){
+      const overlay = document.getElementById('preview-overlay');
+      if(overlay && overlay.classList.contains('show')){
+        closePreview();
+        return;
+      }
+      const activeSection = document.querySelector('.section.active')?.id?.replace('sec-','');
+      if(activeSection && editState && editState[activeSection]){
+        if(confirm('Cancel editing?')) cancelEdit(activeSection);
+      }
+    }
+  });
+}
+
+/* ==============================================================
+   RECENT ITEMS
+   ============================================================== */
+const RECENT_KEY = 'cms_recent_v1';
+const RECENT_MAX = 8;
+function getRecentItems(){
+  try { return JSON.parse(localStorage.getItem(RECENT_KEY) || '[]'); }
+  catch(e) { return []; }
+}
+function recordRecentItem(section, row, rowNum){
+  let items = getRecentItems();
+  const label = row.name || row.title || row.id || '(unnamed)';
+  // 重複削除
+  items = items.filter(i => !(i.section === section && i.rowNum === rowNum));
+  items.unshift({ section, rowNum, label, ts: Date.now() });
+  items = items.slice(0, RECENT_MAX);
+  localStorage.setItem(RECENT_KEY, JSON.stringify(items));
+  renderRecentItems();
+}
+function renderRecentItems(){
+  const c = document.getElementById('recent-items');
+  if(!c) return;
+  const items = getRecentItems();
+  if(!items.length){c.innerHTML = '';return;}
+  const icons = {festival:'◆', venue:'○', artist:'△', event:'◼', article:'✎'};
+  c.innerHTML = '<div style="font-family:var(--font-mono);font-size:.6rem;letter-spacing:1px;color:var(--text3);padding:8px 12px 4px">RECENT</div>' +
+    items.map((item,i) => `<button class="recent-item" onclick="openRecent(${i})" title="${esc(item.section)}">${icons[item.section]||''} ${esc(item.label.substring(0,18))}${item.label.length>18?'…':''}</button>`).join('');
+}
+function openRecent(idx){
+  const items = getRecentItems();
+  const it = items[idx];
+  if(!it) return;
+  // セクション切り替え
+  const navBtns = document.querySelectorAll('.sidebar nav button');
+  let targetBtn = null;
+  navBtns.forEach(b => { if(b.textContent.toLowerCase().includes(it.section)) targetBtn = b; });
+  if(targetBtn) targetBtn.click();
+  // List をロードして該当行を編集モードへ
+  loadList(it.section);
+  setTimeout(() => {
+    const row = listCache[it.section]?.find(r => r._row === it.rowNum);
+    if(row) editRow(it.section, it.rowNum);
+    else toast('Item not found (may have been deleted)', 'error');
+  }, 1500);
+}
+
+/* ==============================================================
+   CALENDAR VIEW
+   ============================================================== */
+let festivalView='list', eventView='list';
+function setFestivalView(v){
+  festivalView=v;
+  document.querySelectorAll('#festival-view-toggle button').forEach(b=>b.classList.toggle('active', b.dataset.view===v));
+  filterFestivalList();
+}
+function setEventView(v){
+  eventView=v;
+  document.querySelectorAll('#event-view-toggle button').forEach(b=>b.classList.toggle('active', b.dataset.view===v));
+  filterEventList();
+}
+function renderCalendar(section, rows){
+  const c=document.getElementById(section+'-list');
+  // 月別にグループ化
+  const months={};
+  rows.forEach(r=>{
+    const date=String(r.date||'').substring(0,7); // YYYY-MM
+    if(!date.match(/^\d{4}-\d{2}$/)) return;
+    if(!months[date]) months[date]=[];
+    months[date].push(r);
+  });
+  const sorted=Object.keys(months).sort().reverse();
+  if(!sorted.length){c.innerHTML='<div class="data-list-empty">No dated entries</div>';return}
+  const html=sorted.map(ym=>{
+    const [y,m]=ym.split('-');
+    const items=months[ym].slice(0,4).map(r=>'<div title="'+esc(r.name||'')+'">'+esc((r.name||r.title||'').substring(0,18))+(r.name && r.name.length>18?'…':'')+'</div>').join('');
+    const more=months[ym].length>4?'<div style="opacity:.5">+'+(months[ym].length-4)+' more</div>':'';
+    return `<div class="cal-month" onclick="document.getElementById('${section}-search').value='${ym}';filter${section.charAt(0).toUpperCase()+section.slice(1)}List()">
+      <div class="cal-month-label">${y} / ${m}</div>
+      <div class="cal-month-count">${months[ym].length}</div>
+      <div class="cal-month-items">${items}${more}</div>
+    </div>`;
+  }).join('');
+  c.innerHTML='<div class="cal-grid">'+html+'</div>';
+}
+
+/* ==============================================================
+   LOCATION MAP — Lat/Lng visual confirmation
+   ============================================================== */
+const locMaps = {};
+function updateLocationMap(prefix){
+  const lat = parseFloat(document.getElementById(prefix+'-lat')?.value);
+  const lng = parseFloat(document.getElementById(prefix+'-lng')?.value);
+  const container = document.getElementById(prefix+'-map');
+  if(!container || !window.L) return;
+  if(isNaN(lat) || isNaN(lng)){
+    container.classList.remove('show');
+    return;
+  }
+  container.classList.add('show');
+  if(!locMaps[prefix]){
+    setTimeout(() => {
+      locMaps[prefix] = L.map(prefix+'-map', {
+        center:[lat,lng], zoom:14, zoomControl:true, attributionControl:false
+      });
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19}).addTo(locMaps[prefix]);
+      const icon = L.divIcon({className:'',html:'<div style="width:14px;height:14px;background:#ff2d2d;border:2px solid #fff;border-radius:50%;box-shadow:0 0 8px rgba(255,45,45,.6)"></div>',iconSize:[14,14],iconAnchor:[7,7]});
+      locMaps[prefix].marker = L.marker([lat,lng],{icon}).addTo(locMaps[prefix]);
+      setTimeout(()=>locMaps[prefix].invalidateSize(), 100);
+    }, 100);
+  } else {
+    locMaps[prefix].setView([lat,lng], locMaps[prefix].getZoom());
+    locMaps[prefix].marker.setLatLng([lat,lng]);
+    setTimeout(()=>locMaps[prefix].invalidateSize(), 100);
+  }
+}
+
+/* ==============================================================
+   VALIDATION HELPERS
+   ============================================================== */
+function isValidUrl(s){
+  if(!s) return true; // 空はOK（オプション）
+  try { const u = new URL(s); return u.protocol === 'http:' || u.protocol === 'https:'; }
+  catch(e) { return false; }
+}
+function checkDuplicateId(section, id){
+  if(!id || !listCache[section]) return null;
+  const exists = listCache[section].find(r => String(r.id||'').toLowerCase() === id.toLowerCase());
+  return exists ? exists : null;
+}
+function findSimilarIds(section, id){
+  if(!id || !listCache[section]) return [];
+  const lower = id.toLowerCase();
+  return listCache[section].filter(r => {
+    const rid = String(r.id||'').toLowerCase();
+    if(rid === lower) return false;
+    // ハイフン違いや短縮形を検出
+    return rid.includes(lower) || lower.includes(rid);
+  }).slice(0, 3);
+}
+function validateBeforeSave(section, payload){
+  const errors = [];
+  // URL系フィールドをチェック
+  const urlFields = ['url','ticketUrl','instagram','soundcloud','bandcamp','website','link','image','flyer'];
+  urlFields.forEach(f => {
+    if(payload[f] && !payload[f].startsWith('images/') && !isValidUrl(payload[f])){
+      errors.push(f + ': 有効なURLではありません ('+payload[f]+')');
+    }
+  });
+  // ID重複チェック（新規登録のみ）
+  if(payload.action && payload.action.startsWith('add_') && payload.id){
+    const dup = checkDuplicateId(section, payload.id);
+    if(dup) errors.push('ID "'+payload.id+'" は既に存在します ('+(dup.name||dup.title)+')');
+    const similar = findSimilarIds(section, payload.id);
+    if(similar.length){
+      const names = similar.map(s => s.id).join(', ');
+      if(!confirm('似たIDがあります: '+names+'\n\nこのまま登録しますか？')) {
+        errors.push('登録キャンセル');
+      }
+    }
+  }
+  return errors;
+}
+
+/* 画像を圧縮: 最大幅 maxW、JPEG品質 quality */
+function compressImage(file, maxW=1920, quality=0.85){
+  return new Promise((resolve, reject)=>{
+    const img = new Image();
+    const reader = new FileReader();
+    reader.onload = e => { img.src = e.target.result; };
+    reader.onerror = reject;
+    img.onload = () => {
+      const ratio = Math.min(1, maxW/img.width);
+      const w = Math.round(img.width * ratio);
+      const h = Math.round(img.height * ratio);
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      canvas.toBlob(blob => {
+        if(!blob) return reject(new Error('compression failed'));
+        // dataURLとして返す
+        const fr = new FileReader();
+        fr.onload = () => resolve({dataUrl: fr.result, blob, width: w, height: h});
+        fr.onerror = reject;
+        fr.readAsDataURL(blob);
+      }, 'image/jpeg', quality);
+    };
+    img.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
 function uploadImage(input,type,prefix){
   const file=input.files[0]; if(!file)return;
   const id=document.getElementById(prefix+'-id')?.value?.trim();
   if(!id)return toast('Enter ID first','error');
-  if(file.size>5*1024*1024)return toast('ファイルサイズが5MBを超えています（max 5MB）','error');
-  const sizeMB=(file.size/1024/1024).toFixed(1);
-  toast('Uploading... ('+sizeMB+'MB)','info');
-  // プレビューID: preview-v-image, preview-f-image, preview-f-flyer, preview-a-image
+  const origMB=(file.size/1024/1024).toFixed(1);
   const previewId='preview-'+prefix+'-'+(type==='festival-flyer'?'flyer':'image');
   const previewEl=document.getElementById(previewId);
-  const reader=new FileReader();
-  reader.onload=()=>{
-    const dataUrl=reader.result;
-    // ローカルプレビュー表示
+
+  toast('Compressing... ('+origMB+'MB)','info');
+  compressImage(file).then(({dataUrl, blob, width, height})=>{
+    const compMB=(blob.size/1024/1024).toFixed(2);
+    toast('Uploading... '+origMB+'MB → '+compMB+'MB','info');
     if(previewEl){
       previewEl.style.display='block';
-      previewEl.innerHTML='<img src="'+dataUrl+'" alt="preview"><div class="preview-info">'+esc(file.name)+' ('+sizeMB+'MB) — uploading...</div>';
+      previewEl.innerHTML='<img src="'+dataUrl+'" alt="preview"><div class="preview-info">'+esc(file.name)+' — '+width+'×'+height+' ('+origMB+'MB → '+compMB+'MB) uploading...</div>';
     }
     // festival系は upload_festival_image、それ以外は upload_image
     const action=type.startsWith('festival')?'upload_festival_image':'upload_image';
     const filename=type==='festival-flyer'?id+'-flyer.jpg':null;
-    const body={action,imageData:dataUrl,mimeType:file.type,id};
+    const body={action,imageData:dataUrl,mimeType:'image/jpeg',id};
     if(filename)body.filename=filename;
-    fetch(GAS_URL,{method:'POST',body:JSON.stringify(body)})
-      .then(r=>r.json()).then(d=>{
-        if(d.status==='ok'||d.success){
-          toast('Uploaded','success');
-          if(d.imagePath&&prefix){
-            const target=type==='festival-flyer'?prefix+'-flyer':prefix+'-image';
-            const el=document.getElementById(target);
-            if(el)el.value=d.imagePath;
-          }
-          if(previewEl){const info=previewEl.querySelector('.preview-info');if(info)info.textContent='✓ '+file.name+' ('+sizeMB+'MB)';}
-        } else {
-          toast(d.message||'Upload failed','error');
-          if(previewEl){const info=previewEl.querySelector('.preview-info');if(info)info.textContent='✗ Upload failed';}
+    return fetch(GAS_URL,{method:'POST',body:JSON.stringify(body)}).then(r=>r.json()).then(d=>{
+      if(d.status==='ok'||d.success){
+        toast('Uploaded ('+compMB+'MB)','success');
+        if(d.imagePath&&prefix){
+          const target=type==='festival-flyer'?prefix+'-flyer':prefix+'-image';
+          const el=document.getElementById(target);
+          if(el)el.value=d.imagePath;
         }
-      })
-      .catch(()=>{toast('Upload error','error');if(previewEl){const info=previewEl.querySelector('.preview-info');if(info)info.textContent='✗ Upload error';}});
-  };
-  reader.readAsDataURL(file);
+        if(previewEl){const info=previewEl.querySelector('.preview-info');if(info)info.textContent='✓ '+width+'×'+height+' ('+compMB+'MB)';}
+      } else {
+        toast(d.message||'Upload failed','error');
+        if(previewEl){const info=previewEl.querySelector('.preview-info');if(info)info.textContent='✗ Upload failed';}
+      }
+    });
+  }).catch(e=>{
+    console.error('Compress/upload error:',e);
+    toast('Image error: '+e.message,'error');
+    if(previewEl){previewEl.style.display='block';previewEl.innerHTML='<div class="preview-info">✗ '+esc(e.message)+'</div>';}
+  });
 }
 
 /* ==============================================================
@@ -1249,7 +1616,19 @@ function sortVenueList(key){
    ============================================================== */
 let eventSortKey='date', eventSortAsc=false;
 function filterEventList(){
-  applyListFilter('event', ['name','venue','city','lineup'], eventSortKey, eventSortAsc);
+  if(!listCache.event)return;
+  const q=(document.getElementById('event-search')?.value||'').toLowerCase();
+  let rows=listCache.event;
+  if(q) rows=rows.filter(r=>
+    String(r.name||'').toLowerCase().includes(q) ||
+    String(r.venue||'').toLowerCase().includes(q) ||
+    String(r.city||'').toLowerCase().includes(q) ||
+    String(r.lineup||'').toLowerCase().includes(q) ||
+    String(r.date||'').includes(q)
+  );
+  if(eventView==='calendar'){ renderCalendar('event', rows); return; }
+  rows=sortRows(rows, eventSortKey, eventSortAsc);
+  renderList('event', rows);
 }
 function sortEventList(key){
   if(eventSortKey===key) eventSortAsc=!eventSortAsc;
@@ -1286,8 +1665,10 @@ function filterFestivalList(){
     String(r.city||'').toLowerCase().includes(q) ||
     String(r.location||'').toLowerCase().includes(q) ||
     String(r.genre||'').toLowerCase().includes(q) ||
-    String(r.lineup||'').toLowerCase().includes(q)
+    String(r.lineup||'').toLowerCase().includes(q) ||
+    String(r.date||'').includes(q)
   );
+  if(festivalView==='calendar'){ renderCalendar('festival', rows); return; }
   rows=sortRows(rows, festivalSortKey, festivalSortAsc);
   renderList('festival', rows);
 }
@@ -1309,6 +1690,7 @@ function editRow(section, rowNum){
   const row=listCache[section].find(r=>r._row===rowNum);
   if(!row)return toast('Row not found','error');
   editState[section]={...row};
+  recordRecentItem(section, row, rowNum);
 
   if(section==='venue'){
     setVal('v-id',row.id); setVal('v-name',row.name); setVal('v-city',row.city);
@@ -1318,6 +1700,7 @@ function editRow(section, rowNum){
     setVal('v-lat',row.lat); setVal('v-lng',row.lng);
     setVal('v-instagram',row.instagram); setVal('v-desc',row.desc);
     setSelectedGenres('v-genre',(row.genre||'').split(',').map(s=>s.trim()).filter(Boolean));
+    updateLocationMap('v');
   }
   else if(section==='festival'){
     setVal('f-id',row.id); setVal('f-type',row.type||'festival');
@@ -1336,6 +1719,7 @@ function editRow(section, rowNum){
     document.getElementById('bulk-lineup-wrap').style.display='none';
     document.getElementById('gradient-preview').style.display='none';
     if(row.heroGradient) updateGradientPreview(row.heroGradient);
+    updateLocationMap('f');
   }
   else if(section==='artist'){
     setVal('a-id',row.id); setVal('a-name',row.name); setVal('a-city',row.city);
@@ -1448,13 +1832,209 @@ function closeConfirm(){document.getElementById('confirmDialog').classList.remov
 function executeDelete(){
   if(!pendingDelete)return;
   const{section,rowNum}=pendingDelete;
+  // 削除前に行データを保存（Undoで復元できるように）
+  const row = listCache[section]?.find(r => r._row === rowNum);
   closeConfirm();
   toast('Deleting...','info');
   fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'delete_row',sheet:SHEET_MAP[section],row:rowNum})})
     .then(r=>r.json()).then(d=>{
-      if(d.status==='ok'||d.success){toast('Deleted','success');loadList(section)}
-      else toast('Delete failed: '+(d.message||''),'error');
+      if(d.status==='ok'||d.success){
+        if(row) saveDeletedItem(section, row);
+        toast('Deleted — undo via "Trash" in sidebar','success');
+        renderTrashCount();
+        loadList(section);
+      } else toast('Delete failed: '+(d.message||''),'error');
     }).catch(()=>toast('Delete error','error'));
+}
+
+/* ==============================================================
+   STATS DASHBOARD
+   ============================================================== */
+function openStats(){
+  toast('Loading stats...','info');
+  Promise.all([
+    fetch(GAS_URL+'?action=get_sheet&sheet=ARTISTS').then(r=>r.json()),
+    fetch(GAS_URL+'?action=get_sheet&sheet=EVENTS').then(r=>r.json()),
+    fetch(GAS_URL+'?action=get_sheet&sheet=FESTIVALS').then(r=>r.json()),
+    fetch(GAS_URL+'?action=get_sheet&sheet=VENUES').then(r=>r.json())
+  ]).then(([a,e,f,v])=>{
+    const stats = computeStats({
+      artists: a.rows||[], events: e.rows||[], festivals: f.rows||[], venues: v.rows||[]
+    });
+    renderStatsDialog(stats);
+  }).catch(err => toast('Stats error: '+err.message,'error'));
+}
+function computeStats(data){
+  const byCity = {};
+  const byGenre = {};
+  const byYear = {};
+  const byCountry = {};
+  const byMonth = {};
+  // 都市別 (Venues + Festivals)
+  [...data.venues, ...data.festivals].forEach(r=>{
+    const c=String(r.city||'').toUpperCase().trim();
+    if(c) byCity[c]=(byCity[c]||0)+1;
+  });
+  // ジャンル別 (全部)
+  [...data.venues, ...data.festivals, ...data.artists].forEach(r=>{
+    String(r.genre||'').split(/[·,]/).forEach(g=>{
+      const t=g.trim().toUpperCase();
+      if(t) byGenre[t]=(byGenre[t]||0)+1;
+    });
+  });
+  // 年別 (Festivals + Events)
+  [...data.festivals, ...data.events].forEach(r=>{
+    const y=String(r.date||'').substring(0,4);
+    if(y.match(/^\d{4}$/)) byYear[y]=(byYear[y]||0)+1;
+  });
+  // 月別 (Festivals)
+  data.festivals.forEach(r=>{
+    const m=String(r.date||'').substring(5,7);
+    if(m.match(/^\d{2}$/)) byMonth[m]=(byMonth[m]||0)+1;
+  });
+  // 国別 (Artists)
+  data.artists.forEach(r=>{
+    const c=String(r.country||'').toUpperCase().trim();
+    if(c) byCountry[c]=(byCountry[c]||0)+1;
+  });
+  return {
+    totals: {
+      venues: data.venues.length,
+      festivals: data.festivals.length,
+      artists: data.artists.length,
+      events: data.events.length
+    },
+    byCity, byGenre, byYear, byCountry, byMonth
+  };
+}
+function topN(obj, n){
+  return Object.entries(obj).sort((a,b)=>b[1]-a[1]).slice(0,n);
+}
+function renderStatsDialog(stats){
+  const overlay = document.createElement('div');
+  overlay.className='dialog-overlay show';
+  overlay.style.zIndex=700;
+  const bar = (label, count, max) => {
+    const w = Math.max(2, (count/max)*100);
+    return `<div style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:.75rem">
+      <div style="width:120px;color:var(--text2);font-family:var(--font-mono);font-size:.7rem">${esc(label)}</div>
+      <div style="flex:1;background:var(--bg3);border-radius:2px;height:14px;position:relative">
+        <div style="width:${w}%;background:var(--accent);height:100%;border-radius:2px"></div>
+      </div>
+      <div style="width:32px;text-align:right;color:var(--text);font-family:var(--font-mono);font-size:.75rem">${count}</div>
+    </div>`;
+  };
+  const section = (title, entries) => {
+    if(!entries.length) return '';
+    const max = entries[0][1];
+    return `<div style="margin-top:20px"><h4 style="margin-bottom:8px;color:var(--text2);font-family:var(--font-mono);font-size:.7rem;letter-spacing:1px">${title}</h4>${entries.map(([k,v])=>bar(k,v,max)).join('')}</div>`;
+  };
+  overlay.innerHTML = `<div class="dialog-box" style="max-width:680px;max-height:85vh;overflow-y:auto">
+    <h3>📊 Stats Dashboard</h3>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0">
+      <div style="text-align:center;background:var(--bg3);padding:14px;border-radius:var(--radius)">
+        <div style="font-family:var(--font-display);font-size:2rem;color:var(--text)">${stats.totals.festivals}</div>
+        <div style="font-family:var(--font-mono);font-size:.6rem;color:var(--text3);letter-spacing:1px">FESTIVALS</div>
+      </div>
+      <div style="text-align:center;background:var(--bg3);padding:14px;border-radius:var(--radius)">
+        <div style="font-family:var(--font-display);font-size:2rem;color:var(--text)">${stats.totals.venues}</div>
+        <div style="font-family:var(--font-mono);font-size:.6rem;color:var(--text3);letter-spacing:1px">VENUES</div>
+      </div>
+      <div style="text-align:center;background:var(--bg3);padding:14px;border-radius:var(--radius)">
+        <div style="font-family:var(--font-display);font-size:2rem;color:var(--text)">${stats.totals.artists}</div>
+        <div style="font-family:var(--font-mono);font-size:.6rem;color:var(--text3);letter-spacing:1px">ARTISTS</div>
+      </div>
+      <div style="text-align:center;background:var(--bg3);padding:14px;border-radius:var(--radius)">
+        <div style="font-family:var(--font-display);font-size:2rem;color:var(--text)">${stats.totals.events}</div>
+        <div style="font-family:var(--font-mono);font-size:.6rem;color:var(--text3);letter-spacing:1px">EVENTS</div>
+      </div>
+    </div>
+    ${section('TOP CITIES', topN(stats.byCity, 8))}
+    ${section('TOP GENRES', topN(stats.byGenre, 8))}
+    ${section('FESTIVALS BY MONTH', Object.entries(stats.byMonth).sort())}
+    ${section('BY YEAR', Object.entries(stats.byYear).sort().reverse().slice(0,5))}
+    ${section('ARTISTS BY COUNTRY', topN(stats.byCountry, 5))}
+    <div class="btn-row" style="margin-top:24px"><button class="btn" onclick="this.closest('.dialog-overlay').remove()">Close</button></div>
+  </div>`;
+  document.body.appendChild(overlay);
+}
+
+/* ==============================================================
+   TRASH / UNDO DELETE
+   削除した行を30日間localStorage保存 → 復元可能
+   ============================================================== */
+const TRASH_KEY = 'cms_trash_v1';
+const TRASH_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+function getTrash(){
+  try {
+    const items = JSON.parse(localStorage.getItem(TRASH_KEY) || '[]');
+    const now = Date.now();
+    return items.filter(i => (now - i.deletedAt) < TRASH_TTL_MS);
+  } catch(e) { return []; }
+}
+function saveDeletedItem(section, row){
+  const items = getTrash();
+  items.unshift({ section, row: { ...row }, deletedAt: Date.now() });
+  localStorage.setItem(TRASH_KEY, JSON.stringify(items.slice(0, 50)));
+}
+function renderTrashCount(){
+  const el = document.getElementById('trash-count');
+  if(!el) return;
+  const n = getTrash().length;
+  el.textContent = n ? '('+n+')' : '';
+}
+function openTrash(){
+  const items = getTrash();
+  if(!items.length) return toast('Trash is empty','info');
+  const overlay = document.createElement('div');
+  overlay.className='dialog-overlay show';
+  overlay.style.zIndex=700;
+  overlay.innerHTML = `<div class="dialog-box" style="max-width:600px;max-height:80vh;overflow-y:auto">
+    <h3>🗑 Trash (${items.length})</h3>
+    <p>削除されたアイテム — 30日間保管。クリックで復元できます。</p>
+    <div id="trash-list">${items.map((it,i)=>{
+      const label = it.row.name || it.row.title || it.row.id || '(unnamed)';
+      const ago = Math.round((Date.now()-it.deletedAt)/1000/60);
+      const agoStr = ago<60?ago+'m ago':ago<1440?Math.round(ago/60)+'h ago':Math.round(ago/1440)+'d ago';
+      return `<div style="padding:10px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:10px">
+        <div><strong>${esc(label)}</strong><br><span style="color:var(--text3);font-size:.7rem">${esc(it.section)} · ${agoStr}</span></div>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-sm btn-green" onclick="restoreTrash(${i})">Restore</button>
+          <button class="btn btn-sm btn-accent" onclick="removeTrashPermanent(${i})">Delete</button>
+        </div>
+      </div>`;
+    }).join('')}</div>
+    <div class="btn-row" style="margin-top:16px"><button class="btn btn-sm" onclick="this.closest('.dialog-overlay').remove()">Close</button></div>
+  </div>`;
+  document.body.appendChild(overlay);
+}
+function restoreTrash(idx){
+  const items = getTrash();
+  const it = items[idx];
+  if(!it) return;
+  const action = 'add_'+it.section;
+  const payload = { action, ...it.row };
+  delete payload._row;
+  toast('Restoring...','info');
+  fetch(GAS_URL,{method:'POST',body:JSON.stringify(payload)})
+    .then(r=>r.json()).then(d=>{
+      if(d.status==='ok'||d.success){
+        toast('Restored','success');
+        items.splice(idx,1);
+        localStorage.setItem(TRASH_KEY, JSON.stringify(items));
+        renderTrashCount();
+        document.querySelector('.dialog-overlay[style*="zIndex"]')?.remove();
+      } else toast('Restore failed: '+(d.message||''),'error');
+    }).catch(()=>toast('Restore error','error'));
+}
+function removeTrashPermanent(idx){
+  if(!confirm('完全に削除しますか？（復元できません）')) return;
+  const items = getTrash();
+  items.splice(idx,1);
+  localStorage.setItem(TRASH_KEY, JSON.stringify(items));
+  renderTrashCount();
+  document.querySelector('.dialog-overlay')?.remove();
+  openTrash();
 }
 
 /* ==============================================================
@@ -1495,6 +2075,11 @@ function submitToSheet(section){
       date:g('ar-date'),image:g('ar-image'),readTime:g('ar-readTime'),
       views:g('ar-views'),featured:g('ar-featured'),excerpt:g('ar-excerpt')};
     if(!payload.id||!payload.title)return toast('ID and Title required','error');
+  }
+  // バリデーション
+  const errors = validateBeforeSave(section, payload);
+  if(errors.length){
+    return toast(errors[0], 'error');
   }
   // Festivalの場合、未登録アーティストを自動でARTISTSに追加
   const unregisteredArtists=(section==='festival')

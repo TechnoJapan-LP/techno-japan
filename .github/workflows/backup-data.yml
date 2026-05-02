@@ -1,0 +1,84 @@
+name: Backup Spreadsheet Data
+
+on:
+  schedule:
+    - cron: '0 2 * * *'  # 毎日 11:00 JST (02:00 UTC)
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Backup data from Google Sheets via GAS
+        run: |
+          python3 << 'PYTHON'
+          import urllib.request
+          import json
+          import os
+          from datetime import datetime, timezone, timedelta
+
+          GAS_URL = "https://script.google.com/macros/s/AKfycbxhJ6rtGoAirNyV5TtBvzWHNOT8RuB0nfDjwglmdu8ClhpWZ-OXSbMM4UyFE_7ZsV-Lpg/exec"
+          AUTH = os.environ.get('CMS_AUTH_HASH', '')
+
+          SHEETS = ['VENUES', 'FESTIVALS', 'ARTISTS', 'EVENTS', 'ARTICLES']
+          backup = {'_meta': {'backedUpAt': datetime.now(timezone(timedelta(hours=9))).isoformat()}}
+
+          for sheet in SHEETS:
+              url = f"{GAS_URL}?action=get_sheet&sheet={sheet}"
+              if AUTH:
+                  url += f"&cmsAuth={AUTH}"
+              try:
+                  with urllib.request.urlopen(url) as res:
+                      data = json.loads(res.read().decode('utf-8'))
+                  if data.get('status') == 'ok':
+                      backup[sheet] = data.get('rows', [])
+                      print(f"✓ {sheet}: {len(backup[sheet])} rows")
+                  else:
+                      print(f"✗ {sheet}: {data.get('message','unknown error')}")
+                      backup[sheet] = []
+              except Exception as e:
+                  print(f"✗ {sheet}: {e}")
+                  backup[sheet] = []
+
+          os.makedirs('LP/backups', exist_ok=True)
+          # 最新 + 日付付き
+          today = datetime.now(timezone(timedelta(hours=9))).strftime('%Y-%m-%d')
+          with open('LP/backups/latest.json', 'w', encoding='utf-8') as f:
+              json.dump(backup, f, ensure_ascii=False, indent=2)
+          with open(f'LP/backups/{today}.json', 'w', encoding='utf-8') as f:
+              json.dump(backup, f, ensure_ascii=False, indent=2)
+
+          # 30日より古いバックアップを削除
+          import glob
+          from datetime import date
+          for path in glob.glob('LP/backups/*.json'):
+              if path.endswith('latest.json'): continue
+              try:
+                  fname = os.path.basename(path).replace('.json','')
+                  fdate = datetime.strptime(fname, '%Y-%m-%d').date()
+                  if (date.today() - fdate).days > 30:
+                      os.remove(path)
+                      print(f"Removed old backup: {fname}")
+              except: pass
+
+          print(f"\nBackup complete: {today}")
+          PYTHON
+        env:
+          CMS_AUTH_HASH: ${{ secrets.CMS_AUTH_HASH }}
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add LP/backups/
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "backup: spreadsheet data $(date -u +%Y-%m-%d)"
+            git push
+          fi
