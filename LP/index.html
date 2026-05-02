@@ -1032,6 +1032,26 @@ footer {
   .cta-btn { cursor: pointer; }
   .nav-hamburger, .nav-overlay .nav-close, .nav-overlay .nav-back, .nav-overlay a { cursor: pointer; }
 }
+
+/* ===== MOBILE/PERFORMANCE OPTIMIZATIONS ===== */
+* { -webkit-tap-highlight-color: transparent; }
+@media (max-width: 768px) {
+  input, textarea, select { font-size: 16px !important; } /* prevent iOS zoom */
+  /* Larger tap targets for fav hearts and share buttons on touch */
+  .tj-fav-heart { width: 38px; height: 38px; }
+  .tj-fav-heart.sm { width: 32px; height: 32px; }
+  .share-btn, .article-share-btn { width: 38px; height: 38px; }
+}
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 </style>
 <script type="application/ld+json">
 {
@@ -1362,11 +1382,28 @@ const observer = new IntersectionObserver((entries) => {
 reveals.forEach(el => observer.observe(el));
 </script>
 
-<!-- BEHOLD INSTAGRAM WIDGET LOADER -->
+<!-- BEHOLD INSTAGRAM WIDGET LOADER (lazy via IntersectionObserver) -->
 <script>
   (() => {
-    const d=document,s=d.createElement("script");s.type="module";
-    s.src="https://w.behold.so/widget.js";d.head.append(s);
+    const target = document.querySelector('behold-widget');
+    if (!target) return;
+    const load = () => {
+      const d = document, s = d.createElement('script');
+      s.type = 'module';
+      s.src = 'https://w.behold.so/widget.js';
+      d.head.append(s);
+    };
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        if (entries.some(e => e.isIntersecting)) {
+          load();
+          io.disconnect();
+        }
+      }, { rootMargin: '300px' });
+      io.observe(target);
+    } else {
+      load();
+    }
   })();
 </script>
 <!-- Service Worker registration -->
@@ -1378,7 +1415,7 @@ reveals.forEach(el => observer.observe(el));
   }
 </script>
 <script src="data.js?v=3"></script>
-<script src="favorites.js"></script>
-<script src="search.js"></script>
+<script src="favorites.js" defer></script>
+<script src="search.js" defer></script>
 </body>
 </html>

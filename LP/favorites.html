@@ -218,6 +218,26 @@ footer { padding: 60px 40px 40px; border-top: 1px solid rgba(240,237,232,0.08); 
 }
 
 /* SHARED Schema for org */
+
+/* ===== MOBILE/PERFORMANCE OPTIMIZATIONS ===== */
+* { -webkit-tap-highlight-color: transparent; }
+@media (max-width: 768px) {
+  input, textarea, select { font-size: 16px !important; } /* prevent iOS zoom */
+  /* Larger tap targets for fav hearts and share buttons on touch */
+  .tj-fav-heart { width: 38px; height: 38px; }
+  .tj-fav-heart.sm { width: 32px; height: 32px; }
+  .share-btn, .article-share-btn { width: 38px; height: 38px; }
+}
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 </style>
 
 <script type="application/ld+json">
@@ -284,8 +304,8 @@ footer { padding: 60px 40px 40px; border-top: 1px solid rgba(240,237,232,0.08); 
 </footer>
 
 <script src="data.js?v=3"></script>
-<script src="favorites.js"></script>
-<script src="search.js"></script>
+<script src="favorites.js" defer></script>
+<script src="search.js" defer></script>
 <script>
 const gradients = [
   'linear-gradient(135deg, #1a0533 0%, #4a1942 40%, #c2185b 100%)',

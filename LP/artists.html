@@ -609,6 +609,26 @@ footer { padding: 60px 40px 40px; border-top: 1px solid rgba(240,237,232,0.08); 
 .newsletter-form button:hover { opacity: 0.85; }
 @media (max-width: 768px) { .newsletter { padding: 60px 24px; } .newsletter-form { flex-direction: column; } .newsletter-form button { padding: 14px; } }
 
+
+/* ===== MOBILE/PERFORMANCE OPTIMIZATIONS ===== */
+* { -webkit-tap-highlight-color: transparent; }
+@media (max-width: 768px) {
+  input, textarea, select { font-size: 16px !important; } /* prevent iOS zoom */
+  /* Larger tap targets for fav hearts and share buttons on touch */
+  .tj-fav-heart { width: 38px; height: 38px; }
+  .tj-fav-heart.sm { width: 32px; height: 32px; }
+  .share-btn, .article-share-btn { width: 38px; height: 38px; }
+}
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 </style>
 <script type="application/ld+json">
 {
@@ -731,8 +751,8 @@ footer { padding: 60px 40px 40px; border-top: 1px solid rgba(240,237,232,0.08); 
   </div>
 </footer>
 
-<script src="favorites.js"></script>
-<script src="search.js"></script>
+<script src="favorites.js" defer></script>
+<script src="search.js" defer></script>
 <script src="data.js?v=3"></script>
 <script>
 const WEEKDAYS = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
