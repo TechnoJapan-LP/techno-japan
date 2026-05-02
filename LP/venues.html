@@ -158,6 +158,10 @@ nav .nav-dropdown-menu-inner a:hover { opacity: 1; background: rgba(240,237,232,
 .share-btn svg { width: 14px; height: 14px; fill: currentColor; }
 .share-btn.copied { background: rgba(255,255,255,0.08); }
 
+/* FAV HEART (venue card) */
+.venue-card { position: relative; }
+.venue-fav-mount { position: absolute; top: 16px; right: 16px; z-index: 5; }
+
 /* VENUE SECTIONS */
 .venue-section { padding-top: 60px; }
 .venue-section-title {
@@ -704,8 +708,16 @@ function renderVenuesList() {
           <div class="venue-card-genre">${v.genre ? (Array.isArray(v.genre) ? v.genre.join(' / ') : v.genre) : ''}</div>
         </div>
         <div class="venue-card-arrow">VIEW →</div>
+        <div class="venue-fav-mount" data-fav-mount="venue" data-fav-id="${v.id}" onclick="event.preventDefault();event.stopPropagation()"></div>
       </a>`;
   }).join('');
+  // Mount hearts
+  if (window.tjFav) {
+    document.querySelectorAll('#venues-grid [data-fav-mount]').forEach(m => {
+      if (m.children.length) return;
+      window.tjFav.attachHeart(m, m.dataset.favMount, m.dataset.favId, { size: 'sm' });
+    });
+  }
   observeAll();
   bindCursorExpand();
   applyAreaFilter();

@@ -55,7 +55,8 @@
       .gs-group { margin-bottom: 24px; }
       .gs-group-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; opacity: 0.4; padding: 8px 20px; border-bottom: 1px solid rgba(240,237,232,0.06); }
       .gs-result { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; border-bottom: 1px solid rgba(240,237,232,0.04); cursor: pointer; transition: background 0.2s ease; }
-      .gs-result:hover { background: rgba(240,237,232,0.04); }
+      .gs-result:hover, .gs-result.gs-active { background: rgba(240,237,232,0.06); }
+      .gs-result.gs-active { border-left: 2px solid #ff2d2d; padding-left: 18px; }
       .gs-result-name { font-family: var(--font-display); font-size: 16px; text-transform: uppercase; }
       .gs-result-meta { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; opacity: 0.4; text-transform: uppercase; }
       .gs-empty { padding: 40px 20px; text-align: center; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; opacity: 0.3; }
@@ -105,6 +106,40 @@
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(() => doSearch(input.value), 150);
     });
+
+    // Keyboard navigation: arrows + enter
+    let activeIdx = -1;
+    function getResultEls() { return Array.from(results.querySelectorAll('.gs-result')); }
+    function setActive(idx) {
+      const els = getResultEls();
+      if (!els.length) return;
+      activeIdx = (idx + els.length) % els.length;
+      els.forEach((el, i) => el.classList.toggle('gs-active', i === activeIdx));
+      els[activeIdx].scrollIntoView({ block: 'nearest' });
+    }
+
+    input.addEventListener('keydown', e => {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setActive(activeIdx + 1);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setActive(activeIdx - 1);
+      } else if (e.key === 'Enter') {
+        const els = getResultEls();
+        if (activeIdx >= 0 && els[activeIdx]) {
+          e.preventDefault();
+          els[activeIdx].click();
+        } else if (els[0]) {
+          e.preventDefault();
+          els[0].click();
+        }
+      }
+    });
+
+    // Reset active index when results re-render
+    const observer = new MutationObserver(() => { activeIdx = -1; });
+    observer.observe(results, { childList: true });
 
     // Add trigger to nav
     document.querySelectorAll('nav .nav-links').forEach(navLinks => {

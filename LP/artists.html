@@ -346,6 +346,9 @@ nav .nav-dropdown-menu-inner a:hover { opacity: 1; background: rgba(240,237,232,
 .share-btn svg { width: 14px; height: 14px; fill: currentColor; }
 .share-btn.copied { background: rgba(255,255,255,0.08); }
 
+/* FAV HEART (artist card) */
+.artist-fav-mount { position: absolute; top: 10px; right: 10px; z-index: 5; }
+
 .artist-detail-links { display: flex; gap: 24px; margin-top: 8px; }
 .artist-detail-links a {
   font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em;
@@ -880,8 +883,18 @@ function renderArtistsList() {
         <div class="artist-card-name">${a.name}</div>
         <div class="artist-card-city">${a.country || a.city || ''}</div>
       </div>
+      <div class="artist-fav-mount" data-fav-mount="artist" data-fav-id="${a.id}" onclick="event.preventDefault();event.stopPropagation()"></div>
     </a>`;
   }).join('');
+
+  // Mount hearts
+  if (window.tjFav) {
+    grid.querySelectorAll('[data-fav-mount]').forEach(m => {
+      if (m.children.length) return;
+      window.tjFav.attachHeart(m, m.dataset.favMount, m.dataset.favId, { size: 'sm' });
+    });
+  }
+
   observeAll();
   bindCursorExpand();
 }

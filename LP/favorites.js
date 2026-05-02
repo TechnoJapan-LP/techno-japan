@@ -94,10 +94,52 @@
       .tj-fav-heart.active svg path { fill: #ff2d2d; stroke: #ff2d2d; }
       .tj-fav-heart.sm { width: 26px; height: 26px; }
       .tj-fav-heart.sm svg { width: 12px; height: 12px; }
+
+      .tj-fav-nav {
+        font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em;
+        text-transform: uppercase; opacity: 0.6; transition: opacity 0.3s ease;
+        display: inline-flex; align-items: center; color: var(--text);
+      }
+      .tj-fav-nav:hover { opacity: 1; }
+      .tj-fav-nav.has-favorites { color: #ff2d2d; opacity: 1; }
+      .tj-fav-nav .tj-fav-count {
+        font-size: 9px; letter-spacing: 0.1em;
+      }
     `;
     document.head.appendChild(style);
   }
 
   injectStyles();
   window.tjFav = tjFav;
+
+  // Auto-mount favorites link with counter in nav
+  function mountNavLink() {
+    document.querySelectorAll('nav .nav-links').forEach(navLinks => {
+      if (navLinks.querySelector('.tj-fav-nav')) return;
+      const link = document.createElement('a');
+      link.href = '/favorites.html';
+      link.className = 'tj-fav-nav';
+      link.innerHTML = `<svg viewBox="0 0 24 24" style="width:14px;height:14px;vertical-align:middle"><path d="M12 21s-7-4.5-7-11a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 6.5-7 11-7 11z" stroke="currentColor" stroke-width="1.6" fill="none"/></svg> <span class="tj-fav-count" style="margin-left:4px"></span>`;
+      // Insert before search trigger if exists, else append
+      const searchTrigger = navLinks.querySelector('.gs-trigger');
+      if (searchTrigger) navLinks.insertBefore(link, searchTrigger);
+      else navLinks.appendChild(link);
+    });
+    updateCount();
+  }
+
+  function updateCount() {
+    const c = tjFav.count();
+    document.querySelectorAll('.tj-fav-count').forEach(el => {
+      el.textContent = c > 0 ? c : '';
+    });
+    document.querySelectorAll('.tj-fav-nav').forEach(el => {
+      el.classList.toggle('has-favorites', c > 0);
+    });
+  }
+
+  document.addEventListener('tj-fav-change', updateCount);
+
+  if (document.readyState !== 'loading') mountNavLink();
+  else document.addEventListener('DOMContentLoaded', mountNavLink);
 })();
