@@ -440,6 +440,84 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
 .footer-links { display: flex; gap: 32px; }
 .footer-links a { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.5; transition: opacity 0.3s ease; }
 .footer-links a:hover { opacity: 1; }
+
+/* FOOTER DISCOVER TOGGLE */
+.footer-discover {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.footer-discover-btn {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+  background: none;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.footer-discover-btn:hover { opacity: 1; }
+.footer-discover-btn::after {
+  content: '+';
+  font-size: 12px;
+  opacity: 0.7;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+.footer-discover-btn.open::after { transform: rotate(45deg); }
+.footer-discover-menu {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  background: rgba(8,8,8,0.97);
+  border: 1px solid rgba(240,237,232,0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 12px 0;
+  min-width: 160px;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 100;
+}
+.footer-discover-menu.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+.footer-discover-menu a {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 10px 24px;
+  opacity: 0.5;
+  transition: opacity 0.2s ease, background 0.2s ease;
+  white-space: nowrap;
+  text-align: center;
+}
+.footer-discover-menu a:hover { opacity: 1; background: rgba(240,237,232,0.05); }
+/* Desktop hover behavior */
+@media (hover: hover) and (pointer: fine) {
+  .footer-discover:hover .footer-discover-btn::after { transform: rotate(45deg); }
+  .footer-discover:hover .footer-discover-menu {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+
 .footer-copy { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; opacity: 0.3; }
 
 /* ===================== RESPONSIVE ===================== */
@@ -602,10 +680,16 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
     <div class="footer-logo">TECHNO JAPAN</div>
     <div class="footer-links">
       <a href="index.html#about">ABOUT</a>
-      <a href="festivals.html">FESTIVALS</a>
-      <a href="events.html">EVENTS</a>
-      <a href="artists.html">ARTISTS</a>
-      <a href="venues.html">VENUES</a>
+      <div class="footer-discover">
+        <button class="footer-discover-btn" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open');event.stopPropagation()">DISCOVER</button>
+        <div class="footer-discover-menu">
+          <a href="festivals.html">FESTIVALS</a>
+          <a href="events.html">EVENTS</a>
+          <a href="artists.html">ARTISTS</a>
+          <a href="venues.html">VENUE</a>
+        </div>
+      </div>
+      <a href="index.html#instagram">INSTAGRAM</a>
       <a href="index.html#contact">CONTACT</a>
     </div>
     <div class="footer-copy">&copy; 2025 TECHNO JAPAN. ALL RIGHTS RESERVED.</div>

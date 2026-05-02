@@ -210,7 +210,8 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
     <button onclick="switchSection('article',this)"><span class="icon">&#9998;</span><span>Article</span></button>
   </nav>
   <div style="padding:12px"><button class="btn btn-sm" style="width:100%;font-size:.7rem" onclick="exportDataJs()">⬇ Export data.js</button></div>
-  <div class="sidebar-footer">v1.3</div>
+  <div style="padding:0 12px 12px"><button class="btn btn-sm" style="width:100%;font-size:.7rem;color:var(--text3)" onclick="cmsLogout()">🔒 Logout</button></div>
+  <div class="sidebar-footer">v1.4</div>
 </aside>
 
 <div class="main">
@@ -223,7 +224,16 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
     <button onclick="switchTab('venue','form')">New</button>
   </div>
   <div class="tab-content active" id="venue-tab-list">
-    <div style="margin-bottom:12px;display:flex;justify-content:flex-end"><button class="btn btn-sm" onclick="loadList('venue')">Refresh</button></div>
+    <div style="margin-bottom:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <input type="text" id="venue-search" placeholder="Search name / city / area / type..." oninput="filterVenueList()" style="flex:1;min-width:180px;padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);font-size:.85rem;color:var(--text)">
+      <div style="display:flex;gap:4px;align-items:center">
+        <span style="font-family:var(--font-mono);font-size:.65rem;letter-spacing:1px;color:var(--text3)">SORT:</span>
+        <button class="btn btn-sm btn-accent" onclick="sortVenueList('name')">Name</button>
+        <button class="btn btn-sm" onclick="sortVenueList('city')">City</button>
+        <button class="btn btn-sm" onclick="sortVenueList('type')">Type</button>
+      </div>
+      <button class="btn btn-sm" onclick="loadList('venue')">Refresh</button>
+    </div>
     <div class="data-list" id="venue-list"><div class="data-list-empty">Click "Refresh" to load data</div></div>
   </div>
   <div class="tab-content" id="venue-tab-form">
@@ -263,10 +273,17 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
     <button onclick="switchTab('festival','form')">New</button>
   </div>
   <div class="tab-content active" id="festival-tab-list">
-    <div style="margin-bottom:12px;display:flex;justify-content:space-between;align-items:center">
-      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap" id="festival-year-filter"></div>
+    <div style="margin-bottom:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <input type="text" id="festival-search" placeholder="Search name / city / location..." oninput="filterFestivalList()" style="flex:1;min-width:180px;padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);font-size:.85rem;color:var(--text)">
+      <div style="display:flex;gap:4px;align-items:center">
+        <span style="font-family:var(--font-mono);font-size:.65rem;letter-spacing:1px;color:var(--text3)">SORT:</span>
+        <button class="btn btn-sm btn-accent" onclick="sortFestivalList('date')">Date</button>
+        <button class="btn btn-sm" onclick="sortFestivalList('name')">Name</button>
+        <button class="btn btn-sm" onclick="sortFestivalList('city')">City</button>
+      </div>
       <button class="btn btn-sm" onclick="loadList('festival')">Refresh</button>
     </div>
+    <div style="margin-bottom:12px;display:flex;gap:6px;align-items:center;flex-wrap:wrap" id="festival-year-filter"></div>
     <div class="data-list" id="festival-list"><div class="data-list-empty">Click "Refresh" to load data</div></div>
   </div>
   <div class="tab-content" id="festival-tab-form">
@@ -374,7 +391,16 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
     <button onclick="switchTab('event','form')">New</button>
   </div>
   <div class="tab-content active" id="event-tab-list">
-    <div style="margin-bottom:12px;display:flex;justify-content:flex-end"><button class="btn btn-sm" onclick="loadList('event')">Refresh</button></div>
+    <div style="margin-bottom:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <input type="text" id="event-search" placeholder="Search name / venue / city..." oninput="filterEventList()" style="flex:1;min-width:180px;padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);font-size:.85rem;color:var(--text)">
+      <div style="display:flex;gap:4px;align-items:center">
+        <span style="font-family:var(--font-mono);font-size:.65rem;letter-spacing:1px;color:var(--text3)">SORT:</span>
+        <button class="btn btn-sm btn-accent" onclick="sortEventList('date')">Date</button>
+        <button class="btn btn-sm" onclick="sortEventList('name')">Name</button>
+        <button class="btn btn-sm" onclick="sortEventList('venue')">Venue</button>
+      </div>
+      <button class="btn btn-sm" onclick="loadList('event')">Refresh</button>
+    </div>
     <div class="data-list" id="event-list"><div class="data-list-empty">Click "Refresh" to load data</div></div>
   </div>
   <div class="tab-content" id="event-tab-form">
@@ -406,7 +432,16 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
     <button onclick="switchTab('article','form')">New</button>
   </div>
   <div class="tab-content active" id="article-tab-list">
-    <div style="margin-bottom:12px;display:flex;justify-content:flex-end"><button class="btn btn-sm" onclick="loadList('article')">Refresh</button></div>
+    <div style="margin-bottom:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <input type="text" id="article-search" placeholder="Search title / category..." oninput="filterArticleList()" style="flex:1;min-width:180px;padding:8px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);font-size:.85rem;color:var(--text)">
+      <div style="display:flex;gap:4px;align-items:center">
+        <span style="font-family:var(--font-mono);font-size:.65rem;letter-spacing:1px;color:var(--text3)">SORT:</span>
+        <button class="btn btn-sm btn-accent" onclick="sortArticleList('date')">Date</button>
+        <button class="btn btn-sm" onclick="sortArticleList('title')">Title</button>
+        <button class="btn btn-sm" onclick="sortArticleList('category')">Category</button>
+      </div>
+      <button class="btn btn-sm" onclick="loadList('article')">Refresh</button>
+    </div>
     <div class="data-list" id="article-list"><div class="data-list-empty">Click "Refresh" to load data</div></div>
   </div>
   <div class="tab-content" id="article-tab-form">
@@ -449,6 +484,69 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
 /* ==============================================================
    CONFIG
    ============================================================== */
+/* ==============================================================
+   AUTHENTICATION
+   ============================================================== */
+// SHA-256 hash of the password.
+// Current password: "techno-japan-admin" — change by running setupPassword('your-new-pw') in console
+const PASSWORD_HASH = 'e49c925f394b2f9cb9d5ab42549c800cb532b4444279cc813ed101af618c9e8c';
+let AUTH_TOKEN = null; // Set after successful login; sent to GAS with every request
+
+async function sha256(text){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+// Utility: type setupPassword('mypass') in console to get a hash to put in PASSWORD_HASH
+window.setupPassword = async (pw) => {
+  const h = await sha256(pw);
+  console.log('PASSWORD_HASH = "' + h + '";');
+  console.log('Copy this value into both cms.html and GAS Script Properties (CMS_PASSWORD_HASH)');
+  return h;
+};
+
+async function checkAuth(){
+  const stored = localStorage.getItem('cms_auth');
+  if(stored && stored === PASSWORD_HASH){
+    AUTH_TOKEN = stored;
+    return true;
+  }
+  for(let i = 0; i < 3; i++){
+    const pw = prompt(i===0 ? 'CMS Password:' : 'Wrong password. Try again:');
+    if(pw === null) break;
+    const hash = await sha256(pw);
+    if(hash === PASSWORD_HASH){
+      localStorage.setItem('cms_auth', hash);
+      AUTH_TOKEN = hash;
+      return true;
+    }
+  }
+  document.body.innerHTML = '<div style="padding:40px;color:#fff;font-family:monospace;background:#0a0a0a;height:100vh;display:flex;align-items:center;justify-content:center"><div><h1 style="margin:0 0 16px">🔒 Access denied</h1><p style="opacity:.6">Refresh the page to try again.</p></div></div>';
+  document.body.style.background = '#0a0a0a';
+  throw new Error('auth-failed');
+}
+
+window.cmsLogout = () => { localStorage.removeItem('cms_auth'); location.reload(); };
+
+// Wrap fetch to inject auth token automatically
+const _origFetch = window.fetch;
+window.fetch = function(url, options){
+  if(typeof url === 'string' && url.indexOf('script.google.com') !== -1 && AUTH_TOKEN){
+    options = options || {};
+    if(options.method === 'POST' && options.body){
+      try {
+        const body = JSON.parse(options.body);
+        body.auth = AUTH_TOKEN;
+        options.body = JSON.stringify(body);
+      } catch(e) {}
+    } else {
+      // GET request — append auth as query param
+      url = url + (url.indexOf('?') !== -1 ? '&' : '?') + 'auth=' + encodeURIComponent(AUTH_TOKEN);
+    }
+  }
+  return _origFetch.call(this, url, options);
+};
+
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbxhJ6rtGoAirNyV5TtBvzWHNOT8RuB0nfDjwglmdu8ClhpWZ-OXSbMM4UyFE_7ZsV-Lpg/exec';
 const GMAPS_KEY = 'AIzaSyDBCrbSFx5rnKZIl3cEP8AO87QdeRDZr1Q';
 const GENRES = ['TECHNO','HOUSE','MINIMAL','AMBIENT','BASS','LIVE','OTHERS'];
@@ -499,7 +597,8 @@ const listCache = { venue:[], festival:[], artist:[], event:[], article:[] };
 /* ==============================================================
    INIT
    ============================================================== */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  await checkAuth();
   initGenreChips('v-genre');
   initGenreChips('f-genre');
   initGradientPresets();
@@ -516,6 +615,10 @@ function switchSection(name, btn) {
 }
 function switchTab(section, tab) {
   const parent = document.getElementById('sec-' + section);
+  // NEWタブクリック時、編集モード中ならキャンセルしてフォームリセット
+  if (tab === 'form' && editState && editState[section]) {
+    cancelEdit(section);
+  }
   parent.querySelectorAll('.tab-bar button').forEach((b, i) => {
     b.classList.toggle('active', (tab === 'list' && i === 0) || (tab === 'form' && i === 1));
   });
@@ -1018,7 +1121,11 @@ function loadList(section){
         listCache[section]=d.rows;
         if(section==='festival') buildYearFilter(d.rows);
         if(section==='artist'){filterArtistList();return}
-        renderList(section, section==='festival' ? filterByYear(d.rows) : d.rows);
+        if(section==='festival'){filterFestivalList();return}
+        if(section==='venue'){filterVenueList();return}
+        if(section==='event'){filterEventList();return}
+        if(section==='article'){filterArticleList();return}
+        renderList(section, d.rows);
       }
       else{container.innerHTML='<div class="data-list-empty">Failed to load</div>';toast('Load failed','error')}
     }).catch(err=>{container.innerHTML='<div class="data-list-empty">Error: '+err.message+'</div>';toast('Load error','error')});
@@ -1031,13 +1138,13 @@ function buildYearFilter(rows){
   const allBtn=document.createElement('button');
   allBtn.className='btn btn-sm'+(festivalYearFilter==='ALL'?' btn-accent':'');
   allBtn.textContent='ALL';
-  allBtn.onclick=()=>{festivalYearFilter='ALL';renderList('festival',listCache.festival);highlightYearBtn()};
+  allBtn.onclick=()=>{festivalYearFilter='ALL';filterFestivalList();highlightYearBtn()};
   c.appendChild(allBtn);
   years.forEach(y=>{
     const b=document.createElement('button');
     b.className='btn btn-sm'+(festivalYearFilter===y?' btn-accent':'');
     b.textContent=y; b.dataset.year=y;
-    b.onclick=()=>{festivalYearFilter=y;renderList('festival',filterByYear(listCache.festival));highlightYearBtn()};
+    b.onclick=()=>{festivalYearFilter=y;filterFestivalList();highlightYearBtn()};
     c.appendChild(b);
   });
 }
@@ -1101,6 +1208,98 @@ function sortRows(rows, key, asc){
     const vb=String(b[key]||'').toLowerCase();
     return asc?va.localeCompare(vb):vb.localeCompare(va);
   });
+}
+
+/* ==============================================================
+   GENERIC LIST FILTER & SORT helpers
+   ============================================================== */
+function applyListFilter(section, searchKeys, sortKey, sortAsc, sortGroup, preFilterFn){
+  if(!listCache[section]) return;
+  const q=(document.getElementById(section+'-search')?.value||'').toLowerCase();
+  let rows=listCache[section];
+  if(preFilterFn) rows=preFilterFn(rows);
+  if(q) rows=rows.filter(r=>searchKeys.some(k=>String(r[k]||'').toLowerCase().includes(q)));
+  rows=sortRows(rows, sortKey, sortAsc);
+  renderList(section, rows);
+}
+function highlightSortBtn(section, key, group){
+  document.querySelectorAll('#'+section+'-tab-list .btn-sm').forEach(b=>{
+    const t=b.textContent.toLowerCase();
+    if(t===key) b.className='btn btn-sm btn-accent';
+    else if(group.includes(t)) b.className='btn btn-sm';
+  });
+}
+
+/* ==============================================================
+   VENUE LIST — SEARCH & SORT
+   ============================================================== */
+let venueSortKey='name', venueSortAsc=true;
+function filterVenueList(){
+  applyListFilter('venue', ['name','id','city','area','type','genre'], venueSortKey, venueSortAsc);
+}
+function sortVenueList(key){
+  if(venueSortKey===key) venueSortAsc=!venueSortAsc;
+  else { venueSortKey=key; venueSortAsc=true; }
+  highlightSortBtn('venue', key, ['name','city','type']);
+  filterVenueList();
+}
+
+/* ==============================================================
+   EVENT LIST — SEARCH & SORT
+   ============================================================== */
+let eventSortKey='date', eventSortAsc=false;
+function filterEventList(){
+  applyListFilter('event', ['name','venue','city','lineup'], eventSortKey, eventSortAsc);
+}
+function sortEventList(key){
+  if(eventSortKey===key) eventSortAsc=!eventSortAsc;
+  else { eventSortKey=key; eventSortAsc=(key!=='date'); }
+  highlightSortBtn('event', key, ['name','date','venue']);
+  filterEventList();
+}
+
+/* ==============================================================
+   ARTICLE LIST — SEARCH & SORT
+   ============================================================== */
+let articleSortKey='date', articleSortAsc=false;
+function filterArticleList(){
+  applyListFilter('article', ['title','id','category','excerpt'], articleSortKey, articleSortAsc);
+}
+function sortArticleList(key){
+  if(articleSortKey===key) articleSortAsc=!articleSortAsc;
+  else { articleSortKey=key; articleSortAsc=(key!=='date'); }
+  highlightSortBtn('article', key, ['title','date','category']);
+  filterArticleList();
+}
+
+/* ==============================================================
+   FESTIVAL LIST — SEARCH & SORT
+   ============================================================== */
+let festivalSortKey='date', festivalSortAsc=false;
+function filterFestivalList(){
+  if(!listCache.festival)return;
+  const q=(document.getElementById('festival-search')?.value||'').toLowerCase();
+  let rows=filterByYear(listCache.festival);
+  if(q) rows=rows.filter(r=>
+    String(r.name||'').toLowerCase().includes(q) ||
+    String(r.id||'').toLowerCase().includes(q) ||
+    String(r.city||'').toLowerCase().includes(q) ||
+    String(r.location||'').toLowerCase().includes(q) ||
+    String(r.genre||'').toLowerCase().includes(q) ||
+    String(r.lineup||'').toLowerCase().includes(q)
+  );
+  rows=sortRows(rows, festivalSortKey, festivalSortAsc);
+  renderList('festival', rows);
+}
+function sortFestivalList(key){
+  if(festivalSortKey===key) festivalSortAsc=!festivalSortAsc;
+  else { festivalSortKey=key; festivalSortAsc=(key!=='date'); }
+  document.querySelectorAll('#festival-tab-list .btn-sm').forEach(b=>{
+    const t=b.textContent.toLowerCase();
+    if(t===key) b.className='btn btn-sm btn-accent';
+    else if(['name','city','date'].includes(t)) b.className='btn btn-sm';
+  });
+  filterFestivalList();
 }
 
 /* ==============================================================
@@ -1272,21 +1471,22 @@ function submitToSheet(section){
   }
   else if(section==='festival'){
     const ds=g('f-dateStart'),de=g('f-dateEnd');
-    payload={action:'addFestival',id:g('f-id'),type:g('f-type'),name:g('f-name'),city:g('f-city'),
+    payload={action:'add_festival',id:g('f-id'),type:g('f-type'),name:g('f-name'),city:g('f-city'),
       location:g('f-location'),url:g('f-url'),ticketUrl:g('f-ticketUrl'),instagram:g('f-instagram'),
-      lat:g('f-lat'),lng:g('f-lng'),date:ds&&de?ds+'/'+de:ds,
+      address:g('f-address'),lat:g('f-lat'),lng:g('f-lng'),date:ds&&de?ds+'/'+de:ds,
       genre:getSelectedGenres('f-genre').join(', '),image:g('f-image'),flyer:g('f-flyer'),
-      heroGradient:g('f-heroGradient'),desc:g('f-desc'),lineup:cleanLineup(lineups.f).join(', ')};
+      heroGradient:g('f-heroGradient'),desc:g('f-desc'),lineup:cleanLineup(lineups.f).join(', '),
+      editions:editions};
     if(!payload.id||!payload.name)return toast('ID and Name required','error');
   }
   else if(section==='artist'){
-    payload={action:'addArtist',id:g('a-id'),name:g('a-name'),city:g('a-city'),country:g('a-country'),
+    payload={action:'add_artist',id:g('a-id'),name:g('a-name'),city:g('a-city'),country:g('a-country'),
       genre:g('a-genre'),image:g('a-image'),bio:g('a-bio'),
       instagram:g('a-instagram'),soundcloud:g('a-soundcloud'),bandcamp:g('a-bandcamp'),website:g('a-website')};
     if(!payload.id||!payload.name)return toast('ID and Name required','error');
   }
   else if(section==='event'){
-    payload={action:'addEvent',name:g('e-name'),date:g('e-date'),venue:g('e-venue'),
+    payload={action:'add_event',name:g('e-name'),date:g('e-date'),venue:g('e-venue'),
       city:g('e-city'),time:g('e-time'),desc:g('e-desc'),lineup:lineups.e.join(', '),link:g('e-link')};
     if(!payload.name)return toast('Name required','error');
   }
@@ -1304,22 +1504,31 @@ function submitToSheet(section){
   toast('Saving...','info');
   fetch(GAS_URL,{method:'POST',body:JSON.stringify(payload)})
     .then(r=>r.json()).then(r=>{
+      console.log('Save response:',r);
       if(r.success||r.status==='ok'){
-        toast('Saved','success');
+        toast('Saved — リフレッシュ中...','success');
         // 未登録アーティストをARTISTSシートに追加
         if(unregisteredArtists.length){
           autoRegisterArtists(unregisteredArtists);
         }
-      } else toast('Save failed','error');
+        // フォームをリセットしてリストに切り替え＆再読み込み
+        resetForm(section);
+        switchTab(section,'list');
+        loadList(section);
+      } else {
+        const msg=r.message||r.error||'Save failed';
+        console.error('Save failed:',r);
+        toast(msg,'error');
+      }
     })
-    .catch(()=>toast('Save error','error'));
+    .catch(e=>{console.error('Save error:',e);toast('Save error: '+e.message,'error')});
 }
 
 function autoRegisterArtists(artistIds){
   let done=0;
   artistIds.forEach(id=>{
     const name=id.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
-    fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'addArtist',id:id,name:name})})
+    fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'add_artist',id:id,name:name})})
       .then(r=>r.json()).then(r=>{
         done++;
         if(r.status==='ok') {
