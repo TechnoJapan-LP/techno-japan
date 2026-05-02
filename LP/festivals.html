@@ -506,6 +506,10 @@ body.rave-mode .festival-section:hover .festival-name {
 .share-btn svg { width: 14px; height: 14px; fill: currentColor; }
 .share-btn.copied { background: rgba(255,255,255,0.08); }
 
+/* FAVORITE HEART (festival card) */
+.festival-image-wrap { position: relative; }
+.fest-fav-mount { position: absolute; top: 12px; right: 12px; z-index: 5; }
+
 /* RELATED FESTIVALS */
 .related-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 24px; }
 .related-card { display: block; background: rgba(240,237,232,0.02); border: 1px solid rgba(240,237,232,0.06); transition: border-color 0.3s ease, transform 0.3s ease; cursor: pointer; }
@@ -865,6 +869,8 @@ footer { border-top: 1px solid rgba(240,237,232,0.08); padding: 60px 40px; }
   </div>
 </footer>
 
+<script src="favorites.js"></script>
+<script src="search.js"></script>
 <script src="data.js?v=3"></script>
 <script>
 
@@ -1190,10 +1196,11 @@ function renderFestivalCard(f, m, i) {
   const genres = Array.isArray(f.genre) ? f.genre : (f.genre ? [f.genre] : []);
   const locationText = [f.location, f.city].filter(Boolean).join(', ');
   return `
-    <section class="festival-section reveal" style="transition-delay:${i * 100}ms">
+    <section class="festival-section reveal" data-fest-id="${f.id}" style="transition-delay:${i * 100}ms">
       <div class="festival-layout" onclick="showDetail('${f.id}')">
         <div class="festival-image-wrap">
           ${imgHtml}
+          <div class="fest-fav-mount" data-fest-fav="${f.id}" onclick="event.stopPropagation()"></div>
         </div>
         <div class="festival-info-col">
           <div class="festival-info-top">
@@ -1266,6 +1273,15 @@ function renderFestivals() {
 
   main.innerHTML = html;
   applyMonthFilter();
+
+  // Mount favorite hearts
+  if (window.tjFav) {
+    main.querySelectorAll('.fest-fav-mount').forEach(mount => {
+      if (mount.children.length) return;
+      const id = mount.dataset.festFav;
+      window.tjFav.attachHeart(mount, 'festival', id);
+    });
+  }
 
   // Observe reveals
   main.querySelectorAll('.reveal').forEach(el => observer.observe(el));
