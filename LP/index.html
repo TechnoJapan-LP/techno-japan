@@ -170,45 +170,91 @@
   font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.12em; opacity: 0.25; text-transform: uppercase;
 }
 
-/* ===================== FESTIVALS PREVIEW ===================== */
+/* ===================== FESTIVALS PREVIEW (HÖR-style rows) ===================== */
 .festivals-preview {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 4px;
-  padding: 32px 40px 0;
+  padding: 0;
+  display: flex; flex-direction: column;
+  border-top: 1px solid var(--card-border);
 }
-.fest-card {
-  position: relative; aspect-ratio: 3/4;
+.fest-row {
+  position: relative;
+  display: block;
   overflow: hidden;
-  background: var(--card-bg);
+  border-bottom: 1px solid var(--card-border);
+  min-height: 140px;
+  isolation: isolate;
 }
-.fest-card-img {
+.fest-row-bg {
   position: absolute; inset: 0;
   background-size: cover; background-position: center;
-  filter: grayscale(60%) brightness(0.55);
-  transition: filter 0.5s ease, transform 0.5s ease;
+  filter: blur(18px) grayscale(70%) brightness(0.35);
+  transform: scale(1.1);
+  transition: filter 0.6s ease, transform 0.6s ease;
+  z-index: 0;
 }
-.fest-card:hover .fest-card-img { filter: grayscale(20%) brightness(0.7); transform: scale(1.04); }
-.fest-card-overlay {
+.fest-row-overlay {
   position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(8,8,8,0.85) 0%, rgba(8,8,8,0.2) 60%, transparent 100%);
+  background: linear-gradient(90deg, rgba(8,8,8,0.85) 0%, rgba(8,8,8,0.55) 50%, rgba(8,8,8,0.25) 100%);
+  z-index: 1;
+  transition: opacity 0.5s ease;
 }
-.fest-card-content {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  padding: 20px;
+.fest-row:hover .fest-row-bg { filter: blur(2px) grayscale(10%) brightness(0.6); transform: scale(1.04); }
+.fest-row:hover .fest-row-overlay { opacity: 0.6; }
+
+.fest-row-inner {
+  position: relative; z-index: 2;
+  display: grid;
+  grid-template-columns: 140px 1fr auto;
+  gap: 32px;
+  align-items: center;
+  padding: 24px 40px;
+  min-height: 140px;
 }
-.fest-card-date {
-  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em;
-  text-transform: uppercase; opacity: 0.7; margin-bottom: 8px;
+.fest-row-thumb {
+  width: 140px; height: 100px;
+  background-size: cover; background-position: center;
+  background-color: var(--card-bg);
+  border: 1px solid rgba(240,237,232,0.1);
 }
-.fest-card-name {
-  font-family: var(--font-display); font-size: clamp(20px, 2vw, 28px);
-  letter-spacing: 0.02em; line-height: 1; text-transform: uppercase;
+.fest-row-thumb.placeholder {
+  background: linear-gradient(135deg, rgba(240,237,232,0.06), rgba(240,237,232,0.01));
 }
-.fest-card-loc {
-  margin-top: 8px;
-  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.15em;
-  text-transform: uppercase; opacity: 0.55;
+.fest-row-main { min-width: 0; }
+.fest-row-eyebrow {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em;
+  text-transform: uppercase; opacity: 0.6;
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 10px;
+}
+.fest-row-num { color: var(--accent); font-weight: 400; }
+.fest-row-name {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 72px);
+  line-height: 0.95; letter-spacing: 0.01em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.3s ease;
+}
+.fest-row:hover .fest-row-name { color: #fff; }
+.fest-row-meta {
+  text-align: right;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em;
+  text-transform: uppercase;
+  max-width: 320px;
+}
+.fest-row-loc {
+  opacity: 0.85; margin-bottom: 8px;
+  display: flex; align-items: center; justify-content: flex-end; gap: 8px;
+}
+.fest-row-loc::before {
+  content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--accent);
+}
+.fest-row-lineup {
+  font-size: 9px; letter-spacing: 0.12em;
+  opacity: 0.45; line-height: 1.6;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
 
 /* ===================== ARTISTS PREVIEW ===================== */
@@ -316,7 +362,6 @@
 
 /* ===================== RESPONSIVE ===================== */
 @media (max-width: 1100px) {
-  .festivals-preview { grid-template-columns: repeat(2, 1fr); }
   .artists-preview { grid-template-columns: repeat(3, 1fr); }
   .venues-preview { grid-template-columns: repeat(3, 1fr); }
 }
@@ -326,26 +371,36 @@
   .side-col { border-left: none; border-top: 1px solid var(--card-border); }
   .featured-card-image { min-height: 280px; }
   .section-head { padding: 60px 24px 20px; }
-  .festivals-preview, .artists-preview, .venues-preview { padding: 24px 24px 0; gap: 3px; }
+  .artists-preview, .venues-preview { padding: 24px 24px 0; gap: 3px; }
   .venues-tabs { padding: 20px 24px 0; gap: 0; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   .venues-tabs::-webkit-scrollbar { display: none; }
   .venue-tab { padding: 12px 0; margin-right: 24px; flex-shrink: 0; }
+  /* fest rows: stack thumb above text on tablet/mobile */
+  .fest-row-inner {
+    grid-template-columns: 1fr;
+    grid-template-areas: "thumb" "main" "meta";
+    padding: 20px 24px;
+    gap: 14px;
+  }
+  .fest-row-thumb { grid-area: thumb; width: 100%; height: 140px; }
+  .fest-row-main { grid-area: main; }
+  .fest-row-meta { grid-area: meta; text-align: left; max-width: none; }
+  .fest-row-loc { justify-content: flex-start; }
+  .fest-row-name { white-space: normal; font-size: clamp(28px, 8vw, 56px); }
 }
 @media (max-width: 768px) {
-  .festivals-preview { grid-template-columns: repeat(2, 1fr); }
   .artists-preview { grid-template-columns: repeat(2, 1fr); }
   .venues-preview { grid-template-columns: repeat(2, 1fr); }
   .marquee { margin-top: 40px; }
 }
 @media (max-width: 480px) {
-  .festivals-preview { grid-template-columns: 1fr; }
   .artists-preview { grid-template-columns: repeat(2, 1fr); }
   .venues-preview { grid-template-columns: 1fr; }
-  .fest-card { aspect-ratio: 4/3; }
   .venue-mini { aspect-ratio: 16/9; }
+  .fest-row-thumb { height: 110px; }
 }
 @media (hover: none) and (pointer: coarse) {
-  .featured-card, .side-card, .fest-card, .artist-mini, .venue-mini, .venue-tab, .section-cta { cursor: pointer; }
+  .featured-card, .side-card, .fest-row, .artist-mini, .venue-mini, .venue-tab, .section-cta { cursor: pointer; }
 }
 </style>
 <script type="application/ld+json">
@@ -568,22 +623,45 @@
     return fmt(a);
   }
 
+  function lineupNames(f) {
+    const ids = Array.isArray(f.lineup) ? f.lineup : [];
+    if (!ids.length) return '';
+    const lookup = new Map((typeof ARTISTS !== 'undefined' ? ARTISTS : []).map(a => [a.id, a.name]));
+    const names = ids.map(id => lookup.get(id) || id).filter(Boolean);
+    return names.slice(0, 8).join(' / ') + (names.length > 8 ? ' / …' : '');
+  }
+  function pad2(n) { return String(n).padStart(2, '0'); }
+
   const festEl = document.getElementById('festivals-preview');
   if (festEl) {
     if (upcoming.length === 0) {
-      festEl.innerHTML = `<div style="grid-column: 1 / -1; padding: 60px 20px; text-align: center; opacity: 0.4; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.15em;">NO UPCOMING FESTIVALS — CHECK BACK SOON.</div>`;
+      festEl.innerHTML = `<div style="padding: 60px 20px; text-align: center; opacity: 0.4; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.15em;">NO UPCOMING FESTIVALS — CHECK BACK SOON.</div>`;
     } else {
-      festEl.innerHTML = upcoming.map(f => `
-        <a class="fest-card" href="festivals.html#${f.id}">
-          ${f.image ? `<div class="fest-card-img" style="background-image:url('${f.image}')"></div>` : ''}
-          <div class="fest-card-overlay"></div>
-          <div class="fest-card-content">
-            <div class="fest-card-date">${fmtFestRange(f.date)}</div>
-            <div class="fest-card-name">${f.name}</div>
-            <div class="fest-card-loc">${f.city || f.location || ''}</div>
+      festEl.innerHTML = upcoming.map((f, i) => {
+        const lineup = lineupNames(f);
+        const img = f.image && f.image.trim();
+        return `
+        <a class="fest-row" href="festivals.html#${f.id}">
+          ${img ? `<div class="fest-row-bg" style="background-image:url('${img}')"></div>` : `<div class="fest-row-bg"></div>`}
+          <div class="fest-row-overlay"></div>
+          <div class="fest-row-inner">
+            ${img
+              ? `<div class="fest-row-thumb" style="background-image:url('${img}')"></div>`
+              : `<div class="fest-row-thumb placeholder"></div>`}
+            <div class="fest-row-main">
+              <div class="fest-row-eyebrow">
+                <span class="fest-row-num">#${pad2(i + 1)}</span>
+                <span>${fmtFestRange(f.date)}</span>
+              </div>
+              <div class="fest-row-name">${f.name}</div>
+            </div>
+            <div class="fest-row-meta">
+              <div class="fest-row-loc">${f.city || f.location || ''}</div>
+              ${lineup ? `<div class="fest-row-lineup">${lineup}</div>` : ''}
+            </div>
           </div>
-        </a>
-      `).join('');
+        </a>`;
+      }).join('');
     }
   }
 
@@ -669,7 +747,7 @@
 
   /* Bind cursor-expand to dynamically rendered items */
   if (window.tjBindCursorExpand) {
-    window.tjBindCursorExpand('.featured-card, .side-card, .fest-card, .artist-mini, .venue-mini, .venue-tab, .section-cta');
+    window.tjBindCursorExpand('.featured-card, .side-card, .fest-row, .artist-mini, .venue-mini, .venue-tab, .section-cta');
   }
 })();
 </script>
