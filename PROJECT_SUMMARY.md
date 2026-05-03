@@ -31,6 +31,7 @@
 - **Google Drive**: 画像保管
   - `VENUES_FOLDER_ID = "1c57ZkrkBj5GioKLO7h2eBrBecpj3oqli"`
   - `FESTIVALS_FOLDER_ID = "15MAHqOfAjjNN_AvD0Hzdrko5NFujfIQi"`
+  - `ARTISTS_FOLDER_ID = "16Tke6MdkD1OPNElvRFjACrz-Y2ggEn5j"`
 
 ## 認証
 

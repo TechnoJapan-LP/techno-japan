@@ -104,6 +104,15 @@ techno-japan/
 - お気に入り一覧ページ（`favorites.html`）
 - ナビにお気に入りカウンター
 
+### Phase 7: アーティスト画像位置設定 ✅（コード側）／ ⏳（GAS側）
+- CMS: `Image Position` 入力 + 3×3アンカーグリッド + 16:9ライブプレビュー
+- CMS payload: add/update 両方で `imagePosition` を送信済み
+- data.js: `imagePosition: "center top"` 形式で保存
+- 表示側:
+  - `artists.html` 詳細: `object-position: var(--img-pos)`
+  - `artists.html` 一覧 / `index.html` カルーセル: `background-position`
+- 残タスク: **スプレッドシート ARTISTS シートに `imagePosition` 列ヘッダーを追加**（GASがヘッダー駆動なら自動連携。連携しなければ `addArtist`/`updateRow` のフィールドリストに追記）
+
 ---
 
 ## ページごとの実装メモ
@@ -196,6 +205,11 @@ const ARTICLES = [{ id, title, excerpt, body, category, date, author, image, fea
   HANDOFF時点でCMSは新フィールド対応済みだが、**GAS側のコードを更新していない**。
   → 当面は CMS の「Generate Code」→ data.js コピペで運用、または GAS 更新が必要。
   → セッション最後で GAS のコード共有を依頼したが受領前にチャット終了。
+- `add_artist` / `update_row` (artist) で `imagePosition` 列が未対応。
+  → スプレッドシート ARTISTS の最終列に `imagePosition` ヘッダーを追加すれば、
+    ヘッダー駆動なら自動で保存される（要動作確認）。
+  → ヘッダー駆動でなければ、`addArtist(data)` の row 配列と `updateRow` の処理に
+    `data.imagePosition` を追加する必要あり。
 
 ### パフォーマンス
 - HTML/CSS/JS の minify は未実装（インラインスクリプトが多くリスク高のためスキップ）
@@ -263,9 +277,10 @@ python3 scripts/generate-rss.py
 ## 次にやるべきこと（優先順位）
 
 ### 短期
-1. **GASのadd_articleハンドラ更新** — body/author/tags/status を受け取れるように
-2. **記事を週1で書く** — 現状3本のみ。10本ぐらいあるとサイトが活きる
-3. **アーティスト画像追加** — 主要DJの写真を集める
+1. **スプレッドシート ARTISTS に `imagePosition` 列を追加** — ヘッダー駆動GASで自動連携を確認
+2. **GASのadd_articleハンドラ更新** — body/author/tags/status を受け取れるように
+3. **記事を週1で書く** — 現状3本のみ。10本ぐらいあるとサイトが活きる
+4. **アーティスト画像追加 + Image Position調整** — 主要DJの写真を集めて頭切れを修正
 
 ### 中期
 4. **Phase 5（多言語）** — CMSの英語フィールドを埋めて URL分離方式で実装

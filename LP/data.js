@@ -2,7 +2,7 @@
    TECHNO JAPAN — SHARED DATA
 
    Edit this file to update artists, events, and venues across all pages.
-   events.html, artists.html, venues.html, discover.html, and map.html
+   events.html, artists.html, venues.html, news.html, and map.html
    all read from here.
    ========================================================== */
 

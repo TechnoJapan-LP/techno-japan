@@ -774,10 +774,11 @@ function switchSection(name, btn) {
   document.querySelectorAll('.sidebar nav button').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
 }
-function switchTab(section, tab) {
+function switchTab(section, tab, opts) {
   const parent = document.getElementById('sec-' + section);
   // NEWタブクリック時、編集モード中ならキャンセルしてフォームリセット
-  if (tab === 'form' && editState && editState[section]) {
+  // （editRow経由のプログラム遷移では opts.fromEdit=true でスキップ）
+  if (tab === 'form' && !(opts && opts.fromEdit) && editState && editState[section]) {
     cancelEdit(section);
   }
   parent.querySelectorAll('.tab-bar button').forEach((b, i) => {
@@ -1750,6 +1751,36 @@ function compressImage(file, maxW=1920, quality=0.85){
   });
 }
 
+/* ==============================================================
+   IMAGE PREVIEW HELPERS
+   既存画像のプレビュー表示 / 削除（編集モード用）
+   ============================================================== */
+function showCurrentImage(previewId, imagePath, clearCallExpr){
+  if(!imagePath) return;
+  const el=document.getElementById(previewId);
+  if(!el) return;
+  el.style.display='block';
+  el.innerHTML='<img src="'+esc(imagePath)+'" alt="current" onerror="this.style.display=\'none\'"><div class="preview-info">現在の画像 — '+esc(imagePath)+' <button type="button" class="btn btn-sm btn-accent" style="margin-left:8px;padding:2px 8px;font-size:.65rem" onclick="'+clearCallExpr+'">✕ Remove</button></div>';
+}
+function clearImageField(prefix, opts){
+  opts=opts||{};
+  const pathId=opts.pathId||(prefix+'-image');
+  const urlId=opts.urlId||(prefix+'-imageUrl');
+  const previewId=opts.previewId||('preview-'+prefix+'-image');
+  const pathEl=document.getElementById(pathId);
+  if(pathEl){pathEl.removeAttribute('readonly');pathEl.value='';pathEl.setAttribute('readonly','');}
+  const urlEl=document.getElementById(urlId);
+  if(urlEl) urlEl.value='';
+  const previewEl=document.getElementById(previewId);
+  if(previewEl){previewEl.style.display='none';previewEl.innerHTML='';}
+  // Reset hidden file input under upload-area
+  const fileInputs=document.querySelectorAll('#sec-'+(opts.section||'')+' .upload-area input[type=file]');
+  fileInputs.forEach(i=>{i.value='';});
+  // Artist position preview refresh
+  if(prefix==='a' && typeof syncArtistImagePos==='function') syncArtistImagePos();
+  toast('画像をクリアしました（保存で反映）','info');
+}
+
 function uploadImage(input,type,prefix){
   const file=input.files[0]; if(!file)return;
   const id=document.getElementById(prefix+'-id')?.value?.trim();
@@ -1769,7 +1800,7 @@ function uploadImage(input,type,prefix){
     // festival系は upload_festival_image、それ以外は upload_image
     const action=type.startsWith('festival')?'upload_festival_image':'upload_image';
     const filename=type==='festival-flyer'?id+'-flyer.jpg':null;
-    const body={action,imageData:dataUrl,mimeType:'image/jpeg',id};
+    const body={action,imageData:dataUrl,mimeType:'image/jpeg',id,type};
     if(filename)body.filename=filename;
     return fetch(GAS_URL,{method:'POST',body:JSON.stringify(body)}).then(r=>r.json()).then(d=>{
       if(d.status==='ok'||d.success){
@@ -1782,14 +1813,29 @@ function uploadImage(input,type,prefix){
         if(previewEl){const info=previewEl.querySelector('.preview-info');if(info)info.textContent='✓ '+width+'×'+height+' ('+compMB+'MB)';}
       } else {
         toast(d.message||'Upload failed','error');
-        if(previewEl){const info=previewEl.querySelector('.preview-info');if(info)info.textContent='✗ Upload failed';}
+        renderUploadFailed(previewEl,'✗ Upload failed: '+(d.message||''),prefix,type);
       }
     });
   }).catch(e=>{
     console.error('Compress/upload error:',e);
     toast('Image error: '+e.message,'error');
-    if(previewEl){previewEl.style.display='block';previewEl.innerHTML='<div class="preview-info">✗ '+esc(e.message)+'</div>';}
+    renderUploadFailed(previewEl,'✗ '+(e.message||'error'),prefix,type);
+  }).finally(()=>{
+    // Always clear file input so re-selecting the same file fires onchange
+    try{input.value='';}catch(_){}
   });
+}
+
+// Render an "upload failed" state with a Retry hint + Dismiss button.
+// Clears the path field so the failed file path doesn't get saved.
+function renderUploadFailed(previewEl,message,prefix,type){
+  if(!previewEl) return;
+  // Clear the path field that uploadImage may have set partially
+  const pathFieldId=prefix+'-'+(type==='festival-flyer'?'flyer':'image');
+  const pathEl=document.getElementById(pathFieldId);
+  if(pathEl){pathEl.removeAttribute('readonly');pathEl.value='';pathEl.setAttribute('readonly','');}
+  previewEl.style.display='block';
+  previewEl.innerHTML='<div class="preview-info" style="color:#ff6b6b">'+esc(message)+' <button type="button" class="btn btn-sm" style="margin-left:8px;padding:2px 8px;font-size:.65rem" onclick="this.closest(\'.img-preview\').style.display=\'none\';this.closest(\'.img-preview\').innerHTML=\'\'">Dismiss</button></div>';
 }
 
 /* ==============================================================
@@ -1829,9 +1875,14 @@ function uploadFromUrl(prefix,type,pathFieldId,urlFieldId,previewId){
         }
       } else {
         toast(d.error||'アップロード失敗','error');
+        renderUploadFailed(previewEl,'✗ '+(d.error||'アップロード失敗'),prefix,type);
       }
     })
-    .catch(e=>{btn.disabled=false;btn.textContent='UPLOAD';toast('通信エラー: '+e.message,'error')});
+    .catch(e=>{
+      btn.disabled=false;btn.textContent='UPLOAD';
+      toast('通信エラー: '+e.message,'error');
+      renderUploadFailed(previewEl,'✗ 通信エラー: '+e.message,prefix,type);
+    });
 }
 
 /* ==============================================================
@@ -2187,6 +2238,7 @@ function editRow(section, rowNum){
     setVal('v-instagram',row.instagram); setVal('v-desc',row.desc);
     setSelectedGenres('v-genre',(row.genre||'').split(',').map(s=>s.trim()).filter(Boolean));
     updateLocationMap('v');
+    if(row.image) showCurrentImage('preview-v-image',row.image,"clearImageField('v',{section:'venue'})");
   }
   else if(section==='festival'){
     setVal('f-id',row.id); setVal('f-type',row.type||'festival');
@@ -2206,6 +2258,8 @@ function editRow(section, rowNum){
     document.getElementById('gradient-preview').style.display='none';
     if(row.heroGradient) updateGradientPreview(row.heroGradient);
     updateLocationMap('f');
+    if(row.image) showCurrentImage('preview-f-image',row.image,"clearImageField('f',{section:'festival',pathId:'f-image',previewId:'preview-f-image'})");
+    if(row.flyer) showCurrentImage('preview-f-flyer',row.flyer,"clearImageField('f',{section:'festival',pathId:'f-flyer',previewId:'preview-f-flyer'})");
   }
   else if(section==='artist'){
     setVal('a-id',row.id); setVal('a-name',row.name); setVal('a-city',row.city);
@@ -2215,6 +2269,7 @@ function editRow(section, rowNum){
     setVal('a-instagram',row.instagram); setVal('a-soundcloud',row.soundcloud);
     setVal('a-bandcamp',row.bandcamp); setVal('a-website',row.website);
     if(typeof syncArtistImagePos==='function') syncArtistImagePos();
+    if(row.image) showCurrentImage('preview-a-image',row.image,"clearImageField('a',{section:'artist'})");
   }
   else if(section==='event'){
     setVal('e-name',row.name); setVal('e-date',row.date);
@@ -2247,7 +2302,7 @@ function editRow(section, rowNum){
   document.getElementById(section+'-edit-name').textContent=row.name||row.title||row.id||'';
   document.getElementById(section+'-edit-banner').classList.add('show');
   document.getElementById(section+'-btn-new').style.display='none';
-  switchTab(section,'form');
+  switchTab(section,'form',{fromEdit:true});
   document.querySelector('.main').scrollTo(0,0);
 }
 
