@@ -19,7 +19,7 @@ const PRECACHE_URLS = [
   '/events.html',
   '/artists.html',
   '/venues.html',
-  '/discover.html',
+  '/news.html',
   '/favorites.html',
   '/common.css',
   '/common.js',

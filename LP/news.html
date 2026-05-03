@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEWS — TECHNO JAPAN</title>
+<meta name="description" content="Explore Japan's underground techno and house scene. Stories, interviews, reports and more.">
+<link rel="alternate" type="application/rss+xml" title="TECHNO JAPAN — RSS" href="https://techno-japan.media/rss.xml">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#080808">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TECHNO JAPAN">
+<link rel="canonical" href="https://techno-japan.media/news.html">
+
+<!-- Open Graph -->
+<meta property="og:title" content="NEWS — TECHNO JAPAN">
+<meta property="og:description" content="Explore Japan's underground techno and house scene. Stories, interviews, reports and more.">
+<meta property="og:image" content="https://techno-japan.media/images/festivals/rainbow-disco-club.jpeg">
+<meta property="og:url" content="https://techno-japan.media/news.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="TECHNO JAPAN">
+<meta property="og:locale" content="ja_JP">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="NEWS — TECHNO JAPAN">
+<meta name="twitter:description" content="Explore Japan's underground techno and house scene. Stories, interviews, reports and more.">
+<meta name="twitter:image" content="https://techno-japan.media/images/festivals/rainbow-disco-club.jpeg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --accent: #ff2d2d;
+  --card-bg: rgba(240,237,232,0.03);
+  --card-border: rgba(240,237,232,0.06);
+}
+@keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ===================== TOP BAR (tagline) ===================== */
+.top-bar {
+  padding: 120px 40px 0;
+  opacity: 0; animation: fadeSlideUp 0.8s ease forwards; animation-delay: 0.2s;
+}
+.tagline {
+  font-family: var(--font-body);
+  font-size: clamp(28px, 4vw, 52px);
+  font-weight: 500;
+  line-height: 1.2;
+  max-width: 640px;
+}
+
+/* ===================== SORT TABS (populaires / dernieres) ===================== */
+.sort-tabs {
+  padding: 40px 40px 0;
+  display: flex; gap: 0;
+  opacity: 0; animation: fadeSlideUp 0.6s ease forwards; animation-delay: 0.4s;
+}
+.sort-tab {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 12px 0; margin-right: 32px;
+  background: transparent; border: none; color: var(--text);
+  cursor: none; opacity: 0.25; transition: opacity 0.3s ease;
+  position: relative;
+}
+.sort-tab:hover { opacity: 0.5; }
+.sort-tab.active { opacity: 1; }
+.sort-tab.active::after {
+  content: ''; position: absolute; bottom: 0; left: 0;
+  width: 100%; height: 2px; background: var(--accent);
+}
+
+/* ===================== MAIN GRID (durevie style) ===================== */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  padding: 40px 40px 0;
+  min-height: 600px;
+  opacity: 0; animation: fadeSlideUp 0.8s ease forwards; animation-delay: 0.5s;
+}
+
+/* LEFT: Featured big image card */
+.featured-col {
+  position: relative;
+  display: flex; flex-direction: column;
+}
+.featured-card {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  background: var(--card-bg);
+}
+.featured-card-image {
+  position: relative;
+  flex: 1; min-height: 480px;
+  overflow: hidden;
+}
+.featured-card-image img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: grayscale(80%) brightness(0.6);
+  transition: filter 0.6s ease, transform 0.6s ease;
+}
+.featured-card:hover .featured-card-image img {
+  filter: grayscale(30%) brightness(0.7);
+  transform: scale(1.02);
+}
+.featured-card-image-placeholder {
+  width: 100%; height: 100%; min-height: 480px;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, rgba(240,237,232,0.05) 0%, rgba(240,237,232,0.01) 100%);
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; opacity: 0.1; text-transform: uppercase;
+}
+.featured-card-date {
+  position: absolute; bottom: 20px; right: 20px;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em;
+  text-align: right; line-height: 1.6;
+  opacity: 0.6;
+}
+.featured-card-body {
+  padding: 28px 0 0;
+}
+.featured-card-tag {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.featured-card-tag .tag-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+.featured-card-title {
+  font-family: var(--font-body); font-size: clamp(20px, 2.5vw, 30px); font-weight: 400;
+  line-height: 1.35;
+}
+.featured-card-meta {
+  margin-top: 16px;
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em; opacity: 0.25; text-transform: uppercase;
+}
+.featured-card .read-link {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
+  margin-top: 16px; opacity: 0.4; transition: opacity 0.3s ease;
+}
+.featured-card:hover .read-link { opacity: 1; }
+
+/* RIGHT: Stacked article cards */
+.side-col {
+  display: flex; flex-direction: column;
+  border-left: 1px solid var(--card-border);
+}
+.side-card {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 32px 36px;
+  flex: 1;
+  border-bottom: 1px solid var(--card-border);
+  position: relative;
+  transition: background 0.3s ease;
+}
+.side-card:last-child { border-bottom: none; }
+.side-card:hover { background: rgba(240,237,232,0.02); }
+.side-card-tag {
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.side-card-tag .tag-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
+.side-card-title {
+  font-family: var(--font-body); font-size: clamp(16px, 2vw, 22px); font-weight: 400;
+  line-height: 1.4;
+  padding-right: 60px;
+}
+.side-card-excerpt {
+  font-family: var(--font-body); font-size: 12px; font-weight: 300; line-height: 1.6;
+  opacity: 0.3; margin-top: 10px; padding-right: 60px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.side-card-meta {
+  margin-top: 12px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.12em; opacity: 0.2; text-transform: uppercase;
+}
+.side-card-arrow {
+  position: absolute; right: 32px; top: 50%; transform: translateY(-50%);
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid rgba(240,237,232,0.12);
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+.side-card:hover .side-card-arrow { border-color: rgba(240,237,232,0.3); background: rgba(240,237,232,0.03); }
+.side-card-arrow::after {
+  content: '→';
+  font-family: var(--font-mono); font-size: 14px; opacity: 0.4;
+  transition: opacity 0.3s ease;
+}
+.side-card:hover .side-card-arrow::after { opacity: 0.8; }
+
+/* ===================== ARTICLE DETAIL VIEW ===================== */
+.article-detail { padding: 120px 0 80px; max-width: 760px; margin: 0 auto; }
+.article-detail-inner { padding: 0 40px; }
+.article-back {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em;
+  text-transform: uppercase; opacity: 0.4; transition: opacity 0.3s ease;
+  margin-bottom: 60px;
+}
+.article-back:hover { opacity: 1; }
+.article-back .arrow { width: 24px; height: 1px; background: var(--text); position: relative; display: inline-block; }
+.article-back .arrow::before { content: ''; position: absolute; left: 0; top: -3px; width: 7px; height: 7px; border-left: 1px solid var(--text); border-bottom: 1px solid var(--text); transform: rotate(45deg); }
+.article-meta-top {
+  display: flex; align-items: center; gap: 16px;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em;
+  text-transform: uppercase; opacity: 0.5; margin-bottom: 24px;
+}
+.article-meta-top .cat-pill { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); opacity: 1; }
+.article-meta-top .cat-pill::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+.article-detail h1 {
+  font-family: var(--font-display); font-size: clamp(36px, 6vw, 72px);
+  line-height: 1.05; text-transform: uppercase; margin-bottom: 24px;
+}
+.article-excerpt {
+  font-family: var(--font-body); font-weight: 300;
+  font-size: clamp(16px, 1.6vw, 19px); line-height: 1.7; opacity: 0.7;
+  margin-bottom: 40px; padding-bottom: 32px;
+  border-bottom: 1px solid rgba(240,237,232,0.1);
+}
+.article-hero-img { margin: 0 -40px 48px; aspect-ratio: 16/9; overflow: hidden; background: rgba(240,237,232,0.04); }
+.article-hero-img img { width: 100%; height: 100%; object-fit: cover; }
+.article-body { font-family: var(--font-body); font-weight: 300; font-size: 16px; line-height: 1.85; color: rgba(240,237,232,0.85); }
+.article-body p { margin-bottom: 24px; }
+.article-body h2 { font-family: var(--font-display); font-size: clamp(24px, 3vw, 32px); text-transform: uppercase; line-height: 1.1; margin: 48px 0 16px; color: var(--text); }
+.article-body h3 { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; margin: 36px 0 12px; color: var(--text); }
+.article-body ul, .article-body ol { margin: 0 0 24px 24px; padding: 0; }
+.article-body li { margin-bottom: 8px; }
+.article-body a { color: var(--text); border-bottom: 1px solid rgba(240,237,232,0.3); transition: border-color 0.2s ease; }
+.article-body a:hover { border-bottom-color: var(--text); }
+.article-body strong { color: var(--text); font-weight: 500; }
+.article-body blockquote { border-left: 2px solid var(--accent); padding: 8px 0 8px 24px; margin: 32px 0; font-style: italic; opacity: 0.85; }
+.article-footer { margin-top: 60px; padding-top: 40px; border-top: 1px solid rgba(240,237,232,0.1); }
+.article-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; }
+.article-tag { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; padding: 6px 12px; border: 1px solid rgba(240,237,232,0.15); opacity: 0.6; }
+.article-share { display: flex; gap: 8px; align-items: center; margin-top: 24px; }
+.article-share-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.4; margin-right: 8px; }
+.article-share-btn { width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid rgba(240,237,232,0.12); background: transparent; cursor: pointer; transition: border-color 0.3s ease; color: var(--text); opacity: 0.6; }
+.article-share-btn:hover { border-color: rgba(240,237,232,0.4); opacity: 1; }
+.article-share-btn svg { width: 14px; height: 14px; fill: currentColor; }
+@media (max-width: 768px) {
+  .article-detail { padding: 100px 0 60px; }
+  .article-detail-inner { padding: 0 24px; }
+  .article-hero-img { margin: 0 -24px 32px; }
+  .article-back { margin-bottom: 40px; }
+}
+
+/* ===================== ARTICLE FEED BELOW ===================== */
+.feed-section {
+  padding: 80px 40px 0;
+  border-top: 1px solid var(--card-border);
+  margin-top: 80px;
+}
+.feed-header {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-bottom: 48px;
+}
+.feed-title {
+  font-family: var(--font-display); font-size: clamp(40px, 6vw, 72px);
+  text-transform: uppercase; line-height: 0.9;
+}
+.feed-label {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+  opacity: 0.3; margin-bottom: 8px;
+}
+
+/* Category nav */
+.category-nav {
+  display: flex; gap: 0; margin-bottom: 40px;
+  border-bottom: 1px solid var(--card-border);
+  overflow-x: auto;
+}
+.category-nav::-webkit-scrollbar { display: none; }
+.cat-btn {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+  padding: 14px 24px;
+  background: transparent; border: none; color: var(--text);
+  cursor: none; opacity: 0.25; transition: opacity 0.3s ease; position: relative; white-space: nowrap;
+}
+.cat-btn:hover { opacity: 0.5; }
+.cat-btn.active { opacity: 1; }
+.cat-btn.active::after {
+  content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 1px; background: var(--text);
+}
+
+/* Feed grid: 2 column cards with image */
+.feed-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px 32px;
+}
+.feed-card {
+  display: flex; flex-direction: column;
+  transition: opacity 0.3s ease;
+}
+.feed-card:hover { opacity: 0.85; }
+.feed-card-image {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--card-bg);
+  margin-bottom: 20px;
+}
+.feed-card-image img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: grayscale(80%) brightness(0.6);
+  transition: filter 0.5s ease, transform 0.5s ease;
+}
+.feed-card:hover .feed-card-image img {
+  filter: grayscale(30%) brightness(0.7);
+  transform: scale(1.02);
+}
+.feed-card-image-placeholder {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  opacity: 0.08;
+  background: linear-gradient(135deg, rgba(240,237,232,0.04) 0%, rgba(240,237,232,0.01) 100%);
+}
+.feed-card-tag {
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 8px;
+  display: flex; align-items: center; gap: 6px;
+}
+.feed-card-tag .tag-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
+.feed-card-title {
+  font-family: var(--font-body); font-size: clamp(16px, 1.8vw, 22px); font-weight: 400;
+  line-height: 1.35;
+}
+.feed-card-excerpt {
+  font-family: var(--font-body); font-size: 12px; font-weight: 300; line-height: 1.6;
+  opacity: 0.3; margin-top: 8px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.feed-card-meta {
+  margin-top: 12px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.12em; opacity: 0.2; text-transform: uppercase;
+  display: flex; gap: 10px; align-items: center;
+}
+.feed-card-meta .meta-dot { width: 2px; height: 2px; border-radius: 50%; background: var(--text); }
+.feed-card .read-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+  margin-top: 14px; opacity: 0; transition: opacity 0.3s ease;
+}
+.feed-card:hover .read-link { opacity: 0.5; }
+
+/* Load more */
+.load-more-wrap {
+  padding: 60px 0;
+  text-align: center;
+}
+.load-more-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  padding: 12px 56px;
+  border: 1px solid rgba(240,237,232,0.12);
+  background: transparent; color: var(--text);
+  cursor: none;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+.load-more-btn:hover { border-color: rgba(240,237,232,0.35); background: rgba(240,237,232,0.03); }
+
+/* ===================== DISCOVER CARDS (index style) ===================== */
+.guide-section {
+  padding: 0 40px;
+  margin-top: 80px;
+  border-top: 1px solid var(--card-border);
+}
+.guide-header {
+  padding-top: 60px;
+  margin-bottom: 32px;
+}
+.guide-label {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+  opacity: 0.3; margin-bottom: 8px;
+}
+.guide-title {
+  font-family: var(--font-display); font-size: clamp(40px, 6vw, 72px);
+  text-transform: uppercase; line-height: 0.9;
+}
+.discover-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.discover-card {
+  display: block; position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: none;
+}
+.discover-card-bg {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.discover-card:hover .discover-card-bg { transform: scale(1.06); }
+.discover-card-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.55) 100%);
+  transition: background 0.4s ease;
+}
+.discover-card:hover .discover-card-overlay {
+  background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.45) 100%);
+}
+.discover-card-content {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 32px 24px;
+  text-align: center;
+  z-index: 1;
+}
+.discover-card-title {
+  font-family: var(--font-display);
+  font-size: 42px;
+  text-transform: uppercase; line-height: 1;
+  margin-bottom: 12px;
+  text-shadow: 0 2px 16px rgba(0,0,0,0.5);
+}
+.discover-card-desc {
+  font-family: var(--font-body); font-weight: 200;
+  font-size: 12px; line-height: 1.7;
+  opacity: 0.7; max-width: 220px;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.3);
+}
+.discover-card-arrow {
+  position: absolute; top: 20px; right: 20px;
+  width: 32px; height: 32px;
+  border: 1px solid rgba(255,255,255,0.3); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: translateY(6px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.discover-card:hover .discover-card-arrow { opacity: 1; transform: translateY(0); }
+.discover-card-arrow svg { width: 12px; height: 12px; stroke: var(--text); fill: none; stroke-width: 2; }
+
+/* ===================== SCROLL REVEAL ===================== */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ===================== FOOTER (page-specific overrides) ===================== */
+footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); margin-top: 120px; }
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 1100px) {
+  .feed-grid { gap: 36px 24px; }
+  .side-card-title { font-size: 16px; }
+}
+@media (max-width: 900px) {
+  .top-bar { padding: 120px 24px 0; }
+  .sort-tabs { padding: 32px 24px 0; }
+  .main-grid { padding: 32px 24px 0; grid-template-columns: 1fr; gap: 0; }
+  .side-col { border-left: none; border-top: 1px solid var(--card-border); }
+  .featured-card-image, .featured-card-image-placeholder { min-height: 320px; }
+  .feed-section { padding: 60px 24px 0; margin-top: 60px; }
+  .feed-grid { grid-template-columns: 1fr; gap: 40px; }
+  .guide-section { padding: 0 24px; }
+  .discover-grid { grid-template-columns: repeat(2, 1fr); }
+  .discover-card { aspect-ratio: 1; }
+  .discover-card-title { font-size: 28px; }
+  footer { padding: 60px 24px 32px; margin-top: 80px; }
+}
+@media (max-width: 768px) {
+  .tagline { font-size: 24px; }
+  .side-card { padding: 24px 20px; }
+  .side-card-arrow { right: 16px; width: 36px; height: 36px; }
+  .side-card-title { padding-right: 48px; font-size: 15px; }
+  .side-card-excerpt { display: none; }
+  .sort-tabs { padding: 24px 24px 0; }
+  .featured-card-title { font-size: 20px; }
+  .featured-card-image, .featured-card-image-placeholder { min-height: 240px; }
+}
+@media (max-width: 480px) {
+  .discover-grid { grid-template-columns: 1fr; }
+  .discover-card { aspect-ratio: 1; }
+}
+@media (hover: none) and (pointer: coarse) {
+  .sort-tab, .cat-btn, .load-more-btn, .discover-card { cursor: pointer; }
+}
+
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Discover — TECHNO JAPAN",
+  "url": "https://techno-japan.media/news.html",
+  "description": "Explore Japan's underground techno and house scene. Stories, interviews, reports and more.",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "TECHNO JAPAN",
+    "url": "https://techno-japan.media"
+  }
+}
+</script>
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4MHCNR7D26"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-4MHCNR7D26');
+</script>
+</head>
+<body>
+
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<nav>
+  <a href="index.html" class="logo">TECHNO JAPAN</a>
+  <div class="nav-links">
+    <a href="index.html">TOP</a>
+    <a href="news.html">NEWS</a>
+    <a href="festivals.html">FESTIVALS</a>
+    <a href="artists.html">ARTISTS</a>
+    <a href="venues.html">VENUE</a>
+    <a href="about.html">ABOUT</a>
+    <span class="nav-social">
+      <a href="https://www.instagram.com/techno.japan_/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.9" fill="currentColor" stroke="none"/></svg></a>
+      <a href="https://www.threads.net/@techno.japan_" target="_blank" rel="noopener" aria-label="Threads"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.781 3.631 2.695 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.964-.065-1.19.408-2.285 1.33-3.082.88-.76 2.119-1.207 3.583-1.291a13.853 13.853 0 0 1 3.02.142c-.126-.742-.375-1.332-.74-1.757-.504-.582-1.279-.876-2.305-.875h-.024c-.815 0-1.917.224-2.617 1.272l-1.715-1.155c.96-1.388 2.413-2.085 4.318-2.085h.038c4.226.025 6.694 2.589 6.943 7.073l.34.119c1.557.555 2.694 1.452 3.34 2.628.94 1.701 1.005 4.348-1.224 6.61C18.69 23.146 16.491 23.978 12.186 24zm-.026-9.965c-.282 0-.567.011-.857.034-1.834.119-2.992.953-2.93 2.139.057 1.108 1.222 1.65 2.367 1.589 1.054-.057 2.426-.467 2.658-3.213a14.3 14.3 0 0 0-1.238-.55z"/></svg></a>
+    </span>
+  </div>
+  <button class="nav-hamburger" aria-label="Open menu" onclick="document.querySelector('.nav-overlay').classList.toggle('active');this.classList.toggle('active')"><span></span><span></span><span></span></button>
+</nav>
+<div class="nav-overlay">
+  <button class="nav-close" aria-label="Close menu" onclick="document.querySelector('.nav-overlay').classList.remove('active');document.querySelector('.nav-hamburger').classList.remove('active')"></button>
+  <a href="index.html">TOP</a>
+  <a href="news.html">NEWS</a>
+  <div class="nav-overlay-sub">
+    <a href="festivals.html">FESTIVALS</a>
+    <a href="artists.html">ARTISTS</a>
+    <a href="venues.html">VENUE</a>
+  </div>
+  <a href="about.html">ABOUT</a>
+  <span class="nav-overlay-social">
+    <a href="https://www.instagram.com/techno.japan_/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.9" fill="currentColor" stroke="none"/></svg></a>
+    <a href="https://www.threads.net/@techno.japan_" target="_blank" rel="noopener" aria-label="Threads"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.781 3.631 2.695 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.964-.065-1.19.408-2.285 1.33-3.082.88-.76 2.119-1.207 3.583-1.291a13.853 13.853 0 0 1 3.02.142c-.126-.742-.375-1.332-.74-1.757-.504-.582-1.279-.876-2.305-.875h-.024c-.815 0-1.917.224-2.617 1.272l-1.715-1.155c.96-1.388 2.413-2.085 4.318-2.085h.038c4.226.025 6.694 2.589 6.943 7.073l.34.119c1.557.555 2.694 1.452 3.34 2.628.94 1.701 1.005 4.348-1.224 6.61C18.69 23.146 16.491 23.978 12.186 24zm-.026-9.965c-.282 0-.567.011-.857.034-1.834.119-2.992.953-2.93 2.139.057 1.108 1.222 1.65 2.367 1.589 1.054-.057 2.426-.467 2.658-3.213a14.3 14.3 0 0 0-1.238-.55z"/></svg></a>
+  </span>
+  <button class="nav-back" onclick="document.querySelector('.nav-overlay').classList.remove('active');document.querySelector('.nav-hamburger').classList.remove('active');history.back()">← BACK</button>
+</div>
+
+<!-- ===================== ARTICLE DETAIL VIEW ===================== -->
+<article class="article-detail" id="article-detail" style="display:none">
+  <div class="article-detail-inner">
+    <a class="article-back" href="news.html">
+      <span class="arrow"></span> ALL STORIES
+    </a>
+    <div id="article-content"></div>
+  </div>
+</article>
+
+<!-- ===================== LIST VIEW WRAPPER ===================== -->
+<div id="list-view">
+
+<!-- ===================== TAGLINE ===================== -->
+<div class="top-bar">
+  <h1 class="tagline">The media exploring cultures and electronic music in Japan.</h1>
+</div>
+
+<!-- ===================== SORT TABS ===================== -->
+<div class="sort-tabs">
+  <button class="sort-tab active" data-sort="latest">Latest</button>
+  <button class="sort-tab" data-sort="popular">Most Popular</button>
+</div>
+
+<!-- ===================== MAIN GRID ===================== -->
+<div class="main-grid" id="main-grid">
+  <div class="featured-col" id="featured-col"></div>
+  <div class="side-col" id="side-col"></div>
+</div>
+
+<!-- ===================== MORE ARTICLES FEED ===================== -->
+<div class="feed-section reveal">
+  <div class="feed-header">
+    <div>
+      <div class="feed-label">ALL STORIES</div>
+      <div class="feed-title">ARCHIVE</div>
+    </div>
+  </div>
+  <div class="category-nav" id="category-nav"></div>
+  <div class="feed-grid" id="feed-grid"></div>
+  <div class="load-more-wrap">
+    <button class="load-more-btn" id="load-more-btn">LOAD MORE</button>
+  </div>
+</div>
+
+<!-- ===================== GUIDE LINKS ===================== -->
+<div class="guide-section reveal">
+  <div class="guide-header">
+    <div class="guide-label">EXPLORE</div>
+    <div class="guide-title">GUIDE</div>
+  </div>
+  <div class="discover-grid">
+    <a href="festivals.html" class="discover-card reveal">
+      <div class="discover-card-bg" style="background:linear-gradient(135deg, #1a0533 0%, #4a1942 40%, #c2185b 100%)"></div>
+      <div class="discover-card-overlay"></div>
+      <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+      <div class="discover-card-content">
+        <div class="discover-card-title">FESTIVALS</div>
+        <div class="discover-card-desc">Open-air gatherings, multi-day adventures, and Japan's most iconic outdoor electronic music festivals.</div>
+      </div>
+    </a>
+    <a href="events.html" class="discover-card reveal">
+      <div class="discover-card-bg" style="background:linear-gradient(135deg, #0d1b2a 0%, #1b2838 40%, #415a77 100%)"></div>
+      <div class="discover-card-overlay"></div>
+      <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+      <div class="discover-card-content">
+        <div class="discover-card-title">EVENTS</div>
+        <div class="discover-card-desc">Club nights, open-air raves, warehouse sessions. The heartbeat of Japan's underground scene.</div>
+      </div>
+    </a>
+    <a href="artists.html" class="discover-card reveal">
+      <div class="discover-card-bg" style="background:linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%)"></div>
+      <div class="discover-card-overlay"></div>
+      <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+      <div class="discover-card-content">
+        <div class="discover-card-title">ARTISTS</div>
+        <div class="discover-card-desc">Emerging talent, established selectors. The names shaping Japan's sound.</div>
+      </div>
+    </a>
+    <a href="venues.html" class="discover-card reveal">
+      <div class="discover-card-bg" style="background:linear-gradient(135deg, #1b1b1b 0%, #2d2d2d 40%, #4a4a4a 100%)"></div>
+      <div class="discover-card-overlay"></div>
+      <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
+      <div class="discover-card-content">
+        <div class="discover-card-title">VENUE</div>
+        <div class="discover-card-desc">The clubs, warehouses, and spaces that define Japan's underground.</div>
+      </div>
+    </a>
+  </div>
+</div>
+
+</div><!-- /#list-view -->
+
+<!-- NEWSLETTER -->
+<section class="newsletter">
+  <div class="newsletter-eyebrow">Newsletter</div>
+  <div class="newsletter-title">Stay in the loop.</div>
+  <div class="newsletter-desc">Monthly digest of new festivals, artists, and stories from Japan's underground.</div>
+  <form class="newsletter-form" action="https://formsubmit.co/tatsuya25shibata@gmail.com" method="POST">
+    <input type="email" name="email" required placeholder="your@email.com">
+    <input type="hidden" name="_subject" value="Newsletter signup — TECHNO JAPAN">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_next" value="https://techno-japan.media/?subscribed=1">
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-logo">TECHNO JAPAN</div>
+    <div class="footer-links">
+      <a href="index.html">TOP</a>
+      <a href="news.html">NEWS</a>
+      <a href="festivals.html">FESTIVALS</a>
+      <a href="artists.html">ARTISTS</a>
+      <a href="venues.html">VENUE</a>
+      <a href="about.html">ABOUT</a>
+      <span class="footer-social">
+        <a href="https://www.instagram.com/techno.japan_/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.9" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://www.threads.net/@techno.japan_" target="_blank" rel="noopener" aria-label="Threads"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.781 3.631 2.695 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.964-.065-1.19.408-2.285 1.33-3.082.88-.76 2.119-1.207 3.583-1.291a13.853 13.853 0 0 1 3.02.142c-.126-.742-.375-1.332-.74-1.757-.504-.582-1.279-.876-2.305-.875h-.024c-.815 0-1.917.224-2.617 1.272l-1.715-1.155c.96-1.388 2.413-2.085 4.318-2.085h.038c4.226.025 6.694 2.589 6.943 7.073l.34.119c1.557.555 2.694 1.452 3.34 2.628.94 1.701 1.005 4.348-1.224 6.61C18.69 23.146 16.491 23.978 12.186 24zm-.026-9.965c-.282 0-.567.011-.857.034-1.834.119-2.992.953-2.93 2.139.057 1.108 1.222 1.65 2.367 1.589 1.054-.057 2.426-.467 2.658-3.213a14.3 14.3 0 0 0-1.238-.55z"/></svg></a>
+      </span>
+    </div>
+    <div class="footer-copy">&copy; 2025 TECHNO JAPAN. ALL RIGHTS RESERVED.</div>
+  </div>
+</footer>
+
+<script src="common.js" defer></script>
+<script src="data.js?v=3"></script>
+<script>
+/* ========== ARTICLE DATA (legacy fallback if data.js missing) ========== */
+const ARTICLES_FALLBACK = [
+  {
+    id: 'rdc-2026-preview',
+    title: 'Rainbow Disco Club 2026: What to Expect This Year',
+    excerpt: 'As the festival enters its newest chapter in the hills of Higashi-Izu, we look at the lineup, the location, and why RDC remains one of Asia\'s most essential outdoor gatherings.',
+    category: 'FESTIVAL',
+    date: '2026-04-10',
+    image: '',
+    featured: true,
+    views: 2400,
+    readTime: 5
+  },
+  {
+    id: 'tokyo-underground-map',
+    title: 'The Complete Guide to Tokyo\'s Underground Club Scene',
+    excerpt: 'From the tight basements of Shibuya to the industrial spaces of Koenji — a deep guide to where the sound lives in Tokyo.',
+    category: 'CLUB',
+    date: '2026-04-08',
+    image: '',
+    views: 3100,
+    readTime: 8
+  },
+  {
+    id: 'interview-dj-nobu',
+    title: 'DJ Nobu: "The Sound Never Stops Evolving"',
+    excerpt: 'We sit down with the Future Terror founder to discuss two decades of pushing boundaries in Japanese techno and his vision for the next generation.',
+    category: 'INTERVIEW',
+    date: '2026-04-05',
+    image: '',
+    views: 4200,
+    readTime: 7
+  },
+  {
+    id: 'labyrinth-2026',
+    title: 'Labyrinth 2026: Into the Forest Once More',
+    excerpt: 'The legendary rave in the mountains of Niigata returns. What makes Labyrinth different from every other festival on earth?',
+    category: 'RAVE',
+    date: '2026-04-01',
+    image: '',
+    views: 1800,
+    readTime: 6
+  },
+  {
+    id: 'osaka-techno-scene',
+    title: 'Why Osaka\'s Techno Scene Deserves Your Attention',
+    excerpt: 'Circus, Compufunk, and a new generation of promoters are redefining what it means to go out in Japan\'s second city.',
+    category: 'CLUB',
+    date: '2026-03-28',
+    image: '',
+    views: 2100,
+    readTime: 5
+  },
+  {
+    id: 'womb-legacy',
+    title: 'WOMB at 25: The Club That Shaped a Generation',
+    excerpt: 'A quarter-century of nights in Shibuya\'s most iconic space. Former residents and regulars reflect on what WOMB means to them.',
+    category: 'CLUB',
+    date: '2026-03-25',
+    image: '',
+    views: 3600,
+    readTime: 9
+  },
+  {
+    id: 'vinyl-culture-japan',
+    title: 'Crate Digging in Japan: A Vinyl Culture Like No Other',
+    excerpt: 'Record shops, rare pressings, and the obsessive care that makes Japan a paradise for vinyl collectors.',
+    category: 'COLUMN',
+    date: '2026-03-20',
+    image: '',
+    views: 2800,
+    readTime: 6
+  },
+  {
+    id: 'rural-rave-report',
+    title: 'Field Report: 48 Hours at a Mountain Rave in Nagano',
+    excerpt: 'No signal, no sleep, no compromise. We spent a weekend at one of Japan\'s most remote and uncompromising free parties.',
+    category: 'RAVE',
+    date: '2026-03-15',
+    image: '',
+    views: 3400,
+    readTime: 7
+  },
+  {
+    id: 'forestlimit-feature',
+    title: 'Forest Limit: The Tiny Room That Changed Tokyo Nightlife',
+    excerpt: 'A closet-sized venue in Hatagaya became the incubator for some of Japan\'s most experimental electronic music.',
+    category: 'CLUB',
+    date: '2026-03-10',
+    image: '',
+    views: 1500,
+    readTime: 5
+  },
+  {
+    id: 'frue-festival-review',
+    title: 'FRUE 2025: Music Without Borders',
+    excerpt: 'Ambient drones, Afrobeat, and free jazz collided in the hills of Hamamatsu. Our review of last year\'s most eclectic festival.',
+    category: 'FESTIVAL',
+    date: '2026-03-05',
+    image: '',
+    views: 1900,
+    readTime: 6
+  },
+  {
+    id: 'sound-system-culture',
+    title: 'Sound System Culture in Japan: Roots and Evolution',
+    excerpt: 'How dub, reggae, and bass culture found a home in Japan and influenced the underground electronic scene.',
+    category: 'PARTY',
+    date: '2026-02-28',
+    image: '',
+    views: 1200,
+    readTime: 8
+  },
+  {
+    id: 'new-generation-djs',
+    title: '10 Japanese DJs You Need to Know in 2026',
+    excerpt: 'The next wave of talent emerging from Tokyo, Osaka, and beyond. These artists are shaping the future of the scene.',
+    category: 'NEWS',
+    date: '2026-02-20',
+    image: '',
+    views: 5100,
+    readTime: 4
+  }
+];
+
+/* Use ARTICLES from data.js if loaded, else fall back to inline placeholders */
+if (typeof ARTICLES === 'undefined' || !ARTICLES.length) {
+  window.ARTICLES = ARTICLES_FALLBACK;
+}
+
+/* ========== HELPERS ========== */
+const MONTHS_S = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+function formatDate(dateStr) {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  return `${MONTHS_S[m-1]} ${d}, ${y}`;
+}
+function formatDateSplit(dateStr) {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  return `${MONTHS_S[m-1]} ${String(d).padStart(2,'0')}<br>${y}`;
+}
+
+/* ========== STATE ========== */
+let currentSort = 'latest';
+let currentCategory = 'ALL';
+let feedVisible = 4;
+
+/* ========== SORT ARTICLES ========== */
+function getSorted(arr) {
+  if (currentSort === 'latest') {
+    return [...arr].sort((a, b) => new Date(b.date) - new Date(a.date));
+  }
+  return [...arr].sort((a, b) => (b.views || 0) - (a.views || 0));
+}
+
+/* ========== RENDER MAIN GRID ========== */
+function renderMainGrid() {
+  const sorted = getSorted(ARTICLES);
+  const featured = sorted[0];
+  const sideItems = sorted.slice(1, 4);
+
+  // Featured left
+  document.getElementById('featured-col').innerHTML = `
+    <a href="#article/${featured.id}" class="featured-card">
+      <div class="featured-card-image">
+        ${featured.image
+          ? `<img loading="lazy" decoding="async" src="${featured.image}" alt="${featured.title}">`
+          : `<div class="featured-card-image-placeholder">COMING SOON</div>`}
+        <div class="featured-card-date">${formatDateSplit(featured.date)}</div>
+      </div>
+      <div class="featured-card-body">
+        <div class="featured-card-tag"><span class="tag-dot"></span> ${featured.category}</div>
+        <div class="featured-card-title">${featured.title}</div>
+        <div class="featured-card-meta">${featured.readTime || 5} MIN READ</div>
+        <div class="read-link">READ <span>→</span></div>
+      </div>
+    </a>`;
+
+  // Side right
+  document.getElementById('side-col').innerHTML = sideItems.map(a => `
+    <a href="#article/${a.id}" class="side-card">
+      <div class="side-card-tag"><span class="tag-dot"></span> ${a.category}</div>
+      <div class="side-card-title">${a.title}</div>
+      <div class="side-card-excerpt">${a.excerpt}</div>
+      <div class="side-card-meta">${formatDate(a.date)} · ${a.readTime || 5} MIN READ</div>
+      <div class="side-card-arrow"></div>
+    </a>
+  `).join('');
+}
+
+/* ========== RENDER CATEGORY NAV ========== */
+function renderCategoryNav() {
+  const cats = ['ALL','REPORT','COLUMN','INTERVIEW','NEWS','FESTIVAL','RAVE','PARTY','CLUB'];
+  document.getElementById('category-nav').innerHTML = cats.map(c =>
+    `<button class="cat-btn ${currentCategory === c ? 'active' : ''}" data-cat="${c}">${c}</button>`
+  ).join('');
+  document.querySelectorAll('.cat-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentCategory = btn.dataset.cat;
+      feedVisible = 4;
+      renderCategoryNav();
+      renderFeed();
+      bindCursorExpand();
+    });
+  });
+}
+
+/* ========== RENDER FEED ========== */
+function renderFeed() {
+  const sorted = getSorted(ARTICLES);
+  // Exclude first 4 (already in main grid) unless filtered
+  let items = currentCategory === 'ALL' ? sorted.slice(4) : sorted.filter(a => a.category === currentCategory);
+  const visible = items.slice(0, feedVisible);
+
+  document.getElementById('feed-grid').innerHTML = visible.map(a => `
+    <a href="#article/${a.id}" class="feed-card">
+      <div class="feed-card-image">
+        ${a.image
+          ? `<img loading="lazy" decoding="async" src="${a.image}" alt="${a.title}">`
+          : `<div class="feed-card-image-placeholder">COMING SOON</div>`}
+      </div>
+      <div class="feed-card-tag"><span class="tag-dot"></span> ${a.category}</div>
+      <div class="feed-card-title">${a.title}</div>
+      <div class="feed-card-excerpt">${a.excerpt}</div>
+      <div class="feed-card-meta">
+        <span>${formatDate(a.date)}</span>
+        <span class="meta-dot"></span>
+        <span>${a.readTime || 5} MIN READ</span>
+      </div>
+      <div class="read-link">READ <span>→</span></div>
+    </a>
+  `).join('');
+
+  const btn = document.getElementById('load-more-btn');
+  btn.style.display = visible.length >= items.length ? 'none' : 'inline-block';
+}
+
+/* ========== SORT TABS ========== */
+document.querySelectorAll('.sort-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    currentSort = tab.dataset.sort;
+    document.querySelectorAll('.sort-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    renderMainGrid();
+    feedVisible = 4;
+    renderFeed();
+    bindCursorExpand();
+  });
+});
+
+/* ========== LOAD MORE ========== */
+document.getElementById('load-more-btn').addEventListener('click', () => {
+  feedVisible += 4;
+  renderFeed();
+  bindCursorExpand();
+});
+
+/* ========== CURSOR (delegated to common.js) ========== */
+function bindCursorExpand() {
+  if (window.tjBindCursorExpand) window.tjBindCursorExpand('button, .featured-card, .side-card, .feed-card, .quick-link');
+}
+
+/* ========== SCROLL REVEAL ========== */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+/* ========== ARTICLE DETAIL ========== */
+function renderArticleDetail(id) {
+  const a = ARTICLES.find(x => x.id === id);
+  const detailEl = document.getElementById('article-detail');
+  const listEl = document.getElementById('list-view');
+  const contentEl = document.getElementById('article-content');
+
+  if (!a) {
+    listEl.style.display = '';
+    detailEl.style.display = 'none';
+    return;
+  }
+
+  // SEO: update title and meta description for this article
+  document.title = `${a.title} — TECHNO JAPAN`;
+  const descTag = document.querySelector('meta[name="description"]');
+  if (descTag) descTag.setAttribute('content', a.excerpt || '');
+
+  const url = `https://techno-japan.media/news.html#article/${a.id}`;
+  const t = encodeURIComponent(`${a.title} — TECHNO JAPAN`);
+  const u = encodeURIComponent(url);
+
+  const tagsHtml = (a.tags || []).map(t =>
+    `<span class="article-tag">${t}</span>`).join('');
+
+  contentEl.innerHTML = `
+    <div class="article-meta-top">
+      <span class="cat-pill">${a.category}</span>
+      <span>${formatDate(a.date)}</span>
+      <span>${a.readTime || 5} MIN READ</span>
+      ${a.author ? `<span>BY ${a.author}</span>` : ''}
+    </div>
+    <h1>${a.title}</h1>
+    <div class="article-excerpt">${a.excerpt || ''}</div>
+    ${a.image ? `<div class="article-hero-img"><img src="${a.image}" alt="${a.title}" loading="lazy" decoding="async"></div>` : ''}
+    <div class="article-body">${a.body || ''}</div>
+    <div class="article-footer">
+      ${tagsHtml ? `<div class="article-tags">${tagsHtml}</div>` : ''}
+      <div class="article-share">
+        <span class="article-share-label">SHARE</span>
+        <a href="https://twitter.com/intent/tweet?text=${t}&url=${u}" target="_blank" rel="noopener" class="article-share-btn" title="X">
+          <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u=${u}" target="_blank" rel="noopener" class="article-share-btn" title="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647z"/></svg>
+        </a>
+        <a href="https://social-plugins.line.me/lineit/share?url=${u}" target="_blank" rel="noopener" class="article-share-btn" title="LINE">
+          <svg viewBox="0 0 24 24"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zM24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+        </a>
+        <button type="button" class="article-share-btn" data-copy="${url}" title="Copy URL" onclick="navigator.clipboard.writeText(this.dataset.copy);this.style.background='rgba(255,255,255,0.1)';setTimeout(()=>this.style.background='',1000)">
+          <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+        </button>
+      </div>
+    </div>
+  `;
+
+  listEl.style.display = 'none';
+  detailEl.style.display = 'block';
+  window.scrollTo(0, 0);
+  bindCursorExpand();
+}
+
+function showList() {
+  document.getElementById('list-view').style.display = '';
+  document.getElementById('article-detail').style.display = 'none';
+  document.title = 'NEWS — TECHNO JAPAN';
+}
+
+function handleHash() {
+  const hash = window.location.hash;
+  if (hash.startsWith('#article/')) {
+    const id = hash.replace('#article/', '');
+    renderArticleDetail(id);
+  } else {
+    showList();
+  }
+}
+
+window.addEventListener('hashchange', handleHash);
+
+/* ========== INIT ========== */
+renderMainGrid();
+renderCategoryNav();
+renderFeed();
+bindCursorExpand();
+handleHash();
+</script>
+<!-- Service Worker registration -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(err => console.warn('SW registration failed:', err));
+    });
+  }
+</script>
+<script src="favorites.js" defer></script>
+<script src="search.js" defer></script>
+</body>
+</html>

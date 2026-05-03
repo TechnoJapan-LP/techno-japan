@@ -20,7 +20,7 @@ const STATIC_PAGES = [
   { path: '/events.html', priority: '0.9', changefreq: 'daily' },
   { path: '/artists.html', priority: '0.8', changefreq: 'weekly' },
   { path: '/venues.html', priority: '0.8', changefreq: 'weekly' },
-  { path: '/discover.html', priority: '0.9', changefreq: 'daily' },
+  { path: '/news.html', priority: '0.9', changefreq: 'daily' },
 ];
 
 // Load data.js
@@ -90,7 +90,7 @@ VENUES.forEach(v => {
 ARTICLES.forEach(a => {
   if (a.id) {
     urls.push({
-      loc: `${BASE_URL}/discover.html#article/${a.id}`,
+      loc: `${BASE_URL}/news.html#article/${a.id}`,
       lastmod: a.publishedAt || today,
       changefreq: 'monthly',
       priority: '0.7',

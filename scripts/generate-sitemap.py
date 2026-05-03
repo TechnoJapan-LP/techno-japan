@@ -20,7 +20,7 @@ STATIC_PAGES = [
     {"path": "/events.html", "priority": "0.9", "changefreq": "daily"},
     {"path": "/artists.html", "priority": "0.8", "changefreq": "weekly"},
     {"path": "/venues.html", "priority": "0.8", "changefreq": "weekly"},
-    {"path": "/discover.html", "priority": "0.9", "changefreq": "daily"},
+    {"path": "/news.html", "priority": "0.9", "changefreq": "daily"},
     {"path": "/about.html", "priority": "0.5", "changefreq": "monthly"},
 ]
 
@@ -117,7 +117,7 @@ def main():
     article_ids = extract_ids(data, "ARTICLES")
     for aid in article_ids:
         urls.append({
-            "loc": f"{BASE_URL}/discover.html#article/{aid}",
+            "loc": f"{BASE_URL}/news.html#article/{aid}",
             "lastmod": today,
             "changefreq": "monthly",
             "priority": "0.7",

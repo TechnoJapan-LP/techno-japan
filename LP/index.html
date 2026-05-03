@@ -493,7 +493,7 @@
   <a href="index.html" class="logo">TECHNO JAPAN</a>
   <div class="nav-links">
     <a href="index.html">TOP</a>
-    <a href="discover.html">NEWS</a>
+    <a href="news.html">NEWS</a>
     <a href="festivals.html">FESTIVALS</a>
     <a href="artists.html">ARTISTS</a>
     <a href="venues.html">VENUE</a>
@@ -508,7 +508,7 @@
 <div class="nav-overlay">
   <button class="nav-close" aria-label="Close menu" onclick="document.querySelector('.nav-overlay').classList.remove('active');document.querySelector('.nav-hamburger').classList.remove('active')"></button>
   <a href="index.html">TOP</a>
-  <a href="discover.html">NEWS</a>
+  <a href="news.html">NEWS</a>
   <div class="nav-overlay-sub">
     <a href="festivals.html">FESTIVALS</a>
     <a href="artists.html">ARTISTS</a>
@@ -535,7 +535,7 @@
 <!-- STORIES -->
 <div class="section-head">
   <div class="section-eyebrow"><span class="dot"></span>STORIES</div>
-  <a href="discover.html" class="section-cta">VIEW ALL →</a>
+  <a href="news.html" class="section-cta">VIEW ALL →</a>
 </div>
 <div class="stories-grid" id="stories-grid"><!-- rendered by JS --></div>
 
@@ -587,7 +587,7 @@
     <div class="footer-logo">TECHNO JAPAN</div>
     <div class="footer-links">
       <a href="index.html">TOP</a>
-      <a href="discover.html">NEWS</a>
+      <a href="news.html">NEWS</a>
       <a href="festivals.html">FESTIVALS</a>
       <a href="artists.html">ARTISTS</a>
       <a href="venues.html">VENUE</a>
@@ -618,7 +618,7 @@
   const featured = published.find(a => a.featured) || published[0];
   const sideCards = published.filter(a => a.id !== (featured && featured.id)).slice(0, 3);
 
-  function articleUrl(a) { return 'discover.html#article/' + a.id; }
+  function articleUrl(a) { return 'news.html#article/' + a.id; }
   function fmtDate(d) {
     if (!d) return '';
     const dt = new Date(d);

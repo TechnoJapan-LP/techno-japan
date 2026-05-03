@@ -121,7 +121,7 @@ def main():
         if not a.get("id") or not (a.get("title") or a.get("name")):
             continue
         title = a.get("title") or a.get("name")
-        link = f"{BASE_URL}/discover.html#article/{a['id']}"
+        link = f"{BASE_URL}/news.html#article/{a['id']}"
         pub_str = a.get("publishedAt") or a.get("publishAt")
         try:
             pub = datetime.fromisoformat(pub_str.replace("Z", "+00:00")) if pub_str else datetime.now()
