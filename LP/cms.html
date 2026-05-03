@@ -300,7 +300,10 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
     <button onclick="switchSection('author',this)"><span class="icon">&#9787;</span><span>Author</span></button>
   </nav>
   <div id="recent-items" style="padding:0 4px;border-top:1px solid var(--border);max-height:240px;overflow-y:auto"></div>
-  <div style="padding:12px"><button class="btn btn-sm" style="width:100%;font-size:.7rem" onclick="exportDataJs()">⬇ Export data.js</button></div>
+  <div style="padding:12px;display:flex;flex-direction:column;gap:6px">
+    <button id="btn-publish-now" class="btn btn-sm btn-accent" style="width:100%;font-size:.7rem" onclick="publishDataJs()">🚀 Publish Now</button>
+    <button class="btn btn-sm" style="width:100%;font-size:.7rem" onclick="exportDataJs()">⬇ Export data.js</button>
+  </div>
   <div style="padding:0 12px 8px"><button class="btn btn-sm" style="width:100%;font-size:.7rem" onclick="openImageLibrary()">🖼 Images</button></div>
   <div style="padding:0 12px 8px"><button class="btn btn-sm" style="width:100%;font-size:.7rem" onclick="openTrash()">🗑 Trash <span id="trash-count" style="opacity:.6"></span></button></div>
   <div style="padding:0 12px 8px"><button class="btn btn-sm" style="width:100%;font-size:.7rem" onclick="openStats()">📊 Stats</button></div>
@@ -3461,20 +3464,64 @@ function autoRegisterArtists(artistIds){
 /* ==============================================================
    EXPORT DATA.JS
    ============================================================== */
+function buildFullDataJs(d){
+  const lines=[];
+  lines.push(dataJsHeader());
+  lines.push(buildArtistsJs(d.ARTISTS||[]));
+  lines.push(buildEventsJs(d.EVENTS||[]));
+  lines.push(buildFestivalsJs(d.FESTIVALS||[]));
+  lines.push(buildVenuesJs(d.VENUES||[]));
+  lines.push(buildArticlesJs(d.ARTICLES||[]));
+  return lines.join('\n\n');
+}
+
 function exportDataJs(){
   toast('Exporting...','info');
   fetchAllSheets(['VENUES','FESTIVALS','ARTISTS','EVENTS','ARTICLES']).then(d=>{
-    const lines=[];
-    lines.push(dataJsHeader());
-    lines.push(buildArtistsJs(d.ARTISTS||[]));
-    lines.push(buildEventsJs(d.EVENTS||[]));
-    lines.push(buildFestivalsJs(d.FESTIVALS||[]));
-    lines.push(buildVenuesJs(d.VENUES||[]));
-    lines.push(buildArticlesJs(d.ARTICLES||[]));
-    const content=lines.join('\n\n');
+    const content=buildFullDataJs(d);
     downloadFile('data.js',content);
     toast('data.js exported','success');
   }).catch(e=>toast('Export error: '+e.message,'error'));
+}
+
+/* ==============================================================
+   PUBLISH NOW — data.js を直接 GitHub にコミット
+   ============================================================== */
+function publishDataJs(opts){
+  opts = opts || {};
+  if (!confirm('data.js をビルドして GitHub に直接 push します。\n（数分後に LP 本番に反映）\n\n続行しますか?')) return;
+  const btn = document.getElementById('btn-publish-now');
+  if (btn) { btn.disabled = true; btn.dataset.originalText = btn.innerHTML; btn.innerHTML = 'Building...'; }
+  toast('Building data.js...','info');
+  fetchAllSheets(['VENUES','FESTIVALS','ARTISTS','EVENTS','ARTICLES']).then(d=>{
+    const content = buildFullDataJs(d);
+    if (btn) btn.innerHTML = 'Pushing to GitHub...';
+    toast('Pushing to GitHub...','info');
+    return fetch(GAS_URL, {
+      method: 'POST',
+      body: JSON.stringify({
+        action: 'publish_data_js',
+        content: content,
+        message: opts.message || 'cms: publish data.js'
+      })
+    }).then(r=>r.json());
+  }).then(r=>{
+    if (r.status === 'ok' || r.success) {
+      const sha = (r.sha || '').slice(0,7);
+      toast('🚀 Published! ('+sha+') — 数分後に本番反映', 'success');
+      if (r.commitUrl) {
+        // 通知トーストから commit を開けるようコンソールに出力
+        console.log('Commit URL:', r.commitUrl);
+      }
+    } else {
+      toast('Publish failed: ' + (r.message || 'unknown'), 'error');
+    }
+  }).catch(e=>{
+    console.error('Publish error:', e);
+    toast('Publish error: '+e.message, 'error');
+  }).finally(()=>{
+    if (btn) { btn.disabled = false; btn.innerHTML = btn.dataset.originalText || '🚀 Publish Now'; }
+  });
 }
 function dataJsHeader(){
   return `/* ==========================================================
