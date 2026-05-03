@@ -1200,8 +1200,10 @@ function setArticleBody(html){
   if (src) src.value = v;
   const q = initArticleEditor();
   if (q) {
-    // Avoid triggering text-change which would loop
-    q.root.innerHTML = v;
+    // Quill v1.x の正しい HTML 読み込み API。
+    // root.innerHTML 直接代入は Delta と DOM が乖離して画像等が消えるバグの原因。
+    const delta = q.clipboard.convert(v);
+    q.setContents(delta, 'silent');
   }
 }
 
@@ -1217,9 +1219,12 @@ function switchArticleEditor(mode){
     sourceTab.classList.add('active');
     visualTab.classList.remove('active');
   } else {
-    // Source → Visual: push textarea HTML to Quill
+    // Source → Visual: push textarea HTML to Quill (proper API)
     const src = document.getElementById('ar-body-source').value;
-    if (articleQuill) articleQuill.root.innerHTML = src;
+    if (articleQuill) {
+      const delta = articleQuill.clipboard.convert(src);
+      articleQuill.setContents(delta, 'silent');
+    }
     document.getElementById('ar-body').value = src;
     wrap.classList.remove('source-mode');
     visualTab.classList.add('active');
