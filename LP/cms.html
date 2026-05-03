@@ -636,6 +636,7 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
             <button type="button" class="ar-editor-tab active" data-mode="visual" onclick="switchArticleEditor('visual')">VISUAL</button>
             <button type="button" class="ar-editor-tab" data-mode="source" onclick="switchArticleEditor('source')">HTML</button>
             <button type="button" class="ar-editor-tab" id="ar-preview-toggle" onclick="toggleArticlePreview()" style="margin-left:auto">プレビュー</button>
+            <button type="button" class="ar-editor-tab" onclick="showArticleHistory()" title="編集履歴">📜 履歴</button>
           </div>
           <div id="ar-body-editor"></div>
           <textarea id="ar-body-source" placeholder="<p>HTMLを直接編集できます</p>"></textarea>
@@ -3481,6 +3482,69 @@ function autoRegisterArtists(artistIds){
 /* ==============================================================
    EXPORT DATA.JS
    ============================================================== */
+/* ==============================================================
+   ARTICLE EDIT HISTORY — body のバージョン履歴
+   ============================================================== */
+function showArticleHistory(){
+  const articleId = (document.getElementById('ar-id')?.value || '').trim();
+  if (!articleId) return toast('IDが必要です（保存済み記事のみ履歴表示可能）', 'error');
+  toast('履歴を取得中...', 'info');
+  fetch(GAS_URL, {
+    method: 'POST',
+    body: JSON.stringify({ action: 'get_article_history', articleId: articleId })
+  }).then(r=>r.json()).then(d=>{
+    if (d.status !== 'ok') return toast('履歴取得失敗: '+(d.message||''), 'error');
+    if (!d.versions || !d.versions.length) return toast('この記事の履歴はまだありません', 'info');
+    renderArticleHistoryModal(d.versions);
+  }).catch(e=>toast('History error: '+e.message, 'error'));
+}
+
+function renderArticleHistoryModal(versions){
+  const existing = document.getElementById('history-modal');
+  if (existing) existing.remove();
+  const modal = document.createElement('div');
+  modal.id = 'history-modal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px';
+  const inner = document.createElement('div');
+  inner.style.cssText = 'background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:24px;max-width:760px;width:100%;max-height:80vh;overflow-y:auto;box-shadow:0 12px 40px rgba(0,0,0,.6)';
+  inner.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><div style="font-family:var(--font-mono);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text3)">📜 編集履歴 ('+versions.length+'件)</div><button class="btn btn-sm" onclick="document.getElementById(\'history-modal\').remove()">✕ Close</button></div>';
+  versions.forEach((v, i) => {
+    const card = document.createElement('div');
+    card.style.cssText = 'border:1px solid var(--border);border-radius:6px;padding:14px;margin-bottom:10px;background:var(--bg3)';
+    const ts = formatHistoryTimestamp(v.savedAt);
+    const preview = (v.body||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().slice(0, 200);
+    card.innerHTML =
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">' +
+        '<div style="font-family:var(--font-mono);font-size:.7rem;color:var(--text2)">' +
+          '<strong style="color:var(--text)">' + esc(ts) + '</strong>' +
+          (v.title ? ' · ' + esc(v.title) : '') +
+        '</div>' +
+        '<button class="btn btn-sm btn-yellow" data-idx="'+i+'">↩ Restore</button>' +
+      '</div>' +
+      '<div style="font-size:.85rem;color:var(--text2);line-height:1.5">' + esc(preview) + (preview.length >= 200 ? '...' : '') + '</div>';
+    card.querySelector('button').onclick = () => {
+      if (!confirm('この履歴で本文を上書きします（現在の本文は次回保存時に履歴に残ります）。続行しますか?')) return;
+      setArticleBody(v.body || '');
+      markFormDirty();
+      modal.remove();
+      toast('履歴から復元しました（Save Changes でスプレッドシートに保存）', 'success');
+    };
+    inner.appendChild(card);
+  });
+  modal.appendChild(inner);
+  modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+  document.body.appendChild(modal);
+}
+
+function formatHistoryTimestamp(iso){
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return iso;
+  const Y=d.getFullYear(), M=String(d.getMonth()+1).padStart(2,'0'), D=String(d.getDate()).padStart(2,'0');
+  const h=String(d.getHours()).padStart(2,'0'), m=String(d.getMinutes()).padStart(2,'0');
+  return Y+'-'+M+'-'+D+' '+h+':'+m;
+}
+
 /* ==============================================================
    AI TITLE SUGGEST — 本文からタイトル候補を3案生成
    ============================================================== */
