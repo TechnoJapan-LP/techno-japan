@@ -28,7 +28,7 @@ jobs:
           CMS_AUTH = os.environ.get('CMS_AUTH', '')
 
           # 各フォルダタイプを同期
-          FOLDERS = ["venues", "festivals", "artists"]
+          FOLDERS = ["venues", "festivals", "artists", "articles"]
 
           for folder_type in FOLDERS:
               print(f"\n--- Syncing {folder_type} ---")

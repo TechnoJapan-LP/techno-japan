@@ -32,6 +32,7 @@
   - `VENUES_FOLDER_ID = "1c57ZkrkBj5GioKLO7h2eBrBecpj3oqli"`
   - `FESTIVALS_FOLDER_ID = "15MAHqOfAjjNN_AvD0Hzdrko5NFujfIQi"`
   - `ARTISTS_FOLDER_ID = "16Tke6MdkD1OPNElvRFjACrz-Y2ggEn5j"`
+  - `ARTICLE_BODY_FOLDER_ID = "1Q7ZYtO7tBasFL-Ds1O0dorlTMOXywmVs"` (記事本文の画像)
 
 ## 認証
 
