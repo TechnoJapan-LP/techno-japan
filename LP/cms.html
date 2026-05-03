@@ -1165,7 +1165,9 @@ function triggerArticleImageUpload(){
         .then(d => {
           if (d.status === 'ok' || d.success) {
             toast('挿入しました ('+width+'×'+height+'). 忘れずに「Save Changes」を押してね', 'success');
-            insertImageAtCursor(d.imagePath || ('images/articles/' + filename));
+            // Drive 直URL があれば優先（同期完了前でも即表示できる）
+            const url = d.driveUrl || d.imagePath || ('images/articles/' + filename);
+            insertImageAtCursor(url);
           } else {
             toast(d.message || 'Upload failed', 'error');
           }
