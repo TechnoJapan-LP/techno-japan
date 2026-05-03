@@ -2075,6 +2075,7 @@ function editRow(section, rowNum){
     // 既存編集時は ID/readTime の自動上書きを抑制
     document.getElementById('ar-id').dataset.userEdited = '1';
     document.getElementById('ar-readTime').dataset.userEdited = row.readTime ? '1' : '';
+    if(row.image) showCurrentImage('preview-ar-image',row.image,"clearImageField('ar',{section:'article'})");
   }
   else if(section==='author'){
     setVal('au-id',row.id); setVal('au-name',row.name); setVal('au-bio',row.bio);
@@ -3330,7 +3331,7 @@ function resetForm(section){
     festival:['f-id','f-name','f-city','f-location','f-url','f-ticketUrl','f-instagram','f-address','f-lat','f-lng','f-dateStart','f-dateEnd','f-image','f-imagePosition','f-flyer','f-heroGradient','f-desc','f-imageUrl','f-flyerUrl'],
     artist:['a-id','a-name','a-city','a-country','a-genre','a-image','a-imagePosition','a-bio','a-instagram','a-soundcloud','a-bandcamp','a-website','a-imageUrl'],
     event:['e-name','e-date','e-venue','e-city','e-time','e-desc','e-link'],
-    article:['ar-id','ar-title','ar-category','ar-date','ar-author','ar-image','ar-readTime','ar-views','ar-excerpt','ar-body','ar-tags'],
+    article:['ar-id','ar-title','ar-category','ar-date','ar-author','ar-image','ar-imageUrl','ar-readTime','ar-views','ar-excerpt','ar-body','ar-tags'],
     author:['au-id','au-name','au-bio','au-image','au-instagram','au-twitter','au-website'],
   }[section];
   fields.forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
