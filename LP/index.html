@@ -785,7 +785,7 @@
     const cardHtml = (a, i) => `
       <a class="artist-mini" href="artists.html#artist/${a.id}">
         ${a.image && a.image.trim()
-          ? `<div class="artist-mini-img" style="background-image:url('${a.image}')"></div>`
+          ? `<div class="artist-mini-img" style="background-image:url('${a.image}');background-position:${a.imagePosition || 'center'}"></div>`
           : `<div class="artist-mini-fallback"></div>`}
         <div class="artist-mini-overlay"></div>
         <div class="artist-mini-num">#${pad2((i % artistsToShow.length) + 1)}</div>

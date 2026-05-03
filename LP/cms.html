@@ -114,6 +114,9 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
 .insta-help ol{margin:8px 0 8px 20px;line-height:1.8}
 .insta-help code{background:var(--bg4);padding:2px 6px;border-radius:3px;font-family:var(--font-mono);font-size:.75rem}
 .label-hint{font-size:.7rem;color:var(--text3);font-family:var(--font-mono);font-weight:400;margin-left:4px}
+.img-pos-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);width:36px;height:36px;font-size:14px;cursor:pointer;border-radius:3px;transition:.15s;display:flex;align-items:center;justify-content:center;padding:0}
+.img-pos-btn:hover{background:var(--bg4);color:var(--text)}
+.img-pos-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 .upload-fallback{opacity:.6;transition:.2s}
 .upload-fallback:hover{opacity:1}
 .upload-fallback .upload-label{font-size:.75rem;color:var(--text3);font-family:var(--font-mono);display:block;margin-bottom:4px}
@@ -426,6 +429,22 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
       <div class="form-group"><label>Image Path</label><input type="text" id="a-image" placeholder="auto-filled" readonly></div>
       <div class="form-group full"><label>Image from URL</label><div class="input-row"><input type="url" id="a-imageUrl" placeholder="画像の直接URL（公式サイト等から）"><button class="btn btn-sm btn-accent" onclick="uploadFromUrl('a','artist','a-image','a-imageUrl','preview-a-image')">UPLOAD</button></div><div class="img-preview" id="preview-a-image"></div></div>
       <div class="form-group full upload-fallback"><label>または手動アップロード <span class="label-hint">max 5MB</span></label><div class="upload-area" onclick="this.querySelector('input').click()"><span class="icon">&#8679;</span><span>Upload Image</span><input type="file" accept="image/*" onchange="uploadImage(this,'artist','a')"></div></div>
+      <div class="form-group full">
+        <label>Image Position <span class="label-hint">頭が切れるときは「top」を選ぶ</span></label>
+        <input type="text" id="a-imagePosition" placeholder="center / top / 50% 25% など" value="" oninput="syncArtistImagePos()">
+        <div class="img-pos-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;max-width:140px;margin-top:8px">
+          <button type="button" class="img-pos-btn" data-pos="left top" onclick="setArtistImagePos('left top')" title="top-left">↖</button>
+          <button type="button" class="img-pos-btn" data-pos="center top" onclick="setArtistImagePos('center top')" title="top">↑</button>
+          <button type="button" class="img-pos-btn" data-pos="right top" onclick="setArtistImagePos('right top')" title="top-right">↗</button>
+          <button type="button" class="img-pos-btn" data-pos="left center" onclick="setArtistImagePos('left center')" title="left">←</button>
+          <button type="button" class="img-pos-btn active" data-pos="center" onclick="setArtistImagePos('center')" title="center">●</button>
+          <button type="button" class="img-pos-btn" data-pos="right center" onclick="setArtistImagePos('right center')" title="right">→</button>
+          <button type="button" class="img-pos-btn" data-pos="left bottom" onclick="setArtistImagePos('left bottom')" title="bottom-left">↙</button>
+          <button type="button" class="img-pos-btn" data-pos="center bottom" onclick="setArtistImagePos('center bottom')" title="bottom">↓</button>
+          <button type="button" class="img-pos-btn" data-pos="right bottom" onclick="setArtistImagePos('right bottom')" title="bottom-right">↘</button>
+        </div>
+        <div class="img-pos-preview" id="a-imagePosPreview" style="margin-top:12px;width:100%;max-width:320px;aspect-ratio:16/9;background:#1a1a1a;background-size:cover;background-position:center;border:1px solid #333;display:none"></div>
+      </div>
       <div class="form-group"><label>Instagram</label><input type="url" id="a-instagram" placeholder="https://instagram.com/..."></div>
       <div class="form-group"><label>SoundCloud</label><input type="url" id="a-soundcloud" placeholder="https://soundcloud.com/..."></div>
       <div class="form-group"><label>Bandcamp</label><input type="url" id="a-bandcamp" placeholder="https://...bandcamp.com/"></div>
@@ -995,6 +1014,28 @@ function autoFillFestivalImage() {
 function autoFillArtistImage() {
   const id = document.getElementById('a-id').value.trim();
   document.getElementById('a-image').value = id ? 'images/artists/'+id+'.jpg' : '';
+}
+
+/* ==============================================================
+   ARTIST IMAGE POSITION CONTROL
+   ============================================================== */
+function setArtistImagePos(val){
+  document.getElementById('a-imagePosition').value = val;
+  syncArtistImagePos();
+}
+function syncArtistImagePos(){
+  const val = (document.getElementById('a-imagePosition').value || 'center').trim();
+  const btns = document.querySelectorAll('#form-artist .img-pos-btn');
+  btns.forEach(b => b.classList.toggle('active', b.dataset.pos === val));
+  const prev = document.getElementById('a-imagePosPreview');
+  const img = document.getElementById('a-image').value.trim();
+  if (img && prev) {
+    prev.style.display = 'block';
+    prev.style.backgroundImage = `url('${img}')`;
+    prev.style.backgroundPosition = val;
+  } else if (prev) {
+    prev.style.display = 'none';
+  }
 }
 
 /* ==============================================================
@@ -2170,8 +2211,10 @@ function editRow(section, rowNum){
     setVal('a-id',row.id); setVal('a-name',row.name); setVal('a-city',row.city);
     setVal('a-country',row.country); setVal('a-genre',row.genre);
     setVal('a-image',row.image); setVal('a-bio',row.bio);
+    setVal('a-imagePosition',row.imagePosition || '');
     setVal('a-instagram',row.instagram); setVal('a-soundcloud',row.soundcloud);
     setVal('a-bandcamp',row.bandcamp); setVal('a-website',row.website);
+    if(typeof syncArtistImagePos==='function') syncArtistImagePos();
   }
   else if(section==='event'){
     setVal('e-name',row.name); setVal('e-date',row.date);
@@ -2233,7 +2276,7 @@ function saveEdit(section){
   }
   else if(section==='artist'){
     Object.assign(payload,{id:g('a-id'),name:g('a-name'),city:g('a-city'),country:g('a-country'),
-      genre:g('a-genre'),image:g('a-image'),bio:g('a-bio'),
+      genre:g('a-genre'),image:g('a-image'),imagePosition:g('a-imagePosition'),bio:g('a-bio'),
       instagram:g('a-instagram'),soundcloud:g('a-soundcloud'),
       bandcamp:g('a-bandcamp'),website:g('a-website')});
   }
@@ -2802,7 +2845,7 @@ function submitToSheet(section){
   }
   else if(section==='artist'){
     payload={action:'add_artist',id:g('a-id'),name:g('a-name'),city:g('a-city'),country:g('a-country'),
-      genre:g('a-genre'),image:g('a-image'),bio:g('a-bio'),
+      genre:g('a-genre'),image:g('a-image'),imagePosition:g('a-imagePosition'),bio:g('a-bio'),
       instagram:g('a-instagram'),soundcloud:g('a-soundcloud'),bandcamp:g('a-bandcamp'),website:g('a-website')};
     if(!payload.id||!payload.name)return toast('ID and Name required','error');
   }
@@ -2904,7 +2947,7 @@ function dataJsHeader(){
    TECHNO JAPAN — SHARED DATA
 
    Edit this file to update artists, events, and venues across all pages.
-   events.html, artists.html, venues.html, discover.html, and map.html
+   events.html, artists.html, venues.html, news.html, and map.html
    all read from here.
    ========================================================== */`;
 }
@@ -2919,6 +2962,7 @@ function buildArtistsJs(rows){
     if(r.country) l.push('    country: "'+q(r.country)+'",');
     if(r.genre) l.push('    genre: "'+q(r.genre)+'",');
     if(r.image) l.push('    image: "'+q(r.image)+'",');
+    if(r.imagePosition) l.push('    imagePosition: "'+q(r.imagePosition)+'",');
     if(r.bio) l.push('    bio: "'+q(r.bio)+'",');
     const links=[];
     if(r.instagram) links.push('      instagram: "'+q(r.instagram)+'"');
@@ -3114,9 +3158,11 @@ function submitFestival(){
    GENERATE CODE — ARTIST
    ============================================================== */
 function submitArtist(){
-  const d={id:g('a-id'),name:g('a-name'),city:g('a-city'),country:g('a-country'),genre:g('a-genre'),image:g('a-image'),bio:g('a-bio'),instagram:g('a-instagram'),soundcloud:g('a-soundcloud'),bandcamp:g('a-bandcamp'),website:g('a-website')};
+  const d={id:g('a-id'),name:g('a-name'),city:g('a-city'),country:g('a-country'),genre:g('a-genre'),image:g('a-image'),imagePosition:g('a-imagePosition'),bio:g('a-bio'),instagram:g('a-instagram'),soundcloud:g('a-soundcloud'),bandcamp:g('a-bandcamp'),website:g('a-website')};
   if(!d.id||!d.name)return toast('ID and Name required','error');
-  const lines=[`  {`,`    id: "${d.id}",`,`    name: "${d.name}",`,`    city: "${d.city}",`,`    country: "${d.country}",`,`    genre: "${d.genre}",`,`    image: "${d.image}",`,`    bio: "${escDesc(d.bio)}",`];
+  const lines=[`  {`,`    id: "${d.id}",`,`    name: "${d.name}",`,`    city: "${d.city}",`,`    country: "${d.country}",`,`    genre: "${d.genre}",`,`    image: "${d.image}",`];
+  if(d.imagePosition) lines.push(`    imagePosition: "${d.imagePosition}",`);
+  lines.push(`    bio: "${escDesc(d.bio)}",`);
   const links=[];
   if(d.instagram)links.push(`      instagram: "${d.instagram}",`);
   if(d.soundcloud)links.push(`      soundcloud: "${d.soundcloud}",`);
@@ -3195,7 +3241,7 @@ function resetForm(section){
   const fields={
     venue:['v-id','v-name','v-city','v-area','v-image','v-capacity','v-address','v-lat','v-lng','v-url','v-instagram','v-desc','v-imageUrl'],
     festival:['f-id','f-name','f-city','f-location','f-url','f-ticketUrl','f-instagram','f-address','f-lat','f-lng','f-dateStart','f-dateEnd','f-image','f-flyer','f-heroGradient','f-desc','f-imageUrl','f-flyerUrl'],
-    artist:['a-id','a-name','a-city','a-country','a-genre','a-image','a-bio','a-instagram','a-soundcloud','a-bandcamp','a-website','a-imageUrl'],
+    artist:['a-id','a-name','a-city','a-country','a-genre','a-image','a-imagePosition','a-bio','a-instagram','a-soundcloud','a-bandcamp','a-website','a-imageUrl'],
     event:['e-name','e-date','e-venue','e-city','e-time','e-desc','e-link'],
     article:['ar-id','ar-title','ar-category','ar-date','ar-author','ar-image','ar-readTime','ar-views','ar-excerpt','ar-body','ar-tags'],
     author:['au-id','au-name','au-bio','au-image','au-instagram','au-twitter','au-website'],
