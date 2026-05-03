@@ -1539,7 +1539,12 @@ function showCurrentImage(previewId, imagePath, clearCallExpr){
   const el=document.getElementById(previewId);
   if(!el) return;
   el.style.display='block';
-  el.innerHTML='<img src="'+esc(imagePath)+'" alt="current" onerror="this.style.display=\'none\'"><div class="preview-info">現在の画像 — '+esc(imagePath)+' <button type="button" class="btn btn-sm btn-accent" style="margin-left:8px;padding:2px 8px;font-size:.65rem" onclick="'+clearCallExpr+'">✕ Remove</button></div>';
+  // 画像ロード失敗時はプレースホルダーに切替（CMS host にファイルが無い時など）
+  const errHandler = "this.style.display='none';this.parentNode.querySelector('.img-missing-placeholder').style.display='flex';";
+  el.innerHTML =
+    '<img src="'+esc(imagePath)+'" alt="current" onerror="'+errHandler+'" style="max-height:140px">' +
+    '<div class="img-missing-placeholder" style="display:none;width:200px;height:120px;background:#1a1a1a;border:1px dashed #444;border-radius:4px;align-items:center;justify-content:center;color:#888;font-family:var(--font-mono);font-size:.7rem;text-align:center;padding:8px;line-height:1.4">📁 画像ファイルが<br>見つかりません<br><span style="opacity:.6">(Drive 同期待ち or 手動で再 upload)</span></div>' +
+    '<div class="preview-info">現在の画像 — '+esc(imagePath)+' <button type="button" class="btn btn-sm btn-accent" style="margin-left:8px;padding:2px 8px;font-size:.65rem" onclick="'+clearCallExpr+'">✕ Remove</button></div>';
 }
 function clearImageField(prefix, opts){
   opts=opts||{};
