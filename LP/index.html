@@ -148,7 +148,8 @@
   border-left: 1px solid var(--card-border);
 }
 .side-card {
-  padding: 28px 32px;
+  position: relative;
+  padding: 28px 88px 28px 32px;
   flex: 1;
   display: flex; flex-direction: column; justify-content: center;
   border-bottom: 1px solid var(--card-border);
@@ -156,6 +157,61 @@
 }
 .side-card:last-child { border-bottom: none; }
 .side-card:hover { background: rgba(240,237,232,0.02); }
+.side-card-arrow {
+  position: absolute; right: 28px; top: 50%; transform: translateY(-50%);
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid rgba(240,237,232,0.12);
+  overflow: hidden;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+.side-card:hover .side-card-arrow { border-color: rgba(240,237,232,0.4); background: rgba(240,237,232,0.04); }
+.side-card-arrow::before,
+.side-card-arrow::after {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.side-card-arrow::before {
+  content: '→';
+  font-family: var(--font-mono); font-size: 14px; opacity: 0.5;
+}
+.side-card-arrow::after {
+  content: 'READ';
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em;
+  opacity: 0;
+  transform: translateY(8px);
+}
+.side-card:hover .side-card-arrow::before { opacity: 0; transform: translateY(-10px); }
+.side-card:hover .side-card-arrow::after { opacity: 1; transform: translateY(0); }
+
+.featured-card-image .featured-card-arrow {
+  position: absolute; right: 20px; bottom: 20px;
+  width: 56px; height: 56px; border-radius: 50%;
+  border: 1px solid rgba(240,237,232,0.25);
+  background: rgba(8,8,8,0.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  overflow: hidden;
+  transition: border-color 0.3s ease, background 0.3s ease;
+  z-index: 2;
+}
+.featured-card:hover .featured-card-arrow { border-color: rgba(240,237,232,0.6); background: rgba(8,8,8,0.7); }
+.featured-card-arrow::before,
+.featured-card-arrow::after {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text);
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.featured-card-arrow::before {
+  content: '→';
+  font-family: var(--font-mono); font-size: 18px; opacity: 0.7;
+}
+.featured-card-arrow::after {
+  content: 'READ';
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em;
+  opacity: 0; transform: translateY(10px);
+}
+.featured-card:hover .featured-card-arrow::before { opacity: 0; transform: translateY(-12px); }
+.featured-card:hover .featured-card-arrow::after { opacity: 1; transform: translateY(0); }
 .side-card-tag {
   font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase;
   color: var(--accent); margin-bottom: 10px;
@@ -633,6 +689,7 @@
         <a class="featured-card" href="${articleUrl(featured)}">
           <div class="featured-card-image">
             ${featured.image ? `<img src="${featured.image}" alt="${featured.title}" loading="lazy" decoding="async">` : `<div class="featured-card-image-placeholder">COMING SOON</div>`}
+            <div class="featured-card-arrow"></div>
           </div>
           <div class="featured-card-body">
             <div class="featured-card-tag"><span class="tag-dot"></span>${featured.category || 'STORY'}</div>
@@ -647,6 +704,7 @@
             <div class="side-card-tag"><span class="tag-dot"></span>${a.category || 'STORY'}</div>
             <div class="side-card-title">${a.title}</div>
             <div class="side-card-meta">${fmtDate(a.date)}${a.readTime ? ` &middot; ${a.readTime} MIN READ` : ''}</div>
+            <div class="side-card-arrow"></div>
           </a>
         `).join('')}
       </div>
