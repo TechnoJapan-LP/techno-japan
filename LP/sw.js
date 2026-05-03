@@ -7,7 +7,7 @@
  * - data.js: stale-while-revalidate (fast load, update in background)
  */
 
-const VERSION = 'v1.1.0';
+const VERSION = 'v1.2.0';
 const STATIC_CACHE = `tj-static-${VERSION}`;
 const DYNAMIC_CACHE = `tj-dynamic-${VERSION}`;
 
@@ -19,6 +19,11 @@ const PRECACHE_URLS = [
   '/artists.html',
   '/venues.html',
   '/discover.html',
+  '/favorites.html',
+  '/common.css',
+  '/common.js',
+  '/favorites.js',
+  '/search.js',
   '/data.js',
 ];
 

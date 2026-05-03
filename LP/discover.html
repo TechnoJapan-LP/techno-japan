@@ -30,79 +30,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
-  --bg: #080808;
-  --text: #f0ede8;
   --accent: #ff2d2d;
   --card-bg: rgba(240,237,232,0.03);
   --card-border: rgba(240,237,232,0.06);
-  --font-display: 'Bebas Neue', sans-serif;
-  --font-mono: 'Space Mono', monospace;
-  --font-body: 'DM Sans', sans-serif;
 }
-html { scroll-behavior: smooth; }
-body {
-  background: var(--bg); color: var(--text); font-family: var(--font-body);
-  overflow-x: hidden; cursor: none; opacity: 0; animation: bodyFadeIn 0.8s ease forwards;
-}
-@keyframes bodyFadeIn { to { opacity: 1; } }
 @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-a { color: inherit; text-decoration: none; }
-
-/* CURSOR */
-.cursor-dot, .cursor-ring { position: fixed; top: 0; left: 0; border-radius: 50%; pointer-events: none; z-index: 99999; mix-blend-mode: difference; }
-.cursor-dot { width: 6px; height: 6px; background: var(--text); transform: translate(-50%, -50%); }
-.cursor-ring { width: 36px; height: 36px; border: 1px solid var(--text); transform: translate(-50%, -50%); transition: transform 0.15s ease-out, width 0.3s ease, height 0.3s ease; }
-
-/* NAV */
-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; padding: 28px 40px; mix-blend-mode: difference; }
-nav .logo { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; }
-nav .nav-links { display: flex; gap: 32px; }
-nav .nav-links a { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.6; transition: opacity 0.3s ease; }
-nav .nav-links a:hover { opacity: 1; }
-nav .nav-links .nav-dropdown { position: relative; display: flex; align-items: center; }
-nav .nav-links .nav-dropdown > a { cursor: pointer; }
-nav .nav-dropdown-menu { position: absolute; top: 100%; left: 50%; transform: translateX(-50%); padding-top: 12px; opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
-nav .nav-dropdown:hover .nav-dropdown-menu { opacity: 1; pointer-events: auto; }
-nav .nav-dropdown-menu-inner { background: rgba(8,8,8,0.95); border: 1px solid rgba(240,237,232,0.1); backdrop-filter: blur(12px); padding: 12px 0; min-width: 160px; display: flex; flex-direction: column; }
-nav .nav-dropdown-menu-inner a { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; padding: 10px 24px; opacity: 0.5; transition: opacity 0.2s ease, background 0.2s ease; white-space: nowrap; }
-nav .nav-dropdown-menu-inner a:hover { opacity: 1; background: rgba(240,237,232,0.05); }
-
-/* HAMBURGER */
-.nav-hamburger {
-  display: none; flex-direction: column; gap: 5px; cursor: pointer;
-  padding: 4px; z-index: 10001; background: none; border: none;
-  position: fixed; top: 28px; right: 48px;
-}
-.nav-hamburger span { display: block; width: 22px; height: 2px; background: var(--text); transition: transform 0.3s ease, opacity 0.3s ease; }
-.nav-hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(4px, 5px); }
-.nav-hamburger.active span:nth-child(2) { opacity: 0; }
-.nav-hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(4px, -5px); }
-.nav-overlay {
-  display: none; position: fixed; inset: 0; background: #080808;
-  z-index: 10000; flex-direction: column; align-items: center; justify-content: center; gap: 32px;
-}
-.nav-overlay.active { display: flex; }
-.nav-overlay a { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.6; transition: opacity 0.3s ease; }
-.nav-overlay a:hover { opacity: 1; }
-.nav-overlay .nav-overlay-sub { display: flex; flex-direction: column; align-items: center; gap: 20px; margin-top: -8px; }
-.nav-overlay .nav-overlay-sub a { font-size: 10px; opacity: 0.35; }
-.nav-overlay .nav-back { position: absolute; bottom: 48px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.15em; opacity: 0.45; transition: opacity 0.3s ease; cursor: pointer; background: none; border: none; color: var(--text); text-transform: uppercase; }
-.nav-overlay .nav-back:hover { opacity: 1; }
-.nav-overlay .nav-close {
-  position: absolute; top: 28px; right: 48px;
-  width: 28px; height: 28px; background: none; border: none; cursor: pointer; z-index: 10001;
-}
-.nav-overlay .nav-close::before,
-.nav-overlay .nav-close::after {
-  content: ''; position: absolute; top: 50%; left: 50%;
-  width: 22px; height: 2px; background: var(--text);
-}
-.nav-overlay .nav-close::before { transform: translate(-50%, -50%) rotate(45deg); }
-.nav-overlay .nav-close::after { transform: translate(-50%, -50%) rotate(-45deg); }
-.nav-overlay .nav-close:hover { opacity: 0.6; }
 
 /* ===================== TOP BAR (tagline) ===================== */
 .top-bar {
@@ -421,9 +357,12 @@ nav .nav-dropdown-menu-inner a:hover { opacity: 1; background: rgba(240,237,232,
   text-align: center;
 }
 .load-more-btn {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
-  padding: 14px 56px;
+  padding: 12px 56px;
   border: 1px solid rgba(240,237,232,0.12);
   background: transparent; color: var(--text);
   cursor: none;
@@ -511,92 +450,8 @@ nav .nav-dropdown-menu-inner a:hover { opacity: 1; background: rgba(240,237,232,
 .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
-/* ===================== FOOTER ===================== */
+/* ===================== FOOTER (page-specific overrides) ===================== */
 footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); margin-top: 120px; }
-.footer-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 80px; }
-.footer-logo { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; }
-.footer-links { display: flex; gap: 32px; }
-.footer-links a { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.5; transition: opacity 0.3s ease; }
-.footer-links a:hover { opacity: 1; }
-
-/* FOOTER DISCOVER TOGGLE */
-.footer-discover {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-}
-.footer-discover-btn {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  opacity: 0.5;
-  transition: opacity 0.3s ease;
-  background: none;
-  border: none;
-  color: var(--text);
-  cursor: pointer;
-  padding: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-.footer-discover-btn:hover { opacity: 1; }
-.footer-discover-btn::after {
-  content: '+';
-  font-size: 12px;
-  opacity: 0.7;
-  transition: transform 0.3s ease;
-  display: inline-block;
-}
-.footer-discover-btn.open::after { transform: rotate(45deg); }
-.footer-discover-menu {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-8px);
-  background: rgba(8,8,8,0.97);
-  border: 1px solid rgba(240,237,232,0.1);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  padding: 12px 0;
-  min-width: 160px;
-  display: flex;
-  flex-direction: column;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  z-index: 100;
-}
-.footer-discover-menu.open {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateX(-50%) translateY(0);
-}
-.footer-discover-menu a {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  padding: 10px 24px;
-  opacity: 0.5;
-  transition: opacity 0.2s ease, background 0.2s ease;
-  white-space: nowrap;
-  text-align: center;
-}
-.footer-discover-menu a:hover { opacity: 1; background: rgba(240,237,232,0.05); }
-/* Desktop hover behavior */
-@media (hover: hover) and (pointer: fine) {
-  .footer-discover:hover .footer-discover-btn::after { transform: rotate(45deg); }
-  .footer-discover:hover .footer-discover-menu {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateX(-50%) translateY(0);
-  }
-}
-
-
-.footer-copy { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; opacity: 0.3; }
 
 /* ===================== RESPONSIVE ===================== */
 @media (max-width: 1100px) {
@@ -604,7 +459,6 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
   .side-card-title { font-size: 16px; }
 }
 @media (max-width: 900px) {
-  nav { padding: 20px 24px; }
   .top-bar { padding: 120px 24px 0; }
   .sort-tabs { padding: 32px 24px 0; }
   .main-grid { padding: 32px 24px 0; grid-template-columns: 1fr; gap: 0; }
@@ -616,19 +470,14 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
   .discover-grid { grid-template-columns: repeat(2, 1fr); }
   .discover-card { aspect-ratio: 1; }
   .discover-card-title { font-size: 28px; }
-  .footer-top { flex-direction: column; gap: 24px; text-align: center; }
   footer { padding: 60px 24px 32px; margin-top: 80px; }
 }
 @media (max-width: 768px) {
-  .nav-hamburger { display: flex; top: 20px; right: 24px; }
-  .nav-overlay .nav-close { top: 20px; right: 24px; }
-  nav .nav-links { display: none; }
   .tagline { font-size: 24px; }
   .side-card { padding: 24px 20px; }
   .side-card-arrow { right: 16px; width: 36px; height: 36px; }
   .side-card-title { padding-right: 48px; font-size: 15px; }
   .side-card-excerpt { display: none; }
-  .footer-links { gap: 20px; }
   .sort-tabs { padding: 24px 24px 0; }
   .featured-card-title { font-size: 20px; }
   .featured-card-image, .featured-card-image-placeholder { min-height: 240px; }
@@ -638,41 +487,7 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
   .discover-card { aspect-ratio: 1; }
 }
 @media (hover: none) and (pointer: coarse) {
-  body { cursor: auto; }
-  .cursor-dot, .cursor-ring { display: none; }
   .sort-tab, .cat-btn, .load-more-btn, .discover-card { cursor: pointer; }
-  .nav-hamburger, .nav-overlay .nav-close, .nav-overlay .nav-back, .nav-overlay a { cursor: pointer; }
-}
-/* NEWSLETTER */
-.newsletter { border-top: 1px solid rgba(240,237,232,0.08); padding: 80px 40px; text-align: center; position: relative; overflow: hidden; }
-.newsletter-eyebrow { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; opacity: 0.4; margin-bottom: 16px; }
-.newsletter-title { font-family: var(--font-display); font-size: clamp(36px, 5vw, 64px); text-transform: uppercase; line-height: 1; margin-bottom: 16px; }
-.newsletter-desc { font-family: var(--font-body); font-weight: 200; font-size: 14px; line-height: 1.8; opacity: 0.5; max-width: 480px; margin: 0 auto 32px; }
-.newsletter-form { display: flex; gap: 0; max-width: 440px; margin: 0 auto; border: 1px solid rgba(240,237,232,0.15); }
-.newsletter-form input { flex: 1; min-width: 0; background: transparent; border: none; outline: none; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; color: var(--text); padding: 14px 20px; }
-.newsletter-form input::placeholder { color: rgba(240,237,232,0.3); }
-.newsletter-form button { background: var(--text); color: var(--bg); border: none; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; padding: 14px 24px; cursor: pointer; transition: opacity 0.3s ease; }
-.newsletter-form button:hover { opacity: 0.85; }
-@media (max-width: 768px) { .newsletter { padding: 60px 24px; } .newsletter-form { flex-direction: column; } .newsletter-form button { padding: 14px; } }
-
-
-/* ===== MOBILE/PERFORMANCE OPTIMIZATIONS ===== */
-* { -webkit-tap-highlight-color: transparent; }
-@media (max-width: 768px) {
-  input, textarea, select { font-size: 16px !important; } /* prevent iOS zoom */
-  /* Larger tap targets for fav hearts and share buttons on touch */
-  .tj-fav-heart { width: 38px; height: 38px; }
-  .tj-fav-heart.sm { width: 32px; height: 32px; }
-  .share-btn, .article-share-btn { width: 38px; height: 38px; }
-}
-/* Reduce motion for accessibility */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
 }
 
 </style>
@@ -712,10 +527,10 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
     <a href="index.html#instagram">INSTAGRAM</a>
     <a href="index.html#contact">CONTACT</a>
   </div>
-  <button class="nav-hamburger" onclick="document.querySelector('.nav-overlay').classList.toggle('active');this.classList.toggle('active')"><span></span><span></span><span></span></button>
+  <button class="nav-hamburger" aria-label="Open menu" onclick="document.querySelector('.nav-overlay').classList.toggle('active');this.classList.toggle('active')"><span></span><span></span><span></span></button>
 </nav>
 <div class="nav-overlay">
-  <button class="nav-close" onclick="document.querySelector('.nav-overlay').classList.remove('active');document.querySelector('.nav-hamburger').classList.remove('active')"></button>
+  <button class="nav-close" aria-label="Close menu" onclick="document.querySelector('.nav-overlay').classList.remove('active');document.querySelector('.nav-hamburger').classList.remove('active')"></button>
   <a href="index.html#about">ABOUT</a>
   <a href="discover.html">DISCOVER</a>
   <div class="nav-overlay-sub">
@@ -857,6 +672,7 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
   </div>
 </footer>
 
+<script src="common.js" defer></script>
 <script src="data.js?v=3"></script>
 <script>
 /* ========== ARTICLE DATA (legacy fallback if data.js missing) ========== */
@@ -1115,25 +931,9 @@ document.getElementById('load-more-btn').addEventListener('click', () => {
   bindCursorExpand();
 });
 
-/* ========== CURSOR ========== */
-const dot = document.querySelector('.cursor-dot');
-const ring = document.querySelector('.cursor-ring');
-let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
-document.addEventListener('mousemove', e => {
-  mouseX = e.clientX; mouseY = e.clientY;
-  dot.style.left = mouseX + 'px'; dot.style.top = mouseY + 'px';
-});
-function animateRing() {
-  ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15;
-  ring.style.left = ringX + 'px'; ring.style.top = ringY + 'px';
-  requestAnimationFrame(animateRing);
-}
-animateRing();
+/* ========== CURSOR (delegated to common.js) ========== */
 function bindCursorExpand() {
-  document.querySelectorAll('a, button, .featured-card, .side-card, .feed-card, .quick-link').forEach(el => {
-    el.addEventListener('mouseenter', () => { ring.style.width = '52px'; ring.style.height = '52px'; });
-    el.addEventListener('mouseleave', () => { ring.style.width = '36px'; ring.style.height = '36px'; });
-  });
+  if (window.tjBindCursorExpand) window.tjBindCursorExpand('button, .featured-card, .side-card, .feed-card, .quick-link');
 }
 
 /* ========== SCROLL REVEAL ========== */
