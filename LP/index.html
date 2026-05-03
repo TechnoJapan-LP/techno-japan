@@ -257,42 +257,65 @@
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
 
-/* ===================== ARTISTS PREVIEW ===================== */
-.artists-preview {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 4px;
-  padding: 32px 40px 0;
-}
-.artist-mini {
-  position: relative; aspect-ratio: 1/1;
+/* ===================== ARTISTS CAROUSEL ===================== */
+.artists-carousel {
+  position: relative;
+  margin-top: 24px;
   overflow: hidden;
-  background: var(--card-bg);
+  /* fade edges */
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 80px, #000 calc(100% - 80px), transparent 100%);
+          mask-image: linear-gradient(to right, transparent 0, #000 80px, #000 calc(100% - 80px), transparent 100%);
 }
+.artists-track {
+  display: flex; gap: 14px;
+  width: max-content;
+  padding: 0 40px;
+  animation: artistsScroll 50s linear infinite;
+}
+.artists-carousel:hover .artists-track { animation-play-state: paused; }
+@keyframes artistsScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(-50% - 7px)); }
+}
+
+.artist-mini {
+  flex: 0 0 auto;
+  width: 220px; aspect-ratio: 2/3;
+  position: relative; overflow: hidden;
+  background: var(--card-bg);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.artist-mini:hover { transform: translateY(-4px); }
 .artist-mini-img {
   position: absolute; inset: 0;
   background-size: cover; background-position: center;
   filter: grayscale(70%) brightness(0.55);
-  transition: filter 0.5s ease, transform 0.5s ease;
+  transition: filter 0.5s ease, transform 0.6s ease;
 }
-.artist-mini:hover .artist-mini-img { filter: grayscale(20%) brightness(0.75); transform: scale(1.05); }
+.artist-mini:hover .artist-mini-img { filter: grayscale(0%) brightness(0.85); transform: scale(1.06); }
 .artist-mini-fallback {
   position: absolute; inset: 0;
   background: linear-gradient(135deg, rgba(240,237,232,0.05), rgba(240,237,232,0.01));
 }
 .artist-mini-overlay {
   position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(8,8,8,0.8) 0%, transparent 70%);
+  background: linear-gradient(to top, rgba(8,8,8,0.9) 0%, rgba(8,8,8,0.1) 50%, transparent 100%);
+}
+.artist-mini-num {
+  position: absolute; top: 14px; left: 14px;
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em;
+  color: var(--accent); opacity: 0.8;
 }
 .artist-mini-content {
   position: absolute; bottom: 0; left: 0; right: 0;
-  padding: 14px;
+  padding: 16px 18px;
 }
 .artist-mini-name {
-  font-family: var(--font-display); font-size: 18px; letter-spacing: 0.03em; text-transform: uppercase; line-height: 1;
+  font-family: var(--font-display); font-size: 22px; letter-spacing: 0.03em;
+  text-transform: uppercase; line-height: 1;
 }
 .artist-mini-genre {
-  margin-top: 6px;
+  margin-top: 8px;
   font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.15em; opacity: 0.55; text-transform: uppercase;
 }
 
@@ -362,7 +385,6 @@
 
 /* ===================== RESPONSIVE ===================== */
 @media (max-width: 1100px) {
-  .artists-preview { grid-template-columns: repeat(3, 1fr); }
   .venues-preview { grid-template-columns: repeat(3, 1fr); }
 }
 @media (max-width: 900px) {
@@ -371,7 +393,9 @@
   .side-col { border-left: none; border-top: 1px solid var(--card-border); }
   .featured-card-image { min-height: 280px; }
   .section-head { padding: 60px 24px 20px; }
-  .artists-preview, .venues-preview { padding: 24px 24px 0; gap: 3px; }
+  .venues-preview { padding: 24px 24px 0; gap: 3px; }
+  .artists-track { padding: 0 24px; gap: 10px; }
+  .artist-mini { width: 170px; }
   .venues-tabs { padding: 20px 24px 0; gap: 0; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   .venues-tabs::-webkit-scrollbar { display: none; }
   .venue-tab { padding: 12px 0; margin-right: 24px; flex-shrink: 0; }
@@ -389,13 +413,13 @@
   .fest-row-name { white-space: normal; font-size: clamp(28px, 8vw, 56px); }
 }
 @media (max-width: 768px) {
-  .artists-preview { grid-template-columns: repeat(2, 1fr); }
   .venues-preview { grid-template-columns: repeat(2, 1fr); }
   .marquee { margin-top: 40px; }
+  .artist-mini { width: 150px; }
 }
 @media (max-width: 480px) {
-  .artists-preview { grid-template-columns: repeat(2, 1fr); }
   .venues-preview { grid-template-columns: 1fr; }
+  .artist-mini { width: 140px; }
   .venue-mini { aspect-ratio: 16/9; }
   .fest-row-thumb { height: 110px; }
 }
@@ -504,7 +528,9 @@
   <div class="section-eyebrow"><span class="dot"></span>ARTISTS</div>
   <a href="artists.html" class="section-cta">VIEW ALL →</a>
 </div>
-<div class="artists-preview" id="artists-preview"><!-- rendered by JS --></div>
+<div class="artists-carousel">
+  <div class="artists-track" id="artists-track"><!-- rendered by JS --></div>
+</div>
 
 <!-- VENUES -->
 <div class="section-head" style="margin-top: 60px;">
@@ -665,27 +691,29 @@
     }
   }
 
-  /* --- Featured artists --- */
+  /* --- Featured artists carousel --- */
   const allArtists = (typeof ARTISTS !== 'undefined' ? ARTISTS : []);
-  // prefer artists with images; fall back to any
   const withImg = allArtists.filter(a => a.image && a.image.trim());
   const others = allArtists.filter(a => !a.image || !a.image.trim());
-  const artistsToShow = [...withImg, ...others].slice(0, 8);
+  const artistsToShow = [...withImg, ...others].slice(0, 16);
 
-  const artistsEl = document.getElementById('artists-preview');
-  if (artistsEl) {
-    artistsEl.innerHTML = artistsToShow.map(a => `
+  const artistsTrackEl = document.getElementById('artists-track');
+  if (artistsTrackEl && artistsToShow.length) {
+    const cardHtml = (a, i) => `
       <a class="artist-mini" href="artists.html#artist/${a.id}">
         ${a.image && a.image.trim()
           ? `<div class="artist-mini-img" style="background-image:url('${a.image}')"></div>`
           : `<div class="artist-mini-fallback"></div>`}
         <div class="artist-mini-overlay"></div>
+        <div class="artist-mini-num">#${pad2((i % artistsToShow.length) + 1)}</div>
         <div class="artist-mini-content">
           <div class="artist-mini-name">${a.name}</div>
           <div class="artist-mini-genre">${(Array.isArray(a.genre) ? a.genre.join(' / ') : (a.genre || ''))}</div>
         </div>
-      </a>
-    `).join('');
+      </a>`;
+    // duplicate the list for seamless infinite loop (animation translates by -50%)
+    const doubled = [...artistsToShow, ...artistsToShow];
+    artistsTrackEl.innerHTML = doubled.map(cardHtml).join('');
   }
 
   /* --- Venues with city tabs --- */
