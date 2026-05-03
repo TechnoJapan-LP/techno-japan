@@ -17,7 +17,6 @@ DATA_PATH = os.path.join(LP_DIR, "data.js")
 STATIC_PAGES = [
     {"path": "/", "priority": "1.0", "changefreq": "daily"},
     {"path": "/festivals.html", "priority": "0.9", "changefreq": "daily"},
-    {"path": "/events.html", "priority": "0.9", "changefreq": "daily"},
     {"path": "/artists.html", "priority": "0.8", "changefreq": "weekly"},
     {"path": "/venues.html", "priority": "0.8", "changefreq": "weekly"},
     {"path": "/news.html", "priority": "0.9", "changefreq": "daily"},

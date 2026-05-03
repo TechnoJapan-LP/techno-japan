@@ -157,6 +157,7 @@
 }
 .side-card:last-child { border-bottom: none; }
 .side-card:hover { background: rgba(240,237,232,0.02); }
+.side-card.is-hidden { display: none; }
 .side-card-arrow {
   position: absolute; right: 28px; top: 50%; transform: translateY(-50%);
   width: 44px; height: 44px; border-radius: 50%;
@@ -606,6 +607,12 @@
   <a href="news.html" class="section-cta">VIEW ALL →</a>
 </div>
 <div class="stories-grid" id="stories-grid"><!-- rendered by JS --></div>
+<div class="fest-more-wrap" id="stories-more-wrap" style="display:none">
+  <button type="button" class="fest-more-btn" id="stories-more-btn">
+    <span class="label">MORE STORIES</span>
+    <span class="arrow">▾</span>
+  </button>
+</div>
 
 <!-- FESTIVALS -->
 <div class="section-head" style="margin-top: 60px;">
@@ -685,12 +692,14 @@
 <script>
 /* ===== MEDIA TOP RENDERING ===== */
 (function () {
-  /* --- Stories: 1 featured + 3 side cards --- */
+  /* --- Stories: 1 featured + up to 7 side cards (3 visible by default) --- */
+  const STORY_INITIAL_SIDE = 3;
+  const STORY_MAX_SIDE = 7;
   const published = (typeof ARTICLES !== 'undefined' ? ARTICLES : [])
     .filter(a => a.status !== 'draft')
     .sort((a, b) => new Date(b.date) - new Date(a.date));
   const featured = published.find(a => a.featured) || published[0];
-  const sideCards = published.filter(a => a.id !== (featured && featured.id)).slice(0, 3);
+  const sideCards = published.filter(a => a.id !== (featured && featured.id)).slice(0, STORY_MAX_SIDE);
 
   function articleUrl(a) { return 'news.html#article/' + a.id; }
   function fmtDate(d) {
@@ -717,8 +726,8 @@
         </a>
       </div>
       <div class="side-col">
-        ${sideCards.map(a => `
-          <a class="side-card" href="${articleUrl(a)}">
+        ${sideCards.map((a, i) => `
+          <a class="side-card${i >= STORY_INITIAL_SIDE ? ' is-hidden' : ''}" href="${articleUrl(a)}">
             <div class="side-card-tag"><span class="tag-dot"></span>${a.category || 'STORY'}</div>
             <div class="side-card-title">${a.title}</div>
             <div class="side-card-meta">${fmtDate(a.date)}${a.readTime ? ` &middot; ${a.readTime} MIN READ` : ''}</div>
@@ -727,6 +736,26 @@
         `).join('')}
       </div>
     `;
+
+    // MORE STORIES toggle
+    const sMoreWrap = document.getElementById('stories-more-wrap');
+    const sMoreBtn = document.getElementById('stories-more-btn');
+    if (sMoreWrap && sMoreBtn) {
+      if (sideCards.length > STORY_INITIAL_SIDE) {
+        sMoreWrap.style.display = '';
+        const labelEl = sMoreBtn.querySelector('.label');
+        sMoreBtn.addEventListener('click', () => {
+          const expanded = sMoreBtn.classList.toggle('expanded');
+          storiesEl.querySelectorAll('.side-card').forEach((row, idx) => {
+            row.classList.toggle('is-hidden', !expanded && idx >= STORY_INITIAL_SIDE);
+          });
+          if (labelEl) labelEl.textContent = expanded ? 'LESS STORIES' : 'MORE STORIES';
+          if (window.tjBindCursorExpand) window.tjBindCursorExpand('.side-card');
+        });
+      } else {
+        sMoreWrap.style.display = 'none';
+      }
+    }
   }
 
   /* --- Upcoming festivals --- */

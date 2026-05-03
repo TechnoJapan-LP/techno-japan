@@ -141,14 +141,16 @@
     const observer = new MutationObserver(() => { activeIdx = -1; });
     observer.observe(results, { childList: true });
 
-    // Add trigger to nav
+    // Add trigger to nav — group it with the social icons cluster
     document.querySelectorAll('nav .nav-links').forEach(navLinks => {
       const trigger = document.createElement('button');
       trigger.className = 'gs-trigger';
       trigger.setAttribute('aria-label', 'Search');
       trigger.innerHTML = '<svg viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>';
       trigger.addEventListener('click', open);
-      navLinks.appendChild(trigger);
+      const socialGroup = navLinks.querySelector('.nav-social');
+      if (socialGroup) socialGroup.appendChild(trigger);
+      else navLinks.appendChild(trigger);
     });
 
     // Add to mobile nav overlay

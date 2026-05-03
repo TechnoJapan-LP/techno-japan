@@ -112,7 +112,7 @@
   injectStyles();
   window.tjFav = tjFav;
 
-  // Auto-mount favorites link with counter in nav
+  // Auto-mount favorites link with counter in nav — placed in the social cluster
   function mountNavLink() {
     document.querySelectorAll('nav .nav-links').forEach(navLinks => {
       if (navLinks.querySelector('.tj-fav-nav')) return;
@@ -120,10 +120,17 @@
       link.href = '/favorites.html';
       link.className = 'tj-fav-nav';
       link.innerHTML = `<svg viewBox="0 0 24 24" style="width:14px;height:14px;vertical-align:middle"><path d="M12 21s-7-4.5-7-11a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 6.5-7 11-7 11z" stroke="currentColor" stroke-width="1.6" fill="none"/></svg> <span class="tj-fav-count" style="margin-left:4px"></span>`;
-      // Insert before search trigger if exists, else append
-      const searchTrigger = navLinks.querySelector('.gs-trigger');
-      if (searchTrigger) navLinks.insertBefore(link, searchTrigger);
-      else navLinks.appendChild(link);
+      const socialGroup = navLinks.querySelector('.nav-social');
+      if (socialGroup) {
+        // Insert before search trigger if it lives in social, else append to social
+        const searchTrigger = socialGroup.querySelector('.gs-trigger');
+        if (searchTrigger) socialGroup.insertBefore(link, searchTrigger);
+        else socialGroup.appendChild(link);
+      } else {
+        const searchTrigger = navLinks.querySelector('.gs-trigger');
+        if (searchTrigger) navLinks.insertBefore(link, searchTrigger);
+        else navLinks.appendChild(link);
+      }
     });
     updateCount();
   }

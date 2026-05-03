@@ -253,8 +253,40 @@
 .article-body figure img { margin: 0; }
 .article-body figcaption { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(240,237,232,0.5); margin-top: 12px; text-align: center; }
 .article-footer { margin-top: 60px; padding-top: 40px; border-top: 1px solid rgba(240,237,232,0.1); }
+.article-comments {
+  margin: 80px auto 0; max-width: 760px;
+  padding: 40px 0 0; border-top: 1px solid rgba(240,237,232,0.1);
+}
+.article-comments-label {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.25em;
+  text-transform: uppercase; opacity: 0.5; margin-bottom: 24px;
+  display: flex; align-items: center; gap: 10px;
+}
+.article-comments-label::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+}
+.giscus, .giscus-frame { width: 100%; }
 .article-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; }
-.article-tag { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; padding: 6px 12px; border: 1px solid rgba(240,237,232,0.15); opacity: 0.6; }
+.article-tag {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 6px 12px; border: 1px solid rgba(240,237,232,0.15);
+  opacity: 0.6; transition: opacity 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  display: inline-block;
+}
+.article-tag:hover { opacity: 1; border-color: var(--accent); color: var(--accent); }
+.tag-filter-pill {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 8px 14px;
+  margin: 24px 40px 0;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  border: 1px solid var(--accent); color: var(--accent);
+  background: rgba(255,45,45,0.06);
+}
+.tag-filter-pill .clear {
+  background: none; border: none; color: var(--accent); cursor: none;
+  font-size: 14px; line-height: 1; padding: 0;
+}
+.tag-filter-pill .clear:hover { opacity: 0.7; }
 .article-share { display: flex; gap: 8px; align-items: center; margin-top: 24px; }
 .article-share-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.4; margin-right: 8px; }
 .article-share-btn { width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid rgba(240,237,232,0.12); background: transparent; cursor: pointer; transition: border-color 0.3s ease; color: var(--text); opacity: 0.6; }
@@ -597,7 +629,7 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
 </div>
 
 <!-- ===================== MORE ARTICLES FEED ===================== -->
-<div class="feed-section reveal">
+<div class="feed-section reveal" id="archive-section">
   <div class="feed-header">
     <div>
       <div class="feed-label">ALL STORIES</div>
@@ -839,6 +871,7 @@ function formatDateSplit(dateStr) {
 /* ========== STATE ========== */
 let currentSort = 'latest';
 let currentCategory = 'ALL';
+let currentTag = null;
 let feedVisible = 4;
 
 /* ========== SORT ARTICLES ========== */
@@ -904,8 +937,30 @@ function renderCategoryNav() {
 /* ========== RENDER FEED ========== */
 function renderFeed() {
   const sorted = getSorted(ARTICLES);
-  // Exclude first 4 (already in main grid) unless filtered
-  let items = currentCategory === 'ALL' ? sorted.slice(4) : sorted.filter(a => a.category === currentCategory);
+  let items;
+  if (currentTag) {
+    items = sorted.filter(a => Array.isArray(a.tags) && a.tags.some(t => t.toLowerCase() === currentTag.toLowerCase()));
+  } else {
+    // Exclude first 4 (already in main grid) unless filtered by category
+    items = currentCategory === 'ALL' ? sorted.slice(4) : sorted.filter(a => a.category === currentCategory);
+  }
+  // Render tag-filter pill if active
+  const archiveSection = document.getElementById('archive-section');
+  let pill = document.getElementById('tag-filter-pill');
+  if (currentTag) {
+    if (!pill && archiveSection) {
+      pill = document.createElement('div');
+      pill.id = 'tag-filter-pill';
+      pill.className = 'tag-filter-pill';
+      archiveSection.insertBefore(pill, archiveSection.firstChild);
+    }
+    if (pill) {
+      pill.innerHTML = `Filtering by #${currentTag} — ${items.length} ${items.length === 1 ? 'article' : 'articles'} <button class="clear" aria-label="Clear filter">&times;</button>`;
+      pill.querySelector('.clear').addEventListener('click', () => { window.location.hash = ''; });
+    }
+  } else if (pill) {
+    pill.remove();
+  }
   const visible = items.slice(0, feedVisible);
 
   document.getElementById('feed-grid').innerHTML = visible.map(a => `
@@ -980,17 +1035,99 @@ function renderArticleDetail(id) {
     return;
   }
 
-  // SEO: update title and meta description for this article
-  document.title = `${a.title} — TECHNO JAPAN`;
-  const descTag = document.querySelector('meta[name="description"]');
-  if (descTag) descTag.setAttribute('content', a.excerpt || '');
+  // ----- AUTO-LINK helpers (inline) -----
+  // Cached lookup table built lazily, then reused across article renders.
+  if (!window.__tjAutoLinkIndex) {
+    const idx = [];
+    if (typeof ARTISTS !== 'undefined') {
+      ARTISTS.forEach(x => x.name && idx.push({ name: x.name, href: 'artists.html#artist/' + x.id, type: 'artist' }));
+    }
+    if (typeof VENUES !== 'undefined') {
+      VENUES.forEach(v => v.name && idx.push({ name: v.name, href: 'venues.html#venue/' + v.id, type: 'venue' }));
+    }
+    if (typeof FESTIVALS !== 'undefined') {
+      FESTIVALS.forEach(f => f.name && idx.push({ name: f.name, href: 'festivals.html#festival/' + f.id, type: 'festival' }));
+    }
+    // Longest-first so multi-word names match before subwords.
+    idx.sort((a, b) => b.name.length - a.name.length);
+    window.__tjAutoLinkIndex = idx;
+  }
+
+  function autoLinkArticleBody(html){
+    if (!html) return '';
+    const idx = window.__tjAutoLinkIndex;
+    if (!idx || !idx.length) return html;
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    const escapeRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    // Build one combined regex, alternation in length-desc order. Word boundaries for ASCII.
+    const pattern = new RegExp('(' + idx.map(e => escapeRe(e.name)).join('|') + ')', 'gi');
+    const linkBy = new Map(idx.map(e => [e.name.toLowerCase(), e]));
+    const seen = new Set(); // first occurrence per article only
+    function walk(node){
+      if (node.nodeType === 3) { // text
+        const text = node.nodeValue;
+        if (!pattern.test(text)) { pattern.lastIndex = 0; return; }
+        pattern.lastIndex = 0;
+        const frag = document.createDocumentFragment();
+        let lastIdx = 0; let m;
+        while ((m = pattern.exec(text)) !== null) {
+          const start = m.index, matched = m[0];
+          const entry = linkBy.get(matched.toLowerCase());
+          if (!entry || seen.has(entry.href)) continue;
+          if (start > lastIdx) frag.appendChild(document.createTextNode(text.slice(lastIdx, start)));
+          const a = document.createElement('a');
+          a.href = entry.href;
+          a.className = 'autolink autolink-' + entry.type;
+          a.textContent = matched;
+          frag.appendChild(a);
+          seen.add(entry.href);
+          lastIdx = start + matched.length;
+        }
+        if (lastIdx === 0) return;
+        if (lastIdx < text.length) frag.appendChild(document.createTextNode(text.slice(lastIdx)));
+        node.parentNode.replaceChild(frag, node);
+        return;
+      }
+      // Skip existing anchors and code blocks
+      if (node.nodeType === 1 && /^(A|CODE|PRE)$/.test(node.tagName)) return;
+      // Iterate children safely (replace shifts childNodes)
+      Array.from(node.childNodes).forEach(walk);
+    }
+    walk(tmp);
+    return tmp.innerHTML;
+  }
+
+  // SEO: update title, meta description, OG / Twitter tags, canonical for this article
+  const articleTitle = `${a.title} — TECHNO JAPAN`;
+  const articleUrlAbs = `https://techno-japan.media/news.html#article/${a.id}`;
+  const articleImg = a.image
+    ? (a.image.startsWith('http') ? a.image : `https://techno-japan.media/${a.image.replace(/^\//,'')}`)
+    : 'https://techno-japan.media/images/festivals/rainbow-disco-club.jpeg';
+  const articleDesc = a.excerpt || '';
+
+  document.title = articleTitle;
+  function setMeta(sel, attr, val){
+    const el = document.querySelector(sel);
+    if (el) el.setAttribute(attr, val);
+  }
+  setMeta('meta[name="description"]',     'content', articleDesc);
+  setMeta('meta[property="og:title"]',    'content', articleTitle);
+  setMeta('meta[property="og:description"]','content', articleDesc);
+  setMeta('meta[property="og:image"]',    'content', articleImg);
+  setMeta('meta[property="og:url"]',      'content', articleUrlAbs);
+  setMeta('meta[property="og:type"]',     'content', 'article');
+  setMeta('meta[name="twitter:title"]',   'content', articleTitle);
+  setMeta('meta[name="twitter:description"]','content', articleDesc);
+  setMeta('meta[name="twitter:image"]',   'content', articleImg);
+  setMeta('link[rel="canonical"]',        'href',    articleUrlAbs);
 
   const url = `https://techno-japan.media/news.html#article/${a.id}`;
   const t = encodeURIComponent(`${a.title} — TECHNO JAPAN`);
   const u = encodeURIComponent(url);
 
   const tagsHtml = (a.tags || []).map(t =>
-    `<span class="article-tag">${t}</span>`).join('');
+    `<a href="#tag/${encodeURIComponent(t)}" class="article-tag">#${t}</a>`).join('');
 
   contentEl.innerHTML = `
     <div class="article-meta-top">
@@ -1002,7 +1139,7 @@ function renderArticleDetail(id) {
     <h1>${a.title}</h1>
     <div class="article-excerpt">${a.excerpt || ''}</div>
     ${a.image ? `<div class="article-hero-img"><img src="${a.image}" alt="${a.title}" loading="lazy" decoding="async"></div>` : ''}
-    <div class="article-body">${a.body || ''}</div>
+    <div class="article-body">${autoLinkArticleBody(a.body || '')}</div>
     <div class="article-footer">
       ${tagsHtml ? `<div class="article-tags">${tagsHtml}</div>` : ''}
       <div class="article-share">
@@ -1021,26 +1158,106 @@ function renderArticleDetail(id) {
         </button>
       </div>
     </div>
+    <div class="article-comments" id="article-comments" style="display:none">
+      <div class="article-comments-label">COMMENTS</div>
+      <div class="giscus"></div>
+    </div>
   `;
 
   listEl.style.display = 'none';
   detailEl.style.display = 'block';
   window.scrollTo(0, 0);
   bindCursorExpand();
+  mountGiscus(a.id);
+}
+
+/* ========== GISCUS COMMENTS (per-article thread) ==========
+   Setup once in giscus.app, then fill GISCUS_CONFIG below.
+   While `repo` is empty, the comments block stays hidden. */
+const GISCUS_CONFIG = {
+  repo: '',                // e.g. 'TechnoJapan-LP/techno-japan'
+  repoId: '',              // Discussions repo ID from giscus.app
+  category: 'Comments',    // category name created on GitHub Discussions
+  categoryId: '',          // category ID from giscus.app
+};
+function mountGiscus(articleId) {
+  const wrap = document.getElementById('article-comments');
+  const slot = wrap && wrap.querySelector('.giscus');
+  if (!wrap || !slot) return;
+  if (!GISCUS_CONFIG.repo || !GISCUS_CONFIG.repoId || !GISCUS_CONFIG.categoryId) {
+    wrap.style.display = 'none';
+    return;
+  }
+  wrap.style.display = '';
+  slot.innerHTML = '';
+  const s = document.createElement('script');
+  s.src = 'https://giscus.app/client.js';
+  s.async = true; s.crossOrigin = 'anonymous';
+  s.dataset.repo = GISCUS_CONFIG.repo;
+  s.dataset.repoId = GISCUS_CONFIG.repoId;
+  s.dataset.category = GISCUS_CONFIG.category;
+  s.dataset.categoryId = GISCUS_CONFIG.categoryId;
+  s.dataset.mapping = 'specific';
+  s.dataset.term = 'article-' + articleId;
+  s.dataset.strict = '0';
+  s.dataset.reactionsEnabled = '1';
+  s.dataset.emitMetadata = '0';
+  s.dataset.inputPosition = 'top';
+  s.dataset.theme = 'noborder_dark';
+  s.dataset.lang = 'en';
+  s.dataset.loading = 'lazy';
+  slot.appendChild(s);
 }
 
 function showList() {
   document.getElementById('list-view').style.display = '';
   document.getElementById('article-detail').style.display = 'none';
   document.title = 'NEWS — TECHNO JAPAN';
+  // Reset SEO meta to news index defaults
+  const def = {
+    title: 'NEWS — TECHNO JAPAN',
+    desc: "Explore Japan's underground techno and house scene. Stories, interviews, reports and more.",
+    img:  'https://techno-japan.media/images/festivals/rainbow-disco-club.jpeg',
+    url:  'https://techno-japan.media/news.html',
+  };
+  function set(sel, attr, val){ const el = document.querySelector(sel); if (el) el.setAttribute(attr, val); }
+  set('meta[name="description"]',          'content', def.desc);
+  set('meta[property="og:title"]',         'content', def.title);
+  set('meta[property="og:description"]',   'content', def.desc);
+  set('meta[property="og:image"]',         'content', def.img);
+  set('meta[property="og:url"]',           'content', def.url);
+  set('meta[property="og:type"]',          'content', 'website');
+  set('meta[name="twitter:title"]',        'content', def.title);
+  set('meta[name="twitter:description"]',  'content', def.desc);
+  set('meta[name="twitter:image"]',        'content', def.img);
+  set('link[rel="canonical"]',             'href',    def.url);
 }
 
 function handleHash() {
   const hash = window.location.hash;
   if (hash.startsWith('#article/')) {
     const id = hash.replace('#article/', '');
+    currentTag = null;
     renderArticleDetail(id);
+  } else if (hash.startsWith('#tag/')) {
+    const tag = decodeURIComponent(hash.replace('#tag/', ''));
+    currentTag = tag;
+    currentCategory = 'ALL';
+    showList();
+    renderMainGrid();
+    renderCategoryNav();
+    feedVisible = 8;
+    renderFeed();
+    bindCursorExpand();
+    // Scroll archive section into view
+    const archive = document.getElementById('archive-section');
+    if (archive) archive.scrollIntoView({ behavior: 'smooth', block: 'start' });
   } else {
+    if (currentTag !== null) {
+      currentTag = null;
+      feedVisible = 4;
+      renderFeed();
+    }
     showList();
   }
 }
