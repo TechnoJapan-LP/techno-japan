@@ -607,7 +607,11 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
     <div class="edit-banner" id="article-edit-banner"><span>Editing: <strong id="article-edit-name"></strong></span><button class="btn btn-sm btn-yellow" onclick="saveEdit('article')">Save Changes</button><button class="btn btn-sm" onclick="cancelEdit('article')">Cancel</button></div>
     <div class="form-grid" id="form-article">
       <div class="form-group"><label>ID (URL slug)</label><input type="text" id="ar-id" placeholder="e.g. rdc-2026-preview"></div>
-      <div class="form-group"><label>Title</label><input type="text" id="ar-title" placeholder="Article title" oninput="onArticleTitleInput()"></div>
+      <div class="form-group">
+        <label>Title <span class="label-hint">本文書いてから ✨ で候補生成可</span></label>
+        <input type="text" id="ar-title" placeholder="Article title" oninput="onArticleTitleInput()">
+        <button class="btn btn-green btn-sm" style="margin-top:4px" onclick="aiTitleSuggest()">✨ AI タイトル候補</button>
+      </div>
       <div class="form-group"><label>Category</label><select id="ar-category"><option value="REPORT">Report</option><option value="COLUMN">Column</option><option value="INTERVIEW">Interview</option><option value="NEWS">News</option><option value="EVENTS">Events (weekly roundup)</option><option value="FESTIVAL">Festival</option><option value="RAVE">Rave</option><option value="PARTY">Party</option><option value="CLUB">Club</option></select></div>
       <div class="form-group"><label>Date</label><input type="date" id="ar-date"></div>
       <div class="form-group"><label>Author</label><input type="text" id="ar-author" placeholder="e.g. TECHNO JAPAN" value="TECHNO JAPAN"></div>
@@ -1388,13 +1392,14 @@ function uploadArticleImageFile(file){
   const origMB = (file.size/1024/1024).toFixed(1);
   window.articleImageUploading = true;
   toast('Compressing... ('+origMB+'MB)', 'info');
-  compressImage(file).then(({ dataUrl, blob, width, height }) => {
+  compressImage(file).then(({ dataUrl, blob, width, height, mimeType, ext }) => {
     const compMB = (blob.size/1024/1024).toFixed(2);
-    toast('Uploading... '+compMB+'MB', 'info');
-    const filename = id + '-' + Date.now() + '.jpg';
+    const fmtLabel = mimeType === 'image/webp' ? 'WebP' : 'JPEG';
+    toast('Uploading... '+compMB+'MB ('+fmtLabel+')', 'info');
+    const filename = id + '-' + Date.now() + '.' + ext;
     const body = {
       action: 'upload_image', type: 'article-body',
-      id: id, filename: filename, imageData: dataUrl, mimeType: 'image/jpeg'
+      id: id, filename: filename, imageData: dataUrl, mimeType: mimeType
     };
     return fetch(GAS_URL, { method: 'POST', body: JSON.stringify(body) })
       .then(r => r.json())
@@ -2198,7 +2203,8 @@ function validateBeforeSave(section, payload){
   return errors;
 }
 
-/* 画像を圧縮: 最大幅 maxW、JPEG品質 quality */
+/* 画像を圧縮: 最大幅 maxW、品質 quality
+   WebP対応ブラウザでは WebP（〜35%軽量）、非対応なら JPEG にフォールバック */
 function compressImage(file, maxW=1920, quality=0.85){
   return new Promise((resolve, reject)=>{
     const img = new Image();
@@ -2213,14 +2219,17 @@ function compressImage(file, maxW=1920, quality=0.85){
       canvas.width = w; canvas.height = h;
       const ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0, w, h);
+      // WebP サポート判定
+      const supportsWebp = canvas.toDataURL('image/webp').startsWith('data:image/webp');
+      const mimeType = supportsWebp ? 'image/webp' : 'image/jpeg';
+      const ext = supportsWebp ? 'webp' : 'jpg';
       canvas.toBlob(blob => {
         if(!blob) return reject(new Error('compression failed'));
-        // dataURLとして返す
         const fr = new FileReader();
-        fr.onload = () => resolve({dataUrl: fr.result, blob, width: w, height: h});
+        fr.onload = () => resolve({dataUrl: fr.result, blob, width: w, height: h, mimeType, ext});
         fr.onerror = reject;
         fr.readAsDataURL(blob);
-      }, 'image/jpeg', quality);
+      }, mimeType, quality);
     };
     img.onerror = reject;
     reader.readAsDataURL(file);
@@ -2266,18 +2275,18 @@ function uploadImage(input,type,prefix){
   const previewEl=document.getElementById(previewId);
 
   toast('Compressing... ('+origMB+'MB)','info');
-  compressImage(file).then(({dataUrl, blob, width, height})=>{
+  compressImage(file).then(({dataUrl, blob, width, height, mimeType, ext})=>{
     const compMB=(blob.size/1024/1024).toFixed(2);
-    toast('Uploading... '+origMB+'MB → '+compMB+'MB','info');
+    const fmtLabel = mimeType === 'image/webp' ? 'WebP' : 'JPEG';
+    toast('Uploading... '+origMB+'MB → '+compMB+'MB ('+fmtLabel+')','info');
     if(previewEl){
       previewEl.style.display='block';
-      previewEl.innerHTML='<img src="'+dataUrl+'" alt="preview"><div class="preview-info">'+esc(file.name)+' — '+width+'×'+height+' ('+origMB+'MB → '+compMB+'MB) uploading...</div>';
+      previewEl.innerHTML='<img src="'+dataUrl+'" alt="preview"><div class="preview-info">'+esc(file.name)+' — '+width+'×'+height+' ('+origMB+'MB → '+compMB+'MB '+fmtLabel+') uploading...</div>';
     }
     // festival系は upload_festival_image、それ以外は upload_image
     const action=type.startsWith('festival')?'upload_festival_image':'upload_image';
-    const filename=type==='festival-flyer'?id+'-flyer.jpg':null;
-    const body={action,imageData:dataUrl,mimeType:'image/jpeg',id,type};
-    if(filename)body.filename=filename;
+    const filename = type === 'festival-flyer' ? (id+'-flyer.'+ext) : (id+'.'+ext);
+    const body={action,imageData:dataUrl,mimeType,id,type,filename};
     return fetch(GAS_URL,{method:'POST',body:JSON.stringify(body)}).then(r=>r.json()).then(d=>{
       if(d.status==='ok'||d.success){
         toast('Uploaded ('+compMB+'MB)','success');
@@ -3472,6 +3481,62 @@ function autoRegisterArtists(artistIds){
 /* ==============================================================
    EXPORT DATA.JS
    ============================================================== */
+/* ==============================================================
+   AI TITLE SUGGEST — 本文からタイトル候補を3案生成
+   ============================================================== */
+function aiTitleSuggest(){
+  const bodyHtml = (document.getElementById('ar-body')?.value || '').trim();
+  if (!bodyHtml || bodyHtml === '<p><br></p>') return toast('先に本文を書いてください', 'error');
+  const text = bodyHtml.replace(/<[^>]+>/g,' ').replace(/&nbsp;/g,' ').replace(/&[a-z]+;/g,' ').replace(/\s+/g,' ').trim();
+  toast('✨ タイトル候補を生成中...', 'info');
+  fetch(GAS_URL, {
+    method: 'POST',
+    body: JSON.stringify({ action: 'ai_summarize', mode: 'titles', text: text.slice(0,8000) })
+  }).then(r=>r.json()).then(d=>{
+    if (d.status === 'ok' && d.text) {
+      const candidates = d.text.split(/\n+/).map(s=>s.replace(/^[\d.\-\)・*]\s*/,'').replace(/^[「『"']/,'').replace(/[」』"']$/,'').trim()).filter(Boolean).slice(0,3);
+      if (!candidates.length) return toast('候補が空でした', 'error');
+      showTitleCandidates(candidates);
+    } else {
+      toast('AI failed: '+(d.message||'unknown'), 'error');
+    }
+  }).catch(e=>{ console.error(e); toast('AI error: '+e.message, 'error'); });
+}
+
+function showTitleCandidates(candidates){
+  // シンプルなオーバーレイ表示
+  const existing = document.getElementById('title-candidate-modal');
+  if (existing) existing.remove();
+  const modal = document.createElement('div');
+  modal.id = 'title-candidate-modal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px';
+  const inner = document.createElement('div');
+  inner.style.cssText = 'background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:24px;max-width:600px;width:100%;box-shadow:0 12px 40px rgba(0,0,0,.6)';
+  inner.innerHTML = '<div style="font-family:var(--font-mono);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text3);margin-bottom:16px">✨ タイトル候補（クリックで採用）</div>';
+  candidates.forEach(c => {
+    const b = document.createElement('button');
+    b.className = 'btn';
+    b.style.cssText = 'display:block;width:100%;text-align:left;margin-bottom:8px;padding:12px 16px;font-size:.9rem;line-height:1.4';
+    b.textContent = c;
+    b.onclick = () => {
+      document.getElementById('ar-title').value = c;
+      onArticleTitleInput();
+      modal.remove();
+      toast('タイトルを設定しました', 'success');
+    };
+    inner.appendChild(b);
+  });
+  const close = document.createElement('button');
+  close.className = 'btn btn-sm';
+  close.textContent = 'Cancel';
+  close.style.cssText = 'margin-top:8px';
+  close.onclick = () => modal.remove();
+  inner.appendChild(close);
+  modal.appendChild(inner);
+  modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+  document.body.appendChild(modal);
+}
+
 /* ==============================================================
    AI SUMMARIZE — 本文から excerpt / meta description を AI 生成
    mode: 'excerpt' | 'excerpt-en' | 'meta'
