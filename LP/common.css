@@ -162,6 +162,97 @@ nav .nav-links .nav-social svg { width: 16px; height: 16px; display: block; }
 .nav-overlay .nav-overlay-social a:hover { opacity: 1; }
 .nav-overlay .nav-overlay-social svg { width: 22px; height: 22px; display: block; }
 
+/* ===================== GUIDE / DISCOVER CARDS (shared) ===================== */
+.guide-section {
+  padding: 0 40px;
+  margin-top: 80px;
+  border-top: 1px solid rgba(240,237,232,0.06);
+}
+.guide-header {
+  padding-top: 60px;
+  margin-bottom: 32px;
+}
+.guide-label {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+  opacity: 0.3; margin-bottom: 8px;
+}
+.guide-title {
+  font-family: var(--font-display); font-size: clamp(40px, 6vw, 72px);
+  text-transform: uppercase; line-height: 0.9;
+}
+.discover-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.discover-card {
+  display: block; position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: none;
+}
+.discover-card-bg {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.discover-card:hover .discover-card-bg { transform: scale(1.06); }
+.discover-card-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.55) 100%);
+  transition: background 0.4s ease;
+}
+.discover-card:hover .discover-card-overlay {
+  background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.45) 100%);
+}
+.discover-card-content {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 32px 24px;
+  text-align: center;
+  z-index: 1;
+}
+.discover-card-title {
+  font-family: var(--font-display);
+  font-size: 42px;
+  text-transform: uppercase; line-height: 1;
+  margin-bottom: 12px;
+  text-shadow: 0 2px 16px rgba(0,0,0,0.5);
+}
+.discover-card-desc {
+  font-family: var(--font-body); font-weight: 200;
+  font-size: 12px; line-height: 1.7;
+  opacity: 0.7; max-width: 220px;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.3);
+}
+.discover-card-arrow {
+  position: absolute; top: 20px; right: 20px;
+  width: 32px; height: 32px;
+  border: 1px solid rgba(255,255,255,0.3); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: translateY(6px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.discover-card:hover .discover-card-arrow { opacity: 1; transform: translateY(0); }
+.discover-card-arrow svg { width: 12px; height: 12px; stroke: var(--text); fill: none; stroke-width: 2; }
+
+@media (max-width: 1100px) {
+  .discover-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+}
+@media (max-width: 768px) {
+  .guide-section { padding: 0 24px; margin-top: 60px; }
+  .guide-header { padding-top: 40px; }
+  .discover-card-title { font-size: 32px; }
+}
+@media (max-width: 480px) {
+  .discover-grid { grid-template-columns: 1fr; }
+}
+@media (hover: none) and (pointer: coarse) {
+  .discover-card { cursor: pointer; }
+}
+
 /* social icons in footer */
 footer .footer-links .footer-social {
   display: inline-flex;
