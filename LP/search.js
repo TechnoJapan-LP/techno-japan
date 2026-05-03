@@ -1,5 +1,5 @@
 /**
- * Global search — searches across FESTIVALS, ARTISTS, VENUES, EVENTS.
+ * Global search — searches across FESTIVALS, ARTISTS, VENUES, EVENTS, ARTICLES (本文含む).
  * Loaded on every page; opens a fullscreen modal on trigger.
  */
 (function() {
@@ -27,7 +27,7 @@
       <div class="gs-panel">
         <div class="gs-input-wrap">
           <svg class="gs-icon" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
-          <input type="text" id="gs-input" placeholder="Search festivals, artists, venues..." autocomplete="off">
+          <input type="text" id="gs-input" placeholder="Search festivals, artists, venues, articles..." autocomplete="off">
           <button class="gs-close" type="button" aria-label="Close">×</button>
         </div>
         <div class="gs-results" id="gs-results">
@@ -57,8 +57,9 @@
       .gs-result { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; border-bottom: 1px solid rgba(240,237,232,0.04); cursor: pointer; transition: background 0.2s ease; }
       .gs-result:hover, .gs-result.gs-active { background: rgba(240,237,232,0.06); }
       .gs-result.gs-active { border-left: 2px solid #ff2d2d; padding-left: 18px; }
+      .gs-result { flex-direction: column; align-items: stretch; gap: 4px; }
       .gs-result-name { font-family: var(--font-display); font-size: 16px; text-transform: uppercase; }
-      .gs-result-meta { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; opacity: 0.4; text-transform: uppercase; }
+      .gs-result-meta { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.05em; opacity: 0.5; line-height: 1.5; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
       .gs-empty { padding: 40px 20px; text-align: center; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; opacity: 0.3; }
 
       /* Search trigger button (placed in nav) */
@@ -267,6 +268,48 @@
             meta: [e.date, e.venue, e.city].filter(Boolean).join(' — '),
             url: `events.html`
           }))
+        });
+      }
+    }
+
+    // Articles (本文も含めた全文検索)
+    if (typeof ARTICLES !== 'undefined') {
+      const stripHtml = s => String(s || '').replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&[a-z]+;/g, ' ');
+      const matches = ARTICLES.filter(a => {
+        if (!a.title) return false;
+        // Drafts や status未設定 (=published扱い) を含める
+        if (a.status && a.status !== 'published') return false;
+        return a.title.toLowerCase().includes(q) ||
+               (a.excerpt || '').toLowerCase().includes(q) ||
+               (a.category || '').toLowerCase().includes(q) ||
+               (Array.isArray(a.tags) ? a.tags.join(' ') : (a.tags || '')).toLowerCase().includes(q) ||
+               stripHtml(a.body).toLowerCase().includes(q);
+      }).slice(0, 6);
+      if (matches.length) {
+        groups.push({
+          label: 'ARTICLES',
+          items: matches.map(a => {
+            // body にヒットした場合は本文の一部をスニペット表示
+            const inBody = stripHtml(a.body).toLowerCase().includes(q) &&
+                           !a.title.toLowerCase().includes(q) &&
+                           !(a.excerpt || '').toLowerCase().includes(q);
+            let meta = [a.category, a.date].filter(Boolean).join(' — ');
+            if (inBody) {
+              const stripped = stripHtml(a.body);
+              const idx = stripped.toLowerCase().indexOf(q);
+              const start = Math.max(0, idx - 40);
+              const end = Math.min(stripped.length, idx + q.length + 60);
+              const snip = (start > 0 ? '...' : '') + stripped.slice(start, end).trim() + (end < stripped.length ? '...' : '');
+              meta = snip;
+            } else if (a.excerpt && a.excerpt.toLowerCase().includes(q)) {
+              meta = a.excerpt.slice(0, 100);
+            }
+            return {
+              name: a.title,
+              meta: meta,
+              url: `news.html#article/${a.id}`
+            };
+          })
         });
       }
     }
