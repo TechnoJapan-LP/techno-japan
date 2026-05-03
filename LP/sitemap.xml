@@ -49,12 +49,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/festivals.html#festival/doofing-park</loc>
-    <lastmod>2026-05-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://techno-japan.media/festivals.html#festival/waifu</loc>
     <lastmod>2026-05-03</lastmod>
     <changefreq>weekly</changefreq>
@@ -554,6 +548,12 @@
   </url>
   <url>
     <loc>https://techno-japan.media/festivals.html#festival/takarajima-beach-cleaning-party</loc>
+    <lastmod>2026-05-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/festivals.html#festival/technogaoka</loc>
     <lastmod>2026-05-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -1105,19 +1105,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/news.html#article/welcome-to-techno-japan</loc>
-    <lastmod>2026-05-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/news.html#article/tokyo-underground-map</loc>
-    <lastmod>2026-05-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/news.html#article/rdc-2026-preview</loc>
+    <loc>https://techno-japan.media/news.html#article/mari</loc>
     <lastmod>2026-05-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

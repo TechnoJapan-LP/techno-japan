@@ -5,8 +5,16 @@
     <link>https://techno-japan.media</link>
     <description>Japan&apos;s underground techno and house music media platform.</description>
     <language>ja-JP</language>
-    <lastBuildDate>Sun, 03 May 2026 15:10:14 -0000</lastBuildDate>
+    <lastBuildDate>Sun, 03 May 2026 16:06:53 -0000</lastBuildDate>
     <atom:link href="https://techno-japan.media/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>FESTIVAL de FRUE 2026</title>
+      <link>https://techno-japan.media/festivals.html#festival/festival-de-frue-2026</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals.html#festival/festival-de-frue-2026</guid>
+      <pubDate>Sat, 31 Oct 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Shizuoka — FESTIVAL de FRUE returns to Shizuoka</description>
+    </item>
     <item>
       <title>Wonderfruit Kyoto</title>
       <link>https://techno-japan.media/festivals.html#festival/wonderfruit-kyoto</link>
@@ -72,6 +80,14 @@
       <description>Fukui — ONE PARK FESTIVAL brings electronic music to Fukui</description>
     </item>
     <item>
+      <title>Sonic Mania</title>
+      <link>https://techno-japan.media/festivals.html#festival/sonic-mania</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals.html#festival/sonic-mania</guid>
+      <pubDate>Fri, 14 Aug 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Chiba — Summer Sonic</description>
+    </item>
+    <item>
       <title>FuliRock</title>
       <link>https://techno-japan.media/festivals.html#festival/fulirock</link>
       <guid isPermaLink="true">https://techno-japan.media/festivals.html#festival/fulirock</guid>
@@ -96,6 +112,14 @@
       <description>Nara — Moment brings carefully curated electronic programming to Nara</description>
     </item>
     <item>
+      <title>HALOLA CAMP</title>
+      <link>https://techno-japan.media/festivals.html#festival/halola-camp</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals.html#festival/halola-camp</guid>
+      <pubDate>Sat, 27 Jun 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Hokkaido — HALOLA CAMP brings together electronic music enthusiasts in Hokkaido</description>
+    </item>
+    <item>
       <title>SAMSARA</title>
       <link>https://techno-japan.media/festivals.html#festival/samsara</link>
       <guid isPermaLink="true">https://techno-japan.media/festivals.html#festival/samsara</guid>
@@ -112,12 +136,28 @@
       <description>Hokkaido — Dots operates as Hokkaido</description>
     </item>
     <item>
+      <title>FESTIVAL FRUEZINHO 2026</title>
+      <link>https://techno-japan.media/festivals.html#festival/festival-fruezinho-2026</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals.html#festival/festival-fruezinho-2026</guid>
+      <pubDate>Sat, 13 Jun 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Tokyo — FESTIVAL FRUEZINHO brings São Paulo</description>
+    </item>
+    <item>
       <title>Gojū-Ichi Festival</title>
       <link>https://techno-japan.media/festivals.html#festival/goj-ichi-festival</link>
       <guid isPermaLink="true">https://techno-japan.media/festivals.html#festival/goj-ichi-festival</guid>
       <pubDate>Fri, 05 Jun 2026 00:00:00 -0000</pubDate>
       <category>Festival</category>
       <description>Tokyo — Gojū-Ichi Festival operates as a multi-venue exploration of Tokyo</description>
+    </item>
+    <item>
+      <title>Link Open Air</title>
+      <link>https://techno-japan.media/festivals.html#festival/link-open-air</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals.html#festival/link-open-air</guid>
+      <pubDate>Sat, 30 May 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Toyama — Link Open Air brings electronic music to Toyama</description>
     </item>
     <item>
       <title>JAPONISM</title>
@@ -176,12 +216,20 @@
       <description>Nagano — Transcendence delivers uncompromising techno programming in the mountainous terrain surrounding Nagano. The festival leverages Japan</description>
     </item>
     <item>
-      <title>おすきにどうぞ2025</title>
+      <title>Osukinidouzo</title>
       <link>https://techno-japan.media/festivals.html#festival/osukinidouzo</link>
       <guid isPermaLink="true">https://techno-japan.media/festivals.html#festival/osukinidouzo</guid>
       <pubDate>Sat, 02 May 2026 00:00:00 -0000</pubDate>
       <category>Festival</category>
       <description>Kanagawa — A carefully curated gathering in Kanagawa that emphasizes artistic freedom and community over commercial spectacle. The festival maintains an intimate scale while showcasing both established and emerging artists across electronic music</description>
+    </item>
+    <item>
+      <title>Technogaoka</title>
+      <link>https://techno-japan.media/festivals.html#festival/technogaoka</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals.html#festival/technogaoka</guid>
+      <pubDate>Sat, 25 Apr 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Hyogo — Underground rave series operating from Tabifusa Ashiya Daihi-kaku in Hyogo. Known for maintaining a proper warehouse aesthetic with focused programming that draws from both local and international techno circuits. Raw sound system setup prioritizes function over flash.</description>
     </item>
     <item>
       <title>ALA</title>
@@ -200,75 +248,11 @@
       <description>Shizuoka — Rainbow Disco Club takes place at the Higashi-Izu Cross Country Course in Shizuoka, transforming the natural terrain into an outdoor dance floor. The festival combines house and techno programming with Japan</description>
     </item>
     <item>
-      <title>ARCH 2025</title>
-      <link>https://techno-japan.media/festivals.html#festival/arch</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals.html#festival/arch</guid>
-      <pubDate>Sat, 11 Apr 2026 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Gunma — ARCH returns to Gunma for its eleventh edition, maintaining its reputation as one of Japan</description>
-    </item>
-    <item>
-      <title>DOOFING PARK</title>
-      <link>https://techno-japan.media/festivals.html#festival/doofing-park</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals.html#festival/doofing-park</guid>
-      <pubDate>Sat, 04 Apr 2026 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>KANTO — DOOFING PARK brings outdoor techno culture to Tokyo</description>
-    </item>
-    <item>
-      <title>Snow Machine Japan</title>
-      <link>https://techno-japan.media/festivals.html#festival/snow-machine-japan</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals.html#festival/snow-machine-japan</guid>
-      <pubDate>Tue, 03 Mar 2026 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Hakuba — Snow Machine Japan transforms the alpine resort town of Hakuba into a winter playground for electronic music enthusiasts. The festival combines skiing and snowboarding culture with carefully curated lineups spanning techno and house music. Set against the backdrop of the Japanese Alps, it offers an intimate alternative to the larger summer festival circuit.</description>
-    </item>
-    <item>
-      <title>TAKARAJIMA-Beach Cleaning Party-</title>
-      <link>https://techno-japan.media/festivals.html#festival/takarajima-beach-cleaning-party</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals.html#festival/takarajima-beach-cleaning-party</guid>
-      <pubDate>Sat, 29 Nov 2025 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Okinawa — TAKARAJIMA combines environmental activism with electronic music programming on Okinawa</description>
-    </item>
-    <item>
-      <title>Odyssey</title>
-      <link>https://techno-japan.media/festivals.html#festival/odyssey</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals.html#festival/odyssey</guid>
-      <pubDate>Sat, 22 Nov 2025 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Miyazaki — Odyssey brings underground electronic music to Miyazaki</description>
-    </item>
-    <item>
-      <title>Mutek</title>
-      <link>https://techno-japan.media/festivals.html#festival/mutek</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals.html#festival/mutek</guid>
-      <pubDate>Thu, 20 Nov 2025 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Tokyo — MUTEK Tokyo brings the Montreal-based festival</description>
-    </item>
-    <item>
-      <title>Welcome to TECHNO JAPAN</title>
-      <link>https://techno-japan.media/news.html#article/welcome-to-techno-japan</link>
-      <guid isPermaLink="true">https://techno-japan.media/news.html#article/welcome-to-techno-japan</guid>
-      <pubDate>Sun, 03 May 2026 15:10:14 -0000</pubDate>
-      <category>COLUMN</category>
-      <description></description>
-    </item>
-    <item>
-      <title>The Complete Guide to Tokyo\</title>
-      <link>https://techno-japan.media/news.html#article/tokyo-underground-map</link>
-      <guid isPermaLink="true">https://techno-japan.media/news.html#article/tokyo-underground-map</guid>
-      <pubDate>Sun, 03 May 2026 15:10:14 -0000</pubDate>
-      <category>CLUB</category>
-      <description></description>
-    </item>
-    <item>
-      <title>Rainbow Disco Club 2026: What to Expect This Year</title>
-      <link>https://techno-japan.media/news.html#article/rdc-2026-preview</link>
-      <guid isPermaLink="true">https://techno-japan.media/news.html#article/rdc-2026-preview</guid>
-      <pubDate>Sun, 03 May 2026 15:10:14 -0000</pubDate>
-      <category>FESTIVAL</category>
+      <title>MARIA</title>
+      <link>https://techno-japan.media/news.html#article/mari</link>
+      <guid isPermaLink="true">https://techno-japan.media/news.html#article/mari</guid>
+      <pubDate>Sun, 03 May 2026 16:06:53 -0000</pubDate>
+      <category>Article</category>
       <description></description>
     </item>
   </channel>
