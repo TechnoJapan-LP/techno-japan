@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TECHNO JAPAN — Underground Dance Music Media</title>
-<meta name="description" content="Japan's underground techno and house music scene. Events, artists, culture.">
+<meta name="description" content="Japan's underground techno and house music scene. Stories, festivals, artists, venues, and culture.">
 <link rel="alternate" type="application/rss+xml" title="TECHNO JAPAN — RSS" href="https://techno-japan.media/rss.xml">
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#080808">
@@ -15,7 +15,7 @@
 
 <!-- Open Graph -->
 <meta property="og:title" content="TECHNO JAPAN — Underground Dance Music Media">
-<meta property="og:description" content="Japan's underground techno and house music scene. Events, artists, festivals, venues, and culture.">
+<meta property="og:description" content="Japan's underground techno and house music scene. Stories, festivals, artists, venues, and culture.">
 <meta property="og:image" content="https://techno-japan.media/images/festivals/rainbow-disco-club.jpeg">
 <meta property="og:url" content="https://techno-japan.media/">
 <meta property="og:type" content="website">
@@ -25,655 +25,281 @@
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="TECHNO JAPAN — Underground Dance Music Media">
-<meta name="twitter:description" content="Japan's underground techno and house music scene. Events, artists, festivals, venues, and culture.">
+<meta name="twitter:description" content="Japan's underground techno and house music scene. Stories, festivals, artists, venues, and culture.">
 <meta name="twitter:image" content="https://techno-japan.media/images/festivals/rainbow-disco-club.jpeg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="common.css">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --accent: #ff2d2d;
+  --card-bg: rgba(240,237,232,0.03);
+  --card-border: rgba(240,237,232,0.06);
+}
+@keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-/* ===================== HERO ===================== */
-.hero {
-  position: relative;
-  height: 100vh;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 0 40px 60px;
-  overflow: hidden;
+/* ===================== INTRO ===================== */
+.media-intro {
+  padding: 140px 40px 0;
+  opacity: 0; animation: fadeSlideUp 0.8s ease forwards; animation-delay: 0.2s;
 }
-
-/* Animated grid background */
-.hero-grid {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  z-index: 0;
-}
-.hero-grid::before, .hero-grid::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-}
-.hero-grid::before {
-  background-image:
-    repeating-linear-gradient(90deg, rgba(240,237,232,0.03) 0, rgba(240,237,232,0.03) 1px, transparent 1px, transparent),
-    repeating-linear-gradient(0deg, rgba(240,237,232,0.03) 0, rgba(240,237,232,0.03) 1px, transparent 1px, transparent);
-  background-size: 80px 80px;
-  animation: gridDrift 20s linear infinite;
-}
-@keyframes gridDrift {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(80px, 80px); }
-}
-
-/* Scan line */
-.scan-line {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: rgba(240,237,232,0.06);
-  z-index: 1;
-  animation: scanDown 6s linear infinite;
-}
-@keyframes scanDown {
-  0% { top: -2%; }
-  100% { top: 102%; }
-}
-
-.hero-bottom {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  width: 100%;
-}
-
-.hero-eyebrow {
-  position: absolute;
-  top: -60px;
-  left: 0;
+.media-intro-eyebrow {
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  opacity: 0;
-  animation: fadeSlideUp 0.6s ease forwards;
-  animation-delay: 0.4s;
-  color: rgba(240,237,232,0.5);
+  font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+  opacity: 0.4; margin-bottom: 24px;
 }
-
-.hero-title {
-  font-family: var(--font-display);
-  font-size: clamp(96px, 18vw, 260px);
-  line-height: 0.85;
-  text-transform: uppercase;
-}
-.hero-title .line {
-  display: block;
-  overflow: hidden;
-}
-.hero-title .line span {
-  display: block;
-  transform: translateY(100%);
-  animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-.hero-title .line:nth-child(1) span { animation-delay: 0.5s; }
-.hero-title .line:nth-child(2) span { animation-delay: 0.65s; }
-
-.hero-label {
-  text-align: right;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  line-height: 2;
-  opacity: 0;
-  animation: fadeIn 0.6s ease forwards;
-  animation-delay: 0.9s;
-  color: rgba(240,237,232,0.5);
-  padding-bottom: 12px;
-}
-
-.scroll-indicator {
-  position: absolute;
-  bottom: 60px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  opacity: 0;
-  animation: fadeIn 0.6s ease forwards;
-  animation-delay: 1.2s;
-  z-index: 2;
-}
-.scroll-indicator .line {
-  width: 1px;
-  height: 40px;
-  background: rgba(240,237,232,0.3);
-  animation: pulse 2s ease-in-out infinite;
-}
-.scroll-indicator span {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  opacity: 0.4;
-}
-@keyframes pulse {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 0.8; }
+.media-intro-headline {
+  font-family: var(--font-body);
+  font-size: clamp(28px, 4vw, 52px);
+  font-weight: 500;
+  line-height: 1.2;
+  max-width: 780px;
 }
 
 /* ===================== MARQUEE ===================== */
 .marquee {
   border-top: 1px solid rgba(240,237,232,0.08);
   border-bottom: 1px solid rgba(240,237,232,0.08);
-  overflow: hidden;
-  white-space: nowrap;
   padding: 16px 0;
+  overflow: hidden;
+  margin: 60px 0 0;
 }
 .marquee:hover .marquee-inner { animation-play-state: paused; }
 .marquee-inner {
   display: inline-block;
-  animation: marqueeScroll 40s linear infinite;
-  font-family: var(--font-display);
-  font-size: 13px;
-  letter-spacing: 0.25em;
-  opacity: 0.25;
-  text-transform: uppercase;
+  white-space: nowrap;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em;
+  text-transform: uppercase; opacity: 0.4;
+  animation: marqueeScroll 60s linear infinite;
 }
 @keyframes marqueeScroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
 
-/* ===================== SECTIONS COMMON ===================== */
-section { padding: 120px 40px; }
-
-.section-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 60px;
-  opacity: 0.5;
+/* ===================== SECTION HEADERS ===================== */
+.section-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 80px 40px 24px;
+  border-bottom: 1px solid var(--card-border);
 }
-.section-label::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: rgba(240,237,232,0.12);
+.section-eyebrow {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.25em;
+  text-transform: uppercase; opacity: 0.5;
+  display: flex; align-items: center; gap: 10px;
 }
-
-/* Scroll animation base */
-.reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ===================== ABOUT ===================== */
-#about {
-  position: relative;
-  overflow: hidden;
-}
-.about-bg {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-}
-.about-bg::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    repeating-linear-gradient(90deg, rgba(240,237,232,0.03) 0, rgba(240,237,232,0.03) 1px, transparent 1px, transparent),
-    repeating-linear-gradient(0deg, rgba(240,237,232,0.03) 0, rgba(240,237,232,0.03) 1px, transparent 1px, transparent);
-  background-size: 80px 80px;
-  animation: gridDrift 20s linear infinite;
-}
-.about-scan {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: rgba(240,237,232,0.06);
-  z-index: 1;
-  animation: scanDown 6s linear infinite;
-}
-#about > .section-label,
-#about > .about-grid {
-  position: relative;
-  z-index: 2;
-}
-
-/* ===================== SHARED ANIMATED SECTION BG ===================== */
-#media, #instagram, #contact {
-  position: relative;
-  overflow: hidden;
-}
-.section-bg {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-.section-bg::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    repeating-linear-gradient(90deg, rgba(240,237,232,0.03) 0, rgba(240,237,232,0.03) 1px, transparent 1px, transparent),
-    repeating-linear-gradient(0deg, rgba(240,237,232,0.03) 0, rgba(240,237,232,0.03) 1px, transparent 1px, transparent);
-  background-size: 80px 80px;
-  animation: gridDrift 20s linear infinite;
-}
-.section-bg::after {
-  content: '';
-  position: absolute;
-  width: 60vw; height: 60vw;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,45,45,0.06) 0%, transparent 60%);
-  filter: blur(40px);
-  animation: glowFloat 18s ease-in-out infinite;
-  pointer-events: none;
-}
-.section-scan {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 1px;
-  background: rgba(240,237,232,0.06);
-  z-index: 1;
-  animation: scanDown 8s linear infinite;
-  pointer-events: none;
-}
-@keyframes glowFloat {
-  0%, 100% { top: -20%; left: -10%; }
-  50% { top: 60%; left: 50%; }
-}
-#media > *:not(.section-bg):not(.section-scan),
-#instagram > *:not(.section-bg):not(.section-scan),
-#contact > *:not(.section-bg):not(.section-scan) {
-  position: relative;
-  z-index: 2;
-}
-.about-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
-  margin-bottom: 80px;
-}
-.about-headline {
-  font-family: var(--font-display);
-  font-size: clamp(48px, 6vw, 96px);
-  line-height: 1;
-  text-transform: uppercase;
-}
-.about-body p {
-  font-family: var(--font-body);
-  font-weight: 200;
-  font-size: 15px;
-  line-height: 1.9;
-  opacity: 0.7;
-  margin-bottom: 24px;
-}
-
-.stat-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  border: 1px solid rgba(240,237,232,0.1);
-}
-.stat-cell {
-  padding: 32px;
-  border: 1px solid rgba(240,237,232,0.1);
-}
-.stat-cell .stat-value {
-  font-family: var(--font-display);
-  font-size: 32px;
-  margin-bottom: 6px;
-}
-.stat-cell .stat-label {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  opacity: 0.4;
-  text-transform: uppercase;
-}
-
-/* ===================== DISCOVER CARDS (durevie style) ===================== */
-.discover-section {
-  padding: 0 40px 0;
-}
-.discover-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-}
-.discover-card {
-  display: block;
-  position: relative;
-  aspect-ratio: 3 / 4;
-  border-radius: 14px;
-  overflow: hidden;
-  cursor: none;
-}
-.discover-card-bg {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.discover-card:hover .discover-card-bg { transform: scale(1.06); }
-.discover-card-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.55) 100%);
-  transition: background 0.4s ease;
-}
-.discover-card:hover .discover-card-overlay {
-  background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.45) 100%);
-}
-.discover-card-content {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 32px 24px;
-  text-align: center;
-  z-index: 1;
-}
-.discover-card-title {
-  font-family: var(--font-display);
-  font-size: 42px;
-  text-transform: uppercase;
-  line-height: 1;
-  margin-bottom: 12px;
-  text-shadow: 0 2px 16px rgba(0,0,0,0.5);
-}
-.discover-card-desc {
-  font-family: var(--font-body);
-  font-weight: 200;
-  font-size: 12px;
-  line-height: 1.7;
-  opacity: 0.7;
-  max-width: 220px;
-  text-shadow: 0 1px 6px rgba(0,0,0,0.3);
-}
-.discover-card-arrow {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 32px;
-  height: 32px;
-  border: 1px solid rgba(255,255,255,0.3);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transform: translateY(6px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
-.discover-card:hover .discover-card-arrow { opacity: 1; transform: translateY(0); }
-.discover-card-arrow svg { width: 12px; height: 12px; stroke: var(--text); fill: none; stroke-width: 2; }
-
-/* ===================== INSTAGRAM ===================== */
-.insta-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 40px;
-}
-.insta-header a {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  opacity: 0.5;
+.section-eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+.section-cta {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em;
+  text-transform: uppercase; opacity: 0.5;
   transition: opacity 0.3s ease;
 }
-.insta-header a:hover { opacity: 1; }
+.section-cta:hover { opacity: 1; }
 
-.insta-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2px;
-  margin-bottom: 60px;
-}
-.insta-feed {
-  margin-bottom: 60px;
-  --behold-row-gap: 2px;
-  --behold-column-gap: 2px;
-  --behold-border-radius: 0;
-  --behold-background-color: transparent;
-}
-.insta-feed behold-widget {
-  display: block;
-  width: 100%;
-}
-.insta-cell {
-  aspect-ratio: 1;
-  background: #1a1a1a;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  border: 1px solid rgba(240,237,232,0.04);
-  transition: border-color 0.3s ease, filter 0.3s ease;
-  padding: 16px;
-  text-align: center;
-}
-.insta-cell:hover {
-  border-color: rgba(240,237,232,0.2);
-  filter: brightness(1.15);
-}
-.insta-cell .cell-type {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  opacity: 0.35;
-}
-.insta-cell .cell-title {
-  font-family: var(--font-display);
-  font-size: 22px;
-  text-transform: uppercase;
-}
-
-.cta-wrap { text-align: center; }
-.cta-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  padding: 14px 40px;
-  border: 1px solid rgba(240,237,232,0.3);
-  background: transparent;
-  color: var(--text);
-  transition: background 0.4s ease, color 0.4s ease;
-  cursor: none;
-}
-.cta-btn:hover {
-  background: var(--text);
-  color: var(--bg);
-}
-
-/* ===================== CONTACT ===================== */
-.contact-grid {
+/* ===================== STORIES (featured + side cards) ===================== */
+.stories-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 60px;
+  gap: 0;
+  padding: 32px 40px 0;
+  min-height: 480px;
 }
-.contact-headline {
-  font-family: var(--font-display);
-  font-size: clamp(48px, 6vw, 96px);
-  line-height: 1;
-  text-transform: uppercase;
+.featured-col { display: flex; flex-direction: column; }
+.featured-card {
+  position: relative; flex: 1;
+  display: flex; flex-direction: column;
+  background: var(--card-bg);
 }
-.contact-body {
-  font-family: var(--font-body);
-  font-weight: 200;
-  font-size: 15px;
-  line-height: 1.9;
-  opacity: 0.7;
-  margin-bottom: 40px;
+.featured-card-image {
+  position: relative; flex: 1; min-height: 380px;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(240,237,232,0.05) 0%, rgba(240,237,232,0.01) 100%);
 }
-.contact-form {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+.featured-card-image img {
+  width: 100%; height: 100%; object-fit: cover;
+  filter: grayscale(80%) brightness(0.6);
+  transition: filter 0.6s ease, transform 0.6s ease;
 }
-.form-group { display: flex; flex-direction: column; gap: 8px; }
-.form-group label {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  opacity: 0.4;
+.featured-card:hover .featured-card-image img { filter: grayscale(30%) brightness(0.7); transform: scale(1.02); }
+.featured-card-image-placeholder {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; opacity: 0.1; text-transform: uppercase;
 }
-.form-group input,
-.form-group textarea,
-.form-group select {
-  background: transparent;
-  border: 1px solid rgba(240,237,232,0.12);
-  color: var(--text);
-  font-family: var(--font-body);
-  font-weight: 200;
-  font-size: 14px;
-  padding: 14px 16px;
-  outline: none;
-  transition: border-color 0.3s ease;
-  -webkit-appearance: none;
-  appearance: none;
-  border-radius: 0;
+.featured-card-body { padding: 24px 0 0; }
+.featured-card-tag {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
 }
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
-  border-color: rgba(240,237,232,0.4);
+.featured-card-tag .tag-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+.featured-card-title {
+  font-family: var(--font-body); font-size: clamp(20px, 2.5vw, 28px); font-weight: 400; line-height: 1.35;
 }
-.form-group textarea { resize: vertical; min-height: 120px; }
-.form-group select {
-  cursor: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(240,237,232,0.4)'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 16px center;
-}
-.form-group select option {
-  background: #080808;
-  color: var(--text);
-}
-.contact-submit {
-  display: inline-block;
-  align-self: flex-start;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  padding: 16px 40px;
-  border: 1px solid rgba(240,237,232,0.3);
-  background: transparent;
-  color: var(--text);
-  cursor: none;
-  transition: background 0.4s ease, color 0.4s ease;
-}
-.contact-submit:hover {
-  background: var(--text);
-  color: var(--bg);
+.featured-card-meta {
+  margin-top: 14px;
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em; opacity: 0.3; text-transform: uppercase;
 }
 
-/* ===================== PAGE-SPECIFIC RESPONSIVE ===================== */
+.side-col {
+  display: flex; flex-direction: column;
+  border-left: 1px solid var(--card-border);
+}
+.side-card {
+  padding: 28px 32px;
+  flex: 1;
+  display: flex; flex-direction: column; justify-content: center;
+  border-bottom: 1px solid var(--card-border);
+  transition: background 0.3s ease;
+}
+.side-card:last-child { border-bottom: none; }
+.side-card:hover { background: rgba(240,237,232,0.02); }
+.side-card-tag {
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.side-card-tag .tag-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
+.side-card-title {
+  font-family: var(--font-body); font-size: clamp(15px, 1.6vw, 19px); font-weight: 400; line-height: 1.4;
+}
+.side-card-meta {
+  margin-top: 10px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.12em; opacity: 0.25; text-transform: uppercase;
+}
+
+/* ===================== FESTIVALS PREVIEW ===================== */
+.festivals-preview {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  padding: 32px 40px 0;
+}
+.fest-card {
+  position: relative; aspect-ratio: 3/4;
+  overflow: hidden;
+  background: var(--card-bg);
+}
+.fest-card-img {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  filter: grayscale(60%) brightness(0.55);
+  transition: filter 0.5s ease, transform 0.5s ease;
+}
+.fest-card:hover .fest-card-img { filter: grayscale(20%) brightness(0.7); transform: scale(1.04); }
+.fest-card-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(8,8,8,0.85) 0%, rgba(8,8,8,0.2) 60%, transparent 100%);
+}
+.fest-card-content {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 20px;
+}
+.fest-card-date {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em;
+  text-transform: uppercase; opacity: 0.7; margin-bottom: 8px;
+}
+.fest-card-name {
+  font-family: var(--font-display); font-size: clamp(20px, 2vw, 28px);
+  letter-spacing: 0.02em; line-height: 1; text-transform: uppercase;
+}
+.fest-card-loc {
+  margin-top: 8px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.15em;
+  text-transform: uppercase; opacity: 0.55;
+}
+
+/* ===================== ARTISTS PREVIEW ===================== */
+.artists-preview {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  padding: 32px 40px 0;
+}
+.artist-mini {
+  position: relative; aspect-ratio: 1/1;
+  overflow: hidden;
+  background: var(--card-bg);
+}
+.artist-mini-img {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  filter: grayscale(70%) brightness(0.55);
+  transition: filter 0.5s ease, transform 0.5s ease;
+}
+.artist-mini:hover .artist-mini-img { filter: grayscale(20%) brightness(0.75); transform: scale(1.05); }
+.artist-mini-fallback {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(240,237,232,0.05), rgba(240,237,232,0.01));
+}
+.artist-mini-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(8,8,8,0.8) 0%, transparent 70%);
+}
+.artist-mini-content {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 14px;
+}
+.artist-mini-name {
+  font-family: var(--font-display); font-size: 18px; letter-spacing: 0.03em; text-transform: uppercase; line-height: 1;
+}
+.artist-mini-genre {
+  margin-top: 6px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.15em; opacity: 0.55; text-transform: uppercase;
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 1100px) {
+  .festivals-preview { grid-template-columns: repeat(2, 1fr); }
+  .artists-preview { grid-template-columns: repeat(3, 1fr); }
+}
 @media (max-width: 900px) {
-  section { padding: 80px 24px; }
-  .hero { padding: 0 24px 48px; height: 75vh; }
-  .about-grid { grid-template-columns: 1fr; gap: 32px; }
-  .contact-grid { grid-template-columns: 1fr; gap: 32px; }
-  .discover-grid { grid-template-columns: repeat(2, 1fr); }
-  .discover-card { aspect-ratio: 1; }
-  .discover-card-title { font-size: 28px; }
-  .insta-grid { grid-template-columns: repeat(2, 1fr); }
-  .hero-bottom { flex-direction: column; align-items: flex-start; gap: 24px; }
-  .hero-label { text-align: left; padding-bottom: 0; }
-  .hero-eyebrow { top: -40px; }
+  .media-intro { padding: 120px 24px 0; }
+  .stories-grid { grid-template-columns: 1fr; padding: 24px 24px 0; }
+  .side-col { border-left: none; border-top: 1px solid var(--card-border); }
+  .featured-card-image { min-height: 280px; }
+  .section-head { padding: 60px 24px 20px; }
+  .festivals-preview, .artists-preview { padding: 24px 24px 0; gap: 3px; }
 }
-
 @media (max-width: 768px) {
-  .discover-grid { grid-template-columns: repeat(2, 1fr); }
-  .discover-card { aspect-ratio: 1; }
-  .insta-grid { grid-template-columns: 1fr 1fr; }
-  .stat-grid { grid-template-columns: 1fr; }
-  .scroll-indicator { display: none; }
-  .hero h1 { font-size: clamp(60px, 18vw, 120px); }
-  .section-label { font-size: 9px; }
-  .about-text h2 { font-size: clamp(36px, 10vw, 72px); }
-  .contact-left h2 { font-size: clamp(36px, 10vw, 72px); }
+  .festivals-preview { grid-template-columns: repeat(2, 1fr); }
+  .artists-preview { grid-template-columns: repeat(2, 1fr); }
+  .marquee { margin-top: 40px; }
 }
-
 @media (max-width: 480px) {
-  .discover-grid { grid-template-columns: 1fr; }
-  .discover-card { aspect-ratio: 1; }
+  .festivals-preview { grid-template-columns: 1fr; }
+  .artists-preview { grid-template-columns: repeat(2, 1fr); }
+  .fest-card { aspect-ratio: 4/3; }
 }
-
+@media (hover: none) and (pointer: coarse) {
+  .featured-card, .side-card, .fest-card, .artist-mini, .section-cta { cursor: pointer; }
+}
 </style>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "TECHNO JAPAN",
-  "alternateName": "Techno Japan",
-  "url": "https://techno-japan.media",
-  "logo": "https://techno-japan.media/images/festivals/rainbow-disco-club.jpeg",
-  "description": "Japan's underground techno and house music media platform.",
-  "sameAs": [
-    "https://www.instagram.com/techno.japan_/"
-  ],
-  "founder": {
-    "@type": "Organization",
-    "name": "TECHNO JAPAN"
-  },
-  "areaServed": {
-    "@type": "Country",
-    "name": "Japan"
-  }
-}
-</script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": "TECHNO JAPAN",
-  "url": "https://techno-japan.media",
-  "description": "Japan's underground techno and house music scene. Events, artists, festivals, venues, and culture.",
+  "alternateName": "テクノジャパン",
+  "url": "https://techno-japan.media/",
+  "description": "Japan's underground techno and house music media platform.",
   "publisher": {
     "@type": "Organization",
-    "name": "TECHNO JAPAN"
+    "name": "TECHNO JAPAN",
+    "url": "https://techno-japan.media/",
+    "logo": "https://techno-japan.media/images/festivals/rainbow-disco-club.jpeg",
+    "sameAs": ["https://www.instagram.com/techno.japan_/"]
   },
-  "inLanguage": "ja-JP"
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://techno-japan.media/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
 }
 </script>
+
 <!-- Google Analytics 4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-4MHCNR7D26"></script>
 <script>
@@ -691,9 +317,9 @@ section { padding: 120px 40px; }
 
 <!-- NAV -->
 <nav>
-  <div class="logo">TECHNO JAPAN</div>
+  <a href="index.html" class="logo">TECHNO JAPAN</a>
   <div class="nav-links">
-    <a href="#about">ABOUT</a>
+    <a href="about.html">ABOUT</a>
     <div class="nav-dropdown">
       <a href="discover.html">DISCOVER</a>
       <div class="nav-dropdown-menu"><div class="nav-dropdown-menu-inner">
@@ -703,14 +329,14 @@ section { padding: 120px 40px; }
         <a href="venues.html">VENUE</a>
       </div></div>
     </div>
-    <a href="#instagram">INSTAGRAM</a>
-    <a href="#contact">CONTACT</a>
+    <a href="about.html#instagram">INSTAGRAM</a>
+    <a href="about.html#contact">CONTACT</a>
   </div>
   <button class="nav-hamburger" aria-label="Open menu" onclick="document.querySelector('.nav-overlay').classList.toggle('active');this.classList.toggle('active')"><span></span><span></span><span></span></button>
 </nav>
 <div class="nav-overlay">
   <button class="nav-close" aria-label="Close menu" onclick="document.querySelector('.nav-overlay').classList.remove('active');document.querySelector('.nav-hamburger').classList.remove('active')"></button>
-  <a href="#about" onclick="document.querySelector('.nav-overlay').classList.remove('active');document.querySelector('.nav-hamburger').classList.remove('active')">ABOUT</a>
+  <a href="about.html">ABOUT</a>
   <a href="discover.html">DISCOVER</a>
   <div class="nav-overlay-sub">
     <a href="festivals.html">FESTIVALS</a>
@@ -718,30 +344,14 @@ section { padding: 120px 40px; }
     <a href="artists.html">ARTISTS</a>
     <a href="venues.html">VENUE</a>
   </div>
-  <a href="#instagram" onclick="document.querySelector('.nav-overlay').classList.remove('active');document.querySelector('.nav-hamburger').classList.remove('active')">INSTAGRAM</a>
-  <a href="#contact" onclick="document.querySelector('.nav-overlay').classList.remove('active');document.querySelector('.nav-hamburger').classList.remove('active')">CONTACT</a>
-  <button class="nav-back" onclick="document.querySelector('.nav-overlay').classList.remove('active');document.querySelector('.nav-hamburger').classList.remove('active');history.back()">← BACK</button>
+  <a href="about.html#instagram">INSTAGRAM</a>
+  <a href="about.html#contact">CONTACT</a>
 </div>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-grid"></div>
-  <div class="scan-line"></div>
-  <div class="hero-eyebrow">JAPAN / UNDERGROUND DANCE MUSIC / MEDIA</div>
-  <div class="hero-bottom">
-    <h1 class="hero-title">
-      <span class="line"><span>TECHNO</span></span>
-      <span class="line"><span>JAPAN</span></span>
-    </h1>
-    <div class="hero-label">
-      UNDERGROUND DANCE MUSIC<br>
-      JAPAN — EST. 2024
-    </div>
-  </div>
-  <div class="scroll-indicator">
-    <div class="line"></div>
-    <span>SCROLL</span>
-  </div>
+<!-- INTRO -->
+<section class="media-intro">
+  <div class="media-intro-eyebrow">JAPAN / UNDERGROUND DANCE MUSIC / MEDIA</div>
+  <h1 class="media-intro-headline">The media exploring Japan's underground techno and house culture.</h1>
 </section>
 
 <!-- MARQUEE -->
@@ -749,148 +359,47 @@ section { padding: 120px 40px; }
   <div class="marquee-inner">TECHNO &middot; HOUSE &middot; JAPAN &middot; UNDERGROUND &middot; CLUBS &middot; FESTIVALS &middot; CULTURE &middot; RAVES &middot; ARTISTS &middot; VENUES &middot; NIGHTS &middot; OPEN-AIR &middot; SCENE &middot; BILINGUAL &middot; TECHNO &middot; HOUSE &middot; JAPAN &middot; UNDERGROUND &middot; CLUBS &middot; FESTIVALS &middot; CULTURE &middot; RAVES &middot; ARTISTS &middot; VENUES &middot; NIGHTS &middot; OPEN-AIR &middot; SCENE &middot; BILINGUAL &middot;&nbsp;</div>
 </div>
 
-<!-- ABOUT -->
-<section id="about">
-  <div class="about-bg"></div>
-  <div class="about-scan"></div>
-  <div class="section-label reveal">01 — ABOUT</div>
-  <div class="about-grid">
-    <div class="about-headline reveal">JAPAN'S<br>UNDERGROUND,<br>CURATED.</div>
-    <div class="about-body reveal">
-      <p>Techno Japan is a cultural media platform focused on Japan's underground techno and house music scene. We go beyond event listings — introducing artists, venues, festivals, and club culture with editorial perspective and scene credibility.</p>
-      <p>We exist to make Japan's underground more visible and more meaningful, to audiences both inside Japan and across the world.</p>
-    </div>
-  </div>
-</section>
+<!-- STORIES -->
+<div class="section-head">
+  <div class="section-eyebrow"><span class="dot"></span>STORIES</div>
+  <a href="discover.html" class="section-cta">VIEW ALL →</a>
+</div>
+<div class="stories-grid" id="stories-grid"><!-- rendered by JS --></div>
 
-<!-- MEDIA PILLARS -->
-<section id="media">
-  <div class="section-bg"></div>
-  <div class="section-scan"></div>
-  <div class="section-label reveal">02 — DISCOVER</div>
-  <div class="discover-section">
-    <div class="discover-grid">
+<!-- FESTIVALS -->
+<div class="section-head" style="margin-top: 60px;">
+  <div class="section-eyebrow"><span class="dot"></span>UPCOMING FESTIVALS</div>
+  <a href="festivals.html" class="section-cta">VIEW ALL →</a>
+</div>
+<div class="festivals-preview" id="festivals-preview"><!-- rendered by JS --></div>
 
-      <!-- To add images: change background to background-image:url('images/discover/festivals.jpg'); background-size:cover; background-position:center; -->
-      <a href="festivals.html" class="discover-card reveal">
-        <div class="discover-card-bg" style="background:linear-gradient(135deg, #1a0533 0%, #4a1942 40%, #c2185b 100%)"></div>
-        <div class="discover-card-overlay"></div>
-        <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
-        <div class="discover-card-content">
-          <div class="discover-card-title">FESTIVALS</div>
-          <div class="discover-card-desc">Open-air gatherings, multi-day adventures, and Japan's most iconic outdoor electronic music festivals.</div>
-        </div>
-      </a>
-
-      <a href="events.html" class="discover-card reveal">
-        <div class="discover-card-bg" style="background:linear-gradient(135deg, #0d1b2a 0%, #1b2838 40%, #415a77 100%)"></div>
-        <div class="discover-card-overlay"></div>
-        <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
-        <div class="discover-card-content">
-          <div class="discover-card-title">EVENTS</div>
-          <div class="discover-card-desc">Club nights, open-air raves, warehouse sessions. The heartbeat of Japan's underground scene.</div>
-        </div>
-      </a>
-
-      <a href="artists.html" class="discover-card reveal">
-        <div class="discover-card-bg" style="background:linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%)"></div>
-        <div class="discover-card-overlay"></div>
-        <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
-        <div class="discover-card-content">
-          <div class="discover-card-title">ARTISTS</div>
-          <div class="discover-card-desc">Emerging talent, established selectors. The names shaping Japan's sound.</div>
-        </div>
-      </a>
-
-      <a href="venues.html" class="discover-card reveal">
-        <div class="discover-card-bg" style="background:linear-gradient(135deg, #1b1b1b 0%, #2d2d2d 40%, #4a4a4a 100%)"></div>
-        <div class="discover-card-overlay"></div>
-        <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
-        <div class="discover-card-content">
-          <div class="discover-card-title">VENUE</div>
-          <div class="discover-card-desc">The clubs, warehouses, and spaces that define Japan's underground.</div>
-        </div>
-      </a>
-
-    </div>
-  </div>
-</section>
-
-<!-- INSTAGRAM -->
-<section id="instagram">
-  <div class="section-bg"></div>
-  <div class="section-scan"></div>
-  <div class="section-label reveal">03 — INSTAGRAM</div>
-  <div class="insta-header reveal">
-    <span style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.15em;opacity:0.5;">LATEST POSTS</span>
-    <a href="https://www.instagram.com/techno.japan_/" target="_blank" rel="noopener">@TECHNO.JAPAN_</a>
-  </div>
-  <div class="insta-feed reveal">
-    <behold-widget feed-id="KSdgYwJwBxsVTQksVCVP"></behold-widget>
-  </div>
-  <div class="cta-wrap reveal">
-    <a href="https://www.instagram.com/techno.japan_/" target="_blank" rel="noopener" class="cta-btn">FOLLOW ON INSTAGRAM</a>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact">
-  <div class="section-bg"></div>
-  <div class="section-scan"></div>
-  <div class="section-label reveal">04 — CONTACT</div>
-  <div class="contact-grid">
-    <div class="contact-headline reveal">GET IN<br>TOUCH.</div>
-    <div class="reveal">
-      <p class="contact-body">For collaborations, press inquiries, advertising, or any other questions — get in touch.</p>
-      <form class="contact-form" action="https://formsubmit.co/tatsuya25shibata@gmail.com" method="POST">
-        <div class="form-group">
-          <label>NAME</label>
-          <input type="text" name="name" required placeholder="Your name">
-        </div>
-        <div class="form-group">
-          <label>EMAIL</label>
-          <input type="email" name="email" required placeholder="your@email.com">
-        </div>
-        <div class="form-group">
-          <label>SUBJECT</label>
-          <select name="subject" required>
-            <option value="" disabled selected>Select a topic</option>
-            <option value="collaboration">Collaboration</option>
-            <option value="press">Press / Media</option>
-            <option value="advertising">Advertising</option>
-            <option value="general">General Inquiry</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>MESSAGE</label>
-          <textarea name="message" required placeholder="Your message"></textarea>
-        </div>
-        <button type="submit" class="contact-submit">SEND MESSAGE</button>
-      </form>
-    </div>
-  </div>
-</section>
+<!-- ARTISTS -->
+<div class="section-head" style="margin-top: 60px;">
+  <div class="section-eyebrow"><span class="dot"></span>ARTISTS</div>
+  <a href="artists.html" class="section-cta">VIEW ALL →</a>
+</div>
+<div class="artists-preview" id="artists-preview"><!-- rendered by JS --></div>
 
 <!-- NEWSLETTER -->
-<section class="newsletter">
-  <div class="newsletter-eyebrow">Newsletter</div>
-  <div class="newsletter-title">Stay in the loop.</div>
+<section class="newsletter" style="margin-top: 80px;">
+  <div class="newsletter-eyebrow">NEWSLETTER</div>
+  <div class="newsletter-title">STAY IN THE LOOP.</div>
   <div class="newsletter-desc">Monthly digest of new festivals, artists, and stories from Japan's underground.</div>
   <form class="newsletter-form" action="https://formsubmit.co/tatsuya25shibata@gmail.com" method="POST">
-    <input type="email" name="email" required placeholder="your@email.com">
-    <input type="hidden" name="_subject" value="Newsletter signup — TECHNO JAPAN">
-    <input type="hidden" name="_template" value="table">
-    <input type="hidden" name="_next" value="https://techno-japan.media/?subscribed=1">
-    <button type="submit">Subscribe</button>
+    <input type="email" name="email" placeholder="your@email.com" required>
+    <input type="hidden" name="_subject" value="TECHNO JAPAN — Newsletter signup">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_next" value="https://techno-japan.media/">
+    <button type="submit">SUBSCRIBE</button>
   </form>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-top reveal">
+  <div class="footer-top">
     <div class="footer-logo">TECHNO JAPAN</div>
     <div class="footer-links">
-      <a href="#about">ABOUT</a>
+      <a href="about.html">ABOUT</a>
       <div class="footer-discover">
         <button class="footer-discover-btn" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open');event.stopPropagation()">DISCOVER</button>
         <div class="footer-discover-menu">
@@ -900,10 +409,10 @@ section { padding: 120px 40px; }
           <a href="venues.html">VENUE</a>
         </div>
       </div>
-      <a href="#instagram">INSTAGRAM</a>
-      <a href="#contact">CONTACT</a>
+      <a href="about.html#instagram">INSTAGRAM</a>
+      <a href="about.html#contact">CONTACT</a>
     </div>
-    <div class="footer-copy">&copy; 2024 TECHNO JAPAN. ALL RIGHTS RESERVED.</div>
+    <div class="footer-copy">&copy; 2026 TECHNO JAPAN. ALL RIGHTS RESERVED.</div>
   </div>
   <div class="footer-watermark">
     <span>JAPAN'S UNDERGROUND, CURATED.</span>
@@ -911,39 +420,124 @@ section { padding: 120px 40px; }
 </footer>
 
 <script src="common.js" defer></script>
+<script src="favorites.js" defer></script>
+<script src="search.js" defer></script>
+<script src="data.js?v=3"></script>
 <script>
-/* Page-specific extra hover targets (cursor expand). */
-window.addEventListener('DOMContentLoaded', () => {
-  if (window.tjBindCursorExpand) {
-    window.tjBindCursorExpand('.cta-btn, .discover-card, .insta-cell');
+/* ===== MEDIA TOP RENDERING ===== */
+(function () {
+  /* --- Stories: 1 featured + 3 side cards --- */
+  const published = (typeof ARTICLES !== 'undefined' ? ARTICLES : [])
+    .filter(a => a.status !== 'draft')
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
+  const featured = published.find(a => a.featured) || published[0];
+  const sideCards = published.filter(a => a.id !== (featured && featured.id)).slice(0, 3);
+
+  function articleUrl(a) { return 'discover.html#article/' + a.id; }
+  function fmtDate(d) {
+    if (!d) return '';
+    const dt = new Date(d);
+    if (isNaN(dt)) return '';
+    return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase();
   }
-});
+
+  const storiesEl = document.getElementById('stories-grid');
+  if (storiesEl && featured) {
+    storiesEl.innerHTML = `
+      <div class="featured-col">
+        <a class="featured-card" href="${articleUrl(featured)}">
+          <div class="featured-card-image">
+            ${featured.image ? `<img src="${featured.image}" alt="${featured.title}" loading="lazy" decoding="async">` : `<div class="featured-card-image-placeholder">COMING SOON</div>`}
+          </div>
+          <div class="featured-card-body">
+            <div class="featured-card-tag"><span class="tag-dot"></span>${featured.category || 'STORY'}</div>
+            <div class="featured-card-title">${featured.title}</div>
+            <div class="featured-card-meta">${fmtDate(featured.date)}${featured.readTime ? ` &middot; ${featured.readTime} MIN READ` : ''}</div>
+          </div>
+        </a>
+      </div>
+      <div class="side-col">
+        ${sideCards.map(a => `
+          <a class="side-card" href="${articleUrl(a)}">
+            <div class="side-card-tag"><span class="tag-dot"></span>${a.category || 'STORY'}</div>
+            <div class="side-card-title">${a.title}</div>
+            <div class="side-card-meta">${fmtDate(a.date)}${a.readTime ? ` &middot; ${a.readTime} MIN READ` : ''}</div>
+          </a>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  /* --- Upcoming festivals --- */
+  function festStartDate(f) {
+    const s = (f.date || '').split('/')[0].trim();
+    const dt = new Date(s);
+    return isNaN(dt) ? null : dt;
+  }
+  const today = new Date(); today.setHours(0,0,0,0);
+  const upcoming = (typeof FESTIVALS !== 'undefined' ? FESTIVALS : [])
+    .map(f => ({ ...f, _start: festStartDate(f) }))
+    .filter(f => f._start && f._start >= today)
+    .sort((a, b) => a._start - b._start)
+    .slice(0, 4);
+
+  function fmtFestRange(s) {
+    if (!s) return '';
+    const [a, b] = s.split('/').map(x => x && x.trim());
+    const fmt = d => { const dt = new Date(d); return isNaN(dt) ? d : dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase(); };
+    if (b) return `${fmt(a)} → ${fmt(b)}`;
+    return fmt(a);
+  }
+
+  const festEl = document.getElementById('festivals-preview');
+  if (festEl) {
+    if (upcoming.length === 0) {
+      festEl.innerHTML = `<div style="grid-column: 1 / -1; padding: 60px 20px; text-align: center; opacity: 0.4; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.15em;">NO UPCOMING FESTIVALS — CHECK BACK SOON.</div>`;
+    } else {
+      festEl.innerHTML = upcoming.map(f => `
+        <a class="fest-card" href="festivals.html#${f.id}">
+          ${f.image ? `<div class="fest-card-img" style="background-image:url('${f.image}')"></div>` : ''}
+          <div class="fest-card-overlay"></div>
+          <div class="fest-card-content">
+            <div class="fest-card-date">${fmtFestRange(f.date)}</div>
+            <div class="fest-card-name">${f.name}</div>
+            <div class="fest-card-loc">${f.city || f.location || ''}</div>
+          </div>
+        </a>
+      `).join('');
+    }
+  }
+
+  /* --- Featured artists --- */
+  const allArtists = (typeof ARTISTS !== 'undefined' ? ARTISTS : []);
+  // prefer artists with images; fall back to any
+  const withImg = allArtists.filter(a => a.image && a.image.trim());
+  const others = allArtists.filter(a => !a.image || !a.image.trim());
+  const artistsToShow = [...withImg, ...others].slice(0, 8);
+
+  const artistsEl = document.getElementById('artists-preview');
+  if (artistsEl) {
+    artistsEl.innerHTML = artistsToShow.map(a => `
+      <a class="artist-mini" href="artists.html#artist/${a.id}">
+        ${a.image && a.image.trim()
+          ? `<div class="artist-mini-img" style="background-image:url('${a.image}')"></div>`
+          : `<div class="artist-mini-fallback"></div>`}
+        <div class="artist-mini-overlay"></div>
+        <div class="artist-mini-content">
+          <div class="artist-mini-name">${a.name}</div>
+          <div class="artist-mini-genre">${(Array.isArray(a.genre) ? a.genre.join(' / ') : (a.genre || ''))}</div>
+        </div>
+      </a>
+    `).join('');
+  }
+
+  /* Bind cursor-expand to dynamically rendered items */
+  if (window.tjBindCursorExpand) {
+    window.tjBindCursorExpand('.featured-card, .side-card, .fest-card, .artist-mini, .section-cta');
+  }
+})();
 </script>
 
-<!-- BEHOLD INSTAGRAM WIDGET LOADER (lazy via IntersectionObserver) -->
-<script>
-  (() => {
-    const target = document.querySelector('behold-widget');
-    if (!target) return;
-    const load = () => {
-      const d = document, s = d.createElement('script');
-      s.type = 'module';
-      s.src = 'https://w.behold.so/widget.js';
-      d.head.append(s);
-    };
-    if ('IntersectionObserver' in window) {
-      const io = new IntersectionObserver((entries) => {
-        if (entries.some(e => e.isIntersecting)) {
-          load();
-          io.disconnect();
-        }
-      }, { rootMargin: '300px' });
-      io.observe(target);
-    } else {
-      load();
-    }
-  })();
-</script>
 <!-- Service Worker registration -->
 <script>
   if ('serviceWorker' in navigator) {
@@ -952,8 +546,6 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
 </script>
-<script src="data.js?v=3"></script>
-<script src="favorites.js" defer></script>
-<script src="search.js" defer></script>
+
 </body>
 </html>
