@@ -546,6 +546,8 @@ footer { padding: 60px 40px; }
   .festivals-main { padding: 0 24px; }
   .festival-section { padding: 60px 0; }
   .festival-layout { grid-template-columns: 1fr; gap: 32px; }
+  /* 狭い幅では 16:9 だと縦が薄くなり画像内容が極端にクロップされるので 4:3 に */
+  .festival-image-wrap { aspect-ratio: 4 / 3; }
   .festival-info-bottom { padding-top: 24px; }
   .festival-name { font-size: 36px; }
   .festival-detail { padding: 120px 24px 80px; }
