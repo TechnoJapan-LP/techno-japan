@@ -1088,6 +1088,72 @@ function autoFillArtistImage() {
    ============================================================== */
 let articleQuill = null;
 
+// 画像挿入: URL貼付 か ファイルアップロード を選んでもらう
+function articleImageHandler(){
+  const choice = prompt(
+    '画像挿入方法を選んでください:\n\n' +
+    '  1: URLを貼り付け\n' +
+    '  2: ファイルをアップロード（Google Driveに保存）\n\n' +
+    '番号を入力してEnter:',
+    '1'
+  );
+  if (choice === '1') {
+    const url = prompt('画像URLを入力（https://...）:');
+    if (url && /^https?:\/\//.test(url)) insertImageAtCursor(url);
+    else if (url) toast('有効なURLを入力してください', 'error');
+  } else if (choice === '2') {
+    triggerArticleImageUpload();
+  }
+}
+
+function insertImageAtCursor(url){
+  if (!articleQuill) return;
+  const range = articleQuill.getSelection(true) || { index: articleQuill.getLength() };
+  articleQuill.insertEmbed(range.index, 'image', url, 'user');
+  articleQuill.setSelection(range.index + 1);
+}
+
+function triggerArticleImageUpload(){
+  const id = (document.getElementById('ar-id')?.value || '').trim();
+  if (!id) { toast('先に記事のIDを入力してください', 'error'); return; }
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.onchange = () => {
+    const file = input.files[0];
+    if (!file) return;
+    const origMB = (file.size/1024/1024).toFixed(1);
+    toast('Compressing... ('+origMB+'MB)', 'info');
+    compressImage(file).then(({ dataUrl, blob, width, height }) => {
+      const compMB = (blob.size/1024/1024).toFixed(2);
+      toast('Uploading... '+compMB+'MB', 'info');
+      const filename = id + '-' + Date.now() + '.jpg';
+      const body = {
+        action: 'upload_image',
+        type: 'article-body',
+        id: id,
+        filename: filename,
+        imageData: dataUrl,
+        mimeType: 'image/jpeg'
+      };
+      return fetch(GAS_URL, { method: 'POST', body: JSON.stringify(body) })
+        .then(r => r.json())
+        .then(d => {
+          if (d.status === 'ok' || d.success) {
+            toast('挿入しました ('+width+'×'+height+')', 'success');
+            insertImageAtCursor(d.imagePath || ('images/articles/' + filename));
+          } else {
+            toast(d.message || 'Upload failed', 'error');
+          }
+        });
+    }).catch(e => {
+      console.error('Image upload error:', e);
+      toast('Image error: ' + e.message, 'error');
+    });
+  };
+  input.click();
+}
+
 function initArticleEditor(){
   if (articleQuill) return articleQuill;
   if (typeof Quill === 'undefined') {
@@ -1098,14 +1164,19 @@ function initArticleEditor(){
     theme: 'snow',
     placeholder: '本文を書く...',
     modules: {
-      toolbar: [
-        [{ 'header': [2, 3, false] }],
-        ['bold', 'italic', 'underline'],
-        ['blockquote'],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        ['link'],
-        ['clean']
-      ]
+      toolbar: {
+        container: [
+          [{ 'header': [2, 3, false] }],
+          ['bold', 'italic', 'underline'],
+          ['blockquote'],
+          [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+          ['link', 'image'],
+          ['clean']
+        ],
+        handlers: {
+          image: articleImageHandler
+        }
+      }
     }
   });
   // Visual で編集 → 隠し textarea (ar-body) と source textarea へ同期
