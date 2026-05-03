@@ -692,7 +692,7 @@
         const lineup = lineupNames(f);
         const img = f.image && f.image.trim();
         return `
-        <a class="fest-row" href="festivals.html#${f.id}">
+        <a class="fest-row" href="festivals.html#festival/${f.id}">
           ${img ? `<div class="fest-row-bg" style="background-image:url('${img}')"></div>` : `<div class="fest-row-bg"></div>`}
           <div class="fest-row-overlay"></div>
           <div class="fest-row-inner">
@@ -839,7 +839,7 @@
       return;
     }
     venuesEl.innerHTML = sorted.map(v => `
-      <a class="venue-mini" href="venues.html#${v.id}">
+      <a class="venue-mini" href="venues.html#venue/${v.id}">
         ${v.image && v.image.trim()
           ? `<div class="venue-mini-img" style="background-image:url('${v.image}')"></div>`
           : `<div class="venue-mini-fallback"></div>`}
