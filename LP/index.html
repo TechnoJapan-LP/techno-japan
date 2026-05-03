@@ -232,6 +232,20 @@
   display: flex; flex-direction: column;
   border-top: 1px solid var(--card-border);
 }
+.fest-row.is-hidden { display: none; }
+.fest-more-wrap { padding: 28px 40px 0; text-align: center; }
+.fest-more-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 14px 32px; min-height: 44px; min-width: 200px;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  background: transparent; color: var(--text);
+  border: 1px solid rgba(240,237,232,0.15);
+  cursor: none;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+.fest-more-btn:hover { border-color: rgba(240,237,232,0.4); background: rgba(240,237,232,0.03); }
+.fest-more-btn .arrow { display: inline-block; transition: transform 0.3s ease; }
+.fest-more-btn.expanded .arrow { transform: rotate(180deg); }
 .fest-row {
   position: relative;
   display: block;
@@ -601,6 +615,12 @@
   <a href="festivals.html" class="section-cta">VIEW ALL →</a>
 </div>
 <div class="festivals-preview" id="festivals-preview"><!-- rendered by JS --></div>
+<div class="fest-more-wrap" id="fest-more-wrap" style="display:none">
+  <button type="button" class="fest-more-btn" id="fest-more-btn">
+    <span class="label">MORE</span>
+    <span class="arrow">▾</span>
+  </button>
+</div>
 
 <!-- ARTISTS -->
 <div class="section-head" style="margin-top: 60px;">
@@ -718,11 +738,13 @@
     return isNaN(dt) ? null : dt;
   }
   const today = new Date(); today.setHours(0,0,0,0);
+  const FEST_INITIAL = 4;
+  const FEST_MAX = 8;
   const upcoming = (typeof FESTIVALS !== 'undefined' ? FESTIVALS : [])
     .map(f => ({ ...f, _start: festStartDate(f) }))
     .filter(f => f._start && f._start >= today)
     .sort((a, b) => a._start - b._start)
-    .slice(0, 4);
+    .slice(0, FEST_MAX);
 
   function fmtFestRange(s) {
     if (!s) return '';
@@ -749,8 +771,9 @@
       festEl.innerHTML = upcoming.map((f, i) => {
         const lineup = lineupNames(f);
         const img = f.image && f.image.trim();
+        const hidden = i >= FEST_INITIAL ? ' is-hidden' : '';
         return `
-        <a class="fest-row" href="festivals.html#festival/${f.id}">
+        <a class="fest-row${hidden}" href="festivals.html#festival/${f.id}">
           ${img ? `<div class="fest-row-bg" style="background-image:url('${img}')"></div>` : `<div class="fest-row-bg"></div>`}
           <div class="fest-row-overlay"></div>
           <div class="fest-row-inner">
@@ -771,6 +794,26 @@
           </div>
         </a>`;
       }).join('');
+    }
+
+    // Show MORE button only if there are extras to reveal
+    const moreWrap = document.getElementById('fest-more-wrap');
+    const moreBtn = document.getElementById('fest-more-btn');
+    if (moreWrap && moreBtn) {
+      if (upcoming.length > FEST_INITIAL) {
+        moreWrap.style.display = '';
+        const labelEl = moreBtn.querySelector('.label');
+        moreBtn.addEventListener('click', () => {
+          const expanded = moreBtn.classList.toggle('expanded');
+          festEl.querySelectorAll('.fest-row').forEach((row, idx) => {
+            row.classList.toggle('is-hidden', !expanded && idx >= FEST_INITIAL);
+          });
+          if (labelEl) labelEl.textContent = expanded ? 'LESS' : 'MORE';
+          if (window.tjBindCursorExpand) window.tjBindCursorExpand('.fest-row');
+        });
+      } else {
+        moreWrap.style.display = 'none';
+      }
     }
   }
 
@@ -926,7 +969,7 @@
 
   /* Bind cursor-expand to dynamically rendered items */
   if (window.tjBindCursorExpand) {
-    window.tjBindCursorExpand('.featured-card, .side-card, .fest-row, .artist-mini, .venue-mini, .venue-tab, .section-cta');
+    window.tjBindCursorExpand('.featured-card, .side-card, .fest-row, .artist-mini, .venue-mini, .venue-tab, .section-cta, .fest-more-btn');
   }
 })();
 </script>
