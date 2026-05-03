@@ -246,6 +246,7 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
 #ar-body-editor .ql-container{border-color:var(--border);font-family:var(--font-body);font-size:15px;line-height:1.7;border-bottom-left-radius:var(--radius);border-bottom-right-radius:var(--radius)}
 #ar-body-editor .ql-editor{min-height:340px;color:var(--text)}
 #ar-body-editor .ql-editor.ql-blank::before{color:var(--text3);font-style:normal}
+#ar-body-editor .ql-editor.drag-hover{outline:2px dashed var(--accent);outline-offset:-4px;background:rgba(255,45,45,0.05)}
 #ar-body-editor .ql-stroke{stroke:var(--text2)}
 #ar-body-editor .ql-fill{fill:var(--text2)}
 #ar-body-editor .ql-picker-label{color:var(--text2)}
@@ -601,12 +602,12 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
     <div class="edit-banner" id="article-edit-banner"><span>Editing: <strong id="article-edit-name"></strong></span><button class="btn btn-sm btn-yellow" onclick="saveEdit('article')">Save Changes</button><button class="btn btn-sm" onclick="cancelEdit('article')">Cancel</button></div>
     <div class="form-grid" id="form-article">
       <div class="form-group"><label>ID (URL slug)</label><input type="text" id="ar-id" placeholder="e.g. rdc-2026-preview"></div>
-      <div class="form-group"><label>Title</label><input type="text" id="ar-title" placeholder="Article title"></div>
+      <div class="form-group"><label>Title</label><input type="text" id="ar-title" placeholder="Article title" oninput="onArticleTitleInput()"></div>
       <div class="form-group"><label>Category</label><select id="ar-category"><option value="REPORT">Report</option><option value="COLUMN">Column</option><option value="INTERVIEW">Interview</option><option value="NEWS">News</option><option value="EVENTS">Events (weekly roundup)</option><option value="FESTIVAL">Festival</option><option value="RAVE">Rave</option><option value="PARTY">Party</option><option value="CLUB">Club</option></select></div>
       <div class="form-group"><label>Date</label><input type="date" id="ar-date"></div>
       <div class="form-group"><label>Author</label><input type="text" id="ar-author" placeholder="e.g. TECHNO JAPAN" value="TECHNO JAPAN"></div>
       <div class="form-group"><label>Image</label><input type="text" id="ar-image" placeholder="images/articles/..."></div>
-      <div class="form-group"><label>Read Time (min)</label><input type="number" id="ar-readTime" placeholder="e.g. 5"></div>
+      <div class="form-group"><label>Read Time (min) <span class="label-hint">空欄なら本文から自動計算</span></label><input type="number" id="ar-readTime" placeholder="auto"></div>
       <div class="form-group"><label>Views</label><input type="number" id="ar-views" placeholder="e.g. 1200"></div>
       <div class="form-group"><label>Featured</label><select id="ar-featured"><option value="false">No</option><option value="true">Yes</option></select></div>
       <div class="form-group"><label>Status</label><select id="ar-status"><option value="published">Published</option><option value="draft">Draft</option></select></div>
@@ -813,6 +814,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   initKeyboardShortcuts();
   loadAuthorsForDropdown();
   initArticleEditor();
+  // フォーム入力の dirty 追跡（保存忘れ防止）
+  document.querySelectorAll('.form-grid input, .form-grid textarea, .form-grid select').forEach(el => {
+    el.addEventListener('input', markFormDirty);
+    el.addEventListener('change', markFormDirty);
+  });
   // バックグラウンドで全セクションを先読み（キャッシュ未存在のものだけ）
   scheduleBackgroundPreload();
 });
@@ -868,6 +874,10 @@ function switchTab(section, tab, opts) {
   // （editRow経由のプログラム遷移では opts.fromEdit=true でスキップ）
   if (tab === 'form' && !(opts && opts.fromEdit) && editState && editState[section]) {
     cancelEdit(section);
+  }
+  // 新規記事フォームを開いた時に下書きがあれば復元提案
+  if (tab === 'form' && section === 'article' && !(opts && opts.fromEdit) && !(editState && editState.article)) {
+    setTimeout(tryRecoverArticleDraft, 100);
   }
   parent.querySelectorAll('.tab-bar button').forEach((b, i) => {
     b.classList.toggle('active', (tab === 'list' && i === 0) || (tab === 'form' && i === 1));
@@ -1106,6 +1116,126 @@ function autoFillArtistImage() {
 }
 
 /* ==============================================================
+   ARTICLE — SLUGIFY (Title → ID)
+   ============================================================== */
+function slugify(s){
+  return (s || '').toString().toLowerCase().trim()
+    // CJKは英数slugにできないので削除（残った英数で生成）
+    .replace(/[　-〿぀-ゟ゠-ヿ一-鿿＀-￯]/g,' ')
+    .replace(/[^a-z0-9\s-]/g,' ')
+    .replace(/\s+/g,'-')
+    .replace(/-+/g,'-')
+    .replace(/^-+|-+$/g,'')
+    .slice(0,60);
+}
+function onArticleTitleInput(){
+  const idEl = document.getElementById('ar-id');
+  if (!idEl) return;
+  // ユーザーが手動でID編集していたら自動上書きしない
+  if (idEl.dataset.userEdited === '1') return;
+  // 編集モード中（既存ID）も触らない
+  if (editState.article && editState.article._row) return;
+  const slug = slugify(document.getElementById('ar-title').value);
+  if (slug) idEl.value = slug;
+  markFormDirty();
+}
+// ID欄を手で触ったら自動生成を止める
+document.addEventListener('DOMContentLoaded', () => {
+  const idEl = document.getElementById('ar-id');
+  if (idEl) idEl.addEventListener('input', () => { idEl.dataset.userEdited = '1'; });
+});
+
+/* ==============================================================
+   ARTICLE — 読了時間自動計算
+   ============================================================== */
+function calcReadTime(html){
+  if (!html) return 0;
+  const text = String(html).replace(/<[^>]+>/g,' ').replace(/&nbsp;/g,' ').replace(/&[a-z]+;/g,' ');
+  const cjk = (text.match(/[一-鿿぀-ゟ゠-ヿ]/g) || []).length;
+  const ascii = (text.replace(/[一-鿿぀-ゟ゠-ヿ]/g,'').match(/\b\w+\b/g) || []).length;
+  // 日本語: 600字/分、英語: 220語/分（少しゆっくり）
+  return Math.max(1, Math.round(cjk/600 + ascii/220));
+}
+function maybeAutoFillReadTime(){
+  const el = document.getElementById('ar-readTime');
+  if (!el) return;
+  // ユーザーが手で値を入れていたら触らない
+  if (el.dataset.userEdited === '1') return;
+  const html = document.getElementById('ar-body').value;
+  const min = calcReadTime(html);
+  if (min > 0) el.value = min;
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const el = document.getElementById('ar-readTime');
+  if (el) el.addEventListener('input', () => { el.dataset.userEdited = '1'; });
+});
+
+/* ==============================================================
+   FORM DIRTY TRACKING (未保存変更で離脱警告)
+   ============================================================== */
+let formDirty = false;
+function markFormDirty(){ formDirty = true; }
+function clearFormDirty(){ formDirty = false; }
+window.addEventListener('beforeunload', (e) => {
+  if (formDirty) { e.preventDefault(); e.returnValue = ''; }
+});
+
+/* ==============================================================
+   ARTICLE — オートセーブ (localStorage)
+   ============================================================== */
+const ARTICLE_DRAFT_KEY = 'tj-cms-article-draft-v1';
+let articleDraftTimer = null;
+function scheduleArticleDraftSave(){
+  clearTimeout(articleDraftTimer);
+  articleDraftTimer = setTimeout(saveArticleDraft, 1500);
+}
+function saveArticleDraft(){
+  try {
+    const title = (document.getElementById('ar-title')?.value || '').trim();
+    const body  = (document.getElementById('ar-body')?.value || '').trim();
+    if (!title && !body) { localStorage.removeItem(ARTICLE_DRAFT_KEY); return; }
+    const draft = {
+      id: g('ar-id'), title: g('ar-title'), category: g('ar-category'),
+      date: g('ar-date'), author: g('ar-author'), image: g('ar-image'),
+      readTime: g('ar-readTime'), views: g('ar-views'),
+      featured: document.getElementById('ar-featured')?.value || 'false',
+      status: g('ar-status'), excerpt: g('ar-excerpt'),
+      body: g('ar-body'), tags: g('ar-tags'),
+      editingRow: editState.article ? editState.article._row : null,
+      savedAt: Date.now()
+    };
+    localStorage.setItem(ARTICLE_DRAFT_KEY, JSON.stringify(draft));
+  } catch(e){}
+}
+function clearArticleDraft(){ localStorage.removeItem(ARTICLE_DRAFT_KEY); }
+function loadArticleDraft(){
+  try { const raw = localStorage.getItem(ARTICLE_DRAFT_KEY); return raw ? JSON.parse(raw) : null; }
+  catch(e){ return null; }
+}
+function tryRecoverArticleDraft(){
+  const draft = loadArticleDraft();
+  if (!draft) return;
+  const minsAgo = Math.max(1, Math.round((Date.now() - (draft.savedAt||Date.now())) / 60000));
+  const label = draft.title || draft.id || '無題';
+  if (confirm(`未保存の下書きが見つかりました：\n「${label}」(${minsAgo}分前)\n\n復元しますか？`)) {
+    setVal('ar-id', draft.id); setVal('ar-title', draft.title);
+    setVal('ar-category', draft.category||'REPORT'); setVal('ar-date', draft.date);
+    setVal('ar-author', draft.author||'TECHNO JAPAN'); setVal('ar-image', draft.image);
+    setVal('ar-readTime', draft.readTime); setVal('ar-views', draft.views);
+    setVal('ar-featured', draft.featured); setVal('ar-status', draft.status||'published');
+    setVal('ar-excerpt', draft.excerpt);
+    setArticleBody(draft.body || '');
+    setVal('ar-tags', draft.tags);
+    if (draft.id) document.getElementById('ar-id').dataset.userEdited = '1';
+    if (draft.readTime) document.getElementById('ar-readTime').dataset.userEdited = '1';
+    toast('下書きを復元しました', 'success');
+    markFormDirty();
+  } else {
+    clearArticleDraft();
+  }
+}
+
+/* ==============================================================
    ARTICLE BODY — RICH TEXT EDITOR (Quill)
    ============================================================== */
 let articleQuill = null;
@@ -1137,45 +1267,12 @@ function insertImageAtCursor(url){
 
 window.articleImageUploading = false;
 function triggerArticleImageUpload(){
-  const id = (document.getElementById('ar-id')?.value || '').trim();
-  if (!id) { toast('先に記事のIDを入力してください', 'error'); return; }
   const input = document.createElement('input');
   input.type = 'file';
   input.accept = 'image/*';
   input.onchange = () => {
     const file = input.files[0];
-    if (!file) return;
-    const origMB = (file.size/1024/1024).toFixed(1);
-    window.articleImageUploading = true;
-    toast('Compressing... ('+origMB+'MB)', 'info');
-    compressImage(file).then(({ dataUrl, blob, width, height }) => {
-      const compMB = (blob.size/1024/1024).toFixed(2);
-      toast('Uploading... '+compMB+'MB', 'info');
-      const filename = id + '-' + Date.now() + '.jpg';
-      const body = {
-        action: 'upload_image',
-        type: 'article-body',
-        id: id,
-        filename: filename,
-        imageData: dataUrl,
-        mimeType: 'image/jpeg'
-      };
-      return fetch(GAS_URL, { method: 'POST', body: JSON.stringify(body) })
-        .then(r => r.json())
-        .then(d => {
-          if (d.status === 'ok' || d.success) {
-            toast('挿入しました ('+width+'×'+height+'). 忘れずに「Save Changes」を押してね', 'success');
-            // Drive 直URL があれば優先（同期完了前でも即表示できる）
-            const url = d.driveUrl || d.imagePath || ('images/articles/' + filename);
-            insertImageAtCursor(url);
-          } else {
-            toast(d.message || 'Upload failed', 'error');
-          }
-        });
-    }).catch(e => {
-      console.error('Image upload error:', e);
-      toast('Image error: ' + e.message, 'error');
-    }).finally(() => { window.articleImageUploading = false; });
+    if (file) uploadArticleImageFile(file);
   };
   input.click();
 }
@@ -1211,14 +1308,91 @@ function initArticleEditor(){
     document.getElementById('ar-body').value = html;
     document.getElementById('ar-body-source').value = html;
     updateArticlePreview(html);
+    maybeAutoFillReadTime();
+    markFormDirty();
+    scheduleArticleDraftSave();
   });
   // HTML source で編集 → ar-body と プレビュー へ反映
   document.getElementById('ar-body-source').addEventListener('input', () => {
     const html = document.getElementById('ar-body-source').value;
     document.getElementById('ar-body').value = html;
     updateArticlePreview(html);
+    maybeAutoFillReadTime();
+    markFormDirty();
+    scheduleArticleDraftSave();
   });
+  // ドラッグ&ドロップ + ペースト
+  setupArticleEditorDropPaste();
   return articleQuill;
+}
+
+function setupArticleEditorDropPaste(){
+  const editor = document.querySelector('#ar-body-editor .ql-editor');
+  if (!editor) return;
+  // クリップボードペースト（スクショ等）
+  editor.addEventListener('paste', (e) => {
+    const items = e.clipboardData && e.clipboardData.items;
+    if (!items) return;
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type && items[i].type.indexOf('image/') === 0) {
+        e.preventDefault();
+        const f = items[i].getAsFile();
+        if (f) uploadArticleImageFile(f);
+        return;
+      }
+    }
+  });
+  // ドラッグ&ドロップ
+  editor.addEventListener('dragover', (e) => {
+    if (e.dataTransfer && Array.from(e.dataTransfer.types || []).includes('Files')) {
+      e.preventDefault();
+      editor.classList.add('drag-hover');
+    }
+  });
+  editor.addEventListener('dragleave', () => editor.classList.remove('drag-hover'));
+  editor.addEventListener('drop', (e) => {
+    editor.classList.remove('drag-hover');
+    if (!e.dataTransfer || !e.dataTransfer.files || !e.dataTransfer.files.length) return;
+    e.preventDefault();
+    for (let i = 0; i < e.dataTransfer.files.length; i++) {
+      const f = e.dataTransfer.files[i];
+      if (f.type && f.type.indexOf('image/') === 0) {
+        uploadArticleImageFile(f);
+      }
+    }
+  });
+}
+
+// 画像アップロード共通処理（ボタン/D&D/ペーストから呼ばれる）
+function uploadArticleImageFile(file){
+  const id = (document.getElementById('ar-id')?.value || '').trim();
+  if (!id) { toast('先に記事のIDを入力してください', 'error'); return; }
+  const origMB = (file.size/1024/1024).toFixed(1);
+  window.articleImageUploading = true;
+  toast('Compressing... ('+origMB+'MB)', 'info');
+  compressImage(file).then(({ dataUrl, blob, width, height }) => {
+    const compMB = (blob.size/1024/1024).toFixed(2);
+    toast('Uploading... '+compMB+'MB', 'info');
+    const filename = id + '-' + Date.now() + '.jpg';
+    const body = {
+      action: 'upload_image', type: 'article-body',
+      id: id, filename: filename, imageData: dataUrl, mimeType: 'image/jpeg'
+    };
+    return fetch(GAS_URL, { method: 'POST', body: JSON.stringify(body) })
+      .then(r => r.json())
+      .then(d => {
+        if (d.status === 'ok' || d.success) {
+          toast('挿入しました ('+width+'×'+height+'). 忘れずに「Save Changes」を', 'success');
+          const url = d.driveUrl || d.imagePath || ('images/articles/' + filename);
+          insertImageAtCursor(url);
+        } else {
+          toast(d.message || 'Upload failed', 'error');
+        }
+      });
+  }).catch(e => {
+    console.error('Image upload error:', e);
+    toast('Image error: ' + e.message, 'error');
+  }).finally(() => { window.articleImageUploading = false; });
 }
 
 function updateArticlePreview(html){
@@ -2576,6 +2750,9 @@ function editRow(section, rowNum){
     setVal('ar-excerpt',row.excerpt);
     setArticleBody(row.body || '');
     setVal('ar-tags',Array.isArray(row.tags)?row.tags.join(', '):(row.tags||''));
+    // 既存編集時は ID/readTime の自動上書きを抑制
+    document.getElementById('ar-id').dataset.userEdited = '1';
+    document.getElementById('ar-readTime').dataset.userEdited = row.readTime ? '1' : '';
   }
   else if(section==='author'){
     setVal('au-id',row.id); setVal('au-name',row.name); setVal('au-bio',row.bio);
@@ -2652,6 +2829,8 @@ function saveEdit(section){
     .then(r=>r.json()).then(d=>{
       if(d.status==='ok'||d.success){
         toast('Updated','success');
+        clearFormDirty();
+        if (section === 'article') clearArticleDraft();
         invalidateSheetCache(section);
         if(unregisteredArtists.length){autoRegisterArtists(unregisteredArtists);invalidateSheetCache('artist');}
         cancelEdit(section);switchTab(section,'list');loadList(section, {force:true});
@@ -3229,6 +3408,8 @@ function submitToSheet(section){
       console.log('Save response:',r);
       if(r.success||r.status==='ok'){
         toast('Saved — リフレッシュ中...','success');
+        clearFormDirty();
+        if (section === 'article') clearArticleDraft();
         invalidateSheetCache(section);
         // 未登録アーティストをARTISTSシートに追加
         if(unregisteredArtists.length){
