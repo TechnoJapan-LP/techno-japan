@@ -4,3 +4,6 @@ techno-japan-493408-4b24cbadf5ec.json
 
 # Update script logs
 update_festivals.log
+
+# Claude Code local config (host-specific paths, not portable)
+.claude/
