@@ -250,10 +250,75 @@
   font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.15em; opacity: 0.55; text-transform: uppercase;
 }
 
+/* ===================== VENUES PREVIEW ===================== */
+.venues-tabs {
+  display: flex; gap: 0;
+  padding: 24px 40px 0;
+  border-bottom: 1px solid var(--card-border);
+}
+.venue-tab {
+  background: none; border: none; color: var(--text);
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 14px 0; margin-right: 32px;
+  cursor: none; opacity: 0.3;
+  transition: opacity 0.3s ease;
+  position: relative;
+}
+.venue-tab:hover { opacity: 0.6; }
+.venue-tab.active { opacity: 1; }
+.venue-tab.active::after {
+  content: ''; position: absolute; bottom: -1px; left: 0;
+  width: 100%; height: 2px; background: var(--accent);
+}
+
+.venues-preview {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  padding: 24px 40px 0;
+}
+.venue-mini {
+  position: relative; aspect-ratio: 4/3;
+  overflow: hidden;
+  background: var(--card-bg);
+}
+.venue-mini-img {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  filter: grayscale(60%) brightness(0.5);
+  transition: filter 0.5s ease, transform 0.5s ease;
+}
+.venue-mini:hover .venue-mini-img { filter: grayscale(20%) brightness(0.7); transform: scale(1.04); }
+.venue-mini-fallback {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(240,237,232,0.05), rgba(240,237,232,0.01));
+}
+.venue-mini-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 70%);
+}
+.venue-mini-content {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 16px;
+}
+.venue-mini-area {
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.2em;
+  text-transform: uppercase; opacity: 0.55; margin-bottom: 6px;
+}
+.venue-mini-name {
+  font-family: var(--font-display); font-size: 22px; letter-spacing: 0.02em; line-height: 1; text-transform: uppercase;
+}
+.venue-mini-meta {
+  margin-top: 4px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.15em; opacity: 0.4; text-transform: uppercase;
+}
+
 /* ===================== RESPONSIVE ===================== */
 @media (max-width: 1100px) {
   .festivals-preview { grid-template-columns: repeat(2, 1fr); }
   .artists-preview { grid-template-columns: repeat(3, 1fr); }
+  .venues-preview { grid-template-columns: repeat(3, 1fr); }
 }
 @media (max-width: 900px) {
   .media-intro { padding: 120px 24px 0; }
@@ -261,20 +326,26 @@
   .side-col { border-left: none; border-top: 1px solid var(--card-border); }
   .featured-card-image { min-height: 280px; }
   .section-head { padding: 60px 24px 20px; }
-  .festivals-preview, .artists-preview { padding: 24px 24px 0; gap: 3px; }
+  .festivals-preview, .artists-preview, .venues-preview { padding: 24px 24px 0; gap: 3px; }
+  .venues-tabs { padding: 20px 24px 0; gap: 0; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .venues-tabs::-webkit-scrollbar { display: none; }
+  .venue-tab { padding: 12px 0; margin-right: 24px; flex-shrink: 0; }
 }
 @media (max-width: 768px) {
   .festivals-preview { grid-template-columns: repeat(2, 1fr); }
   .artists-preview { grid-template-columns: repeat(2, 1fr); }
+  .venues-preview { grid-template-columns: repeat(2, 1fr); }
   .marquee { margin-top: 40px; }
 }
 @media (max-width: 480px) {
   .festivals-preview { grid-template-columns: 1fr; }
   .artists-preview { grid-template-columns: repeat(2, 1fr); }
+  .venues-preview { grid-template-columns: 1fr; }
   .fest-card { aspect-ratio: 4/3; }
+  .venue-mini { aspect-ratio: 16/9; }
 }
 @media (hover: none) and (pointer: coarse) {
-  .featured-card, .side-card, .fest-card, .artist-mini, .section-cta { cursor: pointer; }
+  .featured-card, .side-card, .fest-card, .artist-mini, .venue-mini, .venue-tab, .section-cta { cursor: pointer; }
 }
 </style>
 <script type="application/ld+json">
@@ -379,6 +450,14 @@
   <a href="artists.html" class="section-cta">VIEW ALL →</a>
 </div>
 <div class="artists-preview" id="artists-preview"><!-- rendered by JS --></div>
+
+<!-- VENUES -->
+<div class="section-head" style="margin-top: 60px;">
+  <div class="section-eyebrow"><span class="dot"></span>VENUES</div>
+  <a href="venues.html" class="section-cta">VIEW ALL →</a>
+</div>
+<div class="venues-tabs" id="venues-tabs"><!-- rendered by JS --></div>
+<div class="venues-preview" id="venues-preview"><!-- rendered by JS --></div>
 
 <!-- NEWSLETTER -->
 <section class="newsletter" style="margin-top: 80px;">
@@ -531,9 +610,66 @@
     `).join('');
   }
 
+  /* --- Venues with city tabs --- */
+  const allVenues = (typeof VENUES !== 'undefined' ? VENUES : []);
+  // Detect cities present, ordered by count desc
+  const cityCounts = {};
+  allVenues.forEach(v => { const c = (v.city || '').toUpperCase(); if (c) cityCounts[c] = (cityCounts[c] || 0) + 1; });
+  const cities = Object.keys(cityCounts).sort((a, b) => cityCounts[b] - cityCounts[a]);
+  const tabs = ['ALL', ...cities];
+
+  const venuesEl = document.getElementById('venues-preview');
+  const tabsEl = document.getElementById('venues-tabs');
+  let activeCity = 'ALL';
+
+  function renderVenueCards() {
+    if (!venuesEl) return;
+    const list = activeCity === 'ALL'
+      ? allVenues
+      : allVenues.filter(v => (v.city || '').toUpperCase() === activeCity);
+    // Prefer venues with images, then by capacity desc
+    const sorted = [...list].sort((a, b) => {
+      const ai = (a.image && a.image.trim()) ? 1 : 0;
+      const bi = (b.image && b.image.trim()) ? 1 : 0;
+      if (ai !== bi) return bi - ai;
+      return (b.capacity || 0) - (a.capacity || 0);
+    }).slice(0, 8);
+
+    if (sorted.length === 0) {
+      venuesEl.innerHTML = `<div style="grid-column: 1 / -1; padding: 40px 20px; text-align: center; opacity: 0.4; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.15em;">NO VENUES IN THIS AREA YET.</div>`;
+      return;
+    }
+    venuesEl.innerHTML = sorted.map(v => `
+      <a class="venue-mini" href="venues.html#${v.id}">
+        ${v.image && v.image.trim()
+          ? `<div class="venue-mini-img" style="background-image:url('${v.image}')"></div>`
+          : `<div class="venue-mini-fallback"></div>`}
+        <div class="venue-mini-overlay"></div>
+        <div class="venue-mini-content">
+          <div class="venue-mini-area">${v.area || ''}</div>
+          <div class="venue-mini-name">${v.name}</div>
+          <div class="venue-mini-meta">${v.city || ''}${v.capacity ? ` &middot; CAP ${v.capacity}` : ''}</div>
+        </div>
+      </a>
+    `).join('');
+    if (window.tjBindCursorExpand) window.tjBindCursorExpand('.venue-mini');
+  }
+
+  if (tabsEl) {
+    tabsEl.innerHTML = tabs.map(c => `<button class="venue-tab${c === activeCity ? ' active' : ''}" data-city="${c}">${c}</button>`).join('');
+    tabsEl.addEventListener('click', e => {
+      const btn = e.target.closest('.venue-tab');
+      if (!btn) return;
+      activeCity = btn.dataset.city;
+      tabsEl.querySelectorAll('.venue-tab').forEach(b => b.classList.toggle('active', b === btn));
+      renderVenueCards();
+    });
+  }
+  renderVenueCards();
+
   /* Bind cursor-expand to dynamically rendered items */
   if (window.tjBindCursorExpand) {
-    window.tjBindCursorExpand('.featured-card, .side-card, .fest-card, .artist-mini, .section-cta');
+    window.tjBindCursorExpand('.featured-card, .side-card, .fest-card, .artist-mini, .venue-mini, .venue-tab, .section-cta');
   }
 })();
 </script>
