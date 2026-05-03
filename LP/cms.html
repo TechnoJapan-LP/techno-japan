@@ -309,6 +309,22 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
       <div class="form-group"><label>Instagram</label><input type="url" id="v-instagram" placeholder="https://instagram.com/..."></div>
       <div class="form-group full"><label>Image from URL</label><div class="input-row"><input type="url" id="v-imageUrl" placeholder="画像の直接URL（公式サイト等から）"><button class="btn btn-sm btn-accent" onclick="uploadFromUrl('v','venue','v-image','v-imageUrl','preview-v-image')">UPLOAD</button></div><div class="img-preview" id="preview-v-image"></div></div>
       <div class="form-group full upload-fallback"><label>または手動アップロード <span class="label-hint">max 5MB</span></label><div class="upload-area" onclick="this.querySelector('input').click()"><span class="icon">&#8679;</span><span>Upload Image</span><input type="file" accept="image/*" onchange="uploadImage(this,'venue','v')"></div></div>
+      <div class="form-group full">
+        <label>Image Position <span class="label-hint">頭が切れるときは「top」を選ぶ</span></label>
+        <input type="text" id="v-imagePosition" placeholder="center / top / 50% 25% など" value="" oninput="syncImagePos('v')">
+        <div class="img-pos-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;max-width:140px;margin-top:8px">
+          <button type="button" class="img-pos-btn" data-pos="left top" onclick="setImagePos('v','left top')" title="top-left">↖</button>
+          <button type="button" class="img-pos-btn" data-pos="center top" onclick="setImagePos('v','center top')" title="top">↑</button>
+          <button type="button" class="img-pos-btn" data-pos="right top" onclick="setImagePos('v','right top')" title="top-right">↗</button>
+          <button type="button" class="img-pos-btn" data-pos="left center" onclick="setImagePos('v','left center')" title="left">←</button>
+          <button type="button" class="img-pos-btn active" data-pos="center" onclick="setImagePos('v','center')" title="center">●</button>
+          <button type="button" class="img-pos-btn" data-pos="right center" onclick="setImagePos('v','right center')" title="right">→</button>
+          <button type="button" class="img-pos-btn" data-pos="left bottom" onclick="setImagePos('v','left bottom')" title="bottom-left">↙</button>
+          <button type="button" class="img-pos-btn" data-pos="center bottom" onclick="setImagePos('v','center bottom')" title="bottom">↓</button>
+          <button type="button" class="img-pos-btn" data-pos="right bottom" onclick="setImagePos('v','right bottom')" title="bottom-right">↘</button>
+        </div>
+        <div class="img-pos-preview" id="v-imagePosPreview" style="margin-top:12px;width:100%;max-width:320px;aspect-ratio:16/9;background:#1a1a1a;background-size:cover;background-position:center;border:1px solid #333;display:none"></div>
+      </div>
       <div class="form-group full"><label>Description</label><textarea id="v-desc" rows="8" placeholder="Venue description..." style="width:100%;margin-bottom:8px"></textarea><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-green btn-sm" onclick="aiGenerate('venue')">AI Generate</button><button class="btn btn-sm" onclick="translateField('v-desc','en-to-jp')">EN→JP</button><button class="btn btn-sm" onclick="translateField('v-desc','jp-to-en')">JP→EN</button></div></div>
       <div class="full btn-row" id="venue-btn-new">
         <button class="btn btn-preview" onclick="openPreview('venue')">👁 Preview</button>
@@ -369,6 +385,22 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
       <div class="form-group full"><label>Image from URL</label><div class="input-row"><input type="url" id="f-imageUrl" placeholder="画像の直接URL（公式サイト・RA等から）"><button class="btn btn-sm btn-accent" onclick="uploadFromUrl('f','festival-image','f-image','f-imageUrl','preview-f-image')">UPLOAD</button></div><div class="img-preview" id="preview-f-image"></div></div>
       <div class="form-group full"><label>Flyer from URL</label><div class="input-row"><input type="url" id="f-flyerUrl" placeholder="画像の直接URL（公式サイト・RA等から）"><button class="btn btn-sm btn-accent" onclick="uploadFromUrl('f','festival-flyer','f-flyer','f-flyerUrl','preview-f-flyer')">UPLOAD</button></div><div class="img-preview" id="preview-f-flyer"></div></div>
       <div class="form-group full upload-fallback"><label>または手動アップロード <span class="label-hint">max 5MB</span></label><div style="display:flex;gap:16px;flex-wrap:wrap"><div><span class="upload-label">Image</span><div class="upload-area" onclick="this.querySelector('input').click()"><span class="icon">&#8679;</span><span>Upload Image</span><input type="file" accept="image/*" onchange="uploadImage(this,'festival-image','f')"></div></div><div><span class="upload-label">Flyer</span><div class="upload-area" onclick="this.querySelector('input').click()"><span class="icon">&#8679;</span><span>Upload Flyer</span><input type="file" accept="image/*" onchange="uploadImage(this,'festival-flyer','f')"></div></div></div></div>
+      <div class="form-group full">
+        <label>Image Position <span class="label-hint">頭が切れるときは「top」を選ぶ（カード/サムネイル表示用）</span></label>
+        <input type="text" id="f-imagePosition" placeholder="center / top / 50% 25% など" value="" oninput="syncImagePos('f')">
+        <div class="img-pos-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;max-width:140px;margin-top:8px">
+          <button type="button" class="img-pos-btn" data-pos="left top" onclick="setImagePos('f','left top')" title="top-left">↖</button>
+          <button type="button" class="img-pos-btn" data-pos="center top" onclick="setImagePos('f','center top')" title="top">↑</button>
+          <button type="button" class="img-pos-btn" data-pos="right top" onclick="setImagePos('f','right top')" title="top-right">↗</button>
+          <button type="button" class="img-pos-btn" data-pos="left center" onclick="setImagePos('f','left center')" title="left">←</button>
+          <button type="button" class="img-pos-btn active" data-pos="center" onclick="setImagePos('f','center')" title="center">●</button>
+          <button type="button" class="img-pos-btn" data-pos="right center" onclick="setImagePos('f','right center')" title="right">→</button>
+          <button type="button" class="img-pos-btn" data-pos="left bottom" onclick="setImagePos('f','left bottom')" title="bottom-left">↙</button>
+          <button type="button" class="img-pos-btn" data-pos="center bottom" onclick="setImagePos('f','center bottom')" title="bottom">↓</button>
+          <button type="button" class="img-pos-btn" data-pos="right bottom" onclick="setImagePos('f','right bottom')" title="bottom-right">↘</button>
+        </div>
+        <div class="img-pos-preview" id="f-imagePosPreview" style="margin-top:12px;width:100%;max-width:320px;aspect-ratio:16/9;background:#1a1a1a;background-size:cover;background-position:center;border:1px solid #333;display:none"></div>
+      </div>
       <div class="form-group full"><label>Hero Gradient</label><div class="gradient-presets" id="f-gradientPresets"></div><div id="gradient-preview" style="display:none;margin-top:8px;width:100%;height:80px;border-radius:var(--radius);border:1px solid var(--border)"></div><input type="text" id="f-heroGradient" placeholder="linear-gradient(...)" style="margin-top:8px" oninput="updateGradientPreview(this.value)"></div>
       <div class="form-group full"><label>Description</label><textarea id="f-desc" rows="8" placeholder="Festival description..." style="width:100%;margin-bottom:8px"></textarea><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-green btn-sm" onclick="aiGenerate('festival')">AI Generate</button><button class="btn btn-sm" onclick="translateField('f-desc','en-to-jp')">EN→JP</button><button class="btn btn-sm" onclick="translateField('f-desc','jp-to-en')">JP→EN</button></div></div>
       <div class="form-group full"><label>Lineup</label>
@@ -1018,18 +1050,20 @@ function autoFillArtistImage() {
 }
 
 /* ==============================================================
-   ARTIST IMAGE POSITION CONTROL
+   IMAGE POSITION CONTROL (generic — artist / venue / festival)
    ============================================================== */
-function setArtistImagePos(val){
-  document.getElementById('a-imagePosition').value = val;
-  syncArtistImagePos();
+const FORM_BY_PREFIX = {a:'artist', v:'venue', f:'festival'};
+function setImagePos(prefix, val){
+  document.getElementById(prefix+'-imagePosition').value = val;
+  syncImagePos(prefix);
 }
-function syncArtistImagePos(){
-  const val = (document.getElementById('a-imagePosition').value || 'center').trim();
-  const btns = document.querySelectorAll('#form-artist .img-pos-btn');
+function syncImagePos(prefix){
+  const val = (document.getElementById(prefix+'-imagePosition').value || 'center').trim();
+  const formId = '#form-' + (FORM_BY_PREFIX[prefix] || prefix);
+  const btns = document.querySelectorAll(formId+' .img-pos-btn');
   btns.forEach(b => b.classList.toggle('active', b.dataset.pos === val));
-  const prev = document.getElementById('a-imagePosPreview');
-  const img = document.getElementById('a-image').value.trim();
+  const prev = document.getElementById(prefix+'-imagePosPreview');
+  const img = (document.getElementById(prefix+'-image')?.value || '').trim();
   if (img && prev) {
     prev.style.display = 'block';
     prev.style.backgroundImage = `url('${img}')`;
@@ -1038,6 +1072,9 @@ function syncArtistImagePos(){
     prev.style.display = 'none';
   }
 }
+// Aliases for backward compatibility
+function setArtistImagePos(val){ setImagePos('a', val); }
+function syncArtistImagePos(){ syncImagePos('a'); }
 
 /* ==============================================================
    GEOCODING
@@ -1776,8 +1813,8 @@ function clearImageField(prefix, opts){
   // Reset hidden file input under upload-area
   const fileInputs=document.querySelectorAll('#sec-'+(opts.section||'')+' .upload-area input[type=file]');
   fileInputs.forEach(i=>{i.value='';});
-  // Artist position preview refresh
-  if(prefix==='a' && typeof syncArtistImagePos==='function') syncArtistImagePos();
+  // Position preview refresh (artist/venue/festival)
+  if(typeof syncImagePos==='function' && document.getElementById(prefix+'-imagePosition')) syncImagePos(prefix);
   toast('画像をクリアしました（保存で反映）','info');
 }
 
@@ -2236,8 +2273,10 @@ function editRow(section, rowNum){
     setVal('v-url',row.url); setVal('v-address',row.address);
     setVal('v-lat',row.lat); setVal('v-lng',row.lng);
     setVal('v-instagram',row.instagram); setVal('v-desc',row.desc);
+    setVal('v-imagePosition',row.imagePosition || '');
     setSelectedGenres('v-genre',(row.genre||'').split(',').map(s=>s.trim()).filter(Boolean));
     updateLocationMap('v');
+    syncImagePos('v');
     if(row.image) showCurrentImage('preview-v-image',row.image,"clearImageField('v',{section:'venue'})");
   }
   else if(section==='festival'){
@@ -2248,6 +2287,7 @@ function editRow(section, rowNum){
     setVal('f-lat',row.lat); setVal('f-lng',row.lng);
     setVal('f-image',row.image); setVal('f-flyer',row.flyer);
     setVal('f-heroGradient',row.heroGradient); setVal('f-desc',row.desc);
+    setVal('f-imagePosition',row.imagePosition || '');
     const dates=(row.date||'').split('/');
     setVal('f-dateStart',dates[0]); setVal('f-dateEnd',dates[1]);
     setSelectedGenres('f-genre',(row.genre||'').split(',').map(s=>s.trim()).filter(Boolean));
@@ -2258,6 +2298,7 @@ function editRow(section, rowNum){
     document.getElementById('gradient-preview').style.display='none';
     if(row.heroGradient) updateGradientPreview(row.heroGradient);
     updateLocationMap('f');
+    syncImagePos('f');
     if(row.image) showCurrentImage('preview-f-image',row.image,"clearImageField('f',{section:'festival',pathId:'f-image',previewId:'preview-f-image'})");
     if(row.flyer) showCurrentImage('preview-f-flyer',row.flyer,"clearImageField('f',{section:'festival',pathId:'f-flyer',previewId:'preview-f-flyer'})");
   }
@@ -2316,7 +2357,7 @@ function saveEdit(section){
 
   if(section==='venue'){
     Object.assign(payload,{id:g('v-id'),name:g('v-name'),city:g('v-city'),area:g('v-area'),
-      type:g('v-type'),image:g('v-image'),genre:getSelectedGenres('v-genre').join(', '),
+      type:g('v-type'),image:g('v-image'),imagePosition:g('v-imagePosition'),genre:getSelectedGenres('v-genre').join(', '),
       capacity:g('v-capacity'),address:g('v-address'),lat:g('v-lat'),lng:g('v-lng'),
       url:g('v-url'),instagram:g('v-instagram'),desc:g('v-desc')});
   }
@@ -2326,7 +2367,7 @@ function saveEdit(section){
       location:g('f-location'),url:g('f-url'),ticketUrl:g('f-ticketUrl'),instagram:g('f-instagram'),
       address:g('f-address'),lat:g('f-lat'),lng:g('f-lng'),
       date:ds&&de?ds+'/'+de:ds,genre:getSelectedGenres('f-genre').join(', '),
-      image:g('f-image'),flyer:g('f-flyer'),heroGradient:g('f-heroGradient'),
+      image:g('f-image'),imagePosition:g('f-imagePosition'),flyer:g('f-flyer'),heroGradient:g('f-heroGradient'),
       desc:g('f-desc'),lineup:cleanLineup(lineups.f).join(', ')});
   }
   else if(section==='artist'){
@@ -2883,7 +2924,7 @@ function submitToSheet(section){
   let payload;
   if(section==='venue'){
     payload={action:'addVenue',id:g('v-id'),name:g('v-name'),city:g('v-city'),area:g('v-area'),
-      type:g('v-type'),image:g('v-image'),genre:getSelectedGenres('v-genre').join(', '),
+      type:g('v-type'),image:g('v-image'),imagePosition:g('v-imagePosition'),genre:getSelectedGenres('v-genre').join(', '),
       capacity:g('v-capacity'),address:g('v-address'),lat:g('v-lat'),lng:g('v-lng'),
       url:g('v-url'),instagram:g('v-instagram'),desc:g('v-desc')};
     if(!payload.id||!payload.name)return toast('ID and Name required','error');
@@ -2893,7 +2934,7 @@ function submitToSheet(section){
     payload={action:'add_festival',id:g('f-id'),type:g('f-type'),name:g('f-name'),city:g('f-city'),
       location:g('f-location'),url:g('f-url'),ticketUrl:g('f-ticketUrl'),instagram:g('f-instagram'),
       address:g('f-address'),lat:g('f-lat'),lng:g('f-lng'),date:ds&&de?ds+'/'+de:ds,
-      genre:getSelectedGenres('f-genre').join(', '),image:g('f-image'),flyer:g('f-flyer'),
+      genre:getSelectedGenres('f-genre').join(', '),image:g('f-image'),imagePosition:g('f-imagePosition'),flyer:g('f-flyer'),
       heroGradient:g('f-heroGradient'),desc:g('f-desc'),lineup:cleanLineup(lineups.f).join(', '),
       editions:editions};
     if(!payload.id||!payload.name)return toast('ID and Name required','error');
@@ -3007,6 +3048,36 @@ function dataJsHeader(){
    ========================================================== */`;
 }
 function q(s){return String(s||'').replace(/\\/g,'\\\\').replace(/"/g,'\\"').replace(/\n/g,'\\n')}
+// Normalize a date to "YYYY-MM-DD" (LP-compatible). Handles:
+//   - Date objects
+//   - JS Date.toString() like "Sun May 17 2026 00:00:00 GMT+0900 (日本標準時)"
+//   - ISO 8601 like "2026-05-16T15:00:00.000Z"
+//   - Already YYYY-MM-DD
+//   - Range "YYYY-MM-DD/YYYY-MM-DD" (each side normalized)
+function fmtDate(d){
+  if(!d) return '';
+  if(d instanceof Date){
+    if(isNaN(d.getTime())) return '';
+    const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), dd=String(d.getDate()).padStart(2,'0');
+    return y+'-'+m+'-'+dd;
+  }
+  const s=String(d).trim();
+  if(!s) return '';
+  // Range: "YYYY-MM-DD/YYYY-MM-DD" or other date / date
+  if(s.indexOf('/')>-1){
+    return s.split('/').map(p=>fmtDate(p.trim())).filter(Boolean).join('/');
+  }
+  // Already YYYY-MM-DD (or longer ISO datetime starting with date)
+  const m=s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if(m) return m[1]+'-'+m[2]+'-'+m[3];
+  // Try parsing as Date (handles toString format and ISO)
+  const parsed=new Date(s);
+  if(!isNaN(parsed.getTime())){
+    const y=parsed.getFullYear(), mm=String(parsed.getMonth()+1).padStart(2,'0'), dd=String(parsed.getDate()).padStart(2,'0');
+    return y+'-'+mm+'-'+dd;
+  }
+  return s;
+}
 function buildArtistsJs(rows){
   const items=rows.map(r=>{
     const l=[];
@@ -3039,7 +3110,7 @@ function buildEventsJs(rows){
     const l=[];
     l.push('  {');
     l.push('    name: "'+q(r.name)+'",');
-    if(r.date) l.push('    date: "'+q(r.date)+'",');
+    if(r.date) l.push('    date: "'+q(fmtDate(r.date))+'",');
     if(r.venue) l.push('    venue: "'+q(r.venue)+'",');
     if(r.city) l.push('    city: "'+q(r.city)+'",');
     if(r.time) l.push('    time: "'+q(r.time)+'",');
@@ -3061,13 +3132,14 @@ function buildFestivalsJs(rows){
     l.push('    id: "'+q(r.id)+'",');
     if(r.type) l.push('    type: "'+q(r.type)+'",');
     l.push('    name: "'+q(r.name)+'",');
-    if(r.date) l.push('    date: "'+q(r.date)+'",');
+    if(r.date) l.push('    date: "'+q(fmtDate(r.date))+'",');
     if(r.location) l.push('    location: "'+q(r.location)+'",');
     if(r.city) l.push('    city: "'+q(r.city)+'",');
     if(r.address) l.push('    address: "'+q(r.address)+'",');
     const lat=parseFloat(r.lat); if(!isNaN(lat)) l.push('    lat: '+lat+',');
     const lng=parseFloat(r.lng); if(!isNaN(lng)) l.push('    lng: '+lng+',');
     if(r.image) l.push('    image: "'+q(r.image)+'",');
+    if(r.imagePosition) l.push('    imagePosition: "'+q(r.imagePosition)+'",');
     if(r.flyer) l.push('    flyer: "'+q(r.flyer)+'",');
     if(r.heroGradient) l.push('    heroGradient: "'+q(r.heroGradient)+'",');
     if(r.genre){
@@ -3089,7 +3161,7 @@ function buildFestivalsJs(rows){
           l.push('    editions: [');
           eds.forEach(ed=>{
             const eLineup=(ed.lineup||[]).map(a=>'"'+q(a)+'"').join(', ');
-            l.push('      { year: '+ed.year+', date: "'+q(ed.date)+'", lineup: ['+eLineup+'] },');
+            l.push('      { year: '+ed.year+', date: "'+q(fmtDate(ed.date))+'", lineup: ['+eLineup+'] },');
           });
           l.push('    ],');
         }
@@ -3110,6 +3182,7 @@ function buildVenuesJs(rows){
     if(r.area) l.push('    area: "'+q(r.area)+'",');
     if(r.type) l.push('    type: "'+q(r.type)+'",');
     if(r.image) l.push('    image: "'+q(r.image)+'",');
+    if(r.imagePosition) l.push('    imagePosition: "'+q(r.imagePosition)+'",');
     if(r.genre){
       const arr=String(r.genre).split(/[,·]/).map(s=>'"'+q(s.trim())+'"').filter(s=>s!=='""');
       if(arr.length) l.push('    genre: ['+arr.join(', ')+'],');
@@ -3141,7 +3214,7 @@ function buildArticlesJs(rows){
       l.push('    body: `'+safeBody+'`,');
     }
     if(r.category) l.push('    category: "'+q(r.category)+'",');
-    if(r.date) l.push('    date: "'+q(r.date)+'",');
+    if(r.date) l.push('    date: "'+q(fmtDate(r.date))+'",');
     if(r.author) l.push('    author: "'+q(r.author)+'",');
     if(r.image) l.push('    image: "'+q(r.image)+'",');
     if(r.featured === true || r.featured === 'true' || r.featured === 'TRUE') l.push('    featured: true,');
@@ -3176,10 +3249,12 @@ function downloadFile(filename,content){
    GENERATE CODE — VENUE
    ============================================================== */
 function submitVenue(){
-  const d={id:g('v-id'),name:g('v-name'),city:g('v-city'),area:g('v-area'),type:g('v-type'),image:g('v-image'),genre:getSelectedGenres('v-genre'),capacity:g('v-capacity'),address:g('v-address'),lat:g('v-lat'),lng:g('v-lng'),url:g('v-url'),instagram:g('v-instagram'),desc:g('v-desc')};
+  const d={id:g('v-id'),name:g('v-name'),city:g('v-city'),area:g('v-area'),type:g('v-type'),image:g('v-image'),imagePosition:g('v-imagePosition'),genre:getSelectedGenres('v-genre'),capacity:g('v-capacity'),address:g('v-address'),lat:g('v-lat'),lng:g('v-lng'),url:g('v-url'),instagram:g('v-instagram'),desc:g('v-desc')};
   if(!d.id||!d.name)return toast('ID and Name required','error');
   const genreStr=d.genre.map(g=>`"${g}"`).join(', ');
-  const lines=[`  {`,`    id: "${d.id}",`,`    name: "${d.name}",`,`    city: "${d.city}",`,`    area: "${d.area}",`,`    type: "${d.type}",`,`    image: "${d.image}",`,`    genre: [${genreStr}],`,`    capacity: ${d.capacity||0},`];
+  const lines=[`  {`,`    id: "${d.id}",`,`    name: "${d.name}",`,`    city: "${d.city}",`,`    area: "${d.area}",`,`    type: "${d.type}",`,`    image: "${d.image}",`];
+  if(d.imagePosition)lines.push(`    imagePosition: "${d.imagePosition}",`);
+  lines.push(`    genre: [${genreStr}],`,`    capacity: ${d.capacity||0},`);
   if(d.address)lines.push(`    address: "${d.address}",`);
   if(d.lat)lines.push(`    lat: ${d.lat},`);if(d.lng)lines.push(`    lng: ${d.lng},`);
   if(d.url)lines.push(`    url: "${d.url}",`);if(d.instagram)lines.push(`    instagram: "${d.instagram}",`);
@@ -3191,7 +3266,7 @@ function submitVenue(){
    GENERATE CODE — FESTIVAL
    ============================================================== */
 function submitFestival(){
-  const d={id:g('f-id'),type:g('f-type'),name:g('f-name'),city:g('f-city'),location:g('f-location'),url:g('f-url'),ticketUrl:g('f-ticketUrl'),instagram:g('f-instagram'),lat:g('f-lat'),lng:g('f-lng'),dateStart:g('f-dateStart'),dateEnd:g('f-dateEnd'),genre:getSelectedGenres('f-genre'),image:g('f-image'),flyer:g('f-flyer'),heroGradient:g('f-heroGradient'),desc:g('f-desc'),lineup:cleanLineup(lineups.f),editions:editions.map(e=>({...e}))};
+  const d={id:g('f-id'),type:g('f-type'),name:g('f-name'),city:g('f-city'),location:g('f-location'),url:g('f-url'),ticketUrl:g('f-ticketUrl'),instagram:g('f-instagram'),lat:g('f-lat'),lng:g('f-lng'),dateStart:g('f-dateStart'),dateEnd:g('f-dateEnd'),genre:getSelectedGenres('f-genre'),image:g('f-image'),imagePosition:g('f-imagePosition'),flyer:g('f-flyer'),heroGradient:g('f-heroGradient'),desc:g('f-desc'),lineup:cleanLineup(lineups.f),editions:editions.map(e=>({...e}))};
   if(!d.id||!d.name)return toast('ID and Name required','error');
   const genreStr=d.genre.map(g=>`"${g}"`).join(', ');
   const lineupStr=d.lineup.map(a=>`"${a}"`).join(', ');
@@ -3199,6 +3274,7 @@ function submitFestival(){
   const lines=[`  {`,`    id: "${d.id}",`,`    type: "${d.type}",`,`    name: "${d.name}",`,`    date: "${dateStr}",`,`    location: "${d.location}",`,`    city: "${d.city}",`];
   if(d.lat)lines.push(`    lat: ${d.lat},`);if(d.lng)lines.push(`    lng: ${d.lng},`);
   lines.push(`    image: "${d.image}",`,`    flyer: "${d.flyer}",`);
+  if(d.imagePosition)lines.push(`    imagePosition: "${d.imagePosition}",`);
   if(d.heroGradient)lines.push(`    heroGradient: "${d.heroGradient}",`);
   lines.push(`    genre: [${genreStr}],`,`    desc: "${escDesc(d.desc)}",`);
   if(d.url)lines.push(`    url: "${d.url}",`);
@@ -3294,8 +3370,8 @@ function copyOutput(section){navigator.clipboard.writeText(document.getElementBy
    ============================================================== */
 function resetForm(section){
   const fields={
-    venue:['v-id','v-name','v-city','v-area','v-image','v-capacity','v-address','v-lat','v-lng','v-url','v-instagram','v-desc','v-imageUrl'],
-    festival:['f-id','f-name','f-city','f-location','f-url','f-ticketUrl','f-instagram','f-address','f-lat','f-lng','f-dateStart','f-dateEnd','f-image','f-flyer','f-heroGradient','f-desc','f-imageUrl','f-flyerUrl'],
+    venue:['v-id','v-name','v-city','v-area','v-image','v-imagePosition','v-capacity','v-address','v-lat','v-lng','v-url','v-instagram','v-desc','v-imageUrl'],
+    festival:['f-id','f-name','f-city','f-location','f-url','f-ticketUrl','f-instagram','f-address','f-lat','f-lng','f-dateStart','f-dateEnd','f-image','f-imagePosition','f-flyer','f-heroGradient','f-desc','f-imageUrl','f-flyerUrl'],
     artist:['a-id','a-name','a-city','a-country','a-genre','a-image','a-imagePosition','a-bio','a-instagram','a-soundcloud','a-bandcamp','a-website','a-imageUrl'],
     event:['e-name','e-date','e-venue','e-city','e-time','e-desc','e-link'],
     article:['ar-id','ar-title','ar-category','ar-date','ar-author','ar-image','ar-readTime','ar-views','ar-excerpt','ar-body','ar-tags'],

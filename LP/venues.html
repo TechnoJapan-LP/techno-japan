@@ -648,7 +648,7 @@ function renderVenueDetail(id) {
   // Render hero image
   const heroEl = document.getElementById('venue-hero');
   if (v.image) {
-    heroEl.innerHTML = `<div class="venue-hero-img" style="background-image:url('${v.image}')"></div><div class="venue-hero-gradient"></div>`;
+    heroEl.innerHTML = `<div class="venue-hero-img" style="background-image:url('${v.image}');background-position:${v.imagePosition || 'center'}"></div><div class="venue-hero-gradient"></div>`;
     heroEl.style.display = 'block';
   } else {
     heroEl.innerHTML = `<div class="venue-hero-placeholder"></div><div class="venue-hero-gradient"></div>`;

@@ -104,14 +104,30 @@ techno-japan/
 - お気に入り一覧ページ（`favorites.html`）
 - ナビにお気に入りカウンター
 
-### Phase 7: アーティスト画像位置設定 ✅（コード側）／ ⏳（GAS側）
-- CMS: `Image Position` 入力 + 3×3アンカーグリッド + 16:9ライブプレビュー
-- CMS payload: add/update 両方で `imagePosition` を送信済み
-- data.js: `imagePosition: "center top"` 形式で保存
+### Phase 7: 画像位置設定（artist / venue / festival） ✅
+- CMS: 3セクション共通の汎用 `setImagePos(prefix, val)` / `syncImagePos(prefix)` ヘルパー
+- CMS: 各フォームに `Image Position` 入力 + 3×3アンカーグリッド + 16:9ライブプレビュー
+- CMS payload (add/update): 3セクションとも `imagePosition` を送信
+- data.js export builder: artist/venue/festival とも `imagePosition` を出力
+- スプレッドシート: ARTISTS シートに `imagePosition` 列追加済み
+  - **要対応**: VENUES / FESTIVALS シートにも `imagePosition` 列を追加
+- GAS: `buildRowFromHeaders` がデータ側キーも正規化（lowercase + no-space）するよう修正
+  → 副作用として `lastEditedAt` `ogImage` `metaDescription` 等の保存漏れも解消
 - 表示側:
   - `artists.html` 詳細: `object-position: var(--img-pos)`
-  - `artists.html` 一覧 / `index.html` カルーセル: `background-position`
-- 残タスク: **スプレッドシート ARTISTS シートに `imagePosition` 列ヘッダーを追加**（GASがヘッダー駆動なら自動連携。連携しなければ `addArtist`/`updateRow` のフィールドリストに追記）
+  - `artists.html` 一覧 / `index.html` ARTISTS カルーセル: `background-position`
+  - `venues.html` 詳細 hero / `index.html` venue-mini-img: `background-position`
+  - `festivals.html` カードリスト / 詳細 hero / 関連カード: `object-position`
+  - `index.html` fest-row-thumb / fest-row-bg: `background-position`
+
+### Phase 8: アーティスト画像アップロード周りの整備 ✅
+- GAS: `uploadImage` を `type` で `artists`/`venues`/`festivals` に振り分け
+- GAS: `ARTISTS_FOLDER_ID = "16Tke6MdkD1OPNElvRFjACrz-Y2ggEn5j"` を追加
+- CMS: `uploadImage` の payload に `type` を含めて送信
+- CMS: 編集モードで既存画像プレビュー + ✕ Remove ボタン
+- CMS: アップロード失敗時に Dismiss ボタン + file input クリアで再試行可能
+- CMS: editRow → switchTab の fromEdit フラグで、編集突入直後の自動キャンセル抑止
+- Workflow: `sync-drive-images.yml` に `cmsAuth` パラメータを追加
 
 ---
 
@@ -201,15 +217,9 @@ const ARTICLES = [{ id, title, excerpt, body, category, date, author, image, fea
 - **チケット販売連携**
 
 ### GAS 側
-- `add_article` ハンドラに **body / author / tags / status** フィールドの対応がまだ。
-  HANDOFF時点でCMSは新フィールド対応済みだが、**GAS側のコードを更新していない**。
-  → 当面は CMS の「Generate Code」→ data.js コピペで運用、または GAS 更新が必要。
-  → セッション最後で GAS のコード共有を依頼したが受領前にチャット終了。
-- `add_artist` / `update_row` (artist) で `imagePosition` 列が未対応。
-  → スプレッドシート ARTISTS の最終列に `imagePosition` ヘッダーを追加すれば、
-    ヘッダー駆動なら自動で保存される（要動作確認）。
-  → ヘッダー駆動でなければ、`addArtist(data)` の row 配列と `updateRow` の処理に
-    `data.imagePosition` を追加する必要あり。
+- `add_article` ハンドラの **body / author / tags / status** フィールドは
+  `buildRowFromHeaders` 修正により自動対応されたはず（要確認：ARTICLES シートに
+  該当列が存在すること）。
 
 ### パフォーマンス
 - HTML/CSS/JS の minify は未実装（インラインスクリプトが多くリスク高のためスキップ）
@@ -277,10 +287,9 @@ python3 scripts/generate-rss.py
 ## 次にやるべきこと（優先順位）
 
 ### 短期
-1. **スプレッドシート ARTISTS に `imagePosition` 列を追加** — ヘッダー駆動GASで自動連携を確認
-2. **GASのadd_articleハンドラ更新** — body/author/tags/status を受け取れるように
-3. **記事を週1で書く** — 現状3本のみ。10本ぐらいあるとサイトが活きる
-4. **アーティスト画像追加 + Image Position調整** — 主要DJの写真を集めて頭切れを修正
+1. **記事を週1で書く** — 現状3本のみ。10本ぐらいあるとサイトが活きる
+2. **アーティスト画像追加 + Image Position調整** — 主要DJの写真を集めて頭切れを修正
+3. **ARTICLES シートのヘッダー確認** — body/author/tags/status の列があるか
 
 ### 中期
 4. **Phase 5（多言語）** — CMSの英語フィールドを埋めて URL分離方式で実装

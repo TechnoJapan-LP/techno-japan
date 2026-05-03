@@ -14,7 +14,7 @@ const ARTISTS = [
     country: "JAPAN",
     genre: "TECHNO",
     image: "images/artists/dj-nobu.jpg",
-    bio: "DJ Nobu is a Chiba-based techno artist deeply embedded in Japan's underground electronic music scene. Known for his precise technical approach and atmospheric sound design, he represents the evolution of Japanese techno with a distinctly minimalist aesthetic.",
+    bio: "DJ Nobu is a Tokyo-based techno artist deeply embedded in Japan's underground electronic music scene. Known for his precise technical approach and atmospheric sound design, he represents the evolution of Japanese techno with a distinctly minimalist aesthetic.",
     links: {
       instagram: "https://www.instagram.com/dj_nobu_ft/",
       soundcloud: "https://soundcloud.com/djnobu_bitta",
@@ -28,6 +28,7 @@ const ARTISTS = [
     country: "JAPAN",
     genre: "TECHNO",
     image: "images/artists/wata-igarashi.jpg",
+    imagePosition: "center top",
     bio: "Tokyo-based producer and DJ crafting hypnotic, psychedelic techno. Releases on Midgar, The Bunker NY, and his own Meditate label. His sound is a deep, spiraling journey — transcendent and relentless.",
     links: {
       instagram: "https://www.instagram.com/wataigarashi/",
@@ -328,7 +329,7 @@ const ARTISTS = [
 const EVENTS = [
   {
     name: "UNDERGROUND FREQUENCY",
-    date: "2026-05-16T15:00:00.000Z",
+    date: "2026-05-17",
     venue: "CONTACT",
     city: "TOKYO",
     time: "23:00 - 05:00",
@@ -337,7 +338,7 @@ const EVENTS = [
   },
   {
     name: "DAWN PATROL",
-    date: "2026-05-30T15:00:00.000Z",
+    date: "2026-05-31",
     venue: "CIRCUS",
     city: "OSAKA",
     time: "22:00 - 06:00",
@@ -346,7 +347,7 @@ const EVENTS = [
   },
   {
     name: "RURAL FESTIVAL 2026",
-    date: "2026-07-18T15:00:00.000Z",
+    date: "2026-07-19",
     venue: "NAEBA SKI RESORT",
     city: "NIIGATA",
     time: "ALL DAY",
@@ -355,7 +356,7 @@ const EVENTS = [
   },
   {
     name: "CONCRETE ECHOES",
-    date: "2026-06-13T15:00:00.000Z",
+    date: "2026-06-14",
     venue: "WAREHOUSE 702",
     city: "TOKYO",
     time: "22:00 - 05:00",
@@ -364,7 +365,7 @@ const EVENTS = [
   },
   {
     name: "CAPSULE",
-    date: "2026-04-04T15:00:00.000Z",
+    date: "2026-04-05",
     venue: "CONTACT",
     city: "TOKYO",
     time: "23:00 - 05:00",
@@ -373,7 +374,7 @@ const EVENTS = [
   },
   {
     name: "ZERO GRAVITY",
-    date: "2026-03-21T15:00:00.000Z",
+    date: "2026-03-22",
     venue: "CLUB METRO",
     city: "KYOTO",
     time: "22:00 - 04:00",
@@ -382,7 +383,7 @@ const EVENTS = [
   },
   {
     name: "AFTER HOURS COLLECTIVE",
-    date: "2026-08-08T15:00:00.000Z",
+    date: "2026-08-09",
     venue: "VENT",
     city: "TOKYO",
     time: "28:00 - 10:00",
@@ -403,6 +404,7 @@ const FESTIVALS = [
     lat: 36.6982,
     lng: 137.8619,
     image: "images/festivals/snow-machine-japan.jpeg",
+    imagePosition: "center",
     flyer: "images/festivals/snow-machine-japan-flyer.jpg",
     genre: ["TECHNO", "HOUSE", "LIVE", "OTHERS"],
     desc: "Snow Machine Japan transforms the alpine resort town of Hakuba into a winter playground for electronic music enthusiasts. The festival combines skiing and snowboarding culture with carefully curated lineups spanning techno and house music. Set against the backdrop of the Japanese Alps, it offers an intimate alternative to the larger summer festival circuit.",
@@ -410,22 +412,10 @@ const FESTIVALS = [
     instagram: "https://www.instagram.com/snowmachinejapan/",
   },
   {
-    id: "doofing-park",
-    type: "rave",
-    name: "DOOFING PARK",
-    date: "2026-04-04/2026-04-05",
-    location: "Secret Location",
-    city: "KANTO",
-    genre: ["TECHNO"],
-    desc: "DOOFING PARK brings outdoor techno culture to Tokyo's concrete landscape, focusing on raw sound systems and community-driven programming. The event emphasizes the underground ethos of free party culture within Japan's highly regulated festival environment.",
-    instagram: "https://www.instagram.com/captain_k.doofingpark/",
-    lineup: ["Akey", "AYUMU", "CAPTAIN-K", "HIDAI", "Lowki", "masa a.k.a kyounote", "Menou / iwamaki", "Mimu", "naotsun", "NORID", "Sakuma", "SECO", "Shimoyan", "TADA"],
-  },
-  {
     id: "waifu",
     type: "rave",
     name: "WAIFU",
-    date: "2026-04-10T15:00:00.000Z",
+    date: "2026-04-11",
     location: "Kinone Pension",
     city: "Chiba",
     address: "296-1 Kinone, Narita City, Chiba Prefecture",
@@ -449,6 +439,7 @@ const FESTIVALS = [
     lat: 36.4303,
     lng: 139.2767,
     image: "images/festivals/arch-2025.jpeg",
+    imagePosition: "center bottom",
     flyer: "images/festivals/arch-flyer.jpg",
     genre: ["TECHNO", "HOUSE"],
     desc: "ARCH returns to Gunma for its eleventh edition, maintaining its reputation as one of Japan's most respected underground gatherings. The festival continues to showcase cutting-edge techno programming in an intimate setting that prioritizes sound quality and artistic integrity over commercial appeal.",
@@ -466,6 +457,7 @@ const FESTIVALS = [
     lat: 34.7847,
     lng: 139.0262,
     image: "images/festivals/rainbow-disco-club.jpeg",
+    imagePosition: "center top",
     flyer: "images/festivals/rainbow-disco-club-flyer.jpg",
     genre: ["TECHNO", "HOUSE"],
     desc: "Rainbow Disco Club takes place at the Higashi-Izu Cross Country Course in Shizuoka, transforming the natural terrain into an outdoor dance floor. The festival combines house and techno programming with Japan's scenic countryside setting. Known for its intimate scale and carefully curated lineup that balances international and domestic acts.",
@@ -485,19 +477,30 @@ const FESTIVALS = [
     lng: 140.2882,
     image: "images/festivals/ala.jpg",
     flyer: "images/festivals/ala-flyer.jpg",
+    heroGradient: "linear-gradient(135deg, #0a0a14 0%, #12102a 40%, #1a0e28 70%, #080810 100%)",
     genre: ["TECHNO", "AMBIENT"],
     desc: "ALA brings together Japan's underground electronic music community in Chiba with a focus on psychedelic and trippy soundscapes. The festival showcases both local and international artists across multiple stages, emphasizing immersive audiovisual experiences that blur the lines between genres.",
     url: "https://www.ala-jp.net/",
+    ticketUrl: "https://alanutmeg.zaiko.io/e/alaairfest26",
     instagram: "https://www.instagram.com/ala_trippymusic/",
     lineup: ["DJ MIKU", "DJ KENSEI", "DJ Yogurt", "HIDAI", "TAICHI KAWAHIRA", "TSUTOMU", "Qmico", "GA-SU", "free☆cinn.", "NUTMEG", "snipe1", "LiaRako"],
   },
   {
     id: "osukinidouzo",
     type: "rave",
-    name: "おすきにどうぞ2025",
+    name: "Osukinidouzo",
     date: "2026-05-02/2026-05-04",
+    location: "Zakae Bridge",
     city: "Kanagawa",
+    address: "Nishikurihara, Zama City, Kanagawa Prefecture",
+    lat: 35.4738,
+    lng: 139.4117,
+    image: "images/festivals/osukinidouzo.jpeg",
+    flyer: "images/festivals/osukinidouzo-flyer.jpg",
+    heroGradient: "linear-gradient(135deg, #140a0a 0%, #2a0e0e 40%, #1e0808 70%, #0a0606 100%)",
+    genre: ["TECHNO", "HOUSE", "AMBIENT", "LIVE", "OTHERS"],
     desc: "A carefully curated gathering in Kanagawa that emphasizes artistic freedom and community over commercial spectacle. The festival maintains an intimate scale while showcasing both established and emerging artists across electronic music's more experimental territories.",
+    instagram: "https://www.instagram.com/sunflowers_of_today/",
   },
   {
     id: "transcendence",
@@ -510,6 +513,7 @@ const FESTIVALS = [
     lat: 36.0592,
     lng: 138.5512,
     image: "images/festivals/transcendence.jpeg",
+    imagePosition: "center bottom",
     flyer: "images/festivals/transcendence-flyer.jpg",
     genre: ["TECHNO"],
     desc: "Transcendence delivers uncompromising techno programming in the mountainous terrain surrounding Nagano. The festival leverages Japan's natural acoustics and topography to create an immersive experience that bridges underground electronic music culture with the country's distinctive festival ecosystem. Its focus remains firmly on the music, drawing both domestic and international artists to perform in this unique alpine setting.",
@@ -532,6 +536,7 @@ const FESTIVALS = [
     genre: ["HOUSE", "MINIMAL"],
     desc: "99flags operates as a nomadic party series across Tokyo's club circuit, drawing from deep techno and house traditions while maintaining an underground ethos. The collective has built a reputation for intimate gatherings that prioritize sound system culture and extended sets over commercial appeal.",
     url: "https://www.99flags.org/",
+    ticketUrl: "https://passmarket.yahoo.co.jp/event/show/detail/0253hhfb4g051.html#detail",
     instagram: "https://www.instagram.com/99flags_party/",
     lineup: ["MOODMAN", "SHIBATA", "P-YAN", "ATSUKI", "KARUTA", "LEVOLANT", "CONNOR", "RAMI", "DJ BIN", "ABURA", "ENUOH", "MATSUNAMI", "AKG++"],
   },
@@ -547,9 +552,11 @@ const FESTIVALS = [
     lng: 135.5393,
     image: "images/festivals/the-star-festival.jpeg",
     flyer: "images/festivals/the-star-festival-flyer.jpg",
+    heroGradient: "linear-gradient(135deg, #0e0e0e 0%, #1a1a1a 40%, #121212 70%, #080808 100%)",
     genre: ["TECHNO", "HOUSE", "BASS"],
     desc: "THE STAR FESTIVAL brings together Japan's underground electronic music community in Kyoto's historic setting. The festival showcases both established and emerging artists across techno and house, creating an intimate gathering that reflects the city's unique blend of tradition and forward-thinking culture. Known for its carefully curated lineups and atmospheric venues.",
     url: "https://thestarfestival.com/",
+    ticketUrl: "https://thestarfestival.zaiko.io/e/2026kyoto",
     instagram: "https://www.instagram.com/the_star_festival/",
     lineup: ["CLIPZ", "DJ HYPE", "dj masda", "Guchon", "Lady Shaka", "MAKOTO", "MC GQ", "Minna-no-kimochi", "nasthug", "okadada", "Powder", "ralph", "riria", "ryota", "SHERELLE"],
   },
@@ -565,9 +572,11 @@ const FESTIVALS = [
     lng: 138.9978,
     image: "images/festivals/paramount.jpeg",
     flyer: "images/festivals/paramount-flyer.jpg",
+    heroGradient: "linear-gradient(135deg, #0e0e0e 0%, #1a1a1a 40%, #121212 70%, #080808 100%)",
     genre: ["TECHNO"],
     desc: "PARAMOUNT brings open-air techno to Gunma's natural landscapes, establishing itself as a key destination outside Tokyo's urban circuit. The festival emphasizes raw, uncompromising lineups that reflect Japan's deeper underground currents.",
     url: "https://paramount-jp.net/",
+    ticketUrl: "https://l.instagram.com/",
     instagram: "https://www.instagram.com/paramount_openair/",
     lineup: ["AMORAL", "oma totem", "Space Drum Meditation - Live", "SUNA", "Hidai", "Mimu", "NOCO", "Shuuma", "TAAAHHH"],
   },
@@ -585,6 +594,7 @@ const FESTIVALS = [
     flyer: "images/festivals/letus-music-camp-flyer.jpg",
     genre: ["TECHNO", "HOUSE"],
     desc: "Letus Music Camp brings together Japan's underground electronic community in the natural surroundings of Hyogo Prefecture. The festival emphasizes intimate connections between artists and attendees, fostering a collaborative atmosphere that extends beyond typical festival boundaries. Known for its carefully curated lineups that span multiple electronic genres while maintaining focus on the underground scene.",
+    ticketUrl: "https://letus-music-camp.zaiko.io/e/letuscamp26",
     instagram: "https://www.instagram.com/letus_japan/",
   },
   {
@@ -600,7 +610,7 @@ const FESTIVALS = [
     id: "link-open-air",
     type: "rave",
     name: "Link Open Air",
-    date: "2026-05-29T15:00:00.000Z",
+    date: "2026-05-30",
     city: "Toyama",
     genre: ["TECHNO", "HOUSE", "ELECTRONIC"],
     desc: "Link Open Air brings electronic music to Toyama's natural landscapes, creating an intimate gathering that connects sound with environment. The festival showcases both domestic and international artists across thoughtfully curated stages, emphasizing quality over scale in Japan's growing outdoor festival circuit.",
@@ -627,7 +637,7 @@ const FESTIVALS = [
     id: "festival-fruezinho-2026",
     type: "festival",
     name: "FESTIVAL FRUEZINHO 2026",
-    date: "2026-06-12T15:00:00.000Z",
+    date: "2026-06-13",
     city: "Tokyo",
     genre: ["TECHNO", "HOUSE"],
     desc: "FESTIVAL FRUEZINHO brings São Paulo's underground dance culture to Tokyo for a rare cross-continental exchange. The festival showcases Brazil's distinctive take on techno and house through carefully curated lineups that bridge South American and Japanese electronic music scenes. Expect raw, uncompromising sounds that reflect both cities' commitment to authentic underground culture.",
@@ -654,7 +664,7 @@ const FESTIVALS = [
     id: "halola-camp",
     type: "rave",
     name: "HALOLA CAMP",
-    date: "2026-06-26T15:00:00.000Z",
+    date: "2026-06-27",
     city: "Hokkaido",
     genre: ["HOUSE", "TECHNO"],
     desc: "HALOLA CAMP brings together electronic music enthusiasts in Hokkaido's natural landscape for an intimate outdoor gathering. The festival emphasizes community and connection through carefully curated lineups that span house and techno territories. Set against the backdrop of Japan's northernmost island, it offers a more contemplative alternative to urban festival experiences.",
@@ -689,7 +699,7 @@ const FESTIVALS = [
   {
     id: "sonic-mania",
     name: "Sonic Mania",
-    date: "2026-08-13T15:00:00.000Z",
+    date: "2026-08-14",
     city: "Chiba",
     genre: ["ELECTRONIC", "MIX"],
     desc: "Summer Sonic's electronic-focused sister event brings concentrated doses of dance music to Chiba's festival circuit. The festival curates a focused lineup that spans the electronic spectrum, from harder techno sets to more accessible house programming. A more intimate alternative to the main Summer Sonic experience.",
@@ -770,7 +780,7 @@ const FESTIVALS = [
   {
     id: "festival-de-frue-2026",
     name: "FESTIVAL de FRUE 2026",
-    date: "2026-10-30T15:00:00.000Z",
+    date: "2026-10-31",
     city: "Shizuoka",
     genre: ["TECHNO", "HOUSE", "ELECTRONIC"],
     desc: "FESTIVAL de FRUE returns to Shizuoka's natural landscapes, maintaining its commitment to forward-thinking electronic music programming. The festival continues to blend established artists with emerging talent across carefully curated stages that emphasize sound quality and immersive environments.",
@@ -794,7 +804,7 @@ const FESTIVALS = [
   {
     id: "dom",
     name: "DOM24",
-    date: "2024-10-26T15:00:00.000Z",
+    date: "2024-10-27",
     city: "Tokyo",
     genre: ["TECHNO", "HOUSE", "ELECTRONIC"],
     desc: "DOM24 represents Tokyo's commitment to showcasing cutting-edge electronic music within the city's evolving underground landscape. The festival brings together local and international artists across multiple stages, emphasizing both established names and emerging talent from Japan's thriving scene.",
@@ -841,7 +851,7 @@ const FESTIVALS = [
   {
     id: "intergalactic",
     name: "Intergalactic Festival",
-    date: "2025-05-30T15:00:00.000Z",
+    date: "2025-05-31",
     city: "Chiba",
     genre: ["TECHNO", "HOUSE", "ELECTRONIC"],
     desc: "Intergalactic Festival brings together international and domestic artists across multiple stages in Chiba, focusing on forward-thinking electronic music programming. The festival has established itself as a key destination for techno and house music enthusiasts seeking quality lineups outside Tokyo's immediate orbit.",
@@ -849,7 +859,7 @@ const FESTIVALS = [
   {
     id: "body-soul",
     name: "Body&SOUL Live in Japan",
-    date: "2025-06-07T15:00:00.000Z",
+    date: "2025-06-08",
     city: "Tokyo",
     genre: ["HOUSE"],
     desc: "Body&SOUL brings its legendary deep house and soulful dance music ethos from New York to Tokyo. The event maintains the original's commitment to quality sound, intimate atmosphere, and the spiritual connection between music and movement that has defined the brand since the early 90s.",
@@ -953,7 +963,7 @@ const FESTIVALS = [
   {
     id: "big-fun",
     name: "BIG FUN",
-    date: "2025-09-06T15:00:00.000Z",
+    date: "2025-09-07",
     city: "Hokkaido",
     genre: ["TECHNO", "HOUSE"],
     desc: "BIG FUN brings underground electronic music to Hokkaido's winter landscape, showcasing both international and domestic talent in an intimate setting. The festival has carved out a distinct identity within Japan's northern dance music circuit, emphasizing quality programming over scale.",
@@ -1017,7 +1027,7 @@ const FESTIVALS = [
   {
     id: "circus",
     name: "CIRCUS",
-    date: "2025-10-03T15:00:00.000Z",
+    date: "2025-10-04",
     city: "Tokyo",
     genre: ["TECHNO", "HOUSE"],
     desc: "CIRCUS operates as one of Tokyo's most consistent underground techno platforms, programming both established international acts and emerging local talent across intimate warehouse spaces. The collective has built a reputation for uncompromising lineups that prioritize artistic integrity over commercial appeal, maintaining the raw energy that defines the city's after-hours scene.",
@@ -1169,7 +1179,7 @@ const FESTIVALS = [
   {
     id: "topia",
     name: "Topia",
-    date: "2025-11-14T15:00:00.000Z",
+    date: "2025-11-15",
     city: "Chiba",
     genre: ["TECHNO", "HOUSE"],
     desc: "Topia brings underground electronic music to Chiba's industrial landscape, showcasing both local and international acts across multiple stages. The festival maintains a focus on deeper techno and house sounds, drawing crowds from Tokyo's club scene to experience music in a more expansive outdoor setting.",
@@ -1197,6 +1207,22 @@ const FESTIVALS = [
     city: "Okinawa",
     genre: ["ELECTRONIC", "HOUSE", "TECHNO"],
     desc: "TAKARAJIMA combines environmental activism with electronic music programming on Okinawa's coastline. The festival integrates beach cleaning activities with DJ sets, creating a unique format that addresses ocean conservation while showcasing underground dance music. Participants engage in both ecological restoration and musical celebration across multiple days of programming.",
+  },
+  {
+    id: "technogaoka",
+    type: "rave",
+    name: "Technogaoka",
+    date: "2026-04-25",
+    location: "Tabifusa Ashiya Daihi-kaku",
+    city: "Hyogo",
+    address: "Okuyama 1, Ashiya City, Hyogo Prefecture",
+    lat: 34.7456,
+    lng: 135.2889,
+    image: "images/festivals/technogaoka.jpg",
+    flyer: "images/festivals/technogaoka-flyer.jpg",
+    genre: ["TECHNO"],
+    desc: "Underground rave series operating from Tabifusa Ashiya Daihi-kaku in Hyogo. Known for maintaining a proper warehouse aesthetic with focused programming that draws from both local and international techno circuits. Raw sound system setup prioritizes function over flash.",
+    instagram: "https://www.instagram.com/technogaoka/",
   },
 ];
 
@@ -1271,7 +1297,7 @@ const VENUES = [
     area: "DAIKANYAMA",
     type: "livehouse",
     image: "images/venues/unit.jpeg",
-    genre: ["TECHNO", "HOUSE", "LIVE", "OTHERS"],
+    imagePosition: "center top",
     capacity: 200,
     address: "ZaHOUSE, 1-34-17 Ebisu-Nishi, Shibuya-ku, Tokyo",
     lat: 35.6471,
@@ -1551,131 +1577,20 @@ const VENUES = [
     instagram: "https://www.instagram.com/metro_kyoto/",
     desc: "Metro has anchored Kyoto's underground scene since the early 90s, operating from a converted basement space near Kawaramachi. The club's intimate concrete interior and carefully curated bookings have made it a essential stop for touring artists and a cornerstone of Kansai's electronic music culture."
   },
-  {
-    id: "snow-machine-japan",
-    name: "",
-    type: "festival-image",
-  },
 ];
+
 /* ==========================================================
    ARTICLES — Editorial content for DISCOVER page
-
-   Schema:
-   {
-     id: 'unique-slug',           // URL slug (kebab-case)
-     title: 'Article Title',
-     excerpt: 'Short summary (1-2 sentences)',
-     body: '<p>HTML body content</p>',  // Full article HTML
-     category: 'FESTIVAL'|'EVENT'|'CLUB'|'INTERVIEW'|'REPORT'|'COLUMN'|'NEWS'|'PARTY'|'RAVE',
-     date: 'YYYY-MM-DD',          // Publication date
-     author: 'Author Name',       // Optional
-     image: 'images/articles/xxx.jpg', // Hero image (optional)
-     featured: true|false,        // Show in featured slot
-     views: 0,                    // For sorting by popularity
-     readTime: 5,                 // Minutes
-     tags: ['tag1', 'tag2'],      // Optional tags
-     status: 'published',         // 'published' or 'draft'
-   }
    ========================================================== */
 const ARTICLES = [
   {
-    id: 'welcome-to-techno-japan',
-    title: 'Welcome to TECHNO JAPAN',
-    excerpt: 'A new editorial home for Japan\'s underground techno and house music scene. Here\'s what we\'re about, and what\'s coming.',
-    body: `
-      <p>TECHNO JAPAN is a cultural media platform built around one simple idea: Japan's underground electronic music scene deserves better documentation.</p>
-
-      <p>For decades, the country has been home to some of the most uncompromising clubs, the most adventurous festivals, and the most talented selectors in the world. Yet much of this story has lived in fragments — Instagram posts, flyers, word of mouth.</p>
-
-      <h2>What we cover</h2>
-      <p>We focus on three pillars:</p>
-      <ul>
-        <li><strong>Festivals</strong> — outdoor gatherings, multi-day adventures, mountain raves</li>
-        <li><strong>Venues</strong> — the clubs and spaces where the sound lives</li>
-        <li><strong>Artists</strong> — DJs, producers, selectors who define the sound</li>
-      </ul>
-
-      <h2>Editorial perspective</h2>
-      <p>This is not a calendar app. We go beyond listings — introducing artists, venues, and festivals with editorial perspective and scene credibility. Every piece is written by people who actually go out, dig deep, and care about getting it right.</p>
-
-      <p>We believe Japan's underground deserves to be more visible — to audiences both inside Japan and across the world.</p>
-
-      <h2>What's next</h2>
-      <p>We're publishing weekly. Subscribe to the newsletter to get monthly digests, or follow us on Instagram <a href="https://www.instagram.com/techno.japan_/" target="_blank" rel="noopener">@techno.japan_</a> for daily updates.</p>
-
-      <p>Welcome aboard.</p>
-    `,
-    category: 'COLUMN',
-    date: '2026-05-01',
-    author: 'TECHNO JAPAN',
-    image: '',
+    id: "mari",
+    title: "MARIA",
+    excerpt: "aaa",
+    date: "2026-05-06",
     featured: true,
-    views: 0,
-    readTime: 3,
-    tags: ['announcement', 'editorial'],
-    status: 'published',
-  },
-  {
-    id: 'tokyo-underground-map',
-    title: 'The Complete Guide to Tokyo\'s Underground Club Scene',
-    excerpt: 'From the tight basements of Shibuya to the industrial spaces of Koenji — a deep guide to where the sound lives in Tokyo.',
-    body: `
-      <p>Tokyo's club scene is sprawling, chaotic, and rewarding for those willing to dig. This guide is built for the curious — whether you live here or you're visiting for a weekend.</p>
-
-      <h2>Shibuya — the epicenter</h2>
-      <p><strong>WOMB</strong> remains the iconic name, with its cathedral-like main floor and uncompromising programming. Newer rooms like <strong>Circus Tokyo</strong> have built a reputation for forward-thinking electronic bookings — a more intimate, sound-system-focused experience.</p>
-
-      <h2>Daikanyama and the periphery</h2>
-      <p><strong>UNIT</strong> in Daikanyama runs three floors with a strong sound system and consistent lineups. SALOON, on Cat Street, has emerged as a go-to spot for house-leaning nights with international guests.</p>
-
-      <h2>Beyond Shibuya</h2>
-      <p>If you only stay in Shibuya, you miss half the scene. <strong>Forest Limit</strong> in Hatagaya is a closet-sized room that has incubated some of Japan's most experimental nights. <strong>SOLFA</strong> in Nakameguro books a different crowd — minimal, deep house, longer sets.</p>
-
-      <h2>How to navigate</h2>
-      <p>Most nights start late (after midnight) and run until first train. Trains stop around 1AM in most lines. Bring cash for entry — many doors don't take cards.</p>
-
-      <p>Check our <a href="venues.html">Venues</a> page for the full list with addresses, capacity, and recent events.</p>
-    `,
-    category: 'CLUB',
-    date: '2026-04-25',
-    author: 'TECHNO JAPAN',
-    image: '',
-    featured: false,
-    views: 0,
-    readTime: 6,
-    tags: ['tokyo', 'clubs', 'guide'],
-    status: 'published',
-  },
-  {
-    id: 'rdc-2026-preview',
-    title: 'Rainbow Disco Club 2026: What to Expect This Year',
-    excerpt: 'As the festival enters its newest chapter in the hills of Higashi-Izu, we look at the lineup, the location, and why RDC remains one of Asia\'s most essential outdoor gatherings.',
-    body: `
-      <p>Rainbow Disco Club has always been about more than music. The Higashi-Izu Cross Country Course transforms each year into something between a campsite, a small village, and a dancefloor.</p>
-
-      <h2>The lineup</h2>
-      <p>This year's edition features a strong international roster (Antal & Hunee, Daphni, Floating Points, Helena Hauff, Four Tet) balanced with Japanese names like DJ Maria, Gonno, and Jonathan Kusuma. The booking philosophy — selectors who play long, deep, and across genres — has remained consistent for over a decade.</p>
-
-      <h2>The location</h2>
-      <p>Higashi-Izu is a 90-minute drive from Tokyo, but it feels like a different country. Mountains on three sides, ocean on the other. The festival uses the natural terrain as the architecture of the dancefloor — no big stages, no neon, just sound and space.</p>
-
-      <h2>Practical notes</h2>
-      <ul>
-        <li>Camping is on-site. Bring layers — nights get cold even in May.</li>
-        <li>The festival starts mid-day and runs until late. Pace yourself.</li>
-        <li>Food vendors are good but expensive. Cash works best.</li>
-      </ul>
-
-      <p>For more info, see the <a href="festivals.html#festival/rainbow-disco-club">festival page</a>.</p>
-    `,
-    category: 'FESTIVAL',
-    date: '2026-04-15',
-    author: 'TECHNO JAPAN',
-    image: '',
-    featured: false,
-    views: 0,
-    readTime: 5,
-    tags: ['rainbow-disco-club', 'festival', 'shizuoka', 'outdoor'],
-    status: 'published',
+    views: 1500,
+    tags: ["DJ"],
+    status: "published",
   },
 ];
