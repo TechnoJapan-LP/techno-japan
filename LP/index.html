@@ -261,8 +261,9 @@
 .artists-carousel {
   position: relative;
   margin-top: 24px;
+}
+.artists-track-wrap {
   overflow: hidden;
-  /* fade edges */
   -webkit-mask-image: linear-gradient(to right, transparent 0, #000 80px, #000 calc(100% - 80px), transparent 100%);
           mask-image: linear-gradient(to right, transparent 0, #000 80px, #000 calc(100% - 80px), transparent 100%);
 }
@@ -270,12 +271,34 @@
   display: flex; gap: 14px;
   width: max-content;
   padding: 0 40px;
-  animation: artistsScroll 50s linear infinite;
+  will-change: transform;
 }
-.artists-carousel:hover .artists-track { animation-play-state: paused; }
-@keyframes artistsScroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(calc(-50% - 7px)); }
+
+/* arrows */
+.carousel-arrow {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: rgba(8,8,8,0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(240,237,232,0.15);
+  color: var(--text);
+  cursor: none;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease, background 0.3s ease, transform 0.3s ease;
+}
+.artists-carousel:hover .carousel-arrow { opacity: 0.5; }
+.carousel-arrow:hover { opacity: 1 !important; background: rgba(8,8,8,0.7); }
+.carousel-arrow:active { transform: translateY(-50%) scale(0.92); }
+.carousel-arrow.prev { left: 16px; }
+.carousel-arrow.next { right: 16px; }
+.carousel-arrow svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+@media (hover: none) and (pointer: coarse) {
+  .artists-carousel .carousel-arrow { opacity: 0.6; cursor: pointer; }
 }
 
 .artist-mini {
@@ -529,7 +552,11 @@
   <a href="artists.html" class="section-cta">VIEW ALL →</a>
 </div>
 <div class="artists-carousel">
-  <div class="artists-track" id="artists-track"><!-- rendered by JS --></div>
+  <button class="carousel-arrow prev" aria-label="Previous artists"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <button class="carousel-arrow next" aria-label="Next artists"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <div class="artists-track-wrap">
+    <div class="artists-track" id="artists-track"><!-- rendered by JS --></div>
+  </div>
 </div>
 
 <!-- VENUES -->
@@ -711,9 +738,77 @@
           <div class="artist-mini-genre">${(Array.isArray(a.genre) ? a.genre.join(' / ') : (a.genre || ''))}</div>
         </div>
       </a>`;
-    // duplicate the list for seamless infinite loop (animation translates by -50%)
+    // duplicate the list for seamless infinite loop
     const doubled = [...artistsToShow, ...artistsToShow];
     artistsTrackEl.innerHTML = doubled.map(cardHtml).join('');
+    initArtistsCarousel();
+  }
+
+  function initArtistsCarousel() {
+    const track = document.getElementById('artists-track');
+    const carousel = document.querySelector('.artists-carousel');
+    if (!track || !carousel) return;
+
+    let pos = 0;
+    let halfWidth = 0;
+    let cardStep = 0;
+    let paused = false;
+    let snapping = null; // when set, rAF auto-scroll defers to the snap animation
+    const speed = 0.4; // px per frame ≈ 24px/s at 60fps
+
+    function recalc() {
+      halfWidth = track.scrollWidth / 2;
+      const card = track.querySelector('.artist-mini');
+      if (card) {
+        const gap = parseFloat(getComputedStyle(track).gap) || 14;
+        cardStep = card.offsetWidth + gap;
+      }
+    }
+    function wrap(p) {
+      if (halfWidth <= 0) return p;
+      while (p < 0) p += halfWidth;
+      while (p >= halfWidth) p -= halfWidth;
+      return p;
+    }
+
+    // wait for images / layout
+    requestAnimationFrame(recalc);
+    window.addEventListener('resize', recalc);
+
+    function tick() {
+      if (!paused && !snapping) {
+        pos = wrap(pos + speed);
+        track.style.transform = `translateX(-${pos}px)`;
+      }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+
+    carousel.addEventListener('mouseenter', () => { paused = true; });
+    carousel.addEventListener('mouseleave', () => { paused = false; });
+
+    function snapBy(deltaCards) {
+      if (cardStep <= 0) recalc();
+      const target = pos + deltaCards * cardStep;
+      const start = pos;
+      const t0 = performance.now();
+      const dur = 450;
+      snapping = true;
+      function step(now) {
+        const t = Math.min(1, (now - t0) / dur);
+        const eased = 1 - Math.pow(1 - t, 3); // ease-out cubic
+        pos = wrap(start + (target - start) * eased);
+        track.style.transform = `translateX(-${pos}px)`;
+        if (t < 1) requestAnimationFrame(step);
+        else snapping = false;
+      }
+      requestAnimationFrame(step);
+    }
+
+    const prev = carousel.querySelector('.carousel-arrow.prev');
+    const next = carousel.querySelector('.carousel-arrow.next');
+    if (prev) prev.addEventListener('click', e => { e.preventDefault(); snapBy(-1); });
+    if (next) next.addEventListener('click', e => { e.preventDefault(); snapBy(1); });
   }
 
   /* --- Venues with city tabs --- */
