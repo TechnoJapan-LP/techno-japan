@@ -617,7 +617,14 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
       <div class="form-group"><label>Featured</label><select id="ar-featured"><option value="false">No</option><option value="true">Yes</option></select></div>
       <div class="form-group"><label>Status</label><select id="ar-status"><option value="published">Published</option><option value="draft">Draft</option></select></div>
       <div class="form-group full"><label>Tags (comma-separated)</label><input type="text" id="ar-tags" placeholder="e.g. tokyo, clubs, guide"></div>
-      <div class="form-group full"><label>Excerpt (1-2 sentences)</label><textarea id="ar-excerpt" rows="3" placeholder="Short summary..."></textarea></div>
+      <div class="form-group full">
+        <label>Excerpt (1-2 sentences) <span class="label-hint">本文から自動生成可能</span></label>
+        <textarea id="ar-excerpt" rows="3" placeholder="Short summary..."></textarea>
+        <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">
+          <button class="btn btn-green btn-sm" onclick="aiSummarize('excerpt')">✨ AI Excerpt 生成</button>
+          <button class="btn btn-sm" onclick="aiSummarize('excerpt-en')">✨ EN 版</button>
+        </div>
+      </div>
       <div class="form-group full">
         <label>Body</label>
         <div class="ar-editor-wrap" id="ar-editor-wrap">
@@ -1770,6 +1777,7 @@ function buildPublishingSection(section){
           <label>Meta Description <span class="label-hint">(SEO用 / 160文字以内推奨)</span></label>
           <textarea id="${p}-metaDescription" rows="2" placeholder="検索結果に表示される説明文..." style="width:100%" oninput="updateCharCount('${p}-metaDescription',160)"></textarea>
           <div class="char-count" id="${p}-metaDescription-count">0 / 160</div>
+          ${isArticle ? `<button class="btn btn-green btn-sm" style="margin-top:6px" onclick="aiSummarize('meta')">✨ AI Meta 生成</button>` : ''}
         </div>
         <div class="form-group">
           <label>Tags <span class="label-hint">(Enter または , で追加)</span></label>
@@ -3464,6 +3472,47 @@ function autoRegisterArtists(artistIds){
 /* ==============================================================
    EXPORT DATA.JS
    ============================================================== */
+/* ==============================================================
+   AI SUMMARIZE — 本文から excerpt / meta description を AI 生成
+   mode: 'excerpt' | 'excerpt-en' | 'meta'
+   ============================================================== */
+function aiSummarize(mode){
+  const bodyHtml = (document.getElementById('ar-body')?.value || '').trim();
+  const title = (document.getElementById('ar-title')?.value || '').trim();
+  if (!bodyHtml || bodyHtml === '<p><br></p>') return toast('先に本文を書いてください', 'error');
+
+  const text = bodyHtml.replace(/<[^>]+>/g,' ').replace(/&nbsp;/g,' ').replace(/&[a-z]+;/g,' ').replace(/\s+/g,' ').trim();
+  const targetId = mode === 'meta' ? 'ar-metaDescription' : 'ar-excerpt';
+  const targetEl = document.getElementById(targetId);
+  if (!targetEl) return toast('Field not found: '+targetId, 'error');
+
+  const btnLabel = mode === 'meta' ? 'AI Meta' : (mode === 'excerpt-en' ? 'AI Excerpt EN' : 'AI Excerpt');
+  toast('✨ '+btnLabel+' 生成中...', 'info');
+
+  fetch(GAS_URL, {
+    method: 'POST',
+    body: JSON.stringify({
+      action: 'ai_summarize',
+      mode: mode,
+      title: title,
+      text: text.slice(0, 8000)  // 安全のため上限
+    })
+  }).then(r=>r.json()).then(d=>{
+    if (d.status === 'ok' && d.text) {
+      targetEl.value = d.text.trim();
+      // char count 更新（meta description）
+      if (mode === 'meta' && typeof updateCharCount === 'function') updateCharCount('ar-metaDescription', 160);
+      markFormDirty();
+      toast('✨ 生成完了', 'success');
+    } else {
+      toast('AI failed: '+(d.message||'unknown'), 'error');
+    }
+  }).catch(e=>{
+    console.error('AI summarize error:', e);
+    toast('AI error: '+e.message, 'error');
+  });
+}
+
 function buildFullDataJs(d){
   const lines=[];
   lines.push(dataJsHeader());
