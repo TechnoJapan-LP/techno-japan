@@ -79,15 +79,6 @@ nav .logo {
   font-size: 11px;
   letter-spacing: 0.25em;
   text-transform: uppercase;
-  display: inline-flex;
-  align-items: center;
-}
-nav .logo .logo-img {
-  height: 18px; width: auto; display: block;
-  /* the PNG is white on transparent — render as-is */
-}
-@media (max-width: 768px) {
-  nav .logo .logo-img { height: 16px; }
 }
 nav .nav-links {
   display: flex;

@@ -6,9 +6,6 @@
 <title>ABOUT — TECHNO JAPAN</title>
 <meta name="description" content="About TECHNO JAPAN — a media platform documenting Japan's underground techno and house music scene.">
 <link rel="alternate" type="application/rss+xml" title="TECHNO JAPAN — RSS" href="https://techno-japan.media/rss.xml">
-<link rel="icon" type="image/png" sizes="32x32" href="/images/logo/favicon-32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/images/logo/favicon-16.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/images/logo/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#080808">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -19,7 +16,7 @@
 <!-- Open Graph -->
 <meta property="og:title" content="ABOUT — TECHNO JAPAN">
 <meta property="og:description" content="About TECHNO JAPAN — a media platform documenting Japan's underground techno and house music scene.">
-<meta property="og:image" content="https://techno-japan.media/images/logo/og-image.jpg">
+<meta property="og:image" content="https://techno-japan.media/images/festivals/rainbow-disco-club.jpeg">
 <meta property="og:url" content="https://techno-japan.media/about.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="TECHNO JAPAN">
@@ -29,7 +26,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ABOUT — TECHNO JAPAN">
 <meta name="twitter:description" content="About TECHNO JAPAN — a media platform documenting Japan's underground techno and house music scene.">
-<meta name="twitter:image" content="https://techno-japan.media/images/logo/og-image.jpg">
+<meta name="twitter:image" content="https://techno-japan.media/images/festivals/rainbow-disco-club.jpeg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
@@ -116,16 +113,6 @@
   font-size: clamp(96px, 18vw, 260px);
   line-height: 0.85;
   text-transform: uppercase;
-}
-.hero-title.hero-title-logo {
-  opacity: 0;
-  animation: fadeSlideUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  animation-delay: 0.5s;
-  width: clamp(220px, 40vw, 520px);
-  max-width: 60vw;
-}
-.hero-title.hero-title-logo img {
-  width: 100%; height: auto; display: block;
 }
 .hero-title .line {
   display: block;
@@ -704,7 +691,7 @@ section { padding: 120px 40px; }
 
 <!-- NAV -->
 <nav>
-  <a href="index.html" class="logo" aria-label="TECHNO JAPAN — Home"><img src="images/logo/logo-horizontal.png" alt="TECHNO JAPAN" class="logo-img"></a>
+  <div class="logo">TECHNO JAPAN</div>
   <div class="nav-links">
     <a href="index.html">TOP</a>
     <a href="news.html">NEWS</a>
@@ -740,8 +727,9 @@ section { padding: 120px 40px; }
   <div class="scan-line"></div>
   <div class="hero-eyebrow">JAPAN / UNDERGROUND DANCE MUSIC / MEDIA</div>
   <div class="hero-bottom">
-    <h1 class="hero-title hero-title-logo" aria-label="TECHNO JAPAN">
-      <img src="images/logo/logo-stacked.png" alt="TECHNO JAPAN">
+    <h1 class="hero-title">
+      <span class="line"><span>TECHNO</span></span>
+      <span class="line"><span>JAPAN</span></span>
     </h1>
     <div class="hero-label">
       UNDERGROUND DANCE MUSIC<br>
