@@ -73,6 +73,78 @@ nav { padding: 20px 40px; background: rgba(8,8,8,0.97); mix-blend-mode: normal; 
 .venue-card-arrow { position: absolute; right: 32px; bottom: 48px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; opacity: 0; transition: opacity 0.3s ease; z-index: 1; }
 .venue-card:hover .venue-card-arrow { opacity: 0.5; }
 
+/* ===================== HOVER PREVIEW PANE (HÖR-style) ===================== */
+.vp-pane {
+  position: fixed;
+  top: 50%; right: 32px;
+  transform: translateY(-50%) translateX(20px);
+  width: 360px; max-width: 38vw;
+  background: rgba(8,8,8,0.92);
+  border: 1px solid rgba(240,237,232,0.1);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1500;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+}
+.vp-pane.is-active { opacity: 1; transform: translateY(-50%) translateX(0); }
+.vp-img {
+  position: relative; width: 100%; aspect-ratio: 4/3;
+  overflow: hidden; background: rgba(240,237,232,0.04);
+}
+.vp-img img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; filter: grayscale(40%) brightness(0.85);
+  opacity: 0; transition: opacity 0.4s ease;
+}
+.vp-img img.loaded { opacity: 1; }
+.vp-img-placeholder {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em;
+  text-transform: uppercase; opacity: 0.2;
+}
+.vp-content { padding: 22px 24px 24px; }
+.vp-meta {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em;
+  text-transform: uppercase; opacity: 0.55;
+  display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+}
+.vp-meta .vp-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+.vp-name {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 2.6vw, 38px);
+  text-transform: uppercase; line-height: 0.95;
+  margin-bottom: 14px;
+}
+.vp-stats {
+  display: flex; flex-wrap: wrap; gap: 14px;
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em;
+  text-transform: uppercase; opacity: 0.55; margin-bottom: 14px;
+}
+.vp-stats span { display: inline-flex; align-items: center; }
+.vp-stats span + span::before {
+  content: '·'; opacity: 0.5; margin-right: 14px;
+}
+.vp-desc {
+  font-family: var(--font-body); font-weight: 300;
+  font-size: 12.5px; line-height: 1.65;
+  opacity: 0.65;
+  display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+.vp-cta {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--accent);
+  display: inline-flex; align-items: center; gap: 6px;
+}
+/* Disable on touch + small screens — fallback to default card behavior */
+@media (hover: none) and (pointer: coarse), (max-width: 1100px) {
+  .vp-pane { display: none !important; }
+}
+
 /* ===================== VENUE DETAIL ===================== */
 #venue-detail-view { display: none; position: relative; }
 .venue-hero {
@@ -373,6 +445,20 @@ nav { padding: 20px 40px; background: rgba(8,8,8,0.97); mix-blend-mode: normal; 
   <div class="venues-grid" id="venues-grid"></div>
 </main>
 
+<!-- Hover preview pane (HÖR-inspired). Hidden on touch / narrow screens via CSS. -->
+<aside class="vp-pane" id="venue-preview" aria-hidden="true">
+  <div class="vp-img" id="vp-img-wrap">
+    <div class="vp-img-placeholder">NO IMAGE</div>
+  </div>
+  <div class="vp-content">
+    <div class="vp-meta"><span class="vp-dot"></span><span id="vp-meta">CITY · AREA</span></div>
+    <div class="vp-name" id="vp-name">VENUE</div>
+    <div class="vp-stats" id="vp-stats"></div>
+    <div class="vp-desc" id="vp-desc"></div>
+    <div class="vp-cta">VIEW DETAIL →</div>
+  </div>
+</aside>
+
 <div id="venue-detail-view">
   <div class="venue-hero" id="venue-hero"></div>
   <a class="venue-back" id="venue-back-btn"><span class="arrow" style="width:24px;height:1px;background:var(--text);position:relative;display:inline-block"><span style="position:absolute;left:0;top:-3px;width:7px;height:7px;border-left:1px solid var(--text);border-bottom:1px solid var(--text);transform:rotate(45deg)"></span></span> ALL VENUES</a>
@@ -575,6 +661,73 @@ function applyAreaFilter() {
   });
 }
 
+/* HOVER PREVIEW PANE — HÖR-inspired side popup, desktop only */
+function bindVenueHoverPreview(){
+  const pane = document.getElementById('venue-preview');
+  if (!pane) return;
+  // Skip on touch devices
+  if (window.matchMedia('(hover: none)').matches) return;
+  if (window.matchMedia('(max-width: 1100px)').matches) return;
+
+  const imgWrap = document.getElementById('vp-img-wrap');
+  const metaEl  = document.getElementById('vp-meta');
+  const nameEl  = document.getElementById('vp-name');
+  const statsEl = document.getElementById('vp-stats');
+  const descEl  = document.getElementById('vp-desc');
+
+  let hideTimer = null;
+
+  function fillFor(v){
+    metaEl.textContent = `${v.city || ''}${v.area ? ' · ' + v.area : ''}`;
+    nameEl.textContent = v.name;
+    const parts = [];
+    if (v.capacity) parts.push(`CAP. ${v.capacity}`);
+    const genre = Array.isArray(v.genre) ? v.genre.join(' / ') : (v.genre || '');
+    if (genre) parts.push(genre);
+    if (v.type) parts.push(v.type.toUpperCase());
+    statsEl.innerHTML = parts.map(p => `<span>${p}</span>`).join('');
+    descEl.textContent = v.desc || '';
+    // image
+    imgWrap.innerHTML = '';
+    if (v.image && v.image.trim()) {
+      const img = document.createElement('img');
+      img.alt = v.name;
+      img.loading = 'eager';
+      img.decoding = 'async';
+      img.onload = () => img.classList.add('loaded');
+      img.src = v.image;
+      imgWrap.appendChild(img);
+    } else {
+      const ph = document.createElement('div');
+      ph.className = 'vp-img-placeholder';
+      ph.textContent = 'NO IMAGE';
+      imgWrap.appendChild(ph);
+    }
+  }
+
+  document.querySelectorAll('.venue-card').forEach(card => {
+    if (card.dataset.tjVpBound === '1') return;
+    card.dataset.tjVpBound = '1';
+    const id = (card.getAttribute('href') || '').replace('#venue/', '');
+    const v = (typeof VENUES !== 'undefined') ? VENUES.find(x => x.id === id) : null;
+    if (!v) return;
+
+    card.addEventListener('mouseenter', () => {
+      clearTimeout(hideTimer);
+      fillFor(v);
+      pane.classList.add('is-active');
+      pane.setAttribute('aria-hidden', 'false');
+    });
+    card.addEventListener('mouseleave', () => {
+      // Tiny delay so quick hovers across cards don't strobe
+      hideTimer = setTimeout(() => {
+        pane.classList.remove('is-active');
+        pane.setAttribute('aria-hidden', 'true');
+      }, 80);
+    });
+  });
+}
+
 /* RENDER LIST */
 function renderVenuesList() {
   document.getElementById('venues-grid').innerHTML = VENUES.filter(v => v.name && v.city && v.city !== 'undefined').map((v, i) => {
@@ -601,6 +754,7 @@ function renderVenuesList() {
   observeAll();
   bindCursorExpand();
   applyAreaFilter();
+  bindVenueHoverPreview();
 }
 
 /* RENDER DETAIL */
