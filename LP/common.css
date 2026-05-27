@@ -537,6 +537,14 @@ footer {
   transition: opacity 0.3s ease;
 }
 .newsletter-form button:hover { opacity: 0.85; }
+/* Honeypot — hidden from humans, bots fill it and get rejected by FormSubmit */
+.tj-honeypot {
+  position: absolute !important;
+  left: -9999px !important;
+  width: 1px !important; height: 1px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
 
 /* ===================== RESPONSIVE (shared chrome only) ===================== */
 @media (max-width: 900px) {

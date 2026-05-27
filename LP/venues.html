@@ -3,6 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://w.behold.so https://giscus.app; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://giscus.app; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' https:; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://stats.g.doubleclick.net https://feeds.behold.so https://w.behold.so https://formsubmit.co https://giscus.app; frame-src 'self' https://giscus.app https://w.behold.so https://www.google.com https://www.google.co.jp https://www.youtube.com https://www.youtube-nocookie.com; form-action 'self' https://formsubmit.co; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), interest-cohort=()">
+
 <title>VENUES — TECHNO JAPAN</title>
 <meta name="description" content="Clubs and venues from Japan's underground techno and house music scene.">
 <link rel="alternate" type="application/rss+xml" title="TECHNO JAPAN — RSS" href="https://techno-japan.media/rss.xml">
@@ -517,6 +522,7 @@ nav { padding: 20px 40px; background: rgba(8,8,8,0.97); mix-blend-mode: normal; 
   <div class="newsletter-title">Stay in the loop.</div>
   <div class="newsletter-desc">Monthly digest of new festivals, artists, and stories from Japan's underground.</div>
   <form class="newsletter-form" action="https://formsubmit.co/tatsuya25shibata@gmail.com" method="POST">
+    <input type="text" name="_honey" tabindex="-1" autocomplete="off" class="tj-honeypot" aria-hidden="true">
     <input type="email" name="email" required placeholder="your@email.com">
     <input type="hidden" name="_subject" value="Newsletter signup — TECHNO JAPAN">
     <input type="hidden" name="_template" value="table">
