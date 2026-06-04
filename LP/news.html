@@ -21,7 +21,7 @@
 <!-- Open Graph -->
 <meta property="og:title" content="NEWS — TECHNO JAPAN">
 <meta property="og:description" content="Explore Japan's underground techno and house scene. Stories, interviews, reports and more.">
-<meta property="og:image" content="https://techno-japan.media/images/festivals/rainbow-disco-club.jpeg">
+<meta property="og:image" content="https://techno-japan.media/images/festivals/rainbow-disco-club.webp">
 <meta property="og:url" content="https://techno-japan.media/news.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="TECHNO JAPAN">
@@ -31,9 +31,13 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="NEWS — TECHNO JAPAN">
 <meta name="twitter:description" content="Explore Japan's underground techno and house scene. Stories, interviews, reports and more.">
-<meta name="twitter:image" content="https://techno-japan.media/images/festivals/rainbow-disco-club.jpeg">
+<meta name="twitter:image" content="https://techno-japan.media/images/festivals/rainbow-disco-club.webp">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://www.google-analytics.com">
+<link rel="dns-prefetch" href="https://www.googletagmanager.com">
+<link rel="dns-prefetch" href="https://w.behold.so">
+<link rel="dns-prefetch" href="https://formsubmit.co">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="common.css">
 <style>
@@ -570,6 +574,8 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
 </script>
 </head>
 <body>
+<a href="#main-content" class="skip-to-content">Skip to content</a>
+
 
 <div class="cursor-dot"></div>
 <div class="cursor-ring"></div>
@@ -1111,7 +1117,7 @@ function renderArticleDetail(id) {
   const articleUrlAbs = `https://techno-japan.media/news.html#article/${a.id}`;
   const articleImg = a.image
     ? (a.image.startsWith('http') ? a.image : `https://techno-japan.media/${a.image.replace(/^\//,'')}`)
-    : 'https://techno-japan.media/images/festivals/rainbow-disco-club.jpeg';
+    : 'https://techno-japan.media/images/festivals/rainbow-disco-club.webp';
   const articleDesc = a.excerpt || '';
 
   document.title = articleTitle;
@@ -1129,6 +1135,37 @@ function renderArticleDetail(id) {
   setMeta('meta[name="twitter:description"]','content', articleDesc);
   setMeta('meta[name="twitter:image"]',   'content', articleImg);
   setMeta('link[rel="canonical"]',        'href',    articleUrlAbs);
+
+  // Article schema.org JSON-LD — injected/replaced per article render
+  (function injectArticleSchema(){
+    const old = document.getElementById('tj-article-schema');
+    if (old) old.remove();
+    const schema = {
+      '@context': 'https://schema.org',
+      '@type': 'NewsArticle',
+      headline: a.title,
+      description: articleDesc,
+      image: [articleImg],
+      datePublished: a.date,
+      dateModified: a.updated || a.date,
+      author: (function(){ const name = a.author || 'TECHNO JAPAN'; return { '@type': /TECHNO JAPAN/i.test(name) ? 'Organization' : 'Person', name }; })(),
+      publisher: {
+        '@type': 'Organization',
+        name: 'TECHNO JAPAN',
+        url: 'https://techno-japan.media/',
+        logo: { '@type': 'ImageObject', url: 'https://techno-japan.media/images/festivals/rainbow-disco-club.webp' }
+      },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrlAbs },
+      articleSection: a.category || 'NEWS',
+      keywords: (Array.isArray(a.tags) ? a.tags.join(', ') : '') || undefined,
+      url: articleUrlAbs,
+    };
+    const s = document.createElement('script');
+    s.type = 'application/ld+json';
+    s.id = 'tj-article-schema';
+    s.textContent = JSON.stringify(schema);
+    document.head.appendChild(s);
+  })();
 
   const url = `https://techno-japan.media/news.html#article/${a.id}`;
   const t = encodeURIComponent(`${a.title} — TECHNO JAPAN`);
@@ -1225,7 +1262,7 @@ function showList() {
   const def = {
     title: 'NEWS — TECHNO JAPAN',
     desc: "Explore Japan's underground techno and house scene. Stories, interviews, reports and more.",
-    img:  'https://techno-japan.media/images/festivals/rainbow-disco-club.jpeg',
+    img:  'https://techno-japan.media/images/festivals/rainbow-disco-club.webp',
     url:  'https://techno-japan.media/news.html',
   };
   function set(sel, attr, val){ const el = document.querySelector(sel); if (el) el.setAttribute(attr, val); }
@@ -1239,6 +1276,8 @@ function showList() {
   set('meta[name="twitter:description"]',  'content', def.desc);
   set('meta[name="twitter:image"]',        'content', def.img);
   set('link[rel="canonical"]',             'href',    def.url);
+  const oldSchema = document.getElementById('tj-article-schema');
+  if (oldSchema) oldSchema.remove();
 }
 
 function handleHash() {
