@@ -177,18 +177,22 @@ const ARTICLES = [{ id, title, excerpt, body, category, date, author, image, fea
 
 ## 既知の課題 / 未対応
 
-### GAS 側
-- `add_article` ハンドラに **body / author / tags / status / imagePosition** フィールドの保存処理がまだ
-  - 当面は CMS の「Generate Code」→ data.js コピペ運用、または GAS 更新が必要
-- `add_artist` ハンドラも `imagePosition` 未対応
+### GAS 側（更新キット準備済み）
+- **`scripts/gas-update/README.md`** に貼り付け用コードと手順あり（10分作業）
+  - ヘッダ名マッピング式 `addRowByHeaders_()` で add_article / add_artist を全フィールド対応化
+  - シートに列追加が必要: ARTICLES に `date`、ARTISTS に `imagePosition` / `website`
+- `update_row`（編集保存）は既に全フィールド動作 → 新規作成のみが対象
 
 ### コンテンツ不足
 - **アーティスト画像**: 69件中4件のみ（残り65件はグラデーションプレースホルダー）
 - **記事**: 1〜3本のみ。週1ペースで増やすべき
 - **会場の英語版テキスト**: 未対応
 
-### Giscus コメント
-- `news.html` の `GISCUS_CONFIG` が空。giscus.app で repo / repoId / categoryId を取得して埋める必要あり
+### Giscus コメント（設定済み・要アプリインストール）
+- `GISCUS_CONFIG` は実値設定済み（repo / repoId / Announcements カテゴリID）
+- GitHub Discussions は API で有効化済み
+- **残り1手順**: giscus GitHub App のインストール → https://github.com/apps/giscus
+  （TechnoJapan-LP/techno-japan を選択して Install。これでコメント欄が稼働）
 
 ### 多言語（未着手）
 - CMSに `name_en` `desc_en` `bio_en` フィールドあるが、データ未充足
@@ -280,7 +284,9 @@ img.convert('RGB').save('images/festivals/new.webp', 'WEBP', quality=82, method=
 ### 短期
 1. **GASのadd_article / add_artist ハンドラ更新** — body/author/tags/status/imagePosition 対応
 2. **Giscusセットアップ** — giscus.app で repo接続 → `news.html` の `GISCUS_CONFIG` を埋める
-3. **記事を週1で書く** — EVENTS タグ付きの「次の週末ガイド」など、現状ほぼ空
+3. **記事を週1で書く** — 毎週月曜 09:00 JST に `weekly-article-draft` workflow が
+   直近14日のイベント/フェスをまとめた CMS 貼り付け用ドラフトを **GitHub Issue として自動起票**。
+   Issue の（）を埋めて CMS → Article → New に貼るだけ
 4. **アーティスト画像追加** — 主要DJの写真を集める
 
 ### 中期
