@@ -59,6 +59,7 @@
   <div class="tab-bar">
     <button class="active" onclick="switchTab('venue','list')">List</button>
     <button onclick="switchTab('venue','form')">New</button>
+    <button onclick="openQuickAdd('venue')" style="color:var(--yellow)">⚡ Quick</button>
   </div>
   <div class="tab-content active" id="venue-tab-list">
     <div style="margin-bottom:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
@@ -68,6 +69,7 @@
         <button class="btn btn-sm btn-accent" onclick="sortVenueList('name')">Name</button>
         <button class="btn btn-sm" onclick="sortVenueList('city')">City</button>
         <button class="btn btn-sm" onclick="sortVenueList('type')">Type</button>
+        <button class="btn btn-sm" onclick="sortVenueList('__comp')" title="情報が欠けている順に表示">📊 未完成</button>
       </div>
       <button class="btn btn-sm" onclick="loadList('venue',{force:true})">Refresh</button>
     </div>
@@ -126,6 +128,7 @@
   <div class="tab-bar">
     <button class="active" onclick="switchTab('festival','list')">List</button>
     <button onclick="switchTab('festival','form')">New</button>
+    <button onclick="openQuickAdd('festival')" style="color:var(--yellow)">⚡ Quick</button>
   </div>
   <div class="tab-content active" id="festival-tab-list">
     <div style="margin-bottom:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
@@ -139,6 +142,7 @@
         <button class="btn btn-sm btn-accent" onclick="sortFestivalList('date')">Date</button>
         <button class="btn btn-sm" onclick="sortFestivalList('name')">Name</button>
         <button class="btn btn-sm" onclick="sortFestivalList('city')">City</button>
+        <button class="btn btn-sm" onclick="sortFestivalList('__comp')" title="情報が欠けている順に表示">📊 未完成</button>
       </div>
       <button class="btn btn-sm" onclick="loadList('festival',{force:true})">Refresh</button>
     </div>
@@ -219,6 +223,7 @@
   <div class="tab-bar">
     <button class="active" onclick="switchTab('artist','list')">List</button>
     <button onclick="switchTab('artist','form')">New</button>
+    <button onclick="openQuickAdd('artist')" style="color:var(--yellow)">⚡ Quick</button>
   </div>
   <div class="tab-content active" id="artist-tab-list">
     <div style="margin-bottom:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
@@ -228,6 +233,7 @@
         <button class="btn btn-sm btn-accent" onclick="sortArtistList('name')">Name</button>
         <button class="btn btn-sm" onclick="sortArtistList('city')">City</button>
         <button class="btn btn-sm" onclick="sortArtistList('genre')">Genre</button>
+        <button class="btn btn-sm" onclick="sortArtistList('__comp')" title="情報が欠けている順に表示">📊 未完成</button>
       </div>
       <button class="btn btn-sm" onclick="loadList('artist',{force:true})">Refresh</button>
     </div>
@@ -282,6 +288,7 @@
   <div class="tab-bar">
     <button class="active" onclick="switchTab('event','list')">List</button>
     <button onclick="switchTab('event','form')">New</button>
+    <button onclick="openQuickAdd('event')" style="color:var(--yellow)">⚡ Quick</button>
   </div>
   <div class="tab-content active" id="event-tab-list">
     <div style="margin-bottom:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
@@ -295,6 +302,7 @@
         <button class="btn btn-sm btn-accent" onclick="sortEventList('date')">Date</button>
         <button class="btn btn-sm" onclick="sortEventList('name')">Name</button>
         <button class="btn btn-sm" onclick="sortEventList('venue')">Venue</button>
+        <button class="btn btn-sm" onclick="sortEventList('__comp')" title="情報が欠けている順に表示">📊 未完成</button>
       </div>
       <button class="btn btn-sm" onclick="loadList('event',{force:true})">Refresh</button>
     </div>
@@ -336,6 +344,7 @@
         <button class="btn btn-sm btn-accent" onclick="sortArticleList('date')">Date</button>
         <button class="btn btn-sm" onclick="sortArticleList('title')">Title</button>
         <button class="btn btn-sm" onclick="sortArticleList('category')">Category</button>
+        <button class="btn btn-sm" onclick="sortArticleList('__comp')" title="情報が欠けている順に表示">📊 未完成</button>
       </div>
       <button class="btn btn-sm" onclick="loadList('article',{force:true})">Refresh</button>
     </div>

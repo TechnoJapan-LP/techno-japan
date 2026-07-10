@@ -1936,7 +1936,11 @@ function renderList(section, rows){
     }
     const tds=cols.map(c=>'<td>'+esc(r[c.k])+'</td>').join('');
     const nameVal=esc(r.name||r.title||r.id||'');
-    return '<tr>'+prefix+tds+'<td class="actions"><button class="btn btn-sm btn-blue" onclick="editRow(\''+section+'\','+r._row+')">Edit</button><button class="btn btn-sm btn-accent" onclick="confirmDelete(\''+section+'\','+r._row+',\''+nameVal.replace(/'/g,"\\'")+'\')">Delete</button></td></tr>';
+    // 楽観的挿入直後（GAS応答待ち）は行番号未確定なので操作ボタンを出さない
+    const actions = r.__syncing
+      ? '<td class="actions"><span style="font-family:var(--font-mono);font-size:.7rem;color:var(--text3)">⏳ syncing...</span></td>'
+      : '<td class="actions"><button class="btn btn-sm btn-blue" onclick="editRow(\''+section+'\','+r._row+')">Edit</button><button class="btn btn-sm btn-accent" onclick="confirmDelete(\''+section+'\','+r._row+',\''+nameVal.replace(/'/g,"\\'")+'\')">Delete</button></td>';
+    return '<tr'+(r.__syncing?' style="opacity:.55"':'')+'>'+prefix+tds+actions+'</tr>';
   }).join('');
   c.innerHTML='<table class="data-table"><thead><tr>'+ths+'</tr></thead><tbody>'+trs+'</tbody></table>';
 }
@@ -1961,20 +1965,22 @@ function filterArtistList(){
   const q=(document.getElementById('artist-search')?.value||'').toLowerCase();
   let rows=listCache.artist;
   if(q) rows=rows.filter(r=>String(r.name||'').toLowerCase().includes(q)||String(r.id||'').toLowerCase().includes(q)||String(r.city||'').toLowerCase().includes(q)||String(r.genre||'').toLowerCase().includes(q));
-  rows=sortRows(rows, artistSortKey, artistSortAsc);
+  rows=sortRows(rows, artistSortKey, artistSortAsc, 'artist');
   renderList('artist', rows);
 }
 function sortArtistList(key){
   if(artistSortKey===key) artistSortAsc=!artistSortAsc;
   else { artistSortKey=key; artistSortAsc=true; }
-  // ボタンのハイライト
-  document.querySelectorAll('#artist-tab-list .btn-sm').forEach(b=>{
-    if(b.textContent.toLowerCase()===key) b.className='btn btn-sm btn-accent';
-    else if(['name','city','genre'].includes(b.textContent.toLowerCase())) b.className='btn btn-sm';
-  });
+  highlightSortBtn('artist', key, ['name','city','genre']);
   filterArtistList();
 }
-function sortRows(rows, key, asc){
+function sortRows(rows, key, asc, section){
+  // 完成度ソート: スコアの低い（情報が欠けている）エントリを上に
+  if(key==='__comp' && section){
+    const scored = rows.map(r => ({r, s: computeCompleteness(section, r).score}));
+    scored.sort((a,b) => asc ? a.s - b.s : b.s - a.s);
+    return scored.map(x => x.r);
+  }
   return [...rows].sort((a,b)=>{
     const va=String(a[key]||'').toLowerCase();
     const vb=String(b[key]||'').toLowerCase();
@@ -1991,14 +1997,15 @@ function applyListFilter(section, searchKeys, sortKey, sortAsc, sortGroup, preFi
   let rows=listCache[section];
   if(preFilterFn) rows=preFilterFn(rows);
   if(q) rows=rows.filter(r=>searchKeys.some(k=>String(r[k]||'').toLowerCase().includes(q)));
-  rows=sortRows(rows, sortKey, sortAsc);
+  rows=sortRows(rows, sortKey, sortAsc, section);
   renderList(section, rows);
 }
 function highlightSortBtn(section, key, group){
   document.querySelectorAll('#'+section+'-tab-list .btn-sm').forEach(b=>{
     const t=b.textContent.toLowerCase();
-    if(t===key) b.className='btn btn-sm btn-accent';
-    else if(group.includes(t)) b.className='btn btn-sm';
+    const isComp=t.includes('未完成');
+    if(t===key || (key==='__comp' && isComp)) b.className='btn btn-sm btn-accent';
+    else if(group.includes(t) || isComp) b.className='btn btn-sm';
   });
 }
 
@@ -2032,7 +2039,7 @@ function filterEventList(){
     String(r.date||'').includes(q)
   );
   if(eventView==='calendar'){ renderCalendar('event', rows); return; }
-  rows=sortRows(rows, eventSortKey, eventSortAsc);
+  rows=sortRows(rows, eventSortKey, eventSortAsc, 'event');
   renderList('event', rows);
 }
 function sortEventList(key){
@@ -2074,7 +2081,7 @@ function filterFestivalList(){
     String(r.date||'').includes(q)
   );
   if(festivalView==='calendar'){ renderCalendar('festival', rows); return; }
-  rows=sortRows(rows, festivalSortKey, festivalSortAsc);
+  rows=sortRows(rows, festivalSortKey, festivalSortAsc, 'festival');
   renderList('festival', rows);
 }
 function sortFestivalList(key){
@@ -2237,19 +2244,57 @@ function saveEdit(section){
     ? lineups.f.filter(a=>a.startsWith('?')).map(a=>a.substring(1))
     : [];
 
-  toast('Updating...','info');
+  // ---- 楽観的UI: GAS応答を待たずにリストへ即反映 ----
+  const rowNum = state._row;
+  applyOptimisticUpdate(section, rowNum, payload);
+  clearFormDirty();
+  if (section === 'article') clearArticleDraft();
+  cancelEdit(section);
+  switchTab(section,'list');
+  rerenderListFromCache(section);
+  toast('保存中...','info');
+
   fetch(GAS_URL,{method:'POST',body:JSON.stringify(payload)})
     .then(r=>r.json()).then(d=>{
       if(d.status==='ok'||d.success){
-        toast('Updated','success');
-        clearFormDirty();
-        if (section === 'article') clearArticleDraft();
-        invalidateSheetCache(section);
+        toast('Updated ✓','success');
         if(unregisteredArtists.length){autoRegisterArtists(unregisteredArtists);invalidateSheetCache('artist');}
-        cancelEdit(section);switchTab(section,'list');loadList(section, {force:true});
+        // 裏で正データに置き換え（画面はすでに更新済みなので silent）
+        loadList(section, {force:true, silent:true});
+      } else {
+        toast('保存失敗: '+(d.message||'')+' — リストを再読込します','error');
+        invalidateSheetCache(section);
+        loadList(section, {force:true});
       }
-      else toast('Update failed: '+(d.message||''),'error');
-    }).catch(()=>toast('Update error','error'));
+    }).catch(()=>{
+      toast('通信エラー — リストを再読込します','error');
+      invalidateSheetCache(section);
+      loadList(section, {force:true});
+    });
+}
+
+/* 楽観的更新: listCache の該当行にフォーム値をマージして即描画 */
+function applyOptimisticUpdate(section, rowNum, payload){
+  const rows = listCache[section];
+  if(!rows) return;
+  const idx = rows.findIndex(r => r._row === rowNum);
+  if(idx < 0) return;
+  const {action, sheet, row, ...fields} = payload;
+  rows[idx] = {...rows[idx], ...fields};
+  writeSheetCache(section, rows);
+}
+
+const LIST_FILTER_FNS = {
+  venue: () => filterVenueList(),
+  festival: () => filterFestivalList(),
+  artist: () => filterArtistList(),
+  event: () => filterEventList(),
+  article: () => filterArticleList(),
+  author: () => filterAuthorList(),
+};
+function rerenderListFromCache(section){
+  const fn = LIST_FILTER_FNS[section];
+  if(fn && listCache[section]) fn();
 }
 
 /* ==============================================================
@@ -2816,31 +2861,178 @@ function submitToSheet(section){
     ? lineups.f.filter(a=>a.startsWith('?')).map(a=>a.substring(1))
     : [];
 
-  toast('Saving...','info');
+  // ---- 楽観的UI: 「⏳ syncing」行として即リストに出し、GAS応答は裏で待つ ----
+  applyOptimisticInsert(section, payload);
+  clearFormDirty();
+  if (section === 'article') clearArticleDraft();
+  resetForm(section);
+  switchTab(section,'list');
+  rerenderListFromCache(section);
+  toast('保存中...','info');
+
   fetch(GAS_URL,{method:'POST',body:JSON.stringify(payload)})
     .then(r=>r.json()).then(r=>{
       console.log('Save response:',r);
       if(r.success||r.status==='ok'){
-        toast('Saved — リフレッシュ中...','success');
-        clearFormDirty();
-        if (section === 'article') clearArticleDraft();
-        invalidateSheetCache(section);
-        // 未登録アーティストをARTISTSシートに追加
+        toast('Saved ✓','success');
         if(unregisteredArtists.length){
           autoRegisterArtists(unregisteredArtists);
           invalidateSheetCache('artist');
         }
-        // フォームをリセットしてリストに切り替え＆再読み込み
-        resetForm(section);
-        switchTab(section,'list');
+        // 正式な行番号を取り込むため裏で再読込（syncing 行が実データに置き換わる）
         loadList(section, {force:true});
       } else {
         const msg=r.message||r.error||'Save failed';
         console.error('Save failed:',r);
-        toast(msg,'error');
+        toast('保存失敗: '+msg+' — リストを再読込します','error');
+        invalidateSheetCache(section);
+        loadList(section, {force:true});
       }
     })
-    .catch(e=>{console.error('Save error:',e);toast('Save error: '+e.message,'error')});
+    .catch(e=>{
+      console.error('Save error:',e);
+      toast('通信エラー: '+e.message+' — リストを再読込します','error');
+      invalidateSheetCache(section);
+      loadList(section, {force:true});
+    });
+}
+
+/* 楽観的挿入: 行番号が確定するまで __syncing フラグ付きでキャッシュ先頭に追加 */
+function applyOptimisticInsert(section, payload){
+  if(!listCache[section]) listCache[section] = [];
+  const {action, ...fields} = payload;
+  listCache[section].unshift({...fields, _row: -1, __syncing: true});
+}
+
+/* ==============================================================
+   QUICK ADD — 最小フィールドで即保存 → あとから詳細を追記
+   大量登録時期のための2段階フロー。保存は draft ステータス。
+   ============================================================== */
+const QUICK_ADD_DEFS = {
+  venue: { title: 'Venue クイック追加', action: 'addVenue', fields: [
+    { key: 'name', label: 'Name', ph: 'e.g. CLUB METRO', required: true, slugSource: true },
+    { key: 'id',   label: 'ID (URL slug)', ph: 'nameから自動生成', required: true },
+    { key: 'city', label: 'City', ph: 'e.g. KYOTO' },
+    { key: 'area', label: 'Area', ph: 'e.g. SHIMOGYO' },
+  ]},
+  festival: { title: 'Festival クイック追加', action: 'add_festival', fields: [
+    { key: 'name', label: 'Name', ph: 'e.g. RURAL', required: true, slugSource: true },
+    { key: 'id',   label: 'ID (URL slug)', ph: 'nameから自動生成', required: true },
+    { key: 'dateStart', label: 'Date Start', type: 'date' },
+    { key: 'dateEnd',   label: 'Date End', type: 'date' },
+    { key: 'city', label: 'City / Pref', ph: 'e.g. NIIGATA' },
+  ]},
+  artist: { title: 'Artist クイック追加', action: 'add_artist', fields: [
+    { key: 'name', label: 'Name', ph: 'e.g. DJ NOBU', required: true, slugSource: true },
+    { key: 'id',   label: 'ID (URL slug)', ph: 'nameから自動生成', required: true },
+    { key: 'city', label: 'City', ph: 'e.g. TOKYO' },
+    { key: 'genre', label: 'Genre', ph: 'e.g. TECHNO' },
+  ]},
+  event: { title: 'Event クイック追加', action: 'add_event', fields: [
+    { key: 'name', label: 'Name', ph: 'e.g. FUTURE TERROR', required: true },
+    { key: 'date', label: 'Date', type: 'date' },
+    { key: 'venue', label: 'Venue', ph: 'e.g. WOMB' },
+    { key: 'city', label: 'City', ph: 'e.g. TOKYO' },
+  ]},
+};
+
+function openQuickAdd(section){
+  const def = QUICK_ADD_DEFS[section];
+  if (!def) return;
+  closeQuickAdd();
+  const overlay = document.createElement('div');
+  overlay.id = 'quick-add-modal';
+  overlay.className = 'dialog-overlay show';
+  const fieldsHtml = def.fields.map(f => `
+    <div style="margin-bottom:12px">
+      <label style="display:block;font-family:var(--font-mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text3);margin-bottom:5px">${f.label}${f.required ? '<span class="req-star">*</span>' : ''}</label>
+      <input type="${f.type||'text'}" id="qa-${f.key}" placeholder="${f.ph||''}" style="width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:.9rem">
+    </div>`).join('');
+  overlay.innerHTML = `
+    <div class="dialog-box" style="max-width:440px">
+      <h3>⚡ ${def.title}</h3>
+      <p style="margin-bottom:16px">最小情報で draft 保存。詳細はあとから追記できます。</p>
+      ${fieldsHtml}
+      <div class="btn-row" style="margin-top:16px">
+        <button class="btn btn-sm" onclick="closeQuickAdd()">Cancel</button>
+        <button class="btn btn-sm btn-yellow" onclick="submitQuickAdd('${section}', true)">保存して次を追加</button>
+        <button class="btn btn-sm btn-accent" onclick="submitQuickAdd('${section}', false)">保存して閉じる</button>
+      </div>
+    </div>`;
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeQuickAdd(); });
+  document.body.appendChild(overlay);
+  // name → id 自動生成（手動編集したら追従を止める）
+  const nameEl = document.getElementById('qa-name');
+  const idEl = document.getElementById('qa-id');
+  if (nameEl && idEl) {
+    idEl.addEventListener('input', () => { idEl.dataset.userEdited = '1'; });
+    nameEl.addEventListener('input', () => {
+      if (idEl.dataset.userEdited !== '1') idEl.value = slugify(nameEl.value);
+    });
+  }
+  // Enter で「保存して次を追加」/ Esc で閉じる
+  overlay.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && e.target.tagName === 'INPUT') { e.preventDefault(); submitQuickAdd(section, true); }
+    if (e.key === 'Escape') closeQuickAdd();
+  });
+  if (nameEl) nameEl.focus();
+}
+
+function closeQuickAdd(){
+  const el = document.getElementById('quick-add-modal');
+  if (el) el.remove();
+}
+
+function submitQuickAdd(section, keepOpen){
+  const def = QUICK_ADD_DEFS[section];
+  if (!def) return;
+  const values = {};
+  for (const f of def.fields) {
+    const v = (document.getElementById('qa-'+f.key)?.value || '').trim();
+    if (f.required && !v) return toast(f.label + ' は必須です', 'error');
+    values[f.key] = v;
+  }
+  // festival: dateStart/dateEnd → date に統合
+  if (section === 'festival') {
+    const ds = values.dateStart, de = values.dateEnd;
+    values.date = ds && de ? ds + '/' + de : (ds || '');
+    delete values.dateStart; delete values.dateEnd;
+  }
+  const payload = { action: def.action, ...values, status: 'draft' };
+
+  // 楽観的挿入 → リストに即表示、GAS応答は裏で
+  applyOptimisticInsert(section, payload);
+  rerenderListFromCache(section);
+  toast('保存中... (draft)', 'info');
+
+  fetch(GAS_URL, { method: 'POST', body: JSON.stringify(payload) })
+    .then(r => r.json()).then(r => {
+      if (r.success || r.status === 'ok') {
+        toast('⚡ 追加しました (draft)', 'success');
+        loadList(section, { force: true });
+      } else {
+        toast('追加失敗: ' + (r.message || r.error || '') + ' — リストを再読込します', 'error');
+        invalidateSheetCache(section);
+        loadList(section, { force: true });
+      }
+    })
+    .catch(e => {
+      toast('通信エラー: ' + e.message, 'error');
+      invalidateSheetCache(section);
+      loadList(section, { force: true });
+    });
+
+  if (keepOpen) {
+    // フィールドをクリアして連続入力
+    def.fields.forEach(f => {
+      const el = document.getElementById('qa-'+f.key);
+      if (el) { el.value = ''; delete el.dataset.userEdited; }
+    });
+    document.getElementById('qa-name')?.focus();
+  } else {
+    closeQuickAdd();
+    switchTab(section, 'list');
+  }
 }
 
 function autoRegisterArtists(artistIds){
