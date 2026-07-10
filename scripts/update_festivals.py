@@ -21,7 +21,7 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).resolve().parent
 CREDENTIALS_FILE = SCRIPT_DIR / "techno-japan-493408-4b24cbadf5ec.json"
 SPREADSHEET_ID = "1wHY_tf0JlASL11E0SxmsSM0yPMSZw17LIiiZ3LlXwn8"
-DATA_JS_PATH = SCRIPT_DIR / "data.js"
+DATA_JS_PATH = SCRIPT_DIR.parent / "LP" / "data.js"
 LOG_FILE = SCRIPT_DIR / "update_festivals.log"
 
 DATA_JS_FESTIVALS = {

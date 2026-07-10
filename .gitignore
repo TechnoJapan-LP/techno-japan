@@ -1,0 +1,11 @@
+# Credentials — never commit
+*credentials*.json
+techno-japan-*-*.json
+scripts/techno-japan-*.json
+
+# Logs
+*.log
+scripts/*.log
+
+# OS noise
+.DS_Store

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://w.behold.so https://giscus.app; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://giscus.app; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' https:; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://stats.g.doubleclick.net https://feeds.behold.so https://w.behold.so https://formsubmit.co https://giscus.app; frame-src 'self' https://giscus.app https://w.behold.so https://www.google.com https://www.google.co.jp https://www.youtube.com https://www.youtube-nocookie.com; form-action 'self' https://formsubmit.co; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -505,6 +505,24 @@
 .discover-card:hover .discover-card-arrow { opacity: 1; transform: translateY(0); }
 .discover-card-arrow svg { width: 12px; height: 12px; stroke: var(--text); fill: none; stroke-width: 2; }
 
+/* ===================== READING PROGRESS BAR ===================== */
+.read-progress {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 2px;
+  z-index: 10001;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.read-progress.active { opacity: 1; }
+.read-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-soft, #a82f31), var(--accent, #ff2d2d));
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
 /* ===================== SCROLL REVEAL ===================== */
 .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
@@ -572,9 +590,20 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
   gtag('js', new Date());
   gtag('config', 'G-4MHCNR7D26');
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "TOP", "item": "https://techno-japan.media/" },
+    { "@type": "ListItem", "position": 2, "name": "NEWS", "item": "https://techno-japan.media/news.html" }
+  ]
+}
+</script>
 </head>
 <body>
 <a href="#main-content" class="skip-to-content">Skip to content</a>
+<div class="read-progress" id="read-progress" aria-hidden="true"><div class="read-progress-fill" id="read-progress-fill"></div></div>
 
 
 <div class="cursor-dot"></div>
@@ -1214,7 +1243,30 @@ function renderArticleDetail(id) {
   window.scrollTo(0, 0);
   bindCursorExpand();
   mountGiscus(a.id);
+  setReadProgressActive(true);
 }
+
+/* ========== READING PROGRESS (article view only) ========== */
+const rpBar = document.getElementById('read-progress');
+const rpFill = document.getElementById('read-progress-fill');
+let rpActive = false;
+let rpTicking = false;
+function setReadProgressActive(on) {
+  rpActive = on;
+  if (rpBar) rpBar.classList.toggle('active', on);
+  if (on) updateReadProgress();
+}
+function updateReadProgress() {
+  if (!rpFill) return;
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  const p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+  rpFill.style.transform = `scaleX(${p})`;
+}
+window.addEventListener('scroll', () => {
+  if (!rpActive || rpTicking) return;
+  rpTicking = true;
+  requestAnimationFrame(() => { updateReadProgress(); rpTicking = false; });
+}, { passive: true });
 
 /* ========== GISCUS COMMENTS (per-article thread) ==========
    Setup once in giscus.app, then fill GISCUS_CONFIG below.
@@ -1258,6 +1310,7 @@ function showList() {
   document.getElementById('list-view').style.display = '';
   document.getElementById('article-detail').style.display = 'none';
   document.title = 'NEWS — TECHNO JAPAN';
+  if (typeof setReadProgressActive === 'function') setReadProgressActive(false);
   // Reset SEO meta to news index defaults
   const def = {
     title: 'NEWS — TECHNO JAPAN',

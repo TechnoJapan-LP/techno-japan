@@ -45,18 +45,18 @@ jobs:
                   print(f"✗ {sheet}: {e}")
                   backup[sheet] = []
 
-          os.makedirs('LP/backups', exist_ok=True)
+          os.makedirs('backups', exist_ok=True)
           # 最新 + 日付付き
           today = datetime.now(timezone(timedelta(hours=9))).strftime('%Y-%m-%d')
-          with open('LP/backups/latest.json', 'w', encoding='utf-8') as f:
+          with open('backups/latest.json', 'w', encoding='utf-8') as f:
               json.dump(backup, f, ensure_ascii=False, indent=2)
-          with open(f'LP/backups/{today}.json', 'w', encoding='utf-8') as f:
+          with open(f'backups/{today}.json', 'w', encoding='utf-8') as f:
               json.dump(backup, f, ensure_ascii=False, indent=2)
 
           # 30日より古いバックアップを削除
           import glob
           from datetime import date
-          for path in glob.glob('LP/backups/*.json'):
+          for path in glob.glob('backups/*.json'):
               if path.endswith('latest.json'): continue
               try:
                   fname = os.path.basename(path).replace('.json','')
@@ -75,7 +75,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add LP/backups/
+          git add backups/
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
