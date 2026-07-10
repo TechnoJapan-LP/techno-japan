@@ -125,6 +125,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   initKeyboardShortcuts();
   loadAuthorsForDropdown();
   initArticleEditor();
+  injectFormSectionLabels();
+  markRequiredFields();
   // フォーム入力の dirty 追跡（保存忘れ防止）
   document.querySelectorAll('.form-grid input, .form-grid textarea, .form-grid select').forEach(el => {
     el.addEventListener('input', markFormDirty);
@@ -133,6 +135,53 @@ document.addEventListener('DOMContentLoaded', async () => {
   // バックグラウンドで全セクションを先読み（キャッシュ未存在のものだけ）
   scheduleBackgroundPreload();
 });
+
+/* ==============================================================
+   FORM UX — セクション見出し・必須マークの自動挿入
+   フィールドIDを起点に .form-group の直前へ見出しを差し込む。
+   HTMLを書き換えないので既存の保存ロジックに影響しない。
+   ============================================================== */
+function injectFormSectionLabels(){
+  const SECTIONS = {
+    'v-id':       '基本情報',
+    'v-url':      'リンク・所在地',
+    'v-imageUrl': '画像',
+    'v-desc':     '説明',
+    'f-id':       '基本情報',
+    'f-url':      'リンク・所在地',
+    'f-imageUrl': '画像・ビジュアル',
+    'f-desc':     '説明・ラインナップ',
+    'a-id':       '基本情報',
+    'a-imageUrl': '画像',
+    'a-instagram':'リンク',
+    'a-bio':      'バイオ',
+    'ar-id':      '基本情報',
+    'ar-imageUrl':'ヒーロー画像',
+    'ar-excerpt': '本文・要約',
+  };
+  Object.entries(SECTIONS).forEach(([fieldId, label]) => {
+    const el = document.getElementById(fieldId);
+    const group = el && el.closest('.form-group');
+    if (!group) return;
+    const h = document.createElement('div');
+    h.className = 'form-section-label';
+    h.textContent = label;
+    group.parentNode.insertBefore(h, group);
+  });
+}
+
+function markRequiredFields(){
+  ['v-id','v-name','f-id','f-name','a-id','a-name','e-name','ar-id','ar-title'].forEach(id => {
+    const el = document.getElementById(id);
+    const label = el && el.closest('.form-group')?.querySelector('label');
+    if (label && !label.querySelector('.req-star')) {
+      const star = document.createElement('span');
+      star.className = 'req-star';
+      star.textContent = '*';
+      label.appendChild(star);
+    }
+  });
+}
 
 function scheduleBackgroundPreload(){
   const sections = ['festival','venue','artist','event','article','author'];
@@ -618,28 +667,51 @@ function initArticleEditor(){
       }
     }
   });
-  // Visual で編集 → 隠し textarea (ar-body) と source textarea とプレビューへ同期
+  // Visual で編集 → 同期処理は debounce（毎キーストロークでの
+  // innerHTML シリアライズ + プレビュー再描画が入力ラグの原因だった）
   articleQuill.on('text-change', () => {
-    const html = articleQuill.root.innerHTML;
-    document.getElementById('ar-body').value = html;
-    document.getElementById('ar-body-source').value = html;
-    updateArticlePreview(html);
-    maybeAutoFillReadTime();
-    markFormDirty();
-    scheduleArticleDraftSave();
+    markFormDirty();                 // 軽いフラグだけ即時
+    scheduleArticleEditorSync('quill');
   });
-  // HTML source で編集 → ar-body と プレビュー へ反映
+  // HTML source で編集 → 同様に debounce
   document.getElementById('ar-body-source').addEventListener('input', () => {
-    const html = document.getElementById('ar-body-source').value;
-    document.getElementById('ar-body').value = html;
-    updateArticlePreview(html);
-    maybeAutoFillReadTime();
     markFormDirty();
-    scheduleArticleDraftSave();
+    scheduleArticleEditorSync('source');
   });
   // ドラッグ&ドロップ + ペースト
   setupArticleEditorDropPaste();
   return articleQuill;
+}
+
+/* エディタ同期の debounce（300ms）。
+   シリアライズ・プレビュー・文字数計算・下書き保存を1回にまとめる */
+let articleSyncTimer = null;
+function scheduleArticleEditorSync(from){
+  clearTimeout(articleSyncTimer);
+  articleSyncTimer = setTimeout(() => runArticleEditorSync(from), 300);
+}
+function runArticleEditorSync(from){
+  let html;
+  if (from === 'source') {
+    html = document.getElementById('ar-body-source').value;
+  } else {
+    if (!articleQuill) return;
+    html = articleQuill.root.innerHTML;
+    document.getElementById('ar-body-source').value = html;
+  }
+  document.getElementById('ar-body').value = html;
+  updateArticlePreview(html);
+  maybeAutoFillReadTime();
+  scheduleArticleDraftSave();
+}
+// 保存直前に未反映の同期を確定させる
+function flushArticleEditorSync(){
+  if (articleSyncTimer) {
+    clearTimeout(articleSyncTimer);
+    articleSyncTimer = null;
+    const wrap = document.getElementById('ar-editor-wrap');
+    runArticleEditorSync(wrap && wrap.classList.contains('source-mode') ? 'source' : 'quill');
+  }
 }
 
 function setupArticleEditorDropPaste(){
@@ -712,10 +784,16 @@ function uploadArticleImageFile(file){
   }).finally(() => { window.articleImageUploading = false; });
 }
 
-function updateArticlePreview(html){
+let _lastPreviewHtml = null;
+function updateArticlePreview(html, force){
   const el = document.getElementById('ar-preview-content');
   if (!el) return;
+  // プレビューが閉じている間は再描画しない（開いた時に反映）
+  const wrap = document.getElementById('ar-editor-wrap');
+  if (!force && wrap && !wrap.classList.contains('preview-mode')) return;
   const trimmed = (html || '').trim();
+  if (trimmed === _lastPreviewHtml) return;  // 変更なしなら DOM を触らない
+  _lastPreviewHtml = trimmed;
   if (!trimmed || trimmed === '<p><br></p>') {
     el.innerHTML = '<div class="ar-prev-empty">本文を書くとここにプレビューが表示されます</div>';
   } else {
@@ -730,7 +808,7 @@ function toggleArticlePreview(){
   const on = wrap.classList.toggle('preview-mode');
   if (btn) btn.classList.toggle('active', on);
   // 開いた瞬間に最新HTMLで更新
-  if (on) updateArticlePreview(document.getElementById('ar-body').value);
+  if (on) updateArticlePreview(document.getElementById('ar-body').value, true);
 }
 
 function setArticleBody(html){
@@ -1423,7 +1501,13 @@ function renderCalendar(section, rows){
    LOCATION MAP — Lat/Lng visual confirmation
    ============================================================== */
 const locMaps = {};
+const _locMapTimers = {};
 function updateLocationMap(prefix){
+  // 手入力中の連続呼び出しを 250ms debounce（Leaflet の setView/invalidateSize は重い）
+  clearTimeout(_locMapTimers[prefix]);
+  _locMapTimers[prefix] = setTimeout(() => _updateLocationMapNow(prefix), 250);
+}
+function _updateLocationMapNow(prefix){
   const lat = parseFloat(document.getElementById(prefix+'-lat')?.value);
   const lng = parseFloat(document.getElementById(prefix+'-lng')?.value);
   const container = document.getElementById(prefix+'-map');
@@ -2107,6 +2191,7 @@ function saveEdit(section){
   if (section === 'article' && window.articleImageUploading) {
     return toast('画像アップロード中...完了してから保存してください', 'error');
   }
+  if (section === 'article') flushArticleEditorSync();
   const payload={action:'update_row',sheet:SHEET_MAP[section],row:state._row};
 
   if(section==='venue'){
@@ -2677,6 +2762,7 @@ function removeTrashPermanent(idx){
    SUBMIT TO SHEET (new row)
    ============================================================== */
 function submitToSheet(section){
+  if (section === 'article') flushArticleEditorSync();
   let payload;
   if(section==='venue'){
     payload={action:'addVenue',id:g('v-id'),name:g('v-name'),city:g('v-city'),area:g('v-area'),

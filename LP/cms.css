@@ -129,8 +129,17 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
 .data-table td{padding:10px 12px;border-bottom:1px solid var(--border2);font-size:.85rem;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .data-table tr:hover td{background:var(--bg3)}
 .data-table .actions{white-space:nowrap;display:flex;gap:6px}
-.edit-banner{display:none;align-items:center;gap:12px;padding:10px 16px;margin-bottom:16px;background:rgba(255,208,45,.1);border:1px solid var(--yellow);border-radius:var(--radius);font-family:var(--font-mono);font-size:.75rem;color:var(--yellow);letter-spacing:1px}
-.edit-banner.show{display:flex}
+.edit-banner{display:none;align-items:center;gap:12px;padding:10px 16px;margin-bottom:16px;background:linear-gradient(rgba(255,208,45,.12),rgba(255,208,45,.12)),var(--bg2);border:1px solid var(--yellow);border-radius:var(--radius);font-family:var(--font-mono);font-size:.75rem;color:var(--yellow);letter-spacing:1px}
+/* 編集中は Save/Cancel が常に見えるように上部固定 */
+.edit-banner.show{display:flex;position:sticky;top:0;z-index:60;box-shadow:0 4px 16px rgba(0,0,0,.5)}
+/* 新規作成の保存ボタン列も下部固定（長いフォームでもボタンを探さない） */
+.form-grid .btn-row{position:sticky;bottom:0;z-index:50;background:var(--bg);padding:12px 0;border-top:1px solid var(--border)}
+/* フォーム内セクション見出し（JSで自動挿入） */
+.form-section-label{grid-column:1/-1;display:flex;align-items:center;gap:12px;margin-top:18px;font-family:var(--font-mono);font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:var(--text3)}
+.form-section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.form-section-label:first-child{margin-top:0}
+/* 必須フィールドの赤マーク（JSで付与） */
+label .req-star{color:var(--accent);margin-left:4px}
 .edit-banner span{flex:1}
 .dialog-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;align-items:center;justify-content:center}
 .dialog-overlay.show{display:flex}
