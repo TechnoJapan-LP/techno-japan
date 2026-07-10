@@ -4,8 +4,9 @@
 /* ==============================================================
    AUTHENTICATION
    ============================================================== */
-// SHA-256 hash of the password.
-// Current password: "techno-japan-admin" — change by running setupPassword('your-new-pw') in console
+// SHA-256 hash of the password. To rotate: run setupPassword('your-new-pw')
+// in the browser console, paste the printed hash here, and update the GAS side.
+// NEVER write the plaintext password in this file — it is publicly served.
 const PASSWORD_HASH = 'e49c925f394b2f9cb9d5ab42549c800cb532b4444279cc813ed101af618c9e8c';
 let AUTH_TOKEN = null; // Set after successful login; sent to GAS with every request
 
