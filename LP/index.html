@@ -501,7 +501,9 @@
   .artist-mini { width: 170px; }
   .venues-tabs { padding: 20px 24px 0; gap: 0; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   .venues-tabs::-webkit-scrollbar { display: none; }
-  .venue-tab { padding: 12px 0; margin-right: 24px; flex-shrink: 0; }
+  /* wider hit area on touch: pad horizontally instead of relying on margin gaps */
+  .venue-tab { padding: 14px 12px; margin-right: 8px; flex-shrink: 0; min-height: 44px; }
+  .venue-tab.active::after { left: 12px; right: 12px; width: auto; }
   /* fest rows: stack thumb above text on tablet/mobile */
   .fest-row-inner {
     grid-template-columns: 1fr;
@@ -913,14 +915,32 @@
     requestAnimationFrame(recalc);
     window.addEventListener('resize', recalc);
 
+    // Only burn frames while the carousel is on screen and the tab is visible.
+    let inView = false;
+    let rafId = null;
     function tick() {
       if (!paused && !snapping) {
         pos = wrap(pos + speed);
         track.style.transform = `translateX(-${pos}px)`;
       }
-      requestAnimationFrame(tick);
+      rafId = requestAnimationFrame(tick);
     }
-    requestAnimationFrame(tick);
+    function startLoop() {
+      if (rafId === null) rafId = requestAnimationFrame(tick);
+    }
+    function stopLoop() {
+      if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null; }
+    }
+    const io = new IntersectionObserver((entries) => {
+      inView = entries.some(e => e.isIntersecting);
+      if (inView && !document.hidden) startLoop();
+      else stopLoop();
+    }, { rootMargin: '100px' });
+    io.observe(carousel);
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stopLoop();
+      else if (inView) startLoop();
+    });
 
     carousel.addEventListener('mouseenter', () => { paused = true; });
     carousel.addEventListener('mouseleave', () => { paused = false; });

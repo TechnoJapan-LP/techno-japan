@@ -324,14 +324,19 @@ footer .footer-links .footer-social svg { width: 14px; height: 14px; display: bl
   display: none;
   flex-direction: column;
   gap: 5px;
+  /* 44px hit area (Apple HIG minimum) while the icon stays 22px */
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
   cursor: pointer;
   padding: 4px;
   z-index: 10001;
   background: none;
   border: none;
   position: fixed;
-  top: calc(28px + var(--safe-t));
-  right: calc(48px + var(--safe-r));
+  top: calc(14px + var(--safe-t));
+  right: calc(38px + var(--safe-r));
 }
 .nav-hamburger span {
   display: block;
@@ -385,8 +390,8 @@ footer .footer-links .footer-social svg { width: 14px; height: 14px; display: bl
 }
 .nav-overlay .nav-back:hover { opacity: 1; }
 .nav-overlay .nav-close {
-  position: absolute; top: calc(28px + var(--safe-t)); right: calc(48px + var(--safe-r));
-  width: 28px; height: 28px; background: none; border: none; cursor: pointer; z-index: 10001;
+  position: absolute; top: calc(20px + var(--safe-t)); right: calc(40px + var(--safe-r));
+  width: 44px; height: 44px; background: none; border: none; cursor: pointer; z-index: 10001;
 }
 .nav-overlay .nav-close::before,
 .nav-overlay .nav-close::after {
@@ -584,8 +589,8 @@ footer {
 }
 
 @media (max-width: 768px) {
-  .nav-hamburger { display: flex; top: calc(20px + var(--safe-t)); right: calc(24px + var(--safe-r)); }
-  .nav-overlay .nav-close { top: calc(20px + var(--safe-t)); right: calc(24px + var(--safe-r)); }
+  .nav-hamburger { display: flex; top: calc(10px + var(--safe-t)); right: calc(17px + var(--safe-r)); }
+  .nav-overlay .nav-close { top: calc(12px + var(--safe-t)); right: calc(16px + var(--safe-r)); }
   nav .nav-links { display: none; }
   .footer-links { gap: 20px; flex-wrap: wrap; justify-content: center; }
   .newsletter { padding: 60px 24px; }
@@ -605,6 +610,19 @@ footer {
   .cursor-dot, .cursor-ring { display: none; }
   .cta-btn, .nav-hamburger, .nav-overlay .nav-close, .nav-overlay .nav-back, .nav-overlay a { cursor: pointer; }
 }
+
+/* ===================== RENDERING PERF (Core Web Vitals) ===================== */
+/* Skip layout/paint for below-fold sections until they approach the viewport.
+   contain-intrinsic-size reserves an estimate so the scrollbar doesn't jump;
+   the `auto` keyword remembers the real size after first render. */
+.guide-section,
+.newsletter,
+footer {
+  content-visibility: auto;
+}
+.guide-section { contain-intrinsic-size: auto 640px; }
+.newsletter    { contain-intrinsic-size: auto 420px; }
+footer         { contain-intrinsic-size: auto 320px; }
 
 /* Reduce motion for accessibility */
 @media (prefers-reduced-motion: reduce) {
