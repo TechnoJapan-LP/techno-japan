@@ -489,6 +489,14 @@ function slugify(s){
     .replace(/^-+|-+$/g,'')
     .slice(0,60);
 }
+// 日本語のみタイトルなど slug が空になる場合の安全なフォールバック
+function fallbackSlug(){
+  const d = new Date();
+  const ymd = d.getFullYear().toString()
+    + String(d.getMonth()+1).padStart(2,'0')
+    + String(d.getDate()).padStart(2,'0');
+  return 'post-' + ymd;
+}
 function onArticleTitleInput(){
   const idEl = document.getElementById('ar-id');
   if (!idEl) return;
@@ -496,14 +504,22 @@ function onArticleTitleInput(){
   if (idEl.dataset.userEdited === '1') return;
   // 編集モード中（既存ID）も触らない
   if (editState.article && editState.article._row) return;
-  const slug = slugify(document.getElementById('ar-title').value);
-  if (slug) idEl.value = slug;
+  const slug = slugify(document.getElementById('ar-title').value) || fallbackSlug();
+  idEl.value = slug;
   markFormDirty();
 }
-// ID欄を手で触ったら自動生成を止める
+// ID欄: 手入力を許容しつつ、離れた時に必ず URL 安全な形へ正規化する。
+// これで Transcendence / "My Article" のような値も transcendence / my-article になる。
 document.addEventListener('DOMContentLoaded', () => {
   const idEl = document.getElementById('ar-id');
-  if (idEl) idEl.addEventListener('input', () => { idEl.dataset.userEdited = '1'; });
+  if (!idEl) return;
+  idEl.addEventListener('input', () => { idEl.dataset.userEdited = '1'; });
+  idEl.addEventListener('blur', () => {
+    const raw = idEl.value.trim();
+    if (!raw) return;
+    const clean = slugify(raw) || fallbackSlug();
+    if (clean !== raw) idEl.value = clean;
+  });
 });
 
 /* ==============================================================

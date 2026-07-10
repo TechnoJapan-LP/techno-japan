@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://w.behold.so https://giscus.app; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://giscus.app; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' https:; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://stats.g.doubleclick.net https://feeds.behold.so https://w.behold.so https://formsubmit.co https://giscus.app; frame-src 'self' https://giscus.app https://w.behold.so https://www.google.com https://www.google.co.jp https://www.youtube.com https://www.youtube-nocookie.com; form-action 'self' https://formsubmit.co; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://w.behold.so; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' https:; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://stats.g.doubleclick.net https://feeds.behold.so https://w.behold.so https://formsubmit.co; frame-src 'self' https://w.behold.so https://www.google.com https://www.google.co.jp https://www.youtube.com https://www.youtube-nocookie.com; form-action 'self' https://formsubmit.co; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), interest-cohort=()">
@@ -264,19 +264,6 @@
 .article-body .autolink { color: var(--accent); border-bottom: 1px dotted rgba(255,45,45,0.5); transition: border-bottom-color 0.2s ease; }
 .article-body .autolink:hover { border-bottom-color: var(--accent); border-bottom-style: solid; }
 .article-footer { margin-top: 60px; padding-top: 40px; border-top: 1px solid rgba(240,237,232,0.1); }
-.article-comments {
-  margin: 80px auto 0; max-width: 760px;
-  padding: 40px 0 0; border-top: 1px solid rgba(240,237,232,0.1);
-}
-.article-comments-label {
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.25em;
-  text-transform: uppercase; opacity: 0.5; margin-bottom: 24px;
-  display: flex; align-items: center; gap: 10px;
-}
-.article-comments-label::before {
-  content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
-}
-.giscus, .giscus-frame { width: 100%; }
 .article-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; }
 .article-tag {
   font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
@@ -1232,17 +1219,12 @@ function renderArticleDetail(id) {
         </button>
       </div>
     </div>
-    <div class="article-comments" id="article-comments" style="display:none">
-      <div class="article-comments-label">COMMENTS</div>
-      <div class="giscus"></div>
-    </div>
   `;
 
   listEl.style.display = 'none';
   detailEl.style.display = 'block';
   window.scrollTo(0, 0);
   bindCursorExpand();
-  mountGiscus(a.id);
   setReadProgressActive(true);
 }
 
@@ -1267,44 +1249,6 @@ window.addEventListener('scroll', () => {
   rpTicking = true;
   requestAnimationFrame(() => { updateReadProgress(); rpTicking = false; });
 }, { passive: true });
-
-/* ========== GISCUS COMMENTS (per-article thread) ==========
-   Requires the giscus GitHub App installed on the repo:
-   https://github.com/apps/giscus */
-const GISCUS_CONFIG = {
-  repo: 'TechnoJapan-LP/techno-japan',
-  repoId: 'R_kgDOSAbeHQ',
-  category: 'Announcements',           // giscus-recommended: only the app can open threads
-  categoryId: 'DIC_kwDOSAbeHc4DA4j2',
-};
-function mountGiscus(articleId) {
-  const wrap = document.getElementById('article-comments');
-  const slot = wrap && wrap.querySelector('.giscus');
-  if (!wrap || !slot) return;
-  if (!GISCUS_CONFIG.repo || !GISCUS_CONFIG.repoId || !GISCUS_CONFIG.categoryId) {
-    wrap.style.display = 'none';
-    return;
-  }
-  wrap.style.display = '';
-  slot.innerHTML = '';
-  const s = document.createElement('script');
-  s.src = 'https://giscus.app/client.js';
-  s.async = true; s.crossOrigin = 'anonymous';
-  s.dataset.repo = GISCUS_CONFIG.repo;
-  s.dataset.repoId = GISCUS_CONFIG.repoId;
-  s.dataset.category = GISCUS_CONFIG.category;
-  s.dataset.categoryId = GISCUS_CONFIG.categoryId;
-  s.dataset.mapping = 'specific';
-  s.dataset.term = 'article-' + articleId;
-  s.dataset.strict = '0';
-  s.dataset.reactionsEnabled = '1';
-  s.dataset.emitMetadata = '0';
-  s.dataset.inputPosition = 'top';
-  s.dataset.theme = 'noborder_dark';
-  s.dataset.lang = 'en';
-  s.dataset.loading = 'lazy';
-  slot.appendChild(s);
-}
 
 function showList() {
   document.getElementById('list-view').style.display = '';
