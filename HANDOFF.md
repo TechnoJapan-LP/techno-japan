@@ -220,6 +220,15 @@ a196eb1 feat(home): arrow controls for ARTISTS carousel
 
 ## 開発環境
 
+### ⚠️ 運用パス変更（2026-07-10 のフォルダ整理）
+- `update_festivals.py / .sh` は **LP/ → scripts/** に移動。
+  crontab が古いパス（`.../techno-japan/LP/update_festivals.sh`）を指していたら
+  `.../techno-japan/scripts/update_festivals.sh` に更新すること。
+- Googleサービスアカウント鍵も `scripts/` に移動（git 追跡外・root .gitignore で恒久除外）
+- 日次バックアップは `LP/backups/` → リポジトリ直下 `backups/` に移動
+  （デプロイ対象から除外。workflow も更新済み）
+- `media.html` は noindex リダイレクトスタブ化（→ /news.html）
+
 ### プレビューサーバー
 - ディレクトリ: `/tmp/lp-preview/`
 - スクリプト: `/tmp/serve_lp.py`（Python http.server, port 8080, no-cache）
