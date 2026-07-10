@@ -1269,13 +1269,13 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 
 /* ========== GISCUS COMMENTS (per-article thread) ==========
-   Setup once in giscus.app, then fill GISCUS_CONFIG below.
-   While `repo` is empty, the comments block stays hidden. */
+   Requires the giscus GitHub App installed on the repo:
+   https://github.com/apps/giscus */
 const GISCUS_CONFIG = {
-  repo: '',                // e.g. 'TechnoJapan-LP/techno-japan'
-  repoId: '',              // Discussions repo ID from giscus.app
-  category: 'Comments',    // category name created on GitHub Discussions
-  categoryId: '',          // category ID from giscus.app
+  repo: 'TechnoJapan-LP/techno-japan',
+  repoId: 'R_kgDOSAbeHQ',
+  category: 'Announcements',           // giscus-recommended: only the app can open threads
+  categoryId: 'DIC_kwDOSAbeHc4DA4j2',
 };
 function mountGiscus(articleId) {
   const wrap = document.getElementById('article-comments');
