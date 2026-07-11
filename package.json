@@ -1,0 +1,11 @@
+{
+  "name": "techno-japan-data",
+  "private": true,
+  "type": "module",
+  "description": "スプレッドシート「LP」→ LP/data/*.json ビルドパイプライン（docs/DATA_SCHEMA.md）",
+  "scripts": {
+    "fetch": "node scripts/fetch-data.mjs",
+    "fetch:dry": "node scripts/fetch-data.mjs --dry",
+    "fetch:offline": "node scripts/fetch-data.mjs --offline"
+  }
+}

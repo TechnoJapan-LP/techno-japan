@@ -23,6 +23,14 @@ var MIG_DRY = true;
 function mig_dryRun() { MIG_DRY = true;  migratePhase0_(); }
 function mig_apply()  { MIG_DRY = false; migratePhase0_(); }
 
+// 各シートの gid（sheetId）と spreadsheet URL を出力（Phase 1 の fetch-data.mjs 用）
+function mig_gids() {
+  var ss = SpreadsheetApp.getActive();
+  var out = ['spreadsheetUrl: ' + ss.getUrl(), 'spreadsheetId: ' + ss.getId(), '--- sheets (name → gid) ---'];
+  ss.getSheets().forEach(function (sh) { out.push(sh.getName() + ' → ' + sh.getSheetId()); });
+  Logger.log(out.join('\n'));
+}
+
 function migratePhase0_() {
   var ss = SpreadsheetApp.getActive();
   var log = [], review = [];

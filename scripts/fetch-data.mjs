@@ -41,7 +41,8 @@ const GIDS = {
   VENUES: '525830431',
   ARTISTS: '648440679',
   EVENTS: '959929754',
-  // EDITIONS / LINEUPS: 新設後に gid を追記（スキーマ §4）
+  EDITIONS: '92483021',    // Phase 0 で新設（スキーマ §2.3）
+  LINEUPS: '1197261597',   // Phase 0 で新設（スキーマ §2.4）
 };
 
 // GENRE 正規リスト（スキーマ §1.3。必要に応じて追記）
@@ -131,6 +132,24 @@ function checkGenre(sheet, id, genre) {
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
+// Phase 0 移行時、元 DATE セルが Date 型だった行は "Sat Apr 11 2026 00:00:00 GMT+0900" に
+// 化ける。ISO へ寄せられれば直し、無理なら空にして警告（下書きの品質リスト）。
+function normalizeDate(sheet, id, v) {
+  const s = (v || '').trim();
+  if (!s || ISO_DATE.test(s)) return s;
+  const m = s.match(/^[A-Za-z]{3} ([A-Za-z]{3}) (\d{1,2}) (\d{4})/); // JS Date.toString()
+  if (m) {
+    const mon = { Jan: '01', Feb: '02', Mar: '03', Apr: '04', May: '05', Jun: '06',
+      Jul: '07', Aug: '08', Sep: '09', Oct: '10', Nov: '11', Dec: '12' }[m[1]];
+    if (mon) {
+      warnings.push(`${sheet} ${id}: DATE を Date型文字列から正規化 "${s}" → ${m[3]}-${mon}-${String(m[2]).padStart(2, '0')}`);
+      return `${m[3]}-${mon}-${String(m[2]).padStart(2, '0')}`;
+    }
+  }
+  warnings.push(`${sheet} ${id}: DATE形式不明 "${s}"`);
+  return s;
+}
+
 // ---------- メタカラム除外（スキーマ §5/§1.6）----------
 const DROP_KEYS = new Set([
   'editorNotes', 'lastEditedBy', 'lastEditedAt',
@@ -197,6 +216,39 @@ async function main() {
     festivals.push(stripMeta(r));
   }
 
+  const festivalIds = new Set(raw.FESTIVALS.map(r => r.ID).filter(Boolean));
+
+  // --- EDITIONS（開催回。スキーマ §2.3）---
+  const seenE = new Set();
+  const editions = [];
+  for (const r of raw.EDITIONS) {
+    const pub = isPublished(r);
+    validateId('EDITIONS', r.EDITION_ID, seenE, pub);
+    if (r.FESTIVAL_ID && !festivalIds.has(r.FESTIVAL_ID)) {
+      warnings.push(`EDITIONS ${r.EDITION_ID}: FESTIVAL_ID "${r.FESTIVAL_ID}" が FESTIVALS 未登録`);
+    }
+    r.DATE_START = normalizeDate('EDITIONS', r.EDITION_ID, r.DATE_START);
+    r.DATE_END = normalizeDate('EDITIONS', r.EDITION_ID, r.DATE_END);
+    if (!pub) continue;
+    editions.push(stripMeta(r));
+  }
+  const editionIds = new Set(raw.EDITIONS.map(r => r.EDITION_ID).filter(Boolean));
+
+  // --- LINEUPS（出演。スキーマ §2.4。ARTIST_ID は解決済みのみ、未解決は ACT_LABEL）---
+  const lineups = [];
+  for (const r of raw.LINEUPS) {
+    if (r.EDITION_ID && !editionIds.has(r.EDITION_ID)) {
+      warnings.push(`LINEUPS: EDITION_ID "${r.EDITION_ID}" が EDITIONS 未登録`);
+    }
+    if (r.ARTIST_ID) {
+      if (!ID_RE.test(r.ARTIST_ID)) warnings.push(`LINEUPS ${r.EDITION_ID}: ARTIST_ID形式違反 "${r.ARTIST_ID}"`);
+      else if (!artistIds.has(r.ARTIST_ID)) warnings.push(`LINEUPS ${r.EDITION_ID}: ARTIST_ID "${r.ARTIST_ID}" が ARTISTS 未登録`);
+    } else if (!r.ACT_LABEL) {
+      warnings.push(`LINEUPS ${r.EDITION_ID}: ARTIST_ID も ACT_LABEL も空の行`);
+    }
+    lineups.push(stripMeta(r));
+  }
+
   // --- EVENTS（IDなし → NAME+DATE で暫定キー。孤児参照チェック）---
   const events = [];
   for (const r of raw.EVENTS) {
@@ -213,25 +265,39 @@ async function main() {
     events.push(stripMeta(r));
   }
 
-  // --- レポート ---
-  console.log(`\n検証: エラー ${errors.length} / 警告 ${warnings.length}`);
+  // --- レポート（エラーで停止する前に必ず書き出す）---
+  const gen = new Date().toISOString();
+  const report = [
+    `# データ検証レポート ${gen}`,
+    `取得: ${OFFLINE ? 'OFFLINE' : 'LIVE'}`,
+    `件数: artists ${artists.length} / venues ${venues.length} / festivals ${festivals.length} / editions ${editions.length} / lineups ${lineups.length} / events ${events.length}`,
+    `エラー ${errors.length} / 警告 ${warnings.length}`,
+    '',
+    '## エラー（published 行の致命的問題・ビルド停止）', ...(errors.length ? errors.map(e => '  ✗ ' + e) : ['  (なし)']),
+    '',
+    '## 警告（下書き品質・移行時の要修正リスト）', ...(warnings.length ? warnings.map(w => '  ! ' + w) : ['  (なし)']),
+    '',
+  ].join('\n');
+  await writeFile(path.join(ROOT, 'validation-report.txt'), report, 'utf-8');
+
+  console.log(`\n検証: エラー ${errors.length} / 警告 ${warnings.length} → validation-report.txt`);
   if (errors.length) { console.log('\n[エラー]'); errors.forEach(e => console.log('  ✗ ' + e)); }
-  if (warnings.length) { console.log('\n[警告]'); warnings.slice(0, 40).forEach(w => console.log('  ! ' + w));
-    if (warnings.length > 40) console.log(`  … 他 ${warnings.length - 40} 件`); }
+  if (warnings.length) { console.log(`\n[警告] ${warnings.length}件（詳細は validation-report.txt）`); }
 
   if (errors.length) {
-    console.error('\nエラーがあるためビルド停止（スキーマ §6）。');
+    console.error('\nエラーがあるためJSON書き出しを停止（スキーマ §6）。validation-report.txt は出力済み。');
     process.exit(1);
   }
 
-  if (DRY) { console.log('\n--dry: 書き出しスキップ'); return; }
+  if (DRY) { console.log('\n--dry: JSON書き出しスキップ（レポートのみ）'); return; }
 
   await mkdir(OUT_DIR, { recursive: true });
-  const gen = new Date().toISOString();
   const files = {
     'artists.json': { _generatedAt: gen, count: artists.length, items: artists },
     'venues.json': { _generatedAt: gen, count: venues.length, items: venues },
     'festivals.json': { _generatedAt: gen, count: festivals.length, items: festivals },
+    'editions.json': { _generatedAt: gen, count: editions.length, items: editions },
+    'lineups.json': { _generatedAt: gen, count: lineups.length, items: lineups },
     'events.json': { _generatedAt: gen, count: events.length, items: events },
   };
   for (const [f, data] of Object.entries(files)) {

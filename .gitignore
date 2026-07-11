@@ -9,3 +9,7 @@ scripts/*.log
 
 # OS noise
 .DS_Store
+
+# Node / data pipeline generated artifacts
+node_modules/
+validation-report.txt
