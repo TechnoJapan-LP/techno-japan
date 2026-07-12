@@ -7,7 +7,7 @@
  * - data.js: stale-while-revalidate (fast load, update in background)
  */
 
-const VERSION = 'v1.8.0';
+const VERSION = 'v1.8.1';
 const STATIC_CACHE = `tj-static-${VERSION}`;
 const DYNAMIC_CACHE = `tj-dynamic-${VERSION}`;
 
