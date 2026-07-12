@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TJ APP — FESTIVAL COMPANION (仮)</title>
+<meta name="description" content="Techno Japan のフェスティバル・コンパニオン。ラインナップ確認とマイタイムテーブル。オフライン対応。">
+<meta name="theme-color" content="#080808">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-192.png" type="image/png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="robots" content="noindex"><!-- 仮名のうちは非インデックス -->
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<header class="app-header">
+  <a class="app-logo" href="#/">TJ<span class="dot">·</span>APP</a>
+  <div class="app-header-right">
+    <span id="net-status" class="net-status" title="接続状態"></span>
+    <a class="app-back-site" href="../festivals.html">TECHNO JAPAN ↗</a>
+  </div>
+</header>
+
+<main id="screen" class="screen"></main>
+
+<nav id="fest-tabs" class="fest-tabs" hidden>
+  <a id="tab-lineup" href="#">LINEUP</a>
+  <a id="tab-my" href="#">MY SETS <span id="my-count" class="my-count"></span></a>
+</nav>
+
+<script src="app.js"></script>
+</body>
+</html>
