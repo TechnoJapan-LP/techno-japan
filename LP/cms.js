@@ -7,7 +7,7 @@
 // SHA-256 hash of the password. To rotate: run setupPassword('your-new-pw')
 // in the browser console, paste the printed hash here, and update the GAS side.
 // NEVER write the plaintext password in this file — it is publicly served.
-const PASSWORD_HASH = 'e49c925f394b2f9cb9d5ab42549c800cb532b4444279cc813ed101af618c9e8c';
+const PASSWORD_HASH = '8908d01f5476f7fa5ee6fdf415d7dc9856db5888eaf5a35d78d974dea6462126';
 let AUTH_TOKEN = null; // Set after successful login; sent to GAS with every request
 
 async function sha256(text){
