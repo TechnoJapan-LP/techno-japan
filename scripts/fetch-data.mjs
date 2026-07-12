@@ -49,7 +49,8 @@ const GIDS = {
 const GENRE_ALLOWED = new Set([
   'TECHNO', 'HOUSE', 'MINIMAL', 'AMBIENT', 'DISCO', 'ELECTRO',
   'BASS', 'DUB', 'EXPERIMENTAL', 'LIVE', 'BREAKBEAT', 'TRANCE',
-  'PSYTRANCE', 'HARDCORE', 'DOWNTEMPO', 'LEFTFIELD', 'OTHERS',
+  'PSYTRANCE', 'PSYCHEDELIC', 'HARDCORE', 'DOWNTEMPO', 'LEFTFIELD',
+  'MIX', 'OTHERS',
 ]);
 
 // ---------- RFC 4180 準拠の最小 CSV パーサ（依存ゼロ）----------

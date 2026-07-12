@@ -23,6 +23,53 @@ var MIG_DRY = true;
 function mig_dryRun() { MIG_DRY = true;  migratePhase0_(); }
 function mig_apply()  { MIG_DRY = false; migratePhase0_(); }
 
+// ---- データ・クリーンアップ（ユーザー承認済み: 不正IDのslug化 + VENUES幽霊行削除）----
+var FIX_DRY = true;
+function fix_cleanup_dry() { FIX_DRY = true;  fixCleanup_(); }
+function fix_cleanup()     { FIX_DRY = false; fixCleanup_(); }
+function fixCleanup_() {
+  var ss = SpreadsheetApp.getActive();
+  var log = [];
+  function L(s) { log.push(s); }
+  function slug(s) {
+    s = String(s == null ? '' : s).normalize('NFKD').replace(/[̀-ͯ]/g, '');
+    return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').replace(/-+/g, '-');
+  }
+  function isValid(id) { return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(id); }
+  L('=== クリーンアップ ' + (FIX_DRY ? '[DRY — 変更なし]' : '[APPLY — 書き込み]') + ' ===');
+
+  // ① ARTISTS: 不正IDを slug 化
+  var sa = ss.getSheetByName('ARTISTS');
+  var aVals = sa.getDataRange().getValues();
+  var idC = aVals[0].indexOf('ID');
+  var seen = {}, fixed = 0;
+  aVals.slice(1).forEach(function (row, i) {
+    var id = String(row[idC] || '').trim();
+    if (id && !isValid(id)) {
+      var ns = slug(id);
+      var dup = seen[ns] ? ' ⚠重複' : '';
+      seen[ns] = true;
+      L('ARTISTS 行' + (i + 2) + ': "' + id + '" → "' + ns + '"' + dup);
+      if (!FIX_DRY) sa.getRange(i + 2, idC + 1).setValue(ns);
+      fixed++;
+    }
+  });
+  L('ARTISTS 修正 ' + fixed + '件');
+
+  // ② VENUES: ID も NAME も空の幽霊行を削除
+  var sv = ss.getSheetByName('VENUES');
+  var vVals = sv.getDataRange().getValues();
+  var vId = vVals[0].indexOf('ID'), vNm = vVals[0].indexOf('NAME');
+  var delRows = [];
+  vVals.slice(1).forEach(function (row, i) {
+    if (!String(row[vId] || '').trim() && !String(row[vNm] || '').trim()) delRows.push(i + 2);
+  });
+  L('VENUES 削除対象 ' + delRows.length + '件: 行' + (delRows.join(',') || 'なし'));
+  if (!FIX_DRY) delRows.sort(function (a, b) { return b - a; }).forEach(function (r) { sv.deleteRow(r); });
+
+  Logger.log(log.join('\n'));
+}
+
 // 各シートの gid（sheetId）と spreadsheet URL を出力（Phase 1 の fetch-data.mjs 用）
 function mig_gids() {
   var ss = SpreadsheetApp.getActive();
