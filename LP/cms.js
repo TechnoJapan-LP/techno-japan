@@ -2547,6 +2547,182 @@ function bulkJumpEdit(section, rowNum){
   setTimeout(()=>{ try { editRow(section, rowNum); } catch(e){ toast('編集画面を開けませんでした','error'); } }, 300);
 }
 
+/* ==============================================================
+   BULK IMPORT — 一括登録/インポート
+   ① CSV/一覧で一括追加（draft）  ② 開催回の複製  ③ 画像URL一括アップロード
+   既存の add_*（QUICK_ADD_DEFS）/ upload_from_url / update_row を再利用。
+   すべて確認・進捗・中断つき。追加は draft、重複IDはスキップ。
+   ============================================================== */
+let biCancel = false;
+const biProg = msg => { const el=document.getElementById('bi-progress'); if(el) el.textContent = msg; };
+const biField = 'font-family:var(--font-mono);font-size:.8rem;width:100%;padding:8px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--text)';
+
+function openBulkImport(){
+  biCancel = false;
+  const ov = document.createElement('div');
+  ov.className = 'dialog-overlay show'; ov.id = 'bi-overlay'; ov.style.zIndex = 700;
+  ov.innerHTML = `<div class="dialog-box" style="max-width:640px;max-height:88vh;overflow-y:auto">
+    <h3>⬆ 一括登録 / インポート</h3>
+
+    <div style="margin-top:14px;padding:12px;background:var(--bg3);border-radius:var(--radius)">
+      <div style="font-size:.8rem;font-weight:700;margin-bottom:6px">① CSV / 一覧で一括追加（draft）</div>
+      <select id="bi-csv-sec" style="${biField};margin-bottom:6px">
+        <option value="artist">Artists — name, city, genre</option>
+        <option value="festival">Festivals — name, city, dateStart, dateEnd</option>
+        <option value="venue">Venues — name, city, area</option>
+      </select>
+      <textarea id="bi-csv" rows="4" placeholder="1行1件。カンマ区切り。例:&#10;DJ Nobu, CHIBA, TECHNO&#10;Wata Igarashi, TOKYO, TECHNO" style="${biField};resize:vertical"></textarea>
+      <div style="margin-top:6px;display:flex;gap:8px"><button class="btn btn-sm btn-blue" onclick="biCsvPreview()">プレビュー</button></div>
+      <div id="bi-csv-report" style="margin-top:8px;font-size:.78rem"></div>
+    </div>
+
+    <div style="margin-top:12px;padding:12px;background:var(--bg3);border-radius:var(--radius)">
+      <div style="font-size:.8rem;font-weight:700;margin-bottom:6px">② 開催回の複製（フェス → 翌年の下書き）</div>
+      <select id="bi-dup-fest" style="${biField};margin-bottom:6px"><option value="">読み込み中...</option></select>
+      <div style="display:flex;gap:6px;margin-bottom:6px">
+        <input id="bi-dup-id" placeholder="新ID (例: rural-2027)" style="${biField}">
+        <input id="bi-dup-ds" type="date" style="${biField}">
+        <input id="bi-dup-de" type="date" style="${biField}">
+      </div>
+      <button class="btn btn-sm btn-accent" onclick="biDuplicate()">複製して下書き作成</button>
+    </div>
+
+    <div style="margin-top:12px;padding:12px;background:var(--bg3);border-radius:var(--radius)">
+      <div style="font-size:.8rem;font-weight:700;margin-bottom:6px">③ 画像URL 一括アップロード（→ Drive）</div>
+      <select id="bi-img-target" style="${biField};margin-bottom:6px">
+        <option value="artist-image">アーティスト画像</option>
+        <option value="festival-image">フェス画像</option>
+        <option value="festival-flyer">フェス フライヤー</option>
+      </select>
+      <textarea id="bi-img" rows="4" placeholder="1行1件「id, 画像URL」。例:&#10;dj-nobu, https://.../nobu.jpg&#10;wata-igarashi, https://.../wata.jpg" style="${biField};resize:vertical"></textarea>
+      <div style="margin-top:6px"><button class="btn btn-sm btn-accent" onclick="biImgRun()">アップロード実行</button></div>
+    </div>
+
+    <div id="bi-progress" style="margin-top:12px;font-family:var(--font-mono);font-size:.78rem;color:var(--text2);white-space:pre-line"></div>
+    <div style="margin-top:14px;display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-sm" id="bi-cancel-btn" onclick="biCancel=true" style="display:none">中断</button>
+      <button class="btn btn-sm" onclick="document.getElementById('bi-overlay').remove()">閉じる</button>
+    </div>
+  </div>`;
+  ov.addEventListener('click', e=>{ if(e.target===ov) ov.remove(); });
+  document.body.appendChild(ov);
+  // フェス複製の候補を読み込み
+  fetchAllSheets(['FESTIVALS']).then(d=>{
+    const sel = document.getElementById('bi-dup-fest'); if(!sel) return;
+    biFestRows = (d.FESTIVALS||[]).map(r=>({...r}));
+    sel.innerHTML = '<option value="">フェスを選択...</option>' +
+      biFestRows.filter(r=>r.id).map(r=>`<option value="${esc(r.id)}">${esc(r.name||r.id)} (${esc(r.date||'')})</option>`).join('');
+  }).catch(()=>{ const sel=document.getElementById('bi-dup-fest'); if(sel) sel.innerHTML='<option value="">取得失敗（ログイン確認）</option>'; });
+}
+let biFestRows = [];
+
+// ---- ① CSV 一括追加 ----
+function biParseCsv(section, text){
+  const defFields = { artist:['name','city','genre'], festival:['name','city','dateStart','dateEnd'], venue:['name','city','area'] }[section];
+  return text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean).map(line=>{
+    const parts = line.split(',').map(s=>s.trim());
+    const o = {}; defFields.forEach((f,i)=>{ if(parts[i]) o[f]=parts[i]; });
+    o.id = slugify(o.name||'');
+    if(section==='festival'){ o.date = o.dateStart && o.dateEnd ? o.dateStart+'/'+o.dateEnd : (o.dateStart||''); }
+    return o;
+  }).filter(o=>o.name && o.id);
+}
+function biCsvPreview(){
+  const section = document.getElementById('bi-csv-sec').value;
+  const rows = biParseCsv(section, document.getElementById('bi-csv').value);
+  const rep = document.getElementById('bi-csv-report');
+  if(!rows.length){ rep.innerHTML = '<span style="opacity:.5">有効な行がありません</span>'; return; }
+  rep.innerHTML = 'ID重複チェック中...';
+  const sheetName = section.toUpperCase()+'S';
+  fetchAllSheets([sheetName]).catch(()=>({})).then(d=>{
+    const existing = new Set(((d&&d[sheetName])||[]).map(r=>r.id));
+    let dup=0;
+    const list = rows.map(r=>{ const isDup=existing.has(r.id); if(isDup)dup++; return `<div style="display:flex;justify-content:space-between;padding:2px 0;${isDup?'opacity:.4':''}"><span>${esc(r.name)} → <code>${esc(r.id)}</code></span>${isDup?'<span style="color:var(--accent);font-size:.7rem">既存・スキップ</span>':''}</div>`; }).join('');
+    const addN = rows.length - dup;
+    rep.innerHTML = `<div style="max-height:160px;overflow-y:auto;border:1px solid var(--border);border-radius:4px;padding:8px">${list}</div>
+      <div style="margin-top:8px;display:flex;justify-content:space-between;align-items:center"><span>${addN}件を追加（draft）／${dup}件スキップ</span>${addN?`<button class="btn btn-sm btn-accent" onclick='biCsvRun(${JSON.stringify(section)})'>${addN}件を追加</button>`:''}</div>`;
+    window._biCsvRows = rows; window._biCsvExisting = existing;
+  });
+}
+async function biCsvRun(section){
+  const rows = (window._biCsvRows||[]).filter(r=>!window._biCsvExisting.has(r.id));
+  if(!rows.length) return;
+  if(!confirm(`${rows.length}件を draft として追加します。続行しますか?`)) return;
+  biCancel=false; document.getElementById('bi-cancel-btn').style.display='';
+  const action = QUICK_ADD_DEFS[section].action;
+  let done=0, fail=0;
+  for(const r of rows){
+    if(biCancel) break;
+    biProg(`追加中... ${done+fail+1}/${rows.length}\n${r.name}`);
+    try {
+      const {dateStart, dateEnd, ...vals} = r;
+      const res = await fetch(GAS_URL,{method:'POST',body:JSON.stringify({action, ...vals, status:'draft'})}).then(x=>x.json());
+      (res.success||res.status==='ok') ? done++ : fail++;
+    } catch(e){ fail++; }
+    await new Promise(r=>setTimeout(r,600));
+  }
+  document.getElementById('bi-cancel-btn').style.display='none';
+  biProg(`${biCancel?'中断':'完了'}: ${done}件追加 / ${fail}件失敗`);
+  invalidateSheetCache(section);
+}
+
+// ---- ② 開催回の複製 ----
+async function biDuplicate(){
+  const fid = document.getElementById('bi-dup-fest').value;
+  const newId = document.getElementById('bi-dup-id').value.trim();
+  const ds = document.getElementById('bi-dup-ds').value, de = document.getElementById('bi-dup-de').value;
+  if(!fid) return toast('複製元フェスを選択してください','error');
+  if(!newId || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(newId)) return toast('新IDを正しい形式で入力（例: rural-2027）','error');
+  if((listCache.festival||[]).some(r=>r.id===newId) || biFestRows.some(r=>r.id===newId)) return toast('そのIDは既に存在します','error');
+  const src = biFestRows.find(r=>r.id===fid);
+  if(!src) return toast('複製元が見つかりません','error');
+  if(!confirm(`「${src.name}」を複製して下書き（${newId}）を作成します。ラインナップ等もコピーされます。続行?`)) return;
+  const {_row, ...fields} = src;
+  const payload = { action: QUICK_ADD_DEFS.festival.action, ...fields, id:newId, status:'draft',
+    date: (ds && de) ? ds+'/'+de : (ds || fields.date || '') };
+  biProg('複製中...');
+  try {
+    const res = await fetch(GAS_URL,{method:'POST',body:JSON.stringify(payload)}).then(x=>x.json());
+    if(res.success||res.status==='ok'){ biProg('✓ 下書きを作成しました: '+newId); invalidateSheetCache('festival'); toast('複製しました (draft)','success'); }
+    else biProg('失敗: '+(res.message||res.error||''));
+  } catch(e){ biProg('通信エラー: '+e.message); }
+}
+
+// ---- ③ 画像URL 一括アップロード ----
+async function biImgRun(){
+  const target = document.getElementById('bi-img-target').value; // artist-image / festival-image / festival-flyer
+  const section = target.startsWith('artist') ? 'artist' : 'festival';
+  const field = target.endsWith('flyer') ? 'flyer' : 'image';
+  const pairs = document.getElementById('bi-img').value.split(/\r?\n/).map(l=>l.trim()).filter(Boolean)
+    .map(l=>{ const i=l.indexOf(','); return i<0?null:{ id:l.slice(0,i).trim(), url:l.slice(i+1).trim() }; })
+    .filter(p=>p && p.id && /^https?:/.test(p.url));
+  if(!pairs.length) return toast('「id, 画像URL」を1行ずつ入力してください','error');
+  const d = await fetchAllSheets([section.toUpperCase()+'S']).catch(()=>({}));
+  const rows = (d[section.toUpperCase()+'S'] || listCache[section] || []);
+  const byId = new Map(rows.map(r=>[r.id, r]));
+  const valid = pairs.filter(p=>byId.has(p.id));
+  const missing = pairs.filter(p=>!byId.has(p.id)).map(p=>p.id);
+  if(!valid.length) return toast('該当IDが見つかりません: '+missing.join(', '),'error');
+  if(!confirm(`${valid.length}件の画像を Drive にアップロードし、${field} を設定します。${missing.length?'\n（ID不明でスキップ: '+missing.join(', ')+'）':''}\n続行しますか?`)) return;
+  biCancel=false; document.getElementById('bi-cancel-btn').style.display='';
+  let done=0, fail=0;
+  for(const p of valid){
+    if(biCancel) break;
+    biProg(`アップロード中... ${done+fail+1}/${valid.length}\n${p.id}`);
+    try {
+      const up = await fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'upload_from_url', imageUrl:p.url, type:target, id:p.id})}).then(x=>x.json());
+      if(up.success && up.path){
+        const row = {...byId.get(p.id)}; row[field] = up.path;
+        await bulkSaveRow(section, row); done++;
+      } else fail++;
+    } catch(e){ fail++; }
+    await new Promise(r=>setTimeout(r,800));
+  }
+  document.getElementById('bi-cancel-btn').style.display='none';
+  biProg(`${biCancel?'中断':'完了'}: ${done}件設定 / ${fail}件失敗`);
+  invalidateSheetCache(section);
+}
+
 async function bulkSaveRow(section, row){
   const payload = { action:'update_row', sheet:SHEET_MAP[section], row:row._row, ...row };
   delete payload._row;
