@@ -73,6 +73,14 @@ button { font-family: inherit; color: inherit; background: none; border: none; c
 .fest-item-badge { font-size: 9px; letter-spacing: 0.1em; opacity: 0.5; white-space: nowrap; flex-shrink: 0; }
 .fest-item-badge.has-lineup { color: var(--accent); opacity: 0.9; }
 
+/* ---------- fest flyer ---------- */
+.fest-flyer {
+  display: block; margin: 4px auto 18px;
+  max-width: min(100%, 300px); max-height: 420px; width: auto; height: auto;
+  object-fit: contain;
+  border: 1px solid var(--border); border-radius: 6px; background: var(--bg2);
+}
+
 /* ---------- fest info / actions ---------- */
 .fest-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 22px; }
 .fest-action {

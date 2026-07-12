@@ -1,9 +1,10 @@
 /* TJ APP (仮) — Service Worker
    シェル: cache-first / データ(../data/*.json): stale-while-revalidate
    インストール時に全フェスデータを事前キャッシュ → 圏外の会場でも動く */
-const VERSION = 'tjapp-v1.2.0';
+const VERSION = 'tjapp-v1.3.0';
 const SHELL_CACHE = VERSION + '-shell';
 const DATA_CACHE = VERSION + '-data';
+const IMG_CACHE = VERSION + '-img';
 
 const SHELL = ['./', './index.html', './app.css', './app.js', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 const DATA = ['../data/festivals.json', '../data/editions.json', '../data/lineups.json', '../data/artists.json'];
@@ -38,6 +39,18 @@ self.addEventListener('fetch', e => {
       const cached = await cache.match(request);
       const revalidate = fetch(request).then(res => { if (res.ok) cache.put(request, res.clone()); return res; }).catch(() => cached);
       return cached || revalidate;
+    })());
+    return;
+  }
+
+  // 画像(../images/): 閲覧時にキャッシュ（cache-first）→ 一度見たフライヤーはオフラインでも表示
+  if (/\/images\/.*\.(jpe?g|png|webp|avif)$/i.test(url.pathname)) {
+    e.respondWith((async () => {
+      const cache = await caches.open(IMG_CACHE);
+      const cached = await cache.match(request);
+      if (cached) return cached;
+      try { const res = await fetch(request); if (res.ok) cache.put(request, res.clone()); return res; }
+      catch (err) { return cached || Response.error(); }
     })());
     return;
   }

@@ -213,10 +213,15 @@ function renderFest(editionId, tab) {
     ${tab === 'my' && mine.length ? `<button class="fest-action" id="btn-share">共有</button>` : ''}
   </div>`;
 
+  const flyerHtml = ed.FLYER
+    ? `<img class="fest-flyer" src="../${esc(ed.FLYER)}" alt="${esc(f?.NAME || '')} flyer" loading="lazy" decoding="async" onerror="this.remove()">`
+    : '';
+
   $('#screen').innerHTML = `
     <div class="offline-note">OFFLINE — 保存済みデータを表示中</div>
     <div class="fest-head">
       <div class="screen-title"><a href="#/">← ALL FESTIVALS</a></div>
+      ${flyerHtml}
       <div class="screen-hero">${esc(f?.NAME || ed.FESTIVAL_ID)}</div>
       <div class="screen-sub">${esc(ed.DATE_START || '')}${ed.DATE_END && ed.DATE_END !== ed.DATE_START ? ' → ' + esc(ed.DATE_END) : ''} · ${esc(ed.LOCATION || '')} ${esc(ed.PREF || '')}</div>
     </div>
