@@ -3305,6 +3305,9 @@ function dataJsHeader(){
    ========================================================== */`;
 }
 function q(s){return String(s||'').replace(/\\/g,'\\\\').replace(/"/g,'\\"').replace(/\n/g,'\\n')}
+// 画像は配信フォーマットの .webp に正規化（サイトは最適化済み .webp を配信）。
+// .webp が無い画像は元々 .jpg/.png も欠落しているため、変換で悪化しない。
+function webp(p){return String(p||'').replace(/\.(jpe?g|png)$/i,'.webp')}
 // Normalize a date to "YYYY-MM-DD" (LP-compatible). Handles:
 //   - Date objects
 //   - JS Date.toString() like "Sun May 17 2026 00:00:00 GMT+0900 (日本標準時)"
@@ -3344,7 +3347,7 @@ function buildArtistsJs(rows){
     if(r.city) l.push('    city: "'+q(r.city)+'",');
     if(r.country) l.push('    country: "'+q(r.country)+'",');
     if(r.genre) l.push('    genre: "'+q(r.genre)+'",');
-    if(r.image) l.push('    image: "'+q(r.image)+'",');
+    if(r.image) l.push('    image: "'+q(webp(r.image))+'",');
     if(r.imagePosition) l.push('    imagePosition: "'+q(r.imagePosition)+'",');
     if(r.bio) l.push('    bio: "'+q(r.bio)+'",');
     const links=[];
@@ -3395,9 +3398,9 @@ function buildFestivalsJs(rows){
     if(r.address) l.push('    address: "'+q(r.address)+'",');
     const lat=parseFloat(r.lat); if(!isNaN(lat)) l.push('    lat: '+lat+',');
     const lng=parseFloat(r.lng); if(!isNaN(lng)) l.push('    lng: '+lng+',');
-    if(r.image) l.push('    image: "'+q(r.image)+'",');
+    if(r.image) l.push('    image: "'+q(webp(r.image))+'",');
     if(r.imagePosition) l.push('    imagePosition: "'+q(r.imagePosition)+'",');
-    if(r.flyer) l.push('    flyer: "'+q(r.flyer)+'",');
+    if(r.flyer) l.push('    flyer: "'+q(webp(r.flyer))+'",');
     if(r.heroGradient) l.push('    heroGradient: "'+q(r.heroGradient)+'",');
     if(r.genre){
       const arr=String(r.genre).split(/[,·]/).map(s=>'"'+q(s.trim())+'"').filter(s=>s!=='""');
@@ -3438,7 +3441,7 @@ function buildVenuesJs(rows){
     if(r.city) l.push('    city: "'+q(r.city)+'",');
     if(r.area) l.push('    area: "'+q(r.area)+'",');
     if(r.type) l.push('    type: "'+q(r.type)+'",');
-    if(r.image) l.push('    image: "'+q(r.image)+'",');
+    if(r.image) l.push('    image: "'+q(webp(r.image))+'",');
     if(r.imagePosition) l.push('    imagePosition: "'+q(r.imagePosition)+'",');
     if(r.genre){
       const arr=String(r.genre).split(/[,·]/).map(s=>'"'+q(s.trim())+'"').filter(s=>s!=='""');
