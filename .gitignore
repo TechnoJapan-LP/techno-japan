@@ -13,6 +13,3 @@ scripts/*.log
 # Node / data pipeline generated artifacts
 node_modules/
 validation-report.txt
-
-# Phase 2 生成器の検証用候補
-LP/data.generated.js

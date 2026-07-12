@@ -2,12 +2,10 @@
   "name": "techno-japan-data",
   "private": true,
   "type": "module",
-  "description": "スプレッドシート「LP」→ LP/data/*.json ビルドパイプライン（docs/DATA_SCHEMA.md）",
+  "description": "スプレッドシート「LP」→ LP/data/*.json（discovery用）ビルドパイプライン。data.js の生成は CMS「Publish Now」が担当（docs/DATA_SCHEMA.md）",
   "scripts": {
     "fetch": "node scripts/fetch-data.mjs",
     "fetch:dry": "node scripts/fetch-data.mjs --dry",
-    "fetch:offline": "node scripts/fetch-data.mjs --offline",
-    "build:data-js": "node scripts/build-data-js.mjs",
-    "build:site": "node scripts/fetch-data.mjs && node scripts/build-data-js.mjs"
+    "fetch:offline": "node scripts/fetch-data.mjs --offline"
   }
 }
