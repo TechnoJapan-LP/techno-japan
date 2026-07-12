@@ -2469,6 +2469,126 @@ async function findReplaceExecute(){
 function escRegExp(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
 
 /* ==============================================================
+   BULK ASSIST — 一括補助（空欄のみ・確認/進捗/中断）
+   既存の aiGenerate(GAS) / geocode(Google) / update_row を再利用。
+   既存値は絶対に上書きしない（空欄のみ対象）。
+   ============================================================== */
+let bulkCancel = false;
+let bulkData = null; // { artist:[], festival:[], venue:[] } (rows with _row)
+
+function openBulkAssist(){
+  bulkCancel = false;
+  const overlay = document.createElement('div');
+  overlay.className = 'dialog-overlay show';
+  overlay.id = 'bulk-overlay';
+  overlay.style.zIndex = 700;
+  overlay.innerHTML = `<div class="dialog-box" style="max-width:600px">
+    <h3>⚡ 一括補助 — BULK ASSIST</h3>
+    <p style="color:var(--text2);font-size:.85rem;margin-bottom:12px">空欄だけを AI 生成・ジオコーディングで埋めます（<strong>既存値は上書きしません</strong>）。まず「スキャン」で不足件数を確認してください。</p>
+    <button class="btn btn-sm btn-blue" onclick="bulkScan()">🔍 スキャン</button>
+    <div id="bulk-report" style="margin-top:14px;font-size:.82rem"></div>
+    <div id="bulk-progress" style="margin-top:12px;font-family:var(--font-mono);font-size:.78rem;color:var(--text2);white-space:pre-line"></div>
+    <div style="margin-top:16px;display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-sm" id="bulk-cancel-btn" onclick="bulkCancel=true" style="display:none">中断</button>
+      <button class="btn btn-sm" onclick="document.getElementById('bulk-overlay').remove()">閉じる</button>
+    </div>
+  </div>`;
+  overlay.addEventListener('click', e=>{ if(e.target===overlay) overlay.remove(); });
+  document.body.appendChild(overlay);
+}
+
+function bulkScan(){
+  const rep = document.getElementById('bulk-report');
+  rep.textContent = 'スキャン中...';
+  fetchAllSheets(['ARTISTS','FESTIVALS','VENUES']).then(d=>{
+    bulkData = {
+      artist:   (d.ARTISTS||[]).map(r=>({...r})),
+      festival: (d.FESTIVALS||[]).map(r=>({...r})),
+      venue:    (d.VENUES||[]).map(r=>({...r})),
+    };
+    const missBio  = bulkData.artist.filter(r=>r.name && !r.bio).length;
+    const missFD   = bulkData.festival.filter(r=>r.name && !r.desc).length;
+    const missVD   = bulkData.venue.filter(r=>r.name && !r.desc).length;
+    const geoF     = bulkData.festival.filter(r=>r.address && (!r.lat || !r.lng)).length;
+    const geoV     = bulkData.venue.filter(r=>r.address && (!r.lat || !r.lng)).length;
+    const line = (label, n, fn) => n
+      ? `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)"><span>${label}: <strong>${n}</strong>件</span><button class="btn btn-sm btn-accent" onclick="${fn}">実行</button></div>`
+      : `<div style="padding:8px 0;border-bottom:1px solid var(--border);opacity:.45">${label}: 0件 ✓</div>`;
+    rep.innerHTML =
+      `<div style="font-size:.7rem;letter-spacing:.1em;opacity:.5;margin-bottom:4px">AI 生成（空欄のみ）</div>` +
+      line('アーティスト BIO', missBio, "bulkAiRun('artist','bio')") +
+      line('フェス 説明', missFD, "bulkAiRun('festival','desc')") +
+      line('ヴェニュー 説明', missVD, "bulkAiRun('venue','desc')") +
+      `<div style="font-size:.7rem;letter-spacing:.1em;opacity:.5;margin:14px 0 4px">ジオコーディング（住所あり・座標なし）</div>` +
+      line('フェス 座標', geoF, "bulkGeoRun('festival')") +
+      line('ヴェニュー 座標', geoV, "bulkGeoRun('venue')");
+  }).catch(e=>{ rep.innerHTML = '<span style="color:var(--accent)">取得失敗: '+esc(e.message)+'（ログイン状態を確認）</span>'; });
+}
+
+async function bulkSaveRow(section, row){
+  const payload = { action:'update_row', sheet:SHEET_MAP[section], row:row._row, ...row };
+  delete payload._row;
+  const r = await fetch(GAS_URL,{method:'POST',body:JSON.stringify(payload)}).then(r=>r.json());
+  if(!(r.status==='ok'||r.success)) throw new Error(r.message||'save failed');
+}
+const bulkProg = msg => { const el=document.getElementById('bulk-progress'); if(el) el.textContent = msg; };
+
+async function bulkAiRun(section, field){
+  if(!bulkData) return;
+  const rows = bulkData[section].filter(r=>r.name && !r[field]);
+  if(!rows.length) return;
+  if(!confirm(`${rows.length}件に AI 生成を実行し、スプレッドシートに保存します。\nAI を ${rows.length} 回呼び出します（時間・コストがかかります）。\n空欄のみ対象・既存値は変更しません。続行しますか?`)) return;
+  bulkCancel = false;
+  document.getElementById('bulk-cancel-btn').style.display='';
+  let done=0, fail=0;
+  for(const row of rows){
+    if(bulkCancel){ break; }
+    bulkProg(`AI生成中... ${done+fail+1}/${rows.length}\n${row.name}`);
+    try {
+      const body = { action:'aiGenerate', section, name:row.name, city:row.city||'',
+        context: section==='artist'   ? ('genre: '+(row.genre||'')+', country: '+(row.country||''))
+               : section==='festival' ? ('location: '+(row.location||'')+', type: '+(row.type||''))
+               :                        ('capacity: '+(row.capacity||'')+', type: '+(row.type||'')),
+        url: row.url || row.website || '', instagram: row.instagram || '' };
+      const d = await fetch(GAS_URL,{method:'POST',body:JSON.stringify(body)}).then(r=>r.json());
+      const val = d && (d.bio || d.desc);
+      if(d && d.success && val){ row[field]=val; await bulkSaveRow(section,row); done++; }
+      else fail++;
+    } catch(e){ fail++; }
+    await new Promise(r=>setTimeout(r,1200)); // レート制限対策
+  }
+  document.getElementById('bulk-cancel-btn').style.display='none';
+  bulkProg(`${bulkCancel?'中断':'完了'}: ${done}件生成 / ${fail}件失敗`);
+  ['venue','festival','artist','event','article'].forEach(s=>{listCache[s]=null;});
+}
+
+async function bulkGeoRun(section){
+  if(!bulkData) return;
+  const rows = bulkData[section].filter(r=>r.address && (!r.lat || !r.lng));
+  if(!rows.length) return;
+  if(!confirm(`${rows.length}件をジオコーディングし、スプレッドシートに保存します。\n住所から座標を取得し、座標が空の行のみ埋めます。続行しますか?`)) return;
+  bulkCancel = false;
+  document.getElementById('bulk-cancel-btn').style.display='';
+  let done=0, fail=0;
+  for(const row of rows){
+    if(bulkCancel){ break; }
+    bulkProg(`ジオコーディング中... ${done+fail+1}/${rows.length}\n${row.name}`);
+    try {
+      const d = await fetch('https://maps.googleapis.com/maps/api/geocode/json?address='+encodeURIComponent(row.address)+'&key='+GMAPS_KEY).then(r=>r.json());
+      if(d.status==='OK' && d.results[0]){
+        const loc = d.results[0].geometry.location;
+        row.lat = loc.lat.toFixed(4); row.lng = loc.lng.toFixed(4);
+        await bulkSaveRow(section,row); done++;
+      } else fail++;
+    } catch(e){ fail++; }
+    await new Promise(r=>setTimeout(r,350));
+  }
+  document.getElementById('bulk-cancel-btn').style.display='none';
+  bulkProg(`${bulkCancel?'中断':'完了'}: ${done}件座標設定 / ${fail}件失敗`);
+  ['venue','festival'].forEach(s=>{listCache[s]=null;});
+}
+
+/* ==============================================================
    HOME DASHBOARD
    ============================================================== */
 function openHomeDashboard(){
