@@ -72,6 +72,38 @@ const isFuture = ed => {
   return end >= now;
 };
 
+/* ---------- companion actions ---------- */
+function mapUrl(ed) {
+  if (ed.LAT && ed.LNG) return `https://www.google.com/maps/search/?api=1&query=${ed.LAT},${ed.LNG}`;
+  const q = [ed.ADDRESS, ed.LOCATION, ed.PREF].filter(Boolean).join(' ');
+  return q ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}` : '';
+}
+const ymd = d => String(d || '').replace(/-/g, '');
+const addDay = d => { const t = new Date(d); t.setDate(t.getDate() + 1); return ymd(t.toISOString().slice(0, 10)); };
+function downloadIcs(ed, f) {
+  const start = ymd(ed.DATE_START), end = ed.DATE_END ? addDay(ed.DATE_END) : addDay(ed.DATE_START);
+  const ics = [
+    'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//TJ APP//JP', 'BEGIN:VEVENT',
+    'UID:' + ed.EDITION_ID + '@techno-japan',
+    'DTSTART;VALUE=DATE:' + start, 'DTEND;VALUE=DATE:' + end,
+    'SUMMARY:' + (f?.NAME || ed.FESTIVAL_ID),
+    'LOCATION:' + [ed.LOCATION, ed.PREF].filter(Boolean).join(', '),
+    f?.URL ? 'URL:' + f.URL : '', 'END:VEVENT', 'END:VCALENDAR',
+  ].filter(Boolean).join('\r\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }));
+  a.download = ed.EDITION_ID + '.ics'; a.click(); URL.revokeObjectURL(a.href);
+}
+async function shareMySets(ed, f, mine) {
+  const text = `${f?.NAME || ed.FESTIVAL_ID} — MY SETS\n` +
+    mine.map(r => '★ ' + actName(r) + (r.START ? ' (' + fmtRange(r.START, r.END) + ')' : '')).join('\n') +
+    `\nvia TJ APP`;
+  try {
+    if (navigator.share) await navigator.share({ title: f?.NAME || 'MY SETS', text });
+    else { await navigator.clipboard.writeText(text); alert('コピーしました'); }
+  } catch { /* cancelled */ }
+}
+
 /* ---------- router ---------- */
 function route() {
   const h = window.location.hash || '#/';
@@ -159,6 +191,16 @@ function renderFest(editionId, tab) {
   }
   if (!rows.length) listHtml = `<div class="my-empty">${tab === 'my' ? '☆ をタップして自分のセットを組もう' : 'ラインナップ未登録'}</div>`;
 
+  const map = mapUrl(ed);
+  const actionsHtml = `<div class="fest-actions">
+    ${map ? `<a class="fest-action primary" href="${esc(map)}" target="_blank" rel="noopener">📍 経路</a>` : ''}
+    ${f?.URL ? `<a class="fest-action" href="${esc(f.URL)}" target="_blank" rel="noopener">公式</a>` : ''}
+    ${ed.TICKETURL ? `<a class="fest-action" href="${esc(ed.TICKETURL)}" target="_blank" rel="noopener">チケット</a>` : ''}
+    ${f?.INSTAGRAM ? `<a class="fest-action" href="${esc(f.INSTAGRAM)}" target="_blank" rel="noopener">Instagram</a>` : ''}
+    <button class="fest-action" id="btn-ics">＋カレンダー</button>
+    ${tab === 'my' && mine.length ? `<button class="fest-action" id="btn-share">共有</button>` : ''}
+  </div>`;
+
   $('#screen').innerHTML = `
     <div class="offline-note">OFFLINE — 保存済みデータを表示中</div>
     <div class="fest-head">
@@ -166,6 +208,7 @@ function renderFest(editionId, tab) {
       <div class="screen-hero">${esc(f?.NAME || ed.FESTIVAL_ID)}</div>
       <div class="screen-sub">${esc(ed.DATE_START || '')}${ed.DATE_END && ed.DATE_END !== ed.DATE_START ? ' → ' + esc(ed.DATE_END) : ''} · ${esc(ed.LOCATION || '')} ${esc(ed.PREF || '')}</div>
     </div>
+    ${actionsHtml}
     ${listHtml}
     ${tab === 'my' && mine.length ? `<div class="my-actions"><button class="btn-ghost" id="clear-sets">CLEAR ALL</button></div>` : ''}
     ${tab === 'my' && mine.length && !hasTimes ? `<div class="notice">セット時刻（START/END）が公開されると、ここで自動的に時間被りを検出します。</div>` : ''}
@@ -189,6 +232,8 @@ function renderFest(editionId, tab) {
   $('#clear-sets')?.addEventListener('click', () => {
     if (confirm('MY SETS をすべて解除しますか？')) { saveSets(editionId, new Set()); renderFest(editionId, tab); }
   });
+  $('#btn-ics')?.addEventListener('click', () => downloadIcs(ed, f));
+  $('#btn-share')?.addEventListener('click', () => shareMySets(ed, f, mine));
   window.scrollTo(0, 0);
 }
 

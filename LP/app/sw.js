@@ -1,7 +1,7 @@
 /* TJ APP (仮) — Service Worker
    シェル: cache-first / データ(../data/*.json): stale-while-revalidate
    インストール時に全フェスデータを事前キャッシュ → 圏外の会場でも動く */
-const VERSION = 'tjapp-v1.0.0';
+const VERSION = 'tjapp-v1.1.0';
 const SHELL_CACHE = VERSION + '-shell';
 const DATA_CACHE = VERSION + '-data';
 
