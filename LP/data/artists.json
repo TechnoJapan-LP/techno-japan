@@ -1,0 +1,401 @@
+{
+  "_generatedAt": "2026-07-12T03:31:32.033Z",
+  "count": 90,
+  "items": [
+    {
+      "ID": "dj-nobu",
+      "NAME": "DJ Nobu",
+      "CITY": "CHIBA",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO",
+      "IMAGE": "images/artists/dj-nobu.jpg",
+      "BIO": "DJ Nobu is a Tokyo-based techno artist deeply embedded in Japan's underground electronic music scene. Known for his precise technical approach and atmospheric sound design, he represents the evolution of Japanese techno with a distinctly minimalist aesthetic.",
+      "INSTAGRAM": "https://www.instagram.com/dj_nobu_ft/",
+      "SOUNDCLOUD": "https://soundcloud.com/djnobu_bitta",
+      "BANDCAMP": "https://dj-nobu.bandcamp.com/album/sh",
+      "STATUS": "published"
+    },
+    {
+      "ID": "wata-igarashi",
+      "NAME": "WATA IGARASHI",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO",
+      "IMAGE": "images/artists/wata-igarashi.jpg",
+      "BIO": "Tokyo-based producer and DJ crafting hypnotic, psychedelic techno. Releases on Midgar, The Bunker NY, and his own Meditate label. His sound is a deep, spiraling journey — transcendent and relentless.",
+      "INSTAGRAM": "https://www.instagram.com/wataigarashi/",
+      "SOUNDCLOUD": "https://soundcloud.com/wataigarashi",
+      "BANDCAMP": "https://wataigarashi.bandcamp.com/",
+      "STATUS": "published",
+      "imagePosition": "center top"
+    },
+    {
+      "ID": "kotsu",
+      "NAME": "KOTSU",
+      "CITY": "OSAKA",
+      "COUNTRY": "JAPAN",
+      "GENRE": "HOUSE / MINIMAL",
+      "IMAGE": "images/artists/kotsu.jpg",
+      "BIO": "Osaka selector with deep roots in the Kansai underground. Fluid sets moving between deep house, minimal, and micro-house. A fixture at CIRCUS Osaka and a regular across Japan's club circuit.",
+      "INSTAGRAM": "https://www.instagram.com/kotsu_dj/",
+      "SOUNDCLOUD": "https://soundcloud.com/kotsu"
+    },
+    {
+      "ID": "ken-ishii",
+      "NAME": "KEN ISHII",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO",
+      "IMAGE": "images/artists/ken-ishii.jpg",
+      "BIO": "Pioneer of Japanese techno since the early '90s. Internationally recognized through releases on R&S Records and Sublime. A living legend whose influence on Japan's electronic music scene is immeasurable.",
+      "INSTAGRAM": "https://www.instagram.com/kenishiiofficial/",
+      "SOUNDCLOUD": "https://soundcloud.com/ken-ishii-70drums",
+      "BANDCAMP": "https://kenishii.bandcamp.com/",
+      "WEBSITE": "https://kenishii.com"
+    },
+    {
+      "ID": "dj-miku",
+      "NAME": "Dj Miku"
+    },
+    {
+      "ID": "dj-kensei",
+      "NAME": "Dj Kensei"
+    },
+    {
+      "ID": "dj-yogurt",
+      "NAME": "Dj Yogurt"
+    },
+    {
+      "ID": "hidai",
+      "NAME": "Hidai"
+    },
+    {
+      "ID": "taichi-kawahira",
+      "NAME": "Taichi Kawahira"
+    },
+    {
+      "ID": "tsutomu",
+      "NAME": "Tsutomu"
+    },
+    {
+      "ID": "qmico",
+      "NAME": "Qmico"
+    },
+    {
+      "ID": "ga-su",
+      "NAME": "Ga Su"
+    },
+    {
+      "ID": "freecinn",
+      "NAME": "Freecinn"
+    },
+    {
+      "ID": "nutmeg",
+      "NAME": "Nutmeg"
+    },
+    {
+      "ID": "snipe1",
+      "NAME": "Snipe1"
+    },
+    {
+      "ID": "liarako",
+      "NAME": "Liarako"
+    },
+    {
+      "ID": "akey",
+      "NAME": "Akey"
+    },
+    {
+      "ID": "ayumu",
+      "NAME": "Ayumu"
+    },
+    {
+      "ID": "captain-k",
+      "NAME": "Captain K"
+    },
+    {
+      "ID": "lowki",
+      "NAME": "Lowki"
+    },
+    {
+      "ID": "masa-aka-kyounote",
+      "NAME": "Masa Aka Kyounote"
+    },
+    {
+      "ID": "menou-iwamaki",
+      "NAME": "Menou Iwamaki"
+    },
+    {
+      "ID": "mimu",
+      "NAME": "Mimu"
+    },
+    {
+      "ID": "naotsun",
+      "NAME": "Naotsun"
+    },
+    {
+      "ID": "norid",
+      "NAME": "Norid"
+    },
+    {
+      "ID": "sakuma",
+      "NAME": "Sakuma"
+    },
+    {
+      "ID": "seco",
+      "NAME": "Seco"
+    },
+    {
+      "ID": "shimoyan",
+      "NAME": "Shimoyan"
+    },
+    {
+      "ID": "tada",
+      "NAME": "Tada"
+    },
+    {
+      "ID": "yazzus",
+      "NAME": "Yazzus"
+    },
+    {
+      "ID": "cosmic-caz",
+      "NAME": "Cosmic Caz"
+    },
+    {
+      "ID": "janus-rose",
+      "NAME": "Janus Rose"
+    },
+    {
+      "ID": "mayudepth",
+      "NAME": "Mayudepth"
+    },
+    {
+      "ID": "akii",
+      "NAME": "Akii"
+    },
+    {
+      "ID": "mio",
+      "NAME": "Mio"
+    },
+    {
+      "ID": "aliceyuki",
+      "NAME": "Aliceyuki"
+    },
+    {
+      "ID": "akaaki-ito",
+      "NAME": "Akaaki Ito"
+    },
+    {
+      "ID": "choko",
+      "NAME": "Choko"
+    },
+    {
+      "ID": "akihiro-suzuki",
+      "NAME": "Akihiro Suzuki"
+    },
+    {
+      "ID": "endorphin",
+      "NAME": "Endorphin"
+    },
+    {
+      "ID": "kevin-miyagi",
+      "NAME": "Kevin Miyagi"
+    },
+    {
+      "ID": "psychogem",
+      "NAME": "Psychogem"
+    },
+    {
+      "ID": "sho",
+      "NAME": "Sho"
+    },
+    {
+      "ID": "takehiro-imaizumi",
+      "NAME": "Takehiro Imaizumi"
+    },
+    {
+      "ID": "tazzy",
+      "NAME": "Tazzy"
+    },
+    {
+      "ID": "tko",
+      "NAME": "Tko"
+    },
+    {
+      "ID": "tmak",
+      "NAME": "Tmak"
+    },
+    {
+      "ID": "yeark",
+      "NAME": "Yeark"
+    },
+    {
+      "ID": "yuripon",
+      "NAME": "Yuripon"
+    },
+    {
+      "ID": "ao",
+      "NAME": "青"
+    },
+    {
+      "ID": "198",
+      "NAME": "198"
+    },
+    {
+      "ID": "antal-hunee",
+      "NAME": "Antal b2b Hunee"
+    },
+    {
+      "ID": "ben-ufo",
+      "NAME": "Ben Ufo"
+    },
+    {
+      "ID": "daphni",
+      "NAME": "Daphni"
+    },
+    {
+      "ID": "dj-maria",
+      "NAME": "Dj Maria."
+    },
+    {
+      "ID": "dungeoneering",
+      "NAME": "Dungeoneering"
+    },
+    {
+      "ID": "feline",
+      "NAME": "Feline"
+    },
+    {
+      "ID": "floating-points",
+      "NAME": "Floating Points"
+    },
+    {
+      "ID": "gerd-janson",
+      "NAME": "Gerd Janson"
+    },
+    {
+      "ID": "gonno",
+      "NAME": "Gonno"
+    },
+    {
+      "ID": "haai",
+      "NAME": "Haai"
+    },
+    {
+      "ID": "helena-hauff",
+      "NAME": "Helena Hauff"
+    },
+    {
+      "ID": "jonathan-kusuma",
+      "NAME": "Jonathan Kusuma"
+    },
+    {
+      "ID": "jonny-rock",
+      "NAME": "Jonny Rock"
+    },
+    {
+      "ID": "kikiorix",
+      "NAME": "Kikiorix"
+    },
+    {
+      "ID": "mala",
+      "NAME": "Mala"
+    },
+    {
+      "ID": "nc4k",
+      "NAME": "Nc4k(Stones Taro b2b Lomax)"
+    },
+    {
+      "ID": "sisi-b2b-ouissam-b2b-yamarchy",
+      "NAME": "Sisi b2b Ouissam b2b Yamarchy"
+    },
+    {
+      "ID": "suze-ij",
+      "NAME": "Suze Ij"
+    },
+    {
+      "ID": "four-tet",
+      "NAME": "Four Tet"
+    },
+    {
+      "ID": "ojisan",
+      "NAME": "Ojisan"
+    },
+    {
+      "ID": "noritake",
+      "NAME": "Noritake"
+    },
+    {
+      "ID": "eric-cloutier",
+      "NAME": "Eric Cloutier"
+    },
+    {
+      "ID": "caimann",
+      "NAME": "Caimann"
+    },
+    {
+      "ID": "fuji",
+      "NAME": "FUJI"
+    },
+    {
+      "ID": "prins-thomas",
+      "NAME": "Prins Thomas"
+    },
+    {
+      "ID": "rami",
+      "NAME": "RAMI"
+    },
+    {
+      "ID": "pianeti-sintetici",
+      "NAME": "Pianeti Sintetici"
+    },
+    {
+      "ID": "ground",
+      "NAME": "Ground"
+    },
+    {
+      "ID": "akie",
+      "NAME": "Akie"
+    },
+    {
+      "ID": "adhemar",
+      "NAME": "AdhéMar"
+    },
+    {
+      "ID": "allen-mock",
+      "NAME": "Allen Mock"
+    },
+    {
+      "ID": "doltz",
+      "NAME": "Doltz"
+    },
+    {
+      "ID": "joma",
+      "NAME": "Joma"
+    },
+    {
+      "ID": "suguru-mochizuki",
+      "NAME": "Suguru Mochizuki"
+    },
+    {
+      "ID": "yukimasa",
+      "NAME": "YUKIMASA"
+    },
+    {
+      "ID": "tonbo",
+      "NAME": "Tonbo"
+    },
+    {
+      "ID": "sunga",
+      "NAME": "SUNGA"
+    },
+    {
+      "ID": "dj-yazi",
+      "NAME": "DJ Yazi"
+    },
+    {
+      "ID": "iron",
+      "NAME": "Iron"
+    }
+  ]
+}

@@ -1,0 +1,773 @@
+{
+  "_generatedAt": "2026-07-12T03:31:32.033Z",
+  "count": 86,
+  "items": [
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "FESTIVAL_ID": "snow-machine-japan",
+      "EDITION": "2026",
+      "DATE_START": "2026-03-03",
+      "DATE_END": "2026-03-08",
+      "LOCATION": "HAKUBA VALLEY",
+      "PREF": "Hakuba",
+      "ADDRESS": "Kitajo, Hakuba Village, Kitaazumi District, Nagano Prefecture",
+      "LAT": "36.6982",
+      "LNG": "137.8619",
+      "FLYER": "images/festivals/snow-machine-japan-flyer.jpg",
+      "STATUS": "published"
+    },
+    {
+      "EDITION_ID": "waifu-2026",
+      "FESTIVAL_ID": "waifu",
+      "EDITION": "2026",
+      "DATE_START": "2026-04-11",
+      "DATE_END": "2026-04-11",
+      "LOCATION": "Kinone Pension",
+      "PREF": "Chiba",
+      "ADDRESS": "296-1 Kinone, Narita City, Chiba Prefecture",
+      "LAT": "35.7609",
+      "LNG": "140.3924"
+    },
+    {
+      "EDITION_ID": "arch-2026",
+      "FESTIVAL_ID": "arch",
+      "EDITION": "2026",
+      "DATE_START": "2026-04-11",
+      "DATE_END": "2026-04-12",
+      "LOCATION": "Odaira no Sato Camp Area",
+      "PREF": "Gunma",
+      "ADDRESS": "495 Kodaira, Omama-cho, Midori City, Gunma Prefecture",
+      "LAT": "36.4303",
+      "LNG": "139.2767",
+      "FLYER": "images/festivals/arch-flyer.jpg",
+      "STATUS": "published"
+    },
+    {
+      "EDITION_ID": "rainbow-disco-club-2026",
+      "FESTIVAL_ID": "rainbow-disco-club",
+      "EDITION": "2026",
+      "DATE_START": "2026-04-17",
+      "DATE_END": "2026-04-19",
+      "LOCATION": "Higashi-Izu Cross Country Course",
+      "PREF": "Shizuoka",
+      "ADDRESS": "Inatori, Higashiizu-cho, Kamo-gun, Shizuoka Prefecture",
+      "LAT": "34.7847",
+      "LNG": "139.0262",
+      "FLYER": "images/festivals/rainbow-disco-club-flyer.jpg",
+      "STATUS": "published"
+    },
+    {
+      "EDITION_ID": "ala-2026",
+      "FESTIVAL_ID": "ala",
+      "EDITION": "2026",
+      "DATE_START": "2026-04-18",
+      "DATE_END": "2026-04-19",
+      "LOCATION": "Toriki Tsuribori Cafe & Campground",
+      "PREF": "Chiba",
+      "ADDRESS": "1508 Ogami, Mutsuzawa-machi, Chosei-gun, Chiba Prefecture",
+      "LAT": "35.3265",
+      "LNG": "140.2882",
+      "TICKETURL": "https://alanutmeg.zaiko.io/e/alaairfest26",
+      "FLYER": "images/festivals/ala-flyer.jpg"
+    },
+    {
+      "EDITION_ID": "osukinidouzo-2026",
+      "FESTIVAL_ID": "osukinidouzo",
+      "EDITION": "2026",
+      "DATE_START": "2026-05-02",
+      "DATE_END": "2026-05-04",
+      "LOCATION": "Zakae Bridge",
+      "PREF": "Kanagawa",
+      "ADDRESS": "Nishikurihara, Zama City, Kanagawa Prefecture",
+      "LAT": "35.4738",
+      "LNG": "139.4117",
+      "FLYER": "images/festivals/osukinidouzo-flyer.jpg"
+    },
+    {
+      "EDITION_ID": "transcendence-2026",
+      "FESTIVAL_ID": "transcendence",
+      "EDITION": "2026",
+      "DATE_START": "2026-05-08",
+      "DATE_END": "2026-05-10",
+      "LOCATION": "Choujya no Mori",
+      "PREF": "Nagano",
+      "ADDRESS": "5616-6 Kitaaiki Village, Minamisaku District, Nagano Prefecture",
+      "LAT": "36.0592",
+      "LNG": "138.5512",
+      "FLYER": "images/festivals/transcendence-flyer.jpg",
+      "STATUS": "published"
+    },
+    {
+      "EDITION_ID": "99flags-2026",
+      "FESTIVAL_ID": "99flags",
+      "EDITION": "2026",
+      "DATE_START": "2026-05-09",
+      "DATE_END": "2026-05-10",
+      "LOCATION": "Ooba Camp Village",
+      "PREF": "Tokyo",
+      "ADDRESS": "3741 Okuno, Hinode-machi, Nishitama-gun, Tokyo",
+      "LAT": "35.7421",
+      "LNG": "139.2574",
+      "TICKETURL": "https://passmarket.yahoo.co.jp/event/show/detail/0253hhfb4g051.html#detail",
+      "FLYER": "images/festivals/99flags-flyer.jpg"
+    },
+    {
+      "EDITION_ID": "the-star-festival-2026",
+      "FESTIVAL_ID": "the-star-festival",
+      "EDITION": "2026",
+      "DATE_START": "2026-05-16",
+      "DATE_END": "2026-05-17",
+      "LOCATION": "Fuminno Mori Hiyoshi",
+      "PREF": "Kyoto",
+      "ADDRESS": "25 Tenwaka Kaminosho, Hiyoshi-cho, Nantan City, Kyoto Prefecture",
+      "LAT": "35.1322",
+      "LNG": "135.5393",
+      "TICKETURL": "https://thestarfestival.zaiko.io/e/2026kyoto",
+      "FLYER": "images/festivals/the-star-festival-flyer.jpg"
+    },
+    {
+      "EDITION_ID": "paramount-2026",
+      "FESTIVAL_ID": "paramount",
+      "EDITION": "2026",
+      "DATE_START": "2026-05-23",
+      "DATE_END": "2026-05-24",
+      "LOCATION": "Gunma Cycle Sports Center",
+      "PREF": "Gunma",
+      "ADDRESS": "3853-3853 Shinmaki, Minakami-machi, Tone-gun, Gunma Prefecture",
+      "LAT": "36.6779",
+      "LNG": "138.9978",
+      "TICKETURL": "https://l.instagram.com/",
+      "FLYER": "images/festivals/paramount-flyer.jpg"
+    },
+    {
+      "EDITION_ID": "letus-music-camp-2026",
+      "FESTIVAL_ID": "letus-music-camp",
+      "EDITION": "2026",
+      "DATE_START": "2026-05-29",
+      "DATE_END": "2026-05-31",
+      "LOCATION": "Kuriwaki Farm",
+      "PREF": "Hyogo",
+      "ADDRESS": "1288-3 Nojima Tokiwa, Awaji City, Hyogo Prefecture",
+      "LAT": "34.5206",
+      "LNG": "134.8804",
+      "TICKETURL": "https://letus-music-camp.zaiko.io/e/letuscamp26",
+      "FLYER": "images/festivals/letus-music-camp-flyer.jpg"
+    },
+    {
+      "EDITION_ID": "matricaria-2026",
+      "FESTIVAL_ID": "matricaria",
+      "EDITION": "2026",
+      "DATE_START": "2026-05-29",
+      "DATE_END": "2026-05-31",
+      "LOCATION": "Naeba Greenland",
+      "PREF": "Niigata",
+      "ADDRESS": "Mikuni, Yuzawa-machi, Minamiuonuma-gun, Niigata Prefecture",
+      "LAT": "36.8072",
+      "LNG": "138.7392",
+      "TICKETURL": "https://matricaria.zaiko.io/e/matricaria26",
+      "FLYER": "images/festivals/matricaria-flyer.jpg",
+      "STATUS": "published"
+    },
+    {
+      "EDITION_ID": "link-open-air-2026",
+      "FESTIVAL_ID": "link-open-air",
+      "EDITION": "2026",
+      "DATE_START": "2026-05-30",
+      "DATE_END": "2026-05-30",
+      "PREF": "Toyama"
+    },
+    {
+      "EDITION_ID": "japonism-2026",
+      "FESTIVAL_ID": "japonism",
+      "EDITION": "2026",
+      "DATE_START": "2026-05-30",
+      "DATE_END": "2026-05-31",
+      "PREF": "Tochigi"
+    },
+    {
+      "EDITION_ID": "goj-ichi-festival-2026",
+      "FESTIVAL_ID": "goj-ichi-festival",
+      "EDITION": "2026",
+      "DATE_START": "2026-06-05",
+      "DATE_END": "2026-06-07",
+      "PREF": "Tokyo"
+    },
+    {
+      "EDITION_ID": "festival-fruezinho-2026",
+      "FESTIVAL_ID": "festival-fruezinho",
+      "EDITION": "2026",
+      "DATE_START": "2026-06-13",
+      "DATE_END": "2026-06-13",
+      "PREF": "Tokyo"
+    },
+    {
+      "EDITION_ID": "dots-2026",
+      "FESTIVAL_ID": "dots",
+      "EDITION": "2026",
+      "DATE_START": "2026-06-19",
+      "DATE_END": "2026-06-21",
+      "PREF": "Hokkaido"
+    },
+    {
+      "EDITION_ID": "samsara-2026",
+      "FESTIVAL_ID": "samsara",
+      "EDITION": "2026",
+      "DATE_START": "2026-06-20",
+      "DATE_END": "2026-06-21",
+      "PREF": "Nagano"
+    },
+    {
+      "EDITION_ID": "halola-camp-2026",
+      "FESTIVAL_ID": "halola-camp",
+      "EDITION": "2026",
+      "DATE_START": "2026-06-27",
+      "DATE_END": "2026-06-27",
+      "PREF": "Hokkaido"
+    },
+    {
+      "EDITION_ID": "moment-2026",
+      "FESTIVAL_ID": "moment",
+      "EDITION": "2026",
+      "DATE_START": "2026-07-03",
+      "DATE_END": "2026-07-05",
+      "PREF": "Nara"
+    },
+    {
+      "EDITION_ID": "rural-2026",
+      "FESTIVAL_ID": "rural",
+      "EDITION": "2026",
+      "DATE_START": "2026-07-17",
+      "DATE_END": "2026-07-20",
+      "PREF": "Fukushima"
+    },
+    {
+      "EDITION_ID": "fulirock-2026",
+      "FESTIVAL_ID": "fulirock",
+      "EDITION": "2026",
+      "DATE_START": "2026-07-24",
+      "DATE_END": "2026-07-26",
+      "PREF": "Niigata"
+    },
+    {
+      "EDITION_ID": "sonic-mania-2026",
+      "FESTIVAL_ID": "sonic-mania",
+      "EDITION": "2026",
+      "DATE_START": "2026-08-14",
+      "DATE_END": "2026-08-14",
+      "PREF": "Chiba"
+    },
+    {
+      "EDITION_ID": "one-park-festival-2026",
+      "FESTIVAL_ID": "one-park-festival",
+      "EDITION": "2026",
+      "DATE_START": "2026-09-05",
+      "DATE_END": "2026-09-06",
+      "PREF": "Fukui"
+    },
+    {
+      "EDITION_ID": "re-birth-festival-2026",
+      "FESTIVAL_ID": "re-birth-festival",
+      "EDITION": "2026",
+      "DATE_START": "2026-09-11",
+      "DATE_END": "2026-09-13",
+      "LOCATION": "Gateaux Kingdom Koumi",
+      "PREF": "Nagano",
+      "ADDRESS": "5907 Toyosato, Koumi-machi, Minamisaku-gun, Nagano Prefecture",
+      "LAT": "36.054",
+      "LNG": "138.412",
+      "FLYER": "images/festivals/re-birth-festival-flyer.jpg"
+    },
+    {
+      "EDITION_ID": "ultra-japan-2026",
+      "FESTIVAL_ID": "ultra-japan",
+      "EDITION": "2026",
+      "DATE_START": "2026-09-19",
+      "DATE_END": "2026-09-20",
+      "PREF": "Tokyo"
+    },
+    {
+      "EDITION_ID": "otsukimi-2026",
+      "FESTIVAL_ID": "otsukimi",
+      "EDITION": "2026",
+      "DATE_START": "2026-09-28",
+      "DATE_END": "2026-09-29",
+      "PREF": "Nagano"
+    },
+    {
+      "EDITION_ID": "synapse-festival-2026",
+      "FESTIVAL_ID": "synapse-festival",
+      "EDITION": "2026",
+      "DATE_START": "2026-10-02",
+      "DATE_END": "2026-10-04",
+      "PREF": "Fukuoka"
+    },
+    {
+      "EDITION_ID": "yagura-2026",
+      "FESTIVAL_ID": "yagura",
+      "EDITION": "2026",
+      "DATE_START": "2026-10-10",
+      "DATE_END": "2026-10-11",
+      "PREF": "Gifu"
+    },
+    {
+      "EDITION_ID": "labyrinth-2026",
+      "FESTIVAL_ID": "labyrinth",
+      "EDITION": "2026",
+      "DATE_START": "2026-10-10",
+      "DATE_END": "2026-10-12",
+      "PREF": "Gunma"
+    },
+    {
+      "EDITION_ID": "wonderfruit-kyoto-2026",
+      "FESTIVAL_ID": "wonderfruit-kyoto",
+      "EDITION": "2026",
+      "DATE_START": "2026-10-21",
+      "DATE_END": "2026-10-25",
+      "PREF": "Kyoto"
+    },
+    {
+      "EDITION_ID": "festival-de-frue-2026",
+      "FESTIVAL_ID": "festival-de-frue",
+      "EDITION": "2026",
+      "DATE_START": "2026-10-31",
+      "DATE_END": "2026-10-31",
+      "PREF": "Shizuoka"
+    },
+    {
+      "EDITION_ID": "unknown-2024",
+      "FESTIVAL_ID": "unknown",
+      "EDITION": "2024",
+      "DATE_START": "2024-10-18",
+      "DATE_END": "2024-10-20",
+      "PREF": "Shizuoka"
+    },
+    {
+      "EDITION_ID": "wormhole-2024",
+      "FESTIVAL_ID": "wormhole",
+      "EDITION": "2024",
+      "DATE_START": "2024-10-26",
+      "DATE_END": "2024-10-27",
+      "PREF": "Mie"
+    },
+    {
+      "EDITION_ID": "dom-2024",
+      "FESTIVAL_ID": "dom",
+      "EDITION": "2024",
+      "DATE_START": "2024-10-27",
+      "DATE_END": "2024-10-27",
+      "PREF": "Tokyo"
+    },
+    {
+      "EDITION_ID": "parallel-world-2024",
+      "FESTIVAL_ID": "parallel-world",
+      "EDITION": "2024",
+      "DATE_START": "2024-11-03",
+      "DATE_END": "2024-11-04"
+    },
+    {
+      "EDITION_ID": "bonna-pot-2024",
+      "FESTIVAL_ID": "bonna-pot",
+      "EDITION": "2024",
+      "DATE_START": "2024-11-08",
+      "DATE_END": "2024-11-10",
+      "PREF": "Shizuoka"
+    },
+    {
+      "EDITION_ID": "lab-2025",
+      "FESTIVAL_ID": "lab",
+      "EDITION": "2025",
+      "DATE_START": "2025-03-15",
+      "DATE_END": "2025-03-16",
+      "PREF": "Yamanashi"
+    },
+    {
+      "EDITION_ID": "axiom-2025",
+      "FESTIVAL_ID": "axiom",
+      "EDITION": "2025",
+      "DATE_START": "2025-04-19",
+      "DATE_END": "2025-04-20",
+      "PREF": "Yamanashi"
+    },
+    {
+      "EDITION_ID": "balance-2025",
+      "FESTIVAL_ID": "balance",
+      "EDITION": "2025",
+      "DATE_START": "2025-05-16",
+      "DATE_END": "2025-05-18",
+      "PREF": "Gunma"
+    },
+    {
+      "EDITION_ID": "intergalactic-2025",
+      "FESTIVAL_ID": "intergalactic",
+      "EDITION": "2025",
+      "DATE_START": "2025-05-31",
+      "DATE_END": "2025-05-31",
+      "PREF": "Chiba"
+    },
+    {
+      "EDITION_ID": "body-soul-2025",
+      "FESTIVAL_ID": "body-soul",
+      "EDITION": "2025",
+      "DATE_START": "2025-06-08",
+      "DATE_END": "2025-06-08",
+      "PREF": "Tokyo"
+    },
+    {
+      "EDITION_ID": "signal-2025",
+      "FESTIVAL_ID": "signal",
+      "EDITION": "2025",
+      "DATE_START": "2025-06-14",
+      "DATE_END": "2025-06-15",
+      "PREF": "Yamanashi"
+    },
+    {
+      "EDITION_ID": "euphoria-2025",
+      "FESTIVAL_ID": "euphoria",
+      "EDITION": "2025",
+      "DATE_START": "2025-07-11",
+      "DATE_END": "2025-07-12",
+      "PREF": "Tokyo"
+    },
+    {
+      "EDITION_ID": "orbit-2025",
+      "FESTIVAL_ID": "orbit",
+      "EDITION": "2025",
+      "DATE_START": "2025-07-11",
+      "DATE_END": "2025-07-12",
+      "PREF": "Fukui"
+    },
+    {
+      "EDITION_ID": "yamauto-2025",
+      "FESTIVAL_ID": "yamauto",
+      "EDITION": "2025",
+      "DATE_START": "2025-08-09",
+      "DATE_END": "2025-08-18",
+      "PREF": "Shiga"
+    },
+    {
+      "EDITION_ID": "specialflower-festival-2025",
+      "FESTIVAL_ID": "specialflower-festival",
+      "EDITION": "2025",
+      "DATE_START": "2025-08-10",
+      "DATE_END": "2025-08-11",
+      "PREF": "Ibaraki"
+    },
+    {
+      "EDITION_ID": "loa-lost-paradise-2025",
+      "FESTIVAL_ID": "loa-lost-paradise",
+      "EDITION": "2025",
+      "DATE_START": "2025-08-16",
+      "DATE_END": "2025-08-17",
+      "PREF": "Ibaraki"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "FESTIVAL_ID": "sawagi-festival",
+      "EDITION": "2025",
+      "DATE_START": "2025-08-22",
+      "DATE_END": "2025-08-24",
+      "PREF": "Yamanashi"
+    },
+    {
+      "EDITION_ID": "one-music-camp-2025",
+      "FESTIVAL_ID": "one-music-camp",
+      "EDITION": "2025",
+      "DATE_START": "2025-08-23",
+      "DATE_END": "2025-08-24",
+      "PREF": "Hyogo"
+    },
+    {
+      "EDITION_ID": "global-ark-2025",
+      "FESTIVAL_ID": "global-ark",
+      "EDITION": "2025",
+      "DATE_START": "2025-08-29",
+      "DATE_END": "2025-08-31",
+      "PREF": "Gunma"
+    },
+    {
+      "EDITION_ID": "kyoumei-gathering-2025",
+      "FESTIVAL_ID": "kyoumei-gathering",
+      "EDITION": "2025",
+      "DATE_START": "2025-08-29",
+      "DATE_END": "2025-08-31",
+      "PREF": "Hokkaido"
+    },
+    {
+      "EDITION_ID": "bondisco-2025",
+      "FESTIVAL_ID": "bondisco",
+      "EDITION": "2025",
+      "DATE_START": "2025-08-30",
+      "DATE_END": "2025-08-31",
+      "PREF": "Kyoto"
+    },
+    {
+      "EDITION_ID": "pure-rave-2025",
+      "FESTIVAL_ID": "pure-rave",
+      "EDITION": "2025",
+      "DATE_START": "2025-09-06",
+      "DATE_END": "2025-09-08",
+      "PREF": "Kanto"
+    },
+    {
+      "EDITION_ID": "big-fun-2025",
+      "FESTIVAL_ID": "big-fun",
+      "EDITION": "2025",
+      "DATE_START": "2025-09-07",
+      "DATE_END": "2025-09-07",
+      "PREF": "Hokkaido"
+    },
+    {
+      "EDITION_ID": "okiraku-camp-2025",
+      "FESTIVAL_ID": "okiraku-camp",
+      "EDITION": "2025",
+      "DATE_START": "2025-09-13",
+      "DATE_END": "2025-09-14",
+      "PREF": "Wakayama"
+    },
+    {
+      "EDITION_ID": "gampeki-2025",
+      "FESTIVAL_ID": "gampeki",
+      "EDITION": "2025",
+      "DATE_START": "2025-09-20",
+      "DATE_END": "2025-09-21",
+      "PREF": "Yamagata"
+    },
+    {
+      "EDITION_ID": "sangenjaya-music-festival-2025",
+      "FESTIVAL_ID": "sangenjaya-music-festival",
+      "EDITION": "2025",
+      "DATE_START": "2025-09-20",
+      "DATE_END": "2025-09-21",
+      "PREF": "Tokyo"
+    },
+    {
+      "EDITION_ID": "colors-presents-soundcamp-2025",
+      "FESTIVAL_ID": "colors-presents-soundcamp",
+      "EDITION": "2025",
+      "DATE_START": "2025-09-21",
+      "DATE_END": "2025-09-23",
+      "PREF": "Hokkaido"
+    },
+    {
+      "EDITION_ID": "festival40010-2025",
+      "FESTIVAL_ID": "festival40010",
+      "EDITION": "2025",
+      "DATE_START": "2025-09-26",
+      "DATE_END": "2025-09-28",
+      "PREF": "Kochi"
+    },
+    {
+      "EDITION_ID": "ffkt-2025",
+      "FESTIVAL_ID": "ffkt",
+      "EDITION": "2025",
+      "DATE_START": "2025-09-27",
+      "DATE_END": "2025-09-28",
+      "PREF": "Shizuoka"
+    },
+    {
+      "EDITION_ID": "music-camp-core-2025",
+      "FESTIVAL_ID": "music-camp-core",
+      "EDITION": "2025",
+      "DATE_START": "2025-10-03",
+      "DATE_END": "2025-10-04",
+      "PREF": "Toyama"
+    },
+    {
+      "EDITION_ID": "circus-2025",
+      "FESTIVAL_ID": "circus",
+      "EDITION": "2025",
+      "DATE_START": "2025-10-04",
+      "DATE_END": "2025-10-04",
+      "PREF": "Tokyo"
+    },
+    {
+      "EDITION_ID": "each-story-2025",
+      "FESTIVAL_ID": "each-story",
+      "EDITION": "2025",
+      "DATE_START": "2025-10-04",
+      "DATE_END": "2025-10-05",
+      "PREF": "Nagano"
+    },
+    {
+      "EDITION_ID": "rare-groove-2025",
+      "FESTIVAL_ID": "rare-groove",
+      "EDITION": "2025",
+      "DATE_START": "2025-10-04",
+      "DATE_END": "2025-10-05",
+      "PREF": "Yamanashi"
+    },
+    {
+      "EDITION_ID": "delta-commit-2025",
+      "FESTIVAL_ID": "delta-commit",
+      "EDITION": "2025",
+      "DATE_START": "2025-10-04",
+      "DATE_END": "2025-10-05",
+      "PREF": "Yamanashi"
+    },
+    {
+      "EDITION_ID": "music-2025",
+      "FESTIVAL_ID": "music",
+      "EDITION": "2025",
+      "DATE_START": "2025-10-11",
+      "DATE_END": "2025-10-12",
+      "PREF": "Tokyo"
+    },
+    {
+      "EDITION_ID": "ishinoko-2025",
+      "FESTIVAL_ID": "ishinoko",
+      "EDITION": "2025",
+      "DATE_START": "2025-10-11",
+      "DATE_END": "2025-10-13",
+      "PREF": "Ishikawa"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "FESTIVAL_ID": "treks",
+      "EDITION": "2025",
+      "DATE_START": "2025-10-17",
+      "DATE_END": "2025-10-19",
+      "PREF": "Kyoto"
+    },
+    {
+      "EDITION_ID": "circle-2025",
+      "FESTIVAL_ID": "circle",
+      "EDITION": "2025",
+      "DATE_START": "2025-10-17",
+      "DATE_END": "2025-10-19",
+      "PREF": "Nagano"
+    },
+    {
+      "EDITION_ID": "one-park-riverfes-2025",
+      "FESTIVAL_ID": "one-park-riverfes",
+      "EDITION": "2025",
+      "DATE_START": "2025-10-18",
+      "DATE_END": "2025-10-19",
+      "PREF": "Gifu"
+    },
+    {
+      "EDITION_ID": "lost-find-2025",
+      "FESTIVAL_ID": "lost-find",
+      "EDITION": "2025",
+      "DATE_START": "2025-10-18",
+      "DATE_END": "2025-10-19",
+      "PREF": "Shizuoka"
+    },
+    {
+      "EDITION_ID": "asagiri-jam-2025",
+      "FESTIVAL_ID": "asagiri-jam",
+      "EDITION": "2025",
+      "DATE_START": "2025-10-18",
+      "DATE_END": "2025-10-19",
+      "PREF": "Shizuoka"
+    },
+    {
+      "EDITION_ID": "dream-festival-2025",
+      "FESTIVAL_ID": "dream-festival",
+      "EDITION": "2025",
+      "DATE_START": "2025-10-18",
+      "DATE_END": "2025-10-19",
+      "PREF": "Yamanashi"
+    },
+    {
+      "EDITION_ID": "annahme-2025",
+      "FESTIVAL_ID": "annahme",
+      "EDITION": "2025",
+      "DATE_START": "2025-10-25",
+      "DATE_END": "2025-10-26",
+      "PREF": "kochi"
+    },
+    {
+      "EDITION_ID": "brightness-2025",
+      "FESTIVAL_ID": "brightness",
+      "EDITION": "2025",
+      "DATE_START": "2025-10-25",
+      "DATE_END": "2025-10-26",
+      "PREF": "Kawasaki"
+    },
+    {
+      "EDITION_ID": "capsule-2025",
+      "FESTIVAL_ID": "capsule",
+      "EDITION": "2025",
+      "DATE_START": "2025-10-25",
+      "DATE_END": "2025-10-26",
+      "PREF": "Yamanashi"
+    },
+    {
+      "EDITION_ID": "midnight-cult-rave-2025",
+      "FESTIVAL_ID": "midnight-cult-rave",
+      "EDITION": "2025",
+      "DATE_START": "2025-11-01",
+      "DATE_END": "2025-11-02",
+      "PREF": "Yamanashi"
+    },
+    {
+      "EDITION_ID": "mirrorball-village-2025",
+      "FESTIVAL_ID": "mirrorball-village",
+      "EDITION": "2025",
+      "DATE_START": "2025-11-01",
+      "DATE_END": "2025-11-03",
+      "PREF": "Nagasaki"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2025",
+      "FESTIVAL_ID": "grow-the-culture-open-air",
+      "EDITION": "2025",
+      "DATE_START": "2025-11-08",
+      "DATE_END": "2025-11-09",
+      "PREF": "Tokyo"
+    },
+    {
+      "EDITION_ID": "iyasaka-rave-festival-2025",
+      "FESTIVAL_ID": "iyasaka-rave-festival",
+      "EDITION": "2025",
+      "DATE_START": "2025-11-14",
+      "DATE_END": "2025-11-16",
+      "PREF": "Okinawa"
+    },
+    {
+      "EDITION_ID": "topia-2025",
+      "FESTIVAL_ID": "topia",
+      "EDITION": "2025",
+      "DATE_START": "2025-11-15",
+      "DATE_END": "2025-11-15",
+      "PREF": "Chiba"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "FESTIVAL_ID": "mutek",
+      "EDITION": "2025",
+      "DATE_START": "2025-11-20",
+      "DATE_END": "2025-11-23",
+      "PREF": "Tokyo"
+    },
+    {
+      "EDITION_ID": "odyssey-2026",
+      "FESTIVAL_ID": "odyssey",
+      "EDITION": "2026",
+      "DATE_START": "2026-09-25",
+      "DATE_END": "2026-09-27",
+      "PREF": "Miyazaki"
+    },
+    {
+      "EDITION_ID": "takarajima-beach-cleaning-party-2025",
+      "FESTIVAL_ID": "takarajima-beach-cleaning-party",
+      "EDITION": "2025",
+      "DATE_START": "2025-11-29",
+      "DATE_END": "2025-11-30",
+      "PREF": "Okinawa"
+    },
+    {
+      "EDITION_ID": "technogaoka-2026",
+      "FESTIVAL_ID": "technogaoka",
+      "EDITION": "2026",
+      "DATE_START": "2026-04-25",
+      "DATE_END": "2026-04-25",
+      "LOCATION": "Tabifusa Ashiya Daihi-kaku",
+      "PREF": "Hyogo",
+      "ADDRESS": "Okuyama 1, Ashiya City, Hyogo Prefecture",
+      "LAT": "34.7456",
+      "LNG": "135.2889",
+      "FLYER": "images/festivals/technogaoka-flyer.jpg"
+    }
+  ]
+}
