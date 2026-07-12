@@ -182,6 +182,15 @@ body.rave-mode .festival-section:hover .festival-name {
 .month-nav a.past-month.year-open { display: inline-block; }
 .month-nav a.past-month:hover { opacity: 0.5; }
 .month-nav a.past-month.active { opacity: 0.8; }
+/* GENRE / AREA discovery filters */
+.fest-filters { padding: 14px 40px 4px; display: flex; flex-direction: column; gap: 4px; }
+.fest-filter-row { display: flex; align-items: center; gap: 2px; overflow-x: auto; scrollbar-width: none; }
+.fest-filter-row::-webkit-scrollbar { display: none; }
+.fest-filter-key { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.3; flex-shrink: 0; width: 48px; }
+.fest-filter-chip { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.3; transition: opacity 0.3s ease; padding: 6px 14px; white-space: nowrap; flex-shrink: 0; cursor: pointer; background: none; border: none; color: inherit; }
+.fest-filter-chip:hover { opacity: 0.7; }
+.fest-filter-chip.active { opacity: 1; border-bottom: 1px solid var(--text); }
+@media (max-width: 640px) { .fest-filters { padding: 12px 20px 4px; } }
 .month-nav .year-toggle {
   font-family: var(--font-mono);
   font-size: 9px;
@@ -683,6 +692,9 @@ footer { padding: 60px 40px; }
 <!-- STICKY MONTH NAV -->
 <div class="month-nav" id="month-nav"></div>
 
+<!-- GENRE / AREA FILTERS -->
+<div class="fest-filters" id="fest-filters"></div>
+
 <!-- FESTIVALS LIST -->
 <main class="festivals-main" id="festivals-main"></main>
 
@@ -888,12 +900,19 @@ function buildRelatedFestivals(current) {
 }
 
 let currentMode = 'festival'; // 'festival' or 'rave'
+let currentGenre = 'ALL';
+let currentArea = 'ALL';
+
+const genresOf = f => Array.isArray(f.genre) ? f.genre : (f.genre ? [f.genre] : []);
+const festArea = f => (f.city || '').trim();
 
 function getSorted() {
   const now = new Date();
   now.setHours(0, 0, 0, 0);
   return [...FESTIVALS]
     .filter(f => (f.type || 'festival') === currentMode)
+    .filter(f => currentGenre === 'ALL' || genresOf(f).map(g => g.trim()).includes(currentGenre))
+    .filter(f => currentArea === 'ALL' || festArea(f) === currentArea)
     .sort((a, b) => {
       const aEnd = new Date(a.date.includes('/') ? a.date.split('/')[1] : a.date);
       const bEnd = new Date(b.date.includes('/') ? b.date.split('/')[1] : b.date);
@@ -912,6 +931,28 @@ function isFuture(dateStr) {
   now.setHours(0, 0, 0, 0);
   const end = new Date(dateStr.includes('/') ? dateStr.split('/')[1] : dateStr);
   return end >= now;
+}
+
+/* ========== GENRE / AREA FILTERS ========== */
+function buildFilters() {
+  const box = document.getElementById('fest-filters');
+  if (!box) return;
+  const modeFests = FESTIVALS.filter(f => (f.type || 'festival') === currentMode);
+  const genres = [...new Set(modeFests.flatMap(genresOf).map(g => g.trim()).filter(Boolean))].sort();
+  const areas = [...new Set(modeFests.map(festArea).filter(Boolean))].sort();
+  const chip = (val, cur, key) =>
+    `<button class="fest-filter-chip${val === cur ? ' active' : ''}" data-filter="${key}" data-val="${val}">${val}</button>`;
+  box.innerHTML =
+    `<div class="fest-filter-row"><span class="fest-filter-key">Genre</span>${['ALL', ...genres].map(g => chip(g, currentGenre, 'genre')).join('')}</div>` +
+    `<div class="fest-filter-row"><span class="fest-filter-key">Area</span>${['ALL', ...areas].map(a => chip(a, currentArea, 'area')).join('')}</div>`;
+  box.querySelectorAll('.fest-filter-chip').forEach(b => b.addEventListener('click', () => {
+    if (b.dataset.filter === 'genre') currentGenre = b.dataset.val;
+    else currentArea = b.dataset.val;
+    currentMonth = 'ALL';
+    buildFilters();
+    buildMonthNav();
+    renderFestivals();
+  }));
 }
 
 /* ========== MODE TOGGLE ========== */
@@ -944,6 +985,9 @@ function initModeToggle() {
 
     // Re-render content
     currentMonth = 'ALL';
+    currentGenre = 'ALL';
+    currentArea = 'ALL';
+    buildFilters();
     buildMonthNav();
     renderFestivals();
   }
@@ -1286,6 +1330,7 @@ function renderDetail(id) {
   detail.classList.add('active');
   document.getElementById('page-header').style.display = 'none';
   document.getElementById('month-nav').style.display = 'none';
+  document.getElementById('fest-filters').style.display = 'none';
   document.getElementById('festivals-main').style.display = 'none';
   window.scrollTo(0, 0);
   bindCursorExpand();
@@ -1306,6 +1351,7 @@ function handleHash() {
     detail.classList.remove('active');
     document.getElementById('page-header').style.display = '';
     document.getElementById('month-nav').style.display = '';
+    document.getElementById('fest-filters').style.display = '';
     document.getElementById('festivals-main').style.display = '';
   }
 }
@@ -1319,6 +1365,7 @@ function bindCursorExpand() {
 
 /* ========== INIT ========== */
 initModeToggle();
+buildFilters();
 renderFestivals();
 buildMonthNav();
 handleHash();
