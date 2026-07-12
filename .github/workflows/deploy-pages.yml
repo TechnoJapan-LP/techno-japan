@@ -30,6 +30,11 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      # 開発中のコンパニオンアプリは本番に出さない（リポジトリ/ローカルには残す）。
+      # 公開する準備ができたら、この step を削除するだけでデプロイ対象に戻る。
+      - name: Exclude in-development app from deploy
+        run: rm -rf ./LP/app
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
