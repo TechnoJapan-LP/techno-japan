@@ -4,38 +4,47 @@
 /* ==============================================================
    AUTHENTICATION
    ============================================================== */
-// SHA-256 hash of the password. To rotate: run setupPassword('your-new-pw')
-// in the browser console, paste the printed hash here, and update the GAS side.
-// NEVER write the plaintext password in this file — it is publicly served.
-const PASSWORD_HASH = '8908d01f5476f7fa5ee6fdf415d7dc9856db5888eaf5a35d78d974dea6462126';
-let AUTH_TOKEN = null; // Set after successful login; sent to GAS with every request
+// 認証はサーバー発行のセッショントークン方式（GAS: Auth.gs）。
+// パスワードの SHA-256 を GAS の login に送り、24時間有効なトークンを受け取る。
+// 公開ファイルである cms.js には秘密（パスワードハッシュ）を一切置かない。
+let AUTH_TOKEN = null; // ログイン後のセッショントークン。GAS へ cmsAuth として送る。
 
 async function sha256(text){
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
   return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
 }
 
-// Utility: type setupPassword('mypass') in console to get a hash to put in PASSWORD_HASH
+// パスワード変更: コンソールで setupPassword('新パス') を実行し、表示されたハッシュを
+// GAS の スクリプトプロパティ CMS_PASSWORD_HASH に設定する（cms.js の変更は不要）。
 window.setupPassword = async (pw) => {
   const h = await sha256(pw);
-  console.log('PASSWORD_HASH = "' + h + '";');
-  console.log('Copy this value into both cms.html and GAS Script Properties (CMS_PASSWORD_HASH)');
+  console.log('CMS_PASSWORD_HASH = ' + h);
+  console.log('この値を GAS の スクリプトプロパティ CMS_PASSWORD_HASH に設定してください。');
   return h;
 };
 
+// パスワードハッシュを GAS の login に送り、成功なら {token, expires} を得る
+async function requestToken_(pw){
+  try {
+    const hash = await sha256(pw);
+    const res = await fetch(GAS_URL, { method:'POST', body: JSON.stringify({ action:'login', passHash: hash }) }).then(r=>r.json());
+    return (res && res.status === 'ok' && res.token) ? res : null;
+  } catch(e){ return null; }
+}
+
 async function checkAuth(){
-  const stored = localStorage.getItem('cms_auth');
-  if(stored && stored === PASSWORD_HASH){
-    AUTH_TOKEN = stored;
-    return true;
-  }
+  const token = localStorage.getItem('cms_token');
+  const exp = +(localStorage.getItem('cms_token_exp') || 0);
+  if(token && exp > Date.now()){ AUTH_TOKEN = token; return true; }  // 期限内トークンあり
+  localStorage.removeItem('cms_token'); localStorage.removeItem('cms_token_exp');
   for(let i = 0; i < 3; i++){
     const pw = prompt(i===0 ? 'CMS Password:' : 'Wrong password. Try again:');
     if(pw === null) break;
-    const hash = await sha256(pw);
-    if(hash === PASSWORD_HASH){
-      localStorage.setItem('cms_auth', hash);
-      AUTH_TOKEN = hash;
+    const r = await requestToken_(pw);
+    if(r){
+      localStorage.setItem('cms_token', r.token);
+      localStorage.setItem('cms_token_exp', String(r.expires || 0));
+      AUTH_TOKEN = r.token;
       return true;
     }
   }
@@ -44,7 +53,7 @@ async function checkAuth(){
   throw new Error('auth-failed');
 }
 
-window.cmsLogout = () => { localStorage.removeItem('cms_auth'); location.reload(); };
+window.cmsLogout = () => { localStorage.removeItem('cms_token'); localStorage.removeItem('cms_token_exp'); localStorage.removeItem('cms_auth'); location.reload(); };
 
 // Wrap fetch to inject auth token automatically
 const _origFetch = window.fetch;
