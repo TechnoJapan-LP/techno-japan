@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "backedUpAt": "2026-07-11T14:12:58.940911+09:00"
+    "backedUpAt": "2026-07-12T14:27:58.927287+09:00"
   },
   "VENUES": [
     {
@@ -183,7 +183,7 @@
       "id": "www",
       "name": "WWW",
       "city": "TOKYO",
-      "area": "SHIBUAY",
+      "area": "SHIBUYA",
       "type": "livehouse",
       "image": "images/venues/www.jpeg",
       "genre": "TECHNO · HOUSE · LIVE · OTHERS",
@@ -200,7 +200,7 @@
       "id": "o-east",
       "name": "SPOTIFY O-EAST",
       "city": "TOKYO",
-      "area": "SHIBUAYA",
+      "area": "SHIBUYA",
       "type": "livehouse",
       "image": "images/venues/o-east.jpeg",
       "genre": "TECHNO · HOUSE · MINIMAL · LIVE · OTHERS",
@@ -309,8 +309,8 @@
       "address": "2F, GROW Kitahama Building (Kitahama Building No. 2), 1-29 Kitahama Higashi, Chuo-ku, Osaka City, Osaka Prefecture",
       "lat": "34.6904",
       "lng": "135.5122",
-      "url": "https://www.instagram.com/djcompufunk/",
-      "instagram": "https://www.compufunk.com/?mode=f3",
+      "url": "https://www.compufunk.com/",
+      "instagram": "https://www.instagram.com/djcompufunk/",
       "desc": "COMPUFUNK RECORDS operates as both record shop and intimate club space in Osaka's underground circuit. The venue maintains a focused approach to analog-driven electronic music, with DJ Compufunk's deep knowledge of obscure funk, electro and early techno informing both the shop's selection and club programming. Its compact dimensions create an immersive listening environment that prioritizes sound quality over scale."
     },
     {
@@ -430,7 +430,7 @@
       "_row": 4,
       "id": "arch",
       "type": "rave",
-      "name": "ARCH 2025",
+      "name": "ARCH",
       "date": "2026-04-11/2026-04-12",
       "location": "Odaira no Sato Camp Area",
       "city": "Gunma",
@@ -666,7 +666,7 @@
       "name": "Link Open Air",
       "date": "Sat May 30 2026 00:00:00 GMT+0900 (Japan Standard Time)",
       "city": "Toyama",
-      "genre": "TECHNO · HOUSE · ELECTRONIC",
+      "genre": "TECHNO · HOUSE",
       "desc": "Link Open Air brings electronic music to Toyama's natural landscapes, creating an intimate gathering that connects sound with environment. The festival showcases both domestic and international artists across thoughtfully curated stages, emphasizing quality over scale in Japan's growing outdoor festival circuit."
     },
     {
@@ -676,7 +676,7 @@
       "name": "JAPONISM",
       "date": "2026-05-30/2026-05-31",
       "city": "Tochigi",
-      "genre": "TECHNO · HOUSE · ELECTRONIC",
+      "genre": "TECHNO · HOUSE",
       "desc": "JAPONISM takes place in the natural surroundings of Nasu, Tochigi, blending electronic music with the region's mountainous landscape. The festival emphasizes the connection between sound and environment, creating an immersive experience away from urban centers. Artists perform across multiple stages that integrate with the outdoor setting."
     },
     {
@@ -691,9 +691,9 @@
     },
     {
       "_row": 17,
-      "id": "festival-fruezinho-2026",
+      "id": "festival-fruezinho",
       "type": "festival",
-      "name": "FESTIVAL FRUEZINHO 2026",
+      "name": "FESTIVAL FRUEZINHO",
       "date": "Sat Jun 13 2026 00:00:00 GMT+0900 (Japan Standard Time)",
       "city": "Tokyo",
       "genre": "TECHNO · HOUSE",
@@ -736,7 +736,7 @@
       "name": "Moment",
       "date": "2026-07-03/2026-07-05",
       "city": "Nara",
-      "genre": "TECHNO · HOUSE · ELECTRONIC",
+      "genre": "TECHNO · HOUSE · AMBIENT",
       "desc": "Moment brings carefully curated electronic programming to Nara's historic landscape, creating an intimate dialogue between ancient surroundings and contemporary sound. The festival maintains a focused approach to artist selection, emphasizing quality over scale while showcasing both established and emerging talent from Japan's underground scene."
     },
     {
@@ -756,7 +756,7 @@
       "name": "FuliRock",
       "date": "2026-07-24/2026-07-26",
       "city": "Niigata",
-      "genre": "ELECTRONIC · MIX",
+      "genre": "MIX",
       "desc": "Fuji Rock Festival transforms the mountains of Naeba into Japan's premier outdoor music gathering each summer. While primarily known for its diverse rock and alternative lineup, the festival has increasingly embraced electronic acts across multiple stages. The natural setting creates an immersive experience that bridges Japan's festival culture with international underground sounds."
     },
     {
@@ -765,7 +765,7 @@
       "name": "Sonic Mania",
       "date": "Fri Aug 14 2026 00:00:00 GMT+0900 (Japan Standard Time)",
       "city": "Chiba",
-      "genre": "ELECTRONIC · MIX",
+      "genre": "MIX",
       "desc": "Summer Sonic's electronic-focused sister event brings concentrated doses of dance music to Chiba's festival circuit. The festival curates a focused lineup that spans the electronic spectrum, from harder techno sets to more accessible house programming. A more intimate alternative to the main Summer Sonic experience."
     },
     {
@@ -774,7 +774,7 @@
       "name": "ONE PARK FESTIVAL",
       "date": "2026-09-05/2026-09-06",
       "city": "Fukui",
-      "genre": "ELECTRONIC · HOUSE · TECHNO",
+      "genre": "MIX",
       "desc": "ONE PARK FESTIVAL brings electronic music to Fukui's natural landscape, creating an intimate gathering that balances underground sounds with outdoor festival atmosphere. The event showcases both domestic and international artists across multiple stages, emphasizing community and connection within Japan's regional festival circuit."
     },
     {
@@ -790,7 +790,7 @@
       "lng": "138.412",
       "image": "images/festivals/re-birth-festival.jpg",
       "flyer": "images/festivals/re-birth-festival-flyer.jpg",
-      "genre": "TECHNO, HOUSE, AMBIENT, LIVE",
+      "genre": "TECHNO · HOUSE · AMBIENT · LIVE",
       "desc": "Re:birth Festival takes place at the alpine Gateaux Kingdom Koumi venue in Nagano Prefecture, positioning itself within Japan's mountain festival circuit. The event focuses on techno and electronic music programming in a natural setting away from urban centers.",
       "url": "https://www.rebirth-fes.com/",
       "instagram": "https://www.instagram.com/rebirthfes/"
@@ -801,7 +801,7 @@
       "name": "Ultra Japan",
       "date": "2026-09-19/2026-09-20",
       "city": "Tokyo",
-      "genre": "ELECTRONIC · HOUSE",
+      "genre": "MIX",
       "desc": "Ultra Japan brings the global EDM franchise to Tokyo Bay, drawing massive crowds to Odaiba for its signature main stage spectacle. The festival typically features heavyweight international DJs alongside select Japanese acts, maintaining the Ultra brand's focus on peak-time electronic music across multiple stages."
     },
     {
@@ -810,7 +810,7 @@
       "name": "御月民 -OTSUKIMI-",
       "date": "2026-09-28/2026-09-29",
       "city": "Nagano",
-      "genre": "TECHNO · ELECTRONIC",
+      "genre": "TECHNO ",
       "desc": "OTSUKIMI takes place in Nagano's mountainous terrain, drawing its name from the traditional Japanese moon-viewing festival. The event brings together Japan's underground techno community in a natural setting that emphasizes the connection between electronic music and seasonal ritual."
     },
     {
@@ -824,11 +824,11 @@
     },
     {
       "_row": 30,
-      "id": "yagura-2025",
-      "name": "YAGURA 2025",
+      "id": "yagura",
+      "name": "YAGURA",
       "date": "2026-10-10/2026-10-11",
       "city": "Gifu",
-      "genre": "TECHNO · HOUSE · ELECTRONIC",
+      "genre": "MIX",
       "desc": "YAGURA returns to Gifu's mountainous landscape for another edition of carefully curated electronic music programming. The festival maintains its commitment to showcasing both established and emerging artists within Japan's underground dance scene, set against the region's natural backdrop."
     },
     {
@@ -851,17 +851,17 @@
     },
     {
       "_row": 33,
-      "id": "festival-de-frue-2026",
-      "name": "FESTIVAL de FRUE 2026",
+      "id": "festival-de-frue",
+      "name": "FESTIVAL de FRUE",
       "date": "Sat Oct 31 2026 00:00:00 GMT+0900 (Japan Standard Time)",
       "city": "Shizuoka",
-      "genre": "TECHNO · HOUSE · ELECTRONIC",
+      "genre": "LIVE",
       "desc": "FESTIVAL de FRUE returns to Shizuoka's natural landscapes, maintaining its commitment to forward-thinking electronic music programming. The festival continues to blend established artists with emerging talent across carefully curated stages that emphasize sound quality and immersive environments."
     },
     {
       "_row": 34,
       "id": "unknown",
-      "name": "Unknown 2024",
+      "name": "Unknown",
       "date": "2024-10-18/2024-10-20",
       "city": "Shizuoka",
       "genre": "TECHNO · EXPERIMENTAL · AMBIENT",
@@ -870,7 +870,7 @@
     {
       "_row": 35,
       "id": "wormhole",
-      "name": "wormhole2024",
+      "name": "wormhole",
       "date": "2024-10-26/2024-10-27",
       "city": "Mie",
       "genre": "TECHNO · EXPERIMENTAL",
@@ -882,7 +882,7 @@
       "name": "DOM24",
       "date": "Sun Oct 27 2024 00:00:00 GMT+0900 (Japan Standard Time)",
       "city": "Tokyo",
-      "genre": "TECHNO · HOUSE · ELECTRONIC",
+      "genre": "TECHNO · HOUSE · LIVE",
       "desc": "DOM24 represents Tokyo's commitment to showcasing cutting-edge electronic music within the city's evolving underground landscape. The festival brings together local and international artists across multiple stages, emphasizing both established names and emerging talent from Japan's thriving scene."
     },
     {
@@ -890,7 +890,7 @@
       "id": "parallel-world",
       "name": "PARALLEL WORLD",
       "date": "2024-11-03/2024-11-04",
-      "genre": "EXPERIMENTAL · ELECTRONIC",
+      "genre": "TECHNO · HOUSE · LIVE",
       "desc": "PARALLEL WORLD operates as a forward-thinking platform showcasing experimental electronic music and immersive audiovisual experiences. The event series emphasizes boundary-pushing artists and innovative sound design within carefully curated intimate settings."
     },
     {
@@ -908,7 +908,7 @@
       "name": "LAB.vol.6",
       "date": "2025-03-15/2025-03-16",
       "city": "Yamanashi",
-      "genre": "EXPERIMENTAL · TECHNO · ELECTRONIC",
+      "genre": "TECHNO · HOUSE",
       "desc": "LAB.vol.6 continues Kyokankaku Labo's exploration of underground electronic music in Yamanashi's natural setting. The sixth iteration maintains the collective's focus on experimental sounds and immersive experiences away from urban club environments. Known for curating forward-thinking lineups that blend established and emerging artists in the Japanese underground scene."
     },
     {
@@ -917,7 +917,7 @@
       "name": "axiom",
       "date": "2025-04-19/2025-04-20",
       "city": "Yamanashi",
-      "genre": "TECHNO · EXPERIMENTAL",
+      "genre": "TECHNO",
       "desc": "axiom brings together Japan's underground electronic music community in the natural setting of Yamanashi prefecture. The festival focuses on deep techno and experimental electronic sounds, creating an intimate gathering away from Tokyo's urban landscape. Known for its carefully curated lineup and immersive outdoor environment."
     },
     {
@@ -926,7 +926,7 @@
       "name": "Balance",
       "date": "2025-05-16/2025-05-18",
       "city": "Gunma",
-      "genre": "TECHNO · MINIMAL",
+      "genre": "TECHNO · HOUSE · EXPERIMENTAL ",
       "desc": "Balance operates as an intimate gathering in Gunma's mountainous terrain, prioritizing careful curation over scale. The festival maintains focus on deeper techno sounds while integrating the natural environment into its programming approach."
     },
     {
@@ -935,7 +935,7 @@
       "name": "Intergalactic Festival",
       "date": "Sat May 31 2025 00:00:00 GMT+0900 (Japan Standard Time)",
       "city": "Chiba",
-      "genre": "TECHNO · HOUSE · ELECTRONIC",
+      "genre": "TECHNO · HOUSE",
       "desc": "Intergalactic Festival brings together international and domestic artists across multiple stages in Chiba, focusing on forward-thinking electronic music programming. The festival has established itself as a key destination for techno and house music enthusiasts seeking quality lineups outside Tokyo's immediate orbit."
     },
     {
@@ -953,7 +953,7 @@
       "name": "Signal",
       "date": "2025-06-14/2025-06-15",
       "city": "Yamanashi",
-      "genre": "TECHNO · ELECTRONIC",
+      "genre": "TECHNO · HOUSE",
       "desc": "Signal Open Air takes place in Yamanashi's natural setting, drawing artists and dancers away from Tokyo's club circuit for an immersive outdoor experience. The festival maintains focus on underground techno and electronic music programming while utilizing the prefecture's mountainous landscape as backdrop."
     },
     {
@@ -962,7 +962,7 @@
       "name": "Euphoria",
       "date": "2025-07-11/2025-07-12",
       "city": "Tokyo",
-      "genre": "TECHNO · HOUSE · EXPERIMENTAL",
+      "genre": "TECHNO · HOUSE",
       "desc": "Euphoria presents a focused showcase of Tokyo's underground electronic music community through intimate warehouse settings and carefully curated lineups. The festival maintains a raw, stripped-down approach that prioritizes sound system quality and dancefloor connection over commercial production. Known for hosting both established local talent and emerging artists pushing the boundaries of contemporary club music."
     },
     {
@@ -971,7 +971,7 @@
       "name": "ORBIT",
       "date": "2025-07-11/2025-07-12",
       "city": "Fukui",
-      "genre": "TECHNO · HOUSE · ELECTRONIC",
+      "genre": "TECHNO · HOUSE",
       "desc": "ORBIT brings contemporary electronic music to Fukui's intimate club spaces, fostering connections between local and visiting artists. The festival emphasizes careful curation over scale, creating focused experiences that highlight both established and emerging talents within Japan's underground scene."
     },
     {
@@ -980,7 +980,7 @@
       "name": "YAMAUTO",
       "date": "2025-08-09/2025-08-18",
       "city": "Shiga",
-      "genre": "TECHNO · ELECTRONIC",
+      "genre": "TECHNO · HOUSE · PSYCHEDELIC",
       "desc": "YAMAUTO operates as a multi-day electronic music gathering set against the mountainous terrain of Shiga Prefecture. The festival emphasizes extended sets and immersive soundscapes, drawing both local and international acts to its remote location near Lake Biwa."
     },
     {
@@ -989,7 +989,7 @@
       "name": "SPECIALFLOWER FESTIVAL",
       "date": "2025-08-10/2025-08-11",
       "city": "Ibaraki",
-      "genre": "ELECTRONIC · TECHNO · HOUSE",
+      "genre": "TECHNO · HOUSE · PSYCHEDELIC",
       "desc": "SPECIALFLOWER FESTIVAL brings together Japan's underground electronic music community in Ibaraki's natural surroundings. The festival emphasizes intimate connections between artists and audience, featuring both established and emerging acts across multiple stages. Known for its carefully curated lineup that spans the electronic spectrum while maintaining a cohesive aesthetic vision."
     },
     {
@@ -998,7 +998,7 @@
       "name": "LOA-LOST PARADISE-",
       "date": "2025-08-16/2025-08-17",
       "city": "Ibaraki",
-      "genre": "TECHNO · MINIMAL",
+      "genre": "TECHNO · HOUSE · PSYCHEDELIC",
       "desc": "LOA-LOST PARADISE transforms Ibaraki's natural landscape into an immersive techno sanctuary, drawing devotees deep into the prefecture's forested terrain. The festival maintains its underground ethos while delivering uncompromising lineups that blur the boundaries between raw industrial soundscapes and hypnotic minimal structures."
     },
     {
@@ -1007,7 +1007,7 @@
       "name": "Sawagi Festival",
       "date": "2025-08-22/2025-08-24",
       "city": "Yamanashi",
-      "genre": "TECHNO · HOUSE · ELECTRONIC",
+      "genre": "TECHNO · HOUSE",
       "desc": "Sawagi Festival takes place in the mountainous Yamanashi prefecture, offering a retreat from Tokyo's urban club circuit. The festival emphasizes Japan's electronic underground with careful curation across multiple stages set against natural backdrops."
     },
     {
@@ -1016,7 +1016,7 @@
       "name": "ONE MUSIC CAMP",
       "date": "2025-08-23/2025-08-24",
       "city": "Hyogo",
-      "genre": "ELECTRONIC · AMBIENT · TECHNO",
+      "genre": "MIX",
       "desc": "ONE MUSIC CAMP brings together Japan's electronic music community in the natural setting of Hyogo Prefecture. The festival balances underground dance music with ambient soundscapes, creating an intimate camping experience that emphasizes connection between artists and attendees."
     },
     {
@@ -1025,7 +1025,7 @@
       "name": "Global Ark",
       "date": "2025-08-29/2025-08-31",
       "city": "Gunma",
-      "genre": "TECHNO · HOUSE · EXPERIMENTAL",
+      "genre": "TECHNO · HOUSE",
       "desc": "Global Ark positions itself as one of Japan's premier outdoor electronic music gatherings, drawing international and domestic artists to Gunma's mountainous terrain. The festival emphasizes immersive sound design and natural integration, creating a temporary autonomous zone for the country's underground dance community."
     },
     {
@@ -1034,7 +1034,7 @@
       "name": "KYOUMEI GatherinG",
       "date": "2025-08-29/2025-08-31",
       "city": "Hokkaido",
-      "genre": "TECHNO · EXPERIMENTAL",
+      "genre": "TECHNO · PSYCHEDELIC",
       "desc": "KYOUMEI GatherinG operates as Hokkaido's bridge between techno's industrial core and Japan's experimental electronic traditions. The festival curates intimate gatherings that emphasize spatial acoustics and community resonance over commercial spectacle. Its northern location allows for extended nocturnal programming that follows the island's unique seasonal rhythms."
     },
     {
@@ -1043,7 +1043,7 @@
       "name": "BonDisco",
       "date": "2025-08-30/2025-08-31",
       "city": "Kyoto",
-      "genre": "HOUSE",
+      "genre": "TECHNO · HOUSE",
       "desc": "BonDisco brings disco and house fundamentals to Kyoto's intimate club spaces since 2014. The party maintains a consistent focus on groove-oriented selections that bridge classic disco sensibilities with contemporary dance floor dynamics. Known for creating warm, community-driven atmospheres that emphasize musical heritage over trend-chasing."
     },
     {
@@ -1052,7 +1052,7 @@
       "name": "PURE RAVE",
       "date": "2025-09-06/2025-09-08",
       "city": "Kanto",
-      "genre": "TECHNO",
+      "genre": "TECHNO · HOUSE · PSYCHEDELIC",
       "desc": "PURE RAVE operates as a raw underground gathering in the Kanto region, stripping away commercial festival aesthetics in favor of uncompromising sound system culture. The event maintains focus on deep, driving techno programming that prioritizes the dance floor experience over production spectacle."
     },
     {
@@ -1061,7 +1061,7 @@
       "name": "BIG FUN",
       "date": "Sun Sep 07 2025 00:00:00 GMT+0900 (Japan Standard Time)",
       "city": "Hokkaido",
-      "genre": "TECHNO · HOUSE",
+      "genre": "HOUSE",
       "desc": "BIG FUN brings underground electronic music to Hokkaido's winter landscape, showcasing both international and domestic talent in an intimate setting. The festival has carved out a distinct identity within Japan's northern dance music circuit, emphasizing quality programming over scale."
     },
     {
@@ -1070,7 +1070,7 @@
       "name": "OKIRAKU CAMP",
       "date": "2025-09-13/2025-09-14",
       "city": "Wakayama",
-      "genre": "ELECTRONIC · AMBIENT · MIX",
+      "genre": "TECHNO · PSYCHEDELIC",
       "desc": "OKIRAKU CAMP presents a laid-back approach to electronic music programming in Wakayama's natural setting. The festival balances underground dance music with ambient and experimental sounds, creating space for both peak-time energy and contemplative moments. Its relaxed atmosphere attracts artists and attendees seeking an alternative to the intensity of urban club culture."
     },
     {
@@ -1079,7 +1079,7 @@
       "name": "GAMPEKI",
       "date": "2025-09-20/2025-09-21",
       "city": "Yamagata",
-      "genre": "TECHNO · HOUSE · ELECTRONIC",
+      "genre": "TECHNO · HOUSE · MIX",
       "desc": "GAMPEKI transforms the mountainous landscape of Yamagata into a sanctuary for electronic music, drawing artists and dancers deep into Japan's rural interior. The festival operates as a multi-day gathering that emphasizes the connection between natural environments and underground sound culture."
     },
     {
@@ -1088,7 +1088,7 @@
       "name": "SANGENJAYA MUSIC FESTIVAL",
       "date": "2025-09-20/2025-09-21",
       "city": "Tokyo",
-      "genre": "ELECTRONIC · TECHNO · HOUSE",
+      "genre": "TECHNO · HOUSE · MIX",
       "desc": "Sangenjaya Music Festival brings together Tokyo's electronic music community in the intimate setting of one of the city's most creative neighborhoods. The festival showcases both established and emerging artists across multiple venues, reflecting the diverse underground scene that defines modern Japanese dance music culture."
     },
     {
@@ -1097,7 +1097,7 @@
       "name": "COLORS Presents SOUNDCAMP",
       "date": "2025-09-21/2025-09-23",
       "city": "Hokkaido",
-      "genre": "ELECTRONIC · TECHNO · HOUSE",
+      "genre": "TECHNO · HOUSE",
       "desc": "COLORS Presents SOUNDCAMP brings electronic music to Hokkaido's natural landscape, creating an immersive experience that blends outdoor festival culture with Japan's underground scene. The event showcases a curated selection of domestic and international artists across multiple stages set against the island's distinctive terrain."
     },
     {
@@ -1115,7 +1115,7 @@
       "name": "FFKT",
       "date": "2025-09-27/2025-09-28",
       "city": "Shizuoka",
-      "genre": "TECHNO · ELECTRONIC",
+      "genre": "TECHNO · HOUSE · LIVE",
       "desc": "FFKT takes place in the natural surroundings of Shizuoka, positioning itself as a bridge between Japan's techno underground and international acts. The festival emphasizes immersive sound design and carefully curated lineups that reflect the deeper currents of contemporary electronic music."
     },
     {
@@ -1124,7 +1124,7 @@
       "name": "Music Camp CORE",
       "date": "2025-10-03/2025-10-04",
       "city": "Toyama",
-      "genre": "TECHNO · ELECTRONIC",
+      "genre": "TECHNO · PSYCHEDELIC",
       "desc": "Music Camp CORE brings raw techno programming to Toyama's mountainous landscape, establishing itself as a key destination for Japan's harder electronic sounds. The festival maintains focus on uncompromising lineups that draw from both domestic and international underground circuits."
     },
     {
@@ -1142,7 +1142,7 @@
       "name": "EACH STORY",
       "date": "2025-10-04/2025-10-05",
       "city": "Nagano",
-      "genre": "ELECTRONIC · TECHNO · HOUSE",
+      "genre": "AMBIENT",
       "desc": "EACH STORY brings intimate electronic music programming to Nagano's mountain landscape. The festival curates a focused lineup that emphasizes both established and emerging artists across the underground spectrum. Its remote setting creates a unique environment for deeper musical experiences away from urban club contexts."
     },
     {
@@ -1160,13 +1160,13 @@
       "name": "DELTA COMMIT",
       "date": "2025-10-04/2025-10-05",
       "city": "Yamanashi",
-      "genre": "TECHNO · ELECTRONIC",
+      "genre": "TECHNO · HOUSE",
       "desc": "DELTA COMMIT brings underground electronic music to Yamanashi's natural landscapes, creating an intimate gathering that emphasizes sound quality and community. The festival maintains a carefully curated approach, focusing on both established and emerging artists within Japan's electronic music scene."
     },
     {
       "_row": 68,
-      "id": "music-2024",
-      "name": "＋music 2024",
+      "id": "music",
+      "name": "＋music",
       "date": "2025-10-11/2025-10-12",
       "city": "Tokyo",
       "genre": "TECHNO · HOUSE",
@@ -1178,7 +1178,7 @@
       "name": "ishinoko",
       "date": "2025-10-11/2025-10-13",
       "city": "Ishikawa",
-      "genre": "ELECTRONIC · TECHNO",
+      "genre": "TECHNO · HOUSE",
       "desc": "ishinoko emerges from Ishikawa's growing electronic music community, offering an intimate platform for both established and emerging artists. The festival emphasizes quality programming over scale, creating space for deeper musical exploration within Japan's regional scene."
     },
     {
@@ -1214,7 +1214,7 @@
       "name": "Lost&Find",
       "date": "2025-10-18/2025-10-19",
       "city": "Shizuoka",
-      "genre": "TECHNO · HOUSE · ELECTRONIC",
+      "genre": "TECHNO · HOUSE",
       "desc": "Lost&Find operates in Shizuoka's verdant landscape, positioning itself as a boutique gathering that prioritizes intimate connections between sound and environment. The festival curates a careful balance of underground electronic music within natural settings, drawing a discerning crowd seeking authentic experiences away from urban festival circuits."
     },
     {
@@ -1223,7 +1223,7 @@
       "name": "ASAGIRI JAM",
       "date": "2025-10-18/2025-10-19",
       "city": "Shizuoka",
-      "genre": "AMBIENT · ELECTRONIC · EXPERIMENTAL",
+      "genre": "AMBIENT · LIVE",
       "desc": "ASAGIRI JAM takes place in the misty highlands of Shizuoka's Fujinomiya region, where the natural amphitheater of Mount Fuji's foothills creates an otherworldly setting for electronic music. The festival blends ambient soundscapes with deeper electronic genres, drawing on the mystical atmosphere of its mountainous location. Known for its intimate scale and focus on sonic experimentation within nature's embrace."
     },
     {
@@ -1232,7 +1232,7 @@
       "name": "DREAM FESTIVAL",
       "date": "2025-10-18/2025-10-19",
       "city": "Yamanashi",
-      "genre": "ELECTRONIC · TECHNO · HOUSE",
+      "genre": "TECHNO · HOUSE · PSYCHEDELIC",
       "desc": "Dream Festival brings electronic music to the natural landscapes of Yamanashi Prefecture, creating an intimate connection between sound and environment. The festival showcases both domestic and international artists across multiple stages, emphasizing the contrast between urban electronic culture and rural Japanese settings."
     },
     {
@@ -1255,11 +1255,11 @@
     },
     {
       "_row": 78,
-      "id": "capsule-2025",
-      "name": "CAPSULE-山中湖花火音楽祭-2025-",
+      "id": "capsule",
+      "name": "CAPSULE-山中湖花火音楽祭",
       "date": "2025-10-25/2025-10-26",
       "city": "Yamanashi",
-      "genre": "ELECTRONIC · HOUSE",
+      "genre": "TECHNO · HOUSE",
       "desc": "CAPSULE's annual lakeside gathering returns to Mount Fuji's foothills, combining electronic music with traditional Japanese fireworks displays over Yamanakako's pristine waters. The festival maintains its intimate scale while showcasing both domestic and international acts against one of Japan's most iconic natural backdrops."
     },
     {
@@ -1273,11 +1273,11 @@
     },
     {
       "_row": 80,
-      "id": "mirrorball-village2024",
-      "name": "Mirrorball Village2024",
+      "id": "mirrorball-village",
+      "name": "Mirrorball Village",
       "date": "2025-11-01/2025-11-03",
       "city": "Nagasaki",
-      "genre": "TECHNO · HOUSE · ELECTRONIC",
+      "genre": "TECHNO · HOUSE",
       "desc": "Mirrorball Village returns to Nagasaki with its signature blend of intimate outdoor settings and carefully curated electronic programming. The festival maintains its focus on creating immersive experiences that merge natural landscapes with forward-thinking dance music across multiple stages."
     },
     {
@@ -1286,7 +1286,7 @@
       "name": "GROW THE CULTURE OPEN AIR",
       "date": "2025-11-08/2025-11-09",
       "city": "Tokyo",
-      "genre": "TECHNO · HOUSE · ELECTRONIC",
+      "genre": "TECHNO · HOUSE",
       "desc": "GROW THE CULTURE OPEN AIR brings Tokyo's underground dance music community together in an outdoor setting that prioritizes authentic electronic music culture. The festival showcases both local and international artists across multiple stages, maintaining focus on quality programming over commercial appeal."
     },
     {
@@ -1295,7 +1295,7 @@
       "name": "IYASAKA RAVE FESTIVAL",
       "date": "2025-11-14/2025-11-16",
       "city": "Okinawa",
-      "genre": "TECHNO · HOUSE · ELECTRONIC",
+      "genre": "TECHNO · HOUSE",
       "desc": "IYASAKA RAVE FESTIVAL brings underground electronic music to Okinawa's tropical landscape, creating a unique fusion of island atmosphere and dance floor intensity. The festival showcases both local and international artists across multiple stages, emphasizing the raw energy of rave culture in Japan's southernmost prefecture."
     },
     {
@@ -1313,7 +1313,7 @@
       "name": "Mutek",
       "date": "2025-11-20/2025-11-23",
       "city": "Tokyo",
-      "genre": "EXPERIMENTAL · ELECTRONIC · LIVE",
+      "genre": "EXPERIMENTAL · LIVE · TECHNO · HOUSE",
       "desc": "MUTEK Tokyo brings the Montreal-based festival's signature blend of audiovisual performance and electronic experimentation to Japan's capital. The event showcases cutting-edge digital art installations alongside live electronic music performances, maintaining the brand's focus on innovation at the intersection of sound and visual technology."
     },
     {
@@ -1322,7 +1322,7 @@
       "name": "Odyssey",
       "date": "2026-09-25/2026-09-27",
       "city": "Miyazaki",
-      "genre": "TECHNO · ELECTRONIC",
+      "genre": "TECHNO · HOUSE",
       "desc": "Odyssey brings underground electronic music to Miyazaki's coastal landscape, creating an intimate gathering that bridges Japan's techno scene with the region's natural setting. The festival cultivates a focused sonic experience away from major urban centers, drawing artists and attendees seeking deeper musical connections."
     },
     {
@@ -1331,7 +1331,7 @@
       "name": "TAKARAJIMA-Beach Cleaning Party-",
       "date": "2025-11-29/2025-11-30",
       "city": "Okinawa",
-      "genre": "ELECTRONIC · HOUSE · TECHNO",
+      "genre": "TECHNO · HOUSE",
       "desc": "TAKARAJIMA combines environmental activism with electronic music programming on Okinawa's coastline. The festival integrates beach cleaning activities with DJ sets, creating a unique format that addresses ocean conservation while showcasing underground dance music. Participants engage in both ecological restoration and musical celebration across multiple days of programming."
     },
     {
@@ -1347,7 +1347,7 @@
       "lng": "135.2889",
       "image": "images/festivals/technogaoka.jpg",
       "flyer": "images/festivals/technogaoka-flyer.jpg",
-      "genre": "TECHNO",
+      "genre": "TECHNO · HOUSE",
       "desc": "Underground rave series operating from Tabifusa Ashiya Daihi-kaku in Hyogo. Known for maintaining a proper warehouse aesthetic with focused programming that draws from both local and international techno circuits. Raw sound system setup prioritizes function over flash.",
       "instagram": "https://www.instagram.com/technogaoka/",
       "editions": "[]"
@@ -1505,8 +1505,8 @@
     },
     {
       "_row": 23,
-      "id": "menou--iwamaki",
-      "name": "Menou  Iwamaki"
+      "id": "menou-iwamaki",
+      "name": "Menou Iwamaki"
     },
     {
       "_row": 24,
@@ -1645,317 +1645,251 @@
     },
     {
       "_row": 51,
+      "id": "ao",
+      "name": "青"
+    },
+    {
+      "_row": 52,
       "id": "198",
       "name": "198"
     },
     {
-      "_row": 52,
-      "id": "antal--hunee",
-      "name": "Antal  Hunee"
+      "_row": 53,
+      "id": "antal-hunee",
+      "name": "Antal b2b Hunee"
     },
     {
-      "_row": 53,
+      "_row": 54,
       "id": "ben-ufo",
       "name": "Ben Ufo"
     },
     {
-      "_row": 54,
+      "_row": 55,
       "id": "daphni",
       "name": "Daphni"
     },
     {
-      "_row": 55,
+      "_row": 56,
       "id": "dj-maria",
       "name": "Dj Maria."
     },
     {
-      "_row": 56,
-      "id": "dungeoneering-albino-sound--daigos",
-      "name": "Dungeoneering Albino Sound  Daigos"
+      "_row": 57,
+      "id": "dungeoneering",
+      "name": "Dungeoneering"
     },
     {
-      "_row": 57,
+      "_row": 58,
       "id": "feline",
       "name": "Feline"
     },
     {
-      "_row": 58,
+      "_row": 59,
       "id": "floating-points",
       "name": "Floating Points"
     },
     {
-      "_row": 59,
+      "_row": 60,
       "id": "gerd-janson",
       "name": "Gerd Janson"
     },
     {
-      "_row": 60,
+      "_row": 61,
       "id": "gonno",
       "name": "Gonno"
     },
     {
-      "_row": 61,
+      "_row": 62,
       "id": "haai",
       "name": "Haai"
     },
     {
-      "_row": 62,
+      "_row": 63,
       "id": "helena-hauff",
       "name": "Helena Hauff"
     },
     {
-      "_row": 63,
+      "_row": 64,
       "id": "jonathan-kusuma",
       "name": "Jonathan Kusuma"
     },
     {
-      "_row": 64,
+      "_row": 65,
       "id": "jonny-rock",
       "name": "Jonny Rock"
     },
     {
-      "_row": 65,
+      "_row": 66,
       "id": "kikiorix",
       "name": "Kikiorix"
     },
     {
-      "_row": 66,
+      "_row": 67,
       "id": "mala",
       "name": "Mala"
     },
     {
-      "_row": 67,
-      "id": "nc4k-stones-taro--lomax",
-      "name": "Nc4k Stones Taro  Lomax"
-    },
-    {
       "_row": 68,
-      "id": "sisi-b2b-ouissam-b2b-yamarchy",
-      "name": "Sisi B2b Ouissam B2b Yamarchy"
+      "id": "nc4k",
+      "name": "Nc4k(Stones Taro b2b Lomax)"
     },
     {
       "_row": 69,
+      "id": "sisi-b2b-ouissam-b2b-yamarchy",
+      "name": "Sisi b2b Ouissam b2b Yamarchy"
+    },
+    {
+      "_row": 70,
       "id": "suze-ij",
       "name": "Suze Ij"
     },
     {
-      "_row": 70,
+      "_row": 71,
       "id": "four-tet",
       "name": "Four Tet"
     },
     {
-      "_row": 71,
-      "id": "Ojisan",
+      "_row": 72,
+      "id": "ojisan",
       "name": "Ojisan",
       "lasteditedat": "2026-05-03T18:47:32.198Z",
       "lastEditedAt": "2026-05-03T18:47:32.198Z"
     },
     {
-      "_row": 72,
-      "id": "Noritake",
+      "_row": 73,
+      "id": "noritake",
       "name": "Noritake",
       "lasteditedat": "2026-05-03T18:47:32.672Z",
       "lastEditedAt": "2026-05-03T18:47:32.672Z"
     },
     {
-      "_row": 73,
-      "id": "Eric Cloutier",
+      "_row": 74,
+      "id": "eric-cloutier",
       "name": "Eric Cloutier",
       "lasteditedat": "2026-05-03T18:47:33.556Z",
       "lastEditedAt": "2026-05-03T18:47:33.556Z"
     },
     {
-      "_row": 74,
-      "id": "Caimann",
+      "_row": 75,
+      "id": "caimann",
       "name": "Caimann",
       "lasteditedat": "2026-05-03T18:47:34.626Z",
       "lastEditedAt": "2026-05-03T18:47:34.626Z"
     },
     {
-      "_row": 75,
-      "id": "FUJI",
+      "_row": 76,
+      "id": "fuji",
       "name": "FUJI",
       "lasteditedat": "2026-05-03T18:47:35.174Z",
       "lastEditedAt": "2026-05-03T18:47:35.174Z"
     },
     {
-      "_row": 76,
-      "id": "Prins Thomas",
+      "_row": 77,
+      "id": "prins-thomas",
       "name": "Prins Thomas",
       "lasteditedat": "2026-05-03T18:47:35.731Z",
       "lastEditedAt": "2026-05-03T18:47:35.731Z"
     },
     {
-      "_row": 77,
-      "id": "RAMI",
+      "_row": 78,
+      "id": "rami",
       "name": "RAMI",
       "lasteditedat": "2026-05-03T18:47:36.292Z",
       "lastEditedAt": "2026-05-03T18:47:36.292Z"
     },
     {
-      "_row": 78,
-      "id": "Pianeti Sintetici",
+      "_row": 79,
+      "id": "pianeti-sintetici",
       "name": "Pianeti Sintetici",
       "lasteditedat": "2026-05-03T18:47:36.808Z",
       "lastEditedAt": "2026-05-03T18:47:36.808Z"
     },
     {
-      "_row": 79,
-      "id": "Ground",
+      "_row": 80,
+      "id": "ground",
       "name": "Ground",
       "lasteditedat": "2026-05-03T18:47:37.460Z",
       "lastEditedAt": "2026-05-03T18:47:37.460Z"
     },
     {
-      "_row": 80,
-      "id": "Akie",
+      "_row": 81,
+      "id": "akie",
       "name": "Akie",
       "lasteditedat": "2026-05-03T18:47:37.963Z",
       "lastEditedAt": "2026-05-03T18:47:37.963Z"
     },
     {
-      "_row": 81,
-      "id": "Adhémar",
+      "_row": 82,
+      "id": "adhemar",
       "name": "AdhéMar",
       "lasteditedat": "2026-05-03T18:47:38.429Z",
       "lastEditedAt": "2026-05-03T18:47:38.429Z"
     },
     {
-      "_row": 82,
-      "id": "Allen Mock",
+      "_row": 83,
+      "id": "allen-mock",
       "name": "Allen Mock",
       "lasteditedat": "2026-05-03T18:47:39.154Z",
       "lastEditedAt": "2026-05-03T18:47:39.154Z"
     },
     {
-      "_row": 83,
-      "id": "Doltz. -live-",
-      "name": "Doltz.  Live ",
+      "_row": 84,
+      "id": "doltz",
+      "name": "Doltz",
       "lasteditedat": "2026-05-03T18:47:39.747Z",
       "lastEditedAt": "2026-05-03T18:47:39.747Z"
     },
     {
-      "_row": 84,
-      "id": "Joma",
+      "_row": 85,
+      "id": "joma",
       "name": "Joma",
       "lasteditedat": "2026-05-03T18:47:40.425Z",
       "lastEditedAt": "2026-05-03T18:47:40.425Z"
     },
     {
-      "_row": 85,
-      "id": "Suguru Mochizuki",
+      "_row": 86,
+      "id": "suguru-mochizuki",
       "name": "Suguru Mochizuki",
       "lasteditedat": "2026-05-03T18:47:40.947Z",
       "lastEditedAt": "2026-05-03T18:47:40.947Z"
     },
     {
-      "_row": 86,
-      "id": "YUKIMASA",
+      "_row": 87,
+      "id": "yukimasa",
       "name": "YUKIMASA",
       "lasteditedat": "2026-05-03T18:47:41.417Z",
       "lastEditedAt": "2026-05-03T18:47:41.417Z"
     },
     {
-      "_row": 87,
-      "id": "Tonbo -live-",
-      "name": "Tonbo  Live ",
+      "_row": 88,
+      "id": "tonbo",
+      "name": "Tonbo",
       "lasteditedat": "2026-05-03T18:47:41.842Z",
       "lastEditedAt": "2026-05-03T18:47:41.842Z"
     },
     {
-      "_row": 88,
-      "id": "SUNGA",
+      "_row": 89,
+      "id": "sunga",
       "name": "SUNGA",
       "lasteditedat": "2026-05-03T18:47:42.368Z",
       "lastEditedAt": "2026-05-03T18:47:42.368Z"
     },
     {
-      "_row": 89,
-      "id": "DJ Yazi",
+      "_row": 90,
+      "id": "dj-yazi",
       "name": "DJ Yazi",
       "lasteditedat": "2026-05-03T18:47:42.420Z",
       "lastEditedAt": "2026-05-03T18:47:42.420Z"
     },
     {
-      "_row": 90,
-      "id": "Iron",
+      "_row": 91,
+      "id": "iron",
       "name": "Iron",
       "lasteditedat": "2026-05-03T18:47:42.823Z",
       "lastEditedAt": "2026-05-03T18:47:42.823Z"
     }
   ],
-  "EVENTS": [
-    {
-      "_row": 2,
-      "name": "UNDERGROUND FREQUENCY",
-      "date": "Sun May 17 2026 00:00:00 GMT+0900 (Japan Standard Time)",
-      "venue": "CONTACT",
-      "city": "TOKYO",
-      "time": "23:00 - 05:00",
-      "desc": "A night of raw, unfiltered techno featuring local and international selectors.",
-      "lineup": "dj-nobu, wata-igarashi"
-    },
-    {
-      "_row": 3,
-      "name": "DAWN PATROL",
-      "date": "Sun May 31 2026 00:00:00 GMT+0900 (Japan Standard Time)",
-      "venue": "CIRCUS",
-      "city": "OSAKA",
-      "time": "22:00 - 06:00",
-      "desc": "Deep house and minimal techno. Sunrise session on the terrace.",
-      "lineup": "kotsu, mayurashka"
-    },
-    {
-      "_row": 4,
-      "name": "RURAL FESTIVAL 2026",
-      "date": "Sun Jul 19 2026 00:00:00 GMT+0900 (Japan Standard Time)",
-      "venue": "NAEBA SKI RESORT",
-      "city": "NIIGATA",
-      "time": "ALL DAY",
-      "desc": "Three-day open-air festival in the mountains. Techno, house, ambient, and beyond.",
-      "lineup": "ken-ishii, dj-nobu, wata-igarashi, kotsu"
-    },
-    {
-      "_row": 5,
-      "name": "CONCRETE ECHOES",
-      "date": "Sun Jun 14 2026 00:00:00 GMT+0900 (Japan Standard Time)",
-      "venue": "WAREHOUSE 702",
-      "city": "TOKYO",
-      "time": "22:00 - 05:00",
-      "desc": "Industrial space, concrete walls, heavy sound. Warehouse techno at its finest.",
-      "lineup": "wata-igarashi"
-    },
-    {
-      "_row": 6,
-      "name": "CAPSULE",
-      "date": "Sun Apr 05 2026 00:00:00 GMT+0900 (Japan Standard Time)",
-      "venue": "CONTACT",
-      "city": "TOKYO",
-      "time": "23:00 - 05:00",
-      "desc": "Intimate club night focused on minimal and micro-house.",
-      "lineup": "mayurashka, cabanne"
-    },
-    {
-      "_row": 7,
-      "name": "ZERO GRAVITY",
-      "date": "Sun Mar 22 2026 00:00:00 GMT+0900 (Japan Standard Time)",
-      "venue": "CLUB METRO",
-      "city": "KYOTO",
-      "time": "22:00 - 04:00",
-      "desc": "Kyoto's longest-running underground techno night.",
-      "lineup": "cabanne"
-    },
-    {
-      "_row": 8,
-      "name": "AFTER HOURS COLLECTIVE",
-      "date": "Sun Aug 09 2026 00:00:00 GMT+0900 (Japan Standard Time)",
-      "venue": "VENT",
-      "city": "TOKYO",
-      "time": "28:00 - 10:00",
-      "desc": "After-hours session. Hypnotic, deep, relentless.",
-      "lineup": "dj-nobu, ken-ishii"
-    }
-  ],
+  "EVENTS": [],
   "ARTICLES": [
     {
       "_row": 2,
