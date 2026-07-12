@@ -41,8 +41,9 @@ const GIDS = {
   VENUES: '525830431',
   ARTISTS: '648440679',
   EVENTS: '959929754',
-  EDITIONS: '1765363054',  // スキーマ §2.3（2026-07-12 クリーンデータで再生成）
-  LINEUPS: '580984930',    // スキーマ §2.4（2026-07-12 クリーンデータで再生成）
+  // EDITIONS / LINEUPS はシートから読まず、フラットな FESTIVALS からビルド時に導出する（下記）。
+  // CMS が FESTIVALS を編集するため、シートに保存するとスナップショットがズレる（二重管理）。
+  // 将来「同一ブランドの複数開催」を扱うときは FESTIVALS に BRAND_ID 列を足して拡張。
 };
 
 // GENRE 正規リスト（スキーマ §1.3。必要に応じて追記）
@@ -217,37 +218,51 @@ async function main() {
     festivals.push(stripMeta(r));
   }
 
-  const festivalIds = new Set(raw.FESTIVALS.map(r => r.ID).filter(Boolean));
+  // --- EDITIONS / LINEUPS（フラットな FESTIVALS からビルド時に導出。スキーマ §2.3/§2.4）---
+  // EDITION_ID = {festivalId}-{年}。LINEUP（名前カンマ区切り）を ARTISTS.NAME と突合して
+  // ARTIST_ID を解決、未解決は ACT_LABEL として残す（旧 migrate-phase0.gs と同じ規則）。
+  const yearOf = d => (String(d || '').match(/(\d{4})/) || [])[1] || '';
+  const normName = s => String(s || '').toLowerCase().replace(/\s+/g, ' ').trim();
+  const nameToArtist = new Map();
+  for (const a of raw.ARTISTS) {
+    const nm = normName(a.NAME);
+    if (nm && !nameToArtist.has(nm)) nameToArtist.set(nm, (a.ID || '').trim());
+  }
 
-  // --- EDITIONS（開催回。スキーマ §2.3）---
   const seenE = new Set();
   const editions = [];
-  for (const r of raw.EDITIONS) {
-    const pub = isPublished(r);
-    validateId('EDITIONS', r.EDITION_ID, seenE, pub);
-    if (r.FESTIVAL_ID && !festivalIds.has(r.FESTIVAL_ID)) {
-      warnings.push(`EDITIONS ${r.EDITION_ID}: FESTIVAL_ID "${r.FESTIVAL_ID}" が FESTIVALS 未登録`);
-    }
-    r.DATE_START = normalizeDate('EDITIONS', r.EDITION_ID, r.DATE_START);
-    r.DATE_END = normalizeDate('EDITIONS', r.EDITION_ID, r.DATE_END);
-    if (!pub) continue;
-    editions.push(stripMeta(r));
-  }
-  const editionIds = new Set(raw.EDITIONS.map(r => r.EDITION_ID).filter(Boolean));
-
-  // --- LINEUPS（出演。スキーマ §2.4。ARTIST_ID は解決済みのみ、未解決は ACT_LABEL）---
   const lineups = [];
-  for (const r of raw.LINEUPS) {
-    if (r.EDITION_ID && !editionIds.has(r.EDITION_ID)) {
-      warnings.push(`LINEUPS: EDITION_ID "${r.EDITION_ID}" が EDITIONS 未登録`);
-    }
-    if (r.ARTIST_ID) {
-      if (!ID_RE.test(r.ARTIST_ID)) warnings.push(`LINEUPS ${r.EDITION_ID}: ARTIST_ID形式違反 "${r.ARTIST_ID}"`);
-      else if (!artistIds.has(r.ARTIST_ID)) warnings.push(`LINEUPS ${r.EDITION_ID}: ARTIST_ID "${r.ARTIST_ID}" が ARTISTS 未登録`);
-    } else if (!r.ACT_LABEL) {
-      warnings.push(`LINEUPS ${r.EDITION_ID}: ARTIST_ID も ACT_LABEL も空の行`);
-    }
-    lineups.push(stripMeta(r));
+  for (const r of raw.FESTIVALS) {
+    const fid = (r.ID || '').trim();
+    if (!fid) continue;
+    const pub = isPublished(r);
+    const dParts = (r.DATE || '').split('/').map(s => s.trim());
+    const dStart = normalizeDate('EDITIONS', fid, dParts[0] || '');
+    const dEnd = normalizeDate('EDITIONS', fid, dParts[1] || dParts[0] || '');
+    const year = yearOf(dStart);
+    const editionId = fid + (year ? '-' + year : '');
+    validateId('EDITIONS', editionId, seenE, pub);
+    if (!pub) continue;
+
+    editions.push(stripMeta({
+      EDITION_ID: editionId, FESTIVAL_ID: fid, EDITION: year,
+      DATE_START: dStart, DATE_END: dEnd, LOCATION: r.LOCATION || '',
+      PREF: r.CITY || '', ADDRESS: r.ADDRESS || '', LAT: r.LAT || '', LNG: r.LNG || '',
+      TICKETURL: (r.TICKETURL || r[' TICKETURL'] || ''), FLYER: r.FLYER || '', STATUS: r.STATUS || '',
+    }));
+
+    (r.LINEUP || '').split(',').map(s => s.trim()).filter(Boolean).forEach((act, i) => {
+      const setType = /-live-/i.test(act) ? 'live' : (/\bb2b\b/i.test(act) ? 'b2b' : 'dj');
+      let artistId = '', actLabel = '';
+      if (setType === 'dj') {
+        const hit = nameToArtist.get(normName(act));
+        if (hit && ID_RE.test(hit)) artistId = hit;
+        else { actLabel = act; if (!hit) warnings.push(`LINEUPS ${editionId}: 未解決アクト "${act}"（ARTISTS.NAME に無し）`); }
+      } else {
+        actLabel = act; // b2b/live はメンバー分解せず、そのままラベルで記録
+      }
+      lineups.push(stripMeta({ EDITION_ID: editionId, ARTIST_ID: artistId, ACT_LABEL: actLabel, SET_TYPE: setType, SORT: String(i + 1) }));
+    });
   }
 
   // --- EVENTS（IDなし → NAME+DATE で暫定キー。孤児参照チェック）---
