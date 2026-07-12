@@ -2514,15 +2514,37 @@ function bulkScan(){
     const line = (label, n, fn) => n
       ? `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)"><span>${label}: <strong>${n}</strong>件</span><button class="btn btn-sm btn-accent" onclick="${fn}">実行</button></div>`
       : `<div style="padding:8px 0;border-bottom:1px solid var(--border);opacity:.45">${label}: 0件 ✓</div>`;
+    const gap = (label, rows, section, id) => rows.length
+      ? `<div style="padding:6px 0;border-bottom:1px solid var(--border)">
+          <div style="display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="var l=document.getElementById('${id}');l.style.display=l.style.display==='none'?'block':'none'">
+            <span>${label}: <strong>${rows.length}</strong>件</span><span style="opacity:.5;font-size:.7rem">▸ 一覧</span></div>
+          <div id="${id}" style="display:none;margin-top:6px;max-height:200px;overflow-y:auto">${
+            rows.map(r=>`<div style="display:flex;justify-content:space-between;padding:3px 0 3px 10px;font-size:.78rem"><span>${esc(r.name||r.id)}</span><a style="cursor:pointer;color:var(--text2);text-decoration:underline" onclick="bulkJumpEdit('${section}',${r._row})">編集</a></div>`).join('')
+          }</div></div>`
+      : `<div style="padding:6px 0;border-bottom:1px solid var(--border);opacity:.45">${label}: 0件 ✓</div>`;
+
     rep.innerHTML =
-      `<div style="font-size:.7rem;letter-spacing:.1em;opacity:.5;margin-bottom:4px">AI 生成（空欄のみ）</div>` +
+      `<div style="font-size:.7rem;letter-spacing:.1em;opacity:.5;margin-bottom:4px">AI 生成（空欄のみ・自動）</div>` +
       line('アーティスト BIO', missBio, "bulkAiRun('artist','bio')") +
       line('フェス 説明', missFD, "bulkAiRun('festival','desc')") +
       line('ヴェニュー 説明', missVD, "bulkAiRun('venue','desc')") +
-      `<div style="font-size:.7rem;letter-spacing:.1em;opacity:.5;margin:14px 0 4px">ジオコーディング（住所あり・座標なし）</div>` +
+      `<div style="font-size:.7rem;letter-spacing:.1em;opacity:.5;margin:14px 0 4px">ジオコーディング（住所あり・座標なし・自動）</div>` +
       line('フェス 座標', geoF, "bulkGeoRun('festival')") +
-      line('ヴェニュー 座標', geoV, "bulkGeoRun('venue')");
+      line('ヴェニュー 座標', geoV, "bulkGeoRun('venue')") +
+      `<div style="font-size:.7rem;letter-spacing:.1em;opacity:.5;margin:14px 0 4px">手動入力が必要（一覧→編集へジャンプ）</div>` +
+      gap('アーティスト 画像なし', bulkData.artist.filter(r=>r.name && !r.image), 'artist', 'gap-a-img') +
+      gap('フェス 画像なし', bulkData.festival.filter(r=>r.name && !r.image), 'festival', 'gap-f-img') +
+      gap('フェス フライヤーなし', bulkData.festival.filter(r=>r.name && !r.flyer), 'festival', 'gap-f-fly') +
+      gap('フェス ラインナップなし', bulkData.festival.filter(r=>r.name && !r.lineup), 'festival', 'gap-f-lu') +
+      gap('フェス 公式URLなし', bulkData.festival.filter(r=>r.name && !r.url), 'festival', 'gap-f-url');
   }).catch(e=>{ rep.innerHTML = '<span style="color:var(--accent)">取得失敗: '+esc(e.message)+'（ログイン状態を確認）</span>'; });
+}
+
+// Bulk Assist から特定アイテムの編集画面へジャンプ（既存 editRow を再利用）
+function bulkJumpEdit(section, rowNum){
+  document.getElementById('bulk-overlay')?.remove();
+  document.querySelectorAll('.sidebar nav button').forEach(b=>{ if(b.textContent.toLowerCase().includes(section)) b.click(); });
+  setTimeout(()=>{ try { editRow(section, rowNum); } catch(e){ toast('編集画面を開けませんでした','error'); } }, 300);
 }
 
 async function bulkSaveRow(section, row){
