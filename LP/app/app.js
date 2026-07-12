@@ -114,25 +114,36 @@ function route() {
 }
 
 /* ---------- screen: fest picker ---------- */
-function renderPicker(query = '') {
+const pk = { q: '', genre: 'ALL', area: 'ALL' };
+const festGenres = ed => (DB.byFest.get(ed.FESTIVAL_ID)?.GENRE || '').split(/[,·]/).map(s => s.trim()).filter(Boolean);
+
+function renderPicker() {
   $('#fest-tabs').hidden = true;
-  const q = query.trim().toLowerCase();
-  const editions = DB.editions
-    .filter(ed => {
-      if (!q) return true;
-      const f = DB.byFest.get(ed.FESTIVAL_ID);
-      return (f?.NAME || ed.FESTIVAL_ID).toLowerCase().includes(q) || (ed.PREF || '').toLowerCase().includes(q);
-    });
+  const q = pk.q.trim().toLowerCase();
+  const editions = DB.editions.filter(ed => {
+    const f = DB.byFest.get(ed.FESTIVAL_ID);
+    if (q && !((f?.NAME || ed.FESTIVAL_ID).toLowerCase().includes(q) || (ed.PREF || '').toLowerCase().includes(q))) return false;
+    if (pk.genre !== 'ALL' && !festGenres(ed).includes(pk.genre)) return false;
+    if (pk.area !== 'ALL' && (ed.PREF || '').trim() !== pk.area) return false;
+    return true;
+  });
   const upcoming = editions.filter(isFuture).sort((a, b) => new Date(a.DATE_START) - new Date(b.DATE_START));
   const past = editions.filter(ed => !isFuture(ed)).sort((a, b) => new Date(b.DATE_START) - new Date(a.DATE_START));
+
+  const allGenres = [...new Set(DB.editions.flatMap(festGenres))].sort();
+  const allAreas = [...new Set(DB.editions.map(e => (e.PREF || '').trim()).filter(Boolean))].sort();
+  const chipRow = (key, cur, vals) => `<div class="pf-row"><span class="pf-key">${key}</span>` +
+    ['ALL', ...vals].map(v => `<button class="pf-chip${v === cur ? ' active' : ''}" data-f="${key.toLowerCase()}" data-v="${esc(v)}">${esc(v)}</button>`).join('') + `</div>`;
 
   const item = ed => {
     const f = DB.byFest.get(ed.FESTIVAL_ID);
     const n = (DB.lineupByEdition.get(ed.EDITION_ID) || []).length;
     const mine = loadSets(ed.EDITION_ID).size;
+    const g = festGenres(ed).slice(0, 3).join(' · ');
     return `<button class="fest-item" data-ed="${esc(ed.EDITION_ID)}">
       <span><span class="fest-item-name">${esc(f?.NAME || ed.FESTIVAL_ID)}</span>
-        <div class="fest-item-meta">${esc(ed.DATE_START || '')}${ed.DATE_END && ed.DATE_END !== ed.DATE_START ? ' → ' + esc(ed.DATE_END) : ''} · ${esc(ed.PREF || ed.LOCATION || '')}</div></span>
+        <div class="fest-item-meta">${esc(ed.DATE_START || '')}${ed.DATE_END && ed.DATE_END !== ed.DATE_START ? ' → ' + esc(ed.DATE_END) : ''} · ${esc(ed.PREF || ed.LOCATION || '')}</div>
+        ${g ? `<div class="fest-item-genre">${esc(g)}</div>` : ''}</span>
       <span class="fest-item-badge${n ? ' has-lineup' : ''}">${n ? n + ' ACTS' : '—'}${mine ? ' · ★' + mine : ''}</span>
     </button>`;
   };
@@ -141,16 +152,17 @@ function renderPicker(query = '') {
     <div class="screen-hero">FESTIVAL<br>COMPANION</div>
     <div class="screen-sub">TJ APP (仮) — LINEUPS · MY SETS · OFFLINE</div>
     <div class="offline-note">OFFLINE — 保存済みデータを表示中</div>
-    <input class="search-box" id="picker-search" type="search" placeholder="SEARCH FESTIVALS..." value="${esc(query)}" autocomplete="off">
+    <input class="search-box" id="picker-search" type="search" placeholder="SEARCH FESTIVALS..." value="${esc(pk.q)}" autocomplete="off">
+    <div class="picker-filters">${chipRow('Genre', pk.genre, allGenres)}${chipRow('Area', pk.area, allAreas)}</div>
     ${upcoming.length ? `<div class="picker-group-label">Upcoming</div>${upcoming.map(item).join('')}` : ''}
     ${past.length ? `<div class="picker-group-label">Past</div>${past.map(item).join('')}` : ''}
     ${!editions.length ? '<div class="my-empty">NO FESTIVALS FOUND</div>' : ''}
   `;
-  $('#picker-search').addEventListener('input', e => {
-    const v = e.target.value;
-    renderPicker(v);
-    const box = $('#picker-search'); box.focus(); box.setSelectionRange(v.length, v.length);
-  });
+  const box = $('#picker-search');
+  box.addEventListener('input', e => { pk.q = e.target.value; renderPicker(); const b = $('#picker-search'); b.focus(); b.setSelectionRange(pk.q.length, pk.q.length); });
+  document.querySelectorAll('.pf-chip').forEach(c => c.addEventListener('click', () => {
+    pk[c.dataset.f] = c.dataset.v; renderPicker();
+  }));
   document.querySelectorAll('.fest-item').forEach(b =>
     b.addEventListener('click', () => { window.location.hash = '#/fest/' + b.dataset.ed; }));
 }

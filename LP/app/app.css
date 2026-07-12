@@ -53,6 +53,14 @@ button { font-family: inherit; color: inherit; background: none; border: none; c
   color: var(--text); font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.05em;
 }
 .search-box:focus { outline: 1px solid rgba(240,237,232,0.3); }
+.picker-filters { display: flex; flex-direction: column; gap: 4px; margin-bottom: 6px; }
+.pf-row { display: flex; align-items: center; gap: 2px; overflow-x: auto; scrollbar-width: none; }
+.pf-row::-webkit-scrollbar { display: none; }
+.pf-key { font-size: 9px; letter-spacing: 0.18em; opacity: 0.28; text-transform: uppercase; flex-shrink: 0; width: 44px; }
+.pf-chip { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.35; padding: 6px 12px; white-space: nowrap; flex-shrink: 0; }
+.pf-chip:active { opacity: 0.7; }
+.pf-chip.active { opacity: 1; border-bottom: 1px solid var(--text); }
+.fest-item-genre { font-size: 8px; letter-spacing: 0.12em; opacity: 0.3; text-transform: uppercase; margin-top: 3px; }
 .picker-group-label { font-size: 9px; letter-spacing: 0.25em; opacity: 0.3; text-transform: uppercase; margin: 22px 0 10px; }
 .fest-item {
   display: flex; justify-content: space-between; align-items: center; gap: 12px;
