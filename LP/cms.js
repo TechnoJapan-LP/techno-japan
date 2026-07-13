@@ -924,15 +924,15 @@ function geocode(prefix) {
   const addr = document.getElementById(prefix+'-address').value.trim();
   if (!addr) return toast('Address is empty','error');
   toast('Geocoding...','info');
-  fetch('https://maps.googleapis.com/maps/api/geocode/json?address='+encodeURIComponent(addr)+'&key='+GMAPS_KEY)
+  // OpenStreetMap Nominatim（APIキー不要・無料）。1秒1リクエストのポリシーに注意。
+  fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+encodeURIComponent(addr))
     .then(r=>r.json()).then(d=>{
-      if (d.status==='OK'&&d.results[0]) {
-        const loc=d.results[0].geometry.location;
-        document.getElementById(prefix+'-lat').value=loc.lat.toFixed(4);
-        document.getElementById(prefix+'-lng').value=loc.lng.toFixed(4);
+      if (Array.isArray(d) && d[0] && d[0].lat && d[0].lon) {
+        document.getElementById(prefix+'-lat').value=parseFloat(d[0].lat).toFixed(4);
+        document.getElementById(prefix+'-lng').value=parseFloat(d[0].lon).toFixed(4);
         updateLocationMap(prefix);
         toast('Coordinates set','success');
-      } else toast('Geocoding failed: '+d.status,'error');
+      } else toast('Geocoding failed: 該当なし','error');
     }).catch(()=>toast('Geocoding error','error'));
 }
 
@@ -2781,14 +2781,13 @@ async function bulkGeoRun(section){
     if(bulkCancel){ break; }
     bulkProg(`ジオコーディング中... ${done+fail+1}/${rows.length}\n${row.name}`);
     try {
-      const d = await fetch('https://maps.googleapis.com/maps/api/geocode/json?address='+encodeURIComponent(row.address)+'&key='+GMAPS_KEY).then(r=>r.json());
-      if(d.status==='OK' && d.results[0]){
-        const loc = d.results[0].geometry.location;
-        row.lat = loc.lat.toFixed(4); row.lng = loc.lng.toFixed(4);
+      const d = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+encodeURIComponent(row.address)).then(r=>r.json());
+      if(Array.isArray(d) && d[0] && d[0].lat && d[0].lon){
+        row.lat = parseFloat(d[0].lat).toFixed(4); row.lng = parseFloat(d[0].lon).toFixed(4);
         await bulkSaveRow(section,row); done++;
       } else fail++;
     } catch(e){ fail++; }
-    await new Promise(r=>setTimeout(r,350));
+    await new Promise(r=>setTimeout(r,1100)); // Nominatim: 1リクエスト/秒 ポリシー順守
   }
   document.getElementById('bulk-cancel-btn').style.display='none';
   bulkProg(`${bulkCancel?'中断':'完了'}: ${done}件座標設定 / ${fail}件失敗`);
