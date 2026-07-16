@@ -374,12 +374,19 @@ nav { padding: 20px 40px; background: rgba(8,8,8,0.97); mix-blend-mode: normal; 
 }
 </script>
 <!-- Google Analytics 4 -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-4MHCNR7D26"></script>
 <script>
+(function(){
+  // ボット（ヘッドレスブラウザ等）は計測しない
+  if (navigator.webdriver) return;
+  var s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://www.googletagmanager.com/gtag/js?id=G-4MHCNR7D26';
+  document.head.appendChild(s);
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
+  window.gtag = function(){ dataLayer.push(arguments); };
   gtag('js', new Date());
   gtag('config', 'G-4MHCNR7D26');
+})();
 </script>
 <script type="application/ld+json">
 {
