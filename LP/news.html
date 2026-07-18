@@ -931,7 +931,7 @@ function renderMainGrid() {
 
   // Featured left
   document.getElementById('featured-col').innerHTML = `
-    <a href="#article/${featured.id}" class="featured-card">
+    <a href="/articles/${encodeURIComponent(featured.id)}.html" onclick="event.preventDefault();location.hash='article/'+this.dataset.aid" data-aid="${featured.id}" class="featured-card">
       <div class="featured-card-image">
         ${featured.image
           ? `<img loading="lazy" decoding="async" src="${featured.image}" alt="${featured.title}">`
@@ -948,7 +948,7 @@ function renderMainGrid() {
 
   // Side right
   document.getElementById('side-col').innerHTML = sideItems.map(a => `
-    <a href="#article/${a.id}" class="side-card">
+    <a href="/articles/${encodeURIComponent(a.id)}.html" onclick="event.preventDefault();location.hash='article/'+this.dataset.aid" data-aid="${a.id}" class="side-card">
       <div class="side-card-tag"><span class="tag-dot"></span> ${a.category}</div>
       <div class="side-card-title">${a.title}</div>
       <div class="side-card-excerpt">${a.excerpt}</div>
@@ -1005,7 +1005,7 @@ function renderFeed() {
   const visible = items.slice(0, feedVisible);
 
   document.getElementById('feed-grid').innerHTML = visible.map(a => `
-    <a href="#article/${a.id}" class="feed-card">
+    <a href="/articles/${encodeURIComponent(a.id)}.html" onclick="event.preventDefault();location.hash='article/'+this.dataset.aid" data-aid="${a.id}" class="feed-card">
       <div class="feed-card-image">
         ${a.image
           ? `<img loading="lazy" decoding="async" src="${a.image}" alt="${a.title}">`
@@ -1141,7 +1141,8 @@ function renderArticleDetail(id) {
 
   // SEO: update title, meta description, OG / Twitter tags, canonical for this article
   const articleTitle = `${a.title} — TECHNO JAPAN`;
-  const articleUrlAbs = `https://techno-japan.media/news.html#article/${a.id}`;
+  // 正規URLは静的ページ側。ハッシュ版は互換のため残すが canonical は実URLを指す。
+  const articleUrlAbs = `https://techno-japan.media/articles/${encodeURIComponent(a.id)}.html`;
   const articleImg = a.image
     ? (a.image.startsWith('http') ? a.image : `https://techno-japan.media/${a.image.replace(/^\//,'')}`)
     : 'https://techno-japan.media/images/festivals/rainbow-disco-club.webp';

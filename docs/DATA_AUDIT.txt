@@ -1,0 +1,49 @@
+============================================================
+TECHNO JAPAN — データ品質監査  (2026-07-19)
+============================================================
+
+件数: ARTISTS 90 / FESTIVALS 86 / VENUES 22 / ARTICLES 1
+
+--- 1. 要対応（規約違反・ゴミ行） ---
+  [ARTISTS] ゴミ行の可能性: id='198' name='198' → 削除を検討
+  [ARTICLES] IDが小文字でない: 'Transcendence' → 規約は小文字ケバブケース（URLが変わるため変更は要判断）
+
+--- 2. 画像が未設定（サイトで見栄えに直結） ---
+  ARTISTS: 86/90 件が画像なし
+    例: Dj Miku, Dj Kensei, Dj Yogurt, Hidai, Taichi Kawahira, Tsutomu, Qmico, Ga Su …
+  FESTIVALS: 72/86 件が画像なし
+    例: Link Open Air, JAPONISM, Gojū-Ichi Festival, FESTIVAL FRUEZINHO, Dots, SAMSARA, HALOLA CAMP, Moment …
+  VENUES: 0/22 件が画像なし
+
+--- 3. 説明文(bio/desc)が未設定 ---
+  ARTISTS: 86/90 件が説明なし
+    例: Dj Miku, Dj Kensei, Dj Yogurt, Hidai, Taichi Kawahira, Tsutomu, Qmico, Ga Su …
+  FESTIVALS: 0/86 件が説明なし
+  VENUES: 0/22 件が説明なし
+
+--- 4. 位置情報(lat/lng)が未設定 → 地図に出ない ---
+  FESTIVALS: 72/86 件が座標なし
+    例: Link Open Air, JAPONISM, Gojū-Ichi Festival, FESTIVAL FRUEZINHO, Dots, SAMSARA, HALOLA CAMP, Moment …
+  VENUES: 0/22 件が座標なし
+
+--- 5. ラインナップ未設定のフェス ---
+  FESTIVALS: 77/86 件がラインナップなし
+
+--- 6. 公式URL未設定 ---
+  FESTIVALS: 75/86 件がURLなし
+  VENUES: 1/22 件がURLなし
+
+--- 7. 表記ゆれチェック（CITY） ---
+  表記ゆれ: ['Tokyo', 'TOKYO'] → どちらかに統一が必要
+  表記ゆれ: ['Kyoto', 'KYOTO'] → どちらかに統一が必要
+  表記ゆれ: ['Kochi', 'kochi'] → どちらかに統一が必要
+
+--- 8. 画像ファイルの実在チェック ---
+  参照先が存在しない画像: 7 件
+    [FESTIVALS] Technogaoka → images/festivals/technogaoka.webp
+    [VENUES] LIQUIDROOM → images/venues/liquidroom.webp
+    [VENUES] CLUBASIA → images/venues/clubasia.webp
+    [VENUES] MITSUKI → images/venues/mitsuki.webp
+    [VENUES] BONOBO → images/venues/bonobo.webp
+    [VENUES] FORESTLIMIT → images/venues/forestlimit.webp
+    [ARTICLES] 野外テクノパーティTranscendenceで見た次世代ジェネレーションの可能性 → images/articles/Transcendence.webp

@@ -762,9 +762,9 @@ function renderVenuesList() {
   document.getElementById('venues-grid').innerHTML = VENUES.filter(v => v.name && v.city && v.city !== 'undefined').map((v, i) => {
     const evCount = getVenueEvents(v.name).length;
     return `
-      <a href="#venue/${v.id}" class="venue-card reveal" data-city="${v.city}" style="transition-delay:${i * 80}ms">
+      <a href="/venues/${encodeURIComponent(v.id)}.html" onclick="event.preventDefault();location.hash='venue/'+this.dataset.vid" data-vid="${v.id}" class="venue-card reveal" data-city="${v.city}" style="transition-delay:${i * 80}ms">
         <div class="venue-card-content">
-          <div class="venue-card-city">${v.city}${v.area ? ' · ' + v.area : ''}</div>
+          <div class="venue-card-city">${[v.city, v.area].filter(Boolean).join(' · ')}</div>
           <div class="venue-card-name">${v.name}</div>
           <div class="venue-card-area">${v.capacity ? '~' + v.capacity : ''}</div>
           <div class="venue-card-genre">${v.genre ? (Array.isArray(v.genre) ? v.genre.join(' / ') : v.genre) : ''}</div>
@@ -841,12 +841,12 @@ function renderVenueDetail(id) {
       <div class="venue-detail-name">${v.name}</div>
       <div class="venue-detail-meta">
         <div class="venue-detail-tags">
-          <span>${v.city}</span>
+          ${v.city ? `<span>${v.city}</span>` : ''}
           ${v.area ? `<span>${v.area}</span>` : ''}
           ${v.capacity ? `<span>~${v.capacity}</span>` : ''}
           <span>${Array.isArray(v.genre) ? v.genre.join(' / ') : v.genre}</span>
         </div>
-        <div class="venue-detail-bio">${v.desc}</div>
+        <div class="venue-detail-bio">${v.desc || ''}</div>
         ${linksHtml ? `<div class="venue-detail-links">${linksHtml}</div>` : ''}
         ${buildShareButtons(`${v.name} — TECHNO JAPAN`, `https://techno-japan.media/venues.html#venue/${v.id}`)}
       </div>

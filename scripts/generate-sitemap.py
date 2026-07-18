@@ -86,7 +86,7 @@ def main():
     festival_ids = extract_ids(data, "FESTIVALS")
     for fid in festival_ids:
         urls.append({
-            "loc": f"{BASE_URL}/festivals.html#festival/{fid}",
+            "loc": f"{BASE_URL}/festivals/{fid}.html",
             "lastmod": today,
             "changefreq": "weekly",
             "priority": "0.7",
@@ -96,7 +96,7 @@ def main():
     artist_ids = extract_ids(data, "ARTISTS")
     for aid in artist_ids:
         urls.append({
-            "loc": f"{BASE_URL}/artists.html#artist/{aid}",
+            "loc": f"{BASE_URL}/artists/{aid}.html",
             "lastmod": today,
             "changefreq": "monthly",
             "priority": "0.6",
@@ -106,7 +106,7 @@ def main():
     venue_ids = extract_venue_ids(data)
     for vid in venue_ids:
         urls.append({
-            "loc": f"{BASE_URL}/venues.html#venue/{vid}",
+            "loc": f"{BASE_URL}/venues/{vid}.html",
             "lastmod": today,
             "changefreq": "monthly",
             "priority": "0.6",
@@ -116,7 +116,7 @@ def main():
     article_ids = extract_ids(data, "ARTICLES")
     for aid in article_ids:
         urls.append({
-            "loc": f"{BASE_URL}/news.html#article/{aid}",
+            "loc": f"{BASE_URL}/articles/{aid}.html",
             "lastmod": today,
             "changefreq": "monthly",
             "priority": "0.7",

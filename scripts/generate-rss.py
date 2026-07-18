@@ -101,7 +101,7 @@ def main():
     # Take latest 30 festivals
     for d, f in festivals[:30]:
         title = f["name"]
-        link = f"{BASE_URL}/festivals.html#festival/{f['id']}"
+        link = f"{BASE_URL}/festivals/{f['id']}.html"
         desc_text = f.get("desc") or f.get("description") or f"Festival on {d.isoformat()}"
         if f.get("city"):
             desc_text = f"{f['city']} — {desc_text}"
@@ -121,7 +121,7 @@ def main():
         if not a.get("id") or not (a.get("title") or a.get("name")):
             continue
         title = a.get("title") or a.get("name")
-        link = f"{BASE_URL}/news.html#article/{a['id']}"
+        link = f"{BASE_URL}/articles/{a['id']}.html"
         pub_str = a.get("publishedAt") or a.get("publishAt")
         try:
             pub = datetime.fromisoformat(pub_str.replace("Z", "+00:00")) if pub_str else datetime.now()

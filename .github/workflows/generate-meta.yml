@@ -26,6 +26,16 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # data.js から実URLの詳細ページを生成する。これを作らないと
+      # sitemap が指すURLが 404 になるので、sitemap 生成より前に実行する。
+      - name: Build detail pages
+        run: node scripts/build-detail-pages.mjs
+
       - name: Generate sitemap.xml
         run: python3 scripts/generate-sitemap.py
 
@@ -36,10 +46,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet LP/sitemap.xml LP/rss.xml; then
-            echo "No changes to sitemap.xml or rss.xml"
+          git add -A LP/sitemap.xml LP/rss.xml LP/articles LP/festivals LP/artists LP/venues
+          if git diff --cached --quiet; then
+            echo "No changes"
           else
-            git add LP/sitemap.xml LP/rss.xml
-            git commit -m "chore: regenerate sitemap.xml & rss.xml [skip ci]"
+            git commit -m "chore: regenerate detail pages, sitemap.xml & rss.xml [skip ci]"
             git push
           fi

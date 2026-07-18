@@ -283,6 +283,10 @@ body.rave-mode .festival-section:hover .festival-name {
   text-transform: uppercase;
   line-height: 0.95;
   margin-bottom: 24px;
+  /* クローラーが辿れるよう <a> にしたので、見た目は従来の見出しのまま保つ */
+  display: block;
+  color: inherit;
+  text-decoration: none;
 }
 
 .festival-desc-jp {
@@ -894,7 +898,7 @@ function buildRelatedFestivals(current) {
   if (!picks.length) return '';
 
   const cards = picks.map(f => `
-    <a href="#festival/${f.id}" class="related-card">
+    <a href="/festivals/${encodeURIComponent(f.id)}.html" onclick="event.preventDefault();location.hash='festival/'+this.dataset.fid" data-fid="${f.id}" class="related-card">
       <div class="related-card-img">${f.image ? `<img loading="lazy" decoding="async" src="${f.image}" alt="${f.name}" style="object-position:${f.imagePosition || 'center'}" onerror="this.style.display='none'">` : ''}</div>
       <div class="related-card-info">
         <div class="related-card-date">${formatFestDate(f.date)}</div>
@@ -1171,7 +1175,7 @@ function renderFestivalCard(f, m, i) {
         <div class="festival-info-col">
           <div class="festival-info-top">
             <div class="festival-month-label">${String(m + 1).padStart(2, '0')} / ${MONTHS[m]}</div>
-            <div class="festival-name">${f.name || ''}</div>
+            <a class="festival-name" href="/festivals/${encodeURIComponent(f.id)}.html" onclick="event.preventDefault();event.stopPropagation();showDetail('${f.id}')">${f.name || ''}</a>
             <div class="festival-desc-jp">${f.desc || ''}</div>
             ${lineupHtml}
           </div>
@@ -1317,9 +1321,9 @@ function renderDetail(id) {
       <div class="detail-hero-info">
         <div class="detail-date">${formatFestDate(f.date)}</div>
         <div class="detail-name">${f.name}</div>
-        <div class="detail-location">${f.location} — ${f.city}</div>
+        <div class="detail-location">${[f.location, f.city].filter(Boolean).join(' — ')}</div>
         <div class="detail-tags">${f.genre.map(g => `<span class="detail-tag">${g}</span>`).join('')}</div>
-        <div class="detail-desc">${f.desc}</div>
+        <div class="detail-desc">${f.desc || ''}</div>
         <div style="display:flex;gap:12px;flex-wrap:wrap;">
           ${officialHtml}
           ${ticketHtml}
