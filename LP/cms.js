@@ -679,7 +679,7 @@ function initArticleEditor(){
   }
   articleQuill = new Quill('#ar-body-editor', {
     theme: 'snow',
-    placeholder: '本文を書く...',
+    placeholder: '本文を書く…（📄テンプレで雛形挿入 / 画像はドラッグ&ドロップやペーストでOK / ⌘S 保存・⌘⇧F 集中モード）',
     modules: {
       toolbar: {
         container: [
@@ -840,6 +840,66 @@ function toggleArticlePreview(){
   if (on) updateArticlePreview(document.getElementById('ar-body').value, true);
 }
 
+/* ---------- 記事テンプレート ---------- */
+const ARTICLE_TEMPLATES = {
+  report: { label: '📍 イベントレポート', category: 'REPORT', html:
+    '<p>[導入 — いつ・どこで・何が行われたか。現場の第一印象を2〜3文で]</p><p><br></p>' +
+    '<h2>会場とサウンド</h2><p>[会場の様子、サウンドシステム、空間演出について]</p><p><br></p>' +
+    '<h2>ハイライト</h2><p>[印象に残ったDJ/ライブセット。時間帯ごとの流れ]</p><p><br></p>' +
+    '<h2>クラウドとカルチャー</h2><p>[客層、雰囲気、コミュニティとしての空気感]</p><p><br></p>' +
+    '<h2>総括</h2><p>[このイベントがシーンにとって持つ意味。次回への期待]</p>' },
+  interview: { label: '🎤 インタビュー', category: 'INTERVIEW', html:
+    '<p>[アーティスト紹介 — 経歴・活動・今回話を聞く理由を2〜3文で]</p><p><br></p>' +
+    '<h3>—— まず、最近の活動について聞かせてください。</h3><p>[回答]</p><p><br></p>' +
+    '<h3>—— [質問2]</h3><p>[回答]</p><p><br></p>' +
+    '<h3>—— [質問3]</h3><p>[回答]</p><p><br></p>' +
+    '<h3>—— 最後に、今後の予定を教えてください。</h3><p>[回答]</p><p><br></p>' +
+    '<p><em>[締め — ライブ情報やリリース情報へのリンク]</em></p>' },
+  news: { label: '⚡ ニュース', category: 'NEWS', html:
+    '<p>[リード文 — 何が・いつ・どこで。1〜2文で核心を]</p><p><br></p>' +
+    '<p>[詳細 — 背景、ラインナップ、注目ポイント]</p><p><br></p>' +
+    '<h3>開催情報</h3><ul><li>日程: [日付]</li><li>会場: [会場名]</li><li>チケット: [価格/リンク]</li></ul>' },
+  weekly: { label: '📅 週間まとめ', category: 'EVENTS', html:
+    '<p>[今週の見どころを2〜3文で]</p><p><br></p>' +
+    '<h2>[曜日] — [イベント名]</h2><p>[会場・出演者・ひとこと]</p><p><br></p>' +
+    '<h2>[曜日] — [イベント名]</h2><p>[会場・出演者・ひとこと]</p><p><br></p>' +
+    '<h2>[曜日] — [イベント名]</h2><p>[会場・出演者・ひとこと]</p>' },
+  column: { label: '💭 コラム', category: 'COLUMN', html:
+    '<p>[問題提起・きっかけ — なぜ今これを書くのか]</p><p><br></p>' +
+    '<h2>[論点1]</h2><p>[本文]</p><p><br></p>' +
+    '<h2>[論点2]</h2><p>[本文]</p><p><br></p>' +
+    '<h2>これからのこと</h2><p>[結論・読者への問いかけ]</p>' },
+};
+
+function toggleTemplateMenu(){
+  let menu = document.getElementById('ar-template-menu');
+  if (menu){ menu.remove(); return; }
+  const btn = document.getElementById('ar-template-toggle');
+  if (!btn) return;
+  menu = document.createElement('div');
+  menu.id = 'ar-template-menu';
+  menu.className = 'ar-template-menu';
+  menu.innerHTML = Object.entries(ARTICLE_TEMPLATES).map(([key, t]) =>
+    '<button type="button" onclick="applyArticleTemplate(\'' + key + '\')">' + t.label + '</button>'
+  ).join('');
+  btn.parentElement.style.position = 'relative';
+  btn.insertAdjacentElement('afterend', menu);
+  const close = (e) => { if (!menu.contains(e.target) && e.target !== btn){ menu.remove(); document.removeEventListener('click', close, true); } };
+  setTimeout(() => document.addEventListener('click', close, true), 0);
+}
+
+function applyArticleTemplate(key){
+  const t = ARTICLE_TEMPLATES[key];
+  if (!t) return;
+  const current = (document.getElementById('ar-body')?.value || '').replace(/<p><br><\/p>/g, '').trim();
+  if (current && !confirm('本文にすでに内容があります。テンプレートで置き換えますか？')) return;
+  setArticleBody(t.html);
+  const cat = document.getElementById('ar-category');
+  if (cat) cat.value = t.category;
+  document.getElementById('ar-template-menu')?.remove();
+  toast(t.label + ' の雛形を挿入しました', 'success');
+}
+
 /* ---------- 集中執筆モード（フルスクリーン） ---------- */
 function toggleFocusMode(){
   const wrap = document.getElementById('ar-editor-wrap');
@@ -853,7 +913,18 @@ function toggleFocusMode(){
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape'){
     const w = document.getElementById('ar-editor-wrap');
-    if (w && w.classList.contains('focus-mode')) toggleFocusMode();
+    if (w && w.classList.contains('focus-mode')){
+      toggleFocusMode();
+      // 後段の「編集キャンセル確認」まで発火させない
+      e.stopImmediatePropagation();
+    }
+  }
+  // Cmd+Shift+F: 集中モード切替（記事セクション表示中のみ）
+  if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === 'f'){
+    if (document.querySelector('.section.active')?.id === 'sec-article'){
+      e.preventDefault();
+      toggleFocusMode();
+    }
   }
 });
 
@@ -2017,16 +2088,23 @@ function renderList(section, rows){
     author:  [{k:'name',l:'Name'},{k:'id',l:'ID'},{k:'website',l:'Website'}],
   }[section];
   const showStatus = section !== 'author';
-  const ths=(showStatus?'<th style="width:40px">📊</th><th style="width:90px">Status</th>':'')+cols.map(c=>'<th>'+c.l+'</th>').join('')+'<th></th>';
+  const showThumb = ['article','artist','venue','festival'].includes(section);
+  const ths=(showThumb?'<th style="width:64px"></th>':'')+(showStatus?'<th style="width:40px">📊</th><th style="width:90px">Status</th>':'')+cols.map(c=>'<th>'+c.l+'</th>').join('')+'<th></th>';
   const trs=rows.map(r=>{
     let prefix='';
+    if(showThumb){
+      const img=String(r.image||'').trim();
+      prefix+= img
+        ? '<td class="thumb-cell"><img class="list-thumb" src="'+esc(img)+'" loading="lazy" onerror="this.outerHTML=\'<span class=list-thumb-none>✕</span>\'"></td>'
+        : '<td class="thumb-cell"><span class="list-thumb-none">—</span></td>';
+    }
     if(showStatus){
       const status=String(r.status||'published').toLowerCase();
       const statusBadge='<span class="status-pill status-'+esc(status)+'">'+esc(status)+'</span>';
       const comp=computeCompleteness(section, r);
       const compHtml=completenessBarHtml(comp.score);
       const noteIcon=r.editorNotes?' 📝':'';
-      prefix='<td>'+compHtml+'</td><td>'+statusBadge+noteIcon+'</td>';
+      prefix+='<td>'+compHtml+'</td><td>'+statusBadge+noteIcon+'</td>';
     }
     const tds=cols.map(c=>'<td>'+esc(r[c.k])+'</td>').join('');
     const nameVal=esc(r.name||r.title||r.id||'');
