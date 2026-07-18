@@ -610,7 +610,7 @@
 const WEEKDAYS = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
 const MONTHS_SHORT = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
 
-function parseDate(s) { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); }
+function parseDate(s) { if(!s) return new Date(NaN); const [y,m,d] = String(s).split('-').map(Number); return new Date(y, m-1, d); }
 function isUpcoming(s) { const t = new Date(); t.setHours(0,0,0,0); return parseDate(s) >= t; }
 function getArtist(id) { return ARTISTS.find(a => a.id === id); }
 

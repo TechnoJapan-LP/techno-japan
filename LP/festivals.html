@@ -814,20 +814,25 @@ footer { padding: 60px 40px; }
 const MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
 
 function formatFestDate(dateStr) {
+  if (!dateStr) return 'DATE TBA';
+  dateStr = String(dateStr);
   if (dateStr.includes('/')) {
     const [start, end] = dateStr.split('/');
     const [sy, sm, sd] = start.split('-').map(Number);
     const [ey, em, ed] = end.split('-').map(Number);
+    if (!sy || !sm || !sd) return 'DATE TBA';
     return `${MONTHS[sm-1]} ${sd} — ${ed}, ${sy}`;
   }
   const [y, m, d] = dateStr.split('-').map(Number);
+  if (!y || !m || !d) return 'DATE TBA';
   return `${MONTHS[m-1]} ${d}, ${y}`;
 }
 
 function getMonthFromDate(dateStr) {
-  const [start] = dateStr.split('/');
+  if (!dateStr) return -1;
+  const [start] = String(dateStr).split('/');
   const m = parseInt(start.split('-')[1], 10);
-  return m - 1; // 0-indexed
+  return isNaN(m) ? -1 : m - 1; // 0-indexed
 }
 
 function getArtist(id) {
@@ -921,23 +926,30 @@ function getSorted() {
     .filter(f => currentGenre === 'ALL' || genresOf(f).map(g => g.trim()).includes(currentGenre))
     .filter(f => currentArea === 'ALL' || festArea(f) === currentArea)
     .sort((a, b) => {
-      const aEnd = new Date(a.date.includes('/') ? a.date.split('/')[1] : a.date);
-      const bEnd = new Date(b.date.includes('/') ? b.date.split('/')[1] : b.date);
+      const ad = String(a.date || ''), bd = String(b.date || '');
+      const aEnd = new Date(ad.includes('/') ? ad.split('/')[1] : ad);
+      const bEnd = new Date(bd.includes('/') ? bd.split('/')[1] : bd);
+      // 日付なしは常に末尾へ
+      const aBad = isNaN(aEnd), bBad = isNaN(bEnd);
+      if (aBad !== bBad) return aBad ? 1 : -1;
+      if (aBad && bBad) return 0;
       const aFuture = aEnd >= now;
       const bFuture = bEnd >= now;
       // Future festivals first, then past
       if (aFuture !== bFuture) return aFuture ? -1 : 1;
       // Within future: earliest first; within past: most recent first
-      if (aFuture) return new Date(a.date.split('/')[0]) - new Date(b.date.split('/')[0]);
-      return new Date(b.date.split('/')[0]) - new Date(a.date.split('/')[0]);
+      if (aFuture) return new Date(ad.split('/')[0]) - new Date(bd.split('/')[0]);
+      return new Date(bd.split('/')[0]) - new Date(ad.split('/')[0]);
     });
 }
 
 function isFuture(dateStr) {
+  if (!dateStr) return false;
+  dateStr = String(dateStr);
   const now = new Date();
   now.setHours(0, 0, 0, 0);
   const end = new Date(dateStr.includes('/') ? dateStr.split('/')[1] : dateStr);
-  return end >= now;
+  return !isNaN(end) && end >= now;
 }
 
 /* ========== GENRE / AREA FILTERS ========== */

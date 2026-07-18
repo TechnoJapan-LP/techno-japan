@@ -897,11 +897,15 @@ if (typeof ARTICLES === 'undefined' || !ARTICLES.length) {
 /* ========== HELPERS ========== */
 const MONTHS_S = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
 function formatDate(dateStr) {
-  const [y, m, d] = dateStr.split('-').map(Number);
+  if (!dateStr) return '';
+  const [y, m, d] = String(dateStr).split('-').map(Number);
+  if (!y || !m || !d) return '';
   return `${MONTHS_S[m-1]} ${d}, ${y}`;
 }
 function formatDateSplit(dateStr) {
-  const [y, m, d] = dateStr.split('-').map(Number);
+  if (!dateStr) return '';
+  const [y, m, d] = String(dateStr).split('-').map(Number);
+  if (!y || !m || !d) return '';
   return `${MONTHS_S[m-1]} ${String(d).padStart(2,'0')}<br>${y}`;
 }
 

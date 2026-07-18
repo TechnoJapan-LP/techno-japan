@@ -248,6 +248,9 @@ function switchTab(section, tab, opts) {
   // 新規記事フォームを開いた時に下書きがあれば復元提案
   if (tab === 'form' && section === 'article' && !(opts && opts.fromEdit) && !(editState && editState.article)) {
     setTimeout(tryRecoverArticleDraft, 100);
+    // DATE 未入力のまま公開すると記事詳細が開けないため、今日の日付をプリフィル
+    const dEl = document.getElementById('ar-date');
+    if (dEl && !dEl.value) dEl.value = new Date().toISOString().slice(0, 10);
   }
   parent.querySelectorAll('.tab-bar button').forEach((b, i) => {
     b.classList.toggle('active', (tab === 'list' && i === 0) || (tab === 'form' && i === 1));
@@ -836,6 +839,23 @@ function toggleArticlePreview(){
   // 開いた瞬間に最新HTMLで更新
   if (on) updateArticlePreview(document.getElementById('ar-body').value, true);
 }
+
+/* ---------- 集中執筆モード（フルスクリーン） ---------- */
+function toggleFocusMode(){
+  const wrap = document.getElementById('ar-editor-wrap');
+  if (!wrap) return;
+  const on = wrap.classList.toggle('focus-mode');
+  document.body.classList.toggle('ar-focus-open', on);
+  const btn = document.getElementById('ar-focus-toggle');
+  if (btn){ btn.textContent = on ? '✕ 閉じる (Esc)' : '⛶ 集中モード'; btn.classList.toggle('active', on); }
+  if (on){ const ed = document.querySelector('#ar-body-editor .ql-editor'); if (ed) ed.focus(); }
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape'){
+    const w = document.getElementById('ar-editor-wrap');
+    if (w && w.classList.contains('focus-mode')) toggleFocusMode();
+  }
+});
 
 function setArticleBody(html){
   const v = html || '';
@@ -2306,6 +2326,7 @@ function saveEdit(section){
       date:g('ar-date'),author:g('ar-author'),image:g('ar-image'),readTime:g('ar-readTime'),
       views:g('ar-views'),featured:g('ar-featured'),excerpt:g('ar-excerpt'),
       body:g('ar-body'),tags:g('ar-tags'),status:g('ar-status')});
+    if(!payload.date) payload.date = new Date().toISOString().slice(0,10); // DATE空のまま保存すると記事詳細が壊れるため
   }
   else if(section==='author'){
     Object.assign(payload,{id:g('au-id'),name:g('au-name'),bio:g('au-bio'),
@@ -3234,6 +3255,7 @@ function submitToSheet(section){
       views:g('ar-views'),featured:g('ar-featured'),excerpt:g('ar-excerpt'),
       body:g('ar-body'),tags:g('ar-tags'),status:g('ar-status')};
     if(!payload.id||!payload.title)return toast('ID and Title required','error');
+    if(!payload.date) payload.date = new Date().toISOString().slice(0,10); // DATE空のまま公開すると記事詳細が壊れるため
   }
   else if(section==='author'){
     payload={action:'add_author',id:g('au-id'),name:g('au-name'),bio:g('au-bio'),
@@ -3713,6 +3735,8 @@ function fmtDate(d){
   return s;
 }
 function buildArtistsJs(rows){
+  // draft と id 無し行は公開しない（ARTICLES と同じルール）
+  rows = rows.filter(r => String(r.id||'').trim() && (!r.status || String(r.status).toLowerCase() === 'published'));
   const items=rows.map(r=>{
     const l=[];
     l.push('  {');
@@ -3740,6 +3764,8 @@ function buildArtistsJs(rows){
   return 'const ARTISTS = [\n'+items.join('\n')+'\n];';
 }
 function buildEventsJs(rows){
+  // draft と id 無し行は公開しない（ARTICLES と同じルール）
+  rows = rows.filter(r => String(r.id||'').trim() && (!r.status || String(r.status).toLowerCase() === 'published'));
   const items=rows.map(r=>{
     const l=[];
     l.push('  {');
@@ -3760,6 +3786,8 @@ function buildEventsJs(rows){
   return 'const EVENTS = [\n'+items.join('\n')+'\n];';
 }
 function buildFestivalsJs(rows){
+  // draft と id 無し行は公開しない（ARTICLES と同じルール）
+  rows = rows.filter(r => String(r.id||'').trim() && (!r.status || String(r.status).toLowerCase() === 'published'));
   const items=rows.map(r=>{
     const l=[];
     l.push('  {');
@@ -3807,6 +3835,8 @@ function buildFestivalsJs(rows){
   return 'const FESTIVALS = [\n'+items.join('\n')+'\n];';
 }
 function buildVenuesJs(rows){
+  // draft と id 無し行は公開しない（ARTICLES と同じルール）
+  rows = rows.filter(r => String(r.id||'').trim() && (!r.status || String(r.status).toLowerCase() === 'published'));
   const items=rows.map(r=>{
     const l=[];
     l.push('  {');
