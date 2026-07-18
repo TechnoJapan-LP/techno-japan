@@ -25,10 +25,31 @@ jobs:
           import os
 
           GAS_URL = "https://script.google.com/macros/s/AKfycbxhJ6rtGoAirNyV5TtBvzWHNOT8RuB0nfDjwglmdu8ClhpWZ-OXSbMM4UyFE_7ZsV-Lpg/exec"
-          CMS_AUTH = os.environ.get('CMS_AUTH', '')
+          PASS_HASH = os.environ.get('CMS_AUTH', '')
+
+          # CMS はセッショントークン認証になったため、まず login でトークンを取得する。
+          # （以前はパスワードハッシュを直接 cmsAuth に送っていたが、現在は必ず弾かれる）
+          if not PASS_HASH:
+              raise SystemExit("CMS_AUTH_HASH secret が未設定です")
+
+          req = urllib.request.Request(
+              GAS_URL,
+              data=json.dumps({'action': 'login', 'passHash': PASS_HASH}).encode('utf-8'),
+              method='POST',
+          )
+          with urllib.request.urlopen(req) as res:
+              login = json.loads(res.read().decode('utf-8'))
+          CMS_AUTH = login.get('token') if login.get('status') == 'ok' else None
+          if not CMS_AUTH:
+              raise SystemExit(
+                  "ログイン失敗: " + str(login.get('message') or login) +
+                  " — CMS_AUTH_HASH が現在のパスワードの SHA-256 と一致しているか確認してください"
+              )
+          print("Logged in: session token acquired")
 
           # 各フォルダタイプを同期
           FOLDERS = ["venues", "festivals", "artists", "articles"]
+          failures = []
 
           for folder_type in FOLDERS:
               print(f"\n--- Syncing {folder_type} ---")
@@ -42,10 +63,12 @@ jobs:
                       data = json.loads(res.read().decode('utf-8'))
               except Exception as e:
                   print(f"Failed to fetch {folder_type}: {e}")
+                  failures.append(folder_type)
                   continue
 
               if data.get('status') != 'ok':
                   print(f"Error: {data.get('message')}")
+                  failures.append(folder_type)
                   continue
 
               images = data.get('images', [])
@@ -61,6 +84,9 @@ jobs:
                   except Exception as e:
                       print(f"Failed: {img['name']} — {e}")
 
+          # 握りつぶすと「成功」と表示されて故障に気づけないので、明示的に落とす。
+          if failures:
+              raise SystemExit(f"同期に失敗したフォルダ: {', '.join(failures)}")
           print("\nSync complete.")
           PYTHON
 
@@ -68,7 +94,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add LP/images/venues/ LP/images/festivals/ LP/images/artists/
+          git add LP/images/venues/ LP/images/festivals/ LP/images/artists/ LP/images/articles/
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
