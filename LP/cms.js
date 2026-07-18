@@ -1812,6 +1812,7 @@ function aiGenerate(section){
    LIST — LOAD
    ============================================================== */
 let festivalYearFilter = 'ALL';
+let festivalMonthFilter = 'ALL';
 
 /* ==============================================================
    PERFORMANCE — debounce helper
@@ -1907,34 +1908,81 @@ function loadList(section, opts){
     }).catch(err=>{if(container && !silent){container.innerHTML='<div class="data-list-empty">Error: '+err.message+'</div>';toast('Load error','error')}});
 }
 
+/* 日付セルは ISO ("2026-07-24" / "2026-07-24/2026-07-26") と
+   JS Date.toString() ("Sun Jul 26 2026 ...") が混在する。YYYY-MM に正規化する。 */
+const MONTH_LABELS=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+function ymOf(dateVal){
+  const s=String(dateVal||'').trim();
+  if(!s) return '';
+  const head=s.split('/')[0].trim();
+  const iso=head.match(/(\d{4})-(\d{2})/);
+  if(iso) return iso[1]+'-'+iso[2];
+  const d=new Date(head);
+  if(!isNaN(d)) return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+  return '';
+}
+
 function buildYearFilter(rows){
-  const years = [...new Set(rows.map(r=>(r.date||'').substring(0,4)).filter(Boolean))].sort().reverse();
+  const yms=[...new Set(rows.map(r=>ymOf(r.date)).filter(Boolean))];
+  const years=[...new Set(yms.map(v=>v.slice(0,4)))].sort().reverse();
   const c=document.getElementById('festival-year-filter');
-  c.innerHTML='<span style="font-family:var(--font-mono);font-size:.65rem;letter-spacing:1px;color:var(--text3);text-transform:uppercase">Year:</span>';
-  const allBtn=document.createElement('button');
-  allBtn.className='btn btn-sm'+(festivalYearFilter==='ALL'?' btn-accent':'');
-  allBtn.textContent='ALL';
-  allBtn.onclick=()=>{festivalYearFilter='ALL';filterFestivalList();highlightYearBtn()};
-  c.appendChild(allBtn);
-  years.forEach(y=>{
+  const label=t=>'<span style="font-family:var(--font-mono);font-size:.65rem;letter-spacing:1px;color:var(--text3);text-transform:uppercase">'+t+'</span>';
+  c.innerHTML='';
+  c.style.flexWrap='wrap';
+
+  const yearRow=document.createElement('div');
+  yearRow.style.cssText='display:flex;gap:6px;align-items:center;flex-wrap:wrap;width:100%';
+  yearRow.innerHTML=label('Year:');
+  const mkYear=(val,text)=>{
     const b=document.createElement('button');
-    b.className='btn btn-sm'+(festivalYearFilter===y?' btn-accent':'');
-    b.textContent=y; b.dataset.year=y;
-    b.onclick=()=>{festivalYearFilter=y;filterFestivalList();highlightYearBtn()};
-    c.appendChild(b);
+    b.className='btn btn-sm'+(festivalYearFilter===val?' btn-accent':'');
+    b.textContent=text; b.dataset.year=val;
+    b.onclick=()=>{festivalYearFilter=val;filterFestivalList();highlightYearBtn()};
+    yearRow.appendChild(b);
+  };
+  mkYear('ALL','ALL');
+  years.forEach(y=>mkYear(y,y));
+  c.appendChild(yearRow);
+
+  // 月フィルタ。年が ALL のときは全年の同じ月を対象にする。
+  const monthRow=document.createElement('div');
+  monthRow.style.cssText='display:flex;gap:6px;align-items:center;flex-wrap:wrap;width:100%;margin-top:6px';
+  monthRow.innerHTML=label('Month:');
+  const available=new Set(yms.filter(v=>festivalYearFilter==='ALL'||v.startsWith(festivalYearFilter)).map(v=>v.slice(5,7)));
+  const mkMonth=(val,text,enabled)=>{
+    const b=document.createElement('button');
+    b.className='btn btn-sm'+(festivalMonthFilter===val?' btn-accent':'');
+    b.textContent=text; b.dataset.month=val;
+    if(!enabled){ b.disabled=true; b.style.opacity='.3'; b.title='該当データなし'; }
+    else b.onclick=()=>{festivalMonthFilter=val;filterFestivalList();highlightYearBtn()};
+    monthRow.appendChild(b);
+  };
+  mkMonth('ALL','ALL',true);
+  MONTH_LABELS.forEach((lbl,i)=>{
+    const mm=String(i+1).padStart(2,'0');
+    mkMonth(mm,lbl,available.has(mm));
   });
+  c.appendChild(monthRow);
 }
 
 function highlightYearBtn(){
   document.querySelectorAll('#festival-year-filter .btn').forEach(b=>{
-    const isActive=(festivalYearFilter==='ALL'&&b.textContent==='ALL')||(b.dataset.year===festivalYearFilter);
+    const isActive=(b.dataset.year!==undefined&&b.dataset.year===festivalYearFilter)||
+                   (b.dataset.month!==undefined&&b.dataset.month===festivalMonthFilter);
     b.classList.toggle('btn-accent',isActive);
   });
+  // 年を切り替えると選択可能な月が変わるので、フィルタUIを組み直す。
+  const rows=listCache.festival||[];
+  if(rows.length) buildYearFilter(rows);
 }
 
 function filterByYear(rows){
-  if(festivalYearFilter==='ALL') return rows;
-  return rows.filter(r=>(r.date||'').startsWith(festivalYearFilter));
+  return rows.filter(r=>{
+    const ym=ymOf(r.date);
+    if(festivalYearFilter!=='ALL' && ym.slice(0,4)!==festivalYearFilter) return false;
+    if(festivalMonthFilter!=='ALL' && ym.slice(5,7)!==festivalMonthFilter) return false;
+    return true;
+  });
 }
 
 function renderList(section, rows){
