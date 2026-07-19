@@ -241,7 +241,7 @@ a196eb1 feat(home): arrow controls for ARTISTS carousel
 
 ### サイトマップ・RSS手動生成
 ```bash
-cd /Users/shibatatatsuya/Documents/GitHub/techno-japan
+cd /Users/shibatatatsuya/Developer/techno-japan
 python3 scripts/generate-sitemap.py
 python3 scripts/generate-rss.py
 ```

@@ -12,7 +12,7 @@
 ## 構成
 
 ```
-/Users/shibatatatsuya/Documents/GitHub/techno-japan/
+/Users/shibatatatsuya/Developer/techno-japan/
 ├── LP/
 │   ├── cms.html         ← メインのCMS（4500行超）
 │   ├── data.js          ← LP用データ（CMSからExport）
@@ -141,7 +141,7 @@
 
 ## 開発ワークフロー
 
-- **ローカル**: `/Users/shibatatatsuya/Documents/GitHub/techno-japan/LP/cms.html` で編集
+- **ローカル**: `/Users/shibatatatsuya/Developer/techno-japan/LP/cms.html` で編集
 - **プレビュー**: `/tmp/lp-preview/cms.html` (port 8080)
 - **本番反映**: GitHub Desktop で commit & push → 数分後に GitHub Pages に反映
 - **GAS編集**: Google Apps Script エディタで直接、デプロイ時は既存デプロイの「編集→新バージョン」
@@ -153,7 +153,7 @@
 新しい Claude のチャットを開いて、最初に下記のように声をかけてください：
 
 > このプロジェクトの続きをやりたい。  
-> `/Users/shibatatatsuya/Documents/GitHub/techno-japan/PROJECT_SUMMARY.md` を読んで、現状を把握してください。
+> `/Users/shibatatatsuya/Developer/techno-japan/PROJECT_SUMMARY.md` を読んで、現状を把握してください。
 
 これで Claude がファイルを読んで全体像を理解してくれます。
 
