@@ -917,10 +917,8 @@ function buildRelatedFestivals(current) {
 
 let currentMode = 'festival'; // 'festival' or 'rave'
 let currentGenre = 'ALL';
-let currentArea = 'ALL';
 
 const genresOf = f => Array.isArray(f.genre) ? f.genre : (f.genre ? [f.genre] : []);
-const festArea = f => (f.city || '').trim();
 
 function getSorted() {
   const now = new Date();
@@ -928,7 +926,6 @@ function getSorted() {
   return [...FESTIVALS]
     .filter(f => (f.type || 'festival') === currentMode)
     .filter(f => currentGenre === 'ALL' || genresOf(f).map(g => g.trim()).includes(currentGenre))
-    .filter(f => currentArea === 'ALL' || festArea(f) === currentArea)
     .sort((a, b) => {
       const ad = String(a.date || ''), bd = String(b.date || '');
       const aEnd = new Date(ad.includes('/') ? ad.split('/')[1] : ad);
@@ -962,15 +959,12 @@ function buildFilters() {
   if (!box) return;
   const modeFests = FESTIVALS.filter(f => (f.type || 'festival') === currentMode);
   const genres = [...new Set(modeFests.flatMap(genresOf).map(g => g.trim()).filter(Boolean))].sort();
-  const areas = [...new Set(modeFests.map(festArea).filter(Boolean))].sort();
   const chip = (val, cur, key) =>
     `<button class="fest-filter-chip${val === cur ? ' active' : ''}" data-filter="${key}" data-val="${val}">${val}</button>`;
   box.innerHTML =
-    `<div class="fest-filter-row"><span class="fest-filter-key">Genre</span>${['ALL', ...genres].map(g => chip(g, currentGenre, 'genre')).join('')}</div>` +
-    `<div class="fest-filter-row"><span class="fest-filter-key">Area</span>${['ALL', ...areas].map(a => chip(a, currentArea, 'area')).join('')}</div>`;
+    `<div class="fest-filter-row"><span class="fest-filter-key">Genre</span>${['ALL', ...genres].map(g => chip(g, currentGenre, 'genre')).join('')}</div>`;
   box.querySelectorAll('.fest-filter-chip').forEach(b => b.addEventListener('click', () => {
-    if (b.dataset.filter === 'genre') currentGenre = b.dataset.val;
-    else currentArea = b.dataset.val;
+    currentGenre = b.dataset.val;
     currentMonth = 'ALL';
     buildFilters();
     buildMonthNav();
@@ -1009,7 +1003,6 @@ function initModeToggle() {
     // Re-render content
     currentMonth = 'ALL';
     currentGenre = 'ALL';
-    currentArea = 'ALL';
     buildFilters();
     buildMonthNav();
     renderFestivals();
