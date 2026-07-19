@@ -391,12 +391,26 @@ function venuePage(v) {
 function writeAll(pages, dirName) {
   const dir = path.join(LP_DIR, dirName);
   fs.mkdirSync(dir, { recursive: true });
-  // 既存の生成物を消してから書き直す（削除されたデータのページを残さない）
-  for (const f of fs.readdirSync(dir)) {
-    if (f.endsWith('.html')) fs.unlinkSync(path.join(dir, f));
+
+  // 中身が変わったファイルだけ書く。
+  // 毎回「全削除→全書き直し」にすると、iCloud/Drive 同期下では大量の書き込みが
+  // 競合コピー（"foo 2.html"）を生む。差分だけ触れば通常は書き込み0件で済む。
+  const wanted = new Map(pages.map((p) => [path.basename(p.file), p]));
+  let written = 0;
+
+  for (const [name, p] of wanted) {
+    const cur = fs.existsSync(p.file) ? fs.readFileSync(p.file, 'utf8') : null;
+    if (cur !== p.html) { fs.writeFileSync(p.file, p.html); written++; }
   }
-  for (const p of pages) fs.writeFileSync(p.file, p.html);
-  return pages.length;
+
+  // データから消えたページは削除する（同期が作った重複コピーもここで掃除される）
+  let removed = 0;
+  for (const f of fs.readdirSync(dir)) {
+    if (!f.endsWith('.html')) continue;
+    if (!wanted.has(f)) { fs.unlinkSync(path.join(dir, f)); removed++; }
+  }
+
+  return { total: pages.length, written, removed };
 }
 
 function main() {
@@ -416,9 +430,13 @@ function main() {
     venues: writeAll(VENUES.filter(valid).filter((v) => v.name && v.city && v.city !== 'undefined').map(venuePage), 'venues'),
   };
 
-  console.log('Generated detail pages:');
-  for (const [k, v] of Object.entries(counts)) console.log(`  ${k}: ${v}`);
-  console.log(`  total: ${Object.values(counts).reduce((a, b) => a + b, 0)}`);
+  console.log('Detail pages:');
+  let total = 0, written = 0, removed = 0;
+  for (const [k, v] of Object.entries(counts)) {
+    console.log(`  ${k}: ${v.total} pages (updated ${v.written}, removed ${v.removed})`);
+    total += v.total; written += v.written; removed += v.removed;
+  }
+  console.log(`  total: ${total} pages — ${written} written, ${removed} removed`);
 }
 
 main();
