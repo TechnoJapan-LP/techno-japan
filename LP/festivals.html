@@ -494,6 +494,16 @@ body.rave-mode .festival-section:hover .festival-name {
 .festival-image-wrap { position: relative; }
 .fest-fav-mount { position: absolute; top: 12px; right: 12px; z-index: 5; }
 
+/* RELATED STORIES（記事への導線） */
+.story-link-card { display: flex; gap: 20px; align-items: center; border: 1px solid rgba(240,237,232,0.12); padding: 18px; margin-top: 24px; transition: border-color 0.25s ease; }
+.story-link-card:hover { border-color: var(--accent); }
+.story-link-thumb { width: 130px; aspect-ratio: 4/3; object-fit: cover; flex-shrink: 0; background: rgba(240,237,232,0.05); }
+.story-link-meta { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+.story-link-title { font-family: var(--font-body); font-weight: 300; font-size: 17px; line-height: 1.5; margin-bottom: 10px; }
+.story-link-cta { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.5; }
+.story-link-card:hover .story-link-cta { opacity: 1; }
+@media (max-width: 640px) { .story-link-thumb { width: 92px; } }
+
 /* RELATED FESTIVALS */
 .related-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 24px; }
 .related-card { display: block; background: rgba(240,237,232,0.02); border: 1px solid rgba(240,237,232,0.06); transition: border-color 0.3s ease, transform 0.3s ease; cursor: pointer; }
@@ -797,7 +807,7 @@ footer { padding: 60px 40px; }
 <script src="common.js" defer></script>
 <script src="favorites.js" defer></script>
 <script src="search.js" defer></script>
-<script src="data.js?v=5"></script>
+<script src="data.js?v=6"></script>
 <script>
 
 /* Hide nav on scroll down, show on scroll up */
@@ -912,6 +922,27 @@ function buildRelatedFestivals(current) {
     <div class="detail-section">
       <div class="detail-section-label">RELATED FESTIVALS</div>
       <div class="related-grid">${cards}</div>
+    </div>`;
+}
+
+/* ========== RELATED STORIES（このフェスを取り上げた記事） ========== */
+function buildRelatedStories(current) {
+  const arts = (typeof ARTICLES !== 'undefined' ? ARTICLES : [])
+    .filter(a => a.festivalId === current.id && a.status !== 'draft');
+  if (!arts.length) return '';
+  const cards = arts.map(a => `
+    <a class="story-link-card" href="/articles/${encodeURIComponent(a.id)}.html">
+      ${a.image ? `<img class="story-link-thumb" src="${a.image}" alt="" loading="lazy" decoding="async">` : ''}
+      <div>
+        <div class="story-link-meta">${a.category || 'STORY'}${a.date ? ' · ' + formatFestDate(a.date) : ''}</div>
+        <div class="story-link-title">${a.title}</div>
+        <div class="story-link-cta">READ STORY <span class="arrow-r">→</span></div>
+      </div>
+    </a>`).join('');
+  return `
+    <div class="detail-section">
+      <div class="detail-section-label">RELATED STORIES</div>
+      ${cards}
     </div>`;
 }
 
@@ -1340,6 +1371,7 @@ function renderDetail(id) {
       <div class="editions-timeline">${editionsHtml}</div>
     </div>` : ''}
 
+    ${buildRelatedStories(f)}
     ${buildRelatedFestivals(f)}
   `;
 

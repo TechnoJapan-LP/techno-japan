@@ -187,6 +187,9 @@
 | cardRatio | `auto` / `4:5` / `1:1` / `3:2` / `16:9` / 空 | **トップページのカード**での画像表示比率。空欄なら従来の見た目のまま。`auto`は元画像の縦横比で切り抜かない |
 | heroRatio | `auto` / `4:5` / `1:1` / `3:2` / `16:9` / 空 | **記事詳細ページのヒーロー**での画像表示比率。空欄なら16:9。縦長写真は`auto`推奨 |
 | READTIME | `2` | 分。ビルド時にbodyから自動計算も可 |
+| festivalId | `transcendence` | 関連フェスのID。設定するとフェス詳細ページ（SPA/静的とも）に RELATED STORIES として記事カードが表示される |
+
+**本文内リンク（ショートコード）**: BODY 中に `[[festival:rural]]` / `[[artist:dj-nobu]]` / `[[venue:womb]]` / `[[article:id]]` と書くと、表示時に各詳細ページへのリンクに変換される。表示名はデータから自動で引く。`[[artist:dj-nobu|ノブさん]]` のように `|` でラベル指定も可。CMSエディタの「＠ ID」ボタンから検索して挿入できる。
 | FEATURED | `TRUE` / 空欄 | トップ掲載フラグ |
 | EXCERPT / EXCERPT_EN | | |
 | body | HTML | セル上限5万字に注意。超える場合はGoogle Docs参照方式に移行を検討 |

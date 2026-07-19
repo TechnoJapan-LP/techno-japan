@@ -62,6 +62,17 @@ function ratioAttr(r) {
   if (!/^\d+:\d+$/.test(v)) return '';
   return ` data-ratio="${v}" style="aspect-ratio:${v.replace(':', '/')}"`;
 }
+// 本文中の [[festival:id]] / [[artist:id]] / [[venue:id]] を詳細ページへのリンクに変換
+function makeEntityResolver(data) {
+  const table = { festival: data.FESTIVALS || [], artist: data.ARTISTS || [], venue: data.VENUES || [], article: data.ARTICLES || [] };
+  return (html) => String(html || '').replace(/\[\[(festival|artist|venue|article):([a-z0-9-]+)(?:\|([^\]]+))?\]\]/g, (m, type, id, label) => {
+    const rec = (table[type] || []).find((x) => x.id === id);
+    const name = label || (rec && (rec.name || rec.title)) || id;
+    const dir = type === 'article' ? 'articles' : type + 's';
+    return `<a class="entity-link" href="/${dir}/${id}.html">${esc(name)}</a>`;
+  });
+}
+
 const MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
 function fmtDate(d) {
   if (!d) return '';
@@ -183,7 +194,7 @@ ${GA}
 }
 
 /* ---------- 記事ページ ---------- */
-function articlePage(a) {
+function articlePage(a, resolveEntities) {
   const canonical = `${BASE}/articles/${a.id}.html`;
   const title = `${a.title} — TECHNO JAPAN`;
   const desc = a.excerpt || truncate(stripTags(a.body), 160);
@@ -211,19 +222,27 @@ function articlePage(a) {
     url: canonical,
   };
 
+  const heroBlock = a.image
+    ? `<header class="article-hero"${ratioAttr(a.heroRatio)}>
+        <img src="/${String(a.image).replace(/^\//, '')}" alt="${esc(a.title)}" fetchpriority="high" decoding="async">
+        <div class="article-hero-overlay">
+          <div class="article-chips"><span class="cat-pill">${esc(a.category || 'NEWS')}</span></div>
+          <h1>${esc(a.title)}</h1>
+        </div>
+      </header>`
+    : `<div class="article-meta-top"><span class="cat-pill">${esc(a.category || 'NEWS')}</span></div><h1>${esc(a.title)}</h1>`;
+
   const body = `<article class="article-detail">
   <div class="article-detail-inner">
     <a class="article-back" href="/news.html"><span class="arrow"></span> ALL STORIES</a>
-    <div class="article-meta-top">
-      <span class="cat-pill">${esc(a.category || 'NEWS')}</span>
-      <span>${esc(fmtDate(a.date))}</span>
-      <span>${esc(a.readTime || 5)} MIN READ</span>
-      ${a.author ? `<span>BY ${esc(a.author)}</span>` : ''}
-    </div>
-    <h1>${esc(a.title)}</h1>
+    ${heroBlock}
+    <dl class="article-specs">
+      <div><dt>WORDS BY</dt><dd>${esc(a.author || 'TECHNO JAPAN')}</dd></div>
+      <div><dt>PUBLISHED</dt><dd>${esc(fmtDate(a.date) || '—')}</dd></div>
+      <div><dt>READING TIME</dt><dd>${esc(a.readTime || 5)} MIN</dd></div>
+    </dl>
     <div class="article-excerpt">${esc(a.excerpt || '')}</div>
-    ${a.image ? `<div class="article-hero-img"${ratioAttr(a.heroRatio)}><img src="/${String(a.image).replace(/^\//, '')}" alt="${esc(a.title)}"></div>` : ''}
-    <div class="article-body">${a.body || ''}</div>
+    <div class="article-body">${resolveEntities(a.body || '')}</div>
     <div class="article-footer">
       ${tags ? `<div class="article-tags">${tags}</div>` : ''}
       <a class="article-back" href="/news.html" style="margin:0"><span class="arrow"></span> ALL STORIES</a>
@@ -235,13 +254,24 @@ function articlePage(a) {
 }
 
 /* ---------- フェスティバルページ ---------- */
-function festivalPage(f, artistsById) {
+function festivalPage(f, artistsById, articles) {
   const canonical = `${BASE}/festivals/${f.id}.html`;
   const title = `${f.name} — TECHNO JAPAN`;
   const dateLabel = fmtFestDate(f.date);
   const place = [f.location, f.city].filter(Boolean).join(', ');
   const desc = f.desc || `${f.name}（${dateLabel}${place ? ' / ' + place : ''}）の開催情報・ラインナップ。日本のテクノ／ハウスのフェスティバル情報。`;
   const image = absUrl(f.image || f.flyer);
+
+  // このフェスに紐づく記事（ARTICLES.festivalId で関連付け）
+  const related = (articles || []).filter((a) => a.festivalId === f.id && a.status !== 'draft');
+  const relatedHtml = related.length
+    ? `<div class="related-stories"><h2>RELATED STORIES</h2>` + related.map((a) =>
+        `<a class="related-story-card" href="/articles/${a.id}.html">
+          ${a.image ? `<img class="related-story-thumb" src="/${String(a.image).replace(/^\//, '')}" alt="" loading="lazy">` : ''}
+          <div><div class="related-story-meta">${esc(a.category || 'STORY')} · ${esc(fmtDate(a.date))}</div>
+          <div class="related-story-title">${esc(a.title)}</div></div>
+        </a>`).join('') + `</div>`
+    : '';
 
   const lineup = (f.lineup || [])
     .map((n) => {
@@ -290,6 +320,7 @@ function festivalPage(f, artistsById) {
       ${f.ticketUrl ? `<div><dt>チケット</dt><dd><a href="${esc(f.ticketUrl)}" target="_blank" rel="noopener">購入ページ</a></dd></div>` : ''}
     </dl>
     ${lineup ? `<h2>LINE UP</h2><div class="lineup-list">${lineup}</div>` : ''}
+    ${relatedHtml}
     <div class="article-footer"><a class="article-back" href="/festivals.html" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
   </div>
 </article>`;
@@ -423,9 +454,10 @@ function main() {
 
   const valid = (x) => x && x.id && String(x.id).trim();
 
+  const resolveEntities = makeEntityResolver({ ARTISTS, FESTIVALS, VENUES, ARTICLES });
   const counts = {
-    articles: writeAll(ARTICLES.filter(valid).filter((a) => a.status !== 'draft').map(articlePage), 'articles'),
-    festivals: writeAll(FESTIVALS.filter(valid).map((f) => festivalPage(f, artistsById)), 'festivals'),
+    articles: writeAll(ARTICLES.filter(valid).filter((a) => a.status !== 'draft').map((a) => articlePage(a, resolveEntities)), 'articles'),
+    festivals: writeAll(FESTIVALS.filter(valid).map((f) => festivalPage(f, artistsById, ARTICLES)), 'festivals'),
     artists: writeAll(ARTISTS.filter(valid).map(artistPage), 'artists'),
     venues: writeAll(VENUES.filter(valid).filter((v) => v.name && v.city && v.city !== 'undefined').map(venuePage), 'venues'),
   };

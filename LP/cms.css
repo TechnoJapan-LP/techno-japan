@@ -306,3 +306,23 @@ body.ar-focus-open{overflow:hidden}
 .ar-template-menu button{background:transparent;border:none;color:var(--text);text-align:left;padding:10px 14px;font-size:.85rem;cursor:pointer;font-family:var(--font-body)}
 .ar-template-menu button:hover{background:var(--bg3)}
 .ar-editor-tabs{position:relative}
+
+/* ---------- 記事エディタ: フォント/サイズ選択の表示 ---------- */
+.ql-snow .ql-picker.ql-font .ql-picker-label::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item::before{content:'DM SANS'}
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=bebas]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=bebas]::before{content:'BEBAS';font-family:'Bebas Neue',sans-serif}
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=mono]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=mono]::before{content:'MONO';font-family:'Space Mono',monospace}
+#ar-body-editor .ql-font-bebas{font-family:'Bebas Neue',sans-serif;text-transform:uppercase;letter-spacing:.02em}
+#ar-body-editor .ql-font-mono{font-family:'Space Mono',monospace;font-size:.9em}
+
+/* ---------- プレビュー: 本文の拡張書式 ---------- */
+.ar-prev-body .ql-size-small{font-size:.85em}
+.ar-prev-body .ql-size-large{font-size:1.35em;line-height:1.6}
+.ar-prev-body .ql-size-huge{font-size:1.9em;line-height:1.35;font-weight:200}
+.ar-prev-body .ql-align-center{text-align:center}
+.ar-prev-body .ql-align-right{text-align:right}
+.ar-prev-body .ql-font-bebas{font-family:'Bebas Neue',sans-serif;text-transform:uppercase;letter-spacing:.02em}
+.ar-prev-body .ql-font-mono{font-family:'Space Mono',monospace;font-size:.85em;letter-spacing:.05em}
+.ar-prev-body .entity-link{color:var(--accent);border-bottom:1px dotted rgba(255,45,45,.5);text-decoration:none}

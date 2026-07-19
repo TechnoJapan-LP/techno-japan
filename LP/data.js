@@ -1630,6 +1630,7 @@ const ARTICLES = [
     date: "2026-07-19",
     author: "Masafumi Take",
     image: "images/articles/transcendence.webp",
+    festivalId: "transcendence",
     featured: true,
     views: 1500,
     readTime: 2,

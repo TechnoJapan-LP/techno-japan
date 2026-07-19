@@ -251,6 +251,16 @@ function switchTab(section, tab, opts) {
     // DATE 未入力のまま公開すると記事詳細が開けないため、今日の日付をプリフィル
     const dEl = document.getElementById('ar-date');
     if (dEl && !dEl.value) dEl.value = new Date().toISOString().slice(0, 10);
+    // 関連フェスの入力候補（キャッシュがあれば）
+    const dl = document.getElementById('ar-festival-options');
+    if (dl && !dl.children.length){
+      (readSheetCache('festival') || []).forEach(r => {
+        if (!r.id) return;
+        const o = document.createElement('option');
+        o.value = r.id; o.label = r.name || r.id;
+        dl.appendChild(o);
+      });
+    }
   }
   parent.querySelectorAll('.tab-bar button').forEach((b, i) => {
     b.classList.toggle('active', (tab === 'list' && i === 0) || (tab === 'form' && i === 1));
@@ -591,7 +601,7 @@ function saveArticleDraft(){
     const draft = {
       id: g('ar-id'), title: g('ar-title'), category: g('ar-category'),
       date: g('ar-date'), author: g('ar-author'), image: g('ar-image'),
-      cardRatio: g('ar-cardRatio'), heroRatio: g('ar-heroRatio'),
+      cardRatio: g('ar-cardRatio'), heroRatio: g('ar-heroRatio'), festivalId: g('ar-festivalId'),
       readTime: g('ar-readTime'), views: g('ar-views'),
       featured: document.getElementById('ar-featured')?.value || 'false',
       status: g('ar-status'), excerpt: g('ar-excerpt'),
@@ -616,6 +626,7 @@ function tryRecoverArticleDraft(){
     setVal('ar-id', draft.id); setVal('ar-title', draft.title);
     setVal('ar-category', draft.category||'REPORT'); setVal('ar-date', draft.date);
     setVal('ar-cardRatio', draft.cardRatio||''); setVal('ar-heroRatio', draft.heroRatio||'');
+    setVal('ar-festivalId', draft.festivalId||'');
     setVal('ar-author', draft.author||'TECHNO JAPAN'); setVal('ar-image', draft.image);
     setVal('ar-readTime', draft.readTime); setVal('ar-views', draft.views);
     setVal('ar-featured', draft.featured); setVal('ar-status', draft.status||'published');
@@ -679,6 +690,12 @@ function initArticleEditor(){
     console.warn('Quill not loaded');
     return null;
   }
+  // サイトの3書体だけを許可（デフォルトは DM Sans）。無制限のフォント選択は
+  // デザインの一貫性を壊すので、ホワイトリスト方式にしている。
+  const TjFont = Quill.import('formats/font');
+  TjFont.whitelist = ['bebas', 'mono'];
+  Quill.register(TjFont, true);
+
   articleQuill = new Quill('#ar-body-editor', {
     theme: 'snow',
     placeholder: '本文を書く…（📄テンプレで雛形挿入 / 画像はドラッグ&ドロップやペーストでOK / ⌘S 保存・⌘⇧F 集中モード）',
@@ -686,8 +703,11 @@ function initArticleEditor(){
       toolbar: {
         container: [
           [{ 'header': [2, 3, false] }],
+          [{ 'font': ['', 'bebas', 'mono'] }],
+          [{ 'size': ['small', false, 'large', 'huge'] }],
           ['bold', 'italic', 'underline'],
           ['blockquote'],
+          [{ 'align': ['', 'center', 'right'] }],
           [{ 'list': 'ordered' }, { 'list': 'bullet' }],
           ['link', 'image'],
           ['clean']
@@ -828,7 +848,7 @@ function updateArticlePreview(html, force){
   if (!trimmed || trimmed === '<p><br></p>') {
     el.innerHTML = '<div class="ar-prev-empty">本文を書くとここにプレビューが表示されます</div>';
   } else {
-    el.innerHTML = trimmed;
+    el.innerHTML = resolveEntityLinksPreview(trimmed);
   }
 }
 
@@ -900,6 +920,79 @@ function applyArticleTemplate(key){
   if (cat) cat.value = t.category;
   document.getElementById('ar-template-menu')?.remove();
   toast(t.label + ' の雛形を挿入しました', 'success');
+}
+
+/* ---------- 記事内の ID リンク挿入 ----------
+   本文にショートコード [[festival:rural]] / [[artist:dj-nobu]] / [[venue:womb]] を
+   挿入する。表示時に各詳細ページへのリンクに変換される（news.html と
+   build-detail-pages.mjs 側で解決）。 */
+function toggleEntityLinkMenu(){
+  let menu = document.getElementById('ar-entity-menu');
+  if (menu){ menu.remove(); return; }
+  const btn = document.getElementById('ar-entity-toggle');
+  if (!btn) return;
+
+  // 候補リスト: フェス/ヴェニューはシートキャッシュ、アーティストは ARTIST_DB
+  const opts = [];
+  (readSheetCache('festival') || []).forEach(r => r.id && opts.push({type:'festival', id:r.id, name:r.name||r.id}));
+  (ARTIST_DB || []).forEach(a => a.id && opts.push({type:'artist', id:a.id, name:a.name||a.id}));
+  (readSheetCache('venue') || []).forEach(r => r.id && opts.push({type:'venue', id:r.id, name:r.name||r.id}));
+
+  menu = document.createElement('div');
+  menu.id = 'ar-entity-menu';
+  menu.className = 'ar-template-menu';
+  menu.style.minWidth = '300px';
+  menu.innerHTML =
+    '<div style="padding:10px 14px 6px;font-family:var(--font-mono);font-size:.6rem;letter-spacing:.1em;color:var(--text3)">本文にリンクを挿入（名前で検索）</div>' +
+    '<input id="ar-entity-search" type="text" placeholder="例: rural / DJ NOBU / womb" style="margin:0 10px 8px;padding:8px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:.85rem">' +
+    '<div id="ar-entity-results" style="max-height:260px;overflow-y:auto"></div>';
+  btn.parentElement.style.position = 'relative';
+  btn.insertAdjacentElement('afterend', menu);
+
+  const results = menu.querySelector('#ar-entity-results');
+  const icon = {festival:'◆', artist:'△', venue:'○'};
+  function render(q){
+    q = (q||'').toLowerCase().trim();
+    const hits = opts.filter(o => !q || o.name.toLowerCase().includes(q) || o.id.includes(q)).slice(0, 30);
+    results.innerHTML = hits.length
+      ? hits.map(o => '<button type="button" data-type="'+o.type+'" data-id="'+o.id+'">'+icon[o.type]+' '+esc(o.name)+' <span style="opacity:.4;font-size:.7em">'+o.type+'</span></button>').join('')
+      : '<div style="padding:10px 14px;color:var(--text3);font-size:.8rem">'+(opts.length ? '該当なし' : 'データ未読込 — 各セクションで一度 Refresh してください')+'</div>';
+  }
+  render('');
+  menu.querySelector('#ar-entity-search').addEventListener('input', e => render(e.target.value));
+  results.addEventListener('click', e => {
+    const b = e.target.closest('button[data-id]');
+    if (!b) return;
+    insertEntityShortcode(b.dataset.type, b.dataset.id);
+    menu.remove();
+  });
+  setTimeout(() => menu.querySelector('#ar-entity-search').focus(), 0);
+  const close = (e) => { if (!menu.contains(e.target) && e.target !== btn){ menu.remove(); document.removeEventListener('click', close, true); } };
+  setTimeout(() => document.addEventListener('click', close, true), 0);
+}
+
+function insertEntityShortcode(type, id){
+  const code = '[[' + type + ':' + id + ']]';
+  const q = initArticleEditor();
+  if (q){
+    const range = q.getSelection(true) || { index: q.getLength() };
+    q.insertText(range.index, code, 'user');
+    q.setSelection(range.index + code.length);
+  }
+  toast(code + ' を挿入しました', 'success');
+}
+
+/* プレビュー用: ショートコードをリンク表示に変換 */
+function resolveEntityLinksPreview(html){
+  return String(html || '').replace(/\[\[(festival|artist|venue|article):([a-z0-9-]+)(?:\|([^\]]+))?\]\]/g, (m, type, id, label) => {
+    let name = label;
+    if (!name){
+      if (type === 'artist'){ const a = (ARTIST_DB||[]).find(x => x.id === id); name = a && a.name; }
+      else { const r = (readSheetCache(type) || []).find(x => x.id === id); name = r && (r.name || r.title); }
+    }
+    const dir = type === 'article' ? 'articles' : type + 's';
+    return '<a class="entity-link" href="/' + dir + '/' + id + '.html">' + esc(name || id) + '</a>';
+  });
 }
 
 /* ---------- 集中執筆モード（フルスクリーン） ---------- */
@@ -2336,6 +2429,7 @@ function editRow(section, rowNum){
     setVal('ar-id',row.id); setVal('ar-title',row.title);
     setVal('ar-category',row.category||'REPORT'); setVal('ar-date',row.date);
     setVal('ar-cardRatio',row.cardRatio||''); setVal('ar-heroRatio',row.heroRatio||'');
+    setVal('ar-festivalId',row.festivalId||'');
     setVal('ar-author',row.author||'TECHNO JAPAN');
     setVal('ar-image',row.image); setVal('ar-readTime',row.readTime);
     setVal('ar-views',row.views); setVal('ar-featured',String(row.featured==='true'||row.featured===true));
@@ -2405,7 +2499,7 @@ function saveEdit(section){
   else if(section==='article'){
     Object.assign(payload,{id:g('ar-id'),title:g('ar-title'),category:g('ar-category'),
       date:g('ar-date'),author:g('ar-author'),image:g('ar-image'),readTime:g('ar-readTime'),
-      cardRatio:g('ar-cardRatio'),heroRatio:g('ar-heroRatio'),
+      cardRatio:g('ar-cardRatio'),heroRatio:g('ar-heroRatio'),festivalId:g('ar-festivalId'),
       views:g('ar-views'),featured:g('ar-featured'),excerpt:g('ar-excerpt'),
       body:g('ar-body'),tags:g('ar-tags'),status:g('ar-status')});
     if(!payload.date) payload.date = new Date().toISOString().slice(0,10); // DATE空のまま保存すると記事詳細が壊れるため
@@ -3334,7 +3428,7 @@ function submitToSheet(section){
   else if(section==='article'){
     payload={action:'add_article',id:g('ar-id'),title:g('ar-title'),category:g('ar-category'),
       date:g('ar-date'),author:g('ar-author'),image:g('ar-image'),readTime:g('ar-readTime'),
-      cardRatio:g('ar-cardRatio'),heroRatio:g('ar-heroRatio'),
+      cardRatio:g('ar-cardRatio'),heroRatio:g('ar-heroRatio'),festivalId:g('ar-festivalId'),
       views:g('ar-views'),featured:g('ar-featured'),excerpt:g('ar-excerpt'),
       body:g('ar-body'),tags:g('ar-tags'),status:g('ar-status')};
     if(!payload.id||!payload.title)return toast('ID and Title required','error');
@@ -3983,6 +4077,7 @@ function buildArticlesJs(rows){
     if(r.author) l.push('    author: "'+q(r.author)+'",');
     if(r.image) l.push('    image: "'+q(r.image)+'",');
     if(r.cardRatio) l.push('    cardRatio: "'+q(r.cardRatio)+'",');
+    if(r.festivalId) l.push('    festivalId: "'+q(r.festivalId)+'",');
     if(r.heroRatio) l.push('    heroRatio: "'+q(r.heroRatio)+'",');
     if(r.featured === true || r.featured === 'true' || r.featured === 'TRUE') l.push('    featured: true,');
     if(r.views) l.push('    views: '+(parseInt(r.views,10)||0)+',');
@@ -4141,7 +4236,7 @@ function resetForm(section){
     festival:['f-id','f-name','f-city','f-location','f-url','f-ticketUrl','f-instagram','f-address','f-lat','f-lng','f-dateStart','f-dateEnd','f-image','f-imagePosition','f-flyer','f-heroGradient','f-desc','f-imageUrl','f-flyerUrl'],
     artist:['a-id','a-name','a-city','a-country','a-genre','a-image','a-imagePosition','a-bio','a-instagram','a-soundcloud','a-bandcamp','a-website','a-imageUrl'],
     event:['e-name','e-date','e-venue','e-city','e-time','e-desc','e-link'],
-    article:['ar-id','ar-title','ar-category','ar-date','ar-author','ar-image','ar-imageUrl','ar-readTime','ar-views','ar-excerpt','ar-body','ar-tags','ar-cardRatio','ar-heroRatio'],
+    article:['ar-id','ar-title','ar-category','ar-date','ar-author','ar-image','ar-imageUrl','ar-readTime','ar-views','ar-excerpt','ar-body','ar-tags','ar-cardRatio','ar-heroRatio','ar-festivalId'],
     author:['au-id','au-name','au-bio','au-image','au-instagram','au-twitter','au-website'],
   }[section];
   fields.forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
