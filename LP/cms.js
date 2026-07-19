@@ -251,16 +251,7 @@ function switchTab(section, tab, opts) {
     // DATE 未入力のまま公開すると記事詳細が開けないため、今日の日付をプリフィル
     const dEl = document.getElementById('ar-date');
     if (dEl && !dEl.value) dEl.value = new Date().toISOString().slice(0, 10);
-    // 関連フェスの入力候補（キャッシュがあれば）
-    const dl = document.getElementById('ar-festival-options');
-    if (dl && !dl.children.length){
-      (readSheetCache('festival') || []).forEach(r => {
-        if (!r.id) return;
-        const o = document.createElement('option');
-        o.value = r.id; o.label = r.name || r.id;
-        dl.appendChild(o);
-      });
-    }
+
   }
   parent.querySelectorAll('.tab-bar button').forEach((b, i) => {
     b.classList.toggle('active', (tab === 'list' && i === 0) || (tab === 'form' && i === 1));
@@ -626,7 +617,7 @@ function tryRecoverArticleDraft(){
     setVal('ar-id', draft.id); setVal('ar-title', draft.title);
     setVal('ar-category', draft.category||'REPORT'); setVal('ar-date', draft.date);
     setVal('ar-cardRatio', draft.cardRatio||''); setVal('ar-heroRatio', draft.heroRatio||'');
-    setVal('ar-festivalId', draft.festivalId||'');
+    festPickerSetValue(draft.festivalId||'');
     setVal('ar-author', draft.author||'TECHNO JAPAN'); setVal('ar-image', draft.image);
     setVal('ar-readTime', draft.readTime); setVal('ar-views', draft.views);
     setVal('ar-featured', draft.featured); setVal('ar-status', draft.status||'published');
@@ -747,7 +738,7 @@ function runArticleEditorSync(from){
     html = document.getElementById('ar-body-source').value;
   } else {
     if (!articleQuill) return;
-    html = articleQuill.root.innerHTML;
+    html = normalizeArticleHtml(articleQuill.root.innerHTML);
     document.getElementById('ar-body-source').value = html;
   }
   document.getElementById('ar-body').value = html;
@@ -857,9 +848,14 @@ function toggleArticlePreview(){
   const btn = document.getElementById('ar-preview-toggle');
   if (!wrap) return;
   const on = wrap.classList.toggle('preview-mode');
-  if (btn) btn.classList.toggle('active', on);
-  // 開いた瞬間に最新HTMLで更新
-  if (on) updateArticlePreview(document.getElementById('ar-body').value, true);
+  if (btn) { btn.classList.toggle('active', on); btn.textContent = on ? '✕ プレビューを閉じる' : 'プレビュー'; }
+  if (on) {
+    // 開いた瞬間に最新HTMLで更新し、画面外で気付かれないようスクロールして見せる
+    flushArticleEditorSync();
+    updateArticlePreview(document.getElementById('ar-body').value, true);
+    const prev = document.querySelector('.ar-preview');
+    if (prev) requestAnimationFrame(() => prev.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+  }
 }
 
 /* ---------- 記事テンプレート ---------- */
@@ -922,6 +918,55 @@ function applyArticleTemplate(key){
   toast(t.label + ' の雛形を挿入しました', 'success');
 }
 
+/* ---------- 関連フェスの検索ピッカー ---------- */
+function festPickerFilter(){
+  const input = document.getElementById('ar-festivalId-search');
+  const list  = document.getElementById('ar-festivalId-list');
+  if (!input || !list) return;
+  const rows = (readSheetCache('festival') || []).filter(r => r.id);
+  const q = input.value.toLowerCase().trim();
+  const hits = rows.filter(r => !q || String(r.name||'').toLowerCase().includes(q) || String(r.id).includes(q))
+                   .slice(0, 40);
+  list.innerHTML = rows.length === 0
+    ? '<div class="fp-empty">フェス一覧が未読込です。FESTIVAL セクションで一度 Refresh してください。</div>'
+    : (hits.length
+        ? hits.map(r => '<button type="button" data-id="'+esc(r.id)+'" data-name="'+esc(r.name||r.id)+'">'+esc(r.name||r.id)+'<span class="fp-id">'+esc(r.id)+'</span></button>').join('')
+        : '<div class="fp-empty">該当なし</div>');
+  list.hidden = false;
+}
+function festPickerSelect(id, name){
+  document.getElementById('ar-festivalId').value = id;
+  const sel = document.getElementById('ar-festivalId-selected');
+  sel.innerHTML = '◆ ' + esc(name || id) + ' <span style="opacity:.45;font-family:var(--font-mono);font-size:.75em">' + esc(id) + '</span>'
+                + '<button type="button" class="fp-clear" onclick="festPickerClear()" title="解除">×</button>';
+  sel.hidden = false;
+  document.getElementById('ar-festivalId-search').value = '';
+  document.getElementById('ar-festivalId-list').hidden = true;
+  markFormDirty();
+}
+function festPickerClear(){
+  document.getElementById('ar-festivalId').value = '';
+  document.getElementById('ar-festivalId-selected').hidden = true;
+  markFormDirty();
+}
+/* 編集を開いた時などに、保存済みIDから選択表示を復元する */
+function festPickerSetValue(id){
+  if (!id){ festPickerClear(); return; }
+  const r = (readSheetCache('festival') || []).find(x => x.id === id);
+  festPickerSelect(id, r && r.name);
+}
+document.addEventListener('click', e => {
+  const wrap = document.getElementById('ar-festivalId-picker');
+  const list = document.getElementById('ar-festivalId-list');
+  if (!wrap || !list) return;
+  if (wrap.contains(e.target)){
+    const b = e.target.closest('#ar-festivalId-list button[data-id]');
+    if (b) festPickerSelect(b.dataset.id, b.dataset.name);
+  } else {
+    list.hidden = true;
+  }
+});
+
 /* ---------- 記事内の ID リンク挿入 ----------
    本文にショートコード [[festival:rural]] / [[artist:dj-nobu]] / [[venue:womb]] を
    挿入する。表示時に各詳細ページへのリンクに変換される（news.html と
@@ -955,7 +1000,7 @@ function toggleEntityLinkMenu(){
     q = (q||'').toLowerCase().trim();
     const hits = opts.filter(o => !q || o.name.toLowerCase().includes(q) || o.id.includes(q)).slice(0, 30);
     results.innerHTML = hits.length
-      ? hits.map(o => '<button type="button" data-type="'+o.type+'" data-id="'+o.id+'">'+icon[o.type]+' '+esc(o.name)+' <span style="opacity:.4;font-size:.7em">'+o.type+'</span></button>').join('')
+      ? hits.map(o => '<button type="button" data-type="'+o.type+'" data-id="'+o.id+'" data-name="'+esc(o.name)+'">'+icon[o.type]+' '+esc(o.name)+' <span style="opacity:.4;font-size:.7em">'+o.type+'</span></button>').join('')
       : '<div style="padding:10px 14px;color:var(--text3);font-size:.8rem">'+(opts.length ? '該当なし' : 'データ未読込 — 各セクションで一度 Refresh してください')+'</div>';
   }
   render('');
@@ -963,7 +1008,7 @@ function toggleEntityLinkMenu(){
   results.addEventListener('click', e => {
     const b = e.target.closest('button[data-id]');
     if (!b) return;
-    insertEntityShortcode(b.dataset.type, b.dataset.id);
+    insertEntityShortcode(b.dataset.type, b.dataset.id, b.dataset.name);
     menu.remove();
   });
   setTimeout(() => menu.querySelector('#ar-entity-search').focus(), 0);
@@ -971,15 +1016,30 @@ function toggleEntityLinkMenu(){
   setTimeout(() => document.addEventListener('click', close, true), 0);
 }
 
-function insertEntityShortcode(type, id){
-  const code = '[[' + type + ':' + id + ']]';
+/* 本文には実際の <a> を挿し込む。エディタ上でも「Rural」のように
+   名前で読めるので、[[festival:rural]] という生の記号より分かりやすい。
+   （旧記事のショートコードも表示側で解決し続けるので互換は保たれる） */
+function insertEntityShortcode(type, id, name){
+  const dir = type === 'article' ? 'articles' : type + 's';
+  const href = '/' + dir + '/' + id + '.html';
+  const label = name || id;
   const q = initArticleEditor();
   if (q){
     const range = q.getSelection(true) || { index: q.getLength() };
-    q.insertText(range.index, code, 'user');
-    q.setSelection(range.index + code.length);
+    // 選択中のテキストがあればそれをリンク化、なければ名前を挿入してリンク化
+    if (range.length > 0){
+      q.formatText(range.index, range.length, 'link', href, 'user');
+      q.setSelection(range.index + range.length);
+    } else {
+      q.insertText(range.index, label, 'user');
+      q.formatText(range.index, label.length, 'link', href, 'user');
+      // 直後のスペースはリンクに含めない（含めると下線が伸びて不格好）
+      q.insertText(range.index + label.length, ' ', { link: false }, 'user');
+      q.setSelection(range.index + label.length + 1);
+    }
+    scheduleArticleEditorSync('quill');
   }
-  toast(code + ' を挿入しました', 'success');
+  toast(label + ' へのリンクを挿入しました', 'success');
 }
 
 /* プレビュー用: ショートコードをリンク表示に変換 */
@@ -1022,6 +1082,16 @@ document.addEventListener('keydown', e => {
     }
   }
 });
+
+/* Quill は全リンクに target=_blank rel=... を付けるが、サイト内リンクを
+   別タブで開くのは不自然なので保存前に外す。 */
+function normalizeArticleHtml(html){
+  if (!html) return html;
+  const d = document.createElement('div');
+  d.innerHTML = html;
+  d.querySelectorAll('a[href^="/"]').forEach(a => { a.removeAttribute('target'); a.removeAttribute('rel'); });
+  return d.innerHTML;
+}
 
 function setArticleBody(html){
   const v = html || '';
@@ -2429,7 +2499,7 @@ function editRow(section, rowNum){
     setVal('ar-id',row.id); setVal('ar-title',row.title);
     setVal('ar-category',row.category||'REPORT'); setVal('ar-date',row.date);
     setVal('ar-cardRatio',row.cardRatio||''); setVal('ar-heroRatio',row.heroRatio||'');
-    setVal('ar-festivalId',row.festivalId||'');
+    festPickerSetValue(row.festivalId||'');
     setVal('ar-author',row.author||'TECHNO JAPAN');
     setVal('ar-image',row.image); setVal('ar-readTime',row.readTime);
     setVal('ar-views',row.views); setVal('ar-featured',String(row.featured==='true'||row.featured===true));
@@ -2519,7 +2589,7 @@ function saveEdit(section){
   const rowNum = state._row;
   applyOptimisticUpdate(section, rowNum, payload);
   clearFormDirty();
-  if (section === 'article') clearArticleDraft();
+  if (section === 'article') { clearArticleDraft(); if (typeof festPickerClear === 'function') festPickerClear(); }
   cancelEdit(section);
   switchTab(section,'list');
   rerenderListFromCache(section);

@@ -14,7 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="cms.css?v=5">
+<link rel="stylesheet" href="cms.css?v=6">
 <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" integrity="sha384-cPa8kzsYWhqpAfWOLWYIw3V0BhPi/m3lrd8tBTPxr2NrYCHRVZ7xy1cEoRGOM/03" crossorigin="anonymous" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js" integrity="sha384-QUJ+ckWz1M+a7w0UfG1sEn4pPrbQwSxGm/1TIPyioqXBrwuT9l4f9gdHWLDLbVWI" crossorigin="anonymous"></script>
 </head>
@@ -374,7 +374,14 @@
       <div class="form-group"><label>Featured</label><select id="ar-featured"><option value="false">No</option><option value="true">Yes</option></select></div>
       <div class="form-group"><label>Status</label><select id="ar-status"><option value="published">Published</option><option value="draft">Draft</option></select></div>
       <div class="form-group full"><label>Tags (comma-separated)</label><input type="text" id="ar-tags" placeholder="e.g. tokyo, clubs, guide"></div>
-      <div class="form-group"><label>関連フェスティバル <span class="label-hint">フェスIDを入力するとフェス詳細に記事が表示される</span></label><input type="text" id="ar-festivalId" list="ar-festival-options" placeholder="e.g. transcendence"><datalist id="ar-festival-options"></datalist></div>
+      <div class="form-group full"><label>関連フェスティバル <span class="label-hint">選ぶとそのフェス詳細ページに記事が表示される</span></label>
+        <div class="fest-picker" id="ar-festivalId-picker">
+          <input type="text" id="ar-festivalId-search" placeholder="フェス名で検索（例: Transcendence / rural）" autocomplete="off" oninput="festPickerFilter()" onfocus="festPickerFilter()">
+          <input type="hidden" id="ar-festivalId">
+          <div class="fest-picker-selected" id="ar-festivalId-selected" hidden></div>
+          <div class="fest-picker-list" id="ar-festivalId-list" hidden></div>
+        </div>
+      </div>
       <div class="form-group full">
         <label>Excerpt (1-2 sentences) <span class="label-hint">本文から自動生成可能</span></label>
         <textarea id="ar-excerpt" rows="3" placeholder="Short summary..."></textarea>
@@ -461,6 +468,6 @@
   </div>
 </div>
 
-<script src="cms.js?v=9" defer></script>
+<script src="cms.js?v=11" defer></script>
 </body>
 </html>
