@@ -1791,7 +1791,7 @@ function uploadImage(input,type,prefix){
     const body={action,imageData:dataUrl,mimeType,id,type,filename};
     return fetch(GAS_URL,{method:'POST',body:JSON.stringify(body)}).then(r=>r.json()).then(d=>{
       if(d.status==='ok'||d.success){
-        toast('Uploaded ('+compMB+'MB)','success');
+        toast('Uploaded ('+compMB+'MB) — 「Save Changes」を押すまで保存されません','success');
         if(d.imagePath&&prefix){
           const target=type==='festival-flyer'?prefix+'-flyer':prefix+'-image';
           const el=document.getElementById(target);
@@ -1852,7 +1852,7 @@ function uploadFromUrl(prefix,type,pathFieldId,urlFieldId,previewId){
     .then(r=>r.json()).then(d=>{
       btn.disabled=false;btn.textContent='UPLOAD';
       if(d.success){
-        toast('Google Driveにアップロード完了','success');
+        toast('アップロード完了 — 「Save Changes」を押すまで保存されません','success');
         document.getElementById(pathFieldId).value=d.path||'';
         if(previewEl){
           // Google DriveのURLはプレビュー制限があるので、元のURLを優先表示
@@ -3738,8 +3738,26 @@ function exportDataJs(){
 /* ==============================================================
    PUBLISH NOW — data.js を直接 GitHub にコミット
    ============================================================== */
+/* 未保存の編集があるまま公開すると、その変更が本番に出ずに「反映されない」と
+   見えてしまう。公開前に必ず気付けるようにする。 */
+function unsavedEditWarning(){
+  if (!formDirty) return null;
+  const section = document.querySelector('.section.active')?.id?.replace('sec-','') || '';
+  const editing = section && editState && editState[section];
+  const label = editing
+    ? (document.getElementById(section+'-edit-name')?.textContent || '').trim()
+    : '';
+  return '⚠️ 保存していない編集があります'
+    + (section ? '\n対象: ' + section.toUpperCase() + (label ? ' / ' + label : '') : '')
+    + '\n\nこのまま公開すると、この変更は本番に反映されません。'
+    + '\n先に「Save Changes」を押すことをおすすめします。'
+    + '\n\nそれでも公開しますか?';
+}
+
 function publishDataJs(opts){
   opts = opts || {};
+  const warn = unsavedEditWarning();
+  if (warn && !confirm(warn)) return;
   if (!confirm('data.js をビルドして GitHub に直接 push します。\n（数分後に LP 本番に反映）\n\n続行しますか?')) return;
   const btn = document.getElementById('btn-publish-now');
   if (btn) { btn.disabled = true; btn.dataset.originalText = btn.innerHTML; btn.innerHTML = 'Building...'; }

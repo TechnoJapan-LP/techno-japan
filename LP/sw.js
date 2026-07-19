@@ -7,7 +7,7 @@
  * - data.js: stale-while-revalidate (fast load, update in background)
  */
 
-const VERSION = 'v1.10.0';
+const VERSION = 'v1.11.0';
 const STATIC_CACHE = `tj-static-${VERSION}`;
 const DYNAMIC_CACHE = `tj-dynamic-${VERSION}`;
 
@@ -68,9 +68,17 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // Static assets: cache-first
-  if (/\.(css|js|woff2?|ttf|otf|png|jpe?g|webp|avif|svg|gif|ico)$/i.test(url.pathname)) {
+  // フォント/CSS/JS はファイル名かクエリでバージョン管理しているので cache-first でよい
+  if (/\.(css|js|woff2?|ttf|otf)$/i.test(url.pathname)) {
     event.respondWith(cacheFirst(request));
+    return;
+  }
+
+  // 画像は stale-while-revalidate。
+  // CMS で同じファイル名のまま画像を差し替えることがあり、cache-first だと
+  // 一度見た人には古い画像が永久に表示され続けてしまう。
+  if (/\.(png|jpe?g|webp|avif|svg|gif|ico)$/i.test(url.pathname)) {
+    event.respondWith(staleWhileRevalidate(request));
     return;
   }
 
