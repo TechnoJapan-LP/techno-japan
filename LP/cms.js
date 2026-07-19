@@ -591,6 +591,7 @@ function saveArticleDraft(){
     const draft = {
       id: g('ar-id'), title: g('ar-title'), category: g('ar-category'),
       date: g('ar-date'), author: g('ar-author'), image: g('ar-image'),
+      cardRatio: g('ar-cardRatio'), heroRatio: g('ar-heroRatio'),
       readTime: g('ar-readTime'), views: g('ar-views'),
       featured: document.getElementById('ar-featured')?.value || 'false',
       status: g('ar-status'), excerpt: g('ar-excerpt'),
@@ -614,6 +615,7 @@ function tryRecoverArticleDraft(){
   if (confirm(`未保存の下書きが見つかりました：\n「${label}」(${minsAgo}分前)\n\n復元しますか？`)) {
     setVal('ar-id', draft.id); setVal('ar-title', draft.title);
     setVal('ar-category', draft.category||'REPORT'); setVal('ar-date', draft.date);
+    setVal('ar-cardRatio', draft.cardRatio||''); setVal('ar-heroRatio', draft.heroRatio||'');
     setVal('ar-author', draft.author||'TECHNO JAPAN'); setVal('ar-image', draft.image);
     setVal('ar-readTime', draft.readTime); setVal('ar-views', draft.views);
     setVal('ar-featured', draft.featured); setVal('ar-status', draft.status||'published');
@@ -2333,6 +2335,7 @@ function editRow(section, rowNum){
   else if(section==='article'){
     setVal('ar-id',row.id); setVal('ar-title',row.title);
     setVal('ar-category',row.category||'REPORT'); setVal('ar-date',row.date);
+    setVal('ar-cardRatio',row.cardRatio||''); setVal('ar-heroRatio',row.heroRatio||'');
     setVal('ar-author',row.author||'TECHNO JAPAN');
     setVal('ar-image',row.image); setVal('ar-readTime',row.readTime);
     setVal('ar-views',row.views); setVal('ar-featured',String(row.featured==='true'||row.featured===true));
@@ -2402,6 +2405,7 @@ function saveEdit(section){
   else if(section==='article'){
     Object.assign(payload,{id:g('ar-id'),title:g('ar-title'),category:g('ar-category'),
       date:g('ar-date'),author:g('ar-author'),image:g('ar-image'),readTime:g('ar-readTime'),
+      cardRatio:g('ar-cardRatio'),heroRatio:g('ar-heroRatio'),
       views:g('ar-views'),featured:g('ar-featured'),excerpt:g('ar-excerpt'),
       body:g('ar-body'),tags:g('ar-tags'),status:g('ar-status')});
     if(!payload.date) payload.date = new Date().toISOString().slice(0,10); // DATE空のまま保存すると記事詳細が壊れるため
@@ -3330,6 +3334,7 @@ function submitToSheet(section){
   else if(section==='article'){
     payload={action:'add_article',id:g('ar-id'),title:g('ar-title'),category:g('ar-category'),
       date:g('ar-date'),author:g('ar-author'),image:g('ar-image'),readTime:g('ar-readTime'),
+      cardRatio:g('ar-cardRatio'),heroRatio:g('ar-heroRatio'),
       views:g('ar-views'),featured:g('ar-featured'),excerpt:g('ar-excerpt'),
       body:g('ar-body'),tags:g('ar-tags'),status:g('ar-status')};
     if(!payload.id||!payload.title)return toast('ID and Title required','error');
@@ -3959,6 +3964,8 @@ function buildArticlesJs(rows){
     if(r.date) l.push('    date: "'+q(fmtDate(r.date))+'",');
     if(r.author) l.push('    author: "'+q(r.author)+'",');
     if(r.image) l.push('    image: "'+q(r.image)+'",');
+    if(r.cardRatio) l.push('    cardRatio: "'+q(r.cardRatio)+'",');
+    if(r.heroRatio) l.push('    heroRatio: "'+q(r.heroRatio)+'",');
     if(r.featured === true || r.featured === 'true' || r.featured === 'TRUE') l.push('    featured: true,');
     if(r.views) l.push('    views: '+(parseInt(r.views,10)||0)+',');
     if(r.readTime) l.push('    readTime: '+(parseInt(r.readTime,10)||5)+',');
@@ -4116,7 +4123,7 @@ function resetForm(section){
     festival:['f-id','f-name','f-city','f-location','f-url','f-ticketUrl','f-instagram','f-address','f-lat','f-lng','f-dateStart','f-dateEnd','f-image','f-imagePosition','f-flyer','f-heroGradient','f-desc','f-imageUrl','f-flyerUrl'],
     artist:['a-id','a-name','a-city','a-country','a-genre','a-image','a-imagePosition','a-bio','a-instagram','a-soundcloud','a-bandcamp','a-website','a-imageUrl'],
     event:['e-name','e-date','e-venue','e-city','e-time','e-desc','e-link'],
-    article:['ar-id','ar-title','ar-category','ar-date','ar-author','ar-image','ar-imageUrl','ar-readTime','ar-views','ar-excerpt','ar-body','ar-tags'],
+    article:['ar-id','ar-title','ar-category','ar-date','ar-author','ar-image','ar-imageUrl','ar-readTime','ar-views','ar-excerpt','ar-body','ar-tags','ar-cardRatio','ar-heroRatio'],
     author:['au-id','au-name','au-bio','au-image','au-instagram','au-twitter','au-website'],
   }[section];
   fields.forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});

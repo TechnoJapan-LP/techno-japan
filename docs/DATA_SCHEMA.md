@@ -184,6 +184,8 @@
 | DATE | `2026-05-20` | 公開日(ISO)。**現状のDATE/date/PUBLISHATの3重複を一本化** |
 | AUTHOR_ID | `techno-japan` | AUTHORS参照(現`author`テキストと`AUTHORID`を一本化) |
 | IMAGE | `images/articles/transcendence-2026.webp` | ファイル名もslug準拠 |
+| cardRatio | `auto` / `4:5` / `1:1` / `3:2` / `16:9` / 空 | **トップページのカード**での画像表示比率。空欄なら従来の見た目のまま。`auto`は元画像の縦横比で切り抜かない |
+| heroRatio | `auto` / `4:5` / `1:1` / `3:2` / `16:9` / 空 | **記事詳細ページのヒーロー**での画像表示比率。空欄なら16:9。縦長写真は`auto`推奨 |
 | READTIME | `2` | 分。ビルド時にbodyから自動計算も可 |
 | FEATURED | `TRUE` / 空欄 | トップ掲載フラグ |
 | EXCERPT / EXCERPT_EN | | |

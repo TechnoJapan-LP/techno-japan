@@ -36,6 +36,9 @@
 }
 .article-hero-img { margin: 0 -40px 48px; aspect-ratio: 16/9; overflow: hidden; background: rgba(240,237,232,0.04); }
 .article-hero-img img { width: 100%; height: 100%; object-fit: cover; }
+/* CMS で「元画像のまま」を選んだ記事は切り抜かず、写真本来の縦横比で出す */
+.article-hero-img[data-ratio="auto"] { aspect-ratio: auto; }
+.article-hero-img[data-ratio="auto"] img { height: auto; display: block; }
 
 .article-body { font-family: var(--font-body); font-weight: 300; font-size: 16px; line-height: 1.85; color: rgba(240,237,232,0.85); }
 .article-body p { margin-bottom: 24px; }

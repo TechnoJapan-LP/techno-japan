@@ -13,3 +13,7 @@ scripts/*.log
 # Node / data pipeline generated artifacts
 node_modules/
 validation-report.txt
+
+# macOS/クラウド同期が作る重複コピー（"foo 2.html" / "foo 3.html"）
+* [0-9].html
+* [0-9].*

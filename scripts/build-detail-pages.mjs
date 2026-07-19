@@ -53,6 +53,15 @@ const absUrl = (img) => {
   return String(img).startsWith('http') ? String(img) : `${BASE}/${String(img).replace(/^\//, '')}`;
 };
 
+
+// CMS で指定した表示比率を data 属性 + inline style にする。未指定なら何も出さず既定のCSSが効く。
+function ratioAttr(r) {
+  const v = String(r || '').trim();
+  if (!v) return '';
+  if (v === 'auto') return ' data-ratio="auto"';
+  if (!/^\d+:\d+$/.test(v)) return '';
+  return ` data-ratio="${v}" style="aspect-ratio:${v.replace(':', '/')}"`;
+}
 const MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
 function fmtDate(d) {
   if (!d) return '';
@@ -213,7 +222,7 @@ function articlePage(a) {
     </div>
     <h1>${esc(a.title)}</h1>
     <div class="article-excerpt">${esc(a.excerpt || '')}</div>
-    ${a.image ? `<div class="article-hero-img"><img src="/${String(a.image).replace(/^\//, '')}" alt="${esc(a.title)}"></div>` : ''}
+    ${a.image ? `<div class="article-hero-img"${ratioAttr(a.heroRatio)}><img src="/${String(a.image).replace(/^\//, '')}" alt="${esc(a.title)}"></div>` : ''}
     <div class="article-body">${a.body || ''}</div>
     <div class="article-footer">
       ${tags ? `<div class="article-tags">${tags}</div>` : ''}
