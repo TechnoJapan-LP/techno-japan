@@ -633,3 +633,75 @@ footer         { contain-intrinsic-size: auto 320px; }
     scroll-behavior: auto !important;
   }
 }
+
+/* ==========================================================
+   TJ 背景レイヤー（about.html のグリッド + スキャンラインを全ページ共通化）
+   body に .tj-bg を1つ置くだけで、固定背景として敷かれる。
+   コンテンツより下（z-index:0）、body背景より上。
+   ========================================================== */
+.tj-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.tj-bg::before {
+  content: '';
+  position: absolute;
+  inset: -80px;                 /* ドリフト分を外側に逃がして継ぎ目を隠す */
+  background-image:
+    repeating-linear-gradient(90deg, rgba(240,237,232,0.03) 0, rgba(240,237,232,0.03) 1px, transparent 1px, transparent),
+    repeating-linear-gradient(0deg, rgba(240,237,232,0.03) 0, rgba(240,237,232,0.03) 1px, transparent 1px, transparent);
+  background-size: 80px 80px;
+  animation: gridDrift 20s linear infinite;
+  will-change: transform;
+}
+/* 赤いグロー。ゆっくり漂ってページに奥行きを出す */
+.tj-bg::after {
+  content: '';
+  position: absolute;
+  width: 60vw; height: 60vw;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,45,45,0.05) 0%, transparent 60%);
+  filter: blur(40px);
+  animation: glowFloat 18s ease-in-out infinite;
+  will-change: transform;
+}
+.tj-bg .tj-scan {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: rgba(240,237,232,0.06);
+  animation: scanDown 8s linear infinite;
+}
+
+@keyframes gridDrift {
+  0%   { transform: translate(0, 0); }
+  100% { transform: translate(80px, 80px); }
+}
+@keyframes glowFloat {
+  0%, 100% { top: -20%; left: -10%; }
+  50%      { top: 60%;  left: 50%; }
+}
+@keyframes scanDown {
+  0%   { top: -2%; }
+  100% { top: 102%; }
+}
+
+/* 背景の上にコンテンツを重ねる */
+body > nav,
+body > footer,
+body > main,
+body > section,
+body > article,
+body > div:not(.tj-bg):not(.cursor-dot):not(.cursor-ring) {
+  position: relative;
+  z-index: 1;
+}
+
+/* 動きを減らす設定では、線は残してアニメーションだけ止める */
+@media (prefers-reduced-motion: reduce) {
+  .tj-bg::before, .tj-bg::after, .tj-bg .tj-scan { animation: none; }
+  .tj-bg .tj-scan { display: none; }
+}
