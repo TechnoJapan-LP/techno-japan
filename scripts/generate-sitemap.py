@@ -112,6 +112,18 @@ def main():
             "priority": "0.6",
         })
 
+    # English pages (/en/...) — 生成済みファイルをそのまま列挙する
+    import glob
+    en_root = os.path.join(LP_DIR, "en")
+    for f in sorted(glob.glob(os.path.join(en_root, "*", "*.html"))):
+        rel = os.path.relpath(f, LP_DIR).replace(os.sep, "/")
+        urls.append({
+            "loc": f"{BASE_URL}/{rel}",
+            "lastmod": today,
+            "changefreq": "weekly",
+            "priority": "0.5",
+        })
+
     # Articles (if defined)
     article_ids = extract_ids(data, "ARTICLES")
     for aid in article_ids:

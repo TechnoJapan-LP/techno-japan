@@ -46,7 +46,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -A LP/sitemap.xml LP/rss.xml LP/articles LP/festivals LP/artists LP/venues
+          git add -A LP/sitemap.xml LP/rss.xml LP/articles LP/festivals LP/artists LP/venues LP/en
           if git diff --cached --quiet; then
             echo "No changes"
           else

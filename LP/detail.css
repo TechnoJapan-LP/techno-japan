@@ -204,3 +204,10 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   .article-specs > div:first-child { border-top: none; }
   .related-story-thumb { width: 88px; }
 }
+
+/* ----- 言語トグル（生成ページのナビ内） ----- */
+.nav-lang { display: inline-flex; align-items: center; gap: 8px; margin-left: 18px; padding-left: 18px; border-left: 1px solid rgba(240,237,232,0.15); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; }
+.nav-lang a { opacity: 0.45; transition: opacity 0.2s ease, color 0.2s ease; }
+.nav-lang a:hover { opacity: 1; color: var(--accent); }
+.nav-lang-cur { color: var(--accent); }
+.nav-lang-sep { opacity: 0.25; }

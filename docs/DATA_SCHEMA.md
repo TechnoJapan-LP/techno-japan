@@ -188,6 +188,9 @@
 | heroRatio | `auto` / `4:5` / `1:1` / `3:2` / `16:9` / 空 | **記事詳細ページのヒーロー**での画像表示比率。空欄なら16:9。縦長写真は`auto`推奨 |
 | READTIME | `2` | 分。ビルド時にbodyから自動計算も可 |
 | festivalId | `transcendence` | 関連フェスのID。設定するとフェス詳細ページ（SPA/静的とも）に RELATED STORIES として記事カードが表示される |
+| body_en | HTML | 英語版本文。**title_en か body_en がある記事だけ `/en/articles/` が生成される**。CMSの「✨ 本文をまるごと英訳」でAI下書き生成可 |
+
+**多言語ページ生成**: メインURL（`/articles/` `/festivals/` `/artists/` `/venues/`）は日本語（lang=ja）、`/en/` 配下に英語版を生成。相互に hreflang を宣言し、x-default は英語版。フェス/アーティスト/ヴェニューは常に両言語生成（`DESC_EN` / `bio_en` / `name_en` を使用、無ければフォールバック）。ナビ右端に JA/EN トグルが出る。
 
 **本文内リンク（ショートコード）**: BODY 中に `[[festival:rural]]` / `[[artist:dj-nobu]]` / `[[venue:womb]]` / `[[article:id]]` と書くと、表示時に各詳細ページへのリンクに変換される。表示名はデータから自動で引く。`[[artist:dj-nobu|ノブさん]]` のように `|` でラベル指定も可。CMSエディタの「＠ ID」ボタンから検索して挿入できる。
 | FEATURED | `TRUE` / 空欄 | トップ掲載フラグ |

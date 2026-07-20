@@ -96,7 +96,14 @@ function fmtFestDate(d) {
 /* ---------- 共通のページ骨格 ---------- */
 const CSP = `default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' https:; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://stats.g.doubleclick.net; frame-src 'self' https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests`;
 
-const NAV = `<nav>
+function navHtml(lang, altHref) {
+  // 言語トグル: 対になるページがある時だけ JA / EN を出す
+  const toggle = altHref
+    ? (lang === 'ja'
+        ? `<span class="nav-lang"><span class="nav-lang-cur">JA</span><span class="nav-lang-sep">/</span><a href="${altHref}">EN</a></span>`
+        : `<span class="nav-lang"><a href="${altHref}">JA</a><span class="nav-lang-sep">/</span><span class="nav-lang-cur">EN</span></span>`)
+    : '';
+  return `<nav>
   <a href="/index.html" class="logo">TECHNO JAPAN</a>
   <div class="nav-links">
     <a href="/index.html">TOP</a>
@@ -105,6 +112,7 @@ const NAV = `<nav>
     <a href="/artists.html">ARTISTS</a>
     <a href="/venues.html">VENUES</a>
     <a href="/about.html">ABOUT</a>
+    ${toggle}
   </div>
   <button class="nav-hamburger" aria-label="Open menu" onclick="document.querySelector('.nav-overlay').classList.toggle('active');this.classList.toggle('active')"><span></span><span></span><span></span></button>
 </nav>
@@ -117,6 +125,7 @@ const NAV = `<nav>
   <a href="/venues.html">VENUES</a>
   <a href="/about.html">ABOUT</a>
 </div>`;
+}
 
 const FOOTER = `<footer>
   <div class="footer-top">
@@ -147,10 +156,17 @@ const GA = `<script>
 })();
 </script>`;
 
-function page({ title, desc, canonical, image, ogType = 'article', jsonLd, body }) {
+function page({ title, desc, canonical, image, ogType = 'article', jsonLd, body, lang = 'ja', altHref = null }) {
   const d = truncate(desc || '', 160);
+  // hreflang: JA/EN 両方が存在するページだけ相互宣言する
+  const abs = (path) => `${BASE}${path}`;
+  const hreflang = altHref
+    ? (lang === 'ja'
+        ? `<link rel="alternate" hreflang="ja" href="${esc(canonical)}">\n<link rel="alternate" hreflang="en" href="${esc(abs(altHref))}">\n<link rel="alternate" hreflang="x-default" href="${esc(abs(altHref))}">`
+        : `<link rel="alternate" hreflang="en" href="${esc(canonical)}">\n<link rel="alternate" hreflang="ja" href="${esc(abs(altHref))}">\n<link rel="alternate" hreflang="x-default" href="${esc(canonical)}">`)
+    : '';
   return `<!DOCTYPE html>
-<html lang="ja">
+<html lang="${lang}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -161,6 +177,7 @@ function page({ title, desc, canonical, image, ogType = 'article', jsonLd, body 
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(d)}">
 <link rel="canonical" href="${esc(canonical)}">
+${hreflang}
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#080808">
 
@@ -170,7 +187,7 @@ function page({ title, desc, canonical, image, ogType = 'article', jsonLd, body 
 <meta property="og:url" content="${esc(canonical)}">
 <meta property="og:type" content="${ogType}">
 <meta property="og:site_name" content="TECHNO JAPAN">
-<meta property="og:locale" content="ja_JP">
+<meta property="og:locale" content="${lang === 'ja' ? 'ja_JP' : 'en_US'}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${esc(title)}">
 <meta name="twitter:description" content="${esc(d)}">
@@ -184,7 +201,7 @@ function page({ title, desc, canonical, image, ogType = 'article', jsonLd, body 
 <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
 </head>
 <body>
-${NAV}
+${navHtml(lang, altHref)}
 ${body}
 ${FOOTER}
 ${GA}
@@ -194,10 +211,16 @@ ${GA}
 }
 
 /* ---------- 記事ページ ---------- */
-function articlePage(a, resolveEntities) {
-  const canonical = `${BASE}/articles/${a.id}.html`;
-  const title = `${a.title} — TECHNO JAPAN`;
-  const desc = a.excerpt || truncate(stripTags(a.body), 160);
+function articlePage(a, resolveEntities, lang = 'ja') {
+  // EN版は title_en / excerpt_en / body_en を使う（無い項目はJAへフォールバック）
+  const L = lang === 'en'
+    ? { title: a.title_en || a.title, excerpt: a.excerpt_en || a.excerpt, body: a.body_en || a.body, prefix: '/en' }
+    : { title: a.title, excerpt: a.excerpt, body: a.body, prefix: '' };
+  const hasAlt = lang === 'ja' ? !!(a.title_en || a.body_en) : true;
+  const altHref = hasAlt ? (lang === 'ja' ? `/en/articles/${a.id}.html` : `/articles/${a.id}.html`) : null;
+  const canonical = `${BASE}${L.prefix}/articles/${a.id}.html`;
+  const title = `${L.title} — TECHNO JAPAN`;
+  const desc = L.excerpt || truncate(stripTags(L.body), 160);
   const image = absUrl(a.image);
   const tags = (a.tags || []).map((t) => `<span class="article-tag">#${esc(t)}</span>`).join('');
   const authorName = a.author || 'TECHNO JAPAN';
@@ -205,9 +228,10 @@ function articlePage(a, resolveEntities) {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'NewsArticle',
-    headline: a.title,
+    headline: L.title,
     description: desc,
     image: [image],
+    inLanguage: lang,
     datePublished: a.date,
     dateModified: a.updated || a.date,
     author: { '@type': /TECHNO JAPAN/i.test(authorName) ? 'Organization' : 'Person', name: authorName },
@@ -224,13 +248,13 @@ function articlePage(a, resolveEntities) {
 
   const heroBlock = a.image
     ? `<header class="article-hero"${ratioAttr(a.heroRatio)}>
-        <img src="/${String(a.image).replace(/^\//, '')}" alt="${esc(a.title)}" fetchpriority="high" decoding="async">
+        <img src="/${String(a.image).replace(/^\//, '')}" alt="${esc(L.title)}" fetchpriority="high" decoding="async">
         <div class="article-hero-overlay">
           <div class="article-chips"><span class="cat-pill">${esc(a.category || 'NEWS')}</span></div>
-          <h1>${esc(a.title)}</h1>
+          <h1>${esc(L.title)}</h1>
         </div>
       </header>`
-    : `<div class="article-meta-top"><span class="cat-pill">${esc(a.category || 'NEWS')}</span></div><h1>${esc(a.title)}</h1>`;
+    : `<div class="article-meta-top"><span class="cat-pill">${esc(a.category || 'NEWS')}</span></div><h1>${esc(L.title)}</h1>`;
 
   const body = `<article class="article-detail">
   <div class="article-detail-inner">
@@ -241,8 +265,8 @@ function articlePage(a, resolveEntities) {
       <div><dt>PUBLISHED</dt><dd>${esc(fmtDate(a.date) || '—')}</dd></div>
       <div><dt>READING TIME</dt><dd>${esc(a.readTime || 5)} MIN</dd></div>
     </dl>
-    <div class="article-excerpt">${esc(a.excerpt || '')}</div>
-    <div class="article-body">${resolveEntities(a.body || '')}</div>
+    <div class="article-excerpt">${esc(L.excerpt || '')}</div>
+    <div class="article-body">${resolveEntities(L.body || '')}</div>
     <div class="article-footer">
       ${tags ? `<div class="article-tags">${tags}</div>` : ''}
       <a class="article-back" href="/news.html" style="margin:0"><span class="arrow"></span> ALL STORIES</a>
@@ -250,23 +274,29 @@ function articlePage(a, resolveEntities) {
   </div>
 </article>`;
 
-  return { file: path.join(LP_DIR, 'articles', `${a.id}.html`), html: page({ title, desc, canonical, image, jsonLd, body }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'articles'] : ['articles']), `${a.id}.html`), html: page({ title, desc, canonical, image, jsonLd, body, lang, altHref }) };
 }
 
 /* ---------- フェスティバルページ ---------- */
-function festivalPage(f, artistsById, articles) {
-  const canonical = `${BASE}/festivals/${f.id}.html`;
-  const title = `${f.name} — TECHNO JAPAN`;
+function festivalPage(f, artistsById, articles, lang = 'ja') {
+  const prefix = lang === 'en' ? '/en' : '';
+  const altHref = (lang === 'ja' ? '/en' : '') + `/festivals/${f.id}.html`;
+  const name = lang === 'en' ? (f.name_en || f.name) : f.name;
+  const bodyDesc = lang === 'en' ? (f.desc_en || f.desc) : (f.desc || f.desc_en);
+  const canonical = `${BASE}${prefix}/festivals/${f.id}.html`;
+  const title = `${name} — TECHNO JAPAN`;
   const dateLabel = fmtFestDate(f.date);
   const place = [f.location, f.city].filter(Boolean).join(', ');
-  const desc = f.desc || `${f.name}（${dateLabel}${place ? ' / ' + place : ''}）の開催情報・ラインナップ。日本のテクノ／ハウスのフェスティバル情報。`;
+  const desc = bodyDesc || (lang === 'en'
+    ? `${name} (${dateLabel}${place ? ' / ' + place : ''}) — dates, lineup and info. Techno & house festivals in Japan.`
+    : `${name}（${dateLabel}${place ? ' / ' + place : ''}）の開催情報・ラインナップ。日本のテクノ／ハウスのフェスティバル情報。`);
   const image = absUrl(f.image || f.flyer);
 
   // このフェスに紐づく記事（ARTICLES.festivalId で関連付け）
   const related = (articles || []).filter((a) => a.festivalId === f.id && a.status !== 'draft');
   const relatedHtml = related.length
     ? `<div class="related-stories"><h2>RELATED STORIES</h2>` + related.map((a) =>
-        `<a class="related-story-card" href="/articles/${a.id}.html">
+        `<a class="related-story-card" href="${(lang === 'en' && (a.title_en || a.body_en)) ? '/en' : ''}/articles/${a.id}.html">
           ${a.image ? `<img class="related-story-thumb" src="/${String(a.image).replace(/^\//, '')}" alt="" loading="lazy">` : ''}
           <div><div class="related-story-meta">${esc(a.category || 'STORY')} · ${esc(fmtDate(a.date))}</div>
           <div class="related-story-title">${esc(a.title)}</div></div>
@@ -276,7 +306,7 @@ function festivalPage(f, artistsById, articles) {
   const lineup = (f.lineup || [])
     .map((n) => {
       const a = artistsById.get(String(n).toLowerCase());
-      return a ? `<a class="lineup-item" href="/artists/${a.id}.html">${esc(a.name)}</a>` : `<span class="lineup-item">${esc(n)}</span>`;
+      return a ? `<a class="lineup-item" href="${prefix}/artists/${a.id}.html">${esc(lang === 'en' ? (a.name_en || a.name) : a.name)}</a>` : `<span class="lineup-item">${esc(n)}</span>`;
     })
     .join('');
 
@@ -286,8 +316,9 @@ function festivalPage(f, artistsById, articles) {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Festival',
-    name: f.name,
+    name: name,
     description: desc,
+    inLanguage: lang,
     image: [image],
     ...(start ? { startDate: start, endDate: end } : {}),
     url: canonical,
@@ -307,17 +338,17 @@ function festivalPage(f, artistsById, articles) {
   <div class="detail-inner">
     <a class="article-back" href="/festivals.html"><span class="arrow"></span> ALL FESTIVALS</a>
     <div class="detail-eyebrow">${esc(dateLabel)}${place ? ' · ' + esc(place) : ''}</div>
-    <h1>${esc(f.name)}</h1>
+    <h1>${esc(name)}</h1>
     ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
-    ${f.image || f.flyer ? `<div class="detail-hero"><img src="/${String(f.image || f.flyer).replace(/^\//, '')}" alt="${esc(f.name)}"></div>` : ''}
-    ${f.desc ? `<div class="detail-body"><p>${esc(f.desc)}</p></div>` : ''}
+    ${f.image || f.flyer ? `<div class="detail-hero"><img src="/${String(f.image || f.flyer).replace(/^\//, '')}" alt="${esc(name)}"></div>` : ''}
+    ${bodyDesc ? `<div class="detail-body"><p>${esc(bodyDesc)}</p></div>` : ''}
     <dl class="detail-facts">
-      <div><dt>開催日</dt><dd>${esc(dateLabel)}</dd></div>
-      ${f.location ? `<div><dt>会場</dt><dd>${esc(f.location)}</dd></div>` : ''}
-      ${f.city ? `<div><dt>エリア</dt><dd>${esc(f.city)}</dd></div>` : ''}
-      ${f.address ? `<div><dt>住所</dt><dd>${esc(f.address)}</dd></div>` : ''}
-      ${f.url ? `<div><dt>公式サイト</dt><dd><a href="${esc(f.url)}" target="_blank" rel="noopener">${esc(f.url)}</a></dd></div>` : ''}
-      ${f.ticketUrl ? `<div><dt>チケット</dt><dd><a href="${esc(f.ticketUrl)}" target="_blank" rel="noopener">購入ページ</a></dd></div>` : ''}
+      <div><dt>${lang === 'en' ? 'DATES' : '開催日'}</dt><dd>${esc(dateLabel)}</dd></div>
+      ${f.location ? `<div><dt>${lang === 'en' ? 'VENUE' : '会場'}</dt><dd>${esc(f.location)}</dd></div>` : ''}
+      ${f.city ? `<div><dt>${lang === 'en' ? 'AREA' : 'エリア'}</dt><dd>${esc(f.city)}</dd></div>` : ''}
+      ${f.address ? `<div><dt>${lang === 'en' ? 'ADDRESS' : '住所'}</dt><dd>${esc(f.address)}</dd></div>` : ''}
+      ${f.url ? `<div><dt>${lang === 'en' ? 'OFFICIAL SITE' : '公式サイト'}</dt><dd><a href="${esc(f.url)}" target="_blank" rel="noopener">${esc(f.url)}</a></dd></div>` : ''}
+      ${f.ticketUrl ? `<div><dt>${lang === 'en' ? 'TICKETS' : 'チケット'}</dt><dd><a href="${esc(f.ticketUrl)}" target="_blank" rel="noopener">${lang === 'en' ? 'Buy tickets' : '購入ページ'}</a></dd></div>` : ''}
     </dl>
     ${lineup ? `<h2>LINE UP</h2><div class="lineup-list">${lineup}</div>` : ''}
     ${relatedHtml}
@@ -325,22 +356,29 @@ function festivalPage(f, artistsById, articles) {
   </div>
 </article>`;
 
-  return { file: path.join(LP_DIR, 'festivals', `${f.id}.html`), html: page({ title, desc, canonical, image, ogType: 'website', jsonLd, body }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'festivals'] : ['festivals']), `${f.id}.html`), html: page({ title, desc, canonical, image, ogType: 'website', jsonLd, body, lang, altHref }) };
 }
 
 /* ---------- アーティストページ ---------- */
-function artistPage(a) {
-  const canonical = `${BASE}/artists/${a.id}.html`;
-  const title = `${a.name} — TECHNO JAPAN`;
+function artistPage(a, lang = 'ja') {
+  const prefix = lang === 'en' ? '/en' : '';
+  const altHref = (lang === 'ja' ? '/en' : '') + `/artists/${a.id}.html`;
+  const name = lang === 'en' ? (a.name_en || a.name) : a.name;
+  const bio = lang === 'en' ? (a.bio_en || a.bio) : (a.bio || a.bio_en);
+  const canonical = `${BASE}${prefix}/artists/${a.id}.html`;
+  const title = `${name} — TECHNO JAPAN`;
   const place = [a.city, a.country].filter(Boolean).join(', ');
-  const desc = a.bio ? truncate(stripTags(a.bio), 160) : `${a.name}${place ? '（' + place + '）' : ''}のプロフィール。日本のアンダーグラウンド・テクノ／ハウスシーンで活動するアーティスト。`;
+  const desc = bio ? truncate(stripTags(bio), 160) : (lang === 'en'
+    ? `${name}${place ? ' (' + place + ')' : ''} — artist profile. Japan's underground techno / house scene.`
+    : `${name}${place ? '（' + place + '）' : ''}のプロフィール。日本のアンダーグラウンド・テクノ／ハウスシーンで活動するアーティスト。`);
   const image = absUrl(a.image);
   const links = a.links || {};
 
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'MusicGroup',
-    name: a.name,
+    name: name,
+    inLanguage: lang,
     description: desc,
     ...(a.image ? { image: [image] } : {}),
     url: canonical,
@@ -361,30 +399,37 @@ function artistPage(a) {
   <div class="detail-inner">
     <a class="article-back" href="/artists.html"><span class="arrow"></span> ALL ARTISTS</a>
     ${place ? `<div class="detail-eyebrow">${esc(place)}</div>` : ''}
-    <h1>${esc(a.name)}</h1>
+    <h1>${esc(name)}</h1>
     ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
-    ${a.image ? `<div class="detail-hero detail-hero-portrait"><img src="/${String(a.image).replace(/^\//, '')}" alt="${esc(a.name)}"></div>` : ''}
-    ${a.bio ? `<div class="detail-body"><p>${esc(a.bio)}</p></div>` : ''}
+    ${a.image ? `<div class="detail-hero detail-hero-portrait"><img src="/${String(a.image).replace(/^\//, '')}" alt="${esc(name)}"></div>` : ''}
+    ${bio ? `<div class="detail-body"><p>${esc(bio)}</p></div>` : ''}
     ${linkRow ? `<div class="detail-links">${linkRow}</div>` : ''}
     <div class="article-footer"><a class="article-back" href="/artists.html" style="margin:0"><span class="arrow"></span> ALL ARTISTS</a></div>
   </div>
 </article>`;
 
-  return { file: path.join(LP_DIR, 'artists', `${a.id}.html`), html: page({ title, desc, canonical, image, ogType: 'profile', jsonLd, body }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'artists'] : ['artists']), `${a.id}.html`), html: page({ title, desc, canonical, image, ogType: 'profile', jsonLd, body, lang, altHref }) };
 }
 
 /* ---------- ヴェニューページ ---------- */
-function venuePage(v) {
-  const canonical = `${BASE}/venues/${v.id}.html`;
-  const title = `${v.name} — TECHNO JAPAN`;
+function venuePage(v, lang = 'ja') {
+  const prefix = lang === 'en' ? '/en' : '';
+  const altHref = (lang === 'ja' ? '/en' : '') + `/venues/${v.id}.html`;
+  const name = lang === 'en' ? (v.name_en || v.name) : v.name;
+  const bodyDesc = lang === 'en' ? (v.desc_en || v.desc) : (v.desc || v.desc_en);
+  const canonical = `${BASE}${prefix}/venues/${v.id}.html`;
+  const title = `${name} — TECHNO JAPAN`;
   const place = [v.area, v.city].filter(Boolean).join(', ');
-  const desc = v.desc || `${v.name}${place ? '（' + place + '）' : ''}の基本情報。日本のアンダーグラウンド・ダンスミュージックのクラブ／ヴェニュー。`;
+  const desc = bodyDesc || (lang === 'en'
+    ? `${name}${place ? ' (' + place + ')' : ''} — club / venue guide. Japan's underground dance music.`
+    : `${name}${place ? '（' + place + '）' : ''}の基本情報。日本のアンダーグラウンド・ダンスミュージックのクラブ／ヴェニュー。`);
   const image = absUrl(v.image);
 
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'MusicVenue',
-    name: v.name,
+    name: name,
+    inLanguage: lang,
     description: desc,
     ...(v.image ? { image: [image] } : {}),
     url: canonical,
@@ -401,21 +446,21 @@ function venuePage(v) {
   <div class="detail-inner">
     <a class="article-back" href="/venues.html"><span class="arrow"></span> ALL VENUES</a>
     ${place ? `<div class="detail-eyebrow">${esc(place)}</div>` : ''}
-    <h1>${esc(v.name)}</h1>
+    <h1>${esc(name)}</h1>
     ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
-    ${v.image ? `<div class="detail-hero"><img src="/${String(v.image).replace(/^\//, '')}" alt="${esc(v.name)}"></div>` : ''}
-    ${v.desc ? `<div class="detail-body"><p>${esc(v.desc)}</p></div>` : ''}
+    ${v.image ? `<div class="detail-hero"><img src="/${String(v.image).replace(/^\//, '')}" alt="${esc(name)}"></div>` : ''}
+    ${bodyDesc ? `<div class="detail-body"><p>${esc(bodyDesc)}</p></div>` : ''}
     <dl class="detail-facts">
-      ${v.type ? `<div><dt>タイプ</dt><dd>${esc(v.type)}</dd></div>` : ''}
-      ${v.capacity ? `<div><dt>キャパシティ</dt><dd>${esc(v.capacity)}</dd></div>` : ''}
-      ${v.address ? `<div><dt>住所</dt><dd>${esc(v.address)}</dd></div>` : ''}
-      ${v.url ? `<div><dt>公式サイト</dt><dd><a href="${esc(v.url)}" target="_blank" rel="noopener">${esc(v.url)}</a></dd></div>` : ''}
+      ${v.type ? `<div><dt>${lang === 'en' ? 'TYPE' : 'タイプ'}</dt><dd>${esc(v.type)}</dd></div>` : ''}
+      ${v.capacity ? `<div><dt>${lang === 'en' ? 'CAPACITY' : 'キャパシティ'}</dt><dd>${esc(v.capacity)}</dd></div>` : ''}
+      ${v.address ? `<div><dt>${lang === 'en' ? 'ADDRESS' : '住所'}</dt><dd>${esc(v.address)}</dd></div>` : ''}
+      ${v.url ? `<div><dt>${lang === 'en' ? 'OFFICIAL SITE' : '公式サイト'}</dt><dd><a href="${esc(v.url)}" target="_blank" rel="noopener">${esc(v.url)}</a></dd></div>` : ''}
     </dl>
     <div class="article-footer"><a class="article-back" href="/venues.html" style="margin:0"><span class="arrow"></span> ALL VENUES</a></div>
   </div>
 </article>`;
 
-  return { file: path.join(LP_DIR, 'venues', `${v.id}.html`), html: page({ title, desc, canonical, image, ogType: 'website', jsonLd, body }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'venues'] : ['venues']), `${v.id}.html`), html: page({ title, desc, canonical, image, ogType: 'website', jsonLd, body, lang, altHref }) };
 }
 
 /* ---------- 実行 ---------- */
@@ -455,11 +500,21 @@ function main() {
   const valid = (x) => x && x.id && String(x.id).trim();
 
   const resolveEntities = makeEntityResolver({ ARTISTS, FESTIVALS, VENUES, ARTICLES });
+  const pubArticles = ARTICLES.filter(valid).filter((a) => a.status !== 'draft');
+  const pubFests = FESTIVALS.filter(valid);
+  const pubArtists = ARTISTS.filter(valid);
+  const pubVenues = VENUES.filter(valid).filter((v) => v.name && v.city && v.city !== 'undefined');
+
   const counts = {
-    articles: writeAll(ARTICLES.filter(valid).filter((a) => a.status !== 'draft').map((a) => articlePage(a, resolveEntities)), 'articles'),
-    festivals: writeAll(FESTIVALS.filter(valid).map((f) => festivalPage(f, artistsById, ARTICLES)), 'festivals'),
-    artists: writeAll(ARTISTS.filter(valid).map(artistPage), 'artists'),
-    venues: writeAll(VENUES.filter(valid).filter((v) => v.name && v.city && v.city !== 'undefined').map(venuePage), 'venues'),
+    articles: writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'ja')), 'articles'),
+    festivals: writeAll(pubFests.map((f) => festivalPage(f, artistsById, ARTICLES, 'ja')), 'festivals'),
+    artists: writeAll(pubArtists.map((a) => artistPage(a, 'ja')), 'artists'),
+    venues: writeAll(pubVenues.map((v) => venuePage(v, 'ja')), 'venues'),
+    // 英語版（/en/…）。記事は英訳がある時だけ生成する
+    'en/articles': writeAll(pubArticles.filter((a) => a.title_en || a.body_en).map((a) => articlePage(a, resolveEntities, 'en')), 'en/articles'),
+    'en/festivals': writeAll(pubFests.map((f) => festivalPage(f, artistsById, ARTICLES, 'en')), 'en/festivals'),
+    'en/artists': writeAll(pubArtists.map((a) => artistPage(a, 'en')), 'en/artists'),
+    'en/venues': writeAll(pubVenues.map((v) => venuePage(v, 'en')), 'en/venues'),
   };
 
   console.log('Detail pages:');
