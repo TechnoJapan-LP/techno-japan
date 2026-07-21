@@ -158,7 +158,7 @@
       <div class="form-group"><label>Type</label><select id="f-type"><option value="festival">Festival</option><option value="rave">Rave</option></select></div>
       <div class="form-group"><label>Name</label><input type="text" id="f-name" placeholder="e.g. RURAL FESTIVAL 2026"></div>
       <div class="form-group"><label>City</label><input type="text" id="f-city" placeholder="e.g. NIIGATA"></div>
-      <div class="form-group"><label>Location</label><input type="text" id="f-location" placeholder="e.g. NAEBA SKI RESORT"></div>
+      <div class="form-group full"><label>Location <span class="label-hint">施設名を入れて「📍 検索」で住所と緯度経度を自動取得</span></label><div class="input-row"><input type="text" id="f-location" placeholder="e.g. NAEBA SKI RESORT" onkeydown="if(event.key==='Enter'){event.preventDefault();geocodeFromLocation('f')}"><button class="btn btn-blue btn-sm" onclick="geocodeFromLocation('f')">📍 検索</button></div></div>
       <div class="form-group"><label>URL</label><input type="url" id="f-url" placeholder="https://..."></div>
       <div class="form-group"><label>Ticket URL</label><input type="url" id="f-ticketUrl" placeholder="https://..."></div>
       <div class="form-group"><label>Instagram</label><input type="url" id="f-instagram" placeholder="https://instagram.com/..."></div>
@@ -477,6 +477,6 @@
   </div>
 </div>
 
-<script src="cms.js?v=12" defer></script>
+<script src="cms.js?v=13" defer></script>
 </body>
 </html>

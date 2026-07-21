@@ -1192,6 +1192,75 @@ function geocode(prefix) {
     }).catch(()=>toast('Geocoding error','error'));
 }
 
+/* LOCATION（施設名）から住所 + 緯度経度をまとめて取得する。
+   施設名だけだと曖昧なので City を添えて精度を上げ、日本語の住所で返す。
+   ADDRESS は上書きせず「空のときだけ」自動入力し、既存の手入力を尊重する。 */
+function geocodeFromLocation(prefix) {
+  const loc = document.getElementById(prefix+'-location').value.trim();
+  if (!loc) return toast('Location（施設名）を入力してください','error');
+  const city = (document.getElementById(prefix+'-city')?.value || '').trim();
+  // 施設名 + 市 + 国。まず絞り込みで検索し、ダメなら施設名単体で再試行する。
+  const queries = [ [loc, city, 'Japan'].filter(Boolean).join(', '), loc + ', Japan' ];
+  const addrEl = document.getElementById(prefix+'-address');
+  const latEl = document.getElementById(prefix+'-lat');
+  const lngEl = document.getElementById(prefix+'-lng');
+  toast('📍 施設名から検索中...','info');
+
+  const nominatim = (q) =>
+    fetch('https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=1&accept-language=ja&q='+encodeURIComponent(q))
+      .then(r=>r.json()).catch(()=>null);
+  const applyHit = (hit) => {
+    latEl.value = parseFloat(hit.lat).toFixed(4);
+    lngEl.value = parseFloat(hit.lon).toFixed(4);
+    if (!addrEl.value.trim() && hit.display_name) addrEl.value = hit.display_name;
+    updateLocationMap(prefix);
+  };
+
+  (async () => {
+    // 1) まず Nominatim を直接。有名施設（英/日）はこれで当たる。
+    for (const q of queries) {
+      const d = await nominatim(q);
+      if (Array.isArray(d) && d[0] && d[0].lat && d[0].lon) {
+        applyHit(d[0]);
+        toast('住所と座標を取得しました — 内容を確認してください','success');
+        return;
+      }
+    }
+
+    // 2) 見つからなければ Claude に日本語の正式名称＋住所を推定させ、それで再検索。
+    //    （英語表記の施設名は OSM に載っていないことが多いため）
+    toast('🤖 AIで施設名を照合中...','info');
+    let resolved;
+    try {
+      resolved = await fetch(GAS_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'resolve_place', location: loc, city: city })
+      }).then(r=>r.json());
+    } catch (_) {}
+
+    if (resolved && resolved.status === 'ok') {
+      const tryQueries = [resolved.name_ja, resolved.address].filter(Boolean);
+      for (const q of tryQueries) {
+        const d = await nominatim(q);
+        if (Array.isArray(d) && d[0] && d[0].lat && d[0].lon) {
+          applyHit(d[0]);
+          // AI が返した住所の方が読みやすければ、それで上書き（空のときだけ）
+          if (!addrEl.value.trim() && resolved.address) addrEl.value = resolved.address;
+          toast('AIで照合して座標を取得しました — 内容を確認してください','success');
+          return;
+        }
+      }
+      // Nominatim では最終的に当たらなかったが、AI住所は入れておく（座標は手動 Geocode 可）
+      if (!addrEl.value.trim() && resolved.address) {
+        addrEl.value = resolved.address;
+        toast('住所を推定しました。ADDRESS横の Geocode で座標を取得してください','info');
+        return;
+      }
+    }
+    toast('施設名から見つかりませんでした。ADDRESSに住所を入れて Geocode を試してください','error');
+  })();
+}
+
 /* ==============================================================
    LINEUP AUTOCOMPLETE
    ============================================================== */
