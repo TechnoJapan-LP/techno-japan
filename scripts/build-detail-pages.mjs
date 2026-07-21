@@ -205,6 +205,7 @@ ${navHtml(lang, altHref)}
 ${body}
 ${FOOTER}
 ${GA}
+<script src="/common.js?v=2" defer></script>
 </body>
 </html>
 `;

@@ -81,3 +81,77 @@
     initScrollReveal();
   }
 })();
+
+/* ============================================================
+   TECHNO JAPAN — アナリティクス（GA4 カスタムイベント）
+   価値の高いユーザー行動だけを計測する。gtag が無い環境（
+   ボット除外や広告ブロック）でも無害に no-op になる。
+   ============================================================ */
+(function () {
+  'use strict';
+  function track(name, params) {
+    try {
+      if (typeof window.gtag === 'function') window.gtag('event', name, params || {});
+    } catch (_) {}
+  }
+  window.tjTrack = track;
+
+  function ready(fn) {
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
+    else fn();
+  }
+
+  ready(function () {
+    /* 1) お気に入り登録/解除（何が人気か） */
+    document.addEventListener('tj-fav-change', function (e) {
+      var d = e.detail || {};
+      track(d.added ? 'favorite_add' : 'favorite_remove', {
+        item_type: d.type,          // festival / artist / venue
+        item_id: d.id
+      });
+    });
+
+    /* 2) 外部リンク遷移（チケット/公式/SNS のどれが押されるか） */
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[href]');
+      if (!a) return;
+      var href = a.getAttribute('href') || '';
+      if (!/^https?:\/\//i.test(href)) return;                 // 内部リンクは対象外
+      if (a.hostname === location.hostname) return;
+      var kind = 'external';
+      if (/instagram\.com/i.test(href)) kind = 'instagram';
+      else if (/twitter\.com|x\.com|threads\.net/i.test(href)) kind = 'social';
+      else if (/ticket|eplus|peatix|zaiko|resident|linktr/i.test(href)) kind = 'ticket';
+      track('outbound_click', { link_domain: a.hostname, link_kind: kind, link_url: href.slice(0, 200) });
+    }, true);
+
+    /* 3) 言語切替（JA/EN どちらの需要が大きいか） */
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('.nav-lang a');
+      if (!a) return;
+      track('language_switch', {
+        to_lang: /\/en\//.test(a.getAttribute('href') || '') ? 'en' : 'ja',
+        from_path: location.pathname
+      });
+    }, true);
+
+    /* 4) 記事の読了（本当に最後まで読まれた記事はどれか）
+          記事本文がある時だけ、末尾が一度でも見えたら1回送る。 */
+    var body = document.querySelector('.article-body');
+    if (body && 'IntersectionObserver' in window) {
+      var sent = false;
+      var end = document.createElement('span');
+      end.setAttribute('aria-hidden', 'true');
+      body.appendChild(end);
+      var io = new IntersectionObserver(function (entries) {
+        if (sent) return;
+        if (entries.some(function (x) { return x.isIntersecting; })) {
+          sent = true;
+          track('article_read_complete', { page_path: location.pathname });
+          io.disconnect();
+        }
+      }, { threshold: 0 });
+      io.observe(end);
+    }
+  });
+})();
