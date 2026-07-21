@@ -1218,8 +1218,15 @@ function geocodeFromLocation(prefix) {
 
   (async () => {
     // 1) まず Nominatim を直接。有名施設（英/日）はこれで当たる。
+    // ポリシー(1req/秒)を守るため、2回目以降のクエリは間隔を空ける。
+    let first = true;
+    const politeNominatim = async (q) => {
+      if (!first) await new Promise(r => setTimeout(r, 1100));
+      first = false;
+      return nominatim(q);
+    };
     for (const q of queries) {
-      const d = await nominatim(q);
+      const d = await politeNominatim(q);
       if (Array.isArray(d) && d[0] && d[0].lat && d[0].lon) {
         applyHit(d[0]);
         toast('住所と座標を取得しました — 内容を確認してください','success');
@@ -1241,7 +1248,7 @@ function geocodeFromLocation(prefix) {
     if (resolved && resolved.status === 'ok') {
       const tryQueries = [resolved.name_ja, resolved.address].filter(Boolean);
       for (const q of tryQueries) {
-        const d = await nominatim(q);
+        const d = await politeNominatim(q);
         if (Array.isArray(d) && d[0] && d[0].lat && d[0].lon) {
           applyHit(d[0]);
           // AI が返した住所の方が読みやすければ、それで上書き（空のときだけ）
