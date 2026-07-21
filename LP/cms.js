@@ -1473,22 +1473,23 @@ function buildPublishingSection(section){
   const nameField = section === 'article' ? 'title' : 'name';
   const descField = section === 'artist' ? 'bio' : section === 'article' ? 'excerpt' : 'desc';
   const descLabel = section === 'artist' ? 'Bio' : section === 'article' ? 'Excerpt' : 'Description';
-  const enInputType = section === 'artist' || section === 'article' ? 'textarea' : 'textarea';
-  return `
-    <div class="form-group full">
+  // 記事は本文フォーム内の「🌐 英語版」セクション（title_en/excerpt_en/body_en）に一本化
+  const enSection = isArticle ? '' : `
       <div class="pub-section">
-        <h3>🌐 ENGLISH VERSION</h3>
+        <h3>🌐 ENGLISH VERSION <span class="label-hint">(/en/ ページ用。空欄なら日本語にフォールバック)</span></h3>
         <div class="form-group">
           <label>${nameField === 'title' ? 'Title' : 'Name'} (EN)</label>
           <input type="text" id="${p}-${nameField}En" placeholder="English ${nameField}..." style="width:100%">
-          <button class="btn btn-sm" style="margin-top:4px" onclick="autoTranslateField('${p}-${nameField}','${p}-${nameField}En','jp-to-en')">JP → EN (auto)</button>
+          <button class="btn btn-green btn-sm" style="margin-top:4px" onclick="autoTranslateField('${p}-${nameField}','${p}-${nameField}En','jp-to-en')">✨ 日本語から翻訳</button>
         </div>
         <div class="form-group">
           <label>${descLabel} (EN)</label>
-          <textarea id="${p}-${descField}En" rows="4" placeholder="English ${descLabel.toLowerCase()}..." style="width:100%"></textarea>
-          <button class="btn btn-sm" style="margin-top:4px" onclick="autoTranslateField('${p}-${descField}','${p}-${descField}En','jp-to-en')">JP → EN (auto)</button>
+          <textarea id="${p}-${descField}En" rows="8" placeholder="English ${descLabel.toLowerCase()}..." style="width:100%"></textarea>
+          <button class="btn btn-green btn-sm" style="margin-top:4px" onclick="autoTranslateField('${p}-${descField}','${p}-${descField}En','jp-to-en')">✨ 日本語から翻訳</button>
         </div>
-      </div>
+      </div>`;
+  return `
+    <div class="form-group full">${enSection}
       <div class="pub-section">
         <h3>📤 PUBLISHING & SEO</h3>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
@@ -1512,10 +1513,12 @@ function buildPublishingSection(section){
           <label>Meta Description <span class="label-hint">(SEO用 / 160文字以内推奨)</span></label>
           <textarea id="${p}-metaDescription" rows="2" placeholder="検索結果に表示される説明文..." style="width:100%" oninput="updateCharCount('${p}-metaDescription',160)"></textarea>
           <div class="char-count" id="${p}-metaDescription-count">0 / 160</div>
-          ${isArticle ? `<button class="btn btn-green btn-sm" style="margin-top:6px" onclick="aiSummarize('meta')">✨ AI Meta 生成</button>` : ''}
+          ${isArticle ? `<button class="btn btn-green btn-sm" style="margin-top:6px" onclick="aiSummarize('meta')">✨ AI Meta 生成</button>` : `<button class="btn btn-green btn-sm" style="margin-top:6px" onclick="aiMetaGenerate('${p}','${section}')">✨ ${descLabel}から生成</button>`}
         </div>
         <div class="form-group">
-          <label>Tags <span class="label-hint">(Enter または , で追加)</span></label>
+          <label>Tags <span class="label-hint">(Enter または , で追加)</span>
+            <button class="btn btn-sm" style="margin-left:8px;padding:2px 8px;font-size:.6rem" onclick="suggestTags('${p}','${section}')">＋ ジャンル/都市から候補追加</button>
+          </label>
           <div class="tag-input-wrap" id="${p}-tags-wrap" onclick="document.getElementById('${p}-tags-input').focus()">
             <input type="text" id="${p}-tags-input" placeholder="Add tag..." onkeydown="handleTagKey(event,'${p}')">
           </div>
@@ -1600,11 +1603,12 @@ function getPubFields(section){
     fields.publishAt = g(p+'-publishAt');
     fields.authorId = g(p+'-authorId');
   }
-  // Multi-language
-  const descField = section === 'artist' ? 'bio' : section === 'article' ? 'excerpt' : 'desc';
-  const nameField = section === 'article' ? 'title' : 'name';
-  fields[descField + '_en'] = g(p+'-'+descField+'En');
-  fields[nameField + '_en'] = g(p+'-'+nameField+'En');
+  // Multi-language（記事は本文フォーム内の ar-title_en / ar-excerpt_en を使うためスキップ）
+  if(section !== 'article'){
+    const descField = section === 'artist' ? 'bio' : 'desc';
+    fields[descField+'_en'] = g(p+'-'+descField+'En');
+    fields['name_en'] = g(p+'-nameEn');
+  }
   return fields;
 }
 function setPubFields(section, row){
@@ -1615,11 +1619,12 @@ function setPubFields(section, row){
   setVal(p+'-metaDescription', row.metaDescription || '');
   setVal(p+'-editorNotes', row.editorNotes || '');
   setTagsValue(p, row.tags || '');
-  // Multi-language fields
-  const descField = section === 'artist' ? 'bio' : section === 'article' ? 'excerpt' : 'desc';
-  const nameField = section === 'article' ? 'title' : 'name';
-  setVal(p+'-'+descField+'En', row[descField+'_en'] || '');
-  setVal(p+'-'+nameField+'En', row[nameField+'_en'] || '');
+  // Multi-language fields（記事は本文フォーム内の ar-title_en / ar-excerpt_en を使うためスキップ）
+  if(section !== 'article'){
+    const descField = section === 'artist' ? 'bio' : 'desc';
+    setVal(p+'-'+descField+'En', row[descField+'_en'] || '');
+    setVal(p+'-nameEn', row.name_en || '');
+  }
   if(section === 'article'){
     setVal(p+'-publishAt', row.publishAt || '');
     setVal(p+'-authorId', row.authorId || '');
@@ -1646,6 +1651,12 @@ function clearPubFields(section){
   if(section === 'article'){
     setVal(p+'-publishAt', '');
     setVal(p+'-authorId', '');
+  }
+  // English Version 欄もクリア（記事はインライン ar-*_en が resetForm でクリアされる）
+  if(section !== 'article'){
+    const descField = section === 'artist' ? 'bio' : 'desc';
+    setVal(p+'-'+descField+'En', '');
+    setVal(p+'-nameEn', '');
   }
   const hist = document.getElementById(p+'-edit-history');
   if(hist) hist.textContent = '';
@@ -1692,39 +1703,26 @@ function completenessBarHtml(score){
    TRANSLATE — JP/EN
    ============================================================== */
 function autoTranslateField(srcId, destId, direction){
-  const src = document.getElementById(srcId);
-  const dest = document.getElementById(destId);
-  if(!src || !dest) return;
-  const text = src.value.trim();
-  if(!text) return toast('Source field is empty','error');
-  const btn = event && event.target;
-  if(btn){btn.disabled=true;btn.dataset.orig=btn.textContent;btn.innerHTML='Translating<span class="spinner"></span>';}
-  fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'translate', text, direction})})
-    .then(r=>r.json()).then(d=>{
-      if(btn){btn.disabled=false;btn.textContent=btn.dataset.orig||'Translate';}
-      if(d.status==='ok'&&d.translated){
-        dest.value=d.translated;
-        toast('Translated','success');
-      } else toast(d.message||'Translation failed','error');
-    }).catch(e=>{
-      if(btn){btn.disabled=false;btn.textContent=btn.dataset.orig||'Translate';}
-      toast('Translation error','error');
-    });
+  // 旧 'translate' アクションは壊れているため ai_translate ベースの aiTranslateField に委譲
+  aiTranslateField(srcId, destId, direction === 'en-to-jp' ? 'ja' : 'en');
 }
 function translateField(fieldId, direction){
+  // 同一フィールドを上書き翻訳（EN→JP: 英語で書いた説明文を日本語正に変換する用途）
   const el = document.getElementById(fieldId);
   if(!el) return;
   const text = el.value.trim();
   if(!text) return toast('No text to translate','error');
+  const target = direction === 'en-to-jp' ? 'ja' : 'en';
   const btn = event && event.target;
   if(btn){btn.disabled=true;btn.dataset.orig=btn.textContent;btn.innerHTML='Translating<span class="spinner"></span>';}
-  toast('Translating...','info');
-  fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'translate', text, direction})})
-    .then(r=>r.json()).then(d=>{
+  toast('✨ 翻訳中...','info');
+  aiTranslate_(text, target, false)
+    .then(d=>{
       if(btn){btn.disabled=false;btn.textContent=btn.dataset.orig||'Translate';}
-      if(d.status==='ok'&&d.translated){
-        el.value=d.translated;
-        toast('Translated','success');
+      if(d.status==='ok'&&d.text){
+        el.value=d.text.trim();
+        markFormDirty();
+        toast('翻訳しました — 内容を確認してください','success');
       } else toast(d.message||'Translation failed','error');
     }).catch(e=>{
       if(btn){btn.disabled=false;btn.textContent=btn.dataset.orig||'Translate';}
@@ -2539,7 +2537,6 @@ function editRow(section, rowNum){
     setVal('f-image',row.image); setVal('f-flyer',row.flyer);
     setVal('f-heroGradient',row.heroGradient); setVal('f-desc',row.desc);
     setVal('f-imagePosition',row.imagePosition || '');
-    setVal('f-desc_en',row.desc_en||'');
     const dates=(row.date||'').split('/');
     setVal('f-dateStart',dates[0]); setVal('f-dateEnd',dates[1]);
     setSelectedGenres('f-genre',(row.genre||'').split(',').map(s=>s.trim()).filter(Boolean));
@@ -2559,7 +2556,6 @@ function editRow(section, rowNum){
     setVal('a-country',row.country); setVal('a-genre',row.genre);
     setVal('a-image',row.image); setVal('a-bio',row.bio);
     setVal('a-imagePosition',row.imagePosition || '');
-    setVal('a-bio_en',row.bio_en||'');
     setVal('a-instagram',row.instagram); setVal('a-soundcloud',row.soundcloud);
     setVal('a-bandcamp',row.bandcamp); setVal('a-website',row.website);
     if(typeof syncArtistImagePos==='function') syncArtistImagePos();
@@ -2632,11 +2628,11 @@ function saveEdit(section){
       address:g('f-address'),lat:g('f-lat'),lng:g('f-lng'),
       date:ds&&de?ds+'/'+de:ds,genre:getSelectedGenres('f-genre').join(', '),
       image:g('f-image'),imagePosition:g('f-imagePosition'),flyer:g('f-flyer'),heroGradient:g('f-heroGradient'),
-      desc:g('f-desc'),desc_en:g('f-desc_en'),lineup:cleanLineup(lineups.f).join(', ')});
+      desc:g('f-desc'),lineup:cleanLineup(lineups.f).join(', ')});
   }
   else if(section==='artist'){
     Object.assign(payload,{id:g('a-id'),name:g('a-name'),city:g('a-city'),country:g('a-country'),
-      genre:g('a-genre'),image:g('a-image'),imagePosition:g('a-imagePosition'),bio:g('a-bio'),bio_en:g('a-bio_en'),
+      genre:g('a-genre'),image:g('a-image'),imagePosition:g('a-imagePosition'),bio:g('a-bio'),
       instagram:g('a-instagram'),soundcloud:g('a-soundcloud'),
       bandcamp:g('a-bandcamp'),website:g('a-website')});
   }
@@ -3994,6 +3990,68 @@ function aiSummarize(mode){
     toast('AI error: '+e.message, 'error');
   });
 }
+
+/* ---------- SEO入力の効率化 ---------- */
+// 非記事セクション: Description/Bio から Meta Description をAI生成
+function aiMetaGenerate(p, section){
+  const descField = section === 'artist' ? 'bio' : 'desc';
+  const text = (g(p+'-'+descField) || '').replace(/\s+/g,' ').trim();
+  if(!text) return toast('先に' + (section==='artist'?'Bio':'Description') + 'を入力してください','error');
+  toast('✨ AI Meta 生成中...','info');
+  fetch(GAS_URL,{method:'POST',body:JSON.stringify({
+    action:'ai_summarize', mode:'meta',
+    title: g(p+'-name') || '',
+    text: text.slice(0, 8000)
+  })}).then(r=>r.json()).then(d=>{
+    if(d.status==='ok' && d.text){
+      setVal(p+'-metaDescription', d.text.trim());
+      updateCharCount(p+'-metaDescription', 160);
+      markFormDirty();
+      toast('✨ 生成完了 — 内容を確認してください','success');
+    } else toast('AI failed: '+(d.message||'unknown'),'error');
+  }).catch(e=>toast('AI error: '+e.message,'error'));
+}
+
+// フォーム内のジャンル/都市/タイプ等からタグ候補をワンクリック追加
+function suggestTags(p, section){
+  let cands = [];
+  if(section === 'venue' || section === 'festival'){
+    cands = getSelectedGenres(p+'-genre').concat([g(p+'-city'), g(p+'-type')]);
+  } else if(section === 'artist'){
+    cands = (g('a-genre')||'').split(/[\/,、・]+/).concat([g('a-city'), g('a-country')]);
+  } else if(section === 'event'){
+    cands = [g('e-city'), g('e-venue')];
+  } else if(section === 'article'){
+    cands = [g('ar-category')];
+  }
+  cands = cands.map(s=>String(s||'').trim()).filter(Boolean);
+  if(!cands.length) return toast('候補が見つかりません（ジャンル/都市を先に入力）','error');
+  const before = (tagState[p]||[]).length;
+  cands.forEach(t=>addTag(p, t));
+  const added = (tagState[p]||[]).length - before;
+  if(added > 0){ markFormDirty(); toast(added+'件のタグを追加しました','success'); }
+  else toast('すべて追加済みです','info');
+}
+
+/* ---------- ID入力の自動slug化（§1.1: 小文字英数字とハイフンのみ） ---------- */
+document.addEventListener('input', e=>{
+  const t = e.target;
+  if(!t.id || !/^(v|f|a|ar|au)-id$/.test(t.id)) return;
+  const cleaned = t.value.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'').replace(/-{2,}/g,'-');
+  if(cleaned !== t.value){
+    const pos = t.selectionStart;
+    const diff = t.value.length - cleaned.length;
+    t.value = cleaned;
+    try{ t.setSelectionRange(Math.max(0,pos-diff), Math.max(0,pos-diff)); }catch(_){}
+  }
+});
+// フォーカスが外れたら前後ハイフンを除去（入力中は "dj-" のような途中状態を許す）
+document.addEventListener('change', e=>{
+  const t = e.target;
+  if(!t.id || !/^(v|f|a|ar|au)-id$/.test(t.id)) return;
+  const trimmed = t.value.replace(/^-+|-+$/g,'');
+  if(trimmed !== t.value) t.value = trimmed;
+});
 
 function buildFullDataJs(d){
   const lines=[];

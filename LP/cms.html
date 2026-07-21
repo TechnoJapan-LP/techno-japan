@@ -14,7 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="cms.css?v=8">
+<link rel="stylesheet" href="cms.css?v=9">
 <link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" integrity="sha384-cPa8kzsYWhqpAfWOLWYIw3V0BhPi/m3lrd8tBTPxr2NrYCHRVZ7xy1cEoRGOM/03" crossorigin="anonymous" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js" integrity="sha384-QUJ+ckWz1M+a7w0UfG1sEn4pPrbQwSxGm/1TIPyioqXBrwuT9l4f9gdHWLDLbVWI" crossorigin="anonymous"></script>
 </head>
@@ -192,7 +192,7 @@
       </div>
       <div class="form-group full"><label>Hero Gradient</label><div class="gradient-presets" id="f-gradientPresets"></div><div id="gradient-preview" style="display:none;margin-top:8px;width:100%;height:80px;border-radius:var(--radius);border:1px solid var(--border)"></div><input type="text" id="f-heroGradient" placeholder="linear-gradient(...)" style="margin-top:8px" oninput="updateGradientPreview(this.value)"></div>
       <div class="form-group full"><label>Description</label><textarea id="f-desc" rows="8" placeholder="Festival description..." style="width:100%;margin-bottom:8px"></textarea><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-green btn-sm" onclick="aiGenerate('festival')">AI Generate</button><button class="btn btn-sm" onclick="translateField('f-desc','en-to-jp')">EN→JP</button><button class="btn btn-sm" onclick="translateField('f-desc','jp-to-en')">JP→EN</button></div>
-      <div class="form-group full"><label>Description (EN) <span class="label-hint">/en/ ページ用。空欄なら上のDescにフォールバック</span></label><div class="input-row"><textarea id="f-desc_en" rows="3" placeholder="English description"></textarea><button class="btn btn-green btn-sm" onclick="aiTranslateField('f-desc','f-desc_en','en')">✨ 翻訳</button></div></div></div>
+</div>
       <div class="form-group full"><label>Lineup</label>
         <div class="lineup-section">
           <div class="lineup-input-wrap"><input type="text" id="f-lineupInput" placeholder="Type artist ID..." oninput="filterArtists('f-lineupInput','f-autocomplete','f')" onkeydown="acKeydown(event,'f-autocomplete','f')"><div class="autocomplete-list" id="f-autocomplete"></div></div>
@@ -274,7 +274,7 @@
       <div class="form-group"><label>Bandcamp</label><input type="url" id="a-bandcamp" placeholder="https://...bandcamp.com/"></div>
       <div class="form-group"><label>Website</label><input type="url" id="a-website" placeholder="https://..."></div>
       <div class="form-group full"><label>Bio</label><textarea id="a-bio" rows="8" placeholder="Artist biography..." style="width:100%;margin-bottom:8px"></textarea><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-green btn-sm" onclick="aiGenerate('artist')">AI Generate</button><button class="btn btn-sm" onclick="translateField('a-bio','en-to-jp')">EN→JP</button><button class="btn btn-sm" onclick="translateField('a-bio','jp-to-en')">JP→EN</button></div>
-      <div class="form-group full"><label>Bio (EN) <span class="label-hint">/en/ ページ用</span></label><div class="input-row"><textarea id="a-bio_en" rows="3" placeholder="English bio"></textarea><button class="btn btn-green btn-sm" onclick="aiTranslateField('a-bio','a-bio_en','en')">✨ 翻訳</button></div></div></div>
+</div>
       <div class="full btn-row" id="artist-btn-new">
         <button class="btn btn-preview" onclick="openPreview('artist')">👁 Preview</button>
         <button class="btn btn-accent" onclick="submitArtist()">Generate Code</button>
@@ -477,6 +477,6 @@
   </div>
 </div>
 
-<script src="cms.js?v=14" defer></script>
+<script src="cms.js?v=15" defer></script>
 </body>
 </html>
