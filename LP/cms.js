@@ -687,6 +687,23 @@ function initArticleEditor(){
   TjFont.whitelist = ['bebas', 'mono'];
   Quill.register(TjFont, true);
 
+  // ソフト改行(<br>)を Shift+Enter で入れられるようにする。通常の Enter は段落(<p>)のまま。
+  // Quill 1.x の Break blot は既定では insertEmbed で挿入できないため、挿入可能な
+  // SmartBreak に差し替える（コミュニティ定番のレシピ）。二重登録を避けるためガード。
+  if (!Quill.__tjSmartBreak) {
+    const Embed = Quill.import('blots/embed');
+    const QBreak = Quill.import('blots/break');
+    class SmartBreak extends QBreak {
+      length(){ return 1; }
+      value(){ return '\n'; }
+      insertInto(parent, ref){ Embed.prototype.insertInto.call(this, parent, ref); }
+    }
+    SmartBreak.blotName = 'break';
+    SmartBreak.tagName = 'BR';
+    Quill.register(SmartBreak, true);
+    Quill.__tjSmartBreak = true;
+  }
+
   articleQuill = new Quill('#ar-body-editor', {
     theme: 'snow',
     placeholder: '本文を書く…（📄テンプレで雛形挿入 / 画像はドラッグ&ドロップやペーストでOK / ⌘S 保存・⌘⇧F 集中モード）',
@@ -709,6 +726,22 @@ function initArticleEditor(){
       }
     }
   });
+  // Shift+Enter = ソフト改行(<br>)。既定の Enter(段落)より先に評価させるため unshift。
+  const enterBindings = articleQuill.keyboard.bindings[13] || (articleQuill.keyboard.bindings[13] = []);
+  enterBindings.unshift({
+    key: 13, shiftKey: true,
+    handler: function(range){
+      const q = articleQuill;
+      q.insertEmbed(range.index, 'break', true, Quill.sources.USER);
+      q.setSelection(range.index + 1, Quill.sources.SILENT);
+      return false;
+    }
+  });
+  // 既存記事の <br> を読み込む(dangerouslyPasteHTML)際、既定のクリップボードは
+  // <br> を段落分割(\n)に変換してしまう。break 埋め込みとして取り込み、ソフト改行を保つ。
+  const QDelta = Quill.import('delta');
+  articleQuill.clipboard.addMatcher('BR', () => new QDelta().insert({ break: '' }));
+
   // Visual で編集 → 同期処理は debounce（毎キーストロークでの
   // innerHTML シリアライズ + プレビュー再描画が入力ラグの原因だった）
   articleQuill.on('text-change', () => {
