@@ -62,6 +62,31 @@ function ratioAttr(r) {
   if (!/^\d+:\d+$/.test(v)) return '';
   return ` data-ratio="${v}" style="aspect-ratio:${v.replace(':', '/')}"`;
 }
+// 説明文トグルを持つページ（festival/venue/artist）に読み込むスクリプト。
+// .bilingual が無いページでは no-op なので副作用なし。
+const LANG_TOGGLE_SCRIPT = '\n<script src="/lang-toggle.js?v=1" defer></script>';
+// 説明文（desc/bio）をバイリンガル表示する。ja=日本語スロット, en=英語スロット。
+// 両方あるときだけ言語トグルを出し、pageLang をデフォルト表示にする（SEO: 既定言語を
+// 可視・もう一方は lang 属性付きで hidden → 言語シグナルを濁さない）。片方だけなら従来通り。
+function bilingualBody(ja, en, pageLang) {
+  const jaT = String(ja || '').trim();
+  const enT = String(en || '').trim();
+  if (jaT && enT) {
+    const hid = (l) => (l === pageLang ? '' : ' hidden');   // 既定言語以外は hidden 属性で隠す
+    const act = (l) => (l === pageLang ? ' is-active' : '');
+    return `<div class="detail-body bilingual">
+      <div class="lang-toggle" role="group" aria-label="${pageLang === 'en' ? 'Description language' : '説明文の言語'}">
+        <button type="button" class="lang-btn${act('ja')}" data-lang="ja">日本語</button>
+        <button type="button" class="lang-btn${act('en')}" data-lang="en">ENGLISH</button>
+      </div>
+      <div class="lang-body" data-lang="ja" lang="ja"${hid('ja')}><p>${esc(jaT)}</p></div>
+      <div class="lang-body" data-lang="en" lang="en"${hid('en')}><p>${esc(enT)}</p></div>
+    </div>`;
+  }
+  const only = jaT || enT;
+  if (!only) return '';
+  return `<div class="detail-body"><p lang="${jaT ? 'ja' : 'en'}">${esc(only)}</p></div>`;
+}
 // 本文中の [[festival:id]] / [[artist:id]] / [[venue:id]] を詳細ページへのリンクに変換
 function makeEntityResolver(data) {
   const table = { festival: data.FESTIVALS || [], artist: data.ARTISTS || [], venue: data.VENUES || [], article: data.ARTICLES || [] };
@@ -197,7 +222,7 @@ ${hreflang}
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/common.css">
-<link rel="stylesheet" href="/detail.css">
+<link rel="stylesheet" href="/detail.css?v=2">
 <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
 </head>
 <body>
@@ -367,7 +392,7 @@ function festivalPage(f, artistsById, articles, lang = 'ja') {
     <h1>${esc(name)}</h1>
     ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
     ${f.image || f.flyer ? `<div class="detail-hero"><img src="/${String(f.image || f.flyer).replace(/^\//, '')}" alt="${esc(name)}"></div>` : ''}
-    ${bodyDesc ? `<div class="detail-body"><p>${esc(bodyDesc)}</p></div>` : ''}
+    ${bilingualBody(f.desc, f.desc_en, lang)}
     <dl class="detail-facts">
       <div><dt>${lang === 'en' ? 'DATES' : '開催日'}</dt><dd>${esc(dateLabel)}</dd></div>
       ${f.location ? `<div><dt>${lang === 'en' ? 'VENUE' : '会場'}</dt><dd>${esc(f.location)}</dd></div>` : ''}
@@ -382,7 +407,7 @@ function festivalPage(f, artistsById, articles, lang = 'ja') {
   </div>
 </article>`;
 
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'festivals'] : ['festivals']), `${f.id}.html`), html: page({ title, desc, canonical, image, ogType: 'website', jsonLd, body, lang, altHref }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'festivals'] : ['festivals']), `${f.id}.html`), html: page({ title, desc, canonical, image, ogType: 'website', jsonLd, body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT }) };
 }
 
 /* ---------- アーティストページ ---------- */
@@ -428,13 +453,13 @@ function artistPage(a, lang = 'ja') {
     <h1>${esc(name)}</h1>
     ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
     ${a.image ? `<div class="detail-hero detail-hero-portrait"><img src="/${String(a.image).replace(/^\//, '')}" alt="${esc(name)}"></div>` : ''}
-    ${bio ? `<div class="detail-body"><p>${esc(bio)}</p></div>` : ''}
+    ${bilingualBody(a.bio, a.bio_en, lang)}
     ${linkRow ? `<div class="detail-links">${linkRow}</div>` : ''}
     <div class="article-footer"><a class="article-back" href="/artists.html" style="margin:0"><span class="arrow"></span> ALL ARTISTS</a></div>
   </div>
 </article>`;
 
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'artists'] : ['artists']), `${a.id}.html`), html: page({ title, desc, canonical, image, ogType: 'profile', jsonLd, body, lang, altHref }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'artists'] : ['artists']), `${a.id}.html`), html: page({ title, desc, canonical, image, ogType: 'profile', jsonLd, body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT }) };
 }
 
 /* ---------- ヴェニューページ ---------- */
@@ -475,7 +500,7 @@ function venuePage(v, lang = 'ja') {
     <h1>${esc(name)}</h1>
     ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
     ${v.image ? `<div class="detail-hero"><img src="/${String(v.image).replace(/^\//, '')}" alt="${esc(name)}"></div>` : ''}
-    ${bodyDesc ? `<div class="detail-body"><p>${esc(bodyDesc)}</p></div>` : ''}
+    ${bilingualBody(v.desc, v.desc_en, lang)}
     <dl class="detail-facts">
       ${v.type ? `<div><dt>${lang === 'en' ? 'TYPE' : 'タイプ'}</dt><dd>${esc(v.type)}</dd></div>` : ''}
       ${v.capacity ? `<div><dt>${lang === 'en' ? 'CAPACITY' : 'キャパシティ'}</dt><dd>${esc(v.capacity)}</dd></div>` : ''}
@@ -486,7 +511,7 @@ function venuePage(v, lang = 'ja') {
   </div>
 </article>`;
 
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'venues'] : ['venues']), `${v.id}.html`), html: page({ title, desc, canonical, image, ogType: 'website', jsonLd, body, lang, altHref }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'venues'] : ['venues']), `${v.id}.html`), html: page({ title, desc, canonical, image, ogType: 'website', jsonLd, body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT }) };
 }
 
 /* ---------- 実行 ---------- */

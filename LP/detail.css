@@ -278,3 +278,17 @@ figure.fx-img.fx-portrait img { max-height: 82vh; object-fit: cover; }
   .fx-reveal, figure.fx-img.fx-reveal .fx-frame, .article-body h2::after, .article-body blockquote::before, .article-hero.fx-hero img { transition: none !important; }
   figure.fx-img img, .article-hero.fx-hero img { transform: none !important; }
 }
+
+/* ==============================================================
+   LANG TOGGLE — 説明文の日本語/英語インライン切替（lang-toggle.js と対）
+   ============================================================== */
+.detail-body.bilingual { position: relative; }
+.lang-toggle { display: inline-flex; margin: 0 0 18px; border: 1px solid rgba(240,237,232,0.16); border-radius: 2px; overflow: hidden; }
+.lang-btn { appearance: none; -webkit-appearance: none; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em; padding: 7px 15px; background: transparent; color: rgba(240,237,232,0.5); cursor: pointer; border: 0; line-height: 1; transition: color .18s ease, background .18s ease; }
+.lang-btn + .lang-btn { border-left: 1px solid rgba(240,237,232,0.16); }
+.lang-btn:hover { color: var(--text, #f0ede8); }
+.lang-btn.is-active { background: var(--accent); color: #fff; }
+.lang-body[hidden] { display: none; }
+.lang-body { animation: langFade .35s ease; }
+@keyframes langFade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .lang-body { animation: none; } }
