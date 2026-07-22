@@ -3350,7 +3350,7 @@ function filterImageLibrary(){
   grid.innerHTML=filtered.map(img=>{
     const path='images/'+img.type+'/'+img.name;
     return `<div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer" onclick="copyImagePath('${esc(path)}')" title="${esc(path)}">
-      <div style="aspect-ratio:1;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden"><img src="${esc(img.url)}" loading="lazy" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none';this.parentElement.innerHTML='🖼'"></div>
+      <div style="aspect-ratio:1;background:#0a0a0a;display:flex;align-items:center;justify-content:center;overflow:hidden"><img src="${esc(driveThumb(img.url,240))}" loading="lazy" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none';this.parentElement.innerHTML='🖼'"></div>
       <div style="padding:6px;font-size:.65rem;font-family:var(--font-mono);color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(img.name)}</div>
       <div style="padding:0 6px 6px;font-size:.6rem;color:var(--text3)">${esc(img.type)}</div>
     </div>`;
@@ -4153,6 +4153,14 @@ function q(s){return String(s||'').replace(/\\/g,'\\\\').replace(/"/g,'\\"').rep
 // 画像は配信フォーマットの .webp に正規化（サイトは最適化済み .webp を配信）。
 // .webp が無い画像は元々 .jpg/.png も欠落しているため、変換で悪化しない。
 function webp(p){return String(p||'').replace(/\.(jpe?g|png)$/i,'.webp')}
+// Google Drive の lh3 URL は末尾に =wN を付けると N px のサムネイルを配信する。
+// 画像ライブラリのグリッド等、原寸不要な場面で帯域を節約する。lh3 以外は無変換。
+function driveThumb(url, w){
+  const s = String(url||'');
+  if(/lh3\.googleusercontent\.com\/d\//.test(s)) return s.replace(/=[sw]\d+(-[a-z0-9]+)*$/i,'') + '=w' + w;
+  if(/drive\.google\.com\/thumbnail/.test(s)) return s.replace(/([?&])sz=[^&]*/,'$1sz=w'+w);
+  return s;
+}
 // Normalize a date to "YYYY-MM-DD" (LP-compatible). Handles:
 //   - Date objects
 //   - JS Date.toString() like "Sun May 17 2026 00:00:00 GMT+0900 (日本標準時)"
