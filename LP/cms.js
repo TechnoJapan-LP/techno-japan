@@ -841,6 +841,7 @@ function uploadArticleImageFile(file){
   if (!id) { toast('先に記事のIDを入力してください', 'error'); return; }
   const origMB = (file.size/1024/1024).toFixed(1);
   window.articleImageUploading = true;
+  window.articleImageUploadStartedAt = Date.now();
   toast('Compressing... ('+origMB+'MB)', 'info');
   compressImage(file).then(({ dataUrl, blob, width, height, mimeType, ext }) => {
     const compMB = (blob.size/1024/1024).toFixed(2);
@@ -2762,7 +2763,12 @@ function saveEdit(section){
   const state=editState[section];
   if(!state)return;
   if (section === 'article' && window.articleImageUploading) {
-    return toast('画像アップロード中...完了してから保存してください', 'error');
+    // アップロードが本当に進行中の時だけブロック。fetch がハングして
+    // フラグが固まると保存が永久に不能になるため、45秒超は stale とみなして解除。
+    if (Date.now() - (window.articleImageUploadStartedAt || 0) < 45000) {
+      return toast('画像アップロード中...完了してから保存してください', 'error');
+    }
+    window.articleImageUploading = false;
   }
   if (section === 'article') flushArticleEditorSync();
   const payload={action:'update_row',sheet:SHEET_MAP[section],row:state._row};
