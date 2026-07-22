@@ -744,9 +744,18 @@ function initArticleEditor(){
 
   // Visual で編集 → 同期処理は debounce（毎キーストロークでの
   // innerHTML シリアライズ + プレビュー再描画が入力ラグの原因だった）
-  articleQuill.on('text-change', () => {
+  articleQuill.on('text-change', (delta, oldDelta, source) => {
     markFormDirty();                 // 軽いフラグだけ即時
     scheduleArticleEditorSync('quill');
+    // 「@」または「＠」を打つと、その場でIDリンク挿入メニューを開く（ツールバーまで
+    // スクロールで戻らなくてもリンクを挿せる）
+    if (source === 'user'){
+      const sel = articleQuill.getSelection();
+      if (sel && sel.length === 0 && sel.index > 0){
+        const prev = articleQuill.getText(sel.index - 1, 1);
+        if (prev === '@' || prev === '＠') toggleEntityLinkMenu(sel.index - 1);
+      }
+    }
   });
   // HTML source で編集 → 同様に debounce
   document.getElementById('ar-body-source').addEventListener('input', () => {
@@ -951,12 +960,34 @@ function applyArticleTemplate(key){
   toast(t.label + ' の雛形を挿入しました', 'success');
 }
 
+/* シートデータをキャッシュから返す。無ければ get_sheet で取得してキャッシュ。
+   （各セクションのタブを開いていなくても関連フェス選択や本文リンクができるように） */
+function ensureSheetCache(section){
+  const cached = readSheetCache(section);
+  if (cached) return Promise.resolve(cached);
+  return fetch(GAS_URL+'?action=get_sheet&sheet='+SHEET_MAP[section])
+    .then(r=>r.json()).then(d=>{
+      if (d.status==='ok' && d.rows){ writeSheetCache(section, d.rows); return d.rows; }
+      return null;
+    }).catch(()=>null);
+}
+
 /* ---------- 関連フェスの検索ピッカー ---------- */
 function festPickerFilter(){
   const input = document.getElementById('ar-festivalId-search');
   const list  = document.getElementById('ar-festivalId-list');
   if (!input || !list) return;
-  const rows = (readSheetCache('festival') || []).filter(r => r.id);
+  let rows = (readSheetCache('festival') || []).filter(r => r.id);
+  if (rows.length === 0){
+    // 未読込なら自動取得して読み込み後に再描画（手動 Refresh 不要）
+    list.innerHTML = '<div class="fp-empty">フェス一覧を読み込み中…</div>';
+    list.hidden = false;
+    ensureSheetCache('festival').then(()=>{
+      const l = document.getElementById('ar-festivalId-list');
+      if (l && !l.hidden) festPickerFilter();
+    });
+    return;
+  }
   const q = input.value.toLowerCase().trim();
   const hits = rows.filter(r => !q || String(r.name||'').toLowerCase().includes(q) || String(r.id).includes(q))
                    .slice(0, 40);
@@ -985,8 +1016,16 @@ function festPickerClear(){
 /* 編集を開いた時などに、保存済みIDから選択表示を復元する */
 function festPickerSetValue(id){
   if (!id){ festPickerClear(); return; }
-  const r = (readSheetCache('festival') || []).find(x => x.id === id);
+  const cached = readSheetCache('festival');
+  const r = (cached || []).find(x => x.id === id);
   festPickerSelect(id, r && r.name);
+  if (!cached){
+    // 名前がキャッシュに無ければ取得して選択表示を更新
+    ensureSheetCache('festival').then(rows=>{
+      const rr = (rows||[]).find(x => x.id === id);
+      if (rr && rr.name && document.getElementById('ar-festivalId').value === id) festPickerSelect(id, rr.name);
+    });
+  }
 }
 document.addEventListener('click', e => {
   const wrap = document.getElementById('ar-festivalId-picker');
@@ -1004,11 +1043,12 @@ document.addEventListener('click', e => {
    本文にショートコード [[festival:rural]] / [[artist:dj-nobu]] / [[venue:womb]] を
    挿入する。表示時に各詳細ページへのリンクに変換される（news.html と
    build-detail-pages.mjs 側で解決）。 */
-function toggleEntityLinkMenu(){
+function toggleEntityLinkMenu(caretIndex){
+  const atCaret = typeof caretIndex === 'number';   // @/＠ トリガーならキャレット位置に出す
   let menu = document.getElementById('ar-entity-menu');
-  if (menu){ menu.remove(); return; }
+  if (menu){ menu.remove(); if (!atCaret) return; }  // ボタンはトグル、@は開き直し
   const btn = document.getElementById('ar-entity-toggle');
-  if (!btn) return;
+  if (!btn && !atCaret) return;
 
   // 候補リスト: フェス/ヴェニューはシートキャッシュ、アーティストは ARTIST_DB
   const opts = [];
@@ -1024,8 +1064,23 @@ function toggleEntityLinkMenu(){
     '<div style="padding:10px 14px 6px;font-family:var(--font-mono);font-size:.6rem;letter-spacing:.1em;color:var(--text3)">本文にリンクを挿入（名前で検索）</div>' +
     '<input id="ar-entity-search" type="text" placeholder="例: rural / DJ NOBU / womb" style="margin:0 10px 8px;padding:8px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:.85rem">' +
     '<div id="ar-entity-results" style="max-height:260px;overflow-y:auto"></div>';
-  btn.parentElement.style.position = 'relative';
-  btn.insertAdjacentElement('afterend', menu);
+  if (atCaret){
+    // キャレットのビューポート座標に固定配置（スクロール位置に依存しない）
+    const selc = window.getSelection();
+    let r = selc && selc.rangeCount ? selc.getRangeAt(0).getBoundingClientRect() : null;
+    if (!r || (!r.width && !r.height && !r.top)){
+      const q = initArticleEditor(); const b = q.getBounds(caretIndex); const cr = q.container.getBoundingClientRect();
+      r = { left: cr.left + b.left, bottom: cr.top + b.top + b.height };
+    }
+    menu.style.position = 'fixed';
+    menu.style.left = Math.max(8, Math.min(r.left, window.innerWidth - 340)) + 'px';
+    menu.style.top = (r.bottom + 6) + 'px';
+    menu.style.zIndex = '1000';
+    document.body.appendChild(menu);
+  } else {
+    btn.parentElement.style.position = 'relative';
+    btn.insertAdjacentElement('afterend', menu);
+  }
 
   const results = menu.querySelector('#ar-entity-results');
   const icon = {festival:'◆', artist:'△', venue:'○'};
@@ -1062,12 +1117,20 @@ function toggleEntityLinkMenu(){
   results.addEventListener('click', e => {
     const b = e.target.closest('button[data-id]');
     if (!b) return;
+    if (atCaret){
+      // トリガーの @/＠ を消してからリンクを挿入
+      const q = initArticleEditor();
+      q.deleteText(caretIndex, 1, 'user');
+      q.setSelection(caretIndex, 0, 'silent');
+    }
     insertEntityShortcode(b.dataset.type, b.dataset.id, b.dataset.name);
     menu.remove();
+    document.removeEventListener('keydown', onEsc, true);
   });
   setTimeout(() => menu.querySelector('#ar-entity-search').focus(), 0);
-  const close = (e) => { if (!menu.contains(e.target) && e.target !== btn){ menu.remove(); document.removeEventListener('click', close, true); } };
-  setTimeout(() => document.addEventListener('click', close, true), 0);
+  const close = (e) => { if (!menu.contains(e.target) && e.target !== btn){ menu.remove(); document.removeEventListener('click', close, true); document.removeEventListener('keydown', onEsc, true); } };
+  const onEsc = (e) => { if (e.key === 'Escape'){ menu.remove(); document.removeEventListener('click', close, true); document.removeEventListener('keydown', onEsc, true); if (atCaret) initArticleEditor().focus(); } };
+  setTimeout(() => { document.addEventListener('click', close, true); document.addEventListener('keydown', onEsc, true); }, 0);
 }
 
 /* 本文には実際の <a> を挿し込む。エディタ上でも「Rural」のように
