@@ -1970,6 +1970,31 @@ function compressImage(file, maxW=1920, quality=0.85){
   });
 }
 
+/* URL画像をブラウザ側でfetch → compressImage(webp/1920px上限) し、
+   ファイルアップロードと同じ upload_image / upload_festival_image 経路へ送る。
+   CORS やネットワークで fetch できない、または画像でない場合は null を返し、
+   呼び出し側は従来の GAS upload_from_url（サーバfetch・原寸）にフォールバックする。 */
+async function compressUrlAndUpload(url, type, id){
+  let blob;
+  try {
+    const res = await fetch(url, {mode:'cors'});
+    if(!res.ok) return null;
+    blob = await res.blob();
+  } catch(_) { return null; }            // CORS / ネットワーク → フォールバック
+  let comp;
+  try { comp = await compressImage(blob); } // 画像でなければ img.onerror で reject
+  catch(_) { return null; }
+  const action = type.startsWith('festival') ? 'upload_festival_image' : 'upload_image';
+  const filename = type === 'festival-flyer' ? (id+'-flyer.'+comp.ext) : (id+'.'+comp.ext);
+  try {
+    const d = await fetch(GAS_URL,{method:'POST',body:JSON.stringify({
+      action, imageData:comp.dataUrl, mimeType:comp.mimeType, id, type, filename
+    })}).then(r=>r.json());
+    if(d.status==='ok' || d.success) return { path: d.imagePath||d.path||'', comp };
+  } catch(_) {}
+  return null;
+}
+
 /* ==============================================================
    IMAGE PREVIEW HELPERS
    既存画像のプレビュー表示 / 削除（編集モード用）
@@ -2085,28 +2110,29 @@ function uploadFromUrl(prefix,type,pathFieldId,urlFieldId,previewId){
   btn.disabled=true;btn.innerHTML='UPLOADING...<span class="spinner"></span>';
   const previewEl=document.getElementById(previewId);
   if(previewEl)previewEl.style.display='none';
-  fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'upload_from_url',imageUrl:url,type:type,id:id})})
-    .then(r=>r.json()).then(d=>{
-      btn.disabled=false;btn.textContent='UPLOAD';
-      if(d.success){
-        toast('アップロード完了 — 「Save Changes」を押すまで保存されません','success');
-        document.getElementById(pathFieldId).value=d.path||'';
-        if(previewEl){
-          // Google DriveのURLはプレビュー制限があるので、元のURLを優先表示
-          const previewSrc=url.startsWith('http')?url:(d.driveUrl||'');
-          previewEl.style.display='block';
-          previewEl.innerHTML='<img src="'+esc(previewSrc)+'" alt="preview" onerror="this.src=\''+esc(d.driveUrl||'')+'\';this.onerror=null"><div class="preview-info">✓ アップロード済み — '+esc(d.path||'')+'</div>';
-        }
-      } else {
-        toast(d.error||'アップロード失敗','error');
-        renderUploadFailed(previewEl,'✗ '+(d.error||'アップロード失敗'),prefix,type);
-      }
-    })
-    .catch(e=>{
-      btn.disabled=false;btn.textContent='UPLOAD';
-      toast('通信エラー: '+e.message,'error');
-      renderUploadFailed(previewEl,'✗ 通信エラー: '+e.message,prefix,type);
-    });
+  const done=()=>{btn.disabled=false;btn.textContent='UPLOAD';};
+  const showOk=(path,extra)=>{
+    toast('アップロード完了'+(extra||'')+' — 「Save Changes」を押すまで保存されません','success');
+    document.getElementById(pathFieldId).value=path||'';
+    if(previewEl){
+      previewEl.style.display='block';
+      previewEl.innerHTML='<img src="'+esc(url)+'" alt="preview" onerror="this.style.display=\'none\'"><div class="preview-info">✓ アップロード済み — '+esc(path||'')+'</div>';
+    }
+  };
+  // まずブラウザ側で圧縮を試す（1920px/webp）。CORS等で不可なら従来の原寸経路へ。
+  compressUrlAndUpload(url,type,id).then(r=>{
+    if(r){ done(); showOk(r.path, ' ('+(r.comp.blob.size/1024/1024).toFixed(2)+'MB webp)'); return; }
+    return fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'upload_from_url',imageUrl:url,type:type,id:id})})
+      .then(x=>x.json()).then(d=>{
+        done();
+        if(d.success){ showOk(d.path); }
+        else { toast(d.error||'アップロード失敗','error'); renderUploadFailed(previewEl,'✗ '+(d.error||'アップロード失敗'),prefix,type); }
+      });
+  }).catch(e=>{
+    done();
+    toast('通信エラー: '+e.message,'error');
+    renderUploadFailed(previewEl,'✗ 通信エラー: '+e.message,prefix,type);
+  });
 }
 
 /* ==============================================================
@@ -3120,9 +3146,16 @@ async function biImgRun(){
     if(biCancel) break;
     biProg(`アップロード中... ${done+fail+1}/${valid.length}\n${p.id}`);
     try {
-      const up = await fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'upload_from_url', imageUrl:p.url, type:target, id:p.id})}).then(x=>x.json());
-      if(up.success && up.path){
-        const row = {...byId.get(p.id)}; row[field] = up.path;
+      // まずブラウザ側で圧縮（1920px/webp）。CORS等で不可なら原寸の upload_from_url へ。
+      let path=null;
+      const c = await compressUrlAndUpload(p.url, target, p.id);
+      if(c){ path=c.path; }
+      else {
+        const up = await fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'upload_from_url', imageUrl:p.url, type:target, id:p.id})}).then(x=>x.json());
+        if(up.success && up.path) path=up.path;
+      }
+      if(path){
+        const row = {...byId.get(p.id)}; row[field] = path;
         await bulkSaveRow(section, row); done++;
       } else fail++;
     } catch(e){ fail++; }
