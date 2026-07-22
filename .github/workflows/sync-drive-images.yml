@@ -77,12 +77,19 @@ jobs:
               os.makedirs(f'LP/images/{folder_type}', exist_ok=True)
 
               for img in images:
-                  file_path = f"LP/images/{folder_type}/{img['name']}"
+                  name = img['name']
+                  # data.js が参照するのは webp のみ。Drive には変換前の
+                  # 原本（jpg/heic 等）も同居しているが、それを落とすとリポジトリが
+                  # 未参照ファイルで肥大するだけなので webp 以外はスキップする。
+                  if not name.lower().endswith('.webp'):
+                      print(f"Skipped (not webp): {name}")
+                      continue
+                  file_path = f"LP/images/{folder_type}/{name}"
                   try:
                       urllib.request.urlretrieve(img['url'], file_path)
-                      print(f"Downloaded: {img['name']}")
+                      print(f"Downloaded: {name}")
                   except Exception as e:
-                      print(f"Failed: {img['name']} — {e}")
+                      print(f"Failed: {name} — {e}")
 
           # 握りつぶすと「成功」と表示されて故障に気づけないので、明示的に落とす。
           if failures:
