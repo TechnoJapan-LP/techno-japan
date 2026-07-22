@@ -531,8 +531,29 @@ function main() {
   const pubArtists = ARTISTS.filter(valid);
   const pubVenues = VENUES.filter(valid).filter((v) => v.name && v.city && v.city !== 'undefined');
 
+  // ID変更に伴う旧URLのリダイレクトスタブ（writeAll の掃除で消されないよう wanted に含める）
+  // { dir: { oldId: newId } }
+  const REDIRECTS = {
+    articles: { transcendence: 'transcendence-2025-report' },
+  };
+  const redirectStubs = (dirName) =>
+    Object.entries(REDIRECTS[dirName] || {}).map(([oldId, newId]) => {
+      const to = `/${dirName}/${newId}.html`;
+      return {
+        file: path.join(LP_DIR, dirName, `${oldId}.html`),
+        html: `<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8">
+<title>Redirecting…</title>
+<meta name="robots" content="noindex">
+<link rel="canonical" href="${BASE}${to}">
+<meta http-equiv="refresh" content="0; url=${to}">
+</head><body><p>Moved: <a href="${to}">${BASE}${to}</a></p></body></html>
+`,
+      };
+    });
+
   const counts = {
-    articles: writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'ja')), 'articles'),
+    articles: writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'ja')).concat(redirectStubs('articles')), 'articles'),
     festivals: writeAll(pubFests.map((f) => festivalPage(f, artistsById, ARTICLES, 'ja')), 'festivals'),
     artists: writeAll(pubArtists.map((a) => artistPage(a, 'ja')), 'artists'),
     venues: writeAll(pubVenues.map((v) => venuePage(v, 'ja')), 'venues'),
