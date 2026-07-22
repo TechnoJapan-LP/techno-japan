@@ -258,6 +258,13 @@ label .req-star{color:var(--accent);margin-left:4px}
 /* ----- Article preview pane (LP記事ページのスタイルを模倣) ----- */
 .ar-preview{margin-top:16px;background:#0e0e0e;border:1px solid var(--border);border-radius:var(--radius);padding:32px;display:none;max-height:600px;overflow-y:auto}
 .ar-editor-wrap.preview-mode + .ar-preview{display:block}
+/* 横並びライブプレビュー: 広い画面では左=エディタ / 右=プレビューを並べ、書きながら反映を見られる */
+@media (min-width:1100px){
+  .form-group.full:has(> .ar-editor-wrap.preview-mode){display:flex;flex-direction:row;flex-wrap:wrap;gap:0 20px;align-items:flex-start}
+  .form-group.full:has(> .ar-editor-wrap.preview-mode) > label{width:100%}
+  .form-group.full:has(> .ar-editor-wrap.preview-mode) > .ar-editor-wrap{flex:1 1 0;min-width:0}
+  .ar-editor-wrap.preview-mode + .ar-preview{flex:1 1 0;min-width:0;margin-top:0;position:sticky;top:16px;max-height:calc(100vh - 120px)}
+}
 .ar-preview-header{font-family:var(--font-mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:#7a7570;margin-bottom:18px;display:flex;align-items:center;gap:8px}
 .ar-preview-header::before{content:'●';color:var(--accent)}
 .ar-prev-body{font-family:'DM Sans',sans-serif;font-weight:300;font-size:16px;line-height:1.85;color:rgba(240,237,232,0.85)}

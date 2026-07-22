@@ -615,7 +615,7 @@ function tryRecoverArticleDraft(){
   const label = draft.title || draft.id || '無題';
   if (confirm(`未保存の下書きが見つかりました：\n「${label}」(${minsAgo}分前)\n\n復元しますか？`)) {
     setVal('ar-id', draft.id); setVal('ar-title', draft.title);
-    setVal('ar-category', draft.category||'REPORT'); setVal('ar-date', draft.date);
+    setVal('ar-category', draft.category||'REPORT'); setVal('ar-date', fmtDate(draft.date));
     setVal('ar-cardRatio', draft.cardRatio||''); setVal('ar-heroRatio', draft.heroRatio||'');
     festPickerSetValue(draft.festivalId||'');
     setVal('ar-author', draft.author||'TECHNO JAPAN'); setVal('ar-image', draft.image);
@@ -1004,7 +1004,28 @@ function toggleEntityLinkMenu(){
       : '<div style="padding:10px 14px;color:var(--text3);font-size:.8rem">'+(opts.length ? '該当なし' : 'データ未読込 — 各セクションで一度 Refresh してください')+'</div>';
   }
   render('');
-  menu.querySelector('#ar-entity-search').addEventListener('input', e => render(e.target.value));
+  const searchEl = menu.querySelector('#ar-entity-search');
+  searchEl.addEventListener('input', e => render(e.target.value));
+
+  // フェス/ヴェニューがキャッシュに無ければ取得して候補に追加（各タブを開いていなくても
+  // リンクできるように）。アーティストは ARTIST_DB を都度ロードする。
+  ['festival','venue'].forEach(sec => {
+    if (readSheetCache(sec)) return;
+    fetch(GAS_URL+'?action=get_sheet&sheet='+SHEET_MAP[sec])
+      .then(r=>r.json()).then(d=>{
+        if (d.status==='ok' && d.rows){
+          writeSheetCache(sec, d.rows);
+          d.rows.forEach(r => r.id && opts.push({type:sec, id:r.id, name:r.name||r.id}));
+          if (document.getElementById('ar-entity-menu')) render(searchEl.value);
+        }
+      }).catch(()=>{});
+  });
+  if (!(ARTIST_DB && ARTIST_DB.length) && typeof loadArtistDB === 'function'){
+    loadArtistDB().then(() => {
+      (ARTIST_DB||[]).forEach(a => a.id && !opts.some(o=>o.type==='artist'&&o.id===a.id) && opts.push({type:'artist', id:a.id, name:a.name||a.id}));
+      if (document.getElementById('ar-entity-menu')) render(searchEl.value);
+    });
+  }
   results.addEventListener('click', e => {
     const b = e.target.closest('button[data-id]');
     if (!b) return;
@@ -2563,7 +2584,7 @@ function editRow(section, rowNum){
     setVal('f-image',row.image); setVal('f-flyer',row.flyer);
     setVal('f-heroGradient',row.heroGradient); setVal('f-desc',row.desc);
     setVal('f-imagePosition',row.imagePosition || '');
-    const dates=(row.date||'').split('/');
+    const dates=fmtDate(row.date||'').split('/');  // date型/Date.toString混在を YYYY-MM-DD に正規化（input[type=date]が空になるのを防ぐ）
     setVal('f-dateStart',dates[0]); setVal('f-dateEnd',dates[1]);
     setSelectedGenres('f-genre',(row.genre||'').split(',').map(s=>s.trim()).filter(Boolean));
     lineups.f=(row.lineup||'').split(',').map(s=>s.trim()).filter(Boolean);
@@ -2606,7 +2627,7 @@ function editRow(section, rowNum){
   }
   else if(section==='article'){
     setVal('ar-id',row.id); setVal('ar-title',row.title);
-    setVal('ar-category',row.category||'REPORT'); setVal('ar-date',row.date);
+    setVal('ar-category',row.category||'REPORT'); setVal('ar-date',fmtDate(row.date));
     setVal('ar-cardRatio',row.cardRatio||''); setVal('ar-heroRatio',row.heroRatio||'');
     festPickerSetValue(row.festivalId||'');
     setVal('ar-title_en',row.title_en||''); setVal('ar-excerpt_en',row.excerpt_en||''); setVal('ar-body_en',row.body_en||'');
