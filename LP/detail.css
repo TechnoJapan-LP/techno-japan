@@ -211,3 +211,9 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 .nav-lang a:hover { opacity: 1; color: var(--accent); }
 .nav-lang-cur { color: var(--accent); }
 .nav-lang-sep { opacity: 0.25; }
+
+/* ===== FESTIVAL EDITIONS（開催ヒストリー） ===== */
+.edition-block-static { margin: 28px 0; padding: 20px 22px; border: 1px solid rgba(240,237,232,0.1); border-radius: 6px; }
+.edition-block-static .edition-year { font-family: var(--font-mono); font-size: 22px; letter-spacing: 0.08em; color: var(--accent); margin: 0 0 6px; }
+.edition-block-static .detail-eyebrow { margin-bottom: 12px; }
+.edition-block-static .lineup-list { margin-top: 4px; }

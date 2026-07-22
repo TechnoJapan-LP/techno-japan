@@ -2542,6 +2542,15 @@ function editRow(section, rowNum){
     setSelectedGenres('f-genre',(row.genre||'').split(',').map(s=>s.trim()).filter(Boolean));
     lineups.f=(row.lineup||'').split(',').map(s=>s.trim()).filter(Boolean);
     renderLineupTags('f');
+    // EDITIONS（シートにはJSON文字列で保存されている）
+    editions.length=0;
+    if(row.editions){
+      try{
+        const eds=typeof row.editions==='string'?JSON.parse(row.editions):row.editions;
+        if(Array.isArray(eds)) eds.forEach(ed=>editions.push({year:ed.year||'',date:ed.date||'',lineup:Array.isArray(ed.lineup)?ed.lineup:[]}));
+      }catch(e){console.warn('editions parse failed',e);}
+    }
+    renderEditions();
     document.getElementById('lineup-fetch-status').style.display='none';
     document.getElementById('bulk-lineup-wrap').style.display='none';
     document.getElementById('gradient-preview').style.display='none';
@@ -2628,7 +2637,8 @@ function saveEdit(section){
       address:g('f-address'),lat:g('f-lat'),lng:g('f-lng'),
       date:ds&&de?ds+'/'+de:ds,genre:getSelectedGenres('f-genre').join(', '),
       image:g('f-image'),imagePosition:g('f-imagePosition'),flyer:g('f-flyer'),heroGradient:g('f-heroGradient'),
-      desc:g('f-desc'),lineup:cleanLineup(lineups.f).join(', ')});
+      desc:g('f-desc'),lineup:cleanLineup(lineups.f).join(', '),
+      editions:editions.filter(e=>e.year).map(e=>({...e}))});
   }
   else if(section==='artist'){
     Object.assign(payload,{id:g('a-id'),name:g('a-name'),city:g('a-city'),country:g('a-country'),

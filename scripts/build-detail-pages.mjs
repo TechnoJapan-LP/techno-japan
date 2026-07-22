@@ -311,6 +311,25 @@ function festivalPage(f, artistsById, articles, lang = 'ja') {
     })
     .join('');
 
+  // EDITIONS（開催回）— data.js の f.editions: [{year, date, lineup[]}]
+  const editions = (Array.isArray(f.editions) ? f.editions : [])
+    .filter((ed) => ed && ed.year)
+    .sort((a, b) => String(b.year).localeCompare(String(a.year)));
+  const editionsHtml = editions.length
+    ? `<h2>${lang === 'en' ? 'EDITIONS' : '開催ヒストリー'}</h2>` + editions.map((ed) => {
+        const edLineup = (ed.lineup || [])
+          .map((n) => {
+            const a = artistsById.get(String(n).toLowerCase());
+            return a ? `<a class="lineup-item" href="${prefix}/artists/${a.id}.html">${esc(lang === 'en' ? (a.name_en || a.name) : a.name)}</a>` : `<span class="lineup-item">${esc(n)}</span>`;
+          }).join('');
+        return `<section class="edition-block-static">
+          <h3 class="edition-year">${esc(String(ed.year))}</h3>
+          ${ed.date ? `<div class="detail-eyebrow">${esc(fmtFestDate(ed.date))}</div>` : ''}
+          ${edLineup ? `<div class="lineup-list">${edLineup}</div>` : ''}
+        </section>`;
+      }).join('')
+    : '';
+
   const start = String(f.date || '').split('/')[0];
   const end = String(f.date || '').includes('/') ? String(f.date).split('/')[1] : start;
 
@@ -331,6 +350,12 @@ function festivalPage(f, artistsById, articles, lang = 'ja') {
       ...(f.lat && f.lng ? { geo: { '@type': 'GeoCoordinates', latitude: f.lat, longitude: f.lng } } : {}),
     },
     ...(f.lineup && f.lineup.length ? { performer: f.lineup.map((n) => ({ '@type': 'MusicGroup', name: String(n) })) } : {}),
+    ...(editions.length ? { subEvent: editions.map((ed) => ({
+      '@type': 'Festival',
+      name: `${name} ${ed.year}`,
+      ...(/^\d{4}-\d{2}-\d{2}/.test(String(ed.date || '')) ? { startDate: String(ed.date).split('/')[0] } : {}),
+      location: { '@type': 'Place', name: f.location || f.city || 'Japan' },
+    })) } : {}),
   };
 
   const genres = (Array.isArray(f.genre) ? f.genre : []).map((g) => `<span class="detail-chip">${esc(g)}</span>`).join('');
@@ -352,7 +377,7 @@ function festivalPage(f, artistsById, articles, lang = 'ja') {
       ${f.ticketUrl ? `<div><dt>${lang === 'en' ? 'TICKETS' : 'チケット'}</dt><dd><a href="${esc(f.ticketUrl)}" target="_blank" rel="noopener">${lang === 'en' ? 'Buy tickets' : '購入ページ'}</a></dd></div>` : ''}
     </dl>
     ${lineup ? `<h2>LINE UP</h2><div class="lineup-list">${lineup}</div>` : ''}
-    ${relatedHtml}
+    ${editionsHtml}${relatedHtml}
     <div class="article-footer"><a class="article-back" href="/festivals.html" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
   </div>
 </article>`;
