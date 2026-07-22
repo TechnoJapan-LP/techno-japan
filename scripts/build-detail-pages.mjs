@@ -156,7 +156,7 @@ const GA = `<script>
 })();
 </script>`;
 
-function page({ title, desc, canonical, image, ogType = 'article', jsonLd, body, lang = 'ja', altHref = null }) {
+function page({ title, desc, canonical, image, ogType = 'article', jsonLd, body, lang = 'ja', altHref = null, extraScripts = '' }) {
   const d = truncate(desc || '', 160);
   // hreflang: JA/EN 両方が存在するページだけ相互宣言する
   const abs = (path) => `${BASE}${path}`;
@@ -205,7 +205,7 @@ ${navHtml(lang, altHref)}
 ${body}
 ${FOOTER}
 ${GA}
-<script src="/common.js?v=2" defer></script>
+<script src="/common.js?v=2" defer></script>${extraScripts}
 </body>
 </html>
 `;
@@ -275,7 +275,7 @@ function articlePage(a, resolveEntities, lang = 'ja') {
   </div>
 </article>`;
 
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'articles'] : ['articles']), `${a.id}.html`), html: page({ title, desc, canonical, image, jsonLd, body, lang, altHref }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'articles'] : ['articles']), `${a.id}.html`), html: page({ title, desc, canonical, image, jsonLd, body, lang, altHref, extraScripts: '\n<script src="/article-fx.js?v=1" defer></script>' }) };
 }
 
 /* ---------- フェスティバルページ ---------- */

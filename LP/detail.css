@@ -217,3 +217,64 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 .edition-block-static .edition-year { font-family: var(--font-mono); font-size: 22px; letter-spacing: 0.08em; color: var(--accent); margin: 0 0 6px; }
 .edition-block-static .detail-eyebrow { margin-bottom: 12px; }
 .edition-block-static .lineup-list { margin-top: 4px; }
+
+/* ==============================================================
+   ARTICLE FX — スクロールインタラクション（article-fx.js と対）
+   ============================================================== */
+/* 読了プログレスバー */
+.fx-progress { position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 200; pointer-events: none; background: rgba(240,237,232,0.06); }
+.fx-progress-fill { height: 100%; background: var(--accent); transform: scaleX(0); transform-origin: 0 50%; }
+
+/* テキストのリビール: わずかに沈んだ状態から立ち上がる */
+.fx-reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s cubic-bezier(.22,.61,.36,1), transform .6s cubic-bezier(.22,.61,.36,1); }
+.fx-reveal.fx-on { opacity: 1; transform: none; }
+
+/* h2: リビール時にアクセントのアンダーラインが左から掃引 */
+.article-body h2 { position: relative; padding-bottom: 10px; }
+.article-body h2::after { content: ''; position: absolute; left: 0; bottom: 0; height: 2px; width: 100%; background: var(--accent); transform: scaleX(0); transform-origin: 0 50%; transition: transform .7s cubic-bezier(.22,.61,.36,1) .25s; }
+.article-body h2.fx-on::after { transform: scaleX(1); }
+
+/* blockquote: アクセントボーダーが上から伸びる */
+.article-body blockquote { position: relative; border-left-color: transparent; }
+.article-body blockquote::before { content: ''; position: absolute; left: -2px; top: 0; width: 2px; height: 100%; background: var(--accent); transform: scaleY(0); transform-origin: 0 0; transition: transform .8s cubic-bezier(.22,.61,.36,1) .2s; }
+.article-body blockquote.fx-on::before { transform: scaleY(1); }
+
+/* 画像 figure: ハードエッジのクリップワイプ + FIG索引 */
+/* fx-full のはみ出しは viewport 基準で防ぐ（コンテナ基準だとヒーローの
+   ネガティブマージン full-bleed までクリップしてしまう） */
+body { overflow-x: clip; }
+figure.fx-img { margin: 56px 0; }
+figure.fx-img .fx-frame { overflow: hidden; background: rgba(240,237,232,0.04); }
+figure.fx-img img { display: block; width: 100%; height: auto; margin: 0; border-radius: 0; will-change: transform; transform: scale(1.11); }
+figure.fx-img .fx-fig { display: flex; align-items: center; gap: 10px; margin-top: 10px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; color: var(--text3, rgba(240,237,232,0.45)); }
+figure.fx-img .fx-fig::after { content: ''; flex: 1; height: 1px; background: rgba(240,237,232,0.14); }
+figure.fx-img .fx-fig::before { content: ''; width: 6px; height: 6px; background: var(--accent); }
+
+/* ワイプ: 下から上へ機械的に開く */
+figure.fx-img.fx-reveal { opacity: 1; transform: none; }
+figure.fx-img.fx-reveal .fx-frame { clip-path: inset(100% 0 0 0); transition: clip-path .9s cubic-bezier(.7,0,.2,1); }
+figure.fx-img.fx-reveal.fx-on .fx-frame { clip-path: inset(0 0 0 0); }
+figure.fx-img.fx-reveal .fx-fig { opacity: 0; transition: opacity .5s ease .55s; }
+figure.fx-img.fx-reveal.fx-on .fx-fig { opacity: 1; }
+
+/* 交互リズム: full-bleed → 右 → 左（参考: minimal collective の editorial 文法） */
+@media (min-width: 900px) {
+  figure.fx-img.fx-full { width: min(100vw, 1200px); margin-left: calc(50% - min(50vw, 600px)); }
+  figure.fx-img.fx-full .fx-fig { padding: 0 max(24px, calc(min(50vw, 600px) - 50% - 0px)); }
+  figure.fx-img.fx-right { width: 118%; margin-left: auto; margin-right: -18%; }
+  figure.fx-img.fx-left  { width: 118%; margin-left: -18%; }
+}
+/* ポートレートは中央・高さ制限（原寸で巨大化させない） */
+figure.fx-img.fx-portrait { width: min(100%, 520px) !important; margin-left: auto !important; margin-right: auto !important; }
+figure.fx-img.fx-portrait .fx-fig { padding: 0 !important; }
+figure.fx-img.fx-portrait img { max-height: 82vh; object-fit: cover; }
+
+/* ヒーロー: ロード時にわずかにズームアウト */
+.article-hero.fx-hero img { transform: scale(1.1); transition: transform 1.4s cubic-bezier(.22,.61,.36,1); will-change: transform; }
+.article-hero.fx-hero.fx-on img { transform: scale(1.04); }
+
+/* reduced-motion: 全演出停止（fx-onは即付与される） */
+@media (prefers-reduced-motion: reduce) {
+  .fx-reveal, figure.fx-img.fx-reveal .fx-frame, .article-body h2::after, .article-body blockquote::before, .article-hero.fx-hero img { transition: none !important; }
+  figure.fx-img img, .article-hero.fx-hero img { transform: none !important; }
+}
