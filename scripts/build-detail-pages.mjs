@@ -300,7 +300,7 @@ function articlePage(a, resolveEntities, lang = 'ja') {
   </div>
 </article>`;
 
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'articles'] : ['articles']), `${a.id}.html`), html: page({ title, desc, canonical, image, jsonLd, body, lang, altHref, extraScripts: '\n<script src="/article-fx.js?v=1" defer></script>' }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'articles'] : ['articles']), `${a.id}.html`), html: page({ title, desc, canonical, image, jsonLd, body, lang, altHref, extraScripts: '\n<link rel="stylesheet" href="/article-fx.css?v=1">\n<script src="/article-fx.js?v=2" defer></script>' }) };
 }
 
 /* ---------- フェスティバルページ ---------- */

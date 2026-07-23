@@ -3390,14 +3390,17 @@ function openHomeDashboard(){
   }).catch(err=>toast('Dashboard error: '+err.message,'error'));
 }
 
-/* キャッシュ＋batch 経由で複数シートを取得 */
-function fetchAllSheets(sheetNames){
+/* キャッシュ＋batch 経由で複数シートを取得
+   opts.fresh: キャッシュを使わず必ずシートから取り直す（Publish/Export用。
+   2026-07-23 のフェス全ページ消失事故の再発防止: 欠落・失敗を握りつぶさない） */
+function fetchAllSheets(sheetNames, opts){
+  opts = opts || {};
   const SECTION_BY_SHEET = {VENUES:'venue',FESTIVALS:'festival',ARTISTS:'artist',EVENTS:'event',ARTICLES:'article',AUTHORS:'author'};
   const result = {};
   const missing = [];
   sheetNames.forEach(s => {
     const sec = SECTION_BY_SHEET[s];
-    const cached = sec && readSheetCache(sec);
+    const cached = !opts.fresh && sec && readSheetCache(sec);
     if(cached) result[s] = cached;
     else missing.push(s);
   });
@@ -3407,17 +3410,22 @@ function fetchAllSheets(sheetNames){
     .then(r=>r.json()).then(d=>{
       if(d.status==='ok' && d.sheets){
         Object.entries(d.sheets).forEach(([sheet,rows])=>{
+          if(!Array.isArray(rows)) return;      // 欠落・不正はresultに入れない（下の検査で検知）
           result[sheet] = rows;
           const sec = SECTION_BY_SHEET[sheet];
-          if(sec) writeSheetCache(sec, rows);
+          if(sec && rows.length) writeSheetCache(sec, rows); // 空をキャッシュに書かない
         });
+        // バッチ応答に要求シートが欠けていたら失敗として扱う（黙って空にしない）
+        const lost = missing.filter(s => !Array.isArray(result[s]));
+        if(lost.length) throw new Error('シート取得に失敗: ' + lost.join(', '));
       } else {
         // batch エンドポイント未対応の GAS にフォールバック
         return Promise.all(missing.map(s=>
           fetch(GAS_URL+'?action=get_sheet&sheet='+s).then(r=>r.json()).then(d=>{
-            result[s] = d.rows || [];
+            if(d.status!=='ok' || !Array.isArray(d.rows)) throw new Error('シート取得に失敗: '+s+' — '+(d.message||'unknown'));
+            result[s] = d.rows;
             const sec = SECTION_BY_SHEET[s];
-            if(sec) writeSheetCache(sec, d.rows||[]);
+            if(sec && d.rows.length) writeSheetCache(sec, d.rows);
           })
         )).then(()=>result);
       }
@@ -4254,9 +4262,32 @@ function buildFullDataJs(d){
   return lines.join('\n\n');
 }
 
+/* Publish前サニティチェック（2026-07-23 フェス全消失事故の再発防止）。
+   主要シートが 0件、または前回Publish時から半分以下に減っていたら中断する。
+   前回件数は localStorage に保存（初回は 0件チェックのみ）。 */
+function publishSanityCheck(d){
+  const CORE = ['FESTIVALS','ARTISTS','VENUES','ARTICLES']; // EVENTSは意図的に空があり得る
+  const counts = {};
+  CORE.concat(['EVENTS']).forEach(k => counts[k] = (d[k]||[]).length);
+  const zero = CORE.filter(k => counts[k] === 0);
+  if(zero.length) return {ok:false, message:'⛔ '+zero.join(', ')+' が0件です。シート取得に失敗している可能性が高いためPublishを中断しました。リロード後に再試行してください。'};
+  let prev = null;
+  try { prev = JSON.parse(localStorage.getItem('tj_publish_counts')||'null'); } catch(_){}
+  if(prev){
+    const dropped = CORE.filter(k => typeof prev[k]==='number' && prev[k] > 0 && counts[k] < prev[k] * 0.5);
+    if(dropped.length){
+      const detail = dropped.map(k => k+': '+prev[k]+'→'+counts[k]).join(' / ');
+      if(!confirm('⚠️ 前回Publishから件数が大幅に減っています。\n'+detail+'\n\n意図した削除でなければキャンセルしてください。続行しますか?')) return {ok:false, message:'Publishをキャンセルしました'};
+    }
+  }
+  return {ok:true, counts};
+}
+
 function exportDataJs(){
   toast('Exporting...','info');
-  fetchAllSheets(['VENUES','FESTIVALS','ARTISTS','EVENTS','ARTICLES']).then(d=>{
+  fetchAllSheets(['VENUES','FESTIVALS','ARTISTS','EVENTS','ARTICLES'],{fresh:true}).then(d=>{
+    const sane = publishSanityCheck(d);
+    if(!sane.ok) return toast(sane.message,'error');
     const content=buildFullDataJs(d);
     downloadFile('data.js',content);
     toast('data.js exported','success');
@@ -4290,7 +4321,10 @@ function publishDataJs(opts){
   const btn = document.getElementById('btn-publish-now');
   if (btn) { btn.disabled = true; btn.dataset.originalText = btn.innerHTML; btn.innerHTML = 'Building...'; }
   toast('Building data.js...','info');
-  fetchAllSheets(['VENUES','FESTIVALS','ARTISTS','EVENTS','ARTICLES']).then(d=>{
+  fetchAllSheets(['VENUES','FESTIVALS','ARTISTS','EVENTS','ARTICLES'],{fresh:true}).then(d=>{
+    const sane = publishSanityCheck(d);
+    if(!sane.ok) throw new Error(sane.message);
+    try { localStorage.setItem('tj_publish_counts', JSON.stringify(sane.counts)); } catch(_){}
     const content = buildFullDataJs(d);
     if (btn) btn.innerHTML = 'Pushing to GitHub...';
     toast('Pushing to GitHub...','info');

@@ -40,6 +40,7 @@
 <link rel="dns-prefetch" href="https://formsubmit.co">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="common.css?v=2">
+<link rel="stylesheet" href="article-fx.css?v=1">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
@@ -1360,7 +1361,10 @@ function renderArticleDetail(id) {
   detailEl.style.display = 'block';
   window.scrollTo(0, 0);
   bindCursorExpand();
-  setReadProgressActive(true);
+  // ARTICLE FX（figure化・ワイプ・パララックス・プログレスバー）を適用。
+  // fx側が自前のプログレスバーを持つので、旧readProgressは重複させない。
+  if (window.articleFX) { window.articleFX(); setReadProgressActive(false); }
+  else setReadProgressActive(true);
 }
 
 /* ========== READING PROGRESS (article view only) ========== */
@@ -1390,6 +1394,7 @@ function showList() {
   document.getElementById('article-detail').style.display = 'none';
   document.title = 'NEWS — TECHNO JAPAN';
   if (typeof setReadProgressActive === 'function') setReadProgressActive(false);
+  if (window.articleFX) window.articleFX.teardown();  // 記事ビューのFX（プログレスバー等）を撤去
   // Reset SEO meta to news index defaults
   const def = {
     title: 'NEWS — TECHNO JAPAN',
@@ -1458,6 +1463,7 @@ handleHash();
     });
   }
 </script>
+<script src="article-fx.js?v=2" defer></script>
 <script src="favorites.js" defer></script>
 <script src="search.js" defer></script>
 </body>
