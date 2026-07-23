@@ -2117,15 +2117,39 @@ async function compressUrlAndUpload(url, type, id){
    IMAGE PREVIEW HELPERS
    既存画像のプレビュー表示 / 削除（編集モード用）
    ============================================================== */
+/* アップロード直後の画像はまだ Drive→サイトへ同期されていないため、サイト上のパスでは
+   404 になる（同期は定期実行）。その場合は Drive 上の実物を直接表示して「アップロードは
+   成功している」ことが分かるようにする。Drive にも無ければ本当に見つからない扱い。 */
+function fallbackToDriveImage(img){
+  const path = img.getAttribute('data-path') || '';
+  const m = path.match(/^images\/([^/]+)\/(.+)$/);
+  const showMissing = () => {
+    img.style.display='none';
+    const ph = img.parentNode && img.parentNode.querySelector('.img-missing-placeholder');
+    if (ph) ph.style.display='flex';
+  };
+  if(!m) return showMissing();
+  fetch(GAS_URL+'?action=get_images&type='+encodeURIComponent(m[1]))
+    .then(r=>r.json()).then(d=>{
+      const hit = ((d && d.status==='ok' && d.images) || []).find(i => i.name === m[2]);
+      if(hit && hit.url){
+        img.onerror = showMissing;      // Drive URL でも失敗したら諦める
+        img.src = driveThumb(hit.url, 400);
+        const info = img.parentNode && img.parentNode.querySelector('.preview-info');
+        if(info) info.insertAdjacentHTML('beforeend',
+          ' <span style="color:var(--yellow);font-size:.9em">（Drive にアップ済み — サイトへは同期後に反映）</span>');
+      } else showMissing();
+    }).catch(showMissing);
+}
 function showCurrentImage(previewId, imagePath, clearCallExpr){
   if(!imagePath) return;
   const el=document.getElementById(previewId);
   if(!el) return;
   el.style.display='block';
-  // 画像ロード失敗時はプレースホルダーに切替（CMS host にファイルが無い時など）
-  const errHandler = "this.style.display='none';this.parentNode.querySelector('.img-missing-placeholder').style.display='flex';";
+  // サイト上に無ければ Drive の実物へフォールバック（同期待ちを「消えた」と誤解させない）
+  const errHandler = "fallbackToDriveImage(this)";
   el.innerHTML =
-    '<img src="'+esc(imagePath)+'" alt="current" onerror="'+errHandler+'" style="max-height:140px">' +
+    '<img src="'+esc(imagePath)+'" data-path="'+esc(imagePath)+'" alt="current" onerror="'+errHandler+'" style="max-height:140px">' +
     '<div class="img-missing-placeholder" style="display:none;width:200px;height:120px;background:#1a1a1a;border:1px dashed #444;border-radius:4px;align-items:center;justify-content:center;color:#888;font-family:var(--font-mono);font-size:.7rem;text-align:center;padding:8px;line-height:1.4">📁 画像ファイルが<br>見つかりません<br><span style="opacity:.6">(Drive 同期待ち or 手動で再 upload)</span></div>' +
     '<div class="preview-info">現在の画像 — '+esc(imagePath)+' <button type="button" class="btn btn-sm btn-accent" style="margin-left:8px;padding:2px 8px;font-size:.65rem" onclick="'+clearCallExpr+'">✕ Remove</button></div>';
 }
