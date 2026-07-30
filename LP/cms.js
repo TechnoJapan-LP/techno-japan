@@ -4736,7 +4736,8 @@ function resetForm(section){
   if(section==='article'){document.getElementById('ar-category').value='REPORT';document.getElementById('ar-featured').value='false';document.getElementById('ar-status').value='published';document.getElementById('ar-author').value='TECHNO JAPAN';setArticleBody('')}
   // Publishing fields をクリア（author以外）
   if(section !== 'author') clearPubFields(section);
-  document.getElementById('output-'+section).classList.remove('show');
+  // author には出力ボックスが無い（無い場合に落ちると保存フローが途中で死ぬ）
+  document.getElementById('output-'+section)?.classList.remove('show');
 }
 
 /* ==============================================================
