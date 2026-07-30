@@ -567,6 +567,18 @@ function writeAll(pages, dirName) {
 function main() {
   const { ARTISTS = [], FESTIVALS = [], VENUES = [], ARTICLES = [] } = loadData();
 
+  // 安全弁: data.js の主要配列が空なのに既存ページが大量にある場合、
+  // 生成を続けると writeAll の掃除で全ページ削除→本番404になる
+  // （2026-07-23〜30 のフェス全消失事故の再発防止・CI側の最後の砦）。
+  for (const [name, arr, dir] of [['FESTIVALS', FESTIVALS, 'festivals'], ['ARTISTS', ARTISTS, 'artists'], ['VENUES', VENUES, 'venues']]) {
+    const existing = fs.existsSync(path.join(LP_DIR, dir)) ? fs.readdirSync(path.join(LP_DIR, dir)).filter((f) => f.endsWith('.html')).length : 0;
+    if (arr.length === 0 && existing > 10) {
+      console.error(`⛔ ${name} が data.js で0件ですが既存ページが${existing}件あります。` +
+        `シート/Publishの障害の可能性が高いため、ページ削除を防ぐべく生成を中断します。`);
+      process.exit(1);
+    }
+  }
+
   const artistsById = new Map();
   for (const a of ARTISTS) {
     if (a.id) artistsById.set(String(a.name || '').toLowerCase(), a);
