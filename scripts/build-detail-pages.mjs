@@ -46,6 +46,19 @@ const esc = (s) => String(s ?? '')
 // 本文HTMLからタグを除いて説明文を作る（meta description 用）
 const stripTags = (html) => String(html ?? '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 
+// パンくずJSON-LD（検索結果に「TECHNO JAPAN › FESTIVALS › 名前」のパスを出す）
+function breadcrumbLd(sectionLabel, sectionPath, name, canonical) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'TECHNO JAPAN', item: BASE + '/' },
+      { '@type': 'ListItem', position: 2, name: sectionLabel, item: BASE + sectionPath },
+      { '@type': 'ListItem', position: 3, name: String(name), item: canonical },
+    ],
+  };
+}
+
 const truncate = (s, n) => (s.length > n ? s.slice(0, n - 1) + '…' : s);
 
 const absUrl = (img) => {
@@ -300,7 +313,7 @@ function articlePage(a, resolveEntities, lang = 'ja') {
   </div>
 </article>`;
 
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'articles'] : ['articles']), `${a.id}.html`), html: page({ title, desc, canonical, image, jsonLd, body, lang, altHref, extraScripts: '\n<link rel="stylesheet" href="/article-fx.css?v=1">\n<script src="/article-fx.js?v=2" defer></script>' }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'articles'] : ['articles']), `${a.id}.html`), html: page({ title, desc, canonical, image, jsonLd: [jsonLd, breadcrumbLd('NEWS', '/news.html', a.title, canonical)], body, lang, altHref, extraScripts: '\n<link rel="stylesheet" href="/article-fx.css?v=1">\n<script src="/article-fx.js?v=2" defer></script>' }) };
 }
 
 /* ---------- フェスティバルページ ---------- */
@@ -310,7 +323,10 @@ function festivalPage(f, artistsById, articles, lang = 'ja') {
   const name = lang === 'en' ? (f.name_en || f.name) : f.name;
   const bodyDesc = lang === 'en' ? (f.desc_en || f.desc) : (f.desc || f.desc_en);
   const canonical = `${BASE}${prefix}/festivals/${f.id}.html`;
-  const title = `${name} — TECHNO JAPAN`;
+  // SEO: エンティティ名だけでなく検索キーワード（テクノ フェス 日本 等）をtitleに含める
+  const title = lang === 'en'
+    ? `${name} — Techno ${f.type === 'rave' ? 'Rave' : 'Festival'} in Japan | TECHNO JAPAN`
+    : `${name}｜日本のテクノ・${f.type === 'rave' ? 'レイヴ' : '野外フェス'} — TECHNO JAPAN`;
   const dateLabel = fmtFestDate(f.date);
   const place = [f.location, f.city].filter(Boolean).join(', ');
   const desc = bodyDesc || (lang === 'en'
@@ -407,7 +423,7 @@ function festivalPage(f, artistsById, articles, lang = 'ja') {
   </div>
 </article>`;
 
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'festivals'] : ['festivals']), `${f.id}.html`), html: page({ title, desc, canonical, image, ogType: 'website', jsonLd, body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'festivals'] : ['festivals']), `${f.id}.html`), html: page({ title, desc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('FESTIVALS', '/festivals.html', name, canonical)], body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT }) };
 }
 
 /* ---------- アーティストページ ---------- */
@@ -417,11 +433,17 @@ function artistPage(a, lang = 'ja') {
   const name = lang === 'en' ? (a.name_en || a.name) : a.name;
   const bio = lang === 'en' ? (a.bio_en || a.bio) : (a.bio || a.bio_en);
   const canonical = `${BASE}${prefix}/artists/${a.id}.html`;
-  const title = `${name} — TECHNO JAPAN`;
+  const fromJapan = !a.country || /japan/i.test(String(a.country));
+  const title = lang === 'en'
+    ? `${name} — Techno DJ / Artist${fromJapan ? ' from Japan' : ''} | TECHNO JAPAN`
+    : `${name}｜テクノDJ・アーティスト — TECHNO JAPAN`;
   const place = [a.city, a.country].filter(Boolean).join(', ');
-  const desc = bio ? truncate(stripTags(bio), 160) : (lang === 'en'
-    ? `${name}${place ? ' (' + place + ')' : ''} — artist profile. Japan's underground techno / house scene.`
-    : `${name}${place ? '（' + place + '）' : ''}のプロフィール。日本のアンダーグラウンド・テクノ／ハウスシーンで活動するアーティスト。`);
+  // bioが無い/短い時は、ジャンル・拠点入りのキーワードリッチな定型文にフォールバック
+  const bioDesc = bio ? truncate(stripTags(bio), 160) : '';
+  const genreTxt = String(a.genre || '').trim();
+  const desc = bioDesc.length >= 50 ? bioDesc : (lang === 'en'
+    ? `${name}${place ? ' (' + place + ')' : ''} — ${genreTxt || 'techno / house'} DJ & artist. Profile, links and festival appearances in Japan's underground scene.`
+    : `${name}${place ? '（' + place + '）' : ''} — ${genreTxt ? genreTxt + 'の' : ''}DJ／アーティスト。プロフィール・SNSリンク・日本のテクノ／ハウスシーンでの出演フェス情報。TECHNO JAPANのアーティスト名鑑。`);
   const image = absUrl(a.image);
   const links = a.links || {};
 
@@ -459,7 +481,7 @@ function artistPage(a, lang = 'ja') {
   </div>
 </article>`;
 
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'artists'] : ['artists']), `${a.id}.html`), html: page({ title, desc, canonical, image, ogType: 'profile', jsonLd, body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'artists'] : ['artists']), `${a.id}.html`), html: page({ title, desc, canonical, image, ogType: 'profile', jsonLd: [jsonLd, breadcrumbLd('ARTISTS', '/artists.html', name, canonical)], body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT }) };
 }
 
 /* ---------- ヴェニューページ ---------- */
@@ -469,7 +491,9 @@ function venuePage(v, lang = 'ja') {
   const name = lang === 'en' ? (v.name_en || v.name) : v.name;
   const bodyDesc = lang === 'en' ? (v.desc_en || v.desc) : (v.desc || v.desc_en);
   const canonical = `${BASE}${prefix}/venues/${v.id}.html`;
-  const title = `${name} — TECHNO JAPAN`;
+  const title = lang === 'en'
+    ? `${name} — Club / Venue in ${v.city || 'Japan'} | TECHNO JAPAN`
+    : `${name}｜${v.city ? v.city + 'の' : ''}クラブ・ヴェニュー — TECHNO JAPAN`;
   const place = [v.area, v.city].filter(Boolean).join(', ');
   const desc = bodyDesc || (lang === 'en'
     ? `${name}${place ? ' (' + place + ')' : ''} — club / venue guide. Japan's underground dance music.`
@@ -511,7 +535,7 @@ function venuePage(v, lang = 'ja') {
   </div>
 </article>`;
 
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'venues'] : ['venues']), `${v.id}.html`), html: page({ title, desc, canonical, image, ogType: 'website', jsonLd, body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'venues'] : ['venues']), `${v.id}.html`), html: page({ title, desc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('VENUES', '/venues.html', name, canonical)], body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT }) };
 }
 
 /* ---------- 実行 ---------- */
