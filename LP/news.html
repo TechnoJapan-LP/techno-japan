@@ -379,6 +379,7 @@
 .article-share { display: flex; gap: 8px; align-items: center; margin-top: 24px; }
 .article-share-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.4; margin-right: 8px; }
 .article-share-btn { width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid rgba(240,237,232,0.12); background: transparent; cursor: pointer; transition: border-color 0.3s ease; color: var(--text); opacity: 0.6; }
+@media (pointer: coarse) { .article-share-btn { width: 44px; height: 44px; } }
 .article-share-btn:hover { border-color: rgba(240,237,232,0.4); opacity: 1; }
 .article-share-btn svg { width: 14px; height: 14px; fill: currentColor; }
 @media (max-width: 768px) {
@@ -645,6 +646,14 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
   .sort-tab, .cat-btn, .load-more-btn, .discover-card { cursor: pointer; }
 }
 
+/* ===== SKELETON LOADING（data.js描画前のプレースホルダー・stepsで機械的に点滅） ===== */
+.sk { background: linear-gradient(100deg, rgba(240,237,232,0.05) 40%, rgba(240,237,232,0.11) 50%, rgba(240,237,232,0.05) 60%); background-size: 200% 100%; animation: skSlide 1.1s steps(7) infinite; }
+.sk-hero { aspect-ratio: 16/9; margin-bottom: 18px; }
+.sk-card { height: 96px; margin-bottom: 20px; }
+.sk-line { height: 14px; margin: 10px 0; }
+.sk-line.w60 { width: 60%; } .sk-line.w90 { width: 90%; }
+@keyframes skSlide { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .sk { animation: none; } }
 </style>
 <script type="application/ld+json">
 {
@@ -754,8 +763,12 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
 
 <!-- ===================== MAIN GRID ===================== -->
 <div class="main-grid" id="main-grid">
-  <div class="featured-col" id="featured-col"></div>
-  <div class="side-col" id="side-col"></div>
+  <div class="featured-col" id="featured-col"><!-- skeleton: data.js 描画で置換される -->
+    <div class="sk sk-hero"></div><div class="sk sk-line w60"></div><div class="sk sk-line w90"></div>
+  </div>
+  <div class="side-col" id="side-col">
+    <div class="sk sk-card"></div><div class="sk sk-card"></div><div class="sk sk-card"></div>
+  </div>
 </div>
 
 <!-- ===================== MORE ARTICLES FEED ===================== -->
@@ -767,7 +780,9 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
     </div>
   </div>
   <div class="category-nav" id="category-nav"></div>
-  <div class="feed-grid" id="feed-grid"></div>
+  <div class="feed-grid" id="feed-grid">
+    <div class="sk sk-card"></div><div class="sk sk-card"></div><div class="sk sk-card"></div><div class="sk sk-card"></div>
+  </div>
   <div class="load-more-wrap">
     <button class="load-more-btn" id="load-more-btn">LOAD MORE</button>
   </div>

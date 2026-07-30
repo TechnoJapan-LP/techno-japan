@@ -191,6 +191,11 @@ body.rave-mode .festival-section:hover .festival-name {
 .fest-filter-chip:hover { opacity: 0.7; }
 .fest-filter-chip.active { opacity: 1; border-bottom: 1px solid var(--text); }
 @media (max-width: 640px) { .fest-filters { padding: 12px 20px 4px; } }
+/* タッチデバイスは44pxのタップターゲットを確保（フィルタ・月ナビ） */
+@media (pointer: coarse) {
+  .fest-filter-chip { padding: 13px 16px; }
+  .month-nav a { padding: 13px 16px; }
+}
 .month-nav .year-toggle {
   font-family: var(--font-mono);
   font-size: 9px;

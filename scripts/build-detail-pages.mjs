@@ -61,6 +61,15 @@ function breadcrumbLd(sectionLabel, sectionPath, name, canonical) {
 
 const truncate = (s, n) => (s.length > n ? s.slice(0, n - 1) + '…' : s);
 
+/* ---------- 回遊導線（ページ間の相互リンク）。main() が索引をセットする ---------- */
+let XLINK = { fests: [], venues: [], appearMap: new Map() };
+function relatedChips(items, dir, lang) {
+  const prefix = lang === 'en' ? '/en' : '';
+  return `<div class="lineup-list">` + items.map((x) =>
+    `<a class="lineup-item" href="${prefix}/${dir}/${x.id}.html">${esc(lang === 'en' ? (x.name_en || x.name) : x.name)}</a>`
+  ).join('') + `</div>`;
+}
+
 const absUrl = (img) => {
   if (!img) return DEFAULT_OG;
   return String(img).startsWith('http') ? String(img) : `${BASE}/${String(img).replace(/^\//, '')}`;
@@ -419,6 +428,11 @@ function festivalPage(f, artistsById, articles, lang = 'ja') {
     </dl>
     ${lineup ? `<h2>LINE UP</h2><div class="lineup-list">${lineup}</div>` : ''}
     ${editionsHtml}${relatedHtml}
+    ${(() => { // 回遊: 同じエリアの他のフェス
+      const others = XLINK.fests.filter((x) => x.id !== f.id && x.city && f.city && String(x.city).toLowerCase() === String(f.city).toLowerCase()).slice(0, 6);
+      if (!others.length) return '';
+      return `<h2>${lang === 'en' ? `MORE IN ${esc(String(f.city).toUpperCase())}` : `${esc(f.city)}の他のフェス`}</h2>${relatedChips(others, 'festivals', lang)}`;
+    })()}
     <div class="article-footer"><a class="article-back" href="/festivals.html" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
   </div>
 </article>`;
@@ -477,6 +491,11 @@ function artistPage(a, lang = 'ja') {
     ${a.image ? `<div class="detail-hero detail-hero-portrait"><img src="/${String(a.image).replace(/^\//, '')}" alt="${esc(name)}"></div>` : ''}
     ${bilingualBody(a.bio, a.bio_en, lang)}
     ${linkRow ? `<div class="detail-links">${linkRow}</div>` : ''}
+    ${(() => { // 回遊: このアーティストが出演するフェス（lineup / editions.lineup から逆引き）
+      const appears = XLINK.appearMap.get(String(a.name || '').toLowerCase()) || [];
+      if (!appears.length) return '';
+      return `<h2>${lang === 'en' ? 'APPEARANCES' : '出演フェス'}</h2>${relatedChips(appears.slice(0, 8), 'festivals', lang)}`;
+    })()}
     <div class="article-footer"><a class="article-back" href="/artists.html" style="margin:0"><span class="arrow"></span> ALL ARTISTS</a></div>
   </div>
 </article>`;
@@ -531,6 +550,11 @@ function venuePage(v, lang = 'ja') {
       ${v.address ? `<div><dt>${lang === 'en' ? 'ADDRESS' : '住所'}</dt><dd>${esc(v.address)}</dd></div>` : ''}
       ${v.url ? `<div><dt>${lang === 'en' ? 'OFFICIAL SITE' : '公式サイト'}</dt><dd><a href="${esc(v.url)}" target="_blank" rel="noopener">${esc(v.url)}</a></dd></div>` : ''}
     </dl>
+    ${(() => { // 回遊: 同じ街の他のヴェニュー
+      const others = XLINK.venues.filter((x) => x.id !== v.id && x.city && v.city && String(x.city).toLowerCase() === String(v.city).toLowerCase()).slice(0, 6);
+      if (!others.length) return '';
+      return `<h2>${lang === 'en' ? `MORE VENUES IN ${esc(String(v.city).toUpperCase())}` : `${esc(v.city)}の他のヴェニュー`}</h2>${relatedChips(others, 'venues', lang)}`;
+    })()}
     <div class="article-footer"><a class="article-back" href="/venues.html" style="margin:0"><span class="arrow"></span> ALL VENUES</a></div>
   </div>
 </article>`;
@@ -585,6 +609,20 @@ function main() {
   }
 
   const valid = (x) => x && x.id && String(x.id).trim();
+
+  // 回遊導線の索引: アーティスト名(小文字) → 出演フェス一覧（lineup + editions.lineup）
+  const appearMap = new Map();
+  for (const f of FESTIVALS) {
+    const names = new Set([
+      ...(Array.isArray(f.lineup) ? f.lineup : []),
+      ...((Array.isArray(f.editions) ? f.editions : []).flatMap((e) => e.lineup || [])),
+    ].map((n) => String(n).toLowerCase()));
+    for (const n of names) {
+      if (!appearMap.has(n)) appearMap.set(n, []);
+      appearMap.get(n).push(f);
+    }
+  }
+  XLINK = { fests: FESTIVALS, venues: VENUES, appearMap };
 
   const resolveEntities = makeEntityResolver({ ARTISTS, FESTIVALS, VENUES, ARTICLES });
   const pubArticles = ARTICLES.filter(valid).filter((a) => a.status !== 'draft');

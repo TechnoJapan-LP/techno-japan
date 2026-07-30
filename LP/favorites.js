@@ -105,6 +105,17 @@
       .tj-fav-nav .tj-fav-count {
         font-size: 9px; letter-spacing: 0.1em;
       }
+      /* 追加時のマイクロアニメーション: ハートがポップ、ボタンは押し込み */
+      .tj-fav-nav.fav-pop svg { animation: tjFavPop 0.45s cubic-bezier(.2,1.6,.4,1); }
+      .tj-fav-heart.active svg { animation: tjFavPop 0.45s cubic-bezier(.2,1.6,.4,1); }
+      .tj-fav-heart:active { transform: scale(0.88); }
+      @keyframes tjFavPop { 0% { transform: scale(1); } 40% { transform: scale(1.45); } 100% { transform: scale(1); } }
+      @media (prefers-reduced-motion: reduce) { .tj-fav-nav.fav-pop svg, .tj-fav-heart.active svg { animation: none; } }
+      /* タッチデバイスは44pxのタップターゲット */
+      @media (pointer: coarse) {
+        .tj-fav-heart { width: 44px; height: 44px; }
+        .tj-fav-heart.sm { width: 40px; height: 40px; }
+      }
     `;
     document.head.appendChild(style);
   }
@@ -135,6 +146,7 @@
     updateCount();
   }
 
+  let _lastCount = null;
   function updateCount() {
     const c = tjFav.count();
     document.querySelectorAll('.tj-fav-count').forEach(el => {
@@ -142,7 +154,14 @@
     });
     document.querySelectorAll('.tj-fav-nav').forEach(el => {
       el.classList.toggle('has-favorites', c > 0);
+      // 追加された時だけナビのハートをポップさせる（削除では動かさない）
+      if (_lastCount !== null && c > _lastCount) {
+        el.classList.remove('fav-pop');
+        void el.offsetWidth;          // reflowでアニメーション再トリガー
+        el.classList.add('fav-pop');
+      }
     });
+    _lastCount = c;
   }
 
   document.addEventListener('tj-fav-change', updateCount);

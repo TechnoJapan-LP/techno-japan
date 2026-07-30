@@ -233,3 +233,11 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 .lang-body { animation: langFade .35s ease; }
 @keyframes langFade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .lang-body { animation: none; } }
+
+/* ===== タップターゲット（タッチデバイスは44px確保・Apple HIG準拠） ===== */
+@media (pointer: coarse) {
+  .lineup-item { padding: 13px 18px; }
+  .detail-chip { padding: 11px 16px; }
+  .detail-links a { padding: 13px 18px; }
+  .nav-lang a { padding: 12px 6px; margin: -12px 0; }
+}
