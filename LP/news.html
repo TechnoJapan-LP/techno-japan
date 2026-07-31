@@ -764,7 +764,11 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
 <!-- ===================== MAIN GRID ===================== -->
 <div class="main-grid" id="main-grid">
   <div class="featured-col" id="featured-col"><!-- skeleton: data.js 描画で置換される -->
-    <div class="sk sk-hero"></div><div class="sk sk-line w60"></div><div class="sk sk-line w90"></div>
+    <!-- STATIC_LINKS:ARTICLES:START -->
+<ul class="ssr-link-list">
+  <li><a href="/articles/transcendence-2025-report.html">野外テクノパーティTranscendenceで見た次世代ジェネレーションの可能性</a></li>
+</ul>
+<!-- STATIC_LINKS:ARTICLES:END -->
   </div>
   <div class="side-col" id="side-col">
     <div class="sk sk-card"></div><div class="sk sk-card"></div><div class="sk sk-card"></div>
@@ -1312,7 +1316,7 @@ function renderArticleDetail(id) {
         '@type': 'Organization',
         name: 'TECHNO JAPAN',
         url: 'https://techno-japan.media/',
-        logo: { '@type': 'ImageObject', url: 'https://techno-japan.media/images/festivals/rainbow-disco-club.webp' }
+        logo: { '@type': 'ImageObject', url: 'https://techno-japan.media/images/logo-512.png' }
       },
       mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrlAbs },
       articleSection: a.category || 'NEWS',

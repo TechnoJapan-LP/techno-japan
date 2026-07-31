@@ -96,6 +96,7 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
 .toast.success{background:rgba(45,255,110,.15);border:1px solid var(--green);color:var(--green)}
 .toast.error{background:rgba(255,45,45,.15);border:1px solid var(--accent);color:var(--accent)}
 .toast.info{background:rgba(45,143,255,.15);border:1px solid var(--blue);color:var(--blue)}
+.toast.warning{background:rgba(255,208,45,.15);border:1px solid var(--yellow);color:var(--yellow)}
 .insta-preview{margin-top:10px;display:none}
 .insta-preview img{max-width:300px;max-height:300px;border-radius:var(--radius);border:1px solid var(--border)}
 .insta-preview .insta-info{margin-top:6px;font-size:.75rem;color:var(--text2);font-family:var(--font-mono)}

@@ -14,6 +14,12 @@ jobs:
         with:
           token: ${{ secrets.GH_TOKEN }}
 
+      # Drive には CMS の「Image from URL」がフォールバックで保存した原寸 jpg/png/heic が
+      # 溜まる（配信元が CORS を許可しないとブラウザ側で webp 化できない）。
+      # サイトが配信するのは webp のみなので、ここで変換して救う。
+      - name: Set up Pillow (webp / heic conversion)
+        run: python3 -m pip install --quiet --disable-pip-version-check Pillow pillow-heif
+
       - name: Sync images from Google Drive via GAS
         env:
           CMS_AUTH: ${{ secrets.CMS_AUTH_HASH }}

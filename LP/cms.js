@@ -2261,13 +2261,28 @@ function uploadFromUrl(prefix,type,pathFieldId,urlFieldId,previewId){
       previewEl.innerHTML='<img src="'+esc(url)+'" alt="preview" onerror="this.style.display=\'none\'"><div class="preview-info">✓ アップロード済み — '+esc(path||'')+'</div>';
     }
   };
+  // ブラウザ側で webp 化できず、原寸のまま Drive に入った場合の表示。
+  // 「完了」だけ出して黙っていると、サイトに出ないことに気づけない（webp 化は
+  // Sync Drive Images 側で行うため即時反映されない）。
+  const showFallback=(path)=>{
+    toast('原寸のままアップロードしました — webp変換は同期時（最大30分）','warning');
+    document.getElementById(pathFieldId).value=path||'';
+    if(previewEl){
+      previewEl.style.display='block';
+      previewEl.innerHTML='<img src="'+esc(url)+'" alt="preview" onerror="this.style.display=\'none\'">'
+        +'<div class="preview-info" style="color:var(--yellow)">⚠ 原寸のままDriveに保存しました — '+esc(path||'')
+        +'<br>配信元がCORSを許可していないため、ブラウザ側でwebp化できませんでした。'
+        +'<br>webp変換は Sync Drive Images（最大30分間隔）で行われるため、<strong>サイトへの反映は即時ではありません</strong>。'
+        +'<br>すぐ反映したい場合は、画像を保存してから「手動アップロード」（ファイル選択）を使ってください。</div>';
+    }
+  };
   // まずブラウザ側で圧縮を試す（1920px/webp）。CORS等で不可なら従来の原寸経路へ。
   compressUrlAndUpload(url,type,id).then(r=>{
     if(r){ done(); showOk(r.path, ' ('+(r.comp.blob.size/1024/1024).toFixed(2)+'MB webp)'); return; }
     return fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'upload_from_url',imageUrl:url,type:type,id:id})})
       .then(x=>x.json()).then(d=>{
         done();
-        if(d.success){ showOk(d.path); }
+        if(d.success){ showFallback(d.path); }
         else { toast(d.error||'アップロード失敗','error'); renderUploadFailed(previewEl,'✗ '+(d.error||'アップロード失敗'),prefix,type); }
       });
   }).catch(e=>{
@@ -3288,7 +3303,7 @@ async function biImgRun(){
   if(!valid.length) return toast('該当IDが見つかりません: '+missing.join(', '),'error');
   if(!confirm(`${valid.length}件の画像を Drive にアップロードし、${field} を設定します。${missing.length?'\n（ID不明でスキップ: '+missing.join(', ')+'）':''}\n続行しますか?`)) return;
   biCancel=false; document.getElementById('bi-cancel-btn').style.display='';
-  let done=0, fail=0;
+  let done=0, fail=0, fellBack=[];
   for(const p of valid){
     if(biCancel) break;
     biProg(`アップロード中... ${done+fail+1}/${valid.length}\n${p.id}`);
@@ -3299,7 +3314,9 @@ async function biImgRun(){
       if(c){ path=c.path; }
       else {
         const up = await fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'upload_from_url', imageUrl:p.url, type:target, id:p.id})}).then(x=>x.json());
-        if(up.success && up.path) path=up.path;
+        // webp 化されず原寸で入った分は、同期時に変換されるまでサイトに出ない。
+        // 黙って done に混ぜると気づけないので ID を控えて最後に出す。
+        if(up.success && up.path){ path=up.path; fellBack.push(p.id); }
       }
       if(path){
         const row = {...byId.get(p.id)}; row[field] = path;
@@ -3309,7 +3326,9 @@ async function biImgRun(){
     await new Promise(r=>setTimeout(r,800));
   }
   document.getElementById('bi-cancel-btn').style.display='none';
-  biProg(`${biCancel?'中断':'完了'}: ${done}件設定 / ${fail}件失敗`);
+  biProg(`${biCancel?'中断':'完了'}: ${done}件設定 / ${fail}件失敗`
+    + (fellBack.length ? `\n⚠ ${fellBack.length}件は原寸のまま（webp変換は同期時・最大30分）: ${fellBack.join(', ')}` : ''));
+  if(fellBack.length) toast(`${fellBack.length}件は原寸のままアップロード — 反映は同期後`,'warning');
   invalidateSheetCache(section);
 }
 

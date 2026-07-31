@@ -27,6 +27,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const LP_DIR = path.join(__dirname, '..', 'LP');
 const DATA_PATH = path.join(LP_DIR, 'data.js');
 const BASE = 'https://techno-japan.media';
+// ブランドロゴ（Organization.logo 用）と OGP フォールバック画像は役割が違うので分ける。
+// ロゴは正方形のブランド識別子、OGP は SNS カード向けの横長ビジュアル。
+// ロゴを差し替えるときはこのパスのファイルを置き換えるだけでよい（URL は変えない）。
+const ORG_LOGO = `${BASE}/images/logo-512.png`;
 const DEFAULT_OG = `${BASE}/images/festivals/rainbow-disco-club.webp`;
 
 /* ---------- data.js を読み込む ---------- */
@@ -287,7 +291,7 @@ function articlePage(a, resolveEntities, lang = 'ja') {
       '@type': 'Organization',
       name: 'TECHNO JAPAN',
       url: `${BASE}/`,
-      logo: { '@type': 'ImageObject', url: DEFAULT_OG },
+      logo: { '@type': 'ImageObject', url: ORG_LOGO },
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
     articleSection: a.category || 'NEWS',
@@ -588,6 +592,37 @@ function writeAll(pages, dirName) {
   return { total: pages.length, written, removed };
 }
 
+/* ---------- ハブページの静的リンク ---------- */
+function festivalHubLabel(f) {
+  const details = [];
+  const year = String(f.date || '').match(/\b\d{4}\b/)?.[0];
+  if (year) details.push(year);
+  const place = [f.location, f.city].filter(Boolean).join(', ');
+  if (place) details.push(place);
+  return `${f.name || ''}${details.length ? ` — ${details.join(' · ')}` : ''}`;
+}
+
+function hubLinkList(items, dirName, labelFor) {
+  return `<ul class="ssr-link-list">\n${items.map((item) =>
+    `  <li><a href="/${dirName}/${encodeURIComponent(item.id)}.html">${esc(labelFor(item))}</a></li>`
+  ).join('\n')}\n</ul>`;
+}
+
+function writeHubLinks(fileName, markerName, html) {
+  const file = path.join(LP_DIR, fileName);
+  const start = `<!-- STATIC_LINKS:${markerName}:START -->`;
+  const end = `<!-- STATIC_LINKS:${markerName}:END -->`;
+  const source = fs.readFileSync(file, 'utf8');
+  const pattern = new RegExp(`${start}[\\s\\S]*?${end}`);
+  if (!pattern.test(source)) {
+    throw new Error(`${fileName}: 静的リンクの生成マーカーが見つかりません`);
+  }
+  const next = source.replace(pattern, `${start}\n${html}\n${end}`);
+  if (next === source) return false;
+  fs.writeFileSync(file, next);
+  return true;
+}
+
 function main() {
   const { ARTISTS = [], FESTIVALS = [], VENUES = [], ARTICLES = [] } = loadData();
 
@@ -663,6 +698,25 @@ function main() {
     'en/venues': writeAll(pubVenues.map((v) => venuePage(v, 'en')), 'en/venues'),
   };
 
+  const hubCounts = {
+    'news.html': {
+      total: pubArticles.length,
+      written: writeHubLinks('news.html', 'ARTICLES', hubLinkList(pubArticles, 'articles', (a) => a.title || '')),
+    },
+    'festivals.html': {
+      total: pubFests.length,
+      written: writeHubLinks('festivals.html', 'FESTIVALS', hubLinkList(pubFests, 'festivals', festivalHubLabel)),
+    },
+    'artists.html': {
+      total: pubArtists.length,
+      written: writeHubLinks('artists.html', 'ARTISTS', hubLinkList(pubArtists, 'artists', (a) => a.name || '')),
+    },
+    'venues.html': {
+      total: pubVenues.length,
+      written: writeHubLinks('venues.html', 'VENUES', hubLinkList(pubVenues, 'venues', (v) => v.name || '')),
+    },
+  };
+
   console.log('Detail pages:');
   let total = 0, written = 0, removed = 0;
   for (const [k, v] of Object.entries(counts)) {
@@ -670,6 +724,10 @@ function main() {
     total += v.total; written += v.written; removed += v.removed;
   }
   console.log(`  total: ${total} pages — ${written} written, ${removed} removed`);
+  console.log('Hub static links:');
+  for (const [file, result] of Object.entries(hubCounts)) {
+    console.log(`  ${file}: ${result.total} links (${result.written ? 'updated' : 'unchanged'})`);
+  }
 }
 
 main();
