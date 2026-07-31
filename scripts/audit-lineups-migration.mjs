@@ -20,12 +20,12 @@ const readItems = (name) => {
   return data.items;
 };
 
-function loadArtists() {
+function loadDataJs() {
   const src = fs.readFileSync(path.join(ROOT, 'LP', 'data.js'), 'utf8');
   const ctx = {};
   vm.createContext(ctx);
-  new vm.Script(`${src}\n;globalThis.__artists = ARTISTS;`).runInContext(ctx);
-  return ctx.__artists;
+  new vm.Script(`${src}\n;globalThis.__data = { ARTISTS, FESTIVALS };`).runInContext(ctx);
+  return ctx.__data;
 }
 
 const csvCell = (value) => `"${String(value ?? '').replace(/"/g, '""')}"`;
@@ -35,9 +35,31 @@ const csv = (headers, rows) => [headers, ...rows]
 
 const lineups = readItems('lineups.json');
 const editions = readItems('editions.json');
-const artists = loadArtists();
+const { ARTISTS: artists, FESTIVALS: festivals } = loadDataJs();
 const editionIds = new Set(editions.map((ed) => String(ed.EDITION_ID || '')));
 const artistIds = new Set(artists.map((artist) => String(artist.id || '')));
+const editionToFestival = new Map(editions.map((edition) => [edition.EDITION_ID, edition.FESTIVAL_ID]));
+const festivalsWithLineups = new Set(lineups.map((row) => editionToFestival.get(row.EDITION_ID)).filter(Boolean));
+const legacyArtistIds = (row) => String(row.ARTIST_IDS || row.ARTIST_ID || '')
+  .split(',').map((id) => id.trim()).filter(Boolean);
+const isComposite = (row) => {
+  const ids = legacyArtistIds(row);
+  return ids.length > 1 || !!String(row.JOIN_TYPE || '').trim() ||
+    String(row.SET_TYPE || '').trim().toLowerCase() === 'b2b' ||
+    (!ids.length && /\s&\s/.test(String(row.ACT_LABEL || '')));
+};
+const normalizeName = (value) => String(value || '').normalize('NFKD')
+  .replace(/[\u0300-\u036f]/g, '').toLowerCase()
+  .replace(/\blive\b/g, '').replace(/[^a-z0-9]+/g, '');
+const artistsByNormalizedName = new Map();
+for (const artist of artists) {
+  for (const value of [artist.id, artist.name, artist.name_en]) {
+    if (!value) continue;
+    const key = normalizeName(value);
+    if (!artistsByNormalizedName.has(key)) artistsByNormalizedName.set(key, new Map());
+    artistsByNormalizedName.get(key).set(artist.id, artist);
+  }
+}
 
 const copyRows = [];
 const reviewRows = [];
@@ -92,6 +114,37 @@ const schemaRows = artists.map((artist) => [
   'person または music-group を設定（空欄時の表示既定はperson）',
 ]);
 
+// 複合枠を除くACT_LABEL-only行だけを、スプレッドシート手入力用に出す。
+// 名称一致は候補の提示だけで、自動適用しない。
+const backfillRows = lineups
+  .filter((row) => !legacyArtistIds(row).length && row.ACT_LABEL && !isComposite(row))
+  .map((row) => {
+    const candidates = [...(artistsByNormalizedName.get(normalizeName(row.ACT_LABEL)) || new Map()).values()];
+    const candidate = candidates.length === 1 ? candidates[0] : null;
+    return [
+      row.EDITION_ID, row.SORT, row.ACT_LABEL, row.SET_TYPE || '',
+      candidate?.id || '', candidate?.name || '', candidate ? 'NAME_MATCH_CANDIDATE' : 'ARTIST_ID_REQUIRED',
+    ];
+  });
+
+// 旧data.jsにラインナップがあるのにLINEUPSへ未移行のフェスを自動検出する。
+// 旧データにも詳細がない要確認フェスは --missing-festivals=id1,id2 でレポートへ追加できる。
+const requestedMissingIds = new Set(process.argv.slice(2)
+  .filter((arg) => arg.startsWith('--missing-festivals='))
+  .flatMap((arg) => arg.slice('--missing-festivals='.length).split(','))
+  .map((id) => id.trim()).filter(Boolean));
+const missingFestivalIds = new Set([
+  ...festivals.filter((festival) => Array.isArray(festival.lineup) && festival.lineup.length && !festivalsWithLineups.has(festival.id)).map((festival) => festival.id),
+  ...requestedMissingIds,
+]);
+const missingFestivalRows = [...missingFestivalIds].flatMap((festivalId) => {
+  const festival = festivals.find((item) => item.id === festivalId);
+  if (!festival) return [[festivalId, '', '', 'FESTIVAL_ID_NOT_FOUND']];
+  const legacyLineup = Array.isArray(festival.lineup) ? festival.lineup : [];
+  if (!legacyLineup.length) return [[festival.id, festival.name || '', '', 'FULL_LINEUP_REGISTRATION_REQUIRED']];
+  return legacyLineup.map((actLabel) => [festival.id, festival.name || '', actLabel, 'LINEUP_ROW_REGISTRATION_REQUIRED']);
+});
+
 fs.mkdirSync(REPORT_DIR, { recursive: true });
 fs.writeFileSync(path.join(REPORT_DIR, 'lineups-column-copy.csv'), csv([
   'EDITION_ID', 'ARTIST_IDS', 'JOIN_TYPE', 'PERF_TYPE', 'ACT_LABEL',
@@ -103,9 +156,18 @@ fs.writeFileSync(path.join(REPORT_DIR, 'lineups-migration-review.csv'), csv([
 fs.writeFileSync(path.join(REPORT_DIR, 'artists-schema-type-review.csv'), csv([
   'ARTIST_ID', 'NAME', 'CURRENT_SCHEMA_TYPE', 'MEMBER_IDS', 'ACTION',
 ], schemaRows));
+fs.writeFileSync(path.join(REPORT_DIR, 'lineups-artist-id-backfill.csv'), csv([
+  'EDITION_ID', 'SORT', 'ACT_LABEL', 'CURRENT_SET_TYPE',
+  'CANDIDATE_ARTIST_ID', 'CANDIDATE_ARTIST_NAME', 'STATUS',
+], backfillRows));
+fs.writeFileSync(path.join(REPORT_DIR, 'lineups-missing-festivals.csv'), csv([
+  'FESTIVAL_ID', 'FESTIVAL_NAME', 'LEGACY_ACT_LABEL', 'STATUS',
+], missingFestivalRows));
 
 console.log(`LINEUPS: ${lineups.length} rows`);
 console.log(`  safe column-copy proposals: ${copyRows.length}`);
 console.log(`  review issues: ${reviewRows.length}`);
 console.log(`ARTISTS schema review: ${schemaRows.length} rows`);
+console.log(`ARTIST_ID backfill: ${backfillRows.length} rows (${backfillRows.filter((row) => row[4]).length} name-match candidates)`);
+console.log(`Missing festival lineups: ${missingFestivalIds.size} festivals / ${missingFestivalRows.length} review rows`);
 console.log(`Reports: ${path.relative(ROOT, REPORT_DIR)}/`);

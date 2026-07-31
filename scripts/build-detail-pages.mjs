@@ -27,6 +27,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const LP_DIR = path.join(__dirname, '..', 'LP');
 const DATA_PATH = path.join(LP_DIR, 'data.js');
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
+const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');
 const BASE = 'https://techno-japan.media';
 // ブランドロゴ（Organization.logo 用）と OGP フォールバック画像は役割が違うので分ける。
 // ロゴは正方形のブランド識別子、OGP は SNS カード向けの横長ビジュアル。
@@ -76,7 +77,7 @@ function breadcrumbLd(sectionLabel, sectionPath, name, canonical) {
 const truncate = (s, n) => (s.length > n ? s.slice(0, n - 1) + '…' : s);
 
 /* ---------- 回遊導線（ページ間の相互リンク）。main() が索引をセットする ---------- */
-let XLINK = { fests: [], venues: [] };
+let XLINK = { fests: [], venues: [], appearMap: new Map() };
 function relatedChips(items, dir, lang) {
   const prefix = lang === 'en' ? '/en' : '';
   return `<div class="lineup-list">` + items.map((x) =>
@@ -408,7 +409,63 @@ function editionsTable(editions, lang) {
   </div>`;
 }
 
-function festivalPage(f, festivalEditions, articles, lang = 'ja') {
+function lineupArtistIds(row) {
+  const value = row.ARTIST_IDS || row.ARTIST_ID || [];
+  return (Array.isArray(value) ? value : String(value).split(','))
+    .map((id) => String(id).trim())
+    .filter(Boolean);
+}
+
+// 新列へ移行するまでの安全側フォールバック。ACT_LABELは分割せず、
+// 複合の可能性がある枠をリンク/performer対象から丸ごと除外する。
+function isCompositeLineup(row) {
+  const ids = lineupArtistIds(row);
+  return ids.length > 1 || !!String(row.JOIN_TYPE || '').trim() ||
+    String(row.SET_TYPE || '').trim().toLowerCase() === 'b2b' ||
+    (!ids.length && /\s&\s/.test(String(row.ACT_LABEL || '')));
+}
+
+function lineupEntity(row, artistsById, lang) {
+  if (isCompositeLineup(row)) return null;
+  const id = lineupArtistIds(row)[0];
+  if (!id) return null;
+  const artist = artistsById.get(id);
+  if (!artist) throw new Error(`lineups.json: ARTIST_ID 参照切れ "${id}"`);
+  return {
+    '@type': artistSchemaType(artist),
+    '@id': artistEntityId(id),
+    name: lang === 'en' ? (artist.name_en || artist.name) : artist.name,
+    url: `${BASE}/artists/${encodeURIComponent(id)}.html`,
+  };
+}
+
+function lineupSlotHtml(row, artistsById, lang) {
+  if (isCompositeLineup(row)) return `<span class="lineup-item" data-lineup-slot data-lineup-composite>${esc(row.ACT_LABEL || '')}</span>`;
+  const id = lineupArtistIds(row)[0];
+  if (!id) return `<span class="lineup-item" data-lineup-slot>${esc(row.ACT_LABEL || '')}</span>`;
+  const artist = artistsById.get(id);
+  if (!artist) throw new Error(`lineups.json: ARTIST_ID 参照切れ "${id}"`);
+  const prefix = lang === 'en' ? '/en' : '';
+  const name = lang === 'en' ? (artist.name_en || artist.name) : artist.name;
+  return `<a class="lineup-item" data-lineup-slot data-lineup-artist="${esc(id)}" href="${prefix}/artists/${encodeURIComponent(id)}.html">${esc(name)}</a>`;
+}
+
+function festivalLineupsHtml(editions, lineupsByEdition, artistsById, lang) {
+  const groups = editions.map((ed) => ({ ed, rows: lineupsByEdition.get(ed.EDITION_ID) || [] }))
+    .filter((group) => group.rows.length);
+  if (!groups.length) return '';
+  const body = groups.map(({ ed, rows }) => {
+    const slots = [...rows]
+      .sort((a, b) => Number(a.SORT || 0) - Number(b.SORT || 0))
+      .map((row) => lineupSlotHtml(row, artistsById, lang)).join('');
+    return groups.length > 1
+      ? `<section class="edition-lineup"><h3>${esc(ed.EDITION || ed.EDITION_ID)}</h3><div class="lineup-list">${slots}</div></section>`
+      : `<div class="lineup-list">${slots}</div>`;
+  }).join('');
+  return `<section class="festival-lineups"><h2>LINE UP</h2>${body}</section>`;
+}
+
+function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articles, lang = 'ja') {
   const prefix = lang === 'en' ? '/en' : '';
   const altHref = (lang === 'ja' ? '/en' : '') + `/festivals/${f.id}.html`;
   const name = lang === 'en' ? (f.name_en || f.name) : f.name;
@@ -439,6 +496,9 @@ function festivalPage(f, festivalEditions, articles, lang = 'ja') {
     String(b.EDITION || '').localeCompare(String(a.EDITION || ''))
   );
   const editionsHtml = editionsTable(editions, lang);
+  const lineupsHtml = festivalLineupsHtml(editions, lineupsByEdition, artistsById, lang);
+  const performers = editions.flatMap((ed) => lineupsByEdition.get(ed.EDITION_ID) || [])
+    .map((row) => lineupEntity(row, artistsById, lang)).filter(Boolean);
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -449,6 +509,7 @@ function festivalPage(f, festivalEditions, articles, lang = 'ja') {
     image: [image],
     url: canonical,
     ...(f.url ? { sameAs: f.url } : {}),
+    ...(performers.length ? { performer: performers } : {}),
     ...(editions.length ? { subEvent: editions.map((ed) => ({
       '@type': 'Festival',
       '@id': `${BASE}/festivals/${encodeURIComponent(f.id)}.html#edition-${encodeURIComponent(ed.EDITION_ID)}`,
@@ -456,6 +517,9 @@ function festivalPage(f, festivalEditions, articles, lang = 'ja') {
       ...(ISO_DATE.test(String(ed.DATE_START || '')) ? { startDate: ed.DATE_START } : {}),
       ...(ISO_DATE.test(String(ed.DATE_END || '')) ? { endDate: ed.DATE_END } : {}),
       location: editionLocationLd(ed),
+      ...((lineupsByEdition.get(ed.EDITION_ID) || []).map((row) => lineupEntity(row, artistsById, lang)).filter(Boolean).length
+        ? { performer: (lineupsByEdition.get(ed.EDITION_ID) || []).map((row) => lineupEntity(row, artistsById, lang)).filter(Boolean) }
+        : {}),
       ...(editionStatusLd(ed.STATUS) ? { eventStatus: editionStatusLd(ed.STATUS) } : {}),
       ...(ed.TICKETURL ? { offers: { '@type': 'Offer', url: ed.TICKETURL } } : {}),
     })) } : {}),
@@ -470,7 +534,7 @@ function festivalPage(f, festivalEditions, articles, lang = 'ja') {
     ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
     ${f.image || f.flyer ? `<div class="detail-hero"><img src="/${String(f.image || f.flyer).replace(/^\//, '')}" alt="${esc(name)}"></div>` : ''}
     ${bilingualBody(f.desc, f.desc_en, lang)}
-    ${editionsHtml}${relatedHtml}
+    ${editionsHtml}${lineupsHtml}${relatedHtml}
     ${(() => { // 回遊: 同じエリアの他のフェス
       const others = XLINK.fests.filter((x) => x.id !== f.id && x.city && f.city && String(x.city).toLowerCase() === String(f.city).toLowerCase()).slice(0, 6);
       if (!others.length) return '';
@@ -547,6 +611,10 @@ function artistPage(a, artistsById, lang = 'ja') {
     .filter(([, v]) => v)
     .map(([k, v]) => `<a class="detail-link" href="${esc(v)}" target="_blank" rel="noopener">${esc(k.toUpperCase())}</a>`)
     .join('');
+  const appearances = XLINK.appearMap.get(String(a.id)) || [];
+  const appearancesHtml = appearances.length
+    ? `\n    <section class="artist-appearances"><h2>${lang === 'en' ? 'APPEARANCES' : '出演フェス'}</h2>${relatedChips(appearances, 'festivals', lang)}</section>`
+    : '';
 
   const body = `<article class="detail-page">
   <div class="detail-inner">
@@ -556,7 +624,7 @@ function artistPage(a, artistsById, lang = 'ja') {
     ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
     ${a.image ? `<div class="detail-hero detail-hero-portrait"><img src="/${String(a.image).replace(/^\//, '')}" alt="${esc(name)}"></div>` : ''}
     ${bilingualBody(a.bio, a.bio_en, lang)}
-    ${linkRow ? `<div class="detail-links">${linkRow}</div>` : ''}
+    ${linkRow ? `<div class="detail-links">${linkRow}</div>` : ''}${appearancesHtml}
     <div class="article-footer"><a class="article-back" href="/artists.html" style="margin:0"><span class="arrow"></span> ALL ARTISTS</a></div>
   </div>
 </article>`;
@@ -684,6 +752,7 @@ function writeHubLinks(fileName, markerName, html) {
 function main() {
   const { ARTISTS = [], FESTIVALS = [], VENUES = [], ARTICLES = [] } = loadData();
   const EDITIONS = loadItems(EDITIONS_PATH, 'editions.json');
+  const LINEUPS = loadItems(LINEUPS_PATH, 'lineups.json');
 
   // 安全弁: data.js の主要配列が空なのに既存ページが大量にある場合、
   // 生成を続けると writeAll の掃除で全ページ削除→本番404になる
@@ -709,14 +778,36 @@ function main() {
     if (!editionsByFestival.has(ed.FESTIVAL_ID)) editionsByFestival.set(ed.FESTIVAL_ID, []);
     editionsByFestival.get(ed.FESTIVAL_ID).push(ed);
   }
-  XLINK = { fests: FESTIVALS, venues: VENUES };
-
   const resolveEntities = makeEntityResolver({ ARTISTS, FESTIVALS, VENUES, ARTICLES });
   const pubArticles = ARTICLES.filter(valid).filter((a) => a.status !== 'draft');
   const pubFests = FESTIVALS.filter(valid);
   const pubArtists = ARTISTS.filter(valid);
   const pubVenues = VENUES.filter(valid).filter((v) => v.name && v.city && v.city !== 'undefined');
   const artistsById = new Map(pubArtists.map((artist) => [String(artist.id), artist]));
+  const festivalsById = new Map(pubFests.map((festival) => [String(festival.id), festival]));
+  const editionById = new Map(EDITIONS.map((edition) => [String(edition.EDITION_ID), edition]));
+  const lineupsByEdition = new Map();
+  const appearMap = new Map();
+  for (const row of LINEUPS) {
+    const edition = editionById.get(String(row.EDITION_ID || ''));
+    if (!edition) throw new Error(`lineups.json: EDITION_ID 参照切れ "${row.EDITION_ID || ''}"`);
+    if (!lineupsByEdition.has(row.EDITION_ID)) lineupsByEdition.set(row.EDITION_ID, []);
+    lineupsByEdition.get(row.EDITION_ID).push(row);
+
+    if (isCompositeLineup(row)) continue;
+    const artistId = lineupArtistIds(row)[0];
+    if (!artistId) continue;
+    if (!artistsById.has(artistId)) throw new Error(`lineups.json: ARTIST_ID 参照切れ "${artistId}"`);
+    const festival = festivalsById.get(String(edition.FESTIVAL_ID));
+    if (!festival) throw new Error(`lineups.json: FESTIVAL_ID 参照切れ "${edition.FESTIVAL_ID}"`);
+    if (!appearMap.has(artistId)) appearMap.set(artistId, new Map());
+    appearMap.get(artistId).set(festival.id, festival);
+  }
+  XLINK = {
+    fests: FESTIVALS,
+    venues: VENUES,
+    appearMap: new Map([...appearMap].map(([artistId, festivals]) => [artistId, [...festivals.values()]])),
+  };
 
   // ID変更に伴う旧URLのリダイレクトスタブ（writeAll の掃除で消されないよう wanted に含める）
   // { dir: { oldId: newId } }
@@ -741,12 +832,12 @@ function main() {
 
   const counts = {
     articles: writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'ja')).concat(redirectStubs('articles')), 'articles'),
-    festivals: writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], ARTICLES, 'ja')), 'festivals'),
+    festivals: writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, ARTICLES, 'ja')), 'festivals'),
     artists: writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'ja')), 'artists'),
     venues: writeAll(pubVenues.map((v) => venuePage(v, 'ja')), 'venues'),
     // 英語版（/en/…）。記事は英訳がある時だけ生成する
     'en/articles': writeAll(pubArticles.filter((a) => a.title_en || a.body_en).map((a) => articlePage(a, resolveEntities, 'en')), 'en/articles'),
-    'en/festivals': writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], ARTICLES, 'en')), 'en/festivals'),
+    'en/festivals': writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, ARTICLES, 'en')), 'en/festivals'),
     'en/artists': writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'en')), 'en/artists'),
     'en/venues': writeAll(pubVenues.map((v) => venuePage(v, 'en')), 'en/venues'),
   };
