@@ -111,10 +111,25 @@ metrics:
     note: 監査 B2（エンティティ間リンク）の基盤。97件 × JA/EN の2ページ。
 
   broken_image_refs:
-    description: data.js が参照する画像で実体が存在しないものの件数
+    description: 生成HTMLが参照する /images/ で実体が存在しないものの件数
     min: 0
-    max: 0                    # このメトリクスのみ上限で判定する
+    max: 0                    # 増加方向が回帰なので max で判定する
     target: 0
     note: >-
-      唯一の「増えたら fail」指標。min ではなく max で判定する。
-      監査 B4 で 8件 → 0件に解消済み。
+      監査 B4 で 8件 → 0件に解消済み。<img> だけでなく og:image /
+      twitter:image / JSON-LD image も対象。
+
+  artist_id_violations:
+    description: DATA_SCHEMA §1.1 の slug 規約に反するアーティストIDの件数
+    min: 0
+    max: 7                    # 増加方向が回帰。修正後に 0 へ下げる
+    target: 0
+    note: >-
+      現在7件（Acid Pauli / Alabaster DePlume / Juana Molina / Kiko Dinucci /
+      Kuo from Sunset Rollercoaster / Sylvan Esso /
+      The Master Musicians of Joujouka）。いずれも一括登録時に ID 欄へ NAME を
+      そのまま貼った結果で、大文字とスペースを含み URL に %20 が出ている。
+      スプレッドシート側の ID 修正が済んだら max を 0 に下げること。
+      検査を生成物のファイル名で行う理由: fetch-data.mjs は ID を検証して
+      exit(1) するが、詳細ページの元になる data.js は CMS の Publish Now(GAS)
+      が生成する別経路で、その検証を通らない。ここが実質唯一の自動関門。

@@ -97,7 +97,34 @@
 
 **スタブ運用(公式仕様)**: ラインナップ取り込み時、未登録アーティストは ID+NAME のみのスタブ行として自動追加してよい。スタブは STATUS 空欄(=draft)のまま。充実したら published にする。
 
-**B2B・ユニットは登録しない**: `Sisi b2b Ouissam b2b Yamarchy` のような出演枠はアーティストではない。個々のアーティスト行+LINEUPS側の ACT_LABEL / SET_TYPE で表現する(§2.4)。既存のB2B行・`-live-`付き行は移行時に解体。
+**B2B と ユニット/クルーを区別する**: 「複数人の名前が並んでいるか」ではなく、**独立したアクトとして流通しているか**で判定する。
+
+| | 登録 | 表現方法 | 例 |
+|---|---|---|---|
+| **B2B(その場限りの共演)** | **しない** | LINEUPS の `ARTIST_IDS` に参加者を出演順に格納し、`JOIN_TYPE`(`b2b`/`&`/`vs`)で繋ぐ(§2.4) | `Sisi b2b Ouissam b2b Yamarchy`<br>`Zitto B2B Zurkin`<br>`Antal & Hunee` |
+| **ユニット/クルー(独立したアクト)** | **する** | ARTISTS に1行。`SCHEMA_TYPE=music-group`、構成員が判れば `MEMBER_IDS` | `NC4K`<br>`Dungeoneering` |
+
+判定の目安: 固有の名義でリリース・ブッキングされ、その名前自体が検索対象になるならユニット。特定の1公演のためだけの組み合わせなら B2B。迷う場合は登録しない(後から追加はできるが、発行済みIDの削除はURLを壊す)。
+
+- ユニットを登録する場合も、`NAME` に構成員名を含めない。`NC4K(Stones Taro b2b Lomax)` ではなく `NC4K` とし、構成員は `MEMBER_IDS` で表す。
+- 演奏形態(`live` / `dj`)は名前に混ぜない。LINEUPS の `PERF_TYPE` で持つ。既存の `-live-` 付き行は移行時に解体する。
+
+**要対応: `nc4k` の二重登録**
+
+`nc4k` が ARTISTS と lineups.json の双方に存在し、同一のアクトが2つの形で表現されている。
+
+| 所在 | 値 | 問題 |
+|---|---|---|
+| ARTISTS | ID=`nc4k` / NAME=`Nc4k(Stones Taro b2b Lomax)` | NAME に構成員と `b2b` を含む。上記ルール違反 |
+| lineups.json | `ACT_LABEL="NC4K (Stones Taro & Lomax)"` (ARTIST_ID 空) | 同じアクトが未解決枠として別に存在 |
+
+`NC4K` は独立したクルーなのでユニットとして扱うのが正しい。対応方針:
+
+1. ARTISTS の NAME を `NC4K` に整える(IDは`nc4k`のまま変更しない)
+2. `SCHEMA_TYPE=music-group` を設定し、`stones-taro` / `lomax` を ARTISTS に登録のうえ `MEMBER_IDS` に接続
+3. lineups.json 側の該当行は `ARTIST_IDS=nc4k` に解決し、`ACT_LABEL` は掲載原文として残す
+
+同様の確認が必要なもの: `Dungeoneering (Albino Sound & Daigos)` はユニットとして登録すべきだが未登録。`sisi-b2b-ouissam-b2b-yamarchy` は逆に B2B なのに ARTISTS に登録されており(旧データの遺物)、解体対象。
 
 ### 2.3 FESTIVALS(ブランド)+ EDITIONS(開催回)★構造変更
 

@@ -1,0 +1,69 @@
+name: Regression Check
+
+# 生成物の回帰を PR 時点で止める。
+#
+# 背景: 948a440 で Festival.performer 約130件・LINE UP 10ページ・
+# 出演フェス 94ページが気づかれずに本番へデプロイされた。ローカルの diff で
+# 検出可能だったが実行されなかった。人手の手順に依存しないための関門。
+#
+# このワークフローは検査のみで、生成物をコミットしない。
+# main への push で走る deploy-pages.yml とは独立している（PR では deploy は走らない）。
+
+on:
+  pull_request:
+    paths:
+      - 'LP/data.js'
+      - 'LP/data/**'
+      - 'scripts/build-detail-pages.mjs'
+      - 'scripts/check_regressions.py'
+      - '.github/regression-thresholds.yml'
+      - '.github/workflows/regression-check.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install PyYAML
+        run: python3 -m pip install --quiet --disable-pip-version-check pyyaml
+
+      # 生成物はリポジトリにコミットされているが、PR の変更が生成側だけの場合に
+      # 古い生成物のまま検査してしまう。必ず作り直してから測る。
+      - name: Build detail pages
+        run: node scripts/build-detail-pages.mjs
+
+      # 生成側を変えたのに生成物を再生成せずコミットしていないか検出する。
+      # ここが差分ありなら、PR の生成物は本番に出る内容と一致しない。
+      - name: Warn if generated pages are stale
+        run: |
+          if ! git diff --quiet -- LP/; then
+            echo "::warning::LP/ の生成物がコミット内容と一致しません（$(git diff --name-only -- LP/ | wc -l) ファイル）。生成側を変更したなら再生成してコミットしてください。"
+            git diff --stat -- LP/ | tail -5
+          else
+            echo "生成物はコミット内容と一致しています。"
+          fi
+
+      - name: Check regression thresholds
+        run: python3 scripts/check_regressions.py
+
+      # 生成物は絶対にコミットしない（検査専用ジョブ）。
+      # 明示的に捨てて、後続ステップが誤って拾わないようにする。
+      - name: Discard generated output
+        if: always()
+        run: git checkout -- LP/ || true
