@@ -106,9 +106,13 @@ metrics:
 
   artist_entity_id_pages:
     description: アーティスト JSON-LD に @id を持つページ数（JA + EN）
-    min: 194
-    target: 194
-    note: 監査 B2（エンティティ間リンク）の基盤。97件 × JA/EN の2ページ。
+    min: 200
+    target: null              # ARTISTS の件数に比例して増えるため固定目標を置かない
+    note: >-
+      監査 B2（エンティティ間リンク）の基盤。ARTISTS 件数 × JA/EN の2ページ。
+      2026-08-01: 97件(194ページ) → 100件(200ページ)。
+      新規3件の追加と、B2B 2件（antal-hunee / sisi-b2b-ouissam-b2b-yamarchy）の
+      削除が同時に入った結果。リダイレクトスタブは @id を持たないので数に入らない。
 
   broken_image_refs:
     description: 生成HTMLが参照する /images/ で実体が存在しないものの件数
@@ -122,14 +126,14 @@ metrics:
   artist_id_violations:
     description: DATA_SCHEMA §1.1 の slug 規約に反するアーティストIDの件数
     min: 0
-    max: 7                    # 増加方向が回帰。修正後に 0 へ下げる
+    max: 0                    # 増加方向が回帰。7件の是正完了により 0 へ引き下げ済み
     target: 0
     note: >-
-      現在7件（Acid Pauli / Alabaster DePlume / Juana Molina / Kiko Dinucci /
-      Kuo from Sunset Rollercoaster / Sylvan Esso /
-      The Master Musicians of Joujouka）。いずれも一括登録時に ID 欄へ NAME を
-      そのまま貼った結果で、大文字とスペースを含み URL に %20 が出ている。
-      スプレッドシート側の ID 修正が済んだら max を 0 に下げること。
+      2026-08-01 に 7件 → 0件。一括登録時に ID 欄へ NAME をそのまま貼った
+      （大文字・スペース入りで URL に %20 が出ていた）分をスラッグへ是正し、
+      旧URLは REDIRECTS のスタブで維持している。
+      計測はリダイレクトスタブを除外する（スタブは旧ID名のファイルとして
+      意図的に残るため、除外しないと永久に 0 にならない）。
       検査を生成物のファイル名で行う理由: fetch-data.mjs は ID を検証して
       exit(1) するが、詳細ページの元になる data.js は CMS の Publish Now(GAS)
       が生成する別経路で、その検証を通らない。ここが実質唯一の自動関門。
