@@ -20,80 +20,101 @@
 #   理由を note に書く（サイレントな引き下げを避けるため必須）。
 #   target は「データ整備で到達すべき目標」で、CI の合否には使わない。
 #
-# ステータス: 【値は未設定】
-#   min は Codex による lineups.json 実装の完了後、その実測値を初期値とする。
-#   回帰前(334bd19)の値を基準にはしない。lineups.json の現在のデータでは
-#   復旧上限が旧実装を下回るため、達成不可能な閾値になり CI が恒久的に赤くなる。
-#   詳細は各メトリクスの ceiling を参照。
+# ステータス: 【確定済み — 2026-08-01】
+#   min は lineups.json 実装完了時(91491eb)の実測値。
+#   回帰前(334bd19)の値は基準にしない。lineups.json の現データでは復旧上限が
+#   旧実装を下回るため、達成不可能な閾値になり CI が恒久的に赤くなる。
+#   到達すべき値は target に分けて記録している。
 
 version: 1
+baseline_commit: 91491eb   # Regenerate lineup and appearance pages
+baseline_measured_at: 2026-08-01
 
 metrics:
   festival_performer_pages:
     description: JSON-LD の Festival.performer を1件以上持つフェスページ数（JA）
-    min: null                 # ← Codex 実装完了後に実測値を設定
-    ceiling: 8                # lineups.json で ARTIST_ID が解決済みの行を持つ FESTIVAL 数
+    min: 8
     target: 10                # 【本来の目標値】旧実装で LINE UP が出ていたフェス数
     note: >-
-      ceiling(8) < target(10) の差は データ未整備が原因。
+      min(8) < target(10) の差はデータ未整備が原因。
       festival-de-frue と osukinidouzo は lineups.json に行が存在しない
       （旧実装は FESTIVALS.LINEUP 文字列から直接出力していたため出ていた）。
       この2件を EDITIONS/LINEUPS に登録すれば target に到達する。
+      内訳: 99flags, ala, arch, matricaria, paramount, rainbow-disco-club,
+      transcendence, waifu
+
+  festival_performer_total:
+    description: Festival.performer の総件数（JA、全フェス合計）
+    min: 68
+    target: null              # ARTIST_ID の解決状況に依存するため固定目標を置かない
+    note: >-
+      lineups.json 123行のうち ARTIST_ID が解決済みの 68行に対応する。
+      残り 55行は ACT_LABEL のみで performer に出さない
+      （複合枠5件 + ARTISTS 未登録の単独枠50件）。
+      ARTISTS への登録を進めれば増える。減ったら回帰。
 
   lineup_section_pages:
     description: <h2>LINE UP</h2> セクションを持つフェスページ数（JA）
-    min: null
-    ceiling: 9                # lineups.json にラインナップ行を持つ FESTIVAL 数（ACT_LABEL のみを含む）
+    min: 9
     target: 10                # 【本来の目標値】旧実装と同じ 10フェス
     note: >-
-      ACT_LABEL のみの行も見出しは出るため ceiling は 9。
-      performer より 1件多いのは the-star-festival(15行すべて ARTIST_ID 未解決)。
+      ACT_LABEL のみの行でも見出しは出るため performer(8) より 1件多い。
+      差の 1件は the-star-festival（15行すべて ARTIST_ID 未解決）。
+      target との差 1件は osukinidouzo（lineups.json 未登録）。
 
   artist_appearances_pages:
     description: <h2>出演フェス</h2> セクションを持つアーティストページ数（JA）
-    min: null
-    ceiling: 64               # lineups.json の単独枠 distinct ARTIST_ID 数
-    target: 94                # 【本来の目標値】回帰前(334bd19)の実測値
+    min: 64
+    target: 94                # 【本来の目標値】データ整備で到達すべき値
     note: >-
-      ceiling(64) < target(94) の差 30件は、旧実装が FESTIVALS.LINEUP の
-      名前文字列を ARTISTS.NAME と突合していたため拾えていた分。
-      lineups.json では ARTIST_ID 未解決(55行)が逆引きに乗らない。
-      未登録アーティストを ARTISTS に追加し ARTIST_ID を解決すれば target に近づく。
+      min(64) と target(94) の差 30ページの内訳:
+      (a) 8ページ = 復旧可能。festival-de-frue 出演の7件
+      （Acid Pauli / Alabaster DePlume / Juana Molina / Kiko Dinucci /
+      Kuo from Sunset Rollercoaster / Sylvan Esso /
+      The Master Musicians of Joujouka）と、旧合体ID 1件
+      （sisi-b2b-ouissam-b2b-yamarchy → rainbow-disco-club）。
+      前者は festival-de-frue を EDITIONS/LINEUPS に登録すれば復旧する。
+      後者は B2B を単一アーティストとして登録していた旧データの遺物で、
+      DATA_SCHEMA §2.2（B2B・ユニットは登録しない）に反するため、
+      LINEUPS の複合枠対応で解決すべきもの。復旧させてはいけない。
+      (b) 22ページ = 監査時点(51f6b8f)からのデータ変化によるもので、
+      復元元が残っていない。旧実装は FESTIVALS.LINEUP の名前文字列を
+      ARTISTS.NAME と突合していたため、当時のシート上の文字列に依存していた。
+      その文字列は既に上書きされており、どのアーティストが拾われていたかを
+      再現できない。ARTISTS への登録を進めて積み上げるほかない。
 
   internal_links_to_artists:
     description: フェスページから /artists/ への内部リンク総数（JA、script 外）
-    min: null
-    ceiling: null             # 実装後に実測
+    min: 68
     target: null
-    note: ラインナップからアーティスト詳細へのリンク。エンティティグラフの実体。
+    note: >-
+      ラインナップからアーティスト詳細へのリンク。エンティティグラフの実体。
+      performer 総数と 1:1 で対応する（ACT_LABEL のみの枠はリンクを持たない）。
 
   internal_links_to_festivals:
     description: アーティストページから /festivals/ への内部リンク総数（JA、script 外）
-    min: null
-    ceiling: null
+    min: 68
     target: null
-    note: 出演フェス欄からの逆引きリンク。
+    note: 出演フェス欄からの逆引きリンク。順方向と同数になる。
 
-  # 以下は 948a440 で導入され、現在は本番で稼働中。値は実測済み。
+  # 以下は 948a440 で導入され、現在は本番で稼働中。
   festival_subevent_pages:
     description: JSON-LD に subEvent（開催回）を持つフェスページ数（JA）
-    min: null                 # ← 実測 86 だが、他メトリクスと合わせて実装完了時に確定させる
-    ceiling: 86
+    min: 86
     target: 86
-    note: editions.json 由来。全フェスが対象。
+    note: editions.json 由来。全フェスが対象なので min == target。
 
   artist_entity_id_pages:
     description: アーティスト JSON-LD に @id を持つページ数（JA + EN）
-    min: null
-    ceiling: 194
+    min: 194
     target: 194
-    note: 監査 B2（エンティティ間リンク）の基盤。
+    note: 監査 B2（エンティティ間リンク）の基盤。97件 × JA/EN の2ページ。
 
   broken_image_refs:
     description: data.js が参照する画像で実体が存在しないものの件数
-    min: null
-    ceiling: 0
+    min: 0
+    max: 0                    # このメトリクスのみ上限で判定する
     target: 0
     note: >-
-      これは「増えたら fail」の逆向き指標。0 を維持する。
+      唯一の「増えたら fail」指標。min ではなく max で判定する。
       監査 B4 で 8件 → 0件に解消済み。
