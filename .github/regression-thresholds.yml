@@ -1,0 +1,99 @@
+# 生成物の回帰ガード — 閾値定義
+#
+# 目的:
+#   build-detail-pages.mjs の改修で、構造化データや内部リンクが
+#   気づかれずに消えるのを防ぐ。「ページ数は増えても減らない」という
+#   単調性だけを検査する（増加は常に許可、減少は fail）。
+#
+# 経緯:
+#   948a440「Implement festival edition history and entity IDs」で
+#   旧 f.lineup からの出力を廃止した際、lineups.json からの再実装が
+#   未着手のまま本番へデプロイされ、以下が失われた。
+#     - Festival.performer  約130件（10フェス分）
+#     - <h2>LINE UP</h2>    10ページ
+#     - <h2>出演フェス</h2>  94ページ
+#   ローカルの diff で検出可能だったが、実行されずに push された。
+#   このファイルは同種の事故を機械的に止めるための基準値。
+#
+# 運用:
+#   min の値を下回ったら fail。意図的な減少なら min を更新してコミットし、
+#   理由を note に書く（サイレントな引き下げを避けるため必須）。
+#   target は「データ整備で到達すべき目標」で、CI の合否には使わない。
+#
+# ステータス: 【値は未設定】
+#   min は Codex による lineups.json 実装の完了後、その実測値を初期値とする。
+#   回帰前(334bd19)の値を基準にはしない。lineups.json の現在のデータでは
+#   復旧上限が旧実装を下回るため、達成不可能な閾値になり CI が恒久的に赤くなる。
+#   詳細は各メトリクスの ceiling を参照。
+
+version: 1
+
+metrics:
+  festival_performer_pages:
+    description: JSON-LD の Festival.performer を1件以上持つフェスページ数（JA）
+    min: null                 # ← Codex 実装完了後に実測値を設定
+    ceiling: 8                # lineups.json で ARTIST_ID が解決済みの行を持つ FESTIVAL 数
+    target: 10                # 【本来の目標値】旧実装で LINE UP が出ていたフェス数
+    note: >-
+      ceiling(8) < target(10) の差は データ未整備が原因。
+      festival-de-frue と osukinidouzo は lineups.json に行が存在しない
+      （旧実装は FESTIVALS.LINEUP 文字列から直接出力していたため出ていた）。
+      この2件を EDITIONS/LINEUPS に登録すれば target に到達する。
+
+  lineup_section_pages:
+    description: <h2>LINE UP</h2> セクションを持つフェスページ数（JA）
+    min: null
+    ceiling: 9                # lineups.json にラインナップ行を持つ FESTIVAL 数（ACT_LABEL のみを含む）
+    target: 10                # 【本来の目標値】旧実装と同じ 10フェス
+    note: >-
+      ACT_LABEL のみの行も見出しは出るため ceiling は 9。
+      performer より 1件多いのは the-star-festival(15行すべて ARTIST_ID 未解決)。
+
+  artist_appearances_pages:
+    description: <h2>出演フェス</h2> セクションを持つアーティストページ数（JA）
+    min: null
+    ceiling: 64               # lineups.json の単独枠 distinct ARTIST_ID 数
+    target: 94                # 【本来の目標値】回帰前(334bd19)の実測値
+    note: >-
+      ceiling(64) < target(94) の差 30件は、旧実装が FESTIVALS.LINEUP の
+      名前文字列を ARTISTS.NAME と突合していたため拾えていた分。
+      lineups.json では ARTIST_ID 未解決(55行)が逆引きに乗らない。
+      未登録アーティストを ARTISTS に追加し ARTIST_ID を解決すれば target に近づく。
+
+  internal_links_to_artists:
+    description: フェスページから /artists/ への内部リンク総数（JA、script 外）
+    min: null
+    ceiling: null             # 実装後に実測
+    target: null
+    note: ラインナップからアーティスト詳細へのリンク。エンティティグラフの実体。
+
+  internal_links_to_festivals:
+    description: アーティストページから /festivals/ への内部リンク総数（JA、script 外）
+    min: null
+    ceiling: null
+    target: null
+    note: 出演フェス欄からの逆引きリンク。
+
+  # 以下は 948a440 で導入され、現在は本番で稼働中。値は実測済み。
+  festival_subevent_pages:
+    description: JSON-LD に subEvent（開催回）を持つフェスページ数（JA）
+    min: null                 # ← 実測 86 だが、他メトリクスと合わせて実装完了時に確定させる
+    ceiling: 86
+    target: 86
+    note: editions.json 由来。全フェスが対象。
+
+  artist_entity_id_pages:
+    description: アーティスト JSON-LD に @id を持つページ数（JA + EN）
+    min: null
+    ceiling: 194
+    target: 194
+    note: 監査 B2（エンティティ間リンク）の基盤。
+
+  broken_image_refs:
+    description: data.js が参照する画像で実体が存在しないものの件数
+    min: null
+    ceiling: 0
+    target: 0
+    note: >-
+      これは「増えたら fail」の逆向き指標。0 を維持する。
+      監査 B4 で 8件 → 0件に解消済み。
