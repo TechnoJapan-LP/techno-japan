@@ -35,6 +35,19 @@ const BASE = 'https://techno-japan.media';
 const ORG_LOGO = `${BASE}/images/logo-512.png`;
 const DEFAULT_OG = `${BASE}/images/festivals/rainbow-disco-club.webp`;
 
+// ID 規約違反(DATA_SCHEMA §1.1)の是正に伴う旧ID→新ID。JA/EN 双方で使う。
+// 一度発行したIDは変更しない原則の例外で、一括登録時に ID 欄へ NAME を
+// そのまま貼ってしまった分。旧URLは %20 入りで配信されていた。
+const ARTIST_ID_FIXES = {
+  'Acid Pauli': 'acid-pauli',
+  'Alabaster DePlume': 'alabaster-deplume',
+  'Juana Molina': 'juana-molina',
+  'Kiko Dinucci': 'kiko-dinucci',
+  'Kuo from Sunset Rollercoaster': 'kuo-from-sunset-rollercoaster',
+  'Sylvan Esso': 'sylvan-esso',
+  'The Master Musicians of Joujouka': 'the-master-musicians-of-joujouka',
+};
+
 /* ---------- data.js を読み込む ---------- */
 function loadData() {
   const src = fs.readFileSync(DATA_PATH, 'utf8');
@@ -813,9 +826,22 @@ function main() {
   // { dir: { oldId: newId } }
   const REDIRECTS = {
     articles: { transcendence: 'transcendence-2025-report' },
+    // 一括登録時に ID 欄へ NAME をそのまま貼ってしまった7件（大文字・スペース入り、
+    // DATA_SCHEMA §1.1 違反）。URL に %20 が出ていたため slug へ修正した。
+    // 発行済みIDの変更なので旧URLからのリダイレクトを必ず残す。
+    artists: ARTIST_ID_FIXES,
+    'en/artists': ARTIST_ID_FIXES,
   };
-  const redirectStubs = (dirName) =>
-    Object.entries(REDIRECTS[dirName] || {}).map(([oldId, newId]) => {
+  // 旧IDがまだ data.js に現役で存在する間はスタブを出さない。
+  // writeAll は basename をキーにした Map で後勝ちになるため、スタブを出すと
+  // 同名の本物のページを上書きし、まだ存在しない新URLへ飛ばす壊れたページになる。
+  // 新IDが未登場の間も出さない（リダイレクト先が 404 になるため）。
+  // これにより CMS の Publish Now より先にこのパッチを入れても安全で、
+  // Publish 後は次回ビルドで自動的にスタブが出る。
+  const redirectStubs = (dirName, liveIds = new Set()) =>
+    Object.entries(REDIRECTS[dirName] || {})
+      .filter(([oldId, newId]) => !liveIds.has(oldId) && liveIds.has(newId))
+      .map(([oldId, newId]) => {
       const to = `/${dirName}/${newId}.html`;
       return {
         file: path.join(LP_DIR, dirName, `${oldId}.html`),
@@ -830,15 +856,19 @@ function main() {
       };
     });
 
+  // リダイレクトスタブの衝突判定に使う「現役ID」の集合
+  const liveArticleIds = new Set(pubArticles.map((a) => a.id));
+  const liveArtistIds = new Set(pubArtists.map((a) => a.id));
+
   const counts = {
-    articles: writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'ja')).concat(redirectStubs('articles')), 'articles'),
+    articles: writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'ja')).concat(redirectStubs('articles', liveArticleIds)), 'articles'),
     festivals: writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, ARTICLES, 'ja')), 'festivals'),
-    artists: writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'ja')), 'artists'),
+    artists: writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'ja')).concat(redirectStubs('artists', liveArtistIds)), 'artists'),
     venues: writeAll(pubVenues.map((v) => venuePage(v, 'ja')), 'venues'),
     // 英語版（/en/…）。記事は英訳がある時だけ生成する
     'en/articles': writeAll(pubArticles.filter((a) => a.title_en || a.body_en).map((a) => articlePage(a, resolveEntities, 'en')), 'en/articles'),
     'en/festivals': writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, ARTICLES, 'en')), 'en/festivals'),
-    'en/artists': writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'en')), 'en/artists'),
+    'en/artists': writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'en')).concat(redirectStubs('en/artists', liveArtistIds)), 'en/artists'),
     'en/venues': writeAll(pubVenues.map((v) => venuePage(v, 'en')), 'en/venues'),
   };
 

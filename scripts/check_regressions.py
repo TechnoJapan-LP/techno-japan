@@ -71,6 +71,11 @@ def has_h2(body, label):
     return re.search(r"<h2[^>]*>\s*" + re.escape(label), body) is not None
 
 
+def is_redirect_stub(html):
+    """build-detail-pages.mjs の REDIRECTS が出す旧URL維持用スタブか。"""
+    return "<title>Redirecting…</title>" in html and 'http-equiv="refresh"' in html
+
+
 def measure():
     """全メトリクスを実測して dict で返す。"""
     m = {}
@@ -131,7 +136,14 @@ def measure():
     # ID 規約違反。詳細ページのファイル名 = ID なので、そこから判定する。
     # data.js は CMS の Publish Now が生成し fetch-data.mjs の検証を通らないため、
     # ここが実質唯一の自動チェックポイントになる（DATA_SCHEMA §1.1）。
-    bad_ids = sorted(f.stem for f in artists_ja if not ID_RE.match(f.stem))
+    #
+    # ID を是正した場合、旧URL維持のためのリダイレクトスタブが旧ID名のファイルとして
+    # 残る（build-detail-pages.mjs の REDIRECTS）。これは意図的な残骸なので除外する。
+    # 除外しないと violations が永久に減らず、max を 0 に下げられない。
+    bad_ids = sorted(
+        f.stem for f in artists_ja
+        if not ID_RE.match(f.stem) and not is_redirect_stub(read(f))
+    )
     m["artist_id_violations"] = len(bad_ids)
     m["_artist_id_violation_list"] = bad_ids
 
