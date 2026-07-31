@@ -1,8 +1,27 @@
 # AUDIT_TECHNO_JAPAN.md — Phase A 現状監査
 
 > [GEO_TECHNO_JAPAN.md](GEO_TECHNO_JAPAN.md) Phase A の成果物。
-> 監査日: 2026-07-31 / 対象コミット: `51f6b8f` (main, clean)
-> **本監査ではコードを一切変更していない。**
+> **監査日: 2026-07-31 / 対象コミット: `51f6b8f`**（この時点のスナップショット）
+> **最終更新: 2026-08-01 / 対応後コミット: `f22cdd1`**
+>
+> §1〜§5 の本文は **監査時点の記録として原文を保持**している。
+> その後に解消した項目には ✅/🔶 の追記を入れ、対応内容は [§9 対応履歴](#9-対応履歴2026-08-01) にまとめた。
+> 現在の残タスクは [§6-3 の一覧](#6-3-優先度つき所見一覧) の「状態」列を参照。
+
+---
+
+## 進捗サマリ（2026-08-01 時点）
+
+| 指標 | 監査時 | 現在 |
+|---|---:|---:|
+| ハブpage→詳細pageの静的リンク | **0** | **206** |
+| 参照先が存在しない画像 | **8** | **0** |
+| `lang="ja"` で中身が非日本語 | **108** | **52** |
+| `<ul>`/`<li>` を使うファイル | **0** | 4 |
+| Organization.logo | フェス写真 | 実ロゴ |
+| PWAアイコン | 実体なし(404) | 正常 |
+
+18件の所見のうち **6件が解消**。残り12件は §6-3 参照。
 
 ---
 
@@ -58,6 +77,11 @@ HTML 総数 **428**（うち noindex 8 / sitemap 登録 419）。
 | リダイレクトstub | `media.html` / `discover.html` / `events.html` | → `news.html`、noindex |
 
 ### 1-3. 【重大】ハブページはクライアントサイドレンダリング
+
+> ✅ **解消済み（2026-08-01）** — `build-detail-pages.mjs` が `<!-- STATIC_LINKS:*:START/END -->`
+> マーカー間に `<ul class="ssr-link-list">` を生成する方式を追加。festivals 86 / artists 97 /
+> venues 22 / news 1 の合計206本が静的リンクとして出力され、JS非実行のクローラーからも
+> 詳細ページへ到達できるようになった。以下は監査時点の記録。
 
 `festivals.html` / `artists.html` / `venues.html` / `news.html` の一覧部分は空要素で、
 `data.js` から JS で描画される。
@@ -143,6 +167,12 @@ GPTBot / ClaudeBot / PerplexityBot は基本的に JS を実行しないため�
 
 **(b) Organization の `logo` がフェス写真**
 
+> ✅ **解消済み（2026-08-01）** — `DEFAULT_OG` が兼務していた2つの役割を分離。
+> `ORG_LOGO`（`/images/logo-512.png`）を新設し `publisher.logo` はこちらを参照。
+> `DEFAULT_OG` は OGP フォールバック専用として据え置き。
+> 実ロゴ素材を `logo.png`(2000px マスター) / `logo-512.png` / `logo-192.png` で配置。
+> URL を固定したので、**今後のロゴ差し替えは画像ファイルの置換のみでコード変更不要**。
+
 `scripts/build-detail-pages.mjs:30`
 ```js
 const DEFAULT_OG = `${BASE}/images/festivals/rainbow-disco-club.webp`;
@@ -152,6 +182,9 @@ JSON-LD `image` のフォールバックとして使われている。
 → ロゴが「別のフェスの現地写真」になっており、AI にブランド視覚identityを誤認させる。
 
 **(c) `sameAs` が Instagram 1件のみ**
+
+> ✅ **解消済み（2026-08-01）** — `index.html` / `about.html` の Organization に
+> Threads（`https://www.threads.net/@techno.japan_`）を追加。
 
 `index.html` の Organization は Instagram のみ。ナビには Threads もあるが未登録。
 エンティティ確立（Phase D）の基礎として弱い。
@@ -246,6 +279,10 @@ GPTBot / ClaudeBot / PerplexityBot / Google-Extended / OAI-SearchBot / Applebot-
 
 ### 4-2. 【重大】リスト・表・時刻要素がサイト全体でゼロ
 
+> 🔶 **一部解消（2026-08-01）** — A1 のハブ静的リンクで `<ul>`/`<li>` が 4ファイルに導入された。
+> ただし **`<table>` `<time>` `<figure>` `<blockquote>` は依然ゼロ**、`<main>` も詳細ページ412枚に無い。
+> 詳細ページ側の LINE UP のリスト化と日付の `<time datetime>` 化は未着手。
+
 サイト全体（428ファイル）での要素使用状況:
 
 | 要素 | 使用ファイル数 |
@@ -288,6 +325,13 @@ GPTBot / ClaudeBot / PerplexityBot / Google-Extended / OAI-SearchBot / Applebot-
 **`<main>` が 414枚の詳細ページに無い**のも landmark 欠如として問題（ハブページ6枚にはある）。
 
 ### 4-3. 【重大】JAページの本文が全て英語で、`lang="ja"` が付いている
+
+> 🔶 **一部解消（2026-08-01）** — 監査の推定どおり **Publish Now が未実行だったことが原因**で、
+> 実行によりフェス86件が `desc`（日本語）/ `desc_en`（英語）のバイリンガル表示に切り替わった。
+> `lang="ja"` の誤記は **108件 → 52件**。
+> 残る52件はヴェニュー22件・アーティスト4件（各 JA/EN 2ページ）で、
+> スプレッドシートに `DESC_JA` / `BIO_JA` が未入力なため。**生成側は既に対応済み**なので、
+> 入力して Publish Now すれば同じ仕組みで点灯する。以下は監査時点の記録。
 
 `<p lang="ja">` を持つ 108ブロックすべてで、中身が **英語**。
 
@@ -342,16 +386,29 @@ JSON-LD 側も `"inLanguage": "ja"` を宣言しつつ `description` は英語�
 
 ### 5-3. 【要修正】参照先が存在しない画像 6件
 
+> ✅ **解消済み（2026-08-01）— 欠落は実際には8件だった。現在0件。**
+> 本節の6件は生成HTMLからの参照分のみ。`data.js` 全体では
+> `boars-phes-flyer.webp` と `festival-de-frue-flyer.webp`（SPA の `festivals.html:1412`
+> からのみ参照）も欠落していた。
+>
+> **真因はスプレッドシートのセル値ではなく Drive に `.webp` が無かったこと。**
+> `LP/cms.js:4369` の `webp()` が Publish 時に拡張子を機械的に `.webp` へ書き換えるため、
+> セルが `.jpg` でも `.webp` でも出力は同じ。セル値の修正では直らない。
+>
+> 詳細な経緯と恒久対策は [§9-2](#9-2-欠落画像の真因と恒久対策) 参照。
+
 各 8箇所（JA/EN × `<img>` + `og:image` + `twitter:image` + JSON-LD `image`）から参照:
 
-| 欠落ファイル | 参照数 |
-|---|---:|
-| `images/venues/liquidroom.webp` | 8 |
-| `images/venues/bonobo.webp` | 8 |
-| `images/venues/forestlimit.webp` | 8 |
-| `images/venues/clubasia.webp` | 8 |
-| `images/venues/mitsuki.webp` | 8 |
-| `images/festivals/boars-phes.webp` | 8 |
+| 欠落ファイル | 参照数 | 解消方法 |
+|---|---:|---|
+| `images/venues/liquidroom.webp` | 8 | CMS から webp をアップロード |
+| `images/venues/bonobo.webp` | 8 | CMS から webp をアップロード |
+| `images/venues/forestlimit.webp` | 8 | Drive の jpg を同期時に webp 変換 |
+| `images/venues/clubasia.webp` | 8 | 同上 |
+| `images/venues/mitsuki.webp` | 8 | 同上 |
+| `images/festivals/boars-phes.webp` | 8 | FESTIVALS 行を削除（意図的・87→86件） |
+| `images/festivals/boars-phes-flyer.webp` | SPAのみ | 同上 |
+| `images/festivals/festival-de-frue-flyer.webp` | SPAのみ | Drive の jpg を同期時に webp 変換 |
 
 → 該当ページで画像が壊れ、OGP も 404 になる。
 （AGENTS.md に従い、データ側の問題として報告のみ。修正はしていない）
@@ -428,26 +485,30 @@ JSON-LD 側も `"inLanguage": "ja"` を宣言しつつ `description` は英語�
 
 ### 6-3. 優先度つき所見一覧
 
-| # | 所見 | 影響 | 該当 Phase |
-|---|---|---|---|
-| **A1** | ハブページが JS レンダリングで、詳細ページへの静的リンクが 0（§1-3） | 発見性 | B(追加) |
-| **A2** | アーティスト 93/97 が空スタブ、記事が 1件のみ（§6-1） | 引用価値 | C |
-| **A3** | JAページ本文が全て英語 + `lang="ja"` 誤記（§4-3） | 言語シグナル | 要 Publish Now |
-| **A4** | EDITIONS 86件 / LINEUPS 123件が未出力（§6-2） | 一次情報 | 要調査 |
-| **A5** | NEWS 記事がハッシュURLで個別URLを持たない（§1-4） | 発見性 | B(追加) |
-| **B1** | `<ul>` `<table>` `<time>` `<main>` がサイト全体でゼロ（§4-2） | 構造理解 | B-4 |
-| **B2** | JSON-LD にエンティティ間リンク（`@id`/`url`）が無い（§2-3a） | 知識グラフ | B-1 |
-| **B3** | `<img>` に `width`/`height` が 0件（§5-1） | CLS | B-5 |
-| **B4** | 参照先が存在しない画像 6件 × 8参照（§5-3） | 表示崩れ | 要データ修正 |
-| **C1** | FAQPage スキーマがサイト全体で 0件（§2-2） | AI回答適性 | B-1 / C-2 |
-| **C2** | Organization の `logo` がフェス写真（§2-3b） | ブランド認識 | B-1 |
-| **C3** | EN セクションに入口が無い / ハブに hreflang 無し（§1-5, §3-4） | 多言語 | B(追加) |
-| **C4** | meta description が「…」で途中切断（§2-3d） | 引用品質 | B-1 |
-| **C5** | Google Fonts の指定が4パターンに分裂（§5-4） | キャッシュ効率 | B-5 |
-| **C6** | `sameAs` が Instagram のみ（Threads 未登録）（§2-3c） | エンティティ | B-1 / D |
-| **C7** | `og:type` がフェス/ヴェニューで `website` 固定（§2-3e） | — | B-1 |
-| **C8** | `llms.txt` 未設置（§3-5） | 低 | B-6 |
-| **—** | robots.txt に AI クローラーの**誤ブロックは無い**（§3-1） | 対応不要 | B-2 |
+状態は 2026-08-01 時点。✅=解消 / 🔶=一部解消 / ⬜=未着手。
+
+| # | 所見 | 影響 | 状態 | 次のアクション |
+|---|---|---|---|---|
+| **A1** | ハブページが JS レンダリングで、詳細ページへの静的リンクが 0（§1-3） | 発見性 | ✅ | — |
+| **A2** | アーティスト 93/97 が空スタブ、記事が 1件のみ（§6-1） | 引用価値 | ⬜ | BIO/画像の入力（Phase C） |
+| **A3** | JAページ本文が全て英語 + `lang="ja"` 誤記（§4-3） | 言語シグナル | 🔶 | ヴェニュー/アーティストに `DESC_JA`/`BIO_JA` 入力 → Publish Now |
+| **A4** | EDITIONS 86件 / LINEUPS 123件が未出力（§6-2） | 一次情報 | ⬜ | 未出力の原因調査 → `Festival.subEvent` 化 |
+| **A5** | NEWS 記事がハッシュURLで個別URLを持たない（§1-4） | 発見性 | ⬜ | 記事の静的ページ化（生成側は対応済み） |
+| **B1** | `<ul>` `<table>` `<time>` `<main>` がサイト全体でゼロ（§4-2） | 構造理解 | 🔶 | `<ul>`はハブのみ導入済。LINE UP のリスト化・`<time>`・`<main>` が残 |
+| **B2** | JSON-LD にエンティティ間リンク（`@id`/`url`）が無い（§2-3a） | 知識グラフ | ⬜ | `performer` に `url` を付与（HTML側にリンクは既存） |
+| **B3** | `<img>` に `width`/`height` が 0件（§5-1） | CLS | ⬜ | 生成側で付与 |
+| **B4** | 参照先が存在しない画像 6件 × 8参照（§5-3） | 表示崩れ | ✅ | — （実際は8件・現在0件） |
+| **C1** | FAQPage スキーマがサイト全体で 0件（§2-2） | AI回答適性 | ⬜ | FAQ コンテンツ整備とセットで |
+| **C2** | Organization の `logo` がフェス写真（§2-3b） | ブランド認識 | ✅ | — |
+| **C3** | EN セクションに入口が無い / ハブに hreflang 無し（§1-5, §3-4） | 多言語 | ⬜ | EN ハブページの新設 |
+| **C4** | meta description が「…」で途中切断（§2-3d） | 引用品質 | ⬜ | `truncate()` を文境界で切るよう変更 |
+| **C5** | Google Fonts の指定が4パターンに分裂（§5-4） | キャッシュ効率 | ⬜ | ウェイト構成を1つに統一 |
+| **C6** | `sameAs` が Instagram のみ（Threads 未登録）（§2-3c） | エンティティ | ✅ | — |
+| **C7** | `og:type` がフェス/ヴェニューで `website` 固定（§2-3e） | — | ⬜ | `article` へ |
+| **C8** | `llms.txt` 未設置（§3-5） | 低 | ⬜ | 優先度低（指示書 B-6 も同様） |
+| **D1** | PWAアイコンが実体のない `.jpeg` を参照（§1-5 派生・監査後に発見） | PWA | ✅ | — |
+| **D2** | CMS「Image from URL」がフォールバック時に無変換の原本を保存し、同期で永久にスキップされる（監査後に発見） | 画像が出ない | ✅ | — （[§9-2](#9-2-欠落画像の真因と恒久対策)） |
+| **—** | robots.txt に AI クローラーの**誤ブロックは無い**（§3-1） | 対応不要 | ✅ | — |
 
 ---
 
@@ -463,11 +524,13 @@ JSON-LD 側も `"inLanguage": "ja"` を宣言しつつ `description` は英語�
 | B-4 セマンティックHTML | `scripts/build-detail-pages.mjs`（詳細ページ）/ `LP/festivals.html` 等のハブHTML / `LP/cms.js`（SPA描画） |
 | B-5 画像・フォント | `scripts/build-detail-pages.mjs` の `<img>` 生成箇所 / 各HTMLの `<link>` head |
 | B-6 llms.txt | 新規スクリプト → `LP/llms.txt`、`generate-meta.yml` に追加 |
-| ハブのSSR化（A1）| `scripts/build-detail-pages.mjs` を拡張してハブ一覧も静的生成、または `<noscript>` フォールバック |
+| ハブのSSR化（A1）| ✅ 実装済 — `build-detail-pages.mjs` の `writeHubLinks()` / `hubLinkList()`。ハブHTML側の `<!-- STATIC_LINKS:*:START/END -->` マーカー間を差し替える |
 
 **注意点:**
 - `LP/` 配下の詳細ページは**生成物**。直接編集しても次回 CI 実行で上書きされる。必ず生成側を直すこと。
 - `LP/data.js` は CMS の「Publish Now」が生成する。**手編集しない**（AGENTS.md / docs/DATA_SCHEMA.md）。
+- **再生成の前に必ず `git pull`。** ローカルの `data.js` が古いまま
+  `build-detail-pages.mjs` を実行すると、Publish 済みの内容（バイリンガル等）が巻き戻る。
 - 施策単位で `git commit` を分けること（指示書 §0）。
 
 ---
@@ -478,3 +541,92 @@ JSON-LD 側も `"inLanguage": "ja"` を宣言しつつ `description` は英語�
 - 本ファイル `AUDIT_TECHNO_JAPAN.md` の新規作成
 
 **上記2点以外、コード・データ・設定は一切変更していない。**
+（監査後の対応は §9 に分けて記録している）
+
+---
+
+## 9. 対応履歴（2026-08-01）
+
+対応後コミット: `f22cdd1`。
+
+### 9-1. ロゴとブランド識別（C2 / C6 / D1）
+
+`DEFAULT_OG` 1つが「Organization.logo」と「OGP フォールバック」を兼務していたのが問題の本質。
+役割を分離した。
+
+| ファイル | 変更 |
+|---|---|
+| `scripts/build-detail-pages.mjs:31-35` | `ORG_LOGO` 定数を新設。`DEFAULT_OG` は OGP 専用として据え置き |
+| `scripts/build-detail-pages.mjs:294` | `NewsArticle.publisher.logo` → `ORG_LOGO` |
+| `LP/index.html` / `LP/about.html` / `LP/news.html` | `Organization.logo` を差し替え、`sameAs` に Threads 追加 |
+| `LP/manifest.json` | 実体のない `rainbow-disco-club.jpeg` → `logo-192.png` / `logo-512.png`、`type` も `image/png` へ |
+| `LP/images/logo{,-512,-192}.png` | 実ロゴを追加（2000px マスター + 派生2つ） |
+
+**URL を固定したので、今後のロゴ差し替えは画像ファイルの置換のみで済む**（コード変更不要）。
+`sw.js:82-88` が画像を stale-while-revalidate で扱うため、既存訪問者にも次回アクセスで反映される。
+ただし manifest の `sizes` 宣言と実寸を一致させる必要があるため、**正方形を維持すること**。
+
+### 9-2. 欠落画像の真因と恒久対策
+
+対応した所見: **B4 / D2**
+
+**調査で判明した因果:**
+
+1. CMS の「Image from URL」は、まずブラウザで画像を fetch して webp 化する（`cms.js:2095`）
+2. 配信元が **CORS を許可していないと fetch が失敗**し、`upload_from_url` にフォールバック（`cms.js:2267`）
+3. フォールバックでは GAS がサーバー側で取得し、**原寸の jpg/heic をそのまま Drive に保存**（webp 変換なし）
+4. `sync-drive-images.yml` は **webp 以外をスキップ**するため、そのファイルは永久にサイトへ来ない
+5. しかも成功と失敗で**同じ「アップロード完了」トースト**が出るため気づけない
+
+Instagram CDN やフェス公式サイトは大半が CORS 非許可なので、URL 経由は高確率で ②→③ に落ちる。
+Drive/venues が「22件すべて非webp」だったのはこれが積み重なった結果。
+
+**スプレッドシートのセル値は原因ではない。** `cms.js:4369` の
+`webp(p){return p.replace(/\.(jpe?g|png)$/i,'.webp')}` が Publish 時に拡張子を
+機械的に書き換えるため、セルが `.jpg` でも `.webp` でも出力は同一。
+
+**対策A — 同期時の webp 変換**（`.github/workflows/sync-drive-images.yml`）
+
+- `Pillow` + `pillow_heif` を導入し、`.jpg/.jpeg/.png/.heic/.heif` を webp 変換
+- 変換条件は `compressImage` と同一（長辺1920px / quality 85 / EXIF 回転補正）
+- **二重ガード**: Drive 側に webp があればスキップ、リポジトリ側にあってもスキップ
+  → 既存47枚を CI 変換版で上書きせず、無意味な差分churn を出さない
+- 変換失敗は `::warning::` で GitHub UI に出す（黙って通さない）
+
+出力バイトが決定的であることを確認済み（非決定的だと毎回全画像が差分になる）。
+
+**対策C — CMS でフォールバックを可視化**（`LP/cms.js` / `LP/cms.css`）
+
+- フォールバック時は `showOk`（緑）ではなく `showFallback`（黄）を表示
+- プレビュー欄に消えない注記を出す（理由・同期待ちである旨・手動アップロード推奨）
+- 一括アップロードもフォールバックした ID を集計して最後に表示
+
+**結果** — 実行ログ:
+
+```
+Downloaded: bonobo.webp
+Skipped (webp already in Drive): bonobo.jpg      ← 二重変換を回避
+Converted: forestlimit.jpg -> forestlimit.webp (68 KB, 980x551)
+Converted: mitsuki.jpg     -> mitsuki.webp     (74 KB, 1200x800)
+Converted: clubasia.jpg    -> clubasia.webp    (72 KB, 1280x800)
+Converted: festival-de-frue-flyer.jpg -> festival-de-frue-flyer.webp (151 KB, 960x1200)
+Skipped (webp already in repo): womb.jpeg ...   ← 既存17件は無変更
+Skipped (webp already in Drive): technogaoka.heic
+```
+
+本番の全URLが 200 を返すことを確認。**欠落参照 0件。**
+
+### 9-3. 残る構造的な課題
+
+Drive 側の原本は依然ほぼ `.jpeg/.jpg/.heic` のままで、リポジトリの webp は
+7月22日の一括最適化でコミットされたもの。**Drive とリポジトリが二重管理状態**にある。
+対策A で「新規アップロード分が死ぬ」問題は解消したが、
+既存原本を Drive で差し替えても、リポジトリに webp がある限り変換されない
+（`Skipped (webp already in repo)`）。
+画像を更新したい場合は **CMS 経由でアップロードする**必要がある。
+
+### 9-4. データ側の判断（記録）
+
+- **boars-phes の削除は意図的**。FESTIVALS 87→86件、JA/EN ページ2枚と sitemap 2URL が削除された
+- `articles/mari-1777827955425.webp` が生成されたが `LP/` から参照されていない。
+  記事執筆時にアップして未使用のままか、参照が失われた可能性。害はないため放置
