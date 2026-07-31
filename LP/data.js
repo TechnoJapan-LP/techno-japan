@@ -253,8 +253,12 @@ const ARTISTS = [
     name: "198",
   },
   {
-    id: "antal-hunee",
-    name: "Antal b2b Hunee",
+    id: "antal",
+    name: "Antal",
+  },
+  {
+    id: "hunee",
+    name: "Hunee",
   },
   {
     id: "ben-ufo",
@@ -317,8 +321,16 @@ const ARTISTS = [
     name: "Nc4k(Stones Taro b2b Lomax)",
   },
   {
-    id: "sisi-b2b-ouissam-b2b-yamarchy",
-    name: "Sisi b2b Ouissam b2b Yamarchy",
+    id: "sisi",
+    name: "Sisi",
+  },
+  {
+    id: "ouissam",
+    name: "Ouissam",
+  },
+  {
+    id: "yamarchy",
+    name: "Yamarchy",
   },
   {
     id: "suze-ij",
@@ -409,31 +421,31 @@ const ARTISTS = [
     name: "Iron",
   },
   {
-    id: "Kiko Dinucci",
+    id: "kiko-dinucci",
     name: "Kiko Dinucci",
   },
   {
-    id: "The Master Musicians of Joujouka",
+    id: "the-master-musicians-of-joujouka",
     name: "The Master Musicians Of Joujouka",
   },
   {
-    id: "Kuo from Sunset Rollercoaster",
+    id: "kuo-from-sunset-rollercoaster",
     name: "Kuo From Sunset Rollercoaster",
   },
   {
-    id: "Sylvan Esso",
+    id: "sylvan-esso",
     name: "Sylvan Esso",
   },
   {
-    id: "Acid Pauli",
+    id: "acid-pauli",
     name: "Acid Pauli",
   },
   {
-    id: "Alabaster DePlume",
+    id: "alabaster-deplume",
     name: "Alabaster DePlume",
   },
   {
-    id: "Juana Molina",
+    id: "juana-molina",
     name: "Juana Molina",
   },
 ];
@@ -1400,7 +1412,8 @@ const VENUES = [
     lng: 139.695,
     url: "https://www.womb.co.jp/",
     instagram: "https://www.instagram.com/womb_tokyo/",
-    desc: "WOMB stands as Tokyo's most iconic techno institution, housed in a striking underground space in Shibuya with a world-class sound system that has drawn international artists for over two decades. The venue's distinctive curved main floor and precise acoustics have cemented its reputation as a pilgrimage site for serious dance music enthusiasts."
+    desc_en: "WOMB stands as Tokyo's most iconic techno institution, housed in a striking underground space in Shibuya with a world-class sound system that has drawn international artists for over two decades. The venue's distinctive curved main floor and precise acoustics have cemented its reputation as a pilgrimage site for serious dance music enthusiasts.",
+    desc: "WOMBは、渋谷の地下に構える東京を代表するテクノクラブ。世界水準のサウンドシステムを備え、20年以上にわたり国内外のアーティストを迎えてきた。曲線を描くメインフロアと精度の高い音響で知られ、ダンスミュージックを深く聴く層にとっての目的地となっている。"
   },
   {
     id: "circus-tokyo",
@@ -1416,7 +1429,8 @@ const VENUES = [
     lng: 139.7056,
     url: "https://circus-tokyo.jp/",
     instagram: "https://www.instagram.com/circus_tokyo/",
-    desc: "CIRCUS TOKYO operates as a refined underground space in the heart of Shibuya, known for its carefully curated techno programming and intimate atmosphere. The venue attracts both established international artists and emerging local talent, maintaining a reputation for quality sound systems and discerning crowds. Its compact layout creates an immersive environment where the focus remains firmly on the music."
+    desc_en: "CIRCUS TOKYO operates as a refined underground space in the heart of Shibuya, known for its carefully curated techno programming and intimate atmosphere. The venue attracts both established international artists and emerging local talent, maintaining a reputation for quality sound systems and discerning crowds. Its compact layout creates an immersive environment where the focus remains firmly on the music.",
+    desc: "CIRCUS TOKYOは、渋谷の中心部にあるアンダーグラウンドな空間。丁寧に組まれたテクノのブッキングと親密な雰囲気で知られる。国際的に活動するアーティストから国内の新しい才能までを迎え、音響の質と客層の成熟さに定評がある。コンパクトなつくりが、音楽に集中できる環境を生んでいる。"
   },
   {
     id: "saloon",
@@ -1432,7 +1446,8 @@ const VENUES = [
     lng: 139.7023,
     url: "https://saloon-tokyo.com/",
     instagram: "https://www.instagram.com/saloon_tokyo/",
-    desc: "SALOON operates as a compact basement club in Shibuya, known for its intimate atmosphere and carefully curated lineups spanning techno, house, and experimental electronic music. The venue's low ceilings and minimal lighting create an immersive environment that prioritizes sound quality and dancefloor intimacy over spectacle. Its programming often features both emerging local talent and respected international artists within Tokyo's underground circuit."
+    desc_en: "SALOON operates as a compact basement club in Shibuya, known for its intimate atmosphere and carefully curated lineups spanning techno, house, and experimental electronic music. The venue's low ceilings and minimal lighting create an immersive environment that prioritizes sound quality and dancefloor intimacy over spectacle. Its programming often features both emerging local talent and respected international artists within Tokyo's underground circuit.",
+    desc: "SALOONは、渋谷の地下にある小規模なクラブ。テクノ、ハウス、実験的なエレクトロニックミュージックにまたがるラインナップで知られる。低い天井と抑えた照明が没入感のある空間をつくり、演出よりも音の質とフロアの近さを重視している。国内の新しい才能と、東京のアンダーグラウンドで評価される海外アーティストの双方を迎える。"
   },
   {
     id: "solfa",
@@ -1448,7 +1463,8 @@ const VENUES = [
     lng: 139.6981,
     url: "https://nakameguro-solfa.com/",
     instagram: "https://www.instagram.com/solfa_nakameguro/",
-    desc: "SOLFA occupies a basement space in Nakameguro, offering an intimate setting for electronic music with a sound system that prioritizes clarity over volume. The venue has cultivated a reputation for quality bookings across house and techno, attracting both local selectors and international artists to its compact dancefloor. Its understated approach and commitment to proper sound design has made it a respected destination within Tokyo's discerning underground community."
+    desc_en: "SOLFA occupies a basement space in Nakameguro, offering an intimate setting for electronic music with a sound system that prioritizes clarity over volume. The venue has cultivated a reputation for quality bookings across house and techno, attracting both local selectors and international artists to its compact dancefloor. Its understated approach and commitment to proper sound design has made it a respected destination within Tokyo's discerning underground community.",
+    desc: "SOLFAは、中目黒の地下にあるクラブ。音量よりも解像度を重視したサウンドシステムで、エレクトロニックミュージックを親密な環境で聴かせる。ハウスとテクノを軸にしたブッキングで評価を得ており、国内のセレクターから海外アーティストまでがコンパクトなフロアに立つ。音響設計への姿勢が、東京のアンダーグラウンドで信頼を集めている。"
   },
   {
     id: "unit",
@@ -1464,7 +1480,8 @@ const VENUES = [
     lng: 139.7023,
     url: "https://www.unit-tokyo.com/",
     instagram: "https://www.instagram.com/unit_tokyo/",
-    desc: "UNIT stands as one of Tokyo's most respected underground venues, housed in a basement space in Daikanyama that prioritizes sound quality and intimate atmosphere over flashy production. The club's carefully curated programming spans techno, house, and experimental electronics, attracting both established international artists and Japan's finest selectors. Its compact layout and dedicated sound system create an immersive environment where music takes precedence over spectacle."
+    desc_en: "UNIT stands as one of Tokyo's most respected underground venues, housed in a basement space in Daikanyama that prioritizes sound quality and intimate atmosphere over flashy production. The club's carefully curated programming spans techno, house, and experimental electronics, attracting both established international artists and Japan's finest selectors. Its compact layout and dedicated sound system create an immersive environment where music takes precedence over spectacle.",
+    desc: "UNITは、代官山の地下にある東京有数のアンダーグラウンドクラブ。華美な演出よりも音質と空間の親密さを重視する。テクノ、ハウス、実験的なエレクトロニクスにまたがるブッキングで、海外の実力派と国内の主要なセレクターの双方を迎えてきた。コンパクトなつくりと専用のサウンドシステムが、音楽に集中できる環境をつくっている。"
   },
   {
     id: "liquidroom",
@@ -1480,7 +1497,8 @@ const VENUES = [
     lng: 139.7106,
     url: "https://www.liquidroom.net/",
     instagram: "https://www.instagram.com/liquidroom_ebisu/",
-    desc: "Situated in Ebisu, LIQUIDROOM stands as one of Tokyo's most respected mid-sized venues, hosting everything from international electronic acts to Japan's underground scene regulars. The club's sound system and intimate yet spacious layout have made it a consistent draw for both artists and dedicated ravers since the early 2000s. Its programming spans techno, house, and experimental electronic music with a curatorial approach that balances accessibility with underground credibility."
+    desc_en: "Situated in Ebisu, LIQUIDROOM stands as one of Tokyo's most respected mid-sized venues, hosting everything from international electronic acts to Japan's underground scene regulars. The club's sound system and intimate yet spacious layout have made it a consistent draw for both artists and dedicated ravers since the early 2000s. Its programming spans techno, house, and experimental electronic music with a curatorial approach that balances accessibility with underground credibility.",
+    desc: "恵比寿に位置するLIQUIDROOMは、東京の中規模会場として長く支持されてきた。海外のエレクトロニックアクトから国内アンダーグラウンドの常連まで幅広く迎え、2000年代初頭からアーティストとオーディエンスの双方を引きつけている。テクノ、ハウス、実験的な電子音楽をまたぐブッキングは、間口の広さとアンダーグラウンドの信頼性を両立させている。"
   },
   {
     id: "clubasia",
@@ -1496,7 +1514,8 @@ const VENUES = [
     lng: 139.6953,
     url: "https://clubasia.jp/",
     instagram: "https://www.instagram.com/clubasia/",
-    desc: "A cornerstone of Shibuya's club landscape since the late 90s, CLUBASIA spans multiple floors with its main room hosting everything from techno nights to hip-hop showcases. The venue's adaptable layout and central location have made it a reliable stop for both local crews and touring international acts seeking a mid-sized room with solid sound."
+    desc_en: "A cornerstone of Shibuya's club landscape since the late 90s, CLUBASIA spans multiple floors with its main room hosting everything from techno nights to hip-hop showcases. The venue's adaptable layout and central location have made it a reliable stop for both local crews and touring international acts seeking a mid-sized room with solid sound.",
+    desc: "90年代後半から渋谷のクラブシーンを支えてきたCLUBASIA。複数フロアを持ち、メインルームではテクノからヒップホップまで多様なイベントが開かれる。柔軟なレイアウトと立地の良さから、国内のクルーと海外からのツアーアクトの双方にとって、中規模の会場として定番となっている。"
   },
   {
     id: "mitsuki",
@@ -1512,7 +1531,8 @@ const VENUES = [
     lng: 139.6957,
     url: "https://mitsuki-tokyo.com/",
     instagram: "https://www.instagram.com/mitsuki_tokyo/",
-    desc: "MITSUKI operates as an intimate basement club in Tokyo's nightlife landscape, known for its focused programming of underground electronic music. The venue maintains a stripped-down aesthetic that prioritizes sound quality and dancefloor intimacy over spectacle."
+    desc_en: "MITSUKI operates as an intimate basement club in Tokyo's nightlife landscape, known for its focused programming of underground electronic music. The venue maintains a stripped-down aesthetic that prioritizes sound quality and dancefloor intimacy over spectacle.",
+    desc: "MITSUKIは、東京の地下にある小規模なクラブ。アンダーグラウンドなエレクトロニックミュージックに絞ったブッキングで知られる。装飾を削いだ内装で、演出よりも音の質とフロアの近さを重視している。"
   },
   {
     id: "the-room",
@@ -1528,7 +1548,8 @@ const VENUES = [
     lng: 139.7016,
     url: "https://theroom.jp/",
     instagram: "https://www.instagram.com/theroom_shibuya/",
-    desc: "This intimate Shibuya basement bar operates as a low-key refuge for serious music heads, programming everything from deep house to experimental electronics. The space maintains a deliberately understated atmosphere, drawing a knowing crowd that values sound quality over spectacle. Its compact layout creates an almost living room-like intimacy between DJs and dancers."
+    desc_en: "This intimate Shibuya basement bar operates as a low-key refuge for serious music heads, programming everything from deep house to experimental electronics. The space maintains a deliberately understated atmosphere, drawing a knowing crowd that values sound quality over spectacle. Its compact layout creates an almost living room-like intimacy between DJs and dancers.",
+    desc: "渋谷の地下にある小さなバーで、音楽を深く聴く客層に向けた場所。ディープハウスから実験的なエレクトロニクスまで幅広く扱う。意図的に控えめな雰囲気を保ち、演出よりも音の質を重視する客が集まる。コンパクトな空間が、DJとフロアの距離をリビングルームのように近づけている。"
   },
   {
     id: "oath",
@@ -1544,7 +1565,8 @@ const VENUES = [
     lng: 139.6992,
     url: "https://www.djbar-oath.com/",
     instagram: "https://www.instagram.com/shibuya_oath/",
-    desc: "OATH operates as a DJ bar in Shibuya, maintaining an intimate setting where selectors can explore deeper cuts without the pressure of peak-time crowd dynamics. The venue's compact layout fosters close interaction between artists and audience, creating space for more experimental programming alongside established underground sounds."
+    desc_en: "OATH operates as a DJ bar in Shibuya, maintaining an intimate setting where selectors can explore deeper cuts without the pressure of peak-time crowd dynamics. The venue's compact layout fosters close interaction between artists and audience, creating space for more experimental programming alongside established underground sounds.",
+    desc: "OATHは、渋谷にあるDJバー。ピークタイムのフロアを意識せずに、セレクターが深い選曲を掘り下げられる環境を保っている。小さな空間がアーティストと客の距離を近づけ、定番のアンダーグラウンドサウンドと並んで実験的なプログラムにも余地を残している。"
   },
   {
     id: "www",
@@ -1560,7 +1582,8 @@ const VENUES = [
     lng: 139.6988,
     url: "https://www-shibuya.jp/",
     instagram: "https://www.instagram.com/www_shibuya/",
-    desc: "WWW operates as Shibuya's intimate livehouse where electronic acts perform in a room that prioritizes sound quality over spectacle. The venue's compact layout creates an immersive environment where the boundary between performer and audience dissolves, making it a preferred spot for both established artists and emerging talent to test new material."
+    desc_en: "WWW operates as Shibuya's intimate livehouse where electronic acts perform in a room that prioritizes sound quality over spectacle. The venue's compact layout creates an immersive environment where the boundary between performer and audience dissolves, making it a preferred spot for both established artists and emerging talent to test new material.",
+    desc: "WWWは、渋谷のライブハウス。演出よりも音の質を重視した空間で、エレクトロニックアクトが演奏する。コンパクトなつくりが演者と観客の境界を曖昧にし、実績のあるアーティストから新しい才能まで、新作を試す場として選ばれている。"
   },
   {
     id: "o-east",
@@ -1576,7 +1599,8 @@ const VENUES = [
     lng: 139.6956,
     url: "https://shibuya-o.com/east/",
     instagram: "https://www.instagram.com/midnight_east/",
-    desc: "One of Shibuya's most established mid-sized venues, O-East has hosted everything from indie rock to underground electronic acts since the late 90s. The space maintains a no-frills approach with solid sound and sightlines that work equally well for live bands and DJ sets. Part of the broader O-family of venues, it sits at the sweet spot between intimate club and proper concert hall."
+    desc_en: "One of Shibuya's most established mid-sized venues, O-East has hosted everything from indie rock to underground electronic acts since the late 90s. The space maintains a no-frills approach with solid sound and sightlines that work equally well for live bands and DJ sets. Part of the broader O-family of venues, it sits at the sweet spot between intimate club and proper concert hall.",
+    desc: "渋谷の中規模会場として90年代後半から続くSPOTIFY O-EAST。インディーロックからアンダーグラウンドのエレクトロニックアクトまで幅広く迎えてきた。装飾を抑えた設計で、確かな音響と見通しの良さはバンドのライブとDJセットのどちらにも適している。O系列の会場のひとつで、小規模クラブとコンサートホールの中間に位置する。"
   },
   {
     id: "bonobo",
@@ -1591,7 +1615,8 @@ const VENUES = [
     lat: 35.6746,
     lng: 139.7111,
     instagram: "https://www.instagram.com/jingumaebonobo/",
-    desc: "A cozy neighborhood bar in Jingu-mae that doubles as an intimate venue for electronic music. The space attracts a discerning crowd drawn to its carefully curated sound and unpretentious atmosphere. Its compact size creates an unusually close connection between artists and audience."
+    desc_en: "A cozy neighborhood bar in Jingu-mae that doubles as an intimate venue for electronic music. The space attracts a discerning crowd drawn to its carefully curated sound and unpretentious atmosphere. Its compact size creates an unusually close connection between artists and audience.",
+    desc: "神宮前にある小さなバーで、エレクトロニックミュージックの会場も兼ねる。丁寧に選ばれたサウンドと、気取らない雰囲気に惹かれた客層が集まる。小規模ゆえに、アーティストと観客の距離が非常に近い。"
   },
   {
     id: "forestlimit",
@@ -1607,7 +1632,8 @@ const VENUES = [
     lng: 139.6771,
     url: "https://www.forestlimit.com/",
     instagram: "https://www.instagram.com/forestlimit_info/",
-    desc: "FORESTLIMIT operates as an intimate basement club in Shibuya, carving out space for experimental electronic music and avant-garde sound art. The venue's stripped-down aesthetic and carefully curated programming attracts artists and audiences seeking alternatives to Tokyo's mainstream club circuit. Its compact layout creates an immersive environment where the boundary between performer and audience dissolves."
+    desc_en: "FORESTLIMIT operates as an intimate basement club in Shibuya, carving out space for experimental electronic music and avant-garde sound art. The venue's stripped-down aesthetic and carefully curated programming attracts artists and audiences seeking alternatives to Tokyo's mainstream club circuit. Its compact layout creates an immersive environment where the boundary between performer and audience dissolves.",
+    desc: "FORESTLIMITは、渋谷の地下にある小規模なクラブ。実験的なエレクトロニックミュージックやサウンドアートに場を開いている。装飾を削いだ内装と絞り込んだブッキングが、東京の主流のクラブとは別の選択肢を求めるアーティストと客を引きつけてきた。コンパクトな空間が、演者と観客の境界を曖昧にしている。"
   },
   {
     id: "vent",
@@ -1623,7 +1649,8 @@ const VENUES = [
     lng: 139.7129,
     url: "http://vent-tokyo.net/",
     instagram: "https://www.instagram.com/vent.tokyo/",
-    desc: "A intimate basement club in Shibuya that has carved out a reputation for uncompromising techno programming since opening in 2016. The venue's stark concrete interior and precise sound system create an environment where the music takes absolute priority over everything else."
+    desc_en: "A intimate basement club in Shibuya that has carved out a reputation for uncompromising techno programming since opening in 2016. The venue's stark concrete interior and precise sound system create an environment where the music takes absolute priority over everything else.",
+    desc: "2016年のオープン以来、妥協のないテクノのブッキングで評価を築いてきた渋谷の地下クラブ。無骨なコンクリートの内装と精度の高いサウンドシステムが、音楽を最優先する環境をつくっている。"
   },
   {
     id: "circus-osaka",
@@ -1639,7 +1666,8 @@ const VENUES = [
     lng: 135.4989,
     url: "https://circus-osaka.com/",
     instagram: "https://www.instagram.com/circus_osaka/",
-    desc: "CIRCUS OSAKA operates as one of Osaka's key underground techno destinations, housed in a compact basement space that prioritizes sound system quality over size. The venue consistently programs cutting-edge international and domestic techno acts, maintaining its reputation as a serious club for dedicated heads in the Kansai region."
+    desc_en: "CIRCUS OSAKA operates as one of Osaka's key underground techno destinations, housed in a compact basement space that prioritizes sound system quality over size. The venue consistently programs cutting-edge international and domestic techno acts, maintaining its reputation as a serious club for dedicated heads in the Kansai region.",
+    desc: "CIRCUS OSAKAは、大阪のアンダーグラウンドテクノを代表する会場のひとつ。地下のコンパクトな空間で、規模よりもサウンドシステムの質を重視している。国内外の先鋭的なテクノアクトを継続的に迎え、関西の熱心なリスナーに向けたクラブとしての評価を保っている。"
   },
   {
     id: "club-joule",
@@ -1655,7 +1683,8 @@ const VENUES = [
     lng: 135.4979,
     url: "https://club-joule.com/ja/",
     instagram: "https://www.instagram.com/clubjoule_official/",
-    desc: "Club Joule operates as one of Osaka's key underground techno spaces, housed in a basement setting that prioritizes sound system quality over aesthetic flourishes. The venue maintains a stripped-back approach that lets the music define the experience, regularly hosting both international techno acts and Japan's leading electronic artists. Its intimate layout creates an intense dance floor dynamic that has made it a fixture in Kansai's techno circuit."
+    desc_en: "Club Joule operates as one of Osaka's key underground techno spaces, housed in a basement setting that prioritizes sound system quality over aesthetic flourishes. The venue maintains a stripped-back approach that lets the music define the experience, regularly hosting both international techno acts and Japan's leading electronic artists. Its intimate layout creates an intense dance floor dynamic that has made it a fixture in Kansai's techno circuit.",
+    desc: "CLUB JOULEは、大阪のアンダーグラウンドテクノを支える会場のひとつ。地下にあり、装飾よりもサウンドシステムの質を優先する。余計な演出を削ぎ落とした姿勢で、海外のテクノアクトと国内の主要なエレクトロニックアーティストの双方を定期的に迎えてきた。親密なつくりが生む密度の高いフロアが、関西のテクノシーンにおける定番となっている。"
   },
   {
     id: "compufunk",
@@ -1671,7 +1700,8 @@ const VENUES = [
     lng: 135.5122,
     url: "https://www.compufunk.com/",
     instagram: "https://www.instagram.com/djcompufunk/",
-    desc: "COMPUFUNK RECORDS operates as both record shop and intimate club space in Osaka's underground circuit. The venue maintains a focused approach to analog-driven electronic music, with DJ Compufunk's deep knowledge of obscure funk, electro and early techno informing both the shop's selection and club programming. Its compact dimensions create an immersive listening environment that prioritizes sound quality over scale."
+    desc_en: "COMPUFUNK RECORDS operates as both record shop and intimate club space in Osaka's underground circuit. The venue maintains a focused approach to analog-driven electronic music, with DJ Compufunk's deep knowledge of obscure funk, electro and early techno informing both the shop's selection and club programming. Its compact dimensions create an immersive listening environment that prioritizes sound quality over scale.",
+    desc: "COMPUFUNK RECORDSは、大阪でレコードショップと小規模なクラブスペースを兼ねる場所。アナログを軸にしたエレクトロニックミュージックに絞った姿勢を保つ。DJ Compufunkによるファンク、エレクトロ、初期テクノへの深い知識が、店の品揃えとブッキングの双方に反映されている。小さな空間が、規模よりも音の質を重視した環境をつくっている。"
   },
   {
     id: "noon",
@@ -1687,7 +1717,8 @@ const VENUES = [
     lng: 135.5016,
     url: "https://noon-cafe.com/",
     instagram: "https://www.instagram.com/noon_cafe_nakazaki/",
-    desc: "A intimate bar and cafe hybrid in Osaka's Nakazakicho district that bridges daytime coffee culture with late-night music sessions. The compact space hosts DJ sets and small gatherings that feel more like private parties than formal club nights. Known for its carefully curated selection of underground electronic music and relaxed atmosphere that attracts both local diggers and visiting artists."
+    desc_en: "A intimate bar and cafe hybrid in Osaka's Nakazakicho district that bridges daytime coffee culture with late-night music sessions. The compact space hosts DJ sets and small gatherings that feel more like private parties than formal club nights. Known for its carefully curated selection of underground electronic music and relaxed atmosphere that attracts both local diggers and visiting artists.",
+    desc: "大阪・中崎町にある、バーとカフェを兼ねた小さな空間。昼のコーヒー文化と夜の音楽をつなぐ場所として機能する。DJセットや小規模な集まりが開かれ、形式的なクラブナイトというより私的なパーティーに近い雰囲気を持つ。アンダーグラウンドな選曲とくつろいだ空気で知られ、地元の掘り手から来訪するアーティストまでが集まる。"
   },
   {
     id: "triangle",
@@ -1703,7 +1734,8 @@ const VENUES = [
     lng: 135.4976,
     url: "https://triangle-osaka.jp/",
     instagram: "https://www.instagram.com/triangleosaka/",
-    desc: "Triangle operates as one of Osaka's more intimate underground spaces, housed in a compact basement setting that prioritizes sound quality over scale. The venue has built a reputation for carefully curated lineups that span deeper spectrum techno and experimental electronic music, attracting both local selectors and international acts seeking a more focused environment than the city's larger clubs."
+    desc_en: "Triangle operates as one of Osaka's more intimate underground spaces, housed in a compact basement setting that prioritizes sound quality over scale. The venue has built a reputation for carefully curated lineups that span deeper spectrum techno and experimental electronic music, attracting both local selectors and international acts seeking a more focused environment than the city's larger clubs.",
+    desc: "TRIANGLEは、大阪のアンダーグラウンドな空間のひとつ。地下のコンパクトなつくりで、規模よりも音の質を重視している。ディープな領域のテクノや実験的なエレクトロニックミュージックにまたがる丁寧なラインナップで評価を築き、市内の大箱よりも集中できる環境を求める国内外のアーティストを迎えている。"
   },
   {
     id: "sunhall",
@@ -1719,7 +1751,8 @@ const VENUES = [
     lng: 135.4984,
     url: "https://sunhall.jp/",
     instagram: "https://www.instagram.com/sunhall.info/",
-    desc: "SUNHALL operates as one of Osaka's essential mid-sized venues, bridging the gap between intimate club spaces and larger concert halls. The venue has built its reputation hosting both local underground acts and touring international artists, maintaining a sound system that serves everything from experimental electronics to harder techno lineups. Its consistent programming and accessible Nippombashi location have made it a reliable fixture in Kansai's electronic music circuit."
+    desc_en: "SUNHALL operates as one of Osaka's essential mid-sized venues, bridging the gap between intimate club spaces and larger concert halls. The venue has built its reputation hosting both local underground acts and touring international artists, maintaining a sound system that serves everything from experimental electronics to harder techno lineups. Its consistent programming and accessible Nippombashi location have made it a reliable fixture in Kansai's electronic music circuit.",
+    desc: "SUNHALLは、大阪の中規模会場のひとつ。小規模クラブとコンサートホールの中間を埋める存在として機能する。国内のアンダーグラウンドなアクトと海外からのツアーアーティストの双方を迎えてきた実績を持ち、実験的なエレクトロニクスからハードなテクノまで対応するサウンドシステムを備える。安定したブッキングと日本橋という立地が、関西のシーンにおける定番の場所にしている。"
   },
   {
     id: "club-metro",
@@ -1735,7 +1768,8 @@ const VENUES = [
     lng: 135.7727,
     url: "https://www.metro.ne.jp/",
     instagram: "https://www.instagram.com/metro_kyoto/",
-    desc: "Metro has anchored Kyoto's underground scene since the early 90s, operating from a converted basement space near Kawaramachi. The club's intimate concrete interior and carefully curated bookings have made it a essential stop for touring artists and a cornerstone of Kansai's electronic music culture."
+    desc_en: "Metro has anchored Kyoto's underground scene since the early 90s, operating from a converted basement space near Kawaramachi. The club's intimate concrete interior and carefully curated bookings have made it a essential stop for touring artists and a cornerstone of Kansai's electronic music culture.",
+    desc: "METROは、90年代初頭から京都のアンダーグラウンドシーンを支えてきた。河原町近くの地下空間を改装した場所で営業する。コンクリートの親密な内装と丁寧に組まれたブッキングにより、ツアー中のアーティストにとって欠かせない一軒であり、関西のエレクトロニックミュージック文化の中心のひとつとなっている。"
   },
 ];
 
