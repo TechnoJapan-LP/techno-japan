@@ -859,7 +859,13 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/artists/antal-hunee.html</loc>
+    <loc>https://techno-japan.media/artists/antal.html</loc>
+    <lastmod>2026-07-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/artists/hunee.html</loc>
     <lastmod>2026-07-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -955,7 +961,19 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/artists/sisi-b2b-ouissam-b2b-yamarchy.html</loc>
+    <loc>https://techno-japan.media/artists/sisi.html</loc>
+    <lastmod>2026-07-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/artists/ouissam.html</loc>
+    <lastmod>2026-07-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/artists/yamarchy.html</loc>
     <lastmod>2026-07-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -1093,43 +1111,43 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/artists/Kiko Dinucci.html</loc>
+    <loc>https://techno-japan.media/artists/kiko-dinucci.html</loc>
     <lastmod>2026-07-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/artists/The Master Musicians of Joujouka.html</loc>
+    <loc>https://techno-japan.media/artists/the-master-musicians-of-joujouka.html</loc>
     <lastmod>2026-07-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/artists/Kuo from Sunset Rollercoaster.html</loc>
+    <loc>https://techno-japan.media/artists/kuo-from-sunset-rollercoaster.html</loc>
     <lastmod>2026-07-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/artists/Sylvan Esso.html</loc>
+    <loc>https://techno-japan.media/artists/sylvan-esso.html</loc>
     <lastmod>2026-07-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/artists/Acid Pauli.html</loc>
+    <loc>https://techno-japan.media/artists/acid-pauli.html</loc>
     <lastmod>2026-07-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/artists/Alabaster DePlume.html</loc>
+    <loc>https://techno-japan.media/artists/alabaster-deplume.html</loc>
     <lastmod>2026-07-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/artists/Juana Molina.html</loc>
+    <loc>https://techno-japan.media/artists/juana-molina.html</loc>
     <lastmod>2026-07-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -1315,6 +1333,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://techno-japan.media/en/artists/acid-pauli.html</loc>
+    <lastmod>2026-07-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://techno-japan.media/en/artists/adhemar.html</loc>
     <lastmod>2026-07-31</lastmod>
     <changefreq>weekly</changefreq>
@@ -1351,6 +1375,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://techno-japan.media/en/artists/alabaster-deplume.html</loc>
+    <lastmod>2026-07-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://techno-japan.media/en/artists/aliceyuki.html</loc>
     <lastmod>2026-07-31</lastmod>
     <changefreq>weekly</changefreq>
@@ -1363,7 +1393,7 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/en/artists/antal-hunee.html</loc>
+    <loc>https://techno-japan.media/en/artists/antal.html</loc>
     <lastmod>2026-07-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -1549,6 +1579,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://techno-japan.media/en/artists/hunee.html</loc>
+    <lastmod>2026-07-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://techno-japan.media/en/artists/iron.html</loc>
     <lastmod>2026-07-31</lastmod>
     <changefreq>weekly</changefreq>
@@ -1579,6 +1615,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://techno-japan.media/en/artists/juana-molina.html</loc>
+    <lastmod>2026-07-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://techno-japan.media/en/artists/ken-ishii.html</loc>
     <lastmod>2026-07-31</lastmod>
     <changefreq>weekly</changefreq>
@@ -1597,7 +1639,19 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://techno-japan.media/en/artists/kiko-dinucci.html</loc>
+    <lastmod>2026-07-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://techno-japan.media/en/artists/kotsu.html</loc>
+    <lastmod>2026-07-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/en/artists/kuo-from-sunset-rollercoaster.html</loc>
     <lastmod>2026-07-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -1687,6 +1741,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://techno-japan.media/en/artists/ouissam.html</loc>
+    <lastmod>2026-07-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://techno-japan.media/en/artists/pianeti-sintetici.html</loc>
     <lastmod>2026-07-31</lastmod>
     <changefreq>weekly</changefreq>
@@ -1741,7 +1801,7 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/en/artists/sisi-b2b-ouissam-b2b-yamarchy.html</loc>
+    <loc>https://techno-japan.media/en/artists/sisi.html</loc>
     <lastmod>2026-07-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -1771,6 +1831,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://techno-japan.media/en/artists/sylvan-esso.html</loc>
+    <lastmod>2026-07-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://techno-japan.media/en/artists/tada.html</loc>
     <lastmod>2026-07-31</lastmod>
     <changefreq>weekly</changefreq>
@@ -1790,6 +1856,12 @@
   </url>
   <url>
     <loc>https://techno-japan.media/en/artists/tazzy.html</loc>
+    <lastmod>2026-07-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/en/artists/the-master-musicians-of-joujouka.html</loc>
     <lastmod>2026-07-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -1820,6 +1892,12 @@
   </url>
   <url>
     <loc>https://techno-japan.media/en/artists/wata-igarashi.html</loc>
+    <lastmod>2026-07-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/en/artists/yamarchy.html</loc>
     <lastmod>2026-07-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
