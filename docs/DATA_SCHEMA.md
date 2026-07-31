@@ -89,6 +89,8 @@
 | GENRE | `TECHNO` | §1.3(現状の`HOUSE / MINIMAL`区切りも中黒へ) |
 | IMAGE | | |
 | BIO_JA / BIO_EN | | 現BIOは英語 → BIO_ENへ |
+| SCHEMA_TYPE | `person` / `music-group` | 構造化データの型。空欄は`person`。ユニットは`music-group` |
+| MEMBER_IDS | `albino-sound, daigos` | `music-group`の構成員。ARTISTSのIDをカンマ区切り。設定時は`MusicGroup.member`へ出力 |
 | INSTAGRAM / SOUNDCLOUD / BANDCAMP / WEBSITE | | |
 | imagePosition | | |
 | (共通メタ §1.6) | | |
@@ -141,16 +143,20 @@
 | カラム | 型/例 | 備考 |
 |---|---|---|
 | EDITION_ID | `matricaria-2026` | EDITIONS参照 |
-| ARTIST_ID | `prins-thomas` | ARTISTS参照。未解決の場合は空欄可(ACT_LABELのみで表示) |
-| ACT_LABEL | `Doltz. -live-` / `Sisi b2b Ouissam b2b Yamarchy` | **掲載表記そのまま**。省略時はARTISTSのNAMEを表示 |
-| SET_TYPE | `dj` / `live` / `b2b` / `hybrid` | プルダウン。省略時 `dj` |
+| ARTIST_IDS | `dj-nobu, wata-igarashi` | ARTISTS参照。出演順のIDをカンマ区切り。未解決の場合は空欄可 |
+| JOIN_TYPE | `b2b` / `&` / `vs` | 複数アーティスト間の接続表記。単独出演は空欄 |
+| PERF_TYPE | `dj` / `live` / `hybrid` | 演奏形態。省略時`dj`。出演者名やACT_LABELへ混ぜない |
+| ACT_LABEL | `Space Drum Meditation` | **掲載原文または未解決枠**。文字列を分割・解析してIDを推測しない |
 | STAGE | `OCEAN STAGE` | 任意(タイムテーブル用) |
 | DAY | `1` | 任意 |
 | START / END | `23:00` / `25:00` | 任意。30時間表記可(§2.5) |
 | SORT | `1` | 掲載順(ヘッドライナー=小さい数字) |
 
-- B2Bは「1出演枠=1行」とし、ARTIST_IDには代表者または空欄、参加アーティスト全員に出演歴を付けたい場合は同じACT_LABELで複数行(ARTIST_IDだけ変える)。
-- 移行: 現FESTIVALS.LINEUP(表示名のカンマ区切り)をパースし、ARTISTSのNAMEと突合してARTIST_IDを解決。解決できない名前はスタブ生成(§2.2)または要確認リストへ。
+- B2B等は「1出演枠=1行」。参加者全員を`ARTIST_IDS`へ出演順に格納し、`JOIN_TYPE`を間に表示する。
+- HTMLでは`ARTIST_IDS`の各IDを個別の詳細ページへリンクする。構造化データの`performer`も各アーティストを独立したエンティティとして出力し、B2B全体を架空のPerson/MusicGroupにしない。
+- `ACT_LABEL`から`b2b`、`&`、`vs`、`live`等を実行時に抽出しない。名前自体に`&`等を含むアーティストを破壊するため、構造化は必ず専用列を使う。
+- `SCHEMA_TYPE=music-group`のアーティストは`MusicGroup`として出力する。構成員データがある場合は`MusicGroup.member`へ各アーティストの`@id`を接続する。
+- 移行は旧列の確実なコピーと要確認CSVの生成まで自動化し、スプレッドシートやJSONを自動更新しない。未解決名の登録・複合枠の分解は人が確認する。
 
 ### 2.5 EVENTS(クラブイベント)
 
@@ -269,7 +275,13 @@ EDITIONS / LINEUPS: 新設後にgidを追記
       "location": "Naeba Greenland",
       "pref": "Niigata",
       "lineup": [
-        { "artistId": "prins-thomas", "actLabel": null, "setType": "dj", "sort": 1 }
+        {
+          "artistIds": ["dj-nobu", "wata-igarashi"],
+          "joinType": "b2b",
+          "perfType": "dj",
+          "actLabel": null,
+          "sort": 1
+        }
       ]
     }
   ]
@@ -283,8 +295,9 @@ EDITIONS / LINEUPS: 新設後にgidを追記
 
 エラー(ビルド停止):
 - ID形式違反(`[a-z0-9-]+`以外、連続ハイフン)/ ID重複
-- 参照切れ: LINEUPS.ARTIST_ID, LINEUPS.EDITION_ID, EDITIONS.FESTIVAL_ID, EVENTS.VENUE_ID, EVENTS.LINEUP内ID
+- 参照切れ: LINEUPS.ARTIST_IDS内の各ID、LINEUPS.EDITION_ID、EDITIONS.FESTIVAL_ID、EVENTS.VENUE_ID、EVENTS.LINEUP内ID
 - DATE形式違反(ISO以外)、DATE_START > DATE_END
+- LINEUPS.ARTIST_IDSが複数なのにJOIN_TYPEが空欄
 
 警告(ビルド継続・レポート出力):
 - GENREが正規リスト外/区切り文字違反
@@ -293,6 +306,11 @@ EDITIONS / LINEUPS: 新設後にgidを追記
 - DESC_JA・DESC_EN両方空/publishedなのに画像なし
 - NAMEに年が含まれる(FESTIVALS)
 - EDITIONとDATEの年の不一致
+- LINEUPS.ARTIST_IDSが単一なのにJOIN_TYPEあり
+- LINEUPS.PERF_TYPEが`dj` / `live` / `hybrid`以外
+- LINEUPS.ACT_LABELのみでARTIST_IDSが空欄（要確認一覧へ）
+- ARTISTS.SCHEMA_TYPEが`person` / `music-group`以外
+- ARTISTS.MEMBER_IDS内の参照切れ、または`person`にMEMBER_IDSが設定されている
 
 ## 7. 移行チェックリスト(Phase 0)
 
