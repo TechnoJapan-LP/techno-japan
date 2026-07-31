@@ -124,7 +124,26 @@
 2. `SCHEMA_TYPE=music-group` を設定し、`stones-taro` / `lomax` を ARTISTS に登録のうえ `MEMBER_IDS` に接続
 3. lineups.json 側の該当行は `ARTIST_IDS=nc4k` に解決し、`ACT_LABEL` は掲載原文として残す
 
-同様の確認が必要なもの: `Dungeoneering (Albino Sound & Daigos)` はユニットとして登録すべきだが未登録。`sisi-b2b-ouissam-b2b-yamarchy` は逆に B2B なのに ARTISTS に登録されており(旧データの遺物)、解体対象。
+同様の確認が必要なもの: `Dungeoneering (Albino Sound & Daigos)` はユニットとして登録すべきだが未登録。
+
+**決定: 誤発行された B2B の URL は 404 のままにする(2026-08-01)**
+
+B2B なのに ARTISTS に登録されていた2件を削除した。旧データの遺物で、上記ルールに反する。
+
+| 削除したID | 実体 | 影響を受けた URL |
+|---|---|---|
+| `antal-hunee` | `Antal & Hunee`(共演枠) | `/artists/antal-hunee.html` と `/en/artists/antal-hunee.html` |
+| `sisi-b2b-ouissam-b2b-yamarchy` | Sisi b2b Ouissam b2b Yamarchy(共演枠) | 同上2URL。**sitemap 登録済み・インデックス済み** |
+
+計4URLが 404 になる。**リダイレクトを設定しない**と判断した。理由:
+
+1. B2B 枠に恒久URLを与えないという上記の方針と整合する。リダイレクトを置くことは、そのURLに恒久的な意味を認めることになる
+2. 適切なリダイレクト先が存在しない。出演フェスへ飛ばすのは意味的に別物(アーティストを探した人にフェスを見せる)、一覧ページへ飛ばすのは情報価値がない
+3. **誤って発行されたURLにリダイレクトを与えると、誤りを固定化する。** 消えるべきものは消えるのが正しい
+
+ID 規約違反7件の是正(§1.1)ではリダイレクトを設けたが、それとは扱いが異なる。前者は「正しいコンテンツの正しくないURL」なので移動先が存在する。後者は「存在すべきでないコンテンツ」なので移動先がない。**リダイレクトの要否は、移動先が意味的に成立するかで判断する。**
+
+今後、同種の削除(B2B・重複・誤登録の解体)でも 404 を既定とする。
 
 ### 2.3 FESTIVALS(ブランド)+ EDITIONS(開催回)★構造変更
 
