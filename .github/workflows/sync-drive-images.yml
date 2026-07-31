@@ -30,6 +30,15 @@ jobs:
           import json
           import os
 
+          from PIL import Image, ImageOps
+          import pillow_heif
+          pillow_heif.register_heif_opener()   # iPhone 由来の .heic を Pillow で開けるようにする
+
+          # 変換対象の原本拡張子。webp 以外はサイトが配信しないため、ここで webp を作る。
+          SOURCE_EXTS = {'.jpg', '.jpeg', '.png', '.heic', '.heif'}
+          MAX_EDGE = 1920          # CMS の compressImage と同じ長辺上限
+          convert_failures = []
+
           GAS_URL = "https://script.google.com/macros/s/AKfycbxhJ6rtGoAirNyV5TtBvzWHNOT8RuB0nfDjwglmdu8ClhpWZ-OXSbMM4UyFE_7ZsV-Lpg/exec"
           PASS_HASH = os.environ.get('CMS_AUTH', '')
 
@@ -82,13 +91,17 @@ jobs:
 
               os.makedirs(f'LP/images/{folder_type}', exist_ok=True)
 
+              # Drive に webp があるものは、それが正（CMS がクライアント側で最適化した実物）。
+              # 原本からの変換は「webp がまだ無いもの」の救済に限る。こうしないと
+              # 既存の最適化済み webp を CI 変換版で毎回上書きし、無意味な差分が出続ける。
+              webp_stems = {
+                  os.path.splitext(i['name'])[0]
+                  for i in images if i['name'].lower().endswith('.webp')
+              }
+
               for img in images:
                   name = img['name']
-                  # data.js が参照するのは webp のみ。Drive には変換前の
-                  # 原本（jpg/heic 等）も同居しているが、それを落とすとリポジトリが
-                  # 未参照ファイルで肥大するだけなので webp 以外はスキップする。
                   if not name.lower().endswith('.webp'):
-                      print(f"Skipped (not webp): {name}")
                       continue
                   file_path = f"LP/images/{folder_type}/{name}"
                   try:
@@ -96,10 +109,45 @@ jobs:
                       print(f"Downloaded: {name}")
                   except Exception as e:
                       print(f"Failed: {name} — {e}")
+                      convert_failures.append(f"{folder_type}/{name} (download)")
+
+              # ---- 原本 → webp 変換（webp が存在しないものだけ）----
+              for img in images:
+                  name = img['name']
+                  stem, ext = os.path.splitext(name)
+                  if ext.lower() not in SOURCE_EXTS:
+                      continue
+                  if stem in webp_stems:
+                      print(f"Skipped (webp already in Drive): {name}")
+                      continue
+                  out_path = f"LP/images/{folder_type}/{stem}.webp"
+                  if os.path.exists(out_path):
+                      # 7/22 の一括最適化でコミット済みのものはそのまま使う（差分を出さない）
+                      print(f"Skipped (webp already in repo): {name}")
+                      continue
+                  try:
+                      tmp = f"/tmp/src{ext.lower()}"
+                      urllib.request.urlretrieve(img['url'], tmp)
+                      with Image.open(tmp) as im:
+                          im = ImageOps.exif_transpose(im)
+                          if im.mode not in ('RGB', 'RGBA'):
+                              im = im.convert('RGB')
+                          # CMS の compressImage と同条件（長辺1920px上限 / quality 0.85）
+                          if max(im.size) > MAX_EDGE:
+                              im.thumbnail((MAX_EDGE, MAX_EDGE), Image.LANCZOS)
+                          im.save(out_path, 'WEBP', quality=85, method=6)
+                      kb = os.path.getsize(out_path) / 1024
+                      print(f"Converted: {name} -> {stem}.webp ({kb:.0f} KB, {im.size[0]}x{im.size[1]})")
+                  except Exception as e:
+                      print(f"Convert failed: {name} — {e}")
+                      convert_failures.append(f"{folder_type}/{name}")
 
           # 握りつぶすと「成功」と表示されて故障に気づけないので、明示的に落とす。
           if failures:
               raise SystemExit(f"同期に失敗したフォルダ: {', '.join(failures)}")
+          # 変換漏れは画像が出ないまま放置される。ジョブは通すが必ず見えるようにする。
+          if convert_failures:
+              print(f"\n::warning::webp 変換に失敗: {', '.join(convert_failures)}")
           print("\nSync complete.")
           PYTHON
 
