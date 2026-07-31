@@ -705,3 +705,43 @@ body > div:not(.tj-bg):not(.cursor-dot):not(.cursor-ring) {
   .tj-bg::before, .tj-bg::after, .tj-bg .tj-scan { animation: none; }
   .tj-bg .tj-scan { display: none; }
 }
+
+/* ===================== SSR LINK LIST =====================
+   ハブページの静的リンク一覧（build-detail-pages.mjs が
+   <!-- STATIC_LINKS:*:START/END --> の間に生成する）。
+
+   通常は JS がハブの <main> を innerHTML で上書きするため画面には出ない。
+   出るのは (a) JS を実行しないクローラー、(b) JS が落ちたときのフォールバック。
+   (b) の場合にこれが唯一の導線になるので、素の <ul> のまま崩れて見えないよう
+   最低限読める体裁を与えておく。 */
+.ssr-link-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1px;
+  background: rgba(240, 237, 232, 0.06);
+  border: 1px solid rgba(240, 237, 232, 0.06);
+}
+.ssr-link-list li { background: var(--bg); }
+.ssr-link-list a {
+  display: block;
+  padding: 14px 18px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  color: var(--text);
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.ssr-link-list a:hover,
+.ssr-link-list a:focus-visible {
+  background: rgba(240, 237, 232, 0.05);
+  color: var(--accent);
+}
+@media (max-width: 640px) {
+  .ssr-link-list { grid-template-columns: 1fr; }
+  .ssr-link-list a { padding: 13px 16px; }
+}

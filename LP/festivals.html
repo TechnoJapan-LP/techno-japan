@@ -1155,9 +1155,14 @@ const observer = new IntersectionObserver((entries) => {
 /* ========== MONTH NAV ========== */
 let currentMonth = 'ALL';
 
+// DATE 未入力のフェスが1件でもあるとページ全体のJSが止まっていたため、
+// 他の日付ヘルパ（formatFestDate / getMonthFromDate / isFuture）と同じく
+// null を返して呼び出し側で除外する。年が取れないフェスは月ナビに出ないだけ。
 function getYearFromDate(dateStr) {
-  const [start] = dateStr.split('/');
-  return parseInt(start.split('-')[0], 10);
+  if (!dateStr) return null;
+  const [start] = String(dateStr).split('/');
+  const y = parseInt(start.split('-')[0], 10);
+  return isNaN(y) ? null : y;
 }
 
 let openYear = null;
@@ -1172,6 +1177,7 @@ function buildMonthNav() {
   sorted.filter(f => !isFuture(f.date)).forEach(f => {
     const y = getYearFromDate(f.date);
     const m = getMonthFromDate(f.date);
+    if (y === null || m < 0) return;   // 日付なし/不正はグループ化から除外
     if (!pastByYear[y]) pastByYear[y] = new Set();
     pastByYear[y].add(m);
   });
@@ -1350,6 +1356,9 @@ function renderFestivals() {
   sorted.filter(f => !isFuture(f.date)).forEach(f => {
     const y = getYearFromDate(f.date);
     const m = getMonthFromDate(f.date);
+    // 日付なしは年月グループを作れない。"null--1" のような偽の見出しを出さないよう除外する。
+    // 詳細ページと静的リンク一覧からは引き続き辿れる。
+    if (y === null || m < 0) return;
     const key = `${y}-${m}`;
     if (!pastByYearMonth[key]) pastByYearMonth[key] = { year: y, month: m, festivals: [] };
     pastByYearMonth[key].festivals.push(f);
