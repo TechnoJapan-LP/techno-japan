@@ -20,8 +20,11 @@
 | `<ul>`/`<li>` を使うファイル | **0** | 4 |
 | Organization.logo | フェス写真 | 実ロゴ |
 | PWAアイコン | 実体なし(404) | 正常 |
+| 記事の共有URL | ハッシュ版 | 静的ページURL |
 
-18件の所見のうち **6件が解消**。残り12件は §6-3 参照。
+20件の所見のうち **7件が解消**、2件が一部解消。残りは §6-3 参照。
+
+**所見自体の訂正が1件ある**（A5）。詳細は [§1-4](#1-4-記事newsが-url-を持たない) 冒頭。
 
 ---
 
@@ -109,6 +112,26 @@ GPTBot / ClaudeBot / PerplexityBot は基本的に JS を実行しないため�
 一度クロールされればグラフは辿れる。欠けているのは「入口」。
 
 ### 1-4. 記事（NEWS）が URL を持たない
+
+> ⚠️ **見出しと結論が誤り。訂正済み（2026-08-01）**
+>
+> - **誤**: NEWS記事がハッシュURLで個別URLを持たない
+> - **正**: **個別URLは存在し、sitemap にも登録済み。**
+>   `articlePage()` (`build-detail-pages.mjs:266`) が `/articles/{id}.html` を
+>   NewsArticle + BreadcrumbList + canonical 付きで生成し、
+>   `generate-sitemap.py:128-131` が sitemap に登録している。
+>   旧ID用のリダイレクトスタブ機構（`REDIRECTS`）も既存。
+>   SPA 側も `canonical` / `og:url` を静的ページのURLへ書き換えており、
+>   Google はフラグメントを無視するため重複URLも発生していない。
+> - **実害**: 共有ボタンが渡すURLがハッシュ版だったため、SNS 経由の
+>   被リンク・メンションが記事ページに集まらず、OGP取得クローラーは
+>   SPA実行前の NEWS 一覧の og を読んでいた（記事ごとのカードが出ない）。
+> - **影響度**: 発見性 → **シェア経路の価値損失**に下方修正。
+> - ✅ 解消済み — `news.html:1336` の共有URLを `articleUrlAbs`（静的ページURL）に変更。
+>   X / Facebook / LINE / コピーの4経路すべてが同一変数を経由するため1行で解決。
+>
+> 監査時に `news.html` のハッシュURLとJS内リンクだけを見て、生成側と sitemap の
+> 記事対応を確認しきれていなかったのが誤りの原因。以下は監査時点の記録。
 
 - `data.js` の `ARTICLES` は **1件のみ**（`transcendence-2025-report`）。`EVENTS` は 0件。
 - `news.html` は SPA で、記事URLは `news.html#article/{id}` という **ハッシュURL**。
@@ -493,7 +516,7 @@ JSON-LD 側も `"inLanguage": "ja"` を宣言しつつ `description` は英語�
 | **A2** | アーティスト 93/97 が空スタブ、記事が 1件のみ（§6-1） | 引用価値 | ⬜ | BIO/画像の入力（Phase C） |
 | **A3** | JAページ本文が全て英語 + `lang="ja"` 誤記（§4-3） | 言語シグナル | 🔶 | ヴェニュー/アーティストに `DESC_JA`/`BIO_JA` 入力 → Publish Now |
 | **A4** | EDITIONS 86件 / LINEUPS 123件が未出力（§6-2） | 一次情報 | ⬜ | 未出力の原因調査 → `Festival.subEvent` 化 |
-| **A5** | NEWS 記事がハッシュURLで個別URLを持たない（§1-4） | 発見性 | ⬜ | 記事の静的ページ化（生成側は対応済み） |
+| **A5** | ~~NEWS 記事がハッシュURLで個別URLを持たない~~ → **訂正**: 個別URLは存在し sitemap 登録済み。実害は共有URLがハッシュ版で SNS 経由の被リンクが記事ページに集まらないこと（§1-4） | ~~発見性~~ → シェア経路の価値損失 | ✅ | — |
 | **B1** | `<ul>` `<table>` `<time>` `<main>` がサイト全体でゼロ（§4-2） | 構造理解 | 🔶 | `<ul>`はハブのみ導入済。LINE UP のリスト化・`<time>`・`<main>` が残 |
 | **B2** | JSON-LD にエンティティ間リンク（`@id`/`url`）が無い（§2-3a） | 知識グラフ | ⬜ | `performer` に `url` を付与（HTML側にリンクは既存） |
 | **B3** | `<img>` に `width`/`height` が 0件（§5-1） | CLS | ⬜ | 生成側で付与 |
@@ -616,7 +639,32 @@ Skipped (webp already in Drive): technogaoka.heic
 
 本番の全URLが 200 を返すことを確認。**欠落参照 0件。**
 
-### 9-3. 残る構造的な課題
+### 9-3. 記事の共有URL
+
+対応した所見: **A5**（所見の記述自体も訂正。[§1-4](#1-4-記事newsが-url-を持たない) 参照）
+
+調査の結果、記事の静的ページ生成・sitemap 登録・canonical はすべて既に実装済みで、
+**残っていたのは共有URLだけ**だった。
+
+```js
+// LP/news.html:1336
+- const url = `https://techno-japan.media/news.html#article/${a.id}`;
++ const url = articleUrlAbs;   // :1280 で定義済みの静的ページURL
+```
+
+X / Facebook / LINE / コピーの4経路すべてが `url` を経由するため1行で解決する。
+headless Chrome で実測し、4経路すべてが
+`https://techno-japan.media/articles/transcendence-2025-report.html` を指し、
+描画後DOMに `news.html#article/` が0件であることを確認済み。
+
+**見送った案:**
+
+- **クリック挙動の変更**（`onclick` の `preventDefault()` 廃止）と **pushState 化** —
+  SPA の回遊体験（一覧に戻る・タグ絞り込み）を優先。canonical で検索側は解決済み。
+- **`#article/` → 静的ページへの強制リダイレクト** — 同上の理由。
+- **`#tag/`** — 一覧の絞り込み状態を表すものなので、ハッシュのままが妥当。
+
+### 9-4. 残る構造的な課題
 
 Drive 側の原本は依然ほぼ `.jpeg/.jpg/.heic` のままで、リポジトリの webp は
 7月22日の一括最適化でコミットされたもの。**Drive とリポジトリが二重管理状態**にある。
@@ -625,7 +673,7 @@ Drive 側の原本は依然ほぼ `.jpeg/.jpg/.heic` のままで、リポジト
 （`Skipped (webp already in repo)`）。
 画像を更新したい場合は **CMS 経由でアップロードする**必要がある。
 
-### 9-4. データ側の判断（記録）
+### 9-5. データ側の判断（記録）
 
 - **boars-phes の削除は意図的**。FESTIVALS 87→86件、JA/EN ページ2枚と sitemap 2URL が削除された
 - `articles/mari-1777827955425.webp` が生成されたが `LP/` から参照されていない。

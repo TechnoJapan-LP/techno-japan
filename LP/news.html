@@ -1330,7 +1330,10 @@ function renderArticleDetail(id) {
     document.head.appendChild(s);
   })();
 
-  const url = `https://techno-japan.media/news.html#article/${a.id}`;
+  // 共有URLは静的ページ（= canonical と同一）にする。ハッシュ版を共有すると
+  // OGP取得クローラーが SPA 実行前の NEWS 一覧の og を読むため、記事ごとの
+  // タイトル・画像でカードが出ず、被リンクも記事ページに集まらない。
+  const url = articleUrlAbs;
   const t = encodeURIComponent(`${a.title} — TECHNO JAPAN`);
   const u = encodeURIComponent(url);
 
