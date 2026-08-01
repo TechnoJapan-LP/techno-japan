@@ -21,6 +21,8 @@ const STATIC_PAGES = [
   { path: '/artists.html', priority: '0.8', changefreq: 'weekly' },
   { path: '/venues.html', priority: '0.8', changefreq: 'weekly' },
   { path: '/news.html', priority: '0.9', changefreq: 'daily' },
+  { path: '/submit.html', priority: '0.5', changefreq: 'monthly' },
+  { path: '/en/submit.html', priority: '0.5', changefreq: 'monthly' },
 ];
 
 // Load data.js

@@ -21,6 +21,8 @@ STATIC_PAGES = [
     {"path": "/venues.html", "priority": "0.8", "changefreq": "weekly"},
     {"path": "/news.html", "priority": "0.9", "changefreq": "daily"},
     {"path": "/about.html", "priority": "0.5", "changefreq": "monthly"},
+    {"path": "/submit.html", "priority": "0.5", "changefreq": "monthly"},
+    {"path": "/en/submit.html", "priority": "0.5", "changefreq": "monthly"},
 ]
 
 

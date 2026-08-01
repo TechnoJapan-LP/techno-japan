@@ -202,7 +202,10 @@ function navHtml(lang, altHref) {
 </div>`;
 }
 
-const FOOTER = `<footer>
+function footerHtml(lang) {
+  const submissionHref = lang === 'en' ? '/en/submit.html' : '/submit.html';
+  const submissionLabel = lang === 'en' ? 'Festival Submission' : 'FESTIVAL 掲載申請';
+  return `<footer>
   <div class="footer-top">
     <div class="footer-logo">TECHNO JAPAN</div>
     <div class="footer-links">
@@ -212,10 +215,12 @@ const FOOTER = `<footer>
       <a href="/artists.html">ARTISTS</a>
       <a href="/venues.html">VENUES</a>
       <a href="/about.html">ABOUT</a>
+      <a href="${submissionHref}">${submissionLabel}</a>
     </div>
     <div class="footer-copy">&copy; 2025 TECHNO JAPAN. ALL RIGHTS RESERVED.</div>
   </div>
 </footer>`;
+}
 
 const GA = `<script>
 (function(){
@@ -278,7 +283,7 @@ ${hreflang}
 <body>
 ${navHtml(lang, altHref)}
 ${body}
-${FOOTER}
+${footerHtml(lang)}
 ${GA}
 <script src="/common.js?v=2" defer></script>${extraScripts}
 </body>
