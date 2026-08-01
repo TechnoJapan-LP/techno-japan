@@ -23,6 +23,7 @@ on:
       - 'scripts/build-detail-pages.mjs'
       - 'scripts/check_regressions.py'
       - 'scripts/check_hub_pages.py'
+      - 'scripts/check_asset_versions.py'
       - '.github/regression-thresholds.yml'
       - '.github/workflows/regression-check.yml'
   workflow_dispatch:
@@ -36,6 +37,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0        # merge-base を取るため全履歴が要る
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -65,6 +68,13 @@ jobs:
           else
             echo "生成物はコミット内容と一致しています。"
           fi
+
+      # JS/CSS を変えたのに ?v を据え置くと、sw.js の cache-first により
+      # 一度取得したブラウザへ永久に届かない。cms.js は実際に 26回分が
+      # 届いていなかった（AUDIT §9-11）。生成物ではなくソースの検査なので
+      # ビルドの前後どちらでもよいが、失敗を早く出すためここに置く。
+      - name: Check asset cache busting
+        run: python3 scripts/check_asset_versions.py --base origin/${{ github.base_ref || 'main' }}
 
       - name: Check regression thresholds
         run: python3 scripts/check_regressions.py
