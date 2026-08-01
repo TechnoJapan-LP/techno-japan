@@ -84,6 +84,11 @@
 }
 .detail-body p { margin-bottom: 24px; }
 
+.festival-summary {
+  margin: -8px 0 24px; font-family: var(--font-body); font-size: clamp(16px, 2.2vw, 19px);
+  font-weight: 300; line-height: 1.75; color: rgba(240,237,232,0.9);
+}
+
 .detail-facts { margin: 40px 0; border-top: 1px solid rgba(240,237,232,0.1); }
 .detail-facts > div {
   display: flex; gap: 24px; padding: 14px 0;
@@ -222,6 +227,14 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 .editions-table td { font-family: var(--font-body); font-weight: 300; font-size: 13px; color: rgba(240,237,232,0.85); }
 .editions-table time { white-space: nowrap; }
 .editions-table a { color: var(--accent); border-bottom: 1px solid rgba(255,45,45,0.3); }
+
+/* ===== FESTIVAL FAQ ===== */
+.festival-faq { margin-top: 56px; }
+.festival-faq dl { margin: 0; border-top: 1px solid rgba(240,237,232,0.12); }
+.festival-faq dl > div { padding: 20px 0; border-bottom: 1px solid rgba(240,237,232,0.1); }
+.festival-faq dt { font-family: var(--font-body); font-size: 16px; font-weight: 400; line-height: 1.6; }
+.festival-faq dd { margin: 8px 0 0; font-family: var(--font-body); font-size: 14px; font-weight: 300; line-height: 1.8; color: rgba(240,237,232,0.78); }
+.festival-faq dd a { color: var(--accent); border-bottom: 1px solid rgba(255,45,45,0.3); overflow-wrap: anywhere; }
 
 /* ARTICLE FX styles → article-fx.css に移設（news.html と共有するため） */
 

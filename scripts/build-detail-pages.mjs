@@ -478,6 +478,95 @@ function festivalLineupsHtml(editions, lineupsByEdition, artistsById, lang) {
   return `<section class="festival-lineups"><h2>LINE UP</h2>${body}</section>`;
 }
 
+function festivalDateText(ed, lang) {
+  const start = String(ed?.DATE_START || '');
+  const end = String(ed?.DATE_END || '');
+  if (!ISO_DATE.test(start)) return '';
+  const format = (value) => {
+    const [year, month, day] = value.split('-').map(Number);
+    return lang === 'en'
+      ? new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }).format(new Date(Date.UTC(year, month - 1, day)))
+      : `${year}年${month}月${day}日`;
+  };
+  if (!ISO_DATE.test(end) || end === start) return format(start);
+  return lang === 'en' ? `${format(start)} to ${format(end)}` : `${format(start)}から${format(end)}`;
+}
+
+function festivalAreaText(festival, edition, lang) {
+  const parts = [edition?.PREF, festival.city]
+    .map((value) => String(value || '').trim())
+    .filter((value, index, values) => value && values.findIndex((other) => other.toLowerCase() === value.toLowerCase()) === index);
+  return lang === 'en' ? parts.reverse().join(', ') : parts.join('');
+}
+
+function festivalGenreText(festival, lang) {
+  const genres = (Array.isArray(festival.genre) ? festival.genre : String(festival.genre || '').split('/'))
+    .map((genre) => String(genre).trim())
+    .filter(Boolean);
+  if (!genres.length) return '';
+  return lang === 'en' ? genres.join(' / ').toLowerCase() : genres.join('／');
+}
+
+function festivalSummary(festival, edition, name, lang) {
+  const area = festivalAreaText(festival, edition, lang);
+  const genre = festivalGenreText(festival, lang);
+  const date = festivalDateText(edition, lang);
+  const venue = String(edition?.LOCATION || '').trim();
+  if (lang === 'en') {
+    const kind = genre ? `${genre} festival` : (festival.type === 'rave' ? 'rave' : 'festival');
+    const first = `${name} is a ${kind}${area ? ` held in ${area}` : ''}.`;
+    const second = date ? `The latest listed edition is ${date}${venue ? ` at ${venue}` : ''}.` : '';
+    return [first, second].filter(Boolean).join(' ');
+  }
+  const kind = genre ? `${genre}のフェスティバル` : (festival.type === 'rave' ? 'レイヴ' : 'フェスティバル');
+  const first = `${name}は、${area ? `${area}で開催される` : ''}${kind}です。`;
+  const second = date ? `最新の開催回は${date}${venue ? `、${venue}で` : ''}の開催です。` : '';
+  return [first, second].filter(Boolean).join('');
+}
+
+function festivalFaqItems(editions, lineupsByEdition, artistsById, name, lang) {
+  const current = editions[0];
+  if (!current) return [];
+  const date = festivalDateText(current, lang);
+  const venueParts = [current.LOCATION, current.ADDRESS, current.PREF]
+    .map((value) => String(value || '').trim())
+    .filter((value, index, values) => value && values.indexOf(value) === index);
+  const rows = lineupsByEdition.get(current.EDITION_ID) || [];
+  const acts = [...rows]
+    .sort((a, b) => Number(a.SORT || 0) - Number(b.SORT || 0))
+    .map((row) => {
+      if (isCompositeLineup(row)) return String(row.ACT_LABEL || '').trim();
+      const id = lineupArtistIds(row)[0];
+      const artist = id ? artistsById.get(id) : null;
+      return artist ? (lang === 'en' ? (artist.name_en || artist.name) : artist.name) : String(row.ACT_LABEL || '').trim();
+    })
+    .filter(Boolean);
+  const items = [];
+  if (date) items.push(lang === 'en'
+    ? { question: `When is ${name} held?`, answer: `The latest listed date for ${name} is ${date}.` }
+    : { question: `${name}の開催日はいつですか？`, answer: `${name}の最新の開催日は${date}です。` });
+  if (venueParts.length) items.push(lang === 'en'
+    ? { question: `Where is ${name} held?`, answer: `${name} is held at ${venueParts.join(', ')}.` }
+    : { question: `${name}の会場はどこですか？`, answer: `${name}の会場は${venueParts.join('、')}です。` });
+  if (current.TICKETURL) items.push(lang === 'en'
+    ? { question: `Where can I buy tickets for ${name}?`, answer: `Tickets for ${name} are available at ${current.TICKETURL}.`, url: current.TICKETURL }
+    : { question: `${name}のチケットはどこで買えますか？`, answer: `${name}のチケットは${current.TICKETURL}で購入できます。`, url: current.TICKETURL });
+  if (acts.length) items.push(lang === 'en'
+    ? { question: `Which artists are playing at ${name}?`, answer: `The lineup includes ${acts.join(', ')}.` }
+    : { question: `${name}にはどんなアーティストが出演しますか？`, answer: `出演アーティストは${acts.join('、')}です。` });
+  return items;
+}
+
+function festivalFaqHtml(items, lang) {
+  if (!items.length) return '';
+  const answerHtml = (item) => item.url
+    ? esc(item.answer).replace(esc(item.url), `<a href="${esc(item.url)}" target="_blank" rel="noopener">${esc(item.url)}</a>`)
+    : esc(item.answer);
+  return `<section class="festival-faq"><h2>${lang === 'en' ? 'FREQUENTLY ASKED QUESTIONS' : 'よくある質問'}</h2><dl>${items.map((item) =>
+    `<div><dt>${esc(item.question)}</dt><dd>${answerHtml(item)}</dd></div>`
+  ).join('')}</dl></section>`;
+}
+
 function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articles, lang = 'ja') {
   const prefix = lang === 'en' ? '/en' : '';
   const altHref = (lang === 'ja' ? '/en' : '') + `/festivals/${f.id}.html`;
@@ -510,6 +599,10 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
   );
   const editionsHtml = editionsTable(editions, lang);
   const lineupsHtml = festivalLineupsHtml(editions, lineupsByEdition, artistsById, lang);
+  const currentEdition = editions[0];
+  const summary = festivalSummary(f, currentEdition, name, lang);
+  const faqItems = festivalFaqItems(editions, lineupsByEdition, artistsById, name, lang);
+  const faqHtml = festivalFaqHtml(faqItems, lang);
   const performers = editions.flatMap((ed) => lineupsByEdition.get(ed.EDITION_ID) || [])
     .map((row) => lineupEntity(row, artistsById, lang)).filter(Boolean);
 
@@ -544,10 +637,11 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
   <div class="detail-inner">
     <a class="article-back" href="/festivals.html"><span class="arrow"></span> ALL FESTIVALS</a>
     <h1>${esc(name)}</h1>
+    ${summary ? `<p class="festival-summary">${esc(summary)}</p>` : ''}
     ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
     ${f.image || f.flyer ? `<div class="detail-hero"><img src="/${String(f.image || f.flyer).replace(/^\//, '')}" alt="${esc(name)}"></div>` : ''}
     ${bilingualBody(f.desc, f.desc_en, lang)}
-    ${editionsHtml}${lineupsHtml}${relatedHtml}
+    ${editionsHtml}${lineupsHtml}${faqHtml}${relatedHtml}
     ${(() => { // 回遊: 同じエリアの他のフェス
       const others = XLINK.fests.filter((x) => x.id !== f.id && x.city && f.city && String(x.city).toLowerCase() === String(f.city).toLowerCase()).slice(0, 6);
       if (!others.length) return '';
@@ -557,7 +651,16 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
   </div>
 </article>`;
 
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'festivals'] : ['festivals']), `${f.id}.html`), html: page({ title, desc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('FESTIVALS', '/festivals.html', name, canonical)], body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT }) };
+  const faqLd = faqItems.length ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqItems.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: { '@type': 'Answer', text: item.answer },
+    })),
+  } : null;
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'festivals'] : ['festivals']), `${f.id}.html`), html: page({ title, desc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('FESTIVALS', '/festivals.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT }) };
 }
 
 /* ---------- アーティストページ ---------- */
