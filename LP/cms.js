@@ -2598,7 +2598,10 @@ function renderList(section, rows){
   const trs=rows.map(r=>{
     let prefix='';
     if(showThumb){
-      const img=String(r.image||'').trim();
+      // シートの生値は Drive 原本の拡張子（.jpeg/.jpg）のままのことがあるが、
+      // 配信されるのは webp のみ。生値で <img src> にすると 404 になり ✕ が出る。
+      // Publish 時と同じ webp() を通す（date 列に fmtDate() を通すのと同じ理由）。
+      const img=webp(String(r.image||'').trim());
       prefix+= img
         ? '<td class="thumb-cell"><img class="list-thumb" src="'+esc(img)+'" loading="lazy" onerror="this.outerHTML=\'<span class=list-thumb-none>✕</span>\'"></td>'
         : '<td class="thumb-cell"><span class="list-thumb-none">—</span></td>';
