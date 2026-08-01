@@ -327,7 +327,7 @@ function renderVenuePreview(){
   const imagePath=g('v-image');
   const imageUrl=g('v-imageUrl');
   const pvImg=document.querySelector('#preview-v-image img');
-  const imgSrc=(pvImg&&pvImg.src)||(imagePath&&imagePath.startsWith('http')?imagePath:imageUrl||imagePath||'');
+  const imgSrc=resolveImgSrc(imagePath,imageUrl,pvImg);
   const genres=Array.from(document.querySelectorAll('#v-genre .chip.selected')).map(c=>c.textContent.trim());
   const tagsHtml=genres.map(g=>`<span class="pv-tag">${esc(g)}</span>`).join('');
   const linksHtml=[
@@ -364,7 +364,7 @@ function renderArtistPreview(){
   const imagePath=g('a-image');
   const imageUrl=g('a-imageUrl');
   const pvImg=document.querySelector('#preview-a-image img');
-  const imgSrc=(pvImg&&pvImg.src)||(imagePath&&imagePath.startsWith('http')?imagePath:imageUrl||imagePath||'');
+  const imgSrc=resolveImgSrc(imagePath,imageUrl,pvImg);
   const linksHtml=[
     website?`<a href="${esc(website)}" class="pv-link" target="_blank">WEBSITE →</a>`:'',
     instagram?`<a href="${esc(instagram)}" class="pv-link" target="_blank">INSTAGRAM →</a>`:'',
@@ -414,15 +414,8 @@ function renderFestivalPreview(){
   // Try multiple image sources: uploaded preview > Drive URL > URL input > local path
   const pvImg=document.querySelector('#preview-f-image img');
   const pvFlyer=document.querySelector('#preview-f-flyer img');
-  const resolveImg=function(path,urlField,pvEl){
-    if(pvEl&&pvEl.src)return pvEl.src;
-    if(path&&path.startsWith('http'))return path;
-    if(urlField)return urlField;
-    if(path)return path;
-    return '';
-  };
-  const imgSrc=resolveImg(imagePath,imageUrl,pvImg);
-  const flyerSrc=resolveImg(flyerPath,flyerUrl,pvFlyer);
+  const imgSrc=resolveImgSrc(imagePath,imageUrl,pvImg);
+  const flyerSrc=resolveImgSrc(flyerPath,flyerUrl,pvFlyer);
 
   // Genre
   const genreEls=document.querySelectorAll('#f-genre .chip.selected');
@@ -1280,7 +1273,8 @@ function syncImagePos(prefix){
   const btns = document.querySelectorAll(formId+' .img-pos-btn');
   btns.forEach(b => b.classList.toggle('active', b.dataset.pos === val));
   const prev = document.getElementById(prefix+'-imagePosPreview');
-  const img = (document.getElementById(prefix+'-image')?.value || '').trim();
+  // 配信は webp のみ。生値のままだと 404 で位置調整のプレビューが空になる。
+  const img = webp((document.getElementById(prefix+'-image')?.value || '').trim());
   if (img && prev) {
     prev.style.display = 'block';
     prev.style.backgroundImage = `url('${img}')`;
@@ -2196,7 +2190,10 @@ function fallbackToDriveImage(img){
   if(!m) return showMissing();
   fetch(GAS_URL+'?action=get_images&type='+encodeURIComponent(m[1]))
     .then(r=>r.json()).then(d=>{
-      const hit = ((d && d.status==='ok' && d.images) || []).find(i => i.name === m[2]);
+      // Drive 側のファイル名は原本のまま（.jpeg）のことも webp 変換後のこともある。
+      // data-path は生値なので、両方の名前で探す。
+      const want = [m[2], webp(m[2])];
+      const hit = ((d && d.status==='ok' && d.images) || []).find(i => want.includes(i.name));
       if(hit && hit.url){
         img.onerror = showMissing;      // Drive URL でも失敗したら諦める
         img.src = driveThumb(hit.url, 400);
@@ -2214,12 +2211,15 @@ function showCurrentImage(previewId, imagePath, clearCallExpr){
   const pendingUrl = pendingImagePreviews.get(imagePath) || '';
   // サイト上に無ければ Drive の実物へフォールバック（同期待ちを「消えた」と誤解させない）
   const errHandler = "fallbackToDriveImage(this)";
+  // 配信されるのは webp のみなので表示は webp() を通す。
+  // data-path は Drive 原本を名前で引くためのキーなので生値のまま渡す
+  // （Drive 側は .jpeg のままのことがある。fallbackToDriveImage が両方の名前を試す）。
   el.innerHTML =
-    '<img src="'+esc(pendingUrl||imagePath)+'" data-path="'+esc(imagePath)+'" alt="current" onerror="'+errHandler+'" style="max-height:140px">' +
+    '<img src="'+esc(pendingUrl||webp(imagePath))+'" data-path="'+esc(imagePath)+'" alt="current" onerror="'+errHandler+'" style="max-height:140px">' +
     '<div class="img-missing-placeholder" style="display:none;width:200px;height:120px;background:#1a1a1a;border:1px dashed #444;border-radius:4px;align-items:center;justify-content:center;color:#888;font-family:var(--font-mono);font-size:.7rem;text-align:center;padding:8px;line-height:1.4">📁 画像ファイルが<br>見つかりません<br><span style="opacity:.6">(Drive 同期待ち or 手動で再 upload)</span></div>' +
     (pendingUrl
       ? uploadCompleteInfo(imagePath, '')
-      : '<div class="preview-info">現在の画像 — '+esc(imagePath)+'</div>') +
+      : '<div class="preview-info">現在の画像 — '+esc(webp(imagePath))+'</div>') +
     '<div class="preview-info"><button type="button" class="btn btn-sm btn-accent" style="padding:2px 8px;font-size:.65rem" onclick="'+clearCallExpr+'">✕ Remove</button></div>';
 }
 function clearImageField(prefix, opts){
@@ -4577,6 +4577,17 @@ function q(s){return String(s||'').replace(/\\/g,'\\\\').replace(/"/g,'\\"').rep
 // 画像は配信フォーマットの .webp に正規化（サイトは最適化済み .webp を配信）。
 // .webp が無い画像は元々 .jpg/.png も欠落しているため、変換で悪化しない。
 function webp(p){return String(p||'').replace(/\.(jpe?g|png)$/i,'.webp')}
+// プレビューに出す画像 URL を決める（venue / artist / festival の3プレビュー共通）。
+// path はシートの生値で、拡張子が Drive 原本のまま（.jpeg/.jpg）のことがあるが、
+// サイトへ配信されるのは webp のみ。サイト内の相対パスのときだけ webp() を通す。
+// アップロード直後の DOM 上の src と、http(s) の外部URLはそのまま使う（変換対象外）。
+function resolveImgSrc(path,urlField,pvEl){
+  if(pvEl&&pvEl.src)return pvEl.src;
+  if(path&&path.startsWith('http'))return path;
+  if(urlField)return urlField;
+  if(path)return webp(path);
+  return '';
+}
 // Google Drive の lh3 URL は末尾に =wN を付けると N px のサムネイルを配信する。
 // 画像ライブラリのグリッド等、原寸不要な場面で帯域を節約する。lh3 以外は無変換。
 function driveThumb(url, w){
