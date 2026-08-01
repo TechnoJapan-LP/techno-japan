@@ -14,7 +14,8 @@ const ARTISTS = [
     country: "JAPAN",
     genre: "TECHNO",
     image: "images/artists/dj-nobu.webp",
-    bio: "DJ Nobu is a Tokyo-based techno artist deeply embedded in Japan's underground electronic music scene. Known for his precise technical approach and atmospheric sound design, he represents the evolution of Japanese techno with a distinctly minimalist aesthetic.",
+    bio: "DJ Nobuは東京を拠点に活動するテクノアーティストで、日本のアンダーグラウンドな電子音楽シーンに深く根ざしている。精緻な技術的アプローチと空間的なサウンドデザインで知られ、ミニマルな美学を軸に日本のテクノの展開を体現している。",
+    bio_en: "DJ Nobu is a Tokyo-based techno artist deeply embedded in Japan's underground electronic music scene. Known for his precise technical approach and atmospheric sound design, he represents the evolution of Japanese techno with a distinctly minimalist aesthetic.",
     links: {
       instagram: "https://www.instagram.com/dj_nobu_ft/",
       soundcloud: "https://soundcloud.com/djnobu_bitta",
@@ -29,7 +30,8 @@ const ARTISTS = [
     genre: "TECHNO",
     image: "images/artists/wata-igarashi.webp",
     imagePosition: "center top",
-    bio: "Tokyo-based producer and DJ crafting hypnotic, psychedelic techno. Releases on Midgar, The Bunker NY, and his own Meditate label. His sound is a deep, spiraling journey — transcendent and relentless.",
+    bio: "東京を拠点とするプロデューサー/DJ。ヒプノティックでサイケデリックなテクノを手がける。Midgar、The Bunker NY、そして自身のレーベルMeditateから作品をリリース。深く渦を巻くようなサウンドは、超越的でありながら容赦がない。",
+    bio_en: "Tokyo-based producer and DJ crafting hypnotic, psychedelic techno. Releases on Midgar, The Bunker NY, and his own Meditate label. His sound is a deep, spiraling journey — transcendent and relentless.",
     links: {
       instagram: "https://www.instagram.com/wataigarashi/",
       soundcloud: "https://soundcloud.com/wataigarashi",
@@ -43,7 +45,8 @@ const ARTISTS = [
     country: "JAPAN",
     genre: "HOUSE / MINIMAL",
     image: "images/artists/kotsu.webp",
-    bio: "Osaka selector with deep roots in the Kansai underground. Fluid sets moving between deep house, minimal, and micro-house. A fixture at CIRCUS Osaka and a regular across Japan's club circuit.",
+    bio: "関西アンダーグラウンドに深く根ざした大阪のセレクター。ディープハウス、ミニマル、マイクロハウスの間を自在に行き来するセットを展開する。CIRCUS Osakaの常連であり、日本各地のクラブサーキットにも定期的に登場している。",
+    bio_en: "Osaka selector with deep roots in the Kansai underground. Fluid sets moving between deep house, minimal, and micro-house. A fixture at CIRCUS Osaka and a regular across Japan's club circuit.",
     links: {
       instagram: "https://www.instagram.com/kotsu_dj/",
       soundcloud: "https://soundcloud.com/kotsu",
@@ -56,7 +59,8 @@ const ARTISTS = [
     country: "JAPAN",
     genre: "TECHNO",
     image: "images/artists/ken-ishii.webp",
-    bio: "Pioneer of Japanese techno since the early '90s. Internationally recognized through releases on R&S Records and Sublime. A living legend whose influence on Japan's electronic music scene is immeasurable.",
+    bio: "90年代初頭から日本のテクノを牽引してきたパイオニア。R&S RecordsやSublimeからのリリースを通じて国際的に認知される。日本の電子音楽シーンに与えた影響は計り知れない、生けるレジェンド。",
+    bio_en: "Pioneer of Japanese techno since the early '90s. Internationally recognized through releases on R&S Records and Sublime. A living legend whose influence on Japan's electronic music scene is immeasurable.",
     links: {
       instagram: "https://www.instagram.com/kenishiiofficial/",
       soundcloud: "https://soundcloud.com/ken-ishii-70drums",
@@ -983,7 +987,7 @@ const FESTIVALS = [
     id: "body-soul",
     type: "festival",
     name: "Body&SOUL Live in Japan",
-    date: "2025-06-07",
+    date: "2026-06-07",
     city: "Tokyo",
     genre: ["HOUSE"],
     desc: "Body&SOULが、ニューヨーク仕込みのレジェンダリーなディープハウス／ソウルフル・ダンスミュージックの精神を東京に持ち込む。90年代初頭からこのブランドを特徴づけてきた、質の高いサウンドへのこだわり、親密な雰囲気、そして音楽とダンスの間に生まれるスピリチュアルなつながりを、このイベントも忠実に受け継いでいる。",
