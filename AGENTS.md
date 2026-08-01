@@ -19,6 +19,17 @@
 - `festivals.html` 等の詳細ビューに canonical や JSON-LD が無いのは**意図した設計**であり、
   実装漏れではない。詳細は [AUDIT_TECHNO_JAPAN.md](AUDIT_TECHNO_JAPAN.md) §9-15。
 
+## HTML を正規表現で扱うときの注意
+
+- **閉じタグの並びを境界にしない。** 例: `<span class="nav-lang">[\s\S]*?</span></span>`
+  は言語トグルの JA 側にマッチしない。現在言語は `<span>`、相手言語は `<a>` で
+  出すため、JA は `</a></span>`、EN は `</span></span>` で終わり構造が非対称。
+  1日に2回踏んだ（生成コードで152行を誤削除／検証コードで誤検出）。
+- 代わりに **生成側が出す固定文字列をそのまま探す**か、開始タグからタグ名を取って
+  対応する閉じタグを探す。詳細は [AUDIT_TECHNO_JAPAN.md](AUDIT_TECHNO_JAPAN.md) §9-16。
+- 生成物を機械置換するときは、置換後に必ず **JA と EN の行数を比較**する。
+  行数が変われば何かを巻き込んでいる。
+
 ## ビルド運用の注意
 
 - 再生成(build-detail-pages.mjs)の前に必ず git pull する。

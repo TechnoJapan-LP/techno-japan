@@ -1021,3 +1021,49 @@ GENRE には §1.3 の正規リストがあるが、タグ全体の規約は未�
 **次に触る人へ**: `festivals.html` 等の詳細ビューに canonical や JSON-LD が
 無いのは、**実装漏れではなく意図した設計**である。「記事だけ対応済みだから
 揃えよう」と考えたら、まずこの節を読むこと。
+
+### 9-16. 【教訓】nav-lang の境界判定に `</span></span>` を使わない
+
+**同じ間違いを1日に2回した。** 3回目を防ぐため、事実を具体的に残す。
+
+言語トグルのマークアップは JA と EN で**構造が非対称**である。
+
+```html
+<!-- JA: 最後が </a></span> -->
+<span class="nav-lang"><span class="nav-lang-cur">JA</span><span class="nav-lang-sep">/</span><a href="/en/x.html">EN</a></span>
+
+<!-- EN: 最後が </span></span> -->
+<span class="nav-lang"><a href="/x.html">JA</a><span class="nav-lang-sep">/</span><span class="nav-lang-cur">EN</span></span>
+```
+
+現在言語は `<span>`、相手言語は `<a>` で出すため、閉じタグの並びが揃わない。
+したがって次の正規表現は **JA 側で意図どおり動かない**。
+
+```js
+/<span class="nav-lang">[\s\S]*?<\/span><\/span>/
+```
+
+**1回目（生成コード）**: EN ハブ生成でトグルを差し替えようとしてこれを使った。
+JA 側は `</span></span>` が nav-lang 内に現れないため、非貪欲でも**10KB 先**の
+別要素までマッチし、詳細ビューのマークアップ152行を巻き込んで削除した。
+`artist-back-btn` が消えて `Cannot read properties of null` が出たことで発覚
+（headless Chrome の Uncaught 検出。静的HTML検査では通り抜けていた）。
+
+**2回目（検証コード）**: 本番確認でトグルの有無を調べるのに同じ形を使い、
+JA 側だけマッチせず「JA トップに言語トグルが無い」と**誤報告した**。
+実際は6ハブすべてに存在し、正常に機能していた。
+
+**対策**: 生成側が出す固定文字列をそのまま探す。生成と検証で同じ定数を見れば、
+構造が変わってもズレない。`scripts/check_regressions.py` の
+`hub_language_toggles` はこの方針で実装してある。
+
+```python
+f'<span class="nav-lang-cur">{cur}</span>' in html
+and f'href="{other_href}">{other_lang}</a>' in html
+```
+
+**一般化**: このリポジトリの HTML は手書きで、同種の要素でも状態によって
+タグ構成が変わる箇所がある。閉じタグの並びを境界に使う正規表現は、
+片方の状態でしか検証していないと静かに壊れる。
+固定文字列か、開始タグからタグ名を取って対応する閉じタグを探す方式にする
+（後者は §9-11 のコンテナ抽出で採用した）。
