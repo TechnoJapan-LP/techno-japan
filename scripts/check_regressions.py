@@ -142,7 +142,7 @@ def measure():
 
     # EN ハブから JA 詳細への漏れ。機械生成なので置換漏れが起きうる。
     leaks = 0
-    for name in ("festivals", "artists", "venues", "news"):
+    for name in ("index", "festivals", "artists", "venues", "news"):
         f = LP / "en" / f"{name}.html"
         if f.exists():
             leaks += len(re.findall(
@@ -150,7 +150,7 @@ def measure():
     m["en_hub_leaks_to_ja"] = leaks
 
     # hreflang を持つハブ（ディレクトリ直下のみ。詳細ページは元から持っている）
-    hub_names = ["festivals.html", "artists.html", "venues.html", "news.html", "about.html"]
+    hub_names = ["index.html", "festivals.html", "artists.html", "venues.html", "news.html", "about.html"]
     m["hreflang_hub_pages"] = sum(
         1 for d in (LP, LP / "en") for n in hub_names
         if (d / n).exists() and "hreflang" in read(d / n)

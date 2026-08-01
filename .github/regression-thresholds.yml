@@ -180,8 +180,8 @@ metrics:
       生成物を検査して 0 を維持する。
 
   hreflang_hub_pages:
-    description: hreflang を持つハブページ数（JA 4 + EN 4 + about 2）
-    min: 10
+    description: hreflang を持つハブページ数（JA 5 + EN 5 = index/festivals/artists/venues/news/about）
+    min: 12
     target: null              # ハブが増えれば増える
     note: >-
       2026-08-02 まで JA ハブ8枚に hreflang が1本も無かった。
@@ -270,4 +270,10 @@ hub_pages:
   en/news.html:
     marker: feed-card
     min_markers: 1                 # 実測 1
+    min_container_bytes: 0
+  en/index.html:
+    # TOP は他ハブと構成が違い、<main> もカード用の共通クラスも持たない。
+    # 静的に必ず存在するセクション見出し(.section-head)を存在確認に使う。
+    marker: section-head
+    min_markers: 4                 # 実測 4（NEWS / FESTIVALS / ARTISTS / VENUES）
     min_container_bytes: 0

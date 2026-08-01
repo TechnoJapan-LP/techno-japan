@@ -921,7 +921,7 @@ function hubLinkList(items, dirName, labelFor) {
    置換のほうが確実で、JA を直せば EN が自動追随する（二重管理が起きない）。 */
 
 // EN 版が実在するページ。ここに無いものは JA を指したままにする（404 を作らない）。
-const EN_PAGES = new Set(['about.html', 'submit.html', 'festivals.html', 'artists.html', 'venues.html', 'news.html']);
+const EN_PAGES = new Set(['index.html', 'about.html', 'submit.html', 'festivals.html', 'artists.html', 'venues.html', 'news.html']);
 
 // EN ハブの meta description（JA は日英併記なので英語のみに差し替える）
 const EN_HUB_DESC = {
@@ -929,6 +929,7 @@ const EN_HUB_DESC = {
   'artists.html': "DJs and artists shaping Japan's underground techno and house scene. Profiles, genres and festival appearances.",
   'venues.html': "Clubs, warehouses and music bars across Japan. The venues that define the country's underground electronic music scene.",
   'news.html': "Stories, interviews and reports from Japan's underground techno and house scene.",
+  'index.html': "Japan's underground techno & house — stories, festivals, artists, venues.",
 };
 
 // 本文に残る日本語の固定文言（データ由来の日本語は対象外）
@@ -944,9 +945,13 @@ function enHubFromJa(html, page) {
   s = s.replace(/<html lang="[^"]*"/, '<html lang="en"');
   s = s.replace(/(property="og:locale" content=")[^"]*/, '$1en_US');
 
-  // 正規URL と OGP URL を /en/ 側へ
-  s = s.replace(new RegExp(`(rel="canonical" href=")${abs(page)}"`), `$1${BASE}/en/${page}"`);
-  s = s.replace(new RegExp(`(property="og:url" content=")${abs(page)}"`), `$1${BASE}/en/${page}"`);
+  // 正規URL と OGP URL を /en/ 側へ。
+  // index.html だけ JA 側が "https://techno-japan.media/" とディレクトリ表記なので、
+  // abs() が返す末尾スラッシュ形と一致させる。EN 側は /en/index.html を明示する
+  // （/en/ でも配信されるが、canonical は1つに定めたいので実ファイル名にする）。
+  const jaUrl = abs(page);
+  s = s.replace(new RegExp(`(rel="canonical" href=")${jaUrl}"`), `$1${BASE}/en/${page}"`);
+  s = s.replace(new RegExp(`(property="og:url" content=")${jaUrl}"`), `$1${BASE}/en/${page}"`);
 
   // description 系を英語のみに
   const d = EN_HUB_DESC[page];
@@ -998,7 +1003,8 @@ function enHubFromJa(html, page) {
 }
 
 function hreflangPair(page, self) {
-  const ja = `${BASE}/${page}`;
+  // index の JA 版は "/" で配信される（canonical もそう書かれている）ので合わせる
+  const ja = page === 'index.html' ? `${BASE}/` : `${BASE}/${page}`;
   const en = `${BASE}/en/${page}`;
   return [
     `<link rel="alternate" hreflang="${self}" href="${self === 'ja' ? ja : en}">`,
@@ -1016,7 +1022,9 @@ function fixJaHub(fileName) {
 
   s = s.replace(/<html lang="[^"]*"/, '<html lang="ja"');
 
-  const canon = `<link rel="canonical" href="${BASE}/${fileName}">`;
+  const canon = fileName === 'index.html'
+    ? `<link rel="canonical" href="${BASE}/">`
+    : `<link rel="canonical" href="${BASE}/${fileName}">`;
   if (s.includes(canon) && !s.includes('hreflang')) {
     s = s.replace(canon, `${canon}\n${hreflangPair(fileName, 'ja')}`);
   }
@@ -1188,7 +1196,7 @@ function main() {
 
   // JA ハブを正してから EN を作る。順序が逆だと、直す前の JA から EN が生まれる。
   // 静的リンクの差し替え（上の hubCounts）も EN へ引き継ぐため、この位置に置く。
-  const HUBS = ['festivals.html', 'artists.html', 'venues.html', 'news.html'];
+  const HUBS = ['index.html', 'festivals.html', 'artists.html', 'venues.html', 'news.html'];
   const jaFixed = HUBS.filter(fixJaHub);
   const enWritten = HUBS.filter(writeEnHub);
 
