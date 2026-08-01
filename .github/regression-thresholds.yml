@@ -27,53 +27,56 @@
 #   到達すべき値は target に分けて記録している。
 
 version: 1
-baseline_commit: 91491eb   # Regenerate lineup and appearance pages
+baseline_commit: e763cbf   # Regenerate festival pages with FAQ and refreshed data
 baseline_measured_at: 2026-08-01
 
 metrics:
   festival_performer_pages:
     description: JSON-LD の Festival.performer を1件以上持つフェスページ数（JA）
-    min: 8
+    min: 9
     target: 10                # 【本来の目標値】旧実装で LINE UP が出ていたフェス数
     note: >-
-      min(8) < target(10) の差はデータ未整備が原因。
-      festival-de-frue と osukinidouzo は lineups.json に行が存在しない
-      （旧実装は FESTIVALS.LINEUP 文字列から直接出力していたため出ていた）。
-      この2件を EDITIONS/LINEUPS に登録すれば target に到達する。
-      内訳: 99flags, ala, arch, matricaria, paramount, rainbow-disco-club,
-      transcendence, waifu
+      2026-08-01: data/*.json を再生成して 8 → 9。ID是正により
+      festival-de-frue の出演者が解決され performer が付いた。
+      target(10) との差 1件は osukinidouzo（lineups.json に行が無い）。
+      内訳: 99flags, ala, arch, festival-de-frue, matricaria, paramount,
+      rainbow-disco-club, transcendence, waifu
 
   festival_performer_total:
     description: Festival.performer の総件数（JA、全フェス合計）
-    min: 68
+    min: 75
     target: null              # ARTIST_ID の解決状況に依存するため固定目標を置かない
     note: >-
-      lineups.json 123行のうち ARTIST_ID が解決済みの 68行に対応する。
-      残り 55行は ACT_LABEL のみで performer に出さない
-      （複合枠5件 + ARTISTS 未登録の単独枠50件）。
+      2026-08-01: 68 → 75。lineups.json 130行のうち ARTIST_ID が解決済みの
+      75行に対応する。残りは ACT_LABEL のみで performer に出さない
+      （複合枠5件 + ARTISTS 未登録の単独枠）。
       ARTISTS への登録を進めれば増える。減ったら回帰。
 
   lineup_section_pages:
     description: <h2>LINE UP</h2> セクションを持つフェスページ数（JA）
-    min: 9
+    min: 10
     target: 10                # 【本来の目標値】旧実装と同じ 10フェス
     note: >-
-      ACT_LABEL のみの行でも見出しは出るため performer(8) より 1件多い。
-      差の 1件は the-star-festival（15行すべて ARTIST_ID 未解決）。
-      target との差 1件は osukinidouzo（lineups.json 未登録）。
+      2026-08-01: 9 → 10 で target に到達。ACT_LABEL のみの行でも見出しは
+      出るため performer(9) より 1件多く、差の1件は the-star-festival
+      （全行 ARTIST_ID 未解決）。osukinidouzo は依然 lineups.json に行が無いが、
+      festival-de-frue の復活で件数としては 10 に達した。
 
   artist_appearances_pages:
     description: <h2>出演フェス</h2> セクションを持つアーティストページ数（JA）
-    min: 64
+    min: 71
     target: 94                # 【本来の目標値】データ整備で到達すべき値
     note: >-
-      min(64) と target(94) の差 30ページの内訳:
-      (a) 8ページ = 復旧可能。festival-de-frue 出演の7件
+      2026-08-01: 64 → 71。data/*.json 再生成で、ID是正した7名
+      （Acid Pauli 他、festival-de-frue 出演）の逆引きが復活した。
+      以下は 64 時点の分析。残る差 23ページの内訳:
+      (a) 8ページ = 復旧可能とした分。うち7件は 2026-08-01 に復旧済み。
+      festival-de-frue 出演の7件
       （Acid Pauli / Alabaster DePlume / Juana Molina / Kiko Dinucci /
       Kuo from Sunset Rollercoaster / Sylvan Esso /
       The Master Musicians of Joujouka）と、旧合体ID 1件
       （sisi-b2b-ouissam-b2b-yamarchy → rainbow-disco-club）。
-      前者は festival-de-frue を EDITIONS/LINEUPS に登録すれば復旧する。
+      前者は ID是正で lineups.json 側の名前解決が通り復旧した。
       後者は B2B を単一アーティストとして登録していた旧データの遺物で、
       DATA_SCHEMA §2.2（B2B・ユニットは登録しない）に反するため、
       LINEUPS の複合枠対応で解決すべきもの。復旧させてはいけない。
@@ -85,17 +88,20 @@ metrics:
 
   internal_links_to_artists:
     description: フェスページから /artists/ への内部リンク総数（JA、script 外）
-    min: 68
+    min: 75
     target: null
     note: >-
       ラインナップからアーティスト詳細へのリンク。エンティティグラフの実体。
       performer 総数と 1:1 で対応する（ACT_LABEL のみの枠はリンクを持たない）。
+      2026-08-01: 68 → 75。
 
   internal_links_to_festivals:
     description: アーティストページから /festivals/ への内部リンク総数（JA、script 外）
-    min: 68
+    min: 75
     target: null
-    note: 出演フェス欄からの逆引きリンク。順方向と同数になる。
+    note: >-
+      出演フェス欄からの逆引きリンク。順方向と同数になる。
+      2026-08-01: 68 → 75。
 
   # 以下は 948a440 で導入され、現在は本番で稼働中。
   festival_subevent_pages:
