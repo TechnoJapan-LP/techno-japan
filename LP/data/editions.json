@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-07-12T05:39:06.661Z",
+  "_generatedAt": "2026-08-01T05:31:48.695Z",
   "count": 86,
   "items": [
     {
@@ -21,12 +21,13 @@
       "FESTIVAL_ID": "waifu",
       "EDITION": "2026",
       "DATE_START": "2026-04-11",
-      "DATE_END": "2026-04-11",
+      "DATE_END": "2026-04-12",
       "LOCATION": "Kinone Pension",
       "PREF": "Chiba",
       "ADDRESS": "296-1 Kinone, Narita City, Chiba Prefecture",
       "LAT": "35.7609",
-      "LNG": "140.3924"
+      "LNG": "140.3924",
+      "STATUS": "published"
     },
     {
       "EDITION_ID": "arch-2026",
@@ -173,8 +174,9 @@
       "FESTIVAL_ID": "link-open-air",
       "EDITION": "2026",
       "DATE_START": "2026-05-30",
-      "DATE_END": "2026-05-30",
-      "PREF": "Toyama"
+      "DATE_END": "2026-05-31",
+      "PREF": "Toyama",
+      "STATUS": "published"
     },
     {
       "EDITION_ID": "japonism-2026",
@@ -198,7 +200,8 @@
       "EDITION": "2026",
       "DATE_START": "2026-06-13",
       "DATE_END": "2026-06-13",
-      "PREF": "Tokyo"
+      "PREF": "Tokyo",
+      "STATUS": "published"
     },
     {
       "EDITION_ID": "dots-2026",
@@ -221,8 +224,9 @@
       "FESTIVAL_ID": "halola-camp",
       "EDITION": "2026",
       "DATE_START": "2026-06-27",
-      "DATE_END": "2026-06-27",
-      "PREF": "Hokkaido"
+      "DATE_END": "2026-06-28",
+      "PREF": "Hokkaido",
+      "STATUS": "published"
     },
     {
       "EDITION_ID": "moment-2026",
@@ -253,8 +257,9 @@
       "FESTIVAL_ID": "sonic-mania",
       "EDITION": "2026",
       "DATE_START": "2026-08-14",
-      "DATE_END": "2026-08-14",
-      "PREF": "Chiba"
+      "DATE_END": "2026-08-15",
+      "PREF": "Chiba",
+      "STATUS": "published"
     },
     {
       "EDITION_ID": "one-park-festival-2026",
@@ -283,7 +288,8 @@
       "EDITION": "2026",
       "DATE_START": "2026-09-19",
       "DATE_END": "2026-09-20",
-      "PREF": "Tokyo"
+      "PREF": "Tokyo",
+      "STATUS": "published"
     },
     {
       "EDITION_ID": "otsukimi-2026",
@@ -291,7 +297,8 @@
       "EDITION": "2026",
       "DATE_START": "2026-09-28",
       "DATE_END": "2026-09-29",
-      "PREF": "Nagano"
+      "PREF": "Nagano",
+      "STATUS": "published"
     },
     {
       "EDITION_ID": "synapse-festival-2026",
@@ -299,7 +306,8 @@
       "EDITION": "2026",
       "DATE_START": "2026-10-02",
       "DATE_END": "2026-10-04",
-      "PREF": "Fukuoka"
+      "PREF": "Fukuoka",
+      "STATUS": "published"
     },
     {
       "EDITION_ID": "yagura-2026",
@@ -315,7 +323,8 @@
       "EDITION": "2026",
       "DATE_START": "2026-10-10",
       "DATE_END": "2026-10-12",
-      "PREF": "Gunma"
+      "PREF": "Gunma",
+      "STATUS": "published"
     },
     {
       "EDITION_ID": "wonderfruit-kyoto-2026",
@@ -323,15 +332,20 @@
       "EDITION": "2026",
       "DATE_START": "2026-10-21",
       "DATE_END": "2026-10-25",
-      "PREF": "Kyoto"
+      "PREF": "Kyoto",
+      "STATUS": "published"
     },
     {
       "EDITION_ID": "festival-de-frue-2026",
       "FESTIVAL_ID": "festival-de-frue",
       "EDITION": "2026",
       "DATE_START": "2026-10-31",
-      "DATE_END": "2026-10-31",
-      "PREF": "Shizuoka"
+      "DATE_END": "2026-11-01",
+      "LOCATION": "TSUMAGOI RESORT SAINO SATO",
+      "PREF": "Shizuoka",
+      "TICKETURL": "https://shop.frue.jp/",
+      "FLYER": "images/festivals/festival-de-frue-flyer.jpg",
+      "STATUS": "published"
     },
     {
       "EDITION_ID": "unknown-2024",
@@ -408,9 +422,10 @@
       "EDITION_ID": "body-soul-2025",
       "FESTIVAL_ID": "body-soul",
       "EDITION": "2025",
-      "DATE_START": "2025-06-08",
-      "DATE_END": "2025-06-08",
-      "PREF": "Tokyo"
+      "DATE_START": "2025-06-07",
+      "DATE_END": "2025-06-07",
+      "PREF": "Tokyo",
+      "STATUS": "published"
     },
     {
       "EDITION_ID": "signal-2025",
@@ -418,7 +433,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-06-14",
       "DATE_END": "2025-06-15",
-      "PREF": "Yamanashi"
+      "PREF": "Yamanashi",
+      "STATUS": "published"
     },
     {
       "EDITION_ID": "euphoria-2025",
@@ -709,12 +725,15 @@
       "PREF": "Nagasaki"
     },
     {
-      "EDITION_ID": "grow-the-culture-open-air-2025",
+      "EDITION_ID": "grow-the-culture-open-air-2026",
       "FESTIVAL_ID": "grow-the-culture-open-air",
-      "EDITION": "2025",
-      "DATE_START": "2025-11-08",
-      "DATE_END": "2025-11-09",
-      "PREF": "Tokyo"
+      "EDITION": "2026",
+      "DATE_START": "2026-11-07",
+      "DATE_END": "2026-11-08",
+      "LOCATION": "Ohba Camping Village",
+      "PREF": "Tokyo",
+      "ADDRESS": "3741 Okuno, Hinode-machi, Nishitama-gun, Tokyo",
+      "STATUS": "published"
     },
     {
       "EDITION_ID": "iyasaka-rave-festival-2025",
@@ -746,7 +765,8 @@
       "EDITION": "2026",
       "DATE_START": "2026-09-25",
       "DATE_END": "2026-09-27",
-      "PREF": "Miyazaki"
+      "PREF": "Miyazaki",
+      "STATUS": "published"
     },
     {
       "EDITION_ID": "takarajima-beach-cleaning-party-2025",
@@ -761,13 +781,14 @@
       "FESTIVAL_ID": "technogaoka",
       "EDITION": "2026",
       "DATE_START": "2026-04-25",
-      "DATE_END": "2026-04-25",
+      "DATE_END": "2026-04-26",
       "LOCATION": "Tabifusa Ashiya Daihi-kaku",
       "PREF": "Hyogo",
       "ADDRESS": "Okuyama 1, Ashiya City, Hyogo Prefecture",
       "LAT": "34.7456",
       "LNG": "135.2889",
-      "FLYER": "images/festivals/technogaoka-flyer.jpg"
+      "FLYER": "images/festivals/technogaoka-flyer.jpg",
+      "STATUS": "published"
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-07-12T05:39:06.661Z",
-  "count": 123,
+  "_generatedAt": "2026-08-01T05:31:48.695Z",
+  "count": 130,
   "items": [
     {
       "EDITION_ID": "waifu-2026",
@@ -739,6 +739,48 @@
       "ARTIST_ID": "gonno",
       "SET_TYPE": "dj",
       "SORT": "21"
+    },
+    {
+      "EDITION_ID": "festival-de-frue-2026",
+      "ARTIST_ID": "acid-pauli",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "festival-de-frue-2026",
+      "ARTIST_ID": "alabaster-deplume",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "festival-de-frue-2026",
+      "ARTIST_ID": "juana-molina",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "festival-de-frue-2026",
+      "ARTIST_ID": "kiko-dinucci",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "festival-de-frue-2026",
+      "ARTIST_ID": "kuo-from-sunset-rollercoaster",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "festival-de-frue-2026",
+      "ARTIST_ID": "sylvan-esso",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "festival-de-frue-2026",
+      "ARTIST_ID": "the-master-musicians-of-joujouka",
+      "SET_TYPE": "dj",
+      "SORT": "7"
     }
   ]
 }
