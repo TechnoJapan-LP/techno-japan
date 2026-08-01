@@ -2,7 +2,7 @@ name: Sync Drive Images
 
 on:
   schedule:
-    - cron: '*/30 * * * *'
+    - cron: '17 */2 * * *'
   workflow_dispatch:
 
 # scheduleとCMSからの手動実行が重なっても、Drive同期・git pushを並行させない。
