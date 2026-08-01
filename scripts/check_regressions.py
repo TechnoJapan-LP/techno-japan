@@ -71,6 +71,11 @@ def has_h2(body, label):
     return re.search(r"<h2[^>]*>\s*" + re.escape(label), body) is not None
 
 
+def has_class(body, class_name):
+    """class 属性を空白区切りのトークンとして厳密に判定する。"""
+    return any(class_name in value.split() for value in re.findall(r'class="([^"]*)"', body))
+
+
 def is_redirect_stub(html):
     """build-detail-pages.mjs の REDIRECTS が出す旧URL維持用スタブか。"""
     return "<title>Redirecting…</title>" in html and 'http-equiv="refresh"' in html
@@ -119,6 +124,7 @@ def measure():
     # ページ数だけだと 1ページの Q&A が減っても検出できないため、
     # 設問の総数も別メトリクスとして持つ。
     faq_ld_pages = faq_section_pages = faq_qa_total = summary_pages = 0
+    official_link_pages = social_link_pages = 0
     for f in fest_all:
         html = read(f)
         faqs = [d for d in ld_objects(html) if d.get("@type") == "FAQPage"]
@@ -130,6 +136,10 @@ def measure():
             faq_section_pages += 1
         if re.search(r'class="(?:[^"]*\s)?festival-summary(?=[\s"])', body):
             summary_pages += 1
+        if has_class(body, "festival-official-link"):
+            official_link_pages += 1
+        if has_class(body, "festival-social-link"):
+            social_link_pages += 1
 
     # 掲載申請ページへの導線。全ページのフッターに張っているので、
     # テンプレート変更で静かに消えると気づけない。
@@ -183,6 +193,8 @@ def measure():
     m["festival_faq_section_pages"] = faq_section_pages
     m["festival_faq_qa_total"] = faq_qa_total
     m["festival_summary_pages"] = summary_pages
+    m["festival_official_link_pages"] = official_link_pages
+    m["festival_social_link_pages"] = social_link_pages
 
     m["festival_performer_pages"] = perf_pages
     m["festival_performer_total"] = perf_total

@@ -120,6 +120,47 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   transition: border-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
 }
 .detail-link:hover { border-color: var(--accent); color: var(--accent); opacity: 1; }
+.festival-external-links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+.festival-external-links .detail-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding-top: 0;
+  padding-bottom: 0;
+  box-sizing: border-box;
+}
+.festival-social-links { display: flex; gap: 10px; }
+.festival-social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  box-sizing: border-box;
+  border: 1px solid rgba(255,255,255,.2);
+  color: inherit;
+  opacity: .8;
+  transition: border-color .2s, color .2s, opacity .2s;
+}
+.festival-social-link svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+}
+.festival-social-link:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  opacity: 1;
+}
 
 @media (max-width: 768px) {
   .article-detail, .detail-page { padding: 100px 0 60px; }

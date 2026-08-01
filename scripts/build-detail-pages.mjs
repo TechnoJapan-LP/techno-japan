@@ -322,7 +322,7 @@ ${hreflang}
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/common.css?v=3">
-<link rel="stylesheet" href="/detail.css?v=2">
+<link rel="stylesheet" href="/detail.css?v=3">
 <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
 </head>
 <body>
@@ -666,6 +666,22 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
   const faqHtml = festivalFaqHtml(faqItems, lang);
   const performers = editions.flatMap((ed) => lineupsByEdition.get(ed.EDITION_ID) || [])
     .map((row) => lineupEntity(row, artistsById, lang)).filter(Boolean);
+  const sameAs = [f.url, f.instagram]
+    .map((value) => String(value || '').trim())
+    .filter((value, index, values) => value && values.indexOf(value) === index);
+  const officialLinkHtml = f.url
+    ? `<a class="detail-link festival-official-link" href="${esc(f.url)}" target="_blank" rel="noopener">OFFICIAL SITE</a>`
+    : '';
+  const socialLinksHtml = f.instagram ? `<div class="festival-social-links">
+      <a class="festival-social-link" href="${esc(f.instagram)}" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1"></circle></svg>
+      </a>
+    </div>` : '';
+  const externalLinksHtml = (officialLinkHtml || socialLinksHtml)
+    ? `<div class="festival-external-links">
+    ${[officialLinkHtml, socialLinksHtml].filter(Boolean).join('\n    ')}
+  </div>`
+    : '';
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -676,7 +692,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
     inLanguage: lang,
     image: [image],
     url: canonical,
-    ...(f.url ? { sameAs: f.url } : {}),
+    ...(sameAs.length ? { sameAs } : {}),
     ...(performers.length ? { performer: performers } : {}),
     ...(editions.length ? { subEvent: editions.map((ed) => ({
       '@type': 'Festival',
@@ -703,7 +719,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
     ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
     ${f.image || f.flyer ? `<div class="detail-hero"><img ${dimensionAttrs(f.image || f.flyer)} src="/${String(f.image || f.flyer).replace(/^\//, '')}" alt="${esc(name)}"></div>` : ''}
     ${bilingualBody(f.desc, f.desc_en, lang)}
-    ${editionsHtml}${lineupsHtml}${faqHtml}${relatedHtml}
+${externalLinksHtml ? `    ${externalLinksHtml}\n` : ''}    ${editionsHtml}${lineupsHtml}${faqHtml}${relatedHtml}
     ${(() => { // 回遊: 同じエリアの他のフェス
       const others = XLINK.fests.filter((x) => x.id !== f.id && x.city && f.city && String(x.city).toLowerCase() === String(f.city).toLowerCase()).slice(0, 6);
       if (!others.length) return '';
