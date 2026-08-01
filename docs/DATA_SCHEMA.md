@@ -55,6 +55,13 @@
 - 命名はcamelCaseに統一(EVENTSの全大文字表記は移行時に修正)。
 - editorNotes は内部メモ。**サイトには絶対に出力しない**(fetchスクリプトでJSON化の対象外とする)。
 
+### 1.7 住所の表記
+
+- `ADDRESS`（現行FESTIVALSのG列、現行VENUESのI列）は、**日本語の公式表記**で保持する。
+- 日本語表記を正とする理由は、地図・ジオコーディング照合の精度、施設や主催者の公式表記への忠実性、日英2住所を保守する入力コストを考慮したためである。
+- `ADDRESS` は構造化データの `PostalAddress.streetAddress` に出力する。ページ言語が英語でも、住所は日本語表記の同じ値を使用してよい。
+- 将来は住所を `addressCountry` / `addressRegion` / `addressLocality` / `streetAddress` に分解し、`PREF`や市区町村を構造化して照合精度をさらに高める余地がある。現段階では既存の `PREF` / `CITY` と `ADDRESS` を無理に自動分割しない。
+
 ---
 
 ## 2. シート定義(データレイヤー)
@@ -188,6 +195,10 @@ ID 規約違反7件の是正(§1.1)ではリダイレクトを設けたが、そ
 | AA | name_en |
 | AB | DESC_EN |
 | AC | imagePosition |
+| AD | location_ja |
+
+- `LOCATION` は既存データとの互換性を保つ英語・ローマ字表記、`location_ja` は日本語の公式会場名を保持する。日本語表示は `location_ja` を優先し、空欄なら `LOCATION` にフォールバックする。英語表示は `LOCATION` を使用する。
+- GAS の `update_row` は部分更新ではない。`buildRowFromHeaders` で行全体を組み立て直し、payload にないヘッダーの値を空文字で上書きする。そのため CMS は編集時に、`location_ja` を含むシートの全フィールドを必ず payload に含める。今後列を追加するときも、シート追加と同時に CMS の読込・フォーム・更新 payload を対応させること。
 
 #### 目標: FESTIVALSとEDITIONSの分離
 
@@ -216,6 +227,7 @@ ID 規約違反7件の是正(§1.1)ではリダイレクトを設けたが、そ
 | EDITION | `2026` | 年。年2回開催等は `2026-spring` も可 |
 | DATE_START / DATE_END | `2026-04-17` / `2026-04-19` | ISO形式。1日開催はENDも同値 |
 | LOCATION | `Higashi-Izu Cross Country Course` | 会場名 |
+| LOCATION_JA | `東伊豆クロスカントリーコース` | 日本語の公式会場名。現行FESTIVALSの`location_ja`から引き継ぐ |
 | VENUE_ID | | 会場がVENUESにある場合のみ(任意) |
 | PREF | `Shizuoka` | プルダウン |
 | ADDRESS / LAT / LNG | | |
@@ -392,6 +404,7 @@ EDITIONS / LINEUPS: 新設後にgidを追記
       "dateStart": "2026-05-29",
       "dateEnd": "2026-05-31",
       "location": "Naeba Greenland",
+      "locationJa": "苗場グリーンランド",
       "pref": "Niigata",
       "lineup": [
         {
