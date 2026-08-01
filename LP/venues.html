@@ -874,7 +874,7 @@ function renderVenueDetail(id) {
           ${v.city ? `<span>${v.city}</span>` : ''}
           ${v.area ? `<span>${v.area}</span>` : ''}
           ${v.capacity ? `<span>~${v.capacity}</span>` : ''}
-          <span>${Array.isArray(v.genre) ? v.genre.join(' / ') : v.genre}</span>
+          ${v.genre ? `<span>${Array.isArray(v.genre) ? v.genre.join(' / ') : v.genre}</span>` : ''}
         </div>
         <div class="venue-detail-bio">${v.desc || ''}</div>
         ${linksHtml ? `<div class="venue-detail-links">${linksHtml}</div>` : ''}
