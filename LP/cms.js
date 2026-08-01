@@ -1315,8 +1315,14 @@ function geocode(prefix) {
    施設名だけだと曖昧なので City を添えて精度を上げ、日本語の住所で返す。
    ADDRESS は上書きせず「空のときだけ」自動入力し、既存の手入力を尊重する。 */
 function geocodeFromLocation(prefix) {
-  const loc = document.getElementById(prefix+'-location').value.trim();
-  if (!loc) return toast('Location（施設名）を入力してください','error');
+  const primaryLoc = (document.getElementById(prefix+'-location')?.value || '').trim();
+  const jaLoc = prefix === 'f'
+    ? (document.getElementById('f-location_ja')?.value || '').trim()
+    : '';
+  // 日本の施設は日本語名の方が地図サービスで照合しやすい。
+  // location_ja が未入力の既存行は、従来どおり LOCATION を使う。
+  const loc = jaLoc || primaryLoc;
+  if (!loc) return toast('Location / Location (JA)（施設名）を入力してください','error');
   const city = (document.getElementById(prefix+'-city')?.value || '').trim();
   // 施設名 + 市 + 国。まず絞り込みで検索し、ダメなら施設名単体で再試行する。
   const queries = [ [loc, city, 'Japan'].filter(Boolean).join(', '), loc + ', Japan' ];
