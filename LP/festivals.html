@@ -1294,7 +1294,7 @@ function renderFestivalCard(f, m, i) {
       }).join('')}</div>`
     : '';
   const genres = Array.isArray(f.genre) ? f.genre : (f.genre ? [f.genre] : []);
-  const locationText = [f.location, f.city].filter(Boolean).join(', ');
+  const locationText = [f.location_ja || f.location, f.city].filter(Boolean).join(', ');
   return `
     <section class="festival-section reveal" data-fest-id="${f.id}" style="transition-delay:${i * 100}ms">
       <div class="festival-layout" onclick="showDetail('${f.id}')">
@@ -1454,7 +1454,7 @@ function renderDetail(id) {
       <div class="detail-hero-info">
         <div class="detail-date">${formatFestDate(f.date)}</div>
         <div class="detail-name">${f.name}</div>
-        <div class="detail-location">${[f.location, f.city].filter(Boolean).join(' — ')}</div>
+        <div class="detail-location">${[f.location_ja || f.location, f.city].filter(Boolean).join(' — ')}</div>
         <div class="detail-tags">${f.genre.map(g => `<span class="detail-tag">${g}</span>`).join('')}</div>
         <div class="detail-desc">${f.desc || ''}</div>
         <div style="display:flex;gap:12px;flex-wrap:wrap;">

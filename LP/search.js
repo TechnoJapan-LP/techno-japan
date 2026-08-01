@@ -196,6 +196,7 @@
         return f.name.toLowerCase().includes(q) ||
                (f.city || '').toLowerCase().includes(q) ||
                (f.location || '').toLowerCase().includes(q) ||
+               (f.location_ja || '').toLowerCase().includes(q) ||
                (f.genre || []).join(' ').toLowerCase().includes(q);
       }).slice(0, 6);
       if (matches.length) {
