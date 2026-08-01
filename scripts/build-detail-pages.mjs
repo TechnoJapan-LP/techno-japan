@@ -361,6 +361,13 @@ function articlePage(a, resolveEntities, lang = 'ja') {
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
     articleSection: a.category || 'NEWS',
+    // SPA(news.html) は動的注入で keywords を出していたが、静的ページ側が
+    // 欠けていた。JS を実行しないクローラーには SPA の注入が届かないため、
+    // A5（共有URLがハッシュ版）と同じ「SPAだけ対応済み」の取りこぼし。
+    // 出力形式は SPA と揃える（カンマ区切り文字列・空なら省略）。
+    ...(Array.isArray(a.tags) && a.tags.length
+      ? { keywords: a.tags.join(', ') }
+      : {}),
     url: canonical,
   };
 

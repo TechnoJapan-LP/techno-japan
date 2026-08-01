@@ -917,3 +917,68 @@ Publish 時に `cms.js:4369` の `webp()` が拡張子を `.webp` へ正規化�
 `images/venues/womb.jpg` と表示されるが実体は `womb.webp`。
 
 4箇所すべてを `.webp` に変えるのが素直。未修正。
+
+### 9-13. 記事の keywords が静的ページに出ていなかった
+
+`news.html:1331` の SPA は動的注入する JSON-LD に `keywords` を入れていたが、
+`articlePage()` が生成する静的ページには無かった。
+
+```js
+// news.html（SPA）だけが出していた
+keywords: (Array.isArray(a.tags) ? a.tags.join(', ') : '') || undefined,
+```
+
+JS を実行しないクローラーには SPA の注入が届かないため、**A5（共有URLが
+ハッシュ版）とまったく同じ「SPA だけ対応済み」の取りこぼし**だった。
+
+`articlePage()` の jsonLd に追加し、出力形式を SPA と揃えた（カンマ区切り
+文字列、タグが無ければキーごと省略）。静的・SPA とも
+`"Dj, Rave, transcendence"` で一致することを確認。
+
+**教訓**: SPA と静的生成の二重実装があるため、片方だけに機能が入る事故が
+起きやすい。news.html に手を入れたら `articlePage()` も見る、という対応関係を
+意識する必要がある。同種の取りこぼしが他にも残っている可能性がある。
+
+### 9-14. 将来の検討事項: TAGS 列は現状「死に列」
+
+FESTIVALS / VENUES / ARTISTS の TAGS 列（共通メタ §1.6）は、
+入力UIがあるのにサイトへ一切出力されていない。活用するなら以下が前提になる。
+
+**① Publish 経路に載っていない**
+
+`data.js` を組み立てる `buildFestivalsJs` / `buildVenuesJs` / `buildArtistsJs` は
+`tags` を出力しない。出力しているのは `buildArticlesJs` だけ（`cms.js:4678-4683`）。
+シートに値を入れても Publish しても `data.js` に現れず、サイトにも出ない。
+実データでも FESTIVALS 87件・VENUES 22件・ARTISTS 100件すべて TAGS は空で、
+値があるのは記事1件のみ。
+
+**② CITY の表記揺れで同一概念が別タグになる**
+
+CMS の「＋ ジャンル/都市から候補追加」（`suggestTags` / `cms.js:1645`）は
+GENRE + CITY + TYPE を候補にするが、シートの表記が統一されていない。
+
+| 由来 | 表記 | 例 |
+|---|---|---|
+| GENRE | 全大文字 | `TECHNO` `HOUSE` |
+| CITY | **シートごとに不統一** | FESTIVALS は `Chiba`、VENUES/ARTISTS は `TOKYO` |
+| TYPE | 小文字 | `festival` `rave` `club` |
+
+同じ東京でも `Tokyo` と `TOKYO` の2タグが生まれる。
+記事の既存タグはさらに別系統（`["Dj","Rave","transcendence"]`）。
+
+**③ 正規化が無く完全一致で重複判定している**
+
+`addTag()`（`cms.js`）は `includes` による完全一致で重複を弾くだけで、
+大小変換もトリム以外の正規化もしない。上記②の揺れがそのまま別タグとして残る。
+`news.html:1098` のタグ絞り込みは `toLowerCase()` で比較するため検索は通るが、
+**表示は原文のまま**なので `#Dj` と `#DJ` が並びうる。
+
+**④ タグの表記規約が DATA_SCHEMA に無い**
+
+GENRE には §1.3 の正規リストがあるが、タグ全体の規約は未定義。
+活用前に「大小・言語・区切り・許可語彙」を決める必要がある。
+現時点で日本語タグの前例はゼロ（GENRE/CITY/TYPE がすべて英語のため）。
+
+**着手する場合の順序**: ④ 規約を決める → ② CITY 表記を PREF 規約（§1.5）へ
+正規化 → ③ `addTag()` に正規化を入れる → ① 出力を追加。
+逆順にやると、揺れたタグが本番に出てから直すことになる。
