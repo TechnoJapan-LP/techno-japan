@@ -907,6 +907,7 @@ footer { padding: 60px 40px; }
 <script src="favorites.js" defer></script>
 <script src="search.js" defer></script>
 <script src="data.js?v=6"></script>
+<script src="image-dimensions.js"></script>
 <script>
 
 /* Hide nav on scroll down, show on scroll up */
@@ -1008,7 +1009,7 @@ function buildRelatedFestivals(current) {
 
   const cards = picks.map(f => `
     <a href="/festivals/${encodeURIComponent(f.id)}.html" onclick="event.preventDefault();location.hash='festival/'+this.dataset.fid" data-fid="${f.id}" class="related-card">
-      <div class="related-card-img">${f.image ? `<img loading="lazy" decoding="async" src="${f.image}" alt="${f.name}" style="object-position:${f.imagePosition || 'center'}" onerror="this.style.display='none'">` : ''}</div>
+      <div class="related-card-img">${f.image ? `<img ${tjImageSizeAttrs(f.image)} loading="lazy" decoding="async" src="${f.image}" alt="${f.name}" style="object-position:${f.imagePosition || 'center'}" onerror="this.style.display='none'">` : ''}</div>
       <div class="related-card-info">
         <div class="related-card-date">${formatFestDate(f.date)}</div>
         <div class="related-card-name">${f.name}</div>
@@ -1031,7 +1032,7 @@ function buildRelatedStories(current) {
   if (!arts.length) return '';
   const cards = arts.map(a => `
     <a class="story-link-card" href="/articles/${encodeURIComponent(a.id)}.html">
-      ${a.image ? `<img class="story-link-thumb" src="${a.image}" alt="" loading="lazy" decoding="async">` : ''}
+      ${a.image ? `<img ${tjImageSizeAttrs(a.image)} class="story-link-thumb" src="${a.image}" alt="" loading="lazy" decoding="async">` : ''}
       <div>
         <div class="story-link-meta">${a.category || 'STORY'}${a.date ? ' · ' + formatFestDate(a.date) : ''}</div>
         <div class="story-link-title">${a.title}</div>
@@ -1283,7 +1284,7 @@ function applyMonthFilter() {
 /* ========== RENDER FESTIVAL CARD ========== */
 function renderFestivalCard(f, m, i) {
   const imgHtml = f.image
-    ? `<img loading="lazy" decoding="async" src="${f.image}" alt="${f.name}" style="object-position:${f.imagePosition || 'center'}" onerror="this.style.display='none'">`
+    ? `<img ${tjImageSizeAttrs(f.image)} loading="lazy" decoding="async" src="${f.image}" alt="${f.name}" style="object-position:${f.imagePosition || 'center'}" onerror="this.style.display='none'">`
     : '';
   const lineupHtml = f.lineup && f.lineup.length
     ? `<div class="festival-lineup-preview">${f.lineup.slice(0, 4).map(id => {
@@ -1402,7 +1403,7 @@ function renderDetail(id) {
   const detail = document.getElementById('festival-detail');
   const heroGrad = f.heroGradient || 'linear-gradient(135deg, rgba(120,80,200,0.3), rgba(200,60,100,0.2))';
   const imgHtml = f.image
-    ? `<img loading="lazy" decoding="async" src="${f.image}" alt="${f.name}" style="object-position:${f.imagePosition || 'center'}" onerror="this.style.display='none'">`
+    ? `<img ${tjImageSizeAttrs(f.image)} loading="lazy" decoding="async" src="${f.image}" alt="${f.name}" style="object-position:${f.imagePosition || 'center'}" onerror="this.style.display='none'">`
     : '';
   const officialHtml = f.url
     ? `<a href="${f.url}" target="_blank" rel="noopener" class="detail-official">OFFICIAL SITE <span class="link-arrow"></span></a>`
@@ -1422,7 +1423,7 @@ function renderDetail(id) {
       <div class="detail-section-label">FLYER</div>
       <div class="detail-flyer-image">
         ${f.flyer
-          ? `<img loading="lazy" decoding="async" src="${f.flyer}" alt="${f.name} Flyer" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          ? `<img ${tjImageSizeAttrs(f.flyer)} loading="lazy" decoding="async" src="${f.flyer}" alt="${f.name} Flyer" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
              <div class="detail-flyer-placeholder" style="display:none">FLYER IMAGE</div>`
           : `<div class="detail-flyer-placeholder">FLYER IMAGE</div>`}
       </div>

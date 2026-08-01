@@ -877,6 +877,7 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
 
 <script src="common.js?v=2" defer></script>
 <script src="data.js?v=6"></script>
+<script src="image-dimensions.js"></script>
 <script>
 /* ========== ARTICLE DATA (legacy fallback if data.js missing) ========== */
 const ARTICLES_FALLBACK = [
@@ -1048,7 +1049,7 @@ function renderMainGrid() {
     <a href="/articles/${encodeURIComponent(featured.id)}.html" onclick="event.preventDefault();location.hash='article/'+this.dataset.aid" data-aid="${featured.id}" class="featured-card">
       <div class="featured-card-image">
         ${featured.image
-          ? `<img loading="lazy" decoding="async" src="${featured.image}" alt="${featured.title}">`
+          ? `<img ${tjImageSizeAttrs(featured.image)} loading="lazy" decoding="async" src="${featured.image}" alt="${featured.title}">`
           : `<div class="featured-card-image-placeholder">COMING SOON</div>`}
         <div class="featured-card-date">${formatDateSplit(featured.date)}</div>
       </div>
@@ -1122,7 +1123,7 @@ function renderFeed() {
     <a href="/articles/${encodeURIComponent(a.id)}.html" onclick="event.preventDefault();location.hash='article/'+this.dataset.aid" data-aid="${a.id}" class="feed-card">
       <div class="feed-card-image">
         ${a.image
-          ? `<img loading="lazy" decoding="async" src="${a.image}" alt="${a.title}">`
+          ? `<img ${tjImageSizeAttrs(a.image)} loading="lazy" decoding="async" src="${a.image}" alt="${a.title}">`
           : `<div class="feed-card-image-placeholder">COMING SOON</div>`}
       </div>
       <div class="feed-card-tag"><span class="tag-dot"></span> ${a.category}</div>
@@ -1272,6 +1273,12 @@ function renderArticleDetail(id) {
       Array.from(node.childNodes).forEach(walk);
     }
     walk(tmp);
+    tmp.querySelectorAll('img[src]').forEach(img => {
+      const size = tjImageDimensions(img.getAttribute('src'));
+      if (!size) return;
+      img.width = size[0];
+      img.height = size[1];
+    });
     return tmp.innerHTML;
   }
 
@@ -1343,7 +1350,7 @@ function renderArticleDetail(id) {
 
   const heroBlock = a.image
     ? `<header class="article-hero"${heroRatioAttr(a.heroRatio)}>
-        <img src="${a.image}" alt="${a.title}" fetchpriority="high" decoding="async">
+        <img ${tjImageSizeAttrs(a.image)} src="${a.image}" alt="${a.title}" fetchpriority="high" decoding="async">
         <div class="article-hero-overlay">
           <div class="article-chips"><span class="cat-pill">${a.category}</span></div>
           <h1>${a.title}</h1>

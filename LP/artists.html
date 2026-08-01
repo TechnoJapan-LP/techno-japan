@@ -715,6 +715,7 @@
 <script src="favorites.js" defer></script>
 <script src="search.js" defer></script>
 <script src="data.js?v=6"></script>
+<script src="image-dimensions.js"></script>
 <script>
 const WEEKDAYS = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
 const MONTHS_SHORT = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
@@ -914,7 +915,7 @@ function renderArtistDetail(id) {
   }).join('') : '';
 
   const imageHtml = a.image
-    ? `<div class="artist-detail-image" style="--img-pos:${a.imagePosition || 'center'}"><img loading="lazy" decoding="async" src="${a.image}" alt="${a.name}" onerror="this.parentElement.style.display='none'"></div>`
+    ? `<div class="artist-detail-image" style="--img-pos:${a.imagePosition || 'center'}"><img ${tjImageSizeAttrs(a.image)} loading="lazy" decoding="async" src="${a.image}" alt="${a.name}" onerror="this.parentElement.style.display='none'"></div>`
     : '';
 
   const shareTitle = `${a.name} — TECHNO JAPAN`;

@@ -22,13 +22,19 @@ import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
+import { imageSizeAttrs } from './lib/image-size.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const LP_DIR = path.join(__dirname, '..', 'LP');
 const DATA_PATH = path.join(LP_DIR, 'data.js');
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
 const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');
+const IMAGE_DIMENSIONS_PATH = path.join(LP_DIR, 'image-dimensions.json');
 const BASE = 'https://techno-japan.media';
+
+// 詳細ページとハブのJSテンプレートが同じ最新寸法を参照できるよう、
+// ページ生成のたびに実画像から派生メタデータを先に再生成する。
+await import('./build-image-dimensions.mjs');
 // ブランドロゴ（Organization.logo 用）と OGP フォールバック画像は役割が違うので分ける。
 // ロゴは正方形のブランド識別子、OGP は SNS カード向けの横長ビジュアル。
 // ロゴを差し替えるときはこのパスのファイルを置き換えるだけでよい（URL は変えない）。
@@ -88,6 +94,24 @@ function breadcrumbLd(sectionLabel, sectionPath, name, canonical) {
 }
 
 const truncate = (s, n) => (s.length > n ? s.slice(0, n - 1) + '…' : s);
+
+function loadImageDimensions() {
+  if (!fs.existsSync(IMAGE_DIMENSIONS_PATH)) throw new Error('image-dimensions.json がありません。先に node scripts/build-image-dimensions.mjs を実行してください');
+  return JSON.parse(fs.readFileSync(IMAGE_DIMENSIONS_PATH, 'utf8'));
+}
+let IMAGE_DIMENSIONS = {};
+function dimensionAttrs(source) {
+  const key = String(source || '').split(/[?#]/)[0].replace(/^\/+/, '');
+  const size = IMAGE_DIMENSIONS[String(source || '').split(/[?#]/)[0]] || IMAGE_DIMENSIONS[key];
+  return size ? `width="${size[0]}" height="${size[1]}"` : imageSizeAttrs(LP_DIR, source);
+}
+function addHtmlImageDimensions(html) {
+  return String(html || '').replace(/<img\b(?![^>]*\bwidth=)([^>]*?)\bsrc=(["'])([^"']+)\2([^>]*)>/gi, (tag, before, quote, src, after) => {
+    const attrs = dimensionAttrs(src);
+    if (!attrs) throw new Error(`画像寸法メタデータがありません: ${src}`);
+    return `<img ${attrs}${before}src=${quote}${src}${quote}${after}>`;
+  });
+}
 
 /* ---------- 回遊導線（ページ間の相互リンク）。main() が索引をセットする ---------- */
 let XLINK = { fests: [], venues: [], appearMap: new Map() };
@@ -329,7 +353,7 @@ function articlePage(a, resolveEntities, lang = 'ja') {
 
   const heroBlock = a.image
     ? `<header class="article-hero"${ratioAttr(a.heroRatio)}>
-        <img src="/${String(a.image).replace(/^\//, '')}" alt="${esc(L.title)}" fetchpriority="high" decoding="async">
+        <img ${dimensionAttrs(a.image)} src="/${String(a.image).replace(/^\//, '')}" alt="${esc(L.title)}" fetchpriority="high" decoding="async">
         <div class="article-hero-overlay">
           <div class="article-chips"><span class="cat-pill">${esc(a.category || 'NEWS')}</span></div>
           <h1>${esc(L.title)}</h1>
@@ -347,7 +371,7 @@ function articlePage(a, resolveEntities, lang = 'ja') {
       <div><dt>READING TIME</dt><dd>${esc(a.readTime || 5)} MIN</dd></div>
     </dl>
     <div class="article-excerpt">${esc(L.excerpt || '')}</div>
-    <div class="article-body">${resolveEntities(L.body || '')}</div>
+    <div class="article-body">${addHtmlImageDimensions(resolveEntities(L.body || ''))}</div>
     <div class="article-footer">
       ${tags ? `<div class="article-tags">${tags}</div>` : ''}
       <a class="article-back" href="/news.html" style="margin:0"><span class="arrow"></span> ALL STORIES</a>
@@ -592,7 +616,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
   const relatedHtml = related.length
     ? `<div class="related-stories"><h2>RELATED STORIES</h2>` + related.map((a) =>
         `<a class="related-story-card" href="${(lang === 'en' && (a.title_en || a.body_en)) ? '/en' : ''}/articles/${a.id}.html">
-          ${a.image ? `<img class="related-story-thumb" src="/${String(a.image).replace(/^\//, '')}" alt="" loading="lazy">` : ''}
+          ${a.image ? `<img ${dimensionAttrs(a.image)} class="related-story-thumb" src="/${String(a.image).replace(/^\//, '')}" alt="" loading="lazy">` : ''}
           <div><div class="related-story-meta">${esc(a.category || 'STORY')} · ${esc(fmtDate(a.date))}</div>
           <div class="related-story-title">${esc(a.title)}</div></div>
         </a>`).join('') + `</div>`
@@ -644,7 +668,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
     <h1>${esc(name)}</h1>
     ${summary ? `<p class="festival-summary">${esc(summary)}</p>` : ''}
     ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
-    ${f.image || f.flyer ? `<div class="detail-hero"><img src="/${String(f.image || f.flyer).replace(/^\//, '')}" alt="${esc(name)}"></div>` : ''}
+    ${f.image || f.flyer ? `<div class="detail-hero"><img ${dimensionAttrs(f.image || f.flyer)} src="/${String(f.image || f.flyer).replace(/^\//, '')}" alt="${esc(name)}"></div>` : ''}
     ${bilingualBody(f.desc, f.desc_en, lang)}
     ${editionsHtml}${lineupsHtml}${faqHtml}${relatedHtml}
     ${(() => { // 回遊: 同じエリアの他のフェス
@@ -743,7 +767,7 @@ function artistPage(a, artistsById, lang = 'ja') {
     ${place ? `<div class="detail-eyebrow">${esc(place)}</div>` : ''}
     <h1>${esc(name)}</h1>
     ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
-    ${a.image ? `<div class="detail-hero detail-hero-portrait"><img src="/${String(a.image).replace(/^\//, '')}" alt="${esc(name)}"></div>` : ''}
+    ${a.image ? `<div class="detail-hero detail-hero-portrait"><img ${dimensionAttrs(a.image)} src="/${String(a.image).replace(/^\//, '')}" alt="${esc(name)}"></div>` : ''}
     ${bilingualBody(a.bio, a.bio_en, lang)}
     ${linkRow ? `<div class="detail-links">${linkRow}</div>` : ''}${appearancesHtml}
     <div class="article-footer"><a class="article-back" href="/artists.html" style="margin:0"><span class="arrow"></span> ALL ARTISTS</a></div>
@@ -792,7 +816,7 @@ function venuePage(v, lang = 'ja') {
     ${place ? `<div class="detail-eyebrow">${esc(place)}</div>` : ''}
     <h1>${esc(name)}</h1>
     ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
-    ${v.image ? `<div class="detail-hero"><img src="/${String(v.image).replace(/^\//, '')}" alt="${esc(name)}"></div>` : ''}
+    ${v.image ? `<div class="detail-hero"><img ${dimensionAttrs(v.image)} src="/${String(v.image).replace(/^\//, '')}" alt="${esc(name)}"></div>` : ''}
     ${bilingualBody(v.desc, v.desc_en, lang)}
     <dl class="detail-facts">
       ${v.type ? `<div><dt>${lang === 'en' ? 'TYPE' : 'タイプ'}</dt><dd>${esc(v.type)}</dd></div>` : ''}
@@ -871,6 +895,7 @@ function writeHubLinks(fileName, markerName, html) {
 }
 
 function main() {
+  IMAGE_DIMENSIONS = loadImageDimensions();
   const { ARTISTS = [], FESTIVALS = [], VENUES = [], ARTICLES = [] } = loadData();
   const EDITIONS = loadItems(EDITIONS_PATH, 'editions.json');
   const LINEUPS = loadItems(LINEUPS_PATH, 'lineups.json');

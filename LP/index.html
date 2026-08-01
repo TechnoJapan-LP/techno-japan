@@ -722,6 +722,7 @@
 <script src="favorites.js" defer></script>
 <script src="search.js" defer></script>
 <script src="data.js?v=6"></script>
+<script src="image-dimensions.js"></script>
 <script>
 /* ===== MEDIA TOP RENDERING ===== */
 (function () {
@@ -757,7 +758,7 @@
       <div class="featured-col">
         <a class="featured-card" href="${articleUrl(featured)}">
           <div class="featured-card-image"${ratioAttr(featured.cardRatio)}>
-            ${featured.image ? `<img src="${featured.image}" alt="${featured.title}" loading="lazy" decoding="async">` : `<div class="featured-card-image-placeholder">COMING SOON</div>`}
+            ${featured.image ? `<img ${tjImageSizeAttrs(featured.image)} src="${featured.image}" alt="${featured.title}" loading="lazy" decoding="async">` : `<div class="featured-card-image-placeholder">COMING SOON</div>`}
             <div class="featured-card-arrow"></div>
           </div>
           <div class="featured-card-body">

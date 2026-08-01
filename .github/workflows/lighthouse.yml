@@ -21,5 +21,10 @@ jobs:
             https://techno-japan.media/
             https://techno-japan.media/festivals.html
             https://techno-japan.media/artists.html
+            https://techno-japan.media/festivals/ala.html
+            https://techno-japan.media/en/festivals/ala.html
+            https://techno-japan.media/artists/dj-nobu.html
+            https://techno-japan.media/venues/womb.html
+            https://techno-japan.media/articles/transcendence-2025-report.html
           uploadArtifacts: true
           temporaryPublicStorage: true
