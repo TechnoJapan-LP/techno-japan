@@ -1,0 +1,15 @@
+{
+  "ci": {
+    "assert": {
+      "assertions": {
+        "cumulative-layout-shift": [
+          "error",
+          {
+            "maxNumericValue": 0.05,
+            "aggregationMethod": "pessimistic"
+          }
+        ]
+      }
+    }
+  }
+}

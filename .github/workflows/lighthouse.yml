@@ -26,5 +26,6 @@ jobs:
             https://techno-japan.media/artists/dj-nobu.html
             https://techno-japan.media/venues/womb.html
             https://techno-japan.media/articles/transcendence-2025-report.html
+          configPath: ./.lighthouserc.json
           uploadArtifacts: true
           temporaryPublicStorage: true
