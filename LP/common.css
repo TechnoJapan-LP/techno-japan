@@ -675,6 +675,7 @@ footer         { contain-intrinsic-size: auto 320px; }
   height: 1px;
   background: rgba(240,237,232,0.06);
   animation: scanDown 8s linear infinite;
+  will-change: transform;
 }
 
 @keyframes gridDrift {
@@ -686,8 +687,8 @@ footer         { contain-intrinsic-size: auto 320px; }
   50%      { transform: translate(50vw, 60vh); }
 }
 @keyframes scanDown {
-  0%   { top: -2%; }
-  100% { top: 102%; }
+  0%   { transform: translateY(-2vh); }
+  100% { transform: translateY(102vh); }
 }
 
 /* 背景の上にコンテンツを重ねる */
