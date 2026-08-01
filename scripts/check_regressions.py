@@ -131,6 +131,15 @@ def measure():
         if re.search(r'class="(?:[^"]*\s)?festival-summary(?=[\s"])', body):
             summary_pages += 1
 
+    # 掲載申請ページへの導線。全ページのフッターに張っているので、
+    # テンプレート変更で静かに消えると気づけない。
+    submit_link_pages = sum(
+        1 for f in LP.rglob("*.html")
+        if "/app/" not in str(f)
+        and re.search(r'href="(?:https://techno-japan\.media)?/(?:en/)?submit\.html"', read(f))
+    )
+    m["submit_link_pages"] = submit_link_pages
+
     m["festival_faq_pages"] = faq_ld_pages
     m["festival_faq_section_pages"] = faq_section_pages
     m["festival_faq_qa_total"] = faq_qa_total

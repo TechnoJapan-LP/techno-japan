@@ -157,6 +157,17 @@ metrics:
       指示書 Phase C-1（結論ファースト / BLUF）に対応する要約文。
       全86フェス × JA/EN。
 
+  submit_link_pages:
+    description: 掲載申請ページ（submit.html）へのリンクを持つページ数
+    min: 426
+    target: null              # 詳細ページの増減に比例するため固定目標を置かない
+    note: >-
+      2026-08-01 に submit.html を公開。全ページのフッターから導線を張っている。
+      リンクが無い21ページはすべて noindex かリダイレクトスタブで意図どおり
+      （404 / cms / map / 旧IDスタブ14件 等）。
+      テンプレート変更でフッターの導線が静かに消えるのを防ぐ。
+      詳細ページが増えれば増えるので、減ったら回帰。
+
   broken_image_refs:
     description: 生成HTMLが参照する /images/ で実体が存在しないものの件数
     min: 0
@@ -209,3 +220,16 @@ hub_pages:
     marker: feed-card              # news は <main> を使わず別コンテナへ描画する
     min_markers: 1                 # 実測 1（ARTICLES が1件のみのため）
     min_container_bytes: 0         # <main> は空が正常
+  # submit は静的ページで JS 描画を持たない。marker は静的セクションを数えるので
+  # 「JS が描画したか」ではなく「ページが正しく配信され本文が存在するか」の検査になる。
+  # Uncaught 例外の検出は他ページと同じく有効。
+  submit.html:
+    container: main-content
+    marker: submit-section
+    min_markers: 3                 # 実測 3
+    min_container_bytes: 800       # 実測 1,100
+  en/submit.html:
+    container: main-content
+    marker: submit-section
+    min_markers: 3                 # 実測 3
+    min_container_bytes: 800       # 実測 1,640
