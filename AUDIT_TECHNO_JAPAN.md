@@ -857,3 +857,56 @@ Drive 上で同名になり差し替えになる。** 記事内画像だけは�
 
 拡張子は `compressImage()` の webp 対応判定で決まり、実質常に `.webp`。
 ただし CORS フォールバック経路（§9-2）だけは原本の拡張子のまま保存される。
+
+### 9-11. アセットのキャッシュバスティング破れ（監査後に発覚）
+
+CMS の変更をデプロイしても、ブラウザ側に反映されない事象が起きた。
+`cms.html`（新しい英語欄が見える）と `cms.js`（STATUS の draft 既定が効かない）で
+新旧が食い違うのが手がかりになった。
+
+**原因**: `sw.js:73` が前提としている「クエリでバージョン管理」が守られていなかった。
+
+```js
+// フォント/CSS/JS はファイル名かクエリでバージョン管理しているので cache-first でよい
+if (/\.(css|js|woff2?|ttf|otf)$/i.test(url.pathname)) {
+  event.respondWith(cacheFirst(request));
+```
+
+HTML は network-first なので `cms.html` は更新される。しかし JS/CSS は **cache-first** で、
+キャッシュキーはクエリを含む完全URL。`cms.js?v=25` のまま中身だけ変えても、
+一度取得したブラウザは永久に旧版を使い続ける。
+
+| アセット | ?v 最終変更 | 実体の最終変更 | 据え置き中の変更回数 |
+|---|---|---|---:|
+| `cms.js` | 2026-07-13 | 2026-08-01 | **26** |
+| `cms.css` | 2026-07-19 | 2026-08-01 | **8** |
+| `data.js` | — | 2026-08-01 | **16** |
+| `common.css` | — | 2026-08-01 | 1 |
+
+**7月13日以降に入れた cms.js の変更26回ぶんが、既存ブラウザには届いていなかった。**
+本番のファイル自体は正しく配信されていた（`curl` で全変更を確認済み）ので、
+サーバ側ではなくキャッシュ層の問題。
+
+**対応**: `cms.js?v=26` / `cms.css?v=12` / `common.css?v=3` / `data.js?v=7` へ更新。
+
+**構造的な弱点**: バージョン更新が手作業で、忘れても誰も気づかない。
+`favorites.js` / `search.js` / `image-dimensions.js` は**クエリ自体が無く**、
+ファイル名も変わらないため、更新手段が存在しない状態にある。
+恒久対策としてはビルド時にコンテンツハッシュを付与するのが本筋。
+
+### 9-12. 記録: CMS の画像パス自動補完が .jpg を入れる
+
+`cms.js:480-489` の `autoFillVenueImage` / `autoFillFestivalImage` /
+`autoFillArtistImage` が、ID から画像パスを組み立てるときに `.jpg` を付けている。
+
+```js
+document.getElementById('f-image').value = id ? 'images/festivals/'+id+'.jpg' : '';
+document.getElementById('f-flyer').value = id ? 'images/festivals/'+id+'-flyer.jpg' : '';
+```
+
+サイトが配信するのは `.webp` のみ（§9-2）。実害は今のところ無い —
+Publish 時に `cms.js:4369` の `webp()` が拡張子を `.webp` へ正規化するため。
+ただし **CMS の画面上は実在しないパスが表示され**、混乱の元になる。
+`images/venues/womb.jpg` と表示されるが実体は `womb.webp`。
+
+4箇所すべてを `.webp` に変えるのが素直。未修正。
