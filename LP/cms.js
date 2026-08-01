@@ -4299,6 +4299,29 @@ function publishSanityCheck(d){
       if(!confirm('⚠️ 前回Publishから件数が大幅に減っています。\n'+detail+'\n\n意図した削除でなければキャンセルしてください。続行しますか?')) return {ok:false, message:'Publishをキャンセルしました'};
     }
   }
+  // FESTIVALS の DATE 検証。
+  // 2026-07-22 の Publish で1件の DATE が失われ、festivals.html の
+  // getYearFromDate が undefined.split() で落ちて一覧が10日間表示されなかった。
+  // JS 側は防御済みなのでもう落ちないが、DATE が無いフェスは月グループを
+  // 作れず一覧から消える（＝サイトから見えなくなる）ため、公開前に知らせる。
+  const dateIssues = (d.FESTIVALS||[]).map(f => {
+    const id = (f.ID || f.id || '').trim();
+    const raw = (f.DATE != null ? f.DATE : f.date);
+    const v = String(raw == null ? '' : raw).trim();
+    if(!v) return { id, reason: 'DATE 未入力' };
+    // "YYYY-MM-DD" または "YYYY-MM-DD/YYYY-MM-DD"（スキーマ §2.3）
+    const ok = v.split('/').every(p => /^\d{4}-\d{2}-\d{2}$/.test(p.trim()));
+    return ok ? null : { id, reason: 'DATE 形式不正 "'+v+'"' };
+  }).filter(Boolean);
+  if(dateIssues.length){
+    const detail = dateIssues.slice(0,10).map(x => '  ・'+x.id+' — '+x.reason).join('\n')
+      + (dateIssues.length>10 ? '\n  …他 '+(dateIssues.length-10)+' 件' : '');
+    if(!confirm('⚠️ DATE に問題があるフェスが '+dateIssues.length+' 件あります。\n'
+      +detail
+      +'\n\nこれらはフェス一覧に表示されません（詳細ページは残ります）。'
+      +'\n形式は YYYY-MM-DD または YYYY-MM-DD/YYYY-MM-DD です。'
+      +'\n\nこのまま公開しますか?')) return {ok:false, message:'Publishをキャンセルしました（DATEを修正してください）'};
+  }
   return {ok:true, counts};
 }
 

@@ -137,3 +137,32 @@ metrics:
       検査を生成物のファイル名で行う理由: fetch-data.mjs は ID を検証して
       exit(1) するが、詳細ページの元になる data.js は CMS の Publish Now(GAS)
       が生成する別経路で、その検証を通らない。ここが実質唯一の自動関門。
+
+# ハブページの JS 健全性（scripts/check_hub_pages.py）
+#
+# 生成物の静的検査では「JS は配信されているが実行時に死ぬ」障害を検出できない。
+# 2026-07-22 から 10日間 festivals.html の一覧が表示されていなかった事故
+# （data.js の DATE 欠落 → getYearFromDate が undefined.split() で例外 →
+# ページ全体の JS 停止）を受けて追加した。
+#
+# marker には「JS だけが生成するクラス名」を指定する。静的リンクの
+# フォールバックが残っていても描画失敗を検出できるようにするため。
+# min_markers は実測値から余裕を持たせた値（データ件数の増減で多少ぶれる）。
+hub_pages:
+  festivals.html:
+    container: festivals-main
+    marker: festival-layout        # フェスカード。JS の renderFestivals が生成
+    min_markers: 50                # 実測 70（86件中、表示対象のフェスカード）
+    min_container_bytes: 60000     # 実測 112,911。JS 停止時は 9,130 まで落ちた
+  artists.html:
+    marker: artist-card
+    min_markers: 70                # 実測 101
+    min_container_bytes: 40000     # 実測 66,260
+  venues.html:
+    marker: venue-card
+    min_markers: 18                # 実測 23
+    min_container_bytes: 10000     # 実測 17,101
+  news.html:
+    marker: feed-card              # news は <main> を使わず別コンテナへ描画する
+    min_markers: 1                 # 実測 1（ARTICLES が1件のみのため）
+    min_container_bytes: 0         # <main> は空が正常

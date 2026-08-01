@@ -14,8 +14,15 @@ on:
     paths:
       - 'LP/data.js'
       - 'LP/data/**'
+      # ハブページ本体と共有アセット。2026-07-22 の障害は festivals.html の
+      # JS が原因だったが、当時のパス条件では検査対象外だった。
+      - 'LP/*.html'
+      - 'LP/common.js'
+      - 'LP/common.css'
+      - 'LP/search.js'
       - 'scripts/build-detail-pages.mjs'
       - 'scripts/check_regressions.py'
+      - 'scripts/check_hub_pages.py'
       - '.github/regression-thresholds.yml'
       - '.github/workflows/regression-check.yml'
   workflow_dispatch:
@@ -61,6 +68,17 @@ jobs:
 
       - name: Check regression thresholds
         run: python3 scripts/check_regressions.py
+
+      # 生成物の静的検査では「JS は配信されているが実行時に死ぬ」障害を検出できない。
+      # 実際に headless Chrome で開いて、Uncaught 例外と描画結果を確認する。
+      - name: Verify Chrome is available
+        run: |
+          if command -v google-chrome >/dev/null; then google-chrome --version
+          elif command -v chromium >/dev/null; then chromium --version
+          else echo "::error::headless Chrome が見つかりません"; exit 1; fi
+
+      - name: Check hub pages render (JS health)
+        run: python3 scripts/check_hub_pages.py
 
       # 生成物は絶対にコミットしない（検査専用ジョブ）。
       # 明示的に捨てて、後続ステップが誤って拾わないようにする。
