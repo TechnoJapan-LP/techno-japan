@@ -132,6 +132,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   injectPublishingSections();
   renderRecentItems();
   renderTrashCount();
+  refreshImageSyncButton();
   initKeyboardShortcuts();
   loadAuthorsForDropdown();
   initArticleEditor();
@@ -2174,7 +2175,7 @@ function uploadCompleteInfo(imagePath, details){
     +'<strong>✓ Driveへのアップロード完了</strong>'+(details||'')
     +(imagePath ? '<br>'+esc(imagePath) : '')
     +'<br>「Save Changes」で画像パスを保存してください。'
-    +'<br>サイトへの反映は最大30分後です。</div>';
+    +'<br>左メニューの「画像を今すぐ同期」を押すと、通常1〜3分で反映されます。</div>';
 }
 window.addEventListener('beforeunload',()=>{
   pendingImagePreviews.forEach(url=>URL.revokeObjectURL(url));
@@ -2266,7 +2267,7 @@ function uploadImage(input,type,prefix){
     return fetch(GAS_URL,{method:'POST',body:JSON.stringify(body)}).then(r=>r.json()).then(d=>{
       if(d.status==='ok'||d.success){
         const imagePath=d.imagePath||d.path||'';
-        toast('Driveへのアップロード完了 — Save Changesが必要／サイト反映は最大30分後','success');
+        toast('Driveへのアップロード完了 — Save Changes後に画像同期ボタンを押してください','success');
         if(imagePath&&prefix){
           const target=type==='festival-flyer'?prefix+'-flyer':prefix+'-image';
           const el=document.getElementById(target);
@@ -2333,7 +2334,7 @@ function uploadFromUrl(prefix,type,pathFieldId,urlFieldId,previewId){
   if(previewEl)previewEl.style.display='none';
   const done=()=>{btn.disabled=false;btn.textContent='UPLOAD';};
   const showOk=(path,extra,blob)=>{
-    toast('Driveへのアップロード完了 — Save Changesが必要／サイト反映は最大30分後','success');
+    toast('Driveへのアップロード完了 — Save Changes後に画像同期ボタンを押してください','success');
     document.getElementById(pathFieldId).value=path||'';
     if(previewEl){
       const localUrl=rememberPendingImagePreview(path,blob);
@@ -2346,16 +2347,16 @@ function uploadFromUrl(prefix,type,pathFieldId,urlFieldId,previewId){
   // 「完了」だけ出して黙っていると、サイトに出ないことに気づけない（webp 化は
   // Sync Drive Images 側で行うため即時反映されない）。
   const showFallback=(path)=>{
-    toast('Driveへのアップロード完了 — Save Changesが必要／サイト反映は最大30分後','warning');
+    toast('Driveへのアップロード完了 — Save Changes後に画像同期ボタンを押してください','warning');
     document.getElementById(pathFieldId).value=path||'';
     if(previewEl){
       previewEl.style.display='block';
       previewEl.innerHTML='<img src="'+esc(url)+'" alt="preview" onerror="this.style.display=\'none\'">'
         +'<div class="preview-info" style="color:var(--yellow)">⚠ 原寸のままDriveに保存しました — '+esc(path||'')
         +'<br>配信元がCORSを許可していないため、ブラウザ側でwebp化できませんでした。'
-        +'<br>webp変換は Sync Drive Images（最大30分間隔）で行われるため、<strong>サイトへの反映は即時ではありません</strong>。'
+        +'<br>webp変換は画像同期時に行われるため、<strong>サイトへの反映は即時ではありません</strong>。'
         +'<br><strong>「Save Changes」で画像パスを保存してください。</strong>'
-        +'<br>すぐ反映したい場合は、画像を保存してから「手動アップロード」（ファイル選択）を使ってください。</div>';
+        +'<br>左メニューの「画像を今すぐ同期」を押すと、通常1〜3分で反映されます。</div>';
     }
   };
   // まずブラウザ側で圧縮を試す（1920px/webp）。CORS等で不可なら従来の原寸経路へ。
@@ -3419,7 +3420,7 @@ async function biImgRun(){
   }
   document.getElementById('bi-cancel-btn').style.display='none';
   biProg(`${biCancel?'中断':'完了'}: ${done}件設定 / ${fail}件失敗`
-    + (fellBack.length ? `\n⚠ ${fellBack.length}件は原寸のまま（webp変換は同期時・最大30分）: ${fellBack.join(', ')}` : ''));
+    + (fellBack.length ? `\n⚠ ${fellBack.length}件は原寸のままです。画像同期ボタンを押すとwebpへ変換されます: ${fellBack.join(', ')}` : ''));
   if(fellBack.length) toast(`${fellBack.length}件は原寸のままアップロード — 反映は同期後`,'warning');
   invalidateSheetCache(section);
 }
@@ -3598,6 +3599,61 @@ function closeHomeAndEdit(section, rowNum){
 /* ==============================================================
    IMAGE LIBRARY
    ============================================================== */
+const IMAGE_SYNC_COOLDOWN_KEY = 'cms_image_sync_cooldown_until';
+const IMAGE_SYNC_COOLDOWN_MS = 3 * 60 * 1000;
+let imageSyncCooldownTimer = null;
+
+function setImageSyncStatus(message, isError){
+  const el=document.getElementById('image-sync-status');
+  if(!el)return;
+  el.textContent=message||'';
+  el.style.display=message?'block':'none';
+  el.style.color=isError?'#ff6b6b':'var(--yellow)';
+}
+
+function refreshImageSyncButton(){
+  const btn=document.getElementById('btn-sync-images');
+  if(!btn)return;
+  if(imageSyncCooldownTimer){clearTimeout(imageSyncCooldownTimer);imageSyncCooldownTimer=null;}
+  const until=Number(localStorage.getItem(IMAGE_SYNC_COOLDOWN_KEY)||0);
+  const remaining=Math.max(0,until-Date.now());
+  if(remaining>0){
+    btn.disabled=true;
+    btn.textContent='↻ 同期処理中 ('+Math.ceil(remaining/1000)+'秒)';
+    imageSyncCooldownTimer=setTimeout(refreshImageSyncButton,1000);
+  }else{
+    localStorage.removeItem(IMAGE_SYNC_COOLDOWN_KEY);
+    btn.disabled=false;
+    btn.textContent='↻ 画像を今すぐ同期';
+  }
+}
+
+async function triggerImageSync(){
+  const btn=document.getElementById('btn-sync-images');
+  const until=Number(localStorage.getItem(IMAGE_SYNC_COOLDOWN_KEY)||0);
+  if(until>Date.now()){
+    refreshImageSyncButton();
+    return toast('画像同期はすでに開始されています','info');
+  }
+  if(btn){btn.disabled=true;btn.textContent='↻ 同期を開始中...';}
+  setImageSyncStatus('GitHub Actionsへ同期を依頼しています...',false);
+  try{
+    const d=await fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'trigger_image_sync'})}).then(r=>r.json());
+    if(d && (d.status==='ok'||d.success)){
+      localStorage.setItem(IMAGE_SYNC_COOLDOWN_KEY,String(Date.now()+IMAGE_SYNC_COOLDOWN_MS));
+      setImageSyncStatus('同期を開始しました。通常1〜3分で反映されます。',false);
+      toast('同期を開始しました。通常1〜3分で反映されます。','success');
+      refreshImageSyncButton();
+      return;
+    }
+    throw new Error((d&&d.message)||'同期を開始できませんでした');
+  }catch(e){
+    setImageSyncStatus('同期開始エラー: '+e.message,true);
+    toast('画像同期を開始できませんでした','error');
+    if(btn){btn.disabled=false;btn.textContent='↻ 画像を今すぐ同期';}
+  }
+}
+
 function openImageLibrary(){
   toast('Loading images...','info');
   Promise.all([

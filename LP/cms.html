@@ -43,6 +43,10 @@
     <button class="btn btn-sm" style="width:100%;font-size:.7rem" onclick="exportDataJs()">⬇ Export data.js</button>
   </div>
   <div style="padding:0 12px 8px"><button class="btn btn-sm" style="width:100%;font-size:.7rem" onclick="openImageLibrary()">🖼 Images</button></div>
+  <div style="padding:0 12px 8px">
+    <button id="btn-sync-images" class="btn btn-sm" style="width:100%;font-size:.7rem" onclick="triggerImageSync()">↻ 画像を今すぐ同期</button>
+    <div id="image-sync-status" style="display:none;margin-top:5px;font-family:var(--font-mono);font-size:.58rem;line-height:1.45;color:var(--yellow)"></div>
+  </div>
   <div style="padding:0 12px 8px"><button class="btn btn-sm" style="width:100%;font-size:.7rem" onclick="openTrash()">🗑 Trash <span id="trash-count" style="opacity:.6"></span></button></div>
   <div style="padding:0 12px 8px"><button class="btn btn-sm" style="width:100%;font-size:.7rem" onclick="openStats()">📊 Stats</button></div>
   <div style="padding:0 12px 8px"><button class="btn btn-sm" style="width:100%;font-size:.7rem" onclick="openHomeDashboard()">🏠 Home</button></div>
@@ -493,6 +497,6 @@
   </div>
 </div>
 
-<script src="cms.js?v=28" defer></script>
+<script src="cms.js?v=29" defer></script>
 </body>
 </html>

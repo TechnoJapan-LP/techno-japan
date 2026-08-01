@@ -5,6 +5,11 @@ on:
     - cron: '*/30 * * * *'
   workflow_dispatch:
 
+# scheduleとCMSからの手動実行が重なっても、Drive同期・git pushを並行させない。
+concurrency:
+  group: sync-drive-images
+  cancel-in-progress: false
+
 jobs:
   sync:
     runs-on: ubuntu-latest

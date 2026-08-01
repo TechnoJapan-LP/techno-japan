@@ -32,3 +32,10 @@ ARTISTS は既に name_en / bio_en / ogImage / metaDescription / editorNotes / t
 3. 以上。GAS のコード変更・再デプロイは**不要**（buildRowFromHeaders が自動対応）
 
 これがこの設計の利点。列を足すだけで拡張できる。
+
+## CMSからの画像同期トリガー
+
+[`trigger-image-sync.gs`](trigger-image-sync.gs) をGASプロジェクトへ追加し、認証済みのPOSTルーターに
+`trigger_image_sync` の分岐を追加する。GitHubトークンはコードへ書かず、Script Propertiesの
+`GITHUB_ACTIONS_TOKEN` に保存する。必要権限とデプロイ手順は同ファイルのコメント、および実装時の
+引き渡し手順に従う。
