@@ -149,8 +149,31 @@ def measure():
                 r'href="/(?:festivals|artists|venues|articles)/', read(f)))
     m["en_hub_leaks_to_ja"] = leaks
 
-    # hreflang を持つハブ（ディレクトリ直下のみ。詳細ページは元から持っている）
     hub_names = ["index.html", "festivals.html", "artists.html", "venues.html", "news.html", "about.html"]
+
+    # 言語トグル。「存在する」だけでなく「相手言語へ正しくリンクしている」まで見る。
+    #
+    # 判定に正規表現を使わない理由: nav-lang の中身は JA/EN で非対称で、
+    # JA は <a>EN</a></span>、EN は <span>EN</span></span> で終わる。
+    # `<span class="nav-lang">(.*?)</span></span>` のような書き方だと JA 側だけ
+    # マッチせず「トグルが無い」と誤検出する（実際に一度そう報告してしまった）。
+    # 生成側が出す固定文字列をそのまま探すのが確実。
+    toggle_ok = 0
+    for name in hub_names:
+        for d, lang in ((LP, "ja"), (LP / "en", "en")):
+            f = d / name
+            if not f.exists():
+                continue
+            html = read(f)
+            cur = "JA" if lang == "ja" else "EN"
+            other_lang = "EN" if lang == "ja" else "JA"
+            other_href = f"/en/{name}" if lang == "ja" else f"/{name}"
+            if (f'<span class="nav-lang-cur">{cur}</span>' in html
+                    and f'href="{other_href}">{other_lang}</a>' in html):
+                toggle_ok += 1
+    m["hub_language_toggles"] = toggle_ok
+
+    # hreflang を持つハブ（ディレクトリ直下のみ。詳細ページは元から持っている）
     m["hreflang_hub_pages"] = sum(
         1 for d in (LP, LP / "en") for n in hub_names
         if (d / n).exists() and "hreflang" in read(d / n)

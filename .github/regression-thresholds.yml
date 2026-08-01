@@ -179,6 +179,19 @@ metrics:
       静的リンク・data.js の読み込みパス・index.html の相対表記の3箇所。
       生成物を検査して 0 を維持する。
 
+  hub_language_toggles:
+    description: 言語トグルが正しく相手言語へリンクしているハブ数（JA 6 + EN 6）
+    min: 12
+    target: null              # ハブが増えれば増える
+    note: >-
+      「存在するか」ではなく「相手言語の正しいURLへリンクしているか」まで見る。
+      JA→/en/xxx.html、EN→/xxx.html。片方向だけ壊れる事故を検出するため。
+      判定に正規表現を使わない: nav-lang の中身は JA/EN で非対称
+      （JA は </a></span>、EN は </span></span> で終わる）ため、
+      `<span class="nav-lang">(.*?)</span></span>` と書くと JA 側だけ
+      マッチせず誤検出する。実際に一度「トグルが無い」と誤報告した。
+      生成側が出す固定文字列をそのまま探す。
+
   hreflang_hub_pages:
     description: hreflang を持つハブページ数（JA 5 + EN 5 = index/festivals/artists/venues/news/about）
     min: 12
