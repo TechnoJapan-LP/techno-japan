@@ -2152,6 +2152,35 @@ async function compressUrlAndUpload(url, type, id){
    IMAGE PREVIEW HELPERS
    既存画像のプレビュー表示 / 削除（編集モード用）
    ============================================================== */
+// Drive→サイト同期前でも、同じタブ内ではアップロード済みBlobを確認できるようにする。
+// 保存先パスをキーにするため、Save Changes後に編集フォームを開き直しても再利用できる。
+const pendingImagePreviews = new Map();
+function rememberPendingImagePreview(imagePath, blob){
+  if(!imagePath || !blob) return '';
+  const oldUrl = pendingImagePreviews.get(imagePath);
+  if(oldUrl) URL.revokeObjectURL(oldUrl);
+  const objectUrl = URL.createObjectURL(blob);
+  pendingImagePreviews.set(imagePath, objectUrl);
+  return objectUrl;
+}
+function releasePendingImagePreview(imagePath){
+  const objectUrl = pendingImagePreviews.get(imagePath);
+  if(!objectUrl) return;
+  URL.revokeObjectURL(objectUrl);
+  pendingImagePreviews.delete(imagePath);
+}
+function uploadCompleteInfo(imagePath, details){
+  return '<div class="preview-info" style="color:var(--yellow)">'
+    +'<strong>✓ Driveへのアップロード完了</strong>'+(details||'')
+    +(imagePath ? '<br>'+esc(imagePath) : '')
+    +'<br>「Save Changes」で画像パスを保存してください。'
+    +'<br>サイトへの反映は最大30分後です。</div>';
+}
+window.addEventListener('beforeunload',()=>{
+  pendingImagePreviews.forEach(url=>URL.revokeObjectURL(url));
+  pendingImagePreviews.clear();
+});
+
 /* アップロード直後の画像はまだ Drive→サイトへ同期されていないため、サイト上のパスでは
    404 になる（同期は定期実行）。その場合は Drive 上の実物を直接表示して「アップロードは
    成功している」ことが分かるようにする。Drive にも無ければ本当に見つからない扱い。 */
@@ -2181,12 +2210,16 @@ function showCurrentImage(previewId, imagePath, clearCallExpr){
   const el=document.getElementById(previewId);
   if(!el) return;
   el.style.display='block';
+  const pendingUrl = pendingImagePreviews.get(imagePath) || '';
   // サイト上に無ければ Drive の実物へフォールバック（同期待ちを「消えた」と誤解させない）
   const errHandler = "fallbackToDriveImage(this)";
   el.innerHTML =
-    '<img src="'+esc(imagePath)+'" data-path="'+esc(imagePath)+'" alt="current" onerror="'+errHandler+'" style="max-height:140px">' +
+    '<img src="'+esc(pendingUrl||imagePath)+'" data-path="'+esc(imagePath)+'" alt="current" onerror="'+errHandler+'" style="max-height:140px">' +
     '<div class="img-missing-placeholder" style="display:none;width:200px;height:120px;background:#1a1a1a;border:1px dashed #444;border-radius:4px;align-items:center;justify-content:center;color:#888;font-family:var(--font-mono);font-size:.7rem;text-align:center;padding:8px;line-height:1.4">📁 画像ファイルが<br>見つかりません<br><span style="opacity:.6">(Drive 同期待ち or 手動で再 upload)</span></div>' +
-    '<div class="preview-info">現在の画像 — '+esc(imagePath)+' <button type="button" class="btn btn-sm btn-accent" style="margin-left:8px;padding:2px 8px;font-size:.65rem" onclick="'+clearCallExpr+'">✕ Remove</button></div>';
+    (pendingUrl
+      ? uploadCompleteInfo(imagePath, '')
+      : '<div class="preview-info">現在の画像 — '+esc(imagePath)+'</div>') +
+    '<div class="preview-info"><button type="button" class="btn btn-sm btn-accent" style="padding:2px 8px;font-size:.65rem" onclick="'+clearCallExpr+'">✕ Remove</button></div>';
 }
 function clearImageField(prefix, opts){
   opts=opts||{};
@@ -2194,6 +2227,8 @@ function clearImageField(prefix, opts){
   const urlId=opts.urlId||(prefix+'-imageUrl');
   const previewId=opts.previewId||('preview-'+prefix+'-image');
   const pathEl=document.getElementById(pathId);
+  const oldPath=(pathEl?.value||'').trim();
+  if(oldPath) releasePendingImagePreview(oldPath);
   if(pathEl){pathEl.removeAttribute('readonly');pathEl.value='';pathEl.setAttribute('readonly','');}
   const urlEl=document.getElementById(urlId);
   if(urlEl) urlEl.value='';
@@ -2230,13 +2265,20 @@ function uploadImage(input,type,prefix){
     const body={action,imageData:dataUrl,mimeType,id,type,filename};
     return fetch(GAS_URL,{method:'POST',body:JSON.stringify(body)}).then(r=>r.json()).then(d=>{
       if(d.status==='ok'||d.success){
-        toast('Uploaded ('+compMB+'MB) — 「Save Changes」を押すまで保存されません','success');
-        if(d.imagePath&&prefix){
+        const imagePath=d.imagePath||d.path||'';
+        toast('Driveへのアップロード完了 — Save Changesが必要／サイト反映は最大30分後','success');
+        if(imagePath&&prefix){
           const target=type==='festival-flyer'?prefix+'-flyer':prefix+'-image';
           const el=document.getElementById(target);
-          if(el)el.value=d.imagePath;
+          if(el)el.value=imagePath;
         }
-        if(previewEl){const info=previewEl.querySelector('.preview-info');if(info)info.textContent='✓ '+width+'×'+height+' ('+compMB+'MB)';}
+        if(previewEl){
+          const localUrl=rememberPendingImagePreview(imagePath,blob);
+          const img=previewEl.querySelector('img');
+          if(img&&localUrl)img.src=localUrl;
+          const info=previewEl.querySelector('.preview-info');
+          if(info)info.outerHTML=uploadCompleteInfo(imagePath,' — '+width+'×'+height+' ('+compMB+'MB '+fmtLabel+')');
+        }
       } else {
         toast(d.message||'Upload failed','error');
         renderUploadFailed(previewEl,'✗ Upload failed: '+(d.message||''),prefix,type);
@@ -2259,6 +2301,8 @@ function renderUploadFailed(previewEl,message,prefix,type){
   // Clear the path field that uploadImage may have set partially
   const pathFieldId=prefix+'-'+(type==='festival-flyer'?'flyer':'image');
   const pathEl=document.getElementById(pathFieldId);
+  const oldPath=(pathEl?.value||'').trim();
+  if(oldPath) releasePendingImagePreview(oldPath);
   if(pathEl){pathEl.removeAttribute('readonly');pathEl.value='';pathEl.setAttribute('readonly','');}
   previewEl.style.display='block';
   previewEl.innerHTML='<div class="preview-info" style="color:#ff6b6b">'+esc(message)+' <button type="button" class="btn btn-sm" style="margin-left:8px;padding:2px 8px;font-size:.65rem" onclick="this.closest(\'.img-preview\').style.display=\'none\';this.closest(\'.img-preview\').innerHTML=\'\'">Dismiss</button></div>';
@@ -2288,19 +2332,21 @@ function uploadFromUrl(prefix,type,pathFieldId,urlFieldId,previewId){
   const previewEl=document.getElementById(previewId);
   if(previewEl)previewEl.style.display='none';
   const done=()=>{btn.disabled=false;btn.textContent='UPLOAD';};
-  const showOk=(path,extra)=>{
-    toast('アップロード完了'+(extra||'')+' — 「Save Changes」を押すまで保存されません','success');
+  const showOk=(path,extra,blob)=>{
+    toast('Driveへのアップロード完了 — Save Changesが必要／サイト反映は最大30分後','success');
     document.getElementById(pathFieldId).value=path||'';
     if(previewEl){
+      const localUrl=rememberPendingImagePreview(path,blob);
       previewEl.style.display='block';
-      previewEl.innerHTML='<img src="'+esc(url)+'" alt="preview" onerror="this.style.display=\'none\'"><div class="preview-info">✓ アップロード済み — '+esc(path||'')+'</div>';
+      previewEl.innerHTML='<img src="'+esc(localUrl||url)+'" alt="preview" onerror="this.style.display=\'none\'">'
+        +uploadCompleteInfo(path,extra||'');
     }
   };
   // ブラウザ側で webp 化できず、原寸のまま Drive に入った場合の表示。
   // 「完了」だけ出して黙っていると、サイトに出ないことに気づけない（webp 化は
   // Sync Drive Images 側で行うため即時反映されない）。
   const showFallback=(path)=>{
-    toast('原寸のままアップロードしました — webp変換は同期時（最大30分）','warning');
+    toast('Driveへのアップロード完了 — Save Changesが必要／サイト反映は最大30分後','warning');
     document.getElementById(pathFieldId).value=path||'';
     if(previewEl){
       previewEl.style.display='block';
@@ -2308,12 +2354,13 @@ function uploadFromUrl(prefix,type,pathFieldId,urlFieldId,previewId){
         +'<div class="preview-info" style="color:var(--yellow)">⚠ 原寸のままDriveに保存しました — '+esc(path||'')
         +'<br>配信元がCORSを許可していないため、ブラウザ側でwebp化できませんでした。'
         +'<br>webp変換は Sync Drive Images（最大30分間隔）で行われるため、<strong>サイトへの反映は即時ではありません</strong>。'
+        +'<br><strong>「Save Changes」で画像パスを保存してください。</strong>'
         +'<br>すぐ反映したい場合は、画像を保存してから「手動アップロード」（ファイル選択）を使ってください。</div>';
     }
   };
   // まずブラウザ側で圧縮を試す（1920px/webp）。CORS等で不可なら従来の原寸経路へ。
   compressUrlAndUpload(url,type,id).then(r=>{
-    if(r){ done(); showOk(r.path, ' ('+(r.comp.blob.size/1024/1024).toFixed(2)+'MB webp)'); return; }
+    if(r){ done(); showOk(r.path, ' — '+(r.comp.blob.size/1024/1024).toFixed(2)+'MB WebP', r.comp.blob); return; }
     return fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'upload_from_url',imageUrl:url,type:type,id:id})})
       .then(x=>x.json()).then(d=>{
         done();
