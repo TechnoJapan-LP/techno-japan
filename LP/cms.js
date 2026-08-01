@@ -2528,7 +2528,12 @@ function renderList(section, rows){
       const noteIcon=r.editorNotes?' 📝':'';
       prefix+='<td>'+compHtml+'</td><td>'+statusBadge+noteIcon+'</td>';
     }
-    const tds=cols.map(c=>'<td>'+esc(r[c.k])+'</td>').join('');
+    // date 列は fmtDate() を通す。Sheets が日付と解釈できたセル（単日 "2025-09-07" 等）は
+    // GAS の getValues() が Date オブジェクトを返すため、生値だと
+    // "Sun Sep 07 2025 00:00:00 GMT+0900" と表示される。複数日 "A/B" は Sheets が
+    // 日付と解釈できず文字列のまま来るので、一覧に2形式が混在していた。
+    // 書き出し(buildFullDataJs)と編集フォームは既に fmtDate() 済みで、ここだけ漏れていた。
+    const tds=cols.map(c=>'<td>'+esc(c.k==='date'?fmtDate(r[c.k]):r[c.k])+'</td>').join('');
     const nameVal=esc(r.name||r.title||r.id||'');
     // 楽観的挿入直後（GAS応答待ち）は行番号未確定なので操作ボタンを出さない
     const actions = r.__syncing
@@ -4307,6 +4312,21 @@ function publishSanityCheck(d){
   const dateIssues = (d.FESTIVALS||[]).map(f => {
     const id = (f.ID || f.id || '').trim();
     const raw = (f.DATE != null ? f.DATE : f.date);
+    // Date型セルの検出。DATA_SCHEMA は DATE を YYYY-MM-DD の「文字列」と定めているが、
+    // Sheets が日付と解釈できた値（単日入力）はセルが日付書式になり、GAS の
+    // getValues() が Date オブジェクトを返す。複数日 "A/B" は解釈できず文字列のまま。
+    //
+    // ここが唯一の関門である理由: 公開CSV は Date型セルを表示書式に従って
+    // "2025-09-07" と文字列化して出すため、CSV 経由の fetch-data.mjs では
+    // セルの型を原理的に判別できない（gviz も列単位の型しか返さない）。
+    // 型のまま値を受け取れるのは GAS 経由の CMS だけなので、検出はここでしかできない。
+    // 書き出しは fmtDate() が正規化するので data.js やサイトは壊れないが、
+    // 放置すると生値を読む箇所が増えたときに再発する。
+    if (raw instanceof Date) {
+      return isNaN(raw.getTime())
+        ? { id, reason: 'DATE が不正な日付型セル' }
+        : { id, reason: 'DATE が日付型セル（要「書式なしテキスト」化）→ ' + fmtDate(raw) };
+    }
     const v = String(raw == null ? '' : raw).trim();
     if(!v) return { id, reason: 'DATE 未入力' };
     // "YYYY-MM-DD" または "YYYY-MM-DD/YYYY-MM-DD"（スキーマ §2.3）
@@ -4318,8 +4338,10 @@ function publishSanityCheck(d){
       + (dateIssues.length>10 ? '\n  …他 '+(dateIssues.length-10)+' 件' : '');
     if(!confirm('⚠️ DATE に問題があるフェスが '+dateIssues.length+' 件あります。\n'
       +detail
-      +'\n\nこれらはフェス一覧に表示されません（詳細ページは残ります）。'
-      +'\n形式は YYYY-MM-DD または YYYY-MM-DD/YYYY-MM-DD です。'
+      +'\n\n未入力・形式不正のものはフェス一覧に表示されません（詳細ページは残ります）。'
+      +'\n形式は YYYY-MM-DD または YYYY-MM-DD/YYYY-MM-DD の「文字列」です。'
+      +'\n日付型セルは公開時に自動で正規化されるためサイトは壊れませんが、'
+      +'\nD列を「書式なしテキスト」にして入力し直すのが正しい状態です。'
       +'\n\nこのまま公開しますか?')) return {ok:false, message:'Publishをキャンセルしました（DATEを修正してください）'};
   }
   return {ok:true, counts};
