@@ -565,6 +565,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://techno-japan.media/festivals/hacha-mecha.html</loc>
+    <lastmod>2026-08-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://techno-japan.media/artists/dj-nobu.html</loc>
     <lastmod>2026-08-01</lastmod>
     <changefreq>monthly</changefreq>
@@ -2120,6 +2126,12 @@
   </url>
   <url>
     <loc>https://techno-japan.media/en/festivals/grow-the-culture-open-air.html</loc>
+    <lastmod>2026-08-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/en/festivals/hacha-mecha.html</loc>
     <lastmod>2026-08-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>

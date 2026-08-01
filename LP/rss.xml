@@ -5,7 +5,7 @@
     <link>https://techno-japan.media</link>
     <description>Japan&apos;s underground techno and house music media platform.</description>
     <language>ja-JP</language>
-    <lastBuildDate>Sat, 01 Aug 2026 07:10:48 -0000</lastBuildDate>
+    <lastBuildDate>Sat, 01 Aug 2026 17:20:34 -0000</lastBuildDate>
     <atom:link href="https://techno-japan.media/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
       <title>GROW THE CULTURE OPEN AIR</title>
@@ -102,6 +102,14 @@
       <pubDate>Fri, 14 Aug 2026 00:00:00 -0000</pubDate>
       <category>Festival</category>
       <description>Chiba — Summer Sonicのエレクトロニック特化型姉妹イベントは、千葉のフェスティバル・サーキットに凝縮されたダンスミュージックを届ける。本フェスティバルは、よりハードなテクノセットからアクセスしやすいハウス・プログラミングまで、エレクトロニックの幅広いスペクトラムを網羅した厳選ラインナップをキュレーションしている。メインのSummer Sonic体験に比べ、よりインティメートなオルタナティブとして位置づけられる。</description>
+    </item>
+    <item>
+      <title>HACHA MECHA</title>
+      <link>https://techno-japan.media/festivals/hacha-mecha.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/hacha-mecha.html</guid>
+      <pubDate>Sat, 08 Aug 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Gunma — どんぐりずが地元・群馬県桐生市で主催する音楽フェスティバル。2023年、2024年は桐生駅前のロータリーを舞台にDIYスタイルで開催され、第3回となる2026年は会場を市民の憩いの場である新川公園へ移して規模を拡張した。開催日は桐生の夏を象徴する「桐生八木節まつり」に合わせて設定され、まつりの熱気とダンスミュージックが街の中で交差する。</description>
     </item>
     <item>
       <title>FuliRock</title>
@@ -240,18 +248,10 @@
       <description>Nagano — Transcendenceは、長野を取り囲む山岳地帯において、一切妥協のないテクノ・プログラミングを届けている。フェスティバルは日本ならではの自然が生み出す音響と地形を活かし、アンダーグラウンド・エレクトロニック・ミュージックのカルチャーと、この国ならではのフェスティバル・エコシステムを橋渡しする没入体験を作り上げている。その焦点はあくまで音楽そのものに置かれており、国内外のアーティストたちがこの唯一無二の高原の舞台でプレイするために集まってくる。</description>
     </item>
     <item>
-      <title>Osukinidouzo</title>
-      <link>https://techno-japan.media/festivals/osukinidouzo.html</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals/osukinidouzo.html</guid>
-      <pubDate>Sat, 02 May 2026 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Kanagawa — 神奈川で開催される、商業的な派手さよりもアーティスティックな自由とコミュニティを重視した、丁寧にキュレーションされた集い。フェスティバルは親密な規模を保ちながら、エレクトロニックミュージックのより実験的な領域において、確立されたアーティストと新進気鋭のアーティストの両方を紹介している。</description>
-    </item>
-    <item>
       <title>野外テクノパーティTranscendenceで見た次世代ジェネレーションの可能性</title>
       <link>https://techno-japan.media/articles/transcendence-2025-report.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/transcendence-2025-report.html</guid>
-      <pubDate>Sat, 01 Aug 2026 07:10:48 -0000</pubDate>
+      <pubDate>Sat, 01 Aug 2026 17:20:34 -0000</pubDate>
       <category>REPORT</category>
       <description></description>
     </item>
