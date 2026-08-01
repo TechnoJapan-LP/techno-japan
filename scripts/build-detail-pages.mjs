@@ -208,6 +208,14 @@ function fmtFestDate(d) {
 /* ---------- 共通のページ骨格 ---------- */
 const CSP = `default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' https:; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://stats.g.doubleclick.net; frame-src 'self' https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests`;
 
+/* 詳細ページの nav。EN ページでは EN 版が実在するリンク先だけ /en/ へ向ける。
+   EN_PAGES に無いもの（index.html）は JA のままにして 404 を作らない。
+   これを入れる前は EN 詳細206枚の nav が全て JA を指しており、
+   英語ユーザーはどこを押しても日本語ページに出てしまっていた。 */
+function navLink(lang, page) {
+  return (lang === 'en' && EN_PAGES.has(page)) ? `/en/${page}` : `/${page}`;
+}
+
 function navHtml(lang, altHref) {
   // 言語トグル: 対になるページがある時だけ JA / EN を出す
   const toggle = altHref
@@ -218,24 +226,24 @@ function navHtml(lang, altHref) {
   return `<nav>
   <a href="/index.html" class="logo">TECHNO JAPAN</a>
   <div class="nav-links">
-    <a href="/index.html">TOP</a>
-    <a href="/news.html">NEWS</a>
-    <a href="/festivals.html">FESTIVALS</a>
-    <a href="/artists.html">ARTISTS</a>
-    <a href="/venues.html">VENUES</a>
-    <a href="/about.html">ABOUT</a>
+    <a href="${navLink(lang, 'index.html')}">TOP</a>
+    <a href="${navLink(lang, 'news.html')}">NEWS</a>
+    <a href="${navLink(lang, 'festivals.html')}">FESTIVALS</a>
+    <a href="${navLink(lang, 'artists.html')}">ARTISTS</a>
+    <a href="${navLink(lang, 'venues.html')}">VENUES</a>
+    <a href="${navLink(lang, 'about.html')}">ABOUT</a>
     ${toggle}
   </div>
   <button class="nav-hamburger" aria-label="Open menu" onclick="document.querySelector('.nav-overlay').classList.toggle('active');this.classList.toggle('active')"><span></span><span></span><span></span></button>
 </nav>
 <div class="nav-overlay">
   <button class="nav-close" aria-label="Close menu" onclick="document.querySelector('.nav-overlay').classList.remove('active');document.querySelector('.nav-hamburger').classList.remove('active')"></button>
-  <a href="/index.html">TOP</a>
-  <a href="/news.html">NEWS</a>
-  <a href="/festivals.html">FESTIVALS</a>
-  <a href="/artists.html">ARTISTS</a>
-  <a href="/venues.html">VENUES</a>
-  <a href="/about.html">ABOUT</a>
+  <a href="${navLink(lang, 'index.html')}">TOP</a>
+  <a href="${navLink(lang, 'news.html')}">NEWS</a>
+  <a href="${navLink(lang, 'festivals.html')}">FESTIVALS</a>
+  <a href="${navLink(lang, 'artists.html')}">ARTISTS</a>
+  <a href="${navLink(lang, 'venues.html')}">VENUES</a>
+  <a href="${navLink(lang, 'about.html')}">ABOUT</a>
 </div>`;
 }
 
@@ -246,12 +254,12 @@ function footerHtml(lang) {
   <div class="footer-top">
     <div class="footer-logo">TECHNO JAPAN</div>
     <div class="footer-links">
-      <a href="/index.html">TOP</a>
-      <a href="/news.html">NEWS</a>
-      <a href="/festivals.html">FESTIVALS</a>
-      <a href="/artists.html">ARTISTS</a>
-      <a href="/venues.html">VENUES</a>
-      <a href="/about.html">ABOUT</a>
+      <a href="${navLink(lang, 'index.html')}">TOP</a>
+      <a href="${navLink(lang, 'news.html')}">NEWS</a>
+      <a href="${navLink(lang, 'festivals.html')}">FESTIVALS</a>
+      <a href="${navLink(lang, 'artists.html')}">ARTISTS</a>
+      <a href="${navLink(lang, 'venues.html')}">VENUES</a>
+      <a href="${navLink(lang, 'about.html')}">ABOUT</a>
       <a href="${submissionHref}">${submissionLabel}</a>
     </div>
     <div class="footer-copy">&copy; 2025 TECHNO JAPAN. ALL RIGHTS RESERVED.</div>
