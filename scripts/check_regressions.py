@@ -81,6 +81,7 @@ def measure():
     m = {}
 
     fest = sorted((LP / "festivals").glob("*.html"))
+    fest_all = fest + sorted((LP / "en" / "festivals").glob("*.html"))
     artists_ja = sorted((LP / "artists").glob("*.html"))
     artists_all = artists_ja + sorted((LP / "en" / "artists").glob("*.html"))
 
@@ -113,6 +114,27 @@ def measure():
         1 for f in artists_all
         if any(str(d.get("@id", "")).endswith("#artist") for d in ld_objects(read(f)))
     )
+
+    # FAQ と要約文（JA/EN 両方）。
+    # ページ数だけだと 1ページの Q&A が減っても検出できないため、
+    # 設問の総数も別メトリクスとして持つ。
+    faq_ld_pages = faq_section_pages = faq_qa_total = summary_pages = 0
+    for f in fest_all:
+        html = read(f)
+        faqs = [d for d in ld_objects(html) if d.get("@type") == "FAQPage"]
+        if faqs:
+            faq_ld_pages += 1
+            faq_qa_total += sum(len(as_list(d.get("mainEntity"))) for d in faqs)
+        body = body_without_scripts(html)
+        if re.search(r'class="(?:[^"]*\s)?festival-faq(?=[\s"])', body):
+            faq_section_pages += 1
+        if re.search(r'class="(?:[^"]*\s)?festival-summary(?=[\s"])', body):
+            summary_pages += 1
+
+    m["festival_faq_pages"] = faq_ld_pages
+    m["festival_faq_section_pages"] = faq_section_pages
+    m["festival_faq_qa_total"] = faq_qa_total
+    m["festival_summary_pages"] = summary_pages
 
     m["festival_performer_pages"] = perf_pages
     m["festival_performer_total"] = perf_total

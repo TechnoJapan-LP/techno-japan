@@ -120,6 +120,43 @@ metrics:
       新規3件の追加と、B2B 2件（antal-hunee / sisi-b2b-ouissam-b2b-yamarchy）の
       削除が同時に入った結果。リダイレクトスタブは @id を持たないので数に入らない。
 
+  # 2026-08-01 に追加された FAQ と要約文（f19e831 / e763cbf）。
+  # 監査 C1「FAQPage がサイト全体で 0件」と C-2（自然言語の質問を見出しに）への対応。
+  festival_faq_pages:
+    description: JSON-LD に FAQPage を持つフェスページ数（JA + EN）
+    min: 172
+    target: 172
+    note: 全86フェス × JA/EN。全件が対象なので min == target。
+
+  festival_faq_section_pages:
+    description: <section class="festival-faq"> を持つフェスページ数（JA + EN）
+    min: 172
+    target: 172
+    note: >-
+      スキーマ(festival_faq_pages)と可視HTMLの両方を見る。片方だけ壊れる
+      ことがあるため別メトリクスにしている。構造化データだけあって画面に
+      出ていない状態は Google のガイドライン違反にもなる。
+
+  festival_faq_qa_total:
+    description: FAQPage の mainEntity（Q&A）の総数（JA + EN 合算）
+    min: 376
+    target: null              # 設問はデータの充実度で増えるため固定目標を置かない
+    note: >-
+      ページ数だけだと 1ページの設問が 4問 → 1問に減っても検出できないので
+      総数を持つ。2026-08-01 実測 376（JA 188 + EN 188）。
+      1ページあたりの内訳は 1問:1ページ / 2問:74 / 3問:5 / 4問:6（各言語）。
+      min を片言語分の 188 にすると EN の全設問が消えても通ってしまうため、
+      合算値を基準にする。設問数は DATE・会場・チケットURL 等の有無で
+      決まるので、データが欠けると静かに減る。減ったら回帰。
+
+  festival_summary_pages:
+    description: <p class="festival-summary"> を持つフェスページ数（JA + EN）
+    min: 172
+    target: 172
+    note: >-
+      指示書 Phase C-1（結論ファースト / BLUF）に対応する要約文。
+      全86フェス × JA/EN。
+
   broken_image_refs:
     description: 生成HTMLが参照する /images/ で実体が存在しないものの件数
     min: 0
