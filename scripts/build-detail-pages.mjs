@@ -905,6 +905,134 @@ function hubLinkList(items, dirName, labelFor) {
   ).join('\n')}\n</ul>`;
 }
 
+/* ---------- EN ハブページの生成 ----------
+   JA ハブ（手書きHTML）を唯一のソースとし、機械置換で EN 版を作る。
+   テンプレート化しない理由: ハブ4枚は互いに style 7-19% / JS 9-25% しか
+   共通しておらず、畳めるのは nav/footer 等の外枠 10.8KB だけ。労力に見合わない。
+   一方 JA→EN の差分は「メタ + 内部リンク + 固定文言1つ」しかないので、
+   置換のほうが確実で、JA を直せば EN が自動追随する（二重管理が起きない）。 */
+
+// EN 版が実在するページ。ここに無いものは JA を指したままにする（404 を作らない）。
+const EN_PAGES = new Set(['about.html', 'submit.html', 'festivals.html', 'artists.html', 'venues.html', 'news.html']);
+
+// EN ハブの meta description（JA は日英併記なので英語のみに差し替える）
+const EN_HUB_DESC = {
+  'festivals.html': "Techno, house and open-air festivals across Japan. Browse by date, region and genre — the definitive guide to Japan's electronic music festivals and underground raves.",
+  'artists.html': "DJs and artists shaping Japan's underground techno and house scene. Profiles, genres and festival appearances.",
+  'venues.html': "Clubs, warehouses and music bars across Japan. The venues that define the country's underground electronic music scene.",
+  'news.html': "Stories, interviews and reports from Japan's underground techno and house scene.",
+};
+
+// 本文に残る日本語の固定文言（データ由来の日本語は対象外）
+const EN_HUB_TEXT = [
+  ['FESTIVAL 掲載申請', 'Submit a Festival'],
+];
+
+function enHubFromJa(html, page) {
+  let s = html;
+  const abs = (p) => `${BASE}/${p === 'index.html' ? '' : p}`;
+
+  // 言語シグナル
+  s = s.replace(/<html lang="[^"]*"/, '<html lang="en"');
+  s = s.replace(/(property="og:locale" content=")[^"]*/, '$1en_US');
+
+  // 正規URL と OGP URL を /en/ 側へ
+  s = s.replace(new RegExp(`(rel="canonical" href=")${abs(page)}"`), `$1${BASE}/en/${page}"`);
+  s = s.replace(new RegExp(`(property="og:url" content=")${abs(page)}"`), `$1${BASE}/en/${page}"`);
+
+  // description 系を英語のみに
+  const d = EN_HUB_DESC[page];
+  if (d) {
+    for (const attr of ['name="description"', 'property="og:description"', 'name="twitter:description"']) {
+      s = s.replace(new RegExp(`(<meta ${attr} content=")[^"]*`), `$1${d}`);
+    }
+  }
+
+  // 内部リンク: EN 版があるページだけ /en/ へ。相対・絶対の両表記に対応する。
+  s = s.replace(/href="\/?((?:index|news|festivals|artists|venues|about|submit)\.html)"/g,
+    (m, p) => (EN_PAGES.has(p) ? `href="/en/${p}"` : m));
+  // EN 版が無いページ（index）は相対表記だと /en/index.html を指してしまう。
+  // ルート相対に正規化して JA トップへ確実に戻す。
+  s = s.replace(/href="index\.html"/g, 'href="/index.html"');
+
+  // JA ハブは共有アセットを相対パスで読んでいる。/en/ に置くと /en/data.js を
+  // 探して 404 になり、FESTIVALS is not defined でページ全体が死ぬ。
+  // ルート相対へ正規化する。?v のクエリは維持する（キャッシュバスティング §9-11）。
+  s = s.replace(/(<(?:script|link)[^>]*(?:src|href)=")((?!https?:|\/|#|mailto:|data:)[a-z0-9-]+\.(?:js|css)(?:\?v=\d+)?)"/g,
+    '$1/$2"');
+
+  // 詳細ページへのリンクを EN 側へ。A1 の静的リンク一覧と、SPA が描画する
+  // カードの両方が対象。EN 詳細は 206枚すべて実在する。
+  s = s.replace(/href="\/(festivals|artists|venues|articles)\//g, 'href="/en/$1/');
+  s = s.replace(/href="\/\$\{/g, 'href="/en/${');   // JS テンプレート内の絶対パス
+  s = s.replace(/`\/(festivals|artists|venues|articles)\/\$\{/g, '`/en/$1/${');
+
+  // 固定文言
+  for (const [ja, en] of EN_HUB_TEXT) s = s.split(ja).join(en);
+
+  // hreflang: JA 側の3行を EN 視点の3行へ「置換」する。
+  // 追記にすると JA から引き継いだ分と二重になる（6本出る）。
+  s = s.replace(/<link rel="alternate" hreflang="[^"]*" href="[^"]*">\n?/g, '');
+  s = s.replace(`<link rel="canonical" href="${BASE}/en/${page}">`,
+    `<link rel="canonical" href="${BASE}/en/${page}">\n${hreflangPair(page, 'en')}`);
+
+  // 言語トグル（JA 側と対になる形）。
+  // `<span class="nav-lang">[\s\S]*?</span></span>` のような緩い正規表現は使わない。
+  // nav-lang 内には </span></span> が現れないため 10KB 先まで走り、
+  // 詳細ビューのマークアップ152行を巻き込んで消す事故を起こした。
+  // 実際に生成される固定文字列だけを対象にする。
+  const jaToggle = `<span class="nav-lang"><span class="nav-lang-cur">JA</span><span class="nav-lang-sep">/</span><a href="/en/${page}">EN</a></span>`;
+  const enToggle = `<span class="nav-lang"><a href="/${page}">JA</a><span class="nav-lang-sep">/</span><span class="nav-lang-cur">EN</span></span>`;
+  if (!s.includes(jaToggle)) throw new Error(`${page}: 言語トグルが見つからない（JA 側の生成と不整合）`);
+  s = s.split(jaToggle).join(enToggle);
+
+  return s;
+}
+
+function hreflangPair(page, self) {
+  const ja = `${BASE}/${page}`;
+  const en = `${BASE}/en/${page}`;
+  return [
+    `<link rel="alternate" hreflang="${self}" href="${self === 'ja' ? ja : en}">`,
+    `<link rel="alternate" hreflang="${self === 'ja' ? 'en' : 'ja'}" href="${self === 'ja' ? en : ja}">`,
+    `<link rel="alternate" hreflang="x-default" href="${en}">`,
+  ].join('\n');
+}
+
+/* JA ハブを正す（lang / hreflang / 言語トグル）。EN 生成の前に実行する。
+   全ハブが <html lang="en"> なのに og:locale="ja_JP" という矛盾状態だった。 */
+function fixJaHub(fileName) {
+  const file = path.join(LP_DIR, fileName);
+  let s = fs.readFileSync(file, 'utf8');
+  const before = s;
+
+  s = s.replace(/<html lang="[^"]*"/, '<html lang="ja"');
+
+  const canon = `<link rel="canonical" href="${BASE}/${fileName}">`;
+  if (s.includes(canon) && !s.includes('hreflang')) {
+    s = s.replace(canon, `${canon}\n${hreflangPair(fileName, 'ja')}`);
+  }
+  // 言語トグルを nav-social の直後に置く（無ければ nav-links の末尾）
+  if (!s.includes('nav-lang')) {
+    const toggle = `<span class="nav-lang"><span class="nav-lang-cur">JA</span><span class="nav-lang-sep">/</span><a href="/en/${fileName}">EN</a></span>`;
+    s = s.replace(/(<span class="nav-social">[\s\S]*?<\/span>)(\s*<\/div>)/, `$1\n    ${toggle}$2`);
+  }
+  if (s === before) return false;
+  fs.writeFileSync(file, s);
+  return true;
+}
+
+function writeEnHub(fileName) {
+  const src = fs.readFileSync(path.join(LP_DIR, fileName), 'utf8');
+  const out = path.join(LP_DIR, 'en', fileName);
+  const html = enHubFromJa(src, fileName);
+  const cur = fs.existsSync(out) ? fs.readFileSync(out, 'utf8') : null;
+  if (cur === html) return false;
+  fs.mkdirSync(path.dirname(out), { recursive: true });
+  fs.writeFileSync(out, html);
+  return true;
+}
+
 function writeHubLinks(fileName, markerName, html) {
   const file = path.join(LP_DIR, fileName);
   const start = `<!-- STATIC_LINKS:${markerName}:START -->`;
@@ -1050,6 +1178,12 @@ function main() {
     },
   };
 
+  // JA ハブを正してから EN を作る。順序が逆だと、直す前の JA から EN が生まれる。
+  // 静的リンクの差し替え（上の hubCounts）も EN へ引き継ぐため、この位置に置く。
+  const HUBS = ['festivals.html', 'artists.html', 'venues.html', 'news.html'];
+  const jaFixed = HUBS.filter(fixJaHub);
+  const enWritten = HUBS.filter(writeEnHub);
+
   console.log('Detail pages:');
   let total = 0, written = 0, removed = 0;
   for (const [k, v] of Object.entries(counts)) {
@@ -1057,6 +1191,8 @@ function main() {
     total += v.total; written += v.written; removed += v.removed;
   }
   console.log(`  total: ${total} pages — ${written} written, ${removed} removed`);
+  console.log(`JA hubs fixed (lang/hreflang/toggle): ${jaFixed.length ? jaFixed.join(', ') : 'none'}`);
+  console.log(`EN hubs written: ${enWritten.length ? enWritten.join(', ') : 'none (up to date)'}`);
   console.log('Hub static links:');
   for (const [file, result] of Object.entries(hubCounts)) {
     console.log(`  ${file}: ${result.total} links (${result.written ? 'updated' : 'unchanged'})`);

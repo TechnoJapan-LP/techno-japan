@@ -168,6 +168,25 @@ metrics:
       テンプレート変更でフッターの導線が静かに消えるのを防ぐ。
       詳細ページが増えれば増えるので、減ったら回帰。
 
+  en_hub_leaks_to_ja:
+    description: EN ハブから JA 詳細ページへ漏れているリンクの数
+    min: 0
+    max: 0                    # 増加方向が回帰
+    target: 0
+    note: >-
+      EN ハブは JA ハブから機械生成する（enHubFromJa）。置換漏れがあると
+      英語ユーザーが日本語ページへ飛ばされる。実装時に実際に踏んだ:
+      静的リンク・data.js の読み込みパス・index.html の相対表記の3箇所。
+      生成物を検査して 0 を維持する。
+
+  hreflang_hub_pages:
+    description: hreflang を持つハブページ数（JA 4 + EN 4 + about 2）
+    min: 10
+    target: null              # ハブが増えれば増える
+    note: >-
+      2026-08-02 まで JA ハブ8枚に hreflang が1本も無かった。
+      JA/EN を相互に張り、x-default は EN（詳細ページの既存規則に合わせる）。
+
   broken_image_refs:
     description: 生成HTMLが参照する /images/ で実体が存在しないものの件数
     min: 0
@@ -233,3 +252,22 @@ hub_pages:
     marker: submit-section
     min_markers: 3                 # 実測 3
     min_container_bytes: 800       # 実測 1,640
+  # EN ハブ（build-detail-pages.mjs が JA から機械生成する）。
+  # marker と閾値は JA と同じでよい。同じ data.js を読むのでカード数も一致する。
+  en/festivals.html:
+    container: festivals-main
+    marker: festival-layout
+    min_markers: 50                # 実測 71
+    min_container_bytes: 60000
+  en/artists.html:
+    marker: artist-card
+    min_markers: 70                # 実測 101
+    min_container_bytes: 40000
+  en/venues.html:
+    marker: venue-card
+    min_markers: 18                # 実測 23
+    min_container_bytes: 10000
+  en/news.html:
+    marker: feed-card
+    min_markers: 1                 # 実測 1
+    min_container_bytes: 0
