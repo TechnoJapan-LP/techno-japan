@@ -95,6 +95,19 @@ function breadcrumbLd(sectionLabel, sectionPath, name, canonical) {
 
 const truncate = (s, n) => (s.length > n ? s.slice(0, n - 1) + '…' : s);
 
+// primary は既存互換の値。言語別値が未入力なら primary、さらに反対言語へ
+// フォールバックし、列追加直後でも表示を欠落させない。
+function localizedValue(primary, ja, en, lang) {
+  const values = {
+    primary: String(primary || '').trim(),
+    ja: String(ja || '').trim(),
+    en: String(en || '').trim(),
+  };
+  return lang === 'en'
+    ? (values.en || values.primary || values.ja)
+    : (values.ja || values.primary || values.en);
+}
+
 function loadImageDimensions() {
   if (!fs.existsSync(IMAGE_DIMENSIONS_PATH)) throw new Error('image-dimensions.json がありません。先に node scripts/build-image-dimensions.mjs を実行してください');
   return JSON.parse(fs.readFileSync(IMAGE_DIMENSIONS_PATH, 'utf8'));
@@ -385,14 +398,18 @@ function articlePage(a, resolveEntities, lang = 'ja') {
 /* ---------- フェスティバルページ ---------- */
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
-function editionPlace(ed) {
-  return [ed.LOCATION, ed.PREF].filter(Boolean).join(', ');
+function editionLocationName(ed, lang) {
+  return localizedValue(ed.LOCATION, ed.LOCATION_JA, ed.LOCATION_EN, lang);
 }
 
-function editionLocationLd(ed) {
+function editionPlace(ed, lang) {
+  return [editionLocationName(ed, lang), ed.PREF].filter(Boolean).join(', ');
+}
+
+function editionLocationLd(ed, lang) {
   return {
     '@type': 'Place',
-    name: ed.LOCATION || ed.PREF || 'Japan',
+    name: editionLocationName(ed, lang) || ed.PREF || 'Japan',
     address: {
       '@type': 'PostalAddress',
       addressRegion: ed.PREF || '',
@@ -431,7 +448,7 @@ function editionsTable(editions, lang) {
   const rows = editions.map((ed) => `<tr>
       <th scope="row">${esc(ed.EDITION || ed.EDITION_ID)}</th>
       <td class="edition-date">${editionDateHtml(ed, lang)}</td>
-      <td>${esc(editionPlace(ed) || '—')}</td>
+      <td>${esc(editionPlace(ed, lang) || '—')}</td>
       <td>${esc(ed.STATUS || '—')}</td>
       <td>${ed.TICKETURL ? `<a href="${esc(ed.TICKETURL)}" target="_blank" rel="noopener">${lang === 'en' ? 'Tickets' : 'チケット'}</a>` : '—'}</td>
     </tr>`).join('\n');
@@ -540,7 +557,7 @@ function festivalSummary(festival, edition, name, lang) {
   const area = festivalAreaText(festival, edition, lang);
   const genre = festivalGenreText(festival, lang);
   const date = festivalDateText(edition, lang);
-  const venue = String(edition?.LOCATION || '').trim();
+  const venue = edition ? editionLocationName(edition, lang) : '';
   if (lang === 'en') {
     const kind = genre ? `${genre} festival` : (festival.type === 'rave' ? 'rave' : 'festival');
     const first = `${name} is a ${kind}${area ? ` held in ${area}` : ''}.`;
@@ -557,7 +574,7 @@ function festivalFaqItems(editions, lineupsByEdition, artistsById, name, lang) {
   const current = editions[0];
   if (!current) return [];
   const date = festivalDateText(current, lang);
-  const venueParts = [current.LOCATION, current.ADDRESS, current.PREF]
+  const venueParts = [editionLocationName(current, lang), current.ADDRESS, current.PREF]
     .map((value) => String(value || '').trim())
     .filter((value, index, values) => value && values.indexOf(value) === index);
   const rows = lineupsByEdition.get(current.EDITION_ID) || [];
@@ -638,6 +655,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Festival',
+    '@id': `${BASE}/festivals/${encodeURIComponent(f.id)}.html#festival`,
     name: name,
     description: desc,
     inLanguage: lang,
@@ -651,7 +669,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
       name: `${name} ${ed.EDITION || ''}`.trim(),
       ...(ISO_DATE.test(String(ed.DATE_START || '')) ? { startDate: ed.DATE_START } : {}),
       ...(ISO_DATE.test(String(ed.DATE_END || '')) ? { endDate: ed.DATE_END } : {}),
-      location: editionLocationLd(ed),
+      location: editionLocationLd(ed, lang),
       ...((lineupsByEdition.get(ed.EDITION_ID) || []).map((row) => lineupEntity(row, artistsById, lang)).filter(Boolean).length
         ? { performer: (lineupsByEdition.get(ed.EDITION_ID) || []).map((row) => lineupEntity(row, artistsById, lang)).filter(Boolean) }
         : {}),
@@ -796,6 +814,7 @@ function venuePage(v, lang = 'ja') {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'MusicVenue',
+    '@id': `${BASE}/venues/${encodeURIComponent(v.id)}.html#venue`,
     name: name,
     inLanguage: lang,
     description: desc,
@@ -868,7 +887,7 @@ function festivalHubLabel(f, editions = []) {
   const current = [...editions].sort((a, b) => String(b.DATE_START || '').localeCompare(String(a.DATE_START || '')))[0];
   const year = String(current?.EDITION || current?.DATE_START || '').match(/\b\d{4}\b/)?.[0];
   if (year) details.push(year);
-  const place = current ? editionPlace(current) : '';
+  const place = current ? editionPlace(current, 'ja') : '';
   if (place) details.push(place);
   return `${f.name || ''}${details.length ? ` — ${details.join(' · ')}` : ''}`;
 }

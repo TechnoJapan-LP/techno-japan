@@ -247,6 +247,7 @@ async function main() {
     editions.push(stripMeta({
       EDITION_ID: editionId, FESTIVAL_ID: fid, EDITION: year,
       DATE_START: dStart, DATE_END: dEnd, LOCATION: r.LOCATION || '',
+      LOCATION_JA: r.location_ja || r.LOCATION_JA || '',
       PREF: r.CITY || '', ADDRESS: r.ADDRESS || '', LAT: r.LAT || '', LNG: r.LNG || '',
       TICKETURL: (r.TICKETURL || r[' TICKETURL'] || ''), FLYER: r.FLYER || '', STATUS: r.STATUS || '',
     }));
