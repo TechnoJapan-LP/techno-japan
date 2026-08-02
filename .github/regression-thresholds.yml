@@ -229,7 +229,7 @@ metrics:
 
   lineup_linked_acts:
     description: LINEUP のうちアーティスト詳細へリンクされている件数
-    min: 0                    # Publish 後の実測値に更新する（下記 note 参照）
+    min: 115                  # 2026-08-03 実測。減る方向のみ検出する
     max: null
     target: null
     note: >-
@@ -238,7 +238,9 @@ metrics:
       未登録は欠落ではなく編集判断になったため意味を反転した。
       守りたいのは「いま張れているリンクが壊れて減らないこと」で、
       ID の付け替えやアーティスト削除で既存のリンクが切れたら検出する。
-      min は ARTISTS 整理（38件削除・11件のID修正）の Publish 後に実測して確定する。
+      2026-08-03 に 115 で確定（ARTISTS 整理と13名の登録を反映）。
+      75（ID修正前）→ 100（ID修正）→ 115（NAME修正・LINEUP書換・13名登録）と推移。
+      アーティストを draft にすると当然減るので、その際は実測値へ引き下げる。
       詳細は AUDIT_TECHNO_JAPAN.md §9-25。
 
   artist_id_violations:

@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-08-02T16:08:32.216Z",
+  "_generatedAt": "2026-08-02T16:50:10.656Z",
   "count": 284,
   "items": [
     {
@@ -328,7 +328,7 @@
     },
     {
       "EDITION_ID": "rainbow-disco-club-2026",
-      "ACT_LABEL": "NC4K",
+      "ARTIST_ID": "nc4k",
       "SET_TYPE": "dj",
       "SORT": "17"
     },
@@ -340,7 +340,7 @@
     },
     {
       "EDITION_ID": "rainbow-disco-club-2026",
-      "ACT_LABEL": "Suze Ijó",
+      "ARTIST_ID": "suze-ij",
       "SET_TYPE": "dj",
       "SORT": "19"
     },
@@ -448,13 +448,13 @@
     },
     {
       "EDITION_ID": "transcendence-2026",
-      "ACT_LABEL": "Kohra",
+      "ARTIST_ID": "kohra",
       "SET_TYPE": "dj",
       "SORT": "5"
     },
     {
       "EDITION_ID": "transcendence-2026",
-      "ACT_LABEL": "Paquita Gordon",
+      "ARTIST_ID": "paquita-gordon",
       "SET_TYPE": "dj",
       "SORT": "6"
     },
@@ -472,7 +472,7 @@
     },
     {
       "EDITION_ID": "transcendence-2026",
-      "ACT_LABEL": "upsammy",
+      "ARTIST_ID": "upsammy",
       "SET_TYPE": "dj",
       "SORT": "9"
     },
@@ -496,7 +496,7 @@
     },
     {
       "EDITION_ID": "99flags-2026",
-      "ACT_LABEL": "MOODMAN",
+      "ARTIST_ID": "moodman",
       "SET_TYPE": "dj",
       "SORT": "1"
     },
@@ -610,31 +610,31 @@
     },
     {
       "EDITION_ID": "the-star-festival-2026",
-      "ACT_LABEL": "CLIPZ",
+      "ARTIST_ID": "clipz",
       "SET_TYPE": "dj",
       "SORT": "1"
     },
     {
       "EDITION_ID": "the-star-festival-2026",
-      "ACT_LABEL": "DJ HYPE",
+      "ARTIST_ID": "dj-hype",
       "SET_TYPE": "dj",
       "SORT": "2"
     },
     {
       "EDITION_ID": "the-star-festival-2026",
-      "ACT_LABEL": "dj masda",
+      "ARTIST_ID": "dj-masda",
       "SET_TYPE": "dj",
       "SORT": "3"
     },
     {
       "EDITION_ID": "the-star-festival-2026",
-      "ACT_LABEL": "Guchon",
+      "ARTIST_ID": "guchon",
       "SET_TYPE": "dj",
       "SORT": "4"
     },
     {
       "EDITION_ID": "the-star-festival-2026",
-      "ACT_LABEL": "Lady Shaka",
+      "ARTIST_ID": "lady-shaka",
       "SET_TYPE": "dj",
       "SORT": "5"
     },
@@ -658,19 +658,19 @@
     },
     {
       "EDITION_ID": "the-star-festival-2026",
-      "ACT_LABEL": "nasthug",
+      "ARTIST_ID": "nasthug",
       "SET_TYPE": "dj",
       "SORT": "9"
     },
     {
       "EDITION_ID": "the-star-festival-2026",
-      "ACT_LABEL": "okadada",
+      "ARTIST_ID": "okadada",
       "SET_TYPE": "dj",
       "SORT": "10"
     },
     {
       "EDITION_ID": "the-star-festival-2026",
-      "ACT_LABEL": "Powder",
+      "ARTIST_ID": "powder",
       "SET_TYPE": "dj",
       "SORT": "11"
     },
@@ -694,7 +694,7 @@
     },
     {
       "EDITION_ID": "the-star-festival-2026",
-      "ACT_LABEL": "SHERELLE",
+      "ARTIST_ID": "sherelle",
       "SET_TYPE": "dj",
       "SORT": "15"
     },
