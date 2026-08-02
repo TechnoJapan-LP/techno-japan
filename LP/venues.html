@@ -1009,7 +1009,9 @@ function renderVmMarkers() {
   vmMarkers.forEach(m => vmMap.removeLayer(m));
   vmMarkers = [];
   let filtered = VM_CLUBS;
-  if (vmGenre !== 'ALL') filtered = filtered.filter(c => c.genre.some(g => g.includes(vmGenre)));
+  // genre 未設定のヴェニューがあると c.genre が undefined になり .some で落ちる
+  // （womb / unit が該当。festivals.html:1463 と同型の事故）。
+  if (vmGenre !== 'ALL') filtered = filtered.filter(c => Array.isArray(c.genre) && c.genre.some(g => g.includes(vmGenre)));
   if (vmType) filtered = filtered.filter(c => c.type === vmType);
   filtered.forEach(c => {
     const cls = c.type === 'bar' ? 'vm-pin-bar' : 'vm-pin';
@@ -1066,7 +1068,9 @@ function renderOmMarkers() {
   omMarkers.forEach(m => omMap.removeLayer(m));
   omMarkers = [];
   let filtered = OM_CLUBS;
-  if (omGenre !== 'ALL') filtered = filtered.filter(c => c.genre.some(g => g.includes(omGenre)));
+  // genre 未設定のヴェニューがあると c.genre が undefined になり .some で落ちる
+  // （womb / unit が該当。festivals.html:1463 と同型の事故）。
+  if (omGenre !== 'ALL') filtered = filtered.filter(c => Array.isArray(c.genre) && c.genre.some(g => g.includes(omGenre)));
   if (omType) filtered = filtered.filter(c => c.type === omType);
   filtered.forEach(c => {
     const cls = c.type === 'bar' ? 'vm-pin-bar' : 'vm-pin';
@@ -1102,7 +1106,9 @@ function renderNmFilters() {
 function renderNmMarkers() {
   nmMarkers.forEach(m => nmMap.removeLayer(m)); nmMarkers = [];
   let filtered = NM_CLUBS;
-  if (nmGenre !== 'ALL') filtered = filtered.filter(c => c.genre.some(g => g.includes(nmGenre)));
+  // genre 未設定のヴェニューがあると c.genre が undefined になり .some で落ちる
+  // （womb / unit が該当。festivals.html:1463 と同型の事故）。
+  if (nmGenre !== 'ALL') filtered = filtered.filter(c => Array.isArray(c.genre) && c.genre.some(g => g.includes(nmGenre)));
   if (nmType) filtered = filtered.filter(c => c.type === nmType);
   filtered.forEach(c => {
     const cls = c.type === 'bar' ? 'vm-pin-bar' : 'vm-pin';
@@ -1138,7 +1144,9 @@ function renderKmFilters() {
 function renderKmMarkers() {
   kmMarkers.forEach(m => kmMap.removeLayer(m)); kmMarkers = [];
   let filtered = KM_CLUBS;
-  if (kmGenre !== 'ALL') filtered = filtered.filter(c => c.genre.some(g => g.includes(kmGenre)));
+  // genre 未設定のヴェニューがあると c.genre が undefined になり .some で落ちる
+  // （womb / unit が該当。festivals.html:1463 と同型の事故）。
+  if (kmGenre !== 'ALL') filtered = filtered.filter(c => Array.isArray(c.genre) && c.genre.some(g => g.includes(kmGenre)));
   if (kmType) filtered = filtered.filter(c => c.type === kmType);
   filtered.forEach(c => {
     const cls = c.type === 'bar' ? 'vm-pin-bar' : 'vm-pin';
@@ -1174,7 +1182,9 @@ function renderHmFilters() {
 function renderHmMarkers() {
   hmMarkers.forEach(m => hmMap.removeLayer(m)); hmMarkers = [];
   let filtered = HM_CLUBS;
-  if (hmGenre !== 'ALL') filtered = filtered.filter(c => c.genre.some(g => g.includes(hmGenre)));
+  // genre 未設定のヴェニューがあると c.genre が undefined になり .some で落ちる
+  // （womb / unit が該当。festivals.html:1463 と同型の事故）。
+  if (hmGenre !== 'ALL') filtered = filtered.filter(c => Array.isArray(c.genre) && c.genre.some(g => g.includes(hmGenre)));
   if (hmType) filtered = filtered.filter(c => c.type === hmType);
   filtered.forEach(c => {
     const cls = c.type === 'bar' ? 'vm-pin-bar' : 'vm-pin';
