@@ -1,0 +1,146 @@
+{
+  "_schema": "festival-research/1",
+  "_note": "値と出典は Claude が埋める。DESC/DESC_EN は人が書く（空のままでよい）。",
+  "inbox": {
+    "FES_NAME": "SPRING LOVE 春風 2026"
+  },
+  "fields": {
+    "id": {
+      "value": "spring-love-harukaze",
+      "source": "人が決定（春風＝harukaze）",
+      "confidence": "high",
+      "reason": "ASCII 以外の文字を含むため、ローマ字表記を人が決める必要がある",
+      "kind": "auto",
+      "note": "スラッグ。DATA_SCHEMA §1.1"
+    },
+    "name": {
+      "value": "SPRING LOVE 春風 2026",
+      "source": "INBOX",
+      "confidence": "high",
+      "reason": null,
+      "kind": "auto",
+      "note": "INBOX の FES_NAME"
+    },
+    "date": {
+      "value": "2026-03-28/2026-03-29",
+      "source": "https://harukaze.asia/",
+      "confidence": "high",
+      "reason": null,
+      "kind": "research",
+      "note": "YYYY-MM-DD または YYYY-MM-DD/YYYY-MM-DD"
+    },
+    "location": {
+      "value": "Yoyogi Park Event Square",
+      "source": "https://harukaze.asia/",
+      "confidence": "high",
+      "reason": null,
+      "kind": "research",
+      "note": "会場名（英字表記）"
+    },
+    "location_ja": {
+      "value": "代々木公園 イベント広場",
+      "source": "https://harukaze.asia/",
+      "confidence": "high",
+      "reason": null,
+      "kind": "research",
+      "note": "会場名（日本語）。座標検索はこちらの方が当たる"
+    },
+    "city": {
+      "value": "Tokyo",
+      "source": "https://harukaze.asia/",
+      "confidence": "high",
+      "reason": null,
+      "kind": "research",
+      "note": "都市名"
+    },
+    "address": {
+      "value": "代々木公園野外ステージ, イベント広場, 神南二丁目, 神南, 渋谷区, 東京都, 150-0041, 日本",
+      "source": "nominatim.openstreetmap.org",
+      "confidence": "low",
+      "reason": "公式サイトに住所の記載なし。geocode の逆引きで補う",
+      "kind": "research",
+      "note": "逆引きの表示名。正式な住所ではないので要確認"
+    },
+    "lat": {
+      "value": 35.6673,
+      "source": "nominatim.openstreetmap.org",
+      "confidence": "high",
+      "reason": null,
+      "kind": "auto",
+      "note": "query: 代々木公園 イベント広場, Tokyo, Japan → 代々木公園野外ステージ, イベント広場, 神南二丁目, 神南, 渋谷区, 東京都, 150-0041, 日本"
+    },
+    "lng": {
+      "value": 139.6968,
+      "source": "nominatim.openstreetmap.org",
+      "confidence": "high",
+      "reason": null,
+      "kind": "auto",
+      "note": "query: 代々木公園 イベント広場, Tokyo, Japan → 代々木公園野外ステージ, イベント広場, 神南二丁目, 神南, 渋谷区, 東京都, 150-0041, 日本"
+    },
+    "url": {
+      "value": "https://harukaze.asia/",
+      "source": "https://harukaze.asia/",
+      "confidence": "high",
+      "reason": null,
+      "kind": "research",
+      "note": "公式サイト"
+    },
+    "instagram": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": "公式サイトに Instagram へのリンクなし。未確認",
+      "kind": "research",
+      "note": "公式 Instagram。公式サイトに無いことが多い"
+    },
+    "ticketUrl": {
+      "value": null,
+      "source": "https://harukaze.asia/",
+      "confidence": "high",
+      "reason": "入場無料のためチケット販売なし",
+      "kind": "research",
+      "note": "チケット販売URL。無料開催なら null"
+    },
+    "lineup": {
+      "value": [
+        "DJ KRUSH",
+        "Eminata",
+        "KILLER BONG",
+        "Shin Sasama",
+        "YAMAZIN",
+        "YUIMA and The Rivers",
+        "ZUNDOKO DISCO",
+        "松本YAO善行"
+      ],
+      "source": "https://harukaze.asia/",
+      "confidence": "medium",
+      "reason": null,
+      "kind": "research",
+      "note": "DAY1 SPRING STAGE のみ。全体は4ステージ×2日で50名超あり、現状の LINEUP 列では表現できない（AUDIT §9-22）"
+    },
+    "genre": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": null,
+      "kind": "human",
+      "note": "正規リスト（DATA_SCHEMA §1.3）から選ぶ"
+    },
+    "desc": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": null,
+      "kind": "human",
+      "note": "メディアのトーンに関わるため人が書く"
+    },
+    "desc_en": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": null,
+      "kind": "human",
+      "note": "同上"
+    }
+  }
+}

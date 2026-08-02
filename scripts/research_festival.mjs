@@ -1,0 +1,331 @@
+#!/usr/bin/env node
+/**
+ * フェス調査の下ごしらえ — INBOX からスケルトン JSON を作り、座標を埋め、検証する。
+ *
+ * ■ このスクリプトは Web 検索をしない
+ *
+ *   検索と本文の読み取りは Claude（このリポジトリで作業しているエージェント）が行う。
+ *   スクリプトが担うのは「機械的に決まる部分」だけ:
+ *     - INBOX の読み取りと ID の生成
+ *     - Nominatim による座標取得
+ *     - スキーマ検証
+ *     - JSON の読み書き
+ *   調べた値と出典を JSON に書き込むのは Claude の仕事。
+ *   分担をこう切ったのは、検索結果の取捨選択（第一弾発表か全出演者か等）に
+ *   判断が要り、機械化すると誤りが静かに混ざるため。
+ *
+ * ■ シートには書き込まない
+ *
+ *   出力は data/inbox/<id>.json のみ。シートへの反映（add_festival）は Phase 2。
+ *   数件回して JSON の精度を確認してから進める。
+ *
+ * ■ CSV を作らない
+ *
+ *   列ズレ事故（HACHA MECHA 2回 / SPRING LOVE 春風 1回）は「数え間違い」ではなく
+ *   「30列を数えなければならない形式を使っていたこと」が原因。GAS の
+ *   buildRowFromHeaders はヘッダー名で突合するので、Phase 2 では名前付き JSON を
+ *   そのまま渡す。列位置という概念を経路から消す。
+ *
+ * 使い方:
+ *   node scripts/research_festival.mjs init              # INBOX から雛形を作る
+ *   node scripts/research_festival.mjs init --name "..."  # 1件だけ手で足す
+ *   node scripts/research_festival.mjs geocode <id>      # LOCATION から座標
+ *   node scripts/research_festival.mjs validate [<id>]   # スキーマ検証
+ *   node scripts/research_festival.mjs list              # 進捗一覧
+ */
+
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
+const OUT_DIR = path.join(ROOT, 'data', 'inbox');
+
+// fetch-data.mjs と同じ公開CSV。INBOX は既定シート（gid 指定なし）。
+const BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRjtTHfeFBadTxdKF2EGg43Mh_iPVlgnI9vMpuk429vB6boVSqkRaVa5UwaUl-Iku4RAPBCXYCFOLHB/pub?output=csv';
+
+// DATA_SCHEMA §1.1。fetch-data.mjs:107 / check_regressions.py と同一。
+const ID_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+// 単日は YYYY-MM-DD、複数日は開始/終了（cms.js の ds+'/'+de と同じ形）
+const DATE_RE = /^\d{4}-\d{2}-\d{2}(\/\d{4}-\d{2}-\d{2})?$/;
+
+/**
+ * 調査で埋める項目。FESTIVALS の列名に合わせる（列順ではなく名前で対応させる）。
+ * auto: スクリプトが埋める / research: Claude が調べる / human: 人が書く
+ */
+const FIELDS = [
+  ['id',          'auto',     'スラッグ。DATA_SCHEMA §1.1'],
+  ['name',        'auto',     'INBOX の FES_NAME'],
+  ['date',        'research', 'YYYY-MM-DD または YYYY-MM-DD/YYYY-MM-DD'],
+  ['location',    'research', '会場名（英字表記）'],
+  ['location_ja', 'research', '会場名（日本語）。座標検索はこちらの方が当たる'],
+  ['city',        'research', '都市名'],
+  ['address',     'research', '住所。公式サイトに無いことが多い'],
+  ['lat',         'auto',     'geocode で取得'],
+  ['lng',         'auto',     'geocode で取得'],
+  ['url',         'research', '公式サイト'],
+  ['instagram',   'research', '公式 Instagram。公式サイトに無いことが多い'],
+  ['ticketUrl',   'research', 'チケット販売URL。無料開催なら null'],
+  ['lineup',      'research', '出演者。ステージ別・日別は現状の列で表現できない（AUDIT §9-22）'],
+  ['genre',       'human',    '正規リスト（DATA_SCHEMA §1.3）から選ぶ'],
+  ['desc',        'human',    'メディアのトーンに関わるため人が書く'],
+  ['desc_en',     'human',    '同上'],
+];
+
+const RESEARCH_KEYS = FIELDS.filter(([, k]) => k === 'research').map(([f]) => f);
+
+// ---------------------------------------------------------------- 小道具
+
+const read = (p) => fs.readFileSync(p, 'utf8');
+const jsonPath = (id) => path.join(OUT_DIR, `${id}.json`);
+
+/** RFC4180 の最小実装。引用符内のカンマと改行を落とさない。 */
+function parseCsv(text) {
+  const rows = [];
+  let row = [], cell = '', quoted = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (quoted) {
+      if (c === '"' && text[i + 1] === '"') { cell += '"'; i++; }
+      else if (c === '"') quoted = false;
+      else cell += c;
+    } else if (c === '"') quoted = true;
+    else if (c === ',') { row.push(cell); cell = ''; }
+    else if (c === '\n') { row.push(cell); rows.push(row); row = []; cell = ''; }
+    else if (c !== '\r') cell += c;
+  }
+  if (cell || row.length) { row.push(cell); rows.push(row); }
+  return rows;
+}
+
+/**
+ * フェス名から ID を作る。ASCII 化できない文字が残る場合は null を返し、
+ * 人にローマ字を決めてもらう（勝手にローマ字化すると表記ゆれの原因になる）。
+ */
+function slugify(name) {
+  const norm = String(name).normalize('NFKC').toLowerCase().replace(/[\u2018\u2019`"']/g, '');
+  // 落ちる文字を先に検出する。[^a-z0-9]+ で潰すと
+  // 「SPRING LOVE 春風 2026」→「spring-love-2026」のように
+  // 日本語部分が黙って消え、"妥当に見えるが意味が落ちた ID" ができる。
+  const dropped = norm.match(/[^\x00-\x7f]/g);
+  if (dropped) return { id: null, dropped: [...new Set(dropped)].join('') };
+  const s = norm.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  return { id: ID_RE.test(s) ? s : null, dropped: null };
+}
+
+function field(kind, note) {
+  return { value: null, source: null, confidence: null, reason: null, kind, note };
+}
+
+function skeleton(name, id, inbox = {}) {
+  const fields = {};
+  for (const [f, kind, note] of FIELDS) fields[f] = field(kind, note);
+  fields.name.value = name;
+  fields.name.source = 'INBOX';
+  fields.name.confidence = 'high';
+  fields.id.value = id;
+  fields.id.source = 'slugify(name)';
+  fields.id.confidence = id ? 'high' : null;
+  if (!id) fields.id.reason = 'ASCII 以外の文字を含むため、ローマ字表記を人が決める必要がある';
+  return {
+    _schema: 'festival-research/1',
+    _note: '値と出典は Claude が埋める。DESC/DESC_EN は人が書く（空のままでよい）。',
+    inbox,
+    fields,
+  };
+}
+
+// ---------------------------------------------------------------- init
+
+async function cmdInit(args) {
+  fs.mkdirSync(OUT_DIR, { recursive: true });
+  const manual = args.find((a) => a.startsWith('--name='))?.slice(7)
+    ?? (args.includes('--name') ? args[args.indexOf('--name') + 1] : null);
+
+  let entries = [];
+  if (manual) {
+    entries = [{ FES_NAME: manual }];
+  } else {
+    const rows = parseCsv(await (await fetch(BASE)).text());
+    const head = rows[0].map((h) => h.trim());
+    const iName = head.findIndex((h) => /^FES_NAME$/i.test(h));
+    if (iName < 0) {
+      console.error('  INBOX のヘッダーが想定と違います:', head.join(' / '));
+      return 1;
+    }
+    const iStatus = head.findIndex((h) => /^STATUS/i.test(h));
+    for (const r of rows.slice(1)) {
+      const name = (r[iName] || '').trim();
+      if (!name) continue;
+      const status = iStatus >= 0 ? (r[iStatus] || '').trim().toLowerCase() : '';
+      // new か空欄だけを対象にする。drafted / registered は再処理しない。
+      if (status && status !== 'new') continue;
+      const rec = {};
+      head.forEach((h, i) => { if (h) rec[h] = (r[i] || '').trim(); });
+      entries.push(rec);
+    }
+  }
+
+  if (!entries.length) {
+    console.log('  対象がありません（INBOX が空か、STATUS が new の行がない）');
+    return 0;
+  }
+
+  let made = 0, skipped = 0;
+  for (const e of entries) {
+    const name = e.FES_NAME;
+    const { id, dropped } = slugify(name);
+    // ID 未確定でも、あとで人が探せるようファイル名は名前由来にする
+    // （連番だとどのフェスか分からず、複数件あると照合できない）。
+    const stem = id || '_todo-' + Buffer.from(name).toString('base64url').slice(0, 16);
+    const out = jsonPath(stem);
+    if (fs.existsSync(out)) {
+      console.log(`  = ${stem.padEnd(28)} 既存（上書きしない）`);
+      skipped++;
+      continue;
+    }
+    fs.writeFileSync(out, JSON.stringify(skeleton(name, id, e), null, 2) + '\n');
+    console.log(`  + ${(id || '(ID 未確定)').padEnd(28)} ${name}`);
+    if (!id) console.log(`      ↑ "${dropped ?? ''}" を落とさずに ID 化できません。id.value を手で決めてください`);
+    made++;
+  }
+  console.log(`\n  作成 ${made} / スキップ ${skipped} → ${path.relative(ROOT, OUT_DIR)}/`);
+  console.log('  次: Claude が各項目を調べて value と source を埋める');
+  return 0;
+}
+
+// ---------------------------------------------------------------- geocode
+
+/** Nominatim は 1req/秒。CMS の geocodeFromLocation と同じ順で試す。 */
+async function nominatim(q) {
+  const u = 'https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=1'
+    + '&accept-language=ja&q=' + encodeURIComponent(q);
+  const r = await fetch(u, { headers: { 'User-Agent': 'techno-japan-research/1.0' } });
+  if (!r.ok) return null;
+  const d = await r.json();
+  return Array.isArray(d) && d[0]?.lat ? d[0] : null;
+}
+
+async function cmdGeocode(args) {
+  const ids = args.filter((a) => !a.startsWith('--'));
+  if (!ids.length) return console.error('  id を指定してください'), 1;
+
+  for (const id of ids) {
+    const p = jsonPath(id);
+    if (!fs.existsSync(p)) { console.error(`  ✗ ${id}: JSON がありません`); continue; }
+    const doc = JSON.parse(read(p));
+    const f = doc.fields;
+    // 日本の施設は日本語名の方が OSM に載っている（cms.js:1318 と同じ理由）
+    const loc = f.location_ja?.value || f.location?.value;
+    if (!loc) { console.error(`  ✗ ${id}: location / location_ja が未入力`); continue; }
+    const city = f.city?.value || '';
+
+    const queries = [[loc, city, 'Japan'].filter(Boolean).join(', '), `${loc}, Japan`];
+    let hit = null, used = null;
+    for (const q of queries) {
+      hit = await nominatim(q);
+      if (hit) { used = q; break; }
+      await new Promise((r) => setTimeout(r, 1100));   // 1req/秒を守る
+    }
+
+    if (!hit) {
+      for (const k of ['lat', 'lng']) {
+        f[k].value = null;
+        f[k].reason = `Nominatim で見つからず（試行: ${queries.join(' / ')}）`;
+      }
+      console.log(`  ✗ ${id}: 見つかりません → CMS の「施設名から検索」(resolve_place) を使ってください`);
+    } else {
+      f.lat.value = Number(parseFloat(hit.lat).toFixed(4));
+      f.lng.value = Number(parseFloat(hit.lon).toFixed(4));
+      for (const k of ['lat', 'lng']) {
+        f[k].source = 'nominatim.openstreetmap.org';
+        f[k].confidence = 'high';
+        f[k].note = `query: ${used} → ${hit.display_name}`;
+      }
+      if (!f.address.value && hit.display_name) {
+        f.address.value = hit.display_name;
+        f.address.source = 'nominatim.openstreetmap.org';
+        f.address.confidence = 'low';
+        f.address.note = '逆引きの表示名。正式な住所ではないので要確認';
+      }
+      console.log(`  ✓ ${id}: ${f.lat.value}, ${f.lng.value}  (${hit.display_name.slice(0, 46)})`);
+    }
+    fs.writeFileSync(p, JSON.stringify(doc, null, 2) + '\n');
+  }
+  return 0;
+}
+
+// ---------------------------------------------------------------- validate
+
+function validateDoc(id, doc) {
+  const errs = [], warns = [];
+  const f = doc.fields || {};
+  const v = (k) => f[k]?.value;
+
+  if (!v('id')) errs.push('id が未確定（ローマ字表記を決める）');
+  else if (!ID_RE.test(v('id'))) errs.push(`id が規約違反: "${v('id')}"（DATA_SCHEMA §1.1）`);
+  else if (v('id') !== id) errs.push(`id "${v('id')}" とファイル名 "${id}" が不一致`);
+
+  if (!v('name')) errs.push('name が空');
+  if (v('date') && !DATE_RE.test(v('date')))
+    errs.push(`date の形式が不正: "${v('date')}"（YYYY-MM-DD または .../...）`);
+
+  for (const [k, kind] of FIELDS.map(([a, b]) => [a, b])) {
+    const cell = f[k];
+    if (!cell) { errs.push(`項目 ${k} が JSON に無い`); continue; }
+    // 「調べていない」と「無かった」の区別。research 項目が空なら理由が要る。
+    if (kind === 'research' && cell.value == null && !cell.reason)
+      warns.push(`${k}: 未調査（値が無いなら reason を書く）`);
+    if (cell.value != null && kind === 'research' && !cell.source)
+      errs.push(`${k}: 値があるのに source が無い`);
+  }
+  const done = RESEARCH_KEYS.filter((k) => f[k]?.value != null || f[k]?.reason).length;
+  return { errs, warns, progress: `${done}/${RESEARCH_KEYS.length}` };
+}
+
+function cmdValidate(args) {
+  const only = args.filter((a) => !a.startsWith('--'));
+  const files = fs.existsSync(OUT_DIR) ? fs.readdirSync(OUT_DIR).filter((n) => n.endsWith('.json')) : [];
+  const targets = only.length ? only.map((i) => `${i}.json`) : files;
+  if (!targets.length) return console.log('  対象がありません'), 0;
+
+  let bad = 0;
+  for (const n of targets) {
+    const id = n.replace(/\.json$/, '');
+    const p = path.join(OUT_DIR, n);
+    if (!fs.existsSync(p)) { console.error(`  ✗ ${id}: ファイルがありません`); bad++; continue; }
+    const { errs, warns, progress } = validateDoc(id, JSON.parse(read(p)));
+    const mark = errs.length ? '✗' : warns.length ? '△' : '✓';
+    console.log(`  ${mark} ${id.padEnd(28)} 調査 ${progress}`);
+    errs.forEach((e) => console.log(`      ERROR ${e}`));
+    warns.forEach((w) => console.log(`      warn  ${w}`));
+    if (errs.length) bad++;
+  }
+  return bad ? 1 : 0;
+}
+
+function cmdList() {
+  const files = fs.existsSync(OUT_DIR) ? fs.readdirSync(OUT_DIR).filter((n) => n.endsWith('.json')) : [];
+  if (!files.length) return console.log('  data/inbox/ は空です'), 0;
+  console.log(`  ${'id'.padEnd(28)} 調査   座標  DESC  name`);
+  for (const n of files) {
+    const doc = JSON.parse(read(path.join(OUT_DIR, n)));
+    const f = doc.fields;
+    const done = RESEARCH_KEYS.filter((k) => f[k]?.value != null || f[k]?.reason).length;
+    console.log(`  ${n.replace(/\.json$/, '').padEnd(28)} ${String(done).padStart(2)}/${RESEARCH_KEYS.length}`
+      + `  ${f.lat?.value != null ? ' ✓  ' : ' –  '}`
+      + `  ${f.desc?.value ? '✓' : '–'}    ${f.name?.value ?? ''}`);
+  }
+  return 0;
+}
+
+// ---------------------------------------------------------------- main
+
+const [cmd, ...rest] = process.argv.slice(2);
+const table = { init: cmdInit, geocode: cmdGeocode, validate: cmdValidate, list: cmdList };
+if (!table[cmd]) {
+  console.log(read(fileURLToPath(import.meta.url)).split('\n').slice(1, 38).join('\n')
+    .replace(/^ \*\/?ic?/gm, '').replace(/^\s?\*\s?/gm, ''));
+  process.exit(cmd ? 1 : 0);
+}
+process.exit((await table[cmd](rest)) || 0);
