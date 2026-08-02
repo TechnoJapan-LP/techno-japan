@@ -37,7 +37,7 @@ LP = ROOT / "LP"
 GENERATOR = ROOT / "scripts" / "build-detail-pages.mjs"
 
 REF_RE = re.compile(
-    r'(?:src|href)="(/?(?:[a-z0-9.-]+/)*([a-z0-9-]+\.(?:js|css)))(\?v=(\d+))?"'
+    r'(?:src|href)="(/?(?:[a-z0-9.-]+/)*([a-z0-9.-]+\.(?:js|css)))(\?v=(\d+))?"'
 )
 
 
@@ -68,6 +68,15 @@ def scan():
     return refs
 
 
+def external_cms_scripts():
+    """CMS に外部オリジンの実行可能スクリプトが再導入されていないか。"""
+    cms = (LP / "cms.html").read_text(encoding="utf-8", errors="replace")
+    return re.findall(
+        r'<script\b[^>]*\bsrc=["\']((?:https?:)?//[^"\']+)["\']', cms,
+        flags=re.IGNORECASE,
+    )
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--base", default="origin/main", help="比較対象の ref")
@@ -76,6 +85,20 @@ def main():
 
     refs = scan()
     failures, warnings = [], []
+
+    # CMS は同一オリジンの localStorage に認証トークンを保持する。外部JSは
+    # 同じページ権限で実行されるため、CDN依存の再導入を明示的に禁止する。
+    print("=== CMS の外部 JavaScript 参照 ===")
+    cms_external = external_cms_scripts()
+    if cms_external:
+        for url in cms_external:
+            print(f"  ❌ {url}")
+        failures.append(
+            f"LP/cms.html に外部 JavaScript が {len(cms_external)}件ある。"
+            "CMS の実行スクリプトは同一オリジンから配信すること"
+        )
+    else:
+        print("  ✅ なし")
 
     # ---- (2) クエリ無しの参照 ----
     print("=== クエリ無しで参照されているアセット ===")
