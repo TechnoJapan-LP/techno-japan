@@ -1596,7 +1596,7 @@ function buildPublishingSection(section){
   // 記事は本文フォーム内の「🌐 英語版」セクション（title_en/excerpt_en/body_en）に一本化
   const enSection = isArticle ? '' : `
       <div class="pub-section">
-        <h3>🌐 ENGLISH VERSION <span class="label-hint">(/en/ ページ用。空欄なら日本語にフォールバック)</span></h3>
+        <h3>🌐 ENGLISH VERSION <span class="label-hint">(/en/ ページ用。空欄なら日本語にフォールバック。<strong>✨翻訳は下書きです。必ず目視で確認してから公開してください</strong>)</span></h3>
         <div class="form-group">
           <label>${nameField === 'title' ? 'Title' : 'Name'} (EN)</label>
           <input type="text" id="${p}-${nameField}En" placeholder="English ${nameField}..." style="width:100%">
@@ -2797,7 +2797,6 @@ function editRow(section, rowNum){
     setVal('v-url',row.url); setVal('v-address',row.address);
     setVal('v-lat',row.lat); setVal('v-lng',row.lng);
     setVal('v-instagram',row.instagram); setVal('v-desc',row.desc);
-    setVal('v-name_en',row.name_en); setVal('v-desc_en',row.desc_en);
     setVal('v-imagePosition',row.imagePosition || '');
     setSelectedGenres('v-genre',(row.genre||'').split(',').map(s=>s.trim()).filter(Boolean));
     updateLocationMap('v');
@@ -2813,7 +2812,6 @@ function editRow(section, rowNum){
     setVal('f-lat',row.lat); setVal('f-lng',row.lng);
     setVal('f-image',row.image); setVal('f-flyer',row.flyer);
     setVal('f-heroGradient',row.heroGradient); setVal('f-desc',row.desc);
-    setVal('f-name_en',row.name_en); setVal('f-desc_en',row.desc_en);
     setVal('f-imagePosition',row.imagePosition || '');
     const dates=fmtDate(row.date||'').split('/');  // date型/Date.toString混在を YYYY-MM-DD に正規化（input[type=date]が空になるのを防ぐ）
     setVal('f-dateStart',dates[0]); setVal('f-dateEnd',dates[1]);
@@ -2842,7 +2840,6 @@ function editRow(section, rowNum){
     setVal('a-id',row.id); setVal('a-name',row.name); setVal('a-city',row.city);
     setVal('a-country',row.country); setVal('a-genre',row.genre);
     setVal('a-image',row.image); setVal('a-bio',row.bio);
-    setVal('a-name_en',row.name_en); setVal('a-bio_en',row.bio_en);
     setVal('a-imagePosition',row.imagePosition || '');
     setVal('a-instagram',row.instagram); setVal('a-soundcloud',row.soundcloud);
     setVal('a-bandcamp',row.bandcamp); setVal('a-website',row.website);
@@ -2912,7 +2909,7 @@ function saveEdit(section){
     Object.assign(payload,{id:g('v-id'),name:g('v-name'),city:g('v-city'),area:g('v-area'),
       type:g('v-type'),image:g('v-image'),imagePosition:g('v-imagePosition'),genre:getSelectedGenres('v-genre').join(', '),
       capacity:g('v-capacity'),address:g('v-address'),lat:g('v-lat'),lng:g('v-lng'),
-      url:g('v-url'),instagram:g('v-instagram'),desc:g('v-desc'),name_en:g('v-name_en'),desc_en:g('v-desc_en')});
+      url:g('v-url'),instagram:g('v-instagram'),desc:g('v-desc')});
   }
   else if(section==='festival'){
     const ds=g('f-dateStart'),de=g('f-dateEnd');
@@ -2921,12 +2918,12 @@ function saveEdit(section){
       address:g('f-address'),lat:g('f-lat'),lng:g('f-lng'),
       date:ds&&de?ds+'/'+de:ds,genre:getSelectedGenres('f-genre').join(', '),
       image:g('f-image'),imagePosition:g('f-imagePosition'),flyer:g('f-flyer'),heroGradient:g('f-heroGradient'),
-      desc:g('f-desc'),name_en:g('f-name_en'),desc_en:g('f-desc_en'),lineup:cleanLineup(lineups.f).join(', '),
+      desc:g('f-desc'),lineup:cleanLineup(lineups.f).join(', '),
       editions:editions.filter(e=>e.year).map(e=>({...e}))});
   }
   else if(section==='artist'){
     Object.assign(payload,{id:g('a-id'),name:g('a-name'),city:g('a-city'),country:g('a-country'),
-      genre:g('a-genre'),image:g('a-image'),imagePosition:g('a-imagePosition'),bio:g('a-bio'),name_en:g('a-name_en'),bio_en:g('a-bio_en'),
+      genre:g('a-genre'),image:g('a-image'),imagePosition:g('a-imagePosition'),bio:g('a-bio'),
       instagram:g('a-instagram'),soundcloud:g('a-soundcloud'),
       bandcamp:g('a-bandcamp'),website:g('a-website')});
   }
@@ -3915,7 +3912,7 @@ function submitToSheet(section){
     payload={action:'addVenue',id:g('v-id'),name:g('v-name'),city:g('v-city'),area:g('v-area'),
       type:g('v-type'),image:g('v-image'),imagePosition:g('v-imagePosition'),genre:getSelectedGenres('v-genre').join(', '),
       capacity:g('v-capacity'),address:g('v-address'),lat:g('v-lat'),lng:g('v-lng'),
-      url:g('v-url'),instagram:g('v-instagram'),desc:g('v-desc'),name_en:g('v-name_en'),desc_en:g('v-desc_en')};
+      url:g('v-url'),instagram:g('v-instagram'),desc:g('v-desc')};
     if(!payload.id||!payload.name)return toast('ID and Name required','error');
   }
   else if(section==='festival'){
@@ -3924,13 +3921,13 @@ function submitToSheet(section){
       location:g('f-location'),location_ja:g('f-location_ja'),url:g('f-url'),ticketUrl:g('f-ticketUrl'),instagram:g('f-instagram'),
       address:g('f-address'),lat:g('f-lat'),lng:g('f-lng'),date:ds&&de?ds+'/'+de:ds,
       genre:getSelectedGenres('f-genre').join(', '),image:g('f-image'),imagePosition:g('f-imagePosition'),flyer:g('f-flyer'),
-      heroGradient:g('f-heroGradient'),desc:g('f-desc'),name_en:g('f-name_en'),desc_en:g('f-desc_en'),lineup:cleanLineup(lineups.f).join(', '),
+      heroGradient:g('f-heroGradient'),desc:g('f-desc'),lineup:cleanLineup(lineups.f).join(', '),
       editions:editions};
     if(!payload.id||!payload.name)return toast('ID and Name required','error');
   }
   else if(section==='artist'){
     payload={action:'add_artist',id:g('a-id'),name:g('a-name'),city:g('a-city'),country:g('a-country'),
-      genre:g('a-genre'),image:g('a-image'),imagePosition:g('a-imagePosition'),bio:g('a-bio'),name_en:g('a-name_en'),bio_en:g('a-bio_en'),
+      genre:g('a-genre'),image:g('a-image'),imagePosition:g('a-imagePosition'),bio:g('a-bio'),
       instagram:g('a-instagram'),soundcloud:g('a-soundcloud'),bandcamp:g('a-bandcamp'),website:g('a-website')};
     if(!payload.id||!payload.name)return toast('ID and Name required','error');
   }
@@ -4943,9 +4940,9 @@ function copyOutput(section){navigator.clipboard.writeText(document.getElementBy
    ============================================================== */
 function resetForm(section){
   const fields={
-    venue:['v-id','v-name','v-city','v-area','v-image','v-imagePosition','v-capacity','v-address','v-lat','v-lng','v-url','v-instagram','v-desc','v-name_en','v-desc_en','v-imageUrl'],
-    festival:['f-id','f-name','f-city','f-location','f-location_ja','f-url','f-ticketUrl','f-instagram','f-address','f-lat','f-lng','f-dateStart','f-dateEnd','f-image','f-imagePosition','f-flyer','f-heroGradient','f-desc','f-name_en','f-desc_en','f-imageUrl','f-flyerUrl'],
-    artist:['a-id','a-name','a-city','a-country','a-genre','a-image','a-imagePosition','a-bio','a-name_en','a-bio_en','a-instagram','a-soundcloud','a-bandcamp','a-website','a-imageUrl'],
+    venue:['v-id','v-name','v-city','v-area','v-image','v-imagePosition','v-capacity','v-address','v-lat','v-lng','v-url','v-instagram','v-desc','v-imageUrl'],
+    festival:['f-id','f-name','f-city','f-location','f-location_ja','f-url','f-ticketUrl','f-instagram','f-address','f-lat','f-lng','f-dateStart','f-dateEnd','f-image','f-imagePosition','f-flyer','f-heroGradient','f-desc','f-imageUrl','f-flyerUrl'],
+    artist:['a-id','a-name','a-city','a-country','a-genre','a-image','a-imagePosition','a-bio','a-instagram','a-soundcloud','a-bandcamp','a-website','a-imageUrl'],
     event:['e-name','e-date','e-venue','e-city','e-time','e-desc','e-link'],
     article:['ar-id','ar-title','ar-category','ar-date','ar-author','ar-image','ar-imageUrl','ar-readTime','ar-views','ar-excerpt','ar-body','ar-tags','ar-cardRatio','ar-heroRatio','ar-festivalId','ar-title_en','ar-excerpt_en','ar-body_en'],
     author:['au-id','au-name','au-bio','au-image','au-instagram','au-twitter','au-website'],

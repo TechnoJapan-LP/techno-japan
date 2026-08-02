@@ -117,11 +117,6 @@
         <div class="img-pos-preview" id="v-imagePosPreview" style="margin-top:12px;width:100%;max-width:320px;aspect-ratio:16/9;background:#1a1a1a;background-size:cover;background-position:center;border:1px solid #333;display:none"></div>
       </div>
       <div class="form-group full"><label>Description</label><textarea id="v-desc" rows="8" placeholder="Venue description..." style="width:100%;margin-bottom:8px"></textarea><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-green btn-sm" onclick="aiGenerate('venue')">AI Generate</button><button class="btn btn-sm" onclick="translateField('v-desc','en-to-jp')">EN→JP</button><button class="btn btn-sm" onclick="translateField('v-desc','jp-to-en')">JP→EN</button></div></div>
-      <div class="form-group full" style="margin-top:6px;padding-top:12px;border-top:1px solid var(--border)">
-        <label style="color:var(--yellow)">🌐 英語版（/en/ ページ用）<span class="label-hint">空欄なら英語ページは日本語にフォールバック。<strong>✨翻訳は下書きです。必ず目視で確認してから公開してください</strong></span></label>
-        <div class="form-group" style="margin:10px 0 0"><label>Name (EN)</label><div class="input-row"><input type="text" id="v-name_en" placeholder="English name"><button class="btn btn-green btn-sm" onclick="aiTranslateField('v-name','v-name_en','en')">✨ 翻訳</button></div></div>
-        <div class="form-group" style="margin:12px 0 0"><label>Description (EN)</label><div class="input-row"><textarea id="v-desc_en" rows="8" placeholder="English venue description"></textarea><button class="btn btn-green btn-sm" onclick="aiTranslateField('v-desc','v-desc_en','en')">✨ 翻訳</button></div></div>
-      </div>
       <div class="full btn-row" id="venue-btn-new">
         <button class="btn btn-preview" onclick="openPreview('venue')">👁 Preview</button>
         <button class="btn btn-accent" onclick="submitVenue()">Generate Code</button>
@@ -203,11 +198,6 @@
       <div class="form-group full"><label>Hero Gradient</label><div class="gradient-presets" id="f-gradientPresets"></div><div id="gradient-preview" style="display:none;margin-top:8px;width:100%;height:80px;border-radius:var(--radius);border:1px solid var(--border)"></div><input type="text" id="f-heroGradient" placeholder="linear-gradient(...)" style="margin-top:8px" oninput="updateGradientPreview(this.value)"></div>
       <div class="form-group full"><label>Description</label><textarea id="f-desc" rows="8" placeholder="Festival description..." style="width:100%;margin-bottom:8px"></textarea><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-green btn-sm" onclick="aiGenerate('festival')">AI Generate</button><button class="btn btn-sm" onclick="translateField('f-desc','en-to-jp')">EN→JP</button><button class="btn btn-sm" onclick="translateField('f-desc','jp-to-en')">JP→EN</button></div>
 </div>
-      <div class="form-group full" style="margin-top:6px;padding-top:12px;border-top:1px solid var(--border)">
-        <label style="color:var(--yellow)">🌐 英語版（/en/ ページ用）<span class="label-hint">空欄なら英語ページは日本語にフォールバック。<strong>✨翻訳は下書きです。必ず目視で確認してから公開してください</strong></span></label>
-        <div class="form-group" style="margin:10px 0 0"><label>Name (EN)</label><div class="input-row"><input type="text" id="f-name_en" placeholder="English name"><button class="btn btn-green btn-sm" onclick="aiTranslateField('f-name','f-name_en','en')">✨ 翻訳</button></div></div>
-        <div class="form-group" style="margin:12px 0 0"><label>Description (EN)</label><div class="input-row"><textarea id="f-desc_en" rows="8" placeholder="English festival description"></textarea><button class="btn btn-green btn-sm" onclick="aiTranslateField('f-desc','f-desc_en','en')">✨ 翻訳</button></div></div>
-      </div>
       <div class="form-group full"><label>Lineup</label>
         <div class="lineup-section">
           <div class="lineup-input-wrap"><input type="text" id="f-lineupInput" placeholder="Type artist ID..." oninput="filterArtists('f-lineupInput','f-autocomplete','f')" onkeydown="acKeydown(event,'f-autocomplete','f')"><div class="autocomplete-list" id="f-autocomplete"></div></div>
@@ -290,11 +280,6 @@
       <div class="form-group"><label>Website</label><input type="url" id="a-website" placeholder="https://..."></div>
       <div class="form-group full"><label>Bio</label><textarea id="a-bio" rows="8" placeholder="Artist biography..." style="width:100%;margin-bottom:8px"></textarea><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-green btn-sm" onclick="aiGenerate('artist')">AI Generate</button><button class="btn btn-sm" onclick="translateField('a-bio','en-to-jp')">EN→JP</button><button class="btn btn-sm" onclick="translateField('a-bio','jp-to-en')">JP→EN</button></div>
 </div>
-      <div class="form-group full" style="margin-top:6px;padding-top:12px;border-top:1px solid var(--border)">
-        <label style="color:var(--yellow)">🌐 英語版（/en/ ページ用）<span class="label-hint">空欄なら英語ページは日本語にフォールバック。<strong>✨翻訳は下書きです。必ず目視で確認してから公開してください</strong></span></label>
-        <div class="form-group" style="margin:10px 0 0"><label>Name (EN)</label><div class="input-row"><input type="text" id="a-name_en" placeholder="English name"><button class="btn btn-green btn-sm" onclick="aiTranslateField('a-name','a-name_en','en')">✨ 翻訳</button></div></div>
-        <div class="form-group" style="margin:12px 0 0"><label>Bio (EN)</label><div class="input-row"><textarea id="a-bio_en" rows="8" placeholder="English artist biography"></textarea><button class="btn btn-green btn-sm" onclick="aiTranslateField('a-bio','a-bio_en','en')">✨ 翻訳</button></div></div>
-      </div>
       <div class="full btn-row" id="artist-btn-new">
         <button class="btn btn-preview" onclick="openPreview('artist')">👁 Preview</button>
         <button class="btn btn-accent" onclick="submitArtist()">Generate Code</button>
@@ -497,6 +482,6 @@
   </div>
 </div>
 
-<script src="cms.js?v=31" defer></script>
+<script src="cms.js?v=32" defer></script>
 </body>
 </html>
