@@ -360,7 +360,7 @@ ${backgroundLayer ? '<div class="tj-bg" aria-hidden="true"><div class="tj-scan">
 ${body}
 ${footerHtml(lang)}
 ${GA}
-<script src="/common.js?v=2" defer></script>${extraScripts}
+<script src="/common.js?v=3" defer></script>${extraScripts}
 </body>
 </html>
 `;

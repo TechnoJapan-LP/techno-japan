@@ -9,8 +9,20 @@
   'use strict';
 
   /* ---------- CUSTOM CURSOR ---------- */
-  const dot = document.querySelector('.cursor-dot');
-  const ring = document.querySelector('.cursor-ring');
+  function ensureCursorElement(className) {
+    const existing = document.querySelector('.' + className);
+    if (existing) return existing;
+    const element = document.createElement('div');
+    element.className = className;
+    element.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(element);
+    return element;
+  }
+
+  // Hand-written pages already contain these nodes. Reuse them when present,
+  // and create only the missing node(s) on generated detail pages.
+  const dot = ensureCursorElement('cursor-dot');
+  const ring = ensureCursorElement('cursor-ring');
   let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
 
   if (dot && ring) {

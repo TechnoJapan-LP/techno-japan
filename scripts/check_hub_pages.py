@@ -56,6 +56,7 @@ CONSOLE_IGNORE = re.compile(
 UNCAUGHT_RE = re.compile(r'CONSOLE:\d+\]\s*"?(Uncaught[^"]*)', re.I)
 
 VENUE_MAP_TEST_PATH = "/__venue-map-test.html"
+CURSOR_TEST_PATH = "/__cursor-test.html"
 VENUE_MAP_TEST_HTML = """<!doctype html><html><body data-map-result="pending" data-fallback-result="pending" data-tile-fallback-result="pending" data-en-fallback-result="pending">
 <iframe id="map-live" src="/venues.html"></iframe>
 <iframe id="map-fallback" src="/venues.html"></iframe>
@@ -140,6 +141,37 @@ enFallback.addEventListener('load', () => {
 });
 </script></body></html>"""
 
+CURSOR_TEST_HTML = """<!doctype html><html><body data-detail-result="pending" data-hub-result="pending">
+<iframe id="cursor-detail" src="/festivals/matricaria.html"></iframe>
+<iframe id="cursor-hub" src="/festivals.html"></iframe>
+<script>
+const runCursorTest = (frame, resultName) => {
+  frame.addEventListener('load', () => {
+    const win = frame.contentWindow;
+    const doc = frame.contentDocument;
+    setTimeout(() => {
+      const dots = doc.querySelectorAll('.cursor-dot');
+      const rings = doc.querySelectorAll('.cursor-ring');
+      doc.dispatchEvent(new win.MouseEvent('mousemove', {
+        bubbles: true, clientX: 123, clientY: 234
+      }));
+      setTimeout(() => {
+        const dotMoved = dots[0]?.style.left === '123px' && dots[0]?.style.top === '234px';
+        const ringMoved = !!rings[0]?.style.left && !!rings[0]?.style.top;
+        const coarsePointer = win.matchMedia('(hover: none) and (pointer: coarse)').matches;
+        const ok = !coarsePointer && dots.length === 1 && rings.length === 1 && dotMoved && ringMoved;
+        document.body.dataset[resultName] = ok ? 'pass' : 'fail';
+        document.body.dataset[resultName + 'Detail'] =
+          `coarse=${coarsePointer},dots=${dots.length},rings=${rings.length},dotMoved=${dotMoved},ringMoved=${ringMoved}`;
+        frame.remove();
+      }, 150);
+    }, 100);
+  });
+};
+runCursorTest(document.getElementById('cursor-detail'), 'detailResult');
+runCursorTest(document.getElementById('cursor-hub'), 'hubResult');
+</script></body></html>"""
+
 
 def find_chrome():
     for c in CHROME_CANDIDATES:
@@ -175,8 +207,13 @@ class Server(threading.Thread):
                 super().__init__(*a, directory=root_dir, **k)
 
             def do_GET(self):
-                if urlsplit(self.path).path == VENUE_MAP_TEST_PATH:
-                    payload = VENUE_MAP_TEST_HTML.encode("utf-8")
+                test_pages = {
+                    VENUE_MAP_TEST_PATH: VENUE_MAP_TEST_HTML,
+                    CURSOR_TEST_PATH: CURSOR_TEST_HTML,
+                }
+                test_html = test_pages.get(urlsplit(self.path).path)
+                if test_html is not None:
+                    payload = test_html.encode("utf-8")
                     self.send_response(200)
                     self.send_header("Content-Type", "text/html; charset=utf-8")
                     self.send_header("Content-Length", str(len(payload)))
@@ -332,6 +369,25 @@ def main():
                 failures.append(f"venues.html: タイル失敗時のフォールバックに失敗 — {tile_fallback_value}")
             if en_fallback_value != "pass":
                 failures.append(f"en/venues.html: 英語フォールバックに失敗 — {en_fallback_value}")
+
+            cursor_dom, cursor_console = render(chrome, f"{base}{CURSOR_TEST_PATH}", args.budget)
+            detail_result = re.search(r'<body[^>]*data-detail-result="([^"]+)"', cursor_dom)
+            hub_result = re.search(r'<body[^>]*data-hub-result="([^"]+)"', cursor_dom)
+            detail_value = detail_result.group(1) if detail_result else "missing"
+            hub_value = hub_result.group(1) if hub_result else "missing"
+            print(f"Custom cursor: detail={detail_value}, hub-no-duplicate={hub_value}")
+            if detail_value != "pass":
+                detail = re.search(r'data-detail-result-detail="([^"]*)"', cursor_dom)
+                failures.append(
+                    "festivals/matricaria.html: カスタムカーソルの自動生成・移動に失敗 — "
+                    + (detail.group(1) if detail else detail_value)
+                )
+            if hub_value != "pass":
+                detail = re.search(r'data-hub-result-detail="([^"]*)"', cursor_dom)
+                failures.append(
+                    "festivals.html: 既存カーソルDOMとの重複防止・移動に失敗 — "
+                    + (detail.group(1) if detail else hub_value)
+                )
     finally:
         if server:
             server.stop()
