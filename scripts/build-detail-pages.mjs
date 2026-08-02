@@ -185,13 +185,13 @@ const ARTICLE_HUB_BACK_SCRIPT = FESTIVAL_HUB_BACK_SCRIPT
 // 説明文（desc/bio）をバイリンガル表示する。ja=日本語スロット, en=英語スロット。
 // 両方あるときだけ言語トグルを出し、pageLang をデフォルト表示にする（SEO: 既定言語を
 // 可視・もう一方は lang 属性付きで hidden → 言語シグナルを濁さない）。片方だけなら従来通り。
-function bilingualBody(ja, en, pageLang) {
+function bilingualBody(ja, en, pageLang, extraClass = '') {
   const jaT = String(ja || '').trim();
   const enT = String(en || '').trim();
   if (jaT && enT) {
     const hid = (l) => (l === pageLang ? '' : ' hidden');   // 既定言語以外は hidden 属性で隠す
     const act = (l) => (l === pageLang ? ' is-active' : '');
-    return `<div class="detail-body bilingual">
+    return `<div class="detail-body bilingual${extraClass ? ` ${extraClass}` : ''}">
       <div class="lang-toggle" role="group" aria-label="${pageLang === 'en' ? 'Description language' : '説明文の言語'}">
         <button type="button" class="lang-btn${act('ja')}" data-lang="ja">日本語</button>
         <button type="button" class="lang-btn${act('en')}" data-lang="en">ENGLISH</button>
@@ -202,7 +202,7 @@ function bilingualBody(ja, en, pageLang) {
   }
   const only = jaT || enT;
   if (!only) return '';
-  return `<div class="detail-body"><p lang="${jaT ? 'ja' : 'en'}">${esc(only)}</p></div>`;
+  return `<div class="detail-body${extraClass ? ` ${extraClass}` : ''}"><p lang="${jaT ? 'ja' : 'en'}">${esc(only)}</p></div>`;
 }
 // 本文中の [[festival:id]] / [[artist:id]] / [[venue:id]] を詳細ページへのリンクに変換
 function makeEntityResolver(data) {
@@ -311,7 +311,7 @@ const GA = `<script>
 })();
 </script>`;
 
-function page({ title, desc, canonical, image, ogType = 'article', jsonLd, body, lang = 'ja', altHref = null, extraScripts = '' }) {
+function page({ title, desc, canonical, image, ogType = 'article', jsonLd, body, lang = 'ja', altHref = null, extraScripts = '', backgroundLayer = false, detailCssVersion = 3 }) {
   const d = truncate(desc || '', 160);
   // hreflang: JA/EN 両方が存在するページだけ相互宣言する
   const abs = (path) => `${BASE}${path}`;
@@ -352,11 +352,11 @@ ${hreflang}
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/common.css?v=3">
-<link rel="stylesheet" href="/detail.css?v=3">
+<link rel="stylesheet" href="/detail.css?v=${detailCssVersion}">
 <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
 </head>
 <body>
-${navHtml(lang, altHref)}
+${backgroundLayer ? '<div class="tj-bg" aria-hidden="true"><div class="tj-scan"></div></div>\n' : ''}${navHtml(lang, altHref)}
 ${body}
 ${footerHtml(lang)}
 ${GA}
@@ -659,9 +659,221 @@ function festivalFaqHtml(items, lang) {
   ).join('')}</dl></section>`;
 }
 
-function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articles, lang = 'ja') {
+function festivalFaqDetailsHtml(items, lang) {
+  if (!items.length) return '';
+  const answerHtml = (item) => item.url
+    ? esc(item.answer).replace(esc(item.url), `<a href="${esc(item.url)}" target="_blank" rel="noopener">${esc(item.url)}</a>`)
+    : esc(item.answer);
+  return `<section class="detail-section festival-faq festival-faq-details">
+      <h2 class="detail-section-label">${lang === 'en' ? 'FREQUENTLY ASKED QUESTIONS' : 'よくある質問'}</h2>
+      <div class="festival-faq-list">${items.map((item) => `<details>
+        <summary>${esc(item.question)}</summary>
+        <div class="festival-faq-answer"><p>${answerHtml(item)}</p></div>
+      </details>`).join('')}</div>
+    </section>`;
+}
+
+function festivalEditionsTimelineHtml(editions, lang) {
+  if (editions.length < 2) return '';
+  const rows = editions.map((ed) => `<tr>
+        <th class="edition-year" scope="row">${esc(ed.EDITION || ed.EDITION_ID)}</th>
+        <td class="edition-date">${editionDateHtml(ed, lang)}</td>
+        <td class="edition-place">${esc(editionPlace(ed, lang) || '—')}</td>
+      </tr>`).join('');
+  return `<section class="detail-section festival-editions-v2">
+      <h2 class="detail-section-label">${lang === 'en' ? 'PAST EDITIONS' : '開催ヒストリー'}</h2>
+      <div class="editions-timeline-wrap"><table class="editions-timeline">
+        <caption>${lang === 'en' ? 'Festival edition history' : 'フェスティバル開催履歴'}</caption>
+        <thead><tr>
+          <th scope="col">${lang === 'en' ? 'EDITION' : '開催回'}</th>
+          <th scope="col">${lang === 'en' ? 'DATES' : '日程'}</th>
+          <th scope="col">${lang === 'en' ? 'VENUE' : '会場'}</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>
+    </section>`;
+}
+
+function festivalLineupGroupsHtml(editions, lineupsByEdition, artistsById, lang) {
+  const groups = editions.map((ed) => ({ ed, rows: lineupsByEdition.get(ed.EDITION_ID) || [] }))
+    .filter((group) => group.rows.length);
+  return groups.map(({ ed, rows }) => {
+    const slots = [...rows]
+      .sort((a, b) => Number(a.SORT || 0) - Number(b.SORT || 0))
+      .map((row) => `<li>${lineupSlotHtml(row, artistsById, lang)}</li>`);
+    const visible = slots.slice(0, 30).join('');
+    const overflow = slots.slice(30);
+    const more = overflow.length ? `<details class="lineup-more">
+        <summary>${lang === 'en' ? `SHOW ALL ${slots.length} ARTISTS` : `全${slots.length}組を表示`}</summary>
+        <ul class="detail-lineup-list">${overflow.join('')}</ul>
+      </details>` : '';
+    return `<section class="edition-lineup"><h3>${esc(ed.EDITION || ed.EDITION_ID)}</h3><ul class="detail-lineup-list">${visible}</ul>${more}</section>`;
+  }).join('');
+}
+
+function festivalRelatedCards(current, lang) {
+  const genres = (item) => (Array.isArray(item.genre) ? item.genre : String(item.genre || '').split('/'))
+    .map((genre) => String(genre).trim()).filter(Boolean);
+  const currentGenres = genres(current);
+  const candidates = XLINK.fests
+    .filter((item) => item.id !== current.id && (item.type || 'festival') === (current.type || 'festival'))
+    .map((item) => {
+      const sameCity = item.city && current.city && String(item.city).toLowerCase() === String(current.city).toLowerCase();
+      const sharedGenres = genres(item).filter((genre) => currentGenres.includes(genre)).length;
+      return { item, sameCity, sharedGenres, score: (sameCity ? 10 : 0) + sharedGenres };
+    })
+    .filter(({ sameCity, sharedGenres }) => sameCity || sharedGenres)
+    .sort((a, b) => b.score - a.score || String(a.item.name || '').localeCompare(String(b.item.name || '')))
+    .slice(0, 4)
+    .map(({ item }) => item);
+  if (!candidates.length) return '';
+  const prefix = lang === 'en' ? '/en' : '';
+  const cards = candidates.map((item) => {
+    const name = lang === 'en' ? (item.name_en || item.name) : item.name;
+    const img = item.image || item.flyer;
+    return `<a class="related-card" href="${prefix}/festivals/${encodeURIComponent(item.id)}.html">
+        <div class="related-card-img">${img ? `<img ${dimensionAttrs(img)} src="/${String(img).replace(/^\//, '')}" alt="${esc(name)}" loading="lazy" style="object-position:${esc(item.imagePosition || 'center')}">` : ''}</div>
+        <div class="related-card-info">
+          <div class="related-card-date">${esc(item.date || '')}</div>
+          <div class="related-card-name">${esc(name)}</div>
+          <div class="related-card-loc">${esc(item.city || '')}</div>
+        </div>
+      </a>`;
+  }).join('');
+  return `<section class="detail-section related-festivals">
+      <h2 class="detail-section-label">RELATED FESTIVALS</h2>
+      <div class="related-grid">${cards}</div>
+    </section>`;
+}
+
+function festivalShareButtons(name, canonical, lang) {
+  const title = encodeURIComponent(`${name} — TECHNO JAPAN`);
+  const url = encodeURIComponent(canonical);
+  const label = lang === 'en' ? 'Share' : '共有';
+  return `<div class="share-buttons">
+      <span class="share-buttons-label">SHARE</span>
+      <a class="share-btn" href="https://twitter.com/intent/tweet?text=${title}&url=${url}" target="_blank" rel="noopener" aria-label="${label}: X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg></a>
+      <a class="share-btn" href="https://www.facebook.com/sharer/sharer.php?u=${url}" target="_blank" rel="noopener" aria-label="${label}: Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.673 3.667h-3.246v7.98z"></path></svg></a>
+      <a class="share-btn" href="https://social-plugins.line.me/lineit/share?url=${url}" target="_blank" rel="noopener" aria-label="${label}: LINE"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.275.091-.52-.008-.709-.219l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.254-.09.51.001.689.221l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zM9.769 8.108v4.771c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63zm-2.466 5.4H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"></path></svg></a>
+      <button class="share-btn share-copy-btn" type="button" data-copy-url="${esc(canonical)}" aria-label="${lang === 'en' ? 'Copy URL' : 'URLをコピー'}">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7h11v14H8zM5 17H3V3h12v2"></path></svg>
+      </button>
+    </div>`;
+}
+
+const FESTIVAL_SHARE_SCRIPT = `
+<script>
+document.querySelectorAll('.share-copy-btn').forEach(function(button) {
+  button.addEventListener('click', function() {
+    navigator.clipboard.writeText(button.dataset.copyUrl).then(function() {
+      button.classList.add('copied');
+      window.setTimeout(function() { button.classList.remove('copied'); }, 1500);
+    });
+  });
+});
+</script>`;
+
+function festivalHeroDateHtml(edition) {
+  const start = String(edition?.DATE_START || '');
+  const end = String(edition?.DATE_END || '');
+  if (!ISO_DATE.test(start)) return '';
+  const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+  const parts = (value) => {
+    const [year, month, day] = value.split('-').map(Number);
+    return { year, month, day, monthName: months[month - 1] };
+  };
+  const first = parts(start);
+  if (!ISO_DATE.test(end) || end === start) {
+    return `<time datetime="${start}">${first.monthName} ${first.day}, ${first.year}</time>`;
+  }
+  const last = parts(end);
+  if (first.year === last.year && first.month === last.month) {
+    return `<time datetime="${start}">${first.monthName} ${first.day}</time> — <time datetime="${end}">${last.day}, ${last.year}</time>`;
+  }
+  if (first.year === last.year) {
+    return `<time datetime="${start}">${first.monthName} ${first.day}</time> — <time datetime="${end}">${last.monthName} ${last.day}, ${last.year}</time>`;
+  }
+  return `<time datetime="${start}">${first.monthName} ${first.day}, ${first.year}</time> — <time datetime="${end}">${last.monthName} ${last.day}, ${last.year}</time>`;
+}
+
+function festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, lang, name, canonical, summary, faqItems, relatedHtml }) {
   const prefix = lang === 'en' ? '/en' : '';
   const hubHref = `${prefix}/festivals.html`;
+  const currentEdition = editions[0];
+  const dateHtml = festivalHeroDateHtml(currentEdition);
+  const locationName = currentEdition
+    ? editionLocationName(currentEdition, lang)
+    : localizedValue(f.location, f.location_ja, '', lang);
+  const locationRegion = currentEdition?.PREF || f.city;
+  const location = [locationName, locationRegion].filter(Boolean).join(' — ');
+  const hasGeo = !!String(currentEdition?.LAT || '').trim() && !!String(currentEdition?.LNG || '').trim()
+    && Number.isFinite(Number(currentEdition.LAT)) && Number.isFinite(Number(currentEdition.LNG));
+  const mapQuery = hasGeo
+    ? `${Number(currentEdition.LAT)},${Number(currentEdition.LNG)}`
+    : [locationName, locationRegion].filter(Boolean).join(' ');
+  const mapUrl = mapQuery ? `https://maps.google.com/?q=${encodeURIComponent(mapQuery)}` : '';
+  const genres = (Array.isArray(f.genre) ? f.genre : []).map((genre) => `<span class="detail-tag">${esc(genre)}</span>`).join('');
+  const heroImage = f.image || f.flyer;
+  const heroHtml = heroImage ? `<div class="detail-hero-image">
+        <img ${dimensionAttrs(heroImage)} src="/${String(heroImage).replace(/^\//, '')}" alt="${esc(name)}" style="object-position:${esc(f.imagePosition || 'center')}">
+      </div>` : '<div class="detail-hero-image detail-hero-gradient" aria-hidden="true"></div>';
+  const official = f.url
+    ? `<a class="detail-official festival-official-link" href="${esc(f.url)}" target="_blank" rel="noopener">OFFICIAL SITE</a>`
+    : '';
+  const tickets = currentEdition?.TICKETURL
+    ? `<a class="detail-official festival-ticket-link" href="${esc(currentEdition.TICKETURL)}" target="_blank" rel="noopener">TICKETS</a>`
+    : '';
+  const instagram = f.instagram ? `<div class="festival-social-links">
+        <a class="festival-social-link" href="${esc(f.instagram)}" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1"></circle></svg>
+        </a>
+      </div>` : '';
+  const actions = [official, tickets, instagram].filter(Boolean).join('');
+  const lineupGroups = festivalLineupGroupsHtml(editions, lineupsByEdition, artistsById, lang);
+  const lineupCount = editions.reduce((total, edition) => total + (lineupsByEdition.get(edition.EDITION_ID) || []).length, 0);
+  const flyer = f.flyer ? `<div class="detail-flyer-col">
+        <div class="detail-section-label">FLYER</div>
+        <div class="detail-flyer-image"><img ${dimensionAttrs(f.flyer)} src="/${String(f.flyer).replace(/^\//, '')}" alt="${esc(name)} Flyer" loading="lazy"></div>
+      </div>` : '';
+  const lineup = lineupGroups ? `<div class="detail-lineup-col">
+        <h2 class="detail-section-label">LINE UP</h2>
+        ${lineupGroups}
+      </div>` : '';
+  const flyerLineup = flyer || lineup
+    ? `<div class="detail-flyer-lineup${flyer && lineup && lineupCount > 3 ? ' has-two-columns' : ''}">${flyer}${lineup}</div>`
+    : '';
+  const historyHtml = festivalEditionsTimelineHtml(editions, lang);
+  const faqDetailsHtml = festivalFaqDetailsHtml(faqItems, lang);
+  const shareHtml = `<section class="festival-share-section">${festivalShareButtons(name, canonical, lang)}</section>`;
+  const hasDescription = !!String(f.desc || f.desc_en || '').trim();
+  const description = hasDescription ? bilingualBody(f.desc, f.desc_en, lang, 'festival-description-inline') : '';
+  const heroDescription = description || (summary ? `<p class="detail-desc festival-summary">${esc(summary)}</p>` : '');
+  const programSection = flyerLineup ? `<section class="festival-program-section">${flyerLineup}</section>` : '';
+
+  return `<article class="festival-detail-page festival-design-v2">
+  <div class="festival-detail-inner">
+    <a class="detail-back" href="${hubHref}" data-festival-hub-back="${hubHref}"><span class="arrow"></span> BACK TO FESTIVALS</a>
+
+    <header class="festival-detail-hero">
+      ${heroHtml}
+      <div class="detail-hero-info">
+${genres ? `        <div class="detail-tags">${genres}</div>\n` : ''}${dateHtml ? `        <div class="detail-date">${dateHtml}</div>\n` : ''}
+        <h1 class="detail-name">${esc(name)}</h1>
+${location ? (mapUrl
+          ? `        <a class="detail-location detail-location-map" href="${esc(mapUrl)}" target="_blank" rel="noopener">${esc(location)}<span aria-hidden="true">↗</span></a>\n`
+          : `        <div class="detail-location">${esc(location)}</div>\n`) : ''}${heroDescription ? `        ${heroDescription}\n` : ''}${actions ? `        <div class="detail-actions">${actions}</div>\n` : ''}
+      </div>
+    </header>
+
+${programSection ? `    ${programSection}\n` : ''}${historyHtml ? `    ${historyHtml}\n` : ''}${faqDetailsHtml ? `    ${faqDetailsHtml}\n` : ''}    ${shareHtml}
+${relatedHtml ? `    <section class="detail-section festival-related-stories-v2">${relatedHtml}</section>\n` : ''}    ${festivalRelatedCards(f, lang)}
+    <div class="article-footer"><a class="detail-back" href="${hubHref}" data-festival-hub-back="${hubHref}" style="margin:0"><span class="arrow"></span> BACK TO FESTIVALS</a></div>
+  </div>
+</article>`;
+}
+
+function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articles, lang = 'ja') {
+  const prefix = lang === 'en' ? '/en' : '';
   const altHref = (lang === 'ja' ? '/en' : '') + `/festivals/${f.id}.html`;
   const name = lang === 'en' ? (f.name_en || f.name) : f.name;
   const bodyDesc = lang === 'en' ? (f.desc_en || f.desc) : (f.desc || f.desc_en);
@@ -690,31 +902,14 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
     String(b.DATE_START || '').localeCompare(String(a.DATE_START || '')) ||
     String(b.EDITION || '').localeCompare(String(a.EDITION || ''))
   );
-  const editionsHtml = editionsTable(editions, lang);
-  const lineupsHtml = festivalLineupsHtml(editions, lineupsByEdition, artistsById, lang);
   const currentEdition = editions[0];
   const summary = festivalSummary(f, currentEdition, name, lang);
   const faqItems = festivalFaqItems(editions, lineupsByEdition, artistsById, name, lang);
-  const faqHtml = festivalFaqHtml(faqItems, lang);
   const performers = editions.flatMap((ed) => lineupsByEdition.get(ed.EDITION_ID) || [])
     .map((row) => lineupEntity(row, artistsById, lang)).filter(Boolean);
   const sameAs = [f.url, f.instagram]
     .map((value) => String(value || '').trim())
     .filter((value, index, values) => value && values.indexOf(value) === index);
-  const officialLinkHtml = f.url
-    ? `<a class="detail-link festival-official-link" href="${esc(f.url)}" target="_blank" rel="noopener">OFFICIAL SITE</a>`
-    : '';
-  const socialLinksHtml = f.instagram ? `<div class="festival-social-links">
-      <a class="festival-social-link" href="${esc(f.instagram)}" target="_blank" rel="noopener" aria-label="Instagram">
-        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1"></circle></svg>
-      </a>
-    </div>` : '';
-  const externalLinksHtml = (officialLinkHtml || socialLinksHtml)
-    ? `<div class="festival-external-links">
-    ${[officialLinkHtml, socialLinksHtml].filter(Boolean).join('\n    ')}
-  </div>`
-    : '';
-
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Festival',
@@ -741,25 +936,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
     })) } : {}),
   };
 
-  const genres = (Array.isArray(f.genre) ? f.genre : []).map((g) => `<span class="detail-chip">${esc(g)}</span>`).join('');
-
-  const body = `<article class="detail-page">
-  <div class="detail-inner">
-    <a class="article-back" href="${hubHref}" data-festival-hub-back="${hubHref}"><span class="arrow"></span> ALL FESTIVALS</a>
-    <h1>${esc(name)}</h1>
-    ${summary ? `<p class="festival-summary">${esc(summary)}</p>` : ''}
-    ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
-    ${f.image || f.flyer ? `<div class="detail-hero"><img ${dimensionAttrs(f.image || f.flyer)} src="/${String(f.image || f.flyer).replace(/^\//, '')}" alt="${esc(name)}"></div>` : ''}
-    ${bilingualBody(f.desc, f.desc_en, lang)}
-${externalLinksHtml ? `    ${externalLinksHtml}\n` : ''}    ${editionsHtml}${lineupsHtml}${faqHtml}${relatedHtml}
-    ${(() => { // 回遊: 同じエリアの他のフェス
-      const others = XLINK.fests.filter((x) => x.id !== f.id && x.city && f.city && String(x.city).toLowerCase() === String(f.city).toLowerCase()).slice(0, 6);
-      if (!others.length) return '';
-      return `<h2>${lang === 'en' ? `MORE IN ${esc(String(f.city).toUpperCase())}` : `${esc(f.city)}の他のフェス`}</h2>${relatedChips(others, 'festivals', lang)}`;
-    })()}
-    <div class="article-footer"><a class="article-back" href="${hubHref}" data-festival-hub-back="${hubHref}" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
-  </div>
-</article>`;
+  const body = festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, lang, name, canonical, summary, faqItems, relatedHtml });
 
   const faqLd = faqItems.length ? {
     '@context': 'https://schema.org',
@@ -770,7 +947,7 @@ ${externalLinksHtml ? `    ${externalLinksHtml}\n` : ''}    ${editionsHtml}${lin
       acceptedAnswer: { '@type': 'Answer', text: item.answer },
     })),
   } : null;
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'festivals'] : ['festivals']), `${f.id}.html`), html: page({ title, desc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('FESTIVALS', '/festivals.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT + FESTIVAL_HUB_BACK_SCRIPT }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'festivals'] : ['festivals']), `${f.id}.html`), html: page({ title, desc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('FESTIVALS', '/festivals.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT + FESTIVAL_HUB_BACK_SCRIPT + FESTIVAL_SHARE_SCRIPT, backgroundLayer: true, detailCssVersion: 4 }) };
 }
 
 /* ---------- アーティストページ ---------- */

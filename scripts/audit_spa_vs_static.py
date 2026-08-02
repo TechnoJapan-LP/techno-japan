@@ -171,26 +171,39 @@ def festival_features(spa, static):
     """SPA 側と静的側それぞれから同じ意味の特徴量を取る。マークアップは
     別実装なので、側ごとに別のセレクタを使う（同じ数字の意味は揃える）。"""
     st_lineup = heading_chunk(static, "LINE UP")
-    # 開催ヒストリーは SPA が editions-timeline / edition-row、静的が
-    # editions-table / edition-date と別実装なので、側ごとに別セレクタで数える。
+    # V2 は単一開催回を冗長な表にせず、ヒーローの <time> で表示する。
+    # 複数開催回は従来どおりタイムライン表の行を数える。
     st_ed = heading_chunk(static, "開催ヒストリー")
     return {
         "lineup": (count_class(spa, "detail-lineup-item"), count_class(st_lineup, "lineup-item")),
-        "editions": (count_class(spa, "edition-row"), count_class(st_ed, "edition-date")),
+        "editions": (
+            count_class(spa, "edition-row"),
+            count_class(st_ed, "edition-date") or count_class(static, "detail-date"),
+        ),
         # 開催ヒストリー内の過去ラインナップ。静的にしか無い（festival-lineups）。
         "past_lineup": (count_class(spa, "edition-artist"),
                         count_class(st_ed, "lineup-item")),
         # FAQ は静的が <dl><dt>、SPA は未実装。
         "faq_qa": (count_class(spa, "faq-item"),
-                   len(re.findall(r'<dt\b', heading_chunk(static, "よくある質問")))),
-        "summary": (count_class(spa, "festival-summary"), count_class(static, "festival-summary")),
+                   len(re.findall(r'<(?:dt|summary)\b', heading_chunk(static, "よくある質問")))),
+        # V2 pages use the editorial DESC in the hero and retain the generated
+        # summary only as a fallback when DESC is empty. Both fulfil the same
+        # visible lead-text role that this metric protects.
+        "summary": (
+            count_class(spa, "festival-summary"),
+            count_class(static, "festival-summary")
+            + count_class(static, "festival-description-inline"),
+        ),
         "instagram": (spa.count("instagram.com"), static.count("instagram.com")),
         "official_link": (len(re.findall(r'class="[^"]*detail-official', spa)),
                           len(re.findall(r'OFFICIAL SITE|OFFICIAL', static))),
         "artist_links": (len(re.findall(r'href="artists\.html#artist/', spa)),
                          len(re.findall(r'href="/?artists/[^"]+\.html"', static))),
-        # 「〇〇の他のフェス」回遊ブロック。静的のみ（71/87ページ）。
-        "related": (0, count_class(heading_chunk_contains(static, "他のフェス"), "lineup-item")),
+        # 旧SPAは buildRelatedFestivals() が実行時に related-card を生成する。
+        # ここを0固定にして「SPAには回遊が無い」と誤判定していたため、描画DOMを実測する。
+        "related": (count_class(spa, "related-card"),
+                    count_class(heading_chunk_contains(static, "他のフェス"), "lineup-item")
+                    or count_class(heading_chunk(static, "RELATED FESTIVALS"), "related-card")),
     }
 
 
@@ -351,7 +364,7 @@ def check_after(sections, data):
 
         # 3) 静的詳細ページの到達性
         missing_pages = []
-        stat_sum, seen = {}, 0
+        stat_sum, stat_presence, seen = {}, {}, 0
         for it in items:
             feats, ok = static_only_features(section, it, cfg)
             if not ok:
@@ -360,6 +373,7 @@ def check_after(sections, data):
             seen += 1
             for k, v in feats.items():
                 stat_sum[k] = stat_sum.get(k, 0) + v
+                stat_presence[k] = stat_presence.get(k, 0) + (1 if v else 0)
         checks.append((f"静的詳細ページが全件ある（{len(items)}件）", not missing_pages, len(missing_pages)))
 
         for label, ok, got in checks:
@@ -375,10 +389,18 @@ def check_after(sections, data):
             before = sum(int(r[f"{k}_static"] or 0) for r in base.get(section, [])
                          if f"{k}_static" in r)
             after = stat_sum[k]
+            label = k
+            # 関連カードの件数はデザイン（4枚カード / 6件チップ）で変わる。
+            # 守るべきなのは回遊ブロック自体が消えないことなので、ページ数で比較する。
+            if k == "related":
+                before = sum(1 for r in base.get(section, [])
+                             if int(r.get(f"{k}_static") or 0) > 0)
+                after = stat_presence.get(k, 0)
+                label = "related_pages"
             ok = after >= before
-            lines.append(f"| {k} | {before} | {after} | {'✅' if ok else '❌ 減少'} |")
+            lines.append(f"| {label} | {before} | {after} | {'✅' if ok else '❌ 減少'} |")
             if not ok:
-                failures.append(f"{section}: 静的側の {k} が {before} → {after} に減少")
+                failures.append(f"{section}: 静的側の {label} が {before} → {after} に減少")
         lines.append("")
         report.append("\n".join(lines))
 
