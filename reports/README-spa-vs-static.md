@@ -17,18 +17,58 @@ python3 scripts/audit_spa_vs_static.py --limit 5  # 動作確認
 | `reports/spa-vs-static.md` | 人が読む。項目別合計と差分ランキング |
 | `reports/spa-vs-static.csv` | 差分比較用。1行=1エンティティ |
 
-## 前後比較のしかた
+## 廃止後の検査: `--after`
+
+**`missing_in_spa` が 0 になることを期待してはいけない。**
+
+あれは「SPA と静的の差」を測るメトリクスで、SPA が消えた世界では分母が無くなる。
+SPA 側が全項目 0 になるだけで差は縮まらず、むしろ広がって見える。
+
+廃止が完了したかどうかは別の問いなので、専用モードを用意した。
 
 ```bash
-cp reports/spa-vs-static.csv reports/spa-vs-static.before.csv   # 変更前に退避
-# … SPA 廃止の実装 …
-python3 scripts/audit_spa_vs_static.py
-diff <(cut -d, -f1-5 reports/spa-vs-static.before.csv) \
-     <(cut -d, -f1-5 reports/spa-vs-static.csv)
+python3 scripts/audit_spa_vs_static.py --after                    # 全セクション
+python3 scripts/audit_spa_vs_static.py --after --section venue
 ```
 
-`missing_in_spa` 列がすべて 0 になれば、静的側にあってユーザーに見えていない
-項目が無くなったということ。
+Chrome を使わないので数秒で終わる。検査するのは次の4点。
+
+| 検査 | 意味 |
+|---|---|
+| 詳細ビューのコンテナが無い | `id="venue-detail"` 等が消えたか |
+| `location.hash='<section>/` が無い | SPA へ入る経路が消えたか |
+| カードリンクが preventDefault されていない | 静的ページへ実際に遷移するか |
+| 静的詳細ページが全件ある | リダイレクトスタブでなく実体があるか |
+
+加えて、**静的側の項目数が廃止前から減っていないか**を
+`reports/spa-vs-static.before.csv` と突き合わせる。
+**廃止のついでに静的側が壊れていたら意味がない**ため、これが本体に近い。
+減っていれば `❌ 減少` で落ちる（意図的に1件壊して検出を確認済み）。
+
+失敗時は exit 1。CI に組み込める。
+
+### 基準ファイル
+
+`reports/spa-vs-static.before.csv` が廃止前の記録。これが無いと `--after` は動かない。
+中身は festival 680 / artist 75 / venue 120 / article 3 = **欠け合計 878**。
+festival と artist は `039acd8` の worktree、venue と article は廃止直前の作業ツリーで計測。
+
+## 廃止前の記録を取り直したいとき
+
+SPA がまだ生きているセクションを測る場合のみ、通常モード（Chrome を使う計測）を使う。
+**既に廃止したセクションを通常モードで測っても意味がない**（SPA 側が全項目 0 になり、
+`spa_rendered=False` が並ぶだけ）。廃止後は `--after` を使う。
+
+既に廃止済みのセクションについて廃止前の数字が必要になったら、
+**廃止直前のコミットに worktree を切って測る。**
+
+```bash
+git worktree add /tmp/before 039acd8
+cp scripts/audit_spa_vs_static.py /tmp/before/scripts/
+cd /tmp/before && python3 scripts/audit_spa_vs_static.py --section festival
+cp /tmp/before/reports/spa-vs-static.csv <保存先>
+git worktree remove --force /tmp/before
+```
 
 ## 注意: 並列実行すると数字が壊れる
 

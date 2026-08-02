@@ -292,12 +292,120 @@ def measure(section, item, chrome, port, cfg):
     }
 
 
+# ---------------------------------------------------------------- 廃止後の検査
+
+BASELINE = REPORTS / "spa-vs-static.before.csv"
+
+
+def static_only_features(section, item, cfg):
+    """Chrome を使わず静的側だけの特徴量を取る。廃止後は SPA 側が存在しないので
+    比較対象が無く、見るべきは「静的側が廃止前と同じ内容を保っているか」になる。"""
+    sp = LP / cfg["dir"] / f"{item.get('id')}.html"
+    raw = sp.read_text(encoding="utf-8", errors="replace") if sp.exists() else ""
+    if raw and is_redirect_stub(raw):
+        raw = ""
+    feats = cfg["feat"]("", strip_scripts(raw))
+    return {k: v[1] for k, v in feats.items()}, bool(raw)
+
+
+def check_after(sections, data):
+    """SPA 詳細ビューが消えたことと、静的側が痩せていないことを検査する。
+
+    missing_in_spa が 0 になることを期待してはいけない。あれは「SPA と静的の差」で、
+    SPA が消えた世界では分母が無くなる。SPA 側が全項目 0 になるだけで、
+    差は縮まらない（むしろ広がって見える）。確かめるべきは別の2つ:
+      1. SPA 詳細ビューへ入る経路が本当に消えたか
+      2. 廃止のついでに静的側の内容が壊れていないか
+    """
+    if not BASELINE.exists():
+        sys.exit(f"廃止前の基準がありません: {BASELINE.relative_to(ROOT)}\n"
+                 "  廃止前に `python3 scripts/audit_spa_vs_static.py` を流し、"
+                 "その結果を spa-vs-static.before.csv として残しておく必要があります。")
+    base = {}
+    for r in csv.DictReader(BASELINE.open(encoding="utf-8")):
+        base.setdefault(r["section"], []).append(r)
+
+    failures, report = [], []
+    for section in sections:
+        cfg = SECTIONS[section]
+        hub = (LP / cfg["hub"]).read_text(encoding="utf-8", errors="replace")
+        items = data.get(cfg["key"], [])
+        lines = [f"## {section}", ""]
+
+        # 1) SPA 詳細ビューの残骸
+        container = f'id="{cfg["container"]}"'
+        hash_nav = f"location.hash='{cfg['hash']}"
+        checks = [
+            (f'{container} が無い', hub.count(container) == 0, hub.count(container)),
+            (f"{hash_nav}… が無い", hub.count(hash_nav) == 0, hub.count(hash_nav)),
+        ]
+
+        # 2) カードリンクが横取りされていない
+        #    href が静的ページを指す <a> に preventDefault が付いていないこと。
+        #    タグ内だけを見る（閉じタグの並びを境界にしない — §9-16）。
+        intercepted = 0
+        for m in re.finditer(r'<a\b[^>]*href="/' + cfg["dir"] + r'/[^"]*"[^>]*>', hub):
+            if "preventDefault" in m.group(0):
+                intercepted += 1
+        checks.append(("カードリンクが preventDefault されていない", intercepted == 0, intercepted))
+
+        # 3) 静的詳細ページの到達性
+        missing_pages = []
+        stat_sum, seen = {}, 0
+        for it in items:
+            feats, ok = static_only_features(section, it, cfg)
+            if not ok:
+                missing_pages.append(it.get("id"))
+                continue
+            seen += 1
+            for k, v in feats.items():
+                stat_sum[k] = stat_sum.get(k, 0) + v
+        checks.append((f"静的詳細ページが全件ある（{len(items)}件）", not missing_pages, len(missing_pages)))
+
+        for label, ok, got in checks:
+            lines.append(f"- {'✅' if ok else '❌'} {label}" + ("" if ok else f" → {got}"))
+            if not ok:
+                failures.append(f"{section}: {label}（実測 {got}）")
+        if missing_pages:
+            lines.append(f"  - 欠けているページ: {', '.join(missing_pages[:10])}")
+
+        # 4) 静的側が痩せていないか（廃止前の基準と比較）
+        lines += ["", "| 静的側の項目 | 廃止前 | 廃止後 | 判定 |", "|---|---|---|---|"]
+        for k in sorted(stat_sum):
+            before = sum(int(r[f"{k}_static"] or 0) for r in base.get(section, [])
+                         if f"{k}_static" in r)
+            after = stat_sum[k]
+            ok = after >= before
+            lines.append(f"| {k} | {before} | {after} | {'✅' if ok else '❌ 減少'} |")
+            if not ok:
+                failures.append(f"{section}: 静的側の {k} が {before} → {after} に減少")
+        lines.append("")
+        report.append("\n".join(lines))
+
+    print("\n".join(report))
+    if failures:
+        print("=" * 60)
+        print("廃止後の検査に失敗しました:")
+        for f in failures:
+            print(f"  ✗ {f}")
+        return 1
+    print("✅ SPA 詳細ビューは残っておらず、静的側の内容も維持されています")
+    return 0
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--section", choices=list(SECTIONS))
     ap.add_argument("--limit", type=int)
     ap.add_argument("--workers", type=int, default=1)  # 既定は逐次（render() の注記参照）
+    ap.add_argument("--after", action="store_true",
+                    help="SPA 廃止後の検査。Chrome を使わず、詳細ビューの消滅と"
+                         "静的側の維持を spa-vs-static.before.csv と突き合わせる")
     args = ap.parse_args()
+
+    if args.after:
+        secs = [args.section] if args.section else list(SECTIONS)
+        return check_after(secs, load_data())
 
     chrome = find_chrome()
     if not chrome:
@@ -389,4 +497,5 @@ def write_markdown(rows):
 
 
 if __name__ == "__main__":
-    main()
+    # 戻り値を捨てると --after が失敗しても exit 0 になり CI で使えない。
+    sys.exit(main() or 0)
