@@ -3,11 +3,20 @@
  *
  * Strategy:
  * - HTML pages: network-first (fresh content) with cache fallback
- * - Static assets (CSS/JS/fonts/images): cache-first with background update
- * - data.js: stale-while-revalidate (fast load, update in background)
+ * - CSS/JS/fonts: cache-first。更新は URL の ?v を上げて別キャッシュキーにすることで
+ *   届ける（バックグラウンド更新は行わない）。?v の更新漏れは
+ *   scripts/check_asset_versions.py が止める。
+ * - images: stale-while-revalidate（同名で差し替えられるため）
+ * - data.js: stale-while-revalidate。CMS の Publish Now が commit するので
+ *   人が HTML の ?v を上げる機会が無く、cache-first にすると永久に古いままになる。
+ *
+ * ⚠ fetch ハンドラの分岐は上から順に評価され、最初に一致したところで return する。
+ *   data.js の判定は必ず CSS/JS の判定より前に置くこと（url.pathname は
+ *   クエリを含まないため /data.js?v=7 は /\.js$/ にも一致してしまう）。
+ *   順序を守れているかは scripts/check_sw_routing.mjs が検査する。
  */
 
-const VERSION = 'v1.12.0';
+const VERSION = 'v1.13.0';
 const STATIC_CACHE = `tj-static-${VERSION}`;
 const DYNAMIC_CACHE = `tj-dynamic-${VERSION}`;
 
@@ -70,7 +79,23 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // フォント/CSS/JS はファイル名かクエリでバージョン管理しているので cache-first でよい
+  // data.js: stale-while-revalidate
+  //
+  // 下の CSS/JS 判定より必ず前に置く。url.pathname はクエリを含まないので
+  // /data.js?v=7 の pathname は /data.js となり /\.js$/ にも一致する。
+  // 順序を逆にすると cache-first に吸われ、Publish しても一覧に反映されない
+  // （実際に v1.12.0 までこの状態で、この分岐は到達不能だった）。
+  //
+  // data.js は CMS の Publish Now が直接 commit するため、他の JS のように
+  // 「変更したら参照元 HTML の ?v を上げる」運用が効かない。?v=7 は固定のまま
+  // 中身だけが変わるので、キャッシュキーで鮮度を管理できない。
+  if (url.pathname.endsWith('/data.js')) {
+    event.respondWith(staleWhileRevalidate(request));
+    return;
+  }
+
+  // フォント/CSS/JS はクエリ(?v)でバージョン管理しているので cache-first でよい。
+  // 更新は ?v を上げて別のキャッシュキーにすることで届ける。
   if (/\.(css|js|woff2?|ttf|otf)$/i.test(url.pathname)) {
     event.respondWith(cacheFirst(request));
     return;
@@ -80,12 +105,6 @@ self.addEventListener('fetch', event => {
   // CMS で同じファイル名のまま画像を差し替えることがあり、cache-first だと
   // 一度見た人には古い画像が永久に表示され続けてしまう。
   if (/\.(png|jpe?g|webp|avif|svg|gif|ico)$/i.test(url.pathname)) {
-    event.respondWith(staleWhileRevalidate(request));
-    return;
-  }
-
-  // data.js: stale-while-revalidate
-  if (url.pathname.endsWith('/data.js')) {
     event.respondWith(staleWhileRevalidate(request));
     return;
   }
@@ -113,6 +132,12 @@ async function networkFirst(request) {
   }
 }
 
+// キャッシュに在れば即返して終わり。バックグラウンド更新は「行わない」。
+// 対象は ?v 付きの CSS/JS/フォントだけで、更新すれば ?v が変わり別のキャッシュキーに
+// なるため、同じ URL の中身が変わることが無い。裏で取り直しても常に同じ内容で、
+// 全ページ読み込みごとにネットワーク往復が倍になるだけになる。
+// （ヘッダーコメントには v1.12.0 まで "with background update" と書かれていたが、
+//   実装は最初から無く、記述のほうが誤っていた）
 async function cacheFirst(request) {
   const cached = await caches.match(request);
   if (cached) return cached;

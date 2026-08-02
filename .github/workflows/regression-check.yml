@@ -24,6 +24,8 @@ on:
       - 'scripts/check_regressions.py'
       - 'scripts/check_hub_pages.py'
       - 'scripts/check_asset_versions.py'
+      - 'LP/sw.js'
+      - 'scripts/check_sw_routing.mjs'
       - '.github/regression-thresholds.yml'
       - '.github/workflows/regression-check.yml'
   workflow_dispatch:
@@ -75,6 +77,11 @@ jobs:
       # ビルドの前後どちらでもよいが、失敗を早く出すためここに置く。
       - name: Check asset cache busting
         run: python3 scripts/check_asset_versions.py --base origin/${{ github.base_ref || 'main' }}
+
+      # sw.js の分岐順。data.js が cache-first に吸われると Publish しても
+      # 一度訪問したブラウザには反映されない（AUDIT §9-18）。
+      - name: Check service worker routing
+        run: node scripts/check_sw_routing.mjs
 
       - name: Check regression thresholds
         run: python3 scripts/check_regressions.py

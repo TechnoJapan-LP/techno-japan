@@ -1155,3 +1155,107 @@ Drive の原本は CORS フォールバック時に `.jpeg` のまま保存さ�
 検査の視界に入らない。同メトリクスは「サイト訪問者に壊れた画像が出ないこと」を
 守るもので、今回の「CMS 運用者に ✕ が見えること」は守備範囲が違う。
 表示側で正規化した以上、追加のメトリクスは不要と判断した。
+
+### 9-18. Service Worker の分岐順で data.js が cache-first に吸われていた
+
+HACHA MECHA を Publish Now しても本番の一覧に出ない、という報告から発覚。
+**静的ページ側は正常だった**（`/festivals/hacha-mecha.html` は JA/EN とも 200、
+sitemap にも掲載、data.js にも `status: "published"` で存在）。出ないのは SPA の一覧だけ。
+
+`sw.js` の fetch ハンドラは上から順に評価し、最初に一致した分岐で `return` する。
+
+```js
+// L74 ← ここで data.js が捕まる
+if (/\.(css|js|woff2?|ttf|otf)$/i.test(url.pathname)) { cacheFirst(request); return; }
+...
+// L88 ← 到達不能（デッドコード）
+if (url.pathname.endsWith('/data.js')) { staleWhileRevalidate(request); return; }
+```
+
+**`url.pathname` はクエリを含まない。** `/data.js?v=7` の pathname は `/data.js` なので
+`/\.js$/` にも一致する。data.js 専用の分岐は書かれていたが、一度も実行されていなかった。
+
+さらに `cacheFirst()` にバックグラウンド更新は無い（後述）。結果:
+
+| 訪問者 | 挙動 |
+|---|---|
+| 初回訪問 | 正しく表示される |
+| 一度でも訪問済み | `tj-static-v1.12.0` の古い data.js が永久に返る |
+
+HTML は network-first なので静的ページだけは新しくなる。
+**「詳細ページは出るのに一覧に出ない」という切り分けが、そのまま原因を指していた。**
+
+#### なぜ ?v で防げないか
+
+data.js は **CMS の Publish Now が直接 commit する**（`git log` の `cms: publish data.js`）。
+他の JS のように「変更したら参照元 HTML の `?v` を上げる」運用が働く余地が無い。
+`?v=7` は固定のまま中身だけが変わるため、キャッシュキーで鮮度を管理できない。
+**Publish のたびに中身が変わるものを cache-first に置くこと自体が誤り。**
+
+`check_asset_versions.py`（§9-11）が検出できなかったのもこれが理由で、
+同スクリプトは「origin/main から変更された JS/CSS の `?v` が据え置きか」を見る。
+data.js は常に変更されるので毎回引っかかってしまい、そもそも運用に乗らない。
+
+#### 対応
+
+- data.js の分岐を CSS/JS 判定より**前**へ移動
+- `VERSION` を `v1.12.0` → `v1.13.0`。`activate` が古いキャッシュを消すので、
+  既に古い data.js を掴んでいるブラウザも次回訪問で復旧する
+- `scripts/check_sw_routing.mjs` を追加（後述）
+
+#### cacheFirst のコメントが実装と食い違っていた件
+
+ヘッダーには "cache-first with background update" と書かれていたが、実装に更新は無い。
+**コメントのほうを実装に合わせた。** cache-first の対象は `?v` 付きの CSS/JS/フォントだけで、
+更新すれば `?v` が変わり別のキャッシュキーになる。同じ URL の中身は変わらないので、
+裏で取り直しても常に同じ内容が返り、全ページ読み込みでネットワーク往復が倍になるだけ。
+**実装が正しく、記述が誤っていた。**
+
+#### 他に同じ理由でキャッシュに吸われているファイルは無いか
+
+参照される JS/CSS は12件、**全件が `?v` 付き**（クエリ無しはゼロ）。
+判定は「`?v` があるか」ではなく **「誰がそのファイルを書き換えるか」**。
+
+| ファイル | 書き換える主体 | cache-first で安全か |
+|---|---|---|
+| `data.js` | CMS の Publish Now（自動 commit） | **× 今回修正** |
+| `image-dimensions.js` | 人が `build-image-dimensions.mjs` を実行して commit | ○ `?v` 運用が効く |
+| `common.js` / `common.css` / `search.js` / `favorites.js` / `lang-toggle.js` / `article-fx.*` / `detail.css` / `cms.*` | 人の編集 | ○ 同上 |
+
+`image-dimensions.js` は `\.js$` に一致して cache-first になるが、人が編集して commit する
+ものなので `?v` を上げれば届く（実際 2026-08-02 に `?v=1` → `?v=2` へ更新されている）。
+**cache-first のままで正しい。** 更新漏れは `check_asset_versions.py` が止める。
+
+自動 commit されるものは data.js のみ。ワークフローが commit するのは
+`LP/images/`（stale-while-revalidate）と生成 HTML・sitemap・rss（network-first）で、
+いずれも cache-first の経路に乗らない。
+
+#### 回帰ガード: scripts/check_sw_routing.mjs
+
+「分岐が書かれているか」ではなく **「実際にどの戦略が呼ばれるか」** を検査する。
+今回の不具合は分岐が*存在した*のに到達しなかったのだから、存在を見ても意味がない。
+
+sw.js を Node の `vm` でスタブ環境に読み込み、合成した fetch イベントを流して、
+`caches` / `fetch` スタブへの**呼び出し順**から実際の戦略を判定する。
+
+| 呼び出し順 | 戦略 |
+|---|---|
+| `fetch` | networkFirst |
+| `caches.match` → `fetch` | cacheFirst |
+| `caches.open` → `cache.match` → `fetch` | staleWhileRevalidate |
+
+正規表現で sw.js を読むのではなく**実行する**ので、分岐の並べ替えや条件式の
+書き換えにも追随する（§9-16 の教訓 — HTML/コードを正規表現で読むな）。
+
+`MUST_NOT_BE_CACHE_FIRST` に「自動 commit されるので `?v` が上がらないファイル」を
+理由つきで列挙し、cache-first に落ちたら fail させる。あわせて
+`.github/workflows/*.yml` の `git add` を走査し、**JS/CSS を自動 commit する
+ワークフローが増えたら警告**する（同じ性質のファイルが増えたことに気づくため）。
+
+v1.12.0 の並び順を再現して fail することを確認済み。`regression-check.yml` に組み込んだ。
+
+#### 副次的に見つかったデータ誤り（未修正・報告のみ）
+
+シート FESTIVALS の `name_en` 列に、名前ではなく英語の説明文（`DESC_EN` と同一の347文字）が
+入っており、EN ページの `<h1>` と `<title>` が説明文になっていた。全87件中この1件のみ。
+AGENTS.md の方針に従い修正はせず報告した。
