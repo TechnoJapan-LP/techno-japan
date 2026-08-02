@@ -157,102 +157,9 @@ nav { padding: 20px 40px; background: rgba(8,8,8,0.97); mix-blend-mode: normal; 
   .vp-pane { display: none !important; }
 }
 
-/* ===================== VENUE DETAIL ===================== */
-#venue-detail-view { display: none; position: relative; }
-.venue-hero {
-  position: relative;
-  width: 100%;
-  height: 360px;
-  overflow: hidden;
-}
-.venue-hero-img {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-}
-.venue-hero-gradient {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, var(--bg) 0%, rgba(8,8,8,0.6) 40%, rgba(8,8,8,0.2) 100%);
-}
-/* Fallback when no image */
-.venue-hero-placeholder {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, #1a1a2e 0%, #0f1123 50%, #080808 100%);
-}
-.venue-back {
-  display: inline-flex; align-items: center; gap: 12px; padding: 24px 40px 0;
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em;
-  text-transform: uppercase; opacity: 0.4; transition: opacity 0.3s ease; cursor: none;
-  position: relative; z-index: 10;
-}
-.venue-back:hover { opacity: 1; }
-.venue-detail { padding: 40px 40px 120px; }
-
-.venue-detail-header {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
-  padding-bottom: 60px; border-bottom: 1px solid rgba(240,237,232,0.08);
-}
-.venue-detail-name { font-family: var(--font-display); font-size: clamp(56px, 8vw, 120px); line-height: 0.9; text-transform: uppercase; }
-.venue-detail-meta { display: flex; flex-direction: column; justify-content: flex-end; gap: 24px; }
-.venue-detail-tags { display: flex; gap: 12px; flex-wrap: wrap; }
-.venue-detail-tags span { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; padding: 6px 16px; border: 1px solid rgba(240,237,232,0.15); }
-.venue-detail-bio { font-family: var(--font-body); font-weight: 200; font-size: 15px; line-height: 1.9; opacity: 0.7; max-width: 600px; }
-.venue-detail-links { display: flex; gap: 24px; margin-top: 8px; }
-.venue-detail-links a { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.4; transition: opacity 0.3s ease; padding-bottom: 2px; border-bottom: 1px solid rgba(240,237,232,0.15); }
-.venue-detail-links a:hover { opacity: 1; }
-
-/* SHARE BUTTONS */
-.share-buttons { display: flex; gap: 8px; align-items: center; margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(240,237,232,0.08); }
-.share-buttons-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.4; margin-right: 8px; }
-.share-btn { width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid rgba(240,237,232,0.12); background: transparent; cursor: pointer; transition: border-color 0.3s ease, background 0.3s ease; color: var(--text); opacity: 0.6; }
-.share-btn:hover { border-color: rgba(240,237,232,0.4); opacity: 1; }
-.share-btn svg { width: 14px; height: 14px; fill: currentColor; }
-.share-btn.copied { background: rgba(255,255,255,0.08); }
-
 /* FAV HEART (venue card) */
 .venue-card { position: relative; }
 .venue-fav-mount { position: absolute; top: 16px; right: 16px; z-index: 5; }
-
-/* VENUE SECTIONS */
-.venue-section { padding-top: 60px; }
-.venue-section-title {
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em;
-  text-transform: uppercase; opacity: 0.4; margin-bottom: 32px;
-  display: flex; align-items: center; gap: 20px;
-}
-.venue-section-title::after { content: ''; flex: 1; height: 1px; background: rgba(240,237,232,0.1); }
-
-.venue-event-row {
-  display: grid; grid-template-columns: 80px 1fr auto; gap: 32px;
-  padding: 24px 0; border-bottom: 1px solid rgba(240,237,232,0.06);
-  align-items: center; position: relative;
-}
-.venue-event-row::before { content: ''; position: absolute; inset: 0 -40px; background: rgba(240,237,232,0.02); opacity: 0; transition: opacity 0.3s ease; }
-.venue-event-row:hover::before { opacity: 1; }
-.venue-event-row * { position: relative; z-index: 1; }
-.ve-date { font-family: var(--font-display); font-size: 28px; }
-.ve-name { font-family: var(--font-display); font-size: 24px; text-transform: uppercase; margin-bottom: 4px; }
-.ve-meta { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; opacity: 0.4; text-transform: uppercase; }
-.ve-lineup { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
-.ve-lineup a { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.35; transition: opacity 0.2s ease; padding: 3px 10px; border: 1px solid rgba(240,237,232,0.08); }
-.ve-lineup a:hover { opacity: 1; border-color: rgba(240,237,232,0.25); }
-.ve-tag { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; padding: 5px 14px; border: 1px solid rgba(240,237,232,0.12); }
-.ve-tag.past { opacity: 0.25; }
-
-.venue-artist-row {
-  display: grid; grid-template-columns: 1fr 140px auto; gap: 24px;
-  padding: 20px 0; border-bottom: 1px solid rgba(240,237,232,0.06);
-  align-items: center; position: relative;
-}
-.venue-artist-row::before { content: ''; position: absolute; inset: 0 -40px; background: rgba(240,237,232,0.02); opacity: 0; transition: opacity 0.3s ease; }
-.venue-artist-row:hover::before { opacity: 1; }
-.venue-artist-row * { position: relative; z-index: 1; }
-.va-name { font-family: var(--font-display); font-size: 28px; text-transform: uppercase; }
-.va-genre { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.3; }
-.va-count { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; opacity: 0.3; }
 
 /* REVEAL */
 .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
@@ -340,12 +247,6 @@ nav { padding: 20px 40px; background: rgba(8,8,8,0.97); mix-blend-mode: normal; 
   .area-nav a { padding: 6px 16px; font-size: 9px; }
   .venues-grid { grid-template-columns: 1fr; }
   .venue-card { padding: 36px 24px; min-height: auto; }
-  .venue-back { padding: 40px 24px 0; }
-  .venue-detail { padding: 32px 24px 80px; }
-  .venue-detail-header { grid-template-columns: 1fr; gap: 32px; }
-  .venue-event-row { grid-template-columns: 60px 1fr auto; gap: 16px; }
-  .venue-artist-row { grid-template-columns: 1fr auto; gap: 12px; }
-  .va-genre { display: none; }
   /* Full-width map on mobile — break out of parent padding */
   #venue-map-wrap, #osaka-map-wrap, #nagoya-map-wrap, #kyoto-map-wrap, #hakuba-map-wrap {
     margin: 0 -24px 32px;
@@ -354,11 +255,7 @@ nav { padding: 20px 40px; background: rgba(8,8,8,0.97); mix-blend-mode: normal; 
   #venue-map, #osaka-map, #nagoya-map, #kyoto-map, #hakuba-map { height: 220px; }
 }
 @media (max-width: 768px) {
-  .venue-event-row { grid-template-columns: 1fr; gap: 8px; }
   .area-nav a { flex-shrink: 0; }
-}
-@media (hover: none) and (pointer: coarse) {
-  .venue-back { cursor: pointer; }
 }
 
 </style>
@@ -521,12 +418,6 @@ nav { padding: 20px 40px; background: rgba(8,8,8,0.97); mix-blend-mode: normal; 
   </div>
 </aside>
 
-<div id="venue-detail-view">
-  <div class="venue-hero" id="venue-hero"></div>
-  <a class="venue-back" id="venue-back-btn"><span class="arrow" style="width:24px;height:1px;background:var(--text);position:relative;display:inline-block"><span style="position:absolute;left:0;top:-3px;width:7px;height:7px;border-left:1px solid var(--text);border-bottom:1px solid var(--text);transform:rotate(45deg)"></span></span> ALL VENUES</a>
-  <div class="venue-detail" id="venue-detail"></div>
-</div>
-
 <!-- ===================== GUIDE LINKS ===================== -->
 <div class="guide-section reveal">
   <div class="guide-header">
@@ -616,48 +507,9 @@ nav { padding: 20px 40px; background: rgba(8,8,8,0.97); mix-blend-mode: normal; 
 const MONTHS_SHORT = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
 function parseDate(s) { if(!s) return new Date(NaN); const [y,m,d] = String(s).split('-').map(Number); return new Date(y,m-1,d); }
 function isUpcoming(s) { const t = new Date(); t.setHours(0,0,0,0); return parseDate(s) >= t; }
-function getArtist(id) { return ARTISTS.find(a => a.id === id); }
-function getVenue(id) { return VENUES.find(v => v.id === id); }
-
-/* ========== SHARE BUTTONS ========== */
-function buildShareButtons(title, url) {
-  const t = encodeURIComponent(title);
-  const u = encodeURIComponent(url);
-  return `
-    <div class="share-buttons">
-      <span class="share-buttons-label">SHARE</span>
-      <a href="https://twitter.com/intent/tweet?text=${t}&url=${u}" target="_blank" rel="noopener" class="share-btn" title="X (Twitter)">
-        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-      </a>
-      <a href="https://www.facebook.com/sharer/sharer.php?u=${u}" target="_blank" rel="noopener" class="share-btn" title="Facebook">
-        <svg viewBox="0 0 24 24"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647z"/></svg>
-      </a>
-      <a href="https://social-plugins.line.me/lineit/share?url=${u}" target="_blank" rel="noopener" class="share-btn" title="LINE">
-        <svg viewBox="0 0 24 24"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
-      </a>
-      <button type="button" class="share-btn share-copy-btn" data-url="${url}" title="Copy URL" onclick="copyShareUrl(this)">
-        <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-      </button>
-    </div>
-  `;
-}
-
-function copyShareUrl(btn) {
-  navigator.clipboard.writeText(btn.dataset.url).then(() => {
-    btn.classList.add('copied');
-    btn.title = 'Copied!';
-    setTimeout(() => { btn.classList.remove('copied'); btn.title = 'Copy URL'; }, 1500);
-  });
-}
 function getVenueEvents(venueName) {
   return EVENTS.filter(e => e.venue === venueName).sort((a,b) => parseDate(a.date) - parseDate(b.date));
 }
-function getVenueArtists(venueName) {
-  const ids = new Set();
-  EVENTS.filter(e => e.venue === venueName && e.lineup).forEach(e => e.lineup.forEach(id => ids.add(id)));
-  return [...ids].map(id => getArtist(id)).filter(Boolean);
-}
-
 /* OBSERVER */
 const observer = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
@@ -667,12 +519,34 @@ function observeAll() { document.querySelectorAll('.reveal').forEach(el => obser
 /* AREA FILTER */
 let currentArea = 'ALL';
 let mapCity = null; // which city map is showing
+const VENUE_HUB_STATE_KEY = 'tj:venue-hub-state:v1';
+
+function readVenueQuery() {
+  const area = new URLSearchParams(location.search).get('area');
+  if (area) currentArea = area;
+}
+function syncVenueQuery() {
+  const url = new URL(location.href);
+  url.searchParams.delete('area');
+  if (currentArea !== 'ALL') url.searchParams.set('area', currentArea);
+  history.replaceState(history.state, '', url.pathname + url.search);
+}
+function saveVenueHubState() {
+  try { sessionStorage.setItem(VENUE_HUB_STATE_KEY, JSON.stringify({url:location.pathname+location.search,scrollY,savedAt:Date.now()})); } catch (_) {}
+}
+function restoreVenueHubState(event) {
+  if (event.persisted) return;
+  try { const saved=JSON.parse(sessionStorage.getItem(VENUE_HUB_STATE_KEY)||'null'); if(!saved||saved.url!==location.pathname+location.search||Date.now()-saved.savedAt>1800000)return; sessionStorage.removeItem(VENUE_HUB_STATE_KEY); requestAnimationFrame(()=>requestAnimationFrame(()=>scrollTo(0,saved.scrollY))); } catch (_) {}
+}
+readVenueQuery();
+addEventListener('pageshow', restoreVenueHubState);
 
 function buildAreaNav() {
   const cities = [...new Set(VENUES.map(v => v.city).filter(c => c && c !== 'undefined'))];
+  if (currentArea !== 'ALL' && !cities.includes(currentArea)) currentArea = 'ALL';
   const nav = document.getElementById('area-nav');
-  nav.innerHTML = `<a href="#" data-area="ALL" class="active">ALL</a>` +
-    cities.map(c => `<a href="#" data-area="${c}">${c}</a>`).join('');
+  nav.innerHTML = `<a href="#" data-area="ALL" class="${currentArea === 'ALL' ? 'active' : ''}">ALL</a>` +
+    cities.map(c => `<a href="#" data-area="${c}" class="${currentArea === c ? 'active' : ''}">${c}</a>`).join('');
 
   nav.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', (e) => {
@@ -685,6 +559,7 @@ function buildAreaNav() {
       document.getElementById('area-map-btn').classList.remove('active');
       mapCity = null;
       applyAreaFilter();
+      syncVenueQuery();
     });
   });
 
@@ -772,7 +647,7 @@ function bindVenueHoverPreview(){
   document.querySelectorAll('.venue-card').forEach(card => {
     if (card.dataset.tjVpBound === '1') return;
     card.dataset.tjVpBound = '1';
-    const id = (card.getAttribute('href') || '').replace('#venue/', '');
+    const id = card.dataset.vid;
     const v = (typeof VENUES !== 'undefined') ? VENUES.find(x => x.id === id) : null;
     if (!v) return;
 
@@ -797,7 +672,7 @@ function renderVenuesList() {
   document.getElementById('venues-grid').innerHTML = VENUES.filter(v => v.name && v.city && v.city !== 'undefined').map((v, i) => {
     const evCount = getVenueEvents(v.name).length;
     return `
-      <a href="/en/venues/${encodeURIComponent(v.id)}.html" onclick="event.preventDefault();location.hash='venue/'+this.dataset.vid" data-vid="${v.id}" class="venue-card reveal" data-city="${v.city}" style="transition-delay:${i * 80}ms">
+      <a href="/en/venues/${encodeURIComponent(v.id)}.html" data-venue-detail-link data-vid="${v.id}" class="venue-card reveal" data-city="${v.city}" style="transition-delay:${i * 80}ms">
         <div class="venue-card-content">
           <div class="venue-card-city">${[v.city, v.area].filter(Boolean).join(' · ')}</div>
           <div class="venue-card-name">${v.name}</div>
@@ -815,124 +690,16 @@ function renderVenuesList() {
       window.tjFav.attachHeart(m, m.dataset.favMount, m.dataset.favId, { size: 'sm' });
     });
   }
+  document.querySelectorAll('#venues-grid [data-venue-detail-link]').forEach(link => link.addEventListener('click', saveVenueHubState));
   observeAll();
   bindCursorExpand();
   applyAreaFilter();
   bindVenueHoverPreview();
 }
 
-/* RENDER DETAIL */
-function renderVenueDetail(id) {
-  const v = getVenue(id);
-  if (!v) return;
-  const events = getVenueEvents(v.name);
-  const artists = getVenueArtists(v.name);
-
-  const linksArr = [];
-  if (v.url && v.url !== '#') linksArr.push(`<a href="${v.url}" target="_blank" rel="noopener">WEBSITE</a>`);
-  if (v.instagram) linksArr.push(`<a href="${v.instagram}" target="_blank" rel="noopener">INSTAGRAM</a>`);
-  const linksHtml = linksArr.join('');
-
-  const eventsHtml = events.length ? events.map(ev => {
-    const d = parseDate(ev.date);
-    const upcoming = isUpcoming(ev.date);
-    const lineupHtml = ev.lineup && ev.lineup.length
-      ? `<div class="ve-lineup">${ev.lineup.map(aid => { const a = getArtist(aid); return `<a href="artists.html#artist/${aid}">${a ? a.name : aid}</a>`; }).join('')}</div>`
-      : '';
-    return `
-      <div class="venue-event-row">
-        <div class="ve-date">${MONTHS_SHORT[d.getMonth()]} ${String(d.getDate()).padStart(2,'0')}</div>
-        <div>
-          <div class="ve-name">${ev.name}</div>
-          <div class="ve-meta">${ev.time || ''}</div>
-          ${lineupHtml}
-        </div>
-        <span class="ve-tag ${upcoming ? '' : 'past'}">${upcoming ? 'UPCOMING' : 'PAST'}</span>
-      </div>`;
-  }).join('') : '<div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.2em;opacity:0.3;padding:32px 0;">NO EVENTS SCHEDULED</div>';
-
-  const artistsHtml = artists.length ? artists.map(a => {
-    const count = EVENTS.filter(e => e.venue === v.name && e.lineup && e.lineup.includes(a.id)).length;
-    return `
-      <a href="artists.html#artist/${a.id}" class="venue-artist-row">
-        <div class="va-name">${a.name}</div>
-        <div class="va-genre">${a.genre}</div>
-        <div class="va-count">${count} EVENT${count !== 1 ? 'S' : ''}</div>
-      </a>`;
-  }).join('') : '';
-
-  // Render hero image
-  const heroEl = document.getElementById('venue-hero');
-  if (v.image) {
-    heroEl.innerHTML = `<div class="venue-hero-img" style="background-image:url('${v.image}');background-position:${v.imagePosition || 'center'}"></div><div class="venue-hero-gradient"></div>`;
-    heroEl.style.display = 'block';
-  } else {
-    heroEl.innerHTML = `<div class="venue-hero-placeholder"></div><div class="venue-hero-gradient"></div>`;
-    heroEl.style.display = 'block';
-  }
-
-  document.getElementById('venue-detail').innerHTML = `
-    <div class="venue-detail-header reveal">
-      <div class="venue-detail-name">${v.name}</div>
-      <div class="venue-detail-meta">
-        <div class="venue-detail-tags">
-          ${v.city ? `<span>${v.city}</span>` : ''}
-          ${v.area ? `<span>${v.area}</span>` : ''}
-          ${v.capacity ? `<span>~${v.capacity}</span>` : ''}
-          ${v.genre ? `<span>${Array.isArray(v.genre) ? v.genre.join(' / ') : v.genre}</span>` : ''}
-        </div>
-        <div class="venue-detail-bio">${v.desc || ''}</div>
-        ${linksHtml ? `<div class="venue-detail-links">${linksHtml}</div>` : ''}
-        ${buildShareButtons(`${v.name} — TECHNO JAPAN`, `https://techno-japan.media/venues.html#venue/${v.id}`)}
-      </div>
-    </div>
-    ${artistsHtml ? `<div class="venue-section reveal">
-      <div class="venue-section-title">ARTISTS</div>
-      ${artistsHtml}
-    </div>` : ''}
-    <div class="venue-section reveal">
-      <div class="venue-section-title">EVENTS</div>
-      ${eventsHtml}
-    </div>`;
-
-  observeAll();
-  bindCursorExpand();
-}
-
-/* VIEW SWITCHING */
-function showList() {
-  document.getElementById('venues-list-view').style.display = 'block';
-  document.getElementById('venue-detail-view').style.display = 'none';
-  document.getElementById('page-header').style.display = 'block';
-  window.scrollTo(0, 0);
-}
-function showDetail(id) {
-  document.getElementById('venues-list-view').style.display = 'none';
-  document.getElementById('venue-detail-view').style.display = 'block';
-  document.getElementById('page-header').style.display = 'none';
-  renderVenueDetail(id);
-  window.scrollTo(0, 0);
-}
-
-/* ROUTING */
-function handleRoute() {
-  const hash = window.location.hash;
-  if (hash.startsWith('#venue/')) {
-    showDetail(hash.replace('#venue/', ''));
-  } else {
-    showList();
-  }
-}
-window.addEventListener('hashchange', handleRoute);
-document.getElementById('venue-back-btn').addEventListener('click', (e) => {
-  e.preventDefault();
-  window.location.hash = '';
-  showList();
-});
-
 /* CURSOR (delegated to common.js) */
 function bindCursorExpand() {
-  if (window.tjBindCursorExpand) window.tjBindCursorExpand('.venue-card, .venue-back, .venue-artist-row');
+  if (window.tjBindCursorExpand) window.tjBindCursorExpand('.venue-card');
 }
 
 /* ========== VENUE MAP ========== */
@@ -953,7 +720,8 @@ function attachPinBehavior(marker, venueId, map) {
   marker.on('click', () => {
     if (isTouchDevice()) {
       if (lastTappedPin === marker) {
-        window.location.hash = 'venue/' + venueId;
+        saveVenueHubState();
+        window.location.href = `/en/venues/${encodeURIComponent(venueId)}.html`;
         lastTappedPin = null;
       } else {
         if (lastTappedPin) lastTappedPin.closeTooltip();
@@ -961,7 +729,8 @@ function attachPinBehavior(marker, venueId, map) {
         marker.openTooltip();
       }
     } else {
-      window.location.hash = 'venue/' + venueId;
+      saveVenueHubState();
+      window.location.href = `/en/venues/${encodeURIComponent(venueId)}.html`;
     }
   });
   // Reset selection when user taps on the map (not a pin)
@@ -1208,7 +977,6 @@ const ALL_MAPS_CFG = [
 /* INIT */
 buildAreaNav();
 renderVenuesList();
-handleRoute();
 </script>
 <!-- Service Worker registration -->
 <script>

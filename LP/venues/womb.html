@@ -60,7 +60,7 @@
 </div>
 <article class="detail-page">
   <div class="detail-inner">
-    <a class="article-back" href="/venues.html"><span class="arrow"></span> ALL VENUES</a>
+    <a class="article-back" href="/venues.html" data-venue-hub-back="/venues.html"><span class="arrow"></span> ALL VENUES</a>
     <div class="detail-eyebrow">SHIBUYA, TOKYO</div>
     <h1>WOMB</h1>
     
@@ -80,7 +80,7 @@
       <div><dt>公式サイト</dt><dd><a href="https://www.womb.co.jp/" target="_blank" rel="noopener">https://www.womb.co.jp/</a></dd></div>
     </dl>
     <h2>TOKYOの他のヴェニュー</h2><div class="lineup-list"><a class="lineup-item" href="/venues/circus-tokyo.html">CIRCUS TOKYO</a><a class="lineup-item" href="/venues/saloon.html">SALOON</a><a class="lineup-item" href="/venues/solfa.html">SOLFA</a><a class="lineup-item" href="/venues/unit.html">UNIT</a><a class="lineup-item" href="/venues/liquidroom.html">LIQUIDROOM</a><a class="lineup-item" href="/venues/clubasia.html">CLUBASIA</a></div>
-    <div class="article-footer"><a class="article-back" href="/venues.html" style="margin:0"><span class="arrow"></span> ALL VENUES</a></div>
+    <div class="article-footer"><a class="article-back" href="/venues.html" data-venue-hub-back="/venues.html" style="margin:0"><span class="arrow"></span> ALL VENUES</a></div>
   </div>
 </article>
 <footer>
@@ -113,5 +113,25 @@
 </script>
 <script src="/common.js?v=2" defer></script>
 <script src="/lang-toggle.js?v=1" defer></script>
+<script>
+function bindVenueHubBackLinks() {
+  document.querySelectorAll('[data-venue-hub-back]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      try {
+        const referrer = new URL(document.referrer);
+        if (referrer.origin === window.location.origin && referrer.pathname === link.dataset.venueHubBack) {
+          event.preventDefault();
+          history.back();
+        }
+      } catch (_) {}
+    });
+  });
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bindVenueHubBackLinks, { once: true });
+} else {
+  bindVenueHubBackLinks();
+}
+</script>
 </body>
 </html>

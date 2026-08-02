@@ -176,6 +176,9 @@ if (document.readyState === 'loading') {
 const ARTIST_HUB_BACK_SCRIPT = FESTIVAL_HUB_BACK_SCRIPT
   .replaceAll('Festival', 'Artist')
   .replaceAll('festival', 'artist');
+const VENUE_HUB_BACK_SCRIPT = FESTIVAL_HUB_BACK_SCRIPT
+  .replaceAll('Festival', 'Venue')
+  .replaceAll('festival', 'venue');
 // 説明文（desc/bio）をバイリンガル表示する。ja=日本語スロット, en=英語スロット。
 // 両方あるときだけ言語トグルを出し、pageLang をデフォルト表示にする（SEO: 既定言語を
 // 可視・もう一方は lang 属性付きで hidden → 言語シグナルを濁さない）。片方だけなら従来通り。
@@ -855,6 +858,7 @@ function artistPage(a, artistsById, lang = 'ja') {
 /* ---------- ヴェニューページ ---------- */
 function venuePage(v, lang = 'ja') {
   const prefix = lang === 'en' ? '/en' : '';
+  const hubHref = `${prefix}/venues.html`;
   const altHref = (lang === 'ja' ? '/en' : '') + `/venues/${v.id}.html`;
   const name = lang === 'en' ? (v.name_en || v.name) : v.name;
   const bodyDesc = lang === 'en' ? (v.desc_en || v.desc) : (v.desc || v.desc_en);
@@ -888,7 +892,7 @@ function venuePage(v, lang = 'ja') {
 
   const body = `<article class="detail-page">
   <div class="detail-inner">
-    <a class="article-back" href="/venues.html"><span class="arrow"></span> ALL VENUES</a>
+    <a class="article-back" href="${hubHref}" data-venue-hub-back="${hubHref}"><span class="arrow"></span> ALL VENUES</a>
     ${place ? `<div class="detail-eyebrow">${esc(place)}</div>` : ''}
     <h1>${esc(name)}</h1>
     ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
@@ -905,11 +909,11 @@ function venuePage(v, lang = 'ja') {
       if (!others.length) return '';
       return `<h2>${lang === 'en' ? `MORE VENUES IN ${esc(String(v.city).toUpperCase())}` : `${esc(v.city)}の他のヴェニュー`}</h2>${relatedChips(others, 'venues', lang)}`;
     })()}
-    <div class="article-footer"><a class="article-back" href="/venues.html" style="margin:0"><span class="arrow"></span> ALL VENUES</a></div>
+    <div class="article-footer"><a class="article-back" href="${hubHref}" data-venue-hub-back="${hubHref}" style="margin:0"><span class="arrow"></span> ALL VENUES</a></div>
   </div>
 </article>`;
 
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'venues'] : ['venues']), `${v.id}.html`), html: page({ title, desc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('VENUES', '/venues.html', name, canonical)], body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'venues'] : ['venues']), `${v.id}.html`), html: page({ title, desc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('VENUES', '/venues.html', name, canonical)], body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT + VENUE_HUB_BACK_SCRIPT }) };
 }
 
 /* ---------- 実行 ---------- */
