@@ -30,6 +30,7 @@ import shutil
 import subprocess
 import sys
 import threading
+from urllib.parse import urlsplit
 from pathlib import Path
 
 try:
@@ -53,6 +54,91 @@ CONSOLE_IGNORE = re.compile(
     re.I,
 )
 UNCAUGHT_RE = re.compile(r'CONSOLE:\d+\]\s*"?(Uncaught[^"]*)', re.I)
+
+VENUE_MAP_TEST_PATH = "/__venue-map-test.html"
+VENUE_MAP_TEST_HTML = """<!doctype html><html><body data-map-result="pending" data-fallback-result="pending" data-tile-fallback-result="pending" data-en-fallback-result="pending">
+<iframe id="map-live" src="/venues.html"></iframe>
+<iframe id="map-fallback" src="/venues.html"></iframe>
+<iframe id="map-tile-fallback" src="/venues.html"></iframe>
+<iframe id="map-en-fallback" src="/en/venues.html"></iframe>
+<script>
+const setResult = (name, value, detail = '') => {
+  document.body.dataset[name] = value;
+  if (detail) document.body.dataset[name + 'Detail'] = detail;
+  if (document.body.dataset.mapResult !== 'pending' &&
+      document.body.dataset.fallbackResult !== 'pending' &&
+      document.body.dataset.tileFallbackResult !== 'pending' &&
+      document.body.dataset.enFallbackResult !== 'pending') {
+    document.querySelectorAll('iframe').forEach((frame) => frame.remove());
+  }
+};
+const live = document.getElementById('map-live');
+live.addEventListener('load', () => {
+  const win = live.contentWindow;
+  const doc = live.contentDocument;
+  if (!win.L) { setResult('mapResult', 'fail', 'window.L missing'); return; }
+  doc.getElementById('area-map-btn').click();
+  const deadline = Date.now() + 12000;
+  const poll = setInterval(() => {
+    const wrap = doc.getElementById('venue-map-wrap');
+    const error = doc.getElementById('venue-map-error');
+    if (wrap?.dataset.mapStatus === 'ready' && wrap.querySelector('.leaflet-container, .leaflet-pane')) {
+      clearInterval(poll); setResult('mapResult', 'pass');
+    } else if (error && !error.hidden) {
+      clearInterval(poll); setResult('mapResult', 'fail', error.textContent.trim());
+    } else if (Date.now() > deadline) {
+      clearInterval(poll); setResult('mapResult', 'fail', 'test timeout');
+    }
+  }, 100);
+});
+const fallback = document.getElementById('map-fallback');
+fallback.addEventListener('load', () => {
+  const win = fallback.contentWindow;
+  const doc = fallback.contentDocument;
+  win.L = undefined;
+  doc.getElementById('area-map-btn').click();
+  setTimeout(() => {
+    const wrap = doc.getElementById('venue-map-wrap');
+    const error = doc.getElementById('venue-map-error');
+    const ok = error && !error.hidden && wrap?.style.display === 'none' && error.querySelector('a[href="#venues-grid"]');
+    setResult('fallbackResult', ok ? 'pass' : 'fail', ok ? '' : 'fallback was not shown');
+  }, 300);
+});
+const tileFallback = document.getElementById('map-tile-fallback');
+tileFallback.addEventListener('load', () => {
+  const win = tileFallback.contentWindow;
+  const doc = tileFallback.contentDocument;
+  win.L.tileLayer = () => {
+    const layer = win.L.layerGroup();
+    const addTo = layer.addTo.bind(layer);
+    layer.addTo = (map) => {
+      addTo(map);
+      setTimeout(() => layer.fire('tileerror'), 0);
+      return layer;
+    };
+    return layer;
+  };
+  doc.getElementById('area-map-btn').click();
+  setTimeout(() => {
+    const wrap = doc.getElementById('venue-map-wrap');
+    const error = doc.getElementById('venue-map-error');
+    const ok = error && !error.hidden && wrap?.dataset.mapStatus === 'failed';
+    setResult('tileFallbackResult', ok ? 'pass' : 'fail', ok ? '' : 'tileerror fallback was not shown');
+  }, 300);
+});
+const enFallback = document.getElementById('map-en-fallback');
+enFallback.addEventListener('load', () => {
+  const win = enFallback.contentWindow;
+  const doc = enFallback.contentDocument;
+  win.L = undefined;
+  doc.getElementById('area-map-btn').click();
+  setTimeout(() => {
+    const error = doc.getElementById('venue-map-error');
+    const ok = error && !error.hidden && error.textContent.trim().startsWith('The map could not be loaded.');
+    setResult('enFallbackResult', ok ? 'pass' : 'fail', ok ? '' : 'English fallback was not shown');
+  }, 300);
+});
+</script></body></html>"""
 
 
 def find_chrome():
@@ -82,7 +168,24 @@ class Server(threading.Thread):
 
     def __init__(self, root, port=0):
         super().__init__(daemon=True)
-        handler = lambda *a, **k: QuietHandler(*a, directory=str(root), **k)
+        root_dir = str(root)
+
+        class Handler(QuietHandler):
+            def __init__(self, *a, **k):
+                super().__init__(*a, directory=root_dir, **k)
+
+            def do_GET(self):
+                if urlsplit(self.path).path == VENUE_MAP_TEST_PATH:
+                    payload = VENUE_MAP_TEST_HTML.encode("utf-8")
+                    self.send_response(200)
+                    self.send_header("Content-Type", "text/html; charset=utf-8")
+                    self.send_header("Content-Length", str(len(payload)))
+                    self.end_headers()
+                    self.wfile.write(payload)
+                    return
+                super().do_GET()
+
+        handler = Handler
         http.server.ThreadingHTTPServer.allow_reuse_address = True
         self.httpd = http.server.ThreadingHTTPServer(("127.0.0.1", port), handler)
         self.httpd.daemon_threads = True
@@ -207,6 +310,28 @@ def main():
                 )
             rows.append((name, n, spec["min_markers"], size,
                          spec.get("min_container_bytes", 0), len(uncaught), status))
+
+        if server:
+            map_dom, map_console = render(chrome, f"{base}{VENUE_MAP_TEST_PATH}", max(args.budget, 15000))
+            map_result = re.search(r'<body[^>]*data-map-result="([^"]+)"', map_dom)
+            fallback_result = re.search(r'<body[^>]*data-fallback-result="([^"]+)"', map_dom)
+            tile_fallback_result = re.search(r'<body[^>]*data-tile-fallback-result="([^"]+)"', map_dom)
+            en_fallback_result = re.search(r'<body[^>]*data-en-fallback-result="([^"]+)"', map_dom)
+            map_value = map_result.group(1) if map_result else "missing"
+            fallback_value = fallback_result.group(1) if fallback_result else "missing"
+            tile_fallback_value = tile_fallback_result.group(1) if tile_fallback_result else "missing"
+            en_fallback_value = en_fallback_result.group(1) if en_fallback_result else "missing"
+            print(f"Venue map: init={map_value}, fallback={fallback_value}, "
+                  f"tileerror={tile_fallback_value}, en_fallback={en_fallback_value}")
+            if map_value != "pass":
+                detail = re.search(r'data-map-result-detail="([^"]*)"', map_dom)
+                failures.append(f"venues.html: Leaflet地図の初期化に失敗 — {detail.group(1) if detail else map_value}")
+            if fallback_value != "pass":
+                failures.append(f"venues.html: Leaflet失敗時のフォールバックに失敗 — {fallback_value}")
+            if tile_fallback_value != "pass":
+                failures.append(f"venues.html: タイル失敗時のフォールバックに失敗 — {tile_fallback_value}")
+            if en_fallback_value != "pass":
+                failures.append(f"en/venues.html: 英語フォールバックに失敗 — {en_fallback_value}")
     finally:
         if server:
             server.stop()

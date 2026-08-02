@@ -43,8 +43,8 @@
 <link rel="dns-prefetch" href="https://formsubmit.co">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/common.css?v=3">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="/vendor/leaflet-1.9.4/leaflet.css?v=1">
+<script src="/vendor/leaflet-1.9.4/leaflet.js?v=1"></script>
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -207,6 +207,13 @@ nav { padding: 20px 40px; background: rgba(8,8,8,0.97); mix-blend-mode: normal; 
   background: rgba(8,8,8,0.9); border-bottom: 1px solid rgba(240,237,232,0.06);
 }
 #venue-map, #osaka-map, #nagoya-map, #kyoto-map, #hakuba-map { height: 420px; background: var(--bg); }
+.venue-map-error {
+  margin: 0 40px 32px; padding: 24px;
+  border: 1px solid rgba(255,45,45,0.45); color: rgba(240,237,232,0.75);
+  font-family: var(--font-mono); font-size: 11px; line-height: 1.8; letter-spacing: 0.08em;
+}
+.venue-map-error[hidden] { display: none; }
+.venue-map-error a { color: var(--text); border-bottom: 1px solid rgba(240,237,232,0.4); }
 .leaflet-container { background: var(--bg) !important; }
 .leaflet-control-attribution, .leaflet-control-zoom { display: none !important; }
 .vm-pin {
@@ -253,6 +260,7 @@ nav { padding: 20px 40px; background: rgba(8,8,8,0.97); mix-blend-mode: normal; 
     border-left: none; border-right: none;
   }
   #venue-map, #osaka-map, #nagoya-map, #kyoto-map, #hakuba-map { height: 220px; }
+  .venue-map-error { margin: 0 -24px 32px; border-left: none; border-right: none; }
 }
 @media (max-width: 768px) {
   .area-nav a { flex-shrink: 0; }
@@ -374,6 +382,7 @@ nav { padding: 20px 40px; background: rgba(8,8,8,0.97); mix-blend-mode: normal; 
     <div id="hakuba-map-filters"></div>
     <div id="hakuba-map"></div>
   </div>
+  <p class="venue-map-error" id="venue-map-error" role="status" hidden></p>
   <div class="venues-grid" id="venues-grid">
     <!-- STATIC_LINKS:VENUES:START -->
 <ul class="ssr-link-list">
@@ -574,12 +583,17 @@ function buildAreaNav() {
       mapCity = null;
     } else {
       hideAllMaps();
+      hideMapFallback();
       if (cfg) {
         const wrapEl = document.getElementById(cfg.wrapId);
         if (wrapEl) {
+          if (cfg.failed) {
+            showMapFallback(cfg, 'previous initialization failed');
+            return;
+          }
           wrapEl.style.display = 'block';
           if (!cfg.inited) {
-            setTimeout(() => { cfg.init(); cfg.inited = true; }, 50);
+            setTimeout(() => safeInitVenueMap(cfg), 50);
           }
         }
       }
@@ -591,6 +605,76 @@ function buildAreaNav() {
 
 function hideAllMaps() {
   document.querySelectorAll('[id$="-map-wrap"]').forEach(el => el.style.display = 'none');
+}
+
+const MAP_TILE_TIMEOUT_MS = 8000;
+
+function hideMapFallback() {
+  const error = document.getElementById('venue-map-error');
+  if (error) error.hidden = true;
+}
+
+function showMapFallback(cfg, reason) {
+  if (cfg) {
+    cfg.failed = true;
+    const wrap = document.getElementById(cfg.wrapId);
+    if (wrap) {
+      wrap.style.display = 'none';
+      wrap.dataset.mapStatus = 'failed';
+    }
+  }
+  const error = document.getElementById('venue-map-error');
+  if (error) {
+    const isEn = document.documentElement.lang === 'en';
+    error.innerHTML = isEn
+      ? 'The map could not be loaded. Please use the <a href="#venues-grid">venue list</a>.'
+      : '地図を読み込めませんでした。<a href="#venues-grid">会場一覧</a>をご利用ください。';
+    error.hidden = false;
+  }
+  document.getElementById('area-map-btn')?.classList.remove('active');
+  mapCity = null;
+  console.error('Venue map unavailable:', reason);
+}
+
+function addVenueTiles(map, wrapId) {
+  const cfg = ALL_MAPS_CFG.find(item => item.wrapId === wrapId);
+  const layer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    subdomains: 'abcd', maxZoom: 19
+  });
+  let settled = false;
+  const timer = setTimeout(() => {
+    if (!settled) {
+      settled = true;
+      showMapFallback(cfg, 'tile timeout');
+    }
+  }, MAP_TILE_TIMEOUT_MS);
+  layer.once('load', () => {
+    if (settled) return;
+    settled = true;
+    clearTimeout(timer);
+    const wrap = document.getElementById(wrapId);
+    if (wrap) wrap.dataset.mapStatus = 'ready';
+  });
+  layer.once('tileerror', () => {
+    if (settled) return;
+    settled = true;
+    clearTimeout(timer);
+    showMapFallback(cfg, 'tile error');
+  });
+  return layer.addTo(map);
+}
+
+function safeInitVenueMap(cfg) {
+  if (!window.L) {
+    showMapFallback(cfg, 'Leaflet is not loaded');
+    return;
+  }
+  try {
+    cfg.init();
+    cfg.inited = true;
+  } catch (error) {
+    showMapFallback(cfg, error instanceof Error ? error.message : String(error));
+  }
 }
 
 function applyAreaFilter() {
@@ -749,9 +833,7 @@ function initVenueMap() {
     minZoom: 11, maxZoom: 18,
     zoomControl: false, attributionControl: false
   });
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    subdomains: 'abcd', maxZoom: 19
-  }).addTo(vmMap);
+  addVenueTiles(vmMap, 'venue-map-wrap');
   renderVmFilters();
   renderVmMarkers();
 }
@@ -808,9 +890,7 @@ function initOsakaMap() {
     minZoom: 11, maxZoom: 18,
     zoomControl: false, attributionControl: false
   });
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    subdomains: 'abcd', maxZoom: 19
-  }).addTo(omMap);
+  addVenueTiles(omMap, 'osaka-map-wrap');
   renderOmFilters();
   renderOmMarkers();
 }
@@ -858,7 +938,7 @@ let nmMap = null, nmMarkers = [], nmGenre = 'ALL', nmType = null, nmVisible = fa
 function initNagoyaMap() {
   if (nmMap) return;
   nmMap = L.map('nagoya-map', { center: [35.1680, 136.9070], zoom: 14, minZoom: 11, maxZoom: 18, zoomControl: false, attributionControl: false });
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { subdomains: 'abcd', maxZoom: 19 }).addTo(nmMap);
+  addVenueTiles(nmMap, 'nagoya-map-wrap');
   renderNmFilters(); renderNmMarkers();
 }
 function renderNmFilters() {
@@ -896,7 +976,7 @@ let kmMap = null, kmMarkers = [], kmGenre = 'ALL', kmType = null, kmVisible = fa
 function initKyotoMap() {
   if (kmMap) return;
   kmMap = L.map('kyoto-map', { center: [35.0090, 135.7750], zoom: 14, minZoom: 11, maxZoom: 18, zoomControl: false, attributionControl: false });
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { subdomains: 'abcd', maxZoom: 19 }).addTo(kmMap);
+  addVenueTiles(kmMap, 'kyoto-map-wrap');
   renderKmFilters(); renderKmMarkers();
 }
 function renderKmFilters() {
@@ -934,7 +1014,7 @@ let hmMap = null, hmMarkers = [], hmGenre = 'ALL', hmType = null, hmVisible = fa
 function initHakubaMap() {
   if (hmMap) return;
   hmMap = L.map('hakuba-map', { center: [36.6980, 137.8300], zoom: 13, minZoom: 11, maxZoom: 18, zoomControl: false, attributionControl: false });
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { subdomains: 'abcd', maxZoom: 19 }).addTo(hmMap);
+  addVenueTiles(hmMap, 'hakuba-map-wrap');
   renderHmFilters(); renderHmMarkers();
 }
 function renderHmFilters() {

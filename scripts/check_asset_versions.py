@@ -37,7 +37,7 @@ LP = ROOT / "LP"
 GENERATOR = ROOT / "scripts" / "build-detail-pages.mjs"
 
 REF_RE = re.compile(
-    r'(?:src|href)="(/?(?:[a-z0-9-]+/)*([a-z0-9-]+\.(?:js|css)))(\?v=(\d+))?"'
+    r'(?:src|href)="(/?(?:[a-z0-9.-]+/)*([a-z0-9-]+\.(?:js|css)))(\?v=(\d+))?"'
 )
 
 
