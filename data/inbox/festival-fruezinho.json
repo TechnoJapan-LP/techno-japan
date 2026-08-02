@@ -1,0 +1,208 @@
+{
+  "_schema": "festival-research/2",
+  "_createdAt": "2026-08-02T16:59:30+09:00",
+  "_note": "値と出典は Claude が埋める。DESC/DESC_EN は人が書く（空のままでよい）。",
+  "inbox": {
+    "FES_NAME": "FESTIVAL FRUEZINHO",
+    "DATE": "2026-06-13",
+    "PREF": "Tokyo",
+    "URL/INSTAGRAM": "https://www.instagram.com/frue_presents/",
+    "MEMO": "",
+    "STATUS(new/drafted/registered)": ""
+  },
+  "fields": {
+    "id": {
+      "value": "festival-fruezinho",
+      "source": "slugify(name)",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-02T16:59:30+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "auto",
+      "note": "スラッグ。DATA_SCHEMA §1.1"
+    },
+    "name": {
+      "value": "FESTIVAL FRUEZINHO",
+      "source": "INBOX",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-02T16:59:30+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "auto",
+      "note": "INBOX の FES_NAME"
+    },
+    "date": {
+      "value": "2026-06-13",
+      "source": "https://fruezinho.com/",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-02T17:20:00+09:00",
+      "inboxValue": "2026-06-13",
+      "conflictNote": "既存シートは 2026-06-13/2026-06-13（開始=終了の範囲表記）。公式は単日 2026年6月13日(土)。単日なら範囲にせず 2026-06-13 が正しい。軽微だが要統一",
+      "kind": "research",
+      "note": "INBOX の申告: 2026-06-13。未検証なので公式情報と突き合わせること"
+    },
+    "location": {
+      "value": "TACHIKAWA STAGE GARDEN",
+      "source": "https://fruezinho.com/",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-02T17:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "会場名（英字表記）"
+    },
+    "location_ja": {
+      "value": "立川ステージガーデン",
+      "source": "https://fruezinho.com/",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-02T17:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "会場名（日本語）。座標検索はこちらの方が当たる"
+    },
+    "city": {
+      "value": "Tokyo",
+      "source": "https://fruezinho.com/",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-02T17:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "東京都立川市"
+    },
+    "address": {
+      "value": "東京都立川市緑町3-3 N1",
+      "source": "https://fruezinho.com/",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-02T17:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "〒190-0014"
+    },
+    "lat": {
+      "value": 35.7049,
+      "source": "nominatim.openstreetmap.org",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-02T17:04:17+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "auto",
+      "note": "query: 立川ステージガーデン, Tokyo, Japan → 立川ステージガーデン, 3, 緑町, 立川市, 東京都, 190-0014, 日本"
+    },
+    "lng": {
+      "value": 139.4119,
+      "source": "nominatim.openstreetmap.org",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-02T17:04:17+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "auto",
+      "note": "query: 立川ステージガーデン, Tokyo, Japan → 立川ステージガーデン, 3, 緑町, 立川市, 東京都, 190-0014, 日本"
+    },
+    "url": {
+      "value": "https://fruezinho.com/",
+      "source": "https://fruezinho.com/",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-02T17:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "公式サイト"
+    },
+    "instagram": {
+      "value": "https://www.instagram.com/frue_presents/",
+      "source": "https://fruezinho.com/",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-02T17:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "公式 Instagram。公式サイトに無いことが多い"
+    },
+    "ticketUrl": {
+      "value": "https://shop.frue.jp/collections/festival-fruezinho-2026",
+      "source": "https://fruezinho.com/",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-02T17:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "チケット販売URL。無料開催なら null"
+    },
+    "lineup": {
+      "value": [
+        "Arsenal Mikebe",
+        "GEZAN ft. Arsenal Mikebe",
+        "Marc Ribot Y Los Cubanos Postizos",
+        "PANDIT PRAN NATH 30th Urs Celebration with SARA, YUMIKO OHNO and TERRY RILEY",
+        "Sam Gendel & Sam Wilkes",
+        "井上園子 with 西内徹",
+        "岡田拓郎"
+      ],
+      "source": "https://fruezinho.com/",
+      "confidence": "medium",
+      "reason": null,
+      "checkedAt": "2026-08-02T17:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "公式に \"and more ...\" とあり未発表分がある。第1弾〜の追加発表を後日再確認すること"
+    },
+    "genre": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": null,
+      "checkedAt": null,
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "human",
+      "note": "正規リスト（DATA_SCHEMA §1.3）から選ぶ"
+    },
+    "desc": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": null,
+      "checkedAt": null,
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "human",
+      "note": "メディアのトーンに関わるため人が書く"
+    },
+    "desc_en": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": null,
+      "checkedAt": null,
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "human",
+      "note": "同上"
+    }
+  },
+  "existing": {
+    "id": "festival-fruezinho",
+    "name": "FESTIVAL FRUEZINHO",
+    "date": "2026-06-13/2026-06-13",
+    "filled": [
+      "desc"
+    ],
+    "note": "既に FESTIVALS に登録済み。Phase 2 は add_festival ではなく update_row で空欄だけ埋めること（追加すると二重登録になる）"
+  }
+}

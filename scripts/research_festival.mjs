@@ -182,12 +182,51 @@ function skeleton(name, id, inbox = {}) {
   };
 }
 
+// ---------------------------------------------------------------- 既存照合
+
+/**
+ * 既存の FESTIVALS を読む。INBOX の名前が既に登録済みなら、Phase 2 は
+ * add_festival（新規作成）ではなく update_row（空欄補完）でなければならない。
+ * これを見ずに追加すると同じフェスが二重登録される。
+ */
+function loadExisting() {
+  const p = path.join(ROOT, 'LP', 'data.js');
+  if (!fs.existsSync(p)) return [];
+  const src = read(p);
+  const out = [];
+  // data.js は生成物。パースせず必要な項目だけ拾う（評価はしない）。
+  for (const m of src.matchAll(/\n  \{\n(?:.*\n)*?  \},/g)) {
+    const blk = m[0];
+    const g = (k) => blk.match(new RegExp(`\\n    ${k}: "((?:[^"\\\\]|\\\\.)*)"`))?.[1];
+    const id = g('id');
+    if (!id) continue;
+    const filled = ['location', 'address', 'lat', 'lng', 'url', 'instagram',
+                    'ticketUrl', 'lineup', 'image', 'flyer', 'desc']
+      .filter((k) => new RegExp(`\\n    ${k}: `).test(blk));
+    out.push({ id, name: g('name') ?? '', date: g('date') ?? '', filled });
+  }
+  return out;
+}
+
+const normName = (s) => String(s).toLowerCase().replace(/[^a-z0-9]/g, '');
+
+function findExisting(all, name) {
+  const n = normName(name);
+  const n2 = normName(String(name).replace(/\s*20\d\d\s*$/, ''));
+  return all.find((f) => normName(f.name) === n || normName(f.id) === n
+                      || normName(f.name) === n2 || normName(f.id) === n2) ?? null;
+}
+
 // ---------------------------------------------------------------- init
 
 async function cmdInit(args) {
   fs.mkdirSync(OUT_DIR, { recursive: true });
   const manual = args.find((a) => a.startsWith('--name='))?.slice(7)
     ?? (args.includes('--name') ? args[args.indexOf('--name') + 1] : null);
+
+  const onlyArg = args.find((a) => a.startsWith('--only='))?.slice(7)
+    ?? (args.includes('--only') ? args[args.indexOf('--only') + 1] : null);
+  const only = onlyArg ? onlyArg.split(',').map((x) => normName(x)) : null;
 
   let entries = [];
   if (manual) {
@@ -211,6 +250,7 @@ async function cmdInit(args) {
       head.forEach((h, i) => { if (h) rec[h] = (r[i] || '').trim(); });
       entries.push(rec);
     }
+    if (only) entries = entries.filter((e) => only.includes(normName(e.FES_NAME)));
   }
 
   if (!entries.length) {
@@ -218,6 +258,7 @@ async function cmdInit(args) {
     return 0;
   }
 
+  const existingAll = loadExisting();
   let made = 0, skipped = 0;
   for (const e of entries) {
     const name = e.FES_NAME;
@@ -231,8 +272,25 @@ async function cmdInit(args) {
       skipped++;
       continue;
     }
-    fs.writeFileSync(out, JSON.stringify(skeleton(name, id, e), null, 2) + '\n');
-    console.log(`  + ${(id || '(ID 未確定)').padEnd(28)} ${name}`);
+    const doc = skeleton(name, id, e);
+    const hit = findExisting(existingAll, name);
+    if (hit) {
+      doc.existing = {
+        id: hit.id, name: hit.name, date: hit.date, filled: hit.filled,
+        note: '既に FESTIVALS に登録済み。Phase 2 は add_festival ではなく'
+            + ' update_row で空欄だけ埋めること（追加すると二重登録になる）',
+      };
+      if (!doc.fields.id.value) {
+        doc.fields.id.value = hit.id;
+        doc.fields.id.source = '既存 FESTIVALS の行';
+        doc.fields.id.confidence = 'high';
+        doc.fields.id.reason = null;
+        doc.fields.id.checkedAt = nowJst();
+      }
+    }
+    const stem2 = hit ? hit.id : stem;
+    fs.writeFileSync(jsonPath(stem2), JSON.stringify(doc, null, 2) + '\n');
+    console.log(`  + ${(stem2).padEnd(28)} ${name}` + (hit ? '  [既存行 — 空欄補完]' : '  [新規]'));
     if (!id) console.log(`      ↑ "${dropped ?? ''}" を落とさずに ID 化できません。id.value を手で決めてください`);
     made++;
   }
@@ -253,6 +311,32 @@ async function nominatim(q) {
   return Array.isArray(d) && d[0]?.lat ? d[0] : null;
 }
 
+/** 日本国内か。短縮クエリは国外の同名地物を引くことがある（「宝台樹」→ 台湾）。 */
+function inJapan(hit) {
+  const lat = parseFloat(hit.lat), lon = parseFloat(hit.lon);
+  if (!(lat >= 24 && lat <= 46 && lon >= 122 && lon <= 154)) return false;
+  return /日本|Japan/.test(hit.display_name || '');
+}
+
+/**
+ * 住所を段階的に短くした候補を作る。番地まで載っていない地物が多く、
+ * フルの住所では当たらないことがある（実測: 群馬県利根郡みなかみ町藤原915-1 は外れ、
+ * みなかみ町藤原 は当たる）。短くするほど粗くなるので confidence を下げる。
+ */
+function addressCandidates(addr) {
+  const a = String(addr || '').trim();
+  if (!a) return [];
+  const out = [a];
+  const noNum = a.replace(/[甲乙丙丁]?[\d０-９]+([-−ー－][\d０-９]+)*$/, '').trim();
+  if (noNum && noNum !== a) out.push(noNum);
+  const noAza = noNum.replace(/字[^字]*$/, '').trim();
+  if (noAza && noAza !== noNum) out.push(noAza);
+  // 都道府県を落とすと当たることがある（実測: みなかみ町藤原）
+  const noPref = (out[out.length - 1] || a).replace(/^.{2,3}[都道府県]/, '').replace(/^.{2,4}郡/, '').trim();
+  if (noPref && !out.includes(noPref)) out.push(noPref);
+  return [...new Set(out)];
+}
+
 async function cmdGeocode(args) {
   const ids = args.filter((a) => !a.startsWith('--'));
   if (!ids.length) return console.error('  id を指定してください'), 1;
@@ -264,16 +348,29 @@ async function cmdGeocode(args) {
     const f = doc.fields;
     // 日本の施設は日本語名の方が OSM に載っている（cms.js:1318 と同じ理由）
     const loc = f.location_ja?.value || f.location?.value;
-    if (!loc) { console.error(`  ✗ ${id}: location / location_ja が未入力`); continue; }
+    if (!loc && !f.address?.value) {
+      console.error(`  ✗ ${id}: location / location_ja / address のいずれも未入力`);
+      continue;
+    }
     const city = f.city?.value || '';
 
-    const queries = [[loc, city, 'Japan'].filter(Boolean).join(', '), `${loc}, Japan`];
-    let hit = null, used = null;
-    for (const q of queries) {
-      hit = await nominatim(q);
-      if (hit) { used = q; break; }
-      await new Promise((r) => setTimeout(r, 1100));   // 1req/秒を守る
+    // 施設名 → 住所（段階的に短縮）の順。短いクエリほど粗いので後ろに置く。
+    const facility = loc ? [[loc, city, 'Japan'].filter(Boolean).join(', '), `${loc}, Japan`] : [];
+    const addrQs = addressCandidates(f.address?.value);
+    const queries = [...facility, ...addrQs];
+    let hit = null, used = null, idx = -1;
+    for (let i = 0; i < queries.length; i++) {
+      if (i > 0) await new Promise((r) => setTimeout(r, 1100));   // 1req/秒を守る
+      const h = await nominatim(queries[i]);
+      if (!h) continue;
+      if (!inJapan(h)) {
+        console.log(`      × "${queries[i]}" → 国外にヒット（${h.display_name.slice(0, 40)}）。採用しない`);
+        continue;
+      }
+      hit = h; used = queries[i]; idx = i; break;
     }
+    // 施設名で当たれば高信頼、住所の短縮で当たったものは粗い点なので下げる
+    const conf = idx < facility.length ? 'high' : (idx === facility.length ? 'medium' : 'low');
 
     if (!hit) {
       for (const k of ['lat', 'lng']) {
@@ -287,7 +384,7 @@ async function cmdGeocode(args) {
       f.lng.value = Number(parseFloat(hit.lon).toFixed(4));
       for (const k of ['lat', 'lng']) {
         f[k].source = 'nominatim.openstreetmap.org';
-        f[k].confidence = 'high';
+        f[k].confidence = conf;
         f[k].checkedAt = nowJst();
         f[k].note = `query: ${used} → ${hit.display_name}`;
       }
