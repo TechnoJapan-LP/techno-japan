@@ -1,5 +1,5 @@
 {
-  "_schema": "festival-research/1",
+  "_schema": "festival-research/2",
   "_note": "値と出典は Claude が埋める。DESC/DESC_EN は人が書く（空のままでよい）。",
   "inbox": {
     "FES_NAME": "SPRING LOVE 春風 2026"
@@ -10,6 +10,7 @@
       "source": "人が決定（春風＝harukaze）",
       "confidence": "high",
       "reason": "ASCII 以外の文字を含むため、ローマ字表記を人が決める必要がある",
+      "checkedAt": "2026-08-02T16:32:31+09:00",
       "kind": "auto",
       "note": "スラッグ。DATA_SCHEMA §1.1"
     },
@@ -18,6 +19,7 @@
       "source": "INBOX",
       "confidence": "high",
       "reason": null,
+      "checkedAt": "2026-08-02T16:32:31+09:00",
       "kind": "auto",
       "note": "INBOX の FES_NAME"
     },
@@ -26,6 +28,7 @@
       "source": "https://harukaze.asia/",
       "confidence": "high",
       "reason": null,
+      "checkedAt": "2026-08-02T16:32:31+09:00",
       "kind": "research",
       "note": "YYYY-MM-DD または YYYY-MM-DD/YYYY-MM-DD"
     },
@@ -34,6 +37,7 @@
       "source": "https://harukaze.asia/",
       "confidence": "high",
       "reason": null,
+      "checkedAt": "2026-08-02T16:32:31+09:00",
       "kind": "research",
       "note": "会場名（英字表記）"
     },
@@ -42,6 +46,7 @@
       "source": "https://harukaze.asia/",
       "confidence": "high",
       "reason": null,
+      "checkedAt": "2026-08-02T16:32:31+09:00",
       "kind": "research",
       "note": "会場名（日本語）。座標検索はこちらの方が当たる"
     },
@@ -50,6 +55,7 @@
       "source": "https://harukaze.asia/",
       "confidence": "high",
       "reason": null,
+      "checkedAt": "2026-08-02T16:32:31+09:00",
       "kind": "research",
       "note": "都市名"
     },
@@ -58,6 +64,7 @@
       "source": "nominatim.openstreetmap.org",
       "confidence": "low",
       "reason": "公式サイトに住所の記載なし。geocode の逆引きで補う",
+      "checkedAt": "2026-08-02T16:32:31+09:00",
       "kind": "research",
       "note": "逆引きの表示名。正式な住所ではないので要確認"
     },
@@ -66,6 +73,7 @@
       "source": "nominatim.openstreetmap.org",
       "confidence": "high",
       "reason": null,
+      "checkedAt": "2026-08-02T16:32:31+09:00",
       "kind": "auto",
       "note": "query: 代々木公園 イベント広場, Tokyo, Japan → 代々木公園野外ステージ, イベント広場, 神南二丁目, 神南, 渋谷区, 東京都, 150-0041, 日本"
     },
@@ -74,6 +82,7 @@
       "source": "nominatim.openstreetmap.org",
       "confidence": "high",
       "reason": null,
+      "checkedAt": "2026-08-02T16:32:31+09:00",
       "kind": "auto",
       "note": "query: 代々木公園 イベント広場, Tokyo, Japan → 代々木公園野外ステージ, イベント広場, 神南二丁目, 神南, 渋谷区, 東京都, 150-0041, 日本"
     },
@@ -82,6 +91,7 @@
       "source": "https://harukaze.asia/",
       "confidence": "high",
       "reason": null,
+      "checkedAt": "2026-08-02T16:32:31+09:00",
       "kind": "research",
       "note": "公式サイト"
     },
@@ -90,6 +100,7 @@
       "source": null,
       "confidence": null,
       "reason": "公式サイトに Instagram へのリンクなし。未確認",
+      "checkedAt": "2026-08-02T16:32:31+09:00",
       "kind": "research",
       "note": "公式 Instagram。公式サイトに無いことが多い"
     },
@@ -98,6 +109,7 @@
       "source": "https://harukaze.asia/",
       "confidence": "high",
       "reason": "入場無料のためチケット販売なし",
+      "checkedAt": "2026-08-02T16:32:31+09:00",
       "kind": "research",
       "note": "チケット販売URL。無料開催なら null"
     },
@@ -115,6 +127,7 @@
       "source": "https://harukaze.asia/",
       "confidence": "medium",
       "reason": null,
+      "checkedAt": "2026-08-02T16:32:31+09:00",
       "kind": "research",
       "note": "DAY1 SPRING STAGE のみ。全体は4ステージ×2日で50名超あり、現状の LINEUP 列では表現できない（AUDIT §9-22）"
     },
@@ -123,6 +136,7 @@
       "source": null,
       "confidence": null,
       "reason": null,
+      "checkedAt": null,
       "kind": "human",
       "note": "正規リスト（DATA_SCHEMA §1.3）から選ぶ"
     },
@@ -131,6 +145,7 @@
       "source": null,
       "confidence": null,
       "reason": null,
+      "checkedAt": null,
       "kind": "human",
       "note": "メディアのトーンに関わるため人が書く"
     },
@@ -139,8 +154,10 @@
       "source": null,
       "confidence": null,
       "reason": null,
+      "checkedAt": null,
       "kind": "human",
       "note": "同上"
     }
-  }
+  },
+  "_createdAt": "2026-08-02T16:32:31+09:00"
 }

@@ -32,6 +32,7 @@
  *   node scripts/research_festival.mjs geocode <id>      # LOCATION から座標
  *   node scripts/research_festival.mjs validate [<id>]   # スキーマ検証
  *   node scripts/research_festival.mjs list              # 進捗一覧
+ *   node scripts/research_festival.mjs stale [日数]      # 古い調査項目（既定14日）
  */
 
 import fs from 'node:fs';
@@ -113,8 +114,19 @@ function slugify(name) {
   return { id: ID_RE.test(s) ? s : null, dropped: null };
 }
 
+/**
+ * checkedAt は項目ごとに持つ。文書単位で1つだけ持つと、geocode を流し直しただけで
+ * 全体が「今日確認済み」に見えてしまい、ラインナップの鮮度を偽る。
+ * 項目ごとに変化の速さが違う（lineup は第一弾→第二弾→全出演者と動くが、
+ * url はほぼ変わらない）ので、再調査の判断も項目単位でしかできない。
+ */
+function nowJst() {
+  const d = new Date(Date.now() + 9 * 3600 * 1000);
+  return d.toISOString().replace(/\.\d+Z$/, '+09:00');
+}
+
 function field(kind, note) {
-  return { value: null, source: null, confidence: null, reason: null, kind, note };
+  return { value: null, source: null, confidence: null, reason: null, checkedAt: null, kind, note };
 }
 
 function skeleton(name, id, inbox = {}) {
@@ -123,12 +135,15 @@ function skeleton(name, id, inbox = {}) {
   fields.name.value = name;
   fields.name.source = 'INBOX';
   fields.name.confidence = 'high';
+  fields.name.checkedAt = nowJst();
   fields.id.value = id;
   fields.id.source = 'slugify(name)';
   fields.id.confidence = id ? 'high' : null;
+  fields.id.checkedAt = id ? nowJst() : null;
   if (!id) fields.id.reason = 'ASCII 以外の文字を含むため、ローマ字表記を人が決める必要がある';
   return {
-    _schema: 'festival-research/1',
+    _schema: 'festival-research/2',
+    _createdAt: nowJst(),
     _note: '値と出典は Claude が埋める。DESC/DESC_EN は人が書く（空のままでよい）。',
     inbox,
     fields,
@@ -232,6 +247,7 @@ async function cmdGeocode(args) {
       for (const k of ['lat', 'lng']) {
         f[k].value = null;
         f[k].reason = `Nominatim で見つからず（試行: ${queries.join(' / ')}）`;
+        f[k].checkedAt = nowJst();
       }
       console.log(`  ✗ ${id}: 見つかりません → CMS の「施設名から検索」(resolve_place) を使ってください`);
     } else {
@@ -240,12 +256,14 @@ async function cmdGeocode(args) {
       for (const k of ['lat', 'lng']) {
         f[k].source = 'nominatim.openstreetmap.org';
         f[k].confidence = 'high';
+        f[k].checkedAt = nowJst();
         f[k].note = `query: ${used} → ${hit.display_name}`;
       }
       if (!f.address.value && hit.display_name) {
         f.address.value = hit.display_name;
         f.address.source = 'nominatim.openstreetmap.org';
         f.address.confidence = 'low';
+        f.address.checkedAt = nowJst();
         f.address.note = '逆引きの表示名。正式な住所ではないので要確認';
       }
       console.log(`  ✓ ${id}: ${f.lat.value}, ${f.lng.value}  (${hit.display_name.slice(0, 46)})`);
@@ -278,6 +296,8 @@ function validateDoc(id, doc) {
       warns.push(`${k}: 未調査（値が無いなら reason を書く）`);
     if (cell.value != null && kind === 'research' && !cell.source)
       errs.push(`${k}: 値があるのに source が無い`);
+    if ((cell.value != null || cell.reason) && !cell.checkedAt && kind !== 'human')
+      errs.push(`${k}: 調査済みなのに checkedAt が無い`);
   }
   const done = RESEARCH_KEYS.filter((k) => f[k]?.value != null || f[k]?.reason).length;
   return { errs, warns, progress: `${done}/${RESEARCH_KEYS.length}` };
@@ -304,17 +324,40 @@ function cmdValidate(args) {
   return bad ? 1 : 0;
 }
 
+/** 何日以上前に調べた項目かを出す。フェス情報は更新されるので再調査の判断に使う。 */
+function cmdStale(args) {
+  const days = Number(args.find((a) => /^\d+$/.test(a)) ?? 14);
+  const files = fs.existsSync(OUT_DIR) ? fs.readdirSync(OUT_DIR).filter((n) => n.endsWith('.json')) : [];
+  const limit = Date.now() - days * 86400_000;
+  let hits = 0;
+  console.log(`  ${days} 日以上前に調べた項目:\n`);
+  for (const n of files) {
+    const doc = JSON.parse(read(path.join(OUT_DIR, n)));
+    const old = Object.entries(doc.fields)
+      .filter(([, c]) => c.checkedAt && Date.parse(c.checkedAt) < limit)
+      .map(([k, c]) => `${k}(${c.checkedAt.slice(0, 10)})`);
+    if (!old.length) continue;
+    hits++;
+    console.log(`  ${n.replace(/\.json$/, '')}`);
+    console.log(`      ${old.join(' ')}`);
+  }
+  if (!hits) console.log('  なし');
+  return 0;
+}
+
 function cmdList() {
   const files = fs.existsSync(OUT_DIR) ? fs.readdirSync(OUT_DIR).filter((n) => n.endsWith('.json')) : [];
   if (!files.length) return console.log('  data/inbox/ は空です'), 0;
-  console.log(`  ${'id'.padEnd(28)} 調査   座標  DESC  name`);
+  console.log(`  ${'id'.padEnd(28)} 調査   座標  DESC  最終調査      name`);
   for (const n of files) {
     const doc = JSON.parse(read(path.join(OUT_DIR, n)));
     const f = doc.fields;
     const done = RESEARCH_KEYS.filter((k) => f[k]?.value != null || f[k]?.reason).length;
     console.log(`  ${n.replace(/\.json$/, '').padEnd(28)} ${String(done).padStart(2)}/${RESEARCH_KEYS.length}`
       + `  ${f.lat?.value != null ? ' ✓  ' : ' –  '}`
-      + `  ${f.desc?.value ? '✓' : '–'}    ${f.name?.value ?? ''}`);
+      + `  ${f.desc?.value ? '✓' : '–'}`
+      + `     ${(Object.values(f).map((c) => c.checkedAt).filter(Boolean).sort().pop() ?? '—').slice(0, 10)}`
+      + `    ${f.name?.value ?? ''}`);
   }
   return 0;
 }
@@ -322,7 +365,7 @@ function cmdList() {
 // ---------------------------------------------------------------- main
 
 const [cmd, ...rest] = process.argv.slice(2);
-const table = { init: cmdInit, geocode: cmdGeocode, validate: cmdValidate, list: cmdList };
+const table = { init: cmdInit, geocode: cmdGeocode, validate: cmdValidate, list: cmdList, stale: cmdStale };
 if (!table[cmd]) {
   console.log(read(fileURLToPath(import.meta.url)).split('\n').slice(1, 38).join('\n')
     .replace(/^ \*\/?ic?/gm, '').replace(/^\s?\*\s?/gm, ''));
