@@ -227,20 +227,18 @@ metrics:
       監査 B4 で 8件 → 0件に解消済み。<img> だけでなく og:image /
       twitter:image / JSON-LD image も対象。
 
-  lineup_unresolved_acts:
-    description: >-
-      LINEUP のアクトのうち ARTISTS と照合できずリンクが張られない件数（dj のみ）
-    min: 0
-    max: 51                   # 増加方向が回帰。減らす方向にしか動かさない
-    target: 0
+  lineup_linked_acts:
+    description: LINEUP のうちアーティスト詳細へリンクされている件数
+    min: 0                    # Publish 後の実測値に更新する（下記 note 参照）
+    max: null
+    target: null
     note: >-
-      fetch-data.mjs:225 が FESTIVALS.LINEUP を ARTISTS.NAME と突合する。
-      解決できないと ARTIST_ID が空になり、生成物で <a> ではなく <span> になって
-      アーティスト詳細へリンクされない。ビルドは止まらず警告のみなので静かに増える。
-      2026-08-02 時点で 130行中 55件がリンクなし。うち b2b/live 4件は設計上
-      ラベルのままでよいので除外し、dj の 51件を上限とした。
-      主因は ARTISTS 未登録の46名（data/inbox/export/unregistered-artists.csv）。
-      アーティストを登録すれば自動で解決するので、max を下げていくラチェットとして使う。
+      当初は逆に lineup_unresolved_acts（未解決の件数）を上限つきで見ていたが、
+      「Techno Japan として扱いたいアーティストのみ登録する」方針が決まり、
+      未登録は欠落ではなく編集判断になったため意味を反転した。
+      守りたいのは「いま張れているリンクが壊れて減らないこと」で、
+      ID の付け替えやアーティスト削除で既存のリンクが切れたら検出する。
+      min は ARTISTS 整理（38件削除・11件のID修正）の Publish 後に実測して確定する。
       詳細は AUDIT_TECHNO_JAPAN.md §9-25。
 
   artist_id_violations:

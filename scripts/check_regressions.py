@@ -218,25 +218,24 @@ def measure():
     m["broken_image_refs"] = len(missing)
     m["_broken_image_list"] = sorted(missing)
 
-    # LINEUP の未解決アクト。fetch-data.mjs:225 が ARTISTS.NAME と突合し、
-    # 解決できなかった行は ARTIST_ID が空のまま ACT_LABEL だけ残る。
-    # 生成物では <a> ではなく <span> になりアーティスト詳細へリンクされない。
-    # ビルドは止まらず警告が出るだけなので、放置すると静かに増える（AUDIT §9-25）。
+    # LINEUP のうちアーティスト詳細へリンクされている件数。
     #
-    # b2b / live は設計上あえて分解せずラベルのままなので除外し、
-    # 「本来リンクされるべきなのにされていない」dj だけを数える。
+    # 当初は逆に「未解決の件数」を上限つきで見ていたが、
+    # 「Techno Japan として扱いたいアーティストのみ登録する」方針が決まり、
+    # 未登録は欠落ではなく編集判断になった。未解決が増えること自体は正常。
+    #
+    # 守りたいのは「いま張れているリンクが壊れて減らないこと」。
+    # ID の付け替えやアーティスト削除で既存のリンクが切れたら検出する。
     lineups_path = LP / "data" / "lineups.json"
-    unresolved = 0
+    linked = 0
     if lineups_path.exists():
         doc = json.loads(read(lineups_path))
         rows = doc.get("items", doc) if isinstance(doc, dict) else doc
-        unresolved = sum(
+        linked = sum(
             1 for r in rows
-            if isinstance(r, dict)
-            and r.get("SET_TYPE") == "dj"
-            and not str(r.get("ARTIST_ID") or "").strip()
+            if isinstance(r, dict) and str(r.get("ARTIST_ID") or "").strip()
         )
-    m["lineup_unresolved_acts"] = unresolved
+    m["lineup_linked_acts"] = linked
 
     # ID 規約違反。詳細ページのファイル名 = ID なので、そこから判定する。
     # data.js は CMS の Publish Now が生成し fetch-data.mjs の検証を通らないため、

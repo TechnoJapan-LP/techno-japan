@@ -2966,7 +2966,7 @@ function saveEdit(section){
     .then(r=>r.json()).then(d=>{
       if(d.status==='ok'||d.success){
         toast('Updated ✓','success');
-        if(unregisteredArtists.length){autoRegisterArtists(unregisteredArtists);invalidateSheetCache('artist');}
+        if(unregisteredArtists.length) notifyUnregisteredArtists(unregisteredArtists);
         // 裏で正データに置き換え（画面はすでに更新済みなので silent）
         loadList(section, {force:true, silent:true});
       } else {
@@ -3977,10 +3977,7 @@ function submitToSheet(section){
       console.log('Save response:',r);
       if(r.success||r.status==='ok'){
         toast('Saved ✓','success');
-        if(unregisteredArtists.length){
-          autoRegisterArtists(unregisteredArtists);
-          invalidateSheetCache('artist');
-        }
+          if(unregisteredArtists.length) notifyUnregisteredArtists(unregisteredArtists);
         // 正式な行番号を取り込むため裏で再読込（syncing 行が実データに置き換わる）
         loadList(section, {force:true});
       } else {
@@ -4153,7 +4150,28 @@ function artistIdFromName(name){
 }
 
 /**
+ * 未登録のまま保存されたアーティストを知らせるだけ。登録はしない。
+ *
+ * 以前は autoRegisterArtists() で自動登録していたが、LINEUP に名前を書くだけで
+ * ARTISTS が際限なく増え、「Techno Japan として扱いたいアーティストのみ登録する」
+ * 方針と衝突した。実際にローカル出演者38件を後から削除している。
+ *
+ * 未解決アクトはリンクなしで名前が表示されるだけで、サイトは壊れない。
+ * 登録するかどうかは編集判断なので、人が選ぶ。
+ */
+function notifyUnregisteredArtists(names){
+  const list = names.map(n => String(n).trim()).filter(Boolean);
+  if(!list.length) return;
+  toast('未登録のまま保存: ' + list.join(' / ')
+    + '（掲載したいアーティストは Artists から登録してください）', 'info');
+}
+
+/**
  * LINEUP に書かれた未登録アーティストを一括登録する。
+ *
+ * ⚠ 現在どこからも呼ばれていない。自動登録は方針として無効化した（上記）。
+ *   オプトインで復活させる場合に備えて実装は残す。表記は保持される。
+ *
  *
  * 引数は「?タグから ? を外した元の表記」。以前はこれを ID とみなし、
  * ID から名前を機械的に復元していた:
