@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-08-01T05:31:48.695Z",
-  "count": 100,
+  "_generatedAt": "2026-08-02T16:07:28.210Z",
+  "count": 111,
   "items": [
     {
       "ID": "dj-nobu",
@@ -9,11 +9,12 @@
       "COUNTRY": "JAPAN",
       "GENRE": "TECHNO",
       "IMAGE": "images/artists/dj-nobu.jpg",
-      "BIO": "DJ Nobu is a Tokyo-based techno artist deeply embedded in Japan's underground electronic music scene. Known for his precise technical approach and atmospheric sound design, he represents the evolution of Japanese techno with a distinctly minimalist aesthetic.",
+      "BIO": "DJ Nobuは東京を拠点に活動するテクノアーティストで、日本のアンダーグラウンドな電子音楽シーンに深く根ざしている。精緻な技術的アプローチと空間的なサウンドデザインで知られ、ミニマルな美学を軸に日本のテクノの展開を体現している。",
       "INSTAGRAM": "https://www.instagram.com/dj_nobu_ft/",
       "SOUNDCLOUD": "https://soundcloud.com/djnobu_bitta",
       "BANDCAMP": "https://dj-nobu.bandcamp.com/album/sh",
-      "STATUS": "published"
+      "STATUS": "published",
+      "bio_en": "DJ Nobu is a Tokyo-based techno artist deeply embedded in Japan's underground electronic music scene. Known for his precise technical approach and atmospheric sound design, he represents the evolution of Japanese techno with a distinctly minimalist aesthetic."
     },
     {
       "ID": "wata-igarashi",
@@ -22,11 +23,12 @@
       "COUNTRY": "JAPAN",
       "GENRE": "TECHNO",
       "IMAGE": "images/artists/wata-igarashi.jpg",
-      "BIO": "Tokyo-based producer and DJ crafting hypnotic, psychedelic techno. Releases on Midgar, The Bunker NY, and his own Meditate label. His sound is a deep, spiraling journey — transcendent and relentless.",
+      "BIO": "東京を拠点とするプロデューサー/DJ。ヒプノティックでサイケデリックなテクノを手がける。Midgar、The Bunker NY、そして自身のレーベルMeditateから作品をリリース。深く渦を巻くようなサウンドは、超越的でありながら容赦がない。",
       "INSTAGRAM": "https://www.instagram.com/wataigarashi/",
       "SOUNDCLOUD": "https://soundcloud.com/wataigarashi",
       "BANDCAMP": "https://wataigarashi.bandcamp.com/",
       "STATUS": "published",
+      "bio_en": "Tokyo-based producer and DJ crafting hypnotic, psychedelic techno. Releases on Midgar, The Bunker NY, and his own Meditate label. His sound is a deep, spiraling journey — transcendent and relentless.",
       "imagePosition": "center top"
     },
     {
@@ -36,9 +38,10 @@
       "COUNTRY": "JAPAN",
       "GENRE": "HOUSE / MINIMAL",
       "IMAGE": "images/artists/kotsu.jpg",
-      "BIO": "Osaka selector with deep roots in the Kansai underground. Fluid sets moving between deep house, minimal, and micro-house. A fixture at CIRCUS Osaka and a regular across Japan's club circuit.",
+      "BIO": "関西アンダーグラウンドに深く根ざした大阪のセレクター。ディープハウス、ミニマル、マイクロハウスの間を自在に行き来するセットを展開する。CIRCUS Osakaの常連であり、日本各地のクラブサーキットにも定期的に登場している。",
       "INSTAGRAM": "https://www.instagram.com/kotsu_dj/",
-      "SOUNDCLOUD": "https://soundcloud.com/kotsu"
+      "SOUNDCLOUD": "https://soundcloud.com/kotsu",
+      "bio_en": "Osaka selector with deep roots in the Kansai underground. Fluid sets moving between deep house, minimal, and micro-house. A fixture at CIRCUS Osaka and a regular across Japan's club circuit."
     },
     {
       "ID": "ken-ishii",
@@ -47,11 +50,12 @@
       "COUNTRY": "JAPAN",
       "GENRE": "TECHNO",
       "IMAGE": "images/artists/ken-ishii.jpg",
-      "BIO": "Pioneer of Japanese techno since the early '90s. Internationally recognized through releases on R&S Records and Sublime. A living legend whose influence on Japan's electronic music scene is immeasurable.",
+      "BIO": "90年代初頭から日本のテクノを牽引してきたパイオニア。R&S RecordsやSublimeからのリリースを通じて国際的に認知される。日本の電子音楽シーンに与えた影響は計り知れない、生けるレジェンド。",
       "INSTAGRAM": "https://www.instagram.com/kenishiiofficial/",
       "SOUNDCLOUD": "https://soundcloud.com/ken-ishii-70drums",
       "BANDCAMP": "https://kenishii.bandcamp.com/",
-      "WEBSITE": "https://kenishii.com"
+      "WEBSITE": "https://kenishii.com",
+      "bio_en": "Pioneer of Japanese techno since the early '90s. Internationally recognized through releases on R&S Records and Sublime. A living legend whose influence on Japan's electronic music scene is immeasurable."
     },
     {
       "ID": "dj-miku",
@@ -436,6 +440,50 @@
     {
       "ID": "juana-molina",
       "NAME": "Juana Molina"
+    },
+    {
+      "ID": "suimin",
+      "NAME": "Suimin"
+    },
+    {
+      "ID": "dj-krush",
+      "NAME": "DJ KRUSH"
+    },
+    {
+      "ID": "zundoko-disco",
+      "NAME": "ZUNDOKO DISCO"
+    },
+    {
+      "ID": "calpiss",
+      "NAME": "CALPISS"
+    },
+    {
+      "ID": "space-drum-meditation",
+      "NAME": "Space Drum Meditation"
+    },
+    {
+      "ID": "aoki-takamasa",
+      "NAME": "AOKI Takamasa"
+    },
+    {
+      "ID": "daniel-bell",
+      "NAME": "DANIEL BELL"
+    },
+    {
+      "ID": "kohei",
+      "NAME": "Kohei"
+    },
+    {
+      "ID": "akiram-en",
+      "NAME": "AKIRAM EN"
+    },
+    {
+      "ID": "you-forgot",
+      "NAME": "You Forgot"
+    },
+    {
+      "ID": "yellowuhuru",
+      "NAME": "YELLOWUHURU"
     }
   ]
 }

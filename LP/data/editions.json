@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-08-01T05:31:48.695Z",
-  "count": 86,
+  "_generatedAt": "2026-08-02T16:07:28.210Z",
+  "count": 89,
   "items": [
     {
       "EDITION_ID": "snow-machine-japan-2026",
@@ -17,16 +17,32 @@
       "STATUS": "published"
     },
     {
+      "EDITION_ID": "spring-love-harukaze-2026",
+      "FESTIVAL_ID": "spring-love-harukaze",
+      "EDITION": "2026",
+      "DATE_START": "2026-03-28",
+      "DATE_END": "2026-03-29",
+      "LOCATION": "Yoyogi Event Plaza",
+      "LOCATION_JA": "代々木公園イベント広場",
+      "PREF": "Tokyo",
+      "ADDRESS": "東京都渋谷区神南2-3",
+      "LAT": "35.6679403",
+      "LNG": "139.6968179",
+      "FLYER": "images/festivals/spring-love-flyer.webp",
+      "STATUS": "published"
+    },
+    {
       "EDITION_ID": "waifu-2026",
       "FESTIVAL_ID": "waifu",
       "EDITION": "2026",
       "DATE_START": "2026-04-11",
       "DATE_END": "2026-04-12",
       "LOCATION": "Kinone Pension",
+      "LOCATION_JA": "木の根ペンション",
       "PREF": "Chiba",
-      "ADDRESS": "296-1 Kinone, Narita City, Chiba Prefecture",
-      "LAT": "35.7609",
-      "LNG": "140.3924",
+      "ADDRESS": "千葉県山武郡芝山町岩山2013",
+      "LAT": "35.7531",
+      "LNG": "140.3878",
       "STATUS": "published"
     },
     {
@@ -36,10 +52,11 @@
       "DATE_START": "2026-04-11",
       "DATE_END": "2026-04-12",
       "LOCATION": "Odaira no Sato Camp Area",
+      "LOCATION_JA": "小平の里キャンプ",
       "PREF": "Gunma",
-      "ADDRESS": "495 Kodaira, Omama-cho, Midori City, Gunma Prefecture",
-      "LAT": "36.4303",
-      "LNG": "139.2767",
+      "ADDRESS": "群馬県みどり市大間々町小平４９５",
+      "LAT": "36.464494",
+      "LNG": "139.309112",
       "FLYER": "images/festivals/arch-flyer.jpg",
       "STATUS": "published"
     },
@@ -49,11 +66,12 @@
       "EDITION": "2026",
       "DATE_START": "2026-04-17",
       "DATE_END": "2026-04-19",
-      "LOCATION": "Higashi-Izu Cross Country Course",
+      "LOCATION": "東伊豆クロスカントリーコース",
+      "LOCATION_JA": "Higashi-Izu Cross Country Course",
       "PREF": "Shizuoka",
-      "ADDRESS": "Inatori, Higashiizu-cho, Kamo-gun, Shizuoka Prefecture",
-      "LAT": "34.7847",
-      "LNG": "139.0262",
+      "ADDRESS": "静岡県賀茂郡東伊豆町稲取3348-19",
+      "LAT": "34.7896",
+      "LNG": "139.0419",
       "FLYER": "images/festivals/rainbow-disco-club-flyer.jpg",
       "STATUS": "published"
     },
@@ -64,12 +82,14 @@
       "DATE_START": "2026-04-18",
       "DATE_END": "2026-04-19",
       "LOCATION": "Toriki Tsuribori Cafe & Campground",
+      "LOCATION_JA": "とり亀つりぼりキャンプ場",
       "PREF": "Chiba",
-      "ADDRESS": "1508 Ogami, Mutsuzawa-machi, Chosei-gun, Chiba Prefecture",
-      "LAT": "35.3265",
-      "LNG": "140.2882",
+      "ADDRESS": "千葉県長生郡睦沢町大上1508",
+      "LAT": "35.34",
+      "LNG": "140.2818",
       "TICKETURL": "https://alanutmeg.zaiko.io/e/alaairfest26",
-      "FLYER": "images/festivals/ala-flyer.jpg"
+      "FLYER": "images/festivals/ala-flyer.jpg",
+      "STATUS": "published"
     },
     {
       "EDITION_ID": "osukinidouzo-2026",
@@ -78,11 +98,13 @@
       "DATE_START": "2026-05-02",
       "DATE_END": "2026-05-04",
       "LOCATION": "Zakae Bridge",
+      "LOCATION_JA": "座架依橋",
       "PREF": "Kanagawa",
-      "ADDRESS": "Nishikurihara, Zama City, Kanagawa Prefecture",
-      "LAT": "35.4738",
-      "LNG": "139.4117",
-      "FLYER": "images/festivals/osukinidouzo-flyer.jpg"
+      "ADDRESS": "神奈川県厚木市関口",
+      "LAT": "35.4741",
+      "LNG": "139.3724",
+      "FLYER": "images/festivals/osukinidouzo-flyer.jpg",
+      "STATUS": "published"
     },
     {
       "EDITION_ID": "transcendence-2026",
@@ -91,10 +113,11 @@
       "DATE_START": "2026-05-08",
       "DATE_END": "2026-05-10",
       "LOCATION": "Choujya no Mori",
+      "LOCATION_JA": "長者の森",
       "PREF": "Nagano",
-      "ADDRESS": "5616-6 Kitaaiki Village, Minamisaku District, Nagano Prefecture",
-      "LAT": "36.0592",
-      "LNG": "138.5512",
+      "ADDRESS": "長野県南佐久郡北相木村5616-6",
+      "LAT": "36.0594",
+      "LNG": "138.5611",
       "FLYER": "images/festivals/transcendence-flyer.jpg",
       "STATUS": "published"
     },
@@ -105,12 +128,26 @@
       "DATE_START": "2026-05-09",
       "DATE_END": "2026-05-10",
       "LOCATION": "Ooba Camp Village",
+      "LOCATION_JA": "おおばキャンプ村",
       "PREF": "Tokyo",
-      "ADDRESS": "3741 Okuno, Hinode-machi, Nishitama-gun, Tokyo",
-      "LAT": "35.7421",
-      "LNG": "139.2574",
+      "ADDRESS": "東京都西多摩郡日の出町大久野3741",
+      "LAT": "35.7533",
+      "LNG": "139.2081",
       "TICKETURL": "https://passmarket.yahoo.co.jp/event/show/detail/0253hhfb4g051.html#detail",
-      "FLYER": "images/festivals/99flags-flyer.jpg"
+      "FLYER": "images/festivals/99flags-flyer.jpg",
+      "STATUS": "published"
+    },
+    {
+      "EDITION_ID": "ensou-2026",
+      "FESTIVAL_ID": "ensou",
+      "EDITION": "2026",
+      "DATE_START": "2026-05-15",
+      "DATE_END": "2026-05-17",
+      "LOCATION": "Secret location",
+      "PREF": "Tochigi",
+      "TICKETURL": "https://sonminentertainment.zaiko.io/e/ensoufest2026",
+      "FLYER": "images/festivals/ensou-flyer.webp",
+      "STATUS": "published"
     },
     {
       "EDITION_ID": "the-star-festival-2026",
@@ -119,12 +156,30 @@
       "DATE_START": "2026-05-16",
       "DATE_END": "2026-05-17",
       "LOCATION": "Fuminno Mori Hiyoshi",
+      "LOCATION_JA": "府民の森ひよし",
       "PREF": "Kyoto",
-      "ADDRESS": "25 Tenwaka Kaminosho, Hiyoshi-cho, Nantan City, Kyoto Prefecture",
-      "LAT": "35.1322",
-      "LNG": "135.5393",
+      "ADDRESS": "京都府南丹市日吉町天若上ノ所25",
+      "LAT": "35.1581",
+      "LNG": "135.5398",
       "TICKETURL": "https://thestarfestival.zaiko.io/e/2026kyoto",
-      "FLYER": "images/festivals/the-star-festival-flyer.jpg"
+      "FLYER": "images/festivals/the-star-festival-flyer.jpg",
+      "STATUS": "published"
+    },
+    {
+      "EDITION_ID": "mori-michi-ichiba-2026",
+      "FESTIVAL_ID": "mori-michi-ichiba",
+      "EDITION": "2026",
+      "DATE_START": "2026-05-22",
+      "DATE_END": "2026-05-24",
+      "LOCATION": "Laguna Beach & Laguna Ten Bosch (Lagunasia)",
+      "LOCATION_JA": "ラグーナビーチ＆遊園地ラグナシア",
+      "PREF": "Aichi",
+      "ADDRESS": "愛知県蒲郡市海陽町2-39",
+      "LAT": "34.8057",
+      "LNG": "137.2599",
+      "TICKETURL": "https://morimichiichiba.jp/ticket/",
+      "FLYER": "images/festivals/mori-michi-ichiba-flyer.jpg",
+      "STATUS": "published"
     },
     {
       "EDITION_ID": "paramount-2026",
@@ -133,12 +188,14 @@
       "DATE_START": "2026-05-23",
       "DATE_END": "2026-05-24",
       "LOCATION": "Gunma Cycle Sports Center",
+      "LOCATION_JA": "群馬サイクルスポーツセンター",
       "PREF": "Gunma",
-      "ADDRESS": "3853-3853 Shinmaki, Minakami-machi, Tone-gun, Gunma Prefecture",
-      "LAT": "36.6779",
-      "LNG": "138.9978",
+      "ADDRESS": "群馬県利根郡みなかみ町新巻3853",
+      "LAT": "36.7118",
+      "LNG": "138.9056",
       "TICKETURL": "https://l.instagram.com/",
-      "FLYER": "images/festivals/paramount-flyer.jpg"
+      "FLYER": "images/festivals/paramount-flyer.jpg",
+      "STATUS": "published"
     },
     {
       "EDITION_ID": "letus-music-camp-2026",
@@ -147,12 +204,14 @@
       "DATE_START": "2026-05-29",
       "DATE_END": "2026-05-31",
       "LOCATION": "Kuriwaki Farm",
+      "LOCATION_JA": "栗脇農園",
       "PREF": "Hyogo",
-      "ADDRESS": "1288-3 Nojima Tokiwa, Awaji City, Hyogo Prefecture",
-      "LAT": "34.5206",
-      "LNG": "134.8804",
+      "ADDRESS": "兵庫県淡路市野島常盤1288-3",
+      "LAT": "34.5694",
+      "LNG": "134.9818",
       "TICKETURL": "https://letus-music-camp.zaiko.io/e/letuscamp26",
-      "FLYER": "images/festivals/letus-music-camp-flyer.jpg"
+      "FLYER": "images/festivals/letus-music-camp-flyer.jpg",
+      "STATUS": "published"
     },
     {
       "EDITION_ID": "matricaria-2026",
@@ -161,10 +220,11 @@
       "DATE_START": "2026-05-29",
       "DATE_END": "2026-05-31",
       "LOCATION": "Naeba Greenland",
+      "LOCATION_JA": "苗場グリーンランド",
       "PREF": "Niigata",
-      "ADDRESS": "Mikuni, Yuzawa-machi, Minamiuonuma-gun, Niigata Prefecture",
-      "LAT": "36.8072",
-      "LNG": "138.7392",
+      "ADDRESS": "新潟県南魚沼郡湯沢町三国",
+      "LAT": "36.7938",
+      "LNG": "138.7885",
       "TICKETURL": "https://matricaria.zaiko.io/e/matricaria26",
       "FLYER": "images/festivals/matricaria-flyer.jpg",
       "STATUS": "published"
@@ -175,7 +235,14 @@
       "EDITION": "2026",
       "DATE_START": "2026-05-30",
       "DATE_END": "2026-05-31",
+      "LOCATION": "Katsura Lake Auto Campground",
+      "LOCATION_JA": "桂湖オートキャンプ場",
       "PREF": "Toyama",
+      "ADDRESS": "富山県南砺市桂大沼1-40",
+      "LAT": "36.326091",
+      "LNG": "136.836322",
+      "TICKETURL": "https://club-port.com/special/link-open-air-2026/ticket",
+      "FLYER": "images/festivals/link-open-air-flyer.webp",
       "STATUS": "published"
     },
     {
@@ -184,15 +251,31 @@
       "EDITION": "2026",
       "DATE_START": "2026-05-30",
       "DATE_END": "2026-05-31",
-      "PREF": "Tochigi"
+      "LOCATION": "Nasu Utopia Sauna",
+      "LOCATION_JA": "那須ユートピア サウナ",
+      "PREF": "Tochigi",
+      "ADDRESS": "栃木県那須郡那須町蓑沢563-4 那須ユートピア美野沢アートヴィレッジ内",
+      "LAT": "36.9836",
+      "LNG": "140.1652",
+      "TICKETURL": "https://peatix.com/event/4921776",
+      "FLYER": "images/festivals/japonism-flyer.webp",
+      "STATUS": "published"
     },
     {
-      "EDITION_ID": "goj-ichi-festival-2026",
-      "FESTIVAL_ID": "goj-ichi-festival",
+      "EDITION_ID": "etsuetsu-2026",
+      "FESTIVAL_ID": "etsuetsu",
       "EDITION": "2026",
       "DATE_START": "2026-06-05",
       "DATE_END": "2026-06-07",
-      "PREF": "Tokyo"
+      "LOCATION": "Village Hakushu",
+      "LOCATION_JA": "ヴィレッジ白州",
+      "PREF": "Yamanashi",
+      "ADDRESS": "山梨県北杜市白州町白須上教来石平久保 ２１２４",
+      "LAT": "35.848364",
+      "LNG": "138.266241",
+      "TICKETURL": "https://etsuetsu2026.peatix.com/",
+      "FLYER": "images/festivals/etsuetsu-flyer.webp",
+      "STATUS": "published"
     },
     {
       "EDITION_ID": "festival-fruezinho-2026",
@@ -200,7 +283,13 @@
       "EDITION": "2026",
       "DATE_START": "2026-06-13",
       "DATE_END": "2026-06-13",
+      "LOCATION": "Tachikawa Stage Garden",
+      "LOCATION_JA": "立川ステージガーデン",
       "PREF": "Tokyo",
+      "ADDRESS": "東京都立川市緑町3-3 N1",
+      "LAT": "35.7049",
+      "LNG": "139.4119",
+      "TICKETURL": "https://shop.frue.jp/collections/festival-fruezinho-2026",
       "STATUS": "published"
     },
     {
@@ -242,7 +331,12 @@
       "EDITION": "2026",
       "DATE_START": "2026-07-17",
       "DATE_END": "2026-07-20",
-      "PREF": "Fukushima"
+      "LOCATION": "nowhere CAMP",
+      "PREF": "Fukushima",
+      "ADDRESS": "福島県耶麻郡猪苗代町大字蚕養字沼尻山甲2864",
+      "LAT": "37.602",
+      "LNG": "140.1982",
+      "TICKETURL": "https://ruraljp.zaiko.io/e/rural2026"
     },
     {
       "EDITION_ID": "fulirock-2026",
@@ -253,12 +347,19 @@
       "PREF": "Niigata"
     },
     {
-      "EDITION_ID": "sonic-mania-2026",
-      "FESTIVAL_ID": "sonic-mania",
+      "EDITION_ID": "hacha-mecha-2026",
+      "FESTIVAL_ID": "hacha-mecha",
       "EDITION": "2026",
-      "DATE_START": "2026-08-14",
-      "DATE_END": "2026-08-15",
-      "PREF": "Chiba",
+      "DATE_START": "2026-08-08",
+      "DATE_END": "2026-08-08",
+      "LOCATION": "Shinkawa Park",
+      "LOCATION_JA": "新川公園",
+      "PREF": "Gunma",
+      "ADDRESS": "群馬県桐生市稲荷町1",
+      "LAT": "36.4082",
+      "LNG": "139.3331",
+      "TICKETURL": "https://hacha-mecha-ticket.myshopify.com/",
+      "FLYER": "images/festivals/hacha-mecha-flyer.webp",
       "STATUS": "published"
     },
     {
@@ -323,15 +424,22 @@
       "EDITION": "2026",
       "DATE_START": "2026-10-10",
       "DATE_END": "2026-10-12",
+      "LOCATION": "Minakami Hodaigi Camping Ground",
+      "LOCATION_JA": "みなかみ宝台樹キャンプ場",
       "PREF": "Gunma",
+      "ADDRESS": "群馬県利根郡みなかみ町藤原915-1",
+      "LAT": "36.8572",
+      "LNG": "139.0655",
+      "TICKETURL": "https://mindgames.zaiko.io/en/e/labyrinth2026",
       "STATUS": "published"
     },
     {
       "EDITION_ID": "wonderfruit-kyoto-2026",
       "FESTIVAL_ID": "wonderfruit-kyoto",
       "EDITION": "2026",
-      "DATE_START": "2026-10-21",
+      "DATE_START": "2026-10-22",
       "DATE_END": "2026-10-25",
+      "LOCATION": "Kyoto (Ohara Sanso / ACG Villa Kyoto / Kurama Mountain / Ochill TeaRoom)",
       "PREF": "Kyoto",
       "STATUS": "published"
     },
@@ -419,11 +527,11 @@
       "PREF": "Chiba"
     },
     {
-      "EDITION_ID": "body-soul-2025",
+      "EDITION_ID": "body-soul-2026",
       "FESTIVAL_ID": "body-soul",
-      "EDITION": "2025",
-      "DATE_START": "2025-06-07",
-      "DATE_END": "2025-06-07",
+      "EDITION": "2026",
+      "DATE_START": "2026-06-07",
+      "DATE_END": "2026-06-07",
       "PREF": "Tokyo",
       "STATUS": "published"
     },
@@ -690,7 +798,7 @@
       "EDITION": "2025",
       "DATE_START": "2025-10-25",
       "DATE_END": "2025-10-26",
-      "PREF": "kochi"
+      "PREF": "Kochi"
     },
     {
       "EDITION_ID": "brightness-2025",
@@ -783,10 +891,11 @@
       "DATE_START": "2026-04-25",
       "DATE_END": "2026-04-26",
       "LOCATION": "Tabifusa Ashiya Daihi-kaku",
+      "LOCATION_JA": "旅房 芦屋大悲閣",
       "PREF": "Hyogo",
-      "ADDRESS": "Okuyama 1, Ashiya City, Hyogo Prefecture",
-      "LAT": "34.7456",
-      "LNG": "135.2889",
+      "ADDRESS": "兵庫県芦屋市奥山1",
+      "LAT": "34.7578",
+      "LNG": "135.2974",
       "FLYER": "images/festivals/technogaoka-flyer.jpg",
       "STATUS": "published"
     }
