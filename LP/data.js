@@ -409,10 +409,6 @@ const ARTISTS = [
     name: "YUKIMASA",
   },
   {
-    id: "tonbo",
-    name: "Tonbo",
-  },
-  {
     id: "sunga",
     name: "SUNGA",
   },
