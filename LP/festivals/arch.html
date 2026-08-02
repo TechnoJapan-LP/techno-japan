@@ -60,7 +60,7 @@
 </div>
 <article class="detail-page">
   <div class="detail-inner">
-    <a class="article-back" href="/festivals.html"><span class="arrow"></span> ALL FESTIVALS</a>
+    <a class="article-back" href="/festivals.html" data-festival-hub-back="/festivals.html"><span class="arrow"></span> ALL FESTIVALS</a>
     <h1>ARCH</h1>
     <p class="festival-summary">ARCHは、Gunmaで開催されるTECHNO／HOUSEのフェスティバルです。最新の開催回は2026年4月11日から2026年4月12日、Odaira no Sato Camp Areaでの開催です。</p>
     <div class="detail-chips"><span class="detail-chip">TECHNO</span><span class="detail-chip">HOUSE</span></div>
@@ -101,7 +101,7 @@
     </table>
   </div><section class="festival-lineups"><h2>LINE UP</h2><div class="lineup-list"><a class="lineup-item" data-lineup-slot data-lineup-artist="choko" href="/artists/choko.html">Choko</a><span class="lineup-item" data-lineup-slot>CAPTAIN-K</span><a class="lineup-item" data-lineup-slot data-lineup-artist="akihiro-suzuki" href="/artists/akihiro-suzuki.html">Akihiro Suzuki</a><a class="lineup-item" data-lineup-slot data-lineup-artist="endorphin" href="/artists/endorphin.html">Endorphin</a><a class="lineup-item" data-lineup-slot data-lineup-artist="kevin-miyagi" href="/artists/kevin-miyagi.html">Kevin Miyagi</a><a class="lineup-item" data-lineup-slot data-lineup-artist="psychogem" href="/artists/psychogem.html">Psychogem</a><a class="lineup-item" data-lineup-slot data-lineup-artist="sho" href="/artists/sho.html">Sho</a><a class="lineup-item" data-lineup-slot data-lineup-artist="takehiro-imaizumi" href="/artists/takehiro-imaizumi.html">Takehiro Imaizumi</a><a class="lineup-item" data-lineup-slot data-lineup-artist="tazzy" href="/artists/tazzy.html">Tazzy</a><a class="lineup-item" data-lineup-slot data-lineup-artist="tko" href="/artists/tko.html">Tko</a><a class="lineup-item" data-lineup-slot data-lineup-artist="tmak" href="/artists/tmak.html">Tmak</a><a class="lineup-item" data-lineup-slot data-lineup-artist="yeark" href="/artists/yeark.html">Yeark</a><a class="lineup-item" data-lineup-slot data-lineup-artist="yuripon" href="/artists/yuripon.html">Yuripon</a><a class="lineup-item" data-lineup-slot data-lineup-artist="ao" href="/artists/ao.html">青</a><a class="lineup-item" data-lineup-slot data-lineup-artist="198" href="/artists/198.html">198</a></div></section><section class="festival-faq"><h2>よくある質問</h2><dl><div><dt>ARCHの開催日はいつですか？</dt><dd>ARCHの最新の開催日は2026年4月11日から2026年4月12日です。</dd></div><div><dt>ARCHの会場はどこですか？</dt><dd>ARCHの会場はOdaira no Sato Camp Area、495 Kodaira, Omama-cho, Midori City, Gunma Prefecture、Gunmaです。</dd></div><div><dt>ARCHにはどんなアーティストが出演しますか？</dt><dd>出演アーティストはChoko、CAPTAIN-K、Akihiro Suzuki、Endorphin、Kevin Miyagi、Psychogem、Sho、Takehiro Imaizumi、Tazzy、Tko、Tmak、Yeark、Yuripon、青、198です。</dd></div></dl></section>
     <h2>Gunmaの他のフェス</h2><div class="lineup-list"><a class="lineup-item" href="/festivals/paramount.html">PARAMOUNT</a><a class="lineup-item" href="/festivals/labyrinth.html">Labyrinth</a><a class="lineup-item" href="/festivals/balance.html">Balance</a><a class="lineup-item" href="/festivals/global-ark.html">Global Ark</a><a class="lineup-item" href="/festivals/hacha-mecha.html">HACHA MECHA</a></div>
-    <div class="article-footer"><a class="article-back" href="/festivals.html" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
+    <div class="article-footer"><a class="article-back" href="/festivals.html" data-festival-hub-back="/festivals.html" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
   </div>
 </article>
 <footer>
@@ -134,5 +134,25 @@
 </script>
 <script src="/common.js?v=2" defer></script>
 <script src="/lang-toggle.js?v=1" defer></script>
+<script>
+function bindFestivalHubBackLinks() {
+  document.querySelectorAll('[data-festival-hub-back]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      try {
+        const referrer = new URL(document.referrer);
+        if (referrer.origin === window.location.origin && referrer.pathname === link.dataset.festivalHubBack) {
+          event.preventDefault();
+          history.back();
+        }
+      } catch (_) {}
+    });
+  });
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bindFestivalHubBackLinks, { once: true });
+} else {
+  bindFestivalHubBackLinks();
+}
+</script>
 </body>
 </html>

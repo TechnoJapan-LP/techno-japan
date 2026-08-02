@@ -60,7 +60,7 @@
 </div>
 <article class="detail-page">
   <div class="detail-inner">
-    <a class="article-back" href="/festivals.html"><span class="arrow"></span> ALL FESTIVALS</a>
+    <a class="article-back" href="/festivals.html" data-festival-hub-back="/festivals.html"><span class="arrow"></span> ALL FESTIVALS</a>
     <h1>Gojū-Ichi Festival</h1>
     <p class="festival-summary">Gojū-Ichi Festivalは、Tokyoで開催されるTECHNO／EXPERIMENTALのフェスティバルです。最新の開催回は2026年6月5日から2026年6月7日の開催です。</p>
     <div class="detail-chips"><span class="detail-chip">TECHNO</span><span class="detail-chip">EXPERIMENTAL</span></div>
@@ -94,7 +94,7 @@
     </table>
   </div><section class="festival-faq"><h2>よくある質問</h2><dl><div><dt>Gojū-Ichi Festivalの開催日はいつですか？</dt><dd>Gojū-Ichi Festivalの最新の開催日は2026年6月5日から2026年6月7日です。</dd></div><div><dt>Gojū-Ichi Festivalの会場はどこですか？</dt><dd>Gojū-Ichi Festivalの会場はTokyoです。</dd></div></dl></section>
     <h2>Tokyoの他のフェス</h2><div class="lineup-list"><a class="lineup-item" href="/festivals/99flags.html">99flags</a><a class="lineup-item" href="/festivals/festival-fruezinho.html">FESTIVAL FRUEZINHO</a><a class="lineup-item" href="/festivals/ultra-japan.html">Ultra Japan</a><a class="lineup-item" href="/festivals/dom.html">DOM24</a><a class="lineup-item" href="/festivals/body-soul.html">Body&amp;SOUL Live in Japan</a><a class="lineup-item" href="/festivals/euphoria.html">Euphoria</a></div>
-    <div class="article-footer"><a class="article-back" href="/festivals.html" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
+    <div class="article-footer"><a class="article-back" href="/festivals.html" data-festival-hub-back="/festivals.html" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
   </div>
 </article>
 <footer>
@@ -127,5 +127,25 @@
 </script>
 <script src="/common.js?v=2" defer></script>
 <script src="/lang-toggle.js?v=1" defer></script>
+<script>
+function bindFestivalHubBackLinks() {
+  document.querySelectorAll('[data-festival-hub-back]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      try {
+        const referrer = new URL(document.referrer);
+        if (referrer.origin === window.location.origin && referrer.pathname === link.dataset.festivalHubBack) {
+          event.preventDefault();
+          history.back();
+        }
+      } catch (_) {}
+    });
+  });
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bindFestivalHubBackLinks, { once: true });
+} else {
+  bindFestivalHubBackLinks();
+}
+</script>
 </body>
 </html>

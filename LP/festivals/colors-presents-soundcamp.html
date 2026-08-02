@@ -60,7 +60,7 @@
 </div>
 <article class="detail-page">
   <div class="detail-inner">
-    <a class="article-back" href="/festivals.html"><span class="arrow"></span> ALL FESTIVALS</a>
+    <a class="article-back" href="/festivals.html" data-festival-hub-back="/festivals.html"><span class="arrow"></span> ALL FESTIVALS</a>
     <h1>COLORS Presents SOUNDCAMP</h1>
     <p class="festival-summary">COLORS Presents SOUNDCAMPは、Hokkaidoで開催されるTECHNO／HOUSEのフェスティバルです。最新の開催回は2025年9月21日から2025年9月23日の開催です。</p>
     <div class="detail-chips"><span class="detail-chip">TECHNO</span><span class="detail-chip">HOUSE</span></div>
@@ -94,7 +94,7 @@
     </table>
   </div><section class="festival-faq"><h2>よくある質問</h2><dl><div><dt>COLORS Presents SOUNDCAMPの開催日はいつですか？</dt><dd>COLORS Presents SOUNDCAMPの最新の開催日は2025年9月21日から2025年9月23日です。</dd></div><div><dt>COLORS Presents SOUNDCAMPの会場はどこですか？</dt><dd>COLORS Presents SOUNDCAMPの会場はHokkaidoです。</dd></div></dl></section>
     <h2>Hokkaidoの他のフェス</h2><div class="lineup-list"><a class="lineup-item" href="/festivals/dots.html">Dots</a><a class="lineup-item" href="/festivals/halola-camp.html">HALOLA CAMP</a><a class="lineup-item" href="/festivals/kyoumei-gathering.html">KYOUMEI GatherinG</a><a class="lineup-item" href="/festivals/big-fun.html">BIG FUN</a></div>
-    <div class="article-footer"><a class="article-back" href="/festivals.html" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
+    <div class="article-footer"><a class="article-back" href="/festivals.html" data-festival-hub-back="/festivals.html" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
   </div>
 </article>
 <footer>
@@ -127,5 +127,25 @@
 </script>
 <script src="/common.js?v=2" defer></script>
 <script src="/lang-toggle.js?v=1" defer></script>
+<script>
+function bindFestivalHubBackLinks() {
+  document.querySelectorAll('[data-festival-hub-back]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      try {
+        const referrer = new URL(document.referrer);
+        if (referrer.origin === window.location.origin && referrer.pathname === link.dataset.festivalHubBack) {
+          event.preventDefault();
+          history.back();
+        }
+      } catch (_) {}
+    });
+  });
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bindFestivalHubBackLinks, { once: true });
+} else {
+  bindFestivalHubBackLinks();
+}
+</script>
 </body>
 </html>

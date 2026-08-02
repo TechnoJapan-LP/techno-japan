@@ -60,7 +60,7 @@
 </div>
 <article class="detail-page">
   <div class="detail-inner">
-    <a class="article-back" href="/festivals.html"><span class="arrow"></span> ALL FESTIVALS</a>
+    <a class="article-back" href="/festivals.html" data-festival-hub-back="/festivals.html"><span class="arrow"></span> ALL FESTIVALS</a>
     <h1>FFKT</h1>
     <p class="festival-summary">FFKTは、Shizuokaで開催されるTECHNO／HOUSE／LIVEのフェスティバルです。最新の開催回は2025年9月27日から2025年9月28日の開催です。</p>
     <div class="detail-chips"><span class="detail-chip">TECHNO</span><span class="detail-chip">HOUSE</span><span class="detail-chip">LIVE</span></div>
@@ -94,7 +94,7 @@
     </table>
   </div><section class="festival-faq"><h2>よくある質問</h2><dl><div><dt>FFKTの開催日はいつですか？</dt><dd>FFKTの最新の開催日は2025年9月27日から2025年9月28日です。</dd></div><div><dt>FFKTの会場はどこですか？</dt><dd>FFKTの会場はShizuokaです。</dd></div></dl></section>
     <h2>Shizuokaの他のフェス</h2><div class="lineup-list"><a class="lineup-item" href="/festivals/rainbow-disco-club.html">Rainbow Disco Club</a><a class="lineup-item" href="/festivals/festival-de-frue.html">FESTIVAL de FRUE</a><a class="lineup-item" href="/festivals/unknown.html">Unknown</a><a class="lineup-item" href="/festivals/bonna-pot.html">Bonna Pot</a><a class="lineup-item" href="/festivals/lost-find.html">Lost&amp;Find</a><a class="lineup-item" href="/festivals/asagiri-jam.html">ASAGIRI JAM</a></div>
-    <div class="article-footer"><a class="article-back" href="/festivals.html" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
+    <div class="article-footer"><a class="article-back" href="/festivals.html" data-festival-hub-back="/festivals.html" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
   </div>
 </article>
 <footer>
@@ -127,5 +127,25 @@
 </script>
 <script src="/common.js?v=2" defer></script>
 <script src="/lang-toggle.js?v=1" defer></script>
+<script>
+function bindFestivalHubBackLinks() {
+  document.querySelectorAll('[data-festival-hub-back]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      try {
+        const referrer = new URL(document.referrer);
+        if (referrer.origin === window.location.origin && referrer.pathname === link.dataset.festivalHubBack) {
+          event.preventDefault();
+          history.back();
+        }
+      } catch (_) {}
+    });
+  });
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bindFestivalHubBackLinks, { once: true });
+} else {
+  bindFestivalHubBackLinks();
+}
+</script>
 </body>
 </html>

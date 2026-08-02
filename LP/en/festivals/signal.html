@@ -60,7 +60,7 @@
 </div>
 <article class="detail-page">
   <div class="detail-inner">
-    <a class="article-back" href="/festivals.html"><span class="arrow"></span> ALL FESTIVALS</a>
+    <a class="article-back" href="/en/festivals.html" data-festival-hub-back="/en/festivals.html"><span class="arrow"></span> ALL FESTIVALS</a>
     <h1>Signal</h1>
     <p class="festival-summary">Signal is a techno / house festival held in Yamanashi. The latest listed edition is June 14, 2025 to June 15, 2025.</p>
     <div class="detail-chips"><span class="detail-chip">TECHNO</span><span class="detail-chip">HOUSE</span></div>
@@ -94,7 +94,7 @@
     </table>
   </div><section class="festival-faq"><h2>FREQUENTLY ASKED QUESTIONS</h2><dl><div><dt>When is Signal held?</dt><dd>The latest listed date for Signal is June 14, 2025 to June 15, 2025.</dd></div><div><dt>Where is Signal held?</dt><dd>Signal is held at Yamanashi.</dd></div></dl></section>
     <h2>MORE IN YAMANASHI</h2><div class="lineup-list"><a class="lineup-item" href="/en/festivals/lab.html">LAB.vol.6</a><a class="lineup-item" href="/en/festivals/axiom.html">axiom</a><a class="lineup-item" href="/en/festivals/sawagi-festival.html">Sawagi Festival</a><a class="lineup-item" href="/en/festivals/rare-groove.html">Rare Groove</a><a class="lineup-item" href="/en/festivals/delta-commit.html">DELTA COMMIT</a><a class="lineup-item" href="/en/festivals/dream-festival.html">DREAM FESTIVAL</a></div>
-    <div class="article-footer"><a class="article-back" href="/festivals.html" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
+    <div class="article-footer"><a class="article-back" href="/en/festivals.html" data-festival-hub-back="/en/festivals.html" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
   </div>
 </article>
 <footer>
@@ -127,5 +127,25 @@
 </script>
 <script src="/common.js?v=2" defer></script>
 <script src="/lang-toggle.js?v=1" defer></script>
+<script>
+function bindFestivalHubBackLinks() {
+  document.querySelectorAll('[data-festival-hub-back]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      try {
+        const referrer = new URL(document.referrer);
+        if (referrer.origin === window.location.origin && referrer.pathname === link.dataset.festivalHubBack) {
+          event.preventDefault();
+          history.back();
+        }
+      } catch (_) {}
+    });
+  });
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bindFestivalHubBackLinks, { once: true });
+} else {
+  bindFestivalHubBackLinks();
+}
+</script>
 </body>
 </html>

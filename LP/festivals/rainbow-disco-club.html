@@ -60,7 +60,7 @@
 </div>
 <article class="detail-page">
   <div class="detail-inner">
-    <a class="article-back" href="/festivals.html"><span class="arrow"></span> ALL FESTIVALS</a>
+    <a class="article-back" href="/festivals.html" data-festival-hub-back="/festivals.html"><span class="arrow"></span> ALL FESTIVALS</a>
     <h1>Rainbow Disco Club</h1>
     <p class="festival-summary">Rainbow Disco Clubは、Shizuokaで開催されるTECHNO／HOUSEのフェスティバルです。最新の開催回は2026年4月17日から2026年4月19日、Higashi-Izu Cross Country Courseでの開催です。</p>
     <div class="detail-chips"><span class="detail-chip">TECHNO</span><span class="detail-chip">HOUSE</span></div>
@@ -102,7 +102,7 @@
     </table>
   </div><section class="festival-lineups"><h2>LINE UP</h2><div class="lineup-list"><span class="lineup-item" data-lineup-slot data-lineup-composite>Antal &amp; Hunee</span><a class="lineup-item" data-lineup-slot data-lineup-artist="ben-ufo" href="/artists/ben-ufo.html">Ben Ufo</a><a class="lineup-item" data-lineup-slot data-lineup-artist="daphni" href="/artists/daphni.html">Daphni</a><a class="lineup-item" data-lineup-slot data-lineup-artist="dj-maria" href="/artists/dj-maria.html">Dj Maria.</a><span class="lineup-item" data-lineup-slot data-lineup-composite>Dungeoneering (Albino Sound &amp; Daigos)</span><a class="lineup-item" data-lineup-slot data-lineup-artist="feline" href="/artists/feline.html">Feline</a><a class="lineup-item" data-lineup-slot data-lineup-artist="floating-points" href="/artists/floating-points.html">Floating Points</a><a class="lineup-item" data-lineup-slot data-lineup-artist="gerd-janson" href="/artists/gerd-janson.html">Gerd Janson</a><a class="lineup-item" data-lineup-slot data-lineup-artist="gonno" href="/artists/gonno.html">Gonno</a><a class="lineup-item" data-lineup-slot data-lineup-artist="haai" href="/artists/haai.html">Haai</a><a class="lineup-item" data-lineup-slot data-lineup-artist="helena-hauff" href="/artists/helena-hauff.html">Helena Hauff</a><a class="lineup-item" data-lineup-slot data-lineup-artist="jonathan-kusuma" href="/artists/jonathan-kusuma.html">Jonathan Kusuma</a><a class="lineup-item" data-lineup-slot data-lineup-artist="jonny-rock" href="/artists/jonny-rock.html">Jonny Rock</a><a class="lineup-item" data-lineup-slot data-lineup-artist="kikiorix" href="/artists/kikiorix.html">Kikiorix</a><a class="lineup-item" data-lineup-slot data-lineup-artist="mala" href="/artists/mala.html">Mala</a><span class="lineup-item" data-lineup-slot data-lineup-composite>NC4K (Stones Taro &amp; Lomax)</span><span class="lineup-item" data-lineup-slot data-lineup-composite>Sisi b2b Ouissam b2b Yamarchy</span><span class="lineup-item" data-lineup-slot>Suze Ijó</span><a class="lineup-item" data-lineup-slot data-lineup-artist="four-tet" href="/artists/four-tet.html">Four Tet</a></div></section><section class="festival-faq"><h2>よくある質問</h2><dl><div><dt>Rainbow Disco Clubの開催日はいつですか？</dt><dd>Rainbow Disco Clubの最新の開催日は2026年4月17日から2026年4月19日です。</dd></div><div><dt>Rainbow Disco Clubの会場はどこですか？</dt><dd>Rainbow Disco Clubの会場はHigashi-Izu Cross Country Course、Inatori, Higashiizu-cho, Kamo-gun, Shizuoka Prefecture、Shizuokaです。</dd></div><div><dt>Rainbow Disco Clubにはどんなアーティストが出演しますか？</dt><dd>出演アーティストはAntal &amp; Hunee、Ben Ufo、Daphni、Dj Maria.、Dungeoneering (Albino Sound &amp; Daigos)、Feline、Floating Points、Gerd Janson、Gonno、Haai、Helena Hauff、Jonathan Kusuma、Jonny Rock、Kikiorix、Mala、NC4K (Stones Taro &amp; Lomax)、Sisi b2b Ouissam b2b Yamarchy、Suze Ijó、Four Tetです。</dd></div></dl></section>
     <h2>Shizuokaの他のフェス</h2><div class="lineup-list"><a class="lineup-item" href="/festivals/festival-de-frue.html">FESTIVAL de FRUE</a><a class="lineup-item" href="/festivals/unknown.html">Unknown</a><a class="lineup-item" href="/festivals/bonna-pot.html">Bonna Pot</a><a class="lineup-item" href="/festivals/ffkt.html">FFKT</a><a class="lineup-item" href="/festivals/lost-find.html">Lost&amp;Find</a><a class="lineup-item" href="/festivals/asagiri-jam.html">ASAGIRI JAM</a></div>
-    <div class="article-footer"><a class="article-back" href="/festivals.html" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
+    <div class="article-footer"><a class="article-back" href="/festivals.html" data-festival-hub-back="/festivals.html" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
   </div>
 </article>
 <footer>
@@ -135,5 +135,25 @@
 </script>
 <script src="/common.js?v=2" defer></script>
 <script src="/lang-toggle.js?v=1" defer></script>
+<script>
+function bindFestivalHubBackLinks() {
+  document.querySelectorAll('[data-festival-hub-back]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      try {
+        const referrer = new URL(document.referrer);
+        if (referrer.origin === window.location.origin && referrer.pathname === link.dataset.festivalHubBack) {
+          event.preventDefault();
+          history.back();
+        }
+      } catch (_) {}
+    });
+  });
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bindFestivalHubBackLinks, { once: true });
+} else {
+  bindFestivalHubBackLinks();
+}
+</script>
 </body>
 </html>

@@ -60,7 +60,7 @@
 </div>
 <article class="detail-page">
   <div class="detail-inner">
-    <a class="article-back" href="/festivals.html"><span class="arrow"></span> ALL FESTIVALS</a>
+    <a class="article-back" href="/en/festivals.html" data-festival-hub-back="/en/festivals.html"><span class="arrow"></span> ALL FESTIVALS</a>
     <h1>DOM24</h1>
     <p class="festival-summary">DOM24 is a techno / house / live festival held in Tokyo. The latest listed edition is October 27, 2024.</p>
     <div class="detail-chips"><span class="detail-chip">TECHNO</span><span class="detail-chip">HOUSE</span><span class="detail-chip">LIVE</span></div>
@@ -94,7 +94,7 @@
     </table>
   </div><section class="festival-faq"><h2>FREQUENTLY ASKED QUESTIONS</h2><dl><div><dt>When is DOM24 held?</dt><dd>The latest listed date for DOM24 is October 27, 2024.</dd></div><div><dt>Where is DOM24 held?</dt><dd>DOM24 is held at Tokyo.</dd></div></dl></section>
     <h2>MORE IN TOKYO</h2><div class="lineup-list"><a class="lineup-item" href="/en/festivals/99flags.html">99flags</a><a class="lineup-item" href="/en/festivals/goj-ichi-festival.html">Gojū-Ichi Festival</a><a class="lineup-item" href="/en/festivals/festival-fruezinho.html">FESTIVAL FRUEZINHO</a><a class="lineup-item" href="/en/festivals/ultra-japan.html">Ultra Japan</a><a class="lineup-item" href="/en/festivals/body-soul.html">Body&amp;SOUL Live in Japan</a><a class="lineup-item" href="/en/festivals/euphoria.html">Euphoria</a></div>
-    <div class="article-footer"><a class="article-back" href="/festivals.html" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
+    <div class="article-footer"><a class="article-back" href="/en/festivals.html" data-festival-hub-back="/en/festivals.html" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
   </div>
 </article>
 <footer>
@@ -127,5 +127,25 @@
 </script>
 <script src="/common.js?v=2" defer></script>
 <script src="/lang-toggle.js?v=1" defer></script>
+<script>
+function bindFestivalHubBackLinks() {
+  document.querySelectorAll('[data-festival-hub-back]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      try {
+        const referrer = new URL(document.referrer);
+        if (referrer.origin === window.location.origin && referrer.pathname === link.dataset.festivalHubBack) {
+          event.preventDefault();
+          history.back();
+        }
+      } catch (_) {}
+    });
+  });
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bindFestivalHubBackLinks, { once: true });
+} else {
+  bindFestivalHubBackLinks();
+}
+</script>
 </body>
 </html>

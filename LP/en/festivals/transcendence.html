@@ -60,7 +60,7 @@
 </div>
 <article class="detail-page">
   <div class="detail-inner">
-    <a class="article-back" href="/festivals.html"><span class="arrow"></span> ALL FESTIVALS</a>
+    <a class="article-back" href="/en/festivals.html" data-festival-hub-back="/en/festivals.html"><span class="arrow"></span> ALL FESTIVALS</a>
     <h1>Transcendence</h1>
     <p class="festival-summary">Transcendence is a techno festival held in Nagano. The latest listed edition is May 8, 2026 to May 10, 2026 at Choujya no Mori.</p>
     <div class="detail-chips"><span class="detail-chip">TECHNO</span></div>
@@ -102,7 +102,7 @@
     </table>
   </div><section class="festival-lineups"><h2>LINE UP</h2><div class="lineup-list"><span class="lineup-item" data-lineup-slot>DJ KURI</span><a class="lineup-item" data-lineup-slot data-lineup-artist="dj-maria" href="/en/artists/dj-maria.html">Dj Maria.</a><a class="lineup-item" data-lineup-slot data-lineup-artist="dj-nobu" href="/en/artists/dj-nobu.html">DJ Nobu</a><span class="lineup-item" data-lineup-slot>Garçon</span><span class="lineup-item" data-lineup-slot>Kohra</span><span class="lineup-item" data-lineup-slot>Paquita Gordon</span><span class="lineup-item" data-lineup-slot>Takumi Inamoto</span><span class="lineup-item" data-lineup-slot>Timnah</span><span class="lineup-item" data-lineup-slot>upsammy</span><span class="lineup-item" data-lineup-slot>YSK</span><span class="lineup-item" data-lineup-slot>Yuzo Iwata</span><span class="lineup-item" data-lineup-slot data-lineup-composite>Zitto B2B Zurkin</span></div></section><section class="festival-faq"><h2>FREQUENTLY ASKED QUESTIONS</h2><dl><div><dt>When is Transcendence held?</dt><dd>The latest listed date for Transcendence is May 8, 2026 to May 10, 2026.</dd></div><div><dt>Where is Transcendence held?</dt><dd>Transcendence is held at Choujya no Mori, 5616-6 Kitaaiki Village, Minamisaku District, Nagano Prefecture, Nagano.</dd></div><div><dt>Which artists are playing at Transcendence?</dt><dd>The lineup includes DJ KURI, Dj Maria., DJ Nobu, Garçon, Kohra, Paquita Gordon, Takumi Inamoto, Timnah, upsammy, YSK, Yuzo Iwata, Zitto B2B Zurkin.</dd></div></dl></section>
     <h2>MORE IN NAGANO</h2><div class="lineup-list"><a class="lineup-item" href="/en/festivals/samsara.html">SAMSARA</a><a class="lineup-item" href="/en/festivals/re-birth-festival.html">Re:birth Festival</a><a class="lineup-item" href="/en/festivals/otsukimi.html">御月民 -OTSUKIMI-</a><a class="lineup-item" href="/en/festivals/each-story.html">EACH STORY</a><a class="lineup-item" href="/en/festivals/circle.html">Circle</a></div>
-    <div class="article-footer"><a class="article-back" href="/festivals.html" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
+    <div class="article-footer"><a class="article-back" href="/en/festivals.html" data-festival-hub-back="/en/festivals.html" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
   </div>
 </article>
 <footer>
@@ -135,5 +135,25 @@
 </script>
 <script src="/common.js?v=2" defer></script>
 <script src="/lang-toggle.js?v=1" defer></script>
+<script>
+function bindFestivalHubBackLinks() {
+  document.querySelectorAll('[data-festival-hub-back]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      try {
+        const referrer = new URL(document.referrer);
+        if (referrer.origin === window.location.origin && referrer.pathname === link.dataset.festivalHubBack) {
+          event.preventDefault();
+          history.back();
+        }
+      } catch (_) {}
+    });
+  });
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bindFestivalHubBackLinks, { once: true });
+} else {
+  bindFestivalHubBackLinks();
+}
+</script>
 </body>
 </html>

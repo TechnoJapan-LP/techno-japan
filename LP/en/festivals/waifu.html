@@ -60,7 +60,7 @@
 </div>
 <article class="detail-page">
   <div class="detail-inner">
-    <a class="article-back" href="/festivals.html"><span class="arrow"></span> ALL FESTIVALS</a>
+    <a class="article-back" href="/en/festivals.html" data-festival-hub-back="/en/festivals.html"><span class="arrow"></span> ALL FESTIVALS</a>
     <h1>WAIFU</h1>
     <p class="festival-summary">WAIFU is a techno festival held in Chiba. The latest listed edition is April 11, 2026 to April 12, 2026 at Kinone Pension.</p>
     <div class="detail-chips"><span class="detail-chip">TECHNO</span></div>
@@ -102,7 +102,7 @@
     </table>
   </div><section class="festival-lineups"><h2>LINE UP</h2><div class="lineup-list"><a class="lineup-item" data-lineup-slot data-lineup-artist="yazzus" href="/en/artists/yazzus.html">Yazzus</a><a class="lineup-item" data-lineup-slot data-lineup-artist="cosmic-caz" href="/en/artists/cosmic-caz.html">Cosmic Caz</a><a class="lineup-item" data-lineup-slot data-lineup-artist="janus-rose" href="/en/artists/janus-rose.html">Janus Rose</a><a class="lineup-item" data-lineup-slot data-lineup-artist="mayudepth" href="/en/artists/mayudepth.html">Mayudepth</a><a class="lineup-item" data-lineup-slot data-lineup-artist="akii" href="/en/artists/akii.html">Akii</a><span class="lineup-item" data-lineup-slot>M.I.O</span><a class="lineup-item" data-lineup-slot data-lineup-artist="aliceyuki" href="/en/artists/aliceyuki.html">Aliceyuki</a></div></section><section class="festival-faq"><h2>FREQUENTLY ASKED QUESTIONS</h2><dl><div><dt>When is WAIFU held?</dt><dd>The latest listed date for WAIFU is April 11, 2026 to April 12, 2026.</dd></div><div><dt>Where is WAIFU held?</dt><dd>WAIFU is held at Kinone Pension, 296-1 Kinone, Narita City, Chiba Prefecture, Chiba.</dd></div><div><dt>Which artists are playing at WAIFU?</dt><dd>The lineup includes Yazzus, Cosmic Caz, Janus Rose, Mayudepth, Akii, M.I.O, Aliceyuki.</dd></div></dl></section>
     <h2>MORE IN CHIBA</h2><div class="lineup-list"><a class="lineup-item" href="/en/festivals/ala.html">ALA</a><a class="lineup-item" href="/en/festivals/sonic-mania.html">Sonic Mania</a><a class="lineup-item" href="/en/festivals/intergalactic.html">Intergalactic Festival</a><a class="lineup-item" href="/en/festivals/topia.html">Topia</a></div>
-    <div class="article-footer"><a class="article-back" href="/festivals.html" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
+    <div class="article-footer"><a class="article-back" href="/en/festivals.html" data-festival-hub-back="/en/festivals.html" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
   </div>
 </article>
 <footer>
@@ -135,5 +135,25 @@
 </script>
 <script src="/common.js?v=2" defer></script>
 <script src="/lang-toggle.js?v=1" defer></script>
+<script>
+function bindFestivalHubBackLinks() {
+  document.querySelectorAll('[data-festival-hub-back]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      try {
+        const referrer = new URL(document.referrer);
+        if (referrer.origin === window.location.origin && referrer.pathname === link.dataset.festivalHubBack) {
+          event.preventDefault();
+          history.back();
+        }
+      } catch (_) {}
+    });
+  });
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bindFestivalHubBackLinks, { once: true });
+} else {
+  bindFestivalHubBackLinks();
+}
+</script>
 </body>
 </html>

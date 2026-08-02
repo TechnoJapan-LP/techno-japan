@@ -60,7 +60,7 @@
 </div>
 <article class="detail-page">
   <div class="detail-inner">
-    <a class="article-back" href="/festivals.html"><span class="arrow"></span> ALL FESTIVALS</a>
+    <a class="article-back" href="/en/festivals.html" data-festival-hub-back="/en/festivals.html"><span class="arrow"></span> ALL FESTIVALS</a>
     <h1>Snow Machine Japan</h1>
     <p class="festival-summary">Snow Machine Japan is a techno / house / live / others festival held in Hakuba. The latest listed edition is March 3, 2026 to March 8, 2026 at HAKUBA VALLEY.</p>
     <div class="detail-chips"><span class="detail-chip">TECHNO</span><span class="detail-chip">HOUSE</span><span class="detail-chip">LIVE</span><span class="detail-chip">OTHERS</span></div>
@@ -102,7 +102,7 @@
     </table>
   </div><section class="festival-faq"><h2>FREQUENTLY ASKED QUESTIONS</h2><dl><div><dt>When is Snow Machine Japan held?</dt><dd>The latest listed date for Snow Machine Japan is March 3, 2026 to March 8, 2026.</dd></div><div><dt>Where is Snow Machine Japan held?</dt><dd>Snow Machine Japan is held at HAKUBA VALLEY, Kitajo, Hakuba Village, Kitaazumi District, Nagano Prefecture, Hakuba.</dd></div></dl></section>
     
-    <div class="article-footer"><a class="article-back" href="/festivals.html" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
+    <div class="article-footer"><a class="article-back" href="/en/festivals.html" data-festival-hub-back="/en/festivals.html" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
   </div>
 </article>
 <footer>
@@ -135,5 +135,25 @@
 </script>
 <script src="/common.js?v=2" defer></script>
 <script src="/lang-toggle.js?v=1" defer></script>
+<script>
+function bindFestivalHubBackLinks() {
+  document.querySelectorAll('[data-festival-hub-back]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      try {
+        const referrer = new URL(document.referrer);
+        if (referrer.origin === window.location.origin && referrer.pathname === link.dataset.festivalHubBack) {
+          event.preventDefault();
+          history.back();
+        }
+      } catch (_) {}
+    });
+  });
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bindFestivalHubBackLinks, { once: true });
+} else {
+  bindFestivalHubBackLinks();
+}
+</script>
 </body>
 </html>

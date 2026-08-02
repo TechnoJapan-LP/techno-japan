@@ -152,6 +152,27 @@ function ratioAttr(r) {
 // 説明文トグルを持つページ（festival/venue/artist）に読み込むスクリプト。
 // .bilingual が無いページでは no-op なので副作用なし。
 const LANG_TOGGLE_SCRIPT = '\n<script src="/lang-toggle.js?v=1" defer></script>';
+const FESTIVAL_HUB_BACK_SCRIPT = `
+<script>
+function bindFestivalHubBackLinks() {
+  document.querySelectorAll('[data-festival-hub-back]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      try {
+        const referrer = new URL(document.referrer);
+        if (referrer.origin === window.location.origin && referrer.pathname === link.dataset.festivalHubBack) {
+          event.preventDefault();
+          history.back();
+        }
+      } catch (_) {}
+    });
+  });
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bindFestivalHubBackLinks, { once: true });
+} else {
+  bindFestivalHubBackLinks();
+}
+</script>`;
 // 説明文（desc/bio）をバイリンガル表示する。ja=日本語スロット, en=英語スロット。
 // 両方あるときだけ言語トグルを出し、pageLang をデフォルト表示にする（SEO: 既定言語を
 // 可視・もう一方は lang 属性付きで hidden → 言語シグナルを濁さない）。片方だけなら従来通り。
@@ -630,6 +651,7 @@ function festivalFaqHtml(items, lang) {
 
 function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articles, lang = 'ja') {
   const prefix = lang === 'en' ? '/en' : '';
+  const hubHref = `${prefix}/festivals.html`;
   const altHref = (lang === 'ja' ? '/en' : '') + `/festivals/${f.id}.html`;
   const name = lang === 'en' ? (f.name_en || f.name) : f.name;
   const bodyDesc = lang === 'en' ? (f.desc_en || f.desc) : (f.desc || f.desc_en);
@@ -713,7 +735,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
 
   const body = `<article class="detail-page">
   <div class="detail-inner">
-    <a class="article-back" href="/festivals.html"><span class="arrow"></span> ALL FESTIVALS</a>
+    <a class="article-back" href="${hubHref}" data-festival-hub-back="${hubHref}"><span class="arrow"></span> ALL FESTIVALS</a>
     <h1>${esc(name)}</h1>
     ${summary ? `<p class="festival-summary">${esc(summary)}</p>` : ''}
     ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
@@ -725,7 +747,7 @@ ${externalLinksHtml ? `    ${externalLinksHtml}\n` : ''}    ${editionsHtml}${lin
       if (!others.length) return '';
       return `<h2>${lang === 'en' ? `MORE IN ${esc(String(f.city).toUpperCase())}` : `${esc(f.city)}の他のフェス`}</h2>${relatedChips(others, 'festivals', lang)}`;
     })()}
-    <div class="article-footer"><a class="article-back" href="/festivals.html" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
+    <div class="article-footer"><a class="article-back" href="${hubHref}" data-festival-hub-back="${hubHref}" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
   </div>
 </article>`;
 
@@ -738,7 +760,7 @@ ${externalLinksHtml ? `    ${externalLinksHtml}\n` : ''}    ${editionsHtml}${lin
       acceptedAnswer: { '@type': 'Answer', text: item.answer },
     })),
   } : null;
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'festivals'] : ['festivals']), `${f.id}.html`), html: page({ title, desc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('FESTIVALS', '/festivals.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'festivals'] : ['festivals']), `${f.id}.html`), html: page({ title, desc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('FESTIVALS', '/festivals.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT + FESTIVAL_HUB_BACK_SCRIPT }) };
 }
 
 /* ---------- アーティストページ ---------- */

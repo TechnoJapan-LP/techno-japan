@@ -60,7 +60,7 @@
 </div>
 <article class="detail-page">
   <div class="detail-inner">
-    <a class="article-back" href="/festivals.html"><span class="arrow"></span> ALL FESTIVALS</a>
+    <a class="article-back" href="/festivals.html" data-festival-hub-back="/festivals.html"><span class="arrow"></span> ALL FESTIVALS</a>
     <h1>Osukinidouzo</h1>
     <p class="festival-summary">Osukinidouzoは、Kanagawaで開催されるTECHNO／HOUSE／AMBIENT／LIVE／OTHERSのフェスティバルです。最新の開催回は2026年5月2日から2026年5月4日、Zakae Bridgeでの開催です。</p>
     <div class="detail-chips"><span class="detail-chip">TECHNO</span><span class="detail-chip">HOUSE</span><span class="detail-chip">AMBIENT</span><span class="detail-chip">LIVE</span><span class="detail-chip">OTHERS</span></div>
@@ -101,7 +101,7 @@
     </table>
   </div><section class="festival-faq"><h2>よくある質問</h2><dl><div><dt>Osukinidouzoの開催日はいつですか？</dt><dd>Osukinidouzoの最新の開催日は2026年5月2日から2026年5月4日です。</dd></div><div><dt>Osukinidouzoの会場はどこですか？</dt><dd>Osukinidouzoの会場はZakae Bridge、Nishikurihara, Zama City, Kanagawa Prefecture、Kanagawaです。</dd></div></dl></section>
     
-    <div class="article-footer"><a class="article-back" href="/festivals.html" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
+    <div class="article-footer"><a class="article-back" href="/festivals.html" data-festival-hub-back="/festivals.html" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
   </div>
 </article>
 <footer>
@@ -134,5 +134,25 @@
 </script>
 <script src="/common.js?v=2" defer></script>
 <script src="/lang-toggle.js?v=1" defer></script>
+<script>
+function bindFestivalHubBackLinks() {
+  document.querySelectorAll('[data-festival-hub-back]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      try {
+        const referrer = new URL(document.referrer);
+        if (referrer.origin === window.location.origin && referrer.pathname === link.dataset.festivalHubBack) {
+          event.preventDefault();
+          history.back();
+        }
+      } catch (_) {}
+    });
+  });
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bindFestivalHubBackLinks, { once: true });
+} else {
+  bindFestivalHubBackLinks();
+}
+</script>
 </body>
 </html>

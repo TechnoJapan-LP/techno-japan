@@ -60,7 +60,7 @@
 </div>
 <article class="detail-page">
   <div class="detail-inner">
-    <a class="article-back" href="/festivals.html"><span class="arrow"></span> ALL FESTIVALS</a>
+    <a class="article-back" href="/en/festivals.html" data-festival-hub-back="/en/festivals.html"><span class="arrow"></span> ALL FESTIVALS</a>
     <h1>ALA</h1>
     <p class="festival-summary">ALA is a techno / ambient festival held in Chiba. The latest listed edition is April 18, 2026 to April 19, 2026 at Toriki Tsuribori Cafe &amp; Campground.</p>
     <div class="detail-chips"><span class="detail-chip">TECHNO</span><span class="detail-chip">AMBIENT</span></div>
@@ -102,7 +102,7 @@
     </table>
   </div><section class="festival-lineups"><h2>LINE UP</h2><div class="lineup-list"><a class="lineup-item" data-lineup-slot data-lineup-artist="dj-miku" href="/en/artists/dj-miku.html">Dj Miku</a><a class="lineup-item" data-lineup-slot data-lineup-artist="dj-kensei" href="/en/artists/dj-kensei.html">Dj Kensei</a><a class="lineup-item" data-lineup-slot data-lineup-artist="dj-yogurt" href="/en/artists/dj-yogurt.html">Dj Yogurt</a><a class="lineup-item" data-lineup-slot data-lineup-artist="hidai" href="/en/artists/hidai.html">Hidai</a><a class="lineup-item" data-lineup-slot data-lineup-artist="taichi-kawahira" href="/en/artists/taichi-kawahira.html">Taichi Kawahira</a><a class="lineup-item" data-lineup-slot data-lineup-artist="tsutomu" href="/en/artists/tsutomu.html">Tsutomu</a><a class="lineup-item" data-lineup-slot data-lineup-artist="qmico" href="/en/artists/qmico.html">Qmico</a><span class="lineup-item" data-lineup-slot>GA-SU</span><span class="lineup-item" data-lineup-slot>free☆cinn.</span><a class="lineup-item" data-lineup-slot data-lineup-artist="nutmeg" href="/en/artists/nutmeg.html">Nutmeg</a><a class="lineup-item" data-lineup-slot data-lineup-artist="snipe1" href="/en/artists/snipe1.html">Snipe1</a><a class="lineup-item" data-lineup-slot data-lineup-artist="liarako" href="/en/artists/liarako.html">Liarako</a></div></section><section class="festival-faq"><h2>FREQUENTLY ASKED QUESTIONS</h2><dl><div><dt>When is ALA held?</dt><dd>The latest listed date for ALA is April 18, 2026 to April 19, 2026.</dd></div><div><dt>Where is ALA held?</dt><dd>ALA is held at Toriki Tsuribori Cafe &amp; Campground, 1508 Ogami, Mutsuzawa-machi, Chosei-gun, Chiba Prefecture, Chiba.</dd></div><div><dt>Where can I buy tickets for ALA?</dt><dd>Tickets for ALA are available at <a href="https://alanutmeg.zaiko.io/e/alaairfest26" target="_blank" rel="noopener">https://alanutmeg.zaiko.io/e/alaairfest26</a>.</dd></div><div><dt>Which artists are playing at ALA?</dt><dd>The lineup includes Dj Miku, Dj Kensei, Dj Yogurt, Hidai, Taichi Kawahira, Tsutomu, Qmico, GA-SU, free☆cinn., Nutmeg, Snipe1, Liarako.</dd></div></dl></section>
     <h2>MORE IN CHIBA</h2><div class="lineup-list"><a class="lineup-item" href="/en/festivals/waifu.html">WAIFU</a><a class="lineup-item" href="/en/festivals/sonic-mania.html">Sonic Mania</a><a class="lineup-item" href="/en/festivals/intergalactic.html">Intergalactic Festival</a><a class="lineup-item" href="/en/festivals/topia.html">Topia</a></div>
-    <div class="article-footer"><a class="article-back" href="/festivals.html" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
+    <div class="article-footer"><a class="article-back" href="/en/festivals.html" data-festival-hub-back="/en/festivals.html" style="margin:0"><span class="arrow"></span> ALL FESTIVALS</a></div>
   </div>
 </article>
 <footer>
@@ -135,5 +135,25 @@
 </script>
 <script src="/common.js?v=2" defer></script>
 <script src="/lang-toggle.js?v=1" defer></script>
+<script>
+function bindFestivalHubBackLinks() {
+  document.querySelectorAll('[data-festival-hub-back]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      try {
+        const referrer = new URL(document.referrer);
+        if (referrer.origin === window.location.origin && referrer.pathname === link.dataset.festivalHubBack) {
+          event.preventDefault();
+          history.back();
+        }
+      } catch (_) {}
+    });
+  });
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bindFestivalHubBackLinks, { once: true });
+} else {
+  bindFestivalHubBackLinks();
+}
+</script>
 </body>
 </html>
