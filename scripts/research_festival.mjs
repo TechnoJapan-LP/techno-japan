@@ -204,7 +204,15 @@ function skeleton(name, id, inbox = {}) {
 function loadExisting() {
   const p = path.join(ROOT, 'LP', 'data.js');
   if (!fs.existsSync(p)) return [];
-  const src = read(p);
+  const all = read(p);
+  // data.js には FESTIVALS 以外に ARTISTS / VENUES / ARTICLES も入っている。
+  // 全体を舐めるとアーティストと誤マッチする（実際に「円相芸術音楽祭」が
+  // アーティスト "青"(ao) に一致してしまった）。FESTIVALS の配列だけを見る。
+  const from = all.indexOf('const FESTIVALS = [');
+  if (from < 0) return [];
+  const rest = all.slice(from);
+  const to = rest.indexOf('\n];');
+  const src = to < 0 ? rest : rest.slice(0, to);
   const out = [];
   // data.js は生成物。パースせず必要な項目だけ拾う（評価はしない）。
   for (const m of src.matchAll(/\n  \{\n(?:.*\n)*?  \},/g)) {
@@ -220,10 +228,20 @@ function loadExisting() {
   return out;
 }
 
-const normName = (s) => String(s).toLowerCase().replace(/[^a-z0-9]/g, '');
+/**
+ * 照合用の正規化。日本語だけの名前は英数字が残らず空文字になるため、
+ * 空文字どうしが一致してしまう（「円相芸術音楽祭」と「青」が一致した）。
+ * 空になる場合は元の文字列から記号だけ落としたものを使う。
+ */
+const normName = (s) => {
+  const t = String(s).toLowerCase();
+  const ascii = t.replace(/[^a-z0-9]/g, '');
+  return ascii || t.replace(/[\s、,。.・「」『』()（）\-—–_]/g, '');
+};
 
 function findExisting(all, name) {
   const n = normName(name);
+  if (!n) return null;
   const n2 = normName(String(name).replace(/\s*20\d\d\s*$/, ''));
   return all.find((f) => normName(f.name) === n || normName(f.id) === n
                       || normName(f.name) === n2 || normName(f.id) === n2) ?? null;
@@ -301,6 +319,15 @@ async function cmdInit(args) {
       }
     }
     const stem2 = hit ? hit.id : stem;
+    if (fs.existsSync(jsonPath(stem2))) {
+      const prev = JSON.parse(read(jsonPath(stem2)));
+      if (prev.fields?.name?.value !== name) {
+        console.log(`  ! ${stem2.padEnd(28)} 別のフェス "${prev.fields?.name?.value}" が既に使用中。`
+          + `"${name}" は書き込まずスキップ`);
+        skipped++;
+        continue;
+      }
+    }
     fs.writeFileSync(jsonPath(stem2), JSON.stringify(doc, null, 2) + '\n');
     console.log(`  + ${(stem2).padEnd(28)} ${name}` + (hit ? '  [既存行 — 空欄補完]' : '  [新規]'));
     if (!id) console.log(`      ↑ "${dropped ?? ''}" を落とさずに ID 化できません。id.value を手で決めてください`);

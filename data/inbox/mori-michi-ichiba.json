@@ -1,0 +1,191 @@
+{
+  "_schema": "festival-research/2",
+  "_createdAt": "2026-08-02T17:17:28+09:00",
+  "_note": "値と出典は Claude が埋める。DESC/DESC_EN は人が書く（空のままでよい）。",
+  "inbox": {
+    "FES_NAME": "森、道、市場",
+    "DATE": "2026.05.22-24",
+    "PREF": "Aichi",
+    "URL/INSTAGRAM": "https://www.instagram.com/morimichiichiba/",
+    "MEMO": "",
+    "STATUS(new/drafted/registered)": ""
+  },
+  "fields": {
+    "id": {
+      "value": "mori-michi-ichiba",
+      "source": "人が決定（Perkey）",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-02T18:10:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "auto",
+      "note": "スラッグ。DATA_SCHEMA §1.1"
+    },
+    "name": {
+      "value": "森、道、市場",
+      "source": "INBOX",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-02T17:17:28+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "auto",
+      "note": "INBOX の FES_NAME"
+    },
+    "date": {
+      "value": "2026-05-22/2026-05-24",
+      "source": "https://festival-life.com/festival/mori_michi_ichiba_2026",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-02T18:28:00+09:00",
+      "inboxValue": "2026-05-22/2026-05-24",
+      "conflictNote": null,
+      "kind": "research",
+      "note": "INBOX の申告 2026.05.22-24 と一致"
+    },
+    "location": {
+      "value": "Laguna Beach & Laguna Ten Bosch (Lagunasia)",
+      "source": "https://festival-life.com/festival/mori_michi_ichiba_2026",
+      "confidence": "medium",
+      "reason": null,
+      "checkedAt": "2026-08-02T18:28:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "英語表記は推定を含む"
+    },
+    "location_ja": {
+      "value": "ラグーナビーチ＆遊園地ラグナシア",
+      "source": "https://festival-life.com/festival/mori_michi_ichiba_2026",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-02T18:28:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "会場名（日本語）。座標検索はこちらの方が当たる"
+    },
+    "city": {
+      "value": "Gamagori",
+      "source": "https://festival-life.com/festival/mori_michi_ichiba_2026",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-02T18:28:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "愛知県蒲郡市"
+    },
+    "address": {
+      "value": "愛知県蒲郡市海陽町2-39",
+      "source": "https://festival-life.com/festival/mori_michi_ichiba_2026",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-02T18:28:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "住所。公式サイトに無いことが多い"
+    },
+    "lat": {
+      "value": 34.8057,
+      "source": "nominatim.openstreetmap.org",
+      "confidence": "low",
+      "reason": null,
+      "checkedAt": "2026-08-02T17:19:56+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "auto",
+      "note": "query: 愛知県蒲郡市海陽町 → 県道豊橋幸田線, 海陽町二丁目, 三谷町, 蒲郡市, 愛知県, 443-0013, 日本"
+    },
+    "lng": {
+      "value": 137.2599,
+      "source": "nominatim.openstreetmap.org",
+      "confidence": "low",
+      "reason": null,
+      "checkedAt": "2026-08-02T17:19:56+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "auto",
+      "note": "query: 愛知県蒲郡市海陽町 → 県道豊橋幸田線, 海陽町二丁目, 三谷町, 蒲郡市, 愛知県, 443-0013, 日本"
+    },
+    "url": {
+      "value": "https://morimichiichiba.jp/",
+      "source": "https://morimichiichiba.jp/",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-02T18:28:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "2026年回は終了済みの表示"
+    },
+    "instagram": {
+      "value": "https://instagram.com/morimichiichiba/",
+      "source": "https://morimichiichiba.jp/",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-02T18:28:00+09:00",
+      "inboxValue": "https://www.instagram.com/morimichiichiba/",
+      "conflictNote": null,
+      "kind": "research",
+      "note": "INBOX の申告と一致"
+    },
+    "ticketUrl": {
+      "value": "https://morimichiichiba.jp/ticket/",
+      "source": "https://morimichiichiba.jp/",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-02T18:28:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "チケット販売URL。無料開催なら null"
+    },
+    "lineup": {
+      "value": null,
+      "source": "https://festival-life.com/festival/mori_michi_ichiba_2026",
+      "confidence": "high",
+      "reason": "出演98組。4次にわたる発表が統合された一覧が公開されておらず、全数を確定できない",
+      "checkedAt": "2026-08-02T18:28:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "確認できた例: キタニタツヤ / KIRINJI / Ginger Root / 岡村靖幸 / 木村カエラ / Galileo Galilei / きゃりーぱみゅぱみゅ / never young beach / 石野卓球 / Kroi / カネコアヤノ ほか。テクノ/ハウス系は石野卓球など少数で、総合フェスの性格が強い。掲載方針（全数を載せるか主要のみか）を人が判断する必要がある"
+    },
+    "genre": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": null,
+      "checkedAt": null,
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "human",
+      "note": "正規リスト（DATA_SCHEMA §1.3）から選ぶ"
+    },
+    "desc": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": null,
+      "checkedAt": null,
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "human",
+      "note": "メディアのトーンに関わるため人が書く"
+    },
+    "desc_en": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": null,
+      "checkedAt": null,
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "human",
+      "note": "同上"
+    }
+  }
+}

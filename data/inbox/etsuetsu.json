@@ -1,0 +1,192 @@
+{
+  "_schema": "festival-research/2",
+  "_createdAt": "2026-08-02T17:16:58+09:00",
+  "_note": "値と出典は Claude が埋める。DESC/DESC_EN は人が書く（空のままでよい）。",
+  "inbox": {
+    "FES_NAME": "etsuetsu",
+    "DATE": "2026-06-05/2026-06-07",
+    "PREF": "Yamanashi",
+    "URL/INSTAGRAM": "https://www.instagram.com/etsu_etsu_/",
+    "MEMO": "",
+    "STATUS(new/drafted/registered)": ""
+  },
+  "fields": {
+    "id": {
+      "value": "etsuetsu",
+      "source": "slugify(name)",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-02T17:16:58+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "auto",
+      "note": "スラッグ。DATA_SCHEMA §1.1"
+    },
+    "name": {
+      "value": "etsuetsu",
+      "source": "INBOX",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-02T17:16:58+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "auto",
+      "note": "INBOX の FES_NAME"
+    },
+    "date": {
+      "value": "2026-06-05/2026-06-07",
+      "source": "https://www.instagram.com/etsu_etsu_/",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-02T18:38:00+09:00",
+      "inboxValue": "2026-06-05/2026-06-07",
+      "conflictNote": null,
+      "kind": "research",
+      "note": "Instagram bio に「6/5(金)6(土)7(日)の2泊3日」。INBOX と一致"
+    },
+    "location": {
+      "value": "Village Hakushu",
+      "source": "https://www.timeout.jp/tokyo/ja/音楽/悦悦-etsuetsu",
+      "confidence": "medium",
+      "reason": null,
+      "checkedAt": "2026-08-02T18:38:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "二次情報。公式ページで未確認"
+    },
+    "location_ja": {
+      "value": "ヴィレッジ白州",
+      "source": "https://www.timeout.jp/tokyo/ja/音楽/悦悦-etsuetsu",
+      "confidence": "low",
+      "reason": null,
+      "checkedAt": "2026-08-02T18:38:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "英語表記からの推定。要確認"
+    },
+    "city": {
+      "value": "Hokuto",
+      "source": "https://www.timeout.jp/tokyo/ja/音楽/悦悦-etsuetsu",
+      "confidence": "medium",
+      "reason": null,
+      "checkedAt": "2026-08-02T18:38:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "山梨県北杜市白州町と推定。INBOX の PREF=Yamanashi と整合"
+    },
+    "address": {
+      "value": null,
+      "source": "https://www.instagram.com/etsu_etsu_/",
+      "confidence": "high",
+      "reason": "会場の住所を公開している一次情報が見つからない",
+      "checkedAt": "2026-08-02T18:38:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "住所。公式サイトに無いことが多い"
+    },
+    "lat": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": "Nominatim で見つからず（試行: ヴィレッジ白州, Hokuto, Japan / ヴィレッジ白州, Japan）",
+      "checkedAt": "2026-08-02T17:22:30+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "auto",
+      "note": "geocode で取得"
+    },
+    "lng": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": "Nominatim で見つからず（試行: ヴィレッジ白州, Hokuto, Japan / ヴィレッジ白州, Japan）",
+      "checkedAt": "2026-08-02T17:22:30+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "auto",
+      "note": "geocode で取得"
+    },
+    "url": {
+      "value": null,
+      "source": "https://www.instagram.com/etsu_etsu_/",
+      "confidence": "high",
+      "reason": "独立した公式サイトは無し。告知は Instagram と Peatix",
+      "checkedAt": "2026-08-02T18:38:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "公式サイト"
+    },
+    "instagram": {
+      "value": "https://www.instagram.com/etsu_etsu_/",
+      "source": "https://www.instagram.com/etsu_etsu_/",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-02T18:38:00+09:00",
+      "inboxValue": "https://www.instagram.com/etsu_etsu_/",
+      "conflictNote": null,
+      "kind": "research",
+      "note": "INBOX の申告と一致。アカウント名は 悦悦2024 のまま"
+    },
+    "ticketUrl": {
+      "value": "https://etsuetsu2026.peatix.com/",
+      "source": "https://www.instagram.com/etsu_etsu_/",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-02T18:38:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "Instagram のリンク先。Peatix 本体は内容を取得できず"
+    },
+    "lineup": {
+      "value": null,
+      "source": "https://www.instagram.com/etsu_etsu_/",
+      "confidence": "high",
+      "reason": "Instagram bio に「詳細は追って発表」。2026-08-02 時点で未発表",
+      "checkedAt": "2026-08-02T18:38:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "出演者。ステージ別・日別は現状の列で表現できない（AUDIT §9-22）"
+    },
+    "genre": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": null,
+      "checkedAt": null,
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "human",
+      "note": "正規リスト（DATA_SCHEMA §1.3）から選ぶ"
+    },
+    "desc": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": null,
+      "checkedAt": null,
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "human",
+      "note": "メディアのトーンに関わるため人が書く"
+    },
+    "desc_en": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": null,
+      "checkedAt": null,
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "human",
+      "note": "同上"
+    }
+  },
+  "_researchNote": "正式名称は「悦悦 -ETSU ETSU-」。東京・神宮前の bonobo と三軒茶屋の天狗食堂による共同主催の野外パーティー。bonobo は当サイトに VENUES として登録済み（id=bonobo）なので、会場ではなく主催として関連づけられる可能性がある。会場 Village Hakushu は二次情報のみで、公式の裏が取れていない。"
+}
