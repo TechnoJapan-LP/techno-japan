@@ -125,8 +125,27 @@ function nowJst() {
   return d.toISOString().replace(/\.\d+Z$/, '+09:00');
 }
 
+/**
+ * INBOX の DATE を canonical な形（YYYY-MM-DD / YYYY-MM-DD/YYYY-MM-DD）に寄せる。
+ * 寄せられなければ null を返し、生値だけ残す。勝手に解釈して黙って変えない。
+ */
+function normalizeInboxDate(raw) {
+  const t = String(raw || '').trim();
+  if (!t) return null;
+  if (DATE_RE.test(t)) return t;
+  const iso = t.replace(/[./]/g, '-').replace(/\s+/g, '');
+  // 2026-8-14〜2026-8-15 / 2026-8-14-15 のような書き方を拾う
+  const m = iso.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:[~〜–—-]+(?:(\d{4})-)?(?:(\d{1,2})-)?(\d{1,2}))?$/);
+  if (!m) return null;
+  const p = (y, mo, d) => `${y}-${String(mo).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+  const start = p(m[1], m[2], m[3]);
+  if (!m[6]) return start;
+  return `${start}/${p(m[4] || m[1], m[5] || m[2], m[6])}`;
+}
+
 function field(kind, note) {
-  return { value: null, source: null, confidence: null, reason: null, checkedAt: null, kind, note };
+  return { value: null, source: null, confidence: null, reason: null, checkedAt: null,
+           inboxValue: null, conflictNote: null, kind, note };
 }
 
 function skeleton(name, id, inbox = {}) {
@@ -140,6 +159,19 @@ function skeleton(name, id, inbox = {}) {
   fields.id.source = 'slugify(name)';
   fields.id.confidence = id ? 'high' : null;
   fields.id.checkedAt = id ? nowJst() : null;
+
+  // INBOX の DATE は「人が把握している申告値」で、正確とは限らない。
+  // value には入れない。入れると未検証の値が調査済みに見える。
+  // 調査で確定した値と食い違ったら validate が検出する。
+  const rawDate = inbox.DATE ?? inbox.date ?? '';
+  if (String(rawDate).trim()) {
+    const norm = normalizeInboxDate(rawDate);
+    fields.date.inboxValue = norm ?? String(rawDate).trim();
+    fields.date.note = `INBOX の申告: ${String(rawDate).trim()}`
+      + (norm && norm !== String(rawDate).trim() ? `（正規化: ${norm}）` : '')
+      + (norm ? '' : '（形式を解釈できず。生値のまま）')
+      + '。未検証なので公式情報と突き合わせること';
+  }
   if (!id) fields.id.reason = 'ASCII 以外の文字を含むため、ローマ字表記を人が決める必要がある';
   return {
     _schema: 'festival-research/2',
@@ -288,6 +320,13 @@ function validateDoc(id, doc) {
   if (v('date') && !DATE_RE.test(v('date')))
     errs.push(`date の形式が不正: "${v('date')}"（YYYY-MM-DD または .../...）`);
 
+  // INBOX の申告と調査結果の食い違い。黙って上書きせず、必ず記録させる。
+  // 実例: Sonic Mania がシート上 2026-08-14/15 だったが実際は 2026-08-13。
+  const dc = f.date;
+  if (dc?.value && dc.inboxValue && dc.value !== dc.inboxValue && !dc.conflictNote)
+    errs.push(`date: INBOX の申告 "${dc.inboxValue}" と調査結果 "${dc.value}" が食い違う`
+      + ' → conflictNote に経緯を書き、シート側の訂正を報告すること');
+
   for (const [k, kind] of FIELDS.map(([a, b]) => [a, b])) {
     const cell = f[k];
     if (!cell) { errs.push(`項目 ${k} が JSON に無い`); continue; }
@@ -348,7 +387,7 @@ function cmdStale(args) {
 function cmdList() {
   const files = fs.existsSync(OUT_DIR) ? fs.readdirSync(OUT_DIR).filter((n) => n.endsWith('.json')) : [];
   if (!files.length) return console.log('  data/inbox/ は空です'), 0;
-  console.log(`  ${'id'.padEnd(28)} 調査   座標  DESC  最終調査      name`);
+  console.log(`  ${'id'.padEnd(28)} 調査   座標  DESC  日付  最終調査      name`);
   for (const n of files) {
     const doc = JSON.parse(read(path.join(OUT_DIR, n)));
     const f = doc.fields;
@@ -356,6 +395,7 @@ function cmdList() {
     console.log(`  ${n.replace(/\.json$/, '').padEnd(28)} ${String(done).padStart(2)}/${RESEARCH_KEYS.length}`
       + `  ${f.lat?.value != null ? ' ✓  ' : ' –  '}`
       + `  ${f.desc?.value ? '✓' : '–'}`
+      + `     ${f.date?.inboxValue && f.date?.value && f.date.value !== f.date.inboxValue ? '⚠' : ' '}`
       + `     ${(Object.values(f).map((c) => c.checkedAt).filter(Boolean).sort().pop() ?? '—').slice(0, 10)}`
       + `    ${f.name?.value ?? ''}`);
   }
