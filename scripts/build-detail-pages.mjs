@@ -179,6 +179,9 @@ const ARTIST_HUB_BACK_SCRIPT = FESTIVAL_HUB_BACK_SCRIPT
 const VENUE_HUB_BACK_SCRIPT = FESTIVAL_HUB_BACK_SCRIPT
   .replaceAll('Festival', 'Venue')
   .replaceAll('festival', 'venue');
+const ARTICLE_HUB_BACK_SCRIPT = FESTIVAL_HUB_BACK_SCRIPT
+  .replaceAll('Festival', 'Article')
+  .replaceAll('festival', 'article');
 // 説明文（desc/bio）をバイリンガル表示する。ja=日本語スロット, en=英語スロット。
 // 両方あるときだけ言語トグルを出し、pageLang をデフォルト表示にする（SEO: 既定言語を
 // 可視・もう一方は lang 属性付きで hidden → 言語シグナルを濁さない）。片方だけなら従来通り。
@@ -372,6 +375,7 @@ function articlePage(a, resolveEntities, lang = 'ja') {
   const hasAlt = lang === 'ja' ? !!(a.title_en || a.body_en) : true;
   const altHref = hasAlt ? (lang === 'ja' ? `/en/articles/${a.id}.html` : `/articles/${a.id}.html`) : null;
   const canonical = `${BASE}${L.prefix}/articles/${a.id}.html`;
+  const hubHref = `${L.prefix}/news.html`;
   const title = `${L.title} — TECHNO JAPAN`;
   const desc = L.excerpt || truncate(stripTags(L.body), 160);
   const image = absUrl(a.image);
@@ -418,7 +422,7 @@ function articlePage(a, resolveEntities, lang = 'ja') {
 
   const body = `<article class="article-detail">
   <div class="article-detail-inner">
-    <a class="article-back" href="/news.html"><span class="arrow"></span> ALL STORIES</a>
+    <a class="article-back" href="${hubHref}" data-article-hub-back="${hubHref}"><span class="arrow"></span> ALL STORIES</a>
     ${heroBlock}
     <dl class="article-specs">
       <div><dt>WORDS BY</dt><dd>${esc(a.author || 'TECHNO JAPAN')}</dd></div>
@@ -429,12 +433,12 @@ function articlePage(a, resolveEntities, lang = 'ja') {
     <div class="article-body">${addHtmlImageDimensions(resolveEntities(L.body || ''))}</div>
     <div class="article-footer">
       ${tags ? `<div class="article-tags">${tags}</div>` : ''}
-      <a class="article-back" href="/news.html" style="margin:0"><span class="arrow"></span> ALL STORIES</a>
+      <a class="article-back" href="${hubHref}" data-article-hub-back="${hubHref}" style="margin:0"><span class="arrow"></span> ALL STORIES</a>
     </div>
   </div>
 </article>`;
 
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'articles'] : ['articles']), `${a.id}.html`), html: page({ title, desc, canonical, image, jsonLd: [jsonLd, breadcrumbLd('NEWS', '/news.html', a.title, canonical)], body, lang, altHref, extraScripts: '\n<link rel="stylesheet" href="/article-fx.css?v=1">\n<script src="/article-fx.js?v=2" defer></script>' }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'articles'] : ['articles']), `${a.id}.html`), html: page({ title, desc, canonical, image, jsonLd: [jsonLd, breadcrumbLd('NEWS', '/news.html', a.title, canonical)], body, lang, altHref, extraScripts: '\n<link rel="stylesheet" href="/article-fx.css?v=1">\n<script src="/article-fx.js?v=2" defer></script>' + ARTICLE_HUB_BACK_SCRIPT }) };
 }
 
 /* ---------- フェスティバルページ ---------- */
@@ -1214,8 +1218,9 @@ function main() {
     festivals: writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, ARTICLES, 'ja')), 'festivals'),
     artists: writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'ja')).concat(redirectStubs('artists', liveArtistIds)), 'artists'),
     venues: writeAll(pubVenues.map((v) => venuePage(v, 'ja')), 'venues'),
-    // 英語版（/en/…）。記事は英訳がある時だけ生成する
-    'en/articles': writeAll(pubArticles.filter((a) => a.title_en || a.body_en).map((a) => articlePage(a, resolveEntities, 'en')), 'en/articles'),
+    // 英語版（/en/…）。未翻訳フィールドは articlePage 内で元データへ
+    // フォールバックし、EN ハブの通常遷移先を必ず実在させる。
+    'en/articles': writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'en')), 'en/articles'),
     'en/festivals': writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, ARTICLES, 'en')), 'en/festivals'),
     'en/artists': writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'en')).concat(redirectStubs('en/artists', liveArtistIds)), 'en/artists'),
     'en/venues': writeAll(pubVenues.map((v) => venuePage(v, 'en')), 'en/venues'),

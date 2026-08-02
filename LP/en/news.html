@@ -43,7 +43,6 @@
 <link rel="dns-prefetch" href="https://formsubmit.co">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/common.css?v=3">
-<link rel="stylesheet" href="/article-fx.css?v=1">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
@@ -220,177 +219,17 @@
 .side-card:hover .side-card-arrow::before { opacity: 0; transform: translateY(-10px); }
 .side-card:hover .side-card-arrow::after { opacity: 1; transform: translateY(0); }
 
-/* ===================== ARTICLE DETAIL VIEW ===================== */
-.article-detail { padding: 120px 0 80px; max-width: 760px; margin: 0 auto; }
-.article-detail-inner { padding: 0 40px; }
-.article-back {
-  display: inline-flex; align-items: center; gap: 12px;
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em;
-  text-transform: uppercase; opacity: 0.4; transition: opacity 0.3s ease;
-  margin-bottom: 60px;
-}
-.article-back:hover { opacity: 1; }
-.article-back .arrow { width: 24px; height: 1px; background: var(--text); position: relative; display: inline-block; }
-.article-back .arrow::before { content: ''; position: absolute; left: 0; top: -3px; width: 7px; height: 7px; border-left: 1px solid var(--text); border-bottom: 1px solid var(--text); transform: rotate(45deg); }
-.article-meta-top {
-  display: flex; align-items: center; gap: 16px;
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em;
-  text-transform: uppercase; opacity: 0.5; margin-bottom: 24px;
-}
-.article-meta-top .cat-pill { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); opacity: 1; }
-.article-meta-top .cat-pill::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
-.article-detail h1 {
-  font-family: var(--font-display); font-size: clamp(36px, 6vw, 72px);
-  line-height: 1.05; text-transform: uppercase; margin-bottom: 24px;
-}
-.article-excerpt {
-  font-family: var(--font-body); font-weight: 300;
-  font-size: clamp(16px, 1.6vw, 19px); line-height: 1.7; opacity: 0.7;
-  margin-bottom: 40px; padding-bottom: 32px;
-  border-bottom: 1px solid rgba(240,237,232,0.1);
-}
-.article-hero-img { margin: 0 -40px 48px; aspect-ratio: 16/9; overflow: hidden; background: rgba(240,237,232,0.04); }
-.article-hero-img img { width: 100%; height: 100%; object-fit: cover; }
-/* CMS で「元画像のまま」を選んだ記事は切り抜かず、写真本来の縦横比で出す */
-.article-hero-img[data-ratio="auto"] { aspect-ratio: auto; }
-.article-hero-img[data-ratio="auto"] img { height: auto; display: block; }
-
-/* ----- 記事ヒーロー（画像フルブリード + タイトルオーバーレイ） ----- */
-.article-hero {
-  position: relative; left: 50%; transform: translateX(-50%);
-  width: min(96vw, 1100px);
-  aspect-ratio: 16/9; overflow: hidden;
-  margin-bottom: 0; background: rgba(240,237,232,0.04);
-}
-.article-hero[data-ratio="auto"] { aspect-ratio: auto; }
-.article-hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.article-hero[data-ratio="auto"] img { height: auto; }
-.article-hero-overlay {
-  position: absolute; inset: auto 0 0 0;
-  padding: clamp(24px, 5vw, 56px);
-  background: linear-gradient(to top, rgba(8,8,8,0.92) 0%, rgba(8,8,8,0.55) 55%, transparent 100%);
-}
-.article-hero-overlay h1 {
-  font-family: var(--font-display); font-size: clamp(34px, 5.5vw, 76px);
-  line-height: 1.02; text-transform: uppercase; margin: 0;
-}
-.article-chips { display: flex; gap: 10px; margin-bottom: 14px; }
-.article-chips .cat-pill {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em;
-  text-transform: uppercase; color: var(--text);
-  border: 1px solid rgba(240,237,232,0.35); padding: 5px 12px;
-}
-.article-chips .cat-pill::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
-
-/* ----- スペック表風メタ（WORDS BY / PUBLISHED / READING TIME） ----- */
-.article-specs {
-  display: flex; flex-wrap: wrap; gap: 0;
-  margin: 32px 0 40px; padding: 0;
-  border-bottom: 1px solid rgba(240,237,232,0.12);
-}
-.article-specs > div {
-  flex: 1 1 0; min-width: 140px;
-  padding: 18px 20px 16px;
-  border-right: 1px solid rgba(240,237,232,0.12);
-}
-.article-specs > div:first-child { padding-left: 0; }
-.article-specs > div:last-child { border-right: none; }
-.article-specs dt {
-  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em;
-  text-transform: uppercase; opacity: 0.4; margin-bottom: 6px;
-}
-.article-specs dd {
-  font-family: var(--font-body); font-weight: 300; font-size: 14px;
-  letter-spacing: 0.02em; margin: 0; text-transform: uppercase;
-}
-
-/* ----- 本文の拡張書式（エディタのフォント/サイズ/配置に対応） ----- */
-.article-body .ql-size-small { font-size: 0.85em; }
-.article-body .ql-size-large { font-size: 1.35em; line-height: 1.6; }
-.article-body .ql-size-huge  { font-size: 1.9em;  line-height: 1.35; font-weight: 200; }
-.article-body .ql-align-center { text-align: center; }
-.article-body .ql-align-right  { text-align: right; }
-.article-body .ql-font-bebas { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.02em; }
-.article-body .ql-font-mono  { font-family: var(--font-mono); font-size: 0.85em; letter-spacing: 0.05em; }
-
-/* ----- プルクオート（blockquote を誌面の大引用に） ----- */
-.article-body blockquote {
-  border-left: none; padding: 8px 0; margin: 56px 0;
-  font-family: var(--font-body); font-weight: 200; font-style: normal;
-  font-size: clamp(22px, 3vw, 30px); line-height: 1.45;
-  color: var(--text); opacity: 1; text-align: center; position: relative;
-}
-.article-body blockquote::before {
-  content: ''; display: block; width: 48px; height: 2px;
-  background: var(--accent); margin: 0 auto 24px;
-}
-.article-body blockquote::after {
-  content: ''; display: block; width: 48px; height: 2px;
-  background: var(--accent); margin: 24px auto 0;
-}
-
-/* ----- 記事内エンティティリンク ----- */
-.article-body .entity-link {
-  color: var(--accent); border-bottom: 1px dotted rgba(255,45,45,0.5);
-  transition: border-bottom-color 0.2s ease;
-}
-.article-body .entity-link:hover { border-bottom-color: var(--accent); border-bottom-style: solid; }
-
-@media (max-width: 640px) {
-  .article-specs > div { flex: 1 1 100%; border-right: none; border-top: 1px solid rgba(240,237,232,0.08); padding-left: 0; }
-  .article-specs > div:first-child { border-top: none; }
-}
-.article-body { font-family: var(--font-body); font-weight: 300; font-size: 16px; line-height: 1.85; color: rgba(240,237,232,0.85); }
-.article-body p { margin-bottom: 24px; }
-.article-body h2 { font-family: var(--font-display); font-size: clamp(24px, 3vw, 32px); text-transform: uppercase; line-height: 1.1; margin: 48px 0 16px; color: var(--text); }
-.article-body h3 { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; margin: 36px 0 12px; color: var(--text); }
-.article-body ul, .article-body ol { margin: 0 0 24px 24px; padding: 0; }
-.article-body li { margin-bottom: 8px; }
-.article-body a { color: var(--text); border-bottom: 1px solid rgba(240,237,232,0.3); transition: border-color 0.2s ease; }
-.article-body a:hover { border-bottom-color: var(--text); }
-.article-body strong { color: var(--text); font-weight: 500; }
-.article-body blockquote { border-left: 2px solid var(--accent); padding: 8px 0 8px 24px; margin: 32px 0; font-style: italic; opacity: 0.85; }
-.article-body img { max-width: 100%; height: auto; display: block; margin: 32px auto; border-radius: 4px; }
-.article-body figure { margin: 32px 0; }
-.article-body figure img { margin: 0; }
-.article-body figcaption { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(240,237,232,0.5); margin-top: 12px; text-align: center; }
-.article-body .autolink { color: var(--accent); border-bottom: 1px dotted rgba(255,45,45,0.5); transition: border-bottom-color 0.2s ease; }
-.article-body .autolink:hover { border-bottom-color: var(--accent); border-bottom-style: solid; }
-.article-footer { margin-top: 60px; padding-top: 40px; border-top: 1px solid rgba(240,237,232,0.1); }
-.article-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; }
-.article-tag {
-  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
-  padding: 6px 12px; border: 1px solid rgba(240,237,232,0.15);
-  opacity: 0.6; transition: opacity 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-  display: inline-block;
-}
-.article-tag:hover { opacity: 1; border-color: var(--accent); color: var(--accent); }
 .tag-filter-pill {
   display: inline-flex; align-items: center; gap: 10px;
-  padding: 8px 14px;
-  margin: 24px 40px 0;
+  padding: 8px 14px; margin: 24px 40px 0;
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
-  border: 1px solid var(--accent); color: var(--accent);
-  background: rgba(255,45,45,0.06);
+  border: 1px solid var(--accent); color: var(--accent); background: rgba(255,45,45,0.06);
 }
 .tag-filter-pill .clear {
   background: none; border: none; color: var(--accent); cursor: none;
   font-size: 14px; line-height: 1; padding: 0;
 }
 .tag-filter-pill .clear:hover { opacity: 0.7; }
-.article-share { display: flex; gap: 8px; align-items: center; margin-top: 24px; }
-.article-share-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.4; margin-right: 8px; }
-.article-share-btn { width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid rgba(240,237,232,0.12); background: transparent; cursor: pointer; transition: border-color 0.3s ease; color: var(--text); opacity: 0.6; }
-@media (pointer: coarse) { .article-share-btn { width: 44px; height: 44px; } }
-.article-share-btn:hover { border-color: rgba(240,237,232,0.4); opacity: 1; }
-.article-share-btn svg { width: 14px; height: 14px; fill: currentColor; }
-@media (max-width: 768px) {
-  .article-detail { padding: 100px 0 60px; }
-  .article-detail-inner { padding: 0 24px; }
-  .article-hero-img { margin: 0 -24px 32px; }
-  .article-back { margin-bottom: 40px; }
-}
 
 /* ===================== ARTICLE FEED BELOW ===================== */
 .feed-section {
@@ -741,16 +580,6 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
   <button class="nav-back" onclick="document.querySelector('.nav-overlay').classList.remove('active');document.querySelector('.nav-hamburger').classList.remove('active');history.back()">← BACK</button>
 </div>
 
-<!-- ===================== ARTICLE DETAIL VIEW ===================== -->
-<article class="article-detail" id="article-detail" style="display:none">
-  <div class="article-detail-inner">
-    <a class="article-back" href="/en/news.html">
-      <span class="arrow"></span> ALL STORIES
-    </a>
-    <div id="article-content"></div>
-  </div>
-</article>
-
 <!-- ===================== LIST VIEW WRAPPER ===================== -->
 <div id="list-view">
 
@@ -1027,12 +856,73 @@ function formatDateSplit(dateStr) {
   if (!y || !m || !d) return '';
   return `${MONTHS_S[m-1]} ${String(d).padStart(2,'0')}<br>${y}`;
 }
+function articleDetailHref(article) {
+  const prefix = document.documentElement.lang === 'en' ? '/en' : '';
+  return `${prefix}/articles/${encodeURIComponent(article.id)}.html`;
+}
 
 /* ========== STATE ========== */
 let currentSort = 'latest';
 let currentCategory = 'ALL';
 let currentTag = null;
 let feedVisible = 4;
+const NEWS_HUB_STATE_KEY = 'tj:news-hub-state:v1';
+const NEWS_QUERY_KEYS = ['sort', 'category', 'tag', 'limit'];
+
+function readNewsStateFromUrl() {
+  const params = new URLSearchParams(location.search);
+  if (['latest', 'popular'].includes(params.get('sort'))) currentSort = params.get('sort');
+  if (params.get('category')) currentCategory = params.get('category').toUpperCase();
+  if (params.get('tag')) currentTag = params.get('tag');
+  const limit = Number(params.get('limit'));
+  if (Number.isInteger(limit) && limit >= 4) feedVisible = limit;
+
+  const articleMatch = location.hash.match(/^#article\/([^/?#]+)/);
+  if (articleMatch) {
+    const id = decodeURIComponent(articleMatch[1]);
+    const article = ARTICLES.find((item) => item.id === id);
+    location.replace(article ? articleDetailHref(article) : `/en/articles/${encodeURIComponent(id)}.html`);
+    return false;
+  }
+  if (location.hash.startsWith('#tag/')) {
+    currentTag = decodeURIComponent(location.hash.slice(5));
+    currentCategory = 'ALL';
+    feedVisible = 8;
+    syncNewsUrl();
+  }
+  return true;
+}
+
+function syncNewsUrl() {
+  const url = new URL(location.href);
+  NEWS_QUERY_KEYS.forEach((key) => url.searchParams.delete(key));
+  if (currentSort !== 'latest') url.searchParams.set('sort', currentSort);
+  if (currentCategory !== 'ALL') url.searchParams.set('category', currentCategory);
+  if (currentTag) url.searchParams.set('tag', currentTag);
+  if (feedVisible !== 4) url.searchParams.set('limit', String(feedVisible));
+  url.hash = '';
+  history.replaceState(null, '', url);
+}
+
+function saveNewsHubState() {
+  sessionStorage.setItem(NEWS_HUB_STATE_KEY, JSON.stringify({ url: location.href, scrollY, savedAt: Date.now() }));
+}
+
+function bindArticleNavigation() {
+  document.querySelectorAll('[data-article-detail-link]:not([data-news-state-bound])').forEach((link) => {
+    link.dataset.newsStateBound = 'true';
+    link.addEventListener('click', saveNewsHubState);
+  });
+}
+
+function restoreNewsHubScroll() {
+  try {
+    const state = JSON.parse(sessionStorage.getItem(NEWS_HUB_STATE_KEY) || 'null');
+    if (!state || state.url !== location.href || Date.now() - state.savedAt > 30 * 60 * 1000) return;
+    sessionStorage.removeItem(NEWS_HUB_STATE_KEY);
+    requestAnimationFrame(() => requestAnimationFrame(() => scrollTo(0, state.scrollY)));
+  } catch (_) {}
+}
 
 /* ========== SORT ARTICLES ========== */
 function getSorted(arr) {
@@ -1050,7 +940,7 @@ function renderMainGrid() {
 
   // Featured left
   document.getElementById('featured-col').innerHTML = `
-    <a href="/en/articles/${encodeURIComponent(featured.id)}.html" onclick="event.preventDefault();location.hash='article/'+this.dataset.aid" data-aid="${featured.id}" class="featured-card">
+    <a href="${articleDetailHref(featured)}" data-article-detail-link class="featured-card">
       <div class="featured-card-image">
         ${featured.image
           ? `<img ${tjImageSizeAttrs(featured.image)} loading="lazy" decoding="async" src="${featured.image}" alt="${featured.title}">`
@@ -1067,7 +957,7 @@ function renderMainGrid() {
 
   // Side right
   document.getElementById('side-col').innerHTML = sideItems.map(a => `
-    <a href="/en/articles/${encodeURIComponent(a.id)}.html" onclick="event.preventDefault();location.hash='article/'+this.dataset.aid" data-aid="${a.id}" class="side-card">
+    <a href="${articleDetailHref(a)}" data-article-detail-link class="side-card">
       <div class="side-card-tag"><span class="tag-dot"></span> ${a.category}</div>
       <div class="side-card-title">${a.title}</div>
       <div class="side-card-excerpt">${a.excerpt}</div>
@@ -1086,7 +976,9 @@ function renderCategoryNav() {
   document.querySelectorAll('.cat-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       currentCategory = btn.dataset.cat;
+      currentTag = null;
       feedVisible = 4;
+      syncNewsUrl();
       renderCategoryNav();
       renderFeed();
       bindCursorExpand();
@@ -1116,7 +1008,12 @@ function renderFeed() {
     }
     if (pill) {
       pill.innerHTML = `Filtering by #${currentTag} — ${items.length} ${items.length === 1 ? 'article' : 'articles'} <button class="clear" aria-label="Clear filter">&times;</button>`;
-      pill.querySelector('.clear').addEventListener('click', () => { window.location.hash = ''; });
+      pill.querySelector('.clear').addEventListener('click', () => {
+        currentTag = null;
+        feedVisible = 4;
+        syncNewsUrl();
+        renderFeed();
+      });
     }
   } else if (pill) {
     pill.remove();
@@ -1124,7 +1021,7 @@ function renderFeed() {
   const visible = items.slice(0, feedVisible);
 
   document.getElementById('feed-grid').innerHTML = visible.map(a => `
-    <a href="/en/articles/${encodeURIComponent(a.id)}.html" onclick="event.preventDefault();location.hash='article/'+this.dataset.aid" data-aid="${a.id}" class="feed-card">
+    <a href="${articleDetailHref(a)}" data-article-detail-link class="feed-card">
       <div class="feed-card-image">
         ${a.image
           ? `<img ${tjImageSizeAttrs(a.image)} loading="lazy" decoding="async" src="${a.image}" alt="${a.title}">`
@@ -1144,6 +1041,7 @@ function renderFeed() {
 
   const btn = document.getElementById('load-more-btn');
   btn.style.display = visible.length >= items.length ? 'none' : 'inline-block';
+  bindArticleNavigation();
 }
 
 /* ========== SORT TABS ========== */
@@ -1154,6 +1052,7 @@ document.querySelectorAll('.sort-tab').forEach(tab => {
     tab.classList.add('active');
     renderMainGrid();
     feedVisible = 4;
+    syncNewsUrl();
     renderFeed();
     bindCursorExpand();
   });
@@ -1162,6 +1061,7 @@ document.querySelectorAll('.sort-tab').forEach(tab => {
 /* ========== LOAD MORE ========== */
 document.getElementById('load-more-btn').addEventListener('click', () => {
   feedVisible += 4;
+  syncNewsUrl();
   renderFeed();
   bindCursorExpand();
 });
@@ -1182,312 +1082,16 @@ const revealObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-/* ========== ARTICLE DETAIL ========== */
-/* 記事ごとに CMS で指定したヒーロー比率。未指定なら従来の 16:9。 */
-function heroRatioAttr(r) {
-  const v = String(r || '').trim();
-  if (!v) return '';
-  if (v === 'auto') return ' data-ratio="auto"';
-  if (!/^\d+:\d+$/.test(v)) return '';
-  return ` data-ratio="${v}" style="aspect-ratio:${v.replace(':', '/')}"`;
-}
-/* 本文中の [[festival:id]] / [[artist:id]] / [[venue:id]] を詳細ページへの
-   リンクに変換する。ラベル省略時はデータから名前を引く。 */
-function resolveEntityLinks(html) {
-  return String(html || '').replace(/\[\[(festival|artist|venue|article):([a-z0-9-]+)(?:\|([^\]]+))?\]\]/g, (m, type, id, label) => {
-    const table = { festival: typeof FESTIVALS !== 'undefined' ? FESTIVALS : [],
-                    artist:   typeof ARTISTS   !== 'undefined' ? ARTISTS   : [],
-                    venue:    typeof VENUES    !== 'undefined' ? VENUES    : [],
-                    article:  typeof ARTICLES  !== 'undefined' ? ARTICLES  : [] };
-    const rec = (table[type] || []).find(x => x.id === id);
-    const name = label || (rec && (rec.name || rec.title)) || id;
-    const dir = type === 'article' ? 'articles' : type + 's';
-    return `<a class="entity-link" href="/en/${dir}/${id}.html">${name}</a>`;
-  });
-}
-function renderArticleDetail(id) {
-  const a = ARTICLES.find(x => x.id === id);
-  const detailEl = document.getElementById('article-detail');
-  const listEl = document.getElementById('list-view');
-  const contentEl = document.getElementById('article-content');
-
-  if (!a) {
-    listEl.style.display = '';
-    detailEl.style.display = 'none';
-    return;
-  }
-
-  // ----- AUTO-LINK helpers (inline) -----
-  // Cached lookup table built lazily, then reused across article renders.
-  if (!window.__tjAutoLinkIndex) {
-    const idx = [];
-    if (typeof ARTISTS !== 'undefined') {
-      ARTISTS.forEach(x => x.name && idx.push({ name: x.name, href: 'artists.html#artist/' + x.id, type: 'artist' }));
-    }
-    if (typeof VENUES !== 'undefined') {
-      VENUES.forEach(v => v.name && idx.push({ name: v.name, href: 'venues.html#venue/' + v.id, type: 'venue' }));
-    }
-    if (typeof FESTIVALS !== 'undefined') {
-      FESTIVALS.forEach(f => f.name && idx.push({ name: f.name, href: 'festivals.html#festival/' + f.id, type: 'festival' }));
-    }
-    // Longest-first so multi-word names match before subwords.
-    idx.sort((a, b) => b.name.length - a.name.length);
-    window.__tjAutoLinkIndex = idx;
-  }
-
-  function autoLinkArticleBody(html){
-    if (!html) return '';
-    const idx = window.__tjAutoLinkIndex;
-    if (!idx || !idx.length) return html;
-    const tmp = document.createElement('div');
-    tmp.innerHTML = html;
-    const escapeRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    // Build one combined regex, alternation in length-desc order. Word boundaries for ASCII.
-    const pattern = new RegExp('(' + idx.map(e => escapeRe(e.name)).join('|') + ')', 'gi');
-    const linkBy = new Map(idx.map(e => [e.name.toLowerCase(), e]));
-    const seen = new Set(); // first occurrence per article only
-    function walk(node){
-      if (node.nodeType === 3) { // text
-        const text = node.nodeValue;
-        if (!pattern.test(text)) { pattern.lastIndex = 0; return; }
-        pattern.lastIndex = 0;
-        const frag = document.createDocumentFragment();
-        let lastIdx = 0; let m;
-        while ((m = pattern.exec(text)) !== null) {
-          const start = m.index, matched = m[0];
-          const entry = linkBy.get(matched.toLowerCase());
-          if (!entry || seen.has(entry.href)) continue;
-          if (start > lastIdx) frag.appendChild(document.createTextNode(text.slice(lastIdx, start)));
-          const a = document.createElement('a');
-          a.href = entry.href;
-          a.className = 'autolink autolink-' + entry.type;
-          a.textContent = matched;
-          frag.appendChild(a);
-          seen.add(entry.href);
-          lastIdx = start + matched.length;
-        }
-        if (lastIdx === 0) return;
-        if (lastIdx < text.length) frag.appendChild(document.createTextNode(text.slice(lastIdx)));
-        node.parentNode.replaceChild(frag, node);
-        return;
-      }
-      // Skip existing anchors and code blocks
-      if (node.nodeType === 1 && /^(A|CODE|PRE)$/.test(node.tagName)) return;
-      // Iterate children safely (replace shifts childNodes)
-      Array.from(node.childNodes).forEach(walk);
-    }
-    walk(tmp);
-    tmp.querySelectorAll('img[src]').forEach(img => {
-      const size = tjImageDimensions(img.getAttribute('src'));
-      if (!size) return;
-      img.width = size[0];
-      img.height = size[1];
-    });
-    return tmp.innerHTML;
-  }
-
-  // SEO: update title, meta description, OG / Twitter tags, canonical for this article
-  const articleTitle = `${a.title} — TECHNO JAPAN`;
-  // 正規URLは静的ページ側。ハッシュ版は互換のため残すが canonical は実URLを指す。
-  const articleUrlAbs = `https://techno-japan.media/articles/${encodeURIComponent(a.id)}.html`;
-  const articleImg = a.image
-    ? (a.image.startsWith('http') ? a.image : `https://techno-japan.media/${a.image.replace(/^\//,'')}`)
-    : 'https://techno-japan.media/images/festivals/rainbow-disco-club.webp';
-  const articleDesc = a.excerpt || '';
-
-  document.title = articleTitle;
-  function setMeta(sel, attr, val){
-    const el = document.querySelector(sel);
-    if (el) el.setAttribute(attr, val);
-  }
-  setMeta('meta[name="description"]',     'content', articleDesc);
-  setMeta('meta[property="og:title"]',    'content', articleTitle);
-  setMeta('meta[property="og:description"]','content', articleDesc);
-  setMeta('meta[property="og:image"]',    'content', articleImg);
-  setMeta('meta[property="og:url"]',      'content', articleUrlAbs);
-  setMeta('meta[property="og:type"]',     'content', 'article');
-  setMeta('meta[name="twitter:title"]',   'content', articleTitle);
-  setMeta('meta[name="twitter:description"]','content', articleDesc);
-  setMeta('meta[name="twitter:image"]',   'content', articleImg);
-  setMeta('link[rel="canonical"]',        'href',    articleUrlAbs);
-
-  // Article schema.org JSON-LD — injected/replaced per article render
-  (function injectArticleSchema(){
-    const old = document.getElementById('tj-article-schema');
-    if (old) old.remove();
-    const schema = {
-      '@context': 'https://schema.org',
-      '@type': 'NewsArticle',
-      headline: a.title,
-      description: articleDesc,
-      image: [articleImg],
-      datePublished: a.date,
-      dateModified: a.updated || a.date,
-      author: (function(){ const name = a.author || 'TECHNO JAPAN'; return { '@type': /TECHNO JAPAN/i.test(name) ? 'Organization' : 'Person', name }; })(),
-      publisher: {
-        '@type': 'Organization',
-        name: 'TECHNO JAPAN',
-        url: 'https://techno-japan.media/',
-        logo: { '@type': 'ImageObject', url: 'https://techno-japan.media/images/logo-512.png' }
-      },
-      mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrlAbs },
-      articleSection: a.category || 'NEWS',
-      keywords: (Array.isArray(a.tags) ? a.tags.join(', ') : '') || undefined,
-      url: articleUrlAbs,
-    };
-    const s = document.createElement('script');
-    s.type = 'application/ld+json';
-    s.id = 'tj-article-schema';
-    s.textContent = JSON.stringify(schema);
-    document.head.appendChild(s);
-  })();
-
-  // 共有URLは静的ページ（= canonical と同一）にする。ハッシュ版を共有すると
-  // OGP取得クローラーが SPA 実行前の NEWS 一覧の og を読むため、記事ごとの
-  // タイトル・画像でカードが出ず、被リンクも記事ページに集まらない。
-  const url = articleUrlAbs;
-  const t = encodeURIComponent(`${a.title} — TECHNO JAPAN`);
-  const u = encodeURIComponent(url);
-
-  const tagsHtml = (a.tags || []).map(t =>
-    `<a href="#tag/${encodeURIComponent(t)}" class="article-tag">#${t}</a>`).join('');
-
-  const heroBlock = a.image
-    ? `<header class="article-hero"${heroRatioAttr(a.heroRatio)}>
-        <img ${tjImageSizeAttrs(a.image)} src="${a.image}" alt="${a.title}" fetchpriority="high" decoding="async">
-        <div class="article-hero-overlay">
-          <div class="article-chips"><span class="cat-pill">${a.category}</span></div>
-          <h1>${a.title}</h1>
-        </div>
-      </header>`
-    : `<div class="article-meta-top"><span class="cat-pill">${a.category}</span></div><h1>${a.title}</h1>`;
-
-  contentEl.innerHTML = `
-    ${heroBlock}
-    <dl class="article-specs">
-      <div><dt>WORDS BY</dt><dd>${a.author || 'TECHNO JAPAN'}</dd></div>
-      <div><dt>PUBLISHED</dt><dd>${formatDate(a.date) || '—'}</dd></div>
-      <div><dt>READING TIME</dt><dd>${a.readTime || 5} MIN</dd></div>
-    </dl>
-    <div class="article-excerpt">${a.excerpt || ''}</div>
-    <div class="article-body">${autoLinkArticleBody(resolveEntityLinks(a.body || ''))}</div>
-    <div class="article-footer">
-      ${tagsHtml ? `<div class="article-tags">${tagsHtml}</div>` : ''}
-      <div class="article-share">
-        <span class="article-share-label">SHARE</span>
-        <a href="https://twitter.com/intent/tweet?text=${t}&url=${u}" target="_blank" rel="noopener" class="article-share-btn" title="X">
-          <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-        </a>
-        <a href="https://www.facebook.com/sharer/sharer.php?u=${u}" target="_blank" rel="noopener" class="article-share-btn" title="Facebook">
-          <svg viewBox="0 0 24 24"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647z"/></svg>
-        </a>
-        <a href="https://social-plugins.line.me/lineit/share?url=${u}" target="_blank" rel="noopener" class="article-share-btn" title="LINE">
-          <svg viewBox="0 0 24 24"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zM24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
-        </a>
-        <button type="button" class="article-share-btn" data-copy="${url}" title="Copy URL" onclick="navigator.clipboard.writeText(this.dataset.copy);this.style.background='rgba(255,255,255,0.1)';setTimeout(()=>this.style.background='',1000)">
-          <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-        </button>
-      </div>
-    </div>
-  `;
-
-  listEl.style.display = 'none';
-  detailEl.style.display = 'block';
-  window.scrollTo(0, 0);
-  bindCursorExpand();
-  // ARTICLE FX（figure化・ワイプ・パララックス・プログレスバー）を適用。
-  // fx側が自前のプログレスバーを持つので、旧readProgressは重複させない。
-  if (window.articleFX) { window.articleFX(); setReadProgressActive(false); }
-  else setReadProgressActive(true);
-}
-
-/* ========== READING PROGRESS (article view only) ========== */
-const rpBar = document.getElementById('read-progress');
-const rpFill = document.getElementById('read-progress-fill');
-let rpActive = false;
-let rpTicking = false;
-function setReadProgressActive(on) {
-  rpActive = on;
-  if (rpBar) rpBar.classList.toggle('active', on);
-  if (on) updateReadProgress();
-}
-function updateReadProgress() {
-  if (!rpFill) return;
-  const max = document.documentElement.scrollHeight - window.innerHeight;
-  const p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
-  rpFill.style.transform = `scaleX(${p})`;
-}
-window.addEventListener('scroll', () => {
-  if (!rpActive || rpTicking) return;
-  rpTicking = true;
-  requestAnimationFrame(() => { updateReadProgress(); rpTicking = false; });
-}, { passive: true });
-
-function showList() {
-  document.getElementById('list-view').style.display = '';
-  document.getElementById('article-detail').style.display = 'none';
-  document.title = 'NEWS — TECHNO JAPAN';
-  if (typeof setReadProgressActive === 'function') setReadProgressActive(false);
-  if (window.articleFX) window.articleFX.teardown();  // 記事ビューのFX（プログレスバー等）を撤去
-  // Reset SEO meta to news index defaults
-  const def = {
-    title: 'NEWS — TECHNO JAPAN',
-    desc: "日本のアンダーグラウンドシーンのニュース、インタビュー、レポート。Stories, interviews and reports from Japan's underground scene.",
-    img:  'https://techno-japan.media/images/festivals/rainbow-disco-club.webp',
-    url:  'https://techno-japan.media/news.html',
-  };
-  function set(sel, attr, val){ const el = document.querySelector(sel); if (el) el.setAttribute(attr, val); }
-  set('meta[name="description"]',          'content', def.desc);
-  set('meta[property="og:title"]',         'content', def.title);
-  set('meta[property="og:description"]',   'content', def.desc);
-  set('meta[property="og:image"]',         'content', def.img);
-  set('meta[property="og:url"]',           'content', def.url);
-  set('meta[property="og:type"]',          'content', 'website');
-  set('meta[name="twitter:title"]',        'content', def.title);
-  set('meta[name="twitter:description"]',  'content', def.desc);
-  set('meta[name="twitter:image"]',        'content', def.img);
-  set('link[rel="canonical"]',             'href',    def.url);
-  const oldSchema = document.getElementById('tj-article-schema');
-  if (oldSchema) oldSchema.remove();
-}
-
-function handleHash() {
-  const hash = window.location.hash;
-  if (hash.startsWith('#article/')) {
-    const id = hash.replace('#article/', '');
-    currentTag = null;
-    renderArticleDetail(id);
-  } else if (hash.startsWith('#tag/')) {
-    const tag = decodeURIComponent(hash.replace('#tag/', ''));
-    currentTag = tag;
-    currentCategory = 'ALL';
-    showList();
-    renderMainGrid();
-    renderCategoryNav();
-    feedVisible = 8;
-    renderFeed();
-    bindCursorExpand();
-    // Scroll archive section into view
-    const archive = document.getElementById('archive-section');
-    if (archive) archive.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  } else {
-    if (currentTag !== null) {
-      currentTag = null;
-      feedVisible = 4;
-      renderFeed();
-    }
-    showList();
-  }
-}
-
-window.addEventListener('hashchange', handleHash);
-
 /* ========== INIT ========== */
-renderMainGrid();
-renderCategoryNav();
-renderFeed();
-bindCursorExpand();
-handleHash();
+if (readNewsStateFromUrl()) {
+  document.querySelectorAll('.sort-tab').forEach((tab) => tab.classList.toggle('active', tab.dataset.sort === currentSort));
+  renderMainGrid();
+  renderCategoryNav();
+  renderFeed();
+  bindArticleNavigation();
+  bindCursorExpand();
+  addEventListener('pageshow', restoreNewsHubScroll);
+}
 </script>
 <!-- Service Worker registration -->
 <script>
@@ -1497,7 +1101,6 @@ handleHash();
     });
   }
 </script>
-<script src="/article-fx.js?v=2" defer></script>
 <script src="/favorites.js?v=1" defer></script>
 <script src="/search.js?v=1" defer></script>
 </body>
