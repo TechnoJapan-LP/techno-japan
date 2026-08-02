@@ -6,6 +6,20 @@
 - スプレッドシート「LP」が唯一のデータソース。コードにデータをハードコードしない。
 - ID・GENRE・STATUS等の規約に反するデータを見つけたら、勝手に直さず報告する。
 
+## 文章を書くとき
+
+- **DESC / DESC_EN / BIO / bio_en / 記事本文を書くときは
+  [docs/writing/](docs/writing/) のガイドに従う。**
+  - [Techno_Japan_Web_Style_Guide.md](docs/writing/Techno_Japan_Web_Style_Guide.md)
+    サイト掲載文の文体・編集ルール。データベース項目の要件は §10
+  - [Japanese_Writing_Guidelines.md](docs/writing/Japanese_Writing_Guidelines.md)
+    日本語の文体・表記
+  - [Instagram_Post_Templates.md](docs/writing/Instagram_Post_Templates.md)
+    SNS 投稿の型
+- **事実主義が最優先。** ソースに無い情報を推測で補わない。
+  調査で埋めた値は `data/inbox/<id>.json` に出典と確度が残っているので、
+  文章を書く前にそれを確認する（`confidence: low` の値を断定的に書かない）。
+
 ## 詳細ページと SPA（設計方針）
 
 - **詳細ページは静的生成のみ。** `LP/festivals/` `LP/artists/` `LP/venues/` `LP/articles/`
