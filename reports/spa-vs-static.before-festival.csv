@@ -1,0 +1,88 @@
+section,id,name,missing_in_spa,extra_in_spa,spa_rendered,static_exists,artist_links_spa,artist_links_static,editions_spa,editions_static,faq_qa_spa,faq_qa_static,instagram_spa,instagram_static,lineup_spa,lineup_static,official_link_spa,official_link_static,past_lineup_spa,past_lineup_static,related_spa,related_static,summary_spa,summary_static
+festival,snow-machine-japan,Snow Machine Japan,5,0,True,True,0,0,0,1,0,2,0,1,0,0,1,1,0,0,0,0,0,1
+festival,waifu,WAIFU,10,1,True,True,7,6,0,1,0,3,0,1,7,7,1,1,0,0,0,4,0,1
+festival,arch,ARCH,11,1,True,True,15,14,0,1,0,3,0,1,15,15,0,0,0,0,0,5,0,1
+festival,rainbow-disco-club,Rainbow Disco Club,12,5,True,True,19,14,0,1,0,3,0,1,19,19,1,1,0,0,0,6,0,1
+festival,ala,ALA,11,3,True,True,12,10,0,1,0,4,0,1,12,12,2,1,0,0,0,4,0,1
+festival,osukinidouzo,Osukinidouzo,5,0,True,True,0,0,0,1,0,2,0,1,0,0,0,0,0,0,0,0,0,1
+festival,transcendence,Transcendence,11,10,True,True,12,2,0,1,0,3,0,1,12,12,1,1,0,0,0,5,0,1
+festival,99flags,99flags,13,13,True,True,13,1,0,1,0,4,0,1,13,13,2,1,0,0,0,6,0,1
+festival,the-star-festival,THE STAR FESTIVAL,10,16,True,True,15,0,0,1,0,4,0,1,15,15,2,1,0,0,0,3,0,1
+festival,paramount,PARAMOUNT,14,8,True,True,9,2,0,1,0,4,1,4,9,9,2,1,0,0,0,5,0,1
+festival,letus-music-camp,Letus Music Camp,8,1,True,True,0,0,0,1,0,3,0,1,0,0,1,0,0,0,0,2,0,1
+festival,matricaria,MATRICARIA,8,3,True,True,21,19,0,1,0,4,0,1,21,21,2,1,0,0,0,1,0,1
+festival,link-open-air,Link Open Air,5,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,1,0,1
+festival,japonism,JAPONISM,4,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,0,0,1
+festival,goj-ichi-festival,Gojū-Ichi Festival,10,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,6,0,1
+festival,festival-fruezinho,FESTIVAL FRUEZINHO,10,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,6,0,1
+festival,dots,Dots,8,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,4,0,1
+festival,samsara,SAMSARA,9,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,5,0,1
+festival,halola-camp,HALOLA CAMP,8,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,4,0,1
+festival,moment,Moment,4,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,0,0,1
+festival,rural,Rural,4,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,0,0,1
+festival,fulirock,FuliRock,5,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,1,0,1
+festival,sonic-mania,Sonic Mania,8,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,4,0,1
+festival,one-park-festival,ONE PARK FESTIVAL,5,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,1,0,1
+festival,re-birth-festival,Re:birth Festival,10,0,True,True,0,0,0,1,0,2,0,1,0,0,1,1,0,0,0,5,0,1
+festival,ultra-japan,Ultra Japan,10,0,False,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,6,0,1
+festival,otsukimi,御月民 -OTSUKIMI-,9,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,5,0,1
+festival,synapse-festival,Synapse Festival,4,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,0,0,1
+festival,yagura,YAGURA,5,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,1,0,1
+festival,labyrinth,Labyrinth,9,0,False,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,5,0,1
+festival,wonderfruit-kyoto,Wonderfruit Kyoto,7,0,False,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,3,0,1
+festival,festival-de-frue,FESTIVAL de FRUE,13,1,True,True,7,7,0,1,0,4,0,1,7,7,2,1,0,0,0,6,0,1
+festival,unknown,Unknown,10,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,6,0,1
+festival,wormhole,wormhole,4,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,0,0,1
+festival,dom,DOM24,10,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,6,0,1
+festival,parallel-world,PARALLEL WORLD,3,0,True,True,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,1
+festival,bonna-pot,Bonna Pot,10,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,6,0,1
+festival,lab,LAB.vol.6,10,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,6,0,1
+festival,axiom,axiom,10,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,6,0,1
+festival,balance,Balance,9,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,5,0,1
+festival,intergalactic,Intergalactic Festival,8,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,4,0,1
+festival,body-soul,Body&SOUL Live in Japan,10,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,6,0,1
+festival,signal,Signal,10,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,6,0,1
+festival,euphoria,Euphoria,10,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,6,0,1
+festival,orbit,ORBIT,5,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,1,0,1
+festival,yamauto,YAMAUTO,4,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,0,0,1
+festival,specialflower-festival,SPECIALFLOWER FESTIVAL,5,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,1,0,1
+festival,loa-lost-paradise,LOA-LOST PARADISE-,5,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,1,0,1
+festival,sawagi-festival,Sawagi Festival,10,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,6,0,1
+festival,one-music-camp,ONE MUSIC CAMP,6,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,2,0,1
+festival,global-ark,Global Ark,9,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,5,0,1
+festival,kyoumei-gathering,KYOUMEI GatherinG,8,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,4,0,1
+festival,bondisco,BonDisco,7,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,3,0,1
+festival,pure-rave,PURE RAVE,4,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,0,0,1
+festival,big-fun,BIG FUN,8,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,4,0,1
+festival,okiraku-camp,OKIRAKU CAMP,4,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,0,0,1
+festival,gampeki,GAMPEKI,4,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,0,0,1
+festival,sangenjaya-music-festival,SANGENJAYA MUSIC FESTIVAL,10,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,6,0,1
+festival,colors-presents-soundcamp,COLORS Presents SOUNDCAMP,8,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,4,0,1
+festival,festival40010,Festival40010,5,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,1,0,1
+festival,ffkt,FFKT,10,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,6,0,1
+festival,music-camp-core,Music Camp CORE,5,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,1,0,1
+festival,circus,CIRCUS,10,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,6,0,1
+festival,each-story,EACH STORY,9,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,5,0,1
+festival,rare-groove,Rare Groove,10,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,6,0,1
+festival,delta-commit,DELTA COMMIT,10,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,6,0,1
+festival,music,＋music,10,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,6,0,1
+festival,ishinoko,ishinoko,4,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,0,0,1
+festival,treks,TREKs,7,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,3,0,1
+festival,circle,Circle,9,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,5,0,1
+festival,one-park-riverfes,ONE PARK RIVERFES,5,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,1,0,1
+festival,lost-find,Lost&Find,10,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,6,0,1
+festival,asagiri-jam,ASAGIRI JAM,10,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,6,0,1
+festival,dream-festival,DREAM FESTIVAL,10,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,6,0,1
+festival,annahme,annahme,5,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,1,0,1
+festival,brightness,Brightness,4,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,0,0,1
+festival,capsule,CAPSULE-山中湖花火音楽祭,10,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,6,0,1
+festival,midnight-cult-rave,MIDNIGHT CULT RAVE,10,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,6,0,1
+festival,mirrorball-village,Mirrorball Village,4,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,0,0,1
+festival,grow-the-culture-open-air,GROW THE CULTURE OPEN AIR,11,0,True,True,0,0,0,1,0,2,0,1,0,0,1,1,0,0,0,6,0,1
+festival,iyasaka-rave-festival,IYASAKA RAVE FESTIVAL,5,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,1,0,1
+festival,topia,Topia,8,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,4,0,1
+festival,mutek,Mutek,10,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,6,0,1
+festival,odyssey,Odyssey,4,0,False,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,0,0,1
+festival,takarajima-beach-cleaning-party,TAKARAJIMA-Beach Cleaning Party-,5,0,True,True,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,1,0,1
+festival,technogaoka,Technogaoka,7,0,False,True,0,0,0,1,0,2,0,1,0,0,0,0,0,0,0,2,0,1
+festival,hacha-mecha,HACHA MECHA,7,27,True,True,13,0,0,0,0,0,0,1,13,0,2,1,0,0,0,5,0,1

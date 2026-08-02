@@ -8,6 +8,14 @@
 
 ## SEO の担当範囲（設計方針）
 
+> ⚠ **この節は SPA 詳細ビューの廃止に伴い見直しが必要。**
+> 前提だった「SEO は静的ページが担うので SPA 側は UI 専用でよい」は、
+> カードが `preventDefault()` で SPA へ遷移するため
+> **静的詳細ページが人間のユーザーに届いていない**ことが判明し、崩れた。
+> SPA 廃止が完了したら、この節は「詳細は静的ページに一本化」に置き換える。
+> 経緯と実測は [AUDIT_TECHNO_JAPAN.md](AUDIT_TECHNO_JAPAN.md) §9-20 /
+> `reports/spa-vs-static.md`。
+
 - **SEO は静的ページ（`LP/articles/` `LP/festivals/` `LP/artists/` `LP/venues/`）が担う。
   SPA の詳細ビューは UI の利便性のためのもの。**
 - **SPA 側に SEO 実装（JSON-LD 注入・meta 書き換え・canonical 更新）を新たに足さない。**

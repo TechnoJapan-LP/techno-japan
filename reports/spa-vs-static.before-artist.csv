@@ -1,0 +1,101 @@
+section,id,name,missing_in_spa,extra_in_spa,spa_rendered,static_exists,appearances_spa,appearances_static,bandcamp_spa,bandcamp_static,bio_spa,bio_static,instagram_spa,instagram_static,soundcloud_spa,soundcloud_static
+artist,dj-nobu,DJ Nobu,1,0,True,True,0,1,1,1,1,1,1,1,1,1
+artist,wata-igarashi,WATA IGARASHI,0,0,True,True,0,0,1,1,1,1,1,1,1,1
+artist,kotsu,KOTSU,0,0,True,True,0,0,0,0,1,1,1,1,1,1
+artist,ken-ishii,KEN ISHII,0,0,True,True,0,0,1,1,1,1,1,1,1,1
+artist,dj-miku,Dj Miku,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,dj-kensei,Dj Kensei,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,dj-yogurt,Dj Yogurt,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,hidai,Hidai,2,1,True,True,0,2,0,0,1,0,0,0,0,0
+artist,taichi-kawahira,Taichi Kawahira,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,tsutomu,Tsutomu,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,qmico,Qmico,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,ga-su,Ga Su,0,1,True,True,0,0,0,0,1,0,0,0,0,0
+artist,freecinn,Freecinn,0,1,True,True,0,0,0,0,1,0,0,0,0,0
+artist,nutmeg,Nutmeg,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,snipe1,Snipe1,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,liarako,Liarako,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,akey,Akey,0,1,True,True,0,0,0,0,1,0,0,0,0,0
+artist,ayumu,Ayumu,0,1,True,True,0,0,0,0,1,0,0,0,0,0
+artist,captain-k,Captain K,0,1,True,True,0,0,0,0,1,0,0,0,0,0
+artist,lowki,Lowki,0,1,True,True,0,0,0,0,1,0,0,0,0,0
+artist,masa-aka-kyounote,Masa Aka Kyounote,0,1,True,True,0,0,0,0,1,0,0,0,0,0
+artist,menou-iwamaki,Menou Iwamaki,0,1,True,True,0,0,0,0,1,0,0,0,0,0
+artist,mimu,Mimu,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,naotsun,Naotsun,0,1,True,True,0,0,0,0,1,0,0,0,0,0
+artist,norid,Norid,0,1,True,True,0,0,0,0,1,0,0,0,0,0
+artist,sakuma,Sakuma,0,1,True,True,0,0,0,0,1,0,0,0,0,0
+artist,seco,Seco,0,1,True,True,0,0,0,0,1,0,0,0,0,0
+artist,shimoyan,Shimoyan,0,1,True,True,0,0,0,0,1,0,0,0,0,0
+artist,tada,Tada,0,1,True,True,0,0,0,0,1,0,0,0,0,0
+artist,yazzus,Yazzus,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,cosmic-caz,Cosmic Caz,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,janus-rose,Janus Rose,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,mayudepth,Mayudepth,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,akii,Akii,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,mio,Mio,0,1,True,True,0,0,0,0,1,0,0,0,0,0
+artist,aliceyuki,Aliceyuki,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,akaaki-ito,Akaaki Ito,0,1,True,True,0,0,0,0,1,0,0,0,0,0
+artist,choko,Choko,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,akihiro-suzuki,Akihiro Suzuki,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,endorphin,Endorphin,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,kevin-miyagi,Kevin Miyagi,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,psychogem,Psychogem,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,sho,Sho,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,takehiro-imaizumi,Takehiro Imaizumi,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,tazzy,Tazzy,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,tko,Tko,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,tmak,Tmak,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,yeark,Yeark,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,yuripon,Yuripon,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,ao,青,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,198,198,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,antal,Antal,0,1,True,True,0,0,0,0,1,0,0,0,0,0
+artist,hunee,Hunee,0,1,True,True,0,0,0,0,1,0,0,0,0,0
+artist,ben-ufo,Ben Ufo,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,daphni,Daphni,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,dj-maria,Dj Maria.,2,1,True,True,0,2,0,0,1,0,0,0,0,0
+artist,dungeoneering,Dungeoneering,0,1,True,True,0,0,0,0,1,0,0,0,0,0
+artist,feline,Feline,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,floating-points,Floating Points,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,gerd-janson,Gerd Janson,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,gonno,Gonno,2,1,True,True,0,2,0,0,1,0,0,0,0,0
+artist,haai,Haai,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,helena-hauff,Helena Hauff,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,jonathan-kusuma,Jonathan Kusuma,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,jonny-rock,Jonny Rock,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,kikiorix,Kikiorix,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,mala,Mala,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,nc4k,Nc4k(Stones Taro b2b Lomax),0,1,True,True,0,0,0,0,1,0,0,0,0,0
+artist,sisi,Sisi,0,1,True,True,0,0,0,0,1,0,0,0,0,0
+artist,ouissam,Ouissam,0,1,True,True,0,0,0,0,1,0,0,0,0,0
+artist,yamarchy,Yamarchy,0,1,True,True,0,0,0,0,1,0,0,0,0,0
+artist,suze-ij,Suze Ij,0,1,True,True,0,0,0,0,1,0,0,0,0,0
+artist,four-tet,Four Tet,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,ojisan,Ojisan,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,noritake,Noritake,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,eric-cloutier,Eric Cloutier,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,caimann,Caimann,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,fuji,FUJI,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,prins-thomas,Prins Thomas,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,rami,RAMI,2,1,True,True,0,2,0,0,1,0,0,0,0,0
+artist,pianeti-sintetici,Pianeti Sintetici,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,ground,Ground,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,akie,Akie,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,adhemar,AdhéMar,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,allen-mock,Allen Mock,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,doltz,Doltz,0,1,True,True,0,0,0,0,1,0,0,0,0,0
+artist,joma,Joma,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,suguru-mochizuki,Suguru Mochizuki,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,yukimasa,YUKIMASA,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,tonbo,Tonbo,0,1,True,True,0,0,0,0,1,0,0,0,0,0
+artist,sunga,SUNGA,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,dj-yazi,DJ Yazi,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,iron,Iron,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,kiko-dinucci,Kiko Dinucci,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,the-master-musicians-of-joujouka,The Master Musicians Of Joujouka,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,kuo-from-sunset-rollercoaster,Kuo From Sunset Rollercoaster,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,sylvan-esso,Sylvan Esso,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,acid-pauli,Acid Pauli,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,alabaster-deplume,Alabaster DePlume,1,1,True,True,0,1,0,0,1,0,0,0,0,0
+artist,juana-molina,Juana Molina,1,1,True,True,0,1,0,0,1,0,0,0,0,0
