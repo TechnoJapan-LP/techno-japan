@@ -4137,10 +4137,46 @@ function submitQuickAdd(section, keepOpen){
   }
 }
 
-function autoRegisterArtists(artistIds){
+/**
+ * 名前から ID を作る。matchArtist の slug 化と同じ規則。
+ * 非 ASCII が落ちる場合は null を返し、自動登録の対象から外す。
+ * ID 化で消えると原形に戻せないため、人にローマ字表記を決めてもらう
+ * （research_festival.mjs の slugify と同じ判断）。
+ */
+function artistIdFromName(name){
+  const n = String(name||'').trim();
+  if(!n) return null;
+  if(/[^\x00-\x7f]/.test(n)) return null;
+  const id = n.toLowerCase().replace(/[\s_]+/g,'-').replace(/[^a-z0-9-]/g,'')
+              .replace(/-+/g,'-').replace(/^-+|-+$/g,'');
+  return /^[a-z0-9]+(-[a-z0-9]+)*$/.test(id) ? id : null;
+}
+
+/**
+ * LINEUP に書かれた未登録アーティストを一括登録する。
+ *
+ * 引数は「?タグから ? を外した元の表記」。以前はこれを ID とみなし、
+ * ID から名前を機械的に復元していた:
+ *     id.replace(/-/g,' ').replace(/\b\w/g, c => c.toUpperCase())
+ * このため公式表記が失われた（TKO→Tko / HAAi→Haai / Ben UFO→Ben Ufo /
+ * of→Of / Adhémar→Adh Mar）。ARTISTS 100件中30件がこの被害を受けている。
+ * 詳細は AUDIT_TECHNO_JAPAN.md §9-25。
+ *
+ * 元の表記をそのまま NAME に使い、ID は名前から生成する。
+ */
+function autoRegisterArtists(names){
+  const targets=[], skipped=[];
+  names.forEach(n=>{
+    const id=artistIdFromName(n);
+    if(id) targets.push({id, name:String(n).trim()}); else skipped.push(n);
+  });
+  if(skipped.length){
+    toast('ID を自動生成できないため未登録: '+skipped.join(' / ')
+      +'（ローマ字表記を決めて手動で追加してください）','error');
+  }
+  if(!targets.length) return;
   let done=0;
-  artistIds.forEach(id=>{
-    const name=id.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+  targets.forEach(({id,name})=>{
     fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'add_artist',id:id,name:name})})
       .then(r=>r.json()).then(r=>{
         done++;
@@ -4148,7 +4184,7 @@ function autoRegisterArtists(artistIds){
           ARTIST_DB.push({id:id,name:name});
           ARTIST_LIST.push(id);
         }
-        if(done===artistIds.length){
+        if(done===targets.length){
           toast(done+' artists auto-registered','success');
           // ?プレフィックスを除去してタグを更新
           lineups.f=lineups.f.map(a=>a.startsWith('?')?a.substring(1):a);
