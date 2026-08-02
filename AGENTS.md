@@ -6,26 +6,47 @@
 - スプレッドシート「LP」が唯一のデータソース。コードにデータをハードコードしない。
 - ID・GENRE・STATUS等の規約に反するデータを見つけたら、勝手に直さず報告する。
 
-## SEO の担当範囲（設計方針）
+## 詳細ページと SPA（設計方針）
 
-> ⚠ **この節は SPA 詳細ビューの廃止に伴い見直しが必要。**
-> 前提だった「SEO は静的ページが担うので SPA 側は UI 専用でよい」は、
-> カードが `preventDefault()` で SPA へ遷移するため
-> **静的詳細ページが人間のユーザーに届いていない**ことが判明し、崩れた。
-> SPA 廃止が完了したら、この節は「詳細は静的ページに一本化」に置き換える。
-> 経緯と実測は [AUDIT_TECHNO_JAPAN.md](AUDIT_TECHNO_JAPAN.md) §9-20 /
-> `reports/spa-vs-static.md`。
+- **詳細ページは静的生成のみ。** `LP/festivals/` `LP/artists/` `LP/venues/` `LP/articles/`
+  を `build-detail-pages.mjs` が生成する。SEO も UI も、詳細はここが唯一の実体。
+- **ハブページ（`festivals.html` 等）は一覧・検索・フィルタだけを担う。**
+  詳細ビューは持たない。2026-08-02 に全4セクションで廃止した。
+- **ハブから詳細への遷移は通常の `<a href="/festivals/xxx.html">`。**
+  `preventDefault()` で横取りしない。クリックに処理を挟む場合（スクロール位置の保存等）も
+  遷移そのものは止めないこと。回帰ガード:
+  `python3 scripts/audit_spa_vs_static.py --after`
 
-- **SEO は静的ページ（`LP/articles/` `LP/festivals/` `LP/artists/` `LP/venues/`）が担う。
-  SPA の詳細ビューは UI の利便性のためのもの。**
-- **SPA 側に SEO 実装（JSON-LD 注入・meta 書き換え・canonical 更新）を新たに足さない。**
-  JS を実行するクローラーは canonical が指す静的ページも読めるため、二重に持つ意味が薄い。
-  二重実装は「片方だけ対応済み」の事故を生む。
-- `news.html` だけが meta / canonical / JSON-LD の動的注入を持つのは**歴史的経緯**。
-  ハッシュURLしか無かった時代の名残で、あるべき姿ではない。動いているので残しているだけ。
-  **これを見本に他セクションへ横展開しないこと。**
-- `festivals.html` 等の詳細ビューに canonical や JSON-LD が無いのは**意図した設計**であり、
-  実装漏れではない。詳細は [AUDIT_TECHNO_JAPAN.md](AUDIT_TECHNO_JAPAN.md) §9-15。
+### SPA 詳細ビューを再導入しないこと
+
+「一覧ページで詳細も見せた方が速い」という発想は自然に出てくるが、**やらない。**
+
+2026-08-01 に「SEO は静的ページが担うので SPA 側は UI 専用でよい」と判断したが、
+これは誤りだった。カードが `preventDefault()` で SPA へ遷移するため、
+**JS 有効の通常ユーザーは静的詳細ページに一度も到達していなかった。**
+静的側にだけ実装した FAQ・開催ヒストリー・要約文・回遊ブロックなど
+**878件の内容がクローラーにしか届いていなかった**（実測 / `reports/spa-vs-static.md`）。
+
+同じ内容を2箇所に持つと、必ず片方だけ古くなる。実際に起きたこと:
+
+- `artists.html` の SPA 詳細が `${a.bio}` をガード無しで埋め、96件で
+  画面に文字列 `undefined` を表示していた
+- `festivals.html:1463` の `f.genre.map` が GENRE 未設定の5件で落ち、
+  詳細が白紙になっていた
+- 回遊ブロック420本（festival 300 / venue 120）が SPA 側に無く、
+  **「詳細 → 詳細」の導線が切れていた**
+
+経緯と実測は [AUDIT_TECHNO_JAPAN.md](AUDIT_TECHNO_JAPAN.md) §9-20（判断の誤り）/
+§9-23（廃止完了）。
+
+### meta / canonical / JSON-LD
+
+- ハブは**静的な** canonical と JSON-LD を持つ（一覧ページとしてのもの）。
+  4ハブとも同一構造で、JS による書き換えは無い。
+- **JS で meta / canonical / JSON-LD を書き換えないこと。** 詳細の URL は
+  静的ページなので、動的注入の必要が無い。
+- かつて `news.html` だけが動的注入を持っていたが、SPA 詳細の廃止（`38e0325`）で
+  一緒に消えた。**現在は4ハブとも特別扱いは無い。**
 
 ## HTML を正規表現で扱うときの注意
 
