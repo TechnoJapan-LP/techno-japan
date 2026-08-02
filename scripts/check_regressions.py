@@ -134,7 +134,10 @@ def measure():
         body = body_without_scripts(html)
         if re.search(r'class="(?:[^"]*\s)?festival-faq(?=[\s"])', body):
             faq_section_pages += 1
-        if re.search(r'class="(?:[^"]*\s)?festival-summary(?=[\s"])', body):
+        # 旧デザインは自動要約、V2は編集済みDESCをヒーローへ置く。
+        # どちらでも「冒頭に可視の説明がある」ことを同じラチェットで守る。
+        if (has_class(body, "festival-summary")
+                or has_class(body, "festival-description-inline")):
             summary_pages += 1
         if has_class(body, "festival-official-link"):
             official_link_pages += 1
@@ -214,6 +217,26 @@ def measure():
                 missing.add(ref)
     m["broken_image_refs"] = len(missing)
     m["_broken_image_list"] = sorted(missing)
+
+    # LINEUP の未解決アクト。fetch-data.mjs:225 が ARTISTS.NAME と突合し、
+    # 解決できなかった行は ARTIST_ID が空のまま ACT_LABEL だけ残る。
+    # 生成物では <a> ではなく <span> になりアーティスト詳細へリンクされない。
+    # ビルドは止まらず警告が出るだけなので、放置すると静かに増える（AUDIT §9-25）。
+    #
+    # b2b / live は設計上あえて分解せずラベルのままなので除外し、
+    # 「本来リンクされるべきなのにされていない」dj だけを数える。
+    lineups_path = LP / "data" / "lineups.json"
+    unresolved = 0
+    if lineups_path.exists():
+        doc = json.loads(read(lineups_path))
+        rows = doc.get("items", doc) if isinstance(doc, dict) else doc
+        unresolved = sum(
+            1 for r in rows
+            if isinstance(r, dict)
+            and r.get("SET_TYPE") == "dj"
+            and not str(r.get("ARTIST_ID") or "").strip()
+        )
+    m["lineup_unresolved_acts"] = unresolved
 
     # ID 規約違反。詳細ページのファイル名 = ID なので、そこから判定する。
     # data.js は CMS の Publish Now が生成し fetch-data.mjs の検証を通らないため、

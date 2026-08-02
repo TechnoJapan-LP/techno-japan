@@ -227,6 +227,22 @@ metrics:
       監査 B4 で 8件 → 0件に解消済み。<img> だけでなく og:image /
       twitter:image / JSON-LD image も対象。
 
+  lineup_unresolved_acts:
+    description: >-
+      LINEUP のアクトのうち ARTISTS と照合できずリンクが張られない件数（dj のみ）
+    min: 0
+    max: 51                   # 増加方向が回帰。減らす方向にしか動かさない
+    target: 0
+    note: >-
+      fetch-data.mjs:225 が FESTIVALS.LINEUP を ARTISTS.NAME と突合する。
+      解決できないと ARTIST_ID が空になり、生成物で <a> ではなく <span> になって
+      アーティスト詳細へリンクされない。ビルドは止まらず警告のみなので静かに増える。
+      2026-08-02 時点で 130行中 55件がリンクなし。うち b2b/live 4件は設計上
+      ラベルのままでよいので除外し、dj の 51件を上限とした。
+      主因は ARTISTS 未登録の46名（data/inbox/export/unregistered-artists.csv）。
+      アーティストを登録すれば自動で解決するので、max を下げていくラチェットとして使う。
+      詳細は AUDIT_TECHNO_JAPAN.md §9-25。
+
   artist_id_violations:
     description: DATA_SCHEMA §1.1 の slug 規約に反するアーティストIDの件数
     min: 0
