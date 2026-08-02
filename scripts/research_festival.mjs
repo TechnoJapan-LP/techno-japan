@@ -173,6 +173,18 @@ function skeleton(name, id, inbox = {}) {
       + '。未検証なので公式情報と突き合わせること';
   }
   if (!id) fields.id.reason = 'ASCII 以外の文字を含むため、ローマ字表記を人が決める必要がある';
+  // INBOX の URL/INSTAGRAM 列。DATE と同じく未検証の申告値なので value には
+  // 入れず inboxValue に置く。ただし調査の出発点として必ず使うこと
+  // （実際にこの列を見落とし、instagram を3件取り逃した）。
+  const rawLink = inbox['URL/INSTAGRAM'] ?? inbox.URL ?? inbox.INSTAGRAM ?? '';
+  for (const u of String(rawLink).split(/[\s,]+/).filter(Boolean)) {
+    const k = /instagram\.com/i.test(u) ? 'instagram' : 'url';
+    if (!fields[k].inboxValue) {
+      fields[k].inboxValue = u;
+      fields[k].note = `INBOX の申告: ${u}。未検証。調査の出発点に使うこと`;
+    }
+  }
+
   return {
     _schema: 'festival-research/2',
     _createdAt: nowJst(),
@@ -319,6 +331,18 @@ function inJapan(hit) {
 }
 
 /**
+ * 住所と Nominatim の結果で都道府県が食い違っていないか。
+ * 県境の施設は隣県として登録されていることがある（実測: 桂湖オートキャンプ場は
+ * 住所が富山県南砺市だが OSM は岐阜県白川村として返す）。
+ * 座標自体は妥当なことが多いので弾かずに注意書きを残す。
+ */
+function prefMismatch(addr, displayName) {
+  const pick = (t) => t.match(/(東京都|北海道|(?:京都|大阪)府|[^\s,]{2,3}県)/)?.[1] ?? null;
+  const a = pick(String(addr || '')), b = pick(String(displayName || ''));
+  return a && b && a !== b ? `${a} / ${b}` : null;
+}
+
+/**
  * 住所を段階的に短くした候補を作る。番地まで載っていない地物が多く、
  * フルの住所では当たらないことがある（実測: 群馬県利根郡みなかみ町藤原915-1 は外れ、
  * みなかみ町藤原 は当たる）。短くするほど粗くなるので confidence を下げる。
@@ -388,6 +412,14 @@ async function cmdGeocode(args) {
         f[k].checkedAt = nowJst();
         f[k].note = `query: ${used} → ${hit.display_name}`;
       }
+      const mism = prefMismatch(f.address?.value, hit.display_name);
+      if (mism) {
+        for (const k of ['lat', 'lng']) {
+          f[k].confidence = 'low';
+          f[k].note = (f[k].note || '') + ` ⚠ 都道府県が住所と不一致（住所/OSM = ${mism}）。県境の可能性`;
+        }
+        console.log(`      ⚠ 都道府県が住所と一致しません（${mism}）。県境かデータ誤りの可能性`);
+      }
       if (!f.address.value && hit.display_name) {
         f.address.value = hit.display_name;
         f.address.source = 'nominatim.openstreetmap.org';
@@ -430,6 +462,10 @@ function validateDoc(id, doc) {
     // 「調べていない」と「無かった」の区別。research 項目が空なら理由が要る。
     if (kind === 'research' && cell.value == null && !cell.reason)
       warns.push(`${k}: 未調査（値が無いなら reason を書く）`);
+    // INBOX に手がかりがあるのに未確認のまま残すのは取り逃し
+    if (cell.inboxValue && cell.value == null && !cell.conflictNote)
+      errs.push(`${k}: INBOX に "${cell.inboxValue}" があるのに value が空。`
+        + '確認して採用するか、採用しない理由を conflictNote に書くこと');
     if (cell.value != null && kind === 'research' && !cell.source)
       errs.push(`${k}: 値があるのに source が無い`);
     if ((cell.value != null || cell.reason) && !cell.checkedAt && kind !== 'human')

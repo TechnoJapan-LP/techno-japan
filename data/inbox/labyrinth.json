@@ -122,15 +122,15 @@
       "note": "公式サイト"
     },
     "instagram": {
-      "value": null,
-      "source": null,
-      "confidence": null,
-      "reason": "公式ページに Instagram へのリンクなし。未確認",
-      "checkedAt": "2026-08-02T17:10:00+09:00",
+      "value": "https://www.instagram.com/mindgames.labyrinth/",
+      "source": "INBOX",
+      "confidence": "medium",
+      "reason": null,
+      "checkedAt": "2026-08-02T17:55:00+09:00",
       "inboxValue": null,
       "conflictNote": null,
       "kind": "research",
-      "note": "公式 Instagram。公式サイトに無いことが多い"
+      "note": "INBOX の申告。要確認"
     },
     "ticketUrl": {
       "value": "https://mindgames.zaiko.io/en/e/labyrinth2026",
