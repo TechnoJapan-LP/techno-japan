@@ -496,6 +496,58 @@ const ARTISTS = [
     id: "yellowuhuru",
     name: "YELLOWUHURU",
   },
+  {
+    id: "clipz",
+    name: "CLIPZ",
+  },
+  {
+    id: "dj-hype",
+    name: "DJ HYPE",
+  },
+  {
+    id: "dj-masda",
+    name: "dj masda",
+  },
+  {
+    id: "guchon",
+    name: "Guchon",
+  },
+  {
+    id: "kohra",
+    name: "Kohra",
+  },
+  {
+    id: "lady-shaka",
+    name: "Lady Shaka",
+  },
+  {
+    id: "moodman",
+    name: "MOODMAN",
+  },
+  {
+    id: "nasthug",
+    name: "nasthug",
+  },
+  {
+    id: "okadada",
+    name: "okadada",
+  },
+  {
+    id: "paquita-gordon",
+    name: "Paquita Gordon",
+  },
+  {
+    id: "powder",
+    name: "Powder",
+  },
+  {
+    id: "sherelle",
+    name: "SHERELLE",
+  },
+  {
+    id: "upsammy",
+    name: "upsammy",
+  },
 ];
 
 const EVENTS = [
