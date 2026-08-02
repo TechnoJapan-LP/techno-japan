@@ -1782,3 +1782,100 @@ LINEUP の元表記と比べて大文字小文字だけ違うものが **30/100�
 **文字が落ちているのは1件のみ**: `suze-ij`（`Suze Ijó` の `ó` が ID と NAME の
 両方から脱落）。今日 slugify で「春風」が消えた件（§9-19 の同型）と同じ、
 **非 ASCII が黙って落ちる**パターン。
+
+### 9-26. Reveal の重複実装と詳細ページへの未適用
+
+2026-08-03 時点で、スクロール時の Reveal は4ハブに個別実装され、同時に
+`common.js` の共通 `IntersectionObserver` も読み込まれている。各ハブでは同じ
+`.reveal` 要素を複数の Observer が監視する重複状態になっている。
+
+- Festivals: 移動距離16px、0.7秒
+- Venues: 移動距離30px、0.8秒
+- News: 移動距離20px、0.6秒
+- Artists: 独自の距離・速度設定
+- 生成詳細ページ461枚: `.reveal` 要素0件（`common.js` は対象なしで終了）
+
+後日の共通化では、次の順序で進める。
+
+1. `common.css` に標準Revealを定義する
+2. 距離・速度をCSS変数でページごとに調整可能にする
+3. `common.js` のObserverを単一インスタンス化する
+4. 動的描画後に使える `tjObserveReveals(root)` を提供する
+5. 4ハブの独自Observerを削除する
+6. 詳細ページの対象セクションへ `.reveal` を付与する
+7. `prefers-reduced-motion` ではアニメーションなしで即時表示する
+8. 実ブラウザ回帰検査を追加する
+
+ヒーローは初期表示を維持し、フライヤー／LINE UP、開催ヒストリー、FAQ、SHARE、
+RELATED FESTIVALS など下層セクションをReveal対象とする案が妥当。動的描画を持つ
+ハブの再監視が関係するため、カーソル対応とは分離して実装する。
+
+### 9-27. fetch-data.mjs が draft のアーティストまで LINEUP 照合していた
+
+「掲載したいアーティストのみ登録し、それ以外は draft にする」方針を決めた直後、
+**その方針を使うとビルドが落ちる**ことが判明した。
+
+#### 発見の経緯
+
+未登録アーティスト13名を登録する際、CSV を `STATUS=draft` で出力した。
+既存111件は109件が空欄・2件が published で draft は1件も無く、
+「新規は draft 既定」という別の方針を機械的に適用したのが誤りだった。
+
+その状態で `fetch-data.mjs` → `build-detail-pages.mjs` を回すと落ちた。
+
+```
+Error: lineups.json: ARTIST_ID 参照切れ "kohra"（ほか12件）
+```
+
+#### 構造
+
+```
+fetch-data.mjs   raw.ARTISTS（draft 含む）で LINEUP を照合
+                 → lineups.json に draft の ARTIST_ID が入る
+LP/data.js       Publish Now が draft を除外
+                 → 13名が存在しない
+build-detail-pages.mjs
+                 → ARTIST_ID 参照切れで throw
+```
+
+**2つのデータ源が draft の扱いで食い違っていた。**
+`fetch-data.mjs` は照合に `raw.ARTISTS` を使い、公開判定を通していなかった。
+
+#### なぜ方針の障害になるか
+
+ARTISTS 111件のうち、LINEUP から参照されているのは93件。
+**参照ありのアーティストを draft にした瞬間にビルドが落ちる。**
+参照なし18件なら問題ないが、それ以外は draft にできない。
+「削除ではなく draft にする」という安全な選択肢が、実質使えない状態だった。
+
+#### 対応
+
+照合マップの構築を `raw.ARTISTS` から `artists`（`isPublished` 通過分）に変更した。
+
+```js
+// 変更前
+for (const a of raw.ARTISTS) { … }
+// 変更後
+for (const a of artists) { … }
+```
+
+draft のアクトは照合に当たらず `ACT_LABEL` に落ちる。生成物では `<span>` で
+リンクなし表示になり、名前は残る。これが方針として正しい挙動。
+
+`raw.*` の参照は他に4箇所あるが、EVENTS の孤児参照チェック（警告のみ）と
+各シートのループ（内部で `isPublished` 判定済み）で、生成物に影響しない。
+**問題があったのは照合マップの1箇所だけ。**
+
+#### 記録: STATUS 空欄が公開扱いという分かりにくさ
+
+`fetch-data.mjs:35` の `PUBLISH_EMPTY_STATUS = true` により、
+**STATUS 空欄は公開扱い**になる。現状 ARTISTS 124件のうち122件が空欄で、
+明示的に `published` と入っているのは2件だけ。
+
+つまり「STATUS を見ても公開されているか分からない」状態で、
+今回の draft 混入もこの分かりにくさが遠因だった。
+スキーマ本来は `published` の明示を要求しており、
+`fetch-data.mjs:17-18` のコメントにも「一括入力し終えたら false にする」とある。
+
+**未対応。**空欄122件に `published` を入れて `PUBLISH_EMPTY_STATUS=false` に
+切り替えるのが本来の姿だが、影響範囲が広いので別途進める。

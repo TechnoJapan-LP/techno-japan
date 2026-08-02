@@ -223,8 +223,17 @@ async function main() {
   // ARTIST_ID を解決、未解決は ACT_LABEL として残す（旧 migrate-phase0.gs と同じ規則）。
   const yearOf = d => (String(d || '').match(/(\d{4})/) || [])[1] || '';
   const normName = s => String(s || '').toLowerCase().replace(/\s+/g, ' ').trim();
+  // 照合対象は「公開されるアーティスト」だけに絞る。
+  //
+  // raw.ARTISTS を使うと draft / archived まで拾い、lineups.json に
+  // ARTIST_ID が入る。しかし build-detail-pages.mjs が読む data.js は
+  // 公開分しか持たないため「ARTIST_ID 参照切れ」で throw してビルドが落ちる。
+  // 実際に13名を draft で登録した際に発生した（AUDIT §9-27）。
+  //
+  // 「掲載したいアーティストのみ登録し、それ以外は draft にする」方針を
+  // 採る以上、draft のアクトは ACT_LABEL として名前だけ残るのが正しい。
   const nameToArtist = new Map();
-  for (const a of raw.ARTISTS) {
+  for (const a of artists) {
     const nm = normName(a.NAME);
     if (nm && !nameToArtist.has(nm)) nameToArtist.set(nm, (a.ID || '').trim());
   }
