@@ -7,25 +7,17 @@ name: Regression Check
 # 検出可能だったが実行されなかった。人手の手順に依存しないための関門。
 #
 # このワークフローは検査のみで、生成物をコミットしない。
-# main への push で走る deploy-pages.yml とは独立している（PR では deploy は走らない）。
+# PR では単独実行し、main push では deploy-pages.yml から公開前ゲートとして呼ばれる。
 
 on:
+  # deploy-pages.yml から必須の公開前ゲートとして呼び出す。
+  workflow_call:
   pull_request:
     paths:
-      - 'LP/data.js'
-      - 'LP/data/**'
-      # ハブページ本体と共有アセット。2026-07-22 の障害は festivals.html の
-      # JS が原因だったが、当時のパス条件では検査対象外だった。
-      - 'LP/*.html'
-      - 'LP/common.js'
-      - 'LP/common.css'
-      - 'LP/search.js'
-      - 'scripts/build-detail-pages.mjs'
-      - 'scripts/check_regressions.py'
-      - 'scripts/check_hub_pages.py'
-      - 'scripts/check_asset_versions.py'
-      - 'LP/sw.js'
-      - 'scripts/check_sw_routing.mjs'
+      # 公開物・生成器・検査コードのどこを触っても同じゲートを通す。
+      # 個別列挙は新しいアセットを追加した時に漏れるため、ディレクトリ単位にする。
+      - 'LP/**'
+      - 'scripts/**'
       - '.github/regression-thresholds.yml'
       - '.github/workflows/regression-check.yml'
   workflow_dispatch:
@@ -62,11 +54,12 @@ jobs:
 
       # 生成側を変えたのに生成物を再生成せずコミットしていないか検出する。
       # ここが差分ありなら、PR の生成物は本番に出る内容と一致しない。
-      - name: Warn if generated pages are stale
+      - name: Fail if generated pages are stale
         run: |
           if ! git diff --quiet -- LP/; then
-            echo "::warning::LP/ の生成物がコミット内容と一致しません（$(git diff --name-only -- LP/ | wc -l) ファイル）。生成側を変更したなら再生成してコミットしてください。"
+            echo "::error::LP/ の生成物がコミット内容と一致しません（$(git diff --name-only -- LP/ | wc -l) ファイル）。生成側を変更したなら再生成してコミットしてください。"
             git diff --stat -- LP/ | tail -5
+            exit 1
           else
             echo "生成物はコミット内容と一致しています。"
           fi
@@ -76,7 +69,20 @@ jobs:
       # 届いていなかった（AUDIT §9-11）。生成物ではなくソースの検査なので
       # ビルドの前後どちらでもよいが、失敗を早く出すためここに置く。
       - name: Check asset cache busting
-        run: python3 scripts/check_asset_versions.py --base origin/${{ github.base_ref || 'main' }}
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ] && [ -n "$BASE_REF" ]; then
+            compare="origin/$BASE_REF"
+          elif [ -n "$BEFORE_SHA" ] && ! echo "$BEFORE_SHA" | grep -Eq '^0+$'; then
+            compare="$BEFORE_SHA"
+          else
+            compare="HEAD^"
+          fi
+          echo "Asset comparison base: $compare"
+          python3 scripts/check_asset_versions.py --base "$compare"
 
       # sw.js の分岐順。data.js が cache-first に吸われると Publish しても
       # 一度訪問したブラウザには反映されない（AUDIT §9-18）。

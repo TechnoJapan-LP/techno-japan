@@ -4,7 +4,11 @@ on:
   push:
     branches: [main]
     paths:
+      # main への直接 push も、公開前に regression-check.yml を必ず通す。
       - 'LP/**'
+      - 'scripts/**'
+      - '.github/regression-thresholds.yml'
+      - '.github/workflows/regression-check.yml'
       - '.github/workflows/deploy-pages.yml'
   workflow_dispatch:
 
@@ -18,7 +22,11 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  regression:
+    uses: ./.github/workflows/regression-check.yml
+
   deploy:
+    needs: regression
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
