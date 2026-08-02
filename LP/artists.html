@@ -222,136 +222,10 @@
   text-transform: uppercase;
 }
 
-/* ===================== ARTIST DETAIL VIEW ===================== */
-#artist-detail-view { display: none; }
-
-.artist-back {
-  display: inline-flex; align-items: center; gap: 12px; padding: 60px 40px 0;
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em;
-  text-transform: uppercase; opacity: 0.4; transition: opacity 0.3s ease;
-  cursor: none;
-}
-.artist-back:hover { opacity: 1; }
-
-.artist-detail { padding: 40px 40px 120px; }
-
-.artist-detail-image {
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto 60px;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  background: rgba(240,237,232,0.03);
-  opacity: 0;
-  animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  animation-delay: 0.1s;
-}
-.artist-detail-image img {
-  width: 100%; height: 100%; object-fit: cover;
-  object-position: var(--img-pos, center);
-  filter: grayscale(100%);
-  transition: filter 0.6s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.artist-detail-image:hover img {
-  filter: grayscale(0%);
-  transform: scale(1.02);
-}
-
-.artist-detail-header {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
-  padding-bottom: 60px; border-bottom: 1px solid rgba(240,237,232,0.08);
-}
-
-.artist-detail-name {
-  font-family: var(--font-display); font-size: clamp(56px, 8vw, 120px);
-  line-height: 0.9; text-transform: uppercase;
-}
-.artist-detail-meta { display: flex; flex-direction: column; justify-content: flex-end; gap: 24px; }
-.artist-detail-tags { display: flex; gap: 12px; flex-wrap: wrap; }
-.artist-detail-tags span {
-  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em;
-  text-transform: uppercase; padding: 6px 16px;
-  border: 1px solid rgba(240,237,232,0.15);
-}
-.artist-detail-bio {
-  font-family: var(--font-body); font-weight: 200; font-size: 15px;
-  line-height: 1.9; opacity: 0.7; max-width: 600px;
-}
-/* SHARE BUTTONS */
-.share-buttons {
-  display: flex; gap: 8px; align-items: center;
-  margin-top: 24px; padding-top: 24px;
-  border-top: 1px solid rgba(240,237,232,0.08);
-}
-.share-buttons-label {
-  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em;
-  text-transform: uppercase; opacity: 0.4; margin-right: 8px;
-}
-.share-btn {
-  width: 32px; height: 32px;
-  display: inline-flex; align-items: center; justify-content: center;
-  border: 1px solid rgba(240,237,232,0.12);
-  background: transparent; cursor: pointer;
-  transition: border-color 0.3s ease, background 0.3s ease;
-  color: var(--text); opacity: 0.6;
-}
-.share-btn:hover { border-color: rgba(240,237,232,0.4); opacity: 1; }
-.share-btn svg { width: 14px; height: 14px; fill: currentColor; }
-.share-btn.copied { background: rgba(255,255,255,0.08); }
 
 /* FAV HEART (artist card) */
 .artist-fav-mount { position: absolute; top: 10px; right: 10px; z-index: 5; }
 
-.artist-detail-links { display: flex; gap: 24px; margin-top: 8px; }
-.artist-detail-links a {
-  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em;
-  text-transform: uppercase; opacity: 0.4; transition: opacity 0.3s ease;
-  padding-bottom: 2px; border-bottom: 1px solid rgba(240,237,232,0.15);
-}
-.artist-detail-links a:hover { opacity: 1; }
-
-/* ARTIST EVENTS */
-.artist-events { padding-top: 60px; }
-.artist-events-title {
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em;
-  text-transform: uppercase; opacity: 0.4; margin-bottom: 32px;
-  display: flex; align-items: center; gap: 20px;
-}
-.artist-events-title::after {
-  content: ''; flex: 1; height: 1px; background: rgba(240,237,232,0.1);
-}
-
-.artist-event-row {
-  display: grid; grid-template-columns: 80px 1fr auto; gap: 32px;
-  padding: 24px 0; border-bottom: 1px solid rgba(240,237,232,0.06);
-  align-items: center; transition: background 0.3s ease;
-  position: relative;
-}
-.artist-event-row::before {
-  content: ''; position: absolute; inset: 0 -40px;
-  background: rgba(240,237,232,0.02); opacity: 0; transition: opacity 0.3s ease;
-}
-.artist-event-row:hover::before { opacity: 1; }
-
-.artist-event-date {
-  font-family: var(--font-display); font-size: 28px; position: relative; z-index: 1;
-}
-.artist-event-info { position: relative; z-index: 1; }
-.artist-event-name {
-  font-family: var(--font-display); font-size: 24px; text-transform: uppercase;
-  margin-bottom: 4px;
-}
-.artist-event-venue {
-  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em;
-  opacity: 0.4; text-transform: uppercase;
-}
-.artist-event-tag {
-  position: relative; z-index: 1;
-  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em;
-  text-transform: uppercase; padding: 6px 16px;
-  border: 1px solid rgba(240,237,232,0.15);
-}
-.artist-event-tag.past { opacity: 0.3; }
 
 /* REVEAL */
 .reveal {
@@ -370,28 +244,6 @@
   #artists-list-view { padding: 0 0 80px; }
   .artists-toolbar { padding: 32px 24px 0; }
   .artists-grid { grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 24px; }
-  .artist-back { padding: 40px 24px 0; }
-  .artist-detail { padding: 32px 20px 80px; }
-  .artist-detail-image { margin-bottom: 32px; aspect-ratio: 4 / 3; }
-  .artist-detail-header { grid-template-columns: 1fr; gap: 24px; padding-bottom: 40px; }
-  .artist-detail-name { font-size: clamp(40px, 12vw, 72px); }
-  .artist-detail-bio { font-size: 14px; line-height: 1.7; }
-  .artist-events { padding-top: 40px; }
-  .artist-events-title { margin-bottom: 20px; }
-  .artist-event-row {
-    grid-template-columns: 1fr auto;
-    grid-template-areas:
-      "date tag"
-      "info info";
-    gap: 12px 16px;
-    padding: 20px 0;
-  }
-  .artist-event-row::before { inset: 0 -20px; }
-  .artist-event-date { grid-area: date; font-size: 18px; letter-spacing: 0.05em; }
-  .artist-event-info { grid-area: info; min-width: 0; }
-  .artist-event-name { font-size: 20px; line-height: 1.1; word-break: break-word; }
-  .artist-event-venue { font-size: 8px; margin-top: 4px; }
-  .artist-event-tag { grid-area: tag; align-self: center; font-size: 8px; padding: 4px 10px; white-space: nowrap; }
 }
 @media (max-width: 768px) {
   .artists-grid { grid-template-columns: repeat(2, 1fr); }
@@ -411,7 +263,7 @@
   .artist-card-city { font-size: 7px; }
 }
 @media (hover: none) and (pointer: coarse) {
-  .artist-card, .artist-back, .artists-sort, .genre-tab { cursor: pointer; }
+  .artist-card, .artists-sort, .genre-tab { cursor: pointer; }
 }
 </style>
 <script type="application/ld+json">
@@ -627,12 +479,6 @@
   </div>
 </main>
 
-<!-- ARTIST DETAIL VIEW -->
-<div id="artist-detail-view">
-  <a class="artist-back" id="artist-back-btn"><span class="arrow" style="width:24px;height:1px;background:var(--text);position:relative;display:inline-block"><span style="position:absolute;left:0;top:-3px;width:7px;height:7px;border-left:1px solid var(--text);border-bottom:1px solid var(--text);transform:rotate(45deg)"></span></span> ALL ARTISTS</a>
-  <div class="artist-detail" id="artist-detail"></div>
-</div>
-
 <!-- FOOTER -->
 <!-- ===================== GUIDE LINKS ===================== -->
 <div class="guide-section reveal">
@@ -721,48 +567,6 @@
 <script src="data.js?v=7"></script>
 <script src="image-dimensions.js?v=2"></script>
 <script>
-const WEEKDAYS = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
-const MONTHS_SHORT = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-
-function parseDate(s) { if(!s) return new Date(NaN); const [y,m,d] = String(s).split('-').map(Number); return new Date(y, m-1, d); }
-function isUpcoming(s) { const t = new Date(); t.setHours(0,0,0,0); return parseDate(s) >= t; }
-function getArtist(id) { return ARTISTS.find(a => a.id === id); }
-
-/* ========== SHARE BUTTONS ========== */
-function buildShareButtons(title, url) {
-  const t = encodeURIComponent(title);
-  const u = encodeURIComponent(url);
-  return `
-    <div class="share-buttons">
-      <span class="share-buttons-label">SHARE</span>
-      <a href="https://twitter.com/intent/tweet?text=${t}&url=${u}" target="_blank" rel="noopener" class="share-btn" title="X (Twitter)">
-        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-      </a>
-      <a href="https://www.facebook.com/sharer/sharer.php?u=${u}" target="_blank" rel="noopener" class="share-btn" title="Facebook">
-        <svg viewBox="0 0 24 24"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647z"/></svg>
-      </a>
-      <a href="https://social-plugins.line.me/lineit/share?url=${u}" target="_blank" rel="noopener" class="share-btn" title="LINE">
-        <svg viewBox="0 0 24 24"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
-      </a>
-      <button type="button" class="share-btn share-copy-btn" data-url="${url}" title="Copy URL" onclick="copyShareUrl(this)">
-        <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
-      </button>
-    </div>
-  `;
-}
-
-function copyShareUrl(btn) {
-  navigator.clipboard.writeText(btn.dataset.url).then(() => {
-    btn.classList.add('copied');
-    btn.title = 'Copied!';
-    setTimeout(() => { btn.classList.remove('copied'); btn.title = 'Copy URL'; }, 1500);
-  });
-}
-function getArtistEvents(id) {
-  return EVENTS.filter(e => e.lineup && e.lineup.includes(id))
-    .sort((a,b) => parseDate(a.date) - parseDate(b.date));
-}
-
 /* ========== SCROLL OBSERVER (shared with common.js) ========== */
 const observer = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
@@ -773,6 +577,31 @@ function observeAll() { document.querySelectorAll('.reveal').forEach(el => obser
 let currentGenre = 'ALL';
 let currentSearch = '';
 let currentSort = 'a-z';
+const ARTIST_HUB_STATE_KEY = 'tj:artist-hub-state:v1';
+
+function readArtistQuery() {
+  const p = new URLSearchParams(location.search);
+  if (p.get('genre')) currentGenre = p.get('genre').toUpperCase();
+  if (p.get('q')) currentSearch = p.get('q');
+  if (['a-z', 'z-a'].includes(p.get('sort'))) currentSort = p.get('sort');
+}
+function syncArtistQuery() {
+  const u = new URL(location.href);
+  ['genre','q','sort'].forEach(k => u.searchParams.delete(k));
+  if (currentGenre !== 'ALL') u.searchParams.set('genre', currentGenre);
+  if (currentSearch) u.searchParams.set('q', currentSearch);
+  if (currentSort !== 'a-z') u.searchParams.set('sort', currentSort);
+  history.replaceState(history.state, '', u.pathname + u.search);
+}
+function saveArtistHubState() {
+  try { sessionStorage.setItem(ARTIST_HUB_STATE_KEY, JSON.stringify({url:location.pathname+location.search,scrollY,savedAt:Date.now()})); } catch (_) {}
+}
+function restoreArtistHubState(e) {
+  if (e.persisted) return;
+  try { const s=JSON.parse(sessionStorage.getItem(ARTIST_HUB_STATE_KEY)||'null'); if(!s||s.url!==location.pathname+location.search||Date.now()-s.savedAt>1800000)return; sessionStorage.removeItem(ARTIST_HUB_STATE_KEY); requestAnimationFrame(()=>requestAnimationFrame(()=>scrollTo(0,s.scrollY))); } catch (_) {}
+}
+readArtistQuery();
+addEventListener('pageshow', restoreArtistHubState);
 
 const gradients = [
   'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
@@ -799,10 +628,11 @@ function buildGenreNav() {
   const sorted = ['ALL', ...['TECHNO','HOUSE','MINIMAL','EXPERIMENTAL','AMBIENT','ELECTRONIC','LIVE'].filter(g => allGenres.has(g))];
   // Add remaining genres
   allGenres.forEach(g => { if (!sorted.includes(g)) sorted.push(g); });
+  if (!sorted.includes(currentGenre)) currentGenre = 'ALL';
 
   const nav = document.getElementById('genre-nav');
   nav.innerHTML = sorted.map(g =>
-    `<button class="genre-tab${g === 'ALL' ? ' active' : ''}" data-genre="${g}">${g}</button>`
+    `<button class="genre-tab${g === currentGenre ? ' active' : ''}" data-genre="${g}">${g}</button>`
   ).join('');
 
   nav.addEventListener('click', e => {
@@ -811,6 +641,7 @@ function buildGenreNav() {
     currentGenre = btn.dataset.genre;
     nav.querySelectorAll('.genre-tab').forEach(b => b.classList.toggle('active', b === btn));
     renderArtistsList();
+    syncArtistQuery();
   });
 }
 
@@ -861,7 +692,7 @@ function renderArtistsList() {
       : `background:${gradients[i % gradients.length]}`;
     const genreLabel = getGenreString(a);
     return `
-    <a href="/artists/${encodeURIComponent(a.id)}.html" onclick="event.preventDefault();location.hash='artist/'+this.dataset.id" class="artist-card reveal" data-id="${a.id}">
+    <a href="/artists/${encodeURIComponent(a.id)}.html" class="artist-card reveal" data-artist-detail-link data-id="${a.id}">
       <div class="artist-card-img" style="${bg}"></div>
       <div class="artist-card-content">
         <div class="artist-card-genre">${genreLabel}</div>
@@ -881,74 +712,7 @@ function renderArtistsList() {
   }
 
   observeAll();
-  bindCursorExpand();
-}
-
-/* ========== RENDER DETAIL ========== */
-function renderArtistDetail(id) {
-  const a = getArtist(id);
-  if (!a) return;
-  const events = getArtistEvents(id);
-
-  const linksHtml = a.links ? Object.entries(a.links).map(([k, v]) =>
-    `<a href="${v}" target="_blank" rel="noopener">${k.toUpperCase()}</a>`
-  ).join('') : '';
-
-  const eventsHtml = events.length ? events.map(ev => {
-    const d = parseDate(ev.date);
-    const upcoming = isUpcoming(ev.date);
-    const venue = typeof VENUES !== 'undefined' ? VENUES.find(v => v.name === ev.venue) : null;
-    const venueLink = venue ? `<a href="venues.html#venue/${venue.id}" style="opacity:0.4;transition:opacity 0.3s;border-bottom:1px solid rgba(240,237,232,0.12);padding-bottom:1px">${ev.venue}</a>` : ev.venue;
-    return `
-      <div class="artist-event-row">
-        <div class="artist-event-date">${MONTHS_SHORT[d.getMonth()]} ${String(d.getDate()).padStart(2,'0')}</div>
-        <div class="artist-event-info">
-          <div class="artist-event-name">${ev.name}</div>
-          <div class="artist-event-venue">${venueLink} — ${ev.city}</div>
-        </div>
-        <span class="artist-event-tag ${upcoming ? '' : 'past'}">${upcoming ? 'UPCOMING' : 'PAST'}</span>
-      </div>`;
-  }).join('') : '<div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.2em;opacity:0.3;padding:32px 0;">NO EVENTS SCHEDULED</div>';
-
-  // Unique venues this artist plays at
-  const artistVenues = [...new Set(events.map(e => e.venue))];
-  const venuesHtml = artistVenues.length ? artistVenues.map(vName => {
-    const v = typeof VENUES !== 'undefined' ? VENUES.find(x => x.name === vName) : null;
-    if (!v) return `<span style="font-family:var(--font-mono);font-size:9px;letter-spacing:0.15em;padding:6px 16px;border:1px solid rgba(240,237,232,0.1);opacity:0.4">${vName}</span>`;
-    return `<a href="venues.html#venue/${v.id}" style="font-family:var(--font-mono);font-size:9px;letter-spacing:0.15em;padding:6px 16px;border:1px solid rgba(240,237,232,0.1);opacity:0.4;transition:opacity 0.3s ease;display:inline-block">${[v.name, v.city].filter(Boolean).join(' — ')}</a>`;
-  }).join('') : '';
-
-  const imageHtml = a.image
-    ? `<div class="artist-detail-image" style="--img-pos:${a.imagePosition || 'center'}"><img ${tjImageSizeAttrs(a.image)} loading="lazy" decoding="async" src="${a.image}" alt="${a.name}" onerror="this.parentElement.style.display='none'"></div>`
-    : '';
-
-  const shareTitle = `${a.name} — TECHNO JAPAN`;
-  const shareUrl = `https://techno-japan.media/artists.html#artist/${a.id}`;
-
-  document.getElementById('artist-detail').innerHTML = `
-    ${imageHtml}
-    <div class="artist-detail-header reveal">
-      <div class="artist-detail-name">${a.name}</div>
-      <div class="artist-detail-meta">
-        <div class="artist-detail-tags">
-          ${a.country ? `<span>${a.country}</span>` : ''}
-          <span>${a.genre}</span>
-        </div>
-        <div class="artist-detail-bio">${a.bio}</div>
-        ${linksHtml ? `<div class="artist-detail-links">${linksHtml}</div>` : ''}
-        ${buildShareButtons(shareTitle, shareUrl)}
-      </div>
-    </div>
-    ${venuesHtml ? `<div class="artist-events reveal">
-      <div class="artist-events-title">VENUES</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;padding:8px 0">${venuesHtml}</div>
-    </div>` : ''}
-    <div class="artist-events reveal">
-      <div class="artist-events-title">EVENTS</div>
-      ${eventsHtml}
-    </div>`;
-
-  observeAll();
+  grid.querySelectorAll('[data-artist-detail-link]').forEach(link => link.addEventListener('click', saveArtistHubState));
   bindCursorExpand();
 }
 
@@ -956,6 +720,8 @@ function renderArtistDetail(id) {
 function initSearchSort() {
   const searchInput = document.getElementById('artists-search');
   const sortSelect = document.getElementById('artists-sort');
+  searchInput.value = currentSearch;
+  sortSelect.value = currentSort;
 
   let debounceTimer;
   searchInput.addEventListener('input', () => {
@@ -963,60 +729,26 @@ function initSearchSort() {
     debounceTimer = setTimeout(() => {
       currentSearch = searchInput.value.trim();
       renderArtistsList();
+      syncArtistQuery();
     }, 200);
   });
 
   sortSelect.addEventListener('change', () => {
     currentSort = sortSelect.value;
     renderArtistsList();
+    syncArtistQuery();
   });
 }
 
-/* ========== VIEW SWITCHING ========== */
-function showList() {
-  document.getElementById('artists-list-view').style.display = 'block';
-  document.getElementById('artist-detail-view').style.display = 'none';
-  document.getElementById('page-header').style.display = 'block';
-  window.scrollTo(0, 0);
-}
-
-function showDetail(id) {
-  document.getElementById('artists-list-view').style.display = 'none';
-  document.getElementById('artist-detail-view').style.display = 'block';
-  document.getElementById('page-header').style.display = 'none';
-  renderArtistDetail(id);
-  window.scrollTo(0, 0);
-}
-
-/* ========== ROUTING (hash-based) ========== */
-function handleRoute() {
-  const hash = window.location.hash;
-  if (hash.startsWith('#artist/')) {
-    const id = hash.replace('#artist/', '');
-    showDetail(id);
-  } else {
-    showList();
-  }
-}
-
-window.addEventListener('hashchange', handleRoute);
-
-document.getElementById('artist-back-btn').addEventListener('click', (e) => {
-  e.preventDefault();
-  window.location.hash = '';
-  showList();
-});
-
 /* ========== CURSOR (delegated to common.js) ========== */
 function bindCursorExpand() {
-  if (window.tjBindCursorExpand) window.tjBindCursorExpand('.artist-card, .artist-back');
+  if (window.tjBindCursorExpand) window.tjBindCursorExpand('.artist-card');
 }
 
 /* ========== INIT ========== */
 buildGenreNav();
 initSearchSort();
 renderArtistsList();
-handleRoute();
 </script>
 <!-- Service Worker registration -->
 <script>

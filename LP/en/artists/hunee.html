@@ -60,14 +60,14 @@
 </div>
 <article class="detail-page">
   <div class="detail-inner">
-    <a class="article-back" href="/artists.html"><span class="arrow"></span> ALL ARTISTS</a>
+    <a class="article-back" href="/en/artists.html" data-artist-hub-back="/en/artists.html"><span class="arrow"></span> ALL ARTISTS</a>
     
     <h1>Hunee</h1>
     
     
     
     
-    <div class="article-footer"><a class="article-back" href="/artists.html" style="margin:0"><span class="arrow"></span> ALL ARTISTS</a></div>
+    <div class="article-footer"><a class="article-back" href="/en/artists.html" data-artist-hub-back="/en/artists.html" style="margin:0"><span class="arrow"></span> ALL ARTISTS</a></div>
   </div>
 </article>
 <footer>
@@ -100,5 +100,25 @@
 </script>
 <script src="/common.js?v=2" defer></script>
 <script src="/lang-toggle.js?v=1" defer></script>
+<script>
+function bindArtistHubBackLinks() {
+  document.querySelectorAll('[data-artist-hub-back]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      try {
+        const referrer = new URL(document.referrer);
+        if (referrer.origin === window.location.origin && referrer.pathname === link.dataset.artistHubBack) {
+          event.preventDefault();
+          history.back();
+        }
+      } catch (_) {}
+    });
+  });
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bindArtistHubBackLinks, { once: true });
+} else {
+  bindArtistHubBackLinks();
+}
+</script>
 </body>
 </html>

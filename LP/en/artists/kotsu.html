@@ -60,7 +60,7 @@
 </div>
 <article class="detail-page">
   <div class="detail-inner">
-    <a class="article-back" href="/artists.html"><span class="arrow"></span> ALL ARTISTS</a>
+    <a class="article-back" href="/en/artists.html" data-artist-hub-back="/en/artists.html"><span class="arrow"></span> ALL ARTISTS</a>
     <div class="detail-eyebrow">OSAKA, JAPAN</div>
     <h1>KOTSU</h1>
     <div class="detail-chips"><span class="detail-chip">HOUSE</span><span class="detail-chip">MINIMAL</span></div>
@@ -74,7 +74,7 @@
       <div class="lang-body" data-lang="en" lang="en"><p>Osaka selector with deep roots in the Kansai underground. Fluid sets moving between deep house, minimal, and micro-house. A fixture at CIRCUS Osaka and a regular across Japan&#39;s club circuit.</p></div>
     </div>
     <div class="detail-links"><a class="detail-link" href="https://www.instagram.com/kotsu_dj/" target="_blank" rel="noopener">INSTAGRAM</a><a class="detail-link" href="https://soundcloud.com/kotsu" target="_blank" rel="noopener">SOUNDCLOUD</a></div>
-    <div class="article-footer"><a class="article-back" href="/artists.html" style="margin:0"><span class="arrow"></span> ALL ARTISTS</a></div>
+    <div class="article-footer"><a class="article-back" href="/en/artists.html" data-artist-hub-back="/en/artists.html" style="margin:0"><span class="arrow"></span> ALL ARTISTS</a></div>
   </div>
 </article>
 <footer>
@@ -107,5 +107,25 @@
 </script>
 <script src="/common.js?v=2" defer></script>
 <script src="/lang-toggle.js?v=1" defer></script>
+<script>
+function bindArtistHubBackLinks() {
+  document.querySelectorAll('[data-artist-hub-back]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      try {
+        const referrer = new URL(document.referrer);
+        if (referrer.origin === window.location.origin && referrer.pathname === link.dataset.artistHubBack) {
+          event.preventDefault();
+          history.back();
+        }
+      } catch (_) {}
+    });
+  });
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bindArtistHubBackLinks, { once: true });
+} else {
+  bindArtistHubBackLinks();
+}
+</script>
 </body>
 </html>

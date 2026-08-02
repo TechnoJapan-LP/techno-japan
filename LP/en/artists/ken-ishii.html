@@ -60,7 +60,7 @@
 </div>
 <article class="detail-page">
   <div class="detail-inner">
-    <a class="article-back" href="/artists.html"><span class="arrow"></span> ALL ARTISTS</a>
+    <a class="article-back" href="/en/artists.html" data-artist-hub-back="/en/artists.html"><span class="arrow"></span> ALL ARTISTS</a>
     <div class="detail-eyebrow">TOKYO, JAPAN</div>
     <h1>KEN ISHII</h1>
     <div class="detail-chips"><span class="detail-chip">TECHNO</span></div>
@@ -74,7 +74,7 @@
       <div class="lang-body" data-lang="en" lang="en"><p>Pioneer of Japanese techno since the early &#39;90s. Internationally recognized through releases on R&amp;S Records and Sublime. A living legend whose influence on Japan&#39;s electronic music scene is immeasurable.</p></div>
     </div>
     <div class="detail-links"><a class="detail-link" href="https://www.instagram.com/kenishiiofficial/" target="_blank" rel="noopener">INSTAGRAM</a><a class="detail-link" href="https://soundcloud.com/ken-ishii-70drums" target="_blank" rel="noopener">SOUNDCLOUD</a><a class="detail-link" href="https://kenishii.bandcamp.com/" target="_blank" rel="noopener">BANDCAMP</a><a class="detail-link" href="https://kenishii.com" target="_blank" rel="noopener">WEBSITE</a></div>
-    <div class="article-footer"><a class="article-back" href="/artists.html" style="margin:0"><span class="arrow"></span> ALL ARTISTS</a></div>
+    <div class="article-footer"><a class="article-back" href="/en/artists.html" data-artist-hub-back="/en/artists.html" style="margin:0"><span class="arrow"></span> ALL ARTISTS</a></div>
   </div>
 </article>
 <footer>
@@ -107,5 +107,25 @@
 </script>
 <script src="/common.js?v=2" defer></script>
 <script src="/lang-toggle.js?v=1" defer></script>
+<script>
+function bindArtistHubBackLinks() {
+  document.querySelectorAll('[data-artist-hub-back]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      try {
+        const referrer = new URL(document.referrer);
+        if (referrer.origin === window.location.origin && referrer.pathname === link.dataset.artistHubBack) {
+          event.preventDefault();
+          history.back();
+        }
+      } catch (_) {}
+    });
+  });
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bindArtistHubBackLinks, { once: true });
+} else {
+  bindArtistHubBackLinks();
+}
+</script>
 </body>
 </html>
