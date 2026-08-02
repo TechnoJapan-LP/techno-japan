@@ -78,15 +78,15 @@
       "note": "東京都港区"
     },
     "address": {
-      "value": "高輪ゲートウェイシティ, 高輪, 港区, 東京都, 108-0074, 日本",
-      "source": "nominatim.openstreetmap.org",
+      "value": "東京都港区高輪二丁目",
+      "source": "nominatim.openstreetmap.org（逆引きから町名まで採用）",
       "confidence": "low",
       "reason": "公式サイトに住所の記載なし",
       "checkedAt": "2026-08-02T17:22:31+09:00",
       "inboxValue": null,
       "conflictNote": null,
       "kind": "research",
-      "note": "逆引きの表示名。正式な住所ではないので要確認"
+      "note": "元の逆引き表示名: 高輪ゲートウェイシティ, 高輪, 港区, 東京都, 108-0074, 日本。番地は不明。公式サイトに住所の記載が無いため、掲載前に要確認"
     },
     "lat": {
       "value": 35.6356,
