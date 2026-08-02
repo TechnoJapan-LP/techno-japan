@@ -322,7 +322,7 @@ const ARTISTS = [
   },
   {
     id: "nc4k",
-    name: "Nc4k(Stones Taro b2b Lomax)",
+    name: "NC4K",
   },
   {
     id: "sisi",
@@ -338,7 +338,7 @@ const ARTISTS = [
   },
   {
     id: "suze-ij",
-    name: "Suze Ij",
+    name: "Suze Ijó",
   },
   {
     id: "four-tet",
