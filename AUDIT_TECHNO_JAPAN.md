@@ -1637,6 +1637,26 @@ SPA を消すついでに静的側を壊していたら、split-brain が解消�
 - クローラーが見るリンクグラフとユーザーが見るリンクグラフが一致した
 - `artists.html` が96件に文字列 "undefined" を表示していた問題も同時に消滅（§9-20）
 
+#### 訂正: 旧 Festival SPA にも回遊ブロックは存在した
+
+§9-20 と `reports/spa-vs-static.md` の `related: SPA 0 / 静的 300` を根拠に、
+旧 Festival SPA には「関連フェス」の回遊ブロックが無かったと判断していたが、これは誤り。
+`039acd8:LP/festivals.html` の実コードには `buildRelatedFestivals(current)` があり、
+`renderDetail()` の末尾から実際に呼ばれていた。同じ地域または共通ジャンルを持つフェスを
+スコア順に最大4件選び、画像・日付・名称・地域を持つ `RELATED FESTIVALS` カードとして
+実行時に描画していた。
+
+誤集計の直接原因は `scripts/audit_spa_vs_static.py` の `festival_features()` が、SPA側の
+回遊を解析せず `"related": (0, ...)` と **0をハードコードしていた**こと。静的側の300は
+生成済みHTMLにある具体的なリンク数である一方、SPA側はJavaScriptによる実行時生成だったため、
+この2値をそのまま比較することはできなかった。したがって「SPAに回遊が無かった」および
+「回遊300本がクローラーにしか届いていなかった」という旧記述は、Festivalについては撤回する。
+SPA廃止によってURL・内容・ユーザー経路を静的ページへ統一した意義は変わらないが、
+回遊UIの有無をその根拠には用いない。
+
+この誤った数字はPerkeyとClaudeによる実装優先順位の判断にも使われた。今後、実行時生成の
+特徴量を静的解析できない場合は0で代用せず「未計測」とし、ブラウザ実行で確認する。
+
 #### 残る作業
 
 `AGENTS.md` の「SEO の担当範囲（設計方針）」は SPA 詳細ビューの存在を前提に
@@ -1673,3 +1693,92 @@ HTTP レスポンスヘッダーでの配信が必要。一方、現在利用し
 中期的には CMS を `cms.techno-japan.media` へ移し、公開サイトと別オリジンにすることが
 本質的な対策となる。GitHub Pages でのサブドメイン運用、GAS 通信、Drive 同期、費用への
 影響は別タスクで調査する。
+
+### 9-25. LINEUP のアーティスト名照合 — 130行中55件(42%)がリンクされていない
+
+#### 照合はどこで行われるか
+
+**`scripts/fetch-data.mjs:225`。**`build-detail-pages.mjs` でも CMS でもない。
+`FESTIVALS.LINEUP`（カンマ区切りの名前）を `ARTISTS.NAME` と突合して
+`LP/data/lineups.json` を生成する。シートの LINEUPS タブは読んでいない
+（ビルド時に導出。コメントに「旧 migrate-phase0.gs と同じ規則」）。
+
+```js
+const normName = s => String(s || '').toLowerCase().replace(/\s+/g, ' ').trim();
+```
+
+#### 何を吸収し、何を吸収しないか
+
+| ケース | 結果 |
+|---|---|
+| 大文字小文字（`DJ Nobu` / `dj nobu`） | **吸収する** |
+| 前後の空白 | 吸収する |
+| 名前中の連続空白（`DJ  Nobu`） | 吸収する |
+| 全角空白（`DJ　Nobu`） | 吸収する（`\s` が全角空白にマッチ） |
+| **全角英字**（`ＤＪ Ｎｏｂｕ`） | **吸収しない**（NFKC 正規化が無い） |
+| **記号**（`.` `-` `&` `☆`） | **吸収しない**。`Dj Maria.` と `Dj Maria` は別物 |
+
+**SET_TYPE が `b2b` / `live` の行は照合を試みない。**
+`/-live-/i` または `/\bb2b\b/i` に一致すると、メンバー分解せず
+そのまま `ACT_LABEL` になる（複数人を1枠で表すための設計）。
+`-live-` はハイフンで囲む表記が必要で、`LIVE ACT` は `dj` 判定になる。
+
+#### 照合失敗時の挙動
+
+`<a>` ではなく **`<span>` になり、アーティスト詳細へのリンクが張られない**
+（`build-detail-pages.mjs:554`）。ビルドは止まらず、警告のみ。
+
+```
+LINEUPS {editionId}: 未解決アクト "{名前}"（ARTISTS.NAME に無し）
+```
+
+逆に `ARTIST_ID` が付いているのに ARTISTS に無い場合は `throw` する。
+**片方向だけ厳格**で、名前照合の失敗は静かに通る。
+
+#### 現状（2026-08-02）
+
+| 区分 | 件数 |
+|---|---|
+| `ARTIST_ID` あり（リンクされる） | 75 |
+| `ACT_LABEL` のみ（リンクなし） | **55（42%）** |
+
+`ACT_LABEL` のみ55件のうち51件が `SET_TYPE=dj`、つまり名前照合の失敗。
+残り4件は b2b / live で設計どおり。
+
+51件の内訳:
+
+- **ARTISTS に未登録: 46名**（`upsammy` `Kohra` `Paquita Gordon` `Antal & Hunee` ほか）
+- 記号・表記の違いだけ: 5件（`M.I.O`/`Mio`、`CAPTAIN-K`/`Captain K` 等）
+
+**主因は照合ロジックではなくアーティストの未登録。**
+リストは `data/inbox/export/unregistered-artists.csv`。
+
+#### 正規化強化は採用しない
+
+記号を落とす照合にすると `M.I.O` と `Mio` のように**別名義かもしれないものを
+機械的に同一視**する危険がある。改善するのは5件だけで、割に合わない。
+候補提示にとどめる方針（`audit-lineups-migration.mjs` の
+`NAME_MATCH_CANDIDATE` が既にその形）。
+
+#### 副次的に判明: ARTISTS.NAME が機械的に Title Case 化されている
+
+照合には影響しない（`toLowerCase` するため）が、**表示が公式表記と食い違う。**
+LINEUP の元表記と比べて大文字小文字だけ違うものが **30/100件**。
+
+| ARTISTS.NAME | 本来の表記 |
+|---|---|
+| `Tko` | `TKO` |
+| `Haai` | `HAAi` |
+| `Ben Ufo` | `Ben UFO` |
+| `Dj Miku` / `Dj Kensei` / `Dj Yogurt` | `DJ MIKU` / `DJ KENSEI` / `DJ Yogurt` |
+| `AdhéMar` | `Adhémar` |
+| `The Master Musicians Of Joujouka` | `... of Joujouka` |
+| `Kuo From Sunset Rollercoaster` | `... from Sunset Rollercoaster` |
+
+前置詞まで大文字化されている点から、**どこかで一律の Title Case 変換が
+かかった**と考えられる。スタイルガイドは「大文字小文字も公式に準拠する」と
+定めており（`docs/writing/Japanese_Writing_Guidelines.md`）、現状は違反している。
+
+**文字が落ちているのは1件のみ**: `suze-ij`（`Suze Ijó` の `ó` が ID と NAME の
+両方から脱落）。今日 slugify で「春風」が消えた件（§9-19 の同型）と同じ、
+**非 ASCII が黙って落ちる**パターン。
