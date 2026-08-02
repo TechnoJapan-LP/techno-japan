@@ -453,184 +453,48 @@ const ARTISTS = [
     name: "Juana Molina",
   },
   {
-    id: "Tsuyoshi Suzuki",
-    name: "Tsuyoshi Suzuki",
-  },
-  {
-    id: "DAIJIRO",
-    name: "DAIJIRO",
-  },
-  {
     id: "suimin",
     name: "Suimin",
   },
   {
-    id: "ZUNDOKO DISCO",
-    name: "ZUNDOKO DISCO",
-  },
-  {
-    id: "FUNKY GONG",
-    name: "FUNKY GONG",
-  },
-  {
-    id: "DJ KRUSH",
+    id: "dj-krush",
     name: "DJ KRUSH",
   },
   {
-    id: "CALPISS",
+    id: "zundoko-disco",
+    name: "ZUNDOKO DISCO",
+  },
+  {
+    id: "calpiss",
     name: "CALPISS",
   },
   {
-    id: "Space Drum Meditation",
+    id: "space-drum-meditation",
     name: "Space Drum Meditation",
   },
   {
-    id: "DANIEL BELL",
-    name: "DANIEL BELL",
-  },
-  {
-    id: "IKEDA-IKERU",
-    name: "IKEDA IKERU",
-  },
-  {
-    id: "AOKI takamasa",
+    id: "aoki-takamasa",
     name: "AOKI Takamasa",
   },
   {
-    id: "MiTSUYAS",
-    name: "MiTSUYAS",
-  },
-  {
-    id: "Yoske",
-    name: "Yoske",
-  },
-  {
-    id: "S.O.N.S",
-    name: "S.O.N.S",
-  },
-  {
-    id: "ONIRIK",
-    name: "ONIRIK",
-  },
-  {
-    id: "ONO",
-    name: "ONO",
+    id: "daniel-bell",
+    name: "DANIEL BELL",
   },
   {
     id: "kohei",
     name: "Kohei",
   },
   {
-    id: "INDI ZONE",
-    name: "INDI ZONE",
-  },
-  {
-    id: "JUNKI INOUE",
-    name: "JUNKI INOUE",
-  },
-  {
-    id: "DJ Spot",
-    name: "DJ Spot",
-  },
-  {
-    id: "SHINGO",
-    name: "SHINGO",
-  },
-  {
-    id: "Ryouma Okabe",
-    name: "Ryouma Okabe",
-  },
-  {
-    id: "置石",
-    name: "置石",
-  },
-  {
-    id: "走る犬",
-    name: "走る犬",
-  },
-  {
-    id: "ToA",
-    name: "ToA",
-  },
-  {
-    id: "Tommorow Joe",
-    name: "Tommorow Joe",
-  },
-  {
-    id: "TAIHEI",
-    name: "TAIHEI",
-  },
-  {
-    id: "DJ AGEISHI",
-    name: "DJ AGEISHI",
-  },
-  {
-    id: "AKIRAM EN",
+    id: "akiram-en",
     name: "AKIRAM EN",
   },
   {
-    id: "HappySet",
-    name: "HappySet",
-  },
-  {
-    id: "YUSUKEV",
-    name: "YUSUKEV",
-  },
-  {
-    id: "ALTZ",
-    name: "ALTZ",
-  },
-  {
-    id: "ZUTSUKI-D",
-    name: "ZUTSUKI D",
-  },
-  {
-    id: "Zooey Loomer 1979",
-    name: "Zooey Loomer 1979",
-  },
-  {
-    id: "TERU-O",
-    name: "TERU O",
-  },
-  {
-    id: "TOTS",
-    name: "TOTS",
-  },
-  {
-    id: "pAradice",
-    name: "PAradice",
-  },
-  {
-    id: "YELLOWUHURU",
-    name: "YELLOWUHURU",
-  },
-  {
-    id: "PortaL",
-    name: "PortaL",
-  },
-  {
-    id: "TAKUMYMANN",
-    name: "TAKUMYMANN",
-  },
-  {
-    id: "Masa Takeuchi a.k.a Tabasco",
-    name: "Masa Takeuchi A.K.A Tabasco",
-  },
-  {
-    id: "CHILDA",
-    name: "CHILDA",
-  },
-  {
-    id: "You Forgot",
+    id: "you-forgot",
     name: "You Forgot",
   },
   {
-    id: "Suger-T",
-    name: "Suger T",
-  },
-  {
-    id: "NEWきんぎん",
-    name: "NEWきんぎん",
+    id: "yellowuhuru",
+    name: "YELLOWUHURU",
   },
 ];
 
@@ -736,7 +600,7 @@ const FESTIVALS = [
     desc_en: "Rainbow Disco Club takes place at the Higashi-Izu Cross Country Course in Shizuoka, transforming the natural terrain into an outdoor dance floor. The festival combines house and techno programming with Japan's scenic countryside setting. Known for its intimate scale and carefully curated lineup that balances international and domestic acts.",
     url: "https://www.rainbowdiscoclub.com/",
     instagram: "https://www.instagram.com/rainbowdiscoclub/",
-    lineup: ["Antal & Hunee", "Ben UFO", "Daphni", "DJ Maria.", "Dungeoneering (Albino Sound & Daigos)", "Feline", "Floating Points", "Gerd Janson", "Gonno", "HAAi", "Helena Hauff", "Jonathan Kusuma", "Jonny Rock", "Kikiorix", "Mala", "NC4K (Stones Taro & Lomax)", "Sisi b2b Ouissam b2b Yamarchy", "Suze Ijó", "Four Tet"],
+    lineup: ["Antal", "Hunee", "Ben UFO", "Daphni", "DJ Maria.", "Dungeoneering", "Feline", "Floating Points", "Gerd Janson", "Gonno", "HAAi", "Helena Hauff", "Jonathan Kusuma", "Jonny Rock", "Kikiorix", "Mala", "NC4K", "Sisi b2b Ouissam b2b Yamarchy", "Suze Ijó", "Four Tet"],
   },
   {
     id: "ala",
@@ -984,8 +848,23 @@ const FESTIVALS = [
   },
   {
     id: "etsuetsu",
-    name: "",
+    type: "rave",
+    name: "etsuetsu",
+    date: "2026-06-05/2026-06-07",
+    location: "Village Hakushu",
+    location_ja: "ヴィレッジ白州",
+    city: "Yamanashi",
+    address: "山梨県北杜市白州町白須上教来石平久保 ２１２４",
+    lat: 35.848364,
+    lng: 138.266241,
+    image: "images/festivals/etsuetsu.webp",
+    flyer: "images/festivals/etsuetsu-flyer.webp",
+    genre: ["TECHNO", "HOUSE", "LIVE"],
+    desc: "東京・神宮前の bonobo と、三軒茶屋の天狗食堂による共同主催の野外パーティー。2泊3日で開かれる。都市のクラブと食堂が、そのまま屋外に場所を移して開くという構図になっている。",
+    desc_en: "An open-air party running over three days and two nights, co-hosted by bonobo in Jingumae, Tokyo, and Tengu Shokudo in Sangenjaya. A club and a diner, both rooted in the city, relocating outdoors for a weekend.",
+    ticketUrl: "https://etsuetsu2026.peatix.com/",
     instagram: "https://www.instagram.com/etsu_etsu_/",
+    lineup: ["7e", "AKIRAM EN", "aliceyuki", "ALTZ", "Anna Wakana", "BONJAMAN", "CALPISS", "CHILDA", "DA=TI", "destrooy a.k.a dubdub", "DJ AGEISHI", "dj-yogurt", "DON KABACHO", "ginoｴﾁ", "ground", "HappySet", "HOBO BRAZIL", "ifax!", "kenjinho", "Kohey", "lostbaggage", "Masa Takeuchi a.k.a Tabasco", "michika", "mitoChang", "kevin-miyagi", "naotsun", "NEWきんぎん", "pAradice", "PortaL", "Ryouma Okabe", "dj-kensei", "Sht", "SINKICHI", "starkarmen", "Suger-T", "sui-rex", "suimin", "sunga", "TAIHEI", "TAKUMYMANN", "Taro Toko", "TERU-O", "THE KLO", "ToA", "Tommorow Joe", "TOTS", "Will Renuart", "YELLOWUHURU", "You Forgot", "YUSUKEV", "Zooey Loomer 1979", "ZUTSUKI-D", "カントリー田村", "塩尻寄生", "走る犬", "置石", "泥"],
   },
   {
     id: "festival-fruezinho",
@@ -1094,16 +973,6 @@ const FESTIVALS = [
     ticketUrl: "https://hacha-mecha-ticket.myshopify.com/",
     instagram: "https://www.instagram.com/hachamecha_fes/",
     lineup: ["どんぐりず", "Takuya Nakamura", "Soichi Terada", "Shinichi Osawa", "TRIPPYHOUSING", "FULLHOUSE", "豊と良治", "JUN INAGAWA", "Neibiss", "It's US!!!!", "ハンチング", "lit", "Dance sports"],
-  },
-  {
-    id: "sonic-mania",
-    type: "festival",
-    name: "Sonic Mania",
-    date: "2026-08-14/2026-08-15",
-    city: "Chiba",
-    genre: ["OTHERS"],
-    desc: "Summer Sonicのエレクトロニック特化型姉妹イベントは、千葉のフェスティバル・サーキットに凝縮されたダンスミュージックを届ける。本フェスティバルは、よりハードなテクノセットからアクセスしやすいハウス・プログラミングまで、エレクトロニックの幅広いスペクトラムを網羅した厳選ラインナップをキュレーションしている。メインのSummer Sonic体験に比べ、よりインティメートなオルタナティブとして位置づけられる。",
-    desc_en: "Summer Sonic's electronic-focused sister event brings concentrated doses of dance music to Chiba's festival circuit. The festival curates a focused lineup that spans the electronic spectrum, from harder techno sets to more accessible house programming. A more intimate alternative to the main Summer Sonic experience.",
   },
   {
     id: "one-park-festival",
@@ -1716,26 +1585,6 @@ const FESTIVALS = [
     desc: "兵庫県の「たびふさ 芦屋大悲閣」を拠点に活動するアンダーグラウンド・レイヴシリーズ。本格的な倉庫の雰囲気を保ちながら、国内外のテクノシーンから幅広くアーティストを招く的確なプログラミングで知られている。サウンドシステムは装飾を排し、機能性を最優先したラウな仕様。",
     desc_en: "Underground rave series operating from Tabifusa Ashiya Daihi-kaku in Hyogo. Known for maintaining a proper warehouse aesthetic with focused programming that draws from both local and international techno circuits. Raw sound system setup prioritizes function over flash.",
     instagram: "https://www.instagram.com/technogaoka/",
-  },
-  {
-    id: "etsuetsu",
-    type: "rave",
-    name: "etsuetsu",
-    date: "2026-06-05/2026-06-07",
-    location: "Village Hakushu",
-    location_ja: "ヴィレッジ白州",
-    city: "Yamanashi",
-    address: "山梨県北杜市白州町白須上教来石平久保 ２１２４",
-    lat: 35.848364,
-    lng: 138.266241,
-    image: "images/festivals/etsuetsu.webp",
-    flyer: "images/festivals/etsuetsu-flyer.webp",
-    genre: ["TECHNO", "HOUSE", "LIVE"],
-    desc: "東京・神宮前の bonobo と、三軒茶屋の天狗食堂による共同主催の野外パーティー。2泊3日で開かれる。都市のクラブと食堂が、そのまま屋外に場所を移して開くという構図になっている。",
-    desc_en: "An open-air party running over three days and two nights, co-hosted by bonobo in Jingumae, Tokyo, and Tengu Shokudo in Sangenjaya. A club and a diner, both rooted in the city, relocating outdoors for a weekend.",
-    ticketUrl: "https://etsuetsu2026.peatix.com/",
-    instagram: "https://www.instagram.com/etsu_etsu_/",
-    lineup: ["7e", "AKIRAM EN", "aliceyuki", "ALTZ", "Anna Wakana", "BONJAMAN", "CALPISS", "CHILDA", "DA=TI", "destrooy a.k.a dubdub", "DJ AGEISHI", "dj-yogurt", "DON KABACHO", "ginoｴﾁ", "ground", "HappySet", "HOBO BRAZIL", "ifax!", "kenjinho", "Kohey", "lostbaggage", "Masa Takeuchi a.k.a Tabasco", "michika", "mitoChang", "kevin-miyagi", "naotsun", "NEWきんぎん", "pAradice", "PortaL", "Ryouma Okabe", "dj-kensei", "Sht", "SINKICHI", "starkarmen", "Suger-T", "sui-rex", "suimin", "sunga", "TAIHEI", "TAKUMYMANN", "Taro Toko", "TERU-O", "THE KLO", "ToA", "Tommorow Joe", "TOTS", "Will Renuart", "YELLOWUHURU", "You Forgot", "YUSUKEV", "Zooey Loomer 1979", "ZUTSUKI-D", "カントリー田村", "塩尻寄生", "走る犬", "置石", "泥"],
   },
 ];
 
