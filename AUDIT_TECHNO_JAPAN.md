@@ -1938,3 +1938,51 @@ draft にした時点で 404 が発生する。`published` に戻せばページ
 今回は `grep unlinkSync` の一行で分かることを、確認せずに断定した。
 §9-20（クローラーに届くかとユーザーに届くかは別）と同じ構図で、
 **確かめていないことを確かめたことのように書いた。**
+
+### 9-29. 【申し送り】ARTISTS の draft 化と Title Case 修正の前提
+
+2026-08-03 深夜時点の状態。翌日以降に続ける際の前提をまとめる。
+
+#### draft 化の運用（段階1で判明したこと）
+
+| 事項 | 内容 |
+|---|---|
+| **生成物のコミットが伴う** | `LP/data/*.json`（6件）と `artists.html` の静的リンク。これを忘れると CI の「生成物がコミット内容と一致しません」でデプロイが止まる（実際に1回止めた） |
+| **まとめて行うと差分が大きい** | 18件なら詳細ページ36件の削除 + `artists.json` + 静的リンク18行。小分けを推奨 |
+| **内部リンクからの 404 流入は発生しない** | sitemap と `artists.html` の静的リンクは `build-detail-pages.mjs` が自動で消す。外部直リンクと検索結果からの流入のみが 404 に当たる |
+| **404 は自前ページ** | `LP/404.html` が返る（`<title>404 — TECHNO JAPAN`）。GitHub 既定の素の 404 ではなく、ナビとフッターを備えたページなので訪問者を誘導できる |
+| **取り消し可能** | `published` に戻せばページ・sitemap・静的リンクすべて復活する |
+
+残りは17件（18件から `suze-ij` を除く。照合が復活したため対象外）。
+
+#### Title Case 修正の進捗
+
+反映済み: A の10件 + `TKO` = **11件**。照合は全件維持される
+（変更が大文字小文字のみで `normName` の `toLowerCase()` により正規化結果が不変。14パターンで検証）。
+
+未調査: **19件**。内訳は `arch` 11件 / `ala` 5件 / その他3件。
+
+#### arch のフライヤーから読み取れたこと（重要）
+
+`LP/images/festivals/arch-flyer.webp` を確認したところ、
+**フライヤーの表記自体が全部大文字だった。**
+
+```
+AKIHIRO SUZUKI / ENDORPHIN / KEVIN MIYAGI / PSYCHOGEM aka DJHIROAKI
+SHO / TAKEHIRO IMAIZUMI / TAZZY / TKO / TMAK / YEARK / YURIPON
+CHOKO / CAPTAIN-K / TAKAAKI ITOH
+```
+
+つまり **LINEUP の全部大文字表記はフライヤーを書き写したもの**であり、
+アーティストの公式表記とは限らない。`arch` 由来11件は
+**フライヤーを根拠にできない。**個別に公式（SNS・レーベル）を当たる必要がある。
+
+一方で、フライヤーから**新しい事実**も得られた。
+
+- `PSYCHOGEM` は **`PSYCHOGEM aka DJHIROAKI`** が正式（別名義あり）
+- `TAKAAKI ITOH`（GUEST DJ）と **`198`** が LINEUP に入っていない可能性
+- `青 (COSθ)` の所属表記あり。`ao` の登録名 `青` と一致
+- 会場は「小平の里キャンプ場（群馬県みどり市大間々町小平甲495）」
+
+`ala` `transcendence` `rainbow-disco-club` のフライヤーも実体があるので、
+同様に確認できる。`waifu` は FLYER 未登録。
