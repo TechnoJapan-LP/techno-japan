@@ -245,13 +245,29 @@ def main():
         print("  ✅ なし")
 
     # ---- バージョンの不一致（同じアセットに複数のバージョン）----
+    #
+    # 【混在が正しい場合がある。揃える前に必ず理由を確認すること】
+    #
+    # detail.css の v=3/4 は意図的な分割で、揃えてはいけない。
+    #   1932e50「Redesign all festival detail pages」で detail.css に 259行を
+    #   追加したが、全て .festival-design-v2 / .festival-detail-hero 配下の
+    #   純粋な追加で、既存ルールの変更・削除は 0 行だった（実測）。
+    #   そのためフェス詳細178ページだけ v=4 に上げ、新ルールを使わない
+    #   アーティスト・会場・記事の264ページは v=3 に据え置いた。
+    #   ここを揃えて v=4 にすると、264ページ分の CSS キャッシュを
+    #   何の内容変更も無いまま捨てることになる。
+    #
+    # この警告は「混在している」という事実を報告するだけで、
+    # 「揃えるべき」という指示ではない。判断の材料は
+    # 「その版で増えた規則を、据え置き側のページが使うか」。
+    # 使わないなら据え置きが正しい。経緯は AUDIT §9-35。
     print("\n=== 同一アセットに複数バージョンが混在していないか ===")
     mixed = {a: sorted({v for v in fs.values() if v})
              for a, fs in refs.items()}
     mixed = {a: v for a, v in mixed.items() if len(v) > 1}
     if mixed:
         for a, v in sorted(mixed.items()):
-            print(f"  ⚠️  {a}: v={'/'.join(v)}")
+            print(f"  ⚠️  {a}: v={'/'.join(v)}（意図的な分割かを確認すること）")
             warnings.append(f"{a} が複数バージョンで参照されている（v={'/'.join(v)}）")
     else:
         print("  ✅ なし")

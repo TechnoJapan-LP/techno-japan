@@ -18,6 +18,11 @@
   4. EN ハブの描画後に日本語が残っていないこと（ja_containers / max_ja_chars）
      EN ハブの静的 HTML はほぼ空で、日本語は data.js から JS が描く。
      生成物を見る静的検査では原理的に捕まえられない領域を担当する。
+  5. 描画後に参照される画像が実際に取得できること（JA/EN 全ハブ、許容 0件）
+     2026-08-03 に EN ハブの画像が全滅した（相対パスが /en/images/... に
+     解決されて 404）。broken_image_refs は生成物 HTML の /images/ 参照しか
+     見ず、data.js から JS が埋めるパスは視界に入らない。
+     naturalWidth ではなく URL の取得可否を見る（AUDIT §9-35）。
 
 使い方:
   python3 scripts/check_hub_pages.py              # LP/ をローカル配信して検査
@@ -27,6 +32,7 @@
 
 import argparse
 import http.server
+import json
 import os
 import re
 import shutil
@@ -188,6 +194,81 @@ def find_chrome():
     return None
 
 
+IMAGE_TEST_PATH = "/__image-test.html"
+
+# main() が対象ページを埋めてから差し替える（Handler がリクエスト時に読む）。
+IMAGE_TEST_HTML = ""
+
+
+def image_test_html(paths):
+    """描画後に実際に参照される画像URLを集め、読み込めないものを数えるページ。
+
+    なぜ naturalWidth を見ないか:
+      2026-08-03 に EN ハブの画像が全滅した際、壊れた経路10のうち5は
+      background-image（CSS）で、naturalWidth を持たない。naturalWidth だけを
+      見る検査だと index.html の4件を素通りさせ、今回の事故の後半を
+      そのまま見逃していた。さらに loading="lazy" の画像は headless で
+      未読込のまま naturalWidth===0 になり誤検出する。
+      「参照されているURLが実際に取得できるか」を直接見るほうが、
+      経路の種類に依存せず誤検出も無い。詳細は AUDIT §9-35。
+
+    同一オリジンの /images/ だけを対象にする。外部CDN（Drive 等）は
+    ネットワーク事情で落ちるとノイズになるため見ない。
+    """
+    return IMAGE_TEST_TEMPLATE.replace("__PAGES__", json.dumps(paths))
+
+
+IMAGE_TEST_TEMPLATE = r"""<!doctype html><html><body data-image-result="pending" data-image-broken="">
+<script>
+const PAGES = __PAGES__;
+const wait = ms => new Promise(r => setTimeout(r, ms));
+(async () => {
+  const broken = [];
+  for (const page of PAGES) {
+    const frame = document.createElement('iframe');
+    frame.style.cssText = 'width:1280px;height:900px;border:0;position:absolute;left:-9999px;top:0';
+    frame.src = page;
+    document.body.appendChild(frame);
+    await new Promise(done => {
+      let settled = false;
+      const fin = () => { if (!settled) { settled = true; done(); } };
+      frame.addEventListener('load', fin, { once: true });
+      setTimeout(fin, 15000);
+    });
+    const doc = frame.contentDocument;
+    // カードが描かれる前に読むと画像ゼロで「異常なし」に見えてしまう。
+    for (let i = 0; i < 80 && doc; i++) {
+      if (doc.querySelector('img[src], [style*="background-image"]')) break;
+      await wait(100);
+    }
+    const urls = new Set();
+    if (doc) {
+      doc.querySelectorAll('img[src]').forEach(el => { if (el.src) urls.add(el.src); });
+      // ハブは background-image をインライン style で埋める。
+      doc.querySelectorAll('[style*="background-image"]').forEach(el => {
+        const m = /url\((['"]?)([^'"()]+)\1\)/.exec(el.getAttribute('style') || '');
+        if (!m) return;
+        try { urls.add(new URL(m[2], doc.baseURI).href); } catch (e) {}
+      });
+    }
+    for (const u of urls) {
+      let parsed;
+      try { parsed = new URL(u); } catch (e) { continue; }
+      if (parsed.origin !== location.origin) continue;
+      if (!/\/images\//.test(parsed.pathname)) continue;
+      try {
+        const res = await fetch(u, { cache: 'no-store' });
+        if (!res.ok) broken.push(page + ' ' + parsed.pathname + ' ' + res.status);
+      } catch (e) { broken.push(page + ' ' + parsed.pathname + ' fetch-failed'); }
+    }
+    frame.remove();
+  }
+  document.body.dataset.imageBroken = broken.slice(0, 20).join(' | ');
+  document.body.dataset.imageResult = String(broken.length);
+})();
+</script></body></html>"""
+
+
 class QuietHandler(http.server.SimpleHTTPRequestHandler):
     def log_message(self, *a):
         pass  # アクセスログで検査結果が埋もれるのを防ぐ
@@ -213,6 +294,7 @@ class Server(threading.Thread):
                 test_pages = {
                     VENUE_MAP_TEST_PATH: VENUE_MAP_TEST_HTML,
                     CURSOR_TEST_PATH: CURSOR_TEST_HTML,
+                    IMAGE_TEST_PATH: IMAGE_TEST_HTML,
                 }
                 test_html = test_pages.get(urlsplit(self.path).path)
                 if test_html is not None:
@@ -362,6 +444,8 @@ def main():
     if args.base:
         base = args.base.rstrip("/")
     else:
+        # 画像検査ページは対象ページ一覧を埋めてから配信する（Handler が読む）。
+        globals()["IMAGE_TEST_HTML"] = image_test_html(["/" + n for n in pages])
         server = Server(LP)
         server.start()
         base = f"http://127.0.0.1:{server.port}"
@@ -458,6 +542,25 @@ def main():
                 failures.append(
                     "festivals.html: 既存カーソルDOMとの重複防止・移動に失敗 — "
                     + (detail.group(1) if detail else hub_value)
+                )
+
+            # 描画後に参照される画像が実際に取得できるか（JA/EN 全ハブ）。
+            # 全ページを iframe で順に開くので他の検査より時間がかかる。
+            img_dom, _ = render(chrome, f"{base}{IMAGE_TEST_PATH}", max(args.budget, 90000))
+            img_result = re.search(r'<body[^>]*data-image-result="([^"]*)"', img_dom)
+            img_value = img_result.group(1) if img_result else "missing"
+            print(f"Broken images: {img_value}")
+            if img_value in ("missing", "pending", ""):
+                # 「検査が終わらなかった」を「異常なし」と読み替えない。
+                failures.append(
+                    f"画像検査が完了しなかった（{img_value or 'empty'}）"
+                    " — 描画待ちのタイムアウトか、検査ページ自体の失敗"
+                )
+            elif img_value != "0":
+                detail = re.search(r'data-image-broken="([^"]*)"', img_dom)
+                failures.append(
+                    f"読み込めない画像が {img_value} 件: "
+                    + (detail.group(1) if detail else "(内訳を取得できず)")
                 )
     finally:
         if server:
