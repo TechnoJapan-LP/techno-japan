@@ -15,6 +15,9 @@
      （静的リンクのフォールバックが残っていても検出できるよう、
        JS だけが生成するクラス名を数える）
   3. コンテナの中身が閾値以上のサイズであること
+  4. EN ハブの描画後に日本語が残っていないこと（ja_containers / max_ja_chars）
+     EN ハブの静的 HTML はほぼ空で、日本語は data.js から JS が描く。
+     生成物を見る静的検査では原理的に捕まえられない領域を担当する。
 
 使い方:
   python3 scripts/check_hub_pages.py              # LP/ をローカル配信して検査
@@ -262,6 +265,54 @@ def strip_style(html):
     return re.sub(r"<style\b.*?</style>", "", html, flags=re.S)
 
 
+# EN ハブに残る日本語を数えるための文字クラス。check_regressions.py と同じ。
+JA_RE = re.compile(r"[ぁ-ゟ゠-ヿ㐀-鿿ー々]")
+
+
+def container_inner(body, cid):
+    """id=cid の要素の中身。入れ子の同名タグを数えて対応する閉じまで取る。
+
+    measure() 側の container 抽出は最初の </tag> で止めるため入れ子で切れるが、
+    あちらは「閾値以上の大きさがあるか」を見るラチェットなので短く出ても害が無い。
+    こちらは「日本語が残っていないか」を見るので、切れると見逃しになる。
+    """
+    om = re.search(rf'<(\w+)[^>]*id="{re.escape(cid)}"[^>]*>', body)
+    if not om:
+        return None
+    tag = om.group(1)
+    rest = body[om.end():]
+    depth = 1
+    for mm in re.finditer(rf"</?{tag}\b", rest):
+        depth += 1 if mm.group(0)[1] != "/" else -1
+        if depth == 0:
+            return rest[:mm.start()]
+    return rest
+
+
+def count_ja(dom, spec):
+    """描画後 DOM の、データ描画コンテナに残る日本語の文字数。
+
+    <main> を使わないのは news.html / index.html が <main> を持たないため。
+    「見つからなければ全体」のような既定値を置くと、コンテナ名を間違えたときに
+    ナビやフッターまで数えて別の値にすり替わる（実際に一度そう誤報した）。
+    見つからないコンテナは失敗として返し、黙って別の意味にしない。
+    """
+    ids = spec.get("ja_containers")
+    if not ids:
+        return None, []
+    body = re.sub(r"<script\b[^>]*>.*?</script>", "", dom, flags=re.S)
+    body = re.sub(r"<!--.*?-->", "", body, flags=re.S)
+    body = strip_style(body)
+    total, missing = 0, []
+    for cid in ids:
+        inner = container_inner(body, cid)
+        if inner is None:
+            missing.append(cid)
+            continue
+        total += len(JA_RE.findall(re.sub(r"<[^>]+>", " ", inner)))
+    return total, missing
+
+
 def measure(dom, spec):
     """描画後 DOM から、JS が生成した要素数とコンテナサイズを測る。"""
     body = strip_style(dom)
@@ -328,7 +379,10 @@ def main():
                 for m in [UNCAUGHT_RE.search(line)] if m
             ]
             n, size = measure(dom, spec)
+            ja, ja_missing = count_ja(dom, spec)
             actual[name] = {"markers": n, "container_bytes": size}
+            if ja is not None:
+                actual[name]["ja_chars"] = ja
 
             status = "ok"
             if uncaught:
@@ -345,8 +399,25 @@ def main():
                 failures.append(
                     f"{name}: コンテナが {size}B（min {spec['min_container_bytes']}B）"
                 )
+            # EN ハブに日本語が残っていないか。静的検査では捕まえられない。
+            # EN ハブの静的 HTML はほぼ空で、日本語は data.js から JS が描くため
+            # （実測: EN Festivals の描画後に 11,196 字あった）。
+            if ja_missing:
+                status = "FAIL"
+                failures.append(
+                    f"{name}: ja_containers が見つからない（{', '.join(ja_missing)}）"
+                    " — コンテナ名の変更か描画失敗"
+                )
+            limit = spec.get("max_ja_chars")
+            if limit is not None and ja is not None and ja > limit:
+                status = "FAIL"
+                failures.append(
+                    f"{name}: 描画後に日本語が {ja} 字（max {limit}）"
+                    " — 言語分岐の漏れか、英語列が未入力のデータが増えた"
+                )
             rows.append((name, n, spec["min_markers"], size,
-                         spec.get("min_container_bytes", 0), len(uncaught), status))
+                         spec.get("min_container_bytes", 0), len(uncaught), status,
+                         ja, spec.get("max_ja_chars")))
 
         if server:
             map_dom, map_console = render(chrome, f"{base}{VENUE_MAP_TEST_PATH}", max(args.budget, 15000))
@@ -402,11 +473,14 @@ def main():
         return 0
 
     w = max(len(r[0]) for r in rows)
-    print(f"{'ページ'.ljust(w)}  {'要素':>6} {'min':>6} {'中身':>9} {'min':>8} {'例外':>5}  判定")
-    print("-" * (w + 48))
-    for name, n, mn, size, msz, unc, status in rows:
-        print(f"{name.ljust(w)}  {n:>6} {mn:>6} {size:>8,}B {msz:>7,}B {unc:>5}  "
-              f"{'✅' if status == 'ok' else '❌'}")
+    print(f"{'ページ'.ljust(w)}  {'要素':>6} {'min':>6} {'中身':>9} {'min':>8} {'例外':>5} "
+          f"{'JA':>5} {'max':>5}  判定")
+    print("-" * (w + 60))
+    for name, n, mn, size, msz, unc, status, ja, ja_max in rows:
+        ja_s = "—" if ja is None else str(ja)
+        ja_m = "—" if ja_max is None else str(ja_max)
+        print(f"{name.ljust(w)}  {n:>6} {mn:>6} {size:>8,}B {msz:>7,}B {unc:>5} "
+              f"{ja_s:>5} {ja_m:>5}  {'✅' if status == 'ok' else '❌'}")
 
     if failures:
         print("\n" + "=" * 60)

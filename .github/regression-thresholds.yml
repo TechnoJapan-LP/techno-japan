@@ -200,10 +200,11 @@ metrics:
       見ていない。名前から EN ハブの日本語漏れ全般を守っていると読めてしまうが、
       文言のうち静的な分は en_hub_jsonld_ja_chars /
       en_hub_static_links_ja_chars が分担する。
-      JS が data.js から描く本文（f.desc 等）はどれも見ておらず、
-      実行しないと見えないので check_hub_pages.py 側に指標を足す予定（未実装）。
+      JS が data.js から描く本文（f.desc 等）はここでは見ておらず、
+      実行しないと見えないので check_hub_pages.py の max_ja_chars が担当する。
       このメトリクスが緑でも本文が日本語のままでありうる。実際そうだった:
-      2026-08-03 時点で EN Festivals の描画後 <main> に日本語が約11,000字ある。
+      2026-08-03 に EN Festivals の描画後コンテナに日本語が 11,196 字あったが、
+      その間もこのメトリクスは 0 のまま緑だった。
 
   en_hub_jsonld_ja_chars:
     description: EN ハブの JSON-LD に残る日本語の文字数（alternateName を除く）
@@ -229,18 +230,23 @@ metrics:
   en_hub_static_links_ja_chars:
     description: EN ハブの STATIC_LINKS ブロックに残る日本語の文字数
     min: null
-    max: 216                  # 2026-08-03 実測。増加方向のみ回帰
+    max: 66                   # 2026-08-03 実測（216 → 66）。増加方向のみ回帰
     target: null              # 0 は達成不能。下記のとおり固有名詞が日本語のため
     note: >-
-      静的リンク一覧は writeHubLinks が JA ハブへ1回書き込み、EN 側は
-      URL だけ書き換えたコピーを持つ。ラベルは JA のまま。
-      実測 216 の内訳は festivals 188 / news 27 / artists 1。
-      【0 にできない理由】「森、道、市場」「円相芸術音楽祭」「御月民 -OTSUKIMI-」
-      のようにフェス名そのものが日本語で、name_en は入力しない方針
-      （2026-08-03 判断。名前はほぼ英字表記が実態で別列を持つ意味が薄い）。
+      静的リンク一覧は writeHubLinks が JA ハブへ書き込み、EN 側は
+      enHubFromJa が EN_HUB_LINKS のラベルへ差し替える。
+      当初は URL だけ書き換えたコピーで、ラベルが JA のままだった（216）。
+      festivalHubLabel に lang を通して 66 へ。editionPlace はもともと
+      lang を受け取れたのに 'ja' 固定で呼ばれていた。
+      【0 にできない理由】残り66字の内訳:
+      日本語名のフェス5件 24字（森、道、市場 / 円相芸術音楽祭 / 御月民 -OTSUKIMI- /
+      SPRING LOVE 春風 / CAPSULE-山中湖花火音楽祭）、記事タイトル 27字、
+      アーティスト「青」1字 — いずれも name_en / title_en 未入力。
+      name_en は入力しない方針（2026-08-03 判断。名前はほぼ英字表記が実態）。
+      残る14字は rainbow-disco-club-2026 の EDITIONS 行で LOCATION と
+      LOCATION_JA が入れ替わっているデータ誤り（報告済み・未修正）。
+      直れば 52 になるので、そのとき実測値へ引き下げる。
       したがって目標は 0 ではなく「増やさないこと」。
-      手順6で festivalHubLabel が EN で location_ja を使うのをやめれば
-      下がるので、そのとき実測値へ引き下げる。
 
   hub_language_toggles:
     description: 言語トグルが正しく相手言語へリンクしているハブ数（JA 6 + EN 6）
@@ -313,6 +319,22 @@ metrics:
 # marker には「JS だけが生成するクラス名」を指定する。静的リンクの
 # フォールバックが残っていても描画失敗を検出できるようにするため。
 # min_markers は実測値から余裕を持たせた値（データ件数の増減で多少ぶれる）。
+#
+# ja_containers / max_ja_chars（EN ハブのみ）:
+#   描画後のデータ描画コンテナに残る日本語の文字数を見る。EN ハブの静的 HTML は
+#   ほぼ空で、日本語は data.js から JS が描くため、静的検査では捕まえられない
+#   （2026-08-03 時点で EN Festivals に 11,196 字あったが、生成物を見る
+#   en_hub_leaks_to_ja は 0 のまま緑だった）。
+#
+#   <main> を使わずコンテナ id を列挙するのは、news.html と index.html が
+#   <main> を持たないため。「見つからなければ <main> や body へ」という
+#   フォールバックを置くと、id を間違えたときにナビやフッターまで数えて
+#   別の値にすり替わる（実際に一度そう誤報した）。見つからなければ FAIL にする。
+#
+#   max_ja_chars を 0 にできないページがある。フェス名・記事タイトルに
+#   日本語の固有名詞があり、name_en / title_en は入力しない方針のため。
+#   目標は 0 ではなく「増やさないこと」。--update は min_markers しか
+#   書き換えないので、この値は意図的に更新すること。
 hub_pages:
   festivals.html:
     container: festivals-main
@@ -349,21 +371,31 @@ hub_pages:
   en/festivals.html:
     container: festivals-main
     marker: festival-layout
+    ja_containers: [festivals-main]
+    max_ja_chars: 35    # 2026-08-03 実測。日本語名のフェス5件 21字 + rainbow-disco-club の LOCATION 空欄による location_ja フォールバック 14字。11,196 → 35
     min_markers: 50                # 実測 71
     min_container_bytes: 60000
   en/artists.html:
     marker: artist-card
+    ja_containers: [artists-grid]
+    max_ja_chars: 1    # 2026-08-03 実測。アーティスト「青」の1字。name_en は入力しない方針
     min_markers: 70                # 実測 101
     min_container_bytes: 40000
   en/venues.html:
     marker: venue-card
+    ja_containers: [venues-grid]
+    max_ja_chars: 0    # 2026-08-03 実測。0 を維持する。venue の desc_en は22/22そろっている
     min_markers: 18                # 実測 23
     min_container_bytes: 10000
   en/news.html:
     marker: feed-card
+    ja_containers: [featured-col, side-col, feed-grid]
+    max_ja_chars: 27    # 2026-08-03 実測。記事タイトル27字。title_en が未入力（CMS の ENGLISH VERSION）
     min_markers: 1                 # 実測 1
     min_container_bytes: 0
   en/index.html:
+    ja_containers: [stories-grid, festivals-preview, artists-track, venues-preview]
+    max_ja_chars: 39    # 2026-08-03 実測。記事タイトル27字 + フェス名12字。title_en / name_en 未入力
     # TOP は他ハブと構成が違い、<main> もカード用の共通クラスも持たない。
     # 静的に必ず存在するセクション見出し(.section-head)を存在確認に使う。
     marker: section-head
