@@ -655,12 +655,6 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/artists/freecinn.html</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://techno-japan.media/artists/nutmeg.html</loc>
     <lastmod>2026-08-03</lastmod>
     <changefreq>monthly</changefreq>
@@ -679,37 +673,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/artists/akey.html</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/artists/ayumu.html</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://techno-japan.media/artists/captain-k.html</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/artists/lowki.html</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/artists/masa-aka-kyounote.html</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/artists/menou-iwamaki.html</loc>
     <lastmod>2026-08-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -727,31 +691,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/artists/norid.html</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://techno-japan.media/artists/sakuma.html</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/artists/seco.html</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/artists/shimoyan.html</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/artists/tada.html</loc>
     <lastmod>2026-08-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -787,19 +727,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/artists/mio.html</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://techno-japan.media/artists/aliceyuki.html</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/artists/akaaki-ito.html</loc>
     <lastmod>2026-08-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -986,18 +914,6 @@
   </url>
   <url>
     <loc>https://techno-japan.media/artists/nc4k.html</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/artists/sisi.html</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/artists/ouissam.html</loc>
     <lastmod>2026-08-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -1477,18 +1393,6 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/en/artists/akaaki-ito.html</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/en/artists/akey.html</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://techno-japan.media/en/artists/akie.html</loc>
     <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
@@ -1544,12 +1448,6 @@
   </url>
   <url>
     <loc>https://techno-japan.media/en/artists/aoki-takamasa.html</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/en/artists/ayumu.html</loc>
     <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -1700,12 +1598,6 @@
   </url>
   <url>
     <loc>https://techno-japan.media/en/artists/four-tet.html</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/en/artists/freecinn.html</loc>
     <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -1867,19 +1759,7 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/en/artists/lowki.html</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://techno-japan.media/en/artists/mala.html</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/en/artists/masa-aka-kyounote.html</loc>
     <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -1891,19 +1771,7 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/en/artists/menou-iwamaki.html</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://techno-japan.media/en/artists/mimu.html</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/en/artists/mio.html</loc>
     <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -1933,12 +1801,6 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/en/artists/norid.html</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://techno-japan.media/en/artists/noritake.html</loc>
     <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
@@ -1958,12 +1820,6 @@
   </url>
   <url>
     <loc>https://techno-japan.media/en/artists/okadada.html</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/en/artists/ouissam.html</loc>
     <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -2017,31 +1873,13 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/en/artists/seco.html</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://techno-japan.media/en/artists/sherelle.html</loc>
     <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/en/artists/shimoyan.html</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://techno-japan.media/en/artists/sho.html</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/en/artists/sisi.html</loc>
     <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -2084,12 +1922,6 @@
   </url>
   <url>
     <loc>https://techno-japan.media/en/artists/sylvan-esso.html</loc>
-    <lastmod>2026-08-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/en/artists/tada.html</loc>
     <lastmod>2026-08-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
