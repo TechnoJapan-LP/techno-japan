@@ -43,4 +43,12 @@
     var e = String(en == null ? '' : en).trim();
     return window.TJ_LANG === 'en' ? (e || p || j) : (j || p || e);
   };
+
+  // data.js の画像は従来 `images/...`（JAハブでは正常な相対パス）だが、
+  // /en/ 配下では /en/images/... に解決される。共有ハブでは常にルート相対へ。
+  window.tjAssetPath = function (value) {
+    var s = String(value == null ? '' : value).trim();
+    if (!s || /^(?:https?:|data:|\/)/i.test(s)) return s;
+    return '/' + s;
+  };
 })();

@@ -722,7 +722,7 @@ function bindVenueHoverPreview(){
       img.loading = 'eager';
       img.decoding = 'async';
       img.onload = () => img.classList.add('loaded');
-      img.src = v.image;
+      img.src = tjAssetPath(v.image);
       imgWrap.appendChild(img);
     } else {
       const ph = document.createElement('div');

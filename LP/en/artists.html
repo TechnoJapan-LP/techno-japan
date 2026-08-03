@@ -703,7 +703,7 @@ function renderArtistsList() {
 
   grid.innerHTML = filtered.map((a, i) => {
     const bg = a.image
-      ? `background-image:url('${a.image}');background-position:${a.imagePosition || 'center'}`
+      ? `background-image:url('${tjAssetPath(a.image)}');background-position:${a.imagePosition || 'center'}`
       : `background:${gradients[i % gradients.length]}`;
     const genreLabel = getGenreString(a);
     return `

@@ -1096,7 +1096,7 @@ function renderFestivalCard(f, m, i) {
   // JA は location_ja 優先、EN は英字の location 優先で location_ja へ退避する。
   const locationText = [tjLocalized(f.location, f.location_ja, ''), f.city].filter(Boolean).join(', ');
   const imgHtml = f.image
-    ? `<img ${tjImageSizeAttrs(f.image)} loading="lazy" decoding="async" src="${f.image}" alt="${name}" style="object-position:${f.imagePosition || 'center'}" onerror="this.style.display='none'">`
+    ? `<img ${tjImageSizeAttrs(f.image)} loading="lazy" decoding="async" src="${tjAssetPath(f.image)}" alt="${name}" style="object-position:${f.imagePosition || 'center'}" onerror="this.style.display='none'">`
     : '';
   const genres = Array.isArray(f.genre) ? f.genre : (f.genre ? [f.genre] : []);
   return `

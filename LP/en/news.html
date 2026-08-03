@@ -949,7 +949,7 @@ function renderMainGrid() {
     <a href="${articleDetailHref(featured)}" data-article-detail-link class="featured-card">
       <div class="featured-card-image">
         ${featured.image
-          ? `<img ${tjImageSizeAttrs(featured.image)} loading="lazy" decoding="async" src="${featured.image}" alt="${featuredTitle}">`
+          ? `<img ${tjImageSizeAttrs(featured.image)} loading="lazy" decoding="async" src="${tjAssetPath(featured.image)}" alt="${featuredTitle}">`
           : `<div class="featured-card-image-placeholder">COMING SOON</div>`}
         <div class="featured-card-date">${formatDateSplit(featured.date)}</div>
       </div>
@@ -1030,7 +1030,7 @@ function renderFeed() {
     <a href="${articleDetailHref(a)}" data-article-detail-link class="feed-card">
       <div class="feed-card-image">
         ${a.image
-          ? `<img ${tjImageSizeAttrs(a.image)} loading="lazy" decoding="async" src="${a.image}" alt="${tjLocalized(a.title, '', a.title_en)}">`
+          ? `<img ${tjImageSizeAttrs(a.image)} loading="lazy" decoding="async" src="${tjAssetPath(a.image)}" alt="${tjLocalized(a.title, '', a.title_en)}">`
           : `<div class="feed-card-image-placeholder">COMING SOON</div>`}
       </div>
       <div class="feed-card-tag"><span class="tag-dot"></span> ${a.category}</div>
