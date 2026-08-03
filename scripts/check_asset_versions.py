@@ -44,7 +44,26 @@ REF_RE = re.compile(
 
 # CMS Publish が単独commit/pushするため、通常の before..HEAD では後続の
 # 生成物commitから見失うアセット。人が更新する通常アセットは差分検査で扱う。
-TRACK_ACROSS_PUSHES = {"data.js"}
+#
+# 【data.js は入れないこと】2026-08-03 に一度入れて外した。
+#
+#   data.js は CMS の Publish Now が単独で自動commitするため、?v の更新は
+#   構造的に必ず後追いになる。同日に3回、Publish のたびにこの検査が落ちた。
+#   運用を厳しくしても消えない、CMS の設計に内在する順序制約である。
+#
+#   そもそも data.js は ?v で鮮度を管理していない。sw.js は data.js を
+#   stale-while-revalidate に置いており、その理由が sw.js のコメントと
+#   AUDIT §9-18 に「?v 運用が効かないから」と明記されている。
+#   ここで ?v を強制するのは、その決定と正面から矛盾する。
+#
+#   cache-first に落ちる事故（§9-18 の実害）に対する保険は、
+#   scripts/check_sw_routing.mjs の MUST_NOT_BE_CACHE_FIRST が
+#   sw.js を実際に実行して守っている。?v は二重の保険で、
+#   しかも維持できないほうだった。
+#
+#   代償: Publish 直後の初回表示だけ古い（SWR なので次の遷移で新しくなる）。
+#   経緯は AUDIT §9-30（導入）と §9-32（撤回）。
+TRACK_ACROSS_PUSHES = set()
 
 
 def git(*args):

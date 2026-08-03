@@ -43,17 +43,24 @@ const ORIGIN = 'https://techno-japan.media';
  * commit するものなので、?v を上げる運用で足りる。その運用漏れは
  * scripts/check_asset_versions.py が別途止める。
  */
+/* 【query の値は判定に影響しない】sw.js は url.pathname で分岐するため、
+   ?v が幾つでもルーティングは変わらない。ここに値を書いているのは
+   「クエリ付きでも pathname 判定が効くこと」を再現するためだけで、
+   実態と一致していなくても検査は正しく動く。
+   とはいえ古い値が残ると読む人を誤解させるので、2026-08-03 時点の
+   実値に合わせてある。ズレても慌てて直す必要はない。 */
 const MUST_NOT_BE_CACHE_FIRST = [
-  { path: '/data.js', query: '?v=7', why: 'Publish Now が commit するので ?v が上がらない' },
+  { path: '/data.js', query: '?v=10', why: 'Publish Now が commit するので ?v が上がらない' },
 ];
 
 /** 逆に cache-first のままでよいことを固定するケース（戦略の取り違え防止）。 */
 const EXPECTED = [
-  { path: '/common.js', query: '?v=2', want: 'cacheFirst' },
+  { path: '/common.js', query: '?v=3', want: 'cacheFirst' },
   { path: '/common.css', query: '?v=3', want: 'cacheFirst' },
-  { path: '/image-dimensions.js', query: '?v=2', want: 'cacheFirst' },
+  { path: '/image-dimensions.js', query: '?v=4', want: 'cacheFirst' },
+  { path: '/localize.js', query: '?v=1', want: 'cacheFirst' },
   { path: '/images/festivals/hacha-mecha.webp', query: '', want: 'staleWhileRevalidate' },
-  { path: '/data.js', query: '?v=7', want: 'staleWhileRevalidate' },
+  { path: '/data.js', query: '?v=10', want: 'staleWhileRevalidate' },
 ];
 
 /**

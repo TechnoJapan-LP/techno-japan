@@ -89,6 +89,12 @@ self.addEventListener('fetch', event => {
   // data.js は CMS の Publish Now が直接 commit するため、他の JS のように
   // 「変更したら参照元 HTML の ?v を上げる」運用が効かない。?v=7 は固定のまま
   // 中身だけが変わるので、キャッシュキーで鮮度を管理できない。
+  //
+  // 【相互参照】この「?v で鮮度管理しない」という決定は、
+  // scripts/check_asset_versions.py の TRACK_ACROSS_PUSHES と対になっている。
+  // あちらに data.js を足すと「?v を必ず上げよ」と要求することになり、
+  // ここの前提と矛盾する。2026-08-03 に一度足して同日に外した（AUDIT §9-32）。
+  // data.js の ?v は固定でよい。鮮度はこの stale-while-revalidate が担う。
   if (url.pathname.endsWith('/data.js')) {
     event.respondWith(staleWhileRevalidate(request));
     return;
