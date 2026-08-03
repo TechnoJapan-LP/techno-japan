@@ -230,7 +230,7 @@ metrics:
   en_hub_static_links_ja_chars:
     description: EN ハブの STATIC_LINKS ブロックに残る日本語の文字数
     min: null
-    max: 66                   # 2026-08-03 実測（216 → 66）。増加方向のみ回帰
+    max: 52                   # 2026-08-03 実測（216 → 66 → 52）。増加方向のみ回帰
     target: null              # 0 は達成不能。下記のとおり固有名詞が日本語のため
     note: >-
       静的リンク一覧は writeHubLinks が JA ハブへ書き込み、EN 側は
@@ -243,9 +243,9 @@ metrics:
       SPRING LOVE 春風 / CAPSULE-山中湖花火音楽祭）、記事タイトル 27字、
       アーティスト「青」1字 — いずれも name_en / title_en 未入力。
       name_en は入力しない方針（2026-08-03 判断。名前はほぼ英字表記が実態）。
-      残る14字は rainbow-disco-club-2026 の EDITIONS 行で LOCATION と
-      LOCATION_JA が入れ替わっているデータ誤り（報告済み・未修正）。
-      直れば 52 になるので、そのとき実測値へ引き下げる。
+      LOCATION 逆転（rainbow-disco-club）は 2026-08-03 に修正済みで、
+      これにより 66 → 52 になった。逆転の再発は
+      festival_location_language_inversions が別途 0 で止める。
       したがって目標は 0 ではなく「増やさないこと」。
 
   hub_language_toggles:
@@ -381,7 +381,7 @@ hub_pages:
     container: festivals-main
     marker: festival-layout
     ja_containers: [festivals-main]
-    max_ja_chars: 35    # 2026-08-03 実測。日本語名のフェス5件 21字 + rainbow-disco-club の LOCATION 空欄による location_ja フォールバック 14字。11,196 → 35
+    max_ja_chars: 21    # 2026-08-03 実測。日本語名のフェス5件のみ。11,196 → 35 →（LOCATION 逆転修正で）21
     min_markers: 50                # 実測 71
     min_container_bytes: 60000
   en/artists.html:

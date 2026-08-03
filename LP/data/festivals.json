@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-08-03T05:21:06.250Z",
+  "_generatedAt": "2026-08-03T09:59:14.377Z",
   "count": 89,
   "items": [
     {
@@ -95,7 +95,7 @@
       "TYPE": "festival",
       "NAME": "Rainbow Disco Club",
       "DATE": "2026-04-17/2026-04-19",
-      "LOCATION": "東伊豆クロスカントリーコース",
+      "LOCATION": "Higashiizu Cross Country Course",
       "CITY": "Shizuoka",
       "ADDRESS": "静岡県賀茂郡東伊豆町稲取3348-19",
       "LAT": "34.7896",
@@ -111,7 +111,7 @@
       "STATUS": "published",
       "DESC_EN": "Rainbow Disco Club takes place at the Higashi-Izu Cross Country Course in Shizuoka, transforming the natural terrain into an outdoor dance floor. The festival combines house and techno programming with Japan's scenic countryside setting. Known for its intimate scale and carefully curated lineup that balances international and domestic acts.",
       "imagePosition": "center top",
-      "location_ja": "Higashi-Izu Cross Country Course"
+      "location_ja": "東伊豆クロスカントリーコース"
     },
     {
       "ID": "ala",
