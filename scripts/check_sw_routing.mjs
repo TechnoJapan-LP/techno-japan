@@ -56,9 +56,9 @@ const MUST_NOT_BE_CACHE_FIRST = [
 /** 逆に cache-first のままでよいことを固定するケース（戦略の取り違え防止）。 */
 const EXPECTED = [
   { path: '/common.js', query: '?v=3', want: 'cacheFirst' },
-  { path: '/common.css', query: '?v=3', want: 'cacheFirst' },
+  { path: '/common.css', query: '?v=4', want: 'cacheFirst' },
   { path: '/image-dimensions.js', query: '?v=4', want: 'cacheFirst' },
-  { path: '/localize.js', query: '?v=1', want: 'cacheFirst' },
+  { path: '/localize.js', query: '?v=2', want: 'cacheFirst' },
   { path: '/images/festivals/hacha-mecha.webp', query: '', want: 'staleWhileRevalidate' },
   { path: '/data.js', query: '?v=10', want: 'staleWhileRevalidate' },
 ];

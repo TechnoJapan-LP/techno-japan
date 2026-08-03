@@ -42,10 +42,16 @@ REF_RE = re.compile(
     r'(?:src|href)="(/?(?:[a-z0-9.-]+/)*([a-z0-9.-]+\.(?:js|css)))(\?v=(\d+))?"'
 )
 
-# CMS Publish が単独commit/pushするため、通常の before..HEAD では後続の
-# 生成物commitから見失うアセット。人が更新する通常アセットは差分検査で扱う。
+# 「現在の ?v 導入後にアセットが変更されていないか」の検査から除外するもの。
 #
-# 【data.js は入れないこと】2026-08-03 に一度入れて外した。
+# 【除外リストであって対象リストではない】2026-08-03 に一度これを対象リストの
+# ままにして空にし、検査全体を無効化する事故を起こした（AUDIT §9-36）。
+# localize.js を変更したのに ?v=1 を据え置いたまま push され、Service Worker の
+# cache-first で旧版が返り続けて、本番の返却訪問者にだけ修正が届かなかった。
+# 差分検査のほうは origin/main と比較するため、merge 後は差分ゼロで素通りする。
+# **この検査は全アセットに掛ける。除外は理由を書いて明示的に足すこと。**
+#
+# 【data.js を除外する理由】2026-08-03 に一度対象へ入れて外した。
 #
 #   data.js は CMS の Publish Now が単独で自動commitするため、?v の更新は
 #   構造的に必ず後追いになる。同日に3回、Publish のたびにこの検査が落ちた。
@@ -63,7 +69,7 @@ REF_RE = re.compile(
 #
 #   代償: Publish 直後の初回表示だけ古い（SWR なので次の遷移で新しくなる）。
 #   経緯は AUDIT §9-30（導入）と §9-32（撤回）。
-TRACK_ACROSS_PUSHES = set()
+VERSION_CHECK_EXEMPT = {"data.js"}
 
 
 def git(*args):
@@ -211,7 +217,7 @@ def main():
     # 現在のバージョン表記を導入した最終commitを比較し、更新漏れを持続的に検出する。
     print("\n=== 現在の ?v 導入後に変更されたアセット ===")
     stale_history = []
-    for asset in sorted(TRACK_ACROSS_PUSHES):
+    for asset in sorted(set(refs) - VERSION_CHECK_EXEMPT):
         users = refs.get(asset, {})
         if not users:
             continue

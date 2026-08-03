@@ -42,7 +42,7 @@
 <link rel="dns-prefetch" href="https://w.behold.so">
 <link rel="dns-prefetch" href="https://formsubmit.co">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/common.css?v=3">
+<link rel="stylesheet" href="/common.css?v=4">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
@@ -580,6 +580,7 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
   <button class="nav-back" onclick="document.querySelector('.nav-overlay').classList.remove('active');document.querySelector('.nav-hamburger').classList.remove('active');history.back()">← BACK</button>
 </div>
 
+<main id="main-content">
 <!-- ===================== LIST VIEW WRAPPER ===================== -->
 <div id="list-view">
 
@@ -688,6 +689,7 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
   </form>
 </section>
 
+</main>
 <footer>
   <div class="footer-top">
     <div class="footer-logo">TECHNO JAPAN</div>
@@ -710,7 +712,7 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
 
 <script src="/common.js?v=3" defer></script>
 <!-- localize.js は defer にしない。下のインライン描画が同期実行で tjLocalized を呼ぶ -->
-<script src="/localize.js?v=1"></script>
+<script src="/localize.js?v=2"></script>
 <script src="/data.js?v=10"></script>
 <script src="/image-dimensions.js?v=4"></script>
 <script>
@@ -1108,6 +1110,6 @@ if (readNewsStateFromUrl()) {
   }
 </script>
 <script src="/favorites.js?v=1" defer></script>
-<script src="/search.js?v=1" defer></script>
+<script src="/search.js?v=2" defer></script>
 </body>
 </html>
