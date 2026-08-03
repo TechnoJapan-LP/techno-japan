@@ -14,7 +14,9 @@
 検査内容:
   1. 変更された JS/CSS を検出し、それを参照する HTML の ?v が
      同じ差分の中で更新されているか
-  2. クエリ無しで参照されている JS/CSS が無いか（更新手段が無い状態）
+  2. 現在の ?v 導入後に JS/CSS だけが変更されていないか
+     （Publish と生成物が別コミット・別pushでも検出する）
+  3. クエリ無しで参照されている JS/CSS が無いか（更新手段が無い状態）
 
 使い方:
   python3 scripts/check_asset_versions.py                 # HEAD と origin/main を比較
@@ -40,10 +42,41 @@ REF_RE = re.compile(
     r'(?:src|href)="(/?(?:[a-z0-9.-]+/)*([a-z0-9.-]+\.(?:js|css)))(\?v=(\d+))?"'
 )
 
+# CMS Publish が単独commit/pushするため、通常の before..HEAD では後続の
+# 生成物commitから見失うアセット。人が更新する通常アセットは差分検査で扱う。
+TRACK_ACROSS_PUSHES = {"data.js"}
+
 
 def git(*args):
     return subprocess.run(["git", *args], capture_output=True, text=True,
                           cwd=ROOT).stdout
+
+
+def git_ok(*args):
+    return subprocess.run(["git", *args], capture_output=True, text=True,
+                          cwd=ROOT).returncode == 0
+
+
+def latest_commit(path, pickaxe=None):
+    args = ["log", "-1", "--format=%H"]
+    if pickaxe:
+        args.extend(["-G", pickaxe])
+    args.extend(["--", path])
+    return git(*args).strip()
+
+
+def latest_matching_commits(paths, pickaxe):
+    """Return each path's latest commit matching pickaxe, with one git walk."""
+    output = git("log", "--format=@@%H", "--name-only", "-G", pickaxe,
+                 "--", *paths)
+    result = {}
+    commit = None
+    for line in output.splitlines():
+        if line.startswith("@@"):
+            commit = line[2:]
+        elif commit and line in paths and line not in result:
+            result[line] = commit
+    return result
 
 
 def html_files():
@@ -100,7 +133,7 @@ def main():
     else:
         print("  ✅ なし")
 
-    # ---- (2) クエリ無しの参照 ----
+    # ---- (3) クエリ無しの参照 ----
     print("=== クエリ無しで参照されているアセット ===")
     unversioned = {a: [f for f, v in fs.items() if v is None] for a, fs in refs.items()}
     unversioned = {a: fs for a, fs in unversioned.items() if fs}
@@ -114,7 +147,7 @@ def main():
     else:
         print("  ✅ なし")
 
-    # ---- (1) 変更されたのに ?v が据え置き ----
+    # ---- (1) 指定範囲で変更されたのに ?v が据え置き ----
     if not args.no_diff:
         base = args.base
         if not git("rev-parse", "--verify", "--quiet", base).strip():
@@ -152,6 +185,45 @@ def main():
                         f"{asset} を変更したが ?v が据え置き。"
                         f"参照元（{list(users)[0]} 等 {len(users)}箇所）の ?v を上げること"
                     )
+
+    # ---- (2) 現在の ?v 導入後にアセットだけが変更されていないか ----
+    # push の before..HEAD だけでは、Publish commit と生成物 commit が別pushに
+    # 分かれた場合に変更の組み合わせを見失う。各アセットの最終変更と、参照元で
+    # 現在のバージョン表記を導入した最終commitを比較し、更新漏れを持続的に検出する。
+    print("\n=== 現在の ?v 導入後に変更されたアセット ===")
+    stale_history = []
+    for asset in sorted(TRACK_ACROSS_PUSHES):
+        users = refs.get(asset, {})
+        if not users:
+            continue
+        versions = {v for v in users.values() if v}
+        if len(versions) != 1:
+            continue
+        asset_path = f"LP/{asset}"
+        asset_commit = latest_commit(asset_path)
+        if not asset_commit:
+            continue
+        pattern = rf"{re.escape(asset)}\?v={next(iter(versions))}"
+        version_commits_by_path = latest_matching_commits(list(users), pattern)
+        version_commits = list(version_commits_by_path.values())
+        if not version_commits:
+            continue
+        # 全参照元が現在の版へ更新された後にアセット変更が無ければ安全。
+        if all(git_ok("merge-base", "--is-ancestor", asset_commit, c)
+               for c in version_commits):
+            continue
+        # 作業ツリーで同じ参照を更新中なら、上の差分検査が内容を検証する。
+        if any(re.search(rf"^\+.*{pattern}", git("diff", "--", path), re.M)
+               for path in users):
+            continue
+        stale_history.append(asset)
+        print(f"  ❌ {asset}: アセット最終変更が ?v={next(iter(versions))} 導入後")
+        failures.append(
+            f"{asset} は現在の ?v={next(iter(versions))} を導入した後に変更されている。"
+            "コミットやpushが分かれていても参照元の ?v を上げること"
+        )
+    if not stale_history:
+        print("  ✅ なし")
 
     # ---- バージョンの不一致（同じアセットに複数のバージョン）----
     print("\n=== 同一アセットに複数バージョンが混在していないか ===")

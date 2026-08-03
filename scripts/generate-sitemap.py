@@ -8,6 +8,8 @@ import os
 import re
 import sys
 from datetime import date
+from urllib.parse import quote
+from xml.sax.saxutils import escape
 
 BASE_URL = "https://techno-japan.media"
 LP_DIR = os.path.join(os.path.dirname(__file__), "..", "LP")
@@ -118,6 +120,11 @@ def main():
     import glob
     en_root = os.path.join(LP_DIR, "en")
     for f in sorted(glob.glob(os.path.join(en_root, "*", "*.html"))):
+        # 旧Title Case URLなどの noindex リダイレクトスタブは検索対象ではない。
+        # sitemap には転送先の正規ページだけを載せる。
+        with open(f, "r", encoding="utf-8", errors="replace") as html_file:
+            if '<meta name="robots" content="noindex">' in html_file.read():
+                continue
         rel = os.path.relpath(f, LP_DIR).replace(os.sep, "/")
         urls.append({
             "loc": f"{BASE_URL}/{rel}",
@@ -141,7 +148,9 @@ def main():
              '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     for u in urls:
         lines.append("  <url>")
-        lines.append(f"    <loc>{u['loc']}</loc>")
+        # URLとして非ASCII・空白等をpercent-encodeし、XML予約文字もescapeする。
+        loc = escape(quote(u["loc"], safe=":/%"))
+        lines.append(f"    <loc>{loc}</loc>")
         lines.append(f"    <lastmod>{u['lastmod']}</lastmod>")
         lines.append(f"    <changefreq>{u['changefreq']}</changefreq>")
         lines.append(f"    <priority>{u['priority']}</priority>")
