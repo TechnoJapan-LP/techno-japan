@@ -573,6 +573,8 @@
 <script src="common.js?v=3" defer></script>
 <script src="favorites.js?v=1" defer></script>
 <script src="search.js?v=1" defer></script>
+<!-- localize.js は defer にしない。下のインライン描画が同期実行で tjLocalized を呼ぶ -->
+<script src="localize.js?v=1"></script>
 <script src="data.js?v=9"></script>
 <script src="image-dimensions.js?v=4"></script>
 <script>
@@ -674,10 +676,14 @@ function getFilteredArtists() {
   }
 
   // Sort
+  // ロケールを 'en' で固定する。引数なしだと閲覧者のブラウザ設定で順序が変わり、
+  // JA ハブと EN ハブでカードの並びが食い違って見比べたときに混乱する。
+  // 並べ替えのキーは表示名ではなく a.name のまま。表示名（tjLocalized）で
+  // 並べると JA/EN で順序が変わってしまい、固定する意味が無くなる。
   if (currentSort === 'a-z') {
-    list.sort((a, b) => a.name.localeCompare(b.name));
+    list.sort((a, b) => a.name.localeCompare(b.name, 'en'));
   } else {
-    list.sort((a, b) => b.name.localeCompare(a.name));
+    list.sort((a, b) => b.name.localeCompare(a.name, 'en'));
   }
 
   return list;
@@ -705,7 +711,7 @@ function renderArtistsList() {
       <div class="artist-card-img" style="${bg}"></div>
       <div class="artist-card-content">
         <div class="artist-card-genre">${genreLabel}</div>
-        <div class="artist-card-name">${a.name}</div>
+        <div class="artist-card-name">${tjLocalized(a.name, '', a.name_en)}</div>
         <div class="artist-card-city">${a.country || a.city || ''}</div>
       </div>
       <div class="artist-fav-mount" data-fav-mount="artist" data-fav-id="${a.id}" onclick="event.preventDefault();event.stopPropagation()"></div>

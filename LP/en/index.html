@@ -725,6 +725,8 @@
 <script src="/common.js?v=3" defer></script>
 <script src="/favorites.js?v=1" defer></script>
 <script src="/search.js?v=1" defer></script>
+<!-- localize.js は defer にしない。下のインライン描画が同期実行で tjLocalized を呼ぶ -->
+<script src="/localize.js?v=1"></script>
 <script src="/data.js?v=9"></script>
 <script src="/image-dimensions.js?v=4"></script>
 <script>
@@ -776,7 +778,7 @@
         ${sideCards.map((a, i) => `
           <a class="side-card${i >= STORY_INITIAL_SIDE ? ' is-hidden' : ''}" href="${articleUrl(a)}">
             <div class="side-card-tag"><span class="tag-dot"></span>${a.category || 'STORY'}</div>
-            <div class="side-card-title">${a.title}</div>
+            <div class="side-card-title">${tjLocalized(a.title, '', a.title_en)}</div>
             <div class="side-card-meta">${fmtDate(a.date)}${a.readTime ? ` &middot; ${a.readTime} MIN READ` : ''}</div>
             <div class="side-card-arrow"></div>
           </a>
@@ -859,7 +861,7 @@
                 <span class="fest-row-num">#${pad2(i + 1)}</span>
                 <span>${fmtFestRange(f.date)}</span>
               </div>
-              <div class="fest-row-name">${f.name}</div>
+              <div class="fest-row-name">${tjLocalized(f.name, '', f.name_en)}</div>
             </div>
             <div class="fest-row-meta">
               <div class="fest-row-loc">${f.city || f.location_ja || f.location || ''}</div>
@@ -907,7 +909,7 @@
         <div class="artist-mini-overlay"></div>
         <div class="artist-mini-num">#${pad2((i % artistsToShow.length) + 1)}</div>
         <div class="artist-mini-content">
-          <div class="artist-mini-name">${a.name}</div>
+          <div class="artist-mini-name">${tjLocalized(a.name, '', a.name_en)}</div>
           <div class="artist-mini-genre">${(Array.isArray(a.genre) ? a.genre.join(' / ') : (a.genre || ''))}</div>
         </div>
       </a>`;
@@ -1039,7 +1041,7 @@
         <div class="venue-mini-overlay"></div>
         <div class="venue-mini-content">
           <div class="venue-mini-area">${v.area || ''}</div>
-          <div class="venue-mini-name">${v.name}</div>
+          <div class="venue-mini-name">${tjLocalized(v.name, '', v.name_en)}</div>
           <div class="venue-mini-meta">${v.city || ''}${v.capacity ? ` &middot; CAP ${v.capacity}` : ''}</div>
         </div>
       </a>

@@ -709,6 +709,8 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
 </footer>
 
 <script src="common.js?v=3" defer></script>
+<!-- localize.js は defer にしない。下のインライン描画が同期実行で tjLocalized を呼ぶ -->
+<script src="localize.js?v=1"></script>
 <script src="data.js?v=9"></script>
 <script src="image-dimensions.js?v=4"></script>
 <script>
@@ -939,17 +941,21 @@ function renderMainGrid() {
   const sideItems = sorted.slice(1, 4);
 
   // Featured left
+  // 記事の title_en / excerpt_en は data.js にまだ1件も無い（CMS の
+  // 「🌐 ENGLISH VERSION」に入力されれば詳細ページと同時に効く）。
+  // 現状は JA へフォールバックする。
+  const featuredTitle = tjLocalized(featured.title, '', featured.title_en);
   document.getElementById('featured-col').innerHTML = `
     <a href="${articleDetailHref(featured)}" data-article-detail-link class="featured-card">
       <div class="featured-card-image">
         ${featured.image
-          ? `<img ${tjImageSizeAttrs(featured.image)} loading="lazy" decoding="async" src="${featured.image}" alt="${featured.title}">`
+          ? `<img ${tjImageSizeAttrs(featured.image)} loading="lazy" decoding="async" src="${featured.image}" alt="${featuredTitle}">`
           : `<div class="featured-card-image-placeholder">COMING SOON</div>`}
         <div class="featured-card-date">${formatDateSplit(featured.date)}</div>
       </div>
       <div class="featured-card-body">
         <div class="featured-card-tag"><span class="tag-dot"></span> ${featured.category}</div>
-        <div class="featured-card-title">${featured.title}</div>
+        <div class="featured-card-title">${featuredTitle}</div>
         <div class="featured-card-meta">${featured.readTime || 5} MIN READ</div>
         <div class="read-link">READ <span>→</span></div>
       </div>
@@ -959,8 +965,8 @@ function renderMainGrid() {
   document.getElementById('side-col').innerHTML = sideItems.map(a => `
     <a href="${articleDetailHref(a)}" data-article-detail-link class="side-card">
       <div class="side-card-tag"><span class="tag-dot"></span> ${a.category}</div>
-      <div class="side-card-title">${a.title}</div>
-      <div class="side-card-excerpt">${a.excerpt}</div>
+      <div class="side-card-title">${tjLocalized(a.title, '', a.title_en)}</div>
+      <div class="side-card-excerpt">${tjLocalized(a.excerpt, '', a.excerpt_en)}</div>
       <div class="side-card-meta">${formatDate(a.date)} · ${a.readTime || 5} MIN READ</div>
       <div class="side-card-arrow"></div>
     </a>
@@ -1024,12 +1030,12 @@ function renderFeed() {
     <a href="${articleDetailHref(a)}" data-article-detail-link class="feed-card">
       <div class="feed-card-image">
         ${a.image
-          ? `<img ${tjImageSizeAttrs(a.image)} loading="lazy" decoding="async" src="${a.image}" alt="${a.title}">`
+          ? `<img ${tjImageSizeAttrs(a.image)} loading="lazy" decoding="async" src="${a.image}" alt="${tjLocalized(a.title, '', a.title_en)}">`
           : `<div class="feed-card-image-placeholder">COMING SOON</div>`}
       </div>
       <div class="feed-card-tag"><span class="tag-dot"></span> ${a.category}</div>
-      <div class="feed-card-title">${a.title}</div>
-      <div class="feed-card-excerpt">${a.excerpt}</div>
+      <div class="feed-card-title">${tjLocalized(a.title, '', a.title_en)}</div>
+      <div class="feed-card-excerpt">${tjLocalized(a.excerpt, '', a.excerpt_en)}</div>
       <div class="feed-card-meta">
         <span>${formatDate(a.date)}</span>
         <span class="meta-dot"></span>

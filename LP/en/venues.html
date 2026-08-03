@@ -273,7 +273,7 @@ nav { padding: 20px 40px; background: rgba(8,8,8,0.97); mix-blend-mode: normal; 
   "@type": "CollectionPage",
   "name": "Venues — TECHNO JAPAN",
   "url": "https://techno-japan.media/venues.html",
-  "description": "東京・大阪ほか日本各地のクラブ＆ヴェニューガイド。Clubs and venues from Japan's underground techno and house scene.",
+  "description": "Clubs, warehouses and music bars across Japan. The venues that define the country's underground electronic music scene.",
   "isPartOf": {
     "@type": "WebSite",
     "name": "TECHNO JAPAN",
@@ -511,6 +511,8 @@ nav { padding: 20px 40px; background: rgba(8,8,8,0.97); mix-blend-mode: normal; 
 <script src="/common.js?v=3" defer></script>
 <script src="/favorites.js?v=1" defer></script>
 <script src="/search.js?v=1" defer></script>
+<!-- localize.js は defer にしない。下のインライン描画が同期実行で tjLocalized を呼ぶ -->
+<script src="/localize.js?v=1"></script>
 <script src="/data.js?v=9"></script>
 <script>
 const MONTHS_SHORT = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
@@ -702,14 +704,16 @@ function bindVenueHoverPreview(){
 
   function fillFor(v){
     metaEl.textContent = `${v.city || ''}${v.area ? ' · ' + v.area : ''}`;
-    nameEl.textContent = v.name;
+    nameEl.textContent = tjLocalized(v.name, '', v.name_en);
     const parts = [];
     if (v.capacity) parts.push(`CAP. ${v.capacity}`);
     const genre = Array.isArray(v.genre) ? v.genre.join(' / ') : (v.genre || '');
     if (genre) parts.push(genre);
     if (v.type) parts.push(v.type.toUpperCase());
     statsEl.innerHTML = parts.map(p => `<span>${p}</span>`).join('');
-    descEl.textContent = v.desc || '';
+    // desc_en は22/22件そろっている。ホバー時にしか描かれないため
+    // headless の回帰検査には映らない（2026-08-03 の判断で検査対象外）。
+    descEl.textContent = tjLocalized(v.desc, '', v.desc_en);
     // image
     imgWrap.innerHTML = '';
     if (v.image && v.image.trim()) {
@@ -759,7 +763,7 @@ function renderVenuesList() {
       <a href="/en/venues/${encodeURIComponent(v.id)}.html" data-venue-detail-link data-vid="${v.id}" class="venue-card reveal" data-city="${v.city}" style="transition-delay:${i * 80}ms">
         <div class="venue-card-content">
           <div class="venue-card-city">${[v.city, v.area].filter(Boolean).join(' · ')}</div>
-          <div class="venue-card-name">${v.name}</div>
+          <div class="venue-card-name">${tjLocalized(v.name, '', v.name_en)}</div>
           <div class="venue-card-area">${v.capacity ? '~' + v.capacity : ''}</div>
           <div class="venue-card-genre">${v.genre ? (Array.isArray(v.genre) ? v.genre.join(' / ') : v.genre) : ''}</div>
         </div>

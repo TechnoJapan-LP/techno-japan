@@ -441,7 +441,7 @@ footer { padding: 60px 40px; }
   "@type": "CollectionPage",
   "name": "Festivals — TECHNO JAPAN",
   "url": "https://techno-japan.media/festivals.html",
-  "description": "日本全国のテクノ・ハウス・野外フェス／レイヴのデータベース。開催地・日程・ジャンルから探せる。Music festivals across Japan — techno, house, ambient, and beyond.",
+  "description": "Techno, house and open-air festivals across Japan. Browse by date, region and genre — the definitive guide to Japan's electronic music festivals and underground raves.",
   "isPartOf": {
     "@type": "WebSite",
     "name": "TECHNO JAPAN",
@@ -727,6 +727,8 @@ footer { padding: 60px 40px; }
 <script src="/common.js?v=3" defer></script>
 <script src="/favorites.js?v=1" defer></script>
 <script src="/search.js?v=1" defer></script>
+<!-- localize.js は defer にしない。下のインライン描画が同期実行で tjLocalized を呼ぶ -->
+<script src="/localize.js?v=1"></script>
 <script src="/data.js?v=9"></script>
 <script src="/image-dimensions.js?v=4"></script>
 <script>
@@ -1085,14 +1087,21 @@ function applyMonthFilter() {
 
 /* ========== RENDER FESTIVAL CARD ========== */
 function renderFestivalCard(f, m, i) {
+  // 言語別の値。EN ハブでも同じコードが動く（localize.js / TJ_LANG）。
+  // name_en は現状データが1件も無いので実質 no-op だが、
+  // 将来 NAME_EN が入ったとき描画側を触らずに済むよう通しておく。
+  const name = tjLocalized(f.name, '', f.name_en);
+  const desc = tjLocalized(f.desc, '', f.desc_en);
+  // build-detail-pages.mjs の festivalLocation() と同じ呼び方。
+  // JA は location_ja 優先、EN は英字の location 優先で location_ja へ退避する。
+  const locationText = [tjLocalized(f.location, f.location_ja, ''), f.city].filter(Boolean).join(', ');
   const imgHtml = f.image
-    ? `<img ${tjImageSizeAttrs(f.image)} loading="lazy" decoding="async" src="${f.image}" alt="${f.name}" style="object-position:${f.imagePosition || 'center'}" onerror="this.style.display='none'">`
+    ? `<img ${tjImageSizeAttrs(f.image)} loading="lazy" decoding="async" src="${f.image}" alt="${name}" style="object-position:${f.imagePosition || 'center'}" onerror="this.style.display='none'">`
     : '';
   const genres = Array.isArray(f.genre) ? f.genre : (f.genre ? [f.genre] : []);
-  const locationText = [f.location_ja || f.location, f.city].filter(Boolean).join(', ');
   return `
     <section class="festival-section reveal" data-fest-id="${f.id}" style="transition-delay:${i * 100}ms">
-      <a class="festival-card-link" data-festival-detail-link href="/en/festivals/${encodeURIComponent(f.id)}.html" aria-label="${f.name || ''} details"></a>
+      <a class="festival-card-link" data-festival-detail-link href="/en/festivals/${encodeURIComponent(f.id)}.html" aria-label="${name} details"></a>
       <div class="festival-layout">
         <div class="festival-image-wrap">
           ${imgHtml}
@@ -1101,8 +1110,10 @@ function renderFestivalCard(f, m, i) {
         <div class="festival-info-col">
           <div class="festival-info-top">
             <div class="festival-month-label">${String(m + 1).padStart(2, '0')} / ${MONTHS[m]}</div>
-            <h2 class="festival-name">${f.name || ''}</h2>
-            <div class="festival-desc-jp">${f.desc || ''}</div>
+            <h2 class="festival-name">${name}</h2>
+            <!-- クラス名の -jp は EN では意味的に合わないが、common.css の
+                 セレクタなので変えない（追従漏れのほうが危険） -->
+            <div class="festival-desc-jp">${desc}</div>
           </div>
           <div class="festival-info-bottom">
             <div class="festival-meta-row">

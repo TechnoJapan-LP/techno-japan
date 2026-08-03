@@ -62,6 +62,49 @@
 - かつて `news.html` だけが動的注入を持っていたが、SPA 詳細の廃止（`38e0325`）で
   一緒に消えた。**現在は4ハブとも特別扱いは無い。**
 
+## ハブの言語分岐（JA / EN）
+
+EN ハブ5枚（festivals / artists / venues / news / index）は
+`build-detail-pages.mjs` の `enHubFromJa` が JA から機械生成する。
+
+- **ハブ JS を JA/EN で同一に保つ。** 言語分岐は実行時に
+  `LP/localize.js` の `TJ_LANG`（`document.documentElement.lang`）で行う。
+- **`enHubFromJa` で JS の式を置換しないこと。** `f.desc` → `f.desc_en` のような
+  置換は `f.desc_en_en` や `festival-desc-jp` にも当たる。下の
+  「HTML を正規表現で扱うときの注意」と同じ罠で、あちらより危険。
+- 生成後は **JA と EN の行数を比較**する（5枚とも一致するのが正常）。
+
+### ⚠️ localizedValue 相当が2箇所にある
+
+同じフォールバック規則の実装が**2つ**ある。**片方だけ直さないこと。**
+
+| 場所 | 用途 | 形 |
+|---|---|---|
+| `scripts/build-detail-pages.mjs` の `localizedValue()` | 詳細ページ。ビルド時にサーバ側で解決 | `(primary, ja, en, lang)` |
+| `LP/localize.js` の `tjLocalized()` | ハブ。ブラウザで実行時に解決 | `(primary, ja, en)` — lang は `TJ_LANG` から暗黙 |
+
+規則は同一（`en` なら `en || primary || ja`、`ja` なら `ja || primary || en`）。
+ハブはブラウザ、詳細はビルド時なので実行環境が違い、1本には寄せていない。
+
+### ⚠️ localize.js に `defer` を付けないこと
+
+ハブのインライン描画スクリプトは**パース中に同期実行**され、その時点で
+`tjLocalized` を呼ぶ。`defer` にすると描画時に未定義になり、全カードが
+フォールバック側に落ちる。2026-08-03 に headless Chrome で実測して確認した
+（inline 実行時 `UNDEFINED` / DOMContentLoaded 時 `defined`）。
+`data.js` と `image-dimensions.js` が `defer` 無しなのと同じ理由。
+`common.js` は `defer` なので**ここには置けない**（一度そう設計して撤回した）。
+
+### データ側の前提
+
+- **`name_en` は入力しない方針**（2026-08-03 判断）。フェス・アーティスト・
+  会場名はほぼ英字表記が実態で、別列を持つ意味が薄い。`tjLocalized(x.name, '', x.name_en)`
+  は現状 no-op だが、将来 NAME_EN が入ったとき描画側を触らずに済むよう通してある。
+  日本語名のもの（`森、道、市場` / `円相芸術音楽祭` / `御月民 -OTSUKIMI-` 等）だけ
+  いずれ英語表記を検討する。
+- `desc_en` はフェス89/89・会場22/22 で揃っている。記事の
+  `title_en` / `excerpt_en` / `body_en` は未入力（CMS の「🌐 ENGLISH VERSION」）。
+
 ## HTML を正規表現で扱うときの注意
 
 - **閉じタグの並びを境界にしない。** 例: `<span class="nav-lang">[\s\S]*?</span></span>`

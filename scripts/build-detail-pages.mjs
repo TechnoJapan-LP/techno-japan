@@ -1186,6 +1186,7 @@ function enHubFromJa(html, page) {
     for (const attr of ['name="description"', 'property="og:description"', 'name="twitter:description"']) {
       s = s.replace(new RegExp(`(<meta ${attr} content=")[^"]*`), `$1${d}`);
     }
+    s = replaceCollectionPageDesc(s, d, page);
   }
 
   // 内部リンク: EN 版があるページだけ /en/ へ。相対・絶対の両表記に対応する。
@@ -1227,6 +1228,39 @@ function enHubFromJa(html, page) {
   s = s.split(jaToggle).join(enToggle);
 
   return s;
+}
+
+/* JSON-LD の description を EN 版へ。
+
+   EN_HUB_DESC を meta 3種にしか適用しておらず、JSON-LD の description が
+   JA のまま残っていた（2026-08-03、en_hub_jsonld_ja_chars で検出。
+   EN ハブ4枚が日本語併記だった）。
+
+   対象は CollectionPage.description だけにする。index.html の
+   WebSite.description は「サイト全体の説明」で、ページの説明で上書きするのは
+   意味的に誤り。あちらは元から英語で日本語の混入も無い。
+
+   置換は JSON.parse で値を特定してから、その文字列リテラルだけを差し替える。
+   生ブロックを正規表現で書き換えない（§9-16）。整形も行数も変わらないので、
+   「JA と EN の行数を比較する」という検証がそのまま使える。 */
+function replaceCollectionPageDesc(html, desc, page) {
+  return html.replace(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g, (block, json) => {
+    let parsed;
+    try { parsed = JSON.parse(json); } catch { return block; }   // 解析できない塊は触らない
+    let out = block;
+    for (const o of (Array.isArray(parsed) ? parsed : [parsed])) {
+      if (!o || o['@type'] !== 'CollectionPage') continue;
+      if (typeof o.description !== 'string' || o.description === desc) continue;
+      const literal = JSON.stringify(o.description);
+      // 見つからないなら黙って素通りさせない。JSON の整形が想定と違うということで、
+      // 素通りさせると「置換したつもりで JA が残る」= 今回直している事故そのものになる。
+      if (!out.includes(literal)) {
+        throw new Error(`${page}: JSON-LD の description を特定できない（整形が想定と違う）`);
+      }
+      out = out.split(literal).join(JSON.stringify(desc));
+    }
+    return out;
+  });
 }
 
 function hreflangPair(page, self) {
