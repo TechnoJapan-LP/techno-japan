@@ -44,6 +44,7 @@ LDJSON_RE = re.compile(r'<script[^>]*application/ld\+json[^>]*>(.*?)</script>', 
 # ひらがな・カタカナ・CJK統合漢字・長音記号・々 のみ。
 # — や · は英文でも正当に使うので含めない。
 JA_RE = re.compile(r"[ぁ-ゟ゠-ヿ㐀-鿿ー々]")
+ASCII_RE = re.compile(r"^[\x00-\x7F]*$")
 
 # 静的リンクブロック。START の名前を \1 で受けて対応する END までを取る。
 # 名前を照合しない `.*?` は、ブロックが増えたときに別ブロックの END で
@@ -126,6 +127,26 @@ def has_class(body, class_name):
 def is_redirect_stub(html):
     """build-detail-pages.mjs の REDIRECTS が出す旧URL維持用スタブか。"""
     return "<title>Redirecting…</title>" in html and 'http-equiv="refresh"' in html
+
+
+def location_language_inversions():
+    """LOCATION に日本語、location_ja にASCIIのみが入る反転を検出する。"""
+    path = LP / "data" / "festivals.json"
+    if not path.exists():
+        return []
+    doc = json.loads(read(path))
+    rows = doc.get("items", doc) if isinstance(doc, dict) else doc
+    issues = []
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        location = str(row.get("LOCATION", row.get("location", "")) or "").strip()
+        location_ja = str(row.get("LOCATION_JA", row.get("location_ja", "")) or "").strip()
+        # location_ja 空欄はフォールバックとして正常。両欄ASCIIも正常（WOMB等）。
+        if location and location_ja and JA_RE.search(location) and ASCII_RE.fullmatch(location_ja):
+            issues.append({"id": str(row.get("ID", row.get("id", "")) or "").strip(),
+                           "location": location, "location_ja": location_ja})
+    return issues
 
 
 def measure():
@@ -315,6 +336,9 @@ def measure():
     )
     m["artist_id_violations"] = len(bad_ids)
     m["_artist_id_violation_list"] = bad_ids
+    location_issues = location_language_inversions()
+    m["festival_location_language_inversions"] = len(location_issues)
+    m["_festival_location_language_inversion_list"] = location_issues
 
     return m
 
@@ -370,6 +394,10 @@ def main():
         print("\nID 規約違反（DATA_SCHEMA §1.1）:")
         for i in actual["_artist_id_violation_list"]:
             print(f"  - {i}")
+    if actual["_festival_location_language_inversion_list"]:
+        print("\nLOCATION / location_ja の文字種逆転:")
+        for item in actual["_festival_location_language_inversion_list"]:
+            print(f"  - {item['id']}: LOCATION={item['location']!r} / location_ja={item['location_ja']!r}")
 
     if failures:
         print("\n" + "=" * 60)

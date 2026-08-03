@@ -2085,6 +2085,18 @@ function validateBeforeSave(section, payload){
   return errors;
 }
 
+// LOCATION は英語・ローマ字、location_ja は日本語という入力規約の明らかな逆転。
+// 両方ASCIIの会場名（WOMB等）や location_ja 空欄は正常系なので警告しない。
+function locationLanguageWarning(row){
+  const location=String(row?.LOCATION ?? row?.location ?? '').trim();
+  const locationJa=String(row?.LOCATION_JA ?? row?.location_ja ?? '').trim();
+  const hasJa=/[\u3040-\u30ff\u3400-\u9fff]/.test(location);
+  const jaIsAscii=locationJa !== '' && /^[\x00-\x7F]*$/.test(locationJa);
+  return hasJa && jaIsAscii
+    ? 'LOCATION に日本語が入り、Location (JA) が英字のみです。入力欄が逆になっていないか確認してください。\n\nLOCATION = 英語・ローマ字表記\nLocation (JA) = 日本語表記\n\nこのまま保存しますか?'
+    : '';
+}
+
 /* 画像を圧縮: 最大幅 maxW、品質 quality
    WebP対応ブラウザでは WebP（〜35%軽量）、非対応なら JPEG にフォールバック */
 function compressImage(file, maxW=1920, quality=0.85){
@@ -2947,6 +2959,11 @@ function saveEdit(section){
   }
   // Publishing fields をマージ（author以外）
   if(section !== 'author') Object.assign(payload, getPubFields(section));
+
+  if(section === 'festival'){
+    const warning=locationLanguageWarning(payload);
+    if(warning && !confirm('⚠️ '+warning)) return;
+  }
 
   const unregisteredArtists=(section==='festival')
     ? lineups.f.filter(a=>a.startsWith('?')).map(a=>a.substring(1))
@@ -3958,6 +3975,10 @@ function submitToSheet(section){
   if(errors.length){
     return toast(errors[0], 'error');
   }
+  if(section === 'festival'){
+    const warning=locationLanguageWarning(payload);
+    if(warning && !confirm('⚠️ '+warning)) return;
+  }
   // Festivalの場合、未登録アーティストを自動でARTISTSに追加
   const unregisteredArtists=(section==='festival')
     ? lineups.f.filter(a=>a.startsWith('?')).map(a=>a.substring(1))
@@ -4540,6 +4561,20 @@ function publishSanityCheck(d){
       +'\n日付型セルは公開時に自動で正規化されるためサイトは壊れませんが、'
       +'\nD列を「書式なしテキスト」にして入力し直すのが正しい状態です。'
       +'\n\nこのまま公開しますか?')) return {ok:false, message:'Publishをキャンセルしました（DATEを修正してください）'};
+  }
+  const locationIssues=(d.FESTIVALS||[]).map(f=>({
+    id:(f.ID||f.id||'').trim(),
+    location:String(f.LOCATION??f.location??'').trim(),
+    locationJa:String(f.location_ja??f.LOCATION_JA??f.locationJa??'').trim()
+  })).filter(f=>f.location && f.locationJa
+    && /[\u3040-\u30ff\u3400-\u9fff]/.test(f.location)
+    && /^[\x00-\x7F]*$/.test(f.locationJa));
+  if(locationIssues.length){
+    const detail=locationIssues.slice(0,10).map(x=>'  ・'+x.id+' — LOCATION='+x.location+' / location_ja='+x.locationJa).join('\n')
+      +(locationIssues.length>10?'\n  …他 '+(locationIssues.length-10)+' 件':'');
+    if(!confirm('⚠️ LOCATION / location_ja の文字種逆転が '+locationIssues.length+' 件あります。\n'
+      +detail+'\n\nLOCATION = 英語・ローマ字表記\nLocation (JA) = 日本語表記\n\nこのまま公開しますか?'))
+      return {ok:false, message:'Publishをキャンセルしました（LOCATION / location_ja を確認してください）'};
   }
   return {ok:true, counts};
 }

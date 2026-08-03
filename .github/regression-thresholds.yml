@@ -309,6 +309,15 @@ metrics:
       exit(1) するが、詳細ページの元になる data.js は CMS の Publish Now(GAS)
       が生成する別経路で、その検証を通らない。ここが実質唯一の自動関門。
 
+  festival_location_language_inversions:
+    description: LOCATION に日本語、location_ja にASCIIのみが入るフェス件数
+    min: 0
+    max: 0
+    target: 0
+    note: >-
+      location_ja の空欄（LOCATIONへのフォールバック）と、WOMBのように両欄が
+      ASCIIの正当な会場名は対象外。Publish前にも同じ検査を行う。
+
 # ハブページの JS 健全性（scripts/check_hub_pages.py）
 #
 # 生成物の静的検査では「JS は配信されているが実行時に死ぬ」障害を検出できない。
