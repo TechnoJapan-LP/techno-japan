@@ -70,11 +70,11 @@ const ARTISTS = [
   },
   {
     id: "dj-miku",
-    name: "Dj Miku",
+    name: "DJ MIKU",
   },
   {
     id: "dj-kensei",
-    name: "Dj Kensei",
+    name: "DJ KENSEI",
   },
   {
     id: "dj-yogurt",
@@ -86,11 +86,11 @@ const ARTISTS = [
   },
   {
     id: "taichi-kawahira",
-    name: "Taichi Kawahira",
+    name: "TAICHI KAWAHIRA",
   },
   {
     id: "tsutomu",
-    name: "Tsutomu",
+    name: "TSUTOMU",
   },
   {
     id: "qmico",
@@ -102,7 +102,7 @@ const ARTISTS = [
   },
   {
     id: "nutmeg",
-    name: "Nutmeg",
+    name: "NUTMEG",
   },
   {
     id: "snipe1",
@@ -142,7 +142,7 @@ const ARTISTS = [
   },
   {
     id: "mayudepth",
-    name: "Mayudepth",
+    name: "MAYUDEPTH",
   },
   {
     id: "akii",
@@ -154,7 +154,7 @@ const ARTISTS = [
   },
   {
     id: "choko",
-    name: "Choko",
+    name: "CHOKO",
   },
   {
     id: "akihiro-suzuki",
@@ -162,7 +162,7 @@ const ARTISTS = [
   },
   {
     id: "endorphin",
-    name: "Endorphin",
+    name: "endorphin",
   },
   {
     id: "kevin-miyagi",
@@ -198,7 +198,7 @@ const ARTISTS = [
   },
   {
     id: "yuripon",
-    name: "Yuripon",
+    name: "DJ YURIPON",
   },
   {
     id: "ao",
@@ -226,7 +226,7 @@ const ARTISTS = [
   },
   {
     id: "dj-maria",
-    name: "Dj Maria.",
+    name: "DJ MARIA.",
   },
   {
     id: "dungeoneering",
@@ -579,7 +579,7 @@ const FESTIVALS = [
     name: "Rainbow Disco Club",
     date: "2026-04-17/2026-04-19",
     location: "東伊豆クロスカントリーコース",
-    location_ja: "Higashi-Izu Cross Country Course",
+    location_ja: "Higashiizu Cross Country Course",
     city: "Shizuoka",
     address: "静岡県賀茂郡東伊豆町稲取3348-19",
     lat: 34.7896,
