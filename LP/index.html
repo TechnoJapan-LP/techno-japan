@@ -850,11 +850,11 @@
         const hidden = i >= FEST_INITIAL ? ' is-hidden' : '';
         return `
         <a class="fest-row${hidden}" href="festivals.html#festival/${f.id}">
-          ${img ? `<div class="fest-row-bg" style="background-image:url('${img}')"></div>` : `<div class="fest-row-bg"></div>`}
+          ${img ? `<div class="fest-row-bg" style="background-image:url('${tjAssetPath(img)}')"></div>` : `<div class="fest-row-bg"></div>`}
           <div class="fest-row-overlay"></div>
           <div class="fest-row-inner">
             ${img
-              ? `<div class="fest-row-thumb" style="background-image:url('${img}');background-position:${f.imagePosition || 'center'}"></div>`
+              ? `<div class="fest-row-thumb" style="background-image:url('${tjAssetPath(img)}');background-position:${f.imagePosition || 'center'}"></div>`
               : `<div class="fest-row-thumb placeholder"></div>`}
             <div class="fest-row-main">
               <div class="fest-row-eyebrow">
@@ -904,7 +904,7 @@
     const cardHtml = (a, i) => `
       <a class="artist-mini" href="artists.html#artist/${a.id}">
         ${a.image && a.image.trim()
-          ? `<div class="artist-mini-img" style="background-image:url('${a.image}');background-position:${a.imagePosition || 'center'}"></div>`
+          ? `<div class="artist-mini-img" style="background-image:url('${tjAssetPath(a.image)}');background-position:${a.imagePosition || 'center'}"></div>`
           : `<div class="artist-mini-fallback"></div>`}
         <div class="artist-mini-overlay"></div>
         <div class="artist-mini-num">#${pad2((i % artistsToShow.length) + 1)}</div>
@@ -1036,7 +1036,7 @@
     venuesEl.innerHTML = sorted.map(v => `
       <a class="venue-mini" href="venues.html#venue/${v.id}">
         ${v.image && v.image.trim()
-          ? `<div class="venue-mini-img" style="background-image:url('${v.image}');background-position:${v.imagePosition || 'center'}"></div>`
+          ? `<div class="venue-mini-img" style="background-image:url('${tjAssetPath(v.image)}');background-position:${v.imagePosition || 'center'}"></div>`
           : `<div class="venue-mini-fallback"></div>`}
         <div class="venue-mini-overlay"></div>
         <div class="venue-mini-content">
