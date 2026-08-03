@@ -101,10 +101,6 @@ const ARTISTS = [
     name: "Ga Su",
   },
   {
-    id: "freecinn",
-    name: "Freecinn",
-  },
-  {
     id: "nutmeg",
     name: "Nutmeg",
   },
@@ -117,28 +113,8 @@ const ARTISTS = [
     name: "Liarako",
   },
   {
-    id: "akey",
-    name: "Akey",
-  },
-  {
-    id: "ayumu",
-    name: "Ayumu",
-  },
-  {
     id: "captain-k",
     name: "Captain K",
-  },
-  {
-    id: "lowki",
-    name: "Lowki",
-  },
-  {
-    id: "masa-aka-kyounote",
-    name: "Masa Aka Kyounote",
-  },
-  {
-    id: "menou-iwamaki",
-    name: "Menou Iwamaki",
   },
   {
     id: "mimu",
@@ -149,24 +125,8 @@ const ARTISTS = [
     name: "Naotsun",
   },
   {
-    id: "norid",
-    name: "Norid",
-  },
-  {
     id: "sakuma",
     name: "Sakuma",
-  },
-  {
-    id: "seco",
-    name: "Seco",
-  },
-  {
-    id: "shimoyan",
-    name: "Shimoyan",
-  },
-  {
-    id: "tada",
-    name: "Tada",
   },
   {
     id: "yazzus",
@@ -189,16 +149,8 @@ const ARTISTS = [
     name: "Akii",
   },
   {
-    id: "mio",
-    name: "Mio",
-  },
-  {
     id: "aliceyuki",
     name: "Aliceyuki",
-  },
-  {
-    id: "akaaki-ito",
-    name: "Akaaki Ito",
   },
   {
     id: "choko",
@@ -323,14 +275,6 @@ const ARTISTS = [
   {
     id: "nc4k",
     name: "NC4K",
-  },
-  {
-    id: "sisi",
-    name: "Sisi",
-  },
-  {
-    id: "ouissam",
-    name: "Ouissam",
   },
   {
     id: "yamarchy",
