@@ -128,6 +128,11 @@ function addHtmlImageDimensions(html) {
 
 /* ---------- 回遊導線（ページ間の相互リンク）。main() が索引をセットする ---------- */
 let XLINK = { fests: [], venues: [], appearMap: new Map() };
+
+/* EN ハブの静的リンク一覧。main() が { page: { marker, html } } をセットし、
+   enHubFromJa がラベルを差し替える。JA から機械生成する経路では URL しか
+   書き換わらず、ラベルは JA のまま残っていた。 */
+let EN_HUB_LINKS = {};
 function relatedChips(items, dir, lang) {
   const prefix = lang === 'en' ? '/en' : '';
   return `<div class="lineup-list">` + items.map((x) =>
@@ -1124,14 +1129,17 @@ function writeAll(pages, dirName) {
 }
 
 /* ---------- ハブページの静的リンク ---------- */
-function festivalHubLabel(f, editions = []) {
+function festivalHubLabel(f, editions = [], lang = 'ja') {
   const details = [];
   const current = [...editions].sort((a, b) => String(b.DATE_START || '').localeCompare(String(a.DATE_START || '')))[0];
   const year = String(current?.EDITION || current?.DATE_START || '').match(/\b\d{4}\b/)?.[0];
   if (year) details.push(year);
-  const place = current ? editionPlace(current, 'ja') : '';
+  // lang を 'ja' で固定していたため、EN ハブの静的リンクに JA の会場名が出ていた。
+  // editionPlace はもともと lang を受け取れる（LOCATION_EN → LOCATION → LOCATION_JA）。
+  const place = current ? editionPlace(current, lang) : '';
   if (place) details.push(place);
-  return `${f.name || ''}${details.length ? ` — ${details.join(' · ')}` : ''}`;
+  const name = lang === 'en' ? (f.name_en || f.name || '') : (f.name || '');
+  return `${name}${details.length ? ` — ${details.join(' · ')}` : ''}`;
 }
 
 function hubLinkList(items, dirName, labelFor) {
@@ -1188,6 +1196,13 @@ function enHubFromJa(html, page) {
     }
     s = replaceCollectionPageDesc(s, d, page);
   }
+
+  // 静的リンク一覧のラベルを EN 版へ差し替える。
+  // href はこの下の /en/ 書き換えに任せるので、JA と同じ表記で出しておく。
+  // 日本語名のフェス（森、道、市場 等）は name_en が無いので JA のまま残るが、
+  // 会場名は EDITIONS の LOCATION が英字表記を持っているぶんだけ英語になる。
+  const links = EN_HUB_LINKS[page];
+  if (links) s = replaceHubLinksBlock(s, links.marker, links.html, `en/${page}`);
 
   // 内部リンク: EN 版があるページだけ /en/ へ。相対・絶対の両表記に対応する。
   s = s.replace(/href="\/?((?:index|news|festivals|artists|venues|about|submit)\.html)"/g,
@@ -1310,16 +1325,23 @@ function writeEnHub(fileName) {
   return true;
 }
 
-function writeHubLinks(fileName, markerName, html) {
-  const file = path.join(LP_DIR, fileName);
+/* STATIC_LINKS ブロックの中身を差し替える。JA への書き出し（writeHubLinks）と
+   EN 生成時のラベル差し替え（enHubFromJa）で共通に使う。
+   START/END はマーカー名込みの固定文字列なので、間を [\s\S]*? で取って安全。 */
+function replaceHubLinksBlock(source, markerName, html, label) {
   const start = `<!-- STATIC_LINKS:${markerName}:START -->`;
   const end = `<!-- STATIC_LINKS:${markerName}:END -->`;
-  const source = fs.readFileSync(file, 'utf8');
   const pattern = new RegExp(`${start}[\\s\\S]*?${end}`);
   if (!pattern.test(source)) {
-    throw new Error(`${fileName}: 静的リンクの生成マーカーが見つかりません`);
+    throw new Error(`${label}: 静的リンクの生成マーカーが見つかりません`);
   }
-  const next = source.replace(pattern, `${start}\n${html}\n${end}`);
+  return source.replace(pattern, `${start}\n${html}\n${end}`);
+}
+
+function writeHubLinks(fileName, markerName, html) {
+  const file = path.join(LP_DIR, fileName);
+  const source = fs.readFileSync(file, 'utf8');
+  const next = replaceHubLinksBlock(source, markerName, html, fileName);
   if (next === source) return false;
   fs.writeFileSync(file, next);
   return true;
@@ -1454,6 +1476,16 @@ function main() {
       total: pubVenues.length,
       written: writeHubLinks('venues.html', 'VENUES', hubLinkList(pubVenues, 'venues', (v) => v.name || '')),
     },
+  };
+
+  // EN ハブ用のラベル。JA と同じ items・同じ順序で、ラベルだけ EN 規則にする。
+  // 件数や順序を変えると en_hub_leaks_to_ja や静的リンク数の検査とズレるため、
+  // hubLinkList の呼び出し方は JA 側と対称に保つこと。
+  EN_HUB_LINKS = {
+    'news.html': { marker: 'ARTICLES', html: hubLinkList(pubArticles, 'articles', (a) => a.title_en || a.title || '') },
+    'festivals.html': { marker: 'FESTIVALS', html: hubLinkList(pubFests, 'festivals', (f) => festivalHubLabel(f, editionsByFestival.get(f.id) || [], 'en')) },
+    'artists.html': { marker: 'ARTISTS', html: hubLinkList(pubArtists, 'artists', (a) => a.name_en || a.name || '') },
+    'venues.html': { marker: 'VENUES', html: hubLinkList(pubVenues, 'venues', (v) => v.name_en || v.name || '') },
   };
 
   // JA ハブを正してから EN を作る。順序が逆だと、直す前の JA から EN が生まれる。
