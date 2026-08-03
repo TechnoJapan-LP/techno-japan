@@ -40,6 +40,24 @@ ID_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 SCRIPT_RE = re.compile(r"<script\b.*?</script>", re.S)
 LDJSON_RE = re.compile(r'<script[^>]*application/ld\+json[^>]*>(.*?)</script>', re.S)
 
+# EN ページに残る日本語を数えるための文字クラス。
+# ひらがな・カタカナ・CJK統合漢字・長音記号・々 のみ。
+# — や · は英文でも正当に使うので含めない。
+JA_RE = re.compile(r"[ぁ-ゟ゠-ヿ㐀-鿿ー々]")
+
+# 静的リンクブロック。START の名前を \1 で受けて対応する END までを取る。
+# 名前を照合しない `.*?` は、ブロックが増えたときに別ブロックの END で
+# 切れる／跨ぐ余地を残す（§9-16 の「閉じの並びを境界にしない」と同じ理由）。
+STATIC_LINKS_RE = re.compile(
+    r"<!-- STATIC_LINKS:(\w+):START -->(.*?)<!-- STATIC_LINKS:\1:END -->", re.S
+)
+
+# EN ページの JSON-LD で日本語が「正しい値」になるキー。
+# alternateName は別名なので、英語ページでも日本語のブランド表記を持つのが正しい
+# （en/index.html の "テクノジャパン"）。ここを込みで 0 を目指すと、
+# 正しい構造化データを消す方向に圧力がかかる。
+JSONLD_JA_ALLOWED_KEYS = {"alternateName"}
+
 
 def read(p):
     return p.read_text(encoding="utf-8", errors="replace")
@@ -65,6 +83,35 @@ def as_list(v):
     if v is None:
         return []
     return v if isinstance(v, list) else [v]
+
+
+def ja_chars(s):
+    return len(JA_RE.findall(str(s)))
+
+
+def jsonld_ja_chars(objs):
+    """JSON-LD の文字列値に含まれる日本語文字数。
+
+    生ブロックを正規表現で走査せず、パース済みオブジェクトを辿る。
+    キーごとに扱いを変える必要がある（JSONLD_JA_ALLOWED_KEYS）ため、
+    文字列としての走査では判定できない。
+    """
+    total = 0
+
+    def walk(node, key=None):
+        nonlocal total
+        if isinstance(node, dict):
+            for k, v in node.items():
+                walk(v, k)
+        elif isinstance(node, list):
+            for v in node:
+                walk(v, key)   # 配列は親のキーを引き継ぐ
+        elif isinstance(node, str) and key not in JSONLD_JA_ALLOWED_KEYS:
+            total += ja_chars(node)
+
+    for o in objs:
+        walk(o)
+    return total
 
 
 def has_h2(body, label):
@@ -163,6 +210,24 @@ def measure():
     m["en_hub_leaks_to_ja"] = leaks
 
     hub_names = ["index.html", "festivals.html", "artists.html", "venues.html", "news.html", "about.html"]
+
+    # EN ハブに静的に焼き込まれた日本語。用途ごとに分けて数える。
+    #
+    # ここで見えるのは静的 HTML の分だけで、EN ハブの日本語の大半は
+    # data.js から JS が描く本文（f.desc 等）にある。そちらは実行しないと
+    # 見えないので check_hub_pages.py の担当（§9-20 と同じ切り分け）。
+    # en_hub_leaks_to_ja は「リンク先の URL」しか見ておらず、
+    # 文言の言語は3つとも別のメトリクスで見ることになる。
+    jsonld_ja = static_links_ja = 0
+    for name in hub_names:
+        f = LP / "en" / name
+        if not f.exists():
+            continue
+        html = read(f)
+        jsonld_ja += jsonld_ja_chars(ld_objects(html))
+        static_links_ja += sum(ja_chars(block) for _, block in STATIC_LINKS_RE.findall(html))
+    m["en_hub_jsonld_ja_chars"] = jsonld_ja
+    m["en_hub_static_links_ja_chars"] = static_links_ja
 
     # 言語トグル。「存在する」だけでなく「相手言語へ正しくリンクしている」まで見る。
     #

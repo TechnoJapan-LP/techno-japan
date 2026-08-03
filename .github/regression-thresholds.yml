@@ -196,6 +196,51 @@ metrics:
       英語ユーザーが日本語ページへ飛ばされる。実装時に実際に踏んだ:
       静的リンク・data.js の読み込みパス・index.html の相対表記の3箇所。
       生成物を検査して 0 を維持する。
+      【守備範囲】見ているのは「リンク先の URL」だけで、文言が英語かどうかは
+      見ていない。名前から EN ハブの日本語漏れ全般を守っていると読めてしまうが、
+      文言のうち静的な分は en_hub_jsonld_ja_chars /
+      en_hub_static_links_ja_chars が分担する。
+      JS が data.js から描く本文（f.desc 等）はどれも見ておらず、
+      実行しないと見えないので check_hub_pages.py 側に指標を足す予定（未実装）。
+      このメトリクスが緑でも本文が日本語のままでありうる。実際そうだった:
+      2026-08-03 時点で EN Festivals の描画後 <main> に日本語が約11,000字ある。
+
+  en_hub_jsonld_ja_chars:
+    description: EN ハブの JSON-LD に残る日本語の文字数（alternateName を除く）
+    min: 0
+    max: 0                    # 増加方向が回帰
+    target: 0
+    note: >-
+      2026-08-03 の調査で発覚。enHubFromJa の EN_HUB_DESC 置換は
+      name="description" / og:description / twitter:description の3つしか
+      対象にしておらず、JSON-LD の "description" が素通りしていた。
+      EN ハブ4枚（festivals/artists/venues/news）が日本語併記のままだった。
+      同日 replaceCollectionPageDesc() を追加して 126 → 0 になったので有効化。
+      置換対象は CollectionPage.description だけ。index.html の
+      WebSite.description は「サイト全体の説明」なのでページ説明で
+      上書きしない（元から英語で日本語の混入も無い）。
+      【alternateName を除外する理由】en/index.html の
+      "alternateName": "テクノジャパン" は英語ページでも正しい構造化データで、
+      これを含めて 0 を目指すと正しい値を消す方向に圧力がかかる。
+      将来 JA 名を持つ別キーが必要になったら JSONLD_JA_ALLOWED_KEYS に
+      理由つきで足す。判定は生ブロックの正規表現ではなくパース済み
+      オブジェクトを辿る（キー単位で扱いを変えるため）。
+
+  en_hub_static_links_ja_chars:
+    description: EN ハブの STATIC_LINKS ブロックに残る日本語の文字数
+    min: null
+    max: 216                  # 2026-08-03 実測。増加方向のみ回帰
+    target: null              # 0 は達成不能。下記のとおり固有名詞が日本語のため
+    note: >-
+      静的リンク一覧は writeHubLinks が JA ハブへ1回書き込み、EN 側は
+      URL だけ書き換えたコピーを持つ。ラベルは JA のまま。
+      実測 216 の内訳は festivals 188 / news 27 / artists 1。
+      【0 にできない理由】「森、道、市場」「円相芸術音楽祭」「御月民 -OTSUKIMI-」
+      のようにフェス名そのものが日本語で、name_en は入力しない方針
+      （2026-08-03 判断。名前はほぼ英字表記が実態で別列を持つ意味が薄い）。
+      したがって目標は 0 ではなく「増やさないこと」。
+      手順6で festivalHubLabel が EN で location_ja を使うのをやめれば
+      下がるので、そのとき実測値へ引き下げる。
 
   hub_language_toggles:
     description: 言語トグルが正しく相手言語へリンクしているハブ数（JA 6 + EN 6）
