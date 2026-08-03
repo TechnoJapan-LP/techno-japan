@@ -513,7 +513,7 @@ nav { padding: 20px 40px; background: rgba(8,8,8,0.97); mix-blend-mode: normal; 
 <script src="/search.js?v=1" defer></script>
 <!-- localize.js は defer にしない。下のインライン描画が同期実行で tjLocalized を呼ぶ -->
 <script src="/localize.js?v=1"></script>
-<script src="/data.js?v=9"></script>
+<script src="/data.js?v=10"></script>
 <script>
 const MONTHS_SHORT = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
 function parseDate(s) { if(!s) return new Date(NaN); const [y,m,d] = String(s).split('-').map(Number); return new Date(y,m-1,d); }
