@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-08-03T09:59:14.377Z",
+  "_generatedAt": "2026-08-03T11:25:34.121Z",
   "count": 284,
   "items": [
     {
@@ -214,7 +214,7 @@
     },
     {
       "EDITION_ID": "arch-2026",
-      "ACT_LABEL": "YURIPON",
+      "ARTIST_ID": "yuripon",
       "SET_TYPE": "dj",
       "SORT": "13"
     },
