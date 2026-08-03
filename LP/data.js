@@ -571,7 +571,7 @@ const FESTIVALS = [
     desc: "ARCHが第11回を迎え、群馬に帰ってくる。日本国内でも屈指の評価を誇るアンダーグラウンド・ギャザリングとしての名声は健在だ。商業的なアピールよりもサウンドクオリティとアーティスティックな誠実さを最優先する親密な空間の中で、このフェスティバルは最先端のテクノ・プログラミングを提示し続けている。",
     desc_en: "ARCH returns to Gunma for its eleventh edition, maintaining its reputation as one of Japan's most respected underground gatherings. The festival continues to showcase cutting-edge techno programming in an intimate setting that prioritizes sound quality and artistic integrity over commercial appeal.",
     instagram: "https://www.instagram.com/arch___2014/",
-    lineup: ["CHOKO", "CAPTAIN-K", "AKIHIRO SUZUKI", "ENDORPHIN", "KEVIN MIYAGI", "PSYCHOGEM", "SHO", "TAKEHIRO IMAIZUMI", "TAZZY", "TKO", "TMAK", "YEARK", "YURIPON", "青", "198"],
+    lineup: ["CHOKO", "CAPTAIN-K", "AKIHIRO SUZUKI", "ENDORPHIN", "KEVIN MIYAGI", "PSYCHOGEM", "SHO", "TAKEHIRO IMAIZUMI", "TAZZY", "TKO", "TMAK", "YEARK", "DJ YURIPON", "青", "198"],
   },
   {
     id: "rainbow-disco-club",
