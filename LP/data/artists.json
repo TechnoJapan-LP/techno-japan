@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-08-02T17:33:45.780Z",
-  "count": 123,
+  "_generatedAt": "2026-08-03T05:21:06.250Z",
+  "count": 109,
   "items": [
     {
       "ID": "dj-nobu",
@@ -90,10 +90,6 @@
       "NAME": "Ga Su"
     },
     {
-      "ID": "freecinn",
-      "NAME": "Freecinn"
-    },
-    {
       "ID": "nutmeg",
       "NAME": "Nutmeg"
     },
@@ -106,28 +102,8 @@
       "NAME": "Liarako"
     },
     {
-      "ID": "akey",
-      "NAME": "Akey"
-    },
-    {
-      "ID": "ayumu",
-      "NAME": "Ayumu"
-    },
-    {
       "ID": "captain-k",
       "NAME": "Captain K"
-    },
-    {
-      "ID": "lowki",
-      "NAME": "Lowki"
-    },
-    {
-      "ID": "masa-aka-kyounote",
-      "NAME": "Masa Aka Kyounote"
-    },
-    {
-      "ID": "menou-iwamaki",
-      "NAME": "Menou Iwamaki"
     },
     {
       "ID": "mimu",
@@ -138,24 +114,8 @@
       "NAME": "Naotsun"
     },
     {
-      "ID": "norid",
-      "NAME": "Norid"
-    },
-    {
       "ID": "sakuma",
       "NAME": "Sakuma"
-    },
-    {
-      "ID": "seco",
-      "NAME": "Seco"
-    },
-    {
-      "ID": "shimoyan",
-      "NAME": "Shimoyan"
-    },
-    {
-      "ID": "tada",
-      "NAME": "Tada"
     },
     {
       "ID": "yazzus",
@@ -178,16 +138,8 @@
       "NAME": "Akii"
     },
     {
-      "ID": "mio",
-      "NAME": "Mio"
-    },
-    {
       "ID": "aliceyuki",
       "NAME": "Aliceyuki"
-    },
-    {
-      "ID": "akaaki-ito",
-      "NAME": "Akaaki Ito"
     },
     {
       "ID": "choko",
@@ -312,14 +264,6 @@
     {
       "ID": "nc4k",
       "NAME": "NC4K"
-    },
-    {
-      "ID": "sisi",
-      "NAME": "Sisi"
-    },
-    {
-      "ID": "ouissam",
-      "NAME": "Ouissam"
     },
     {
       "ID": "yamarchy",
