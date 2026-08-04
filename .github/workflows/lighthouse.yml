@@ -1,16 +1,32 @@
 name: Lighthouse CI
 
+# 2026-08-04: push トリガーから workflow_run に変えた。
+#
+# 以前は main への全 push で起動し、60秒待って本番を計測していた。
+# デプロイの成否と無関係に走るため、deploy が落ちた push では
+# 「古い本番」を測って結果だけ出す状態だった。実際 Publish のたびに
+# deploy が落ちていたので、その間の計測はすべて前の内容を見ていた。
+#
+# デプロイが成功した後にだけ走らせる。計測対象が「いま出した内容」になる。
 on:
-  push:
-    branches: [main]
+  workflow_run:
+    workflows: ["Deploy LP to GitHub Pages", "Publish pipeline"]
+    types: [completed]
   workflow_dispatch:
 
 jobs:
   lighthouse:
+    # 失敗・キャンセルされたデプロイの後では測らない。
+    # workflow_dispatch には event.workflow_run が無いので、その場合も通す。
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
+      # deploy-pages が success を返してから Pages の CDN に反映されるまで
+      # 少し遅れるため、従来どおり待つ。
       - name: Wait for GitHub Pages deploy
         run: sleep 60
 

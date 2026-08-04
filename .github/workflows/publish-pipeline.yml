@@ -1,0 +1,155 @@
+name: Publish pipeline
+
+# CMS の Publish Now（LP/data.js の単独コミット）専用の一本道。
+#
+# ■ なぜ分けたか
+#
+#   Publish は data.js だけをコミットする。生成物（詳細ページ・sitemap・rss）は
+#   追従していないので、deploy-pages.yml の「生成物がコミット内容と一致するか」
+#   検査に必ず引っかかっていた。一方 generate-meta.yml が並行で再生成し
+#   [skip ci] でコミットするため、正しくなった生成物は**デプロイされないまま**
+#   次の人手 push まで残っていた。赤いだけでなく配信が遅れる。
+#
+#   3つのワークフローが同じ push で並行に走り、互いの結果を見ていなかったのが原因。
+#   ここで fetch → build → 検査 → sitemap/RSS → commit → deploy を
+#   一本の順序に畳む。
+#
+# ■ 無限ループにならない理由
+#
+#   生成物のコミットに [skip ci] を付けるので push は再トリガしない。
+#   デプロイは同じ run の working tree（./LP）から行うため、
+#   新しいコミットを拾い直す必要がない。
+#
+# ■ 停止条件
+#
+#   fetch のスキーマ検証（参照切れ・ID規約違反）と各ガードは失敗で止める。
+#   壊れたデータを配信しないことを、赤いバッジより優先する。
+#   Lighthouse は deploy 成功後に別ワークフローで走る品質警告で、ここには含めない。
+
+# 【既知の重なり】1つの push に LP/data.js と他の LP/** が同時に含まれると、
+# deploy-pages.yml（他のファイルに反応）とこちら（data.js に反応）の両方が起動する。
+# 実運用では CMS の Publish が data.js を単独でコミットし、人手の push は
+# data.js を含まないので起きない。起きた場合も concurrency: pages で直列化され、
+# 両方とも同じ内容を再生成してデプロイするだけで壊れない（無駄なだけ）。
+# パスフィルタでは「data.js だけが変わった push」を表現できないため、
+# 複雑な条件分岐を足すよりこの重なりを許容する。
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'LP/data.js'
+  workflow_dispatch:
+
+permissions:
+  contents: write        # 生成物のコミット
+  pages: write           # デプロイ
+  id-token: write
+
+# deploy-pages.yml と同じグループ。Pages のデプロイが競合しないようにする。
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0        # check_asset_versions が merge-base を取る
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install PyYAML
+        run: python3 -m pip install --quiet --disable-pip-version-check pyyaml
+
+      # シート → LP/data/*.json。スキーマ検証に落ちたらここで止まる。
+      # 2026-08-04 に FESTIVAL_ID の参照切れ（fulirock）で実際に止まった。
+      # data.js だけ新しく data/*.json が古い、という食い違いを持ち込ませない。
+      - name: Fetch data from spreadsheet
+        run: npm run fetch
+
+      - name: Build detail pages
+        run: node scripts/build-detail-pages.mjs
+
+      # 検査は再生成した状態に対して行う。
+      # deploy-pages.yml の「生成物がコミット内容と一致するか」はここでは見ない。
+      # あれは人手 push で再生成漏れを止めるためのもので、今まさに再生成した
+      # 直後のこの経路では常に真になり、意味を持たない。
+      - name: Check asset cache busting
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          if [ -n "$BEFORE_SHA" ] && ! echo "$BEFORE_SHA" | grep -Eq '^0+$'; then
+            compare="$BEFORE_SHA"
+          else
+            compare="HEAD^"
+          fi
+          echo "Asset comparison base: $compare"
+          python3 scripts/check_asset_versions.py --base "$compare"
+
+      - name: Check service worker routing
+        run: node scripts/check_sw_routing.mjs
+
+      - name: Check regression thresholds
+        run: python3 scripts/check_regressions.py
+
+      - name: Verify Chrome is available
+        run: |
+          if command -v google-chrome >/dev/null; then google-chrome --version
+          elif command -v chromium >/dev/null; then chromium --version
+          else echo "::error::headless Chrome が見つかりません"; exit 1; fi
+
+      - name: Check hub pages render (JS health)
+        run: python3 scripts/check_hub_pages.py
+
+      # 検査を通ってから sitemap/RSS を作る。順序が逆だと、落ちる内容の
+      # sitemap を先に書いてしまう。
+      - name: Generate sitemap.xml
+        run: python3 scripts/generate-sitemap.py
+
+      - name: Generate rss.xml
+        run: python3 scripts/generate-rss.py
+
+      # [skip ci] が無いと、この push が自分自身を再トリガして無限に回る。
+      - name: Commit generated output
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          # LP/ だけ。リポジトリ直下の data/（data/inbox の調査JSON）は
+          # 人が書く作業ファイルで、このパイプラインの生成物ではない。
+          git add -A LP/
+          if git diff --cached --quiet; then
+            echo "生成物に変更なし"
+          else
+            git commit -m "chore: regenerate detail pages, sitemap.xml & rss.xml [skip ci]"
+            git push
+          fi
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      # 開発中のコンパニオンアプリは本番に出さない（deploy-pages.yml と同じ扱い）。
+      - name: Exclude in-development app from deploy
+        run: rm -rf ./LP/app
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./LP
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

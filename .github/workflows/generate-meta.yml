@@ -1,13 +1,15 @@
 name: Generate sitemap.xml & rss.xml
 
+# 2026-08-04: push トリガーを廃止した。
+#
+# LP/data.js の push で起動していたが、同じ push で deploy-pages.yml も走り、
+# こちらが再生成して [skip ci] でコミットする頃には deploy 側は
+# 「生成物が古い」で落ちていた。正しくなった生成物はデプロイされないまま残る。
+# Publish の経路は publish-pipeline.yml が一本道で処理する。
+#
+# ここは保険として日次実行だけを残す。シート側だけが変わって Publish が
+# 走らなかった場合（手編集・外部からの更新）に sitemap を追従させる。
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'LP/data.js'
-      - 'scripts/generate-sitemap.py'
-      - 'scripts/generate-rss.py'
-      - '.github/workflows/generate-meta.yml'
   schedule:
     # Run daily at 03:00 UTC (12:00 JST)
     - cron: '0 3 * * *'
@@ -35,6 +37,21 @@ jobs:
       # sitemap が指すURLが 404 になるので、sitemap 生成より前に実行する。
       - name: Build detail pages
         run: node scripts/build-detail-pages.mjs
+
+      # 定期実行でも publish-pipeline と同じ整合性検査を通す。
+      # ここを素通りさせると、壊れたデータのまま sitemap だけが更新され、
+      # 存在しないURLを載せた sitemap を配ることになる。
+      # Chrome を要する描画検査（check_hub_pages）はここでは省く。
+      # 生成物をコミットするだけでデプロイはしないため、実行時の JS 健全性は
+      # 次の deploy 経路で必ず見られる。
+      - name: Install PyYAML
+        run: python3 -m pip install --quiet --disable-pip-version-check pyyaml
+
+      - name: Check service worker routing
+        run: node scripts/check_sw_routing.mjs
+
+      - name: Check regression thresholds
+        run: python3 scripts/check_regressions.py
 
       - name: Generate sitemap.xml
         run: python3 scripts/generate-sitemap.py

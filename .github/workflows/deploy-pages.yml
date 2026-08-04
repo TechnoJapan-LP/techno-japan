@@ -10,6 +10,16 @@ on:
       - '.github/regression-thresholds.yml'
       - '.github/workflows/regression-check.yml'
       - '.github/workflows/deploy-pages.yml'
+      # CMS の Publish（LP/data.js 単独のコミット）はここでは扱わない。
+      # data.js だけが新しく生成物が追従していない状態なので、
+      # regression-check の「生成物がコミット内容と一致するか」に必ず落ちる。
+      # その経路は publish-pipeline.yml が fetch → build → 検査 → deploy まで
+      # 順序どおり面倒を見る。除外しないと同じ push で2本デプロイが走る。
+      #
+      # 否定パターンは「他に LP/ の変更があれば起動する」意味になる。
+      # data.js 単独の push でだけ起動しない。人が data.js を手で直した場合も
+      # 同じ扱いになるが、その内容は publish-pipeline が拾う。
+      - '!LP/data.js'
   workflow_dispatch:
 
 permissions:
