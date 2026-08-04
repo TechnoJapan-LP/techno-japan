@@ -317,3 +317,55 @@
 
 ### 次の担当への注意・判断待ち
 - Publish 後に詳細ページを再生成する場合は、`git pull` 後に `npm run check:mobile-language` と回帰ガードを再実行すること。
+
+## 2026-08-04 / Claude (Opus 5) / 完了（ARTISTS 整理の反映検証。common.css の ?v 漏れを1件検出・修正）
+
+### 実施
+- Publish（`759fa55`）の反映を検証。`npm run fetch` → `build-detail-pages.mjs`
+- draft 化されたアーティストを data.js の差分から特定（**24件**）
+- 閾値4件を実測値へ更新（うち3件は draft 化の帰結、1件は他セッションの変更由来）
+- **`common.css` の `?v` 据え置きを検出して修正**（下記）
+
+### コミット
+- SHA: このエントリを含めてコミット
+- push / rebase 状態: 追記前に rebase 済み
+
+### 検証
+
+| 確認項目 | 結果 |
+|---|---|
+| draft 化件数 | **24件**（ARTISTS 109 → 88。別途 sisi / ouissam / tonbo の3件が新規公開） |
+| 詳細ページの削除 | **24件すべて JA/EN とも削除済み** |
+| published 残存 | **0件**（draft 化した24件はいずれも data.js に残っていない） |
+| 取り残しページ | **0件**（published でない詳細ページはリダイレクトスタブのみ） |
+| `lineup_linked_acts` | 115 → **91** |
+| `/festivals/fulirock.html` | **JA/EN ともリダイレクトスタブに変化**。JA → `/festivals/fuji-rock.html`、EN → `/en/festivals/fuji-rock.html`。遷移先も実在 |
+| `signal` の日付 | **2026-06-13/2026-06-14** に更新済み（JA/EN の JSON-LD `startDate` も一致） |
+| 全ガード | `check_regressions` ✅ / `check_hub_pages` ✅（例外0・Broken images 0）/ `check_sw_routing` ✅ / `check_asset_versions` ✅ / `check:mobile-language` 24/24 ✅ |
+| 再生成の不動点 | ✅ `0 written` |
+
+### 変更したパターン
+- 閾値の引き下げ4件（すべて根拠を note に明記）
+  - `lineup_linked_acts` 115 → 91（Perkey の編集判断による draft 化）
+  - `artist_entity_id_pages` 200 → 176（88件 × JA/EN と一致を確認）
+  - `submit_link_pages` 426 → 415（詳細ページ48枚の削除分。スタブはフッターを持たない）
+  - `en_hub_static_links_ja_chars` 52 → 51（`ao`「青」の draft 化で1字減）
+- `common.css?v=4` → `?v=5`: HTML 416枚 ＋ 生成側テンプレート1箇所
+
+### 未確認の類似パターン
+- 他セッションの `b84e4b8` は `common.css` 以外の JS/CSS を変更していない — **確認済み・0件**
+- リダイレクトスタブの `<html lang="ja">` が EN 版でも "ja" のまま — **未対応**（noindex の中継ページなので実害は小さい）
+- `etsuetsu` の LINEUP が `dj-yogurt`（ハイフン区切り）で未解決のまま — **依頼者が次の Publish で修正予定**
+
+### 次の担当への注意・判断待ち
+
+1. **`common.css` の `?v` 漏れを1件検出した（修正済み）**
+   - `b84e4b8`「fix: expose mobile language toggle in menu」が `.nav-overlay .nav-lang` の CSS を
+     `common.css` に追加したが、`?v=4` を据え置いていた
+   - `sw.js` は CSS を cache-first で扱うため、**一度訪問したブラウザにはモバイルトグルの
+     スタイルが永久に届かない**状態だった。機能そのものが見えない
+   - §9-36 と同型。**同日に広げた `check_asset_versions.py` の検査（対象リスト → 除外リスト）が
+     捕まえた。** 反転していなければ素通りしていた
+   - `?v=5` へ更新済み（HTML 416枚＋生成側テンプレート）。**生成側を忘れると次のビルドで巻き戻る**
+2. `lineup_linked_acts` は 91 が新しい下限。`etsuetsu` の LINEUP 修正で 92 になる見込み
+3. `sisi` / `ouissam` / `tonbo` の3件が新たに published になっている。意図した公開か未確認

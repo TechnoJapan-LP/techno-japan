@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-08-03T11:25:34.121Z",
+  "_generatedAt": "2026-08-04T05:40:21.543Z",
   "count": 284,
   "items": [
     {
@@ -100,19 +100,19 @@
     },
     {
       "EDITION_ID": "waifu-2026",
-      "ARTIST_ID": "yazzus",
+      "ACT_LABEL": "Yazzus",
       "SET_TYPE": "dj",
       "SORT": "1"
     },
     {
       "EDITION_ID": "waifu-2026",
-      "ARTIST_ID": "cosmic-caz",
+      "ACT_LABEL": "Cosmic Caz",
       "SET_TYPE": "dj",
       "SORT": "2"
     },
     {
       "EDITION_ID": "waifu-2026",
-      "ARTIST_ID": "janus-rose",
+      "ACT_LABEL": "Janus Rose",
       "SET_TYPE": "dj",
       "SORT": "3"
     },
@@ -124,7 +124,7 @@
     },
     {
       "EDITION_ID": "waifu-2026",
-      "ARTIST_ID": "akii",
+      "ACT_LABEL": "akii",
       "SET_TYPE": "dj",
       "SORT": "5"
     },
@@ -136,7 +136,7 @@
     },
     {
       "EDITION_ID": "waifu-2026",
-      "ARTIST_ID": "aliceyuki",
+      "ACT_LABEL": "Aliceyuki",
       "SET_TYPE": "dj",
       "SORT": "7"
     },
@@ -154,7 +154,7 @@
     },
     {
       "EDITION_ID": "arch-2026",
-      "ARTIST_ID": "akihiro-suzuki",
+      "ACT_LABEL": "AKIHIRO SUZUKI",
       "SET_TYPE": "dj",
       "SORT": "3"
     },
@@ -166,67 +166,67 @@
     },
     {
       "EDITION_ID": "arch-2026",
-      "ARTIST_ID": "kevin-miyagi",
+      "ACT_LABEL": "KEVIN MIYAGI",
       "SET_TYPE": "dj",
       "SORT": "5"
     },
     {
       "EDITION_ID": "arch-2026",
-      "ARTIST_ID": "psychogem",
+      "ACT_LABEL": "PSYCHOGEM",
       "SET_TYPE": "dj",
       "SORT": "6"
     },
     {
       "EDITION_ID": "arch-2026",
-      "ARTIST_ID": "sho",
+      "ACT_LABEL": "SHO",
       "SET_TYPE": "dj",
       "SORT": "7"
     },
     {
       "EDITION_ID": "arch-2026",
-      "ARTIST_ID": "takehiro-imaizumi",
+      "ACT_LABEL": "TAKEHIRO IMAIZUMI",
       "SET_TYPE": "dj",
       "SORT": "8"
     },
     {
       "EDITION_ID": "arch-2026",
-      "ARTIST_ID": "tazzy",
+      "ACT_LABEL": "TAZZY",
       "SET_TYPE": "dj",
       "SORT": "9"
     },
     {
       "EDITION_ID": "arch-2026",
-      "ARTIST_ID": "tko",
+      "ACT_LABEL": "TKO",
       "SET_TYPE": "dj",
       "SORT": "10"
     },
     {
       "EDITION_ID": "arch-2026",
-      "ARTIST_ID": "tmak",
+      "ACT_LABEL": "TMAK",
       "SET_TYPE": "dj",
       "SORT": "11"
     },
     {
       "EDITION_ID": "arch-2026",
-      "ARTIST_ID": "yeark",
+      "ACT_LABEL": "YEARK",
       "SET_TYPE": "dj",
       "SORT": "12"
     },
     {
       "EDITION_ID": "arch-2026",
-      "ARTIST_ID": "yuripon",
+      "ACT_LABEL": "DJ YURIPON",
       "SET_TYPE": "dj",
       "SORT": "13"
     },
     {
       "EDITION_ID": "arch-2026",
-      "ARTIST_ID": "ao",
+      "ACT_LABEL": "青",
       "SET_TYPE": "dj",
       "SORT": "14"
     },
     {
       "EDITION_ID": "arch-2026",
-      "ARTIST_ID": "198",
+      "ACT_LABEL": "198",
       "SET_TYPE": "dj",
       "SORT": "15"
     },
@@ -406,19 +406,19 @@
     },
     {
       "EDITION_ID": "ala-2026",
-      "ARTIST_ID": "nutmeg",
+      "ACT_LABEL": "NUTMEG",
       "SET_TYPE": "dj",
       "SORT": "10"
     },
     {
       "EDITION_ID": "ala-2026",
-      "ARTIST_ID": "snipe1",
+      "ACT_LABEL": "snipe1",
       "SET_TYPE": "dj",
       "SORT": "11"
     },
     {
       "EDITION_ID": "ala-2026",
-      "ARTIST_ID": "liarako",
+      "ACT_LABEL": "LiaRako",
       "SET_TYPE": "dj",
       "SORT": "12"
     },
@@ -610,13 +610,13 @@
     },
     {
       "EDITION_ID": "the-star-festival-2026",
-      "ARTIST_ID": "clipz",
+      "ACT_LABEL": "CLIPZ",
       "SET_TYPE": "dj",
       "SORT": "1"
     },
     {
       "EDITION_ID": "the-star-festival-2026",
-      "ARTIST_ID": "dj-hype",
+      "ACT_LABEL": "DJ HYPE",
       "SET_TYPE": "dj",
       "SORT": "2"
     },
@@ -1030,7 +1030,7 @@
     },
     {
       "EDITION_ID": "etsuetsu-2026",
-      "ARTIST_ID": "aliceyuki",
+      "ACT_LABEL": "aliceyuki",
       "SET_TYPE": "dj",
       "SORT": "3"
     },
@@ -1168,7 +1168,7 @@
     },
     {
       "EDITION_ID": "etsuetsu-2026",
-      "ARTIST_ID": "naotsun",
+      "ACT_LABEL": "naotsun",
       "SET_TYPE": "dj",
       "SORT": "26"
     },

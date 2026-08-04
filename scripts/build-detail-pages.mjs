@@ -368,7 +368,7 @@ ${hreflang}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/common.css?v=4">
+<link rel="stylesheet" href="/common.css?v=5">
 <link rel="stylesheet" href="/detail.css?v=${detailCssVersion}">
 <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
 </head>

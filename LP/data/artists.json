@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-08-03T11:25:34.121Z",
-  "count": 109,
+  "_generatedAt": "2026-08-04T05:40:21.543Z",
+  "count": 88,
   "items": [
     {
       "ID": "dj-nobu",
@@ -67,7 +67,7 @@
     },
     {
       "ID": "dj-yogurt",
-      "NAME": "Dj Yogurt"
+      "NAME": "DJ Yogurt"
     },
     {
       "ID": "hidai",
@@ -86,22 +86,6 @@
       "NAME": "Qmico"
     },
     {
-      "ID": "ga-su",
-      "NAME": "Ga Su"
-    },
-    {
-      "ID": "nutmeg",
-      "NAME": "NUTMEG"
-    },
-    {
-      "ID": "snipe1",
-      "NAME": "Snipe1"
-    },
-    {
-      "ID": "liarako",
-      "NAME": "Liarako"
-    },
-    {
       "ID": "captain-k",
       "NAME": "Captain K"
     },
@@ -110,92 +94,20 @@
       "NAME": "Mimu"
     },
     {
-      "ID": "naotsun",
-      "NAME": "Naotsun"
-    },
-    {
       "ID": "sakuma",
       "NAME": "Sakuma"
-    },
-    {
-      "ID": "yazzus",
-      "NAME": "Yazzus"
-    },
-    {
-      "ID": "cosmic-caz",
-      "NAME": "Cosmic Caz"
-    },
-    {
-      "ID": "janus-rose",
-      "NAME": "Janus Rose"
     },
     {
       "ID": "mayudepth",
       "NAME": "MAYUDEPTH"
     },
     {
-      "ID": "akii",
-      "NAME": "Akii"
-    },
-    {
-      "ID": "aliceyuki",
-      "NAME": "Aliceyuki"
-    },
-    {
       "ID": "choko",
       "NAME": "CHOKO"
     },
     {
-      "ID": "akihiro-suzuki",
-      "NAME": "Akihiro Suzuki"
-    },
-    {
       "ID": "endorphin",
       "NAME": "endorphin"
-    },
-    {
-      "ID": "kevin-miyagi",
-      "NAME": "Kevin Miyagi"
-    },
-    {
-      "ID": "psychogem",
-      "NAME": "Psychogem"
-    },
-    {
-      "ID": "sho",
-      "NAME": "Sho"
-    },
-    {
-      "ID": "takehiro-imaizumi",
-      "NAME": "Takehiro Imaizumi"
-    },
-    {
-      "ID": "tazzy",
-      "NAME": "Tazzy"
-    },
-    {
-      "ID": "tko",
-      "NAME": "Tko"
-    },
-    {
-      "ID": "tmak",
-      "NAME": "Tmak"
-    },
-    {
-      "ID": "yeark",
-      "NAME": "Yeark"
-    },
-    {
-      "ID": "yuripon",
-      "NAME": "DJ YURIPON"
-    },
-    {
-      "ID": "ao",
-      "NAME": "青"
-    },
-    {
-      "ID": "198",
-      "NAME": "198"
     },
     {
       "ID": "antal",
@@ -207,7 +119,7 @@
     },
     {
       "ID": "ben-ufo",
-      "NAME": "Ben Ufo"
+      "NAME": "Ben UFO"
     },
     {
       "ID": "daphni",
@@ -239,7 +151,7 @@
     },
     {
       "ID": "haai",
-      "NAME": "Haai"
+      "NAME": "HAAi"
     },
     {
       "ID": "helena-hauff",
@@ -264,6 +176,14 @@
     {
       "ID": "nc4k",
       "NAME": "NC4K"
+    },
+    {
+      "ID": "sisi",
+      "NAME": "Sisi"
+    },
+    {
+      "ID": "ouissam",
+      "NAME": "Ouissam"
     },
     {
       "ID": "yamarchy",
@@ -342,6 +262,10 @@
       "NAME": "YUKIMASA"
     },
     {
+      "ID": "tonbo",
+      "NAME": "Tonbo"
+    },
+    {
       "ID": "sunga",
       "NAME": "SUNGA"
     },
@@ -359,7 +283,7 @@
     },
     {
       "ID": "the-master-musicians-of-joujouka",
-      "NAME": "The Master Musicians Of Joujouka"
+      "NAME": "The Master Musicians of Joujouka"
     },
     {
       "ID": "kuo-from-sunset-rollercoaster",
@@ -424,14 +348,6 @@
     {
       "ID": "yellowuhuru",
       "NAME": "YELLOWUHURU"
-    },
-    {
-      "ID": "clipz",
-      "NAME": "CLIPZ"
-    },
-    {
-      "ID": "dj-hype",
-      "NAME": "DJ HYPE"
     },
     {
       "ID": "dj-masda",

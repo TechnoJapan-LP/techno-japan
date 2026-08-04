@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-08-03T11:25:34.121Z",
+  "_generatedAt": "2026-08-04T05:40:21.543Z",
   "count": 89,
   "items": [
     {
@@ -339,8 +339,8 @@
       "TICKETURL": "https://ruraljp.zaiko.io/e/rural2026"
     },
     {
-      "EDITION_ID": "fulirock-2026",
-      "FESTIVAL_ID": "fulirock",
+      "EDITION_ID": "fuji-rock-2026",
+      "FESTIVAL_ID": "fuji-rock",
       "EDITION": "2026",
       "DATE_START": "2026-07-24",
       "DATE_END": "2026-07-26",
@@ -536,11 +536,11 @@
       "STATUS": "published"
     },
     {
-      "EDITION_ID": "signal-2025",
+      "EDITION_ID": "signal-2026",
       "FESTIVAL_ID": "signal",
-      "EDITION": "2025",
-      "DATE_START": "2025-06-14",
-      "DATE_END": "2025-06-15",
+      "EDITION": "2026",
+      "DATE_START": "2026-06-13",
+      "DATE_END": "2026-06-14",
       "PREF": "Yamanashi",
       "STATUS": "published"
     },
