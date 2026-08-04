@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-08-04T07:09:35.372Z",
+  "_generatedAt": "2026-08-04T15:33:20.787Z",
   "count": 89,
   "items": [
     {
@@ -89,6 +89,21 @@
       "LNG": "140.2818",
       "TICKETURL": "https://alanutmeg.zaiko.io/e/alaairfest26",
       "FLYER": "images/festivals/ala-flyer.jpg",
+      "STATUS": "published"
+    },
+    {
+      "EDITION_ID": "technogaoka-2026",
+      "FESTIVAL_ID": "technogaoka",
+      "EDITION": "2026",
+      "DATE_START": "2026-04-25",
+      "DATE_END": "2026-04-26",
+      "LOCATION": "Tabifusa Ashiya Daihi-kaku",
+      "LOCATION_JA": "旅房 芦屋大悲閣",
+      "PREF": "Hyogo",
+      "ADDRESS": "兵庫県芦屋市奥山1",
+      "LAT": "34.7578",
+      "LNG": "135.2974",
+      "FLYER": "images/festivals/technogaoka-flyer.jpg",
       "STATUS": "published"
     },
     {
@@ -278,6 +293,18 @@
       "STATUS": "published"
     },
     {
+      "EDITION_ID": "body-soul-2026",
+      "FESTIVAL_ID": "body-soul",
+      "EDITION": "2026",
+      "DATE_START": "2026-06-07",
+      "DATE_END": "2026-06-07",
+      "LOCATION": "Kiranah Garden Toyosu",
+      "LOCATION_JA": "キラナガーデン豊洲",
+      "PREF": "Tokyo",
+      "TICKETURL": "http://www.bodyandsoul-japan.com/",
+      "STATUS": "published"
+    },
+    {
       "EDITION_ID": "festival-fruezinho-2026",
       "FESTIVAL_ID": "festival-fruezinho",
       "EDITION": "2026",
@@ -290,6 +317,17 @@
       "LAT": "35.7049",
       "LNG": "139.4119",
       "TICKETURL": "https://shop.frue.jp/collections/festival-fruezinho-2026",
+      "STATUS": "published"
+    },
+    {
+      "EDITION_ID": "signal-2026",
+      "FESTIVAL_ID": "signal",
+      "EDITION": "2026",
+      "DATE_START": "2026-06-13",
+      "DATE_END": "2026-06-14",
+      "LOCATION": "Secret location",
+      "LOCATION_JA": "Secret location",
+      "PREF": "Yamanashi",
       "STATUS": "published"
     },
     {
@@ -525,24 +563,6 @@
       "DATE_START": "2025-05-31",
       "DATE_END": "2025-05-31",
       "PREF": "Chiba"
-    },
-    {
-      "EDITION_ID": "body-soul-2026",
-      "FESTIVAL_ID": "body-soul",
-      "EDITION": "2026",
-      "DATE_START": "2026-06-07",
-      "DATE_END": "2026-06-07",
-      "PREF": "Tokyo",
-      "STATUS": "published"
-    },
-    {
-      "EDITION_ID": "signal-2026",
-      "FESTIVAL_ID": "signal",
-      "EDITION": "2026",
-      "DATE_START": "2026-06-13",
-      "DATE_END": "2026-06-14",
-      "PREF": "Yamanashi",
-      "STATUS": "published"
     },
     {
       "EDITION_ID": "euphoria-2025",
@@ -883,21 +903,6 @@
       "DATE_START": "2025-11-29",
       "DATE_END": "2025-11-30",
       "PREF": "Okinawa"
-    },
-    {
-      "EDITION_ID": "technogaoka-2026",
-      "FESTIVAL_ID": "technogaoka",
-      "EDITION": "2026",
-      "DATE_START": "2026-04-25",
-      "DATE_END": "2026-04-26",
-      "LOCATION": "Tabifusa Ashiya Daihi-kaku",
-      "LOCATION_JA": "旅房 芦屋大悲閣",
-      "PREF": "Hyogo",
-      "ADDRESS": "兵庫県芦屋市奥山1",
-      "LAT": "34.7578",
-      "LNG": "135.2974",
-      "FLYER": "images/festivals/technogaoka-flyer.jpg",
-      "STATUS": "published"
     }
   ]
 }

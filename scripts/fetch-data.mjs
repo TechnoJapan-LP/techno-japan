@@ -8,6 +8,8 @@
  *   node scripts/fetch-data.mjs            # 取得 → バリデーション → data/*.json 書き出し
  *   node scripts/fetch-data.mjs --dry      # 書き出さず、バリデーション結果だけ表示
  *   node scripts/fetch-data.mjs --offline  # /tmp/tj_*.csv を使う（取得済みキャッシュ）
+ *   TJ_EDITIONS_GID=<gid> node scripts/fetch-data.mjs --editions-from-sheet --dry
+ *                                          # EDITIONS シートと導出結果の一致を検証（段階1）
  *
  * 重要な設計判断（2026-07-11 時点）:
  *  - EDITIONS / LINEUPS タブはまだ未新設（スキーマ §2.3/§2.4 は将来対応）。
@@ -30,6 +32,9 @@ const OUT_DIR = path.join(ROOT, 'LP', 'data');
 const ARGS = new Set(process.argv.slice(2));
 const DRY = ARGS.has('--dry');
 const OFFLINE = ARGS.has('--offline');
+// 段階1の検証用。EDITIONS シートを読んで、導出結果と一致するかだけを見る。
+// 既定は false で、editions.json の中身は従来どおり FESTIVALS から導出したもの。
+const EDITIONS_FROM_SHEET = ARGS.has('--editions-from-sheet');
 
 // スキーマ §1.4 準拠に切り替えるときは false にする
 const PUBLISH_EMPTY_STATUS = true;
@@ -45,6 +50,24 @@ const GIDS = {
   // CMS が FESTIVALS を編集するため、シートに保存するとスナップショットがズレる（二重管理）。
   // 将来「同一ブランドの複数開催」を扱うときは FESTIVALS に BRAND_ID 列を足して拡張。
 };
+
+/* ---------- EDITIONS シート（段階1: 併存させて一致を検証する） ----------
+ *
+ * 現状 editions は FESTIVALS 1行から1開催回を導出している。この構造では
+ * 「翌年の開催が決まったら DATE を上書きする」しかなく、前年の開催回が消える。
+ * 実際に 2025年終了が44件あり、bondisco / global-ark / orbit / yamauto / signal は
+ * 既存行が前年の日付のまま残っていた（AUDIT §9-40）。
+ *
+ * 段階1では**読み取り元を切り替えない**。EDITIONS シートを新設して現状を写し、
+ * --editions-from-sheet で読んだ結果が導出結果と一致することだけを確認する。
+ * 一致が確認できたら段階2で既定を切り替える。
+ *
+ * 既定を変えないのは、切り替えと同時に不整合が出たとき、原因が
+ * 「シートの内容」なのか「読み取り処理」なのか切り分けられなくなるため。
+ */
+const EDITIONS_GID = process.env.TJ_EDITIONS_GID || null;
+const EDITIONS_COLS = ['EDITION_ID', 'FESTIVAL_ID', 'EDITION', 'DATE_START', 'DATE_END',
+  'LOCATION', 'LOCATION_JA', 'PREF', 'ADDRESS', 'LAT', 'LNG', 'TICKETURL', 'FLYER', 'STATUS'];
 
 // GENRE 正規リスト（スキーマ §1.3。必要に応じて追記）
 const GENRE_ALLOWED = new Set([
@@ -98,6 +121,46 @@ async function fetchSheet(name) {
   const res = await fetch(url, { redirect: 'follow' });
   if (!res.ok) throw new Error(`${name}: HTTP ${res.status}`);
   return csvToObjects(await res.text());
+}
+
+/* EDITIONS シートを読む（段階1: 検証専用）。
+   GIDS には入れない。入れると main() の取得ループが必ず走り、
+   シート未作成の環境で fetch-data 全体が落ちるため。 */
+async function fetchEditionsSheet() {
+  if (!EDITIONS_GID) {
+    throw new Error('EDITIONS の gid が未設定です。TJ_EDITIONS_GID 環境変数で指定してください');
+  }
+  if (OFFLINE) {
+    const p = '/tmp/tj_EDITIONS.csv';
+    if (!existsSync(p)) throw new Error(`offline cache not found: ${p}`);
+    return csvToObjects(await readFile(p, 'utf-8'));
+  }
+  const res = await fetch(`${BASE}&gid=${EDITIONS_GID}`, { redirect: 'follow' });
+  if (!res.ok) throw new Error(`EDITIONS: HTTP ${res.status}`);
+  return csvToObjects(await res.text());
+}
+
+/* 導出した editions とシートの内容を突き合わせる。
+   段階1の目的はこの一致確認だけで、editions.json の中身は差し替えない。
+   不一致は「シートが古い」か「導出が変わった」かのどちらかで、
+   どちらも段階2へ進む前に解消しておく必要がある。 */
+function compareEditions(derived, sheet) {
+  const key = (r) => String(r.EDITION_ID || '').trim();
+  const D = new Map(derived.map((r) => [key(r), r]));
+  const S = new Map(sheet.map((r) => [key(r), r]));
+  const diffs = [];
+  for (const [id, d] of D) {
+    const s = S.get(id);
+    if (!s) { diffs.push(`${id}: シートに無い`); continue; }
+    for (const c of EDITIONS_COLS) {
+      // 導出側は空欄を落とす（stripMeta）ので、両方を '' に寄せて比較する
+      const dv = String(d[c] ?? '').trim();
+      const sv = String(s[c] ?? '').trim();
+      if (dv !== sv) diffs.push(`${id}.${c}  導出="${dv}"  シート="${sv}"`);
+    }
+  }
+  for (const id of S.keys()) if (!D.has(id)) diffs.push(`${id}: 導出に無い（シートにのみ存在）`);
+  return diffs;
 }
 
 // ---------- バリデーション（スキーマ §6）----------
@@ -313,6 +376,23 @@ async function main() {
   if (errors.length) {
     console.error('\nエラーがあるためJSON書き出しを停止（スキーマ §6）。validation-report.txt は出力済み。');
     process.exit(1);
+  }
+
+  // 段階1: EDITIONS シートと導出結果の一致確認。editions.json は差し替えない。
+  if (EDITIONS_FROM_SHEET) {
+    console.log('\n[EDITIONS シート照合]');
+    const sheetEditions = await fetchEditionsSheet();
+    console.log(`  シート: ${sheetEditions.length} 行 / 導出: ${editions.length} 行`);
+    const diffs = compareEditions(editions, sheetEditions);
+    if (diffs.length) {
+      console.error(`  ✗ 不一致 ${diffs.length}件`);
+      diffs.slice(0, 15).forEach((d) => console.error(`      ${d}`));
+      if (diffs.length > 15) console.error(`      … ほか ${diffs.length - 15}件`);
+      console.error('\n  EDITIONS シートと導出結果が一致しません。');
+      console.error('  段階2（読み取り元の切り替え）へ進む前に解消してください。');
+      process.exit(1);
+    }
+    console.log('  ✅ 全行・全列が一致');
   }
 
   if (DRY) { console.log('\n--dry: JSON書き出しスキップ（レポートのみ）'); return; }

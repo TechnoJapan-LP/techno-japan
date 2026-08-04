@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-08-04T07:09:35.372Z",
+  "_generatedAt": "2026-08-04T15:33:20.787Z",
   "count": 89,
   "items": [
     {
@@ -136,6 +136,26 @@
       "STATUS": "published",
       "DESC_EN": "ALA brings together Japan's underground electronic music community in Chiba with a focus on psychedelic and trippy soundscapes. The festival showcases both local and international artists across multiple stages, emphasizing immersive audiovisual experiences that blur the lines between genres.",
       "location_ja": "とり亀つりぼりキャンプ場"
+    },
+    {
+      "ID": "technogaoka",
+      "TYPE": "rave",
+      "NAME": "Technogaoka",
+      "DATE": "2026-04-25/2026-04-26",
+      "LOCATION": "Tabifusa Ashiya Daihi-kaku",
+      "CITY": "Hyogo",
+      "ADDRESS": "兵庫県芦屋市奥山1",
+      "LAT": "34.7578",
+      "LNG": "135.2974",
+      "IMAGE": "images/festivals/technogaoka.webp",
+      "FLYER": "images/festivals/technogaoka-flyer.jpg",
+      "GENRE": "TECHNO, HOUSE",
+      "DESC": "兵庫県の「たびふさ 芦屋大悲閣」を拠点に活動するアンダーグラウンド・レイヴシリーズ。本格的な倉庫の雰囲気を保ちながら、国内外のテクノシーンから幅広くアーティストを招く的確なプログラミングで知られている。サウンドシステムは装飾を排し、機能性を最優先したラウな仕様。",
+      "INSTAGRAM": "https://www.instagram.com/technogaoka/",
+      "EDITIONS": "[]",
+      "STATUS": "published",
+      "DESC_EN": "Underground rave series operating from Tabifusa Ashiya Daihi-kaku in Hyogo. Known for maintaining a proper warehouse aesthetic with focused programming that draws from both local and international techno circuits. Raw sound system setup prioritizes function over flash.",
+      "location_ja": "旅房 芦屋大悲閣"
     },
     {
       "ID": "osukinidouzo",
@@ -404,6 +424,21 @@
       "location_ja": "ヴィレッジ白州"
     },
     {
+      "ID": "body-soul",
+      "TYPE": "festival",
+      "NAME": "Body&SOUL Live in Japan",
+      "DATE": "2026-06-07",
+      "LOCATION": "Kiranah Garden Toyosu",
+      "CITY": "Tokyo",
+      "GENRE": "HOUSE",
+      "DESC": "Body&SOULが、ニューヨーク仕込みのレジェンダリーなディープハウス／ソウルフル・ダンスミュージックの精神を東京に持ち込む。90年代初頭からこのブランドを特徴づけてきた、質の高いサウンドへのこだわり、親密な雰囲気、そして音楽とダンスの間に生まれるスピリチュアルなつながりを、このイベントも忠実に受け継いでいる。",
+      "TICKETURL": "http://www.bodyandsoul-japan.com/",
+      "INSTAGRAM": "https://www.instagram.com/bodyandsouljpn/",
+      "STATUS": "published",
+      "DESC_EN": "Body&SOUL brings its legendary deep house and soulful dance music ethos from New York to Tokyo. The event maintains the original's commitment to quality sound, intimate atmosphere, and the spiritual connection between music and movement that has defined the brand since the early 90s.",
+      "location_ja": "キラナガーデン豊洲"
+    },
+    {
       "ID": "festival-fruezinho",
       "TYPE": "festival",
       "NAME": "FESTIVAL FRUEZINHO",
@@ -422,6 +457,20 @@
       "STATUS": "published",
       "DESC_EN": "A spin-off from FESTIVAL de FRUE, the Shizuoka festival built around the idea of music that moves the soul. Where the parent event runs outdoors in Kakegawa over several days, this one is a single day in the city. The suffix zinho is a Portuguese diminutive, so the name reads simply as \"little FRUE.\" The most recent edition took place on 13 June 2026 at Tachikawa Stage Garden in Tokyo, a 2,500-seat indoor hall. The idea is to hear music from across the world in comfortable conditions, all in one day. The bill included Marc Ribot Y Los Cubanos Postizos, Sam Gendel & Sam Wilkes and Takuro Okada, plus a programme marking thirty years since the death of Indian classical vocalist Pandit Pran Nath, bringing together SARA, Yumiko Ohno and Terry Riley.",
       "location_ja": "立川ステージガーデン"
+    },
+    {
+      "ID": "signal",
+      "TYPE": "rave",
+      "NAME": "Signal",
+      "DATE": "2026-06-13/2026-06-14",
+      "LOCATION": "Secret location",
+      "CITY": "Yamanashi",
+      "GENRE": "TECHNO · HOUSE",
+      "DESC": "山梨の自然豊かなロケーションで開催されるSignal Open Airは、東京のクラブシーンから離れたアーティストやダンサーたちを引き寄せ、没入感あふれる野外体験を提供する。同フェスティバルは、山梨県の山岳地帯の景観を背景としながらも、アンダーグラウンドなテクノ／エレクトロニック・ミュージックに軸足を置いたプログラム編成を貫いている。",
+      "INSTAGRAM": "https://www.instagram.com/signal_open_air/",
+      "STATUS": "published",
+      "DESC_EN": "Signal Open Air takes place in Yamanashi's natural setting, drawing artists and dancers away from Tokyo's club circuit for an immersive outdoor experience. The festival maintains focus on underground techno and electronic music programming while utilizing the prefecture's mountainous landscape as backdrop.",
+      "location_ja": "Secret location"
     },
     {
       "ID": "dots",
@@ -716,28 +765,6 @@
       "DESC_EN": "Intergalactic Festival brings together international and domestic artists across multiple stages in Chiba, focusing on forward-thinking electronic music programming. The festival has established itself as a key destination for techno and house music enthusiasts seeking quality lineups outside Tokyo's immediate orbit."
     },
     {
-      "ID": "body-soul",
-      "TYPE": "festival",
-      "NAME": "Body&SOUL Live in Japan",
-      "DATE": "2026-06-07",
-      "CITY": "Tokyo",
-      "GENRE": "HOUSE",
-      "DESC": "Body&SOULが、ニューヨーク仕込みのレジェンダリーなディープハウス／ソウルフル・ダンスミュージックの精神を東京に持ち込む。90年代初頭からこのブランドを特徴づけてきた、質の高いサウンドへのこだわり、親密な雰囲気、そして音楽とダンスの間に生まれるスピリチュアルなつながりを、このイベントも忠実に受け継いでいる。",
-      "STATUS": "published",
-      "DESC_EN": "Body&SOUL brings its legendary deep house and soulful dance music ethos from New York to Tokyo. The event maintains the original's commitment to quality sound, intimate atmosphere, and the spiritual connection between music and movement that has defined the brand since the early 90s."
-    },
-    {
-      "ID": "signal",
-      "TYPE": "rave",
-      "NAME": "Signal",
-      "DATE": "2026-06-13/2026-06-14",
-      "CITY": "Yamanashi",
-      "GENRE": "TECHNO · HOUSE",
-      "DESC": "山梨の自然豊かなロケーションで開催されるSignal Open Airは、東京のクラブシーンから離れたアーティストやダンサーたちを引き寄せ、没入感あふれる野外体験を提供する。同フェスティバルは、山梨県の山岳地帯の景観を背景としながらも、アンダーグラウンドなテクノ／エレクトロニック・ミュージックに軸足を置いたプログラム編成を貫いている。",
-      "STATUS": "published",
-      "DESC_EN": "Signal Open Air takes place in Yamanashi's natural setting, drawing artists and dancers away from Tokyo's club circuit for an immersive outdoor experience. The festival maintains focus on underground techno and electronic music programming while utilizing the prefecture's mountainous landscape as backdrop."
-    },
-    {
       "ID": "euphoria",
       "NAME": "Euphoria",
       "DATE": "2025-07-11/2025-07-12",
@@ -834,6 +861,7 @@
       "CITY": "Kanto",
       "GENRE": "TECHNO · HOUSE · PSYCHEDELIC",
       "DESC": "PURE RAVEは、商業的なフェスティバルの装飾を排し、妥協なきサウンドシステム文化を追求する、関東エリアの生々しいアンダーグラウンド・ギャザリングとして活動している。演出過多なプロダクションよりもダンスフロア体験を重視する、ディープでドライヴィングなテクノのプログラミングに一貫してフォーカスを当てているイベントだ。",
+      "INSTAGRAM": "https://www.instagram.com/abductions_group/",
       "DESC_EN": "PURE RAVE operates as a raw underground gathering in the Kanto region, stripping away commercial festival aesthetics in favor of uncompromising sound system culture. The event maintains focus on deep, driving techno programming that prioritizes the dance floor experience over production spectacle."
     },
     {
@@ -1121,26 +1149,6 @@
       "GENRE": "TECHNO · HOUSE",
       "DESC": "TAKARAJIMAは、沖縄の海岸線を舞台に環境保護活動とエレクトロニック・ミュージックのプログラミングを融合させたフェスティバルだ。ビーチクリーン活動とDJセットを一体化させ、海洋保全をテーマにしながらアンダーグラウンド・ダンス・ミュージックを紹介するというユニークなフォーマットを生み出している。参加者は複数日にわたるプログラムを通じて、生態系の再生と音楽の祭典の両方に関わることになる。",
       "DESC_EN": "TAKARAJIMA combines environmental activism with electronic music programming on Okinawa's coastline. The festival integrates beach cleaning activities with DJ sets, creating a unique format that addresses ocean conservation while showcasing underground dance music. Participants engage in both ecological restoration and musical celebration across multiple days of programming."
-    },
-    {
-      "ID": "technogaoka",
-      "TYPE": "rave",
-      "NAME": "Technogaoka",
-      "DATE": "2026-04-25/2026-04-26",
-      "LOCATION": "Tabifusa Ashiya Daihi-kaku",
-      "CITY": "Hyogo",
-      "ADDRESS": "兵庫県芦屋市奥山1",
-      "LAT": "34.7578",
-      "LNG": "135.2974",
-      "IMAGE": "images/festivals/technogaoka.webp",
-      "FLYER": "images/festivals/technogaoka-flyer.jpg",
-      "GENRE": "TECHNO, HOUSE",
-      "DESC": "兵庫県の「たびふさ 芦屋大悲閣」を拠点に活動するアンダーグラウンド・レイヴシリーズ。本格的な倉庫の雰囲気を保ちながら、国内外のテクノシーンから幅広くアーティストを招く的確なプログラミングで知られている。サウンドシステムは装飾を排し、機能性を最優先したラウな仕様。",
-      "INSTAGRAM": "https://www.instagram.com/technogaoka/",
-      "EDITIONS": "[]",
-      "STATUS": "published",
-      "DESC_EN": "Underground rave series operating from Tabifusa Ashiya Daihi-kaku in Hyogo. Known for maintaining a proper warehouse aesthetic with focused programming that draws from both local and international techno circuits. Raw sound system setup prioritizes function over flash.",
-      "location_ja": "旅房 芦屋大悲閣"
     }
   ]
 }
