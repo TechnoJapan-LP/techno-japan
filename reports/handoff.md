@@ -201,3 +201,54 @@
 3. **`pure-rave` は INBOX の PREF が "Kanto"** で県名ではない。会場非公開のフェスの可能性
 4. 残り5件（未着手）: japonism / body-soul / signal / dots / samsara
 5. 停止条件には到達していない（空振り連続2件で止まらず、日付食い違い0件、geocode 正常）
+
+## 2026-08-04 / Claude (Opus 5) / 完了（バッチ3＋FUJI ROCK。INBOX 全件が調査済みに）
+
+### 実施
+- `fuji-rock`（旧 fulirock）を FUJI ROCK として調査。**既存行の是正であることが判明**
+- バッチ3（6件）: japonism / body-soul / signal / dots / samsara / moment
+- **これで INBOX 全27件が `調査 9/9` に到達**
+
+| id | 収穫 |
+|---|---|
+| `fuji-rock` | 公式から日程・会場・住所・チケット・主要30組。geocode は苗場スキー場に正確に一致 |
+| `dots` | ZAIKO から会場「藍鱗」・住所・チケット・出演者。geocode も会場名に正確に一致 |
+| `japonism` | 欠けていた url / lineup を確認（url は存在せず、lineup は未到達） |
+| `body-soul` | 会場 Kiranah Garden Toyosu と公式サイトを特定 |
+| `moment` | 会場 Dorogawa Camp Site を特定。linktree に販売リンクは無し |
+| `signal` | 日程のみ確定。**既存行が2025年の日付のまま** |
+| `samsara` | 会場 Windera CAMPGROUNDS 八ヶ岳（二次情報）。geocode は OSM 未収録で取得できず |
+
+### コミット
+- SHA: このエントリを含めてコミット
+- push / rebase 状態: 追記前に rebase 済み
+
+### 検証
+- `research_festival.mjs validate`: **全27件 `✓ 調査 9/9`、`✗` は0件**
+- `geocode fuji-rock`: `36.795, 138.7788`（苗場スキー場, 湯沢町）— 会場名で正確に一致
+- `geocode dots`: `42.9321, 141.4131`（藍鱗, 有明, 清田区, 札幌市）— 会場名で正確に一致
+- `geocode samsara`: 見つからず（Windera CAMPGROUNDS が OSM 未収録）。値は入れていない
+
+### 変更したパターン
+- 調査JSONの記入: 6件 × 9項目 ＋ fuji-rock 11項目
+- `id` の是正: 2件（`fulirock`→`fuji-rock` ファイル名も変更、`body-soul-live-in-japan`→`body-soul`）
+- 画像から読み取った項目（confidence low ＋ note に「画像から読み取り、未検証」）: 3件
+  （body-soul の location_ja / moment の location_ja / moment の city）
+
+### 未確認の類似パターン
+- **`init` が id.value と ファイル名で別の値を採る場合がある** — `body-soul` で発生。
+  名前が slugify できると `id.value` は slugify 結果、ファイル名は既存 FESTIVALS の id になる。
+  他に該当する行がないか — **未調査**
+- IG 投稿画像の中にある lineup（`loa` / `e-groove` / `orbit` / `japonism` / `signal` / `samsara` / `moment` の7件）— **未取得**
+- 既存 FESTIVALS 行の日付が前年のまま、というケース — `signal` で1件確認。**他は未調査**
+
+### 次の担当への注意・判断待ち
+
+1. **`fuji-rock` は新規登録ではなく既存行の是正**
+   - 既存 `fulirock` 行の `desc` / `desc_en` は**すでに FUJI ROCK について書かれている**（「フジロックフェスティバルは、毎夏、苗場の山々を…」）。誤っているのは `id` と `name` だけ
+   - 詳細ページ `/festivals/fulirock.html`（JA/EN）と sitemap 掲載があるため、**ID 変更時は `build-detail-pages.mjs` の `REDIRECTS` に旧ID のスタブを追加すること**
+   - §9-28 の分類では「正しいコンテンツの正しくないURL」に当たり、リダイレクトが妥当（404 にすべき類ではない）
+2. **`signal` の既存行が前年の日付** — `2025-06-14/2025-06-15`。IG bio・INBOX・二次情報の3つが `2026-06-13/2026-06-14` で一致するので更新が必要
+3. **`samsara` の座標が取れない** — Windera CAMPGROUNDS 八ヶ岳 が OSM 未収録。CMS の「施設名から検索」(resolve_place) を使うか、八ヶ岳周辺の代表座標で代用するか判断が要る
+4. **`e-groove` の LOCATION 表記**（判断待ち。下記の提案参照）
+5. **`pure-rave` の開催地** — 主催者アカウントに情報が無く、INBOX の PREF も「Kanto」で県名でない。会場非公開型の可能性

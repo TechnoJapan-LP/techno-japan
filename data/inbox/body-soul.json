@@ -12,15 +12,15 @@
   },
   "fields": {
     "id": {
-      "value": "body-soul-live-in-japan",
-      "source": "slugify(name)",
+      "value": "body-soul",
+      "source": "既存 FESTIVALS の行",
       "confidence": "high",
       "reason": null,
       "checkedAt": "2026-08-04T09:56:01+09:00",
       "inboxValue": null,
       "conflictNote": null,
       "kind": "auto",
-      "note": "スラッグ。DATA_SCHEMA §1.1"
+      "note": "slugify(name) は body-soul-live-in-japan になるが、既存 FESTIVALS の ID は body-soul。詳細ページも /festivals/body-soul.html なので既存に合わせる"
     },
     "name": {
       "value": "Body&SOUL Live in Japan",
@@ -34,55 +34,55 @@
       "note": "INBOX の FES_NAME"
     },
     "date": {
-      "value": null,
-      "source": null,
-      "confidence": null,
+      "value": "2026-06-07",
+      "source": "https://www.instagram.com/bodyandsouljpn/",
+      "confidence": "medium",
       "reason": null,
-      "checkedAt": null,
+      "checkedAt": "2026-08-04T11:20:00+09:00",
       "inboxValue": "2026-06-07",
       "conflictNote": null,
       "kind": "research",
-      "note": "INBOX の申告: 2026.06.07（正規化: 2026-06-07）。未検証なので公式情報と突き合わせること"
+      "note": "IG 記載（12:00–21:00）。INBOX・既存 FESTIVALS と一致"
     },
     "location": {
-      "value": null,
-      "source": null,
-      "confidence": null,
+      "value": "Kiranah Garden Toyosu",
+      "source": "https://www.instagram.com/bodyandsouljpn/",
+      "confidence": "medium",
       "reason": null,
-      "checkedAt": null,
+      "checkedAt": "2026-08-04T11:20:00+09:00",
       "inboxValue": null,
       "conflictNote": null,
       "kind": "research",
-      "note": "会場名（英字表記）"
+      "note": "IG の投稿・会場マップより。一次情報は IG のみ"
     },
     "location_ja": {
-      "value": null,
-      "source": null,
-      "confidence": null,
+      "value": "キラナガーデン豊洲",
+      "source": "https://www.instagram.com/bodyandsouljpn/",
+      "confidence": "low",
       "reason": null,
-      "checkedAt": null,
+      "checkedAt": "2026-08-04T11:20:00+09:00",
       "inboxValue": null,
       "conflictNote": null,
       "kind": "research",
-      "note": "会場名（日本語）。座標検索はこちらの方が当たる"
+      "note": "画像から読み取り、未検証。英字表記 Kiranah Garden Toyosu の一般的な日本語表記を当てたもので、公式表記の確認は未了"
     },
     "city": {
-      "value": null,
-      "source": null,
-      "confidence": null,
+      "value": "Tokyo",
+      "source": "https://www.instagram.com/bodyandsouljpn/",
+      "confidence": "high",
       "reason": null,
-      "checkedAt": null,
+      "checkedAt": "2026-08-04T11:20:00+09:00",
       "inboxValue": null,
       "conflictNote": null,
       "kind": "research",
-      "note": "都市名"
+      "note": "江東区豊洲。既存 FESTIVALS と一致"
     },
     "address": {
       "value": null,
       "source": null,
       "confidence": null,
-      "reason": null,
-      "checkedAt": null,
+      "reason": "住所を記載した一次情報を未確認",
+      "checkedAt": "2026-08-04T11:20:00+09:00",
       "inboxValue": null,
       "conflictNote": null,
       "kind": "research",
@@ -111,33 +111,33 @@
       "note": "geocode で取得"
     },
     "url": {
-      "value": null,
-      "source": null,
-      "confidence": null,
+      "value": "http://www.bodyandsoul-japan.com/",
+      "source": "https://linktr.ee/bodyandsouljpn",
+      "confidence": "medium",
       "reason": null,
-      "checkedAt": null,
+      "checkedAt": "2026-08-04T11:20:00+09:00",
       "inboxValue": null,
       "conflictNote": null,
       "kind": "research",
-      "note": "公式サイト"
+      "note": "linktree の HP リンク。2026年の開催情報が載っているかは未確認"
     },
     "instagram": {
-      "value": null,
-      "source": null,
-      "confidence": null,
+      "value": "https://www.instagram.com/bodyandsouljpn/",
+      "source": "https://www.instagram.com/bodyandsouljpn/",
+      "confidence": "high",
       "reason": null,
-      "checkedAt": null,
+      "checkedAt": "2026-08-04T11:20:00+09:00",
       "inboxValue": "https://www.instagram.com/bodyandsouljpn/",
       "conflictNote": null,
       "kind": "research",
-      "note": "INBOX の申告: https://www.instagram.com/bodyandsouljpn/。未検証。調査の出発点に使うこと"
+      "note": "INBOX の申告と一致"
     },
     "ticketUrl": {
       "value": null,
-      "source": null,
+      "source": "https://linktr.ee/bodyandsouljpn",
       "confidence": null,
-      "reason": null,
-      "checkedAt": null,
+      "reason": "linktree・IG bio いずれにも販売URLが無い",
+      "checkedAt": "2026-08-04T11:20:00+09:00",
       "inboxValue": null,
       "conflictNote": null,
       "kind": "research",
@@ -147,8 +147,8 @@
       "value": null,
       "source": null,
       "confidence": null,
-      "reason": null,
-      "checkedAt": null,
+      "reason": "IG 投稿に出演者告知があるが、テキストとして取得できていない",
+      "checkedAt": "2026-08-04T11:20:00+09:00",
       "inboxValue": null,
       "conflictNote": null,
       "kind": "research",
