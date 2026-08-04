@@ -1,0 +1,17 @@
+ID,理由
+hacha-mecha,全項目一致
+japonism,全項目一致
+wonderfruit-kyoto,全項目一致
+car-multimedia,DATE 以外が空。情報が揃うまで登録見送り（INBOX に残す）
+loa,既存 loa-lost-paradise（2025年回）がある。翌年回として EDITIONS 側の課題
+festival-fruezinho,LINEUP の差は区切り文字のみ（カンマ vs スラッシュ）
+dots,CITY の粒度差のみ（Sapporo→Hokkaido）
+etsuetsu,同上
+fuji-rock,同上
+labyrinth,同上
+moment,同上
+mori-michi-ichiba,同上
+rural,同上
+samsara,同上
+link-open-air,lat/lng/address は既存の方が高精度
+spring-love-harukaze,LOCATION/address/lat/lng は既存の方が適切（LINEUP のみ上書き）

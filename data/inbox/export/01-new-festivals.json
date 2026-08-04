@@ -1,0 +1,53 @@
+[
+  {
+    "ID": "e-groove",
+    "NAME": "E-GROOVE",
+    "TYPE": "festival",
+    "DATE": "2026-08-01",
+    "LOCATION": "Japanese Garden",
+    "location_ja": "日本庭園",
+    "CITY": "Akita",
+    "ADDRESS": null,
+    "LAT": null,
+    "LNG": null,
+    "URL": null,
+    "INSTAGRAM": "https://www.instagram.com/e_groove.jp/",
+    "TICKETURL": null,
+    "LINEUP": null,
+    "STATUS": "published"
+  },
+  {
+    "ID": "nu-festival",
+    "NAME": "NU FESTIVAL",
+    "TYPE": "festival",
+    "DATE": "2026-06-26/2026-06-28",
+    "LOCATION": "Takanawa Gateway City",
+    "location_ja": "高輪ゲートウェイシティ",
+    "CITY": "Tokyo",
+    "ADDRESS": "東京都港区高輪二丁目",
+    "LAT": 35.6356,
+    "LNG": 139.7396,
+    "URL": "https://nufestival.jp/",
+    "INSTAGRAM": "https://www.instagram.com/nu_fes_tokyo/",
+    "TICKETURL": "https://nufestival.jp/tickets/",
+    "LINEUP": "Shinichi Osawa, Shingo Nakamura, Sputniko!, Meitei, Nick Luscombe",
+    "STATUS": "published"
+  },
+  {
+    "ID": "sub-tide",
+    "NAME": "SuB-TiDe",
+    "TYPE": "festival",
+    "DATE": "2026-07-31/2026-08-02",
+    "LOCATION": "Uzumaku Hiroba",
+    "location_ja": "ウズマク広場",
+    "CITY": "Nagano",
+    "ADDRESS": "長野県南佐久郡南相木村三川",
+    "LAT": 36.0048,
+    "LNG": 138.6446,
+    "URL": "https://sub-tide.com/2026",
+    "INSTAGRAM": "https://www.instagram.com/sub_tide/",
+    "TICKETURL": "https://tiget.net/events/484557",
+    "LINEUP": "cyberman, Dj KAZOOO, Dr. NISHIMURA & ダブ山ジャズ男, Ebisu, Fumish, Hidai, HiraFrat, HouseCat, ikeaboy, KAN, KAZUYA, Masayuki Seta, Mimu, MUNEMASA, NAGEE, NORID, rik, Shuuma, SiD, SISEN, THE REBELS aka ACID DUO, Toty Kawasaki, 964cm",
+    "STATUS": "published"
+  }
+]

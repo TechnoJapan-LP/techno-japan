@@ -1,0 +1,8 @@
+ID,列,現在値,新しい値,理由
+bondisco,DATE,2025-08-30/2025-08-31,2026-08-22/2026-08-23,既存が前年の開催回
+global-ark,DATE,2025-08-29/2025-08-31,2026-08-21/2026-08-23,既存が前年の開催回
+orbit,DATE,2025-07-11/2025-07-12,2026-07-11/2026-07-12,既存が前年の開催回
+yamauto,DATE,2025-08-09/2025-08-18,2026-08-22/2026-08-30,既存が前年の開催回
+bondisco,CITY,Kyoto,Hyogo,会場は兵庫県三田市。IG bio も Hyogo
+spring-love-harukaze,LINEUP,"HAPPY, Inoue Ohana, IORI, Jun Inagawa, Mari Sakurai, OCCA, Tomocomo, YAMARCHY, DJ KRUSH, kikiorix, DAIJIRO, suimin, CALPISS, ZUNDOKO DISCO, Tsuyoshi Suzuki, FUNKY GONG","DJ KRUSH, Eminata, KILLER BONG, Shin Sasama, YAMAZIN, YUIMA and The Rivers, ZUNDOKO DISCO, 松本YAO善行",最終発表
+ensou,LINEUP,"TōYō, The Factors, The Rolling Papers, Sunju Hargun, Atsushi Maeda, kojiro","TōYō, The Factors, The Rolling Papers, カタケン, ドグラマグラ, Sunju Hargun, Atsushi Maeda, kojiro",カタケン・ドグラマグラの2名を追加（既存に欠落は無し）
