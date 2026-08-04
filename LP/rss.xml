@@ -5,7 +5,7 @@
     <link>https://techno-japan.media</link>
     <description>Japan&apos;s underground techno and house music media platform.</description>
     <language>ja-JP</language>
-    <lastBuildDate>Mon, 03 Aug 2026 11:09:14 -0000</lastBuildDate>
+    <lastBuildDate>Tue, 04 Aug 2026 06:04:30 -0000</lastBuildDate>
     <atom:link href="https://techno-japan.media/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
       <title>GROW THE CULTURE OPEN AIR</title>
@@ -104,9 +104,9 @@
       <description>Gunma — どんぐりずが地元・群馬県桐生市で主催する音楽フェスティバル。2023年、2024年は桐生駅前のロータリーを舞台にDIYスタイルで開催され、第3回となる2026年は会場を市民の憩いの場である新川公園へ移して規模を拡張した。開催日は桐生の夏を象徴する「桐生八木節まつり」に合わせて設定され、まつりの熱気とダンスミュージックが街の中で交差する。</description>
     </item>
     <item>
-      <title>FuliRock</title>
-      <link>https://techno-japan.media/festivals/fulirock.html</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals/fulirock.html</guid>
+      <title>FUJI ROCK</title>
+      <link>https://techno-japan.media/festivals/fuji-rock.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/fuji-rock.html</guid>
       <pubDate>Fri, 24 Jul 2026 00:00:00 -0000</pubDate>
       <category>Festival</category>
       <description>Niigata — フジロックフェスティバルは、毎夏、苗場の山々を日本を代表する野外音楽の祭典へと変貌させる。多彩なロックやオルタナティブのラインナップで主に知られているが、近年は複数のステージでエレクトロニック・アクトの起用も増えている。自然に囲まれたロケーションが没入感のある体験を生み出し、日本のフェス文化と海外のアンダーグラウンド・サウンドを繋いでいる。</description>
@@ -158,6 +158,14 @@
       <pubDate>Sat, 13 Jun 2026 00:00:00 -0000</pubDate>
       <category>Festival</category>
       <description>Tokyo — 魂のふるえる音楽体験」を掲げる FESTIVAL de FRUE のスピンオフ。静岡県掛川市で野外開催される本体に対し、こちらは都市型の1日限りのイベントだ。「-zinho」はポルトガル語の縮小辞。名前はそのまま「ちいさな FRUE」を意味する。 直近の開催は2026年6月13日、東京・立川ステージガーデン。約2,500席の屋内ホールで、世界各国の多様な音楽を快適な環境で聴ける一日として設計された。出演は Marc Ribot Y Los Cubanos Postizos、Sam Gendel &amp; Sam Wilkes、岡田拓郎。インド古典声楽の Pandit Pran Nath 没後30年を記念する Urs Celebration には SARA、YUMIKO OHNO、Terry Riley。</description>
+    </item>
+    <item>
+      <title>Signal</title>
+      <link>https://techno-japan.media/festivals/signal.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/signal.html</guid>
+      <pubDate>Sat, 13 Jun 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Yamanashi — 山梨の自然豊かなロケーションで開催されるSignal Open Airは、東京のクラブシーンから離れたアーティストやダンサーたちを引き寄せ、没入感あふれる野外体験を提供する。同フェスティバルは、山梨県の山岳地帯の景観を背景としながらも、アンダーグラウンドなテクノ／エレクトロニック・ミュージックに軸足を置いたプログラム編成を貫いている。</description>
     </item>
     <item>
       <title>Body&amp;SOUL Live in Japan</title>
@@ -240,18 +248,10 @@
       <description>Tochigi — 円相とは一筆で描かれた円のことで、悟りや真理、執着のない心を象徴的に表す。主催は村民ENTERTAINMENT。その言葉を名前に据え、芸術と音楽の祭典を掲げる。会場は公表されない。栃木県南部としか明かされず、場所を知るのはチケットを買った人だけだ。 ステージングは1960年代から2000年代へと受け継がれてきた野外フェスとレイヴを意識する。ライブに TōYō、The Factors、The Rolling Papers、カタケン、ドグラマグラ、DJ には Sunju Hargun、Atsushi Maeda、kojiro。出店や飲食に加え、マッサージ、図書館、レコード販売、ハンモックを備えたチルスポットが併設される。VJ、照明、フィールドデザインの各クルーも出演者として掲載される。</description>
     </item>
     <item>
-      <title>99flags</title>
-      <link>https://techno-japan.media/festivals/99flags.html</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals/99flags.html</guid>
-      <pubDate>Sat, 09 May 2026 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Tokyo — 99flagsは東京のクラブシーンを転々としながら開催されるパーティー・シリーズであり、ディープなテクノやハウスの伝統を汲みつつ、アンダーグラウンドな精神を貫いている。コマーシャルな要素よりもサウンドシステム文化と長尺セットを重視した、親密な雰囲気のイベントを積み重ねることで評価を築いてきたコレクティブだ。</description>
-    </item>
-    <item>
       <title>野外テクノパーティTranscendenceで見た次世代ジェネレーションの可能性</title>
       <link>https://techno-japan.media/articles/transcendence-2025-report.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/transcendence-2025-report.html</guid>
-      <pubDate>Mon, 03 Aug 2026 11:09:14 -0000</pubDate>
+      <pubDate>Tue, 04 Aug 2026 06:04:30 -0000</pubDate>
       <category>REPORT</category>
       <description></description>
     </item>
