@@ -10,16 +10,6 @@ on:
       - '.github/regression-thresholds.yml'
       - '.github/workflows/regression-check.yml'
       - '.github/workflows/deploy-pages.yml'
-      # CMS の Publish（LP/data.js 単独のコミット）はここでは扱わない。
-      # data.js だけが新しく生成物が追従していない状態なので、
-      # regression-check の「生成物がコミット内容と一致するか」に必ず落ちる。
-      # その経路は publish-pipeline.yml が fetch → build → 検査 → deploy まで
-      # 順序どおり面倒を見る。除外しないと同じ push で2本デプロイが走る。
-      #
-      # 否定パターンは「他に LP/ の変更があれば起動する」意味になる。
-      # data.js 単独の push でだけ起動しない。人が data.js を手で直した場合も
-      # 同じ扱いになるが、その内容は publish-pipeline が拾う。
-      - '!LP/data.js'
   workflow_dispatch:
 
 permissions:
@@ -31,12 +21,26 @@ concurrency:
   group: pages
   cancel-in-progress: false
 
+# CMS の Publish（`cms: publish data.js`）はこのワークフローでは扱わない。
+# data.js だけが新しく生成物が追従していない状態なので、regression-check の
+# 「生成物がコミット内容と一致するか」に必ず落ちる。その経路は
+# publish-pipeline.yml が fetch → build → 検査 → deploy まで面倒を見る。
+#
+# 【paths の否定パターンは使わないこと】2026-08-04 に `- '!LP/data.js'` を
+# 足したところ、**このワークフローが一切起動しなくなった**。他のパターンに
+# 一致するファイル（.github/workflows/deploy-pages.yml 自身や LP/data/*.json）が
+# 変わった push でも起動しない。ドキュメント上は「後続の否定に一致した
+# パスだけ除外」だが、実際にはフィルタ全体が効かなくなった。
+# サイトが更新されなくなる回帰なので、判定は job の if で行う。
+# 経緯は AUDIT §9-39。
 jobs:
   regression:
+    if: ${{ !startsWith(github.event.head_commit.message, 'cms: publish') }}
     uses: ./.github/workflows/regression-check.yml
 
   deploy:
     needs: regression
+    if: ${{ !startsWith(github.event.head_commit.message, 'cms: publish') }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
