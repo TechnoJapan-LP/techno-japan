@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-08-04T15:33:20.787Z",
-  "count": 89,
+  "_generatedAt": "2026-08-04T16:16:36.724Z",
+  "count": 91,
   "items": [
     {
       "EDITION_ID": "snow-machine-japan-2026",
@@ -345,6 +345,22 @@
       "DATE_START": "2026-06-20",
       "DATE_END": "2026-06-21",
       "PREF": "Nagano"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "FESTIVAL_ID": "nu-festival",
+      "EDITION": "2026",
+      "DATE_START": "2026-06-26",
+      "DATE_END": "2026-06-28",
+      "LOCATION": "Takanawa Gateway City",
+      "LOCATION_JA": "高輪ゲートウェイシティ",
+      "PREF": "Tokyo",
+      "ADDRESS": "東京都港区高輪二丁目",
+      "LAT": "35.6356",
+      "LNG": "139.7396",
+      "TICKETURL": "https://nufestival.jp/tickets/",
+      "FLYER": "images/festivals/nu-festival-flyer.webp",
+      "STATUS": "published"
     },
     {
       "EDITION_ID": "halola-camp-2026",
@@ -903,6 +919,18 @@
       "DATE_START": "2025-11-29",
       "DATE_END": "2025-11-30",
       "PREF": "Okinawa"
+    },
+    {
+      "EDITION_ID": "e-groove-2026",
+      "FESTIVAL_ID": "e-groove",
+      "EDITION": "2026",
+      "DATE_START": "2026-08-01",
+      "DATE_END": "2026-08-01",
+      "LOCATION": "Japanese Secret Garden",
+      "LOCATION_JA": "日本庭園",
+      "PREF": "Akita",
+      "FLYER": "images/festivals/e-groove-flyer.webp",
+      "STATUS": "published"
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-08-04T15:33:20.787Z",
-  "count": 89,
+  "_generatedAt": "2026-08-04T16:16:36.724Z",
+  "count": 91,
   "items": [
     {
       "ID": "snow-machine-japan",
@@ -491,6 +491,30 @@
       "GENRE": "TECHNO · EXPERIMENTAL",
       "DESC": "SAMSARAは、長野の山々にアンダーグラウンド・エレクトロニック・ミュージックを届け、自然と音との親密なつながりを生み出すフェスティバルだ。その名が示す精神性に呼応するように、深く瞑想的な体験に重きを置き、日本の実験音楽・テクノシーンから才能あるアーティストたちを招いている。",
       "DESC_EN": "SAMSARA brings underground electronic music to the mountains of Nagano, creating an intimate connection between nature and sound. The festival focuses on deep, meditative experiences that align with its spiritual namesake, drawing talent from Japan's experimental and techno scenes."
+    },
+    {
+      "ID": "nu-festival",
+      "TYPE": "festival",
+      "NAME": "NU FESTIVAL",
+      "DATE": "2026-06-26/2026-06-28",
+      "LOCATION": "Takanawa Gateway City",
+      "CITY": "Tokyo",
+      "ADDRESS": "東京都港区高輪二丁目",
+      "LAT": "35.6356",
+      "LNG": "139.7396",
+      "IMAGE": "images/festivals/nu-festival.webp",
+      "FLYER": "images/festivals/nu-festival-flyer.webp",
+      "GENRE": "TECHNO, HOUSE, AMBIENT, OTHERS",
+      "DESC": "NU は NEXT NEW UNITY の略。音とアートの交差点に置かれた都市規模のプログラムを掲げ、再開発によって生まれた高輪ゲートウェイシティを舞台とする。 プログラムは5つに分かれ、NU ART が Sónar+D と六本木の SuperDeluxe、NU LIVE が Sónar Sound、NU STATION が J-WAVE と組む。ほかに NU CONNECTION と NU PARK が置かれる。音楽プログラムだけでなく、テクノロジーとクリエイティビティを扱う Sónar+D の枠組みごと持ち込んでいる点に、このフェスティバルの設計が出ている。",
+      "URL": "https://nufestival.jp/",
+      "TICKETURL": "https://nufestival.jp/tickets/",
+      "INSTAGRAM": "https://www.instagram.com/nu_fes_tokyo/",
+      "LINEUP": "Shinichi Osawa, Shingo Nakamura, Sputniko!, Meitei, Nick Luscombe, 100LDK, Actress, akie, Albert.DATA, Andrea Faroppa, Broth Works, Cal Lyall, akey, Chloé Juliette, Chris SSG, COLA REN, comboy, DAITO MANABE, DJ EMMA, DJ Emerald, dj-krush, FULLHOUSE, Grandbrothers, Haruka Hirata, Ikebana Whispering, Imai Kazuo, Ito Atsuhiro, Ito Keiji, Keigo Tatsumi, KO KIMURA, kotsu, Kyomi, Masaaki Hara, MEITEI, Menden-no-Meiban-Kaiho-Domei, Minsan-no-Kimochi, MISOLA, Muddersten, Namaiki, Nao Tokui, Nari, Nathan Fake, Neutone, Nick Luscombe, onnacodomo, Paracollider, Ponpoko-Yama, Portrait XO, RHYME, Ryogo, SAKURA, SAMO, Sapphire Slows, SATOSHI OTSUKI, Shhhhh, Shinichi Osawa, Shingo Nakamura, Shöka, Suzanne Ciani, TAKENOKO, Technique & Picnic, TONTON, Two Shell, William Basinski, Yagi Michiyo",
+      "EDITIONS": "[]",
+      "STATUS": "published",
+      "DESC_EN": "NU stands for NEXT NEW UNITY, a city-wide programme positioned at the intersection of sound and art. It takes place at Takanawa Gateway City, a newly developed district in Tokyo. The programme splits into five strands: NU ART, running with Sonar+D and Roppongi's SuperDeluxe; NU LIVE, with Sonar Sound; NU STATION, with the broadcaster J-WAVE; plus NU CONNECTION and NU PARK. What stands out structurally is that it imports more than the music programming. Sonar+D, the strand dealing with technology and creativity, comes across intact, which places art and research alongside the live programme rather than behind it.",
+      "imagePosition": "center top",
+      "location_ja": "高輪ゲートウェイシティ"
     },
     {
       "ID": "halola-camp",
@@ -1149,6 +1173,24 @@
       "GENRE": "TECHNO · HOUSE",
       "DESC": "TAKARAJIMAは、沖縄の海岸線を舞台に環境保護活動とエレクトロニック・ミュージックのプログラミングを融合させたフェスティバルだ。ビーチクリーン活動とDJセットを一体化させ、海洋保全をテーマにしながらアンダーグラウンド・ダンス・ミュージックを紹介するというユニークなフォーマットを生み出している。参加者は複数日にわたるプログラムを通じて、生態系の再生と音楽の祭典の両方に関わることになる。",
       "DESC_EN": "TAKARAJIMA combines environmental activism with electronic music programming on Okinawa's coastline. The festival integrates beach cleaning activities with DJ sets, creating a unique format that addresses ocean conservation while showcasing underground dance music. Participants engage in both ecological restoration and musical celebration across multiple days of programming."
+    },
+    {
+      "ID": "e-groove",
+      "TYPE": "rave",
+      "NAME": "E-GROOVE",
+      "DATE": "2026-08-01",
+      "LOCATION": "Japanese Secret Garden",
+      "CITY": "Akita",
+      "IMAGE": "images/festivals/e-groove.webp",
+      "FLYER": "images/festivals/e-groove-flyer.webp",
+      "GENRE": "TECHNO, HOUSE",
+      "DESC": "秋田・雄和の日本庭園を舞台に、ひと晩だけ立ち上がるレイヴ。地図に載っていない場所で、秋田のローカルシーンと国内外で活動するアーティストが顔を合わせる。21時から翌朝8時まで、10組がバトンをつなぐように、途切れることなく音を重ねていく。夜が深まり、やがて庭園に朝日が差し込むまで、電子音楽が鳴り続ける。クラブでもキャンプ場でもない、庭園という空間で夜を明かすことが、この一夜の輪郭をつくっている",
+      "INSTAGRAM": "https://www.instagram.com/e_groove.jp/",
+      "LINEUP": "arow, DJ Chris Hale, DJ SHINTARO, EICHI ABE, Garcir, Hikaru, irlsDot, Naoki Ikawa, starRo, squall",
+      "EDITIONS": "[]",
+      "STATUS": "published",
+      "DESC_EN": "A rave that exists for one night only, staged in a Japanese garden in Yuwa, Akita, at a location that does not appear on any map. Akita's local scene meets artists working across Japan and beyond.From 9pm until 8 the following morning, they pass the night between them like a baton, layering sound without a break. As the night deepens and light eventually reaches the garden, the music keeps running. Not a club, not a campsite. Spending a whole night inside a garden is what gives this one its shape.",
+      "location_ja": "日本庭園"
     }
   ]
 }

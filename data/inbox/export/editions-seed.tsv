@@ -1,90 +1,95 @@
-EDITION_ID	FESTIVAL_ID	EDITION	DATE_START	DATE_END	LOCATION	LOCATION_JA	PREF	ADDRESS	LAT	LNG	TICKETURL	FLYER	STATUS
-snow-machine-japan-2026	snow-machine-japan	2026	2026-03-03	2026-03-08	HAKUBA VALLEY		Hakuba	Kitajo, Hakuba Village, Kitaazumi District, Nagano Prefecture	36.6982	137.8619		images/festivals/snow-machine-japan-flyer.jpg	published
-spring-love-harukaze-2026	spring-love-harukaze	2026	2026-03-28	2026-03-29	Yoyogi Event Plaza	代々木公園イベント広場	Tokyo	東京都渋谷区神南2-3	35.6679403	139.6968179		images/festivals/spring-love-flyer.webp	published
-waifu-2026	waifu	2026	2026-04-11	2026-04-12	Kinone Pension	木の根ペンション	Chiba	千葉県山武郡芝山町岩山2013	35.7531	140.3878			published
-arch-2026	arch	2026	2026-04-11	2026-04-12	Odaira no Sato Camp Area	小平の里キャンプ	Gunma	群馬県みどり市大間々町小平４９５	36.464494	139.309112		images/festivals/arch-flyer.jpg	published
-rainbow-disco-club-2026	rainbow-disco-club	2026	2026-04-17	2026-04-19	Higashiizu Cross Country Course	東伊豆クロスカントリーコース	Shizuoka	静岡県賀茂郡東伊豆町稲取3348-19	34.7896	139.0419		images/festivals/rainbow-disco-club-flyer.jpg	published
-ala-2026	ala	2026	2026-04-18	2026-04-19	Toriki Tsuribori Cafe & Campground	とり亀つりぼりキャンプ場	Chiba	千葉県長生郡睦沢町大上1508	35.34	140.2818	https://alanutmeg.zaiko.io/e/alaairfest26	images/festivals/ala-flyer.jpg	published
-technogaoka-2026	technogaoka	2026	2026-04-25	2026-04-26	Tabifusa Ashiya Daihi-kaku	旅房 芦屋大悲閣	Hyogo	兵庫県芦屋市奥山1	34.7578	135.2974		images/festivals/technogaoka-flyer.jpg	published
-osukinidouzo-2026	osukinidouzo	2026	2026-05-02	2026-05-04	Zakae Bridge	座架依橋	Kanagawa	神奈川県厚木市関口	35.4741	139.3724		images/festivals/osukinidouzo-flyer.jpg	published
-transcendence-2026	transcendence	2026	2026-05-08	2026-05-10	Choujya no Mori	長者の森	Nagano	長野県南佐久郡北相木村5616-6	36.0594	138.5611		images/festivals/transcendence-flyer.jpg	published
-99flags-2026	99flags	2026	2026-05-09	2026-05-10	Ooba Camp Village	おおばキャンプ村	Tokyo	東京都西多摩郡日の出町大久野3741	35.7533	139.2081	https://passmarket.yahoo.co.jp/event/show/detail/0253hhfb4g051.html#detail	images/festivals/99flags-flyer.jpg	published
-ensou-2026	ensou	2026	2026-05-15	2026-05-17	Secret location		Tochigi				https://sonminentertainment.zaiko.io/e/ensoufest2026	images/festivals/ensou-flyer.webp	published
-the-star-festival-2026	the-star-festival	2026	2026-05-16	2026-05-17	Fuminno Mori Hiyoshi	府民の森ひよし	Kyoto	京都府南丹市日吉町天若上ノ所25	35.1581	135.5398	https://thestarfestival.zaiko.io/e/2026kyoto	images/festivals/the-star-festival-flyer.jpg	published
-mori-michi-ichiba-2026	mori-michi-ichiba	2026	2026-05-22	2026-05-24	Laguna Beach & Laguna Ten Bosch (Lagunasia)	ラグーナビーチ＆遊園地ラグナシア	Aichi	愛知県蒲郡市海陽町2-39	34.8057	137.2599	https://morimichiichiba.jp/ticket/	images/festivals/mori-michi-ichiba-flyer.jpg	published
-paramount-2026	paramount	2026	2026-05-23	2026-05-24	Gunma Cycle Sports Center	群馬サイクルスポーツセンター	Gunma	群馬県利根郡みなかみ町新巻3853	36.7118	138.9056	https://l.instagram.com/	images/festivals/paramount-flyer.jpg	published
-letus-music-camp-2026	letus-music-camp	2026	2026-05-29	2026-05-31	Kuriwaki Farm	栗脇農園	Hyogo	兵庫県淡路市野島常盤1288-3	34.5694	134.9818	https://letus-music-camp.zaiko.io/e/letuscamp26	images/festivals/letus-music-camp-flyer.jpg	published
-matricaria-2026	matricaria	2026	2026-05-29	2026-05-31	Naeba Greenland	苗場グリーンランド	Niigata	新潟県南魚沼郡湯沢町三国	36.7938	138.7885	https://matricaria.zaiko.io/e/matricaria26	images/festivals/matricaria-flyer.jpg	published
-link-open-air-2026	link-open-air	2026	2026-05-30	2026-05-31	Katsura Lake Auto Campground	桂湖オートキャンプ場	Toyama	富山県南砺市桂大沼1-40	36.326091	136.836322	https://club-port.com/special/link-open-air-2026/ticket	images/festivals/link-open-air-flyer.webp	published
-japonism-2026	japonism	2026	2026-05-30	2026-05-31	Nasu Utopia Sauna	那須ユートピア サウナ	Tochigi	栃木県那須郡那須町蓑沢563-4 那須ユートピア美野沢アートヴィレッジ内	36.9836	140.1652	https://peatix.com/event/4921776	images/festivals/japonism-flyer.webp	published
-etsuetsu-2026	etsuetsu	2026	2026-06-05	2026-06-07	Village Hakushu	ヴィレッジ白州	Yamanashi	山梨県北杜市白州町白須上教来石平久保 ２１２４	35.848364	138.266241	https://etsuetsu2026.peatix.com/	images/festivals/etsuetsu-flyer.webp	published
-body-soul-2026	body-soul	2026	2026-06-07	2026-06-07	Kiranah Garden Toyosu	キラナガーデン豊洲	Tokyo				http://www.bodyandsoul-japan.com/		published
-festival-fruezinho-2026	festival-fruezinho	2026	2026-06-13	2026-06-13	Tachikawa Stage Garden	立川ステージガーデン	Tokyo	東京都立川市緑町3-3 N1	35.7049	139.4119	https://shop.frue.jp/collections/festival-fruezinho-2026		published
-signal-2026	signal	2026	2026-06-13	2026-06-14	Secret location	Secret location	Yamanashi						published
-dots-2026	dots	2026	2026-06-19	2026-06-21			Hokkaido						
-samsara-2026	samsara	2026	2026-06-20	2026-06-21			Nagano						
-halola-camp-2026	halola-camp	2026	2026-06-27	2026-06-28			Hokkaido						published
-moment-2026	moment	2026	2026-07-03	2026-07-05			Nara						
-rural-2026	rural	2026	2026-07-17	2026-07-20	nowhere CAMP		Fukushima	福島県耶麻郡猪苗代町大字蚕養字沼尻山甲2864	37.602	140.1982	https://ruraljp.zaiko.io/e/rural2026		
-fuji-rock-2026	fuji-rock	2026	2026-07-24	2026-07-26			Niigata						
-hacha-mecha-2026	hacha-mecha	2026	2026-08-08	2026-08-08	Shinkawa Park	新川公園	Gunma	群馬県桐生市稲荷町1	36.4082	139.3331	https://hacha-mecha-ticket.myshopify.com/	images/festivals/hacha-mecha-flyer.webp	published
-one-park-festival-2026	one-park-festival	2026	2026-09-05	2026-09-06			Fukui						
-re-birth-festival-2026	re-birth-festival	2026	2026-09-11	2026-09-13	Gateaux Kingdom Koumi		Nagano	5907 Toyosato, Koumi-machi, Minamisaku-gun, Nagano Prefecture	36.054	138.412		images/festivals/re-birth-festival-flyer.jpg	
-ultra-japan-2026	ultra-japan	2026	2026-09-19	2026-09-20			Tokyo						published
-otsukimi-2026	otsukimi	2026	2026-09-28	2026-09-29			Nagano						published
-synapse-festival-2026	synapse-festival	2026	2026-10-02	2026-10-04			Fukuoka						published
-yagura-2026	yagura	2026	2026-10-10	2026-10-11			Gifu						
-labyrinth-2026	labyrinth	2026	2026-10-10	2026-10-12	Minakami Hodaigi Camping Ground	みなかみ宝台樹キャンプ場	Gunma	群馬県利根郡みなかみ町藤原915-1	36.8572	139.0655	https://mindgames.zaiko.io/en/e/labyrinth2026		published
-wonderfruit-kyoto-2026	wonderfruit-kyoto	2026	2026-10-22	2026-10-25	Kyoto (Ohara Sanso / ACG Villa Kyoto / Kurama Mountain / Ochill TeaRoom)		Kyoto						published
-festival-de-frue-2026	festival-de-frue	2026	2026-10-31	2026-11-01	TSUMAGOI RESORT SAINO SATO		Shizuoka				https://shop.frue.jp/	images/festivals/festival-de-frue-flyer.jpg	published
-unknown-2024	unknown	2024	2024-10-18	2024-10-20			Shizuoka						
-wormhole-2024	wormhole	2024	2024-10-26	2024-10-27			Mie						
-dom-2024	dom	2024	2024-10-27	2024-10-27			Tokyo						
-parallel-world-2024	parallel-world	2024	2024-11-03	2024-11-04									
-bonna-pot-2024	bonna-pot	2024	2024-11-08	2024-11-10			Shizuoka						
-lab-2025	lab	2025	2025-03-15	2025-03-16			Yamanashi						
-axiom-2025	axiom	2025	2025-04-19	2025-04-20			Yamanashi						
-balance-2025	balance	2025	2025-05-16	2025-05-18			Gunma						
-intergalactic-2025	intergalactic	2025	2025-05-31	2025-05-31			Chiba						
-euphoria-2025	euphoria	2025	2025-07-11	2025-07-12			Tokyo						
-orbit-2025	orbit	2025	2025-07-11	2025-07-12			Fukui						
-yamauto-2025	yamauto	2025	2025-08-09	2025-08-18			Shiga						
-specialflower-festival-2025	specialflower-festival	2025	2025-08-10	2025-08-11			Ibaraki						
-loa-lost-paradise-2025	loa-lost-paradise	2025	2025-08-16	2025-08-17			Ibaraki						
-sawagi-festival-2025	sawagi-festival	2025	2025-08-22	2025-08-24			Yamanashi						
-one-music-camp-2025	one-music-camp	2025	2025-08-23	2025-08-24			Hyogo						
-global-ark-2025	global-ark	2025	2025-08-29	2025-08-31			Gunma						
-kyoumei-gathering-2025	kyoumei-gathering	2025	2025-08-29	2025-08-31			Hokkaido						
-bondisco-2025	bondisco	2025	2025-08-30	2025-08-31			Kyoto						
-pure-rave-2025	pure-rave	2025	2025-09-06	2025-09-08			Kanto						
-big-fun-2025	big-fun	2025	2025-09-07	2025-09-07			Hokkaido						
-okiraku-camp-2025	okiraku-camp	2025	2025-09-13	2025-09-14			Wakayama						
-gampeki-2025	gampeki	2025	2025-09-20	2025-09-21			Yamagata						
-sangenjaya-music-festival-2025	sangenjaya-music-festival	2025	2025-09-20	2025-09-21			Tokyo						
-colors-presents-soundcamp-2025	colors-presents-soundcamp	2025	2025-09-21	2025-09-23			Hokkaido						
-festival40010-2025	festival40010	2025	2025-09-26	2025-09-28			Kochi						
-ffkt-2025	ffkt	2025	2025-09-27	2025-09-28			Shizuoka						
-music-camp-core-2025	music-camp-core	2025	2025-10-03	2025-10-04			Toyama						
-circus-2025	circus	2025	2025-10-04	2025-10-04			Tokyo						
-each-story-2025	each-story	2025	2025-10-04	2025-10-05			Nagano						
-rare-groove-2025	rare-groove	2025	2025-10-04	2025-10-05			Yamanashi						
-delta-commit-2025	delta-commit	2025	2025-10-04	2025-10-05			Yamanashi						
-music-2025	music	2025	2025-10-11	2025-10-12			Tokyo						
-ishinoko-2025	ishinoko	2025	2025-10-11	2025-10-13			Ishikawa						
-treks-2025	treks	2025	2025-10-17	2025-10-19			Kyoto						
-circle-2025	circle	2025	2025-10-17	2025-10-19			Nagano						
-one-park-riverfes-2025	one-park-riverfes	2025	2025-10-18	2025-10-19			Gifu						
-lost-find-2025	lost-find	2025	2025-10-18	2025-10-19			Shizuoka						
-asagiri-jam-2025	asagiri-jam	2025	2025-10-18	2025-10-19			Shizuoka						
-dream-festival-2025	dream-festival	2025	2025-10-18	2025-10-19			Yamanashi						
-annahme-2025	annahme	2025	2025-10-25	2025-10-26			Kochi						
-brightness-2025	brightness	2025	2025-10-25	2025-10-26			Kawasaki						
-capsule-2025	capsule	2025	2025-10-25	2025-10-26			Yamanashi						
-midnight-cult-rave-2025	midnight-cult-rave	2025	2025-11-01	2025-11-02			Yamanashi						
-mirrorball-village-2025	mirrorball-village	2025	2025-11-01	2025-11-03			Nagasaki						
-grow-the-culture-open-air-2026	grow-the-culture-open-air	2026	2026-11-07	2026-11-08	Ohba Camping Village		Tokyo	3741 Okuno, Hinode-machi, Nishitama-gun, Tokyo					published
-iyasaka-rave-festival-2025	iyasaka-rave-festival	2025	2025-11-14	2025-11-16			Okinawa						
-topia-2025	topia	2025	2025-11-15	2025-11-15			Chiba						
-mutek-2025	mutek	2025	2025-11-20	2025-11-23			Tokyo						
-odyssey-2026	odyssey	2026	2026-09-25	2026-09-27			Miyazaki						published
-takarajima-beach-cleaning-party-2025	takarajima-beach-cleaning-party	2025	2025-11-29	2025-11-30			Okinawa						
+EDITION_ID	FESTIVAL_ID	EDITION	DATE_START	DATE_END	LOCATION	LOCATION_JA	VENUE_ID	PREF	ADDRESS	LAT	LNG	TICKETURL	FLYER	STATUS
+snow-machine-japan-2026	snow-machine-japan	2026	2026-03-03	2026-03-08	HAKUBA VALLEY			Hakuba	Kitajo, Hakuba Village, Kitaazumi District, Nagano Prefecture	36.6982	137.8619		images/festivals/snow-machine-japan-flyer.jpg	published
+spring-love-harukaze-2026	spring-love-harukaze	2026	2026-03-28	2026-03-29	Yoyogi Event Plaza	代々木公園イベント広場		Tokyo	東京都渋谷区神南2-3	35.6679403	139.6968179		images/festivals/spring-love-flyer.webp	published
+waifu-2026	waifu	2026	2026-04-11	2026-04-12	Kinone Pension	木の根ペンション		Chiba	千葉県山武郡芝山町岩山2013	35.7531	140.3878			published
+arch-2026	arch	2026	2026-04-11	2026-04-12	Odaira no Sato Camp Area	小平の里キャンプ		Gunma	群馬県みどり市大間々町小平４９５	36.464494	139.309112		images/festivals/arch-flyer.jpg	published
+rainbow-disco-club-2026	rainbow-disco-club	2026	2026-04-17	2026-04-19	Higashiizu Cross Country Course	東伊豆クロスカントリーコース		Shizuoka	静岡県賀茂郡東伊豆町稲取3348-19	34.7896	139.0419		images/festivals/rainbow-disco-club-flyer.jpg	published
+ala-2026	ala	2026	2026-04-18	2026-04-19	Toriki Tsuribori Cafe & Campground	とり亀つりぼりキャンプ場		Chiba	千葉県長生郡睦沢町大上1508	35.34	140.2818	https://alanutmeg.zaiko.io/e/alaairfest26	images/festivals/ala-flyer.jpg	published
+technogaoka-2026	technogaoka	2026	2026-04-25	2026-04-26	Tabifusa Ashiya Daihi-kaku	旅房 芦屋大悲閣		Hyogo	兵庫県芦屋市奥山1	34.7578	135.2974		images/festivals/technogaoka-flyer.jpg	published
+osukinidouzo-2026	osukinidouzo	2026	2026-05-02	2026-05-04	Zakae Bridge	座架依橋		Kanagawa	神奈川県厚木市関口	35.4741	139.3724		images/festivals/osukinidouzo-flyer.jpg	published
+transcendence-2026	transcendence	2026	2026-05-08	2026-05-10	Choujya no Mori	長者の森		Nagano	長野県南佐久郡北相木村5616-6	36.0594	138.5611		images/festivals/transcendence-flyer.jpg	published
+99flags-2026	99flags	2026	2026-05-09	2026-05-10	Ooba Camp Village	おおばキャンプ村		Tokyo	東京都西多摩郡日の出町大久野3741	35.7533	139.2081	https://passmarket.yahoo.co.jp/event/show/detail/0253hhfb4g051.html#detail	images/festivals/99flags-flyer.jpg	published
+ensou-2026	ensou	2026	2026-05-15	2026-05-17	Secret location			Tochigi				https://sonminentertainment.zaiko.io/e/ensoufest2026	images/festivals/ensou-flyer.webp	published
+the-star-festival-2026	the-star-festival	2026	2026-05-16	2026-05-17	Fuminno Mori Hiyoshi	府民の森ひよし		Kyoto	京都府南丹市日吉町天若上ノ所25	35.1581	135.5398	https://thestarfestival.zaiko.io/e/2026kyoto	images/festivals/the-star-festival-flyer.jpg	published
+mori-michi-ichiba-2026	mori-michi-ichiba	2026	2026-05-22	2026-05-24	Laguna Beach & Laguna Ten Bosch (Lagunasia)	ラグーナビーチ＆遊園地ラグナシア		Aichi	愛知県蒲郡市海陽町2-39	34.8057	137.2599	https://morimichiichiba.jp/ticket/	images/festivals/mori-michi-ichiba-flyer.jpg	published
+paramount-2026	paramount	2026	2026-05-23	2026-05-24	Gunma Cycle Sports Center	群馬サイクルスポーツセンター		Gunma	群馬県利根郡みなかみ町新巻3853	36.7118	138.9056	https://l.instagram.com/	images/festivals/paramount-flyer.jpg	published
+letus-music-camp-2026	letus-music-camp	2026	2026-05-29	2026-05-31	Kuriwaki Farm	栗脇農園		Hyogo	兵庫県淡路市野島常盤1288-3	34.5694	134.9818	https://letus-music-camp.zaiko.io/e/letuscamp26	images/festivals/letus-music-camp-flyer.jpg	published
+matricaria-2026	matricaria	2026	2026-05-29	2026-05-31	Naeba Greenland	苗場グリーンランド		Niigata	新潟県南魚沼郡湯沢町三国	36.7938	138.7885	https://matricaria.zaiko.io/e/matricaria26	images/festivals/matricaria-flyer.jpg	published
+link-open-air-2026	link-open-air	2026	2026-05-30	2026-05-31	Katsura Lake Auto Campground	桂湖オートキャンプ場		Toyama	富山県南砺市桂大沼1-40	36.326091	136.836322	https://club-port.com/special/link-open-air-2026/ticket	images/festivals/link-open-air-flyer.webp	published
+japonism-2026	japonism	2026	2026-05-30	2026-05-31	Nasu Utopia Sauna	那須ユートピア サウナ		Tochigi	栃木県那須郡那須町蓑沢563-4 那須ユートピア美野沢アートヴィレッジ内	36.9836	140.1652	https://peatix.com/event/4921776	images/festivals/japonism-flyer.webp	published
+etsuetsu-2026	etsuetsu	2026	2026-06-05	2026-06-07	Village Hakushu	ヴィレッジ白州		Yamanashi	山梨県北杜市白州町白須上教来石平久保 ２１２４	35.848364	138.266241	https://etsuetsu2026.peatix.com/	images/festivals/etsuetsu-flyer.webp	published
+body-soul-2026	body-soul	2026	2026-06-07	2026-06-07	Kiranah Garden Toyosu	キラナガーデン豊洲		Tokyo				http://www.bodyandsoul-japan.com/		published
+festival-fruezinho-2026	festival-fruezinho	2026	2026-06-13	2026-06-13	Tachikawa Stage Garden	立川ステージガーデン		Tokyo	東京都立川市緑町3-3 N1	35.7049	139.4119	https://shop.frue.jp/collections/festival-fruezinho-2026		published
+signal-2026	signal	2026	2026-06-13	2026-06-14	Secret location	Secret location		Yamanashi						published
+dots-2026	dots	2026	2026-06-19	2026-06-21				Hokkaido						
+samsara-2026	samsara	2026	2026-06-20	2026-06-21				Nagano						
+nu-festival-2026	nu-festival	2026	2026-06-26	2026-06-28	Takanawa Gateway City	高輪ゲートウェイシティ		Tokyo	東京都港区高輪二丁目	35.6356	139.7396	https://nufestival.jp/tickets/	images/festivals/nu-festival-flyer.webp	published
+halola-camp-2026	halola-camp	2026	2026-06-27	2026-06-28				Hokkaido						published
+moment-2026	moment	2026	2026-07-03	2026-07-05				Nara						
+rural-2026	rural	2026	2026-07-17	2026-07-20	nowhere CAMP			Fukushima	福島県耶麻郡猪苗代町大字蚕養字沼尻山甲2864	37.602	140.1982	https://ruraljp.zaiko.io/e/rural2026		
+fuji-rock-2026	fuji-rock	2026	2026-07-24	2026-07-26				Niigata						
+hacha-mecha-2026	hacha-mecha	2026	2026-08-08	2026-08-08	Shinkawa Park	新川公園		Gunma	群馬県桐生市稲荷町1	36.4082	139.3331	https://hacha-mecha-ticket.myshopify.com/	images/festivals/hacha-mecha-flyer.webp	published
+one-park-festival-2026	one-park-festival	2026	2026-09-05	2026-09-06				Fukui						
+re-birth-festival-2026	re-birth-festival	2026	2026-09-11	2026-09-13	Gateaux Kingdom Koumi			Nagano	5907 Toyosato, Koumi-machi, Minamisaku-gun, Nagano Prefecture	36.054	138.412		images/festivals/re-birth-festival-flyer.jpg	
+ultra-japan-2026	ultra-japan	2026	2026-09-19	2026-09-20				Tokyo						published
+otsukimi-2026	otsukimi	2026	2026-09-28	2026-09-29				Nagano						published
+synapse-festival-2026	synapse-festival	2026	2026-10-02	2026-10-04				Fukuoka						published
+yagura-2026	yagura	2026	2026-10-10	2026-10-11				Gifu						
+labyrinth-2026	labyrinth	2026	2026-10-10	2026-10-12	Minakami Hodaigi Camping Ground	みなかみ宝台樹キャンプ場		Gunma	群馬県利根郡みなかみ町藤原915-1	36.8572	139.0655	https://mindgames.zaiko.io/en/e/labyrinth2026		published
+wonderfruit-kyoto-2026	wonderfruit-kyoto	2026	2026-10-22	2026-10-25	Kyoto (Ohara Sanso / ACG Villa Kyoto / Kurama Mountain / Ochill TeaRoom)			Kyoto						published
+festival-de-frue-2026	festival-de-frue	2026	2026-10-31	2026-11-01	TSUMAGOI RESORT SAINO SATO			Shizuoka				https://shop.frue.jp/	images/festivals/festival-de-frue-flyer.jpg	published
+unknown-2024	unknown	2024	2024-10-18	2024-10-20				Shizuoka						
+wormhole-2024	wormhole	2024	2024-10-26	2024-10-27				Mie						
+dom-2024	dom	2024	2024-10-27	2024-10-27				Tokyo						
+parallel-world-2024	parallel-world	2024	2024-11-03	2024-11-04										
+bonna-pot-2024	bonna-pot	2024	2024-11-08	2024-11-10				Shizuoka						
+lab-2025	lab	2025	2025-03-15	2025-03-16				Yamanashi						
+axiom-2025	axiom	2025	2025-04-19	2025-04-20				Yamanashi						
+balance-2025	balance	2025	2025-05-16	2025-05-18				Gunma						
+intergalactic-2025	intergalactic	2025	2025-05-31	2025-05-31				Chiba						
+euphoria-2025	euphoria	2025	2025-07-11	2025-07-12				Tokyo						
+orbit-2025	orbit	2025	2025-07-11	2025-07-12				Fukui						
+yamauto-2025	yamauto	2025	2025-08-09	2025-08-18				Shiga						
+specialflower-festival-2025	specialflower-festival	2025	2025-08-10	2025-08-11				Ibaraki						
+loa-lost-paradise-2025	loa-lost-paradise	2025	2025-08-16	2025-08-17				Ibaraki						
+sawagi-festival-2025	sawagi-festival	2025	2025-08-22	2025-08-24				Yamanashi						
+one-music-camp-2025	one-music-camp	2025	2025-08-23	2025-08-24				Hyogo						
+global-ark-2025	global-ark	2025	2025-08-29	2025-08-31				Gunma						
+kyoumei-gathering-2025	kyoumei-gathering	2025	2025-08-29	2025-08-31				Hokkaido						
+bondisco-2025	bondisco	2025	2025-08-30	2025-08-31				Kyoto						
+pure-rave-2025	pure-rave	2025	2025-09-06	2025-09-08				Kanto						
+big-fun-2025	big-fun	2025	2025-09-07	2025-09-07				Hokkaido						
+okiraku-camp-2025	okiraku-camp	2025	2025-09-13	2025-09-14				Wakayama						
+gampeki-2025	gampeki	2025	2025-09-20	2025-09-21				Yamagata						
+sangenjaya-music-festival-2025	sangenjaya-music-festival	2025	2025-09-20	2025-09-21				Tokyo						
+colors-presents-soundcamp-2025	colors-presents-soundcamp	2025	2025-09-21	2025-09-23				Hokkaido						
+festival40010-2025	festival40010	2025	2025-09-26	2025-09-28				Kochi						
+ffkt-2025	ffkt	2025	2025-09-27	2025-09-28				Shizuoka						
+music-camp-core-2025	music-camp-core	2025	2025-10-03	2025-10-04				Toyama						
+circus-2025	circus	2025	2025-10-04	2025-10-04				Tokyo						
+each-story-2025	each-story	2025	2025-10-04	2025-10-05				Nagano						
+rare-groove-2025	rare-groove	2025	2025-10-04	2025-10-05				Yamanashi						
+delta-commit-2025	delta-commit	2025	2025-10-04	2025-10-05				Yamanashi						
+music-2025	music	2025	2025-10-11	2025-10-12				Tokyo						
+ishinoko-2025	ishinoko	2025	2025-10-11	2025-10-13				Ishikawa						
+treks-2025	treks	2025	2025-10-17	2025-10-19				Kyoto						
+circle-2025	circle	2025	2025-10-17	2025-10-19				Nagano						
+one-park-riverfes-2025	one-park-riverfes	2025	2025-10-18	2025-10-19				Gifu						
+lost-find-2025	lost-find	2025	2025-10-18	2025-10-19				Shizuoka						
+asagiri-jam-2025	asagiri-jam	2025	2025-10-18	2025-10-19				Shizuoka						
+dream-festival-2025	dream-festival	2025	2025-10-18	2025-10-19				Yamanashi						
+annahme-2025	annahme	2025	2025-10-25	2025-10-26				Kochi						
+brightness-2025	brightness	2025	2025-10-25	2025-10-26				Kawasaki						
+capsule-2025	capsule	2025	2025-10-25	2025-10-26				Yamanashi						
+midnight-cult-rave-2025	midnight-cult-rave	2025	2025-11-01	2025-11-02				Yamanashi						
+mirrorball-village-2025	mirrorball-village	2025	2025-11-01	2025-11-03				Nagasaki						
+grow-the-culture-open-air-2026	grow-the-culture-open-air	2026	2026-11-07	2026-11-08	Ohba Camping Village			Tokyo	3741 Okuno, Hinode-machi, Nishitama-gun, Tokyo					published
+iyasaka-rave-festival-2025	iyasaka-rave-festival	2025	2025-11-14	2025-11-16				Okinawa						
+topia-2025	topia	2025	2025-11-15	2025-11-15				Chiba						
+mutek-2025	mutek	2025	2025-11-20	2025-11-23				Tokyo						
+odyssey-2026	odyssey	2026	2026-09-25	2026-09-27				Miyazaki						published
+takarajima-beach-cleaning-party-2025	takarajima-beach-cleaning-party	2025	2025-11-29	2025-11-30				Okinawa						
+e-groove-2026	e-groove	2026	2026-08-01	2026-08-01	Japanese Secret Garden	日本庭園		Akita					images/festivals/e-groove-flyer.webp	published
+body-soul-2025	body-soul	2025	2025-06-08	2025-06-08				Tokyo						
+signal-2025	signal	2025	2025-06-14	2025-06-15				Yamanashi						
+grow-the-culture-open-air-2025	grow-the-culture-open-air	2025	2025-11-08	2025-11-09				Tokyo						

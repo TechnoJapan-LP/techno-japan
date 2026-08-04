@@ -5,7 +5,7 @@
  * ■ なぜ必要か
  *
  *   列ズレ事故（HACHA MECHA 2回 / SPRING LOVE 春風 1回）は「30列を数えなければ
- *   ならない形式」が原因だった。EDITIONS は14列で少ないが、TSV を1回貼るという
+ *   ならない形式」が原因だった。EDITIONS は15列で少ないが、TSV を1回貼るという
  *   点は同じで、ズレたことに気づく手段が無ければ同じ事故が起きる。
  *
  *   貼り付けは人がやる作業なので、事故は「起きない」ようにするのではなく
@@ -40,8 +40,13 @@ const SEED_DEFAULT = path.join(ROOT, 'data', 'inbox', 'export', 'editions-seed.t
 // fetch-data.mjs と同じ公開CSV。gid を付けるとそのタブを取れる。
 const BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRjtTHfeFBadTxdKF2EGg43Mh_iPVlgnI9vMpuk429vB6boVSqkRaVa5UwaUl-Iku4RAPBCXYCFOLHB/pub?output=csv';
 
+// 既存 EDITIONS シートは migrate-phase0.gs が作った14列で、7列目が VENUE_ID。
+// そこに LOCATION_JA を足して15列にする。VENUE_ID は移行スクリプトが常に
+// 空文字を入れており CMS も書かないため、現時点では全件空。
+// DATA_SCHEMA §2.3 に「会場がVENUESにある場合のみ(任意)」と定義があるので列は残す。
 const COLS = ['EDITION_ID', 'FESTIVAL_ID', 'EDITION', 'DATE_START', 'DATE_END',
-  'LOCATION', 'LOCATION_JA', 'PREF', 'ADDRESS', 'LAT', 'LNG', 'TICKETURL', 'FLYER', 'STATUS'];
+  'LOCATION', 'LOCATION_JA', 'VENUE_ID', 'PREF', 'ADDRESS', 'LAT', 'LNG',
+  'TICKETURL', 'FLYER', 'STATUS'];
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -113,7 +118,7 @@ async function main() {
     console.error('  --gid で EDITIONS タブの gid を指定してください。');
     process.exit(1);
   }
-  console.log('  ✅ ヘッダー14列を確認（列順は名前で吸収）');
+  console.log(`  ✅ ヘッダー${COLS.length}列を確認（列順は名前で吸収）`);
 
   const sheet = rows.slice(1)
     .filter((r) => r.some((c) => String(c).trim()))

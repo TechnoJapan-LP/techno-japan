@@ -67,7 +67,8 @@ const GIDS = {
  */
 const EDITIONS_GID = process.env.TJ_EDITIONS_GID || null;
 const EDITIONS_COLS = ['EDITION_ID', 'FESTIVAL_ID', 'EDITION', 'DATE_START', 'DATE_END',
-  'LOCATION', 'LOCATION_JA', 'PREF', 'ADDRESS', 'LAT', 'LNG', 'TICKETURL', 'FLYER', 'STATUS'];
+  'LOCATION', 'LOCATION_JA', 'VENUE_ID', 'PREF', 'ADDRESS', 'LAT', 'LNG',
+  'TICKETURL', 'FLYER', 'STATUS'];
 
 // GENRE 正規リスト（スキーマ §1.3。必要に応じて追記）
 const GENRE_ALLOWED = new Set([
@@ -159,8 +160,12 @@ function compareEditions(derived, sheet) {
       if (dv !== sv) diffs.push(`${id}.${c}  導出="${dv}"  シート="${sv}"`);
     }
   }
-  for (const id of S.keys()) if (!D.has(id)) diffs.push(`${id}: 導出に無い（シートにのみ存在）`);
-  return diffs;
+  // シートにのみ存在する行は不一致にしない。
+  // 過去回（body-soul-2025 / signal-2025 / grow-the-culture-open-air-2025）は
+  // FESTIVALS の DATE が上書きされた後なので導出では再現できない。
+  // これらが残っていることこそ EDITIONS を持つ目的なので、差分ではなく情報として出す。
+  const sheetOnly = [...S.keys()].filter((id) => !D.has(id));
+  return { diffs, sheetOnly };
 }
 
 // ---------- バリデーション（スキーマ §6）----------
@@ -383,7 +388,11 @@ async function main() {
     console.log('\n[EDITIONS シート照合]');
     const sheetEditions = await fetchEditionsSheet();
     console.log(`  シート: ${sheetEditions.length} 行 / 導出: ${editions.length} 行`);
-    const diffs = compareEditions(editions, sheetEditions);
+    const { diffs, sheetOnly } = compareEditions(editions, sheetEditions);
+    if (sheetOnly.length) {
+      console.log(`  ℹ シートにのみ存在（導出では再現できない過去回）: ${sheetOnly.length}件`);
+      sheetOnly.forEach((id) => console.log(`      ${id}`));
+    }
     if (diffs.length) {
       console.error(`  ✗ 不一致 ${diffs.length}件`);
       diffs.slice(0, 15).forEach((d) => console.error(`      ${d}`));

@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-08-04T15:33:20.787Z",
-  "count": 284,
+  "_generatedAt": "2026-08-04T16:16:36.724Z",
+  "count": 359,
   "items": [
     {
       "EDITION_ID": "spring-love-harukaze-2026",
@@ -1401,6 +1401,396 @@
       "SORT": "7"
     },
     {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Shinichi Osawa",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Shingo Nakamura",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Sputniko!",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Meitei",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Nick Luscombe",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "100LDK",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Actress",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ARTIST_ID": "akie",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Albert.DATA",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Andrea Faroppa",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Broth Works",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Cal Lyall",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "akey",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Chloé Juliette",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Chris SSG",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "COLA REN",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "comboy",
+      "SET_TYPE": "dj",
+      "SORT": "17"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "DAITO MANABE",
+      "SET_TYPE": "dj",
+      "SORT": "18"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "DJ EMMA",
+      "SET_TYPE": "dj",
+      "SORT": "19"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "DJ Emerald",
+      "SET_TYPE": "dj",
+      "SORT": "20"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "dj-krush",
+      "SET_TYPE": "dj",
+      "SORT": "21"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "FULLHOUSE",
+      "SET_TYPE": "dj",
+      "SORT": "22"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Grandbrothers",
+      "SET_TYPE": "dj",
+      "SORT": "23"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Haruka Hirata",
+      "SET_TYPE": "dj",
+      "SORT": "24"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Ikebana Whispering",
+      "SET_TYPE": "dj",
+      "SORT": "25"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Imai Kazuo",
+      "SET_TYPE": "dj",
+      "SORT": "26"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Ito Atsuhiro",
+      "SET_TYPE": "dj",
+      "SORT": "27"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Ito Keiji",
+      "SET_TYPE": "dj",
+      "SORT": "28"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Keigo Tatsumi",
+      "SET_TYPE": "dj",
+      "SORT": "29"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "KO KIMURA",
+      "SET_TYPE": "dj",
+      "SORT": "30"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ARTIST_ID": "kotsu",
+      "SET_TYPE": "dj",
+      "SORT": "31"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Kyomi",
+      "SET_TYPE": "dj",
+      "SORT": "32"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Masaaki Hara",
+      "SET_TYPE": "dj",
+      "SORT": "33"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "MEITEI",
+      "SET_TYPE": "dj",
+      "SORT": "34"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Menden-no-Meiban-Kaiho-Domei",
+      "SET_TYPE": "dj",
+      "SORT": "35"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Minsan-no-Kimochi",
+      "SET_TYPE": "dj",
+      "SORT": "36"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "MISOLA",
+      "SET_TYPE": "dj",
+      "SORT": "37"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Muddersten",
+      "SET_TYPE": "dj",
+      "SORT": "38"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Namaiki",
+      "SET_TYPE": "dj",
+      "SORT": "39"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Nao Tokui",
+      "SET_TYPE": "dj",
+      "SORT": "40"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Nari",
+      "SET_TYPE": "dj",
+      "SORT": "41"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Nathan Fake",
+      "SET_TYPE": "dj",
+      "SORT": "42"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Neutone",
+      "SET_TYPE": "dj",
+      "SORT": "43"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Nick Luscombe",
+      "SET_TYPE": "dj",
+      "SORT": "44"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "onnacodomo",
+      "SET_TYPE": "dj",
+      "SORT": "45"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Paracollider",
+      "SET_TYPE": "dj",
+      "SORT": "46"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Ponpoko-Yama",
+      "SET_TYPE": "dj",
+      "SORT": "47"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Portrait XO",
+      "SET_TYPE": "dj",
+      "SORT": "48"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "RHYME",
+      "SET_TYPE": "dj",
+      "SORT": "49"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Ryogo",
+      "SET_TYPE": "dj",
+      "SORT": "50"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "SAKURA",
+      "SET_TYPE": "dj",
+      "SORT": "51"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "SAMO",
+      "SET_TYPE": "dj",
+      "SORT": "52"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Sapphire Slows",
+      "SET_TYPE": "dj",
+      "SORT": "53"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "SATOSHI OTSUKI",
+      "SET_TYPE": "dj",
+      "SORT": "54"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Shhhhh",
+      "SET_TYPE": "dj",
+      "SORT": "55"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Shinichi Osawa",
+      "SET_TYPE": "dj",
+      "SORT": "56"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Shingo Nakamura",
+      "SET_TYPE": "dj",
+      "SORT": "57"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Shöka",
+      "SET_TYPE": "dj",
+      "SORT": "58"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Suzanne Ciani",
+      "SET_TYPE": "dj",
+      "SORT": "59"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "TAKENOKO",
+      "SET_TYPE": "dj",
+      "SORT": "60"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Technique & Picnic",
+      "SET_TYPE": "dj",
+      "SORT": "61"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "TONTON",
+      "SET_TYPE": "dj",
+      "SORT": "62"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Two Shell",
+      "SET_TYPE": "dj",
+      "SORT": "63"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "William Basinski",
+      "SET_TYPE": "dj",
+      "SORT": "64"
+    },
+    {
+      "EDITION_ID": "nu-festival-2026",
+      "ACT_LABEL": "Yagi Michiyo",
+      "SET_TYPE": "dj",
+      "SORT": "65"
+    },
+    {
       "EDITION_ID": "rural-2026",
       "ACT_LABEL": "Al Wootton",
       "SET_TYPE": "dj",
@@ -1705,6 +2095,66 @@
       "ARTIST_ID": "the-master-musicians-of-joujouka",
       "SET_TYPE": "dj",
       "SORT": "7"
+    },
+    {
+      "EDITION_ID": "e-groove-2026",
+      "ACT_LABEL": "arow",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "e-groove-2026",
+      "ACT_LABEL": "DJ Chris Hale",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "e-groove-2026",
+      "ACT_LABEL": "DJ SHINTARO",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "e-groove-2026",
+      "ACT_LABEL": "EICHI ABE",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "e-groove-2026",
+      "ACT_LABEL": "Garcir",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "e-groove-2026",
+      "ACT_LABEL": "Hikaru",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "e-groove-2026",
+      "ACT_LABEL": "irlsDot",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "e-groove-2026",
+      "ACT_LABEL": "Naoki Ikawa",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "e-groove-2026",
+      "ACT_LABEL": "starRo",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "e-groove-2026",
+      "ACT_LABEL": "squall",
+      "SET_TYPE": "dj",
+      "SORT": "10"
     }
   ]
 }
