@@ -2758,7 +2758,8 @@ fetch → build → 検査4種 → sitemap/RSS → commit [skip ci] → deploy
 - **無限ループにならない**: 生成物のコミットに `[skip ci]` を付け、
   デプロイは同じ run の working tree（`./LP`）から行う。
   新しいコミットを拾い直す必要がないので再トリガが要らない
-- `deploy-pages.yml` は `!LP/data.js` で Publish を除外（人手 push 用に残す）
+- `deploy-pages.yml` は job の `if` で Publish を除外（人手 push 用に残す）。
+  **当初 `paths` に `!LP/data.js` と書いたが、これでデプロイが完全に止まった**（後述）
 - `generate-meta.yml` は push トリガーを廃止し、日次の保険だけ残す。
   **保険側にも同じ整合性検査を通す。** 素通りさせると、壊れたデータのまま
   sitemap だけが更新され、存在しないURLを載せた sitemap を配ることになる
@@ -2791,3 +2792,84 @@ fetch → build → 検査4種 → sitemap/RSS → commit [skip ci] → deploy
 残っているのはカード自体の高さが描画前に確定していない分と思われる。
 `.lighthouserc.json` の `_note` に「緩めた値で通ることを『直った』と
 読み替えないため」と明記した。改善したら 0.05 に戻す。
+
+#### 修正の過程で、本番デプロイを2回止めた
+
+このワークフロー修正そのもので回帰を2件出した。どちらも**「検査を書いたのに
+止まらなかった」**形で、今日の他の節と同じ構図なので記録する。
+
+**(1) `paths` の否定パターンでデプロイが完全に止まった**
+
+`deploy-pages.yml` から Publish を除くために、こう書いた。
+
+```yaml
+paths:
+  - 'LP/**'
+  - '.github/workflows/deploy-pages.yml'
+  - '!LP/data.js'
+```
+
+ドキュメント上は「後続の否定パターンに一致したパスだけが除外される」。
+だから `LP/data/*.json` や `deploy-pages.yml` 自身が変わった push では
+起動するはずだった。**実際には1本も起動しなくなった。**
+
+`5e52acf` はその両方を変更している push だったが、Deploy の run が
+1件も作られていない。否定を1つ足しただけで**フィルタ全体が効かなくなった**
+ように見える。サイトが更新されなくなる回帰で、**気づいたのは
+「push したのに run が出ない」ことに違和感を持ったからで、
+何かが赤くなったわけではない。**
+
+**失敗が沈黙として現れる変更は、成功と区別がつかない。**
+`paths` の否定は使わず、判定は job の `if` で行う。
+
+```yaml
+if: "${{ !startsWith(github.event.head_commit.message, 'cms: publish') }}"
+```
+
+**(2) YAML 構文エラーのまま push した**
+
+上の `if` を引用符無しで書いたため、式中の `'cms: publish'` のコロンを
+YAML がマッピングのキー区切りと解釈し、ファイル全体がパース不能になった。
+
+```
+ScannerError: mapping values are not allowed here (line 38, column 63)
+```
+
+**構文検証は書いてあった。それでも素通りした。**
+
+```bash
+python3 -c "import yaml; ..." ; git add ... ; git commit ... ; git push
+#                             ^ セミコロン連結なので、検証が落ちても後続が走る
+```
+
+§9-36 で「対象リストを空にすると検査が無言で死ぬ」と書いた翌々時間に、
+**検査の結果を使わないという別の形で同じ失敗をした。**
+検査を書くことと、失敗を後続に伝えることは別の作業である。
+`&&` で連結し、検証が落ちたらコミットしないようにした。
+
+#### 初回実行の実測（workflow_dispatch）
+
+```
+ 3秒  Fetch data from spreadsheet
+ 2秒  Build detail pages
+ 4秒  Check asset cache busting
+ 0秒  Check service worker routing / Check regression thresholds
+20秒  Check hub pages render (JS health)   ← 支配的。headless Chrome で11ページ
+ 0秒  Generate sitemap.xml / rss.xml
+ 2秒  Commit generated output（差分なしで抜けた）
+ 6秒  Deploy to GitHub Pages
+----
+57秒  合計
+```
+
+検査4種と描画検査を挟んでも1分以内。従来の Deploy 単体（18秒〜3分）と
+比べて実用上の差は無い。
+
+sitemap のリダイレクトスタブ除外も確認した。スタブ17件
+（Title Case 7件 × JA/EN、記事1件、今日追加した `fulirock` 2件）が
+すべて除外され、`<loc>` は412件。除外は個別列挙ではなく
+`<meta name="robots" content="noindex">` の有無で判定しているため、
+**スタブが増えても漏れない。**
+
+`deploy-pages` の `if` による skip は `push` イベントでないと発火しないため、
+**次の実データ Publish まで未検証。**
