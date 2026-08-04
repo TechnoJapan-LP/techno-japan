@@ -78,7 +78,7 @@ const ARTISTS = [
   },
   {
     id: "dj-yogurt",
-    name: "Dj Yogurt",
+    name: "DJ Yogurt",
   },
   {
     id: "hidai",
@@ -218,7 +218,7 @@ const ARTISTS = [
   },
   {
     id: "ben-ufo",
-    name: "Ben Ufo",
+    name: "Ben UFO",
   },
   {
     id: "daphni",
@@ -250,7 +250,7 @@ const ARTISTS = [
   },
   {
     id: "haai",
-    name: "Haai",
+    name: "HAAi",
   },
   {
     id: "helena-hauff",
@@ -370,7 +370,7 @@ const ARTISTS = [
   },
   {
     id: "the-master-musicians-of-joujouka",
-    name: "The Master Musicians Of Joujouka",
+    name: "The Master Musicians of Joujouka",
   },
   {
     id: "kuo-from-sunset-rollercoaster",
@@ -935,9 +935,9 @@ const FESTIVALS = [
     lineup: ["Al Wootton", "APEPA", "Atsushi Maeda", "Carpas Wiño Klint", "Chhabb", "DJ mew", "dj sniff", "Enantiomorphs", "Herbalistek", "Jane Fitz", "KAPI", "Kiss Nuka", "LAP", "Lena Willikens", "LEVOLANT", "MANISDRON", "MITAYO", "Nao", "NDRX", "RS Tangent", "SAMO", "SOUKI", "suimin", "Toner", "Volodymyr Gnatenko", "YAMA", "YAMARCHY", "YELLOWUHURU", "YuY", "悪魔の沼", "鏡民"],
   },
   {
-    id: "fulirock",
+    id: "fuji-rock",
     type: "festival",
-    name: "FuliRock",
+    name: "FUJI ROCK",
     date: "2026-07-24/2026-07-26",
     city: "Niigata",
     genre: ["MIX"],
@@ -1171,7 +1171,7 @@ const FESTIVALS = [
     id: "signal",
     type: "rave",
     name: "Signal",
-    date: "2025-06-14/2025-06-15",
+    date: "2026-06-13/2026-06-14",
     city: "Yamanashi",
     genre: ["TECHNO", "HOUSE"],
     desc: "山梨の自然豊かなロケーションで開催されるSignal Open Airは、東京のクラブシーンから離れたアーティストやダンサーたちを引き寄せ、没入感あふれる野外体験を提供する。同フェスティバルは、山梨県の山岳地帯の景観を背景としながらも、アンダーグラウンドなテクノ／エレクトロニック・ミュージックに軸足を置いたプログラム編成を貫いている。",
