@@ -286,7 +286,7 @@ metrics:
 
   lineup_linked_acts:
     description: LINEUP のうちアーティスト詳細へリンクされている件数
-    min: 91                   # 2026-08-04 実測。減る方向のみ検出する
+    min: 94                   # 2026-08-04 実測。減る方向のみ検出する
     max: null
     target: null
     note: >-
@@ -298,8 +298,9 @@ metrics:
       ID の付け替えやアーティスト削除で既存のリンクが切れたら検出する。
       75（ID修正前）→ 100（ID修正）→ 115（NAME修正・LINEUP書換・13名登録）
       → 91（2026-08-04）と推移。
-      2026-08-04 の 115 → 91 は Perkey の編集判断による draft 化。
-      シートを見ながら「Techno Japan として扱わない」アーティスト24件を draft にした結果、
+      2026-08-04 の 115 → 91 → 94 は Perkey の編集判断による draft 化と、その後の見直し
+      （clipz / dj-hype を published に戻した分 +3）。
+      シートを見ながら「Techno Japan として扱わない」アーティスト22件を draft にした結果、
       その分の LINEUP リンクが外れた。欠落ではなく意図的な減少なので実測値へ引き下げる。
       アーティストを draft にすると当然減るので、その際は実測値へ引き下げる。
       詳細は AUDIT_TECHNO_JAPAN.md §9-25。
