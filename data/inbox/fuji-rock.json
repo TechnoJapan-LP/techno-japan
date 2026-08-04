@@ -23,15 +23,15 @@
       "note": "既存 FESTIVALS の id は fulirock だが、これは FUJI ROCK の綴り誤り。詳細ページ2枚と sitemap 掲載があるため、ID 変更は旧URLのリダイレクト要否とセットで判断すること"
     },
     "name": {
-      "value": "FUJI ROCK FESTIVAL '26",
-      "source": "https://www.fujirockfestival.com/info/index",
+      "value": "FUJI ROCK",
+      "source": "人が決定（命名規約）",
       "confidence": "high",
       "reason": null,
-      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "checkedAt": "2026-08-04T13:40:00+09:00",
       "inboxValue": null,
       "conflictNote": null,
       "kind": "auto",
-      "note": "公式の正式表記。既存 FESTIVALS の name は FuliRock で誤り"
+      "note": "年号を含めない。FESTIVALS はブランド行で、開催回は EDITIONS 側が持つ設計のため（DATA_SCHEMA §2.3）。rural / Labyrinth 等の既存フェスと同じ扱い。公式の正式表記は 'FUJI ROCK FESTIVAL 26' だが、年号入りだと翌年に直す必要が出る"
     },
     "date": {
       "value": "2026-07-24/2026-07-26",
