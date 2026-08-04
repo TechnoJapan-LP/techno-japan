@@ -361,6 +361,14 @@ const ARTISTS = [
     name: "YELLOWUHURU",
   },
   {
+    id: "clipz",
+    name: "CLIPZ",
+  },
+  {
+    id: "dj-hype",
+    name: "DJ HYPE",
+  },
+  {
     id: "dj-masda",
     name: "dj masda",
   },
@@ -772,7 +780,7 @@ const FESTIVALS = [
     desc_en: "An open-air party running over three days and two nights, co-hosted by bonobo in Jingumae, Tokyo, and Tengu Shokudo in Sangenjaya. A club and a diner, both rooted in the city, relocating outdoors for a weekend.",
     ticketUrl: "https://etsuetsu2026.peatix.com/",
     instagram: "https://www.instagram.com/etsu_etsu_/",
-    lineup: ["7e", "AKIRAM EN", "aliceyuki", "ALTZ", "Anna Wakana", "BONJAMAN", "CALPISS", "CHILDA", "DA=TI", "destrooy a.k.a dubdub", "DJ AGEISHI", "dj-yogurt", "DON KABACHO", "ginoｴﾁ", "ground", "HappySet", "HOBO BRAZIL", "ifax!", "kenjinho", "Kohey", "lostbaggage", "Masa Takeuchi a.k.a Tabasco", "michika", "mitoChang", "kevin-miyagi", "naotsun", "NEWきんぎん", "pAradice", "PortaL", "Ryouma Okabe", "dj-kensei", "Sht", "SINKICHI", "starkarmen", "Suger-T", "sui-rex", "suimin", "sunga", "TAIHEI", "TAKUMYMANN", "Taro Toko", "TERU-O", "THE KLO", "ToA", "Tommorow Joe", "TOTS", "Will Renuart", "YELLOWUHURU", "You Forgot", "YUSUKEV", "Zooey Loomer 1979", "ZUTSUKI-D", "カントリー田村", "塩尻寄生", "走る犬", "置石", "泥"],
+    lineup: ["7e", "AKIRAM EN", "aliceyuki", "ALTZ", "Anna Wakana", "BONJAMAN", "CALPISS", "CHILDA", "DA=TI", "destrooy a.k.a dubdub", "DJ AGEISHI", "DJ Yogurt", "DON KABACHO", "ginoｴﾁ", "ground", "HappySet", "HOBO BRAZIL", "ifax!", "kenjinho", "Kohey", "lostbaggage", "Masa Takeuchi a.k.a Tabasco", "michika", "mitoChang", "kevin-miyagi", "naotsun", "NEWきんぎん", "pAradice", "PortaL", "Ryouma Okabe", "dj-kensei", "Sht", "SINKICHI", "starkarmen", "Suger-T", "sui-rex", "suimin", "sunga", "TAIHEI", "TAKUMYMANN", "Taro Toko", "TERU-O", "THE KLO", "ToA", "Tommorow Joe", "TOTS", "Will Renuart", "YELLOWUHURU", "You Forgot", "YUSUKEV", "Zooey Loomer 1979", "ZUTSUKI-D", "カントリー田村", "塩尻寄生", "走る犬", "置石", "泥"],
   },
   {
     id: "festival-fruezinho",
