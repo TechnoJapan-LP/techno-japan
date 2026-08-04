@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-08-04T16:16:36.724Z",
-  "count": 91,
+  "_generatedAt": "2026-08-04T16:35:43.938Z",
+  "count": 92,
   "items": [
     {
       "EDITION_ID": "snow-machine-japan-2026",
@@ -930,6 +930,18 @@
       "LOCATION_JA": "日本庭園",
       "PREF": "Akita",
       "FLYER": "images/festivals/e-groove-flyer.webp",
+      "STATUS": "published"
+    },
+    {
+      "EDITION_ID": "sub-tide-2026",
+      "FESTIVAL_ID": "sub-tide",
+      "EDITION": "2026",
+      "DATE_START": "2026-07-31",
+      "DATE_END": "2026-08-02",
+      "LOCATION": "Secret Location",
+      "PREF": "Nagano",
+      "TICKETURL": "https://tiget.net/events/484557",
+      "FLYER": "images/festivals/sub-tide-flyer.webp",
       "STATUS": "published"
     }
   ]

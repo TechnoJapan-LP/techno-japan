@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-08-04T16:16:36.724Z",
-  "count": 359,
+  "_generatedAt": "2026-08-04T16:35:43.938Z",
+  "count": 382,
   "items": [
     {
       "EDITION_ID": "spring-love-harukaze-2026",
@@ -2155,6 +2155,144 @@
       "ACT_LABEL": "squall",
       "SET_TYPE": "dj",
       "SORT": "10"
+    },
+    {
+      "EDITION_ID": "sub-tide-2026",
+      "ACT_LABEL": "cyberman",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "sub-tide-2026",
+      "ACT_LABEL": "Dj KAZOOO",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "sub-tide-2026",
+      "ACT_LABEL": "Ebisu",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "sub-tide-2026",
+      "ACT_LABEL": "Fumish",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "sub-tide-2026",
+      "ARTIST_ID": "hidai",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "sub-tide-2026",
+      "ACT_LABEL": "HiraFrat",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "sub-tide-2026",
+      "ACT_LABEL": "HouseCat",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "sub-tide-2026",
+      "ACT_LABEL": "ikeaboy",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "sub-tide-2026",
+      "ACT_LABEL": "KAN",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "sub-tide-2026",
+      "ACT_LABEL": "KAZUYA",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "sub-tide-2026",
+      "ACT_LABEL": "Masayuki Seta",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "sub-tide-2026",
+      "ARTIST_ID": "mimu",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "sub-tide-2026",
+      "ACT_LABEL": "MUNEMASA",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "sub-tide-2026",
+      "ACT_LABEL": "NAGEE",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "sub-tide-2026",
+      "ACT_LABEL": "norid",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "sub-tide-2026",
+      "ACT_LABEL": "rik",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
+      "EDITION_ID": "sub-tide-2026",
+      "ACT_LABEL": "Shuuma",
+      "SET_TYPE": "dj",
+      "SORT": "17"
+    },
+    {
+      "EDITION_ID": "sub-tide-2026",
+      "ACT_LABEL": "SiD",
+      "SET_TYPE": "dj",
+      "SORT": "18"
+    },
+    {
+      "EDITION_ID": "sub-tide-2026",
+      "ACT_LABEL": "SISEN",
+      "SET_TYPE": "dj",
+      "SORT": "19"
+    },
+    {
+      "EDITION_ID": "sub-tide-2026",
+      "ACT_LABEL": "THE REBELS aka ACID DUO",
+      "SET_TYPE": "dj",
+      "SORT": "20"
+    },
+    {
+      "EDITION_ID": "sub-tide-2026",
+      "ACT_LABEL": "Toty Kawasaki",
+      "SET_TYPE": "dj",
+      "SORT": "21"
+    },
+    {
+      "EDITION_ID": "sub-tide-2026",
+      "ACT_LABEL": "964cm",
+      "SET_TYPE": "dj",
+      "SORT": "22"
+    },
+    {
+      "EDITION_ID": "sub-tide-2026",
+      "ACT_LABEL": "Dr. NISHIMURA",
+      "SET_TYPE": "dj",
+      "SORT": "23"
     }
   ]
 }

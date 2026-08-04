@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-08-04T16:16:36.724Z",
-  "count": 91,
+  "_generatedAt": "2026-08-04T16:35:43.938Z",
+  "count": 92,
   "items": [
     {
       "ID": "snow-machine-japan",
@@ -1191,6 +1191,25 @@
       "STATUS": "published",
       "DESC_EN": "A rave that exists for one night only, staged in a Japanese garden in Yuwa, Akita, at a location that does not appear on any map. Akita's local scene meets artists working across Japan and beyond.From 9pm until 8 the following morning, they pass the night between them like a baton, layering sound without a break. As the night deepens and light eventually reaches the garden, the music keeps running. Not a club, not a campsite. Spending a whole night inside a garden is what gives this one its shape.",
       "location_ja": "日本庭園"
+    },
+    {
+      "ID": "sub-tide",
+      "TYPE": "festival",
+      "NAME": "SuB-TiDe",
+      "DATE": "2026-07-31/2026-08-02",
+      "LOCATION": "Secret Location",
+      "CITY": "Nagano",
+      "IMAGE": "images/festivals/sub-tide.webp",
+      "FLYER": "images/festivals/sub-tide-flyer.webp",
+      "GENRE": "TECHNO, HOUSE",
+      "DESC": "SuB-TiDe（サブタイド）は、長野県の南相木ダム付近で開催される150人限定のシークレット・レイヴパーティー。コンセプトに「心象領域（Domain of Mindscape）」を掲げ、多様なクリエイターの創作や音楽を通じて深い没入感を体験できる空間を提供している",
+      "URL": "https://sub-tide.com/2026",
+      "TICKETURL": "https://tiget.net/events/484557",
+      "INSTAGRAM": "https://www.instagram.com/sub_tide/",
+      "LINEUP": "cyberman, Dj KAZOOO, Ebisu, Fumish, hidai, HiraFrat, HouseCat, ikeaboy, KAN, KAZUYA, Masayuki Seta, mimu, MUNEMASA, NAGEE, norid, rik, Shuuma, SiD, SISEN, THE REBELS aka ACID DUO, Toty Kawasaki, 964cm, Dr. NISHIMURA",
+      "EDITIONS": "[]",
+      "STATUS": "published",
+      "DESC_EN": "SuB-TiDe is a secret rave party limited to 150 people, held near the Minamiaiki Dam in Nagano Prefecture. Under the concept \"Domain of Mindscape,\" it provides a space where attendees can experience a deep sense of immersion through the music and creations of diverse artists."
     }
   ]
 }
