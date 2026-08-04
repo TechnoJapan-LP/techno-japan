@@ -35,12 +35,12 @@ concurrency:
 # 経緯は AUDIT §9-39。
 jobs:
   regression:
-    if: ${{ !startsWith(github.event.head_commit.message, 'cms: publish') }}
+    if: "${{ !startsWith(github.event.head_commit.message, 'cms: publish') }}"
     uses: ./.github/workflows/regression-check.yml
 
   deploy:
     needs: regression
-    if: ${{ !startsWith(github.event.head_commit.message, 'cms: publish') }}
+    if: "${{ !startsWith(github.event.head_commit.message, 'cms: publish') }}"
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
