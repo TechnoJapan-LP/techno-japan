@@ -291,7 +291,7 @@ function navHtml(lang, altHref) {
   <a href="${navLink(lang, 'artists.html')}">ARTISTS</a>
   <a href="${navLink(lang, 'venues.html')}">VENUES</a>
   <a href="${navLink(lang, 'about.html')}">ABOUT</a>
-</div>`;
+${toggle ? `  ${toggle}\n` : ''}</div>`;
 }
 
 function footerHtml(lang) {

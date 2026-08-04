@@ -294,3 +294,26 @@
 3. `samsara` の座標は富士見町の代表座標（`35.9146, 138.2407`、confidence low）。
    会場が富士見町にあること自体が二次情報なので、一次情報が出たら差し替える
 4. `e-groove` の「日本庭園」は一般名詞で正式名称が未確認。掲載前に主催者確認が望ましい
+# 2026-08-04 / Codex / モバイル言語トグル修正
+
+### 変更
+- `LP/common.css`: モバイル overlay 内の `.nav-lang` を追加。現在言語の視認性とリンクの44px以上のタップ領域を確保。
+- `scripts/build-detail-pages.mjs`: 詳細ページの overlay に言語トグルを生成。
+- JA ハブ5枚を更新し、EN ハブ5枚と JA/EN 詳細ページを再生成。
+- `scripts/check_mobile_language_toggles.mjs` と npm script `check:mobile-language` を追加。
+
+### 確認
+- `npm run check:mobile-language`: 375px / 390px、JA/EN 12ページを展開検査し **24/24**。
+- `python3 scripts/check_regressions.py`: **回帰なし**。
+- デスクトップ用 `.nav-links` のトグルは維持。詳細生成物の JA/EN に overlay トグルを確認。
+
+### 変更したパターン
+- `nav .nav-links` 内の既存トグル — 変更なし（デスクトップ用）。
+- `.nav-overlay .nav-lang` — 新規追加、ハブ10枚＋詳細生成テンプレート。
+
+### 未確認の類似パターン
+- `nav-lang` を持たない EN 対応外のページ（記事等）— **確認済み・対象外**。
+- JavaScript が動的に生成する別の言語リンク — **確認済み・0件**。
+
+### 次の担当への注意・判断待ち
+- Publish 後に詳細ページを再生成する場合は、`git pull` 後に `npm run check:mobile-language` と回帰ガードを再実行すること。

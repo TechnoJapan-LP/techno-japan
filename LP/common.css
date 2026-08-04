@@ -210,6 +210,28 @@ nav .nav-links .nav-social .tj-fav-count {
 .nav-overlay .nav-overlay-social a:hover { opacity: 1; }
 .nav-overlay .nav-overlay-social svg { width: 22px; height: 22px; display: block; }
 
+/* language toggle in the mobile menu */
+.nav-overlay .nav-lang {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.2em;
+}
+.nav-overlay .nav-lang a,
+.nav-overlay .nav-lang .nav-lang-cur {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 6px;
+}
+.nav-overlay .nav-lang .nav-lang-cur { opacity: 1; }
+.nav-overlay .nav-lang .nav-lang-sep { opacity: 0.45; }
+
 /* ===================== GUIDE / DISCOVER CARDS (shared) ===================== */
 .guide-section {
   padding: 0 40px;
