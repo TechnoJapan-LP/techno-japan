@@ -1,0 +1,224 @@
+{
+  "_schema": "festival-research/2",
+  "_createdAt": "2026-08-04T09:56:01+09:00",
+  "_note": "値と出典は Claude が埋める。DESC/DESC_EN は人が書く（空のままでよい）。",
+  "inbox": {
+    "FES_NAME": "HACHA MECHA",
+    "DATE": "2026.08.08",
+    "PREF": "Gunma",
+    "URL/INSTAGRAM": "https://www.instagram.com/hachamecha_fes/",
+    "MEMO": "",
+    "STATUS(new/drafted/registered)": ""
+  },
+  "fields": {
+    "id": {
+      "value": "hacha-mecha",
+      "source": "slugify(name)",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-04T09:56:01+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "auto",
+      "note": "スラッグ。DATA_SCHEMA §1.1"
+    },
+    "name": {
+      "value": "HACHA MECHA",
+      "source": "INBOX",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-04T09:56:01+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "auto",
+      "note": "INBOX の FES_NAME"
+    },
+    "date": {
+      "value": "2026-08-08",
+      "source": "https://hachamecha.jp/",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "inboxValue": "2026-08-08",
+      "conflictNote": null,
+      "kind": "research",
+      "note": "公式 og:description「2026年8月8日開催」。既存 FESTIVALS と一致"
+    },
+    "location": {
+      "value": "Shinkawa Park",
+      "source": "https://www.cdjournal.com/news/dongurizu/128471",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "既存 FESTIVALS と一致"
+    },
+    "location_ja": {
+      "value": "新川公園",
+      "source": "https://www.cdjournal.com/news/dongurizu/128471",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "既存 FESTIVALS と一致"
+    },
+    "city": {
+      "value": "Gunma",
+      "source": "https://www.cdjournal.com/news/dongurizu/128471",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "実際の市は桐生市。既存 FESTIVALS の city は県名（他フェスと同じ運用）なので合わせた"
+    },
+    "address": {
+      "value": "群馬県桐生市稲荷町1",
+      "source": "既存 FESTIVALS の行",
+      "confidence": "medium",
+      "reason": null,
+      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "公式サイトに住所表記が無く、既存値を検証できていない"
+    },
+    "lat": {
+      "value": 36.4082,
+      "source": "nominatim.openstreetmap.org",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-04T10:15:16+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "auto",
+      "note": "query: 新川公園, Gunma, Japan → 新川公園, 桐生市, 群馬県, 日本"
+    },
+    "lng": {
+      "value": 139.3331,
+      "source": "nominatim.openstreetmap.org",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-04T10:15:16+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "auto",
+      "note": "query: 新川公園, Gunma, Japan → 新川公園, 桐生市, 群馬県, 日本"
+    },
+    "url": {
+      "value": "https://hachamecha.jp/",
+      "source": "https://hachamecha.jp/",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "公式サイト"
+    },
+    "instagram": {
+      "value": "https://www.instagram.com/hachamecha_fes/",
+      "source": "https://hachamecha.jp/",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "inboxValue": "https://www.instagram.com/hachamecha_fes/",
+      "conflictNote": null,
+      "kind": "research",
+      "note": "公式サイトのリンク。INBOX の申告と一致"
+    },
+    "ticketUrl": {
+      "value": "https://hacha-mecha-ticket.myshopify.com/",
+      "source": "https://hachamecha.jp/",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "公式サイトの TICKET リンク"
+    },
+    "lineup": {
+      "value": [
+        "どんぐりず",
+        "Takuya Nakamura",
+        "Soichi Terada",
+        "Shinichi Osawa",
+        "TRIPPYHOUSING",
+        "FULLHOUSE",
+        "豊と良治",
+        "JUN INAGAWA",
+        "Neibiss",
+        "It's US!!!!",
+        "ハンチング",
+        "lit",
+        "Dance sports"
+      ],
+      "source": "https://spincoaster.com/news/hacha-mecha-2026-full",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "全13組。最終発表まで反映。既存 FESTIVALS と一致"
+    },
+    "genre": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": null,
+      "checkedAt": null,
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "human",
+      "note": "正規リスト（DATA_SCHEMA §1.3）から選ぶ"
+    },
+    "desc": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": null,
+      "checkedAt": null,
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "human",
+      "note": "メディアのトーンに関わるため人が書く"
+    },
+    "desc_en": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": null,
+      "checkedAt": null,
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "human",
+      "note": "同上"
+    }
+  },
+  "existing": {
+    "id": "hacha-mecha",
+    "name": "HACHA MECHA",
+    "date": "2026-08-08",
+    "filled": [
+      "location",
+      "address",
+      "lat",
+      "lng",
+      "url",
+      "instagram",
+      "ticketUrl",
+      "lineup",
+      "image",
+      "flyer",
+      "desc"
+    ],
+    "note": "既に FESTIVALS に登録済み。Phase 2 は add_festival ではなく update_row で空欄だけ埋めること（追加すると二重登録になる）"
+  }
+}

@@ -1,0 +1,191 @@
+{
+  "_schema": "festival-research/2",
+  "_createdAt": "2026-08-04T09:56:01+09:00",
+  "_note": "値と出典は Claude が埋める。DESC/DESC_EN は人が書く（空のままでよい）。",
+  "inbox": {
+    "FES_NAME": "Sonic Mania",
+    "DATE": "2026.08.14",
+    "PREF": "Chiba",
+    "URL/INSTAGRAM": "https://www.instagram.com/summersonic_official/",
+    "MEMO": "",
+    "STATUS(new/drafted/registered)": ""
+  },
+  "fields": {
+    "id": {
+      "value": "sonic-mania",
+      "source": "slugify(name)",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-04T09:56:01+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "auto",
+      "note": "スラッグ。DATA_SCHEMA §1.1"
+    },
+    "name": {
+      "value": "Sonic Mania",
+      "source": "INBOX",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-04T09:56:01+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "auto",
+      "note": "INBOX の FES_NAME"
+    },
+    "date": {
+      "value": null,
+      "source": "https://www.summersonic.com/",
+      "confidence": null,
+      "reason": "SUMMER SONIC 2026 公式サイトに SONICMANIA へのリンクが1本も無い。公式の SONICMANIA ページは 2025年版が最新、幕張メッセの会場ページは2024年版が最新。2026年の開催を裏づける一次情報に到達できず",
+      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "inboxValue": "2026-08-14",
+      "conflictNote": "INBOX は 2026.08.14。ただし SONICMANIA は例年 SUMMER SONIC 前夜（2026年なら 8/13）で、8/14 は SUMMER SONIC 東京の初日。いずれにせよ2026年開催の一次情報が無い",
+      "kind": "research",
+      "note": "開催有無から要確認"
+    },
+    "location": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": "開催が未確認のため会場も未確定（例年は幕張メッセ）",
+      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "会場名（英字表記）"
+    },
+    "location_ja": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": "同上",
+      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "会場名（日本語）。座標検索はこちらの方が当たる"
+    },
+    "city": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": "同上",
+      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "都市名"
+    },
+    "address": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": "同上",
+      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "住所。公式サイトに無いことが多い"
+    },
+    "lat": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": null,
+      "checkedAt": null,
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "auto",
+      "note": "geocode で取得"
+    },
+    "lng": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": null,
+      "checkedAt": null,
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "auto",
+      "note": "geocode で取得"
+    },
+    "url": {
+      "value": null,
+      "source": "https://www.summersonic.com/",
+      "confidence": null,
+      "reason": "2026年の SONICMANIA 専用ページが存在しない",
+      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "公式サイト"
+    },
+    "instagram": {
+      "value": null,
+      "source": "https://www.summersonic.com/2025/sonicmania/",
+      "confidence": null,
+      "reason": "INBOX の summersonic_official は SUMMER SONIC 本体と共用で、SONICMANIA 専用アカウントではない（専用は X の @SONICMANIA_JP）",
+      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "inboxValue": "https://www.instagram.com/summersonic_official/",
+      "conflictNote": "INBOX の https://www.instagram.com/summersonic_official/ は SUMMER SONIC 本体と共用のアカウントで、SONICMANIA 専用ではない（専用は X の @SONICMANIA_JP）。2026年の SONICMANIA 開催自体が未確認のため採用しない",
+      "kind": "research",
+      "note": "INBOX の申告: https://www.instagram.com/summersonic_official/。未検証。調査の出発点に使うこと"
+    },
+    "ticketUrl": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": "開催が未確認",
+      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "チケット販売URL。無料開催なら null"
+    },
+    "lineup": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": "開催が未確認",
+      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "出演者。ステージ別・日別は現状の列で表現できない（AUDIT §9-22）"
+    },
+    "genre": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": null,
+      "checkedAt": null,
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "human",
+      "note": "正規リスト（DATA_SCHEMA §1.3）から選ぶ"
+    },
+    "desc": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": null,
+      "checkedAt": null,
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "human",
+      "note": "メディアのトーンに関わるため人が書く"
+    },
+    "desc_en": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": null,
+      "checkedAt": null,
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "human",
+      "note": "同上"
+    }
+  }
+}

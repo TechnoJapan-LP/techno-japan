@@ -1,0 +1,200 @@
+{
+  "_schema": "festival-research/2",
+  "_createdAt": "2026-08-04T09:56:01+09:00",
+  "_note": "値と出典は Claude が埋める。DESC/DESC_EN は人が書く（空のままでよい）。",
+  "inbox": {
+    "FES_NAME": "YAMAUTO",
+    "DATE": "2026.08.22-30",
+    "PREF": "Shiga",
+    "URL/INSTAGRAM": "https://www.instagram.com/yamauto2026/",
+    "MEMO": "",
+    "STATUS(new/drafted/registered)": ""
+  },
+  "fields": {
+    "id": {
+      "value": "yamauto",
+      "source": "slugify(name)",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-04T09:56:01+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "auto",
+      "note": "スラッグ。DATA_SCHEMA §1.1"
+    },
+    "name": {
+      "value": "YAMAUTO",
+      "source": "INBOX",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-04T09:56:01+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "auto",
+      "note": "INBOX の FES_NAME"
+    },
+    "date": {
+      "value": "2026-08-22/2026-08-30",
+      "source": "https://www.instagram.com/yamauto2026/",
+      "confidence": "medium",
+      "reason": null,
+      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "inboxValue": "2026-08-22/2026-08-30",
+      "conflictNote": null,
+      "kind": "research",
+      "note": "INBOX の申告 2026.08.22-30 と一致。20周年"
+    },
+    "location": {
+      "value": null,
+      "source": "https://www.instagram.com/yamauto2026/",
+      "confidence": null,
+      "reason": "英語表記の会場名を確認できていない",
+      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "会場名（英字表記）"
+    },
+    "location_ja": {
+      "value": "朽木生杉",
+      "source": "https://www.instagram.com/yamauto2026/",
+      "confidence": "medium",
+      "reason": null,
+      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "滋賀県。IG プロフィール記載"
+    },
+    "city": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": "朽木生杉の所在市（高島市の可能性）を一次情報で確認できていない",
+      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "都市名"
+    },
+    "address": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": "住所を記載した一次情報を未確認",
+      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "住所。公式サイトに無いことが多い"
+    },
+    "lat": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": null,
+      "checkedAt": null,
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "auto",
+      "note": "geocode で取得"
+    },
+    "lng": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": null,
+      "checkedAt": null,
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "auto",
+      "note": "geocode で取得"
+    },
+    "url": {
+      "value": "https://yamauto.net/",
+      "source": "https://www.instagram.com/yamauto2026/",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "IG bio のリンク。未読（次バッチで内容確認）"
+    },
+    "instagram": {
+      "value": "https://www.instagram.com/yamauto2026/",
+      "source": "https://www.instagram.com/yamauto2026/",
+      "confidence": "high",
+      "reason": null,
+      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "inboxValue": "https://www.instagram.com/yamauto2026/",
+      "conflictNote": null,
+      "kind": "research",
+      "note": "INBOX の申告と一致"
+    },
+    "ticketUrl": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": "未確認（yamauto.net 未読）",
+      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "チケット販売URL。無料開催なら null"
+    },
+    "lineup": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": "未確認（yamauto.net 未読）",
+      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "research",
+      "note": "出演者。ステージ別・日別は現状の列で表現できない（AUDIT §9-22）"
+    },
+    "genre": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": null,
+      "checkedAt": null,
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "human",
+      "note": "正規リスト（DATA_SCHEMA §1.3）から選ぶ"
+    },
+    "desc": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": null,
+      "checkedAt": null,
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "human",
+      "note": "メディアのトーンに関わるため人が書く"
+    },
+    "desc_en": {
+      "value": null,
+      "source": null,
+      "confidence": null,
+      "reason": null,
+      "checkedAt": null,
+      "inboxValue": null,
+      "conflictNote": null,
+      "kind": "human",
+      "note": "同上"
+    }
+  },
+  "existing": {
+    "id": "yamauto",
+    "name": "YAMAUTO",
+    "date": "2025-08-09/2025-08-18",
+    "filled": [
+      "desc"
+    ],
+    "note": "既に FESTIVALS に登録済み。Phase 2 は add_festival ではなく update_row で空欄だけ埋めること（追加すると二重登録になる）"
+  }
+}

@@ -87,3 +87,47 @@
 
 ### 次の担当への注意・判断待ち
 - なし
+
+## 2026-08-04 / Claude (Opus 5) / ブロック（停止条件に到達）
+
+### 実施
+- `research_festival.mjs init` の上書きバグを修正（AUDIT §9-37）。既存の調査結果を巻き戻していた
+- フェス調査バッチ1（開催前の近い順6件）: hacha-mecha / global-ark / loa / bondisco / yamauto / sonic-mania
+- 着手前の棚卸しで、未調査17件の内訳が判明:
+  - 完全登録済み **1件**（hacha-mecha。調査で内容一致も確認）
+  - 一部欠損 **12件**（date/city は入っており、location 系・url・instagram・ticketUrl・lineup が空）
+  - 未登録 **4件**（sub-tide / e-groove / sonic-mania / loa）
+- INBOX の重複2組を特定（削除は依頼者が実施）
+
+### コミット
+- SHA: `7229f64`（init 修正 + §9-37）→ push 済み（`9b9a9dc` に含まれる）
+- 調査結果 `data/inbox/*.json` 6件: **未コミット**
+- push / rebase 状態: 追記前に rebase 済み
+
+### 検証
+- `research_festival.mjs validate`: 対象6件すべて `✓ 調査 9/9`
+- `init` 再実行: `作成 0 / スキップ 29`、既存ファイルの git 差分なし（上書き再発しないことを確認）
+- geocode: hacha-mecha は施設名で一致（confidence high）。global-ark / bondisco は住所フォールバックで confidence low
+
+### 変更したパターン
+- `research_festival.mjs` の存在検査を「書き込み先パス（stem2）」基準に統一: 1箇所
+- 調査JSONの記入: 6件 × 9項目
+
+### 未確認の類似パターン
+- `research_festival.mjs` の他コマンド（`geocode` / `validate`）に同種の「入口と出口の食い違い」が無いか — **未調査**
+- INBOX 由来の日付フォーマット2種（ISO / ドット区切り）が他の列にも混在していないか — **未調査**
+- geocode の住所フォールバックで語中切断が起きる件、既存11件の座標にも同じ誤りが無いか — **未調査**
+
+### 次の担当への注意・判断待ち
+
+**停止条件に到達したため、バッチ2に進んでいません。**
+
+1. **日付の食い違い 2件（停止条件）**
+   - `sonic-mania`: INBOX `2026.08.14`。SUMMER SONIC 2026 公式サイトに SONICMANIA へのリンクが1本も無く、公式 SONICMANIA ページは2025年版、幕張メッセの会場ページは2024年版が最新。**2026年の開催自体が未確認**。8/14 は SUMMER SONIC 東京の初日で、SONICMANIA は例年その前夜（2026年なら 8/13）
+   - `bondisco`: INBOX `2026.08.22-30` / PREF `Kyoto`。IG bio は `22-23 August 2026` / `Hyogo`、公式サイト（2025年版）の会場は兵庫県三田市。**INBOX の日付は同じ行の YAMAUTO（2026.08.22-30）と同一で、転記誤りの可能性が高い**
+2. **geocode の想定外挙動（停止条件）**
+   - `global-ark`: 施設名（野反湖キャンプ場）が OSM に無く住所フォールバックへ。そこで住所が **語中で切断**され `群馬県吾妻郡中之条町大` になり、**大竹川（川）にヒット**。実際の野反湖から約15km east。`addressCandidates()` の段階的短縮が `大字入山国有林224` を `大` まで削ったため
+   - `confidence: low` が付くので設計どおりの安全側だが、**値としては使えない**。野反湖そのものは `36.7069, 138.6458` で引けるため、会場座標は手当てが必要
+3. **空振り1件**: `sonic-mania`（3件連続ではないので停止理由ではない）
+4. **LOA は検索で完全に空振りしたが、INBOX の Instagram から日付・会場・チケットまで到達できた。** link-open-air の教訓が再現した形。以後も IG を最初に当てること
+5. **未調査11件**（すべて開催済み・情報が消えている可能性あり）: japonism / body-soul / signal / dots / samsara / moment / orbit / pure-rave / fulirock / sub-tide / e-groove
