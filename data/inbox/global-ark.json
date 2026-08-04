@@ -89,26 +89,26 @@
       "note": "二次情報。公式サイトに住所表記が無いため未検証"
     },
     "lat": {
-      "value": 36.5908,
-      "source": "nominatim.openstreetmap.org",
+      "value": 36.7069,
+      "source": "nominatim.openstreetmap.org（野反湖）",
       "confidence": "low",
       "reason": null,
-      "checkedAt": "2026-08-04T10:15:26+09:00",
+      "checkedAt": "2026-08-04T11:45:00+09:00",
       "inboxValue": null,
       "conflictNote": null,
       "kind": "auto",
-      "note": "query: 群馬県吾妻郡中之条町大 → 大竹川, 中之条町, 吾妻郡, 群馬県, 日本"
+      "note": "野反湖の座標。キャンプ場そのものではない。会場名「野反湖キャンプ場」は OSM に無く、住所フォールバックは語中切断で大竹川（約15km east）にヒットしていたため、湖の座標で代用する（AUDIT §9-38）"
     },
     "lng": {
-      "value": 138.7935,
-      "source": "nominatim.openstreetmap.org",
+      "value": 138.6458,
+      "source": "nominatim.openstreetmap.org（野反湖）",
       "confidence": "low",
       "reason": null,
-      "checkedAt": "2026-08-04T10:15:26+09:00",
+      "checkedAt": "2026-08-04T11:45:00+09:00",
       "inboxValue": null,
       "conflictNote": null,
       "kind": "auto",
-      "note": "query: 群馬県吾妻郡中之条町大 → 大竹川, 中之条町, 吾妻郡, 群馬県, 日本"
+      "note": "野反湖の座標。キャンプ場そのものではない。会場名「野反湖キャンプ場」は OSM に無く、住所フォールバックは語中切断で大竹川（約15km east）にヒットしていたため、湖の座標で代用する（AUDIT §9-38）"
     },
     "url": {
       "value": "https://www.global-ark.net/",

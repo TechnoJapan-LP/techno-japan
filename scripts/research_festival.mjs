@@ -390,7 +390,11 @@ function addressCandidates(addr) {
   const out = [a];
   const noNum = a.replace(/[甲乙丙丁]?[\d０-９]+([-−ー－][\d０-９]+)*$/, '').trim();
   if (noNum && noNum !== a) out.push(noNum);
-  const noAza = noNum.replace(/字[^字]*$/, '').trim();
+  // 「大字」は2文字で1語。/字[^字]*$/ だけだと "大" が孤立して残り、
+  // "中之条町大" のような存在しない地名を Nominatim に投げることになる。
+  // 2026-08-04 に global-ark で発生し、野反湖から約15km 離れた「大竹川」に
+  // ヒットした（confidence: low は付くが値としては使えない）。AUDIT §9-38。
+  const noAza = noNum.replace(/大?字[^字]*$/, '').trim();
   if (noAza && noAza !== noNum) out.push(noAza);
   // 都道府県を落とすと当たることがある（実測: みなかみ町藤原）
   const noPref = (out[out.length - 1] || a).replace(/^.{2,3}[都道府県]/, '').replace(/^.{2,4}郡/, '').trim();
