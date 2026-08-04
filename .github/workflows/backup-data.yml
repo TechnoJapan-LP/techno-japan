@@ -41,7 +41,14 @@ jobs:
               raise SystemExit("ログイン失敗: " + str(login.get('message') or login))
           print("Logged in: session token acquired")
 
-          SHEETS = ['VENUES', 'FESTIVALS', 'ARTISTS', 'EVENTS', 'ARTICLES']
+          # 【シートを新設したらここに必ず追加すること】
+          # 2026-08-05 まで EDITIONS / LINEUPS が漏れており、開催回と
+          # ラインナップ284行が一度もバックアップされていなかった（AUDIT §9-41）。
+          # ハードコードなので、シートを増やしても自動では入らない。
+          # 追加を忘れても既存シートのバックアップは成功し続けるため、
+          # 失敗として現れない。気づく手段が無い種類の漏れである。
+          SHEETS = ['VENUES', 'FESTIVALS', 'ARTISTS', 'EVENTS', 'ARTICLES',
+                    'EDITIONS', 'LINEUPS']
           backup = {'_meta': {'backedUpAt': datetime.now(timezone(timedelta(hours=9))).isoformat()}}
           failures = []
 
