@@ -131,3 +131,49 @@
 3. **空振り1件**: `sonic-mania`（3件連続ではないので停止理由ではない）
 4. **LOA は検索で完全に空振りしたが、INBOX の Instagram から日付・会場・チケットまで到達できた。** link-open-air の教訓が再現した形。以後も IG を最初に当てること
 5. **未調査11件**（すべて開催済み・情報が消えている可能性あり）: japonism / body-soul / signal / dots / samsara / moment / orbit / pure-rave / fulirock / sub-tide / e-groove
+
+## 2026-08-04 / Claude (Opus 5) / 完了（バッチ2・停止条件には未到達）
+
+### 実施
+- フェス調査バッチ2（5件）: e-groove / sub-tide / orbit / pure-rave / fulirock
+- INBOX の現状を再取得（依頼者の整理が反映済み。26行・重複なし・BonDisco 修正済み・FuliRock の URL 空欄化済み）
+
+| id | 結果 |
+|---|---|
+| `sub-tide` | 公式サイトから会場・住所・チケット・DJ 23組を取得。**今回で最も収穫が大きい** |
+| `orbit` | linktree から ZAIKO チケットと会場名。日本語会場名・住所は未到達 |
+| `e-groove` | IG bio から日程・会場（秋田市雄和 日本庭園）。**会場とチケットは DM 対応で非公開** |
+| `pure-rave` | 主催者アカウントのみ、フェス専用の情報なし（依頼どおり記録） |
+| `fulirock` | **実在の確認ができず。FUJI ROCK の可能性が高い**（下記） |
+
+### コミット
+- SHA: このエントリを含めてコミット
+- push / rebase 状態: 追記前に rebase 済み
+
+### 検証
+- `research_festival.mjs validate`: 5件とも `✓ 調査 9/9`
+- `geocode sub-tide`: `36.0048, 138.6446`（三川, 南相木村）。南相木ダムから **0.7km** で妥当。confidence medium
+- 語中切断の修正後に実行し、異常な短縮は発生しなかった
+
+### 変更したパターン
+- 調査JSONの記入: 5件 × 9項目
+- `conflictNote` の追記: 2件（pure-rave の日付、fulirock の Instagram）
+
+### 未確認の類似パターン
+- INBOX の `PREF` 列に県名でない値が入る例（`pure-rave` = "Kanto"）が他にもないか — **未調査**
+- `sub-tide` の Live 欄（B.T.Reo 440 ほか）は本文取得が途中で切れており未収録 — **DJ 欄のみ収録済み**
+- IG の bio だけ読んで投稿画像を読んでいない項目（lineup が取れなかった e-groove / orbit / loa） — **未調査**
+
+### 次の担当への注意・判断待ち
+
+1. **`fulirock` は実在しない可能性が高い（判断待ち）**
+   - INBOX: `2026.07.24-26` / `Niigata`
+   - FUJI ROCK '26 公式: 「2026年7月24日(金) 25日(土) 26日(日)」「新潟県 湯沢町 苗場スキー場」
+   - **日程・県が完全一致。** 当初 INBOX に入っていた URL も FUJI ROCK 公式（fujirock_jp）
+   - 「FuliRock」名義の独立したフェスは検索で1件も出ない
+   - 依頼者は「FuliRock は新潟の別フェスで FUJI ROCK とは無関係」との認識だが、**証拠は逆を示している**
+   - **FUJI ROCK の情報を FuliRock として登録してはいけない。** 値は全項目 null のまま保留
+2. **`e-groove` は会場・チケットが非公開**（IG bio「チケット、会場はDMへ」）。掲載するなら主催者への確認が要る
+3. **`pure-rave` は INBOX の PREF が "Kanto"** で県名ではない。会場非公開のフェスの可能性
+4. 残り5件（未着手）: japonism / body-soul / signal / dots / samsara
+5. 停止条件には到達していない（空振り連続2件で止まらず、日付食い違い0件、geocode 正常）
