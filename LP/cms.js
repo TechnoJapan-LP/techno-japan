@@ -1391,14 +1391,84 @@ function geocodeFromLocation(prefix) {
 /* ==============================================================
    LINEUP AUTOCOMPLETE
    ============================================================== */
+const artistSuggestionStore = new Map();
+let artistSuggestionSeq = 0;
+
+function artistSearchKey(value){
+  return String(value||'').normalize('NFKC').toLowerCase().trim().replace(/\s+/g,' ');
+}
+function artistSlugKey(value){
+  return artistSearchKey(value).replace(/[\s_]+/g,'-').replace(/[^a-z0-9-]/g,'').replace(/-+/g,'-').replace(/^-+|-+$/g,'');
+}
+function artistCompactKey(value){
+  return artistSearchKey(value).replace(/[^a-z0-9]/g,'');
+}
+function artistEditDistance(a,b){
+  const prev=Array.from({length:b.length+1},(_,i)=>i);
+  for(let i=1;i<=a.length;i++){
+    const cur=[i];
+    for(let j=1;j<=b.length;j++) cur[j]=Math.min(cur[j-1]+1,prev[j]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1));
+    for(let j=0;j<cur.length;j++) prev[j]=cur[j];
+  }
+  return prev[b.length];
+}
+
+/* matchArtist() は厳密な照合のままにし、候補提示だけを担当する。 */
+function suggestArtistCandidates(input){
+  const raw=String(input||'').trim();
+  const q=artistSearchKey(raw);
+  if(q.length<2) return [];
+  const qSlug=artistSlugKey(q), qCompact=artistCompactKey(q);
+  const out=[];
+  ARTIST_DB.forEach(a=>{
+    const id=String(a.id||''), name=String(a.name||'');
+    const idKey=artistSearchKey(id), nameKey=artistSearchKey(name);
+    const idSlug=artistSlugKey(id), nameSlug=artistSlugKey(name);
+    let score=0, reason='';
+    if(idKey===q || nameKey===q){ score=100; reason='完全一致'; }
+    else if(qSlug && (idSlug===qSlug || nameSlug===qSlug) && !(qCompact.length<=3 && qCompact===artistCompactKey(name))){ score=95; reason='表記ゆれ'; }
+    else if(q.length>=3 && (idKey.startsWith(q) || nameKey.startsWith(q))){ score=82; reason='前方一致'; }
+    else if(q.length>=4 && (idKey.includes(q) || nameKey.includes(q) || q.startsWith(idKey) || q.startsWith(nameKey))){ score=76; reason='部分一致'; }
+    else {
+      const qWords=q.split(/[^a-z0-9]+/).filter(Boolean);
+      const nWords=nameKey.split(/[^a-z0-9]+/).filter(Boolean);
+      const isSubject=qWords.length && nWords.length && qWords[0]===nWords[0] && qWords[0].length>=4;
+      if(isSubject){ score=72; reason='主体名一致'; }
+      else if(qCompact.length>=4 && Math.min(artistEditDistance(qCompact,artistCompactKey(id)),artistEditDistance(qCompact,artistCompactKey(name)))<=2){
+        const d=Math.min(artistEditDistance(qCompact,artistCompactKey(id)),artistEditDistance(qCompact,artistCompactKey(name)));
+        if(d/Math.max(qCompact.length,artistCompactKey(name).length)<=.25){ score=60-d; reason='編集距離'; }
+      }
+    }
+    if(score) out.push({id,name,score,reason,confidence:score>=80?'high':score>=70?'medium':'low'});
+  });
+  return out.sort((a,b)=>b.score-a.score||a.name.localeCompare(b.name)).slice(0,3);
+}
+
+function suggestionButton(prefix, source, candidate){
+  const key=String(++artistSuggestionSeq);
+  artistSuggestionStore.set(key,{prefix,source,id:candidate.id});
+  return '<button type="button" class="lineup-suggestion" onclick="adoptArtistSuggestion(\''+key+'\')">採用: '+esc(candidate.name)+' <small>'+esc(candidate.id)+' · '+esc(candidate.reason)+'</small></button>';
+}
+
+function adoptArtistSuggestion(key){
+  const item=artistSuggestionStore.get(String(key));
+  if(!item) return;
+  const arr=lineups[item.prefix]||[];
+  const idx=arr.indexOf('?'+item.source);
+  if(idx<0) return;
+  arr[idx]=item.id;
+  artistSuggestionStore.delete(String(key));
+  renderLineupTags(item.prefix);
+}
+
 function filterArtists(inputId, listId, prefix) {
-  const val = document.getElementById(inputId).value.toLowerCase();
+  const val = document.getElementById(inputId).value.trim();
   const list = document.getElementById(listId);
   acHighlight = -1;
   if (!val) { list.classList.remove('show'); return; }
-  const matches = ARTIST_DB.filter(a => (a.id.toLowerCase().includes(val) || a.name.toLowerCase().includes(val)) && !lineups[prefix].includes(a.id));
+  const matches = suggestArtistCandidates(val).filter(a=>!lineups[prefix].includes(a.id));
   if (!matches.length) { list.classList.remove('show'); return; }
-  list.innerHTML = matches.map(a => '<div class="autocomplete-item" onmousedown="addLineup(\''+prefix+'\',\''+a.id+'\')"><strong>'+esc(a.id)+'</strong> <span style="opacity:.5;font-size:.8em">'+esc(a.name)+'</span></div>').join('');
+  list.innerHTML = matches.map(a => '<div class="autocomplete-item" onmousedown="addLineup(\''+prefix+'\',\''+a.id+'\')"><strong>'+esc(a.name)+'</strong> <span style="opacity:.5;font-size:.8em">'+esc(a.id)+' · '+esc(a.reason)+'</span></div>').join('');
   list.classList.add('show');
 }
 function acKeydown(e, listId, prefix) {
@@ -1423,7 +1493,10 @@ function renderLineupTags(prefix){
     const display=isUnmatched?a.substring(1):a;
     const cls='lineup-tag'+(isUnmatched?' unmatched':'');
     const escaped=a.replace(/'/g,"\\'");
-    return '<div class="'+cls+'">'+esc(display)+'<span class="remove" onclick="removeLineup(\''+prefix+'\',\''+escaped+'\')">&times;</span></div>';
+    if(!isUnmatched) return '<div class="'+cls+'">'+esc(display)+'<span class="remove" onclick="removeLineup(\''+prefix+'\',\''+escaped+'\')">&times;</span></div>';
+    const candidates=suggestArtistCandidates(display);
+    const buttons=candidates.map(c=>suggestionButton(prefix,display,c)).join('');
+    return '<div class="lineup-unmatched-wrap"><div class="'+cls+'">'+esc(display)+'<span class="remove" onclick="removeLineup(\''+prefix+'\',\''+escaped+'\')">&times;</span></div>'+(buttons?'<div class="lineup-suggestions">'+buttons+'</div>':'')+'</div>';
   }).join('');
 }
 
@@ -2968,6 +3041,7 @@ function saveEdit(section){
   const unregisteredArtists=(section==='festival')
     ? lineups.f.filter(a=>a.startsWith('?')).map(a=>a.substring(1))
     : [];
+  if (unregisteredArtists.length && !confirmUnresolvedArtists(unregisteredArtists)) return;
 
   // ---- 楽観的UI: GAS応答を待たずにリストへ即反映 ----
   const rowNum = state._row;
@@ -3983,6 +4057,7 @@ function submitToSheet(section){
   const unregisteredArtists=(section==='festival')
     ? lineups.f.filter(a=>a.startsWith('?')).map(a=>a.substring(1))
     : [];
+  if (unregisteredArtists.length && !confirmUnresolvedArtists(unregisteredArtists)) return;
 
   // ---- 楽観的UI: 「⏳ syncing」行として即リストに出し、GAS応答は裏で待つ ----
   applyOptimisticInsert(section, payload);
@@ -4185,6 +4260,14 @@ function notifyUnregisteredArtists(names){
   if(!list.length) return;
   toast('未登録のまま保存: ' + list.join(' / ')
     + '（掲載したいアーティストは Artists から登録してください）', 'info');
+}
+
+function confirmUnresolvedArtists(names){
+  const lines=names.map(name=>{
+    const c=suggestArtistCandidates(name);
+    return '・'+name+(c.length?'\n  候補: '+c.map(x=>x.name+' ['+x.id+']').join(' / '):'\n  候補なし');
+  }).join('\n');
+  return confirm('⚠️ LINEUP に未照合の表記があります。原文のまま保存しますか？\n\n'+lines+'\n\n候補は入力欄のタグから明示的に採用できます。');
 }
 
 /**

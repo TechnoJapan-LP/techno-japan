@@ -78,6 +78,11 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
 .lineup-tag .remove{cursor:pointer;color:var(--accent);font-size:1rem;line-height:1}
 .lineup-tag.unmatched{border-style:dashed;border-color:var(--yellow);color:var(--yellow);opacity:.8}
 .lineup-tag.unmatched .remove{color:var(--yellow)}
+.lineup-unmatched-wrap{display:flex;flex-direction:column;gap:4px}
+.lineup-suggestions{display:flex;flex-wrap:wrap;gap:4px;margin-left:8px}
+.lineup-suggestion{padding:3px 7px;border:1px solid var(--yellow);border-radius:12px;background:transparent;color:var(--yellow);font-size:.68rem;cursor:pointer}
+.lineup-suggestion:hover{background:rgba(255,208,45,.15)}
+.lineup-suggestion small{opacity:.65}
 .editions-section{margin-top:4px}
 .edition-block{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px;position:relative}
 .edition-block .remove-edition{position:absolute;top:8px;right:8px;cursor:pointer;color:var(--accent);font-size:1rem;background:none;border:none}
