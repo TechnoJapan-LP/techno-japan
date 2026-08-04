@@ -187,6 +187,9 @@ def main():
             print(f"\n=== {base} からの変更 JS/CSS: {len(changed)}件 ===")
             for path in changed:
                 asset = os.path.basename(path)
+                if asset in VERSION_CHECK_EXEMPT:
+                    print(f"  −  {asset}（キャッシュバスティング検査から除外）")
+                    continue
                 if asset == "sw.js":
                     continue      # SW 自身は VERSION 定数で管理
                 users = refs.get(asset)
