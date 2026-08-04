@@ -23,6 +23,7 @@ import json
 import os
 import re
 import sys
+from urllib.parse import unquote
 from pathlib import Path
 
 try:
@@ -127,6 +128,13 @@ def has_class(body, class_name):
 def is_redirect_stub(html):
     """build-detail-pages.mjs の REDIRECTS が出す旧URL維持用スタブか。"""
     return "<title>Redirecting…</title>" in html and 'http-equiv="refresh"' in html
+
+
+def article_page_is_public(path):
+    """記事ページが存在し、noindex のリダイレクトスタブではないか。"""
+    if not path.exists():
+        return False
+    return '<meta name="robots" content="noindex">' not in read(path)
 
 
 def location_language_inversions():
@@ -340,6 +348,37 @@ def measure():
     m["festival_location_language_inversions"] = len(location_issues)
     m["_festival_location_language_inversion_list"] = location_issues
 
+    # 記事の公開整合性。生成側は draft の詳細ページを消すため、
+    # sitemap とニュースハブの静的リンクが実在する公開ページだけを指すことを守る。
+    missing_article_links = []
+    for hub_path in (LP / "news.html", LP / "en" / "news.html"):
+        if not hub_path.exists():
+            continue
+        html = read(hub_path)
+        for block_name, block in STATIC_LINKS_RE.findall(html):
+            if block_name != "ARTICLES":
+                continue
+            for href in re.findall(r'href="/(en/)?articles/([^"#]+)\.html"', block):
+                prefix, raw_id = href
+                rel = Path("en/articles" if prefix else "articles") / f"{unquote(raw_id)}.html"
+                if not article_page_is_public(LP / rel):
+                    missing_article_links.append(f"{hub_path.relative_to(LP)}: /{rel}")
+    m["article_static_links_missing_pages"] = len(missing_article_links)
+    m["_article_static_links_missing_list"] = missing_article_links
+
+    missing_sitemap_articles = []
+    sitemap = LP / "sitemap.xml"
+    if sitemap.exists():
+        for loc in re.findall(r"<loc>([^<]+)</loc>", read(sitemap)):
+            match = re.fullmatch(r"https://techno-japan\.media/(articles|en/articles)/([^/]+)\.html", unquote(loc))
+            if not match:
+                continue
+            rel = Path(match.group(1)) / f"{match.group(2)}.html"
+            if not article_page_is_public(LP / rel):
+                missing_sitemap_articles.append(loc)
+    m["article_sitemap_missing_pages"] = len(missing_sitemap_articles)
+    m["_article_sitemap_missing_list"] = missing_sitemap_articles
+
     return m
 
 
@@ -398,6 +437,14 @@ def main():
         print("\nLOCATION / location_ja の文字種逆転:")
         for item in actual["_festival_location_language_inversion_list"]:
             print(f"  - {item['id']}: LOCATION={item['location']!r} / location_ja={item['location_ja']!r}")
+    if actual["_article_static_links_missing_list"]:
+        print("\n記事の静的リンク先が存在しません:")
+        for item in actual["_article_static_links_missing_list"]:
+            print(f"  - {item}")
+    if actual["_article_sitemap_missing_list"]:
+        print("\nsitemap の記事URLが存在しません:")
+        for item in actual["_article_sitemap_missing_list"]:
+            print(f"  - {item}")
 
     if failures:
         print("\n" + "=" * 60)

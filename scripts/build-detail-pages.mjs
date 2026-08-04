@@ -232,6 +232,36 @@ function makeEntityResolver(data) {
   });
 }
 
+// 公開記事本文の entity shortcode は、生成前に参照先を検証する。
+// 未知のIDをそのままリンク化すると、見た目は正常でも404リンクが公開されるため、
+// draft以外の記事だけを対象にビルドを停止する（draftは未完成本文を保存できる）。
+function validateArticleShortcodes(data) {
+  const table = {
+    festival: new Set((data.FESTIVALS || []).map((x) => String(x.id || '').trim()).filter(Boolean)),
+    artist: new Set((data.ARTISTS || []).map((x) => String(x.id || '').trim()).filter(Boolean)),
+    venue: new Set((data.VENUES || []).map((x) => String(x.id || '').trim()).filter(Boolean)),
+    article: new Set((data.ARTICLES || []).map((x) => String(x.id || '').trim()).filter(Boolean)),
+  };
+  const re = /\[\[(festival|artist|venue|article):([^\]|]+)(?:\|([^\]]+))?\]\]/g;
+  const errors = [];
+  for (const article of (data.ARTICLES || [])) {
+    if (String(article.status || '').toLowerCase() === 'draft') continue;
+    for (const [lang, body] of [['ja', article.body], ['en', article.body_en]]) {
+      const text = String(body || '');
+      let match;
+      while ((match = re.exec(text)) !== null) {
+        if (!table[match[1]].has(match[2])) {
+          errors.push(`${article.id || '(no-id)'}[${lang}]: ${match[1]}:${match[2]}`);
+        }
+      }
+      re.lastIndex = 0;
+    }
+  }
+  if (errors.length) {
+    throw new Error(`記事本文の shortcode 参照切れ（${errors.length}件）:\n  - ${errors.join('\n  - ')}`);
+  }
+}
+
 const MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
 function fmtDate(d) {
   if (!d) return '';
@@ -729,29 +759,44 @@ function festivalLineupGroupsHtml(editions, lineupsByEdition, artistsById, lang)
 }
 
 function festivalRelatedCards(current, lang) {
+  const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Tokyo' }).format(new Date());
+  const dateStatus = (item) => {
+    const parts = String(item.date || '').split('/').map((s) => s.trim()).filter(Boolean);
+    const end = parts[1] || parts[0] || '';
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(end)) return 'unknown';
+    return end >= today ? 'upcoming' : 'past';
+  };
   const genres = (item) => (Array.isArray(item.genre) ? item.genre : String(item.genre || '').split('/'))
     .map((genre) => String(genre).trim()).filter(Boolean);
   const currentGenres = genres(current);
+  // CITY一致=10点、共通GENRE=1点/ジャンル。従来どおり地域を優先する。
   const candidates = XLINK.fests
     .filter((item) => item.id !== current.id && (item.type || 'festival') === (current.type || 'festival'))
     .map((item) => {
       const sameCity = item.city && current.city && String(item.city).toLowerCase() === String(current.city).toLowerCase();
       const sharedGenres = genres(item).filter((genre) => currentGenres.includes(genre)).length;
-      return { item, sameCity, sharedGenres, score: (sameCity ? 10 : 0) + sharedGenres };
+      return { item, sameCity, sharedGenres, score: (sameCity ? 10 : 0) + sharedGenres, status: dateStatus(item) };
     })
-    .filter(({ sameCity, sharedGenres }) => sameCity || sharedGenres)
+    .filter(({ sameCity, sharedGenres, status }) => (sameCity || sharedGenres) && status !== 'unknown')
     .sort((a, b) => b.score - a.score || String(a.item.name || '').localeCompare(String(b.item.name || '')))
-    .slice(0, 4)
-    .map(({ item }) => item);
-  if (!candidates.length) return '';
+  // 未来/開催中を優先。現行条件で1件以下なら過去開催で最大4件まで補完する。
+  const upcoming = candidates.filter((candidate) => candidate.status === 'upcoming');
+  const past = candidates.filter((candidate) => candidate.status === 'past');
+  const selected = upcoming.length <= 1
+    ? upcoming.concat(past).slice(0, 4)
+    : upcoming.slice(0, 4);
+  if (!selected.length) return '';
   const prefix = lang === 'en' ? '/en' : '';
-  const cards = candidates.map((item) => {
+  const cards = selected.map(({ item, status }) => {
     const name = lang === 'en' ? (item.name_en || item.name) : item.name;
     const img = item.image || item.flyer;
+    const pastLabel = status === 'past'
+      ? `<span class="related-card-past" style="opacity:.55;font-size:.72em;letter-spacing:.04em">${lang === 'en' ? 'Past event' : '過去の開催'}</span> · `
+      : '';
     return `<a class="related-card" href="${prefix}/festivals/${encodeURIComponent(item.id)}.html">
         <div class="related-card-img">${img ? `<img ${dimensionAttrs(img)} src="/${String(img).replace(/^\//, '')}" alt="${esc(name)}" loading="lazy" style="object-position:${esc(item.imagePosition || 'center')}">` : ''}</div>
         <div class="related-card-info">
-          <div class="related-card-date">${esc(item.date || '')}</div>
+          <div class="related-card-date">${pastLabel}${esc(item.date || '')}</div>
           <div class="related-card-name">${esc(name)}</div>
           <div class="related-card-loc">${esc(item.city || '')}</div>
         </div>
@@ -1390,6 +1435,7 @@ function main() {
     editionsByFestival.get(ed.FESTIVAL_ID).push(ed);
   }
   const resolveEntities = makeEntityResolver({ ARTISTS, FESTIVALS, VENUES, ARTICLES });
+  validateArticleShortcodes({ ARTISTS, FESTIVALS, VENUES, ARTICLES });
   const pubArticles = ARTICLES.filter(valid).filter((a) => a.status !== 'draft');
   const pubFests = FESTIVALS.filter(valid);
   const pubArtists = ARTISTS.filter(valid);

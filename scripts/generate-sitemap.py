@@ -133,9 +133,18 @@ def main():
             "priority": "0.5",
         })
 
-    # Articles (if defined)
-    article_ids = extract_ids(data, "ARTICLES")
-    for aid in article_ids:
+    # Articles: 生成済みの公開ページだけを列挙する。
+    # data.js の ARTICLES を無条件に読むと draft も sitemap に入り、
+    # 詳細ページ生成側（draft は除外）との間で404が生じる。
+    article_ids = []
+    article_root = os.path.join(LP_DIR, "articles")
+    for f in sorted(glob.glob(os.path.join(article_root, "*.html"))):
+        with open(f, "r", encoding="utf-8", errors="replace") as html_file:
+            html = html_file.read()
+        if '<meta name="robots" content="noindex">' in html:
+            continue
+        aid = os.path.splitext(os.path.basename(f))[0]
+        article_ids.append(aid)
         urls.append({
             "loc": f"{BASE_URL}/articles/{aid}.html",
             "lastmod": today,

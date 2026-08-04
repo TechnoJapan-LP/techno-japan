@@ -329,6 +329,24 @@ metrics:
       location_ja の空欄（LOCATIONへのフォールバック）と、WOMBのように両欄が
       ASCIIの正当な会場名は対象外。Publish前にも同じ検査を行う。
 
+  article_static_links_missing_pages:
+    description: ニュースハブの静的記事リンクのうち公開ページへ到達できない件数
+    min: 0
+    max: 0
+    target: 0
+    note: >-
+      記事を draft にすると詳細ページとハブ静的リンクから除外される。
+      JA/EN 両ニュースハブのリンク先が実在する公開HTMLであることを検査する。
+
+  article_sitemap_missing_pages:
+    description: sitemap に載った記事URLのうち公開ページへ到達できない件数
+    min: 0
+    max: 0
+    target: 0
+    note: >-
+      sitemap は生成済みの公開記事ページから作る。draft や noindex スタブが
+      sitemap に混入しないことを、URLと実ファイルの対応で検査する。
+
 # ハブページの JS 健全性（scripts/check_hub_pages.py）
 #
 # 生成物の静的検査では「JS は配信されているが実行時に死ぬ」障害を検出できない。

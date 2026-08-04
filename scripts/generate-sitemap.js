@@ -88,9 +88,9 @@ VENUES.forEach(v => {
   }
 });
 
-// Articles (if any)
+// Articles (if any). draft は詳細ページ・静的リンクと同じく公開対象外。
 ARTICLES.forEach(a => {
-  if (a.id) {
+  if (a.id && a.status !== 'draft') {
     urls.push({
       loc: `${BASE_URL}/news.html#article/${a.id}`,
       lastmod: a.publishedAt || today,
