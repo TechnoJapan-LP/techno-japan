@@ -97,22 +97,6 @@ const ARTISTS = [
     name: "Qmico",
   },
   {
-    id: "ga-su",
-    name: "Ga Su",
-  },
-  {
-    id: "nutmeg",
-    name: "NUTMEG",
-  },
-  {
-    id: "snipe1",
-    name: "Snipe1",
-  },
-  {
-    id: "liarako",
-    name: "Liarako",
-  },
-  {
     id: "captain-k",
     name: "Captain K",
   },
@@ -121,92 +105,20 @@ const ARTISTS = [
     name: "Mimu",
   },
   {
-    id: "naotsun",
-    name: "Naotsun",
-  },
-  {
     id: "sakuma",
     name: "Sakuma",
-  },
-  {
-    id: "yazzus",
-    name: "Yazzus",
-  },
-  {
-    id: "cosmic-caz",
-    name: "Cosmic Caz",
-  },
-  {
-    id: "janus-rose",
-    name: "Janus Rose",
   },
   {
     id: "mayudepth",
     name: "MAYUDEPTH",
   },
   {
-    id: "akii",
-    name: "Akii",
-  },
-  {
-    id: "aliceyuki",
-    name: "Aliceyuki",
-  },
-  {
     id: "choko",
     name: "CHOKO",
   },
   {
-    id: "akihiro-suzuki",
-    name: "Akihiro Suzuki",
-  },
-  {
     id: "endorphin",
     name: "endorphin",
-  },
-  {
-    id: "kevin-miyagi",
-    name: "Kevin Miyagi",
-  },
-  {
-    id: "psychogem",
-    name: "Psychogem",
-  },
-  {
-    id: "sho",
-    name: "Sho",
-  },
-  {
-    id: "takehiro-imaizumi",
-    name: "Takehiro Imaizumi",
-  },
-  {
-    id: "tazzy",
-    name: "Tazzy",
-  },
-  {
-    id: "tko",
-    name: "Tko",
-  },
-  {
-    id: "tmak",
-    name: "Tmak",
-  },
-  {
-    id: "yeark",
-    name: "Yeark",
-  },
-  {
-    id: "yuripon",
-    name: "DJ YURIPON",
-  },
-  {
-    id: "ao",
-    name: "青",
-  },
-  {
-    id: "198",
-    name: "198",
   },
   {
     id: "antal",
@@ -275,6 +187,14 @@ const ARTISTS = [
   {
     id: "nc4k",
     name: "NC4K",
+  },
+  {
+    id: "sisi",
+    name: "Sisi",
+  },
+  {
+    id: "ouissam",
+    name: "Ouissam",
   },
   {
     id: "yamarchy",
@@ -351,6 +271,10 @@ const ARTISTS = [
   {
     id: "yukimasa",
     name: "YUKIMASA",
+  },
+  {
+    id: "tonbo",
+    name: "Tonbo",
   },
   {
     id: "sunga",
@@ -435,14 +359,6 @@ const ARTISTS = [
   {
     id: "yellowuhuru",
     name: "YELLOWUHURU",
-  },
-  {
-    id: "clipz",
-    name: "CLIPZ",
-  },
-  {
-    id: "dj-hype",
-    name: "DJ HYPE",
   },
   {
     id: "dj-masda",
