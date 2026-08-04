@@ -68,6 +68,30 @@
 ## 2026-08-04 / Codex / 完了
 
 ### 実施
+- 最新`LP/data.js`を確認し、残り46件から既知の残置対象5件と`dungeoneering`を除外
+- 最新NAMEを反映した40件の判断用CSVを作成
+
+### コミット
+- SHA: このエントリを含めてコミット予定
+- push / rebase 状態: 未push
+
+### 検証
+- CSV行数: 40件（個別判断9件、draft候補31件）
+- `data/inbox/*.json`: 変更なし（別セッションの変更は保持）
+
+### 変更したパターン
+- `reports/artists-ref1-review-40.csv`: 新規1ファイル
+- 最新data.jsで反映確認: CHOKO / endorphin / NC4K / NUTMEG / TSUTOMU / DJ YURIPON
+
+### 未確認の類似パターン
+- 確認済み・0件（外部Web検索・INBOX編集は行っていない）
+
+### 次の担当への注意・判断待ち
+- 昨日残すと決めた11件のうち、今回の46件に含まれる5件と`dungeoneering`を除外。残り6件は46件の対象外層に含まれるため、今回のCSVには現れない。
+
+## 2026-08-04 / Codex / 完了
+
+### 実施
 - ARTISTS「参照1件・情報なし」74件を棚卸しし、分類CSVを作成
 
 ### コミット
