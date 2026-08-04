@@ -70,12 +70,12 @@
       "value": null,
       "source": null,
       "confidence": null,
-      "reason": "INBOX の PREF は「Kanto」で県名ではない。会場も未確認",
-      "checkedAt": "2026-08-04T11:20:00+09:00",
+      "reason": "会場が非公開で開催地を特定できない。INBOX の PREF「Kanto」は県名ではないため空欄にする方針（2026-08-04 判断）。判明したら埋める",
+      "checkedAt": "2026-08-04T13:10:00+09:00",
       "inboxValue": null,
       "conflictNote": null,
       "kind": "research",
-      "note": "都市名"
+      "note": "会場非公開型の可能性が高い"
     },
     "address": {
       "value": null,

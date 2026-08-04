@@ -89,26 +89,26 @@
       "note": "住所。公式サイトに無いことが多い"
     },
     "lat": {
-      "value": null,
-      "source": null,
-      "confidence": null,
-      "reason": "Nominatim で見つからず（試行: Windera CAMPGROUNDS 八ヶ岳, Fujimi, Japan / Windera CAMPGROUNDS 八ヶ岳, Japan）",
-      "checkedAt": "2026-08-04T11:05:46+09:00",
+      "value": 35.9146,
+      "source": "nominatim.openstreetmap.org（富士見町）",
+      "confidence": "low",
+      "reason": null,
+      "checkedAt": "2026-08-04T13:10:00+09:00",
       "inboxValue": null,
       "conflictNote": null,
       "kind": "auto",
-      "note": "geocode で取得"
+      "note": "富士見町（諏訪郡）の代表座標。会場そのものではない。「Windera CAMPGROUNDS 八ヶ岳」は OSM に無く、英字・日本語・キャンプ場表記の4通りを試して全て不発。CMS の resolve_place 相当（日本語名を推定して再検索）も当たらなかった。会場が富士見町にあること自体が二次情報のため、町の座標も暫定"
     },
     "lng": {
-      "value": null,
-      "source": null,
-      "confidence": null,
-      "reason": "Nominatim で見つからず（試行: Windera CAMPGROUNDS 八ヶ岳, Fujimi, Japan / Windera CAMPGROUNDS 八ヶ岳, Japan）",
-      "checkedAt": "2026-08-04T11:05:46+09:00",
+      "value": 138.2407,
+      "source": "nominatim.openstreetmap.org（富士見町）",
+      "confidence": "low",
+      "reason": null,
+      "checkedAt": "2026-08-04T13:10:00+09:00",
       "inboxValue": null,
       "conflictNote": null,
       "kind": "auto",
-      "note": "geocode で取得"
+      "note": "富士見町（諏訪郡）の代表座標。会場そのものではない。「Windera CAMPGROUNDS 八ヶ岳」は OSM に無く、英字・日本語・キャンプ場表記の4通りを試して全て不発。CMS の resolve_place 相当（日本語名を推定して再検索）も当たらなかった。会場が富士見町にあること自体が二次情報のため、町の座標も暫定"
     },
     "url": {
       "value": null,

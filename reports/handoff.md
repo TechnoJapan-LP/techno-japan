@@ -252,3 +252,45 @@
 3. **`samsara` の座標が取れない** — Windera CAMPGROUNDS 八ヶ岳 が OSM 未収録。CMS の「施設名から検索」(resolve_place) を使うか、八ヶ岳周辺の代表座標で代用するか判断が要る
 4. **`e-groove` の LOCATION 表記**（判断待ち。下記の提案参照）
 5. **`pure-rave` の開催地** — 主催者アカウントに情報が無く、INBOX の PREF も「Kanto」で県名でない。会場非公開型の可能性
+
+## 2026-08-04 / Claude (Opus 5) / 完了（判断5件の反映 ＋ init のID不一致を構造的に修正）
+
+### 実施
+- `fulirock` → `fuji-rock` のリダイレクトを `build-detail-pages.mjs` に追加
+- `samsara` の座標を富士見町の代表座標で記録（会場は OSM 未収録）
+- `e-groove` の LOCATION を A案（判明している会場名を残す）で記録
+- `pure-rave` の city を空欄化（会場非公開のため）
+- **`init` が id.value とファイル名で別の値を採るバグを修正**（調査ではなくコード側で塞いだ）
+
+### コミット
+- SHA: このエントリを含めてコミット
+- push / rebase 状態: 追記前に rebase 済み
+
+### 検証
+- `research_festival.mjs validate`: **全27件 `✓`、`✗` 0件**
+- `init` のID不一致: 全27件を照合し**現時点の不一致は0件**。さらに `body-soul.json` を消して
+  再生成し、`id.value` が既存FESTIVALSの `body-soul` になることを確認（修正前は `body-soul-live-in-japan`）
+- リダイレクト: `build-detail-pages.mjs` 実行で **スタブは出ない**ことを確認（`0 written`）。
+  旧IDが現役かつ新IDが未登場のためで、既存のガードが意図どおり働いている
+- `samsara` の会場は英字・日本語・キャンプ場表記の4通りで Nominatim を試して全て不発
+
+### 変更したパターン
+- `REDIRECTS` に `festivals` / `en/festivals` を追加: 2エントリ（`FESTIVAL_ID_FIXES`）
+- `redirectStubs()` の呼び出しを festivals の writeAll に追加: JA/EN 2箇所
+- `init` の id 決定ロジック: 1箇所
+- 調査JSONの修正: 3件（samsara 座標 / e-groove LOCATION / pure-rave city）
+
+### 未確認の類似パターン
+- `REDIRECTS` に `venues` / `en/venues` の経路が無い。会場のID是正が起きた場合に
+  リダイレクトを出せない — **未調査**（現時点で該当なし）
+- `init` は INBOX の名称が変わると別ファイルを作る。`fulirock.json` が再生成された（削除済み）。
+  他に旧名のまま残っている調査ファイルが無いか — **確認済み・0件**
+- IG 投稿画像の中にある lineup 7件 — **別タスクに切り出し（優先度低）**
+
+### 次の担当への注意・判断待ち
+1. **`fuji-rock` のシート修正待ち**。FESTIVALS の **A列（ID）を `fuji-rock`、C列（NAME）を `FUJI ROCK FESTIVAL '26`** へ。
+   Publish 後の次回ビルドで `/festivals/fulirock.html` が自動的にリダイレクトスタブへ変わる
+2. **`signal` の日付更新待ち**。既存 `2025-06-14/2025-06-15` → **`2026-06-13/2026-06-14`**
+3. `samsara` の座標は富士見町の代表座標（`35.9146, 138.2407`、confidence low）。
+   会場が富士見町にあること自体が二次情報なので、一次情報が出たら差し替える
+4. `e-groove` の「日本庭園」は一般名詞で正式名称が未確認。掲載前に主催者確認が望ましい

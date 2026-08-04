@@ -54,6 +54,18 @@ const ARTIST_ID_FIXES = {
   'The Master Musicians of Joujouka': 'the-master-musicians-of-joujouka',
 };
 
+// 名称の転記誤りに伴う旧ID→新ID。
+// INBOX に「FuliRock」と入力されたまま FESTIVALS へ登録されていたが、
+// 実体は FUJI ROCK FESTIVAL（日程 2026-07-24/26・新潟県湯沢町 苗場スキー場が
+// 公式発表と完全一致し、desc / desc_en も当初から FUJI ROCK について
+// 書かれていた）。誤っていたのは id と name だけ。
+// 詳細ページが JA/EN で配信済み・sitemap 掲載済みのため、旧URLは残す。
+// §9-28 の分類では「正しいコンテンツの正しくないURL」に当たり、
+// リダイレクトが妥当（存在すべきでないコンテンツの 404 とは扱いが違う）。
+const FESTIVAL_ID_FIXES = {
+  fulirock: 'fuji-rock',
+};
+
 /* ---------- data.js を読み込む ---------- */
 function loadData() {
   const src = fs.readFileSync(DATA_PATH, 'utf8');
@@ -1417,6 +1429,8 @@ function main() {
     // 発行済みIDの変更なので旧URLからのリダイレクトを必ず残す。
     artists: ARTIST_ID_FIXES,
     'en/artists': ARTIST_ID_FIXES,
+    festivals: FESTIVAL_ID_FIXES,
+    'en/festivals': FESTIVAL_ID_FIXES,
   };
   // 旧IDがまだ data.js に現役で存在する間はスタブを出さない。
   // writeAll は basename をキーにした Map で後勝ちになるため、スタブを出すと
@@ -1445,16 +1459,17 @@ function main() {
   // リダイレクトスタブの衝突判定に使う「現役ID」の集合
   const liveArticleIds = new Set(pubArticles.map((a) => a.id));
   const liveArtistIds = new Set(pubArtists.map((a) => a.id));
+  const liveFestivalIds = new Set(pubFests.map((f) => f.id));
 
   const counts = {
     articles: writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'ja')).concat(redirectStubs('articles', liveArticleIds)), 'articles'),
-    festivals: writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, ARTICLES, 'ja')), 'festivals'),
+    festivals: writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, ARTICLES, 'ja')).concat(redirectStubs('festivals', liveFestivalIds)), 'festivals'),
     artists: writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'ja')).concat(redirectStubs('artists', liveArtistIds)), 'artists'),
     venues: writeAll(pubVenues.map((v) => venuePage(v, 'ja')), 'venues'),
     // 英語版（/en/…）。未翻訳フィールドは articlePage 内で元データへ
     // フォールバックし、EN ハブの通常遷移先を必ず実在させる。
     'en/articles': writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'en')), 'en/articles'),
-    'en/festivals': writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, ARTICLES, 'en')), 'en/festivals'),
+    'en/festivals': writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, ARTICLES, 'en')).concat(redirectStubs('en/festivals', liveFestivalIds)), 'en/festivals'),
     'en/artists': writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'en')).concat(redirectStubs('en/artists', liveArtistIds)), 'en/artists'),
     'en/venues': writeAll(pubVenues.map((v) => venuePage(v, 'en')), 'en/venues'),
   };

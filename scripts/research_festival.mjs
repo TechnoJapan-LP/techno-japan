@@ -310,7 +310,15 @@ async function cmdInit(args) {
         note: '既に FESTIVALS に登録済み。Phase 2 は add_festival ではなく'
             + ' update_row で空欄だけ埋めること（追加すると二重登録になる）',
       };
-      if (!doc.fields.id.value) {
+      // 既存行があるなら、その ID が正。slugify の結果ではなくこちらを採る。
+      // ファイル名は下で hit.id にするので、ここで slugify 結果を残すと
+      // 「ファイル名と id.value が別の値」という状態になる。
+      // 実際に body-soul で発生した（ファイル名 body-soul /
+      // id.value body-soul-live-in-japan）。詳細ページの URL は既存 ID なので、
+      // 食い違ったまま Phase 2 に進むと別 ID で二重登録しかねない。
+      // ID そのものを是正したい場合は、init 後にファイルを編集する
+      // （init は既存ファイルを上書きしないので消えない）。
+      if (doc.fields.id.value !== hit.id) {
         doc.fields.id.value = hit.id;
         doc.fields.id.source = '既存 FESTIVALS の行';
         doc.fields.id.confidence = 'high';
