@@ -318,6 +318,12 @@ async function cmdInit(args) {
         doc.fields.id.checkedAt = nowJst();
       }
     }
+    // 書き込み先は stem ではなく stem2（既存 FESTIVALS の ID）で確定する。
+    // L300 の存在検査は stem に対するもので、名前を ID 化できないフェス
+    // （日本語名など）では stem が '_todo-...' になり、必ず「存在しない」と
+    // 判定される。そのまま書くと stem2 側の調査結果を消す。
+    // 2026-08-03 に ensou / mori-michi-ichiba の調査結果を実際に巻き戻した。
+    // 検査は「最終的に書き込むパス」に対して行うこと（AUDIT §9-37）。
     const stem2 = hit ? hit.id : stem;
     if (fs.existsSync(jsonPath(stem2))) {
       const prev = JSON.parse(read(jsonPath(stem2)));
@@ -327,6 +333,10 @@ async function cmdInit(args) {
         skipped++;
         continue;
       }
+      // 同名 = 同じフェスの雛形か調査結果が既にある。init は上書きしない。
+      console.log(`  = ${stem2.padEnd(28)} 既存（上書きしない）`);
+      skipped++;
+      continue;
     }
     fs.writeFileSync(jsonPath(stem2), JSON.stringify(doc, null, 2) + '\n');
     console.log(`  + ${(stem2).padEnd(28)} ${name}` + (hit ? '  [既存行 — 空欄補完]' : '  [新規]'));
