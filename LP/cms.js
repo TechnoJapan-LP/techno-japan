@@ -3129,6 +3129,9 @@ function editRow(section, rowNum){
 /* ==============================================================
    SAVE EDIT
    ============================================================== */
+function gasWriteSucceeded(result){
+  return !!result && (result.status==='ok' || result.status==='success' || result.success===true);
+}
 function syncExistingEditionRows(festivalId, sourceEditions=editions){
   const rows=sourceEditions.filter(e=>e._row&&e._editionId);
   if(!rows.length) return Promise.resolve();
@@ -3148,7 +3151,7 @@ function syncExistingEditionRows(festivalId, sourceEditions=editions){
     });
   });
   return Promise.all(requests).then(results=>{
-    const failed=results.filter(r=>!(r.status==='ok'||r.success));
+    const failed=results.filter(r=>!gasWriteSucceeded(r));
     if(failed.length) throw new Error('EDITIONSの更新に失敗しました');
   });
 }
@@ -3169,7 +3172,7 @@ function syncNewEditionRows(festivalId, sourceEditions=editions){
     (e.lineup||[]).forEach((label,i)=>requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'update_row',sheet:'LINEUPS',row:nextLineupRow++,EDITION_ID:eid,ARTIST_ID:'',ACT_LABEL:label,SET_TYPE:'dj',STAGE:'',DAY:'',START:'',END:'',SORT:String(i+1)})}).then(r=>r.json())));
   });
   return Promise.all(requests).then(results=>{
-    const failed=results.filter(r=>!(r.status==='ok'||r.success));
+    const failed=results.filter(r=>!gasWriteSucceeded(r));
     if(failed.length) throw new Error('新規EDITIONSの追加に失敗しました');
   });
 }
