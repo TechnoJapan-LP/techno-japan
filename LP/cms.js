@@ -3339,6 +3339,23 @@ function syncFestivalDateToLatestEdition(date){
   },null);
   if(latest && latest._row) { latest.date=date; markFormDirty(); }
 }
+function promoteLatestEditionDateToFestivalForm(){
+  if(!editions.length) return;
+  const latest=editions.reduce((best,e)=>{
+    const year=Number(String(e.year||'').match(/20\d{2}/)?.[0]||0);
+    const bestYear=Number(String(best?.year||'').match(/20\d{2}/)?.[0]||0);
+    return !best || year>bestYear ? e : best;
+  },null);
+  if(!latest?.date) return;
+  const parts=String(latest.date).split('/').map(s=>s.trim()).filter(Boolean);
+  if(!parts[0]) return;
+  const currentYear=Number(String(document.getElementById('f-dateStart')?.value||'').slice(0,4)||0);
+  const latestYear=Number(String(latest.year||'').match(/20\d{2}/)?.[0]||0);
+  if(latestYear>currentYear){
+    setVal('f-dateStart',parts[0]);
+    setVal('f-dateEnd',parts[1]||parts[0]);
+  }
+}
 
 /* ==============================================================
    DELETE
@@ -4241,6 +4258,7 @@ function submitToSheet(section){
     if(!payload.id||!payload.name)return toast('ID and Name required','error');
   }
   else if(section==='festival'){
+    promoteLatestEditionDateToFestivalForm();
     const ds=g('f-dateStart'),de=g('f-dateEnd');
     payload={action:'add_festival',id:g('f-id'),type:g('f-type'),name:g('f-name'),city:g('f-city'),
       location:g('f-location'),location_ja:g('f-location_ja'),url:g('f-url'),ticketUrl:g('f-ticketUrl'),instagram:g('f-instagram'),
