@@ -369,3 +369,32 @@
    - `?v=5` へ更新済み（HTML 416枚＋生成側テンプレート）。**生成側を忘れると次のビルドで巻き戻る**
 2. `lineup_linked_acts` は 91 が新しい下限。`etsuetsu` の LINEUP 修正で 92 になる見込み
 3. `sisi` / `ouissam` / `tonbo` の3件が新たに published になっている。意図した公開か未確認
+
+## 2026-08-05 / Codex / 作業中（開催回CMSブリッジ）
+
+### 実施
+- FESTIVALS CMS に開催回セレクターを追加
+- 年・回数・日程・会場・住所・座標・チケット・フライヤー・ステータス・LINEUPを回ごとに編集可能化
+- `fetch-data.mjs` が既存の `Editions` JSON から複数開催回を展開できるよう変更
+
+### コミット
+- SHA: `3282b65`（CMS・複数回展開）、`8d8813e`（AUDIT §9-43）
+- push / rebase 状態: push済み。Deploy `30967144297` 成功
+
+### 検証
+- `node --check LP/cms.js`: 成功
+- `node --check scripts/fetch-data.mjs`: 成功
+- `check_asset_versions.py`: 成功（cms.css v14 / cms.js v37）
+- `check_regressions.py`: 成功
+- GitHub Actions 回帰ガード・Deploy: 成功
+
+### 変更したパターン
+- 開催回選択・回別入力フォーム: 1経路
+- FESTIVALS の Editions JSON → editions/lineups 展開: 1経路
+
+### 未確認の類似パターン
+- EDITIONS / LINEUPS シートを正式な書き込み元にするGAS経路: **未実装**
+- EDITIONSシートからCMSへ直接読み込み・行追加する経路: **未確認**
+
+### 次の担当への注意・判断待ち
+- 現在は既存FESTIVALS行の `EDITIONS` JSON を使う移行ブリッジ。EDITIONS / LINEUPS シートの正式入稿元切替は段階2として残る。
