@@ -729,7 +729,7 @@
 <script src="favorites.js?v=1" defer></script>
 <script src="search.js?v=3" defer></script>
 <!-- localize.js は defer にしない。下のインライン描画が同期実行で tjLocalized を呼ぶ -->
-<script src="localize.js?v=3"></script>
+<script src="localize.js?v=4"></script>
 <script src="data.js?v=10"></script>
 <script src="image-dimensions.js?v=7"></script>
 <script>
@@ -858,11 +858,11 @@
         const hidden = i >= FEST_INITIAL ? ' is-hidden' : '';
         return `
         <a class="fest-row${hidden}" href="/festivals/${encodeURIComponent(f.id)}.html">
-          ${img ? `<div class="fest-row-bg" style="background-image:url('${tjAssetPath(img)}')"></div>` : `<div class="fest-row-bg"></div>`}
+          ${img ? `<div class="fest-row-bg"${tjLazyBgAttr(img)}></div>` : `<div class="fest-row-bg"></div>`}
           <div class="fest-row-overlay"></div>
           <div class="fest-row-inner">
             ${img
-              ? `<div class="fest-row-thumb" style="background-image:url('${tjAssetPath(img)}');background-position:${f.imagePosition || 'center'}"></div>`
+              ? `<div class="fest-row-thumb"${tjLazyBgAttr(img)} style="background-position:${f.imagePosition || 'center'}"></div>`
               : `<div class="fest-row-thumb placeholder"></div>`}
             <div class="fest-row-main">
               <div class="fest-row-eyebrow">
@@ -878,6 +878,7 @@
           </div>
         </a>`;
       }).join('');
+      tjApplyLazyBackgrounds(festEl);
     }
 
     // Show MORE button only if there are extras to reveal
@@ -912,7 +913,7 @@
     const cardHtml = (a, i) => `
       <a class="artist-mini" href="/artists/${encodeURIComponent(a.id)}.html">
         ${a.image && a.image.trim()
-          ? `<div class="artist-mini-img" style="background-image:url('${tjAssetPath(a.image)}');background-position:${a.imagePosition || 'center'}"></div>`
+          ? `<div class="artist-mini-img"${tjLazyBgAttr(a.image)} style="background-position:${a.imagePosition || 'center'}"></div>`
           : `<div class="artist-mini-fallback"></div>`}
         <div class="artist-mini-overlay"></div>
         <div class="artist-mini-num">#${pad2((i % artistsToShow.length) + 1)}</div>
@@ -924,6 +925,7 @@
     // duplicate the list for seamless infinite loop
     const doubled = [...artistsToShow, ...artistsToShow];
     artistsTrackEl.innerHTML = doubled.map(cardHtml).join('');
+    tjApplyLazyBackgrounds(artistsTrackEl);
     initArtistsCarousel();
   }
 
@@ -1044,7 +1046,7 @@
     venuesEl.innerHTML = sorted.map(v => `
       <a class="venue-mini" href="/venues/${encodeURIComponent(v.id)}.html">
         ${v.image && v.image.trim()
-          ? `<div class="venue-mini-img" style="background-image:url('${tjAssetPath(v.image)}');background-position:${v.imagePosition || 'center'}"></div>`
+          ? `<div class="venue-mini-img"${tjLazyBgAttr(v.image)} style="background-position:${v.imagePosition || 'center'}"></div>`
           : `<div class="venue-mini-fallback"></div>`}
         <div class="venue-mini-overlay"></div>
         <div class="venue-mini-content">
@@ -1054,6 +1056,7 @@
         </div>
       </a>
     `).join('');
+    tjApplyLazyBackgrounds(venuesEl);
     if (window.tjBindCursorExpand) window.tjBindCursorExpand('.venue-mini');
   }
 

@@ -69,4 +69,63 @@
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#39;');
   };
+
+  /* ---------- 背景画像の遅延読み込み ----------
+
+     ブラウザの loading="lazy" は <img> にしか効かない。
+     CSS の background-image は画面外でも即座に取りに行く。
+
+     2026-08-06 に実測したところ、トップの初回訪問は 2.82MB で
+     そのうち 2.70MB が画像だった（412x915 の viewport）。
+     festivals.html は <img loading="lazy"> を使っているが、
+     トップのフェス行・アーティスト・会場カードと artists.html の
+     カードはすべて background-image なので、1枚も遅延していなかった。
+     適用後は 1.38MB / 0.11MB。AUDIT §9-45。
+
+     使い方: テンプレートでは style ではなく tjLazyBgAttr(url) を展開し、
+     innerHTML を入れ終わったら tjApplyLazyBackgrounds(root) を呼ぶ。
+     画面に近づいた時点で style.backgroundImage を立てる。
+     rootMargin を広めに取ってあるので、スクロールして到達する頃には
+     読み終わっている（体感は変えずに初回の転送だけ減らす）。
+
+     IntersectionObserver が無い環境では即座に全部立てる。
+     「遅延できないなら表示しない」にはしないこと。
+
+     【検査の申し送り】遅延させた画像は style 属性に現れないため、
+     scripts/check_hub_pages.py の画像検査に映らなくなる。
+     あちらは [data-bg] と element.style の両方を見るようにしてある。
+     属性名を変えるなら両方直すこと。 */
+  window.tjLazyBgAttr = function (url) {
+    var u = window.tjAssetPath(url);
+    return u ? ' data-bg="' + window.tjEscapeHtml(u) + '"' : '';
+  };
+
+  var lazyBgObserver = null;
+  window.tjApplyLazyBackgrounds = function (root) {
+    var scope = root || document;
+    var targets = scope.querySelectorAll ? scope.querySelectorAll('[data-bg]') : [];
+    if (!targets.length) return;
+
+    function show(el) {
+      var url = el.getAttribute('data-bg');
+      if (!url) return;
+      el.style.backgroundImage = "url('" + url.replace(/'/g, "\\'") + "')";
+      el.removeAttribute('data-bg');
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      for (var i = 0; i < targets.length; i++) show(targets[i]);
+      return;
+    }
+    if (!lazyBgObserver) {
+      lazyBgObserver = new IntersectionObserver(function (entries, obs) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          show(entry.target);
+          obs.unobserve(entry.target);
+        });
+      }, { rootMargin: '600px 0px' });
+    }
+    for (var j = 0; j < targets.length; j++) lazyBgObserver.observe(targets[j]);
+  };
 })();

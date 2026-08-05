@@ -291,7 +291,7 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
     const doc = frame.contentDocument;
     // カードが描かれる前に読むと画像ゼロで「異常なし」に見えてしまう。
     for (let i = 0; i < 80 && doc; i++) {
-      if (doc.querySelector('img[src], [style*="background-image"]')) break;
+      if (doc.querySelector('img[src], [style*="background-image"], [data-bg]')) break;
       await wait(100);
     }
     const urls = new Set();
@@ -303,6 +303,21 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
         if (!m) return;
         try { urls.add(new URL(m[2], doc.baseURI).href); } catch (e) {}
       });
+      // 遅延読み込みの背景（tjLazyBgAttr）。画面外のものは style に入らないので、
+      // data-bg のまま残っている分もここで拾う。これを見ないと、
+      // 「遅延させた画像は壊れていても検査に映らない」状態になる（AUDIT §9-32）。
+      doc.querySelectorAll('[data-bg]').forEach(el => {
+        const v = el.getAttribute('data-bg');
+        if (!v) return;
+        try { urls.add(new URL(v, doc.baseURI).href); } catch (e) {}
+      });
+      // 適用済みの背景は style 属性ではなく element.style に入るので別途拾う。
+      doc.querySelectorAll('.fest-row-bg, .fest-row-thumb, .artist-mini-img, .venue-mini-img, .artist-card-img')
+        .forEach(el => {
+          const m = /url\((['"]?)([^'"()]+)\1\)/.exec(el.style.backgroundImage || '');
+          if (!m) return;
+          try { urls.add(new URL(m[2], doc.baseURI).href); } catch (e) {}
+        });
     }
     for (const u of urls) {
       let parsed;

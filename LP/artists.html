@@ -556,7 +556,7 @@
 <script src="favorites.js?v=1" defer></script>
 <script src="search.js?v=3" defer></script>
 <!-- localize.js は defer にしない。下のインライン描画が同期実行で tjLocalized を呼ぶ -->
-<script src="localize.js?v=3"></script>
+<script src="localize.js?v=4"></script>
 <script src="data.js?v=10"></script>
 <script src="image-dimensions.js?v=7"></script>
 <script>
@@ -684,13 +684,16 @@ function renderArtistsList() {
   }
 
   grid.innerHTML = filtered.map((a, i) => {
+    // 画像は data-bg にして画面に近づいてから読む（AUDIT §9-45）。
+    // グラデーションは転送を伴わないのでそのまま style に入れる。
+    const bgAttr = a.image ? tjLazyBgAttr(a.image) : '';
     const bg = a.image
-      ? `background-image:url('${tjAssetPath(a.image)}');background-position:${a.imagePosition || 'center'}`
+      ? `background-position:${a.imagePosition || 'center'}`
       : `background:${gradients[i % gradients.length]}`;
     const genreLabel = getGenreString(a);
     return `
     <a href="/artists/${encodeURIComponent(a.id)}.html" class="artist-card reveal" data-artist-detail-link data-id="${a.id}">
-      <div class="artist-card-img" style="${bg}"></div>
+      <div class="artist-card-img"${bgAttr} style="${bg}"></div>
       <div class="artist-card-content">
         <div class="artist-card-genre">${genreLabel}</div>
         <div class="artist-card-name">${tjLocalized(a.name, '', a.name_en)}</div>
@@ -699,6 +702,8 @@ function renderArtistsList() {
       <div class="artist-fav-mount" data-fav-mount="artist" data-fav-id="${a.id}" onclick="event.preventDefault();event.stopPropagation()"></div>
     </a>`;
   }).join('');
+
+  tjApplyLazyBackgrounds(grid);
 
   // Mount hearts
   if (window.tjFav) {
