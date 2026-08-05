@@ -285,6 +285,51 @@ img.convert('RGB').save('images/festivals/new.webp', 'WEBP', quality=82, method=
 
 ---
 
+## 2026-08-06 の全面点検（セキュリティ・バグ・負荷）
+
+詳細は AUDIT_TECHNO_JAPAN.md **§9-44 / §9-45**。ここは要点だけ。
+
+### 直したもの
+
+| | 内容 |
+|---|---|
+| 反射型XSS | `news.html` の `?tag=` で `<img src=x onerror=...>` が**実際に発火していた**。`tjEscapeHtml()` + `sanitizeTag()` で塞いだ |
+| セキュリティヘッダ | CSP / nosniff / Referrer-Policy / Permissions-Policy を**全449ページ**へ。`map.html` の Leaflet は unpkg.com から `/vendor/` へ取り込んで self に閉じた |
+| `javascript:` URL | `esc()` では止まらない。`safeUrl()` をデータ由来 href 9箇所に適用 |
+| **導線切れ** | SPA 廃止（§9-23）以降、**トップ・検索・お気に入り・APP から詳細ページへ一度も行けていなかった**。全て静的詳細ページ直リンクへ |
+| 転送量 | 背景画像が1枚も遅延していなかった。トップ **2.82MB → 1.38MB**、artists **0.53MB → 0.11MB** |
+| CI | Drive 同期のたびに CI が落ちる状態だった。同期側が寸法表と `?v` まで作るようにした |
+
+### 増えたガード
+
+- `scripts/check_internal_links.py`（新規）— 廃止済み SPA ハッシュの禁止 + 内部リンク実在確認
+- `check_hub_pages.py` に XSS 検査（実際に攻撃URLを踏む）と、遅延背景の画像検査
+
+いずれも**負のコントロールで検出できることを確認**してから入れてある。
+緑になっただけでは、検査が何も見ていない場合と区別が付かない（§9-32）。
+
+### 触るときの注意
+
+- `safeUrl()` は `build-detail-pages.mjs` と `LP/app/app.js` の**2箇所に同じ規則**がある。片方だけ直さないこと
+- `LP/app/`（PWA）は `?v=` ではなく `app/sw.js` の `VERSION` 定数でキャッシュを切る。
+  `app.js` / `app.css` / `app/index.html` を触ったら `VERSION` を上げること
+- `app/index.html` の CSP は `script-src 'self'`（`'unsafe-inline'` 無し）。
+  `onclick=` 等の属性ハンドラを足すと**黙ってブロックされる**。`addEventListener` を使うこと
+- 背景画像は `style` ではなく `tjLazyBgAttr()` で `data-bg` に入れ、`innerHTML` 後に
+  `tjApplyLazyBackgrounds(root)` を呼ぶ
+
+### 残っている宿題（§9-45 に設計あり）
+
+**`festivals.html` が 1訪問 4.87MB。** 遅延読み込みは効いていて、
+残りは画像1枚が大きいこと（webp 平均272KB・実寸1080〜1920px に対し
+カード表示幅は400〜600px）。800px の派生画像を作れば 1MB 前後になる見込み。
+
+ただし `LP/images/` は `sync-drive-images.yml` が2時間おきに上書きするので、
+**派生は別ディレクトリ（例 `LP/images-sm/`）に出すこと**。
+影響範囲が広く（画像全滅の事故は §9-35 で起きている）独断では入れていない。
+
+---
+
 ## 次にやるべきこと（優先順位）
 
 ### 短期
