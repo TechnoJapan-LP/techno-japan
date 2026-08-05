@@ -3060,3 +3060,17 @@ LINEUPS 284行も同様で、`ARTIST_ID` の解決結果を含む出演情報が
 `VERSION_CHECK_EXEMPT = {"data.js"}` を検査1にも適用し、data.jsは
 同一push比較・履歴比較の両方から除外した。`check_sw_routing.mjs` の
 SWR実行検査は引き続き有効である。
+
+### 9-43. 開催回をCMSで選択・編集する経路
+
+FESTIVALSの編集画面に開催回セレクターを追加した。既存の`Editions`欄を
+後方互換で読み込み、年・回数・日程・会場・住所・座標・チケット・フライヤー・
+ステータス・LINEUPを開催回単位で編集できる。保存値は既存のFESTIVALS行の
+`EDITIONS` JSON欄に保持され、`fetch-data.mjs`は複数開催回を展開して
+`editions.json` / `lineups.json`を生成する。
+
+これは既存データを壊さずにCMS操作を可能にする移行ブリッジである。EDITIONS /
+LINEUPSシートを正式な書き込み元に切り替える段階2は未完了であり、シートを直接
+編集しただけではまだPublish結果に反映されない。正式切替時はGASの行追加・更新
+経路、バックアップ対象、CIのGID設定を同時に変更し、FESTIVALS JSONとの一致を
+検査してから切り替えること。
