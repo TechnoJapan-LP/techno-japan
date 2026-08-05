@@ -460,12 +460,13 @@
 - AGENTS.md に年次更新の運用ルールを追記
 
 ### コミット
-- SHA: `13033e6`（rebase後）
-- push済み。Deploy は `13033e6` で実行中
+- SHA: `13033e6`（CMS）、`97d927f`（生成物）、`a829cfe`（キャッシュ更新）
+- push済み。Deploy `31016416478` 成功
 
 ### 検証
 - `node --check LP/cms.js`: 成功
 - `git diff --check`: 成功
+- 回帰ガード（生成物・cache busting・SW routing・閾値・JS health）: 成功
 
 ### 変更したパターン
 - 開催回の新規作成ボタン・翌年複製: 1経路
