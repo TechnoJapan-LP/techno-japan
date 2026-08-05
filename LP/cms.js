@@ -1510,7 +1510,24 @@ function addEdition(){
   const year = String(new Date().getFullYear());
   editions.push({year,edition:'',date:'',location:'',location_ja:'',address:'',lat:'',lng:'',ticketUrl:'',flyer:'',status:'announced',lineup:[]});
   selectedEditionIndex = editions.length - 1;
+  markFormDirty();
   renderEditions();
+}
+// 既存の開催回を保存したまま、次回開催の入力枠を作る。
+// 会場情報は引き継ぐが、日程・チケット・フライヤー・LINEUPは空にして確認を促す。
+function createNextEdition(){
+  const base=editions[selectedEditionIndex];
+  if(!base) return toast('先に既存の開催回を選択してください','error');
+  const match=String(base.year||'').match(/20\d{2}/);
+  const nextYear=match ? String(Number(match[0])+1) : String(new Date().getFullYear()+1);
+  if(editions.some(e=>String(e.year||'').trim()===nextYear)) return toast(nextYear+'年の開催回は既にあります','error');
+  if(!confirm(''+nextYear+'年の次回開催を作成します。\n日程・チケット・フライヤー・LINEUPは空欄で作成されます。')) return;
+  const editionNumber=String(base.edition||'').match(/^\d+$/) ? String(Number(base.edition)+1) : '';
+  editions.push({year:nextYear,edition:editionNumber,date:'',location:base.location||'',location_ja:base.location_ja||'',address:base.address||'',lat:base.lat||'',lng:base.lng||'',ticketUrl:'',flyer:'',status:'announced',lineup:[]});
+  selectedEditionIndex=editions.length-1;
+  markFormDirty();
+  renderEditions();
+  toast(nextYear+'年の開催回を作成しました。日程・チケット・フライヤー・LINEUPを入力してください','info');
 }
 function removeEdition(i){
   editions.splice(i,1);
@@ -1574,6 +1591,7 @@ function renderEditions(){
     <div class="edition-selector-row">
       <label>開催回</label>
       <select onchange="selectEdition(this.value)">${editions.map((x,n)=>`<option value="${n}" ${n===i?'selected':''}>${esc(x.year||'年未設定')}${x.edition?`（第${esc(x.edition)}回）`:''}</option>`).join('')}</select>
+      <button type="button" class="btn btn-sm btn-accent" onclick="createNextEdition()">次回開催を作成</button>
       <button type="button" class="btn btn-sm" onclick="removeEdition(${i})">この回を削除</button>
     </div>
     <div class="edition-block">
@@ -3041,6 +3059,7 @@ function editRow(section, rowNum){
     syncImagePos('f');
     if(row.image) showCurrentImage('preview-f-image',row.image,"clearImageField('f',{section:'festival',pathId:'f-image',previewId:'preview-f-image'})");
     if(row.flyer) showCurrentImage('preview-f-flyer',row.flyer,"clearImageField('f',{section:'festival',pathId:'f-flyer',previewId:'preview-f-flyer'})");
+    setFestivalDateEditingMode(true);
   }
   else if(section==='artist'){
     setVal('a-id',row.id); setVal('a-name',row.name); setVal('a-city',row.city);
@@ -3274,6 +3293,18 @@ function cancelEdit(section){
   document.getElementById(section+'-edit-banner').classList.remove('show');
   document.getElementById(section+'-btn-new').style.display='';
   resetForm(section);
+}
+
+// FESTIVALS.DATE はブランドの現在値として残し、年次の履歴は EDITIONS で管理する。
+// 既存フェスの編集時だけ読み取り専用にして、誤って過去回を上書きする操作を防ぐ。
+function setFestivalDateEditingMode(isEditing){
+  ['f-dateStart','f-dateEnd'].forEach(id=>{
+    const el=document.getElementById(id); if(!el) return;
+    el.readOnly=!!isEditing;
+    el.title=isEditing?'既存フェスの日程は開催回（EDITIONS）で編集してください':'新規フェスの現在日程';
+  });
+  const note=document.getElementById('festival-date-edit-note');
+  if(note) note.style.display=isEditing?'block':'none';
 }
 
 /* ==============================================================
@@ -5294,6 +5325,7 @@ function resetForm(section){
   document.querySelectorAll('.img-preview').forEach(p=>{p.style.display='none';p.innerHTML='';});
   if(section==='venue'){document.getElementById('v-type').value='club';document.querySelectorAll('#v-genre .chip').forEach(c=>c.classList.remove('selected'))}
   if(section==='festival'){document.getElementById('f-type').value='festival';document.querySelectorAll('#f-genre .chip').forEach(c=>c.classList.remove('selected'));document.querySelectorAll('#f-gradientPresets .gradient-swatch').forEach(s=>s.classList.remove('selected'));lineups.f=[];renderLineupTags('f');editions.length=0;renderEditions();document.getElementById('lineup-fetch-status').style.display='none';document.getElementById('gradient-preview').style.display='none';document.getElementById('bulk-lineup-wrap').style.display='none'}
+  if(section==='festival') setFestivalDateEditingMode(false);
   if(section==='event'){lineups.e=[];renderLineupTags('e')}
   if(section==='article'){document.getElementById('ar-category').value='REPORT';document.getElementById('ar-featured').value='false';document.getElementById('ar-status').value='published';document.getElementById('ar-author').value='TECHNO JAPAN';setArticleBody('')}
   // Publishing fields をクリア（author以外）
