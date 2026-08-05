@@ -3116,8 +3116,8 @@ function editRow(section, rowNum){
 /* ==============================================================
    SAVE EDIT
    ============================================================== */
-function syncExistingEditionRows(festivalId){
-  const rows=editions.filter(e=>e._row&&e._editionId);
+function syncExistingEditionRows(festivalId, sourceEditions=editions){
+  const rows=sourceEditions.filter(e=>e._row&&e._editionId);
   if(!rows.length) return Promise.resolve();
   const requests=[];
   rows.forEach(e=>{
@@ -3140,8 +3140,8 @@ function syncExistingEditionRows(festivalId){
   });
 }
 
-function syncNewEditionRows(festivalId){
-  const rows=editions.filter(e=>!e._row&&e.year);
+function syncNewEditionRows(festivalId, sourceEditions=editions){
+  const rows=sourceEditions.filter(e=>!e._row&&e.year);
   if(!rows.length) return Promise.resolve();
   if(!editionSheetRows.length) return Promise.reject(new Error('EDITIONSシートが未読込'));
   const requests=[];
@@ -3183,6 +3183,7 @@ function saveEdit(section){
   }
   else if(section==='festival'){
     const ds=g('f-dateStart'),de=g('f-dateEnd');
+    syncFestivalDateToLatestEdition(ds&&de?ds+'/'+de:ds);
     Object.assign(payload,{id:g('f-id'),type:g('f-type'),name:g('f-name'),city:g('f-city'),
       location:g('f-location'),location_ja:g('f-location_ja'),url:g('f-url'),ticketUrl:g('f-ticketUrl'),instagram:g('f-instagram'),
       address:g('f-address'),lat:g('f-lat'),lng:g('f-lng'),
@@ -3228,6 +3229,11 @@ function saveEdit(section){
     : [];
   if (unregisteredArtists.length && !confirmUnresolvedArtists(unregisteredArtists)) return;
 
+  // cancelEdit() はフォームを初期化するため、非同期同期処理用に開催回を退避する。
+  const editionsForSync=section==='festival'
+    ? editions.filter(e=>e.year).map(e=>({...e,lineup:[...(e.lineup||[])]}))
+    : null;
+
   // ---- 楽観的UI: GAS応答を待たずにリストへ即反映 ----
   const rowNum = state._row;
   applyOptimisticUpdate(section, rowNum, payload);
@@ -3243,8 +3249,8 @@ function saveEdit(section){
       if(d.status==='ok'||d.success){
         toast('Updated ✓','success');
         if(section==='festival'){
-          syncExistingEditionRows(payload.id).catch(()=>toast('FESTIVALSは保存済みですが、既存EDITIONSの同期に失敗しました','error'));
-          syncNewEditionRows(payload.id).catch(()=>toast('FESTIVALSは保存済みですが、新規EDITIONSの追加に失敗しました（EDITIONSシートの読込が必要）','error'));
+          syncExistingEditionRows(payload.id,editionsForSync||[]).catch(()=>toast('FESTIVALSは保存済みですが、既存EDITIONSの同期に失敗しました','error'));
+          syncNewEditionRows(payload.id,editionsForSync||[]).catch(()=>toast('FESTIVALSは保存済みですが、新規EDITIONSの追加に失敗しました（EDITIONSシートの読込が必要）','error'));
         }
         if(unregisteredArtists.length) notifyUnregisteredArtists(unregisteredArtists);
         // 裏で正データに置き換え（画面はすでに更新済みなので silent）
@@ -3300,11 +3306,21 @@ function cancelEdit(section){
 function setFestivalDateEditingMode(isEditing){
   ['f-dateStart','f-dateEnd'].forEach(id=>{
     const el=document.getElementById(id); if(!el) return;
-    el.readOnly=!!isEditing;
-    el.title=isEditing?'既存フェスの日程は開催回（EDITIONS）で編集してください':'新規フェスの現在日程';
+    el.readOnly=false;
+    el.title=isEditing?'保存時に最新の開催回（EDITIONS）にも反映されます':'新規フェスの現在日程';
   });
   const note=document.getElementById('festival-date-edit-note');
   if(note) note.style.display=isEditing?'block':'none';
+}
+
+function syncFestivalDateToLatestEdition(date){
+  if(!date || !editions.length) return;
+  const latest=editions.reduce((best,e)=>{
+    const year=Number(String(e.year||'').match(/20\d{2}/)?.[0]||0);
+    const bestYear=Number(String(best?.year||'').match(/20\d{2}/)?.[0]||0);
+    return !best || year>bestYear ? e : best;
+  },null);
+  if(latest && latest._row) { latest.date=date; markFormDirty(); }
 }
 
 /* ==============================================================
