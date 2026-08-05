@@ -269,7 +269,7 @@ ID 規約違反7件の是正(§1.1)ではリダイレクトを設けたが、そ
 | PREF | `Shizuoka` | プルダウン |
 | ADDRESS / LAT / LNG | | |
 | TICKETURL | | |
-| FLYER | | 開催回ごとのフライヤー |
+| FLYER | | 開催回ごとのフライヤー。CMSアップロードは `images/festivals/{EDITION_ID}-flyer.webp`（例: `loa-2025-flyer.webp`） |
 | STATUS | `announced` / `on-sale` / `soldout` / `finished` / `cancelled` | 開催回のライフサイクル。公開可否は共通STATUSと別カラム |
 | (共通メタ §1.6) | | |
 

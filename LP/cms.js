@@ -1526,6 +1526,43 @@ function updateEditionField(i, key, value){
   editions[i][key] = value;
   markFormDirty();
 }
+function editionUploadId(ed){
+  return String(ed._editionId || ((document.getElementById('f-id')?.value||'').trim()+'-'+String(ed.year||'').trim())).replace(/[^a-z0-9-]+/gi,'-').replace(/^-+|-+$/g,'').toLowerCase();
+}
+function editionFlyerPreview(i, ed){
+  const path=ed.flyer||'';
+  if(!path) return '<div class="edition-flyer-preview" id="edition-flyer-preview-'+i+'"></div>';
+  const pending=pendingImagePreviews.get(path)||'';
+  return '<div class="edition-flyer-preview img-preview" id="edition-flyer-preview-'+i+'" style="display:block"><img src="'+esc(pending||webp(path))+'" alt="flyer preview" style="max-height:140px" onerror="this.style.display=\'none\'"><div class="preview-info">'+esc(path)+'</div></div>';
+}
+function uploadEditionFlyer(input,i){
+  const file=input.files[0], ed=editions[i]; if(!file||!ed) return;
+  const id=editionUploadId(ed); if(!id) return toast('開催年またはフェスIDを入力してください','error');
+  const previewId='edition-flyer-preview-'+i, previewEl=document.getElementById(previewId);
+  toast('Compressing flyer...','info');
+  compressImage(file).then(({dataUrl,blob,width,height,mimeType,ext})=>{
+    if(previewEl){previewEl.style.display='block';previewEl.innerHTML='<img src="'+dataUrl+'" alt="preview"><div class="preview-info">uploading...</div>';}
+    return fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'upload_festival_image',imageData:dataUrl,mimeType,id,type:'festival-flyer',filename:id+'-flyer.'+ext})}).then(r=>r.json()).then(d=>{
+      if(d.status!=='ok'&&!d.success) throw new Error(d.message||'Upload failed');
+      const path=d.imagePath||d.path||('images/festivals/'+id+'-flyer.'+ext);
+      ed.flyer=path; rememberPendingImagePreview(path,blob); markFormDirty(); renderEditions();
+      toast('Flyer uploaded — Save Changesで保存してください','success');
+    });
+  }).catch(e=>{toast('Flyer upload error: '+e.message,'error');}).finally(()=>{try{input.value='';}catch(_){} });
+}
+function uploadEditionFlyerFromUrl(i,button){
+  const ed=editions[i], url=(document.getElementById('edition-flyer-url-'+i)?.value||'').trim();
+  if(!ed||!url) return;
+  const id=editionUploadId(ed); if(!id) return toast('開催年またはフェスIDを入力してください','error');
+  if(button) button.disabled=true;
+  compressUrlAndUpload(url,'festival-flyer',id).then(r=>{
+    if(r){ed.flyer=r.path||('images/festivals/'+id+'-flyer.'+r.comp.ext);rememberPendingImagePreview(ed.flyer,r.comp.blob);markFormDirty();renderEditions();toast('Flyer uploaded — Save Changesで保存してください','success');return;}
+    return fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'upload_from_url',imageUrl:url,type:'festival-flyer',id})}).then(x=>x.json()).then(d=>{
+      if(!d.success) throw new Error(d.error||'Upload failed');
+      ed.flyer=d.path||('images/festivals/'+id+'-flyer.jpg');markFormDirty();renderEditions();toast('Flyer uploaded — Save Changesで保存してください','success');
+    });
+  }).catch(e=>toast('Flyer upload error: '+e.message,'error')).finally(()=>{if(button)button.disabled=false;});
+}
 function renderEditions(){
   const host=document.getElementById('f-editions');
   if(!host) return;
@@ -1555,8 +1592,10 @@ function renderEditions(){
         <label>Lat<input type="text" value="${val('lat')}" onchange="updateEditionField(${i},'lat',this.value)"></label>
         <label>Lng<input type="text" value="${val('lng')}" onchange="updateEditionField(${i},'lng',this.value)"></label>
         <label>Ticket URL<input type="text" value="${val('ticketUrl')}" onchange="updateEditionField(${i},'ticketUrl',this.value)"></label>
-        <label>Flyer<input type="text" value="${val('flyer')}" onchange="updateEditionField(${i},'flyer',this.value)"></label>
+        <label>Flyer path<input type="text" value="${val('flyer')}" readonly></label>
       </div>
+      <div class="edition-flyer-tools"><input type="url" id="edition-flyer-url-${i}" placeholder="Flyer image URL"><button type="button" class="btn btn-sm btn-accent" onclick="uploadEditionFlyerFromUrl(${i},this)">UPLOAD URL</button><label class="btn btn-sm">Upload Flyer<input type="file" accept="image/*" style="display:none" onchange="uploadEditionFlyer(this,${i})"></label></div>
+      ${editionFlyerPreview(i,ed)}
       <label class="edition-lineup-label">Lineup (comma-separated)
         <input type="text" value="${esc((ed.lineup||[]).join(', '))}" onchange="updateEditionField(${i},'lineup',this.value.split(',').map(s=>s.trim()).filter(Boolean))">
       </label>
@@ -1584,7 +1623,7 @@ async function loadEditionsFromSheet(festivalId){
         .sort((a,b)=>(Number(a.SORT)||0)-(Number(b.SORT)||0))
         .map(x=>x.ACT_LABEL||x.ARTIST_ID||'').filter(Boolean);
       const lrRaw=lineupSheetRows.filter(x=>String(x.EDITION_ID||'').trim()===eid).sort((a,b)=>(Number(a.SORT)||0)-(Number(b.SORT)||0));
-      editions.push({_row:row._row,_editionId:eid,_sheetRow:{...row},_lineupRows:lrRaw,year:row.EDITION||'',edition:'',date:[row.DATE_START,row.DATE_END].filter(Boolean).join('/'),location:row.LOCATION||'',location_ja:row.LOCATION_JA||'',address:row.ADDRESS||'',lat:row.LAT||'',lng:row.LNG||'',ticketUrl:row.TICKETURL||'',flyer:row.FLYER||'',status:row.STATUS||'announced',lineup:ls});
+      editions.push({_row:row._row,_editionId:eid,_sheetRow:{...row},_lineupRows:lrRaw,year:row.EDITION||'',edition:'',date:[row.DATE_START,row.DATE_END].filter(Boolean).join('/'),location:row.LOCATION||'',location_ja:row.LOCATION_JA||'',address:row.ADDRESS||'',lat:row.LAT||'',lng:row.LNG||'',ticketUrl:row.TICKETURL||'',flyer:row.FLYER||'',status:row.STATUS||'announced',lineup:lrRows});
     });
     selectedEditionIndex=0;
     renderEditions();
