@@ -3186,7 +3186,7 @@ function saveEdit(section){
         toast('Updated ✓','success');
         if(section==='festival'){
           syncExistingEditionRows(payload.id).catch(()=>toast('FESTIVALSは保存済みですが、既存EDITIONSの同期に失敗しました','error'));
-          syncNewEditionRows(payload.id).catch(()=>toast('FESTIVALSは保存済みですが、新規EDITIONSの追加に失敗しました（GASのadd_edition対応が必要）','error'));
+          syncNewEditionRows(payload.id).catch(()=>toast('FESTIVALSは保存済みですが、新規EDITIONSの追加に失敗しました（EDITIONSシートの読込が必要）','error'));
         }
         if(unregisteredArtists.length) notifyUnregisteredArtists(unregisteredArtists);
         // 裏で正データに置き換え（画面はすでに更新済みなので silent）
