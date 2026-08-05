@@ -424,3 +424,29 @@
 
 ### 次の担当への注意・判断待ち
 - 現在は既存FESTIVALS行の `EDITIONS` JSON を使う移行ブリッジ。EDITIONS / LINEUPS シートの正式入稿元切替は段階2として残る。
+
+## 2026-08-05 / Codex / 完了（EDITIONS FLYERアップロード）
+
+### 実施
+- 開催回ごとの FLYER にファイル選択アップロードを追加
+- 画像URLからのアップロードを追加（CORS時はGASフォールバック）
+- アップロード直後のプレビューを追加
+- 命名を `images/festivals/{EDITION_ID}-flyer.webp` に統一
+- Drive同期の既存 `festivals` フォルダ経路を利用
+- AGENTS.md / DATA_SCHEMA.md に開催回運用と命名規則を記録
+
+### コミット
+- SHA: `1f510cc`（FLYER UI）、rebase後 `2e65cd8`
+- push / rebase 状態: push済み。Deploy `31014727911` 成功
+
+### 検証
+- `node --check LP/cms.js`: 成功
+- `check_asset_versions.py`: cms.css v15 / cms.js v41
+- GitHub Actions 回帰ガード・Deploy: 成功
+
+### 変更したパターン
+- EDITIONS FLYERのファイルアップロード / URLアップロード / プレビュー: 1経路
+
+### 未確認の類似パターン
+- 実ブラウザでの認証後のDrive保存操作: **未実施**（この実行環境にブラウザ操作環境なし）
+- EDITIONS に開催回ごとの IMAGE（メイン画像）を持たせる設計: **未実装**。現状はブランド共通IMAGE + 回別FLYER。
