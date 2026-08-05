@@ -8,6 +8,19 @@
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), interest-cohort=()">
+<!-- CMS 専用の CSP。公開ページ用より通信先が広い（GAS・Nominatim・Drive サムネイル）。
+     AUDIT §9-24 で未着手だったもの。2026-08-06 に追加。
+
+     connect-src に script.google.com が要る（GAS が保存・認証の窓口）。
+     nominatim は「📍検索」の座標取得。img-src の blob: はアップロード直後の
+     プレビュー、data: は画像位置調整のキャンバス。
+
+     script-src に外部オリジンを一切入れないのが要点。CMS は同一オリジンの
+     localStorage に認証トークン（cms_token）を持つため、ここで外部スクリプトの
+     実行を許すとトークンを読める。check_asset_versions.py が
+     「CMS の外部 JavaScript 参照」を検査しているのと同じ意図を、
+     ブラウザ側でも強制する。 -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://nominatim.openstreetmap.org; form-action 'self'; frame-src 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
 
 <title>CMS — TECHNO JAPAN</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">

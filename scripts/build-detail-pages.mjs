@@ -283,6 +283,10 @@ function fmtFestDate(d) {
 }
 
 /* ---------- 共通のページ骨格 ---------- */
+// 使わない強力な機能を明示的に閉じる。サードパーティのスクリプトが混入しても
+// 位置情報やカメラを勝手に要求できない。interest-cohort は FLoC の無効化。
+const PERMISSIONS_POLICY = 'geolocation=(), microphone=(), camera=(), interest-cohort=()';
+
 const CSP = `default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' https:; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://stats.g.doubleclick.net; frame-src 'self' https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests`;
 
 /* 詳細ページの nav。EN ページでは EN 版が実在するリンク先だけ /en/ へ向ける。
@@ -375,6 +379,7 @@ function page({ title, desc, canonical, image, ogType = 'article', jsonLd, body,
 <meta http-equiv="Content-Security-Policy" content="${CSP}">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="Permissions-Policy" content="${PERMISSIONS_POLICY}">
 
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(d)}">
@@ -1493,6 +1498,10 @@ function main() {
         file: path.join(LP_DIR, dirName, `${oldId}.html`),
         html: `<!DOCTYPE html>
 <html lang="ja"><head><meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="${CSP}">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="Permissions-Policy" content="${PERMISSIONS_POLICY}">
 <title>Redirecting…</title>
 <meta name="robots" content="noindex">
 <link rel="canonical" href="${BASE}${to}">

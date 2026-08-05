@@ -51,4 +51,22 @@
     if (!s || /^(?:https?:|data:|\/)/i.test(s)) return s;
     return '/' + s;
   };
+
+  /* HTML エスケープ。innerHTML に値を差し込む前に必ず通す。
+     テンプレートリテラルで組み立てた文字列を innerHTML に代入する箇所が
+     ハブ全体で71ある。そのうち攻撃者が制御できるのは URL パラメータ由来の
+     値だけで、2026-08-06 の監査では news.html の ?tag= が実際に発火した
+     （<img src=x onerror=...> が実行された）。AUDIT §9-44。
+
+     data.js 由来の値は CMS 経由なので現時点では信頼できるが、
+     「信頼できる入力だから素通しでよい」は入力経路が増えたときに崩れる。
+     文字列を HTML として解釈させる箇所では、出所を問わず通すのが安全側。 */
+  window.tjEscapeHtml = function (value) {
+    return String(value == null ? '' : value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  };
 })();

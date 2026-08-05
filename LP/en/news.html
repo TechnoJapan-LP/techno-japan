@@ -713,7 +713,7 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
 
 <script src="/common.js?v=3" defer></script>
 <!-- localize.js は defer にしない。下のインライン描画が同期実行で tjLocalized を呼ぶ -->
-<script src="/localize.js?v=2"></script>
+<script src="/localize.js?v=3"></script>
 <script src="/data.js?v=10"></script>
 <script src="/image-dimensions.js?v=7"></script>
 <script>
@@ -874,11 +874,28 @@ let feedVisible = 4;
 const NEWS_HUB_STATE_KEY = 'tj:news-hub-state:v1';
 const NEWS_QUERY_KEYS = ['sort', 'category', 'tag', 'limit'];
 
+/* URL から来るタグを、実際に存在するタグの集合に丸める。
+   出力側の tjEscapeHtml と二重化する。片方だけだと、次に同じ値を別の箇所へ
+   出したときに素通りする（今回 pill だけが未エスケープだった）。
+   タグは記事データ由来の有限集合なので、存在しない値は捨ててよい。 */
+function sanitizeTag(raw) {
+  const v = String(raw == null ? '' : raw).trim();
+  if (!v || v.length > 64) return null;
+  const known = new Set();
+  for (const a of (typeof ARTICLES !== 'undefined' ? ARTICLES : [])) {
+    if (Array.isArray(a.tags)) for (const t of a.tags) known.add(String(t).toLowerCase());
+  }
+  // 既知タグに一致すればそのまま。一致しなければ、絞り込み結果が0件になるだけの
+  // 無害な文字列に落とす（英数字・ハイフン・アンダースコアのみ許可）。
+  for (const t of known) if (t === v.toLowerCase()) return v;
+  return /^[\w-]+$/.test(v) ? v : null;
+}
+
 function readNewsStateFromUrl() {
   const params = new URLSearchParams(location.search);
   if (['latest', 'popular'].includes(params.get('sort'))) currentSort = params.get('sort');
   if (params.get('category')) currentCategory = params.get('category').toUpperCase();
-  if (params.get('tag')) currentTag = params.get('tag');
+  if (params.get('tag')) currentTag = sanitizeTag(params.get('tag'));
   const limit = Number(params.get('limit'));
   if (Number.isInteger(limit) && limit >= 4) feedVisible = limit;
 
@@ -890,7 +907,7 @@ function readNewsStateFromUrl() {
     return false;
   }
   if (location.hash.startsWith('#tag/')) {
-    currentTag = decodeURIComponent(location.hash.slice(5));
+    currentTag = sanitizeTag(decodeURIComponent(location.hash.slice(5)));
     currentCategory = 'ALL';
     feedVisible = 8;
     syncNewsUrl();
@@ -1016,7 +1033,9 @@ function renderFeed() {
       archiveSection.insertBefore(pill, archiveSection.firstChild);
     }
     if (pill) {
-      pill.innerHTML = `Filtering by #${currentTag} — ${items.length} ${items.length === 1 ? 'article' : 'articles'} <button class="clear" aria-label="Clear filter">&times;</button>`;
+      // currentTag は ?tag= と #tag/ から来る攻撃者制御値。エスケープ必須。
+      // 2026-08-06 まで素通しで、<img src=x onerror=...> が実際に実行できた（AUDIT §9-44）。
+      pill.innerHTML = `Filtering by #${tjEscapeHtml(currentTag)} — ${items.length} ${items.length === 1 ? 'article' : 'articles'} <button class="clear" aria-label="Clear filter">&times;</button>`;
       pill.querySelector('.clear').addEventListener('click', () => {
         currentTag = null;
         feedVisible = 4;
