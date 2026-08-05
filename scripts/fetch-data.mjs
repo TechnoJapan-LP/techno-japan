@@ -8,13 +8,12 @@
  *   node scripts/fetch-data.mjs            # 取得 → バリデーション → data/*.json 書き出し
  *   node scripts/fetch-data.mjs --dry      # 書き出さず、バリデーション結果だけ表示
  *   node scripts/fetch-data.mjs --offline  # /tmp/tj_*.csv を使う（取得済みキャッシュ）
- *   TJ_EDITIONS_GID=<gid> node scripts/fetch-data.mjs --editions-from-sheet --dry
- *                                          # EDITIONS シートと導出結果の一致を検証（段階1）
+ *   node scripts/fetch-data.mjs --from-festivals --dry
+ *                                          # 旧形式（FESTIVALSから導出）を検証
  *
- * 重要な設計判断（2026-07-11 時点）:
- *  - EDITIONS / LINEUPS タブはまだ未新設（スキーマ §2.3/§2.4 は将来対応）。
- *    現状は FESTIVALS 1行=1フェス、LINEUP は文字列のまま出力する。
- *    → 分離は EDITIONS/LINEUPS の gid が確定してから（TODO を参照）。
+ * 重要な設計判断:
+ *  - EDITIONS / LINEUPS は正式な入力元。FESTIVALS はブランド情報を持ち、
+ *    開催回と出演情報は各タブから読み込む（旧形式は --from-festivals で検証可能）。
  *  - STATUS: スキーマ §1.4 は「空欄=draft=非公開」。だが現状セルはほぼ全件空欄で、
  *    本番サイトは表示中。よって暫定で PUBLISH_EMPTY_STATUS=true（空欄=公開扱い）。
  *    シートに published を一括入力し終えたら false にしてスキーマ準拠へ。
@@ -32,9 +31,8 @@ const OUT_DIR = path.join(ROOT, 'LP', 'data');
 const ARGS = new Set(process.argv.slice(2));
 const DRY = ARGS.has('--dry');
 const OFFLINE = ARGS.has('--offline');
-// 段階1の検証用。EDITIONS シートを読んで、導出結果と一致するかだけを見る。
-// 既定は false で、editions.json の中身は従来どおり FESTIVALS から導出したもの。
-const EDITIONS_FROM_SHEET = ARGS.has('--editions-from-sheet');
+// 既定は正式なEDITIONS/LINEUPSシートを使う。旧形式は明示的に指定する。
+const EDITIONS_FROM_SHEET = !ARGS.has('--from-festivals');
 
 // スキーマ §1.4 準拠に切り替えるときは false にする
 const PUBLISH_EMPTY_STATUS = true;
@@ -46,29 +44,9 @@ const GIDS = {
   VENUES: '525830431',
   ARTISTS: '648440679',
   EVENTS: '959929754',
-  // EDITIONS / LINEUPS はシートから読まず、フラットな FESTIVALS からビルド時に導出する（下記）。
-  // CMS が FESTIVALS を編集するため、シートに保存するとスナップショットがズレる（二重管理）。
-  // 将来「同一ブランドの複数開催」を扱うときは FESTIVALS に BRAND_ID 列を足して拡張。
+  EDITIONS: '1765363054',
+  LINEUPS: '580984930',
 };
-
-/* ---------- EDITIONS シート（段階1: 併存させて一致を検証する） ----------
- *
- * 現状 editions は FESTIVALS 1行から1開催回を導出している。この構造では
- * 「翌年の開催が決まったら DATE を上書きする」しかなく、前年の開催回が消える。
- * 実際に 2025年終了が44件あり、bondisco / global-ark / orbit / yamauto / signal は
- * 既存行が前年の日付のまま残っていた（AUDIT §9-40）。
- *
- * 段階1では**読み取り元を切り替えない**。EDITIONS シートを新設して現状を写し、
- * --editions-from-sheet で読んだ結果が導出結果と一致することだけを確認する。
- * 一致が確認できたら段階2で既定を切り替える。
- *
- * 既定を変えないのは、切り替えと同時に不整合が出たとき、原因が
- * 「シートの内容」なのか「読み取り処理」なのか切り分けられなくなるため。
- */
-const EDITIONS_GID = process.env.TJ_EDITIONS_GID || null;
-const EDITIONS_COLS = ['EDITION_ID', 'FESTIVAL_ID', 'EDITION', 'DATE_START', 'DATE_END',
-  'LOCATION', 'LOCATION_JA', 'VENUE_ID', 'PREF', 'ADDRESS', 'LAT', 'LNG',
-  'TICKETURL', 'FLYER', 'STATUS'];
 
 // GENRE 正規リスト（スキーマ §1.3。必要に応じて追記）
 const GENRE_ALLOWED = new Set([
@@ -122,50 +100,6 @@ async function fetchSheet(name) {
   const res = await fetch(url, { redirect: 'follow' });
   if (!res.ok) throw new Error(`${name}: HTTP ${res.status}`);
   return csvToObjects(await res.text());
-}
-
-/* EDITIONS シートを読む（段階1: 検証専用）。
-   GIDS には入れない。入れると main() の取得ループが必ず走り、
-   シート未作成の環境で fetch-data 全体が落ちるため。 */
-async function fetchEditionsSheet() {
-  if (!EDITIONS_GID) {
-    throw new Error('EDITIONS の gid が未設定です。TJ_EDITIONS_GID 環境変数で指定してください');
-  }
-  if (OFFLINE) {
-    const p = '/tmp/tj_EDITIONS.csv';
-    if (!existsSync(p)) throw new Error(`offline cache not found: ${p}`);
-    return csvToObjects(await readFile(p, 'utf-8'));
-  }
-  const res = await fetch(`${BASE}&gid=${EDITIONS_GID}`, { redirect: 'follow' });
-  if (!res.ok) throw new Error(`EDITIONS: HTTP ${res.status}`);
-  return csvToObjects(await res.text());
-}
-
-/* 導出した editions とシートの内容を突き合わせる。
-   段階1の目的はこの一致確認だけで、editions.json の中身は差し替えない。
-   不一致は「シートが古い」か「導出が変わった」かのどちらかで、
-   どちらも段階2へ進む前に解消しておく必要がある。 */
-function compareEditions(derived, sheet) {
-  const key = (r) => String(r.EDITION_ID || '').trim();
-  const D = new Map(derived.map((r) => [key(r), r]));
-  const S = new Map(sheet.map((r) => [key(r), r]));
-  const diffs = [];
-  for (const [id, d] of D) {
-    const s = S.get(id);
-    if (!s) { diffs.push(`${id}: シートに無い`); continue; }
-    for (const c of EDITIONS_COLS) {
-      // 導出側は空欄を落とす（stripMeta）ので、両方を '' に寄せて比較する
-      const dv = String(d[c] ?? '').trim();
-      const sv = String(s[c] ?? '').trim();
-      if (dv !== sv) diffs.push(`${id}.${c}  導出="${dv}"  シート="${sv}"`);
-    }
-  }
-  // シートにのみ存在する行は不一致にしない。
-  // 過去回（body-soul-2025 / signal-2025 / grow-the-culture-open-air-2025）は
-  // FESTIVALS の DATE が上書きされた後なので導出では再現できない。
-  // これらが残っていることこそ EDITIONS を持つ目的なので、差分ではなく情報として出す。
-  const sheetOnly = [...S.keys()].filter((id) => !D.has(id));
-  return { diffs, sheetOnly };
 }
 
 // ---------- バリデーション（スキーマ §6）----------
@@ -240,9 +174,10 @@ async function main() {
   console.log(`fetch-data.mjs — ${OFFLINE ? 'OFFLINE' : 'LIVE'}${DRY ? ' (dry-run)' : ''}`);
 
   const raw = {};
-  for (const name of Object.keys(GIDS)) {
-    raw[name] = await fetchSheet(name);
-    console.log(`  ${name}: ${raw[name].length} 行`);
+  const fetched = await Promise.all(Object.keys(GIDS).map(async name => [name, await fetchSheet(name)]));
+  for (const [name, rows] of fetched) {
+    raw[name] = rows;
+    console.log(`  ${name}: ${rows.length} 行`);
   }
 
   const artistIds = new Set(raw.ARTISTS.map(r => r.ID).filter(Boolean));
@@ -271,7 +206,7 @@ async function main() {
     venues.push(stripMeta(r));
   }
 
-  // --- FESTIVALS（現構造のまま。EDITIONS/LINEUPS 分離は TODO）---
+  // --- FESTIVALS（ブランド情報）---
   const seenF = new Set();
   const festivals = [];
   for (const r of raw.FESTIVALS) {
@@ -286,7 +221,7 @@ async function main() {
     festivals.push(stripMeta(r));
   }
 
-  // --- EDITIONS / LINEUPS（フラットな FESTIVALS からビルド時に導出。スキーマ §2.3/§2.4）---
+  // --- EDITIONS / LINEUPS（正式シートまたは旧互換モード）---
   // EDITION_ID = {festivalId}-{年}。LINEUP（名前カンマ区切り）を ARTISTS.NAME と突合して
   // ARTIST_ID を解決、未解決は ACT_LABEL として残す（旧 migrate-phase0.gs と同じ規則）。
   const yearOf = d => (String(d || '').match(/(\d{4})/) || [])[1] || '';
@@ -309,51 +244,57 @@ async function main() {
   const seenE = new Set();
   const editions = [];
   const lineups = [];
-  for (const r of raw.FESTIVALS) {
-    const fid = (r.ID || '').trim();
-    if (!fid) continue;
-    const pub = isPublished(r);
-    if (!pub) continue;
-    // CMS の Editions 欄に複数回が保存されていれば、それを開催回の入力元として使う。
-    // 未設定の既存行は従来どおり FESTIVALS の現在回から1件を導出する。
-    let stored = r.EDITIONS || r.editions || '';
-    try { if (typeof stored === 'string' && stored.trim()) stored = JSON.parse(stored); } catch (_) { stored = []; }
-    const records = Array.isArray(stored) && stored.length ? stored : [null];
-    records.forEach((ed) => {
-      const rawDate = ed ? (ed.date || [ed.DATE_START, ed.DATE_END].filter(Boolean).join('/')) : (r.DATE || '');
-      const dParts = String(rawDate).split('/').map(s => s.trim());
+  if (EDITIONS_FROM_SHEET) {
+    // 正式ソース: EDITIONS / LINEUPS。FESTIVALSから消えた過去回も保持する。
+    const festivalIds = new Set(festivals.map(f => String(f.ID || '').trim()));
+    for (const r of raw.EDITIONS) {
+      const id = String(r.EDITION_ID || '').trim();
+      const fid = String(r.FESTIVAL_ID || '').trim();
+      const pub = isPublished(r);
+      validateId('EDITIONS', id, seenE, pub);
+      if (!festivalIds.has(fid)) errors.push(`EDITIONS ${id}: FESTIVAL_ID参照切れ "${fid}"`);
+      if (!pub) continue;
+      editions.push(stripMeta({
+        EDITION_ID:id, FESTIVAL_ID:fid, EDITION:r.EDITION || '',
+        DATE_START:normalizeDate('EDITIONS', id, r.DATE_START || ''),
+        DATE_END:normalizeDate('EDITIONS', id, r.DATE_END || r.DATE_START || ''),
+        LOCATION:r.LOCATION || '', LOCATION_JA:r.LOCATION_JA || '', VENUE_ID:r.VENUE_ID || '',
+        PREF:r.PREF || '', ADDRESS:r.ADDRESS || '', LAT:r.LAT || '', LNG:r.LNG || '',
+        TICKETURL:r.TICKETURL || '', FLYER:r.FLYER || '', STATUS:r.STATUS || '',
+      }));
+    }
+    const editionIds = new Set(editions.map(e => e.EDITION_ID));
+    for (const r of raw.LINEUPS) {
+      const editionId = String(r.EDITION_ID || '').trim();
+      if (!editionIds.has(editionId)) {
+        if (editionId) warnings.push(`LINEUPS ${editionId}: EDITION_ID参照切れ`);
+        continue;
+      }
+      const artistId = String(r.ARTIST_ID || '').trim();
+      if (artistId && !artistIds.has(artistId)) warnings.push(`LINEUPS ${editionId}: ARTIST_ID参照切れ "${artistId}"`);
+      lineups.push(stripMeta({
+        EDITION_ID:editionId, ARTIST_ID:artistId, ACT_LABEL:r.ACT_LABEL || '',
+        SET_TYPE:r.SET_TYPE || 'dj', STAGE:r.STAGE || '', DAY:r.DAY || '',
+        START:r.START || '', END:r.END || '', SORT:r.SORT || '',
+      }));
+    }
+  } else {
+    // 互換モード: 旧FESTIVALS行から1開催回とLINEUPを導出する。
+    for (const r of raw.FESTIVALS) {
+      const fid = (r.ID || '').trim();
+      if (!fid || !isPublished(r)) continue;
+      const dParts = (r.DATE || '').split('/').map(s => s.trim());
       const dStart = normalizeDate('EDITIONS', fid, dParts[0] || '');
       const dEnd = normalizeDate('EDITIONS', fid, dParts[1] || dParts[0] || '');
-      const year = String(ed?.year || ed?.EDITION || yearOf(dStart) || '').trim();
-      const editionId = fid + (year ? '-' + year : '');
-      validateId('EDITIONS', editionId, seenE, pub);
-      editions.push(stripMeta({
-        EDITION_ID: editionId, FESTIVAL_ID: fid, EDITION: year,
-        DATE_START: dStart, DATE_END: dEnd,
-        LOCATION: ed ? (ed.location || ed.LOCATION || r.LOCATION || '') : (r.LOCATION || ''),
-        LOCATION_JA: ed ? (ed.location_ja || ed.LOCATION_JA || r.location_ja || '') : (r.location_ja || r.LOCATION_JA || ''),
-        PREF: ed ? (ed.pref || ed.PREF || r.CITY || '') : (r.CITY || ''),
-        ADDRESS: ed ? (ed.address || ed.ADDRESS || r.ADDRESS || '') : (r.ADDRESS || ''),
-        LAT: ed ? (ed.lat || ed.LAT || r.LAT || '') : (r.LAT || ''),
-        LNG: ed ? (ed.lng || ed.LNG || r.LNG || '') : (r.LNG || ''),
-        TICKETURL: ed ? (ed.ticketUrl || ed.TICKETURL || r.TICKETURL || r[' TICKETURL'] || '') : (r.TICKETURL || r[' TICKETURL'] || ''),
-        FLYER: ed ? (ed.flyer || ed.FLYER || r.FLYER || '') : (r.FLYER || ''),
-        STATUS: ed ? (ed.status || ed.STATUS || r.STATUS || '') : (r.STATUS || ''),
-      }));
-      const acts = Array.isArray(ed?.lineup) ? ed.lineup : String(ed?.LINEUP || (ed ? '' : r.LINEUP) || '').split(',').map(s => s.trim()).filter(Boolean);
-      acts.forEach((act, i) => {
-      const setType = /-live-/i.test(act) ? 'live' : (/\bb2b\b/i.test(act) ? 'b2b' : 'dj');
-      let artistId = '', actLabel = '';
-      if (setType === 'dj') {
-        const hit = nameToArtist.get(normName(act));
-        if (hit && ID_RE.test(hit)) artistId = hit;
-        else { actLabel = act; if (!hit) warnings.push(`LINEUPS ${editionId}: 未解決アクト "${act}"（ARTISTS.NAME に無し）`); }
-      } else {
-        actLabel = act; // b2b/live はメンバー分解せず、そのままラベルで記録
-      }
-      lineups.push(stripMeta({ EDITION_ID: editionId, ARTIST_ID: artistId, ACT_LABEL: actLabel, SET_TYPE: setType, SORT: String(i + 1) }));
+      const year = yearOf(dStart), editionId = fid + (year ? '-' + year : '');
+      validateId('EDITIONS', editionId, seenE, true);
+      editions.push(stripMeta({EDITION_ID:editionId,FESTIVAL_ID:fid,EDITION:year,DATE_START:dStart,DATE_END:dEnd,LOCATION:r.LOCATION||'',LOCATION_JA:r.location_ja||r.LOCATION_JA||'',PREF:r.CITY||'',ADDRESS:r.ADDRESS||'',LAT:r.LAT||'',LNG:r.LNG||'',TICKETURL:r.TICKETURL||r[' TICKETURL']||'',FLYER:r.FLYER||'',STATUS:r.STATUS||''}));
+      (r.LINEUP || '').split(',').map(s => s.trim()).filter(Boolean).forEach((act, i) => {
+        const setType = /-live-/i.test(act) ? 'live' : (/\bb2b\b/i.test(act) ? 'b2b' : 'dj');
+        const hit = setType === 'dj' ? nameToArtist.get(normName(act)) : '';
+        lineups.push(stripMeta({EDITION_ID:editionId,ARTIST_ID:hit&&ID_RE.test(hit)?hit:'',ACT_LABEL:hit?'':act,SET_TYPE:setType,SORT:String(i+1)}));
       });
-    });
+    }
   }
 
   // --- EVENTS（IDなし → NAME+DATE で暫定キー。孤児参照チェック）---
@@ -394,27 +335,6 @@ async function main() {
   if (errors.length) {
     console.error('\nエラーがあるためJSON書き出しを停止（スキーマ §6）。validation-report.txt は出力済み。');
     process.exit(1);
-  }
-
-  // 段階1: EDITIONS シートと導出結果の一致確認。editions.json は差し替えない。
-  if (EDITIONS_FROM_SHEET) {
-    console.log('\n[EDITIONS シート照合]');
-    const sheetEditions = await fetchEditionsSheet();
-    console.log(`  シート: ${sheetEditions.length} 行 / 導出: ${editions.length} 行`);
-    const { diffs, sheetOnly } = compareEditions(editions, sheetEditions);
-    if (sheetOnly.length) {
-      console.log(`  ℹ シートにのみ存在（導出では再現できない過去回）: ${sheetOnly.length}件`);
-      sheetOnly.forEach((id) => console.log(`      ${id}`));
-    }
-    if (diffs.length) {
-      console.error(`  ✗ 不一致 ${diffs.length}件`);
-      diffs.slice(0, 15).forEach((d) => console.error(`      ${d}`));
-      if (diffs.length > 15) console.error(`      … ほか ${diffs.length - 15}件`);
-      console.error('\n  EDITIONS シートと導出結果が一致しません。');
-      console.error('  段階2（読み取り元の切り替え）へ進む前に解消してください。');
-      process.exit(1);
-    }
-    console.log('  ✅ 全行・全列が一致');
   }
 
   if (DRY) { console.log('\n--dry: JSON書き出しスキップ（レポートのみ）'); return; }

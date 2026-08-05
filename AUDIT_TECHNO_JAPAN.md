@@ -3069,8 +3069,8 @@ FESTIVALSの編集画面に開催回セレクターを追加した。既存の`E
 `EDITIONS` JSON欄に保持され、`fetch-data.mjs`は複数開催回を展開して
 `editions.json` / `lineups.json`を生成する。
 
-これは既存データを壊さずにCMS操作を可能にする移行ブリッジである。EDITIONS /
-LINEUPSシートを正式な書き込み元に切り替える段階2は未完了であり、シートを直接
-編集しただけではまだPublish結果に反映されない。正式切替時はGASの行追加・更新
-経路、バックアップ対象、CIのGID設定を同時に変更し、FESTIVALS JSONとの一致を
-検査してから切り替えること。
+EDITIONS / LINEUPSシートの読み取りは段階2として接続済み（EDITIONS gid
+`1765363054`、LINEUPS gid `580984930`）。`fetch-data.mjs` の既定経路と
+Publish pipeline はシートを正式ソースとして `editions.json` / `lineups.json` を
+生成する。CMSの既存行更新は `update_row` で同期し、新規行は `add_edition` /
+`add_lineup` を呼ぶため、GAS側のこれらのハンドラが未配備なら追加が必要である。

@@ -118,6 +118,8 @@ const PREFIX_MAP = { venue:'v', festival:'f', artist:'a', event:'e', article:'ar
 const lineups = { f:[], e:[] };
 const editions = [];
 let selectedEditionIndex = 0;
+let editionSheetRows = [];
+let lineupSheetRows = [];
 let acHighlight = -1;
 const editState = { venue:null, festival:null, artist:null, event:null, article:null };
 const listCache = { venue:[], festival:[], artist:[], event:[], article:[] };
@@ -1561,6 +1563,34 @@ function renderEditions(){
     </div>`;
 }
 
+// EDITIONS / LINEUPS シートを優先して開催回を読み込む。GASが未接続の場合は
+// editRow() が読み込んだ既存のFESTIVALS Editions JSONをそのまま使う。
+async function loadEditionsFromSheet(festivalId){
+  if(!festivalId) return;
+  try{
+    const results=await Promise.all([
+      fetch(GAS_URL+'?action=get_sheet&sheet=EDITIONS').then(r=>r.json()),
+      fetch(GAS_URL+'?action=get_sheet&sheet=LINEUPS').then(r=>r.json())
+    ]);
+    const er=results[0], lr=results[1];
+    if(er.status!=='ok'||!Array.isArray(er.rows)) return;
+    editionSheetRows=er.rows.filter(r=>String(r.FESTIVAL_ID||'').trim()===String(festivalId).trim());
+    lineupSheetRows=lr.status==='ok'&&Array.isArray(lr.rows)?lr.rows:[];
+    if(!editionSheetRows.length) return;
+    editions.length=0;
+    editionSheetRows.forEach(row=>{
+      const eid=String(row.EDITION_ID||'').trim();
+      const lrRows=lineupSheetRows.filter(x=>String(x.EDITION_ID||'').trim()===eid)
+        .sort((a,b)=>(Number(a.SORT)||0)-(Number(b.SORT)||0))
+        .map(x=>x.ACT_LABEL||x.ARTIST_ID||'').filter(Boolean);
+      const lrRaw=lineupSheetRows.filter(x=>String(x.EDITION_ID||'').trim()===eid).sort((a,b)=>(Number(a.SORT)||0)-(Number(b.SORT)||0));
+      editions.push({_row:row._row,_editionId:eid,_sheetRow:{...row},_lineupRows:lrRaw,year:row.EDITION||'',edition:'',date:[row.DATE_START,row.DATE_END].filter(Boolean).join('/'),location:row.LOCATION||'',location_ja:row.LOCATION_JA||'',address:row.ADDRESS||'',lat:row.LAT||'',lng:row.LNG||'',ticketUrl:row.TICKETURL||'',flyer:row.FLYER||'',status:row.STATUS||'announced',lineup:ls});
+    });
+    selectedEditionIndex=0;
+    renderEditions();
+  }catch(_){ /* 旧JSONのフォールバックを維持 */ }
+}
+
 /* ==============================================================
    LINEUP — ARTIST DB FROM GAS
    ============================================================== */
@@ -2963,6 +2993,7 @@ function editRow(section, rowNum){
       editions.push({year:currentYear,edition:'',date:row.date||'',location:row.location||'',location_ja:row.location_ja||'',address:row.address||'',lat:row.lat||'',lng:row.lng||'',ticketUrl:row.ticketUrl||'',flyer:row.flyer||'',status:row.status||'announced',lineup:(row.lineup||'').split(',').map(s=>s.trim()).filter(Boolean)});
     }
     renderEditions();
+    loadEditionsFromSheet(row.id);
     document.getElementById('lineup-fetch-status').style.display='none';
     document.getElementById('bulk-lineup-wrap').style.display='none';
     document.getElementById('gradient-preview').style.display='none';
@@ -3027,6 +3058,46 @@ function editRow(section, rowNum){
 /* ==============================================================
    SAVE EDIT
    ============================================================== */
+function syncExistingEditionRows(festivalId){
+  const rows=editions.filter(e=>e._row&&e._editionId);
+  if(!rows.length) return Promise.resolve();
+  const requests=[];
+  rows.forEach(e=>{
+    const parts=String(e.date||'').split('/').map(s=>s.trim());
+    const base={...(e._sheetRow||{})};
+    delete base._row;
+    requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'update_row',sheet:'EDITIONS',row:e._row,...base,
+      EDITION_ID:e._editionId,FESTIVAL_ID:festivalId,EDITION:e.year||'',DATE_START:parts[0]||'',DATE_END:parts[1]||parts[0]||'',
+      LOCATION:e.location||'',LOCATION_JA:e.location_ja||'',ADDRESS:e.address||'',LAT:e.lat||'',LNG:e.lng||'',
+      TICKETURL:e.ticketUrl||'',FLYER:e.flyer||'',STATUS:e.status||''})}).then(r=>r.json()));
+    (e._lineupRows||[]).forEach((lr,i)=>{
+      const baseLine={...lr}; delete baseLine._row;
+      const label=(e.lineup||[])[i]||'';
+      requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'update_row',sheet:'LINEUPS',row:lr._row,...baseLine,EDITION_ID:e._editionId,ACT_LABEL:label,ARTIST_ID:lr.ARTIST_ID||''})}).then(r=>r.json()));
+    });
+  });
+  return Promise.all(requests).then(results=>{
+    const failed=results.filter(r=>!(r.status==='ok'||r.success));
+    if(failed.length) throw new Error('EDITIONSの更新に失敗しました');
+  });
+}
+
+function syncNewEditionRows(festivalId){
+  const rows=editions.filter(e=>!e._row&&e.year);
+  if(!rows.length) return Promise.resolve();
+  const requests=[];
+  rows.forEach(e=>{
+    const parts=String(e.date||'').split('/').map(s=>s.trim());
+    const eid=festivalId+'-'+String(e.year).trim();
+    requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'add_edition',EDITION_ID:eid,FESTIVAL_ID:festivalId,EDITION:e.year,DATE_START:parts[0]||'',DATE_END:parts[1]||parts[0]||'',LOCATION:e.location||'',LOCATION_JA:e.location_ja||'',ADDRESS:e.address||'',LAT:e.lat||'',LNG:e.lng||'',TICKETURL:e.ticketUrl||'',FLYER:e.flyer||'',STATUS:e.status||''})}).then(r=>r.json()));
+    (e.lineup||[]).forEach((label,i)=>requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'add_lineup',EDITION_ID:eid,ARTIST_ID:'',ACT_LABEL:label,SET_TYPE:'dj',SORT:String(i+1)})}).then(r=>r.json())));
+  });
+  return Promise.all(requests).then(results=>{
+    const failed=results.filter(r=>!(r.status==='ok'||r.success));
+    if(failed.length) throw new Error('新規EDITIONSの追加に失敗しました');
+  });
+}
+
 function saveEdit(section){
   const state=editState[section];
   if(!state)return;
@@ -3108,6 +3179,10 @@ function saveEdit(section){
     .then(r=>r.json()).then(d=>{
       if(d.status==='ok'||d.success){
         toast('Updated ✓','success');
+        if(section==='festival'){
+          syncExistingEditionRows(payload.id).catch(()=>toast('FESTIVALSは保存済みですが、既存EDITIONSの同期に失敗しました','error'));
+          syncNewEditionRows(payload.id).catch(()=>toast('FESTIVALSは保存済みですが、新規EDITIONSの追加に失敗しました（GASのadd_edition対応が必要）','error'));
+        }
         if(unregisteredArtists.length) notifyUnregisteredArtists(unregisteredArtists);
         // 裏で正データに置き換え（画面はすでに更新済みなので silent）
         loadList(section, {force:true, silent:true});

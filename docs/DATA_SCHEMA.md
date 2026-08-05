@@ -174,7 +174,8 @@ ID 規約違反7件の是正(§1.1)ではリダイレクトを設けたが、そ
 #### 現状: 稼働中のFESTIVALSシート 【実装済み・これが実在する列】
 
 > 実在するタブは **VENUES / FESTIVALS / ARTISTS / EVENTS / ARTICLES の5つだけ**。
-> EDITIONS / LINEUPS / AUTHORS / BODY_HISTORY のタブは存在しない（2026-08-03 確認）。
+> EDITIONS / LINEUPS のタブは存在し、公開CSVの入力元として接続済み（EDITIONS gid
+> `1765363054`、LINEUPS gid `580984930`）。AUTHORS / BODY_HISTORY は別管理。
 > 確かめ方: `backups/latest.json` のトップレベルキーを見る。
 
 現在は「1フェス=1行」で、ブランド情報と開催回情報が同じ行に存在する。列構成は次のとおり。
@@ -215,7 +216,7 @@ ID 規約違反7件の是正(§1.1)ではリダイレクトを設けたが、そ
 - `LOCATION` は既存データとの互換性を保つ英語・ローマ字表記、`location_ja` は日本語の公式会場名を保持する。日本語表示は `location_ja` を優先し、空欄なら `LOCATION` にフォールバックする。英語表示は `LOCATION` を使用する。
 - GAS の `update_row` は部分更新ではない。`buildRowFromHeaders` で行全体を組み立て直し、payload にないヘッダーの値を空文字で上書きする。そのため CMS は編集時に、`location_ja` を含むシートの全フィールドを必ず payload に含める。今後列を追加するときも、シート追加と同時に CMS の読込・フォーム・更新 payload を対応させること。
 
-#### 目標: FESTIVALSとEDITIONSの分離 【設計案・未実装 — 2026-08-03 時点】
+#### 目標: FESTIVALSとEDITIONSの分離 【段階2・読み取り接続済み】
 
 > ⚠️ **以下の表の列はシートに存在しない。** 実在する列は上の「現状」を参照。
 > この節に到達する読者の多くは列名で `grep` して飛び込んでくるので、
@@ -241,24 +242,20 @@ ID 規約違反7件の是正(§1.1)ではリダイレクトを設けたが、そ
 | IMAGE / HEROGRADIENT / imagePosition | | ブランドのキービジュアル |
 | (共通メタ §1.6) | | |
 
-**EDITIONS(開催回・目標)** — 新設シート。1開催回=1行:
+**EDITIONS(開催回・正式入力元)** — 1開催回=1行:
 
-> ⚠️ 【設計案・未実装】**EDITIONS タブは存在しない。**
-> `LP/data/editions.json` は実在するが、これは `scripts/fetch-data.mjs` が
-> **FESTIVALS の各行から1開催回ずつ導出**したもので、独立した入力元ではない。
+> EDITIONS タブは実在し、`scripts/fetch-data.mjs` が公開CSVから読み込む正式な
+> 開催回入力元である。`LP/data/editions.json` はその生成物で、FESTIVALSからの
+> 導出は `--from-festivals` を指定した互換モードに限定される。
 >
 > | editions.json | 導出元 |
 > |---|---|
-> | `LOCATION` | FESTIVALS **E列** `LOCATION` の写し |
-> | `LOCATION_JA` | FESTIVALS **AD列** `location_ja` の写し |
-> | `PREF` | FESTIVALS `CITY` の写し |
-> | `EDITION` / `DATE_START` / `DATE_END` | FESTIVALS `DATE` から導出（年を自動抽出） |
-> | `EDITION_ID` | `{FESTIVAL_ID}-{年}` |
+> | `LOCATION`〜`FLYER` | EDITIONS シートの同名ヘッダー |
+> | `EDITION` / `DATE_START` / `DATE_END` | EDITIONS シートの開催回情報 |
+> | `EDITION_ID` | EDITIONS シートの一意キー |
 >
-> したがって**開催回の値を直すときは FESTIVALS を直す**。editions.json を
-> 直接編集しても次の `npm run fetch` で上書きされる。
-> 1フェスにつき1開催回しか作られないため、複数回の開催は現状表現できない。
-> 実装は `scripts/fetch-data.mjs` の `editions.push(...)`。
+> 開催回の値は EDITIONS シートを直す。`editions.json` を直接編集しても次の
+> `npm run fetch` で上書きされる。FESTIVALS はブランドの共通情報を保持する。
 
 | カラム | 型/例 | 備考 |
 |---|---|---|
@@ -276,9 +273,9 @@ ID 規約違反7件の是正(§1.1)ではリダイレクトを設けたが、そ
 | STATUS | `announced` / `on-sale` / `soldout` / `finished` / `cancelled` | 開催回のライフサイクル。公開可否は共通STATUSと別カラム |
 | (共通メタ §1.6) | | |
 
-> 移行: 現FESTIVALSの各行から DATE / LOCATION / TICKETURL / FLYER 等を EDITIONS に切り出す。EDITION は DATE の年から自動推定し、NAME内の年(`ARCH 2025`等)と食い違う行は要確認リストへ(§7)。
+> 移行済み: 既存の開催回は EDITIONS シートへ投入済み。NAME内の年と開催回の年が食い違う行は要確認リストとして扱う。
 
-### 2.4 LINEUPS ★新設(このプロジェクトの核)
+### 2.4 LINEUPS ★正式入力元（このプロジェクトの核）
 
 フェス開催回 × アーティストの中間テーブル。「探すアプリ」のフィルタ、アーティストページの出演歴、フェス単体アプリのタイムテーブルすべての土台。
 
@@ -419,7 +416,8 @@ FESTIVALS: &gid=818164718
 VENUES:    &gid=525830431
 ARTISTS:   &gid=648440679
 EVENTS:    &gid=959929754
-EDITIONS / LINEUPS: 新設後にgidを追記
+EDITIONS:  &gid=1765363054
+LINEUPS:   &gid=580984930
 ```
 
 - data/*.json はコミットする(シート障害時もビルド可能・変更履歴がgitに残る)。
@@ -489,8 +487,8 @@ EDITIONS / LINEUPS: 新設後にgidを追記
 実データ監査(2026-07-11)で確認した修正項目。上から順に。
 
 **構造(スクリプトで実施)**
-- [ ] EDITIONSシート新設、FESTIVALSから開催回情報を切り出し(§2.3)
-- [ ] LINEUPSシート新設、FESTIVALS.LINEUP文字列をパースして移行(§2.4)
+- [x] EDITIONSシート接続、開催回情報を正式ソース化(§2.3)
+- [x] LINEUPSシート接続、出演情報を正式ソース化(§2.4)
 - [ ] EVENTSにIDカラム追加、VENUE→VENUE_ID/VENUE_NAME分離(§2.5)
 - [ ] 全シート: DESC/BIO(英語)→ `_EN` へ移動、`_JA` カラム新設
 - [ ] EVENTSのメタカラム名をcamelCaseに統一
