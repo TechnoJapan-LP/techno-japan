@@ -727,7 +727,7 @@
 
 <script src="common.js?v=3" defer></script>
 <script src="favorites.js?v=1" defer></script>
-<script src="search.js?v=2" defer></script>
+<script src="search.js?v=3" defer></script>
 <!-- localize.js は defer にしない。下のインライン描画が同期実行で tjLocalized を呼ぶ -->
 <script src="localize.js?v=3"></script>
 <script src="data.js?v=10"></script>
@@ -753,7 +753,12 @@
   const featured = published.find(a => a.featured) || published[0];
   const sideCards = published.filter(a => a.id !== (featured && featured.id)).slice(0, STORY_MAX_SIDE);
 
-  function articleUrl(a) { return 'news.html#article/' + a.id; }
+  /* 記事は静的ページへ直結する。'news.html#article/<id>' でも news.html 側が
+     location.replace で飛ばしてくれるが、その1回のために news.html と data.js を
+     読み込んでから改めて遷移することになる。トップは最も踏まれる導線なので
+     最初から実体を指す。EN 生成時は enHubFromJa が記事パスに /en を
+     前置するので、この関数は JA 表記のままでよい。AUDIT §9-44。 */
+  function articleUrl(a) { return `/articles/${encodeURIComponent(a.id)}.html`; }
   function fmtDate(d) {
     if (!d) return '';
     const dt = new Date(d);
@@ -852,7 +857,7 @@
         const img = f.image && f.image.trim();
         const hidden = i >= FEST_INITIAL ? ' is-hidden' : '';
         return `
-        <a class="fest-row${hidden}" href="festivals.html#festival/${f.id}">
+        <a class="fest-row${hidden}" href="/festivals/${encodeURIComponent(f.id)}.html">
           ${img ? `<div class="fest-row-bg" style="background-image:url('${tjAssetPath(img)}')"></div>` : `<div class="fest-row-bg"></div>`}
           <div class="fest-row-overlay"></div>
           <div class="fest-row-inner">
@@ -905,7 +910,7 @@
   const artistsTrackEl = document.getElementById('artists-track');
   if (artistsTrackEl && artistsToShow.length) {
     const cardHtml = (a, i) => `
-      <a class="artist-mini" href="artists.html#artist/${a.id}">
+      <a class="artist-mini" href="/artists/${encodeURIComponent(a.id)}.html">
         ${a.image && a.image.trim()
           ? `<div class="artist-mini-img" style="background-image:url('${tjAssetPath(a.image)}');background-position:${a.imagePosition || 'center'}"></div>`
           : `<div class="artist-mini-fallback"></div>`}
@@ -1037,7 +1042,7 @@
       return;
     }
     venuesEl.innerHTML = sorted.map(v => `
-      <a class="venue-mini" href="venues.html#venue/${v.id}">
+      <a class="venue-mini" href="/venues/${encodeURIComponent(v.id)}.html">
         ${v.image && v.image.trim()
           ? `<div class="venue-mini-img" style="background-image:url('${tjAssetPath(v.image)}');background-position:${v.imagePosition || 'center'}"></div>`
           : `<div class="venue-mini-fallback"></div>`}

@@ -340,8 +340,17 @@ function openCard(club) {
   document.getElementById('card-capacity').textContent = 'CAPACITY \u2014 ' + club.capacity;
   document.getElementById('card-address').textContent = club.address;
   const link = document.getElementById('card-link');
-  if (club.url && club.url !== '#') {
-    link.href = club.url;
+  /* href に入れる前にスキームを見る。textContent と違い href は
+     javascript: を実行してしまう。値はスプレッドシート由来で現時点は安全だが、
+     出所を問わず通す方針（AUDIT §9-44）。 */
+  const safeClubUrl = (() => {
+    const v = String(club.url ?? '').trim();
+    if (!v || v === '#') return '';
+    if (/^(?:\/|#|\.)/.test(v)) return v;
+    try { return /^https?:$/.test(new URL(v).protocol) ? v : ''; } catch { return ''; }
+  })();
+  if (safeClubUrl) {
+    link.href = safeClubUrl;
     link.style.display = 'inline-block';
   } else {
     link.style.display = 'none';

@@ -92,6 +92,11 @@ jobs:
       - name: Check regression thresholds
         run: python3 scripts/check_regressions.py
 
+      # 404 にならないリンク切れ（廃止済み SPA ハッシュ）を含む内部リンク検査。
+      # トップ・検索・お気に入りから詳細へ行けない状態が4日続いた（AUDIT §9-44）。
+      - name: Check internal links
+        run: python3 scripts/check_internal_links.py
+
       # 生成物の静的検査では「JS は配信されているが実行時に死ぬ」障害を検出できない。
       # 実際に headless Chrome で開いて、Uncaught 例外と描画結果を確認する。
       - name: Verify Chrome is available

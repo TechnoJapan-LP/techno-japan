@@ -205,7 +205,7 @@
           items: matches.map(f => ({
             name: f.name,
             meta: [f.city, (f.genre || []).join(' / ')].filter(Boolean).join(' — '),
-            url: `festivals.html#festival/${f.id}`
+            url: detailUrl('festivals', f.id)
           }))
         });
       }
@@ -226,7 +226,7 @@
           items: matches.map(a => ({
             name: a.name,
             meta: [a.city || a.country, Array.isArray(a.genre) ? a.genre.join(' / ') : a.genre].filter(Boolean).join(' — '),
-            url: `artists.html#artist/${a.id}`
+            url: detailUrl('artists', a.id)
           }))
         });
       }
@@ -247,7 +247,7 @@
           items: matches.map(v => ({
             name: v.name,
             meta: [v.city, v.area].filter(Boolean).join(' — '),
-            url: `venues.html#venue/${v.id}`
+            url: detailUrl('venues', v.id)
           }))
         });
       }
@@ -267,7 +267,7 @@
           items: matches.map(e => ({
             name: e.name,
             meta: [e.date, e.venue, e.city].filter(Boolean).join(' — '),
-            url: `events.html`
+            url: '/events.html'  // EN 版は無い（LP/en/events.html は存在しない）
           }))
         });
       }
@@ -308,7 +308,7 @@
             return {
               name: a.title,
               meta: meta,
-              url: `news.html#article/${a.id}`
+              url: detailUrl('articles', a.id)
             };
           })
         });
@@ -324,13 +324,24 @@
       <div class="gs-group">
         <div class="gs-group-label">${g.label} (${g.items.length})</div>
         ${g.items.map(it => `
-          <a href="${it.url}" class="gs-result">
+          <a href="${escapeHtml(it.url)}" class="gs-result">
             <div class="gs-result-name">${escapeHtml(it.name)}</div>
             <div class="gs-result-meta">${escapeHtml(it.meta)}</div>
           </a>
         `).join('')}
       </div>
     `).join('');
+  }
+
+  /* 検索結果の遷移先。
+     2026-08-02 の SPA 詳細廃止（AUDIT §9-23）以降、festivals.html#festival/<id>
+     等を解釈するコードはどのハブにも無い。検索から選んでも一覧に着くだけで
+     詳細に着かない状態が続いていた（2026-08-06 監査 / AUDIT §9-44）。
+     search.js は JA/EN 共通で読まれるので、遷移先は <html lang> で分ける
+     （news.html の articleDetailHref と同じ規則）。 */
+  function detailUrl(section, id) {
+    const prefix = document.documentElement.lang === 'en' ? '/en' : '';
+    return `${prefix}/${section}/${encodeURIComponent(id)}.html`;
   }
 
   function escapeHtml(s) {

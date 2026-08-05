@@ -8,6 +8,17 @@ const DATA_BASE = '../data/';
 const LS_PREFIX = 'tjapp:sets:';
 
 const $ = sel => document.querySelector(sel);
+/* href に入れる URL のスキーム検証。esc() は属性からの脱出は防ぐが
+   `javascript:` はそのまま残りクリックで実行される。値はスプレッドシート由来で
+   現時点は信頼できるが、出所を問わず通す方針。scripts/build-detail-pages.mjs の
+   safeUrl() と同じ規則（片方だけ直さないこと）。AUDIT §9-44。 */
+const safeUrl = v => {
+  const s = String(v ?? '').trim();
+  if (!s) return '';
+  if (/^(?:\/|#|\.)/.test(s)) return s;
+  try { return /^(?:https?|mailto|tel):$/.test(new URL(s).protocol) ? s : ''; } catch { return ''; }
+};
+
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 const DB = { festivals: [], editions: [], lineups: [], artists: [], byFest: new Map(), artistName: new Map(), lineupByEdition: new Map() };
@@ -182,7 +193,7 @@ function renderFest(editionId, tab) {
 
   const rowHtml = r => {
     const k = actKey(r), on = sets.has(k), clash = tab === 'my' && clashes.has(k);
-    const link = r.ARTIST_ID ? `<a href="../artists.html#artist/${esc(r.ARTIST_ID)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${esc(actName(r))}</a>` : esc(actName(r));
+    const link = r.ARTIST_ID ? `<a class="act-artist-link" href="/artists/${encodeURIComponent(r.ARTIST_ID)}.html" target="_blank" rel="noopener">${esc(actName(r))}</a>` : esc(actName(r));
     return `<div class="act-row${clash ? ' clash' : ''}">
       <button class="act-star${on ? ' on' : ''}" data-k="${esc(k)}" aria-label="MY SETS に追加">${on ? '★' : '☆'}</button>
       <div class="act-main"><div class="act-name">${link}</div>
@@ -205,16 +216,16 @@ function renderFest(editionId, tab) {
 
   const map = mapUrl(ed);
   const actionsHtml = `<div class="fest-actions">
-    ${map ? `<a class="fest-action primary" href="${esc(map)}" target="_blank" rel="noopener">📍 経路</a>` : ''}
-    ${f?.URL ? `<a class="fest-action" href="${esc(f.URL)}" target="_blank" rel="noopener">公式</a>` : ''}
-    ${ed.TICKETURL ? `<a class="fest-action" href="${esc(ed.TICKETURL)}" target="_blank" rel="noopener">チケット</a>` : ''}
-    ${f?.INSTAGRAM ? `<a class="fest-action" href="${esc(f.INSTAGRAM)}" target="_blank" rel="noopener">Instagram</a>` : ''}
+    ${map ? `<a class="fest-action primary" href="${esc(safeUrl(map))}" target="_blank" rel="noopener">📍 経路</a>` : ''}
+    ${f?.URL ? `<a class="fest-action" href="${esc(safeUrl(f.URL))}" target="_blank" rel="noopener">公式</a>` : ''}
+    ${ed.TICKETURL ? `<a class="fest-action" href="${esc(safeUrl(ed.TICKETURL))}" target="_blank" rel="noopener">チケット</a>` : ''}
+    ${f?.INSTAGRAM ? `<a class="fest-action" href="${esc(safeUrl(f.INSTAGRAM))}" target="_blank" rel="noopener">Instagram</a>` : ''}
     <button class="fest-action" id="btn-ics">＋カレンダー</button>
     ${tab === 'my' && mine.length ? `<button class="fest-action" id="btn-share">共有</button>` : ''}
   </div>`;
 
   const flyerHtml = ed.FLYER
-    ? `<img class="fest-flyer" src="../${esc(ed.FLYER)}" alt="${esc(f?.NAME || '')} flyer" loading="lazy" decoding="async" onerror="this.remove()">`
+    ? `<img class="fest-flyer" src="../${esc(ed.FLYER)}" alt="${esc(f?.NAME || '')} flyer" loading="lazy" decoding="async">`
     : '';
 
   $('#screen').innerHTML = `
@@ -268,5 +279,23 @@ if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
 window.addEventListener('hashchange', route);
 updateNet();
 loadData().then(route).catch(err => {
-  $('#screen').innerHTML = `<div class="my-empty">データを読み込めませんでした<br>${esc(err.message)}<br><br><button class="btn-ghost" onclick="location.reload()">RELOAD</button></div>`;
+  $('#screen').innerHTML = `<div class="my-empty">データを読み込めませんでした<br>${esc(err.message)}<br><br><button class="btn-ghost" id="btn-reload">RELOAD</button></div>`;
+  $('#btn-reload')?.addEventListener('click', () => location.reload());
 });
+
+/* リンクのクリックで親の行（☆トグル）が反応しないように。
+   以前は onclick="event.stopPropagation()" を属性で書いていたが、
+   属性ハンドラを許すと CSP に script-src 'unsafe-inline' が必要になる。
+   委譲リスナーにして、index.html の CSP から 'unsafe-inline' を外した。 */
+document.addEventListener('click', (e) => {
+  if (e.target.closest('.act-artist-link')) e.stopPropagation();
+}, true);
+
+/* 読み込めないフライヤーを消す。以前は onerror 属性で書いていたが、
+   属性ハンドラは CSP の script-src 'unsafe-inline' を要求する。
+   error はバブルしないのでキャプチャで拾う。 */
+document.addEventListener('error', (e) => {
+  if (e.target instanceof HTMLImageElement && e.target.classList.contains('fest-flyer')) {
+    e.target.remove();
+  }
+}, true);

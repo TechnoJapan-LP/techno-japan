@@ -252,7 +252,7 @@ nav .nav-links { align-items: center; }
 <script src="common.js?v=3" defer></script>
 <script src="data.js?v=10"></script>
 <script src="favorites.js?v=1" defer></script>
-<script src="search.js?v=2" defer></script>
+<script src="search.js?v=3" defer></script>
 <script>
 const gradients = [
   'linear-gradient(135deg, #1a0533 0%, #4a1942 40%, #c2185b 100%)',
@@ -301,7 +301,7 @@ function render() {
         </div>
         <div class="fav-grid">
           ${festivals.map((f, i) => `
-            <a href="festivals.html#festival/${f.id}" class="fav-card">
+            <a href="/festivals/${encodeURIComponent(f.id)}.html" class="fav-card">
               <div class="fav-card-img" style="${makeCardImg(f.image, i)}"></div>
               <div class="fav-card-overlay"></div>
               <div class="fav-card-content">
@@ -326,7 +326,7 @@ function render() {
         </div>
         <div class="fav-grid">
           ${artists.map((a, i) => `
-            <a href="artists.html#artist/${a.id}" class="fav-card">
+            <a href="/artists/${encodeURIComponent(a.id)}.html" class="fav-card">
               <div class="fav-card-img" style="${makeCardImg(a.image, i)}"></div>
               <div class="fav-card-overlay"></div>
               <div class="fav-card-content">
@@ -351,7 +351,7 @@ function render() {
         </div>
         <div class="fav-grid">
           ${venues.map((v, i) => `
-            <a href="venues.html#venue/${v.id}" class="fav-card">
+            <a href="/venues/${encodeURIComponent(v.id)}.html" class="fav-card">
               <div class="fav-card-img" style="${makeCardImg(v.image, i)}"></div>
               <div class="fav-card-overlay"></div>
               <div class="fav-card-content">

@@ -89,6 +89,28 @@ const esc = (s) => String(s ?? '')
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
   .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 
+/* href に入れる URL のスキーム検証。
+   esc() は " を潰すので属性からの脱出は防げるが、`javascript:alert(1)` は
+   そのまま href に残り、クリックで実行される。URL・TICKETURL・INSTAGRAM・
+   SOUNDCLOUD 等はスプレッドシート（CMS）から来るので、現時点では信頼できるが、
+   「入力元が1つで信頼できる」という前提はフォーム投稿や取り込みが増えれば崩れる。
+   HTML として解釈させる値と同じく、出所を問わず通す。AUDIT §9-44。
+
+   相対パスは自前で組み立てたものなのでそのまま通す。 */
+const SAFE_URL_SCHEMES = new Set(['http:', 'https:', 'mailto:', 'tel:']);
+function safeUrl(value) {
+  const v = String(value ?? '').trim();
+  if (!v) return '';
+  // スキームを持たない（= 相対 / ルート相対 / フラグメント）ものは自前の組み立て。
+  if (/^(?:\/|#|\.)/.test(v)) return v;
+  if (!/^[a-z][a-z0-9+.-]*:/i.test(v)) return v;
+  try {
+    if (SAFE_URL_SCHEMES.has(new URL(v).protocol)) return v;
+  } catch { /* 壊れたURLは落とす */ }
+  console.warn(`  ⚠ 危険なスキームの URL を除去: ${v.slice(0, 80)}`);
+  return '';
+}
+
 // 本文HTMLからタグを除いて説明文を作る（meta description 用）
 const stripTags = (html) => String(html ?? '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 
@@ -362,7 +384,17 @@ const GA = `<script>
 })();
 </script>`;
 
-function page({ title, desc, canonical, image, ogType = 'article', jsonLd, body, lang = 'ja', altHref = null, extraScripts = '', backgroundLayer = false, detailCssVersion = 3 }) {
+/* detail.css の ?v は全ページで同一にすること。
+   1932e50「Redesign all festival detail pages」で detail.css に259行を追記した際、
+   フェス詳細だけを ?v=4 にし、artists/venues/articles/en の226ページは ?v=3 のまま
+   残った。追記が .festival-design-v2 配下だけだったので実害は出なかったが、
+   sw.js は /detail.css を cacheFirst で持つため（scripts/check_sw_routing.mjs）、
+   次に共通ルールを触ったときは 226ページに新CSSが届かない。
+   呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
+   CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
+const DETAIL_CSS_VERSION = 4;
+
+function page({ title, desc, canonical, image, ogType = 'article', jsonLd, body, lang = 'ja', altHref = null, extraScripts = '', backgroundLayer = false }) {
   const d = truncate(desc || '', 160);
   // hreflang: JA/EN 両方が存在するページだけ相互宣言する
   const abs = (path) => `${BASE}${path}`;
@@ -404,7 +436,7 @@ ${hreflang}
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/common.css?v=5">
-<link rel="stylesheet" href="/detail.css?v=${detailCssVersion}">
+<link rel="stylesheet" href="/detail.css?v=${DETAIL_CSS_VERSION}">
 <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
 </head>
 <body>
@@ -548,7 +580,7 @@ function editionsTable(editions, lang) {
       <td class="edition-date">${editionDateHtml(ed, lang)}</td>
       <td>${esc(editionPlace(ed, lang) || '—')}</td>
       <td>${esc(ed.STATUS || '—')}</td>
-      <td>${ed.TICKETURL ? `<a href="${esc(ed.TICKETURL)}" target="_blank" rel="noopener">${lang === 'en' ? 'Tickets' : 'チケット'}</a>` : '—'}</td>
+      <td>${ed.TICKETURL ? `<a href="${esc(safeUrl(ed.TICKETURL))}" target="_blank" rel="noopener">${lang === 'en' ? 'Tickets' : 'チケット'}</a>` : '—'}</td>
     </tr>`).join('\n');
   return `<h2>${lang === 'en' ? 'EDITIONS' : '開催ヒストリー'}</h2>
   <div class="editions-table-wrap">
@@ -704,7 +736,7 @@ function festivalFaqItems(editions, lineupsByEdition, artistsById, name, lang) {
 function festivalFaqHtml(items, lang) {
   if (!items.length) return '';
   const answerHtml = (item) => item.url
-    ? esc(item.answer).replace(esc(item.url), `<a href="${esc(item.url)}" target="_blank" rel="noopener">${esc(item.url)}</a>`)
+    ? esc(item.answer).replace(esc(item.url), `<a href="${esc(safeUrl(item.url))}" target="_blank" rel="noopener">${esc(item.url)}</a>`)
     : esc(item.answer);
   return `<section class="festival-faq"><h2>${lang === 'en' ? 'FREQUENTLY ASKED QUESTIONS' : 'よくある質問'}</h2><dl>${items.map((item) =>
     `<div><dt>${esc(item.question)}</dt><dd>${answerHtml(item)}</dd></div>`
@@ -714,7 +746,7 @@ function festivalFaqHtml(items, lang) {
 function festivalFaqDetailsHtml(items, lang) {
   if (!items.length) return '';
   const answerHtml = (item) => item.url
-    ? esc(item.answer).replace(esc(item.url), `<a href="${esc(item.url)}" target="_blank" rel="noopener">${esc(item.url)}</a>`)
+    ? esc(item.answer).replace(esc(item.url), `<a href="${esc(safeUrl(item.url))}" target="_blank" rel="noopener">${esc(item.url)}</a>`)
     : esc(item.answer);
   return `<section class="detail-section festival-faq festival-faq-details">
       <h2 class="detail-section-label">${lang === 'en' ? 'FREQUENTLY ASKED QUESTIONS' : 'よくある質問'}</h2>
@@ -885,13 +917,13 @@ function festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, lang, 
         <img ${dimensionAttrs(heroImage)} src="/${String(heroImage).replace(/^\//, '')}" alt="${esc(name)}" style="object-position:${esc(f.imagePosition || 'center')}">
       </div>` : '<div class="detail-hero-image detail-hero-gradient" aria-hidden="true"></div>';
   const official = f.url
-    ? `<a class="detail-official festival-official-link" href="${esc(f.url)}" target="_blank" rel="noopener">OFFICIAL SITE</a>`
+    ? `<a class="detail-official festival-official-link" href="${esc(safeUrl(f.url))}" target="_blank" rel="noopener">OFFICIAL SITE</a>`
     : '';
   const tickets = currentEdition?.TICKETURL
-    ? `<a class="detail-official festival-ticket-link" href="${esc(currentEdition.TICKETURL)}" target="_blank" rel="noopener">TICKETS</a>`
+    ? `<a class="detail-official festival-ticket-link" href="${esc(safeUrl(currentEdition.TICKETURL))}" target="_blank" rel="noopener">TICKETS</a>`
     : '';
   const instagram = f.instagram ? `<div class="festival-social-links">
-        <a class="festival-social-link" href="${esc(f.instagram)}" target="_blank" rel="noopener" aria-label="Instagram">
+        <a class="festival-social-link" href="${esc(safeUrl(f.instagram))}" target="_blank" rel="noopener" aria-label="Instagram">
           <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1"></circle></svg>
         </a>
       </div>` : '';
@@ -927,7 +959,7 @@ function festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, lang, 
 ${genres ? `        <div class="detail-tags">${genres}</div>\n` : ''}${dateHtml ? `        <div class="detail-date">${dateHtml}</div>\n` : ''}
         <h1 class="detail-name">${esc(name)}</h1>
 ${location ? (mapUrl
-          ? `        <a class="detail-location detail-location-map" href="${esc(mapUrl)}" target="_blank" rel="noopener">${esc(location)}<span aria-hidden="true">↗</span></a>\n`
+          ? `        <a class="detail-location detail-location-map" href="${esc(safeUrl(mapUrl))}" target="_blank" rel="noopener">${esc(location)}<span aria-hidden="true">↗</span></a>\n`
           : `        <div class="detail-location">${esc(location)}</div>\n`) : ''}${heroDescription ? `        ${heroDescription}\n` : ''}${actions ? `        <div class="detail-actions">${actions}</div>\n` : ''}
       </div>
     </header>
@@ -1014,7 +1046,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
       acceptedAnswer: { '@type': 'Answer', text: item.answer },
     })),
   } : null;
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'festivals'] : ['festivals']), `${f.id}.html`), html: page({ title, desc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('FESTIVALS', '/festivals.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT + FESTIVAL_HUB_BACK_SCRIPT + FESTIVAL_SHARE_SCRIPT, backgroundLayer: true, detailCssVersion: 4 }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'festivals'] : ['festivals']), `${f.id}.html`), html: page({ title, desc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('FESTIVALS', '/festivals.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT + FESTIVAL_HUB_BACK_SCRIPT + FESTIVAL_SHARE_SCRIPT, backgroundLayer: true }) };
 }
 
 /* ---------- アーティストページ ---------- */
@@ -1080,7 +1112,7 @@ function artistPage(a, artistsById, lang = 'ja') {
 
   const linkRow = Object.entries(links)
     .filter(([, v]) => v)
-    .map(([k, v]) => `<a class="detail-link" href="${esc(v)}" target="_blank" rel="noopener">${esc(k.toUpperCase())}</a>`)
+    .map(([k, v]) => `<a class="detail-link" href="${esc(safeUrl(v))}" target="_blank" rel="noopener">${esc(k.toUpperCase())}</a>`)
     .join('');
   const appearances = XLINK.appearMap.get(String(a.id)) || [];
   const appearancesHtml = appearances.length
@@ -1150,7 +1182,7 @@ function venuePage(v, lang = 'ja') {
       ${v.type ? `<div><dt>${lang === 'en' ? 'TYPE' : 'タイプ'}</dt><dd>${esc(v.type)}</dd></div>` : ''}
       ${v.capacity ? `<div><dt>${lang === 'en' ? 'CAPACITY' : 'キャパシティ'}</dt><dd>${esc(v.capacity)}</dd></div>` : ''}
       ${v.address ? `<div><dt>${lang === 'en' ? 'ADDRESS' : '住所'}</dt><dd>${esc(v.address)}</dd></div>` : ''}
-      ${v.url ? `<div><dt>${lang === 'en' ? 'OFFICIAL SITE' : '公式サイト'}</dt><dd><a href="${esc(v.url)}" target="_blank" rel="noopener">${esc(v.url)}</a></dd></div>` : ''}
+      ${v.url ? `<div><dt>${lang === 'en' ? 'OFFICIAL SITE' : '公式サイト'}</dt><dd><a href="${esc(safeUrl(v.url))}" target="_blank" rel="noopener">${esc(v.url)}</a></dd></div>` : ''}
     </dl>
     ${(() => { // 回遊: 同じ街の他のヴェニュー
       const others = XLINK.venues.filter((x) => x.id !== v.id && x.city && v.city && String(x.city).toLowerCase() === String(v.city).toLowerCase()).slice(0, 6);

@@ -23,6 +23,10 @@
      解決されて 404）。broken_image_refs は生成物 HTML の /images/ 参照しか
      見ず、data.js から JS が埋めるパスは視界に入らない。
      naturalWidth ではなく URL の取得可否を見る（AUDIT §9-35）。
+  6. URLパラメータ由来の値で XSS が発火しないこと（許容 0件）
+     2026-08-06 に news.html の ?tag= で <img src=x onerror=...> が実行できた。
+     静的に「未エスケープの補間」を探しても、その大半はデータ由来で安全なため
+     真偽が決まらない。実際に攻撃URLを踏んで発火するかを見る（AUDIT §9-44）。
 
 使い方:
   python3 scripts/check_hub_pages.py              # LP/ をローカル配信して検査
@@ -194,6 +198,55 @@ def find_chrome():
     return None
 
 
+XSS_TEST_PATH = "/__xss-test.html"
+
+# URL パラメータ由来の値が innerHTML に素通しで入っていないかを、実際に攻撃URLを
+# 踏んで確かめる。2026-08-06 に news.html の ?tag= で <img src=x onerror=...> が
+# 実行できた（AUDIT §9-44）。同一オリジンに CMS の認証トークンがあるため、
+# URL を踏ませるだけでトークンを読める状態だった。
+#
+# 静的検査（grep で未エスケープの補間を探す）では判定できない。ハブ全体に
+# innerHTML への補間が71箇所あり、そのほとんどはデータ由来で安全なため、
+# 「未エスケープの補間がある」だけでは真偽が決まらない。実際に発火するかを見る。
+XSS_TEST_HTML = """<!doctype html><html><body data-xss-result="pending" data-xss-detail="">
+<script>
+// 攻撃URLの一覧。ページと、攻撃者が制御できるパラメータの組み合わせ。
+const CASES = [
+  ['/news.html?tag=', 'news:tag'],
+  ['/news.html#tag/', 'news:hash-tag'],
+  ['/news.html?category=', 'news:category'],
+  ['/festivals.html?genre=', 'festivals:genre'],
+  ['/festivals.html?type=', 'festivals:type'],
+  ['/artists.html?genre=', 'artists:genre'],
+  ['/venues.html?area=', 'venues:area'],
+  ['/en/news.html?tag=', 'en-news:tag'],
+];
+// onerror が動けば親フレームに印を付ける。同一オリジンなので親を触れる。
+const PAYLOAD = encodeURIComponent('<img src=x onerror="parent.__XSS_HIT=1">');
+(async () => {
+  const fired = [];
+  for (const [base, label] of CASES) {
+    window.__XSS_HIT = 0;
+    const frame = document.createElement('iframe');
+    frame.style.cssText = 'width:1200px;height:800px;border:0;position:absolute;left:-9999px';
+    frame.src = base + PAYLOAD;
+    document.body.appendChild(frame);
+    await new Promise(done => {
+      let settled = false;
+      const fin = () => { if (!settled) { settled = true; done(); } };
+      frame.addEventListener('load', fin, { once: true });
+      setTimeout(fin, 8000);
+    });
+    // 描画とタグ反映を待つ
+    await new Promise(r => setTimeout(r, 700));
+    if (window.__XSS_HIT === 1) fired.push(label);
+    frame.remove();
+  }
+  document.body.dataset.xssDetail = fired.join(' | ');
+  document.body.dataset.xssResult = String(fired.length);
+})();
+</script></body></html>"""
+
 IMAGE_TEST_PATH = "/__image-test.html"
 
 # main() が対象ページを埋めてから差し替える（Handler がリクエスト時に読む）。
@@ -294,6 +347,7 @@ class Server(threading.Thread):
                 test_pages = {
                     VENUE_MAP_TEST_PATH: VENUE_MAP_TEST_HTML,
                     CURSOR_TEST_PATH: CURSOR_TEST_HTML,
+                    XSS_TEST_PATH: XSS_TEST_HTML,
                     IMAGE_TEST_PATH: IMAGE_TEST_HTML,
                 }
                 test_html = test_pages.get(urlsplit(self.path).path)
@@ -561,6 +615,24 @@ def main():
                 failures.append(
                     f"読み込めない画像が {img_value} 件: "
                     + (detail.group(1) if detail else "(内訳を取得できず)")
+                )
+
+            # URL パラメータ由来の値で XSS が発火しないか。実際に攻撃URLを踏む。
+            xss_dom, _ = render(chrome, f"{base}{XSS_TEST_PATH}", max(args.budget, 60000))
+            xss_result = re.search(r'<body[^>]*data-xss-result="([^"]*)"', xss_dom)
+            xss_value = xss_result.group(1) if xss_result else "missing"
+            print(f"XSS (URL params): {xss_value} fired")
+            if xss_value in ("missing", "pending", ""):
+                failures.append(
+                    f"XSS 検査が完了しなかった（{xss_value or 'empty'}）"
+                    " — 検査ページ自体の失敗。異常なしと読み替えないこと"
+                )
+            elif xss_value != "0":
+                detail = re.search(r'data-xss-detail="([^"]*)"', xss_dom)
+                failures.append(
+                    f"URLパラメータ由来の XSS が {xss_value}件 発火: "
+                    + (detail.group(1) if detail else "(内訳を取得できず)")
+                    + "\n      → 値を innerHTML に入れる前に tjEscapeHtml() を通すこと（AUDIT §9-44）"
                 )
     finally:
         if server:

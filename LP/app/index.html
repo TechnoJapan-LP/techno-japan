@@ -3,6 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- サイト内で唯一セキュリティヘッダを持っていなかったページ（2026-08-06 監査）。
+     ここは他ハブと違い外部スクリプト（GA・Behold・Google Fonts）を一切読まず、
+     app.js からのインラインハンドラも全て除去したので、
+     script-src に 'unsafe-inline' を入れずに済む＝サイト内で最も厳しい CSP にできる。
+     app.js を編集して属性ハンドラを足すと、ここで黙ってブロックされる。
+     追加したいときは addEventListener を使うこと。AUDIT §9-44。 -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; frame-src 'none'; form-action 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), interest-cohort=()">
 <title>TJ APP — FESTIVAL COMPANION (仮)</title>
 <meta name="description" content="Techno Japan のフェスティバル・コンパニオン。ラインナップ確認とマイタイムテーブル。オフライン対応。">
 <meta name="theme-color" content="#080808">

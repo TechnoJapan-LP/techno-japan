@@ -3074,3 +3074,139 @@ EDITIONS / LINEUPSシートの読み取りは段階2として接続済み（EDIT
 Publish pipeline はシートを正式ソースとして `editions.json` / `lineups.json` を
 生成する。CMSの既存行更新は `update_row` で同期し、新規行もシート末尾の次行へ
 同じ `update_row` を送るため、既存GASのヘッダー写像を共有する。
+
+### 9-44. セキュリティ全面点検と、404 にならないリンク切れ（2026-08-06）
+
+「全体のバグ修正とセキュリティ強化」の依頼を受けた全面点検。
+推測ではなく実測で確かめたものだけを記す。
+
+#### A. 反射型 XSS（実際に発火した）
+
+`news.html` の `?tag=` と `#tag/` が、URL の値をそのまま
+`pill.innerHTML` に差し込んでいた。
+`/news.html?tag=<img src=x onerror=...>` を headless Chrome で開き、
+**onerror が実行されることを確認**した（理論上の指摘ではない）。
+
+ハブ全体でテンプレートリテラルを `innerHTML` に代入する箇所は71あるが、
+攻撃者が値を決められるのは URL パラメータ由来のものだけで、
+実測で発火したのはこの1経路。他は固定リストか data.js 由来だった。
+
+対応:
+
+- `localize.js` に `tjEscapeHtml()` を追加し、`innerHTML` へ入れる前に通す
+- `sanitizeTag()` を追加。既知タグに一致するか `^[\w-]+$` のものだけ通し、
+  64文字を超えるものは落とす。`?tag=` と `#tag/` の両方の入口に適用
+- **`?v=2 → v=3` を10ファイル + `check_sw_routing.mjs` で更新**。
+  最初これを忘れ、ブラウザには古い `localize.js` が配信されて
+  `tjEscapeHtml is not defined` になった。§9-36 と同じ踏み方で、
+  `check_asset_versions.py` が拾った
+
+#### B. セキュリティヘッダを全449ページへ
+
+GitHub Pages は HTTP ヘッダを設定できないので `<meta http-equiv>` で入れる。
+CSP / X-Content-Type-Options / Referrer-Policy / Permissions-Policy の4種。
+
+- 生成物は `build-detail-pages.mjs` に定数を置き、詳細ページと
+  リダイレクトスタブの両方に出す
+- `map.html` は Leaflet を unpkg.com から読んでいた。CSP に外部 CDN を
+  書き足すのではなく、**`/vendor/leaflet-1.9.4/` に取り込んで self に閉じた**。
+  第三者 CDN は、そこが乗っ取られた日にこちらのページで任意コードが動く
+- `cms.html` だけ別の CSP にした。`localStorage` に `cms_token` を持つので、
+  外部オリジンの script は一切許可しない
+- `LP/app/index.html`（PWA）はサイト内で唯一ヘッダが無かった。
+  ここは外部スクリプトを一切読まないので、`app.js` からインライン
+  ハンドラ（`onclick` / `onerror`）を除去して
+  **`script-src 'self'`（`'unsafe-inline'` 無し）**にした。サイト内で最も厳しい
+
+#### C. `javascript:` URL（esc() では止まらない）
+
+`esc()` は `"` を潰すので属性からの脱出は防ぐが、
+`href="javascript:..."` はそのまま残りクリックで実行される。
+URL / TICKETURL / INSTAGRAM / SOUNDCLOUD などはスプレッドシート由来で
+現時点では信頼できるが、入力経路が増えれば前提は崩れる。
+
+`build-detail-pages.mjs` と `LP/app/app.js` に `safeUrl()` を追加し
+（http / https / mailto / tel と相対パスのみ通す）、
+データ由来の `href` 9箇所に適用。`map.html` の `link.href = club.url` にも
+同じ規則を入れた。**この2つの `safeUrl()` は同じ規則なので、
+片方だけ直さないこと**（`localizedValue()` と同じ申し送り）。
+
+#### D. 404 にならないリンク切れ ← 今回いちばん大きい
+
+2026-08-02 に SPA 詳細ビューを廃止した（§9-23）とき、
+`#festival/<id>` を**解釈する側**は消えたが、**そこへ飛ばす側**が残っていた。
+
+| 場所 | 影響 |
+|---|---|
+| `index.html`（JA/EN） | フェス行・アーティスト・会場の**全カード** |
+| `favorites.html` | お気に入りカード3種 |
+| `search.js` | 検索結果の**全項目**（フェス/アーティスト/会場/記事） |
+| `app/app.js` | ラインナップのアーティスト名 |
+
+`festivals.html#festival/xxx` は 200 を返す。ハブは正常に描画される。
+だから**リンク切れ検査にも、ハブ描画検査にも、SPA/静的差分検査にも映らない**。
+トップから詳細へ一度も行けない状態が4日間続いていた。
+トップは最も踏まれるページで、検索はもう一つの主要導線である。
+
+対応: すべて `/festivals/<id>.html` 形式の静的詳細ページ直リンクに変更。
+EN は `enHubFromJa` が `/en/` を前置する既存規則にそのまま乗る。
+`search.js` は JA/EN 共通で読まれるので `<html lang>` で分岐させた
+（`news.html` の `articleDetailHref` と同じ規則）。
+
+`index.html` の記事リンクは `news.html#article/<id>` で、これは
+news.html 側の `location.replace` で最終的には詳細に着いていた。
+ただし**そのために news.html と data.js を読んでから改めて遷移**していたので、
+静的ページ直結に変えた。
+
+実測（`--dump-dom` で描画後の href を取り、実際に fetch して確認）:
+
+```
+index: フェス行        /festivals/hacha-mecha.html → 200 (詳細ページ)  ✅
+index: アーティスト     /artists/dj-nobu.html → 200 (詳細ページ)        ✅
+index: 会場            /venues/o-east.html → 200 (詳細ページ)          ✅
+index: 記事            /articles/....html → 200 (詳細ページ)           ✅
+en/index: フェス行     /en/festivals/hacha-mecha.html → 200            ✅
+```
+
+#### E. detail.css のバージョンが2つに割れていた
+
+`1932e50`「Redesign all festival detail pages」で `detail.css` に259行を
+追記した際、フェス詳細だけ `?v=4` にし、**artists / venues / articles / en の
+226ページは `?v=3` のまま**残っていた。
+
+追記が `.festival-design-v2` 配下だけだったので実害は出ていない。
+ただし `sw.js` は `/detail.css` を cache-first で持つので、
+次に共通ルールを触れば226ページに新 CSS が届かない。
+呼び出し側で上書きできる引数（`detailCssVersion`）だったのが原因なので、
+**モジュール定数 `DETAIL_CSS_VERSION` にして上書きできなくした**。
+
+#### F. 追加した回帰ガード
+
+いずれも**負のコントロールで検出できることを確認**してから入れた。
+「緑になった」だけでは、検査が何も見ていない場合と区別できない（§9-32）。
+
+1. `check_hub_pages.py` に XSS 検査を追加。
+   iframe で実際に8本の攻撃 URL を踏み、`onerror` が動いた数を数える。
+   静的に「未エスケープの補間」を探す方式では、その大半がデータ由来で
+   安全なため真偽が決まらない。実際に踏むほうが判定が付く。
+   *負のコントロール: `tjEscapeHtml` を外すと `2件 発火` と出た*
+
+2. `check_internal_links.py`（新規）。
+   廃止済み SPA ハッシュ形式の禁止と、449ページの内部リンク実在確認。
+   D で見たとおり **404 にならない壊れ方があるので、404 を探すだけでは足りない**。
+   消えた受け手に向けたリンク形式そのものを禁止する。
+   *負のコントロール: 死んだリンクを1本戻すと該当行を指して落ちた*
+
+   自分の説明文に禁止パターンを書くと自己検出するので、
+   走査前にコメントを潰している。理由を書けないガードは、
+   次に触る人が理由を知らないまま消しにかかる。
+
+3. 両方を `publish-pipeline.yml` と `regression-check.yml` に組み込み。
+
+#### 残っている申し送り
+
+- `check_asset_versions.py` は `LP/app/app.js` を
+  「どの HTML からも参照されていない」として素通しする。
+  PWA のシェルは `?v=` ではなく `app/sw.js` の `VERSION` 定数で
+  無効化する方式なので、**`app.js` / `app.css` / `app/index.html` を触ったら
+  `VERSION` を上げること**。今回 `v1.3.0 → v1.4.0`
