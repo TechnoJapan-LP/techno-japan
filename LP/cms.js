@@ -1544,6 +1544,9 @@ function updateEditionField(i, key, value){
   editions[i][key] = value;
   markFormDirty();
 }
+function parseEditionLineupText(value){
+  return String(value||'').split(/[\n,]+/).map(s=>s.trim()).filter(Boolean);
+}
 function editionUploadId(ed){
   return String(ed._editionId || ((document.getElementById('f-id')?.value||'').trim()+'-'+String(ed.year||'').trim())).replace(/[^a-z0-9-]+/gi,'-').replace(/^-+|-+$/g,'').toLowerCase();
 }
@@ -1615,8 +1618,8 @@ function renderEditions(){
       </div>
       <div class="edition-flyer-tools"><input type="url" id="edition-flyer-url-${i}" placeholder="Flyer image URL"><button type="button" class="btn btn-sm btn-accent" onclick="uploadEditionFlyerFromUrl(${i},this)">UPLOAD URL</button><label class="btn btn-sm">Upload Flyer<input type="file" accept="image/*" style="display:none" onchange="uploadEditionFlyer(this,${i})"></label></div>
       ${editionFlyerPreview(i,ed)}
-      <label class="edition-lineup-label">Lineup (comma-separated)
-        <input type="text" value="${esc((ed.lineup||[]).join(', '))}" onchange="updateEditionField(${i},'lineup',this.value.split(',').map(s=>s.trim()).filter(Boolean))">
+      <label class="edition-lineup-label">Lineup (1組1行 / comma-separated)
+        <textarea rows="5" placeholder="1組1行、またはカンマ区切りで貼り付け" onchange="updateEditionField(${i},'lineup',parseEditionLineupText(this.value))">${esc((ed.lineup||[]).join('\n'))}</textarea>
       </label>
     </div>`;
 }

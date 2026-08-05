@@ -90,7 +90,7 @@ input,select,textarea,button{font-family:var(--font-body);font-size:.9rem;color:
 .edition-selector-row select,.edition-fields select{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:8px 10px;color:var(--text);font-size:.85rem}
 .edition-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:10px}
 .edition-fields label,.edition-lineup-label{display:flex;flex-direction:column;gap:5px;font-family:var(--font-mono);font-size:.62rem;letter-spacing:.04em;color:var(--text3)}
-.edition-fields input,.edition-lineup-label input{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:8px 10px;font-size:.85rem;color:var(--text);min-width:0}
+.edition-fields input,.edition-lineup-label input,.edition-lineup-label textarea{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:8px 10px;font-size:.85rem;color:var(--text);min-width:0;font-family:inherit;resize:vertical}
 .edition-lineup-label{margin-top:4px}
 .edition-flyer-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:4px 0 10px}
 .edition-flyer-tools input[type=url]{flex:1;min-width:220px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:8px 10px;color:var(--text);font-size:.82rem}
