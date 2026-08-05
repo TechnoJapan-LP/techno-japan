@@ -117,6 +117,7 @@ const PREFIX_MAP = { venue:'v', festival:'f', artist:'a', event:'e', article:'ar
    ============================================================== */
 const lineups = { f:[], e:[] };
 const editions = [];
+let selectedEditionIndex = 0;
 let acHighlight = -1;
 const editState = { venue:null, festival:null, artist:null, event:null, article:null };
 const listCache = { venue:[], festival:[], artist:[], event:[], article:[] };
@@ -1503,22 +1504,61 @@ function renderLineupTags(prefix){
 /* ==============================================================
    EDITIONS
    ============================================================== */
-function addEdition(){editions.push({year:'',date:'',lineup:[]});renderEditions()}
-function removeEdition(i){editions.splice(i,1);renderEditions()}
+function addEdition(){
+  const year = String(new Date().getFullYear());
+  editions.push({year,edition:'',date:'',location:'',location_ja:'',address:'',lat:'',lng:'',ticketUrl:'',flyer:'',status:'announced',lineup:[]});
+  selectedEditionIndex = editions.length - 1;
+  renderEditions();
+}
+function removeEdition(i){
+  editions.splice(i,1);
+  selectedEditionIndex = Math.max(0, Math.min(selectedEditionIndex, editions.length - 1));
+  renderEditions();
+}
+function selectEdition(i){
+  selectedEditionIndex = Math.max(0, Math.min(Number(i) || 0, editions.length - 1));
+  renderEditions();
+}
+function updateEditionField(i, key, value){
+  if(!editions[i]) return;
+  editions[i][key] = value;
+  markFormDirty();
+}
 function renderEditions(){
-  document.getElementById('f-editions').innerHTML=editions.map((ed,i)=>`
+  const host=document.getElementById('f-editions');
+  if(!host) return;
+  if(!editions.length){host.innerHTML='<div class="edition-empty">開催回がありません。「+ Add Edition」から追加してください。</div>';return;}
+  selectedEditionIndex=Math.max(0,Math.min(selectedEditionIndex,editions.length-1));
+  const ed=editions[selectedEditionIndex], i=selectedEditionIndex;
+  const val=(key)=>esc(ed[key]||'');
+  host.innerHTML=`
+    <div class="edition-selector-row">
+      <label>開催回</label>
+      <select onchange="selectEdition(this.value)">${editions.map((x,n)=>`<option value="${n}" ${n===i?'selected':''}>${esc(x.year||'年未設定')}${x.edition?`（第${esc(x.edition)}回）`:''}</option>`).join('')}</select>
+      <button type="button" class="btn btn-sm" onclick="removeEdition(${i})">この回を削除</button>
+    </div>
     <div class="edition-block">
-      <button class="remove-edition" onclick="removeEdition(${i})">&times;</button>
       <div class="edition-fields">
-        <input type="number" placeholder="Year" value="${ed.year}" onchange="editions[${i}].year=this.value">
-        <input type="text" placeholder="Date range" value="${ed.date}" onchange="editions[${i}].date=this.value">
+        <label>Year<input type="number" value="${val('year')}" onchange="updateEditionField(${i},'year',this.value)"></label>
+        <label>回数<input type="text" placeholder="例: 3" value="${val('edition')}" onchange="updateEditionField(${i},'edition',this.value)"></label>
+        <label>Date range<input type="text" placeholder="YYYY-MM-DD/YYYY-MM-DD" value="${val('date')}" onchange="updateEditionField(${i},'date',this.value)"></label>
+        <label>Status<select onchange="updateEditionField(${i},'status',this.value)">${['announced','on-sale','soldout','finished','cancelled'].map(s=>`<option ${ed.status===s?'selected':''}>${s}</option>`).join('')}</select></label>
       </div>
-      <div style="margin-top:8px">
-        <input type="text" placeholder="Lineup (comma-separated)" value="${ed.lineup.join(', ')}"
-          onchange="editions[${i}].lineup=this.value.split(',').map(s=>s.trim()).filter(Boolean)"
-          style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:8px 10px;font-size:.85rem;color:var(--text)">
+      <div class="edition-fields">
+        <label>Location<input type="text" value="${val('location')}" onchange="updateEditionField(${i},'location',this.value)"></label>
+        <label>Location (JA)<input type="text" value="${val('location_ja')}" onchange="updateEditionField(${i},'location_ja',this.value)"></label>
+        <label>Address<input type="text" value="${val('address')}" onchange="updateEditionField(${i},'address',this.value)"></label>
       </div>
-    </div>`).join('');
+      <div class="edition-fields">
+        <label>Lat<input type="text" value="${val('lat')}" onchange="updateEditionField(${i},'lat',this.value)"></label>
+        <label>Lng<input type="text" value="${val('lng')}" onchange="updateEditionField(${i},'lng',this.value)"></label>
+        <label>Ticket URL<input type="text" value="${val('ticketUrl')}" onchange="updateEditionField(${i},'ticketUrl',this.value)"></label>
+        <label>Flyer<input type="text" value="${val('flyer')}" onchange="updateEditionField(${i},'flyer',this.value)"></label>
+      </div>
+      <label class="edition-lineup-label">Lineup (comma-separated)
+        <input type="text" value="${esc((ed.lineup||[]).join(', '))}" onchange="updateEditionField(${i},'lineup',this.value.split(',').map(s=>s.trim()).filter(Boolean))">
+      </label>
+    </div>`;
 }
 
 /* ==============================================================
@@ -2905,11 +2945,22 @@ function editRow(section, rowNum){
     renderLineupTags('f');
     // EDITIONS（シートにはJSON文字列で保存されている）
     editions.length=0;
+    selectedEditionIndex=0;
     if(row.editions){
       try{
         const eds=typeof row.editions==='string'?JSON.parse(row.editions):row.editions;
-        if(Array.isArray(eds)) eds.forEach(ed=>editions.push({year:ed.year||'',date:ed.date||'',lineup:Array.isArray(ed.lineup)?ed.lineup:[]}));
+        if(Array.isArray(eds)) eds.forEach(ed=>editions.push({
+          year:ed.year||ed.EDITION||'', edition:ed.edition||'', date:ed.date||'',
+          location:ed.location||ed.LOCATION||'', location_ja:ed.location_ja||ed.LOCATION_JA||'',
+          address:ed.address||ed.ADDRESS||'', lat:ed.lat||ed.LAT||'', lng:ed.lng||ed.LNG||'',
+          ticketUrl:ed.ticketUrl||ed.TICKETURL||'', flyer:ed.flyer||ed.FLYER||'',
+          status:ed.status||ed.STATUS||'announced', lineup:Array.isArray(ed.lineup)?ed.lineup:[]
+        }));
       }catch(e){console.warn('editions parse failed',e);}
+    }
+    if(!editions.length){
+      const currentYear=(String(row.date||'').match(/(20\d{2})/)||[])[1]||String(new Date().getFullYear());
+      editions.push({year:currentYear,edition:'',date:row.date||'',location:row.location||'',location_ja:row.location_ja||'',address:row.address||'',lat:row.lat||'',lng:row.lng||'',ticketUrl:row.ticketUrl||'',flyer:row.flyer||'',status:row.status||'announced',lineup:(row.lineup||'').split(',').map(s=>s.trim()).filter(Boolean)});
     }
     renderEditions();
     document.getElementById('lineup-fetch-status').style.display='none';

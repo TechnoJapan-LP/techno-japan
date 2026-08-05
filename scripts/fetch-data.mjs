@@ -313,23 +313,35 @@ async function main() {
     const fid = (r.ID || '').trim();
     if (!fid) continue;
     const pub = isPublished(r);
-    const dParts = (r.DATE || '').split('/').map(s => s.trim());
-    const dStart = normalizeDate('EDITIONS', fid, dParts[0] || '');
-    const dEnd = normalizeDate('EDITIONS', fid, dParts[1] || dParts[0] || '');
-    const year = yearOf(dStart);
-    const editionId = fid + (year ? '-' + year : '');
-    validateId('EDITIONS', editionId, seenE, pub);
     if (!pub) continue;
-
-    editions.push(stripMeta({
-      EDITION_ID: editionId, FESTIVAL_ID: fid, EDITION: year,
-      DATE_START: dStart, DATE_END: dEnd, LOCATION: r.LOCATION || '',
-      LOCATION_JA: r.location_ja || r.LOCATION_JA || '',
-      PREF: r.CITY || '', ADDRESS: r.ADDRESS || '', LAT: r.LAT || '', LNG: r.LNG || '',
-      TICKETURL: (r.TICKETURL || r[' TICKETURL'] || ''), FLYER: r.FLYER || '', STATUS: r.STATUS || '',
-    }));
-
-    (r.LINEUP || '').split(',').map(s => s.trim()).filter(Boolean).forEach((act, i) => {
+    // CMS の Editions 欄に複数回が保存されていれば、それを開催回の入力元として使う。
+    // 未設定の既存行は従来どおり FESTIVALS の現在回から1件を導出する。
+    let stored = r.EDITIONS || r.editions || '';
+    try { if (typeof stored === 'string' && stored.trim()) stored = JSON.parse(stored); } catch (_) { stored = []; }
+    const records = Array.isArray(stored) && stored.length ? stored : [null];
+    records.forEach((ed) => {
+      const rawDate = ed ? (ed.date || [ed.DATE_START, ed.DATE_END].filter(Boolean).join('/')) : (r.DATE || '');
+      const dParts = String(rawDate).split('/').map(s => s.trim());
+      const dStart = normalizeDate('EDITIONS', fid, dParts[0] || '');
+      const dEnd = normalizeDate('EDITIONS', fid, dParts[1] || dParts[0] || '');
+      const year = String(ed?.year || ed?.EDITION || yearOf(dStart) || '').trim();
+      const editionId = fid + (year ? '-' + year : '');
+      validateId('EDITIONS', editionId, seenE, pub);
+      editions.push(stripMeta({
+        EDITION_ID: editionId, FESTIVAL_ID: fid, EDITION: year,
+        DATE_START: dStart, DATE_END: dEnd,
+        LOCATION: ed ? (ed.location || ed.LOCATION || r.LOCATION || '') : (r.LOCATION || ''),
+        LOCATION_JA: ed ? (ed.location_ja || ed.LOCATION_JA || r.location_ja || '') : (r.location_ja || r.LOCATION_JA || ''),
+        PREF: ed ? (ed.pref || ed.PREF || r.CITY || '') : (r.CITY || ''),
+        ADDRESS: ed ? (ed.address || ed.ADDRESS || r.ADDRESS || '') : (r.ADDRESS || ''),
+        LAT: ed ? (ed.lat || ed.LAT || r.LAT || '') : (r.LAT || ''),
+        LNG: ed ? (ed.lng || ed.LNG || r.LNG || '') : (r.LNG || ''),
+        TICKETURL: ed ? (ed.ticketUrl || ed.TICKETURL || r.TICKETURL || r[' TICKETURL'] || '') : (r.TICKETURL || r[' TICKETURL'] || ''),
+        FLYER: ed ? (ed.flyer || ed.FLYER || r.FLYER || '') : (r.FLYER || ''),
+        STATUS: ed ? (ed.status || ed.STATUS || r.STATUS || '') : (r.STATUS || ''),
+      }));
+      const acts = Array.isArray(ed?.lineup) ? ed.lineup : String(ed?.LINEUP || (ed ? '' : r.LINEUP) || '').split(',').map(s => s.trim()).filter(Boolean);
+      acts.forEach((act, i) => {
       const setType = /-live-/i.test(act) ? 'live' : (/\bb2b\b/i.test(act) ? 'b2b' : 'dj');
       let artistId = '', actLabel = '';
       if (setType === 'dj') {
@@ -340,6 +352,7 @@ async function main() {
         actLabel = act; // b2b/live はメンバー分解せず、そのままラベルで記録
       }
       lineups.push(stripMeta({ EDITION_ID: editionId, ARTIST_ID: artistId, ACT_LABEL: actLabel, SET_TYPE: setType, SORT: String(i + 1) }));
+      });
     });
   }
 
