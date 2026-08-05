@@ -156,11 +156,27 @@ jobs:
           print("\nSync complete.")
           PYTHON
 
+      # 画像だけをコミットすると LP/image-dimensions.js が古いまま残り、
+      # 次の deploy で regression-check が「生成物がコミット内容と一致しません」で
+      # 落ちる。2026-08-06 に実際に起きた（AUDIT §9-45）。
+      # 同期した側が寸法表も作り直して、同じコミットに含める。
+      # build-image-dimensions.mjs は中身が変わったとき ?v も自動で上げる。
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Regenerate image dimensions
+        run: node scripts/build-image-dimensions.mjs
+
       - name: Commit and push if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add LP/images/venues/ LP/images/festivals/ LP/images/artists/ LP/images/articles/
+          # 寸法表と、?v を上げた HTML（LP/ と LP/en/ の両方に散る）。
+          # 追跡済みの変更だけを拾うので、新しい画像は上の行が担当する。
+          git add -u LP/
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
