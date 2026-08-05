@@ -120,6 +120,7 @@ const editions = [];
 let selectedEditionIndex = 0;
 let editionSheetRows = [];
 let lineupSheetRows = [];
+let editionsLoadingPromise = null;
 let acHighlight = -1;
 const editState = { venue:null, festival:null, artist:null, event:null, article:null };
 const listCache = { venue:[], festival:[], artist:[], event:[], article:[] };
@@ -1634,6 +1635,8 @@ async function loadEditionsFromSheet(festivalId){
     editionSheetRows=er.rows.filter(r=>String(r.FESTIVAL_ID||'').trim()===String(festivalId).trim());
     lineupSheetRows=lr.status==='ok'&&Array.isArray(lr.rows)?lr.rows:[];
     if(!editionSheetRows.length) return;
+    // シート取得中にユーザーがアップロード・編集した値を失わない。
+    const pendingByYear=new Map(editions.map(e=>[String(e.year||''),e]));
     editions.length=0;
     editionSheetRows.forEach(row=>{
       const eid=String(row.EDITION_ID||'').trim();
@@ -1641,7 +1644,14 @@ async function loadEditionsFromSheet(festivalId){
         .sort((a,b)=>(Number(a.SORT)||0)-(Number(b.SORT)||0))
         .map(x=>x.ACT_LABEL||x.ARTIST_ID||'').filter(Boolean);
       const lrRaw=lineupSheetRows.filter(x=>String(x.EDITION_ID||'').trim()===eid).sort((a,b)=>(Number(a.SORT)||0)-(Number(b.SORT)||0));
-      editions.push({_row:row._row,_editionId:eid,_sheetRow:{...row},_lineupRows:lrRaw,year:row.EDITION||'',edition:'',date:[row.DATE_START,row.DATE_END].filter(Boolean).join('/'),location:row.LOCATION||'',location_ja:row.LOCATION_JA||'',address:row.ADDRESS||'',lat:row.LAT||'',lng:row.LNG||'',ticketUrl:row.TICKETURL||'',flyer:row.FLYER||'',status:row.STATUS||'announced',lineup:lrRows});
+      const loaded={_row:row._row,_editionId:eid,_sheetRow:{...row},_lineupRows:lrRaw,year:row.EDITION||'',edition:'',date:[row.DATE_START,row.DATE_END].filter(Boolean).join('/'),location:row.LOCATION||'',location_ja:row.LOCATION_JA||'',address:row.ADDRESS||'',lat:row.LAT||'',lng:row.LNG||'',ticketUrl:row.TICKETURL||'',flyer:row.FLYER||'',status:row.STATUS||'announced',lineup:lrRows};
+      const pending=pendingByYear.get(String(loaded.year));
+      if(pending){
+        ['date','location','location_ja','address','lat','lng','ticketUrl','flyer','status','lineup'].forEach(key=>{
+          if(pending[key] && (!loaded[key] || key==='flyer' || key==='lineup')) loaded[key]=pending[key];
+        });
+      }
+      editions.push(loaded);
     });
     selectedEditionIndex=0;
     renderEditions();
@@ -3050,7 +3060,7 @@ function editRow(section, rowNum){
       editions.push({year:currentYear,edition:'',date:row.date||'',location:row.location||'',location_ja:row.location_ja||'',address:row.address||'',lat:row.lat||'',lng:row.lng||'',ticketUrl:row.ticketUrl||'',flyer:row.flyer||'',status:row.status||'announced',lineup:(row.lineup||'').split(',').map(s=>s.trim()).filter(Boolean)});
     }
     renderEditions();
-    loadEditionsFromSheet(row.id);
+    editionsLoadingPromise=loadEditionsFromSheet(row.id).finally(()=>{editionsLoadingPromise=null;});
     document.getElementById('lineup-fetch-status').style.display='none';
     document.getElementById('bulk-lineup-wrap').style.display='none';
     document.getElementById('gradient-preview').style.display='none';
@@ -3164,6 +3174,10 @@ function syncNewEditionRows(festivalId, sourceEditions=editions){
 function saveEdit(section){
   const state=editState[section];
   if(!state)return;
+  if(section==='festival' && editionsLoadingPromise){
+    toast('開催回データを読み込み中です。完了後に保存します','info');
+    return editionsLoadingPromise.then(()=>saveEdit(section));
+  }
   if (section === 'article' && window.articleImageUploading) {
     // アップロードが本当に進行中の時だけブロック。fetch がハングして
     // フラグが固まると保存が永久に不能になるため、45秒超は stale とみなして解除。
