@@ -311,6 +311,8 @@ img.convert('RGB').save('images/festivals/new.webp', 'WEBP', quality=82, method=
 ### 触るときの注意
 
 - `safeUrl()` は `build-detail-pages.mjs` と `LP/app/app.js` の**2箇所に同じ規則**がある。片方だけ直さないこと
+- `LP/app/`（PWA）は **`deploy-pages.yml` の `rm -rf ./LP/app` で本番に出していない**（開発中）。
+  公開はその step を消すだけ。CSP は先に入れてあるので、消す前に塞ぐ作業は要らない
 - `LP/app/`（PWA）は `?v=` ではなく `app/sw.js` の `VERSION` 定数でキャッシュを切る。
   `app.js` / `app.css` / `app/index.html` を触ったら `VERSION` を上げること
 - `app/index.html` の CSP は `script-src 'self'`（`'unsafe-inline'` 無し）。

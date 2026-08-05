@@ -3113,10 +3113,16 @@ CSP / X-Content-Type-Options / Referrer-Policy / Permissions-Policy の4種。
   第三者 CDN は、そこが乗っ取られた日にこちらのページで任意コードが動く
 - `cms.html` だけ別の CSP にした。`localStorage` に `cms_token` を持つので、
   外部オリジンの script は一切許可しない
-- `LP/app/index.html`（PWA）はサイト内で唯一ヘッダが無かった。
+- `LP/app/index.html`（PWA）はリポジトリ内で唯一ヘッダが無かった。
   ここは外部スクリプトを一切読まないので、`app.js` からインライン
   ハンドラ（`onclick` / `onerror`）を除去して
-  **`script-src 'self'`（`'unsafe-inline'` 無し）**にした。サイト内で最も厳しい
+  **`script-src 'self'`（`'unsafe-inline'` 無し）**にした。リポジトリ内で最も厳しい。
+
+  **なお `LP/app/` は本番に出ていない。** `deploy-pages.yml` に
+  `rm -rf ./LP/app` があり、開発中として除外されている
+  （`/app/index.html` は本番では 404 ページが返る）。
+  今開いている穴を塞いだのではなく、**公開する日に穴が開いていないようにした**もの。
+  公開はその step を消すだけなので、塞いでから消せる状態にしておく
 
 #### C. `javascript:` URL（esc() では止まらない）
 
