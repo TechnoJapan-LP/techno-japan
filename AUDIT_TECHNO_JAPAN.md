@@ -3072,5 +3072,5 @@ FESTIVALSの編集画面に開催回セレクターを追加した。既存の`E
 EDITIONS / LINEUPSシートの読み取りは段階2として接続済み（EDITIONS gid
 `1765363054`、LINEUPS gid `580984930`）。`fetch-data.mjs` の既定経路と
 Publish pipeline はシートを正式ソースとして `editions.json` / `lineups.json` を
-生成する。CMSの既存行更新は `update_row` で同期し、新規行は `add_edition` /
-`add_lineup` を呼ぶため、GAS側のこれらのハンドラが未配備なら追加が必要である。
+生成する。CMSの既存行更新は `update_row` で同期し、新規行もシート末尾の次行へ
+同じ `update_row` を送るため、既存GASのヘッダー写像を共有する。

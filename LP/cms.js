@@ -3085,12 +3085,17 @@ function syncExistingEditionRows(festivalId){
 function syncNewEditionRows(festivalId){
   const rows=editions.filter(e=>!e._row&&e.year);
   if(!rows.length) return Promise.resolve();
+  if(!editionSheetRows.length) return Promise.reject(new Error('EDITIONSシートが未読込'));
   const requests=[];
+  let nextEditionRow=Math.max(1,...editionSheetRows.map(r=>Number(r._row)||0))+1;
+  let nextLineupRow=Math.max(1,...lineupSheetRows.map(r=>Number(r._row)||0))+1;
   rows.forEach(e=>{
     const parts=String(e.date||'').split('/').map(s=>s.trim());
     const eid=festivalId+'-'+String(e.year).trim();
-    requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'add_edition',EDITION_ID:eid,FESTIVAL_ID:festivalId,EDITION:e.year,DATE_START:parts[0]||'',DATE_END:parts[1]||parts[0]||'',LOCATION:e.location||'',LOCATION_JA:e.location_ja||'',ADDRESS:e.address||'',LAT:e.lat||'',LNG:e.lng||'',TICKETURL:e.ticketUrl||'',FLYER:e.flyer||'',STATUS:e.status||''})}).then(r=>r.json()));
-    (e.lineup||[]).forEach((label,i)=>requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'add_lineup',EDITION_ID:eid,ARTIST_ID:'',ACT_LABEL:label,SET_TYPE:'dj',SORT:String(i+1)})}).then(r=>r.json())));
+    // GASの既存 update_row は指定行が末尾の次でも追記できるため、
+    // 新規専用ハンドラを要求せず同じ認証・ヘッダー写像を使う。
+    requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'update_row',sheet:'EDITIONS',row:nextEditionRow++,EDITION_ID:eid,FESTIVAL_ID:festivalId,EDITION:e.year,DATE_START:parts[0]||'',DATE_END:parts[1]||parts[0]||'',LOCATION:e.location||'',LOCATION_JA:e.location_ja||'',VENUE_ID:'',PREF:'',ADDRESS:e.address||'',LAT:e.lat||'',LNG:e.lng||'',TICKETURL:e.ticketUrl||'',FLYER:e.flyer||'',STATUS:e.status||''})}).then(r=>r.json()));
+    (e.lineup||[]).forEach((label,i)=>requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'update_row',sheet:'LINEUPS',row:nextLineupRow++,EDITION_ID:eid,ARTIST_ID:'',ACT_LABEL:label,SET_TYPE:'dj',STAGE:'',DAY:'',START:'',END:'',SORT:String(i+1)})}).then(r=>r.json())));
   });
   return Promise.all(requests).then(results=>{
     const failed=results.filter(r=>!(r.status==='ok'||r.success));
