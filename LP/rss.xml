@@ -5,7 +5,7 @@
     <link>https://techno-japan.media</link>
     <description>Japan&apos;s underground techno and house music media platform.</description>
     <language>ja-JP</language>
-    <lastBuildDate>Tue, 04 Aug 2026 07:10:03 -0000</lastBuildDate>
+    <lastBuildDate>Wed, 05 Aug 2026 05:42:46 -0000</lastBuildDate>
     <atom:link href="https://techno-japan.media/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
       <title>GROW THE CULTURE OPEN AIR</title>
@@ -104,6 +104,22 @@
       <description>Gunma — どんぐりずが地元・群馬県桐生市で主催する音楽フェスティバル。2023年、2024年は桐生駅前のロータリーを舞台にDIYスタイルで開催され、第3回となる2026年は会場を市民の憩いの場である新川公園へ移して規模を拡張した。開催日は桐生の夏を象徴する「桐生八木節まつり」に合わせて設定され、まつりの熱気とダンスミュージックが街の中で交差する。</description>
     </item>
     <item>
+      <title>E-GROOVE</title>
+      <link>https://techno-japan.media/festivals/e-groove.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/e-groove.html</guid>
+      <pubDate>Sat, 01 Aug 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Akita — 秋田・雄和の日本庭園を舞台に、ひと晩だけ立ち上がるレイヴ。地図に載っていない場所で、秋田のローカルシーンと国内外で活動するアーティストが顔を合わせる。21時から翌朝8時まで、10組がバトンをつなぐように、途切れることなく音を重ねていく。夜が深まり、やがて庭園に朝日が差し込むまで、電子音楽が鳴り続ける。クラブでもキャンプ場でもない、庭園という空間で夜を明かすことが、この一夜の輪郭をつくっている</description>
+    </item>
+    <item>
+      <title>SuB-TiDe</title>
+      <link>https://techno-japan.media/festivals/sub-tide.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/sub-tide.html</guid>
+      <pubDate>Fri, 31 Jul 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Nagano — SuB-TiDe（サブタイド）は、長野県の南相木ダム付近で開催される150人限定のシークレット・レイヴパーティー。コンセプトに「心象領域（Domain of Mindscape）」を掲げ、多様なクリエイターの創作や音楽を通じて深い没入感を体験できる空間を提供している</description>
+    </item>
+    <item>
       <title>FUJI ROCK</title>
       <link>https://techno-japan.media/festivals/fuji-rock.html</link>
       <guid isPermaLink="true">https://techno-japan.media/festivals/fuji-rock.html</guid>
@@ -134,6 +150,14 @@
       <pubDate>Sat, 27 Jun 2026 00:00:00 -0000</pubDate>
       <category>Festival</category>
       <description>Hokkaido — HALOLA CAMPは、北海道の大自然を舞台に、電子音楽を愛する人々が集うアットホームな野外イベントだ。ハウスからテクノまで幅広くカバーする、丁寧にキュレーションされたラインナップを通して、コミュニティとのつながりを大切にしているのが特徴である。日本最北の地を背景に繰り広げられるこのフェスは、都市型フェスティバルとは一線を画す、より内省的なオルタナティブとして存在感を放っている。</description>
+    </item>
+    <item>
+      <title>NU FESTIVAL</title>
+      <link>https://techno-japan.media/festivals/nu-festival.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/nu-festival.html</guid>
+      <pubDate>Fri, 26 Jun 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Tokyo — NU は NEXT NEW UNITY の略。音とアートの交差点に置かれた都市規模のプログラムを掲げ、再開発によって生まれた高輪ゲートウェイシティを舞台とする。 プログラムは5つに分かれ、NU ART が Sónar+D と六本木の SuperDeluxe、NU LIVE が Sónar Sound、NU STATION が J-WAVE と組む。ほかに NU CONNECTION と NU PARK が置かれる。音楽プログラムだけでなく、テクノロジーとクリエイティビティを扱う Sónar+D の枠組みごと持ち込んでいる点に、このフェスティバルの設計が出ている。</description>
     </item>
     <item>
       <title>SAMSARA</title>
@@ -224,34 +248,10 @@
       <description>Gunma — PARAMOUNTは群馬の自然の中にオープンエアのテクノを持ち込み、東京の都市部シーンの外にある重要な目的地として自らを確立している。このフェスティバルは、日本のよりディープなアンダーグラウンドの潮流を反映した、生々しく妥協のないラインアップを重視している。</description>
     </item>
     <item>
-      <title>森、道、市場</title>
-      <link>https://techno-japan.media/festivals/mori-michi-ichiba.html</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals/mori-michi-ichiba.html</guid>
-      <pubDate>Fri, 22 May 2026 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Aichi — 「モノとごはんと音楽の市場」を標榜する。主催者によれば、始まりは蒲郡の三ヶ根山という場所を人に見てもらいたいという動機だった。人を集める手段として店を呼び、市場をつくり、そのあとに音楽が加わった。順序が逆なのが、この催しの性格を決めている。 2011年の初回に約3,000人。現在は出店550店舗以上、来場者は5万人規模になった。2013年には岡崎市での開催が台風で中止になっている。2026年は98組が出演し、岡村靖幸、KIRINJI、カネコアヤノ、Ginger Root、石野卓球らが名を連ねる。会場はラグーナビーチと遊園地ラグナシアの両方を使う。音楽フェスというより、市場に音楽が加わった催しとして設計されている。</description>
-    </item>
-    <item>
-      <title>THE STAR FESTIVAL</title>
-      <link>https://techno-japan.media/festivals/the-star-festival.html</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals/the-star-festival.html</guid>
-      <pubDate>Sat, 16 May 2026 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Kyoto — THE STAR FESTIVALは、京都という歴史ある土地に日本のアンダーグラウンド・エレクトロニック・ミュージック・コミュニティを結集させるフェスティバルだ。テクノとハウスを軸に、名の知れたアーティストから新進気鋭のアクトまでを紹介し、伝統と革新的なカルチャーが融合するこの街ならではの空気感を映し出す、親密な集いを作り出している。丁寧に練り上げられたラインナップと、雰囲気のあるヴェニュー選びで知られている。</description>
-    </item>
-    <item>
-      <title>円相芸術音楽祭</title>
-      <link>https://techno-japan.media/festivals/ensou.html</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals/ensou.html</guid>
-      <pubDate>Fri, 15 May 2026 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Tochigi — 円相とは一筆で描かれた円のことで、悟りや真理、執着のない心を象徴的に表す。主催は村民ENTERTAINMENT。その言葉を名前に据え、芸術と音楽の祭典を掲げる。会場は公表されない。栃木県南部としか明かされず、場所を知るのはチケットを買った人だけだ。 ステージングは1960年代から2000年代へと受け継がれてきた野外フェスとレイヴを意識する。ライブに TōYō、The Factors、The Rolling Papers、カタケン、ドグラマグラ、DJ には Sunju Hargun、Atsushi Maeda、kojiro。出店や飲食に加え、マッサージ、図書館、レコード販売、ハンモックを備えたチルスポットが併設される。VJ、照明、フィールドデザインの各クルーも出演者として掲載される。</description>
-    </item>
-    <item>
       <title>野外テクノパーティTranscendenceで見た次世代ジェネレーションの可能性</title>
       <link>https://techno-japan.media/articles/transcendence-2025-report.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/transcendence-2025-report.html</guid>
-      <pubDate>Tue, 04 Aug 2026 07:10:03 -0000</pubDate>
+      <pubDate>Wed, 05 Aug 2026 05:42:46 -0000</pubDate>
       <category>REPORT</category>
       <description></description>
     </item>
