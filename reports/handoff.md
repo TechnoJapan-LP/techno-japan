@@ -370,6 +370,32 @@
 2. `lineup_linked_acts` は 91 が新しい下限。`etsuetsu` の LINEUP 修正で 92 になる見込み
 3. `sisi` / `ouissam` / `tonbo` の3件が新たに published になっている。意図した公開か未確認
 
+## 2026-08-05 / Codex / 完了（EDITIONS・LINEUPS正式接続）
+
+### 実施
+- `fetch-data.mjs` の正式ソースを EDITIONS（gid `1765363054`）/ LINEUPS（gid `580984930`）へ切替
+- CMSでシートの開催回を読み込み、既存行の回別編集を `update_row` で同期
+- 新規開催回・出演行は各シート末尾の次行へ `update_row` で追記
+- DATA_SCHEMA と AUDIT §9-43 を実装状態へ更新
+
+### コミット
+- SHA: `3e985ed`（正式ソース接続）、`b59bfa4`（CMS同期）
+- push / rebase 状態: push済み。Deploy `30970256013` 成功
+
+### 検証
+- `node scripts/fetch-data.mjs --dry`: EDITIONS 95行 / LINEUPS 130行、エラー0
+- `python3 scripts/check_regressions.py`: 全項目通過
+- `python3 scripts/check_asset_versions.py --base HEAD~1`: cms.js v39、通過
+- GitHub Actions 回帰ガード・Deploy: 成功
+
+### 変更したパターン
+- EDITIONS / LINEUPS 公開CSV → JSON生成: 1経路
+- CMS開催回編集 → EDITIONS / LINEUPS `update_row`: 2経路
+
+### 未確認の類似パターン
+- `festival-de-frue` のLINEUPS 7行が `festival-de-frue-2026` を参照していない — **警告として検出済み・データ修正は未実施**
+- `matricaria-2026` の `doltz.` / `Tonbo` ARTIST_ID参照切れ — **警告として検出済み・データ修正は未実施**
+
 ## 2026-08-05 / Codex / 作業中（開催回CMSブリッジ）
 
 ### 実施
