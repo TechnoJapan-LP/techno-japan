@@ -295,6 +295,34 @@ async function main() {
         lineups.push(stripMeta({EDITION_ID:editionId,ARTIST_ID:hit&&ID_RE.test(hit)?hit:'',ACT_LABEL:hit?'':act,SET_TYPE:setType,SORT:String(i+1)}));
       });
     }
+
+  }
+
+  /* 移行漏れの検出。
+
+     FESTIVALS には旧 LINEUP 列が残っており、CMS もそこへ書ける。
+     正式モードは LINEUPS シートしか読まないので、旧列にしか出演者が
+     無いフェスは詳細ページの LINE UP が**黙って出ない**。
+     2026-08-06 に loa-lost-paradise(13名) / global-ark(40名) の
+     計53名がこの状態だった。ページは正常に見えるので気づけない。
+
+     出せない出演者がいることを必ず見えるようにする。
+     ここで落とさないのは、旧列は移行途中の正常な状態でもあるため。 */
+  const lineupCountByFestival = new Map();
+  for (const l of lineups) {
+    const fid = editions.find(e => e.EDITION_ID === l.EDITION_ID)?.FESTIVAL_ID;
+    if (fid) lineupCountByFestival.set(fid, (lineupCountByFestival.get(fid) || 0) + 1);
+  }
+  for (const r of raw.FESTIVALS) {
+    const fid = String(r.ID || '').trim();
+    if (!fid || !isPublished(r)) continue;
+    const legacy = String(r.LINEUP || '').split(',').map(s => s.trim()).filter(Boolean);
+    if (legacy.length && !lineupCountByFestival.get(fid)) {
+      warnings.push(
+        `FESTIVALS "${fid}": LINEUP列に${legacy.length}名あるが LINEUPS シートに0行 — ` +
+        `詳細ページに LINE UP が出ません（LINEUPS へ移してください）`
+      );
+    }
   }
 
   // --- EVENTS（IDなし → NAME+DATE で暫定キー。孤児参照チェック）---
