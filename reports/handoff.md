@@ -585,3 +585,26 @@
 
 ### 未確認の類似パターン
 - 認証済みCMSでの実保存操作: **未実施**
+
+## 2026-08-06 / Codex / 完了（全面強化・初動）
+
+### 実施
+- 公開・CMS/GAS・Publish・Backup・CIを横断監査
+- Publish停止原因 `yazzus` 参照切れを特定
+- 参照切れを全件収集し、該当 EDITION_ID まで表示する生成器に改善
+- セキュリティ/信頼性の段階的実装計画を `reports/security-hardening-plan.md` に記録
+
+### コミット
+- SHA: `d3305c9`
+- Deploy `31062591994` 成功
+
+### 検証
+- `node --check scripts/build-detail-pages.mjs`: 成功
+- 回帰ガード・Deploy: 成功
+
+### 変更したパターン
+- LINEUPS参照切れの全件診断: 1経路
+
+### 未確認の類似パターン
+- `yazzus` を含む最新シートの修正後Publish: **未実施**（シート修正が必要）
+- CMS/GASの実ブラウザ認証操作: **未実施**
