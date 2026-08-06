@@ -1499,15 +1499,30 @@ function filterArtists(inputId, listId, prefix) {
   if (!val) { list.classList.remove('show'); return; }
   const matches = suggestArtistCandidates(val).filter(a=>!lineups[prefix].includes(a.id));
   if (!matches.length) { list.classList.remove('show'); return; }
-  list.innerHTML = matches.map(a => '<div class="autocomplete-item" onmousedown="addLineup(\''+prefix+'\',\''+a.id+'\')"><strong>'+esc(a.name)+'</strong> <span style="opacity:.5;font-size:.8em">'+esc(a.id)+' · '+esc(a.reason)+'</span></div>').join('');
+  // 候補は表示するだけにし、クリックしたときだけ明示的に採用する。
+  // 入力値 (例: YAMA) を候補 (例: YAMARCHY) に暗黙変換しない。
+  list.innerHTML = matches.map(a => '<div class="autocomplete-item" role="button" tabindex="0" onclick="addLineup(\''+prefix+'\',\''+a.id+'\')"><strong>候補を採用: '+esc(a.name)+'</strong> <span style="opacity:.5;font-size:.8em">'+esc(a.id)+' · '+esc(a.reason)+'</span></div>').join('');
   list.classList.add('show');
 }
 function acKeydown(e, listId, prefix) {
   const list=document.getElementById(listId), items=list.querySelectorAll('.autocomplete-item');
+  if(e.key==='Enter'&&acHighlight<0){
+    const input=document.getElementById(prefix+'-lineupInput');
+    const raw=input&&input.value.trim();
+    if(raw){
+      e.preventDefault();
+      const tag='?'+raw;
+      if(!lineups[prefix].includes(tag)) lineups[prefix].push(tag);
+      renderLineupTags(prefix);
+      input.value='';
+      list.classList.remove('show');
+    }
+    return;
+  }
   if (!items.length) return;
   if (e.key==='ArrowDown'){e.preventDefault();acHighlight=Math.min(acHighlight+1,items.length-1)}
   else if(e.key==='ArrowUp'){e.preventDefault();acHighlight=Math.max(acHighlight-1,0)}
-  else if(e.key==='Enter'&&acHighlight>=0){e.preventDefault();items[acHighlight].onmousedown();return}
+  else if(e.key==='Enter'&&acHighlight>=0){e.preventDefault();items[acHighlight].click();return}
   else return;
   items.forEach((it,i)=>it.classList.toggle('highlight',i===acHighlight));
 }
