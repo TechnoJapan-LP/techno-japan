@@ -100,6 +100,11 @@ jobs:
       - name: Check internal links
         run: python3 scripts/check_internal_links.py
 
+      # CMS は prompt() でブラウザ検査ができないので、cms.js を VM に読んで
+      # 開催回まわりの回帰を見る（AUDIT §9-47）。
+      - name: Check CMS editions logic
+        run: node scripts/check_cms_editions.mjs
+
       - name: Check card image derivatives
         run: python3 scripts/check_image_derivatives.py
 
