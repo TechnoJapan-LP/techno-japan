@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-08-04T16:35:43.938Z",
-  "count": 92,
+  "_generatedAt": "2026-08-06T02:55:20.735Z",
+  "count": 97,
   "items": [
     {
       "EDITION_ID": "snow-machine-japan-2026",
@@ -942,6 +942,60 @@
       "PREF": "Nagano",
       "TICKETURL": "https://tiget.net/events/484557",
       "FLYER": "images/festivals/sub-tide-flyer.webp",
+      "STATUS": "published"
+    },
+    {
+      "EDITION_ID": "body-soul-2025",
+      "FESTIVAL_ID": "body-soul",
+      "EDITION": "2025",
+      "DATE_START": "2025-06-08",
+      "DATE_END": "2025-06-08",
+      "PREF": "Tokyo"
+    },
+    {
+      "EDITION_ID": "signal-2025",
+      "FESTIVAL_ID": "signal",
+      "EDITION": "2025",
+      "DATE_START": "2025-06-14",
+      "DATE_END": "2025-06-15",
+      "PREF": "Yamanashi"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2025",
+      "FESTIVAL_ID": "grow-the-culture-open-air",
+      "EDITION": "2025",
+      "DATE_START": "2025-11-08",
+      "DATE_END": "2025-11-09",
+      "PREF": "Tokyo"
+    },
+    {
+      "EDITION_ID": "loa-lost-paradise-2026",
+      "FESTIVAL_ID": "loa-lost-paradise",
+      "EDITION": "2026",
+      "DATE_START": "2026-08-15",
+      "DATE_END": "2026-08-16",
+      "LOCATION": "Nalu Beach",
+      "PREF": "Ibaraki",
+      "ADDRESS": "茨城県鉾田市汲上2525",
+      "LAT": "36.0827",
+      "LNG": "140.596",
+      "FLYER": "images/festivals/loa-lost-paradise-flyer.webp",
+      "STATUS": "published"
+    },
+    {
+      "EDITION_ID": "global-ark-2026",
+      "FESTIVAL_ID": "global-ark",
+      "EDITION": "2026",
+      "DATE_START": "2026-08-21",
+      "DATE_END": "2026-08-23",
+      "LOCATION": "Nozoriko Camping Ground",
+      "LOCATION_JA": "野反湖キャンプ場",
+      "PREF": "Gunma",
+      "ADDRESS": "群馬県吾妻郡中之条町入山 国有林内",
+      "LAT": "36.6976",
+      "LNG": "138.6534",
+      "TICKETURL": "https://globalark.zaiko.io/en/e/global-ark-2026",
+      "FLYER": "images/festivals/global-ark-flyer.webp",
       "STATUS": "published"
     }
   ]

@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-08-04T16:35:43.938Z",
+  "_generatedAt": "2026-08-06T02:55:20.735Z",
   "count": 92,
   "items": [
     {
@@ -808,12 +808,24 @@
     },
     {
       "ID": "yamauto",
+      "TYPE": "rave",
       "NAME": "YAMAUTO",
-      "DATE": "2025-08-09/2025-08-18",
+      "DATE": "2026-08-22/2026-08-30",
+      "LOCATION": "Sansuibito Eco Village",
       "CITY": "Shiga",
-      "GENRE": "TECHNO · HOUSE · PSYCHEDELIC",
+      "ADDRESS": "滋賀県高島市朽木針畑",
+      "LAT": "35.3056",
+      "LNG": "135.8369",
+      "IMAGE": "images/festivals/yamauto.webp",
+      "FLYER": "images/festivals/yamauto-flyer.webp",
+      "GENRE": "TECHNO, OTHERS",
       "DESC": "YAMAUTOは、滋賀県の山あいの地形を舞台に開催される、複数日程にわたるエレクトロニック・ミュージックの祭典として展開されている。フェスティバルはロングセットと没入感あるサウンドスケープを重視し、琵琶湖近郊の秘境的なロケーションに、国内外のアーティストたちを呼び集めている。",
-      "DESC_EN": "YAMAUTO operates as a multi-day electronic music gathering set against the mountainous terrain of Shiga Prefecture. The festival emphasizes extended sets and immersive soundscapes, drawing both local and international acts to its remote location near Lake Biwa."
+      "URL": "https://yamauto.net/",
+      "INSTAGRAM": "https://www.instagram.com/yamauto2026/",
+      "EDITIONS": "[{\"year\":\"2025\",\"edition\":\"\",\"date\":\"2025-08-09/2025-08-18\",\"location\":\"Sansuibito Eco Village\",\"location_ja\":\"山水人エコビレッジ\",\"address\":\"滋賀県高島市朽木針畑\",\"lat\":\"35.3056°\",\"lng\":\"135.8369\",\"ticketUrl\":\"\",\"flyer\":\"images/festivals/yamauto-2025-flyer.webp\",\"status\":\"finished\",\"lineup\":[]},{\"year\":\"2026\",\"edition\":\"\",\"date\":\"2025-08-22/2025-08-30\",\"location\":\"Sansuibito Eco Village\",\"location_ja\":\"山水人エコビレッジ\",\"address\":\"滋賀県高島市朽木針畑\",\"lat\":\"35.3056°\",\"lng\":\"135.8369\",\"ticketUrl\":\"\",\"flyer\":\"\",\"status\":\"announced\",\"lineup\":[]}]",
+      "STATUS": "published",
+      "DESC_EN": "YAMAUTO operates as a multi-day electronic music gathering set against the mountainous terrain of Shiga Prefecture. The festival emphasizes extended sets and immersive soundscapes, drawing both local and international acts to its remote location near Lake Biwa.",
+      "location_ja": "山水人エコビレッジ"
     },
     {
       "ID": "specialflower-festival",
@@ -826,12 +838,24 @@
     },
     {
       "ID": "loa-lost-paradise",
+      "TYPE": "rave",
       "NAME": "LOA-LOST PARADISE-",
-      "DATE": "2025-08-16/2025-08-17",
+      "DATE": "2026-08-15/2026-08-16",
+      "LOCATION": "Nalu Beach",
       "CITY": "Ibaraki",
-      "GENRE": "TECHNO · HOUSE · PSYCHEDELIC",
-      "DESC": "LOA-LOST PARADISEは、茨城の自然の景観を、身も心も浸りきるようなテクノの聖域へと変貌させ、県内の森に覆われた大地の奥深くへと信奉者たちを引き込んでいく。このフェスティバルは、アンダーグラウンドの精神を貫きながらも、生々しいインダストリアルの音響世界と、催眠的なミニマル構造の境界を曖昧にする、一切妥協のないラインアップを届け続けている。",
-      "DESC_EN": "LOA-LOST PARADISE transforms Ibaraki's natural landscape into an immersive techno sanctuary, drawing devotees deep into the prefecture's forested terrain. The festival maintains its underground ethos while delivering uncompromising lineups that blur the boundaries between raw industrial soundscapes and hypnotic minimal structures."
+      "ADDRESS": "茨城県鉾田市汲上2525",
+      "LAT": "36.0827",
+      "LNG": "140.596",
+      "IMAGE": "images/festivals/loa-lost-paradise.webp",
+      "FLYER": "images/festivals/loa-lost-paradise-flyer.webp",
+      "GENRE": "TECHNO, HOUSE, OTHERS",
+      "DESC": "LOA-LOST PARADISEは、太平洋に面した茨城・鉾田の nalu beach で開かれる、「New style beach party」を掲げたビーチパーティー。構成は「Sunset to Sunset」。日没から翌日の日没まで、夜の闇に脈打つ低音と、朝の光に踊るグルーヴが地続きで繋がる。ジャンルも世代も年齢も問わない、ただ踊るための場所であることを掲げる。",
+      "INSTAGRAM": "https://www.instagram.com/loa_lost_paradise/",
+      "LINEUP": "GIZMO, Junko Onagi, KANKEEY, LAZZZY, Louis Shannon, MAMAZU, NICO, Rickey Shannon, Ryoki Shindo, Saeki Takuya, SWELY, TAAAHHH, YUXI",
+      "EDITIONS": "[{\"year\":\"2025\",\"edition\":\"1\",\"date\":\"2025-08-16/2025-08-17\",\"location\":\"Nalu Beach\",\"location_ja\":\"\",\"address\":\"茨城県鉾田市汲上2525\",\"lat\":\"36.0827\",\"lng\":\"140.5960\",\"ticketUrl\":\"\",\"flyer\":\"images/festivals/loa-lost-paradise-2025-flyer.webp\",\"status\":\"finished\",\"lineup\":[]},{\"year\":\"2026\",\"edition\":\"\",\"date\":\"\",\"location\":\"\",\"location_ja\":\"\",\"address\":\"\",\"lat\":\"\",\"lng\":\"\",\"ticketUrl\":\"\",\"flyer\":\"\",\"status\":\"announced\",\"lineup\":[]}]",
+      "STATUS": "published",
+      "DESC_EN": "LOA-LOST PARADISE is a beach party on the Pacific coast at nalu beach in Hokota, Ibaraki, billed by its organisers as a new style beach party. The structure is sunset to sunset. Low end pulsing through the dark and grooves moving in the morning light run continuously into one another, across one unbroken stretch of time. The stated intention is a floor with no lines drawn across genre, generation or age. Somewhere to dance, and nothing more complicated than that.",
+      "imagePosition": "center bottom"
     },
     {
       "ID": "sawagi-festival",
@@ -853,12 +877,27 @@
     },
     {
       "ID": "global-ark",
+      "TYPE": "rave",
       "NAME": "Global Ark",
-      "DATE": "2025-08-29/2025-08-31",
+      "DATE": "2026-08-21/2026-08-23",
+      "LOCATION": "Nozoriko Camping Ground",
       "CITY": "Gunma",
-      "GENRE": "TECHNO · HOUSE",
+      "ADDRESS": "群馬県吾妻郡中之条町入山 国有林内",
+      "LAT": "36.6976°",
+      "LNG": "138.6534",
+      "IMAGE": "images/festivals/global-ark.webp",
+      "FLYER": "images/festivals/global-ark-flyer.webp",
+      "GENRE": "TECHNO, HOUSE",
       "DESC": "Global Arkは、群馬の山岳地帯に国内外のアーティストを集める、日本を代表する野外エレクトロニック・ミュージック・イベントの一つとして位置づけられている。フェスティバルは没入感のあるサウンドデザインと自然との一体感を重視し、国内アンダーグラウンド・ダンスコミュニティのための一時的な自治区（テンポラリー・オートノマス・ゾーン）を作り出している。",
-      "DESC_EN": "Global Ark positions itself as one of Japan's premier outdoor electronic music gatherings, drawing international and domestic artists to Gunma's mountainous terrain. The festival emphasizes immersive sound design and natural integration, creating a temporary autonomous zone for the country's underground dance community."
+      "URL": "https://www.global-ark.net/",
+      "TICKETURL": "https://globalark.zaiko.io/en/e/global-ark-2026",
+      "INSTAGRAM": "https://www.instagram.com/global_ark/",
+      "LINEUP": "D-Leria, Mathys Lenne, Tohru Takahashi, dj-miku, dj-kensei, moodman, J.A.K.A.M., dj-yogurt, AKIRA ARASAWA, yakenohara, choko, sunga, 7e, DANA NADA, naotsun, akihiro-suzuki, Ryoichi Komagome, tsutomu, GAKU SAIMURA, Shinya Miyachi, Isamu Kobayashi, Eiichi Kawai, YAKO MIKA, OYASSAN, ken-ishii, Q'HEY, HIDEO KOBAYASHI, DJ SODEYAMA, DRUNKEN KONG, RISA TANIGUCHI, Yoshinori Hayashi, nutmeg, heykazma, YOUTH, liarako, HENTAI CAMERA MAN, Ecstasy Twins, Shaman Riyo, SUEPON, AOKIYA",
+      "EDITIONS": "[{\"year\":\"2025\",\"edition\":\"13\",\"date\":\"2025-08-29/2025-08-31\",\"location\":\"Sutekinamura Camping Ground\",\"location_ja\":\"ステキな村キャンプ場\",\"address\":\"群馬県吾妻郡東吾妻町本宿３３３０−５\",\"lat\":\"36.5298\",\"lng\":\"138.7423\",\"ticketUrl\":\"\",\"flyer\":\"images/festivals/global-ark-2025-flyer.webp\",\"status\":\"finished\",\"lineup\":[\"JAMES HOLDEN\",\"Stefan Goldmann\",\"Stefan Vincent\",\"Tohru Takahashi\",\"DJ MIKU\",\"Kaoru Inoue\",\"J.A.K.A.M.\",\"DJ YOGURT\",\"HIDEO KOBAYASHI\",\"DRUNKEN KONG\",\"HENTAI CAMERA MAN\",\"DO SHOCK BOOZE\",\"Ecstasy Twins\",\"Sancho Meiso Chaya）\",\"Akira Arasawa\",\"7e\",\"Dani Savant\",\"ERIMIYA\",\"GAKU SAIMURA\",\"TAICHI KAWAHIRA\",\"Tsutomu\",\"AΦPOΔITA\",\"Tatsuo Sunaga\",\"DJ KENSEI\",\"ENUOH × MATSUNAMI\",\"Isamu Kobayashi\",\"Bob Rogue\",\"DJ Dante\",\"DANA NADA\",\"Akihiro Suzuki\",\"NUTMEG\",\"Eiichi Kawai\",\"DJ YAKO MIKA\",\"DJ. CHAPPY & JUNKO\",\"Ken2\",\"DIGITALBLOCK DJs\",\"KOTARO\",\"Kojiro\",\"SayakaStar\",\"NORID\",\"naotsun\",\"snipe1\",\"TARZAN\"]},{\"year\":\"2026\",\"edition\":\"14\",\"date\":\"2026-08-21/2026-08-23\",\"location\":\"Sutekinamura Camping Ground\",\"location_ja\":\"ステキな村キャンプ場\",\"address\":\"群馬県吾妻郡東吾妻町本宿３３３０−５\",\"lat\":\"36.5298\",\"lng\":\"138.7423\",\"ticketUrl\":\"\",\"flyer\":\"\",\"status\":\"announced\",\"lineup\":[]}]",
+      "STATUS": "published",
+      "metaDescription": "群馬の山岳地帯で開催される日本を代表する野外エレクトロニック・ミュージック・イベント。没入的なサウンドデザインと自然との融合を実現する、国内外アーティストが集結するフェスティバルの全貌をご紹介します。",
+      "DESC_EN": "Global Ark positions itself as one of Japan's premier outdoor electronic music gatherings, drawing international and domestic artists to Gunma's mountainous terrain. The festival emphasizes immersive sound design and natural integration, creating a temporary autonomous zone for the country's underground dance community.",
+      "location_ja": "野反湖キャンプ場"
     },
     {
       "ID": "kyoumei-gathering",

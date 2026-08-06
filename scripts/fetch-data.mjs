@@ -264,16 +264,63 @@ async function main() {
       }));
     }
     const editionIds = new Set(editions.map(e => e.EDITION_ID));
+    // 公開されるアーティストの ID と、draft も含む ID→表示名。
+    const publishedArtistIds = new Set(artists.map(a => String(a.ID || '').trim()).filter(Boolean));
+    const artistNameById = new Map(
+      raw.ARTISTS.map(a => [String(a.ID || '').trim(), String(a.NAME || '').trim()]).filter(([id]) => id));
     for (const r of raw.LINEUPS) {
       const editionId = String(r.EDITION_ID || '').trim();
       if (!editionIds.has(editionId)) {
         if (editionId) warnings.push(`LINEUPS ${editionId}: EDITION_ID参照切れ`);
         continue;
       }
-      const artistId = String(r.ARTIST_ID || '').trim();
-      if (artistId && !artistIds.has(artistId)) warnings.push(`LINEUPS ${editionId}: ARTIST_ID参照切れ "${artistId}"`);
+      /* ARTIST_ID は「公開されているアーティスト」に対してだけ通す。
+
+         §9-27 と同じ穴が、こちら（正式な LINEUPS 経路）に残っていた。
+         artistIds は raw.ARTISTS から作るので draft / archived も含む。
+         そのまま lineups.json に ARTIST_ID を残すと、build-detail-pages.mjs が
+         読む data.js には公開分しか無いため「ARTIST_ID 参照切れ」で
+         ビルドが落ちる。2026-08-06 に 20件（waifu / arch / ala）で再発した。
+
+         方針は §9-27 と同じ:「掲載したいアーティストのみ登録し、
+         それ以外は draft にする」以上、draft のアクトは
+         ACT_LABEL として名前だけ残るのが正しい。リンクは張らずに出す。
+         ここで捨てると出演者そのものが消えるので、名前は必ず残す。 */
+      const rawArtistId = String(r.ARTIST_ID || '').trim();
+      let artistId = rawArtistId;
+      let actLabel = r.ACT_LABEL || '';
+
+      /* ARTIST_ID が空でも、ACT_LABEL が公開アーティストの名前と一致すれば繋ぐ。
+
+         2026-08-06 に the-star-festival / transcendence / rainbow-disco-club /
+         99flags の LINEUPS 行が ARTIST_ID 空 + ACT_LABEL 文字列に変わっており、
+         CLIPZ・DJ HYPE・Powder・SHERELLE・upsammy など15枠のリンクが外れていた。
+         アーティスト詳細への導線と、アーティスト側の「出演フェス」逆引きが
+         同時に消えるので、影響は LINEUP の見た目だけに留まらない。
+
+         互換モードは以前からこの名前解決をしている（nameToArtist）。
+         同じ規則をこちらにも通し、入力の書き方の違いで導線が消えないようにする。
+         b2b / live は「Antal & Hunee」のような複合枠なので解決しない
+         （互換モードと同一条件）。 */
+      const setTypeRaw = String(r.SET_TYPE || 'dj').trim().toLowerCase();
+      if (!artistId && actLabel && setTypeRaw === 'dj') {
+        const hit = nameToArtist.get(normName(actLabel));
+        if (hit && ID_RE.test(hit)) {
+          artistId = hit;
+          actLabel = '';   // 表示名は ARTISTS 側を正とする（互換モードと同じ）
+        }
+      }
+
+      if (artistId && !publishedArtistIds.has(artistId)) {
+        const known = artistNameById.get(artistId);
+        actLabel = actLabel || known || artistId;
+        artistId = '';
+        warnings.push(known
+          ? `LINEUPS ${editionId}: "${rawArtistId}" は draft/archived のため、リンク無しの「${actLabel}」として出します`
+          : `LINEUPS ${editionId}: ARTIST_ID参照切れ "${rawArtistId}" — ARTISTS に存在しません（名前だけ出します）`);
+      }
       lineups.push(stripMeta({
-        EDITION_ID:editionId, ARTIST_ID:artistId, ACT_LABEL:r.ACT_LABEL || '',
+        EDITION_ID:editionId, ARTIST_ID:artistId, ACT_LABEL:actLabel,
         SET_TYPE:r.SET_TYPE || 'dj', STAGE:r.STAGE || '', DAY:r.DAY || '',
         START:r.START || '', END:r.END || '', SORT:r.SORT || '',
       }));

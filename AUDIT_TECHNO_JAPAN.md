@@ -3427,3 +3427,48 @@ DATE だけ2026に進めて EDITIONS に回を足していない状態。
   生成した TSV では `36.6976` にしたが、**FESTIVALS 側も直すこと**
 - `LINEUPS` に `EDITION_ID = "festival-de-frue"`（年なし）の行が7つある。
   `EDITION_ID参照切れ` として捨てられている
+
+#### 追記: 導出を通したら、同じ穴が LINEUPS 経路にも残っていた
+
+`EDITIONS` に2026回を追加してもらい導出を通したところ、ビルドが
+**`ARTIST_ID 参照切れ 22件`** で落ちた（waifu / arch / ala / matricaria）。
+
+原因は §9-27 とまったく同じで、直した場所が違っただけだった。
+`artistIds` は `raw.ARTISTS` から作るので **draft / archived も含む**。
+`fetch-data.mjs` の正式な `LINEUPS` 経路はその ID をそのまま
+`lineups.json` に残すが、`build-detail-pages.mjs` が読む `data.js` には
+公開分しか無いので落ちる。§9-27 の修正は互換モード側の
+`nameToArtist` にしか入っていなかった。
+
+対応: 方針は §9-27 と同じ（「掲載したいアーティストのみ登録し、
+それ以外は draft にする」以上、draft のアクトは `ACT_LABEL` として
+名前だけ残るのが正しい）。**リンクは張らずに名前で出す。**
+ここで行ごと捨てると出演者そのものが消えるので、名前は必ず残す。
+20件が該当した（arch 12 / waifu 5 / ala 3）。
+
+#### さらに: 入力の書き方が変わってリンクが15枠外れていた
+
+同じ確認で、**私が触っていないフェスから19本のリンクが消えている**のを見つけた。
+調べると `LINEUPS` シート側が `ARTIST_ID` 空 + `ACT_LABEL` 文字列に
+変わっており（`the-star-festival-2026` / `transcendence-2026` /
+`rainbow-disco-club-2026` / `99flags-2026`）、
+CLIPZ・DJ HYPE・Powder・SHERELLE・upsammy など15枠が
+**アーティスト詳細へのリンクと、アーティスト側の「出演フェス」逆引きを
+同時に失っていた。**
+
+互換モードは以前からこの名前解決をしている（`nameToArtist`）。
+同じ規則を正式経路にも通し、**入力の書き方の違いで導線が消えないようにした。**
+`b2b` / `live` は複合枠なので解決しない（互換モードと同一条件）。
+
+残る4枠は編集判断による表記なので、そのままにした:
+
+```
+Antal & Hunee                       b2b の組
+Dungeoneering (Albino Sound & Daigos)  メンバー註記
+Space Drum Meditation - Live        ライブ註記
+```
+
+結果、リンク付き枠は **98 → 98**（差し引きゼロ）。
+`check_regressions.py` は閾値を1つも下げずに通った。
+**「閾値を下げれば通る」で済ませていたら、15本の導線を失ったまま
+気づかなかった。**
