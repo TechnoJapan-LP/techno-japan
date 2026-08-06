@@ -298,29 +298,71 @@ async function main() {
 
   }
 
-  /* 移行漏れの検出。
+  /* 旧 FESTIVALS.LINEUP 列からの導出（移行の橋渡し）。
 
      FESTIVALS には旧 LINEUP 列が残っており、CMS もそこへ書ける。
      正式モードは LINEUPS シートしか読まないので、旧列にしか出演者が
      無いフェスは詳細ページの LINE UP が**黙って出ない**。
-     2026-08-06 に loa-lost-paradise(13名) / global-ark(40名) の
-     計53名がこの状態だった。ページは正常に見えるので気づけない。
+     2026-08-06 の実測で 14フェス / 311名 がこの状態だった
+     （etsuetsu 57名 / nu-festival 65名 / global-ark 40名 ほか）。
+     ページ自体は正常に描画されるので気づけない。AUDIT §9-46。
 
-     出せない出演者がいることを必ず見えるようにする。
-     ここで落とさないのは、旧列は移行途中の正常な状態でもあるため。 */
-  const lineupCountByFestival = new Map();
-  for (const l of lineups) {
-    const fid = editions.find(e => e.EDITION_ID === l.EDITION_ID)?.FESTIVAL_ID;
-    if (fid) lineupCountByFestival.set(fid, (lineupCountByFestival.get(fid) || 0) + 1);
-  }
-  for (const r of raw.FESTIVALS) {
-    const fid = String(r.ID || '').trim();
-    if (!fid || !isPublished(r)) continue;
-    const legacy = String(r.LINEUP || '').split(',').map(s => s.trim()).filter(Boolean);
-    if (legacy.length && !lineupCountByFestival.get(fid)) {
+     LINEUPS が正式な置き場所であることは変えない。移し終えるまでの間、
+     旧列の値を捨てないための導出をここに置く。導出ロジックは下の
+     互換モードと同一で、違うのは「対応する開催回を選ぶ」ところだけ。
+
+     ・そのフェスに LINEUPS 行が1行でもあれば、シート側が正。何もしない
+     ・FESTIVALS.DATE の年に対応する開催回へ付ける。今の出演者は
+       今の開催回のものなので、過去回に付けてはいけない
+     ・対応する回が無ければ付け先が無い。警告だけ出す
+       （loa-lost-paradise / global-ark が該当。EDITIONS に2026回が無い）
+
+     移行が終われば旧列が空になり、このブロックは自然に何もしなくなる。 */
+  {
+    const editionsByFestival = new Map();
+    for (const e of editions) {
+      const a = editionsByFestival.get(e.FESTIVAL_ID) || [];
+      a.push(e);
+      editionsByFestival.set(e.FESTIVAL_ID, a);
+    }
+    const festivalsWithLineup = new Set();
+    for (const l of lineups) {
+      const fid = editions.find(e => e.EDITION_ID === l.EDITION_ID)?.FESTIVAL_ID;
+      if (fid) festivalsWithLineup.add(fid);
+    }
+
+    for (const r of raw.FESTIVALS) {
+      const fid = String(r.ID || '').trim();
+      if (!fid || !isPublished(r)) continue;
+      if (festivalsWithLineup.has(fid)) continue;
+      const acts = String(r.LINEUP || '').split(',').map(x => x.trim()).filter(Boolean);
+      if (!acts.length) continue;
+
+      const year = yearOf(normalizeDate('EDITIONS', fid, (r.DATE || '').split('/')[0].trim()));
+      const eds = editionsByFestival.get(fid) || [];
+      const target = eds.find(e => String(e.EDITION) === String(year))
+        || eds.find(e => String(e.DATE_START || '').slice(0, 4) === String(year));
+      if (!target) {
+        warnings.push(
+          `FESTIVALS "${fid}": LINEUP列に${acts.length}名あるが、DATE(${r.DATE})の年に対応する`
+          + ` EDITIONS 行が無いため出せません（EDITIONS に ${fid}-${year} を追加してください）`
+        );
+        continue;
+      }
+      acts.forEach((act, i) => {
+        const setType = /-live-/i.test(act) ? 'live' : (/\bb2b\b/i.test(act) ? 'b2b' : 'dj');
+        const hit = setType === 'dj' ? nameToArtist.get(normName(act)) : '';
+        lineups.push(stripMeta({
+          EDITION_ID: target.EDITION_ID,
+          ARTIST_ID: hit && ID_RE.test(hit) ? hit : '',
+          ACT_LABEL: hit ? '' : act,
+          SET_TYPE: setType, STAGE: '', DAY: '', START: '', END: '',
+          SORT: String(i + 1),
+        }));
+      });
       warnings.push(
-        `FESTIVALS "${fid}": LINEUP列に${legacy.length}名あるが LINEUPS シートに0行 — ` +
-        `詳細ページに LINE UP が出ません（LINEUPS へ移してください）`
+        `FESTIVALS "${fid}": LINEUP列の${acts.length}名を ${target.EDITION_ID} へ導出しました`
+        + `（LINEUPS シートへ移すとステージ・日別・時間も持てます）`
       );
     }
   }

@@ -1,0 +1,3 @@
+EDITION_ID	FESTIVAL_ID	EDITION	DATE_START	DATE_END	LOCATION	LOCATION_JA	VENUE_ID	PREF	ADDRESS	LAT	LNG	TICKETURL	FLYER	STATUS
+loa-lost-paradise-2026	loa-lost-paradise	2026	2026-08-15	2026-08-16	Nalu Beach			Ibaraki	茨城県鉾田市汲上2525	36.0827	140.596		images/festivals/loa-lost-paradise-flyer.webp	published
+global-ark-2026	global-ark	2026	2026-08-21	2026-08-23	Nozoriko Camping Ground	野反湖キャンプ場		Gunma	群馬県吾妻郡中之条町入山 国有林内	36.6976	138.6534	https://globalark.zaiko.io/en/e/global-ark-2026	images/festivals/global-ark-flyer.webp	published

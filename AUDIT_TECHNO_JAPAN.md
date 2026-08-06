@@ -3346,3 +3346,84 @@ GitHub Pagesの帯域、生成パイプライン停止、CMS/GAS認証境界で�
 全面強化の計画は `reports/security-hardening-plan.md` に記録した。優先順位は、
 参照切れ復旧導線、CMS/GAS認証・権限、入力/画像/URL境界、Publish/Backup再実行性、
 CI権限・依存関係・秘密情報、実ブラウザ/負荷計測の順とする。
+
+### 9-46. 出演者311名が詳細ページに出ていなかった（2026-08-06）
+
+`https://techno-japan.media/festivals/loa-lost-paradise.html` で
+「LINEUP がフライヤー横に入っていない」という指摘から入った。
+調べたら1ページの話ではなかった。
+
+#### 何が起きていたか
+
+`FESTIVALS` シートには旧 `LINEUP` 列が残っており、CMS もそこへ書ける。
+一方 `fetch-data.mjs` の正式モード（段階2で `EDITIONS` / `LINEUPS` シートを
+正式ソースにした）は **`LINEUPS` シートしか読まない**。
+
+その結果、旧列にしか出演者が無いフェスは
+**詳細ページの LINE UP が黙って出ない**。
+ページ自体は正常に描画され、エラーも警告も出ない。
+
+実測（ライブシート / 2026-08-06）:
+
+```
+14フェス / 311名 が該当
+  nu-festival 65 / etsuetsu 57 / global-ark 40 / rural 31 / sub-tide 23
+  spring-love-harukaze 16 / hacha-mecha 13 / letus-music-camp 13
+  loa-lost-paradise 13 / link-open-air 10 / e-groove 10
+  festival-de-frue 7 / festival-fruezinho 7 / ensou 6
+```
+
+**「出ない」ことが検出されない構造だったのが本体。**
+参照切れ（`ARTIST_ID参照切れ` 等）は警告が出るのに、
+「そもそも参照が無い」は誰も見ていなかった。
+
+#### 対応
+
+`fetch-data.mjs` の正式モードに、旧列からの導出を橋渡しとして入れた。
+`LINEUPS` が正式な置き場所であることは変えない。
+
+- そのフェスに `LINEUPS` 行が1行でもあれば、シート側が正。何もしない
+- `FESTIVALS.DATE` の年に対応する開催回へ付ける。
+  **今の出演者は今の開催回のものなので、過去回に付けてはいけない**
+- 対応する回が無ければ付け先が無い。警告だけ出す
+- 導出したときも警告を出す（移行が終わるまで見えるようにしておく）
+
+移行が終われば旧列が空になり、このブロックは自然に何もしなくなる。
+
+導出ロジックは互換モード（`--legacy`）と同一で、
+違うのは「対応する開催回を選ぶ」ところだけ。
+
+検証（ローカルで fetch → build して実測、生成物は戻した）:
+
+```
+hacha-mecha    LINE UP=あり  出演枠 13
+nu-festival    LINE UP=あり  出演枠 65
+etsuetsu       LINE UP=あり  出演枠 57
+rural          LINE UP=あり  出演枠 31
+sub-tide       LINE UP=あり  出演枠 23
+→ detail-flyer-lineup has-two-columns（フライヤーの横に並ぶ）
+```
+
+#### 付け先が無い2件 — 別の事故が隠れていた
+
+`loa-lost-paradise` と `global-ark` だけ導出できなかった。
+両方とも **`FESTIVALS.DATE` が2026なのに `EDITIONS` に2025回しか無い**。
+
+これは AGENTS.md が禁じている
+「FESTIVALS の DATE を翌年へ上書きして過去回を消す」の**裏返し**で、
+DATE だけ2026に進めて EDITIONS に回を足していない状態。
+詳細ページは `editions[0]` を見るので、**2025の日程・会場を表示し続けていた**。
+指摘されたページで日程が「AUG 16—17, 2025」だったのはこれが理由。
+
+対応: `data/inbox/export/editions-2026-add.tsv`（2行 × 15列）を生成。
+値はすべて `FESTIVALS` シートの現在値の転記で、推測は入れていない。
+貼り付け後に `EDITIONS` へ2026回が入り、導出も通るようになる。
+
+#### ついでに見つかったデータの傷
+
+- **`global-ark` の `FESTIVALS.LAT` が `36.6976°`**（度記号付き）。
+  `Number.isFinite(Number(LAT))` が false になるので地図リンクが
+  座標ではなく文字列検索にフォールバックする。
+  生成した TSV では `36.6976` にしたが、**FESTIVALS 側も直すこと**
+- `LINEUPS` に `EDITION_ID = "festival-de-frue"`（年なし）の行が7つある。
+  `EDITION_ID参照切れ` として捨てられている
