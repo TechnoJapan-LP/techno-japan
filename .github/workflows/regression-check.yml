@@ -112,7 +112,9 @@ jobs:
           else echo "::error::headless Chrome が見つかりません"; exit 1; fi
 
       - name: Check hub pages render (JS health)
-        run: python3 scripts/check_hub_pages.py
+        # フェス一覧は画像遅延読み込みを含むため、CIのChromeが混雑すると
+        # 既定9秒では描画途中を検査してしまう。失敗を隠さず、描画待ちだけ延長する。
+        run: python3 scripts/check_hub_pages.py --budget 15000
 
       # 生成物は絶対にコミットしない（検査専用ジョブ）。
       # 明示的に捨てて、後続ステップが誤って拾わないようにする。
