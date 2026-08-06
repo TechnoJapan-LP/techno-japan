@@ -48,11 +48,14 @@ permissions:
 # deploy-pages.yml と同じグループ。Pages のデプロイが競合しないようにする。
 concurrency:
   group: pages
-  cancel-in-progress: false
+  # 新しいPublishが来たら、まだ公開していない古い実行を止める。
+  # 最新データだけを最後まで検査・公開し、同じ処理を並列で走らせない。
+  cancel-in-progress: true
 
 jobs:
   publish:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

@@ -19,7 +19,8 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: false
+  # 古いデプロイを待たず、最新コミットのデプロイを優先する。
+  cancel-in-progress: true
 
 # CMS の Publish（`cms: publish data.js`）はこのワークフローでは扱わない。
 # data.js だけが新しく生成物が追従していない状態なので、regression-check の
@@ -45,6 +46,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v4

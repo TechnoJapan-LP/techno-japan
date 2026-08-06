@@ -14,6 +14,11 @@ on:
     types: [completed]
   workflow_dispatch:
 
+# デプロイが連続した場合、古い本番を計測中のLighthouseを止める。
+concurrency:
+  group: lighthouse
+  cancel-in-progress: true
+
 jobs:
   lighthouse:
     # 失敗・キャンセルされたデプロイの後では測らない。
@@ -22,6 +27,7 @@ jobs:
       github.event_name == 'workflow_dispatch' ||
       github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
 
