@@ -52,6 +52,13 @@
     return '/' + s;
   };
 
+  window.tjCardAssetPath = function (value) {
+    var original = String(value == null ? '' : value).trim();
+    var key = original.replace(/^\//, '');
+    var derivative = window.TJ_IMAGE_DERIVATIVES && window.TJ_IMAGE_DERIVATIVES[key];
+    return window.tjAssetPath(derivative || original);
+  };
+
   /* HTML エスケープ。innerHTML に値を差し込む前に必ず通す。
      テンプレートリテラルで組み立てた文字列を innerHTML に代入する箇所が
      ハブ全体で71ある。そのうち攻撃者が制御できるのは URL パラメータ由来の
@@ -96,7 +103,7 @@
      あちらは [data-bg] と element.style の両方を見るようにしてある。
      属性名を変えるなら両方直すこと。 */
   window.tjLazyBgAttr = function (url) {
-    var u = window.tjAssetPath(url);
+    var u = window.tjCardAssetPath(url);
     return u ? ' data-bg="' + window.tjEscapeHtml(u) + '"' : '';
   };
 

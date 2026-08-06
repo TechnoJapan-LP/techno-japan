@@ -97,6 +97,9 @@ jobs:
       - name: Check internal links
         run: python3 scripts/check_internal_links.py
 
+      - name: Check card image derivatives
+        run: python3 scripts/check_image_derivatives.py
+
       # 生成物の静的検査では「JS は配信されているが実行時に死ぬ」障害を検出できない。
       # 実際に headless Chrome で開いて、Uncaught 例外と描画結果を確認する。
       - name: Verify Chrome is available

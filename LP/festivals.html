@@ -732,9 +732,10 @@ footer { padding: 60px 40px; }
 <script src="favorites.js?v=1" defer></script>
 <script src="search.js?v=3" defer></script>
 <!-- localize.js は defer にしない。下のインライン描画が同期実行で tjLocalized を呼ぶ -->
-<script src="localize.js?v=4"></script>
+<script src="localize.js?v=5"></script>
+<script src="image-derivatives.js?v=1"></script>
 <script src="data.js?v=10"></script>
-<script src="image-dimensions.js?v=8"></script>
+<script src="image-dimensions.js?v=9"></script>
 <script>
 
 /* Hide nav on scroll down, show on scroll up */
@@ -1100,7 +1101,7 @@ function renderFestivalCard(f, m, i) {
   // JA は location_ja 優先、EN は英字の location 優先で location_ja へ退避する。
   const locationText = [tjLocalized(f.location, f.location_ja, ''), f.city].filter(Boolean).join(', ');
   const imgHtml = f.image
-    ? `<img ${tjImageSizeAttrs(f.image)} loading="lazy" decoding="async" src="${tjAssetPath(f.image)}" alt="${name}" style="object-position:${f.imagePosition || 'center'}" onerror="this.style.display='none'">`
+    ? `<img ${tjImageSizeAttrs(f.image)} loading="lazy" decoding="async" src="${tjCardAssetPath(f.image)}" data-original-src="${tjAssetPath(f.image)}" alt="${name}" style="object-position:${f.imagePosition || 'center'}" onerror="if(this.dataset.originalSrc&&this.src!==this.dataset.originalSrc){this.src=this.dataset.originalSrc}else{this.style.display='none'}">`
     : '';
   const genres = Array.isArray(f.genre) ? f.genre : (f.genre ? [f.genre] : []);
   return `
