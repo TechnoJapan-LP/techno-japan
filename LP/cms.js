@@ -74,6 +74,26 @@ window.fetch = function(url, options){
   return _origFetch.call(this, url, options);
 };
 
+// GAS側でセッションを失効させられた場合、localStorageの期限だけでは検知できない。
+// アップロードなどの書き込みでInvalid auth tokenが返ったら、古いトークンを捨てて
+// 1回だけ再ログインし、同じ処理を再試行する。
+function isAuthError_(d){
+  const text = String(d?.message || d?.error || '');
+  return /invalid\s+auth\s+token|auth(?:entication)?\s+error|unauthorized/i.test(text);
+}
+async function gasPostJson_(body, retry = true){
+  const response = await fetch(GAS_URL, {method:'POST', body:JSON.stringify(body)});
+  const data = await response.json();
+  if (retry && isAuthError_(data)) {
+    localStorage.removeItem('cms_token');
+    localStorage.removeItem('cms_token_exp');
+    AUTH_TOKEN = null;
+    await checkAuth();
+    return gasPostJson_(body, false);
+  }
+  return data;
+}
+
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbxhJ6rtGoAirNyV5TtBvzWHNOT8RuB0nfDjwglmdu8ClhpWZ-OXSbMM4UyFE_7ZsV-Lpg/exec';
 const GMAPS_KEY = 'AIzaSyDBCrbSFx5rnKZIl3cEP8AO87QdeRDZr1Q';
 const GENRES = ['TECHNO','HOUSE','MINIMAL','AMBIENT','BASS','LIVE','OTHERS'];
@@ -1570,7 +1590,7 @@ function uploadEditionFlyer(input,i){
   toast('Compressing flyer...','info');
   compressImage(file).then(({dataUrl,blob,width,height,mimeType,ext})=>{
     if(previewEl){previewEl.style.display='block';previewEl.innerHTML='<img src="'+dataUrl+'" alt="preview"><div class="preview-info">uploading...</div>';}
-    return fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'upload_festival_image',imageData:dataUrl,mimeType,id,type:'festival-flyer',filename:id+'-flyer.'+ext})}).then(r=>r.json()).then(d=>{
+    return gasPostJson_({action:'upload_festival_image',imageData:dataUrl,mimeType,id,type:'festival-flyer',filename:id+'-flyer.'+ext}).then(d=>{
       if(d.status!=='ok'&&!d.success) throw new Error(d.message||'Upload failed');
       const path=d.imagePath||d.path||('images/festivals/'+id+'-flyer.'+ext);
       ed.flyer=path; rememberPendingImagePreview(path,blob); markFormDirty(); renderEditions();
@@ -1585,7 +1605,7 @@ function uploadEditionFlyerFromUrl(i,button){
   if(button) button.disabled=true;
   compressUrlAndUpload(url,'festival-flyer',id).then(r=>{
     if(r){ed.flyer=r.path||('images/festivals/'+id+'-flyer.'+r.comp.ext);rememberPendingImagePreview(ed.flyer,r.comp.blob);markFormDirty();renderEditions();toast('Flyer uploaded — Save Changesで保存してください','success');return;}
-    return fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'upload_from_url',imageUrl:url,type:'festival-flyer',id})}).then(x=>x.json()).then(d=>{
+    return gasPostJson_({action:'upload_from_url',imageUrl:url,type:'festival-flyer',id}).then(d=>{
       if(!d.success) throw new Error(d.error||'Upload failed');
       ed.flyer=d.path||('images/festivals/'+id+'-flyer.jpg');markFormDirty();renderEditions();toast('Flyer uploaded — Save Changesで保存してください','success');
     });
@@ -2415,9 +2435,9 @@ async function compressUrlAndUpload(url, type, id){
   const action = type.startsWith('festival') ? 'upload_festival_image' : 'upload_image';
   const filename = type === 'festival-flyer' ? (id+'-flyer.'+comp.ext) : (id+'.'+comp.ext);
   try {
-    const d = await fetch(GAS_URL,{method:'POST',body:JSON.stringify({
+    const d = await gasPostJson_({
       action, imageData:comp.dataUrl, mimeType:comp.mimeType, id, type, filename
-    })}).then(r=>r.json());
+    });
     if(d.status==='ok' || d.success) return { path: d.imagePath||d.path||'', comp };
   } catch(_) {}
   return null;
@@ -2544,7 +2564,7 @@ function uploadImage(input,type,prefix){
     const action=type.startsWith('festival')?'upload_festival_image':'upload_image';
     const filename = type === 'festival-flyer' ? (id+'-flyer.'+ext) : (id+'.'+ext);
     const body={action,imageData:dataUrl,mimeType,id,type,filename};
-    return fetch(GAS_URL,{method:'POST',body:JSON.stringify(body)}).then(r=>r.json()).then(d=>{
+    return gasPostJson_(body).then(d=>{
       if(d.status==='ok'||d.success){
         const imagePath=d.imagePath||d.path||'';
         toast('Driveへのアップロード完了 — Save Changes後に画像同期ボタンを押してください','success');
@@ -2642,8 +2662,8 @@ function uploadFromUrl(prefix,type,pathFieldId,urlFieldId,previewId){
   // まずブラウザ側で圧縮を試す（1920px/webp）。CORS等で不可なら従来の原寸経路へ。
   compressUrlAndUpload(url,type,id).then(r=>{
     if(r){ done(); showOk(r.path, ' — '+(r.comp.blob.size/1024/1024).toFixed(2)+'MB WebP', r.comp.blob); return; }
-    return fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'upload_from_url',imageUrl:url,type:type,id:id})})
-      .then(x=>x.json()).then(d=>{
+    return gasPostJson_({action:'upload_from_url',imageUrl:url,type:type,id:id})
+      .then(d=>{
         done();
         if(d.success){ showFallback(d.path); }
         else { toast(d.error||'アップロード失敗','error'); renderUploadFailed(previewEl,'✗ '+(d.error||'アップロード失敗'),prefix,type); }
@@ -3842,7 +3862,7 @@ async function biImgRun(){
       const c = await compressUrlAndUpload(p.url, target, p.id);
       if(c){ path=c.path; }
       else {
-        const up = await fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'upload_from_url', imageUrl:p.url, type:target, id:p.id})}).then(x=>x.json());
+        const up = await gasPostJson_({action:'upload_from_url', imageUrl:p.url, type:target, id:p.id});
         // webp 化されず原寸で入った分は、同期時に変換されるまでサイトに出ない。
         // 黙って done に混ぜると気づけないので ID を控えて最後に出す。
         if(up.success && up.path){ path=up.path; fellBack.push(p.id); }
