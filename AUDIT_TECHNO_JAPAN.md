@@ -3732,3 +3732,60 @@ festivals.html / index.html / 詳細ページ / EN ハブ いずれも
 
 **反映には Google の再クロールが必要で、置いてすぐには変わらない。**
 数日〜数週間かかる。Search Console で再クロールを促せる。
+
+### 9-50. デプロイの途中中断で公開が消える（2026-08-07）
+
+「デプロイが重なったりエラーになったりする」という相談。1日の実行履歴を
+見ると、症状は2つに分かれた。
+
+#### 症状1: `failure` の正体は GitHub 側の一時障害
+
+失敗した run はどれも `Set up job` の段階で落ちており、ログは
+`Failed to resolve action download info: Internal Server Error` /
+`Service Unavailable`。これは checkout などの action を GitHub が配れなかった
+だけで、**こちらのコードとは無関係**。一時的なもので再実行すれば通る。
+
+#### 症状2: `cancelled` が本当の問題 — 良いデプロイが途中で消えていた
+
+`deploy-pages.yml` / `publish-pipeline.yml` はどちらも
+`concurrency: { group: pages, cancel-in-progress: true }` だった。
+`true` は「同じグループの実行中を、新しい run が来たら kill する」。
+
+これが §9-49 のファビノンが公開されなかった直接原因:
+
+```
+1. ファビコンのデプロイが動き出す
+2. 直後に別コミットが push され、動いていたデプロイを途中で kill
+3. その別コミットは `cms: publish`（deploy-pages では if でスキップ）
+4. → 誰も何も公開しないまま終わる
+```
+
+`concurrency` のキャンセルは**ジョブの `if` 判定より前**に効くので、
+スキップされる運命の run でも、実行中の本物のデプロイを道連れにする。
+GitHub 側の一時障害で後続が落ちた場合も同じで、
+**殺した後に公開できないと、前の良いデプロイごと失われる。**
+
+#### 対応: `cancel-in-progress: false`
+
+実行中は最後まで完走させる。GitHub 仕様での false の挙動:
+
+- 実行中の run は絶対に kill されない（完走する）
+- push が重なると新しい run が pending になり、
+  **それより前の pending は自動キャンセルされる**
+- → 「実行中1本 ＋ 最新の待機1本」だけが残る
+
+つまり **latest は必ず後で公開され、かつデプロイが N 本積み上がらない。**
+今後 `cancelled` と出るのは「まだ始まってもいない pending が最新に
+差し替えられた」ケースだけで、実行中の作業が失われることは無くなる。
+
+`true` の狙い（古い内容を公開しない）は false でも保たれる ──
+静的サイトで各デプロイは全ツリーをアップロードするので、
+最後に完走した run の内容＝最新で確定する。
+
+#### 二重起動は実害が無いことも確認
+
+`deploy-pages`（paths: `LP/**` ほか）と `publish-pipeline`（paths: `LP/data.js`）が
+同じ push で両方走るのは「data.js と他ファイルを同時に変える push」だけ。
+実履歴では data.js を変えるのは `cms: publish`（data.js 単独）のみで、
+他コミットは data.js を触らない。二重起動はほぼ発生せず、
+起きても同じ `pages` グループで直列化される。今回は触らない。

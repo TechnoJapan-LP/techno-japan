@@ -48,9 +48,10 @@ permissions:
 # deploy-pages.yml と同じグループ。Pages のデプロイが競合しないようにする。
 concurrency:
   group: pages
-  # 新しいPublishが来たら、まだ公開していない古い実行を止める。
-  # 最新データだけを最後まで検査・公開し、同じ処理を並列で走らせない。
-  cancel-in-progress: true
+  # deploy-pages.yml と同じ理由で false。実行中は途中で止めない。
+  # 「実行中1本＋最新の待機1本」だけが残り、最新データが必ず最後に公開される。
+  # 詳細は deploy-pages.yml の concurrency コメントと AUDIT §9-50。
+  cancel-in-progress: false
 
 jobs:
   publish:
