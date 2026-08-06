@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-08-06T02:55:20.735Z",
+  "_generatedAt": "2026-08-06T03:38:57.501Z",
   "count": 434,
   "items": [
     {
@@ -739,6 +739,48 @@
       "ARTIST_ID": "gonno",
       "SET_TYPE": "dj",
       "SORT": "21"
+    },
+    {
+      "EDITION_ID": "festival-de-frue-2026",
+      "ARTIST_ID": "kiko-dinucci",
+      "SET_TYPE": "live",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "festival-de-frue-2026",
+      "ARTIST_ID": "the-master-musicians-of-joujouka",
+      "SET_TYPE": "live",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "festival-de-frue-2026",
+      "ARTIST_ID": "kuo-from-sunset-rollercoaster",
+      "SET_TYPE": "live",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "festival-de-frue-2026",
+      "ARTIST_ID": "sylvan-esso",
+      "SET_TYPE": "live",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "festival-de-frue-2026",
+      "ARTIST_ID": "acid-pauli",
+      "SET_TYPE": "live",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "festival-de-frue-2026",
+      "ARTIST_ID": "alabaster-deplume",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "festival-de-frue-2026",
+      "ARTIST_ID": "juana-molina",
+      "SET_TYPE": "live",
+      "SORT": "7"
     },
     {
       "EDITION_ID": "spring-love-harukaze-2026",
@@ -2047,48 +2089,6 @@
       "ACT_LABEL": "Dance sports",
       "SET_TYPE": "dj",
       "SORT": "13"
-    },
-    {
-      "EDITION_ID": "festival-de-frue-2026",
-      "ARTIST_ID": "acid-pauli",
-      "SET_TYPE": "dj",
-      "SORT": "1"
-    },
-    {
-      "EDITION_ID": "festival-de-frue-2026",
-      "ARTIST_ID": "alabaster-deplume",
-      "SET_TYPE": "dj",
-      "SORT": "2"
-    },
-    {
-      "EDITION_ID": "festival-de-frue-2026",
-      "ARTIST_ID": "juana-molina",
-      "SET_TYPE": "dj",
-      "SORT": "3"
-    },
-    {
-      "EDITION_ID": "festival-de-frue-2026",
-      "ARTIST_ID": "kiko-dinucci",
-      "SET_TYPE": "dj",
-      "SORT": "4"
-    },
-    {
-      "EDITION_ID": "festival-de-frue-2026",
-      "ARTIST_ID": "kuo-from-sunset-rollercoaster",
-      "SET_TYPE": "dj",
-      "SORT": "5"
-    },
-    {
-      "EDITION_ID": "festival-de-frue-2026",
-      "ARTIST_ID": "sylvan-esso",
-      "SET_TYPE": "dj",
-      "SORT": "6"
-    },
-    {
-      "EDITION_ID": "festival-de-frue-2026",
-      "ARTIST_ID": "the-master-musicians-of-joujouka",
-      "SET_TYPE": "dj",
-      "SORT": "7"
     },
     {
       "EDITION_ID": "loa-lost-paradise-2026",

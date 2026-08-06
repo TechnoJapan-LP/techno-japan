@@ -5,7 +5,7 @@
     <link>https://techno-japan.media</link>
     <description>Japan&apos;s underground techno and house music media platform.</description>
     <language>ja-JP</language>
-    <lastBuildDate>Wed, 05 Aug 2026 05:42:46 -0000</lastBuildDate>
+    <lastBuildDate>Thu, 06 Aug 2026 12:40:01 -0000</lastBuildDate>
     <atom:link href="https://techno-japan.media/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
       <title>GROW THE CULTURE OPEN AIR</title>
@@ -94,6 +94,30 @@
       <pubDate>Sat, 05 Sep 2026 00:00:00 -0000</pubDate>
       <category>Festival</category>
       <description>Fukui — ONE PARK FESTIVALは、福井の自然豊かな風景の中でエレクトロニック・ミュージックを届け、アンダーグラウンドなサウンドとアウトドア・フェスの雰囲気が調和した親密な集まりを作り出している。このイベントは複数のステージにわたり国内外のアーティストを紹介し、日本のローカル・フェスシーンにおけるコミュニティとつながりを重視している。</description>
+    </item>
+    <item>
+      <title>YAMAUTO</title>
+      <link>https://techno-japan.media/festivals/yamauto.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/yamauto.html</guid>
+      <pubDate>Sat, 22 Aug 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Shiga — YAMAUTOは、滋賀県の山あいの地形を舞台に開催される、複数日程にわたるエレクトロニック・ミュージックの祭典として展開されている。フェスティバルはロングセットと没入感あるサウンドスケープを重視し、琵琶湖近郊の秘境的なロケーションに、国内外のアーティストたちを呼び集めている。</description>
+    </item>
+    <item>
+      <title>Global Ark</title>
+      <link>https://techno-japan.media/festivals/global-ark.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/global-ark.html</guid>
+      <pubDate>Fri, 21 Aug 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Gunma — Global Arkは、群馬の山岳地帯に国内外のアーティストを集める、日本を代表する野外エレクトロニック・ミュージック・イベントの一つとして位置づけられている。フェスティバルは没入感のあるサウンドデザインと自然との一体感を重視し、国内アンダーグラウンド・ダンスコミュニティのための一時的な自治区（テンポラリー・オートノマス・ゾーン）を作り出している。</description>
+    </item>
+    <item>
+      <title>LOA-LOST PARADISE-</title>
+      <link>https://techno-japan.media/festivals/loa-lost-paradise.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/loa-lost-paradise.html</guid>
+      <pubDate>Sat, 15 Aug 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Ibaraki — LOA-LOST PARADISEは、太平洋に面した茨城・鉾田の nalu beach で開かれる、「New style beach party」を掲げたビーチパーティー。構成は「Sunset to Sunset」。日没から翌日の日没まで、夜の闇に脈打つ低音と、朝の光に踊るグルーヴが地続きで繋がる。ジャンルも世代も年齢も問わない、ただ踊るための場所であることを掲げる。</description>
     </item>
     <item>
       <title>HACHA MECHA</title>
@@ -224,34 +248,10 @@
       <description>Tochigi — JAPONISMは栃木県・那須の自然環境の中で開催され、エレクトロニック・ミュージックとこの地域の山岳景観を融合させている。フェスは音と環境のつながりを重視しており、都市部から離れた没入感のある体験を作り出している。アーティストたちは、屋外の環境と一体化した複数のステージでパフォーマンスを行う。</description>
     </item>
     <item>
-      <title>Letus Music Camp</title>
-      <link>https://techno-japan.media/festivals/letus-music-camp.html</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals/letus-music-camp.html</guid>
-      <pubDate>Fri, 29 May 2026 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Hyogo — Letus Music Campは、兵庫県の自然に囲まれた環境の中で、日本のアンダーグラウンド・エレクトロニック・コミュニティを結集させるフェスティバルだ。アーティストと来場者との親密なつながりを重視し、一般的なフェスティバルの枠を超えたコラボレーティブな雰囲気を育んでいる。アンダーグラウンド・シーンへのフォーカスを保ちながら、複数のエレクトロニック・ジャンルにまたがる、丁寧に厳選されたラインアップで知られている。</description>
-    </item>
-    <item>
-      <title>MATRICARIA</title>
-      <link>https://techno-japan.media/festivals/matricaria.html</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals/matricaria.html</guid>
-      <pubDate>Fri, 29 May 2026 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Niigata — MATRICARIAは、進化を続ける福島の文化的風土に、先進的な電子音楽をもたらしている。このフェスティバルは、実験的なサウンドスケープとダンスフロア志向のセットを橋渡しする、雰囲気重視のプログラム構成に重きを置いている。その規模の親密さゆえに、丹念にキュレーションされた環境の中で、アーティストとオーディエンスがより深くつながることが可能になっている。</description>
-    </item>
-    <item>
-      <title>PARAMOUNT</title>
-      <link>https://techno-japan.media/festivals/paramount.html</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals/paramount.html</guid>
-      <pubDate>Sat, 23 May 2026 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Gunma — PARAMOUNTは群馬の自然の中にオープンエアのテクノを持ち込み、東京の都市部シーンの外にある重要な目的地として自らを確立している。このフェスティバルは、日本のよりディープなアンダーグラウンドの潮流を反映した、生々しく妥協のないラインアップを重視している。</description>
-    </item>
-    <item>
       <title>野外テクノパーティTranscendenceで見た次世代ジェネレーションの可能性</title>
       <link>https://techno-japan.media/articles/transcendence-2025-report.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/transcendence-2025-report.html</guid>
-      <pubDate>Wed, 05 Aug 2026 05:42:46 -0000</pubDate>
+      <pubDate>Thu, 06 Aug 2026 12:40:01 -0000</pubDate>
       <category>REPORT</category>
       <description></description>
     </item>

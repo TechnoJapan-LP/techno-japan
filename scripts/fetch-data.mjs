@@ -154,6 +154,19 @@ function normalizeDate(sheet, id, v) {
   return s;
 }
 
+function normalizeCoordinate(sheet, id, key, value) {
+  const s = String(value || '').trim();
+  if (!s) return '';
+  const n = Number(s.replace(/[°º]/g, '').trim());
+  if (Number.isFinite(n)) {
+    const normalized = String(n);
+    if (normalized !== s) warnings.push(`${sheet} ${id}: ${key} を数値へ正規化 "${s}" → ${normalized}`);
+    return normalized;
+  }
+  warnings.push(`${sheet} ${id}: ${key}形式不明 "${s}"`);
+  return s;
+}
+
 // ---------- メタカラム除外（スキーマ §5/§1.6）----------
 const DROP_KEYS = new Set([
   'editorNotes', 'lastEditedBy', 'lastEditedAt',
@@ -218,7 +231,10 @@ async function main() {
     const d0 = (r.DATE || '').split('/')[0].trim();
     if (d0 && !ISO_DATE.test(d0)) warnings.push(`FESTIVALS ${r.ID}: DATE形式 "${r.DATE}"`);
     if (!pub) continue;
-    festivals.push(stripMeta(r));
+    festivals.push(stripMeta({ ...r,
+      LAT: normalizeCoordinate('FESTIVALS', r.ID, 'LAT', r.LAT),
+      LNG: normalizeCoordinate('FESTIVALS', r.ID, 'LNG', r.LNG),
+    }));
   }
 
   // --- EDITIONS / LINEUPS（正式シートまたは旧互換モード）---
@@ -259,7 +275,7 @@ async function main() {
         DATE_START:normalizeDate('EDITIONS', id, r.DATE_START || ''),
         DATE_END:normalizeDate('EDITIONS', id, r.DATE_END || r.DATE_START || ''),
         LOCATION:r.LOCATION || '', LOCATION_JA:r.LOCATION_JA || '', VENUE_ID:r.VENUE_ID || '',
-        PREF:r.PREF || '', ADDRESS:r.ADDRESS || '', LAT:r.LAT || '', LNG:r.LNG || '',
+        PREF:r.PREF || '', ADDRESS:r.ADDRESS || '', LAT:normalizeCoordinate('EDITIONS', id, 'LAT', r.LAT), LNG:normalizeCoordinate('EDITIONS', id, 'LNG', r.LNG),
         TICKETURL:r.TICKETURL || '', FLYER:r.FLYER || '', STATUS:r.STATUS || '',
       }));
     }
@@ -268,10 +284,26 @@ async function main() {
     const publishedArtistIds = new Set(artists.map(a => String(a.ID || '').trim()).filter(Boolean));
     const artistNameById = new Map(
       raw.ARTISTS.map(a => [String(a.ID || '').trim(), String(a.NAME || '').trim()]).filter(([id]) => id));
+    const editionsByFestival = new Map();
+    for (const e of editions) {
+      const list = editionsByFestival.get(String(e.FESTIVAL_ID)) || [];
+      list.push(e);
+      editionsByFestival.set(String(e.FESTIVAL_ID), list);
+    }
     for (const r of raw.LINEUPS) {
-      const editionId = String(r.EDITION_ID || '').trim();
+      const rawEditionId = String(r.EDITION_ID || '').trim();
+      let editionId = rawEditionId;
+      if (!editionIds.has(editionId) && editionsByFestival.has(editionId)) {
+        const candidates = editionsByFestival.get(editionId).slice().sort((a, b) => String(b.EDITION || '').localeCompare(String(a.EDITION || '')));
+        if (candidates.length === 1) {
+          editionId = candidates[0].EDITION_ID;
+          warnings.push(`LINEUPS ${rawEditionId}: 年なしEDITION_IDを ${editionId} へ移送`);
+        } else {
+          warnings.push(`LINEUPS ${rawEditionId}: 年なしEDITION_ID（候補 ${candidates.map(e => e.EDITION_ID).join(', ')}）`);
+        }
+      }
       if (!editionIds.has(editionId)) {
-        if (editionId) warnings.push(`LINEUPS ${editionId}: EDITION_ID参照切れ`);
+        if (rawEditionId) warnings.push(`LINEUPS ${rawEditionId}: EDITION_ID参照切れ`);
         continue;
       }
       /* ARTIST_ID は「公開されているアーティスト」に対してだけ通す。
