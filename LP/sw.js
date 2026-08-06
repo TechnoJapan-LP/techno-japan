@@ -7,8 +7,8 @@
  *   届ける（バックグラウンド更新は行わない）。?v の更新漏れは
  *   scripts/check_asset_versions.py が止める。
  * - images: stale-while-revalidate（同名で差し替えられるため）
- * - data.js: stale-while-revalidate。CMS の Publish Now が commit するので
- *   人が HTML の ?v を上げる機会が無く、cache-first にすると永久に古いままになる。
+ * - data.js: network-first。CMS の Publish Now が commit するので
+ *   人が HTML の ?v を上げる機会が無く、初回から最新データを優先する。
  *
  * ⚠ fetch ハンドラの分岐は上から順に評価され、最初に一致したところで return する。
  *   data.js の判定は必ず CSS/JS の判定より前に置くこと（url.pathname は
@@ -16,7 +16,7 @@
  *   順序を守れているかは scripts/check_sw_routing.mjs が検査する。
  */
 
-const VERSION = 'v1.13.0';
+const VERSION = 'v1.14.0';
 const STATIC_CACHE = `tj-static-${VERSION}`;
 const DYNAMIC_CACHE = `tj-dynamic-${VERSION}`;
 
@@ -79,7 +79,7 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // data.js: stale-while-revalidate
+  // data.js: network-first
   //
   // 下の CSS/JS 判定より必ず前に置く。url.pathname はクエリを含まないので
   // /data.js?v=7 の pathname は /data.js となり /\.js$/ にも一致する。
@@ -87,16 +87,17 @@ self.addEventListener('fetch', event => {
   // （実際に v1.12.0 までこの状態で、この分岐は到達不能だった）。
   //
   // data.js は CMS の Publish Now が直接 commit するため、他の JS のように
-  // 「変更したら参照元 HTML の ?v を上げる」運用が効かない。?v=7 は固定のまま
+  // 「変更したら参照元 HTML の ?v を上げる」運用が効かない。?v=10 は固定のまま
   // 中身だけが変わるので、キャッシュキーで鮮度を管理できない。
   //
   // 【相互参照】この「?v で鮮度管理しない」という決定は、
   // scripts/check_asset_versions.py の TRACK_ACROSS_PUSHES と対になっている。
   // あちらに data.js を足すと「?v を必ず上げよ」と要求することになり、
   // ここの前提と矛盾する。2026-08-03 に一度足して同日に外した（AUDIT §9-32）。
-  // data.js の ?v は固定でよい。鮮度はこの stale-while-revalidate が担う。
+  // stale-while-revalidate では初回表示に古い一覧が出るため、data.js は
+  // network-first にする。ネットワーク障害時だけキャッシュへフォールバックする。
   if (url.pathname.endsWith('/data.js')) {
-    event.respondWith(staleWhileRevalidate(request));
+    event.respondWith(networkFirst(request));
     return;
   }
 

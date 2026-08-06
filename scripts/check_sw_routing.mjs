@@ -4,11 +4,12 @@
  *
  * なぜ必要か:
  *   sw.js の fetch ハンドラは上から順に評価され、最初に一致した分岐で return する。
- *   v1.12.0 では data.js の stale-while-revalidate 分岐が CSS/JS の cache-first 判定
+ *   v1.12.0 では data.js の更新経路が CSS/JS の cache-first 判定
  *   より後ろに置かれており、到達不能だった。url.pathname はクエリを含まないため
  *   /data.js?v=7 の pathname は /data.js となり /\.js$/ にも一致してしまう。
  *   結果、一度サイトを見たブラウザには古い data.js が返り続け、Publish Now しても
- *   新しいフェスが一覧に出なかった（HACHA MECHA / 2026-08-02）。
+ *   新しいフェスが一覧に出なかった（HACHA MECHA / 2026-08-02）。現在は
+ *   network-first とし、初回表示から最新データを優先する。
  *
  *   コードを読んでも「上に別の分岐がある」ことには気づきにくい。分岐の存在ではなく
  *   「実際にどの戦略が呼ばれるか」を確かめる必要がある。
@@ -60,7 +61,7 @@ const EXPECTED = [
   { path: '/image-dimensions.js', query: '?v=4', want: 'cacheFirst' },
   { path: '/localize.js', query: '?v=4', want: 'cacheFirst' },
   { path: '/images/festivals/hacha-mecha.webp', query: '', want: 'staleWhileRevalidate' },
-  { path: '/data.js', query: '?v=10', want: 'staleWhileRevalidate' },
+  { path: '/data.js', query: '?v=10', want: 'networkFirst' },
 ];
 
 /**
