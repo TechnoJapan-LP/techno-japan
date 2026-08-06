@@ -179,7 +179,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add LP/images/venues/ LP/images/festivals/ LP/images/artists/ LP/images/articles/
           git add LP/images/derivatives/ LP/image-derivatives.js
-      # 寸法表と、?v を上げた HTML（LP/ と LP/en/ の両方に散る）。
+          # 寸法表と、?v を上げた HTML（LP/ と LP/en/ の両方に散る）。
           # 追跡済みの変更だけを拾うので、新しい画像は上の行が担当する。
           git add -u LP/
           if git diff --staged --quiet; then
