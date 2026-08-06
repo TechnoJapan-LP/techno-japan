@@ -3508,3 +3508,17 @@ LINEUPSの `festival-de-frue`（年なし）7行は、公開EDITIONSの唯一の
 初回pushでは、回帰ジョブにPillowをインストールしていなかったため検査が失敗した。
 依存を追加して解消した。またDrive同期ワークフローにコメントのインデント誤りが
 あり、ジョブなしで失敗していたためYAMLを修正した。
+
+### 9-49. Publish後のTOP一覧が古いdata.jsを表示する問題（2026-08-06）
+
+詳細ページは新しい生成物なのにTOPのUpcoming Festivalsだけ古い並びになる事象を
+確認した。原因はService Workerの `data.js` stale-while-revalidateで、初回表示時に
+古いキャッシュを返してから裏で更新していたことだった。
+
+`data.js` はCMSのPublish Nowが同じURLで更新するため、初回からネットワークを
+優先し、ネットワーク障害時だけキャッシュへフォールバックする `networkFirst` に
+変更した。Service Workerのキャッシュ世代も `v1.14.0` に更新し、
+`check_sw_routing.mjs` の期待値も更新した。
+
+Deploy `31074629244` は成功。これにより、Publish直後の初回TOP表示でも最新の
+FESTIVALS一覧を取得できる。

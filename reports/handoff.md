@@ -662,3 +662,25 @@
 - artists / venues / index のカードはmanifest未収録時に原本へフォールバック: **確認済み・派生化は未実施**
 - 詳細ヒーロー、フライヤー、CSS `background-image`: **確認済み・原本経路を維持**
 - 本番スマホ実機での転送量計測: **未実施**
+
+## 2026-08-06 / Codex / 完了（TOPのPublish後データ反映）
+
+### 実施
+- Service Workerの `data.js` を stale-while-revalidate から network-first に変更
+- 初回表示は最新ネットワークデータ、オフライン時のみキャッシュへフォールバック
+- Service Worker世代を `v1.14.0` に更新
+- `check_sw_routing.mjs` の期待戦略を更新
+
+### 原因
+- 詳細ページは新しい生成物だったが、TOPの `data.js` は初回に古いキャッシュを返していた
+- そのため新規フェスが詳細ページには存在しても、TOPのUpcoming一覧には表示されなかった
+
+### 検証
+- `node scripts/check_sw_routing.mjs`: 成功
+- Deploy `31074629244`: 成功
+
+### 変更したパターン
+- Service Worker `/data.js` ルーティング: 1経路
+
+### 未確認の類似パターン
+- 実機でService Worker旧世代から更新される瞬間の表示: **未実施**
