@@ -694,7 +694,7 @@
 - Publish前にFESTIVALS / EDITIONS / ARTISTS / VENUES / ARTICLESの差分を表示
 - EditionごとのLINEUP件数も差分確認に含めた
 - 既存の詳細プレビュー（ヒーロー、日程、会場、フライヤー、LINEUP、履歴）を保存前経路として維持
-- `cms.js?v=49`
+- `cms.js?v=50`
 
 ### 検証
 - `node --check LP/cms.js`: 成功
@@ -702,6 +702,9 @@
 - `check_sw_routing.mjs`: 成功
 - Deploy `31075799271`: 成功
 - Lighthouse `31075883518`: 成功
+
+追記: EDITIONS / LINEUPS の差分取得は補助確認として扱い、取得失敗時も
+FESTIVALS等の必須データのPublish自体は止めないようにした。
 
 ### 変更したパターン
 - 新規Festival保存: バリデーション1経路
