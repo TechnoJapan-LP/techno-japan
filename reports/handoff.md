@@ -684,3 +684,31 @@
 
 ### 未確認の類似パターン
 - 実機でService Worker旧世代から更新される瞬間の表示: **未実施**
+
+## 2026-08-06 / Codex / 完了（Festival入力の公開前関門）
+
+### 実施
+- Festivalの新規・既存編集でID、日付、座標を検証
+- Editionの年、日付、座標、重複年を検証
+- FestivalとEditionの役割をCMSラベルに明示
+- Publish前にFESTIVALS / EDITIONS / ARTISTS / VENUES / ARTICLESの差分を表示
+- EditionごとのLINEUP件数も差分確認に含めた
+- 既存の詳細プレビュー（ヒーロー、日程、会場、フライヤー、LINEUP、履歴）を保存前経路として維持
+- `cms.js?v=49`
+
+### 検証
+- `node --check LP/cms.js`: 成功
+- `check_asset_versions.py`: 成功
+- `check_sw_routing.mjs`: 成功
+- Deploy `31075799271`: 成功
+- Lighthouse `31075883518`: 成功
+
+### 変更したパターン
+- 新規Festival保存: バリデーション1経路
+- 既存Festival保存: バリデーション1経路
+- Publish Now: 差分確認1経路
+- Festival/Edition役割説明: CMSフォーム1箇所
+
+### 未確認の類似パターン
+- 認証済みCMSで意図的な不正日付を入力する実操作: **未実施**
+- Publish差分ダイアログの実ブラウザ操作: **未実施**

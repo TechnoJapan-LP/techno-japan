@@ -3522,3 +3522,18 @@ LINEUPSの `festival-de-frue`（年なし）7行は、公開EDITIONSの唯一の
 
 Deploy `31074629244` は成功。これにより、Publish直後の初回TOP表示でも最新の
 FESTIVALS一覧を取得できる。
+
+### 9-50. Festival入力の公開前関門（2026-08-06）
+
+Festival入力を増やす前の事故防止としてCMSに4つの関門を追加した。
+
+- 保存時: FestivalのID、日付、座標、Edition年・日付・座標の形式と範囲を検証
+- 既存行の編集も新規登録と同じ検証経路を通す
+- Festival / Editionの役割をフォーム上に明示
+- Publish前: 前回Publishの軽量スナップショットと比較し、FESTIVALS・EDITIONS等の
+  追加、削除、変更、LINEUP件数を確認してから続行する
+
+プレビューは既存のFestival詳細相当（ヒーロー、日程、会場、フライヤー、LINEUP、
+開催履歴）を保存前に表示する経路を維持した。
+
+Deploy `31075799271`、Lighthouse `31075883518` は成功。
