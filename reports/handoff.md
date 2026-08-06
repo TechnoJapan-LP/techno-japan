@@ -608,3 +608,27 @@
 ### 未確認の類似パターン
 - `yazzus` を含む最新シートの修正後Publish: **未実施**（シート修正が必要）
 - CMS/GASの実ブラウザ認証操作: **未実施**
+
+## 2026-08-06 / Codex / 完了（Claude引き継ぎ: データ正規化）
+
+### 実施
+- FESTIVALS / EDITIONSの緯度経度をfetch時に数値正規化
+- 年なし `festival-de-frue` のLINEUPS 7行を唯一の公開回へ移送
+- 14フェスのLINEUPS 434枠を再生成
+- 回帰ガード・内部リンク・SW routing・Deployを再実行
+
+### コミット
+- SHA: `5daaaf6`
+- Deploy `31069177224` 成功
+
+### 検証
+- FESTIVALS 93 / EDITIONS 97 / LINEUPS 434
+- 参照エラー 0、`lineup_linked_acts` 98
+
+### 変更したパターン
+- 座標正規化: 1経路
+- 年なしEDITION_IDの一意候補移送: 1経路
+
+### 未確認の類似パターン
+- `festivals.html` 派生画像生成: **未実装**（原本同期との分離設計が必要）
+- 認証済みCMSの実操作: **未実施**

@@ -3472,3 +3472,18 @@ Space Drum Meditation - Live        ライブ註記
 `check_regressions.py` は閾値を1つも下げずに通った。
 **「閾値を下げれば通る」で済ませていたら、15本の導線を失ったまま
 気づかなかった。**
+
+### 9-47. Claude引き継ぎ: 座標正規化と年なしEDITION_ID（2026-08-06）
+
+`global-ark` の FESTIVALS.LAT に付いていた度記号を、fetch時に数値へ正規化した。
+入力元の値は変更せず、生成物側で `36.6976°` → `36.6976` とする。
+
+LINEUPSの `festival-de-frue`（年なし）7行は、公開EDITIONSの唯一の候補
+`festival-de-frue-2026` へ移送する。候補が複数ある場合は自動移送せず警告にする。
+これにより出演者を黙って捨てず、曖昧な履歴参照は公開前に検出できる。
+
+検証: FESTIVALS 93 / EDITIONS 97 / LINEUPS 434、参照エラー0。
+回帰ガード、内部リンク、SW routing、Deploy `31069177224` は成功。
+
+未実装: `festivals.html` の派生画像生成。原本同期と分離した派生ディレクトリ、
+ハッシュmanifest、カード用途だけの参照切替を設計してから着手する。
