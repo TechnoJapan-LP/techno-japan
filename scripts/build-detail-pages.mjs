@@ -362,6 +362,24 @@ function fmtFestDate(d) {
 /* ---------- 共通のページ骨格 ---------- */
 // 使わない強力な機能を明示的に閉じる。サードパーティのスクリプトが混入しても
 // 位置情報やカメラを勝手に要求できない。interest-cohort は FLoC の無効化。
+/* ファビコン。Google 検索結果とブラウザのタブに出る小さいアイコン。
+
+   2026-08-07 まで**サイト全体で1つも宣言が無く**、`/favicon.ico` も404だった。
+   PWA の manifest.json には icons があるが、Google はあれを検索結果に使わない。
+   その結果、検索結果には既定の地球アイコンが出ていた。
+
+   Google の条件: 正方形で48pxの倍数、サイト全体で同一、robots で拒否しない。
+   `/favicon.ico` は宣言が無くても取りに来るので、実体を置いたうえで明示もする。
+   反映には Google の再クロールが要るので、置いてすぐには変わらない。
+
+   画像はロゴのマーク部分だけを切り出したもの（`TECHNO JAPAN` の文字は
+   16pxでは必ず潰れ、その分マークが小さくなるので入れていない）。 */
+const FAVICON_TAGS = [
+  '<link rel="icon" href="/favicon.ico" sizes="32x32">',
+  '<link rel="icon" type="image/png" href="/images/favicon-192.png" sizes="192x192">',
+  '<link rel="apple-touch-icon" href="/apple-touch-icon.png">',
+].join('\n');
+
 const PERMISSIONS_POLICY = 'geolocation=(), microphone=(), camera=(), interest-cohort=()';
 
 const CSP = `default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' https:; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://stats.g.doubleclick.net; frame-src 'self' https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests`;
@@ -467,6 +485,7 @@ function page({ title, desc, canonical, image, ogType = 'article', jsonLd, body,
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta http-equiv="Permissions-Policy" content="${PERMISSIONS_POLICY}">
+${FAVICON_TAGS}
 
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(d)}">
@@ -1603,6 +1622,7 @@ function main() {
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta http-equiv="Permissions-Policy" content="${PERMISSIONS_POLICY}">
+${FAVICON_TAGS}
 <title>Redirecting…</title>
 <meta name="robots" content="noindex">
 <link rel="canonical" href="${BASE}${to}">

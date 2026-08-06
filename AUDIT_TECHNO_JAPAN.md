@@ -3684,3 +3684,51 @@ Drive に置き、`sync-drive-images.yml` が**同名の .webp に変換して**
 - シートの `EDITIONS.FLYER` 15件は拡張子が `.jpg` のまま。
   表示はビルド側で吸収しているが、**シートを `.webp` に直せば読み替えは不要**
 - `EDITIONS.VENUE_ID` は CMS から書けるようにしたが、まだ表示に使っていない
+
+### 9-49. ファビコンがサイト全体で1つも無かった（2026-08-07）
+
+Google の検索結果にロゴではなく既定の地球アイコンが出ている、という指摘から。
+ロゴの問題ではなく、**サイト全体でファビコンの宣言が1つも無かった。**
+
+```
+/favicon.ico                        → 404
+rel="icon" を持つページ             → 449中1（本番未公開の LP/app/ のみ）
+```
+
+`manifest.json` には PWA 用の `icons` があるが、
+**Google は検索結果のファビコンにあれを使わない。**
+`/favicon.ico` か `<link rel="icon">` のどちらかが要る。
+どちらも無かったので、出しようが無かった。
+
+#### 用意したもの
+
+| ファイル | 用途 |
+|---|---|
+| `/favicon.ico` | Google が最初に見に行く場所。16/32/48px を1ファイルに |
+| `/images/favicon-192.png` | Google の条件「正方形・48pxの倍数」を満たす明示宣言用 |
+| `/apple-touch-icon.png` | iOS のホーム画面用（180px） |
+
+画像は `logo-512.png` から**マーク部分だけを切り出した**もの。
+ロゴには下に `TECHNO JAPAN` の文字があるが、16px では必ず潰れるうえ、
+文字を入れるとその分マークが小さくなって判別できなくなる。
+実測（16px を拡大して確認）のうえでマークのみにした。
+
+宣言は全449ページに入れた。生成物は `build-detail-pages.mjs` の
+`FAVICON_TAGS`、手管理のハブ等21ページは直接。
+
+#### 確認
+
+`robots.txt` は `/favicon.ico` を拒否していない
+（`Disallow` は `/cms.html` と `/map.html` のみ）。
+
+ブラウザで実際に描画して取得できることを確かめた
+（宣言が在るだけ・ファイルが在るだけでは、CSP の `img-src` で
+止まる可能性が残るため）:
+
+```
+festivals.html / index.html / 詳細ページ / EN ハブ いずれも
+  /favicon.ico=200  /images/favicon-192.png=200  /apple-touch-icon.png=200
+```
+
+**反映には Google の再クロールが必要で、置いてすぐには変わらない。**
+数日〜数週間かかる。Search Console で再クロールを促せる。
