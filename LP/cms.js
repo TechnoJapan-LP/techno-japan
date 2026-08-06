@@ -4989,7 +4989,9 @@ function publishDiffSummary(d){
 
 function exportDataJs(){
   toast('Exporting...','info');
-  fetchAllSheets(['VENUES','FESTIVALS','ARTISTS','EVENTS','ARTICLES','EDITIONS','LINEUPS'],{fresh:true}).then(d=>{
+  fetchAllSheets(['VENUES','FESTIVALS','ARTISTS','EVENTS','ARTICLES'],{fresh:true}).then(d=>Promise.all(
+    ['EDITIONS','LINEUPS'].map(sheet => fetch(GAS_URL+'?action=get_sheet&sheet='+sheet).then(r=>r.json()).then(x => ({sheet, rows:x.status==='ok'&&Array.isArray(x.rows)?x.rows:[]})).catch(() => ({sheet, rows:[]})))
+  ).then(optional => { optional.forEach(x => { d[x.sheet] = x.rows; }); return d; })).then(d=>{
     const sane = publishSanityCheck(d);
     if(!sane.ok) return toast(sane.message,'error');
     const content=buildFullDataJs(d);
