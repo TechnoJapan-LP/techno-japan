@@ -2295,6 +2295,39 @@ function validateBeforeSave(section, payload){
       }
     }
   }
+  if(section === 'festival') {
+    const dateParts = String(payload.date || '').split('/').map(s => s.trim()).filter(Boolean);
+    if (!dateParts.length || dateParts.length > 2 || dateParts.some(d => !/^\d{4}-\d{2}-\d{2}$/.test(d))) {
+      errors.push('DATE は YYYY-MM-DD または YYYY-MM-DD/YYYY-MM-DD で入力してください');
+    } else if (dateParts.length === 2 && dateParts[0] > dateParts[1]) {
+      errors.push('DATE_START が DATE_END より後になっています');
+    }
+    const lat = String(payload.lat || '').trim(), lng = String(payload.lng || '').trim();
+    if ((lat && !/^[-+]?\d+(?:\.\d+)?$/.test(lat)) || (lng && !/^[-+]?\d+(?:\.\d+)?$/.test(lng))) {
+      errors.push('LAT / LNG は数値で入力してください');
+    } else if (lat && (Number(lat) < -90 || Number(lat) > 90)) {
+      errors.push('LAT は -90〜90 の範囲で入力してください');
+    } else if (lng && (Number(lng) < -180 || Number(lng) > 180)) {
+      errors.push('LNG は -180〜180 の範囲で入力してください');
+    }
+    const eds = Array.isArray(payload.editions) ? payload.editions.filter(e => e && e.year) : [];
+    const years = new Set();
+    eds.forEach(ed => {
+      const year = String(ed.year).trim();
+      if (!/^\d{4}$/.test(year)) errors.push('EDITIONSの開催年が不正です: ' + year);
+      if (years.has(year)) errors.push('EDITIONSの開催年が重複しています: ' + year);
+      years.add(year);
+      const parts = String(ed.date || '').split('/').map(s => s.trim()).filter(Boolean);
+      if (parts.length && (parts.length > 2 || parts.some(d => !/^\d{4}-\d{2}-\d{2}$/.test(d)))) {
+        errors.push('EDITIONS ' + year + ' の日付形式が不正です');
+      } else if (parts.length === 2 && parts[0] > parts[1]) {
+        errors.push('EDITIONS ' + year + ' の開始日が終了日より後です');
+      }
+      const elat = String(ed.lat || '').trim(), elng = String(ed.lng || '').trim();
+      if (elat && (!/^[-+]?\d+(?:\.\d+)?$/.test(elat) || Number(elat) < -90 || Number(elat) > 90)) errors.push('EDITIONS ' + year + ' のLATが不正です');
+      if (elng && (!/^[-+]?\d+(?:\.\d+)?$/.test(elng) || Number(elng) < -180 || Number(elng) > 180)) errors.push('EDITIONS ' + year + ' のLNGが不正です');
+    });
+  }
   return errors;
 }
 
@@ -3239,6 +3272,11 @@ function saveEdit(section){
   // Publishing fields をマージ（author以外）
   if(section !== 'author') Object.assign(payload, getPubFields(section));
 
+  // 新規登録だけでなく既存Festivalの編集も同じ入口検査を通す。
+  // 保存後にEDITIONSや座標の不正が発覚すると、Publish時まで気づけないため。
+  const saveErrors = validateBeforeSave(section, payload);
+  if (saveErrors.length) return toast(saveErrors[0], 'error');
+
   if(section === 'festival'){
     const warning=locationLanguageWarning(payload);
     if(warning && !confirm('⚠️ '+warning)) return;
@@ -3852,7 +3890,7 @@ function openHomeDashboard(){
    2026-07-23 のフェス全ページ消失事故の再発防止: 欠落・失敗を握りつぶさない） */
 function fetchAllSheets(sheetNames, opts){
   opts = opts || {};
-  const SECTION_BY_SHEET = {VENUES:'venue',FESTIVALS:'festival',ARTISTS:'artist',EVENTS:'event',ARTICLES:'article',AUTHORS:'author'};
+  const SECTION_BY_SHEET = {VENUES:'venue',FESTIVALS:'festival',ARTISTS:'artist',EVENTS:'event',ARTICLES:'article',AUTHORS:'author',EDITIONS:null,LINEUPS:null};
   const result = {};
   const missing = [];
   sheetNames.forEach(s => {
@@ -4917,9 +4955,41 @@ function publishSanityCheck(d){
   return {ok:true, counts};
 }
 
+/* Publish前の差分確認。件数だけでは、1件のdraft化や日程変更を見落とすため、
+   前回Publish時の軽量スナップショット（ID・状態・日付・LINEUP件数）と比較する。 */
+function publishSnapshot(d){
+  const rows = (key, idKey='ID') => (d[key] || []).map(r => {
+    const id = String(r[idKey] ?? r.id ?? '').trim();
+    return {id, name:String(r.NAME ?? r.name ?? r.TITLE ?? r.title ?? id), status:String(r.STATUS ?? r.status ?? ''), date:String(r.DATE ?? r.date ?? ''), lineup:String(r.LINEUP ?? r.lineup ?? '').split(',').map(x=>x.trim()).filter(Boolean).length};
+  }).filter(r => r.id);
+  const editions = (d.EDITIONS || []).map(r => ({id:String(r.EDITION_ID || '').trim(), name:String(r.FESTIVAL_ID || ''), status:String(r.STATUS || ''), date:String(r.DATE_START || '')})).filter(r => r.id);
+  const lineupCounts = new Map();
+  (d.LINEUPS || []).forEach(r => { const id=String(r.EDITION_ID || '').trim(); if(id) lineupCounts.set(id, (lineupCounts.get(id)||0)+1); });
+  editions.forEach(r => { r.lineup = lineupCounts.get(r.id) || 0; });
+  return { FESTIVALS:rows('FESTIVALS'), ARTISTS:rows('ARTISTS'), VENUES:rows('VENUES'), ARTICLES:rows('ARTICLES'), EDITIONS:editions };
+}
+function publishDiffSummary(d){
+  let prev = null;
+  try { prev = JSON.parse(localStorage.getItem('tj_publish_snapshot') || 'null'); } catch (_) {}
+  if (!prev) return '前回Publishの詳細スナップショットがありません（今回のPublish後から比較を開始します）。';
+  const current = publishSnapshot(d), lines = [];
+  for (const key of ['FESTIVALS','ARTISTS','VENUES','ARTICLES','EDITIONS']) {
+    const before = new Map((prev[key] || []).map(x => [x.id, x]));
+    const after = new Map((current[key] || []).map(x => [x.id, x]));
+    const added = [...after.keys()].filter(id => !before.has(id));
+    const removed = [...before.keys()].filter(id => !after.has(id));
+    const changed = [...after.keys()].filter(id => before.has(id) && JSON.stringify(before.get(id)) !== JSON.stringify(after.get(id)));
+    if (added.length || removed.length || changed.length) {
+      lines.push(key + ': 追加 ' + added.length + ' / 削除 ' + removed.length + ' / 変更 ' + changed.length);
+      [...added.slice(0,4).map(id => '+ ' + id), ...removed.slice(0,4).map(id => '- ' + id), ...changed.slice(0,6).map(id => '↻ ' + id)].forEach(x => lines.push('  ' + x));
+    }
+  }
+  return lines.length ? lines.join('\n') : '前回Publishからデータ上の変更はありません。';
+}
+
 function exportDataJs(){
   toast('Exporting...','info');
-  fetchAllSheets(['VENUES','FESTIVALS','ARTISTS','EVENTS','ARTICLES'],{fresh:true}).then(d=>{
+  fetchAllSheets(['VENUES','FESTIVALS','ARTISTS','EVENTS','ARTICLES','EDITIONS','LINEUPS'],{fresh:true}).then(d=>{
     const sane = publishSanityCheck(d);
     if(!sane.ok) return toast(sane.message,'error');
     const content=buildFullDataJs(d);
@@ -4958,7 +5028,10 @@ function publishDataJs(opts){
   fetchAllSheets(['VENUES','FESTIVALS','ARTISTS','EVENTS','ARTICLES'],{fresh:true}).then(d=>{
     const sane = publishSanityCheck(d);
     if(!sane.ok) throw new Error(sane.message);
+    const diff = publishDiffSummary(d);
+    if(!confirm('Publish前の差分確認\n\n'+diff+'\n\nこの内容で公開しますか?')) throw new Error('Publishをキャンセルしました');
     try { localStorage.setItem('tj_publish_counts', JSON.stringify(sane.counts)); } catch(_){}
+    try { localStorage.setItem('tj_publish_snapshot_pending', JSON.stringify(publishSnapshot(d))); } catch(_){}
     const content = buildFullDataJs(d);
     if (btn) btn.innerHTML = 'Pushing to GitHub...';
     toast('Pushing to GitHub...','info');
@@ -4974,6 +5047,10 @@ function publishDataJs(opts){
     if (r.status === 'ok' || r.success) {
       const sha = (r.sha || '').slice(0,7);
       toast('🚀 Published! ('+sha+') — 数分後に本番反映', 'success');
+      try {
+        const pending = localStorage.getItem('tj_publish_snapshot_pending');
+        if (pending) { localStorage.setItem('tj_publish_snapshot', pending); localStorage.removeItem('tj_publish_snapshot_pending'); }
+      } catch (_) {}
       if (r.commitUrl) {
         // 通知トーストから commit を開けるようコンソールに出力
         console.log('Commit URL:', r.commitUrl);
