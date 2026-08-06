@@ -3487,3 +3487,24 @@ LINEUPSの `festival-de-frue`（年なし）7行は、公開EDITIONSの唯一の
 
 未実装: `festivals.html` の派生画像生成。原本同期と分離した派生ディレクトリ、
 ハッシュmanifest、カード用途だけの参照切替を設計してから着手する。
+
+### 9-48. フェスティバルカード画像の派生配信（2026-08-06）
+
+`festivals.html` は一覧カードのために原本画像をそのまま読み込み、初回転送量が
+約4.87MB（派生画像生成前の実測）になっていた。原本を変更せず、カード用途だけ
+長辺960px・WebP quality 80の派生画像へ切り替えた。
+
+- `scripts/build-image-derivatives.py` が `LP/images/festivals/*.webp` から生成
+- 出力名は原本SHA-256先頭8桁を含め、原本変更時にURLが変わる
+- `LP/image-derivatives.js` のmanifestを `tjCardAssetPath()` が参照
+- manifestに無い画像は従来の原本へフォールバック（表示を壊さない）
+- Drive同期後に派生画像、寸法表を同一コミットへ生成
+- `check_image_derivatives.py` が原本・manifest・出力寸法を公開前に検査
+
+59件の派生画像は約5.86MB。原本の約30.9%で、カード用途の転送量を抑えつつ、
+詳細ヒーロー・フライヤー・未対応種類（artists/venues）の原本経路は変更しない。
+ローカルのハブ実ブラウザ検査では壊れた画像0件、回帰ガードも通過した。
+
+初回pushでは、回帰ジョブにPillowをインストールしていなかったため検査が失敗した。
+依存を追加して解消した。またDrive同期ワークフローにコメントのインデント誤りが
+あり、ジョブなしで失敗していたためYAMLを修正した。
