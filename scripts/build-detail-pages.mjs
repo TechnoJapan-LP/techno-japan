@@ -152,6 +152,61 @@ function dimensionAttrs(source) {
   const size = IMAGE_DIMENSIONS[String(source || '').split(/[?#]/)[0]] || IMAGE_DIMENSIONS[key];
   return size ? `width="${size[0]}" height="${size[1]}"` : imageSizeAttrs(LP_DIR, source);
 }
+/* 開催回ごとのフライヤーを優先して選ぶ。
+
+   フライヤーは年ごとに違うのに、詳細ページは長らく FESTIVALS.FLYER
+   （フェス共通の1枚）だけを出していた。EDITIONS.FLYER は CMS に
+   アップロード欄まであって保存もされていたのに、**どこにも表示されず
+   26件が死蔵されていた**（2026-08-07 調査 / AUDIT §9-48）。
+
+   ただし、そのうち15件は拡張子が .jpg のままで実ファイルが無い
+   （サイトが配信するのは webp のみ）。そのまま出すと画像が割れるので、
+   実在するものだけを採用し、無ければフェス共通のものへ落とす。
+   捨てずに warn を出して、直すべき行が見えるようにする。 */
+const missingEditionFlyers = new Set();
+const rewrittenEditionFlyers = new Set();
+
+function localImageExists(source) {
+  const s = String(source || '').trim();
+  if (!s) return false;
+  if (/^https?:/i.test(s)) return true;          // 外部URLは取得可否を見ない
+  return fs.existsSync(path.join(LP_DIR, s.replace(/^\/+/, '')));
+}
+
+/* シートに記録された拡張子が古いことがある。
+
+   CMS の「Image from URL」が原本(jpg/png/heic)を Drive に置き、
+   sync-drive-images.yml が **同じ名前の .webp に変換して**取り込む。
+   このときシートの FLYER は原本の名前のまま残るため、
+   `arch-flyer.jpg` と書いてあるのに実体は `arch-flyer.webp`、
+   という行ができる。EDITIONS.FLYER の26件中15件がこれだった。
+
+   サイトが配信するのは webp だけなので（AGENTS.md「ビルド運用の注意」）、
+   同名の .webp が在るならそれが実体。推測ではなく変換規則そのもの。 */
+function resolveImagePath(source) {
+  const s = String(source || '').trim();
+  if (!s || /^https?:/i.test(s)) return s;
+  if (localImageExists(s)) return s;
+  const asWebp = s.replace(/\.(jpe?g|png|heic|heif)$/i, '.webp');
+  return asWebp !== s && localImageExists(asWebp) ? asWebp : '';
+}
+
+/* 開催回ごとのフライヤーを優先する。無ければフェス共通のものへ落とす。 */
+function pickFlyer(festival, edition) {
+  const editionFlyer = String(edition?.FLYER || '').trim();
+  if (editionFlyer) {
+    const resolved = resolveImagePath(editionFlyer);
+    if (resolved) {
+      if (resolved !== editionFlyer) {
+        rewrittenEditionFlyers.add(`${edition?.EDITION_ID || '?'}: ${editionFlyer} → ${resolved}`);
+      }
+      return { src: resolved, edition: edition?.EDITION || '' };
+    }
+    missingEditionFlyers.add(`${edition?.EDITION_ID || '?'}: ${editionFlyer}`);
+  }
+  return { src: String(festival?.flyer || '').trim(), edition: '' };
+}
+
 function addHtmlImageDimensions(html) {
   return String(html || '').replace(/<img\b(?![^>]*\bwidth=)([^>]*?)\bsrc=(["'])([^"']+)\2([^>]*)>/gi, (tag, before, quote, src, after) => {
     const attrs = dimensionAttrs(src);
@@ -930,9 +985,11 @@ function festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, lang, 
   const actions = [official, tickets, instagram].filter(Boolean).join('');
   const lineupGroups = festivalLineupGroupsHtml(editions, lineupsByEdition, artistsById, lang);
   const lineupCount = editions.reduce((total, edition) => total + (lineupsByEdition.get(edition.EDITION_ID) || []).length, 0);
-  const flyer = f.flyer ? `<div class="detail-flyer-col">
+  const flyerPick = pickFlyer(f, currentEdition);
+  const flyerAlt = flyerPick.edition ? `${name} ${flyerPick.edition} Flyer` : `${name} Flyer`;
+  const flyer = flyerPick.src ? `<div class="detail-flyer-col">
         <div class="detail-section-label">FLYER</div>
-        <div class="detail-flyer-image"><img ${dimensionAttrs(f.flyer)} src="/${String(f.flyer).replace(/^\//, '')}" alt="${esc(name)} Flyer" loading="lazy"></div>
+        <div class="detail-flyer-image"><img ${dimensionAttrs(flyerPick.src)} src="/${String(flyerPick.src).replace(/^\//, '')}" alt="${esc(flyerAlt)}" loading="lazy"></div>
       </div>` : '';
   const lineup = lineupGroups ? `<div class="detail-lineup-col">
         <h2 class="detail-section-label">LINE UP</h2>
@@ -1615,6 +1672,18 @@ function main() {
     total += v.total; written += v.written; removed += v.removed;
   }
   console.log(`  total: ${total} pages — ${written} written, ${removed} removed`);
+  if (rewrittenEditionFlyers.size) {
+    // シートの拡張子が原本(jpg等)のまま。表示は webp で通しているが、
+    // シート側の拡張子を直せば、この読み替えは不要になる。
+    console.log(`EDITIONS.FLYER の拡張子を実体(.webp)に読み替えた: ${rewrittenEditionFlyers.size}件`);
+    for (const m of [...rewrittenEditionFlyers].sort()) console.log(`  - ${m}`);
+  }
+  if (missingEditionFlyers.size) {
+    // 実ファイルが無いので表示できず、フェス共通のフライヤーに落としたもの。
+    // 黙って落とすと「入れたのに出ない」が続くため、毎ビルドで出す。
+    console.log(`EDITIONS.FLYER のファイルが無く共通フライヤーに落とした: ${missingEditionFlyers.size}件`);
+    for (const m of [...missingEditionFlyers].sort()) console.log(`  - ${m}`);
+  }
   console.log(`JA hubs fixed (lang/hreflang/toggle): ${jaFixed.length ? jaFixed.join(', ') : 'none'}`);
   console.log(`EN hubs written: ${enWritten.length ? enWritten.join(', ') : 'none (up to date)'}`);
   console.log('Hub static links:');
