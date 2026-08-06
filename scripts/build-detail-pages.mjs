@@ -1482,6 +1482,7 @@ function main() {
   const editionById = new Map(EDITIONS.map((edition) => [String(edition.EDITION_ID), edition]));
   const lineupsByEdition = new Map();
   const appearMap = new Map();
+  const missingArtistRefs = new Map();
   for (const row of LINEUPS) {
     const edition = editionById.get(String(row.EDITION_ID || ''));
     if (!edition) throw new Error(`lineups.json: EDITION_ID 参照切れ "${row.EDITION_ID || ''}"`);
@@ -1491,11 +1492,22 @@ function main() {
     if (isCompositeLineup(row)) continue;
     const artistId = lineupArtistIds(row)[0];
     if (!artistId) continue;
-    if (!artistsById.has(artistId)) throw new Error(`lineups.json: ARTIST_ID 参照切れ "${artistId}"`);
+    if (!artistsById.has(artistId)) {
+      const refs = missingArtistRefs.get(artistId) || [];
+      refs.push(String(row.EDITION_ID || ''));
+      missingArtistRefs.set(artistId, refs);
+      continue;
+    }
     const festival = festivalsById.get(String(edition.FESTIVAL_ID));
     if (!festival) throw new Error(`lineups.json: FESTIVAL_ID 参照切れ "${edition.FESTIVAL_ID}"`);
     if (!appearMap.has(artistId)) appearMap.set(artistId, new Map());
     appearMap.get(artistId).set(festival.id, festival);
+  }
+  if (missingArtistRefs.size) {
+    const details = [...missingArtistRefs.entries()]
+      .map(([id, editions]) => `  - ${id}: ${[...new Set(editions)].join(', ')}`)
+      .join('\n');
+    throw new Error(`lineups.json: ARTIST_ID 参照切れ ${missingArtistRefs.size}件。ARTISTSシートに追加するか、LINEUPSのIDを修正してください。\n${details}`);
   }
   XLINK = {
     fests: FESTIVALS,
