@@ -47,6 +47,9 @@ jobs:
       - name: Install PyYAML
         run: python3 -m pip install --quiet --disable-pip-version-check pyyaml
 
+      - name: Install Pillow
+        run: python3 -m pip install --quiet --disable-pip-version-check pillow
+
       # 生成物はリポジトリにコミットされているが、PR の変更が生成側だけの場合に
       # 古い生成物のまま検査してしまう。必ず作り直してから測る。
       - name: Build detail pages
