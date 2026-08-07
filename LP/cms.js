@@ -923,6 +923,7 @@ function initArticleEditor(){
   });
   // ドラッグ&ドロップ + ペースト
   setupArticleEditorDropPaste();
+  setupArticleScrollGuard();
   return articleQuill;
 }
 
@@ -1296,12 +1297,64 @@ function toggleEntityLinkMenu(caretIndex){
 /* 本文には実際の <a> を挿し込む。エディタ上でも「Rural」のように
    名前で読めるので、[[festival:rural]] という生の記号より分かりやすい。
    （旧記事のショートコードも表示側で解決し続けるので互換は保たれる） */
+/* 貼り付け・リンク挿入で本文の表示位置が動かないようにする。
+
+   Quill は挿入のあと「入力位置を見せる」ためにスクロールする
+   （setSelection → scrollIntoView）。加えて貼り付け時には画面外の隠し要素
+   （.ql-clipboard）へ一瞬フォーカスを移すため、スクロールできる親要素も動く。
+   実測では 1回の貼り付け／挿入で 70px ずれた（2026-08-08 / AUDIT §9-56）。
+
+   打つ手として「Quill に正しいスクロール要素を教える」も試したが、
+   .ql-editor は Quill 標準CSSで overflow-y:auto を持ち、既定（エディタ自身）が
+   そもそも正しかった。**設定の問題ではなく、動かすこと自体が仕様**なので、
+   動いた分を戻す。
+
+   元々見えていた位置を保つだけなので、入力位置が画面外へ消えることはない
+   （貼り付け前に見えていた＝貼り付け後も見えている）。
+
+   スクロールしうる要素は状況で変わる:
+     通常      .main（body は overflow:hidden）
+     集中モード .ar-editor-wrap（position:fixed + overflow-y:auto）
+     どちらでも .ql-editor（内容が高さを超えたとき）
+   全部まとめて保存・復元する。
+
+   復元を3回に分けているのは、Quill が同期・非同期の両方で動かすため。
+   1回だけだと、あとから来る分を取りこぼす。 */
+function preserveArticleScroll(run){
+  const targets = [
+    document.querySelector('#ar-body-editor .ql-editor'),
+    document.getElementById('ar-editor-wrap'),
+    document.querySelector('.main'),
+  ].filter(Boolean);
+  const saved = targets.map((el) => [el, el.scrollTop]);
+  const restore = () => saved.forEach(([el, top]) => { if (el.scrollTop !== top) el.scrollTop = top; });
+  try {
+    return run();
+  } finally {
+    restore();
+    requestAnimationFrame(restore);
+    setTimeout(restore, 80);
+  }
+}
+
+/* 貼り付け（文字・画像とも）。Quill 自身の paste 処理より先に位置を控える。 */
+function setupArticleScrollGuard(){
+  const editor = document.querySelector('#ar-body-editor .ql-editor');
+  if (!editor || editor.dataset.scrollGuard) return;
+  editor.dataset.scrollGuard = '1';
+  editor.addEventListener('paste', () => {
+    // ここで戻すと Quill の処理前になるので、処理が終わる頃に戻す
+    preserveArticleScroll(() => {});
+  }, true);
+  editor.addEventListener('drop', () => { preserveArticleScroll(() => {}); }, true);
+}
+
 function insertEntityShortcode(type, id, name){
   const dir = type === 'article' ? 'articles' : type + 's';
   const href = '/' + dir + '/' + id + '.html';
   const label = name || id;
   const q = initArticleEditor();
-  if (q){
+  if (q) preserveArticleScroll(() => {
     const range = q.getSelection(true) || { index: q.getLength() };
     // 選択中のテキストがあればそれをリンク化、なければ名前を挿入してリンク化
     if (range.length > 0){
@@ -1315,7 +1368,7 @@ function insertEntityShortcode(type, id, name){
       q.setSelection(range.index + label.length + 1);
     }
     scheduleArticleEditorSync('quill');
-  }
+  });
   toast(label + ' へのリンクを挿入しました', 'success');
 }
 
