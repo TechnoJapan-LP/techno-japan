@@ -435,6 +435,18 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 }
 .festival-design-v2 .detail-flyer-image img { width: 100%; height: auto; display: block; }
 .festival-design-v2 .edition-lineup + .edition-lineup { margin-top: 34px; }
+.festival-design-v2 .edition-lineup.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity .65s ease, transform .65s cubic-bezier(.2,.8,.2,1);
+}
+.festival-design-v2 .edition-lineup.reveal.visible { opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) {
+  .festival-design-v2 .edition-lineup.reveal,
+  .festival-design-v2 .edition-lineup.reveal.visible {
+    opacity: 1; transform: none; transition: none;
+  }
+}
 .festival-design-v2 .edition-lineup h3 {
   font-family: var(--font-display); font-size: 28px; font-weight: 400;
   line-height: 1; margin: 0 0 18px; opacity: .45;
@@ -483,6 +495,60 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap;
 }
+.festival-design-v2 .editions-timeline-row {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .6s ease, transform .6s cubic-bezier(.2,.8,.2,1);
+}
+.festival-design-v2 .editions-timeline-row.visible { opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) {
+  .festival-design-v2 .editions-timeline-row,
+  .festival-design-v2 .editions-timeline-row.visible {
+    opacity: 1; transform: none; transition: none;
+  }
+}
+
+/* Festival hero: quiet entrance motion, without delaying content or images. */
+.festival-design-v2 .festival-detail-hero { animation: tjDetailHeroIn .7s ease both; }
+.festival-design-v2 .detail-hero-image { overflow: hidden; }
+.festival-design-v2 .detail-hero-image img {
+  transform: scale(1.16) translateY(10px);
+  filter: brightness(.72);
+  animation: tjDetailHeroImage 1.65s cubic-bezier(.2,.8,.2,1) .05s both;
+}
+.festival-design-v2 .detail-hero-info > * {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: tjDetailHeroText .7s cubic-bezier(.2,.8,.2,1) both;
+}
+.festival-design-v2 .detail-hero-info > *:nth-child(1) { animation-delay: .22s; }
+.festival-design-v2 .detail-hero-info > *:nth-child(2) { animation-delay: .30s; }
+.festival-design-v2 .detail-hero-info > *:nth-child(3) { animation-delay: .38s; }
+.festival-design-v2 .detail-hero-info > *:nth-child(4) { animation-delay: .46s; }
+.festival-design-v2 .detail-hero-info > *:nth-child(5) { animation-delay: .54s; }
+@keyframes tjDetailHeroIn { from { opacity: .7; } to { opacity: 1; } }
+@keyframes tjDetailHeroImage { from { transform: scale(1.16) translateY(10px); filter: brightness(.72); } to { transform: scale(1) translateY(0); filter: brightness(1); } }
+@keyframes tjDetailHeroText { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+.festival-design-v2 .festival-program-section {
+  opacity: 0;
+  transform: translateY(70px);
+  animation: tjDetailProgramIn .9s cubic-bezier(.2,.8,.2,1) 1.45s both;
+}
+.festival-design-v2 .detail-flyer-image img {
+  transform: scale(1.12);
+  animation: tjDetailFlyerIn 1.35s cubic-bezier(.2,.8,.2,1) 1.58s both;
+}
+@keyframes tjDetailProgramIn { from { opacity: 0; transform: translateY(70px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes tjDetailFlyerIn { from { transform: scale(1.12); filter: brightness(.65); } to { transform: scale(1); filter: brightness(1); } }
+@media (prefers-reduced-motion: reduce) {
+  .festival-design-v2 .festival-detail-hero,
+  .festival-design-v2 .detail-hero-image img,
+  .festival-design-v2 .detail-hero-info > *,
+  .festival-design-v2 .festival-program-section,
+  .festival-design-v2 .detail-flyer-image img {
+    animation: none; opacity: 1; transform: none;
+  }
+}
 .festival-design-v2 .editions-timeline th,
 .festival-design-v2 .editions-timeline td { padding: 0 24px 0 0; text-align: left; vertical-align: top; border: 0; }
 .festival-design-v2 .editions-timeline .edition-year {
@@ -523,6 +589,18 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 .festival-design-v2 .related-card {
   display: block; background: rgba(240,237,232,.02);
   transition: transform .3s ease; cursor: pointer;
+}
+.festival-design-v2 .related-card.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity .65s ease, transform .65s cubic-bezier(.2,.8,.2,1);
+}
+.festival-design-v2 .related-card.reveal.visible { opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) {
+  .festival-design-v2 .related-card.reveal,
+  .festival-design-v2 .related-card.reveal.visible {
+    opacity: 1; transform: none; transition: none;
+  }
 }
 .festival-design-v2 .related-card:hover { transform: translateY(-4px); }
 .festival-design-v2 .related-card-img { aspect-ratio: 4/3; overflow: hidden; background: rgba(240,237,232,.04); }

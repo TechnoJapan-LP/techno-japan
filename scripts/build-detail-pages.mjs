@@ -871,7 +871,7 @@ function festivalFaqDetailsHtml(items, lang) {
 
 function festivalEditionsTimelineHtml(editions, lang) {
   if (editions.length < 2) return '';
-  const rows = editions.map((ed) => `<tr>
+  const rows = editions.map((ed, index) => `<tr class="edition-timeline-row reveal" style="transition-delay:${index * 100}ms">
         <th class="edition-year" scope="row">${esc(ed.EDITION || ed.EDITION_ID)}</th>
         <td class="edition-date">${editionDateHtml(ed, lang)}</td>
         <td class="edition-place">${esc(editionPlace(ed, lang) || '—')}</td>
@@ -903,7 +903,7 @@ function festivalLineupGroupsHtml(editions, lineupsByEdition, artistsById, lang)
         <summary>${lang === 'en' ? `SHOW ALL ${slots.length} ARTISTS` : `全${slots.length}組を表示`}</summary>
         <ul class="detail-lineup-list">${overflow.join('')}</ul>
       </details>` : '';
-    return `<section class="edition-lineup"><h3>${esc(ed.EDITION || ed.EDITION_ID)}</h3><ul class="detail-lineup-list">${visible}</ul>${more}</section>`;
+    return `<section class="edition-lineup reveal"><h3>${esc(ed.EDITION || ed.EDITION_ID)}</h3><ul class="detail-lineup-list">${visible}</ul>${more}</section>`;
   }).join('');
 }
 
@@ -936,13 +936,13 @@ function festivalRelatedCards(current, lang) {
     : upcoming.slice(0, 4);
   if (!selected.length) return '';
   const prefix = lang === 'en' ? '/en' : '';
-  const cards = selected.map(({ item, status }) => {
+  const cards = selected.map(({ item, status }, index) => {
     const name = lang === 'en' ? (item.name_en || item.name) : item.name;
     const img = item.image || item.flyer;
     const pastLabel = status === 'past'
       ? `<span class="related-card-past" style="opacity:.55;font-size:.72em;letter-spacing:.04em">${lang === 'en' ? 'Past event' : '過去の開催'}</span> · `
       : '';
-    return `<a class="related-card" href="${prefix}/festivals/${encodeURIComponent(item.id)}.html">
+    return `<a class="related-card reveal" style="transition-delay:${index * 100}ms" href="${prefix}/festivals/${encodeURIComponent(item.id)}.html">
         <div class="related-card-img">${img ? `<img ${dimensionAttrs(cardImagePath(img))} src="/${cardImagePath(img)}"${cardSrcsetAttr(img)} alt="${esc(name)}" loading="lazy" style="object-position:${esc(item.imagePosition || 'center')}">` : ''}</div>
         <div class="related-card-info">
           <div class="related-card-date">${pastLabel}${esc(item.date || '')}</div>
