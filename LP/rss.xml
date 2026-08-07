@@ -5,7 +5,7 @@
     <link>https://techno-japan.media</link>
     <description>Japan&apos;s underground techno and house music media platform.</description>
     <language>ja-JP</language>
-    <lastBuildDate>Thu, 06 Aug 2026 05:45:45 -0000</lastBuildDate>
+    <lastBuildDate>Fri, 07 Aug 2026 09:30:44 -0000</lastBuildDate>
     <atom:link href="https://techno-japan.media/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
       <title>GROW THE CULTURE OPEN AIR</title>
@@ -85,7 +85,15 @@
       <guid isPermaLink="true">https://techno-japan.media/festivals/re-birth-festival.html</guid>
       <pubDate>Fri, 11 Sep 2026 00:00:00 -0000</pubDate>
       <category>Festival</category>
-      <description>Nagano — Re:birth Festivalは長野県の山間にあるGateaux Kingdom Koumiで開催され、日本の「マウンテンフェス」シーンの中に自らを位置づけている。都市の喧騒から離れた自然環境の中で、テクノやエレクトロニック・ミュージックのプログラミングに焦点を当てたイベントだ。</description>
+      <description>Nagano — Re:birth Festivalは、大自然のなかで国内外のトップDJによるテクノやトランスが響き渡る、国内最大規模の野外レイヴです。圧倒的なレーザーとアートデコレーションが融合した幻想的な空間で、究極の音響とキャンプ体験を数日間にわたって満喫できます。</description>
+    </item>
+    <item>
+      <title>BIG FUN</title>
+      <link>https://techno-japan.media/festivals/big-fun.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/big-fun.html</guid>
+      <pubDate>Sun, 06 Sep 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Hokkaido — 札幌の伝説的なクラブ「Precious Hall（プレシャスホール）」がプロデュースする、大自然に囲まれた屋外音楽フェスティバルです。単なる音楽イベントの枠を超え、世界的なレジェンドとローカルのトップアーティストが融合する特別な空間を提供しています。</description>
     </item>
     <item>
       <title>ONE PARK FESTIVAL</title>
@@ -96,12 +104,36 @@
       <description>Fukui — ONE PARK FESTIVALは、福井の自然豊かな風景の中でエレクトロニック・ミュージックを届け、アンダーグラウンドなサウンドとアウトドア・フェスの雰囲気が調和した親密な集まりを作り出している。このイベントは複数のステージにわたり国内外のアーティストを紹介し、日本のローカル・フェスシーンにおけるコミュニティとつながりを重視している。</description>
     </item>
     <item>
+      <title>fabulous -endless summer SP-</title>
+      <link>https://techno-japan.media/festivals/fabulous.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/fabulous.html</guid>
+      <pubDate>Sat, 05 Sep 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Kyoto — 都府宮津市にある海のロケーション「TAKE SEA（テイク・シー）」で開催される、プライベートビーチ感覚を味わえる野外音楽イベント。「最幸天川（サイクウテンカワ）」などのコミュニティやオーガナイザーが関わっており、美しい海の絶景とともに心地よい音楽を楽しめるイベントとして企画されています</description>
+    </item>
+    <item>
+      <title>FOREST SOUND CAMP</title>
+      <link>https://techno-japan.media/festivals/forest-sound-camp.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/forest-sound-camp.html</guid>
+      <pubDate>Sat, 05 Sep 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Tokyo — Festival on 2026-09-05</description>
+    </item>
+    <item>
       <title>YAMAUTO</title>
       <link>https://techno-japan.media/festivals/yamauto.html</link>
       <guid isPermaLink="true">https://techno-japan.media/festivals/yamauto.html</guid>
       <pubDate>Sat, 22 Aug 2026 00:00:00 -0000</pubDate>
       <category>Festival</category>
       <description>Shiga — YAMAUTOは、滋賀県の山あいの地形を舞台に開催される、複数日程にわたるエレクトロニック・ミュージックの祭典として展開されている。フェスティバルはロングセットと没入感あるサウンドスケープを重視し、琵琶湖近郊の秘境的なロケーションに、国内外のアーティストたちを呼び集めている。</description>
+    </item>
+    <item>
+      <title>BonDisco</title>
+      <link>https://techno-japan.media/festivals/bondisco.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/bondisco.html</guid>
+      <pubDate>Sat, 22 Aug 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Hyogo — BonDiscoは2014年以来、ディスコとハウスの基本を京都のこぢんまりとしたクラブスペースに持ち込んできた。このパーティーは、クラシックなディスコ感覚と現代的なダンスフロアのダイナミズムを橋渡しする、グルーヴ志向の選曲に一貫してこだわり続けている。トレンド追随よりも音楽的ルーツを重んじる、温かくコミュニティ主体な雰囲気づくりで知られている。</description>
     </item>
     <item>
       <title>Global Ark</title>
@@ -142,6 +174,14 @@
       <pubDate>Fri, 31 Jul 2026 00:00:00 -0000</pubDate>
       <category>Festival</category>
       <description>Nagano — SuB-TiDe（サブタイド）は、長野県の南相木ダム付近で開催される150人限定のシークレット・レイヴパーティー。コンセプトに「心象領域（Domain of Mindscape）」を掲げ、多様なクリエイターの創作や音楽を通じて深い没入感を体験できる空間を提供している</description>
+    </item>
+    <item>
+      <title>CAR MULTIMEDIA</title>
+      <link>https://techno-japan.media/festivals/car-multimedia.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/car-multimedia.html</guid>
+      <pubDate>Sat, 25 Jul 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Saitama — DJコレクティブWAGON Rが主催する、「CAR MULTIMEDIA」の第2回。7月25日の深夜、埼玉の山奥のどこかで、場所を明かさないまま一夜のレイブ。そこに集う人それぞれのバックグラウンドやカルチャー、ジャンルが交差して初めて成立する「CAR MULTIMEDIA」。既存の社会からの逃亡と、独自のマルチメディアの構築を試みる一夜</description>
     </item>
     <item>
       <title>FUJI ROCK</title>
@@ -208,50 +248,10 @@
       <description>Tokyo — 魂のふるえる音楽体験」を掲げる FESTIVAL de FRUE のスピンオフ。静岡県掛川市で野外開催される本体に対し、こちらは都市型の1日限りのイベントだ。「-zinho」はポルトガル語の縮小辞。名前はそのまま「ちいさな FRUE」を意味する。 直近の開催は2026年6月13日、東京・立川ステージガーデン。約2,500席の屋内ホールで、世界各国の多様な音楽を快適な環境で聴ける一日として設計された。出演は Marc Ribot Y Los Cubanos Postizos、Sam Gendel &amp; Sam Wilkes、岡田拓郎。インド古典声楽の Pandit Pran Nath 没後30年を記念する Urs Celebration には SARA、YUMIKO OHNO、Terry Riley。</description>
     </item>
     <item>
-      <title>Signal</title>
-      <link>https://techno-japan.media/festivals/signal.html</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals/signal.html</guid>
-      <pubDate>Sat, 13 Jun 2026 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Yamanashi — 山梨の自然豊かなロケーションで開催されるSignal Open Airは、東京のクラブシーンから離れたアーティストやダンサーたちを引き寄せ、没入感あふれる野外体験を提供する。同フェスティバルは、山梨県の山岳地帯の景観を背景としながらも、アンダーグラウンドなテクノ／エレクトロニック・ミュージックに軸足を置いたプログラム編成を貫いている。</description>
-    </item>
-    <item>
-      <title>Body&amp;SOUL Live in Japan</title>
-      <link>https://techno-japan.media/festivals/body-soul.html</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals/body-soul.html</guid>
-      <pubDate>Sun, 07 Jun 2026 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Tokyo — Body&amp;SOULが、ニューヨーク仕込みのレジェンダリーなディープハウス／ソウルフル・ダンスミュージックの精神を東京に持ち込む。90年代初頭からこのブランドを特徴づけてきた、質の高いサウンドへのこだわり、親密な雰囲気、そして音楽とダンスの間に生まれるスピリチュアルなつながりを、このイベントも忠実に受け継いでいる。</description>
-    </item>
-    <item>
-      <title>etsuetsu</title>
-      <link>https://techno-japan.media/festivals/etsuetsu.html</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals/etsuetsu.html</guid>
-      <pubDate>Fri, 05 Jun 2026 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Yamanashi — 東京・神宮前の bonobo と、三軒茶屋の天狗食堂による共同主催の野外パーティー。2泊3日で開かれる。都市のクラブと食堂が、そのまま屋外に場所を移して開くという構図になっている。</description>
-    </item>
-    <item>
-      <title>Link Open Air</title>
-      <link>https://techno-japan.media/festivals/link-open-air.html</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals/link-open-air.html</guid>
-      <pubDate>Sat, 30 May 2026 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Toyama — Link Open Airは、電子音楽を富山の自然の中へと届け、サウンドと環境が結びつく親密な集いを生み出している。フェスティバルでは、丁寧にキュレーションされたステージで国内外のアーティストを紹介し、拡大を続ける日本のアウトドアフェスティバル・シーンにおいて、規模よりも質を重視する姿勢を貫いている。コンセプトは「Link =繋がる」の一語。会場は富山県南砺市の桂湖オートキャンプ場で、湖と山並みに囲まれ、夜は星空が広がる。 バンコクから Hiro と OPTIKZ を迎え、BeBe、Keisuke Miura、masato.EPA、Gouki、MAD-SARU といった国内勢が並ぶ。出店を巡り、キャンプをして、テクノで踊る。</description>
-    </item>
-    <item>
-      <title>JAPONISM</title>
-      <link>https://techno-japan.media/festivals/japonism.html</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals/japonism.html</guid>
-      <pubDate>Sat, 30 May 2026 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Tochigi — JAPONISMは栃木県・那須の自然環境の中で開催され、エレクトロニック・ミュージックとこの地域の山岳景観を融合させている。フェスは音と環境のつながりを重視しており、都市部から離れた没入感のある体験を作り出している。アーティストたちは、屋外の環境と一体化した複数のステージでパフォーマンスを行う。</description>
-    </item>
-    <item>
       <title>野外テクノパーティTranscendenceで見た次世代ジェネレーションの可能性</title>
       <link>https://techno-japan.media/articles/transcendence-2025-report.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/transcendence-2025-report.html</guid>
-      <pubDate>Thu, 06 Aug 2026 05:45:45 -0000</pubDate>
+      <pubDate>Fri, 07 Aug 2026 09:30:44 -0000</pubDate>
       <category>REPORT</category>
       <description></description>
     </item>
