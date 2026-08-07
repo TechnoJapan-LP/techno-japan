@@ -347,6 +347,30 @@
     384,
     480
   ],
+  "images/derivatives/card/festivals/ffkt--62a5e387-lg.webp": [
+    726,
+    960
+  ],
+  "images/derivatives/card/festivals/ffkt--62a5e387-sm.webp": [
+    363,
+    480
+  ],
+  "images/derivatives/card/festivals/ffkt-2025-flyer--1576478a-lg.webp": [
+    768,
+    960
+  ],
+  "images/derivatives/card/festivals/ffkt-2025-flyer--1576478a-sm.webp": [
+    384,
+    480
+  ],
+  "images/derivatives/card/festivals/ffkt-flyer--56206519-lg.webp": [
+    240,
+    300
+  ],
+  "images/derivatives/card/festivals/ffkt-flyer--56206519-sm.webp": [
+    240,
+    300
+  ],
   "images/derivatives/card/festivals/forest-sound-camp--30f7fc4d-lg.webp": [
     675,
     506
@@ -523,6 +547,22 @@
     360,
     480
   ],
+  "images/derivatives/card/festivals/odyssey--d9ace6c1-lg.webp": [
+    960,
+    545
+  ],
+  "images/derivatives/card/festivals/odyssey--d9ace6c1-sm.webp": [
+    480,
+    273
+  ],
+  "images/derivatives/card/festivals/odyssey-flyer--a36d3f7e-lg.webp": [
+    720,
+    960
+  ],
+  "images/derivatives/card/festivals/odyssey-flyer--a36d3f7e-sm.webp": [
+    360,
+    480
+  ],
   "images/derivatives/card/festivals/one-park-festival--64469430-lg.webp": [
     960,
     640
@@ -553,6 +593,22 @@
   ],
   "images/derivatives/card/festivals/osukinidouzo-flyer--088168ba-sm.webp": [
     270,
+    480
+  ],
+  "images/derivatives/card/festivals/otsukimi--97b773f4-lg.webp": [
+    960,
+    648
+  ],
+  "images/derivatives/card/festivals/otsukimi--97b773f4-sm.webp": [
+    480,
+    324
+  ],
+  "images/derivatives/card/festivals/otsukimi-flyer--ef38c13d-lg.webp": [
+    768,
+    960
+  ],
+  "images/derivatives/card/festivals/otsukimi-flyer--ef38c13d-sm.webp": [
+    384,
     480
   ],
   "images/derivatives/card/festivals/paramount--a5e38a98-lg.webp": [
@@ -602,6 +658,22 @@
   "images/derivatives/card/festivals/re-birth-festival-flyer--7be9c574-sm.webp": [
     201,
     251
+  ],
+  "images/derivatives/card/festivals/ringo-festival--bd7b4062-lg.webp": [
+    960,
+    641
+  ],
+  "images/derivatives/card/festivals/ringo-festival--bd7b4062-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/festivals/ringo-festival-flyer--45d812ce-lg.webp": [
+    720,
+    960
+  ],
+  "images/derivatives/card/festivals/ringo-festival-flyer--45d812ce-sm.webp": [
+    360,
+    480
   ],
   "images/derivatives/card/festivals/snow-machine-japan--38afb88e-lg.webp": [
     720,
@@ -867,6 +939,18 @@
     1920,
     1278
   ],
+  "images/festivals/ffkt-2025-flyer.webp": [
+    1080,
+    1350
+  ],
+  "images/festivals/ffkt-flyer.webp": [
+    240,
+    300
+  ],
+  "images/festivals/ffkt.webp": [
+    1920,
+    2540
+  ],
   "images/festivals/forest-sound-camp-flyer.webp": [
     1920,
     2400
@@ -955,6 +1039,14 @@
     1920,
     1271
   ],
+  "images/festivals/odyssey-flyer.webp": [
+    1920,
+    2560
+  ],
+  "images/festivals/odyssey.webp": [
+    1920,
+    1090
+  ],
   "images/festivals/one-park-festival-flyer.webp": [
     1080,
     1350
@@ -970,6 +1062,14 @@
   "images/festivals/osukinidouzo.webp": [
     780,
     520
+  ],
+  "images/festivals/otsukimi-flyer.webp": [
+    1920,
+    2400
+  ],
+  "images/festivals/otsukimi.webp": [
+    1920,
+    1296
   ],
   "images/festivals/paramount-flyer.webp": [
     1080,
@@ -994,6 +1094,14 @@
   "images/festivals/re-birth-festival.webp": [
     1920,
     1280
+  ],
+  "images/festivals/ringo-festival-flyer.webp": [
+    1440,
+    1920
+  ],
+  "images/festivals/ringo-festival.webp": [
+    1280,
+    854
   ],
   "images/festivals/snow-machine-japan-flyer.webp": [
     1442,
