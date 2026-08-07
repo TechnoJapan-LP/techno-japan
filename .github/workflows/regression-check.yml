@@ -73,12 +73,12 @@ jobs:
             exit 1
           else
             echo "生成物はコミット内容と一致しています。"
+          fi
 
       - name: Generated pages will be committed by deploy
         if: ${{ inputs.fail_on_generated_drift == false }}
         run: |
           echo "main デプロイ経路: 再生成物をこの後のデプロイジョブでコミット・配信します。"
-          fi
 
       # JS/CSS を変えたのに ?v を据え置くと、sw.js の cache-first により
       # 一度取得したブラウザへ永久に届かない。cms.js は実際に 26回分が
