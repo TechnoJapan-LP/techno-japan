@@ -83,6 +83,38 @@
     679,
     960
   ],
+  "images/derivatives/card/festivals/big-fun--f2e10178.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/festivals/big-fun-2025-flyer--15ea01bd.webp": [
+    680,
+    960
+  ],
+  "images/derivatives/card/festivals/big-fun-flyer--2ec4a310.webp": [
+    960,
+    960
+  ],
+  "images/derivatives/card/festivals/bondisco--5e809b55.webp": [
+    960,
+    720
+  ],
+  "images/derivatives/card/festivals/bondisco-2025-flyer--993660b3.webp": [
+    768,
+    960
+  ],
+  "images/derivatives/card/festivals/bondisco-flyer--9cc89fc9.webp": [
+    682,
+    960
+  ],
+  "images/derivatives/card/festivals/car-multimedia--2bbe72b2.webp": [
+    960,
+    638
+  ],
+  "images/derivatives/card/festivals/car-multimedia-flyer--7f01ed47.webp": [
+    768,
+    960
+  ],
   "images/derivatives/card/festivals/e-groove--ea4023c8.webp": [
     960,
     540
@@ -107,11 +139,27 @@
     768,
     960
   ],
+  "images/derivatives/card/festivals/fabulous--39e9ba17.webp": [
+    960,
+    960
+  ],
+  "images/derivatives/card/festivals/fabulous-flyer--1adec3be.webp": [
+    768,
+    960
+  ],
   "images/derivatives/card/festivals/festival-de-frue--9b01442e.webp": [
     960,
     639
   ],
   "images/derivatives/card/festivals/festival-de-frue-flyer--2e008d45.webp": [
+    768,
+    960
+  ],
+  "images/derivatives/card/festivals/forest-sound-camp--30f7fc4d.webp": [
+    675,
+    506
+  ],
+  "images/derivatives/card/festivals/forest-sound-camp-flyer--1b1c5780.webp": [
     768,
     960
   ],
@@ -195,6 +243,14 @@
     720,
     960
   ],
+  "images/derivatives/card/festivals/one-park-festival--64469430.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/festivals/one-park-festival-flyer--791b6b1e.webp": [
+    768,
+    960
+  ],
   "images/derivatives/card/festivals/osukinidouzo--4ad17999.webp": [
     780,
     520
@@ -219,9 +275,9 @@
     768,
     960
   ],
-  "images/derivatives/card/festivals/re-birth-festival--681e6298.webp": [
-    275,
-    183
+  "images/derivatives/card/festivals/re-birth-festival--29631340.webp": [
+    960,
+    640
   ],
   "images/derivatives/card/festivals/re-birth-festival-flyer--7be9c574.webp": [
     201,
@@ -323,6 +379,38 @@
     842,
     1191
   ],
+  "images/festivals/big-fun-2025-flyer.webp": [
+    1360,
+    1920
+  ],
+  "images/festivals/big-fun-flyer.webp": [
+    1920,
+    1920
+  ],
+  "images/festivals/big-fun.webp": [
+    1920,
+    1280
+  ],
+  "images/festivals/bondisco-2025-flyer.webp": [
+    1080,
+    1350
+  ],
+  "images/festivals/bondisco-flyer.webp": [
+    1180,
+    1662
+  ],
+  "images/festivals/bondisco.webp": [
+    1179,
+    884
+  ],
+  "images/festivals/car-multimedia-flyer.webp": [
+    1179,
+    1474
+  ],
+  "images/festivals/car-multimedia.webp": [
+    1920,
+    1275
+  ],
   "images/festivals/e-groove-flyer.webp": [
     1920,
     2715
@@ -347,6 +435,14 @@
     1920,
     1280
   ],
+  "images/festivals/fabulous-flyer.webp": [
+    1920,
+    2400
+  ],
+  "images/festivals/fabulous.webp": [
+    1920,
+    1920
+  ],
   "images/festivals/festival-de-frue-flyer.webp": [
     960,
     1200
@@ -354,6 +450,14 @@
   "images/festivals/festival-de-frue.webp": [
     1920,
     1278
+  ],
+  "images/festivals/forest-sound-camp-flyer.webp": [
+    1920,
+    2400
+  ],
+  "images/festivals/forest-sound-camp.webp": [
+    675,
+    506
   ],
   "images/festivals/global-ark-2025-flyer.webp": [
     1080,
@@ -435,6 +539,14 @@
     1920,
     1271
   ],
+  "images/festivals/one-park-festival-flyer.webp": [
+    1080,
+    1350
+  ],
+  "images/festivals/one-park-festival.webp": [
+    1600,
+    1067
+  ],
   "images/festivals/osukinidouzo-flyer.webp": [
     1080,
     1920
@@ -464,8 +576,8 @@
     251
   ],
   "images/festivals/re-birth-festival.webp": [
-    275,
-    183
+    1920,
+    1280
   ],
   "images/festivals/snow-machine-japan-flyer.webp": [
     1442,
