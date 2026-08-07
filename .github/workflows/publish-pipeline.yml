@@ -130,6 +130,11 @@ jobs:
       - name: Check CMS auth retry
         run: node scripts/check_cms_auth_retry.mjs
 
+      # GAS の AI ハンドラ（貼り替え用コード）の検査。実体は Apps Script 側に
+      # あり普段は見えないので、少なくとも管理下のコードは壊さない（AUDIT §9-54）。
+      - name: Check GAS AI handlers
+        run: node scripts/check_gas_ai.mjs
+
       - name: Verify Chrome is available
         run: |
           if command -v google-chrome >/dev/null; then google-chrome --version
