@@ -219,6 +219,54 @@
     384,
     480
   ],
+  "images/derivatives/card/festivals/circus--0af741a0-lg.webp": [
+    960,
+    642
+  ],
+  "images/derivatives/card/festivals/circus--0af741a0-sm.webp": [
+    480,
+    321
+  ],
+  "images/derivatives/card/festivals/circus-2025-flyer--6f58716d-lg.webp": [
+    387,
+    516
+  ],
+  "images/derivatives/card/festivals/circus-2025-flyer--6f58716d-sm.webp": [
+    360,
+    480
+  ],
+  "images/derivatives/card/festivals/circus-flyer--a79fb583-lg.webp": [
+    720,
+    960
+  ],
+  "images/derivatives/card/festivals/circus-flyer--a79fb583-sm.webp": [
+    360,
+    480
+  ],
+  "images/derivatives/card/festivals/colors-presents-soundcamp--bb900983-lg.webp": [
+    960,
+    624
+  ],
+  "images/derivatives/card/festivals/colors-presents-soundcamp--bb900983-sm.webp": [
+    480,
+    312
+  ],
+  "images/derivatives/card/festivals/colors-presents-soundcamp-2025-flyer--69490e5b-lg.webp": [
+    768,
+    960
+  ],
+  "images/derivatives/card/festivals/colors-presents-soundcamp-2025-flyer--69490e5b-sm.webp": [
+    384,
+    480
+  ],
+  "images/derivatives/card/festivals/colors-presents-soundcamp-flyer--3c5d19c3-lg.webp": [
+    585,
+    960
+  ],
+  "images/derivatives/card/festivals/colors-presents-soundcamp-flyer--3c5d19c3-sm.webp": [
+    293,
+    480
+  ],
   "images/derivatives/card/festivals/e-groove--ea4023c8-lg.webp": [
     960,
     540
@@ -754,6 +802,30 @@
   "images/festivals/car-multimedia.webp": [
     1920,
     1275
+  ],
+  "images/festivals/circus-2025-flyer.webp": [
+    387,
+    516
+  ],
+  "images/festivals/circus-flyer.webp": [
+    1080,
+    1440
+  ],
+  "images/festivals/circus.webp": [
+    1920,
+    1284
+  ],
+  "images/festivals/colors-presents-soundcamp-2025-flyer.webp": [
+    1024,
+    1280
+  ],
+  "images/festivals/colors-presents-soundcamp-flyer.webp": [
+    593,
+    973
+  ],
+  "images/festivals/colors-presents-soundcamp.webp": [
+    1920,
+    1248
   ],
   "images/festivals/e-groove-flyer.webp": [
     1920,
