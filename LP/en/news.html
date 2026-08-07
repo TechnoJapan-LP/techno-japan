@@ -54,6 +54,7 @@
   --card-border: rgba(240,237,232,0.06);
 }
 @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+html.tj-page-leaving body { opacity: 0; transition: opacity .18s ease; }
 
 /* ===================== TOP BAR (tagline) ===================== */
 .top-bar {
@@ -86,7 +87,9 @@
 .sort-tab.active::after {
   content: ''; position: absolute; bottom: 0; left: 0;
   width: 100%; height: 2px; background: var(--accent);
+  transform-origin: left center; animation: sortUnderline .3s cubic-bezier(.16,1,.3,1) both;
 }
+@keyframes sortUnderline { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
 /* ===================== MAIN GRID (durevie style) ===================== */
 .main-grid {
@@ -249,6 +252,9 @@
   border-top: 1px solid var(--card-border);
   margin-top: 80px;
 }
+/* ARCHIVE はカテゴリ操作の対象なので、親セクションを透明なままにしない。
+   表示演出は内部のカード単位で行う。 */
+#archive-section.reveal { opacity: 1; transform: none; }
 .feed-header {
   display: flex; justify-content: space-between; align-items: flex-end;
   margin-bottom: 48px;
@@ -273,13 +279,29 @@
   font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
   padding: 14px 24px;
   background: transparent; border: none; color: var(--text);
-  cursor: none; opacity: 0.25; transition: opacity 0.3s ease; position: relative; white-space: nowrap;
+  cursor: none; opacity: 0.25; transition: opacity 0.3s ease, color 0.3s ease; position: relative; white-space: nowrap;
 }
 .cat-btn:hover { opacity: 0.5; }
 .cat-btn.active { opacity: 1; }
 .cat-btn.active::after {
-  content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 1px; background: var(--text);
+  content: ''; position: absolute; bottom: -1px; left: 24px; right: 24px; height: 1px; background: var(--accent);
+  transform-origin: left center; animation: categoryUnderline .35s cubic-bezier(.16,1,.3,1) both;
 }
+.sort-tab:focus-visible,
+.cat-btn:focus-visible,
+.load-more-btn:focus-visible,
+.featured-card:focus-visible,
+.side-card:focus-visible,
+.feed-card:focus-visible,
+.discover-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 5px;
+  opacity: 1;
+}
+.sort-tab:focus-visible,
+.cat-btn:focus-visible,
+.load-more-btn:focus-visible { cursor: pointer; }
+@keyframes categoryUnderline { from { transform: scaleX(0); opacity: .2; } to { transform: scaleX(1); opacity: 1; } }
 
 /* Feed grid: 2 column cards with image */
 .feed-grid {
@@ -287,6 +309,23 @@
   grid-template-columns: 1fr 1fr;
   gap: 48px 32px;
 }
+.feed-empty {
+  grid-column: 1 / -1;
+  min-height: 140px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--card-border);
+  color: var(--text);
+  opacity: .45;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .16em;
+  line-height: 1.8;
+  text-align: center;
+  text-transform: uppercase;
+}
+.feed-grid.feed-refresh .feed-card { animation: feedCardIn .5s cubic-bezier(.16,1,.3,1) both; animation-delay: var(--reveal-delay, 0ms); }
+@keyframes feedCardIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 .feed-card {
   display: flex; flex-direction: column;
   --reveal-delay: 0ms;
@@ -361,9 +400,11 @@
   border: 1px solid rgba(240,237,232,0.12);
   background: transparent; color: var(--text);
   cursor: none;
-  transition: border-color 0.3s ease, background 0.3s ease;
+  position: relative;
+  transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
 }
-.load-more-btn:hover { border-color: rgba(240,237,232,0.35); background: rgba(240,237,232,0.03); }
+.load-more-btn:hover { border-color: rgba(240,237,232,0.35); background: rgba(240,237,232,0.03); transform: translateY(-3px); }
+.load-more-btn:active { transform: translateY(0); }
 
 /* ===================== DISCOVER CARDS (index style) ===================== */
 .guide-section {
@@ -505,6 +546,19 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
 }
 @media (hover: none) and (pointer: coarse) {
   .sort-tab, .cat-btn, .load-more-btn, .discover-card { cursor: pointer; }
+  /* タッチ端末では hover がタップ後に残るブラウザがあるため、
+     レイアウトを横へ押し出す演出は無効にして、軽い押下だけ残す。 */
+  .side-card:hover { transform: none; }
+  .feed-card:hover { transform: none; }
+  .load-more-btn:hover { transform: none; }
+  .featured-card:hover .featured-card-image img,
+  .feed-card:hover .feed-card-image img { transform: none; }
+  .side-card:active, .feed-card:active { opacity: 0.8; }
+  .featured-card:active .featured-card-image img,
+  .feed-card:active .feed-card-image img { transform: scale(1.03); }
+  .reveal { transition-delay: 0ms; }
+  .side-card.reveal .side-card-title,
+  .feed-card.reveal .feed-card-title { transition-delay: 80ms; }
 }
 
 /* ===== SKELETON LOADING（data.js描画前のプレースホルダー・stepsで機械的に点滅） ===== */
@@ -954,6 +1008,9 @@ function bindArticleNavigation() {
   document.querySelectorAll('[data-article-detail-link]:not([data-news-state-bound])').forEach((link) => {
     link.dataset.newsStateBound = 'true';
     link.addEventListener('click', saveNewsHubState);
+    link.addEventListener('click', () => {
+      requestAnimationFrame(() => document.documentElement.classList.add('tj-page-leaving'));
+    });
   });
 }
 
@@ -1041,8 +1098,8 @@ function renderFeed() {
   if (currentTag) {
     items = sorted.filter(a => Array.isArray(a.tags) && a.tags.some(t => t.toLowerCase() === currentTag.toLowerCase()));
   } else {
-    // Exclude first 4 (already in main grid) unless filtered by category
-    items = currentCategory === 'ALL' ? sorted.slice(4) : sorted.filter(a => a.category === currentCategory);
+    // ALL は全記事を表示する。個別カテゴリだけ絞り込む。
+    items = currentCategory === 'ALL' ? sorted : sorted.filter(a => a.category === currentCategory);
   }
   // Render tag-filter pill if active
   const archiveSection = document.getElementById('archive-section');
@@ -1070,7 +1127,10 @@ function renderFeed() {
   }
   const visible = items.slice(0, feedVisible);
 
-  document.getElementById('feed-grid').innerHTML = visible.map((a, index) => `
+  const feedGrid = document.getElementById('feed-grid');
+  feedGrid.classList.remove('feed-refresh');
+  void feedGrid.offsetWidth;
+  feedGrid.innerHTML = visible.length ? visible.map((a, index) => `
     <a href="${articleDetailHref(a)}" data-article-detail-link class="feed-card reveal" style="--reveal-delay:${index * 90}ms">
       <div class="feed-card-image">
         ${a.image
@@ -1087,12 +1147,13 @@ function renderFeed() {
       </div>
       <div class="read-link">READ <span>→</span></div>
     </a>
-  `).join('');
+  `).join('') : `<div class="feed-empty">MORE STORIES COMING SOON</div>`;
 
   const btn = document.getElementById('load-more-btn');
   btn.style.display = visible.length >= items.length ? 'none' : 'inline-block';
   bindArticleNavigation();
-  observeReveals(document.getElementById('feed-grid'));
+  observeReveals(feedGrid);
+  feedGrid.classList.add('feed-refresh');
 }
 
 /* ========== SORT TABS ========== */
@@ -1148,6 +1209,7 @@ if (readNewsStateFromUrl()) {
   bindArticleNavigation();
   bindCursorExpand();
   addEventListener('pageshow', restoreNewsHubScroll);
+  addEventListener('pageshow', () => document.documentElement.classList.remove('tj-page-leaving'));
 }
 </script>
 <!-- Service Worker registration -->
