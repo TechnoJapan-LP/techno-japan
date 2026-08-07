@@ -55,23 +55,70 @@ async function checkAuth(){
 
 window.cmsLogout = () => { localStorage.removeItem('cms_token'); localStorage.removeItem('cms_token_exp'); localStorage.removeItem('cms_auth'); location.reload(); };
 
-// Wrap fetch to inject auth token automatically
+/* GAS への通信にセッショントークンを差し込み、期限切れなら1回だけ回復する。
+
+   ■ なぜ入口でやるか
+
+     GAS のセッションは時間で失効する。失効後に投げると
+     「Invalid auth token」が返るが、HTTP は 200 なので
+     呼び出し側が個別に見ないと気づけない。
+     見ていない機能は**その機能だけが静かに使えなくなる**。
+     画面はログイン済みに見えるので、利用者には「壊れた」としか映らない。
+
+     2026-08-07 に ARTICLE の翻訳が止まった。当時、回復処理は
+     gasPostJson_ を通る画像アップロードにしか入っておらず、
+     翻訳・AI生成・保存・削除・開催回の同期は素の fetch のままだった。
+     呼び出し箇所は16あり、1つずつ直しても**次に足したものが漏れる**。
+     入口で1回だけ回復させれば、以後どこから呼んでも同じように直る。
+     AUDIT §9-53。
+
+   ■ 実装上の注意
+
+     ・本文を読むと stream が消費されるので clone() を検査に使う
+     ・JSON でない応答（HTML エラーページ等）は素通しする
+     ・再試行は1回だけ。失敗しても呼び出し側にそのまま返し、
+       握りつぶさない（黙って成功したように見せない）
+     ・login 自体は AUTH_TOKEN が無い状態で呼ばれるので対象外 */
 const _origFetch = window.fetch;
-window.fetch = function(url, options){
-  if(typeof url === 'string' && url.indexOf('script.google.com') !== -1 && AUTH_TOKEN){
-    options = options || {};
-    if(options.method === 'POST' && options.body){
-      try {
-        const body = JSON.parse(options.body);
-        body.cmsAuth = AUTH_TOKEN;
-        options.body = JSON.stringify(body);
-      } catch(e) {}
-    } else {
-      // GET request — append cmsAuth as query param (avoid reserved 'auth')
-      url = url + (url.indexOf('?') !== -1 ? '&' : '?') + 'cmsAuth=' + encodeURIComponent(AUTH_TOKEN);
-    }
+
+function withAuthToken_(url, options){
+  if(typeof url !== 'string' || url.indexOf('script.google.com') === -1 || !AUTH_TOKEN){
+    return { url, options };
   }
-  return _origFetch.call(this, url, options);
+  options = options || {};
+  if(options.method === 'POST' && options.body){
+    try {
+      const body = JSON.parse(options.body);
+      body.cmsAuth = AUTH_TOKEN;
+      options = Object.assign({}, options, { body: JSON.stringify(body) });
+    } catch(e) { /* JSON でない body はそのまま */ }
+  } else {
+    // GET request — append cmsAuth as query param (avoid reserved 'auth')
+    url = url + (url.indexOf('?') !== -1 ? '&' : '?') + 'cmsAuth=' + encodeURIComponent(AUTH_TOKEN);
+  }
+  return { url, options };
+}
+
+window.fetch = async function(url, options){
+  const first = withAuthToken_(url, options);
+  const response = await _origFetch.call(this, first.url, first.options);
+
+  const isGas = typeof url === 'string' && url.indexOf('script.google.com') !== -1;
+  if(!isGas || !AUTH_TOKEN || !response.ok) return response;
+
+  let data = null;
+  try { data = await response.clone().json(); } catch(e) { return response; }
+  if(!data || !isAuthError_(data)) return response;
+
+  // 失効していた。1回だけ入り直して同じ要求を投げ直す。
+  localStorage.removeItem('cms_token');
+  localStorage.removeItem('cms_token_exp');
+  AUTH_TOKEN = null;
+  try { await checkAuth(); } catch(e) { return response; }
+  if(!AUTH_TOKEN) return response;
+
+  const retry = withAuthToken_(url, options);
+  return _origFetch.call(this, retry.url, retry.options);
 };
 
 // GAS側でセッションを失効させられた場合、localStorageの期限だけでは検知できない。
@@ -81,6 +128,16 @@ function isAuthError_(d){
   const text = String(d?.message || d?.error || '');
   return /invalid\s+auth\s+token|auth(?:entication)?\s+error|unauthorized/i.test(text);
 }
+/* GAS への POST は必ずこれを通すこと。
+
+   セッショントークンは GAS 側で失効する。素の fetch で投げると
+   「Invalid auth token」がそのままエラーとして返り、**その機能だけが
+   静かに使えなくなる**。ログインし直すまで直らないが、画面はログイン
+   済みに見えるので、利用者には「壊れた」としか映らない。
+
+   2026-08-07 に ARTICLE の翻訳が止まった。当時この自動再ログインは
+   画像アップロードにしか入っておらず、翻訳・AI生成・保存・削除は
+   素の fetch のままだった。AUDIT §9-53。 */
 async function gasPostJson_(body, retry = true){
   const response = await fetch(GAS_URL, {method:'POST', body:JSON.stringify(body)});
   const data = await response.json();
@@ -2784,8 +2841,8 @@ function aiGenerate(section){
   }
   if(!name)return toast('Enter name first','error');
   toast('Generating...','info');
-  fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'aiGenerate',section,name,city,context:extraContext,url,instagram})})
-    .then(r=>r.json()).then(d=>{
+  gasPostJson_({action:'aiGenerate',section,name,city,context:extraContext,url,instagram})
+    .then(d=>{
       if(d.success){
         if(section==='venue'){if(d.desc)document.getElementById('v-desc').value=d.desc;if(d.capacity)document.getElementById('v-capacity').value=d.capacity}
         else if(section==='festival'){if(d.desc)document.getElementById('f-desc').value=d.desc}
@@ -3446,8 +3503,8 @@ function saveEdit(section){
   rerenderListFromCache(section);
   toast('保存中...','info');
 
-  fetch(GAS_URL,{method:'POST',body:JSON.stringify(payload)})
-    .then(r=>r.json()).then(d=>{
+  gasPostJson_(payload)
+    .then(d=>{
       if(d.status==='ok'||d.success){
         toast('Updated ✓','success');
         if(section==='festival'){
@@ -3581,8 +3638,8 @@ function executeDelete(){
   const row = listCache[section]?.find(r => r._row === rowNum);
   closeConfirm();
   toast('Deleting...','info');
-  fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'delete_row',sheet:SHEET_MAP[section],row:rowNum})})
-    .then(r=>r.json()).then(d=>{
+  gasPostJson_({action:'delete_row',sheet:SHEET_MAP[section],row:rowNum})
+    .then(d=>{
       if(d.status==='ok'||d.success){
         if(row) saveDeletedItem(section, row);
         toast('Deleted — undo via "Trash" in sidebar','success');
@@ -4901,10 +4958,7 @@ function showTitleCandidates(candidates){
    ============================================================== */
 /* ---------- AI 翻訳（GAS 側の ai_translate を呼ぶ） ---------- */
 function aiTranslate_(text, target, isHtml){
-  return fetch(GAS_URL, {
-    method: 'POST',
-    body: JSON.stringify({ action: 'ai_translate', text: String(text).slice(0, 12000), target: target, html: !!isHtml })
-  }).then(r => r.json());
+  return gasPostJson_({ action: 'ai_translate', text: String(text).slice(0, 12000), target: target, html: !!isHtml });
 }
 
 function aiTranslateField(srcId, dstId, target){
@@ -4947,15 +5001,12 @@ function aiSummarize(mode){
   const btnLabel = mode === 'meta' ? 'AI Meta' : (mode === 'excerpt-en' ? 'AI Excerpt EN' : 'AI Excerpt');
   toast('✨ '+btnLabel+' 生成中...', 'info');
 
-  fetch(GAS_URL, {
-    method: 'POST',
-    body: JSON.stringify({
-      action: 'ai_summarize',
-      mode: mode,
-      title: title,
-      text: text.slice(0, 8000)  // 安全のため上限
-    })
-  }).then(r=>r.json()).then(d=>{
+  gasPostJson_({
+    action: 'ai_summarize',
+    mode: mode,
+    title: title,
+    text: text.slice(0, 8000)  // 安全のため上限
+  }).then(d=>{
     if (d.status === 'ok' && d.text) {
       targetEl.value = d.text.trim();
       // char count 更新（meta description）

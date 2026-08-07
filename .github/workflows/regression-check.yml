@@ -110,6 +110,11 @@ jobs:
       - name: Check CMS authors autocomplete
         run: node scripts/check_cms_authors.mjs
 
+      # セッション失効からの自動回復。ここが壊れると翻訳・保存など
+      # 個々の機能が「静かに使えなくなる」（AUDIT §9-53）。
+      - name: Check CMS auth retry
+        run: node scripts/check_cms_auth_retry.mjs
+
       - name: Check card image derivatives
         run: python3 scripts/check_image_derivatives.py
 
