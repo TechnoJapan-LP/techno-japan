@@ -19,14 +19,35 @@ if not match:
 mapping = json.loads(match.group(1))
 if not mapping:
     raise SystemExit("派生画像manifestが空です")
-for source, target in mapping.items():
+# manifest は 2026-08-07 に {src, srcset:[[path,幅],...]} の形へ変わった。
+# 旧形式（文字列1本）も受けて、片方だけ更新された状態でも落ちないようにする。
+def entries(value):
+    """(パス, 宣言幅 or None) を列挙する。"""
+    if isinstance(value, str):
+        return [(value, None)]
+    out = [(value["src"], None)]
+    out += [(path, width) for path, width in value.get("srcset", [])]
+    return out
+
+
+checked = 0
+for source, value in mapping.items():
     source_path = ROOT / "LP" / source
-    target_path = ROOT / "LP" / target
     if not source_path.exists():
         raise SystemExit(f"原本がありません: {source}")
-    if not target_path.exists():
-        raise SystemExit(f"派生画像がありません: {target}")
-    with Image.open(target_path) as image:
-        if max(image.size) > 960:
-            raise SystemExit(f"派生画像が大きすぎます: {target} {image.size}")
-print(f"✅ 派生画像 {len(mapping)}件、原本・manifest・サイズを確認")
+    for target, declared_width in entries(value):
+        target_path = ROOT / "LP" / target
+        if not target_path.exists():
+            raise SystemExit(f"派生画像がありません: {target}")
+        with Image.open(target_path) as image:
+            if max(image.size) > 960:
+                raise SystemExit(f"派生画像が大きすぎます: {target} {image.size}")
+            # srcset の幅宣言が実体とずれると、ブラウザが誤った1枚を選ぶ。
+            # 「小さいのに大きいと宣言」= ぼやけ、逆 = 無駄な転送。
+            if declared_width is not None and image.size[0] != declared_width:
+                raise SystemExit(
+                    f"srcset の幅宣言が実体と違います: {target} "
+                    f"宣言={declared_width}w 実体={image.size[0]}px"
+                )
+        checked += 1
+print(f"✅ 派生画像 {checked}枚（原本{len(mapping)}件）、実体・サイズ・幅宣言を確認")

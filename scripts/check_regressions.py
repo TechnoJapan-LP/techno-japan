@@ -303,10 +303,24 @@ def measure():
     m["artist_entity_id_pages"] = entity_id_pages
 
     # 参照先が存在しない画像。生成物の全 HTML から /images/ 参照を集めて実体を確認する。
+    #
+    # srcset は "a.webp 480w, b.webp 960w" と1つの属性に複数のURLが入る。
+    # 素朴に属性値を1本のパスとして扱うと、幅指定やカンマごと
+    # ファイル名の一部と見なして「存在しない」と誤検出する
+    # （2026-08-07 に14件の誤検出。AUDIT §9-51）。
+    # srcset だけ先に分解してから、通常の参照と同じ検査にかける。
     missing = set()
     for f in LP.rglob("*.html"):
         html = read(f)
-        for ref in re.findall(r'(?:src|content|")(?:https://techno-japan\.media)?(/images/[^"\']+)', html):
+        refs = []
+        for srcset in re.findall(r'srcset="([^"]+)"', html):
+            for candidate in srcset.split(","):
+                url = candidate.strip().split()[0] if candidate.strip() else ""
+                if url.startswith("/images/"):
+                    refs.append(url)
+        stripped = re.sub(r'\ssrcset="[^"]*"', " ", html)
+        refs += re.findall(r'(?:src|content|")(?:https://techno-japan\.media)?(/images/[^"\']+)', stripped)
+        for ref in refs:
             if not (LP / ref.lstrip("/")).exists():
                 missing.add(ref)
     m["broken_image_refs"] = len(missing)

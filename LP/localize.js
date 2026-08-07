@@ -52,11 +52,38 @@
     return '/' + s;
   };
 
+  /* カード用の縮小画像。build-image-derivatives.py が作る対応表を引く。
+
+     対応表は {src, srcset:[[path,幅],...]} の形。
+     2026-08-07 まで文字列1本だったので、古い形（文字列）も受ける。 */
+  function tjDerivativeEntry(value) {
+    var key = String(value == null ? '' : value).trim().replace(/^\//, '');
+    var hit = window.TJ_IMAGE_DERIVATIVES && window.TJ_IMAGE_DERIVATIVES[key];
+    if (!hit) return null;
+    return typeof hit === 'string' ? { src: hit, srcset: null } : hit;
+  }
+
   window.tjCardAssetPath = function (value) {
-    var original = String(value == null ? '' : value).trim();
-    var key = original.replace(/^\//, '');
-    var derivative = window.TJ_IMAGE_DERIVATIVES && window.TJ_IMAGE_DERIVATIVES[key];
-    return window.tjAssetPath(derivative || original);
+    var hit = tjDerivativeEntry(value);
+    return window.tjAssetPath(hit ? hit.src : String(value == null ? '' : value).trim());
+  };
+
+  /* srcset / sizes 属性。
+
+     【一覧ハブでは使わないこと】festivals.html のカードは実測で
+     モバイル452px / PC 848px と大きく、960px（lg）がちょうど良い。
+     srcset を付けると PC で 480px が選ばれて**画質が落ちた**（2026-08-07 実測）。
+     使ってよいのは、表示幅が明確に小さいカード
+     （詳細ページ下部の関連フェス = 実測324px）だけ。
+     sizes は必ず実測値に合わせること。ここを実際より小さく書くと、
+     ブラウザは正直に小さい画像を選んでぼやける。 */
+  window.tjCardSrcsetAttr = function (value) {
+    var hit = tjDerivativeEntry(value);
+    if (!hit || !hit.srcset || !hit.srcset.length) return '';
+    var set = hit.srcset.map(function (pair) {
+      return window.tjAssetPath(pair[0]) + ' ' + pair[1] + 'w';
+    }).join(', ');
+    return ' srcset="' + window.tjEscapeHtml(set) + '" sizes="(max-width: 700px) 100vw, 480px"';
   };
 
   /* HTML エスケープ。innerHTML に値を差し込む前に必ず通す。

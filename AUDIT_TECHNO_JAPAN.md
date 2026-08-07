@@ -3789,3 +3789,81 @@ GitHub 側の一時障害で後続が落ちた場合も同じで、
 実履歴では data.js を変えるのは `cms: publish`（data.js 単独）のみで、
 他コミットは data.js を触らない。二重起動はほぼ発生せず、
 起きても同じ `pages` グループで直列化される。今回は触らない。
+
+### 9-51. 詳細ページの関連カードが原寸を読んでいた（2026-08-07）
+
+§9-45 の宿題「festivals.html が 4.87MB」は、その後 Codex が
+カード用縮小画像（`build-image-derivatives.py` / `image-derivatives.js` /
+`tjCardAssetPath`）を入れて **1.80MB** まで下がっていた。
+残りを詰めるにあたって実測し直したところ、**別のところが増えていた。**
+
+#### 詳細ページが 0.48MB → 1.07MB に増えていた
+
+`festivals/ala.html` の内訳:
+
+```
+  137 KB  ala.webp（ヒーロー）
+   59 KB  ala-flyer.webp
+  185 KB  bondisco.webp          ┐
+  153 KB  forest-sound-camp.webp │ 下部の「関連フェス」カード4枚
+  263 KB  global-ark.webp        │ すべて原寸
+  249 KB  loa-lost-paradise.webp ┘
+```
+
+縮小画像の差し替えは `tjCardAssetPath`（ブラウザ側の JS）で行っており、
+**静的生成の詳細ページには効かない。** 新しいフェスが増えて関連カードが
+埋まったぶん、そのまま原寸が増えていた。
+
+対応: `build-detail-pages.mjs` でも `image-derivatives.js` の対応表を読み、
+関連カードを縮小版にした（`loadCardDerivatives` / `cardImagePath`）。
+**1.07MB → 0.66MB。**
+
+#### srcset は「実測してから」でないと逆効果
+
+転送量をさらに削るため 480px 版を足して `srcset` を入れたが、
+**表示幅を測らずに `sizes` を書いたら画質が落ちた。**
+
+| 場所 | 実測表示幅 | 適正 |
+|---|---|---|
+| `festivals.html` のカード | モバイル452px / PC **848px** | 960px（lg） |
+| 詳細ページの関連カード | **324px** | 480px（sm） |
+
+一覧のカードは「小さなサムネイル」ではなく大きなビジュアルで、
+960px がちょうど良い。ここに `sizes="...480px"` と書いたところ、
+PC で 480px 版が選ばれて **848px の枠に 480px を引き伸ばす**状態になった。
+
+`sizes` は実際の表示幅の宣言であって、希望を書く場所ではない。
+**実測より小さく書けば、ブラウザは正直に小さい画像を選んでぼやける。**
+
+結論として `srcset` は関連カード（324px）にだけ残し、
+一覧カードからは撤回した。`localize.js` の `tjCardSrcsetAttr` に
+「一覧ハブでは使わないこと」と実測値つきで書いた。
+
+#### 検査2つを新形式に追随させた
+
+manifest を `{src, srcset:[[path,幅],...]}` に変えたので、既存検査が壊れた。
+
+- `check_regressions.py` の `broken_image_refs` が **14件の誤検出**。
+  `srcset="a.webp 480w, b.webp 960w"` を1本のパスとして扱い、
+  幅指定やカンマごとファイル名と見なしていた。
+  srcset だけ先に分解してから同じ検査にかけるようにした
+- `check_image_derivatives.py`（Codex 作）が旧形式（文字列）前提で
+  `TypeError` で落ちていた。両形式を受けるようにしたうえで、
+  **srcset の幅宣言が実体と一致するか**の検証を足した。
+  ここがずれると、ぼやけ（小さいのに大きいと宣言）か
+  無駄な転送（逆）が起きるが、目視では気づけない
+  *負のコントロール: 宣言を 480 → 900 に改ざんすると検出した*
+
+#### 現状と、ここから先
+
+```
+index.html          2.82MB → 0.80MB
+festivals.html      4.87MB → 1.80MB
+festivals/ala.html  0.48MB → 0.66MB（一時 1.07MB まで増えたのを戻した）
+artists.html        0.53MB → 0.12MB
+```
+
+**festivals.html の 1.80MB はほぼ下限。** 画像14枚 × 平均120KB で、
+1枚ずつは 960px と適正。これ以上削るには
+「カードを小さくする」「画質を下げる」「初期表示の枚数を減らす」の
+いずれかで、**デザインの判断が要る**ため手を付けていない。

@@ -59,7 +59,7 @@ const EXPECTED = [
   { path: '/common.js', query: '?v=3', want: 'cacheFirst' },
   { path: '/common.css', query: '?v=4', want: 'cacheFirst' },
   { path: '/image-dimensions.js', query: '?v=4', want: 'cacheFirst' },
-  { path: '/localize.js', query: '?v=4', want: 'cacheFirst' },
+  { path: '/localize.js', query: '?v=6', want: 'cacheFirst' },
   { path: '/images/festivals/hacha-mecha.webp', query: '', want: 'staleWhileRevalidate' },
   { path: '/data.js', query: '?v=10', want: 'networkFirst' },
 ];

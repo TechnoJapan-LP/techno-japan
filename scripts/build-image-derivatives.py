@@ -1,5 +1,20 @@
 #!/usr/bin/env python3
-"""Build cache-safe card derivatives from Drive-synced originals."""
+"""カード表示用の縮小画像を、Drive同期の原本から作る。
+
+■ なぜ2サイズ作るか
+
+  カードの実測表示幅は 324〜452px（2026-08-07 / headless で計測）。
+  960px 1枚だけだと、スマホには必要の3倍近い画素を送ることになる。
+  480px と 960px を作り、srcset でブラウザに選ばせる。
+  高解像度ディスプレイでは 480px スロットに 960px が選ばれるので、
+  見た目は落とさずスマホの転送量だけが減る。
+
+■ 原本には触らない
+
+  LP/images/ は sync-drive-images.yml が2時間おきに Drive から
+  上書きするため、そこへ派生を置くと消えるか毎回差分が出る。
+  LP/images/derivatives/ 配下だけを生成物として扱う（AUDIT §9-45）。
+"""
 from __future__ import annotations
 
 import hashlib
@@ -13,7 +28,8 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE_DIR = ROOT / "LP" / "images" / "festivals"
 OUT_DIR = ROOT / "LP" / "images" / "derivatives" / "card" / "festivals"
 OUT_JS = ROOT / "LP" / "image-derivatives.js"
-MAX_EDGE = 960
+# (接尾辞, 長辺上限)。srcset の候補になる。
+SIZES = (("sm", 480), ("lg", 960))
 QUALITY = 80
 
 
@@ -25,19 +41,30 @@ def main() -> None:
             continue
         raw = source.read_bytes()
         digest = hashlib.sha256(raw).hexdigest()[:8]
-        target = OUT_DIR / f"{source.stem}--{digest}.webp"
-        with Image.open(source) as image:
-            image = ImageOps.exif_transpose(image)
-            if image.mode not in ("RGB", "RGBA"):
-                image = image.convert("RGB")
-            if max(image.size) > MAX_EDGE:
-                image.thumbnail((MAX_EDGE, MAX_EDGE), Image.Resampling.LANCZOS)
-            image.save(target, "WEBP", quality=QUALITY, method=6)
-        mapping[f"images/festivals/{source.name}"] = f"images/derivatives/card/festivals/{target.name}"
+        entry = {}
+        for suffix, max_edge in SIZES:
+            target = OUT_DIR / f"{source.stem}--{digest}-{suffix}.webp"
+            with Image.open(source) as image:
+                image = ImageOps.exif_transpose(image)
+                if image.mode not in ("RGB", "RGBA"):
+                    image = image.convert("RGB")
+                if max(image.size) > max_edge:
+                    image.thumbnail((max_edge, max_edge), Image.Resampling.LANCZOS)
+                image.save(target, "WEBP", quality=QUALITY, method=6)
+                entry[suffix] = {
+                    "path": f"images/derivatives/card/festivals/{target.name}",
+                    "w": image.size[0],
+                }
+        # 既定( src )は lg。srcset を解釈しない環境でも従来どおり表示できる。
+        mapping[f"images/festivals/{source.name}"] = {
+            "src": entry["lg"]["path"],
+            "srcset": [[entry["sm"]["path"], entry["sm"]["w"]],
+                       [entry["lg"]["path"], entry["lg"]["w"]]],
+        }
 
     # 派生画像はハッシュ付きで履歴を持つため、原本更新時に旧版が残る。
     # 原本同期領域には触れず、この生成物ディレクトリだけを安全に整理する。
-    wanted = {Path(value).name for value in mapping.values()}
+    wanted = {Path(p).name for value in mapping.values() for p, _ in value["srcset"]}
     for stale in OUT_DIR.glob("*.webp"):
         if stale.name not in wanted:
             stale.unlink()
@@ -49,7 +76,7 @@ def main() -> None:
     if changed:
         OUT_JS.write_text(output, encoding="utf-8")
         bump_asset_version()
-    print(f"Card derivatives: {len(mapping)} festivals → {OUT_DIR.relative_to(ROOT)}")
+    print(f"Card derivatives: {len(mapping)} festivals × {len(SIZES)}サイズ → {OUT_DIR.relative_to(ROOT)}")
 
 
 def bump_asset_version() -> None:

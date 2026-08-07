@@ -152,6 +152,44 @@ function dimensionAttrs(source) {
   const size = IMAGE_DIMENSIONS[String(source || '').split(/[?#]/)[0]] || IMAGE_DIMENSIONS[key];
   return size ? `width="${size[0]}" height="${size[1]}"` : imageSizeAttrs(LP_DIR, source);
 }
+/* カード用の縮小版画像を使う。
+
+   ハブ（festivals.html 等）は image-derivatives.js の対応表を JS で引いて
+   カード画像を縮小版に差し替えているが、**詳細ページは静的生成なので
+   その仕組みが効かない**。実測で festivals/ala.html が 0.48MB → 1.07MB に
+   増えていたのは、下部の「関連フェス」カード4枚が原寸を読んでいたため
+   （850KB / 4枚）。カードは 1枚あたり数百pxでしか表示しないので、
+   960px 上限の縮小版で十分。AUDIT §9-51。
+
+   対応表が無い画像（外部URL・記事画像など）は原本のままにする。 */
+const DERIVATIVES_PATH = path.join(LP_DIR, 'image-derivatives.js');
+function loadCardDerivatives() {
+  if (!fs.existsSync(DERIVATIVES_PATH)) return {};
+  const src = fs.readFileSync(DERIVATIVES_PATH, 'utf8');
+  const m = src.match(/window\.TJ_IMAGE_DERIVATIVES\s*=\s*(\{[\s\S]*?\});/);
+  if (!m) return {};
+  try { return JSON.parse(m[1]); } catch { return {}; }
+}
+let CARD_DERIVATIVES = {};
+/* 対応表は {src, srcset:[[path,幅],...]}。旧形式（文字列）も受ける。 */
+function cardEntry(source) {
+  const key = String(source || '').trim().replace(/^\/+/, '');
+  const hit = CARD_DERIVATIVES[key];
+  if (!hit) return null;
+  return typeof hit === 'string' ? { src: hit, srcset: null } : hit;
+}
+function cardImagePath(source) {
+  const hit = cardEntry(source);
+  return hit ? hit.src : String(source || '').trim().replace(/^\/+/, '');
+}
+/* 関連カードは実測 324px 幅で表示される。960px を全端末へ配らない。 */
+function cardSrcsetAttr(source) {
+  const hit = cardEntry(source);
+  if (!hit || !hit.srcset || !hit.srcset.length) return '';
+  const set = hit.srcset.map(([p, w]) => `/${p} ${w}w`).join(', ');
+  return ` srcset="${esc(set)}" sizes="(max-width: 700px) 100vw, 360px"`;
+}
+
 /* 開催回ごとのフライヤーを優先して選ぶ。
 
    フライヤーは年ごとに違うのに、詳細ページは長らく FESTIVALS.FLYER
@@ -905,7 +943,7 @@ function festivalRelatedCards(current, lang) {
       ? `<span class="related-card-past" style="opacity:.55;font-size:.72em;letter-spacing:.04em">${lang === 'en' ? 'Past event' : '過去の開催'}</span> · `
       : '';
     return `<a class="related-card" href="${prefix}/festivals/${encodeURIComponent(item.id)}.html">
-        <div class="related-card-img">${img ? `<img ${dimensionAttrs(img)} src="/${String(img).replace(/^\//, '')}" alt="${esc(name)}" loading="lazy" style="object-position:${esc(item.imagePosition || 'center')}">` : ''}</div>
+        <div class="related-card-img">${img ? `<img ${dimensionAttrs(cardImagePath(img))} src="/${cardImagePath(img)}"${cardSrcsetAttr(img)} alt="${esc(name)}" loading="lazy" style="object-position:${esc(item.imagePosition || 'center')}">` : ''}</div>
         <div class="related-card-info">
           <div class="related-card-date">${pastLabel}${esc(item.date || '')}</div>
           <div class="related-card-name">${esc(name)}</div>
@@ -1519,6 +1557,7 @@ function writeHubLinks(fileName, markerName, html) {
 
 function main() {
   IMAGE_DIMENSIONS = loadImageDimensions();
+  CARD_DERIVATIVES = loadCardDerivatives();
   const { ARTISTS = [], FESTIVALS = [], VENUES = [], ARTICLES = [] } = loadData();
   const EDITIONS = loadItems(EDITIONS_PATH, 'editions.json');
   const LINEUPS = loadItems(LINEUPS_PATH, 'lineups.json');
