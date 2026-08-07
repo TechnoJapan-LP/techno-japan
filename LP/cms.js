@@ -252,6 +252,7 @@ function loadAuthorsForDropdown(){
   fetch(GAS_URL+'?action=get_sheet&sheet=AUTHORS')
     .then(r=>r.json()).then(d=>{
       if(d.status==='ok' && d.rows){
+        AUTHOR_DB = d.rows.filter(a=>a && (a.name||a.id));
         const sel = document.getElementById('ar-authorId');
         if(sel){
           sel.innerHTML = '<option value="">— None —</option>' +
@@ -259,6 +260,81 @@ function loadAuthorsForDropdown(){
         }
       }
     }).catch(()=>{});
+}
+
+/* ==============================================================
+   AUTHOR オートコンプリート
+
+   Author は自由入力なので、同じ人が「TECHNO JAPAN」「Techno Japan」と
+   表記ゆれしたまま溜まっていく。記事一覧やアーティクル詳細では
+   そのまま表示されるので、ゆれると別人に見える。
+
+   候補の出どころは2つ:
+     1. AUTHORS シートに登録された執筆者（正式）
+     2. これまでの記事で実際に使われた author 名（既存の表記に揃えるため）
+
+   入力値は候補に強制しない。クリックしたときだけ置き換える
+   （アーティストの候補と同じ方針。AUDIT §9-52）。
+   ============================================================== */
+let AUTHOR_DB = [];
+
+function authorCandidates(query){
+  const seen = new Map();
+  const add = (name, id, reason) => {
+    const key = String(name||'').trim();
+    if(!key || seen.has(key.toLowerCase())) return;
+    seen.set(key.toLowerCase(), {name:key, id:id||'', reason});
+  };
+  AUTHOR_DB.forEach(a => add(a.name||a.id, a.id, 'AUTHORS 登録'));
+  // 既存記事で使われている表記。listCache は loadList が貯めた行データ。
+  const rows = (typeof listCache!=='undefined' && listCache.article) || [];
+  rows.forEach(r => add(r.author, '', '過去の記事'));
+
+  const q = String(query||'').trim().toLowerCase();
+  const all = [...seen.values()];
+  if(!q) return all.slice(0, 8);
+  const starts = all.filter(a => a.name.toLowerCase().startsWith(q));
+  const includes = all.filter(a => !a.name.toLowerCase().startsWith(q) && a.name.toLowerCase().includes(q));
+  return starts.concat(includes).slice(0, 8);
+}
+
+function filterAuthors(inputId, listId, showAll){
+  const input = document.getElementById(inputId);
+  const list = document.getElementById(listId);
+  if(!input || !list) return;
+  acHighlight = -1;
+  const val = input.value.trim();
+  // 入力済みの値とぴったり同じ候補しか無いなら出す意味がない。
+  const matches = authorCandidates(showAll ? '' : val)
+    .filter(a => a.name.toLowerCase() !== val.toLowerCase());
+  // 閉じるときは中身も消す。残しておくと、次に開いた瞬間に
+  // 古い候補が一瞬見える（描画前に show が付くため）。
+  if(!matches.length){ list.innerHTML = ''; list.classList.remove('show'); return; }
+  list.innerHTML = matches.map(a =>
+    '<div class="autocomplete-item" role="button" tabindex="0" onclick="adoptAuthor(\''+inputId+'\',\''+listId+'\',this.dataset.name)" data-name="'+esc(a.name)+'">'
+    + '<strong>'+esc(a.name)+'</strong> <span style="opacity:.5;font-size:.8em">'+esc(a.reason)+(a.id?' · '+esc(a.id):'')+'</span></div>'
+  ).join('');
+  list.classList.add('show');
+}
+
+function adoptAuthor(inputId, listId, name){
+  const input = document.getElementById(inputId);
+  if(input){ input.value = name; markFormDirty(); }
+  const list = document.getElementById(listId);
+  if(list) list.classList.remove('show');
+}
+
+function authorAcKeydown(e, listId){
+  const list = document.getElementById(listId);
+  if(!list) return;
+  const items = list.querySelectorAll('.autocomplete-item');
+  if(e.key === 'Escape'){ list.classList.remove('show'); return; }
+  if(!items.length) return;
+  if(e.key === 'ArrowDown'){ e.preventDefault(); acHighlight = Math.min(acHighlight+1, items.length-1); }
+  else if(e.key === 'ArrowUp'){ e.preventDefault(); acHighlight = Math.max(acHighlight-1, 0); }
+  else if(e.key === 'Enter' && acHighlight >= 0){ e.preventDefault(); items[acHighlight].click(); return; }
+  else return;
+  items.forEach((it,i) => it.classList.toggle('highlight', i === acHighlight));
 }
 
 /* ==============================================================

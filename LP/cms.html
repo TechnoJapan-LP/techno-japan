@@ -387,7 +387,7 @@
       </div>
       <div class="form-group"><label>Category</label><select id="ar-category"><option value="REPORT">Report</option><option value="COLUMN">Column</option><option value="INTERVIEW">Interview</option><option value="NEWS">News</option><option value="EVENTS">Events (weekly roundup)</option><option value="FESTIVAL">Festival</option><option value="RAVE">Rave</option><option value="PARTY">Party</option><option value="CLUB">Club</option></select></div>
       <div class="form-group"><label>Date</label><input type="date" id="ar-date"></div>
-      <div class="form-group"><label>Author</label><input type="text" id="ar-author" placeholder="e.g. TECHNO JAPAN" value="TECHNO JAPAN"></div>
+      <div class="form-group"><label>Author <span class="label-hint">入力すると AUTHORS の登録者と過去の書き手から候補が出ます</span></label><div class="lineup-input-wrap"><input type="text" id="ar-author" placeholder="e.g. TECHNO JAPAN" value="TECHNO JAPAN" autocomplete="off" oninput="filterAuthors('ar-author','ar-author-ac')" onfocus="filterAuthors('ar-author','ar-author-ac',true)" onkeydown="authorAcKeydown(event,'ar-author-ac')"><div class="autocomplete-list" id="ar-author-ac"></div></div></div>
       <div class="form-group"><label>Image Path</label><input type="text" id="ar-image" placeholder="auto-filled" readonly></div>
       <div class="form-group full"><label>Image from URL</label><div class="input-row"><input type="url" id="ar-imageUrl" placeholder="画像の直接URL（公式サイト・SNS等から）"><button class="btn btn-sm btn-accent" onclick="uploadFromUrl('ar','article','ar-image','ar-imageUrl','preview-ar-image')">UPLOAD</button></div><div class="img-preview" id="preview-ar-image"></div></div>
       <div class="form-group full upload-fallback"><label>または手動アップロード <span class="label-hint">max 5MB</span></label><div class="upload-area" onclick="this.querySelector('input').click()"><span class="icon">&#8679;</span><span>Upload Image</span><input type="file" accept="image/*" onchange="uploadImage(this,'article','ar')"></div></div>
@@ -499,6 +499,6 @@
   </div>
 </div>
 
-<script src="cms.js?v=53" defer></script>
+<script src="cms.js?v=54" defer></script>
 </body>
 </html>

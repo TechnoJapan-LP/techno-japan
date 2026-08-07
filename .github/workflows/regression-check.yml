@@ -105,6 +105,11 @@ jobs:
       - name: Check CMS editions logic
         run: node scripts/check_cms_editions.mjs
 
+      # Author 候補（表記ゆれ防止）の回帰。cms は prompt() でブラウザ検査
+      # できないため VM で cms.js を叩く（AUDIT §9-52）。
+      - name: Check CMS authors autocomplete
+        run: node scripts/check_cms_authors.mjs
+
       - name: Check card image derivatives
         run: python3 scripts/check_image_derivatives.py
 
