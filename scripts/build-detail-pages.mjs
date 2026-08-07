@@ -503,7 +503,7 @@ const GA = `<script>
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 4;
+const DETAIL_CSS_VERSION = 5;
 
 function page({ title, desc, canonical, image, ogType = 'article', jsonLd, body, lang = 'ja', altHref = null, extraScripts = '', backgroundLayer = false }) {
   const d = truncate(desc || '', 160);
@@ -563,7 +563,7 @@ ${GA}
 }
 
 /* ---------- 記事ページ ---------- */
-function articlePage(a, resolveEntities, lang = 'ja') {
+function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsByFestival = new Map()) {
   // EN版は title_en / excerpt_en / body_en を使う（無い項目はJAへフォールバック）
   const L = lang === 'en'
     ? { title: a.title_en || a.title, excerpt: a.excerpt_en || a.excerpt, body: a.body_en || a.body, prefix: '/en' }
@@ -616,6 +616,43 @@ function articlePage(a, resolveEntities, lang = 'ja') {
       </header>`
     : `<div class="article-meta-top"><span class="cat-pill">${esc(a.category || 'NEWS')}</span></div><h1>${esc(L.title)}</h1>`;
 
+  /* 記事に紐づくフェス（ARTICLES.festivalId）。
+
+     紐づけ自体は前からあり、**フェス側の「RELATED STORIES」だけが**
+     それを使っていた。記事 → フェスの導線は無く、片方向だった
+     （2026-08-07 / AUDIT §9-55）。詳細 → 詳細が繋がらない状態は
+     §9-23 で回遊が切れたときと同じ形なので、対にしておく。
+
+     カード画像はハブと同じ縮小版を使う（§9-51）。 */
+  const relatedFestival = String(a.festivalId || '').trim()
+    ? (festivals || []).find((f) => String(f.id) === String(a.festivalId).trim())
+    : null;
+  const relatedFestivalHtml = relatedFestival ? (() => {
+    const feds = [...(editionsByFestival.get(relatedFestival.id) || [])].sort((x, y) =>
+      String(y.DATE_START || '').localeCompare(String(x.DATE_START || '')));
+    const cur = feds[0];
+    const fname = lang === 'en' ? (relatedFestival.name_en || relatedFestival.name) : relatedFestival.name;
+    const img = relatedFestival.image || relatedFestival.flyer;
+    const place = [
+      cur ? editionLocationName(cur, lang) : localizedValue(relatedFestival.location, relatedFestival.location_ja, '', lang),
+      cur?.PREF || relatedFestival.city,
+    ].filter(Boolean).join(' — ');
+    const when = cur?.DATE_START
+      ? [cur.DATE_START, cur.DATE_END].filter(Boolean).filter((v, i, arr) => arr.indexOf(v) === i).join(' — ')
+      : (relatedFestival.date || '');
+    return `<div class="related-festival">
+      <h2>${lang === 'en' ? 'RELATED FESTIVAL' : '関連フェスティバル'}</h2>
+      <a class="related-card" href="${L.prefix}/festivals/${encodeURIComponent(relatedFestival.id)}.html">
+        <div class="related-card-img">${img ? `<img ${dimensionAttrs(cardImagePath(img))} src="/${cardImagePath(img)}"${cardSrcsetAttr(img)} alt="${esc(fname)}" loading="lazy" style="object-position:${esc(relatedFestival.imagePosition || 'center')}">` : ''}</div>
+        <div class="related-card-info">
+          <div class="related-card-date">${esc(when)}</div>
+          <div class="related-card-name">${esc(fname)}</div>
+          <div class="related-card-loc">${esc(place)}</div>
+        </div>
+      </a>
+    </div>`;
+  })() : '';
+
   const body = `<article class="article-detail">
   <div class="article-detail-inner">
     <a class="article-back" href="${hubHref}" data-article-hub-back="${hubHref}"><span class="arrow"></span> ALL STORIES</a>
@@ -627,6 +664,7 @@ function articlePage(a, resolveEntities, lang = 'ja') {
     </dl>
     <div class="article-excerpt">${esc(L.excerpt || '')}</div>
     <div class="article-body">${addHtmlImageDimensions(resolveEntities(L.body || ''))}</div>
+    ${relatedFestivalHtml}
     <div class="article-footer">
       ${tags ? `<div class="article-tags">${tags}</div>` : ''}
       <a class="article-back" href="${hubHref}" data-article-hub-back="${hubHref}" style="margin:0"><span class="arrow"></span> ALL STORIES</a>
@@ -1677,13 +1715,13 @@ ${FAVICON_TAGS}
   const liveFestivalIds = new Set(pubFests.map((f) => f.id));
 
   const counts = {
-    articles: writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'ja')).concat(redirectStubs('articles', liveArticleIds)), 'articles'),
+    articles: writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'ja', pubFests, editionsByFestival)).concat(redirectStubs('articles', liveArticleIds)), 'articles'),
     festivals: writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, ARTICLES, 'ja')).concat(redirectStubs('festivals', liveFestivalIds)), 'festivals'),
     artists: writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'ja')).concat(redirectStubs('artists', liveArtistIds)), 'artists'),
     venues: writeAll(pubVenues.map((v) => venuePage(v, 'ja')), 'venues'),
     // 英語版（/en/…）。未翻訳フィールドは articlePage 内で元データへ
     // フォールバックし、EN ハブの通常遷移先を必ず実在させる。
-    'en/articles': writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'en')), 'en/articles'),
+    'en/articles': writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'en', pubFests, editionsByFestival)), 'en/articles'),
     'en/festivals': writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, ARTICLES, 'en')).concat(redirectStubs('en/festivals', liveFestivalIds)), 'en/festivals'),
     'en/artists': writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'en')).concat(redirectStubs('en/artists', liveArtistIds)), 'en/artists'),
     'en/venues': writeAll(pubVenues.map((v) => venuePage(v, 'en')), 'en/venues'),

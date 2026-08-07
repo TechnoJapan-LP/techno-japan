@@ -637,3 +637,45 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 @media (max-width: 480px) {
   .festival-design-v2 .related-grid { grid-template-columns: 1fr; }
 }
+
+/* ---------- 記事ページの「関連フェスティバル」 ----------
+
+   記事 → フェスの導線。2026-08-07 まで、紐づけ（ARTICLES.festivalId）は
+   フェス側の「RELATED STORIES」だけが使っており、逆向きが無かった（AUDIT §9-55）。
+
+   上の .related-card 系は `.festival-design-v2` 配下にしか無く、
+   記事ページ（.article-detail）には効かない。同じ見た目を記事側にも用意する。
+   共通化して両方に効かせる手もあるが、フェス側は3〜4枚を横に並べるグリッド、
+   記事側は1枚だけなので、幅の扱いが違う。無理に1本化しない。 */
+.article-detail .related-festival { margin-top: 56px; }
+.article-detail .related-festival h2 {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .2em;
+  text-transform: uppercase; opacity: .45; margin: 0 0 18px; font-weight: 400;
+}
+.article-detail .related-card {
+  display: block; max-width: 420px; background: rgba(240,237,232,.02);
+  transition: transform .3s ease;
+}
+.article-detail .related-card:hover { transform: translateY(-4px); }
+.article-detail .related-card-img {
+  aspect-ratio: 4/3; overflow: hidden; background: rgba(240,237,232,.04);
+}
+.article-detail .related-card-img img {
+  width: 100%; height: 100%; object-fit: cover; filter: grayscale(40%);
+  transition: filter .4s ease;
+}
+.article-detail .related-card:hover .related-card-img img { filter: grayscale(0); }
+.article-detail .related-card-info { padding: 16px 0; }
+.article-detail .related-card-date,
+.article-detail .related-card-loc {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: .15em;
+  opacity: .4; text-transform: uppercase;
+}
+.article-detail .related-card-date { margin-bottom: 8px; }
+.article-detail .related-card-name {
+  font-family: var(--font-display); font-size: 18px; text-transform: uppercase;
+  line-height: 1; margin-bottom: 6px;
+}
+@media (max-width: 600px) {
+  .article-detail .related-card { max-width: none; }
+}
