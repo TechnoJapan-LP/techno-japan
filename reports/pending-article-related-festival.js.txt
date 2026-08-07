@@ -1,0 +1,74 @@
+// 【保留中】記事ページに「関連フェスティバル」を出すコード。2026-08-07 実装・動作確認済み。
+//
+// ■ なぜ保留したか
+//   実装した時点で LP/detail.css と scripts/build-detail-pages.mjs を
+//   別セッション（Codex）がアニメーション演出のために編集中だった。
+//   同一ファイルに両者の変更が同居し、自分の分だけを切り出せないため、
+//   相手の作業が終わるまで待つ判断（利用者と合意）。
+//
+// ■ 再開手順（Codex の作業がコミットされたあと）
+//
+//   1. scripts/build-detail-pages.mjs の articlePage に引数を足す
+//        - function articlePage(a, resolveEntities, lang = 'ja') {
+//        + function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsByFestival = new Map()) {
+//
+//   2. 呼び出し2箇所に渡す（'ja' と 'en'）
+//        articlePage(a, resolveEntities, 'ja', pubFests, editionsByFestival)
+//        articlePage(a, resolveEntities, 'en', pubFests, editionsByFestival)
+//
+//   3. 下のブロックを `const body = ` の直前に貼る
+//
+//   4. 記事本文の直後（article-footer の直前）に差し込む
+//        + ${relatedFestivalHtml}
+//          <div class="article-footer">
+//
+//   5. LP/detail.css に見た目を足す ★未実施
+//      .related-card 系は `.festival-design-v2` 配下にしか無く、記事ページには効かない。
+//      記事ページ用に同等の指定が要る（アスペクト比4:3・グレースケール解除のhover等）。
+//
+//   6. 検証: 記事に festivalId を一時設定してビルドし、
+//      日程・会場・画像・リンク・EN版が出ることを確認してから戻す
+//      （2026-08-07 に実施済み。Transcendence で正しく出た）
+//
+// ■ 前提
+//   CMS 側は festivalId を送っている（cms.js の payload）。
+//   ただし現時点で全記事が空欄なので、紐づけないと表示されない。
+//   フェス側の「RELATED STORIES」も同じ理由で出ていない。
+
+  /* 記事に紐づくフェス（ARTICLES.festivalId）。
+
+     紐づけ自体は前からあり、**フェス側の「RELATED STORIES」だけが**
+     それを使っていた。記事 → フェスの導線は無く、片方向だった
+     （2026-08-07 / AUDIT §9-55）。詳細 → 詳細が繋がらない状態は
+     §9-23 で回遊が切れたときと同じ形なので、対にしておく。
+
+     カード画像はハブと同じ縮小版を使う（§9-51）。 */
+  const relatedFestival = String(a.festivalId || '').trim()
+    ? (festivals || []).find((f) => String(f.id) === String(a.festivalId).trim())
+    : null;
+  const relatedFestivalHtml = relatedFestival ? (() => {
+    const feds = [...(editionsByFestival.get(relatedFestival.id) || [])].sort((x, y) =>
+      String(y.DATE_START || '').localeCompare(String(x.DATE_START || '')));
+    const cur = feds[0];
+    const fname = lang === 'en' ? (relatedFestival.name_en || relatedFestival.name) : relatedFestival.name;
+    const img = relatedFestival.image || relatedFestival.flyer;
+    const place = [
+      cur ? editionLocationName(cur, lang) : localizedValue(relatedFestival.location, relatedFestival.location_ja, '', lang),
+      cur?.PREF || relatedFestival.city,
+    ].filter(Boolean).join(' — ');
+    const when = cur?.DATE_START
+      ? [cur.DATE_START, cur.DATE_END].filter(Boolean).filter((v, i, arr) => arr.indexOf(v) === i).join(' — ')
+      : (relatedFestival.date || '');
+    return `<div class="related-festival">
+      <h2>${lang === 'en' ? 'RELATED FESTIVAL' : '関連フェスティバル'}</h2>
+      <a class="related-card" href="${L.prefix}/festivals/${encodeURIComponent(relatedFestival.id)}.html">
+        <div class="related-card-img">${img ? `<img ${dimensionAttrs(cardImagePath(img))} src="/${cardImagePath(img)}"${cardSrcsetAttr(img)} alt="${esc(fname)}" loading="lazy" style="object-position:${esc(relatedFestival.imagePosition || 'center')}">` : ''}</div>
+        <div class="related-card-info">
+          <div class="related-card-date">${esc(when)}</div>
+          <div class="related-card-name">${esc(fname)}</div>
+          <div class="related-card-loc">${esc(place)}</div>
+        </div>
+      </a>
+    </div>`;
+  })() : '';
+
