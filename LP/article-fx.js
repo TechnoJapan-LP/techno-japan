@@ -7,7 +7,7 @@
    v2: window.articleFX() として再実行可能に。
    - 静的 /articles/*.html では自動起動（従来どおり）
    - news.html の #article/... ビューでは描画後に articleFX() を呼ぶ
-   - 横長画像（アスペクト比 >= 1.4）は fx-bleed でビューポート全幅に突き抜ける
+   - 横長画像は左右寄せを基本にし、極端に横長な画像だけ fx-bleed にする
    ============================================================== */
 (function(){
   'use strict';
@@ -50,7 +50,7 @@
 
     /* ---------- 2. 本文画像を figure 化: 交互リズム + FIG索引 + ワイプ枠 ---------- */
     // Quill出力は <p><img></p>。画像だけの <p> を <figure> に置き換える。
-    // 横長（landscape, w/h >= 1.4）はリズムに関係なく fx-bleed で全幅ブレイクアウト。
+    // 横長画像も左右のリズムを優先する。極端なシネマ比率だけ全幅にする。
     var imgs = [].slice.call(body.querySelectorAll('img'));
     var figIndex = 0;
     imgs.forEach(function(img){
@@ -60,8 +60,13 @@
       var host = textOnly ? p : img;           // 画像単独の<p>なら<p>ごと置換
       figIndex++;
       var fig = document.createElement('figure');
-      var rhythm = figIndex % 3 === 1 ? 'fx-full' : (figIndex % 3 === 2 ? 'fx-right' : 'fx-left');
-      fig.className = 'fx-img ' + rhythm;
+      var requested = img.dataset.layout;
+      var rhythm = ['contained', 'left', 'right', 'full', 'compact'].indexOf(requested) >= 0
+        ? (requested === 'contained' ? 'fx-full' : 'fx-' + requested)
+        : (figIndex % 3 === 1 ? 'fx-full' : (figIndex % 3 === 2 ? 'fx-right' : 'fx-left'));
+      var compact = !requested && figIndex % 4 === 0 ? ' fx-compact' : '';
+      fig.className = 'fx-img ' + rhythm + compact;
+      if (img.dataset.position) fig.dataset.position = img.dataset.position;
       var frame = document.createElement('div');
       frame.className = 'fx-frame';
       var grid = document.createElement('div');
@@ -77,11 +82,12 @@
       img.loading = 'lazy';
       img.decoding = 'async';
       // 実寸が分かった時点で形状クラスを決める:
-      //   横長(>=1.4) → fx-bleed（ビューポート全幅・グリッドライン点灯）
+      //   横長(>=1.4) → 左右寄せを維持
+      //   極端な横長(>=1.9) → fx-bleed（全幅・グリッドライン点灯）
       //   縦長(>1.15) → fx-portrait（高さ制限）
       var classify = function(){
         if (!img.naturalWidth || !img.naturalHeight) return;
-        if (img.naturalWidth >= img.naturalHeight * 1.4) fig.classList.add('fx-bleed');
+        if (img.naturalWidth >= img.naturalHeight * 1.9) fig.classList.add('fx-bleed');
         else if (img.naturalHeight > img.naturalWidth * 1.15) fig.classList.add('fx-portrait');
       };
       if (img.complete && img.naturalWidth) classify(); else img.addEventListener('load', classify, { once:true });
