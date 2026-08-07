@@ -13,7 +13,8 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  # 再生成した LP を同じデプロイでコミットし、次回の生成差分を残さない。
+  contents: write
   pages: write
   id-token: write
 
@@ -52,6 +53,10 @@ jobs:
   regression:
     if: "${{ !startsWith(github.event.head_commit.message, 'cms: publish') }}"
     uses: ./.github/workflows/regression-check.yml
+    with:
+      # main のデプロイは生成差分を後続の deploy ジョブで解消する。
+      # PR の回帰検査は既定値 true のまま厳格にする。
+      fail_on_generated_drift: false
 
   deploy:
     needs: regression
@@ -64,6 +69,30 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # 回帰検査と同じ生成をデプロイ直前にも行う。ここで作られた LP が
+      # 実際に Pages へ配信されるため、コミット漏れで古い生成物を出さない。
+      - name: Build detail pages for deployment
+        run: node scripts/build-detail-pages.mjs
+
+      - name: Commit generated output
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A LP/
+          if git diff --cached --quiet; then
+            echo "生成物に変更なし"
+          else
+            git commit -m "chore: sync generated LP before deploy [skip ci]"
+            # 同時 push があっても、Pages の配信自体は止めない。
+            # 次回の push または日次生成で再同期される。
+            git push || echo "::warning::生成物コミットのpushに失敗しました。配信は続行します。"
+          fi
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
