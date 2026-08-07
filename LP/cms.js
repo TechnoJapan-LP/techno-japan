@@ -5252,14 +5252,11 @@ function publishDataJs(opts){
     const content = buildFullDataJs(d);
     if (btn) btn.innerHTML = 'Pushing to GitHub...';
     toast('Pushing to GitHub...','info');
-    return fetch(GAS_URL, {
-      method: 'POST',
-      body: JSON.stringify({
-        action: 'publish_data_js',
-        content: content,
-        message: opts.message || 'cms: publish data.js'
-      })
-    }).then(r=>r.json());
+    return gasPostJson_({
+      action: 'publish_data_js',
+      content: content,
+      message: opts.message || 'cms: publish data.js'
+    });
   }).then(r=>{
     if (r.status === 'ok' || r.success) {
       const sha = (r.sha || '').slice(0,7);
