@@ -1213,6 +1213,8 @@ function renderArticleFxPreview(root){
     // レイアウト指定がある画像だけ新しいfigure変換を行う。
     const hasLayoutData = img.dataset.layout || img.dataset.crop || img.dataset.pairId || img.dataset.zoom || img.dataset.x || img.dataset.y;
     if (!hasLayoutData) { img.loading = 'eager'; return; }
+    const originalSrc = img.getAttribute('src');
+    const originalAlt = img.getAttribute('alt') || '';
     // スクロール領域内のプレビューでも既存画像を確実に表示する
     img.loading = 'eager';
     const p = img.closest('p');
@@ -1226,7 +1228,14 @@ function renderArticleFxPreview(root){
     img.style.objectPosition = `var(--crop-x) var(--crop-y)`;
     if (img.dataset.crop && img.dataset.crop !== 'none') img.style.objectFit = 'cover';
     if (p && p.textContent.trim() === '' && p.querySelectorAll('img').length === 1) p.parentNode.replaceChild(fig, p);
-    else img.parentNode.insertBefore(fig, img), fig.appendChild(img);
+    else img.parentNode.insertBefore(fig, img);
+    fig.appendChild(img);
+    // DOM再構成後も元画像を確実に保持する（Quill/preview変換でsrcが消えないようにする）
+    if (originalSrc) img.setAttribute('src', originalSrc);
+    img.setAttribute('alt', originalAlt);
+    img.loading = 'eager';
+    img.style.display = 'block';
+    img.style.visibility = 'visible';
     fig.appendChild(document.createElement('figcaption'));
   });
   const pairs = {};
