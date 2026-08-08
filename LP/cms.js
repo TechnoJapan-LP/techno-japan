@@ -807,6 +807,7 @@ let articleQuill = null;
 let articleSelectedImage = null;
 let articleLastLoadedBody = '';
 let articleQuillUserEdited = false;
+let articleRawBodyHtml = '';
 
 function setArticleImageToolsEnabled(enabled){
   ['ar-image-layout','ar-image-crop','ar-image-zoom','ar-image-x','ar-image-y','ar-image-pair','ar-image-layout-apply'].forEach(id => {
@@ -1073,6 +1074,7 @@ function runArticleEditorSync(from){
   let html;
   if (from === 'source') {
     html = document.getElementById('ar-body-source').value;
+    articleRawBodyHtml = html;
   } else {
     if (!articleQuill) return;
     html = normalizeArticleHtml(articleQuill.root.innerHTML);
@@ -1688,6 +1690,7 @@ function normalizeArticleHtml(html){
 function setArticleBody(html){
   const v = html || '';
   articleLastLoadedBody = v;
+  articleRawBodyHtml = v;
   articleQuillUserEdited = false;
   document.getElementById('ar-body').value = v;
   const src = document.getElementById('ar-body-source');
@@ -1719,13 +1722,16 @@ function switchArticleEditor(mode){
   const sourceTab = wrap.querySelector('[data-mode="source"]');
   if (mode === 'source') {
     // Visual → Source: push current Quill HTML to textarea
-    if (articleQuill) document.getElementById('ar-body-source').value = articleQuill.root.innerHTML;
+    const current = articleQuill?.root?.innerHTML || articleRawBodyHtml || document.getElementById('ar-body').value || '';
+    document.getElementById('ar-body-source').value = current;
+    articleRawBodyHtml = current;
     wrap.classList.add('source-mode');
     sourceTab.classList.add('active');
     visualTab.classList.remove('active');
   } else {
     // Source → Visual: push textarea HTML to Quill (proper API)
     const src = document.getElementById('ar-body-source').value;
+    articleRawBodyHtml = src;
     if (articleQuill) {
       articleQuill.setText('');
       if (src) {
