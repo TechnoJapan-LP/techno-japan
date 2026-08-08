@@ -1721,6 +1721,13 @@ function filterArtists(inputId, listId, prefix) {
   list.classList.add('show');
 }
 function acKeydown(e, listId, prefix) {
+  /* 日本語入力の「変換確定」Enter を拾わない。
+
+     IME で変換中の Enter は「変換を確定する」操作であって、入力を終える
+     操作ではない。ここで拾うと変換途中の文字（例:「やま」）がそのまま
+     LINEUP に入り、続きが打てなくなる（2026-08-08 報告 / AUDIT §9-57）。
+     isComposing は変換中に true。keyCode 229 は古いブラウザの同等表現。 */
+  if(e.isComposing || e.keyCode === 229) return;
   const list=document.getElementById(listId), items=list.querySelectorAll('.autocomplete-item');
   if(e.key==='Enter'&&acHighlight<0){
     const input=document.getElementById(prefix+'-lineupInput');
@@ -1748,6 +1755,36 @@ function addLineup(prefix,id){
   document.getElementById(prefix+'-lineupInput').value='';
   document.getElementById(prefix+'-autocomplete').classList.remove('show');
 }
+/* 未照合タグを、打った表記のまま ARTISTS へ登録して照合済みにする。
+
+   ID は名前から生成するが、**表記（NAME）は打ったものをそのまま使う。**
+   §9-25 では ID から名前を機械復元して TKO→Tko / Ben UFO→Ben Ufo のように
+   30件を壊した。同じことを繰り返さない。 */
+async function registerLineupArtist(prefix, tag){
+  const name = String(tag).startsWith('?') ? String(tag).slice(1) : String(tag);
+  const id = artistIdFromName(name);
+  if(!id){
+    return toast('「'+name+'」から ID を作れません。Artists から手動で追加してください','error');
+  }
+  if((ARTIST_DB||[]).some(a=>String(a.id)===id)){
+    return toast('ID「'+id+'」は既にあります。候補から選ぶか、別の表記にしてください','error');
+  }
+  if(!confirm('ARTISTS に登録します。\n\n  表示名: '+name+'\n  ID: '+id+'\n\nよろしいですか？')) return;
+  toast('登録中...','info');
+  const r = await gasPostJson_({action:'add_artist', id, name});
+  if(!(r && (r.status==='ok' || r.success))){
+    return toast('登録に失敗しました: '+((r&&r.message)||'unknown'),'error');
+  }
+  ARTIST_DB.push({id,name});
+  if(typeof ARTIST_LIST!=='undefined') ARTIST_LIST.push(id);
+  const arr = lineups[prefix]||[];
+  const i = arr.indexOf(tag);
+  if(i>=0) arr[i]=id;
+  markFormDirty();
+  renderLineupTags(prefix);
+  toast('「'+name+'」を登録しました（ID: '+id+'）','success');
+}
+
 function removeLineup(prefix,id){lineups[prefix]=lineups[prefix].filter(a=>a!==id);renderLineupTags(prefix)}
 function renderLineupTags(prefix){
   document.getElementById(prefix+'-lineupTags').innerHTML=lineups[prefix].map(a=>{
@@ -1758,7 +1795,14 @@ function renderLineupTags(prefix){
     if(!isUnmatched) return '<div class="'+cls+'">'+esc(display)+'<span class="remove" onclick="removeLineup(\''+prefix+'\',\''+escaped+'\')">&times;</span></div>';
     const candidates=suggestArtistCandidates(display);
     const buttons=candidates.map(c=>suggestionButton(prefix,display,c)).join('');
-    return '<div class="lineup-unmatched-wrap"><div class="'+cls+'">'+esc(display)+'<span class="remove" onclick="removeLineup(\''+prefix+'\',\''+escaped+'\')">&times;</span></div>'+(buttons?'<div class="lineup-suggestions">'+buttons+'</div>':'')+'</div>';
+    /* 候補が違うとき（例: YAMA と打ったのに候補は Yamarchy）に、打った表記の
+       まま ARTISTS へ登録する導線。これが無いと「未登録のまま保存 →
+       Artists 画面へ移動 → 手入力」と往復が要る。
+       一括自動登録は復活させない（§9-25 で公式表記を30件壊した）。 */
+    const reg='<button type="button" class="lineup-suggestion lineup-register" '
+      + 'onclick="registerLineupArtist(\''+prefix+'\',\''+escaped+'\')">'
+      + '＋「'+esc(display)+'」を新規登録</button>';
+    return '<div class="lineup-unmatched-wrap"><div class="'+cls+'">'+esc(display)+'<span class="remove" onclick="removeLineup(\''+prefix+'\',\''+escaped+'\')">&times;</span></div><div class="lineup-suggestions">'+buttons+reg+'</div></div>';
   }).join('');
 }
 

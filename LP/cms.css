@@ -431,3 +431,9 @@ body.ar-focus-open{overflow:hidden}
 .fest-picker-selected .fp-clear{
   margin-left:auto;background:none;border:none;color:var(--accent);cursor:pointer;font-size:1rem;line-height:1;padding:0
 }
+
+/* 未照合タグから「打った表記のまま新規登録」する導線。
+   候補の採用ボタンと区別が付くよう色を分ける（採用＝既存に寄せる /
+   登録＝新しく作る）。AUDIT §9-57。 */
+.lineup-register{border-color:var(--accent);color:var(--accent)}
+.lineup-register:hover{background:var(--accent);color:#0a0a0a}

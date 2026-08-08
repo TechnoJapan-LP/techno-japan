@@ -130,6 +130,11 @@ jobs:
       - name: Check CMS auth retry
         run: node scripts/check_cms_auth_retry.mjs
 
+      # LINEUP 入力（IME の変換確定・候補の暗黙置換・表記保持）。
+      # §9-25 の「公式表記を機械復元して30件壊した」再発防止も兼ねる。
+      - name: Check CMS lineup input
+        run: node scripts/check_cms_lineup.mjs
+
       # GAS の AI ハンドラ（貼り替え用コード）の検査。実体は Apps Script 側に
       # あり普段は見えないので、少なくとも管理下のコードは壊さない（AUDIT §9-54）。
       - name: Check GAS AI handlers
