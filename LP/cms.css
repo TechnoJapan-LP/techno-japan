@@ -309,6 +309,17 @@ label .req-star{color:var(--accent);margin-left:4px}
 .ar-prev-body strong{color:#f0ede8;font-weight:500}
 .ar-prev-body blockquote{border-left:2px solid var(--accent);padding:8px 0 8px 24px;margin:32px 0;font-style:italic;opacity:.85}
 .ar-prev-body img{max-width:100%;height:auto;display:block;margin:32px auto;border-radius:4px}
+/* プレビューは元のHTML構造を変えず、属性に対するCSSだけで表示を合わせる */
+.ar-prev-body p:has(img[data-layout="left"]){width:66.6667%;margin-right:auto}
+.ar-prev-body p:has(img[data-layout="right"]){width:66.6667%;margin-left:auto}
+.ar-prev-body p:has(img[data-layout="full"]){width:100%}
+.ar-prev-body p:has(img[data-crop="16:10"]){aspect-ratio:16/10;overflow:hidden}
+.ar-prev-body p:has(img[data-crop="4:3"]){aspect-ratio:4/3;overflow:hidden}
+.ar-prev-body p:has(img[data-crop="1:1"]){aspect-ratio:1;overflow:hidden}
+.ar-prev-body p:has(img[data-crop]) img{width:100%;height:100%;object-fit:cover;object-position:var(--crop-x,50%) var(--crop-y,50%);transform:scale(var(--crop-zoom,1))}
+.ar-prev-body p:has(img[data-pair-id]){display:inline-block;vertical-align:top;width:calc(50% - 8px);margin-right:12px}
+.ar-prev-body p:has(img[data-pair-id]) + p:has(img[data-pair-id]){margin-right:0}
+@media(max-width:600px){.ar-prev-body p:has(img[data-pair-id]){display:block;width:100%;margin-right:0}}
 .ar-prev-body .preview-fx-img{margin:32px 0;overflow:hidden}
 .ar-prev-body .preview-fx-img img{width:100%;margin:0;transform:scale(var(--crop-zoom,1));}
 .ar-prev-body .preview-fx-img[data-crop="16:10"]{aspect-ratio:16/10}
