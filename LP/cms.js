@@ -806,13 +806,21 @@ function tryRecoverArticleDraft(){
 let articleQuill = null;
 let articleSelectedImage = null;
 
+function setArticleImageToolsEnabled(enabled){
+  ['ar-image-layout','ar-image-position','ar-image-layout-apply'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.disabled = !enabled;
+  });
+  const hint = document.getElementById('ar-image-layout-hint');
+  if (hint) hint.textContent = enabled ? '選択中の画像' : '本文中の画像をクリックしてレイアウトを設定';
+}
+
 function selectArticleImage(img){
   if (articleSelectedImage) articleSelectedImage.classList.remove('tj-image-selected');
   articleSelectedImage = img;
+  setArticleImageToolsEnabled(!!img);
   if (!img) return;
   img.classList.add('tj-image-selected');
-  const tools = document.getElementById('ar-image-layout-tools');
-  if (tools) tools.hidden = false;
   const layout = document.getElementById('ar-image-layout');
   const position = document.getElementById('ar-image-position');
   if (layout) layout.value = img.dataset.layout || 'contained';
