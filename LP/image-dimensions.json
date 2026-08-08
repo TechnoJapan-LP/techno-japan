@@ -723,6 +723,30 @@
     384,
     480
   ],
+  "images/derivatives/card/festivals/synapse-festival--47a2b414-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/festivals/synapse-festival--47a2b414-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/festivals/synapse-festival-2025-flyer--045d32a2-lg.webp": [
+    720,
+    960
+  ],
+  "images/derivatives/card/festivals/synapse-festival-2025-flyer--045d32a2-sm.webp": [
+    360,
+    480
+  ],
+  "images/derivatives/card/festivals/synapse-festival-flyer--d544621a-lg.webp": [
+    720,
+    960
+  ],
+  "images/derivatives/card/festivals/synapse-festival-flyer--d544621a-sm.webp": [
+    360,
+    480
+  ],
   "images/derivatives/card/festivals/technogaoka--19d4d608-lg.webp": [
     720,
     960
@@ -1126,6 +1150,18 @@
   "images/festivals/sub-tide.webp": [
     1920,
     1920
+  ],
+  "images/festivals/synapse-festival-2025-flyer.webp": [
+    1800,
+    2400
+  ],
+  "images/festivals/synapse-festival-flyer.webp": [
+    1800,
+    2400
+  ],
+  "images/festivals/synapse-festival.webp": [
+    1920,
+    1280
   ],
   "images/festivals/technogaoka-flyer.webp": [
     1752,
