@@ -49,6 +49,10 @@ const BRIDGE = `
   get editionSheetMaxRow(){return editionSheetMaxRow}, set editionSheetMaxRow(v){editionSheetMaxRow=v},
   get lineupSheetMaxRow(){return lineupSheetMaxRow}, set lineupSheetMaxRow(v){lineupSheetMaxRow=v},
   get editionSheetLoaded(){return editionSheetLoaded}, set editionSheetLoaded(v){editionSheetLoaded=v},
+  get editionRowById(){return editionRowById}, set editionRowById(v){editionRowById=v},
+  get editionSheetLoadError(){return editionSheetLoadError}, set editionSheetLoadError(v){editionSheetLoadError=v},
+  get editions(){return editions},
+  get editState(){return editState},
 };`;
 const src = fs.readFileSync(CMS_PATH, 'utf8') + BRIDGE;
 
@@ -173,6 +177,50 @@ const check = (name, pass, detail) => { results.push([name, pass, detail]); };
   await c.syncNewEditionRows('b', [{ year: '2026', date: '2026-06-01', lineup: [] }]).catch(()=>{});
   const rows = c.__calls.filter(x => x.sheet === 'EDITIONS').map(x => x.row);
   check('2回続けて保存しても行が衝突しない', rows.length === 2 && rows[0] !== rows[1], `rows=${rows.join(', ') || '(書き込みなし)'}`);
+}
+
+
+// ---- 9) 同じ年をもう一度保存しても、行が増えず上書きされること ----
+{
+  const c = makeCtx();
+  c.__T.editionSheetRows = [{ _row: 54, FESTIVAL_ID: 'loa' }];
+  c.__T.lineupSheetRows = [];
+  c.__T.editionSheetMaxRow = 98; c.__T.lineupSheetMaxRow = 400;
+  c.__T.editionSheetLoaded = true;
+  c.__T.editionRowById = new Map([['loa-2026', 54]]);   // 既に 2026 がある
+  c.gasWriteSucceeded = () => true;
+  await c.syncNewEditionRows('loa', [{ year:'2026', date:'2026-08-15/2026-08-16', lineup:[] }]);
+  const call = c.__calls.find(x => x.sheet === 'EDITIONS');
+  check('同じ年は既存の行を上書きする（末尾に足さない）',
+    call?.row === 54, `書き込み先 row=${call?.row}（54なら上書き / 99なら重複）`);
+}
+
+// ---- 10) 新しい年は末尾に追加されること ----
+{
+  const c = makeCtx();
+  c.__T.editionSheetRows = []; c.__T.lineupSheetRows = [];
+  c.__T.editionSheetMaxRow = 98; c.__T.lineupSheetMaxRow = 400;
+  c.__T.editionSheetLoaded = true;
+  c.__T.editionRowById = new Map([['loa-2025', 54]]);
+  c.gasWriteSucceeded = () => true;
+  await c.syncNewEditionRows('loa', [{ year:'2027', date:'2027-08-15', lineup:[] }]);
+  const call = c.__calls.find(x => x.sheet === 'EDITIONS');
+  check('新しい年は末尾に足す', call?.row === 99, `row=${call?.row}`);
+}
+
+// ---- 11) 読み込み失敗のまま保存しようとしたら止まること ----
+{
+  const c = makeCtx();
+  c.__T.editionSheetLoaded = false;
+  c.__T.editionSheetLoadError = 'EDITIONS シートを読めませんでした';
+  c.__T.editions.length = 0;
+  c.__T.editions.push({ year:'2026', date:'2026-08-15' });
+  let msg = '';
+  c.toast = (m) => { msg = m; };
+  c.__T.editState.festival = { _row: 5 };
+  c.saveEdit('festival');
+  check('読み込み失敗のまま保存させない',
+    /読み込め|重複します/.test(msg), msg.slice(0, 40) || '(止まらなかった)');
 }
 
 console.log('\n検証項目'.padEnd(52) + '判定  実測');

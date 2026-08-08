@@ -283,7 +283,7 @@ function ratioAttr(r) {
 }
 // 説明文トグルを持つページ（festival/venue/artist）に読み込むスクリプト。
 // .bilingual が無いページでは no-op なので副作用なし。
-const LANG_TOGGLE_SCRIPT = '\n<script src="/lang-toggle.js?v=1" defer></script>';
+const LANG_TOGGLE_SCRIPT = `\n<script src="/lang-toggle.js?v=${LANG_TOGGLE_VERSION}" defer></script>`;
 const FESTIVAL_HUB_BACK_SCRIPT = `
 <script>
 function bindFestivalHubBackLinks() {
@@ -505,6 +505,25 @@ const GA = `<script>
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
 const DETAIL_CSS_VERSION = 5;
 
+/* 記事ページの演出アセット。**べた書きしないこと。**
+
+   2026-08-07〜08 のデプロイ失敗6件のうち3件がこれだった。
+   生成側が `?v=1` `?v=2` を文字列で埋めていたため、
+   article-fx を編集して HTML の ?v を手で上げても、
+   **次のビルドで元に戻る。** 直したつもりが直っていない状態が続いた。
+   検査（check_asset_versions.py）は毎回正しく落としていたのに、
+   落ちる場所と直す場所がずれていて原因に辿り着けなかった。AUDIT §9-58。
+
+   article-fx.js / article-fx.css を変更したら、ここを上げる。 */
+const ARTICLE_FX_JS_VERSION = 4;
+const ARTICLE_FX_CSS_VERSION = 3;
+
+/* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
+   （変更しても次のビルドで戻り、直したつもりが直らない）。 */
+const COMMON_JS_VERSION = 3;
+const COMMON_CSS_VERSION = 5;
+const LANG_TOGGLE_VERSION = 1;
+
 function page({ title, desc, canonical, image, ogType = 'article', jsonLd, body, lang = 'ja', altHref = null, extraScripts = '', backgroundLayer = false }) {
   const d = truncate(desc || '', 160);
   // hreflang: JA/EN 両方が存在するページだけ相互宣言する
@@ -547,7 +566,7 @@ ${hreflang}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/common.css?v=5">
+<link rel="stylesheet" href="/common.css?v=${COMMON_CSS_VERSION}">
 <link rel="stylesheet" href="/detail.css?v=${DETAIL_CSS_VERSION}">
 <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
 </head>
@@ -556,7 +575,7 @@ ${backgroundLayer ? '<div class="tj-bg" aria-hidden="true"><div class="tj-scan">
 ${body}
 ${footerHtml(lang)}
 ${GA}
-<script src="/common.js?v=3" defer></script>${extraScripts}
+<script src="/common.js?v=${COMMON_JS_VERSION}" defer></script>${extraScripts}
 </body>
 </html>
 `;
@@ -672,7 +691,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   </div>
 </article>`;
 
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'articles'] : ['articles']), `${a.id}.html`), html: page({ title, desc, canonical, image, jsonLd: [jsonLd, breadcrumbLd('NEWS', '/news.html', a.title, canonical)], body, lang, altHref, extraScripts: '\n<link rel="stylesheet" href="/article-fx.css?v=1">\n<script src="/article-fx.js?v=2" defer></script>' + ARTICLE_HUB_BACK_SCRIPT }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'articles'] : ['articles']), `${a.id}.html`), html: page({ title, desc, canonical, image, jsonLd: [jsonLd, breadcrumbLd('NEWS', '/news.html', a.title, canonical)], body, lang, altHref, extraScripts: `\n<link rel="stylesheet" href="/article-fx.css?v=${ARTICLE_FX_CSS_VERSION}">\n<script src="/article-fx.js?v=${ARTICLE_FX_JS_VERSION}" defer></script>` + ARTICLE_HUB_BACK_SCRIPT }) };
 }
 
 /* ---------- フェスティバルページ ---------- */

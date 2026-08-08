@@ -107,6 +107,11 @@ jobs:
       - name: Check service worker routing
         run: node scripts/check_sw_routing.mjs
 
+      # 生成スクリプトへの ?v べた書き禁止。べた書きがあると HTML の ?v を
+      # 手で上げても次のビルドで戻り、同じデプロイ失敗を繰り返す（AUDIT §9-58）。
+      - name: Check no hardcoded asset versions
+        run: python3 scripts/check_no_hardcoded_versions.py
+
       - name: Check regression thresholds
         run: python3 scripts/check_regressions.py
 

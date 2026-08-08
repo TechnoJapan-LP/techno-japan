@@ -204,6 +204,14 @@ let lineupSheetRows = [];
 let editionSheetMaxRow = 0;
 let lineupSheetMaxRow = 0;
 let editionSheetLoaded = false;
+/* シート全体の EDITION_ID → 行番号。**年度ごとの上書き（upsert）に使う。**
+   EDITION_ID は {festivalId}-{年} なので、同じ年を保存し直すときは
+   新しい行を足すのではなく、その行を書き換えるのが正しい。
+   これを持たずに「_row が無い＝新規」で判定していたため、
+   読み込みに失敗した回だけ末尾に重複が積み上がった（AUDIT §9-58）。 */
+let editionRowById = new Map();
+/* 直近の読み込みが失敗したか。失敗したまま保存させない。 */
+let editionSheetLoadError = '';
 let editionsLoadingPromise = null;
 let acHighlight = -1;
 const editState = { venue:null, festival:null, artist:null, event:null, article:null };
@@ -1937,7 +1945,21 @@ async function loadEditionsFromSheet(festivalId){
       fetch(GAS_URL+'?action=get_sheet&sheet=LINEUPS').then(r=>r.json())
     ]);
     const er=results[0], lr=results[1];
-    if(er.status!=='ok'||!Array.isArray(er.rows)) return;
+    if(er.status!=='ok'||!Array.isArray(er.rows)){
+      /* 黙って抜けると、開催回が「シートのどの行か」を失ったまま残る。
+         その状態で保存すると全部が新規扱いになり、末尾に重複が積まれる。
+         実際に EDITIONS へ26行の重複ができた（AUDIT §9-58）。
+         失敗は記録して、保存側で止める。 */
+      editionSheetLoadError = 'EDITIONS シートを読めませんでした'
+        + (er && er.message ? '（' + er.message + '）' : '');
+      editionSheetLoaded = false;
+      toast(editionSheetLoadError + ' — 開催回は保存できません。再読み込みしてください', 'error');
+      return;
+    }
+    editionSheetLoadError = '';
+    editionRowById = new Map(er.rows
+      .map(r => [String(r.EDITION_ID||'').trim(), Number(r._row)||0])
+      .filter(([id,row]) => id && row));
     editionSheetRows=er.rows.filter(r=>String(r.FESTIVAL_ID||'').trim()===String(festivalId).trim());
     lineupSheetRows=lr.status==='ok'&&Array.isArray(lr.rows)?lr.rows:[];
     // 追記位置はシート全体から取る（絞り込み後の配列から取ってはいけない）。
@@ -1969,7 +1991,12 @@ async function loadEditionsFromSheet(festivalId){
     });
     selectedEditionIndex=0;
     renderEditions();
-  }catch(_){ /* 旧JSONのフォールバックを維持 */ }
+  }catch(err){
+    /* 通信エラー。ここも黙って抜けない（上と同じ理由）。 */
+    editionSheetLoadError = 'EDITIONS シートの取得に失敗しました（' + (err && err.message || 'unknown') + '）';
+    editionSheetLoaded = false;
+    toast(editionSheetLoadError + ' — 開催回は保存できません。再読み込みしてください', 'error');
+  }
 }
 
 /* ==============================================================
@@ -3510,22 +3537,43 @@ function syncNewEditionRows(festivalId, sourceEditions=editions){
   const rows=sourceEditions.filter(e=>!e._row&&e.year);
   if(!rows.length) return Promise.resolve();
   // 見るのは「シートを読めたか」であって「このフェスに開催回があるか」ではない。
-  if(!editionSheetLoaded) return Promise.reject(new Error('EDITIONSシートが未読込'));
+  if(!editionSheetLoaded) return Promise.reject(new Error(editionSheetLoadError || 'EDITIONSシートが未読込'));
   const requests=[];
   let nextEditionRow=editionSheetMaxRow+1;
   let nextLineupRow=lineupSheetMaxRow+1;
+  const usedRows=new Set();
   rows.forEach(e=>{
     const parts=String(e.date||'').split('/').map(s=>s.trim());
     const eid=festivalId+'-'+String(e.year).trim();
+    /* 年度ごとの上書き（upsert）。
+
+       EDITION_ID は {festivalId}-{年} なので、同じ年は**シート上で必ず1行**。
+       既にその ID の行があるなら、末尾に足すのではなくその行を書き換える。
+
+       これが無かったため、シートの読み込みに失敗した回だけ
+       「行番号を知らない＝新規」と判定され、保存のたびに末尾へ重複が
+       積み上がった（circus-2025 が5行など。AUDIT §9-58）。
+       行番号を知っているかどうかではなく、**IDが既にあるか**で決める。 */
+    const existingRow=editionRowById.get(eid);
+    const targetRow=existingRow || nextEditionRow++;
+    if(!existingRow) usedRows.add(targetRow);
     // GASの既存 update_row は指定行が末尾の次でも追記できるため、
     // 新規専用ハンドラを要求せず同じ認証・ヘッダー写像を使う。
-    requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'update_row',sheet:'EDITIONS',row:nextEditionRow++,EDITION_ID:eid,FESTIVAL_ID:festivalId,EDITION:e.year,DATE_START:parts[0]||'',DATE_END:parts[1]||parts[0]||'',LOCATION:e.location||'',LOCATION_JA:e.location_ja||'',VENUE_ID:e.venueId||'',PREF:e.pref||festivalPrefFallback(),ADDRESS:e.address||'',LAT:e.lat||'',LNG:e.lng||'',TICKETURL:e.ticketUrl||'',FLYER:e.flyer||'',STATUS:e.status||''})}).then(r=>r.json()));
+    requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'update_row',sheet:'EDITIONS',row:targetRow,EDITION_ID:eid,FESTIVAL_ID:festivalId,EDITION:e.year,DATE_START:parts[0]||'',DATE_END:parts[1]||parts[0]||'',LOCATION:e.location||'',LOCATION_JA:e.location_ja||'',VENUE_ID:e.venueId||'',PREF:e.pref||festivalPrefFallback(),ADDRESS:e.address||'',LAT:e.lat||'',LNG:e.lng||'',TICKETURL:e.ticketUrl||'',FLYER:e.flyer||'',STATUS:e.status||''})}).then(r=>r.json()));
     (e.lineup||[]).forEach((label,i)=>requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'update_row',sheet:'LINEUPS',row:nextLineupRow++,EDITION_ID:eid,ARTIST_ID:'',ACT_LABEL:label,SET_TYPE:'dj',STAGE:'',DAY:'',START:'',END:'',SORT:String(i+1)})}).then(r=>r.json())));
   });
   /* 追記した分だけ末尾を進める。進めないと、同じ画面でもう一度保存したときに
      同じ行番号を再利用して直前に足した開催回を上書きする。 */
-  editionSheetMaxRow=nextEditionRow-1;
-  lineupSheetMaxRow=nextLineupRow-1;
+  editionSheetMaxRow=Math.max(editionSheetMaxRow, nextEditionRow-1);
+  lineupSheetMaxRow=Math.max(lineupSheetMaxRow, nextLineupRow-1);
+  // 今回書いた行を対応表へ入れる。同じ画面で2回保存しても重複しない。
+  rows.forEach(e=>{
+    const eid=festivalId+'-'+String(e.year).trim();
+    if(!editionRowById.has(eid)){
+      const r=[...usedRows][0];
+      if(r){ editionRowById.set(eid, r); usedRows.delete(r); }
+    }
+  });
   return Promise.all(requests).then(results=>{
     const failed=results.filter(r=>!gasWriteSucceeded(r));
     if(failed.length) throw new Error('新規EDITIONSの追加に失敗しました');
@@ -3544,6 +3592,18 @@ function saveEdit(section){
   if(section==='festival' && editionsLoadingPromise){
     toast('開催回データを読み込み中です。完了後に保存します','info');
     return editionsLoadingPromise.then(()=>saveEdit(section));
+  }
+  /* シートを読めていない状態では開催回を保存させない。
+
+     読めていない＝各開催回が「シートのどの行か」を知らない。
+     そのまま保存すると全部が新規扱いになり、末尾に重複が積まれる。
+     実際に EDITIONS へ26行（circus-2025 は5行）できた。AUDIT §9-58。
+
+     「保存できたのにデータが壊れる」より「保存できないと分かる」を選ぶ。
+     フェス本体だけ保存して開催回が壊れる、という中途半端も避けたい。 */
+  if(section==='festival' && editions.some(e=>e.year) && !editionSheetLoaded){
+    return toast((editionSheetLoadError || 'EDITIONS シートを読み込めていません')
+      + ' — このまま保存すると開催回が重複します。ページを再読み込みしてからやり直してください', 'error');
   }
   if (section === 'article' && window.articleImageUploading) {
     // アップロードが本当に進行中の時だけブロック。fetch がハングして
