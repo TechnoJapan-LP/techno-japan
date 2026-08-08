@@ -1261,14 +1261,16 @@ function toggleArticlePreview(){
     const prev = document.querySelector('.ar-preview');
     if (!prev) return;
     const hidden = prev.dataset.focusPreviewHidden === '1';
-  if (hidden) {
+    if (hidden) {
       delete prev.dataset.focusPreviewHidden;
+      wrap.classList.add('preview-mode');
       prev.style.display = 'block';
       document.getElementById('ar-focus-preview')?.classList.remove('is-hidden');
       if (btn) { btn.classList.add('active'); btn.textContent = 'プレビューを表示中'; }
       updateArticlePreview(articleQuill?.root?.innerHTML || document.getElementById('ar-body').value, true);
     } else {
       prev.dataset.focusPreviewHidden = '1';
+      wrap.classList.remove('preview-mode');
       prev.style.display = 'none';
       document.getElementById('ar-focus-preview')?.classList.add('is-hidden');
       if (btn) { btn.classList.remove('active'); btn.textContent = 'プレビュー'; }
@@ -1625,6 +1627,9 @@ function resolveEntityLinksPreview(html){
 function toggleFocusMode(){
   const wrap = document.getElementById('ar-editor-wrap');
   if (!wrap) return;
+  // 集中モード開始時にプレビューを勝手に開かない。
+  // 開始前の表示状態を保存し、ユーザーが明示的に開いていた場合だけ維持する。
+  const previewWasOn = wrap.classList.contains('preview-mode');
   const on = wrap.classList.toggle('focus-mode');
   // 集中モードと左右分割プレビューは同時に有効にしない。
   // 同時適用すると、編集欄が幅計算の対象外になり本文が見えなくなる。
@@ -1635,9 +1640,9 @@ function toggleFocusMode(){
   const btn = document.getElementById('ar-focus-toggle');
   if (btn){ btn.textContent = on ? '✕ 閉じる (Esc)' : '⛶ 集中モード'; btn.classList.toggle('active', on); }
   if (on){
-    wrap.classList.add('preview-mode');
+    wrap.dataset.focusPreviewWasOn = previewWasOn ? '1' : '0';
     const focusPreview = document.querySelector('.ar-preview');
-    if (focusPreview) {
+    if (focusPreview && previewWasOn) {
       delete focusPreview.dataset.focusPreviewHidden;
       focusPreview.style.display = 'block';
       focusPreview.style.position = 'fixed';
@@ -1650,17 +1655,24 @@ function toggleFocusMode(){
       focusPreview.dataset.focusPreview = '1';
     }
     const previewBtn = document.getElementById('ar-preview-toggle');
-    if (previewBtn) { previewBtn.classList.add('active'); previewBtn.textContent = 'プレビューを表示中'; }
-    document.getElementById('ar-focus-preview')?.classList.remove('is-hidden');
+    if (previewBtn) {
+      previewBtn.classList.toggle('active', previewWasOn);
+      previewBtn.textContent = previewWasOn ? 'プレビューを表示中' : 'プレビュー';
+    }
+    document.getElementById('ar-focus-preview')?.classList.toggle('is-hidden', !previewWasOn);
     const ed = document.querySelector('#ar-body-editor .ql-editor');
     // 表示だけが空になった場合は、最後に同期した本文から安全に復元する。
     const stored = document.getElementById('ar-body')?.value || document.getElementById('ar-body-source')?.value || '';
     if (ed && !ed.innerHTML.trim() && stored.trim()) setArticleBody(stored);
-    updateArticlePreview(articleQuill?.root?.innerHTML || document.getElementById('ar-body').value, true);
+    if (previewWasOn) updateArticlePreview(articleQuill?.root?.innerHTML || document.getElementById('ar-body').value, true);
     if (ed) ed.focus();
   }
   else {
-    wrap.classList.remove('preview-mode');
+    // 集中モード開始前に表示していた状態へ戻す。
+    // 集中モード中のプレビュー操作は次回の集中モードには持ち越さない。
+    const restorePreview = wrap.dataset.focusPreviewWasOn === '1';
+    delete wrap.dataset.focusPreviewWasOn;
+    wrap.classList.toggle('preview-mode', restorePreview);
     const focusPreview = document.querySelector('.ar-preview[data-focus-preview="1"]');
     if (focusPreview) {
       focusPreview.removeAttribute('style');
