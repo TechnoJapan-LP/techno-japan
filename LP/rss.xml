@@ -5,7 +5,7 @@
     <link>https://techno-japan.media</link>
     <description>Japan&apos;s underground techno and house music media platform.</description>
     <language>ja-JP</language>
-    <lastBuildDate>Fri, 07 Aug 2026 04:51:41 -0000</lastBuildDate>
+    <lastBuildDate>Sat, 08 Aug 2026 12:37:17 -0000</lastBuildDate>
     <atom:link href="https://techno-japan.media/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
       <title>GROW THE CULTURE OPEN AIR</title>
@@ -64,12 +64,36 @@
       <description>Nagano — OTSUKIMIは長野の山岳地帯で開催され、日本の伝統的な月見の風習からその名を取っている。このイベントは、エレクトロニック・ミュージックと季節の儀式とのつながりを重視した自然の中で、日本のアンダーグラウンド・テクノ・コミュニティを一堂に集めるものだ。</description>
     </item>
     <item>
+      <title>りんご音楽祭</title>
+      <link>https://techno-japan.media/festivals/ringo-festival.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/ringo-festival.html</guid>
+      <pubDate>Sat, 26 Sep 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Nagano — 「りんご音楽祭」は、長野県松本市のアルプス公園で毎年秋に開催される、自然豊かなロケーションが魅力の野外音楽フェスです。「アーティスト主導・現場主義」を掲げ、メジャー・インディーズを問わず旬の実力派からアンダーグラウンドの鬼才まで多種多様な才能が集結します。会場には「りんご」「そば」「わさび」など地元の名産品から命名されたユニークなステージが多数登場し、長野愛にあふれたアットホームな空間を楽しめます。</description>
+    </item>
+    <item>
       <title>Odyssey</title>
       <link>https://techno-japan.media/festivals/odyssey.html</link>
       <guid isPermaLink="true">https://techno-japan.media/festivals/odyssey.html</guid>
       <pubDate>Fri, 25 Sep 2026 00:00:00 -0000</pubDate>
       <category>Festival</category>
       <description>Miyazaki — Odysseyは宮崎の海岸沿いの風景にアンダーグラウンド・エレクトロニック・ミュージックを持ち込み、日本のテクノ・シーンとこの地の自然環境とを結びつける親密な集まりを作り出している。主要都市から離れた場所で、フェスティバルは研ぎ澄まされたサウンド体験を育んでおり、より深い音楽的つながりを求めるアーティストやオーディエンスを惹きつけている。</description>
+    </item>
+    <item>
+      <title>CIRCUS ODAIBA</title>
+      <link>https://techno-japan.media/festivals/circus.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/circus.html</guid>
+      <pubDate>Tue, 22 Sep 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Tokyo — 「CIRCUS × CIRCUS ODAIBA」は、お台場の開放的な屋外会場に国内外の最先端ヒップホップやエレクトロニック系アーティスト13組が集結する都市型フェスです。7年ぶりとなるRejjie Snowの来日ステージなど貴重なパフォーマンスが楽しめます。さらに前日にはMURA MASAらが出演する前夜祭も同会場で開催され、2日連続で最先端の音楽に浸れるのが大きな特徴です。</description>
+    </item>
+    <item>
+      <title>COLORS Presents SOUNDCAMP</title>
+      <link>https://techno-japan.media/festivals/colors-presents-soundcamp.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/colors-presents-soundcamp.html</guid>
+      <pubDate>Sun, 20 Sep 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Hokkaido — COLORS Presents SOUNDCAMPは、北海道の自然の中にエレクトロニック・ミュージックを持ち込み、アウトドア・フェスティバル文化と日本のアンダーグラウンド・シーンを融合させた没入感あふれる体験を生み出す。同島ならではの地形を背景に設けられた複数のステージでは、国内外から厳選されたアーティストたちのラインナップが披露される。</description>
     </item>
     <item>
       <title>Ultra Japan</title>
@@ -224,34 +248,18 @@
       <description>Tokyo — NU は NEXT NEW UNITY の略。音とアートの交差点に置かれた都市規模のプログラムを掲げ、再開発によって生まれた高輪ゲートウェイシティを舞台とする。 プログラムは5つに分かれ、NU ART が Sónar+D と六本木の SuperDeluxe、NU LIVE が Sónar Sound、NU STATION が J-WAVE と組む。ほかに NU CONNECTION と NU PARK が置かれる。音楽プログラムだけでなく、テクノロジーとクリエイティビティを扱う Sónar+D の枠組みごと持ち込んでいる点に、このフェスティバルの設計が出ている。</description>
     </item>
     <item>
-      <title>SAMSARA</title>
-      <link>https://techno-japan.media/festivals/samsara.html</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals/samsara.html</guid>
-      <pubDate>Sat, 20 Jun 2026 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Nagano — SAMSARAは、長野の山々にアンダーグラウンド・エレクトロニック・ミュージックを届け、自然と音との親密なつながりを生み出すフェスティバルだ。その名が示す精神性に呼応するように、深く瞑想的な体験に重きを置き、日本の実験音楽・テクノシーンから才能あるアーティストたちを招いている。</description>
-    </item>
-    <item>
-      <title>Dots</title>
-      <link>https://techno-japan.media/festivals/dots.html</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals/dots.html</guid>
-      <pubDate>Fri, 19 Jun 2026 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Hokkaido — Dotsは北海道を代表する先進的な電子音楽イベントとして、日本の北方アンダーグラウンド・シーンの中に自らの位置を確立している。フェスティバルはテクノのハードな側面と実験的なエレクトロニック・サウンドを橋渡しする、的を絞ったラインナップをキュレーションし、地元アーティストとツアー・アーティストの双方を札幌のクラブ・インフラへと呼び込んでいる。</description>
-    </item>
-    <item>
-      <title>FESTIVAL FRUEZINHO</title>
-      <link>https://techno-japan.media/festivals/festival-fruezinho.html</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals/festival-fruezinho.html</guid>
-      <pubDate>Sat, 13 Jun 2026 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Tokyo — 魂のふるえる音楽体験」を掲げる FESTIVAL de FRUE のスピンオフ。静岡県掛川市で野外開催される本体に対し、こちらは都市型の1日限りのイベントだ。「-zinho」はポルトガル語の縮小辞。名前はそのまま「ちいさな FRUE」を意味する。 直近の開催は2026年6月13日、東京・立川ステージガーデン。約2,500席の屋内ホールで、世界各国の多様な音楽を快適な環境で聴ける一日として設計された。出演は Marc Ribot Y Los Cubanos Postizos、Sam Gendel &amp; Sam Wilkes、岡田拓郎。インド古典声楽の Pandit Pran Nath 没後30年を記念する Urs Celebration には SARA、YUMIKO OHNO、Terry Riley。</description>
-    </item>
-    <item>
       <title>野外テクノパーティTranscendenceで見た次世代ジェネレーションの可能性</title>
       <link>https://techno-japan.media/articles/transcendence-2025-report.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/transcendence-2025-report.html</guid>
-      <pubDate>Fri, 07 Aug 2026 04:51:41 -0000</pubDate>
+      <pubDate>Sat, 08 Aug 2026 12:37:17 -0000</pubDate>
+      <category>REPORT</category>
+      <description></description>
+    </item>
+    <item>
+      <title>MUTEK.JP 2025現地レポート WWWとO-EASTで体感した音と光の二日間</title>
+      <link>https://techno-japan.media/articles/post-20251120.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/articles/post-20251120.html</guid>
+      <pubDate>Sat, 08 Aug 2026 12:37:17 -0000</pubDate>
       <category>REPORT</category>
       <description></description>
     </item>

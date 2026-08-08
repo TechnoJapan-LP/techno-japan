@@ -27,6 +27,50 @@ import { imageSizeAttrs } from './lib/image-size.mjs';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const LP_DIR = path.join(__dirname, '..', 'LP');
 const DATA_PATH = path.join(LP_DIR, 'data.js');
+
+/* ==============================================================
+   アセットの ?v（キャッシュバスティング）
+
+   **ここより下で ?v を文字列にべた書きしないこと。**
+
+   2026-08-07〜08 のデプロイ失敗6件のうち3件がこれだった。
+   article-fx の版を文字列で埋めていたため、HTML の ?v を手で上げても
+   次のビルドで元に戻り、「直したつもりが直らない」状態が続いた。
+   検査は毎回正しく落としていたが、落ちる場所（HTML）と直す場所（ここ）が
+   ずれていて原因に辿り着けなかった。AUDIT §9-58。
+
+   使う場所より前で定義すること（2026-08-08 に下方で定義していて
+   ReferenceError でビルドが止まった）。scripts/check_no_hardcoded_versions.py
+   がべた書きを禁止する。
+   ============================================================== */
+/* detail.css の ?v は全ページで同一にすること。
+   1932e50「Redesign all festival detail pages」で detail.css に259行を追記した際、
+   フェス詳細だけを ?v=4 にし、artists/venues/articles/en の226ページは ?v=3 のまま
+   残った。追記が .festival-design-v2 配下だけだったので実害は出なかったが、
+   sw.js は /detail.css を cacheFirst で持つため（scripts/check_sw_routing.mjs）、
+   次に共通ルールを触ったときは 226ページに新CSSが届かない。
+   呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
+   CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
+const DETAIL_CSS_VERSION = 5;
+
+/* 記事ページの演出アセット。**べた書きしないこと。**
+
+   2026-08-07〜08 のデプロイ失敗6件のうち3件がこれだった。
+   生成側が `?v=1` `?v=2` を文字列で埋めていたため、
+   article-fx を編集して HTML の ?v を手で上げても、
+   **次のビルドで元に戻る。** 直したつもりが直っていない状態が続いた。
+   検査（check_asset_versions.py）は毎回正しく落としていたのに、
+   落ちる場所と直す場所がずれていて原因に辿り着けなかった。AUDIT §9-58。
+
+   article-fx.js / article-fx.css を変更したら、ここを上げる。 */
+const ARTICLE_FX_JS_VERSION = 4;
+const ARTICLE_FX_CSS_VERSION = 3;
+
+/* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
+   （変更しても次のビルドで戻り、直したつもりが直らない）。 */
+const COMMON_JS_VERSION = 3;
+const COMMON_CSS_VERSION = 5;
+const LANG_TOGGLE_VERSION = 1;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
 const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');
 const IMAGE_DIMENSIONS_PATH = path.join(LP_DIR, 'image-dimensions.json');
@@ -495,34 +539,7 @@ const GA = `<script>
 })();
 </script>`;
 
-/* detail.css の ?v は全ページで同一にすること。
-   1932e50「Redesign all festival detail pages」で detail.css に259行を追記した際、
-   フェス詳細だけを ?v=4 にし、artists/venues/articles/en の226ページは ?v=3 のまま
-   残った。追記が .festival-design-v2 配下だけだったので実害は出なかったが、
-   sw.js は /detail.css を cacheFirst で持つため（scripts/check_sw_routing.mjs）、
-   次に共通ルールを触ったときは 226ページに新CSSが届かない。
-   呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
-   CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 5;
 
-/* 記事ページの演出アセット。**べた書きしないこと。**
-
-   2026-08-07〜08 のデプロイ失敗6件のうち3件がこれだった。
-   生成側が `?v=1` `?v=2` を文字列で埋めていたため、
-   article-fx を編集して HTML の ?v を手で上げても、
-   **次のビルドで元に戻る。** 直したつもりが直っていない状態が続いた。
-   検査（check_asset_versions.py）は毎回正しく落としていたのに、
-   落ちる場所と直す場所がずれていて原因に辿り着けなかった。AUDIT §9-58。
-
-   article-fx.js / article-fx.css を変更したら、ここを上げる。 */
-const ARTICLE_FX_JS_VERSION = 4;
-const ARTICLE_FX_CSS_VERSION = 3;
-
-/* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
-   （変更しても次のビルドで戻り、直したつもりが直らない）。 */
-const COMMON_JS_VERSION = 3;
-const COMMON_CSS_VERSION = 5;
-const LANG_TOGGLE_VERSION = 1;
 
 function page({ title, desc, canonical, image, ogType = 'article', jsonLd, body, lang = 'ja', altHref = null, extraScripts = '', backgroundLayer = false }) {
   const d = truncate(desc || '', 160);
