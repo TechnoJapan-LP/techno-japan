@@ -63,8 +63,8 @@ const DETAIL_CSS_VERSION = 5;
    落ちる場所と直す場所がずれていて原因に辿り着けなかった。AUDIT §9-58。
 
    article-fx.js / article-fx.css を変更したら、ここを上げる。 */
-const ARTICLE_FX_JS_VERSION = 4;
-const ARTICLE_FX_CSS_VERSION = 3;
+const ARTICLE_FX_JS_VERSION = 5;
+const ARTICLE_FX_CSS_VERSION = 4;
 
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
@@ -708,7 +708,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   </div>
 </article>`;
 
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'articles'] : ['articles']), `${a.id}.html`), html: page({ title, desc, canonical, image, jsonLd: [jsonLd, breadcrumbLd('NEWS', '/news.html', a.title, canonical)], body, lang, altHref, extraScripts: `\n<link rel="stylesheet" href="/article-fx.css?v=${ARTICLE_FX_CSS_VERSION}">\n<script src="/article-fx.js?v=${ARTICLE_FX_JS_VERSION}" defer></script>` + ARTICLE_HUB_BACK_SCRIPT }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'articles'] : ['articles']), `${a.id}.html`), html: page({ title, desc, canonical, image, jsonLd: [jsonLd, breadcrumbLd('NEWS', '/news.html', a.title, canonical)], body, lang, altHref, backgroundLayer: true, extraScripts: `\n<link rel="stylesheet" href="/article-fx.css?v=${ARTICLE_FX_CSS_VERSION}">\n<script src="/article-fx.js?v=${ARTICLE_FX_JS_VERSION}" defer></script>` + ARTICLE_HUB_BACK_SCRIPT }) };
 }
 
 /* ---------- フェスティバルページ ---------- */
