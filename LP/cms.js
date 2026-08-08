@@ -1285,6 +1285,18 @@ function toggleArticlePreview(){
   }
 }
 
+// 本番と同じCSS/FXを使う独立プレビュー。編集画面のDOMを一切変更しない。
+function openArticleGeneratedPreview(){
+  const body = getArticleBodyForSave();
+  const win = window.open('', '_blank');
+  if (!win) return toast('ポップアップがブロックされています', 'warning');
+  const title = esc(document.getElementById('ar-title')?.value || 'ARTICLE PREVIEW');
+  const safeBody = String(body || '').replace(/<script/gi, '&lt;script');
+  win.document.open();
+  win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><link rel="stylesheet" href="/common.css?v=6"><link rel="stylesheet" href="/detail.css?v=5"><link rel="stylesheet" href="/article-fx.css?v=4"><style>body{padding:80px 24px;background:#080808}.article-detail{max-width:820px;margin:auto}.article-body{font-family:var(--font-body);color:var(--text)}</style></head><body><main class="article-detail"><h1>${title}</h1><div class="article-body">${safeBody}</div></main><script src="/article-fx.js?v=5"><\/script></body></html>`);
+  win.document.close();
+}
+
 /* ---------- 記事テンプレート ---------- */
 const ARTICLE_TEMPLATES = {
   report: { label: '📍 イベントレポート', category: 'REPORT', html:
