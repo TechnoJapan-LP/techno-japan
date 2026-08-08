@@ -809,7 +809,7 @@ let articleLastLoadedBody = '';
 let articleQuillUserEdited = false;
 
 function setArticleImageToolsEnabled(enabled){
-  ['ar-image-layout','ar-image-position','ar-image-crop','ar-image-zoom','ar-image-x','ar-image-y','ar-image-pair','ar-image-layout-apply'].forEach(id => {
+  ['ar-image-layout','ar-image-crop','ar-image-zoom','ar-image-x','ar-image-y','ar-image-pair','ar-image-layout-apply'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.disabled = !enabled;
   });
@@ -827,7 +827,11 @@ function pairSelectedArticleImage(){
   const next = index >= 0 ? images[index + 1] : null;
   if (img.dataset.pairId) {
     const pairId = img.dataset.pairId;
-    images.filter(item => item.dataset.pairId === pairId).forEach(item => delete item.dataset.pairId);
+    images.filter(item => item.dataset.pairId === pairId).forEach(item => {
+      delete item.dataset.pairId;
+      const host = item.closest('p');
+      if (host) { host.style.removeProperty('width'); host.style.removeProperty('display'); host.style.removeProperty('margin-left'); host.style.removeProperty('margin-right'); }
+    });
     markFormDirty();
     scheduleArticleEditorSync('quill');
     updateArticlePreview(articleQuill.root.innerHTML, true);
@@ -839,6 +843,10 @@ function pairSelectedArticleImage(){
   const pairId = img.dataset.pairId || next.dataset.pairId || `pair-${Date.now()}`;
   img.dataset.pairId = pairId;
   next.dataset.pairId = pairId;
+  [img, next].forEach(item => {
+    const host = item.closest('p');
+    if (host) { host.style.display = 'inline-block'; host.style.verticalAlign = 'top'; host.style.width = 'calc(50% - 8px)'; host.style.marginRight = item === img ? '12px' : '0'; }
+  });
   setArticleImageToolsEnabled(true);
   markFormDirty();
   scheduleArticleEditorSync('quill');
@@ -853,13 +861,11 @@ function selectArticleImage(img){
   if (!img) return;
   img.classList.add('tj-image-selected');
   const layout = document.getElementById('ar-image-layout');
-  const position = document.getElementById('ar-image-position');
   const crop = document.getElementById('ar-image-crop');
   const zoom = document.getElementById('ar-image-zoom');
   const x = document.getElementById('ar-image-x');
   const y = document.getElementById('ar-image-y');
   if (layout) layout.value = img.dataset.layout || 'contained';
-  if (position) position.value = img.dataset.position || 'center';
   if (crop) crop.value = img.dataset.crop || 'none';
   if (zoom) zoom.value = img.dataset.zoom || '1';
   if (x) x.value = img.dataset.x || '50';
@@ -869,14 +875,11 @@ function selectArticleImage(img){
 function applyArticleImageLayout(){
   if (!articleSelectedImage) return;
   const layout = document.getElementById('ar-image-layout')?.value || 'contained';
-  const position = document.getElementById('ar-image-position')?.value || 'center';
   const crop = document.getElementById('ar-image-crop')?.value || 'none';
   const zoom = document.getElementById('ar-image-zoom')?.value || '1';
   const x = document.getElementById('ar-image-x')?.value || '50';
   const y = document.getElementById('ar-image-y')?.value || '50';
-  const positionY = position === 'top' ? '0' : (position === 'bottom' ? '100' : y);
   articleSelectedImage.dataset.layout = layout;
-  articleSelectedImage.dataset.position = position;
   if (crop === 'none') delete articleSelectedImage.dataset.crop;
   else articleSelectedImage.dataset.crop = crop;
   articleSelectedImage.dataset.zoom = zoom;
@@ -884,7 +887,7 @@ function applyArticleImageLayout(){
   articleSelectedImage.dataset.y = y;
   articleSelectedImage.style.setProperty('--crop-zoom', zoom);
   articleSelectedImage.style.setProperty('--crop-x', `${x}%`);
-  articleSelectedImage.style.setProperty('--crop-y', `${positionY}%`);
+  articleSelectedImage.style.setProperty('--crop-y', `${y}%`);
   markFormDirty();
   scheduleArticleEditorSync('quill');
   updateArticlePreview(articleQuill?.root?.innerHTML || '', true);
@@ -896,11 +899,9 @@ function previewArticleImageLayout(){
   if (!articleSelectedImage) return;
   const layout = document.getElementById('ar-image-layout')?.value || 'contained';
   const crop = document.getElementById('ar-image-crop')?.value || 'none';
-  const position = document.getElementById('ar-image-position')?.value || 'center';
   const zoom = document.getElementById('ar-image-zoom')?.value || '1';
   const x = document.getElementById('ar-image-x')?.value || '50';
   const y = document.getElementById('ar-image-y')?.value || '50';
-  const positionY = position === 'top' ? '0' : (position === 'bottom' ? '100' : y);
   articleSelectedImage.dataset.layout = layout;
   const host = articleSelectedImage.closest('p');
   if (host) {
@@ -910,13 +911,12 @@ function previewArticleImageLayout(){
   }
   if (crop === 'none') delete articleSelectedImage.dataset.crop;
   else articleSelectedImage.dataset.crop = crop;
-  articleSelectedImage.dataset.position = position;
   articleSelectedImage.dataset.zoom = zoom;
   articleSelectedImage.dataset.x = x;
   articleSelectedImage.dataset.y = y;
   articleSelectedImage.style.setProperty('--crop-zoom', zoom);
   articleSelectedImage.style.setProperty('--crop-x', `${x}%`);
-  articleSelectedImage.style.setProperty('--crop-y', `${positionY}%`);
+  articleSelectedImage.style.setProperty('--crop-y', `${y}%`);
   updateArticlePreview(articleQuill?.root?.innerHTML || '', true);
 }
 
@@ -1014,7 +1014,6 @@ function initArticleEditor(){
   });
   document.getElementById('ar-image-layout-apply')?.addEventListener('click', applyArticleImageLayout);
   document.getElementById('ar-image-layout')?.addEventListener('change', previewArticleImageLayout);
-  document.getElementById('ar-image-position')?.addEventListener('change', previewArticleImageLayout);
   document.getElementById('ar-image-crop')?.addEventListener('change', previewArticleImageLayout);
   document.getElementById('ar-image-zoom')?.addEventListener('input', previewArticleImageLayout);
   document.getElementById('ar-image-x')?.addEventListener('input', previewArticleImageLayout);
