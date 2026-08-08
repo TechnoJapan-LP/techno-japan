@@ -219,6 +219,8 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 .article-body .ql-align-right  { text-align: right; }
 .article-body .ql-font-bebas { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.02em; }
 .article-body .ql-font-mono  { font-family: var(--font-mono); font-size: 0.85em; letter-spacing: 0.05em; }
+.article-body .ql-font-serif { font-family: Georgia, 'Times New Roman', serif; }
+.article-body .ql-font-condensed { font-family: 'Arial Narrow', 'Roboto Condensed', Arial, sans-serif; letter-spacing: -0.02em; }
 
 .article-body blockquote {
   border-left: none; padding: 8px 0; margin: 56px 0;

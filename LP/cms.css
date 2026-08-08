@@ -455,6 +455,12 @@ body.ar-focus-open #ar-focus-preview{display:none !important}
 #ar-body-editor .ql-editor blockquote::after{ margin:24px auto 0; }
 /* 本文に挿し込んだリンクはエディタ上でも赤く見せる */
 #ar-body-editor .ql-editor a{ color:var(--accent); text-decoration:none; border-bottom:1px dotted rgba(255,45,45,.5); }
+#ar-body-editor .ql-font-serif{font-family:Georgia,'Times New Roman',serif}
+#ar-body-editor .ql-font-condensed{font-family:'Arial Narrow','Roboto Condensed',Arial,sans-serif;letter-spacing:-.02em}
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="serif"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="serif"]::before{content:'Serif'}
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="condensed"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="condensed"]::before{content:'Condensed'}
 
 /* ---------- プレビューを左右分割にして、押した瞬間に見えるようにする ---------- */
 @media (min-width: 1200px){

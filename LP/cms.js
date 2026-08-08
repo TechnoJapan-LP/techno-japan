@@ -967,7 +967,7 @@ function initArticleEditor(){
   // サイトの3書体だけを許可（デフォルトは DM Sans）。無制限のフォント選択は
   // デザインの一貫性を壊すので、ホワイトリスト方式にしている。
   const TjFont = Quill.import('formats/font');
-  TjFont.whitelist = ['bebas', 'mono'];
+  TjFont.whitelist = ['bebas', 'mono', 'serif', 'condensed'];
   Quill.register(TjFont, true);
 
   // ソフト改行(<br>)を Shift+Enter で入れられるようにする。通常の Enter は段落(<p>)のまま。
@@ -994,7 +994,7 @@ function initArticleEditor(){
       toolbar: {
         container: [
           [{ 'header': [2, 3, false] }],
-          [{ 'font': ['', 'bebas', 'mono'] }],
+          [{ 'font': ['', 'bebas', 'mono', 'serif', 'condensed'] }],
           [{ 'size': ['small', false, 'large', 'huge'] }],
           ['bold', 'italic', 'underline'],
           ['blockquote'],
@@ -2895,7 +2895,7 @@ function validateBeforeSave(section, payload){
   // 7件（"Acid Pauli" 等）が混入し、URL に %20 が出る状態になった。
   // 発行後のIDは変更できない（URLになる）ので、入口で止める。
   // 自動整形はしない。IDはURLとして恒久的に残るため、人が意図を確認して決めるべき。
-  if(payload.id && ['venue','festival','artist'].includes(section)){
+  if(payload.id && ['venue','festival','artist','article'].includes(section)){
     const ID_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;   // fetch-data.mjs と同一
     if(!ID_RE.test(payload.id)){
       const suggest = slugify(payload.name || '');
@@ -5028,7 +5028,10 @@ function submitToSheet(section){
       title_en:g('ar-title_en'),excerpt_en:g('ar-excerpt_en'),body_en:g('ar-body_en'),
       views:g('ar-views'),featured:g('ar-featured'),excerpt:g('ar-excerpt'),
       body:getArticleBodyForSave(),tags:g('ar-tags'),status:g('ar-status')};
-    if(!payload.id||!payload.title)return toast('ID and Title required','error');
+    const missing = [];
+    if(!payload.id) missing.push('ID');
+    if(!payload.title) missing.push('Title');
+    if(missing.length) return toast(missing.join(' / ')+' が未入力です。入力欄を確認してください', 'error');
     if(!payload.date) payload.date = new Date().toISOString().slice(0,10); // DATE空のまま公開すると記事詳細が壊れるため
   }
   else if(section==='author'){
