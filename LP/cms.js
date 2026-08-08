@@ -902,6 +902,12 @@ function previewArticleImageLayout(){
   const y = document.getElementById('ar-image-y')?.value || '50';
   const positionY = position === 'top' ? '0' : (position === 'bottom' ? '100' : y);
   articleSelectedImage.dataset.layout = layout;
+  const host = articleSelectedImage.closest('p');
+  if (host) {
+    host.style.width = ['left','right'].includes(layout) ? '66.6667%' : (layout === 'compact' ? '62%' : '100%');
+    host.style.marginLeft = layout === 'right' ? 'auto' : '0';
+    host.style.marginRight = layout === 'left' ? 'auto' : '0';
+  }
   if (crop === 'none') delete articleSelectedImage.dataset.crop;
   else articleSelectedImage.dataset.crop = crop;
   articleSelectedImage.dataset.position = position;
