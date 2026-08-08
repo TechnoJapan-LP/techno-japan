@@ -763,7 +763,7 @@ function saveArticleDraft(){
       readTime: g('ar-readTime'), views: g('ar-views'),
       featured: document.getElementById('ar-featured')?.value || 'false',
       status: g('ar-status'), excerpt: g('ar-excerpt'),
-      body: g('ar-body'), tags: g('ar-tags'),
+      body: getArticleBodyForSave(), tags: g('ar-tags'),
       editingRow: editState.article ? editState.article._row : null,
       savedAt: Date.now()
     };
