@@ -1198,7 +1198,6 @@ function updateArticlePreview(html, force){
     el.innerHTML = '<div class="ar-prev-empty">本文を書くとここにプレビューが表示されます</div>';
   } else {
     el.innerHTML = resolveEntityLinksPreview(trimmed);
-    renderArticleFxPreview(el);
   }
   const focusContent = document.getElementById('ar-focus-preview-content');
   if (focusContent) focusContent.innerHTML = el.innerHTML;
