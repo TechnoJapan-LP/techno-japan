@@ -1209,6 +1209,10 @@ function renderArticleFxPreview(root){
   const images = Array.from(root.querySelectorAll('img'));
   images.forEach((img, index) => {
     if (img.closest('.preview-fx-img')) return;
+    // 既存記事の旧形式画像は元のHTML構造を保つ。
+    // レイアウト指定がある画像だけ新しいfigure変換を行う。
+    const hasLayoutData = img.dataset.layout || img.dataset.crop || img.dataset.pairId || img.dataset.zoom || img.dataset.x || img.dataset.y;
+    if (!hasLayoutData) { img.loading = 'eager'; return; }
     // スクロール領域内のプレビューでも既存画像を確実に表示する
     img.loading = 'eager';
     const p = img.closest('p');
