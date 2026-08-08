@@ -138,6 +138,14 @@ jobs:
       - name: Check CMS lineup input
         run: node scripts/check_cms_lineup.mjs
 
+      # 記事本文の保存経路とプレビュー開閉の安全性。Visual/HTML/hidden本文の
+      # 同期が空本文を上書きしないこと、本文・画像データが壊れていないことを担保する。
+      - name: Check CMS article state
+        run: python3 scripts/check_cms_article_state.py
+
+      - name: Check article data integrity
+        run: node scripts/check_article_data_integrity.mjs
+
       # GAS の AI ハンドラ（貼り替え用コード）の検査。実体は Apps Script 側に
       # あり普段は見えないので、少なくとも管理下のコードは壊さない（AUDIT §9-54）。
       - name: Check GAS AI handlers
