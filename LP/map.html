@@ -340,7 +340,12 @@ function openCard(club) {
     `<span class="info-card-genre">${g}</span>`
   ).join('');
   document.getElementById('card-desc').textContent = club.description;
-  document.getElementById('card-capacity').textContent = 'CAPACITY \u2014 ' + club.capacity;
+  /* CAPACITY は事実確認が難しく、今後は入力しない方針（2026-08-09）。
+     空のときに「CAPACITY —」だけ残らないよう、要素ごと隠す。 */
+  const capEl = document.getElementById('card-capacity');
+  const cap = String(club.capacity || '').trim();
+  capEl.textContent = cap ? 'CAPACITY \u2014 ' + cap : '';
+  capEl.style.display = cap ? '' : 'none';
   document.getElementById('card-address').textContent = club.address;
   const link = document.getElementById('card-link');
   /* href に入れる前にスキームを見る。textContent と違い href は

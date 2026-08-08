@@ -140,6 +140,10 @@ jobs:
       - name: Check CMS lineup input
         run: node scripts/check_cms_lineup.mjs
 
+      # 施設名ジオコーディングが日本国外の座標を入れないこと（AUDIT §9-59）。
+      - name: Check CMS geocode
+        run: node scripts/check_cms_geocode.mjs
+
       # GAS の AI ハンドラ（貼り替え用コード）の検査。実体は Apps Script 側に
       # あり普段は見えないので、少なくとも管理下のコードは壊さない（AUDIT §9-54）。
       - name: Check GAS AI handlers

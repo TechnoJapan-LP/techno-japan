@@ -1368,7 +1368,6 @@ function venuePage(v, lang = 'ja') {
     ${bilingualBody(v.desc, v.desc_en, lang)}
     <dl class="detail-facts">
       ${v.type ? `<div><dt>${lang === 'en' ? 'TYPE' : 'タイプ'}</dt><dd>${esc(v.type)}</dd></div>` : ''}
-      ${v.capacity ? `<div><dt>${lang === 'en' ? 'CAPACITY' : 'キャパシティ'}</dt><dd>${esc(v.capacity)}</dd></div>` : ''}
       ${v.address ? `<div><dt>${lang === 'en' ? 'ADDRESS' : '住所'}</dt><dd>${esc(v.address)}</dd></div>` : ''}
       ${v.url ? `<div><dt>${lang === 'en' ? 'OFFICIAL SITE' : '公式サイト'}</dt><dd><a href="${esc(safeUrl(v.url))}" target="_blank" rel="noopener">${esc(v.url)}</a></dd></div>` : ''}
     </dl>

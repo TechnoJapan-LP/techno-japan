@@ -1035,13 +1035,26 @@
     const list = activeCity === 'ALL'
       ? allVenues
       : allVenues.filter(v => (v.city || '').toUpperCase() === activeCity);
-    // Prefer venues with images, then by capacity desc
-    const sorted = [...list].sort((a, b) => {
-      const ai = (a.image && a.image.trim()) ? 1 : 0;
-      const bi = (b.image && b.image.trim()) ? 1 : 0;
-      if (ai !== bi) return bi - ai;
-      return (b.capacity || 0) - (a.capacity || 0);
-    }).slice(0, 8);
+    /* 画像がある会場を優先し、その中はランダムに並べる。
+
+       以前はキャパシティの降順だった。しかしキャパは事実確認が難しく
+       今後は入力しない方針になった（2026-08-09）。
+       それ以上に、順序が固定だと**同じ会場しかトップに出ない**。
+       毎回入れ替えることで、まだ知られていない会場に出会う入口にする。
+
+       画像の有無を先に見るのは、画像なしのカードが並ぶと見栄えが落ちるため。
+       ランダムは描画のたびに1回だけで、スクロール中に入れ替わることはない。 */
+    const shuffle = (arr) => {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    };
+    const withImage = shuffle(list.filter(v => v.image && v.image.trim()));
+    const noImage = shuffle(list.filter(v => !(v.image && v.image.trim())));
+    const sorted = withImage.concat(noImage).slice(0, 8);
 
     if (sorted.length === 0) {
       venuesEl.innerHTML = `<div style="grid-column: 1 / -1; padding: 40px 20px; text-align: center; opacity: 0.4; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.15em;">NO VENUES IN THIS AREA YET.</div>`;
@@ -1056,7 +1069,7 @@
         <div class="venue-mini-content">
           <div class="venue-mini-area">${v.area || ''}</div>
           <div class="venue-mini-name">${tjLocalized(v.name, '', v.name_en)}</div>
-          <div class="venue-mini-meta">${v.city || ''}${v.capacity ? ` &middot; CAP ${v.capacity}` : ''}</div>
+          <div class="venue-mini-meta">${v.city || ''}</div>
         </div>
       </a>
     `).join('');

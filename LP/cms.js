@@ -1821,14 +1821,30 @@ function geocode(prefix) {
    施設名だけだと曖昧なので City を添えて精度を上げ、日本語の住所で返す。
    ADDRESS は上書きせず「空のときだけ」自動入力し、既存の手入力を尊重する。 */
 function geocodeFromLocation(prefix) {
-  const primaryLoc = (document.getElementById(prefix+'-location')?.value || '').trim();
+  /* 施設名から住所と座標を引く。
+
+     【会場（v）は Location 欄を持たない】
+     フェスは開催地が回ごとに変わるので LOCATION 列があるが、
+     会場は名前そのものが施設名。そこで v のときは NAME を使う。
+
+     住所からの検索（geocode）は日本語住所だとほぼ当たらない。
+     実測（2026-08-09）:
+       「東京都渋谷区円山町2-16」 → 取得できず
+       「WOMB 渋谷」              → 35.6584, 139.6950
+     会場登録では住所も座標も手入力になっていたので、こちらを使えるようにする。
+     AUDIT §9-59。 */
+  const primaryLoc = prefix === 'v'
+    ? (document.getElementById('v-name')?.value || '').trim()
+    : (document.getElementById(prefix+'-location')?.value || '').trim();
   const jaLoc = prefix === 'f'
     ? (document.getElementById('f-location_ja')?.value || '').trim()
     : '';
   // 日本の施設は日本語名の方が地図サービスで照合しやすい。
   // location_ja が未入力の既存行は、従来どおり LOCATION を使う。
   const loc = jaLoc || primaryLoc;
-  if (!loc) return toast('Location / Location (JA)（施設名）を入力してください','error');
+  if (!loc) return toast(prefix === 'v'
+    ? '会場名（Name）を入力してください'
+    : 'Location / Location (JA)（施設名）を入力してください','error');
   const city = (document.getElementById(prefix+'-city')?.value || '').trim();
   // 施設名 + 市 + 国。まず絞り込みで検索し、ダメなら施設名単体で再試行する。
   const queries = [ [loc, city, 'Japan'].filter(Boolean).join(', '), loc + ', Japan' ];
@@ -1840,11 +1856,29 @@ function geocodeFromLocation(prefix) {
   const nominatim = (q) =>
     fetch('https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=1&accept-language=ja&q='+encodeURIComponent(q))
       .then(r=>r.json()).catch(()=>null);
+  /* 日本国内の座標か確かめてから入れる。
+
+     施設名検索は「それらしい別の場所」を返すことがある。実測（2026-08-09）:
+       「UNIT, 代官山」→ 37.4527, 116.2691  ← 中国内陸部
+     正しくは 35.6471, 139.7023（東京・代官山）。
+     確認せずに入れると、当たったように見えて**まったく違う場所**が入る。
+     地図リンクも詳細ページの座標も狂うが、数字なので目視では気づけない。
+
+     日本の範囲（およそ 北緯20〜46 / 東経122〜154）に入らない結果は捨てる。
+     捨てたことは黙らず伝える。AUDIT §9-59。 */
+  const inJapan = (lat, lon) =>
+    lat >= 20 && lat <= 46 && lon >= 122 && lon <= 154;
+
   const applyHit = (hit) => {
-    latEl.value = parseFloat(hit.lat).toFixed(4);
-    lngEl.value = parseFloat(hit.lon).toFixed(4);
+    const lat = parseFloat(hit.lat), lon = parseFloat(hit.lon);
+    if (!Number.isFinite(lat) || !Number.isFinite(lon) || !inJapan(lat, lon)) {
+      return false;
+    }
+    latEl.value = lat.toFixed(4);
+    lngEl.value = lon.toFixed(4);
     if (!addrEl.value.trim() && hit.display_name) addrEl.value = hit.display_name;
     updateLocationMap(prefix);
+    return true;
   };
 
   (async () => {
@@ -1859,9 +1893,11 @@ function geocodeFromLocation(prefix) {
     for (const q of queries) {
       const d = await politeNominatim(q);
       if (Array.isArray(d) && d[0] && d[0].lat && d[0].lon) {
-        applyHit(d[0]);
-        toast('住所と座標を取得しました — 内容を確認してください','success');
-        return;
+        if (applyHit(d[0])) {
+          toast('住所と座標を取得しました — 内容を確認してください','success');
+          return;
+        }
+        // 日本国外だった。採用せず次の候補へ。
       }
     }
 
@@ -1881,11 +1917,12 @@ function geocodeFromLocation(prefix) {
       for (const q of tryQueries) {
         const d = await politeNominatim(q);
         if (Array.isArray(d) && d[0] && d[0].lat && d[0].lon) {
-          applyHit(d[0]);
-          // AI が返した住所の方が読みやすければ、それで上書き（空のときだけ）
-          if (!addrEl.value.trim() && resolved.address) addrEl.value = resolved.address;
-          toast('AIで照合して座標を取得しました — 内容を確認してください','success');
-          return;
+          if (applyHit(d[0])) {
+            // AI が返した住所の方が読みやすければ、それで上書き（空のときだけ）
+            if (!addrEl.value.trim() && resolved.address) addrEl.value = resolved.address;
+            toast('AIで照合して座標を取得しました — 内容を確認してください','success');
+            return;
+          }
         }
       }
       // Nominatim では最終的に当たらなかったが、AI住所は入れておく（座標は手動 Geocode 可）

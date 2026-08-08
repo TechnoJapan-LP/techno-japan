@@ -101,7 +101,7 @@
     <div class="edit-banner" id="venue-edit-banner"><span>Editing: <strong id="venue-edit-name"></strong></span><button class="btn btn-sm btn-preview" onclick="openPreview('venue')">👁 Preview</button><button class="btn btn-sm btn-yellow" onclick="saveEdit('venue')">Save Changes</button><button class="btn btn-sm" onclick="cancelEdit('venue')">Cancel</button></div>
     <div class="form-grid" id="form-venue">
       <div class="form-group"><label>ID</label><input type="text" id="v-id" placeholder="e.g. club-metro" oninput="autoFillVenueImage()"></div>
-      <div class="form-group"><label>Name</label><input type="text" id="v-name" placeholder="e.g. CLUB METRO"></div>
+      <div class="form-group"><label>Name <span class="label-hint">会場名を入れて「📍 検索」で住所と座標を自動取得</span></label><div class="input-row"><input type="text" id="v-name" placeholder="e.g. CLUB METRO" onkeydown="if(event.key==='Enter'){event.preventDefault();geocodeFromLocation('v')}"><button class="btn btn-blue btn-sm" onclick="geocodeFromLocation('v')">📍 検索</button></div></div>
       <div class="form-group"><label>City</label><input type="text" id="v-city" placeholder="e.g. KYOTO"></div>
       <div class="form-group"><label>Area</label><input type="text" id="v-area" placeholder="e.g. SHIMOGYO"></div>
       <div class="form-group"><label>Type</label><select id="v-type"><option value="club">Club</option><option value="bar">Bar</option><option value="livehouse">Livehouse</option></select></div>
@@ -522,6 +522,6 @@
   </div>
 </div>
 
-<script src="cms.js?v=69" defer></script>
+<script src="cms.js?v=70" defer></script>
 </body>
 </html>
