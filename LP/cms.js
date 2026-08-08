@@ -763,7 +763,7 @@ function saveArticleDraft(){
       readTime: g('ar-readTime'), views: g('ar-views'),
       featured: document.getElementById('ar-featured')?.value || 'false',
       status: g('ar-status'), excerpt: g('ar-excerpt'),
-      body: g('ar-body'), tags: g('ar-tags'),
+      body: getArticleBodyForSave(), tags: g('ar-tags'),
       editingRow: editState.article ? editState.article._row : null,
       savedAt: Date.now()
     };
@@ -805,14 +805,53 @@ function tryRecoverArticleDraft(){
    ============================================================== */
 let articleQuill = null;
 let articleSelectedImage = null;
+let articleLastLoadedBody = '';
+let articleQuillUserEdited = false;
 
 function setArticleImageToolsEnabled(enabled){
-  ['ar-image-layout','ar-image-position','ar-image-layout-apply'].forEach(id => {
+  ['ar-image-layout','ar-image-crop','ar-image-zoom','ar-image-x','ar-image-y','ar-image-pair','ar-image-layout-apply'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.disabled = !enabled;
   });
   const hint = document.getElementById('ar-image-layout-hint');
   if (hint) hint.textContent = enabled ? '選択中の画像' : '本文中の画像をクリックしてレイアウトを設定';
+  const pair = document.getElementById('ar-image-pair');
+  if (pair) pair.textContent = articleSelectedImage?.dataset.pairId ? '2枚セットを解除' : '2枚セット（50:50）';
+}
+
+function pairSelectedArticleImage(){
+  const img = articleSelectedImage;
+  if (!img || !articleQuill) return;
+  const images = Array.from(articleQuill.root.querySelectorAll('img'));
+  const index = images.indexOf(img);
+  const next = index >= 0 ? images[index + 1] : null;
+  if (img.dataset.pairId) {
+    const pairId = img.dataset.pairId;
+    images.filter(item => item.dataset.pairId === pairId).forEach(item => {
+      delete item.dataset.pairId;
+      const host = item.closest('p');
+      if (host) { host.style.removeProperty('width'); host.style.removeProperty('display'); host.style.removeProperty('margin-left'); host.style.removeProperty('margin-right'); }
+    });
+    markFormDirty();
+    scheduleArticleEditorSync('quill');
+    updateArticlePreview(articleQuill.root.innerHTML, true);
+    setArticleImageToolsEnabled(true);
+    toast('2枚セットを解除しました', 'success');
+    return;
+  }
+  if (!next) { toast('隣に画像がないため、2枚セットにできません', 'warning'); return; }
+  const pairId = img.dataset.pairId || next.dataset.pairId || `pair-${Date.now()}`;
+  img.dataset.pairId = pairId;
+  next.dataset.pairId = pairId;
+  [img, next].forEach(item => {
+    const host = item.closest('p');
+    if (host) { host.style.display = 'inline-block'; host.style.verticalAlign = 'top'; host.style.width = 'calc(50% - 8px)'; host.style.marginRight = item === img ? '12px' : '0'; }
+  });
+  setArticleImageToolsEnabled(true);
+  markFormDirty();
+  scheduleArticleEditorSync('quill');
+  updateArticlePreview(articleQuill?.root?.innerHTML || '', true);
+  toast('隣の画像と2枚セットにしました', 'success');
 }
 
 function selectArticleImage(img){
@@ -822,20 +861,63 @@ function selectArticleImage(img){
   if (!img) return;
   img.classList.add('tj-image-selected');
   const layout = document.getElementById('ar-image-layout');
-  const position = document.getElementById('ar-image-position');
+  const crop = document.getElementById('ar-image-crop');
+  const zoom = document.getElementById('ar-image-zoom');
+  const x = document.getElementById('ar-image-x');
+  const y = document.getElementById('ar-image-y');
   if (layout) layout.value = img.dataset.layout || 'contained';
-  if (position) position.value = img.dataset.position || 'center';
+  if (crop) crop.value = img.dataset.crop || 'none';
+  if (zoom) zoom.value = img.dataset.zoom || '1';
+  if (x) x.value = img.dataset.x || '50';
+  if (y) y.value = img.dataset.y || '50';
 }
 
 function applyArticleImageLayout(){
   if (!articleSelectedImage) return;
   const layout = document.getElementById('ar-image-layout')?.value || 'contained';
-  const position = document.getElementById('ar-image-position')?.value || 'center';
+  const crop = document.getElementById('ar-image-crop')?.value || 'none';
+  const zoom = document.getElementById('ar-image-zoom')?.value || '1';
+  const x = document.getElementById('ar-image-x')?.value || '50';
+  const y = document.getElementById('ar-image-y')?.value || '50';
   articleSelectedImage.dataset.layout = layout;
-  articleSelectedImage.dataset.position = position;
+  if (crop === 'none') delete articleSelectedImage.dataset.crop;
+  else articleSelectedImage.dataset.crop = crop;
+  articleSelectedImage.dataset.zoom = zoom;
+  articleSelectedImage.dataset.x = x;
+  articleSelectedImage.dataset.y = y;
+  articleSelectedImage.style.setProperty('--crop-zoom', zoom);
+  articleSelectedImage.style.setProperty('--crop-x', `${x}%`);
+  articleSelectedImage.style.setProperty('--crop-y', `${y}%`);
   markFormDirty();
   scheduleArticleEditorSync('quill');
+  updateArticlePreview(articleQuill?.root?.innerHTML || '', true);
   toast('画像レイアウトを適用しました', 'success');
+}
+
+// 設定を選んだ瞬間に本文内へプレビューする（保存は「画像に適用」で確定）
+function previewArticleImageLayout(){
+  if (!articleSelectedImage) return;
+  const layout = document.getElementById('ar-image-layout')?.value || 'contained';
+  const crop = document.getElementById('ar-image-crop')?.value || 'none';
+  const zoom = document.getElementById('ar-image-zoom')?.value || '1';
+  const x = document.getElementById('ar-image-x')?.value || '50';
+  const y = document.getElementById('ar-image-y')?.value || '50';
+  articleSelectedImage.dataset.layout = layout;
+  const host = articleSelectedImage.closest('p');
+  if (host) {
+    host.style.width = ['left','right'].includes(layout) ? '66.6667%' : (layout === 'compact' ? '62%' : '100%');
+    host.style.marginLeft = layout === 'right' ? 'auto' : '0';
+    host.style.marginRight = layout === 'left' ? 'auto' : '0';
+  }
+  if (crop === 'none') delete articleSelectedImage.dataset.crop;
+  else articleSelectedImage.dataset.crop = crop;
+  articleSelectedImage.dataset.zoom = zoom;
+  articleSelectedImage.dataset.x = x;
+  articleSelectedImage.dataset.y = y;
+  articleSelectedImage.style.setProperty('--crop-zoom', zoom);
+  articleSelectedImage.style.setProperty('--crop-x', `${x}%`);
+  articleSelectedImage.style.setProperty('--crop-y', `${y}%`);
+  updateArticlePreview(articleQuill?.root?.innerHTML || '', true);
 }
 
 // 画像挿入: URL貼付 か ファイルアップロード を選んでもらう
@@ -931,6 +1013,12 @@ function initArticleEditor(){
     selectArticleImage(img && articleQuill.root.contains(img) ? img : null);
   });
   document.getElementById('ar-image-layout-apply')?.addEventListener('click', applyArticleImageLayout);
+  document.getElementById('ar-image-layout')?.addEventListener('change', previewArticleImageLayout);
+  document.getElementById('ar-image-crop')?.addEventListener('change', previewArticleImageLayout);
+  document.getElementById('ar-image-zoom')?.addEventListener('input', previewArticleImageLayout);
+  document.getElementById('ar-image-x')?.addEventListener('input', previewArticleImageLayout);
+  document.getElementById('ar-image-y')?.addEventListener('input', previewArticleImageLayout);
+  document.getElementById('ar-image-pair')?.addEventListener('click', pairSelectedArticleImage);
   // Shift+Enter = ソフト改行(<br>)。既定の Enter(段落)より先に評価させるため unshift。
   const enterBindings = articleQuill.keyboard.bindings[13] || (articleQuill.keyboard.bindings[13] = []);
   enterBindings.unshift({
@@ -950,6 +1038,7 @@ function initArticleEditor(){
   // Visual で編集 → 同期処理は debounce（毎キーストロークでの
   // innerHTML シリアライズ + プレビュー再描画が入力ラグの原因だった）
   articleQuill.on('text-change', (delta, oldDelta, source) => {
+    if (source === 'user') articleQuillUserEdited = true;
     markFormDirty();                 // 軽いフラグだけ即時
     scheduleArticleEditorSync('quill');
     // 「@」または「＠」を打つと、その場でIDリンク挿入メニューを開く（ツールバーまで
@@ -987,6 +1076,9 @@ function runArticleEditorSync(from){
   } else {
     if (!articleQuill) return;
     html = normalizeArticleHtml(articleQuill.root.innerHTML);
+    // Quillの再描画途中で空になることがある。ユーザーが実際に削除していない
+    // 既存本文を空で上書きしない（プレビュー開閉・集中モード切替の安全策）。
+    if (!html.trim() && articleLastLoadedBody.trim() && !articleQuillUserEdited) return;
     document.getElementById('ar-body-source').value = html;
   }
   document.getElementById('ar-body').value = html;
@@ -1002,6 +1094,24 @@ function flushArticleEditorSync(){
     const wrap = document.getElementById('ar-editor-wrap');
     runArticleEditorSync(wrap && wrap.classList.contains('source-mode') ? 'source' : 'quill');
   }
+}
+
+// 記事本文の唯一の読み出し口。表示切替やプレビューからは呼ばず、
+// 保存・コード生成の直前だけ呼ぶ。Visualが一時的に空なら既存本文を守る。
+function getArticleBodyForSave(){
+  const wrap = document.getElementById('ar-editor-wrap');
+  if (wrap?.classList.contains('source-mode')) {
+    const source = normalizeArticleHtml(document.getElementById('ar-body-source')?.value || '');
+    document.getElementById('ar-body').value = source;
+    return source;
+  }
+  const visual = normalizeArticleHtml(articleQuill?.root?.innerHTML || '');
+  if (!visual.trim() && articleLastLoadedBody.trim() && !articleQuillUserEdited) {
+    document.getElementById('ar-body').value = articleLastLoadedBody;
+    return articleLastLoadedBody;
+  }
+  document.getElementById('ar-body').value = visual;
+  return visual;
 }
 
 function setupArticleEditorDropPaste(){
@@ -1082,26 +1192,92 @@ function updateArticlePreview(html, force){
   // プレビューが閉じている間は再描画しない（開いた時に反映）
   const wrap = document.getElementById('ar-editor-wrap');
   if (!force && wrap && !wrap.classList.contains('preview-mode')) return;
-  const trimmed = (html || '').trim();
-  if (trimmed === _lastPreviewHtml) return;  // 変更なしなら DOM を触らない
+  // Visual editorが保持している本文を最優先にする。
+  // 同期用 hidden textarea が古い/空でも、右側プレビューを空にしない。
+  const visualHtml = articleQuill?.root?.innerHTML || '';
+  const fallbackHtml = document.getElementById('ar-body-source')?.value || '';
+  const candidates = [visualHtml, html || '', fallbackHtml].filter(Boolean);
+  // Quillが画像だけの段落を省略する場合があるため、画像を最も多く含むHTMLを採用。
+  // 同数ならVisual側（現在の編集内容）を優先する。
+  const countImages = value => (String(value).match(/<img\b/gi) || []).length;
+  const trimmed = String(candidates.sort((a, b) => countImages(b) - countImages(a))[0] || '').trim();
+  if (!force && trimmed === _lastPreviewHtml) return;  // 強制更新時はレイアウトも再描画
   _lastPreviewHtml = trimmed;
   if (!trimmed || trimmed === '<p><br></p>') {
     el.innerHTML = '<div class="ar-prev-empty">本文を書くとここにプレビューが表示されます</div>';
   } else {
     el.innerHTML = resolveEntityLinksPreview(trimmed);
   }
+  const focusContent = document.getElementById('ar-focus-preview-content');
+  if (focusContent) focusContent.innerHTML = el.innerHTML;
+}
+
+// 本番記事ページと同じ画像レイアウトをCMSプレビューへ反映する
+function renderArticleFxPreview(root){
+  const images = Array.from(root.querySelectorAll('img'));
+  images.forEach((img, index) => {
+    if (img.closest('.preview-fx-img')) return;
+    // 既存記事の旧形式画像は元のHTML構造を保つ。
+    // レイアウト指定がある画像だけ新しいfigure変換を行う。
+    const hasLayoutData = img.dataset.layout || img.dataset.crop || img.dataset.pairId || img.dataset.zoom || img.dataset.x || img.dataset.y;
+    if (!hasLayoutData) { img.loading = 'eager'; return; }
+    const originalSrc = img.getAttribute('src');
+    const originalAlt = img.getAttribute('alt') || '';
+    // スクロール領域内のプレビューでも既存画像を確実に表示する
+    img.loading = 'eager';
+    const p = img.closest('p');
+    const fig = document.createElement('figure');
+    fig.className = 'preview-fx-img ' + ({left:'preview-fx-left', right:'preview-fx-right', full:'preview-fx-full', compact:'preview-fx-compact'}[img.dataset.layout] || '');
+    if (img.dataset.crop && img.dataset.crop !== 'none') fig.dataset.crop = img.dataset.crop;
+    if (img.dataset.pairId) fig.dataset.pairId = img.dataset.pairId;
+    fig.style.setProperty('--crop-x', (img.dataset.x || '50') + '%');
+    fig.style.setProperty('--crop-y', (img.dataset.y || '50') + '%');
+    fig.style.setProperty('--crop-zoom', img.dataset.zoom || '1');
+    img.style.objectPosition = `var(--crop-x) var(--crop-y)`;
+    if (img.dataset.crop && img.dataset.crop !== 'none') img.style.objectFit = 'cover';
+    if (p && p.textContent.trim() === '' && p.querySelectorAll('img').length === 1) p.parentNode.replaceChild(fig, p);
+    else img.parentNode.insertBefore(fig, img);
+    fig.appendChild(img);
+    // DOM再構成後も元画像を確実に保持する（Quill/preview変換でsrcが消えないようにする）
+    if (originalSrc) img.setAttribute('src', originalSrc);
+    img.setAttribute('alt', originalAlt);
+    img.loading = 'eager';
+    img.style.display = 'block';
+    img.style.visibility = 'visible';
+    fig.appendChild(document.createElement('figcaption'));
+  });
+  const pairs = {};
+  root.querySelectorAll('.preview-fx-img[data-pair-id]').forEach(fig => (pairs[fig.dataset.pairId] || (pairs[fig.dataset.pairId] = [])).push(fig));
+  Object.values(pairs).forEach(figs => { if (figs.length !== 2) return; const pair = document.createElement('div'); pair.className = 'preview-image-pair'; figs[0].parentNode.insertBefore(pair, figs[0]); figs.forEach(fig => pair.appendChild(fig)); });
 }
 
 function toggleArticlePreview(){
   const wrap = document.getElementById('ar-editor-wrap');
   const btn = document.getElementById('ar-preview-toggle');
   if (!wrap) return;
+  if (wrap.classList.contains('focus-mode')) {
+    const prev = document.querySelector('.ar-preview');
+    if (!prev) return;
+    const hidden = prev.dataset.focusPreviewHidden === '1';
+  if (hidden) {
+      delete prev.dataset.focusPreviewHidden;
+      prev.style.display = 'block';
+      document.getElementById('ar-focus-preview')?.classList.remove('is-hidden');
+      if (btn) { btn.classList.add('active'); btn.textContent = 'プレビューを表示中'; }
+      updateArticlePreview(articleQuill?.root?.innerHTML || document.getElementById('ar-body').value, true);
+    } else {
+      prev.dataset.focusPreviewHidden = '1';
+      prev.style.display = 'none';
+      document.getElementById('ar-focus-preview')?.classList.add('is-hidden');
+      if (btn) { btn.classList.remove('active'); btn.textContent = 'プレビュー'; }
+    }
+    return;
+  }
   const on = wrap.classList.toggle('preview-mode');
   if (btn) { btn.classList.toggle('active', on); btn.textContent = on ? '✕ プレビューを閉じる' : 'プレビュー'; }
   if (on) {
     // 開いた瞬間に最新HTMLで更新し、画面外で気付かれないようスクロールして見せる
-    flushArticleEditorSync();
-    updateArticlePreview(document.getElementById('ar-body').value, true);
+    updateArticlePreview(articleQuill?.root?.innerHTML || document.getElementById('ar-body').value, true);
     const prev = document.querySelector('.ar-preview');
     if (prev) requestAnimationFrame(() => prev.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
   }
@@ -1436,10 +1612,50 @@ function toggleFocusMode(){
   const wrap = document.getElementById('ar-editor-wrap');
   if (!wrap) return;
   const on = wrap.classList.toggle('focus-mode');
+  // 集中モードと左右分割プレビューは同時に有効にしない。
+  // 同時適用すると、編集欄が幅計算の対象外になり本文が見えなくなる。
+  if (on && wrap.classList.contains('preview-mode')) {
+    // preview-mode は維持する。集中モードでは右側固定表示に切り替える。
+  }
   document.body.classList.toggle('ar-focus-open', on);
   const btn = document.getElementById('ar-focus-toggle');
   if (btn){ btn.textContent = on ? '✕ 閉じる (Esc)' : '⛶ 集中モード'; btn.classList.toggle('active', on); }
-  if (on){ const ed = document.querySelector('#ar-body-editor .ql-editor'); if (ed) ed.focus(); }
+  if (on){
+    wrap.classList.add('preview-mode');
+    const focusPreview = document.querySelector('.ar-preview');
+    if (focusPreview) {
+      delete focusPreview.dataset.focusPreviewHidden;
+      focusPreview.style.display = 'block';
+      focusPreview.style.position = 'fixed';
+      focusPreview.style.top = '16px';
+      focusPreview.style.right = '16px';
+      focusPreview.style.width = '42vw';
+      focusPreview.style.height = 'calc(100vh - 32px)';
+      focusPreview.style.maxHeight = 'none';
+      focusPreview.style.zIndex = '2001';
+      focusPreview.dataset.focusPreview = '1';
+    }
+    const previewBtn = document.getElementById('ar-preview-toggle');
+    if (previewBtn) { previewBtn.classList.add('active'); previewBtn.textContent = 'プレビューを表示中'; }
+    document.getElementById('ar-focus-preview')?.classList.remove('is-hidden');
+    const ed = document.querySelector('#ar-body-editor .ql-editor');
+    // 表示だけが空になった場合は、最後に同期した本文から安全に復元する。
+    const stored = document.getElementById('ar-body')?.value || document.getElementById('ar-body-source')?.value || '';
+    if (ed && !ed.innerHTML.trim() && stored.trim()) setArticleBody(stored);
+    updateArticlePreview(articleQuill?.root?.innerHTML || document.getElementById('ar-body').value, true);
+    if (ed) ed.focus();
+  }
+  else {
+    wrap.classList.remove('preview-mode');
+    const focusPreview = document.querySelector('.ar-preview[data-focus-preview="1"]');
+    if (focusPreview) {
+      focusPreview.removeAttribute('style');
+      delete focusPreview.dataset.focusPreview;
+    }
+    document.getElementById('ar-focus-preview')?.classList.add('is-hidden');
+    const previewBtn = document.getElementById('ar-preview-toggle');
+    if (previewBtn) { previewBtn.classList.remove('active'); previewBtn.textContent = 'プレビュー'; }
+  }
 }
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape'){
@@ -1471,6 +1687,8 @@ function normalizeArticleHtml(html){
 
 function setArticleBody(html){
   const v = html || '';
+  articleLastLoadedBody = v;
+  articleQuillUserEdited = false;
   document.getElementById('ar-body').value = v;
   const src = document.getElementById('ar-body-source');
   if (src) src.value = v;
@@ -3658,7 +3876,7 @@ function saveEdit(section){
       cardRatio:g('ar-cardRatio'),heroRatio:g('ar-heroRatio'),festivalId:g('ar-festivalId'),
       title_en:g('ar-title_en'),excerpt_en:g('ar-excerpt_en'),body_en:g('ar-body_en'),
       views:g('ar-views'),featured:g('ar-featured'),excerpt:g('ar-excerpt'),
-      body:g('ar-body'),tags:g('ar-tags'),status:g('ar-status')});
+      body:getArticleBodyForSave(),tags:g('ar-tags'),status:g('ar-status')});
     if(!payload.date) payload.date = new Date().toISOString().slice(0,10); // DATE空のまま保存すると記事詳細が壊れるため
   }
   else if(section==='author'){
@@ -4742,7 +4960,7 @@ function submitToSheet(section){
       cardRatio:g('ar-cardRatio'),heroRatio:g('ar-heroRatio'),festivalId:g('ar-festivalId'),
       title_en:g('ar-title_en'),excerpt_en:g('ar-excerpt_en'),body_en:g('ar-body_en'),
       views:g('ar-views'),featured:g('ar-featured'),excerpt:g('ar-excerpt'),
-      body:g('ar-body'),tags:g('ar-tags'),status:g('ar-status')};
+      body:getArticleBodyForSave(),tags:g('ar-tags'),status:g('ar-status')};
     if(!payload.id||!payload.title)return toast('ID and Title required','error');
     if(!payload.date) payload.date = new Date().toISOString().slice(0,10); // DATE空のまま公開すると記事詳細が壊れるため
   }
@@ -5808,7 +6026,7 @@ function submitEvent(){
    ============================================================== */
 function submitArticle(){
   const d={
-    id:g('ar-id'),title:g('ar-title'),excerpt:g('ar-excerpt'),body:g('ar-body'),
+    id:g('ar-id'),title:g('ar-title'),excerpt:g('ar-excerpt'),body:getArticleBodyForSave(),
     category:g('ar-category'),date:g('ar-date'),author:g('ar-author'),image:g('ar-image'),
     featured:g('ar-featured'),views:g('ar-views'),readTime:g('ar-readTime'),
     status:g('ar-status'),tags:g('ar-tags')

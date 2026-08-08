@@ -256,7 +256,18 @@ label .req-star{color:var(--accent);margin-left:4px}
 .article-image-layout-tools select{background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:5px 8px;font-size:.72rem}
 .article-image-layout-tools[hidden]{display:none}
 .article-image-layout-tools select:disabled,.article-image-layout-tools button:disabled{opacity:.45;cursor:not-allowed}
+.article-crop-control{display:inline-flex;align-items:center;gap:4px;color:var(--text3);white-space:nowrap}
+.article-crop-control input[type=range]{width:76px;accent-color:var(--accent)}
 .ql-editor img.tj-image-selected{outline:2px solid var(--accent);outline-offset:4px}
+.ql-editor img[data-crop="16:10"]{aspect-ratio:16/10;height:min(60vw,360px);object-fit:cover;border:1px dashed var(--yellow)}
+.ql-editor img[data-crop="4:3"]{aspect-ratio:4/3;height:min(60vw,360px);object-fit:cover;border:1px dashed var(--yellow)}
+.ql-editor img[data-crop="1:1"]{aspect-ratio:1;height:min(60vw,360px);object-fit:cover;border:1px dashed var(--yellow)}
+.ql-editor img[data-position="top"]{object-position:center top}
+.ql-editor img[data-position="bottom"]{object-position:center bottom}
+.ql-editor img[data-position="center"]{object-position:center center}
+.ql-editor img[data-x]{object-position:var(--crop-x,50%) var(--crop-y,50%);transform:scale(var(--crop-zoom,1))}
+.ql-editor p:has(img[data-pair-id]){display:inline-block;vertical-align:top;width:calc(50% - 8px);margin-right:12px}
+.ql-editor p:has(img[data-pair-id]) + p:has(img[data-pair-id]){margin-right:0}
 .ar-editor-tabs{display:flex;gap:4px;margin-bottom:6px}
 .ar-editor-tab{background:transparent;border:1px solid var(--border);color:var(--text3);padding:4px 12px;font-family:var(--font-mono);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:3px}
 .ar-editor-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
@@ -298,6 +309,26 @@ label .req-star{color:var(--accent);margin-left:4px}
 .ar-prev-body strong{color:#f0ede8;font-weight:500}
 .ar-prev-body blockquote{border-left:2px solid var(--accent);padding:8px 0 8px 24px;margin:32px 0;font-style:italic;opacity:.85}
 .ar-prev-body img{max-width:100%;height:auto;display:block;margin:32px auto;border-radius:4px}
+/* プレビューは元のHTML構造を変えず、属性に対するCSSだけで表示を合わせる */
+.ar-prev-body p:has(img[data-layout="left"]){width:66.6667%;margin-right:auto}
+.ar-prev-body p:has(img[data-layout="right"]){width:66.6667%;margin-left:auto}
+.ar-prev-body p:has(img[data-layout="full"]){width:100%}
+.ar-prev-body p:has(img[data-crop="16:10"]){aspect-ratio:16/10;overflow:hidden}
+.ar-prev-body p:has(img[data-crop="4:3"]){aspect-ratio:4/3;overflow:hidden}
+.ar-prev-body p:has(img[data-crop="1:1"]){aspect-ratio:1;overflow:hidden}
+.ar-prev-body p:has(img[data-crop]) img{width:100%;height:100%;object-fit:cover;object-position:var(--crop-x,50%) var(--crop-y,50%);transform:scale(var(--crop-zoom,1))}
+.ar-prev-body p:has(img[data-pair-id]){display:inline-block;vertical-align:top;width:calc(50% - 8px);margin-right:12px}
+.ar-prev-body p:has(img[data-pair-id]) + p:has(img[data-pair-id]){margin-right:0}
+@media(max-width:600px){.ar-prev-body p:has(img[data-pair-id]){display:block;width:100%;margin-right:0}}
+.ar-prev-body .preview-fx-img{margin:32px 0;overflow:hidden}
+.ar-prev-body .preview-fx-img img{width:100%;margin:0;transform:scale(var(--crop-zoom,1));}
+.ar-prev-body .preview-fx-img[data-crop="16:10"]{aspect-ratio:16/10}
+.ar-prev-body .preview-fx-img[data-crop="4:3"]{aspect-ratio:4/3}
+.ar-prev-body .preview-fx-img[data-crop="1:1"]{aspect-ratio:1}
+.ar-prev-body .preview-fx-img[data-crop] img{height:100%;object-fit:cover}
+.ar-prev-body .preview-fx-left{width:66.6667%;margin-right:auto}.ar-prev-body .preview-fx-right{width:66.6667%;margin-left:auto}.ar-prev-body .preview-fx-full{width:100%}
+.ar-prev-body .preview-image-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:32px 0}.ar-prev-body .preview-image-pair .preview-fx-img{width:auto;margin:0}
+@media(max-width:600px){.ar-prev-body .preview-image-pair{grid-template-columns:1fr}}
 .ar-prev-body em{font-style:italic}
 .ar-prev-empty{color:#5a5550;font-family:var(--font-mono);font-size:.75rem;letter-spacing:.1em}
 .ar-word-count{font-family:var(--font-mono);font-size:.65rem;color:var(--text3);letter-spacing:.1em;margin-top:6px;text-align:right}
@@ -313,6 +344,26 @@ label .req-star{color:var(--accent);margin-left:4px}
 .ar-editor-wrap.focus-mode #ar-body-source{max-width:820px;margin:0 auto;width:100%;flex:1;min-height:70vh}
 .ar-editor-wrap.focus-mode .ar-word-count{position:fixed;bottom:12px;right:20px;background:var(--bg2);padding:5px 12px;border-radius:4px;border:1px solid var(--border);margin:0}
 body.ar-focus-open{overflow:hidden}
+/* 集中モードでも右側に本番相当のプレビューを固定表示する */
+body.ar-focus-open .ar-preview{
+  display:block !important;
+  position:fixed !important;
+  top:16px;
+  right:16px;
+  width:42vw;
+  height:calc(100vh - 32px);
+  max-height:none !important;
+  margin:0 !important;
+  z-index:2001;
+  overflow-y:auto;
+}
+body.ar-focus-open .ar-editor-wrap.focus-mode{right:44vw;inset-right:auto;width:52vw}
+body.ar-focus-open .ar-editor-wrap.focus-mode .ar-editor-tabs,
+body.ar-focus-open .ar-editor-wrap.focus-mode #ar-body-editor,
+body.ar-focus-open .ar-editor-wrap.focus-mode #ar-body-source{max-width:none}
+#ar-focus-preview{display:none}
+body.ar-focus-open #ar-focus-preview{display:block;position:fixed;top:16px;right:16px;width:42vw;height:calc(100vh - 32px);padding:32px;background:#0e0e0e;border:1px solid var(--border);border-radius:var(--radius);z-index:3000;overflow-y:auto}
+body.ar-focus-open #ar-focus-preview.is-hidden{display:none}
 
 /* Quill はツールバーを #ar-body-editor の「兄弟」として挿入するため、
    #ar-body-editor .ql-toolbar 系の既存ルールは当たらない。兄弟セレクタで再定義。 */

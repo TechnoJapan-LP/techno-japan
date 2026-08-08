@@ -67,6 +67,14 @@
       var compact = !requested && figIndex % 4 === 0 ? ' fx-compact' : '';
       fig.className = 'fx-img ' + rhythm + compact;
       if (img.dataset.position) fig.dataset.position = img.dataset.position;
+      if (img.dataset.crop && /^(16:10|4:3|1:1)$/.test(img.dataset.crop)) fig.dataset.crop = img.dataset.crop;
+      if (img.dataset.zoom) fig.dataset.zoom = img.dataset.zoom;
+      if (img.dataset.x) fig.dataset.x = img.dataset.x;
+      if (img.dataset.y) fig.dataset.y = img.dataset.y;
+      if (img.dataset.pairId) fig.dataset.pairId = img.dataset.pairId;
+      if (img.dataset.zoom) fig.style.setProperty('--crop-zoom', img.dataset.zoom);
+      if (img.dataset.x) fig.style.setProperty('--crop-x', img.dataset.x + '%');
+      if (img.dataset.y) fig.style.setProperty('--crop-y', img.dataset.y + '%');
       var frame = document.createElement('div');
       frame.className = 'fx-frame';
       var grid = document.createElement('div');
@@ -91,6 +99,21 @@
         else if (img.naturalHeight > img.naturalWidth * 1.15) fig.classList.add('fx-portrait');
       };
       if (img.complete && img.naturalWidth) classify(); else img.addEventListener('load', classify, { once:true });
+    });
+
+    // 同じ pair-id の連続画像を左右50:50の1セットにまとめる
+    var pairGroups = {};
+    Array.from(body.querySelectorAll('figure.fx-img[data-pair-id]')).forEach(function(fig){
+      var id = fig.dataset.pairId;
+      (pairGroups[id] || (pairGroups[id] = [])).push(fig);
+    });
+    Object.keys(pairGroups).forEach(function(id){
+      var figs = pairGroups[id];
+      if (figs.length !== 2) return;
+      var pair = document.createElement('div');
+      pair.className = 'fx-image-pair';
+      figs[0].parentNode.insertBefore(pair, figs[0]);
+      figs.forEach(function(fig){ pair.appendChild(fig); });
     });
 
     /* ---------- 3. リビール対象の指定 ---------- */

@@ -30,7 +30,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/vendor/leaflet-1.9.4/leaflet.css?v=2">
 <script src="/vendor/leaflet-1.9.4/leaflet.js?v=2"></script>
-<link rel="stylesheet" href="cms.css?v=20">
+<link rel="stylesheet" href="cms.css?v=22">
 <link rel="stylesheet" href="/vendor/quill-1.3.7/quill.snow.css?v=1">
 <script src="/vendor/quill-1.3.7/quill.min.js?v=2"></script>
 </head>
@@ -437,19 +437,24 @@
         <div class="article-image-layout-tools" id="ar-image-layout-tools">
           <span class="label-hint" id="ar-image-layout-hint">本文中の画像をクリックしてレイアウトを設定</span>
           <select id="ar-image-layout" aria-label="画像のレイアウト" disabled>
-            <option value="contained">中央・標準</option><option value="left">左寄せ</option>
-            <option value="right">右寄せ</option><option value="full">全幅</option><option value="compact">小さめ</option>
+            <option value="contained">中央・標準</option><option value="left">左寄せ（2/3）</option>
+            <option value="right">右寄せ（2/3）</option><option value="full">全幅</option><option value="compact">小さめ</option>
           </select>
-          <select id="ar-image-position" aria-label="画像の位置" disabled>
-            <option value="center">位置：中央</option><option value="top">位置：上</option><option value="bottom">位置：下</option>
+          <select id="ar-image-crop" aria-label="画像のトリミング比率" disabled>
+            <option value="none">トリミングなし</option><option value="16:10">トリミング 16:10</option>
+            <option value="4:3">トリミング 4:3</option><option value="1:1">トリミング 1:1</option>
           </select>
+          <label class="article-crop-control">拡大 <input id="ar-image-zoom" type="range" min="1" max="2" step="0.05" value="1" disabled></label>
+          <label class="article-crop-control">左右 <input id="ar-image-x" type="range" min="0" max="100" step="1" value="50" disabled></label>
+          <label class="article-crop-control">上下 <input id="ar-image-y" type="range" min="0" max="100" step="1" value="50" disabled></label>
+          <button type="button" class="btn btn-sm" id="ar-image-pair" disabled>2枚セット（50:50）</button>
           <button type="button" class="btn btn-sm" id="ar-image-layout-apply" disabled>画像に適用</button>
         </div>
           <textarea id="ar-body-source" placeholder="<p>HTMLを直接編集できます</p>"></textarea>
           <div class="ar-word-count" id="ar-word-count">— 0 chars · 0 min read</div>
         </div>
         <div class="ar-preview">
-          <div class="ar-preview-header">プレビュー（LP記事ページの見た目）</div>
+          <div class="ar-preview-header">本文プレビュー（画像レイアウトは保存後の生成ページで確認）</div>
           <div class="ar-prev-body" id="ar-preview-content"><div class="ar-prev-empty">本文を書くとここにプレビューが表示されます</div></div>
         </div>
         <textarea id="ar-body" style="display:none"></textarea>
@@ -463,6 +468,12 @@
     <div class="output-panel" id="output-article"><div class="output-header"><span>data.js output</span><button class="btn btn-sm" onclick="copyOutput('article')">Copy</button></div><div class="output-code" id="code-article"></div></div>
   </div>
 </div>
+
+<!-- 集中モード専用プレビュー（編集欄のレイアウトから分離） -->
+<aside id="ar-focus-preview" aria-label="本番表示プレビュー">
+  <div class="ar-preview-header">本文プレビュー（画像レイアウトは保存後の生成ページで確認）</div>
+  <div class="ar-prev-body" id="ar-focus-preview-content"></div>
+</aside>
 
 <!-- ==================== AUTHOR ==================== -->
 <div id="sec-author" class="section">
@@ -510,6 +521,6 @@
   </div>
 </div>
 
-<script src="cms.js?v=62" defer></script>
+<script src="cms.js?v=65" defer></script>
 </body>
 </html>

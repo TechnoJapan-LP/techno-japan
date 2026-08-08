@@ -27,9 +27,21 @@ body { overflow-x: clip; }
 figure.fx-img { margin: 56px 0; }
 figure.fx-img .fx-frame { overflow: hidden; background: rgba(240,237,232,0.04); position: relative; }
 figure.fx-img img { display: block; width: 100%; height: auto; margin: 0; border-radius: 0; will-change: transform; transform: scale(1.11); }
+figure.fx-img[data-crop="16:10"] .fx-frame { aspect-ratio: 16 / 10; }
+figure.fx-img[data-crop="4:3"] .fx-frame { aspect-ratio: 4 / 3; }
+figure.fx-img[data-crop="1:1"] .fx-frame { aspect-ratio: 1 / 1; }
+figure.fx-img[data-crop] img { height: 100%; object-fit: cover; }
+figure.fx-img[data-position="top"] img { object-position: center top; }
+figure.fx-img[data-position="bottom"] img { object-position: center bottom; }
+figure.fx-img[data-position="center"] img { object-position: center center; }
+figure.fx-img[data-x] img { object-position: var(--crop-x, 50%) var(--crop-y, 50%); }
+figure.fx-img[data-y] img { object-position: var(--crop-x, 50%) var(--crop-y, 50%); }
+figure.fx-img[data-zoom] img { transform: scale(var(--crop-zoom, 1.11)); }
 figure.fx-img .fx-fig { display: flex; align-items: center; gap: 10px; margin-top: 10px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; color: var(--text3, rgba(240,237,232,0.45)); }
 figure.fx-img .fx-fig::after { content: ''; flex: 1; height: 1px; background: rgba(240,237,232,0.14); }
 figure.fx-img .fx-fig::before { content: ''; width: 6px; height: 6px; background: var(--accent); }
+.fx-image-pair { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin:56px 0; }
+.fx-image-pair figure.fx-img { width:auto!important; margin:0!important; }
 
 /* ワイプ: 下から上へ機械的に開く */
 figure.fx-img.fx-reveal { opacity: 1; transform: none; }
@@ -43,10 +55,13 @@ figure.fx-img.fx-reveal.fx-on .fx-fig { opacity: 1; }
   figure.fx-img.fx-full { width: min(100vw, 1200px); margin-left: calc(50% - min(50vw, 600px)); }
   figure.fx-img.fx-full .fx-fig { padding: 0 max(24px, calc(min(50vw, 600px) - 50% - 0px)); }
   /* Editorial rail: 本文は細い中央カラム、画像だけ左右へ逃がす */
-  figure.fx-img.fx-right { width: 74%; margin-left: 26%; margin-right: -8vw; }
-  figure.fx-img.fx-left  { width: 74%; margin-left: -8vw; margin-right: 26%; }
+  figure.fx-img.fx-right { width: 66.6667%; margin-left: 33.3333%; margin-right: -8vw; }
+  figure.fx-img.fx-left  { width: 66.6667%; margin-left: -8vw; margin-right: 33.3333%; }
   figure.fx-img.fx-compact.fx-right { width: 62%; margin-left: 38%; }
   figure.fx-img.fx-compact.fx-left  { width: 62%; margin-left: 0; margin-right: 38%; }
+}
+@media (max-width: 899px) {
+  .fx-image-pair { grid-template-columns:1fr; gap:28px; }
 }
 
 /* 横長画像（w/h >= 1.4）: カラムを突き破りビューポート端から端まで。
