@@ -796,6 +796,31 @@ function tryRecoverArticleDraft(){
    ARTICLE BODY — RICH TEXT EDITOR (Quill)
    ============================================================== */
 let articleQuill = null;
+let articleSelectedImage = null;
+
+function selectArticleImage(img){
+  if (articleSelectedImage) articleSelectedImage.classList.remove('tj-image-selected');
+  articleSelectedImage = img;
+  if (!img) return;
+  img.classList.add('tj-image-selected');
+  const tools = document.getElementById('ar-image-layout-tools');
+  if (tools) tools.hidden = false;
+  const layout = document.getElementById('ar-image-layout');
+  const position = document.getElementById('ar-image-position');
+  if (layout) layout.value = img.dataset.layout || 'contained';
+  if (position) position.value = img.dataset.position || 'center';
+}
+
+function applyArticleImageLayout(){
+  if (!articleSelectedImage) return;
+  const layout = document.getElementById('ar-image-layout')?.value || 'contained';
+  const position = document.getElementById('ar-image-position')?.value || 'center';
+  articleSelectedImage.dataset.layout = layout;
+  articleSelectedImage.dataset.position = position;
+  markFormDirty();
+  scheduleArticleEditorSync('quill');
+  toast('画像レイアウトを適用しました', 'success');
+}
 
 // 画像挿入: URL貼付 か ファイルアップロード を選んでもらう
 function articleImageHandler(){
@@ -885,6 +910,11 @@ function initArticleEditor(){
       }
     }
   });
+  articleQuill.root.addEventListener('click', (event) => {
+    const img = event.target.closest('img');
+    selectArticleImage(img && articleQuill.root.contains(img) ? img : null);
+  });
+  document.getElementById('ar-image-layout-apply')?.addEventListener('click', applyArticleImageLayout);
   // Shift+Enter = ソフト改行(<br>)。既定の Enter(段落)より先に評価させるため unshift。
   const enterBindings = articleQuill.keyboard.bindings[13] || (articleQuill.keyboard.bindings[13] = []);
   enterBindings.unshift({
