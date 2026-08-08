@@ -893,11 +893,13 @@ function applyArticleImageLayout(){
 // 設定を選んだ瞬間に本文内へプレビューする（保存は「画像に適用」で確定）
 function previewArticleImageLayout(){
   if (!articleSelectedImage) return;
+  const layout = document.getElementById('ar-image-layout')?.value || 'contained';
   const crop = document.getElementById('ar-image-crop')?.value || 'none';
   const position = document.getElementById('ar-image-position')?.value || 'center';
   const zoom = document.getElementById('ar-image-zoom')?.value || '1';
   const x = document.getElementById('ar-image-x')?.value || '50';
   const y = document.getElementById('ar-image-y')?.value || '50';
+  articleSelectedImage.dataset.layout = layout;
   if (crop === 'none') delete articleSelectedImage.dataset.crop;
   else articleSelectedImage.dataset.crop = crop;
   articleSelectedImage.dataset.position = position;
