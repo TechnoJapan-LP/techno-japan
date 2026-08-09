@@ -1323,6 +1323,20 @@ function artistPage(a, artistsById, lang = 'ja') {
   return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'artists'] : ['artists']), `${a.id}.html`), html: page({ title, desc, canonical, image, ogType: 'profile', jsonLd: [jsonLd, breadcrumbLd('ARTISTS', '/artists.html', name, canonical)], body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT + ARTIST_HUB_BACK_SCRIPT }) };
 }
 
+/* Instagram の URL から表示用の @ハンドルを取り出す。
+
+   会場詳細に Instagram を出す（2026-08-09）。22件すべてに入力があるのに
+   詳細ページのどこにも出ていなかった（一覧では使われていた。AUDIT §9-60）。
+   クラブは公式サイトを持たない・更新が止まっている例が多く、
+   Instagram が実質の一次情報になっている。
+
+   URL をそのまま出すと長いので @womb_tokyo の形にする。
+   取り出せない形の URL は、そのまま出して壊さない。 */
+function instagramHandle(url) {
+  const m = String(url || '').match(/instagram\.com\/([^/?#]+)/i);
+  return m && m[1] ? '@' + m[1] : String(url || '');
+}
+
 /* ---------- ヴェニューページ ---------- */
 function venuePage(v, lang = 'ja') {
   const prefix = lang === 'en' ? '/en' : '';
@@ -1349,7 +1363,12 @@ function venuePage(v, lang = 'ja') {
     description: desc,
     ...(v.image ? { image: [image] } : {}),
     url: canonical,
-    ...(v.url ? { sameAs: v.url } : {}),
+    /* sameAs は「同じ主体を指す別のURL」。公式サイトと Instagram の両方を
+       並べると、検索エンジンが同一の店だと判断しやすくなる。 */
+    ...((() => {
+      const same = [v.url, v.instagram].map((u) => String(u || '').trim()).filter(Boolean);
+      return same.length ? { sameAs: same.length === 1 ? same[0] : same } : {};
+    })()),
     address: { '@type': 'PostalAddress', addressLocality: v.city || '', addressCountry: 'JP', ...(v.address ? { streetAddress: v.address } : {}) },
     ...(v.lat && v.lng ? { geo: { '@type': 'GeoCoordinates', latitude: v.lat, longitude: v.lng } } : {}),
     ...(v.capacity ? { maximumAttendeeCapacity: v.capacity } : {}),
@@ -1370,6 +1389,7 @@ function venuePage(v, lang = 'ja') {
       ${v.type ? `<div><dt>${lang === 'en' ? 'TYPE' : 'タイプ'}</dt><dd>${esc(v.type)}</dd></div>` : ''}
       ${v.address ? `<div><dt>${lang === 'en' ? 'ADDRESS' : '住所'}</dt><dd>${esc(v.address)}</dd></div>` : ''}
       ${v.url ? `<div><dt>${lang === 'en' ? 'OFFICIAL SITE' : '公式サイト'}</dt><dd><a href="${esc(safeUrl(v.url))}" target="_blank" rel="noopener">${esc(v.url)}</a></dd></div>` : ''}
+      ${v.instagram ? `<div><dt>Instagram</dt><dd><a href="${esc(safeUrl(v.instagram))}" target="_blank" rel="noopener">${esc(instagramHandle(v.instagram))}</a></dd></div>` : ''}
     </dl>
     ${(() => { // 回遊: 同じ街の他のヴェニュー
       const others = XLINK.venues.filter((x) => x.id !== v.id && x.city && v.city && String(x.city).toLowerCase() === String(v.city).toLowerCase()).slice(0, 6);
