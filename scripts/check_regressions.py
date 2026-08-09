@@ -380,6 +380,36 @@ def measure():
     m["article_static_links_missing_pages"] = len(missing_article_links)
     m["_article_static_links_missing_list"] = missing_article_links
 
+    # JA と EN の静的リンク一覧が同じ件数か。
+    #
+    # 生成は同じデータから両方を作るので、**ずれたら生成物のどちらかが古い。**
+    # 2026-08-09、generate-meta.yml のコミット対象が
+    # 「LP/articles LP/festivals LP/artists LP/venues LP/en」で、
+    # LP/festivals は**フォルダ**のため LP/festivals.html に当たらず、
+    # EN は LP/en でフォルダごと入るため **EN だけ更新されていた。**
+    # 新着記事が JA の news.html の一覧から漏れ、JS を実行しないクローラーには
+    # 見えていなかった（§9-64）。
+    #
+    # 件数で見る。中身は言語で違うが、件数は必ず一致する。
+    static_link_gaps = []
+    for name in hub_names:
+        ja_f, en_f = LP / name, LP / "en" / name
+        if not (ja_f.exists() and en_f.exists()):
+            continue
+        def counts(f):
+            return {
+                b: len(re.findall(r'href="/', block))
+                for b, block in STATIC_LINKS_RE.findall(read(f))
+            }
+        cj, ce = counts(ja_f), counts(en_f)
+        for block in sorted(set(cj) | set(ce)):
+            if cj.get(block, 0) != ce.get(block, 0):
+                static_link_gaps.append(
+                    f"{name} {block}: JA={cj.get(block, 0)} EN={ce.get(block, 0)}"
+                )
+    m["hub_static_link_ja_en_gaps"] = len(static_link_gaps)
+    m["_hub_static_link_ja_en_gap_list"] = static_link_gaps
+
     missing_sitemap_articles = []
     sitemap = LP / "sitemap.xml"
     if sitemap.exists():

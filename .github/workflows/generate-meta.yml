@@ -68,7 +68,18 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -A LP/sitemap.xml LP/rss.xml LP/articles LP/festivals LP/artists LP/venues LP/en
+          # LP/ 配下をまとめて拾う。deploy-pages.yml / publish-pipeline.yml と同じ。
+          #
+          # かつて「LP/articles LP/festivals LP/artists LP/venues LP/en」と
+          # 列挙していたが、LP/festivals は**フォルダ**なので LP/festivals.html
+          # には当たらない。一方 EN は LP/en でフォルダごと入るため、
+          # **EN のハブだけ更新され、JA のハブが取り残されていた。**
+          # 実際に LOA の記事が JA の news.html の静的リンク一覧から漏れ、
+          # JS を実行しないクローラーには新着記事が見えていなかった（§9-64）。
+          #
+          # 列挙は「生成物が増えたときに足し忘れる」形。足し忘れても誰も気づかない。
+          # 列挙をやめる。
+          git add -A LP/
           if git diff --cached --quiet; then
             echo "No changes"
           else

@@ -4587,3 +4587,58 @@ headless Chrome で cms.html を開き、ツールバーと STATUS / AUTHOR / PU
 
 検査のために LP のファイルは変更していない。配信時に `checkAuth` だけを
 素通しさせ、GAS への通信も握って外へ出さない（§9-44 と同じ方式）。
+
+### 9-64. EN のハブだけ更新され、JA が取り残されていた（2026-08-09）
+
+LOA の記事を Publish した後、**JA の `news.html` の静的リンク一覧に
+新着記事が入っていなかった。EN には入っていた。**
+
+```
+コミット済み(HEAD)の静的リンク件数
+  news         JA=2  EN=3   ← ずれている
+  festivals    JA=96 EN=96
+  artists      JA=96 EN=96
+  venues       JA=22 EN=22
+```
+
+原因は `generate-meta.yml` のコミット対象。
+
+```yaml
+git add -A LP/sitemap.xml LP/rss.xml LP/articles LP/festivals LP/artists LP/venues LP/en
+```
+
+`LP/festivals` は**フォルダ**なので、`LP/festivals.html` には当たらない。
+JA 側は詳細ページのフォルダだけが対象で、**ハブの HTML が1枚も入っていない。**
+一方 EN は `LP/en` でフォルダごと入るため、`LP/en/news.html` は更新される。
+
+実際、Publish 後の再生成コミット `a52c830c` は
+`LP/en/news.html` を含み、`LP/news.html` を含んでいなかった。
+
+#### 何が起きていたか
+
+静的リンク一覧（`<!-- STATIC_LINKS:ARTICLES -->`）は、**JS を実行しない
+クローラーが見る唯一の記事一覧**。ここに載らない記事は、JA のニュースハブから
+辿れない。EN からは辿れるので、**日本語側だけ新着が見えない**状態だった。
+
+`image-dimensions.js` の `?v` も同じ理由で JA 側だけ古いまま止まっていた
+（v=20 のまま、実体は更新済み）。
+
+#### 直し方
+
+列挙をやめて `git add -A LP/` にした。deploy-pages.yml と
+publish-pipeline.yml は元からこの形で、**generate-meta.yml だけが違っていた。**
+
+列挙は「生成物が増えたときに足し忘れる」形で、しかも**足し忘れても
+エラーが出ない。**片方だけ更新され、気づけないまま公開される。
+同じ内容を2箇所に持つと必ず片方が古くなる、という AGENTS.md の警告が
+**生成物のコミット対象にも当てはまる。**
+
+#### 恒久チェック
+
+`check_regressions.py` に `hub_static_link_ja_en_gaps` を追加した。
+JA と EN のハブで、静的リンク一覧の**件数**を比べる。
+同じデータから生成するので、ずれたらどちらかが古い。
+中身は言語で違うため、件数だけを見る。
+
+ネガティブコントロールとして、取り残されていた実際の `LP/news.html` に
+戻すと `1 > max 0` で落ちることを確認済み。

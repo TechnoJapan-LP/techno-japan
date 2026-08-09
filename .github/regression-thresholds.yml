@@ -338,6 +338,18 @@ metrics:
       記事を draft にすると詳細ページとハブ静的リンクから除外される。
       JA/EN 両ニュースハブのリンク先が実在する公開HTMLであることを検査する。
 
+  hub_static_link_ja_en_gaps:
+    description: ハブの静的リンク一覧で JA と EN の件数がずれているブロック数
+    min: 0
+    max: 0
+    target: 0
+    note: >-
+      JA と EN は同じデータから生成するので、件数がずれたらどちらかの生成物が
+      古い。generate-meta.yml が LP/festivals（フォルダ）だけをコミット対象に
+      していたため、LP/festivals.html など JA のハブが取り残され、新着記事が
+      JA の news.html の一覧から漏れていた（§9-64）。中身は言語で違うため
+      件数だけを見る。
+
   article_sitemap_missing_pages:
     description: sitemap に載った記事URLのうち公開ページへ到達できない件数
     min: 0
