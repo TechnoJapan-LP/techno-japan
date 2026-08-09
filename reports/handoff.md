@@ -1046,3 +1046,44 @@ FESTIVALS等の必須データのPublish自体は止めないようにした。
 - 手動で詰まりを外したいときは
   `gh workflow run unstick-queue.yml -f stuck_minutes=5` のように
   閾値を短くして実行できる。`-f dry_run=true` で対象だけ確認できる。
+
+## 2026-08-09 / Claude / Publish 失敗の原因特定と、押す前に止める関門
+
+### 実施
+- Publish Now の失敗原因を特定: **EDITIONS の `synapse-festival-2026` が
+  92行目と107行目で重複。**§9-58 の掃除の消し漏れで、8/8 17:02 以降
+  丸1日、同じ理由で失敗し続けていた。**データ側の問題でコード変更では直らない。**
+- `publishNow` が EDITIONS を取得するようにし、`publishSanityCheck` に
+  EDITION_ID の重複検査を追加。押す前に行番号まで出して止める。
+- `scripts/check_cms_publish_guard.mjs`（9件）を追加し、CI 2本に組み込み。
+
+### コミット
+- `1218a7e2` fix(cms): 必ず失敗する状態で Publish を押せてしまう問題を直す
+
+### 検証
+- `check_cms_publish_guard.mjs`: 9件すべて通過。実際に起きた重複
+  （92行目と107行目）を再現した事例を含む。
+- ネガティブコントロール: 重複判定を `>1` → `>2` に変えると落ちることを確認。
+- `node --check LP/cms.js` / `check_asset_versions.py`（cms.js ?v=73）通過。
+- **実ブラウザでの Publish Now は未実施**（重複を消すまで必ず失敗するため、
+  データ修正後にユーザー環境で確認が必要）。
+
+### 変更したパターン
+- 必ず失敗すると分かっている状態で、CMS が Publish を押せてしまうパターン。
+- 「重複がある」とだけ伝えて、どの行かを出さないパターン
+  （消す対象を人が探すことになり、§9-58 の消し漏れの一因）。
+
+### 未確認の類似パターン
+- 他シートの ID 重複（FESTIVALS / ARTISTS / VENUES / ARTICLES）:
+  **未確認。**`fetch-data.mjs` は検証しているが、CMS 側の事前検査は
+  今回 EDITIONS のみ追加した。同じ事故が起きうる。
+- `publishSanityCheck` が見ていない `fetch-data.mjs` のエラー種別:
+  **未確認。**今回のように「CI でしか分からないエラー」が他にもある可能性。
+  `validation-report.txt` のエラー一覧と突き合わせるのが次の一手。
+
+### 次の担当への注意・判断待ち
+- **ユーザー作業が必要: EDITIONS の92行目を削除する。**
+  92行目は LOCATION・ADDRESS・LAT すべて空で、`STATUS=published` は
+  開催回には存在しない値（`announced`/`on-sale`/`soldout`/`finished`/`cancelled`）。
+  107行目が会場・住所・座標を持つ正しい行。削除後に Publish Now で通る。
+- 削除しても festivalId が data.js に入らない場合は、記事側の保存を先に確認する。
