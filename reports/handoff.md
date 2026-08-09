@@ -1087,3 +1087,56 @@ FESTIVALS等の必須データのPublish自体は止めないようにした。
   開催回には存在しない値（`announced`/`on-sale`/`soldout`/`finished`/`cancelled`）。
   107行目が会場・住所・座標を持つ正しい行。削除後に Publish Now で通る。
 - 削除しても festivalId が data.js に入らない場合は、記事側の保存を先に確認する。
+
+## 2026-08-09 / Claude / 取得経路の違いで列が落ちていた件
+
+### 実施
+- 記事の関連フェスが編集画面には出るのに公開に乗らず、Publish が
+  **空コミット**（変更0件）を作っていた原因を特定。
+  取得経路が2つあり、返す列が違っていた。
+    編集・一覧  `get_sheet`（1枚ずつ）    → 新しい列が出る
+    Publish     `get_all_sheets`（一括）  → 新しい列が落ちる
+  落ちていたのは `festivalId` / `cardRatio` / `heroRatio` / `views` の4列で、
+  すべて 2026-08-09 に追加した列。`title_en` 等は両方に出ていた。
+- `fetchAllSheets` に `perSheet` option を追加し、Publish と Export を
+  `{fresh:true,perSheet:true}` に変更。一括経路は一覧の初回読み込みで
+  使うため残した。
+- `scripts/check_cms_fetch_path.mjs`（6件）を追加し、CI 2本に組み込み。
+
+### コミット
+- `e32629b8` fix(cms): Publish が列を落とす経路でデータを取っていた問題を直す
+
+### 検証
+- `check_cms_fetch_path.mjs`: 6件通過。一括経路が列を落とす状況を再現し、
+  perSheet では一括を呼ばないこと・新しい列が残ること・perSheet 無しでは
+  従来どおり一括で取ること（既存動作を壊さない）を確認。
+- ネガティブコントロール: `perSheet:true` を外すと落ちることを確認。
+- CMS ガード一式（fetch_path / publish_guard / editions / authors / lineup /
+  ai_body）すべて通過。`node --check LP/cms.js` 通過。
+- 本番反映を実測: `cms.js?v=74` を確認（23:37）。
+- **実ブラウザでの Publish Now は未実施。**修正が効いたかは、次に
+  ユーザーが Publish Now を押した結果（data.js に festivalId が入るか）で決まる。
+
+### 変更したパターン
+- 同じデータを2つの経路で取得し、片方だけが新しい列を返さないパターン。
+- 値が無いときに項目を省く書き出しのため、「無い」と「取れなかった」を
+  区別できず、失敗が成功に見えるパターン。
+
+### 未確認の類似パターン
+- **GAS の `get_all_sheets` がなぜ新しい列を落とすのかは未確認。**
+  ヘッダー行のキャッシュが疑わしいが、GAS のソースを見ていない。
+  一括経路を使う残りの箇所（一覧の初回読み込み、cms.js:4589）は
+  同じ問題を抱えたままである。新しい列に依存しないため実害は出ていない。
+- ARTICLES 以外のシートで同種の列落ちが起きているか: 未確認。
+  今回は ARTICLES にしか新しい列を足していないため顕在化していない。
+- ARTICLES シートの列名が `festivalId`（キャメル）と `VIEWS`（大文字）で
+  混在しており、CMS は名前をそのまま照合する。`VIEWS` は CMS が `views` を
+  探すため取りこぼす。Views は廃止方針のため今回は手を付けていない。
+
+### 次の担当への注意・判断待ち
+- **ユーザー作業: CMS を再読み込み（`cms.js?v=74` を読ませる）してから
+  Publish Now。**これで data.js に festivalId が入るはず。
+  入れば記事ページ・フェスページの双方に相互リンクが出る
+  （生成側は仮データで動作確認済み）。
+- 入らなかった場合は、GAS の `get_sheet` 側も新しい列を返していないことになる。
+  その場合は GAS のソース（`get_sheet` / `get_all_sheets`）の確認が必要。
