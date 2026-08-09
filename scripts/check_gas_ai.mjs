@@ -222,6 +222,16 @@ const okBody = (t, stop='end_turn') => ({ content:[{type:'text',text:t}], stop_r
   check('type の無い応答でも取り出せる', r.text==='古い形式', r.text||r.message);
 }
 
+// 25) 要約側の上限が、考える過程で食い潰されない余裕を持つこと（§9-73）
+{
+  const src = fs.readFileSync(GAS_PATH, 'utf8');
+  const m = src.match(/var\s+MAX_TOKENS_SUMMARY\s*=\s*(\d+)/);
+  const v = m ? Number(m[1]) : 0;
+  check('要約の上限が 1000 より大きい', v > 1000, 'MAX_TOKENS_SUMMARY = ' + v);
+  const t = src.match(/var\s+MAX_TOKENS_TRANSLATE\s*=\s*(\d+)/);
+  check('翻訳の上限は要約より大きい', Number(t[1]) > v, t[1] + ' > ' + v);
+}
+
 console.log('\n検証項目'.padEnd(46)+'判定  実測');
 console.log('-'.repeat(96));
 let fail=0;
