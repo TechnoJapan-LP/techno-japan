@@ -930,3 +930,59 @@ FESTIVALS等の必須データのPublish自体は止めないようにした。
 
 ### 次の担当への注意・判断待ち
 - 次回同じIDで保存し、表示された不足項目またはGAS応答を記録する。
+
+## 2026-08-09 / Claude / CMSレイアウト重なり修正・CI片側更新の修正
+
+### 実施
+- CMS記事フォームで STATUS / AUTHOR / PUBLISH AT が画像レイアウトツールバーに
+  覆われて押せない状態を修正。`.ar-editor-wrap` を flex 化して中身を包み、
+  `#ar-body-editor{min-height:540px}` で本文の広さ（537px）を維持。
+  `flex:1 0 auto` で伸ばす案は重なりが再発したため不採用。
+  集中モードは別の高さ規則を持つため `:not(.focus-mode)` で除外。
+- `scripts/check_cms_layout.mjs` を新規追加。headless Chrome で cms.html を
+  描画し、ツールバーと各入力欄の矩形が交差しないことを実測する。
+  regression-check.yml / publish-pipeline.yml の2本に組み込み済み。
+- `generate-meta.yml` のコミット対象を `git add -A LP/` に変更。
+  従来の列挙では `LP/festivals` がフォルダのため `LP/festivals.html` に当たらず、
+  EN は `LP/en` でフォルダごと入るため **EN のハブだけが更新されていた。**
+- `check_regressions.py` に `hub_static_link_ja_en_gaps` を追加。
+  JA と EN のハブで静的リンクの件数を比べ、ずれたら落とす。
+- 取り残されていた生成物（JA ハブ4枚・image-dimensions）を更新。
+
+### コミット
+- `b18f9d63` fix(cms): STATUS/AUTHOR が本文エディタに覆われて押せない問題を修正
+- `ece6199e` fix(ci): EN のハブだけ更新され JA が取り残される構造を直す
+
+### 検証
+- `check_cms_layout.mjs`: 重なり3組すべて false / 本文 539px / 集中モード・
+  ソース表示・プレビューの3モードでツールバーが枠内。
+  ネガティブコントロール（元の CSS に戻す）で落ちることを確認済み。
+- `check_regressions.py`: `hub_static_link_ja_en_gaps` = 0 で通過。
+  取り残されていた実際の `LP/news.html` に戻すと `1 > max 0` で落ちることを確認済み。
+- CMSガード一式（editions / authors / auth_retry / lineup / geocode / ai_body /
+  gas_ai）すべて通過。`check_asset_versions.py` / `check_sw_routing.mjs` /
+  `check_internal_links.py` / `check_no_hardcoded_versions.py` 通過。
+- 記事↔フェスの相互リンク: `data.js` に festivalId を仮挿入してビルドし、
+  記事ページ→フェス・フェスページ→記事の双方が JA/EN とも出ることを確認。
+  仮データは削除済み（生成物も戻して再ビルド済み）。
+
+### 変更したパターン
+- `.ar-editor-wrap` が中身の高さを合算していないため、次の要素と重なるパターン。
+- CI のコミット対象がフォルダ名の列挙で、同名の `.html` を取りこぼすパターン
+  （`LP/festivals` は `LP/festivals.html` に当たらない）。
+
+### 未確認の類似パターン
+- CMS の他フォーム（FESTIVAL / ARTIST / VENUE）での要素の重なり:
+  **未確認。** `check_cms_layout.mjs` は記事フォームだけを見ている。
+- 他ワークフローのコミット対象: 確認済み・0件。
+  `deploy-pages.yml` / `publish-pipeline.yml` は元から `git add -A LP/`。
+  `sync-drive-images.yml` は画像用で `git add -u LP/` を併用しており取りこぼしなし。
+- `LP/venues.html` の静的リンク: 確認済み・0件（JA=22 / EN=22 で一致）。
+
+### 次の担当への注意・判断待ち
+- **ARTICLES の festivalId が data.js に入っていない。** シート側には値が
+  反映済みとの報告だが、`237a1fd6` の Publish 時点では入っておらず、
+  現在の `LP/data.js` でも 0 件。生成側の実装は JA/EN とも動作確認済みなので、
+  **CMS で記事を開いて関連フェスを選び直し、保存 → Publish Now** で点灯する。
+- `check_cms_layout.mjs` は headless Chrome を使うため、CI では
+  「Verify Chrome is available」ステップより後に置いてある。順序を変えないこと。
