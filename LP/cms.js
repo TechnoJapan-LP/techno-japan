@@ -4611,6 +4611,28 @@ function fetchAllSheets(sheetNames, opts){
     else missing.push(s);
   });
   if(!missing.length) return Promise.resolve(result);
+
+  /* opts.perSheet: batch エンドポイントを使わず、1枚ずつ取る。
+
+     Publish 用。batch（get_all_sheets）と単体（get_sheet）で
+     **返ってくる列が違っていた。**2026-08-09、記事に追加した
+     festivalId / cardRatio / heroRatio / views の4列が、
+     編集画面（単体で取得）には出るのに data.js（batch で取得）には
+     入らなかった。以前からある title_en などは両方に出ていた。
+
+     公開は頻度が低く、5回に増えても実用上の差は無い。
+     **確実に取れる経路を使う。**AUDIT §9-67。 */
+  if(opts.perSheet){
+    return Promise.all(missing.map(s=>
+      fetch(GAS_URL+'?action=get_sheet&sheet='+s).then(r=>r.json()).then(d=>{
+        if(d.status!=='ok' || !Array.isArray(d.rows)) throw new Error('シート取得に失敗: '+s+' — '+(d.message||'unknown'));
+        result[s] = d.rows;
+        const sec = SECTION_BY_SHEET[s];
+        if(sec && d.rows.length) writeSheetCache(sec, d.rows);
+      })
+    )).then(()=>result);
+  }
+
   // 不足分は batch エンドポイントで一括取得
   return fetch(GAS_URL+'?action=get_all_sheets&sheets='+missing.join(','))
     .then(r=>r.json()).then(d=>{
@@ -5740,7 +5762,7 @@ function publishDiffSummary(d){
 
 function exportDataJs(){
   toast('Exporting...','info');
-  fetchAllSheets(['VENUES','FESTIVALS','ARTISTS','EVENTS','ARTICLES'],{fresh:true}).then(d=>Promise.all(
+  fetchAllSheets(['VENUES','FESTIVALS','ARTISTS','EVENTS','ARTICLES'],{fresh:true,perSheet:true}).then(d=>Promise.all(
     ['EDITIONS','LINEUPS'].map(sheet => fetch(GAS_URL+'?action=get_sheet&sheet='+sheet).then(r=>r.json()).then(x => ({sheet, rows:x.status==='ok'&&Array.isArray(x.rows)?x.rows:[]})).catch(() => ({sheet, rows:[]})))
   ).then(optional => { optional.forEach(x => { d[x.sheet] = x.rows; }); return d; })).then(d=>{
     const sane = publishSanityCheck(d);
@@ -5781,7 +5803,7 @@ function publishDataJs(opts){
   /* EDITIONS も取る。data.js には入らないが、**ID が重複していると
      公開処理が必ず失敗する**ため、押す前に見る必要がある（§9-66）。
      取れなかった場合は d.EDITIONS が未定義になり、重複検査は黙って飛ばす。 */
-  fetchAllSheets(['VENUES','FESTIVALS','ARTISTS','EVENTS','ARTICLES'],{fresh:true})
+  fetchAllSheets(['VENUES','FESTIVALS','ARTISTS','EVENTS','ARTICLES'],{fresh:true,perSheet:true})
     .then(d => fetch(GAS_URL+'?action=get_sheet&sheet=EDITIONS').then(r=>r.json())
       .then(x => { if(x.status==='ok' && Array.isArray(x.rows)) d.EDITIONS = x.rows; return d; })
       .catch(() => d))

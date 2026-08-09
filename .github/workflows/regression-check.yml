@@ -175,6 +175,10 @@ jobs:
       # 詰まった CI を外す仕組みは、普段は何もしないので壊れても気づけない。
       # 判断部分（動作中・承認待ちを殺さない等）をここで毎回試験する（§9-65）。
       # 押した時点では成功に見えて、20分後に CI が赤くなる状態を作らない（§9-66）。
+      # Publish が「列を落とす経路」でデータを取っていないこと（§9-67）。
+      - name: Check CMS fetch path
+        run: node scripts/check_cms_fetch_path.mjs
+
       - name: Check CMS publish guard
         run: node scripts/check_cms_publish_guard.mjs
 
