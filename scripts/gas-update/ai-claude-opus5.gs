@@ -123,15 +123,44 @@ function callClaude_(systemPrompt, userText, maxTokens) {
     return { status: 'error', message: 'Claude API ' + code + ': ' + detail };
   }
 
-  var text = (body.content && body.content[0] && body.content[0].text) || '';
-  if (!text) return { status: 'error', message: 'Claude API: 応答が空でした' };
+  /* 応答から本文を取り出す。
 
-  // 上限で打ち切られた場合。HTML なら閉じタグを失っているので使わせない。
+     **content[0] が本文とは限らない。**応答は複数のブロックの配列で、
+     モデルによっては thinking ブロックが先頭に来る。
+     `content[0].text` だけを見ると、本文があるのに空と判定してしまう。
+
+     2026-08-10、キーを直したあと `Claude API: 応答が空でした` が出た。
+     HTTP は 200 で、本文も返っていたのに、先頭ブロックが text ではなかった。
+     **type が 'text' のブロックを全部つなぐ。**AUDIT §9-73。 */
+  var blocks = (body.content && body.content.length) ? body.content : [];
+  var text = '';
+  for (var i = 0; i < blocks.length; i++) {
+    if (blocks[i] && blocks[i].type === 'text' && blocks[i].text) text += blocks[i].text;
+  }
+  // type が無い応答（古い形式）にも備える。
+  if (!text && blocks.length === 1 && blocks[0] && blocks[0].text) text = blocks[0].text;
+
+  /* 上限で打ち切られた場合。HTML なら閉じタグを失っているので使わせない。
+     **空判定より先に見る。**thinking が上限を食い切ると本文が空になり、
+     「応答が空」と報告してしまって、本当の原因（上限）に辿り着けない。 */
   if (body.stop_reason === 'max_tokens') {
     return {
       status: 'error',
       message: '長すぎて途中で切れました（上限 ' + maxTokens + 'トークン）。'
              + '本文を分割して実行するか、GAS の MAX_TOKENS を上げてください'
+    };
+  }
+
+  if (!text) {
+    /* 空のときは**何が返ってきたか**を添える。これが無いと、
+       ブロック構成が変わったときに毎回ここで詰まる。 */
+    var kinds = [];
+    for (var j = 0; j < blocks.length; j++) kinds.push((blocks[j] && blocks[j].type) || '?');
+    return {
+      status: 'error',
+      message: 'Claude API: 本文が取り出せませんでした'
+             + '（ブロック ' + (kinds.length ? kinds.join('/') : 'なし')
+             + ' / stop_reason ' + (body.stop_reason || '不明') + '）'
     };
   }
 

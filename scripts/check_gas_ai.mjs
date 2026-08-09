@@ -56,7 +56,7 @@ function run({ key='sk-ant-test', httpCode=200, body=null, throwOn=null }) {
 }
 
 const results=[]; const check=(n,p,d)=>results.push([n,p,d]);
-const okBody = (t, stop='end_turn') => ({ content:[{text:t}], stop_reason:stop });
+const okBody = (t, stop='end_turn') => ({ content:[{type:'text',text:t}], stop_reason:stop });
 
 // 1) 翻訳が通る
 {
@@ -176,6 +176,50 @@ const okBody = (t, stop='end_turn') => ({ content:[{text:t}], stop_reason:stop }
   const r = c.aiTranslateV2_({ text:'x', target:'en' });
   check('401 は残高と無関係だと明示する', /残高とは無関係/.test(r.message), r.message.slice(0,50));
   check('既存デプロイの編集だと明示する', /新しいデプロイ.*ではなく|既存のデプロイ/.test(r.message), r.message.slice(-50));
+}
+
+// 20) thinking ブロックが先頭でも本文を取り出せること（§9-73）
+{
+  const c = run({ body: { content: [
+    { type:'thinking', thinking:'考え中…' },
+    { type:'text', text:'<p>Translated</p>' },
+  ], stop_reason:'end_turn' } });
+  const r = c.aiTranslateV2_({ text:'x', target:'en' });
+  check('先頭が thinking でも本文を取り出す', r.status==='ok' && r.text==='<p>Translated</p>',
+    r.status+' '+(r.text||r.message||'').slice(0,30));
+}
+
+// 21) text ブロックが複数なら全部つなぐ
+{
+  const c = run({ body: { content: [
+    { type:'text', text:'前半' }, { type:'text', text:'後半' },
+  ], stop_reason:'end_turn' } });
+  const r = c.aiTranslateV2_({ text:'x', target:'en' });
+  check('text ブロックを全部つなぐ', r.text==='前半後半', r.text||r.message);
+}
+
+// 22) 本当に空なら、何が返ったかを添える
+{
+  const c = run({ body: { content: [{ type:'thinking', thinking:'…' }], stop_reason:'end_turn' } });
+  const r = c.aiTranslateV2_({ text:'x', target:'en' });
+  check('空のときはブロック構成を添える',
+    r.status==='error' && /thinking/.test(r.message) && /stop_reason/.test(r.message), r.message);
+}
+
+// 23) 打ち切りは「空」より先に判定する
+//     thinking が上限を食い切ると本文が空になる。そこで「応答が空」と
+//     報告すると、本当の原因（上限）に辿り着けない。
+{
+  const c = run({ body: { content: [{ type:'thinking', thinking:'…' }], stop_reason:'max_tokens' } });
+  const r = c.aiTranslateV2_({ text:'x', target:'en' });
+  check('打ち切りを「空」より優先して報告する', /途中で切れました/.test(r.message), r.message.slice(0,40));
+}
+
+// 24) type の無い古い形式にも備える
+{
+  const c = run({ body: { content: [{ text:'古い形式' }], stop_reason:'end_turn' } });
+  const r = c.aiTranslateV2_({ text:'x', target:'en' });
+  check('type の無い応答でも取り出せる', r.text==='古い形式', r.text||r.message);
 }
 
 console.log('\n検証項目'.padEnd(46)+'判定  実測');
