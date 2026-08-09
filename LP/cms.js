@@ -1089,13 +1089,23 @@ function runArticleEditorSync(from){
   scheduleArticleDraftSave();
 }
 // 保存直前に未反映の同期を確定させる
+/* エディタの内容を ar-body へ確定させる。
+
+   【予約が無いときも同期すること】
+   以前は `if (articleSyncTimer)` の中だけで同期していた。debounce の予約が
+   無い状態（既存記事を読み込んだ直後など）では**何もせず**、
+   ar-body が空のままになりうる。その状態で AI 機能を押すと
+   「先に本文を書いてください」と出て、書いてあるのに動かないように見える。
+   AUDIT §9-62。 */
 function flushArticleEditorSync(){
   if (articleSyncTimer) {
     clearTimeout(articleSyncTimer);
     articleSyncTimer = null;
-    const wrap = document.getElementById('ar-editor-wrap');
-    runArticleEditorSync(wrap && wrap.classList.contains('source-mode') ? 'source' : 'quill');
   }
+  const wrap = document.getElementById('ar-editor-wrap');
+  const from = wrap && wrap.classList.contains('source-mode') ? 'source' : 'quill';
+  // エディタが未初期化なら何もしない（runArticleEditorSync が early return する）
+  runArticleEditorSync(from);
 }
 
 // 記事本文の唯一の読み出し口。表示切替やプレビューからは呼ばず、
@@ -5383,6 +5393,14 @@ function formatHistoryTimestamp(iso){
    AI TITLE SUGGEST — 本文からタイトル候補を3案生成
    ============================================================== */
 function aiTitleSuggest(){
+  /* 先に本文を確定させる。
+
+     エディタの内容が ar-body に入るのは 300ms の debounce 後
+     （scheduleArticleEditorSync）。本文を書いてすぐ押すと ar-body がまだ空で、
+     「先に本文を書いてください」で止まる。**書いてあるのに動かない**ように見える。
+     翻訳（aiTranslateBody）は flush していたが、こちらと要約が漏れていた。
+     2026-08-09 報告 / AUDIT §9-62。 */
+  flushArticleEditorSync();
   const bodyHtml = (document.getElementById('ar-body')?.value || '').trim();
   if (!bodyHtml || bodyHtml === '<p><br></p>') return toast('先に本文を書いてください', 'error');
   const text = bodyHtml.replace(/<[^>]+>/g,' ').replace(/&nbsp;/g,' ').replace(/&[a-z]+;/g,' ').replace(/\s+/g,' ').trim();
@@ -5472,6 +5490,8 @@ function aiTranslateBody(){
 }
 
 function aiSummarize(mode){
+  // タイトル候補と同じ理由で、読む前に確定させる（AUDIT §9-62）。
+  flushArticleEditorSync();
   const bodyHtml = (document.getElementById('ar-body')?.value || '').trim();
   const title = (document.getElementById('ar-title')?.value || '').trim();
   if (!bodyHtml || bodyHtml === '<p><br></p>') return toast('先に本文を書いてください', 'error');

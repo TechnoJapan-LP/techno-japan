@@ -142,6 +142,10 @@ jobs:
       - name: Check CMS geocode
         run: node scripts/check_cms_geocode.mjs
 
+      # AI機能が本文を確定させてから読むこと（書いたのに動かない、を防ぐ）。
+      - name: Check CMS AI body sync
+        run: node scripts/check_cms_ai_body.mjs
+
       # 記事本文の保存経路とプレビュー開閉の安全性。Visual/HTML/hidden本文の
       # 同期が空本文を上書きしないこと、本文・画像データが壊れていないことを担保する。
       - name: Check CMS article state

@@ -4488,3 +4488,47 @@ sameAs: ["https://www.womb.co.jp/", "https://www.instagram.com/womb_tokyo/"]
 22件 × JA/EN の44ページすべてに出ることを確認。
 公式サイトが無い `bonobo` でも Instagram だけが正しく出る。
 `safeUrl()` を通しているので `javascript:` は入らない（§9-44）。
+
+### 9-62. AIタイトル候補が「本文を書いたのに動かない」（2026-08-09）
+
+エディタの内容が `ar-body`（隠しテキストエリア）へ入るのは
+**300ms の debounce 後**（`scheduleArticleEditorSync`）。
+AI 機能はその `ar-body` を読むので、**本文を書いてすぐ押すとまだ空**で、
+「先に本文を書いてください」と出る。書いてあるのに動かないように見える。
+
+```
+flushArticleEditorSync を呼んでいたか:
+  aiTranslateBody   あり
+  aiTitleSuggest    なし  ← 報告された症状
+  aiSummarize       なし  ← 抜粋・メタ生成も同じ
+```
+
+さらに `flushArticleEditorSync` 自体にも穴があった:
+
+```js
+if (articleSyncTimer) { ... 同期 ... }   // 予約が無いと何もしない
+```
+
+既存記事を読み込んだ直後など**予約が無い状態では同期されず**、
+`ar-body` が空のままになりうる。翻訳でも同じ条件で起きていた。
+
+対応: 両方に `flushArticleEditorSync()` を足し、
+flush 自体も予約の有無によらず同期するようにした
+（エディタ未初期化なら `runArticleEditorSync` が early return するので安全）。
+
+`scripts/check_cms_ai_body.mjs`（新規、CI 組込）で4項目を見張る。
+*負のコントロール: flush 呼び出しを外すと3件が
+「先に本文を書いてください」で止まることを確認。*
+
+#### スクリーンショットの入力欄の被りについて
+
+同時に「BODY の下の STATUS / AUTHOR が被って見えない」という報告もあったが、
+**再現も特定もできなかった。**
+
+スクリーンショットには `PUBLISH AT（予約公開）` `OG IMAGE URL`
+`EDITOR NOTES` という項目が写っているが、**これらは本番にもリポジトリにも
+存在しない**（`LP/cms.html` は本番・手元とも527行で一致、該当文字列は0件）。
+
+つまり**別セッションの未公開バージョンの画面**を見ている。
+こちらのコードには該当する要素が無いため、原因を追えない。
+そちらがコミットされてから、改めて実測する。

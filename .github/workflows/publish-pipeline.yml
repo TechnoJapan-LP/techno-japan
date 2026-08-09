@@ -144,6 +144,10 @@ jobs:
       - name: Check CMS geocode
         run: node scripts/check_cms_geocode.mjs
 
+      # AI機能が本文を確定させてから読むこと（書いたのに動かない、を防ぐ）。
+      - name: Check CMS AI body sync
+        run: node scripts/check_cms_ai_body.mjs
+
       # GAS の AI ハンドラ（貼り替え用コード）の検査。実体は Apps Script 側に
       # あり普段は見えないので、少なくとも管理下のコードは壊さない（AUDIT §9-54）。
       - name: Check GAS AI handlers
