@@ -114,6 +114,60 @@ const BODY='<p>本文がここにあります。</p>';
   check('本文が空なら正しく止まる', !c.__sent.length && /本文を書いて/.test(msg), msg||'(何も出ない)');
 }
 
+/* aiFail は要素を組み立てて body に足す。疑似DOM に append と
+   テキストの蓄積が要るので、この試験のためだけの最小実装を用意する。 */
+function fakeDom(c){
+  const mk = () => {
+    const el = {
+      style:{}, className:'', id:'', __children:[],
+      set textContent(v){ el.__own = String(v); }, get textContent(){ return el.__own||''; },
+      set innerHTML(v){ el.__own = String(v); }, get innerHTML(){ return el.__own||''; },
+      get __text(){ return (el.__own||'') + el.__children.map(x=>x.__text||'').join(' '); },
+      append(...xs){ el.__children.push(...xs); },
+      appendChild(x){ el.__children.push(x); return x; },
+      addEventListener(){}, setAttribute(){}, remove(){},
+      classList:{add(){},remove(){},toggle(){},contains:()=>false},
+    };
+    return el;
+  };
+  c.document.createElement = mk;
+  const shown = [];
+  c.document.body.appendChild = (el) => { shown.push(el); return el; };
+  return shown;
+}
+
+// ⑤ 失敗の理由が消えずに残ること（2026-08-10 / §9-70）
+//
+//    AI が動かないときに要るのは「動かない」ではなく理由。
+//    3秒で消えるトーストだと、キー未設定なのかモデル指定ミスなのか
+//    分からず、原因の切り分けに進めない。
+{
+  const c=ctxOf();
+  c.toast=()=>{};
+  const shown=fakeDom(c);
+  c.aiFail('翻訳', 'ANTHROPIC_API_KEY not set');
+  check('失敗の理由が画面に残る', shown.length===1, shown.length+'件');
+  const text = shown.length ? String(shown[0].__text||'') : '';
+  check('理由の本文がそのまま出る', text.includes('ANTHROPIC_API_KEY not set'), text.slice(0,40));
+  check('対処の手掛かりを添える', text.includes('スクリプト プロパティ'), text.slice(0,60));
+}
+{
+  const c=ctxOf();
+  c.toast=()=>{};
+  const shown=fakeDom(c);
+  c.aiFail('翻訳', 'Claude API 400: max_tokens too large');
+  const text = shown.length ? String(shown[0].__text||'') : '';
+  check('400 ならモデル・上限の確認を促す', text.includes('MAX_TOKENS'), text.slice(0,60));
+}
+{
+  const c=ctxOf();
+  c.toast=()=>{};
+  const shown=fakeDom(c);
+  c.aiFail('翻訳', '見たことのないエラー');
+  const text = shown.length ? String(shown[0].__text||'') : '';
+  check('未知のエラーは文言の共有を促す', text.includes('そのまま共有'), text.slice(0,60));
+}
+
 console.log('\n検証項目'.padEnd(44)+'判定  実測');
 console.log('-'.repeat(88));
 let fail=0;

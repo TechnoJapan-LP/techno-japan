@@ -5468,6 +5468,56 @@ function formatHistoryTimestamp(iso){
 /* ==============================================================
    AI TITLE SUGGEST — 本文からタイトル候補を3案生成
    ============================================================== */
+/* AI 機能の失敗は、3秒で消えるトーストにしか出ていなかった。
+
+   AI が動かないときに知りたいのは「動かない」ではなく**理由**で、
+   それは GAS が返す message にしか入っていない。
+     ・ANTHROPIC_API_KEY not set   … GAS のキー未設定
+     ・Claude API 400: ...          … モデル名・上限などの指定ミス
+     ・Claude API 401: ...          … キーが無効
+     ・長すぎて途中で切れました        … 本文が長すぎる
+   どれも対処がまったく違うのに、読む前に消えていた。
+
+   2026-08-10、「AI タイトル生成と翻訳が動かない」の原因を追う際、
+   コード・結線・認証・GAS の単体検査はすべて正常で、
+   **実行時の message だけが分からず前に進めなかった。**
+   消えない・選んでコピーできる形で出す。AUDIT §9-70。 */
+function aiFail(where, message){
+  const msg = String(message || 'unknown');
+  console.error('[AI] ' + where + ': ' + msg);
+  toast(where + 'に失敗しました', 'error');
+  const old = document.getElementById('ai-error-modal');
+  if (old) old.remove();
+  const modal = document.createElement('div');
+  modal.id = 'ai-error-modal';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px';
+  const inner = document.createElement('div');
+  inner.style.cssText = 'background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:24px;max-width:640px;width:100%';
+  const head = document.createElement('div');
+  head.style.cssText = 'font-family:var(--font-mono);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text3);margin-bottom:12px';
+  head.textContent = '⚠️ ' + where + 'に失敗しました';
+  const pre = document.createElement('pre');
+  pre.style.cssText = 'white-space:pre-wrap;word-break:break-all;user-select:text;background:var(--bg3);border:1px solid var(--border);padding:12px;font-size:.78rem;margin:0 0 16px';
+  pre.textContent = msg;
+  const hint = document.createElement('div');
+  hint.style.cssText = 'font-size:.75rem;color:var(--text3);margin-bottom:16px;line-height:1.7';
+  hint.textContent = /not set/i.test(msg)
+    ? 'GAS のスクリプト プロパティに ANTHROPIC_API_KEY が設定されていません。'
+    : /Claude API 40[13]/.test(msg)
+      ? 'API キーが無効か、権限がありません。GAS のキーを確認してください。'
+      : /Claude API 400/.test(msg)
+        ? 'モデル名か上限トークン数の指定が通っていません。GAS の CLAUDE_MODEL / MAX_TOKENS を確認してください。'
+        : 'この文言をそのまま共有してください。原因の切り分けに必要です。';
+  const btn = document.createElement('button');
+  btn.className = 'btn btn-sm';
+  btn.textContent = '閉じる';
+  btn.onclick = () => modal.remove();
+  inner.append(head, pre, hint, btn);
+  modal.appendChild(inner);
+  modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+  document.body.appendChild(modal);
+}
+
 function aiTitleSuggest(){
   /* 先に本文を確定させる。
 
@@ -5490,9 +5540,9 @@ function aiTitleSuggest(){
       if (!candidates.length) return toast('候補が空でした', 'error');
       showTitleCandidates(candidates);
     } else {
-      toast('AI failed: '+(d.message||'unknown'), 'error');
+      aiFail('タイトル候補の生成', d.message);
     }
-  }).catch(e=>{ console.error(e); toast('AI error: '+e.message, 'error'); });
+  }).catch(e=>{ aiFail('タイトル候補の生成', e.message); });
 }
 
 function showTitleCandidates(candidates){
@@ -5547,8 +5597,8 @@ function aiTranslateField(srcId, dstId, target){
       document.getElementById(dstId).value = d.text.trim();
       markFormDirty();
       toast('翻訳しました — 内容を確認してください', 'success');
-    } else toast('翻訳エラー: ' + (d.message || 'unknown'), 'error');
-  }).catch(e => toast('翻訳エラー: ' + e.message, 'error'));
+    } else aiFail('翻訳', d.message);
+  }).catch(e => aiFail('翻訳', e.message));
 }
 
 function aiTranslateBody(){
@@ -5561,8 +5611,8 @@ function aiTranslateBody(){
       document.getElementById('ar-body_en').value = d.text.trim();
       markFormDirty();
       toast('英訳完了 — 内容を確認して保存してください', 'success');
-    } else toast('翻訳エラー: ' + (d.message || 'unknown'), 'error');
-  }).catch(e => toast('翻訳エラー: ' + e.message, 'error'));
+    } else aiFail('翻訳', d.message);
+  }).catch(e => aiFail('翻訳', e.message));
 }
 
 function aiSummarize(mode){
@@ -5593,11 +5643,11 @@ function aiSummarize(mode){
       markFormDirty();
       toast('✨ 生成完了', 'success');
     } else {
-      toast('AI failed: '+(d.message||'unknown'), 'error');
+      aiFail('タイトル候補の生成', d.message);
     }
   }).catch(e=>{
     console.error('AI summarize error:', e);
-    toast('AI error: '+e.message, 'error');
+    aiFail('要約の生成', e.message);
   });
 }
 
@@ -5618,8 +5668,8 @@ function aiMetaGenerate(p, section){
       updateCharCount(p+'-metaDescription', 160);
       markFormDirty();
       toast('✨ 生成完了 — 内容を確認してください','success');
-    } else toast('AI failed: '+(d.message||'unknown'),'error');
-  }).catch(e=>toast('AI error: '+e.message,'error'));
+    } else aiFail('AI 生成', d.message);
+  }).catch(e=>aiFail('AI 生成', e.message));
 }
 
 // フォーム内のジャンル/都市/タイプ等からタグ候補をワンクリック追加
