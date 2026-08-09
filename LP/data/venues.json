@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-08-08T03:34:47.485Z",
+  "_generatedAt": "2026-08-09T15:24:05.830Z",
   "count": 22,
   "items": [
     {
@@ -9,6 +9,7 @@
       "AREA": "SHIBUYA",
       "TYPE": "club",
       "IMAGE": "images/venues/womb.jpg",
+      "GENRE": "TECHNO · HOUSE · MINIMAL · BASS · OTHERS",
       "CAPACITY": "800",
       "ADDRESS": "2-16 Maruyama-cho, Shibuya-ku, Tokyo",
       "LAT": "35.6583",
@@ -22,7 +23,7 @@
       "ID": "circus-tokyo",
       "NAME": "CIRCUS TOKYO",
       "CITY": "TOKYO",
-      "AREA": "SHIBUAYA",
+      "AREA": "SHIBUYA",
       "TYPE": "club",
       "IMAGE": "images/venues/circus-tokyo.jpeg",
       "GENRE": "TECHNO · HOUSE · MINIMAL · BASS · OTHERS",
@@ -76,6 +77,7 @@
       "AREA": "DAIKANYAMA",
       "TYPE": "livehouse",
       "IMAGE": "images/venues/unit.jpeg",
+      "GENRE": "LIVE, OTHERS",
       "CAPACITY": "200",
       "ADDRESS": "ZaHOUSE, 1-34-17 Ebisu-Nishi, Shibuya-ku, Tokyo",
       "LAT": "35.6471",

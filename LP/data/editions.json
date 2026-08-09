@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-08-08T03:34:47.485Z",
-  "count": 103,
+  "_generatedAt": "2026-08-09T15:24:05.830Z",
+  "count": 104,
   "items": [
     {
       "EDITION_ID": "99flags-2026",
@@ -975,15 +975,6 @@
       "STATUS": "published"
     },
     {
-      "EDITION_ID": "synapse-festival-2026",
-      "FESTIVAL_ID": "synapse-festival",
-      "EDITION": "2026",
-      "DATE_START": "2026-10-02",
-      "DATE_END": "2026-10-04",
-      "PREF": "Fukuoka",
-      "STATUS": "published"
-    },
-    {
       "EDITION_ID": "takarajima-beach-cleaning-party-2025",
       "FESTIVAL_ID": "takarajima-beach-cleaning-party",
       "EDITION": "2025",
@@ -1117,6 +1108,35 @@
       "DATE_START": "2025-08-09",
       "DATE_END": "2025-08-18",
       "PREF": "Shiga"
+    },
+    {
+      "EDITION_ID": "synapse-festival-2025",
+      "FESTIVAL_ID": "synapse-festival",
+      "EDITION": "2025",
+      "DATE_START": "2025-10-04",
+      "DATE_END": "2025-10-05",
+      "LOCATION": "Nokonoshima Camp Ground",
+      "LOCATION_JA": "能古島キャンプ場",
+      "PREF": "Fukuoka",
+      "ADDRESS": "福岡県福岡市西区能古島",
+      "LAT": "33.6262",
+      "LNG": "130.3015",
+      "FLYER": "images/festivals/synapse-festival-2025-flyer.webp",
+      "STATUS": "finished"
+    },
+    {
+      "EDITION_ID": "synapse-festival-2026",
+      "FESTIVAL_ID": "synapse-festival",
+      "EDITION": "2026",
+      "DATE_START": "2026-10-02",
+      "DATE_END": "2026-10-04",
+      "LOCATION": "INN THE PARK FUKUOKA",
+      "LOCATION_JA": "泊まれる公園 INN THE PARK 福岡",
+      "PREF": "Fukuoka",
+      "ADDRESS": "福岡県福岡市東区西戸崎18-26",
+      "LAT": "33.6682",
+      "LNG": "130.3756",
+      "STATUS": "announced"
     }
   ]
 }

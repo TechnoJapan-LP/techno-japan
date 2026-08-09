@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-08-08T03:34:47.485Z",
+  "_generatedAt": "2026-08-09T15:24:05.830Z",
   "count": 96,
   "items": [
     {
@@ -699,11 +699,23 @@
       "TYPE": "festival",
       "NAME": "Synapse Festival",
       "DATE": "2026-10-02/2026-10-04",
+      "LOCATION": "INN THE PARK FUKUOKA",
       "CITY": "Fukuoka",
+      "ADDRESS": "福岡県福岡市東区西戸崎18-26",
+      "LAT": "33.6682",
+      "LNG": "130.3756",
+      "IMAGE": "images/festivals/synapse-festival.webp",
+      "FLYER": "images/festivals/synapse-festival-flyer.webp",
       "GENRE": "TECHNO, HOUSE, AMBIENT, LIVE",
       "DESC": "Synapse Festivalは、福岡の親密な雰囲気を持つ会場で、エレクトロニック・ミュージックの知的な側面を結集させるイベントだ。ディープ・テクノや実験的なサウンドに焦点を当て、商業的な訴求力よりもサウンドの探求を優先するアーティストたちを惹きつけている。地元の才能と、エレクトロニック・ミュージックの境界を押し広げる海外アクトを融合させた、丁寧にキュレーションされたラインナップで知られている。",
+      "URL": "https://synapse-festival.studio.site/",
+      "TICKETURL": "https://app.imin-x.com/events/synapse-festival-2026",
+      "INSTAGRAM": "https://www.instagram.com/synapsefestival/",
+      "LINEUP": "CMT, COCO, DJ FUMI, Eita Godo, ge-ology, ground, idjut-boys, Kengo Groove, KIORA, mr-disco-kid, Naoki, occa, Rei Nakagawa, RYO, tonbo, ÜuMA, ysk",
+      "EDITIONS": "[{\"year\":\"2025\",\"edition\":\"2\",\"date\":\"2025-10-04/2025-10-05\",\"location\":\"Nokonoshima Camp Ground\",\"location_ja\":\"能古島キャンプ場\",\"address\":\"福岡県福岡市西区能古島\",\"lat\":\"33.6262\",\"lng\":\"130.3015\",\"ticketUrl\":\"\",\"flyer\":\"images/festivals/synapse-festival-2025-flyer.webp\",\"status\":\"finished\",\"lineup\":[\"Sound Metaphors DJs\",\"Poggio\",\"Monkey Timers\",\"Ground\",\"Eita Godo\",\"Yuka Mizuhara\",\"Noritake\",\"Nakame House Groove\",\"Lyra Tsuru\",\"SO\",\"YSK\",\"Remmy\",\"MONO SAFARI\",\"Ryo\",\"Olive Oil\",\"luvis\",\"YANBARISE\",\"Chuba\",\"MASUO\",\"H1b1k1\",\"Joma\",\"Neggy\",\"kasetsu\"],\"pref\":\"Fukuoka\"},{\"year\":\"2026\",\"edition\":\"3\",\"date\":\"2026-10-02/2026-10-04\",\"location\":\"INN THE PARK FUKUOKA\",\"location_ja\":\"泊まれる公園 INN THE PARK 福岡\",\"pref\":\"Fukuoka\",\"venueId\":\"\",\"address\":\"福岡県福岡市東区西戸崎18-26\",\"lat\":\"33.6682\",\"lng\":\"130.3756\",\"ticketUrl\":\"\",\"flyer\":\"\",\"status\":\"announced\",\"lineup\":[]}]",
       "STATUS": "published",
-      "DESC_EN": "Synapse Festival brings together electronic music's cerebral edge in Fukuoka's intimate venue spaces. The event focuses on deep techno and experimental sounds, drawing artists who prioritize sonic exploration over commercial appeal. Known for its carefully curated lineups that blend local talent with international acts pushing electronic music's boundaries."
+      "DESC_EN": "Synapse Festival brings together electronic music's cerebral edge in Fukuoka's intimate venue spaces. The event focuses on deep techno and experimental sounds, drawing artists who prioritize sonic exploration over commercial appeal. Known for its carefully curated lineups that blend local talent with international acts pushing electronic music's boundaries.",
+      "location_ja": "泊まれる公園 INN THE PARK 福岡"
     },
     {
       "ID": "yagura",

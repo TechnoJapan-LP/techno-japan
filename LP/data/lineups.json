@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-08-08T03:34:47.485Z",
-  "count": 598,
+  "_generatedAt": "2026-08-09T15:24:05.830Z",
+  "count": 621,
   "items": [
     {
       "EDITION_ID": "waifu-2026",
@@ -376,7 +376,7 @@
     },
     {
       "EDITION_ID": "transcendence-2026",
-      "ACT_LABEL": "YSK",
+      "ARTIST_ID": "ysk",
       "SET_TYPE": "dj",
       "SORT": "10"
     },
@@ -928,7 +928,7 @@
     },
     {
       "EDITION_ID": "colors-presents-soundcamp-2025",
-      "ACT_LABEL": "OCCA",
+      "ARTIST_ID": "occa",
       "SET_TYPE": "dj",
       "SORT": "10"
     },
@@ -1696,7 +1696,7 @@
     },
     {
       "EDITION_ID": "otsukimi-2025",
-      "ACT_LABEL": "So",
+      "ARTIST_ID": "so",
       "SET_TYPE": "dj",
       "SORT": "11"
     },
@@ -1717,6 +1717,144 @@
       "ACT_LABEL": "Yuka",
       "SET_TYPE": "dj",
       "SORT": "14"
+    },
+    {
+      "EDITION_ID": "synapse-festival-2025",
+      "ACT_LABEL": "Sound Metaphors DJs",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "synapse-festival-2025",
+      "ACT_LABEL": "Poggio",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "synapse-festival-2025",
+      "ACT_LABEL": "Monkey Timers",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "synapse-festival-2025",
+      "ARTIST_ID": "ground",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "synapse-festival-2025",
+      "ACT_LABEL": "Eita Godo",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "synapse-festival-2025",
+      "ACT_LABEL": "Yuka Mizuhara",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "synapse-festival-2025",
+      "ARTIST_ID": "noritake",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "synapse-festival-2025",
+      "ACT_LABEL": "Nakame House Groove",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "synapse-festival-2025",
+      "ACT_LABEL": "Lyra Tsuru",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "synapse-festival-2025",
+      "ARTIST_ID": "so",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "synapse-festival-2025",
+      "ARTIST_ID": "ysk",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "synapse-festival-2025",
+      "ACT_LABEL": "Remmy",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "synapse-festival-2025",
+      "ACT_LABEL": "MONO SAFARI",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "synapse-festival-2025",
+      "ACT_LABEL": "Ryo",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "synapse-festival-2025",
+      "ACT_LABEL": "Olive Oil",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "synapse-festival-2025",
+      "ACT_LABEL": "luvis",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
+      "EDITION_ID": "synapse-festival-2025",
+      "ACT_LABEL": "YANBARISE",
+      "SET_TYPE": "dj",
+      "SORT": "17"
+    },
+    {
+      "EDITION_ID": "synapse-festival-2025",
+      "ACT_LABEL": "Chuba",
+      "SET_TYPE": "dj",
+      "SORT": "18"
+    },
+    {
+      "EDITION_ID": "synapse-festival-2025",
+      "ACT_LABEL": "MASUO",
+      "SET_TYPE": "dj",
+      "SORT": "19"
+    },
+    {
+      "EDITION_ID": "synapse-festival-2025",
+      "ACT_LABEL": "H1b1k1",
+      "SET_TYPE": "dj",
+      "SORT": "20"
+    },
+    {
+      "EDITION_ID": "synapse-festival-2025",
+      "ARTIST_ID": "joma",
+      "SET_TYPE": "dj",
+      "SORT": "21"
+    },
+    {
+      "EDITION_ID": "synapse-festival-2025",
+      "ACT_LABEL": "Neggy",
+      "SET_TYPE": "dj",
+      "SORT": "22"
+    },
+    {
+      "EDITION_ID": "synapse-festival-2025",
+      "ACT_LABEL": "kasetsu",
+      "SET_TYPE": "dj",
+      "SORT": "23"
     },
     {
       "EDITION_ID": "spring-love-harukaze-2026",
@@ -1750,7 +1888,7 @@
     },
     {
       "EDITION_ID": "spring-love-harukaze-2026",
-      "ACT_LABEL": "OCCA",
+      "ARTIST_ID": "occa",
       "SET_TYPE": "dj",
       "SORT": "6"
     },
