@@ -1,0 +1,55 @@
+name: Unstick CI queue
+
+# 順番待ちのまま固まった CI を外す見張り番。
+#
+# 2026-08-09、Publish pipeline が queued のまま60分動かず、
+# concurrency: pages で直列化された後続のデプロイが全部止まった。
+# 失敗ではないので通知も出ず、ユーザーが「Publish が完了しない」と
+# 言うまで誰も気づけなかった。AUDIT §9-65。
+#
+# timeout-minutes は**動き出してからの時計**なので、
+# 順番待ちのまま固まる事故には効かない。ここで外す。
+#
+# 判断は scripts/unstick_ci_queue.mjs の decide() にあり、
+# scripts/check_unstick_queue.mjs で試験している。
+# 特に「動作中」「承認待ち」を絶対に殺さないことを守っている。
+
+on:
+  schedule:
+    # 15分ごと。詰まりの判定は25分なので、最悪でも40分で外れる。
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: '何もせず、外す対象だけ表示する'
+        type: boolean
+        default: false
+
+permissions:
+  actions: write        # 詰まった run のキャンセルと再実行
+  contents: read
+
+# 見張り番自身は直列化しない。pages グループに入れると、
+# **外したい相手の後ろに並んで一緒に固まる。**
+concurrency:
+  group: unstick-queue
+  cancel-in-progress: true
+
+jobs:
+  unstick:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Unstick
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          node scripts/unstick_ci_queue.mjs \
+            ${{ inputs.dry_run && '--dry-run' || '' }}

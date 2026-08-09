@@ -172,6 +172,11 @@ jobs:
 
       # 入力欄が別の要素に覆われて押せない、を防ぐ。CSS の重なりは
       # コードを読んでも分からないので、実際に描画して矩形を測る（§9-63）。
+      # 詰まった CI を外す仕組みは、普段は何もしないので壊れても気づけない。
+      # 判断部分（動作中・承認待ちを殺さない等）をここで毎回試験する（§9-65）。
+      - name: Check CI unstick logic
+        run: node scripts/check_unstick_queue.mjs
+
       - name: Check CMS form layout (no overlap)
         run: node scripts/check_cms_layout.mjs
 
