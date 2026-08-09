@@ -1,0 +1,163 @@
+#!/usr/bin/env node
+/**
+ * CMS の記事フォームで、要素が重なっていないかを実測する。
+ *
+ * ■ 何を守るか（AUDIT §9-63）
+ *
+ *   2026-08-09 に「BODY の下の STATUS / AUTHOR が被って見えない」という
+ *   報告があった。実測すると、本文エディタの枠（1751-2289）から
+ *   画像レイアウトツールバー（2370-2426）が完全にはみ出し、
+ *   その下の AUTHOR 欄（2384-2422）を覆っていた。
+ *   **AUTHOR が見えず、押せない状態だった。**
+ *
+ *   CSS の重なりは、コードを読んでも分からない。実際に描画して
+ *   矩形を測るしかない。
+ *
+ * ■ 認証について
+ *
+ *   cms.html は読み込み時に prompt() を出し、失敗すると body を
+ *   「Access denied」で差し替える（§9-44）。**LP のファイルは変更せず、
+ *   配信時に checkAuth だけを素通しさせて**測る。
+ *   GAS への通信も握って外へ出さない。
+ *
+ * ■ 判定
+ *
+ *   画像ツールバーが STATUS / AUTHOR / PUBLISH AT と重ならないこと。
+ *   集中モード・ソース表示・プレビューでも枠内に収まること。
+ *
+ * 使い方:
+ *   node scripts/check_cms_layout.mjs
+ */
+
+import http from 'node:http'; import { spawn, spawnSync } from 'node:child_process';
+import fs from 'node:fs'; import path from 'node:path';
+const ROOT=path.join(process.cwd(),'LP');
+const MIME={'.html':'text/html;charset=utf-8','.js':'text/javascript;charset=utf-8','.css':'text/css;charset=utf-8','.json':'application/json'};
+const server=http.createServer((req,res)=>{const u=new URL(req.url,'http://x');
+ let p=decodeURIComponent(u.pathname); if(p==='/')p='/cms.html';
+ const f=path.join(ROOT,p);
+ if(!f.startsWith(ROOT)||!fs.existsSync(f)){res.writeHead(404);return res.end();}
+ let buf=fs.readFileSync(f);
+ if(p==='/cms.js'){
+   let t=buf.toString('utf8');
+   // テスト専用（LP は変更しない）: 認証を素通しし、GAS 通信を握る
+   t=t.replace('async function checkAuth(){','async function checkAuth(){ AUTH_TOKEN="t"; return true;');
+   t='window.__of=window.fetch;window.fetch=async(u,o)=>String(u).includes("script.google.com")'
+     +'?{ok:true,status:200,clone(){return this},json:async()=>({status:"ok",rows:[],sheets:{}})}'
+     +':window.__of(u,o);window.prompt=()=>"x";\n'+t;
+   buf=Buffer.from(t,'utf8');
+ }
+ res.writeHead(200,{'Content-Type':MIME[path.extname(f)]||'application/octet-stream'});res.end(buf);});
+await new Promise(r=>server.listen(0,'127.0.0.1',r));
+const base=`http://127.0.0.1:${server.address().port}`;
+const PROBE=`<script>
+window.addEventListener('load',()=>setTimeout(()=>{
+ const out={};
+ try{
+  // 認証で body が差し替えられていないか。innerHTML で 'Access denied' を
+  // 探すと、cms.html のインライン script に書かれた文字列そのものに当たり、
+  // 正常時でも true になる（2026-08-09 に踏んだ）。
+  // **差し替えの実態は「記事フォームが描画されない」こと。**それを直接見る。
+  const sec=document.getElementById('sec-article');
+  out.sectionある = !!sec;
+  if(sec){ document.querySelectorAll('.section').forEach(e=>e.classList.remove('active')); sec.classList.add('active'); }
+  document.querySelectorAll('#sec-article .tab-content').forEach(e=>e.classList.remove('active'));
+  const form=document.getElementById('article-tab-form');
+  out.formある = !!form;
+  if(form) form.classList.add('active');
+  window.initArticleEditor && window.initArticleEditor();
+  // フォームを開いた**後**に測る（開く前は display:none で 0 になる）
+  out.フォームの高さ = Math.round((document.getElementById('article-tab-form')||{getBoundingClientRect:()=>({height:0})}).getBoundingClientRect().height);
+
+  const R=id=>{const e=document.getElementById(id);if(!e)return null;const r=e.getBoundingClientRect();
+    return {top:Math.round(r.top+window.scrollY),bottom:Math.round(r.bottom+window.scrollY),h:Math.round(r.height)};};
+  out.パネル挿入数 = document.querySelectorAll('#sec-article .pub-section').length;
+  out.エディタ=R('ar-body-editor'); out.画像ツールバー=R('ar-image-layout-tools');
+  out.STATUS=R('ar-status'); out.AUTHOR=R('ar-authorId'); out.PUBLISH_AT=R('ar-publishAt');
+  // 親子関係と CSS を見る
+  const tb=document.getElementById('ar-image-layout-tools');
+  const au=document.getElementById('ar-authorId');
+  if(tb){ const cs=getComputedStyle(tb);
+    out.ツールバー={position:cs.position,親:tb.parentElement&&(tb.parentElement.id||tb.parentElement.className)}; }
+  if(au){ const cs=getComputedStyle(au);
+    out.AUTHOR欄={position:cs.position,親:au.parentElement&&(au.parentElement.className),
+      祖父:au.parentElement&&au.parentElement.parentElement&&au.parentElement.parentElement.className};
+    out.AUTHORはツールバーの中 = tb ? tb.contains(au) : null; }
+  const box=(el)=>{if(!el)return null;const r=el.getBoundingClientRect();
+    const cs=getComputedStyle(el);
+    return {top:Math.round(r.top+scrollY),bottom:Math.round(r.bottom+scrollY),h:Math.round(r.height),
+            pos:cs.position,ov:cs.overflow,gridCol:cs.gridColumn};};
+  out.エディタ枠 = box(document.getElementById('ar-editor-wrap'));
+  out.エディタ本体 = box(document.getElementById('ar-body-editor'));
+  out.Quill枠 = box(document.querySelector('#ar-body-editor .ql-container'));
+  out.Quill本文 = box(document.querySelector('#ar-body-editor .ql-editor'));
+  const qe=document.querySelector('#ar-body-editor .ql-editor');
+  if(qe){out.Quill本文2={高さ:Math.round(qe.getBoundingClientRect().height),
+    はみ出す:qe.scrollHeight>qe.clientHeight+2, scrollH:qe.scrollHeight, clientH:qe.clientHeight};}
+  const be=document.getElementById('ar-body-editor');
+  if(be){const cs=getComputedStyle(be); out.エディタ本体CSS={height:cs.height,minHeight:cs.minHeight,display:cs.display};}
+  out.公開パネル = box(document.querySelector('#sec-article .pub-section'));
+  out.パネルの親 = box(document.querySelector('#sec-article .pub-section')?.parentElement);
+  out.フォーム格子 = box(document.querySelector('#article-tab-form .form-grid'));
+  // 集中モード / ソース表示 / プレビュー でも壊れないか
+  const wrap=document.getElementById('ar-editor-wrap');
+  out.モード切替={};
+  for(const cls of ['focus-mode','source-mode','preview-mode']){
+    wrap.classList.add(cls);
+    const w=wrap.getBoundingClientRect(), tb=document.getElementById('ar-image-layout-tools').getBoundingClientRect();
+    out.モード切替[cls]={枠高さ:Math.round(w.height),ツールバー枠内: tb.bottom<=w.bottom+2};
+    wrap.classList.remove(cls);
+  }
+  const pairs=[['画像ツールバー','STATUS'],['画像ツールバー','AUTHOR'],['画像ツールバー','PUBLISH_AT']];
+  out.重なり={};
+  for(const [a,b] of pairs){const A=out[a],B=out[b];
+    if(A&&B&&A.h&&B.h) out.重なり[a+'×'+b] = !(A.bottom<=B.top||B.bottom<=A.top);}
+ }catch(e){out.error=String(e).slice(0,120);}
+ document.body.setAttribute('data-o',JSON.stringify(out));
+},5000));
+</script>`;
+const orig=server.listeners('request')[0];server.removeAllListeners('request');
+server.on('request',(req,res)=>{const u=new URL(req.url,'http://x');
+ if(u.pathname==='/__o.html'){res.writeHead(200,{'Content-Type':'text/html;charset=utf-8'});
+  return res.end(fs.readFileSync(path.join(ROOT,'cms.html'),'utf8').replace('</body>',PROBE+'</body>'));}
+ orig(req,res);});
+// Chrome の場所は OS で違う。mac のパスを直書きすると CI（Linux）で動かない。
+// check_hub_pages.py の CHROME_CANDIDATES と同じ順で探す。
+const CHROME_CANDIDATES=[
+  '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+  'google-chrome','google-chrome-stable','chromium','chromium-browser',
+];
+function findChrome(){
+  for(const c of CHROME_CANDIDATES){
+    if(c.includes('/')){ if(fs.existsSync(c)) return c; continue; }
+    const r=spawnSync('which',[c]); if(r.status===0) return String(r.stdout).trim();
+  }
+  return null;
+}
+const CHROME=findChrome();
+if(!CHROME){ server.close(); console.error('✗ headless Chrome が見つかりません'); process.exit(1); }
+const dom=await new Promise(r=>{const pr=spawn(CHROME,['--headless=new','--disable-gpu','--no-sandbox','--window-size=1440,2400',
+ '--virtual-time-budget=16000','--no-first-run','--dump-dom',`${base}/__o.html`],
+ {stdio:['ignore','pipe','ignore']});let o='';pr.stdout.on('data',d=>o+=d);pr.on('close',()=>r(o));});
+const m=dom.match(/data-o="([^"]*)"/);
+server.close();
+if(!m){ console.error('✗ 計測できませんでした（フォームを開けていない可能性）'); process.exit(1); }
+const d=JSON.parse(m[1].replace(/&quot;/g,'"'));
+const failures=[];
+if(!(d.フォームの高さ > 500)) failures.push(`記事フォームが描画されていない（高さ ${d.フォームの高さ}px）。認証で body が差し替えられた可能性`);
+if(!d.formある) failures.push('記事フォームを開けなかった');
+for(const [k,v] of Object.entries(d.重なり||{})) if(v) failures.push(`${k} が重なっている`);
+for(const [mode,r] of Object.entries(d.モード切替||{})) if(!r.ツールバー枠内)
+  failures.push(`${mode}: 画像ツールバーがエディタ枠からはみ出している`);
+const q=d.Quill本文2;
+if(q && q.高さ < 400) failures.push(`本文の入力欄が狭い（${q.高さ}px）。従来は約537px`);
+if(failures.length){
+  console.log('CMS のレイアウトに問題があります:');
+  for(const f of failures) console.log('  ✗ '+f);
+  console.log('\n  実測値:', JSON.stringify(d,null,1));
+  process.exit(1);
+}
+console.log('  ✅ 画像ツールバーが STATUS / AUTHOR / PUBLISH AT と重ならない');
+console.log(`  ✅ 集中モード・ソース表示・プレビューでも枠内に収まる`);
+console.log(`  ✅ 本文の入力欄の高さ ${q?q.高さ:'?'}px`);
+console.log('\n✅ CMS のレイアウトは正常');

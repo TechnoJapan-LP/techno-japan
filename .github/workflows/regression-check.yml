@@ -170,6 +170,11 @@ jobs:
           elif command -v chromium >/dev/null; then chromium --version
           else echo "::error::headless Chrome が見つかりません"; exit 1; fi
 
+      # 入力欄が別の要素に覆われて押せない、を防ぐ。CSS の重なりは
+      # コードを読んでも分からないので、実際に描画して矩形を測る（§9-63）。
+      - name: Check CMS form layout (no overlap)
+        run: node scripts/check_cms_layout.mjs
+
       - name: Check hub pages render (JS health)
         # フェス一覧は画像遅延読み込みを含むため、CIのChromeが混雑すると
         # 既定9秒では描画途中を検査してしまう。失敗を隠さず、描画待ちだけ延長する。
