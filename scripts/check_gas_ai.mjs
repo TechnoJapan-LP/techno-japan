@@ -154,6 +154,30 @@ const okBody = (t, stop='end_turn') => ({ content:[{text:t}], stop_reason:stop }
   check('空白だけのキーは未設定として扱う', /not set/.test(r.message), r.message);
 }
 
+// 17) 残高不足（400）は「お金の問題」と言い切る（§9-71）
+{
+  const c = run({ httpCode: 400, body: { error: { message: 'Your credit balance is too low to access the Anthropic API' } } });
+  const r = c.aiTranslateV2_({ text:'x', target:'en' });
+  check('残高不足はクレジットの問題だと明示する',
+    /クレジット残高/.test(r.message) && /キーは有効/.test(r.message), r.message.slice(0,50));
+  check('Cost ではなく Credits を見るよう促す', /Credits/.test(r.message), r.message.slice(-40));
+}
+
+// 18) 残高と関係ない 400 では、余計なことを言わない
+{
+  const c = run({ httpCode: 400, body: { error: { message: 'max_tokens: value exceeds limit' } } });
+  const r = c.aiTranslateV2_({ text:'x', target:'en' });
+  check('別の 400 でクレジットの話をしない', !/クレジット残高/.test(r.message), r.message.slice(0,50));
+}
+
+// 19) 401 は残高と無関係だと言い切る
+{
+  const c = run({ httpCode: 401, body: { error: { message: 'invalid x-api-key' } } });
+  const r = c.aiTranslateV2_({ text:'x', target:'en' });
+  check('401 は残高と無関係だと明示する', /残高とは無関係/.test(r.message), r.message.slice(0,50));
+  check('既存デプロイの編集だと明示する', /新しいデプロイ.*ではなく|既存のデプロイ/.test(r.message), r.message.slice(-50));
+}
+
 console.log('\n検証項目'.padEnd(46)+'判定  実測');
 console.log('-'.repeat(96));
 let fail=0;
