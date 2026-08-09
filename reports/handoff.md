@@ -986,3 +986,63 @@ FESTIVALS等の必須データのPublish自体は止めないようにした。
   **CMS で記事を開いて関連フェスを選び直し、保存 → Publish Now** で点灯する。
 - `check_cms_layout.mjs` は headless Chrome を使うため、CI では
   「Verify Chrome is available」ステップより後に置いてある。順序を変えないこと。
+
+## 2026-08-09 / Claude / 順番待ちのまま固まった CI を自動で外す
+
+### 実施
+- `.github/workflows/unstick-queue.yml` を追加。15分ごとに走り、
+  順番待ちのまま25分以上たった run を外す。それで `concurrency: pages` が
+  空になった場合だけ、デプロイを1回だけ蹴り直す。最悪40分で自動復旧する。
+- 判断は `scripts/unstick_ci_queue.mjs` の `decide()` に純粋な関数として分離。
+  `in_progress`（動作中）と `waiting`（環境の承認待ち）は絶対に触らない。
+- 蹴り直したデプロイがまた詰まった場合は、同じ SHA への `workflow_dispatch` を
+  検出して蹴らず、ジョブを失敗させて通知する（無限ループ防止）。
+- 見張り番自身は `concurrency: pages` に入れていない
+  （入れると外したい相手の後ろに並んで一緒に固まる）。
+- `scripts/check_unstick_queue.mjs` で判断を13件試験。CI 2本に組み込み済み。
+- 平常時の実行で、キャンセルの権限があるかを毎回確認する。
+  完了済みの run へのキャンセルは 409、権限が無ければ 403 になる違いを使い、
+  **run を1つも壊さずに**判別する。
+
+### コミット
+- `0577a43e` fix(ci): 順番待ちのまま固まった CI を自動で外す見張り番を追加
+- `chore(ci): 詰まり外しに閾値の手動指定を追加（実地検証と手動復旧用）`
+- `chore(ci): 詰まり外しの権限を、何も壊さずに毎回確認する`
+
+### 検証
+- `check_unstick_queue.mjs`: 13件すべて通過。実際に起きた事故
+  （65分の Publish ＋ 36分の Deploy）を再現した事例を含む。
+- ネガティブコントロール: `waiting` を対象に含めると落ちる／
+  無限ループ防止を外すと落ちる、の2つを確認済み。
+- 実地: `gh workflow run unstick-queue.yml -f dry_run=true` を本番で2回実行し、
+  success。ログに「25分以上固まっている run はありません」
+  「キャンセルの権限あり（409 = 正常）」を確認。
+  **CI 上のトークンで実際に外せることまで確認済み。**
+- 詰まりの解消そのものは実地で確認済み（詰まった run を1本外したところ、
+  後ろで36分 pending だったデプロイが success になり、cms.css v=26 と
+  JA ハブの更新が本番へ出た）。
+
+### 変更したパターン
+- 順番待ちのまま固まる事故に `timeout-minutes` が効かないパターン
+  （動き出してからの時計のため）。
+- 失敗ではないので通知が出ず、人が気づくまで放置されるパターン。
+
+### 未確認の類似パターン
+- **見張り番が実際に run をキャンセルする経路は、実地では未発火。**
+  権限があることは確認済みだが、詰まりが起きていないため
+  「本当に外れるところ」までは踏んでいない。判断部分は試験済み。
+- `concurrency` を持つ他ワークフロー（generate-meta / lighthouse /
+  sync-drive-images）での同種の詰まり: 未発生。見張り番は
+  ワークフローを問わず順番待ちを見るので、起きれば同じように外れる。
+- 環境の承認ルール（required reviewers）を追加した場合: 未検証。
+  `waiting` は除外しているので殺さない設計だが、実際に設定した例は無い。
+
+### 次の担当への注意・判断待ち
+- **ARTICLES の festivalId は本番の data.js にまだ 0 件。**
+  CMS の Publish Now がコミットまで届いていない（リポジトリに新しい
+  `cms: publish data.js` が増えていない）。原因特定には CMS が出した
+  メッセージ（差分確認の内容 / `Publish error:` の文言 / `Building...` と
+  `Pushing to GitHub...` のどちらで止まったか）が要る。
+- 手動で詰まりを外したいときは
+  `gh workflow run unstick-queue.yml -f stuck_minutes=5` のように
+  閾値を短くして実行できる。`-f dry_run=true` で対象だけ確認できる。
