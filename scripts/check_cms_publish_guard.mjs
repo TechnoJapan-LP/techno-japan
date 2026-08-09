@@ -194,6 +194,32 @@ const c = makeCtx();
   c.confirm = () => true;
 }
 
+/* --- 5. 名寄せ済みなら「綴りが違う」と言わないこと ------------------------ */
+{
+  console.log('\n名寄せ後の誤警告');
+  const asked = [];
+  c.confirm = (msg) => { asked.push(msg); return true; };
+
+  // canonicalizeRows を通した後の行（小文字キーと正しい綴りが両方ある）。
+  asked.length = 0;
+  c.__T.publishSanityCheck({ ...BASE, ARTICLES: [
+    { id:'a1', title:'T', status:'published', _row:2,
+      festivalid:'loa', festivalId:'loa', readtime:3, readTime:3 },
+  ]});
+  check('取得経路の都合で小文字キーが残っていても黙る（2026-08-09 の誤報告）',
+    asked.length === 0, asked.join(' / '));
+
+  // 名寄せできなかった場合だけ言う。
+  asked.length = 0;
+  c.__T.publishSanityCheck({ ...BASE, ARTICLES: [
+    { id:'a1', title:'T', status:'published', _row:2, 'festival id':'loa' },
+  ]});
+  check('正しい綴りが無ければ従来どおり指摘する',
+    asked.some(m => m.includes('festivalId')), asked.join(' / '));
+
+  c.confirm = () => true;
+}
+
 console.log();
 if (failed) { console.log(`❌ ${failed}件の判定が誤っています`); process.exit(1); }
 console.log('✅ Publish 前の重複検査はすべて正しい');

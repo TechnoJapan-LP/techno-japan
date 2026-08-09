@@ -3335,6 +3335,57 @@ const debouncedFilterArticle = debounce(()=>filterArticleList(), 200);
 const debouncedFilterAuthor = debounce(()=>filterAuthorList(), 200);
 
 /* ==============================================================
+   シートの列名ゆれを吸収する
+   ==============================================================
+
+   GAS から返る行のキーは、**取得経路によって大文字小文字が変わる。**
+
+     get_all_sheets（まとめて）… readTime  （シートの見出しのまま）
+     get_sheet（1枚ずつ）      … readtime  （すべて小文字）
+
+   CMS のコードは `r.readTime` `r.festivalId` のように完全一致で読むので、
+   経路が変わるだけで**値が黙って消える。**エラーも警告も出ない。
+
+   2026-08-09、記事の festivalId がこの形で行方不明になった。
+   §9-67 で公開を「1枚ずつ」に変えたところ、今度は readTime と
+   metaDescription が読めなくなった。**片方を直すと片方が壊れる。**
+
+   読む側を直すのが正しい。取り込んだ時点で正しい綴りの別名を足しておけば、
+   以降のコードは1文字も変えずに済む。元のキーは残す（消すと、
+   まだ知らない列を扱う箇所が壊れる）。AUDIT §9-69。 */
+const SHEET_FIELD_NAMES = [
+  // ARTICLES
+  'title_en','excerpt_en','body_en','cardRatio','heroRatio','festivalId','readTime',
+  'metaDescription','publishAt','ogImage','editorNotes','authorId',
+  // FESTIVALS / VENUES / ARTISTS
+  'name_en','desc_en','bio_en','location_ja','ticketUrl','venueId','instagramUrl',
+  // EDITIONS / LINEUPS
+  'editionId','festivalId','artistId','actLabel','setType',
+];
+const SHEET_FIELD_BY_NORM = (() => {
+  const m = new Map();
+  SHEET_FIELD_NAMES.forEach(f => m.set(f.toLowerCase().replace(/[^a-z0-9]/g,''), f));
+  return m;
+})();
+/** 行に「正しい綴り」の別名を足す。元のキーはそのまま残す。 */
+function canonicalizeRows(rows){
+  if(!Array.isArray(rows)) return rows;
+  return rows.map(r => {
+    if(!r || typeof r !== 'object') return r;
+    let out = r;
+    for(const key of Object.keys(r)){
+      const canon = SHEET_FIELD_BY_NORM.get(String(key).toLowerCase().replace(/[^a-z0-9]/g,''));
+      // 既に正しい綴りのキーがあるなら触らない（空文字で上書きしない）。
+      if(canon && canon !== key && r[canon] === undefined){
+        if(out === r) out = {...r};
+        out[canon] = r[key];
+      }
+    }
+    return out;
+  });
+}
+
+/* ==============================================================
    PERFORMANCE — localStorage cache layer
    ============================================================== */
 const SHEET_CACHE_TTL = 5 * 60 * 1000; // 5分
@@ -3384,6 +3435,7 @@ function loadList(section, opts){
       fetch(GAS_URL+'?action=get_sheet&sheet='+SHEET_MAP[section])
         .then(r=>r.json()).then(d=>{
           if(d.status==='ok'&&d.rows){
+            d.rows = canonicalizeRows(d.rows);
             writeSheetCache(section, d.rows);
             // データに変更があれば再描画
             if(JSON.stringify(d.rows)!==JSON.stringify(cached) && container && container.offsetParent !== null){
@@ -3401,6 +3453,7 @@ function loadList(section, opts){
   fetch(GAS_URL+'?action=get_sheet&sheet='+SHEET_MAP[section])
     .then(r=>r.json()).then(d=>{
       if(d.status==='ok'&&d.rows){
+        d.rows = canonicalizeRows(d.rows);
         writeSheetCache(section, d.rows);
         if(silent){ listCache[section] = d.rows; return; }
         applyLoadedRows(section, d.rows, container);
@@ -4626,9 +4679,9 @@ function fetchAllSheets(sheetNames, opts){
     return Promise.all(missing.map(s=>
       fetch(GAS_URL+'?action=get_sheet&sheet='+s).then(r=>r.json()).then(d=>{
         if(d.status!=='ok' || !Array.isArray(d.rows)) throw new Error('シート取得に失敗: '+s+' — '+(d.message||'unknown'));
-        result[s] = d.rows;
+        result[s] = canonicalizeRows(d.rows);
         const sec = SECTION_BY_SHEET[s];
-        if(sec && d.rows.length) writeSheetCache(sec, d.rows);
+        if(sec && result[s].length) writeSheetCache(sec, result[s]);
       })
     )).then(()=>result);
   }
@@ -4639,6 +4692,7 @@ function fetchAllSheets(sheetNames, opts){
       if(d.status==='ok' && d.sheets){
         Object.entries(d.sheets).forEach(([sheet,rows])=>{
           if(!Array.isArray(rows)) return;      // 欠落・不正はresultに入れない（下の検査で検知）
+          rows = canonicalizeRows(rows);
           result[sheet] = rows;
           const sec = SECTION_BY_SHEET[sheet];
           if(sec && rows.length) writeSheetCache(sec, rows); // 空をキャッシュに書かない
@@ -4651,9 +4705,9 @@ function fetchAllSheets(sheetNames, opts){
         return Promise.all(missing.map(s=>
           fetch(GAS_URL+'?action=get_sheet&sheet='+s).then(r=>r.json()).then(d=>{
             if(d.status!=='ok' || !Array.isArray(d.rows)) throw new Error('シート取得に失敗: '+s+' — '+(d.message||'unknown'));
-            result[s] = d.rows;
+            result[s] = canonicalizeRows(d.rows);
             const sec = SECTION_BY_SHEET[s];
-            if(sec && d.rows.length) writeSheetCache(sec, d.rows);
+            if(sec && result[s].length) writeSheetCache(sec, result[s]);
           })
         )).then(()=>result);
       }
@@ -5750,7 +5804,14 @@ function publishSanityCheck(d){
     columns.forEach(col => {
       if(col === '_row' || ARTICLE_FIELDS.includes(col)) return;
       const hit = known.get(norm(col));
-      if(hit) nameIssues.push({sheet:col, expected:hit});
+      if(!hit) return;
+      /* canonicalizeRows が正しい綴りの別名を足しているなら、値は読めている。
+         大文字小文字の違いは取得経路の都合（§9-69）であって、
+         シートの誤りではない。**ここで「直してください」と言ってはいけない。**
+         実際 2026-08-09 に readtime / metadescription / festivalid を
+         誤って「綴りが違う」と報告し、シートを直させるところだった。 */
+      if(d.ARTICLES.some(r => r && r[hit] !== undefined)) return;
+      nameIssues.push({sheet:col, expected:hit});
     });
   }
   if(nameIssues.length){

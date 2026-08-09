@@ -69,14 +69,18 @@ function makeCtx(rowsBySheet) {
       if (action === 'get_all_sheets') {
         // 一括経路は「新しい列を落とす」壊れた状態を再現する。
         const sheets = {};
+        // 実測（2026-08-09）: 一括経路は見出しの綴りをそのまま返す。
         for (const s of (u.searchParams.get('sheets') || '').split(',')) {
-          sheets[s] = (rowsBySheet[s] || []).map(({ festivalId, ...rest }) => rest);
+          sheets[s] = rowsBySheet[s] || [];
         }
         return { json: async () => ({ status: 'ok', sheets }) };
       }
       if (action === 'get_sheet') {
+        // 実測（2026-08-09）: 単体経路はキーを**すべて小文字**にして返す。
         const s = u.searchParams.get('sheet');
-        return { json: async () => ({ status: 'ok', rows: rowsBySheet[s] || [] }) };
+        const lower = (rowsBySheet[s] || []).map((r) =>
+          Object.fromEntries(Object.entries(r).map(([k, v]) => [k.toLowerCase(), v])));
+        return { json: async () => ({ status: 'ok', rows: lower }) };
       }
       return { json: async () => ({ status: 'ok' }) };
     },
@@ -93,13 +97,14 @@ function makeCtx(rowsBySheet) {
   };
   ctx.window = ctx; ctx.globalThis = ctx;
   vm.createContext(ctx);
-  try { vm.runInContext(source + ';globalThis.__T={fetchAllSheets};', ctx, { filename: 'cms.js' }); }
+  try { vm.runInContext(source + ';globalThis.__T={fetchAllSheets, canonicalizeRows, buildArticlesJs};', ctx, { filename: 'cms.js' }); }
   catch (e) { console.log('  (読み込み時エラー: ' + e.message + ')'); }
   return ctx;
 }
 
 const ROWS = {
-  ARTICLES: [{ id: 'a1', title: 'T', status: 'published', festivalId: 'loa-lost-paradise', _row: 2 }],
+  ARTICLES: [{ id: 'a1', title: 'T', status: 'published',
+    festivalId: 'loa-lost-paradise', readTime: 3, metaDescription: 'M', _row: 2 }],
   VENUES: [{ id: 'v1', _row: 2 }], FESTIVALS: [{ id: 'f1', _row: 2 }],
   ARTISTS: [{ id: 'ar1', _row: 2 }], EVENTS: [],
 };
@@ -110,14 +115,18 @@ console.log('取得経路');
   const d = await c.__T.fetchAllSheets(['ARTICLES'], { fresh: true, perSheet: true });
   check('perSheet では一括エンドポイントを呼ばない',
     !c.__urls.some((u) => u.includes('get_all_sheets')), c.__urls.join(' , '));
-  check('perSheet なら新しい列が残る', d.ARTICLES?.[0]?.festivalId === 'loa-lost-paradise',
-    JSON.stringify(d.ARTICLES?.[0]));
+  check('小文字で返っても正しい綴りで読める（1枚ずつ）',
+    d.ARTICLES?.[0]?.festivalId === 'loa-lost-paradise', JSON.stringify(d.ARTICLES?.[0]));
+  check('readTime も読める（§9-67 で壊した側）',
+    d.ARTICLES?.[0]?.readTime === 3, JSON.stringify(d.ARTICLES?.[0]));
 }
 {
   const c = makeCtx(ROWS);
-  await c.__T.fetchAllSheets(['ARTICLES'], { fresh: true });
+  const d2 = await c.__T.fetchAllSheets(['ARTICLES'], { fresh: true });
   check('perSheet 無しは従来どおり一括で取る（既存動作を壊さない）',
     c.__urls.some((u) => u.includes('get_all_sheets')));
+  check('一括経路でも読める', d2.ARTICLES?.[0]?.festivalId === 'loa-lost-paradise'
+    && d2.ARTICLES?.[0]?.readTime === 3, JSON.stringify(d2.ARTICLES?.[0]));
 }
 
 console.log('\n呼び出し側');
@@ -131,6 +140,15 @@ console.log('\n呼び出し側');
     calls.every(([, l]) => l.includes('perSheet:true')),
     calls.map(([n]) => n + '行目').join(' , '));
   check('publish_data_js の呼び出しは残っている', !!publishLine);
+}
+
+console.log('\n書き出しまで通るか');
+{
+  const c = makeCtx(ROWS);
+  const d = await c.__T.fetchAllSheets(['ARTICLES'], { fresh: true, perSheet: true });
+  const out = c.__T.buildArticlesJs(d.ARTICLES);
+  check('data.js に festivalId が出る', /festivalId: *"loa-lost-paradise"/.test(out), out);
+  check('data.js に readTime が出る', /readTime: *3/.test(out), out);
 }
 
 console.log();
