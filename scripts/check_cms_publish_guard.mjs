@@ -154,6 +154,46 @@ const c = makeCtx();
     r2.ok === false && String(r2.message).includes('他 14 件'), r2.message);
 }
 
+/* --- 4. 列名の綴り違い（シートにあるのに読めていない列） ------------------ */
+{
+  console.log('\n列名の綴り違い');
+
+  const withCol = (col) => c.__T.publishSanityCheck({
+    ...BASE,
+    ARTICLES: [{ id: 'a1', title: 'T', status: 'published', [col]: 'loa-lost-paradise', _row: 2 }],
+  });
+
+  // confirm は true を返すので ok:true のまま。message ではなく
+  // 「警告が出たか」を confirm の呼び出しで見る。
+  const asked = [];
+  c.confirm = (msg) => { asked.push(msg); return true; };
+
+  asked.length = 0; withCol('FestivalId');
+  check('大文字違い FestivalId を指摘する',
+    asked.some(m => m.includes('FestivalId') && m.includes('festivalId')), asked.join(' / '));
+
+  asked.length = 0; withCol('FESTIVAL_ID');
+  check('区切り違い FESTIVAL_ID を指摘する',
+    asked.some(m => m.includes('FESTIVAL_ID') && m.includes('festivalId')));
+
+  asked.length = 0; withCol('VIEWS');
+  check('VIEWS → views を指摘する',
+    asked.some(m => m.includes('VIEWS') && m.includes('views')));
+
+  asked.length = 0; withCol('festivalId');
+  check('正しい綴りなら何も言わない', asked.length === 0, asked.join(' / '));
+
+  asked.length = 0; withCol('編集メモ');
+  check('関係ない列では鳴らない（メモ用の列などで毎回鳴らせない）',
+    asked.length === 0, asked.join(' / '));
+
+  asked.length = 0;
+  c.__T.publishSanityCheck({ ...BASE, ARTICLES: [{ id:'a1', title:'T', status:'published', _row:2 }] });
+  check('列が無いだけなら鳴らない', asked.length === 0);
+
+  c.confirm = () => true;
+}
+
 console.log();
 if (failed) { console.log(`❌ ${failed}件の判定が誤っています`); process.exit(1); }
 console.log('✅ Publish 前の重複検査はすべて正しい');

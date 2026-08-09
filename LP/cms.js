@@ -5725,6 +5725,42 @@ function publishSanityCheck(d){
       +detail+'\n\nスプレッドシートで、どちらか一方の行を削除してから再実行してください。'};
   }
 
+  /* 列名の綴り違いで、値が黙って捨てられていないか。
+
+     CMS はシートの列名を**完全一致**で読む。1文字でも違うと、
+     エラーも警告も出さずにその列を無視する。
+     シートには値が入っているのに、サイトには出ない——という形になり、
+     入力した側からは原因がまったく見えない。
+
+     2026-08-09、記事の festivalId がこの形で行方不明になった。
+     `VIEWS`（シート）と `views`（CMS）も同じ状態で放置されている。
+
+     全ての未知の列を警告すると、メモ用の列などで毎回鳴ってうるさい。
+     **「惜しい」列だけを指す。**大小文字・記号・空白を取り除いた形が
+     既知の項目と一致するものだけ挙げる。AUDIT §9-68。 */
+  const ARTICLE_FIELDS = ['id','title','title_en','excerpt','excerpt_en','body','body_en',
+    'category','date','author','authorId','image','cardRatio','heroRatio','festivalId',
+    'featured','views','readTime','tags','status','metaDescription','publishAt','ogImage','editorNotes'];
+  const norm = s => String(s).toLowerCase().replace(/[^a-z0-9]/g,'');
+  const known = new Map(ARTICLE_FIELDS.map(f => [norm(f), f]));
+  const nameIssues = [];
+  if(Array.isArray(d.ARTICLES) && d.ARTICLES.length){
+    const columns = new Set();
+    d.ARTICLES.forEach(r => Object.keys(r||{}).forEach(k => columns.add(k)));
+    columns.forEach(col => {
+      if(col === '_row' || ARTICLE_FIELDS.includes(col)) return;
+      const hit = known.get(norm(col));
+      if(hit) nameIssues.push({sheet:col, expected:hit});
+    });
+  }
+  if(nameIssues.length){
+    const detail = nameIssues.map(x => '  ・"'+x.sheet+'" → "'+x.expected+'" が正しい綴りです').join('\n');
+    if(!confirm('⚠️ 列名が違うため、CMS が読めていない列があります。\n'
+      +detail+'\n\nこの列に入力した値は、シートにあってもサイトには出ません。\n'
+      +'ARTICLES シートの1行目（見出し）を、上の綴りに直してください。\n\n'
+      +'このまま公開しますか?')) return {ok:false, message:'Publishをキャンセルしました（列名を直してください）'};
+  }
+
   return {ok:true, counts};
 }
 
