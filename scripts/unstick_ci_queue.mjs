@@ -114,7 +114,34 @@ export function decide({ runs, nowMs, stuckMinutes = DEFAULT_STUCK_MINUTES, head
 /* ---------------------------------------------------------------- 実行部 */
 
 function gh(args) {
-  return execFileSync('gh', args, { encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 });
+  // stderr を親へ素通しさせない。権限確認は 409 を**期待して**呼ぶので、
+  // gh のエラー行がそのまま出るとログ上は失敗に見える。
+  return execFileSync('gh', args, {
+    encoding: 'utf8', maxBuffer: 32 * 1024 * 1024, stdio: ['ignore', 'pipe', 'pipe'],
+  });
+}
+
+/**
+ * キャンセルの権限が本当にあるかを、**何も壊さずに**確かめる。
+ *
+ * 詰まりは滅多に起きないので、いざ起きたときに「権限が無くて外せません」だと
+ * 意味がない。かといって、動いている run で試すわけにもいかない。
+ *
+ * **完了済みの run に対するキャンセルは 409（状態が違う）で断られる。**
+ * 権限が無ければ 403 になる。この違いで、run を1つも壊さずに判別できる。
+ */
+function probeCancelPermission(repo, runs) {
+  const done = runs.find((r) => r.status === 'completed');
+  if (!done) return '完了済みの run が無いため確認できませんでした';
+  try {
+    gh(['api', '-X', 'POST', `repos/${repo}/actions/runs/${done.id}/cancel`]);
+    return '⚠️ 完了済みの run のキャンセルが通ってしまいました（想定外）';
+  } catch (e) {
+    const msg = String(e.stderr || e.message);
+    if (/HTTP 409/.test(msg)) return '✅ キャンセルの権限あり（完了済みには 409 で断られる = 正常）';
+    if (/HTTP 403/.test(msg)) return '✗ キャンセルの権限がありません（permissions: actions: write を確認）';
+    return `？判定できません: ${msg.split('\n')[0]}`;
+  }
 }
 
 function main() {
@@ -148,6 +175,8 @@ function main() {
 
   if (!stuck.length) {
     console.log(`✅ ${stuckMinutes}分以上、順番待ちのまま固まっている run はありません`);
+    // 平常時こそ、いざというとき外せるかを確かめておく。
+    console.log(`   ${probeCancelPermission(repo, runs)}`);
     return;
   }
 
