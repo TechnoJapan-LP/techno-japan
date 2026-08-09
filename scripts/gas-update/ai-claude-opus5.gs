@@ -62,6 +62,25 @@ function callClaude_(systemPrompt, userText, maxTokens) {
   var key = PropertiesService.getScriptProperties().getProperty('ANTHROPIC_API_KEY');
   if (!key) return { status: 'error', message: 'ANTHROPIC_API_KEY not set' };
 
+  /* 前後の空白・改行を落とす。
+
+     キーはコピー＆ペーストで入れるので、末尾に改行や空白が紛れ込みやすい。
+     見た目では気づけないのに、API は 401 で拒否する。
+     「キーは合っているのに通らない」で時間を溶かす典型なので、
+     ここで吸収する。AUDIT §9-71。 */
+  key = String(key).replace(/\s+/g, '');
+  if (!key) return { status: 'error', message: 'ANTHROPIC_API_KEY not set' };
+
+  /* 形が明らかに違うなら、API を叩く前に言う。
+     401 は「キーが無効」としか分からないが、これなら**何が違うか**が分かる。 */
+  if (key.indexOf('sk-ant-') !== 0) {
+    return {
+      status: 'error',
+      message: 'ANTHROPIC_API_KEY の形式が違います（sk-ant- で始まる必要があります）。'
+             + '別のサービスのキー（Google/Gemini など）が入っていないか確認してください'
+    };
+  }
+
   var res = UrlFetchApp.fetch(CLAUDE_ENDPOINT, {
     method: 'post',
     contentType: 'application/json',
@@ -80,10 +99,17 @@ function callClaude_(systemPrompt, userText, maxTokens) {
   try { body = JSON.parse(res.getContentText()); } catch (e) {}
 
   if (code !== 200) {
-    return {
-      status: 'error',
-      message: 'Claude API ' + code + ': ' + ((body.error && body.error.message) || 'unknown')
-    };
+    var detail = (body.error && body.error.message) || 'unknown';
+    /* 401 は「キーが拒否された」以上のことを API が教えてくれない。
+       確認する場所を、その場で示す。2026-08-10 に実際に出た（§9-71）。 */
+    if (code === 401) {
+      detail += '\n\n確認すること:\n'
+             + '  1. console.anthropic.com でキーが有効か（失効・削除されていないか）\n'
+             + '  2. そのキーの組織にクレジットが残っているか\n'
+             + '  3. GAS のスクリプト プロパティに入れ直す（前後の空白は自動で除去します）\n'
+             + '  4. 入れ直したら **GAS を再デプロイ** する（保存だけでは反映されません）';
+    }
+    return { status: 'error', message: 'Claude API ' + code + ': ' + detail };
   }
 
   var text = (body.content && body.content[0] && body.content[0].text) || '';

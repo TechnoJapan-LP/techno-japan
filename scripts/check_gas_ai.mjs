@@ -38,7 +38,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const GAS_PATH = path.join(ROOT, 'scripts', 'gas-update', 'ai-claude-opus5.gs');
 
-function run({ key='sk-test', httpCode=200, body=null, throwOn=null }) {
+function run({ key='sk-ant-test', httpCode=200, body=null, throwOn=null }) {
   const calls = [];
   const ctx = {
     console, JSON, Math, Date, String, Number, Boolean, Object, Array, RegExp, Error,
@@ -121,6 +121,37 @@ const okBody = (t, stop='end_turn') => ({ content:[{text:t}], stop_reason:stop }
   c2.aiSummarize({ text:'本文', mode:'excerpt-en' });
   check('mode で指示が切り替わる',
     /クリックされやすい記事タイトル/.test(sysTitles) && /English summaries/.test(c2.__calls[0].payload.system), 'ok');
+}
+
+// 13) キーの前後の空白・改行を落とす（貼り付けで紛れ込む）
+{
+  const c = run({ key: ' sk-ant-test\n', body: okBody('ok') });
+  const r = c.aiTranslateV2_({ text:'x', target:'en' });
+  check('キーの空白・改行を落として通す', r.status==='ok', r.status+' '+(r.message||''));
+}
+
+// 14) 別サービスのキーは、API を叩く前に形で弾く
+{
+  const c = run({ key: 'AIzaSyDBCrbSFx5rnKZIl3cEP8AO87QdeRDZr1Q', body: okBody('ok') });
+  const r = c.aiTranslateV2_({ text:'x', target:'en' });
+  check('sk-ant- で始まらないキーは叩く前に弾く',
+    r.status==='error' && /sk-ant-/.test(r.message), r.message);
+  check('弾いたときは API を呼ばない', c.__calls.length===0, c.__calls.length+'回');
+}
+
+// 15) 401 は確認すべき場所まで出す（2026-08-10 に実際に出た。§9-71）
+{
+  const c = run({ httpCode: 401, body: { error: { message: 'invalid x-api-key' } } });
+  const r = c.aiTranslateV2_({ text:'x', target:'en' });
+  check('401 は元の文言を保つ', /invalid x-api-key/.test(r.message), r.message.slice(0,40));
+  check('401 は再デプロイの必要まで伝える', /再デプロイ/.test(r.message), r.message.slice(-40));
+}
+
+// 16) 空白だけのキーは「未設定」と同じ扱い
+{
+  const c = run({ key: '   ' });
+  const r = c.aiTranslateV2_({ text:'x', target:'en' });
+  check('空白だけのキーは未設定として扱う', /not set/.test(r.message), r.message);
 }
 
 console.log('\n検証項目'.padEnd(46)+'判定  実測');
