@@ -163,6 +163,10 @@ jobs:
       # コードを読んでも分からないので、実際に描画して矩形を測る（§9-63）。
       # 詰まった CI を外す仕組みは、普段は何もしないので壊れても気づけない。
       # 判断部分（動作中・承認待ちを殺さない等）をここで毎回試験する（§9-65）。
+      # 押した時点では成功に見えて、20分後に CI が赤くなる状態を作らない（§9-66）。
+      - name: Check CMS publish guard
+        run: node scripts/check_cms_publish_guard.mjs
+
       - name: Check CI unstick logic
         run: node scripts/check_unstick_queue.mjs
 

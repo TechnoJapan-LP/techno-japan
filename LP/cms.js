@@ -5670,6 +5670,39 @@ function publishSanityCheck(d){
       +detail+'\n\nLOCATION = 英語・ローマ字表記\nLocation (JA) = 日本語表記\n\nこのまま公開しますか?'))
       return {ok:false, message:'Publishをキャンセルしました（LOCATION / location_ja を確認してください）'};
   }
+  /* EDITIONS / LINEUPS の ID 重複。
+
+     重複があると fetch-data.mjs が「エラー」で書き出しを止めるため、
+     **Publish は必ず失敗する。**ところが CMS 側は今まで EDITIONS を
+     見ていなかったので、押した時点では成功したように見え、
+     20分後に CI が赤くなって初めて分かった。
+
+     2026-08-09 は synapse-festival-2026 の1行が消し漏れており、
+     **丸1日、Publish が同じ理由で失敗し続けていた**（§9-66）。
+     押す前に、行番号まで出して止める。
+
+     EDITIONS を取れなかったときは黙って通す（この検査のために
+     Publish 自体を止めない）。 */
+  const dupIssues=[];
+  if(Array.isArray(d.EDITIONS)){
+    // LINEUPS は同じ EDITION_ID が何行あっても正しい（出演者ごとに1行）ので見ない。
+    const seen=new Map();
+    d.EDITIONS.forEach(r=>{
+      const id=String(r.EDITION_ID||'').trim();
+      if(!id) return;
+      if(!seen.has(id)) seen.set(id,[]);
+      seen.get(id).push(Number(r._row)||0);
+    });
+    seen.forEach((rows,id)=>{ if(rows.length>1) dupIssues.push({id,rows}); });
+  }
+  if(dupIssues.length){
+    const detail=dupIssues.slice(0,10).map(x=>
+      '  ・EDITIONS "'+x.id+'" — '+(x.rows.filter(Boolean).map(r=>r+'行目').join(' と ') || x.rows.length+'行')).join('\n')
+      +(dupIssues.length>10?'\n  …他 '+(dupIssues.length-10)+' 件':'');
+    return {ok:false, message:'⛔ 同じ ID の行が重複しています。このまま公開すると必ず失敗します。\n'
+      +detail+'\n\nスプレッドシートで、どちらか一方の行を削除してから再実行してください。'};
+  }
+
   return {ok:true, counts};
 }
 
@@ -5745,7 +5778,14 @@ function publishDataJs(opts){
   const btn = document.getElementById('btn-publish-now');
   if (btn) { btn.disabled = true; btn.dataset.originalText = btn.innerHTML; btn.innerHTML = 'Building...'; }
   toast('Building data.js...','info');
-  fetchAllSheets(['VENUES','FESTIVALS','ARTISTS','EVENTS','ARTICLES'],{fresh:true}).then(d=>{
+  /* EDITIONS も取る。data.js には入らないが、**ID が重複していると
+     公開処理が必ず失敗する**ため、押す前に見る必要がある（§9-66）。
+     取れなかった場合は d.EDITIONS が未定義になり、重複検査は黙って飛ばす。 */
+  fetchAllSheets(['VENUES','FESTIVALS','ARTISTS','EVENTS','ARTICLES'],{fresh:true})
+    .then(d => fetch(GAS_URL+'?action=get_sheet&sheet=EDITIONS').then(r=>r.json())
+      .then(x => { if(x.status==='ok' && Array.isArray(x.rows)) d.EDITIONS = x.rows; return d; })
+      .catch(() => d))
+    .then(d=>{
     const sane = publishSanityCheck(d);
     if(!sane.ok) throw new Error(sane.message);
     const diff = publishDiffSummary(d);
