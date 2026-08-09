@@ -24,6 +24,10 @@ on:
         description: '何もせず、外す対象だけ表示する'
         type: boolean
         default: false
+      stuck_minutes:
+        description: '何分の順番待ちを詰まりとみなすか（手動復旧のとき短くする）'
+        type: string
+        default: ''
 
 permissions:
   actions: write        # 詰まった run のキャンセルと再実行
@@ -52,4 +56,5 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
           node scripts/unstick_ci_queue.mjs \
-            ${{ inputs.dry_run && '--dry-run' || '' }}
+            ${{ inputs.dry_run && '--dry-run' || '' }} \
+            ${{ inputs.stuck_minutes && format('--stuck-minutes {0}', inputs.stuck_minutes) || '' }}
