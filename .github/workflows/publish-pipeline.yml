@@ -166,6 +166,10 @@ jobs:
       # 押した時点では成功に見えて、20分後に CI が赤くなる状態を作らない（§9-66）。
       # Publish が「列を落とす経路」でデータを取っていないこと（§9-67）。
       # リポジトリの .gs と GAS の実物がずれていないか（貼り忘れ検出。§9-74）。
+      # 一時的な通信失敗で画像同期が落ちないこと（§9-75）。
+      - name: Check image sync retry
+        run: python3 scripts/check_sync_retry.py
+
       - name: Check GAS sync
         run: node scripts/check_gas_sync.mjs
 
