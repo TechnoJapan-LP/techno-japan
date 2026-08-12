@@ -1591,3 +1591,49 @@ FESTIVALS等の必須データのPublish自体は止めないようにした。
 - 診断書の優先順位1〜6 は着手可能。1（robots.txt）だけは意図確認が先。
 - SSR/ISR・ヘッドレスCMS・AVIF は「やらない」判断と再検討トリガーを
   診断書に明記した。次に同じ提案が出たらそこを参照。
+
+## 2026-08-13 / Claude / 診断の優先1〜6を実施・本番公開済み
+
+### 実施
+- **出演者を構造化データに復旧**（本命）。LINEUPS 621行中501行が
+  ARTIST_ID 無しの名前だけ行で、リンク必須の lineupEntity が全部捨てていた。
+  名前だけでも MusicGroup として出すよう修正（lineupPerformerLd）。
+  出演データのあるフェス31件すべてに点灯（LOA=13名）。
+- eventStatus の既定を EventScheduled に（cancelled のみ明示必須のため既定外）。
+- robots.txt の `/map.html` 封鎖を解除（ユーザー承認済み・cms.html は維持）。
+- llms.txt / events.json をビルド生成（buildAiSurface・タイムスタンプ無し）。
+- タップ領域 44px 化（pointer: coarse のみ）+ touch-action: manipulation。
+- Lighthouse にカテゴリ別の床（性能0.60/A11y0.85/BP0.90/SEO0.90 =
+  実測の床のすこし下。理想値は張らない）。
+- エリア名ラベルに aria-hidden。
+- 恒久チェック `check_jsonld.mjs` を CI 2本 + preflight に追加（計27検査）。
+
+### コミット
+- `aba2958e` feat(seo): 出演者を構造化データに復旧し、AI検索向けの入口を整備
+
+### 検証
+- push 前 preflight 全27件成功。deploy success。
+- 本番実測: llms.txt HTTP 200 / events.json 17件 / LOA に performer /
+  robots.txt の Disallow は cms.html のみ。
+- ネガティブコントロール2種（performer 対応を外す＝元のバグ再現／
+  robots 封鎖を戻す）で check_jsonld が落ちることを確認。
+  **置換後に件数を出力して「本当に壊した」ことを確かめてから判定**（§9-78 の反省）。
+
+### 変更したパターン
+- リンク解決できない出演行を黙って捨て、構造化データから出演者が消えるパターン。
+- 目に見えないデータ（JSON-LD）の欠落に誰も気づけないパターン。
+- 理想値のしきい値が初日から赤くなり、赤が無視されるパターン（床は実測の下に張る）。
+
+### 未確認の類似パターン
+- **EDITIONS.STATUS の規約外 `published` 36件・空欄55件はデータ課題のまま**
+  （AGENTS.md に従い勝手に直していない）。シートで announced 等へ要修正。
+  eventStatus は既定で出るが、soldout/finished の区別はデータ修正後に効く。
+- TICKETURL 未入力 84/104件。入れば offers が自動で出る（コード対応済み）。
+- 検索エンジンが llms.txt / events.json を実際に取得しているかは
+  数週間後にアクセスログ等でしか確認できない。
+
+### 次の担当への注意・判断待ち
+- 診断書（reports/diagnosis-2026-08-13.md）の末尾に**診断自体の訂正**が2件ある。
+  「コードに無い」と断定する前に生成コードを読むこと。
+- events.json / llms.txt は build-detail-pages.mjs の buildAiSurface が生成。
+  **タイムスタンプを入れないこと**（毎日の再生成で差分ノイズになる）。
