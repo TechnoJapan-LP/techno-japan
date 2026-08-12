@@ -738,6 +738,31 @@ function editionLocationLd(ed, lang) {
   };
 }
 
+/* JSON-LD 用の出演者。ARTIST_ID が解決できれば登録アーティストへのリンク付き、
+   できなければ ACT_LABEL の名前だけで出す。
+
+   LINEUPS 621行のうち **501行は ARTIST_ID を持たない名前だけの行**（2026-08-13 実測）。
+   lineupEntity（リンク必須）だけに頼ると、出演者情報のほとんどが
+   構造化データから消える。名前だけでも schema.org として有効で、
+   AI検索が「誰が出るか」を読める。AUDIT §9-79。 */
+function lineupPerformerLd(row, artistsById, lang) {
+  const linked = lineupEntity(row, artistsById, lang);  // 参照切れは従来どおり例外で止める
+  if (linked) return linked;
+  const label = String(row.ACT_LABEL || '').trim();
+  return label ? { '@type': 'MusicGroup', name: label } : null;
+}
+
+/* 同じ出演者が複数の開催回に出ると親の performer が重複するので名寄せする。 */
+function dedupePerformers(list) {
+  const seen = new Set();
+  return list.filter((p) => {
+    const key = p['@id'] || p.name;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
 function editionStatusLd(status) {
   const values = {
     announced: 'EventScheduled',
@@ -747,7 +772,11 @@ function editionStatusLd(status) {
     cancelled: 'EventCancelled',
   };
   const value = values[String(status || '').trim().toLowerCase()];
-  return value ? `https://schema.org/${value}` : null;
+  /* 空欄・規約外（published 等が36件ある。§9-79）は EventScheduled を出す。
+     掲載している開催回である以上 scheduled は事実であり、eventStatus は
+     リッチリザルトの推奨項目。cancelled だけは明示値が必要なので既定にしない。
+     規約外の値そのものは直さず報告する（AGENTS.md）。 */
+  return `https://schema.org/${value || 'EventScheduled'}`;
 }
 
 function editionDateHtml(ed, lang) {
@@ -1192,8 +1221,9 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
   const currentEdition = editions[0];
   const summary = festivalSummary(f, currentEdition, name, lang);
   const faqItems = festivalFaqItems(editions, lineupsByEdition, artistsById, name, lang);
-  const performers = editions.flatMap((ed) => lineupsByEdition.get(ed.EDITION_ID) || [])
-    .map((row) => lineupEntity(row, artistsById, lang)).filter(Boolean);
+  const performers = dedupePerformers(
+    editions.flatMap((ed) => lineupsByEdition.get(ed.EDITION_ID) || [])
+      .map((row) => lineupPerformerLd(row, artistsById, lang)).filter(Boolean));
   const sameAs = [f.url, f.instagram]
     .map((value) => String(value || '').trim())
     .filter((value, index, values) => value && values.indexOf(value) === index);
@@ -1215,8 +1245,8 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
       ...(ISO_DATE.test(String(ed.DATE_START || '')) ? { startDate: ed.DATE_START } : {}),
       ...(ISO_DATE.test(String(ed.DATE_END || '')) ? { endDate: ed.DATE_END } : {}),
       location: editionLocationLd(ed, lang),
-      ...((lineupsByEdition.get(ed.EDITION_ID) || []).map((row) => lineupEntity(row, artistsById, lang)).filter(Boolean).length
-        ? { performer: (lineupsByEdition.get(ed.EDITION_ID) || []).map((row) => lineupEntity(row, artistsById, lang)).filter(Boolean) }
+      ...((lineupsByEdition.get(ed.EDITION_ID) || []).map((row) => lineupPerformerLd(row, artistsById, lang)).filter(Boolean).length
+        ? { performer: (lineupsByEdition.get(ed.EDITION_ID) || []).map((row) => lineupPerformerLd(row, artistsById, lang)).filter(Boolean) }
         : {}),
       ...(editionStatusLd(ed.STATUS) ? { eventStatus: editionStatusLd(ed.STATUS) } : {}),
       ...(ed.TICKETURL ? { offers: { '@type': 'Offer', url: ed.TICKETURL } } : {}),
@@ -1648,6 +1678,95 @@ function writeHubLinks(fileName, markerName, html) {
   return true;
 }
 
+
+/* ==============================================================
+   AI検索向けの機械可読データ（llms.txt / events.json）
+   ==============================================================
+
+   生成AI検索（ChatGPT / Perplexity / AI Overviews）は「一覧を1回で
+   読める場所」を強く好む。HTML を473ページ巡回させるより、
+   要点をまとめた2ファイルを置くほうが引用されやすい。AUDIT §9-79。
+
+   ・events.json … 今後の開催回（日付・場所・座標・チケット）。日付昇順
+   ・llms.txt    … サイトの説明と主要な入口（llmstxt.org の慣行に沿う）
+
+   **タイムスタンプを埋めない。**毎日の再生成コミット（generate-meta）で
+   中身が変わっていないのに毎回差分が出る、を避ける。 */
+function buildAiSurface({ pubFests, editionsByFestival, pubVenues, pubArtists, pubArticles }) {
+  const today = new Date().toISOString().slice(0, 10);
+  const events = [];
+  for (const f of pubFests) {
+    for (const ed of (editionsByFestival.get(String(f.id)) || [])) {
+      const start = String(ed.DATE_START || '');
+      if (!ISO_DATE.test(start)) continue;
+      const end = ISO_DATE.test(String(ed.DATE_END || '')) ? ed.DATE_END : start;
+      if (end < today) continue;                                   // 終わった回は載せない
+      if (String(ed.STATUS || '').trim().toLowerCase() === 'cancelled') continue;
+      events.push({
+        name: `${f.name} ${ed.EDITION || ''}`.trim(),
+        url: `${BASE}/festivals/${encodeURIComponent(f.id)}.html`,
+        start,
+        end,
+        ...(ed.LOCATION ? { venue: ed.LOCATION } : {}),
+        ...(ed.PREF ? { pref: ed.PREF } : {}),
+        ...(Number(ed.LAT) && Number(ed.LNG) ? { lat: Number(ed.LAT), lng: Number(ed.LNG) } : {}),
+        ...(Array.isArray(f.genre) && f.genre.length ? { genres: f.genre } : {}),
+        ...(ed.TICKETURL ? { tickets: ed.TICKETURL } : {}),
+      });
+    }
+  }
+  events.sort((a, b) => a.start.localeCompare(b.start) || a.name.localeCompare(b.name));
+
+  const eventsJson = JSON.stringify({
+    source: `${BASE}/`,
+    license: 'データの出典として techno-japan.media へのリンクを求めます',
+    count: events.length,
+    events,
+  }, null, 2) + '\n';
+
+  const lines = [
+    '# TECHNO JAPAN',
+    '',
+    `> 日本のテクノ / ハウスの独立メディア。フェスティバル${pubFests.length}件・`,
+    `> アーティスト${pubArtists.length}名・会場${pubVenues.length}件・記事${pubArticles.length}本を日英で掲載し、`,
+    '> 開催日・場所・出演者を構造化データ（schema.org）付きで公開している。',
+    '',
+    `## 今後の開催予定（${events.length}件）`,
+    '',
+    ...events.slice(0, 40).map((e) =>
+      `- ${e.start}${e.end !== e.start ? `〜${e.end}` : ''}: [${e.name}](${e.url})` +
+      `${e.venue ? ` — ${e.venue}` : ''}${e.pref ? `, ${e.pref}` : ''}`),
+    ...(events.length > 40 ? [`- …ほか ${events.length - 40} 件は events.json を参照`] : []),
+    '',
+    '## 一覧',
+    '',
+    `- [Festivals](${BASE}/festivals.html)`,
+    `- [Artists](${BASE}/artists.html)`,
+    `- [Venues](${BASE}/venues.html)`,
+    `- [News](${BASE}/news.html)`,
+    `- [Club Map](${BASE}/map.html)`,
+    `- [English](${BASE}/en/)`,
+    '',
+    '## 機械可読データ',
+    '',
+    `- [Events (JSON)](${BASE}/events.json): 今後の開催回。日付・場所・座標・チケットURL`,
+    `- [Sitemap](${BASE}/sitemap.xml)`,
+    `- [RSS](${BASE}/rss.xml)`,
+    '',
+  ];
+  const llmsTxt = lines.join('\n');
+
+  const writeIfChanged = (file, content) => {
+    if (fs.existsSync(file) && fs.readFileSync(file, 'utf8') === content) return false;
+    fs.writeFileSync(file, content);
+    return true;
+  };
+  const w1 = writeIfChanged(path.join(LP_DIR, 'events.json'), eventsJson);
+  const w2 = writeIfChanged(path.join(LP_DIR, 'llms.txt'), llmsTxt);
+  console.log(`AI surface: events.json ${events.length}件 (${w1 ? 'updated' : 'unchanged'}), llms.txt (${w2 ? 'updated' : 'unchanged'})`);
+}
+
+
 function main() {
   IMAGE_DIMENSIONS = loadImageDimensions();
   CARD_DERIVATIVES = loadCardDerivatives();
@@ -1816,6 +1935,8 @@ ${FAVICON_TAGS}
   const HUBS = ['index.html', 'festivals.html', 'artists.html', 'venues.html', 'news.html'];
   const jaFixed = HUBS.filter(fixJaHub);
   const enWritten = HUBS.filter(writeEnHub);
+
+  buildAiSurface({ pubFests, editionsByFestival, pubVenues, pubArtists, pubArticles });
 
   console.log('Detail pages:');
   let total = 0, written = 0, removed = 0;

@@ -1,8 +1,8 @@
 User-agent: *
 Allow: /
 
-# Disallow CMS / preview pages
+# CMS は隠す。map.html は 2026-08-13 に封鎖を解除した
+# （全国対応済みの一般公開ページであり、隠す理由が無い。AUDIT §9-79）
 Disallow: /cms.html
-Disallow: /map.html
 
 Sitemap: https://techno-japan.media/sitemap.xml

@@ -71,6 +71,12 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
   transition: all 0.3s ease; white-space: nowrap; flex-shrink: 0;
 }
 .filter-pill:hover { border-color: rgba(240,237,232,0.5); color: var(--text); }
+/* タップ端末では押せる範囲を 44px に。見た目の変更はタップ端末に限る。
+   touch-action はスクロール開始との競合を断つ。AUDIT §9-79。 */
+.filter-pill { touch-action: manipulation; }
+@media (pointer: coarse) {
+  .filter-pill { min-height: 40px; display: inline-flex; align-items: center; }
+}
 .filter-pill.active { background: var(--text); color: var(--bg); border-color: var(--text); }
 
 /* MAP */
@@ -298,7 +304,8 @@ AREA_LABELS.forEach(a => {
   L.marker([a.lat, a.lng], {
     icon: L.divIcon({
       className: 'area-label',
-      html: a.name,
+      /* 装飾のラベル（コントラスト1.65:1）。読み上げ対象にしない */
+      html: `<span aria-hidden="true">${a.name}</span>`,
       iconSize: [0, 0],
       iconAnchor: [0, 0]
     }),

@@ -18,8 +18,43 @@
             "maxNumericValue": 0.06,
             "aggregationMethod": "pessimistic"
           }
+        ],
+        "categories:performance": [
+          "error",
+          {
+            "minScore": 0.6,
+            "aggregationMethod": "pessimistic"
+          }
+        ],
+        "categories:accessibility": [
+          "error",
+          {
+            "minScore": 0.85,
+            "aggregationMethod": "pessimistic"
+          }
+        ],
+        "categories:best-practices": [
+          "error",
+          {
+            "minScore": 0.9,
+            "aggregationMethod": "pessimistic"
+          }
+        ],
+        "categories:seo": [
+          "error",
+          {
+            "minScore": 0.9,
+            "aggregationMethod": "pessimistic"
+          }
         ]
       }
     }
-  }
+  },
+  "_note_categories": [
+    "カテゴリ別の合格ライン。2026-08-13 の実測（8URL の最小値）:",
+    "  性能67（/ が最低・articles 69）/ A11y 89 / BestPractices 96 / SEO 92",
+    "しきい値は**現状の床のすこし下**に張る。理想値ではなく回帰の検出が目的",
+    "（0.85 のような理想値を置くと初日から赤くなり、赤が無視される）。",
+    "スコアを改善したら、そのぶん床を上げること。"
+  ]
 }

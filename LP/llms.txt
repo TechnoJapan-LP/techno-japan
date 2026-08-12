@@ -1,0 +1,40 @@
+# TECHNO JAPAN
+
+> 日本のテクノ / ハウスの独立メディア。フェスティバル96件・
+> アーティスト96名・会場22件・記事3本を日英で掲載し、
+> 開催日・場所・出演者を構造化データ（schema.org）付きで公開している。
+
+## 今後の開催予定（17件）
+
+- 2026-08-15〜2026-08-16: [LOA-LOST PARADISE- 2026](https://techno-japan.media/festivals/loa-lost-paradise.html) — Nalu Beach, Ibaraki
+- 2026-08-21〜2026-08-23: [Global Ark 2026](https://techno-japan.media/festivals/global-ark.html) — Nozoriko Camping Ground, Gunma
+- 2026-09-05〜2026-09-06: [ONE PARK FESTIVAL 2026](https://techno-japan.media/festivals/one-park-festival.html), Fukui
+- 2026-09-06: [BIG FUN 2026](https://techno-japan.media/festivals/big-fun.html) — Hakkenzan Orchard, Hokkaido
+- 2026-09-11〜2026-09-13: [Re:birth Festival 2026](https://techno-japan.media/festivals/re-birth-festival.html) — Kodamanomori Camping Ground, Nagano
+- 2026-09-19〜2026-09-20: [Ultra Japan 2026](https://techno-japan.media/festivals/ultra-japan.html), Tokyo
+- 2026-09-20〜2026-09-22: [COLORS Presents SOUNDCAMP 2026](https://techno-japan.media/festivals/colors-presents-soundcamp.html) — Secret Location, Hokkaido
+- 2026-09-22〜2026-09-23: [CIRCUS ODAIBA 2026](https://techno-japan.media/festivals/circus.html) — Odaiba Outdoor Special Venue, Tokyo
+- 2026-09-25〜2026-09-27: [Odyssey 2026](https://techno-japan.media/festivals/odyssey.html) — Sky Lodge Ginga Village, Miyazaki
+- 2026-09-26〜2026-09-27: [FFKT 2026](https://techno-japan.media/festivals/ffkt.html) — Hotel Izukyu, Shizuoka
+- 2026-09-28〜2026-09-29: [御月民 -OTSUKIMI- 2026](https://techno-japan.media/festivals/otsukimi.html) — Healing Garden Takanami, Niigata
+- 2026-10-02〜2026-10-04: [Synapse Festival 2026](https://techno-japan.media/festivals/synapse-festival.html) — INN THE PARK FUKUOKA, Fukuoka
+- 2026-10-10〜2026-10-12: [Labyrinth 2026](https://techno-japan.media/festivals/labyrinth.html) — Minakami Hodaigi Camping Ground, Gunma
+- 2026-10-10〜2026-10-11: [YAGURA 2026](https://techno-japan.media/festivals/yagura.html), Gifu
+- 2026-10-22〜2026-10-25: [Wonderfruit Kyoto 2026](https://techno-japan.media/festivals/wonderfruit-kyoto.html) — Kyoto (Ohara Sanso / ACG Villa Kyoto / Kurama Mountain / Ochill TeaRoom), Kyoto
+- 2026-10-31〜2026-11-01: [FESTIVAL de FRUE 2026](https://techno-japan.media/festivals/festival-de-frue.html) — TSUMAGOI RESORT SAINO SATO, Shizuoka
+- 2026-11-07〜2026-11-08: [GROW THE CULTURE OPEN AIR 2026](https://techno-japan.media/festivals/grow-the-culture-open-air.html) — Ohba Camping Village, Tokyo
+
+## 一覧
+
+- [Festivals](https://techno-japan.media/festivals.html)
+- [Artists](https://techno-japan.media/artists.html)
+- [Venues](https://techno-japan.media/venues.html)
+- [News](https://techno-japan.media/news.html)
+- [Club Map](https://techno-japan.media/map.html)
+- [English](https://techno-japan.media/en/)
+
+## 機械可読データ
+
+- [Events (JSON)](https://techno-japan.media/events.json): 今後の開催回。日付・場所・座標・チケットURL
+- [Sitemap](https://techno-japan.media/sitemap.xml)
+- [RSS](https://techno-japan.media/rss.xml)

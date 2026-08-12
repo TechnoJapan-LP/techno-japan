@@ -181,6 +181,10 @@ jobs:
       - name: Check image sync retry
         run: python3 scripts/check_sync_retry.py
 
+      # 構造化データは目に見えない。壊れても消えても画面は変わらない（§9-79）。
+      - name: Check structured data & AI surface
+        run: node scripts/check_jsonld.mjs
+
       - name: Check GAS sync
         run: node scripts/check_gas_sync.mjs
 

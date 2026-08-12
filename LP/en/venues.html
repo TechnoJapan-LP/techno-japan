@@ -253,6 +253,12 @@ nav { padding: 20px 40px; background: rgba(8,8,8,0.97); mix-blend-mode: normal; 
 }
 .vm-pill:hover { border-color: rgba(240,237,232,0.4); color: var(--text); }
 .vm-pill.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+/* タップ端末では押せる範囲を 44px に（見た目の変更はタップ端末に限る）。§9-79 */
+.vm-pill { touch-action: manipulation; }
+@media (pointer: coarse) {
+  .city-map-filters { gap: 12px; }
+  .vm-pill { min-height: 44px; display: inline-flex; align-items: center; }
+}
 
 /* RESPONSIVE */
 @media (max-width: 900px) {

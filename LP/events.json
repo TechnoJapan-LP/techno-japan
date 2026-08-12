@@ -1,0 +1,231 @@
+{
+  "source": "https://techno-japan.media/",
+  "license": "データの出典として techno-japan.media へのリンクを求めます",
+  "count": 17,
+  "events": [
+    {
+      "name": "LOA-LOST PARADISE- 2026",
+      "url": "https://techno-japan.media/festivals/loa-lost-paradise.html",
+      "start": "2026-08-15",
+      "end": "2026-08-16",
+      "venue": "Nalu Beach",
+      "pref": "Ibaraki",
+      "lat": 36.0827,
+      "lng": 140.596,
+      "genres": [
+        "TECHNO",
+        "HOUSE",
+        "OTHERS"
+      ]
+    },
+    {
+      "name": "Global Ark 2026",
+      "url": "https://techno-japan.media/festivals/global-ark.html",
+      "start": "2026-08-21",
+      "end": "2026-08-23",
+      "venue": "Nozoriko Camping Ground",
+      "pref": "Gunma",
+      "lat": 36.6976,
+      "lng": 138.6534,
+      "genres": [
+        "TECHNO",
+        "HOUSE"
+      ],
+      "tickets": "https://globalark.zaiko.io/en/e/global-ark-2026"
+    },
+    {
+      "name": "ONE PARK FESTIVAL 2026",
+      "url": "https://techno-japan.media/festivals/one-park-festival.html",
+      "start": "2026-09-05",
+      "end": "2026-09-06",
+      "pref": "Fukui",
+      "genres": [
+        "OTHERS"
+      ]
+    },
+    {
+      "name": "BIG FUN 2026",
+      "url": "https://techno-japan.media/festivals/big-fun.html",
+      "start": "2026-09-06",
+      "end": "2026-09-06",
+      "venue": "Hakkenzan Orchard",
+      "pref": "Hokkaido",
+      "lat": 42.9649,
+      "lng": 141.2215,
+      "genres": [
+        "HOUSE"
+      ]
+    },
+    {
+      "name": "Re:birth Festival 2026",
+      "url": "https://techno-japan.media/festivals/re-birth-festival.html",
+      "start": "2026-09-11",
+      "end": "2026-09-13",
+      "venue": "Kodamanomori Camping Ground",
+      "pref": "Nagano",
+      "lat": 35.9472,
+      "lng": 137.8183,
+      "genres": [
+        "TECHNO",
+        "HOUSE",
+        "AMBIENT",
+        "LIVE"
+      ]
+    },
+    {
+      "name": "Ultra Japan 2026",
+      "url": "https://techno-japan.media/festivals/ultra-japan.html",
+      "start": "2026-09-19",
+      "end": "2026-09-20",
+      "pref": "Tokyo",
+      "genres": [
+        "TECHNO",
+        "OTHERS"
+      ]
+    },
+    {
+      "name": "COLORS Presents SOUNDCAMP 2026",
+      "url": "https://techno-japan.media/festivals/colors-presents-soundcamp.html",
+      "start": "2026-09-20",
+      "end": "2026-09-22",
+      "venue": "Secret Location",
+      "pref": "Hokkaido",
+      "genres": [
+        "TECHNO",
+        "HOUSE"
+      ]
+    },
+    {
+      "name": "CIRCUS ODAIBA 2026",
+      "url": "https://techno-japan.media/festivals/circus.html",
+      "start": "2026-09-22",
+      "end": "2026-09-23",
+      "venue": "Odaiba Outdoor Special Venue",
+      "pref": "Tokyo",
+      "lat": 35.6258,
+      "lng": 139.7758,
+      "genres": [
+        "HOUSE",
+        "BASS",
+        "LIVE",
+        "OTHERS"
+      ]
+    },
+    {
+      "name": "Odyssey 2026",
+      "url": "https://techno-japan.media/festivals/odyssey.html",
+      "start": "2026-09-25",
+      "end": "2026-09-27",
+      "venue": "Sky Lodge Ginga Village",
+      "pref": "Miyazaki",
+      "lat": 32.5029,
+      "lng": 131.4283,
+      "genres": [
+        "TECHNO",
+        "HOUSE",
+        "LIVE"
+      ]
+    },
+    {
+      "name": "FFKT 2026",
+      "url": "https://techno-japan.media/festivals/ffkt.html",
+      "start": "2026-09-26",
+      "end": "2026-09-27",
+      "venue": "Hotel Izukyu",
+      "pref": "Shizuoka",
+      "lat": 34.6934,
+      "lng": 138.9712,
+      "genres": [
+        "TECHNO",
+        "HOUSE",
+        "AMBIENT",
+        "LIVE",
+        "OTHERS"
+      ]
+    },
+    {
+      "name": "御月民 -OTSUKIMI- 2026",
+      "url": "https://techno-japan.media/festivals/otsukimi.html",
+      "start": "2026-09-28",
+      "end": "2026-09-29",
+      "venue": "Healing Garden Takanami",
+      "pref": "Niigata",
+      "lat": 36.9079,
+      "lng": 137.8872,
+      "genres": [
+        "TECHNO"
+      ]
+    },
+    {
+      "name": "Synapse Festival 2026",
+      "url": "https://techno-japan.media/festivals/synapse-festival.html",
+      "start": "2026-10-02",
+      "end": "2026-10-04",
+      "venue": "INN THE PARK FUKUOKA",
+      "pref": "Fukuoka",
+      "lat": 33.6682,
+      "lng": 130.3756,
+      "genres": [
+        "TECHNO",
+        "HOUSE",
+        "AMBIENT",
+        "LIVE"
+      ]
+    },
+    {
+      "name": "Labyrinth 2026",
+      "url": "https://techno-japan.media/festivals/labyrinth.html",
+      "start": "2026-10-10",
+      "end": "2026-10-12",
+      "venue": "Minakami Hodaigi Camping Ground",
+      "pref": "Gunma",
+      "lat": 36.8572,
+      "lng": 139.0655,
+      "tickets": "https://mindgames.zaiko.io/en/e/labyrinth2026"
+    },
+    {
+      "name": "YAGURA 2026",
+      "url": "https://techno-japan.media/festivals/yagura.html",
+      "start": "2026-10-10",
+      "end": "2026-10-11",
+      "pref": "Gifu",
+      "genres": [
+        "MIX"
+      ]
+    },
+    {
+      "name": "Wonderfruit Kyoto 2026",
+      "url": "https://techno-japan.media/festivals/wonderfruit-kyoto.html",
+      "start": "2026-10-22",
+      "end": "2026-10-25",
+      "venue": "Kyoto (Ohara Sanso / ACG Villa Kyoto / Kurama Mountain / Ochill TeaRoom)",
+      "pref": "Kyoto"
+    },
+    {
+      "name": "FESTIVAL de FRUE 2026",
+      "url": "https://techno-japan.media/festivals/festival-de-frue.html",
+      "start": "2026-10-31",
+      "end": "2026-11-01",
+      "venue": "TSUMAGOI RESORT SAINO SATO",
+      "pref": "Shizuoka",
+      "genres": [
+        "HOUSE",
+        "LIVE"
+      ],
+      "tickets": "https://shop.frue.jp/"
+    },
+    {
+      "name": "GROW THE CULTURE OPEN AIR 2026",
+      "url": "https://techno-japan.media/festivals/grow-the-culture-open-air.html",
+      "start": "2026-11-07",
+      "end": "2026-11-08",
+      "venue": "Ohba Camping Village",
+      "pref": "Tokyo",
+      "genres": [
+        "TECHNO",
+        "HOUSE",
+        "BASS"
+      ]
+    }
+  ]
+}
