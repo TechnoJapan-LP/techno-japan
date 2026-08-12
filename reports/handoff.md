@@ -1477,3 +1477,56 @@ FESTIVALS等の必須データのPublish自体は止めないようにした。
   詳細ページ・英語版すべてに自動で出る。コード変更は不要。
   貼る前に `node scripts/check_paste_tsv.mjs <tsv> --sheet VENUES` を通すこと。
 - push の前に必ず `bash scripts/preflight.sh`（AGENTS.md 冒頭のルール）。
+
+## 2026-08-12 / Codex / TOPアーティスト1件目の視認性修正
+
+### 実施
+- TOPのARTISTSカルーセル左端フェードを見直し、先頭カード（#01）が左側の
+  マスクで薄くならないよう変更。右端のフェードは維持。
+
+### コミット
+- 未コミット。公開前のテスト段階。
+
+### 検証
+- 実ブラウザ（Chrome）で `/index.html` と `/en/index.html` をPC・モバイル相当で確認。
+  #01 DJ Nobu がDOMに存在し、`display:block`・`opacity:1`で表示されることを確認。
+- NEXTイベントは `NEXT RAVE / LOA-LOST PARADISE-`、一覧の先頭は #02、重複なし。
+- `python3 scripts/check_regressions.py` 成功。
+- `python3 scripts/check_internal_links.py` 成功。
+- `git diff --check` 成功。
+
+### 変更したパターン
+- 横スクロールカルーセルの装飾用フェードが先頭カードの視認性を損なうパターン。
+
+### 未確認の類似パターン
+- 実機（iOS Safari / Android Chrome）の表示は未確認。
+
+### 次の担当への注意・判断待ち
+- 本番公開前に、実機または同等のブラウザ自動操作でTOPの先頭カードを再確認し、
+  `bash scripts/preflight.sh` 全件を実行すること。今回は公開していない。
+
+## 2026-08-12 / Codex / UPCOMING EVENTS先頭イベントの出演者表示
+
+### 実施
+- TOPのNEXT Festival / Raveカードに、データの`lineup`から出演者名を表示。
+- JA / ENとも同じ描画ロジックにし、出演者が未登録のイベントでは空欄を出さない。
+
+### コミット
+- 未コミット。公開前のテスト段階。
+
+### 検証
+- 実ブラウザ（Chrome）で `/index.html` と `/en/index.html` をPC・モバイル相当で確認。
+  `NEXT RAVE / LOA-LOST PARADISE-` と出演者8名＋省略記号を確認。
+- 下の一覧は #02から始まり、NEXTとの重複なし。
+- `python3 scripts/check_regressions.py`、`python3 scripts/check_internal_links.py`、
+  `git diff --check` 成功。
+
+### 変更したパターン
+- 一覧側には出演者があるのに、最初のNEXTイベントカードだけ出演者が欠けるパターン。
+
+### 未確認の類似パターン
+- 実機（iOS Safari / Android Chrome）の表示は未確認。
+
+### 次の担当への注意・判断待ち
+- 本番公開前に実機または同等のブラウザ自動操作と、`bash scripts/preflight.sh` 全件を実施。
+  今回は公開していない。

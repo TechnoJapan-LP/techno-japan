@@ -201,6 +201,11 @@ nav { padding: 20px 40px; background: rgba(8,8,8,0.97); mix-blend-mode: normal; 
   width: 6px; height: 6px; border-radius: 50%; background: #ff2d2d; transition: background 0.3s ease;
 }
 .area-nav-map.active .pin-icon { background: var(--bg); }
+.venues-toolbar { display: flex; align-items: center; gap: 16px; padding: 24px 0; }
+.venues-search { flex: 1; max-width: 420px; background: transparent; border: 1px solid rgba(240,237,232,0.12); color: var(--text); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; padding: 12px 16px; outline: none; transition: border-color 0.3s ease; }
+.venues-search::placeholder { color: rgba(240,237,232,0.25); }
+.venues-search:focus { border-color: rgba(240,237,232,0.35); }
+.venues-count { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; opacity: .3; }
 /* 都市ごとの id を並べない。都市が増えるたびに書き足す形は、
    足し忘れに気づけない（AUDIT §9-78）。クラスで受ける。 */
 .city-map-wrap {
@@ -270,6 +275,7 @@ nav { padding: 20px 40px; background: rgba(8,8,8,0.97); mix-blend-mode: normal; 
 @media (max-width: 768px) {
   .area-nav a { flex-shrink: 0; }
 }
+@media (max-width: 640px) { .venues-toolbar { align-items: stretch; flex-direction: column; gap: 8px; } .venues-search { max-width: none; width: 100%; } }
 
 </style>
 <script type="application/ld+json">
@@ -367,6 +373,10 @@ nav { padding: 20px 40px; background: rgba(8,8,8,0.97); mix-blend-mode: normal; 
   <div class="area-nav-wrap">
     <div class="area-nav" id="area-nav"></div>
     <button class="area-nav-map" id="area-map-btn"><span class="pin-icon"></span> MAP</button>
+  </div>
+  <div class="venues-toolbar">
+    <input class="venues-search" id="venues-search" type="search" placeholder="SEARCH VENUES..." aria-label="Search venues">
+    <span class="venues-count" id="venues-count"></span>
   </div>
   <!-- 地図の入れ物は、VENUES にある都市の分だけ JS が作る（buildCityMapSections）。
        以前は5都市ぶんをここに直接書いていたため、**対応表に無い都市は
@@ -521,16 +531,21 @@ function observeAll() { document.querySelectorAll('.reveal').forEach(el => obser
 /* AREA FILTER */
 let currentArea = 'ALL';
 let mapCity = null; // which city map is showing
+let currentSearch = '';
 const VENUE_HUB_STATE_KEY = 'tj:venue-hub-state:v1';
 
 function readVenueQuery() {
   const area = new URLSearchParams(location.search).get('area');
   if (area) currentArea = area;
+  const q = new URLSearchParams(location.search).get('q');
+  if (q) currentSearch = q;
 }
 function syncVenueQuery() {
   const url = new URL(location.href);
   url.searchParams.delete('area');
+  url.searchParams.delete('q');
   if (currentArea !== 'ALL') url.searchParams.set('area', currentArea);
+  if (currentSearch) url.searchParams.set('q', currentSearch);
   history.replaceState(history.state, '', url.pathname + url.search);
 }
 function saveVenueHubState() {
@@ -671,10 +686,17 @@ function safeInitVenueMap(cfg) {
 }
 
 function applyAreaFilter() {
+  let visible = 0;
   document.querySelectorAll('.venue-card').forEach(card => {
     const city = card.dataset.city;
-    card.style.display = (currentArea === 'ALL' || city === currentArea) ? '' : 'none';
+    const matchesArea = currentArea === 'ALL' || city === currentArea;
+    const matchesSearch = !currentSearch || card.dataset.search.includes(currentSearch.toLowerCase());
+    const show = matchesArea && matchesSearch;
+    card.style.display = show ? '' : 'none';
+    if (show) visible++;
   });
+  const count = document.getElementById('venues-count');
+  if (count) count.textContent = `${visible} VENUES`;
 }
 
 /* HOVER PREVIEW PANE — HÖR-inspired side popup, desktop only */
@@ -750,7 +772,7 @@ function renderVenuesList() {
   document.getElementById('venues-grid').innerHTML = VENUES.filter(v => v.name && v.city && v.city !== 'undefined').map((v, i) => {
     const evCount = getVenueEvents(v.name).length;
     return `
-      <a href="/en/venues/${encodeURIComponent(v.id)}.html" data-venue-detail-link data-vid="${v.id}" class="venue-card reveal" data-city="${v.city}" style="transition-delay:${i * 80}ms">
+      <a href="/en/venues/${encodeURIComponent(v.id)}.html" data-venue-detail-link data-vid="${v.id}" class="venue-card reveal" data-city="${v.city}" data-search="${[v.name, v.name_en, v.city, v.area, Array.isArray(v.genre) ? v.genre.join(' ') : v.genre].filter(Boolean).join(' ').toLowerCase()}" style="transition-delay:${i * 80}ms">
         <div class="venue-card-content">
           <div class="venue-card-city">${[v.city, v.area].filter(Boolean).join(' · ')}</div>
           <div class="venue-card-name">${tjLocalized(v.name, '', v.name_en)}</div>
@@ -930,6 +952,13 @@ const ALL_MAPS_CFG = CITY_MAPS;   // 既存の呼び出し名を保つ
 /* INIT */
 buildCityMapSections();   // 地図の入れ物を都市の数だけ用意してから
 buildAreaNav();
+const venueSearch = document.getElementById('venues-search');
+venueSearch.value = currentSearch;
+let venueSearchTimer;
+venueSearch.addEventListener('input', () => {
+  clearTimeout(venueSearchTimer);
+  venueSearchTimer = setTimeout(() => { currentSearch = venueSearch.value.trim(); applyAreaFilter(); syncVenueQuery(); }, 150);
+});
 renderVenuesList();
 </script>
 <!-- Service Worker registration -->

@@ -248,6 +248,22 @@
 }
 
 /* ===================== FESTIVALS PREVIEW (HÖR-style rows) ===================== */
+.next-festival-card {
+  position: relative; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(220px, .85fr);
+  min-height: 300px; overflow: hidden; isolation: isolate;
+  border-bottom: 1px solid var(--card-border); background: var(--card-bg);
+}
+.next-festival-bg { position: absolute; inset: 0; background-size: cover; background-position: center; filter: grayscale(65%) brightness(.38); transform: scale(1.04); transition: filter .6s ease, transform .6s ease; z-index: -2; }
+.next-festival-overlay { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(8,8,8,.9) 0%, rgba(8,8,8,.62) 48%, rgba(8,8,8,.3) 100%); z-index: -1; }
+.next-festival-card:hover .next-festival-bg { filter: grayscale(15%) brightness(.58); transform: scale(1); }
+.next-festival-content { align-self: end; padding: 40px; }
+.next-festival-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: .25em; color: var(--accent); margin-bottom: 14px; }
+.next-festival-name { font-family: var(--font-display); font-size: clamp(44px, 8vw, 110px); line-height: .88; text-transform: uppercase; max-width: 900px; }
+.next-festival-meta { margin-top: 20px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .15em; text-transform: uppercase; opacity: .65; }
+.next-festival-lineup { margin-top: 10px; max-width: 720px; font-family: var(--font-mono); font-size: 9px; letter-spacing: .1em; line-height: 1.6; text-transform: uppercase; opacity: .6; }
+.next-festival-arrow { align-self: end; justify-self: end; margin: 40px; width: 54px; height: 54px; border: 1px solid rgba(240,237,232,.25); border-radius: 50%; display: grid; place-items: center; font-family: var(--font-mono); font-size: 18px; transition: border-color .3s ease, background .3s ease; }
+.next-festival-card:hover .next-festival-arrow { border-color: var(--accent); background: rgba(168,47,49,.18); }
+@media (max-width: 640px) { .next-festival-card { grid-template-columns: 1fr; min-height: 260px; } .next-festival-content { padding: 28px 24px; align-self: end; } .next-festival-arrow { position: absolute; right: 24px; bottom: 24px; margin: 0; } }
 .festivals-preview {
   padding: 0;
   display: flex; flex-direction: column;
@@ -355,8 +371,9 @@
 }
 .artists-track-wrap {
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 80px, #000 calc(100% - 80px), transparent 100%);
-          mask-image: linear-gradient(to right, transparent 0, #000 80px, #000 calc(100% - 80px), transparent 100%);
+  /* The first card must remain fully readable; fade only the moving exit edge. */
+  -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 80px), transparent 100%);
+          mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 80px), transparent 100%);
 }
 .artists-track {
   display: flex; gap: 14px;
@@ -656,9 +673,10 @@
 
 <!-- FESTIVALS -->
 <div class="section-head" style="margin-top: 60px;">
-  <div class="section-eyebrow"><span class="dot"></span>UPCOMING FESTIVALS</div>
+  <div class="section-eyebrow"><span class="dot"></span>UPCOMING EVENTS</div>
   <a href="festivals.html" class="section-cta">VIEW ALL →</a>
 </div>
+<div id="next-festival" aria-live="polite"></div>
 <div class="festivals-preview" id="festivals-preview"><!-- rendered by JS --></div>
 <div class="fest-more-wrap" id="fest-more-wrap" style="display:none">
   <button type="button" class="fest-more-btn" id="fest-more-btn">
@@ -834,6 +852,27 @@
     .sort((a, b) => a._start - b._start)
     .slice(0, FEST_MAX);
 
+  const nextFestival = upcoming[0];
+  // NEXT に出したイベントは、下の一覧では重複表示しない。
+  const upcomingList = upcoming.slice(1);
+  const nextEl = document.getElementById('next-festival');
+  if (nextEl && nextFestival) {
+    const nextImage = nextFestival.image && nextFestival.image.trim();
+    const nextLabel = (nextFestival.type || 'festival') === 'rave' ? 'NEXT RAVE' : 'NEXT FESTIVAL';
+    nextEl.innerHTML = `<a class="next-festival-card" href="/festivals/${encodeURIComponent(nextFestival.id)}.html">
+      ${nextImage ? `<div class="next-festival-bg"${tjLazyBgAttr(nextImage)}></div>` : '<div class="next-festival-bg"></div>'}
+      <div class="next-festival-overlay"></div>
+      <div class="next-festival-content">
+        <div class="next-festival-label">${nextLabel}</div>
+        <div class="next-festival-name">${tjLocalized(nextFestival.name, '', nextFestival.name_en)}</div>
+        <div class="next-festival-meta">${fmtFestRange(nextFestival.date)} · ${nextFestival.city || nextFestival.location_ja || nextFestival.location || ''}</div>
+        ${lineupNames(nextFestival) ? `<div class="next-festival-lineup">${lineupNames(nextFestival)}</div>` : ''}
+      </div>
+      <div class="next-festival-arrow" aria-hidden="true">→</div>
+    </a>`;
+    tjApplyLazyBackgrounds(nextEl);
+  }
+
   function fmtFestRange(s) {
     if (!s) return '';
     const [a, b] = s.split('/').map(x => x && x.trim());
@@ -853,10 +892,10 @@
 
   const festEl = document.getElementById('festivals-preview');
   if (festEl) {
-    if (upcoming.length === 0) {
-      festEl.innerHTML = `<div style="padding: 60px 20px; text-align: center; opacity: 0.4; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.15em;">NO UPCOMING FESTIVALS — CHECK BACK SOON.</div>`;
+    if (upcomingList.length === 0) {
+      festEl.innerHTML = `<div style="padding: 60px 20px; text-align: center; opacity: 0.4; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.15em;">MORE EVENTS — CHECK BACK SOON.</div>`;
     } else {
-      festEl.innerHTML = upcoming.map((f, i) => {
+      festEl.innerHTML = upcomingList.map((f, i) => {
         const lineup = lineupNames(f);
         const img = f.image && f.image.trim();
         const hidden = i >= FEST_INITIAL ? ' is-hidden' : '';
@@ -870,7 +909,7 @@
               : `<div class="fest-row-thumb placeholder"></div>`}
             <div class="fest-row-main">
               <div class="fest-row-eyebrow">
-                <span class="fest-row-num">#${pad2(i + 1)}</span>
+                <span class="fest-row-num">#${pad2(i + 2)}</span>
                 <span>${fmtFestRange(f.date)}</span>
               </div>
               <div class="fest-row-name">${tjLocalized(f.name, '', f.name_en)}</div>
@@ -889,7 +928,7 @@
     const moreWrap = document.getElementById('fest-more-wrap');
     const moreBtn = document.getElementById('fest-more-btn');
     if (moreWrap && moreBtn) {
-      if (upcoming.length > FEST_INITIAL) {
+      if (upcomingList.length > FEST_INITIAL) {
         moreWrap.style.display = '';
         const labelEl = moreBtn.querySelector('.label');
         moreBtn.addEventListener('click', () => {

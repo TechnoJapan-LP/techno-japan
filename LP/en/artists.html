@@ -126,6 +126,10 @@
   display: flex; gap: 0; flex-wrap: wrap;
   border-bottom: 1px solid rgba(240,237,232,0.08);
 }
+.artists-alpha-nav { display: flex; flex-wrap: wrap; gap: 2px; padding-top: 4px; }
+.alpha-tab { min-width: 28px; padding: 7px 6px; border: 1px solid transparent; background: none; color: var(--text); opacity: .35; font-family: var(--font-mono); font-size: 10px; cursor: pointer; }
+.alpha-tab:hover, .alpha-tab:focus-visible { opacity: 1; border-color: rgba(240,237,232,.25); outline: none; }
+@media (max-width: 640px) { .artists-alpha-nav { gap: 1px; } .alpha-tab { min-width: 24px; padding: 9px 4px; } }
 
 .genre-tab {
   font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em;
@@ -374,6 +378,7 @@
       <span class="artists-count" id="artists-count"></span>
     </div>
     <div class="artists-genre-nav" id="genre-nav"></div>
+    <nav class="artists-alpha-nav" id="artists-alpha-nav" aria-label="Artists A to Z"></nav>
   </div>
   <div class="artists-grid" id="artists-grid">
     <!-- STATIC_LINKS:ARTISTS:START -->
@@ -648,6 +653,24 @@ function buildGenreNav() {
   });
 }
 
+function artistLetter(name) {
+  const letter = String(name || '').trim().charAt(0).toUpperCase();
+  return /^[A-Z]$/.test(letter) ? letter : '#';
+}
+
+function buildAlphabetNav() {
+  const nav = document.getElementById('artists-alpha-nav');
+  nav.innerHTML = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'.split('').map(letter =>
+    `<button type="button" class="alpha-tab" data-letter="${letter}">${letter}</button>`
+  ).join('');
+  nav.addEventListener('click', e => {
+    const button = e.target.closest('.alpha-tab');
+    if (!button) return;
+    const target = document.querySelector(`.artist-card[data-letter="${button.dataset.letter}"]`);
+    target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+}
+
 function getFilteredArtists() {
   let list = [...ARTISTS];
 
@@ -702,7 +725,7 @@ function renderArtistsList() {
       : `background:${gradients[i % gradients.length]}`;
     const genreLabel = getGenreString(a);
     return `
-    <a href="/en/artists/${encodeURIComponent(a.id)}.html" class="artist-card reveal" data-artist-detail-link data-id="${a.id}">
+    <a href="/en/artists/${encodeURIComponent(a.id)}.html" class="artist-card reveal" data-artist-detail-link data-id="${a.id}" data-letter="${artistLetter(a.name)}">
       <div class="artist-card-img"${bgAttr} style="${bg}"></div>
       <div class="artist-card-content">
         <div class="artist-card-genre">${genreLabel}</div>
@@ -759,6 +782,7 @@ function bindCursorExpand() {
 
 /* ========== INIT ========== */
 buildGenreNav();
+buildAlphabetNav();
 initSearchSort();
 renderArtistsList();
 </script>
