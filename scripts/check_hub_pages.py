@@ -86,6 +86,15 @@ const setResult = (name, value, detail = '') => {
     document.querySelectorAll('iframe').forEach((frame) => frame.remove());
   }
 };
+/* 入れ物の id を直接指さない。
+   以前は東京の 'venue-map-wrap' を決め打ちしていたが、venues.html の地図が
+   都市ごとに自動生成される形になり、id が都市名から作られるようになった
+   （AUDIT §9-78）。**検査が特定の都市に依存していると、都市を増やすたびに
+   検査の方が壊れる。**開いている入れ物をクラスで取る。 */
+const openWrap = (doc) =>
+  [].slice.call(doc.querySelectorAll('.city-map-wrap'))
+    .filter((w) => w.style.display !== 'none')[0]
+  || doc.querySelector('.city-map-wrap');
 const live = document.getElementById('map-live');
 live.addEventListener('load', () => {
   const win = live.contentWindow;
@@ -94,7 +103,7 @@ live.addEventListener('load', () => {
   doc.getElementById('area-map-btn').click();
   const deadline = Date.now() + 12000;
   const poll = setInterval(() => {
-    const wrap = doc.getElementById('venue-map-wrap');
+    const wrap = openWrap(doc);
     const error = doc.getElementById('venue-map-error');
     if (wrap?.dataset.mapStatus === 'ready' && wrap.querySelector('.leaflet-container, .leaflet-pane')) {
       clearInterval(poll); setResult('mapResult', 'pass');
@@ -112,7 +121,7 @@ fallback.addEventListener('load', () => {
   win.L = undefined;
   doc.getElementById('area-map-btn').click();
   setTimeout(() => {
-    const wrap = doc.getElementById('venue-map-wrap');
+    const wrap = openWrap(doc);
     const error = doc.getElementById('venue-map-error');
     const ok = error && !error.hidden && wrap?.style.display === 'none' && error.querySelector('a[href="#venues-grid"]');
     setResult('fallbackResult', ok ? 'pass' : 'fail', ok ? '' : 'fallback was not shown');
@@ -134,7 +143,7 @@ tileFallback.addEventListener('load', () => {
   };
   doc.getElementById('area-map-btn').click();
   setTimeout(() => {
-    const wrap = doc.getElementById('venue-map-wrap');
+    const wrap = openWrap(doc);
     const error = doc.getElementById('venue-map-error');
     const ok = error && !error.hidden && wrap?.dataset.mapStatus === 'failed';
     setResult('tileFallbackResult', ok ? 'pass' : 'fail', ok ? '' : 'tileerror fallback was not shown');

@@ -105,11 +105,13 @@ if [ "$FAST" = "1" ]; then
   skip "ハブページが JS 込みで描ける"
   skip "CMS フォームの重なり"
   skip "地図が全国の会場を出す"
+  skip "会場一覧の地図が全都市を出す"
   skip "モバイルの言語切替"
 else
   run "ハブページが JS 込みで描ける"    python3 scripts/check_hub_pages.py --budget 15000
   run "CMS フォームの重なり"            node scripts/check_cms_layout.mjs
   run "地図が全国の会場を出す"          node scripts/check_map_nationwide.mjs
+  run "会場一覧の地図が全都市を出す"    node scripts/check_venue_maps.mjs
   [ -f scripts/check_mobile_language_toggles.mjs ] \
     && run "モバイルの言語切替"         node scripts/check_mobile_language_toggles.mjs
 fi

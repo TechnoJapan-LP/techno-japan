@@ -186,6 +186,10 @@ jobs:
         run: node scripts/check_cms_layout.mjs
 
       # 地図が東京以外の会場も出すこと。初期化のタイミング依存も見る（§9-76）。
+      # 会場一覧の地図が、データにある全都市を出すこと（§9-78）。
+      - name: Check venue hub maps cover all cities
+        run: node scripts/check_venue_maps.mjs
+
       - name: Check club map covers all cities
         run: node scripts/check_map_nationwide.mjs
 
