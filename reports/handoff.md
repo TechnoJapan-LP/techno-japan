@@ -1530,3 +1530,34 @@ FESTIVALS等の必須データのPublish自体は止めないようにした。
 ### 次の担当への注意・判断待ち
 - 本番公開前に実機または同等のブラウザ自動操作と、`bash scripts/preflight.sh` 全件を実施。
   今回は公開していない。
+
+## 2026-08-13 / Codex / イベント検索・TOPプレビューを本番公開
+
+### 実施
+- `c7fbf503` を `main` へpushし、イベント検索、Festival / Rave表示、TOPのNEXTイベントと
+  出演者表示、記事本文レイアウト、先頭アーティストの視認性修正を公開。
+
+### コミット
+- `c7fbf503 feat: improve event discovery and homepage previews`
+- GitHub Pages deploy run `31610593651` 成功。
+
+### 検証
+- push前 `bash scripts/preflight.sh` 全26件成功。
+- GitHub Actions regression check 成功、Pages deploy 成功。
+- 公開URL `https://techno-japan.media/` を直接取得し、`NEXT RAVE` と
+  `UPCOMING EVENTS` を確認。
+- 公開URLをChrome headlessで描画し、`NEXT RAVE`、`LOA-LOST PARADISE-`、
+  `GIZMO`、`Global Ark`、`#02`を確認。
+
+### 変更したパターン
+- 検索語入力時のFestival / Rave横断検索とカード色分け。
+- TOPのNEXTイベント表示と一覧重複防止。
+- NEXTイベントの出演者表示。
+- 記事本文の可読性、TOPカルーセル先頭カードの視認性。
+
+### 未確認の類似パターン
+- CMSの実操作（入力→保存→再表示）は未確認。
+- iOS Safari / Android Chromeの実機確認は未確認。
+
+### 次の担当への注意・判断待ち
+- 公開済み。公開後の実機確認とCMS操作確認は次のテスト項目。
