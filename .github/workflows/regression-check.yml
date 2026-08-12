@@ -196,6 +196,10 @@ jobs:
       - name: Check CMS form layout (no overlap)
         run: node scripts/check_cms_layout.mjs
 
+      # 地図が東京以外の会場も出すこと。初期化のタイミング依存も見る（§9-76）。
+      - name: Check club map covers all cities
+        run: node scripts/check_map_nationwide.mjs
+
       - name: Check hub pages render (JS health)
         # フェス一覧は画像遅延読み込みを含むため、CIのChromeが混雑すると
         # 既定9秒では描画途中を検査してしまう。失敗を隠さず、描画待ちだけ延長する。

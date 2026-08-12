@@ -14,8 +14,8 @@
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" type="image/png" href="/images/favicon-192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<title>TOKYO CLUB MAP — TECHNO JAPAN</title>
-<meta name="description" content="Interactive map of Tokyo's underground clubs and venues. Techno Japan.">
+<title>CLUB MAP — TECHNO JAPAN</title>
+<meta name="description" content="Interactive map of underground clubs and venues across Japan. Techno Japan.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
@@ -194,7 +194,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
 
 <header class="header">
   <div class="header-logo"><a href="index.html">TECHNO JAPAN</a></div>
-  <div class="header-title">TOKYO CLUB MAP</div>
+  <div class="header-title">CLUB MAP</div>
   <div class="header-right">
     <div class="header-nav">
       <a href="artists.html" class="header-nav-link">ARTISTS</a>
@@ -242,7 +242,13 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
 /* ==========================================================
    CLUB DATA — derived from shared VENUES in data.js
    ========================================================== */
-const CLUBS = VENUES.filter(v => v.city === 'TOKYO' && v.lat).map(v => ({
+/* 都市で絞らない。
+
+   以前は `v.city === 'TOKYO'` で絞っていたため、**大阪6件・京都1件が
+   地図に出ていなかった。**福岡や札幌を足しても同じことが起きる。
+   一覧側は `[...new Set(VENUES.map(v => v.city))]` で自動追随するのに、
+   地図だけが取り残されていた。AUDIT §9-76。 */
+const CLUBS = VENUES.filter(v => v.lat && v.lng).map(v => ({
   ...v, description: v.desc, address: v.address || '', url: v.url || '#'
 }));
 
@@ -252,7 +258,10 @@ const CLUBS = VENUES.filter(v => v.city === 'TOKYO' && v.lat).map(v => ({
 const map = L.map('map', {
   center: [35.6600, 139.6980],
   zoom: 13,
-  minZoom: 11,
+  /* minZoom を 11 のままにすると、**日本全体が画面に入らない。**
+     東京と大阪を同時に見るには 7 前後まで引く必要がある。
+     絞り込みを外しても、引けなければピンに辿り着けない。 */
+  minZoom: 5,
   maxZoom: 18,
   zoomControl: false,
   attributionControl: false
@@ -461,6 +470,46 @@ setTimeout(() => {
    INIT
    ========================================================== */
 renderMap(CLUBS);
+
+/* 初期表示を、実在する会場に合わせる。
+
+   中心とズームを固定にすると、**東京以外を足したとき画面外に出る。**
+   会場が全部入る範囲へ寄せておけば、どの都市が増えても勝手に収まる。
+   1件しか無いときは fitBounds が極端に寄るので、その場合だけ setView。 */
+function fitToVenues() {
+  const pts = CLUBS.map(c => [c.lat, c.lng]).filter(p => isFinite(p[0]) && isFinite(p[1]));
+  if (!pts.length) return;                       // 会場ゼロなら初期値のまま
+  if (pts.length === 1) { map.setView(pts[0], 14); return; }
+  map.fitBounds(L.latLngBounds(pts), { padding: [60, 60], maxZoom: 13 });
+}
+/* エリア名（SHIBUYA 等）は東京の地名なので、引いた状態では邪魔になる。
+   街の区別がつく倍率まで寄ったときだけ出す。 */
+const AREA_LABEL_MIN_ZOOM = 12;
+function applyAreaLabelVisibility() {
+  const show = map.getZoom() >= AREA_LABEL_MIN_ZOOM;
+  document.querySelectorAll('.area-label').forEach(el => {
+    el.style.display = show ? '' : 'none';
+  });
+}
+/* **監視は寄せる前に登録する。**
+   whenReady はすでに準備できていれば**その場で走る**ため、後ろで
+   `map.on('zoomend', …)` を書くと、初期表示の寄せに間に合わない。
+   実際そうなっていて、ズーム8まで引いてもエリア名が出たままだった。 */
+map.on('zoomend', applyAreaLabelVisibility);
+map.on('moveend', applyAreaLabelVisibility);   // 寄せが動きだけで終わる場合に備える
+
+/* **地図の枠の大きさが確定してから寄せる。**
+   #map は position:absolute で、読み込み直後は高さが 0 のことがある。
+   その状態で fitBounds を呼ぶと**黙って無視され**、初期ズーム 13 のまま
+   東京だけが映る。実際、同じコードで 9 になったり 13 になったりした。
+   whenReady と invalidateSize を挟んで、大きさを確定させてから呼ぶ。 */
+map.whenReady(() => {
+  map.invalidateSize();
+  fitToVenues();
+  applyAreaLabelVisibility();
+});
+
+applyAreaLabelVisibility();
 </script>
 </body>
 </html>

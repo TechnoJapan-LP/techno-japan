@@ -185,6 +185,10 @@ jobs:
       - name: Check CMS form layout (no overlap)
         run: node scripts/check_cms_layout.mjs
 
+      # 地図が東京以外の会場も出すこと。初期化のタイミング依存も見る（§9-76）。
+      - name: Check club map covers all cities
+        run: node scripts/check_map_nationwide.mjs
+
       - name: Check hub pages render (JS health)
         run: python3 scripts/check_hub_pages.py
 
