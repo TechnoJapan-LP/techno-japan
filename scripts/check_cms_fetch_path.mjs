@@ -129,6 +129,22 @@ console.log('取得経路');
     && d2.ARTICLES?.[0]?.readTime === 3, JSON.stringify(d2.ARTICLES?.[0]));
 }
 
+console.log('\n同時実行しないこと（GAS の同時実行制限を避ける・§9-80）');
+{
+  // fetch を遅延させ、重なりが起きるかを実測する
+  const c = makeCtx(ROWS);
+  let inflight = 0, maxInflight = 0;
+  const orig = c.fetch;
+  c.fetch = async (url, opts) => {
+    inflight++; maxInflight = Math.max(maxInflight, inflight);
+    await new Promise(r => setTimeout(r, 20));
+    try { return await orig(url, opts); } finally { inflight--; }
+  };
+  await c.__T.fetchAllSheets(['VENUES','FESTIVALS','ARTISTS','EVENTS','ARTICLES'],
+    { fresh: true, perSheet: true });
+  check('同時に走るのは常に1本だけ', maxInflight === 1, `最大 ${maxInflight} 本が同時に走った`);
+}
+
 console.log('\n呼び出し側');
 {
   const publishLine = source.split('\n').find((l) => l.includes("action: 'publish_data_js'"));

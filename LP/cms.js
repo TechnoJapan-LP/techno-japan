@@ -4676,14 +4676,21 @@ function fetchAllSheets(sheetNames, opts){
      公開は頻度が低く、5回に増えても実用上の差は無い。
      **確実に取れる経路を使う。**AUDIT §9-67。 */
   if(opts.perSheet){
-    return Promise.all(missing.map(s=>
+    /* **1枚ずつ順番に取る。同時に投げない。**
+
+       Promise.all で5本同時に投げていたが、GAS は同一デプロイへの同時実行に
+       制限があり、一部が失敗すると Publish 全体が止まる。
+       2026-08-13、シートに紹介文を入れたのに Publish が2回続けて
+       コミットまで届かなかった。公開は頻度が低いので、
+       速さより確実さを取る。AUDIT §9-80。 */
+    return missing.reduce((chain, s) => chain.then(() =>
       fetch(GAS_URL+'?action=get_sheet&sheet='+s).then(r=>r.json()).then(d=>{
         if(d.status!=='ok' || !Array.isArray(d.rows)) throw new Error('シート取得に失敗: '+s+' — '+(d.message||'unknown'));
         result[s] = canonicalizeRows(d.rows);
         const sec = SECTION_BY_SHEET[s];
         if(sec && result[s].length) writeSheetCache(sec, result[s]);
       })
-    )).then(()=>result);
+    ), Promise.resolve()).then(()=>result);
   }
 
   // 不足分は batch エンドポイントで一括取得
@@ -5501,13 +5508,19 @@ function aiFail(where, message){
   pre.textContent = msg;
   const hint = document.createElement('div');
   hint.style.cssText = 'font-size:.75rem;color:var(--text3);margin-bottom:16px;line-height:1.7';
+  /* 代表的な原因には対処を添える。AI 以外（Publish 等）からも呼ぶ。 */
   hint.textContent = /not set/i.test(msg)
     ? 'GAS のスクリプト プロパティに ANTHROPIC_API_KEY が設定されていません。'
     : /Claude API 40[13]/.test(msg)
       ? 'API キーが無効か、権限がありません。GAS のキーを確認してください。'
       : /Claude API 400/.test(msg)
         ? 'モデル名か上限トークン数の指定が通っていません。GAS の CLAUDE_MODEL / MAX_TOKENS を確認してください。'
-        : 'この文言をそのまま共有してください。原因の切り分けに必要です。';
+        : /シート取得に失敗/.test(msg)
+          ? 'スプレッドシートを読めませんでした。もう一度試すと通ることがあります。'
+            + '続く場合は、この文言をそのまま共有してください。'
+          : /認証|auth/i.test(msg)
+            ? 'ログインが切れている可能性があります。ページを再読み込みして入り直してください。'
+            : 'この文言をそのまま共有してください。原因の切り分けに必要です。';
   const btn = document.createElement('button');
   btn.className = 'btn btn-sm';
   btn.textContent = '閉じる';
@@ -5982,11 +5995,11 @@ function publishDataJs(opts){
         console.log('Commit URL:', r.commitUrl);
       }
     } else {
-      toast('Publish failed: ' + (r.message || 'unknown'), 'error');
+      aiFail('公開（Publish）', r.message);
     }
   }).catch(e=>{
     console.error('Publish error:', e);
-    toast('Publish error: '+e.message, 'error');
+    aiFail('公開（Publish）', e.message);
   }).finally(()=>{
     if (btn) { btn.disabled = false; btn.innerHTML = btn.dataset.originalText || '🚀 Publish Now'; }
   });

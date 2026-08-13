@@ -201,5 +201,13 @@ jobs:
             echo "No changes to commit"
           else
             git commit -m "sync: update images from Google Drive"
-            git push
+            # 押している間に他が push すると弾かれる。実際 2026-08-13 に、
+            # 別の push と重なって同期が失敗した（画像は作れていたのに落ちた）。
+            # rebase して数回やり直す。生成物の追加なので rebase で衝突しない。
+            for i in 1 2 3; do
+              if git push; then break; fi
+              echo "push が弾かれました。取り込んでやり直します [$i/3]"
+              git pull --rebase --autostash origin main || exit 1
+              sleep $((i * 5))
+            done
           fi
