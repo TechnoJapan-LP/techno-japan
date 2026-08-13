@@ -159,6 +159,10 @@
     640,
     480
   ],
+  "images/artists/choko.webp": [
+    800,
+    800
+  ],
   "images/artists/dj-nobu.webp": [
     1920,
     1280
@@ -183,9 +187,17 @@
     940,
     940
   ],
+  "images/artists/sunga.webp": [
+    800,
+    800
+  ],
   "images/artists/sylvan-esso.webp": [
     639,
     480
+  ],
+  "images/artists/tsutomu.webp": [
+    312,
+    210
   ],
   "images/artists/wata-igarashi.webp": [
     1440,
