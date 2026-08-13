@@ -609,3 +609,68 @@ RA やレーベルサイトの写真は**撮影者に著作権があり、勝手
 | **調査完了（CMS 入力待ち）** | **29人** |
 | 保留（本人確認とれず） | 6件（moodman SC / okadada IG / suimin / DJ Yogurt SC / DJ KENSEI IG / Ben UFO IG） |
 | 残り（名前だけ） | 63人 — 次: rami・akie（@matricaria_festival）/ yamarchy・calpiss（@harukaze_asia）/ yellowuhuru（@etsu_etsu_）/ mimu（@sub_tide）/ mayudepth（@waifu_party）/ endorphin（@arch___2014）
+
+---
+
+# 第5弾 — 国際的な著名アーティスト10人
+
+（BIO は確認できた事実のみで自前執筆。確度「中」の URL は開いて確認してから）
+
+## 30. Four Tet（four-tet）— Rainbow Disco Club
+- BANDCAMP: https://fourtet.bandcamp.com/（高）/ SOUNDCLOUD: https://soundcloud.com/four-tet（高）/ COUNTRY: UK
+- **BIO案**: 本名 Kieran Hebden。ロンドンを拠点に、エレクトロニカとダンスミュージックの間を自由に往復する作品を1990年代末から発表し続ける、シーンで最も信頼される名前のひとつ。
+- **bio_en案**: Kieran Hebden, a London artist moving freely between electronica and dance music since the late 90s — one of the most trusted names in the scene.
+
+## 31. Floating Points（floating-points）— Rainbow Disco Club
+- BANDCAMP: https://floatingpoints.bandcamp.com/（高）/ SOUNDCLOUD: https://soundcloud.com/floatingpoints（高）/ COUNTRY: UK
+- **BIO案**: 本名 Sam Shepherd。自身のレーベル Pluto を主宰し、『Elaenia』（2015）から『Cascade』（2024）まで、クラブとコンサートホールの両方に届く音楽を作る。神経科学の博士号を持つことでも知られる。
+- **bio_en案**: Sam Shepherd, head of the Pluto label, making music that reaches both clubs and concert halls — from "Elaenia" (2015) to "Cascade" (2024). Also holds a PhD in neuroscience.
+
+## 32. Helena Hauff（helena-hauff）— Rainbow Disco Club
+- SOUNDCLOUD: https://soundcloud.com/helena-hauff（高）/ CITY: HAMBURG / COUNTRY: GERMANY
+- **BIO案**: ハンブルクの DJ/プロデューサー。アナログ機材だけで録音する生々しいテクノとエレクトロで知られ、Golden Pudel Club のレジデントから世界のフェスへと歩んだ。『Discreet Desires』（2015）『Qualm』（2018）。
+- **bio_en案**: A Hamburg DJ/producer known for raw techno and electro recorded entirely on analogue gear, from a Golden Pudel residency to festivals worldwide.
+
+## 33. DJ KRUSH（dj-krush）— 春風
+- WEBSITE: http://djkrush.jp/（高）/ INSTAGRAM: https://www.instagram.com/djkrushofficial/（高）/ CITY: TOKYO
+- **BIO案**: 日本のヒップホップ/エレクトロニックを代表する DJ/プロデューサー。1990年代から国際的に活動し、ソロキャリアは30年を超える。ターンテーブルを楽器に変えた先駆者のひとり。
+- **bio_en案**: One of Japan's defining DJ/producers, internationally active since the early 90s with a solo career spanning over 30 years — a pioneer who turned the turntable into an instrument.
+
+## 34. Mala（mala）— Rainbow Disco Club
+- BANDCAMP: https://deepmedimusik.bandcamp.com/（高・自身のレーベル）/ COUNTRY: UK
+- **BIO案**: ダブステップの創成期を作った Digital Mystikz の一員。2006年にレーベル Deep Medi Musik を設立し、サウンドシステム文化に根ざした低音の美学を貫き続ける。
+- **bio_en案**: One half of Digital Mystikz, who shaped dubstep's founding era, and founder of Deep Medi Musik (2006), keeping a bass aesthetic rooted in soundsystem culture.
+
+## 35. Gerd Janson（gerd-janson）— Rainbow Disco Club
+- SOUNDCLOUD: https://soundcloud.com/gerdjanson（高）/ COUNTRY: GERMANY
+- **BIO案**: レーベル Running Back を2002年から主宰するドイツの DJ。ハウスとディスコへの深い愛情を軸に、世界中のフロアとフェスでプレイする。
+- **bio_en案**: The German DJ behind Running Back (since 2002), playing floors and festivals worldwide with a deep devotion to house and disco.
+
+## 36. HAAi（haai）— Rainbow Disco Club
+- INSTAGRAM: https://www.instagram.com/haaihaaihaai/（高）/ SOUNDCLOUD: https://soundcloud.com/haai-2（中・要確認）/ COUNTRY: UK
+- **BIO案**: 本名 Teneil Throssell。西オーストラリア出身、ロンドン拠点。サイケデリアとテクノを混ぜ合わせるスタイルで急速に頭角を現し、『Baby, We're Ascending』（2022）や DJ-Kicks（2023）、Mute からの『HUMANiSE』（2025）を発表。
+- **bio_en案**: Teneil Throssell, from Western Australia and based in London, blending psychedelia and techno — with "Baby, We're Ascending" (2022), DJ-Kicks (2023) and "HUMANiSE" (Mute, 2025).
+
+## 37. Prins Thomas（prins-thomas）— MATRICARIA
+- BANDCAMP: https://fullpupp.bandcamp.com/（高・自身のレーベル）/ WEBSITE: http://prinsthomas.com/（高）/ CITY: OSLO / COUNTRY: NORWAY
+- **BIO案**: ノルウェーのスペースディスコを代表する DJ/プロデューサー。オスロのレーベル Full Pupp を主宰し、ディスコからクラウトロックまでを溶かし込む長い航海のようなセットで知られる。
+- **bio_en案**: Norway's leading space-disco DJ/producer, running Oslo's Full Pupp label, known for voyage-like sets melting disco into krautrock.
+
+## 38. SHERELLE（sherelle）— THE STAR FESTIVAL
+- BANDCAMP: https://sherelle.bandcamp.com/（高）/ IG・SC は要確認（中）/ COUNTRY: UK
+- **BIO案**: ロンドンの DJ。NAINA と共にレーベル HOOVERSOUND を主宰し、フットワークやジャングルなど 160BPM 以上の高速ダンスミュージックを最前線で牽引する。
+- **bio_en案**: A London DJ running HOOVERSOUND with NAINA, leading the charge for 160BPM+ dance music — footwork, jungle and beyond.
+
+## 39. Daniel Bell（daniel-bell）— LETUS MUSIC CAMP
+- リンク: 公式アカウント確認できず（載せない）/ COUNTRY: USA（中）
+- **BIO案**: DBX 名義で知られるミニマルテクノの開拓者。1991年にレーベル Accelerate を設立し、『Losing Control』（1994）はアンダーグラウンドの国際的ヒットとなった。Richie Hawtin との Cybersonik でも活動した。
+- **bio_en案**: The minimal techno pioneer known as DBX, founder of Accelerate (1991), whose "Losing Control" (1994) became an international underground hit. Also worked with Richie Hawtin as Cybersonik.
+
+---
+
+## 全体進捗（第5弾まで）
+
+| | 人数 |
+|---|---|
+| **調査完了（CMS 入力待ち）** | **39人** |
+| 残り | 40人 — 国際勢: eric-cloutier / haai済 / suze-ij / jonny-rock / jonathan-kusuma / dj-hype / clipz / lady-shaka / upsammy / paquita-gordon / aoki-takamasa / feline / guchon / dj-masda / kohra / nc4k ほか。国内勢は各フェス IG フォロー先方式

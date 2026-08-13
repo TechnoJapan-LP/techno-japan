@@ -1,0 +1,38 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T04:10:00+09:00",
+ "_note": "確度 medium の URL は開いて確認してから登録。BIO 下書きは reports/artists-draft-2026-08-13.md 第5弾",
+ "_appearsAt": "matricaria",
+ "fields": {
+  "BANDCAMP": {
+   "value": "https://fullpupp.bandcamp.com/",
+   "source": "Web検索（自身のレーベル Full Pupp）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "WEBSITE": {
+   "value": "http://prinsthomas.com/",
+   "source": "Web検索（直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "CITY": {
+   "value": "OSLO",
+   "source": "Bandcamp",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "COUNTRY": {
+   "value": "NORWAY",
+   "source": "Bandcamp",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "facts": {
+   "value": "ノルウェーのスペースディスコを代表するDJ/プロデューサー。オスロのレーベル Full Pupp を主宰し、Internasjonal 等のサブレーベルも運営",
+   "source": "Bandcamp + prinsthomas.com",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:10:00+09:00"
+  }
+ }
+}

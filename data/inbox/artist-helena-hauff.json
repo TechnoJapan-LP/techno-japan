@@ -1,0 +1,32 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T04:10:00+09:00",
+ "_note": "確度 medium の URL は開いて確認してから登録。BIO 下書きは reports/artists-draft-2026-08-13.md 第5弾",
+ "_appearsAt": "rainbow-disco-club",
+ "fields": {
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/helena-hauff",
+   "source": "Web検索（本人アカウント直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "CITY": {
+   "value": "HAMBURG",
+   "source": "Wikipedia",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "COUNTRY": {
+   "value": "GERMANY",
+   "source": "Wikipedia",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "facts": {
+   "value": "ハンブルクのDJ/プロデューサー。アナログ機材のみで録音するテクノ/エレクトロで知られ、Golden Pudel Club のレジデントを務めた。『Discreet Desires』(2015)、『Qualm』(2018)",
+   "source": "Wikipedia + RA",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:10:00+09:00"
+  }
+ }
+}

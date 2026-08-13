@@ -1,0 +1,26 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T04:10:00+09:00",
+ "_note": "確度 medium の URL は開いて確認してから登録。BIO 下書きは reports/artists-draft-2026-08-13.md 第5弾",
+ "_appearsAt": "rainbow-disco-club",
+ "fields": {
+  "BANDCAMP": {
+   "value": "https://deepmedimusik.bandcamp.com/",
+   "source": "Web検索（自身のレーベル Deep Medi Musik）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "COUNTRY": {
+   "value": "UK",
+   "source": "Wikipedia",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "facts": {
+   "value": "ダブステップの創成期を作った Digital Mystikz の一員（Coki と共に）。2006年にレーベル Deep Medi Musik を設立し、サウンドシステム文化を軸に活動を続ける",
+   "source": "Wikipedia + Bandcamp",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:10:00+09:00"
+  }
+ }
+}

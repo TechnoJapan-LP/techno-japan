@@ -1,0 +1,32 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T04:10:00+09:00",
+ "_note": "確度 medium の URL は開いて確認してから登録。BIO 下書きは reports/artists-draft-2026-08-13.md 第5弾",
+ "_appearsAt": "rainbow-disco-club",
+ "fields": {
+  "BANDCAMP": {
+   "value": "https://floatingpoints.bandcamp.com/",
+   "source": "Web検索（本人アカウント直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/floatingpoints",
+   "source": "Web検索（本人アカウント直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "COUNTRY": {
+   "value": "UK",
+   "source": "Wikipedia",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "facts": {
+   "value": "本名 Sam Shepherd。自身のレーベル Pluto を主宰。『Elaenia』(2015)、『Cascade』(2024) 等。神経科学の博士号を持つことでも知られる",
+   "source": "Wikipedia + Bandcamp",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:10:00+09:00"
+  }
+ }
+}

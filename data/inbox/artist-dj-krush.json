@@ -1,0 +1,32 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T04:10:00+09:00",
+ "_note": "確度 medium の URL は開いて確認してから登録。BIO 下書きは reports/artists-draft-2026-08-13.md 第5弾",
+ "_appearsAt": "spring-love-harukaze",
+ "fields": {
+  "WEBSITE": {
+   "value": "http://djkrush.jp/",
+   "source": "Web検索（公式サイト直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/djkrushofficial/",
+   "source": "Web検索（公式プロフィール直リンク・linktr.ee とも一致）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "公式サイト",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "facts": {
+   "value": "日本のヒップホップ/エレクトロニックを代表するDJ/プロデューサー。1990年代から国際的に活動し、ソロキャリアは30年を超える",
+   "source": "djkrush.jp + TOKION + Wikipedia",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:10:00+09:00"
+  }
+ }
+}

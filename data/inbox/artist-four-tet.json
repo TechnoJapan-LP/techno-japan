@@ -1,0 +1,32 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T04:10:00+09:00",
+ "_note": "確度 medium の URL は開いて確認してから登録。BIO 下書きは reports/artists-draft-2026-08-13.md 第5弾",
+ "_appearsAt": "rainbow-disco-club",
+ "fields": {
+  "BANDCAMP": {
+   "value": "https://fourtet.bandcamp.com/",
+   "source": "Web検索（本人アカウント直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/four-tet",
+   "source": "Web検索（本人アカウント直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "COUNTRY": {
+   "value": "UK",
+   "source": "複数ソース（ロンドン）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "facts": {
+   "value": "本名 Kieran Hebden。ロンドン拠点。1990年代末から活動し、エレクトロニカとダンスミュージックを往復する作品群で広く知られる",
+   "source": "Wikipedia + Bandcamp + DIY Magazine",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:10:00+09:00"
+  }
+ }
+}

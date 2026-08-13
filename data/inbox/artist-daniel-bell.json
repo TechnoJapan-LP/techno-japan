@@ -1,0 +1,21 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T04:10:00+09:00",
+ "_note": "確度 medium の URL は開いて確認してから登録。BIO 下書きは reports/artists-draft-2026-08-13.md 第5弾",
+ "_appearsAt": "letus-music-camp",
+ "fields": {
+  "COUNTRY": {
+   "value": "USA",
+   "source": "Wikipedia（デトロイト拠点で活動）",
+   "confidence": "medium",
+   "checkedAt": "2026-08-13T04:10:00+09:00",
+   "note": "出生はサクラメント、育ちはトロント近郊"
+  },
+  "facts": {
+   "value": "DBX 名義で知られるミニマルテクノの開拓者。1991年にレーベル Accelerate を設立し、『Losing Control』(1994) はアンダーグラウンドの国際的ヒットに。Richie Hawtin と Cybersonik としても活動した",
+   "source": "Wikipedia + RA + 15questions",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:10:00+09:00"
+  }
+ }
+}

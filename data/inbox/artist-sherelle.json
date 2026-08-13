@@ -1,0 +1,40 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T04:10:00+09:00",
+ "_note": "確度 medium の URL は開いて確認してから登録。BIO 下書きは reports/artists-draft-2026-08-13.md 第5弾",
+ "_appearsAt": "the-star-festival",
+ "fields": {
+  "BANDCAMP": {
+   "value": "https://sherelle.bandcamp.com/",
+   "source": "Web検索（本人アカウント直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/sherelle_",
+   "source": "Web検索の要約",
+   "confidence": "medium",
+   "checkedAt": "2026-08-13T04:10:00+09:00",
+   "note": "開いて本人確認してから登録"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/iamsherelle",
+   "source": "Web検索の要約",
+   "confidence": "medium",
+   "checkedAt": "2026-08-13T04:10:00+09:00",
+   "note": "開いて本人確認してから登録"
+  },
+  "COUNTRY": {
+   "value": "UK",
+   "source": "複数ソース（ロンドン）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "facts": {
+   "value": "ロンドンのDJ。NAINA と共にレーベル HOOVERSOUND を主宰し、フットワークやジャングルなど160BPM 以上のダンスミュージックを牽引する",
+   "source": "DJ Mag + RA + Bandcamp",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:10:00+09:00"
+  }
+ }
+}
