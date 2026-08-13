@@ -1,0 +1,20 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T05:30:00+09:00",
+ "_note": "確度 medium は断定を避ける。BIO 下書きは reports/artists-draft-2026-08-13.md 第7弾",
+ "_appearsAt": "the-star-festival",
+ "fields": {
+  "COUNTRY": {
+   "value": "UK",
+   "source": "Wikipedia（ブリストル）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T05:30:00+09:00"
+  },
+  "facts": {
+   "value": "本名 Hugh Pescod。ブリストルのDJ/プロデューサー。2000年代のジャンプアップD&Bを牽引した Clipz 名義と、四つ打ちベースミュージックの Redlight 名義を使い分け、20年以上ベースミュージックの最前線に立つ。公式の SC/IG は特定できず（リンクは載せない）",
+   "source": "Wikipedia + UKF",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T05:30:00+09:00"
+  }
+ }
+}

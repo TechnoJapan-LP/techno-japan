@@ -1,0 +1,32 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T05:30:00+09:00",
+ "_note": "確度 medium は断定を避ける。BIO 下書きは reports/artists-draft-2026-08-13.md 第7弾",
+ "_appearsAt": "the-star-festival",
+ "fields": {
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/ladyshaka",
+   "source": "Web検索（本人アカウント直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T05:30:00+09:00"
+  },
+  "WEBSITE": {
+   "value": "https://www.lady-shaka.com/",
+   "source": "Web検索（公式サイト直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T05:30:00+09:00"
+  },
+  "COUNTRY": {
+   "value": "UK",
+   "source": "Wikipedia（NZ 出身・ロンドン拠点）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T05:30:00+09:00"
+  },
+  "facts": {
+   "value": "アオテアロア（NZ）出身、ロンドン拠点のDJ/学際的アーティスト。マオリ、タヒチ、カーボベルデ等にルーツを持ち、2019年に太平洋文化のコレクティブ Pulotu Underworld を設立。ハウス、バイレファンキ、パシフィカ・クラブサウンドを混ぜる",
+   "source": "Wikipedia + DJ Mag",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T05:30:00+09:00"
+  }
+ }
+}

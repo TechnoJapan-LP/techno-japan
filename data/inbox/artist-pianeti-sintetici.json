@@ -1,0 +1,32 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T05:30:00+09:00",
+ "_note": "確度 medium は断定を避ける。BIO 下書きは reports/artists-draft-2026-08-13.md 第7弾",
+ "_appearsAt": "matricaria",
+ "fields": {
+  "BANDCAMP": {
+   "value": "https://pianetisintetici.bandcamp.com/",
+   "source": "Web検索（本人アカウント直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T05:30:00+09:00"
+  },
+  "CITY": {
+   "value": "MILAN",
+   "source": "複数ソース",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T05:30:00+09:00"
+  },
+  "COUNTRY": {
+   "value": "ITALY",
+   "source": "複数ソース",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T05:30:00+09:00"
+  },
+  "facts": {
+   "value": "ミラノの Davide Perrone（Primal Code）によるプロジェクト。Hypnus Records の『Esplora』三部作、Astral Industries の『Space Opera』等。モジュラーシンセによる深いアンビエント・テクノ",
+   "source": "Hypnus + Astral Industries + Bandcamp",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T05:30:00+09:00"
+  }
+ }
+}

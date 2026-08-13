@@ -1,0 +1,21 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T05:30:00+09:00",
+ "_note": "確度 medium は断定を避ける。BIO 下書きは reports/artists-draft-2026-08-13.md 第7弾",
+ "_appearsAt": "festival-de-frue (2026-11)",
+ "fields": {
+  "COUNTRY": {
+   "value": "TAIWAN",
+   "source": "Wikipedia（Sunset Rollercoaster は台北のバンド）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T05:30:00+09:00"
+  },
+  "facts": {
+   "value": "台北のバンド Sunset Rollercoaster のフロントマン Kuo（Tseng Kuo-Hung）によるソロ出演名義。ソロ名義の公式アカウントは特定できず（リンクは載せない）",
+   "source": "Wikipedia + Bandcamp Daily",
+   "confidence": "medium",
+   "checkedAt": "2026-08-13T05:30:00+09:00",
+   "note": "「Kuo」がフロントマンを指すことはバンドの通称として一般的だが、ソロ活動の一次情報は薄い。断定を避けた表現にした"
+  }
+ }
+}

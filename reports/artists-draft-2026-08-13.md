@@ -740,3 +740,54 @@ RA やレーベルサイトの写真は**撮影者に著作権があり、勝手
 | **調査完了（CMS 入力待ち）** | **48人** |
 | 保留 | 8件（KOHRA 追加） |
 | 残り | 約30人 — 国内勢中心。各フェス IG フォロー先方式で |
+
+---
+
+# 第7弾 — 国際勢・国内勢（計6人）
+
+## 49. Pianeti Sintetici — MATRICARIA
+- BANDCAMP: https://pianetisintetici.bandcamp.com/（高）/ CITY: MILAN / COUNTRY: ITALY
+- **BIO案**: ミラノの Davide Perrone によるプロジェクト。Hypnus Records の『Esplora』三部作や Astral Industries からのアルバムで、モジュラーシンセによる深宇宙のようなアンビエント・テクノを描く。
+- **bio_en案**: The project of Milan's Davide Perrone, painting deep-space ambient techno with modular synths across the "Esplora" trilogy on Hypnus and releases on Astral Industries.
+
+## 50. DJ YAZI — MATRICARIA
+- リンク: 公式アカウント特定できず（載せない）/ CITY: TOKYO
+- **BIO案**: 90年代半ばから活動する東京の DJ。前衛ヒップホップ集団 Think Tank の一員として Black Smoker Records と歩み、パーティー El Nino のレジデントを20年務める。Haruka との Twin Peaks でも知られる。
+- **bio_en案**: A Tokyo DJ active since the mid-90s, part of avant-garde hip hop collective Think Tank alongside Black Smoker Records, resident of El Nino for two decades, and half of Twin Peaks with Haruka.
+
+## 51. Kuo From Sunset Rollercoaster — FRUE 11月
+- リンク: ソロ名義の公式アカウント特定できず / COUNTRY: TAIWAN
+- **BIO案**: 台北のバンド Sunset Rollercoaster を率いる Kuo によるソロ出演名義。バンドではシティポップやAORを現代に接続する音像で、アジアから世界へと聴衆を広げてきた。
+- **bio_en案**: The solo billing of Kuo, leader of Taipei's Sunset Rollercoaster — the band that reconnected city pop and AOR to the present and carried it from Asia to the world.
+
+## 52. Jonny Rock — Rainbow Disco Club
+- SC: https://soundcloud.com/jonnyrock（高）/ COUNTRY: UK
+- **BIO案**: ロンドンのディガー/エディット職人。レコード店 Phonica の出身として知られ、シカゴハウスとアンダーグラウンド・ディスコ、ブギーを一枚のセットに混ぜ込む。
+- **bio_en案**: A London digger and edit-master out of Phonica, folding Chicago house, underground disco and boogie into a single set.
+
+## 53. LADY SHAKA — THE STAR FESTIVAL
+- SC: https://soundcloud.com/ladyshaka（高）/ WEBSITE: https://www.lady-shaka.com/（高）/ COUNTRY: UK
+- **BIO案**: アオテアロア（ニュージーランド）出身、ロンドン拠点の DJ。マオリやタヒチ、カーボベルデにルーツを持ち、2019年に太平洋文化のコレクティブ Pulotu Underworld を設立。ハウスとバイレファンキ、パシフィカのクラブサウンドを踊りでつなぐ。
+- **bio_en案**: An Aotearoa-born, London-based DJ of Māori, Tahitian and Cape Verdean descent, founder of Pulotu Underworld (2019), connecting house, baile funk and Pasifika club sounds through dance.
+
+## 54. Clipz — THE STAR FESTIVAL
+- リンク: 公式アカウント特定できず（載せない）/ COUNTRY: UK
+- **BIO案**: 本名 Hugh Pescod。ブリストルの DJ/プロデューサー。2000年代のジャンプアップ D&B を Clipz 名義で牽引し、Redlight 名義では四つ打ちのベースミュージックを開拓。20年以上にわたり UK ベースの最前線に立つ。
+- **bio_en案**: Hugh Pescod of Bristol, who led 2000s jump-up D&B as Clipz and four-to-the-floor bass music as Redlight — over two decades at the front line of UK bass.
+
+## 今回のスキップ
+
+- **rami / akie（MATRICARIA）** — フェス公式のフォロー先に該当なし。
+  次は rami → @99flags_party、akie → @nu_fes_tokyo のフォロー先で試す
+
+---
+
+## 全体進捗（第7弾まで）
+
+| | 人数 |
+|---|---|
+| **調査完了（inbox 保存済み）** | **55人**（うち登録可 54 / 保留 KOHRA） |
+| 残り | **37人** = 出演データあり24（国内勢中心）+ 出演データ無しスタブ13 |
+
+残りのスタブ13人には **Antal / Hunee / GE-OLOGY / Idjut Boys /
+Space Drum Meditation** など著名どころが含まれる（検索で確定可能）。

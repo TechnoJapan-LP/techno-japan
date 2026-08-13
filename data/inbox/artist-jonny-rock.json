@@ -1,0 +1,26 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T05:30:00+09:00",
+ "_note": "確度 medium は断定を避ける。BIO 下書きは reports/artists-draft-2026-08-13.md 第7弾",
+ "_appearsAt": "rainbow-disco-club",
+ "fields": {
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/jonnyrock",
+   "source": "Web検索（本人アカウント直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T05:30:00+09:00"
+  },
+  "COUNTRY": {
+   "value": "UK",
+   "source": "複数ソース（ロンドン）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T05:30:00+09:00"
+  },
+  "facts": {
+   "value": "ロンドンのディガー/エディット職人。レコード店 Phonica の出身として知られ、シカゴハウス、アンダーグラウンド・ディスコ、ブギーを混ぜる。Luke Solomon のFreaks でギターも弾いた",
+   "source": "Phonica + RA + Dekmantel Selectors",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T05:30:00+09:00"
+  }
+ }
+}

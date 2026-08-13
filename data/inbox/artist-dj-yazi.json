@@ -1,0 +1,20 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T05:30:00+09:00",
+ "_note": "確度 medium は断定を避ける。BIO 下書きは reports/artists-draft-2026-08-13.md 第7弾",
+ "_appearsAt": "matricaria",
+ "fields": {
+  "CITY": {
+   "value": "TOKYO",
+   "source": "複数ソース",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T05:30:00+09:00"
+  },
+  "facts": {
+   "value": "90年代半ばから活動する東京のDJ。前衛ヒップホップ集団 Think Tank の一員で、Black Smoker Records と縁が深い。パーティー El Nino のレジデントを20年務め、Haruka との Twin Peaks でも知られる（Dekmantel Podcast 169）。公式の SC/IG は特定できず（リンクは載せない）",
+   "source": "RA + iFLYER + Dekmantel",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T05:30:00+09:00"
+  }
+ }
+}
