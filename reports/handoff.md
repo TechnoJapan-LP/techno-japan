@@ -1852,3 +1852,41 @@ FESTIVALS等の必須データのPublish自体は止めないようにした。
   確度「中」の URL は開いて本人確認してから貼ること。
 - BIO を書く前に data/inbox/artist-<id>.json の confidence を確認する
   （AGENTS.md の事実主義。low は断定的に書かない）。
+
+## 2026-08-13 / Claude / アーティスト調査・第2弾（IG 実地確認で8人特定）
+
+### 実施
+- Web 検索で特定できなかった出演者を、**フェス公式 Instagram のフォロー先
+  検索 → 本人プロフィールを開いて確認**する手法で特定。
+  - Global Ark 組（8/21 出演・最優先）: choko / sunga / tsutomu
+  - Synapse 組（10/2）: ground / ysk / noritake / joma
+  - COLORS（9/20）: occa（CHOKO のフォロワー欄から発見）
+- **全員、bio に DJ 活動の記載があることを確認してから記録**
+  （名前一致＋公式フォローだけでは確定にしない）。
+- data/inbox/artist-*.json 8件追加（計15件）。下書き第2弾を
+  reports/artists-draft-2026-08-13.md に追記（BIO/bio_en 草稿つき）。
+
+### コミット
+- `docs: アーティスト調査・第2弾（IG実地確認8人・計15人分の下書き）`
+
+### 検証
+- Instagram プロフィール8件を実際に開き、DJ 活動・所属・拠点の記載を確認。
+- 別人だった例を実際に検出（@ga.globalark はアルゼンチンの建材会社）。
+  handle 検索だけでは危険という実証。
+- ユーザー方針「不確かなものは載せない」に従い、moodman の SoundCloud と
+  okadada の Instagram は**保留のまま**（本人確認が取れない）。
+
+### 変更したパターン
+- なし（調査・下書きのみ。本番・シート未変更）。
+
+### 未確認の類似パターン
+- noritake の SoundCloud は**短縮リンクのみ**（on.soundcloud.com/…）。
+  展開先を開いて本来の URL を確認してから登録すること。
+- suimin（Odyssey）/ so（御月民）は未特定。各フェス公式 IG の
+  フォロー先から辿る手法が有効なはず。
+- FRUE 組3人（Kiko Dinucci / Joujouka / Kuo）は次バッチ（開催11月）。
+
+### 次の担当への注意・判断待ち
+- **CMS 入力待ち15人分**が reports/artists-draft-2026-08-13.md にある。
+  確度「中」の URL は開いて確認してから貼ること。
+- 写真は全員空欄のまま（ユーザーが手動で収集する方針。2026-08-13 決定）。
