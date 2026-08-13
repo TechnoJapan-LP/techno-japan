@@ -1766,3 +1766,27 @@ FESTIVALS等の必須データのPublish自体は止めないようにした。
   「コードに無い」と断定する前に生成コードを読むこと。
 - events.json / llms.txt は build-detail-pages.mjs の buildAiSurface が生成。
   **タイムスタンプを入れないこと**（毎日の再生成で差分ノイズになる）。
+
+## 2026-08-13 / Codex / 本番ARTISTS・VENUESモバイル確認
+
+### 実施
+- 本番ARTISTS / VENUESをモバイル幅でChrome描画。
+- JA / ENの4ハブへHTTPアクセスし、表示要素を確認。
+
+### コミット
+- 未コミット。次回のドキュメントコミットに含める。
+
+### 検証
+- ARTISTS: A–Zナビ、検索欄、ジャンルフィルター、先頭カード群を確認。
+- VENUES: 都市フィルター、検索欄、最初の会場カードを確認。
+- `/artists.html`、`/venues.html`、`/en/artists.html`、`/en/venues.html`がHTTP 200。
+
+### 変更したパターン
+- 本番ARTISTS / VENUESハブのモバイル表示。
+
+### 未確認の類似パターン
+- 実機でのA–Zタップ、検索入力、横スワイプは未確認。
+- CMSの入力→保存→再表示は未確認。
+
+### 次の担当への注意・判断待ち
+- 次は実機相当の操作確認またはCMS操作確認へ進む。
