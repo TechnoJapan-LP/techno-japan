@@ -1954,3 +1954,32 @@ FESTIVALS等の必須データのPublish自体は止めないようにした。
 - 次バッチの行き先はメモ済み: rami・akie（@matricaria_festival）/
   yamarchy・calpiss（@harukaze_asia）/ yellowuhuru（@etsu_etsu_）/
   mimu（@sub_tide）/ mayudepth（@waifu_party）/ endorphin（@arch___2014）。
+
+## 2026-08-13 / Claude / アーティスト調査・第5弾（計39人分）
+
+### 実施
+- 国際的な著名アーティスト10人を Web 検索で調査:
+  Four Tet / Floating Points / Helena Hauff / DJ KRUSH / Mala /
+  Gerd Janson / HAAi / Prins Thomas / SHERELLE / Daniel Bell。
+- 残りの正確な人数を再集計: **50人 → 調査済み10人を引いて残り40人。**
+  フェス別の行き先マップを下書きに記録済み。
+
+### コミット
+- `docs: アーティスト調査・第5弾（国際的な著名10人・計39人分）`
+
+### 検証
+- Bandcamp/SoundCloud は検索結果の直リンクのみ「高」。
+  要約経由（HAAi の SC / SHERELLE の IG・SC）は「中 — 開いて確認」。
+- Daniel Bell は公式アカウントを確認できず**リンクなしで登録**（事実のみのBIO）。
+
+### 変更したパターン
+- なし（調査・下書きのみ）。
+
+### 未確認の類似パターン
+- 残り40人。RDC 国際勢（suze-ij / jonny-rock / jonathan-kusuma / feline /
+  nc4k）、STAR FESTIVAL 勢（dj-hype / clipz / lady-shaka / guchon /
+  dj-masda / nasthug）、Transcendence 勢（kohra / paquita-gordon / upsammy）、
+  MATRICARIA 国内勢（rami / akie ほか）等。
+
+### 次の担当への注意・判断待ち
+- CMS 入力待ち **39人分**。Global Ark（8/21）組を最優先で。
