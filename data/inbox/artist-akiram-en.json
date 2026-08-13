@@ -1,0 +1,32 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T01:30:00+09:00",
+ "_note": "リンクは公式アカウントの確認済みURL。confidence: low の値は断定的に書かない（AGENTS.md）。BIO/bio_en の下書きは reports/artists-draft-2026-08-13.md にある。",
+ "_appearsAt": "ffkt (2026-09-26)",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/akiram_en/",
+   "source": "Web検索（公式プロフィール直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T01:30:00+09:00"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/akiram-en",
+   "source": "Web検索（本人アカウント直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T01:30:00+09:00"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "Instagram プロフィール",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T01:30:00+09:00"
+  },
+  "facts": {
+   "value": "90年代半ばにDJキャリアを開始。日本のアンダーグラウンド・シーンで長く活動。DJ KRUSH との共演歴あり",
+   "source": "SoundCloud プロフィール + イベント告知",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T01:30:00+09:00"
+  }
+ }
+}

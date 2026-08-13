@@ -1,0 +1,27 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T01:30:00+09:00",
+ "_note": "リンクは公式アカウントの確認済みURL。confidence: low の値は断定的に書かない（AGENTS.md）。BIO/bio_en の下書きは reports/artists-draft-2026-08-13.md にある。",
+ "_appearsAt": "circus (2026-09-22)",
+ "fields": {
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/okadada",
+   "source": "Web検索（本人アカウント。CIRCUS Tokyo でのセット多数で本人性を確認）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T01:30:00+09:00"
+  },
+  "INSTAGRAM": {
+   "value": null,
+   "source": "イベント告知（lit.jp）に @okadada の言及はあるが本人プロフィール未確認",
+   "confidence": "medium",
+   "checkedAt": "2026-08-13T01:30:00+09:00",
+   "note": "instagram.com/okadada が本人か要確認"
+  },
+  "facts": {
+   "value": "DJ/プロデューサー。全国各地で活動。CIRCUS Tokyo の audiotwo 等に出演",
+   "source": "SoundCloud のセット履歴 + lit.jp イベント告知",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T01:30:00+09:00"
+  }
+ }
+}

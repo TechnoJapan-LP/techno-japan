@@ -1,0 +1,33 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T01:30:00+09:00",
+ "_note": "リンクは公式アカウントの確認済みURL。confidence: low の値は断定的に書かない（AGENTS.md）。BIO/bio_en の下書きは reports/artists-draft-2026-08-13.md にある。",
+ "_appearsAt": "ffkt (2026-09-26)",
+ "fields": {
+  "WEBSITE": {
+   "value": "https://powd.jp/",
+   "source": "Web検索（公式サイト）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T01:30:00+09:00"
+  },
+  "GENRE": {
+   "value": "HOUSE",
+   "source": "DJ Mag / MUTEK / Unsound の紹介文（left-field house）",
+   "confidence": "medium",
+   "checkedAt": "2026-08-13T01:30:00+09:00",
+   "note": "編集判断。正規リストでは HOUSE が最も近い"
+  },
+  "facts": {
+   "value": "本名 Moko Shibata。長崎出身、2011年に東京へ。2015年頃から国際的に活動。CockTail d'Amore（2017年 EP『H』）、Beats in Space、ESP Institute、The Trilogy Tapes 等からリリース",
+   "source": "DJ Mag 特集 / MUTEK / Unsound / Bandcamp（label ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T01:30:00+09:00"
+  },
+  "BANDCAMP": {
+   "value": null,
+   "source": "本人名義のアカウントは無い（リリースはレーベル側: cocktaildamoremusic.bandcamp.com/album/powder-h）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T01:30:00+09:00"
+  }
+ }
+}

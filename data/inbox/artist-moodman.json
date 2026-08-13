@@ -1,0 +1,33 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T01:30:00+09:00",
+ "_note": "リンクは公式アカウントの確認済みURL。confidence: low の値は断定的に書かない（AGENTS.md）。BIO/bio_en の下書きは reports/artists-draft-2026-08-13.md にある。",
+ "_appearsAt": "global-ark (2026-08-21)",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/moodman10/",
+   "source": "Web検索（Instagram 公式プロフィール直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T01:30:00+09:00"
+  },
+  "SOUNDCLOUD": {
+   "value": null,
+   "source": "soundcloud.com/moodman は同名別人の可能性を排除できず",
+   "confidence": "low",
+   "checkedAt": "2026-08-13T01:30:00+09:00",
+   "note": "Boiler Room Tokyo のセットは soundcloud.com/platform/moodman（Boiler Room 側）にある"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "Instagram プロフィール（Tokyo 表記）",
+   "confidence": "medium",
+   "checkedAt": "2026-08-13T01:30:00+09:00"
+  },
+  "facts": {
+   "value": "ハウス・シーンのDJ。GODFATHER / HOUSE OF LIQUID / SLOWMOTION 等のパーティーに関わる",
+   "source": "acid.tokyo（ACiD collective 紹介）+ Instagram bio",
+   "confidence": "medium",
+   "checkedAt": "2026-08-13T01:30:00+09:00"
+  }
+ }
+}

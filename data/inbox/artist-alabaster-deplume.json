@@ -1,0 +1,39 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T01:30:00+09:00",
+ "_note": "リンクは公式アカウントの確認済みURL。confidence: low の値は断定的に書かない（AGENTS.md）。BIO/bio_en の下書きは reports/artists-draft-2026-08-13.md にある。",
+ "_appearsAt": "festival-de-frue (2026-11)",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/alabaster_deplume/",
+   "source": "Web検索（公式プロフィール直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T01:30:00+09:00"
+  },
+  "BANDCAMP": {
+   "value": null,
+   "source": "本人名義のアカウントは無い（リリースはレーベル側: intlanthem.bandcamp.com）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T01:30:00+09:00"
+  },
+  "COUNTRY": {
+   "value": "UK",
+   "source": "各種プレス（マンチェスター出身）",
+   "confidence": "medium",
+   "checkedAt": "2026-08-13T01:30:00+09:00"
+  },
+  "GENRE": {
+   "value": "EXPERIMENTAL",
+   "source": "ジャズ/実験音楽（International Anthem 所属）",
+   "confidence": "medium",
+   "checkedAt": "2026-08-13T01:30:00+09:00",
+   "note": "編集判断"
+  },
+  "facts": {
+   "value": "サックス奏者・詩人。シカゴのレーベル International Anthem から『GOLD』(2022)『Come With Fierce Grace』(2023) 等をリリース",
+   "source": "intlanthem.bandcamp.com + プレス各種",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T01:30:00+09:00"
+  }
+ }
+}

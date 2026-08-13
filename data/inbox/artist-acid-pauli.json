@@ -1,0 +1,39 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T01:30:00+09:00",
+ "_note": "リンクは公式アカウントの確認済みURL。confidence: low の値は断定的に書かない（AGENTS.md）。BIO/bio_en の下書きは reports/artists-draft-2026-08-13.md にある。",
+ "_appearsAt": "festival-de-frue (2026-11)",
+ "fields": {
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/acidpauli",
+   "source": "Web検索（本人アカウント直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T01:30:00+09:00"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/therealacidpauli",
+   "source": "Web検索の要約（直リンク未取得）",
+   "confidence": "medium",
+   "checkedAt": "2026-08-13T01:30:00+09:00",
+   "note": "登録前にURLを開いて本人確認"
+  },
+  "COUNTRY": {
+   "value": "GERMANY",
+   "source": "Ouïe レーベル（ベルリン拠点）の紹介",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T01:30:00+09:00"
+  },
+  "CITY": {
+   "value": "BERLIN",
+   "source": "同上",
+   "confidence": "medium",
+   "checkedAt": "2026-08-13T01:30:00+09:00"
+  },
+  "facts": {
+   "value": "本名 Martin Gretschmann。ベルリン拠点。Nico Stojan とレーベル Ouïe を主宰",
+   "source": "ouie.bandcamp.com + SoundCloud",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T01:30:00+09:00"
+  }
+ }
+}

@@ -1,0 +1,40 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T01:30:00+09:00",
+ "_note": "リンクは公式アカウントの確認済みURL。confidence: low の値は断定的に書かない（AGENTS.md）。BIO/bio_en の下書きは reports/artists-draft-2026-08-13.md にある。",
+ "_appearsAt": "festival-de-frue (2026-11)",
+ "fields": {
+  "BANDCAMP": {
+   "value": "https://sylvanesso.bandcamp.com/",
+   "source": "Web検索（本人アカウント直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T01:30:00+09:00"
+  },
+  "WEBSITE": {
+   "value": "https://sylvanesso.com",
+   "source": "Web検索の要約",
+   "confidence": "medium",
+   "checkedAt": "2026-08-13T01:30:00+09:00",
+   "note": "登録前にURLを開いて確認"
+  },
+  "COUNTRY": {
+   "value": "USA",
+   "source": "Wikipedia / Bandcamp（Durham, North Carolina）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T01:30:00+09:00"
+  },
+  "GENRE": {
+   "value": "LIVE",
+   "source": "エレクトロニック・ポップのデュオ（バンド形態）",
+   "confidence": "medium",
+   "checkedAt": "2026-08-13T01:30:00+09:00",
+   "note": "編集判断"
+  },
+  "facts": {
+   "value": "Amelia Meath と Nick Sanborn によるデュオ。ノースカロライナ州ダーラム拠点。アルバム4作、グラミー賞ノミネート2回",
+   "source": "Bandcamp + Wikipedia",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T01:30:00+09:00"
+  }
+ }
+}
