@@ -303,14 +303,43 @@ const ARTISTS = [
   {
     id: "sylvan-esso",
     name: "Sylvan Esso",
+    country: "USA",
+    genre: "LIVE",
+    image: "images/artists/sylvan-esso.webp",
+    bio: "Amelia Meath と Nick Sanborn によるエレクトロニック・ポップ・デュオ。\nノースカロライナ州ダーラムを拠点に4作のアルバムを発表し、グラミー賞に2度ノミネートされている。",
+    bio_en: "An electronic pop duo of Amelia Meath and Nick Sanborn based in Durham, North Carolina, with four albums and two Grammy nominations.",
+    links: {
+      instagram: "https://www.instagram.com/sylvanesso/",
+      bandcamp: "https://sylvanesso.bandcamp.com/",
+      website: "https://www.sylvanesso.com/",
+    }
   },
   {
     id: "acid-pauli",
     name: "Acid Pauli",
+    city: "BERLIN",
+    country: "GERMANY",
+    genre: "HOUSE/TECHNO",
+    image: "images/artists/acid-pauli.webp",
+    bio: "ベルリンを拠点とする Martin Gretschmann のソロ名義。Nico Stojan と共にレーベル Ouïe を主宰し、テクノやハウスを軸に、サイケデリックで実験的な独自のダンスミュージックで知られる。",
+    bio_en: "The solo alias of Berlin-based Martin Gretschmann. He co-runs the label Ouïe with Nico Stojan and is known for a distinctive strain of dance music—rooted in techno and house, yet psychedelic and experimental.",
+    links: {
+      instagram: "https://www.instagram.com/therealacidpauli",
+      soundcloud: "https://soundcloud.com/acidpauli",
+    }
   },
   {
     id: "alabaster-deplume",
     name: "Alabaster DePlume",
+    country: "UK",
+    genre: "LIVE",
+    image: "images/artists/alabaster-deplume.webp",
+    bio: "サックス奏者・詩人。シカゴのレーベル International Anthem から『GOLD』（2022）『Come With Fierce Grace』（2023）などを発表し、ジャズと語りの境界を漂う独自の表現で知られる。",
+    bio_en: "A saxophonist and poet releasing on Chicago's International Anthem, including \"GOLD\" (2022) and \"Come With Fierce Grace\" (2023), known for drifting between jazz and spoken word.",
+    links: {
+      instagram: "https://www.instagram.com/alabaster_deplume/",
+      bandcamp: "https://alabasterdeplume.bandcamp.com/",
+    }
   },
   {
     id: "juana-molina",
@@ -351,6 +380,16 @@ const ARTISTS = [
   {
     id: "akiram-en",
     name: "AKIRAM EN",
+    city: "TOKYO",
+    country: "JAPAN",
+    genre: "TECHNO",
+    image: "images/artists/akiram-en.webp",
+    bio: "90年代中盤よりDJとして活動開始。\nレフトフィールドテクノやアヴァンギャルドなどをフロアマナーに従ってミックスしていくエッジーなダンスセットから、オブスキュアサウンドに着想を得たディープなリスニングセットまで、聴覚と身体感覚を揺さぶるプレイは、ダンスフロアを常に意識しつつ、音楽を深く知覚させる体験へ導いていく。",
+    bio_en: "Active as a DJ since the mid-'90s.\nFrom edgy dance sets that mix leftfield techno and avant-garde material according to the manners of the floor, through to deep listening sets drawn from obscure sound, his playing works on both the ears and the body — always conscious of the dancefloor, yet guiding the listener toward an experience of perceiving music at a far deeper level.",
+    links: {
+      instagram: "https://www.instagram.com/akiram_en/",
+      soundcloud: "https://soundcloud.com/akiram-en",
+    }
   },
   {
     id: "you-forgot",
@@ -387,6 +426,15 @@ const ARTISTS = [
   {
     id: "moodman",
     name: "MOODMAN",
+    city: "TOKYO",
+    country: "JAPAN",
+    genre: "HOUSE",
+    image: "images/artists/moodman.webp",
+    bio: "東京のハウス・シーンを長年支えてきたDJ。GODFATHER、HOUSE OF LIQUID、SLOWMOTION など複数のパーティーに深く関わり、日本のクラブカルチャーを現場から形づくってきた存在として知られる。",
+    bio_en: "A DJ who has long shaped Tokyo's house scene from the ground up, deeply involved in parties such as GODFATHER, HOUSE OF LIQUID and SLOWMOTION.",
+    links: {
+      instagram: "https://www.instagram.com/moodman10/",
+    }
   },
   {
     id: "nasthug",
@@ -395,6 +443,17 @@ const ARTISTS = [
   {
     id: "okadada",
     name: "okadada",
+    city: "TOKYO",
+    country: "JAPAN",
+    genre: "HOUSE",
+    image: "images/artists/okadada.webp",
+    bio: "全国各地、多岐にわたるパーティーでDJとして出演し、ネットレーベル「maltine records」やbandcampで楽曲をリリース。大小、上下、場所、種別を問わず野外フェスから地下のパーティーまで出演、遊び、類例の無い幅広さの活動で各所に存在、評価を確立する。",
+    bio_en: "Performing as a DJ at a wide range of parties across Japan, with releases on the net label maltine records and on Bandcamp. Appearing at—and simply hanging out at—everything from outdoor festivals to underground parties, regardless of scale, status, location or genre, he has carved out a presence and earned recognition across the board through an unparalleled breadth of activity.",
+    links: {
+      instagram: "https://www.instagram.com/okadada/",
+      soundcloud: "https://soundcloud.com/okadada",
+      bandcamp: "https://halooo.bandcamp.com/",
+    }
   },
   {
     id: "paquita-gordon",
@@ -403,6 +462,17 @@ const ARTISTS = [
   {
     id: "powder",
     name: "Powder",
+    city: "TOKYO",
+    country: "JAPAN",
+    genre: "HOUSE",
+    image: "images/artists/powder.webp",
+    bio: "長崎出身、2011年より東京を拠点とするDJ/プロデューサー Moko Shibata のソロ名義。2017年に CockTail d'Amore から EP『H』を発表して以降、Beats in Space、ESP Institute、The Trilogy Tapes などから作品を重ね、レフトフィールド・ハウスの旗手として国際的に活動する。",
+    bio_en: "The solo alias of Moko Shibata, a Nagasaki-born, Tokyo-based DJ and producer. Since her 2017 EP \"H\" on CockTail d'Amore she has released on Beats in Space, ESP Institute and The Trilogy Tapes, earning international recognition as a leading figure in left-field house.",
+    links: {
+      soundcloud: "https://soundcloud.com/thinner_groove",
+      bandcamp: "https://thinnergroove.bandcamp.com/",
+      website: "https://powd.jp/",
+    }
   },
   {
     id: "sherelle",
@@ -2076,6 +2146,7 @@ const VENUES = [
     address: "2-23-4 Jingumae, Shibuya-ku, Tokyo",
     lat: 35.6746,
     lng: 139.7111,
+    url: "https://www.bonobo.jp/",
     instagram: "https://www.instagram.com/jingumaebonobo/",
     desc_en: "A cozy neighborhood bar in Jingu-mae that doubles as an intimate venue for electronic music. The space attracts a discerning crowd drawn to its carefully curated sound and unpretentious atmosphere. Its compact size creates an unusually close connection between artists and audience.",
     desc: "神宮前にある小さなバーで、エレクトロニックミュージックの会場も兼ねる。丁寧に選ばれたサウンドと、気取らない雰囲気に惹かれた客層が集まる。小規模ゆえに、アーティストと観客の距離が非常に近い。"
@@ -2274,11 +2345,12 @@ const ARTICLES = [
   },
   {
     id: "loa-lost-paradise-2026-info",
-    title: "茨城・鉾田の隠れたビーチで、2日間を通しで踊り明かすビーチパーティ",
+    title: "茨城 鉾田 nalu beachでビーチパーティLOA 8月15日開催",
     title_en: "On a hidden beach in Hokota, Ibaraki, a two-day beach party where you can dance the nights away.",
     excerpt: "かつて大洋村と呼ばれた茨城・鉾田の隠れたビーチに、28時間止まらないフロアが立ち上がる。夕日で始まり、砂浜で朝日を迎え、二度目の夕日で幕を閉じるビーチパーティLOA。海の家もない太平洋を前に波打ち際で音を鳴らす。",
     excerpt_en: "On a hidden beach in Hokota, Ibaraki—once known as Taiyo Village—a floor rises that never stops for 28 hours. LOA is a beach party that begins with a sunset, greets the morning sun on the sand, and closes with a second sunset. Facing the Pacific Ocean with no beach huts in sight, the sound rings out right at the water's edge.",
     body: `<h2><span class="ql-font-bebas">茨城・鉾田の隠れたビーチで、2日間を通しで踊り明かすビーチパーティ。</span></h2><p>8月15日の14時に開場し、翌16日の18時まで、フロアは一度も止まらない。かつて「大洋村」と呼ばれた茨城・鉾田の海辺、nalu beachで、海に向かって踊り続けるビーチパーティ「LOA - LOST PARADISE -」が開かれる。</p><p><img src="https://lh3.googleusercontent.com/d/1iGtKrkgerRsQmV4lOvtBfkKqNV0O4xKl=w2000"></p><h3><span class="ql-font-condensed ql-size-huge">LOAとは</span></h3><p>LOAとは、ハワイ語で「永続的な」を意味する言葉。2026年のテーマは、波。同じ形で二度と訪れない波のように、姿も形も変えながら、寄せては返す。</p><p>ここには境界も、線引きもない。ジャンルも、人種も、性別も、すべてが海と音に溶けていく。</p><p>掲げられているのは「Sunset to Sunset」。初日の夕日でフロアが立ち上がり、砂浜で朝日を迎え、二度目の夕日で幕を下ろす。夜を越えて続くこの時間の構造こそが、LOAの体験の核だ。真夏の二日間が、人生の新しい一ページになる。</p><p><img src="https://lh3.googleusercontent.com/d/1jZ9jGEX3NrekaVtDqOVRikk0veMllOdR=w2000"></p><h2>VENU</h2><p><strong class="ql-font-bebas"><em>サーファーたちが守り続けてきた、大洋村の隠れたビーチ。</em></strong><strong class="ql-font-mono"><br>Nalu beach, </strong><span class="ql-font-mono">Hokota, Ibaraki</span></p><p>かつて「大洋村」と呼ばれた茨城県鉾田市の海辺。nalu beachは、古くから地元のサーファーたちに愛され、大切に守られてきた隠れたビーチだ。コロナ禍で長く閉ざされていたこの場所が、この夏、再びダンスフロアとして目を覚ます。</p><p>海の家はない。目の前に広がるのは、果てしなく続く砂浜と、雄大な太平洋だけ。</p><p>鉾田市は日本のレイライン上に位置するとも言われ、日本最古の神宮のひとつ、鹿島神宮にもほど近い。風と太陽、そして海に祝福された場所で、フロアが立ち上がる。</p><p><img src="https://lh3.googleusercontent.com/d/1aQU56W1VQUrMyqzvPoVW372m7EG6dTPd=w2000"></p><h2>MUSIC</h2><p><em class="ql-font-bebas">砂浜のフロアに、全国から音が集まる。</em></p><p>GIZMO、MAMAZU、SAEKI TAKUYA、TAAAHHH。LOAを共に創り上げてきた面々が、波打ち際のフロアに立つ。音を支えるのは、日本の野外シーンで信頼を集めるOtodashi Sound。</p><p>砂浜にはEarthist creator's communeによるランドアートが立ち上がり、Onchiのバブルアートが海風に舞う。音と光景が、ひとつの風景として重なり合っていく。</p><p><img src="https://lh3.googleusercontent.com/d/1giKYfVimSi9sx89hQCSB8Ihn31uTbTNv=w2000"></p><h2>INFORMATION</h2><p>前売券は2券種・計100枚が完売し、現在は最終前売となる¥10,000のチケットが20枚限定で販売されている。販売期間は8月12日まで。予定枚数に達し次第、販売は終了する。</p><p>当日券は¥13,000。お名前と枚数を記載のうえ、メールでの申し込みとなる。</p><p>✉️ <a href="mailto:loa.lostparadise@gmail.com" rel="noopener noreferrer" target="_blank">loa.lostparadise@gmail.com</a></p><p>同じ形の波は、二度と岸に届かない。<br> この夏の二日間も、一度きりだ。</p><p><span style="color: rgba(240, 237, 232, 0.85);">◯ Dates / 日程 2026.08.15 (Sat) 14:00 - 08.16 (Sun) 18:00</span><br><span style="color: rgba(240, 237, 232, 0.85);">◯ Venue / 会場 nalu beach, Hokota, Ibaraki</span><br><span style="color: rgba(240, 237, 232, 0.85);">◯ Genre / ジャンル Techno / House / Psychedelic</span><br><span style="color: rgba(240, 237, 232, 0.85);">🎫 Tickets / チケット → LivePocket（最終前売 8.12まで）</span></p><p><img src="https://lh3.googleusercontent.com/d/13dRTor9t8l6Z1CuMclLrOLbxJBwlGVk1=w2000"></p>`,
+    body_en: `<h2><span class="ql-font-bebas">A two-day beach party on a hidden stretch of shoreline in Hokota, Ibaraki, dancing straight through from start to finish.</span></h2><p>Doors open at 14:00 on August 15, and the floor doesn't stop once until 18:00 the following day, August 16. At nalu beach — on the coast of Hokota, Ibaraki, once known as "Taiyo Village" — comes "LOA - LOST PARADISE -," a beach party where you dance facing the sea.</p><p><img src="https://lh3.googleusercontent.com/d/1iGtKrkgerRsQmV4lOvtBfkKqNV0O4xKl=w2000"></p><h3><span class="ql-size-huge ql-font-condensed">What is LOA</span></h3><p>LOA is a Hawaiian word meaning "everlasting." The theme for 2026 is waves. Like a wave that never arrives in the same shape twice, it shifts its form as it rolls in and pulls back out.</p><p>There are no boundaries here, no dividing lines. Genre, race, gender — everything dissolves into the sea and the sound.</p><p>The banner reads "Sunset to Sunset." The floor rises with the first day's sunset, greets the sunrise on the sand, and comes down with the second sunset. This structure of time, carrying on straight through the night, is the very core of the LOA experience. Two midsummer days that become a new page in your life.</p><p><img src="https://lh3.googleusercontent.com/d/1jZ9jGEX3NrekaVtDqOVRikk0veMllOdR=w2000"></p><h2>VENU</h2><p><strong class="ql-font-bebas"><em>A hidden beach in Taiyo Village, watched over by surfers for generations.</em></strong><strong class="ql-font-mono"><br>Nalu beach, </strong><span class="ql-font-mono">Hokota, Ibaraki</span></p><p>The coastline of Hokota, Ibaraki, a place once called "Taiyo Village." nalu beach is a hidden beach long loved and carefully protected by local surfers. Closed off for years during the pandemic, this spot wakes up again this summer as a dance floor.</p><p>There are no beach houses. All that stretches out before you is endless sand and the vast Pacific.</p><p>Hokota is said to sit on one of Japan's ley lines, and it's close to Kashima Jingu, one of the oldest shrines in the country. The floor rises in a place blessed by wind, sun, and sea.</p><p><img src="https://lh3.googleusercontent.com/d/1aQU56W1VQUrMyqzvPoVW372m7EG6dTPd=w2000"></p><h2>MUSIC</h2><p><em class="ql-font-bebas">Sound gathers on a sand floor from across the country.</em></p><p>GIZMO, MAMAZU, SAEKI TAKUYA, TAAAHHH. The crew who have built LOA together take their place on a floor at the water's edge. Holding down the sound is Otodashi Sound, a trusted name in Japan's outdoor scene.</p><p>Land art by Earthist creator's commune rises from the sand, while Onchi's bubble art drifts on the sea breeze. Sound and scenery overlap into a single landscape.</p><p><img src="https://lh3.googleusercontent.com/d/1giKYfVimSi9sx89hQCSB8Ihn31uTbTNv=w2000"></p><h2>INFORMATION</h2><p>Two advance ticket tiers, 100 tickets in total, have already sold out. Currently on sale is the final advance ticket at ¥10,000, limited to 20 tickets. Sales run until August 12, and will close as soon as the allocation is gone.</p><p>Door tickets are ¥13,000. Apply by email with your name and the number of tickets.</p><p>✉️ <a href="mailto:loa.lostparadise@gmail.com" rel="noopener noreferrer" target="_blank">loa.lostparadise@gmail.com</a></p><p>No wave ever reaches the shore in the same shape twice.<br> These two summer days are a one-time thing too.</p><p><span style="color: rgba(240, 237, 232, 0.85);">◯ Dates / 日程 2026.08.15 (Sat) 14:00 - 08.16 (Sun) 18:00</span><br><span style="color: rgba(240, 237, 232, 0.85);">◯ Venue / 会場 nalu beach, Hokota, Ibaraki</span><br><span style="color: rgba(240, 237, 232, 0.85);">◯ Genre / ジャンル Techno / House / Psychedelic</span><br><span style="color: rgba(240, 237, 232, 0.85);">🎫 Tickets / チケット → LivePocket (final advance sale, until 8.12)</span></p><p><img src="https://lh3.googleusercontent.com/d/13dRTor9t8l6Z1CuMclLrOLbxJBwlGVk1=w2000"></p>`,
     category: "RAVE",
     date: "2026-08-09",
     author: "TECHNO JAPAN",
@@ -2286,6 +2358,22 @@ const ARTICLES = [
     festivalId: "loa-lost-paradise",
     readTime: 2,
     tags: ["RAVE"],
+    status: "published",
+  },
+  {
+    id: "bondisco-2026-info",
+    title: "兵庫・三田の森で26時間 DIYパーティBON DISCOが13年目の夏へ",
+    title_en: "26 Hours in the Woods of Sanda, Hyogo: DIY Party BON DISCO Heads Into Its 13th Summer",
+    excerpt: "兵庫県三田市の森を舞台に、正午から翌日午後まで踊り続けるDIYパーティBON DISCOが13年目の夏を迎える。全国から集まる40組近いアーティストと2つのフロア、そしてプールで身体を冷やしてまた音へ戻る、真夏だけの過ごし方がここにある。",
+    excerpt_en: "Set deep in the woods of Sanda, Hyōgo, the DIY party BON DISCO — where dancing runs from noon straight through to the following afternoon — is heading into its 13th summer. Nearly 40 acts from across Japan, two floors, and a pool to cool your body down before diving back into the sound: this is a way of spending time that only midsummer can offer.",
+    body: `<h2><span class="ql-size-large ql-font-mono">兵庫・三田の森で、夏の週末を通しで踊るDIYパーティ</span></h2><p>8月22日の正午に始まり、翌23日の午後まで続く。自分たちの手で創り上げるインディペンデントなDIYパーティ「BON DISCO」が、兵庫県三田市の三田アスレチックパークで13年目の夏を迎える。</p><p><img src="https://lh3.googleusercontent.com/d/1QN2QNCMXsG-RmOt51ynnIWFPw86NDiwF=w2000"></p><h2><em class="ql-font-bebas ql-size-large">BON DISCOとは</em></h2><p>自分たちの手で創り上げる、インディペンデントなDIYパーティ。豊かな自然の中で、誰もが最大限に日常から解放される空間を目指し、2026年で13年目を迎える。</p><p>大きな資本にも、流行にも寄りかからない。13年のあいだにBON DISCOが築いてきた関係が、そのままこのパーティの形になっている。</p><p><img src="https://lh3.googleusercontent.com/d/1xmtAAfocLc6ReqaJuWD6Jz4O5J6RDuPL=w2000"></p><h2><em class="ql-font-mono ql-size-large">都会の熱波から離れた、森とプールのロケーション</em><strong><br></strong></h2><p><span class="ql-font-condensed">会場は昨年に続き2年目となる、兵庫県三田市の三田アスレチックパーク。木々に囲まれた環境そのものが、このパーティの体験を形づくっている。</span></p><p><span class="ql-font-condensed">魅力のひとつが、プールエリアだ。ゆったり涼める通常プールと、小さな子どもも安心して遊べる浅いプールの2種類を完備し、シャワー設備も整っている。今年はサウナやプールサイドでのDJはなく、森の息吹を静かに感じる、純粋なリラックス・スペースとして開かれる。</span></p><p><span class="ql-font-condensed">踊り疲れた身体を水で冷やし、また音へ戻っていく。この往復が、真夏のBON DISCOの過ごし方だ。</span></p><p><img src="https://lh3.googleusercontent.com/d/1ywChGlIVARZwaNfc8IfkiMICd8XI8-PM=w2000"></p><h2><em class="ql-font-bebas">趣向を凝らした2フロアに40組近くが集まる。</em></h2><p>高音質にこだわった2つのフロアが、より深く、没入感のある音楽体験へと導いていく。出演は関西を中心に、全国から集まる40組近いアーティストたち。</p><p>フロアの外では、Naokoによるヨガのセッションが開かれ、電子原人、佐々木ビル（Yabar食堂&amp;太陽の村）、Vamos Tacosがフードを並べる。音楽と休息と食事が、同じ森の中で地続きになっている。</p><p><img src="https://lh3.googleusercontent.com/d/18gYtK2UBRPWTh2SMgh5jH77OCPe8IXFb=w2000"></p><h2><span class="ql-font-mono ql-size-large">INFORMATION</span></h2><p>入場料は¥7,000。18歳以下は無料。</p><p>費用はエントランス料金のみで、駐車料金、テント料金、プールの利用料は一切発生しない。有料ロッジでの宿泊を希望する場合のみ、三田アスレチックへの直接の事前予約が必要となる。</p><p>踊って、冷やして、また踊る。<br> その繰り返しの先に、13年目の夏がある。</p><p>◯ Dates / 日程 2026.08.22 (Sat) 12:00 - 08.23 (Sun) afternoon<br>◯ Venue / 会場 Sanda Athletic Park, Sanda, Hyogo<br>🎫 Entrance ¥7,000（18歳以下無料）</p>`,
+    body_en: `<h2><span class="ql-size-large ql-font-mono">A DIY party dancing straight through a summer weekend in the woods of Sanda, Hyogo</span></h2><p>It kicks off at noon on August 22 and runs until the afternoon of the 23rd. "BON DISCO," an independent DIY party built entirely by its own crew, marks its 13th summer at Sanda Athletic Park in Sanda, Hyogo.</p><p><img src="https://lh3.googleusercontent.com/d/1QN2QNCMXsG-RmOt51ynnIWFPw86NDiwF=w2000"></p><h2><em class="ql-font-bebas ql-size-large">What is BON DISCO</em></h2><p>An independent DIY party built with their own hands. Surrounded by abundant nature, it aims to be a space where anyone can be released from the everyday to the fullest — and in 2026 it reaches its 13th year.</p><p>It leans on neither big capital nor trends. The relationships BON DISCO has built over 13 years are, quite literally, the shape this party takes.</p><p><img src="https://lh3.googleusercontent.com/d/1xmtAAfocLc6ReqaJuWD6Jz4O5J6RDuPL=w2000"></p><h2><em class="ql-font-mono ql-size-large">A forest-and-pool location, far from the city's heatwave</em><strong><br></strong></h2><p><span class="ql-font-condensed">The venue is Sanda Athletic Park in Sanda, Hyogo — the second year running, following last year. The tree-lined setting itself shapes the experience of this party.</span></p><p><span class="ql-font-condensed">One of its draws is the pool area. There are two pools — a standard one for a leisurely cool-down and a shallow one where small children can play safely — plus shower facilities. This year there will be no sauna and no poolside DJs; instead, it opens as a purely relaxing space where you can quietly feel the breath of the forest.</span></p><p><span class="ql-font-condensed">Cool a body worn out from dancing in the water, then head back to the sound. That round trip is how you spend a midsummer BON DISCO.</span></p><p><img src="https://lh3.googleusercontent.com/d/1ywChGlIVARZwaNfc8IfkiMICd8XI8-PM=w2000"></p><h2><em class="ql-font-bebas">Nearly 40 acts gather across two carefully crafted floors.</em></h2><p>Two floors built around a commitment to high-quality sound guide you into a deeper, more immersive musical experience. The lineup features nearly 40 artists, centered on Kansai but coming in from across the country.</p><p>Outside the floors, Naoko hosts yoga sessions, while 電子原人, 佐々木ビル (Yabar食堂 &amp; 太陽の村) and Vamos Tacos serve up food. Music, rest and eating all run seamlessly together within the same forest.</p><p><img src="https://lh3.googleusercontent.com/d/18gYtK2UBRPWTh2SMgh5jH77OCPe8IXFb=w2000"></p><h2><span class="ql-font-mono ql-size-large">INFORMATION</span></h2><p>Admission is ¥7,000. Free for those 18 and under.</p><p>The entrance fee is all you pay — there are no charges whatsoever for parking, tents or pool use. Only those wishing to stay in the paid lodges need to make an advance reservation directly with Sanda Athletic.</p><p>Dance, cool off, dance again.<br> At the end of that cycle lies a 13th summer.</p><p>◯ Dates / 日程 2026.08.22 (Sat) 12:00 - 08.23 (Sun) afternoon<br>◯ Venue / 会場 Sanda Athletic Park, Sanda, Hyogo<br>🎫 Entrance ¥7,000 (free for ages 18 and under)</p>`,
+    category: "RAVE",
+    date: "2026-08-13",
+    author: "TECHNO JAPAN",
+    image: "images/articles/bondisco-2026-info.webp",
+    festivalId: "bondisco",
+    readTime: 1,
     status: "published",
   },
 ];
