@@ -1,0 +1,20 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T04:50:00+09:00",
+ "_note": "確度 medium は登録前に確認。BIO 下書きは reports/artists-draft-2026-08-13.md 第6弾",
+ "_appearsAt": "the-star-festival",
+ "fields": {
+  "COUNTRY": {
+   "value": "UK",
+   "source": "Wikipedia",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:50:00+09:00"
+  },
+  "facts": {
+   "value": "本名 Kevin Ford。ジャングル/ドラムンベースの立役者のひとり。1994年から Kiss FM で番組を持ち、1996年に Pascal、Zinc と True Playaz（現 Playaz）を設立。Fabric の月例 Playaz を15年主宰。公式の SC/IG は特定できず（リンクは載せない）",
+   "source": "Wikipedia + Playaz Recordings",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:50:00+09:00"
+  }
+ }
+}

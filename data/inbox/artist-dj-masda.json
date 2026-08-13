@@ -1,0 +1,20 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T04:50:00+09:00",
+ "_note": "確度 medium は登録前に確認。BIO 下書きは reports/artists-draft-2026-08-13.md 第6弾",
+ "_appearsAt": "the-star-festival",
+ "fields": {
+  "CITY": {
+   "value": "BERLIN",
+   "source": "RA biography（静岡出身・ベルリン拠点）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:50:00+09:00"
+  },
+  "facts": {
+   "value": "静岡・富士山麓出身、ベルリン拠点のDJ。2010年に東京でレーベル Cabaret Recordings を設立。初期テクノ、エレクトロ、ハウスを行き来する選曲で「日本最高峰のセレクター」と評される。公式の SoundCloud/IG は特定できず（リンクは載せない）",
+   "source": "RA biography + WOMB + SEVEN Berlin",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:50:00+09:00"
+  }
+ }
+}

@@ -1,0 +1,33 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T04:50:00+09:00",
+ "_note": "確度 medium は登録前に確認。BIO 下書きは reports/artists-draft-2026-08-13.md 第6弾",
+ "_appearsAt": "matricaria",
+ "fields": {
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/cloutier",
+   "source": "Web検索（本人アカウント直リンク・Palinoia 名義併記）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:50:00+09:00"
+  },
+  "CITY": {
+   "value": "BERLIN",
+   "source": "複数ソース",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:50:00+09:00"
+  },
+  "COUNTRY": {
+   "value": "GERMANY",
+   "source": "デトロイト出身・ベルリン拠点",
+   "confidence": "medium",
+   "checkedAt": "2026-08-13T04:50:00+09:00",
+   "note": "COUNTRY はベルリン拠点に合わせた。出身は米国"
+  },
+  "facts": {
+   "value": "デトロイト出身、ベルリン拠点のDJ。NYC の The Bunker を支えた後に渡欧し、Tresor/Globus のレジデントを務める。キャリア25年超。レーベル Palinoia を主宰",
+   "source": "RA + Boiler Room + Vice",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:50:00+09:00"
+  }
+ }
+}

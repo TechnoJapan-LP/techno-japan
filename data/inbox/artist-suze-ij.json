@@ -1,0 +1,32 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T04:50:00+09:00",
+ "_note": "確度 medium は登録前に確認。BIO 下書きは reports/artists-draft-2026-08-13.md 第6弾",
+ "_appearsAt": "rainbow-disco-club",
+ "fields": {
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/suze_ijo",
+   "source": "Web検索（本人アカウント直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:50:00+09:00"
+  },
+  "CITY": {
+   "value": "ROTTERDAM",
+   "source": "複数ソース",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:50:00+09:00"
+  },
+  "COUNTRY": {
+   "value": "NETHERLANDS",
+   "source": "複数ソース",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:50:00+09:00"
+  },
+  "facts": {
+   "value": "ロッテルダムのDJ。深く、ファンキーで、スピリチュアルな志向のハウスを掛ける新世代。Dekmantel Podcast 421 / DJ Mag Fresh Kicks 205 に登場。キュラソーのルーツとシカゴ、80年代からの影響を語る",
+   "source": "DJ Mag + Dekmantel + Soul in the Horn",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:50:00+09:00"
+  }
+ }
+}

@@ -1,0 +1,27 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T04:50:00+09:00",
+ "_note": "確度 medium は登録前に確認。BIO 下書きは reports/artists-draft-2026-08-13.md 第6弾",
+ "_appearsAt": "letus-music-camp",
+ "fields": {
+  "BANDCAMP": {
+   "value": "https://raster-raster.bandcamp.com/album/rv8",
+   "source": "Web検索（raster の公式プラットフォーム。本人名義ページは無し）",
+   "confidence": "medium",
+   "checkedAt": "2026-08-13T04:50:00+09:00",
+   "note": "本人単独の Bandcamp は無く raster 内。リンクとして載せるかは編集判断"
+  },
+  "CITY": {
+   "value": "OSAKA",
+   "source": "Wikipedia / raster",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:50:00+09:00"
+  },
+  "facts": {
+   "value": "大阪の電子音楽家/写真家。raster-noton から『RV8』(2013) 等を発表し、坂本龍一のリミックスも手がけた。リズムの変調を探求し続ける",
+   "source": "Wikipedia + raster",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:50:00+09:00"
+  }
+ }
+}

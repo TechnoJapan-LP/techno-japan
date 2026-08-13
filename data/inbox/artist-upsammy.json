@@ -1,0 +1,32 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T04:50:00+09:00",
+ "_note": "確度 medium は登録前に確認。BIO 下書きは reports/artists-draft-2026-08-13.md 第6弾",
+ "_appearsAt": "transcendence",
+ "fields": {
+  "BANDCAMP": {
+   "value": "https://upsammy.bandcamp.com/",
+   "source": "Web検索（本人アカウント直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:50:00+09:00"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/upsammy",
+   "source": "Web検索（本人アカウント直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:50:00+09:00"
+  },
+  "COUNTRY": {
+   "value": "NETHERLANDS",
+   "source": "複数ソース",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:50:00+09:00"
+  },
+  "facts": {
+   "value": "オランダのプロデューサー/DJ。De School のレジデントを務め、Dekmantel から『Zoom』『Bend』『Open Catalyst』等をリリース。うねるグルーヴと瞑想性を併せ持つ",
+   "source": "Dekmantel + Bandcamp",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:50:00+09:00"
+  }
+ }
+}

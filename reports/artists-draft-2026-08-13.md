@@ -674,3 +674,69 @@ RA やレーベルサイトの写真は**撮影者に著作権があり、勝手
 |---|---|
 | **調査完了（CMS 入力待ち）** | **39人** |
 | 残り | 40人 — 国際勢: eric-cloutier / haai済 / suze-ij / jonny-rock / jonathan-kusuma / dj-hype / clipz / lady-shaka / upsammy / paquita-gordon / aoki-takamasa / feline / guchon / dj-masda / kohra / nc4k ほか。国内勢は各フェス IG フォロー先方式
+
+---
+
+# 第6弾 — 国際勢 + 国内著名（計10人）
+
+## 40. upsammy — Transcendence
+- BANDCAMP: https://upsammy.bandcamp.com/（高）/ SC: https://soundcloud.com/upsammy（高）/ COUNTRY: NETHERLANDS
+- **BIO案**: オランダのプロデューサー/DJ。De School のレジデントを務め、Dekmantel から『Zoom』『Open Catalyst』などを発表。うねるグルーヴに瞑想的な景色を重ねる音で知られる。
+- **bio_en案**: A Dutch producer/DJ and former De School resident, releasing "Zoom" and "Open Catalyst" on Dekmantel — uptempo grooves layered to meditative ends.
+
+## 41. Paquita Gordon — Transcendence
+- SC: https://soundcloud.com/paquitagordon（高）/ COUNTRY: ITALY
+- **BIO案**: ミラノ出身のヴァイナル・オンリー DJ。サイケデリア、ダブ、スピリチュアルジャズからハウス、テクノまでを一つの物語として紡ぐ。RA ポッドキャストや Boiler Room x Dekmantel に登場。
+- **bio_en案**: A Milan-born vinyl-only DJ weaving psychedelia, dub and spiritual jazz into house and techno as one narrative — featured on RA's podcast and Boiler Room x Dekmantel.
+
+## 42. Eric Cloutier — MATRICARIA
+- SC: https://soundcloud.com/cloutier（高）/ CITY: BERLIN
+- **BIO案**: デトロイト出身、ベルリン拠点の DJ。NYC の The Bunker を支えたのちに渡欧し、Tresor/Globus のレジデントに。四半世紀を超えるキャリアで、堅牢かつしなやかなテクノを掛け続ける。レーベル Palinoia 主宰。
+- **bio_en案**: A Detroit-born, Berlin-based DJ — a force behind NYC's The Bunker, now a Tresor/Globus resident with a 25-year career and the Palinoia label.
+
+## 43. DJ Masda — THE STAR FESTIVAL
+- リンク: 公式アカウント特定できず（載せない）/ CITY: BERLIN
+- **BIO案**: 静岡・富士山麓出身、ベルリン拠点の DJ。2010年に東京でレーベル Cabaret Recordings を設立。初期テクノ、エレクトロ、ハウスを自在に行き来する選曲で、日本最高峰のセレクターのひとりと評される。
+- **bio_en案**: From the foot of Mt. Fuji and now Berlin-based, founder of Tokyo's Cabaret Recordings (2010) — regarded as one of Japan's finest selectors, moving between early techno, electro and house.
+
+## 44. Guchon — THE STAR FESTIVAL
+- BANDCAMP: https://guchon.bandcamp.com/（高）/ SC: https://soundcloud.com/guchon（高）/ CITY: TOKYO
+- **BIO案**: 東京の DJ/プロデューサー。Hot Haus、Chiwax、Moveltraxx、Trekkie Trax などからリリースし、遊び心あふれるフィルターハウスの快作を連発。かつて Sabacan Records を率いた。
+- **bio_en案**: A Tokyo DJ/producer releasing on Hot Haus, Chiwax, Moveltraxx and Trekkie Trax, known for a streak of playful filter-house EPs, formerly leading Sabacan Records.
+
+## 45. AOKI takamasa — LETUS MUSIC CAMP
+- BANDCAMP: raster 内のみ（中・編集判断）/ CITY: OSAKA
+- **BIO案**: 大阪の電子音楽家/写真家。raster-noton から『RV8』（2013）などを発表し、坂本龍一のリミックスも手がけた。リズムの変調と身体の関係を探求し続けている。
+- **bio_en案**: An Osaka electronic musician and photographer releasing on raster-noton ("RV8", 2013), who has remixed Ryuichi Sakamoto and continues to explore the modulation of rhythm.
+
+## 46. Suze Ijó（suze-ij）— Rainbow Disco Club
+- SC: https://soundcloud.com/suze_ijo（高）/ CITY: ROTTERDAM / COUNTRY: NETHERLANDS
+- **BIO案**: ロッテルダムの DJ。深く、ファンキーで、スピリチュアルな志向のハウスを掛ける新世代。キュラソーのルーツにシカゴと80年代の影響を重ね、Dekmantel Podcast にも登場した。
+- **bio_en案**: A Rotterdam DJ of a new generation playing house with deep, funky and spiritual intention — Curaçao roots meeting Chicago and the 80s, featured on the Dekmantel Podcast.
+- ⚠️ **ID が規約とずれている**: スキーマ §1.1 では `suze-ijo`（ó→o で文字を落とさない）だが、現行 ID は `suze-ij`。URL になっているため勝手に変えない。**管理判断待ち**
+
+## 47. Jonathan Kusuma — Rainbow Disco Club
+- SC: https://soundcloud.com/jonathan-kusuma（高）/ COUNTRY: INDONESIA
+- **BIO案**: ジャカルタのミュージシャン/プロデューサー/DJ。レーベル Space.rec を共同設立し、現在は Akamady Records も運営。催眠的なプロダクションでアジアのシーンを代表するひとり。
+- **bio_en案**: A Jakarta musician/producer/DJ, co-founder of Space.rec and now running Akamady Records, known for hypnotic productions.
+
+## 48. DJ Hype — THE STAR FESTIVAL
+- リンク: 公式アカウント特定できず（載せない）/ COUNTRY: UK
+- **BIO案**: 本名 Kevin Ford。ジャングル/ドラムンベースを形づくった立役者のひとり。1994年から Kiss FM の番組を持ち、1996年に True Playaz（現 Playaz）を設立。Fabric の月例 Playaz を15年にわたり主宰した。
+- **bio_en案**: Kevin Ford, one of the architects of jungle/drum & bass — on Kiss FM since 1994, founder of True Playaz (1996), and host of the Playaz monthly at Fabric for 15 years.
+
+## 保留（登録しない）
+
+- **KOHRA（Transcendence）** — 調査ではインドの KOHRA（Qilla Records 主宰）が
+  有力だが、**Transcendence 出演者が同一人物かの確証が取れていない**。
+  フェス公式の出演者告知で確認してから登録する（inbox に調査結果は保存済み）
+
+---
+
+## 全体進捗（第6弾まで）
+
+| | 人数 |
+|---|---|
+| **調査完了（CMS 入力待ち）** | **48人** |
+| 保留 | 8件（KOHRA 追加） |
+| 残り | 約30人 — 国内勢中心。各フェス IG フォロー先方式で |

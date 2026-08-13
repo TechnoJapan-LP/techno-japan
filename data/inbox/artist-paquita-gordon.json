@@ -1,0 +1,26 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T04:50:00+09:00",
+ "_note": "確度 medium は登録前に確認。BIO 下書きは reports/artists-draft-2026-08-13.md 第6弾",
+ "_appearsAt": "transcendence",
+ "fields": {
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/paquitagordon",
+   "source": "Web検索（本人アカウント直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:50:00+09:00"
+  },
+  "COUNTRY": {
+   "value": "ITALY",
+   "source": "Triangle Agency（ミラノ出身）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:50:00+09:00"
+  },
+  "facts": {
+   "value": "ミラノ出身のヴァイナル・オンリーDJ。サイケデリア、ダブ、スピリチュアルジャズからハウス、テクノまでを物語のように紡ぐ。RA ポッドキャスト RA.639、Boiler Room x Dekmantel 出演",
+   "source": "Triangle Agency + RA + Boiler Room",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:50:00+09:00"
+  }
+ }
+}

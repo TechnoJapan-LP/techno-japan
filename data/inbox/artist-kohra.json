@@ -1,0 +1,16 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T04:50:00+09:00",
+ "_note": "確度 medium は登録前に確認。BIO 下書きは reports/artists-draft-2026-08-13.md 第6弾",
+ "_identityNote": "⚠️ Transcendence 出演の Kohra が、ここで調べたインドの KOHRA と同一人物かは未確証。登録前にフェス公式告知で確認すること",
+ "_appearsAt": "transcendence",
+ "fields": {
+  "facts": {
+   "value": "（インドの KOHRA の場合）本名 Madhav Shorey。ニューデリー出身。2009年にレーベル Qilla Records を設立し、インドのテクノシーンを牽引",
+   "source": "DJ Mag + Beatportal",
+   "confidence": "medium",
+   "checkedAt": "2026-08-13T04:50:00+09:00",
+   "note": "同一人物か未確証のため、確認まで登録しない"
+  }
+ }
+}

@@ -1,0 +1,26 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T04:50:00+09:00",
+ "_note": "確度 medium は登録前に確認。BIO 下書きは reports/artists-draft-2026-08-13.md 第6弾",
+ "_appearsAt": "rainbow-disco-club",
+ "fields": {
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/jonathan-kusuma",
+   "source": "Web検索（本人アカウント直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:50:00+09:00"
+  },
+  "COUNTRY": {
+   "value": "INDONESIA",
+   "source": "複数ソース（ジャカルタ）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:50:00+09:00"
+  },
+  "facts": {
+   "value": "ジャカルタのミュージシャン/プロデューサー/DJ。レーベル Space.rec（2009-2015）を共同設立し、現在は Akamady Records も運営。催眠的なプロダクションで知られる",
+   "source": "Bandwagon + Shi Fu Miz",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:50:00+09:00"
+  }
+ }
+}

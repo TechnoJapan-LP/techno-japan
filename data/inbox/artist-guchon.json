@@ -1,0 +1,32 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T04:50:00+09:00",
+ "_note": "確度 medium は登録前に確認。BIO 下書きは reports/artists-draft-2026-08-13.md 第6弾",
+ "_appearsAt": "the-star-festival",
+ "fields": {
+  "BANDCAMP": {
+   "value": "https://guchon.bandcamp.com/",
+   "source": "Web検索（本人アカウント直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:50:00+09:00"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/guchon",
+   "source": "Web検索（本人アカウント直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:50:00+09:00"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "RA",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:50:00+09:00"
+  },
+  "facts": {
+   "value": "東京のDJ/プロデューサー。Hot Haus、Chiwax、Moveltraxx、Trekkie Trax 等からリリース。フィルターハウスの快作を連発し、Sabacan Records を率いた",
+   "source": "RA + Bandcamp Daily",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T04:50:00+09:00"
+  }
+ }
+}
