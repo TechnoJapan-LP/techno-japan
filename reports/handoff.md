@@ -2192,3 +2192,92 @@ preflight: **全28件成功**（新検査を含む）。
   ⚡Global Ark(8/21) の CHOKO / SUNGA / TSUTOMU が最優先
 - 報告済みでユーザー判断待ちのデータ課題: EDITIONS の `STATUS=published` 36行 /
   TICKETURL 未入力 20/104 / ID規約違反 `suze-ij`（正しくは `suze-ijo`）
+
+## 2026-08-14 / Codex / STORIES演出の段階導入方針
+
+### 判断
+- NEWSページでは、Dure Vieを参考にした「PCは左画像固定・右記事スクロール・記事連動で画像切替」の演出を試験中。
+- TOPのSTORIESには、記事数が増えるまで同じ演出を導入しない。
+- TOPのモバイル表示は現状を維持する。
+- TOPへの導入は、常時4〜6本以上の記事が揃った時点で再検討する。
+
+### 注意
+- 現在のNEWS演出は未公開のローカル変更（`LP/news.html` / `LP/en/news.html`）。
+- TOPへ反映する場合も、まずローカルのPC・モバイル・JA・ENでテストしてから公開する。
+
+### ローカル確認結果
+- ユーザー確認で、PCのNEWSページをスクロールした際に右記事と左画像が正常に切り替わることを確認。
+- NEWS変更は引き続き本番未公開。preflight後に公開判断する。
+
+---
+
+## 2026-08-14 CMS の Image Position が詳細ページに届いていなかった
+
+### 実施
+- `scripts/build-detail-pages.mjs` に `imagePositionStyle()` を追加し、
+  **アーティスト詳細（1346行）と会場詳細（1416行）の hero に付与**
+- 同じ式が散っていた既存3箇所（フェス hero / 回遊カード2種）も同関数へ集約。
+  直書きは定義の1箇所のみに
+- `scripts/check_image_position.mjs` を新規追加。preflight「生成物とデータ」に組み込み
+- 詳細ページ再生成（LP/artists/ LP/venues/ LP/festivals/ の JA・EN）
+- `AUDIT_TECHNO_JAPAN.md` §9-83 に記録
+
+### 原因
+CMS には3種すべてに Image Position の入力欄があり、保存も data.js への
+書き出しも一覧カードへの反映も正常だった。**詳細ページの hero に
+`object-position` を出力する1行だけが、アーティストと会場で欠けていた。**
+`.detail-hero img { object-fit: cover }` のため、指定が無いと必ず中央基準で切れる。
+
+### コミット
+（本エントリと同一コミット）
+
+### 検証
+**実ブラウザ（headless Chrome / 1440×1000）で計測。**
+
+修正前:
+```
+WATA IGARASHI  CMS指定 center top → 実際 50% 50%（無視）
+枠 860×573 / 原画 1440×1440 → 縦33%が切れ、上から17%（頭）が消失
+```
+
+修正後（4経路）:
+```
+アーティスト WATA IGARASHI  center top → 50% 0%  ✅ 切り落としは全て下側・上0%
+アーティスト Acid Pauli     指定なし    → 50% 50% ✅
+会場 UNIT                   center top → 50% 0%  ✅
+英語版 WATA IGARASHI        center top → 50% 0%  ✅
+```
+
+ネガティブコントロール: アーティスト hero から `imagePositionStyle(a)` を外して
+再生成 → **22件を検知して落ちた**（復旧後は緑）。
+
+preflight: **全29件成功**（新検査を含む。28→29件）。
+
+※ 修正後の初回計測で「上から17%切れている」と出たが、**計測式の誤り**だった。
+　`parseFloat("0%")/100 || 0.5` が 0 を偽値として 0.5 に落としていた。
+　式を直して再計測（AUDIT §9-83）。
+
+### 変更したパターン
+- アーティスト詳細 hero — `object-position` を新規付与（JA/EN 各96枚）
+- 会場詳細 hero — 同上（JA/EN 各22枚）
+- フェス詳細 hero / 回遊カード2種 — 出力は不変のまま共通関数へ集約
+- preflight に「CMS の Image Position が届く」を追加（28→29件）
+
+### 未確認の類似パターン
+- **data.js で imagePosition を持つ全項目を検査済み・不一致0件**
+  （アーティスト11 / 会場22 / フェス42 の画像あり項目、JA+EN 計150ページ）
+- 一覧ハブ（artists / venues / festivals / index）は元から効いていた。**確認済み・0件**
+- 記事（ARTICLES）に imagePosition の概念は無い。**該当なし**
+- `heroGradient` など他の見た目系フィールドが同様に届いていないかは**未確認**
+
+### 次の担当への注意・判断待ち
+- `center` 以外を指定しているのはアーティスト1名（wata-igarashi）・会場1件（unit）・
+  フェス6件のみ。**今後アーティスト写真を集める際、頭が切れたら
+  CMS の Image Position に `top` を入れれば詳細ページにも効くようになった**
+- ⚠️ **Publish 経路（cms.js）の §9-81 変更が依然として実機未確認。**
+  CMS で Publish Now を1回押し、`cms: publish data.js` のコミットが
+  増えることの確認が必要
+- CMS 入力の積み残し: アーティスト54名（紹介文v2 + リンク）。
+  ⚡Global Ark(8/21) の CHOKO / SUNGA / TSUTOMU が最優先
+- ユーザー判断待ちのデータ課題: EDITIONS の `STATUS=published` 36行 /
+  TICKETURL 未入力 20/104 / ID規約違反 `suze-ij`（正しくは `suze-ijo`）

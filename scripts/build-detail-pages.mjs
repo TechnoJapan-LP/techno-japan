@@ -196,6 +196,22 @@ function dimensionAttrs(source) {
   const size = IMAGE_DIMENSIONS[String(source || '').split(/[?#]/)[0]] || IMAGE_DIMENSIONS[key];
   return size ? `width="${size[0]}" height="${size[1]}"` : imageSizeAttrs(LP_DIR, source);
 }
+/* CMS の Image Position を style に落とす。
+
+   写真は object-fit: cover（枠に合わせて切り抜く）で出すため、位置指定が
+   無いと必ず中央基準で切れる。CMS の入力欄に「頭が切れるときは top を選ぶ」
+   と書いてあるのは、まさにこれを避けるため。
+
+   ⚠️ 2026-08-14 まで、この指定はフェスにしか効いていなかった。
+   アーティストと会場の詳細ページが object-position を出しておらず、
+   CMS で "center top" を入れても実際の描画は 50% 50% のままだった。
+   WATA IGARASHI は原画 1440×1440 が 3:2 の枠に入るため縦の33%が切られ、
+   上から17%（＝頭）が消えていた。AUDIT §9-83。
+
+   同じ式を3箇所に書くと必ず片方だけ古くなるので、ここに1本化する。 */
+function imagePositionStyle(item) {
+  return ` style="object-position:${esc(String(item && item.imagePosition || 'center').trim() || 'center')}"`;
+}
 /* カード用の縮小版画像を使う。
 
    ハブ（festivals.html 等）は image-derivatives.js の対応表を JS で引いて
@@ -679,7 +695,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
     return `<div class="related-festival">
       <h2>${lang === 'en' ? 'RELATED FESTIVAL' : '関連フェスティバル'}</h2>
       <a class="related-card" href="${L.prefix}/festivals/${encodeURIComponent(relatedFestival.id)}.html">
-        <div class="related-card-img">${img ? `<img ${dimensionAttrs(cardImagePath(img))} src="/${cardImagePath(img)}"${cardSrcsetAttr(img)} alt="${esc(fname)}" loading="lazy" style="object-position:${esc(relatedFestival.imagePosition || 'center')}">` : ''}</div>
+        <div class="related-card-img">${img ? `<img ${dimensionAttrs(cardImagePath(img))} src="/${cardImagePath(img)}"${cardSrcsetAttr(img)} alt="${esc(fname)}" loading="lazy"${imagePositionStyle(relatedFestival)}>` : ''}</div>
         <div class="related-card-info">
           <div class="related-card-date">${esc(when)}</div>
           <div class="related-card-name">${esc(fname)}</div>
@@ -1046,7 +1062,7 @@ function festivalRelatedCards(current, lang) {
       ? `<span class="related-card-past" style="opacity:.55;font-size:.72em;letter-spacing:.04em">${lang === 'en' ? 'Past event' : '過去の開催'}</span> · `
       : '';
     return `<a class="related-card reveal" style="transition-delay:${index * 100}ms" href="${prefix}/festivals/${encodeURIComponent(item.id)}.html">
-        <div class="related-card-img">${img ? `<img ${dimensionAttrs(cardImagePath(img))} src="/${cardImagePath(img)}"${cardSrcsetAttr(img)} alt="${esc(name)}" loading="lazy" style="object-position:${esc(item.imagePosition || 'center')}">` : ''}</div>
+        <div class="related-card-img">${img ? `<img ${dimensionAttrs(cardImagePath(img))} src="/${cardImagePath(img)}"${cardSrcsetAttr(img)} alt="${esc(name)}" loading="lazy"${imagePositionStyle(item)}>` : ''}</div>
         <div class="related-card-info">
           <div class="related-card-date">${pastLabel}${esc(item.date || '')}</div>
           <div class="related-card-name">${esc(name)}</div>
@@ -1129,7 +1145,7 @@ function festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, lang, 
   const genres = (Array.isArray(f.genre) ? f.genre : []).map((genre) => `<span class="detail-tag">${esc(genre)}</span>`).join('');
   const heroImage = f.image || f.flyer;
   const heroHtml = heroImage ? `<div class="detail-hero-image">
-        <img ${dimensionAttrs(heroImage)} src="/${String(heroImage).replace(/^\//, '')}" alt="${esc(name)}" style="object-position:${esc(f.imagePosition || 'center')}">
+        <img ${dimensionAttrs(heroImage)} src="/${String(heroImage).replace(/^\//, '')}" alt="${esc(name)}"${imagePositionStyle(f)}>
       </div>` : '<div class="detail-hero-image detail-hero-gradient" aria-hidden="true"></div>';
   const official = f.url
     ? `<a class="detail-official festival-official-link" href="${esc(safeUrl(f.url))}" target="_blank" rel="noopener">OFFICIAL SITE</a>`
@@ -1343,7 +1359,7 @@ function artistPage(a, artistsById, lang = 'ja') {
     ${place ? `<div class="detail-eyebrow">${esc(place)}</div>` : ''}
     <h1>${esc(name)}</h1>
     ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
-    ${a.image ? `<div class="detail-hero detail-hero-portrait"><img ${dimensionAttrs(a.image)} src="/${String(a.image).replace(/^\//, '')}" alt="${esc(name)}"></div>` : ''}
+    ${a.image ? `<div class="detail-hero detail-hero-portrait"><img ${dimensionAttrs(a.image)} src="/${String(a.image).replace(/^\//, '')}" alt="${esc(name)}"${imagePositionStyle(a)}></div>` : ''}
     ${bilingualBody(a.bio, a.bio_en, lang)}
     ${linkRow ? `<div class="detail-links">${linkRow}</div>` : ''}${appearancesHtml}
     <div class="article-footer"><a class="article-back" href="${hubHref}" data-artist-hub-back="${hubHref}" style="margin:0"><span class="arrow"></span> ALL ARTISTS</a></div>
@@ -1413,7 +1429,7 @@ function venuePage(v, lang = 'ja') {
     ${place ? `<div class="detail-eyebrow">${esc(place)}</div>` : ''}
     <h1>${esc(name)}</h1>
     ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
-    ${v.image ? `<div class="detail-hero"><img ${dimensionAttrs(v.image)} src="/${String(v.image).replace(/^\//, '')}" alt="${esc(name)}"></div>` : ''}
+    ${v.image ? `<div class="detail-hero"><img ${dimensionAttrs(v.image)} src="/${String(v.image).replace(/^\//, '')}" alt="${esc(name)}"${imagePositionStyle(v)}></div>` : ''}
     ${bilingualBody(v.desc, v.desc_en, lang)}
     <dl class="detail-facts">
       ${v.type ? `<div><dt>${lang === 'en' ? 'TYPE' : 'タイプ'}</dt><dd>${esc(v.type)}</dd></div>` : ''}
