@@ -1922,3 +1922,35 @@ FESTIVALS等の必須データのPublish自体は止めないようにした。
 - 次バッチ候補: hidai（3フェス出演）、dj-maria / kikiorix / dj-yogurt /
   rami / mimu / akie / yamarchy / calpiss / yellowuhuru（各2フェス）。
   国内勢はフェス公式 IG フォロー先方式が有効。
+
+## 2026-08-13 / Claude / アーティスト調査・第4弾（計29人分）
+
+### 実施
+- 出演フェス数の多い順に7人を調査。
+  - IG 実地確認: hidai（@ala_trippymusic のフォロー先→ bio に PARAMOUNT 一致）、
+    TAICHI KAWAHIRA（Brightness LLC 代表・linktr.ee あり）
+  - Web 検索: DJ Yogurt（UPSET RECORDINGS 設立者）、DJ KENSEI（SC 直リンク）、
+    DJ MIKU（公式サイト・GLOBAL ARK 主宰者と判明）、Kikiorix（IG+SC 直リンク）、
+    DJ MARIA.（IG 直リンク・Berghain 出演）
+- data/inbox 計29件。下書き第4弾を追記。
+
+### コミット
+- `docs: アーティスト調査・第4弾（hidai/KAWAHIRA実地確認 + 著名5人・計29人分）`
+
+### 検証
+- IG 2件はプロフィールを開いて本人確認。検索組は直リンクのみ「高」。
+- **DJ Yogurt の SoundCloud は候補が複数（3アカウント）で特定できず「載せない」。**
+- DJ KENSEI の IG（@sarasvati_music_ashram）は要約情報のみのため保留。
+
+### 変更したパターン
+- なし（調査・下書きのみ）。
+
+### 未確認の類似パターン
+- 保留計6件（moodman SC / okadada IG / suimin / DJ Yogurt SC /
+  DJ KENSEI IG / Ben UFO IG）。いずれも「複数候補 or 未確認」で載せない判断。
+
+### 次の担当への注意・判断待ち
+- CMS 入力待ち **29人分**（reports/artists-draft-2026-08-13.md）。
+- 次バッチの行き先はメモ済み: rami・akie（@matricaria_festival）/
+  yamarchy・calpiss（@harukaze_asia）/ yellowuhuru（@etsu_etsu_）/
+  mimu（@sub_tide）/ mayudepth（@waifu_party）/ endorphin（@arch___2014）。
