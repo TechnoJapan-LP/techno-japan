@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-08-09T15:24:05.830Z",
+  "_generatedAt": "2026-08-13T14:59:21.158Z",
   "count": 96,
   "items": [
     {
@@ -291,15 +291,44 @@
     },
     {
       "ID": "sylvan-esso",
-      "NAME": "Sylvan Esso"
+      "NAME": "Sylvan Esso",
+      "COUNTRY": "USA",
+      "GENRE": "LIVE",
+      "IMAGE": "images/artists/sylvan-esso.jpg",
+      "BIO": "Amelia Meath と Nick Sanborn によるエレクトロニック・ポップ・デュオ。\nノースカロライナ州ダーラムを拠点に4作のアルバムを発表し、グラミー賞に2度ノミネートされている。",
+      "INSTAGRAM": "https://www.instagram.com/sylvanesso/",
+      "BANDCAMP": "https://sylvanesso.bandcamp.com/",
+      "WEBSITE": "https://www.sylvanesso.com/",
+      "STATUS": "published",
+      "metaDescription": "Amelia MeathとNick Sanbornによるエレクトロニック・ポップ・デュオ、Sylvan Esso。米ノースカロライナ州ダーラムを拠点に4枚のアルバムを発表し、グラミー賞にも2度ノミネートされた実力派の魅力と歩みを紹介します。",
+      "bio_en": "An electronic pop duo of Amelia Meath and Nick Sanborn based in Durham, North Carolina, with four albums and two Grammy nominations."
     },
     {
       "ID": "acid-pauli",
-      "NAME": "Acid Pauli"
+      "NAME": "Acid Pauli",
+      "CITY": "BERLIN",
+      "COUNTRY": "GERMANY",
+      "GENRE": "HOUSE/TECHNO",
+      "IMAGE": "images/artists/acid-pauli.jpg",
+      "BIO": "ベルリンを拠点とする Martin Gretschmann のソロ名義。Nico Stojan と共にレーベル Ouïe を主宰し、テクノやハウスを軸に、サイケデリックで実験的な独自のダンスミュージックで知られる。",
+      "INSTAGRAM": "https://www.instagram.com/therealacidpauli",
+      "SOUNDCLOUD": "https://soundcloud.com/acidpauli",
+      "STATUS": "published",
+      "metaDescription": "ベルリンを拠点に活動するMartin Gretschmannのソロ名義、Acid Pauli。Nico Stojanと共にレーベルOuïeを主宰し、ダンスフロアと実験性を自在に行き来するDJセットで唯一無二の存在感を放つアーティストのプロフィールを紹介します。",
+      "bio_en": "The solo alias of Berlin-based Martin Gretschmann. He co-runs the label Ouïe with Nico Stojan and is known for a distinctive strain of dance music—rooted in techno and house, yet psychedelic and experimental."
     },
     {
       "ID": "alabaster-deplume",
-      "NAME": "Alabaster DePlume"
+      "NAME": "Alabaster DePlume",
+      "COUNTRY": "UK",
+      "GENRE": "LIVE",
+      "IMAGE": "images/artists/alabaster-deplume.jpg",
+      "BIO": "サックス奏者・詩人。シカゴのレーベル International Anthem から『GOLD』（2022）『Come With Fierce Grace』（2023）などを発表し、ジャズと語りの境界を漂う独自の表現で知られる。",
+      "INSTAGRAM": "https://www.instagram.com/alabaster_deplume/",
+      "BANDCAMP": "https://alabasterdeplume.bandcamp.com/",
+      "STATUS": "published",
+      "metaDescription": "サックス奏者であり詩人でもあるAlabaster DePlume。シカゴの名門International Anthemから発表したGOLDやCome With Fierce Graceで見せた、ジャズと語りの境界を漂う唯一無二の音世界とその魅力を紹介します。",
+      "bio_en": "A saxophonist and poet releasing on Chicago's International Anthem, including \"GOLD\" (2022) and \"Come With Fierce Grace\" (2023), known for drifting between jazz and spoken word."
     },
     {
       "ID": "juana-molina",
@@ -339,7 +368,17 @@
     },
     {
       "ID": "akiram-en",
-      "NAME": "AKIRAM EN"
+      "NAME": "AKIRAM EN",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO",
+      "IMAGE": "images/artists/akiram-en.jpg",
+      "BIO": "90年代中盤よりDJとして活動開始。\nレフトフィールドテクノやアヴァンギャルドなどをフロアマナーに従ってミックスしていくエッジーなダンスセットから、オブスキュアサウンドに着想を得たディープなリスニングセットまで、聴覚と身体感覚を揺さぶるプレイは、ダンスフロアを常に意識しつつ、音楽を深く知覚させる体験へ導いていく。",
+      "INSTAGRAM": "https://www.instagram.com/akiram_en/",
+      "SOUNDCLOUD": "https://soundcloud.com/akiram-en",
+      "STATUS": "published",
+      "metaDescription": "90年代中盤からDJとして活動するAKIRAM EN。レフトフィールドテクノやアヴァンギャルドをフロアマナーに沿って紡ぐエッジーなダンスセットから、オブスキュアな音に着想を得たディープなリスニングセットまで、聴覚と身体を揺さぶるプレイの魅力に迫る。",
+      "bio_en": "Active as a DJ since the mid-'90s.\nFrom edgy dance sets that mix leftfield techno and avant-garde material according to the manners of the floor, through to deep listening sets drawn from obscure sound, his playing works on both the ears and the body — always conscious of the dancefloor, yet guiding the listener toward an experience of perceiving music at a far deeper level."
     },
     {
       "ID": "you-forgot",
@@ -375,7 +414,16 @@
     },
     {
       "ID": "moodman",
-      "NAME": "MOODMAN"
+      "NAME": "MOODMAN",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "HOUSE",
+      "IMAGE": "images/artists/moodman.jpg",
+      "BIO": "東京のハウス・シーンを長年支えてきたDJ。GODFATHER、HOUSE OF LIQUID、SLOWMOTION など複数のパーティーに深く関わり、日本のクラブカルチャーを現場から形づくってきた存在として知られる。",
+      "INSTAGRAM": "https://www.instagram.com/moodman10/",
+      "STATUS": "published",
+      "metaDescription": "東京のハウス・シーンを長年支え続けるDJ MOODMAN。GODFATHER、HOUSE OF LIQUID、SLOWMOTIONなど数々のパーティーに深く関わり、日本のクラブカルチャーを現場から形づくってきたキーパーソンの歩みと功績を紹介します。",
+      "bio_en": "A DJ who has long shaped Tokyo's house scene from the ground up, deeply involved in parties such as GODFATHER, HOUSE OF LIQUID and SLOWMOTION."
     },
     {
       "ID": "nasthug",
@@ -383,7 +431,18 @@
     },
     {
       "ID": "okadada",
-      "NAME": "okadada"
+      "NAME": "okadada",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "HOUSE",
+      "IMAGE": "images/artists/okadada.jpg",
+      "BIO": "全国各地、多岐にわたるパーティーでDJとして出演し、ネットレーベル「maltine records」やbandcampで楽曲をリリース。大小、上下、場所、種別を問わず野外フェスから地下のパーティーまで出演、遊び、類例の無い幅広さの活動で各所に存在、評価を確立する。",
+      "INSTAGRAM": "https://www.instagram.com/okadada/",
+      "SOUNDCLOUD": "https://soundcloud.com/okadada",
+      "BANDCAMP": "https://halooo.bandcamp.com/",
+      "STATUS": "published",
+      "metaDescription": "全国のフェスからアンダーグラウンドなパーティーまで、場所やジャンルを問わず出演を重ねるDJ okadada。Maltine RecordsやBandcampでの楽曲リリースも含め、類を見ない幅広い活動で唯一無二の存在感を放つアーティストの魅力に迫ります。",
+      "bio_en": "Performing as a DJ at a wide range of parties across Japan, with releases on the net label maltine records and on Bandcamp. Appearing at—and simply hanging out at—everything from outdoor festivals to underground parties, regardless of scale, status, location or genre, he has carved out a presence and earned recognition across the board through an unparalleled breadth of activity."
     },
     {
       "ID": "paquita-gordon",
@@ -391,7 +450,18 @@
     },
     {
       "ID": "powder",
-      "NAME": "Powder"
+      "NAME": "Powder",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "HOUSE",
+      "IMAGE": "images/artists/powder.jpg",
+      "BIO": "長崎出身、2011年より東京を拠点とするDJ/プロデューサー Moko Shibata のソロ名義。2017年に CockTail d'Amore から EP『H』を発表して以降、Beats in Space、ESP Institute、The Trilogy Tapes などから作品を重ね、レフトフィールド・ハウスの旗手として国際的に活動する。",
+      "SOUNDCLOUD": "https://soundcloud.com/thinner_groove",
+      "BANDCAMP": "https://thinnergroove.bandcamp.com/",
+      "WEBSITE": "https://powd.jp/",
+      "STATUS": "published",
+      "metaDescription": "長崎出身・東京拠点のDJ/プロデューサーMoko Shibataによるソロ名義Powder。2017年のEP『H』以降、Beats in Space、ESP Institute、The Trilogy Tapesから作品を発表し、レフトフィールド・ハウスの旗手として世界で活躍する軌跡を紹介。",
+      "bio_en": "The solo alias of Moko Shibata, a Nagasaki-born, Tokyo-based DJ and producer. Since her 2017 EP \"H\" on CockTail d'Amore she has released on Beats in Space, ESP Institute and The Trilogy Tapes, earning international recognition as a leading figure in left-field house."
     },
     {
       "ID": "sherelle",
