@@ -1890,3 +1890,35 @@ FESTIVALS等の必須データのPublish自体は止めないようにした。
 - **CMS 入力待ち15人分**が reports/artists-draft-2026-08-13.md にある。
   確度「中」の URL は開いて確認してから貼ること。
 - 写真は全員空欄のまま（ユーザーが手動で収集する方針。2026-08-13 決定）。
+
+## 2026-08-13 / Claude / アーティスト調査・第3弾（計22人分の下書き完成）
+
+### 実施
+- 直近開催の残りを調査: SO（御月民公式のフォロー先→ IG 実地確認。
+  The Labyrinth / Mindgames の DJ。SoundCloud も本人 bio から取得）、
+  FRUE 組4人（Kiko Dinucci / Joujouka / Juana Molina は Bandcamp 直リンク）。
+- 「どんどん追加」の指示により著名どころを前倒し: Gonno / Ben UFO / Daphni。
+- data/inbox/artist-*.json 計22件。下書き第3弾を artists-draft-2026-08-13.md に追記。
+
+### コミット
+- `docs: アーティスト調査・第3弾（SO実地確認 + 著名6人・計22人分）`
+
+### 検証
+- SO は IG プロフィールを開いて本人確認（表示名 SO | satoshi aoyagi、
+  bio に DJ / The Labyrinth / soundcloud.com/dj_so）。
+- 直リンクが取れたものだけ「高」。要約経由（Gonno の SC / Juana Molina の
+  WEBSITE / Ben UFO の COUNTRY）は「中 — 開いて確認」と明記。
+
+### 変更したパターン
+- なし（調査・下書きのみ）。
+
+### 未確認の類似パターン
+- **suimin（Odyssey 9/25）は特定できず登録しない**（公式フォロー先に該当なし）。
+  出演者告知投稿のタグから辿る手が残っている。
+- moodman の SoundCloud / okadada の IG / Ben UFO の IG も未確認のまま保留。
+
+### 次の担当への注意・判断待ち
+- CMS 入力待ち **22人分**。⚡Global Ark 組（8/21）を最優先で。
+- 次バッチ候補: hidai（3フェス出演）、dj-maria / kikiorix / dj-yogurt /
+  rami / mimu / akie / yamarchy / calpiss / yellowuhuru（各2フェス）。
+  国内勢はフェス公式 IG フォロー先方式が有効。
