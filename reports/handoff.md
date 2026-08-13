@@ -2016,3 +2016,34 @@ FESTIVALS等の必須データのPublish自体は止めないようにした。
 ### 次の担当への注意・判断待ち
 - CMS 入力待ち **48人分**。⚡Global Ark（8/21）組を最優先。
 - `suze-ij` の ID 修正は URL 変更を伴うため要判断（§1.1 違反の報告）。
+
+## 2026-08-13 / Claude / アーティスト調査・第7弾（計55人分・残り37人）
+
+### 実施
+- 6人調査: Pianeti Sintetici / DJ YAZI / Kuo From Sunset Rollercoaster /
+  Jonny Rock / LADY SHAKA / Clipz。
+- MATRICARIA 公式 IG のフォロー先で rami / akie を検索 → **該当なし**。
+  このフェスは出演者をフォローしない方針らしく、この手法が効かない。
+
+### コミット
+- `docs: アーティスト調査・第7弾（6人・計55人分）`
+
+### 検証
+- 直リンクのみ「高」。DJ YAZI / Clipz / Kuo は公式アカウント特定できず
+  **リンクなし・経歴のみ**。
+- 正確な残数を再集計: **残り37人** = 出演データあり24 + スタブ13。
+
+### 変更したパターン
+- なし（調査・下書きのみ）。
+
+### 未確認の類似パターン
+- rami は @99flags_party、akie は @nu_fes_tokyo のフォロー先が次の手。
+- スタブ13人に Antal / Hunee / GE-OLOGY / Idjut Boys /
+  Space Drum Meditation 等の著名どころ（検索で確定可能）。
+- 国内勢24人（qmico / mimu / mayudepth / endorphin / feline / nc4k /
+  yamarchy / ojisan / caimann / fuji / adhemar / allen-mock /
+  suguru-mochizuki / yukimasa / iron / zundoko-disco / calpiss / kohei /
+  you-forgot / nasthug / suimin ほか）は各フェス IG の告知投稿タグが最後の手。
+
+### 次の担当への注意・判断待ち
+- CMS 入力待ち **54人分**（+KOHRA 保留）。⚡Global Ark（8/21）組を最優先。
