@@ -1790,3 +1790,30 @@ FESTIVALS等の必須データのPublish自体は止めないようにした。
 
 ### 次の担当への注意・判断待ち
 - 次は実機相当の操作確認またはCMS操作確認へ進む。
+
+## 2026-08-13 / Codex / ユーザー確認後の最終公開状態確認
+
+### 実施
+- ユーザーによるTOP、FESTIVALS、ARTISTS、VENUESの操作確認がすべてOK。
+- 本番主要URL（JA / ENのTOP・4ハブ）を再確認。
+
+### コミット
+- `22788018 docs: record production artists and venues review`
+
+### 検証
+- 主要8 URLがすべてHTTP 200。
+- 作業ツリーはクリーン。
+- 直近のUnstick CIは成功。
+- UI公開のDeploy / regressionは成功済み。
+
+### 変更したパターン
+- ユーザー実操作確認後の公開状態確認。
+
+### 未確認の類似パターン
+- Sync Drive ImagesジョブはCMS認証エラー（`Invalid auth token`）で失敗。
+  今回のUI公開・既存画像配信とは別系統で、画像同期は未確認。
+- CMSの入力→保存→再表示は未確認。
+
+### 次の担当への注意・判断待ち
+- UI変更は公開・確認済み。画像を追加・更新する前にCMS_AUTH_HASHを確認し、
+  Sync Drive Imagesを再実行すること。
