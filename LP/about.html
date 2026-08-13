@@ -45,7 +45,10 @@
 <link rel="dns-prefetch" href="https://w.behold.so">
 <link rel="dns-prefetch" href="https://formsubmit.co">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="common.css?v=6">
+<!-- 資産は必ず絶対パス（/）で書く。相対だと en/about.html にコピーされたとき
+     /en/common.css を探して 404 になり、CSS も JS も一切効かない状態になる。
+     2026-08-14 に英語版が素の HTML で公開されていた。AUDIT §9-82。 -->
+<link rel="stylesheet" href="/common.css?v=6">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -939,7 +942,7 @@ section { padding: 120px 40px; }
   </div>
 </footer>
 
-<script src="common.js?v=4" defer></script>
+<script src="/common.js?v=4" defer></script>
 <script>
 /* Page-specific extra hover targets (cursor expand). */
 window.addEventListener('DOMContentLoaded', () => {
@@ -981,8 +984,8 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
 </script>
-<script src="data.js?v=10"></script>
-<script src="favorites.js?v=2" defer></script>
-<script src="search.js?v=3" defer></script>
+<script src="/data.js?v=10"></script>
+<script src="/favorites.js?v=2" defer></script>
+<script src="/search.js?v=3" defer></script>
 </body>
 </html>

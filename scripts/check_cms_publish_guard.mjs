@@ -37,7 +37,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const CMS_PATH = path.join(ROOT, 'LP', 'cms.js');
 
-const BRIDGE = `;globalThis.__T = { publishSanityCheck };`;
+const BRIDGE = `;globalThis.__T = { publishSanityCheck, publishPayloadSummary };`;
 const src = fs.readFileSync(CMS_PATH, 'utf8') + BRIDGE;
 
 function makeCtx() {
@@ -218,6 +218,45 @@ const c = makeCtx();
     asked.some(m => m.includes('festivalId')), asked.join(' / '));
 
   c.confirm = () => true;
+}
+
+/* --- 6. 送る中身を数で見せる / 無変更を成功と呼ばない（§9-81） --------------
+   Publish の事故は症状がいつも「静か」だった。列が落ちても件数が減るだけ、
+   中身が同じなら空コミット、失敗しても3秒で消える。
+   検査はモックで通っていたが、モックは GAS の実挙動を再現できない。
+   最後の砦を「実際に送る中身そのもの」に置く。 */
+{
+  console.log('\n送信前の要約');
+
+  const DATA = [
+    'const FESTIVALS = [',
+    '  {', '    id: "a",', '  },', '  {', '    id: "b",', '  },', '];',
+    '',
+    'const ARTISTS = [',
+    '  {', '    id: "x",', '    bio: "…",', '    image: "i.webp",', '    links: {},', '  },',
+    '  {', '    id: "y",', '  },', '];',
+    '',
+    'const VENUES = [', '  {', '    id: "v",', '  },', '];',
+    '',
+    'const ARTICLES = [',
+    '  {', '    id: "ar",', '    body_en: "…",', '    festivalId: "a",', '  },', '];',
+    '',
+    'const EVENTS = [', '];',
+  ].join('\n');
+
+  const sum = c.__T.publishPayloadSummary(DATA);
+  check('フェスの件数を出す', /FESTIVALS\s+2件/.test(sum), sum);
+  check('アーティストの件数と内訳を出す',
+    /ARTISTS\s+2件（紹介文 1 \/ 画像 1 \/ リンク 1）/.test(sum), sum);
+  check('記事の英語本文と関連フェスの数を出す',
+    /ARTICLES\s+1件（英語本文 1 \/ 関連フェス 1）/.test(sum), sum);
+  check('ファイルの大きさを出す', /ファイルの大きさ \d+KB/.test(sum), sum);
+
+  // §9-67 / §9-69 の再現: 列が落ちると数字が減って目に入る
+  const dropped = DATA.replace('    bio: "…",\n', '').replace('    image: "i.webp",\n', '');
+  const sum2 = c.__T.publishPayloadSummary(dropped);
+  check('列が落ちると件数が減って見える（§9-67 の再現）',
+    /紹介文 0 \/ 画像 0/.test(sum2), sum2);
 }
 
 console.log();

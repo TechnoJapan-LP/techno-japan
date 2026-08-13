@@ -77,6 +77,7 @@ echo "▸ キャッシュと配信"
 run "?v の上げ忘れが無い"               python3 scripts/check_asset_versions.py
 run "生成側に ?v のべた書きが無い"      python3 scripts/check_no_hardcoded_versions.py
 run "Service Worker の経路"             node scripts/check_sw_routing.mjs
+run "CSS / JS の参照先が実在する"       python3 scripts/check_asset_paths.py
 
 echo
 echo "▸ CMS"
@@ -145,4 +146,19 @@ echo " 残っている確認（自動化できないもの）:"
 echo "   ・CMS を実際に操作したか（入力→保存→再表示）"
 echo "   ・GAS を触ったなら再デプロイしたか"
 echo "   → 未確認なら reports/handoff.md に「未確認」と明記する"
+echo
+# Publish 経路は7回壊れ、うち3回は直前の修正が引き金だった（§9-81）。
+# モックの検査が全部緑でも壊れていたので、変更を検出したら実機確認を促す。
+if git diff --name-only origin/main 2>/dev/null | grep -qE "LP/cms\.js|scripts/gas-update/"; then
+  echo "════════════════════════════════════════════════════════════════"
+  echo " ⚠️  Publish の経路（cms.js / GAS）に変更があります"
+  echo
+  echo " **モックの検査が全部緑でも、実機では壊れていたことが3回あります。**"
+  echo " （§9-67 → §9-69 / §9-80 と、修正が次の失敗を呼んだ）"
+  echo
+  echo " 完了と呼ぶ前に:"
+  echo "   1. CMS で実際に Publish Now を1回押す"
+  echo "   2. 'cms: publish data.js' のコミットが増えたことを確認する"
+  echo "   3. 未確認なら handoff に「実機未確認」と明記する"
+fi
 echo "════════════════════════════════════════════════════════════════"

@@ -5952,6 +5952,48 @@ function unsavedEditWarning(){
     + '\n\nそれでも公開しますか?';
 }
 
+/* これから送る data.js の中身を、数で見せる。
+
+   ■ なぜ必要か（AUDIT §9-81）
+
+   Publish の事故は繰り返し起きているが、**症状はいつも「静か」**だった。
+   ・列が落ちても件数が減るだけで、画面には何も出ない（§9-67 / §9-69）
+   ・中身が同じなら空コミットになり、成功したように見える（§9-67）
+   ・失敗しても3秒で消える（§9-80）
+
+   検査はモックで通っていた。**モックは GAS の実挙動を再現できない。**
+   だから最後の砦を、実際に送る中身そのものに置く。
+   押す前に数を見せれば、列落ちは「11件 → 4件」という形で目に入る。 */
+function publishPayloadSummary(content) {
+  const count = (re) => (content.match(re) || []).length;
+  const block = (name) => {
+    const m = content.match(new RegExp('const ' + name + '\\s*=\\s*\\[([\\s\\S]*?)\\n\\];'));
+    return m ? m[1] : '';
+  };
+  const items = (name) => (block(name).match(/\n    id: "/g) || []).length;
+  const field = (name, key) => (block(name).match(new RegExp('\\n    ' + key + ':', 'g')) || []).length;
+  return [
+    'これから公開する内容',
+    '',
+    `  FESTIVALS  ${items('FESTIVALS')}件`,
+    `  ARTISTS    ${items('ARTISTS')}件（紹介文 ${field('ARTISTS','bio')} / 画像 ${field('ARTISTS','image')} / リンク ${field('ARTISTS','links')}）`,
+    `  VENUES     ${items('VENUES')}件`,
+    `  ARTICLES   ${items('ARTICLES')}件（英語本文 ${field('ARTICLES','body_en')} / 関連フェス ${field('ARTICLES','festivalId')}）`,
+    `  EVENTS     ${items('EVENTS')}件`,
+    '',
+    `  ファイルの大きさ ${Math.round(content.length / 1024)}KB`,
+  ].join('\n');
+}
+
+/* いま公開されている data.js と同じなら、送っても何も起きない。
+   §9-67 では空コミットが「成功」に見え、原因の特定に半日かかった。
+   **同じであることを、成功と呼ばない。** */
+function fetchPublishedDataJs() {
+  return fetch('https://techno-japan.media/data.js?ts=' + Date.now(), { cache: 'no-store' })
+    .then((r) => (r.ok ? r.text() : null))
+    .catch(() => null);   // 取れなくても公開は止めない
+}
+
 function publishDataJs(opts){
   opts = opts || {};
   const warn = unsavedEditWarning();
@@ -5975,12 +6017,25 @@ function publishDataJs(opts){
     try { localStorage.setItem('tj_publish_counts', JSON.stringify(sane.counts)); } catch(_){}
     try { localStorage.setItem('tj_publish_snapshot_pending', JSON.stringify(publishSnapshot(d))); } catch(_){}
     const content = buildFullDataJs(d);
-    if (btn) btn.innerHTML = 'Pushing to GitHub...';
-    toast('Pushing to GitHub...','info');
-    return gasPostJson_({
+    if (btn) btn.innerHTML = 'Checking...';
+    return fetchPublishedDataJs().then((live) => {
+      /* 中身が同じなら送らない。送っても空コミットになるだけで、
+         「成功したのに何も変わらない」という最も分かりにくい結果になる。 */
+      if (live !== null && live.trim() === content.trim()) {
+        throw new Error('公開中の内容と同じでした。変更が無いため、何も公開していません。'
+          + '\n\nシートの編集が保存されているか、CMS を再読み込みしてから'
+          + 'もう一度お試しください。');
+      }
+      if (!confirm(publishPayloadSummary(content) + '\n\nこの内容で公開しますか?')) {
+        throw new Error('Publishをキャンセルしました');
+      }
+      if (btn) btn.innerHTML = 'Pushing to GitHub...';
+      toast('Pushing to GitHub...','info');
+      return gasPostJson_({
       action: 'publish_data_js',
-      content: content,
-      message: opts.message || 'cms: publish data.js'
+        content: content,
+        message: opts.message || 'cms: publish data.js'
+      });
     });
   }).then(r=>{
     if (r.status === 'ok' || r.success) {

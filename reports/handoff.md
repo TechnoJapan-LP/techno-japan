@@ -2117,3 +2117,78 @@ FESTIVALS等の必須データのPublish自体は止めないようにした。
 ### 次の担当への注意・判断待ち
 - 入力時は **BIO/bio_en は v2、リンク・CITY 等は v1（artists-draft）** から取る。
 - 写真は空欄のまま（手動収集の方針）。
+
+---
+
+## 2026-08-14 英語版 ABOUT が CSS 無しで公開されていた（緊急対応）
+
+### 実施
+- **`LP/en/about.html`** の CSS / JS 参照5本を相対→絶対パスへ修正（本番に出ている実体）
+- **`LP/about.html`** も同様に修正し、理由をコメントで残した（原本）
+- **`scripts/check_asset_paths.py`** を新規追加。preflight「キャッシュと配信」に組み込み
+- `AUDIT_TECHNO_JAPAN.md` §9-82 に経緯を記録
+- 併せて §9-81 の Publish 改善（送信内容サマリ・無変更検知・AGENTS.md 追記）を同梱
+
+### 原因
+`LP/about.html` が `href="common.css?v=6"` と**相対パス**で書かれていた。
+ルート直下の `/about.html` では `/common.css` に解決するため**日本語版は正常**。
+しかし同じファイルが `/en/about.html` に置かれると `/en/common.css` を探して 404 になり、
+CSS 5本すべてが読めず素の HTML で公開されていた。
+
+さらに `build-detail-pages.mjs` が英語版を生成しているのは5ハブ
+（index/festivals/artists/venues/news）だけで、`about.html` / `submit.html` は
+**一度手でコピーされたきり再生成されない**。原本を直しても複製に届かず、
+EN 側を直接修正する必要があった。
+
+### コミット
+（本エントリと同一コミット。下記「検証」の後に push）
+
+### 検証
+**実ブラウザ（headless Chrome / 1440×1000）で計測。**
+
+本番 `https://techno-japan.media/en/about.html`（修正前）:
+```
+背景色 rgba(0,0,0,0) / 文字色 rgb(0,0,0) / /en/common.css=0(404) / 最初のSVG 1637px
+```
+
+ローカル修正後 `/en/about.html`・`/about.html`・`/en/submit.html` の3経路:
+```
+背景色 rgb(8,8,8) / 文字色 rgb(240,237,232) / フォント "DM Sans"
+/common.css?v=6 = 142ルール / 読めなかった資産 なし / 最初のSVG 16px
+```
+→ **英語・日本語で計測値が完全に一致。**
+
+ネガティブコントロール3経路すべてで検知を確認:
+```
+LP/en/about.html を相対に戻す → ✅「LP/en/common.css が無い」
+LP/about.html を相対に戻す    → ✅「en/about.html 側で 404」
+LP/submit.html を相対に戻す   → ✅「en/submit.html 側で 404」
+```
+（初回の破壊は `/manifest.json` の `.js` に当たっており、置換1件でも狙いが外れていた。
+　一致文字列を印字させて修正。AUDIT §9-82）
+
+preflight: **全28件成功**（新検査を含む）。
+
+### 変更したパターン
+- `LP/en/about.html` — `common.css` `common.js` `data.js` `favorites.js` `search.js` の5本
+- `LP/about.html` — 同5本
+- preflight に「CSS / JS の参照先が実在する」を追加（27→28件）
+
+### 未確認の類似パターン
+- **`/en/` 配下の全7枚を検査済み・相対パス0件。** 生成5ハブは `enHubFromJa` が
+  絶対パスへ書き換えるため元から無事だった
+- **LP 配下473ページ全体で、解決できない CSS / JS 参照は0件**（検査で確認済み）
+- 画像・フォントの相対パスは今回の検査対象外。**未確認**
+  （CSS が効かない致命傷にはならないため今回は見送り）
+
+### 次の担当への注意・判断待ち
+- ⚠️ **`LP/en/about.html` と `LP/en/submit.html` は手書きの複製**で、生成経路に無い。
+  JA 側を直しても EN 側は追従しない。**JA の about / submit を編集したら EN も手で直す。**
+  同じ内容を2箇所に持つ構造なので、いずれ生成経路へ寄せるか要判断
+- **Publish 経路（cms.js）の変更が未コミット分に含まれる。** preflight は緑だが、
+  過去3回モック緑・実機失敗が起きている。**CMS で Publish Now を1回押して
+  `cms: publish data.js` のコミットが増えることを確認するまで完了ではない**（実機未確認）
+- CMS 入力の積み残し: アーティスト54名（紹介文v2 + リンク）。
+  ⚡Global Ark(8/21) の CHOKO / SUNGA / TSUTOMU が最優先
+- 報告済みでユーザー判断待ちのデータ課題: EDITIONS の `STATUS=published` 36行 /
+  TICKETURL 未入力 20/104 / ID規約違反 `suze-ij`（正しくは `suze-ijo`）
