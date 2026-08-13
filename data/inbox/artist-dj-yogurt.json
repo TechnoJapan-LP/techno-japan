@@ -1,0 +1,33 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T03:30:00+09:00",
+ "_note": "確度 medium/low の値は登録しない・断定的に書かない。BIO 下書きは reports/artists-draft-2026-08-13.md 第4弾",
+ "_appearsAt": "ala / etsuetsu",
+ "fields": {
+  "BANDCAMP": {
+   "value": "https://upsetrecordings.bandcamp.com/",
+   "source": "Web検索（自身のレーベル UPSET RECORDINGS）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T03:30:00+09:00"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "Wikipedia(ja) / ele-king",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T03:30:00+09:00"
+  },
+  "SOUNDCLOUD": {
+   "value": null,
+   "source": "候補が複数（djyogurt506 / djyogurt-1 / dj-yogurt-moja）で本人の主アカウントを特定できず",
+   "confidence": "low",
+   "checkedAt": "2026-08-13T03:30:00+09:00",
+   "note": "載せない"
+  },
+  "facts": {
+   "value": "1996年にDJを開始、1998年にユニット UPSETS とレーベル UPSET RECORDINGS を設立。90年代にゴア、パンガン島、ロンドン、アムステルダムのレイヴを経験。年間70本以上の現場に立つ",
+   "source": "Wikipedia(ja) + ele-king + 音楽ナタリー",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T03:30:00+09:00"
+  }
+ }
+}

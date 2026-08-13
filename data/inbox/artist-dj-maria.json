@@ -1,0 +1,26 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T03:30:00+09:00",
+ "_note": "確度 medium/low の値は登録しない・断定的に書かない。BIO 下書きは reports/artists-draft-2026-08-13.md 第4弾",
+ "_appearsAt": "rainbow-disco-club / transcendence",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/mariasatelles/",
+   "source": "Web検索（公式プロフィール直リンク・フォロワー2.4万）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T03:30:00+09:00"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "紹介文（東京の新世代テクノ）",
+   "confidence": "medium",
+   "checkedAt": "2026-08-13T03:30:00+09:00"
+  },
+  "facts": {
+   "value": "東京の新世代テクノを象徴するDJのひとり。グルーヴィーなテクノとトランスを軸に、ダウンテンポ、ハウス、アンビエントまで横断する。ベルリンの Berghain、ベルギー La Nature、ノルウェー Monument、ポルトガル BOOM に出演",
+   "source": "検索結果（RA ニュース等）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T03:30:00+09:00"
+  }
+ }
+}

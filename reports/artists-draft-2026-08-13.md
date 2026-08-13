@@ -471,3 +471,141 @@ RA やレーベルサイトの写真は**撮影者に著作権があり、勝手
 | **調査完了（CMS 入力待ち）** | **22人** |
 | 保留（本人確認とれず） | 3件（moodman SC / okadada IG / suimin） |
 | 残り（名前だけ） | 70人 — 次は hidai(3フェス) / dj-maria / kikiorix / dj-yogurt / rami / mimu / akie / yamarchy / calpiss / yellowuhuru（各2フェス）
+
+---
+
+# 第4弾 — 出演フェス数の多い順（計7人）
+
+## 23. Hidai（hidai）— ALA / PARAMOUNT / SUB-TIDE（3フェス出演・最多）
+
+| 項目 | 値 | 確度 |
+|---|---|---|
+| INSTAGRAM | https://www.instagram.com/hidai_otodashi/ | 高（本人確認済み） |
+
+**BIO（案）**
+> OtOdashi soundsystem を率いる DJ。PARAMOUNT ではサウンドデザインと
+> イベントデザインも手がけ、鳴らす側と場を作る側の両方に立つ。
+
+**bio_en（案）**
+> A DJ leading the OtOdashi soundsystem, also handling sound and event
+> design for PARAMOUNT — standing on both sides: playing the music and
+> building the place.
+
+## 24. TAICHI KAWAHIRA（taichi-kawahira）— ALA / Brightness
+
+| 項目 | 値 | 確度 |
+|---|---|---|
+| INSTAGRAM | https://www.instagram.com/taichi_kawahira/ | 高（本人確認済み） |
+| WEBSITE | https://linktr.ee/taichikawahira | 高 |
+| CITY | TOKYO | 高 |
+
+**BIO（案）**
+> 東京の DJ/プロデューサー。フェス Brightness を運営する Brightness LLC を
+> 率い、作曲からギター、キーボードまでこなす音楽家としての顔も持つ。
+
+**bio_en（案）**
+> A Tokyo DJ and producer who leads Brightness LLC, the company behind
+> the Brightness festival, and works as a composer playing guitar and
+> keyboards.
+
+## 25. DJ Yogurt（dj-yogurt）— ALA / ETSUETSU
+
+| 項目 | 値 | 確度 |
+|---|---|---|
+| BANDCAMP | https://upsetrecordings.bandcamp.com/ | 高（自身のレーベル） |
+| CITY | TOKYO | 高 |
+| SOUNDCLOUD | —（候補が複数で本人の主アカウント特定できず。載せない） | — |
+
+**BIO（案）**
+> 1996年に DJ を開始し、1998年にユニット UPSETS とレーベル
+> UPSET RECORDINGS を設立。90年代にゴアやパンガン島、ロンドン、
+> アムステルダムのレイヴを浴び、以来年間70本を超える現場に立ち続ける
+> 東京の重鎮。
+
+**bio_en（案）**
+> DJing since 1996, founding the unit UPSETS and label UPSET RECORDINGS
+> in 1998. Shaped by 90s raves from Goa to Amsterdam, he still plays
+> over 70 parties a year.
+
+## 26. DJ KENSEI（dj-kensei）— ALA
+
+| 項目 | 値 | 確度 |
+|---|---|---|
+| SOUNDCLOUD | https://soundcloud.com/dj_kensei | 高 |
+| INSTAGRAM | —（候補 @sarasvati_music_ashram は未確認。載せない） | 中 |
+| CITY | TOKYO | 高 |
+
+**BIO（案）**
+> 東京生まれの DJ/プロデューサー/ビートメイカー。80年代半ばに活動を
+> 始め、キャリアは35年を超える。ミックスCDやアナログ盤を数多く残し、
+> ジャンルの境界を軽々とまたぐ選曲で知られる。
+
+**bio_en（案）**
+> A Tokyo-born DJ, producer and beat-maker active since the mid-80s,
+> with a career spanning over 35 years and countless mix CDs and
+> records.
+
+## 27. DJ MIKU（dj-miku）— ALA（Global Ark 主宰）
+
+| 項目 | 値 | 確度 |
+|---|---|---|
+| WEBSITE | http://djmiku.com/ | 高 |
+| CITY | TOKYO | 高 |
+
+**BIO（案）**
+> 80年代のニューウェーブ、エレクトロ、テクノに根ざす DJ/プロデューサー。
+> 90年代初頭にはウェアハウスパーティー KEY-ENERGY のレジデントとして
+> 東京のアンダーグラウンドの形成に関わった。1996年に NewStage Records を
+> 設立し、2012年からは野外フェス GLOBAL ARK を主宰する。
+
+**bio_en（案）**
+> A DJ/producer rooted in 80s new wave, electro and techno. A resident
+> of the KEY-ENERGY warehouse parties that shaped Tokyo's early-90s
+> underground, he founded NewStage Records in 1996 and has run the
+> open-air festival GLOBAL ARK since 2012.
+
+## 28. Kikiorix（kikiorix）— Rainbow Disco Club / 春風
+
+| 項目 | 値 | 確度 |
+|---|---|---|
+| INSTAGRAM | https://www.instagram.com/kikigraphix/ | 高 |
+| SOUNDCLOUD | https://soundcloud.com/kikiorix | 高 |
+| CITY | TOKYO | 高 |
+
+**BIO（案）**
+> 本名 Takaya Ito。Rainbow Disco Club のレジデント DJ にしてフェスの
+> デザインも担う。REALROCKDESIGN のアートディレクターとしての顔も持ち、
+> Boiler Room Tokyo をはじめロンドンやベルリン、LA でもプレイしてきた。
+
+**bio_en（案）**
+> Takaya Ito, resident DJ and designer for Rainbow Disco Club and art
+> director at REALROCKDESIGN, has played Boiler Room Tokyo and gigs
+> from London to Berlin and LA.
+
+## 29. DJ MARIA.（dj-maria）— Rainbow Disco Club / Transcendence
+
+| 項目 | 値 | 確度 |
+|---|---|---|
+| INSTAGRAM | https://www.instagram.com/mariasatelles/ | 高 |
+| CITY | TOKYO | 中 |
+
+**BIO（案）**
+> 東京の新世代テクノを象徴する DJ のひとり。グルーヴィーなテクノと
+> トランスを軸にダウンテンポやアンビエントまでを織り込み、ベルリンの
+> Berghain、ベルギーの La Nature、ポルトガルの BOOM など海外の
+> フロアにも立つ。
+
+**bio_en（案）**
+> One of the defining DJs of Tokyo's new-generation techno, weaving
+> groovy techno and trance with downtempo and ambient, with sets at
+> Berghain, La Nature and BOOM.
+
+---
+
+## 全体進捗（第4弾まで）
+
+| | 人数 |
+|---|---|
+| **調査完了（CMS 入力待ち）** | **29人** |
+| 保留（本人確認とれず） | 6件（moodman SC / okadada IG / suimin / DJ Yogurt SC / DJ KENSEI IG / Ben UFO IG） |
+| 残り（名前だけ） | 63人 — 次: rami・akie（@matricaria_festival）/ yamarchy・calpiss（@harukaze_asia）/ yellowuhuru（@etsu_etsu_）/ mimu（@sub_tide）/ mayudepth（@waifu_party）/ endorphin（@arch___2014）

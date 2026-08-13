@@ -1,0 +1,26 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T03:30:00+09:00",
+ "_note": "確度 medium/low の値は登録しない・断定的に書かない。BIO 下書きは reports/artists-draft-2026-08-13.md 第4弾",
+ "_appearsAt": "ala（Global Ark 主宰者）",
+ "fields": {
+  "WEBSITE": {
+   "value": "http://djmiku.com/",
+   "source": "Web検索（公式サイト直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T03:30:00+09:00"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "clubberia / musicmine",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T03:30:00+09:00"
+  },
+  "facts": {
+   "value": "80年代のニューウェーブ/エレクトロ/テクノに根ざすDJ/プロデューサー。90年代初頭、ウェアハウスパーティー KEY-ENERGY のレジデントとして東京のアンダーグラウンドを形成。1996年に NewStage Records 設立。2012年から野外フェス GLOBAL ARK を主宰",
+   "source": "clubberia + musicmine + global-ark.net",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T03:30:00+09:00"
+  }
+ }
+}

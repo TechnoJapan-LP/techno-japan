@@ -1,0 +1,32 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T03:30:00+09:00",
+ "_note": "確度 medium/low の値は登録しない・断定的に書かない。BIO 下書きは reports/artists-draft-2026-08-13.md 第4弾",
+ "_appearsAt": "rainbow-disco-club / spring-love-harukaze",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/kikigraphix/",
+   "source": "Web検索（公式プロフィール直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T03:30:00+09:00"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/kikiorix",
+   "source": "Web検索（本人アカウント直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T03:30:00+09:00"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "iFLYER / RA",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T03:30:00+09:00"
+  },
+  "facts": {
+   "value": "本名 Takaya Ito。Rainbow Disco Club のレジデントDJ兼デザイナー。REALROCKDESIGN のグラフィックデザイナー/アートディレクターでもあり、Boiler Room Tokyo 出演。ロンドン、イビサ、ベルリン、LA でもプレイ",
+   "source": "iFLYER + RA + Boiler Room",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T03:30:00+09:00"
+  }
+ }
+}

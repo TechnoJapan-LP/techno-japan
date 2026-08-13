@@ -1,0 +1,33 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T03:30:00+09:00",
+ "_note": "確度 medium/low の値は登録しない・断定的に書かない。BIO 下書きは reports/artists-draft-2026-08-13.md 第4弾",
+ "_appearsAt": "ala / brightness",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/taichi_kawahira/",
+   "source": "Instagram プロフィールを開いて本人確認（フェス公式のフォロー先から特定）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T03:30:00+09:00",
+   "note": "bio「Brightness LLC | DJ & Producer @brightness_festival / Tokyo」"
+  },
+  "WEBSITE": {
+   "value": "https://linktr.ee/taichikawahira",
+   "source": "本人 Instagram bio のリンク",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T03:30:00+09:00"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "本人 Instagram bio",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T03:30:00+09:00"
+  },
+  "facts": {
+   "value": "DJ/プロデューサー。フェス Brightness を運営する Brightness LLC を率いる。作曲・ギター・キーボードもこなす",
+   "source": "本人 Instagram bio",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T03:30:00+09:00"
+  }
+ }
+}

@@ -1,0 +1,33 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T03:30:00+09:00",
+ "_note": "確度 medium/low の値は登録しない・断定的に書かない。BIO 下書きは reports/artists-draft-2026-08-13.md 第4弾",
+ "_appearsAt": "ala",
+ "fields": {
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/dj_kensei",
+   "source": "Web検索（本人アカウント直リンク・本人名義の投稿確認）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T03:30:00+09:00"
+  },
+  "INSTAGRAM": {
+   "value": null,
+   "source": "@sarasvati_music_ashram は要約情報のみで未確認",
+   "confidence": "medium",
+   "checkedAt": "2026-08-13T03:30:00+09:00",
+   "note": "開いて本人確認してから登録"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "複数のプロフィール記述",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T03:30:00+09:00"
+  },
+  "facts": {
+   "value": "東京生まれのDJ/プロデューサー/ビートメイカー。80年代半ばに活動を開始し、キャリアは35年を超える。ミックスCD・アナログ盤を多数発表",
+   "source": "検索結果の複数ソース",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T03:30:00+09:00"
+  }
+ }
+}
