@@ -1,0 +1,27 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T02:20:00+09:00",
+ "_note": "Instagram はすべて実際にプロフィールを開き、DJ活動の記載を確認してから記録した。BIO の下書きは reports/artists-draft-2026-08-13.md 第2弾にある。",
+ "_appearsAt": "global-ark (2026-08-21)",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/tsutomu_tabata/",
+   "source": "Instagram プロフィールを実際に開いて本人確認（フェス公式アカウントのフォロー先から特定）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:20:00+09:00",
+   "note": "bio「Sawagi Festival Producer / Spring Love 春風 at.代々木公園 実行委員」+ DJ ハイライト"
+  },
+  "WEBSITE": {
+   "value": "https://twitter.com/tsutomusic",
+   "source": "本人 Instagram bio のリンク",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:20:00+09:00"
+  },
+  "facts": {
+   "value": "DJ。Sawagi Festival のプロデューサーであり、代々木公園の Spring Love 春風 実行委員も務める",
+   "source": "本人 Instagram bio",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:20:00+09:00"
+  }
+ }
+}

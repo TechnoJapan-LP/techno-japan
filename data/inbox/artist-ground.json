@@ -1,0 +1,27 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T02:20:00+09:00",
+ "_note": "Instagram はすべて実際にプロフィールを開き、DJ活動の記載を確認してから記録した。BIO の下書きは reports/artists-draft-2026-08-13.md 第2弾にある。",
+ "_appearsAt": "synapse-festival (2026-10-02)",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/mtchill_ground/",
+   "source": "SUNGA のフォロワー欄から発見→プロフィールを開いて本人確認",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:20:00+09:00",
+   "note": "bio「Ground / DJ/Producer / General Producer of Chill Mountain Records (JP)」。Synapse 公式がフォロー"
+  },
+  "WEBSITE": {
+   "value": "https://linktr.ee/Ground_jp",
+   "source": "本人 Instagram bio のリンク",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:20:00+09:00"
+  },
+  "facts": {
+   "value": "DJ/プロデューサー。レーベル Chill Mountain Records のゼネラルプロデューサー",
+   "source": "本人 Instagram bio",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:20:00+09:00"
+  }
+ }
+}

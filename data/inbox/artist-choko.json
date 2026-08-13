@@ -1,0 +1,27 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T02:20:00+09:00",
+ "_note": "Instagram はすべて実際にプロフィールを開き、DJ活動の記載を確認してから記録した。BIO の下書きは reports/artists-draft-2026-08-13.md 第2弾にある。",
+ "_appearsAt": "global-ark (2026-08-21)",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/choko25digitalblock/",
+   "source": "Instagram プロフィールを実際に開いて本人確認（フェス公式アカウントのフォロー先から特定）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:20:00+09:00",
+   "note": "bio に「DJ CHOKO / Digitalblock DJ / Graphic Designer」。Web検索の Digitalblock 所属情報とも一致"
+  },
+  "WEBSITE": {
+   "value": "https://linktr.ee/djchoko",
+   "source": "本人 Instagram bio のリンク",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:20:00+09:00"
+  },
+  "facts": {
+   "value": "DJ CHOKO。Digitalblock の DJ / グラフィックデザイナー。ChokoMart も運営",
+   "source": "本人 Instagram bio",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:20:00+09:00"
+  }
+ }
+}

@@ -1,0 +1,27 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T02:20:00+09:00",
+ "_note": "Instagram はすべて実際にプロフィールを開き、DJ活動の記載を確認してから記録した。BIO の下書きは reports/artists-draft-2026-08-13.md 第2弾にある。",
+ "_appearsAt": "synapse-festival (2026-10-02)",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/jomajjj/",
+   "source": "Synapse 公式のフォロー先から特定→プロフィールを開いて本人確認",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:20:00+09:00",
+   "note": "bio「digital hippie in Tokyo / DJ / Techno/House Party → @night_trip_」+ DJ ハイライト"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "本人 Instagram bio（in Tokyo）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:20:00+09:00"
+  },
+  "facts": {
+   "value": "東京のDJ。テクノ/ハウスのパーティー night_trip_、リスニングパーティー day__trip_ に関わる",
+   "source": "本人 Instagram bio",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:20:00+09:00"
+  }
+ }
+}

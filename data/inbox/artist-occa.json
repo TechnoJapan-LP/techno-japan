@@ -1,0 +1,27 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T02:20:00+09:00",
+ "_note": "Instagram はすべて実際にプロフィールを開き、DJ活動の記載を確認してから記録した。BIO の下書きは reports/artists-draft-2026-08-13.md 第2弾にある。",
+ "_appearsAt": "colors-presents-soundcamp (2026-09-20)",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/occa_occa_occa/",
+   "source": "CHOKO のフォロワー欄から発見→プロフィールを開いて本人確認",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:20:00+09:00",
+   "note": "bio「DJ / Sapporo_Japan / ARCHIV at Precious Hall_Sapporo / TELEPATH at Womb_Tokyo」。北海道開催の COLORS 出演と整合"
+  },
+  "CITY": {
+   "value": "SAPPORO",
+   "source": "本人 Instagram bio",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:20:00+09:00"
+  },
+  "facts": {
+   "value": "札幌のDJ。Precious Hall（札幌）の ARCHIV、Womb（東京）の TELEPATH に関わる。EU ブッキング窓口あり",
+   "source": "本人 Instagram bio",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:20:00+09:00"
+  }
+ }
+}

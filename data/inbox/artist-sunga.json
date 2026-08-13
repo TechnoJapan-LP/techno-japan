@@ -1,0 +1,27 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T02:20:00+09:00",
+ "_note": "Instagram はすべて実際にプロフィールを開き、DJ活動の記載を確認してから記録した。BIO の下書きは reports/artists-draft-2026-08-13.md 第2弾にある。",
+ "_appearsAt": "global-ark (2026-08-21)",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/sunga_eezee/",
+   "source": "Instagram プロフィールを実際に開いて本人確認（フェス公式アカウントのフォロー先から特定）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:20:00+09:00",
+   "note": "bio「EEZEE / COREHEAD / BEACH WHISTLE / BLACKSHEEP」。九州・福岡ツアー等のDJ活動ハイライト多数"
+  },
+  "WEBSITE": {
+   "value": "https://linktr.ee/SUNGA_EEZEE",
+   "source": "本人 Instagram bio のリンク",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:20:00+09:00"
+  },
+  "facts": {
+   "value": "EEZEE / COREHEAD / BEACH WHISTLE / BLACKSHEEP 等のパーティー・クルーに関わるDJ。各地をツアーで回る",
+   "source": "本人 Instagram bio + ハイライト",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:20:00+09:00"
+  }
+ }
+}

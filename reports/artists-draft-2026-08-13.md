@@ -178,3 +178,153 @@ RA やレーベルサイトの写真は**撮影者に著作権があり、勝手
 
 シートへの直接貼り付けは**既存行の更新になるため使わない**
 （末尾追記の事故 §9-58 と同型のリスクがある）。
+
+---
+
+# 第2弾 — Instagram を実際に開いて特定した8人（2026-08-13 深夜）
+
+**全員、プロフィールを開いて DJ 活動の記載を確認してから記録した。**
+特定方法: フェス公式アカウント（@global_ark / @synapsefestival）の
+フォロー先を検索 → 本人プロフィールで裏取り。
+
+## 8. CHOKO（choko）— Global Ark 8/21 ⚡最優先
+
+| 項目 | 値 | 確度 |
+|---|---|---|
+| INSTAGRAM | https://www.instagram.com/choko25digitalblock/ | 高（bio: DJ CHOKO / Digitalblock DJ） |
+| WEBSITE | https://linktr.ee/djchoko | 高 |
+
+**BIO（案）**
+> Digitalblock に所属する DJ / グラフィックデザイナー。DJ CHOKO 名義で
+> 各地のパーティーに出演し、ChokoMart の運営でも知られる。
+
+**bio_en（案）**
+> A DJ and graphic designer with Digitalblock, performing as DJ CHOKO
+> and also known for running ChokoMart.
+
+## 9. SUNGA（sunga）— Global Ark 8/21 ⚡最優先
+
+| 項目 | 値 | 確度 |
+|---|---|---|
+| INSTAGRAM | https://www.instagram.com/sunga_eezee/ | 高 |
+| WEBSITE | https://linktr.ee/SUNGA_EEZEE | 高 |
+
+**BIO（案）**
+> EEZEE、COREHEAD、BEACH WHISTLE、BLACKSHEEP といったパーティーや
+> クルーに関わる DJ。九州から各地までツアーで回り、現場で経験を
+> 積み重ねている。
+
+**bio_en（案）**
+> A DJ involved with parties and crews including EEZEE, COREHEAD,
+> BEACH WHISTLE and BLACKSHEEP, touring from Kyushu across Japan.
+
+## 10. TSUTOMU（tsutomu）— Global Ark 8/21 ⚡最優先
+
+| 項目 | 値 | 確度 |
+|---|---|---|
+| INSTAGRAM | https://www.instagram.com/tsutomu_tabata/ | 高 |
+| WEBSITE | https://twitter.com/tsutomusic | 高 |
+
+**BIO（案）**
+> DJ であり、Sawagi Festival のプロデューサー。代々木公園で開かれる
+> Spring Love 春風の実行委員も務めるなど、フェスの作り手としての顔も持つ。
+
+**bio_en（案）**
+> A DJ and the producer of Sawagi Festival, who also serves on the
+> organizing committee of Spring Love Harukaze at Yoyogi Park.
+
+## 11. OCCA（occa）— COLORS SOUNDCAMP 9/20
+
+| 項目 | 値 | 確度 |
+|---|---|---|
+| INSTAGRAM | https://www.instagram.com/occa_occa_occa/ | 高 |
+| CITY | SAPPORO | 高 |
+
+**BIO（案）**
+> 札幌を拠点とする DJ。Precious Hall の ARCHIV、東京・Womb の TELEPATH に
+> 関わり、北の現場から日本のダンスミュージックを支える。
+
+**bio_en（案）**
+> A Sapporo-based DJ involved with ARCHIV at Precious Hall and TELEPATH
+> at Womb Tokyo.
+
+## 12. Ground（ground）— Synapse 10/2
+
+| 項目 | 値 | 確度 |
+|---|---|---|
+| INSTAGRAM | https://www.instagram.com/mtchill_ground/ | 高 |
+| WEBSITE | https://linktr.ee/Ground_jp | 高 |
+
+**BIO（案）**
+> DJ/プロデューサー。レーベル Chill Mountain Records のゼネラル
+> プロデューサーとして、リリースと現場の両面からシーンを耕し続けている。
+
+**bio_en（案）**
+> A DJ and producer serving as general producer of Chill Mountain
+> Records, cultivating the scene through both releases and parties.
+
+## 13. YSK（ysk）— Synapse 10/2
+
+| 項目 | 値 | 確度 |
+|---|---|---|
+| INSTAGRAM | https://www.instagram.com/ysk_alpha/ | 高 |
+| WEBSITE | https://linktr.ee/ysk_explore | 高 |
+
+**BIO（案）**
+> 小倉の alpha や undulate_sound に関わる DJ。九州のアンダーグラウンド・
+> シーンを現場から支える。
+
+**bio_en（案）**
+> A DJ involved with alpha in Kokura and undulate_sound, supporting
+> Kyushu's underground scene from the floor.
+
+## 14. Noritake（noritake）— Synapse 10/2
+
+| 項目 | 値 | 確度 |
+|---|---|---|
+| INSTAGRAM | https://www.instagram.com/nori0615/ | 高（bio: MATRICARIA/LAB. Resident DJ） |
+| SOUNDCLOUD | —（短縮リンクのみ。**展開先を開いて確認してから**） | 中 |
+
+**BIO（案）**
+> MATRICARIA / LAB. のレジデント DJ。キャンプ・フェスの現場を軸に
+> 活動する。
+
+**bio_en（案）**
+> A resident DJ of MATRICARIA / LAB., active around Japan's camp
+> festival scene.
+
+## 15. Joma（joma）— Synapse 10/2
+
+| 項目 | 値 | 確度 |
+|---|---|---|
+| INSTAGRAM | https://www.instagram.com/jomajjj/ | 高 |
+| CITY | TOKYO | 高 |
+
+**BIO（案）**
+> 東京の DJ。テクノ/ハウス・パーティー night_trip_ と、リスニング
+> パーティー day__trip_ に関わる。
+
+**bio_en（案）**
+> A Tokyo DJ involved with the techno/house party night_trip_ and the
+> listening party day__trip_.
+
+---
+
+## 判断（スキップ・保留）
+
+**事実と異なるものを出さない**方針により、以下は今回登録しない:
+
+- **MOODMAN の SoundCloud** — soundcloud.com/moodman が本人か確認できず。**載せない**
+- **okadada の Instagram** — @okadada が本人か未確認。**保留**
+- **suimin（Odyssey）/ so（御月民）** — 名前が一般的すぎて未特定。
+  次回、各フェス公式 IG のフォロー先から辿る（今回の手法が有効）
+- **FRUE 組（Kiko Dinucci / Master Musicians of Joujouka / Kuo）** —
+  開催が11月と先なので次バッチへ（著名なので Web 検索で特定可能）
+
+## 進捗
+
+| | 人数 |
+|---|---|
+| 調査完了（CMS 入力待ち） | **15人** |
+| 保留（本人確認が取れず） | 2件（moodman の SC / okadada の IG） |
+| 未特定（次バッチ） | 5人 + 開催が先の71人 |
