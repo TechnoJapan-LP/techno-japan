@@ -1,0 +1,26 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T02:50:00+09:00",
+ "_note": "確度 medium の URL は開いて確認してから登録する。BIO 下書きは reports/artists-draft-2026-08-13.md 第3弾",
+ "_appearsAt": "（直近開催外）",
+ "fields": {
+  "BANDCAMP": {
+   "value": "https://caribouband.bandcamp.com/",
+   "source": "Web検索（直リンク多数。Caribou と共用アカウント）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:50:00+09:00"
+  },
+  "COUNTRY": {
+   "value": "CANADA",
+   "source": "Wikipedia",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:50:00+09:00"
+  },
+  "facts": {
+   "value": "カナダの Daniel Snaith（Caribou）によるダンスフロア名義。2012年『Jiaolong』以降、自身のレーベル Jiaolong からリリース",
+   "source": "Wikipedia + Bandcamp",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:50:00+09:00"
+  }
+ }
+}

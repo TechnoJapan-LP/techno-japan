@@ -1,0 +1,33 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T02:50:00+09:00",
+ "_note": "確度 medium の URL は開いて確認してから登録する。BIO 下書きは reports/artists-draft-2026-08-13.md 第3弾",
+ "_appearsAt": "（直近開催外・出演2フェス）",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/djgonno/",
+   "source": "Web検索（公式プロフィール直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:50:00+09:00"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/gonno",
+   "source": "Web検索の要約（直リンク未取得）",
+   "confidence": "medium",
+   "checkedAt": "2026-08-13T02:50:00+09:00",
+   "note": "開いて本人確認してから登録"
+  },
+  "COUNTRY": {
+   "value": "JAPAN",
+   "source": "clubberia / RA",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:50:00+09:00"
+  },
+  "facts": {
+   "value": "日本のプロデューサー/DJ。International Feel『Acdise #2』(2011)、Endless Flight『Remember The Life Is Beautiful』(2015)、Beats In Space 等からリリース。Merkur / WC / mulemusiq に関わる",
+   "source": "clubberia + JET SET + RA",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:50:00+09:00"
+  }
+ }
+}

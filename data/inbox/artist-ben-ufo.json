@@ -1,0 +1,26 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T02:50:00+09:00",
+ "_note": "確度 medium の URL は開いて確認してから登録する。BIO 下書きは reports/artists-draft-2026-08-13.md 第3弾",
+ "_appearsAt": "（直近開催外）",
+ "fields": {
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/benufo",
+   "source": "Web検索（本人アカウント直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:50:00+09:00"
+  },
+  "COUNTRY": {
+   "value": "UK",
+   "source": "Hessle Audio / Rinse FM の文脈",
+   "confidence": "medium",
+   "checkedAt": "2026-08-13T02:50:00+09:00"
+  },
+  "facts": {
+   "value": "レーベル Hessle Audio に関わる DJ。Rinse FM で長年番組を担当し、世界中のフェス・クラブでプレイする",
+   "source": "Rinse FM の番組アーカイブ多数",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:50:00+09:00"
+  }
+ }
+}

@@ -1,0 +1,27 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T02:50:00+09:00",
+ "_note": "確度 medium の URL は開いて確認してから登録する。BIO 下書きは reports/artists-draft-2026-08-13.md 第3弾",
+ "_appearsAt": "otsukimi (2026-09-25)",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/dj.so_/",
+   "source": "御月民公式のフォロー先から特定→プロフィールを開いて本人確認",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:50:00+09:00",
+   "note": "表示名「SO | satoshi aoyagi」bio「DJ at The Labyrinth / Mindgames」フォロワー1.2万"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/dj_so",
+   "source": "本人 Instagram bio のリンク",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:50:00+09:00"
+  },
+  "facts": {
+   "value": "本名 Satoshi Aoyagi。The Labyrinth や Mindgames でプレイしてきた DJ",
+   "source": "本人 Instagram bio",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:50:00+09:00"
+  }
+ }
+}

@@ -1,0 +1,33 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T02:50:00+09:00",
+ "_note": "確度 medium の URL は開いて確認してから登録する。BIO 下書きは reports/artists-draft-2026-08-13.md 第3弾",
+ "_appearsAt": "festival-de-frue (2026-11)",
+ "fields": {
+  "BANDCAMP": {
+   "value": "https://juanamolina.bandcamp.com/",
+   "source": "Web検索（本人アカウント直リンク多数）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:50:00+09:00"
+  },
+  "WEBSITE": {
+   "value": "https://juanamolina.com",
+   "source": "Bandcamp プロフィール経由",
+   "confidence": "medium",
+   "checkedAt": "2026-08-13T02:50:00+09:00",
+   "note": "開いて確認してから登録"
+  },
+  "COUNTRY": {
+   "value": "ARGENTINA",
+   "source": "Bandcamp（Buenos Aires）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:50:00+09:00"
+  },
+  "facts": {
+   "value": "ブエノスアイレスのシンガーソングライター。実験的なポップで知られ、『Un Día』『Halo』等のアルバムがある",
+   "source": "Bandcamp + Wikipedia",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:50:00+09:00"
+  }
+ }
+}

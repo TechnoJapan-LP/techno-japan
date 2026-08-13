@@ -1,0 +1,26 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T02:50:00+09:00",
+ "_note": "確度 medium の URL は開いて確認してから登録する。BIO 下書きは reports/artists-draft-2026-08-13.md 第3弾",
+ "_appearsAt": "festival-de-frue (2026-11)",
+ "fields": {
+  "BANDCAMP": {
+   "value": "https://kikodinucci.bandcamp.com/",
+   "source": "Web検索（本人アカウント直リンク多数）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:50:00+09:00"
+  },
+  "COUNTRY": {
+   "value": "BRAZIL",
+   "source": "Bandcamp Daily / Wikipedia（サンパウロ）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:50:00+09:00"
+  },
+  "facts": {
+   "value": "サンパウロのギタリスト/作曲家。Metá Metá と Passo Torto の創設メンバー。Elza Soares、Tom Zé、Criolo らと共演。ポストパンクとサンバを横断する",
+   "source": "Bandcamp Daily 特集 + Wikipedia",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:50:00+09:00"
+  }
+ }
+}

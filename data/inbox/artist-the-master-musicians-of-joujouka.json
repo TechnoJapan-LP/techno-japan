@@ -1,0 +1,26 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T02:50:00+09:00",
+ "_note": "確度 medium の URL は開いて確認してから登録する。BIO 下書きは reports/artists-draft-2026-08-13.md 第3弾",
+ "_appearsAt": "festival-de-frue (2026-11)",
+ "fields": {
+  "BANDCAMP": {
+   "value": "https://themastermusiciansofjoujouka.bandcamp.com/",
+   "source": "Web検索（本人アカウント直リンク多数）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:50:00+09:00"
+  },
+  "COUNTRY": {
+   "value": "MOROCCO",
+   "source": "Wikipedia / Bandcamp",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:50:00+09:00"
+  },
+  "facts": {
+   "value": "モロッコ北部リーフ山地・ジャジューカ村のスーフィー・トランス楽団。1950年代から続く集団で、1971年に Brian Jones 録音の LP がローリング・ストーンズのレーベルから出た。2021年にポンピドゥー・センターでのライヴ盤",
+   "source": "Wikipedia + Bandcamp",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T02:50:00+09:00"
+  }
+ }
+}

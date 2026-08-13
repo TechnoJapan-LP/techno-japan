@@ -328,3 +328,146 @@ RA やレーベルサイトの写真は**撮影者に著作権があり、勝手
 | 調査完了（CMS 入力待ち） | **15人** |
 | 保留（本人確認が取れず） | 2件（moodman の SC / okadada の IG） |
 | 未特定（次バッチ） | 5人 + 開催が先の71人 |
+
+---
+
+# 第3弾 — 直近開催の残り + 著名アーティスト（計7人）
+
+## 16. SO（so）— 御月民 -OTSUKIMI- 9/25
+
+| 項目 | 値 | 確度 |
+|---|---|---|
+| INSTAGRAM | https://www.instagram.com/dj.so_/ | 高（本人確認済み） |
+| SOUNDCLOUD | https://soundcloud.com/dj_so | 高（本人 bio のリンク） |
+
+**BIO（案）**
+> 本名 Satoshi Aoyagi。伝説的な野外パーティー The Labyrinth や
+> Mindgames でプレイしてきた DJ。深く長い時間軸で踊らせる選曲で
+> 知られる。
+
+**bio_en（案）**
+> Satoshi Aoyagi, a DJ who has played The Labyrinth and Mindgames,
+> known for deep, long-form sets.
+
+## 17. Kiko Dinucci（kiko-dinucci）— FRUE 11月
+
+| 項目 | 値 | 確度 |
+|---|---|---|
+| BANDCAMP | https://kikodinucci.bandcamp.com/ | 高 |
+| COUNTRY | BRAZIL | 高 |
+
+**BIO（案）**
+> サンパウロのギタリスト/作曲家。Metá Metá、Passo Torto の創設メンバー
+> として、またソロとして、ポストパンクの衝動とサンバの伝統を一本の
+> ギターで往復する。Elza Soares、Tom Zé、Criolo らとの共演でも知られる。
+
+**bio_en（案）**
+> A São Paulo guitarist and composer, founding member of Metá Metá and
+> Passo Torto, moving between post-punk urgency and samba tradition.
+> He has worked with Elza Soares, Tom Zé and Criolo.
+
+## 18. The Master Musicians of Joujouka — FRUE 11月
+
+| 項目 | 値 | 確度 |
+|---|---|---|
+| BANDCAMP | https://themastermusiciansofjoujouka.bandcamp.com/ | 高 |
+| COUNTRY | MOROCCO | 高 |
+
+**BIO（案）**
+> モロッコ北部リーフ山地・ジャジューカ村に代々伝わるスーフィー・
+> トランスの楽団。1971年、Brian Jones が録音した LP がローリング・
+> ストーンズのレーベルから出て世界に知られた。2021年にはポンピドゥー・
+> センターでのライヴ盤を発表している。
+
+**bio_en（案）**
+> A collective of Sufi trance musicians from the village of Joujouka in
+> Morocco's Rif mountains, brought to worldwide attention by the 1971
+> LP recorded by Brian Jones, with a 2021 live album recorded at
+> Centre Pompidou.
+
+## 19. Juana Molina（juana-molina）— FRUE 11月
+
+| 項目 | 値 | 確度 |
+|---|---|---|
+| BANDCAMP | https://juanamolina.bandcamp.com/ | 高 |
+| WEBSITE | https://juanamolina.com | 中 — 開いて確認 |
+| COUNTRY | ARGENTINA | 高 |
+
+**BIO（案）**
+> ブエノスアイレスのシンガーソングライター。ささやくような歌と
+> 反復するエレクトロニクスを織り上げた実験的なポップで、
+> 『Un Día』『Halo』など国際的に評価されるアルバムを重ねている。
+
+**bio_en（案）**
+> A Buenos Aires singer-songwriter whose experimental pop weaves
+> whispered vocals with hypnotic electronics, across acclaimed albums
+> including "Un Día" and "Halo".
+
+## 20. Gonno（gonno）— 出演2フェス
+
+| 項目 | 値 | 確度 |
+|---|---|---|
+| INSTAGRAM | https://www.instagram.com/djgonno/ | 高 |
+| SOUNDCLOUD | https://soundcloud.com/gonno | 中 — 開いて確認 |
+| COUNTRY | JAPAN | 高 |
+
+**BIO（案）**
+> 日本のプロデューサー/DJ。International Feel からの『Acdise #2』（2011）
+> で国際的な評価を確立し、『Remember The Life Is Beautiful』（2015）ほか、
+> ミニマルからアシッド、アンビエントまでを横断する作品を発表し続けている。
+
+**bio_en（案）**
+> A Japanese producer and DJ whose "Acdise #2" (International Feel,
+> 2011) earned international acclaim, releasing work that spans minimal
+> techno, acid and ambient, including "Remember The Life Is Beautiful"
+> (2015).
+
+## 21. Ben UFO（ben-ufo）
+
+| 項目 | 値 | 確度 |
+|---|---|---|
+| SOUNDCLOUD | https://soundcloud.com/benufo | 高 |
+| COUNTRY | UK | 中 |
+
+**BIO（案）**
+> レーベル Hessle Audio と共に歩む UK の DJ。Rinse FM の番組を長年
+> 担当し、制作に頼らず選曲だけで世界のトップに立つ稀有な存在として
+> 知られる。
+
+**bio_en（案）**
+> A UK DJ synonymous with the Hessle Audio label and its long-running
+> Rinse FM show, renowned as one of the few to reach the top through
+> selection alone.
+
+## 22. Daphni（daphni）
+
+| 項目 | 値 | 確度 |
+|---|---|---|
+| BANDCAMP | https://caribouband.bandcamp.com/ | 高（Caribou と共用） |
+| COUNTRY | CANADA | 高 |
+
+**BIO（案）**
+> カナダの Daniel Snaith が Caribou と使い分けるダンスフロア名義。
+> 2012年の『Jiaolong』以降、自身のレーベルからフロア直結の
+> リリースを重ねる。
+
+**bio_en（案）**
+> The dancefloor alias of Canada's Daniel Snaith (Caribou), releasing
+> club-focused work on his own Jiaolong label since 2012's "Jiaolong".
+
+---
+
+## 第3弾のスキップ判断
+
+- **suimin（Odyssey 9/25）** — Odyssey 公式のフォロー先に該当なし。
+  Web 検索でも特定できず。**登録しない**（出演者告知投稿のタグから
+  辿る手が残っているが、今回は確定できなかった）
+- **Ben UFO の Instagram** — 未確認のため載せない
+
+## 全体進捗（2026-08-13 時点）
+
+| | 人数 |
+|---|---|
+| **調査完了（CMS 入力待ち）** | **22人** |
+| 保留（本人確認とれず） | 3件（moodman SC / okadada IG / suimin） |
+| 残り（名前だけ） | 70人 — 次は hidai(3フェス) / dj-maria / kikiorix / dj-yogurt / rami / mimu / akie / yamarchy / calpiss / yellowuhuru（各2フェス）
