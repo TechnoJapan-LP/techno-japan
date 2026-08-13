@@ -1,0 +1,32 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T06:10:00+09:00",
+ "_note": "確度 medium は開いて確認してから登録。BIO 下書きは reports/artists-draft-2026-08-13.md 第8弾",
+ "_appearsAt": "（出演データなしのスタブ）",
+ "fields": {
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/antalrushhour",
+   "source": "Web検索（本人アカウント直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T06:10:00+09:00"
+  },
+  "CITY": {
+   "value": "AMSTERDAM",
+   "source": "複数ソース",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T06:10:00+09:00"
+  },
+  "COUNTRY": {
+   "value": "NETHERLANDS",
+   "source": "複数ソース",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T06:10:00+09:00"
+  },
+  "facts": {
+   "value": "アムステルダムの Rush Hour（レコード店/レーベル）共同創設者。ジャンルの境界を越えるセレクションで20年以上世界のフロアに立つ",
+   "source": "Rush Hour + The Lot Radio",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T06:10:00+09:00"
+  }
+ }
+}

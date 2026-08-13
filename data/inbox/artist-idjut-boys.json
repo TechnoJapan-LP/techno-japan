@@ -1,0 +1,26 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T06:10:00+09:00",
+ "_note": "確度 medium は開いて確認してから登録。BIO 下書きは reports/artists-draft-2026-08-13.md 第8弾",
+ "_appearsAt": "（出演データなしのスタブ）",
+ "fields": {
+  "BANDCAMP": {
+   "value": "https://idjutboys.bandcamp.com/",
+   "source": "Web検索（本人アカウント直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T06:10:00+09:00"
+  },
+  "COUNTRY": {
+   "value": "UK",
+   "source": "複数ソース",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T06:10:00+09:00"
+  },
+  "facts": {
+   "value": "Dan Tyler と Conrad McDonnell によるダブ・ディスコの重鎮デュオ。1993年にU-Star Records を設立。『Cellar Door』(Smalltown Supersound, 2012)、『Versions』(2015)",
+   "source": "Bandcamp + 複数ソース",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T06:10:00+09:00"
+  }
+ }
+}

@@ -1,0 +1,38 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T06:10:00+09:00",
+ "_note": "確度 medium は開いて確認してから登録。BIO 下書きは reports/artists-draft-2026-08-13.md 第8弾",
+ "_appearsAt": "（出演データなしのスタブ）",
+ "fields": {
+  "BANDCAMP": {
+   "value": "https://ge-ology365.bandcamp.com/",
+   "source": "Web検索（本人アカウント直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T06:10:00+09:00"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/geology365/",
+   "source": "Web検索（公式プロフィール直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T06:10:00+09:00"
+  },
+  "CITY": {
+   "value": "BROOKLYN",
+   "source": "複数ソース",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T06:10:00+09:00"
+  },
+  "COUNTRY": {
+   "value": "USA",
+   "source": "複数ソース",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T06:10:00+09:00"
+  },
+  "facts": {
+   "value": "ブルックリンのプロデューサー/DJ/ビジュアルアーティスト。高校時代に若き 2Pac と同じヒップホップグループに在籍。Mos Def、Talib Kweli、Jill Scott らを手がけ、現在はハウスミュージックを軸に活動",
+   "source": "Bandcamp + 複数ソース",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T06:10:00+09:00"
+  }
+ }
+}

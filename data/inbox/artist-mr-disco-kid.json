@@ -1,0 +1,27 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T06:10:00+09:00",
+ "_note": "確度 medium は開いて確認してから登録。BIO 下書きは reports/artists-draft-2026-08-13.md 第8弾",
+ "_appearsAt": "synapse ほか（IG フォローから）",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/mr_disco_kid/",
+   "source": "プロフィールを開いて本人確認（Synapse/MATRICARIA 両公式がフォロー）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T06:10:00+09:00",
+   "note": "アーティスト区分。『I play music to touch your soul』。EU ツアー・LIQUID ROOM のハイライト"
+  },
+  "WEBSITE": {
+   "value": "https://linktr.ee/mr.discokid",
+   "source": "本人 Instagram bio のリンク",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T06:10:00+09:00"
+  },
+  "facts": {
+   "value": "My Own Little World を掲げるDJ。EU ツアーやデリー、LIQUID ROOM 等の出演歴をもつ",
+   "source": "本人 Instagram",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T06:10:00+09:00"
+  }
+ }
+}

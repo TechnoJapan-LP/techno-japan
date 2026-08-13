@@ -1,0 +1,21 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T06:10:00+09:00",
+ "_note": "確度 medium は開いて確認してから登録。BIO 下書きは reports/artists-draft-2026-08-13.md 第8弾",
+ "_appearsAt": "（出演データなしのスタブ）",
+ "fields": {
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/ouissamhk",
+   "source": "Web検索の要約（同名が複数おり要確認）",
+   "confidence": "medium",
+   "checkedAt": "2026-08-13T06:10:00+09:00",
+   "note": "Savage のレジデントとされるアカウント。登録前に開いて本人確認"
+  },
+  "facts": {
+   "value": "（有力候補）ハノイのクラブ Savage に関わるDJ。同名アカウントが複数あるため確認してから登録する",
+   "source": "検索結果の要約",
+   "confidence": "medium",
+   "checkedAt": "2026-08-13T06:10:00+09:00"
+  }
+ }
+}

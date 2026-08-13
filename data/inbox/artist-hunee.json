@@ -1,0 +1,33 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T06:10:00+09:00",
+ "_note": "確度 medium は開いて確認してから登録。BIO 下書きは reports/artists-draft-2026-08-13.md 第8弾",
+ "_appearsAt": "（出演データなしのスタブ）",
+ "fields": {
+  "BANDCAMP": {
+   "value": "https://hunee.bandcamp.com/",
+   "source": "Web検索（本人アカウント直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T06:10:00+09:00"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/hunee",
+   "source": "Web検索（本人アカウント直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T06:10:00+09:00"
+  },
+  "COUNTRY": {
+   "value": "GERMANY",
+   "source": "複数ソース（ベルリン拠点）",
+   "confidence": "medium",
+   "checkedAt": "2026-08-13T06:10:00+09:00",
+   "note": "近年はアムステルダム拠点との記述もある。断定を避ける"
+  },
+  "facts": {
+   "value": "本名 Hun Choi。2009年から Rush Hour、Future Times 等にリリース。アルバム『Hunch Music』(Rush Hour, 2015)。ソウルフルで遊び心のあるハウス",
+   "source": "Rush Hour + Juno",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T06:10:00+09:00"
+  }
+ }
+}

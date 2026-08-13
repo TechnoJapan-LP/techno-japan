@@ -791,3 +791,55 @@ RA やレーベルサイトの写真は**撮影者に著作権があり、勝手
 
 残りのスタブ13人には **Antal / Hunee / GE-OLOGY / Idjut Boys /
 Space Drum Meditation** など著名どころが含まれる（検索で確定可能）。
+
+---
+
+# 第8弾 — スタブの著名勢 + IG 発見組（計8人）
+
+## 55. Antal — スタブ
+- SC: https://soundcloud.com/antalrushhour（高）/ CITY: AMSTERDAM / COUNTRY: NETHERLANDS
+- **BIO案**: アムステルダムのレコード店/レーベル Rush Hour の共同創設者。ジャンルの壁を持たないセレクションで、20年以上にわたり世界のダンスフロアの教師であり続けている。
+- **bio_en案**: Co-founder of Amsterdam's Rush Hour, a selector without genre walls who has taught dancefloors worldwide for over two decades.
+
+## 56. Hunee — スタブ
+- BANDCAMP: https://hunee.bandcamp.com/（高）/ SC: https://soundcloud.com/hunee（高）
+- **BIO案**: 本名 Hun Choi。Rush Hour や Future Times からのリリースで知られ、アルバム『Hunch Music』（2015）はソウルと遊び心が同居するハウスの快作。Antal との B2B でも世界を回る。
+- **bio_en案**: Hun Choi, known for releases on Rush Hour and Future Times including "Hunch Music" (2015) — soulful, playful house — touring the world often B2B with Antal.
+
+## 57. GE-OLOGY — スタブ
+- BANDCAMP: https://ge-ology365.bandcamp.com/（高）/ INSTAGRAM: https://www.instagram.com/geology365/（高）/ CITY: BROOKLYN
+- **BIO案**: ブルックリンのプロデューサー/DJ/ビジュアルアーティスト。高校時代には若き 2Pac と同じグループに在籍し、Mos Def や Talib Kweli、Jill Scott の作品を手がけた。現在はハウスを軸に、緻密な手仕事で世界を教育し続ける。
+- **bio_en案**: A Brooklyn producer/DJ/visual artist who shared a high-school group with a young 2Pac and produced for Mos Def, Talib Kweli and Jill Scott — now crafting house music with the same fine hand.
+
+## 58. Idjut Boys — スタブ
+- BANDCAMP: https://idjutboys.bandcamp.com/（高）/ COUNTRY: UK
+- **BIO案**: Dan Tyler と Conrad McDonnell によるダブ・ディスコの重鎮デュオ。1993年に U-Star Records を設立し、『Cellar Door』（2012）『Versions』（2015）などエフェクトの海を漂うグルーヴを作り続ける。
+- **bio_en案**: The dub-disco duo of Dan Tyler and Conrad McDonnell, founders of U-Star Records (1993), crafting grooves adrift in effects across "Cellar Door" (2012) and "Versions" (2015).
+
+## 59. Space Drum Meditation — スタブ
+- BANDCAMP: https://spacedrummeditation.bandcamp.com/（高）/ SC: https://soundcloud.com/spacedrummeditation（高）/ CITY: HAMBURG
+- **BIO案**: ハンブルク拠点のプロジェクト。トライバルなパーカッションにサイケデリックな質感を重ね、SDM シリーズやアルバム『Four Tusks』（2024）で、儀式のようなテクノを鳴らす。
+- **bio_en案**: A Hamburg project layering tribal percussion with psychedelic texture — ritual-like techno across the SDM series and "Four Tusks" (2024).
+
+## 60. Mr.Disco Kid — IG 発見（Synapse/MATRICARIA がフォロー）
+- INSTAGRAM: https://www.instagram.com/mr_disco_kid/（高・本人確認済み）/ WEBSITE: https://linktr.ee/mr.discokid（高）
+- **BIO案**: 「My Own Little World」を掲げる DJ。EU ツアーやデリー、LIQUID ROOM への出演歴を持ち、魂に触れる選曲を信条とする。
+- **bio_en案**: A DJ flying the "My Own Little World" flag, with an EU tour, Delhi and LIQUID ROOM behind him — playing music to touch your soul.
+
+## 61. DOLTZ（doltz）— IG 発見（Odyssey/Synapse がフォロー）
+- INSTAGRAM: https://www.instagram.com/doltzdeep/（高・本人確認済み）/ WEBSITE: https://linktr.ee/doltz（高）
+- **BIO案**: サウンドアーティスト/DJ。Omega Point と Bitta（DJ Nobu 主宰）に関わり、ノルウェーの Monument や WOMB でのプレイ歴を持つ。シンセサイザーとドローイングも手がける。
+- **bio_en案**: A sound artist and DJ involved with Omega Point and Bitta, with sets at Norway's Monument and WOMB — also working in synthesis and drawing.
+
+## 62. Ouissam — 保留寄り（要確認）
+- SC 候補: https://soundcloud.com/ouissamhk（**中 — 同名複数のため開いて確認**）
+- ハノイの Savage に関わる DJ が有力候補。確認してから登録。
+
+---
+
+## 全体進捗（第8弾まで）
+
+| | 人数 |
+|---|---|
+| **調査完了（inbox 保存済み）** | **63人**（登録可 61 / 保留 KOHRA・Ouissam） |
+| 残り | **29人** = 国内勢22 + スタブ5（captain-k / sakuma / dungeoneering / sisi / tonbo※draft済み）+ suimin + rami/akie 再挑戦

@@ -1,0 +1,38 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-08-13T06:10:00+09:00",
+ "_note": "確度 medium は開いて確認してから登録。BIO 下書きは reports/artists-draft-2026-08-13.md 第8弾",
+ "_appearsAt": "（出演データなしのスタブ）",
+ "fields": {
+  "BANDCAMP": {
+   "value": "https://spacedrummeditation.bandcamp.com/",
+   "source": "Web検索（本人アカウント直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T06:10:00+09:00"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/spacedrummeditation",
+   "source": "Web検索（本人アカウント直リンク）",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T06:10:00+09:00"
+  },
+  "CITY": {
+   "value": "HAMBURG",
+   "source": "Bandcamp",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T06:10:00+09:00"
+  },
+  "COUNTRY": {
+   "value": "GERMANY",
+   "source": "Bandcamp",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T06:10:00+09:00"
+  },
+  "facts": {
+   "value": "ハンブルク拠点。トライバルなパーカッションとサイケデリックな質感を重ねるテクノプロジェクト。SDM シリーズと『Four Tusks』(2024)。MoDem Festival 出演",
+   "source": "Bandcamp + MoDem",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T06:10:00+09:00"
+  }
+ }
+}
