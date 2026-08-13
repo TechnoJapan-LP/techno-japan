@@ -1983,3 +1983,36 @@ FESTIVALS等の必須データのPublish自体は止めないようにした。
 
 ### 次の担当への注意・判断待ち
 - CMS 入力待ち **39人分**。Global Ark（8/21）組を最優先で。
+
+## 2026-08-13 / Claude / アーティスト調査・第6弾（計49人分・保留8件）
+
+### 実施
+- 国際勢+国内著名10人: upsammy / Paquita Gordon / Eric Cloutier / DJ Masda /
+  Guchon / AOKI takamasa / KOHRA(保留) / Suze Ijó / Jonathan Kusuma / DJ Hype。
+
+### コミット
+- `docs: アーティスト調査・第6弾（国際勢+国内著名10人・計49人分）`
+
+### 検証
+- 直リンクのみ「高」。DJ Masda / DJ Hype は公式アカウント特定できず
+  **リンクなし・経歴のみ**で下書き。
+- **KOHRA は同一人物か未確証のため「保留」**（インドの KOHRA が有力だが、
+  Transcendence 出演者との同定ができない。フェス公式告知で確認してから）。
+
+### 変更したパターン
+- なし（調査・下書きのみ）。
+
+### 未確認の類似パターン
+- **ID 規約ずれを発見: `suze-ij`**。スキーマ §1.1 では `suze-ijo`
+  （アクセント文字は基底文字に変換・文字を落とさない）のはず。
+  URL になっているため勝手に変えず**管理判断待ち**として報告。
+- 残り約30人は国内勢中心。MATRICARIA 組13人（rami / akie / adhemar /
+  allen-mock / caimann / dj-yazi / fuji / iron / ojisan / suguru-mochizuki /
+  yukimasa / pianeti-sintetici）、STAR FESTIVAL 残り（clipz / lady-shaka /
+  nasthug）、RDC 残り（feline / jonny-rock / nc4k）、春風・ETSUETSU 組
+  （yamarchy / calpiss / yellowuhuru / zundoko-disco / you-forgot）、
+  qmico / mimu / mayudepth / endorphin / kohei / kuo-from-sunset-rollercoaster。
+
+### 次の担当への注意・判断待ち
+- CMS 入力待ち **48人分**。⚡Global Ark（8/21）組を最優先。
+- `suze-ij` の ID 修正は URL 変更を伴うため要判断（§1.1 違反の報告）。
