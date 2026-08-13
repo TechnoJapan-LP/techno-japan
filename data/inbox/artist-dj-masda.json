@@ -15,6 +15,13 @@
    "source": "RA biography + WOMB + SEVEN Berlin",
    "confidence": "high",
    "checkedAt": "2026-08-13T04:50:00+09:00"
+  },
+  "facts_extra": {
+   "value": "Cabaret Recordings は Mr. Ho、Samuel Jabba、Nicola Cruz らのアーティストを擁する",
+   "source": "SEVEN Berlin レーベル紹介 + RA biography",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T07:20:00+09:00",
+   "note": "紹介文 v2 執筆時に、記録漏れだった事実を追記（本文の記述を出典まで辿れるようにするため）"
   }
  }
 }

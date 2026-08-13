@@ -27,6 +27,13 @@
    "source": "DJ Mag + Dekmantel + Soul in the Horn",
    "confidence": "high",
    "checkedAt": "2026-08-13T04:50:00+09:00"
+  },
+  "facts_extra": {
+   "value": "ニューヨークの The Loft に着想を得たロッテルダム近郊の共同スペース First Floor のメンバーだった。キュラソー、シカゴ、80年代のサウンドからの影響",
+   "source": "Soul in the Horn + DJ Mag",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T07:20:00+09:00",
+   "note": "紹介文 v2 執筆時に、記録漏れだった事実を追記（本文の記述を出典まで辿れるようにするため）"
   }
  }
 }

@@ -33,6 +33,13 @@
    "source": "Bandcamp + prinsthomas.com",
    "confidence": "high",
    "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "facts_extra": {
+   "value": "Full Pupp はノルウェーの才能に絞り、サブレーベル Internasjonal / Rett i Fletta / Horisontal Mambo がそれ以外を扱う",
+   "source": "Full Pupp Bandcamp のレーベル紹介",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T07:20:00+09:00",
+   "note": "紹介文 v2 執筆時に、記録漏れだった事実を追記（本文の記述を出典まで辿れるようにするため）"
   }
  }
 }

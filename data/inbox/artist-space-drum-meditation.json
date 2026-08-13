@@ -33,6 +33,13 @@
    "source": "Bandcamp + MoDem",
    "confidence": "high",
    "checkedAt": "2026-08-13T06:10:00+09:00"
+  },
+  "facts_extra": {
+   "value": "SDM シリーズは SDM001（2018年9月）から始まり、SDM007（2026年1月）まで continuing。アルバム『Four Tusks』は 2024年11月",
+   "source": "Bandcamp のディスコグラフィ一覧",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T07:20:00+09:00",
+   "note": "紹介文 v2 執筆時に、記録漏れだった事実を追記（本文の記述を出典まで辿れるようにするため）"
   }
  }
 }

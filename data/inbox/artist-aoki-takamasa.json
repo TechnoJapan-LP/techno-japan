@@ -22,6 +22,13 @@
    "source": "Wikipedia + raster",
    "confidence": "high",
    "checkedAt": "2026-08-13T04:50:00+09:00"
+  },
+  "facts_extra": {
+   "value": "リズムの変調を主題にした長期プロジェクト『Rhythm Variations』は 2009年の EP から始まる",
+   "source": "raster（Bandcamp）の作品紹介",
+   "confidence": "high",
+   "checkedAt": "2026-08-13T07:20:00+09:00",
+   "note": "紹介文 v2 執筆時に、記録漏れだった事実を追記（本文の記述を出典まで辿れるようにするため）"
   }
  }
 }
