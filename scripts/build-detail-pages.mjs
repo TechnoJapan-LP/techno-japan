@@ -64,7 +64,7 @@ const DETAIL_CSS_VERSION = 8;
 
    article-fx.js / article-fx.css を変更したら、ここを上げる。 */
 const ARTICLE_FX_JS_VERSION = 5;
-const ARTICLE_FX_CSS_VERSION = 5;
+const ARTICLE_FX_CSS_VERSION = 6;
 
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
@@ -473,9 +473,9 @@ function fmtFestDate(d) {
    画像はロゴのマーク部分だけを切り出したもの（`TECHNO JAPAN` の文字は
    16pxでは必ず潰れ、その分マークが小さくなるので入れていない）。 */
 const FAVICON_TAGS = [
-  '<link rel="icon" href="/favicon.ico" sizes="32x32">',
-  '<link rel="icon" type="image/png" href="/images/favicon-192.png" sizes="192x192">',
-  '<link rel="apple-touch-icon" href="/apple-touch-icon.png">',
+  '<link rel="icon" href="/favicon.ico?v=2" sizes="32x32">',
+  '<link rel="icon" type="image/png" href="/images/favicon-192.png?v=2" sizes="192x192">',
+  '<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">',
 ].join('\n');
 
 const PERMISSIONS_POLICY = 'geolocation=(), microphone=(), camera=(), interest-cohort=()';
