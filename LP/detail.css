@@ -659,6 +659,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 
 @media (max-width: 900px) {
   .festival-design-v2 { padding: 96px 24px 80px; }
+  .festival-design-v2 .festival-program-section { padding-top: 28px; }
   .festival-detail-hero { grid-template-columns: 1fr; gap: 32px; }
   .festival-design-v2 .detail-name { font-size: 42px; }
   .festival-design-v2 .detail-actions { flex-wrap: nowrap; gap: 8px; }
