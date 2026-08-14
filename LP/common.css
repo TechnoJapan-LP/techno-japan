@@ -640,6 +640,10 @@ footer {
 /* PCではスクロール中もナビゲーションを見失わないよう、背景を持たせる */
 @media (min-width: 901px) {
   nav {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
     background: rgba(8,8,8,0.82);
     border-bottom: 1px solid rgba(240,237,232,0.12);
     backdrop-filter: blur(12px);

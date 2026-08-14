@@ -69,7 +69,7 @@ const ARTICLE_FX_CSS_VERSION = 6;
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
 const COMMON_JS_VERSION = 4;   // 2026-08-14 ハブ(v4)と揃えた。AUDIT §9-88
-const COMMON_CSS_VERSION = 8;   // 2026-08-14 ヘッダーのロゴを画像化（nav .logo img）
+const COMMON_CSS_VERSION = 9;   // 2026-08-14 PCヘッダーの固定位置を強制
 const LANG_TOGGLE_VERSION = 1;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
 const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');
