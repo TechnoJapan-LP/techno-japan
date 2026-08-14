@@ -3099,3 +3099,31 @@ preflight: **全32件成功**。
 
 #### 次の担当への注意・判断待ち
 - TOP STORIESは現状維持で問題なし。記事数が5本以上になった時にMORE STORIESを再確認する。
+
+### 写真の初期表示明度とRELATED FESTIVALSホバー改善（2026-08-15）
+
+#### 実施
+- TOP、STORIES、FESTIVALS一覧の写真を、初期状態から見やすい明るさへ調整。
+- Festival詳細のメイン写真・関連記事写真も同じ基準へ調整。
+- Festival詳細のRELATED FESTIVALSに、ホバー時の拡大・明度/彩度変化・浮き上がり・アクセントカラー変化を追加。
+
+#### コミット
+- 本エントリとUI変更を同一コミットに含める予定。
+- 本番デプロイは未実施。
+
+#### 検証
+- Festival詳細 `/festivals/arch.html` をPCで確認し、RELATED FESTIVALSのホバー演出を確認済み。
+- 同ページをモバイル幅で確認し、1列表示・画像・リンク・横スクロールなしを確認済み。
+- `python3 scripts/check_regressions.py` 成功。
+- `python3 scripts/check_internal_links.py` 成功。
+
+#### 変更したパターン
+- TOPのSTORIES/FESTIVAL写真、STORIES一覧・記事写真、FESTIVALS一覧写真。
+- Festival詳細のメイン写真、RELATED FESTIVALS、記事詳細の関連Festival。
+
+#### 未確認の類似パターン
+- 本番デプロイ後のPC/モバイル表示は未確認。
+- `prefers-reduced-motion` 環境でのホバー表示は未確認。
+
+#### 次の担当への注意・判断待ち
+- 本番へ反映する場合は、詳細CSSのキャッシュ更新を考慮して公開前ブラウザ確認を行う。

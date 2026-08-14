@@ -139,10 +139,10 @@
 .featured-card-image[data-ratio="auto"] img { height: auto; position: static; }
 .featured-card-image img {
   width: 100%; height: 100%; object-fit: cover;
-  filter: grayscale(80%) brightness(0.6);
+  filter: grayscale(60%) brightness(0.84);
   transition: filter 0.6s ease, transform 0.6s ease;
 }
-.featured-card:hover .featured-card-image img { filter: grayscale(30%) brightness(0.7); transform: scale(1.02); }
+.featured-card:hover .featured-card-image img { filter: grayscale(20%) brightness(0.96); transform: scale(1.02); }
 .featured-card-image-placeholder {
   width: 100%; height: 100%;
   display: flex; align-items: center; justify-content: center;
@@ -294,19 +294,19 @@
 .fest-row-bg {
   position: absolute; inset: 0;
   background-size: cover; background-position: center;
-  filter: blur(18px) grayscale(70%) brightness(0.35);
+  filter: blur(18px) grayscale(55%) brightness(0.58);
   transform: scale(1.1);
   transition: filter 0.6s ease, transform 0.6s ease;
   z-index: 0;
 }
 .fest-row-overlay {
   position: absolute; inset: 0;
-  background: linear-gradient(90deg, rgba(8,8,8,0.85) 0%, rgba(8,8,8,0.55) 50%, rgba(8,8,8,0.25) 100%);
+  background: linear-gradient(90deg, rgba(8,8,8,0.62) 0%, rgba(8,8,8,0.34) 50%, rgba(8,8,8,0.12) 100%);
   z-index: 1;
   transition: opacity 0.5s ease;
 }
-.fest-row:hover .fest-row-bg { filter: blur(2px) grayscale(10%) brightness(0.6); transform: scale(1.04); }
-.fest-row:hover .fest-row-overlay { opacity: 0.6; }
+.fest-row:hover .fest-row-bg { filter: blur(2px) grayscale(10%) brightness(0.72); transform: scale(1.04); }
+.fest-row:hover .fest-row-overlay { opacity: 0.72; }
 
 .fest-row-inner {
   position: relative; z-index: 2;
