@@ -2517,3 +2517,79 @@ preflight: **全31件成功**（30→31件）。
 - CMS 入力の積み残し: アーティスト54名（紹介文v2 + リンク）
 - ユーザー判断待ちのデータ課題: EDITIONS の `STATUS=published` 36行 /
   TICKETURL 未入力 20/104 / ID規約違反 `suze-ij`（正しくは `suze-ijo`）
+
+---
+
+## 2026-08-14 フッターのロゴ画像化 ＋ SNS シェア画像を専用画像へ
+
+### 実施
+**① SNS シェア画像（AUDIT §9-86）**
+- `LP/images/og-default.png`（1200×630・利用者提供）を新規設置
+- `build-detail-pages.mjs` の `DEFAULT_OG` を差し替え（詳細ページ266枚）
+- ハブ15枚は HTML べた書きのため直接置換（og:image + twitter:image 計30件）
+- **RDC 自身のページ2枚は変更せず**（本来の画像として正しい）
+- `ORG_LOGO` に `?v=2` を付与
+- `scripts/check_og_image.mjs` を新規追加。preflight に組み込み
+
+**② フッターのロゴ（AUDIT §9-87）**
+- `<div class="footer-logo">TECHNO JAPAN</div>` を画像に差し替え
+  （**451ページ + 生成側1 = 452件**）
+- ヘッダーと違い `loading="lazy"` を付与（画面下のため）
+- `LP/common.css` に `.footer-logo img { height:13px; width:auto }`
+- `check_header_logo.mjs` をフッターにも拡張
+- `COMMON_CSS_VERSION` 7 → 8（452枚すべて v8）
+
+### 原因（SNS 画像）
+自前の写真を持たないページ283枚の既定 `og:image` が
+`images/festivals/rainbow-disco-club.webp` だった。
+**トップページを SNS で共有すると他社フェスの写真がカードに出ていた。**
+`og:image` はページを開いても表示されないため、**サイトを何度見ても
+気づけない**。仮置きの画像がそのまま既定として283ページに配られていた。
+
+### コミット
+（本エントリと同一コミット）
+
+### 検証
+**実ブラウザ（headless Chrome）4ページ × 3画面幅 = 12経路**
+```
+トップ / アーティスト詳細 / 英語トップ / ABOUT × PC(1440)/タブレット(900)/スマホ(390)
+全12経路: ヘッダー 158x13 / フッター 158x13・画像読込成功・はみ出し無し
+フッターとリンク群の間隔: PC 133〜179px、900px 以下は縦積み（衝突なし）
+```
+フッターのみを描画したスクリーンショットで見た目も確認。
+
+ネガティブコントロール **6経路すべて検知**:
+```
+[フッター] 1ページだけ文字に戻す / loading=lazy を消す / CSS を消す  → ✅✅✅
+[SNS画像] 既定をフェス写真に戻す / og:image を消す / twitter:image だけ変える → ✅✅✅
+```
+
+preflight: **全32件成功**（31→32件）。
+
+### 変更したパターン
+- フッターのロゴ 451ページ（`<div class="footer-logo">`）
+- `og:image` / `twitter:image` の既定 281ページ（詳細266 + ハブ15）
+- `.footer-logo` / `.footer-logo img` の CSS
+- `common.css?v` 7 → 8（452枚）
+- preflight に「SNS シェア画像」を追加、「ヘッダーのロゴ」を
+  「ヘッダー・フッターのロゴ」に拡張（31→32件）
+
+### 未確認の類似パターン
+- **サイト内のロゴ表示箇所はヘッダー・フッターで全部**。両方とも画像化済み。
+  CMS のサイドバー `sidebar-logo` は管理画面なので対象外（文字のまま）
+- **og:image を持つ451ページすべてを検査済み・不整合0件**
+  （og と twitter の食い違い0 / 参照先の欠落0）
+- **`common.js` の版が v3/v4 でずれたまま**。`check_asset_versions.py` が
+  警告を出し続けている。common.css と同じ構造の問題。**未着手**
+- OGP の `og:image:width` / `og:image:height` の宣言有無は**未確認**
+  （無くても表示はされるが、初回表示が速くなる）
+
+### 次の担当への注意・判断待ち
+- ⚠️ **ロゴ原本はラスタ（PNG）のまま。** ヘッダー／フッター用 `logo-wordmark.png`
+  は原本 2726×224 からの縮小で作っており、これ以上大きくはできない。
+  SVG があれば差し替えたいが、**現状の用途では支障なし**
+- **`common.js` の版ずれ（v3/v4）が未解決。** 今回 common.css は統一したが、
+  common.js は手つかず。同じ直し方（生成側の定数と HTML を揃える）で直せる
+- CMS 入力の積み残し: アーティスト54名（紹介文v2 + リンク）
+- ユーザー判断待ちのデータ課題: EDITIONS の `STATUS=published` 36行 /
+  TICKETURL 未入力 20/104 / ID規約違反 `suze-ij`（正しくは `suze-ijo`）

@@ -69,7 +69,7 @@ const ARTICLE_FX_CSS_VERSION = 6;
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
 const COMMON_JS_VERSION = 3;
-const COMMON_CSS_VERSION = 7;   // 2026-08-14 ヘッダーのロゴを画像化（nav .logo img）
+const COMMON_CSS_VERSION = 8;   // 2026-08-14 ヘッダーのロゴを画像化（nav .logo img）
 const LANG_TOGGLE_VERSION = 1;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
 const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');
@@ -82,8 +82,15 @@ await import('./build-image-dimensions.mjs');
 // ブランドロゴ（Organization.logo 用）と OGP フォールバック画像は役割が違うので分ける。
 // ロゴは正方形のブランド識別子、OGP は SNS カード向けの横長ビジュアル。
 // ロゴを差し替えるときはこのパスのファイルを置き換えるだけでよい（URL は変えない）。
-const ORG_LOGO = `${BASE}/images/logo-512.png`;
-const DEFAULT_OG = `${BASE}/images/festivals/rainbow-disco-club.webp`;
+const ORG_LOGO = `${BASE}/images/logo-512.png?v=2`;
+/* 自前の写真を持たないページ（トップ・ABOUT・一覧など283枚）が SNS で
+   共有されたときのサムネイル。
+
+   ⚠️ 2026-08-14 まで **他社フェスの写真（Rainbow Disco Club）** が
+   全ページの既定になっていた。トップページを X や Instagram で共有すると、
+   TECHNO JAPAN と無関係の写真がカードに出ていた。
+   ロゴ入りの専用画像（1200x630）に差し替えた。AUDIT §9-86。 */
+const DEFAULT_OG = `${BASE}/images/og-default.png?v=1`;
 
 // ID 規約違反(DATA_SCHEMA §1.1)の是正に伴う旧ID→新ID。JA/EN 双方で使う。
 // 一度発行したIDは変更しない原則の例外で、一括登録時に ID 欄へ NAME を
@@ -526,7 +533,7 @@ function footerHtml(lang) {
   const submissionLabel = lang === 'en' ? 'Festival Submission' : 'FESTIVAL 掲載申請';
   return `<footer>
   <div class="footer-top">
-    <div class="footer-logo">TECHNO JAPAN</div>
+    <div class="footer-logo"><img src="/images/logo-wordmark.png?v=1" alt="TECHNO JAPAN" width="158" height="13" loading="lazy" decoding="async"></div>
     <div class="footer-links">
       <a href="${navLink(lang, 'index.html')}">TOP</a>
       <a href="${navLink(lang, 'news.html')}">NEWS</a>

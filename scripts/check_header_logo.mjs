@@ -44,35 +44,43 @@ const htmls = [...fs.readdirSync(LP, { recursive: true })]
   .filter((f) => typeof f === 'string' && f.endsWith('.html') && !f.startsWith('vendor'))
   .map((f) => path.join(LP, f));
 
-/* ヘッダー（nav 内）のロゴだけを見る。フッターの footer-logo は対象外。 */
-const LOGO_BOX = /<(a|div)[^>]*class="logo"[^>]*>([\s\S]*?)<\/\1>/;
+/* ヘッダー（class="logo"）とフッター（class="footer-logo"）の両方を見る。
+   2026-08-14 の第1弾ではヘッダーだけを画像化したため、この検査も
+   ヘッダーしか見ていなかった。第2弾でフッターも画像にしたので広げた。 */
+const BOXES = [
+  { label: 'ヘッダー', re: /<(a|div)[^>]*class="logo"[^>]*>([\s\S]*?)<\/\1>/ },
+  { label: 'フッター', re: /<div[^>]*class="footer-logo"[^>]*>([\s\S]*?)<\/div>/ },
+];
 
 const withImg = [];
-const textLeft = [];
-const noBox = [];
 let src = null;
 
-for (const f of htmls) {
-  const html = fs.readFileSync(f, 'utf8');
-  const m = html.match(LOGO_BOX);
-  const rel = path.relative(LP, f);
-  if (!m) { noBox.push(rel); continue; }
-  const inner = m[2];
-  const img = inner.match(/<img[^>]*>/);
-  if (!img) { textLeft.push(rel); continue; }
-  withImg.push([rel, img[0]]);
-  const s = img[0].match(/src="([^"]+)"/);
-  if (s && !src) src = s[1];
-}
-
 console.log('▸ 全ページに入っているか');
-if (textLeft.length) {
-  fail(`${textLeft.length}ページがまだ文字のまま: ${textLeft.slice(0, 5).join(', ')}`);
-} else {
-  pass(`${withImg.length}ページすべてがロゴ画像（文字のまま残ったページ 0件）`);
-}
-if (noBox.length && noBox.length > 5) {
-  console.log(`  （ヘッダーを持たないページ ${noBox.length}件は対象外）`);
+for (const box of BOXES) {
+  const found = [];
+  const textLeft = [];
+  let noBox = 0;
+  for (const f of htmls) {
+    const html = fs.readFileSync(f, 'utf8');
+    const m = html.match(box.re);
+    const rel = path.relative(LP, f);
+    if (!m) { noBox++; continue; }
+    const inner = m[m.length - 1];
+    const img = inner.match(/<img[^>]*>/);
+    if (!img) { textLeft.push(rel); continue; }
+    found.push([rel, img[0]]);
+    withImg.push([rel, img[0], box.label]);
+    const sm = img[0].match(/src="([^"]+)"/);
+    if (sm && !src) src = sm[1];
+  }
+  if (textLeft.length) {
+    fail(`${box.label}: ${textLeft.length}ページがまだ文字のまま: ${textLeft.slice(0, 5).join(', ')}`);
+  } else if (found.length === 0) {
+    fail(`${box.label}: ロゴが1ページも見つからない`);
+  } else {
+    pass(`${box.label}: ${found.length}ページすべてがロゴ画像（文字のまま残ったページ 0件）`);
+  }
+  if (noBox > 5) console.log(`  （${box.label}を持たないページ ${noBox}件は対象外）`);
 }
 
 console.log();
@@ -93,10 +101,23 @@ if (!src) {
   }
 }
 
-/* すべてのページで同じ src / width / height か（1枚だけ古い、を防ぐ） */
-const shapes = new Set(withImg.map(([, tag]) => tag.replace(/\s+/g, ' ')));
-if (shapes.size === 1) pass('452ページとも同じ <img>（食い違い 0件）');
-else fail(`<img> の書き方が ${shapes.size} 種類ある（1種類であるべき）`);
+/* 同じ場所のロゴは全ページで同一か（1枚だけ古い、を防ぐ）。
+   ヘッダーとフッターは別々に見る。フッターは画面下なので loading="lazy" が
+   付き、ヘッダーは最初に見えるので付かない。**この差は正しい。**
+   まとめて1種類だと判定すると、正しい違いを不具合として報告してしまう。 */
+for (const label of ['ヘッダー', 'フッター']) {
+  const tags = withImg.filter(([, , l]) => l === label).map(([, t]) => t.replace(/\s+/g, ' '));
+  const shapes = new Set(tags);
+  if (shapes.size === 1) pass(`${label}: ${tags.length}ページとも同じ <img>（食い違い 0件）`);
+  else fail(`${label}: <img> の書き方が ${shapes.size} 種類ある（1種類であるべき）`);
+}
+/* 画面下のフッターだけは遅延読み込みにしておく（初期表示を軽くする） */
+const footerTag = (withImg.find(([, , l]) => l === 'フッター') || [])[1] || '';
+if (/loading="lazy"/.test(footerTag)) pass('フッター: loading="lazy" が付いている');
+else fail('フッター: loading="lazy" が無い（画面下なのに先に読み込む）');
+const headerTag = (withImg.find(([, , l]) => l === 'ヘッダー') || [])[1] || '';
+if (!/loading="lazy"/.test(headerTag)) pass('ヘッダー: 即時読み込み（lazy 無し）');
+else fail('ヘッダー: loading="lazy" が付いている（最初に見える位置なので遅れて出る）');
 
 const sample = withImg[0]?.[1] || '';
 const w = Number((sample.match(/width="(\d+)"/) || [])[1]);
@@ -116,15 +137,18 @@ if (!w || !h) {
 console.log();
 console.log('▸ CSS');
 const css = fs.readFileSync(path.join(LP, 'common.css'), 'utf8');
-const rule = css.match(/nav \.logo img \{([^}]*)\}/);
-if (!rule) {
-  fail('common.css に nav .logo img の指定が無い（原寸で出て崩れる）');
-} else {
+for (const sel of ['nav \\.logo img', '\\.footer-logo img']) {
+  const label = sel.includes('footer') ? 'フッター' : 'ヘッダー';
+  const rule = css.match(new RegExp(sel + ' \\{([^}]*)\\}'));
+  if (!rule) {
+    fail(`common.css に ${sel.replace(/\\\\/g, '')} の指定が無い（原寸で出て崩れる）`);
+    continue;
+  }
   const body = rule[1];
-  if (/height:\s*\d+px/.test(body)) pass('高さが固定されている');
-  else fail('height が px で固定されていない');
-  if (/width:\s*auto/.test(body)) pass('幅は auto（縦横比が保たれる）');
-  else fail('width: auto が無い（画像が歪む）');
+  if (/height:\s*\d+px/.test(body)) pass(`${label}: 高さが固定されている`);
+  else fail(`${label}: height が px で固定されていない`);
+  if (/width:\s*auto/.test(body)) pass(`${label}: 幅は auto（縦横比が保たれる）`);
+  else fail(`${label}: width: auto が無い（画像が歪む）`);
 }
 
 console.log();

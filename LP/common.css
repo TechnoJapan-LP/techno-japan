@@ -457,6 +457,16 @@ footer {
   font-size: 11px;
   letter-spacing: 0.25em;
   text-transform: uppercase;
+  display: flex;
+  align-items: center;
+}
+/* フッターのロゴ画像。ヘッダー（nav .logo img）と同じ 13px で揃える。
+   PC ではフッターのリンク群と同じ行に並び、間隔は 162px あるので
+   158px 幅でも余裕がある。900px 以下では縦積みになり衝突しない。 */
+.footer-logo img {
+  display: block;
+  height: 13px;
+  width: auto;
 }
 .footer-links {
   display: flex;
