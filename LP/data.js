@@ -91,6 +91,15 @@ const ARTISTS = [
   {
     id: "tsutomu",
     name: "TSUTOMU",
+    city: "TOKYO",
+    country: "JAPAN",
+    genre: "TECHNO",
+    image: "images/artists/tsutomu.webp",
+    bio: "DJ であり、Sawagi Festival のプロデューサー。代々木公園で開かれる Spring Love 春風の実行委員も務めるなど、フェスの作り手としての顔も持つ。\n掛ける側と、開く側の両方に立ち続けている人である。",
+    bio_en: "A DJ and the producer of Sawagi Festival. He also sits on the organizing committee of Spring Love 春風, held in Yoyogi Park, giving him another face as a builder of festivals.\nHe is someone who has kept one foot on each side: the person putting the records on, and the person opening the doors.",
+    links: {
+      instagram: "https://www.instagram.com/tsutomu_tabata/",
+    }
   },
   {
     id: "qmico",
@@ -115,6 +124,16 @@ const ARTISTS = [
   {
     id: "choko",
     name: "CHOKO",
+    city: "KANAGAWA",
+    country: "JAPAN",
+    genre: "HOUSE/TECHNO",
+    image: "images/artists/choko.webp",
+    bio: "Digitalblock に所属する DJ / グラフィックデザイナー。94年よりHIPHOP DJとして活動を開始。\nその後、ハウス/ブレイクビーツ/ジャングル等のダンスミュージックに幅を広げていく。そしてその頃から行き始めた野外パーティに衝撃を受けレイヴカルチャーに傾倒、2001年より地元横浜をベースにアンダーグラウンド・サイケデリック／テクノパーティ[DIGITALBLOCK]をDJ Daijiroと共にスタートする。\nフロアの空気と共鳴しながら進んでいくプレイで、関東を中心に全国各地のコアなフロアを揺らし続けている。またグラフィックデザイナーとしての一面も持ち、様々なParty Flyerのデザインや、AFFKT率いるスペインの人気レーベル[SINCOPAT]のレーベルデザインも手がけている。",
+    bio_en: "A DJ and graphic designer affiliated with Digitalblock. He began his career in 1994 as a hip-hop DJ, later broadening his scope into house, breakbeats, jungle and other strains of dance music. Around the same time, the outdoor parties he started attending left a deep impression on him, drawing him fully into rave culture. In 2001, together with DJ Daijiro, he launched [DIGITALBLOCK] — an underground psychedelic/techno party based in his hometown of Yokohama.\n\nWith a style of play that moves in resonance with the mood of the floor, he continues to rock the country's most dedicated dancefloors, centred on the Kanto region. He is also active as a graphic designer, handling artwork for a wide range of party flyers as well as the label design for [SINCOPAT], the popular Spanish imprint headed by AFFKT.",
+    links: {
+      instagram: "https://www.instagram.com/choko25digitalblock/",
+      soundcloud: "https://soundcloud.com/choko25",
+    }
   },
   {
     id: "endorphin",
@@ -243,6 +262,18 @@ const ARTISTS = [
   {
     id: "ground",
     name: "Ground",
+    city: "OSAKA",
+    country: "JAPAN",
+    genre: "HOUSE",
+    image: "images/artists/ground.webp",
+    bio: "大阪を拠点とするDJ / プロデューサー。レーベル Chill Mountain Rec の General Producer。音楽スタイルの土台にあるのは、2005年から大阪の山間部でレギュラー開催されてきた野外パーティ「Chill Mountain」。その後、サウンドエンジニアのKabamix、デザイナーのMt.chillsとともにレーベル Chill Mountain Rec を立ち上げ、様々な才能を発掘しリリースを重ねてきた。ジャンルを超えたユニークなサウンドを追求し、ダンスフロアのための新しいクリエイションを生み出し続けている。\n\n活動の場はヨーロッパ、南米、北米、アジアへと広がり、これまでに29カ国以上のフェスティバル / イベントに出演。近年はタイのWonderfruit FestivalのPolygonステージに3年連続で出演している。2018年にはLAの ESP Institute からアルバム『SUNIZM』、カナダの Multi Culti からEP『Syuiro Seki (朱色の石)』をリリース。世界各地のプロデューサーとのコラボレーション作品も多く、ドキュメンタリーフィルム『倭文 (しずり) 旅するカジの木』への楽曲提供も手がける。2025年、ESP Institute よりアルバム『Yaoyorozoo』を発表。",
+    bio_en: "Osaka-based DJ and producer, and General Producer of the label Chill Mountain Rec.\nThe foundation of his sound is \"Chill Mountain,\" the open-air party held regularly in the mountains outside Osaka since 2005. He went on to found Chill Mountain Rec with sound engineer Kabamix and designer Mt.chills, digging out and releasing new talent. His music moves across genres, always aimed at creating something new for the dancefloor.\n\nHe has performed at festivals and events in more than 29 countries across Europe, South America, North America and Asia. In recent years he has played the Polygon stage at Wonderfruit Festival in Thailand for three consecutive years.In 2018 he released the album SUNIZM on ESP Institute in Los Angeles, followed by the EP Syuiro Seki on Canada's Multi Culti, alongside numerous collaborations with producers worldwide. He has also composed for the documentary film Shizuri: Tabi suru Kaji no Ki. In 2025 he released the album Yaoyorozoo on ESP Institute.",
+    links: {
+      instagram: "https://www.instagram.com/mtchill_ground/",
+      soundcloud: "https://soundcloud.com/dj-ground",
+      bandcamp: "https://chillmountain1.bandcamp.com/",
+      website: "https://linktr.ee/Ground_jp",
+    }
   },
   {
     id: "akie",
@@ -279,6 +310,18 @@ const ARTISTS = [
   {
     id: "sunga",
     name: "SUNGA",
+    city: "KANAGAWA",
+    country: "JAPAN",
+    genre: "HOUSE",
+    image: "images/artists/sunga.webp",
+    bio: "EEZEE、COREHEAD、BEACH WHISTLE、BLACKSHEEP といったパーティーやクルーに関わるDJ。\n都内を中心に全国さまざまな箱でプレイ。野外パーティでのDJプレイにも定評がある。\nレコード店やイベントとの結びつきも深く、現場の数を積み上げることで立ち位置をつくってきたタイプである。",
+    bio_en: "A DJ involved with parties and crews including EEZEE, COREHEAD, BEACH WHISTLE and BLACKSHEEP.\n\nPlaying mainly in Tokyo but also at venues across the country, with a solid reputation for his sets at open-air parties as well.\n\nHe also maintains close ties with record shops and events — the type who has carved out his position by stacking up sheer numbers of appearances on the floor.",
+    links: {
+      instagram: "https://www.instagram.com/sunga_eezee/",
+      soundcloud: "https://soundcloud.com/sunga",
+      bandcamp: "https://eeezeee.bandcamp.com/",
+      website: "https://linktr.ee/SUNGA_EEZEE",
+    }
   },
   {
     id: "dj-yazi",
@@ -334,8 +377,8 @@ const ARTISTS = [
     country: "UK",
     genre: "LIVE",
     image: "images/artists/alabaster-deplume.webp",
-    bio: "サックス奏者・詩人。シカゴのレーベル International Anthem から『GOLD』（2022）『Come With Fierce Grace』（2023）などを発表し、ジャズと語りの境界を漂う独自の表現で知られる。",
-    bio_en: "A saxophonist and poet releasing on Chicago's International Anthem, including \"GOLD\" (2022) and \"Come With Fierce Grace\" (2023), known for drifting between jazz and spoken word.",
+    bio: "サックス奏者であり、詩人。シカゴのレーベル International Anthem から作品を発表している。『GOLD』（2022）、『Salty Road Dogs Victory Anthem』（2023）、『Come With Fierce Grace』（2023）と、短い間隔で作品を重ねてきた。ジャズと語りの境界を漂う表現は、他の誰にも似ていない。",
+    bio_en: "A saxophonist and poet releasing on Chicago's International Anthem, with \"GOLD\" (2022), \"Salty Road Dogs Victory Anthem\" (2023) and \"Come With Fierce Grace\" (2023) arriving in close succession. His drift between jazz and spoken word sounds like no one else.",
     links: {
       instagram: "https://www.instagram.com/alabaster_deplume/",
       bandcamp: "https://alabasterdeplume.bandcamp.com/",
@@ -466,8 +509,8 @@ const ARTISTS = [
     country: "JAPAN",
     genre: "HOUSE",
     image: "images/artists/powder.webp",
-    bio: "長崎出身、2011年より東京を拠点とするDJ/プロデューサー Moko Shibata のソロ名義。2017年に CockTail d'Amore から EP『H』を発表して以降、Beats in Space、ESP Institute、The Trilogy Tapes などから作品を重ね、レフトフィールド・ハウスの旗手として国際的に活動する。",
-    bio_en: "The solo alias of Moko Shibata, a Nagasaki-born, Tokyo-based DJ and producer. Since her 2017 EP \"H\" on CockTail d'Amore she has released on Beats in Space, ESP Institute and The Trilogy Tapes, earning international recognition as a leading figure in left-field house.",
+    bio: "長崎出身、2011年から東京を拠点とするDJ/プロデューサー Moko Shibata のソロ名義。2017年に CockTail d'Amore から EP『H』を発表。以降 Beats in Space、ESP Institute、The Trilogy Tapes などから作品を重ねている。細部まで作り込まれたトラックは、豊かな旋律とフロアのリズムを同時に持つ。レフトフィールド・ハウスの旗手として、国際的に名前が通っている。",
+    bio_en: "The solo alias of Moko Shibata, born in Nagasaki and based in Tokyo since 2011. Her EP \"H\" arrived on CockTail d'Amore in 2017, followed by releases on Beats in Space, ESP Institute and The Trilogy Tapes. Her intensely detailed tracks hold rich melody and dancefloor rhythm at once, and her name now travels internationally as a leading figure in left-field house.",
     links: {
       soundcloud: "https://soundcloud.com/thinner_groove",
       bandcamp: "https://thinnergroove.bandcamp.com/",
@@ -485,6 +528,17 @@ const ARTISTS = [
   {
     id: "occa",
     name: "Occa",
+    city: "SAPPORO",
+    country: "JAPAN",
+    genre: "TECHNO",
+    image: "images/artists/occa.webp",
+    imagePosition: "center top",
+    bio: "北海道・札幌拠点。聖域とも称されるPrecious Hallで、自身のパーティ「ARCHIV」をホームとする。Womb「Telepath」、Mitsuki「Sect」などのオーガナイズも手がける。独自のサイケデリクスを探求するなかで吸収してきた多様な音楽観と精神性を、能動的なミキシングと緻密な構築力で形象化し、ダンスフロアに多次元的な構造を生み出す。空間や時間の感覚さえも分解し、体験者の知覚を拡張すること。それがプレイの目的に据えられている。アジア・ヨーロッパ諸国での定期的なブッキングを重ね、国内外の主要クラブ / フェスティバルに出演。近年はSpekki Webu、System Revival、Axces Recordingsと深く共鳴し、そのサイケデリックなネットワークは新たなフェイズに入っている。",
+    bio_en: "Based in Sapporo, Hokkaido. His home floor is \"ARCHIV\" at Precious Hall, the club long regarded as a sanctuary in Japan. He also organizes \"Telepath\" at Womb and \"Sect\" at Mitsuki.\n\nThrough his own pursuit of psychedelics, he has absorbed a wide range of musical and spiritual perspectives, giving them form through active mixing and meticulous construction to build multidimensional structures on the dancefloor. The aim is to dissolve the sense of space and even time, and to expand the perception of everyone in the room.\n\nHe holds regular bookings across Asia and Europe, and has played major clubs and festivals in Japan and abroad. In recent years his resonance with Spekki Webu, System Revival and Axces Recordings has pushed his psychedelic network into a new phase.",
+    links: {
+      instagram: "https://www.instagram.com/occa_occa_occa/",
+      soundcloud: "https://soundcloud.com/oooccaaa",
+    }
   },
   {
     id: "ge-ology",
@@ -497,6 +551,18 @@ const ARTISTS = [
   {
     id: "ysk",
     name: "YSK",
+    city: "FUKUOKA",
+    country: "JAPAN",
+    genre: "TECHNO",
+    image: "images/artists/ysk.webp",
+    imagePosition: "center",
+    bio: "北九州出身。日本各地のクラブから野外パーティまで出演を重ね、ベルリン Berghain の Säule、プラハの Ankali をはじめ、ヨーロッパ各国、オーストラリア、メキシコ、アジア全域へのツアーを行う。世界各国のレーベルからMixをリリース。\nsound space α 主宰。パーティとポッドキャストを運営する「Undulate」、新たに始動したレーベル「EXPLORE」と、その活動は多岐にわたる。2021年からはOCCAとともにSECTを始動している。\nDJスタイルはTechnoを基軸としながら、立体的なテクスチャーのサウンドを重ね、有機的にストーリーを組み立てていく。",
+    bio_en: "From Kitakyushu. He has played clubs and open-air parties across Japan, and toured Europe, Australia, Mexico and Asia, including Säule at Berghain in Berlin and Ankali in Prague. His mixes have been released by labels around the world.\nHe runs sound space α, the party and podcast series Undulate, and the recently launched label EXPLORE. Since 2021 he has also run SECT together with OCCA.\nHis DJing is built on techno, layering sound with a three-dimensional sense of texture and letting the story unfold organically.",
+    links: {
+      instagram: "https://www.instagram.com/ysk_alpha/",
+      soundcloud: "https://soundcloud.com/ysksaske",
+      website: "https://linktr.ee/ysk_explore",
+    }
   },
   {
     id: "mr-disco-kid",
@@ -2349,7 +2415,7 @@ const ARTICLES = [
     title_en: "On a hidden beach in Hokota, Ibaraki, a two-day beach party where you can dance the nights away.",
     excerpt: "かつて大洋村と呼ばれた茨城・鉾田の隠れたビーチに、28時間止まらないフロアが立ち上がる。夕日で始まり、砂浜で朝日を迎え、二度目の夕日で幕を閉じるビーチパーティLOA。海の家もない太平洋を前に波打ち際で音を鳴らす。",
     excerpt_en: "On a hidden beach in Hokota, Ibaraki—once known as Taiyo Village—a floor rises that never stops for 28 hours. LOA is a beach party that begins with a sunset, greets the morning sun on the sand, and closes with a second sunset. Facing the Pacific Ocean with no beach huts in sight, the sound rings out right at the water's edge.",
-    body: `<h2><span class="ql-font-bebas">茨城・鉾田の隠れたビーチで、2日間を通しで踊り明かすビーチパーティ。</span></h2><p>8月15日の14時に開場し、翌16日の18時まで、フロアは一度も止まらない。かつて「大洋村」と呼ばれた茨城・鉾田の海辺、nalu beachで、海に向かって踊り続けるビーチパーティ「LOA - LOST PARADISE -」が開かれる。</p><p><img src="https://lh3.googleusercontent.com/d/1iGtKrkgerRsQmV4lOvtBfkKqNV0O4xKl=w2000"></p><h3><span class="ql-font-condensed ql-size-huge">LOAとは</span></h3><p>LOAとは、ハワイ語で「永続的な」を意味する言葉。2026年のテーマは、波。同じ形で二度と訪れない波のように、姿も形も変えながら、寄せては返す。</p><p>ここには境界も、線引きもない。ジャンルも、人種も、性別も、すべてが海と音に溶けていく。</p><p>掲げられているのは「Sunset to Sunset」。初日の夕日でフロアが立ち上がり、砂浜で朝日を迎え、二度目の夕日で幕を下ろす。夜を越えて続くこの時間の構造こそが、LOAの体験の核だ。真夏の二日間が、人生の新しい一ページになる。</p><p><img src="https://lh3.googleusercontent.com/d/1jZ9jGEX3NrekaVtDqOVRikk0veMllOdR=w2000"></p><h2>VENU</h2><p><strong class="ql-font-bebas"><em>サーファーたちが守り続けてきた、大洋村の隠れたビーチ。</em></strong><strong class="ql-font-mono"><br>Nalu beach, </strong><span class="ql-font-mono">Hokota, Ibaraki</span></p><p>かつて「大洋村」と呼ばれた茨城県鉾田市の海辺。nalu beachは、古くから地元のサーファーたちに愛され、大切に守られてきた隠れたビーチだ。コロナ禍で長く閉ざされていたこの場所が、この夏、再びダンスフロアとして目を覚ます。</p><p>海の家はない。目の前に広がるのは、果てしなく続く砂浜と、雄大な太平洋だけ。</p><p>鉾田市は日本のレイライン上に位置するとも言われ、日本最古の神宮のひとつ、鹿島神宮にもほど近い。風と太陽、そして海に祝福された場所で、フロアが立ち上がる。</p><p><img src="https://lh3.googleusercontent.com/d/1aQU56W1VQUrMyqzvPoVW372m7EG6dTPd=w2000"></p><h2>MUSIC</h2><p><em class="ql-font-bebas">砂浜のフロアに、全国から音が集まる。</em></p><p>GIZMO、MAMAZU、SAEKI TAKUYA、TAAAHHH。LOAを共に創り上げてきた面々が、波打ち際のフロアに立つ。音を支えるのは、日本の野外シーンで信頼を集めるOtodashi Sound。</p><p>砂浜にはEarthist creator's communeによるランドアートが立ち上がり、Onchiのバブルアートが海風に舞う。音と光景が、ひとつの風景として重なり合っていく。</p><p><img src="https://lh3.googleusercontent.com/d/1giKYfVimSi9sx89hQCSB8Ihn31uTbTNv=w2000"></p><h2>INFORMATION</h2><p>前売券は2券種・計100枚が完売し、現在は最終前売となる¥10,000のチケットが20枚限定で販売されている。販売期間は8月12日まで。予定枚数に達し次第、販売は終了する。</p><p>当日券は¥13,000。お名前と枚数を記載のうえ、メールでの申し込みとなる。</p><p>✉️ <a href="mailto:loa.lostparadise@gmail.com" rel="noopener noreferrer" target="_blank">loa.lostparadise@gmail.com</a></p><p>同じ形の波は、二度と岸に届かない。<br> この夏の二日間も、一度きりだ。</p><p><span style="color: rgba(240, 237, 232, 0.85);">◯ Dates / 日程 2026.08.15 (Sat) 14:00 - 08.16 (Sun) 18:00</span><br><span style="color: rgba(240, 237, 232, 0.85);">◯ Venue / 会場 nalu beach, Hokota, Ibaraki</span><br><span style="color: rgba(240, 237, 232, 0.85);">◯ Genre / ジャンル Techno / House / Psychedelic</span><br><span style="color: rgba(240, 237, 232, 0.85);">🎫 Tickets / チケット → LivePocket（最終前売 8.12まで）</span></p><p><img src="https://lh3.googleusercontent.com/d/13dRTor9t8l6Z1CuMclLrOLbxJBwlGVk1=w2000"></p>`,
+    body: `<h2><span class="ql-font-mono">茨城・鉾田の隠れたビーチで、2日間を通しで踊り明かすビーチパーティ。</span></h2><p>8月15日の14時に開場し、翌16日の18時まで、フロアは一度も止まらない。かつて「大洋村」と呼ばれた茨城・鉾田の海辺、nalu beachで、海に向かって踊り続けるビーチパーティ「LOA - LOST PARADISE -」が開かれる。</p><p style="width: 62%; margin-left: 0px; margin-right: 0px;"><img src="https://lh3.googleusercontent.com/d/1iGtKrkgerRsQmV4lOvtBfkKqNV0O4xKl=w2000" class="" data-layout="compact" data-zoom="1" data-x="50" data-y="50" style="--crop-zoom: 1; --crop-x: 50%; --crop-y: 50%;"></p><h2><em class="ql-font-bebas ql-size-large">LOAとは</em></h2><p>LOAとは、ハワイ語で「永続的な」を意味する言葉。2026年のテーマは、波。同じ形で二度と訪れない波のように、姿も形も変えながら、寄せては返す。</p><p>ここには境界も、線引きもない。ジャンルも、人種も、性別も、すべてが海と音に溶けていく。</p><p>掲げられているのは「Sunset to Sunset」。初日の夕日でフロアが立ち上がり、砂浜で朝日を迎え、二度目の夕日で幕を下ろす。夜を越えて続くこの時間の構造こそが、LOAの体験の核だ。真夏の二日間が、人生の新しい一ページになる。</p><p style="width: 100%; margin-left: 0px; margin-right: 0px;"><img src="https://lh3.googleusercontent.com/d/1jZ9jGEX3NrekaVtDqOVRikk0veMllOdR=w2000" class="" data-layout="contained" data-crop="16:10" data-zoom="1" data-x="50" data-y="50" style="--crop-zoom: 1; --crop-x: 50%; --crop-y: 50%;"></p><h2><strong class="ql-font-bebas"><em>サーファーたちが守り続けてきた、大洋村の隠れたビーチ。</em></strong><strong class="ql-font-mono"><br></strong></h2><p>かつて「大洋村」と呼ばれた茨城県鉾田市の海辺。nalu beachは、古くから地元のサーファーたちに愛され、大切に守られてきた隠れたビーチだ。コロナ禍で長く閉ざされていたこの場所が、この夏、再びダンスフロアとして目を覚ます。</p><p>海の家はない。目の前に広がるのは、果てしなく続く砂浜と、雄大な太平洋だけ。</p><p>鉾田市は日本のレイライン上に位置するとも言われ、日本最古の神宮のひとつ、鹿島神宮にもほど近い。風と太陽、そして海に祝福された場所で、フロアが立ち上がる。</p><p style="width: 62%; margin-left: 0px; margin-right: 0px;"><img src="https://lh3.googleusercontent.com/d/1aQU56W1VQUrMyqzvPoVW372m7EG6dTPd=w2000" class="" data-layout="compact" data-zoom="1" data-x="50" data-y="50" style="--crop-zoom: 1; --crop-x: 50%; --crop-y: 50%;"></p><h2><em class="ql-font-bebas">砂浜のフロアに、全国から音が集まる。</em></h2><p>GIZMO、MAMAZU、SAEKI TAKUYA、TAAAHHH。LOAを共に創り上げてきた面々が、波打ち際のフロアに立つ。音を支えるのは、日本の野外シーンで信頼を集めるOtodashi Sound。</p><p>砂浜にはEarthist creator's communeによるランドアートが立ち上がり、Onchiのバブルアートが海風に舞う。音と光景が、ひとつの風景として重なり合っていく。</p><p style="width: 62%; margin-left: 0px; margin-right: 0px;"><img src="https://lh3.googleusercontent.com/d/1giKYfVimSi9sx89hQCSB8Ihn31uTbTNv=w2000" class="" data-layout="compact" data-zoom="1" data-x="50" data-y="50" style="--crop-zoom: 1; --crop-x: 50%; --crop-y: 50%;"></p><h2>INFORMATION</h2><p>前売券は2券種・計100枚が完売し、現在は最終前売となる¥10,000のチケットが20枚限定で販売されている。販売期間は8月12日まで。予定枚数に達し次第、販売は終了する。</p><p>当日券は¥13,000。お名前と枚数を記載のうえ、メールでの申し込みとなる。</p><p>✉️ <a href="mailto:loa.lostparadise@gmail.com" rel="noopener noreferrer" target="_blank">loa.lostparadise@gmail.com</a></p><p>同じ形の波は、二度と岸に届かない。<br> この夏の二日間も、一度きりだ。</p><p><span style="color: rgba(240, 237, 232, 0.85);">◯ Dates / 日程 2026.08.15 (Sat) 14:00 - 08.16 (Sun) 18:00</span><br><span style="color: rgba(240, 237, 232, 0.85);">◯ Venue / 会場 nalu beach, Hokota, Ibaraki</span><br><span style="color: rgba(240, 237, 232, 0.85);">◯ Genre / ジャンル Techno / House / Psychedelic</span><br><span style="color: rgba(240, 237, 232, 0.85);">🎫 Tickets / チケット → LivePocket（最終前売 8.12まで）</span></p><p style="width: 62%; margin-left: 0px; margin-right: 0px;"><img src="https://lh3.googleusercontent.com/d/13dRTor9t8l6Z1CuMclLrOLbxJBwlGVk1=w2000" class="tj-image-selected" data-layout="compact" data-zoom="1" data-x="50" data-y="50" style="--crop-zoom: 1; --crop-x: 50%; --crop-y: 50%;"></p>`,
     body_en: `<h2><span class="ql-font-bebas">A two-day beach party on a hidden stretch of shoreline in Hokota, Ibaraki, dancing straight through from start to finish.</span></h2><p>Doors open at 14:00 on August 15, and the floor doesn't stop once until 18:00 the following day, August 16. At nalu beach — on the coast of Hokota, Ibaraki, once known as "Taiyo Village" — comes "LOA - LOST PARADISE -," a beach party where you dance facing the sea.</p><p><img src="https://lh3.googleusercontent.com/d/1iGtKrkgerRsQmV4lOvtBfkKqNV0O4xKl=w2000"></p><h3><span class="ql-size-huge ql-font-condensed">What is LOA</span></h3><p>LOA is a Hawaiian word meaning "everlasting." The theme for 2026 is waves. Like a wave that never arrives in the same shape twice, it shifts its form as it rolls in and pulls back out.</p><p>There are no boundaries here, no dividing lines. Genre, race, gender — everything dissolves into the sea and the sound.</p><p>The banner reads "Sunset to Sunset." The floor rises with the first day's sunset, greets the sunrise on the sand, and comes down with the second sunset. This structure of time, carrying on straight through the night, is the very core of the LOA experience. Two midsummer days that become a new page in your life.</p><p><img src="https://lh3.googleusercontent.com/d/1jZ9jGEX3NrekaVtDqOVRikk0veMllOdR=w2000"></p><h2>VENU</h2><p><strong class="ql-font-bebas"><em>A hidden beach in Taiyo Village, watched over by surfers for generations.</em></strong><strong class="ql-font-mono"><br>Nalu beach, </strong><span class="ql-font-mono">Hokota, Ibaraki</span></p><p>The coastline of Hokota, Ibaraki, a place once called "Taiyo Village." nalu beach is a hidden beach long loved and carefully protected by local surfers. Closed off for years during the pandemic, this spot wakes up again this summer as a dance floor.</p><p>There are no beach houses. All that stretches out before you is endless sand and the vast Pacific.</p><p>Hokota is said to sit on one of Japan's ley lines, and it's close to Kashima Jingu, one of the oldest shrines in the country. The floor rises in a place blessed by wind, sun, and sea.</p><p><img src="https://lh3.googleusercontent.com/d/1aQU56W1VQUrMyqzvPoVW372m7EG6dTPd=w2000"></p><h2>MUSIC</h2><p><em class="ql-font-bebas">Sound gathers on a sand floor from across the country.</em></p><p>GIZMO, MAMAZU, SAEKI TAKUYA, TAAAHHH. The crew who have built LOA together take their place on a floor at the water's edge. Holding down the sound is Otodashi Sound, a trusted name in Japan's outdoor scene.</p><p>Land art by Earthist creator's commune rises from the sand, while Onchi's bubble art drifts on the sea breeze. Sound and scenery overlap into a single landscape.</p><p><img src="https://lh3.googleusercontent.com/d/1giKYfVimSi9sx89hQCSB8Ihn31uTbTNv=w2000"></p><h2>INFORMATION</h2><p>Two advance ticket tiers, 100 tickets in total, have already sold out. Currently on sale is the final advance ticket at ¥10,000, limited to 20 tickets. Sales run until August 12, and will close as soon as the allocation is gone.</p><p>Door tickets are ¥13,000. Apply by email with your name and the number of tickets.</p><p>✉️ <a href="mailto:loa.lostparadise@gmail.com" rel="noopener noreferrer" target="_blank">loa.lostparadise@gmail.com</a></p><p>No wave ever reaches the shore in the same shape twice.<br> These two summer days are a one-time thing too.</p><p><span style="color: rgba(240, 237, 232, 0.85);">◯ Dates / 日程 2026.08.15 (Sat) 14:00 - 08.16 (Sun) 18:00</span><br><span style="color: rgba(240, 237, 232, 0.85);">◯ Venue / 会場 nalu beach, Hokota, Ibaraki</span><br><span style="color: rgba(240, 237, 232, 0.85);">◯ Genre / ジャンル Techno / House / Psychedelic</span><br><span style="color: rgba(240, 237, 232, 0.85);">🎫 Tickets / チケット → LivePocket (final advance sale, until 8.12)</span></p><p><img src="https://lh3.googleusercontent.com/d/13dRTor9t8l6Z1CuMclLrOLbxJBwlGVk1=w2000"></p>`,
     category: "RAVE",
     date: "2026-08-09",
