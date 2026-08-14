@@ -633,7 +633,14 @@ footer {
 
 /* ===================== RESPONSIVE (shared chrome only) ===================== */
 @media (max-width: 900px) {
-  nav { padding: calc(20px + var(--safe-t)) calc(24px + var(--safe-r)) 20px calc(24px + var(--safe-l)); }
+  nav {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 100000 !important;
+    padding: calc(20px + var(--safe-t)) calc(24px + var(--safe-r)) 20px calc(24px + var(--safe-l));
+  }
   .footer-top { flex-direction: column; gap: 24px; text-align: center; }
 }
 
