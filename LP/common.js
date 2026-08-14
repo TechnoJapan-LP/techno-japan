@@ -90,7 +90,17 @@
   function initMobileNav() {
     const nav = document.querySelector('nav');
     if (!nav) return;
-    const update = () => nav.classList.toggle('nav-scrolled', window.scrollY > 24);
+    const update = () => {
+      const scrolled = window.scrollY > 24;
+      nav.classList.toggle('nav-scrolled', scrolled);
+      if (window.innerWidth <= 900) {
+        nav.style.backgroundColor = scrolled ? 'rgba(8,8,8,0.78)' : 'transparent';
+        nav.style.borderBottomColor = scrolled ? 'rgba(240,237,232,0.12)' : 'transparent';
+        nav.style.backdropFilter = scrolled ? 'blur(12px)' : 'none';
+        nav.style.webkitBackdropFilter = scrolled ? 'blur(12px)' : 'none';
+        nav.style.mixBlendMode = scrolled ? 'normal' : 'difference';
+      }
+    };
     update();
     window.addEventListener('scroll', update, { passive: true });
   }
