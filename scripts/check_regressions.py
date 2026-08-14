@@ -320,8 +320,14 @@ def measure():
                     refs.append(url)
         stripped = re.sub(r'\ssrcset="[^"]*"', " ", html)
         refs += re.findall(r'(?:src|content|")(?:https://techno-japan\.media)?(/images/[^"\']+)', stripped)
+        # ?v=2 のようなキャッシュ用の版番号を外してから実体を探す。
+        # 付けたまま探すと必ず「存在しない」になる
+        # （2026-08-14、ロゴ差し替えで favicon-192.png?v=2 を誤検出した）。
         for ref in refs:
-            if not (LP / ref.lstrip("/")).exists():
+            path = ref.split("?")[0].split("#")[0]
+            if not path:
+                continue
+            if not (LP / path.lstrip("/")).exists():
                 missing.add(ref)
     m["broken_image_refs"] = len(missing)
     m["_broken_image_list"] = sorted(missing)
