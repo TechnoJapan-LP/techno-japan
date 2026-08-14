@@ -220,7 +220,7 @@ const ARTISTS = [
     name: "Yamarchy",
   },
   {
-    id: "suze-ij",
+    id: "suze-ijo",
     name: "Suze Ijó",
   },
   {
