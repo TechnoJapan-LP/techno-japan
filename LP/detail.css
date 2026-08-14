@@ -662,6 +662,15 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   }
   .festival-design-v2 .detail-flyer-lineup.has-two-columns { grid-template-columns: 1fr; }
   .festival-design-v2 .detail-flyer-image { width: 100%; max-width: 520px; }
+  .festival-design-v2 .festival-related-stories-v2 .related-story-card {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .festival-design-v2 .festival-related-stories-v2 .related-story-thumb {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
   .festival-design-v2 .related-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 480px) {
