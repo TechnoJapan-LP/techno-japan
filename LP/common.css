@@ -105,6 +105,7 @@ nav {
   opacity: 0;
   animation: fadeIn 0.6s ease forwards;
   animation-delay: 0.3s;
+  transition: background-color 0.25s ease, border-color 0.25s ease, backdrop-filter 0.25s ease;
 }
 nav .logo {
   font-family: var(--font-mono);
@@ -640,6 +641,16 @@ footer {
     right: 0 !important;
     z-index: 100000 !important;
     padding: calc(20px + var(--safe-t)) calc(24px + var(--safe-r)) 20px calc(24px + var(--safe-l));
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    mix-blend-mode: difference;
+  }
+  nav.nav-scrolled {
+    background: rgba(8,8,8,0.78);
+    border-bottom-color: rgba(240,237,232,0.12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    mix-blend-mode: normal;
   }
   .footer-top { flex-direction: column; gap: 24px; text-align: center; }
 }

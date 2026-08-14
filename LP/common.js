@@ -86,11 +86,24 @@
   }
   window.tjInitScrollReveal = initScrollReveal;
 
+  /* ---------- MOBILE NAV STATE ---------- */
+  function initMobileNav() {
+    const nav = document.querySelector('nav');
+    if (!nav) return;
+    const update = () => nav.classList.toggle('nav-scrolled', window.scrollY > 24);
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+  }
+
   /* Auto-init on DOM ready (or immediately if already parsed). */
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initScrollReveal);
+    document.addEventListener('DOMContentLoaded', () => {
+      initScrollReveal();
+      initMobileNav();
+    });
   } else {
     initScrollReveal();
+    initMobileNav();
   }
 })();
 
