@@ -446,6 +446,11 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   display: grid; grid-template-columns: 1fr; gap: 48px; padding: 0; align-items: start;
 }
 .festival-design-v2 .detail-flyer-lineup.has-two-columns { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); }
+.festival-design-v2 .detail-flyer-lineup.flyer-only .detail-flyer-col {
+  width: min(520px, 100%);
+  justify-self: start;
+}
+.festival-design-v2 .detail-flyer-lineup.flyer-only .detail-flyer-image { width: 100%; }
 .festival-design-v2 .festival-program-section + .detail-section { padding-top: 28px; }
 .festival-design-v2 .detail-flyer-image {
   width: 88%; overflow: hidden; background: rgba(240,237,232,.03);

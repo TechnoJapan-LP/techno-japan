@@ -51,7 +51,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 10;
+const DETAIL_CSS_VERSION = 11;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -1186,7 +1186,7 @@ function festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, lang, 
         ${lineupGroups}
       </div>` : '';
   const flyerLineup = flyer || lineup
-    ? `<div class="detail-flyer-lineup${flyer && lineup && lineupCount > 3 ? ' has-two-columns' : ''}">${flyer}${lineup}</div>`
+    ? `<div class="detail-flyer-lineup${flyer && !lineup ? ' flyer-only' : ''}${flyer && lineup && lineupCount > 3 ? ' has-two-columns' : ''}">${flyer}${lineup}</div>`
     : '';
   const historyHtml = festivalEditionsTimelineHtml(editions, lang);
   const faqDetailsHtml = festivalFaqDetailsHtml(faqItems, lang);
