@@ -130,6 +130,20 @@ nav .logo img {
   height: 13px;
   width: auto;
 }
+/* 当たり判定を44pxへ広げる（見た目の位置は1pxも変えない）。
+
+   ⚠️ ロゴを文字から画像に替えたとき、当たり判定が画像の高さ13pxまで
+   縮んだ。文字時代は行の高さで16pxあった。推奨は44px。
+   2026-08-15 実測 158x13px（全12ページ共通）。
+
+   height を増やすとヘッダーの高さが変わるので、padding で広げて
+   同じ量の負の margin で相殺する。レイアウトは動かない。 */
+nav .logo, .footer-logo {
+  padding-top: 15px;
+  padding-bottom: 16px;
+  margin-top: -15px;
+  margin-bottom: -16px;
+}
 nav .nav-links {
   display: flex;
   gap: 32px;

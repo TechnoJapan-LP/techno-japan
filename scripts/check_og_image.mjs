@@ -123,6 +123,27 @@ if (!topUrl) {
 }
 
 console.log();
+console.log('▸ 単体ページの基本タグ');
+/* 2026-08-15 の監査で、地図ページだけ h1 が0個・canonical も hreflang も
+   無いことが分かった。他477枚には全て入っていた。1枚だけの例外は
+   目視の比較にも残らない。AUDIT §9-90。 */
+for (const [file, opts] of [
+  ['map.html', { h1: true, canonical: true, hreflang: true }],
+  ['about.html', { h1: true, canonical: true, hreflang: true }],
+  ['submit.html', { h1: true, canonical: true, hreflang: true }],
+]) {
+  const f = path.join(LP, file);
+  if (!fs.existsSync(f)) continue;
+  const html = fs.readFileSync(f, 'utf-8');
+  const problems = [];
+  if (opts.h1 && !/<h1[\s>]/.test(html)) problems.push('h1 が無い');
+  if (opts.canonical && !/rel="canonical"/.test(html)) problems.push('canonical が無い');
+  if (opts.hreflang && !/hreflang=/.test(html)) problems.push('hreflang が無い');
+  if (problems.length) fail(`${file}: ${problems.join(' / ')}`);
+  else pass(`${file}: h1 / canonical / hreflang がそろっている`);
+}
+
+console.log();
 if (failed) {
   console.log(`❌ ${failed}件の問題があります`);
   process.exit(1);

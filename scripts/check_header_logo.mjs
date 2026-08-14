@@ -135,6 +135,31 @@ if (!w || !h) {
 }
 
 console.log();
+console.log('▸ タップ領域');
+/* ロゴを画像にした際、当たり判定が画像の高さ(13px)まで縮んだ。
+   推奨は44px。padding で広げ、同じ量の負の margin で相殺してある
+   （見た目の位置は変わらない）。2026-08-15 実測で 158x13 → 158x44。
+   AUDIT §9-90。 */
+{
+  const cssAll = fs.readFileSync(path.join(LP, 'common.css'), 'utf-8');
+  const rule = cssAll.match(/nav \.logo, \.footer-logo \{([^}]*)\}/);
+  if (!rule) {
+    fail('common.css に nav .logo, .footer-logo のタップ領域指定が無い');
+  } else {
+    const b = rule[1];
+    const pt = Number((b.match(/padding-top:\s*(\d+)px/) || [])[1] || 0);
+    const pb = Number((b.match(/padding-bottom:\s*(\d+)px/) || [])[1] || 0);
+    const mt = Number((b.match(/margin-top:\s*-(\d+)px/) || [])[1] || 0);
+    const mb = Number((b.match(/margin-bottom:\s*-(\d+)px/) || [])[1] || 0);
+    const tap = (h || 0) + pt + pb;
+    if (tap >= 44) pass(`当たり判定 ${tap}px（画像${h}px + 余白${pt + pb}px）— 推奨44px以上`);
+    else fail(`当たり判定 ${tap}px は小さい（推奨44px）。指で押しにくい`);
+    if (pt === mt && pb === mb) pass('余白と同じだけ負の margin があり、見た目の位置は変わらない');
+    else fail(`padding(${pt}/${pb}) と margin(-${mt}/-${mb}) が非対称。ヘッダーの高さが動く`);
+  }
+}
+
+console.log();
 console.log('▸ CSS');
 const css = fs.readFileSync(path.join(LP, 'common.css'), 'utf8');
 for (const sel of ['nav \\.logo img', '\\.footer-logo img']) {

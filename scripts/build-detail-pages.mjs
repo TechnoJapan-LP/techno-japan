@@ -69,7 +69,7 @@ const ARTICLE_FX_CSS_VERSION = 8;
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
 const COMMON_JS_VERSION = 6;   // 2026-08-14 モバイルヘッダーの透明/半透明切替を直接適用
-const COMMON_CSS_VERSION = 12;   // 2026-08-14 モバイルヘッダーの透明/半透明切替
+const COMMON_CSS_VERSION = 13;   // 2026-08-14 モバイルヘッダーの透明/半透明切替
 const LANG_TOGGLE_VERSION = 1;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
 const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');
@@ -256,13 +256,38 @@ function cardImagePath(source) {
   const hit = cardEntry(source);
   return hit ? hit.src : String(source || '').trim().replace(/^\/+/, '');
 }
-/* 関連カードは実測 324px 幅で表示される。960px を全端末へ配らない。 */
-function cardSrcsetAttr(source) {
+/* 派生画像から srcset を組む。sizes は「その画像が実際に何px幅で出るか」。
+
+   ⚠️ sizes は実測で決めること。憶測で書くとブラウザが小さすぎる／
+   大きすぎる候補を選び、ボケるか無駄に重くなる。
+   下の3つの数値はすべて headless Chrome の実測（2026-08-15）。 */
+function srcsetAttr(source, sizes) {
   const hit = cardEntry(source);
   if (!hit || !hit.srcset || !hit.srcset.length) return '';
   const set = hit.srcset.map(([p, w]) => `/${p} ${w}w`).join(', ');
-  return ` srcset="${esc(set)}" sizes="(max-width: 700px) 100vw, 360px"`;
+  return ` srcset="${esc(set)}" sizes="${esc(sizes)}"`;
 }
+/* 関連カードは実測 324px 幅で表示される。960px を全端末へ配らない。 */
+const cardSrcsetAttr = (s) => srcsetAttr(s, '(max-width: 700px) 100vw, 360px');
+
+/* hero（詳細ページの一番大きい画像）。実測 モバイル480px / PC 696px。
+
+   ⚠️ 2026-08-15 まで hero だけ srcset が無く、原寸をそのまま配っていた。
+   関連カードには srcset が付いていたのに、**一番重い画像だけ**素通し。
+
+     フェス詳細  原画 1920px(407KB) → モバイル表示 480px
+     記事        原画 1920px        → モバイル表示 496px
+
+   LCP（最初に大きな絵が出るまでの時間）に直接効く。 */
+const heroSrcsetAttr = (s) => srcsetAttr(s, '(max-width: 700px) 100vw, 700px');
+
+/* 開催回のフライヤー。実測 モバイル488px / タブレット582px / PC 511px。
+
+   ⚠️ hero を直した直後の計測で、**フライヤーが 624KB で最大の重量**だと
+   分かった（フェス詳細のモバイル総量1,080KBのうち624KB）。
+   派生は50件すべて生成済みだったのに、出力側で使っていなかった。
+   「一番大きい画像」を直したら次に大きいものが顔を出す。 */
+const flyerSrcsetAttr = (s) => srcsetAttr(s, '(max-width: 700px) 100vw, 580px');
 
 /* 開催回ごとのフライヤーを優先して選ぶ。
 
@@ -674,7 +699,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
 
   const heroBlock = a.image
     ? `<header class="article-hero"${ratioAttr(a.heroRatio)}>
-        <img ${dimensionAttrs(a.image)} src="/${String(a.image).replace(/^\//, '')}" alt="${esc(L.title)}" fetchpriority="high" decoding="async">
+        <img ${dimensionAttrs(a.image)} src="/${String(a.image).replace(/^\//, '')}"${heroSrcsetAttr(a.image)} alt="${esc(L.title)}" fetchpriority="high" decoding="async">
         <div class="article-hero-overlay">
           <div class="article-chips"><span class="cat-pill">${esc(a.category || 'NEWS')}</span></div>
           <h1>${esc(L.title)}</h1>
@@ -1159,7 +1184,7 @@ function festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, lang, 
   const genres = (Array.isArray(f.genre) ? f.genre : []).map((genre) => `<span class="detail-tag">${esc(genre)}</span>`).join('');
   const heroImage = f.image || f.flyer;
   const heroHtml = heroImage ? `<div class="detail-hero-image">
-        <img ${dimensionAttrs(heroImage)} src="/${String(heroImage).replace(/^\//, '')}" alt="${esc(name)}"${imagePositionStyle(f)}>
+        <img ${dimensionAttrs(heroImage)} src="/${String(heroImage).replace(/^\//, '')}"${heroSrcsetAttr(heroImage)} alt="${esc(name)}"${imagePositionStyle(f)}>
       </div>` : '<div class="detail-hero-image detail-hero-gradient" aria-hidden="true"></div>';
   const official = f.url
     ? `<a class="detail-official festival-official-link" href="${esc(safeUrl(f.url))}" target="_blank" rel="noopener">OFFICIAL SITE</a>`
@@ -1179,7 +1204,7 @@ function festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, lang, 
   const flyerAlt = flyerPick.edition ? `${name} ${flyerPick.edition} Flyer` : `${name} Flyer`;
   const flyer = flyerPick.src ? `<div class="detail-flyer-col">
         <div class="detail-section-label">FLYER</div>
-        <div class="detail-flyer-image"><img ${dimensionAttrs(flyerPick.src)} src="/${String(flyerPick.src).replace(/^\//, '')}" alt="${esc(flyerAlt)}" loading="lazy"></div>
+        <div class="detail-flyer-image"><img ${dimensionAttrs(flyerPick.src)} src="/${String(flyerPick.src).replace(/^\//, '')}"${flyerSrcsetAttr(flyerPick.src)} alt="${esc(flyerAlt)}" loading="lazy"></div>
       </div>` : '';
   const lineup = lineupGroups ? `<div class="detail-lineup-col">
         <h2 class="detail-section-label">LINE UP</h2>
@@ -1279,6 +1304,11 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
         ? { performer: (lineupsByEdition.get(ed.EDITION_ID) || []).map((row) => lineupPerformerLd(row, artistsById, lang)).filter(Boolean) }
         : {}),
       ...(editionStatusLd(ed.STATUS) ? { eventStatus: editionStatusLd(ed.STATUS) } : {}),
+      /* 現地開催であることを明示する。Google / AI 検索が「配信のみ」と
+         誤解しないための項目で、無いと Event のリッチリザルトで警告になる。
+         このサイトが扱うのは屋外フェスとクラブ公演だけなので、
+         全件 Offline で事実として正しい。2026-08-15 追加（AUDIT §9-90）。 */
+      eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
       ...(ed.TICKETURL ? { offers: { '@type': 'Offer', url: ed.TICKETURL } } : {}),
     })) } : {}),
   };
@@ -1373,7 +1403,7 @@ function artistPage(a, artistsById, lang = 'ja') {
     ${place ? `<div class="detail-eyebrow">${esc(place)}</div>` : ''}
     <h1>${esc(name)}</h1>
     ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
-    ${a.image ? `<div class="detail-hero detail-hero-portrait"><img ${dimensionAttrs(a.image)} src="/${String(a.image).replace(/^\//, '')}" alt="${esc(name)}"${imagePositionStyle(a)}></div>` : ''}
+    ${a.image ? `<div class="detail-hero detail-hero-portrait"><img ${dimensionAttrs(a.image)} src="/${String(a.image).replace(/^\//, '')}"${heroSrcsetAttr(a.image)} alt="${esc(name)}"${imagePositionStyle(a)}></div>` : ''}
     ${bilingualBody(a.bio, a.bio_en, lang)}
     ${linkRow ? `<div class="detail-links">${linkRow}</div>` : ''}${appearancesHtml}
     <div class="article-footer"><a class="article-back" href="${hubHref}" data-artist-hub-back="${hubHref}" style="margin:0"><span class="arrow"></span> ALL ARTISTS</a></div>
@@ -1443,7 +1473,7 @@ function venuePage(v, lang = 'ja') {
     ${place ? `<div class="detail-eyebrow">${esc(place)}</div>` : ''}
     <h1>${esc(name)}</h1>
     ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
-    ${v.image ? `<div class="detail-hero"><img ${dimensionAttrs(v.image)} src="/${String(v.image).replace(/^\//, '')}" alt="${esc(name)}"${imagePositionStyle(v)}></div>` : ''}
+    ${v.image ? `<div class="detail-hero"><img ${dimensionAttrs(v.image)} src="/${String(v.image).replace(/^\//, '')}"${heroSrcsetAttr(v.image)} alt="${esc(name)}"${imagePositionStyle(v)}></div>` : ''}
     ${bilingualBody(v.desc, v.desc_en, lang)}
     <dl class="detail-facts">
       ${v.type ? `<div><dt>${lang === 'en' ? 'TYPE' : 'タイプ'}</dt><dd>${esc(v.type)}</dd></div>` : ''}

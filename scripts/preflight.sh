@@ -73,6 +73,7 @@ run "構造化データと AI 向けファイル"       node scripts/check_jsonl
 run "CMS の Image Position が届く"      node scripts/check_image_position.mjs
 run "ヘッダー・フッターのロゴ"      node scripts/check_header_logo.mjs
 run "SNS シェア画像"                    node scripts/check_og_image.mjs
+run "大きい画像の配信"                  node scripts/check_image_delivery.mjs
 run "画像の軽量版"                      python3 scripts/check_image_derivatives.py
 
 echo
