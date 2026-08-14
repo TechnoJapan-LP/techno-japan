@@ -2593,3 +2593,67 @@ preflight: **全32件成功**（31→32件）。
 - CMS 入力の積み残し: アーティスト54名（紹介文v2 + リンク）
 - ユーザー判断待ちのデータ課題: EDITIONS の `STATUS=published` 36行 /
   TICKETURL 未入力 20/104 / ID規約違反 `suze-ij`（正しくは `suze-ijo`）
+
+---
+
+## 2026-08-14 common.js の版統一 ／ ID規約違反の移行表 ／ SVG は不採用
+
+### 実施
+**① common.js の版ずれを統一（AUDIT §9-88）**
+- `COMMON_JS_VERSION` 3 → 4、生成済み HTML 436枚も v4 に。**452枚すべて v4**
+- `check_asset_versions.py` に「生成側の定数と HTML のずれ」を**失敗**として追加
+  （※既存の「混在」検査は警告のまま。detail.css の意図的分割 §9-35 を壊さないため）
+
+**② ID規約違反 `suze-ij` の移行表を追加**
+- `ARTIST_ID_FIXES` に `'suze-ij': 'suze-ijo'` を追加（`build-detail-pages.mjs`）
+- **シート未変更のため、現時点では何も起きない**。`redirectStubs` が
+  「旧IDが data.js から消え、新IDが登場してから」しかスタブを出さない設計のため、
+  先に入れておいて安全
+
+**③ 受領した SVG は不採用（AUDIT §9-89）**
+- `名称未設定のデザイン.svg` は中身が 799×417 の PNG 埋め込みで、ベクターではなかった
+- **アセットは差し替えていない**（品質が上がらず、描画が重くなるだけのため）
+
+### コミット
+（本エントリと同一コミット）
+
+### 検証
+```
+common.js の版: 直す前 v3=436 / v4=16  →  直した後 v4=452
+```
+ネガティブコントロール:
+```
+ハブ1枚だけ版を戻す（今回の事故の形）→ ✅ 検知
+定数だけ上げて HTML を放置          → ✅ 検知
+detail.css の意図的な混在           → 警告のみ・失敗にしない ✅
+```
+SVG の判定: `<image>` を除去して描画 → 白い画素 **0.00%**（絵が完全に消えた）
+
+preflight: **全32件成功**。
+
+### 変更したパターン
+- `common.js?v` 3/4 の混在 → 452枚すべて v4
+- `check_asset_versions.py` に定数ずれ検査を追加（定数を持つ5アセットが対象:
+  common.css / common.js / lang-toggle.js / article-fx.css / article-fx.js）
+- `ARTIST_ID_FIXES` に1件追加
+
+### 未確認の類似パターン
+- **定数を持つ5アセットは全て一致を確認済み・ずれ0件**
+- `detail.css` は定数を持たないため対象外（意図的な v3/v4 分割・§9-35）。**変更なし**
+- 画像アセット（favicon 等）の `?v` は今回の検査対象外。
+  生成側の定数を持たず HTML べた書きのため。**未確認だが現状は全て v=2 で一致**
+
+### 次の担当への注意・判断待ち
+- ⚠️ **`suze-ij` はシート側の変更待ち。利用者が手動で対応予定。**
+  変更が必要なのは2箇所:
+  1. `ARTISTS` シートの `ID`： `suze-ij` → `suze-ijo`
+  2. `LINEUPS` シートの `ARTIST_ID`：1行（`EDITION_ID=rainbow-disco-club-2026`,
+     `SET_TYPE=dj`, `SORT=18`）を `suze-ijo` に
+  この2つを直して **Publish Now → 次のビルド**で、
+  `/artists/suze-ij.html` から新URLへのリダイレクトが自動生成される
+- ⚠️ **EDITIONS の STATUS 36行も利用者が手動対応予定**
+  （`published` は規約外。正しくは announced / on-sale / soldout / finished / cancelled）
+- **ロゴのベクター版は引き続き無し。** 実使用は最大512pxなので支障なし。
+  Illustrator 等から真のアウトライン SVG が出せれば差し替え価値あり
+- CMS 入力の積み残し: アーティスト96名中、紹介文79・写真79・リンク79が未入力
+- チケットURL 未入力 86/106

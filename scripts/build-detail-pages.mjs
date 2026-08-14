@@ -68,7 +68,7 @@ const ARTICLE_FX_CSS_VERSION = 6;
 
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
-const COMMON_JS_VERSION = 3;
+const COMMON_JS_VERSION = 4;   // 2026-08-14 ハブ(v4)と揃えた。AUDIT §9-88
 const COMMON_CSS_VERSION = 8;   // 2026-08-14 ヘッダーのロゴを画像化（nav .logo img）
 const LANG_TOGGLE_VERSION = 1;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
@@ -103,6 +103,13 @@ const ARTIST_ID_FIXES = {
   'Kuo from Sunset Rollercoaster': 'kuo-from-sunset-rollercoaster',
   'Sylvan Esso': 'sylvan-esso',
   'The Master Musicians of Joujouka': 'the-master-musicians-of-joujouka',
+  // 表示名 "Suze Ijó" のアクセント付き ó が落ちて "ij" になっていた（2026-08-14）。
+  // 上の7件と違い %20 は出ていないが、名前と ID が対応しない点で同じ違反。
+  // ⚠️ シート側（ARTISTS.ID と LINEUPS.ARTIST_ID の rainbow-disco-club-2026 の1行）を
+  //    suze-ijo に直して Publish するまで、この行は何もしない。
+  //    redirectStubs が「旧IDが消えて新IDが出てから」しかスタブを出さないため、
+  //    先に入れておいても安全（順序を気にしなくてよい）。
+  'suze-ij': 'suze-ijo',
 };
 
 // 名称の転記誤りに伴う旧ID→新ID。

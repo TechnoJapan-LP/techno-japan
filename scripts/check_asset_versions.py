@@ -281,6 +281,53 @@ def main():
     else:
         print("  ✅ なし")
 
+    # ---- 生成側の定数と、HTML べた書きのずれ ----
+    #
+    # 上の「混在」は意図的な場合があるので警告どまりにしてある。
+    # だが **同じアセットの版が2箇所で管理されている** 場合は話が別で、
+    # ずれは必ず事故になる。片方を上げたつもりでもう片方に届かない。
+    #
+    # build-detail-pages.mjs が定数で持っているアセット
+    # （COMMON_CSS_VERSION 等）は、その定数が唯一の正解。
+    # ハブ等の HTML にべた書きされた同じアセットの版が食い違っていたら止める。
+    #
+    # 2026-08-14 に2回続けて踏んだ:
+    #   common.css  詳細436枚 v5 / ハブ16枚 v6  （§9-85 で発見・統一）
+    #   common.js   詳細436枚 v3 / ハブ16枚 v4  （§9-88 で統一）
+    # どちらも「HTML を直したが生成側の定数を忘れた」形。
+    # detail.css のような定数を持たないアセットは対象外なので、
+    # §9-35 の意図的な分割は壊さない。
+    print("\n=== 生成側の定数と HTML の版が一致しているか ===")
+    build_src = (ROOT / "scripts" / "build-detail-pages.mjs").read_text(encoding="utf-8")
+    CONST_ASSETS = {
+        "COMMON_CSS_VERSION": "common.css",
+        "COMMON_JS_VERSION": "common.js",
+        "LANG_TOGGLE_VERSION": "lang-toggle.js",
+        "ARTICLE_FX_CSS_VERSION": "article-fx.css",
+        "ARTICLE_FX_JS_VERSION": "article-fx.js",
+    }
+    drift = False
+    for const, asset in CONST_ASSETS.items():
+        m = re.search(rf"const {const}\s*=\s*(\d+)", build_src)
+        if not m:
+            continue
+        want = m.group(1)
+        found = sorted({v for v in refs.get(asset, {}).values() if v})
+        if not found:
+            continue
+        off = [v for v in found if v != want]
+        if off:
+            print(f"  ❌ {asset}: 生成側 {const}={want} なのに HTML は v={'/'.join(off)}")
+            failures.append(
+                f"{asset} の版が2箇所でずれている（{const}={want} / HTML v={'/'.join(off)}）。"
+                f"生成側の定数を唯一の正解として揃えること"
+            )
+            drift = True
+        else:
+            print(f"  ✅ {asset}: 生成側 {const}={want} と HTML が一致")
+    if not drift:
+        pass
+
     if warnings:
         print("\n警告:")
         for w in warnings:
