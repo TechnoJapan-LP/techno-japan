@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-08-13T14:59:21.158Z",
-  "count": 104,
+  "_generatedAt": "2026-08-14T05:41:00.195Z",
+  "count": 105,
   "items": [
     {
       "EDITION_ID": "99flags-2026",
@@ -16,7 +16,7 @@
       "LNG": "139.2081",
       "TICKETURL": "https://passmarket.yahoo.co.jp/event/show/detail/0253hhfb4g051.html#detail",
       "FLYER": "images/festivals/99flags-flyer.jpg",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "ala-2026",
@@ -32,7 +32,7 @@
       "LNG": "140.2818",
       "TICKETURL": "https://alanutmeg.zaiko.io/e/alaairfest26",
       "FLYER": "images/festivals/ala-flyer.jpg",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "annahme-2025",
@@ -40,7 +40,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-10-25",
       "DATE_END": "2025-10-26",
-      "PREF": "Kochi"
+      "PREF": "Kochi",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "arch-2026",
@@ -55,7 +56,7 @@
       "LAT": "36.464494",
       "LNG": "139.309112",
       "FLYER": "images/festivals/arch-flyer.jpg",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "asagiri-jam-2025",
@@ -63,7 +64,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-10-18",
       "DATE_END": "2025-10-19",
-      "PREF": "Shizuoka"
+      "PREF": "Shizuoka",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "axiom-2025",
@@ -71,7 +73,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-04-19",
       "DATE_END": "2025-04-20",
-      "PREF": "Yamanashi"
+      "PREF": "Yamanashi",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "balance-2025",
@@ -79,7 +82,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-05-16",
       "DATE_END": "2025-05-18",
-      "PREF": "Gunma"
+      "PREF": "Gunma",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "big-fun-2025",
@@ -118,7 +122,8 @@
       "DATE_END": "2025-06-08",
       "LOCATION": "Kiranah Garden Toyosu",
       "LOCATION_JA": "キラナガーデン豊洲",
-      "PREF": "Tokyo"
+      "PREF": "Tokyo",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "body-soul-2026",
@@ -130,7 +135,7 @@
       "LOCATION_JA": "キラナガーデン豊洲",
       "PREF": "Tokyo",
       "TICKETURL": "http://www.bodyandsoul-japan.com/",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "bondisco-2025",
@@ -138,7 +143,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-08-30",
       "DATE_END": "2025-08-31",
-      "PREF": "Kyoto"
+      "PREF": "Kyoto",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "bonna-pot-2024",
@@ -146,7 +152,8 @@
       "EDITION": "2024",
       "DATE_START": "2024-11-08",
       "DATE_END": "2024-11-10",
-      "PREF": "Shizuoka"
+      "PREF": "Shizuoka",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "brightness-2025",
@@ -154,7 +161,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-10-25",
       "DATE_END": "2025-10-26",
-      "PREF": "Kawasaki"
+      "PREF": "Kawasaki",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "capsule-2025",
@@ -162,7 +170,18 @@
       "EDITION": "2025",
       "DATE_START": "2025-10-25",
       "DATE_END": "2025-10-26",
-      "PREF": "Yamanashi"
+      "PREF": "Yamanashi",
+      "STATUS": "finished"
+    },
+    {
+      "EDITION_ID": "car-multimedia-2026",
+      "FESTIVAL_ID": "car-multimedia",
+      "EDITION": "2026",
+      "DATE_START": "2026-07-25",
+      "DATE_END": "2026-07-25",
+      "LOCATION": "Secret location",
+      "PREF": "Saitama",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "circle-2025",
@@ -170,7 +189,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-10-17",
       "DATE_END": "2025-10-19",
-      "PREF": "Nagano"
+      "PREF": "Nagano",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "circus-2025",
@@ -230,7 +250,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-10-04",
       "DATE_END": "2025-10-05",
-      "PREF": "Yamanashi"
+      "PREF": "Yamanashi",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "dom-2024",
@@ -238,7 +259,8 @@
       "EDITION": "2024",
       "DATE_START": "2024-10-27",
       "DATE_END": "2024-10-27",
-      "PREF": "Tokyo"
+      "PREF": "Tokyo",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "dots-2026",
@@ -246,7 +268,8 @@
       "EDITION": "2026",
       "DATE_START": "2026-06-19",
       "DATE_END": "2026-06-21",
-      "PREF": "Hokkaido"
+      "PREF": "Hokkaido",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "dream-festival-2025",
@@ -254,7 +277,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-10-18",
       "DATE_END": "2025-10-19",
-      "PREF": "Yamanashi"
+      "PREF": "Yamanashi",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "e-groove-2026",
@@ -266,7 +290,7 @@
       "LOCATION_JA": "日本庭園",
       "PREF": "Akita",
       "FLYER": "images/festivals/e-groove-flyer.webp",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "each-story-2025",
@@ -274,7 +298,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-10-04",
       "DATE_END": "2025-10-05",
-      "PREF": "Nagano"
+      "PREF": "Nagano",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "ensou-2026",
@@ -286,7 +311,7 @@
       "PREF": "Tochigi",
       "TICKETURL": "https://sonminentertainment.zaiko.io/e/ensoufest2026",
       "FLYER": "images/festivals/ensou-flyer.webp",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "etsuetsu-2026",
@@ -302,7 +327,7 @@
       "LNG": "138.266241",
       "TICKETURL": "https://etsuetsu2026.peatix.com/",
       "FLYER": "images/festivals/etsuetsu-flyer.webp",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "euphoria-2025",
@@ -310,7 +335,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-07-11",
       "DATE_END": "2025-07-12",
-      "PREF": "Tokyo"
+      "PREF": "Tokyo",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "festival-de-frue-2026",
@@ -322,7 +348,7 @@
       "PREF": "Shizuoka",
       "TICKETURL": "https://shop.frue.jp/",
       "FLYER": "images/festivals/festival-de-frue-flyer.jpg",
-      "STATUS": "published"
+      "STATUS": "announced"
     },
     {
       "EDITION_ID": "festival-fruezinho-2026",
@@ -337,7 +363,7 @@
       "LAT": "35.7049",
       "LNG": "139.4119",
       "TICKETURL": "https://shop.frue.jp/collections/festival-fruezinho-2026",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "festival40010-2025",
@@ -345,7 +371,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-09-26",
       "DATE_END": "2025-09-28",
-      "PREF": "Kochi"
+      "PREF": "Kochi",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "ffkt-2025",
@@ -382,7 +409,8 @@
       "EDITION": "2026",
       "DATE_START": "2026-07-24",
       "DATE_END": "2026-07-26",
-      "PREF": "Niigata"
+      "PREF": "Niigata",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "gampeki-2025",
@@ -390,7 +418,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-09-20",
       "DATE_END": "2025-09-21",
-      "PREF": "Yamagata"
+      "PREF": "Yamagata",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "global-ark-2025",
@@ -398,7 +427,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-08-29",
       "DATE_END": "2025-08-31",
-      "PREF": "Gunma"
+      "PREF": "Gunma",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "global-ark-2026",
@@ -414,7 +444,7 @@
       "LNG": "138.6534",
       "TICKETURL": "https://globalark.zaiko.io/en/e/global-ark-2026",
       "FLYER": "images/festivals/global-ark-flyer.webp",
-      "STATUS": "published"
+      "STATUS": "announced"
     },
     {
       "EDITION_ID": "grow-the-culture-open-air-2025",
@@ -422,7 +452,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-11-08",
       "DATE_END": "2025-11-09",
-      "PREF": "Tokyo"
+      "PREF": "Tokyo",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "grow-the-culture-open-air-2026",
@@ -433,7 +464,7 @@
       "LOCATION": "Ohba Camping Village",
       "PREF": "Tokyo",
       "ADDRESS": "3741 Okuno, Hinode-machi, Nishitama-gun, Tokyo",
-      "STATUS": "published"
+      "STATUS": "announced"
     },
     {
       "EDITION_ID": "hacha-mecha-2026",
@@ -449,7 +480,7 @@
       "LNG": "139.3331",
       "TICKETURL": "https://hacha-mecha-ticket.myshopify.com/",
       "FLYER": "images/festivals/hacha-mecha-flyer.webp",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "halola-camp-2026",
@@ -458,7 +489,7 @@
       "DATE_START": "2026-06-27",
       "DATE_END": "2026-06-28",
       "PREF": "Hokkaido",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "intergalactic-2025",
@@ -466,7 +497,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-05-31",
       "DATE_END": "2025-05-31",
-      "PREF": "Chiba"
+      "PREF": "Chiba",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "ishinoko-2025",
@@ -474,7 +506,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-10-11",
       "DATE_END": "2025-10-13",
-      "PREF": "Ishikawa"
+      "PREF": "Ishikawa",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "iyasaka-rave-festival-2025",
@@ -482,7 +515,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-11-14",
       "DATE_END": "2025-11-16",
-      "PREF": "Okinawa"
+      "PREF": "Okinawa",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "japonism-2026",
@@ -498,7 +532,7 @@
       "LNG": "140.1652",
       "TICKETURL": "https://peatix.com/event/4921776",
       "FLYER": "images/festivals/japonism-flyer.webp",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "kyoumei-gathering-2025",
@@ -506,7 +540,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-08-29",
       "DATE_END": "2025-08-31",
-      "PREF": "Hokkaido"
+      "PREF": "Hokkaido",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "lab-2025",
@@ -514,7 +549,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-03-15",
       "DATE_END": "2025-03-16",
-      "PREF": "Yamanashi"
+      "PREF": "Yamanashi",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "labyrinth-2026",
@@ -529,7 +565,7 @@
       "LAT": "36.8572",
       "LNG": "139.0655",
       "TICKETURL": "https://mindgames.zaiko.io/en/e/labyrinth2026",
-      "STATUS": "published"
+      "STATUS": "announced"
     },
     {
       "EDITION_ID": "letus-music-camp-2026",
@@ -545,7 +581,7 @@
       "LNG": "134.9818",
       "TICKETURL": "https://letus-music-camp.zaiko.io/e/letuscamp26",
       "FLYER": "images/festivals/letus-music-camp-flyer.jpg",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "link-open-air-2026",
@@ -561,7 +597,7 @@
       "LNG": "136.836322",
       "TICKETURL": "https://club-port.com/special/link-open-air-2026/ticket",
       "FLYER": "images/festivals/link-open-air-flyer.webp",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "loa-lost-paradise-2025",
@@ -569,7 +605,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-08-16",
       "DATE_END": "2025-08-17",
-      "PREF": "Ibaraki"
+      "PREF": "Ibaraki",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "loa-lost-paradise-2026",
@@ -583,7 +620,7 @@
       "LAT": "36.0827",
       "LNG": "140.596",
       "FLYER": "images/festivals/loa-lost-paradise-flyer.webp",
-      "STATUS": "published"
+      "STATUS": "announced"
     },
     {
       "EDITION_ID": "lost-find-2025",
@@ -591,7 +628,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-10-18",
       "DATE_END": "2025-10-19",
-      "PREF": "Shizuoka"
+      "PREF": "Shizuoka",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "matricaria-2026",
@@ -607,7 +645,7 @@
       "LNG": "138.7885",
       "TICKETURL": "https://matricaria.zaiko.io/e/matricaria26",
       "FLYER": "images/festivals/matricaria-flyer.jpg",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "midnight-cult-rave-2025",
@@ -615,7 +653,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-11-01",
       "DATE_END": "2025-11-02",
-      "PREF": "Yamanashi"
+      "PREF": "Yamanashi",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "mirrorball-village-2025",
@@ -623,7 +662,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-11-01",
       "DATE_END": "2025-11-03",
-      "PREF": "Nagasaki"
+      "PREF": "Nagasaki",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "moment-2026",
@@ -631,7 +671,8 @@
       "EDITION": "2026",
       "DATE_START": "2026-07-03",
       "DATE_END": "2026-07-05",
-      "PREF": "Nara"
+      "PREF": "Nara",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "mori-michi-ichiba-2026",
@@ -647,7 +688,7 @@
       "LNG": "137.2599",
       "TICKETURL": "https://morimichiichiba.jp/ticket/",
       "FLYER": "images/festivals/mori-michi-ichiba-flyer.jpg",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "music-2025",
@@ -655,7 +696,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-10-11",
       "DATE_END": "2025-10-12",
-      "PREF": "Tokyo"
+      "PREF": "Tokyo",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "music-camp-core-2025",
@@ -663,7 +705,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-10-03",
       "DATE_END": "2025-10-04",
-      "PREF": "Toyama"
+      "PREF": "Toyama",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "mutek-2025",
@@ -671,7 +714,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-11-20",
       "DATE_END": "2025-11-23",
-      "PREF": "Tokyo"
+      "PREF": "Tokyo",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "nu-festival-2026",
@@ -687,7 +731,7 @@
       "LNG": "139.7396",
       "TICKETURL": "https://nufestival.jp/tickets/",
       "FLYER": "images/festivals/nu-festival-flyer.webp",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "odyssey-2025",
@@ -701,7 +745,7 @@
       "ADDRESS": "宮崎県東臼杵郡美郷町北郷宇納間7527-17",
       "LAT": "32.5029",
       "LNG": "131.4283",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "odyssey-2026",
@@ -723,7 +767,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-09-13",
       "DATE_END": "2025-09-14",
-      "PREF": "Wakayama"
+      "PREF": "Wakayama",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "one-music-camp-2025",
@@ -731,7 +776,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-08-23",
       "DATE_END": "2025-08-24",
-      "PREF": "Hyogo"
+      "PREF": "Hyogo",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "one-park-festival-2026",
@@ -739,7 +785,8 @@
       "EDITION": "2026",
       "DATE_START": "2026-09-05",
       "DATE_END": "2026-09-06",
-      "PREF": "Fukui"
+      "PREF": "Fukui",
+      "STATUS": "announced"
     },
     {
       "EDITION_ID": "one-park-riverfes-2025",
@@ -747,7 +794,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-10-18",
       "DATE_END": "2025-10-19",
-      "PREF": "Gifu"
+      "PREF": "Gifu",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "orbit-2025",
@@ -755,7 +803,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-07-11",
       "DATE_END": "2025-07-12",
-      "PREF": "Fukui"
+      "PREF": "Fukui",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "osukinidouzo-2026",
@@ -770,7 +819,7 @@
       "LAT": "35.4741",
       "LNG": "139.3724",
       "FLYER": "images/festivals/osukinidouzo-flyer.jpg",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "otsukimi-2025",
@@ -784,7 +833,7 @@
       "ADDRESS": "新潟県糸魚川市小滝19336",
       "LAT": "36.9079",
       "LNG": "137.8872",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "otsukimi-2026",
@@ -805,7 +854,8 @@
       "FESTIVAL_ID": "parallel-world",
       "EDITION": "2024",
       "DATE_START": "2024-11-03",
-      "DATE_END": "2024-11-04"
+      "DATE_END": "2024-11-04",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "paramount-2026",
@@ -821,7 +871,7 @@
       "LNG": "138.9056",
       "TICKETURL": "https://l.instagram.com/",
       "FLYER": "images/festivals/paramount-flyer.jpg",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "pure-rave-2025",
@@ -829,7 +879,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-09-06",
       "DATE_END": "2025-09-08",
-      "PREF": "Kanto"
+      "PREF": "Kanto",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "rainbow-disco-club-2026",
@@ -844,7 +895,7 @@
       "LAT": "34.7896",
       "LNG": "139.0419",
       "FLYER": "images/festivals/rainbow-disco-club-flyer.jpg",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "rare-groove-2025",
@@ -852,7 +903,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-10-04",
       "DATE_END": "2025-10-05",
-      "PREF": "Yamanashi"
+      "PREF": "Yamanashi",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "re-birth-festival-2026",
@@ -880,7 +932,8 @@
       "ADDRESS": "福島県耶麻郡猪苗代町大字蚕養字沼尻山甲2864",
       "LAT": "37.602",
       "LNG": "140.1982",
-      "TICKETURL": "https://ruraljp.zaiko.io/e/rural2026"
+      "TICKETURL": "https://ruraljp.zaiko.io/e/rural2026",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "samsara-2026",
@@ -888,7 +941,8 @@
       "EDITION": "2026",
       "DATE_START": "2026-06-20",
       "DATE_END": "2026-06-21",
-      "PREF": "Nagano"
+      "PREF": "Nagano",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "sangenjaya-music-festival-2025",
@@ -896,7 +950,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-09-20",
       "DATE_END": "2025-09-21",
-      "PREF": "Tokyo"
+      "PREF": "Tokyo",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "sawagi-festival-2025",
@@ -904,7 +959,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-08-22",
       "DATE_END": "2025-08-24",
-      "PREF": "Yamanashi"
+      "PREF": "Yamanashi",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "signal-2025",
@@ -912,7 +968,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-06-14",
       "DATE_END": "2025-06-15",
-      "PREF": "Yamanashi"
+      "PREF": "Yamanashi",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "signal-2026",
@@ -923,7 +980,7 @@
       "LOCATION": "Secret location",
       "LOCATION_JA": "Secret location",
       "PREF": "Yamanashi",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "snow-machine-japan-2026",
@@ -937,7 +994,7 @@
       "LAT": "36.6982",
       "LNG": "137.8619",
       "FLYER": "images/festivals/snow-machine-japan-flyer.jpg",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "specialflower-festival-2025",
@@ -945,7 +1002,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-08-10",
       "DATE_END": "2025-08-11",
-      "PREF": "Ibaraki"
+      "PREF": "Ibaraki",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "spring-love-harukaze-2026",
@@ -960,7 +1018,7 @@
       "LAT": "35.6679403",
       "LNG": "139.6968179",
       "FLYER": "images/festivals/spring-love-flyer.webp",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "sub-tide-2026",
@@ -972,7 +1030,7 @@
       "PREF": "Nagano",
       "TICKETURL": "https://tiget.net/events/484557",
       "FLYER": "images/festivals/sub-tide-flyer.webp",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "takarajima-beach-cleaning-party-2025",
@@ -980,7 +1038,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-11-29",
       "DATE_END": "2025-11-30",
-      "PREF": "Okinawa"
+      "PREF": "Okinawa",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "technogaoka-2026",
@@ -995,7 +1054,7 @@
       "LAT": "34.7578",
       "LNG": "135.2974",
       "FLYER": "images/festivals/technogaoka-flyer.jpg",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "the-star-festival-2026",
@@ -1011,7 +1070,7 @@
       "LNG": "135.5398",
       "TICKETURL": "https://thestarfestival.zaiko.io/e/2026kyoto",
       "FLYER": "images/festivals/the-star-festival-flyer.jpg",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "topia-2025",
@@ -1019,7 +1078,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-11-15",
       "DATE_END": "2025-11-15",
-      "PREF": "Chiba"
+      "PREF": "Chiba",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "transcendence-2026",
@@ -1034,7 +1094,7 @@
       "LAT": "36.0594",
       "LNG": "138.5611",
       "FLYER": "images/festivals/transcendence-flyer.jpg",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "treks-2025",
@@ -1042,7 +1102,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-10-17",
       "DATE_END": "2025-10-19",
-      "PREF": "Kyoto"
+      "PREF": "Kyoto",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "ultra-japan-2026",
@@ -1051,7 +1112,7 @@
       "DATE_START": "2026-09-19",
       "DATE_END": "2026-09-20",
       "PREF": "Tokyo",
-      "STATUS": "published"
+      "STATUS": "announced"
     },
     {
       "EDITION_ID": "unknown-2024",
@@ -1059,7 +1120,8 @@
       "EDITION": "2024",
       "DATE_START": "2024-10-18",
       "DATE_END": "2024-10-20",
-      "PREF": "Shizuoka"
+      "PREF": "Shizuoka",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "waifu-2026",
@@ -1073,7 +1135,7 @@
       "ADDRESS": "千葉県山武郡芝山町岩山2013",
       "LAT": "35.7531",
       "LNG": "140.3878",
-      "STATUS": "published"
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "wonderfruit-kyoto-2026",
@@ -1083,7 +1145,7 @@
       "DATE_END": "2026-10-25",
       "LOCATION": "Kyoto (Ohara Sanso / ACG Villa Kyoto / Kurama Mountain / Ochill TeaRoom)",
       "PREF": "Kyoto",
-      "STATUS": "published"
+      "STATUS": "announced"
     },
     {
       "EDITION_ID": "wormhole-2024",
@@ -1091,7 +1153,8 @@
       "EDITION": "2024",
       "DATE_START": "2024-10-26",
       "DATE_END": "2024-10-27",
-      "PREF": "Mie"
+      "PREF": "Mie",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "yagura-2026",
@@ -1099,7 +1162,8 @@
       "EDITION": "2026",
       "DATE_START": "2026-10-10",
       "DATE_END": "2026-10-11",
-      "PREF": "Gifu"
+      "PREF": "Gifu",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "yamauto-2025",
@@ -1107,7 +1171,8 @@
       "EDITION": "2025",
       "DATE_START": "2025-08-09",
       "DATE_END": "2025-08-18",
-      "PREF": "Shiga"
+      "PREF": "Shiga",
+      "STATUS": "finished"
     },
     {
       "EDITION_ID": "synapse-festival-2025",

@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-08-13T14:59:21.158Z",
+  "_generatedAt": "2026-08-14T05:41:00.195Z",
   "count": 96,
   "items": [
     {
@@ -79,7 +79,16 @@
     },
     {
       "ID": "tsutomu",
-      "NAME": "TSUTOMU"
+      "NAME": "TSUTOMU",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO",
+      "IMAGE": "images/artists/tsutomu.jpg",
+      "BIO": "DJ であり、Sawagi Festival のプロデューサー。代々木公園で開かれる Spring Love 春風の実行委員も務めるなど、フェスの作り手としての顔も持つ。\n掛ける側と、開く側の両方に立ち続けている人である。",
+      "INSTAGRAM": "https://www.instagram.com/tsutomu_tabata/",
+      "STATUS": "published",
+      "metaDescription": "DJとして、そしてSawagi Festivalのプロデューサーとしてフェスを作り続けるTSUTOMU。代々木公園のSpring Love春風では実行委員も務める。掛ける側と開く側、その両方に立ち続ける稀有な存在の歩みとその視点に迫ります。",
+      "bio_en": "A DJ and the producer of Sawagi Festival. He also sits on the organizing committee of Spring Love 春風, held in Yoyogi Park, giving him another face as a builder of festivals.\nHe is someone who has kept one foot on each side: the person putting the records on, and the person opening the doors."
     },
     {
       "ID": "qmico",
@@ -103,7 +112,17 @@
     },
     {
       "ID": "choko",
-      "NAME": "CHOKO"
+      "NAME": "CHOKO",
+      "CITY": "KANAGAWA",
+      "COUNTRY": "JAPAN",
+      "GENRE": "HOUSE/TECHNO",
+      "IMAGE": "images/artists/choko.jpg",
+      "BIO": "Digitalblock に所属する DJ / グラフィックデザイナー。94年よりHIPHOP DJとして活動を開始。\nその後、ハウス/ブレイクビーツ/ジャングル等のダンスミュージックに幅を広げていく。そしてその頃から行き始めた野外パーティに衝撃を受けレイヴカルチャーに傾倒、2001年より地元横浜をベースにアンダーグラウンド・サイケデリック／テクノパーティ[DIGITALBLOCK]をDJ Daijiroと共にスタートする。\nフロアの空気と共鳴しながら進んでいくプレイで、関東を中心に全国各地のコアなフロアを揺らし続けている。またグラフィックデザイナーとしての一面も持ち、様々なParty Flyerのデザインや、AFFKT率いるスペインの人気レーベル[SINCOPAT]のレーベルデザインも手がけている。",
+      "INSTAGRAM": "https://www.instagram.com/choko25digitalblock/",
+      "SOUNDCLOUD": "https://soundcloud.com/choko25",
+      "STATUS": "published",
+      "metaDescription": "横浜を拠点に活動するDJ兼グラフィックデザイナーCHOKO。94年にHIPHOP DJとして始動し、レイヴカルチャーに傾倒。DJ DaijiroとともにサイケデリックテクノパーティDIGITALBLOCKを主宰し、全国のコアなフロアを揺らす存在。スペインの人気レーベルSINCOPATのデザインも手がける。",
+      "bio_en": "A DJ and graphic designer affiliated with Digitalblock. He began his career in 1994 as a hip-hop DJ, later broadening his scope into house, breakbeats, jungle and other strains of dance music. Around the same time, the outdoor parties he started attending left a deep impression on him, drawing him fully into rave culture. In 2001, together with DJ Daijiro, he launched [DIGITALBLOCK] — an underground psychedelic/techno party based in his hometown of Yokohama.\n\nWith a style of play that moves in resonance with the mood of the floor, he continues to rock the country's most dedicated dancefloors, centred on the Kanto region. He is also active as a graphic designer, handling artwork for a wide range of party flyers as well as the label design for [SINCOPAT], the popular Spanish imprint headed by AFFKT."
     },
     {
       "ID": "endorphin",
@@ -190,7 +209,7 @@
       "NAME": "Yamarchy"
     },
     {
-      "ID": "suze-ij",
+      "ID": "suze-ijo",
       "NAME": "Suze Ijó"
     },
     {
@@ -231,7 +250,19 @@
     },
     {
       "ID": "ground",
-      "NAME": "Ground"
+      "NAME": "Ground",
+      "CITY": "OSAKA",
+      "COUNTRY": "JAPAN",
+      "GENRE": "HOUSE",
+      "IMAGE": "images/artists/ground.webp",
+      "BIO": "大阪を拠点とするDJ / プロデューサー。レーベル Chill Mountain Rec の General Producer。音楽スタイルの土台にあるのは、2005年から大阪の山間部でレギュラー開催されてきた野外パーティ「Chill Mountain」。その後、サウンドエンジニアのKabamix、デザイナーのMt.chillsとともにレーベル Chill Mountain Rec を立ち上げ、様々な才能を発掘しリリースを重ねてきた。ジャンルを超えたユニークなサウンドを追求し、ダンスフロアのための新しいクリエイションを生み出し続けている。\n\n活動の場はヨーロッパ、南米、北米、アジアへと広がり、これまでに29カ国以上のフェスティバル / イベントに出演。近年はタイのWonderfruit FestivalのPolygonステージに3年連続で出演している。2018年にはLAの ESP Institute からアルバム『SUNIZM』、カナダの Multi Culti からEP『Syuiro Seki (朱色の石)』をリリース。世界各地のプロデューサーとのコラボレーション作品も多く、ドキュメンタリーフィルム『倭文 (しずり) 旅するカジの木』への楽曲提供も手がける。2025年、ESP Institute よりアルバム『Yaoyorozoo』を発表。",
+      "INSTAGRAM": "https://www.instagram.com/mtchill_ground/",
+      "SOUNDCLOUD": "https://soundcloud.com/dj-ground",
+      "BANDCAMP": "https://chillmountain1.bandcamp.com/",
+      "WEBSITE": "https://linktr.ee/Ground_jp",
+      "STATUS": "published",
+      "metaDescription": "大阪発のDJ / プロデューサーGround。野外パーティChill Mountainを土台にレーベルChill Mountain Recを主宰し、29カ国以上で公演。ESP InstituteやMulti Cultiからの作品、2025年の新作アルバムYaoyorozooまでその軌跡を紹介。",
+      "bio_en": "Osaka-based DJ and producer, and General Producer of the label Chill Mountain Rec.\nThe foundation of his sound is \"Chill Mountain,\" the open-air party held regularly in the mountains outside Osaka since 2005. He went on to found Chill Mountain Rec with sound engineer Kabamix and designer Mt.chills, digging out and releasing new talent. His music moves across genres, always aimed at creating something new for the dancefloor.\n\nHe has performed at festivals and events in more than 29 countries across Europe, South America, North America and Asia. In recent years he has played the Polygon stage at Wonderfruit Festival in Thailand for three consecutive years.In 2018 he released the album SUNIZM on ESP Institute in Los Angeles, followed by the EP Syuiro Seki on Canada's Multi Culti, alongside numerous collaborations with producers worldwide. He has also composed for the documentary film Shizuri: Tabi suru Kaji no Ki. In 2025 he released the album Yaoyorozoo on ESP Institute."
     },
     {
       "ID": "akie",
@@ -267,7 +298,19 @@
     },
     {
       "ID": "sunga",
-      "NAME": "SUNGA"
+      "NAME": "SUNGA",
+      "CITY": "KANAGAWA",
+      "COUNTRY": "JAPAN",
+      "GENRE": "HOUSE",
+      "IMAGE": "images/artists/sunga.jpg",
+      "BIO": "EEZEE、COREHEAD、BEACH WHISTLE、BLACKSHEEP といったパーティーやクルーに関わるDJ。\n都内を中心に全国さまざまな箱でプレイ。野外パーティでのDJプレイにも定評がある。\nレコード店やイベントとの結びつきも深く、現場の数を積み上げることで立ち位置をつくってきたタイプである。",
+      "INSTAGRAM": "https://www.instagram.com/sunga_eezee/",
+      "SOUNDCLOUD": "https://soundcloud.com/sunga",
+      "BANDCAMP": "https://eeezeee.bandcamp.com/",
+      "WEBSITE": "https://linktr.ee/SUNGA_EEZEE",
+      "STATUS": "published",
+      "metaDescription": "EEZEE、COREHEAD、BEACH WHISTLE、BLACKSHEEPに関わるDJ SUNGAのプロフィール。都内から全国の箱、野外パーティまで現場を積み上げてきたキャリアと、レコード店やイベントとの深い結びつきを紹介します。",
+      "bio_en": "A DJ involved with parties and crews including EEZEE, COREHEAD, BEACH WHISTLE and BLACKSHEEP.\n\nPlaying mainly in Tokyo but also at venues across the country, with a solid reputation for his sets at open-air parties as well.\n\nHe also maintains close ties with record shops and events — the type who has carved out his position by stacking up sheer numbers of appearances on the floor."
     },
     {
       "ID": "dj-yazi",
@@ -323,12 +366,12 @@
       "COUNTRY": "UK",
       "GENRE": "LIVE",
       "IMAGE": "images/artists/alabaster-deplume.jpg",
-      "BIO": "サックス奏者・詩人。シカゴのレーベル International Anthem から『GOLD』（2022）『Come With Fierce Grace』（2023）などを発表し、ジャズと語りの境界を漂う独自の表現で知られる。",
+      "BIO": "サックス奏者であり、詩人。シカゴのレーベル International Anthem から作品を発表している。『GOLD』（2022）、『Salty Road Dogs Victory Anthem』（2023）、『Come With Fierce Grace』（2023）と、短い間隔で作品を重ねてきた。ジャズと語りの境界を漂う表現は、他の誰にも似ていない。",
       "INSTAGRAM": "https://www.instagram.com/alabaster_deplume/",
       "BANDCAMP": "https://alabasterdeplume.bandcamp.com/",
       "STATUS": "published",
       "metaDescription": "サックス奏者であり詩人でもあるAlabaster DePlume。シカゴの名門International Anthemから発表したGOLDやCome With Fierce Graceで見せた、ジャズと語りの境界を漂う唯一無二の音世界とその魅力を紹介します。",
-      "bio_en": "A saxophonist and poet releasing on Chicago's International Anthem, including \"GOLD\" (2022) and \"Come With Fierce Grace\" (2023), known for drifting between jazz and spoken word."
+      "bio_en": "A saxophonist and poet releasing on Chicago's International Anthem, with \"GOLD\" (2022), \"Salty Road Dogs Victory Anthem\" (2023) and \"Come With Fierce Grace\" (2023) arriving in close succession. His drift between jazz and spoken word sounds like no one else."
     },
     {
       "ID": "juana-molina",
@@ -455,13 +498,13 @@
       "COUNTRY": "JAPAN",
       "GENRE": "HOUSE",
       "IMAGE": "images/artists/powder.jpg",
-      "BIO": "長崎出身、2011年より東京を拠点とするDJ/プロデューサー Moko Shibata のソロ名義。2017年に CockTail d'Amore から EP『H』を発表して以降、Beats in Space、ESP Institute、The Trilogy Tapes などから作品を重ね、レフトフィールド・ハウスの旗手として国際的に活動する。",
+      "BIO": "長崎出身、2011年から東京を拠点とするDJ/プロデューサー Moko Shibata のソロ名義。2017年に CockTail d'Amore から EP『H』を発表。以降 Beats in Space、ESP Institute、The Trilogy Tapes などから作品を重ねている。細部まで作り込まれたトラックは、豊かな旋律とフロアのリズムを同時に持つ。レフトフィールド・ハウスの旗手として、国際的に名前が通っている。",
       "SOUNDCLOUD": "https://soundcloud.com/thinner_groove",
       "BANDCAMP": "https://thinnergroove.bandcamp.com/",
       "WEBSITE": "https://powd.jp/",
       "STATUS": "published",
-      "metaDescription": "長崎出身・東京拠点のDJ/プロデューサーMoko Shibataによるソロ名義Powder。2017年のEP『H』以降、Beats in Space、ESP Institute、The Trilogy Tapesから作品を発表し、レフトフィールド・ハウスの旗手として世界で活躍する軌跡を紹介。",
-      "bio_en": "The solo alias of Moko Shibata, a Nagasaki-born, Tokyo-based DJ and producer. Since her 2017 EP \"H\" on CockTail d'Amore she has released on Beats in Space, ESP Institute and The Trilogy Tapes, earning international recognition as a leading figure in left-field house."
+      "metaDescription": "長崎出身、東京拠点のDJ/プロデューサーPowder（Moko Shibata）。2017年のEP『H』以降、Beats in SpaceやESP Institute、The Trilogy Tapesから作品を発表。旋律とフロアのリズムを両立させるレフトフィールド・ハウスの旗手を紹介。",
+      "bio_en": "The solo alias of Moko Shibata, born in Nagasaki and based in Tokyo since 2011. Her EP \"H\" arrived on CockTail d'Amore in 2017, followed by releases on Beats in Space, ESP Institute and The Trilogy Tapes. Her intensely detailed tracks hold rich melody and dancefloor rhythm at once, and her name now travels internationally as a leading figure in left-field house."
     },
     {
       "ID": "sherelle",
@@ -473,7 +516,18 @@
     },
     {
       "ID": "occa",
-      "NAME": "Occa"
+      "NAME": "Occa",
+      "CITY": "SAPPORO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO",
+      "IMAGE": "images/artists/occa.webp",
+      "BIO": "北海道・札幌拠点。聖域とも称されるPrecious Hallで、自身のパーティ「ARCHIV」をホームとする。Womb「Telepath」、Mitsuki「Sect」などのオーガナイズも手がける。独自のサイケデリクスを探求するなかで吸収してきた多様な音楽観と精神性を、能動的なミキシングと緻密な構築力で形象化し、ダンスフロアに多次元的な構造を生み出す。空間や時間の感覚さえも分解し、体験者の知覚を拡張すること。それがプレイの目的に据えられている。アジア・ヨーロッパ諸国での定期的なブッキングを重ね、国内外の主要クラブ / フェスティバルに出演。近年はSpekki Webu、System Revival、Axces Recordingsと深く共鳴し、そのサイケデリックなネットワークは新たなフェイズに入っている。",
+      "INSTAGRAM": "https://www.instagram.com/occa_occa_occa/",
+      "SOUNDCLOUD": "https://soundcloud.com/oooccaaa",
+      "STATUS": "published",
+      "metaDescription": "札幌Precious Hallを拠点にパーティARCHIVを主宰するDJ、Occa。独自のサイケデリクスを追求し、能動的なミキシングと緻密な構築で多次元的なフロアを生み出す。Spekki Webuらとも共鳴し海外ツアーを重ねる注目のアーティストを紹介。",
+      "bio_en": "Based in Sapporo, Hokkaido. His home floor is \"ARCHIV\" at Precious Hall, the club long regarded as a sanctuary in Japan. He also organizes \"Telepath\" at Womb and \"Sect\" at Mitsuki.\n\nThrough his own pursuit of psychedelics, he has absorbed a wide range of musical and spiritual perspectives, giving them form through active mixing and meticulous construction to build multidimensional structures on the dancefloor. The aim is to dissolve the sense of space and even time, and to expand the perception of everyone in the room.\n\nHe holds regular bookings across Asia and Europe, and has played major clubs and festivals in Japan and abroad. In recent years his resonance with Spekki Webu, System Revival and Axces Recordings has pushed his psychedelic network into a new phase.",
+      "imagePosition": "center top"
     },
     {
       "ID": "ge-ology",
@@ -485,7 +539,19 @@
     },
     {
       "ID": "ysk",
-      "NAME": "YSK"
+      "NAME": "YSK",
+      "CITY": "FUKUOKA",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO",
+      "IMAGE": "images/artists/ysk.webp",
+      "BIO": "北九州出身。日本各地のクラブから野外パーティまで出演を重ね、ベルリン Berghain の Säule、プラハの Ankali をはじめ、ヨーロッパ各国、オーストラリア、メキシコ、アジア全域へのツアーを行う。世界各国のレーベルからMixをリリース。\nsound space α 主宰。パーティとポッドキャストを運営する「Undulate」、新たに始動したレーベル「EXPLORE」と、その活動は多岐にわたる。2021年からはOCCAとともにSECTを始動している。\nDJスタイルはTechnoを基軸としながら、立体的なテクスチャーのサウンドを重ね、有機的にストーリーを組み立てていく。",
+      "INSTAGRAM": "https://www.instagram.com/ysk_alpha/",
+      "SOUNDCLOUD": "https://soundcloud.com/ysksaske",
+      "WEBSITE": "https://linktr.ee/ysk_explore",
+      "STATUS": "published",
+      "metaDescription": "北九州出身のDJ YSK。ベルリンBerghain Säuleやプラハ Ankaliなど欧州、豪州、メキシコ、アジアへツアーを重ね、sound space α主宰、Undulate、レーベルEXPLORE、SECTを展開。テクノを軸に立体的な音像で物語を紡ぐDJスタイルを紹介。",
+      "bio_en": "From Kitakyushu. He has played clubs and open-air parties across Japan, and toured Europe, Australia, Mexico and Asia, including Säule at Berghain in Berlin and Ankali in Prague. His mixes have been released by labels around the world.\nHe runs sound space α, the party and podcast series Undulate, and the recently launched label EXPLORE. Since 2021 he has also run SECT together with OCCA.\nHis DJing is built on techno, layering sound with a three-dimensional sense of texture and letting the story unfold organically.",
+      "imagePosition": "center"
     },
     {
       "ID": "mr-disco-kid",

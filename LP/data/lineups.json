@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-08-13T14:59:21.158Z",
-  "count": 621,
+  "_generatedAt": "2026-08-14T05:41:00.195Z",
+  "count": 630,
   "items": [
     {
       "EDITION_ID": "waifu-2026",
@@ -238,7 +238,7 @@
     },
     {
       "EDITION_ID": "rainbow-disco-club-2026",
-      "ARTIST_ID": "suze-ij",
+      "ARTIST_ID": "suze-ijo",
       "SET_TYPE": "dj",
       "SORT": "18"
     },
@@ -3085,6 +3085,60 @@
       "ACT_LABEL": "鏡民",
       "SET_TYPE": "dj",
       "SORT": "31"
+    },
+    {
+      "EDITION_ID": "car-multimedia-2026",
+      "ACT_LABEL": "Higurashi",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "car-multimedia-2026",
+      "ACT_LABEL": "hunos",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "car-multimedia-2026",
+      "ACT_LABEL": "TDK",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "car-multimedia-2026",
+      "ACT_LABEL": "EICHI ABE",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "car-multimedia-2026",
+      "ACT_LABEL": "manato",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "car-multimedia-2026",
+      "ACT_LABEL": "pgm",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "car-multimedia-2026",
+      "ACT_LABEL": "NOWBU",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "car-multimedia-2026",
+      "ACT_LABEL": "SPRINGLING",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "car-multimedia-2026",
+      "ACT_LABEL": "WAGON R",
+      "SET_TYPE": "dj",
+      "SORT": "9"
     },
     {
       "EDITION_ID": "hacha-mecha-2026",
