@@ -508,7 +508,7 @@ function renderVenuePreview(){
   ].join('');
   document.getElementById('preview-content').innerHTML=`
     <div class="pv-hero">
-      <div class="pv-hero-image" style="background:linear-gradient(135deg,#1a1a1a 0%,#2a2a2a 100%)">${imgSrc?`<img src="${esc(imgSrc)}" onerror="this.style.display='none'">`:''}</div>
+      <div class="pv-hero-image" style="background:linear-gradient(135deg,#1a1a1a 0%,#2a2a2a 100%);${pvHeroStyle('v')}">${imgSrc?`<img src="${esc(imgSrc)}" onerror="this.style.display='none'">`:''}</div>
       <div class="pv-hero-info">
         <div class="pv-date">${esc([city,area].filter(Boolean).join(' · '))}</div>
         <div class="pv-name">${esc(name)}</div>
@@ -545,7 +545,7 @@ function renderArtistPreview(){
   ].filter(Boolean).join('');
   document.getElementById('preview-content').innerHTML=`
     <div class="pv-hero">
-      <div class="pv-hero-image" style="background:linear-gradient(135deg,#1a1a1a 0%,#2a2a2a 100%);aspect-ratio:1/1">${imgSrc?`<img src="${esc(imgSrc)}" onerror="this.style.display='none'">`:''}</div>
+      <div class="pv-hero-image" style="background:linear-gradient(135deg,#1a1a1a 0%,#2a2a2a 100%);${pvHeroStyle('a')}">${imgSrc?`<img src="${esc(imgSrc)}" onerror="this.style.display='none'">`:''}</div>
       <div class="pv-hero-info">
         <div class="pv-date">${esc([city,country].filter(Boolean).join(' · '))}</div>
         <div class="pv-name">${esc(name)}</div>
@@ -618,7 +618,7 @@ function renderFestivalPreview(){
 
   document.getElementById('preview-content').innerHTML=`
     <div class="pv-hero">
-      <div class="pv-hero-image" style="background:${heroGrad}">${imgHtml}</div>
+      <div class="pv-hero-image" style="background:${heroGrad};${pvHeroStyle('f')}">${imgHtml}</div>
       <div class="pv-hero-info">
         <div class="pv-date">${esc(formatPreviewDate(dateStr))}</div>
         <div class="pv-name">${esc(name)}</div>
@@ -1804,6 +1804,23 @@ function syncImagePos(prefix){
     prev.style.display = 'none';
   }
 }
+/* 「👁 Preview」の hero に Image Position を効かせる。
+
+   ⚠️ 2026-08-14 まで、Preview overlay は object-position を一切出しておらず、
+   Image Position を top にしても**常に中央で表示していた**。
+   位置調整のための機能なのに、確認画面がその調整を見せていなかった。
+
+   枠の比率も詳細ページと揃える（AUDIT §9-84）:
+     アーティスト 3/2（detail.css .detail-hero-portrait）
+     会場        16/9（.detail-hero）
+     フェス       16/10（.detail-hero-image）
+   ここがずれるとプレビューが嘘をつく。 */
+const PV_HERO_RATIO = {a:'3/2', v:'16/9', f:'16/10'};
+function pvHeroStyle(prefix){
+  const pos = (document.getElementById(prefix+'-imagePosition')?.value || 'center').trim() || 'center';
+  return `aspect-ratio:${PV_HERO_RATIO[prefix]};--pv-pos:${pos.replace(/[";]/g,'')}`;
+}
+
 // Aliases for backward compatibility
 function setArtistImagePos(val){ setImagePos('a', val); }
 function syncArtistImagePos(){ syncImagePos('a'); }

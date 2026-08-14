@@ -90,6 +90,7 @@ run "座標の取得"                        node scripts/check_cms_geocode.mjs
 run "AI が本文を読む前に確定させる"     node scripts/check_cms_ai_body.mjs
 run "Publish 前の関門"                  node scripts/check_cms_publish_guard.mjs
 run "データの取得経路"                  node scripts/check_cms_fetch_path.mjs
+run "プレビューが実ページと同じ枠"    node scripts/check_cms_preview_frame.mjs
 run "記事フォームの状態保持"            python3 scripts/check_cms_article_state.py
 
 echo

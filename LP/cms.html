@@ -30,7 +30,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/vendor/leaflet-1.9.4/leaflet.css?v=2">
 <script src="/vendor/leaflet-1.9.4/leaflet.js?v=2"></script>
-<link rel="stylesheet" href="cms.css?v=26">
+<link rel="stylesheet" href="cms.css?v=27">
 <link rel="stylesheet" href="/vendor/quill-1.3.7/quill.snow.css?v=1">
 <script src="/vendor/quill-1.3.7/quill.min.js?v=2"></script>
 </head>
@@ -130,6 +130,7 @@
           <button type="button" class="img-pos-btn" data-pos="center bottom" onclick="setImagePos('v','center bottom')" title="bottom">↓</button>
           <button type="button" class="img-pos-btn" data-pos="right bottom" onclick="setImagePos('v','right bottom')" title="bottom-right">↘</button>
         </div>
+        <!-- aspect-ratio は詳細ページの枠と揃える。会場は detail.css の .detail-hero と同じ 16/9。AUDIT §9-84 -->
         <div class="img-pos-preview" id="v-imagePosPreview" style="margin-top:12px;width:100%;max-width:320px;aspect-ratio:16/9;background:#1a1a1a;background-size:cover;background-position:center;border:1px solid #333;display:none"></div>
       </div>
       <div class="form-group full"><label>Description</label><textarea id="v-desc" rows="8" placeholder="Venue description..." style="width:100%;margin-bottom:8px"></textarea><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-green btn-sm" onclick="aiGenerate('venue')">AI Generate</button><button class="btn btn-sm" onclick="translateField('v-desc','en-to-jp')">EN→JP</button><button class="btn btn-sm" onclick="translateField('v-desc','jp-to-en')">JP→EN</button></div></div>
@@ -210,6 +211,7 @@
           <button type="button" class="img-pos-btn" data-pos="center bottom" onclick="setImagePos('f','center bottom')" title="bottom">↓</button>
           <button type="button" class="img-pos-btn" data-pos="right bottom" onclick="setImagePos('f','right bottom')" title="bottom-right">↘</button>
         </div>
+        <!-- aspect-ratio は詳細ページの枠と揃える。フェスは detail.css の .detail-hero-image と同じ 16/10。AUDIT §9-84 -->
         <div class="img-pos-preview" id="f-imagePosPreview" style="margin-top:12px;width:100%;max-width:320px;aspect-ratio:16/10;background:#1a1a1a;background-size:cover;background-position:center;border:1px solid #333;display:none"></div>
       </div>
       <div class="form-group full"><label>Hero Gradient</label><div class="gradient-presets" id="f-gradientPresets"></div><div id="gradient-preview" style="display:none;margin-top:8px;width:100%;height:80px;border-radius:var(--radius);border:1px solid var(--border)"></div><input type="text" id="f-heroGradient" placeholder="linear-gradient(...)" style="margin-top:8px" oninput="updateGradientPreview(this.value)"></div>
@@ -289,7 +291,11 @@
           <button type="button" class="img-pos-btn" data-pos="center bottom" onclick="setArtistImagePos('center bottom')" title="bottom">↓</button>
           <button type="button" class="img-pos-btn" data-pos="right bottom" onclick="setArtistImagePos('right bottom')" title="bottom-right">↘</button>
         </div>
-        <div class="img-pos-preview" id="a-imagePosPreview" style="margin-top:12px;width:100%;max-width:320px;aspect-ratio:16/9;background:#1a1a1a;background-size:cover;background-position:center;border:1px solid #333;display:none"></div>
+        <!-- aspect-ratio は詳細ページの枠と必ず揃える。ここがずれると
+             プレビューが嘘をつく。アーティストは detail.css の
+             .detail-hero-portrait と同じ 3/2（会場 16/9・フェス 16/10）。
+             2026-08-14 まで 16/9 で、実際より11%多く切れて見えていた。AUDIT §9-84。 -->
+        <div class="img-pos-preview" id="a-imagePosPreview" style="margin-top:12px;width:100%;max-width:320px;aspect-ratio:3/2;background:#1a1a1a;background-size:cover;background-position:center;border:1px solid #333;display:none"></div>
       </div>
       <div class="form-group"><label>Instagram</label><input type="url" id="a-instagram" placeholder="https://instagram.com/..."></div>
       <div class="form-group"><label>SoundCloud</label><input type="url" id="a-soundcloud" placeholder="https://soundcloud.com/..."></div>
@@ -522,6 +528,6 @@
   </div>
 </div>
 
-<script src="cms.js?v=79" defer></script>
+<script src="cms.js?v=80" defer></script>
 </body>
 </html>
