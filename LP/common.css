@@ -111,6 +111,23 @@ nav .logo {
   font-size: 11px;
   letter-spacing: 0.25em;
   text-transform: uppercase;
+  /* 中身が <img> になっても行の高さで隙間が出ないように */
+  display: flex;
+  align-items: center;
+}
+/* ヘッダーのロゴ画像（2026-08-14 に文字から差し替え）。
+
+   高さで固定し、幅は縦横比なり（原本 2726x224 = 12.17:1）。
+   width/height 属性を HTML 側にも書いてあるので、画像の読み込み前後で
+   レイアウトが飛ばない。
+
+   ⚠️ 幅を広げすぎないこと。タブレット幅（900px）では右のメニューまでの
+   余白が 86px しかなく、現在の 158px から +60px 程度で衝突する。
+   変更したら check_header_logo.mjs が実測で止める。 */
+nav .logo img {
+  display: block;
+  height: 13px;
+  width: auto;
 }
 nav .nav-links {
   display: flex;
@@ -608,6 +625,17 @@ footer {
 @media (max-width: 900px) {
   nav { padding: calc(20px + var(--safe-t)) calc(24px + var(--safe-r)) 20px calc(24px + var(--safe-l)); }
   .footer-top { flex-direction: column; gap: 24px; text-align: center; }
+}
+
+/* PCではスクロール中もナビゲーションを見失わないよう、背景を持たせる */
+@media (min-width: 901px) {
+  nav {
+    background: rgba(8,8,8,0.82);
+    border-bottom: 1px solid rgba(240,237,232,0.12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    mix-blend-mode: normal;
+  }
 }
 
 @media (max-width: 768px) {

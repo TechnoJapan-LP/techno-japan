@@ -71,6 +71,7 @@ run "記事データの整合性"                node scripts/check_article_data
 run "内部リンクが生きている"            python3 scripts/check_internal_links.py
 run "構造化データと AI 向けファイル"       node scripts/check_jsonld.mjs
 run "CMS の Image Position が届く"      node scripts/check_image_position.mjs
+run "ヘッダーのロゴ"                    node scripts/check_header_logo.mjs
 run "画像の軽量版"                      python3 scripts/check_image_derivatives.py
 
 echo

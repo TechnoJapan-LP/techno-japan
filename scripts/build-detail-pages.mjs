@@ -69,7 +69,7 @@ const ARTICLE_FX_CSS_VERSION = 6;
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
 const COMMON_JS_VERSION = 3;
-const COMMON_CSS_VERSION = 5;
+const COMMON_CSS_VERSION = 7;   // 2026-08-14 ヘッダーのロゴを画像化（nav .logo img）
 const LANG_TOGGLE_VERSION = 1;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
 const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');
@@ -498,7 +498,7 @@ function navHtml(lang, altHref) {
         : `<span class="nav-lang"><a href="${altHref}">JA</a><span class="nav-lang-sep">/</span><span class="nav-lang-cur">EN</span></span>`)
     : '';
   return `<nav>
-  <a href="/index.html" class="logo">TECHNO JAPAN</a>
+  <a href="/index.html" class="logo"><img src="/images/logo-wordmark.png?v=1" alt="TECHNO JAPAN" width="158" height="13" decoding="async"></a>
   <div class="nav-links">
     <a href="${navLink(lang, 'index.html')}">TOP</a>
     <a href="${navLink(lang, 'news.html')}">NEWS</a>
