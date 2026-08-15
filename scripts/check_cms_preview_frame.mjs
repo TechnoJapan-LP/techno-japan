@@ -101,6 +101,33 @@ else
   fail('cms.css の .pv-hero-image img に object-position:var(--pv-pos) が無い（位置が効かない）');
 
 console.log();
+console.log('▸ 画像の説明文（alt）の入力欄');
+/* 2026-08-15 追加。それまで入力する場所が無く、本文の画像46枚すべてに
+   alt が無かった。仕組みは3つ揃って初めて機能する:
+     ① 入力欄がある  ② 画像を選ぶと今の値が読み込まれる
+     ③「画像に適用」で書き込まれる
+   どれか1つ欠けると「入力したのに保存されない」になる。AUDIT §9-92。 */
+{
+  const checks = [
+    ['入力欄がある', /id="ar-image-alt"/.test(cmsHtml)],
+    /* ⚠️ 当初 /ar-image-alt[^\n]*\]\.forEach/ を空白をまとめた文字列に当てていた。
+       全体が1行になるため [^\n]* が全文に広がり、配列から外しても
+       別の場所の 'ar-image-alt' を拾って通ってしまった（NCで発覚）。
+       有効化の配列そのものを取り出して、中に入っているかを見る。 */
+    ['選択時に有効になる', (() => {
+      const m = cmsJs.match(/\[([^\]]*'ar-image-layout-apply'[^\]]*)\]\.forEach/);
+      return !!m && m[1].includes("'ar-image-alt'");
+    })()],
+    ['今の値を読み込む', /getElementById\('ar-image-alt'\)[\s\S]{0,120}getAttribute\('alt'\)/.test(cmsJs)],
+    ['「画像に適用」で書き込む', /setAttribute\('alt',\s*altInput\.value/.test(cmsJs)],
+  ];
+  for (const [label, ok] of checks) {
+    if (ok) pass(label);
+    else fail(`${label} — この1つが欠けると「入力したのに保存されない」`);
+  }
+}
+
+console.log();
 if (failed) {
   console.log(`❌ ${failed}件の食い違いがあります`);
   console.log('  プレビューと詳細ページの枠がずれると、CMS で合わせたつもりの位置が');

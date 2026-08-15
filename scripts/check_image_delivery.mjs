@@ -166,6 +166,49 @@ console.log('▸ 記事本文の外部画像（Google Drive）');
 }
 
 console.log();
+console.log('▸ 記事本文の説明文（alt）');
+/* 2026-08-15 に CMS へ入力欄を追加した（AUDIT §9-92）。それまで入力する
+   場所が無く、46枚すべてに alt が無かった。
+
+   ⚠️ **`alt=""` は「未入力」として数える。**
+   空を書けば読み上げソフトは飛ばしてくれるので「無い」よりはマシだが、
+   内容のある写真を装飾扱いにするので情報は落ちる。ここを合格にすると
+   `alt=""` を一括で入れて検査を通し、そのまま忘れてしまう。
+   **残りが見え続ける状態を保つ。**
+
+   だから現時点では**落とさない**（警告として枚数を出すだけ）。
+   46枚を人が書くまで preflight を赤にし続けると、無関係な作業まで
+   止めてしまうため。埋まりきったら error に変える。 */
+{
+  const dirs = ['articles', path.join('en', 'articles')];
+  let total = 0, filled = 0, empty = 0, none = 0;
+  for (const d of dirs) {
+    const dir = path.join(LP, d);
+    if (!fs.existsSync(dir)) continue;
+    for (const f of fs.readdirSync(dir).filter((x) => x.endsWith('.html'))) {
+      const html = fs.readFileSync(path.join(dir, f), 'utf-8');
+      for (const tag of html.match(/<img\b[^>]*lh3\.googleusercontent\.com[^>]*>/gi) || []) {
+        total++;
+        const m2 = tag.match(/\balt="([^"]*)"/i);
+        if (!m2) none++;
+        else if (!m2[1].trim()) empty++;
+        else filled++;
+      }
+    }
+  }
+  if (!total) {
+    console.log('  － Drive 画像なし');
+  } else if (filled === total) {
+    pass(`${total}枚すべてに説明文がある`);
+  } else {
+    console.log(`  ⚠️  説明文の入力: ${filled}/${total}枚`
+      + `（属性なし ${none}枚 / 空 ${empty}枚）`);
+    console.log('      CMS の記事編集 → 本文の画像をクリック → 「説明文」欄に入力 →「画像に適用」');
+    console.log('      ※ 未入力があっても preflight は止めない（AUDIT §9-92）');
+  }
+}
+
+console.log();
 if (failed) {
   console.log(`❌ ${failed}件の問題があります`);
   console.log('  大きい画像を原寸のまま配ると、モバイルの LCP が直撃を受けます。');

@@ -810,7 +810,7 @@ let articleQuillUserEdited = false;
 let articleRawBodyHtml = '';
 
 function setArticleImageToolsEnabled(enabled){
-  ['ar-image-layout','ar-image-crop','ar-image-zoom','ar-image-x','ar-image-y','ar-image-pair','ar-image-layout-apply'].forEach(id => {
+  ['ar-image-layout','ar-image-crop','ar-image-zoom','ar-image-x','ar-image-y','ar-image-pair','ar-image-layout-apply','ar-image-alt'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.disabled = !enabled;
   });
@@ -871,6 +871,10 @@ function selectArticleImage(img){
   if (zoom) zoom.value = img.dataset.zoom || '1';
   if (x) x.value = img.dataset.x || '50';
   if (y) y.value = img.dataset.y || '50';
+  /* いま入っている説明文を読み込む。空欄でも上書きせずそのまま見せる
+     （「まだ書いていない」と「意図的に空」を、画面上で区別できるように）。 */
+  const alt = document.getElementById('ar-image-alt');
+  if (alt) alt.value = img.getAttribute('alt') || '';
 }
 
 function applyArticleImageLayout(){
@@ -889,6 +893,11 @@ function applyArticleImageLayout(){
   articleSelectedImage.style.setProperty('--crop-zoom', zoom);
   articleSelectedImage.style.setProperty('--crop-x', `${x}%`);
   articleSelectedImage.style.setProperty('--crop-y', `${y}%`);
+  /* 説明文（alt）。空にしたら属性ごと消さず alt="" を残す。
+     属性が無いと読み上げソフトが URL を読もうとするため、
+     「意図的に空」を明示する必要がある（AUDIT §9-92）。 */
+  const altInput = document.getElementById('ar-image-alt');
+  if (altInput) articleSelectedImage.setAttribute('alt', altInput.value.trim());
   markFormDirty();
   scheduleArticleEditorSync('quill');
   updateArticlePreview(articleQuill?.root?.innerHTML || '', true);
