@@ -127,6 +127,45 @@ for (const t of TARGETS) {
 }
 
 console.log();
+console.log('▸ 記事本文の外部画像（Google Drive）');
+/* ⚠️ 前夜の計測は自サイトへの通信しか数えず、記事を 209KB と報告した。
+   実際は Drive の画像が別に約3.2MB あった。**外部も数える**こと。
+
+   Drive は URL 末尾の =w数字 でその場で縮小した画像を返すので、
+   同じIDから srcset が組める。実測（2026-08-15 / 記事1本）:
+     変更前 3,547KB → 変更後 1,048KB（スマホ dpr1）
+     変更前 3,539KB → 変更後 1,836KB（スマホ dpr3 = 実機相当）
+   AUDIT §9-91。 */
+{
+  const dirs = ['articles', path.join('en', 'articles')];
+  let total = 0, withSrcset = 0, noLazy = 0;
+  const bad = [];
+  for (const d of dirs) {
+    const dir = path.join(LP, d);
+    if (!fs.existsSync(dir)) continue;
+    for (const f of fs.readdirSync(dir).filter((x) => x.endsWith('.html'))) {
+      const html = fs.readFileSync(path.join(dir, f), 'utf-8');
+      for (const tag of html.match(/<img\b[^>]*lh3\.googleusercontent\.com[^>]*>/gi) || []) {
+        total++;
+        if (/\bsrcset=/i.test(tag)) withSrcset++;
+        else bad.push(`${d}/${f}`);
+        if (!/\bloading="lazy"/i.test(tag)) noLazy++;
+      }
+    }
+  }
+  if (!total) {
+    console.log('  － Drive 画像なし');
+  } else if (withSrcset === total) {
+    pass(`${total}枚すべてに srcset がある（原寸を全端末へ配っていない）`);
+    if (noLazy) fail(`${noLazy}枚に loading="lazy" が無い`);
+    else pass('すべて loading="lazy"');
+  } else {
+    fail(`${total - withSrcset}枚が原寸のまま（1枚 最大628KB）。`
+       + `例: ${[...new Set(bad)].slice(0, 3).join(', ')}`);
+  }
+}
+
+console.log();
 if (failed) {
   console.log(`❌ ${failed}件の問題があります`);
   console.log('  大きい画像を原寸のまま配ると、モバイルの LCP が直撃を受けます。');

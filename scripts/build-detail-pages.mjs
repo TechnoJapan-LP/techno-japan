@@ -344,6 +344,66 @@ function pickFlyer(festival, edition) {
   return { src: String(festival?.flyer || '').trim(), edition: '' };
 }
 
+/* 記事本文の Google Drive 画像を、端末に合った大きさで配る。
+
+   ■ なぜ必要か（AUDIT §9-91）
+
+   本文の画像は CMS から Drive のURLで入っており、末尾が `=w2000` だった。
+   実測（2026-08-15）:
+
+     表示幅   スマホ 484px / PC 468〜1332px
+     配信     2000px = 1枚 628KB
+     記事1本に8枚 → 約3MB
+
+   Drive は URL 末尾の `=w数字` でその場で縮小した画像を返す。
+   **同じIDから複数サイズを出せるので srcset が組める。**
+
+     =w2000  628KB  1920x2485
+     =w1200  227KB  1200x1553
+     =w800    99KB   800x1035
+     =w480    39KB   480x621
+
+   ■ src は変えない
+
+   src を変えると IMAGE_DIMENSIONS の引き当てキーが変わって
+   addHtmlImageDimensions が落ちる。また width/height が実物と
+   食い違いになる。**srcset を足すだけ**にすれば、
+   srcset を解釈する現代のブラウザは小さい方を選び、
+   解釈しない環境は従来どおり src を読む。どちらも壊れない。
+
+   ■ この見落としが起きた理由
+
+   前夜の計測で「記事 501KB → 209KB」と報告したが、
+   **自サイトへの通信しか数えておらず、Drive の画像は素通りしていた。**
+   実際の記事ページはモバイルで約3.2MBだった。
+   「実測した」と言うとき、利用者が実際に受け取るもの全部を
+   数えているかを確かめること。 */
+const DRIVE_IMG = /(<img\b[^>]*\bsrc=(["']))(https:\/\/lh3\.googleusercontent\.com\/d\/[A-Za-z0-9_-]+)=w(\d+)(\2[^>]*>)/gi;
+/* 候補の幅。⚠️ 実測で決めること。
+
+   1600 を足して測ったら、実機相当（390px / dpr3）が
+   1,836KB → 2,646KB と **44%重くなった**（2026-08-15 実測）。
+   得られるのは PC の全幅画像を Retina で見たときの精細さだけで、
+   モバイル優先の方針に見合わない。**足さずに戻した。**
+
+   なお Drive は原本より大きくは返さない。原本1100pxの画像は
+   =w1200 も =w2000 も同じ 1100px・208KB が返る。
+   「w2000 だから1920px」とは限らない。 */
+const DRIVE_WIDTHS = [480, 800, 1200];
+function addDriveImageSrcset(html) {
+  return String(html || '').replace(DRIVE_IMG, (tag, head, _q, base, w, tail) => {
+    if (/\bsrcset=/i.test(tag)) return tag;           // 既にあるものは触らない
+    const set = DRIVE_WIDTHS.map((n) => `${base}=w${n} ${n}w`).join(', ');
+    /* sizes は実測値。本文画像はスマホ484px / PC は 503px〜1332px（fx-full が全幅）。
+       PC は article-fx.css で figure.fx-full が min(100vw, 1200px)。
+       視差の拡大込みで実測1332px。ここを実際より小さく書くと
+       ブラウザは正直に小さい画像を選び、ぼやける。 */
+    const attrs = ` srcset="${esc(set)}" sizes="(max-width: 700px) 100vw, 1200px"`;
+    const lazy = /\bloading=/i.test(tag) ? '' : ' loading="lazy" decoding="async"';
+    return `${head}${base}=w${w}${tail.slice(0, 1)}${attrs}${lazy}${tail.slice(1)}`;
+  });
+}
+
 function addHtmlImageDimensions(html) {
   return String(html || '').replace(/<img\b(?![^>]*\bwidth=)([^>]*?)\bsrc=(["'])([^"']+)\2([^>]*)>/gi, (tag, before, quote, src, after) => {
     const attrs = dimensionAttrs(src);
@@ -754,7 +814,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
       <div><dt>READING TIME</dt><dd>${esc(a.readTime || 5)} MIN</dd></div>
     </dl>
     <div class="article-excerpt">${esc(L.excerpt || '')}</div>
-    <div class="article-body">${addHtmlImageDimensions(resolveEntities(L.body || ''))}</div>
+    <div class="article-body">${addDriveImageSrcset(addHtmlImageDimensions(resolveEntities(L.body || '')))}</div>
     ${relatedFestivalHtml}
     <div class="article-footer">
       ${tags ? `<div class="article-tags">${tags}</div>` : ''}
