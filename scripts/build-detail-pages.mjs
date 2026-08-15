@@ -51,7 +51,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 14;
+const DETAIL_CSS_VERSION = 22;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -68,8 +68,8 @@ const ARTICLE_FX_CSS_VERSION = 8;
 
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
-const COMMON_JS_VERSION = 6;   // 2026-08-14 モバイルヘッダーの透明/半透明切替を直接適用
-const COMMON_CSS_VERSION = 13;   // 2026-08-14 モバイルヘッダーの透明/半透明切替
+const COMMON_JS_VERSION = 12;   // 2026-08-15 モバイルメニュー上下の閉じるボタン
+const COMMON_CSS_VERSION = 21;   // 2026-08-15 モバイルメニュー上下の閉じるボタン
 const LANG_TOGGLE_VERSION = 1;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
 const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');

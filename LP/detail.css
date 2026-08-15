@@ -163,10 +163,13 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 }
 
 @media (max-width: 768px) {
-  .article-detail, .detail-page { padding: 100px 0 60px; }
+  .article-detail { padding: 80px 0 60px; }
+  .detail-page { padding: 100px 0 60px; }
   .article-detail-inner, .detail-inner { padding: 0 24px; }
+  .article-detail .article-back { padding: 10px 0; margin-bottom: 20px; }
   .article-hero-img, .detail-hero { margin-left: -24px; margin-right: -24px; }
   .detail-facts > div { flex-direction: column; gap: 6px; }
+  .article-body { max-width: none; text-wrap: wrap; }
 }
 
 
@@ -697,6 +700,13 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
    共通化して両方に効かせる手もあるが、フェス側は3〜4枚を横に並べるグリッド、
    記事側は1枚だけなので、幅の扱いが違う。無理に1本化しない。 */
 .article-detail .related-festival { margin-top: 56px; }
+
+@media (min-width: 769px) {
+  .article-detail-inner > .article-back:first-child {
+    margin-left: calc((min(96vw, 1100px) - 760px) / -2 - 40px);
+  }
+}
+
 .article-detail .related-festival h2 {
   font-family: var(--font-mono); font-size: 10px; letter-spacing: .2em;
   text-transform: uppercase; opacity: .45; margin: 0 0 18px; font-weight: 400;

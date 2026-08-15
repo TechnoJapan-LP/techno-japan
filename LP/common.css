@@ -406,10 +406,13 @@ footer .footer-links .footer-social svg { width: 14px; height: 14px; display: bl
 /* ===================== NAV OVERLAY ===================== */
 .nav-overlay {
   display: none;
-  position: fixed;
-  inset: 0;
+  position: fixed !important;
+  inset: 0 !important;
   background: #080808;
-  z-index: 10000;
+  z-index: 100001 !important;
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow-y: auto;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -417,6 +420,8 @@ footer .footer-links .footer-social svg { width: 14px; height: 14px; display: bl
   padding: var(--safe-t) var(--safe-r) var(--safe-b) var(--safe-l);
 }
 .nav-overlay.active { display: flex; }
+.nav-overlay .nav-back { display: none; }
+html.nav-open, body.nav-open { overflow: hidden; }
 .nav-overlay a {
   font-family: var(--font-mono);
   font-size: 12px;
@@ -455,6 +460,7 @@ footer .footer-links .footer-social svg { width: 14px; height: 14px; display: bl
 .nav-overlay .nav-close::before { transform: translate(-50%, -50%) rotate(45deg); }
 .nav-overlay .nav-close::after { transform: translate(-50%, -50%) rotate(-45deg); }
 .nav-overlay .nav-close:hover { opacity: 0.6; }
+.nav-overlay .nav-close-bottom { display: none; }
 
 /* ===================== FOOTER ===================== */
 footer {
@@ -654,6 +660,8 @@ footer {
     left: 0 !important;
     right: 0 !important;
     z-index: 100000 !important;
+    opacity: 1 !important;
+    animation: none !important;
     padding: calc(20px + var(--safe-t)) calc(24px + var(--safe-r)) 20px calc(24px + var(--safe-l));
     background: transparent;
     border-bottom: 1px solid transparent;
@@ -686,6 +694,12 @@ footer {
 }
 
 @media (max-width: 768px) {
+  .nav-overlay .nav-close-bottom {
+    display: block;
+    top: auto !important;
+    bottom: calc(12px + var(--safe-b)) !important;
+    right: calc(16px + var(--safe-r)) !important;
+  }
   .nav-hamburger { display: flex; top: calc(10px + var(--safe-t)); right: calc(17px + var(--safe-r)); }
   .nav-overlay .nav-close { top: calc(12px + var(--safe-t)); right: calc(16px + var(--safe-r)); }
   nav .nav-links { display: none; }

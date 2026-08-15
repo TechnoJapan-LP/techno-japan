@@ -45,7 +45,7 @@
 <link rel="dns-prefetch" href="https://w.behold.so">
 <link rel="dns-prefetch" href="https://formsubmit.co">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/common.css?v=13">
+<link rel="stylesheet" href="/common.css?v=21">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
@@ -746,7 +746,7 @@
   </div>
 </footer>
 
-<script src="/common.js?v=6" defer></script>
+<script src="/common.js?v=12" defer></script>
 <script src="/favorites.js?v=2" defer></script>
 <script src="/search.js?v=3" defer></script>
 <!-- localize.js は defer にしない。下のインライン描画が同期実行で tjLocalized を呼ぶ -->
@@ -794,12 +794,12 @@
       <div class="featured-col">
         <a class="featured-card" href="${articleUrl(featured)}">
           <div class="featured-card-image"${ratioAttr(featured.cardRatio)}>
-            ${featured.image ? `<img ${tjImageSizeAttrs(featured.image)} src="${tjAssetPath(featured.image)}" alt="${featured.title}" loading="lazy" decoding="async">` : `<div class="featured-card-image-placeholder">COMING SOON</div>`}
+            ${featured.image ? `<img ${tjImageSizeAttrs(featured.image)} src="${tjAssetPath(featured.image)}" alt="${tjLocalized(featured.title, '', featured.title_en)}" loading="lazy" decoding="async">` : `<div class="featured-card-image-placeholder">COMING SOON</div>`}
             <div class="featured-card-arrow"></div>
           </div>
           <div class="featured-card-body">
             <div class="featured-card-tag"><span class="tag-dot"></span>${featured.category || 'STORY'}</div>
-            <div class="featured-card-title">${featured.title}</div>
+            <div class="featured-card-title">${tjLocalized(featured.title, '', featured.title_en)}</div>
             <div class="featured-card-meta">${fmtDate(featured.date)}${featured.readTime ? ` &middot; ${featured.readTime} MIN READ` : ''}</div>
           </div>
         </a>

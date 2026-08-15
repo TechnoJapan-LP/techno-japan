@@ -105,15 +105,47 @@
     window.addEventListener('scroll', update, { passive: true });
   }
 
+  /* Keep the full-screen menu pinned to the current viewport, even when it
+     is opened deep inside a long page. The inline handlers still own the
+     toggle; this only synchronizes scroll locking after they run. */
+  function initMobileNavOverlay() {
+    const overlay = document.querySelector('.nav-overlay');
+    if (!overlay) return;
+    if (!overlay.querySelector('.nav-close-bottom')) {
+      const bottomClose = document.createElement('button');
+      bottomClose.type = 'button';
+      bottomClose.className = 'nav-close nav-close-bottom';
+      bottomClose.setAttribute('aria-label', 'Close menu');
+      bottomClose.addEventListener('click', () => {
+        overlay.classList.remove('active');
+        document.querySelector('.nav-hamburger')?.classList.remove('active');
+      });
+      overlay.appendChild(bottomClose);
+    }
+    const sync = () => {
+      const open = overlay.classList.contains('active');
+      document.documentElement.classList.toggle('nav-open', open);
+      document.body.classList.toggle('nav-open', open);
+    };
+    document.addEventListener('click', (event) => {
+      if (event.target.closest('.nav-hamburger, .nav-close, .nav-overlay a')) {
+        window.setTimeout(sync, 0);
+      }
+    });
+    sync();
+  }
+
   /* Auto-init on DOM ready (or immediately if already parsed). */
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       initScrollReveal();
       initMobileNav();
+      initMobileNavOverlay();
     });
   } else {
     initScrollReveal();
     initMobileNav();
+    initMobileNavOverlay();
   }
 })();
 

@@ -45,7 +45,7 @@
 <link rel="dns-prefetch" href="https://w.behold.so">
 <link rel="dns-prefetch" href="https://formsubmit.co">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="common.css?v=13">
+<link rel="stylesheet" href="common.css?v=21">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
@@ -293,7 +293,10 @@ html.tj-page-leaving body { opacity: 0; transition: opacity .18s ease; }
 .category-nav {
   display: flex; gap: 0; margin-bottom: 40px;
   border-bottom: 1px solid var(--card-border);
-  overflow-x: auto;
+  width: 100%; max-width: 100%; overflow-x: auto;
+  overscroll-behavior-x: contain;
+  touch-action: pan-x;
+  scrollbar-width: none;
 }
 .category-nav::-webkit-scrollbar { display: none; }
 .cat-btn {
@@ -817,7 +820,7 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
   </div>
 </footer>
 
-<script src="common.js?v=6" defer></script>
+<script src="common.js?v=12" defer></script>
 <!-- localize.js は defer にしない。下のインライン描画が同期実行で tjLocalized を呼ぶ -->
 <script src="localize.js?v=7"></script>
 <script src="data.js?v=10"></script>
@@ -1119,10 +1122,13 @@ function initStoryVisualRail() {
 
 /* ========== RENDER CATEGORY NAV ========== */
 function renderCategoryNav() {
+  const nav = document.getElementById('category-nav');
+  const previousScrollLeft = nav ? nav.scrollLeft : 0;
   const cats = ['ALL','REPORT','COLUMN','INTERVIEW','NEWS','FESTIVAL','RAVE','PARTY','CLUB'];
-  document.getElementById('category-nav').innerHTML = cats.map(c =>
+  nav.innerHTML = cats.map(c =>
     `<button class="cat-btn ${currentCategory === c ? 'active' : ''}" data-cat="${c}">${c}</button>`
   ).join('');
+  nav.scrollLeft = previousScrollLeft;
   document.querySelectorAll('.cat-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       currentCategory = btn.dataset.cat;
