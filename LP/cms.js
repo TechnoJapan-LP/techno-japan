@@ -1730,6 +1730,26 @@ function normalizeArticleHtml(html){
   return d.innerHTML;
 }
 
+/* QuillはHTMLを再読み込みするとき、data-*属性を落とすことがある。
+   本文画像のレイアウト設定は画像URLだけでは復元できないため、
+   読み込み元HTMLの同じ順番の画像から属性を戻す。 */
+function restoreArticleImageAttributes(root, sourceHtml){
+  if (!root || !sourceHtml) return;
+  const source = document.createElement('div');
+  source.innerHTML = sourceHtml;
+  const sourceImages = Array.from(source.querySelectorAll('img'));
+  const targetImages = Array.from(root.querySelectorAll('img'));
+  const attrs = ['data-layout','data-crop','data-pair-id','data-zoom','data-x','data-y','alt'];
+  targetImages.forEach((img, index) => {
+    const sourceImage = sourceImages[index];
+    if (!sourceImage) return;
+    attrs.forEach(attr => {
+      if (sourceImage.hasAttribute(attr)) img.setAttribute(attr, sourceImage.getAttribute(attr) || '');
+      else img.removeAttribute(attr);
+    });
+  });
+}
+
 function setArticleBody(html){
   const v = html || '';
   articleLastLoadedBody = v;
@@ -1752,6 +1772,7 @@ function setArticleBody(html){
         q.setContents(delta, 'silent');
       }
     }
+    restoreArticleImageAttributes(q.root, v);
     // ar-body を Quill が解釈した正規化後 HTML で再同期
     document.getElementById('ar-body').value = q.root.innerHTML;
   }
@@ -1781,6 +1802,7 @@ function switchArticleEditor(mode){
         try { articleQuill.clipboard.dangerouslyPasteHTML(0, src, 'silent'); }
         catch(e){ articleQuill.setContents(articleQuill.clipboard.convert(src), 'silent'); }
       }
+      restoreArticleImageAttributes(articleQuill.root, src);
     }
     document.getElementById('ar-body').value = src;
     wrap.classList.remove('source-mode');
