@@ -163,13 +163,16 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 }
 
 @media (max-width: 768px) {
-  .article-detail { padding: 80px 0 60px; }
+  /* 固定ヘッダー直下でも戻る導線が重ならないようにする */
+  .article-detail { padding: 112px 0 60px; }
   .detail-page { padding: 100px 0 60px; }
   .article-detail-inner, .detail-inner { padding: 0 24px; }
   .article-detail .article-back { padding: 10px 0; margin-bottom: 20px; }
   .article-hero-img, .detail-hero { margin-left: -24px; margin-right: -24px; }
   .detail-facts > div { flex-direction: column; gap: 6px; }
-  .article-body { max-width: none; text-wrap: wrap; }
+  /* 本文は右端まで使い、見出しの balance による不自然な改行を避ける */
+  .article-body { max-width: none; margin-right: -12px; text-wrap: wrap; }
+  .article-body h2 { text-wrap: wrap; }
 }
 
 

@@ -68,8 +68,8 @@ const ARTICLE_FX_CSS_VERSION = 10;
 
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
-const COMMON_JS_VERSION = 12;   // 2026-08-15 モバイルメニュー上下の閉じるボタン
-const COMMON_CSS_VERSION = 21;   // 2026-08-15 モバイルメニュー上下の閉じるボタン
+const COMMON_JS_VERSION = 13;   // 2026-08-18 共通モバイルメニューの反映保証
+const COMMON_CSS_VERSION = 22;   // 2026-08-18 記事詳細のモバイル余白・共通メニュー
 const LANG_TOGGLE_VERSION = 1;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
 const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');
