@@ -982,7 +982,13 @@ function getYearFromDate(dateStr) {
 function buildMonthNav() {
   const nav = document.getElementById('month-nav');
   const sorted = getSorted();
-  const futureMonths = [...new Set(sorted.filter(f => isFuture(f.date)).map(f => getMonthFromDate(f.date)))].sort((a,b) => a - b);
+  const futureEntries = sorted.filter(f => isFuture(f.date)).map(f => ({
+    year: getYearFromDate(f.date), month: getMonthFromDate(f.date)
+  })).filter(x => x.year !== null && x.month >= 0);
+  const futureMonthYears = [...new Map(futureEntries.map(x => [`${x.year}-${x.month}`, x])).values()]
+    .sort((a,b) => a.year - b.year || a.month - b.month);
+  const futureMonthCounts = new Map();
+  futureMonthYears.forEach(x => futureMonthCounts.set(x.month, (futureMonthCounts.get(x.month) || 0) + 1));
 
   // Group past festivals by year → month
   const pastByYear = {};
@@ -996,9 +1002,11 @@ function buildMonthNav() {
   const pastYears = Object.keys(pastByYear).map(Number).sort((a,b) => b - a); // newest first
 
   let html = `<a href="#" data-month="ALL" class="active">ALL</a>`;
-  html += futureMonths.map(m =>
-    `<a href="#" data-month="${m}">${MONTHS[m]}</a>`
-  ).join('');
+  html += futureMonthYears.map(({year, month}) => {
+    const key = `FUTURE-${year}-${month}`;
+    const label = futureMonthCounts.get(month) > 1 ? `${MONTHS[month]} ${year}` : MONTHS[month];
+    return `<a href="#" data-month="${key}">${label}</a>`;
+  }).join('');
 
   // Year toggles + their months
   pastYears.forEach(y => {
@@ -1113,6 +1121,9 @@ function applyMonthFilter() {
       const targetYear = parts[1];
       const targetMonth = parts[2];
       group.style.display = (gTime === 'past' && gYear === targetYear && gMonth === targetMonth) ? '' : 'none';
+    } else if (currentMonth.startsWith('FUTURE-')) {
+      const [, year, month] = currentMonth.split('-');
+      group.style.display = (gTime === 'future' && gYear === year && gMonth === month) ? '' : 'none';
     } else {
       // Show specific future month
       group.style.display = (gTime === 'future' && gMonth === currentMonth) ? '' : 'none';
@@ -1176,24 +1187,28 @@ function renderFestivals() {
   const count = document.getElementById('fest-count');
   if (count) count.textContent = `${sorted.length} ${currentMode === 'rave' ? 'RAVES' : 'FESTIVALS'}`;
 
-  // Group by future/past, then by month
+  // Group by future/past, then by year and month. Month aloneでまとめると、
+  // 2027年3月が2026年8月より先に表示されるため、年を必ず並び順に含める。
   const futureGrouped = {};
   const pastGrouped = {};
   sorted.forEach(f => {
     const m = getMonthFromDate(f.date);
+    const y = getYearFromDate(f.date);
     const target = isFuture(f.date) ? futureGrouped : pastGrouped;
-    if (!target[m]) target[m] = [];
-    target[m].push(f);
+    const key = y === null || m < 0 ? String(m) : `${y}-${m}`;
+    if (!target[key]) target[key] = { year: y, month: m, festivals: [] };
+    target[key].festivals.push(f);
   });
 
   let html = '';
 
   // Render future festivals first
-  const futureKeys = Object.keys(futureGrouped).map(Number).sort((a,b) => a - b);
-  futureKeys.forEach(m => {
-    html += `<div class="festival-month-group" id="month-${MONTHS[m]}" data-month="${m}" data-time="future">`;
-    futureGrouped[m].forEach((f, i) => {
-      html += renderFestivalCard(f, m, i);
+  const futureEntries = Object.values(futureGrouped)
+    .sort((a, b) => (a.year ?? 9999) - (b.year ?? 9999) || (a.month ?? 99) - (b.month ?? 99));
+  futureEntries.forEach(({ year, month, festivals }) => {
+    html += `<div class="festival-month-group" id="month-${year}-${MONTHS[month]}" data-month="${month}" data-year="${year ?? ''}" data-time="future">`;
+    festivals.forEach((f, i) => {
+      html += renderFestivalCard(f, month, i);
     });
     html += '</div>';
   });
