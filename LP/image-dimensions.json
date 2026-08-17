@@ -1235,6 +1235,14 @@
     388,
     480
   ],
+  "images/derivatives/card/festivals/mutek-2025-flyer--9263c6bb-lg.webp": [
+    768,
+    960
+  ],
+  "images/derivatives/card/festivals/mutek-2025-flyer--9263c6bb-sm.webp": [
+    384,
+    480
+  ],
   "images/derivatives/card/festivals/nu-festival--a722e0ae-lg.webp": [
     960,
     636
@@ -1934,6 +1942,10 @@
   "images/festivals/mori-michi-ichiba.webp": [
     1920,
     1279
+  ],
+  "images/festivals/mutek-2025-flyer.webp": [
+    1350,
+    1688
   ],
   "images/festivals/nu-festival-flyer.webp": [
     1920,
