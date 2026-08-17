@@ -65,7 +65,7 @@ figure.fx-img.fx-reveal.fx-on .fx-fig { opacity: 1; }
   figure.fx-img.fx-compact.fx-left  { width: 62%; margin-left: 0; margin-right: 38%; }
 }
 @media (max-width: 899px) {
-  .fx-image-pair { grid-template-columns:1fr; gap:28px; }
+  .fx-image-pair { grid-template-columns:1fr; width:100%; gap:28px; }
 }
 
 /* 横長画像（w/h >= 1.4）: カラムを突き破りビューポート端から端まで。
