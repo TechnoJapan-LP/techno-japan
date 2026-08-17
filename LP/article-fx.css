@@ -44,7 +44,7 @@ figure.fx-img[data-zoom] img { transform: scale(var(--crop-zoom, 1.11)); }
 figure.fx-img .fx-fig { display: flex; align-items: center; gap: 10px; margin-top: 10px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; color: var(--text3, rgba(240,237,232,0.45)); }
 figure.fx-img .fx-fig::after { content: ''; flex: 1; height: 1px; background: rgba(240,237,232,0.14); }
 figure.fx-img .fx-fig::before { content: ''; width: 6px; height: 6px; background: var(--accent); }
-.fx-image-pair { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin:56px 0; }
+.fx-image-pair { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); width:133.3333%; gap:16px; margin:56px 0; }
 .fx-image-pair figure.fx-img { width:auto!important; margin:0!important; }
 
 /* ワイプ: 下から上へ機械的に開く */
