@@ -4,9 +4,8 @@
 > アーティスト96名・会場22件・記事4本を日英で掲載し、
 > 開催日・場所・出演者を構造化データ（schema.org）付きで公開している。
 
-## 今後の開催予定（17件）
+## 今後の開催予定（16件）
 
-- 2026-08-15〜2026-08-16: [LOA-LOST PARADISE- 2026](https://techno-japan.media/festivals/loa-lost-paradise.html) — Nalu Beach, Ibaraki
 - 2026-08-21〜2026-08-23: [Global Ark 2026](https://techno-japan.media/festivals/global-ark.html) — Nozoriko Camping Ground, Gunma
 - 2026-09-05〜2026-09-06: [ONE PARK FESTIVAL 2026](https://techno-japan.media/festivals/one-park-festival.html), Fukui
 - 2026-09-06: [BIG FUN 2026](https://techno-japan.media/festivals/big-fun.html) — Hakkenzan Orchard, Hokkaido

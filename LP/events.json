@@ -1,23 +1,8 @@
 {
   "source": "https://techno-japan.media/",
   "license": "データの出典として techno-japan.media へのリンクを求めます",
-  "count": 17,
+  "count": 16,
   "events": [
-    {
-      "name": "LOA-LOST PARADISE- 2026",
-      "url": "https://techno-japan.media/festivals/loa-lost-paradise.html",
-      "start": "2026-08-15",
-      "end": "2026-08-16",
-      "venue": "Nalu Beach",
-      "pref": "Ibaraki",
-      "lat": 36.0827,
-      "lng": 140.596,
-      "genres": [
-        "TECHNO",
-        "HOUSE",
-        "OTHERS"
-      ]
-    },
     {
       "name": "Global Ark 2026",
       "url": "https://techno-japan.media/festivals/global-ark.html",
