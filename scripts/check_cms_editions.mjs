@@ -51,6 +51,7 @@ const BRIDGE = `
   get editionSheetLoaded(){return editionSheetLoaded}, set editionSheetLoaded(v){editionSheetLoaded=v},
   get editionRowById(){return editionRowById}, set editionRowById(v){editionRowById=v},
   get editionSheetLoadError(){return editionSheetLoadError}, set editionSheetLoadError(v){editionSheetLoadError=v},
+  duplicateEditionRows,
   get editions(){return editions},
   addEdition,
   get editState(){return editState},
@@ -101,6 +102,19 @@ function makeCtx({ cityValue = 'Ibaraki' } = {}) {
 
 const results = [];
 const check = (name, pass, detail) => { results.push([name, pass, detail]); };
+
+// ---- 0a) 既存シートの重複を読み込み時点で止めること ------------------------
+{
+  const c = makeCtx();
+  const dup = c.__T.duplicateEditionRows([
+    { EDITION_ID: 'mutek-2026', _row: 108 },
+    { EDITION_ID: 'mutek-2026', _row: 114 },
+    { EDITION_ID: 'mutek-2025', _row: 107 },
+  ]);
+  check('既存EDITIONSの重複を行番号付きで検出する',
+    dup.length === 1 && dup[0].id === 'mutek-2026'
+      && dup[0].rowNums.join(',') === '108,114', JSON.stringify(dup));
+}
 
 // ---- 0) Add Edition が既存年を再利用しないこと ----------------------------
 {

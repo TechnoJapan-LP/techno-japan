@@ -3,6 +3,34 @@
 セッション間の短期的な引き継ぎ専用ログです。
 長い背景説明・事故の経緯・設計判断は [AUDIT_TECHNO_JAPAN.md](../AUDIT_TECHNO_JAPAN.md) に記録し、ここからリンクしてください。
 
+## 2026-08-18 / Codex / 完了（Edition編集時の重複再発防止）
+
+### 実施
+- MUTEKのフライヤー編集後に同じ`EDITION_ID`が追記された事象を調査。
+- EDITIONS読み込み時に重複IDを行番号付きで検出し、重複がある場合は保存を停止するガードを追加。
+- 既存データを自動削除・自動統合せず、誤った開催回を上書きしない安全設計を維持。
+
+### コミット
+- SHA: 未コミット
+- push / rebase 状態: 未実施
+
+### 検証
+- `node --check LP/cms.js`: 成功
+- `node scripts/check_cms_editions.mjs`: 15/15項目成功
+- `git diff --check`: 成功
+- LIVE確認: MUTEK EDITIONS重複6件、LINEUPS重複4セットを確認。既存データ整理が必要
+
+### 変更したパターン
+- `LP/cms.js`のEDITIONS読み込み時重複検出・保存停止: 1経路
+- `scripts/check_cms_editions.mjs`の重複検出回帰テスト: 1件
+
+### 未確認の類似パターン
+- 重複整理後の認証済みCMS実ブラウザでの保存確認: 未確認
+- 重複整理後のPublish pipeline: 未確認
+
+### 次の担当への注意・判断待ち
+- LIVEシートのMUTEK重複行を整理し、画像参照切れも解消してからPublishを再実行する。
+
 ## 2026-08-17 / Codex / 完了（Publish停止のCMSキャッシュ番号修正）
 
 ### 実施

@@ -2295,6 +2295,19 @@ function renderEditions(){
 
 // EDITIONS / LINEUPS シートを優先して開催回を読み込む。GASが未接続の場合は
 // editRow() が読み込んだ既存のFESTIVALS Editions JSONをそのまま使う。
+function duplicateEditionRows(rows){
+  const byId=new Map();
+  (Array.isArray(rows)?rows:[]).forEach(row=>{
+    const id=String(row?.EDITION_ID||'').trim();
+    if(!id) return;
+    if(!byId.has(id)) byId.set(id,[]);
+    byId.get(id).push(Number(row._row)||0);
+  });
+  return [...byId.entries()]
+    .filter(([,rowNums])=>rowNums.length>1)
+    .map(([id,rowNums])=>({id,rowNums}));
+}
+
 async function loadEditionsFromSheet(festivalId){
   if(!festivalId) return;
   try{
@@ -2315,6 +2328,16 @@ async function loadEditionsFromSheet(festivalId){
       return;
     }
     editionSheetLoadError = '';
+    const duplicateIds=duplicateEditionRows(er.rows);
+    if(duplicateIds.length){
+      const detail=duplicateIds.slice(0,10).map(x=>
+        '・'+x.id+'（'+x.rowNums.filter(Boolean).map(n=>n+'行目').join(' / ')+'）').join('\n');
+      editionSheetLoadError='EDITIONSに重複した開催回があります。\n'+detail
+        +'\n重複を整理してから再読み込みしてください';
+      editionSheetLoaded=false;
+      toast(editionSheetLoadError+' — 保存を停止しました','error');
+      return;
+    }
     editionRowById = new Map(er.rows
       .map(r => [String(r.EDITION_ID||'').trim(), Number(r._row)||0])
       .filter(([id,row]) => id && row));
