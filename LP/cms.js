@@ -2169,7 +2169,14 @@ function renderLineupTags(prefix){
    EDITIONS
    ============================================================== */
 function addEdition(){
-  const year = String(new Date().getFullYear());
+  // 既存の開催回がある場合に今年を初期値にすると、同じ
+  // FESTIVAL_ID-YYYY を二重登録しやすい。常に最大年の翌年を提案する。
+  const years=editions.map(e=>Number(String(e.year||'').trim()))
+    .filter(y=>Number.isInteger(y)&&y>=2000&&y<=2100);
+  const year = String(years.length ? Math.max(...years)+1 : new Date().getFullYear());
+  if(editions.some(e=>String(e.year||'').trim()===year)){
+    return toast(year+'年の開催回は既にあります。既存の回を編集してください','error');
+  }
   editions.push({year,edition:'',date:'',location:'',location_ja:'',pref:'',venueId:'',address:'',lat:'',lng:'',ticketUrl:'',flyer:'',status:'announced',lineup:[]});
   selectedEditionIndex = editions.length - 1;
   markFormDirty();
@@ -3946,6 +3953,11 @@ function syncNewEditionRows(festivalId, sourceEditions=editions){
   let nextEditionRow=editionSheetMaxRow+1;
   let nextLineupRow=lineupSheetMaxRow+1;
   const usedRows=new Set();
+  const pendingIds=rows.map(e=>festivalId+'-'+String(e.year).trim());
+  const duplicateId=pendingIds.find((id,i)=>pendingIds.indexOf(id)!==i);
+  if(duplicateId){
+    return Promise.reject(new Error('同じ開催年のEDITIONSが複数あります: '+duplicateId+'。保存前に片方を削除してください'));
+  }
   rows.forEach(e=>{
     const parts=String(e.date||'').split('/').map(s=>s.trim());
     const eid=festivalId+'-'+String(e.year).trim();

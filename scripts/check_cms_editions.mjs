@@ -52,6 +52,7 @@ const BRIDGE = `
   get editionRowById(){return editionRowById}, set editionRowById(v){editionRowById=v},
   get editionSheetLoadError(){return editionSheetLoadError}, set editionSheetLoadError(v){editionSheetLoadError=v},
   get editions(){return editions},
+  addEdition,
   get editState(){return editState},
 };`;
 const src = fs.readFileSync(CMS_PATH, 'utf8') + BRIDGE;
@@ -101,6 +102,20 @@ function makeCtx({ cityValue = 'Ibaraki' } = {}) {
 const results = [];
 const check = (name, pass, detail) => { results.push([name, pass, detail]); };
 
+// ---- 0) Add Edition が既存年を再利用しないこと ----------------------------
+{
+  const c = makeCtx();
+  c.__T.editions.length = 0;
+  c.__T.editions.push({ year: '2026', date: '2026-08-15' });
+  c.toast = () => {};
+  c.markFormDirty = () => {};
+  c.renderEditions = () => {};
+  c.__T.addEdition();
+  check('既存回がある場合はAdd Editionを翌年で作る',
+    c.__T.editions.at(-1)?.year === '2027',
+    `追加年=${c.__T.editions.at(-1)?.year}`);
+}
+
 // ---- 1) FESTIVALS の DATE を翌年にしても、過去回を書き換えないこと ----
 {
   const c = makeCtx();
@@ -148,6 +163,27 @@ const check = (name, pass, detail) => { results.push([name, pass, detail]); };
     edCall?.PREF === 'Ibaraki', `PREF=${JSON.stringify(edCall?.PREF)}`);
   check('EDITION_ID は {festivalId}-{年}',
     edCall?.EDITION_ID === 'loa-lost-paradise-2026', `EDITION_ID=${edCall?.EDITION_ID}`);
+}
+
+// ---- 3b) 同じ画面で同じ年を2件追加しないこと ------------------------------
+{
+  const c = makeCtx();
+  c.__T.editionSheetRows = [];
+  c.__T.lineupSheetRows = [];
+  c.__T.editionSheetMaxRow = 98;
+  c.__T.lineupSheetMaxRow = 400;
+  c.__T.editionSheetLoaded = true;
+  c.gasWriteSucceeded = () => true;
+  let err = null;
+  await c.syncNewEditionRows('same-fest', [
+    { year: '2027', date: '2027-05-01', lineup: [] },
+    { year: '2027', date: '2027-06-01', lineup: [] },
+  ]).catch(e => err = e);
+  check('同じ年の新規開催回を保存前に止める',
+    err && String(err.message).includes('same-fest-2027'),
+    err ? err.message : 'エラーなし');
+  check('重複検知時はシートへ書き込まない',
+    c.__calls.length === 0, `書き込み=${c.__calls.length}件`);
 }
 
 // ---- 4) 開催回が1つも無いフェスでも追加できること ----
