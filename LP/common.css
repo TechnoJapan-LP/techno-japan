@@ -147,7 +147,20 @@ nav .logo, .footer-logo {
 nav .nav-links {
   display: flex;
   gap: 32px;
+  align-items: center;
 }
+/* JA/ENはページ内のリンク数に左右されず、常にナビ右端に揃える */
+nav .nav-links .nav-lang {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  white-space: nowrap;
+  margin-left: 4px;
+  padding-left: 16px;
+  border-left: 1px solid rgba(240,237,232,0.15);
+}
+nav .nav-links .nav-lang .nav-lang-sep { opacity: 0.45; }
 nav .nav-links a {
   font-family: var(--font-mono);
   font-size: 10px;
@@ -251,6 +264,9 @@ nav .nav-links .nav-social .tj-fav-count {
   font-family: var(--font-mono);
   font-size: 12px;
   letter-spacing: 0.2em;
+  align-self: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 .nav-overlay .nav-lang a,
 .nav-overlay .nav-lang .nav-lang-cur {
