@@ -83,9 +83,12 @@ function csvToObjects(text) {
   const rows = parseCSV(text).filter(r => r.some(c => c.trim() !== ''));
   if (!rows.length) return [];
   const headers = rows[0].map(h => h.trim());
-  return rows.slice(1).map(r => {
+  return rows.slice(1).map((r, i) => {
     const o = {};
     headers.forEach((h, i) => { o[h] = (r[i] ?? '').trim(); });
+    // Google Sheetsの1行目はヘッダーなので、データ行は2行目から始まる。
+    // 検証エラーをCMS/シート上で直ちに特定できるよう、内部メタ情報として保持する。
+    o._row = i + 2;
     return o;
   });
 }
@@ -116,13 +119,18 @@ function isPublished(row, statusKey = 'STATUS') {
 
 // published 行は errors（ビルド停止）、非公開の下書きは warnings（移行時に直すリスト）。
 // スキーマ §6 の狙いは「出力されるデータの品質保証」。下書きのゴミで CI を止めない。
-function validateId(sheet, id, seen, isPub) {
+function validateId(sheet, id, seen, isPub, row) {
   const sink = isPub ? errors : warnings;
   const tag = isPub ? '' : '（draft）';
+  const rowTag = row ? `（${row}行目）` : '';
   if (!id) { sink.push(`${sheet}: ID空欄の行がある${tag}`); return; }
-  if (!ID_RE.test(id)) sink.push(`${sheet}: ID形式違反 "${id}"${tag}（[a-z0-9-]+ のみ・連続/前後ハイフン禁止）`);
-  if (seen.has(id)) sink.push(`${sheet}: ID重複 "${id}"${tag}`);
-  seen.add(id);
+  if (!ID_RE.test(id)) sink.push(`${sheet}: ID形式違反 "${id}"${rowTag}${tag}（[a-z0-9-]+ のみ・連続/前後ハイフン禁止）`);
+  if (seen.has(id)) {
+    const firstRow = seen.get(id);
+    sink.push(`${sheet}: ID重複 "${id}"（${firstRow}行目と${row || '?'}行目）${tag}`);
+  } else {
+    seen.set(id, row || null);
+  }
 }
 
 function checkGenre(sheet, id, genre) {
@@ -171,6 +179,7 @@ function normalizeCoordinate(sheet, id, key, value) {
 const DROP_KEYS = new Set([
   'editorNotes', 'lastEditedBy', 'lastEditedAt',
   'EDITORNOTES', 'LASTEDITEDBY', 'LASTEDITEDAT',
+  '_row',
 ]);
 function stripMeta(obj) {
   const o = {};
@@ -197,11 +206,11 @@ async function main() {
   const venueIds = new Set(raw.VENUES.map(r => r.ID).filter(Boolean));
 
   // --- ARTISTS ---
-  const seenA = new Set();
+  const seenA = new Map();
   const artists = [];
   for (const r of raw.ARTISTS) {
     const pub = isPublished(r);
-    validateId('ARTISTS', r.ID, seenA, pub);
+    validateId('ARTISTS', r.ID, seenA, pub, r._row);
     checkGenre('ARTISTS', r.ID, r.GENRE);
     if (r.URL && /instagram\.com/i.test(r.URL)) warnings.push(`ARTISTS ${r.ID}: URLカラムにinstagram.com`);
     if (!pub) continue;
@@ -209,22 +218,22 @@ async function main() {
   }
 
   // --- VENUES ---
-  const seenV = new Set();
+  const seenV = new Map();
   const venues = [];
   for (const r of raw.VENUES) {
     const pub = isPublished(r);
-    validateId('VENUES', r.ID, seenV, pub);
+    validateId('VENUES', r.ID, seenV, pub, r._row);
     checkGenre('VENUES', r.ID, r.GENRE);
     if (!pub) continue;
     venues.push(stripMeta(r));
   }
 
   // --- FESTIVALS（ブランド情報）---
-  const seenF = new Set();
+  const seenF = new Map();
   const festivals = [];
   for (const r of raw.FESTIVALS) {
     const pub = isPublished(r);
-    validateId('FESTIVALS', r.ID, seenF, pub);
+    validateId('FESTIVALS', r.ID, seenF, pub, r._row);
     checkGenre('FESTIVALS', r.ID, r.GENRE);
     if (/20\d\d/.test(r.NAME || '')) warnings.push(`FESTIVALS ${r.ID}: NAMEに年 "${r.NAME}"（EDITIONS移行で分離）`);
     // DATE は "YYYY-MM-DD" or "YYYY-MM-DD/YYYY-MM-DD" を許容
@@ -257,7 +266,7 @@ async function main() {
     if (nm && !nameToArtist.has(nm)) nameToArtist.set(nm, (a.ID || '').trim());
   }
 
-  const seenE = new Set();
+  const seenE = new Map();
   const editions = [];
   const lineups = [];
   if (EDITIONS_FROM_SHEET) {
@@ -267,7 +276,7 @@ async function main() {
       const id = String(r.EDITION_ID || '').trim();
       const fid = String(r.FESTIVAL_ID || '').trim();
       const pub = isPublished(r);
-      validateId('EDITIONS', id, seenE, pub);
+      validateId('EDITIONS', id, seenE, pub, r._row);
       if (!festivalIds.has(fid)) errors.push(`EDITIONS ${id}: FESTIVAL_ID参照切れ "${fid}"`);
       if (!pub) continue;
       editions.push(stripMeta({
@@ -482,6 +491,9 @@ async function main() {
   if (warnings.length) { console.log(`\n[警告] ${warnings.length}件（詳細は validation-report.txt）`); }
 
   if (errors.length) {
+    // Actionsの一覧画面からも原因が見えるようにする。検証を通過させたり、
+    // 自動修正したりはせず、あくまで安全停止の理由を目立たせるだけ。
+    errors.forEach(e => console.error(`::error title=Publish blocked::${e}`));
     console.error('\nエラーがあるためJSON書き出しを停止（スキーマ §6）。validation-report.txt は出力済み。');
     process.exit(1);
   }

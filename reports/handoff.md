@@ -3,6 +3,33 @@
 セッション間の短期的な引き継ぎ専用ログです。
 長い背景説明・事故の経緯・設計判断は [AUDIT_TECHNO_JAPAN.md](../AUDIT_TECHNO_JAPAN.md) に記録し、ここからリンクしてください。
 
+## 2026-08-17 / Codex / 完了（Publish重複エラーの診断改善）
+
+### 実施
+- Publish pipelineが安全停止した原因を確認。LIVEのEDITIONSに`snow-machine-japan-2026`の重複があり、データを推測で自動統合せず公開を停止する現行仕様が正常に働いていた。
+- CSV取得時にシート行番号を内部保持し、ID重複エラーを「どのIDの何行目と何行目か」まで表示するよう改善。
+- GitHub Actionsのエラー注釈にも検証結果を出し、一覧画面から原因を確認できるよう改善。データの自動削除・先勝ち採用は行わない。
+
+### コミット
+- SHA: 未コミット
+- push / rebase 状態: 未実施
+
+### 検証
+- `node --check scripts/fetch-data.mjs`: 成功
+- `node scripts/check_cms_publish_guard.mjs`: 全項目成功
+- `git diff --check`: 成功
+- 実ブラウザ確認: 今回はCI診断コードのみの変更のため対象UIなし。Publish pipelineの実行確認は重複データ修正後に実施
+
+### 変更したパターン
+- `scripts/fetch-data.mjs`のCSV行番号メタ情報、ID重複診断、GitHub Actionsエラー注釈: 1経路
+
+### 未確認の類似パターン
+- 実際のLIVEシートで修正後にPublishが成功する経路: 未確認（EDITIONS重複の修正が必要）
+- `LINEUPS`の同一`EDITION_ID`複数行: 確認済み・0件（出演者ごとの複数行は正しい）
+
+### 次の担当への注意・判断待ち
+- `snow-machine-japan-2026`について、EDITIONSシートの重複2行を内容確認し、誤登録行をユーザーが修正する必要がある。修正後にPublish Nowを再実行する。
+
 ## 2026-08-07 / Codex / 完了（LINEUP候補の誤採用防止）
 
 ### 実施
