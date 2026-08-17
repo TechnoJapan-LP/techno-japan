@@ -3,6 +3,31 @@
 セッション間の短期的な引き継ぎ専用ログです。
 長い背景説明・事故の経緯・設計判断は [AUDIT_TECHNO_JAPAN.md](../AUDIT_TECHNO_JAPAN.md) に記録し、ここからリンクしてください。
 
+## 2026-08-17 / Codex / 完了（Publish停止のCMSキャッシュ番号修正）
+
+### 実施
+- Publish pipelineの`Check asset cache busting`失敗を確認。
+- Edition追加重複防止を含む`LP/cms.js`の変更に対し、参照元`LP/cms.html`の`cms.js?v=82`が更新されていなかったため、`v=83`へ更新。
+
+### コミット
+- SHA: 未コミット
+- push / rebase 状態: 未実施
+
+### 検証
+- `node scripts/check_cms_editions.mjs`: 14/14項目成功（直前確認）
+- `git diff --check`: 実施予定
+- Publish pipeline: `Check asset cache busting`で停止した原因をログ確認済み。修正後の再実行は未実施
+
+### 変更したパターン
+- `LP/cms.html`の`cms.js`キャッシュバージョン: 1箇所
+
+### 未確認の類似パターン
+- CMSキャッシュ番号修正後のPublish pipeline: 未確認
+- 他のJS/CSS参照バージョン: 確認済み・0件
+
+### 次の担当への注意・判断待ち
+- push後にPublish pipelineを再実行し、asset cache bustingからDeployまで成功することを確認する。
+
 ## 2026-08-17 / Codex / 完了（FESTIVALS月フィルターの年対応）
 
 ### 実施
