@@ -1113,6 +1113,11 @@ function initStoryVisualRail() {
   const index = rail.querySelector('#story-visual-index');
   const date = rail.querySelector('#story-visual-date');
   const dates = items.map(item => item.querySelector('.side-card-meta')?.textContent.split('·')[0].trim() || '');
+  const activate = (n) => {
+    slides.forEach((slide, i) => slide.classList.toggle('is-active', i === n));
+    if (index) index.textContent = String(n + 1).padStart(2, '0');
+    if (date) date.textContent = dates[n] || '';
+  };
   let frame = 0;
   const sync = () => {
     frame = 0;
@@ -1127,16 +1132,18 @@ function initStoryVisualRail() {
       const br = b.getBoundingClientRect();
       return Math.abs(ar.top + ar.height / 2 - viewportCenter) - Math.abs(br.top + br.height / 2 - viewportCenter);
     })[0];
-    const n = Number(active.dataset.storyIndex) || 0;
-    slides.forEach((slide, i) => slide.classList.toggle('is-active', i === n));
-    if (index) index.textContent = String(n + 1).padStart(2, '0');
-    if (date) date.textContent = dates[n] || '';
+    activate(Number(active.dataset.storyIndex) || 0);
   };
   const requestSync = () => {
     if (!frame) frame = requestAnimationFrame(sync);
   };
   window.addEventListener('scroll', requestSync, { passive: true });
   window.addEventListener('resize', requestSync, { passive: true });
+  items.forEach(item => item.addEventListener('pointerenter', () => {
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      activate(Number(item.dataset.storyIndex) || 0);
+    }
+  }));
   sync();
 }
 
