@@ -756,19 +756,25 @@ function bindVenueHoverPreview(){
     const v = (typeof VENUES !== 'undefined') ? VENUES.find(x => x.id === id) : null;
     if (!v) return;
 
-    card.addEventListener('mouseenter', () => {
+    const show = () => {
       clearTimeout(hideTimer);
       fillFor(v);
       pane.classList.toggle('is-left', card.getBoundingClientRect().left + card.getBoundingClientRect().width / 2 > window.innerWidth / 2);
       pane.classList.add('is-active');
       pane.setAttribute('aria-hidden', 'false');
-    });
-    card.addEventListener('mouseleave', () => {
+    };
+    const hide = () => {
       // Tiny delay so quick hovers across cards don't strobe
       hideTimer = setTimeout(() => {
         pane.classList.remove('is-active');
         pane.setAttribute('aria-hidden', 'true');
       }, 80);
+    };
+    card.addEventListener('mouseenter', show);
+    card.addEventListener('focusin', show);
+    card.addEventListener('mouseleave', hide);
+    card.addEventListener('focusout', event => {
+      if (!card.contains(event.relatedTarget)) hide();
     });
   });
 }

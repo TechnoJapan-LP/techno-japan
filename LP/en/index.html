@@ -794,7 +794,7 @@
       <div class="featured-col">
         <a class="featured-card" href="${articleUrl(featured)}">
           <div class="featured-card-image"${ratioAttr(featured.cardRatio)}>
-            ${featured.image ? `<img ${tjImageSizeAttrs(featured.image)} src="${tjAssetPath(featured.image)}" alt="${tjLocalized(featured.title, '', featured.title_en)}" loading="eager" fetchpriority="high" decoding="async">` : `<div class="featured-card-image-placeholder">COMING SOON</div>`}
+            ${featured.image ? `<img ${tjImageSizeAttrs(featured.image)} src="${tjCardAssetPath(featured.image)}" data-original-src="${tjAssetPath(featured.image)}" onerror="if(this.dataset.originalSrc&&this.src!==this.dataset.originalSrc){this.src=this.dataset.originalSrc}else{this.style.display='none'}" alt="${tjLocalized(featured.title, '', featured.title_en)}" loading="eager" fetchpriority="high" decoding="async">` : `<div class="featured-card-image-placeholder">COMING SOON</div>`}
             <div class="featured-card-arrow"></div>
           </div>
           <div class="featured-card-body">

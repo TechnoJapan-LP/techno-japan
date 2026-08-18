@@ -825,6 +825,11 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
 <script src="common.js?v=13" defer></script>
 <!-- localize.js は defer にしない。下のインライン描画が同期実行で tjLocalized を呼ぶ -->
 <script src="localize.js?v=7"></script>
+<!-- カード画像の縮小版の対応表。これが無いと tjCardAssetPath は
+     **エラーを出さず原本（最大686KB）へフォールバック**する。
+     2026-08-19 まで news.html だけ読み込んでおらず、レールの記事画像が
+     全部原寸で配られていた（実測 1,808KB）。AUDIT §9-93。 -->
+<script src="image-derivatives.js?v=13"></script>
 <script src="data.js?v=10"></script>
 <script src="image-dimensions.js?v=38"></script>
 <script>
@@ -1082,7 +1087,7 @@ function renderMainGrid() {
   const featuredTitle = tjLocalized(featured.title, '', featured.title_en);
   document.getElementById('featured-col').innerHTML = `<div class="stories-visual" aria-hidden="true">
     ${storyItems.map((a, i) => `<div class="stories-visual-slide${i === 0 ? ' is-active' : ''}" data-story-visual="${i}">
-      ${a.image ? `<img ${tjImageSizeAttrs(a.image)} loading="${i === 0 ? 'eager' : 'lazy'}"${i === 0 ? ' fetchpriority="high"' : ''} decoding="async" src="${tjAssetPath(a.image)}" alt="">` : ''}
+      ${a.image ? `<img ${tjImageSizeAttrs(a.image)} loading="${i === 0 ? 'eager' : 'lazy'}"${i === 0 ? ' fetchpriority="high"' : ''} decoding="async" src="${tjCardAssetPath(a.image)}" data-original-src="${tjAssetPath(a.image)}" onerror="if(this.dataset.originalSrc&&this.src!==this.dataset.originalSrc){this.src=this.dataset.originalSrc}else{this.style.display='none'}" alt="">` : ''}
     </div>`).join('')}
     <div class="stories-visual-label">STORIES <span id="story-visual-index">01</span> / ${String(storyItems.length).padStart(2,'0')}</div>
     <div class="stories-visual-date" id="story-visual-date">${formatDateSplit(featured.date)}</div>
@@ -1091,7 +1096,7 @@ function renderMainGrid() {
   // Side right
   document.getElementById('side-col').innerHTML = storyItems.map((a, index) => `
     <div class="story-side-item" data-story-index="${index}"><a href="${articleDetailHref(a)}" data-article-detail-link class="side-card reveal" style="--reveal-delay:${index * 100}ms">
-      ${a.image ? `<div class="story-side-mobile-image"><img ${tjImageSizeAttrs(a.image)} loading="lazy" decoding="async" src="${tjAssetPath(a.image)}" alt="${tjLocalized(a.title, '', a.title_en)}"></div>` : ''}
+      ${a.image ? `<div class="story-side-mobile-image"><img ${tjImageSizeAttrs(a.image)} loading="lazy" decoding="async" src="${tjCardAssetPath(a.image)}" data-original-src="${tjAssetPath(a.image)}" onerror="if(this.dataset.originalSrc&&this.src!==this.dataset.originalSrc){this.src=this.dataset.originalSrc}else{this.style.display='none'}" alt="${tjLocalized(a.title, '', a.title_en)}"></div>` : ''}
       <div class="side-card-tag"><span class="tag-dot"></span> ${a.category}</div>
       <div class="side-card-title">${tjLocalized(a.title, '', a.title_en)}</div>
       <div class="side-card-excerpt">${tjLocalized(a.excerpt, '', a.excerpt_en)}</div>
@@ -1217,7 +1222,7 @@ function renderFeed() {
     <a href="${articleDetailHref(a)}" data-article-detail-link class="feed-card reveal" style="--reveal-delay:${index * 90}ms">
       <div class="feed-card-image">
         ${a.image
-          ? `<img ${tjImageSizeAttrs(a.image)} loading="lazy" decoding="async" src="${tjAssetPath(a.image)}" alt="${tjLocalized(a.title, '', a.title_en)}">`
+          ? `<img ${tjImageSizeAttrs(a.image)} loading="lazy" decoding="async" src="${tjCardAssetPath(a.image)}" data-original-src="${tjAssetPath(a.image)}" onerror="if(this.dataset.originalSrc&&this.src!==this.dataset.originalSrc){this.src=this.dataset.originalSrc}else{this.style.display='none'}" alt="${tjLocalized(a.title, '', a.title_en)}">`
           : `<div class="feed-card-image-placeholder">COMING SOON</div>`}
       </div>
       <div class="feed-card-tag"><span class="tag-dot"></span> ${a.category}</div>

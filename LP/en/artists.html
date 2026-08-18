@@ -788,7 +788,7 @@ function bindArtistHoverPreview() {
     card.dataset.artistPreviewBound = '1';
     const artist = (typeof ARTISTS !== 'undefined') ? ARTISTS.find(a => a.id === card.dataset.id) : null;
     if (!artist) return;
-    card.addEventListener('mouseenter', () => {
+    const show = () => {
       clearTimeout(hideTimer);
       meta.textContent = getGenreString(artist) || 'ARTIST';
       name.textContent = tjLocalized(artist.name, '', artist.name_en);
@@ -802,9 +802,15 @@ function bindArtistHoverPreview() {
       } else image.innerHTML = '<div class="placeholder">NO IMAGE</div>';
       pane.classList.toggle('is-left', card.getBoundingClientRect().left + card.getBoundingClientRect().width / 2 > window.innerWidth / 2);
       pane.classList.add('is-active'); pane.setAttribute('aria-hidden', 'false');
-    });
-    card.addEventListener('mouseleave', () => {
+    };
+    const hide = () => {
       hideTimer = setTimeout(() => { pane.classList.remove('is-active'); pane.setAttribute('aria-hidden', 'true'); }, 100);
+    };
+    card.addEventListener('mouseenter', show);
+    card.addEventListener('focusin', show);
+    card.addEventListener('mouseleave', hide);
+    card.addEventListener('focusout', event => {
+      if (!card.contains(event.relatedTarget)) hide();
     });
   });
 }

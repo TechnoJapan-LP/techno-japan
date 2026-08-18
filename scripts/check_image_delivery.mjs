@@ -127,6 +127,37 @@ for (const t of TARGETS) {
 }
 
 console.log();
+console.log('▸ 縮小版の対応表（image-derivatives.js）の読み込み');
+/* tjCardAssetPath は対応表（window.TJ_IMAGE_DERIVATIVES）が無いと、
+   **エラーを出さず原本へフォールバック**する。表示は正常なので気づけない。
+
+   2026-08-19、news.html だけがこのスクリプトを読み込んでおらず、
+   レールの記事画像が原寸（最大686KB）で配られていた。
+   実測: ニュース 2,157KB → 追加後 869KB（AUDIT §9-93）。
+
+   tjCardAssetPath を使う HTML は、必ず image-derivatives.js も読み込むこと。 */
+{
+  const hubs = fs.readdirSync(LP).filter((f) => f.endsWith('.html'));
+  const enDir = path.join(LP, 'en');
+  const enHubs = fs.existsSync(enDir)
+    ? fs.readdirSync(enDir).filter((f) => f.endsWith('.html')).map((f) => path.join('en', f))
+    : [];
+  let users = 0, missing = [];
+  for (const rel of [...hubs, ...enHubs]) {
+    const html = fs.readFileSync(path.join(LP, rel), 'utf-8');
+    if (!html.includes('tjCardAssetPath(')) continue;
+    users++;
+    if (!/<script src="\/?image-derivatives\.js\?v=\d+"/.test(html)) missing.push(rel);
+  }
+  if (!users) console.log('  － 使用ページなし');
+  else if (missing.length) {
+    fail(`${missing.length}ページが tjCardAssetPath を使うのに対応表を読み込んでいない: ${missing.join(', ')}`);
+  } else {
+    pass(`tjCardAssetPath を使う ${users}ページすべてが対応表を読み込んでいる`);
+  }
+}
+
+console.log();
 console.log('▸ 記事本文の外部画像（Google Drive）');
 /* ⚠️ 前夜の計測は自サイトへの通信しか数えず、記事を 209KB と報告した。
    実際は Drive の画像が別に約3.2MB あった。**外部も数える**こと。
