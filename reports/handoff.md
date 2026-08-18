@@ -11,12 +11,12 @@
 - 残存していたcommon.css/common.jsの古い参照をv23/v13へ統一。
 
 ### コミット
-- SHA: 生成物コミット予定
-- push / rebase 状態: 修正コミット後にrebase・自動検証済み。再push予定
+- SHA: `d48bddd1`
+- push / rebase 状態: push済み。Deploy成功
 
 ### 検証
 - `python3 scripts/check_asset_versions.py --base HEAD~1`: 成功、混在0件
-- Publish: キャッシュ番号不一致で停止。修正後の再実行は未実施
+- Publish: 前回はキャッシュ番号不一致で停止。修正後のDeploy run `32089490254`は成功
 - 実ブラウザ確認: 既存NEWS確認済み、キャッシュ番号修正後の全ページは未確認
 
 ### 変更したパターン
@@ -25,11 +25,11 @@
 - common.css/common.js参照: 残存旧参照5ページ
 
 ### 未確認の類似パターン
-- Publish再実行後のDeploy成功: 未確認
+- Publish再実行後のDeploy成功: 確認済み
 - CMSの認証済み実ブラウザ操作: 未確認
 
 ### 次の担当への注意・判断待ち
-- 混在0件を確認済み。生成物をコミットしてpush後、Publish pipelineを再実行する。
+- 混在0件、Deploy成功、本番NEWS URLのHTTP 200と`storyItems = sorted.slice(0, 6)`を確認済み。
 
 ## 2026-08-18 / Codex / 完了（NEWS右レール6記事化）
 
