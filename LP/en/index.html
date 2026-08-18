@@ -757,7 +757,7 @@
 <script>
 /* ===== MEDIA TOP RENDERING ===== */
 (function () {
-  /* --- Stories: 1 featured + up to 7 side cards (3 visible by default) --- */
+  /* --- Stories: 1 featured + up to 7 side cards (5 visible by default) --- */
   /* 記事ごとに CMS で指定した表示比率を data 属性にする。
      未指定なら属性を出さず、従来のCSSがそのまま効く。 */
   function ratioAttr(r) {
@@ -767,7 +767,7 @@
     if (!/^\d+:\d+$/.test(v)) return '';
     return ` data-ratio="${v}" style="aspect-ratio:${v.replace(':', '/')}"`;
   }
-  const STORY_INITIAL_SIDE = 3;
+  const STORY_INITIAL_SIDE = 5;
   const STORY_MAX_SIDE = 7;
   const published = (typeof ARTICLES !== 'undefined' ? ARTICLES : [])
     .filter(a => a.status !== 'draft')
