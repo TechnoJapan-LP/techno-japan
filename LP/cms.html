@@ -421,6 +421,7 @@
       </div>
       <div class="form-group full" style="border:1px solid rgba(240,237,232,0.12);border-radius:var(--radius);padding:14px 16px">
         <label style="color:var(--yellow)">🌐 英語版（/en/ ページ用）<span class="label-hint">空欄なら英語ページは日本語にフォールバック。記事は英語版がある時だけ /en/ が作られる</span></label>
+        <div style="display:flex;gap:6px;margin:10px 0 2px;flex-wrap:wrap"><button id="ar-english-all-generate" class="btn btn-green btn-sm" onclick="generateEnglishArticleFields()">✨ 英語版を一括生成</button><span class="label-hint" style="align-self:center">入力済みの英語欄は上書きしません</span></div>
         <div class="form-group" style="margin:10px 0 0"><label>Title (EN)</label><div class="input-row"><input type="text" id="ar-title_en" placeholder="English title"><button class="btn btn-green btn-sm" onclick="aiTranslateField('ar-title','ar-title_en','en')">✨ 翻訳</button></div></div>
         <div class="form-group" style="margin:12px 0 0"><label>Excerpt (EN)</label><div class="input-row"><textarea id="ar-excerpt_en" rows="2" placeholder="English excerpt"></textarea><button class="btn btn-green btn-sm" onclick="aiTranslateField('ar-excerpt','ar-excerpt_en','en')">✨ 翻訳</button></div></div>
         <div class="form-group" style="margin:12px 0 0"><label>Body (EN) <span class="label-hint">HTMLのまま翻訳されます</span></label><textarea id="ar-body_en" rows="8" placeholder="<p>English body…</p>" style="font-family:var(--font-mono);font-size:.78rem"></textarea>
@@ -549,6 +550,6 @@
   </div>
 </div>
 
-<script src="cms.js?v=88" defer></script>
+<script src="cms.js?v=89" defer></script>
 </body>
 </html>

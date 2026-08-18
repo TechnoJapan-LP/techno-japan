@@ -5778,6 +5778,56 @@ function aiTranslate_(text, target, isHtml){
   return gasPostJson_({ action: 'ai_translate', text: String(text).slice(0, 12000), target: target, html: !!isHtml });
 }
 
+/* 記事の空欄になっている英語フィールドを一括生成する。
+   既存の英語訳は上書きせず、本文はHTML構造を保ったまま翻訳する。 */
+async function generateEnglishArticleFields() {
+  flushArticleEditorSync();
+  const button = document.getElementById('ar-english-all-generate');
+  const fields = [
+    { source: 'ar-title', target: 'ar-title_en', label: 'Title (EN)', html: false },
+    { source: 'ar-excerpt', target: 'ar-excerpt_en', label: 'Excerpt (EN)', html: false },
+    { source: 'ar-body', target: 'ar-body_en', label: 'Body (EN)', html: true }
+  ];
+  const candidates = fields.filter(field => {
+    const source = (document.getElementById(field.source)?.value || '').trim();
+    const target = (document.getElementById(field.target)?.value || '').trim();
+    return source && target === '' && (!field.html || source !== '<p><br></p>');
+  });
+  if (!candidates.length) return toast('一括生成できる空欄の英語フィールドはありません', 'info');
+  if (!confirm(`英語版 ${candidates.length}項目を生成します。入力済みの英語欄は変更しません。続行しますか？`)) return;
+
+  if (button) {
+    button.disabled = true;
+    button.textContent = '✨ 英語版を生成中…';
+  }
+  let completed = 0;
+  let failed = 0;
+  try {
+    for (const field of candidates) {
+      const source = (document.getElementById(field.source)?.value || '').trim();
+      toast(`✨ ${field.label}を生成中… ${completed + 1}/${candidates.length}`, 'info');
+      try {
+        const result = await aiTranslate_(source, 'en', field.html);
+        if (result?.status !== 'ok' || !result.text?.trim()) throw new Error(result?.message || '翻訳結果が空です');
+        const target = document.getElementById(field.target);
+        if (target) target.value = result.text.trim();
+        if (field.target === 'ar-body_en') renderEnglishBodyAltEditor();
+        completed++;
+      } catch (error) {
+        failed++;
+        console.warn('English article field generation failed', field.target, error);
+      }
+    }
+    if (completed) markFormDirty();
+    toast(`英語版を${completed}項目生成しました${failed ? `（${failed}項目は失敗。再実行できます）` : ''}。内容を確認して保存してください`, failed ? 'error' : 'success');
+  } finally {
+    if (button) {
+      button.disabled = false;
+      button.textContent = '✨ 英語版を一括生成';
+    }
+  }
+}
+
 function aiTranslateField(srcId, dstId, target){
   const src = (document.getElementById(srcId)?.value || '').trim();
   if (!src) return toast('先に元のテキストを入力してください', 'error');
