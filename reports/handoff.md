@@ -3,6 +3,33 @@
 セッション間の短期的な引き継ぎ専用ログです。
 長い背景説明・事故の経緯・設計判断は [AUDIT_TECHNO_JAPAN.md](../AUDIT_TECHNO_JAPAN.md) に記録し、ここからリンクしてください。
 
+## 2026-08-18 / Codex / 作業中（CMSの英語本文alt編集）
+
+### 実施
+- CMSのBody (EN)内にある`img`タグを自動検出。
+- 画像ごとのEnglish alt入力欄を追加し、入力内容を既存の`body_en` HTMLへ保存できるようにした。
+- CMSキャッシュ番号をv85へ更新。
+
+### コミット
+- SHA: 未コミット
+- push / rebase 状態: ローカル検証後にコミット予定。push未実施
+
+### 検証
+- `node --check LP/cms.js`: 成功
+- `node scripts/check_cms_preview_frame.mjs`: 成功
+- `git diff --check`: 成功
+- 認証済みCMSでの入力→保存→再表示: 未確認
+
+### 変更したパターン
+- ARTICLESのBody (EN)画像alt編集: 1パターン
+
+### 未確認の類似パターン
+- 画像なし英語本文: 自動的に案内文を表示する経路、実ブラウザ未確認
+- 複数画像のalt保存・再表示: 実ブラウザ未確認
+
+### 次の担当への注意・判断待ち
+- CMSでSnow Machine記事を開き、Body (EN)の画像ごとに英語altを入力して保存・再表示まで確認する。確認後にpush・Publishする。
+
 ## 2026-08-18 / Codex / 完了（EN記事のSEOタイトル統一）
 
 ### 実施

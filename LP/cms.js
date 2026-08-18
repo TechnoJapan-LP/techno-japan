@@ -791,7 +791,8 @@ function tryRecoverArticleDraft(){
     setVal('ar-excerpt', draft.excerpt);
     setArticleBody(draft.body || '');
     setVal('ar-tags', draft.tags);
-    if (draft.id) document.getElementById('ar-id').dataset.userEdited = '1';
+  renderEnglishBodyAltEditor();
+  if (draft.id) document.getElementById('ar-id').dataset.userEdited = '1';
     if (draft.readTime) document.getElementById('ar-readTime').dataset.userEdited = '1';
     toast('下書きを復元しました', 'success');
     markFormDirty();
@@ -808,6 +809,48 @@ let articleSelectedImage = null;
 let articleLastLoadedBody = '';
 let articleQuillUserEdited = false;
 let articleRawBodyHtml = '';
+
+/* 英語本文の画像alt編集。body_enはHTML textareaで管理されるため、
+   画像タグだけを安全に置換し、本文全体をDOMParserで再シリアライズしない。 */
+function replaceEnglishBodyImageAlt(html, targetIndex, value) {
+  let index = 0;
+  const safe = String(value || '').trim()
+    .replace(/&/g, '&amp;').replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return String(html || '').replace(/<img\b[^>]*>/gi, (tag) => {
+    if (index++ !== targetIndex) return tag;
+    if (/\salt\s*=\s*(["'])[^]*?\1/i.test(tag)) {
+      return tag.replace(/\salt\s*=\s*(["'])[^]*?\1/i, ` alt="${safe}"`);
+    }
+    return tag.replace(/^<img\b/i, `<img alt="${safe}"`);
+  });
+}
+
+function renderEnglishBodyAltEditor() {
+  const host = document.getElementById('ar-body-en-alt-editor');
+  const source = document.getElementById('ar-body_en');
+  if (!host || !source) return;
+  const tags = String(source.value || '').match(/<img\b[^>]*>/gi) || [];
+  if (!tags.length) {
+    host.textContent = '英語本文に画像が入ると、ここでEnglish altを編集できます。';
+    return;
+  }
+  host.innerHTML = `<div style="margin-bottom:6px;color:var(--yellow)">画像の説明（EN）</div>` + tags.map((tag, index) => {
+    const src = (tag.match(/\bsrc\s*=\s*(["'])([^"']*)\1/i) || [,'',''])[2];
+    const alt = (tag.match(/\balt\s*=\s*(["'])([^]*?)\1/i) || [,'',''])[2];
+    return `<label style="display:flex;gap:8px;align-items:center;margin:5px 0">
+      <span style="width:28px;flex:none">#${index + 1}</span>
+      <span title="${esc(src)}" style="width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(src.split('/').pop() || 'image')}</span>
+      <input type="text" data-en-alt-index="${index}" value="${esc(alt)}" placeholder="English image description" style="flex:1;min-width:0">
+    </label>`;
+  }).join('');
+  host.querySelectorAll('[data-en-alt-index]').forEach((input) => {
+    input.addEventListener('input', () => {
+      source.value = replaceEnglishBodyImageAlt(source.value, Number(input.dataset.enAltIndex), input.value);
+      markFormDirty();
+    });
+  });
+}
 
 function setArticleImageToolsEnabled(enabled){
   ['ar-image-layout','ar-image-crop','ar-image-zoom','ar-image-x','ar-image-y','ar-image-pair','ar-image-layout-apply','ar-image-alt'].forEach(id => {
@@ -1066,6 +1109,7 @@ function initArticleEditor(){
     markFormDirty();
     scheduleArticleEditorSync('source');
   });
+  document.getElementById('ar-body_en')?.addEventListener('input', renderEnglishBodyAltEditor);
   // ドラッグ&ドロップ + ペースト
   setupArticleEditorDropPaste();
   setupArticleScrollGuard();
@@ -3908,7 +3952,7 @@ function editRow(section, rowNum){
     setVal('ar-category',row.category||'REPORT'); setVal('ar-date',fmtDate(row.date));
     setVal('ar-cardRatio',row.cardRatio||''); setVal('ar-heroRatio',row.heroRatio||'');
     festPickerSetValue(row.festivalId||'');
-    setVal('ar-title_en',row.title_en||''); setVal('ar-excerpt_en',row.excerpt_en||''); setVal('ar-body_en',row.body_en||'');
+    setVal('ar-title_en',row.title_en||''); setVal('ar-excerpt_en',row.excerpt_en||''); setVal('ar-body_en',row.body_en||''); renderEnglishBodyAltEditor();
     setVal('ar-author',row.author||'TECHNO JAPAN');
     setVal('ar-image',row.image); setVal('ar-readTime',row.readTime);
     setVal('ar-views',row.views); setVal('ar-featured',String(row.featured==='true'||row.featured===true));
@@ -5704,7 +5748,7 @@ function aiTranslateBody(){
   toast('✨ 本文を英訳中...（長い記事は少し時間がかかります）', 'info');
   aiTranslate_(src, 'en', true).then(d => {
     if (d.status === 'ok' && d.text){
-      document.getElementById('ar-body_en').value = d.text.trim();
+      document.getElementById('ar-body_en').value = d.text.trim(); renderEnglishBodyAltEditor();
       markFormDirty();
       toast('英訳完了 — 内容を確認して保存してください', 'success');
     } else aiFail('翻訳', d.message);
