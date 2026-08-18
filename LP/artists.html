@@ -222,6 +222,8 @@
 /* HÖR-inspired artist hover preview: desktop only, never blocks the list. */
 .artist-preview-pane { position:fixed; z-index:40; right:24px; top:50%; transform:translateY(-50%) translateX(18px); width:min(320px,28vw); padding:10px; background:rgba(8,8,8,.94); border:1px solid rgba(240,237,232,.22); pointer-events:none; opacity:0; transition:opacity .25s ease,transform .35s cubic-bezier(.16,1,.3,1); backdrop-filter:blur(10px); }
 .artist-preview-pane.is-active { opacity:1; transform:translateY(-50%) translateX(0); }
+.artist-preview-pane.is-left { right:auto; left:24px; transform:translateY(-50%) translateX(-18px); }
+.artist-preview-pane.is-left.is-active { transform:translateY(-50%) translateX(0); }
 .artist-preview-img { aspect-ratio:4/3; overflow:hidden; background:#151515; margin-bottom:14px; }
 .artist-preview-img img { width:100%; height:100%; object-fit:cover; display:block; }
 .artist-preview-img .placeholder { height:100%; display:grid; place-items:center; color:rgba(240,237,232,.25); font:9px var(--font-mono); letter-spacing:.2em; }
@@ -798,6 +800,7 @@ function bindArtistHoverPreview() {
         img.alt = artist.name || ''; img.loading = 'eager'; img.decoding = 'async';
         img.src = tjAssetPath(artist.image); image.appendChild(img);
       } else image.innerHTML = '<div class="placeholder">NO IMAGE</div>';
+      pane.classList.toggle('is-left', card.getBoundingClientRect().left + card.getBoundingClientRect().width / 2 > window.innerWidth / 2);
       pane.classList.add('is-active'); pane.setAttribute('aria-hidden', 'false');
     });
     card.addEventListener('mouseleave', () => {
