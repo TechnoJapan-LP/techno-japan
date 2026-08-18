@@ -11,8 +11,8 @@
 - EN記事5件、関連するENフェス詳細5件を再生成。
 
 ### コミット
-- SHA: `8ace0aa7`
-- push / rebase 状態: 実ブラウザ確認済み。push予定
+- SHA: `de740f6c`
+- push / rebase 状態: rebase後にpush済み。Deploy成功
 
 ### 検証
 - `node --check scripts/build-detail-pages.mjs`: 成功
@@ -29,7 +29,7 @@
 - 本番反映後の構造化データ: 未確認
 
 ### 次の担当への注意・判断待ち
-- `8ace0aa7`をpushし、Publish/Deploy成功と本番構造化データを確認する。
+- `de740f6c`のDeploy成功と、本番構造化データの英語タイトルを確認済み。
 
 ## 2026-08-18 / Codex / 完了（公開前キャッシュ番号不一致の解消）
 
