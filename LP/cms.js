@@ -852,6 +852,55 @@ function renderEnglishBodyAltEditor() {
   });
 }
 
+/* 英語本文内の日本語altだけを一括翻訳する。
+   空altは画像の内容を確認できないため推測で埋めず、すでに英語のaltも上書きしない。 */
+async function generateEnglishBodyAlts() {
+  const source = document.getElementById('ar-body_en');
+  const button = document.getElementById('ar-body-en-alt-generate');
+  if (!source) return;
+  const tags = String(source.value || '').match(/<img\b[^>]*>/gi) || [];
+  const candidates = tags.map((tag, index) => ({
+    index,
+    alt: (tag.match(/\balt\s*=\s*(["'])([^]*?)\1/i) || [,'',''])[2].trim()
+  })).filter(item => item.alt && /[ぁ-んァ-ン一-龥]/.test(item.alt));
+  if (!candidates.length) {
+    return toast('一括生成の対象になる日本語altはありません', 'info');
+  }
+  if (!confirm(`日本語alt ${candidates.length}件を英語に変換します。既存の英語altは変更しません。続行しますか？`)) return;
+
+  if (button) {
+    button.disabled = true;
+    button.textContent = '✨ 英語altを生成中…';
+  }
+  let completed = 0;
+  let failed = 0;
+  try {
+    for (const item of candidates) {
+      toast(`✨ 英語altを生成中… ${completed + 1}/${candidates.length}`, 'info');
+      try {
+        const result = await aiTranslate_(item.alt, 'en', false);
+        const translated = String(result?.text || '').trim().replace(/^['"“”「」]+|['"“”「」]+$/g, '');
+        if (result?.status !== 'ok' || !translated) throw new Error(result?.message || '翻訳結果が空です');
+        source.value = replaceEnglishBodyImageAlt(source.value, item.index, translated);
+        completed++;
+      } catch (error) {
+        failed++;
+        console.warn('English alt generation failed', item.index, error);
+      }
+    }
+    if (completed) {
+      renderEnglishBodyAltEditor();
+      markFormDirty();
+    }
+    toast(`英語altを${completed}件生成しました${failed ? `（${failed}件は失敗。再実行できます）` : ''}。内容を確認して保存してください`, failed ? 'error' : 'success');
+  } finally {
+    if (button) {
+      button.disabled = false;
+      button.textContent = '✨ 英語altを一括生成';
+    }
+  }
+}
+
 function setArticleImageToolsEnabled(enabled){
   ['ar-image-layout','ar-image-crop','ar-image-zoom','ar-image-x','ar-image-y','ar-image-pair','ar-image-layout-apply','ar-image-alt'].forEach(id => {
     const el = document.getElementById(id);

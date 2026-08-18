@@ -3,12 +3,13 @@
 セッション間の短期的な引き継ぎ専用ログです。
 長い背景説明・事故の経緯・設計判断は [AUDIT_TECHNO_JAPAN.md](../AUDIT_TECHNO_JAPAN.md) に記録し、ここからリンクしてください。
 
-## 2026-08-18 / Codex / 作業中（CMSの英語本文alt編集）
+## 2026-08-18 / Codex / 作業中（CMSの英語本文alt一括生成）
 
 ### 実施
 - CMSのBody (EN)内にある`img`タグを自動検出。
 - 画像ごとのEnglish alt入力欄を追加し、入力内容を既存の`body_en` HTMLへ保存できるようにした。
-- CMSキャッシュ番号をv85へ更新。
+- 日本語を含むaltだけを対象に、既存の英語altや空欄を上書きしない一括AI翻訳ボタンを追加。
+- CMSキャッシュ番号をv86へ更新。
 
 ### コミット
 - SHA: 未コミット
@@ -18,17 +19,19 @@
 - `node --check LP/cms.js`: 成功
 - `node scripts/check_cms_preview_frame.mjs`: 成功
 - `git diff --check`: 成功
-- 認証済みCMSでの入力→保存→再表示: 未確認
+- 認証済みCMSでの一括生成→入力確認→保存→再表示: 未確認
 
 ### 変更したパターン
-- ARTICLESのBody (EN)画像alt編集: 1パターン
+- ARTICLESのBody (EN)画像alt手入力: 1パターン
+- ARTICLESのBody (EN)日本語altの一括英訳: 1パターン
 
 ### 未確認の類似パターン
 - 画像なし英語本文: 自動的に案内文を表示する経路、実ブラウザ未確認
 - 複数画像のalt保存・再表示: 実ブラウザ未確認
+- AI翻訳失敗時の再実行と、空欄・既存英語altの保持: 実ブラウザ未確認
 
 ### 次の担当への注意・判断待ち
-- CMSでSnow Machine記事を開き、Body (EN)の画像ごとに英語altを入力して保存・再表示まで確認する。確認後にpush・Publishする。
+- CMSでSnow Machine記事を開き、「英語altを一括生成」を実行し、生成結果を確認する。保存→再表示まで確認後にpush・Publishする。
 
 ## 2026-08-18 / Codex / 完了（EN記事のSEOタイトル統一）
 

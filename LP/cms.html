@@ -425,6 +425,7 @@
         <div class="form-group" style="margin:12px 0 0"><label>Excerpt (EN)</label><div class="input-row"><textarea id="ar-excerpt_en" rows="2" placeholder="English excerpt"></textarea><button class="btn btn-green btn-sm" onclick="aiTranslateField('ar-excerpt','ar-excerpt_en','en')">✨ 翻訳</button></div></div>
         <div class="form-group" style="margin:12px 0 0"><label>Body (EN) <span class="label-hint">HTMLのまま翻訳されます</span></label><textarea id="ar-body_en" rows="8" placeholder="<p>English body…</p>" style="font-family:var(--font-mono);font-size:.78rem"></textarea>
           <div id="ar-body-en-alt-editor" class="label-hint" style="margin-top:8px"></div>
+          <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap"><button id="ar-body-en-alt-generate" class="btn btn-green btn-sm" onclick="generateEnglishBodyAlts()">✨ 英語altを一括生成</button></div>
           <div style="display:flex;gap:6px;margin-top:6px"><button class="btn btn-green btn-sm" onclick="aiTranslateBody()">✨ 本文をまるごと英訳</button></div>
         </div>
       </div>
@@ -548,6 +549,6 @@
   </div>
 </div>
 
-<script src="cms.js?v=85" defer></script>
+<script src="cms.js?v=86" defer></script>
 </body>
 </html>
