@@ -3,6 +3,33 @@
 セッション間の短期的な引き継ぎ専用ログです。
 長い背景説明・事故の経緯・設計判断は [AUDIT_TECHNO_JAPAN.md](../AUDIT_TECHNO_JAPAN.md) に記録し、ここからリンクしてください。
 
+## 2026-08-18 / Codex / 作業中（公開前キャッシュ番号不一致の解消）
+
+### 実施
+- Publish失敗ログから、`detail.css`のv22据え置き、`cms.js`のv83据え置き、古いcommon参照を特定。
+- `DETAIL_CSS_VERSION`を23、CMS参照をv84へ更新。
+- 残存していたcommon.css/common.jsの古い参照をv23/v13へ統一。
+
+### コミット
+- SHA: 未コミット
+- push / rebase 状態: 修正後にrebase・自動検証・再push予定
+
+### 検証
+- Publish: キャッシュ番号不一致で停止。修正後は未実行
+- 実ブラウザ確認: 既存NEWS確認済み、キャッシュ番号修正後の全ページは未確認
+
+### 変更したパターン
+- detail.css参照: 全詳細ページ
+- cms.js参照: CMSページ1件
+- common.css/common.js参照: 残存旧参照5ページ
+
+### 未確認の類似パターン
+- Publish再実行後のDeploy成功: 未確認
+- CMSの認証済み実ブラウザ操作: 未確認
+
+### 次の担当への注意・判断待ち
+- `check_asset_versions.py`で混在が0件になったことを確認し、Publish pipelineを再実行する。
+
 ## 2026-08-18 / Codex / 完了（NEWS右レール6記事化）
 
 ### 実施
