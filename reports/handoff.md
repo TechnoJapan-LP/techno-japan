@@ -3,7 +3,7 @@
 セッション間の短期的な引き継ぎ専用ログです。
 長い背景説明・事故の経緯・設計判断は [AUDIT_TECHNO_JAPAN.md](../AUDIT_TECHNO_JAPAN.md) に記録し、ここからリンクしてください。
 
-## 2026-08-18 / Codex / 作業中（EN記事のSEOタイトル統一）
+## 2026-08-18 / Codex / 完了（EN記事のSEOタイトル統一）
 
 ### 実施
 - EN記事のパンくず構造化データに日本語タイトルが残る問題を修正。
@@ -11,25 +11,25 @@
 - EN記事5件、関連するENフェス詳細5件を再生成。
 
 ### コミット
-- SHA: 未コミット
-- push / rebase 状態: 最新originを取り込み済み。ローカル検証後にコミット予定
+- SHA: `8ace0aa7`
+- push / rebase 状態: 実ブラウザ確認済み。push予定
 
 ### 検証
 - `node --check scripts/build-detail-pages.mjs`: 成功
 - `git diff --check`: 成功
 - Snow Machine ENのBreadcrumbList: 英語タイトルを確認
-- 実ブラウザ確認: 未確認
+- `http://127.0.0.1:8080/en/articles/snow-mashine-2027-info.html`: 英語タイトル・関連記事を確認
 
 ### 変更したパターン
 - EN記事のBreadcrumbList title: 1パターン
 - EN記事の関連記事タイトル: 1パターン
 
 ### 未確認の類似パターン
-- 5件すべてのEN記事を実ブラウザで確認: 未確認
+- 5件すべてのEN記事を実ブラウザで確認: 自動再生成済み、代表記事を実ブラウザ確認
 - 本番反映後の構造化データ: 未確認
 
 ### 次の担当への注意・判断待ち
-- ローカルでEN記事と関連記事表示を確認してからpush・Publishする。
+- `8ace0aa7`をpushし、Publish/Deploy成功と本番構造化データを確認する。
 
 ## 2026-08-18 / Codex / 完了（公開前キャッシュ番号不一致の解消）
 
