@@ -1882,6 +1882,7 @@ function switchArticleEditor(mode){
     const current = articleQuill?.root?.innerHTML || articleRawBodyHtml || document.getElementById('ar-body').value || '';
     document.getElementById('ar-body-source').value = current;
     articleRawBodyHtml = current;
+    selectArticleImage(null);
     wrap.classList.add('source-mode');
     sourceTab.classList.add('active');
     visualTab.classList.remove('active');

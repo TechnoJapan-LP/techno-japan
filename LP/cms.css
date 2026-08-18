@@ -302,8 +302,9 @@ label .req-star{color:var(--accent);margin-left:4px}
 #ar-body-editor .ql-snow .ql-tooltip{background:var(--bg3);color:var(--text);border-color:var(--border);box-shadow:0 4px 16px rgba(0,0,0,.4)}
 #ar-body-editor .ql-snow .ql-tooltip input[type=text]{background:var(--bg2);color:var(--text);border-color:var(--border)}
 #ar-body-source{font-family:var(--font-mono);font-size:.8rem;display:none;width:100%;min-height:380px}
-.ar-editor-wrap.source-mode #ar-body-editor{display:none}
-.ar-editor-wrap.source-mode #ar-body-source{display:block}
+.ar-editor-wrap.source-mode #ar-body-editor,
+.ar-editor-wrap.source-mode .article-image-layout-tools{display:none !important}
+.ar-editor-wrap.source-mode #ar-body-source{display:block;box-sizing:border-box;position:relative;z-index:1}
 /* ----- Article preview pane (LP記事ページのスタイルを模倣) ----- */
 .ar-preview{margin-top:16px;background:#0e0e0e;border:1px solid var(--border);border-radius:var(--radius);padding:32px;display:none;max-height:600px;overflow-y:auto}
 .ar-editor-wrap.preview-mode + .ar-preview{display:block}
