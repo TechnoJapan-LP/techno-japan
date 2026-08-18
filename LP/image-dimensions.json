@@ -1235,11 +1235,11 @@
     388,
     480
   ],
-  "images/derivatives/card/festivals/mutek--c9f860dc-lg.webp": [
+  "images/derivatives/card/festivals/mutek--f584a76a-lg.webp": [
     960,
     640
   ],
-  "images/derivatives/card/festivals/mutek--c9f860dc-sm.webp": [
+  "images/derivatives/card/festivals/mutek--f584a76a-sm.webp": [
     480,
     320
   ],
@@ -1249,6 +1249,14 @@
   ],
   "images/derivatives/card/festivals/mutek-2025-flyer--9263c6bb-sm.webp": [
     384,
+    480
+  ],
+  "images/derivatives/card/festivals/mutek-2026-flyer--8a9470ad-lg.webp": [
+    720,
+    960
+  ],
+  "images/derivatives/card/festivals/mutek-2026-flyer--8a9470ad-sm.webp": [
+    360,
     480
   ],
   "images/derivatives/card/festivals/mutek-flyer--8a9470ad-lg.webp": [
@@ -1962,6 +1970,10 @@
   "images/festivals/mutek-2025-flyer.webp": [
     1350,
     1688
+  ],
+  "images/festivals/mutek-2026-flyer.webp": [
+    1200,
+    1600
   ],
   "images/festivals/mutek-flyer.webp": [
     1200,
