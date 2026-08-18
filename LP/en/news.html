@@ -104,7 +104,9 @@ html.tj-page-leaving body { opacity: 0; transition: opacity .18s ease; }
 /* Dure Vie-inspired editorial rail: the image stays in view while stories advance. */
 .stories-visual {
   position: sticky; top: 0;
-  height: 100vh; min-height: 620px;
+  /* PCでは正方形に近い縦長表示を避け、横長の編集写真として見せる */
+  width: 100%; aspect-ratio: 16 / 9;
+  height: auto; min-height: 0;
   overflow: hidden; background: #080808;
 }
 .stories-visual-slide { position: absolute; inset: 0; opacity: 0; transition: opacity .55s ease; }
@@ -114,8 +116,8 @@ html.tj-page-leaving body { opacity: 0; transition: opacity .18s ease; }
 .stories-visual-slide::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,8,8,.12), rgba(8,8,8,.06) 55%, rgba(8,8,8,.58)); pointer-events: none; }
 .stories-visual-date { position: absolute; right: 28px; bottom: 28px; z-index: 1; font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; line-height: 1.6; text-align: right; opacity: .8; }
 .stories-visual-label { position: absolute; left: 28px; bottom: 28px; z-index: 1; font-family: var(--font-mono); font-size: 9px; letter-spacing: .2em; color: var(--accent); text-transform: uppercase; }
-.story-side-item { min-height: 72vh; display: flex; flex-direction: column; justify-content: center; }
-.story-side-item .side-card { min-height: 72vh; flex: none; }
+.story-side-item { min-height: 46vh; display: flex; flex-direction: column; justify-content: center; }
+.story-side-item .side-card { min-height: 46vh; flex: none; }
 .story-side-mobile-image { display: none; }
 
 /* LEFT: Featured big image card */
@@ -193,7 +195,7 @@ html.tj-page-leaving body { opacity: 0; transition: opacity .18s ease; }
 }
 .side-card {
   display: flex; flex-direction: column; justify-content: center;
-  padding: 32px 36px;
+  padding: 26px 36px;
   flex: 1;
   border-bottom: 1px solid var(--card-border);
   position: relative;
