@@ -1082,7 +1082,7 @@ function renderMainGrid() {
   const featuredTitle = tjLocalized(featured.title, '', featured.title_en);
   document.getElementById('featured-col').innerHTML = `<div class="stories-visual" aria-hidden="true">
     ${storyItems.map((a, i) => `<div class="stories-visual-slide${i === 0 ? ' is-active' : ''}" data-story-visual="${i}">
-      ${a.image ? `<img ${tjImageSizeAttrs(a.image)} loading="${i === 0 ? 'eager' : 'lazy'}" decoding="async" src="${tjAssetPath(a.image)}" alt="">` : ''}
+      ${a.image ? `<img ${tjImageSizeAttrs(a.image)} loading="${i === 0 ? 'eager' : 'lazy'}"${i === 0 ? ' fetchpriority="high"' : ''} decoding="async" src="${tjAssetPath(a.image)}" alt="">` : ''}
     </div>`).join('')}
     <div class="stories-visual-label">STORIES <span id="story-visual-index">01</span> / ${String(storyItems.length).padStart(2,'0')}</div>
     <div class="stories-visual-date" id="story-visual-date">${formatDateSplit(featured.date)}</div>
