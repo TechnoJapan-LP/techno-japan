@@ -1071,7 +1071,8 @@ function getSorted(arr) {
 /* ========== RENDER MAIN GRID ========== */
 function renderMainGrid() {
   const sorted = getSorted(ARTICLES);
-  const storyItems = sorted.slice(0, 4);
+  // Dure Vie型の右レールを6記事まで表示し、スクロール回遊を増やす。
+  const storyItems = sorted.slice(0, 6);
   const featured = storyItems[0];
 
   // Featured left
