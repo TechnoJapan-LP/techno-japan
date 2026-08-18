@@ -5,8 +5,24 @@
     <link>https://techno-japan.media</link>
     <description>Japan&apos;s underground techno and house music media platform.</description>
     <language>ja-JP</language>
-    <lastBuildDate>Mon, 17 Aug 2026 03:46:20 -0000</lastBuildDate>
+    <lastBuildDate>Tue, 18 Aug 2026 03:40:42 -0000</lastBuildDate>
     <atom:link href="https://techno-japan.media/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Snow Machine Japan</title>
+      <link>https://techno-japan.media/festivals/snow-machine-japan.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/snow-machine-japan.html</guid>
+      <pubDate>Tue, 02 Mar 2027 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Hakuba — Snow Machine Japanは、山岳リゾートタウンである白馬を、エレクトロニック・ミュージック愛好家のためのウィンター・プレイグラウンドへと変貌させる。このフェスティバルは、スキーとスノーボードのカルチャーと、テクノやハウス・ミュージックにまたがる緻密にキュレーションされたラインアップを融合させている。日本アルプスを背景に、より規模の大きい夏フェス・サーキットとは一線を画す、こぢんまりとしたオルタナティブな体験を提供してくれる。</description>
+    </item>
+    <item>
+      <title>Mutek</title>
+      <link>https://techno-japan.media/festivals/mutek.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/mutek.html</guid>
+      <pubDate>Fri, 20 Nov 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Tokyo — MUTEK Tokyoは、モントリオール発の同フェスティバルが誇るオーディオビジュアル・パフォーマンスと電子音楽実験の融合を、日本の首都に届ける。会場では最先端のデジタルアート・インスタレーションとライブ・エレクトロニック・ミュージックのパフォーマンスが並行して展開され、サウンドとビジュアルテクノロジーが交差する領域でのイノベーションを追求するというブランドの根幹が貫かれている。</description>
+    </item>
     <item>
       <title>GROW THE CULTURE OPEN AIR</title>
       <link>https://techno-japan.media/festivals/grow-the-culture-open-air.html</link>
@@ -232,26 +248,10 @@
       <description>Nara — Momentは、奈良の歴史的な風景に丁寧にキュレーションされたエレクトロニック・プログラミングを持ち込み、古の環境と現代的なサウンドとの間に親密な対話を生み出している。フェスティバルはアーティスト選定において一貫して的を絞ったアプローチを保ち、規模よりも質を重視しながら、日本のアンダーグラウンド・シーンで活躍する実力派とこれから注目される才能の両方を紹介している。</description>
     </item>
     <item>
-      <title>HALOLA CAMP</title>
-      <link>https://techno-japan.media/festivals/halola-camp.html</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals/halola-camp.html</guid>
-      <pubDate>Sat, 27 Jun 2026 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Hokkaido — HALOLA CAMPは、北海道の大自然を舞台に、電子音楽を愛する人々が集うアットホームな野外イベントだ。ハウスからテクノまで幅広くカバーする、丁寧にキュレーションされたラインナップを通して、コミュニティとのつながりを大切にしているのが特徴である。日本最北の地を背景に繰り広げられるこのフェスは、都市型フェスティバルとは一線を画す、より内省的なオルタナティブとして存在感を放っている。</description>
-    </item>
-    <item>
-      <title>NU FESTIVAL</title>
-      <link>https://techno-japan.media/festivals/nu-festival.html</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals/nu-festival.html</guid>
-      <pubDate>Fri, 26 Jun 2026 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Tokyo — NU は NEXT NEW UNITY の略。音とアートの交差点に置かれた都市規模のプログラムを掲げ、再開発によって生まれた高輪ゲートウェイシティを舞台とする。 プログラムは5つに分かれ、NU ART が Sónar+D と六本木の SuperDeluxe、NU LIVE が Sónar Sound、NU STATION が J-WAVE と組む。ほかに NU CONNECTION と NU PARK が置かれる。音楽プログラムだけでなく、テクノロジーとクリエイティビティを扱う Sónar+D の枠組みごと持ち込んでいる点に、このフェスティバルの設計が出ている。</description>
-    </item>
-    <item>
       <title>野外テクノパーティTranscendenceで見た次世代ジェネレーションの可能性</title>
       <link>https://techno-japan.media/articles/transcendence-2025-report.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/transcendence-2025-report.html</guid>
-      <pubDate>Mon, 17 Aug 2026 03:46:20 -0000</pubDate>
+      <pubDate>Tue, 18 Aug 2026 03:40:42 -0000</pubDate>
       <category>REPORT</category>
       <description></description>
     </item>
@@ -259,7 +259,7 @@
       <title>MUTEK.JP 2025現地レポート WWWとO-EASTで体感した音と光の二日間</title>
       <link>https://techno-japan.media/articles/post-20251120.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/post-20251120.html</guid>
-      <pubDate>Mon, 17 Aug 2026 03:46:20 -0000</pubDate>
+      <pubDate>Tue, 18 Aug 2026 03:40:42 -0000</pubDate>
       <category>REPORT</category>
       <description></description>
     </item>
@@ -267,7 +267,7 @@
       <title>茨城 鉾田 nalu beachでビーチパーティLOA 8月15日開催</title>
       <link>https://techno-japan.media/articles/loa-lost-paradise-2026-info.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/loa-lost-paradise-2026-info.html</guid>
-      <pubDate>Mon, 17 Aug 2026 03:46:20 -0000</pubDate>
+      <pubDate>Tue, 18 Aug 2026 03:40:42 -0000</pubDate>
       <category>RAVE</category>
       <description></description>
     </item>
@@ -275,8 +275,16 @@
       <title>兵庫・三田の森で26時間 DIYパーティBON DISCOが13年目の夏へ</title>
       <link>https://techno-japan.media/articles/bondisco-2026-info.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/bondisco-2026-info.html</guid>
-      <pubDate>Mon, 17 Aug 2026 03:46:20 -0000</pubDate>
+      <pubDate>Tue, 18 Aug 2026 03:40:42 -0000</pubDate>
       <category>RAVE</category>
+      <description></description>
+    </item>
+    <item>
+      <title>Snow Machine 2027長野白馬で開催 出演者とステージ構成を解説</title>
+      <link>https://techno-japan.media/articles/snow-mashine-2027-info.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/articles/snow-mashine-2027-info.html</guid>
+      <pubDate>Tue, 18 Aug 2026 03:40:42 -0000</pubDate>
+      <category>FESTIVAL</category>
       <description></description>
     </item>
   </channel>
