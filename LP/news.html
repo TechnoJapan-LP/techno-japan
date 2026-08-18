@@ -1139,11 +1139,16 @@ function initStoryVisualRail() {
   };
   window.addEventListener('scroll', requestSync, { passive: true });
   window.addEventListener('resize', requestSync, { passive: true });
-  items.forEach(item => item.addEventListener('pointerenter', () => {
-    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  items.forEach(item => {
+    item.addEventListener('pointerenter', () => {
+      if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        activate(Number(item.dataset.storyIndex) || 0);
+      }
+    });
+    item.addEventListener('focusin', () => {
       activate(Number(item.dataset.storyIndex) || 0);
-    }
-  }));
+    });
+  });
   sync();
 }
 
