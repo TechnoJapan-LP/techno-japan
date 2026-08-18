@@ -1777,7 +1777,7 @@ function toggleFocusMode(){
     const stored = document.getElementById('ar-body')?.value || document.getElementById('ar-body-source')?.value || '';
     if (ed && !ed.innerHTML.trim() && stored.trim()) setArticleBody(stored);
     if (previewWasOn) updateArticlePreview(articleQuill?.root?.innerHTML || document.getElementById('ar-body').value, true);
-    if (ed) ed.focus();
+    if (ed && !wrap.classList.contains('source-mode')) ed.focus();
   }
   else {
     // 集中モード開始前に表示していた状態へ戻す。
