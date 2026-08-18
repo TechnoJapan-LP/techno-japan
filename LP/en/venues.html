@@ -101,6 +101,8 @@
   box-shadow: 0 24px 60px rgba(0,0,0,0.5);
 }
 .vp-pane.is-active { opacity: 1; transform: translateY(-50%) translateX(0); }
+.vp-pane.is-left { right:auto; left:32px; transform:translateY(-50%) translateX(-20px); }
+.vp-pane.is-left.is-active { transform:translateY(-50%) translateX(0); }
 .vp-img {
   position: relative; width: 100%; aspect-ratio: 4/3;
   overflow: hidden; background: rgba(240,237,232,0.04);
@@ -757,6 +759,7 @@ function bindVenueHoverPreview(){
     card.addEventListener('mouseenter', () => {
       clearTimeout(hideTimer);
       fillFor(v);
+      pane.classList.toggle('is-left', card.getBoundingClientRect().left + card.getBoundingClientRect().width / 2 > window.innerWidth / 2);
       pane.classList.add('is-active');
       pane.setAttribute('aria-hidden', 'false');
     });
