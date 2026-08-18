@@ -1107,20 +1107,37 @@ function renderMainGrid() {
 function initStoryVisualRail() {
   const rail = document.querySelector('.stories-visual');
   const items = [...document.querySelectorAll('[data-story-index]')];
-  if (!rail || !items.length || !('IntersectionObserver' in window)) return;
+  if (!rail || !items.length || rail.dataset.storyRailBound === 'true') return;
+  rail.dataset.storyRailBound = 'true';
   const slides = [...rail.querySelectorAll('[data-story-visual]')];
   const index = rail.querySelector('#story-visual-index');
   const date = rail.querySelector('#story-visual-date');
   const dates = items.map(item => item.querySelector('.side-card-meta')?.textContent.split('·')[0].trim() || '');
-  const io = new IntersectionObserver(entries => {
-    const active = entries.filter(e => e.isIntersecting).sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
-    if (!active) return;
-    const n = Number(active.target.dataset.storyIndex) || 0;
+  let frame = 0;
+  const sync = () => {
+    frame = 0;
+    const viewportCenter = window.innerHeight / 2;
+    const visible = items.filter(item => {
+      const rect = item.getBoundingClientRect();
+      return rect.bottom > 0 && rect.top < window.innerHeight;
+    });
+    if (!visible.length) return;
+    const active = visible.sort((a, b) => {
+      const ar = a.getBoundingClientRect();
+      const br = b.getBoundingClientRect();
+      return Math.abs(ar.top + ar.height / 2 - viewportCenter) - Math.abs(br.top + br.height / 2 - viewportCenter);
+    })[0];
+    const n = Number(active.dataset.storyIndex) || 0;
     slides.forEach((slide, i) => slide.classList.toggle('is-active', i === n));
     if (index) index.textContent = String(n + 1).padStart(2, '0');
     if (date) date.textContent = dates[n] || '';
-  }, { threshold: [0.45, 0.7], rootMargin: '-12% 0px -12% 0px' });
-  items.forEach(item => io.observe(item));
+  };
+  const requestSync = () => {
+    if (!frame) frame = requestAnimationFrame(sync);
+  };
+  window.addEventListener('scroll', requestSync, { passive: true });
+  window.addEventListener('resize', requestSync, { passive: true });
+  sync();
 }
 
 /* ========== RENDER CATEGORY NAV ========== */
