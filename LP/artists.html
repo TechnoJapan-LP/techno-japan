@@ -219,6 +219,18 @@
   text-transform: uppercase; opacity: 0.4;
 }
 
+/* HÖR-inspired artist hover preview: desktop only, never blocks the list. */
+.artist-preview-pane { position:fixed; z-index:40; right:24px; top:50%; transform:translateY(-50%) translateX(18px); width:min(320px,28vw); padding:10px; background:rgba(8,8,8,.94); border:1px solid rgba(240,237,232,.22); pointer-events:none; opacity:0; transition:opacity .25s ease,transform .35s cubic-bezier(.16,1,.3,1); backdrop-filter:blur(10px); }
+.artist-preview-pane.is-active { opacity:1; transform:translateY(-50%) translateX(0); }
+.artist-preview-img { aspect-ratio:4/3; overflow:hidden; background:#151515; margin-bottom:14px; }
+.artist-preview-img img { width:100%; height:100%; object-fit:cover; display:block; }
+.artist-preview-img .placeholder { height:100%; display:grid; place-items:center; color:rgba(240,237,232,.25); font:9px var(--font-mono); letter-spacing:.2em; }
+.artist-preview-meta { color:var(--accent); font:9px var(--font-mono); letter-spacing:.16em; text-transform:uppercase; margin-bottom:8px; }
+.artist-preview-name { font:32px/1 var(--font-display); text-transform:uppercase; margin-bottom:8px; }
+.artist-preview-stats { color:rgba(240,237,232,.5); font:9px var(--font-mono); letter-spacing:.12em; text-transform:uppercase; margin-bottom:14px; }
+.artist-preview-bio { color:rgba(240,237,232,.68); font-size:12px; line-height:1.6; display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden; }
+@media (max-width:1100px), (hover:none) { .artist-preview-pane { display:none; } }
+
 /* No results */
 .artists-empty {
   grid-column: 1 / -1;
@@ -483,6 +495,14 @@
 <!-- STATIC_LINKS:ARTISTS:END -->
   </div>
 </main>
+
+<aside class="artist-preview-pane" id="artist-preview" aria-hidden="true">
+  <div class="artist-preview-img" id="artist-preview-img"><div class="placeholder">NO IMAGE</div></div>
+  <div class="artist-preview-meta" id="artist-preview-meta">ARTIST</div>
+  <div class="artist-preview-name" id="artist-preview-name">ARTIST</div>
+  <div class="artist-preview-stats" id="artist-preview-stats"></div>
+  <div class="artist-preview-bio" id="artist-preview-bio"></div>
+</aside>
 
 <!-- FOOTER -->
 <!-- ===================== GUIDE LINKS ===================== -->
@@ -749,6 +769,41 @@ function renderArtistsList() {
   observeAll();
   grid.querySelectorAll('[data-artist-detail-link]').forEach(link => link.addEventListener('click', saveArtistHubState));
   bindCursorExpand();
+  bindArtistHoverPreview();
+}
+
+function bindArtistHoverPreview() {
+  const pane = document.getElementById('artist-preview');
+  if (!pane || window.matchMedia('(hover: none), (max-width: 1100px)').matches) return;
+  const image = document.getElementById('artist-preview-img');
+  const meta = document.getElementById('artist-preview-meta');
+  const name = document.getElementById('artist-preview-name');
+  const stats = document.getElementById('artist-preview-stats');
+  const bio = document.getElementById('artist-preview-bio');
+  let hideTimer;
+  document.querySelectorAll('#artists-grid .artist-card').forEach(card => {
+    if (card.dataset.artistPreviewBound === '1') return;
+    card.dataset.artistPreviewBound = '1';
+    const artist = (typeof ARTISTS !== 'undefined') ? ARTISTS.find(a => a.id === card.dataset.id) : null;
+    if (!artist) return;
+    card.addEventListener('mouseenter', () => {
+      clearTimeout(hideTimer);
+      meta.textContent = getGenreString(artist) || 'ARTIST';
+      name.textContent = tjLocalized(artist.name, '', artist.name_en);
+      stats.textContent = [artist.country || artist.city, artist.type].filter(Boolean).join(' · ');
+      bio.textContent = tjLocalized(artist.bio, '', artist.bio_en);
+      image.innerHTML = '';
+      if (artist.image) {
+        const img = document.createElement('img');
+        img.alt = artist.name || ''; img.loading = 'eager'; img.decoding = 'async';
+        img.src = tjAssetPath(artist.image); image.appendChild(img);
+      } else image.innerHTML = '<div class="placeholder">NO IMAGE</div>';
+      pane.classList.add('is-active'); pane.setAttribute('aria-hidden', 'false');
+    });
+    card.addEventListener('mouseleave', () => {
+      hideTimer = setTimeout(() => { pane.classList.remove('is-active'); pane.setAttribute('aria-hidden', 'true'); }, 100);
+    });
+  });
 }
 
 /* ========== SEARCH & SORT BINDINGS ========== */
