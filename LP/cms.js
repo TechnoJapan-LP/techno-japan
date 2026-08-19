@@ -4045,14 +4045,18 @@ function syncExistingEditionRows(festivalId, sourceEditions=editions){
     const parts=String(e.date||'').split('/').map(s=>s.trim());
     const base={...(e._sheetRow||{})};
     delete base._row;
-    requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'update_row',sheet:'EDITIONS',row:e._row,...base,
+    const rowNumber=Number(e._row);
+    if(!Number.isInteger(rowNumber)||rowNumber<2) throw new Error('EDITIONSの行番号が不正です: '+e._row);
+    requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'update_row',sheet:'EDITIONS',row:rowNumber,...base,
       EDITION_ID:e._editionId,FESTIVAL_ID:festivalId,EDITION:e.year||'',DATE_START:parts[0]||'',DATE_END:parts[1]||parts[0]||'',
       LOCATION:e.location||'',LOCATION_JA:e.location_ja||'',PREF:e.pref||(e._sheetRow||{}).PREF||'',ADDRESS:e.address||'',LAT:e.lat||'',LNG:e.lng||'',
       TICKETURL:e.ticketUrl||'',FLYER:e.flyer||'',STATUS:e.status||''})}).then(r=>r.json()));
     (e._lineupRows||[]).forEach((lr,i)=>{
       const baseLine={...lr}; delete baseLine._row;
       const label=(e.lineup||[])[i]||'';
-      requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'update_row',sheet:'LINEUPS',row:lr._row,...baseLine,EDITION_ID:e._editionId,ACT_LABEL:label,ARTIST_ID:lr.ARTIST_ID||''})}).then(r=>r.json()));
+      const lineupRowNumber=Number(lr._row);
+      if(!Number.isInteger(lineupRowNumber)||lineupRowNumber<2) throw new Error('LINEUPSの行番号が不正です: '+lr._row);
+      requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'update_row',sheet:'LINEUPS',row:lineupRowNumber,...baseLine,EDITION_ID:e._editionId,ACT_LABEL:label,ARTIST_ID:lr.ARTIST_ID||''})}).then(r=>r.json()));
     });
   });
   return Promise.all(requests).then(results=>{

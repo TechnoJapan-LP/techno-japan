@@ -54,6 +54,7 @@ const BRIDGE = `
   duplicateEditionRows,
   get editions(){return editions},
   addEdition,
+  syncExistingEditionRows,
   get editState(){return editState},
 };`;
 const src = fs.readFileSync(CMS_PATH, 'utf8') + BRIDGE;
@@ -91,7 +92,7 @@ function makeCtx({ cityValue = 'Ibaraki' } = {}) {
     URL, URLSearchParams, TextEncoder, TextDecoder,
     crypto: { subtle: { digest: async () => new ArrayBuffer(32) }, getRandomValues: (a) => a },
     Promise, Date, Math, JSON, Object, Array, String, Number, Boolean, RegExp, Error, Map, Set,
-  };
+};
   ctx.window = ctx;
   ctx.globalThis = ctx;
   vm.createContext(ctx);
@@ -154,6 +155,22 @@ const check = (name, pass, detail) => { results.push([name, pass, detail]); };
   check('同じ年の開催回には同期する',
     c.__T.editions[1].date === '2026-08-15/2026-08-16' && c.__T.editions[0].date === '2025-08-16/2025-08-17',
     `2026回=${c.__T.editions[1].date} / 2025回=${c.__T.editions[0].date}`);
+}
+
+// ---- 3) 新規開催回はシート全体の末尾に追記されること ----
+// ---- 2b) 既存行の行番号を数値化して更新すること -----------------------
+{
+  const c = makeCtx();
+  c.gasWriteSucceeded = () => true;
+  await c.syncExistingEditionRows('grow-the-culture-open-air', [{
+    _row: '109', _editionId: 'grow-the-culture-open-air-2026',
+    _sheetRow: { EDITION_ID: 'grow-the-culture-open-air-2026', FESTIVAL_ID: 'grow-the-culture-open-air' },
+    year: '2026', flyer: 'images/festivals/grow-the-culture-open-air-2026-flyer.webp', lineup: [], _lineupRows: []
+  }]);
+  const call = c.__calls.find(x => x.sheet === 'EDITIONS');
+  check('既存EDITIONの文字列行番号を数値化して更新する',
+    call?.row === 109 && call?.FLYER.includes('grow-the-culture-open-air-2026-flyer.webp'),
+    `row=${call?.row} / FLYER=${call?.FLYER}`);
 }
 
 // ---- 3) 新規開催回はシート全体の末尾に追記されること ----
