@@ -187,13 +187,19 @@ def cmd_fix_dates(execute: bool) -> int:
                   "options": {"dateFormat": {"name": "iso"}}})
             print(f"  作成: {tmp}（日付型）")
         # 値のコピー（10件ずつ = API 上限）
-        pending, copied, bad = [], 0, 0
+        pending, copied, bad = [], 0, []
         for r in records:
             raw = r["fields"].get(name)
             if not raw:
                 continue
-            if not re.match(r"^\d{4}-\d{2}-\d{2}$", str(raw)):
-                bad += 1
+            # 形だけでなく「実在する日付か」まで検証する。
+            # 移行データに "2026-00-01"（0月）が実在し、形式チェックだけでは
+            # Airtable 側で INVALID_VALUE_FOR_COLUMN になった（CI実測）
+            try:
+                import datetime
+                datetime.date.fromisoformat(str(raw))
+            except ValueError:
+                bad.append((r["fields"].get("festival_id", r["id"]), str(raw)))
                 continue
             pending.append({"id": r["id"], "fields": {tmp: raw}})
         for i in range(0, len(pending), 10):
@@ -201,7 +207,9 @@ def cmd_fix_dates(execute: bool) -> int:
                  {"records": pending[i:i + 10]})
             copied += len(pending[i:i + 10])
             time.sleep(0.25)                                  # 5req/s 制限
-        print(f"  コピー: {copied}件（形式不正でスキップ {bad}件）")
+        print(f"  コピー: {copied}件（不正な日付でスキップ {len(bad)}件）")
+        for fid, raw in bad:
+            print(f"    ⚠️ {fid}: '{raw}' — needs_review として残置。元値は select 側にあり")
         # 改名: 旧 → legacy、新 → 正式名
         call("PATCH",
              f"/meta/bases/{BASE_ID}/tables/{fest['id']}/fields/{fields[name]['id']}",
