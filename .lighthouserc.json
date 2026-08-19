@@ -1,12 +1,10 @@
 {
   "_note": [
-    "CLS の上限。2026-08-04 に 0.05 → 0.06 へ緩めた。festivals.html が 0.05336 で",
-    "落ちていたが、同じ内容でも run によって通ったり落ちたりする境界上の揺らぎだった。",
-    "【本来は改善すべき。原因は festivals.html のカード描画】",
-    "カードは data.js から JS で描かれるため、後から差し込まれてレイアウトがずれる。",
-    "画像は tjImageSizeAttrs で width/height を入れてあるので、残っているのは",
-    "カード自体の高さが描画前に確定していない分と思われる。AUDIT §9-39。",
-    "改善したら 0.05 に戻すこと。緩めた値で通ることを『直った』と読み替えないため、",
+    "CLS の上限。FESTIVALSのカード描画対策が本番Lighthouseで合格したため、0.05へ復帰。",
+    "以前は festivals.html が 0.05336 で落ち、同じ内容でも run によって揺れていた。",
+    "カードは data.js から JS で描かれるため、後から差し込まれてレイアウトがずれていた。",
+    "画像は tjImageSizeAttrs で width/height を入れてあるため、主因はカード描画時の差し替え。",
+    "対策は festivals.html のハイドレーション中の一覧領域保護。AUDIT §9-39。",
     "この note を残す。aggregationMethod: pessimistic（複数 run の最悪値）は維持する。"
   ],
   "ci": {
@@ -15,7 +13,7 @@
         "cumulative-layout-shift": [
           "error",
           {
-            "maxNumericValue": 0.06,
+            "maxNumericValue": 0.05,
             "aggregationMethod": "pessimistic"
           }
         ],
