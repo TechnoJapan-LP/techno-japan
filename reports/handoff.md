@@ -3838,3 +3838,21 @@ preflight: **全33件成功**。
 - **公開リポジトリに移行データの中身を書かないこと**（handoff にも件数以上の詳細は書かない）
 - ジャンル語彙の正規化先はユーザー判断待ち
 - LP シートと Publish 経路は本件で一切触っていない
+
+---
+
+## 2026-08-19 DB移行 Step 2-B 完了: Airtable 取り込みファイル一式を生成
+
+### 実施
+- `scripts/migration/build_airtable_import.py` 新規（公開リポジトリに置くためデータ非含有）
+- `data/migration/out/`（非公開）に festivals/venues/editions/promoters/media/pilot/issues の7ファイル生成
+- 語彙変換はユーザー確定版（Deep→DEEP TECHNO 等、Mix/Consepting はジャンル要判定＋特徴タグ）
+
+### 検証
+- 列数整合・slug 一意性・日付変換率（directory 783中746）・抜き取り5種を確認
+- 途中で slug 衝突3種を検出し修正（数字のみslug／連番不備／海外同名の誤スキップ）
+
+### 次の担当への注意
+- Airtable 取り込みは `data/migration/out/IMPORT_GUIDE.md`（非公開）の手順で。パイロット→本番の順
+- 「サイト掲載と同名・要確認」3件は別フェスか要判断
+- LP・Publish 経路は不変更
