@@ -3,6 +3,33 @@
 セッション間の短期的な引き継ぎ専用ログです。
 長い背景説明・事故の経緯・設計判断は [AUDIT_TECHNO_JAPAN.md](../AUDIT_TECHNO_JAPAN.md) に記録し、ここからリンクしてください。
 
+## 2026-08-20 / Codex / 完了（手動Deploy後のLighthouse自動起動）
+
+### 実施
+- 手動起動したDeployでは`workflow_run`経由のLighthouseが自動起動しない場合があるため、Deploy完了後にLighthouseを明示起動する処理を追加。
+- `workflow_dispatch`で起動したDeployだけを対象にし、通常のpush後の二重起動は避ける構成にした。
+- DeployジョブにActions実行権限を追加。
+
+### コミット
+- SHA: `603396f0`
+- push / rebase 状態: push済み。Deploy成功
+
+### 検証
+- `git diff --check`: 成功
+- deploy-pages.yml YAML解析: 成功
+- 通常push後のDeploy: 成功（run `32282396821`）
+- Deploy後のLighthouse自動起動: 成功（run `32282662561`、8 URLすべて合格）
+
+### 変更したパターン
+- 通常push後のDeploy→Lighthouse: 1パターン
+- 手動Deploy後のLighthouse起動経路: 1パターン
+
+### 未確認の類似パターン
+- Publish pipeline完了後のLighthouse: 今回は未確認
+
+### 次の担当への注意・判断待ち
+- 手動Deploy時はDeploy完了後にLighthouseを起動する。通常pushでは既存の`workflow_run`経路を使用する。
+
 ## 2026-08-20 / Codex / 完了（FESTIVALS一覧のCLS対策・基準復帰）
 
 ### 実施
