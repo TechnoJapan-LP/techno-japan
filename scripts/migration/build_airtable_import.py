@@ -33,10 +33,15 @@ OUT = ROOT / 'data/migration/out'
 OUT.mkdir(parents=True, exist_ok=True)
 
 # ---- 語彙の変換表（2026-08-19 ユーザー確定）----
+# 大分類4つ（TECHNO/HOUSE/AMBIENT/DOWNTEMPO）＋独立2つ（DEEP/HARD TECHNO）。
+# MELODIC は廃止して TECHNO へ統合（2026-08-19 ユーザー確定・第2版）。
+# LIVE/BASS/EDM はサイト公開中データとの互換で残す。
 GENRE_MAP = {
     'techno': ['TECHNO'], 'house': ['HOUSE'], 'deep': ['DEEP TECHNO'],
-    'hard': ['HARD TECHNO'], 'melodic': ['MELODIC TECHNO'],
-    'ambient': ['AMBIENT'], 'trance': ['TRANCE'], 'psychedelic': ['PSYTRANCE'],
+    'hard': ['HARD TECHNO'], 'melodic': ['TECHNO'],
+    'ambient': ['AMBIENT'], 'downtempo': ['DOWNTEMPO'], 'chill': ['DOWNTEMPO'],
+    'chillout': ['DOWNTEMPO'],
+    'trance': ['TRANCE'], 'psychedelic': ['PSYTRANCE'],
     'live': ['LIVE'], 'band': ['LIVE'], 'bass': ['BASS'], 'edm': ['EDM'],
     # ジャンルではない語 → 特徴タグへ
     'digital art': ('FEATURE', 'DIGITAL ART'),
@@ -300,13 +305,18 @@ def main():
     write_csv(OUT/'promoters.csv', P_HEADER, pro_rows)
 
     # ---------- Media ----------
-    M_HEADER = ['Name','media_id','area','genres','instagram','followers','notes','confidence']
+    # Media タブの Genre 列は実データ上ジャンルではなく媒体種別だった
+    # （media 84 / streaming 53 / platform 4 / ticket 1）。列を分けて取り込む
+    MEDIA_TYPES = {'media':'webmedia','streaming':'streaming','platform':'platform','ticket':'ticket'}
+    M_HEADER = ['Name','media_id','media_type','area','genres','instagram','followers','notes','confidence']
     med_rows = []
     for r in sheet_rows(wb, 'Media'):
         fol = re.sub(r'[^\d]', '', r.get('フォロワー',''))
-        g, _, _, _ = map_genre(r.get('Genre',''))
-        med_rows.append([r['Name'], unique_slug(r['Name'], None), r.get('エリア',''),
-                         ','.join(g) or r.get('Genre',''), r.get('URL',''), fol or '', r.get('備考',''), 'low'])
+        raw = r.get('Genre','').strip().lower()
+        mtype = MEDIA_TYPES.get(raw, '')
+        g, _, _, _ = map_genre('' if mtype else r.get('Genre',''))
+        med_rows.append([r['Name'], unique_slug(r['Name'], None), mtype, r.get('エリア',''),
+                         ','.join(g), r.get('URL',''), fol or '', r.get('備考',''), 'low'])
     write_csv(OUT/'media.csv', M_HEADER, med_rows)
 
     # ---------- Editions（日付が取れた directory フェスのみ）----------
