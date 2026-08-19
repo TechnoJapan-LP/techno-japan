@@ -15,6 +15,7 @@ on:
 permissions:
   # 再生成した LP を同じデプロイでコミットし、次回の生成差分を残さない。
   contents: write
+  actions: write
   pages: write
   id-token: write
 
@@ -110,3 +111,12 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      # GitHub Actions の workflow_run は、手動起動した Deploy では
+      # Lighthouse を後続起動しないことがある。手動で本番確認した場合も
+      # 検査漏れにしないため、手動Deployの完了後だけ明示的に起動する。
+      - name: Trigger Lighthouse after manual deploy
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run lighthouse.yml --ref "${GITHUB_SHA}"
