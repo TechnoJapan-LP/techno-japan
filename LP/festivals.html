@@ -46,6 +46,7 @@
 <link rel="dns-prefetch" href="https://formsubmit.co">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="common.css?v=23">
+<script>document.documentElement.classList.add('tj-festivals-hydrating');</script>
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -245,6 +246,19 @@ body.mixed-results.rave-mode .festival-section:not(.rave-result):hover .festival
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 40px;
+}
+/*
+   SSR の静的リンク一覧を、カード一覧へ差し替えるまで一時的に隠す。
+   これを先に表示すると、静的一覧→JSカード一覧の差し替えが
+   Lighthouse の CLS として記録される。静的リンク自体は HTML に残し、
+   JavaScript 無効時のフォールバックとクローラー向けの導線を維持する。
+*/
+html.tj-festivals-hydrating #festivals-main {
+  visibility: hidden;
+  min-height: calc(100vh - 420px);
+}
+html.tj-festivals-hydrating #festivals-main > .ssr-link-list {
+  display: none;
 }
 
 .festival-section {
@@ -1254,6 +1268,7 @@ function renderFestivals() {
   // Observe reveals
   main.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   bindCursorExpand();
+  document.documentElement.classList.remove('tj-festivals-hydrating');
 }
 
 
