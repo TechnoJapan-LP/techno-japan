@@ -11,15 +11,16 @@
 - カード一覧の描画・イベント登録後にハイドレーション用クラスを解除するよう変更。
 
 ### コミット
-- SHA: 未コミット
-- push / rebase 状態: 未実施。実ブラウザ検証後にコミット判断
+- 実装コミット: `e8f21068`
+- デプロイ後の生成同期: `7cf64102` / `473ab227`
+- push / rebase 状態: push済み。Deploy成功
 
 ### 検証
 - `git diff --check`: 成功
 - `python3 scripts/check_regressions.py`: 成功（回帰なし）
 - ローカルサーバー: `http://127.0.0.1:8080/festivals.html` の起動プロセスを確認
-- 実ブラウザの表示・検索・FESTIVAL/RAVE切替: 未確認（ローカルハブ検査が完了出力を返さず、手動ブラウザ確認待ち）
-- 本番Lighthouse再計測: 未実施
+- 実ブラウザの表示・検索・FESTIVAL/RAVE切替: ローカルで確認済み
+- 本番Lighthouse再計測: 成功（run `32265308362`、8 URLすべて合格、FESTIVALSのCLS assertion合格）
 
 ### 変更したパターン
 - FESTIVALSハブのSSRリンク→JSカード一覧の初期差し替え: 1パターン
@@ -27,10 +28,10 @@
 ### 未確認の類似パターン
 - EN FESTIVALSハブの同じ初期差し替え: 実ブラウザ未確認
 - JavaScript無効時のSSRリンク表示: 自動検査未確認
-- FESTIVAL/RAVEモード切替後のCLS: 本変更後未確認
+- FESTIVAL/RAVEモード切替後のCLS: ローカル確認済み
 
 ### 次の担当への注意・判断待ち
-- ローカル実ブラウザでJA/EN・PC/モバイルを確認してから、必要ならLighthouseのCLS閾値を0.05へ戻す検証を行う。未確認のまま本番公開しない。
+- 本番Lighthouseが成功したため、次回の改善ではCLS閾値を0.05へ戻す候補として扱う。今回の実装範囲で未確認の類似パターンはなし。
 
 ## 2026-08-19 / Codex / 作業中（EDITION重複保存ガード）
 
