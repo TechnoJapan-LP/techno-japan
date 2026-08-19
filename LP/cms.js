@@ -4113,6 +4113,38 @@ function syncNewEditionRows(festivalId, sourceEditions=editions){
   });
 }
 
+/* FESTIVALS本体を保存する前のEDITION同期チェック。
+   EDITIONSの同期はFESTIVALS本体とは別リクエストなので、後段だけで検査すると
+   「フェス本体は保存済み・開催回だけ失敗」という中途半端な状態が残る。
+   保存開始前に、今回送る開催回のIDとシート上の対応を確認しておく。 */
+function validateEditionSyncBeforeSave(festivalId, sourceEditions=editions){
+  if(!festivalId) return ['FESTIVAL_IDがありません。先にフェスIDを確認してください'];
+  const rows=sourceEditions.filter(e=>e && e.year);
+  if(!rows.length) return [];
+  if(!editionSheetLoaded){
+    return [editionSheetLoadError || 'EDITIONSシートを読み込めていません。ページを再読み込みしてください'];
+  }
+  const seen=new Map();
+  const errors=[];
+  rows.forEach(e=>{
+    const year=String(e.year).trim();
+    const eid=festivalId+'-'+year;
+    if(seen.has(eid)){
+      errors.push('同じ開催年のEDITIONSが複数あります: '+eid+'。保存前に片方を削除してください');
+    } else {
+      seen.set(eid,e);
+    }
+    if(e._editionId && e._editionId!==eid){
+      errors.push('開催回のIDと年が一致しません: '+e._editionId+' / '+eid+'。再読み込みして確認してください');
+    }
+    const existingRow=editionRowById.get(eid);
+    if(e._row && existingRow && Number(e._row)!==Number(existingRow)){
+      errors.push('EDITIONSの行番号が変わっています: '+eid+'（再読み込みしてから保存してください）');
+    }
+  });
+  return [...new Set(errors)];
+}
+
 // EDITIONS.PREF が空だと詳細ページの地域表示が FESTIVALS.CITY 頼みになる。
 // 新規開催回でも取り違えないよう、フォームの CITY を既定値にする。
 function festivalPrefFallback(){
@@ -4213,6 +4245,11 @@ function saveEdit(section){
     ? editions.filter(e=>e.year).map(e=>({...e,lineup:[...(e.lineup||[])]}))
     : null;
 
+  if(section==='festival'){
+    const editionErrors=validateEditionSyncBeforeSave(payload.id, editionsForSync||[]);
+    if(editionErrors.length) return toast(editionErrors[0], 'error');
+  }
+
   // ---- 楽観的UI: GAS応答を待たずにリストへ即反映 ----
   const rowNum = state._row;
   applyOptimisticUpdate(section, rowNum, payload);
@@ -4228,8 +4265,13 @@ function saveEdit(section){
       if(d.status==='ok'||d.success){
         toast('Updated ✓','success');
         if(section==='festival'){
-          syncExistingEditionRows(payload.id,editionsForSync||[]).catch(()=>toast('FESTIVALSは保存済みですが、既存EDITIONSの同期に失敗しました','error'));
-          syncNewEditionRows(payload.id,editionsForSync||[]).catch(()=>toast('FESTIVALSは保存済みですが、新規EDITIONSの追加に失敗しました（EDITIONSシートの読込が必要）','error'));
+          Promise.all([
+            syncExistingEditionRows(payload.id,editionsForSync||[]),
+            syncNewEditionRows(payload.id,editionsForSync||[])
+          ]).catch(()=>{
+            toast('開催回の同期に失敗しました。公開せず、フェスを再読み込みして確認してください','error');
+            invalidateSheetCache('festival');
+          });
         }
         if(unregisteredArtists.length) notifyUnregisteredArtists(unregisteredArtists);
         // 裏で正データに置き換え（画面はすでに更新済みなので silent）

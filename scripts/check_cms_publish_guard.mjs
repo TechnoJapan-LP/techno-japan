@@ -37,7 +37,16 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const CMS_PATH = path.join(ROOT, 'LP', 'cms.js');
 
-const BRIDGE = `;globalThis.__T = { publishSanityCheck, publishPayloadSummary };`;
+const BRIDGE = `;globalThis.__T = {
+  publishSanityCheck,
+  publishPayloadSummary,
+  validateEditionSyncBeforeSave,
+  setEditionSheetState: (loaded, rows) => {
+    editionSheetLoaded = loaded;
+    editionSheetLoadError = '';
+    editionRowById = new Map(rows || []);
+  }
+};`;
 const src = fs.readFileSync(CMS_PATH, 'utf8') + BRIDGE;
 
 function makeCtx() {
@@ -91,6 +100,31 @@ const check = (name, pass, detail = '') => {
 };
 
 const c = makeCtx();
+
+/* --- 0. 保存開始前のEDITION同期チェック ------------------------------- */
+{
+  console.log('保存開始前のEDITION同期チェック');
+  c.__T.setEditionSheetState(true, [['festival-2026', 12]]);
+  const ok = c.__T.validateEditionSyncBeforeSave('festival', [
+    { year: '2026', _editionId: 'festival-2026', _row: 12 },
+  ]);
+  check('正常な既存開催回を通す', ok.length === 0);
+
+  const duplicate = c.__T.validateEditionSyncBeforeSave('festival', [
+    { year: '2026', _editionId: 'festival-2026', _row: 12 },
+    { year: '2026' },
+  ]);
+  check('同じ開催年の保存を開始前に止める', duplicate.some(x => x.includes('festival-2026')));
+
+  const mismatch = c.__T.validateEditionSyncBeforeSave('festival', [
+    { year: '2026', _editionId: 'festival-2025', _row: 12 },
+  ]);
+  check('開催回IDと年の不一致を止める', mismatch.some(x => x.includes('IDと年が一致しません')));
+
+  c.__T.setEditionSheetState(false);
+  const loadError = c.__T.validateEditionSyncBeforeSave('festival', [{ year: '2026' }]);
+  check('シート未読込時に保存を止める', loadError.length === 1);
+}
 
 /* --- 1. 実際に起きた事故（2026-08-09）をそのまま再現する ------------------ */
 {
