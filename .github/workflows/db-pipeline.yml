@@ -1,0 +1,37 @@
+# TECHNO JAPAN DB（Airtable）の承認制更新パイプライン。
+#
+# 手動実行のみ（workflow_dispatch）。dry_run が既定で、
+# 「書き込む」を明示的に選んだときだけ本体へ反映する。
+# サイト（LP / Publish 経路）には一切触れない。
+#
+# 将来: AI 巡回（research）ジョブを追加したら cron を設定する。
+name: DB Pipeline (Airtable)
+
+on:
+  workflow_dispatch:
+    inputs:
+      task:
+        description: '実行する処理'
+        required: true
+        type: choice
+        options: [apply, fix-dates]
+      mode:
+        description: 'dry-run（確認のみ）か execute（書き込み）か'
+        required: true
+        type: choice
+        options: [dry-run, execute]
+        default: dry-run
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run pipeline
+        env:
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        run: |
+          FLAG="--dry-run"
+          if [ "${{ inputs.mode }}" = "execute" ]; then FLAG="--execute"; fi
+          python3 scripts/db/airtable_pipeline.py "${{ inputs.task }}" "$FLAG"
