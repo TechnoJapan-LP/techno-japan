@@ -15,7 +15,6 @@ on:
 permissions:
   # 再生成した LP を同じデプロイでコミットし、次回の生成差分を残さない。
   contents: write
-  actions: write
   pages: write
   id-token: write
 

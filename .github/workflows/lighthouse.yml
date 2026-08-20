@@ -14,6 +14,9 @@ on:
     types: [completed]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 # デプロイが連続した場合、古い本番を計測中のLighthouseを止める。
 concurrency:
   group: lighthouse
