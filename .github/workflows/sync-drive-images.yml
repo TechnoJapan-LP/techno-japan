@@ -19,7 +19,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           token: ${{ secrets.GH_TOKEN }}
 
@@ -181,7 +181,7 @@ jobs:
       # 同期した側が寸法表も作り直して、同じコミットに含める。
       # build-image-dimensions.mjs は中身が変わったとき ?v も自動で上げる。
       - name: Set up Node
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: '20'
 
