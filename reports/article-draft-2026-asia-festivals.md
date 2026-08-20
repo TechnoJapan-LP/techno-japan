@@ -11,9 +11,9 @@
 
 | 日程 / Date | イベント / Event | 開催地 / Location |
 | :--- | :--- | :--- |
-| 8/22(土)〜23(日)［要確認］ | Fingerprints Summer Camp | 江原道 / SOUTH KOREA |
+| 8/22(土)〜24(月) | Fingerprints Summer Camp | 江原道 / SOUTH KOREA |
 | 8/22(土)〜23(日) | KHARKHORUM Festival | ウランバートル / MONGOLIA |
-| 8/29(土)［要確認］ | Thevault_Rave | 台北 / TAIWAN |
+| 8/29(土) | Thevault_Rave | 台北 / TAIWAN |
 | 8/29(土)〜30(日) | TOR festival | 京畿道 / SOUTH KOREA |
 | 9/11(金)〜13(日) | Zhao Dai On Leave | 河北省 / CHINA |
 | 9/4(金)〜6(日) | ĀKĀŚA | ラダック / INDIA |
@@ -37,12 +37,12 @@
 > | 項目 (Item) | 詳細内容 (Details) |
 > | :--- | :--- |
 > | **イベント名** / Event | **Fingerprints Summer Camp** |
-> | **開催日程** / Date | 2026年8月22日(土)〜23日(日)［要確認: 当サイトDBでは 8/22〜24］ |
-> | **開催場所** / Venue | 江原道（韓国）［要確認・会場未発表］ |
+> | **開催日程** / Date | 2026年8月22日(土)〜24日(月) |
+> | **開催場所** / Venue | 江原道（韓国）（会場詳細は公式発表を確認） |
 > | **ジャンル** / Genre | House / Techno |
 > | **公式リンク** / Official | [Instagram (@fingerprints.rtl)](https://www.instagram.com/fingerprints.rtl/) |
 
-ソウルを拠点にテクノ・ハウスのパーティーを重ねてきたプロモーター、Fingerprints によるキャンプ型の野外編。都市のフロアで鍛えたブッキングの感覚を、夏の終わりの山へそのまま持ち出す2日間だ。詳細は Instagram で告知されていくスタイルなので、動くなら公式アカウントを追うところから。
+ソウルを拠点にテクノ・ハウスのパーティーを重ねてきたプロモーター、Fingerprints によるキャンプ型の野外編。都市のフロアで鍛えたブッキングの感覚を、夏の終わりの山へそのまま持ち出す3日間だ。詳細は Instagram で告知されていくスタイルなので、動くなら公式アカウントを追うところから。
 
 ## KHARKHORUM Festival
 
@@ -68,13 +68,14 @@
 >
 > | 項目 (Item) | 詳細内容 (Details) |
 > | :--- | :--- |
-> | **イベント名** / Event | **Thevault_Rave** |
-> | **開催日程** / Date | 2026年8月29日(土)［要確認］ |
-> | **開催場所** / Venue | 台北（台湾）［会場は公式発表を確認］ |
+> | **イベント名** / Event | **Thevault_Rave**（V4ULT$YNDR0M） |
+> | **開催日程** / Date | 2026年8月29日(土) 22:00〜翌3:00 |
+> | **開催場所** / Venue | 非公開（台湾）。登録者のみに通知 |
+> | **入場** / Entry | 完全ゲストリスト制・200人限定（公式フォームで登録。定員到達で締切） |
 > | **ジャンル** / Genre | House / Techno |
 > | **公式リンク** / Official | [Instagram (@thevault_rave)](https://www.instagram.com/thevault_rave/) |
 
-台北のレイヴクルー Thevault によるパーティー。2026年2月には3日間にわたる開催実績があり、ハウス・テクノを軸に台北のアンダーグラウンドを動かしている存在だ。8月末の一夜の詳細は Instagram での告知を確認したい。
+台湾のレイヴクルー Thevault によるクローズドな一夜。今回の「V4ULT$YNDR0M」は、30年間封印されていた地下金庫を限定的に開き、フロアへ転用するという告知だ。会場の場所は公開されず、入場は公式フォームで登録した200人だけ。定員に達した時点でフォームは閉じられる。廃墟ビルでのレイヴ「URBAN LEGEND」を仕掛けてきたクルーらしい、場所そのものを主役にする設計。行くなら告知を見た瞬間に動くタイプのパーティーだ。
 
 ## TOR festival
 
@@ -265,19 +266,19 @@ TRICO は「TRIP IN COSMIC」の略。江原道の山あい、スキーリゾー
 
 ## 編集メモ（公開前に削除）
 
-**［重要・依頼文との食い違い］Wonderfruit の開催地**
-- 依頼文: 「Chiang Mai」 / 実際: **パタヤ**（The Fields at Siam Country Club）。複数ソースで確認済み（公式・Wikipedia・Expats Thailand）。
-- **Instagram 投稿スライド側にも「Chiang Mai」と書いていれば要修正。**
-- 表記も「Wonderfruits」ではなく「Wonderfruit」が公式。
+**［解決済み 8/20］Wonderfruit の開催地**
+- パタヤで確定（ユーザー確認済み）。表記は「Wonderfruit」（複数形にしない）。
+- **Instagram 投稿スライド側に「Chiang Mai」と書いていれば要修正（未確認）。**
 
-**［要確認］Fingerprints Summer Camp**
-- 日付が食い違い: 依頼文 8/22〜23 / 当サイトDB 8/22〜24（DB確度low）
-- 開催地「江原道」はウェブで確認できず（DBはソウルのプロモーターとだけ記録）
-- 公式IG (@fingerprints.rtl) で日付・会場を確認してから公開すること
+**［解決済み 8/20］Fingerprints Summer Camp の日付**
+- 8/22〜24 で確定（ユーザー確認済み・DBと一致）。会場詳細のみ未発表扱いのまま。
 
-**［要確認］Thevault_Rave 8/29**
-- ウェブ検索で8/29の開催情報を確認できず。DBには2026年2月開催（2/20〜22）の記録のみ
-- 公式IG (@thevault_rave) で確認してから公開すること
+**［解決済み 8/20］Thevault_Rave 8/29**
+- 公式IG投稿を実際に閲覧して確認: 8/29(土) 22:00〜翌3:00 / 完全ゲストリスト制200人 /
+  会場非公開（30年封存の地下金庫、登録者に通知）/ @eg0isd3ath との共催 /
+  サウンド @grayton.systems。出演: êsân, DJ喝咖啡, 駭修男孩, oi0io, LilY
+- 依頼文の「台北」はIG上では明言されていない（プロフィールの過去投稿に桃園の記載あり）。
+  本文の会場表記は「非公開（台湾）」にしてある。台北と断定するかはユーザー判断
 
 **［要確認］Zhao Dai On Leave 2026 の会場**
 - 2024年は Aranya Golden Coast（河北省秦皇島・昌黎）。2026年の会場は未確認のため本文は「例年は」の表現にしてある
@@ -300,7 +301,8 @@ TRICO は「TRIP IN COSMIC」の略。江原道の山あい、スキーリゾー
 - Mycelium（Chapter V・Tiger Jungle Art Camp・4ステージ）: [公式](https://myceliumfestival.co/) / [Ticketmelon](https://www.ticketmelon.com/th/myceliumfestivalth/mycelium2026)
 - Zhao Dai On Leave（Aranya・2020年創設・6回目・9月移動）: [RA 2024](https://ra.co/events/1921768) / [Mixmag Asia](https://mixmag.asia/read/zhao-dai-on-leave-seaside-festival-china-local) / 当サイトDB
 - Wonderfruit（The Fields・12/3-7・1週前倒し・規模）: [Expats Thailand](https://expatsthai.com/events/wonderfruit-festival-pattaya-2026) / [Wikipedia](https://en.wikipedia.org/wiki/Wonderfruit)
-- TOR / PROMPT / Fingerprints / Thevault の日付・会場: 当サイト Airtable DB（確度low）＋依頼文
+- TOR / PROMPT の日付・会場: 当サイト Airtable DB（確度low）＋依頼文
+- Fingerprints: 日付はユーザー確認 / Thevault: 公式IG投稿（2026-08-20閲覧）
 
 **未確認のためテンプレートから省いた項目**
 - チケット価格: 全14件とも未確認（推測で書いていない）
