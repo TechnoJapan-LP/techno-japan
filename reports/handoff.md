@@ -3,6 +3,38 @@
 セッション間の短期的な引き継ぎ専用ログです。
 長い背景説明・事故の経緯・設計判断は [AUDIT_TECHNO_JAPAN.md](../AUDIT_TECHNO_JAPAN.md) に記録し、ここからリンクしてください。
 
+## 2026-08-20 / Codex / 作業中（RELATED FESTIVALS水平スクロール）
+
+### 実施
+- FESTIVAL詳細ページの`RELATED FESTIVALS`だけを横一列のスクロールレールへ変更。
+- PCでは複数カードを横に並べ、スマホではスワイプできるカード幅に調整。
+- スマホの見出し横に`SWIPE →`サインを追加。
+- 詳細ページ共通CSSのキャッシュ番号を`v=24`から`v=25`へ更新し、JA/ENの全詳細ページを再生成。
+
+### コミット
+- 実装コミット: `c40920f3`
+- push / rebase 状態: ローカル検証済み。公開前のpush待ち
+
+### 検証
+- `node scripts/build-detail-pages.mjs`: 成功
+- `python3 scripts/check_regressions.py`: 成功（回帰なし）
+- `python3 scripts/check_asset_versions.py --base HEAD~1`: 成功
+- `node scripts/check_sw_routing.mjs`: 成功
+- PC/スマホのローカル表示・横スクロール・リンク操作: 確認済み
+- 本番Deploy / Lighthouse: 未実施
+
+### 変更したパターン
+- FESTIVAL詳細のRELATED FESTIVALS横スクロール: 1パターン
+- モバイルのSWIPE案内: 1パターン
+- JA/EN詳細ページのCSSキャッシュ更新: 457ページ
+
+### 未確認の類似パターン
+- 本番反映後のRELATED FESTIVALS表示: 未確認
+- RELATED STORIESの横スクロール: 今回は対象外
+
+### 次の担当への注意・判断待ち
+- 本番Deploy後、PC/モバイルの代表詳細ページとLighthouseを確認してから完了扱いにする。
+
 ## 2026-08-20 / Codex / 完了（STORIES見出しのキネティックタイポグラフィ）
 
 ### 実施
