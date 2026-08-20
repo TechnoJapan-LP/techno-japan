@@ -624,6 +624,9 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   aspect-ratio: auto;
   object-fit: cover;
 }
+.festival-design-v2 .related-festivals .detail-section-label::after {
+  display: none;
+}
 .festival-design-v2 .related-grid {
   display: flex;
   gap: 16px;
@@ -698,6 +701,16 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
     aspect-ratio: 16 / 9;
   }
   .festival-design-v2 .related-card { flex-basis: min(62vw, 320px); }
+  .festival-design-v2 .related-festivals .detail-section-label::after {
+    content: 'SWIPE →';
+    display: inline-block;
+    margin-left: 14px;
+    color: var(--accent);
+    font-size: 8px;
+    letter-spacing: .16em;
+    opacity: .75;
+    vertical-align: middle;
+  }
 }
 @media (max-width: 480px) {
   .festival-design-v2 .related-card { flex-basis: 78vw; }
