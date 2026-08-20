@@ -15,7 +15,7 @@ jobs:
   draft:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Build weekly roundup draft from data.js
         run: python3 scripts/weekly_draft.py

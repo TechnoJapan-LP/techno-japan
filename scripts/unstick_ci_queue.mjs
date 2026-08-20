@@ -190,6 +190,8 @@ function main() {
     return;
   }
 
+  let transientCancelFailures = 0;
+  let hardCancelFailures = 0;
   for (const r of stuck) {
     try {
       gh(['api', '-X', 'POST', `repos/${repo}/actions/runs/${r.id}/cancel`]);
@@ -200,9 +202,30 @@ function main() {
         gh(['api', '-X', 'POST', `repos/${repo}/actions/runs/${r.id}/force-cancel`]);
         console.log(`  強制的に外しました: ${r.id}`);
       } catch (e2) {
-        console.log(`  外せませんでした: ${r.id} — ${e2.message.split('\n')[0]}`);
+        const detail = `${e.message}\n${e2.message}`;
+        if (/HTTP (500|502|503|504)/.test(detail)) {
+          // GitHub 側に残った孤立 queued run では、cancel/force-cancel の
+          // 両方が 5xx になることがある。見張り番自身を赤くしても復旧せず、
+          // 15分ごとの通知だけが増えるため、Summary に警告を残して継続する。
+          transientCancelFailures++;
+          console.log(`  GitHub側で保持中（5xx）のため保留: ${r.id}`);
+          console.log(`  ::warning::queued run ${r.id} は GitHub API の 5xx によりキャンセルできません`);
+        } else {
+          hardCancelFailures++;
+          console.log(`  外せませんでした: ${r.id} — ${e2.message.split('\n')[0]}`);
+        }
       }
     }
+  }
+
+  if (stuck.length && transientCancelFailures === stuck.length && hardCancelFailures === 0) {
+    const summary = process.env.GITHUB_STEP_SUMMARY;
+    if (summary) {
+      fs.appendFileSync(summary,
+        `### queued run は GitHub 側で保持中\n\n` +
+        `キャンセル API が 5xx のため、対象を保留しました。GitHub 側の状態が戻れば次回確認します。\n`);
+    }
+    return;
   }
 
   if (redispatch) {
