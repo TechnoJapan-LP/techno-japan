@@ -1,0 +1,17 @@
+version: 2
+
+updates:
+  # GitHub Actions の Node ランタイム廃止や脆弱性対応を自動追従する。
+  # Actions はまとめて更新し、レビュー対象の PR 数を増やしすぎない。
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: Asia/Tokyo
+    open-pull-requests-limit: 3
+    groups:
+      github-actions:
+        patterns:
+          - "*"
