@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: backup-data
+  cancel-in-progress: false
+
 jobs:
   backup:
     runs-on: ubuntu-latest

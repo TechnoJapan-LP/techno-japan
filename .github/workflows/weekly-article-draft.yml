@@ -11,6 +11,10 @@ permissions:
   contents: read
   issues: write
 
+concurrency:
+  group: weekly-article-draft
+  cancel-in-progress: false
+
 jobs:
   draft:
     runs-on: ubuntu-latest
