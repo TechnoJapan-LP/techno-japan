@@ -3,7 +3,7 @@
 セッション間の短期的な引き継ぎ専用ログです。
 長い背景説明・事故の経緯・設計判断は [AUDIT_TECHNO_JAPAN.md](../AUDIT_TECHNO_JAPAN.md) に記録し、ここからリンクしてください。
 
-## 2026-08-20 / Codex / 作業中（RELATED FESTIVALS水平スクロール）
+## 2026-08-20 / Codex / 完了（RELATED FESTIVALS水平スクロール）
 
 ### 実施
 - FESTIVAL詳細ページの`RELATED FESTIVALS`だけを横一列のスクロールレールへ変更。
@@ -12,8 +12,8 @@
 - 詳細ページ共通CSSのキャッシュ番号を`v=24`から`v=25`へ更新し、JA/ENの全詳細ページを再生成。
 
 ### コミット
-- 実装コミット: `c40920f3`
-- push / rebase 状態: ローカル検証済み。公開前のpush待ち
+- 実装コミット: `d2f2564f`, `49b5aa5d`
+- push / rebase 状態: push済み。Deploy成功
 
 ### 検証
 - `node scripts/build-detail-pages.mjs`: 成功
@@ -21,7 +21,9 @@
 - `python3 scripts/check_asset_versions.py --base HEAD~1`: 成功
 - `node scripts/check_sw_routing.mjs`: 成功
 - PC/スマホのローカル表示・横スクロール・リンク操作: 確認済み
-- 本番Deploy / Lighthouse: 未実施
+- 本番Deploy: 成功（run `32345003586`）
+- 本番Lighthouse: 成功（run `32345218538`、8 URLすべて合格）
+- 本番JA/EN代表ページ: HTTP 200、`detail.css?v=25`の反映を確認
 
 ### 変更したパターン
 - FESTIVAL詳細のRELATED FESTIVALS横スクロール: 1パターン
@@ -29,11 +31,11 @@
 - JA/EN詳細ページのCSSキャッシュ更新: 457ページ
 
 ### 未確認の類似パターン
-- 本番反映後のRELATED FESTIVALS表示: 未確認
+- 本番反映後のRELATED FESTIVALS表示: HTML/CSS配信確認済み。実ブラウザでの本番スワイプ操作は未確認
 - RELATED STORIESの横スクロール: 今回は対象外
 
 ### 次の担当への注意・判断待ち
-- 本番Deploy後、PC/モバイルの代表詳細ページとLighthouseを確認してから完了扱いにする。
+- 本番DeployとLighthouseは完了。次回、実ブラウザで本番のPC/モバイル横スクロール操作を確認する。
 
 ## 2026-08-20 / Codex / 完了（STORIES見出しのキネティックタイポグラフィ）
 
