@@ -625,10 +625,20 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   object-fit: cover;
 }
 .festival-design-v2 .related-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(240,237,232,.22) transparent;
+  padding-bottom: 10px;
 }
 .festival-design-v2 .related-card {
-  display: block; background: rgba(240,237,232,.02);
+  display: block;
+  flex: 0 0 min(28vw, 320px);
+  scroll-snap-align: start;
+  background: rgba(240,237,232,.02);
   transition: transform .3s ease; cursor: pointer;
 }
 .festival-design-v2 .related-card.reveal {
@@ -687,10 +697,10 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
     height: auto;
     aspect-ratio: 16 / 9;
   }
-  .festival-design-v2 .related-grid { grid-template-columns: repeat(2, 1fr); }
+  .festival-design-v2 .related-card { flex-basis: min(62vw, 320px); }
 }
 @media (max-width: 480px) {
-  .festival-design-v2 .related-grid { grid-template-columns: 1fr; }
+  .festival-design-v2 .related-card { flex-basis: 78vw; }
 }
 
 /* ---------- 記事ページの「関連フェスティバル」 ----------
