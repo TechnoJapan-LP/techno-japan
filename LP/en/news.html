@@ -68,6 +68,12 @@ html.tj-page-leaving body { opacity: 0; transition: opacity .18s ease; }
   line-height: 1.2;
   max-width: 640px;
 }
+/* STORIES限定のキネティックタイプ。記事カードの位置や高さは動かさない。 */
+.kinetic-type {
+  max-width: 640px;
+  will-change: transform;
+  transition: transform .18s cubic-bezier(.16,1,.3,1);
+}
 
 /* ===================== SORT TABS (populaires / dernieres) ===================== */
 .sort-tabs {
@@ -529,6 +535,7 @@ html.tj-page-leaving body { opacity: 0; transition: opacity .18s ease; }
 .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; transition-delay: var(--reveal-delay, 0ms); }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 @media (prefers-reduced-motion: reduce) {
+  .kinetic-type { transform: none !important; transition: none; }
   .featured-card.reveal .featured-card-body > *, .side-card.reveal .side-card-title, .feed-card.reveal .feed-card-title { opacity: 1; transform: none; transition: none; }
   .side-card:hover, .feed-card:hover { transform: none; }
 }
@@ -543,6 +550,7 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
 }
 @media (max-width: 900px) {
   .top-bar { padding: 120px 24px 0; }
+  .kinetic-type { transform: none !important; transition: none; }
   .sort-tabs { padding: 32px 24px 0; }
   .main-grid { padding: 32px 24px 0; grid-template-columns: 1fr; gap: 0; }
   .side-col { border-left: none; border-top: 1px solid var(--card-border); }
@@ -694,7 +702,9 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
 
 <!-- ===================== TAGLINE ===================== -->
 <div class="top-bar">
-  <h1 class="tagline">The media exploring cultures and electronic music in Japan.</h1>
+  <div class="kinetic-type" id="stories-kinetic-type">
+    <h1 class="tagline">The media exploring cultures and electronic music in Japan.</h1>
+  </div>
 </div>
 
 <!-- ===================== SORT TABS ===================== -->
@@ -1271,6 +1281,39 @@ function bindCursorExpand() {
   if (window.tjBindCursorExpand) window.tjBindCursorExpand('button, .featured-card, .side-card, .feed-card, .quick-link');
 }
 
+/* ========== KINETIC STORIES TYPE ========== */
+// Obys系の動きをSTORIESの導入見出しだけに限定する。
+// カードのレイアウト・記事一覧・検索には影響させず、モバイルと
+// prefers-reduced-motionでは静止表示にする。
+function initKineticStoriesType() {
+  const type = document.getElementById('stories-kinetic-type');
+  if (!type) return;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let frame = 0;
+  const update = () => {
+    frame = 0;
+    if (window.innerWidth <= 900 || reduceMotion.matches) {
+      type.style.transform = 'none';
+      return;
+    }
+    const rect = type.getBoundingClientRect();
+    if (rect.bottom < 0 || rect.top > window.innerHeight) {
+      type.style.transform = 'none';
+      return;
+    }
+    const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+    const offset = Math.max(-18, Math.min(18, (progress - 0.5) * 36));
+    type.style.transform = `translate3d(${offset.toFixed(2)}px, 0, 0)`;
+  };
+  const requestUpdate = () => {
+    if (!frame) frame = requestAnimationFrame(update);
+  };
+  window.addEventListener('scroll', requestUpdate, { passive: true });
+  window.addEventListener('resize', requestUpdate, { passive: true });
+  reduceMotion.addEventListener?.('change', requestUpdate);
+  requestUpdate();
+}
+
 /* ========== SCROLL REVEAL ========== */
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
@@ -1289,6 +1332,7 @@ function observeReveals(root = document) {
 observeReveals();
 
 /* ========== INIT ========== */
+initKineticStoriesType();
 if (readNewsStateFromUrl()) {
   document.querySelectorAll('.sort-tab').forEach((tab) => tab.classList.toggle('active', tab.dataset.sort === currentSort));
   renderMainGrid();
