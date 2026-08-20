@@ -3,7 +3,7 @@
 セッション間の短期的な引き継ぎ専用ログです。
 長い背景説明・事故の経緯・設計判断は [AUDIT_TECHNO_JAPAN.md](../AUDIT_TECHNO_JAPAN.md) に記録し、ここからリンクしてください。
 
-## 2026-08-20 / Codex / 作業中（STORIES見出しのキネティックタイポグラフィ）
+## 2026-08-20 / Codex / 完了（STORIES見出しのキネティックタイポグラフィ）
 
 ### 実施
 - NEWS/STORIES上部の導入見出しだけにスクロール連動の小さな横移動を追加。
@@ -13,7 +13,7 @@
 
 ### コミット
 - 実装コミット: `d8c7026c`（rebase後のローカル履歴）
-- push / rebase 状態: ローカル検証済み。公開前のpush待ち
+- push / rebase 状態: push済み。Deploy成功
 
 ### 検証
 - `git diff --check`: 成功
@@ -21,7 +21,9 @@
 - `python3 scripts/check_regressions.py`: 成功（回帰なし）
 - `python3 scripts/check_asset_versions.py --base HEAD~1`: 成功
 - PC/モバイルのローカル表示、記事カード同期、カテゴリ操作: 確認済み
-- 本番Deploy / Lighthouse: 未実施
+- 本番Deploy: 成功（run `32339113923`）
+- 本番Lighthouse: 成功（run `32339245939`、8 URLすべて合格）
+- 本番JA/EN NEWS応答: HTTP 200、キネティック実装の反映を確認
 
 ### 変更したパターン
 - STORIES導入見出しのPCスクロール連動: 1パターン
@@ -29,11 +31,11 @@
 - EN NEWS再生成: 1ページ
 
 ### 未確認の類似パターン
-- 本番反映後のJA/EN NEWS表示: 未確認
-- 動きを減らす設定での本番表示: 未確認
+- 本番反映後のJA/EN NEWS表示: HTTP応答・HTML反映確認済み。実ブラウザの最終目視はユーザー確認待ち
+- 動きを減らす設定での本番表示: ローカルCSS確認済み、本番実機は未確認
 
 ### 次の担当への注意・判断待ち
-- 本番Deploy後、PC/モバイルの実サイト表示とLighthouseを確認してから完了扱いにする。
+- 本番DeployとLighthouseは完了。ユーザーが本番PC/モバイル表示を確認後、最終完了扱いにする。
 
 ## 2026-08-20 / Codex / 完了（手動Deploy後のLighthouse自動起動）
 
