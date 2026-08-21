@@ -465,6 +465,72 @@ footer { padding: 60px 40px; }
   .festival-image-wrap img { filter: grayscale(0%) brightness(0.98) !important; }
 }
 
+/* ===================== INDEX ROWS (P1) ===================== */
+/* The database view is intentionally information-first. Images remain on the
+   detail page and can be previewed later on pointer devices without making
+   the list itself heavy or difficult to compare. */
+.festival-row {
+  padding: 22px 0;
+  min-height: 92px;
+}
+.festival-row-grid {
+  display: grid;
+  grid-template-columns: minmax(150px, 1.15fr) minmax(260px, 2fr) minmax(180px, 1.2fr) auto;
+  align-items: center;
+  gap: 24px;
+}
+.festival-row-date,
+.festival-row-location,
+.festival-row-status {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .08em;
+  line-height: 1.5;
+}
+.festival-row-date { display: flex; flex-direction: column; gap: 5px; }
+.festival-row-label {
+  font-size: 8px;
+  letter-spacing: .18em;
+  opacity: .35;
+  text-transform: uppercase;
+}
+.festival-row-date strong { font-weight: 400; }
+.festival-row-status { color: var(--accent); font-size: 8px; letter-spacing: .14em; text-transform: uppercase; }
+.festival-row-main { min-width: 0; }
+.festival-row-name {
+  font-family: var(--font-head);
+  font-size: clamp(24px, 3vw, 42px);
+  line-height: .95;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+.festival-row-location { opacity: .62; text-transform: uppercase; }
+.festival-row-meta { min-width: 0; }
+.festival-row-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+.festival-row .festival-tag { padding: 3px 8px; font-size: 8px; }
+.festival-row .fest-fav-mount {
+  position: relative;
+  top: auto;
+  right: auto;
+  z-index: 5;
+}
+.festival-row:hover { background: rgba(240,237,232,.035); }
+.festival-row:hover .festival-row-name { color: var(--accent); }
+.festival-row.rave-result .festival-row-status,
+body.rave-mode .festival-row-status { color: var(--accent); }
+@media (max-width: 900px) {
+  .festival-row { padding: 20px 0; }
+  .festival-row-grid { grid-template-columns: 1fr auto; gap: 10px 16px; }
+  .festival-row-date { grid-column: 1 / -1; flex-direction: row; align-items: baseline; gap: 10px; }
+  .festival-row-main { grid-column: 1 / -1; }
+  .festival-row-meta { grid-column: 1; }
+  .festival-row .fest-fav-mount { grid-column: 2; grid-row: 3; justify-self: end; }
+  .festival-row-name { font-size: clamp(25px, 8vw, 38px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .festival-row:hover .festival-row-name { color: inherit; }
+}
+
 </style>
 <script type="application/ld+json">
 {
@@ -1153,43 +1219,30 @@ function renderFestivalCard(f, m, i) {
   // name_en は現状データが1件も無いので実質 no-op だが、
   // 将来 NAME_EN が入ったとき描画側を触らずに済むよう通しておく。
   const name = tjLocalized(f.name, '', f.name_en);
-  const desc = tjLocalized(f.desc, '', f.desc_en);
   // build-detail-pages.mjs の festivalLocation() と同じ呼び方。
   // JA は location_ja 優先、EN は英字の location 優先で location_ja へ退避する。
   const locationText = [tjLocalized(f.location, f.location_ja, ''), f.city].filter(Boolean).join(', ');
-  const imgHtml = f.image
-    ? `<img ${tjImageSizeAttrs(f.image)} loading="lazy" decoding="async" src="${tjCardAssetPath(f.image)}" data-original-src="${tjAssetPath(f.image)}" alt="${name}" style="object-position:${f.imagePosition || 'center'}" onerror="if(this.dataset.originalSrc&&this.src!==this.dataset.originalSrc){this.src=this.dataset.originalSrc}else{this.style.display='none'}">`
-    : '';
   const genres = Array.isArray(f.genre) ? f.genre : (f.genre ? [f.genre] : []);
+  const dateLabel = formatFestDate(f.date);
+  const statusLabel = !f.date ? 'DATE TBA' : (isFuture(f.date) ? 'UPCOMING' : 'ARCHIVED');
   return `
-    <section class="festival-section reveal${currentSearch && (f.type || 'festival') === 'rave' ? ' rave-result' : ''}" data-fest-id="${f.id}" data-result-type="${f.type || 'festival'}" style="transition-delay:${i * 100}ms">
-      <a class="festival-card-link" data-festival-detail-link href="/en/festivals/${encodeURIComponent(f.id)}.html" aria-label="${name} details"></a>
-      <div class="festival-layout">
-        <div class="festival-image-wrap">
-          ${imgHtml}
-          <div class="fest-fav-mount" data-fest-fav="${f.id}" onclick="event.stopPropagation()"></div>
+    <section class="festival-section festival-row reveal${currentSearch && (f.type || 'festival') === 'rave' ? ' rave-result' : ''}" data-fest-id="${f.id}" data-result-type="${f.type || 'festival'}" style="transition-delay:${i * 40}ms">
+      <a class="festival-card-link" data-festival-detail-link data-thumb="${f.image ? tjCardAssetPath(f.image) : ''}" href="/en/festivals/${encodeURIComponent(f.id)}.html" aria-label="${name} details"></a>
+      <div class="festival-row-grid">
+        <div class="festival-row-date">
+          <span class="festival-row-label">DATE</span>
+          <strong>${dateLabel}</strong>
+          <span class="festival-row-status">${statusLabel}</span>
         </div>
-        <div class="festival-info-col">
-          <div class="festival-info-top">
-            <div class="festival-month-label">${String(m + 1).padStart(2, '0')} / ${MONTHS[m]}</div>
-            ${currentSearch ? `<div class="festival-result-type">${(f.type || 'festival') === 'rave' ? 'RAVE' : 'FESTIVAL'}</div>` : ''}
-            <h2 class="festival-name">${name}</h2>
-            <!-- クラス名の -jp は EN では意味的に合わないが、common.css の
-                 セレクタなので変えない（追従漏れのほうが危険） -->
-            <div class="festival-desc-jp">${desc}</div>
-          </div>
-          <div class="festival-info-bottom">
-            <div class="festival-meta-row">
-              <span class="festival-meta-label">LOCATION</span>
-              <span class="festival-meta-value">${locationText}</span>
-            </div>
-            <div class="festival-meta-row">
-              <span class="festival-meta-label">DATE</span>
-              <span class="festival-meta-value">${formatFestDate(f.date)}</span>
-            </div>
-            <div class="festival-tags">${genres.map(g => `<span class="festival-tag">${g}</span>`).join('')}</div>
-          </div>
+        <div class="festival-row-main">
+          ${currentSearch ? `<div class="festival-result-type">${(f.type || 'festival') === 'rave' ? 'RAVE' : 'FESTIVAL'}</div>` : ''}
+          <h2 class="festival-row-name">${name}</h2>
         </div>
+        <div class="festival-row-meta">
+          <div class="festival-row-location">${locationText || 'LOCATION TBA'}</div>
+          <div class="festival-row-tags">${genres.map(g => `<span class="festival-tag">${g}</span>`).join('')}</div>
+        </div>
+        <div class="fest-fav-mount" data-fest-fav="${f.id}" onclick="event.stopPropagation()"></div>
       </div>
     </section>`;
 }
@@ -1274,7 +1327,7 @@ function renderFestivals() {
 
 /* ========== CURSOR (delegated to common.js) ========== */
 function bindCursorExpand() {
-  if (window.tjBindCursorExpand) window.tjBindCursorExpand('button, .festival-card-link, .festival-cta');
+  if (window.tjBindCursorExpand) window.tjBindCursorExpand('button, .festival-card-link, .festival-row, .festival-cta');
 }
 
 /* ========== INIT ========== */
