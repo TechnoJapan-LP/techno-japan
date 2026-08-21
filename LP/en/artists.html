@@ -84,6 +84,10 @@
 .artists-toolbar {
   padding: 40px 40px 0;
   display: flex; flex-direction: column; gap: 24px;
+  position: sticky; top: 0; z-index: 20;
+  background: rgba(8,8,8,.96);
+  border-bottom: 1px solid rgba(240,237,232,.08);
+  backdrop-filter: blur(12px);
 }
 
 .artists-search-row {
@@ -263,7 +267,7 @@
   .page-header { padding: 140px 24px 60px; }
   .page-header-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
   #artists-list-view { padding: 0 0 80px; }
-  .artists-toolbar { padding: 32px 24px 0; }
+  .artists-toolbar { padding: 32px 24px 24px; }
   .artists-grid { grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 24px; }
 }
 @media (max-width: 768px) {
@@ -277,7 +281,7 @@
 }
 @media (max-width: 480px) {
   .artists-grid { grid-template-columns: repeat(2, 1fr); gap: 3px; padding: 16px; }
-  .artists-toolbar { padding: 24px 16px 0; gap: 16px; }
+  .artists-toolbar { padding: 24px 16px 16px; gap: 16px; }
   .artist-card-content { padding: 12px; }
   .artist-card-name { font-size: 16px; }
   .artist-card-genre { font-size: 7px; margin-bottom: 3px; }
