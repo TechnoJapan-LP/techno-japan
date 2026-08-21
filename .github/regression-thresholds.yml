@@ -283,6 +283,14 @@ metrics:
       2026-08-21: ARTISTSの検索・A-Z・ジャンル操作を一覧の途中でも使えるようにした。
       JA/ENの両方で .artists-toolbar の sticky / top / z-index を維持する。
 
+  mobile_in_app_browser_guards:
+    description: アプリ内ブラウザ向けSkipリンク・固定ナビ対策の有効数
+    min: 1
+    target: 1
+    note: >-
+      2026-08-21: LINE等でSkip to contentが残る問題と、固定ヘッダーがスクロール位置へ
+      移動して見える問題へのガード。common.cssの3条件をまとめて検査する。
+
   broken_image_refs:
     description: 生成HTMLが参照する /images/ で実体が存在しないものの件数
     min: 0
