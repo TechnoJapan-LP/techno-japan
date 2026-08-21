@@ -11,6 +11,8 @@
   --accent: #ff2d2d;          /* sharp neon — small accents, dots, active states */
   --accent-soft: #a82f31;     /* editorial wine — warmer hovers, section tints */
   --font-display: 'Bebas Neue', sans-serif;
+  /* Editorial headings can be upgraded independently of navigation/body text. */
+  --font-head: var(--font-display);
   --font-mono: 'Space Mono', monospace;
   --font-body: 'DM Sans', sans-serif;
   /* iOS notch / home-indicator safe areas (0 on other devices) */
@@ -68,6 +70,35 @@ body {
 a { color: inherit; text-decoration: none; }
 
 * { -webkit-tap-highlight-color: transparent; }
+
+/* Shared interaction primitives. Keep the response small and predictable so
+   buttons still feel native on touch devices. */
+button:not(:disabled):active,
+.cta-btn:active,
+.tj-action:active {
+  transform: scale(0.97);
+  transition-duration: 80ms;
+}
+
+/* Horizontal content strip. It is intentionally opt-in: never hijack the
+   page's vertical wheel/touch scroll to move this strip. */
+.tj-strip {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(240,237,232,0.35) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+.tj-strip > * {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+}
+.tj-strip::-webkit-scrollbar { height: 4px; }
+.tj-strip::-webkit-scrollbar-track { background: transparent; }
+.tj-strip::-webkit-scrollbar-thumb { background: rgba(240,237,232,0.35); }
 
 /* ===================== CUSTOM CURSOR ===================== */
 .cursor-dot, .cursor-ring {
