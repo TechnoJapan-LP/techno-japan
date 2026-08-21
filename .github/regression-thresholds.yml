@@ -275,6 +275,14 @@ metrics:
       2026-08-02 まで JA ハブ8枚に hreflang が1本も無かった。
       JA/EN を相互に張り、x-default は EN（詳細ページの既存規則に合わせる）。
 
+  artist_filter_sticky_pages:
+    description: ARTISTSの検索・絞り込みがスクロール追従するページ数（JA + EN）
+    min: 2
+    target: 2
+    note: >-
+      2026-08-21: ARTISTSの検索・A-Z・ジャンル操作を一覧の途中でも使えるようにした。
+      JA/ENの両方で .artists-toolbar の sticky / top / z-index を維持する。
+
   broken_image_refs:
     description: 生成HTMLが参照する /images/ で実体が存在しないものの件数
     min: 0

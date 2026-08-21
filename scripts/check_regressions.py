@@ -286,6 +286,21 @@ def measure():
         if (d / n).exists() and "hreflang" in read(d / n)
     )
 
+    # ARTISTS の検索・絞り込みをスクロール中も使える状態に保つ。
+    # sticky指定が消えると、長い一覧で検索欄が画面外へ消えるため、JA/ENを別々に検査する。
+    artist_filter_sticky_pages = 0
+    artist_toolbar_re = re.compile(
+        r"\.artists-toolbar\s*\{[^}]*"
+        r"position:\s*sticky\s*;[^}]*"
+        r"top:\s*0\s*;[^}]*"
+        r"z-index:\s*20\s*;",
+        re.S,
+    )
+    for f in (LP / "artists.html", LP / "en" / "artists.html"):
+        if f.exists() and artist_toolbar_re.search(read(f)):
+            artist_filter_sticky_pages += 1
+    m["artist_filter_sticky_pages"] = artist_filter_sticky_pages
+
     m["festival_faq_pages"] = faq_ld_pages
     m["festival_faq_section_pages"] = faq_section_pages
     m["festival_faq_qa_total"] = faq_qa_total
