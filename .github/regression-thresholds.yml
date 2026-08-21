@@ -388,7 +388,7 @@ metrics:
 hub_pages:
   festivals.html:
     container: festivals-main
-    marker: festival-layout        # フェスカード。JS の renderFestivals が生成
+    marker: festival-row           # フェス行。JS の renderFestivals が生成
     min_markers: 50                # 実測 70（86件中、表示対象のフェスカード）
     min_container_bytes: 60000     # 実測 112,911。JS 停止時は 9,130 まで落ちた
   artists.html:
@@ -420,7 +420,7 @@ hub_pages:
   # marker と閾値は JA と同じでよい。同じ data.js を読むのでカード数も一致する。
   en/festivals.html:
     container: festivals-main
-    marker: festival-layout
+    marker: festival-row
     ja_containers: [festivals-main]
     max_ja_chars: 27    # 2026-08-08 実測。日本語名のフェスが5件→6件に増えたぶん。
                         # 11,196 → 35 →（LOCATION 逆転修正で）21 → 27。
