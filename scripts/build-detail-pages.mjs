@@ -69,7 +69,7 @@ const ARTICLE_FX_CSS_VERSION = 10;
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
 const COMMON_JS_VERSION = 13;   // 2026-08-18 共通モバイルメニューの反映保証
-const COMMON_CSS_VERSION = 23;   // 2026-08-18 JA/ENの共通位置揃え
+const COMMON_CSS_VERSION = 24;   // 2026-08-21 共通CSSのUI/UX改善
 const LANG_TOGGLE_VERSION = 1;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
 const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');
