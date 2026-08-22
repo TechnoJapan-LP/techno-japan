@@ -524,7 +524,7 @@ footer { padding: 60px 40px; }
   z-index: 0;
   pointer-events: none;
 }
-.festival-list-visual-a .festival-row.has-visual .festival-row-grid,
+.festival-list-visual-a .festival-row .festival-row-grid,
 .festival-list-visual-b .festival-row.has-visual .festival-row-grid {
   position: relative;
   z-index: 2;
@@ -590,7 +590,9 @@ body.rave-mode .festival-row-status { color: var(--accent); }
   .festival-row .fest-fav-mount { grid-column: 2; grid-row: 3; justify-self: end; }
   .festival-row-name { font-size: clamp(25px, 8vw, 38px); }
   .festival-row { --festival-row-visual-width: 96px; min-height: 112px; }
-  .festival-list-visual-a .festival-row.has-visual .festival-row-grid { padding-right: calc(var(--festival-row-visual-width) + 14px); }
+  /* モバイルは画像を出さず、画像の有無で本文幅を変えない。 */
+  .festival-list-visual-a .festival-row .festival-row-grid { padding-right: 0; }
+  .festival-list-visual-a .festival-row.has-visual .festival-row-visual-a { display: none; }
   .festival-row-visual-a { border-left: 1px solid rgba(240,237,232,.1); }
   .festival-list-visual-b .festival-row.has-visual .festival-row-grid { padding-right: 112px; }
   .festival-list-visual-b .festival-row-date-visual { right: 14px; font-size: 30px; }

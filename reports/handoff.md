@@ -4199,3 +4199,26 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - CMS入力・Publish・GAS再デプロイは今回のUI変更対象外のため未実施。
 - VENUESの「画像なし行」は現在の22件すべて画像あり。FESTIVALSでは画像あり22件、
   画像なし49件をブラウザDOMで確認し、画像なし行が黒のままであることを確認。
+
+## 2026-08-23 追加修正: モバイル案AとVENUESホバー
+
+### 変更
+
+- FESTIVALS案Aは390px以下で右側画像を非表示に変更。
+- PCでは画像の有無にかかわらず右側の予約幅を統一し、行の本文幅を揃えた。
+- VENUESは画像と役割が重なる面塗りホバーを削除し、境界線と矢印の反応だけを残した。
+
+### 再確認
+
+- 修正後の390px案A: FESTIVALS JA/ENとも画像リクエスト3件（ロゴ等のみ）、
+  LCP JA 1,204ms / EN 1,196ms、CLS 0.00015。
+- 画像あり22件・画像なし49件の行でレイアウトを確認。
+- JA/ENフィルタ後の画像整合性 `true`、通常詳細リンク遷移 `true`。
+- 修正後のスクリーンショットは既存の
+  `reports/screenshots/list-visual/a-ja-festivals-390.png` と
+  `a-en-festivals-390.png` を更新。
+- `bash scripts/preflight.sh`: 全33件成功。
+
+### 未確認
+
+- 実機iPhone / Instagram内ブラウザ / LINE内ブラウザは引き続き未確認。

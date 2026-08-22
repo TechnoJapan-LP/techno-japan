@@ -82,12 +82,7 @@
   content: ''; position: absolute; inset: 0;
   background: linear-gradient(90deg, rgba(8,8,8,.02), rgba(8,8,8,.18)); pointer-events: none;
 }
-.venue-card::before {
-  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 100%;
-  background: rgba(240,237,232,0.03); transform: scaleY(0); transform-origin: bottom;
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.venue-card:hover::before { transform: scaleY(1); }
+/* 画像自体がホバー時の視線誘導を担うため、面を塗る演出は重ねない。 */
 .venue-card:hover { border-color: rgba(240,237,232,0.15); }
 .venue-card-content { position: relative; z-index: 1; }
 .venue-card-city { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.3; margin-bottom: 16px; }
