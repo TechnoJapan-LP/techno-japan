@@ -63,8 +63,11 @@
     return typeof hit === 'string' ? { src: hit, srcset: null } : hit;
   }
 
-  window.tjCardAssetPath = function (value) {
+  window.tjCardAssetPath = function (value, size) {
     var hit = tjDerivativeEntry(value);
+    if (hit && size === 'sm' && hit.srcset && hit.srcset.length) {
+      return window.tjAssetPath(hit.srcset[0][0]);
+    }
     return window.tjAssetPath(hit ? hit.src : String(value == null ? '' : value).trim());
   };
 
@@ -116,7 +119,7 @@
      カードはすべて background-image なので、1枚も遅延していなかった。
      適用後は 1.38MB / 0.11MB。AUDIT §9-45。
 
-     使い方: テンプレートでは style ではなく tjLazyBgAttr(url) を展開し、
+     使い方: テンプレートでは style ではなく tjLazyBgAttr(url[, 'sm']) を展開し、
      innerHTML を入れ終わったら tjApplyLazyBackgrounds(root) を呼ぶ。
      画面に近づいた時点で style.backgroundImage を立てる。
      rootMargin を広めに取ってあるので、スクロールして到達する頃には
@@ -129,14 +132,15 @@
      scripts/check_hub_pages.py の画像検査に映らなくなる。
      あちらは [data-bg] と element.style の両方を見るようにしてある。
      属性名を変えるなら両方直すこと。 */
-  window.tjLazyBgAttr = function (url) {
-    var u = window.tjCardAssetPath(url);
+  window.tjLazyBgAttr = function (url, size) {
+    var u = window.tjCardAssetPath(url, size);
     return u ? ' data-bg="' + window.tjEscapeHtml(u) + '"' : '';
   };
 
   var lazyBgObserver = null;
   window.tjApplyLazyBackgrounds = function (root) {
     var scope = root || document;
+    var rootMargin = arguments.length > 1 && arguments[1] ? arguments[1] : '600px 0px';
     var targets = scope.querySelectorAll ? scope.querySelectorAll('[data-bg]') : [];
     if (!targets.length) return;
 
@@ -158,7 +162,7 @@
           show(entry.target);
           obs.unobserve(entry.target);
         });
-      }, { rootMargin: '600px 0px' });
+      }, { rootMargin: rootMargin });
     }
     for (var j = 0; j < targets.length; j++) lazyBgObserver.observe(targets[j]);
   };

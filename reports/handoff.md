@@ -4097,3 +4097,105 @@ preflight: **全33件成功**。
 
 ### 次の担当への注意・判断待ち
 - 残タスクは画像14点の取得・タイトル期間表記の判断・CMS入稿（前エントリ参照）
+
+---
+
+## 2026-08-23 FESTIVALS / VENUES 一覧ビジュアル2案の比較
+
+### 実施: 何をどこに変えたか
+
+- `LP/festivals.html:472-605,1290-1420`
+  - `?visual=a`: 行右端に派生 `sm` の4:3画像を追加（ぼかしなし）。
+  - `?visual=b`: 行全体に派生 `sm` の背景画像、blur 18px / grayscale 55% /
+    brightness 0.58、左→右暗幕、右端の日付を追加。
+  - パラメータなしは変更前表示の比較用。画像なし行は視覚要素を生成しない。
+  - reduced-motion では案Bのhover filter/transform変化を停止。
+- `LP/venues.html:69-98,797-816`
+  - 22件のVENUESカード右側に派生 `sm` を追加。画像がない場合は子要素を生成しない。
+  - 画像は `data-bg` と `tjApplyLazyBackgrounds` で遅延適用。
+- `LP/localize.js:66-71,135-164`
+  - 既存の派生表から `sm` を選ぶ引数と、ページごとのrootMarginを追加。
+- `LP/en/festivals.html` / `LP/en/venues.html`
+  - `scripts/build-detail-pages.mjs` の `enHubFromJa` で再生成。
+  - `wc -l`:
+    - `LP/festivals.html` 1,442 / `LP/en/festivals.html` 1,442
+    - `LP/venues.html` 1,002 / `LP/en/venues.html` 1,002
+
+### 計測: 変更前 / 案A / 案B
+
+条件は全ケース同一: headless Chrome、390×844、DPR2、iPhone UA、Fast 3G、
+resource entriesのtransferSize合計＋navigation transferSize、スクロール前後を計測。
+画像リクエスト数は最下部までスクロールした時点。案A/Bは最終調整後の値。
+
+| ページ・言語 | 状態 | 初期表示 KB | 全スクロール KB | 画像リクエスト数 | LCP ms | CLS |
+|---|---:|---:|---:|---:|---:|---:|
+| FESTIVALS JA | 変更前 | 478.3 | 478.3 | 3 | 1,232 | 0.00015 |
+| FESTIVALS JA | 案A | 565.1 | 896.6 | 13 | 1,232 | 0.00015 |
+| FESTIVALS JA | 案B | 565.1 | 565.1 | 14 | 4,852 | 0.00015 |
+| FESTIVALS EN | 変更前 | 478.4 | 478.4 | 3 | 1,196 | 0.00015 |
+| FESTIVALS EN | 案A | 565.2 | 565.2 | 14 | 1,220 | 0.00015 |
+| FESTIVALS EN | 案B | 565.2 | 565.2 | 14 | 4,632 | 0.00015 |
+| VENUES JA | 変更前 | 577.8 | 577.8 | 3 | 1,928 | 0.04471 |
+| VENUES JA | 案A | 579.2 | 579.2 | 25 | 4,520 | 0.04471 |
+| VENUES EN | 変更前 | 577.9 | 577.9 | 3 | 1,924 | 0.04471 |
+| VENUES EN | 案A | 589.9 | 597.9 | 25 | 4,792 | 0.04471 |
+
+KBは1KB=1024bytesで換算。案BはFESTIVALSのみ実装対象、VENUESは案Aのみ。
+`CLS 0.04471` は変更前から存在するVENUES側の既存値で、今回の画像追加による増加はない。
+
+### 合否: 事前基準との比較
+
+- FESTIVALS 案A: 合格。初期 +86.8KB、全スクロール +418.3KB、LCP JA ±0ms /
+  EN +24ms、CLS +0。全基準内。
+- FESTIVALS 案B: 不採用候補。初期重量は +86.8KBで通るが、LCPがJA +3,620ms /
+  EN +3,436msで、+200ms基準を大幅超過。
+- VENUES 案A: 不採用候補。重量増はJA +1.4KB / EN +12.0KBで通るが、LCPが
+  JA +2,592ms / EN +2,868msで基準超過。CLSは既存の0.04471で、絶対値0.02基準には
+  変更前から未達。画像の遅延範囲を追加調整してもLCP基準内にはならなかった。
+
+### 目視: スクショのパス一覧と気づいた問題
+
+保存先: `reports/screenshots/list-visual/`
+
+- 案A: `a-ja-festivals-390.png`, `a-en-festivals-390.png`,
+  `a-ja-festivals-1280.png`, `a-en-festivals-1280.png`
+- 案B: `b-ja-festivals-390.png`, `b-en-festivals-390.png`,
+  `b-ja-festivals-1280.png`, `b-en-festivals-1280.png`
+- VENUES案A: `a-ja-venues-390.png`, `a-en-venues-390.png`,
+  `a-ja-venues-1280.png`, `a-en-venues-1280.png`
+- 比較用追加確認: `b-ja-venues-390.png`, `b-en-venues-390.png`,
+  `b-ja-venues-1280.png`, `b-en-venues-1280.png`
+
+案Aは右側の画像が行の情報と競合せず、案Bは暗幕により白文字のコントラストを維持。
+案Bはモバイルで日付が大きく、行の情報領域を圧迫する。画像なし行は黒のままで、
+灰色枠・壊れた画像アイコンは発生しなかった。
+
+390pxの1画面に入る完全なFESTIVAL行数（JA / EN）は、変更前 5 / 5、案A 5 / 4、
+案B 5 / 4。案A/BのENのみ1件減少。案A/Bともフィルタ後の画像対応は一致した。
+
+### 操作確認
+
+- JA/ENで月・ジャンルフィルタ後の行と画像の対応を確認: `visualConsistency: true`
+- VENUES検索 `WOMB` で1件に絞り込み、画像表示を確認。
+- FESTIVALS/ENを含む通常 `<a href>` をクリックし、静的詳細ページへ遷移。
+- `preventDefault()` による詳細遷移横取りなし。
+- `python3 scripts/check_hub_pages.py`: JS例外0、壊れた画像0、XSS発火0。
+- `python3 scripts/audit_spa_vs_static.py --after`: 4セクションともSPA詳細なし。
+
+### 提案: どちらを採るか
+
+FESTIVALSは案Aを採用候補とする。案Bは視覚的には強いが、LCPが約3.4〜3.6秒悪化し、
+データベース一覧の検索体験に対する基準を満たさない。案Aは初期+86.8KB、全スクロール
++418.3KBで、LCP/CLSも基準内。
+
+VENUES案Aは見た目と重量は良いが、LCP基準を超えているため、現時点では本採用しない。
+VENUESは画像を表示する場合のLCP対策を別途行い、再計測してから判断する。
+最終判断はユーザーに委ねる。
+
+### 未確認
+
+- 実機のiPhone Safari、Instagram内ブラウザ、LINE内ブラウザでの操作は未確認。
+  今回はChrome headlessの390px/DPR2と1280pxで確認した。
+- CMS入力・Publish・GAS再デプロイは今回のUI変更対象外のため未実施。
+- VENUESの「画像なし行」は現在の22件すべて画像あり。FESTIVALSでは画像あり22件、
+  画像なし49件をブラウザDOMで確認し、画像なし行が黒のままであることを確認。
