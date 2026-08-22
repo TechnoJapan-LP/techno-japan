@@ -45,7 +45,7 @@
 <link rel="dns-prefetch" href="https://w.behold.so">
 <link rel="dns-prefetch" href="https://formsubmit.co">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/common.css?v=26">
+<link rel="stylesheet" href="/common.css?v=27">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -129,8 +129,9 @@
 .artists-genre-nav {
   display: flex; gap: 0; flex-wrap: wrap;
   border-bottom: 1px solid rgba(240,237,232,0.08);
+  min-height: 31px;
 }
-.artists-alpha-nav { display: flex; flex-wrap: wrap; gap: 2px; padding-top: 4px; }
+.artists-alpha-nav { display: flex; flex-wrap: wrap; gap: 2px; padding-top: 4px; min-height: 31px; }
 .alpha-tab { min-width: 28px; padding: 7px 6px; border: 1px solid transparent; background: none; color: var(--text); opacity: .35; font-family: var(--font-mono); font-size: 10px; cursor: pointer; }
 .alpha-tab:hover, .alpha-tab:focus-visible { opacity: 1; border-color: rgba(240,237,232,.25); outline: none; }
 @media (max-width: 640px) { .artists-alpha-nav { gap: 1px; } .alpha-tab { min-width: 24px; padding: 9px 4px; } }
@@ -275,7 +276,7 @@
   .artists-search-row { flex-wrap: wrap; }
   .artists-search { max-width: 100%; }
   .artists-count { margin-left: 0; width: 100%; }
-  .artists-genre-nav { gap: 0; overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .artists-genre-nav { gap: 0; overflow-x: auto; flex-wrap: nowrap; min-height: 36px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   .artists-genre-nav::-webkit-scrollbar { display: none; }
   .genre-tab { padding: 10px 14px; font-size: 8px; }
 }
