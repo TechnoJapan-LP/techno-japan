@@ -4232,6 +4232,12 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - `scripts/check_hub_pages.py` が検査するハブ描画・画像・JS例外はpreflight内で成功。
 - 本番反映、push、PR作成は未実施。
 
+## 2026-08-23 追加修正: スマホVIEWをさらに右下へ
+
+- スマホの円形矢印ボタンを `right 12px / bottom 12px` に変更。
+- 390px JA/ENのローカルスクリーンショットと転送量・LCP・CLSを確認。
+- 本番反映、push、PR作成は未実施。
+
 ## 2026-08-23 追加修正: スマホのVENUES VIEW位置
 
 - スマホもPCと同じく、円形の矢印ボタンを画像領域の右下（right 24px / bottom 24px）へ配置。
