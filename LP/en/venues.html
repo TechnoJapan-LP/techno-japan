@@ -90,9 +90,16 @@
 .venue-card-genre { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.2; }
 .venue-card-arrow {
   position: absolute; right: 32px; bottom: 48px; z-index: 1;
-  display: inline-flex; align-items: center;
+  width: 56px; height: 56px; border: 1px solid rgba(240,237,232,0.18); border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
   font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
-  opacity: 0.4;
+  color: var(--text); opacity: 0.55;
+}
+.venue-card-arrow-icon { font-size: 18px; line-height: 1; }
+.venue-card-arrow-label { display: none; }
+@media (hover: hover) and (pointer: fine) {
+  .venue-card:hover .venue-card-arrow-icon { display: none; }
+  .venue-card:hover .venue-card-arrow-label { display: inline; }
 }
 
 /* ===================== HOVER PREVIEW PANE (HÖR-style) ===================== */
@@ -805,7 +812,7 @@ function renderVenuesList() {
           <div class="venue-card-area"></div>
           <div class="venue-card-genre">${v.genre ? (Array.isArray(v.genre) ? v.genre.join(' / ') : v.genre) : ''}</div>
         </div>
-        <div class="venue-card-arrow">VIEW</div>
+        <div class="venue-card-arrow" aria-label="VIEW"><span class="venue-card-arrow-icon" aria-hidden="true">→</span><span class="venue-card-arrow-label">VIEW</span></div>
         <div class="venue-fav-mount" data-fav-mount="venue" data-fav-id="${v.id}" onclick="event.preventDefault();event.stopPropagation()"></div>
       </a>`;
   }).join('');
