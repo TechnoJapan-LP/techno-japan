@@ -4239,3 +4239,14 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - 転送量・画像リクエスト・LCP/CLSを再計測済み。
 - `bash scripts/preflight.sh`: 全33件成功。
 - push、PR、本番反映は未実施。
+
+## 2026-08-23 追加修正: VENUESスマホのVIEWラベル
+
+- モバイルVENUESカードの縦積み指定を削除し、直前の右下固定レイアウトへ戻した。
+- 行内リンクの表示を `VIEW →` から記事一覧のREADリンクに合わせた `VIEW` に変更。
+- JA変更後にENを再生成。`wc -l LP/venues.html LP/en/venues.html` は 996行 / 996行。
+- 390pxローカル計測: JA 初期592,680B・最下部592,680B、画像3件→25件、LCP 4,528ms、CLS 0.0447。
+  EN 初期607,052B・最下部611,989B、画像2件→25件、LCP 4,832ms、CLS 0.0447。
+- `scripts/check_list_visual_interactions.py --root LP --state A`: JA/ENの検索・絞り込み後画像整合性・通常リンクを確認。
+- `bash scripts/preflight.sh`: 全33件成功。
+- 本番反映、push、PR作成は未実施。

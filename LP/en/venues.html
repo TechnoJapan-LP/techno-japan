@@ -276,8 +276,6 @@
   .venue-card { padding: 36px 24px; min-height: auto; }
   .venue-card-visual { width: 38%; }
   .venue-card.has-visual .venue-card-content { padding-right: 24%; }
-  /* 画像レイヤーと重ならないよう、スマホではカード本文の下に置く。 */
-  .venue-card-arrow { position: relative; right: auto; bottom: auto; margin-top: 24px; opacity: .55; }
   /* Full-width map on mobile — break out of parent padding */
   .city-map-wrap {
     margin: 0 -24px 32px;
@@ -802,7 +800,7 @@ function renderVenuesList() {
           <div class="venue-card-area"></div>
           <div class="venue-card-genre">${v.genre ? (Array.isArray(v.genre) ? v.genre.join(' / ') : v.genre) : ''}</div>
         </div>
-        <div class="venue-card-arrow">VIEW →</div>
+        <div class="venue-card-arrow">VIEW</div>
         <div class="venue-fav-mount" data-fav-mount="venue" data-fav-id="${v.id}" onclick="event.preventDefault();event.stopPropagation()"></div>
       </a>`;
   }).join('');
