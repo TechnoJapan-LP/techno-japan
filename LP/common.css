@@ -706,8 +706,14 @@ footer {
 
 /* ===================== RESPONSIVE (shared chrome only) ===================== */
 @media (max-width: 900px) {
+  /* アプリ内ブラウザでは :focus-visible の判定が不安定で、
+     Skipリンクがページ本文の上に残ることがある。モバイルはメニュー操作を
+     優先し、キーボード向けSkipリンクを表示しない。 */
+  .skip-to-content { display: none !important; }
   nav {
-    position: fixed !important;
+    /* LINE / InstagramのWebViewで fixed が文書内の位置に描画される場合がある。
+       navは文書先頭のためstickyなら、復元されたスクロール位置でも必ず上端に留まる。 */
+    position: sticky !important;
     top: 0 !important;
     left: 0 !important;
     right: 0 !important;
@@ -718,11 +724,6 @@ footer {
     background: transparent;
     border-bottom: 1px solid transparent;
     mix-blend-mode: difference;
-    /* iOSアプリ内ブラウザで fixed nav がスクロール位置に追従して
-       描画されることがあるため、独立した合成レイヤーに固定する。 */
-    transform: translate3d(0, 0, 0);
-    -webkit-transform: translate3d(0, 0, 0);
-    will-change: transform;
   }
   nav.nav-scrolled {
     background: rgba(8,8,8,0.78);

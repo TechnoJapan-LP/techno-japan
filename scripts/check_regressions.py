@@ -302,12 +302,12 @@ def measure():
     m["artist_filter_sticky_pages"] = artist_filter_sticky_pages
 
     # LINE等のアプリ内ブラウザ向けの共有モバイル表示ガード。
-    # Skipリンクがタップ後に残らず、固定ナビが独立レイヤーで描画されることを確認する。
+    # Skipリンクがタップ後に残らず、固定ナビがWebViewでも上端に留まることを確認する。
     common_css = read(LP / "common.css")
     mobile_browser_guards = int(
         bool(re.search(r"\.skip-to-content:focus-visible", common_css))
-        and bool(re.search(r"\.skip-to-content:focus\s*\{\s*transform:\s*translateY\(-200%\)", common_css))
-        and bool(re.search(r"nav\s*\{[^}]*transform:\s*translate3d\(0, 0, 0\)", common_css, re.S))
+        and bool(re.search(r"\.skip-to-content\s*\{[^}]*display:\s*none\s*!important", common_css, re.S))
+        and bool(re.search(r"nav\s*\{[^}]*position:\s*sticky\s*!important", common_css, re.S))
     )
     m["mobile_in_app_browser_guards"] = mobile_browser_guards
 

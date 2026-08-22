@@ -288,8 +288,8 @@ metrics:
     min: 1
     target: 1
     note: >-
-      2026-08-21: LINE等でSkip to contentが残る問題と、固定ヘッダーがスクロール位置へ
-      移動して見える問題へのガード。common.cssの3条件をまとめて検査する。
+      2026-08-22: LINE等でSkip to contentが残る問題と、固定ヘッダーがスクロール位置へ
+      移動して見える問題へのガード。モバイルのSkip非表示とnav stickyを検査する。
 
   broken_image_refs:
     description: 生成HTMLが参照する /images/ で実体が存在しないものの件数
