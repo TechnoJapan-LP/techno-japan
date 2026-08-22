@@ -10,6 +10,16 @@ bash scripts/preflight.sh
 
 **これが通るまで push しない。**
 
+初回セットアップ時に、push自体もこの検査を通らないと実行できないようにする。
+
+```bash
+bash scripts/install-git-hooks.sh
+```
+
+以後、git push は `.githooks/pre-push` が省略なしの
+`bash scripts/preflight.sh` を自動実行する。テストが1件でも失敗した場合、
+pushは中止される。`--fast` や回避用の環境変数は本番pushには使わない。
+
 ### なぜ「push しない」なのか
 
 このリポジトリは **main へ push した時点で本番へ出る**。

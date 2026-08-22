@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+#
+# 本番へ出る main push の前に、必ずローカルの完全な preflight を通す。
+# --fast や環境変数による回避は許可しない。
+
+set -euo pipefail
+cd "$(git rev-parse --show-toplevel)"
+
+echo "本番push前のローカル検証を開始します。"
+echo "省略なしの scripts/preflight.sh を実行します。"
+bash scripts/preflight.sh
+
+echo "ローカル検証に合格しました。pushを続行します。"
