@@ -4232,6 +4232,17 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - `scripts/check_hub_pages.py` が検査するハブ描画・画像・JS例外はpreflight内で成功。
 - 本番反映、push、PR作成は未実施。
 
+## 2026-08-23 追加修正: VENUES VIEWのREAD準拠
+
+- VENUESの `VIEW` を記事一覧のREADリンクと同じフォントサイズ、字間、大文字表示、透明度に統一。
+- モバイルの右下固定レイアウトは維持し、カードの縦幅は変更していない。
+- JA/EN再生成後の行数は 1001行 / 1001行。
+- 390pxスクリーンショットを再取得: `reports/screenshots/list-visual/a-ja-venues-390.png`、
+  `a-en-venues-390.png`。
+- 再計測: JA 初期592,756B・最下部592,756B、LCP 4,544ms、CLS 0.0447。
+  EN 初期603,800B・最下部1,076,155B、LCP 5,248ms、CLS 0.0447。
+- 本番反映、push、PR作成は未実施。
+
 ## 2026-08-23 追加修正: VENUESスマホのVIEW矢印
 
 - 390px以下では `VIEW →` を画像上の絶対配置から本文下の通常フローへ変更。
