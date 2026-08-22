@@ -4232,6 +4232,14 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - `scripts/check_hub_pages.py` が検査するハブ描画・画像・JS例外はpreflight内で成功。
 - 本番反映、push、PR作成は未実施。
 
+## 2026-08-23 追加修正: PCのVENUES VIEW位置
+
+- PCでは円形の矢印ボタンを画像領域の右下（right 24px / bottom 24px）へ移動。
+- 390px以下では従来位置（right 32px / bottom 48px）を維持。
+- 1280px/390pxのJA/ENローカルスクリーンショットと転送量・LCP・CLSを再確認。
+- `bash scripts/preflight.sh`: 全33件成功。
+- 本番反映、push、PR作成は未実施。
+
 ## 2026-08-23 追加修正: VENUES VIEWホバー表現
 
 - 初期表示を円形ボタン内の `→` に変更。
