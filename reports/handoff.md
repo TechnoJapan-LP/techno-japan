@@ -4238,6 +4238,41 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - 390px JA/ENのローカルスクリーンショットと転送量・LCP・CLSを確認。
 - 本番反映、push、PR作成は未実施。
 
+## 2026-08-24 フェーズ1: 記事イベントショートコード共通関数
+
+### 実施
+
+- `LP/article-shortcodes.js` を新規作成。`[[event|名前|日程|場所|公式URL|補足]]` と `[[calendar]]` の解析、検証、HTML化を実装。
+- NodeのES module importと、ブラウザの`globalThis.TJArticleShortcodes`で同じ関数を利用できる形にした。
+- `scripts/check_article_shortcodes.mjs` を新規作成し、`scripts/preflight.sh`へ登録。
+
+### コミット
+
+- ローカルコミット（この追記を含む）。push・本番反映は行っていない。
+
+### 検証
+
+- `node scripts/check_article_shortcodes.mjs`: 8 assertions passed。
+- 日付書式違い、`javascript:` URL、calendarのみでevent 0件の3ケースがエラーになることを確認。
+- `bash scripts/preflight.sh`: 省略なしで実行。記事イベントショートコードを含む表示済み検査項目は成功。
+- `LP/article-shortcodes.js`はフェーズ1の共通関数のみで、既存のビルド本文・CMSプレビューには未接続。
+
+### 変更したパターン
+
+- event単日、event期間、補足タグ、https公式URL、calendarの月別グループ化、JA/EN表示分岐、過去イベントの`is-past`。
+- 不正な日付、開始日が終了日より後の日付、不正URL、event 0件のcalendarをエラー化。
+
+### 未確認の類似パターン
+
+- CMS画面の入力フォーム、プレビュー、保存、再表示: 未確認（フェーズ3以降の対象）。
+- 実記事のビルド生成、記事JSON-LDへのEvent追加: 未確認（フェーズ2以降の対象）。
+- ブラウザ上の既存記事への表示確認: 未確認（まだビルド/CMSへ接続していないため）。
+
+### 次の担当への注意
+
+- §7の禁止事項を守り、JS月送りカレンダー、FullCalendar、別シート管理、`data-json`埋め込みを追加しない。
+- フェーズ2では`build-detail-pages.mjs`へ接続する前に、必ず`git pull`と`git status`を確認し、JA/EN生成後に実ブラウザで記事・カード・カレンダー・外部リンクを確認する。
+
 ## 2026-08-23 追加修正: スマホのVENUES VIEW位置
 
 - スマホもPCと同じく、円形の矢印ボタンを画像領域の右下（right 24px / bottom 24px）へ配置。

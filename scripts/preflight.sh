@@ -68,6 +68,7 @@ echo "▸ 生成物とデータ"
 run "詳細ページを生成できる"            node scripts/build-detail-pages.mjs
 run "回帰のしきい値"                    python3 scripts/check_regressions.py
 run "記事データの整合性"                node scripts/check_article_data_integrity.mjs
+run "記事イベントショートコード"        node scripts/check_article_shortcodes.mjs
 run "内部リンクが生きている"            python3 scripts/check_internal_links.py
 run "構造化データと AI 向けファイル"       node scripts/check_jsonld.mjs
 run "CMS の Image Position が届く"      node scripts/check_image_position.mjs
