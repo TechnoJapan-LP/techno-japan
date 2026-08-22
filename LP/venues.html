@@ -83,14 +83,12 @@
   background: linear-gradient(90deg, rgba(8,8,8,.02), rgba(8,8,8,.18)); pointer-events: none;
 }
 /* 画像自体がホバー時の視線誘導を担うため、面を塗る演出は重ねない。 */
-.venue-card:hover { border-color: rgba(240,237,232,0.15); }
 .venue-card-content { position: relative; z-index: 1; }
 .venue-card-city { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.3; margin-bottom: 16px; }
 .venue-card-name { font-family: var(--font-display); font-size: clamp(28px, 3.5vw, 48px); text-transform: uppercase; line-height: 1; margin-bottom: 8px; }
 .venue-card-area { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.3; margin-bottom: 16px; }
 .venue-card-genre { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.2; }
-.venue-card-arrow { position: absolute; right: 32px; bottom: 48px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; opacity: 0; transition: opacity 0.3s ease; z-index: 1; }
-.venue-card:hover .venue-card-arrow { opacity: 0.5; }
+.venue-card-arrow { position: absolute; right: 32px; bottom: 48px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; opacity: 0.35; z-index: 1; }
 
 /* ===================== HOVER PREVIEW PANE (HÖR-style) ===================== */
 .vp-pane {
@@ -820,7 +818,6 @@ function renderVenuesList() {
   observeAll();
   bindCursorExpand();
   applyAreaFilter();
-  bindVenueHoverPreview();
 }
 
 /* CURSOR (delegated to common.js) */

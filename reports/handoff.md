@@ -4222,3 +4222,12 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 ### 未確認
 
 - 実機iPhone / Instagram内ブラウザ / LINE内ブラウザは引き続き未確認。
+
+## 2026-08-23 追加修正: DATEラベルとVENUESホバーの削除
+
+- FESTIVALS一覧の各行から `DATE` ラベルを削除し、日付だけを表示。
+- VENUESはホバープレビューの呼び出し、枠線変化、矢印のホバー表示を停止。
+  矢印は薄く常時表示。
+- `bash scripts/preflight.sh`: 全33件成功。
+- `scripts/check_hub_pages.py` が検査するハブ描画・画像・JS例外はpreflight内で成功。
+- 本番反映、push、PR作成は未実施。
