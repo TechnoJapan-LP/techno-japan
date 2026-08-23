@@ -1,0 +1,32 @@
+{
+  "batch": "features-recrawl-01",
+  "date": "2026-08-23",
+  "note": "公開中22件＋東京club第1バッチ10件を、特徴タグ/営業時間/チャージ/実用メモの観点で再調査。値は出典に明記があるものだけ。空欄＝確認できず（『無い』ではない）。",
+  "venues": {
+    "womb":        {"features":["id-required"],"hours":"","charge":"cover","payment":"現金・クレカ・電子マネー・QR決済 可","sources":["https://www.womb.co.jp/news/2016/06/04/ic_card/","https://www.womb.co.jp/faq/"],"notes":"20歳以上・写真付きID必須。再入場/撮影は公式FAQに項目はあるが回答を取得できず"},
+    "circus-tokyo":{"features":["id-required"],"hours":"22:00–05:00（イベントにより変動）","charge":"cover","payment":"","sources":["https://circus-tokyo.jp/","https://japan-nightclub.com/en/tokyo/circustokyo.html"],"notes":"22時以降は20歳未満不可、写真付きID提示"},
+    "saloon":      {"features":["after-hours","cash-only","no-reentry"],"hours":"22:00–05:00（イベントにより変動）","charge":"cover","payment":"入口は現金のみ","sources":["https://saloon-tokyo.com/","https://www.timeout.jp/tokyo/ja/%E3%82%AF%E3%83%A9%E3%83%96/saloon","https://clubberia.com/ja/news/6245/"],"notes":"公式サイトに AFTER HOURS ¥1000 の料金設定。clubberia が『アフターアワーズの聖地』と紹介"},
+    "solfa":       {"features":["no-reentry"],"hours":"19:00–23:00（平日）/ 22:00–05:00（週末）","charge":"cover","payment":"","sources":["https://nakameguro-solfa.com/"],"notes":"公式に『再入場はお断り』『飲食物持込不可』"},
+    "clubasia":    {"features":["id-required","no-reentry"],"hours":"イベントにより変動","charge":"cover","payment":"現金・カード・交通IC・iD・QUICPay・PayPay 可","sources":["https://trend-dogman.com/clubasia/","https://clubasia.jp/"],"notes":"1F 入口で ID チェック。再入場不可"},
+    "mitsuki":     {"features":["id-required","no-reentry","no-photo"],"hours":"","charge":"cover","payment":"現金・クレカ・iD・QUICPay・交通IC 可","sources":["https://mitsuki-tokyo.com/"],"notes":"公式: 20歳以上・政府発行の写真付きID・再入場不可・フラッシュ撮影禁止"},
+    "the-room":    {"features":[],"hours":"","charge":"","payment":"","sources":["https://theroom.jp/"],"notes":"公式サイトに営業方針の記載なし。1992年開業、ジャズ/ソウル起点"},
+    "oath":        {"features":["after-hours"],"hours":"20:00–05:00（週末朝はアフターアワーズ、『朝蜂』は6:00〜昼）","charge":"","payment":"","sources":["https://www.timeout.jp/tokyo/ja/%E3%82%AF%E3%83%A9%E3%83%96/oath","https://brutus.jp/en/post-140197/"],"notes":"土日朝のアフターアワーズ営業が名物。東京の After Hours 記事の軸になる"},
+    "bonobo":      {"features":["cash-only"],"hours":"19:00/21:00–05:00（情報源により差）・日月休","charge":"cover（¥600〜）","payment":"クレジットカード不可","sources":["https://www.navitime.co.jp/poi?spot=02301-1308091","https://www.timeout.jp/tokyo/ja/%E3%82%AF%E3%83%A9%E3%83%96/bar-bonobo"],"notes":"古民家改装。1F バー・2F DJ ブース"},
+    "forestlimit": {"features":["daytime"],"hours":"日によって 15:00〜 / 20:00〜 など。深夜2時まで","charge":"varies","payment":"現金・キャッシュレス（イベントによる）","sources":["https://www.forestlimit.com/en/guide","https://ja.foursquare.com/v/forestlimit/4ba4c004f964a520a8b138e3"],"notes":"昼過ぎから開く日が多い。48時間パーティーの実績あり（after-hours は要確認）"},
+    "vent":        {"features":[],"hours":"","charge":"cover","payment":"クレカ（VISA/Master/JCB）・Suica/PASMO・QUICPay・iD 可","sources":["https://www.timeout.jp/tokyo/ja/%E3%82%AF%E3%83%A9%E3%83%96/vent"],"notes":"ID/撮影/営業時間は確認できず。公式サイトは SSL エラーで読めない（official_url を https に要確認）"},
+    "circus-osaka":{"features":["id-required"],"hours":"","charge":"cover","payment":"","sources":["https://circus-osaka.com/"],"notes":"写真付きID、22時以降は20歳未満不可"},
+    "club-joule":  {"features":["id-required"],"hours":"22:00–05:00（イベントにより変動）","charge":"cover","payment":"","sources":["https://osaka-club.com/joule/"],"notes":"1F 受付で ID チェック、2F で支払い"},
+    "compufunk":   {"features":["no-cover","vinyl","daytime"],"hours":"","charge":"no-cover","payment":"","sources":["https://neoosaka.com/blog/compurfunkrecords/","https://www.ragnet.co.jp/place-compufunk"],"notes":"昼はレコード店、夜は DJ バー。ノーチャージ、カクテル¥600〜"},
+    "noon":        {"features":["daytime"],"hours":"12:00–22:00（水休）","charge":"cover（夜¥2,000 / 昼¥1,000）","payment":"","sources":["https://noon-cafe.com/","https://tabelog.com/osaka/A2701/A270101/27060169/"],"notes":"1994年 ClubDAWN → 2004年 NOON+CAFE。昼営業あり"},
+    "triangle":    {"features":["rooftop"],"hours":"22:00–05:00（イベントにより変動）","charge":"cover","payment":"","sources":["https://iflyer.tv/triangle/about/"],"notes":"屋上スペース・ジャグジー付き VIP"},
+    "club-metro":  {"features":[],"hours":"日によって変動","charge":"cover","payment":"クレカ（VISA/Master/JCB/AMEX 等）可","sources":["https://www.metro.ne.jp/"],"notes":"1990年開業、京都最古"},
+    "unit": {"features":[],"notes":"未調査（ライブハウス。優先度低）"}, "liquidroom": {"features":[],"notes":"未調査"}, "www": {"features":[],"notes":"未調査"}, "o-east": {"features":[],"notes":"未調査"}, "sunhall": {"features":[],"notes":"未調査"},
+    "zerotokyo":   {"features":["id-required","cashless-only"],"hours":"","charge":"cover","payment":"店内は現金不可（コインロッカー除く）。クレカ・電子マネー・QR","sources":["https://zerotokyo.jp/system/","https://zerotokyo.jp/faq/"],"notes":"20歳以上・写真付きID（コピー/画像不可）・ボディチェック。撮影ルールあり（詳細未取得）"},
+    "enter":       {"features":[],"hours":"","charge":"cover","payment":"","sources":["https://entershibuya.com/"],"notes":"営業方針は取得できず（検索が宮下パーク側に引かれた）"},
+    "spread":      {"features":[],"hours":"イベントにより変動","charge":"cover（例 ADV ¥3,000 / DOOR ¥3,500 +1D）","payment":"","sources":["https://spread.tokyo/access.html"],"notes":""},
+    "soup":        {"features":[],"hours":"","charge":"cover（例 ADV ¥2,500 / DOOR ¥3,000 +D）","payment":"","sources":["https://ochiaisoup.com/?page_id=1581"],"notes":"再入場可との記載あり（イベントによる）"},
+    "shelter-hachioji": {"features":[],"hours":"22:00〜（イベントにより変動）・無休","charge":"","payment":"","sources":["https://8dabe.com/shop/25426/","https://www.at-shelter.com/"],"notes":"住所は NKビルB1F"},
+    "debris":      {"features":[],"hours":"19:00–00:00（金土は01:00）・日休","charge":"","payment":"","sources":["https://debrispace.com/"],"notes":""},
+    "heavysick-zero": {"features":["daytime"],"hours":"12:00–24:00","charge":"varies","payment":"","sources":["https://heavysick.co.jp/zero/"],"notes":"イベント無い日はミュージックバー営業"}
+  }
+}

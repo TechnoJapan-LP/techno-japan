@@ -30,7 +30,7 @@
 | `HOURS` | `19:00–03:00`（自由記述、短く） | — | 曜日差は書かない。詳細は公式へ |
 | `CHARGE` | `no-cover / cover / varies` | — | 「入場無料」が bar の強い訴求点。`FEATURES` の `no-cover` と重複するので、**CHARGE を正、FEATURES 側は検索用の写し**とする |
 | `GENRE` | 既存 | — | bar も同じ語彙（§1.3） |
-| `FEATURES` | `;` 区切り。**個性**: `after-hours / daytime / vinyl / outdoor / rooftop / listening / no-cover`、**実用メモ**: `cash-only / id-required / no-photo / smoking / no-reentry` | — | 種別でもジャンルでもない**特徴タグ**。個性タグはカードのピルと記事の切り口に、実用メモは詳細ページの「GOOD TO KNOW」欄にだけ出す（カードには出さない）。Airtable Venues の `features`（複数選択）と同じ語彙。語彙の正は本表 |
+| `FEATURES` | `;` 区切り。**個性**: `after-hours / daytime / vinyl / outdoor / rooftop / listening / no-cover`、**実用メモ**: `cash-only / cashless-only / id-required / no-photo / smoking / no-reentry` | — | 種別でもジャンルでもない**特徴タグ**。個性タグはカードのピルと記事の切り口に、実用メモは詳細ページの「GOOD TO KNOW」欄にだけ出す（カードには出さない）。Airtable Venues の `features`（複数選択）と同じ語彙。語彙の正は本表 |
 
 - **列の追加はヘッダー行の末尾**に。A1 を触らない（[[data-outage-guards]]）
 - **列を足しただけでは `data.js` に出ない。** `LP/cms.js` の `buildVenuesJs()` が列を名指しで書き出している（`id, name, city, area, type, image, genre, capacity, address, lat, lng, url, instagram, desc_en, name_en, desc`）。
