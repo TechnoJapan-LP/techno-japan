@@ -4623,7 +4623,7 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 
 ### コミット
 
-- 未コミット。push・本番反映は未実施。
+- ローカルコミット済み（f5c628c7）。push・本番反映は未実施。
 
 ### 検証
 
@@ -4649,3 +4649,42 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - LPシートのVENUESヘッダー末尾へ`SUBTYPE / HOURS / CHARGE / FEATURES`を手動追加してから、認証済みCMSでPublish Nowを1回実行する。
 - Publish後の`data.js`で実際に`subtype / hours / charge / features`が出ることを確認するまで、フェーズ1完了とは扱わない。
 - §6-2のハブUI、§6-3の詳細ページ、§6-4のCMS入力UIは今回の変更に含めない。
+
+## 2026-08-23 VENUES §6-4: CMS入力欄
+
+### 実施
+
+- `LP/cms.html` の `v-type` 下に `v-subtype`（bar時のみ表示）、`v-hours`、`v-charge`、`v-features`（設計§2の13語）を追加。
+- `LP/cms.js` のVENUESプレビュー、既存行の読込、編集保存、新規保存、コード生成、リセットに4項目を接続。
+- 「Venue クイック追加」にTYPE選択（club / bar / livehouse）を追加。連続入力時もclub初期値を保持。
+- `scripts/check_cms_layout.mjs` に入力欄、選択肢数、bar限定表示、プレビュー再表示保持の検査を追加。
+- `LP/cms.html` の `cms.js` キャッシュバスターを `v=94` に更新。
+
+### コミット
+
+- ローカルコミット済み（このエントリを含む）。push・本番反映は未実施。
+
+### 検証
+
+- `node --check LP/cms.js`: 成功。
+- `node scripts/check_cms_publish_guard.mjs`: 成功（既存検査を含む全項目）。
+- `node scripts/check_cms_layout.mjs`: 成功。headless Chromeで入力欄・FEATURES 13語・bar時のSUBTYPE表示・プレビュー閉じる→再表示で値が残ることを確認。
+- `bash scripts/preflight.sh`: 全34件成功。
+
+### 変更したパターン
+
+- VENUESの編集フォームで、barだけSUBTYPEを表示するパターン。
+- FEATURESを既存GENREと同じチップUIで複数選択し、シートへ`; `区切りで保存するパターン。
+- クイック追加でVENUE TYPEを選択し、初期値clubでdraft保存するパターン。
+
+### 未確認の類似パターン
+
+- 認証済みCMSでの実操作「入力 → プレビュー → 閉じる → 再表示 → 保存」およびGAS実保存: 未確認。
+- 認証済みCMSで編集した行を再読込して4項目が復元される経路: 未確認。
+- LPシートに実データを入力し、Publish後の `data.js` に4項目が反映される経路: 未確認（§6-1から継続）。
+
+### 次の担当への注意・判断待ち
+
+- 本番CMSへはまだ反映していない。認証済み環境でbarのテスト行を使い、4項目の入力値が保存後も残ることを確認する。
+- 保存前にプレビューを閉じても入力欄の値は保持されるが、実GAS保存の成否は画面で確認すること。
+- 確認後に初めてPublish経路を実機完了扱いにする。pushはユーザーの公開判断まで行わない。

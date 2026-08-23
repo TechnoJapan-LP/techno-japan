@@ -105,8 +105,12 @@
       <div class="form-group"><label>City</label><input type="text" id="v-city" placeholder="e.g. KYOTO"></div>
       <div class="form-group"><label>Area</label><input type="text" id="v-area" placeholder="e.g. SHIMOGYO"></div>
       <div class="form-group"><label>Type</label><select id="v-type"><option value="club">Club</option><option value="bar">Bar</option><option value="livehouse">Livehouse</option></select></div>
+      <div class="form-group" id="v-subtype-wrap" hidden><label>Bar Subtype</label><select id="v-subtype"><option value="">—</option><option value="dj-bar">DJ Bar</option><option value="music-bar">Music Bar</option><option value="listening-bar">Listening Bar</option></select></div>
+      <div class="form-group"><label>Hours</label><input type="text" id="v-hours" placeholder="e.g. 19:00–03:00"></div>
+      <div class="form-group"><label>Charge</label><select id="v-charge"><option value="">—</option><option value="no-cover">No Cover</option><option value="cover">Cover</option><option value="varies">Varies</option></select></div>
       <div class="form-group"><label>Image Path</label><input type="text" id="v-image" placeholder="auto-filled" readonly></div>
       <div class="form-group full"><label>Genre</label><div class="chip-group" id="v-genre"></div></div>
+      <div class="form-group full"><label>Features</label><div class="chip-group" id="v-features" aria-label="Venue features"></div></div>
       <div class="form-group"><label>Capacity</label><input type="number" id="v-capacity" placeholder="e.g. 300"></div>
       <div class="form-group"><label>URL</label><input type="url" id="v-url" placeholder="https://..."></div>
       <div class="form-group full"><label>Address</label><div class="input-row"><input type="text" id="v-address" placeholder="Full address"><button class="btn btn-blue btn-sm" onclick="geocode('v')">Geocode</button></div></div>
@@ -553,6 +557,6 @@
 </div>
 
 <script type="module" src="article-shortcodes.js?v=2"></script>
-<script src="cms.js?v=93" defer></script>
+<script src="cms.js?v=94" defer></script>
 </body>
 </html>
