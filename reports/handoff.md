@@ -4485,6 +4485,41 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - `--draft-preview` はローカル確認専用。通常の `node scripts/build-detail-pages.mjs` はdraftを生成しない。
 - §7の禁止事項（JS月送り、FullCalendar、別シート、`data-json`埋め込み）を追加しない。
 
+## 2026-08-23 フェーズ5表示不具合修正: カレンダーの固定表示
+
+### 実施
+
+- 原因は、記事内カレンダーを意味的な`<nav>`で出力していたため、`LP/common.css`のサイトヘッダー用`nav { position: fixed }`が誤適用されていたこと。
+- `LP/detail.css`で`.article-body .tj-calendar`だけ`position: static`、通常の本文フロー、モバイル縦積みに戻す指定を追加。
+- `DETAIL_CSS_VERSION`を26から27へ更新。
+- shortcode本体変更のキャッシュ漏れを防ぐため、`LP/cms.html`の`article-shortcodes.js`を`?v=1`から`?v=2`へ更新。
+
+### コミット
+
+- ローカルコミットのみ。push・本番反映は未実施。
+
+### 検証
+
+- JA/EN・390px/1280pxをChrome実ブラウザで再撮影。
+- PCでカレンダーがヘッダー位置に固定されず、記事本文内に表示されることを確認。
+- `node scripts/check_article_shortcodes.mjs`: 成功。
+- 修正前のpreflightはキャッシュバージョン1件のみ失敗。`?v=2`修正後、`bash scripts/preflight.sh`は全34件成功。
+
+### 変更したパターン
+
+- PC固定ヘッダーと記事内`nav`のCSS競合。
+- スマホのstickyヘッダー指定と記事内カレンダーの競合。
+
+### 未確認の類似パターン
+
+- 認証済みCMS保存後に新しい`article-shortcodes.js?v=2`が読み込まれる経路: 未確認。
+- 実機iPhone / Android、Instagram内ブラウザ、LINE内ブラウザ: 未確認。
+
+### 次の担当への注意
+
+- 記事本文に`nav`など共通UIと同じ要素名を追加する場合、`common.css`のグローバルセレクタとの競合を確認する。
+- 公開前にpreflight全件成功を再確認する。
+
 ## 2026-08-23 VENUE 巡回: 東京 bar 02
 
 - 実施: Airtable Venues（Tokyo / bar / directory）から30件を WebSearch で調査し、
@@ -4495,3 +4530,49 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - 未確認の類似パターン: IG のみで Web に痕跡が無い5件（BAR結界 / Open Source / bar__kraken / FOLK / bar not bar）は判断保留。
 - 次の担当への注意: ○×が決まったら coverage_tier / notes / venue_type（88block は club）を Airtable に書き戻す。
   venue_id の修正候補: bar-jp-2・music-bar・neo、A10 と地下肆は未設定。残り東京 bar 25件 → 大阪 club。
+
+## 2026-08-23 VENUE 巡回: 東京 bar 03（東京 bar 一巡完了）
+
+- 実施: Airtable Venues（Tokyo / bar / directory）の残り25件を WebSearch で調査し、
+  `data/inbox/venues/tokyo-bar-03.json` に記録（載せる3 / 保留4 / 載せない17、重複1）。
+- コミット: 未（データファイルのみ、コードは未変更）。
+- 検証: JSON の読み込みと件数を確認（24件）。Airtable への書き戻しは未実施（ユーザーの○×待ち）。
+- 変更したパターン: なし（コード変更なし）。
+- 未確認の類似パターン: 確認済み・0件（東京 bar の directory 行はすべて調査済み）。
+- 次の担当への注意: BAROOM は 2026-02-20 閉店（venue_status=closed へ）。TACOS BAR / SG Club /
+  INCredible COFFEE は音楽会場ではない（Airtable から外す候補）。THE ROOM は掲載済なので editorial へ。
+  東京 bar 01〜03 の○×が決まったら coverage_tier / notes / venue_type を書き戻し、次は大阪 club 11件。
+
+## 2026-08-23 VENUE 巡回: 東京 club 02 ＋ 大阪 01（東京・大阪の club/bar を一巡）
+
+- 実施: Airtable Venues の Tokyo/club 残り27件を `data/inbox/venues/tokyo-club-02.json`（○7/△10/×10）、
+  Osaka/club 11 + bar 6 を `data/inbox/venues/osaka-01.json`（○7/△8/×2）に WebSearch の出典つきで記録。
+- コミット: 未（データファイルのみ、コードは未変更）。
+- 検証: 両 JSON の読み込みと件数（27 / 17）を確認。Airtable への書き戻しは未実施（ユーザーの○×待ち）。
+- 変更したパターン: なし（コード変更なし）。
+- 未確認の類似パターン: city='TOKYO'（大文字）の directory 8行、Tokyo/Osaka の record-shop 27行、地方都市・海外は未巡回。
+- 次の担当への注意: 壊れた行『53263.0』（Tokyo/club）は削除候補。TERANOMA は裏難波へ移転済で Airtable の住所更新が必要。
+  LOOPY PURR ×2 は統合。無重力セッションは会場でなくコレクティブ。
+
+## 2026-08-23 VENUE 巡回: 愛知・北海道・京都・白馬（長野）
+
+- 実施: Airtable Venues の directory 行を WebSearch で調査し `data/inbox/venues/` に記録。
+  aichi-01（12件: ○4/△5/×3）、hokkaido-01（16件: ○2/△5/×9）、kyoto-01（5件: ○2/△2/×1）、hakuba-nagano-01（7件: ○1/△4/×2）。
+- コミット: 未（データファイルのみ、コードは未変更）。
+- 検証: 4 JSON の読み込みと件数を確認（12/16/5/7）。Airtable への書き戻しは未実施（ユーザーの○×待ち）。
+- 変更したパターン: なし（コード変更なし）。
+- 未確認の類似パターン: 兵庫・新潟・静岡・沖縄などの地方、東京/大阪の record-shop、海外は未巡回。
+- 次の担当への注意: スキー場の店（Hertzz / DJ Bar Steam / ニセコ各店）は冬季限定なので HOURS に営業期間を書く。
+  cafe commons は2025年3月閉店→倶知安で再開予定（未確認）。venue_id 修正候補: bar（薬膳BAR）・bar-jp（唐草）・balance-jp・log。
+
+## 2026-08-23 Festival の country / city_region を Inbox 経由で直せるようにした
+
+- 実施: `scripts/db/airtable_pipeline.py` の `FIELD_MAP` に `country` と `city_region` を追加。
+  過去の巡回で notes に書いていた国の誤り8件（Field Maneuvers GB / ОСТРОВ RU / Beyond The Valley AT→AU /
+  AfrikaBurn ZA + city_region Tankwa Karoo / Dockyard NL / Bosburcht NL / BUMBAYÉ CO）を Updates Inbox に pending で投入。
+- コミット: 未。
+- 検証: `apply --dry-run` は従来の提案で正常に動作。**新しい field_name=country の apply --execute は、ユーザー承認後の実機で未確認。**
+  `country` は単一選択型だが typecast:true で新しい選択肢が作られる（既存の brand_status と同じ仕組み）。
+- 変更したパターン: FIELD_MAP への2行追加。
+- 未確認の類似パターン: Venues の country / city には同じ経路が無い（Inbox は target_festival のみ）。確認済み・0件（Festivals 側）。
+- 次の担当への注意: 承認 → `apply --execute` のあと、Festivals の country が実際に変わったことを1件確認する。

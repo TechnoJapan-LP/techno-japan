@@ -87,6 +87,18 @@
 }
 .article-body .tj-event-link:hover { color: var(--accent); }
 .article-body .tj-calendar {
+  /* common.css のサイトナビ用 `nav` は固定表示。記事内のカレンダーは
+     本文の流れに置くため、ナビゲーションの共通指定を明示的に打ち消す。 */
+  position: static !important;
+  inset: auto !important;
+  z-index: auto !important;
+  display: block !important;
+  padding: 0 !important;
+  mix-blend-mode: normal !important;
+  opacity: 1 !important;
+  animation: none !important;
+  background: transparent !important;
+  border-left: 0;
   margin: 48px 0;
   border-top: 1px solid rgba(240,237,232,0.12);
   border-bottom: 1px solid rgba(240,237,232,0.12);
