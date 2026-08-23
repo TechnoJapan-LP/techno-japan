@@ -4737,3 +4737,48 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - 本番へはまだ反映していない。先にCMSで4列を含むVENUESデータをPublishし、barカードの実表示を確認する。
 - 実データ反映後、390pxでSUBTYPE / NO COVER / 個性タグが画像やVIEWボタンと重ならないことを再確認する。
 - pushはユーザーの公開判断まで行わない。
+
+## 2026-08-23 VENUES §6-3: 詳細ページ情報と近隣会場
+
+### 実施
+
+- `scripts/build-detail-pages.mjs` のVENUES JSON-LDを変更。
+  - `TYPE=bar`: `['BarOrPub', 'MusicVenue']`
+  - `TYPE=club`: `['NightClub', 'MusicVenue']`
+  - その他は従来どおり `MusicVenue`
+- VENUE詳細の `INFORMATION` に `HOURS` / `CHARGE` を追加。空欄の場合は行を生成しない。
+- 実用FEATURES（cash-only等）がある場合だけ `GOOD TO KNOW` を生成し、JAラベルと「最新の情報は公式サイトでご確認ください。」を表示。
+- 近隣会場を座標距離順で最大4件に変更。種別を限定せず、座標が無い場合は同じ都市へフォールバック。
+- `LP/detail.css` にINFORMATION / GOOD TO KNOWの見た目を追加し、詳細CSSバージョンを28へ更新。
+- `scripts/check_venue_details.mjs` と `scripts/check_venue_details_browser.mjs` を追加し、preflightへ登録。
+
+### コミット
+
+- ローカルコミット済み（このエントリを含む）。push・本番反映は未実施。
+
+### 検証
+
+- `wc -l LP/venues/*.html LP/en/venues/*.html`: JA 3146行 / EN 3146行（各22ページ）。
+- `node scripts/check_venue_details.mjs`: JSON-LD、INFORMATION、GOOD TO KNOW条件、近隣4件上限を22件×JA/ENで確認。
+- `node scripts/check_venue_details_browser.mjs`: bar / club × JA / EN × 390px / 1280pxをheadless Chromeで描画確認。
+- `python3 scripts/audit_spa_vs_static.py --after`: 静的詳細ページと通常リンクを確認。
+- `bash scripts/preflight.sh`: 全36件成功。
+
+### 変更したパターン
+
+- VENUEの種別を検索エンジン向けJSON-LDの型へ反映するパターン。
+- 任意データ（HOURS / CHARGE / FEATURES）を空欄時にHTMLへ出さないパターン。
+- 実用FEATURESだけをGOOD TO KNOWへ翻訳表示するパターン。
+- 座標距離順の近隣会場を最大4件、種別横断で表示するパターン。
+
+### 未確認の類似パターン
+
+- 実データにHOURS / CHARGE / FEATURESを入力してPublishした後の実ページ表示: 未確認（現在のdata.jsでは該当値が未反映）。
+- 実データ付きbarのGOOD TO KNOWを実機で目視する経路: 未確認。
+- CMS認証環境でのPublish Nowと、生成後の本番相当データ確認: 未確認。
+
+### 次の担当への注意・判断待ち
+
+- CMSで4列をPublishした後、bar詳細でHOURS / CHARGE / GOOD TO KNOWが表示されることを確認する。
+- FEATURESの実用メモはカードには出さず、詳細のGOOD TO KNOWだけに出す。
+- 本番反映はユーザーの公開判断まで行わない。

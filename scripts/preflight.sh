@@ -119,6 +119,7 @@ else
   run "ハブページが JS 込みで描ける"    python3 scripts/check_hub_pages.py --budget 15000
   run "CMS フォームの重なり"            node scripts/check_cms_layout.mjs
   run "VENUES 種別フィルタ"              node scripts/check_venue_type_filters.mjs
+  run "VENUES 詳細ページ"                 node scripts/check_venue_details.mjs
   run "地図が全国の会場を出す"          node scripts/check_map_nationwide.mjs
   run "会場一覧の地図が全都市を出す"    node scripts/check_venue_maps.mjs
   [ -f scripts/check_mobile_language_toggles.mjs ] \
