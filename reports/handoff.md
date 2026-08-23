@@ -4782,3 +4782,46 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - CMSで4列をPublishした後、bar詳細でHOURS / CHARGE / GOOD TO KNOWが表示されることを確認する。
 - FEATURESの実用メモはカードには出さず、詳細のGOOD TO KNOWだけに出す。
 - 本番反映はユーザーの公開判断まで行わない。
+
+## 2026-08-23 VENUES CMSクイック追加用エクスポート
+
+### 実施
+
+- `scripts/db/venue_export_cms.py` を新規作成。
+- Airtable Venues の `coverage_tier=editorial` かつ `on_site` 空欄だけを抽出し、
+  `ID NAME CITY AREA TYPE ADDRESS URL INSTAGRAM GENRE SUBTYPE HOURS CHARGE FEATURES` の順でTSV化。
+- `Name` は `scripts/db/venue_crawl.py` の BOM付き `NAME` 定数を流用。
+- Airtableトークンは `data/migration/.airtable_token` を優先し、環境変数 `AIRTABLE_TOKEN` も利用可能。
+- 既定は読み取り専用の `--dry-run`。IMAGE / DESC / DESC_EN は出力しない。
+- 件数・出力列・列落ちをTSV本体と分離して標準エラーへ表示。`--output` 指定時はファイルへ保存。
+- `scripts/check_venue_export_cms.py` を追加し、`scripts/preflight.sh` に登録。
+
+### コミット
+
+- 未コミット。push・本番反映は未実施。
+
+### 検証
+
+- `python3 scripts/check_venue_export_cms.py`: Airtable条件、TSV列順、配列整形、列落ち表示を確認。
+- `python3 -m py_compile scripts/db/venue_export_cms.py scripts/check_venue_export_cms.py`: 成功。
+- `bash scripts/preflight.sh`: 省略なしで全37件成功。
+- 実Airtableへ読み取り専用dry-run: 対象0件、列落ちなし、ヘッダー13列を確認。
+
+### 変更したパターン
+
+- Airtableの単一値・選択肢・配列をCMS貼り付け用TSVセルへ正規化するパターン。
+- TSV本体を標準出力、診断情報を標準エラーへ分離するパターン。
+- Airtableの書き込みを行わず、抽出条件と列落ちを可視化するパターン。
+
+### 未確認の類似パターン
+
+- 実Airtableに対象行が0件だったため、実データ1行以上をCMSへ貼り付ける経路: 未確認。
+- CMSクイック追加へ貼り付け後の入力・保存・再表示: 未確認。
+- 実データの `genres` / `features` がAirtable APIで配列以外の形式になった場合: 単体テストでは未確認。
+
+### 次の担当への注意
+
+- 対象行が出たら `python3 scripts/db/venue_export_cms.py --dry-run > venues.tsv` のようにTSVだけを保存し、CMSのVENUESクイック追加へ貼り付ける。
+- `IMAGE / DESC / DESC_EN` は意図的に空欄。CMSで人が入力する。
+- 対象0件は「抽出条件に一致する行がない」状態であり、エクスポート失敗ではない。
+- push・本番反映はユーザーの公開判断まで行わない。
