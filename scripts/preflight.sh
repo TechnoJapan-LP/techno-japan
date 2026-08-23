@@ -122,6 +122,7 @@ else
 run "VENUES 詳細ページ"                 node scripts/check_venue_details.mjs
 run "VENUES CMSエクスポート"             python3 scripts/check_venue_export_cms.py
 run "ARTICLE本番表示プレビュー"          node scripts/check_cms_article_generated_preview.mjs
+run "TOP ARTISTSランダム表示"             node scripts/check_top_artists.mjs
   run "地図が全国の会場を出す"          node scripts/check_map_nationwide.mjs
   run "会場一覧の地図が全都市を出す"    node scripts/check_venue_maps.mjs
   [ -f scripts/check_mobile_language_toggles.mjs ] \

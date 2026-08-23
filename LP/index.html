@@ -948,8 +948,17 @@
   /* --- Featured artists carousel --- */
   const allArtists = (typeof ARTISTS !== 'undefined' ? ARTISTS : []);
   const withImg = allArtists.filter(a => a.image && a.image.trim());
-  const others = allArtists.filter(a => !a.image || !a.image.trim());
-  const artistsToShow = [...withImg, ...others].slice(0, 16);
+  // 画像のあるアーティストだけを、訪問ごとにランダムな順番で表示する。
+  // sort(() => Math.random() - .5) は偏りが出るため Fisher–Yates を使う。
+  function shuffleArtists(items) {
+    const shuffled = items.slice();
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  }
+  const artistsToShow = shuffleArtists(withImg).slice(0, 16);
 
   const artistsTrackEl = document.getElementById('artists-track');
   if (artistsTrackEl && artistsToShow.length) {
