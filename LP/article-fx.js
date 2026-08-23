@@ -117,7 +117,7 @@
     });
 
     /* ---------- 3. リビール対象の指定 ---------- */
-    var targets = [].slice.call(body.querySelectorAll('p, h2, h3, blockquote, figure.fx-img'));
+    var targets = [].slice.call(body.querySelectorAll('p, h2, h3, blockquote, figure.fx-img, .tj-event, .tj-calendar'));
     var specs = document.querySelector('.article-specs');
     var excerpt = document.querySelector('.article-excerpt');
     if (specs) targets.unshift(specs);

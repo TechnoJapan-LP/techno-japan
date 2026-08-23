@@ -55,6 +55,65 @@
 .article-body figure { margin: 32px 0; }
 .article-body figcaption { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(240,237,232,0.5); margin-top: 12px; text-align: center; }
 
+/* ----- 記事内イベントカード / 開催カレンダー -----
+   JSを持たない静的HTML。カードの高さを先に確保し、リビールはtransformだけで行う。 */
+.article-body .tj-event {
+  margin: 32px 0;
+  padding: 18px 20px 20px 22px;
+  border-left: 2px solid var(--accent);
+  border-top: 1px solid rgba(240,237,232,0.08);
+  border-bottom: 1px solid rgba(240,237,232,0.08);
+}
+.article-body .tj-event.is-past { opacity: .6; }
+.article-body .tj-event-date {
+  display: block;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em;
+  text-transform: uppercase; opacity: .65; margin-bottom: 10px;
+}
+.article-body .tj-event-name {
+  margin: 0 0 8px;
+  font-family: var(--font-display); font-size: clamp(28px, 3.5vw, 42px);
+  line-height: .95; text-transform: uppercase; color: var(--text);
+}
+.article-body .tj-event-place {
+  margin: 0 0 14px;
+  font-family: var(--font-body); font-size: 14px; line-height: 1.5;
+  color: var(--text); opacity: .7;
+}
+.article-body .tj-event-link {
+  display: inline-block; margin: 0;
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: .15em;
+  text-transform: uppercase; color: var(--text); opacity: .6;
+}
+.article-body .tj-event-link:hover { color: var(--accent); }
+.article-body .tj-calendar {
+  margin: 48px 0;
+  border-top: 1px solid rgba(240,237,232,0.12);
+  border-bottom: 1px solid rgba(240,237,232,0.12);
+}
+.article-body .tj-cal-month + .tj-cal-month { border-top: 1px solid rgba(240,237,232,0.08); }
+.article-body .tj-cal-month h3 {
+  margin: 0; padding: 18px 0 12px;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--accent);
+}
+.article-body .tj-cal-month ol { margin: 0; padding: 0; list-style: none; }
+.article-body .tj-cal-month li {
+  display: grid; grid-template-columns: minmax(120px, .8fr) minmax(140px, 1.2fr) 1fr;
+  gap: 16px; align-items: baseline; margin: 0; padding: 12px 0;
+  border-top: 1px solid rgba(240,237,232,0.06);
+}
+.article-body .tj-cal-month li time,
+.article-body .tj-cal-month li span {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: .1em;
+  text-transform: uppercase; opacity: .55;
+}
+.article-body .tj-cal-month li a {
+  border-bottom: 0; color: var(--text); font-family: var(--font-body);
+  font-size: 15px; opacity: .9;
+}
+.article-body .tj-cal-month li a:hover { color: var(--accent); }
+
 .article-footer { margin-top: 60px; padding-top: 40px; border-top: 1px solid rgba(240,237,232,0.1); }
 .article-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; }
 .article-tag {
@@ -763,4 +822,8 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 }
 @media (max-width: 600px) {
   .article-detail .related-card { max-width: none; }
+  .article-body .tj-event { margin: 28px 0; padding: 16px 16px 18px 18px; }
+  .article-body .tj-event-name { font-size: 32px; }
+  .article-body .tj-cal-month li { grid-template-columns: 1fr; gap: 4px; padding: 12px 0; }
+  .article-body .tj-cal-month li a { font-size: 16px; }
 }

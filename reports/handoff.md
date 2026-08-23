@@ -4311,6 +4311,45 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - フェーズ3以降も§7の禁止事項を守る。JS月送り、FullCalendar、別シート、`data-json`埋め込みは追加しない。
 - 実データにshortcodeを入れる場合は、公開前にJA/EN記事の実ブラウザ表示、ページ内リンク、公式外部リンク、JSON-LDを確認し、同じ6項目をhandoffへ追記する。
 
+## 2026-08-24 フェーズ3: イベントカードと開催カレンダーの見た目
+
+### 実施
+
+- `LP/detail.css`へ`.tj-event` / `.tj-calendar` / `.tj-cal-month`の静的スタイルを追加。
+- 色は既存の`--bg` / `--text` / `--accent`と既存の透明度表現のみ、フォントは既存のBebas Neue / Space Mono / DM Sansのみを使用。
+- `LP/article-fx.js`のリビール対象へ`.tj-event`と`.tj-calendar`を追加。既存の`.fx-reveal`によるopacity + transformのみを使用し、レイアウト寸法を変える演出は追加していない。
+- `DETAIL_CSS_VERSION`を26、`ARTICLE_FX_JS_VERSION`を6へ更新し、JA/EN静的ページを再生成。
+
+### コミット
+
+- フェーズ3変更はローカルコミット済み（このエントリを含む）。push・本番反映は行わない。
+
+### 検証
+
+- `node scripts/build-detail-pages.mjs`: 成功（JA/ENの静的ページを再生成）。
+- `bash scripts/preflight.sh`: 省略なしで実行。表示された検査項目は成功。
+- 実ブラウザChromeで390pxと1280pxを確認し、イベントカード・開催カレンダーの最終表示を保存。
+- スクリーンショット: `reports/screenshots/article-events-phase3-390.png`、`reports/screenshots/article-events-phase3-1280.png`。
+- fixtureで`common.css`込みの表示を確認。初回のcommon.css未読込による白背景はfixtureを修正して再撮影済み。
+
+### 変更したパターン
+
+- 1カラムのイベントカード、左アクセント線、日付・名称・場所・公式リンク、過去イベントの薄表示。
+- 月見出しと静的リストによる開催カレンダー、390pxでの1列化、1280pxでの日付・名称・場所の3列配置。
+- `prefers-reduced-motion`時は既存の`.fx-reveal`停止規則を適用。
+
+### 未確認の類似パターン
+
+- 実データに`[[event]]` / `[[calendar]]`を含む公開記事がないため、実記事ページでのカード・カレンダー表示: 未確認。
+- 実機iPhone / Android / Instagram内ブラウザ / LINE内ブラウザ: 未確認。
+- CMS入力画面から保存したshortcodeの表示: 未確認（フェーズ4対象）。
+
+### 次の担当への注意
+
+- fixtureは削除済み。スクショは残している。
+- CSS変更時は`DETAIL_CSS_VERSION`、article-fx.js変更時は`ARTICLE_FX_JS_VERSION`を必ず更新し、生成後の全ページ参照を確認する。
+- §7の禁止事項（JS月送り、FullCalendar、別シート、`data-json`埋め込み）を追加しない。
+
 ## 2026-08-23 追加修正: スマホのVENUES VIEW位置
 
 - スマホもPCと同じく、円形の矢印ボタンを画像領域の右下（right 24px / bottom 24px）へ配置。

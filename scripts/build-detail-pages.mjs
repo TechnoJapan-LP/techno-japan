@@ -52,7 +52,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 25;
+const DETAIL_CSS_VERSION = 26;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -64,7 +64,7 @@ const DETAIL_CSS_VERSION = 25;
    落ちる場所と直す場所がずれていて原因に辿り着けなかった。AUDIT §9-58。
 
    article-fx.js / article-fx.css を変更したら、ここを上げる。 */
-const ARTICLE_FX_JS_VERSION = 5;
+const ARTICLE_FX_JS_VERSION = 6;
 const ARTICLE_FX_CSS_VERSION = 10;
 
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
