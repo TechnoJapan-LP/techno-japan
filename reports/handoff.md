@@ -4585,3 +4585,28 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - 変更したパターン: FIELD_MAP への1行追加。
 - 未確認の類似パターン: サイト側シートの `TICKETURL` とは別管理（Airtable → LP シートの同期は無い）。確認済み・0件。
 - 次の担当への注意: 次回の巡回から ticket_url 空のフェスにチケットページを提案する。年で変わらない公式ページを優先。
+
+## 2026-08-23 VENUE 巡回の結果を Airtable notes の「提案票」にした
+
+- 実施: `scripts/db/venue_crawl.py` を新規作成（propose / apply、--dry-run 既定）。
+  9 バッチの JSON から 160 行の Venues に提案票を書き込み（既存 notes は保持）。
+- コミット: 未。
+- 検証: propose は一致なし 0 / 複数一致 14（重複行）。apply --dry-run = 反映 107 / 保留 53 / 不正 0。
+  「23時閉店」を閉店と誤判定する不具合を修正（CLOSED_RE）、再 propose で BAROOM だけが closed になることを確認。
+  **apply --execute は未実行**（ユーザーが notes を見て判断してから）。
+- 変更したパターン: 新規スクリプト。tokyo-bar-02.json の Upstairs を type=record-shop に修正。
+- 未確認の類似パターン: Festivals には同じ提案票方式を入れていない（Inbox 方式のまま）。確認済み・0件。
+- 次の担当への注意: 重複行（Grassroots/TENCUPS、濤 TOH×2、COUNTER CLUB×2、Open Source×2、Upstairs×2、THE TOKYO×2、
+  THmC×2、Pure's×2、THE ROOM×2、LOOPY PURR×2、ALFFO×2）には同じ提案票が入っている。統合はユーザーが手で。
+
+## 2026-08-23 Venues に CMS 入力用の列を追加
+
+- 実施: Airtable Venues に area / address / lat / lng / genres / subtype / hours / charge を API で追加。
+  `venue_crawl.py` の提案票に area / genres 行を足し、apply が area / address / subtype / hours / charge / genres を書くよう拡張。
+  160 行の提案票を書き直した（area・address 入り）。
+- コミット: 未。
+- 検証: apply --dry-run で MEIMEI 等に area / address / hours / charge が入ることを確認（反映107 / 保留53 / 不正0）。apply --execute は未実行。
+- 変更したパターン: venue_crawl.py の render_card / cmd_apply。
+- 未確認の類似パターン: lat / lng は空のまま（住所からの一括変換は未実装）。genres は巡回 JSON に無いので提案票では空（ユーザーが書く）。
+  CMS 側（LP シート・cms.js）には subtype / hours / charge をまだ入れていない（VENUES_BARS.md §6-1 の作業）。
+- 次の担当への注意: area は日本（JP）の行だけ使う。海外は city のみ。image / desc / desc_en / capacity は Airtable に持たない（ユーザー決定）。
