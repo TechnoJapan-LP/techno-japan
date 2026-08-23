@@ -213,7 +213,7 @@ def parse_card(notes: str) -> dict | None:
     return card
 
 
-def cmd_apply(execute: bool) -> int:
+def cmd_apply(execute: bool, only_decided: bool = False) -> int:
     recs = fetch_all()
     today = time.strftime("%Y-%m-%d")
     updates, skipped, held, bad = [], 0, 0, []
@@ -227,6 +227,9 @@ def cmd_apply(execute: bool) -> int:
         tier = (f.get("coverage_tier") or "").strip()
         if tier in ("editorial", "skip"):
             verdict = {"editorial": "載せる", "skip": "載せない"}[tier]
+        elif only_decided:
+            held += 1          # ユーザーがまだ決めていない行は触らない
+            continue
         else:
             verdict = card.get("判断", "保留")
         if verdict not in VERDICT_TO_TIER:
@@ -278,6 +281,8 @@ def main() -> int:
     a = sub.add_parser("propose")
     a.add_argument("files", nargs="+")
     b = sub.add_parser("apply")
+    b.add_argument("--only-decided", action="store_true",
+                   help="coverage_tier を editorial/skip に変えた行だけ反映（提案票の判断は使わない）")
     for x in (a, b):
         g = x.add_mutually_exclusive_group()
         g.add_argument("--dry-run", action="store_true", default=True)
@@ -285,7 +290,7 @@ def main() -> int:
     args = p.parse_args()
     if args.cmd == "propose":
         return cmd_propose(args.files, args.execute)
-    return cmd_apply(args.execute)
+    return cmd_apply(args.execute, args.only_decided)
 
 
 if __name__ == "__main__":
