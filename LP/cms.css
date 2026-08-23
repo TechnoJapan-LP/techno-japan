@@ -324,6 +324,9 @@ label .req-star{color:var(--accent);margin-left:4px}
 .ar-prev-body ul,.ar-prev-body ol{margin:0 0 24px 24px;padding:0}
 .ar-prev-body li{margin-bottom:8px}
 .ar-prev-body a{color:#f0ede8;border-bottom:1px solid rgba(240,237,232,.3)}
+.ar-preview .tj-event,.ar-preview .tj-calendar{position:relative;z-index:1;pointer-events:auto}
+.ar-preview .tj-event a,.ar-preview .tj-calendar a{position:relative;z-index:2;pointer-events:auto;cursor:pointer}
+.ar-preview .tj-event[data-preview-target="1"]{outline:1px solid var(--accent);outline-offset:4px}
 .ar-prev-body strong{color:#f0ede8;font-weight:500}
 .ar-prev-body blockquote{border-left:2px solid var(--accent);padding:8px 0 8px 24px;margin:32px 0;font-style:italic;opacity:.85}
 .ar-prev-body img{max-width:100%;height:auto;display:block;margin:32px auto;border-radius:4px}

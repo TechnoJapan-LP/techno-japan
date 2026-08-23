@@ -1337,6 +1337,21 @@ function uploadArticleImageFile(file){
 }
 
 let _lastPreviewHtml = null;
+function bindArticlePreviewInteractions(root){
+  if (!root || root.dataset.previewInteractions === '1') return;
+  root.dataset.previewInteractions = '1';
+  root.addEventListener('click', event => {
+    const link = event.target.closest('a[href^="#ev-"]');
+    if (!link || !root.contains(link)) return;
+    const target = root.querySelector(link.getAttribute('href'));
+    if (!target) return;
+    event.preventDefault();
+    const scroller = root.closest('.ar-preview');
+    if (scroller) scroller.scrollTop = Math.max(0, target.offsetTop - 24);
+    target.setAttribute('data-preview-target', '1');
+    setTimeout(() => target.removeAttribute('data-preview-target'), 900);
+  });
+}
 function updateArticlePreview(html, force){
   const el = document.getElementById('ar-preview-content');
   if (!el) return;
@@ -1371,8 +1386,12 @@ function updateArticlePreview(html, force){
       el.innerHTML = entityHtml;
     }
   }
+  bindArticlePreviewInteractions(el);
   const focusContent = document.getElementById('ar-focus-preview-content');
-  if (focusContent) focusContent.innerHTML = el.innerHTML;
+  if (focusContent) {
+    focusContent.innerHTML = el.innerHTML;
+    bindArticlePreviewInteractions(focusContent);
+  }
 }
 
 // 本番記事ページと同じ画像レイアウトをCMSプレビューへ反映する

@@ -119,6 +119,22 @@ window.addEventListener('load',()=>setTimeout(()=>{
   openPreview('venue'); closePreview(); openPreview('venue');
   const previewText=document.getElementById('preview-content')?.textContent||'';
   out.VENUES入力欄.previewReopenKeepsValues=previewText.includes('dj-bar')&&previewText.includes('19:00–03:00')&&previewText.includes('no-cover')&&previewText.includes('vinyl')&&previewText.includes('cashless-only');
+  // 集中モードの固定プレビューでも、カレンダーからカードへ移動できること。
+  const articlePreview=document.getElementById('ar-preview-content');
+  const articleWrap=document.getElementById('ar-editor-wrap');
+  articleWrap.classList.add('focus-mode','preview-mode');
+  articlePreview.innerHTML='<nav class="tj-calendar"><ol><li><time>JAN 01</time><a href="#ev-preview-event-1">Preview Event</a><span>Tokyo</span></li></ol></nav><p style="height:900px">spacer</p><article class="tj-event" id="ev-preview-event-1"><h3>Preview Event</h3><a class="tj-event-link" href="https://example.com" target="_blank">OFFICIAL ↗</a></article>';
+  bindArticlePreviewInteractions(articlePreview);
+  const calendarLink=articlePreview?.querySelector('.tj-calendar a');
+  const beforeHash=location.hash;
+  calendarLink?.click();
+  out.イベントカード操作={
+    officialLinkPointer:articlePreview?.querySelector('.tj-event-link')?getComputedStyle(articlePreview.querySelector('.tj-event-link')).pointerEvents:'missing',
+    calendarLinkPointer:calendarLink?getComputedStyle(calendarLink).pointerEvents:'missing',
+    hash変更なし:location.hash===beforeHash,
+    cardHighlight:!!articlePreview?.querySelector('.tj-event[data-preview-target="1"]')
+  };
+  articleWrap.classList.remove('focus-mode','preview-mode');
   out.公開パネル = box(document.querySelector('#sec-article .pub-section'));
   out.パネルの親 = box(document.querySelector('#sec-article .pub-section')?.parentElement);
   out.フォーム格子 = box(document.querySelector('#article-tab-form .form-grid'));
@@ -178,6 +194,7 @@ if(!d.VENUES入力欄?.subtype||!d.VENUES入力欄?.hours||!d.VENUES入力欄?.c
 if(d.VENUES入力欄?.features!==13) failures.push(`VENUESのFEATURES選択肢が不足（${d.VENUES入力欄?.features||0}件、13件必要）`);
 if(d.VENUES入力欄 && (!d.VENUES入力欄.subtypeVisibleForBar || !d.VENUES入力欄.subtypeHiddenForClub)) failures.push('SUBTYPEのbar限定表示が動作していない');
 if(d.VENUES入力欄 && !d.VENUES入力欄.previewReopenKeepsValues) failures.push('VENUESのプレビュー再表示で入力値が保持されていない');
+if(d.イベントカード操作 && (d.イベントカード操作.officialLinkPointer!=='auto' || d.イベントカード操作.calendarLinkPointer!=='auto' || !d.イベントカード操作.hash変更なし || !d.イベントカード操作.cardHighlight)) failures.push('集中モードのイベントカード / カレンダーリンクを操作できない');
   if(failures.length){
   console.log('CMS のレイアウトに問題があります:');
   for(const f of failures) console.log('  ✗ '+f);
