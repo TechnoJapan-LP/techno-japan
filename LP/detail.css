@@ -58,8 +58,8 @@
 /* ----- 記事内イベントカード / 開催カレンダー -----
    JSを持たない静的HTML。カードの高さを先に確保し、リビールはtransformだけで行う。 */
 .article-body .tj-event {
-  margin: 32px 0;
-  padding: 18px 20px 20px 22px;
+  margin: 24px 0;
+  padding: 13px 18px 14px 20px;
   border-left: 2px solid var(--accent);
   border-top: 1px solid rgba(240,237,232,0.08);
   border-bottom: 1px solid rgba(240,237,232,0.08);
@@ -67,8 +67,8 @@
 .article-body .tj-event.is-past { opacity: .6; }
 .article-body .tj-event-date {
   display: block;
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em;
-  text-transform: uppercase; opacity: .65; margin-bottom: 10px;
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em;
+  text-transform: uppercase; opacity: .7; margin-bottom: 6px;
 }
 .article-body .tj-event-name {
   margin: 0 0 8px;
@@ -76,7 +76,7 @@
   line-height: .95; text-transform: uppercase; color: var(--text);
 }
 .article-body .tj-event-place {
-  margin: 0 0 14px;
+  margin: 0 0 8px;
   font-family: var(--font-body); font-size: 14px; line-height: 1.5;
   color: var(--text); opacity: .7;
 }
@@ -839,7 +839,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 }
 @media (max-width: 600px) {
   .article-detail .related-card { max-width: none; }
-  .article-body .tj-event { margin: 28px 0; padding: 16px 16px 18px 18px; }
+  .article-body .tj-event { margin: 20px 0; padding: 12px 14px 14px 16px; }
   .article-body .tj-event-name { font-size: 32px; }
   .article-body .tj-cal-month li { grid-template-columns: 1fr; gap: 4px; padding: 12px 0; }
   .article-body .tj-cal-month li a { font-size: 16px; }
