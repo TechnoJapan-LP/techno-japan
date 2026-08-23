@@ -4688,3 +4688,52 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - 本番CMSへはまだ反映していない。認証済み環境でbarのテスト行を使い、4項目の入力値が保存後も残ることを確認する。
 - 保存前にプレビューを閉じても入力欄の値は保持されるが、実GAS保存の成否は画面で確認すること。
 - 確認後に初めてPublish経路を実機完了扱いにする。pushはユーザーの公開判断まで行わない。
+
+## 2026-08-23 VENUES §6-2: 種別フィルタとカード情報
+
+### 実施
+
+- `LP/venues.html` に `[ALL] [CLUBS] [BARS] [LIVEHOUSE]` の種別フィルタを都市フィルタの上へ追加。
+- 種別は `#type=bar` でURLに保持し、既存の `area` / `q` クエリと併用可能にした。
+- 件数表示を `22 VENUES · CLUBS 13 · BARS 4 · LIVEHOUSE 5` 形式に変更。
+- ALL時は `club → livehouse → bar`、種別選択時は名前順に並べ替え。
+- barカードにSUBTYPE、`no-cover` のNO COVER、個性FEATURES（最大2個）を表示。cash-only等の実用メモは除外。
+- 一覧フィルタと地図の `MAP_TYPES` が `currentType` を共有するように変更。
+- `scripts/check_venue_type_filters.mjs` を追加し、preflightへ登録。
+- `scripts/build-detail-pages.mjs` の `enHubFromJa` でENハブを再生成。
+
+### コミット
+
+- ローカルコミット済み（このエントリを含む）。push・本番反映は未実施。
+
+### 検証
+
+- `wc -l LP/venues.html LP/en/venues.html`: JA 1078行 / EN 1078行。
+- `node scripts/check_venue_type_filters.mjs`: 種別4ボタン、`#type=bar`、bar 4件、ALL時の並び順、実用メモ非表示を実ブラウザで確認。
+- `python3 scripts/check_hub_pages.py`: 全ハブ描画・地図・JA/ENフォールバック成功。
+- `python3 scripts/audit_spa_vs_static.py --after`: SPA詳細なし、静的詳細リンク全件成功。
+- `bash scripts/preflight.sh`: 全35件成功。
+- 実ブラウザ計測（390px / 1280px、JA / EN）:
+  - 390 JA: 初期597,571B / 全スクロール597,571B、画像2→25、LCP 2016ms、CLS 0.0682。
+  - 390 EN: 初期597,664B / 全スクロール623,918B、画像2→25、LCP 2076ms、CLS 0.0682。
+  - 1280 JA: 初期597,571B / 全スクロール597,571B、画像2→13、LCP 2460ms、CLS 0.0399。
+  - 1280 EN: 初期589,399B / 全スクロール597,664B、画像1→22、LCP 2000ms、CLS 0.0560。
+
+### 変更したパターン
+
+- 都市・検索に加えて種別を独立状態として扱うフィルタパターン。
+- ハッシュ（種別）とクエリ（都市・検索）を同時に保持するURLパターン。
+- bar固有の補助ラベルと、個性FEATURESだけをカードへ出すパターン。
+- 一覧と都市別Leaflet地図で種別状態を同期するパターン。
+
+### 未確認の類似パターン
+
+- 実データにSUBTYPE / CHARGE / FEATURESが入った状態で、実際のbarカードへ各ラベルが表示されること: 未確認（現在のdata.jsでは該当値が未反映）。
+- 地図を開いた後に地図内の種別ボタンを操作し、一覧側へ反映される実機操作: 自動コード経路は検査済みだが、地図タイル表示を含む手操作は未確認。
+- 認証済みCMSでのPublish後、本番相当のdata.jsを使ったJA/EN表示: 未確認。
+
+### 次の担当への注意・判断待ち
+
+- 本番へはまだ反映していない。先にCMSで4列を含むVENUESデータをPublishし、barカードの実表示を確認する。
+- 実データ反映後、390pxでSUBTYPE / NO COVER / 個性タグが画像やVIEWボタンと重ならないことを再確認する。
+- pushはユーザーの公開判断まで行わない。
