@@ -4901,6 +4901,45 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - カレンダーのイベント名を押すと、同じプレビュー内のイベントカードへ移動する。
 - Publish Nowと本番反映はユーザーの公開判断まで行わない。
 
+## 2026-08-24 ARTICLE本番表示プレビューのイベント表示
+
+### 実施
+
+- `openArticleGeneratedPreview()` でも `article-shortcodes.js` の共通関数を使い、`[[event]]` と `[[calendar]]` をHTMLへ変換するよう修正。
+- 本番表示プレビューの `article-detail-inner` 構造と `common.css` / `detail.css` / `article-fx.css` のバージョンを実ページと一致させた。
+- 独自の見出しCSSを削除し、本番と同じ `detail.css` の見出し2折り返しを使用。
+- `scripts/check_cms_article_generated_preview.mjs` を追加し、preflightへ登録。
+- `scripts/check_cms_layout.mjs` に本番表示プレビューのイベント・カレンダー変換検査を追加。
+
+### コミット
+
+- 未コミット。push・本番反映は未実施。
+
+### 検証
+
+- `node scripts/check_cms_article_generated_preview.mjs`: 成功。
+- `node scripts/check_cms_layout.mjs`: 実ブラウザ相当でイベントカード・カレンダー・本番CSSを確認。
+- `node --check LP/cms.js`: 成功。
+- `git diff --check`: 成功。
+- `bash scripts/preflight.sh`: 省略なしで全38件成功。
+
+### 変更したパターン
+
+- CMS内プレビューと別ウィンドウの本番表示プレビューで同じショートコード変換関数を使うパターン。
+- 本番ページと同じCSS構造・バージョンを使い、見出しの折り返しを一致させるパターン。
+
+### 未確認の類似パターン
+
+- 認証済みCMSで実際に入力・保存した本文を別ウィンドウの本番表示プレビューで確認する操作: 未確認。
+- 英語本文の本番表示プレビュー: 未確認（現在の本番表示プレビューはJA設定）。
+- 実機スマートフォンでの見出し折り返し: 未確認。
+
+### 次の担当への注意
+
+- 「↗ 本番表示」を押す前に本文を保存する必要はない。現在の入力内容からプレビューを生成する。
+- イベントカードを1件以上追加してから `[[calendar]]` を挿入する。
+- Publish Nowと本番反映はユーザーの公開判断まで行わない。
+
 ## 2026-08-24 ARTICLE集中モードのイベント入力ダイアログ修正
 
 ### 実施
