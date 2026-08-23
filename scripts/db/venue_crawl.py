@@ -6,7 +6,8 @@
 
   1) propose : data/inbox/venues/*.json の判断を、各 Venues 行の notes 先頭に
                提案票として書く（既存の notes は下に残す。coverage_tier 等は触らない）
-  2) ユーザーが Airtable の notes を直接編集する（判断・type・features など）
+  2) ユーザーが Airtable で coverage_tier のプルダウンを editorial / skip に変える（これが最優先）。
+     directory のままなら提案票の「判断:」を使う。type・features 等を直したいときだけ notes を編集
   3) apply   : notes の提案票を読み、判断が「載せる / 載せない」の行だけ本体へ反映し、
                提案票の1行目を「反映済 日付」に書き換える。「保留」は何もしない
 
@@ -221,7 +222,13 @@ def cmd_apply(execute: bool) -> int:
         card = parse_card(f.get("notes") or "")
         if not card or card["_applied"]:
             continue
-        verdict = card.get("判断", "保留")
+        # 判断は「coverage_tier のプルダウン」が優先（ユーザーが Airtable で変えた値）。
+        # editorial / skip 以外（directory のまま）なら提案票の「判断:」を見る
+        tier = (f.get("coverage_tier") or "").strip()
+        if tier in ("editorial", "skip"):
+            verdict = {"editorial": "載せる", "skip": "載せない"}[tier]
+        else:
+            verdict = card.get("判断", "保留")
         if verdict not in VERDICT_TO_TIER:
             held += 1
             continue
