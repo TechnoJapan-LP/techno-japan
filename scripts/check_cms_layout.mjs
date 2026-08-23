@@ -169,7 +169,7 @@ window.addEventListener('load',()=>setTimeout(()=>{
     event:generatedPreview.includes('class="tj-event"'),
     calendar:generatedPreview.includes('class="tj-calendar"'),
     detailInner:generatedPreview.includes('class="article-detail-inner"'),
-    productionCss:generatedPreview.includes('/detail.css?v=28')
+    productionCss:generatedPreview.includes('/detail.css?v=29')
   };
   out.公開パネル = box(document.querySelector('#sec-article .pub-section'));
   out.パネルの親 = box(document.querySelector('#sec-article .pub-section')?.parentElement);
