@@ -146,6 +146,18 @@ window.addEventListener('load',()=>setTimeout(()=>{
     eventVisible:!!articlePreview.querySelector('.tj-event')
   };
   toggleFocusMode();
+  // イベントカード入力ダイアログが集中モードの裏に隠れないこと。
+  toggleFocusMode();
+  openArticleEventForm();
+  const eventDialog=document.getElementById('ar-event-dialog');
+  const eventDialogBox=eventDialog?.querySelector('.dialog-box');
+  out.集中モードのイベント入力={
+    visible:!!eventDialog && getComputedStyle(eventDialog).display!=='none',
+    zIndex:eventDialog?getComputedStyle(eventDialog).zIndex:'missing',
+    boxVisible:!!eventDialogBox && eventDialogBox.getBoundingClientRect().width>0
+  };
+  eventDialog?.remove();
+  toggleFocusMode();
   out.公開パネル = box(document.querySelector('#sec-article .pub-section'));
   out.パネルの親 = box(document.querySelector('#sec-article .pub-section')?.parentElement);
   out.フォーム格子 = box(document.querySelector('#article-tab-form .form-grid'));
@@ -207,6 +219,7 @@ if(d.VENUES入力欄 && (!d.VENUES入力欄.subtypeVisibleForBar || !d.VENUES入
 if(d.VENUES入力欄 && !d.VENUES入力欄.previewReopenKeepsValues) failures.push('VENUESのプレビュー再表示で入力値が保持されていない');
 if(d.イベントカード操作 && (d.イベントカード操作.officialLinkPointer!=='auto' || d.イベントカード操作.calendarLinkPointer!=='auto' || !d.イベントカード操作.hash変更なし || !d.イベントカード操作.cardHighlight)) failures.push('集中モードのイベントカード / カレンダーリンクを操作できない');
 if(d.集中モードからプレビュー表示 && (!d.集中モードからプレビュー表示.focus || !d.集中モードからプレビュー表示.preview || !d.集中モードからプレビュー表示.eventVisible)) failures.push('集中モード開始後にプレビューを表示できない');
+if(d.集中モードのイベント入力 && (!d.集中モードのイベント入力.visible || Number(d.集中モードのイベント入力.zIndex)<=2000 || !d.集中モードのイベント入力.boxVisible)) failures.push('集中モードのイベント入力ダイアログが前面に出ない');
   if(failures.length){
   console.log('CMS のレイアウトに問題があります:');
   for(const f of failures) console.log('  ✗ '+f);

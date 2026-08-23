@@ -1833,6 +1833,8 @@ function openArticleEventForm(){
   const overlay = document.createElement('div');
   overlay.id = 'ar-event-dialog';
   overlay.className = 'dialog-overlay show';
+  // 集中モード（z-index: 2000）の上に表示する。通常モードでも同じ値で問題ない。
+  overlay.style.zIndex = '2100';
   overlay.innerHTML = `<div class="dialog-box" style="max-width:620px">
     <h3>📦 イベントカード</h3>
     <p class="label-hint">入力内容から記事本文に <code>[[event|…]]</code> を挿入します。</p>
