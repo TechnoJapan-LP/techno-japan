@@ -13,6 +13,8 @@ assert.match(rendered.html, /class="tj-event"/);
 assert.match(rendered.html, /class="tj-calendar"/);
 assert.match(rendered.html, /href="#ev-epizode-1"/);
 assert.match(rendered.html, /OFFICIAL/);
+assert.doesNotMatch(rendered.html, /<p>\s*<article class="tj-event/);
+assert.doesNotMatch(rendered.html, /<p>\s*<nav class="tj-calendar/);
 assert.doesNotMatch(rendered.html, /\[\[(event|calendar)/);
 
 assert.throws(

@@ -16,6 +16,7 @@
  *   LP/venues/<id>.html
  *
  * 使い方: node scripts/build-detail-pages.mjs
+ * draft確認: node scripts/build-detail-pages.mjs --draft-preview=reports/fixtures/phase5-asian-festival-roundup.json
  */
 
 import fs from 'node:fs';
@@ -76,6 +77,9 @@ const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
 const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');
 const IMAGE_DIMENSIONS_PATH = path.join(LP_DIR, 'image-dimensions.json');
 const BASE = 'https://techno-japan.media';
+const DRAFT_PREVIEW_ARG = process.argv.find((arg) => arg.startsWith('--draft-preview='));
+const DRAFT_PREVIEW_PATH = DRAFT_PREVIEW_ARG ? path.resolve(process.cwd(), DRAFT_PREVIEW_ARG.slice('--draft-preview='.length)) : '';
+const DRAFT_PREVIEW_DIR = path.join(__dirname, '..', 'reports', 'phase5-preview');
 
 // 詳細ページとハブのJSテンプレートが同じ最新寸法を参照できるよう、
 // ページ生成のたびに実画像から派生メタデータを先に再生成する。
@@ -132,6 +136,17 @@ function loadData() {
   vm.createContext(ctx);
   new vm.Script(src + '\n;globalThis.__out = { ARTISTS, EVENTS, FESTIVALS, VENUES, ARTICLES };').runInContext(ctx);
   return ctx.__out;
+}
+
+function loadDraftPreview(file) {
+  const article = JSON.parse(fs.readFileSync(file, 'utf8'));
+  if (!article || typeof article !== 'object' || Array.isArray(article)) {
+    throw new Error(`draft preview: objectが必要です (${file})`);
+  }
+  if (String(article.status || '').toLowerCase() !== 'draft') {
+    throw new Error(`draft preview: status は draft にしてください (${file})`);
+  }
+  return article;
 }
 
 function loadItems(file, label) {
@@ -1939,6 +1954,29 @@ function main() {
   }
   const resolveEntities = makeEntityResolver({ ARTISTS, FESTIVALS, VENUES, ARTICLES });
   validateArticleShortcodes({ ARTISTS, FESTIVALS, VENUES, ARTICLES });
+
+  // CMS未接続のローカル確認用。通常ビルドには一切含めず、reports配下へ
+  // JA/ENの静的ページだけを書き出す。公開データのdraft除外ルールは維持する。
+  if (DRAFT_PREVIEW_PATH) {
+    const draft = loadDraftPreview(DRAFT_PREVIEW_PATH);
+    const jaEvents = parseEvents(draft.body || '');
+    const enEvents = parseEvents(draft.body_en || draft.body || '');
+    if (jaEvents.length < 5 || enEvents.length < 5) {
+      throw new Error(`draft preview: JA/ENともイベントカード5件以上が必要です (JA=${jaEvents.length}, EN=${enEvents.length})`);
+    }
+    fs.rmSync(DRAFT_PREVIEW_DIR, { recursive: true, force: true });
+    for (const lang of ['ja', 'en']) {
+      const built = articlePage(draft, resolveEntities, lang, FESTIVALS, editionsByFestival);
+      const relative = path.relative(LP_DIR, built.file);
+      const file = path.join(DRAFT_PREVIEW_DIR, relative);
+      fs.mkdirSync(path.dirname(file), { recursive: true });
+      fs.writeFileSync(file, built.html);
+      console.log(`Draft preview ${lang}: ${file}`);
+    }
+    console.log(`Draft preview events: JA=${jaEvents.length}, EN=${enEvents.length}`);
+    return;
+  }
+
   const pubArticles = ARTICLES.filter(valid).filter((a) => a.status !== 'draft');
   const pubFests = FESTIVALS.filter(valid);
   const pubArtists = ARTISTS.filter(valid);

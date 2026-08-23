@@ -4441,3 +4441,57 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - `scripts/check_list_visual_interactions.py --root LP --state A`: JA/ENの検索・絞り込み後画像整合性・通常リンクを確認。
 - `bash scripts/preflight.sh`: 全33件成功。
 - 本番反映、push、PR作成は未実施。
+
+## 2026-08-23 フェーズ5: アジアのフェスまとめdraft
+
+### 実施
+
+- `reports/fixtures/phase5-asian-festival-roundup.json` に、`status: "draft"` のアジアフェスまとめ記事を作成。
+- JA/EN本文それぞれにイベントカード5件と `[[calendar]]` を含めた。
+- `scripts/build-detail-pages.mjs` に `--draft-preview=<fixture>` を追加し、通常の公開ビルド（draft除外）を変えずに `reports/phase5-preview/` へJA/EN静的記事を生成できるようにした。
+- `LP/article-shortcodes.js` はCMSが保存する `<p>[[event|…]]</p>` を正しいブロックHTMLへ変換し、イベントカードとカレンダーのアンカーを一致させるよう修正。
+- 変更箇所: `scripts/build-detail-pages.mjs:80-82,141-149,1958-1977`、`LP/article-shortcodes.js:165-180`、`scripts/check_article_shortcodes.mjs:16-17`。
+
+### コミット
+
+- フェーズ5変更をローカルコミット済み。push・PR作成・本番反映は行わない。
+- 公開判断は未実施。`status: draft` のまま、通常ビルドには出ない。
+
+### 検証
+
+- `node scripts/build-detail-pages.mjs --draft-preview=reports/fixtures/phase5-asian-festival-roundup.json`: 成功。JA=5件 / EN=5件、JA/ENにcalendar各1件。
+- 生成記事の行数: `wc -l` でJA 137行 / EN 137行。
+- `node scripts/check_article_shortcodes.mjs`: 8 assertions passed（不正日付、URL不正、calendar単独0件、ブロックHTMLを確認）。
+- `python3 scripts/audit_spa_vs_static.py --after`: 成功。
+- `bash scripts/preflight.sh`: **全34件成功**。
+- 実ブラウザ（Chrome）でJA/EN × 390px/1280pxを確認。共通CSS適用後のイベントカード、カレンダー、見出し、日英切替を確認し、短コードが画面に残らないことを確認。
+
+### 変更したパターン
+
+- CMS/Quillが本文を `<p>` で包むイベントカード・カレンダー。
+- 同一イベント配列から生成するイベントカードのアンカーとカレンダーリンク。
+- draft専用ローカルプレビューと、通常公開ビルドのdraft除外。
+
+### 未確認の類似パターン
+
+- 認証済みCMSで実際に「入力→プレビュー→閉じる→再表示→保存」し、GAS経由でこのdraftを作成する経路: 未確認（フェーズ4から継続）。
+- 実機iPhone / Android、Instagram内ブラウザ、LINE内ブラウザ: 未確認。今回の390pxは実ブラウザのモバイル設定で確認。
+- 公開判断・Publish Now・本番URLでの表示: 未確認（ユーザー判断待ち）。
+
+### 次の担当への注意
+
+- 公開前に認証済みCMSで本文の保存・再表示を実操作し、draftの内容が消えないことを確認する。
+- 公開する場合は、先にユーザーが公開判断を行う。pushは本番公開なので、明示指示とpreflight全件成功の両方が必要。
+- `--draft-preview` はローカル確認専用。通常の `node scripts/build-detail-pages.mjs` はdraftを生成しない。
+- §7の禁止事項（JS月送り、FullCalendar、別シート、`data-json`埋め込み）を追加しない。
+
+## 2026-08-23 VENUE 巡回: 東京 bar 02
+
+- 実施: Airtable Venues（Tokyo / bar / directory）から30件を WebSearch で調査し、
+  `data/inbox/venues/tokyo-bar-02.json` に出典・確度・判断（載せる5 / 保留9 / 載せない16）を記録。
+- コミット: 未（データファイルのみ、コードは未変更）。
+- 検証: JSON の読み込みと件数を確認（30件）。Airtable への書き戻しは未実施（ユーザーの○×待ち）。
+- 変更したパターン: なし（コード変更なし）。
+- 未確認の類似パターン: IG のみで Web に痕跡が無い5件（BAR結界 / Open Source / bar__kraken / FOLK / bar not bar）は判断保留。
+- 次の担当への注意: ○×が決まったら coverage_tier / notes / venue_type（88block は club）を Airtable に書き戻す。
+  venue_id の修正候補: bar-jp-2・music-bar・neo、A10 と地下肆は未設定。残り東京 bar 25件 → 大阪 club。

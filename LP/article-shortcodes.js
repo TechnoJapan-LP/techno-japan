@@ -162,8 +162,21 @@ function renderArticleShortcodes(source, { lang = 'en' } = {}) {
   let match;
   while ((match = CALENDAR_RE.exec(text)) !== null) calendarMatches.push({ raw: match[0], range: parseMonthFilter(match[1]) });
   if (calendarMatches.length && !events.length) throw new Error('calendarがあるのにeventカードが0件です');
-  let html = text.replace(EVENT_RE, (_, fields) => renderEvent(parseEventFields(fields), lang));
+  let eventIndex = 0;
+  let html = text.replace(EVENT_RE, (_, fields) => {
+    const event = parseEventFields(fields);
+    event.index = eventIndex;
+    event.slug = `${slugify(event.name)}-${eventIndex + 1}`;
+    eventIndex += 1;
+    return renderEvent(event, lang);
+  });
   html = html.replace(CALENDAR_RE, (_, value) => renderCalendar(events, parseMonthFilter(value), lang));
+  // CMSのQuillは短いコードを<p>[[event|...]]</p>として保存する。
+  // article/nav はpの子にできないため、ブロックの外側だけを取り除いて
+  // ブラウザのHTMLパーサーによるDOMの組み替えを防ぐ。
+  html = html
+    .replace(/<p>\s*(<article class="tj-event[\s\S]*?<\/article>)\s*<\/p>/g, '$1')
+    .replace(/<p>\s*(<nav class="tj-calendar[\s\S]*?<\/nav>)\s*<\/p>/g, '$1');
   return { html, events, calendars: calendarMatches.length };
 }
 
