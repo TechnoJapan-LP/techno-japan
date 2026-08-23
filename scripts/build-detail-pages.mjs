@@ -23,6 +23,7 @@ import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
 import { imageSizeAttrs } from './lib/image-size.mjs';
+import { parseEvents, renderArticleShortcodes } from '../LP/article-shortcodes.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const LP_DIR = path.join(__dirname, '..', 'LP');
@@ -498,12 +499,15 @@ function bilingualBody(ja, en, pageLang, extraClass = '') {
 // 本文中の [[festival:id]] / [[artist:id]] / [[venue:id]] を詳細ページへのリンクに変換
 function makeEntityResolver(data) {
   const table = { festival: data.FESTIVALS || [], artist: data.ARTISTS || [], venue: data.VENUES || [], article: data.ARTICLES || [] };
-  return (html) => String(html || '').replace(/\[\[(festival|artist|venue|article):([a-z0-9-]+)(?:\|([^\]]+))?\]\]/g, (m, type, id, label) => {
+  return (html, lang = 'en') => {
+    const entityHtml = String(html || '').replace(/\[\[(festival|artist|venue|article):([a-z0-9-]+)(?:\|([^\]]+))?\]\]/g, (m, type, id, label) => {
     const rec = (table[type] || []).find((x) => x.id === id);
     const name = label || (rec && (rec.name || rec.title)) || id;
     const dir = type === 'article' ? 'articles' : type + 's';
     return `<a class="entity-link" href="/${dir}/${id}.html">${esc(name)}</a>`;
-  });
+    });
+    return renderArticleShortcodes(entityHtml, { lang }).html;
+  };
 }
 
 // 公開記事本文の entity shortcode は、生成前に参照先を検証する。
@@ -529,6 +533,11 @@ function validateArticleShortcodes(data) {
         }
       }
       re.lastIndex = 0;
+      try {
+        renderArticleShortcodes(text, { lang });
+      } catch (error) {
+        errors.push(`${article.id || '(no-id)'}[${lang}]: ${error.message}`);
+      }
     }
   }
   if (errors.length) {
@@ -728,6 +737,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   const image = absUrl(a.image);
   const tags = (a.tags || []).map((t) => `<span class="article-tag">#${esc(t)}</span>`).join('');
   const authorName = a.author || 'TECHNO JAPAN';
+  const articleEvents = parseEvents(L.body || '');
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -756,6 +766,15 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
       : {}),
     url: canonical,
   };
+  const eventJsonLd = articleEvents.map((event) => ({
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    name: event.name,
+    ...(event.date.start ? { startDate: event.date.start, endDate: event.date.end } : {}),
+    location: { '@type': 'Place', name: event.place },
+    ...(event.url ? { url: event.url } : {}),
+    ...(event.tags.length ? { description: event.tags.join(' · ') } : {}),
+  }));
 
   const heroBlock = a.image
     ? `<header class="article-hero"${ratioAttr(a.heroRatio)}>
@@ -814,7 +833,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
       <div><dt>READING TIME</dt><dd>${esc(a.readTime || 5)} MIN</dd></div>
     </dl>
     <div class="article-excerpt">${esc(L.excerpt || '')}</div>
-    <div class="article-body">${addDriveImageSrcset(addHtmlImageDimensions(resolveEntities(L.body || '')))}</div>
+    <div class="article-body">${addDriveImageSrcset(addHtmlImageDimensions(resolveEntities(L.body || '', lang)))}</div>
     ${relatedFestivalHtml}
     <div class="article-footer">
       ${tags ? `<div class="article-tags">${tags}</div>` : ''}
@@ -823,7 +842,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   </div>
 </article>`;
 
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'articles'] : ['articles']), `${a.id}.html`), html: page({ title, desc, canonical, image, jsonLd: [jsonLd, breadcrumbLd('NEWS', '/news.html', L.title, canonical)], body, lang, altHref, backgroundLayer: true, extraScripts: `\n<link rel="stylesheet" href="/article-fx.css?v=${ARTICLE_FX_CSS_VERSION}">\n<script src="/article-fx.js?v=${ARTICLE_FX_JS_VERSION}" defer></script>` + ARTICLE_HUB_BACK_SCRIPT }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'articles'] : ['articles']), `${a.id}.html`), html: page({ title, desc, canonical, image, jsonLd: [jsonLd, breadcrumbLd('NEWS', '/news.html', L.title, canonical), ...eventJsonLd], body, lang, altHref, backgroundLayer: true, extraScripts: `\n<link rel="stylesheet" href="/article-fx.css?v=${ARTICLE_FX_CSS_VERSION}">\n<script src="/article-fx.js?v=${ARTICLE_FX_JS_VERSION}" defer></script>` + ARTICLE_HUB_BACK_SCRIPT }) };
 }
 
 /* ---------- フェスティバルページ ---------- */

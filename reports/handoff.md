@@ -4273,6 +4273,44 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - §7の禁止事項を守り、JS月送りカレンダー、FullCalendar、別シート管理、`data-json`埋め込みを追加しない。
 - フェーズ2では`build-detail-pages.mjs`へ接続する前に、必ず`git pull`と`git status`を確認し、JA/EN生成後に実ブラウザで記事・カード・カレンダー・外部リンクを確認する。
 
+## 2026-08-24 フェーズ2: 静的記事ビルドへの接続
+
+### 実施
+
+- ビルド前に`git pull --ff-only origin main`を実行し、`Already up to date.`を確認。
+- `scripts/build-detail-pages.mjs`の`makeEntityResolver`後段で`renderArticleShortcodes`を呼ぶよう変更。
+- 記事本文のeventを`Event` JSON-LDとして記事JSON-LD配列へ追加。
+- 公開記事のJA/EN本文について、event必須項目・日付・URL・calendarのevent 0件を`validateArticleShortcodes`で検証。
+
+### コミット
+
+- フェーズ2変更はローカルコミット予定。push・本番反映は行わない。
+
+### 検証
+
+- `node scripts/build-detail-pages.mjs`: 成功（記事JA 6件 / EN 5件を生成、既存出力の更新なし）。
+- 生成後の記事行数: JA `779 total`、EN `765 total`。
+- `python3 scripts/audit_spa_vs_static.py --after`: 成功。静的記事5件と通常リンクを確認。
+- `node scripts/check_article_shortcodes.mjs`: 8 assertions passed。
+- `bash scripts/preflight.sh`: 省略なしで実行。記事イベントショートコードを含む検査項目は成功。
+- 実ブラウザ: Chromeで共通モジュールを読み込み、`tj-event` / `tj-calendar`生成を確認。ローカルJA記事`/articles/bondisco-2026-info.html`とEN記事`/en/articles/bondisco-2026-info.html`を開き、`article-detail` / `article-body` / title表示を確認。
+
+### 変更したパターン
+
+- 既存entity shortcode → event/calendar shortcodeの順で変換。
+- JA/EN本文ごとのevent抽出、記事JSON-LDへのEvent配列追加、公開記事のショートコード検証。
+
+### 未確認の類似パターン
+
+- 実データ内にevent/calendar shortcodeを含む公開記事がまだ無いため、生成済み実記事でカード・カレンダー・Event JSON-LDが出る経路: 未確認。
+- CMSの入力→プレビュー→閉じる→再表示→保存: 未確認（フェーズ3対象）。
+- 実機iPhone / Instagram内ブラウザ / LINE内ブラウザ: 未確認。
+
+### 次の担当への注意
+
+- フェーズ3以降も§7の禁止事項を守る。JS月送り、FullCalendar、別シート、`data-json`埋め込みは追加しない。
+- 実データにshortcodeを入れる場合は、公開前にJA/EN記事の実ブラウザ表示、ページ内リンク、公式外部リンク、JSON-LDを確認し、同じ6項目をhandoffへ追記する。
+
 ## 2026-08-23 追加修正: スマホのVENUES VIEW位置
 
 - スマホもPCと同じく、円形の矢印ボタンを画像領域の右下（right 24px / bottom 24px）へ配置。
