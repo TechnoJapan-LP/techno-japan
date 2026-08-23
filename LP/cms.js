@@ -1320,7 +1320,19 @@ function updateArticlePreview(html, force){
   if (!trimmed || trimmed === '<p><br></p>') {
     el.innerHTML = '<div class="ar-prev-empty">本文を書くとここにプレビューが表示されます</div>';
   } else {
-    el.innerHTML = resolveEntityLinksPreview(trimmed);
+    const entityHtml = resolveEntityLinksPreview(trimmed);
+    const shortcodeApi = globalThis.TJArticleShortcodes;
+    if (shortcodeApi?.renderArticleShortcodes) {
+      try {
+        el.innerHTML = shortcodeApi.renderArticleShortcodes(entityHtml, {
+          lang: document.documentElement.lang === 'en' ? 'en' : 'ja'
+        }).html;
+      } catch (error) {
+        el.innerHTML = '<div class="ar-prev-empty">ショートコードエラー: ' + esc(error.message) + '</div>';
+      }
+    } else {
+      el.innerHTML = entityHtml;
+    }
   }
   const focusContent = document.getElementById('ar-focus-preview-content');
   if (focusContent) focusContent.innerHTML = el.innerHTML;
@@ -1435,6 +1447,12 @@ const ARTICLE_TEMPLATES = {
     '<h2>[曜日] — [イベント名]</h2><p>[会場・出演者・ひとこと]</p><p><br></p>' +
     '<h2>[曜日] — [イベント名]</h2><p>[会場・出演者・ひとこと]</p><p><br></p>' +
     '<h2>[曜日] — [イベント名]</h2><p>[会場・出演者・ひとこと]</p>' },
+  roundup: { label: '🗺 フェスまとめ', category: 'EVENTS', html:
+    '<p>[リード — 地域・シーズン・このまとめの視点を2〜3文]</p><p><br></p>' +
+    '[[calendar]]<p><br></p>' +
+    '<h2>[国・地域名]</h2>' +
+    '[[event|イベント名|2026-12-28〜2027-01-08|都市, 国|https://公式URL|Techno;House]]' +
+    '<p>[なぜ行く価値があるかを2〜4文]</p><p><br></p>' },
   column: { label: '💭 コラム', category: 'COLUMN', html:
     '<p>[問題提起・きっかけ — なぜ今これを書くのか]</p><p><br></p>' +
     '<h2>[論点1]</h2><p>[本文]</p><p><br></p>' +
@@ -1720,6 +1738,78 @@ function insertEntityShortcode(type, id, name){
     scheduleArticleEditorSync('quill');
   });
   toast(label + ' へのリンクを挿入しました', 'success');
+}
+
+function insertArticleShortcode(text){
+  const value = String(text || '').trim();
+  if (!value) return;
+  const insertion = value + '\n';
+  const wrap = document.getElementById('ar-editor-wrap');
+  if (wrap?.classList.contains('source-mode')) {
+    const source = document.getElementById('ar-body-source');
+    if (!source) return;
+    const start = source.selectionStart ?? source.value.length;
+    const end = source.selectionEnd ?? start;
+    source.setRangeText(insertion, start, end, 'end');
+    source.dispatchEvent(new Event('input', { bubbles: true }));
+    updateArticlePreview(source.value, true);
+    return;
+  }
+  const q = initArticleEditor();
+  if (!q) return;
+  preserveArticleScroll(() => {
+    const range = q.getSelection(true) || { index: q.getLength() };
+    q.insertText(range.index, insertion, 'user');
+    q.setSelection(range.index + insertion.length, 0, 'silent');
+    scheduleArticleEditorSync('quill');
+  });
+  toast('本文にショートコードを挿入しました', 'success');
+}
+
+function insertArticleCalendar(){
+  insertArticleShortcode('[[calendar]]');
+}
+
+function openArticleEventForm(){
+  document.getElementById('ar-event-dialog')?.remove();
+  const overlay = document.createElement('div');
+  overlay.id = 'ar-event-dialog';
+  overlay.className = 'dialog-overlay show';
+  overlay.innerHTML = `<div class="dialog-box" style="max-width:620px">
+    <h3>📦 イベントカード</h3>
+    <p class="label-hint">入力内容から記事本文に <code>[[event|…]]</code> を挿入します。</p>
+    <div class="form-grid" style="grid-template-columns:1fr 1fr;gap:10px">
+      <div class="form-group" style="grid-column:1 / -1"><label>名前 *</label><input id="ar-event-name" type="text" placeholder="Epizode"></div>
+      <div class="form-group"><label>開始日 *</label><input id="ar-event-start" type="date"></div>
+      <div class="form-group"><label>終了日（任意）</label><input id="ar-event-end" type="date"></div>
+      <div class="form-group" style="grid-column:1 / -1"><label>場所 *</label><input id="ar-event-place" type="text" placeholder="Phu Quoc, Vietnam"></div>
+      <div class="form-group" style="grid-column:1 / -1"><label>公式URL（任意）</label><input id="ar-event-url" type="url" placeholder="https://example.com"></div>
+      <div class="form-group" style="grid-column:1 / -1"><label>補足（任意 / ; 区切り）</label><input id="ar-event-note" type="text" placeholder="Techno;House;11日間"></div>
+    </div>
+    <div class="btn-row" style="justify-content:flex-end;margin-top:14px">
+      <button type="button" class="btn" id="ar-event-cancel">キャンセル</button>
+      <button type="button" class="btn btn-accent" id="ar-event-insert">本文に挿入</button>
+    </div>
+  </div>`;
+  document.body.appendChild(overlay);
+  const close = () => overlay.remove();
+  overlay.querySelector('#ar-event-cancel').addEventListener('click', close);
+  overlay.addEventListener('click', (event) => { if (event.target === overlay) close(); });
+  overlay.querySelector('#ar-event-insert').addEventListener('click', () => {
+    const fields = ['name', 'start', 'end', 'place', 'url', 'note'].reduce((out, key) => {
+      out[key] = overlay.querySelector('#ar-event-' + key).value.trim(); return out;
+    }, {});
+    const required = [['name', '名前'], ['start', '開始日'], ['place', '場所']].filter(([key]) => !fields[key]);
+    if (required.length) return toast(required.map(([, label]) => label).join(' / ') + 'を入力してください', 'error');
+    if (fields.name.includes('|') || fields.place.includes('|') || fields.note.includes('|')) return toast('| は入力できません', 'error');
+    if (fields.end && fields.end < fields.start) return toast('終了日は開始日以降にしてください', 'error');
+    if (fields.url && !/^https?:\/\//i.test(fields.url)) return toast('公式URLはhttps://から入力してください', 'error');
+    const date = fields.end && fields.end !== fields.start ? fields.start + '〜' + fields.end : fields.start;
+    const shortcode = `[[event|${fields.name}|${date}|${fields.place}|${fields.url}|${fields.note}]]`;
+    insertArticleShortcode(shortcode);
+    close();
+  });
+  overlay.querySelector('#ar-event-name').focus();
 }
 
 /* プレビュー用: ショートコードをリンク表示に変換 */

@@ -437,6 +437,8 @@
             <button type="button" class="ar-editor-tab active" data-mode="visual" onclick="switchArticleEditor('visual')">VISUAL</button>
             <button type="button" class="ar-editor-tab" data-mode="source" onclick="switchArticleEditor('source')">HTML</button>
             <button type="button" class="ar-editor-tab" id="ar-entity-toggle" onclick="toggleEntityLinkMenu()" style="margin-left:auto" title="フェス/アーティスト/ヴェニューへのリンクを本文に挿入">＠ ID</button>
+            <button type="button" class="ar-editor-tab" id="ar-event-toggle" onclick="openArticleEventForm()" title="記事本文にイベントカードを挿入">📦 イベントカード</button>
+            <button type="button" class="ar-editor-tab" id="ar-calendar-toggle" onclick="insertArticleCalendar()" title="記事本文に開催カレンダーを挿入">📅 カレンダーを挿入</button>
             <button type="button" class="ar-editor-tab" id="ar-template-toggle" onclick="toggleTemplateMenu()" title="記事の雛形を挿入">📄 テンプレ</button>
             <button type="button" class="ar-editor-tab" id="ar-focus-toggle" onclick="toggleFocusMode()" title="フルスクリーンで執筆に集中 (⌘⇧F)">⛶ 集中モード</button>
             <button type="button" class="ar-editor-tab" id="ar-preview-toggle" onclick="toggleArticlePreview()">プレビュー</button>
@@ -550,6 +552,7 @@
   </div>
 </div>
 
-<script src="cms.js?v=91" defer></script>
+<script type="module" src="article-shortcodes.js?v=1"></script>
+<script src="cms.js?v=92" defer></script>
 </body>
 </html>

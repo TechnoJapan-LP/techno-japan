@@ -4350,6 +4350,45 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - CSS変更時は`DETAIL_CSS_VERSION`、article-fx.js変更時は`ARTICLE_FX_JS_VERSION`を必ず更新し、生成後の全ページ参照を確認する。
 - §7の禁止事項（JS月送り、FullCalendar、別シート、`data-json`埋め込み）を追加しない。
 
+## 2026-08-24 フェーズ4: CMSイベントカード入力・プレビュー
+
+### 実施
+
+- `LP/cms.html`の記事本文ツールバーに「📦 イベントカード」「📅 カレンダーを挿入」を追加。
+- イベントカードフォームから名前・開始日・終了日・場所・公式URL・補足を入力し、`[[event|…]]`をVisual/HTML本文のカーソル位置へ挿入。
+- `ARTICLE_TEMPLATES`に`roundup`（🗺 フェスまとめ）を追加。
+- `updateArticlePreview`でentity shortcode変換後、`globalThis.TJArticleShortcodes.renderArticleShortcodes`を使ってevent/calendarを変換。
+- CMSへ`LP/article-shortcodes.js`をmoduleとして読み込み、`cms.js`のキャッシュバージョンを92へ更新。
+
+### コミット
+
+- フェーズ4変更はローカルコミット済み（このエントリを含む）。push・本番反映は行わない。
+
+### 検証
+
+- `node --check LP/cms.js`: 成功。
+- `node scripts/check_article_shortcodes.mjs`: 8 assertions passed。
+- ChromeでCMS HTMLの配信と共通moduleの読み込みを試行。
+- 既存CMSの認証が必要なため、認証後の実操作はこの環境では完了できなかった。
+
+### 変更したパターン
+
+- イベントカード入力フォーム、必須項目チェック、日付順チェック、https URLチェック、`|`入力拒否。
+- Visual本文への挿入、HTML本文への挿入、カレンダー単独挿入、roundupテンプレート、プレビューの共通変換。
+
+### 未確認の類似パターン
+
+- 認証済みCMSでの「入力→プレビュー→閉じる→再表示→保存」: 未確認。
+- 保存後の本文再取得、Quill再初期化後のshortcode保持: 未確認。
+- CMSでroundupテンプレートを選択し、calendarとeventを編集・保存する経路: 未確認。
+- 実機iPhone / Android / Instagram内ブラウザ / LINE内ブラウザ: 未確認。
+
+### 次の担当への注意
+
+- 認証済みCMSで上記の未確認経路を必ず実操作し、本文が消えないことを確認する。
+- 認証済み環境で確認できるまで、公開済みとして扱わない。
+- §7の禁止事項（JS月送り、FullCalendar、別シート、`data-json`埋め込み）を追加しない。
+
 ## 2026-08-23 追加修正: スマホのVENUES VIEW位置
 
 - スマホもPCと同じく、円形の矢印ボタンを画像領域の右下（right 24px / bottom 24px）へ配置。
