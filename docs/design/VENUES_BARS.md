@@ -30,7 +30,7 @@
 | `HOURS` | `19:00–03:00`（自由記述、短く） | — | 曜日差は書かない。詳細は公式へ |
 | `CHARGE` | `no-cover / cover / varies` | — | 「入場無料」が bar の強い訴求点。`FEATURES` の `no-cover` と重複するので、**CHARGE を正、FEATURES 側は検索用の写し**とする |
 | `GENRE` | 既存 | — | bar も同じ語彙（§1.3） |
-| `FEATURES` | `after-hours / daytime / vinyl / outdoor / rooftop / listening / no-cover` を `;` 区切り | — | 種別でもジャンルでもない**特徴タグ**。記事の切り口（After Hours 特集等）と将来の絞り込みに使う。Airtable Venues の `features`（複数選択）と同じ語彙 |
+| `FEATURES` | `;` 区切り。**個性**: `after-hours / daytime / vinyl / outdoor / rooftop / listening / no-cover`、**実用メモ**: `cash-only / id-required / no-photo / smoking / no-reentry` | — | 種別でもジャンルでもない**特徴タグ**。個性タグはカードのピルと記事の切り口に、実用メモは詳細ページの「GOOD TO KNOW」欄にだけ出す（カードには出さない）。Airtable Venues の `features`（複数選択）と同じ語彙。語彙の正は本表 |
 
 - **列の追加はヘッダー行の末尾**に。A1 を触らない（[[data-outage-guards]]）
 - **列を足しただけでは `data.js` に出ない。** `LP/cms.js` の `buildVenuesJs()` が列を名指しで書き出している（`id, name, city, area, type, image, genre, capacity, address, lat, lng, url, instagram, desc_en, name_en, desc`）。
@@ -57,13 +57,14 @@
 ### カード
 
 - bar は club と同じカードを使う。違いは右上に `SUBTYPE` の小さなラベル（`DJ BAR` / `MUSIC BAR` / `LISTENING`）と、`CHARGE=no-cover` のとき `NO COVER` のピル
-- `FEATURES` に `after-hours` があれば `AFTER HOURS` のピル（club にも出る）。ピルは最大 2 個まで。3 個以上は詳細ページにだけ出す
+- `FEATURES` の**個性タグ**（after-hours 等）があればピル（club にも出る）。ピルは最大 2 個まで。**実用メモ（cash-only 等）はカードに出さない**
 - 画像が無い bar は **載せない**（club と同じ基準）。bar は店内写真の権利が取りにくいので、掲載前に権利を確認する
 
 ## 4. 詳細ページ（`build-detail-pages.mjs`）
 
 - JSON-LD: `TYPE=bar` のとき `@type: ["BarOrPub","MusicVenue"]`、club は `NightClub` も併記（`["NightClub","MusicVenue"]`）。今は全件 `MusicVenue` だけ
 - `HOURS` / `CHARGE` があれば INFORMATION ブロックに行を足す（無ければ行ごと出さない。`undefined` を出さない）
+- `FEATURES` の実用メモがあれば INFORMATION の下に **GOOD TO KNOW** 欄（例: `CASH ONLY · ID REQUIRED · NO PHOTOS`）。JA は `現金のみ · 要ID · 撮影禁止`。変わりやすい情報なので「最新は公式で」の一文を常に添える
 - 回遊ブロック「近くの会場」は **種別をまたいで**出す（club の詳細に近くの bar が出るのが狙い）。距離は既存の座標で計算。
   既存の回遊ブロックの件数が増えないよう、上限 4 件のまま
 - EN 版: `SUBTYPE` のラベルは英語固定、`HOURS` はそのまま
