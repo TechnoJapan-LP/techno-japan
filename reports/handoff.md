@@ -4610,3 +4610,42 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - 未確認の類似パターン: lat / lng は空のまま（住所からの一括変換は未実装）。genres は巡回 JSON に無いので提案票では空（ユーザーが書く）。
   CMS 側（LP シート・cms.js）には subtype / hours / charge をまだ入れていない（VENUES_BARS.md §6-1 の作業）。
 - 次の担当への注意: area は日本（JP）の行だけ使う。海外は city のみ。image / desc / desc_en / capacity は Airtable に持たない（ユーザー決定）。
+
+## 2026-08-23 VENUES §6-1: サイト側4列のPublish経路
+
+### 実施
+
+- `LP/cms.js` の `SHEET_FIELD_NAMES` に `subtype / hours / charge / features` を追加し、取得行の正規化対象にした。
+- `buildVenuesJs()` が4列を `data.js` に出力するようにした。`features` は `;` と `,` の両方で分割して配列化する。
+- `publishPayloadSummary()` のVENUES要約に4列の件数を追加し、列落ちを `features 5 → 0` のように確認できるようにした。
+- `scripts/check_cms_publish_guard.mjs` に4列の要約、data.js出力、列落ち0件のテストを追加。
+- LPシートのヘッダーは変更していない（ユーザーが末尾へ手動追加する前提）。
+
+### コミット
+
+- 未コミット。push・本番反映は未実施。
+
+### 検証
+
+- `node scripts/check_cms_publish_guard.mjs`: 成功。既存検査＋VENUES 4列検査。
+- `node --check LP/cms.js`: 成功。
+- 実ブラウザで既存VENUES一覧のJA/EN・390px/1280px表示を確認。390pxの計測はJA 593,347B / EN 612,656B、1280pxはJA 593,347B / EN 585,175B（EN全スクロール593,440B）。スクリーンショットは`reports/screenshots/venues-phase6-1-390/`と`reports/screenshots/venues-phase6-1-1280/`。
+- `bash scripts/preflight.sh`: 全34件成功。
+
+### 変更したパターン
+
+- VENUES行の`subtype / hours / charge / features`取得・data.js出力。
+- `features`のセミコロン・カンマ区切り配列化。
+- Publish前の件数要約と列落ち検知。
+
+### 未確認の類似パターン
+
+- ユーザーがLPシート末尾へ4列を追加した実データの取得: 未確認。
+- 認証済みCMSでPublish Nowを押し、`cms: publish data.js`コミットに`features`が含まれること: 未確認。
+- CMS入力UIの4フィールド: フェーズ4ではなく§6-4対象のため未実装・未確認。
+
+### 次の担当への注意・判断待ち
+
+- LPシートのVENUESヘッダー末尾へ`SUBTYPE / HOURS / CHARGE / FEATURES`を手動追加してから、認証済みCMSでPublish Nowを1回実行する。
+- Publish後の`data.js`で実際に`subtype / hours / charge / features`が出ることを確認するまで、フェーズ1完了とは扱わない。
+- §6-2のハブUI、§6-3の詳細ページ、§6-4のCMS入力UIは今回の変更に含めない。

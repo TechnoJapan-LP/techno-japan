@@ -3621,6 +3621,7 @@ const SHEET_FIELD_NAMES = [
   'metaDescription','publishAt','ogImage','editorNotes','authorId',
   // FESTIVALS / VENUES / ARTISTS
   'name_en','desc_en','bio_en','location_ja','ticketUrl','venueId','instagramUrl',
+  'subtype','hours','charge','features',
   // EDITIONS / LINEUPS
   'editionId','festivalId','artistId','actLabel','setType',
 ];
@@ -6340,7 +6341,7 @@ function publishPayloadSummary(content) {
     '',
     `  FESTIVALS  ${items('FESTIVALS')}件`,
     `  ARTISTS    ${items('ARTISTS')}件（紹介文 ${field('ARTISTS','bio')} / 画像 ${field('ARTISTS','image')} / リンク ${field('ARTISTS','links')}）`,
-    `  VENUES     ${items('VENUES')}件`,
+    `  VENUES     ${items('VENUES')}件（subtype ${field('VENUES','subtype')} / hours ${field('VENUES','hours')} / charge ${field('VENUES','charge')} / features ${field('VENUES','features')}）`,
     `  ARTICLES   ${items('ARTICLES')}件（英語本文 ${field('ARTICLES','body_en')} / 関連フェス ${field('ARTICLES','festivalId')}）`,
     `  EVENTS     ${items('EVENTS')}件`,
     '',
@@ -6600,11 +6601,18 @@ function buildVenuesJs(rows){
     if(r.city) l.push('    city: "'+q(r.city)+'",');
     if(r.area) l.push('    area: "'+q(r.area)+'",');
     if(r.type) l.push('    type: "'+q(r.type)+'",');
+    if(r.subtype) l.push('    subtype: "'+q(r.subtype)+'",');
+    if(r.hours) l.push('    hours: "'+q(r.hours)+'",');
+    if(r.charge) l.push('    charge: "'+q(r.charge)+'",');
     if(r.image) l.push('    image: "'+q(webp(r.image))+'",');
     if(r.imagePosition) l.push('    imagePosition: "'+q(r.imagePosition)+'",');
     if(r.genre){
       const arr=String(r.genre).split(/[,·]/).map(s=>'"'+q(s.trim())+'"').filter(s=>s!=='""');
       if(arr.length) l.push('    genre: ['+arr.join(', ')+'],');
+    }
+    if(r.features){
+      const arr=String(r.features).split(/[;,]/).map(s=>'"'+q(s.trim())+'"').filter(s=>s!=='""');
+      if(arr.length) l.push('    features: ['+arr.join(', ')+'],');
     }
     const cap=parseInt(r.capacity); if(!isNaN(cap)) l.push('    capacity: '+cap+',');
     if(r.address) l.push('    address: "'+q(r.address)+'",');

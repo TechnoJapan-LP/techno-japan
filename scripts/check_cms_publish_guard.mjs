@@ -40,6 +40,7 @@ const CMS_PATH = path.join(ROOT, 'LP', 'cms.js');
 const BRIDGE = `;globalThis.__T = {
   publishSanityCheck,
   publishPayloadSummary,
+  buildVenuesJs,
   validateEditionSyncBeforeSave,
   setEditionSheetState: (loaded, rows) => {
     editionSheetLoaded = loaded;
@@ -270,7 +271,10 @@ const c = makeCtx();
     '  {', '    id: "x",', '    bio: "…",', '    image: "i.webp",', '    links: {},', '  },',
     '  {', '    id: "y",', '  },', '];',
     '',
-    'const VENUES = [', '  {', '    id: "v",', '  },', '];',
+    'const VENUES = [', '  {', '    id: "v",',
+    '    subtype: "dj-bar",', '    hours: "20:00–03:00",',
+    '    charge: "no-cover",', '    features: ["after-hours", "vinyl"],',
+    '  },', '];',
     '',
     'const ARTICLES = [',
     '  {', '    id: "ar",', '    body_en: "…",', '    festivalId: "a",', '  },', '];',
@@ -284,13 +288,32 @@ const c = makeCtx();
     /ARTISTS\s+2件（紹介文 1 \/ 画像 1 \/ リンク 1）/.test(sum), sum);
   check('記事の英語本文と関連フェスの数を出す',
     /ARTICLES\s+1件（英語本文 1 \/ 関連フェス 1）/.test(sum), sum);
+  check('VENUESの4列の件数を出す',
+    /VENUES\s+1件（subtype 1 \/ hours 1 \/ charge 1 \/ features 1）/.test(sum), sum);
+  const venueJs = c.__T.buildVenuesJs([{
+    id: 'v1', name: 'Test Bar', subtype: 'dj-bar', hours: '20:00–03:00',
+    charge: 'no-cover', features: 'after-hours;vinyl, no-cover',
+  }]);
+  check('VENUESの4列をdata.jsへ出力する',
+    /subtype: "dj-bar"/.test(venueJs)
+      && /hours: "20:00–03:00"/.test(venueJs)
+      && /charge: "no-cover"/.test(venueJs)
+      && /features: \["after-hours", "vinyl", "no-cover"\]/.test(venueJs), venueJs);
   check('ファイルの大きさを出す', /ファイルの大きさ \d+KB/.test(sum), sum);
 
   // §9-67 / §9-69 の再現: 列が落ちると数字が減って目に入る
-  const dropped = DATA.replace('    bio: "…",\n', '').replace('    image: "i.webp",\n', '');
+  const dropped = DATA
+    .replace('    bio: "…",\n', '')
+    .replace('    image: "i.webp",\n', '')
+    .replace('    subtype: "dj-bar",\n', '')
+    .replace('    hours: "20:00–03:00",\n', '')
+    .replace('    charge: "no-cover",\n', '')
+    .replace('    features: ["after-hours", "vinyl"],\n', '');
   const sum2 = c.__T.publishPayloadSummary(dropped);
   check('列が落ちると件数が減って見える（§9-67 の再現）',
     /紹介文 0 \/ 画像 0/.test(sum2), sum2);
+  check('VENUESの4列が落ちると0件になる',
+    /VENUES\s+1件（subtype 0 \/ hours 0 \/ charge 0 \/ features 0）/.test(sum2), sum2);
 }
 
 console.log();
