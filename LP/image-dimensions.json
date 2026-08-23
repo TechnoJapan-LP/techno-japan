@@ -231,6 +231,10 @@
     640,
     615
   ],
+  "images/artists/kiko-dinucci.webp": [
+    1280,
+    1510
+  ],
   "images/artists/kotsu.webp": [
     1440,
     1440
@@ -251,6 +255,10 @@
     940,
     940
   ],
+  "images/artists/so.webp": [
+    1477,
+    1108
+  ],
   "images/artists/sunga.webp": [
     800,
     800
@@ -258,6 +266,10 @@
   "images/artists/sylvan-esso.webp": [
     639,
     480
+  ],
+  "images/artists/the-master-musicians-of-joujouka.webp": [
+    447,
+    447
   ],
   "images/artists/tsutomu.webp": [
     312,
@@ -735,6 +747,14 @@
     480,
     461
   ],
+  "images/derivatives/card/artists/kiko-dinucci--e2276e0e-lg.webp": [
+    814,
+    960
+  ],
+  "images/derivatives/card/artists/kiko-dinucci--e2276e0e-sm.webp": [
+    407,
+    480
+  ],
   "images/derivatives/card/artists/kotsu--53a1a831-lg.webp": [
     960,
     960
@@ -775,6 +795,14 @@
     480,
     480
   ],
+  "images/derivatives/card/artists/so--523afd19-lg.webp": [
+    960,
+    720
+  ],
+  "images/derivatives/card/artists/so--523afd19-sm.webp": [
+    480,
+    360
+  ],
   "images/derivatives/card/artists/sunga--f454f76d-lg.webp": [
     800,
     800
@@ -790,6 +818,14 @@
   "images/derivatives/card/artists/sylvan-esso--b1b06910-sm.webp": [
     480,
     361
+  ],
+  "images/derivatives/card/artists/the-master-musicians-of-joujouka--0a97c308-lg.webp": [
+    447,
+    447
+  ],
+  "images/derivatives/card/artists/the-master-musicians-of-joujouka--0a97c308-sm.webp": [
+    447,
+    447
   ],
   "images/derivatives/card/artists/tsutomu--a9f93a04-lg.webp": [
     312,
