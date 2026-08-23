@@ -135,6 +135,17 @@ window.addEventListener('load',()=>setTimeout(()=>{
     cardHighlight:!!articlePreview?.querySelector('.tj-event[data-preview-target="1"]')
   };
   articleWrap.classList.remove('focus-mode','preview-mode');
+  // プレビューを先に開かず集中モードへ入った場合も、後から表示できること。
+  const probeEditor=document.querySelector('#ar-body-editor .ql-editor');
+  if (probeEditor) probeEditor.innerHTML=articlePreview.innerHTML;
+  toggleFocusMode();
+  toggleArticlePreview();
+  out.集中モードからプレビュー表示={
+    focus:articleWrap.classList.contains('focus-mode'),
+    preview:articleWrap.classList.contains('preview-mode') && getComputedStyle(articlePreview).display!=='none',
+    eventVisible:!!articlePreview.querySelector('.tj-event')
+  };
+  toggleFocusMode();
   out.公開パネル = box(document.querySelector('#sec-article .pub-section'));
   out.パネルの親 = box(document.querySelector('#sec-article .pub-section')?.parentElement);
   out.フォーム格子 = box(document.querySelector('#article-tab-form .form-grid'));
@@ -195,6 +206,7 @@ if(d.VENUES入力欄?.features!==13) failures.push(`VENUESのFEATURES選択肢�
 if(d.VENUES入力欄 && (!d.VENUES入力欄.subtypeVisibleForBar || !d.VENUES入力欄.subtypeHiddenForClub)) failures.push('SUBTYPEのbar限定表示が動作していない');
 if(d.VENUES入力欄 && !d.VENUES入力欄.previewReopenKeepsValues) failures.push('VENUESのプレビュー再表示で入力値が保持されていない');
 if(d.イベントカード操作 && (d.イベントカード操作.officialLinkPointer!=='auto' || d.イベントカード操作.calendarLinkPointer!=='auto' || !d.イベントカード操作.hash変更なし || !d.イベントカード操作.cardHighlight)) failures.push('集中モードのイベントカード / カレンダーリンクを操作できない');
+if(d.集中モードからプレビュー表示 && (!d.集中モードからプレビュー表示.focus || !d.集中モードからプレビュー表示.preview || !d.集中モードからプレビュー表示.eventVisible)) failures.push('集中モード開始後にプレビューを表示できない');
   if(failures.length){
   console.log('CMS のレイアウトに問題があります:');
   for(const f of failures) console.log('  ✗ '+f);

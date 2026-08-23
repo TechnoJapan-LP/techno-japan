@@ -1445,6 +1445,7 @@ function toggleArticlePreview(){
       delete prev.dataset.focusPreviewHidden;
       wrap.classList.add('preview-mode');
       prev.style.display = 'block';
+      prev.dataset.focusPreview = '1';
       document.getElementById('ar-focus-preview')?.classList.remove('is-hidden');
       if (btn) { btn.classList.add('active'); btn.textContent = 'プレビューを表示中'; }
       updateArticlePreview(articleQuill?.root?.innerHTML || document.getElementById('ar-body').value, true);
@@ -1452,6 +1453,7 @@ function toggleArticlePreview(){
       prev.dataset.focusPreviewHidden = '1';
       wrap.classList.remove('preview-mode');
       prev.style.display = 'none';
+      delete prev.dataset.focusPreview;
       document.getElementById('ar-focus-preview')?.classList.add('is-hidden');
       if (btn) { btn.classList.remove('active'); btn.textContent = 'プレビュー'; }
     }
@@ -1911,6 +1913,11 @@ function toggleFocusMode(){
       focusPreview.style.maxHeight = 'none';
       focusPreview.style.zIndex = '2001';
       focusPreview.dataset.focusPreview = '1';
+    } else if (focusPreview) {
+      // 集中モード開始時にプレビューが閉じていた場合も、集中モード内の
+      // 「プレビュー」ボタンで開けるよう、初期状態を明示する。
+      focusPreview.dataset.focusPreviewHidden = '1';
+      focusPreview.style.display = 'none';
     }
     const previewBtn = document.getElementById('ar-preview-toggle');
     if (previewBtn) {
@@ -1931,10 +1938,11 @@ function toggleFocusMode(){
     const restorePreview = wrap.dataset.focusPreviewWasOn === '1';
     delete wrap.dataset.focusPreviewWasOn;
     wrap.classList.toggle('preview-mode', restorePreview);
-    const focusPreview = document.querySelector('.ar-preview[data-focus-preview="1"]');
+    const focusPreview = document.querySelector('.ar-preview');
     if (focusPreview) {
       focusPreview.removeAttribute('style');
       delete focusPreview.dataset.focusPreview;
+      delete focusPreview.dataset.focusPreviewHidden;
     }
     document.getElementById('ar-focus-preview')?.classList.add('is-hidden');
     const previewBtn = document.getElementById('ar-preview-toggle');
