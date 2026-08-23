@@ -4576,3 +4576,12 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - 変更したパターン: FIELD_MAP への2行追加。
 - 未確認の類似パターン: Venues の country / city には同じ経路が無い（Inbox は target_festival のみ）。確認済み・0件（Festivals 側）。
 - 次の担当への注意: 承認 → `apply --execute` のあと、Festivals の country が実際に変わったことを1件確認する。
+
+## 2026-08-23 Festivals に ticket_url を追加
+
+- 実施: Airtable Festivals に `ticket_url`（url 型）を API で新設。`airtable_pipeline.py` の `FIELD_MAP` に `ticket_url` を追加。
+- コミット: 未。
+- 検証: 列の作成を API の応答で確認（flda2tjHuI5ZuFpvO）。構文チェックのみ。apply の実機は country と同様に承認後に確認。
+- 変更したパターン: FIELD_MAP への1行追加。
+- 未確認の類似パターン: サイト側シートの `TICKETURL` とは別管理（Airtable → LP シートの同期は無い）。確認済み・0件。
+- 次の担当への注意: 次回の巡回から ticket_url 空のフェスにチケットページを提案する。年で変わらない公式ページを優先。
