@@ -107,20 +107,6 @@
 .artists-search::placeholder { color: rgba(240,237,232,0.25); }
 .artists-search:focus { border-color: rgba(240,237,232,0.35); }
 
-.artists-sort {
-  background: transparent;
-  border: 1px solid rgba(240,237,232,0.12);
-  color: var(--text);
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em;
-  padding: 12px 16px;
-  cursor: pointer;
-  outline: none;
-  transition: border-color 0.3s ease;
-  -webkit-appearance: none;
-  appearance: none;
-}
-.artists-sort option { background: #080808; color: var(--text); }
-
 .artists-count {
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em;
   opacity: 0.3; margin-left: auto;
@@ -131,10 +117,6 @@
   border-bottom: 1px solid rgba(240,237,232,0.08);
   min-height: 31px;
 }
-.artists-alpha-nav { display: flex; flex-wrap: wrap; gap: 2px; padding-top: 4px; min-height: 31px; }
-.alpha-tab { min-width: 28px; padding: 7px 6px; border: 1px solid transparent; background: none; color: var(--text); opacity: .35; font-family: var(--font-mono); font-size: 10px; cursor: pointer; }
-.alpha-tab:hover, .alpha-tab:focus-visible { opacity: 1; border-color: rgba(240,237,232,.25); outline: none; }
-@media (max-width: 640px) { .artists-alpha-nav { gap: 1px; } .alpha-tab { min-width: 24px; padding: 9px 4px; } }
 
 .genre-tab {
   font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em;
@@ -157,21 +139,29 @@
 
 .artists-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 24px;
   padding: 40px;
 }
 
+@media (min-width: 1280px) {
+  .artists-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
 .artist-card {
-  aspect-ratio: 3/4;
+  min-height: 104px;
   position: relative;
   overflow: hidden;
-  display: block;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(240,237,232,.1);
   cursor: none;
 }
 .artist-card-img {
-  position: absolute;
-  inset: 0;
+  position: relative;
+  width: 80px;
+  height: 80px;
+  flex: 0 0 80px;
   background-size: cover;
   background-position: center;
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
@@ -202,10 +192,17 @@
 }
 .artist-card:hover::after { opacity: 1; }
 
+/* PCも画像を補助にした情報リストとして表示する。 */
+.artist-card::before, .artist-card::after { display: none; }
 .artist-card-content {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  padding: 20px;
+  position: relative;
+  inset: auto;
+  min-width: 0;
+  padding: 16px 48px 16px 16px;
+}
+
+.artist-card-content {
+  padding: 16px 48px 16px 16px;
   z-index: 2;
   display: flex;
   flex-direction: column;
@@ -262,14 +259,14 @@
 
 /* PAGE-SPECIFIC RESPONSIVE */
 @media (max-width: 1100px) {
-  .artists-grid { grid-template-columns: repeat(3, 1fr); }
+  .artists-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 900px) {
-  .page-header { padding: 140px 24px 60px; }
+  .page-header { padding: 96px 24px 40px; }
   .page-header-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
   #artists-list-view { padding: 0 0 80px; }
   .artists-toolbar { padding: 32px 24px 24px; }
-  .artists-grid { grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 24px; }
+  .artists-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; padding: 24px; }
 }
 @media (max-width: 768px) {
   .artists-grid { grid-template-columns: repeat(2, 1fr); }
@@ -288,8 +285,28 @@
   .artist-card-genre { font-size: 7px; margin-bottom: 3px; }
   .artist-card-city { font-size: 7px; }
 }
+/* スマホは画像カードより、名前を探しやすいコンパクトなリストを優先する。 */
+@media (max-width: 640px) {
+  .artists-grid { grid-template-columns: 1fr; gap: 0; padding: 0 16px 16px; }
+  .artist-card {
+    min-height: 80px; aspect-ratio: auto; display: flex; align-items: center;
+    border-bottom: 1px solid rgba(240,237,232,.1); cursor: pointer;
+  }
+  .artist-card-img {
+    position: relative; inset: auto; width: 64px; height: 64px; flex: 0 0 64px;
+    transition: none;
+  }
+  .artist-card-content {
+    position: relative; inset: auto; min-width: 0; padding: 12px 44px 12px 14px;
+  }
+  .artist-card::before, .artist-card::after { display: none; }
+  .artist-card:hover .artist-card-img { transform: none; }
+  .artist-card-genre { font-size: 7px; margin-bottom: 4px; }
+  .artist-card-name { font-size: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .artist-card-city { font-size: 7px; margin-top: 4px; }
+}
 @media (hover: none) and (pointer: coarse) {
-  .artist-card, .artists-sort, .genre-tab { cursor: pointer; }
+  .artist-card, .genre-tab { cursor: pointer; }
 }
 </style>
 <script type="application/ld+json">
@@ -390,14 +407,9 @@
   <div class="artists-toolbar">
     <div class="artists-search-row">
       <input type="text" class="artists-search" id="artists-search" placeholder="SEARCH ARTISTS...">
-      <select class="artists-sort" id="artists-sort">
-        <option value="a-z">A → Z</option>
-        <option value="z-a">Z → A</option>
-      </select>
       <span class="artists-count" id="artists-count"></span>
     </div>
     <div class="artists-genre-nav" id="genre-nav"></div>
-    <nav class="artists-alpha-nav" id="artists-alpha-nav" aria-label="Artists A to Z"></nav>
   </div>
   <div class="artists-grid" id="artists-grid">
     <!-- STATIC_LINKS:ARTISTS:START -->
@@ -611,21 +623,18 @@ function observeAll() { document.querySelectorAll('.reveal').forEach(el => obser
 /* ========== GENRES & STATE ========== */
 let currentGenre = 'ALL';
 let currentSearch = '';
-let currentSort = 'a-z';
 const ARTIST_HUB_STATE_KEY = 'tj:artist-hub-state:v1';
 
 function readArtistQuery() {
   const p = new URLSearchParams(location.search);
   if (p.get('genre')) currentGenre = p.get('genre').toUpperCase();
   if (p.get('q')) currentSearch = p.get('q');
-  if (['a-z', 'z-a'].includes(p.get('sort'))) currentSort = p.get('sort');
 }
 function syncArtistQuery() {
   const u = new URL(location.href);
-  ['genre','q','sort'].forEach(k => u.searchParams.delete(k));
+  ['genre','q'].forEach(k => u.searchParams.delete(k));
   if (currentGenre !== 'ALL') u.searchParams.set('genre', currentGenre);
   if (currentSearch) u.searchParams.set('q', currentSearch);
-  if (currentSort !== 'a-z') u.searchParams.set('sort', currentSort);
   history.replaceState(history.state, '', u.pathname + u.search);
 }
 function saveArtistHubState() {
@@ -680,24 +689,6 @@ function buildGenreNav() {
   });
 }
 
-function artistLetter(name) {
-  const letter = String(name || '').trim().charAt(0).toUpperCase();
-  return /^[A-Z]$/.test(letter) ? letter : '#';
-}
-
-function buildAlphabetNav() {
-  const nav = document.getElementById('artists-alpha-nav');
-  nav.innerHTML = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#'.split('').map(letter =>
-    `<button type="button" class="alpha-tab" data-letter="${letter}">${letter}</button>`
-  ).join('');
-  nav.addEventListener('click', e => {
-    const button = e.target.closest('.alpha-tab');
-    if (!button) return;
-    const target = document.querySelector(`.artist-card[data-letter="${button.dataset.letter}"]`);
-    target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
-}
-
 function getFilteredArtists() {
   let list = [...ARTISTS];
 
@@ -717,16 +708,9 @@ function getFilteredArtists() {
     );
   }
 
-  // Sort
-  // ロケールを 'en' で固定する。引数なしだと閲覧者のブラウザ設定で順序が変わり、
-  // JA ハブと EN ハブでカードの並びが食い違って見比べたときに混乱する。
-  // 並べ替えのキーは表示名ではなく a.name のまま。表示名（tjLocalized）で
-  // 並べると JA/EN で順序が変わってしまい、固定する意味が無くなる。
-  if (currentSort === 'a-z') {
-    list.sort((a, b) => a.name.localeCompare(b.name, 'en'));
-  } else {
-    list.sort((a, b) => b.name.localeCompare(a.name, 'en'));
-  }
+  // 並び順はA-Zに固定する。検索・ジャンルに集中できるよう、
+  // 並び替えUIは表示しない。
+  list.sort((a, b) => a.name.localeCompare(b.name, 'en'));
 
   return list;
 }
@@ -752,7 +736,7 @@ function renderArtistsList() {
       : `background:${gradients[i % gradients.length]}`;
     const genreLabel = getGenreString(a);
     return `
-    <a href="/en/artists/${encodeURIComponent(a.id)}.html" class="artist-card reveal" data-artist-detail-link data-id="${a.id}" data-letter="${artistLetter(a.name)}">
+    <a href="/en/artists/${encodeURIComponent(a.id)}.html" class="artist-card reveal" data-artist-detail-link data-id="${a.id}">
       <div class="artist-card-img"${bgAttr} style="${bg}"></div>
       <div class="artist-card-content">
         <div class="artist-card-genre">${genreLabel}</div>
@@ -820,12 +804,10 @@ function bindArtistHoverPreview() {
   });
 }
 
-/* ========== SEARCH & SORT BINDINGS ========== */
+/* ========== SEARCH BINDINGS ========== */
 function initSearchSort() {
   const searchInput = document.getElementById('artists-search');
-  const sortSelect = document.getElementById('artists-sort');
   searchInput.value = currentSearch;
-  sortSelect.value = currentSort;
 
   let debounceTimer;
   searchInput.addEventListener('input', () => {
@@ -837,11 +819,6 @@ function initSearchSort() {
     }, 200);
   });
 
-  sortSelect.addEventListener('change', () => {
-    currentSort = sortSelect.value;
-    renderArtistsList();
-    syncArtistQuery();
-  });
 }
 
 /* ========== CURSOR (delegated to common.js) ========== */
@@ -851,7 +828,6 @@ function bindCursorExpand() {
 
 /* ========== INIT ========== */
 buildGenreNav();
-buildAlphabetNav();
 initSearchSort();
 renderArtistsList();
 </script>
