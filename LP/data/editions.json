@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-08-14T05:41:00.195Z",
-  "count": 105,
+  "_generatedAt": "2026-08-24T09:42:05.898Z",
+  "count": 109,
   "items": [
     {
       "EDITION_ID": "99flags-2026",
@@ -143,7 +143,12 @@
       "EDITION": "2025",
       "DATE_START": "2025-08-30",
       "DATE_END": "2025-08-31",
-      "PREF": "Kyoto",
+      "LOCATION": "Sanda Athletic Park",
+      "LOCATION_JA": "三田アスレチックパーク",
+      "ADDRESS": "兵庫県三田市波豆川282-1",
+      "LAT": "34.9197",
+      "LNG": "135.2892",
+      "FLYER": "images/festivals/bondisco-2025-flyer.webp",
       "STATUS": "finished"
     },
     {
@@ -456,17 +461,6 @@
       "STATUS": "finished"
     },
     {
-      "EDITION_ID": "grow-the-culture-open-air-2026",
-      "FESTIVAL_ID": "grow-the-culture-open-air",
-      "EDITION": "2026",
-      "DATE_START": "2026-11-07",
-      "DATE_END": "2026-11-08",
-      "LOCATION": "Ohba Camping Village",
-      "PREF": "Tokyo",
-      "ADDRESS": "3741 Okuno, Hinode-machi, Nishitama-gun, Tokyo",
-      "STATUS": "announced"
-    },
-    {
       "EDITION_ID": "hacha-mecha-2026",
       "FESTIVAL_ID": "hacha-mecha",
       "EDITION": "2026",
@@ -706,15 +700,6 @@
       "DATE_START": "2025-10-03",
       "DATE_END": "2025-10-04",
       "PREF": "Toyama",
-      "STATUS": "finished"
-    },
-    {
-      "EDITION_ID": "mutek-2025",
-      "FESTIVAL_ID": "mutek",
-      "EDITION": "2025",
-      "DATE_START": "2025-11-20",
-      "DATE_END": "2025-11-23",
-      "PREF": "Tokyo",
       "STATUS": "finished"
     },
     {
@@ -990,7 +975,7 @@
       "DATE_END": "2026-03-08",
       "LOCATION": "HAKUBA VALLEY",
       "PREF": "Hakuba",
-      "ADDRESS": "Kitajo, Hakuba Village, Kitaazumi District, Nagano Prefecture",
+      "ADDRESS": "長野県北安曇郡白馬村北城",
       "LAT": "36.6982",
       "LNG": "137.8619",
       "FLYER": "images/festivals/snow-machine-japan-flyer.jpg",
@@ -1144,8 +1129,8 @@
       "DATE_START": "2026-10-22",
       "DATE_END": "2026-10-25",
       "LOCATION": "Kyoto (Ohara Sanso / ACG Villa Kyoto / Kurama Mountain / Ochill TeaRoom)",
-      "PREF": "Kyoto",
-      "STATUS": "announced"
+      "FLYER": "images/festivals/wonderfruit-kyoto-2026-flyer.jpg",
+      "STATUS": "published"
     },
     {
       "EDITION_ID": "wormhole-2024",
@@ -1201,6 +1186,82 @@
       "ADDRESS": "福岡県福岡市東区西戸崎18-26",
       "LAT": "33.6682",
       "LNG": "130.3756",
+      "STATUS": "announced"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2027",
+      "FESTIVAL_ID": "snow-machine-japan",
+      "EDITION": "2027",
+      "DATE_START": "2027-03-02",
+      "DATE_END": "2027-03-07",
+      "LOCATION": "HAKUBA VALLEY",
+      "PREF": "Nagano",
+      "ADDRESS": "長野県北安曇郡白馬村北城",
+      "LAT": "36.6982",
+      "LNG": "137.8619",
+      "STATUS": "announced"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "FESTIVAL_ID": "mutek",
+      "EDITION": "2025",
+      "DATE_START": "2025-11-20",
+      "DATE_END": "2025-11-23",
+      "LOCATION": "Shibuya",
+      "LOCATION_JA": "渋谷",
+      "FLYER": "images/festivals/mutek-2025-flyer.jpg",
+      "STATUS": "finished"
+    },
+    {
+      "EDITION_ID": "mutek-2026",
+      "FESTIVAL_ID": "mutek",
+      "EDITION": "2026",
+      "DATE_START": "2026-11-20",
+      "DATE_END": "2026-11-22",
+      "LOCATION": "Shibuya",
+      "LOCATION_JA": "渋谷",
+      "FLYER": "images/festivals/mutek-2026-flyer.jpg",
+      "STATUS": "announced"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2026",
+      "FESTIVAL_ID": "grow-the-culture-open-air",
+      "EDITION": "2026",
+      "DATE_START": "2026-11-07",
+      "DATE_END": "2026-11-08",
+      "LOCATION": "Ohba Camping Village",
+      "LOCATION_JA": "おおばキャンプ村",
+      "PREF": "Tokyo",
+      "ADDRESS": "東京都西多摩郡日の出町大久野３７４１",
+      "LAT": "35.760438",
+      "LNG": "139.209443",
+      "FLYER": "images/festivals/grow-the-culture-open-air-2026-flyer.jpg",
+      "STATUS": "published"
+    },
+    {
+      "EDITION_ID": "fabulous-2026",
+      "FESTIVAL_ID": "fabulous",
+      "EDITION": "2026",
+      "DATE_START": "2026-09-05",
+      "DATE_END": "2026-09-06",
+      "LOCATION": "TAKE SEA",
+      "ADDRESS": "京都府宮津市脇340",
+      "LAT": "35.5298",
+      "LNG": "135.2106",
+      "FLYER": "images/festivals/fabulous-flyer.webp",
+      "STATUS": "published"
+    },
+    {
+      "EDITION_ID": "bondisco-2026",
+      "FESTIVAL_ID": "bondisco",
+      "EDITION": "2026",
+      "DATE_START": "2026-08-22",
+      "DATE_END": "2026-08-23",
+      "LOCATION": "Sanda Athletic Park",
+      "LOCATION_JA": "三田アスレチックパーク",
+      "ADDRESS": "兵庫県三田市波豆川282-1",
+      "LAT": "34.9197",
+      "LNG": "135.2892",
       "STATUS": "announced"
     }
   ]

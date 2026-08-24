@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-08-14T05:41:00.195Z",
-  "count": 630,
+  "_generatedAt": "2026-08-24T09:42:05.898Z",
+  "count": 857,
   "items": [
     {
       "EDITION_ID": "waifu-2026",
@@ -1855,6 +1855,1368 @@
       "ACT_LABEL": "kasetsu",
       "SET_TYPE": "dj",
       "SORT": "23"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "Steve Aoki",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "Armand Van Helden",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "Flight Facilities",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "Gorgon City",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "Sub Focus",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "Cyril",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "D.O.D",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "Korolova",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "Mall Grab",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "Hannah Laing",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "Anna Lunoe",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "Bella Claxton",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "Big Wet",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "DJ BORING",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "Choomba",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "Harvey Sutherland",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "Horatio Luna",
+      "SET_TYPE": "dj",
+      "SORT": "17"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "Human Movement",
+      "SET_TYPE": "dj",
+      "SORT": "18"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "Jimi The Klesis",
+      "SET_TYPE": "dj",
+      "SORT": "19"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "Kinder",
+      "SET_TYPE": "dj",
+      "SORT": "20"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "Late Nite Tuff Guy",
+      "SET_TYPE": "dj",
+      "SORT": "21"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "Loods",
+      "SET_TYPE": "dj",
+      "SORT": "22"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "Mell Hall",
+      "SET_TYPE": "dj",
+      "SORT": "23"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "Needs No Sleep",
+      "SET_TYPE": "dj",
+      "SORT": "24"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "Northeast Party House",
+      "SET_TYPE": "dj",
+      "SORT": "25"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "Paris",
+      "SET_TYPE": "dj",
+      "SORT": "26"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "Poolclash",
+      "SET_TYPE": "dj",
+      "SORT": "27"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "Slay",
+      "SET_TYPE": "dj",
+      "SORT": "28"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "STUM",
+      "SET_TYPE": "dj",
+      "SORT": "29"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "Tori Levett",
+      "SET_TYPE": "dj",
+      "SORT": "30"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "Wax Motif",
+      "SET_TYPE": "dj",
+      "SORT": "31"
+    },
+    {
+      "EDITION_ID": "snow-machine-japan-2026",
+      "ACT_LABEL": "World Champion",
+      "SET_TYPE": "dj",
+      "SORT": "32"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Alva Noto",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Daito Manabe",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Verses GT",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Eiko Ishibashi",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Jim O'Rourke",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Joe Talia",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Nicola Cruz",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Marie Davidson",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "WaqWaq Kingdom",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "goat",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Satoshi Tomiie",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Kuniyuki Takahashi",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Manami Sakamoto",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "GEZAN",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "NONOTAK",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Kyoka",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Takuma Nakata",
+      "SET_TYPE": "dj",
+      "SORT": "17"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Open Reel Ensemble",
+      "SET_TYPE": "dj",
+      "SORT": "18"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Yoichi Ochiai",
+      "SET_TYPE": "dj",
+      "SORT": "19"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Max Cooper",
+      "SET_TYPE": "dj",
+      "SORT": "20"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Abul Mogard",
+      "SET_TYPE": "dj",
+      "SORT": "21"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Grand River",
+      "SET_TYPE": "dj",
+      "SORT": "22"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Aurora Halal",
+      "SET_TYPE": "dj",
+      "SORT": "23"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "James Holden",
+      "SET_TYPE": "dj",
+      "SORT": "24"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Waclaw Zimpel",
+      "SET_TYPE": "dj",
+      "SORT": "25"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Speedy J",
+      "SET_TYPE": "dj",
+      "SORT": "26"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "e-Dancer",
+      "SET_TYPE": "dj",
+      "SORT": "27"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Shackleton",
+      "SET_TYPE": "dj",
+      "SORT": "28"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "machìna",
+      "SET_TYPE": "dj",
+      "SORT": "29"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Yu Su",
+      "SET_TYPE": "dj",
+      "SORT": "30"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Alva Noto",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Daito Manabe",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Verses GT",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Eiko Ishibashi",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Jim O'Rourke",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Joe Talia",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Nicola Cruz",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Marie Davidson",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "WaqWaq Kingdom",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "goat",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Satoshi Tomiie",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Kuniyuki Takahashi",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Manami Sakamoto",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "GEZAN",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "NONOTAK",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Kyoka",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Takuma Nakata",
+      "SET_TYPE": "dj",
+      "SORT": "17"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Open Reel Ensemble",
+      "SET_TYPE": "dj",
+      "SORT": "18"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Yoichi Ochiai",
+      "SET_TYPE": "dj",
+      "SORT": "19"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Max Cooper",
+      "SET_TYPE": "dj",
+      "SORT": "20"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Abul Mogard",
+      "SET_TYPE": "dj",
+      "SORT": "21"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Grand River",
+      "SET_TYPE": "dj",
+      "SORT": "22"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Aurora Halal",
+      "SET_TYPE": "dj",
+      "SORT": "23"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "James Holden",
+      "SET_TYPE": "dj",
+      "SORT": "24"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Waclaw Zimpel",
+      "SET_TYPE": "dj",
+      "SORT": "25"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Speedy J",
+      "SET_TYPE": "dj",
+      "SORT": "26"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "e-Dancer",
+      "SET_TYPE": "dj",
+      "SORT": "27"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Shackleton",
+      "SET_TYPE": "dj",
+      "SORT": "28"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "machìna",
+      "SET_TYPE": "dj",
+      "SORT": "29"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Yu Su",
+      "SET_TYPE": "dj",
+      "SORT": "30"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Alva Noto",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Daito Manabe",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Verses GT",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Eiko Ishibashi",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Jim O'Rourke",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Joe Talia",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Nicola Cruz",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Marie Davidson",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "WaqWaq Kingdom",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "goat",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Satoshi Tomiie",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Kuniyuki Takahashi",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Manami Sakamoto",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "GEZAN",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "NONOTAK",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Kyoka",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Takuma Nakata",
+      "SET_TYPE": "dj",
+      "SORT": "17"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Open Reel Ensemble",
+      "SET_TYPE": "dj",
+      "SORT": "18"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Yoichi Ochiai",
+      "SET_TYPE": "dj",
+      "SORT": "19"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Max Cooper",
+      "SET_TYPE": "dj",
+      "SORT": "20"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Abul Mogard",
+      "SET_TYPE": "dj",
+      "SORT": "21"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Grand River",
+      "SET_TYPE": "dj",
+      "SORT": "22"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Aurora Halal",
+      "SET_TYPE": "dj",
+      "SORT": "23"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "James Holden",
+      "SET_TYPE": "dj",
+      "SORT": "24"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Waclaw Zimpel",
+      "SET_TYPE": "dj",
+      "SORT": "25"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Speedy J",
+      "SET_TYPE": "dj",
+      "SORT": "26"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "e-Dancer",
+      "SET_TYPE": "dj",
+      "SORT": "27"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Shackleton",
+      "SET_TYPE": "dj",
+      "SORT": "28"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "machìna",
+      "SET_TYPE": "dj",
+      "SORT": "29"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Yu Su",
+      "SET_TYPE": "dj",
+      "SORT": "30"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Alva Noto",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Daito Manabe",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Verses GT",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Eiko Ishibashi",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Jim O'Rourke",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Joe Talia",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Nicola Cruz",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Marie Davidson",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "WaqWaq Kingdom",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "goat",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Satoshi Tomiie",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Kuniyuki Takahashi",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Manami Sakamoto",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "GEZAN",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "NONOTAK",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Kyoka",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Takuma Nakata",
+      "SET_TYPE": "dj",
+      "SORT": "17"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Open Reel Ensemble",
+      "SET_TYPE": "dj",
+      "SORT": "18"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Yoichi Ochiai",
+      "SET_TYPE": "dj",
+      "SORT": "19"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Max Cooper",
+      "SET_TYPE": "dj",
+      "SORT": "20"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Abul Mogard",
+      "SET_TYPE": "dj",
+      "SORT": "21"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Grand River",
+      "SET_TYPE": "dj",
+      "SORT": "22"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Aurora Halal",
+      "SET_TYPE": "dj",
+      "SORT": "23"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "James Holden",
+      "SET_TYPE": "dj",
+      "SORT": "24"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Waclaw Zimpel",
+      "SET_TYPE": "dj",
+      "SORT": "25"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Speedy J",
+      "SET_TYPE": "dj",
+      "SORT": "26"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "e-Dancer",
+      "SET_TYPE": "dj",
+      "SORT": "27"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Shackleton",
+      "SET_TYPE": "dj",
+      "SORT": "28"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "machìna",
+      "SET_TYPE": "dj",
+      "SORT": "29"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Yu Su",
+      "SET_TYPE": "dj",
+      "SORT": "30"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Alva Noto",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Daito Manabe",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Verses GT",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Eiko Ishibashi",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Jim O'Rourke",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Joe Talia",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Nicola Cruz",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Marie Davidson",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "WaqWaq Kingdom",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "goat",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Satoshi Tomiie",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Kuniyuki Takahashi",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Manami Sakamoto",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "GEZAN",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "NONOTAK",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Kyoka",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Takuma Nakata",
+      "SET_TYPE": "dj",
+      "SORT": "17"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Open Reel Ensemble",
+      "SET_TYPE": "dj",
+      "SORT": "18"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Yoichi Ochiai",
+      "SET_TYPE": "dj",
+      "SORT": "19"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Max Cooper",
+      "SET_TYPE": "dj",
+      "SORT": "20"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Abul Mogard",
+      "SET_TYPE": "dj",
+      "SORT": "21"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Grand River",
+      "SET_TYPE": "dj",
+      "SORT": "22"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Aurora Halal",
+      "SET_TYPE": "dj",
+      "SORT": "23"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "James Holden",
+      "SET_TYPE": "dj",
+      "SORT": "24"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Waclaw Zimpel",
+      "SET_TYPE": "dj",
+      "SORT": "25"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Speedy J",
+      "SET_TYPE": "dj",
+      "SORT": "26"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "e-Dancer",
+      "SET_TYPE": "dj",
+      "SORT": "27"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Shackleton",
+      "SET_TYPE": "dj",
+      "SORT": "28"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "machìna",
+      "SET_TYPE": "dj",
+      "SORT": "29"
+    },
+    {
+      "EDITION_ID": "mutek-2025",
+      "ACT_LABEL": "Yu Su",
+      "SET_TYPE": "dj",
+      "SORT": "30"
+    },
+    {
+      "EDITION_ID": "fabulous-2026",
+      "ACT_LABEL": "aratame",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "fabulous-2026",
+      "ACT_LABEL": "ayam",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "fabulous-2026",
+      "ACT_LABEL": "Charu",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "fabulous-2026",
+      "ACT_LABEL": "Crux a.k.a Muuta",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "fabulous-2026",
+      "ACT_LABEL": "disco very",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "fabulous-2026",
+      "ACT_LABEL": "e_minor",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "fabulous-2026",
+      "ACT_LABEL": "Gyro",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "fabulous-2026",
+      "ACT_LABEL": "Herzhaimer",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "fabulous-2026",
+      "ACT_LABEL": "Hideto",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "fabulous-2026",
+      "ACT_LABEL": "jutaka",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "fabulous-2026",
+      "ACT_LABEL": "keita",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "fabulous-2026",
+      "ACT_LABEL": "koma-sun",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "fabulous-2026",
+      "ACT_LABEL": "masato.mt",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "fabulous-2026",
+      "ACT_LABEL": "PaLa",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "fabulous-2026",
+      "ACT_LABEL": "psychoro",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "fabulous-2026",
+      "ACT_LABEL": "star tambourine",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
+      "EDITION_ID": "fabulous-2026",
+      "ACT_LABEL": "take-c",
+      "SET_TYPE": "dj",
+      "SORT": "17"
+    },
+    {
+      "EDITION_ID": "fabulous-2026",
+      "ACT_LABEL": "TEZ",
+      "SET_TYPE": "dj",
+      "SORT": "18"
+    },
+    {
+      "EDITION_ID": "fabulous-2026",
+      "ACT_LABEL": "Daredemo NHK",
+      "SET_TYPE": "dj",
+      "SORT": "19"
+    },
+    {
+      "EDITION_ID": "fabulous-2026",
+      "ACT_LABEL": "△HAL",
+      "SET_TYPE": "dj",
+      "SORT": "20"
+    },
+    {
+      "EDITION_ID": "bondisco-2025",
+      "ACT_LABEL": "81blend",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "bondisco-2025",
+      "ACT_LABEL": "aon",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "bondisco-2025",
+      "ACT_LABEL": "CM Smooth",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "bondisco-2025",
+      "ACT_LABEL": "dogezaExp",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "bondisco-2025",
+      "ACT_LABEL": "Giddlah Selecta",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "bondisco-2025",
+      "ACT_LABEL": "Haruki",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "bondisco-2025",
+      "ACT_LABEL": "Hexee",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "bondisco-2025",
+      "ACT_LABEL": "ironman",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "bondisco-2025",
+      "ACT_LABEL": "kannQazuja",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "bondisco-2025",
+      "ACT_LABEL": "kiku",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "bondisco-2025",
+      "ACT_LABEL": "Naluu",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "bondisco-2025",
+      "ACT_LABEL": "NSN",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "bondisco-2025",
+      "ACT_LABEL": "Ryu2",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "bondisco-2025",
+      "ACT_LABEL": "SHA_XUE",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "bondisco-2025",
+      "ACT_LABEL": "SHIROH",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "bondisco-2025",
+      "ACT_LABEL": "Space Kanta",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
+      "EDITION_ID": "bondisco-2025",
+      "ACT_LABEL": "SUETAKE",
+      "SET_TYPE": "dj",
+      "SORT": "17"
+    },
+    {
+      "EDITION_ID": "bondisco-2025",
+      "ACT_LABEL": "Tech-Bou",
+      "SET_TYPE": "dj",
+      "SORT": "18"
+    },
+    {
+      "EDITION_ID": "bondisco-2025",
+      "ACT_LABEL": "ushim",
+      "SET_TYPE": "dj",
+      "SORT": "19"
+    },
+    {
+      "EDITION_ID": "bondisco-2025",
+      "ACT_LABEL": "WATAYA",
+      "SET_TYPE": "dj",
+      "SORT": "20"
+    },
+    {
+      "EDITION_ID": "bondisco-2025",
+      "ACT_LABEL": "Xin",
+      "SET_TYPE": "dj",
+      "SORT": "21"
+    },
+    {
+      "EDITION_ID": "bondisco-2025",
+      "ACT_LABEL": "YAKO MIKA",
+      "SET_TYPE": "dj",
+      "SORT": "22"
+    },
+    {
+      "EDITION_ID": "bondisco-2025",
+      "ACT_LABEL": "Yona",
+      "SET_TYPE": "dj",
+      "SORT": "23"
+    },
+    {
+      "EDITION_ID": "bondisco-2025",
+      "ACT_LABEL": "H.YOROZU",
+      "SET_TYPE": "dj",
+      "SORT": "24"
+    },
+    {
+      "EDITION_ID": "bondisco-2025",
+      "ACT_LABEL": "Yoshihiro Kimura",
+      "SET_TYPE": "dj",
+      "SORT": "25"
     },
     {
       "EDITION_ID": "spring-love-harukaze-2026",

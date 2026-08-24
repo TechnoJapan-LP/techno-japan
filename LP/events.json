@@ -1,22 +1,16 @@
 {
   "source": "https://techno-japan.media/",
   "license": "データの出典として techno-japan.media へのリンクを求めます",
-  "count": 16,
+  "count": 18,
   "events": [
     {
-      "name": "Global Ark 2026",
-      "url": "https://techno-japan.media/festivals/global-ark.html",
-      "start": "2026-08-21",
-      "end": "2026-08-23",
-      "venue": "Nozoriko Camping Ground",
-      "pref": "Gunma",
-      "lat": 36.6976,
-      "lng": 138.6534,
-      "genres": [
-        "TECHNO",
-        "HOUSE"
-      ],
-      "tickets": "https://globalark.zaiko.io/en/e/global-ark-2026"
+      "name": "fabulous -endless summer SP- 2026",
+      "url": "https://techno-japan.media/festivals/fabulous.html",
+      "start": "2026-09-05",
+      "end": "2026-09-06",
+      "venue": "TAKE SEA",
+      "lat": 35.5298,
+      "lng": 135.2106
     },
     {
       "name": "ONE PARK FESTIVAL 2026",
@@ -183,8 +177,7 @@
       "url": "https://techno-japan.media/festivals/wonderfruit-kyoto.html",
       "start": "2026-10-22",
       "end": "2026-10-25",
-      "venue": "Kyoto (Ohara Sanso / ACG Villa Kyoto / Kurama Mountain / Ochill TeaRoom)",
-      "pref": "Kyoto"
+      "venue": "Kyoto (Ohara Sanso / ACG Villa Kyoto / Kurama Mountain / Ochill TeaRoom)"
     },
     {
       "name": "FESTIVAL de FRUE 2026",
@@ -206,10 +199,42 @@
       "end": "2026-11-08",
       "venue": "Ohba Camping Village",
       "pref": "Tokyo",
+      "lat": 35.760438,
+      "lng": 139.209443,
       "genres": [
         "TECHNO",
         "HOUSE",
         "BASS"
+      ]
+    },
+    {
+      "name": "Mutek 2026",
+      "url": "https://techno-japan.media/festivals/mutek.html",
+      "start": "2026-11-20",
+      "end": "2026-11-22",
+      "venue": "Shibuya",
+      "genres": [
+        "TECHNO",
+        "HOUSE",
+        "AMBIENT",
+        "LIVE",
+        "OTHERS"
+      ]
+    },
+    {
+      "name": "Snow Machine Japan 2027",
+      "url": "https://techno-japan.media/festivals/snow-machine-japan.html",
+      "start": "2027-03-02",
+      "end": "2027-03-07",
+      "venue": "HAKUBA VALLEY",
+      "pref": "Nagano",
+      "lat": 36.6982,
+      "lng": 137.8619,
+      "genres": [
+        "TECHNO",
+        "HOUSE",
+        "LIVE",
+        "OTHERS"
       ]
     }
   ]
