@@ -5620,3 +5620,48 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
     5321行「`?sort=z-a` の利用者影響: 未確認」は、**本エントリで解消**。
   - 390px の確認は iframe 方式が使える（ハブの CSP は `frame-src 'self'` を許可）。
     cms.html だけは `frame-src 'none'` のため不可。
+
+## 2026-08-24 ✅ feat/list-visual を本番公開・Publish経路の実機確認まで完了
+
+- 実施: `feat/list-visual` を `main` へ `--no-ff` マージして公開。デプロイ後、
+  **ユーザーが本番CMSで Publish Now を1回実行**し、AGENTS.md の
+  「Publish の経路を触ったら実機で1回通すまで完了にしない」を満たした。
+  （ダイアログの自動承認は安全機構にブロックされたため、押下はユーザーが実施。回避はしていない）
+- コミット: `eeb2c6a9` Merge（486ファイル / +3741 −730）→ 本番デプロイ成功。
+  続いて `5fac4ad8 cms: publish data.js` / `e187f1ec chore: regenerate ...`。
+- 検証（すべて実測）:
+  - push前 `bash scripts/preflight.sh`（main の状態で）→ **全40件成功**
+  - `Deploy LP to GitHub Pages` run `32719391236` → **success**
+  - `Publish pipeline` run `32723161475` → **success**（前回に続き2回連続成功）
+  - **空コミットではない**: `5fac4ad8` は `LP/data.js | 5 +++++`（1ファイル5行追加）
+  - **VENUES 4列が初めて data.js に届いた**（旧cms.js → 新cms.js の差）:
+    `subtype 0→1 / hours 0→1 / charge 0→0 / features 0→3`
+    これはローカルで事前に実測したダイアログの数字
+    `VENUES 22件（SUBTYPE 1 / HOURS 1 / CHARGE 0 / FEATURES 3）` と**完全一致**
+  - **本番 data.js と main の data.js が完全一致**（`diff`）
+  - 本番の実ブラウザ確認: `/artists.html` 96件・A–Z・並び替えUIなし・Joma/Noritake表示 ✅
+    `/venues.html` 種別フィルタ動作（22→CLUBS 13件・全て `data-type=club`）✅
+    `/en/artists.html` `/en/venues.html` とも HTTP 200 ✅
+  - 本番CMSが新 `cms.js` を配信していることを確認（`PROD_CMS_HOST` 定義・
+    ローカル用ガード・大文字ラベルの3点） ✅
+  - **詳細ページへの反映**: 本番 `/venues/vent.html` と `/en/venues/vent.html` に
+    `<dt>HOURS</dt><dd>23:00~05:00</dd>` が出ることを確認 ✅
+    シート → GAS → data.js → 詳細ページまでエンドツーエンドで通った。
+- 変更したパターン: マージのみ（コード変更なし）。
+- 未確認の類似パターン:
+  - **`features` は詳細ページに表示されない。これは仕様**であり不具合ではない。
+    `VENUE_PRACTICAL_FEATURES` は注意書き6種（cash-only / cashless-only / id-required /
+    no-photo / smoking / no-reentry）だけを「GOOD TO KNOW」に出す設計で、
+    現在 features を持つ3件はすべて `after-hours`（フィルタ用タグ）のため対象外。
+    `subtype` も INFORMATION 行には出さず（表示は `type`）、ハブの種別分類に使う。
+  - CMS で SUBTYPE / HOURS / CHARGE / FEATURES を**入力して保存する**経路: **未確認**。
+    今回確認したのは読み取り→公開→表示の経路。書き込み（`update_row`）は未検証。
+  - `charge` は全22件が未入力のため、表示経路そのものが未検証。
+  - 実機端末（iOS/Android）での確認は未実施。390pxはiframe再現であり、
+    タッチ・dpr・iOS Safari固有挙動は含まない。
+  - ホバー時プレビューの視認性（handoff 5280行）は今回の対象外で未確認のまま。
+- 次の担当への注意:
+  - **本番は正常。** 8/14から10日間止まっていた公開は復旧し、以後2回連続で成功している。
+  - 残る本命は**再発防止**。並行セッション（Codex）の「未公開検知方式の提案」エントリを参照。
+    今回も人が気づくまで10日かかった。検知が無い限り同じことが起きる。
+  - 切り戻しが必要な場合は `git revert -m 1 eeb2c6a9`。
