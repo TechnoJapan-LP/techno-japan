@@ -6798,3 +6798,72 @@ push した中身はいずれも無害（docs / スクリプトのみ）だっ�
 - パイプは exit code を最後のコマンドのものにすり替える。
   関門にする値は、すり替わらない形で取り出す。
 - 計測プロセスの後始末まで含めて計測。孤児が次の計測を壊す。
+
+### 9-95. ローカルCMSからは Publish できない——CSP を足さないことを方針にした（2026-08-24）
+
+#### 起きたこと
+
+ローカル（`http://127.0.0.1:8000/cms.html`）で Publish Now を押すと、
+公開内容の確認ダイアログに**辿り着く前に**止まった。
+
+```
+⚠️ 公開（PUBLISH）に失敗しました
+公開中のdata.jsを確認できませんでした。空コミット防止のため公開を停止しました。
+```
+
+#### 原因
+
+同じ日の変更で `fetchPublishedDataJs()` が「本番の data.js を読めなければ throw する」に
+なった（それ以前は `null` を返して公開を続行していた）。
+ところが `LP/cms.html` の CSP `connect-src` に `techno-japan.media` が無い。
+ローカルでは `'self'` = `127.0.0.1:8000` なので、本番 data.js への通信はブラウザに
+止められる。実測 `TypeError: Failed to fetch`。
+
+**CORS は無関係。** 切り分け済み:
+
+```
+curl -I -H "Origin: http://127.0.0.1:8000" https://techno-japan.media/data.js
+→ HTTP/2 200 / access-control-allow-origin: *
+```
+
+つまり原因は CSP `connect-src` 単独。1行足せば通る状態だった。
+
+#### 判断: 足さない
+
+足せばローカルからも Publish が通る。**足さないことを選んだ。**
+
+このリポジトリは push した時点で本番に出る。2026-08 の事故は、どれも
+「意図せず本番が動いた」形だった。ローカルCMSから本番へ push できる経路を
+開けておく利点より、開いていることの危険の方が大きいと判断した。
+
+「ローカルからは本番へ出さない」を、覚えておく約束ではなく**ブラウザに強制させる**。
+CSP に足さないこと自体が、その強制になっている。
+
+#### 「失敗」が「仕様」だと分かるようにした
+
+黙って落ちるだけでは、次に見た人が同じ調査を繰り返す。実際にこの日、
+CSP に辿り着くまでに切り分けが必要だった。そこで:
+
+- `fetchPublishedDataJs()` は、ホストが `techno-japan.media` でなければ
+  「ローカルからは Publish できません。これは仕様です」と**言い切る**メッセージを出す。
+  CSP が原因であることと、本番CMSから行うことも文面に含める。
+- `LP/cms.html` の CSP コメントに、`techno-japan.media` が**無いのは忘れではない**ことと、
+  足すと何が起きるかを書いた。
+
+#### 副作用
+
+Publish 経路をローカルで通しきれなくなった。`publishPayloadSummary` の表示を
+確認するには、`fetchPublishedDataJs` を一時的に差し替えるしかない。
+**本番CMSでの1回の実機確認は、引き続き必須**（AGENTS.md「Publish の経路を触ったら」）。
+
+#### 付随して確認したこと
+
+`publishPayloadSummary` の VENUES 行（大文字ラベル化）は正しく動作していた。
+
+```
+VENUES     22件（SUBTYPE 1 / HOURS 1 / CHARGE 0 / FEATURES 3）
+```
+
+GAS `get_sheet&sheet=VENUES` を直接叩いた集計（total 22 / subtype 1 / hours 1 /
+charge 0 / features 3）と完全一致。CHARGE 0 はデータ未入力によるもので、
+GAS の列落ちではない（ユーザー確認済み）。

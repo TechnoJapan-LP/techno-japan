@@ -6422,7 +6422,7 @@ function publishPayloadSummary(content) {
     '',
     `  FESTIVALS  ${items('FESTIVALS')}件`,
     `  ARTISTS    ${items('ARTISTS')}件（紹介文 ${field('ARTISTS','bio')} / 画像 ${field('ARTISTS','image')} / リンク ${field('ARTISTS','links')}）`,
-    `  VENUES     ${items('VENUES')}件（subtype ${field('VENUES','subtype')} / hours ${field('VENUES','hours')} / charge ${field('VENUES','charge')} / features ${field('VENUES','features')}）`,
+    `  VENUES     ${items('VENUES')}件（SUBTYPE ${field('VENUES','subtype')} / HOURS ${field('VENUES','hours')} / CHARGE ${field('VENUES','charge')} / FEATURES ${field('VENUES','features')}）`,
     `  ARTICLES   ${items('ARTICLES')}件（英語本文 ${field('ARTICLES','body_en')} / 関連フェス ${field('ARTICLES','festivalId')}）`,
     `  EVENTS     ${items('EVENTS')}件`,
     '',
@@ -6432,11 +6432,36 @@ function publishPayloadSummary(content) {
 
 /* いま公開されている data.js と同じなら、送っても何も起きない。
    §9-67 では空コミットが「成功」に見え、原因の特定に半日かかった。
-   **同じであることを、成功と呼ばない。** */
+   **同じであることを、成功と呼ばない。比較できない場合も送らない。**
+
+   ■ ローカル（127.0.0.1 等）からは、この関数は必ず失敗する。**それが仕様**（§9-95）
+
+   cms.html の CSP connect-src に techno-japan.media を**意図的に入れていない**。
+   そのためローカルでは fetch がブラウザに止められ、Publish はここで停止する。
+   「ローカルからは本番へ出せない」を、覚えておく約束ではなくブラウザに強制させている。
+   通したくなったら、CSP を触る前に §9-95 を読むこと。 */
+const PROD_CMS_HOST = 'techno-japan.media';
+
 function fetchPublishedDataJs() {
-  return fetch('https://techno-japan.media/data.js?ts=' + Date.now(), { cache: 'no-store' })
-    .then((r) => (r.ok ? r.text() : null))
-    .catch(() => null);   // 取れなくても公開は止めない
+  return fetch('https://' + PROD_CMS_HOST + '/data.js?ts=' + Date.now(), { cache: 'no-store' })
+    .then((r) => {
+      if (!r.ok) throw new Error('公開中のdata.jsを確認できませんでした（HTTP ' + r.status + '）。空コミット防止のため公開を停止しました。');
+      return r.text();
+    })
+    .catch((e) => {
+      if (e instanceof Error && e.message.includes('公開中のdata.js')) throw e;
+      /* 「通信できませんでした」とだけ出すと、次に見た人が CSP に辿り着くまで時間を溶かす。
+         2026-08-24 に実際にそうなった。ローカルなら、仕様であることをその場で言い切る。 */
+      if (location.hostname !== PROD_CMS_HOST) {
+        throw new Error(
+          'ローカル（' + location.hostname + '）からは Publish できません。これは仕様です。\n\n'
+          + 'cms.html の CSP connect-src に ' + PROD_CMS_HOST + ' を入れていないため、'
+          + '公開中の data.js を読めず、空コミット防止のガードが働きました。\n\n'
+          + 'Publish は本番CMS（https://' + PROD_CMS_HOST + '/cms.html）から行ってください。'
+        );
+      }
+      throw new Error('公開中のdata.jsを確認できませんでした。空コミット防止のため公開を停止しました。');
+    });
 }
 
 function publishDataJs(opts){

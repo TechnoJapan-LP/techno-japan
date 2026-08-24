@@ -19,7 +19,17 @@
      localStorage に認証トークン（cms_token）を持つため、ここで外部スクリプトの
      実行を許すとトークンを読める。check_asset_versions.py が
      「CMS の外部 JavaScript 参照」を検査しているのと同じ意図を、
-     ブラウザ側でも強制する。 -->
+     ブラウザ側でも強制する。
+
+     ■ connect-src に techno-japan.media を入れていないのは、忘れではない（§9-95）
+
+     cms.js の fetchPublishedDataJs() は本番の data.js を読み、「公開中と同じ内容か」を
+     見る。本番CMS は techno-japan.media 上にあるので 'self' で読めるが、
+     ローカル（127.0.0.1）からは読めない。その結果、**ローカルからは Publish が
+     必ず止まる**。2026-08-24 に「ローカルからは本番へ出さない」を方針として選び、
+     ここを足さないことでブラウザに強制させている。
+     ここに techno-japan.media を足すと、ローカルCMSの Publish Now が本物になる。
+     足す前に §9-95 を読むこと。 -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://nominatim.openstreetmap.org; form-action 'self'; frame-src 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
 
 <link rel="icon" href="/favicon.ico?v=2" sizes="32x32">
@@ -557,6 +567,6 @@
 </div>
 
 <script type="module" src="article-shortcodes.js?v=2"></script>
-<script src="cms.js?v=99" defer></script>
+<script src="cms.js?v=100" defer></script>
 </body>
 </html>
