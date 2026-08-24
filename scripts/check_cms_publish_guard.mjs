@@ -41,6 +41,7 @@ const BRIDGE = `;globalThis.__T = {
   publishSanityCheck,
   publishPayloadSummary,
   buildVenuesJs,
+  fetchPublishedDataJs,
   validateEditionSyncBeforeSave,
   setEditionSheetState: (loaded, rows) => {
     editionSheetLoaded = loaded;
@@ -101,6 +102,20 @@ const check = (name, pass, detail = '') => {
 };
 
 const c = makeCtx();
+
+/* --- -1. 空コミットを成功扱いしない経路 ------------------------------- */
+{
+  console.log('空コミット防止の経路');
+  check('公開内容の比較に失敗したら送信を止める',
+    /fetchPublishedDataJs/.test(src)
+      && !/\.catch\(\(\) => null\)/.test(src)
+      && /空コミット防止のため公開を停止しました/.test(src));
+  const summary = c.__T.publishPayloadSummary([
+    'const VENUES = [', '  {', '    id: "v",',
+    '    features: ["after-hours"],', '  },', '];',
+  ].join('\n'));
+  check('Publish要約にFEATURES件数を表示する', /FEATURES 1/.test(summary), summary);
+}
 
 /* --- 0. 保存開始前のEDITION同期チェック ------------------------------- */
 {
@@ -289,7 +304,7 @@ const c = makeCtx();
   check('記事の英語本文と関連フェスの数を出す',
     /ARTICLES\s+1件（英語本文 1 \/ 関連フェス 1）/.test(sum), sum);
   check('VENUESの4列の件数を出す',
-    /VENUES\s+1件（subtype 1 \/ hours 1 \/ charge 1 \/ features 1）/.test(sum), sum);
+    /VENUES\s+1件（SUBTYPE 1 \/ HOURS 1 \/ CHARGE 1 \/ FEATURES 1）/.test(sum), sum);
   const venueJs = c.__T.buildVenuesJs([{
     id: 'v1', name: 'Test Bar', subtype: 'dj-bar', hours: '20:00–03:00',
     charge: 'no-cover', features: 'after-hours;vinyl, no-cover',
@@ -313,7 +328,7 @@ const c = makeCtx();
   check('列が落ちると件数が減って見える（§9-67 の再現）',
     /紹介文 0 \/ 画像 0/.test(sum2), sum2);
   check('VENUESの4列が落ちると0件になる',
-    /VENUES\s+1件（subtype 0 \/ hours 0 \/ charge 0 \/ features 0）/.test(sum2), sum2);
+    /VENUES\s+1件（SUBTYPE 0 \/ HOURS 0 \/ CHARGE 0 \/ FEATURES 0）/.test(sum2), sum2);
 }
 
 console.log();
