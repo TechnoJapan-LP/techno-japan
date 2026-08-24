@@ -5547,6 +5547,29 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
   - 復旧後も、Publish失敗を10日間見逃さないための二層監視（Actions失敗通知＋本番/main差分watchdog）は必要。
   - 監視の実装承認後、まず外部WebhookなしのGitHub Actions通知＋SHA-256監視から着手する。
 
+## 2026-08-24 未公開検知の二層構成を実装
+
+- 実施: 本番未公開を検知する共通スクリプトとGitHub Actionsを追加した。
+  1. `scripts/check_production_sync.mjs` がmainの`LP/data.js`と本番URLの`data.js`をSHA-256で比較。
+  2. 同スクリプトがPublish pipelineとsitemap/RSS生成の最新completed runをGitHub APIで確認。
+  3. `.github/workflows/production-sync-watchdog.yml`を30分ごとに実行し、差分・失敗を検知。
+  4. 対象workflowの失敗時は`workflow_run`経由で別jobも失敗させ、GitHub Actions通知に乗せる。
+  外部WebhookやCSP変更は追加していない。
+- コミット: 未コミット・未push。監視コードの実装までで、本番公開はしていない。
+- 検証:
+  - `node scripts/check_production_sync.mjs --self-test` → 成功。
+  - watchdog YAMLの構文・`schedule` / `workflow_run`トリガー → 成功。
+  - `bash scripts/preflight.sh` → **全41件成功**（ネットワーク・ローカルブラウザ許可で再実行）。
+  - 通常権限のpreflightでは外部画像DNSとローカルHTTPサーバー権限で失敗したが、コード修正後の再実行で解消。
+- 変更したパターン: 定期SHA-256照合、Publish/sitemap失敗の別経路検知、監視スクリプトの自己テストを追加。
+- 未確認の類似パターン: GitHubリポジトリのWatch設定により担当者へメール/画面通知が届くか、
+  Actionsのスケジュール実行が実際に30分周期で起動するかは未確認。GitHub上へのpushが必要。
+- 次の担当への注意・判断待ち:
+  - 本番へ反映するには、監視コードをmainへpush後、Actionsの`Production sync watchdog`を手動実行する。
+  - その実行で「main/live hash一致」「Publish pipeline success」「sitemap/RSS success」を確認する。
+  - GitHub通知を受け取りたい担当者は、リポジトリのActions通知またはWatch設定を有効にする。
+  - LINE/Slack等の外部通知は今回の範囲外。必要なら別途Webhookの送信先を決めてから追加する。
+
 ## 2026-08-24 ✅ 本番復旧（8/14以来10日ぶりの公開）
 
 - 実施: ユーザーが ARTISTS シートの Joma(88行) / Noritake(76行) の STATUS を
@@ -5665,3 +5688,48 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
   - 残る本命は**再発防止**。並行セッション（Codex）の「未公開検知方式の提案」エントリを参照。
     今回も人が気づくまで10日かかった。検知が無い限り同じことが起きる。
   - 切り戻しが必要な場合は `git revert -m 1 eeb2c6a9`。
+
+## 2026-08-24 未公開検知の見張り番を実装（Codex実装＋誤報の猶予・自己テスト強化）
+
+- 実施: Codex が実装した二層構成（`scripts/check_production_sync.mjs` /
+  `.github/workflows/production-sync-watchdog.yml` / preflight登録）をレビューし、
+  2点を追加した。あわせて、見張り番が最初から緑で動くよう
+  `Generate sitemap.xml & rss.xml` を手動実行して失敗状態を解消した。
+- コミット: `7feeea70`（見張り番の改良）。
+  `Generate sitemap.xml & rss.xml` run `32727739889` は workflow_dispatch で実行。
+- 検証（すべて実測）:
+  - `bash scripts/preflight.sh` → **全41件成功**（自己テスト1本増）
+  - **10日間の障害と同じ形**（`eeb2c6a9` の旧 data.js を main に見立てる）→ **exit 1 で検知**
+  - 猶予が誤って効いていないこと: data.js 最終更新 11:41:40Z / 実行 12:18Z（37分前）→
+    猶予外として正しく鳴った
+  - **自己テストが壊れを捕まえるか**: `evaluateSync` の戻り値を `ok:true` に改変すると
+    `自己テスト失敗: 未公開状態を異常として検知する` で **exit 1**。復元すると exit 0。
+    検知が壊れても緑のまま、という状態にはならない。
+  - 実データ（GitHub API込み）→ **exit 0**。
+    `Publish pipeline: success / 11:41:43Z`、`sitemap / RSS: success / 12:33:40Z`。
+  - 見張り番は実装直後に**実在の問題を1件検知した**（sitemap/RSS が 03:51 の failure のまま）。
+    誤検知ではなく、手動再実行で解消。中身は問題なかった（本番sitemap 446URL・
+    joma/noritake 掲載・main と一致）。
+- 変更したパターン:
+  1. **誤報の猶予**: 不一致を見つけたときだけ追加問い合わせし、
+     (a) `publish-pipeline` / `deploy-pages` に完了していない run がある、
+     (b) `LP/data.js` の最終更新が10分以内、のいずれかなら異常扱いしない。
+     API を引けない場合は**猶予を与えず鳴らす**（見逃すより誤報の方が直せる）。
+     通常時の API 消費は増やさない。
+  2. **自己テストの範囲**: 判断を純関数 `evaluateSync` に切り出し、
+     「不一致で落ちる／一致で通す／公開中は鳴らさない／10日前は猶予外／
+     時刻不明・未来日時に猶予を与えない」まで15項目を検査。
+     従来は sha256 と run 抽出だけで、**不一致検知そのものが未検査**だった。
+- 未確認の類似パターン:
+  - **猶予パスの API 統合は実発火していない。** コミット時刻の取得・表示が動くことと、
+    判定ロジックの単体テストは済んでいるが、「進行中の run がある状態」を作って
+    通した検証はしていない。次の Publish 時に観察すること。
+  - **失敗が誰に届くかは未確認。** ジョブが失敗するところまでは動くが、
+    通知は GitHub の設定次第（Settings → Notifications → Actions）。
+    **ここが未設定だと、失敗しても今回と同じく誰も気づかない。**
+    この見張り番の価値は実質ここにかかっている。**ユーザー確認待ち。**
+  - 30分間隔の cron が実際に回り始めるかは、初回発火まで未確認。
+- 次の担当への注意:
+  - 見張り番が赤いとき、まず疑うのは本番ではなく**通知が届いているか**。
+    2026-08 の事故は「失敗していたこと」ではなく「気づかなかったこと」が本体だった。
+  - `evaluateSync` は純関数のまま保つこと。ネットワークを混ぜると自己テストが書けなくなる。
