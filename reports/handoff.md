@@ -5129,6 +5129,52 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - 副題はブランド・ページ説明として残している。
 - コミット・push・本番反映はユーザーの確認後に行う。
 
+## 2026-08-24 Publish空コミット対策・GAS VENUES列手貼り資料
+
+### 実施
+
+- `LP/cms.js` のPublish要約を `SUBTYPE / HOURS / CHARGE / FEATURES` 表記へ変更し、`FEATURES n件`を確認できるようにした。
+- 公開中の`data.js`を取得できない場合は送信を止めるfail-closedへ変更し、比較不能な状態で空コミットを作らないようにした。
+- `LP/cms.html` の`cms.js`参照をv99からv100へ更新。
+- `scripts/gas-update/venue-columns.patch.gs` を追加。GAS `Code.gs`の既存`COLUMNS`へ`DESC_EN / SUBTYPE / HOURS / CHARGE / FEATURES`を追加する手貼り用資料と確認関数を用意。
+- `scripts/gas-update/README.md` に貼り替え・再デプロイ・`snapshot.js`実行・実差分確認の手順を追加。
+- `scripts/check_gas_venue_columns.mjs` を追加し、preflightへ登録。
+- `scripts/check_cms_publish_guard.mjs` に空コミット防止とFEATURES件数の検査を追加。
+
+### コミット
+
+- 未コミット。push・本番反映は未実施。
+- GAS実物への貼り付け・再デプロイも未実施。
+
+### 検証
+
+- `node scripts/check_gas_venue_columns.mjs`: 成功。
+- `node scripts/check_cms_publish_guard.mjs`: 成功。
+- `node scripts/check_cms_fetch_path.mjs`: 成功。
+- `git diff --check`: 成功。
+- `bash scripts/preflight.sh`: 省略なしで全40件成功。
+- preflight内の実ブラウザ確認（CMSレイアウト・JA/ENハブ）: 成功。
+
+### 変更したパターン
+
+- 公開中データと比較できないときにPublishを止める、空コミット防止のfail-closedパターン。
+- Publish前のデータ要約で、VENUESの4列を大文字ラベルと件数で明示するパターン。
+- 機密設定を含むGAS本体をリポジトリへ持ち込まず、必要な列差分だけを手貼り資料として管理するパターン。
+
+### 未確認の類似パターン
+
+- GASへ`venue-columns.patch.gs`の内容を貼り、再デプロイした実機経路: 未確認。
+- `snapshot.js`実行後の`live-snapshot.json`更新と`node scripts/check_gas_sync.mjs`: 未確認。
+- 認証済み本番CMSで`FEATURES n件`を確認し、`cms: publish data.js`に`LP/data.js`の実差分が出ること: 未確認。
+- Publish後のGitHub Actions成功と本番反映: 未確認。
+
+### 次の担当への注意・判断待ち
+
+- `COLUMNS`は既存列を消さず、`DESC_EN`（無い場合）と4列だけを末尾へ追加する。
+- GASは保存だけでは本番に反映されない。必ず新バージョンとして再デプロイする。
+- `FEATURES n件`が0件の場合は列落ちの可能性があるため、空コミットを成功扱いにしない。
+- GAS貼り付け後に、ユーザーとClaudeで実機Publish→実差分commit→Actions成功を確認してから、ARTISTS変更の公開タイミングを判断する。
+
 ## 2026-08-24 ARTISTS 1280px以上の3列表示
 
 ### 実施
@@ -5300,3 +5346,95 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - 変更したパターン: 新規スクリプトのみ。
 - 未確認の類似パターン: LINEUPS の二重管理は未検討（Airtable に LINEUPS 相当は無し）。確認済み・0件。
 - 次の担当への注意: 国内フェスの開催回は LP シートの EDITIONS が正。Airtable に作らない（巡回もこのルールに従う）。
+
+## 2026-08-24 ローカルCMSからは Publish できない（CSPを足さない方針を明文化）
+
+- 実施: ローカルCMS（`http://127.0.0.1:8000/cms.html`）で Publish の公開確認ダイアログを検証。
+  素の状態では**ダイアログ手前で停止**することを実測。原因は `LP/cms.html` の CSP
+  `connect-src` に `techno-japan.media` が無く、変更後の `fetchPublishedDataJs()` が
+  本番 data.js を読めずに throw するため。ユーザー判断で**CSPは足さない**（ローカルからは
+  本番へ出さない）。代わりに「失敗が仕様であること」を3箇所に明記した。
+  1. `LP/cms.js` `fetchPublishedDataJs()` — ホストが本番でなければ
+     「ローカルからは Publish できません。これは仕様です」と原因つきで言い切る
+  2. `LP/cms.html` CSP コメント — `techno-japan.media` が無いのは忘れではない旨
+  3. `AUDIT_TECHNO_JAPAN.md` §9-95 — 経緯・切り分け・判断理由
+- コミット: **未コミット**（ユーザーが最終確認後に本番pushへ進む予定）。
+- 検証:
+  - CSP が原因であることの切り分け: `curl -I -H "Origin: http://127.0.0.1:8000"
+    https://techno-japan.media/data.js` → `HTTP/2 200` / `access-control-allow-origin: *`。
+    **CORSは無関係、CSP単独**と確定。ブラウザ実測は `TypeError: Failed to fetch`。
+  - 公開確認ダイアログの内容（`fetchPublishedDataJs` を一時差し替えて到達、1280px / 500px で同一）:
+    `VENUES 22件（SUBTYPE 1 / HOURS 1 / CHARGE 0 / FEATURES 3）`。大文字ラベル化は正常、
+    FEATURES は 0 ではない。
+  - 数字の検算: GAS `get_sheet&sheet=VENUES` を直接集計し
+    `total 22 / subtype 1 / hours 1 / charge 0 / features 3` で**ダイアログと完全一致**。
+    CHARGE 0 はデータ未入力（ユーザー確認済み）で、GAS の列落ちではない。
+  - **新メッセージの実ブラウザ確認（1280px）**: 差し替え無しの素の状態で Publish Now を押し、
+    失敗パネルに「ローカル（127.0.0.1）からは Publish できません。これは仕様です。」＋
+    CSP が原因である旨＋本番CMSへの誘導が3段落で表示されることを確認。
+  - `bash scripts/preflight.sh`: **全40件 成功**。
+    （Publish 経路の変更を検知して「実機で1回通すまで完了にしない」警告が出る。下記のとおり未確認）
+  - Console: クリーンなスーパーリロード後 0件。Publish 実行中の赤字はアプリ自身が意図して
+    出す「Publishをキャンセルしました」「ローカルからは Publish できません」等のみ。
+  - **Publish Now は毎回キャンセルで終了。GASへの `publish_data_js` 送信は0回**
+    （送信遮断ガードの発動回数0＝そもそも到達せず）。GitHub操作・push は行っていない。
+- 変更したパターン: `fetchPublishedDataJs()` の catch で、`location.hostname` が
+  `techno-japan.media` 以外なら仕様である旨のメッセージを投げる分岐を追加。
+  併せて本番ホスト名を定数 `PROD_CMS_HOST` に切り出した（同名の既存識別子なし・確認済み）。
+- 未確認の類似パターン:
+  - **本番CMS上での `fetchPublishedDataJs` の動作: 未確認。** 同一オリジンなので `'self'` で
+    通る想定だが未検証。本番CMSで Publish Now を1回通すまで完了にしない（AGENTS.md）。
+  - GAS COLUMNS の手貼り: **確認済み・適用済み**（下記の追記を参照）。
+  - **390px 幅: 未確認。** Chrome がウィンドウを500px未満にできず（実測 `innerWidth=500`）、
+    iframe での回避も cms.html 自身の `frame-src 'none'` に阻まれた。到達可能な最小幅
+    500px で確認し、1280px と同一の内容を得た。
+  - 公開確認ダイアログは `confirm()`（ブラウザ標準）であり、ページ幅の影響を受けず
+    スクリーンショットにも写らない。上記の文面は実行時に捕捉した実物。
+  - 他の CMS 画面から本番オリジンへ通信する箇所: 確認済み・0件
+    （`connect-src` を要するのは GAS と nominatim のみ）。
+- 次の担当への注意:
+  - **ローカルで Publish が失敗するのは正常。** CSP に `techno-japan.media` を足せば
+    通るが、足さないことが方針。触る前に §9-95 を読むこと。
+  - `publishPayloadSummary` の表示をローカルで見るには `fetchPublishedDataJs` の
+    一時差し替えが要る。差し替えたまま放置しないこと（空コミット防止ガードが死ぬ）。
+  - 本番pushの前に `bash scripts/preflight.sh` を全件通すこと。
+
+## 2026-08-24 GAS COLUMNS は適用済みだった／手順書が実物と食い違っていた
+
+- 実施: 「GAS 手貼りが未確認」を解消するため、Apps Script「Techno Japan」を
+  **読み取りのみ**で開いて実物を確認した。結果、**作業は不要**（すでに適用・デプロイ済み）。
+  一方で、リポジトリの手順書が実物と食い違っていたため訂正した。
+- コミット: **未コミット**（ユーザーが最終確認後に本番pushへ進む予定）。
+- 検証:
+  - `コード.gs` 冒頭の `const COLUMNS = [...]` に
+    `desc_en / subtype / hours / charge / features` が**すべて存在**（実物を目視）。
+  - アクティブなデプロイは **バージョン62（2026/08/24 14:35）**。デプロイIDは
+    `cms.js` の `GAS_URL`（`AKfycbxhJ6rtGoAirNyV5TtBvzWHNOT8RuB0nf...`）と一致。
+    **保存だけでなく再デプロイまで完了している。**
+  - `node scripts/check_gas_venue_columns.mjs` → ✅。
+    大文字を注入すると exit 1（`手貼りパッチのVENUE_COLUMNS_REQUIREDが大文字`）になることも確認。
+    検査が素通りしないことを実証済み。
+- 変更したパターン: **列名の大文字→小文字の訂正**を3ファイルに適用。
+  実物の `COLUMNS` は既存要素を含めすべて小文字で、CMS のペイロードキーも小文字。
+  手順書だけが大文字（`'DESC_EN', 'SUBTYPE', ...`）を指示しており、そのとおりにすると
+  AUDIT §9-69「大文字小文字で値が消える」を再現する状態だった。
+  1. `scripts/gas-update/venue-columns.patch.gs` — 小文字化。`assertVenueColumnsPatch_()` は
+     大文字小文字を問わず突き合わせるようにし、冒頭に「適用済み」の状態を明記。
+  2. `scripts/gas-update/README.md` — 冒頭に「✅ 適用済み。作業は要らない」と実物のCOLUMNSを
+     記載。手順は再適用用として残し、コード例を小文字に訂正。
+  3. `scripts/check_gas_venue_columns.mjs` — 期待値を小文字に。加えて、大文字で書き戻されたら
+     落ちるガードを追加。**散文ではなくコード部分だけ**を見る（最初に散文まで拾って
+     正しい手順書を落としたため、その場で修正した）。
+- 未確認の類似パターン:
+  - `assertVenueColumnsPatch_()` の **Apps Script 上での実行: 未実施**。
+    COLUMNS は目視で確認済みのため実行しなくても結論は変わらないが、
+    関数そのものの動作は未検証。
+  - `live-snapshot.json` は 2026-08-10（バージョン59）のまま。**バージョン62 に未更新**。
+    更新には Apps Script エディタのコンソールで `snapshot.js` を実行する必要がある（未実施）。
+    ただし `check_gas_sync.mjs` が見るのは AI 系3関数の指紋で、今回の COLUMNS 変更は対象外。
+  - CMS で SUBTYPE / HOURS / CHARGE / FEATURES を**入力して保存する**経路: 未確認。
+    COLUMNS が揃ったので通る想定だが、実機で保存→再表示までは見ていない。
+- 次の担当への注意:
+  - **GAS の手貼りは終わっている。もう一度貼らないこと。** 特に大文字で足さないこと。
+  - 手順書を書くときは、実物を開いて確かめてから書く。今回は実物が小文字なのに
+    手順書が大文字を指示していた（Publish の実機調査から起票された想定ベースの記述）。
