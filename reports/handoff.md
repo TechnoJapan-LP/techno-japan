@@ -5527,7 +5527,25 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
     - 不一致なら「本番とmainのdata.jsが不一致」として失敗し、SHAと最終成功時刻を出す。
     - Publish pipelineまたはmeta生成が失敗したら、失敗runのURLと最初の失敗ステップを出す。
     - 空コミットでPublish pipelineが起動しなくても、watchdogの差分検査で検知する。
-    - 同じ障害を毎回大量通知せず、GitHub Issueまたは同一タイトルのアラートを更新する。
+  - 同じ障害を毎回大量通知せず、GitHub Issueまたは同一タイトルのアラートを更新する。
+
+## 2026-08-24 Publish復旧確認（Run 32712925871）
+
+- 実施: ユーザーがARTISTSのSTATUSを修正後、本番CMSでPublish Nowを実行した結果を確認した。
+- コミット: Publish pipelineの生成コミットは`7e75413f2f877e29839023578758bd725acf6e2c`。
+  Codexからのpushはしていない。
+- 検証:
+  - Run `32712925871` は success。Fetch / Build / 全検査 / sitemap / RSS / Pages deployまで成功。
+  - `origin/main`の`LP/data.js` SHA-256:
+    `e9b8f38029c4bb72fdcb2889f329891a6e6c059ab986cc49c7c19034ed979186`
+  - 本番`https://techno-japan.media/data.js` SHA-256:
+    `e9b8f38029c4bb72fdcb2889f329891a6e6c059ab986cc49c7c19034ed979186`
+  - 本番とmainは完全一致。2026-08-14以来の未公開状態は解消した。
+- 変更したパターン: データ所有者がARTISTSのSTATUSをpublishedへ修正し、参照切れを解消した。
+- 未確認の類似パターン: 未公開検知の定期実行はまだ未実装。GitHub通知が担当者に届く設定かも未確認。
+- 次の担当への注意・判断待ち:
+  - 復旧後も、Publish失敗を10日間見逃さないための二層監視（Actions失敗通知＋本番/main差分watchdog）は必要。
+  - 監視の実装承認後、まず外部WebhookなしのGitHub Actions通知＋SHA-256監視から着手する。
 
 ## 2026-08-24 ✅ 本番復旧（8/14以来10日ぶりの公開）
 
@@ -5564,3 +5582,41 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
   - **本エントリの直前に、並行セッション（Codex）の「未公開検知方式の提案」がある。**
     改変せずそのまま残してある。10日間気づかれなかった件の再発防止はそちらが本命。
   - ブランチは preflight 全件通過済みで push 可能な状態。main へのマージ可否はユーザー判断待ち。
+
+## 2026-08-24 公開前の実ブラウザ確認（UI変更・未確認項目の解消）
+
+- 実施: `feat/list-visual` を main へ出す前提として、handoff に「未確認」と残っていた
+  UI項目を実ブラウザで確認した。**390px は iframe（同一オリジン・`frame-src 'self'` 許可）で
+  実幅ちょうどを再現**し、Chromeのウィンドウ下限500pxの制約を回避した。
+  URL: `http://127.0.0.1:8000/`（ローカル配信）。幅 1280px / 390px。
+- コミット: 本エントリ。コード変更なし。
+- 検証（操作 → 期待 → 実測）:
+  - artists.html 1280px: 初期表示 → A–Z・96件 → **A–Z / 96件 ✅**、並び替えUI・アルファベットタブは**存在しない ✅**
+  - artists.html 1280px: 検索「dj」 → 絞込後もA–Z → **10件・A–Z ✅**（DJ HYPE…Idjut Boys）
+  - artists.html 1280px: 検索「dj」＋ジャンルTECHNO → 重ねがけでもA–Z → **4件・A–Z ✅**
+  - artists.html 1280px: `?sort=z-a` で開く → 壊れずA–Z固定 → **96件・A–Z・Consoleエラー0 ✅**
+    （旧URLの利用者影響なし。パラメータは無視される）
+  - venues.html 1280px: 種別CLUBS → club のみ13件 → **13件・全て `data-type=club` ✅**
+  - venues.html 1280px: 種別BARS × 都市TOKYO → 重ねがけ → **3件（BONOBO / OATH / THE ROOM）✅**
+  - index.html 1280px: TOPアーティスト → 画像付きでランダム → **16名（マーキー複製で32リンク）・
+    全員に画像あり ✅**。`?r=2` で再読込すると別の16名になり**ランダム化が効いている ✅**
+  - artists.html **390px**: 横スクロールなし（scrollWidth 390 = innerWidth）・96件・A–Z・
+    並び替えUIなし・検索欄幅358px・ジャンルタブ7個 ✅
+  - artists.html **390px**: 検索「dj」＋TECHNO → **4件・A–Z・横スクロールなし ✅**（1280pxと同一）
+  - venues.html **390px**: 22件 → BARS 4件 ✅、横スクロールなし ✅
+  - **EN** `/en/artists.html` 390px: `lang=en`・96件・A–Z・並び替えUIなし・
+    本文に文字列 `undefined` なし ✅
+  - **EN** `/en/venues.html` 390px: 22件 → CLUBS 13件 ✅、`undefined` なし ✅
+  - Console: **エラー0件**（全ページ通して）
+- 変更したパターン: なし（確認のみ）。
+- 未確認の類似パターン:
+  - **実機端末での確認は未実施**（iframe による390px再現であり、実機のタッチ・dpr・
+    iOS Safari 固有挙動は含まない）。§9-83 の「headless はタッチを模擬しない」と同じ限界。
+  - 実機PCでのホバー時プレビュー位置とリスト行の視認性: **未確認のまま**
+    （handoff 5280行の項目。ホバー挙動は今回の対象外）。
+  - festivals.html / news.html のハブ: 今回の変更対象外のため未確認。
+- 次の担当への注意:
+  - handoff 5320行「検索・ジャンル絞り込み後のA–Z固定表示: 未確認」および
+    5321行「`?sort=z-a` の利用者影響: 未確認」は、**本エントリで解消**。
+  - 390px の確認は iframe 方式が使える（ハブの CSP は `frame-src 'self'` を許可）。
+    cms.html だけは `frame-src 'none'` のため不可。
