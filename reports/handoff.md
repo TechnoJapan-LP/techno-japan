@@ -5735,7 +5735,31 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - 次の担当への注意:
   - 見張り番が赤いとき、まず疑うのは本番ではなく**通知が届いているか**。
     2026-08 の事故は「失敗していたこと」ではなく「気づかなかったこと」が本体だった。
-  - `evaluateSync` は純関数のまま保つこと。ネットワークを混ぜると自己テストが書けなくなる。
+- `evaluateSync` は純関数のまま保つこと。ネットワークを混ぜると自己テストが書けなくなる。
+
+## 2026-08-24 SEO/GEOテーマ1 依頼1・2の実装、依頼3は判断待ち
+
+- 実施: 着手前に`git status --short --branch`（`main...origin/main`、変更なし）と
+  `git pull --ff-only`（Already up to date）を実行した。`scripts/build-detail-pages.mjs`で
+  `llms.txt`に最新記事（新しい順・最大20件・ENリンク付き）を追加し、
+  `NewsMediaOrganization`（`#org`）をJA/ENのindex/aboutへ追加した。記事JSON-LDには
+  `publisher.@id`、`isAccessibleForFree`、`wordCount`、`thumbnailUrl`、実在確認済みの`about`を追加。
+  `scripts/check_jsonld.mjs`に全llmsリンク実在・記事件数・組織・記事JSON-LD・JA/ENキー一致の検査を追加した。
+  実在するロゴは`LP/images/logo-512.png`（512×512）だったため、その実測値を使用した。
+- コミット: 未コミット・未push。`cms.js` / GAS / 画像生成器 / AGENTS.mdは変更していない。
+- 検証: 着手前実測はrss HTTP 200、`[[event]]` 0件、フェス`#festival`既存。ビルド成功。
+  `node scripts/check_jsonld.mjs`成功。`bash scripts/preflight.sh`は**全41件成功**。
+  公開記事5本のJA/EN行数は全て153行で一致（旧URLリダイレクト`transcendence.html`は記事本体ではない）。
+- 変更したパターン: llms記事セクション、全llmsリンクのファイル実在検査、NewsMediaOrganization、
+  記事publisherの組織参照、記事SEO差分4点、festival `about`の実在条件、JA/EN JSON-LDキー比較。
+- 未確認の類似パターン: Google Rich Results Testの外部画面でのエラー0、実ブラウザ390/1280×JA/ENの
+  目視確認は未確認。依頼3の1:1/4:3画像派生と変更前後の実ページ重量比較は未実施。
+  依頼書の「build-detail-pages.mjsと検査スクリプトのみ」という制約では、既存の
+  `build-image-derivatives.py`を拡張せず再現可能なクロップ派生を作れないため、勝手に範囲を広げていない。
+  AGENTS.mdの古い記事英語欄記述も、同じ変更範囲制約により未変更。
+- 次の担当への注意・判断待ち: 依頼3を進めるには、画像派生生成器（`scripts/build-image-derivatives.py`）を
+  変更対象へ含める承認が必要。承認後、1:1/4:3を`imagePosition`対応で生成し、変更前後を同じ
+  390/1280・JA/EN・dpr2〜3のresource転送量で比較し、増加した場合は独立コミットを撤回する。
 
 ## 2026-08-24 AUDIT §9-96 を追記（10日間の未公開・事故の記録）
 

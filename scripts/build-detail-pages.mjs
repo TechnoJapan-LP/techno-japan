@@ -87,7 +87,23 @@ await import('./build-image-dimensions.mjs');
 // ブランドロゴ（Organization.logo 用）と OGP フォールバック画像は役割が違うので分ける。
 // ロゴは正方形のブランド識別子、OGP は SNS カード向けの横長ビジュアル。
 // ロゴを差し替えるときはこのパスのファイルを置き換えるだけでよい（URL は変えない）。
+const ORG_ID = `${BASE}/#org`;
 const ORG_LOGO = `${BASE}/images/logo-512.png?v=2`;
+const ORG_JSONLD = {
+  '@context': 'https://schema.org',
+  '@type': 'NewsMediaOrganization',
+  '@id': ORG_ID,
+  name: 'TECHNO JAPAN',
+  url: `${BASE}/`,
+  logo: { '@type': 'ImageObject', url: ORG_LOGO, width: 512, height: 512 },
+  sameAs: [
+    'https://www.instagram.com/techno.japan_/',
+    'https://www.threads.net/@techno.japan_',
+  ],
+  knowsAbout: ['techno', 'house music', 'music festivals in Japan', 'Japanese club culture'],
+  publishingPrinciples: `${BASE}/about.html`,
+  inLanguage: ['ja', 'en'],
+};
 /* 自前の写真を持たないページ（トップ・ABOUT・一覧など283枚）が SNS で
    共有されたときのサムネイル。
 
@@ -753,6 +769,16 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   const tags = (a.tags || []).map((t) => `<span class="article-tag">#${esc(t)}</span>`).join('');
   const authorName = a.author || 'TECHNO JAPAN';
   const articleEvents = parseEvents(L.body || '');
+  const festivalId = String(a.festivalId || '').trim();
+  const relatedFestival = festivalId
+    ? (festivals || []).find((f) => String(f.id) === festivalId)
+    : null;
+  const relatedFestivalPath = relatedFestival
+    ? path.join(LP_DIR, 'festivals', `${relatedFestival.id}.html`)
+    : '';
+  const about = relatedFestival && fs.existsSync(relatedFestivalPath)
+    ? [{ '@id': `${BASE}/festivals/${encodeURIComponent(relatedFestival.id)}.html#festival` }]
+    : undefined;
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -760,16 +786,15 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
     headline: L.title,
     description: desc,
     image: [image],
+    isAccessibleForFree: true,
+    wordCount: stripTags(L.body || '').length,
+    thumbnailUrl: image,
+    ...(about ? { about } : {}),
     inLanguage: lang,
     datePublished: a.date,
     dateModified: a.updated || a.date,
     author: { '@type': /TECHNO JAPAN/i.test(authorName) ? 'Organization' : 'Person', name: authorName },
-    publisher: {
-      '@type': 'Organization',
-      name: 'TECHNO JAPAN',
-      url: `${BASE}/`,
-      logo: { '@type': 'ImageObject', url: ORG_LOGO },
-    },
+    publisher: { '@id': ORG_ID },
     mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
     articleSection: a.category || 'NEWS',
     // SPA(news.html) は動的注入で keywords を出していたが、静的ページ側が
@@ -809,9 +834,6 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
      §9-23 で回遊が切れたときと同じ形なので、対にしておく。
 
      カード画像はハブと同じ縮小版を使う（§9-51）。 */
-  const relatedFestival = String(a.festivalId || '').trim()
-    ? (festivals || []).find((f) => String(f.id) === String(a.festivalId).trim())
-    : null;
   const relatedFestivalHtml = relatedFestival ? (() => {
     const feds = [...(editionsByFestival.get(relatedFestival.id) || [])].sort((x, y) =>
       String(y.DATE_START || '').localeCompare(String(x.DATE_START || '')));
@@ -1832,6 +1854,10 @@ function fixJaHub(fileName) {
 
   s = s.replace(/<html lang="[^"]*"/, '<html lang="ja"');
 
+  if (fileName === 'index.html' || fileName === 'about.html') {
+    s = ensureNewsMediaOrganization(s, fileName);
+  }
+
   const canon = fileName === 'index.html'
     ? `<link rel="canonical" href="${BASE}/">`
     : `<link rel="canonical" href="${BASE}/${fileName}">`;
@@ -1846,6 +1872,17 @@ function fixJaHub(fileName) {
   if (s === before) return false;
   fs.writeFileSync(file, s);
   return true;
+}
+
+/* index/about は手書きのJSON-LDを持つため、JAを正規化してからENへ引き継ぐ。
+   既存のWebSite / BreadcrumbListは残し、報道主体だけを独立ブロックで宣言する。 */
+function ensureNewsMediaOrganization(html, page) {
+  const marker = /"@type"\s*:\s*"NewsMediaOrganization"/;
+  if (marker.test(html) && html.includes(`"@id": "${ORG_ID}"`)) return html;
+  const block = `<script type="application/ld+json">\n${JSON.stringify(ORG_JSONLD, null, 2)}\n</script>`;
+  const first = '<script type="application/ld+json">';
+  if (!html.includes(first)) throw new Error(`${page}: JSON-LDの挿入位置が見つかりません`);
+  return html.replace(first, `${block}\n${first}`);
 }
 
 function writeEnHub(fileName) {
@@ -1949,6 +1986,20 @@ function buildAiSurface({ pubFests, editionsByFestival, pubVenues, pubArtists, p
     `- [News](${BASE}/news.html)`,
     `- [Club Map](${BASE}/map.html)`,
     `- [English](${BASE}/en/)`,
+    '',
+    '## 最新記事',
+    '',
+    ...[...pubArticles]
+      .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')))
+      .slice(0, 20)
+      .map((a) => {
+        const title = String(a.title || a.id || '').replace(/\s+/g, ' ').trim();
+        const excerpt = stripTags(a.excerpt || '').replace(/\s+/g, ' ').trim();
+        const ja = `${BASE}/articles/${encodeURIComponent(a.id)}.html`;
+        const hasEn = !!(a.title_en || a.body_en);
+        const en = hasEn ? ` / [EN](${BASE}/en/articles/${encodeURIComponent(a.id)}.html)` : '';
+        return `- ${a.date || ''}: [${title}](${ja}) — ${excerpt}${en}`;
+      }),
     '',
     '## 機械可読データ',
     '',
@@ -2158,7 +2209,7 @@ ${FAVICON_TAGS}
 
   // JA ハブを正してから EN を作る。順序が逆だと、直す前の JA から EN が生まれる。
   // 静的リンクの差し替え（上の hubCounts）も EN へ引き継ぐため、この位置に置く。
-  const HUBS = ['index.html', 'festivals.html', 'artists.html', 'venues.html', 'news.html'];
+  const HUBS = ['index.html', 'about.html', 'festivals.html', 'artists.html', 'venues.html', 'news.html'];
   const jaFixed = HUBS.filter(fixJaHub);
   const enWritten = HUBS.filter(writeEnHub);
 

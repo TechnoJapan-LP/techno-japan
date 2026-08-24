@@ -12,7 +12,7 @@
 <link rel="icon" type="image/png" href="/images/favicon-192.png?v=2" sizes="192x192">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
 <title>ABOUT — TECHNO JAPAN</title>
-<meta name="description" content="About TECHNO JAPAN — a cultural media platform documenting Japan\'s underground techno and house scene: artists, venues, festivals and club culture.">
+<meta name="description" content="TECHNO JAPANについて — 日本のアンダーグラウンド・ダンスミュージックシーンを記録するメディア。About TECHNO JAPAN, documenting Japan's underground scene.">
 <link rel="alternate" type="application/rss+xml" title="TECHNO JAPAN — RSS" href="https://techno-japan.media/rss.xml">
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#080808">
@@ -26,7 +26,7 @@
 
 <!-- Open Graph -->
 <meta property="og:title" content="ABOUT — TECHNO JAPAN">
-<meta property="og:description" content="About TECHNO JAPAN — a cultural media platform documenting Japan\'s underground techno and house scene.">
+<meta property="og:description" content="TECHNO JAPANについて — 日本のアンダーグラウンド・ダンスミュージックシーンを記録するメディア。About TECHNO JAPAN, documenting Japan's underground scene.">
 <meta property="og:image" content="https://techno-japan.media/images/og-default.png?v=1">
 <meta property="og:url" content="https://techno-japan.media/en/about.html">
 <meta property="og:type" content="website">
@@ -36,7 +36,7 @@
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ABOUT — TECHNO JAPAN">
-<meta name="twitter:description" content="About TECHNO JAPAN — a cultural media platform documenting Japan\'s underground techno and house scene.">
+<meta name="twitter:description" content="TECHNO JAPANについて — 日本のアンダーグラウンド・ダンスミュージックシーンを記録するメディア。About TECHNO JAPAN, documenting Japan's underground scene.">
 <meta name="twitter:image" content="https://techno-japan.media/images/og-default.png?v=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,6 +45,9 @@
 <link rel="dns-prefetch" href="https://w.behold.so">
 <link rel="dns-prefetch" href="https://formsubmit.co">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+<!-- 資産は必ず絶対パス（/）で書く。相対だと en/about.html にコピーされたとき
+     /en/common.css を探して 404 になり、CSS も JS も一切効かない状態になる。
+     2026-08-14 に英語版が素の HTML で公開されていた。AUDIT §9-82。 -->
 <link rel="stylesheet" href="/common.css?v=27">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -656,6 +659,36 @@ section { padding: 120px 40px; }
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
+  "@type": "NewsMediaOrganization",
+  "@id": "https://techno-japan.media/#org",
+  "name": "TECHNO JAPAN",
+  "url": "https://techno-japan.media/",
+  "logo": {
+    "@type": "ImageObject",
+    "url": "https://techno-japan.media/images/logo-512.png?v=2",
+    "width": 512,
+    "height": 512
+  },
+  "sameAs": [
+    "https://www.instagram.com/techno.japan_/",
+    "https://www.threads.net/@techno.japan_"
+  ],
+  "knowsAbout": [
+    "techno",
+    "house music",
+    "music festivals in Japan",
+    "Japanese club culture"
+  ],
+  "publishingPrinciples": "https://techno-japan.media/about.html",
+  "inLanguage": [
+    "ja",
+    "en"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
   "@type": "Organization",
   "name": "TECHNO JAPAN",
   "alternateName": "Techno Japan",
@@ -791,8 +824,8 @@ section { padding: 120px 40px; }
   <div class="about-grid">
     <div class="about-headline reveal">JAPAN'S<br>UNDERGROUND,<br>CURATED.</div>
     <div class="about-body reveal">
-      <p>Techno Japan is a cultural media platform focused on Japan's underground techno and house music scene. We go beyond event listings — introducing artists, venues, festivals, and club culture with editorial perspective and scene credibility.</p>
-      <p>We exist to make Japan's underground more visible and more meaningful, to audiences both inside Japan and across the world.</p>
+      <p>Techno Japanは、日本のアンダーグラウンドなテクノ/ハウスシーンを扱うカルチャーメディアです。イベント情報の羅列にとどまらず、アーティスト、会場、フェスティバル、クラブカルチャーを、編集的な視点とシーンへの理解をもって紹介します。</p>
+      <p>国内外の読者に向けて、日本のアンダーグラウンドをより見えやすく、より意味のあるものにすること。それが私たちの存在理由です。</p>
     </div>
   </div>
 </section>
@@ -810,7 +843,7 @@ section { padding: 120px 40px; }
         <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
         <div class="discover-card-content">
           <div class="discover-card-title">NEWS</div>
-          <div class="discover-card-desc">Stories, interviews, and editorial features from Japan's underground scene.</div>
+          <div class="discover-card-desc">日本のアンダーグラウンドシーンの最新記事、インタビュー、特集など。</div>
         </div>
       </a>
       <a href="/en/festivals.html" class="discover-card reveal">
@@ -819,7 +852,7 @@ section { padding: 120px 40px; }
         <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
         <div class="discover-card-content">
           <div class="discover-card-title">FESTIVALS</div>
-          <div class="discover-card-desc">Open-air gatherings, multi-day adventures, and Japan's most iconic outdoor electronic music festivals.</div>
+          <div class="discover-card-desc">オープンエアのギャザリング、レイヴ、そして日本を代表する野外電子音楽フェスティバル。</div>
         </div>
       </a>
       <a href="/en/artists.html" class="discover-card reveal">
@@ -828,7 +861,7 @@ section { padding: 120px 40px; }
         <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
         <div class="discover-card-content">
           <div class="discover-card-title">ARTISTS</div>
-          <div class="discover-card-desc">Emerging talent, established selectors. The names shaping Japan's sound.</div>
+          <div class="discover-card-desc">新しい才能から、確かなセレクターまで。日本のサウンドを形づくるアーティスト達。</div>
         </div>
       </a>
       <a href="/en/venues.html" class="discover-card reveal">
@@ -837,7 +870,7 @@ section { padding: 120px 40px; }
         <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
         <div class="discover-card-content">
           <div class="discover-card-title">VENUES</div>
-          <div class="discover-card-desc">The clubs, warehouses, and spaces that define Japan's underground.</div>
+          <div class="discover-card-desc">日本のアンダーグラウンドなナイトクラブやミュージックバー、そしてユニークな空間。</div>
         </div>
       </a>
     </div>
@@ -869,8 +902,8 @@ section { padding: 120px 40px; }
   <div class="contact-grid">
     <div class="contact-headline reveal">GET IN<br>TOUCH.</div>
     <div class="reveal">
-      <p class="contact-body">For collaborations, press inquiries, advertising, or any other questions — get in touch.</p>
-      <p class="contact-body" style="margin-top:14px"><a href="/en/submit.html">Submit a festival for listing →</a></p>
+      <p class="contact-body">コラボレーション、取材・掲載のご相談、広告掲載、その他のお問い合わせはこちらから。</p>
+      <p class="contact-body" style="margin-top:14px"><a href="/en/submit.html">フェスティバルの掲載申請はこちら →</a></p>
       <form class="contact-form" action="https://formsubmit.co/tatsuya25shibata@gmail.com" method="POST">
         <div class="form-group">
           <label>NAME</label>

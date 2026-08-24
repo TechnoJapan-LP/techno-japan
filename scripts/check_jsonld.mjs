@@ -29,6 +29,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
@@ -59,6 +60,33 @@ function* htmlFiles(dir) {
   }
 }
 
+function jsonLdObjects(file) {
+  return blocksOf(file).flatMap((b) => {
+    try {
+      const value = JSON.parse(b);
+      return Array.isArray(value) ? value : [value];
+    } catch { return []; }
+  });
+}
+
+function loadPublishedArticles() {
+  const context = {};
+  vm.createContext(context);
+  new vm.Script(fs.readFileSync(path.join(LP, 'data.js'), 'utf8') + '\n;globalThis.__articles = ARTICLES;').runInContext(context);
+  return (context.__articles || []).filter((a) => a && a.id && a.status !== 'draft');
+}
+
+function localPathFromSiteUrl(url) {
+  let parsed;
+  try { parsed = new URL(url); } catch { return null; }
+  if (parsed.origin !== 'https://techno-japan.media') return null;
+  let pathname = decodeURIComponent(parsed.pathname);
+  if (pathname === '/') pathname = '/index.html';
+  if (pathname.endsWith('/')) pathname += 'index.html';
+  if (!pathname.startsWith('/') || pathname.includes('..')) return null;
+  return path.join(LP, pathname.slice(1));
+}
+
 /* --- 1〜2) 全ページのパースと @type --- */
 let pages = 0, blocks = 0;
 const parseErrors = [];
@@ -82,6 +110,52 @@ console.log(`対象: ${pages}ページ / ${blocks}ブロック\n`);
 check('全ブロックが JSON としてパースできる', parseErrors.length === 0,
   parseErrors.slice(0, 3).join(', '));
 check('全ブロックに @type がある', noType.length === 0, noType.slice(0, 3).join(', '));
+
+/* --- NewsMediaOrganization / NewsArticle 差分 --- */
+const ORG_ID = 'https://techno-japan.media/#org';
+const orgPages = ['index.html', 'about.html', 'en/index.html', 'en/about.html'];
+for (const rel of orgPages) {
+  const file = path.join(LP, rel);
+  const org = jsonLdObjects(file).find((x) => x['@type'] === 'NewsMediaOrganization');
+  check(`${rel} に NewsMediaOrganization がある`, !!org);
+  if (org) {
+    check(`${rel} の組織 @id が #org`, org['@id'] === ORG_ID, String(org['@id'] || ''));
+    check(`${rel} のロゴ寸法が実測値`, org.logo?.width === 512 && org.logo?.height === 512,
+      JSON.stringify(org.logo || {}));
+  }
+}
+
+const publishedArticles = loadPublishedArticles();
+const articleLdByLang = new Map();
+for (const article of publishedArticles) {
+  const id = String(article.id);
+  for (const [lang, rel] of [['ja', `articles/${id}.html`], ['en', `en/articles/${id}.html`]]) {
+    const file = path.join(LP, rel);
+    const ld = jsonLdObjects(file).find((x) => x['@type'] === 'NewsArticle');
+    check(`${rel} がNewsArticleを持つ`, !!ld);
+    if (!ld) continue;
+    if (!articleLdByLang.has(lang)) articleLdByLang.set(lang, new Map());
+    articleLdByLang.get(lang).set(id, ld);
+    check(`${rel} のpublisherが#org`, ld.publisher?.['@id'] === ORG_ID,
+      JSON.stringify(ld.publisher || {}));
+    check(`${rel} の記事SEO差分4点`, ld.isAccessibleForFree === true
+      && Number.isInteger(ld.wordCount) && ld.wordCount > 0
+      && typeof ld.thumbnailUrl === 'string' && ld.thumbnailUrl.startsWith('https://'),
+      JSON.stringify({ isAccessibleForFree: ld.isAccessibleForFree, wordCount: ld.wordCount, thumbnailUrl: ld.thumbnailUrl }));
+    if (article.festivalId) {
+      const aboutId = ld.about?.[0]?.['@id'];
+      const aboutFile = aboutId ? localPathFromSiteUrl(aboutId.replace(/#festival$/, '')) : null;
+      check(`${rel} のabout参照先が実在する`, !!aboutId && !!aboutFile && fs.existsSync(aboutFile), aboutId || 'aboutなし');
+    }
+  }
+}
+const jaArticles = articleLdByLang.get('ja') || new Map();
+const enArticles = articleLdByLang.get('en') || new Map();
+for (const id of jaArticles.keys()) {
+  const jaKeys = Object.keys(jaArticles.get(id)).sort().join('|');
+  const enKeys = Object.keys(enArticles.get(id) || {}).sort().join('|');
+  check(`記事${id}のJA/EN JSON-LDキー構成が一致`, jaKeys === enKeys, `${jaKeys} / ${enKeys}`);
+}
 
 /* --- 3) 出演データのあるフェスに performer が出ているか --- */
 const lineups = JSON.parse(fs.readFileSync(path.join(LP, 'data', 'lineups.json'), 'utf8')).items;
@@ -144,6 +218,16 @@ if (!fs.existsSync(llmsPath)) {
   check('llms.txt がサイト名で始まる', t.startsWith('# TECHNO JAPAN'));
   check('llms.txt が events.json を案内している', t.includes('/events.json'));
   check('llms.txt が sitemap を案内している', t.includes('/sitemap.xml'));
+  const links = [...t.matchAll(/\]\((https:\/\/techno-japan\.media\/[^)]+)\)/g)].map((m) => m[1]);
+  const missingLinks = links.filter((url) => {
+    const file = localPathFromSiteUrl(url);
+    return !file || !fs.existsSync(file);
+  });
+  const articleLinks = links.filter((url) => /^https:\/\/techno-japan\.media\/articles\/[^/]+\.html$/.test(url));
+  check(`llms.txt の全${links.length}リンク先が実在する`, missingLinks.length === 0, missingLinks.slice(0, 3).join(', '));
+  check('llms.txt に記事リンクが1本以上ある', articleLinks.length > 0);
+  check(`llms.txt の記事件数がARTICLESと一致する（上限20）`, articleLinks.length === Math.min(publishedArticles.length, 20),
+    `${articleLinks.length} / ${Math.min(publishedArticles.length, 20)}`);
 }
 
 /* --- robots.txt が地図を隠していないこと（§9-79 で解除した） --- */

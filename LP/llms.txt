@@ -34,6 +34,14 @@
 - [Club Map](https://techno-japan.media/map.html)
 - [English](https://techno-japan.media/en/)
 
+## 最新記事
+
+- 2026-08-17: [Snow Machine 2027長野白馬で開催 出演者とステージ構成を解説](https://techno-japan.media/articles/snow-mashine-2027-info.html) — 昼はゲレンデ、夜はアリーナ、深夜は村のバーへ。白馬バレー全域を舞台に、Patrick ToppingやRisa Taniguchiらが集うウィンターフェスSnow Machineが2027年3月に上陸する。滑って踊るだけの5日間が始まる。 / [EN](https://techno-japan.media/en/articles/snow-mashine-2027-info.html)
+- 2026-08-13: [兵庫・三田の森で26時間 DIYパーティBON DISCOが13年目の夏へ](https://techno-japan.media/articles/bondisco-2026-info.html) — 兵庫県三田市の森を舞台に、正午から翌日午後まで踊り続けるDIYパーティBON DISCOが13年目の夏を迎える。全国から集まる40組近いアーティストと2つのフロア、そしてプールで身体を冷やしてまた音へ戻る、真夏だけの過ごし方がここにある。 / [EN](https://techno-japan.media/en/articles/bondisco-2026-info.html)
+- 2026-08-09: [茨城 鉾田 nalu beachでビーチパーティLOA 8月15日開催](https://techno-japan.media/articles/loa-lost-paradise-2026-info.html) — かつて大洋村と呼ばれた茨城・鉾田の隠れたビーチに、28時間止まらないフロアが立ち上がる。夕日で始まり、砂浜で朝日を迎え、二度目の夕日で幕を閉じるビーチパーティLOA。海の家もない太平洋を前に波打ち際で音を鳴らす。 / [EN](https://techno-japan.media/en/articles/loa-lost-paradise-2026-info.html)
+- 2026-01-09: [MUTEK.JP 2025現地レポート WWWとO-EASTで体感した音と光の二日間](https://techno-japan.media/articles/post-20251120.html) — 電子音楽の最前線を体験できるアジア有数のプラットフォーム、MUTEK.JPが2025年も開催。石橋英子やアルヴァ・ノトら世界的アーティストが、音と光とテクノロジーの融合による未体験のパフォーマンスを繰り広げた。 / [EN](https://techno-japan.media/en/articles/post-20251120.html)
+- 2025-06-20: [野外テクノパーティTranscendenceで見た次世代ジェネレーションの可能性](https://techno-japan.media/articles/transcendence-2025-report.html) — 北相木村の森に響き渡る先進的なテクノビート。若き世代が創造するTranscendenceで、日本の野外レイヴカルチャーの可能性と未来を目撃した。 / [EN](https://techno-japan.media/en/articles/transcendence-2025-report.html)
+
 ## 機械可読データ
 
 - [Events (JSON)](https://techno-japan.media/events.json): 今後の開催回。日付・場所・座標・チケットURL
