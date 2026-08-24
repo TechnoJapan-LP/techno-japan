@@ -192,9 +192,6 @@
   position: sticky; top: 52px; z-index: 50;
   background: rgba(8,8,8,0.97); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(240,237,232,0.06);
-  display: flex; align-items: center;
-  padding-right: 40px;
-  flex-wrap: wrap;
 }
 .type-nav { width: 100%; display: flex; gap: 0; overflow-x: auto; scrollbar-width: none; padding: 12px 0 0 40px; align-items: center; border-bottom: 1px solid rgba(240,237,232,0.04); }
 .type-nav::-webkit-scrollbar { display: none; }
@@ -202,7 +199,7 @@
 .type-nav a:hover { opacity: 0.7; }
 .type-nav a.active { opacity: 1; border-bottom: 1px solid var(--text); }
 .area-nav {
-  flex: 1; min-width: 0;
+  width: 100%;
   padding: 14px 0 14px 40px; display: flex; gap: 0; overflow-x: auto; scrollbar-width: none;
   align-items: center;
 }
@@ -214,9 +211,9 @@
 .area-nav a:hover { opacity: 0.7; }
 .area-nav a.active { opacity: 1; border-bottom: 1px solid var(--text); }
 .area-nav-map {
-  flex-shrink: 0; margin-left: 16px;
+  flex-shrink: 0;
   font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
-  padding: 6px 16px; border: 1px solid rgba(240,237,232,0.15); background: transparent;
+  padding: 13px 16px; border: 1px solid rgba(240,237,232,0.15); background: transparent;
   color: rgba(240,237,232,0.5); cursor: pointer; transition: all 0.3s ease;
   display: flex; align-items: center; gap: 8px;
 }
@@ -226,8 +223,11 @@
   width: 6px; height: 6px; border-radius: 50%; background: #ff2d2d; transition: background 0.3s ease;
 }
 .area-nav-map.active .pin-icon { background: var(--bg); }
-.venues-toolbar { display: flex; align-items: center; gap: 16px; padding: 24px 0; }
-.venues-search { flex: 1; max-width: 420px; background: transparent; border: 1px solid rgba(240,237,232,0.12); color: var(--text); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; padding: 12px 16px; outline: none; transition: border-color 0.3s ease; }
+/* 検索とMAPは同じ「操作の行」。stretch で高さを検索欄に揃える。
+   件数(span)だけ中央に戻し、狭い画面では2行目へ折り返す。 */
+.venues-toolbar { display: flex; align-items: stretch; gap: 16px; padding: 24px 0; flex-wrap: wrap; }
+.venues-toolbar .venues-count { align-self: center; }
+.venues-search { flex: 1 1 160px; min-width: 0; max-width: 420px; background: transparent; border: 1px solid rgba(240,237,232,0.12); color: var(--text); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; padding: 12px 16px; outline: none; transition: border-color 0.3s ease; }
 .venues-search::placeholder { color: rgba(240,237,232,0.25); }
 .venues-search:focus { border-color: rgba(240,237,232,0.35); }
 .venues-count { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; opacity: .3; }
@@ -294,6 +294,8 @@
   .type-nav { padding-left: 24px; }
   .type-nav a { padding: 6px 12px; font-size: 9px; }
   .area-nav { padding: 12px 0 12px 24px; }
+  .type-nav { padding-left: 24px; }
+  .type-nav a { padding: 8px 16px 12px; font-size: 9px; }
   .area-nav a { padding: 6px 16px; font-size: 9px; }
   .venues-grid { grid-template-columns: 1fr; }
   .venue-card { padding: 36px 24px; min-height: auto; }
@@ -311,7 +313,9 @@
 @media (max-width: 768px) {
   .area-nav a { flex-shrink: 0; }
 }
-@media (max-width: 640px) { .venues-toolbar { align-items: stretch; flex-direction: column; gap: 8px; } .venues-search { max-width: none; width: 100%; } }
+/* モバイルは「検索＋MAP」を1行、件数を2行目に。縦積み(column)にすると
+   flex-basis が高さに化けて検索欄が160pxに伸びる事故が起きる。 */
+@media (max-width: 640px) { .venues-toolbar { gap: 12px; } .venues-search { max-width: none; } .venues-toolbar .venues-count { flex-basis: 100%; } }
 
 </style>
 <script type="application/ld+json">
@@ -406,13 +410,19 @@
 </header>
 
 <main id="venues-list-view">
+  <!-- タブ2行にはタブだけを置き、MAP ボタンは検索の隣に置く。
+       以前は都市タブの行に MAP が同居し、390px で都市タブを圧迫して
+       KYOTO が「KY」に見切れていた（2026-08-25 実機）。種別タブの行へ
+       移しても今度は LIVEHOUSE が押し出される（実測: タブ末端330px >
+       表示域）。MAP は絞り込みではなく表示切替なので、検索と同じ
+       「操作の行」に置くのが位置としても正しい。 -->
   <div class="area-nav-wrap">
     <div class="type-nav" id="type-nav"></div>
     <div class="area-nav" id="area-nav"></div>
-    <button class="area-nav-map" id="area-map-btn"><span class="pin-icon"></span> MAP</button>
   </div>
   <div class="venues-toolbar">
     <input class="venues-search" id="venues-search" type="search" placeholder="SEARCH VENUES..." aria-label="Search venues">
+    <button class="area-nav-map" id="area-map-btn"><span class="pin-icon"></span> MAP</button>
     <span class="venues-count" id="venues-count"></span>
   </div>
   <!-- 地図の入れ物は、VENUES にある都市の分だけ JS が作る（buildCityMapSections）。
