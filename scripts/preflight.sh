@@ -107,6 +107,7 @@ echo
 echo "▸ CI 自身"
 run "詰まり外しの判断"                  node scripts/check_unstick_queue.mjs
 run "画像同期の再試行"                  python3 scripts/check_sync_retry.py
+run "本番同期監視の自己テスト"            node scripts/check_production_sync.mjs --self-test
 
 echo
 echo "▸ 実際に描画して見るもの"

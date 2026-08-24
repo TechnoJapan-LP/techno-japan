@@ -1,0 +1,52 @@
+name: Production sync watchdog
+
+# Publishの失敗通知と、本番/mainの不一致検知を別経路で行う。
+# 空コミットでPublish pipeline自体が起動しない場合も、定期照合で検知する。
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+  workflow_run:
+    workflows: ['Publish pipeline', 'Generate sitemap.xml & rss.xml']
+    types: [completed]
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: production-sync-watchdog
+  cancel-in-progress: true
+
+jobs:
+  scheduled-check:
+    if: ${{ github.event_name != 'workflow_run' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: '20'
+      - name: Compare main and production
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_API_URL: ${{ github.api_url }}
+        run: node scripts/check_production_sync.mjs
+
+  workflow-failure:
+    if: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail visibly and include the failed run URL
+        env:
+          FAILED_WORKFLOW: ${{ github.event.workflow_run.name }}
+          FAILED_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          FAILED_URL: ${{ github.event.workflow_run.html_url }}
+        run: |
+          echo "::error title=本番公開経路の失敗::${FAILED_WORKFLOW} / ${FAILED_CONCLUSION}"
+          echo "失敗したRun: ${FAILED_URL}"
+          exit 1
