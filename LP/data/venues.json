@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-08-14T05:41:00.195Z",
+  "_generatedAt": "2026-08-24T09:42:05.898Z",
   "count": 22,
   "items": [
     {
@@ -141,7 +141,8 @@
       "INSTAGRAM": "https://www.instagram.com/mitsuki_tokyo/",
       "DESC": "MITSUKIは、東京の地下にある小規模なクラブ。アンダーグラウンドなエレクトロニックミュージックに絞ったブッキングで知られる。装飾を削いだ内装で、演出よりも音の質とフロアの近さを重視している。",
       "STATUS": "published",
-      "DESC_EN": "MITSUKI operates as an intimate basement club in Tokyo's nightlife landscape, known for its focused programming of underground electronic music. The venue maintains a stripped-down aesthetic that prioritizes sound quality and dancefloor intimacy over spectacle."
+      "DESC_EN": "MITSUKI operates as an intimate basement club in Tokyo's nightlife landscape, known for its focused programming of underground electronic music. The venue maintains a stripped-down aesthetic that prioritizes sound quality and dancefloor intimacy over spectacle.",
+      "FEATURES": "after-hours"
     },
     {
       "ID": "the-room",
@@ -175,7 +176,8 @@
       "URL": "https://www.djbar-oath.com/",
       "INSTAGRAM": "https://www.instagram.com/shibuya_oath/",
       "DESC": "OATHは、渋谷にあるDJバー。ピークタイムのフロアを意識せずに、セレクターが深い選曲を掘り下げられる環境を保っている。小さな空間がアーティストと客の距離を近づけ、定番のアンダーグラウンドサウンドと並んで実験的なプログラムにも余地を残している。",
-      "DESC_EN": "OATH operates as a DJ bar in Shibuya, maintaining an intimate setting where selectors can explore deeper cuts without the pressure of peak-time crowd dynamics. The venue's compact layout fosters close interaction between artists and audience, creating space for more experimental programming alongside established underground sounds."
+      "DESC_EN": "OATH operates as a DJ bar in Shibuya, maintaining an intimate setting where selectors can explore deeper cuts without the pressure of peak-time crowd dynamics. The venue's compact layout fosters close interaction between artists and audience, creating space for more experimental programming alongside established underground sounds.",
+      "FEATURES": "after-hours"
     },
     {
       "ID": "www",
@@ -227,7 +229,9 @@
       "INSTAGRAM": "https://www.instagram.com/jingumaebonobo/",
       "DESC": "神宮前にある小さなバーで、エレクトロニックミュージックの会場も兼ねる。丁寧に選ばれたサウンドと、気取らない雰囲気に惹かれた客層が集まる。小規模ゆえに、アーティストと観客の距離が非常に近い。",
       "STATUS": "published",
-      "DESC_EN": "A cozy neighborhood bar in Jingu-mae that doubles as an intimate venue for electronic music. The space attracts a discerning crowd drawn to its carefully curated sound and unpretentious atmosphere. Its compact size creates an unusually close connection between artists and audience."
+      "DESC_EN": "A cozy neighborhood bar in Jingu-mae that doubles as an intimate venue for electronic music. The space attracts a discerning crowd drawn to its carefully curated sound and unpretentious atmosphere. Its compact size creates an unusually close connection between artists and audience.",
+      "SUBTYPE": "dj-bar",
+      "FEATURES": "after-hours"
     },
     {
       "ID": "forestlimit",
@@ -262,7 +266,8 @@
       "URL": "http://vent-tokyo.net/",
       "INSTAGRAM": "https://www.instagram.com/vent.tokyo/",
       "DESC": "2016年のオープン以来、妥協のないテクノのブッキングで評価を築いてきた渋谷の地下クラブ。無骨なコンクリートの内装と精度の高いサウンドシステムが、音楽を最優先する環境をつくっている。",
-      "DESC_EN": "A intimate basement club in Shibuya that has carved out a reputation for uncompromising techno programming since opening in 2016. The venue's stark concrete interior and precise sound system create an environment where the music takes absolute priority over everything else."
+      "DESC_EN": "A intimate basement club in Shibuya that has carved out a reputation for uncompromising techno programming since opening in 2016. The venue's stark concrete interior and precise sound system create an environment where the music takes absolute priority over everything else.",
+      "HOURS": "23:00~05:00"
     },
     {
       "ID": "circus-osaka",

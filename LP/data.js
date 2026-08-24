@@ -319,6 +319,13 @@ const ARTISTS = [
     name: "Ojisan",
   },
   {
+    id: "noritake",
+    name: "Noritake",
+    links: {
+      instagram: "https://www.instagram.com/nori0615/",
+    }
+  },
+  {
     id: "eric-cloutier",
     name: "Eric Cloutier",
   },
@@ -373,6 +380,13 @@ const ARTISTS = [
   {
     id: "doltz",
     name: "Doltz",
+  },
+  {
+    id: "joma",
+    name: "Joma",
+    links: {
+      instagram: "https://www.instagram.com/jomajjj/",
+    }
   },
   {
     id: "suguru-mochizuki",

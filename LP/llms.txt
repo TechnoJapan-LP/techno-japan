@@ -4,8 +4,9 @@
 > アーティスト96名・会場22件・記事5本を日英で掲載し、
 > 開催日・場所・出演者を構造化データ（schema.org）付きで公開している。
 
-## 今後の開催予定（15件）
+## 今後の開催予定（18件）
 
+- 2026-09-05〜2026-09-06: [fabulous -endless summer SP- 2026](https://techno-japan.media/festivals/fabulous.html) — TAKE SEA
 - 2026-09-05〜2026-09-06: [ONE PARK FESTIVAL 2026](https://techno-japan.media/festivals/one-park-festival.html), Fukui
 - 2026-09-06: [BIG FUN 2026](https://techno-japan.media/festivals/big-fun.html) — Hakkenzan Orchard, Hokkaido
 - 2026-09-11〜2026-09-13: [Re:birth Festival 2026](https://techno-japan.media/festivals/re-birth-festival.html) — Kodamanomori Camping Ground, Nagano
@@ -18,9 +19,11 @@
 - 2026-10-02〜2026-10-04: [Synapse Festival 2026](https://techno-japan.media/festivals/synapse-festival.html) — INN THE PARK FUKUOKA, Fukuoka
 - 2026-10-10〜2026-10-12: [Labyrinth 2026](https://techno-japan.media/festivals/labyrinth.html) — Minakami Hodaigi Camping Ground, Gunma
 - 2026-10-10〜2026-10-11: [YAGURA 2026](https://techno-japan.media/festivals/yagura.html), Gifu
-- 2026-10-22〜2026-10-25: [Wonderfruit Kyoto 2026](https://techno-japan.media/festivals/wonderfruit-kyoto.html) — Kyoto (Ohara Sanso / ACG Villa Kyoto / Kurama Mountain / Ochill TeaRoom), Kyoto
+- 2026-10-22〜2026-10-25: [Wonderfruit Kyoto 2026](https://techno-japan.media/festivals/wonderfruit-kyoto.html) — Kyoto (Ohara Sanso / ACG Villa Kyoto / Kurama Mountain / Ochill TeaRoom)
 - 2026-10-31〜2026-11-01: [FESTIVAL de FRUE 2026](https://techno-japan.media/festivals/festival-de-frue.html) — TSUMAGOI RESORT SAINO SATO, Shizuoka
 - 2026-11-07〜2026-11-08: [GROW THE CULTURE OPEN AIR 2026](https://techno-japan.media/festivals/grow-the-culture-open-air.html) — Ohba Camping Village, Tokyo
+- 2026-11-20〜2026-11-22: [Mutek 2026](https://techno-japan.media/festivals/mutek.html) — Shibuya
+- 2027-03-02〜2027-03-07: [Snow Machine Japan 2027](https://techno-japan.media/festivals/snow-machine-japan.html) — HAKUBA VALLEY, Nagano
 
 ## 一覧
 

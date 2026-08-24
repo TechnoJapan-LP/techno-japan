@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-08-14T05:41:00.195Z",
+  "_generatedAt": "2026-08-24T09:42:05.898Z",
   "count": 96,
   "items": [
     {
@@ -59,23 +59,70 @@
     },
     {
       "ID": "dj-miku",
-      "NAME": "DJ MIKU"
+      "NAME": "DJ MIKU",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO",
+      "IMAGE": "images/artists/dj-miku.jpg",
+      "BIO": "80年代のニューウェーブ、エレクトロ、テクノを出発点に持つDJ/プロデューサー。90年代初頭、ウェアハウスパーティー KEY-ENERGY のレジデントとして、東京のアンダーグラウンドが形になっていく現場に立ち会った。1996年に NewStage Records を設立し、2012年からは野外フェス GLOBAL ARK を主宰。掛ける側から、場をつくる側へと軸足を広げてきた人である。",
+      "INSTAGRAM": "https://www.instagram.com/djmikumahirojazu/",
+      "WEBSITE": "http://djmiku.com/",
+      "STATUS": "published",
+      "metaDescription": "80年代ニューウェーブから始まりKEY-ENERGYのレジデントとして東京アンダーグラウンドを支えたDJ MIKU。1996年にNewStage Recordsを設立し、2012年から野外フェスGLOBAL ARKを主宰。掛ける側から場をつくる側へ広がった軌跡をたどる。",
+      "bio_en": "A DJ and producer rooted in 80s new wave, electro and techno. In the early 90s he was a resident at the KEY-ENERGY warehouse parties, present as Tokyo's underground took shape. He founded NewStage Records in 1996 and has run the open-air festival GLOBAL ARK since 2012, widening his role from playing the music to building the place where it happens."
     },
     {
       "ID": "dj-kensei",
-      "NAME": "DJ KENSEI"
+      "NAME": "DJ KENSEI",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO/HOUSE",
+      "IMAGE": "images/artists/dj-kensei.jpg",
+      "BIO": "東京生まれのDJ/プロデューサー/ビートメイカー。80年代半ばに活動を始め、キャリアは35年を超える。ミックスCD、アナログ盤、テープと、形を選ばず作品を残し、リミキサーやプロデューサーとしての仕事も長い。時代が何度も入れ替わるあいだ、東京の現場に立ち続けている。",
+      "SOUNDCLOUD": "https://soundcloud.com/dj_kensei",
+      "STATUS": "published",
+      "metaDescription": "東京生まれのDJ/プロデューサー、DJ KENSEIの軌跡。80年代半ばの始動から35年超、ミックスCDやアナログ盤、テープまで形を選ばず作品を残し、リミックスや制作も手がけながら東京の現場に立ち続けるキャリアを紹介します。",
+      "bio_en": "A Tokyo-born DJ, producer and beat-maker who began in the mid-80s, with a career now spanning more than 35 years. He has left work across mix CDs, vinyl and tapes without preferring any one format, alongside long-running work as a remixer and producer. Through several changes of era, he has stayed on Tokyo's floors."
     },
     {
       "ID": "dj-yogurt",
-      "NAME": "DJ Yogurt"
+      "NAME": "DJ Yogurt",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO",
+      "IMAGE": "images/artists/dj-yogurt.jpg",
+      "BIO": "1996年にDJを始め、1998年にユニット UPSETS とレーベル UPSET RECORDINGS を設立。その前後、ゴアやパンガン島、ロンドン、アムステルダムのレイヴを渡り歩いている。東京のレコード店で15年間働いた経験も選盤の土台にあり現場に立ち続け、リリースも途切れることがない。日本のアンダーグラウンドを、量と継続で支えてきたDJだ。",
+      "INSTAGRAM": "https://www.instagram.com/djyogurt0107/",
+      "SOUNDCLOUD": "https://soundcloud.com/djyogurt-1",
+      "BANDCAMP": "https://upsetrecordings.bandcamp.com/",
+      "STATUS": "published",
+      "metaDescription": "1996年のDJデビューから、UPSETSとUPSET RECORDINGSを設立。ゴアやパンガン島、ロンドン、アムステルダムのレイヴを渡り歩き、東京のレコード店で15年。現場とリリースを止めずに日本のアンダーグラウンドを支え続けるDJ Yogurtの軌跡を辿る。",
+      "bio_en": "DJing since 1996, he founded the unit UPSETS and the label UPSET RECORDINGS in 1998, having passed through raves in Goa, Koh Phangan, London and Amsterdam along the way. Fifteen years working in Tokyo record stores still shows in his selection. He plays over 70 parties a year and keeps releasing, supporting Japan's underground through sheer volume and persistence."
     },
     {
       "ID": "hidai",
-      "NAME": "Hidai"
+      "NAME": "Hidai",
+      "IMAGE": "images/artists/hidai.jpg",
+      "BIO": "主に野外で活動しているSoundsystem crew  OtOdashiのDJ。サウンドシステムを持ち込みフロアをデザインし、変幻自在なスタイルで様々な内外のイベントに参加している。TEKNIVALやアンダーグラウンドの超越DIYパーティから強く影響を受け、OtOdashi、BEACHWHISTLE、Black Sheep、PARALLEL WORLD等々の、非エントランス式イベントに積極的に参加し、その風潮を高めてきた。そこで培ってきた体感を元に、プロモーターやオーガナイザーとしての活動も多岐に渡り、今では、ハイクオリティ重視な世界観を表現することに重きをおいている。DJとしての音楽は、hiphopからクロスオーバーし、生楽器、自然音、不自然音、electroなどの、全ての音にルーツがあり、Technoを中心に様々な音源を駆使し積み重ね、気宇壮大なgrooveを創造する。",
+      "INSTAGRAM": "https://www.instagram.com/hidai_otodashi/",
+      "STATUS": "published",
+      "metaDescription": "野外を主戦場とするSoundsystem crew OtOdashiのDJ Hidai。TEKNIVALやDIYパーティに影響を受け、自らサウンドシステムを持ち込みフロアをデザイン。hiphopから自然音、electroまでを飲み込みTechnoを軸に壮大なgrooveを描く、その音楽性と活動に迫る。",
+      "bio_en": "A DJ with OtOdashi, a soundsystem crew active primarily in outdoor settings. Hauling in their own rig to design the floor itself, he takes part in a wide range of events at home and abroad with a style that shifts shape at will. Drawing strong influence from TEKNIVAL and the transcendent DIY spirit of the underground, he has thrown himself into non-entrance-fee events — OtOdashi, BEACHWHISTLE, Black Sheep, PARALLEL WORLD and more — helping to build that movement's momentum. Building on the instincts honed in those environments, his work as a promoter and organizer spans just as broadly, and these days he places particular weight on articulating a world-view rooted in uncompromising quality. As a DJ, his music crosses over from hip-hop, with roots in every kind of sound — live instrumentation, natural sound, unnatural sound, electro — layering and marshalling a diverse arsenal of material around a core of techno to create a groove of vast, expansive scale."
     },
     {
       "ID": "taichi-kawahira",
-      "NAME": "TAICHI KAWAHIRA"
+      "NAME": "TAICHI KAWAHIRA",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO",
+      "IMAGE": "images/artists/taichi-kawahira.jpg",
+      "BIO": "1997年よりライブ、オーガナイズ活動を開始。様々なレーベルより楽曲も勢力的にリリースし、2004年よりサイケデリックかつスペーシーなサウンドを軸としたスタイルでDJ活動をスタート。ヒプノティックでディープな空気の中にストーリー性の高いエモーショナルなセンスを内包し、アップリフティングでトランシーなドライブ力を併せ持つ。様々な音楽フェスティバルへの出演をはじめに都内主要クラブからアンダーグラウンドな場所まで幅広い現場でプレイ。またエレクトロニカ、エクスペリメンタル、アンビエント、アブストラクトを軸とする音楽も得意とし、ギャラリーやアートイベントでの音楽担当など活動の場所は多岐に渡る。 自身主催によるOpen Air Music&Art Festival Brightnessは活動9年目を迎え、クラブシーンやバンドシーンの垣根を飛び越え、多様なカルチャーをクロスオーバーさせるアプローチで独自の立ち位置を獲得しシーンに一石投じている。",
+      "INSTAGRAM": "https://www.instagram.com/taichi_kawahira/",
+      "SOUNDCLOUD": "https://soundcloud.com/dj-taichi-kawahira",
+      "STATUS": "published",
+      "metaDescription": "1997年から活動するTAICHI KAWAHIRAのプロフィール。サイケデリックでスペーシーなDJスタイル、ヒプノティックかつエモーショナルなプレイで国内フェスやクラブを席巻。主催する野外フェスBrightnessの魅力にも迫ります。",
+      "bio_en": "Began performing live and organizing events in 1997, releasing music prolifically on a range of labels along the way. In 2004 he launched his DJ career, built around a psychedelic, spacey sound. His sets fold a highly narrative, emotional sensibility into hypnotic, deep atmospheres, while retaining an uplifting, trance-inflected drive. Alongside appearances at numerous music festivals, he has played everywhere from Tokyo's major clubs to the deepest underground spaces. He is equally at home with electronica, experimental, ambient and abstract sounds, and his activities extend to soundtracking galleries and art events.\n\nNow in its ninth year, Open Air Music & Art Festival Brightness — the festival he founded and directs — has carved out a singular position by leaping over the barriers between club and band scenes, taking a crossover approach to diverse cultures and throwing down a challenge to the scene at large.",
+      "imagePosition": "center top"
     },
     {
       "ID": "tsutomu",
@@ -138,11 +185,30 @@
     },
     {
       "ID": "ben-ufo",
-      "NAME": "Ben UFO"
+      "NAME": "Ben UFO",
+      "COUNTRY": "UK",
+      "GENRE": "HOUSE/UK BASS/TECHNO/DUBSTEP",
+      "IMAGE": "images/artists/ben-ufo.jpg",
+      "BIO": "レーベル Hessle Audio と共に名前が知られてきた UK のDJ。Rinse FM の番組を長年担当している。自身の制作をほとんど持たず、選曲だけで世界の第一線に立った。DJという仕事の定義そのものを、実践で押し広げてきた人である。",
+      "INSTAGRAM": "https://www.instagram.com/ben___ufo/",
+      "SOUNDCLOUD": "https://soundcloud.com/benufo",
+      "STATUS": "published",
+      "metaDescription": "自作トラックをほとんど持たないまま、選曲だけで世界の第一線に立ち続けるUKのDJ、Ben UFO。Hessle Audioの共同主宰者としての歩みと、Rinse FMでの長年のレギュラー番組、そしてDJという職能の定義を実践で押し広げてきた軌跡をたどる。",
+      "bio_en": "A UK DJ who made his name alongside the label Hessle Audio, and a long-running fixture on Rinse FM. With almost no productions of his own, he reached the front rank of the global scene on the strength of his selections alone — a figure who has expanded the very definition of what a DJ does, through practice rather than theory."
     },
     {
       "ID": "daphni",
-      "NAME": "Daphni"
+      "NAME": "Daphni",
+      "COUNTRY": "CANADA",
+      "GENRE": "HOUSE",
+      "IMAGE": "images/artists/daphni.jpg",
+      "BIO": "カナダの Daniel Snaith が、Caribou と使い分けるダンスフロア名義。2012年の『Jiaolong』から本格的に動き出した。同名のレーベル Jiaolong を自ら運営しCaribou よりも直接的に、フロアに向けた音を作る。名義を分けることで、二つの時間の流れを持っている作家である。",
+      "INSTAGRAM": "https://www.instagram.com/cariboumusic/",
+      "SOUNDCLOUD": "https://soundcloud.com/caribouband",
+      "BANDCAMP": "https://caribouband.bandcamp.com/",
+      "STATUS": "published",
+      "metaDescription": "CaribouことDaniel Snaithがダンスフロア専用に立ち上げた別名義Daphni。2012年のJiaolongを起点に自主レーベルを運営し、より直接的でクラブ寄りの音を追求する。二つの名義で異なる時間を刻むカナダ人作家の核心に迫る。",
+      "bio_en": "Daphni is the dancefloor alias that Canada's Daniel Snaith keeps separate from Caribou. The project began in earnest with 2012's *Jiaolong*, and he runs a label of the same name, Jiaolong, himself. The music here is aimed more directly at the floor than anything under Caribou. By splitting his output across two names, he's an artist who moves at two different tempos of time."
     },
     {
       "ID": "dj-maria",
@@ -166,7 +232,19 @@
     },
     {
       "ID": "gonno",
-      "NAME": "Gonno"
+      "NAME": "Gonno",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO/ HOUSE",
+      "IMAGE": "images/artists/gonno.webp",
+      "BIO": "ジャパニーズ・ハウス/テクノシーンを代表するDJ/プロデューサーとして国内外で活躍。これまでにInternational Feel Recordings (Ibiza)、Beats In Space(New York), Ostgut-Ton(Berlin)など海外のレーベルを中心に数々の作品を発表。2015年にリリースされた2ndアルバム”Remember The Life Is Beautiful”はPitchforkやResident Advisor等の海外メディアでも紹介され、日本のMusic Magazine紙に年間ベストディスクにもランクインされた。またドラマー/パーカッショニスト増村和彦とGonno x Masumura名義でライブ活動も行っており、アルバム”In Circles”ではアシッディかつメロディックなシンセサイザーとアフロ・ビートを通過したライヴドラムの実験性の高いコラボレーションを発表し各方面の話題となった。",
+      "INSTAGRAM": "https://www.instagram.com/djgonno/",
+      "SOUNDCLOUD": "https://soundcloud.com/gonno",
+      "BANDCAMP": "https://gonno.bandcamp.com/",
+      "STATUS": "published",
+      "metaDescription": "日本のハウス/テクノシーンを牽引するDJ/プロデューサーGonnoのプロフィール。International FeelやOstgut-Tonなど海外レーベルからの作品、Pitchforkも評価した2ndアルバム、増村和彦とのライブユニットまで軌跡を紹介。",
+      "bio_en": "A DJ/producer at the forefront of the Japanese house/techno scene, active both at home and abroad. He has released a string of works primarily on overseas labels including International Feel Recordings (Ibiza), Beats In Space (New York) and Ostgut-Ton (Berlin). His second album, \"Remember The Life Is Beautiful,\" released in 2015, drew coverage from international outlets such as Pitchfork and Resident Advisor, and placed among the year's best albums in Japan's Music Magazine. He also performs live alongside drummer/percussionist Kazuhiko Masumura as Gonno x Masumura; their album \"In Circles\" — a highly experimental collaboration pairing acid-tinged, melodic synthesizers with live drumming filtered through Afrobeat — became a talking point across the board.",
+      "imagePosition": "center"
     },
     {
       "ID": "haai",
@@ -186,7 +264,16 @@
     },
     {
       "ID": "kikiorix",
-      "NAME": "Kikiorix"
+      "NAME": "Kikiorix",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "IMAGE": "images/artists/kikiorix.jpg",
+      "BIO": "日本・東京を拠点に活動。Kikiorixは日本国内はもちろん、海外でも数多くのクラブやフェスティバルでプレイしてきた。Rush Hour x RDCによるSomewhere in Amsterdam、Dusk Camp Los Angeles、Fabric London、The End/Aka London、Space Ibiza、Tresor Berlinなど、ヨーロッパにとどまらず、ハワイ、中国、タイ、スリランカなどにも招かれている。2000年代にはロンドンを拠点とし、Tomoki Tamuraとともにレジデントを務めたHolicで多くのDJ経験を積み、その後Tresvibesの一員として日本最大級の音楽フェスティバルのひとつであるFuji Rock Festivalへの出演も果たした。平日はRealrockdesignにてデザイナーとして多忙な日々を送る。Rainbow Disco Clubのレジデントデザイナー兼DJ。",
+      "INSTAGRAM": "https://www.instagram.com/kikigraphix/",
+      "SOUNDCLOUD": "https://soundcloud.com/kikiorix",
+      "STATUS": "published",
+      "metaDescription": "東京拠点のDJ Kikiorix。Fabric LondonやTresor Berlin、Space Ibizaなど世界各地でプレイし、Fuji Rock Festivalにも出演。Rainbow Disco Clubのレジデントデザイナー兼DJとしての活動と経歴を紹介。",
+      "bio_en": "Based in Tokyo, Japan.Kikiorix has played in many clubs and festivals in Japan as well as abroad including Somewhere in Amsterdam by Rush Hour x RDC, Dusk Camp Los Angeles, Fabric London, The End/Aka London, Space Ibiza, Tresor Berlin – and not only Europe but also he was invited to Hawaii, China, Thailand, Sri Lanka etc. Being based in London in 00s, he gained a lot of DJ experiences as a Holic resident together with Tomoki Tamura, and later he got to perform at one of the biggest music festivals in Japan, Fuji Rock Festival as a member of Tresvibes. During weekdays, he is busy working as a designer at Realrockdesign. A resident DJ and designer for Rainbow Disco Club."
     },
     {
       "ID": "mala",
@@ -222,7 +309,9 @@
     },
     {
       "ID": "noritake",
-      "NAME": "Noritake"
+      "NAME": "Noritake",
+      "INSTAGRAM": "https://www.instagram.com/nori0615/",
+      "STATUS": "published"
     },
     {
       "ID": "eric-cloutier",
@@ -282,7 +371,9 @@
     },
     {
       "ID": "joma",
-      "NAME": "Joma"
+      "NAME": "Joma",
+      "INSTAGRAM": "https://www.instagram.com/jomajjj/",
+      "STATUS": "published"
     },
     {
       "ID": "suguru-mochizuki",
@@ -310,7 +401,7 @@
       "WEBSITE": "https://linktr.ee/SUNGA_EEZEE",
       "STATUS": "published",
       "metaDescription": "EEZEE、COREHEAD、BEACH WHISTLE、BLACKSHEEPに関わるDJ SUNGAのプロフィール。都内から全国の箱、野外パーティまで現場を積み上げてきたキャリアと、レコード店やイベントとの深い結びつきを紹介します。",
-      "bio_en": "A DJ involved with parties and crews including EEZEE, COREHEAD, BEACH WHISTLE and BLACKSHEEP.\n\nPlaying mainly in Tokyo but also at venues across the country, with a solid reputation for his sets at open-air parties as well.\n\nHe also maintains close ties with record shops and events — the type who has carved out his position by stacking up sheer numbers of appearances on the floor."
+      "bio_en": "A DJ involved with parties and crews including EEZEE, COREHEAD, BEACH WHISTLE and BLACKSHEEP.\nPlaying mainly in Tokyo but also at venues across the country, with a solid reputation for his sets at open-air parties as well.\nHe also maintains close ties with record shops and events — the type who has carved out his position by stacking up sheer numbers of appearances on the floor."
     },
     {
       "ID": "dj-yazi",
@@ -322,11 +413,33 @@
     },
     {
       "ID": "kiko-dinucci",
-      "NAME": "Kiko Dinucci"
+      "NAME": "Kiko Dinucci",
+      "COUNTRY": "BRAZIL",
+      "GENRE": "LIVE",
+      "IMAGE": "images/artists/kiko-dinucci.jpg",
+      "BIO": "サンパウロのギタリストであり作曲家。Metá Metá と Passo Torto の創設メンバーである。Elza Soares、Tom Zé、Criolo、Jards Macalé、Marcelo D2 と共演してきた。若い頃のパンクやハードコア、そしてサンバ。どちらにも完全には属さないと本人は語る。激しいアコースティックギターに女性コーラスが応える構図が、その音の核にある。",
+      "INSTAGRAM": "https://www.instagram.com/KikoDinucci/",
+      "SOUNDCLOUD": "https://soundcloud.com/kikodinucci",
+      "BANDCAMP": "https://kikodinucci.bandcamp.com/",
+      "STATUS": "published",
+      "metaDescription": "Metá MetáとPasso Tortoの創設メンバー、サンパウロのギタリスト兼作曲家Kiko Dinucci。パンクとサンバのどちらにも属さないと語る彼の音楽性、Elza SoaresやTom Zé、Criolo、Marcelo D2との共演歴、激しいアコースティックギターと女性コーラスが交錯する独自のサウンドを紹介。",
+      "bio_en": "A guitarist and composer from São Paulo, and a founding member of both Metá Metá and Passo Torto. He has performed alongside Elza Soares, Tom Zé, Criolo, Jards Macalé and Marcelo D2. Punk and hardcore in his youth, and samba — he says he belongs fully to neither. At the core of his sound is a structure in which ferocious acoustic guitar is answered by a female chorus.",
+      "imagePosition": "center"
     },
     {
       "ID": "the-master-musicians-of-joujouka",
-      "NAME": "The Master Musicians of Joujouka"
+      "NAME": "The Master Musicians of Joujouka",
+      "COUNTRY": "MOROCCO",
+      "GENRE": "LIVE",
+      "IMAGE": "images/artists/the-master-musicians-of-joujouka.jpg",
+      "BIO": "モロッコ北部リーフ山地、ジャジューカ村のスーフィー・トランス楽団。1950年代初頭から続き、村の50人を超える音楽家が名を連ねる。1971年、Brian Jones が録音した LP がローリング・ストーンズのレーベルから出た。それを機に、村の音楽は世界に知られることになる。2021年にはポンピドゥー・センターでのライヴ盤を発表している。",
+      "INSTAGRAM": "https://www.instagram.com/mastermusiciansofjoujouka/",
+      "BANDCAMP": "https://zehra.bandcamp.com/",
+      "WEBSITE": "https://www.joujouka.org/",
+      "STATUS": "published",
+      "metaDescription": "モロッコ北部リーフ山地のジャジューカ村に伝わるスーフィー・トランス楽団を紹介。1971年のブライアン・ジョーンズ録音がローリング・ストーンズのレーベルから世界へ。50人を超える音楽家が受け継ぐ儀式音楽と、2021年のポンピドゥー・センター公演のライヴ盤まで。",
+      "bio_en": "A collective of Jbala Sufi trance musicians from the village of Joujouka in Morocco's Rif mountains, performing since the early 1950s and numbering over fifty musicians. In 1971 an LP recorded by Brian Jones was released on Rolling Stones Records, carrying the village's music to the world. A live album recorded at Centre Pompidou followed in 2021.",
+      "imagePosition": "center top"
     },
     {
       "ID": "kuo-from-sunset-rollercoaster",
@@ -375,7 +488,18 @@
     },
     {
       "ID": "juana-molina",
-      "NAME": "Juana Molina"
+      "NAME": "Juana Molina",
+      "COUNTRY": "ARGENTINA",
+      "GENRE": "LIVE",
+      "IMAGE": "images/artists/juana-molina.jpg",
+      "BIO": "ブエノスアイレスのシンガーソングライター。ささやくような歌と反復するエレクトロニクスを重ね合わせる。『Un Día』『Halo』など、国際的に評価されたアルバムを重ねてきた。実験的でありながら、耳に残るポップの手触りを失わない。",
+      "INSTAGRAM": "https://www.instagram.com/SOYJUANAMOLINA/",
+      "BANDCAMP": "https://juanamolina.bandcamp.com/",
+      "WEBSITE": "https://juanamolina.com",
+      "STATUS": "published",
+      "metaDescription": "ブエノスアイレス出身のシンガーソングライター、フアナ・モリーナ。ささやく歌声とループするエレクトロニクスが溶け合う独自の音世界を築き、Un DíaやHaloで国際的評価を獲得。実験性とポップの親しみやすさを両立させた稀有な音楽性を紹介します。",
+      "bio_en": "A Buenos Aires singer-songwriter who layers whispered vocals over looping electronics. Across acclaimed albums including \"Un Día\" and \"Halo\", her work stays experimental without losing the feel of pop that lodges in the ear.",
+      "imagePosition": "center top"
     },
     {
       "ID": "suimin",
@@ -559,7 +683,17 @@
     },
     {
       "ID": "so",
-      "NAME": "So"
+      "NAME": "So",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO",
+      "IMAGE": "images/artists/so.webp",
+      "BIO": "仙台にて18歳でDJを始める。その後野外フェスティバル「The Labyrinth」のレジデントDJ兼オーガナイザーとして20年以上に渡り活動中。安定感のあるスムーズなミックスと徐々に高揚感を増す丁寧なストーリーメイクを自身のスタイルとし、長年に渡り完成度を高めて来た。\n近年は3回目の出演となるポルトガルのWaking Life、ポーランドのGarbicz、オランダのDraaimolen、ベルギーのLa Nature等、欧州の大型フェスに絶えず出演し続け、昨年もスペインのParal·lel Festival に出演しそのセットはハイライトとなり好評を博した。年々その存在感を示し続けている。",
+      "INSTAGRAM": "https://www.instagram.com/dj.so_/",
+      "SOUNDCLOUD": "https://soundcloud.com/dj_so",
+      "STATUS": "published",
+      "metaDescription": "仙台で18歳からDJを始め、野外フェスThe Labyrinthのレジデント兼オーガナイザーとして20年以上活動するSo。滑らかなミックスと高揚感を紡ぐストーリーメイクを武器に、Waking LifeやGarbiczなど欧州の大型フェスへ出演し続けるその歩みを紹介。",
+      "bio_en": "He began DJing in Sendai at the age of 18. Since then, he has spent more than two decades as resident DJ and organizer of the open-air festival The Labyrinth. His signature style — rock-solid, seamless mixing paired with meticulous storytelling that builds euphoria little by little — is something he has refined over many years.\n\nMore recently he has been a constant presence on Europe's major festival circuit, appearing at Waking Life in Portugal (for the third time), Garbicz in Poland, Draaimolen in the Netherlands and La Nature in Belgium, among others. Last year he also played Paral·lel Festival in Spain, where his set was hailed as one of the weekend's highlights. Year after year, his presence continues to grow."
     }
   ]
 }
