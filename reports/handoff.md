@@ -5816,3 +5816,22 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - 次の担当への注意: `LP/images/`直下へ派生を置かないこと。記事本文画像を対象へ広げると
   生成時間と容量が急増する。画像生成器を再実行した際は、先に変更前後の同一条件の転送量を取り、
   外部Google画像の変動値と自サイト派生画像の増減を分けて判断すること。pushはユーザー承認後。
+
+## 2026-08-25 SEO/GEOテーマ1 依頼3受入確認の手直し
+
+- 実施: `scripts/build-image-derivatives.py` の記事アスペクト派生を、目標幅960pxから1200pxへ変更した。
+  ただし原本幅を上限にし、bondiscoは1179px、その他4記事は1200pxとした。事前生成ポジションは
+  各記事の実 `imagePosition` と `center` の2種類だけに限定し、現在の5記事はすべてcenterだったため
+  3アスペクト×centerの15枚になった。旧960px派生・top/bottom/left/right派生は同じコミットで削除した。
+  検査上限も1200pxへ更新した。
+- コミット: `b00bb849 fix(seo): tune article image derivatives`。修正内容の独立コミット、pushはしていない。
+- 検証: `python3 scripts/check_image_derivatives.py` は624枚（原本203件、記事5件）を確認。
+  記事アスペクトは全件実在し、幅は1179pxまたは1200px。余剰ポジションは0枚。
+  `node scripts/check_jsonld.mjs` 成功。`bash scripts/preflight.sh` **全41件成功**。
+  JA/EN公開記事5本の行数は全て153行で一致。
+- 変更したパターン: 1200px上限・原本幅キャップ、実ポジション＋centerのみの事前生成、
+  stale派生の自動削除、派生画像サイズ検査の上限更新。
+- 未確認の類似パターン: 現在の5記事にcenter以外の実データが無いため、top/bottom/left/rightを
+  指定した記事の実生成は未確認。manifestのcenterフォールバック検査は既存のJSON-LD検査で確認済み。
+- 次の担当への注意: 新記事で`imagePosition`を変更した場合は、その位置の派生とcenterの2枚だけが生成される。
+  1200px未満の原本は拡大しない。pushはユーザー承認後。

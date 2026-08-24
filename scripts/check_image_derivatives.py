@@ -52,7 +52,7 @@ for source, value in mapping.items():
         if not target_path.exists():
             raise SystemExit(f"派生画像がありません: {target}")
         with Image.open(target_path) as image:
-            if max(image.size) > 960:
+            if max(image.size) > 1200:
                 raise SystemExit(f"派生画像が大きすぎます: {target} {image.size}")
             # srcset の幅宣言が実体とずれると、ブラウザが誤った1枚を選ぶ。
             # 「小さいのに大きいと宣言」= ぼやけ、逆 = 無駄な転送。

@@ -56,6 +56,34 @@ def article_hero_sources() -> set[str]:
     return set(re.findall(r'image:\s*"(images/articles/[^"?]+\.webp)"', section))
 
 
+def article_hero_positions() -> dict[str, set[str]]:
+    """記事ごとの実際の imagePosition と center だけを返す。"""
+    data = (ROOT / "LP" / "data.js").read_text(encoding="utf-8")
+    section = data.split("const ARTICLES = [", 1)[-1].split("\n];", 1)[0]
+    result = {}
+    for block in re.findall(r"\n  \{(.*?)(?=\n  \},|\Z)", section, re.DOTALL):
+        image = re.search(r'image:\s*"(images/articles/[^"?]+\.webp)"', block)
+        if not image:
+            continue
+        value = re.search(r'imagePosition:\s*"([^"]+)"', block)
+        position = crop_position_key(value.group(1) if value else "center")
+        result[image.group(1)] = {"center", position}
+    return result
+
+
+def crop_position_key(value: str) -> str:
+    value = str(value or "center").lower()
+    if "top" in value:
+        return "top"
+    if "bottom" in value:
+        return "bottom"
+    if "left" in value:
+        return "left"
+    if "right" in value:
+        return "right"
+    return "center"
+
+
 def crop_centering(position: str) -> tuple[float, float]:
     """CSSのimagePosition相当をPillowのcrop中心へ変換する。"""
     value = str(position or "center").lower()
@@ -68,6 +96,7 @@ def main() -> None:
     mapping = {}
     counts = {}
     article_heroes = article_hero_sources()
+    article_positions = article_hero_positions()
     for kind in SOURCE_DIRS:
         source_dir = ROOT / "LP" / "images" / kind
         out_dir = OUT_ROOT / kind
@@ -108,10 +137,12 @@ def main() -> None:
                     if original.mode not in ("RGB", "RGBA"):
                         original = original.convert("RGB")
                     for aspect_name, (rw, rh) in ARTICLE_ASPECTS.items():
-                        target_w = 960
+                        # Discover/News向けに1200pxを目標にするが、原本は拡大しない。
+                        target_w = min(1200, original.size[0])
                         target_h = round(target_w * rh / rw)
                         positions = {}
-                        for position in ARTICLE_POSITIONS:
+                        source_key = f"images/articles/{source.name}"
+                        for position in sorted(article_positions.get(source_key, {"center"})):
                             target = out_dir / f"{source.stem}--{digest}-{aspect_name}-{position}.webp"
                             cropped = ImageOps.fit(
                                 original,
