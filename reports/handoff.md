@@ -5786,3 +5786,33 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
   - 見張り番が赤いとき、まず疑うのは本番ではなく通知経路。
   - `evaluateSync` は純関数のまま保つこと。ネットワークを混ぜると自己テストが書けない。
   - 時刻を扱うときは JST / UTC を必ず明記する。今回それで一度誤った記録を書いた。
+
+## 2026-08-25 SEO/GEOテーマ1 依頼3（記事画像アスペクト派生）
+
+- 実施: `scripts/build-image-derivatives.py` を変更し、記事のヒーロー5枚だけを対象に
+  `wide(16:9) / square(1:1) / fourThree(4:3)`を生成した。切り出しは
+  `imagePosition` の center/top/bottom/left/right を Pillow の中心位置へ変換する。
+  派生はすべて `LP/images/derivatives/card/articles/` 配下に置き、本文中の画像は対象外とした。
+  `scripts/build-detail-pages.mjs` はJA/ENのNewsArticle.imageへ3派生URLを出力し、
+  `scripts/check_image_derivatives.py` と `scripts/check_jsonld.mjs` に検査を追加。
+  同条件の再計測用に `scripts/measure_article_weight.py` を追加し、実ブラウザ画像も保存した。
+- コミット: `06763206 feat(seo): add article image aspect derivatives`。依頼3単独コミット、pushはしていない。
+- 検証: `bash scripts/preflight.sh` **全41件成功**。派生画像684枚（原本203件、記事ヒーロー5件）の
+  実体・幅宣言を確認。JSON-LDは453ページ469ブロックを検査し、記事5本×JA/ENの3アスペクトと
+  JA/ENキー一致が全件成功。公開記事5本のJA/EN行数は全て153行で一致。
+  変更前→変更後（390/1280、dpr2、Fast 3G相当）の代表計測は、JA390初期944,592→944,907 bytes・
+  全スクロール1,740,669→1,740,984、JA1280初期761,221→761,536・全1,391,258→1,391,573、
+  EN390初期590,022→590,337・全1,740,393→1,740,708、EN1280初期760,945→761,260・
+  全1,390,982→1,391,297。画像リクエスト数は2〜4件で変化なし、CLSは全て0.008未満。
+  差分はJSON-LDに派生URLを2本追加した文書分（315 bytes）で、画像転送量の増加はない。
+  なお外部Google画像の応答量は実行ごとに変動し、別実行のEN1280全スクロールだけ
+  2,656,171 bytesになったため、外部画像を含む絶対値は再現性に注意する。
+- 変更したパターン: 記事ヒーローの3アスペクト配列、`imagePosition`準拠の5方向crop、
+  derivatives manifestのaspect情報、記事JSON-LD検査、同一条件の重量・スクリーンショット計測。
+- 未確認の類似パターン: Google Rich Results Testの外部画面でのエラー0、実機Safariでの表示、
+  Google画像の外部応答量が安定した状態での再計測は未確認。スクリーンショットは
+  `reports/screenshots/seo-theme1/article-ja-390.png` / `article-ja-1280.png` /
+  `article-en-390.png` / `article-en-1280.png` に保存した。
+- 次の担当への注意: `LP/images/`直下へ派生を置かないこと。記事本文画像を対象へ広げると
+  生成時間と容量が急増する。画像生成器を再実行した際は、先に変更前後の同一条件の転送量を取り、
+  外部Google画像の変動値と自サイト派生画像の増減を分けて判断すること。pushはユーザー承認後。

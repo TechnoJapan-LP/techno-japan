@@ -27,14 +27,26 @@ def entries(value):
         return [(value, None)]
     out = [(value["src"], None)]
     out += [(path, width) for path, width in value.get("srcset", [])]
+    for aspect in value.get("aspect", {}).values():
+        for position in aspect.values():
+            out.append((position["path"], position.get("w")))
     return out
+
+data = (ROOT / "LP/data.js").read_text(encoding="utf-8")
+article_section = data.split("const ARTICLES = [", 1)[-1].split("\n];", 1)[0]
+article_heroes = set(re.findall(r'image:\s*"(images/articles/[^"?]+\.webp)"', article_section))
 
 
 checked = 0
+article_sources = 0
 for source, value in mapping.items():
     source_path = ROOT / "LP" / source
     if not source_path.exists():
         raise SystemExit(f"原本がありません: {source}")
+    if source in article_heroes and isinstance(value, dict):
+        article_sources += 1
+        if not all(value.get("aspect", {}).get(name) for name in ("wide", "square", "fourThree")):
+            raise SystemExit(f"記事画像の3アスペクト派生がありません: {source}")
     for target, declared_width in entries(value):
         target_path = ROOT / "LP" / target
         if not target_path.exists():
@@ -50,4 +62,4 @@ for source, value in mapping.items():
                     f"宣言={declared_width}w 実体={image.size[0]}px"
                 )
         checked += 1
-print(f"✅ 派生画像 {checked}枚（原本{len(mapping)}件）、実体・サイズ・幅宣言を確認")
+print(f"✅ 派生画像 {checked}枚（原本{len(mapping)}件、記事{article_sources}件）、実体・サイズ・幅宣言を確認")

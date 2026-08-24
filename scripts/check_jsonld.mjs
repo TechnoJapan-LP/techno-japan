@@ -142,6 +142,9 @@ for (const article of publishedArticles) {
       && Number.isInteger(ld.wordCount) && ld.wordCount > 0
       && typeof ld.thumbnailUrl === 'string' && ld.thumbnailUrl.startsWith('https://'),
       JSON.stringify({ isAccessibleForFree: ld.isAccessibleForFree, wordCount: ld.wordCount, thumbnailUrl: ld.thumbnailUrl }));
+    const imageFiles = Array.isArray(ld.image) ? ld.image.map((url) => localPathFromSiteUrl(url)) : [];
+    check(`${rel} のimageが16:9・1:1・4:3の3件で実在する`, imageFiles.length === 3 && imageFiles.every((file) => file && fs.existsSync(file)),
+      JSON.stringify(ld.image || []));
     if (article.festivalId) {
       const aboutId = ld.about?.[0]?.['@id'];
       const aboutFile = aboutId ? localPathFromSiteUrl(aboutId.replace(/#festival$/, '')) : null;

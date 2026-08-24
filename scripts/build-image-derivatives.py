@@ -37,11 +37,37 @@ OUT_JS = ROOT / "LP" / "image-derivatives.js"
 # 480 / 960 の2枚で両方をまかなえる。
 SIZES = (("sm", 480), ("lg", 960))
 QUALITY = 80
+ARTICLE_ASPECTS = {
+    "wide": (16, 9),
+    "square": (1, 1),
+    "fourThree": (4, 3),
+}
+ARTICLE_POSITIONS = ("center", "top", "bottom", "left", "right")
+
+
+def article_hero_sources() -> set[str]:
+    """記事のヒーロー画像だけを派生対象にする。
+
+    本文中の外部画像までアスペクト違いを生成すると、対象が5記事ではなく
+    数十枚へ膨らみ、生成時間とリポジトリ容量を不必要に増やすため。
+    """
+    data = (ROOT / "LP" / "data.js").read_text(encoding="utf-8")
+    section = data.split("const ARTICLES = [", 1)[-1].split("\n];", 1)[0]
+    return set(re.findall(r'image:\s*"(images/articles/[^"?]+\.webp)"', section))
+
+
+def crop_centering(position: str) -> tuple[float, float]:
+    """CSSのimagePosition相当をPillowのcrop中心へ変換する。"""
+    value = str(position or "center").lower()
+    x = 0.0 if "left" in value else 1.0 if "right" in value else 0.5
+    y = 0.0 if "top" in value else 1.0 if "bottom" in value else 0.5
+    return x, y
 
 
 def main() -> None:
     mapping = {}
     counts = {}
+    article_heroes = article_hero_sources()
     for kind in SOURCE_DIRS:
         source_dir = ROOT / "LP" / "images" / kind
         out_dir = OUT_ROOT / kind
@@ -75,6 +101,32 @@ def main() -> None:
                 "srcset": [[entry["sm"]["path"], entry["sm"]["w"]],
                            [entry["lg"]["path"], entry["lg"]["w"]]],
             }
+            if kind == "articles" and f"images/articles/{source.name}" in article_heroes:
+                aspect_entries = {}
+                with Image.open(source) as original:
+                    original = ImageOps.exif_transpose(original)
+                    if original.mode not in ("RGB", "RGBA"):
+                        original = original.convert("RGB")
+                    for aspect_name, (rw, rh) in ARTICLE_ASPECTS.items():
+                        target_w = 960
+                        target_h = round(target_w * rh / rw)
+                        positions = {}
+                        for position in ARTICLE_POSITIONS:
+                            target = out_dir / f"{source.stem}--{digest}-{aspect_name}-{position}.webp"
+                            cropped = ImageOps.fit(
+                                original,
+                                (target_w, target_h),
+                                method=Image.Resampling.LANCZOS,
+                                centering=crop_centering(position),
+                            )
+                            cropped.save(target, "WEBP", quality=QUALITY, method=6)
+                            positions[position] = {
+                                "path": f"images/derivatives/card/{kind}/{target.name}",
+                                "w": target_w,
+                                "h": target_h,
+                            }
+                        aspect_entries[aspect_name] = positions
+                mapping[f"images/{kind}/{source.name}"]["aspect"] = aspect_entries
             n += 1
         counts[kind] = n
 
@@ -86,6 +138,12 @@ def main() -> None:
             for key, value in mapping.items()
             if key.startswith(f"images/{kind}/")
             for p, _ in value["srcset"]
+        } | {
+            Path(position["path"]).name
+            for key, value in mapping.items()
+            if key.startswith(f"images/{kind}/")
+            for aspect in value.get("aspect", {}).values()
+            for position in aspect.values()
         }
         for stale in out_dir.glob("*.webp"):
             if stale.name not in wanted:

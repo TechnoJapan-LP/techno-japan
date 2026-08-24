@@ -302,6 +302,28 @@ function srcsetAttr(source, sizes) {
 /* 関連カードは実測 324px 幅で表示される。960px を全端末へ配らない。 */
 const cardSrcsetAttr = (s) => srcsetAttr(s, '(max-width: 700px) 100vw, 360px');
 
+function articlePositionKey(value) {
+  const v = String(value || '').toLowerCase();
+  if (v.includes('top')) return 'top';
+  if (v.includes('bottom')) return 'bottom';
+  if (v.includes('left')) return 'left';
+  if (v.includes('right')) return 'right';
+  return 'center';
+}
+
+/* NewsArticle.image は同じ原画の水増しではなく、実際の切り出し画像を出す。
+   imagePosition は crop 生成時の center/top/bottom 等と同じキーへ変換する。 */
+function articleImageVariants(source, imagePosition) {
+  const entry = cardEntry(source);
+  const aspect = entry?.aspect;
+  if (!aspect) return [absUrl(source)];
+  const position = articlePositionKey(imagePosition);
+  const variants = ['wide', 'square', 'fourThree']
+    .map((name) => aspect[name]?.[position]?.path || aspect[name]?.center?.path)
+    .filter(Boolean);
+  return variants.length === 3 ? variants.map((p) => absUrl(p)) : [absUrl(source)];
+}
+
 /* hero（詳細ページの一番大きい画像）。実測 モバイル480px / PC 696px。
 
    ⚠️ 2026-08-15 まで hero だけ srcset が無く、原寸をそのまま配っていた。
@@ -779,16 +801,17 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   const about = relatedFestival && fs.existsSync(relatedFestivalPath)
     ? [{ '@id': `${BASE}/festivals/${encodeURIComponent(relatedFestival.id)}.html#festival` }]
     : undefined;
+  const articleImages = articleImageVariants(a.image, a.imagePosition);
 
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'NewsArticle',
     headline: L.title,
     description: desc,
-    image: [image],
+    image: articleImages,
     isAccessibleForFree: true,
     wordCount: stripTags(L.body || '').length,
-    thumbnailUrl: image,
+    thumbnailUrl: articleImages[0] || image,
     ...(about ? { about } : {}),
     inLanguage: lang,
     datePublished: a.date,
