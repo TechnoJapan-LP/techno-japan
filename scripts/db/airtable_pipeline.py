@@ -45,6 +45,12 @@ FIELD_MAP = {
     "official_url": "official_url",
     "instagram": "instagram",
     "venue_status": "venue_status",
+    # 2026-08-23 追加: 巡回で見つかる国・地域の空欄/誤記を、notes の「提案」でなく
+    # 他の項目と同じ Inbox → 承認 → apply の経路で直せるようにする
+    "country": "country",
+    "city_region": "city_region",
+    # 2026-08-23 追加: 公式のチケット案内ページ（年で変わらない URL を優先）
+    "ticket_url": "ticket_url",
 }
 
 

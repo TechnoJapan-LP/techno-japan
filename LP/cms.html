@@ -19,7 +19,17 @@
      localStorage に認証トークン（cms_token）を持つため、ここで外部スクリプトの
      実行を許すとトークンを読める。check_asset_versions.py が
      「CMS の外部 JavaScript 参照」を検査しているのと同じ意図を、
-     ブラウザ側でも強制する。 -->
+     ブラウザ側でも強制する。
+
+     ■ connect-src に techno-japan.media を入れていないのは、忘れではない（§9-95）
+
+     cms.js の fetchPublishedDataJs() は本番の data.js を読み、「公開中と同じ内容か」を
+     見る。本番CMS は techno-japan.media 上にあるので 'self' で読めるが、
+     ローカル（127.0.0.1）からは読めない。その結果、**ローカルからは Publish が
+     必ず止まる**。2026-08-24 に「ローカルからは本番へ出さない」を方針として選び、
+     ここを足さないことでブラウザに強制させている。
+     ここに techno-japan.media を足すと、ローカルCMSの Publish Now が本物になる。
+     足す前に §9-95 を読むこと。 -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://nominatim.openstreetmap.org; form-action 'self'; frame-src 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
 
 <link rel="icon" href="/favicon.ico?v=2" sizes="32x32">
@@ -30,7 +40,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/vendor/leaflet-1.9.4/leaflet.css?v=2">
 <script src="/vendor/leaflet-1.9.4/leaflet.js?v=2"></script>
-<link rel="stylesheet" href="cms.css?v=31">
+<link rel="stylesheet" href="cms.css?v=33">
 <link rel="stylesheet" href="/vendor/quill-1.3.7/quill.snow.css?v=1">
 <script src="/vendor/quill-1.3.7/quill.min.js?v=2"></script>
 </head>
@@ -105,8 +115,12 @@
       <div class="form-group"><label>City</label><input type="text" id="v-city" placeholder="e.g. KYOTO"></div>
       <div class="form-group"><label>Area</label><input type="text" id="v-area" placeholder="e.g. SHIMOGYO"></div>
       <div class="form-group"><label>Type</label><select id="v-type"><option value="club">Club</option><option value="bar">Bar</option><option value="livehouse">Livehouse</option></select></div>
+      <div class="form-group" id="v-subtype-wrap" hidden><label>Bar Subtype</label><select id="v-subtype"><option value="">—</option><option value="dj-bar">DJ Bar</option><option value="music-bar">Music Bar</option><option value="listening-bar">Listening Bar</option></select></div>
+      <div class="form-group"><label>Hours</label><input type="text" id="v-hours" placeholder="e.g. 19:00–03:00"></div>
+      <div class="form-group"><label>Charge</label><select id="v-charge"><option value="">—</option><option value="no-cover">No Cover</option><option value="cover">Cover</option><option value="varies">Varies</option></select></div>
       <div class="form-group"><label>Image Path</label><input type="text" id="v-image" placeholder="auto-filled" readonly></div>
       <div class="form-group full"><label>Genre</label><div class="chip-group" id="v-genre"></div></div>
+      <div class="form-group full"><label>Features</label><div class="chip-group" id="v-features" aria-label="Venue features"></div></div>
       <div class="form-group"><label>Capacity</label><input type="number" id="v-capacity" placeholder="e.g. 300"></div>
       <div class="form-group"><label>URL</label><input type="url" id="v-url" placeholder="https://..."></div>
       <div class="form-group full"><label>Address</label><div class="input-row"><input type="text" id="v-address" placeholder="Full address"><button class="btn btn-blue btn-sm" onclick="geocode('v')">Geocode</button></div></div>
@@ -553,6 +567,6 @@
 </div>
 
 <script type="module" src="article-shortcodes.js?v=2"></script>
-<script src="cms.js?v=92" defer></script>
+<script src="cms.js?v=100" defer></script>
 </body>
 </html>

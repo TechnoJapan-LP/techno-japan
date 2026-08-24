@@ -88,6 +88,9 @@
 .venue-card-name { font-family: var(--font-display); font-size: clamp(28px, 3.5vw, 48px); text-transform: uppercase; line-height: 1; margin-bottom: 8px; }
 .venue-card-area { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.3; margin-bottom: 16px; }
 .venue-card-genre { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.2; }
+.venue-card-labels { position: absolute; top: 16px; right: 76px; z-index: 2; display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end; max-width: 55%; }
+.venue-card-label { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text); border: 1px solid rgba(240,237,232,0.22); padding: 4px 6px; background: rgba(8,8,8,0.62); }
+.venue-card-label.subtype { color: var(--accent); border-color: rgba(255,45,45,0.45); }
 .venue-card-arrow {
   position: absolute; right: 24px; bottom: 24px; z-index: 1;
   width: 56px; height: 56px; border: 1px solid rgba(240,237,232,0.18); border-radius: 50%;
@@ -191,7 +194,13 @@
   border-bottom: 1px solid rgba(240,237,232,0.06);
   display: flex; align-items: center;
   padding-right: 40px;
+  flex-wrap: wrap;
 }
+.type-nav { width: 100%; display: flex; gap: 0; overflow-x: auto; scrollbar-width: none; padding: 12px 0 0 40px; align-items: center; border-bottom: 1px solid rgba(240,237,232,0.04); }
+.type-nav::-webkit-scrollbar { display: none; }
+.type-nav a { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.3; transition: opacity 0.3s ease; padding: 8px 24px 12px; white-space: nowrap; flex-shrink: 0; cursor: pointer; }
+.type-nav a:hover { opacity: 0.7; }
+.type-nav a.active { opacity: 1; border-bottom: 1px solid var(--text); }
 .area-nav {
   flex: 1; min-width: 0;
   padding: 14px 0 14px 40px; display: flex; gap: 0; overflow-x: auto; scrollbar-width: none;
@@ -282,6 +291,8 @@
   .page-header-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
   #venues-list-view { padding: 40px 24px 80px; }
   .area-nav-wrap { padding-right: 24px; top: 48px; }
+  .type-nav { padding-left: 24px; }
+  .type-nav a { padding: 6px 12px; font-size: 9px; }
   .area-nav { padding: 12px 0 12px 24px; }
   .area-nav a { padding: 6px 16px; font-size: 9px; }
   .venues-grid { grid-template-columns: 1fr; }
@@ -396,6 +407,7 @@
 
 <main id="venues-list-view">
   <div class="area-nav-wrap">
+    <div class="type-nav" id="type-nav"></div>
     <div class="area-nav" id="area-nav"></div>
     <button class="area-nav-map" id="area-map-btn"><span class="pin-icon"></span> MAP</button>
   </div>
@@ -555,6 +567,7 @@ function observeAll() { document.querySelectorAll('.reveal').forEach(el => obser
 
 /* AREA FILTER */
 let currentArea = 'ALL';
+let currentType = 'ALL';
 let mapCity = null; // which city map is showing
 let currentSearch = '';
 const VENUE_HUB_STATE_KEY = 'tj:venue-hub-state:v1';
@@ -564,6 +577,8 @@ function readVenueQuery() {
   if (area) currentArea = area;
   const q = new URLSearchParams(location.search).get('q');
   if (q) currentSearch = q;
+  const hashType = new URLSearchParams(location.hash.replace(/^#/, '')).get('type');
+  if (['club','bar','livehouse'].includes(hashType)) currentType = hashType;
 }
 function syncVenueQuery() {
   const url = new URL(location.href);
@@ -571,7 +586,8 @@ function syncVenueQuery() {
   url.searchParams.delete('q');
   if (currentArea !== 'ALL') url.searchParams.set('area', currentArea);
   if (currentSearch) url.searchParams.set('q', currentSearch);
-  history.replaceState(history.state, '', url.pathname + url.search);
+  url.hash = currentType === 'ALL' ? '' : `type=${encodeURIComponent(currentType)}`;
+  history.replaceState(history.state, '', url.pathname + url.search + url.hash);
 }
 function saveVenueHubState() {
   try { sessionStorage.setItem(VENUE_HUB_STATE_KEY, JSON.stringify({url:location.pathname+location.search,scrollY,savedAt:Date.now()})); } catch (_) {}
@@ -634,6 +650,26 @@ function buildAreaNav() {
       mapCity = city;
     }
   });
+}
+
+function buildTypeNav() {
+  const nav = document.getElementById('type-nav');
+  if (!nav) return;
+  nav.innerHTML = [['ALL','ALL'], ...MAP_TYPES].map(([value, label]) =>
+    `<a href="#" data-type="${value}" class="${currentType === value ? 'active' : ''}">${label}</a>`
+  ).join('');
+  nav.querySelectorAll('a').forEach(link => link.addEventListener('click', e => {
+    e.preventDefault();
+    setVenueType(link.dataset.type);
+  }));
+}
+
+function setVenueType(type) {
+  currentType = ['club','bar','livehouse'].includes(type) ? type : 'ALL';
+  document.querySelectorAll('#type-nav a').forEach(a => a.classList.toggle('active', a.dataset.type === currentType));
+  renderVenuesList();
+  syncMapTypeFilters();
+  syncVenueQuery();
 }
 
 function hideAllMaps() {
@@ -714,14 +750,19 @@ function applyAreaFilter() {
   let visible = 0;
   document.querySelectorAll('.venue-card').forEach(card => {
     const city = card.dataset.city;
+    const type = card.dataset.type;
     const matchesArea = currentArea === 'ALL' || city === currentArea;
+    const matchesType = currentType === 'ALL' || type === currentType;
     const matchesSearch = !currentSearch || card.dataset.search.includes(currentSearch.toLowerCase());
-    const show = matchesArea && matchesSearch;
+    const show = matchesArea && matchesType && matchesSearch;
     card.style.display = show ? '' : 'none';
     if (show) visible++;
   });
   const count = document.getElementById('venues-count');
-  if (count) count.textContent = `${visible} VENUES`;
+  if (count) {
+    const typeCounts = [['club','CLUBS'],['bar','BARS'],['livehouse','LIVEHOUSE']].map(([type,label]) => `${label} ${VENUES.filter(v => v.type === type).length}`);
+    count.textContent = `${visible} VENUES · ${typeCounts.join(' · ')}`;
+  }
 }
 
 /* HOVER PREVIEW PANE — HÖR-inspired side popup, desktop only */
@@ -801,11 +842,23 @@ function bindVenueHoverPreview(){
 
 /* RENDER LIST */
 function renderVenuesList() {
-  document.getElementById('venues-grid').innerHTML = VENUES.filter(v => v.name && v.city && v.city !== 'undefined').map((v, i) => {
+  const typeOrder = { club: 0, livehouse: 1, bar: 2 };
+  const venues = VENUES.filter(v => v.name && v.city && v.city !== 'undefined').sort((a,b) => {
+    if (currentType === 'ALL') return (typeOrder[a.type] ?? 9) - (typeOrder[b.type] ?? 9) || String(a.name).localeCompare(String(b.name));
+    return String(a.name).localeCompare(String(b.name));
+  });
+  document.getElementById('venues-grid').innerHTML = venues.map((v, i) => {
     const evCount = getVenueEvents(v.name).length;
     const visualImage = v.image && v.image.trim();
+    const personalityFeatures = ['after-hours','daytime','vinyl','outdoor','rooftop','listening','no-cover'];
+    const featureLabels = (Array.isArray(v.features) ? v.features : String(v.features || '').split(/[;,]/))
+      .map(f => String(f).trim()).filter(f => personalityFeatures.includes(f)).slice(0, 2);
+    const labels = [];
+    if (v.type === 'bar' && v.subtype) labels.push(`<span class="venue-card-label subtype">${v.subtype}</span>`);
+    if (v.type === 'bar' && v.charge === 'no-cover') labels.push('<span class="venue-card-label">NO COVER</span>');
+    featureLabels.forEach(f => labels.push(`<span class="venue-card-label">${f}</span>`));
     return `
-      <a href="/venues/${encodeURIComponent(v.id)}.html" data-venue-detail-link data-vid="${v.id}" class="venue-card reveal${visualImage ? ' has-visual' : ''}" data-city="${v.city}" data-search="${[v.name, v.name_en, v.city, v.area, Array.isArray(v.genre) ? v.genre.join(' ') : v.genre].filter(Boolean).join(' ').toLowerCase()}" style="transition-delay:${i * 80}ms">
+      <a href="/venues/${encodeURIComponent(v.id)}.html" data-venue-detail-link data-vid="${v.id}" class="venue-card reveal${visualImage ? ' has-visual' : ''}" data-city="${v.city}" data-type="${v.type || ''}" data-search="${[v.name, v.name_en, v.city, v.area, v.subtype, v.features, Array.isArray(v.genre) ? v.genre.join(' ') : v.genre].filter(Boolean).join(' ').toLowerCase()}" style="transition-delay:${i * 80}ms">
         ${visualImage ? `<div class="venue-card-visual"${tjLazyBgAttr(visualImage, 'sm')}></div>` : ''}
         <div class="venue-card-content">
           <div class="venue-card-city">${[v.city, v.area].filter(Boolean).join(' · ')}</div>
@@ -813,6 +866,7 @@ function renderVenuesList() {
           <div class="venue-card-area"></div>
           <div class="venue-card-genre">${v.genre ? (Array.isArray(v.genre) ? v.genre.join(' / ') : v.genre) : ''}</div>
         </div>
+        ${labels.length ? `<div class="venue-card-labels">${labels.join('')}</div>` : ''}
         <div class="venue-card-arrow" aria-label="VIEW"><span class="venue-card-arrow-icon" aria-hidden="true">→</span><span class="venue-card-arrow-label">VIEW</span></div>
         <div class="venue-fav-mount" data-fav-mount="venue" data-fav-id="${v.id}" onclick="event.preventDefault();event.stopPropagation()"></div>
       </a>`;
@@ -853,6 +907,7 @@ function bindCursorExpand() {
 
 const MAP_GENRES = ['ALL', 'TECHNO', 'HOUSE', 'OTHERS'];
 const MAP_TYPES  = [['club', 'CLUBS'], ['bar', 'BARS'], ['livehouse', 'LIVEHOUSE']];
+const mapTypeControllers = [];
 
 /* 都市名から要素 id を作る。id に使えない文字は落とす。 */
 function citySlug(city) {
@@ -914,6 +969,8 @@ function createCityMap(city) {
   const slug = citySlug(city);
   const clubs = VENUES.filter(v => v.city === city && v.lat && v.lng);
   const state = { map: null, markers: [], genre: 'ALL', type: null };
+  const controller = { state, renderFilters: null, renderMarkers: null };
+  mapTypeControllers.push(controller);
 
   function renderFilters() {
     const bar = document.getElementById(`${slug}-map-filters`);
@@ -928,7 +985,7 @@ function createCityMap(city) {
     bar.querySelectorAll('.vm-pill[data-type]').forEach(pill => {
       pill.addEventListener('click', () => {
         state.type = state.type === pill.dataset.type ? null : pill.dataset.type;
-        renderFilters(); renderMarkers();
+        setVenueType(state.type || 'ALL');
       });
     });
   }
@@ -955,6 +1012,7 @@ function createCityMap(city) {
 
   function init() {
     if (state.map) return;
+    state.type = currentType === 'ALL' ? null : currentType;
     /* **中心座標を都市ごとに持たない。**持つと、都市が増えるたびに
        座標表を書き足すことになり、書き忘れれば的外れな場所が映る。
        その都市の会場から求める。 */
@@ -969,7 +1027,17 @@ function createCityMap(city) {
     renderMarkers();
   }
 
+  controller.renderFilters = renderFilters;
+  controller.renderMarkers = renderMarkers;
+
   return { city, slug, init, invalidate: () => state.map && state.map.invalidateSize() };
+}
+
+function syncMapTypeFilters() {
+  mapTypeControllers.forEach(({state, renderFilters, renderMarkers}) => {
+    state.type = currentType === 'ALL' ? null : currentType;
+    if (state.map && renderFilters && renderMarkers) { renderFilters(); renderMarkers(); }
+  });
 }
 
 /* ========== MAP CONFIG ==========
@@ -988,6 +1056,7 @@ const ALL_MAPS_CFG = CITY_MAPS;   // 既存の呼び出し名を保つ
 /* INIT */
 buildCityMapSections();   // 地図の入れ物を都市の数だけ用意してから
 buildAreaNav();
+buildTypeNav();
 const venueSearch = document.getElementById('venues-search');
 venueSearch.value = currentSearch;
 let venueSearchTimer;

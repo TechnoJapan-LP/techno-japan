@@ -96,6 +96,81 @@ window.addEventListener('load',()=>setTimeout(()=>{
     はみ出す:qe.scrollHeight>qe.clientHeight+2, scrollH:qe.scrollHeight, clientH:qe.clientHeight};}
   const be=document.getElementById('ar-body-editor');
   if(be){const cs=getComputedStyle(be); out.エディタ本体CSS={height:cs.height,minHeight:cs.minHeight,display:cs.display};}
+  const venueType=document.getElementById('v-type');
+  const venueSubtype=document.getElementById('v-subtype');
+  const venueSubtypeWrap=document.getElementById('v-subtype-wrap');
+  const venueFeatures=document.querySelectorAll('#v-features .chip');
+  out.VENUES入力欄={
+    subtype:!!venueSubtype, hours:!!document.getElementById('v-hours'), charge:!!document.getElementById('v-charge'),
+    features:venueFeatures.length, subtypeOptions:venueSubtype?[...venueSubtype.options].map(o=>o.value):[], hiddenInitially:venueSubtypeWrap?venueSubtypeWrap.hidden:null
+  };
+  if(venueType&&venueSubtypeWrap){
+    venueType.value='bar'; venueType.dispatchEvent(new Event('change'));
+    out.VENUES入力欄.subtypeVisibleForBar=!venueSubtypeWrap.hidden;
+    venueType.value='club'; venueType.dispatchEvent(new Event('change'));
+    out.VENUES入力欄.subtypeHiddenForClub=venueSubtypeWrap.hidden;
+  }
+  document.getElementById('v-name').value='CHECK VENUE';
+  venueType.value='bar'; venueType.dispatchEvent(new Event('change'));
+  venueSubtype.value='dj-bar'; document.getElementById('v-hours').value='19:00–03:00';
+  document.getElementById('v-charge').value='no-cover';
+  document.querySelector('#v-features .chip[data-feature="vinyl"]')?.click();
+  document.querySelector('#v-features .chip[data-feature="cashless-only"]')?.click();
+  openPreview('venue'); closePreview(); openPreview('venue');
+  const previewText=document.getElementById('preview-content')?.textContent||'';
+  out.VENUES入力欄.previewReopenKeepsValues=previewText.includes('dj-bar')&&previewText.includes('19:00–03:00')&&previewText.includes('no-cover')&&previewText.includes('vinyl')&&previewText.includes('cashless-only');
+  // 集中モードの固定プレビューでも、カレンダーからカードへ移動できること。
+  const articlePreview=document.getElementById('ar-preview-content');
+  const articleWrap=document.getElementById('ar-editor-wrap');
+  articleWrap.classList.add('focus-mode','preview-mode');
+  articlePreview.innerHTML='<nav class="tj-calendar"><ol><li><time>JAN 01</time><a href="#ev-preview-event-1">Preview Event</a><span>Tokyo</span></li></ol></nav><p style="height:900px">spacer</p><article class="tj-event" id="ev-preview-event-1"><h3>Preview Event</h3><a class="tj-event-link" href="https://example.com" target="_blank">OFFICIAL ↗</a></article>';
+  bindArticlePreviewInteractions(articlePreview);
+  const calendarLink=articlePreview?.querySelector('.tj-calendar a');
+  const beforeHash=location.hash;
+  calendarLink?.click();
+  out.イベントカード操作={
+    officialLinkPointer:articlePreview?.querySelector('.tj-event-link')?getComputedStyle(articlePreview.querySelector('.tj-event-link')).pointerEvents:'missing',
+    calendarLinkPointer:calendarLink?getComputedStyle(calendarLink).pointerEvents:'missing',
+    hash変更なし:location.hash===beforeHash,
+    cardHighlight:!!articlePreview?.querySelector('.tj-event[data-preview-target="1"]')
+  };
+  articleWrap.classList.remove('focus-mode','preview-mode');
+  // プレビューを先に開かず集中モードへ入った場合も、後から表示できること。
+  const probeEditor=document.querySelector('#ar-body-editor .ql-editor');
+  if (probeEditor) probeEditor.innerHTML=articlePreview.innerHTML;
+  toggleFocusMode();
+  toggleArticlePreview();
+  out.集中モードからプレビュー表示={
+    focus:articleWrap.classList.contains('focus-mode'),
+    preview:articleWrap.classList.contains('preview-mode') && getComputedStyle(articlePreview).display!=='none',
+    eventVisible:!!articlePreview.querySelector('.tj-event')
+  };
+  toggleFocusMode();
+  // イベントカード入力ダイアログが集中モードの裏に隠れないこと。
+  toggleFocusMode();
+  openArticleEventForm();
+  const eventDialog=document.getElementById('ar-event-dialog');
+  const eventDialogBox=eventDialog?.querySelector('.dialog-box');
+  out.集中モードのイベント入力={
+    visible:!!eventDialog && getComputedStyle(eventDialog).display!=='none',
+    zIndex:eventDialog?getComputedStyle(eventDialog).zIndex:'missing',
+    boxVisible:!!eventDialogBox && eventDialogBox.getBoundingClientRect().width>0
+  };
+  eventDialog?.remove();
+  toggleFocusMode();
+  // 別ウィンドウの本番表示プレビューにも短コードが変換されること。
+  let generatedPreview='';
+  const originalOpen=window.open;
+  window.open=()=>({document:{open(){},write(value){generatedPreview=String(value)},close(){}}});
+  if (probeEditor) probeEditor.innerHTML='<p>[[event|Generated Preview Event|2030-01-01|Tokyo|https://example.com|Techno]]</p><p>[[calendar]]</p>';
+  openArticleGeneratedPreview();
+  window.open=originalOpen;
+  out.本番表示プレビュー={
+    event:generatedPreview.includes('class="tj-event"'),
+    calendar:generatedPreview.includes('class="tj-calendar"'),
+    detailInner:generatedPreview.includes('class="article-detail-inner"'),
+    productionCss:generatedPreview.includes('/detail.css?v=29')
+  };
   out.公開パネル = box(document.querySelector('#sec-article .pub-section'));
   out.パネルの親 = box(document.querySelector('#sec-article .pub-section')?.parentElement);
   out.フォーム格子 = box(document.querySelector('#article-tab-form .form-grid'));
@@ -150,8 +225,16 @@ for(const [k,v] of Object.entries(d.重なり||{})) if(v) failures.push(`${k} �
 for(const [mode,r] of Object.entries(d.モード切替||{})) if(!r.ツールバー枠内)
   failures.push(`${mode}: 画像ツールバーがエディタ枠からはみ出している`);
 const q=d.Quill本文2;
-if(q && q.高さ < 400) failures.push(`本文の入力欄が狭い（${q.高さ}px）。従来は約537px`);
-if(failures.length){
+  if(q && q.高さ < 400) failures.push(`本文の入力欄が狭い（${q.高さ}px）。従来は約537px`);
+if(!d.VENUES入力欄?.subtype||!d.VENUES入力欄?.hours||!d.VENUES入力欄?.charge) failures.push('VENUESのSUBTYPE / HOURS / CHARGE入力欄が不足');
+if(d.VENUES入力欄?.features!==13) failures.push(`VENUESのFEATURES選択肢が不足（${d.VENUES入力欄?.features||0}件、13件必要）`);
+if(d.VENUES入力欄 && (!d.VENUES入力欄.subtypeVisibleForBar || !d.VENUES入力欄.subtypeHiddenForClub)) failures.push('SUBTYPEのbar限定表示が動作していない');
+if(d.VENUES入力欄 && !d.VENUES入力欄.previewReopenKeepsValues) failures.push('VENUESのプレビュー再表示で入力値が保持されていない');
+if(d.イベントカード操作 && (d.イベントカード操作.officialLinkPointer!=='auto' || d.イベントカード操作.calendarLinkPointer!=='auto' || !d.イベントカード操作.hash変更なし || !d.イベントカード操作.cardHighlight)) failures.push('集中モードのイベントカード / カレンダーリンクを操作できない');
+if(d.集中モードからプレビュー表示 && (!d.集中モードからプレビュー表示.focus || !d.集中モードからプレビュー表示.preview || !d.集中モードからプレビュー表示.eventVisible)) failures.push('集中モード開始後にプレビューを表示できない');
+if(d.集中モードのイベント入力 && (!d.集中モードのイベント入力.visible || Number(d.集中モードのイベント入力.zIndex)<=2000 || !d.集中モードのイベント入力.boxVisible)) failures.push('集中モードのイベント入力ダイアログが前面に出ない');
+if(d.本番表示プレビュー && (!d.本番表示プレビュー.event || !d.本番表示プレビュー.calendar || !d.本番表示プレビュー.detailInner || !d.本番表示プレビュー.productionCss)) failures.push('本番表示プレビューにイベントカード / カレンダー / 本番CSSが反映されない');
+  if(failures.length){
   console.log('CMS のレイアウトに問題があります:');
   for(const f of failures) console.log('  ✗ '+f);
   console.log('\n  実測値:', JSON.stringify(d,null,1));

@@ -223,7 +223,10 @@ const listCache = { venue:[], festival:[], artist:[], event:[], article:[] };
 document.addEventListener('DOMContentLoaded', async () => {
   await checkAuth();
   initGenreChips('v-genre');
+  initFeatureChips('v-features');
   initGenreChips('f-genre');
+  document.getElementById('v-type')?.addEventListener('change', updateVenueSubtypeVisibility);
+  updateVenueSubtypeVisibility();
   initGradientPresets();
   injectPublishingSections();
   renderRecentItems();
@@ -449,6 +452,33 @@ function getSelectedGenres(id) { return [...document.querySelectorAll('#'+id+' .
 function setSelectedGenres(id, genres) {
   document.querySelectorAll('#'+id+' .chip').forEach(c => c.classList.toggle('selected', genres.includes(c.dataset.genre)));
 }
+const VENUE_FEATURES = ['after-hours','daytime','vinyl','outdoor','rooftop','listening','no-cover','cash-only','cashless-only','id-required','no-photo','smoking','no-reentry'];
+function initFeatureChips(id) {
+  const c = document.getElementById(id);
+  if (!c) return;
+  VENUE_FEATURES.forEach(feature => {
+    const chip = document.createElement('div');
+    chip.className = 'chip'; chip.textContent = feature; chip.dataset.feature = feature;
+    chip.setAttribute('role','checkbox'); chip.setAttribute('aria-checked','false'); chip.tabIndex = 0;
+    chip.onclick = () => { chip.classList.toggle('selected'); chip.setAttribute('aria-checked', chip.classList.contains('selected') ? 'true' : 'false'); };
+    c.appendChild(chip);
+  });
+}
+function getSelectedFeatures(id) { return [...document.querySelectorAll('#'+id+' .chip.selected')].map(c => c.dataset.feature); }
+function setSelectedFeatures(id, features) {
+  const values = new Set((features || []).map(s => String(s).trim()).filter(Boolean));
+  document.querySelectorAll('#'+id+' .chip').forEach(c => {
+    const selected = values.has(c.dataset.feature);
+    c.classList.toggle('selected', selected); c.setAttribute('aria-checked', selected ? 'true' : 'false');
+  });
+}
+function updateVenueSubtypeVisibility() {
+  const wrap = document.getElementById('v-subtype-wrap');
+  const select = document.getElementById('v-subtype');
+  const isBar = document.getElementById('v-type')?.value === 'bar';
+  if (wrap) wrap.hidden = !isBar;
+  if (select && !isBar) select.value = '';
+}
 
 /* ==============================================================
    GRADIENT PRESETS
@@ -491,6 +521,9 @@ function renderVenuePreview(){
   const city=g('v-city');
   const area=g('v-area');
   const type=g('v-type');
+  const subtype=g('v-subtype');
+  const hours=g('v-hours');
+  const charge=g('v-charge');
   const desc=g('v-desc');
   const url=g('v-url');
   const instagram=g('v-instagram');
@@ -501,7 +534,9 @@ function renderVenuePreview(){
   const pvImg=document.querySelector('#preview-v-image img');
   const imgSrc=resolveImgSrc(imagePath,imageUrl,pvImg);
   const genres=Array.from(document.querySelectorAll('#v-genre .chip.selected')).map(c=>c.textContent.trim());
+  const features=getSelectedFeatures('v-features');
   const tagsHtml=genres.map(g=>`<span class="pv-tag">${esc(g)}</span>`).join('');
+  const featuresHtml=features.map(f=>`<span class="pv-tag">${esc(f)}</span>`).join('');
   const linksHtml=[
     url?`<a href="${esc(url)}" class="pv-link" target="_blank">OFFICIAL SITE →</a>`:'',
     instagram?`<a href="${esc(instagram)}" class="pv-link" target="_blank">INSTAGRAM →</a>`:''
@@ -512,8 +547,10 @@ function renderVenuePreview(){
       <div class="pv-hero-info">
         <div class="pv-date">${esc([city,area].filter(Boolean).join(' · '))}</div>
         <div class="pv-name">${esc(name)}</div>
-        <div class="pv-location">${esc(type||'')}${capacity?' · CAPACITY '+esc(capacity):''}</div>
+        <div class="pv-location">${esc(type||'')}${subtype?' · '+esc(subtype):''}${capacity?' · CAPACITY '+esc(capacity):''}</div>
+        ${(hours||charge)?`<div class="pv-location">${esc([hours,charge].filter(Boolean).join(' · '))}</div>`:''}
         ${tagsHtml?'<div class="pv-tags">'+tagsHtml+'</div>':''}
+        ${featuresHtml?'<div class="pv-tags">'+featuresHtml+'</div>':''}
         ${desc?'<div class="pv-desc">'+esc(desc)+'</div>':'<div class="pv-empty" style="margin-bottom:28px">No description</div>'}
         ${address?'<div class="pv-location" style="margin-bottom:16px">📍 '+esc(address)+'</div>':''}
         <div class="pv-links">${linksHtml}</div>
@@ -1300,6 +1337,21 @@ function uploadArticleImageFile(file){
 }
 
 let _lastPreviewHtml = null;
+function bindArticlePreviewInteractions(root){
+  if (!root || root.dataset.previewInteractions === '1') return;
+  root.dataset.previewInteractions = '1';
+  root.addEventListener('click', event => {
+    const link = event.target.closest('a[href^="#ev-"]');
+    if (!link || !root.contains(link)) return;
+    const target = root.querySelector(link.getAttribute('href'));
+    if (!target) return;
+    event.preventDefault();
+    const scroller = root.closest('.ar-preview');
+    if (scroller) scroller.scrollTop = Math.max(0, target.offsetTop - 24);
+    target.setAttribute('data-preview-target', '1');
+    setTimeout(() => target.removeAttribute('data-preview-target'), 900);
+  });
+}
 function updateArticlePreview(html, force){
   const el = document.getElementById('ar-preview-content');
   if (!el) return;
@@ -1334,8 +1386,12 @@ function updateArticlePreview(html, force){
       el.innerHTML = entityHtml;
     }
   }
+  bindArticlePreviewInteractions(el);
   const focusContent = document.getElementById('ar-focus-preview-content');
-  if (focusContent) focusContent.innerHTML = el.innerHTML;
+  if (focusContent) {
+    focusContent.innerHTML = el.innerHTML;
+    bindArticlePreviewInteractions(focusContent);
+  }
 }
 
 // 本番記事ページと同じ画像レイアウトをCMSプレビューへ反映する
@@ -1389,6 +1445,7 @@ function toggleArticlePreview(){
       delete prev.dataset.focusPreviewHidden;
       wrap.classList.add('preview-mode');
       prev.style.display = 'block';
+      prev.dataset.focusPreview = '1';
       document.getElementById('ar-focus-preview')?.classList.remove('is-hidden');
       if (btn) { btn.classList.add('active'); btn.textContent = 'プレビューを表示中'; }
       updateArticlePreview(articleQuill?.root?.innerHTML || document.getElementById('ar-body').value, true);
@@ -1396,6 +1453,7 @@ function toggleArticlePreview(){
       prev.dataset.focusPreviewHidden = '1';
       wrap.classList.remove('preview-mode');
       prev.style.display = 'none';
+      delete prev.dataset.focusPreview;
       document.getElementById('ar-focus-preview')?.classList.add('is-hidden');
       if (btn) { btn.classList.remove('active'); btn.textContent = 'プレビュー'; }
     }
@@ -1417,9 +1475,19 @@ function openArticleGeneratedPreview(){
   const win = window.open('', '_blank');
   if (!win) return toast('ポップアップがブロックされています', 'warning');
   const title = esc(document.getElementById('ar-title')?.value || 'ARTICLE PREVIEW');
-  const safeBody = String(body || '').replace(/<script/gi, '&lt;script');
+  const entityHtml = resolveEntityLinksPreview(String(body || ''));
+  let previewBody = entityHtml;
+  const shortcodeApi = globalThis.TJArticleShortcodes;
+  if (shortcodeApi?.renderArticleShortcodes) {
+    try {
+      previewBody = shortcodeApi.renderArticleShortcodes(entityHtml, { lang: 'ja' }).html;
+    } catch (error) {
+      return toast('ショートコードエラー: ' + error.message, 'error');
+    }
+  }
+  const safeBody = String(previewBody).replace(/<script/gi, '&lt;script');
   win.document.open();
-  win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><link rel="stylesheet" href="/common.css?v=6"><link rel="stylesheet" href="/detail.css?v=5"><link rel="stylesheet" href="/article-fx.css?v=4"><style>body{padding:80px 24px;background:#080808}.article-detail{max-width:820px;margin:auto}.article-body{font-family:var(--font-body);color:var(--text)}</style></head><body><main class="article-detail"><h1>${title}</h1><div class="article-body">${safeBody}</div></main><script src="/article-fx.js?v=5"><\/script></body></html>`);
+  win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><link rel="stylesheet" href="/common.css?v=27"><link rel="stylesheet" href="/detail.css?v=29"><link rel="stylesheet" href="/article-fx.css?v=10"></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${title}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=6"><\/script></body></html>`);
   win.document.close();
 }
 
@@ -1775,6 +1843,8 @@ function openArticleEventForm(){
   const overlay = document.createElement('div');
   overlay.id = 'ar-event-dialog';
   overlay.className = 'dialog-overlay show';
+  // 集中モード（z-index: 2000）の上に表示する。通常モードでも同じ値で問題ない。
+  overlay.style.zIndex = '2100';
   overlay.innerHTML = `<div class="dialog-box" style="max-width:620px">
     <h3>📦 イベントカード</h3>
     <p class="label-hint">入力内容から記事本文に <code>[[event|…]]</code> を挿入します。</p>
@@ -1855,6 +1925,11 @@ function toggleFocusMode(){
       focusPreview.style.maxHeight = 'none';
       focusPreview.style.zIndex = '2001';
       focusPreview.dataset.focusPreview = '1';
+    } else if (focusPreview) {
+      // 集中モード開始時にプレビューが閉じていた場合も、集中モード内の
+      // 「プレビュー」ボタンで開けるよう、初期状態を明示する。
+      focusPreview.dataset.focusPreviewHidden = '1';
+      focusPreview.style.display = 'none';
     }
     const previewBtn = document.getElementById('ar-preview-toggle');
     if (previewBtn) {
@@ -1875,10 +1950,11 @@ function toggleFocusMode(){
     const restorePreview = wrap.dataset.focusPreviewWasOn === '1';
     delete wrap.dataset.focusPreviewWasOn;
     wrap.classList.toggle('preview-mode', restorePreview);
-    const focusPreview = document.querySelector('.ar-preview[data-focus-preview="1"]');
+    const focusPreview = document.querySelector('.ar-preview');
     if (focusPreview) {
       focusPreview.removeAttribute('style');
       delete focusPreview.dataset.focusPreview;
+      delete focusPreview.dataset.focusPreviewHidden;
     }
     document.getElementById('ar-focus-preview')?.classList.add('is-hidden');
     const previewBtn = document.getElementById('ar-preview-toggle');
@@ -3621,6 +3697,7 @@ const SHEET_FIELD_NAMES = [
   'metaDescription','publishAt','ogImage','editorNotes','authorId',
   // FESTIVALS / VENUES / ARTISTS
   'name_en','desc_en','bio_en','location_ja','ticketUrl','venueId','instagramUrl',
+  'subtype','hours','charge','features',
   // EDITIONS / LINEUPS
   'editionId','festivalId','artistId','actLabel','setType',
 ];
@@ -4012,13 +4089,16 @@ function editRow(section, rowNum){
 
   if(section==='venue'){
     setVal('v-id',row.id); setVal('v-name',row.name); setVal('v-city',row.city);
-    setVal('v-area',row.area); setVal('v-type',row.type||'club');
+    setVal('v-area',row.area); setVal('v-type',row.type||'club'); setVal('v-subtype',row.subtype);
+    setVal('v-hours',row.hours); setVal('v-charge',row.charge);
     setVal('v-image',row.image); setVal('v-capacity',row.capacity);
     setVal('v-url',row.url); setVal('v-address',row.address);
     setVal('v-lat',row.lat); setVal('v-lng',row.lng);
     setVal('v-instagram',row.instagram); setVal('v-desc',row.desc);
     setVal('v-imagePosition',row.imagePosition || '');
     setSelectedGenres('v-genre',(row.genre||'').split(',').map(s=>s.trim()).filter(Boolean));
+    setSelectedFeatures('v-features',String(row.features||'').split(/[;,]/));
+    updateVenueSubtypeVisibility();
     updateLocationMap('v');
     syncImagePos('v');
     if(row.image) showCurrentImage('preview-v-image',row.image,"clearImageField('v',{section:'venue'})");
@@ -4277,7 +4357,7 @@ function saveEdit(section){
 
   if(section==='venue'){
     Object.assign(payload,{id:g('v-id'),name:g('v-name'),city:g('v-city'),area:g('v-area'),
-      type:g('v-type'),image:g('v-image'),imagePosition:g('v-imagePosition'),genre:getSelectedGenres('v-genre').join(', '),
+      type:g('v-type'),subtype:g('v-subtype'),hours:g('v-hours'),charge:g('v-charge'),features:getSelectedFeatures('v-features').join('; '),image:g('v-image'),imagePosition:g('v-imagePosition'),genre:getSelectedGenres('v-genre').join(', '),
       capacity:g('v-capacity'),address:g('v-address'),lat:g('v-lat'),lng:g('v-lng'),
       url:g('v-url'),instagram:g('v-instagram'),desc:g('v-desc')});
   }
@@ -5400,7 +5480,7 @@ function submitToSheet(section){
   let payload;
   if(section==='venue'){
     payload={action:'addVenue',id:g('v-id'),name:g('v-name'),city:g('v-city'),area:g('v-area'),
-      type:g('v-type'),image:g('v-image'),imagePosition:g('v-imagePosition'),genre:getSelectedGenres('v-genre').join(', '),
+      type:g('v-type'),subtype:g('v-subtype'),hours:g('v-hours'),charge:g('v-charge'),features:getSelectedFeatures('v-features').join('; '),image:g('v-image'),imagePosition:g('v-imagePosition'),genre:getSelectedGenres('v-genre').join(', '),
       capacity:g('v-capacity'),address:g('v-address'),lat:g('v-lat'),lng:g('v-lng'),
       url:g('v-url'),instagram:g('v-instagram'),desc:g('v-desc')};
     if(!payload.id||!payload.name)return toast('ID and Name required','error');
@@ -5512,6 +5592,7 @@ const QUICK_ADD_DEFS = {
     { key: 'id',   label: 'ID (URL slug)', ph: 'nameから自動生成', required: true },
     { key: 'city', label: 'City', ph: 'e.g. KYOTO' },
     { key: 'area', label: 'Area', ph: 'e.g. SHIMOGYO' },
+    { key: 'type', label: 'Type', kind: 'select', options: [['club','Club'],['bar','Bar'],['livehouse','Livehouse']], value: 'club' },
   ]},
   festival: { title: 'Festival クイック追加', action: 'add_festival', fields: [
     { key: 'name', label: 'Name', ph: 'e.g. RURAL', required: true, slugSource: true },
@@ -5544,7 +5625,7 @@ function openQuickAdd(section){
   const fieldsHtml = def.fields.map(f => `
     <div style="margin-bottom:12px">
       <label style="display:block;font-family:var(--font-mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text3);margin-bottom:5px">${f.label}${f.required ? '<span class="req-star">*</span>' : ''}</label>
-      <input type="${f.type||'text'}" id="qa-${f.key}" placeholder="${f.ph||''}" style="width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:.9rem">
+      ${f.kind === 'select' ? `<select id="qa-${f.key}" style="width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:.9rem">${f.options.map(([value,label])=>`<option value="${value}"${value===(f.value||'')?' selected':''}>${label}</option>`).join('')}</select>` : `<input type="${f.type||'text'}" id="qa-${f.key}" placeholder="${f.ph||''}" style="width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:.9rem">`}
     </div>`).join('');
   overlay.innerHTML = `
     <div class="dialog-box" style="max-width:440px">
@@ -5624,7 +5705,8 @@ function submitQuickAdd(section, keepOpen){
     // フィールドをクリアして連続入力
     def.fields.forEach(f => {
       const el = document.getElementById('qa-'+f.key);
-      if (el) { el.value = ''; delete el.dataset.userEdited; }
+    if (el) { el.value = ''; delete el.dataset.userEdited; }
+      if (el && f.value) el.value = f.value;
     });
     document.getElementById('qa-name')?.focus();
   } else {
@@ -6340,7 +6422,7 @@ function publishPayloadSummary(content) {
     '',
     `  FESTIVALS  ${items('FESTIVALS')}件`,
     `  ARTISTS    ${items('ARTISTS')}件（紹介文 ${field('ARTISTS','bio')} / 画像 ${field('ARTISTS','image')} / リンク ${field('ARTISTS','links')}）`,
-    `  VENUES     ${items('VENUES')}件`,
+    `  VENUES     ${items('VENUES')}件（SUBTYPE ${field('VENUES','subtype')} / HOURS ${field('VENUES','hours')} / CHARGE ${field('VENUES','charge')} / FEATURES ${field('VENUES','features')}）`,
     `  ARTICLES   ${items('ARTICLES')}件（英語本文 ${field('ARTICLES','body_en')} / 関連フェス ${field('ARTICLES','festivalId')}）`,
     `  EVENTS     ${items('EVENTS')}件`,
     '',
@@ -6350,11 +6432,36 @@ function publishPayloadSummary(content) {
 
 /* いま公開されている data.js と同じなら、送っても何も起きない。
    §9-67 では空コミットが「成功」に見え、原因の特定に半日かかった。
-   **同じであることを、成功と呼ばない。** */
+   **同じであることを、成功と呼ばない。比較できない場合も送らない。**
+
+   ■ ローカル（127.0.0.1 等）からは、この関数は必ず失敗する。**それが仕様**（§9-95）
+
+   cms.html の CSP connect-src に techno-japan.media を**意図的に入れていない**。
+   そのためローカルでは fetch がブラウザに止められ、Publish はここで停止する。
+   「ローカルからは本番へ出せない」を、覚えておく約束ではなくブラウザに強制させている。
+   通したくなったら、CSP を触る前に §9-95 を読むこと。 */
+const PROD_CMS_HOST = 'techno-japan.media';
+
 function fetchPublishedDataJs() {
-  return fetch('https://techno-japan.media/data.js?ts=' + Date.now(), { cache: 'no-store' })
-    .then((r) => (r.ok ? r.text() : null))
-    .catch(() => null);   // 取れなくても公開は止めない
+  return fetch('https://' + PROD_CMS_HOST + '/data.js?ts=' + Date.now(), { cache: 'no-store' })
+    .then((r) => {
+      if (!r.ok) throw new Error('公開中のdata.jsを確認できませんでした（HTTP ' + r.status + '）。空コミット防止のため公開を停止しました。');
+      return r.text();
+    })
+    .catch((e) => {
+      if (e instanceof Error && e.message.includes('公開中のdata.js')) throw e;
+      /* 「通信できませんでした」とだけ出すと、次に見た人が CSP に辿り着くまで時間を溶かす。
+         2026-08-24 に実際にそうなった。ローカルなら、仕様であることをその場で言い切る。 */
+      if (location.hostname !== PROD_CMS_HOST) {
+        throw new Error(
+          'ローカル（' + location.hostname + '）からは Publish できません。これは仕様です。\n\n'
+          + 'cms.html の CSP connect-src に ' + PROD_CMS_HOST + ' を入れていないため、'
+          + '公開中の data.js を読めず、空コミット防止のガードが働きました。\n\n'
+          + 'Publish は本番CMS（https://' + PROD_CMS_HOST + '/cms.html）から行ってください。'
+        );
+      }
+      throw new Error('公開中のdata.jsを確認できませんでした。空コミット防止のため公開を停止しました。');
+    });
 }
 
 function publishDataJs(opts){
@@ -6600,11 +6707,18 @@ function buildVenuesJs(rows){
     if(r.city) l.push('    city: "'+q(r.city)+'",');
     if(r.area) l.push('    area: "'+q(r.area)+'",');
     if(r.type) l.push('    type: "'+q(r.type)+'",');
+    if(r.subtype) l.push('    subtype: "'+q(r.subtype)+'",');
+    if(r.hours) l.push('    hours: "'+q(r.hours)+'",');
+    if(r.charge) l.push('    charge: "'+q(r.charge)+'",');
     if(r.image) l.push('    image: "'+q(webp(r.image))+'",');
     if(r.imagePosition) l.push('    imagePosition: "'+q(r.imagePosition)+'",');
     if(r.genre){
       const arr=String(r.genre).split(/[,·]/).map(s=>'"'+q(s.trim())+'"').filter(s=>s!=='""');
       if(arr.length) l.push('    genre: ['+arr.join(', ')+'],');
+    }
+    if(r.features){
+      const arr=String(r.features).split(/[;,]/).map(s=>'"'+q(s.trim())+'"').filter(s=>s!=='""');
+      if(arr.length) l.push('    features: ['+arr.join(', ')+'],');
     }
     const cap=parseInt(r.capacity); if(!isNaN(cap)) l.push('    capacity: '+cap+',');
     if(r.address) l.push('    address: "'+q(r.address)+'",');
@@ -6679,12 +6793,16 @@ function downloadFile(filename,content){
    GENERATE CODE — VENUE
    ============================================================== */
 function submitVenue(){
-  const d={id:g('v-id'),name:g('v-name'),city:g('v-city'),area:g('v-area'),type:g('v-type'),image:g('v-image'),imagePosition:g('v-imagePosition'),genre:getSelectedGenres('v-genre'),capacity:g('v-capacity'),address:g('v-address'),lat:g('v-lat'),lng:g('v-lng'),url:g('v-url'),instagram:g('v-instagram'),desc:g('v-desc')};
+  const d={id:g('v-id'),name:g('v-name'),city:g('v-city'),area:g('v-area'),type:g('v-type'),subtype:g('v-subtype'),hours:g('v-hours'),charge:g('v-charge'),features:getSelectedFeatures('v-features'),image:g('v-image'),imagePosition:g('v-imagePosition'),genre:getSelectedGenres('v-genre'),capacity:g('v-capacity'),address:g('v-address'),lat:g('v-lat'),lng:g('v-lng'),url:g('v-url'),instagram:g('v-instagram'),desc:g('v-desc')};
   if(!d.id||!d.name)return toast('ID and Name required','error');
   const genreStr=d.genre.map(g=>`"${g}"`).join(', ');
   const lines=[`  {`,`    id: "${d.id}",`,`    name: "${d.name}",`,`    city: "${d.city}",`,`    area: "${d.area}",`,`    type: "${d.type}",`,`    image: "${d.image}",`];
   if(d.imagePosition)lines.push(`    imagePosition: "${d.imagePosition}",`);
   lines.push(`    genre: [${genreStr}],`,`    capacity: ${d.capacity||0},`);
+  if(d.subtype)lines.push(`    subtype: "${d.subtype}",`);
+  if(d.hours)lines.push(`    hours: "${d.hours}",`);
+  if(d.charge)lines.push(`    charge: "${d.charge}",`);
+  if(d.features.length)lines.push(`    features: ${JSON.stringify(d.features)},`);
   if(d.address)lines.push(`    address: "${d.address}",`);
   if(d.lat)lines.push(`    lat: ${d.lat},`);if(d.lng)lines.push(`    lng: ${d.lng},`);
   if(d.url)lines.push(`    url: "${d.url}",`);if(d.instagram)lines.push(`    instagram: "${d.instagram}",`);
@@ -6801,7 +6919,7 @@ function copyOutput(section){navigator.clipboard.writeText(document.getElementBy
    ============================================================== */
 function resetForm(section){
   const fields={
-    venue:['v-id','v-name','v-city','v-area','v-image','v-imagePosition','v-capacity','v-address','v-lat','v-lng','v-url','v-instagram','v-desc','v-imageUrl'],
+    venue:['v-id','v-name','v-city','v-area','v-subtype','v-hours','v-charge','v-image','v-imagePosition','v-capacity','v-address','v-lat','v-lng','v-url','v-instagram','v-desc','v-imageUrl'],
     festival:['f-id','f-name','f-city','f-location','f-location_ja','f-url','f-ticketUrl','f-instagram','f-address','f-lat','f-lng','f-dateStart','f-dateEnd','f-image','f-imagePosition','f-flyer','f-heroGradient','f-desc','f-imageUrl','f-flyerUrl'],
     artist:['a-id','a-name','a-city','a-country','a-genre','a-image','a-imagePosition','a-bio','a-instagram','a-soundcloud','a-bandcamp','a-website','a-imageUrl'],
     event:['e-name','e-date','e-venue','e-city','e-time','e-desc','e-link'],
@@ -6811,7 +6929,7 @@ function resetForm(section){
   fields.forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   // プレビューをクリア
   document.querySelectorAll('.img-preview').forEach(p=>{p.style.display='none';p.innerHTML='';});
-  if(section==='venue'){document.getElementById('v-type').value='club';document.querySelectorAll('#v-genre .chip').forEach(c=>c.classList.remove('selected'))}
+  if(section==='venue'){document.getElementById('v-type').value='club';document.querySelectorAll('#v-genre .chip').forEach(c=>c.classList.remove('selected'));setSelectedFeatures('v-features',[]);updateVenueSubtypeVisibility()}
   if(section==='festival'){document.getElementById('f-type').value='festival';document.querySelectorAll('#f-genre .chip').forEach(c=>c.classList.remove('selected'));document.querySelectorAll('#f-gradientPresets .gradient-swatch').forEach(s=>s.classList.remove('selected'));lineups.f=[];renderLineupTags('f');editions.length=0;renderEditions();document.getElementById('lineup-fetch-status').style.display='none';document.getElementById('gradient-preview').style.display='none';document.getElementById('bulk-lineup-wrap').style.display='none'}
   if(section==='festival') setFestivalDateEditingMode(false);
   if(section==='event'){lineups.e=[];renderLineupTags('e')}

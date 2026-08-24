@@ -93,6 +93,7 @@ run "LINEUP の入力"                     node scripts/check_cms_lineup.mjs
 run "座標の取得"                        node scripts/check_cms_geocode.mjs
 run "AI が本文を読む前に確定させる"     node scripts/check_cms_ai_body.mjs
 run "Publish 前の関門"                  node scripts/check_cms_publish_guard.mjs
+run "GAS VENUES列パッチ"                 node scripts/check_gas_venue_columns.mjs
 run "データの取得経路"                  node scripts/check_cms_fetch_path.mjs
 run "プレビューが実ページと同じ枠"    node scripts/check_cms_preview_frame.mjs
 run "記事フォームの状態保持"            python3 scripts/check_cms_article_state.py
@@ -118,6 +119,11 @@ if [ "$FAST" = "1" ]; then
 else
   run "ハブページが JS 込みで描ける"    python3 scripts/check_hub_pages.py --budget 15000
   run "CMS フォームの重なり"            node scripts/check_cms_layout.mjs
+  run "VENUES 種別フィルタ"              node scripts/check_venue_type_filters.mjs
+run "VENUES 詳細ページ"                 node scripts/check_venue_details.mjs
+run "VENUES CMSエクスポート"             python3 scripts/check_venue_export_cms.py
+run "ARTICLE本番表示プレビュー"          node scripts/check_cms_article_generated_preview.mjs
+run "TOP ARTISTSランダム表示"             node scripts/check_top_artists.mjs
   run "地図が全国の会場を出す"          node scripts/check_map_nationwide.mjs
   run "会場一覧の地図が全都市を出す"    node scripts/check_venue_maps.mjs
   [ -f scripts/check_mobile_language_toggles.mjs ] \

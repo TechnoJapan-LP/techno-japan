@@ -4585,3 +4585,1038 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - 変更したパターン: FIELD_MAP への1行追加。
 - 未確認の類似パターン: サイト側シートの `TICKETURL` とは別管理（Airtable → LP シートの同期は無い）。確認済み・0件。
 - 次の担当への注意: 次回の巡回から ticket_url 空のフェスにチケットページを提案する。年で変わらない公式ページを優先。
+
+## 2026-08-23 VENUE 巡回の結果を Airtable notes の「提案票」にした
+
+- 実施: `scripts/db/venue_crawl.py` を新規作成（propose / apply、--dry-run 既定）。
+  9 バッチの JSON から 160 行の Venues に提案票を書き込み（既存 notes は保持）。
+- コミット: 未。
+- 検証: propose は一致なし 0 / 複数一致 14（重複行）。apply --dry-run = 反映 107 / 保留 53 / 不正 0。
+  「23時閉店」を閉店と誤判定する不具合を修正（CLOSED_RE）、再 propose で BAROOM だけが closed になることを確認。
+  **apply --execute は未実行**（ユーザーが notes を見て判断してから）。
+- 変更したパターン: 新規スクリプト。tokyo-bar-02.json の Upstairs を type=record-shop に修正。
+- 未確認の類似パターン: Festivals には同じ提案票方式を入れていない（Inbox 方式のまま）。確認済み・0件。
+- 次の担当への注意: 重複行（Grassroots/TENCUPS、濤 TOH×2、COUNTER CLUB×2、Open Source×2、Upstairs×2、THE TOKYO×2、
+  THmC×2、Pure's×2、THE ROOM×2、LOOPY PURR×2、ALFFO×2）には同じ提案票が入っている。統合はユーザーが手で。
+
+## 2026-08-23 Venues に CMS 入力用の列を追加
+
+- 実施: Airtable Venues に area / address / lat / lng / genres / subtype / hours / charge を API で追加。
+  `venue_crawl.py` の提案票に area / genres 行を足し、apply が area / address / subtype / hours / charge / genres を書くよう拡張。
+  160 行の提案票を書き直した（area・address 入り）。
+- コミット: 未。
+- 検証: apply --dry-run で MEIMEI 等に area / address / hours / charge が入ることを確認（反映107 / 保留53 / 不正0）。apply --execute は未実行。
+- 変更したパターン: venue_crawl.py の render_card / cmd_apply。
+- 未確認の類似パターン: lat / lng は空のまま（住所からの一括変換は未実装）。genres は巡回 JSON に無いので提案票では空（ユーザーが書く）。
+  CMS 側（LP シート・cms.js）には subtype / hours / charge をまだ入れていない（VENUES_BARS.md §6-1 の作業）。
+- 次の担当への注意: area は日本（JP）の行だけ使う。海外は city のみ。image / desc / desc_en / capacity は Airtable に持たない（ユーザー決定）。
+
+## 2026-08-23 VENUES §6-1: サイト側4列のPublish経路
+
+### 実施
+
+- `LP/cms.js` の `SHEET_FIELD_NAMES` に `subtype / hours / charge / features` を追加し、取得行の正規化対象にした。
+- `buildVenuesJs()` が4列を `data.js` に出力するようにした。`features` は `;` と `,` の両方で分割して配列化する。
+- `publishPayloadSummary()` のVENUES要約に4列の件数を追加し、列落ちを `features 5 → 0` のように確認できるようにした。
+- `scripts/check_cms_publish_guard.mjs` に4列の要約、data.js出力、列落ち0件のテストを追加。
+- LPシートのヘッダーは変更していない（ユーザーが末尾へ手動追加する前提）。
+
+### コミット
+
+- ローカルコミット済み（f5c628c7）。push・本番反映は未実施。
+
+### 検証
+
+- `node scripts/check_cms_publish_guard.mjs`: 成功。既存検査＋VENUES 4列検査。
+- `node --check LP/cms.js`: 成功。
+- 実ブラウザで既存VENUES一覧のJA/EN・390px/1280px表示を確認。390pxの計測はJA 593,347B / EN 612,656B、1280pxはJA 593,347B / EN 585,175B（EN全スクロール593,440B）。スクリーンショットは`reports/screenshots/venues-phase6-1-390/`と`reports/screenshots/venues-phase6-1-1280/`。
+- `bash scripts/preflight.sh`: 全34件成功。
+
+### 変更したパターン
+
+- VENUES行の`subtype / hours / charge / features`取得・data.js出力。
+- `features`のセミコロン・カンマ区切り配列化。
+- Publish前の件数要約と列落ち検知。
+
+### 未確認の類似パターン
+
+- ユーザーがLPシート末尾へ4列を追加した実データの取得: 未確認。
+- 認証済みCMSでPublish Nowを押し、`cms: publish data.js`コミットに`features`が含まれること: 未確認。
+- CMS入力UIの4フィールド: フェーズ4ではなく§6-4対象のため未実装・未確認。
+
+### 次の担当への注意・判断待ち
+
+- LPシートのVENUESヘッダー末尾へ`SUBTYPE / HOURS / CHARGE / FEATURES`を手動追加してから、認証済みCMSでPublish Nowを1回実行する。
+- Publish後の`data.js`で実際に`subtype / hours / charge / features`が出ることを確認するまで、フェーズ1完了とは扱わない。
+- §6-2のハブUI、§6-3の詳細ページ、§6-4のCMS入力UIは今回の変更に含めない。
+
+## 2026-08-23 VENUES §6-4: CMS入力欄
+
+### 実施
+
+- `LP/cms.html` の `v-type` 下に `v-subtype`（bar時のみ表示）、`v-hours`、`v-charge`、`v-features`（設計§2の13語）を追加。
+- `LP/cms.js` のVENUESプレビュー、既存行の読込、編集保存、新規保存、コード生成、リセットに4項目を接続。
+- 「Venue クイック追加」にTYPE選択（club / bar / livehouse）を追加。連続入力時もclub初期値を保持。
+- `scripts/check_cms_layout.mjs` に入力欄、選択肢数、bar限定表示、プレビュー再表示保持の検査を追加。
+- `LP/cms.html` の `cms.js` キャッシュバスターを `v=94` に更新。
+
+### コミット
+
+- ローカルコミット済み（このエントリを含む）。push・本番反映は未実施。
+
+### 検証
+
+- `node --check LP/cms.js`: 成功。
+- `node scripts/check_cms_publish_guard.mjs`: 成功（既存検査を含む全項目）。
+- `node scripts/check_cms_layout.mjs`: 成功。headless Chromeで入力欄・FEATURES 13語・bar時のSUBTYPE表示・プレビュー閉じる→再表示で値が残ることを確認。
+- `bash scripts/preflight.sh`: 全34件成功。
+
+### 変更したパターン
+
+- VENUESの編集フォームで、barだけSUBTYPEを表示するパターン。
+- FEATURESを既存GENREと同じチップUIで複数選択し、シートへ`; `区切りで保存するパターン。
+- クイック追加でVENUE TYPEを選択し、初期値clubでdraft保存するパターン。
+
+### 未確認の類似パターン
+
+- 認証済みCMSでの実操作「入力 → プレビュー → 閉じる → 再表示 → 保存」およびGAS実保存: 未確認。
+- 認証済みCMSで編集した行を再読込して4項目が復元される経路: 未確認。
+- LPシートに実データを入力し、Publish後の `data.js` に4項目が反映される経路: 未確認（§6-1から継続）。
+
+### 次の担当への注意・判断待ち
+
+- 本番CMSへはまだ反映していない。認証済み環境でbarのテスト行を使い、4項目の入力値が保存後も残ることを確認する。
+- 保存前にプレビューを閉じても入力欄の値は保持されるが、実GAS保存の成否は画面で確認すること。
+- 確認後に初めてPublish経路を実機完了扱いにする。pushはユーザーの公開判断まで行わない。
+
+## 2026-08-23 VENUES §6-2: 種別フィルタとカード情報
+
+### 実施
+
+- `LP/venues.html` に `[ALL] [CLUBS] [BARS] [LIVEHOUSE]` の種別フィルタを都市フィルタの上へ追加。
+- 種別は `#type=bar` でURLに保持し、既存の `area` / `q` クエリと併用可能にした。
+- 件数表示を `22 VENUES · CLUBS 13 · BARS 4 · LIVEHOUSE 5` 形式に変更。
+- ALL時は `club → livehouse → bar`、種別選択時は名前順に並べ替え。
+- barカードにSUBTYPE、`no-cover` のNO COVER、個性FEATURES（最大2個）を表示。cash-only等の実用メモは除外。
+- 一覧フィルタと地図の `MAP_TYPES` が `currentType` を共有するように変更。
+- `scripts/check_venue_type_filters.mjs` を追加し、preflightへ登録。
+- `scripts/build-detail-pages.mjs` の `enHubFromJa` でENハブを再生成。
+
+### コミット
+
+- ローカルコミット済み（このエントリを含む）。push・本番反映は未実施。
+
+### 検証
+
+- `wc -l LP/venues.html LP/en/venues.html`: JA 1078行 / EN 1078行。
+- `node scripts/check_venue_type_filters.mjs`: 種別4ボタン、`#type=bar`、bar 4件、ALL時の並び順、実用メモ非表示を実ブラウザで確認。
+- `python3 scripts/check_hub_pages.py`: 全ハブ描画・地図・JA/ENフォールバック成功。
+- `python3 scripts/audit_spa_vs_static.py --after`: SPA詳細なし、静的詳細リンク全件成功。
+- `bash scripts/preflight.sh`: 全35件成功。
+- 実ブラウザ計測（390px / 1280px、JA / EN）:
+  - 390 JA: 初期597,571B / 全スクロール597,571B、画像2→25、LCP 2016ms、CLS 0.0682。
+  - 390 EN: 初期597,664B / 全スクロール623,918B、画像2→25、LCP 2076ms、CLS 0.0682。
+  - 1280 JA: 初期597,571B / 全スクロール597,571B、画像2→13、LCP 2460ms、CLS 0.0399。
+  - 1280 EN: 初期589,399B / 全スクロール597,664B、画像1→22、LCP 2000ms、CLS 0.0560。
+
+### 変更したパターン
+
+- 都市・検索に加えて種別を独立状態として扱うフィルタパターン。
+- ハッシュ（種別）とクエリ（都市・検索）を同時に保持するURLパターン。
+- bar固有の補助ラベルと、個性FEATURESだけをカードへ出すパターン。
+- 一覧と都市別Leaflet地図で種別状態を同期するパターン。
+
+### 未確認の類似パターン
+
+- 実データにSUBTYPE / CHARGE / FEATURESが入った状態で、実際のbarカードへ各ラベルが表示されること: 未確認（現在のdata.jsでは該当値が未反映）。
+- 地図を開いた後に地図内の種別ボタンを操作し、一覧側へ反映される実機操作: 自動コード経路は検査済みだが、地図タイル表示を含む手操作は未確認。
+- 認証済みCMSでのPublish後、本番相当のdata.jsを使ったJA/EN表示: 未確認。
+
+### 次の担当への注意・判断待ち
+
+- 本番へはまだ反映していない。先にCMSで4列を含むVENUESデータをPublishし、barカードの実表示を確認する。
+- 実データ反映後、390pxでSUBTYPE / NO COVER / 個性タグが画像やVIEWボタンと重ならないことを再確認する。
+- pushはユーザーの公開判断まで行わない。
+
+## 2026-08-23 VENUES §6-3: 詳細ページ情報と近隣会場
+
+### 実施
+
+- `scripts/build-detail-pages.mjs` のVENUES JSON-LDを変更。
+  - `TYPE=bar`: `['BarOrPub', 'MusicVenue']`
+  - `TYPE=club`: `['NightClub', 'MusicVenue']`
+  - その他は従来どおり `MusicVenue`
+- VENUE詳細の `INFORMATION` に `HOURS` / `CHARGE` を追加。空欄の場合は行を生成しない。
+- 実用FEATURES（cash-only等）がある場合だけ `GOOD TO KNOW` を生成し、JAラベルと「最新の情報は公式サイトでご確認ください。」を表示。
+- 近隣会場を座標距離順で最大4件に変更。種別を限定せず、座標が無い場合は同じ都市へフォールバック。
+- `LP/detail.css` にINFORMATION / GOOD TO KNOWの見た目を追加し、詳細CSSバージョンを28へ更新。
+- `scripts/check_venue_details.mjs` と `scripts/check_venue_details_browser.mjs` を追加し、preflightへ登録。
+
+### コミット
+
+- ローカルコミット済み（このエントリを含む）。push・本番反映は未実施。
+
+### 検証
+
+- `wc -l LP/venues/*.html LP/en/venues/*.html`: JA 3146行 / EN 3146行（各22ページ）。
+- `node scripts/check_venue_details.mjs`: JSON-LD、INFORMATION、GOOD TO KNOW条件、近隣4件上限を22件×JA/ENで確認。
+- `node scripts/check_venue_details_browser.mjs`: bar / club × JA / EN × 390px / 1280pxをheadless Chromeで描画確認。
+- `python3 scripts/audit_spa_vs_static.py --after`: 静的詳細ページと通常リンクを確認。
+- `bash scripts/preflight.sh`: 全36件成功。
+
+### 変更したパターン
+
+- VENUEの種別を検索エンジン向けJSON-LDの型へ反映するパターン。
+- 任意データ（HOURS / CHARGE / FEATURES）を空欄時にHTMLへ出さないパターン。
+- 実用FEATURESだけをGOOD TO KNOWへ翻訳表示するパターン。
+- 座標距離順の近隣会場を最大4件、種別横断で表示するパターン。
+
+### 未確認の類似パターン
+
+- 実データにHOURS / CHARGE / FEATURESを入力してPublishした後の実ページ表示: 未確認（現在のdata.jsでは該当値が未反映）。
+- 実データ付きbarのGOOD TO KNOWを実機で目視する経路: 未確認。
+- CMS認証環境でのPublish Nowと、生成後の本番相当データ確認: 未確認。
+
+### 次の担当への注意・判断待ち
+
+- CMSで4列をPublishした後、bar詳細でHOURS / CHARGE / GOOD TO KNOWが表示されることを確認する。
+- FEATURESの実用メモはカードには出さず、詳細のGOOD TO KNOWだけに出す。
+- 本番反映はユーザーの公開判断まで行わない。
+
+## 2026-08-23 VENUES CMSクイック追加用エクスポート
+
+### 実施
+
+- `scripts/db/venue_export_cms.py` を新規作成。
+- Airtable Venues の `coverage_tier=editorial` かつ `on_site` 空欄だけを抽出し、
+  `ID NAME CITY AREA TYPE ADDRESS URL INSTAGRAM GENRE SUBTYPE HOURS CHARGE FEATURES` の順でTSV化。
+- `Name` は `scripts/db/venue_crawl.py` の BOM付き `NAME` 定数を流用。
+- Airtableトークンは `data/migration/.airtable_token` を優先し、環境変数 `AIRTABLE_TOKEN` も利用可能。
+- 既定は読み取り専用の `--dry-run`。IMAGE / DESC / DESC_EN は出力しない。
+- 件数・出力列・列落ちをTSV本体と分離して標準エラーへ表示。`--output` 指定時はファイルへ保存。
+- `scripts/check_venue_export_cms.py` を追加し、`scripts/preflight.sh` に登録。
+
+### コミット
+
+- 未コミット。push・本番反映は未実施。
+
+### 検証
+
+- `python3 scripts/check_venue_export_cms.py`: Airtable条件、TSV列順、配列整形、列落ち表示を確認。
+- `python3 -m py_compile scripts/db/venue_export_cms.py scripts/check_venue_export_cms.py`: 成功。
+- `bash scripts/preflight.sh`: 省略なしで全37件成功。
+- 実Airtableへ読み取り専用dry-run: 対象0件、列落ちなし、ヘッダー13列を確認。
+
+### 変更したパターン
+
+- Airtableの単一値・選択肢・配列をCMS貼り付け用TSVセルへ正規化するパターン。
+- TSV本体を標準出力、診断情報を標準エラーへ分離するパターン。
+- Airtableの書き込みを行わず、抽出条件と列落ちを可視化するパターン。
+
+### 未確認の類似パターン
+
+- 実Airtableに対象行が0件だったため、実データ1行以上をCMSへ貼り付ける経路: 未確認。
+- CMSクイック追加へ貼り付け後の入力・保存・再表示: 未確認。
+- 実データの `genres` / `features` がAirtable APIで配列以外の形式になった場合: 単体テストでは未確認。
+
+### 次の担当への注意
+
+- 対象行が出たら `python3 scripts/db/venue_export_cms.py --dry-run > venues.tsv` のようにTSVだけを保存し、CMSのVENUESクイック追加へ貼り付ける。
+- `IMAGE / DESC / DESC_EN` は意図的に空欄。CMSで人が入力する。
+- 対象0件は「抽出条件に一致する行がない」状態であり、エクスポート失敗ではない。
+- push・本番反映はユーザーの公開判断まで行わない。
+
+## 2026-08-23 ARTICLE集中モードのイベントカード操作
+
+### 実施
+
+- `LP/cms.js` の記事プレビューに操作処理を追加。
+- 集中モードの固定プレビュー内で、カレンダーの `#ev-...` リンクをページ全体のハッシュ遷移にせず、プレビュー内の該当イベントカードへ移動するよう変更。
+- イベントカードと公式リンクの `pointer-events` / z-index を明示し、集中モードでもクリック可能にした。
+- `LP/cms.css` と `LP/cms.html` のキャッシュバージョンを更新。
+- `scripts/check_cms_layout.mjs` に集中モードのイベントカード操作検査を追加。
+
+### コミット
+
+- 未コミット。push・本番反映は未実施。
+
+### 検証
+
+- `node --check LP/cms.js`: 成功。
+- `node scripts/check_cms_layout.mjs`: 実ブラウザでイベントカードの公式リンクとカレンダーリンクが操作可能、ハッシュ変更なし、カード移動を確認。
+- `bash scripts/preflight.sh`: 省略なしで全37件成功。
+- `git diff --check`: 成功。
+
+### 変更したパターン
+
+- 固定表示されたCMSプレビュー内で、内部アンカーをプレビュー領域内スクロールへ変換するパターン。
+- 外部公式リンクは通常のリンク遷移を維持し、内部カレンダーリンクだけをプレビュー内で処理するパターン。
+
+### 未確認の類似パターン
+
+- 認証済みCMSで実際にイベントカードを入力し、集中モードを開いて公式リンクを押す操作: 未確認。
+- 実データの複数イベント・複数カレンダーを含む長文記事での操作: 未確認。
+- 実機スマートフォンでのCMS集中モード操作: 未確認。
+
+### 次の担当への注意
+
+- CMSで記事を開き、プレビューを表示した状態で集中モードへ入り、カレンダーのイベント名とカードの公式リンクを確認する。
+- 本文入力欄のショートコード自体は編集用テキストであり、イベントカードの操作はプレビュー側で行う。
+- Publish Now と本番反映はユーザーの公開判断まで行わない。
+
+## 2026-08-24 ARTICLE集中モード後のプレビュー表示修正
+
+### 実施
+
+- 集中モード開始前にプレビューを開いていなくても、集中モード内の「プレビュー」ボタンでイベントカードとカレンダーを表示できるよう修正。
+- 集中モード終了時に、表示・非表示のインライン状態が通常画面へ残らないよう後始末を修正。
+- `LP/cms.html` の `cms.js` キャッシュバージョンを96へ更新。
+- `scripts/check_cms_layout.mjs` に「集中モード開始後にプレビューを開く」実ブラウザ検査を追加。
+
+### コミット
+
+- 未コミット。push・本番反映は未実施。
+
+### 検証
+
+- `node scripts/check_cms_layout.mjs`: 実ブラウザで集中モード開始後のプレビュー表示、イベントカード表示、カレンダー操作を確認。
+- `node --check LP/cms.js`: 成功。
+- `git diff --check`: 成功。
+- `bash scripts/preflight.sh`: 省略なしで全37件成功。
+
+### 変更したパターン
+
+- 集中モード開始前のプレビュー状態に依存せず、集中モード内のボタンから表示状態を切り替えるパターン。
+- 集中モード終了時に、固定プレビューの表示状態とデータ属性を通常画面へ持ち越さないパターン。
+
+### 未確認の類似パターン
+
+- 認証済みCMSで実際に本文へイベントカードとカレンダーを挿入し、集中モード内で表示する操作: 未確認。
+- 実機スマートフォンでのCMS集中モード操作: 未確認。
+- Publish Now後の本番相当ページでの表示: 未確認。
+
+### 次の担当への注意
+
+- プレビューを先に開く必要はない。集中モードへ入り、上部の「プレビュー」を押すと右側に本文プレビューが表示される。
+- カレンダーのイベント名を押すと、同じプレビュー内のイベントカードへ移動する。
+- Publish Nowと本番反映はユーザーの公開判断まで行わない。
+
+## 2026-08-24 ARTICLEプレビューのカードCSSバージョン整合
+
+### 実施
+
+- 本番表示プレビューの `detail.css` 参照を `v=28` から `v=29` へ更新。
+- 実ページのコンパクトなイベントカードCSSが、本番表示プレビューでも読み込まれるようにした。
+- `cms.js` 更新に伴い `cms.js?v=99`、CMSプレビューCSS更新に伴い `cms.css?v=33` へ更新。
+- プレビュー検査と実ブラウザ検査の期待バージョンも更新。
+
+### コミット
+
+- 未コミット。push・本番反映は未実施。
+
+### 検証
+
+- `node scripts/check_cms_article_generated_preview.mjs`: 成功。
+- `node scripts/check_cms_layout.mjs`: 実ブラウザ確認成功。
+- `bash scripts/preflight.sh`: 省略なしで全38件成功。
+- preflightで検出された `cms.js` / `cms.css` の参照バージョン漏れを修正後、再実行して成功。
+
+### 変更したパターン
+
+- CSS本体のバージョン更新と、CMSの別ウィンドウプレビュー参照を同時に更新するパターン。
+- キャッシュ検査の失敗を公開前に修正し、再検証するパターン。
+
+### 未確認の類似パターン
+
+- 実機ブラウザで本番表示プレビューを開き、コンパクト化されたカードを目視する経路: 未確認。
+- 実データの長いイベント名・長い会場名でのスマホ表示: 未確認。
+
+### 次の担当への注意
+
+- 本番表示プレビュー確認時はブラウザを強制更新する。
+- 日程は12px、カードの上下余白は従来より小さくなっている。
+- Publish Nowと本番反映はユーザーの公開判断まで行わない。
+
+## 2026-08-24 ARTICLEイベントカードのコンパクト化
+
+### 実施
+
+- `LP/detail.css` のイベントカードを調整。
+- 日程表示を10pxから12pxへ拡大。
+- カードの上下パディング、日程・場所の間隔、カード外側の余白を縮小し、縦に短くした。
+- 390px向けにも余白を縮小。
+- `LP/cms.css` のARTICLEプレビュー側にも同じカードバランスを追加。
+- `DETAIL_CSS_VERSION` を29へ更新して静的ページを再生成。
+- キャッシュ検査で検出された `cms.js` の参照漏れを修正し、`cms.js?v=98`へ更新。
+
+### コミット
+
+- 未コミット。push・本番反映は未実施。
+
+### 検証
+
+- 静的ページ再生成: 成功。
+- `node scripts/check_cms_layout.mjs`: 実ブラウザ確認成功。
+- `node scripts/check_cms_article_generated_preview.mjs`: 成功。
+- `node --check scripts/build-detail-pages.mjs`: 成功。
+- `bash scripts/preflight.sh`: 省略なしで全38件成功。
+- 途中のpreflightで `cms.js?v=97` の更新漏れを検出し、v98へ修正後に再実行して成功。
+
+### 変更したパターン
+
+- 日程の視認性を上げながら、イベントカード全体の縦余白を減らすパターン。
+- 本番詳細ページとCMSプレビューでカードの余白・文字サイズを揃えるパターン。
+
+### 未確認の類似パターン
+
+- 実データを入力した記事を認証済みCMSの「本番表示」で目視する経路: 未確認。
+- 実機スマートフォンで複数行の長いイベント名を含むカード: 未確認。
+- 英語表示での日程ラベルの見え方: 未確認。
+
+### 次の担当への注意
+
+- 日程は読みやすくするため12pxに拡大し、カードは従来よりコンパクトになっている。
+- 本番表示を再確認する際は、ブラウザを強制更新してから確認する。
+- Publish Nowと本番反映はユーザーの公開判断まで行わない。
+
+## 2026-08-24 ARTICLE本番表示プレビューのイベント表示
+
+### 実施
+
+- `openArticleGeneratedPreview()` でも `article-shortcodes.js` の共通関数を使い、`[[event]]` と `[[calendar]]` をHTMLへ変換するよう修正。
+- 本番表示プレビューの `article-detail-inner` 構造と `common.css` / `detail.css` / `article-fx.css` のバージョンを実ページと一致させた。
+- 独自の見出しCSSを削除し、本番と同じ `detail.css` の見出し2折り返しを使用。
+- `scripts/check_cms_article_generated_preview.mjs` を追加し、preflightへ登録。
+- `scripts/check_cms_layout.mjs` に本番表示プレビューのイベント・カレンダー変換検査を追加。
+
+### コミット
+
+- 未コミット。push・本番反映は未実施。
+
+### 検証
+
+- `node scripts/check_cms_article_generated_preview.mjs`: 成功。
+- `node scripts/check_cms_layout.mjs`: 実ブラウザ相当でイベントカード・カレンダー・本番CSSを確認。
+- `node --check LP/cms.js`: 成功。
+- `git diff --check`: 成功。
+- `bash scripts/preflight.sh`: 省略なしで全38件成功。
+
+### 変更したパターン
+
+- CMS内プレビューと別ウィンドウの本番表示プレビューで同じショートコード変換関数を使うパターン。
+- 本番ページと同じCSS構造・バージョンを使い、見出しの折り返しを一致させるパターン。
+
+### 未確認の類似パターン
+
+- 認証済みCMSで実際に入力・保存した本文を別ウィンドウの本番表示プレビューで確認する操作: 未確認。
+- 英語本文の本番表示プレビュー: 未確認（現在の本番表示プレビューはJA設定）。
+- 実機スマートフォンでの見出し折り返し: 未確認。
+
+### 次の担当への注意
+
+- 「↗ 本番表示」を押す前に本文を保存する必要はない。現在の入力内容からプレビューを生成する。
+- イベントカードを1件以上追加してから `[[calendar]]` を挿入する。
+- Publish Nowと本番反映はユーザーの公開判断まで行わない。
+
+## 2026-08-24 ARTICLE集中モードのイベント入力ダイアログ修正
+
+### 実施
+
+- 集中モードの本文領域よりイベントカード入力ダイアログが背面になる問題を修正。
+- `openArticleEventForm()` のダイアログを `z-index: 2100` とし、集中モードの `z-index: 2000` より前面に表示。
+- `LP/cms.html` の `cms.js` キャッシュバージョンを97へ更新。
+- `scripts/check_cms_layout.mjs` に、集中モード中のイベント入力ダイアログの表示・前面・サイズ検査を追加。
+
+### コミット
+
+- 未コミット。push・本番反映は未実施。
+
+### 検証
+
+- `node scripts/check_cms_layout.mjs`: 実ブラウザで集中モード中のイベント入力ダイアログ表示を確認。
+- `node --check LP/cms.js`: 成功。
+- `git diff --check`: 成功。
+- `bash scripts/preflight.sh`: 省略なしで全37件成功。
+
+### 変更したパターン
+
+- フルスクリーン編集領域内から開くモーダルを、編集領域より前面に配置するパターン。
+- UIのz-index関係を実ブラウザで矩形・表示状態として検査するパターン。
+
+### 未確認の類似パターン
+
+- 認証済みCMSで実際に入力フォームへ値を入れて「本文に挿入」する操作: 未確認。
+- 実機スマートフォンでの集中モードとイベント入力操作: 未確認。
+- Publish Now後の本番反映: 未確認。
+
+### 次の担当への注意
+
+- 集中モード中でも、上部の「📦 イベントカード」ボタンから入力フォームを開ける。
+- 入力後は「本文に挿入」を押し、必要なら「📅 カレンダーを挿入」を押す。
+- Publish Nowと本番反映はユーザーの公開判断まで行わない。
+
+## 2026-08-24 TOP ARTISTS画像ありランダム表示
+
+### 実施
+
+- `LP/index.html` と生成済みの `LP/en/index.html` のTOP ARTISTSを、画像が登録されているアーティストだけの候補に変更。
+- Fisher–Yates方式でページ訪問ごとに順番をシャッフルし、最大16件を表示。
+- 既存のカルーセル、自動スクロール、通常リンク、`data-bg`による遅延背景画像読み込みは維持。
+- `scripts/check_top_artists.mjs` を追加し、`scripts/preflight.sh`へ登録。
+
+### コミット
+
+- ローカルコミット済み（このエントリを含む）。push・本番反映は未実施。
+
+### 検証
+
+- `node scripts/check_top_artists.mjs`: 成功。
+- `git diff --check`: 成功。
+- `bash scripts/preflight.sh`: 省略なしで全39件成功。
+- preflight内のハブ実ブラウザ確認（JA/ENを含む）: 成功。
+
+### 変更したパターン
+
+- 画像ありアーティストのみを抽出するパターン。
+- `sort(() => Math.random() - .5)`ではなくFisher–Yatesでランダム化するパターン。
+
+### 未確認の類似パターン
+
+- 実機スマートフォンで複数回リロードし、表示順が変わることの目視: 未確認。
+- 画像あり候補が16件未満の場合のTOP上限表示: 自動検査のみ。
+
+### 次の担当への注意
+
+- 画像がないアーティストはTOP ARTISTSには表示しない仕様。
+- 表示順は固定ではないため、特定アーティストの掲載位置を前提にしない。
+- Publish Now・push・本番反映はユーザーの公開判断まで行わない。
+
+## 2026-08-24 ARTISTSスマホ導線の整理
+
+### 実施
+
+- `LP/artists.html` のアルファベット一覧フィルター（A〜Z・#）と関連JavaScript/CSSを削除。
+- 副題 `DJS · PRODUCERS · SELECTORS`、検索、ジャンルフィルター、`A → Z`並び替えは維持。
+- スマホのARTISTSページヘッダー上部余白を縮小し、一覧へ早く到達できるようにした。
+- `scripts/build-detail-pages.mjs` の `enHubFromJa` 経由で `LP/en/artists.html` を再生成。
+
+### コミット
+
+- 未コミット。push・本番反映は未実施。
+
+### 検証
+
+- JA/EN両方からアルファベット一覧のDOM・CSS・JSが消えていることを確認。
+- `node scripts/build-detail-pages.mjs`: 成功。EN artists hubをJAから再生成。
+- `bash scripts/preflight.sh`: 省略なしで全39件成功。
+- preflight内の実ブラウザによるハブ描画確認（JA/EN）: 成功。
+- 生成処理後の意図しない差分: なし（変更はJA/EN artists hubのみ）。
+
+### 変更したパターン
+
+- 一覧性の低いアルファベットジャンプUIを削除し、検索・ジャンル・並び替えへ操作を集約するパターン。
+- スマホだけページヘッダーの上下余白を縮小するパターン。
+
+### 未確認の類似パターン
+
+- 実機スマートフォンでの検索・ジャンル絞り込み・A→Z並び替えの連続操作: 未確認。
+- PC幅でアルファベット一覧削除後の一覧密度: 実ブラウザ目視未確認。
+- Publish Now後の本番反映: 未確認。
+
+### 次の担当への注意
+
+- アーティスト名から探す場合は検索欄を使う。A〜ZのジャンプUIは廃止済み。
+- 副題はブランド・ページ説明として残している。
+- コミット・push・本番反映はユーザーの確認後に行う。
+
+## 2026-08-24 Publish空コミット対策・GAS VENUES列手貼り資料
+
+### 実施
+
+- `LP/cms.js` のPublish要約を `SUBTYPE / HOURS / CHARGE / FEATURES` 表記へ変更し、`FEATURES n件`を確認できるようにした。
+- 公開中の`data.js`を取得できない場合は送信を止めるfail-closedへ変更し、比較不能な状態で空コミットを作らないようにした。
+- `LP/cms.html` の`cms.js`参照をv99からv100へ更新。
+- `scripts/gas-update/venue-columns.patch.gs` を追加。GAS `Code.gs`の既存`COLUMNS`へ`DESC_EN / SUBTYPE / HOURS / CHARGE / FEATURES`を追加する手貼り用資料と確認関数を用意。
+- `scripts/gas-update/README.md` に貼り替え・再デプロイ・`snapshot.js`実行・実差分確認の手順を追加。
+- `scripts/check_gas_venue_columns.mjs` を追加し、preflightへ登録。
+- `scripts/check_cms_publish_guard.mjs` に空コミット防止とFEATURES件数の検査を追加。
+
+### コミット
+
+- 未コミット。push・本番反映は未実施。
+- GAS実物への貼り付け・再デプロイも未実施。
+
+### 検証
+
+- `node scripts/check_gas_venue_columns.mjs`: 成功。
+- `node scripts/check_cms_publish_guard.mjs`: 成功。
+- `node scripts/check_cms_fetch_path.mjs`: 成功。
+- `git diff --check`: 成功。
+- `bash scripts/preflight.sh`: 省略なしで全40件成功。
+- preflight内の実ブラウザ確認（CMSレイアウト・JA/ENハブ）: 成功。
+
+### 変更したパターン
+
+- 公開中データと比較できないときにPublishを止める、空コミット防止のfail-closedパターン。
+- Publish前のデータ要約で、VENUESの4列を大文字ラベルと件数で明示するパターン。
+- 機密設定を含むGAS本体をリポジトリへ持ち込まず、必要な列差分だけを手貼り資料として管理するパターン。
+
+### 未確認の類似パターン
+
+- GASへ`venue-columns.patch.gs`の内容を貼り、再デプロイした実機経路: 未確認。
+- `snapshot.js`実行後の`live-snapshot.json`更新と`node scripts/check_gas_sync.mjs`: 未確認。
+- 認証済み本番CMSで`FEATURES n件`を確認し、`cms: publish data.js`に`LP/data.js`の実差分が出ること: 未確認。
+- Publish後のGitHub Actions成功と本番反映: 未確認。
+
+### 次の担当への注意・判断待ち
+
+- `COLUMNS`は既存列を消さず、`DESC_EN`（無い場合）と4列だけを末尾へ追加する。
+- GASは保存だけでは本番に反映されない。必ず新バージョンとして再デプロイする。
+- `FEATURES n件`が0件の場合は列落ちの可能性があるため、空コミットを成功扱いにしない。
+- GAS貼り付け後に、ユーザーとClaudeで実機Publish→実差分commit→Actions成功を確認してから、ARTISTS変更の公開タイミングを判断する。
+
+## 2026-08-24 ARTISTS 1280px以上の3列表示
+
+### 実施
+
+- `LP/artists.html` に1280px以上だけ3列にするメディアクエリを追加。
+- 1279px以下は2列、640px以下は1列の既存リスト表示を維持。
+- `enHubFromJa`で`LP/en/artists.html`を再生成。
+
+### コミット
+
+- 未コミット。push・本番反映は未実施。
+
+### 検証
+
+- `node scripts/build-detail-pages.mjs`: 成功。
+- `git diff --check`: 成功。
+- `bash scripts/preflight.sh`: 省略なしで全39件成功。
+- preflight内の実ブラウザによるハブ描画確認（JA/EN）: 成功。
+
+### 変更したパターン
+
+- 1280px以上の広い画面では3列にして一覧性を高めるレスポンシブパターン。
+- 中間幅では2列、スマホでは1列にして、名前・ジャンル・地域の可読性を保つパターン。
+
+### 未確認の類似パターン
+
+- 実機1280px以上での長いアーティスト名とホバープレビューの目視: 未確認。
+- 1280px未満のPC幅で2列へ戻る状態: 未確認。
+- Publish Now後の本番反映: 未確認。
+
+### 次の担当への注意
+
+- ローカルでは1280px、1024px、390pxの3幅で列数を確認する。
+- 3列表示でも名前・ジャンル・地域が詰まりすぎないことを確認する。
+- コミット・push・本番反映はユーザーの確認後に行う。
+
+## 2026-08-24 ARTISTSスマホ一覧表示の試作
+
+### 実施
+
+- `LP/artists.html` のスマホ幅（640px以下）だけ、画像カードをコンパクトなリストへ変更。
+- サムネイルは64pxに縮小し、名前・ジャンル・地域を優先表示。
+- PCのカード表示とデスクトップのホバープレビューは維持。
+- 画像が無いアーティストも同じ行高で表示できる構造を維持。
+- `enHubFromJa`で`LP/en/artists.html`を再生成。
+
+### コミット
+
+- 未コミット。push・本番反映は未実施。
+
+### 検証
+
+- `node scripts/build-detail-pages.mjs`: 成功。
+- `git diff --check`: 成功。
+- `bash scripts/preflight.sh`: 省略なしで全39件成功。
+- preflight内の実ブラウザによるハブ描画確認（JA/EN）: 成功。
+
+### 変更したパターン
+
+- モバイルでは画像を主役にせず、名前を短時間で走査できるリストにするパターン。
+- PCでは視覚的なカードとホバープレビューを残し、端末ごとに情報密度を変えるパターン。
+
+### 未確認の類似パターン
+
+- 実機スマートフォンで画像あり・画像なし・長いアーティスト名を含む一覧の目視: 未確認。
+- 検索・ジャンル絞り込み後のリスト表示: 未確認。
+- Publish Now後の本番反映: 未確認。
+
+### 次の担当への注意
+
+- ローカルでは390px程度の幅で、1画面に複数アーティストが見えるかを確認する。
+- PC幅では従来のカードレイアウトが維持されていることを確認する。
+- 現時点は試作段階で、コミット・push・本番反映はユーザーの確認後に行う。
+
+## 2026-08-24 ARTISTS PCリスト表示の試作
+
+### 実施
+
+- `LP/artists.html` のPC表示を、4列の大きな画像カードから2列の情報リストへ変更。
+- PCサムネイルは80px、名前・ジャンル・地域を優先表示。
+- 既存のPCホバープレビューは維持。
+- スマホは既存の1列リスト表示を維持。
+- `enHubFromJa`で`LP/en/artists.html`を再生成。
+
+### コミット
+
+- 未コミット。push・本番反映は未実施。
+
+### 検証
+
+- `node scripts/build-detail-pages.mjs`: 成功。
+- `git diff --check`: 成功。
+- `bash scripts/preflight.sh`: 省略なしで全39件成功。
+- preflight内の実ブラウザによるハブ描画確認（JA/EN）: 成功。
+
+### 変更したパターン
+
+- PCも情報検索を優先した2列リストにし、画像とホバー演出を補助にするパターン。
+- PCとスマホでリスト密度だけを変え、基本の情報構造を揃えるパターン。
+
+### 未確認の類似パターン
+
+- 実機PCでのホバー時プレビュー位置とリスト行の視認性: 未確認。
+- 実機スマートフォンでの1列リスト表示: 未確認。
+- 検索・ジャンル絞り込み後のPC/スマホ表示: 未確認。
+- Publish Now後の本番反映: 未確認。
+
+### 次の担当への注意
+
+- ローカルでは1280pxと390pxの両方で確認する。
+- PCでは2列、スマホでは1列のリストになることを確認する。
+- 画像あり・画像なしの行で高さが崩れないことを確認する。
+- コミット・push・本番反映はユーザーの確認後に行う。
+
+## 2026-08-24 ARTISTSの並び替えUI削除
+
+### 実施
+
+- ARTISTSの大きな`A → Z` / `Z → A`セレクトを削除。
+- アーティスト一覧の内部ソートはA–Z固定に変更。
+- 検索・ジャンルフィルター・件数表示は維持。
+- URLから`sort`パラメータを扱う処理も削除し、不要な状態を残さないようにした。
+- `enHubFromJa`で`LP/en/artists.html`を再生成。
+
+### コミット
+
+- 未コミット。push・本番反映は未実施。
+
+### 検証
+
+- 不要な`artists-sort` / `currentSort` / アルファベット一覧関連コードがJA/ENに残っていないことを確認。
+- `node scripts/build-detail-pages.mjs`: 成功。
+- `git diff --check`: 成功。
+- `bash scripts/preflight.sh`: 省略なしで全39件成功。
+- preflight内の実ブラウザによるハブ描画確認（JA/EN）: 成功。
+
+### 変更したパターン
+
+- 並び替え操作を常時表示せず、A–Z固定で検索・ジャンル選択に集中させるパターン。
+
+### 未確認の類似パターン
+
+- 実機スマートフォンでの検索・ジャンル絞り込み後のA–Z固定表示: 未確認。
+- 既存URLに`?sort=z-a`が付いている場合の利用者影響: 未確認（現在はA–Z固定へ統一）。
+- Publish Now後の本番反映: 未確認。
+
+### 次の担当への注意
+
+- A–Z / Z–Aの切り替えUIは廃止済み。アーティスト一覧は常にA–Z順。
+- 並び順を将来変更する場合は、検索・ジャンル操作の邪魔にならない小さな補助UIとして再設計する。
+- コミット・push・本番反映はユーザーの確認後に行う。
+
+## 2026-08-24 VENUE 反映 89 件・ビュー整備・ジャンル提案
+
+- 実施: `venue_crawl.py apply --only-decided --execute` でユーザーが決めた 89 件（editorial 72 / skip 17）を反映。
+  Airtable の `notes` を multilineText に作り直し（旧 singleSelect は `notes_legacy`）。
+  ビュー「TJ 掲載判断」「TJ 掲載情報（載せる店）」を Chrome で作成。載せる店 63 件に genres を提案として書込。
+- コミット: venue_crawl.py の --only-decided は `74e0fbfc` 以降にコミット済み。handoff は本エントリ。
+- 検証: apply を2回実行し、2回目が「反映 0」（二重反映なし）。
+- 変更したパターン: venue_crawl.py apply（--only-decided、coverage_tier プルダウン優先）。
+- 未確認の類似パターン: 未判断 71 件は directory のまま。Codex 依頼1・2（LP シート列・CMS 入力欄）は未着手。
+- 次の担当への注意: 掲載可否はユーザーが決めた値が正（AI の verdict と違っても直さない）。
+
+## 2026-08-24 Airtable Editions × LP EDITIONS の二重管理検査を追加
+
+- 実施: `scripts/db/check_edition_overlap.py` を新規作成。LP/data.js の FESTIVALS と Airtable Editions を照合。
+- コミット: 済み。
+- 検証: 実データで「重なり 0 / 重複 0 / 形式エラー 0」。偽の重なり（cluster-festival）を注入して exit 1 と警告文が出ることも確認。
+- 変更したパターン: 新規スクリプトのみ。
+- 未確認の類似パターン: LINEUPS の二重管理は未検討（Airtable に LINEUPS 相当は無し）。確認済み・0件。
+- 次の担当への注意: 国内フェスの開催回は LP シートの EDITIONS が正。Airtable に作らない（巡回もこのルールに従う）。
+
+## 2026-08-24 ローカルCMSからは Publish できない（CSPを足さない方針を明文化）
+
+- 実施: ローカルCMS（`http://127.0.0.1:8000/cms.html`）で Publish の公開確認ダイアログを検証。
+  素の状態では**ダイアログ手前で停止**することを実測。原因は `LP/cms.html` の CSP
+  `connect-src` に `techno-japan.media` が無く、変更後の `fetchPublishedDataJs()` が
+  本番 data.js を読めずに throw するため。ユーザー判断で**CSPは足さない**（ローカルからは
+  本番へ出さない）。代わりに「失敗が仕様であること」を3箇所に明記した。
+  1. `LP/cms.js` `fetchPublishedDataJs()` — ホストが本番でなければ
+     「ローカルからは Publish できません。これは仕様です」と原因つきで言い切る
+  2. `LP/cms.html` CSP コメント — `techno-japan.media` が無いのは忘れではない旨
+  3. `AUDIT_TECHNO_JAPAN.md` §9-95 — 経緯・切り分け・判断理由
+- コミット: **未コミット**（ユーザーが最終確認後に本番pushへ進む予定）。
+- 検証:
+  - CSP が原因であることの切り分け: `curl -I -H "Origin: http://127.0.0.1:8000"
+    https://techno-japan.media/data.js` → `HTTP/2 200` / `access-control-allow-origin: *`。
+    **CORSは無関係、CSP単独**と確定。ブラウザ実測は `TypeError: Failed to fetch`。
+  - 公開確認ダイアログの内容（`fetchPublishedDataJs` を一時差し替えて到達、1280px / 500px で同一）:
+    `VENUES 22件（SUBTYPE 1 / HOURS 1 / CHARGE 0 / FEATURES 3）`。大文字ラベル化は正常、
+    FEATURES は 0 ではない。
+  - 数字の検算: GAS `get_sheet&sheet=VENUES` を直接集計し
+    `total 22 / subtype 1 / hours 1 / charge 0 / features 3` で**ダイアログと完全一致**。
+    CHARGE 0 はデータ未入力（ユーザー確認済み）で、GAS の列落ちではない。
+  - **新メッセージの実ブラウザ確認（1280px）**: 差し替え無しの素の状態で Publish Now を押し、
+    失敗パネルに「ローカル（127.0.0.1）からは Publish できません。これは仕様です。」＋
+    CSP が原因である旨＋本番CMSへの誘導が3段落で表示されることを確認。
+  - `bash scripts/preflight.sh`: **全40件 成功**。
+    （Publish 経路の変更を検知して「実機で1回通すまで完了にしない」警告が出る。下記のとおり未確認）
+  - Console: クリーンなスーパーリロード後 0件。Publish 実行中の赤字はアプリ自身が意図して
+    出す「Publishをキャンセルしました」「ローカルからは Publish できません」等のみ。
+  - **Publish Now は毎回キャンセルで終了。GASへの `publish_data_js` 送信は0回**
+    （送信遮断ガードの発動回数0＝そもそも到達せず）。GitHub操作・push は行っていない。
+- 変更したパターン: `fetchPublishedDataJs()` の catch で、`location.hostname` が
+  `techno-japan.media` 以外なら仕様である旨のメッセージを投げる分岐を追加。
+  併せて本番ホスト名を定数 `PROD_CMS_HOST` に切り出した（同名の既存識別子なし・確認済み）。
+- 未確認の類似パターン:
+  - **本番CMS上での `fetchPublishedDataJs` の動作: 未確認。** 同一オリジンなので `'self'` で
+    通る想定だが未検証。本番CMSで Publish Now を1回通すまで完了にしない（AGENTS.md）。
+  - GAS COLUMNS の手貼り: **確認済み・適用済み**（下記の追記を参照）。
+  - **390px 幅: 未確認。** Chrome がウィンドウを500px未満にできず（実測 `innerWidth=500`）、
+    iframe での回避も cms.html 自身の `frame-src 'none'` に阻まれた。到達可能な最小幅
+    500px で確認し、1280px と同一の内容を得た。
+  - 公開確認ダイアログは `confirm()`（ブラウザ標準）であり、ページ幅の影響を受けず
+    スクリーンショットにも写らない。上記の文面は実行時に捕捉した実物。
+  - 他の CMS 画面から本番オリジンへ通信する箇所: 確認済み・0件
+    （`connect-src` を要するのは GAS と nominatim のみ）。
+- 次の担当への注意:
+  - **ローカルで Publish が失敗するのは正常。** CSP に `techno-japan.media` を足せば
+    通るが、足さないことが方針。触る前に §9-95 を読むこと。
+  - `publishPayloadSummary` の表示をローカルで見るには `fetchPublishedDataJs` の
+    一時差し替えが要る。差し替えたまま放置しないこと（空コミット防止ガードが死ぬ）。
+  - 本番pushの前に `bash scripts/preflight.sh` を全件通すこと。
+
+## 2026-08-24 GAS COLUMNS は適用済みだった／手順書が実物と食い違っていた
+
+- 実施: 「GAS 手貼りが未確認」を解消するため、Apps Script「Techno Japan」を
+  **読み取りのみ**で開いて実物を確認した。結果、**作業は不要**（すでに適用・デプロイ済み）。
+  一方で、リポジトリの手順書が実物と食い違っていたため訂正した。
+- コミット: **未コミット**（ユーザーが最終確認後に本番pushへ進む予定）。
+- 検証:
+  - `コード.gs` 冒頭の `const COLUMNS = [...]` に
+    `desc_en / subtype / hours / charge / features` が**すべて存在**（実物を目視）。
+  - アクティブなデプロイは **バージョン62（2026/08/24 14:35）**。デプロイIDは
+    `cms.js` の `GAS_URL`（`AKfycbxhJ6rtGoAirNyV5TtBvzWHNOT8RuB0nf...`）と一致。
+    **保存だけでなく再デプロイまで完了している。**
+  - `node scripts/check_gas_venue_columns.mjs` → ✅。
+    大文字を注入すると exit 1（`手貼りパッチのVENUE_COLUMNS_REQUIREDが大文字`）になることも確認。
+    検査が素通りしないことを実証済み。
+- 変更したパターン: **列名の大文字→小文字の訂正**を3ファイルに適用。
+  実物の `COLUMNS` は既存要素を含めすべて小文字で、CMS のペイロードキーも小文字。
+  手順書だけが大文字（`'DESC_EN', 'SUBTYPE', ...`）を指示しており、そのとおりにすると
+  AUDIT §9-69「大文字小文字で値が消える」を再現する状態だった。
+  1. `scripts/gas-update/venue-columns.patch.gs` — 小文字化。`assertVenueColumnsPatch_()` は
+     大文字小文字を問わず突き合わせるようにし、冒頭に「適用済み」の状態を明記。
+  2. `scripts/gas-update/README.md` — 冒頭に「✅ 適用済み。作業は要らない」と実物のCOLUMNSを
+     記載。手順は再適用用として残し、コード例を小文字に訂正。
+  3. `scripts/check_gas_venue_columns.mjs` — 期待値を小文字に。加えて、大文字で書き戻されたら
+     落ちるガードを追加。**散文ではなくコード部分だけ**を見る（最初に散文まで拾って
+     正しい手順書を落としたため、その場で修正した）。
+- 未確認の類似パターン:
+  - `assertVenueColumnsPatch_()` の **Apps Script 上での実行: 未実施**。
+    COLUMNS は目視で確認済みのため実行しなくても結論は変わらないが、
+    関数そのものの動作は未検証。
+  - `live-snapshot.json` は 2026-08-10（バージョン59）のまま。**バージョン62 に未更新**。
+    更新には Apps Script エディタのコンソールで `snapshot.js` を実行する必要がある（未実施）。
+    ただし `check_gas_sync.mjs` が見るのは AI 系3関数の指紋で、今回の COLUMNS 変更は対象外。
+  - CMS で SUBTYPE / HOURS / CHARGE / FEATURES を**入力して保存する**経路: 未確認。
+    COLUMNS が揃ったので通る想定だが、実機で保存→再表示までは見ていない。
+- 次の担当への注意:
+  - **GAS の手貼りは終わっている。もう一度貼らないこと。** 特に大文字で足さないこと。
+  - 手順書を書くときは、実物を開いて確かめてから書く。今回は実物が小文字なのに
+    手順書が大文字を指示していた（Publish の実機調査から起票された想定ベースの記述）。
+
+## 2026-08-24 🚨 本番が 8/14 から更新されていない（Publish pipeline が10日間失敗）
+
+**公開作業を中断した。原因はデータ側にあり、勝手に直さず報告する（AGENTS.md）。**
+
+- 実施: `feat/list-visual` を `main` へ出す準備として、ブランチに `origin/main` を取り込み
+  （衝突なし）、詳細ページを再生成しようとしたところビルドが停止。切り分けの結果、
+  **本番が2026-08-14から更新されていない**ことが判明した。公開は行っていない。
+- コミット: `a92f81a3` Merge origin/main into feat/list-visual（**ローカルのみ・未push**）。
+  preflight が落ちる状態のため pre-push フックを通せない。`--no-verify` は使わない。
+  それ以前の6件（`90e3cc27`〜`67a1f8d1`）は push 済み（ブランチのみ・本番未反映）。
+- 検証:
+  - **本番と main の data.js が違う。** 本番 = アーティスト96名（joma/noritake を含む）。
+    main の `LP/data.js` = 94名（含まない）。`curl` で実測。
+  - **Publish pipeline は 2026-08-14 05:40 の成功を最後に、以降すべて失敗。**
+    08-17 10:07 / 08-17 13:59 / 08-17 14:18(手動) / 08-23 17:38 → 全て failure。
+    08-24 の `cms: publish data.js` 3件は**空コミットのため paths に一致せず、
+    ワークフローが起動すらしていない**（`gh run list --commit 075fb6d2` → 0件）。
+  - 08-23 の失敗理由: `EDITIONS: ID重複 "grow-the-culture-open-air-2026"（42行目と109行目）`。
+    **この重複は現在のシートでは解消済み**（EDITIONS 109行 / 重複0件を実測）。
+  - 現在の停止要因は別。`build-detail-pages.mjs` が
+    `lineups.json: ARTIST_ID 参照切れ 2件` で停止する。
+  - **参照切れの正体（実測）**: ARTISTS シートに `joma`(76行) と `noritake`(88行) は
+    存在するが、STATUS が **draft**。data.js は draft を除くため 94名になり、
+    LINEUPS の `matricaria-2026` がその2名を参照したまま残っている。
+    （ARTISTS 130行の内訳: published 28 / 空欄 66 / draft 36）
+  - ローカル `LP/data/lineups.json` は 2026-08-14 生成で古い。実シートは 536行で
+    `synapse-festival-2025` の参照は既に無く、残るのは `matricaria-2026` の2行のみ。
+  - `origin/main` 単体でも同じビルドエラーになることを隔離ワークツリーで確認。
+    **この不整合は今回のマージが作ったものではなく、main に既にあった。**
+  - preflight: ブランチで **2件失敗**（`詳細ページを生成できる` / `CMS の Image Position が届く`）。
+    どちらも「再生成できないので生成物が data.js に追いついていない」ことが根。
+- 変更したパターン: `origin/main` をブランチへマージ（data.js が 08-17版 → 08-24版に更新）。
+  コード変更なし。データ修正は**一切していない**。
+- 未確認の類似パターン:
+  - 08-17 の3回の失敗理由: **未確認**（08-23 の1件しかログを見ていない）。
+  - `Generate sitemap.xml & rss.xml` が 2026-08-24 03:51 に failure。**原因未確認**。
+  - 他シート（FESTIVALS / VENUES / ARTICLES）の参照切れ: 未確認。
+  - 本番CMSでの Publish Now（④）: **未実施**。データを直すまで実施しても失敗する。
+- 次の担当への注意:
+  - **判断待ち（データ所有者=ユーザー）**: `matricaria-2026` の出演者 Joma / Noritake を
+    (a) ARTISTS の STATUS を published にして載せる のか、
+    (b) LINEUPS から2行を削除する のか。**どちらかを決めるまで本番は復旧しない。**
+  - 直した後の手順: シート修正 → `npm run fetch` で lineups.json 更新 →
+    `node scripts/build-detail-pages.mjs` → `bash scripts/preflight.sh` 全件 →
+    ブランチ push → main へマージ → 本番CMSで Publish Now。
+- **「Publish Now を押したのに変わらない」の真因はこれ。** 空コミットの調査
+  （`reports/codex-request-2026-08-24-publish-empty-commit.md`）は入口であって、
+  その奥に10日分の未公開がある。
+
+## 2026-08-24 Publish失敗履歴と未公開検知方式の提案（実装前）
+
+- 実施: GitHub Actionsの実ログを読み取り専用で確認した。08-17の3件と08-24のsitemap失敗は、
+  同一原因ではなかった。失敗時に人へ届く通知・本番との差分監視はまだ実装していない。
+- コミット: なし（方式提案のみ。pushなし）。
+- 検証:
+  - 08-17 10:07 `32018605378`:
+    `Fetch data from spreadsheet`で`EDITIONS: ID重複 "snow-machine-japan-2026"`。
+  - 08-17 13:54 `32037103731`:
+    `Check asset cache busting`で`cms.js`の参照が`?v=82`のまま。コード更新に対する
+    キャッシュバージョン更新漏れ。
+  - 08-17 14:18 手動 `32038582389`:
+    `Check regression thresholds`で`broken_image_refs 2 > max 0`。
+    不足画像は`/images/festivals/mutek-flyer.webp`と`/images/festivals/mutek.webp`。
+  - 08-24 03:51 `32687890361`（Generate sitemap.xml & rss.xml）:
+    sitemap生成前の`Build detail pages`で停止。`lineups.json: ARTIST_ID 参照切れ 2件`、
+    `joma / noritake → matricaria-2026, synapse-festival-2025`。
+    これは共有済みのARTISTS STATUSとLINEUPSの不整合に一致する。
+- 変更したパターン: なし（調査のみ）。
+- 未確認の類似パターン: GitHub通知設定が実際に誰へ届くか、LINE等の外部通知先の有無、
+  データ側の他シート参照切れは未確認。
+- 次の担当への注意・判断待ち:
+  - 推奨方式は二層構成。
+    1. **即時通知**: Publish pipeline / generate-meta の失敗をGitHub Actionsの失敗通知で受ける。
+       まずリポジトリ管理者・担当者がActions失敗通知を有効化する。外部Webhookは後回しにする。
+    2. **定期監視**: 30分〜1時間ごとのwatchdogで、(a) `main`の`LP/data.js`と
+       `https://techno-japan.media/data.js`のSHA-256、(b)最後のPublish pipelineの成功時刻、
+       (c)失敗runの有無を確認する。不一致または一定時間更新なしなら失敗終了し、通知対象にする。
+  - 方式比較:
+    - GitHub Actions失敗通知だけ: 実装が最小。ただし「空コミットでworkflow自体が起動しない」
+      事故と、本番とmainの不一致は検知できない。
+    - 本番との差分watchdogだけ: 今回の10日間未公開を検知できる。ただし、何の検査で止まったかは
+      Actionsの失敗ログを見に行く必要がある。
+    - **推奨の二層構成**: 失敗理由と未公開状態の両方を検知でき、外部サービスを増やさず始められる。
+  - 実装前の合否条件:
+    - `main`と本番のdata.jsが一致していると成功。
+    - 不一致なら「本番とmainのdata.jsが不一致」として失敗し、SHAと最終成功時刻を出す。
+    - Publish pipelineまたはmeta生成が失敗したら、失敗runのURLと最初の失敗ステップを出す。
+    - 空コミットでPublish pipelineが起動しなくても、watchdogの差分検査で検知する。
+  - 同じ障害を毎回大量通知せず、GitHub Issueまたは同一タイトルのアラートを更新する。
+
+## 2026-08-24 Publish復旧確認（Run 32712925871）
+
+- 実施: ユーザーがARTISTSのSTATUSを修正後、本番CMSでPublish Nowを実行した結果を確認した。
+- コミット: Publish pipelineの生成コミットは`7e75413f2f877e29839023578758bd725acf6e2c`。
+  Codexからのpushはしていない。
+- 検証:
+  - Run `32712925871` は success。Fetch / Build / 全検査 / sitemap / RSS / Pages deployまで成功。
+  - `origin/main`の`LP/data.js` SHA-256:
+    `e9b8f38029c4bb72fdcb2889f329891a6e6c059ab986cc49c7c19034ed979186`
+  - 本番`https://techno-japan.media/data.js` SHA-256:
+    `e9b8f38029c4bb72fdcb2889f329891a6e6c059ab986cc49c7c19034ed979186`
+  - 本番とmainは完全一致。2026-08-14以来の未公開状態は解消した。
+- 変更したパターン: データ所有者がARTISTSのSTATUSをpublishedへ修正し、参照切れを解消した。
+- 未確認の類似パターン: 未公開検知の定期実行はまだ未実装。GitHub通知が担当者に届く設定かも未確認。
+- 次の担当への注意・判断待ち:
+  - 復旧後も、Publish失敗を10日間見逃さないための二層監視（Actions失敗通知＋本番/main差分watchdog）は必要。
+  - 監視の実装承認後、まず外部WebhookなしのGitHub Actions通知＋SHA-256監視から着手する。
+
+## 2026-08-24 ✅ 本番復旧（8/14以来10日ぶりの公開）
+
+- 実施: ユーザーが ARTISTS シートの Joma(88行) / Noritake(76行) の STATUS を
+  `draft` → 公開 に変更。その後ユーザーが本番CMSで Publish Now を実行し、
+  **Publish pipeline が10日ぶりに成功**した。私は実行前の障害の洗い出しと、
+  実行後の実測確認、ブランチ側の再生成を担当した。**本番の操作は行っていない。**
+- コミット: `7ebec9a4` Merge origin/main / `0a5ed581` 生成物の再生成 / 本エントリ。
+  いずれも `feat/list-visual`。**main へは何も出していない。**
+- 検証（すべて実測）:
+  - `publish-pipeline` run `32712925871` → **success**（1m38s）。
+    直前の成功は 2026-08-14 05:40 で、その間の4回はすべて failure だった。
+  - main に `c0817661 cms: publish data.js` と
+    `7e75413f chore: regenerate detail pages, sitemap.xml & rss.xml [skip ci]` が増えた。
+  - **本番の data.js と main の data.js が完全一致**（`diff` で確認）。
+    本番アーティスト96名・joma / noritake とも含む。復旧前は本番96名・main94名で不一致だった。
+  - 本番 `festivals/matricaria.html` が `/artists/joma.html` へリンク（2箇所）。
+    本番 `artists/joma.html` は HTTP 200。`llms.txt` は「アーティスト96名」。
+  - 実行前に過去の失敗要因を全部潰してあることを確認:
+    EDITIONS重複0件 / `broken_image_refs 0` / mutek画像2枚とも存在 / cms.js の ?v 整合。
+  - ブランチ: `origin/main` を取り込み（衝突44件は**すべて生成物**のため main 側を採用）、
+    `build-detail-pages.mjs` で再生成 → **`bash scripts/preflight.sh` 全40件成功**。
+- 変更したパターン: 生成物の再生成のみ（詳細ページ42枚 / llms.txt / events.json）。
+  コード変更なし。データ修正はユーザーが実施。
+- 未確認の類似パターン:
+  - **本番CMSでの Publish Now は「旧 cms.js」で実行された。** 今日の変更
+    （空コミット防止の throw 化 / VENUES 4列の大文字ラベル / ローカル用メッセージ）は
+    **まだ本番に出ていない**ため、その経路は実機未確認のまま。
+    AGENTS.md の「Publish 経路を触ったら実機で1回通す」は**未達**。
+    main へマージした後に、もう一度 Publish Now を通す必要がある。
+  - `feat/list-visual` を main へ出す判断: 未実施（27コミット超）。
+  - CMS で VENUES の SUBTYPE / HOURS / CHARGE / FEATURES を入力して保存する経路: 未確認。
+- 次の担当への注意:
+  - **本エントリの直前に、並行セッション（Codex）の「未公開検知方式の提案」がある。**
+    改変せずそのまま残してある。10日間気づかれなかった件の再発防止はそちらが本命。
+  - ブランチは preflight 全件通過済みで push 可能な状態。main へのマージ可否はユーザー判断待ち。
+
+## 2026-08-24 公開前の実ブラウザ確認（UI変更・未確認項目の解消）
+
+- 実施: `feat/list-visual` を main へ出す前提として、handoff に「未確認」と残っていた
+  UI項目を実ブラウザで確認した。**390px は iframe（同一オリジン・`frame-src 'self'` 許可）で
+  実幅ちょうどを再現**し、Chromeのウィンドウ下限500pxの制約を回避した。
+  URL: `http://127.0.0.1:8000/`（ローカル配信）。幅 1280px / 390px。
+- コミット: 本エントリ。コード変更なし。
+- 検証（操作 → 期待 → 実測）:
+  - artists.html 1280px: 初期表示 → A–Z・96件 → **A–Z / 96件 ✅**、並び替えUI・アルファベットタブは**存在しない ✅**
+  - artists.html 1280px: 検索「dj」 → 絞込後もA–Z → **10件・A–Z ✅**（DJ HYPE…Idjut Boys）
+  - artists.html 1280px: 検索「dj」＋ジャンルTECHNO → 重ねがけでもA–Z → **4件・A–Z ✅**
+  - artists.html 1280px: `?sort=z-a` で開く → 壊れずA–Z固定 → **96件・A–Z・Consoleエラー0 ✅**
+    （旧URLの利用者影響なし。パラメータは無視される）
+  - venues.html 1280px: 種別CLUBS → club のみ13件 → **13件・全て `data-type=club` ✅**
+  - venues.html 1280px: 種別BARS × 都市TOKYO → 重ねがけ → **3件（BONOBO / OATH / THE ROOM）✅**
+  - index.html 1280px: TOPアーティスト → 画像付きでランダム → **16名（マーキー複製で32リンク）・
+    全員に画像あり ✅**。`?r=2` で再読込すると別の16名になり**ランダム化が効いている ✅**
+  - artists.html **390px**: 横スクロールなし（scrollWidth 390 = innerWidth）・96件・A–Z・
+    並び替えUIなし・検索欄幅358px・ジャンルタブ7個 ✅
+  - artists.html **390px**: 検索「dj」＋TECHNO → **4件・A–Z・横スクロールなし ✅**（1280pxと同一）
+  - venues.html **390px**: 22件 → BARS 4件 ✅、横スクロールなし ✅
+  - **EN** `/en/artists.html` 390px: `lang=en`・96件・A–Z・並び替えUIなし・
+    本文に文字列 `undefined` なし ✅
+  - **EN** `/en/venues.html` 390px: 22件 → CLUBS 13件 ✅、`undefined` なし ✅
+  - Console: **エラー0件**（全ページ通して）
+- 変更したパターン: なし（確認のみ）。
+- 未確認の類似パターン:
+  - **実機端末での確認は未実施**（iframe による390px再現であり、実機のタッチ・dpr・
+    iOS Safari 固有挙動は含まない）。§9-83 の「headless はタッチを模擬しない」と同じ限界。
+  - 実機PCでのホバー時プレビュー位置とリスト行の視認性: **未確認のまま**
+    （handoff 5280行の項目。ホバー挙動は今回の対象外）。
+  - festivals.html / news.html のハブ: 今回の変更対象外のため未確認。
+- 次の担当への注意:
+  - handoff 5320行「検索・ジャンル絞り込み後のA–Z固定表示: 未確認」および
+    5321行「`?sort=z-a` の利用者影響: 未確認」は、**本エントリで解消**。
+  - 390px の確認は iframe 方式が使える（ハブの CSP は `frame-src 'self'` を許可）。
+    cms.html だけは `frame-src 'none'` のため不可。

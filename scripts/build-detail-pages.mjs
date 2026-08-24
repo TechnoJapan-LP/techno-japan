@@ -53,7 +53,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 27;
+const DETAIL_CSS_VERSION = 29;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -1521,6 +1521,29 @@ function instagramHandle(url) {
   return m && m[1] ? '@' + m[1] : String(url || '');
 }
 
+const VENUE_PRACTICAL_FEATURES = {
+  'cash-only': ['現金のみ', 'CASH ONLY'],
+  'cashless-only': ['キャッシュレスのみ', 'CASHLESS ONLY'],
+  'id-required': ['要ID', 'ID REQUIRED'],
+  'no-photo': ['撮影禁止', 'NO PHOTOS'],
+  'smoking': ['喫煙可', 'SMOKING'],
+  'no-reentry': ['再入場不可', 'NO RE-ENTRY'],
+};
+
+function venueFeatures(value) {
+  return (Array.isArray(value) ? value : String(value || '').split(/[;,]/))
+    .map((item) => String(item).trim()).filter(Boolean);
+}
+
+function venueDistance(a, b) {
+  const lat1 = Number(a.lat), lng1 = Number(a.lng), lat2 = Number(b.lat), lng2 = Number(b.lng);
+  if (![lat1, lng1, lat2, lng2].every(Number.isFinite)) return Infinity;
+  const rad = Math.PI / 180;
+  const dLat = (lat2 - lat1) * rad, dLng = (lng2 - lng1) * rad;
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * Math.sin(dLng / 2) ** 2;
+  return 6371 * 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h));
+}
+
 /* ---------- ヴェニューページ ---------- */
 function venuePage(v, lang = 'ja') {
   const prefix = lang === 'en' ? '/en' : '';
@@ -1537,10 +1560,15 @@ function venuePage(v, lang = 'ja') {
     ? `${name}${place ? ' (' + place + ')' : ''} — club / venue guide. Japan's underground dance music.`
     : `${name}${place ? '（' + place + '）' : ''}の基本情報。日本のアンダーグラウンド・ダンスミュージックのクラブ／ヴェニュー。`);
   const image = absUrl(v.image);
+  const venueLdType = v.type === 'bar'
+    ? ['BarOrPub', 'MusicVenue']
+    : v.type === 'club'
+      ? ['NightClub', 'MusicVenue']
+      : 'MusicVenue';
 
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'MusicVenue',
+    '@type': venueLdType,
     '@id': `${BASE}/venues/${encodeURIComponent(v.id)}.html#venue`,
     name: name,
     inLanguage: lang,
@@ -1560,6 +1588,28 @@ function venuePage(v, lang = 'ja') {
 
   const genres = (Array.isArray(v.genre) ? v.genre : String(v.genre || '').split('/').filter(Boolean))
     .map((g) => `<span class="detail-chip">${esc(String(g).trim())}</span>`).join('');
+  const hours = String(v.hours || '').trim();
+  const charge = String(v.charge || '').trim();
+  const practical = venueFeatures(v.features)
+    .filter((feature) => Object.prototype.hasOwnProperty.call(VENUE_PRACTICAL_FEATURES, feature));
+  const goodToKnow = practical.map((feature) => VENUE_PRACTICAL_FEATURES[feature][lang === 'en' ? 1 : 0]);
+  const informationRows = [
+    v.type ? `<div><dt>${lang === 'en' ? 'TYPE' : 'タイプ'}</dt><dd>${esc(v.type)}</dd></div>` : '',
+    hours ? `<div><dt>HOURS</dt><dd>${esc(hours)}</dd></div>` : '',
+    charge ? `<div><dt>CHARGE</dt><dd>${esc(charge)}</dd></div>` : '',
+    v.address ? `<div><dt>${lang === 'en' ? 'ADDRESS' : '住所'}</dt><dd>${esc(v.address)}</dd></div>` : '',
+    v.url ? `<div><dt>${lang === 'en' ? 'OFFICIAL SITE' : '公式サイト'}</dt><dd><a href="${esc(safeUrl(v.url))}" target="_blank" rel="noopener">${esc(v.url)}</a></dd></div>` : '',
+    v.instagram ? `<div><dt>Instagram</dt><dd><a href="${esc(safeUrl(v.instagram))}" target="_blank" rel="noopener">${esc(instagramHandle(v.instagram))}</a></dd></div>` : '',
+  ].filter(Boolean).join('\n      ');
+  const information = `<div class="detail-section-label">INFORMATION</div>
+    <dl class="detail-facts">
+      ${informationRows}
+    </dl>`;
+  const goodToKnowHtml = goodToKnow.length ? `<section class="detail-good-to-know">
+    <div class="detail-section-label">GOOD TO KNOW</div>
+    <div class="detail-good-to-know-items">${goodToKnow.map((item) => `<span>${esc(item)}</span>`).join(' · ')}</div>
+    <p>${lang === 'en' ? 'Check the official source for the latest information.' : '最新の情報は公式サイトでご確認ください。'}</p>
+  </section>` : '';
 
   const body = `<article class="detail-page">
   <div class="detail-inner">
@@ -1569,16 +1619,15 @@ function venuePage(v, lang = 'ja') {
     ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
     ${v.image ? `<div class="detail-hero"><img ${dimensionAttrs(v.image)} src="/${String(v.image).replace(/^\//, '')}"${heroSrcsetAttr(v.image)} alt="${esc(name)}"${imagePositionStyle(v)}></div>` : ''}
     ${bilingualBody(v.desc, v.desc_en, lang)}
-    <dl class="detail-facts">
-      ${v.type ? `<div><dt>${lang === 'en' ? 'TYPE' : 'タイプ'}</dt><dd>${esc(v.type)}</dd></div>` : ''}
-      ${v.address ? `<div><dt>${lang === 'en' ? 'ADDRESS' : '住所'}</dt><dd>${esc(v.address)}</dd></div>` : ''}
-      ${v.url ? `<div><dt>${lang === 'en' ? 'OFFICIAL SITE' : '公式サイト'}</dt><dd><a href="${esc(safeUrl(v.url))}" target="_blank" rel="noopener">${esc(v.url)}</a></dd></div>` : ''}
-      ${v.instagram ? `<div><dt>Instagram</dt><dd><a href="${esc(safeUrl(v.instagram))}" target="_blank" rel="noopener">${esc(instagramHandle(v.instagram))}</a></dd></div>` : ''}
-    </dl>
-    ${(() => { // 回遊: 同じ街の他のヴェニュー
-      const others = XLINK.venues.filter((x) => x.id !== v.id && x.city && v.city && String(x.city).toLowerCase() === String(v.city).toLowerCase()).slice(0, 6);
+    ${information}${goodToKnowHtml ? `\n    ${goodToKnowHtml}` : ''}
+    ${(() => { // 回遊: 座標があれば距離順、無ければ同じ街。種別はまたぐ。
+      const sameCity = XLINK.venues.filter((x) => x.id !== v.id && x.city && v.city && String(x.city).toLowerCase() === String(v.city).toLowerCase());
+      const withDistance = v.lat && v.lng && XLINK.venues.some((x) => x.lat && x.lng)
+        ? XLINK.venues.filter((x) => x.id !== v.id && x.lat && x.lng).sort((a, b) => venueDistance(v, a) - venueDistance(v, b))
+        : sameCity;
+      const others = withDistance.slice(0, 4);
       if (!others.length) return '';
-      return `<h2>${lang === 'en' ? `MORE VENUES IN ${esc(String(v.city).toUpperCase())}` : `${esc(v.city)}の他のヴェニュー`}</h2>${relatedChips(others, 'venues', lang)}`;
+      return `<h2>${lang === 'en' ? 'NEARBY VENUES' : '近くの会場'}</h2>${relatedChips(others, 'venues', lang)}`;
     })()}
     <div class="article-footer"><a class="article-back" href="${hubHref}" data-venue-hub-back="${hubHref}" style="margin:0"><span class="arrow"></span> ALL VENUES</a></div>
   </div>
