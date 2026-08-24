@@ -1,23 +1,8 @@
 {
   "source": "https://techno-japan.media/",
   "license": "データの出典として techno-japan.media へのリンクを求めます",
-  "count": 16,
+  "count": 15,
   "events": [
-    {
-      "name": "Global Ark 2026",
-      "url": "https://techno-japan.media/festivals/global-ark.html",
-      "start": "2026-08-21",
-      "end": "2026-08-23",
-      "venue": "Nozoriko Camping Ground",
-      "pref": "Gunma",
-      "lat": 36.6976,
-      "lng": 138.6534,
-      "genres": [
-        "TECHNO",
-        "HOUSE"
-      ],
-      "tickets": "https://globalark.zaiko.io/en/e/global-ark-2026"
-    },
     {
       "name": "ONE PARK FESTIVAL 2026",
       "url": "https://techno-japan.media/festivals/one-park-festival.html",
