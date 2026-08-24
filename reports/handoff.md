@@ -5484,6 +5484,83 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
   - 直した後の手順: シート修正 → `npm run fetch` で lineups.json 更新 →
     `node scripts/build-detail-pages.mjs` → `bash scripts/preflight.sh` 全件 →
     ブランチ push → main へマージ → 本番CMSで Publish Now。
-  - **「Publish Now を押したのに変わらない」の真因はこれ。** 空コミットの調査
-    （`reports/codex-request-2026-08-24-publish-empty-commit.md`）は入口であって、
-    その奥に10日分の未公開がある。
+- **「Publish Now を押したのに変わらない」の真因はこれ。** 空コミットの調査
+  （`reports/codex-request-2026-08-24-publish-empty-commit.md`）は入口であって、
+  その奥に10日分の未公開がある。
+
+## 2026-08-24 Publish失敗履歴と未公開検知方式の提案（実装前）
+
+- 実施: GitHub Actionsの実ログを読み取り専用で確認した。08-17の3件と08-24のsitemap失敗は、
+  同一原因ではなかった。失敗時に人へ届く通知・本番との差分監視はまだ実装していない。
+- コミット: なし（方式提案のみ。pushなし）。
+- 検証:
+  - 08-17 10:07 `32018605378`:
+    `Fetch data from spreadsheet`で`EDITIONS: ID重複 "snow-machine-japan-2026"`。
+  - 08-17 13:54 `32037103731`:
+    `Check asset cache busting`で`cms.js`の参照が`?v=82`のまま。コード更新に対する
+    キャッシュバージョン更新漏れ。
+  - 08-17 14:18 手動 `32038582389`:
+    `Check regression thresholds`で`broken_image_refs 2 > max 0`。
+    不足画像は`/images/festivals/mutek-flyer.webp`と`/images/festivals/mutek.webp`。
+  - 08-24 03:51 `32687890361`（Generate sitemap.xml & rss.xml）:
+    sitemap生成前の`Build detail pages`で停止。`lineups.json: ARTIST_ID 参照切れ 2件`、
+    `joma / noritake → matricaria-2026, synapse-festival-2025`。
+    これは共有済みのARTISTS STATUSとLINEUPSの不整合に一致する。
+- 変更したパターン: なし（調査のみ）。
+- 未確認の類似パターン: GitHub通知設定が実際に誰へ届くか、LINE等の外部通知先の有無、
+  データ側の他シート参照切れは未確認。
+- 次の担当への注意・判断待ち:
+  - 推奨方式は二層構成。
+    1. **即時通知**: Publish pipeline / generate-meta の失敗をGitHub Actionsの失敗通知で受ける。
+       まずリポジトリ管理者・担当者がActions失敗通知を有効化する。外部Webhookは後回しにする。
+    2. **定期監視**: 30分〜1時間ごとのwatchdogで、(a) `main`の`LP/data.js`と
+       `https://techno-japan.media/data.js`のSHA-256、(b)最後のPublish pipelineの成功時刻、
+       (c)失敗runの有無を確認する。不一致または一定時間更新なしなら失敗終了し、通知対象にする。
+  - 方式比較:
+    - GitHub Actions失敗通知だけ: 実装が最小。ただし「空コミットでworkflow自体が起動しない」
+      事故と、本番とmainの不一致は検知できない。
+    - 本番との差分watchdogだけ: 今回の10日間未公開を検知できる。ただし、何の検査で止まったかは
+      Actionsの失敗ログを見に行く必要がある。
+    - **推奨の二層構成**: 失敗理由と未公開状態の両方を検知でき、外部サービスを増やさず始められる。
+  - 実装前の合否条件:
+    - `main`と本番のdata.jsが一致していると成功。
+    - 不一致なら「本番とmainのdata.jsが不一致」として失敗し、SHAと最終成功時刻を出す。
+    - Publish pipelineまたはmeta生成が失敗したら、失敗runのURLと最初の失敗ステップを出す。
+    - 空コミットでPublish pipelineが起動しなくても、watchdogの差分検査で検知する。
+    - 同じ障害を毎回大量通知せず、GitHub Issueまたは同一タイトルのアラートを更新する。
+
+## 2026-08-24 ✅ 本番復旧（8/14以来10日ぶりの公開）
+
+- 実施: ユーザーが ARTISTS シートの Joma(88行) / Noritake(76行) の STATUS を
+  `draft` → 公開 に変更。その後ユーザーが本番CMSで Publish Now を実行し、
+  **Publish pipeline が10日ぶりに成功**した。私は実行前の障害の洗い出しと、
+  実行後の実測確認、ブランチ側の再生成を担当した。**本番の操作は行っていない。**
+- コミット: `7ebec9a4` Merge origin/main / `0a5ed581` 生成物の再生成 / 本エントリ。
+  いずれも `feat/list-visual`。**main へは何も出していない。**
+- 検証（すべて実測）:
+  - `publish-pipeline` run `32712925871` → **success**（1m38s）。
+    直前の成功は 2026-08-14 05:40 で、その間の4回はすべて failure だった。
+  - main に `c0817661 cms: publish data.js` と
+    `7e75413f chore: regenerate detail pages, sitemap.xml & rss.xml [skip ci]` が増えた。
+  - **本番の data.js と main の data.js が完全一致**（`diff` で確認）。
+    本番アーティスト96名・joma / noritake とも含む。復旧前は本番96名・main94名で不一致だった。
+  - 本番 `festivals/matricaria.html` が `/artists/joma.html` へリンク（2箇所）。
+    本番 `artists/joma.html` は HTTP 200。`llms.txt` は「アーティスト96名」。
+  - 実行前に過去の失敗要因を全部潰してあることを確認:
+    EDITIONS重複0件 / `broken_image_refs 0` / mutek画像2枚とも存在 / cms.js の ?v 整合。
+  - ブランチ: `origin/main` を取り込み（衝突44件は**すべて生成物**のため main 側を採用）、
+    `build-detail-pages.mjs` で再生成 → **`bash scripts/preflight.sh` 全40件成功**。
+- 変更したパターン: 生成物の再生成のみ（詳細ページ42枚 / llms.txt / events.json）。
+  コード変更なし。データ修正はユーザーが実施。
+- 未確認の類似パターン:
+  - **本番CMSでの Publish Now は「旧 cms.js」で実行された。** 今日の変更
+    （空コミット防止の throw 化 / VENUES 4列の大文字ラベル / ローカル用メッセージ）は
+    **まだ本番に出ていない**ため、その経路は実機未確認のまま。
+    AGENTS.md の「Publish 経路を触ったら実機で1回通す」は**未達**。
+    main へマージした後に、もう一度 Publish Now を通す必要がある。
+  - `feat/list-visual` を main へ出す判断: 未実施（27コミット超）。
+  - CMS で VENUES の SUBTYPE / HOURS / CHARGE / FEATURES を入力して保存する経路: 未確認。
+- 次の担当への注意:
+  - **本エントリの直前に、並行セッション（Codex）の「未公開検知方式の提案」がある。**
+    改変せずそのまま残してある。10日間気づかれなかった件の再発防止はそちらが本命。
+  - ブランチは preflight 全件通過済みで push 可能な状態。main へのマージ可否はユーザー判断待ち。
