@@ -1,4 +1,8 @@
 {
+  "images/articles/asia-festival-2026second-1787467998635.webp": [
+    1080,
+    1440
+  ],
   "images/articles/bondisco-2026-info-1786627284029.webp": [
     1179,
     884
@@ -211,21 +215,61 @@
     640,
     480
   ],
+  "images/artists/ben-ufo.webp": [
+    390,
+    390
+  ],
   "images/artists/choko.webp": [
     800,
     800
+  ],
+  "images/artists/daphni.webp": [
+    707,
+    434
+  ],
+  "images/artists/dj-kensei.webp": [
+    900,
+    400
+  ],
+  "images/artists/dj-miku.webp": [
+    1280,
+    843
   ],
   "images/artists/dj-nobu.webp": [
     1920,
     1280
   ],
+  "images/artists/dj-yogurt.webp": [
+    1024,
+    780
+  ],
+  "images/artists/gonno.webp": [
+    1765,
+    1768
+  ],
   "images/artists/ground.webp": [
     1334,
     1334
   ],
+  "images/artists/hidai.webp": [
+    225,
+    225
+  ],
+  "images/artists/juana-molina.webp": [
+    1200,
+    1200
+  ],
   "images/artists/ken-ishii.webp": [
     640,
     615
+  ],
+  "images/artists/kikiorix.webp": [
+    800,
+    1200
+  ],
+  "images/artists/kiko-dinucci.webp": [
+    1280,
+    1510
   ],
   "images/artists/kotsu.webp": [
     1440,
@@ -247,6 +291,10 @@
     940,
     940
   ],
+  "images/artists/so.webp": [
+    1477,
+    1108
+  ],
   "images/artists/sunga.webp": [
     800,
     800
@@ -254,6 +302,14 @@
   "images/artists/sylvan-esso.webp": [
     639,
     480
+  ],
+  "images/artists/taichi-kawahira.webp": [
+    800,
+    800
+  ],
+  "images/artists/the-master-musicians-of-joujouka.webp": [
+    447,
+    447
   ],
   "images/artists/tsutomu.webp": [
     312,
@@ -266,6 +322,14 @@
   "images/artists/ysk.webp": [
     1920,
     2880
+  ],
+  "images/derivatives/card/articles/asia-festival-2026second-1787467998635--04988d1d-lg.webp": [
+    720,
+    960
+  ],
+  "images/derivatives/card/articles/asia-festival-2026second-1787467998635--04988d1d-sm.webp": [
+    360,
+    480
   ],
   "images/derivatives/card/articles/bondisco-2026-info--9f04f9ce-lg.webp": [
     960,
@@ -691,6 +755,14 @@
     480,
     360
   ],
+  "images/derivatives/card/artists/ben-ufo--4fc831a3-lg.webp": [
+    390,
+    390
+  ],
+  "images/derivatives/card/artists/ben-ufo--4fc831a3-sm.webp": [
+    390,
+    390
+  ],
   "images/derivatives/card/artists/choko--b7cc6c74-lg.webp": [
     800,
     800
@@ -698,6 +770,30 @@
   "images/derivatives/card/artists/choko--b7cc6c74-sm.webp": [
     480,
     480
+  ],
+  "images/derivatives/card/artists/daphni--0f03d543-lg.webp": [
+    707,
+    434
+  ],
+  "images/derivatives/card/artists/daphni--0f03d543-sm.webp": [
+    480,
+    295
+  ],
+  "images/derivatives/card/artists/dj-kensei--43e84160-lg.webp": [
+    900,
+    400
+  ],
+  "images/derivatives/card/artists/dj-kensei--43e84160-sm.webp": [
+    480,
+    213
+  ],
+  "images/derivatives/card/artists/dj-miku--eec2c8a7-lg.webp": [
+    960,
+    632
+  ],
+  "images/derivatives/card/artists/dj-miku--eec2c8a7-sm.webp": [
+    480,
+    316
   ],
   "images/derivatives/card/artists/dj-nobu--af1a60e7-lg.webp": [
     960,
@@ -707,11 +803,43 @@
     480,
     320
   ],
+  "images/derivatives/card/artists/dj-yogurt--ec09ee55-lg.webp": [
+    960,
+    731
+  ],
+  "images/derivatives/card/artists/dj-yogurt--ec09ee55-sm.webp": [
+    480,
+    366
+  ],
+  "images/derivatives/card/artists/gonno--bb092cea-lg.webp": [
+    958,
+    960
+  ],
+  "images/derivatives/card/artists/gonno--bb092cea-sm.webp": [
+    479,
+    480
+  ],
   "images/derivatives/card/artists/ground--2bf4b4ea-lg.webp": [
     960,
     960
   ],
   "images/derivatives/card/artists/ground--2bf4b4ea-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/hidai--ac316014-lg.webp": [
+    225,
+    225
+  ],
+  "images/derivatives/card/artists/hidai--ac316014-sm.webp": [
+    225,
+    225
+  ],
+  "images/derivatives/card/artists/juana-molina--e4a43f90-lg.webp": [
+    960,
+    960
+  ],
+  "images/derivatives/card/artists/juana-molina--e4a43f90-sm.webp": [
     480,
     480
   ],
@@ -722,6 +850,22 @@
   "images/derivatives/card/artists/ken-ishii--fdb2218f-sm.webp": [
     480,
     461
+  ],
+  "images/derivatives/card/artists/kikiorix--5ed809a7-lg.webp": [
+    640,
+    960
+  ],
+  "images/derivatives/card/artists/kikiorix--5ed809a7-sm.webp": [
+    320,
+    480
+  ],
+  "images/derivatives/card/artists/kiko-dinucci--e2276e0e-lg.webp": [
+    814,
+    960
+  ],
+  "images/derivatives/card/artists/kiko-dinucci--e2276e0e-sm.webp": [
+    407,
+    480
   ],
   "images/derivatives/card/artists/kotsu--53a1a831-lg.webp": [
     960,
@@ -763,6 +907,14 @@
     480,
     480
   ],
+  "images/derivatives/card/artists/so--523afd19-lg.webp": [
+    960,
+    720
+  ],
+  "images/derivatives/card/artists/so--523afd19-sm.webp": [
+    480,
+    360
+  ],
   "images/derivatives/card/artists/sunga--f454f76d-lg.webp": [
     800,
     800
@@ -778,6 +930,22 @@
   "images/derivatives/card/artists/sylvan-esso--b1b06910-sm.webp": [
     480,
     361
+  ],
+  "images/derivatives/card/artists/taichi-kawahira--e2ffea7a-lg.webp": [
+    800,
+    800
+  ],
+  "images/derivatives/card/artists/taichi-kawahira--e2ffea7a-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/the-master-musicians-of-joujouka--0a97c308-lg.webp": [
+    447,
+    447
+  ],
+  "images/derivatives/card/artists/the-master-musicians-of-joujouka--0a97c308-sm.webp": [
+    447,
+    447
   ],
   "images/derivatives/card/artists/tsutomu--a9f93a04-lg.webp": [
     312,

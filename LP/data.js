@@ -71,22 +71,69 @@ const ARTISTS = [
   {
     id: "dj-miku",
     name: "DJ MIKU",
+    city: "TOKYO",
+    country: "JAPAN",
+    genre: "TECHNO",
+    image: "images/artists/dj-miku.webp",
+    bio: "80年代のニューウェーブ、エレクトロ、テクノを出発点に持つDJ/プロデューサー。90年代初頭、ウェアハウスパーティー KEY-ENERGY のレジデントとして、東京のアンダーグラウンドが形になっていく現場に立ち会った。1996年に NewStage Records を設立し、2012年からは野外フェス GLOBAL ARK を主宰。掛ける側から、場をつくる側へと軸足を広げてきた人である。",
+    bio_en: "A DJ and producer rooted in 80s new wave, electro and techno. In the early 90s he was a resident at the KEY-ENERGY warehouse parties, present as Tokyo's underground took shape. He founded NewStage Records in 1996 and has run the open-air festival GLOBAL ARK since 2012, widening his role from playing the music to building the place where it happens.",
+    links: {
+      instagram: "https://www.instagram.com/djmikumahirojazu/",
+      website: "http://djmiku.com/",
+    }
   },
   {
     id: "dj-kensei",
     name: "DJ KENSEI",
+    city: "TOKYO",
+    country: "JAPAN",
+    genre: "TECHNO/HOUSE",
+    image: "images/artists/dj-kensei.webp",
+    bio: "東京生まれのDJ/プロデューサー/ビートメイカー。80年代半ばに活動を始め、キャリアは35年を超える。ミックスCD、アナログ盤、テープと、形を選ばず作品を残し、リミキサーやプロデューサーとしての仕事も長い。時代が何度も入れ替わるあいだ、東京の現場に立ち続けている。",
+    bio_en: "A Tokyo-born DJ, producer and beat-maker who began in the mid-80s, with a career now spanning more than 35 years. He has left work across mix CDs, vinyl and tapes without preferring any one format, alongside long-running work as a remixer and producer. Through several changes of era, he has stayed on Tokyo's floors.",
+    links: {
+      soundcloud: "https://soundcloud.com/dj_kensei",
+    }
   },
   {
     id: "dj-yogurt",
     name: "DJ Yogurt",
+    city: "TOKYO",
+    country: "JAPAN",
+    genre: "TECHNO",
+    image: "images/artists/dj-yogurt.webp",
+    bio: "1996年にDJを始め、1998年にユニット UPSETS とレーベル UPSET RECORDINGS を設立。その前後、ゴアやパンガン島、ロンドン、アムステルダムのレイヴを渡り歩いている。東京のレコード店で15年間働いた経験も選盤の土台にあり現場に立ち続け、リリースも途切れることがない。日本のアンダーグラウンドを、量と継続で支えてきたDJだ。",
+    bio_en: "DJing since 1996, he founded the unit UPSETS and the label UPSET RECORDINGS in 1998, having passed through raves in Goa, Koh Phangan, London and Amsterdam along the way. Fifteen years working in Tokyo record stores still shows in his selection. He plays over 70 parties a year and keeps releasing, supporting Japan's underground through sheer volume and persistence.",
+    links: {
+      instagram: "https://www.instagram.com/djyogurt0107/",
+      soundcloud: "https://soundcloud.com/djyogurt-1",
+      bandcamp: "https://upsetrecordings.bandcamp.com/",
+    }
   },
   {
     id: "hidai",
     name: "Hidai",
+    image: "images/artists/hidai.webp",
+    bio: "主に野外で活動しているSoundsystem crew  OtOdashiのDJ。サウンドシステムを持ち込みフロアをデザインし、変幻自在なスタイルで様々な内外のイベントに参加している。TEKNIVALやアンダーグラウンドの超越DIYパーティから強く影響を受け、OtOdashi、BEACHWHISTLE、Black Sheep、PARALLEL WORLD等々の、非エントランス式イベントに積極的に参加し、その風潮を高めてきた。そこで培ってきた体感を元に、プロモーターやオーガナイザーとしての活動も多岐に渡り、今では、ハイクオリティ重視な世界観を表現することに重きをおいている。DJとしての音楽は、hiphopからクロスオーバーし、生楽器、自然音、不自然音、electroなどの、全ての音にルーツがあり、Technoを中心に様々な音源を駆使し積み重ね、気宇壮大なgrooveを創造する。",
+    bio_en: "A DJ with OtOdashi, a soundsystem crew active primarily in outdoor settings. Hauling in their own rig to design the floor itself, he takes part in a wide range of events at home and abroad with a style that shifts shape at will. Drawing strong influence from TEKNIVAL and the transcendent DIY spirit of the underground, he has thrown himself into non-entrance-fee events — OtOdashi, BEACHWHISTLE, Black Sheep, PARALLEL WORLD and more — helping to build that movement's momentum. Building on the instincts honed in those environments, his work as a promoter and organizer spans just as broadly, and these days he places particular weight on articulating a world-view rooted in uncompromising quality. As a DJ, his music crosses over from hip-hop, with roots in every kind of sound — live instrumentation, natural sound, unnatural sound, electro — layering and marshalling a diverse arsenal of material around a core of techno to create a groove of vast, expansive scale.",
+    links: {
+      instagram: "https://www.instagram.com/hidai_otodashi/",
+    }
   },
   {
     id: "taichi-kawahira",
     name: "TAICHI KAWAHIRA",
+    city: "TOKYO",
+    country: "JAPAN",
+    genre: "TECHNO",
+    image: "images/artists/taichi-kawahira.webp",
+    imagePosition: "center top",
+    bio: "1997年よりライブ、オーガナイズ活動を開始。様々なレーベルより楽曲も勢力的にリリースし、2004年よりサイケデリックかつスペーシーなサウンドを軸としたスタイルでDJ活動をスタート。ヒプノティックでディープな空気の中にストーリー性の高いエモーショナルなセンスを内包し、アップリフティングでトランシーなドライブ力を併せ持つ。様々な音楽フェスティバルへの出演をはじめに都内主要クラブからアンダーグラウンドな場所まで幅広い現場でプレイ。またエレクトロニカ、エクスペリメンタル、アンビエント、アブストラクトを軸とする音楽も得意とし、ギャラリーやアートイベントでの音楽担当など活動の場所は多岐に渡る。 自身主催によるOpen Air Music&Art Festival Brightnessは活動9年目を迎え、クラブシーンやバンドシーンの垣根を飛び越え、多様なカルチャーをクロスオーバーさせるアプローチで独自の立ち位置を獲得しシーンに一石投じている。",
+    bio_en: "Began performing live and organizing events in 1997, releasing music prolifically on a range of labels along the way. In 2004 he launched his DJ career, built around a psychedelic, spacey sound. His sets fold a highly narrative, emotional sensibility into hypnotic, deep atmospheres, while retaining an uplifting, trance-inflected drive. Alongside appearances at numerous music festivals, he has played everywhere from Tokyo's major clubs to the deepest underground spaces. He is equally at home with electronica, experimental, ambient and abstract sounds, and his activities extend to soundtracking galleries and art events.\n\nNow in its ninth year, Open Air Music & Art Festival Brightness — the festival he founded and directs — has carved out a singular position by leaping over the barriers between club and band scenes, taking a crossover approach to diverse cultures and throwing down a challenge to the scene at large.",
+    links: {
+      instagram: "https://www.instagram.com/taichi_kawahira/",
+      soundcloud: "https://soundcloud.com/dj-taichi-kawahira",
+    }
   },
   {
     id: "tsutomu",
@@ -150,10 +197,29 @@ const ARTISTS = [
   {
     id: "ben-ufo",
     name: "Ben UFO",
+    country: "UK",
+    genre: "HOUSE/UK BASS/TECHNO/DUBSTEP",
+    image: "images/artists/ben-ufo.webp",
+    bio: "レーベル Hessle Audio と共に名前が知られてきた UK のDJ。Rinse FM の番組を長年担当している。自身の制作をほとんど持たず、選曲だけで世界の第一線に立った。DJという仕事の定義そのものを、実践で押し広げてきた人である。",
+    bio_en: "A UK DJ who made his name alongside the label Hessle Audio, and a long-running fixture on Rinse FM. With almost no productions of his own, he reached the front rank of the global scene on the strength of his selections alone — a figure who has expanded the very definition of what a DJ does, through practice rather than theory.",
+    links: {
+      instagram: "https://www.instagram.com/ben___ufo/",
+      soundcloud: "https://soundcloud.com/benufo",
+    }
   },
   {
     id: "daphni",
     name: "Daphni",
+    country: "CANADA",
+    genre: "HOUSE",
+    image: "images/artists/daphni.webp",
+    bio: "カナダの Daniel Snaith が、Caribou と使い分けるダンスフロア名義。2012年の『Jiaolong』から本格的に動き出した。同名のレーベル Jiaolong を自ら運営しCaribou よりも直接的に、フロアに向けた音を作る。名義を分けることで、二つの時間の流れを持っている作家である。",
+    bio_en: "Daphni is the dancefloor alias that Canada's Daniel Snaith keeps separate from Caribou. The project began in earnest with 2012's *Jiaolong*, and he runs a label of the same name, Jiaolong, himself. The music here is aimed more directly at the floor than anything under Caribou. By splitting his output across two names, he's an artist who moves at two different tempos of time.",
+    links: {
+      instagram: "https://www.instagram.com/cariboumusic/",
+      soundcloud: "https://soundcloud.com/caribouband",
+      bandcamp: "https://caribouband.bandcamp.com/",
+    }
   },
   {
     id: "dj-maria",
@@ -178,6 +244,18 @@ const ARTISTS = [
   {
     id: "gonno",
     name: "Gonno",
+    city: "TOKYO",
+    country: "JAPAN",
+    genre: "TECHNO/ HOUSE",
+    image: "images/artists/gonno.webp",
+    imagePosition: "center",
+    bio: "ジャパニーズ・ハウス/テクノシーンを代表するDJ/プロデューサーとして国内外で活躍。これまでにInternational Feel Recordings (Ibiza)、Beats In Space(New York), Ostgut-Ton(Berlin)など海外のレーベルを中心に数々の作品を発表。2015年にリリースされた2ndアルバム”Remember The Life Is Beautiful”はPitchforkやResident Advisor等の海外メディアでも紹介され、日本のMusic Magazine紙に年間ベストディスクにもランクインされた。またドラマー/パーカッショニスト増村和彦とGonno x Masumura名義でライブ活動も行っており、アルバム”In Circles”ではアシッディかつメロディックなシンセサイザーとアフロ・ビートを通過したライヴドラムの実験性の高いコラボレーションを発表し各方面の話題となった。",
+    bio_en: "A DJ/producer at the forefront of the Japanese house/techno scene, active both at home and abroad. He has released a string of works primarily on overseas labels including International Feel Recordings (Ibiza), Beats In Space (New York) and Ostgut-Ton (Berlin). His second album, \"Remember The Life Is Beautiful,\" released in 2015, drew coverage from international outlets such as Pitchfork and Resident Advisor, and placed among the year's best albums in Japan's Music Magazine. He also performs live alongside drummer/percussionist Kazuhiko Masumura as Gonno x Masumura; their album \"In Circles\" — a highly experimental collaboration pairing acid-tinged, melodic synthesizers with live drumming filtered through Afrobeat — became a talking point across the board.",
+    links: {
+      instagram: "https://www.instagram.com/djgonno/",
+      soundcloud: "https://soundcloud.com/gonno",
+      bandcamp: "https://gonno.bandcamp.com/",
+    }
   },
   {
     id: "haai",
@@ -198,6 +276,15 @@ const ARTISTS = [
   {
     id: "kikiorix",
     name: "Kikiorix",
+    city: "TOKYO",
+    country: "JAPAN",
+    image: "images/artists/kikiorix.webp",
+    bio: "日本・東京を拠点に活動。Kikiorixは日本国内はもちろん、海外でも数多くのクラブやフェスティバルでプレイしてきた。Rush Hour x RDCによるSomewhere in Amsterdam、Dusk Camp Los Angeles、Fabric London、The End/Aka London、Space Ibiza、Tresor Berlinなど、ヨーロッパにとどまらず、ハワイ、中国、タイ、スリランカなどにも招かれている。2000年代にはロンドンを拠点とし、Tomoki Tamuraとともにレジデントを務めたHolicで多くのDJ経験を積み、その後Tresvibesの一員として日本最大級の音楽フェスティバルのひとつであるFuji Rock Festivalへの出演も果たした。平日はRealrockdesignにてデザイナーとして多忙な日々を送る。Rainbow Disco Clubのレジデントデザイナー兼DJ。",
+    bio_en: "Based in Tokyo, Japan.Kikiorix has played in many clubs and festivals in Japan as well as abroad including Somewhere in Amsterdam by Rush Hour x RDC, Dusk Camp Los Angeles, Fabric London, The End/Aka London, Space Ibiza, Tresor Berlin – and not only Europe but also he was invited to Hawaii, China, Thailand, Sri Lanka etc. Being based in London in 00s, he gained a lot of DJ experiences as a Holic resident together with Tomoki Tamura, and later he got to perform at one of the biggest music festivals in Japan, Fuji Rock Festival as a member of Tresvibes. During weekdays, he is busy working as a designer at Realrockdesign. A resident DJ and designer for Rainbow Disco Club.",
+    links: {
+      instagram: "https://www.instagram.com/kikigraphix/",
+      soundcloud: "https://soundcloud.com/kikiorix",
+    }
   },
   {
     id: "mala",
@@ -230,10 +317,6 @@ const ARTISTS = [
   {
     id: "ojisan",
     name: "Ojisan",
-  },
-  {
-    id: "noritake",
-    name: "Noritake",
   },
   {
     id: "eric-cloutier",
@@ -292,10 +375,6 @@ const ARTISTS = [
     name: "Doltz",
   },
   {
-    id: "joma",
-    name: "Joma",
-  },
-  {
     id: "suguru-mochizuki",
     name: "Suguru Mochizuki",
   },
@@ -315,7 +394,7 @@ const ARTISTS = [
     genre: "HOUSE",
     image: "images/artists/sunga.webp",
     bio: "EEZEE、COREHEAD、BEACH WHISTLE、BLACKSHEEP といったパーティーやクルーに関わるDJ。\n都内を中心に全国さまざまな箱でプレイ。野外パーティでのDJプレイにも定評がある。\nレコード店やイベントとの結びつきも深く、現場の数を積み上げることで立ち位置をつくってきたタイプである。",
-    bio_en: "A DJ involved with parties and crews including EEZEE, COREHEAD, BEACH WHISTLE and BLACKSHEEP.\n\nPlaying mainly in Tokyo but also at venues across the country, with a solid reputation for his sets at open-air parties as well.\n\nHe also maintains close ties with record shops and events — the type who has carved out his position by stacking up sheer numbers of appearances on the floor.",
+    bio_en: "A DJ involved with parties and crews including EEZEE, COREHEAD, BEACH WHISTLE and BLACKSHEEP.\nPlaying mainly in Tokyo but also at venues across the country, with a solid reputation for his sets at open-air parties as well.\nHe also maintains close ties with record shops and events — the type who has carved out his position by stacking up sheer numbers of appearances on the floor.",
     links: {
       instagram: "https://www.instagram.com/sunga_eezee/",
       soundcloud: "https://soundcloud.com/sunga",
@@ -334,10 +413,32 @@ const ARTISTS = [
   {
     id: "kiko-dinucci",
     name: "Kiko Dinucci",
+    country: "BRAZIL",
+    genre: "LIVE",
+    image: "images/artists/kiko-dinucci.webp",
+    imagePosition: "center",
+    bio: "サンパウロのギタリストであり作曲家。Metá Metá と Passo Torto の創設メンバーである。Elza Soares、Tom Zé、Criolo、Jards Macalé、Marcelo D2 と共演してきた。若い頃のパンクやハードコア、そしてサンバ。どちらにも完全には属さないと本人は語る。激しいアコースティックギターに女性コーラスが応える構図が、その音の核にある。",
+    bio_en: "A guitarist and composer from São Paulo, and a founding member of both Metá Metá and Passo Torto. He has performed alongside Elza Soares, Tom Zé, Criolo, Jards Macalé and Marcelo D2. Punk and hardcore in his youth, and samba — he says he belongs fully to neither. At the core of his sound is a structure in which ferocious acoustic guitar is answered by a female chorus.",
+    links: {
+      instagram: "https://www.instagram.com/KikoDinucci/",
+      soundcloud: "https://soundcloud.com/kikodinucci",
+      bandcamp: "https://kikodinucci.bandcamp.com/",
+    }
   },
   {
     id: "the-master-musicians-of-joujouka",
     name: "The Master Musicians of Joujouka",
+    country: "MOROCCO",
+    genre: "LIVE",
+    image: "images/artists/the-master-musicians-of-joujouka.webp",
+    imagePosition: "center top",
+    bio: "モロッコ北部リーフ山地、ジャジューカ村のスーフィー・トランス楽団。1950年代初頭から続き、村の50人を超える音楽家が名を連ねる。1971年、Brian Jones が録音した LP がローリング・ストーンズのレーベルから出た。それを機に、村の音楽は世界に知られることになる。2021年にはポンピドゥー・センターでのライヴ盤を発表している。",
+    bio_en: "A collective of Jbala Sufi trance musicians from the village of Joujouka in Morocco's Rif mountains, performing since the early 1950s and numbering over fifty musicians. In 1971 an LP recorded by Brian Jones was released on Rolling Stones Records, carrying the village's music to the world. A live album recorded at Centre Pompidou followed in 2021.",
+    links: {
+      instagram: "https://www.instagram.com/mastermusiciansofjoujouka/",
+      bandcamp: "https://zehra.bandcamp.com/",
+      website: "https://www.joujouka.org/",
+    }
   },
   {
     id: "kuo-from-sunset-rollercoaster",
@@ -387,6 +488,17 @@ const ARTISTS = [
   {
     id: "juana-molina",
     name: "Juana Molina",
+    country: "ARGENTINA",
+    genre: "LIVE",
+    image: "images/artists/juana-molina.webp",
+    imagePosition: "center top",
+    bio: "ブエノスアイレスのシンガーソングライター。ささやくような歌と反復するエレクトロニクスを重ね合わせる。『Un Día』『Halo』など、国際的に評価されたアルバムを重ねてきた。実験的でありながら、耳に残るポップの手触りを失わない。",
+    bio_en: "A Buenos Aires singer-songwriter who layers whispered vocals over looping electronics. Across acclaimed albums including \"Un Día\" and \"Halo\", her work stays experimental without losing the feel of pop that lodges in the ear.",
+    links: {
+      instagram: "https://www.instagram.com/SOYJUANAMOLINA/",
+      bandcamp: "https://juanamolina.bandcamp.com/",
+      website: "https://juanamolina.com",
+    }
   },
   {
     id: "suimin",
@@ -571,6 +683,16 @@ const ARTISTS = [
   {
     id: "so",
     name: "So",
+    city: "TOKYO",
+    country: "JAPAN",
+    genre: "TECHNO",
+    image: "images/artists/so.webp",
+    bio: "仙台にて18歳でDJを始める。その後野外フェスティバル「The Labyrinth」のレジデントDJ兼オーガナイザーとして20年以上に渡り活動中。安定感のあるスムーズなミックスと徐々に高揚感を増す丁寧なストーリーメイクを自身のスタイルとし、長年に渡り完成度を高めて来た。\n近年は3回目の出演となるポルトガルのWaking Life、ポーランドのGarbicz、オランダのDraaimolen、ベルギーのLa Nature等、欧州の大型フェスに絶えず出演し続け、昨年もスペインのParal·lel Festival に出演しそのセットはハイライトとなり好評を博した。年々その存在感を示し続けている。",
+    bio_en: "He began DJing in Sendai at the age of 18. Since then, he has spent more than two decades as resident DJ and organizer of the open-air festival The Labyrinth. His signature style — rock-solid, seamless mixing paired with meticulous storytelling that builds euphoria little by little — is something he has refined over many years.\n\nMore recently he has been a constant presence on Europe's major festival circuit, appearing at Waking Life in Portugal (for the third time), Garbicz in Poland, Draaimolen in the Netherlands and La Nature in Belgium, among others. Last year he also played Paral·lel Festival in Spain, where his set was hailed as one of the weekend's highlights. Year after year, his presence continues to grow.",
+    links: {
+      instagram: "https://www.instagram.com/dj.so_/",
+      soundcloud: "https://soundcloud.com/dj_so",
+    }
   },
 ];
 
@@ -1216,7 +1338,7 @@ const FESTIVALS = [
     id: "otsukimi",
     type: "rave",
     name: "御月民 -OTSUKIMI-",
-    date: "2026-09-28/2026-09-29",
+    date: "2026-09-25/2026-09-27",
     location: "Healing Garden Takanami",
     location_ja: "ヒーリングガーデンたかなみ",
     city: "Nagano",
@@ -1298,6 +1420,9 @@ const FESTIVALS = [
     desc_en: "The first edition of Wonderfruit staged outside Thailand, where the festival has run for eleven years. Capacity is capped at 100 guests. There is no single site: the four days move between Ohara Sanso, ACG Villa Kyoto, Kurama Mountain and Ochill TeaRoom, across Kyoto. The organising idea is Myo, a Japanese philosophy described here as finding the extraordinary living quietly inside the ordinary. The programme is divided into four movements, one per day: Arrival and Silence, Attunement and Sensitivity, Encounter, Realization. No lineup has been published. The official language goes no further than artisans, practitioners and artists. What is offered in advance is not who will appear, but how the time is shaped.",
     url: "https://chapterskyoto.co/",
     instagram: "https://www.instagram.com/wonderfruitchapters/",
+    editions: [
+      { year: 2026, date: "2026-10-22/2026-10-25", lineup: [] },
+    ],
   },
   {
     id: "festival-de-frue",
@@ -1538,7 +1663,7 @@ const FESTIVALS = [
     desc: "BonDiscoは2014年以来、ディスコとハウスの基本を京都のこぢんまりとしたクラブスペースに持ち込んできた。このパーティーは、クラシックなディスコ感覚と現代的なダンスフロアのダイナミズムを橋渡しする、グルーヴ志向の選曲に一貫してこだわり続けている。トレンド追随よりも音楽的ルーツを重んじる、温かくコミュニティ主体な雰囲気づくりで知られている。",
     desc_en: "BonDisco brings disco and house fundamentals to Kyoto's intimate club spaces since 2014. The party maintains a consistent focus on groove-oriented selections that bridge classic disco sensibilities with contemporary dance floor dynamics. Known for creating warm, community-driven atmospheres that emphasize musical heritage over trend-chasing.",
     instagram: "https://www.instagram.com/bondisco.since2014/",
-    lineup: ["81blend", "Abu", "Acidclank", "chazuke", "Chikara Sueda", "Nakakuni", "Dasakura", "DENKIHITSUJI", "DJ FOX-X a.k.a TAKA MARL", "dogezaExp", "H.YOROZU", "Hexee", "HALO", "JUDO", "Kaito", "Kamenomisoshiru", "Kanemah", "kannQazuja", "kiku", "MADZINE", "Manchineel", "Masayoshi Sakaguchi", "MIYAKE", "MORRIS.K", "NK", "Raio", "Ryu2", "Sacai & Taichi Tsumori", "SHA_XUE", "space kanta", "SUETAKE", "Takahiro Oisi", "Wakoo & Gyo-shin", "Yoshihiro Kimura", "YUKAKU 'И", "zundoko-disco"],
+    lineup: ["81blend", "Abu", "Acidclank", "chazuke", "Chikara Sueda", "Nakakuni", "Dasakura", "DENKIHITSUJI", "DJ FOX-X a.k.a TAKA MARL", "dogezaExp", "H.YOROZU", "Hexee", "HALO", "JUDO", "Kaito", "Kamenomisoshiru", "Kanemah", "kannQazuja", "kiku", "MADZINE", "Manchineel", "Masayoshi Sakaguchi", "MIYAKE", "MORRIS.K", "NK", "Raio", "Ryu2", "Sacai & Taichi Tsumori", "SHA_XUE", "space kanta", "SUETAKE", "Takahiro Oisi", "Yoshihiro Kimura", "YUKAKU 'И", "zundoko-disco", "Wakoo", "Gyo-shin"],
     editions: [
       { year: 2025, date: "2025-08-30/2025-08-31", lineup: ["81blend", "aon", "CM Smooth", "dogezaExp", "Giddlah Selecta", "Haruki", "Hexee", "ironman", "kannQazuja", "kiku", "Naluu", "NSN", "Ryu2", "SHA_XUE", "SHIROH", "Space Kanta", "SUETAKE", "Tech-Bou", "ushim", "WATAYA", "Xin", "YAKO MIKA", "Yona", "H.YOROZU", "Yoshihiro Kimura"] },
       { year: 2026, date: "2026-08-22/2026-08-23", lineup: [] },
@@ -1843,13 +1968,22 @@ const FESTIVALS = [
     name: "GROW THE CULTURE OPEN AIR",
     date: "2026-11-07/2026-11-08",
     location: "Ohba Camping Village",
+    location_ja: "おおばキャンプ村",
     city: "Tokyo",
-    address: "3741 Okuno, Hinode-machi, Nishitama-gun, Tokyo",
+    address: "東京都西多摩郡日の出町大久野３７４１",
+    lat: 35.760438,
+    lng: 139.209443,
+    image: "images/festivals/grow-the-culture-open-air.webp",
+    flyer: "images/festivals/grow-the-culture-open-air-flyer.webp",
     genre: ["TECHNO", "HOUSE", "BASS"],
     desc: "GROW THE CULTURE OPEN AIRは、本物のエレクトロニック・ミュージック・カルチャーを重視した屋外の場に、東京のアンダーグラウンド・ダンスミュージック・コミュニティを集結させる。複数のステージにわたって国内外のアーティストをフィーチャーし、商業的な訴求力よりもクオリティの高いプログラミングにこだわりを持ち続けている。",
     desc_en: "GROW THE CULTURE OPEN AIR brings Tokyo's underground dance music community together in an outdoor setting that prioritizes authentic electronic music culture. The festival showcases both local and international artists across multiple stages, maintaining focus on quality programming over commercial appeal.",
     url: "https://growtheculture.jp/",
+    ticketUrl: "https://growtheculture.jp/openair2026#tickets",
     instagram: "https://www.instagram.com/gtc_jp/",
+    editions: [
+      { year: 2026, date: "2026-11-07/2026-11-08", lineup: [] },
+    ],
   },
   {
     id: "iyasaka-rave-festival",
@@ -1969,11 +2103,15 @@ const FESTIVALS = [
     lat: 35.5298,
     lng: 135.2106,
     image: "images/festivals/fabulous.webp",
+    imagePosition: "center bottom",
     flyer: "images/festivals/fabulous-flyer.webp",
     desc: "都府宮津市にある海のロケーション「TAKE SEA（テイク・シー）」で開催される、プライベートビーチ感覚を味わえる野外音楽イベント。「最幸天川（サイクウテンカワ）」などのコミュニティやオーガナイザーが関わっており、美しい海の絶景とともに心地よい音楽を楽しめるイベントとして企画されています",
     desc_en: "An outdoor music event offering a private-beach experience, held at the seaside location \"TAKE SEA\" in Miyazu City, Kyoto Prefecture. With communities and organizers such as \"Saikyo Tenkawa\" involved, the event is designed to let attendees enjoy pleasant music alongside stunning ocean views.",
     instagram: "https://www.instagram.com/saikoutenkawa/",
     lineup: ["aratame", "ayam", "Charu", "Crux a.k.a Muuta", "disco very", "e_minor", "Gyro", "Herzhaimer", "Hideto", "jutaka", "keita", "koma-sun", "masato.mt", "PaLa", "psychoro", "star tambourine", "take-c", "TEZ", "Daredemo NHK", "△HAL"],
+    editions: [
+      { year: 2026, date: "2026-09-05/2026-09-06", lineup: ["aratame", "ayam", "Charu", "Crux a.k.a Muuta", "disco very", "e_minor", "Gyro", "Herzhaimer", "Hideto", "jutaka", "keita", "koma-sun", "masato.mt", "PaLa", "psychoro", "star tambourine", "take-c", "TEZ", "Daredemo NHK", "△HAL"] },
+    ],
   },
   {
     id: "forest-sound-camp",
@@ -2469,8 +2607,8 @@ const ARTICLES = [
     title_en: "Five Days of Riding and Raving in Hakuba's Powder Snow — Snow Machine 2027 Confirmed",
     excerpt: "昼はゲレンデ、夜はアリーナ、深夜は村のバーへ。白馬バレー全域を舞台に、Patrick ToppingやRisa Taniguchiらが集うウィンターフェスSnow Machineが2027年3月に上陸する。滑って踊るだけの5日間が始まる。",
     excerpt_en: "By day, the slopes; by night, the arena; after hours, the village bars. Snow Machine, the winter festival that takes over the entire Hakuba Valley with the likes of Patrick Topping and Risa Taniguchi, lands in March 2027. Five days of nothing but riding and raving.",
-    body: `<h2><em class="ql-font-mono">長野・白馬のパウダースノーで滑り、そのまま踊る5日間</em></h2><p>音楽フェスティバルとスキーホリデーがひとつになったウィンターフェス「Snow Machine」が、2027年3月2日から7日まで、長野・白馬バレーで開催される。オーストラリア発の国際フェスが舞台に選んだのは、世界中のスキーヤーを惹きつけてきた日本の雪山だ。</p><p><img src="https://lh3.googleusercontent.com/d/1lt-7nXEvKcQpSYv91yI3yZipBshzuiLN=w2000" alt="Snow Machin 2026 の夜のメインステージ"></p><h2><em class="ql-font-bebas">Snow Machineとは</em></h2><p>音楽フェスティバルとスキーホリデーが、ひとつになったウィンターフェス。5日間の会期のあいだ、昼はゲレンデの上で、夜はアリーナで、深夜は村のバーで音が鳴り続ける。</p><p>ここには「会場に入る」という感覚がない。滑る、踊る、食べる、また滑る。休暇と音楽体験の境界を取り払うことが、このフェスの設計思想そのものになっている。</p><p><img src="https://lh3.googleusercontent.com/d/1lsbtyST3m4Z3GXBHAEGoCGWgMsaQV_6T=w2000" alt="Snow Machinとは？" data-layout="compact" data-zoom="1" data-x="50" data-y="50" class="tj-image-selected"></p><h2><em class="ql-font-bebas">会場は、ひとつの敷地ではなく白馬全域</em></h2><p>会場は単一の施設ではない。7つのスキーリゾートにまたがる、白馬バレーの全域だ。参加者は谷のどこかに滞在し、リフトでステージからステージへ移動しながら5日間を過ごす。</p><p><span style="color: rgba(240, 237, 232, 0.85);">白馬のパウダースノーは、世界のスキーヤーがこの谷を目指す理由であり、Snow Machineがこの場所を選んだ理由でもある。フェスのために作られた会場ではなく、雪山という環境そのものが会場になっている。</span></p><p><img src="https://lh3.googleusercontent.com/d/1j0Nv16DPXlkcP55AJnADrXvQGx-Qw7iG=w2000" alt="会場となる白馬バレー全域の雰囲気" data-layout="compact" data-zoom="1" data-x="50" data-y="50" class=""></p><h2><em class="ql-font-bebas">8つのステージに、30組以上が登場する</em></h2><p>第1弾ラインナップには、Patrick Topping、Kettama、Lovebirds、Sam Alfredらが名を連ね、日本からはRisa Taniguchiが登場する。追加のアーティストは順次発表される。</p><p><span style="color: rgba(240, 237, 232, 0.85);">ハウス、テクノからベースミュージックまで、幅のあるブッキングのなかに、Techno Japanの読者と相性のよい名前が確かに並んでいる。</span></p><p><img src="https://lh3.googleusercontent.com/d/1eciMBlzEgrDIe3TRne1j7kui9UegPowJ=w2000" alt="Snow Machine 2026 のTHE TEA HOUSEステージ" data-layout="compact" data-zoom="1" data-x="50" data-y="50" class=""></p><h2><em class="ql-font-bebas">-FESTIVAL STRUCTURE-</em><strong class="ql-font-bebas"><br><em>1日は、4つの層で組み立てられている</em></strong></h2><p><strong class="ql-size-large">Après Stages</strong><br> 白馬バレー各地のゲレンデ上で、毎日11時から。午前中に滑った勢いのまま、そのセットに合流する。</p><p><strong class="ql-size-large">Main Arena</strong><br> リフトが止まると灯りがともる。3月4日から6日までの3夜、2ステージ制で展開される。</p><p><strong class="ql-size-large">Side Events</strong><br> 岩岳の雲の上でのパーティ、ナイトスキーレイヴ、ディスコブランチ。Snow Machineの伝説は、ここから生まれてきた。</p><p><strong class="ql-size-large">After Parties</strong><br> 五竜から栂池まで、村の隠れたバーで深夜から朝まで続くポップアップパーティ。最良の瞬間は、たいていスケジュールには載っていない。</p><p><img src="https://lh3.googleusercontent.com/d/1fc4xhKKTHpMroELv0IL8bNdTZCcdbn7J=w2000" alt="北アルプスが一望できる特設ステージ" data-pair-id="pair-1786958936659" class=""><img src="https://lh3.googleusercontent.com/d/1BHb6dYQM_bf0tV1E1rUOfIyv3g8TeA6d=w2000" data-pair-id="pair-1786958936659" class=""></p><h2><em class="ql-font-mono">INFORMATION</em></h2><p>現在はプレセール登録の受付期間。チケットの価格やパッケージの詳細は、登録者向けの案内および公式サイトで発表される。</p><p>あわせて、Techno JapanのInstagramでは、Snow Machine 2027のチケット（$1,000／約15万円相当）を1組2名様にプレゼントするキャンペーンを実施中。<br>応募期間は8月31日まで。参加条件は @techno.japan_ のキャンペーン投稿から。</p><p><br></p>`,
-    body_en: `<h2><em class="ql-font-mono">Five days of riding Hakuba's powder in Nagano, then dancing straight through</em></h2><p>Snow Machine, the winter festival that fuses a music festival with a ski holiday, comes to Nagano's Hakuba Valley from March 2 to 7, 2027. For its stage, this Australian-born international festival has chosen the Japanese snow mountains that have long drawn skiers from around the world.</p><p><img src="https://lh3.googleusercontent.com/d/1lt-7nXEvKcQpSYv91yI3yZipBshzuiLN=w2000" alt="Snow Machin 2026 の夜のメインステージ"></p><h2><em class="ql-font-bebas">What is Snow Machine</em></h2><p>A winter festival where a music festival and a ski holiday become one and the same. Across the five-day run, the sound keeps going: on the slopes by day, in the arena by night, and in the village bars into the small hours.</p><p>There's no sense of "entering a venue" here. You ride, you dance, you eat, you ride again. Dissolving the boundary between a holiday and a music experience is the festival's very design philosophy.</p><p><img src="https://lh3.googleusercontent.com/d/1lsbtyST3m4Z3GXBHAEGoCGWgMsaQV_6T=w2000" alt="Snow Machinとは？" data-layout="compact" data-zoom="1" data-x="50" data-y="50" class="tj-image-selected"></p><h2><em class="ql-font-bebas">The venue isn't a single site — it's all of Hakuba</em></h2><p>The venue is not one facility. It's the entire Hakuba Valley, spanning seven ski resorts. Attendees stay somewhere in the valley and spend five days moving from stage to stage by lift.</p><p><span style="color: rgba(240, 237, 232, 0.85);">Hakuba's powder snow is why skiers the world over head for this valley, and it's why Snow Machine chose this place. Rather than a site built for a festival, the snow-mountain environment itself becomes the venue.</span></p><p><img src="https://lh3.googleusercontent.com/d/1j0Nv16DPXlkcP55AJnADrXvQGx-Qw7iG=w2000" alt="会場となる白馬バレー全域の雰囲気" data-layout="compact" data-zoom="1" data-x="50" data-y="50" class=""></p><h2><em class="ql-font-bebas">Over 30 acts across eight stages</em></h2><p>The first lineup announcement includes Patrick Topping, Kettama, Lovebirds and Sam Alfred, with Risa Taniguchi representing Japan. Further artists will be announced in stages.</p><p><span style="color: rgba(240, 237, 232, 0.85);">From house and techno through to bass music, it's a broad booking policy — and within it sit names that will resonate with Techno Japan readers.</span></p><p><img src="https://lh3.googleusercontent.com/d/1eciMBlzEgrDIe3TRne1j7kui9UegPowJ=w2000" alt="Snow Machine 2026 のTHE TEA HOUSEステージ" data-layout="compact" data-zoom="1" data-x="50" data-y="50" class=""></p><h2><em class="ql-font-bebas">-FESTIVAL STRUCTURE-</em><strong class="ql-font-bebas"><br><em>The day is built from four layers</em></strong></h2><p><strong class="ql-size-large">Après Stages</strong><br> On the slopes across the Hakuba Valley, daily from 11am. Carry the momentum of a morning's riding straight into the set.</p><p><strong class="ql-size-large">Main Arena</strong><br> When the lifts stop, the lights come up. Three nights, March 4 to 6, running on two stages.</p><p><strong class="ql-size-large">Side Events</strong><br> A party above the clouds at Iwatake, a night-ski rave, a disco brunch. This is where Snow Machine's legends have been born.</p><p><strong class="ql-size-large">After Parties</strong><br> From Goryu to Tsugaike, pop-up parties in the village's hidden bars running from midnight until morning. The best moments are usually the ones that never make it onto the schedule.</p><p><img src="https://lh3.googleusercontent.com/d/1fc4xhKKTHpMroELv0IL8bNdTZCcdbn7J=w2000" alt="北アルプスが一望できる特設ステージ" data-pair-id="pair-1786958936659" class=""><img src="https://lh3.googleusercontent.com/d/1BHb6dYQM_bf0tV1E1rUOfIyv3g8TeA6d=w2000" data-pair-id="pair-1786958936659" class=""></p><h2><em class="ql-font-mono">INFORMATION</em></h2><p>Presale registration is currently open. Ticket prices and package details will be announced via notifications to registrants and on the official site.</p><p>In addition, Techno Japan's Instagram is currently running a campaign giving away Snow Machine 2027 tickets (worth $1,000 / approx. ¥150,000) to one pair of two winners.<br>Entries close August 31. Full entry conditions are on the campaign post at @techno.japan_.</p><p><br></p>`,
+    body: `<h2><em class="ql-font-mono">長野・白馬のパウダースノーで滑り、そのまま踊る5日間</em></h2><p>音楽フェスティバルとスキーホリデーがひとつになったウィンターフェス「Snow Machine」が、2027年3月2日から7日まで、長野・白馬バレーで開催される。オーストラリア発の国際フェスが舞台に選んだのは、世界中のスキーヤーを惹きつけてきた日本の雪山だ。</p><p><img src="https://lh3.googleusercontent.com/d/1lt-7nXEvKcQpSYv91yI3yZipBshzuiLN=w2000" alt="Snow Machin 2026 の夜のメインステージ"></p><h2><em class="ql-font-bebas">Snow Machineとは</em></h2><p>音楽フェスティバルとスキーホリデーが、ひとつになったウィンターフェス。5日間の会期のあいだ、昼はゲレンデの上で、夜はアリーナで、深夜は村のバーで音が鳴り続ける。</p><p>ここには「会場に入る」という感覚がない。滑る、踊る、食べる、また滑る。休暇と音楽体験の境界を取り払うことが、このフェスの設計思想そのものになっている。</p><p><img src="https://lh3.googleusercontent.com/d/1lsbtyST3m4Z3GXBHAEGoCGWgMsaQV_6T=w2000" alt="Snow Machinとは？" data-layout="compact" data-zoom="1" data-x="50" data-y="50"></p><h2><em class="ql-font-bebas">会場は、ひとつの敷地ではなく白馬全域</em></h2><p>会場は単一の施設ではない。7つのスキーリゾートにまたがる、白馬バレーの全域だ。参加者は谷のどこかに滞在し、リフトでステージからステージへ移動しながら5日間を過ごす。</p><p><span style="color: rgba(240, 237, 232, 0.85);">白馬のパウダースノーは、世界のスキーヤーがこの谷を目指す理由であり、Snow Machineがこの場所を選んだ理由でもある。フェスのために作られた会場ではなく、雪山という環境そのものが会場になっている。</span></p><p><img src="https://lh3.googleusercontent.com/d/1j0Nv16DPXlkcP55AJnADrXvQGx-Qw7iG=w2000" alt="会場となる白馬バレー全域の雰囲気" data-layout="compact" data-zoom="1" data-x="50" data-y="50"></p><h2><em class="ql-font-bebas">8つのステージに、30組以上が登場する</em></h2><p>第1弾ラインナップには、Patrick Topping、Kettama、Lovebirds、Sam Alfredらが名を連ね、日本からはRisa Taniguchiが登場する。追加のアーティストは順次発表される。</p><p><span style="color: rgba(240, 237, 232, 0.85);">ハウス、テクノからベースミュージックまで、幅のあるブッキングのなかに、Techno Japanの読者と相性のよい名前が確かに並んでいる。</span></p><p><img src="https://lh3.googleusercontent.com/d/1eciMBlzEgrDIe3TRne1j7kui9UegPowJ=w2000" alt="Snow Machine 2026 のTHE TEA HOUSEステージ" data-layout="compact" data-zoom="1" data-x="50" data-y="50"></p><h2><em class="ql-font-bebas">-FESTIVAL STRUCTURE-</em><strong class="ql-font-bebas"><br><em>1日は、4つの層で組み立てられている</em></strong></h2><p><strong class="ql-size-large">Après Stages</strong><br> 白馬バレー各地のゲレンデ上で、毎日11時から。午前中に滑った勢いのまま、そのセットに合流する。</p><p><strong class="ql-size-large">Main Arena</strong><br> リフトが止まると灯りがともる。3月4日から6日までの3夜、2ステージ制で展開される。</p><p><strong class="ql-size-large">Side Events</strong><br> 岩岳の雲の上でのパーティ、ナイトスキーレイヴ、ディスコブランチ。Snow Machineの伝説は、ここから生まれてきた。</p><p><strong class="ql-size-large">After Parties</strong><br> 五竜から栂池まで、村の隠れたバーで深夜から朝まで続くポップアップパーティ。最良の瞬間は、たいていスケジュールには載っていない。</p><p><img src="https://lh3.googleusercontent.com/d/1fc4xhKKTHpMroELv0IL8bNdTZCcdbn7J=w2000" alt="北アルプスが一望できる特設ステージ" data-pair-id="pair-1786958936659"><img src="https://lh3.googleusercontent.com/d/1BHb6dYQM_bf0tV1E1rUOfIyv3g8TeA6d=w2000" data-pair-id="pair-1786958936659"></p><h2><em class="ql-font-mono">INFORMATION</em></h2><p>現在はプレセール登録の受付期間。チケットの価格やパッケージの詳細は、登録者向けの案内および公式サイトで発表される。</p><p>あわせて、Techno JapanのInstagramでは、Snow Machine 2027のチケット（$1,000／約15万円相当）を1組2名様にプレゼントするキャンペーンを実施中。<br>応募期間は8月31日まで。参加条件は @techno.japan_ のキャンペーン投稿から。</p><p><br></p>`,
+    body_en: `<h2><em class="ql-font-mono">Five days of riding Hakuba's powder in Nagano, then dancing straight through</em></h2><p>Snow Machine, the winter festival that fuses a music festival with a ski holiday, comes to Nagano's Hakuba Valley from March 2 to 7, 2027. For its stage, this Australian-born international festival has chosen the Japanese snow mountains that have long drawn skiers from around the world.</p><p><img src="https://lh3.googleusercontent.com/d/1lt-7nXEvKcQpSYv91yI3yZipBshzuiLN=w2000" alt="The main stage by night at Snow Machin 2026"></p><h2><em class="ql-font-bebas">What is Snow Machine</em></h2><p>A winter festival where a music festival and a ski holiday become one and the same. Across the five-day run, the sound keeps going: on the slopes by day, in the arena by night, and in the village bars into the small hours.</p><p>There's no sense of "entering a venue" here. You ride, you dance, you eat, you ride again. Dissolving the boundary between a holiday and a music experience is the festival's very design philosophy.</p><p><img src="https://lh3.googleusercontent.com/d/1lsbtyST3m4Z3GXBHAEGoCGWgMsaQV_6T=w2000" alt="What Is Snow Machine?" data-layout="compact" data-zoom="1" data-x="50" data-y="50" class="tj-image-selected"></p><h2><em class="ql-font-bebas">The venue isn't a single site — it's all of Hakuba</em></h2><p>The venue is not one facility. It's the entire Hakuba Valley, spanning seven ski resorts. Attendees stay somewhere in the valley and spend five days moving from stage to stage by lift.</p><p><span style="color: rgba(240, 237, 232, 0.85);">Hakuba's powder snow is why skiers the world over head for this valley, and it's why Snow Machine chose this place. Rather than a site built for a festival, the snow-mountain environment itself becomes the venue.</span></p><p><img src="https://lh3.googleusercontent.com/d/1j0Nv16DPXlkcP55AJnADrXvQGx-Qw7iG=w2000" alt="The atmosphere across the entirety of Hakuba Valley, the festival's sprawling venue" data-layout="compact" data-zoom="1" data-x="50" data-y="50" class=""></p><h2><em class="ql-font-bebas">Over 30 acts across eight stages</em></h2><p>The first lineup announcement includes Patrick Topping, Kettama, Lovebirds and Sam Alfred, with Risa Taniguchi representing Japan. Further artists will be announced in stages.</p><p><span style="color: rgba(240, 237, 232, 0.85);">From house and techno through to bass music, it's a broad booking policy — and within it sit names that will resonate with Techno Japan readers.</span></p><p><img src="https://lh3.googleusercontent.com/d/1eciMBlzEgrDIe3TRne1j7kui9UegPowJ=w2000" alt="The THE TEA HOUSE stage at Snow Machine 2026" data-layout="compact" data-zoom="1" data-x="50" data-y="50" class=""></p><h2><em class="ql-font-bebas">-FESTIVAL STRUCTURE-</em><strong class="ql-font-bebas"><br><em>The day is built from four layers</em></strong></h2><p><strong class="ql-size-large">Après Stages</strong><br> On the slopes across the Hakuba Valley, daily from 11am. Carry the momentum of a morning's riding straight into the set.</p><p><strong class="ql-size-large">Main Arena</strong><br> When the lifts stop, the lights come up. Three nights, March 4 to 6, running on two stages.</p><p><strong class="ql-size-large">Side Events</strong><br> A party above the clouds at Iwatake, a night-ski rave, a disco brunch. This is where Snow Machine's legends have been born.</p><p><strong class="ql-size-large">After Parties</strong><br> From Goryu to Tsugaike, pop-up parties in the village's hidden bars running from midnight until morning. The best moments are usually the ones that never make it onto the schedule.</p><p><img src="https://lh3.googleusercontent.com/d/1fc4xhKKTHpMroELv0IL8bNdTZCcdbn7J=w2000" alt="A specially constructed stage commanding sweeping views of the Northern Alps" data-pair-id="pair-1786958936659" class=""><img src="https://lh3.googleusercontent.com/d/1BHb6dYQM_bf0tV1E1rUOfIyv3g8TeA6d=w2000" data-pair-id="pair-1786958936659" class=""></p><h2><em class="ql-font-mono">INFORMATION</em></h2><p>Presale registration is currently open. Ticket prices and package details will be announced via notifications to registrants and on the official site.</p><p>In addition, Techno Japan's Instagram is currently running a campaign giving away Snow Machine 2027 tickets (worth $1,000 / approx. ¥150,000) to one pair of two winners.<br>Entries close August 31. Full entry conditions are on the campaign post at @techno.japan_.</p><p><br></p>`,
     category: "FESTIVAL",
     date: "2026-08-17",
     author: "TECHNO JAPAN",
