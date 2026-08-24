@@ -5438,3 +5438,52 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
   - **GAS の手貼りは終わっている。もう一度貼らないこと。** 特に大文字で足さないこと。
   - 手順書を書くときは、実物を開いて確かめてから書く。今回は実物が小文字なのに
     手順書が大文字を指示していた（Publish の実機調査から起票された想定ベースの記述）。
+
+## 2026-08-24 🚨 本番が 8/14 から更新されていない（Publish pipeline が10日間失敗）
+
+**公開作業を中断した。原因はデータ側にあり、勝手に直さず報告する（AGENTS.md）。**
+
+- 実施: `feat/list-visual` を `main` へ出す準備として、ブランチに `origin/main` を取り込み
+  （衝突なし）、詳細ページを再生成しようとしたところビルドが停止。切り分けの結果、
+  **本番が2026-08-14から更新されていない**ことが判明した。公開は行っていない。
+- コミット: `a92f81a3` Merge origin/main into feat/list-visual（**ローカルのみ・未push**）。
+  preflight が落ちる状態のため pre-push フックを通せない。`--no-verify` は使わない。
+  それ以前の6件（`90e3cc27`〜`67a1f8d1`）は push 済み（ブランチのみ・本番未反映）。
+- 検証:
+  - **本番と main の data.js が違う。** 本番 = アーティスト96名（joma/noritake を含む）。
+    main の `LP/data.js` = 94名（含まない）。`curl` で実測。
+  - **Publish pipeline は 2026-08-14 05:40 の成功を最後に、以降すべて失敗。**
+    08-17 10:07 / 08-17 13:59 / 08-17 14:18(手動) / 08-23 17:38 → 全て failure。
+    08-24 の `cms: publish data.js` 3件は**空コミットのため paths に一致せず、
+    ワークフローが起動すらしていない**（`gh run list --commit 075fb6d2` → 0件）。
+  - 08-23 の失敗理由: `EDITIONS: ID重複 "grow-the-culture-open-air-2026"（42行目と109行目）`。
+    **この重複は現在のシートでは解消済み**（EDITIONS 109行 / 重複0件を実測）。
+  - 現在の停止要因は別。`build-detail-pages.mjs` が
+    `lineups.json: ARTIST_ID 参照切れ 2件` で停止する。
+  - **参照切れの正体（実測）**: ARTISTS シートに `joma`(76行) と `noritake`(88行) は
+    存在するが、STATUS が **draft**。data.js は draft を除くため 94名になり、
+    LINEUPS の `matricaria-2026` がその2名を参照したまま残っている。
+    （ARTISTS 130行の内訳: published 28 / 空欄 66 / draft 36）
+  - ローカル `LP/data/lineups.json` は 2026-08-14 生成で古い。実シートは 536行で
+    `synapse-festival-2025` の参照は既に無く、残るのは `matricaria-2026` の2行のみ。
+  - `origin/main` 単体でも同じビルドエラーになることを隔離ワークツリーで確認。
+    **この不整合は今回のマージが作ったものではなく、main に既にあった。**
+  - preflight: ブランチで **2件失敗**（`詳細ページを生成できる` / `CMS の Image Position が届く`）。
+    どちらも「再生成できないので生成物が data.js に追いついていない」ことが根。
+- 変更したパターン: `origin/main` をブランチへマージ（data.js が 08-17版 → 08-24版に更新）。
+  コード変更なし。データ修正は**一切していない**。
+- 未確認の類似パターン:
+  - 08-17 の3回の失敗理由: **未確認**（08-23 の1件しかログを見ていない）。
+  - `Generate sitemap.xml & rss.xml` が 2026-08-24 03:51 に failure。**原因未確認**。
+  - 他シート（FESTIVALS / VENUES / ARTICLES）の参照切れ: 未確認。
+  - 本番CMSでの Publish Now（④）: **未実施**。データを直すまで実施しても失敗する。
+- 次の担当への注意:
+  - **判断待ち（データ所有者=ユーザー）**: `matricaria-2026` の出演者 Joma / Noritake を
+    (a) ARTISTS の STATUS を published にして載せる のか、
+    (b) LINEUPS から2行を削除する のか。**どちらかを決めるまで本番は復旧しない。**
+  - 直した後の手順: シート修正 → `npm run fetch` で lineups.json 更新 →
+    `node scripts/build-detail-pages.mjs` → `bash scripts/preflight.sh` 全件 →
+    ブランチ push → main へマージ → 本番CMSで Publish Now。
+  - **「Publish Now を押したのに変わらない」の真因はこれ。** 空コミットの調査
+    （`reports/codex-request-2026-08-24-publish-empty-commit.md`）は入口であって、
+    その奥に10日分の未公開がある。
