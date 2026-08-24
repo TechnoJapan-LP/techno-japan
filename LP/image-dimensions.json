@@ -3,6 +3,18 @@
     1080,
     1440
   ],
+  "images/articles/asia-festival-2026second-1787593727588.webp": [
+    1080,
+    1350
+  ],
+  "images/articles/asia-festival-2026second-1787593762067.webp": [
+    1080,
+    1350
+  ],
+  "images/articles/asia-festival-2026second-1787593889933.webp": [
+    1080,
+    1350
+  ],
   "images/articles/bondisco-2026-info-1786627284029.webp": [
     1179,
     884
@@ -329,6 +341,30 @@
   ],
   "images/derivatives/card/articles/asia-festival-2026second-1787467998635--04988d1d-sm.webp": [
     360,
+    480
+  ],
+  "images/derivatives/card/articles/asia-festival-2026second-1787593727588--1a9c6519-lg.webp": [
+    768,
+    960
+  ],
+  "images/derivatives/card/articles/asia-festival-2026second-1787593727588--1a9c6519-sm.webp": [
+    384,
+    480
+  ],
+  "images/derivatives/card/articles/asia-festival-2026second-1787593762067--70c85bc0-lg.webp": [
+    768,
+    960
+  ],
+  "images/derivatives/card/articles/asia-festival-2026second-1787593762067--70c85bc0-sm.webp": [
+    384,
+    480
+  ],
+  "images/derivatives/card/articles/asia-festival-2026second-1787593889933--2720a15a-lg.webp": [
+    768,
+    960
+  ],
+  "images/derivatives/card/articles/asia-festival-2026second-1787593889933--2720a15a-sm.webp": [
+    384,
     480
   ],
   "images/derivatives/card/articles/bondisco-2026-info--9f04f9ce-fourThree-center.webp": [
@@ -1197,6 +1233,22 @@
   ],
   "images/derivatives/card/festivals/colors-presents-soundcamp-flyer--3c5d19c3-sm.webp": [
     293,
+    480
+  ],
+  "images/derivatives/card/festivals/detox--7f2244f5-lg.webp": [
+    960,
+    720
+  ],
+  "images/derivatives/card/festivals/detox--7f2244f5-sm.webp": [
+    480,
+    360
+  ],
+  "images/derivatives/card/festivals/detox-flyer--6a1f5f51-lg.webp": [
+    768,
+    960
+  ],
+  "images/derivatives/card/festivals/detox-flyer--6a1f5f51-sm.webp": [
+    384,
     480
   ],
   "images/derivatives/card/festivals/e-groove--ea4023c8-lg.webp": [
@@ -2174,6 +2226,14 @@
   "images/festivals/colors-presents-soundcamp.webp": [
     1920,
     1248
+  ],
+  "images/festivals/detox-flyer.webp": [
+    1144,
+    1430
+  ],
+  "images/festivals/detox.webp": [
+    1920,
+    1440
   ],
   "images/festivals/e-groove-flyer.webp": [
     1920,
