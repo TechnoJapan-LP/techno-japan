@@ -232,6 +232,11 @@ function localizedValue(primary, ja, en, lang) {
     : (values.ja || values.primary || values.en);
 }
 
+function isoDateTime(value) {
+  const date = String(value || '').trim();
+  return /^\d{4}-\d{2}-\d{2}$/.test(date) ? `${date}T00:00:00+09:00` : date;
+}
+
 function loadImageDimensions() {
   if (!fs.existsSync(IMAGE_DIMENSIONS_PATH)) throw new Error('image-dimensions.json がありません。先に node scripts/build-image-dimensions.mjs を実行してください');
   return JSON.parse(fs.readFileSync(IMAGE_DIMENSIONS_PATH, 'utf8'));
@@ -802,6 +807,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
     ? [{ '@id': `${BASE}/festivals/${encodeURIComponent(relatedFestival.id)}.html#festival` }]
     : undefined;
   const articleImages = articleImageVariants(a.image, a.imagePosition);
+  const isOrganizationAuthor = /TECHNO JAPAN/i.test(authorName);
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -814,9 +820,13 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
     thumbnailUrl: articleImages[0] || image,
     ...(about ? { about } : {}),
     inLanguage: lang,
-    datePublished: a.date,
-    dateModified: a.updated || a.date,
-    author: { '@type': /TECHNO JAPAN/i.test(authorName) ? 'Organization' : 'Person', name: authorName },
+    datePublished: isoDateTime(a.date),
+    dateModified: isoDateTime(a.updated || a.date),
+    author: {
+      '@type': isOrganizationAuthor ? 'Organization' : 'Person',
+      name: authorName,
+      ...(isOrganizationAuthor ? { url: `${BASE}/` } : {}),
+    },
     publisher: { '@id': ORG_ID },
     mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
     articleSection: a.category || 'NEWS',
@@ -902,7 +912,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   </div>
 </article>`;
 
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'articles'] : ['articles']), `${a.id}.html`), html: page({ title, desc, canonical, image, jsonLd: [jsonLd, breadcrumbLd('NEWS', '/news.html', L.title, canonical), ...eventJsonLd], body, lang, altHref, backgroundLayer: true, extraScripts: `\n<link rel="stylesheet" href="/article-fx.css?v=${ARTICLE_FX_CSS_VERSION}">\n<script src="/article-fx.js?v=${ARTICLE_FX_JS_VERSION}" defer></script>` + ARTICLE_HUB_BACK_SCRIPT }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'articles'] : ['articles']), `${a.id}.html`), html: page({ title, desc, canonical, image, jsonLd: [jsonLd, ORG_JSONLD, breadcrumbLd('NEWS', '/news.html', L.title, canonical), ...eventJsonLd], body, lang, altHref, backgroundLayer: true, extraScripts: `\n<link rel="stylesheet" href="/article-fx.css?v=${ARTICLE_FX_CSS_VERSION}">\n<script src="/article-fx.js?v=${ARTICLE_FX_JS_VERSION}" defer></script>` + ARTICLE_HUB_BACK_SCRIPT }) };
 }
 
 /* ---------- フェスティバルページ ---------- */
