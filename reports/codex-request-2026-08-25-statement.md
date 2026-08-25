@@ -91,6 +91,21 @@ INDEPENDENT   No capital, no agenda, no bias.
   `About TECHNO JAPAN — a selective media for Japan's underground dance music scene. AUTHENTIC / SELECTIVE / BORDERLESS / INDEPENDENT.`
 - og:description / twitter:description に about の説明があれば同時に整合させる
 
+## 追加依頼: 掲載フォームからの参照（2026-08-25 追記・ユーザー決定）
+
+STATEMENT の全文は about のみに置く（同じ内容を2箇所に持たない）。
+掲載フォームからは1行で参照させる。対象: `LP/submit.html` / `LP/en/submit.html`。
+
+- JA: 「掲載について」セクションの本文
+  `掲載するフェスティバル・イベントは、編集部がメディアの方向性に照らして判断しています。`
+  の直後に、次の1文をリンク付きで追加:
+  `掲載の考え方は <a href="/about.html#statement">STATEMENT</a> をご覧ください。`
+- EN: 同セクションの
+  `... based on the direction of the publication.` の直後に:
+  `See our <a href="/en/about.html#statement">STATEMENT</a> for how we decide.`
+- リンク先アンカー `#statement` は本依頼の about 実装で作られるものを指す。
+  **about 側の実装と同じコミットに含めること**（リンクだけ先に出ると404アンカーになる）
+
 ## 受け入れ条件
 
 1. `grep -c STATMENT LP/about.html LP/en/about.html` → 0 / 0
@@ -100,4 +115,5 @@ INDEPENDENT   No capital, no agenda, no bias.
 5. JA/EN 行数一致
 6. 実ブラウザ 390px / 1280px × JA / EN（既存セクションが崩れていないことも見る）
 7. `bash scripts/preflight.sh` 全件成功
-8. `reports/handoff.md` に6項目記録。push はしない
+8. 掲載フォーム(JA/EN)のリンクから about の STATEMENT セクション先頭に着地する
+9. `reports/handoff.md` に6項目記録。push はしない
