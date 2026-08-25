@@ -12,7 +12,7 @@
 <link rel="icon" type="image/png" href="/images/favicon-192.png?v=2" sizes="192x192">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
 <title>ABOUT — TECHNO JAPAN</title>
-<meta name="description" content="TECHNO JAPANについて — 日本のアンダーグラウンド・ダンスミュージックシーンを記録するメディア。About TECHNO JAPAN, documenting Japan's underground scene.">
+<meta name="description" content="TECHNO JAPANについて — 日本のアンダーグラウンド・ダンスミュージックシーンを厳選して届けるメディア。AUTHENTIC / SELECTIVE / BORDERLESS / INDEPENDENT。">
 <link rel="alternate" type="application/rss+xml" title="TECHNO JAPAN — RSS" href="https://techno-japan.media/rss.xml">
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#080808">
@@ -26,7 +26,7 @@
 
 <!-- Open Graph -->
 <meta property="og:title" content="ABOUT — TECHNO JAPAN">
-<meta property="og:description" content="TECHNO JAPANについて — 日本のアンダーグラウンド・ダンスミュージックシーンを記録するメディア。About TECHNO JAPAN, documenting Japan's underground scene.">
+<meta property="og:description" content="TECHNO JAPANについて — 日本のアンダーグラウンド・ダンスミュージックシーンを厳選して届けるメディア。AUTHENTIC / SELECTIVE / BORDERLESS / INDEPENDENT。">
 <meta property="og:image" content="https://techno-japan.media/images/og-default.png?v=1">
 <meta property="og:url" content="https://techno-japan.media/about.html">
 <meta property="og:type" content="website">
@@ -36,7 +36,7 @@
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ABOUT — TECHNO JAPAN">
-<meta name="twitter:description" content="TECHNO JAPANについて — 日本のアンダーグラウンド・ダンスミュージックシーンを記録するメディア。About TECHNO JAPAN, documenting Japan's underground scene.">
+<meta name="twitter:description" content="TECHNO JAPANについて — 日本のアンダーグラウンド・ダンスミュージックシーンを厳選して届けるメディア。AUTHENTIC / SELECTIVE / BORDERLESS / INDEPENDENT。">
 <meta name="twitter:image" content="https://techno-japan.media/images/og-default.png?v=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -352,6 +352,41 @@ section { padding: 120px 40px; }
   margin-bottom: 24px;
 }
 
+.statement-keywords { margin-bottom: 80px; }
+.statement-keyword { padding: 28px 0; border-bottom: 1px solid rgba(240,237,232,0.08); }
+.statement-keyword:first-child { border-top: 1px solid rgba(240,237,232,0.08); }
+.statement-word {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 6vw, 96px);
+  line-height: 1;
+  text-transform: uppercase;
+}
+.statement-word::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: #ff2d2d;
+  margin-right: 20px;
+  vertical-align: middle;
+}
+.statement-line {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  opacity: 0.5;
+  margin-top: 10px;
+}
+.statement-body { max-width: 720px; }
+.statement-body p {
+  font-family: var(--font-body);
+  font-weight: 200;
+  font-size: 15px;
+  line-height: 1.9;
+  opacity: 0.7;
+  margin-bottom: 24px;
+}
+
 .stat-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -648,6 +683,8 @@ section { padding: 120px 40px; }
   .section-label { font-size: 9px; }
   .about-text h2 { font-size: clamp(36px, 10vw, 72px); }
   .contact-left h2 { font-size: clamp(36px, 10vw, 72px); }
+  .statement-keyword { padding: 20px 0; }
+  .statement-keywords { margin-bottom: 56px; }
 }
 
 @media (max-width: 480px) {
@@ -830,11 +867,45 @@ section { padding: 120px 40px; }
   </div>
 </section>
 
+<!-- STATEMENT -->
+<section id="statement">
+  <div class="section-label reveal">02 — STATEMENT</div>
+  <div class="statement-keywords">
+    <div class="statement-keyword reveal">
+      <div class="statement-word">AUTHENTIC</div>
+      <div class="statement-line">本物の音楽体験だけを。</div>
+    </div>
+    <div class="statement-keyword reveal">
+      <div class="statement-word">SELECTIVE</div>
+      <div class="statement-line">すべては発信しない。厳選して届ける。</div>
+    </div>
+    <div class="statement-keyword reveal">
+      <div class="statement-word">BORDERLESS</div>
+      <div class="statement-line">日本と世界を、交差させる。</div>
+    </div>
+    <div class="statement-keyword reveal">
+      <div class="statement-word">INDEPENDENT</div>
+      <div class="statement-line">どこにも偏らず、フラットであり続ける。</div>
+    </div>
+  </div>
+  <div class="statement-body reveal">
+    <p>日本のダンスフロアには、世界に誇るべき圧倒的なクオリティ、細部に宿るホスピタリティ、そして真摯な音楽体験が存在します。</p>
+    <p>私たちの目的は、音楽そのものを目的に世界中から人々が訪れるような、持続可能で熱量ある循環を、この地に生み出すことです。</p>
+    <p>しかし、アンダーグラウンドカルチャーの美しさは、「ただ広めればいい」というものではありません。知る人ぞ知る場の空気感、限られた空間だからこそ成り立つ純度。それは、私たちが何よりも守るべき境界線です。</p>
+    <p>だからこそ、Techno Japanは、すべての情報を発信するメディアではありません。現場で感じ、深く賛同したイベントとカルチャーだけを、厳選して届けます。</p>
+    <p>私たちの視線は日本の内側にとどまりません。世界のダンスフロアで生まれるムーブメントを日本へ、日本の熱量を世界へ。本物の音楽体験に、国境はないからです。</p>
+    <p>日本と世界をボーダレスに交差させることが、シーンを次へと進めていく。私たちはそう信じています。</p>
+    <p>そして、ひとつの約束を。特定の資本や過度な商業的思惑、偏った思想を介入させず、客観的でフラットな視点を貫き続けます。</p>
+    <p>私たちが目指すのは、人、場所、音楽をつなぐ、シーンの接続点となるフラットなメディアです。</p>
+    <p>Techno Japanは、この姿勢で届けていきます。</p>
+  </div>
+</section>
+
 <!-- MEDIA PILLARS -->
 <section id="media">
   <div class="section-bg"></div>
   <div class="section-scan"></div>
-  <div class="section-label reveal">02 — NEWS</div>
+  <div class="section-label reveal">03 — NEWS</div>
   <div class="discover-section">
     <div class="discover-grid">
       <a href="news.html" class="discover-card reveal">
@@ -881,7 +952,7 @@ section { padding: 120px 40px; }
 <section id="instagram">
   <div class="section-bg"></div>
   <div class="section-scan"></div>
-  <div class="section-label reveal">03 — INSTAGRAM</div>
+  <div class="section-label reveal">04 — INSTAGRAM</div>
   <div class="insta-header reveal">
     <span style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.15em;opacity:0.5;">LATEST POSTS</span>
     <a href="https://www.instagram.com/techno.japan_/" target="_blank" rel="noopener">@TECHNO.JAPAN_</a>
@@ -898,7 +969,7 @@ section { padding: 120px 40px; }
 <section id="contact">
   <div class="section-bg"></div>
   <div class="section-scan"></div>
-  <div class="section-label reveal">04 — CONTACT</div>
+  <div class="section-label reveal">05 — CONTACT</div>
   <div class="contact-grid">
     <div class="contact-headline reveal">GET IN<br>TOUCH.</div>
     <div class="reveal">

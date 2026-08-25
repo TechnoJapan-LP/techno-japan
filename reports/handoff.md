@@ -5836,6 +5836,27 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - 次の担当への注意: 新記事で`imagePosition`を変更した場合は、その位置の派生とcenterの2枚だけが生成される。
   1200px未満の原本は拡大しない。pushはユーザー承認後。
 
+## 2026-08-25 ABOUT STATEMENT 実装
+
+- 実施: `LP/about.html` と `LP/en/about.html` にSTATEMENTセクションを追加し、依頼書の本文・4キーワードを
+  一字一句そのまま掲載した。既存ラベルを01〜05へ繰り下げ、JA/ENのmeta・og・twitter descriptionを指定文へ更新。
+  追加依頼に従い`LP/submit.html`と`LP/en/submit.html`からSTATEMENTへの1行リンクも追加した。
+  既存の`.reveal`包括Observerを確認し、新規JSは追加していない。
+- コミット: `6dc98c82 feat(about): add statement section`。STATEMENT関連を1コミットにまとめた。pushはしていない。
+- 検証: `grep -c STATMENT LP/about.html LP/en/about.html`は0/0。JA/ENラベルは01 — ABOUT、02 — STATEMENT、
+  03 — NEWS、04 — INSTAGRAM、05 — CONTACT。JA/EN行数は1092/1092。
+  実ブラウザ390px/1280px×JA/ENで`#statement`へ直接着地し、キーワードの`.reveal`を確認。
+  掲載フォームのJA/ENリンクを実クリックし、`/about.html#statement`と`/en/about.html#statement`へ遷移。
+  `bash scripts/preflight.sh`は**全41件成功**。スクリーンショットは
+  `reports/screenshots/about-statement/about-ja-390.png`、`about-ja-1280.png`、
+  `about-en-390.png`、`about-en-1280.png`。
+- 変更したパターン: `#statement`、4キーワードの個別reveal、9段落の本文、6px赤マーカー、
+  section-label番号、ABOUTのメタ説明、掲載フォームからのJA/ENアンカーリンク。
+- 未確認の類似パターン: 本番ドメイン上でのSNS共有カード表示、実機Safariでの確認は未確認。
+  ローカル実ブラウザ（Chrome headless）の表示・着地・revealは確認済み。
+- 次の担当への注意: STATEMENT本文はaboutだけを正本とし、submit側にはリンク文1行だけを置く。
+  本文の句読点・ダッシュ・英語表記を編集しない。pushはユーザー承認後。
+
 ## 2026-08-25 ✅ SEO/GEOテーマ1を本番公開・リッチリザルトテスト通過
 
 - 実施: テーマ1の3コミット（llms.txt記事欄 / NewsMediaOrganization+記事JSON-LD /
