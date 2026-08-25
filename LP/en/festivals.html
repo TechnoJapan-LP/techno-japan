@@ -438,7 +438,9 @@ footer { padding: 60px 40px; }
 
 /* ===================== RESPONSIVE ===================== */
 @media (max-width: 900px) {
-  .page-header { padding: 140px 24px 60px; }
+  /* ヒーローの余白は ARTISTS ページ(96px/40px)に揃える（2026-08-25）。
+     変えるときはハブ3枚同時に。 */
+  .page-header { padding: 96px 24px 40px; }
   .page-header-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
   .month-nav { padding: 16px 24px; top: 0; }
   .month-nav a { padding: 6px 16px; font-size: 9px; }

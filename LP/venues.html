@@ -188,25 +188,34 @@
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 /* AREA FILTER NAV */
+/* 都市と種別は1つの帯にまとめる。広い画面では1行に並び、
+   狭い画面では自動で「都市 / 種別」の2行に折り返す。
+   2行を常に縦積みにすると、広い画面で右半分と行間が空白になる
+   （2026-08-25 ユーザー指摘）。 */
 .area-nav-wrap {
   position: sticky; top: 52px; z-index: 50;
   background: rgba(8,8,8,0.97); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(240,237,232,0.06);
+  display: flex; flex-wrap: wrap; align-items: center;
+  padding: 4px 40px;
 }
-.type-nav { width: 100%; display: flex; gap: 0; overflow-x: auto; scrollbar-width: none; padding: 12px 0 0 40px; align-items: center; border-bottom: 1px solid rgba(240,237,232,0.04); }
+.type-nav { display: flex; gap: 0; overflow-x: auto; scrollbar-width: none; min-width: 0; max-width: 100%; padding: 6px 0; align-items: center; }
 .type-nav::-webkit-scrollbar { display: none; }
-.type-nav a { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.3; transition: opacity 0.3s ease; padding: 8px 24px 12px; white-space: nowrap; flex-shrink: 0; cursor: pointer; }
+.type-nav a { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.3; transition: opacity 0.3s ease; padding: 10px 24px; white-space: nowrap; flex-shrink: 0; cursor: pointer; }
 .type-nav a:hover { opacity: 0.7; }
 .type-nav a.active { opacity: 1; border-bottom: 1px solid var(--text); }
 .area-nav {
-  width: 100%;
-  padding: 14px 0 14px 40px; display: flex; gap: 0; overflow-x: auto; scrollbar-width: none;
-  align-items: center;
+  display: flex; gap: 0; overflow-x: auto; scrollbar-width: none; min-width: 0; max-width: 100%;
+  padding: 6px 0; align-items: center;
+}
+/* 1行に並んだときの「都市｜種別」の区切り。折り返した2行では消す。 */
+@media (min-width: 641px) {
+  .type-nav { margin-left: 16px; padding-left: 24px; border-left: 1px solid rgba(240,237,232,0.1); }
 }
 .area-nav::-webkit-scrollbar { display: none; }
 .area-nav a {
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
-  opacity: 0.3; transition: opacity 0.3s ease; padding: 8px 24px; white-space: nowrap; flex-shrink: 0; cursor: pointer;
+  opacity: 0.3; transition: opacity 0.3s ease; padding: 10px 24px; white-space: nowrap; flex-shrink: 0; cursor: pointer;
 }
 .area-nav a:hover { opacity: 0.7; }
 .area-nav a.active { opacity: 1; border-bottom: 1px solid var(--text); }
@@ -225,7 +234,7 @@
 .area-nav-map.active .pin-icon { background: var(--bg); }
 /* 検索とMAPは同じ「操作の行」。stretch で高さを検索欄に揃える。
    件数(span)だけ中央に戻し、狭い画面では2行目へ折り返す。 */
-.venues-toolbar { display: flex; align-items: stretch; gap: 16px; padding: 24px 0; flex-wrap: wrap; }
+.venues-toolbar { display: flex; align-items: stretch; gap: 16px; padding: 18px 0 20px; flex-wrap: wrap; }
 .venues-toolbar .venues-count { align-self: center; }
 .venues-search { flex: 1 1 160px; min-width: 0; max-width: 420px; background: transparent; border: 1px solid rgba(240,237,232,0.12); color: var(--text); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; padding: 12px 16px; outline: none; transition: border-color 0.3s ease; }
 .venues-search::placeholder { color: rgba(240,237,232,0.25); }
@@ -287,15 +296,18 @@
 
 /* RESPONSIVE */
 @media (max-width: 900px) {
-  .page-header { padding: 140px 24px 60px; }
+  /* ヒーローの余白は ARTISTS ページ(96px/40px)に揃える。
+     ハブ3枚でバラバラ（140/60等）だと、行き来したとき高さが揃わない
+     （2026-08-25 ユーザー指摘）。変えるときは3枚同時に。 */
+  .page-header { padding: 96px 24px 40px; }
   .page-header-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
-  #venues-list-view { padding: 40px 24px 80px; }
+  #venues-list-view { padding: 8px 24px 80px; }
   .area-nav-wrap { padding-right: 24px; top: 48px; }
   .type-nav { padding-left: 24px; }
   .type-nav a { padding: 6px 12px; font-size: 9px; }
-  .area-nav { padding: 12px 0 12px 24px; }
-  .type-nav { padding-left: 24px; }
-  .type-nav a { padding: 8px 16px 12px; font-size: 9px; }
+  .area-nav-wrap { padding: 4px 24px; }
+  .area-nav a { padding: 8px 16px; font-size: 9px; }
+  .type-nav a { padding: 8px 16px; font-size: 9px; }
   .area-nav a { padding: 6px 16px; font-size: 9px; }
   .venues-grid { grid-template-columns: 1fr; }
   .venue-card { padding: 36px 24px; min-height: auto; }
@@ -416,9 +428,10 @@
        移しても今度は LIVEHOUSE が押し出される（実測: タブ末端330px >
        表示域）。MAP は絞り込みではなく表示切替なので、検索と同じ
        「操作の行」に置くのが位置としても正しい。 -->
+  <!-- 都市が1行目。クラブは「どの街で遊ぶか」から探すため（2026-08-25 ユーザー判断）。 -->
   <div class="area-nav-wrap">
-    <div class="type-nav" id="type-nav"></div>
     <div class="area-nav" id="area-nav"></div>
+    <div class="type-nav" id="type-nav"></div>
   </div>
   <div class="venues-toolbar">
     <input class="venues-search" id="venues-search" type="search" placeholder="SEARCH VENUES..." aria-label="Search venues">
