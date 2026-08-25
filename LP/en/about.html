@@ -212,7 +212,7 @@
 }
 
 /* ===================== SECTIONS COMMON ===================== */
-section { padding: 120px 40px; }
+section { padding: 120px 40px; scroll-margin-top: 64px; }
 
 .section-label {
   font-family: var(--font-mono);
@@ -1088,5 +1088,24 @@ window.addEventListener('DOMContentLoaded', () => {
 <script src="/data.js?v=10"></script>
 <script src="/favorites.js?v=2" defer></script>
 <script src="/search.js?v=3" defer></script>
+<script>
+/* ハッシュ着地の補正。scroll-behavior:smooth の環境では、ロード時の
+   アンカー移動が描画中に打ち切られ、#about でも先頭に留まっていた（2026-08-25 実測）。
+   読み込み完了後に一度だけ即時ジャンプで着地させる。ページ内クリックは従来通り smooth。 */
+(function () {
+  if (!location.hash) return;
+  window.addEventListener('load', function () {
+    requestAnimationFrame(function () {
+      var el = document.getElementById(location.hash.slice(1));
+      if (!el) return;
+      var html = document.documentElement;
+      var prev = html.style.scrollBehavior;
+      html.style.scrollBehavior = 'auto';
+      el.scrollIntoView();
+      html.style.scrollBehavior = prev;
+    });
+  });
+})();
+</script>
 </body>
 </html>
