@@ -6029,3 +6029,34 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - 未確認の類似パターン: 実機端末は未確認（iframe 再現）。トップページ(index)の
   モバイル余白は対象外（同様の詰めが可能かは別途）。
 - 次の担当への注意: セクション余白 48px はハブとは別系統（About は縦読みページ）。
+
+## 2026-08-26 🚨 en/about.html は生成物だった — STATEMENT英語化を生成器へ移植
+
+- 実施: 公開後の本番確認で、**EN の STATEMENT が日本語に戻っている**のを発見。
+  原因は `en/about.html` が `writeEnHub`（build-detail-pages.mjs）により
+  **JA から毎ビルド自動生成される**ファイルだったこと。48c0da70 での手編集の英語化は
+  生成物への編集であり、ビルド（preflight・デプロイに含まれる）が JA 由来の内容で
+  上書きしていた。対訳を生成器側（`ABOUT_EN_TEXT`）へ移し、恒久化した。
+- コミット: 本エントリと同時。
+- 検証（すべて実測）:
+  - ビルド後の `en/about.html`: statement-line 4行が英語 / 本文英語 /
+    meta description が EN 版（`EN_HUB_DESC['about.html']` 追加）
+  - **ガード**: JA 側の文を1字変えるとビルドが
+    `en/about: 置換元が見つからない` で停止することを実測（黙ってJAのまま公開される
+    事故の再発防止）。復元後は正常
+  - preflight 全41件成功。preflight 内のビルド再実行後も英語が維持される
+    （= 生成器由来なので何度ビルドしても消えない）
+- 変更したパターン: build-detail-pages.mjs に `ABOUT_EN_TEXT`（対訳13組・
+  各文が JA 内で一意なことを確認済み）と about 用の置換・存在ガードを追加。
+  `EN_HUB_DESC` に about.html を追加。
+- 教訓（AGENTS.md の既存ルールの再確認）: **編集する前に、それが生成物かを確かめる。**
+  手編集→ブラウザ確認→preflight→コミットの順だと、preflight のビルドが
+  手編集を巻き戻した状態でコミットされる。
+- 未確認の類似パターン:
+  - **en/about.html の 01 ABOUT 本文・CONTACT 等は依然日本語**（STATEMENT以外は対訳が無い）。
+    英語ページとして完成させるには対訳の追加が必要。ユーザーの文面決定待ち。
+  - en/submit.html も同様に生成物か: writeEnHub の対象は HUBS 6枚で submit は含まれず、
+    **submit は手書き**（前回の英語化は安全）。確認済み。
+- 次の担当への注意: STATEMENT の文面を変えるときは、JA（about.html）と
+  ABOUT_EN_TEXT（build-detail-pages.mjs）の**両方**を更新する。片方だけだと
+  ビルドが止まる（意図した挙動）。

@@ -1754,11 +1754,42 @@ const EN_HUB_DESC = {
   'venues.html': "Clubs, warehouses and music bars across Japan. The venues that define the country's underground electronic music scene.",
   'news.html': "Stories, interviews and reports from Japan's underground techno and house scene.",
   'index.html': "Japan's underground techno & house — stories, festivals, artists, venues.",
+  'about.html': "About TECHNO JAPAN — a selective media for Japan's underground dance music scene. AUTHENTIC / SELECTIVE / BORDERLESS / INDEPENDENT.",
 };
 
 // 本文に残る日本語の固定文言（データ由来の日本語は対象外）
 const EN_HUB_TEXT = [
   ['FESTIVAL 掲載申請', 'Submit a Festival'],
+];
+
+/* about.html の STATEMENT を EN 版で英語にするための対訳。
+   **en/about.html は writeEnHub が JA から毎ビルド生成する。**手で英語化しても
+   次のビルドで消える（2026-08-26 に実際に起きた。デプロイ中のビルドが
+   手編集の英語を日本語へ巻き戻した）。文面を変えるときは JA 側と、
+   この対訳の両方を更新する。JA 側の文が見つからなければビルドを止める
+   （黙って JA のまま公開される事故を防ぐ）。 */
+const ABOUT_EN_TEXT = [
+  ['本物の音楽体験だけを。', 'Only real music experiences.'],
+  ['すべては発信しない。厳選して届ける。', "We don't publish everything. We select."],
+  ['日本と世界を、交差させる。', 'Crossing Japan and the world.'],
+  ['どこにも偏らず、フラットであり続ける。', 'No capital, no agenda, no bias.'],
+  ['日本のダンスフロアには、世界に誇るべき圧倒的なクオリティ、細部に宿るホスピタリティ、そして真摯な音楽体験が存在します。',
+   "Japan's dancefloors hold world-class quality, hospitality woven into every detail, and a sincerity toward music itself."],
+  ['私たちの目的は、音楽そのものを目的に世界中から人々が訪れるような、持続可能で熱量ある循環を、この地に生み出すことです。',
+   'Our purpose is to create a lasting, passionate cycle here, one that draws people from around the world for the music itself.'],
+  ['しかし、アンダーグラウンドカルチャーの美しさは、「ただ広めればいい」というものではありません。知る人ぞ知る場の空気感、限られた空間だからこそ成り立つ純度。それは、私たちが何よりも守るべき境界線です。',
+   'But the beauty of underground culture is not something to simply spread. The air of places known only to those who know, the purity that exists because a space is limited. That is the boundary we protect above all.'],
+  ['だからこそ、Techno Japanは、すべての情報を発信するメディアではありません。現場で感じ、深く賛同したイベントとカルチャーだけを、厳選して届けます。',
+   'This is why Techno Japan does not publish everything. We select only the events and cultures we have felt and believed in, on the floor.'],
+  ['私たちの視線は日本の内側にとどまりません。世界のダンスフロアで生まれるムーブメントを日本へ、日本の熱量を世界へ。本物の音楽体験に、国境はないからです。',
+   "Our gaze does not stop at Japan's borders. Movements from the world's dancefloors to Japan, Japan's heat to the world. Authenticity knows no borders."],
+  ['日本と世界をボーダレスに交差させることが、シーンを次へと進めていく。私たちはそう信じています。',
+   'Crossing Japan and the world, borderless, is what moves this scene forward. That is what we believe.'],
+  ['そして、ひとつの約束を。特定の資本や過度な商業的思惑、偏った思想を介入させず、客観的でフラットな視点を貫き続けます。',
+   'And one promise. No capital, no agenda, no bias. We stay objective and flat, always.'],
+  ['私たちが目指すのは、人、場所、音楽をつなぐ、シーンの接続点となるフラットなメディアです。',
+   'What we aim to be is a flat, open media, a point of contact connecting people, places, and music.'],
+  ['Techno Japanは、この姿勢で届けていきます。', 'This is how Techno Japan will keep delivering.'],
 ];
 
 function enHubFromJa(html, page) {
@@ -1814,6 +1845,14 @@ function enHubFromJa(html, page) {
 
   // 固定文言
   for (const [ja, en] of EN_HUB_TEXT) s = s.split(ja).join(en);
+
+  // about の STATEMENT 対訳（各文は JA 内で一意であることを 2026-08-26 に確認済み）
+  if (page === 'about.html') {
+    for (const [ja, en] of ABOUT_EN_TEXT) {
+      if (!s.includes(ja)) throw new Error(`en/about: 置換元が見つからない（JA側の文が変わった？）: ${ja.slice(0, 24)}…`);
+      s = s.split(ja).join(en);
+    }
+  }
 
   // hreflang: JA 側の3行を EN 視点の3行へ「置換」する。
   // 追記にすると JA から引き継いだ分と二重になる（6本出る）。
