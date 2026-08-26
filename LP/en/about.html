@@ -686,9 +686,13 @@ details[open] .statement-panel p {
 
 /* ===================== PAGE-SPECIFIC RESPONSIVE ===================== */
 @media (max-width: 900px) {
-  section { padding: 80px 24px; }
-  .hero { padding: 0 24px 48px; height: 75vh; }
-  .about-grid { grid-template-columns: 1fr; gap: 32px; }
+  /* スマホはセクション境界ごとに 80+80=160px の空白が6箇所あり、
+     ページの約2割が余白だった（2026-08-26 実測）。48px に詰める。 */
+  section { padding: 48px 24px; }
+  /* スマホのヒーローは 75vh だと上半分が空グリッドだけになる。
+     タイトルが下寄せのデザインは保ちつつ 56vh に（2026-08-26）。 */
+  .hero { padding: 0 24px 40px; height: 56vh; min-height: 420px; }
+  .about-grid { grid-template-columns: 1fr; gap: 32px; margin-bottom: 0; }
   .contact-grid { grid-template-columns: 1fr; gap: 32px; }
   .discover-grid { grid-template-columns: repeat(2, 1fr); }
   .discover-card { aspect-ratio: 1; }
