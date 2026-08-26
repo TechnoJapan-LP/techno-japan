@@ -352,12 +352,31 @@ section { padding: 120px 40px; scroll-margin-top: 64px; }
   margin-bottom: 24px;
 }
 
-.statement-keywords { margin-bottom: 80px; }
-.statement-keyword { padding: 28px 0; border-bottom: 1px solid rgba(240,237,232,0.08); }
-.statement-keyword:first-child { border-top: 1px solid rgba(240,237,232,0.08); }
+/* STATEMENT: キーワードごとの開閉式（2026-08-26 ユーザー要望）。
+   details/summary のネイティブ開閉を使う。JS 不要で CSP・アクセシビリティとも安全。 */
+.statement-keywords { border-top: 1px solid rgba(240,237,232,0.08); }
+.statement-item { border-bottom: 1px solid rgba(240,237,232,0.08); }
+.statement-summary {
+  padding: 28px 48px 28px 0;
+  cursor: pointer;
+  position: relative;
+  list-style: none;
+  display: block;
+}
+.statement-summary::-webkit-details-marker { display: none; }
+.statement-summary::after {
+  content: '+';
+  position: absolute; right: 8px; top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-mono); font-size: 22px; font-weight: 200;
+  opacity: 0.4;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.statement-summary:hover::after { opacity: 0.8; }
+details[open] > .statement-summary::after { transform: translateY(-50%) rotate(45deg); }
 .statement-word {
   font-family: var(--font-display);
-  font-size: clamp(48px, 6vw, 96px);
+  font-size: clamp(40px, 6vw, 96px);
   line-height: 1;
   text-transform: uppercase;
 }
@@ -377,15 +396,22 @@ section { padding: 120px 40px; scroll-margin-top: 64px; }
   opacity: 0.5;
   margin-top: 10px;
 }
-.statement-body { max-width: 720px; }
-.statement-body p {
+.statement-panel { max-width: 720px; padding: 4px 0 40px; }
+.statement-panel p {
   font-family: var(--font-body);
   font-weight: 200;
   font-size: 15px;
   line-height: 1.9;
-  opacity: 0.7;
+  opacity: 0;
+  transform: translateY(8px);
   margin-bottom: 24px;
 }
+details[open] .statement-panel p {
+  opacity: 0.7;
+  transform: none;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.statement-panel p:last-child { margin-bottom: 0; }
 
 .stat-grid {
   display: grid;
@@ -683,8 +709,8 @@ section { padding: 120px 40px; scroll-margin-top: 64px; }
   .section-label { font-size: 9px; }
   .about-text h2 { font-size: clamp(36px, 10vw, 72px); }
   .contact-left h2 { font-size: clamp(36px, 10vw, 72px); }
-  .statement-keyword { padding: 20px 0; }
-  .statement-keywords { margin-bottom: 56px; }
+  .statement-summary { padding: 20px 40px 20px 0; }
+  .statement-panel { padding-bottom: 32px; }
 }
 
 @media (max-width: 480px) {
@@ -871,33 +897,47 @@ section { padding: 120px 40px; scroll-margin-top: 64px; }
 <section id="statement">
   <div class="section-label reveal">02 — STATEMENT</div>
   <div class="statement-keywords">
-    <div class="statement-keyword reveal">
-      <div class="statement-word">AUTHENTIC</div>
-      <div class="statement-line">本物の音楽体験だけを。</div>
-    </div>
-    <div class="statement-keyword reveal">
-      <div class="statement-word">SELECTIVE</div>
-      <div class="statement-line">すべては発信しない。厳選して届ける。</div>
-    </div>
-    <div class="statement-keyword reveal">
-      <div class="statement-word">BORDERLESS</div>
-      <div class="statement-line">日本と世界を、交差させる。</div>
-    </div>
-    <div class="statement-keyword reveal">
-      <div class="statement-word">INDEPENDENT</div>
-      <div class="statement-line">どこにも偏らず、フラットであり続ける。</div>
-    </div>
-  </div>
-  <div class="statement-body reveal">
-    <p>日本のダンスフロアには、世界に誇るべき圧倒的なクオリティ、細部に宿るホスピタリティ、そして真摯な音楽体験が存在します。</p>
-    <p>私たちの目的は、音楽そのものを目的に世界中から人々が訪れるような、持続可能で熱量ある循環を、この地に生み出すことです。</p>
-    <p>しかし、アンダーグラウンドカルチャーの美しさは、「ただ広めればいい」というものではありません。知る人ぞ知る場の空気感、限られた空間だからこそ成り立つ純度。それは、私たちが何よりも守るべき境界線です。</p>
-    <p>だからこそ、Techno Japanは、すべての情報を発信するメディアではありません。現場で感じ、深く賛同したイベントとカルチャーだけを、厳選して届けます。</p>
-    <p>私たちの視線は日本の内側にとどまりません。世界のダンスフロアで生まれるムーブメントを日本へ、日本の熱量を世界へ。本物の音楽体験に、国境はないからです。</p>
-    <p>日本と世界をボーダレスに交差させることが、シーンを次へと進めていく。私たちはそう信じています。</p>
-    <p>そして、ひとつの約束を。特定の資本や過度な商業的思惑、偏った思想を介入させず、客観的でフラットな視点を貫き続けます。</p>
-    <p>私たちが目指すのは、人、場所、音楽をつなぐ、シーンの接続点となるフラットなメディアです。</p>
-    <p>Techno Japanは、この姿勢で届けていきます。</p>
+    <details class="statement-item reveal">
+      <summary class="statement-summary">
+        <div class="statement-word">AUTHENTIC</div>
+        <div class="statement-line">本物の音楽体験だけを。</div>
+      </summary>
+      <div class="statement-panel">
+        <p>日本のダンスフロアには、世界に誇るべき圧倒的なクオリティ、細部に宿るホスピタリティ、そして真摯な音楽体験が存在します。</p>
+        <p>私たちの目的は、音楽そのものを目的に世界中から人々が訪れるような、持続可能で熱量ある循環を、この地に生み出すことです。</p>
+      </div>
+    </details>
+    <details class="statement-item reveal">
+      <summary class="statement-summary">
+        <div class="statement-word">SELECTIVE</div>
+        <div class="statement-line">すべては発信しない。厳選して届ける。</div>
+      </summary>
+      <div class="statement-panel">
+        <p>しかし、アンダーグラウンドカルチャーの美しさは、「ただ広めればいい」というものではありません。知る人ぞ知る場の空気感、限られた空間だからこそ成り立つ純度。それは、私たちが何よりも守るべき境界線です。</p>
+        <p>だからこそ、Techno Japanは、すべての情報を発信するメディアではありません。現場で感じ、深く賛同したイベントとカルチャーだけを、厳選して届けます。</p>
+      </div>
+    </details>
+    <details class="statement-item reveal">
+      <summary class="statement-summary">
+        <div class="statement-word">BORDERLESS</div>
+        <div class="statement-line">日本と世界を、交差させる。</div>
+      </summary>
+      <div class="statement-panel">
+        <p>私たちの視線は日本の内側にとどまりません。世界のダンスフロアで生まれるムーブメントを日本へ、日本の熱量を世界へ。本物の音楽体験に、国境はないからです。</p>
+        <p>日本と世界をボーダレスに交差させることが、シーンを次へと進めていく。私たちはそう信じています。</p>
+      </div>
+    </details>
+    <details class="statement-item reveal">
+      <summary class="statement-summary">
+        <div class="statement-word">INDEPENDENT</div>
+        <div class="statement-line">どこにも偏らず、フラットであり続ける。</div>
+      </summary>
+      <div class="statement-panel">
+        <p>そして、ひとつの約束を。特定の資本や過度な商業的思惑、偏った思想を介入させず、客観的でフラットな視点を貫き続けます。</p>
+        <p>私たちが目指すのは、人、場所、音楽をつなぐ、シーンの接続点となるフラットなメディアです。</p>
+        <p>Techno Japanは、この姿勢で届けていきます。</p>
+      </div>
+    </details>
   </div>
 </section>
 
