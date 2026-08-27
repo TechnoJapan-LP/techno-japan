@@ -6173,3 +6173,45 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
   4. 保存経路の実機1回（AGENTS.md）はこのPublishと3.の保存テストで満たす。
 - 次の担当への注意: LINEUPSの行削除は絶対にしない（行番号がずれて _row が全滅する）。
   余り行は空白化が正。空白行はシートに残るが、読み側は EDITION_ID 空を無視する。
+
+## 2026-08-27 LINEUPS増殖の根本原因を特定・全修正・シート掃除・実機確認まで完了
+
+- 実施: 前エントリの修正後、さらに深い根本原因を特定した。
+  **GAS get_sheet は列名を小文字で返す**（EDITION_ID→edition_id）のに、
+  loadEditionsFromSheet 以降は大文字で読んでおり、シート照合が全員分・常に空振り。
+  全開催回が毎回「新規」扱いで追記されていた。§9-66 の EDITIONS 重複ガード
+  （publish前検査）も同じ理由で空振り（8/17 snow-machine / 8/23 grow-the-culture が
+  素通りした理由）。§9-96 の10日間障害の「EDITIONS ID重複」失敗も源流はここ。
+  詳細は **AUDIT §9-97（追記включ）**。
+- 対応:
+  1. cms.js: SHEET_FIELD_NAMES に EDITIONS/LINEUPS の大文字名24個を追加
+     （1列に複数の正しい綴りを許す形へ canonicalizeRows を拡張）。
+     loadEditionsFromSheet・publish の EDITIONS/LINEUPS 取得を全て正規化。
+     LINEUPS 送信は正規列名のみの明示ペイロードに。cms.js ?v=102
+  2. **シート掃除**: LINEUPS の意味重複 260行（mutek-2025 120 / rural-2026 31 /
+     circus 30 / odyssey 28 / bondisco-2025 25 / ffkt-2025 16 / big-fun 10）を
+     1本ずつ空白化。260/260 成功・失敗0。再取得で残重複0を確認
+     （mutek-2025 150→30 等）。
+  3. 検査: 実物と同じ**小文字キー**の行での回帰テストを追加
+     （大文字のテストデータではこのバグを検出できない）。
+     EDITIONS 重複ガードが小文字データで発火することも検査。
+- コミット: 本エントリと同時。push 済み。
+- 検証（実機・実シート）:
+  - ローカルCMS（v102・認証済み）で circus を編集画面で開く →
+    **史上初めて editionSheetLoaded=true / 開催回に _row が付いた**
+    （circus-2025: _row あり・lineup 10行をシートから正しく取得）
+  - **保存を2回実行** → LINEUPS: total 520 / circus-2025 10行 / 重複0 / maxRow 765 が
+    **before/after 完全一致**（旧コードなら+20行）。EDITIONS も 110行・重複0
+  - check_cms_publish_guard 全38項目緑 / preflight 全41件成功
+- 変更したパターン: 上記1のみ（GAS 側は無変更）。
+- 未確認の類似パターン:
+  - **Publish Now（本番）が未実施。** シートに新アーティスト10名・moment 追加済みで
+    data.js が古い。次の Publish で反映される（fetch-data の重複ガードも初回から有効）
+  - 他セクション（ARTISTS等）の get_sheet 消費箇所は loadList 経由で
+    canonicalizeRows 済みだった（確認済み）。EDITIONS/LINEUPS だけが生読みだった
+  - 空白化した260行はシート上に空行として残る（行削除は行番号ずれ事故になるため意図的）。
+    読み側（CMS・fetch-data）は EDITION_ID 空を無視する
+- 次の担当への注意:
+  - **シートを読む前に1行の実キーをダンプすること。** この調査でも当初大文字で読んで
+    「重複0」という誤測定を2回した。
+  - ガードは実物のデータ形状でテストしない限り動いている証明にならない（AUDIT §9-97教訓）。

@@ -2576,6 +2576,10 @@ async function loadEditionsFromSheet(festivalId){
       fetch(GAS_URL+'?action=get_sheet&sheet=LINEUPS').then(r=>r.json())
     ]);
     const er=results[0], lr=results[1];
+    /* get_sheet は列名を小文字で返す（EDITION_ID→edition_id）。
+       正規化しないと以降の照合が全滅する（§9-97 の根本原因）。 */
+    if(er&&Array.isArray(er.rows)) er.rows=canonicalizeRows(er.rows);
+    if(lr&&Array.isArray(lr.rows)) lr.rows=canonicalizeRows(lr.rows);
     if(er.status!=='ok'||!Array.isArray(er.rows)){
       /* 黙って抜けると、開催回が「シートのどの行か」を失ったまま残る。
          その状態で保存すると全部が新規扱いになり、末尾に重複が積まれる。
@@ -3698,12 +3702,26 @@ const SHEET_FIELD_NAMES = [
   // FESTIVALS / VENUES / ARTISTS
   'name_en','desc_en','bio_en','location_ja','ticketUrl','venueId','instagramUrl',
   'subtype','hours','charge','features',
-  // EDITIONS / LINEUPS
+  // EDITIONS / LINEUPS（camelCase 消費箇所向け）
   'editionId','festivalId','artistId','actLabel','setType',
+  /* EDITIONS / LINEUPS の**大文字名**。ここに無かったことが LINEUPS 増殖
+     （§9-97）の根本原因。get_sheet は列名を小文字で返すが、
+     loadEditionsFromSheet・sync 系・publish の EDITIONS 重複検査は
+     r.EDITION_ID のように大文字で読む。別名が足されないため照合が全員分
+     常に失敗し、全開催回が毎回「新規」扱い＝毎回末尾追記になっていた。
+     §9-66 の EDITIONS 重複ガードも同じ理由で空振りしていた（8/17・8/23 再発）。 */
+  'EDITION_ID','FESTIVAL_ID','EDITION','DATE_START','DATE_END','LOCATION','LOCATION_JA',
+  'PREF','VENUE_ID','ADDRESS','LAT','LNG','TICKETURL','FLYER','STATUS',
+  'ARTIST_ID','ACT_LABEL','SET_TYPE','STAGE','DAY','START','END','SORT',
 ];
+/* 同じ列に複数の正しい綴り（editionId と EDITION_ID）があるため、配列で持つ。 */
 const SHEET_FIELD_BY_NORM = (() => {
   const m = new Map();
-  SHEET_FIELD_NAMES.forEach(f => m.set(f.toLowerCase().replace(/[^a-z0-9]/g,''), f));
+  SHEET_FIELD_NAMES.forEach(f => {
+    const k = f.toLowerCase().replace(/[^a-z0-9]/g,'');
+    if(!m.has(k)) m.set(k, []);
+    if(!m.get(k).includes(f)) m.get(k).push(f);
+  });
   return m;
 })();
 /** 行に「正しい綴り」の別名を足す。元のキーはそのまま残す。 */
@@ -3713,11 +3731,13 @@ function canonicalizeRows(rows){
     if(!r || typeof r !== 'object') return r;
     let out = r;
     for(const key of Object.keys(r)){
-      const canon = SHEET_FIELD_BY_NORM.get(String(key).toLowerCase().replace(/[^a-z0-9]/g,''));
-      // 既に正しい綴りのキーがあるなら触らない（空文字で上書きしない）。
-      if(canon && canon !== key && r[canon] === undefined){
-        if(out === r) out = {...r};
-        out[canon] = r[key];
+      const canons = SHEET_FIELD_BY_NORM.get(String(key).toLowerCase().replace(/[^a-z0-9]/g,'')) || [];
+      for(const canon of canons){
+        // 既に正しい綴りのキーがあるなら触らない（空文字で上書きしない）。
+        if(canon !== key && r[canon] === undefined && (out === r || out[canon] === undefined)){
+          if(out === r) out = {...r};
+          out[canon] = r[key];
+        }
       }
     }
     return out;
@@ -4239,8 +4259,9 @@ function syncLineupRowsForEdition(eid, labels, existingRows, requests){
       const rowNumber=Number(lr._row);
       if(label){
         const keepId=String(lr.ACT_LABEL||'').trim()===label?(lr.ARTIST_ID||''):'';
-        const base={...lr}; delete base._row;
-        requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'update_row',sheet:'LINEUPS',row:rowNumber,...base,EDITION_ID:eid,ACT_LABEL:label,ARTIST_ID:keepId,SORT:String(i+1)})}).then(r=>r.json()));
+        /* 送るのは正規の列名だけ。行オブジェクトを丸ごとスプレッドすると、
+           get_sheet 由来の小文字キー（edition_id）と大文字キーが二重に載る。 */
+        requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'update_row',sheet:'LINEUPS',row:rowNumber,EDITION_ID:eid,ACT_LABEL:label,ARTIST_ID:keepId,SET_TYPE:lr.SET_TYPE||'dj',STAGE:lr.STAGE||'',DAY:lr.DAY||'',START:lr.START||'',END:lr.END||'',SORT:String(i+1)})}).then(r=>r.json()));
         written.push({_row:rowNumber,EDITION_ID:eid,ACT_LABEL:label,ARTIST_ID:keepId,SET_TYPE:lr.SET_TYPE||'dj',SORT:String(i+1)});
       } else {
         requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'update_row',sheet:'LINEUPS',row:rowNumber,EDITION_ID:'',ARTIST_ID:'',ACT_LABEL:'',SET_TYPE:'',STAGE:'',DAY:'',START:'',END:'',SORT:''})}).then(r=>r.json()));
@@ -6424,7 +6445,7 @@ function publishDiffSummary(d){
 function exportDataJs(){
   toast('Exporting...','info');
   fetchAllSheets(['VENUES','FESTIVALS','ARTISTS','EVENTS','ARTICLES'],{fresh:true,perSheet:true}).then(d=>Promise.all(
-    ['EDITIONS','LINEUPS'].map(sheet => fetch(GAS_URL+'?action=get_sheet&sheet='+sheet).then(r=>r.json()).then(x => ({sheet, rows:x.status==='ok'&&Array.isArray(x.rows)?x.rows:[]})).catch(() => ({sheet, rows:[]})))
+    ['EDITIONS','LINEUPS'].map(sheet => fetch(GAS_URL+'?action=get_sheet&sheet='+sheet).then(r=>r.json()).then(x => ({sheet, rows:x.status==='ok'&&Array.isArray(x.rows)?canonicalizeRows(x.rows):[]})).catch(() => ({sheet, rows:[]})))
   ).then(optional => { optional.forEach(x => { d[x.sheet] = x.rows; }); return d; })).then(d=>{
     const sane = publishSanityCheck(d);
     if(!sane.ok) return toast(sane.message,'error');
@@ -6533,7 +6554,7 @@ function publishDataJs(opts){
      取れなかった場合は d.EDITIONS が未定義になり、重複検査は黙って飛ばす。 */
   fetchAllSheets(['VENUES','FESTIVALS','ARTISTS','EVENTS','ARTICLES'],{fresh:true,perSheet:true})
     .then(d => fetch(GAS_URL+'?action=get_sheet&sheet=EDITIONS').then(r=>r.json())
-      .then(x => { if(x.status==='ok' && Array.isArray(x.rows)) d.EDITIONS = x.rows; return d; })
+      .then(x => { if(x.status==='ok' && Array.isArray(x.rows)) d.EDITIONS = canonicalizeRows(x.rows); return d; })
       .catch(() => d))
     .then(d=>{
     const sane = publishSanityCheck(d);

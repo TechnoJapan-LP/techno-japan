@@ -49,6 +49,7 @@ const BRIDGE = `;globalThis.__T = {
     editionRowById = new Map(rows || []);
   },
   syncLineupRowsForEdition,
+  canonicalizeRows,
   setLineupSheetState: (rows, max) => { lineupSheetRows = rows; lineupSheetMaxRow = max; },
   getLineupSheetState: () => ({ rows: lineupSheetRows, max: lineupSheetMaxRow })
 };`;
@@ -166,6 +167,31 @@ const c = makeCtx();
   c.__T.syncLineupRowsForEdition('test-2026', ['B'], c.__T.getLineupSheetState().rows, []);
   const relabeled = sent.find(b => b.ACT_LABEL === 'B');
   check('ラベルが変わった行はARTIST_IDを引き継がない', relabeled && relabeled.ARTIST_ID === '', JSON.stringify(relabeled));
+
+  /* --- 根本原因の固定: get_sheet は列名を小文字で返す（§9-97） ---------
+     EDITION_ID を大文字で読む照合が全滅し、全開催回が毎回「新規」扱いで
+     追記されていた。実物と同じ小文字キーの行で、正規化→同期が通ることを見る。 */
+  const snake = c.__T.canonicalizeRows([
+    { _row: 2, edition_id: 'snake-2026', artist_id: 'dj-a', set_type: 'dj', sort: '1' },
+    { _row: 3, edition_id: 'snake-2026', artist_id: 'dj-b', set_type: 'dj', sort: '2' },
+  ]);
+  check('get_sheetの小文字キーからEDITION_IDを読める（正規化）',
+    snake[0].EDITION_ID === 'snake-2026' && snake[0].ARTIST_ID === 'dj-a' && snake[0].SORT === '1',
+    JSON.stringify(snake[0]));
+  sent.length = 0;
+  c.__T.setLineupSheetState(snake, 3);
+  c.__T.syncLineupRowsForEdition('snake-2026', ['dj-a','dj-b'], c.__T.getLineupSheetState().rows, []);
+  const snakeAppends = sent.filter(b => b.row > 3);
+  check('実物のキー形状（小文字）でも再保存で行が増えない', snakeAppends.length === 0, `append=${snakeAppends.length}`);
+
+  // publish側のEDITIONS重複ガードも、小文字キーの実データで発火すること（§9-66の空振り防止）
+  const dupEditions = c.__T.canonicalizeRows([
+    { _row: 2, edition_id: 'dup-fes-2026' },
+    { _row: 9, edition_id: 'dup-fes-2026' },
+  ]);
+  const sane = c.__T.publishSanityCheck({ ...BASE, EDITIONS: dupEditions });
+  check('EDITIONS重複ガードが小文字キーの実データで発火する',
+    !sane.ok && /dup-fes-2026/.test(sane.message || ''), JSON.stringify(sane).slice(0,120));
 }
 
 /* --- 0. 保存開始前のEDITION同期チェック ------------------------------- */
