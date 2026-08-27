@@ -6109,3 +6109,28 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
   - SC「修正を検証」の結果は数日〜2週間後。**要フォローアップ**
 - 次の担当への注意: 親 Festival ノードの日付は「最新開催回」由来。開催回を
   追加・更新すれば自動で追従する。SCの検証結果が失敗で戻ったらこのエントリから調査。
+
+## 2026-08-27 イベントJSON-LDの拡充（[[event]]会場突合の解禁＋SC警告の削減）
+
+- 実施:
+  1. **記事 [[event]] の会場突合を実装**（保留を解除・ユーザー指示）。place 文字列を
+     VENUES と NFKC 正規化で突合し、一致すれば住所・座標・offers・eventStatus /
+     eventAttendanceMode 付きの Event JSON-LD を出す。不一致は従来どおり名前のみ（壊れない）。
+  2. **SC のイベント警告削減**: subEvent に image / description（フェス本体から）、
+     親ノードに eventStatus を追加。警告 image 11 / description 11 / eventStatus 18 が対象。
+- コミット: 本エントリと同時。push 済み。
+- 検証:
+  - **[[event]] は実使用0件のため合成テストで実証**: data.js に一時注入→ビルド→
+    「VENT」一致で geo/streetAddress/offers あり、「Somewhere Hall」不一致で名前のみ、
+    を出力 JSON-LD で確認→ data.js を復元しビルドし直し（残留0）。
+  - subEvent の image/desc/status、親の eventStatus を re-birth の生成物で確認。
+  - preflight 全41件成功。
+- 変更したパターン: articlePage に venues 引数を追加（呼び出し2箇所）/
+  venueByPlaceName 新設 / eventJsonLd の組み立て拡張 / subEvent・親ノードへの項目追加。
+- 未確認の類似パターン:
+  - 警告 offers 25 / performer 20 / endDate 14 は**データ依存**
+    （EDITIONS の TICKETURL・LINEUPS・DATE_END が空）。コードでは埋められない。
+  - [[event]] の place と VENUES の表記が大きく違う場合（略称等）は突合しない。
+    記事で使い始めて不一致が出たら、その実例で正規化を調整する。
+- 次の担当への注意: 記事で [[event|名前|日付|場所|URL]] を書くとき、場所を
+  VENUES の name と同じ表記にすれば住所・座標が自動で付く。

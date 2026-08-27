@@ -781,7 +781,19 @@ ${GA}
 }
 
 /* ---------- 記事ページ ---------- */
-function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsByFestival = new Map()) {
+/* [[event]] の place 文字列を VENUES と突合する。
+   一致すれば Event JSON-LD に住所・座標を出せる（Google のイベント
+   リッチリザルトは location の住所が実質必須。親設計 SEO_GEO_NEWS.md 1-3）。
+   表記ゆれに耐えるよう NFKC 正規化＋英数字のみで比較する。
+   一致しなければ従来どおり名前だけ出す（壊れない設計）。 */
+function venueByPlaceName(place, venues) {
+  const norm = (v) => String(v || '').normalize('NFKC').toLowerCase().replace(/[^a-z0-9ぁ-んァ-ヶ一-龠]/g, '');
+  const key = norm(place);
+  if (!key) return null;
+  return venues.find((v) => norm(v.name) === key) || null;
+}
+
+function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsByFestival = new Map(), venues = []) {
   // EN版は title_en / excerpt_en / body_en を使う（無い項目はJAへフォールバック）
   const L = lang === 'en'
     ? { title: a.title_en || a.title, excerpt: a.excerpt_en || a.excerpt, body: a.body_en || a.body, prefix: '/en' }
@@ -839,15 +851,32 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
       : {}),
     url: canonical,
   };
-  const eventJsonLd = articleEvents.map((event) => ({
-    '@context': 'https://schema.org',
-    '@type': 'Event',
-    name: event.name,
-    ...(event.date.start ? { startDate: event.date.start, endDate: event.date.end } : {}),
-    location: { '@type': 'Place', name: event.place },
-    ...(event.url ? { url: event.url } : {}),
-    ...(event.tags.length ? { description: event.tags.join(' · ') } : {}),
-  }));
+  const eventJsonLd = articleEvents.map((event) => {
+    const venue = venueByPlaceName(event.place, venues);
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'Event',
+      name: event.name,
+      ...(event.date.start ? { startDate: event.date.start, endDate: event.date.end } : {}),
+      location: venue
+        ? {
+            '@type': 'Place',
+            name: venue.name,
+            address: {
+              '@type': 'PostalAddress',
+              ...(venue.address ? { streetAddress: venue.address } : {}),
+              addressLocality: venue.city || '',
+              addressCountry: 'JP',
+            },
+            ...(venue.lat && venue.lng ? { geo: { '@type': 'GeoCoordinates', latitude: venue.lat, longitude: venue.lng } } : {}),
+          }
+        : { '@type': 'Place', name: event.place },
+      eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+      eventStatus: 'https://schema.org/EventScheduled',
+      ...(event.url ? { url: event.url, offers: { '@type': 'Offer', url: event.url, availability: 'https://schema.org/InStock' } } : {}),
+      ...(event.tags.length ? { description: event.tags.join(' · ') } : {}),
+    };
+  });
 
   const heroBlock = a.image
     ? `<header class="article-hero"${ratioAttr(a.heroRatio)}>
@@ -1481,6 +1510,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
     ...parentDates,
     ...(parentLocation ? { location: parentLocation } : {}),
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    eventStatus: editionStatusLd(currentEdition?.STATUS) || 'https://schema.org/EventScheduled',
     ...(sameAs.length ? { sameAs } : {}),
     ...(performers.length ? { performer: performers } : {}),
     ...(editions.length ? { subEvent: editions.map((ed) => ({
@@ -1494,6 +1524,10 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
         ? { performer: (lineupsByEdition.get(ed.EDITION_ID) || []).map((row) => lineupPerformerLd(row, artistsById, lang)).filter(Boolean) }
         : {}),
       ...(editionStatusLd(ed.STATUS) ? { eventStatus: editionStatusLd(ed.STATUS) } : {}),
+      /* image / description は SC で「任意項目なし」警告が各11件出ていた（2026-08-27）。
+         開催回に固有の画像・説明は無いので、フェス本体のものを渡す。 */
+      image: [image],
+      ...(desc ? { description: desc } : {}),
       /* 現地開催であることを明示する。Google / AI 検索が「配信のみ」と
          誤解しないための項目で、無いと Event のリッチリザルトで警告になる。
          このサイトが扱うのは屋外フェスとクラブ公演だけなので、
@@ -2295,13 +2329,13 @@ ${FAVICON_TAGS}
   const liveFestivalIds = new Set(pubFests.map((f) => f.id));
 
   const counts = {
-    articles: writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'ja', pubFests, editionsByFestival)).concat(redirectStubs('articles', liveArticleIds)), 'articles'),
+    articles: writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'ja', pubFests, editionsByFestival, pubVenues)).concat(redirectStubs('articles', liveArticleIds)), 'articles'),
     festivals: writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, ARTICLES, 'ja')).concat(redirectStubs('festivals', liveFestivalIds)), 'festivals'),
     artists: writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'ja')).concat(redirectStubs('artists', liveArtistIds)), 'artists'),
     venues: writeAll(pubVenues.map((v) => venuePage(v, 'ja')), 'venues'),
     // 英語版（/en/…）。未翻訳フィールドは articlePage 内で元データへ
     // フォールバックし、EN ハブの通常遷移先を必ず実在させる。
-    'en/articles': writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'en', pubFests, editionsByFestival)), 'en/articles'),
+    'en/articles': writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'en', pubFests, editionsByFestival, pubVenues)), 'en/articles'),
     'en/festivals': writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, ARTICLES, 'en')).concat(redirectStubs('en/festivals', liveFestivalIds)), 'en/festivals'),
     'en/artists': writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'en')).concat(redirectStubs('en/artists', liveArtistIds)), 'en/artists'),
     'en/venues': writeAll(pubVenues.map((v) => venuePage(v, 'en')), 'en/venues'),
