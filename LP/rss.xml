@@ -5,7 +5,7 @@
     <link>https://techno-japan.media</link>
     <description>Japan&apos;s underground techno and house music media platform.</description>
     <language>ja-JP</language>
-    <lastBuildDate>Wed, 26 Aug 2026 03:51:08 -0000</lastBuildDate>
+    <lastBuildDate>Thu, 27 Aug 2026 03:44:18 -0000</lastBuildDate>
     <atom:link href="https://techno-japan.media/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
       <title>Snow Machine Japan</title>
@@ -48,20 +48,20 @@
       <description>Kyoto — タイで11年続いてきた Wonderfruit が、国外で初めて開く企画。定員は100名に絞られる。単一の会場を持たず、Ohara Sanso、ACG Villa Kyoto、鞍馬山、Ochill TeaRoom と京都の各所を移動しながら進む。 軸に置かれているのは「妙」という日本の思想。日常のなかに静かに宿る非日常を見出す構えとして説明されている。4日間は Arrival / Silence、Attunement / Sensitivity、Encounter、Realization の4つの楽章に分けられる。出演者は公表されていない。公式が示すのは artisans, practitioners and artists という記述だけ。誰が来るかではなく、どう過ごすかが先に示される。</description>
     </item>
     <item>
-      <title>YAGURA</title>
-      <link>https://techno-japan.media/festivals/yagura.html</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals/yagura.html</guid>
-      <pubDate>Sat, 10 Oct 2026 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Gifu — YAGURAが岐阜の山あいの地に帰ってくる。今回もまた、丁寧にキュレーションされたエレクトロニック・ミュージックのプログラムが展開される。フェスティバルは、日本のアンダーグラウンド・ダンスシーンにおける実力派アーティストと新進アーティストの双方を紹介するというそのコミットメントを、この地域ならではの自然を背景に貫き続けている。</description>
-    </item>
-    <item>
       <title>Labyrinth</title>
       <link>https://techno-japan.media/festivals/labyrinth.html</link>
       <guid isPermaLink="true">https://techno-japan.media/festivals/labyrinth.html</guid>
       <pubDate>Sat, 10 Oct 2026 00:00:00 -0000</pubDate>
       <category>Festival</category>
       <description>Gunma — Labyrinthは群馬のアンダーグラウンド・シーンに独自の居場所を築き上げ、精神と身体の境界を溶かしていくような没入的なサウンド体験を求める信奉者たちを惹きつけている。より深いサウンドと実験的なアプローチへのこだわりは、見せかけよりも本質を求める者たちにとっての聖域を生み出している。</description>
+    </item>
+    <item>
+      <title>YAGURA</title>
+      <link>https://techno-japan.media/festivals/yagura.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/yagura.html</guid>
+      <pubDate>Sat, 10 Oct 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Gifu — YAGURAが岐阜の山あいの地に帰ってくる。今回もまた、丁寧にキュレーションされたエレクトロニック・ミュージックのプログラムが展開される。フェスティバルは、日本のアンダーグラウンド・ダンスシーンにおける実力派アーティストと新進アーティストの双方を紹介するというそのコミットメントを、この地域ならではの自然を背景に貫き続けている。</description>
     </item>
     <item>
       <title>Synapse Festival</title>
@@ -80,12 +80,28 @@
       <description>Nagano — 「りんご音楽祭」は、長野県松本市のアルプス公園で毎年秋に開催される、自然豊かなロケーションが魅力の野外音楽フェスです。「アーティスト主導・現場主義」を掲げ、メジャー・インディーズを問わず旬の実力派からアンダーグラウンドの鬼才まで多種多様な才能が集結します。会場には「りんご」「そば」「わさび」など地元の名産品から命名されたユニークなステージが多数登場し、長野愛にあふれたアットホームな空間を楽しめます。</description>
     </item>
     <item>
+      <title>FFKT</title>
+      <link>https://techno-japan.media/festivals/ffkt.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/ffkt.html</guid>
+      <pubDate>Sat, 26 Sep 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Shizuoka — FFKTは静岡の自然に囲まれた環境で開催され、日本のテクノ・アンダーグラウンドと海外アーティストを繋ぐ架け橋として位置づけられている。このフェスティバルは没入感のあるサウンドデザインと、現代エレクトロニック・ミュージックの深層を映し出す入念にキュレーションされたラインナップを重視している。</description>
+    </item>
+    <item>
+      <title>DETOX</title>
+      <link>https://techno-japan.media/festivals/detox.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/detox.html</guid>
+      <pubDate>Sat, 26 Sep 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>AICHI — 名古屋を拠点に活動するedenk1d、idiot、sabaotohaの3人によるレイヴクルー・CPBが主催する「DETOX」。CPBは、メンバーそれぞれが音楽やアートなどの活動を通して培ってきた経験や感覚を、レイヴという形で表現している。第4回となる今回は、愛知県西尾市・吉良ワイキキビーチに位置するCafe goofyを舞台に、デイイベントとして開催。これまでのシークレットかつ人数限定のスタイルを解禁し、海に隣接した開放的なロケーションで、Guest DJにE.O.UとTAIHEIを迎えるほか、東海エリアで活動する気鋭の若手ローカルDJが集結する。11時から20時まではDance Time、21時から24時まではAmbient Timeとして、時間の移り変わりとともに異なる音楽体験をつくり上げる。</description>
+    </item>
+    <item>
       <title>御月民 -OTSUKIMI-</title>
       <link>https://techno-japan.media/festivals/otsukimi.html</link>
       <guid isPermaLink="true">https://techno-japan.media/festivals/otsukimi.html</guid>
       <pubDate>Fri, 25 Sep 2026 00:00:00 -0000</pubDate>
       <category>Festival</category>
-      <description>Nagano — OTSUKIMIは長野の山岳地帯で開催され、日本の伝統的な月見の風習からその名を取っている。このイベントは、エレクトロニック・ミュージックと季節の儀式とのつながりを重視した自然の中で、日本のアンダーグラウンド・テクノ・コミュニティを一堂に集めるものだ。</description>
+      <description>Niigata — OTSUKIMIは長野の山岳地帯で開催され、日本の伝統的な月見の風習からその名を取っている。このイベントは、エレクトロニック・ミュージックと季節の儀式とのつながりを重視した自然の中で、日本のアンダーグラウンド・テクノ・コミュニティを一堂に集めるものだ。</description>
     </item>
     <item>
       <title>Odyssey</title>
@@ -157,7 +173,7 @@
       <guid isPermaLink="true">https://techno-japan.media/festivals/forest-sound-camp.html</guid>
       <pubDate>Sat, 05 Sep 2026 00:00:00 -0000</pubDate>
       <category>Festival</category>
-      <description>Tokyo — Festival on 2026-09-05</description>
+      <description>Tokyo — 東京のクラブシーンでイベントを企画してきたUniversal Music Box/UMBが主催する、キャンプ型のオールナイトレイヴ。幼い頃から森に親しみ、林学を学んできたメンバーが、「森林と音楽の共存」をコンセプトに立ち上げた。舞台は、地域の約8割を森林が占める西多摩・日の出町のおおばキャンプ村。都心で育まれたダンスミュージックカルチャーを東京の森へ持ち込み、多摩産材の薪割りやシルクスクリーンなど、手でつくる体験も展開する。英国VOID Acousticsのサウンドが林間に響く中、昼から翌朝まで、それぞれの過ごし方で森と音楽に触れる2日間。音楽をきっかけに、森林との新しい関係をつくる実験だ。</description>
     </item>
     <item>
       <title>YAMAUTO</title>
@@ -173,7 +189,7 @@
       <guid isPermaLink="true">https://techno-japan.media/festivals/bondisco.html</guid>
       <pubDate>Sat, 22 Aug 2026 00:00:00 -0000</pubDate>
       <category>Festival</category>
-      <description>Hyogo — BonDiscoは2014年以来、ディスコとハウスの基本を京都のこぢんまりとしたクラブスペースに持ち込んできた。このパーティーは、クラシックなディスコ感覚と現代的なダンスフロアのダイナミズムを橋渡しする、グルーヴ志向の選曲に一貫してこだわり続けている。トレンド追随よりも音楽的ルーツを重んじる、温かくコミュニティ主体な雰囲気づくりで知られている。</description>
+      <description>Hyogo — 自分たちの手で創り上げる、インディペンデントなDIYパーティ。豊かな自然の中で、誰もが最大限に日常から解放される空間を目指し、今年で13年目を迎える。会場は兵庫県三田市の三田アスレチックパーク。都会の熱波から離れた森の中に、趣向を凝らした高音質の2フロアが組まれ、大小2種のプールが踊り疲れた身体を冷やす。関西を中心に全国から40組近いアーティストが集結し、土曜の昼から日曜の午後まで音が鳴り続ける。費用はエントランス料金のみで、駐車場もテントもプールも追加料金はかからず、18歳以下は入場無料。13年のあいだに築かれてきた関係が、そのままラインナップになっている。</description>
     </item>
     <item>
       <title>Global Ark</title>
@@ -189,7 +205,7 @@
       <guid isPermaLink="true">https://techno-japan.media/festivals/loa-lost-paradise.html</guid>
       <pubDate>Sat, 15 Aug 2026 00:00:00 -0000</pubDate>
       <category>Festival</category>
-      <description>Ibaraki — LOA-LOST PARADISEは、太平洋に面した茨城・鉾田の nalu beach で開かれる、「New style beach party」を掲げたビーチパーティー。構成は「Sunset to Sunset」。日没から翌日の日没まで、夜の闇に脈打つ低音と、朝の光に踊るグルーヴが地続きで繋がる。ジャンルも世代も年齢も問わない、ただ踊るための場所であることを掲げる。</description>
+      <description>Ibaraki — ハワイ語で「永続的な」を意味するLOA。2026年のテーマは、波。同じ形で二度と訪れない波のように、この夏も一度きりしかない。舞台は茨城県鉾田市のnalu beach。かつて「大洋村」と呼ばれた地で、地元のサーファーたちに守られてきた隠れたビーチだ。コロナ禍で長く閉ざされていたこの場所が、再びダンスフロアとして目を覚ます。海の家はなく、目の前に広がるのは果てしない砂浜と太平洋だけ。全国から集まるアーティストたちとOtodashi Soundの音響が支える中、砂浜にはランドアートとバブルアートが立ち上がる。境界も線引きもなく、ジャンルも人種も性別も、すべてが海と音に溶けていく2日間のビーチパーティ。</description>
     </item>
     <item>
       <title>HACHA MECHA</title>
@@ -197,7 +213,7 @@
       <guid isPermaLink="true">https://techno-japan.media/festivals/hacha-mecha.html</guid>
       <pubDate>Sat, 08 Aug 2026 00:00:00 -0000</pubDate>
       <category>Festival</category>
-      <description>Gunma — どんぐりずが地元・群馬県桐生市で主催する音楽フェスティバル。2023年、2024年は桐生駅前のロータリーを舞台にDIYスタイルで開催され、第3回となる2026年は会場を市民の憩いの場である新川公園へ移して規模を拡張した。開催日は桐生の夏を象徴する「桐生八木節まつり」に合わせて設定され、まつりの熱気とダンスミュージックが街の中で交差する。</description>
+      <description>Gunma — 群馬県桐生市を拠点とする2人組、どんぐりずが主催するダンスミュージックフェスティバル。2023年から駅前のロータリーでDIYスタイルで開催され、3回目となる2026年は、桐生の象徴・新川公園へと会場を移した。開催日の8月8日、街は一年で最も熱くなる。市内中心部を歩行者天国にして開かれる「桐生八木節まつり」の真っ只中。巨大な櫓を囲み、太鼓と唄と手拍子が幾重にも重なり、街全体がトランス状態に包まれていく。会場からまつりの中心までは徒歩5分。Shinichi Osawa、Soichi Terada、JUN INAGAWAらジャンルも世代も超えた13組が、八木節の鳴る街で自由なグルーヴを鳴らす。民謡とダンスミュージックが交差する、真夏の一日だ。</description>
     </item>
     <item>
       <title>E-GROOVE</title>
@@ -221,7 +237,7 @@
       <guid isPermaLink="true">https://techno-japan.media/festivals/car-multimedia.html</guid>
       <pubDate>Sat, 25 Jul 2026 00:00:00 -0000</pubDate>
       <category>Festival</category>
-      <description>Saitama — DJコレクティブWAGON Rが主催する、「CAR MULTIMEDIA」の第2回。7月25日の深夜、埼玉の山奥のどこかで、場所を明かさないまま一夜のレイブ。そこに集う人それぞれのバックグラウンドやカルチャー、ジャンルが交差して初めて成立する「CAR MULTIMEDIA」。既存の社会からの逃亡と、独自のマルチメディアの構築を試みる一夜</description>
+      <description>Saitama — b.256_、iddo_na、haotomaruyamaの3名からなるDJコレクティブ、WAGON Rが主催する深夜のDIYレイヴ。会場は埼玉の山奥、場所は非公開。深夜23時に開場し、朝まで続く。マルチメディアとは、文字、音声、静止画など別々に扱われてきた媒体を、ひとつのシステムとして同時に扱うこと。そこに集う人それぞれのバックグラウンドやカルチャー、ジャンルが交差して初めて、「CAR MULTIMEDIA」は成立する。イベント名は2000年代初頭のカーナビやカーステレオを、主催者名は平成のカスタムカー文化を想起させ、名前そのものに彼らの美学が滲む。新世代トランス、ハードコア、Y2Kサイバー。既存の社会からの逃亡と、独自のマルチメディアの構築を試みる一夜だ。</description>
     </item>
     <item>
       <title>FUJI ROCK</title>
@@ -232,26 +248,10 @@
       <description>Niigata — フジロックフェスティバルは、毎夏、苗場の山々を日本を代表する野外音楽の祭典へと変貌させる。多彩なロックやオルタナティブのラインナップで主に知られているが、近年は複数のステージでエレクトロニック・アクトの起用も増えている。自然に囲まれたロケーションが没入感のある体験を生み出し、日本のフェス文化と海外のアンダーグラウンド・サウンドを繋いでいる。</description>
     </item>
     <item>
-      <title>Rural</title>
-      <link>https://techno-japan.media/festivals/rural.html</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals/rural.html</guid>
-      <pubDate>Fri, 17 Jul 2026 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Fukushima — 「A Peak Experience」を掲げ、音を鳴らす場ではなく、時間をかけて編み上げられていく体験としてフェスティバルを設計してきた。会場の nowhere CAMP は安達太良山の麓、沼尻高原にあり、山と温泉に囲まれている。この場所での開催は3年目になる。 2026年は31組が出演する。Lena Willikens、Jane Fitz、Vladimir Ivkovic といった欧州の選曲家に、Sunju Hargun、dj sniff、そして悪魔の沼や鏡民といった日本語名義が並ぶ。欧州の実験性、アジアの感性、日本各地の土着的なローカルシーンをひとつの流れとして繋ぐという編成方針が、そのままラインナップに出ている。東北在住者向けの割引券種も設けられている。</description>
-    </item>
-    <item>
-      <title>Moment</title>
-      <link>https://techno-japan.media/festivals/moment.html</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals/moment.html</guid>
-      <pubDate>Fri, 03 Jul 2026 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Nara — Momentは、奈良の歴史的な風景に丁寧にキュレーションされたエレクトロニック・プログラミングを持ち込み、古の環境と現代的なサウンドとの間に親密な対話を生み出している。フェスティバルはアーティスト選定において一貫して的を絞ったアプローチを保ち、規模よりも質を重視しながら、日本のアンダーグラウンド・シーンで活躍する実力派とこれから注目される才能の両方を紹介している。</description>
-    </item>
-    <item>
       <title>野外テクノパーティTranscendenceで見た次世代ジェネレーションの可能性</title>
       <link>https://techno-japan.media/articles/transcendence-2025-report.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/transcendence-2025-report.html</guid>
-      <pubDate>Wed, 26 Aug 2026 03:51:08 -0000</pubDate>
+      <pubDate>Thu, 27 Aug 2026 03:44:18 -0000</pubDate>
       <category>REPORT</category>
       <description></description>
     </item>
@@ -259,7 +259,7 @@
       <title>MUTEK.JP 2025現地レポート WWWとO-EASTで体感した音と光の二日間</title>
       <link>https://techno-japan.media/articles/post-20251120.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/post-20251120.html</guid>
-      <pubDate>Wed, 26 Aug 2026 03:51:08 -0000</pubDate>
+      <pubDate>Thu, 27 Aug 2026 03:44:18 -0000</pubDate>
       <category>REPORT</category>
       <description></description>
     </item>
@@ -267,7 +267,7 @@
       <title>茨城 鉾田 nalu beachでビーチパーティLOA 8月15日開催</title>
       <link>https://techno-japan.media/articles/loa-lost-paradise-2026-info.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/loa-lost-paradise-2026-info.html</guid>
-      <pubDate>Wed, 26 Aug 2026 03:51:08 -0000</pubDate>
+      <pubDate>Thu, 27 Aug 2026 03:44:18 -0000</pubDate>
       <category>RAVE</category>
       <description></description>
     </item>
@@ -275,7 +275,7 @@
       <title>兵庫・三田の森で26時間 DIYパーティBON DISCOが13年目の夏へ</title>
       <link>https://techno-japan.media/articles/bondisco-2026-info.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/bondisco-2026-info.html</guid>
-      <pubDate>Wed, 26 Aug 2026 03:51:08 -0000</pubDate>
+      <pubDate>Thu, 27 Aug 2026 03:44:18 -0000</pubDate>
       <category>RAVE</category>
       <description></description>
     </item>
@@ -283,7 +283,7 @@
       <title>Snow Machine 2027長野白馬で開催 出演者とステージ構成を解説</title>
       <link>https://techno-japan.media/articles/snow-mashine-2027-info.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/snow-mashine-2027-info.html</guid>
-      <pubDate>Wed, 26 Aug 2026 03:51:08 -0000</pubDate>
+      <pubDate>Thu, 27 Aug 2026 03:44:18 -0000</pubDate>
       <category>FESTIVAL</category>
       <description></description>
     </item>

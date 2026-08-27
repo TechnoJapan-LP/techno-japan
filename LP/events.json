@@ -1,7 +1,7 @@
 {
   "source": "https://techno-japan.media/",
   "license": "データの出典として techno-japan.media へのリンクを求めます",
-  "count": 18,
+  "count": 19,
   "events": [
     {
       "name": "fabulous -endless summer SP- 2026",
@@ -11,6 +11,21 @@
       "venue": "TAKE SEA",
       "lat": 35.5298,
       "lng": 135.2106
+    },
+    {
+      "name": "FOREST SOUND CAMP 2026",
+      "url": "https://techno-japan.media/festivals/forest-sound-camp.html",
+      "start": "2026-09-05",
+      "end": "2026-09-06",
+      "venue": "Ooba Camp Village",
+      "lat": 35.7533,
+      "lng": 139.2081,
+      "genres": [
+        "TECHNO",
+        "HOUSE",
+        "MINIMAL"
+      ],
+      "tickets": "https://universal-music-box.zaiko.io/en/e/forest-sound-camp"
     },
     {
       "name": "ONE PARK FESTIVAL 2026",
@@ -69,6 +84,8 @@
       "end": "2026-09-22",
       "venue": "Secret Location",
       "pref": "Hokkaido",
+      "lat": 43.1101,
+      "lng": 141.1746,
       "genres": [
         "TECHNO",
         "HOUSE"
@@ -111,7 +128,6 @@
       "start": "2026-09-26",
       "end": "2026-09-27",
       "venue": "Hotel Izukyu",
-      "pref": "Shizuoka",
       "lat": 34.6934,
       "lng": 138.9712,
       "genres": [

@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-08-24T11:42:00.779Z",
+  "_generatedAt": "2026-08-27T03:43:03.965Z",
   "count": 109,
   "items": [
     {
@@ -145,6 +145,7 @@
       "DATE_END": "2025-08-31",
       "LOCATION": "Sanda Athletic Park",
       "LOCATION_JA": "三田アスレチックパーク",
+      "PREF": "Gunma",
       "ADDRESS": "兵庫県三田市波豆川282-1",
       "LAT": "34.9197",
       "LNG": "135.2892",
@@ -176,16 +177,6 @@
       "DATE_START": "2025-10-25",
       "DATE_END": "2025-10-26",
       "PREF": "Yamanashi",
-      "STATUS": "finished"
-    },
-    {
-      "EDITION_ID": "car-multimedia-2026",
-      "FESTIVAL_ID": "car-multimedia",
-      "EDITION": "2026",
-      "DATE_START": "2026-07-25",
-      "DATE_END": "2026-07-25",
-      "LOCATION": "Secret location",
-      "PREF": "Saitama",
       "STATUS": "finished"
     },
     {
@@ -235,6 +226,8 @@
       "LOCATION": "Secret Location",
       "PREF": "Hokkaido",
       "ADDRESS": "石狩市新港中央1丁目",
+      "LAT": "43.1101",
+      "LNG": "141.1746",
       "FLYER": "images/festivals/colors-presents-soundcamp-2025-flyer.jpg",
       "STATUS": "finished"
     },
@@ -247,6 +240,8 @@
       "LOCATION": "Secret Location",
       "PREF": "Hokkaido",
       "ADDRESS": "石狩市新港中央1丁目",
+      "LAT": "43.1101",
+      "LNG": "141.1746",
       "STATUS": "announced"
     },
     {
@@ -293,9 +288,9 @@
       "DATE_END": "2026-08-01",
       "LOCATION": "Japanese Secret Garden",
       "LOCATION_JA": "日本庭園",
-      "PREF": "Akita",
+      "PREF": "Hokkaido",
       "FLYER": "images/festivals/e-groove-flyer.webp",
-      "STATUS": "finished"
+      "STATUS": "published"
     },
     {
       "EDITION_ID": "each-story-2025",
@@ -387,7 +382,6 @@
       "DATE_END": "2025-09-28",
       "LOCATION": "Hotel Izukyu",
       "LOCATION_JA": "ホテル伊豆急",
-      "PREF": "Shizuoka",
       "ADDRESS": "静岡県下田市白浜2732-7",
       "LAT": "34.6934",
       "LNG": "138.9712",
@@ -402,7 +396,6 @@
       "DATE_END": "2026-09-27",
       "LOCATION": "Hotel Izukyu",
       "LOCATION_JA": "ホテル伊豆急",
-      "PREF": "Shizuoka",
       "ADDRESS": "静岡県下田市白浜2732-7",
       "LAT": "34.6934",
       "LNG": "138.9712",
@@ -414,7 +407,13 @@
       "EDITION": "2026",
       "DATE_START": "2026-07-24",
       "DATE_END": "2026-07-26",
+      "LOCATION": "Naeba Ski Resort",
+      "LOCATION_JA": "苗場スキー場",
       "PREF": "Niigata",
+      "ADDRESS": "新潟県南魚沼郡湯沢町三国202",
+      "LAT": "36.7919",
+      "LNG": "138.7847",
+      "FLYER": "images/festivals/fuji-rock-2026-flyer.jpg",
       "STATUS": "finished"
     },
     {
@@ -468,13 +467,13 @@
       "DATE_END": "2026-08-08",
       "LOCATION": "Shinkawa Park",
       "LOCATION_JA": "新川公園",
-      "PREF": "Gunma",
+      "PREF": "Akita",
       "ADDRESS": "群馬県桐生市稲荷町1",
       "LAT": "36.4082",
       "LNG": "139.3331",
       "TICKETURL": "https://hacha-mecha-ticket.myshopify.com/",
       "FLYER": "images/festivals/hacha-mecha-flyer.webp",
-      "STATUS": "finished"
+      "STATUS": "published"
     },
     {
       "EDITION_ID": "halola-camp-2026",
@@ -599,7 +598,12 @@
       "EDITION": "2025",
       "DATE_START": "2025-08-16",
       "DATE_END": "2025-08-17",
+      "LOCATION": "Nalu Beach",
       "PREF": "Ibaraki",
+      "ADDRESS": "茨城県鉾田市汲上2525",
+      "LAT": "36.0827",
+      "LNG": "140.596",
+      "FLYER": "images/festivals/loa-lost-paradise-2025-flyer.webp",
       "STATUS": "finished"
     },
     {
@@ -608,12 +612,7 @@
       "EDITION": "2026",
       "DATE_START": "2026-08-15",
       "DATE_END": "2026-08-16",
-      "LOCATION": "Nalu Beach",
       "PREF": "Ibaraki",
-      "ADDRESS": "茨城県鉾田市汲上2525",
-      "LAT": "36.0827",
-      "LNG": "140.596",
-      "FLYER": "images/festivals/loa-lost-paradise-flyer.webp",
       "STATUS": "announced"
     },
     {
@@ -665,7 +664,12 @@
       "EDITION": "2026",
       "DATE_START": "2026-07-03",
       "DATE_END": "2026-07-05",
-      "PREF": "Nara",
+      "LOCATION": "Dorogawa Camp Site",
+      "LOCATION_JA": "洞川キャンプ場",
+      "ADDRESS": "奈良県吉野郡天川村洞川934-15",
+      "LAT": "34.2709",
+      "LNG": "135.8887",
+      "FLYER": "images/festivals/moment-2026-flyer.jpg",
       "STATUS": "finished"
     },
     {
@@ -780,15 +784,6 @@
       "DATE_START": "2025-10-18",
       "DATE_END": "2025-10-19",
       "PREF": "Gifu",
-      "STATUS": "finished"
-    },
-    {
-      "EDITION_ID": "orbit-2025",
-      "FESTIVAL_ID": "orbit",
-      "EDITION": "2025",
-      "DATE_START": "2025-07-11",
-      "DATE_END": "2025-07-12",
-      "PREF": "Fukui",
       "STATUS": "finished"
     },
     {
@@ -913,12 +908,11 @@
       "DATE_START": "2026-07-17",
       "DATE_END": "2026-07-20",
       "LOCATION": "nowhere CAMP",
-      "PREF": "Fukushima",
       "ADDRESS": "福島県耶麻郡猪苗代町大字蚕養字沼尻山甲2864",
       "LAT": "37.602",
       "LNG": "140.1982",
       "TICKETURL": "https://ruraljp.zaiko.io/e/rural2026",
-      "STATUS": "finished"
+      "STATUS": "announced"
     },
     {
       "EDITION_ID": "samsara-2026",
@@ -1012,10 +1006,9 @@
       "DATE_START": "2026-07-31",
       "DATE_END": "2026-08-02",
       "LOCATION": "Secret Location",
-      "PREF": "Nagano",
       "TICKETURL": "https://tiget.net/events/484557",
       "FLYER": "images/festivals/sub-tide-flyer.webp",
-      "STATUS": "finished"
+      "STATUS": "published"
     },
     {
       "EDITION_ID": "takarajima-beach-cleaning-party-2025",
@@ -1259,10 +1252,39 @@
       "DATE_END": "2026-08-23",
       "LOCATION": "Sanda Athletic Park",
       "LOCATION_JA": "三田アスレチックパーク",
+      "PREF": "Gunma",
       "ADDRESS": "兵庫県三田市波豆川282-1",
       "LAT": "34.9197",
       "LNG": "135.2892",
       "STATUS": "announced"
+    },
+    {
+      "EDITION_ID": "forest-sound-camp-2026",
+      "FESTIVAL_ID": "forest-sound-camp",
+      "EDITION": "2026",
+      "DATE_START": "2026-09-05",
+      "DATE_END": "2026-09-06",
+      "LOCATION": "Ooba Camp Village",
+      "LOCATION_JA": "おおばキャンプ村",
+      "ADDRESS": "東京都西多摩郡日の出町大久野3741",
+      "LAT": "35.7533",
+      "LNG": "139.2081",
+      "TICKETURL": "https://universal-music-box.zaiko.io/en/e/forest-sound-camp",
+      "FLYER": "images/festivals/forest-sound-camp-flyer.webp",
+      "STATUS": "published"
+    },
+    {
+      "EDITION_ID": "orbit-2026",
+      "FESTIVAL_ID": "orbit",
+      "EDITION": "2026",
+      "DATE_START": "2026-07-11",
+      "DATE_END": "2026-07-12",
+      "LOCATION": "Maesaka Camp Ground",
+      "LOCATION_JA": "前坂キャンプ場",
+      "ADDRESS": "福井県大野市朝日前坂6-23",
+      "LAT": "35.9463",
+      "LNG": "136.7214",
+      "STATUS": "finished"
     }
   ]
 }

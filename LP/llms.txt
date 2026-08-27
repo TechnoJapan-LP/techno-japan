@@ -1,12 +1,13 @@
 # TECHNO JAPAN
 
-> 日本のテクノ / ハウスの独立メディア。フェスティバル96件・
-> アーティスト96名・会場22件・記事5本を日英で掲載し、
+> 日本のテクノ / ハウスの独立メディア。フェスティバル97件・
+> アーティスト106名・会場22件・記事5本を日英で掲載し、
 > 開催日・場所・出演者を構造化データ（schema.org）付きで公開している。
 
-## 今後の開催予定（18件）
+## 今後の開催予定（19件）
 
 - 2026-09-05〜2026-09-06: [fabulous -endless summer SP- 2026](https://techno-japan.media/festivals/fabulous.html) — TAKE SEA
+- 2026-09-05〜2026-09-06: [FOREST SOUND CAMP 2026](https://techno-japan.media/festivals/forest-sound-camp.html) — Ooba Camp Village
 - 2026-09-05〜2026-09-06: [ONE PARK FESTIVAL 2026](https://techno-japan.media/festivals/one-park-festival.html), Fukui
 - 2026-09-06: [BIG FUN 2026](https://techno-japan.media/festivals/big-fun.html) — Hakkenzan Orchard, Hokkaido
 - 2026-09-11〜2026-09-13: [Re:birth Festival 2026](https://techno-japan.media/festivals/re-birth-festival.html) — Kodamanomori Camping Ground, Nagano
@@ -14,7 +15,7 @@
 - 2026-09-20〜2026-09-22: [COLORS Presents SOUNDCAMP 2026](https://techno-japan.media/festivals/colors-presents-soundcamp.html) — Secret Location, Hokkaido
 - 2026-09-22〜2026-09-23: [CIRCUS ODAIBA 2026](https://techno-japan.media/festivals/circus.html) — Odaiba Outdoor Special Venue, Tokyo
 - 2026-09-25〜2026-09-27: [Odyssey 2026](https://techno-japan.media/festivals/odyssey.html) — Sky Lodge Ginga Village, Miyazaki
-- 2026-09-26〜2026-09-27: [FFKT 2026](https://techno-japan.media/festivals/ffkt.html) — Hotel Izukyu, Shizuoka
+- 2026-09-26〜2026-09-27: [FFKT 2026](https://techno-japan.media/festivals/ffkt.html) — Hotel Izukyu
 - 2026-09-28〜2026-09-29: [御月民 -OTSUKIMI- 2026](https://techno-japan.media/festivals/otsukimi.html) — Healing Garden Takanami, Niigata
 - 2026-10-02〜2026-10-04: [Synapse Festival 2026](https://techno-japan.media/festivals/synapse-festival.html) — INN THE PARK FUKUOKA, Fukuoka
 - 2026-10-10〜2026-10-12: [Labyrinth 2026](https://techno-japan.media/festivals/labyrinth.html) — Minakami Hodaigi Camping Ground, Gunma
