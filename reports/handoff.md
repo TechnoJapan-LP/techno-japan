@@ -6060,3 +6060,20 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - 次の担当への注意: STATEMENT の文面を変えるときは、JA（about.html）と
   ABOUT_EN_TEXT（build-detail-pages.mjs）の**両方**を更新する。片方だけだと
   ビルドが止まる（意図した挙動）。
+
+## 2026-08-27 en/about.html の全文英語化（STATEMENT以外の8文）
+
+- 実施: 生成器の対訳 `ABOUT_EN_TEXT` に8組を追加（01 ABOUT 本文2段落 /
+  NEWSカード説明4本 / CONTACT 2文）。英訳はユーザー採用済みの文面。
+  これで en/about.html の**利用者に見える日本語は0件**になった。
+- コミット: 本エントリと同時。push 済み。
+- 検証: ビルド後の en/about を機械走査（可視テキストの日本語0件）/
+  実ブラウザで lang=en・01 ABOUT・CONTACT・submitリンクの英語表示を確認 /
+  JA 側は無変更 / preflight 全41件成功。
+  既存ガード（JA文が変わるとビルド停止）が新規8組にも同様に効く。
+- 変更したパターン: build-detail-pages.mjs の ABOUT_EN_TEXT のみ（+8組・計21組）。
+- 未確認の類似パターン: ページソース内のJSコメント1箇所は日本語のまま
+  （表示されないコードコメント。実害なし）。他の生成ENハブに日本語の説明文は無い
+  （EN_HUB_DESC で管理済み）。
+- 次の担当への注意: about の文面変更は JA と ABOUT_EN_TEXT の両方を更新
+  （片方だけならビルドが止まる）。

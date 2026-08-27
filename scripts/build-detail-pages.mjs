@@ -1790,6 +1790,22 @@ const ABOUT_EN_TEXT = [
   ['私たちが目指すのは、人、場所、音楽をつなぐ、シーンの接続点となるフラットなメディアです。',
    'What we aim to be is a flat, open media, a point of contact connecting people, places, and music.'],
   ['Techno Japanは、この姿勢で届けていきます。', 'This is how Techno Japan will keep delivering.'],
+  // ---- STATEMENT 以外の about 全文（2026-08-27 ユーザー採用） ----
+  ['Techno Japanは、日本のアンダーグラウンドなテクノ/ハウスシーンを扱うカルチャーメディアです。イベント情報の羅列にとどまらず、アーティスト、会場、フェスティバル、クラブカルチャーを、編集的な視点とシーンへの理解をもって紹介します。',
+   "Techno Japan is a culture media covering Japan's underground techno and house scene. More than a listing of events, we present artists, venues, festivals and club culture with an editorial eye and a real understanding of the scene."],
+  ['国内外の読者に向けて、日本のアンダーグラウンドをより見えやすく、より意味のあるものにすること。それが私たちの存在理由です。',
+   "To make Japan's underground more visible, and more meaningful, for readers at home and abroad. That is why we exist."],
+  ['日本のアンダーグラウンドシーンの最新記事、インタビュー、特集など。',
+   "The latest stories, interviews and features from Japan's underground scene."],
+  ['オープンエアのギャザリング、レイヴ、そして日本を代表する野外電子音楽フェスティバル。',
+   "Open-air gatherings, raves, and Japan's defining outdoor electronic music festivals."],
+  ['新しい才能から、確かなセレクターまで。日本のサウンドを形づくるアーティスト達。',
+   "From emerging talent to trusted selectors. The artists shaping Japan's sound."],
+  ['日本のアンダーグラウンドなナイトクラブやミュージックバー、そしてユニークな空間。',
+   "Japan's underground nightclubs, music bars and singular spaces."],
+  ['コラボレーション、取材・掲載のご相談、広告掲載、その他のお問い合わせはこちらから。',
+   'For collaborations, press and listing inquiries, advertising, and anything else — reach us here.'],
+  ['フェスティバルの掲載申請はこちら →', 'Submit your festival here →'],
 ];
 
 function enHubFromJa(html, page) {
