@@ -6077,3 +6077,35 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
   （EN_HUB_DESC で管理済み）。
 - 次の担当への注意: about の文面変更は JA と ABOUT_EN_TEXT の両方を更新
   （片方だけならビルドが止まる）。
+
+## 2026-08-27 Search Console確認とイベント構造化データのエラー修正
+
+- 実施: テーマ1公開の1〜2日後確認として Search Console を閲覧（Chrome・
+  プロパティ https://techno-japan.media/・最終更新 2026/08/25）。
+  - **パンくずリスト: エラー0・有効55件** ✅（8/25に約40→55へ増加。取り込み進行中）
+  - **「記事」レポートは未出現**（新規Articleマークアップの処理待ち。正常）
+  - **イベント: 無効14件**（location なし14 / startDate なし14・同一ページ群）を発見し修正
+- エラーの正体（実測で特定）:
+  - 初検出 2026/08/02 = **テーマ1以前からの既存問題**
+  - 対象はフェス詳細の**親 Festival ノード**。日付・会場は開催回(subEvent)にだけ
+    書く設計で、親ノードが「日付なしEvent」として無効判定されていた
+    （subEvent側は有効12件と別勘定）。開催回を持つフェスも親は同罪で、
+    **クロールが進めば全フェス(192ノード)に広がる**状態だった
+- 修正: 親ノードに startDate / endDate / location / eventAttendanceMode を追加。
+  値は最新開催回（editions[0]）から、開催回が無いフェス（rave系等）は
+  FESTIVALS の date（範囲形式を分解）/ location / address / lat / lng から。
+  どちらも無ければ従来どおり出さない（嘘の値は書かない）。
+- コミット: 本エントリと同時。push 済み。
+- 検証:
+  - 全192親ノード（JA/EN×96）で日付+会場あり・欠落0を機械走査
+  - editions無しの forest-sound-camp: JA=おおばキャンプ村 / EN=Ooba Camp Village
+    と localizedValue が効いている
+  - preflight 全41件成功
+  - push後: リッチリザルトテスト（本番URL）と SC の「修正を検証」実行（下記）
+- 未確認の類似パターン:
+  - イベントの警告側（offers 25 / performer 20 / eventStatus 18 / endDate 14 /
+    image 11 / description 11）は任意項目。親ノードへの追加で一部は減る見込みだが
+    全解消はしない（subEvent の offers/image 等は EDITIONS データ依存）
+  - SC「修正を検証」の結果は数日〜2週間後。**要フォローアップ**
+- 次の担当への注意: 親 Festival ノードの日付は「最新開催回」由来。開催回を
+  追加・更新すれば自動で追従する。SCの検証結果が失敗で戻ったらこのエントリから調査。

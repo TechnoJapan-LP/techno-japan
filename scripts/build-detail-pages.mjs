@@ -1431,6 +1431,44 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
   const sameAs = [f.url, f.instagram]
     .map((value) => String(value || '').trim())
     .filter((value, index, values) => value && values.indexOf(value) === index);
+  /* 親の Festival ノードにも startDate / location を持たせる。
+
+     日付・会場は開催回（subEvent）にだけ書く設計だったが、Google は
+     親ノードを独立した Event アイテムとして評価するため、親が
+     「startDate なし / location なし」の**無効アイテム**として
+     Search Console に積まれていた（2026-08-27 実測: 無効14件。
+     subEvent 側は有効12件と別勘定。クロールが進めば全フェスに広がる）。
+
+     値は開催回があれば最新回（editions[0]）から、無ければ FESTIVALS の
+     date（"開始/終了" の範囲形式）と location / address / lat / lng から取る。
+     どちらも無いフェスは従来どおり出さない（嘘の値は書かない）。 */
+  const parentDates = (() => {
+    if (currentEdition) {
+      return {
+        ...(ISO_DATE.test(String(currentEdition.DATE_START || '')) ? { startDate: currentEdition.DATE_START } : {}),
+        ...(ISO_DATE.test(String(currentEdition.DATE_END || '')) ? { endDate: currentEdition.DATE_END } : {}),
+      };
+    }
+    const [ds, de] = String(f.date || '').split('/');
+    return {
+      ...(ISO_DATE.test(String(ds || '')) ? { startDate: ds } : {}),
+      ...(ISO_DATE.test(String(de || '')) ? { endDate: de } : {}),
+    };
+  })();
+  const parentLocation = currentEdition
+    ? editionLocationLd(currentEdition, lang)
+    : ((f.location || f.city) ? {
+        '@type': 'Place',
+        name: localizedValue(f.location, f.location_ja, '', lang) || f.city || 'Japan',
+        address: {
+          '@type': 'PostalAddress',
+          addressRegion: f.city || '',
+          addressCountry: 'JP',
+          ...(f.address ? { streetAddress: f.address } : {}),
+        },
+        ...(f.lat && f.lng ? { geo: { '@type': 'GeoCoordinates', latitude: f.lat, longitude: f.lng } } : {}),
+      } : null);
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Festival',
@@ -1440,6 +1478,9 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
     inLanguage: lang,
     image: [image],
     url: canonical,
+    ...parentDates,
+    ...(parentLocation ? { location: parentLocation } : {}),
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
     ...(sameAs.length ? { sameAs } : {}),
     ...(performers.length ? { performer: performers } : {}),
     ...(editions.length ? { subEvent: editions.map((ed) => ({
