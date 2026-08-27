@@ -4207,6 +4207,54 @@ function editRow(section, rowNum){
 function gasWriteSucceeded(result){
   return !!result && (result.status==='ok' || result.status==='success' || result.success===true);
 }
+/* 開催回1つぶんの LINEUPS を「既存行の上書き＋余り行の空白化＋不足分の追記」で同期する。
+
+   ■ なぜこの形か（LINEUPS 重複事故・2026-08-27）
+
+   以前は「新規扱いの開催回はラインナップ全行を末尾へ追記」だった。
+   EDITIONS は §9-58 で ID upsert になったのに LINEUPS は追記のままで、
+   さらに保存成功後も e._row が付かず**同じ画面での再保存が毎回「新規」扱い**
+   だったため、保存のたびに全ラインナップが末尾へ積み上がった
+   （mutek-2025 は同一アーティストが5行 = 5回保存。余分192行）。
+
+   ・行の削除はしない。delete_row は以降の行番号を全てずらし、
+     画面が覚えている _row を無効にする（別の事故になる）。余りは空白化する
+   ・ARTIST_ID は ACT_LABEL が変わっていない行だけ引き継ぐ。
+     並び替えで別人の ID が付く事故を防ぐ
+   ・書いた行はセッション内の台帳（lineupSheetRows）へ反映する。
+     同じ画面でもう一度保存しても増殖しない
+   ・既存行に重複が積まれていた場合も、この同期が余り行を空白化するので
+     **保存するだけで自然に掃除される** */
+function syncLineupRowsForEdition(eid, labels, existingRows, requests){
+  const rows=[...(existingRows||[])]
+    .filter(lr=>Number.isInteger(Number(lr._row))&&Number(lr._row)>=2)
+    .sort((a,b)=>Number(a._row)-Number(b._row));
+  const clean=(labels||[]).map(s=>String(s||'').trim()).filter(Boolean);
+  const written=[];
+  const count=Math.max(rows.length, clean.length);
+  for(let i=0;i<count;i++){
+    const label=clean[i]||'';
+    if(i<rows.length){
+      const lr=rows[i];
+      const rowNumber=Number(lr._row);
+      if(label){
+        const keepId=String(lr.ACT_LABEL||'').trim()===label?(lr.ARTIST_ID||''):'';
+        const base={...lr}; delete base._row;
+        requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'update_row',sheet:'LINEUPS',row:rowNumber,...base,EDITION_ID:eid,ACT_LABEL:label,ARTIST_ID:keepId,SORT:String(i+1)})}).then(r=>r.json()));
+        written.push({_row:rowNumber,EDITION_ID:eid,ACT_LABEL:label,ARTIST_ID:keepId,SET_TYPE:lr.SET_TYPE||'dj',SORT:String(i+1)});
+      } else {
+        requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'update_row',sheet:'LINEUPS',row:rowNumber,EDITION_ID:'',ARTIST_ID:'',ACT_LABEL:'',SET_TYPE:'',STAGE:'',DAY:'',START:'',END:'',SORT:''})}).then(r=>r.json()));
+      }
+    } else {
+      const rowNumber=++lineupSheetMaxRow;
+      requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'update_row',sheet:'LINEUPS',row:rowNumber,EDITION_ID:eid,ARTIST_ID:'',ACT_LABEL:label,SET_TYPE:'dj',STAGE:'',DAY:'',START:'',END:'',SORT:String(i+1)})}).then(r=>r.json()));
+      written.push({_row:rowNumber,EDITION_ID:eid,ACT_LABEL:label,ARTIST_ID:'',SET_TYPE:'dj',SORT:String(i+1)});
+    }
+  }
+  lineupSheetRows=lineupSheetRows.filter(x=>String(x.EDITION_ID||'').trim()!==String(eid).trim()).concat(written);
+  return written;
+}
+
 function syncExistingEditionRows(festivalId, sourceEditions=editions){
   const rows=sourceEditions.filter(e=>e._row&&e._editionId);
   if(!rows.length) return Promise.resolve();
@@ -4221,13 +4269,13 @@ function syncExistingEditionRows(festivalId, sourceEditions=editions){
       EDITION_ID:e._editionId,FESTIVAL_ID:festivalId,EDITION:e.year||'',DATE_START:parts[0]||'',DATE_END:parts[1]||parts[0]||'',
       LOCATION:e.location||'',LOCATION_JA:e.location_ja||'',PREF:e.pref||(e._sheetRow||{}).PREF||'',ADDRESS:e.address||'',LAT:e.lat||'',LNG:e.lng||'',
       TICKETURL:e.ticketUrl||'',FLYER:e.flyer||'',STATUS:e.status||''})}).then(r=>r.json()));
-    (e._lineupRows||[]).forEach((lr,i)=>{
-      const baseLine={...lr}; delete baseLine._row;
-      const label=(e.lineup||[])[i]||'';
+    (e._lineupRows||[]).forEach(lr=>{
       const lineupRowNumber=Number(lr._row);
       if(!Number.isInteger(lineupRowNumber)||lineupRowNumber<2) throw new Error('LINEUPSの行番号が不正です: '+lr._row);
-      requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'update_row',sheet:'LINEUPS',row:lineupRowNumber,...baseLine,EDITION_ID:e._editionId,ACT_LABEL:label,ARTIST_ID:lr.ARTIST_ID||''})}).then(r=>r.json()));
     });
+    /* 以前は「行数が同じ」前提の1:1上書きだった。アーティストを追加すると
+       黙って消え、削除すると古い行が残った。増減両対応の同期に置き換える。 */
+    e._lineupRows=syncLineupRowsForEdition(e._editionId, e.lineup, e._lineupRows, requests);
   });
   return Promise.all(requests).then(results=>{
     const failed=results.filter(r=>!gasWriteSucceeded(r));
@@ -4242,7 +4290,6 @@ function syncNewEditionRows(festivalId, sourceEditions=editions){
   if(!editionSheetLoaded) return Promise.reject(new Error(editionSheetLoadError || 'EDITIONSシートが未読込'));
   const requests=[];
   let nextEditionRow=editionSheetMaxRow+1;
-  let nextLineupRow=lineupSheetMaxRow+1;
   const usedRows=new Set();
   const pendingIds=rows.map(e=>festivalId+'-'+String(e.year).trim());
   const duplicateId=pendingIds.find((id,i)=>pendingIds.indexOf(id)!==i);
@@ -4267,12 +4314,21 @@ function syncNewEditionRows(festivalId, sourceEditions=editions){
     // GASの既存 update_row は指定行が末尾の次でも追記できるため、
     // 新規専用ハンドラを要求せず同じ認証・ヘッダー写像を使う。
     requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'update_row',sheet:'EDITIONS',row:targetRow,EDITION_ID:eid,FESTIVAL_ID:festivalId,EDITION:e.year,DATE_START:parts[0]||'',DATE_END:parts[1]||parts[0]||'',LOCATION:e.location||'',LOCATION_JA:e.location_ja||'',VENUE_ID:e.venueId||'',PREF:e.pref||festivalPrefFallback(),ADDRESS:e.address||'',LAT:e.lat||'',LNG:e.lng||'',TICKETURL:e.ticketUrl||'',FLYER:e.flyer||'',STATUS:e.status||''})}).then(r=>r.json()));
-    (e.lineup||[]).forEach((label,i)=>requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'update_row',sheet:'LINEUPS',row:nextLineupRow++,EDITION_ID:eid,ARTIST_ID:'',ACT_LABEL:label,SET_TYPE:'dj',STAGE:'',DAY:'',START:'',END:'',SORT:String(i+1)})}).then(r=>r.json())));
+    /* LINEUPS も EDITIONS と同じく upsert。以前はここが無条件の末尾追記で、
+       保存のたびに全ラインナップが積み上がった（重複事故の本体）。
+       この開催回の既存行はセッション台帳（lineupSheetRows）から引く。
+       真に新規なら空配列 = 全行追記になる。 */
+    e._lineupRows=syncLineupRowsForEdition(eid, e.lineup,
+      lineupSheetRows.filter(x=>String(x.EDITION_ID||'').trim()===eid), requests);
+    /* 保存後は「既存の開催回」として扱う。これが無かったため、同じ画面での
+       再保存が毎回「新規」扱いになり、追記が繰り返された。 */
+    e._row=targetRow;
+    e._editionId=eid;
   });
   /* 追記した分だけ末尾を進める。進めないと、同じ画面でもう一度保存したときに
-     同じ行番号を再利用して直前に足した開催回を上書きする。 */
+     同じ行番号を再利用して直前に足した開催回を上書きする。
+     （LINEUPS 側は syncLineupRowsForEdition が lineupSheetMaxRow を直接進める） */
   editionSheetMaxRow=Math.max(editionSheetMaxRow, nextEditionRow-1);
-  lineupSheetMaxRow=Math.max(lineupSheetMaxRow, nextLineupRow-1);
   // 今回書いた行を対応表へ入れる。同じ画面で2回保存しても重複しない。
   rows.forEach(e=>{
     const eid=festivalId+'-'+String(e.year).trim();

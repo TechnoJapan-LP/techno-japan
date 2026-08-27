@@ -498,6 +498,36 @@ async function main() {
     process.exit(1);
   }
 
+  /* LINEUPS の完全重複行を除去する（2026-08-27）。
+
+     CMS の保存が「新規扱いの開催回のラインナップを毎回末尾追記」していたため、
+     同一アーティストが最大5重に積まれていた（mutek-2025 ほか余分192行）。
+     CMS 側は upsert に修正済みだが、シートに残る既存の重複と、
+     万一の再発が**本番の出演者一覧にそのまま出る**のをここで最終遮断する。
+
+     キーは全列一致（SORT 含む）。追記事故のコピーは SORT まで同一になる。
+     同じアーティストの正当な複数出演（別ステージ・別日・b2b）は
+     いずれかの列が異なるので消えない。何を落としたかは必ず警告に出す
+     （黙って直さない）。 */
+  {
+    const seenLineup = new Set();
+    const deduped = [];
+    for (const l of lineups) {
+      const key = [l.EDITION_ID, l.ARTIST_ID, l.ACT_LABEL, l.SET_TYPE, l.STAGE || '', l.DAY || '', l.START || '', l.END || '', l.SORT].join('\u0000');
+      if (seenLineup.has(key)) {
+        warnings.push(`LINEUPS ${l.EDITION_ID}: 完全重複行を除去 "${l.ARTIST_ID || l.ACT_LABEL}"（SORT ${l.SORT}）`);
+        continue;
+      }
+      seenLineup.add(key);
+      deduped.push(l);
+    }
+    if (deduped.length !== lineups.length) {
+      console.log(`  [重複除去] LINEUPS ${lineups.length} → ${deduped.length} 行（${lineups.length - deduped.length} 行の完全重複を落とした）`);
+    }
+    lineups.length = 0;
+    lineups.push(...deduped);
+  }
+
   if (DRY) { console.log('\n--dry: JSON書き出しスキップ（レポートのみ）'); return; }
 
   await mkdir(OUT_DIR, { recursive: true });
