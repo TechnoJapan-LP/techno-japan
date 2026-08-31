@@ -111,6 +111,25 @@ export function decide({ runs, nowMs, stuckMinutes = DEFAULT_STUCK_MINUTES, head
   return { stuck, redispatch, alarm, pagesSurvivors };
 }
 
+/**
+ * キャンセル失敗の扱いを決める純粋な関数（§9-98）。
+ *
+ *   'transient' … GitHub 側の一時障害（5xx）。次回の実行に任せて保留する
+ *   'phantom'   … 「まだ順番待ちに入っていない」(409)。GitHub 内部で壊れた
+ *                 ゾンビ run で、cancel / force-cancel の両方が永久に断られる。
+ *                 実測では後続のデプロイを塞がない（2026-08-19 の1件が
+ *                 12日間残る間、デプロイは全件成功していた）。保留する
+ *   'hard'      … それ以外（403 権限不足など）。本当に外せていないので
+ *                 失敗として報告する
+ *
+ * @param {string} detail cancel と force-cancel 両方のエラーメッセージ連結
+ */
+export function classifyCancelFailure(detail) {
+  if (/HTTP (500|502|503|504)/.test(detail)) return 'transient';
+  if (/has not been queued yet/.test(detail)) return 'phantom';
+  return 'hard';
+}
+
 /* ---------------------------------------------------------------- 実行部 */
 
 function gh(args) {
@@ -190,26 +209,29 @@ function main() {
     return;
   }
 
-  let transientCancelFailures = 0;
+  let cancelledCount = 0;
   let hardCancelFailures = 0;
   for (const r of stuck) {
     try {
       gh(['api', '-X', 'POST', `repos/${repo}/actions/runs/${r.id}/cancel`]);
+      cancelledCount++;
       console.log(`  外しました: ${r.id}`);
     } catch (e) {
       // 通常のキャンセルに応じない run 用の強制停止。
       try {
         gh(['api', '-X', 'POST', `repos/${repo}/actions/runs/${r.id}/force-cancel`]);
+        cancelledCount++;
         console.log(`  強制的に外しました: ${r.id}`);
       } catch (e2) {
-        const detail = `${e.message}\n${e2.message}`;
-        if (/HTTP (500|502|503|504)/.test(detail)) {
-          // GitHub 側に残った孤立 queued run では、cancel/force-cancel の
-          // 両方が 5xx になることがある。見張り番自身を赤くしても復旧せず、
-          // 15分ごとの通知だけが増えるため、Summary に警告を残して継続する。
-          transientCancelFailures++;
+        // 見張り番自身を赤くしても復旧せず、15分ごとの通知だけが増える
+        // 種類の失敗（5xx / 消せないゾンビ）は、警告を残して保留する。
+        const kind = classifyCancelFailure(`${e.message}\n${e2.message}`);
+        if (kind === 'transient') {
           console.log(`  GitHub側で保持中（5xx）のため保留: ${r.id}`);
           console.log(`  ::warning::queued run ${r.id} は GitHub API の 5xx によりキャンセルできません`);
+        } else if (kind === 'phantom') {
+          console.log(`  消せないゾンビ（409: not been queued yet）のため保留: ${r.id}`);
+          console.log(`  ::warning::run ${r.id} は GitHub 内部で壊れており API から消せません（§9-98）。後続は塞ぎません`);
         } else {
           hardCancelFailures++;
           console.log(`  外せませんでした: ${r.id} — ${e2.message.split('\n')[0]}`);
@@ -218,12 +240,15 @@ function main() {
     }
   }
 
-  if (stuck.length && transientCancelFailures === stuck.length && hardCancelFailures === 0) {
+  if (stuck.length && cancelledCount === 0 && hardCancelFailures === 0) {
+    // 1件も外せていないが、すべて GitHub 側の事情（5xx / ゾンビ）。
+    // 何も変わっていないので、デプロイの蹴り直しも警報もせずに終える。
     const summary = process.env.GITHUB_STEP_SUMMARY;
     if (summary) {
       fs.appendFileSync(summary,
         `### queued run は GitHub 側で保持中\n\n` +
-        `キャンセル API が 5xx のため、対象を保留しました。GitHub 側の状態が戻れば次回確認します。\n`);
+        `キャンセル API が 5xx または 409（消せないゾンビ）のため、対象を保留しました。\n` +
+        `GitHub 側の状態が戻れば次回確認します。詳細は AUDIT §9-98。\n`);
     }
     return;
   }

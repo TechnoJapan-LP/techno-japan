@@ -17,7 +17,7 @@
  *   node scripts/check_unstick_queue.mjs
  */
 
-import { decide, DEFAULT_STUCK_MINUTES } from './unstick_ci_queue.mjs';
+import { decide, classifyCancelFailure, DEFAULT_STUCK_MINUTES } from './unstick_ci_queue.mjs';
 
 const NOW = Date.parse('2026-08-09T05:00:00Z');
 const minsAgo = (m) => new Date(NOW - m * 60000).toISOString();
@@ -117,6 +117,32 @@ function check(name, cond, detail = '') {
   ];
   const d = decide({ runs: normal, nowMs: NOW, headSha: 'a' });
   check('何もしない', d.stuck.length === 0 && d.redispatch === false && d.alarm === '');
+}
+
+/* --- 5. キャンセル失敗の扱い（§9-98） ------------------------------------ */
+{
+  console.log('\nキャンセル失敗の扱い');
+
+  // 実際に起きた事故（2026-08-31）: 2026-08-19 の run が GitHub 内部で壊れ、
+  // cancel / force-cancel の両方が 409 で断られ続けた。
+  const zombie409 =
+    'Command failed: gh api -X POST repos/x/y/actions/runs/32219284839/cancel\n' +
+    'gh: Cannot cancel a workflow run that has not been queued yet. (HTTP 409)\n' +
+    'Command failed: gh api -X POST repos/x/y/actions/runs/32219284839/force-cancel\n' +
+    'gh: Cannot cancel a workflow run that has not been queued yet. (HTTP 409)';
+  check('消せないゾンビ（409 not been queued yet）は保留',
+    classifyCancelFailure(zombie409) === 'phantom');
+
+  check('GitHub 側の一時障害（5xx）は保留',
+    classifyCancelFailure('Command failed: gh api ...\ngh: HTTP 502') === 'transient');
+
+  check('権限不足（403）は失敗として報告',
+    classifyCancelFailure('Command failed: gh api ...\ngh: HTTP 403') === 'hard');
+
+  // 完了済み run への 409 は「まだ queued でない」ではなく状態違いの別文言。
+  // 文言判定なので、通常の 409 まで保留に落とさないことを確かめる。
+  check('通常の 409（already completed 等）は失敗として報告',
+    classifyCancelFailure('gh: Cannot cancel a workflow run that is completed. (HTTP 409)') === 'hard');
 }
 
 console.log();
