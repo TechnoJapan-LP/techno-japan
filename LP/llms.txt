@@ -4,12 +4,8 @@
 > アーティスト106名・会場22件・記事5本を日英で掲載し、
 > 開催日・場所・出演者を構造化データ（schema.org）付きで公開している。
 
-## 今後の開催予定（19件）
+## 今後の開催予定（15件）
 
-- 2026-09-05〜2026-09-06: [fabulous -endless summer SP- 2026](https://techno-japan.media/festivals/fabulous.html) — TAKE SEA
-- 2026-09-05〜2026-09-06: [FOREST SOUND CAMP 2026](https://techno-japan.media/festivals/forest-sound-camp.html) — Ooba Camp Village
-- 2026-09-05〜2026-09-06: [ONE PARK FESTIVAL 2026](https://techno-japan.media/festivals/one-park-festival.html), Fukui
-- 2026-09-06: [BIG FUN 2026](https://techno-japan.media/festivals/big-fun.html) — Hakkenzan Orchard, Hokkaido
 - 2026-09-11〜2026-09-13: [Re:birth Festival 2026](https://techno-japan.media/festivals/re-birth-festival.html) — Kodamanomori Camping Ground, Nagano
 - 2026-09-19〜2026-09-20: [Ultra Japan 2026](https://techno-japan.media/festivals/ultra-japan.html), Tokyo
 - 2026-09-20〜2026-09-22: [COLORS Presents SOUNDCAMP 2026](https://techno-japan.media/festivals/colors-presents-soundcamp.html) — Secret Location, Hokkaido

@@ -1,55 +1,8 @@
 {
   "source": "https://techno-japan.media/",
   "license": "データの出典として techno-japan.media へのリンクを求めます",
-  "count": 19,
+  "count": 15,
   "events": [
-    {
-      "name": "fabulous -endless summer SP- 2026",
-      "url": "https://techno-japan.media/festivals/fabulous.html",
-      "start": "2026-09-05",
-      "end": "2026-09-06",
-      "venue": "TAKE SEA",
-      "lat": 35.5298,
-      "lng": 135.2106
-    },
-    {
-      "name": "FOREST SOUND CAMP 2026",
-      "url": "https://techno-japan.media/festivals/forest-sound-camp.html",
-      "start": "2026-09-05",
-      "end": "2026-09-06",
-      "venue": "Ooba Camp Village",
-      "lat": 35.7533,
-      "lng": 139.2081,
-      "genres": [
-        "TECHNO",
-        "HOUSE",
-        "MINIMAL"
-      ],
-      "tickets": "https://universal-music-box.zaiko.io/en/e/forest-sound-camp"
-    },
-    {
-      "name": "ONE PARK FESTIVAL 2026",
-      "url": "https://techno-japan.media/festivals/one-park-festival.html",
-      "start": "2026-09-05",
-      "end": "2026-09-06",
-      "pref": "Fukui",
-      "genres": [
-        "OTHERS"
-      ]
-    },
-    {
-      "name": "BIG FUN 2026",
-      "url": "https://techno-japan.media/festivals/big-fun.html",
-      "start": "2026-09-06",
-      "end": "2026-09-06",
-      "venue": "Hakkenzan Orchard",
-      "pref": "Hokkaido",
-      "lat": 42.9649,
-      "lng": 141.2215,
-      "genres": [
-        "HOUSE"
-      ]
-    },
     {
       "name": "Re:birth Festival 2026",
       "url": "https://techno-japan.media/festivals/re-birth-festival.html",
