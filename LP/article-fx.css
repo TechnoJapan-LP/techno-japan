@@ -74,6 +74,8 @@ figure.fx-img.fx-reveal.fx-on .fx-fig { opacity: 1; }
 figure.fx-img.fx-bleed { width: 100vw !important; max-width: none; margin-left: calc(50% - 50vw) !important; margin-right: calc(50% - 50vw); }
 figure.fx-img.fx-bleed .fx-fig { max-width: 760px; margin-left: auto; margin-right: auto; padding: 0 40px !important; }
 figure.fx-img.fx-bleed img { transform: scale(1.06); }
+/* ユーザーが拡大を指定した全幅は指定値を優先する */
+figure.fx-img.fx-bleed[data-zoom] img { transform: scale(var(--crop-zoom, 1.06)); }
 
 /* 全幅画像の上に細いカラムグリッド線（誌面のカラム分割を透かす・techno） */
 .fx-gridlines { position: absolute; inset: 0; pointer-events: none; opacity: 0; }

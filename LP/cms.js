@@ -1409,7 +1409,7 @@ function renderArticleFxPreview(root){
     img.loading = 'eager';
     const p = img.closest('p');
     const fig = document.createElement('figure');
-    fig.className = 'preview-fx-img ' + ({left:'preview-fx-left', right:'preview-fx-right', full:'preview-fx-full', compact:'preview-fx-compact'}[img.dataset.layout] || '');
+    fig.className = 'preview-fx-img ' + ({left:'preview-fx-left', right:'preview-fx-right', full:'preview-fx-full preview-fx-bleed', compact:'preview-fx-compact'}[img.dataset.layout] || '');
     if (img.dataset.crop && img.dataset.crop !== 'none') fig.dataset.crop = img.dataset.crop;
     if (img.dataset.pairId) fig.dataset.pairId = img.dataset.pairId;
     fig.style.setProperty('--crop-x', (img.dataset.x || '50') + '%');
@@ -1487,7 +1487,7 @@ function openArticleGeneratedPreview(){
   }
   const safeBody = String(previewBody).replace(/<script/gi, '&lt;script');
   win.document.open();
-  win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><link rel="stylesheet" href="/common.css?v=27"><link rel="stylesheet" href="/detail.css?v=30"><link rel="stylesheet" href="/article-fx.css?v=10"></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${title}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=6"><\/script></body></html>`);
+  win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><link rel="stylesheet" href="/common.css?v=27"><link rel="stylesheet" href="/detail.css?v=30"><link rel="stylesheet" href="/article-fx.css?v=11"></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${title}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=7"><\/script></body></html>`);
   win.document.close();
 }
 

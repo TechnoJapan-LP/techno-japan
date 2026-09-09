@@ -6398,3 +6398,59 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
   アーティスト表の渡し方（引数で注入）を設計してから触ること。
 - detail.css を変えるときは DETAIL_CSS_VERSION（定数）を上げて再ビルド。
   bump_asset_versions.py に任せると生成HTMLだけ上がって次のビルドで戻る。
+
+## 2026-09-10 BODY画像の「全幅」レイアウトが効かない問題を修正
+
+### 実施
+- 症状: BODYに画像をアップロード→トリミック後、「全幅」を選んでも変わらない。
+- 実測で確定した真因（headless Chrome / 1440px幅）:
+  1. article-fx.js のクラス割当が `contained` も `full` も **同じ fx-full**（幅1200px
+     上限）に落としていた。画面端までの本当の全幅 fx-bleed は、縦横比1.9以上の
+     画像への**自動判定でしか付かず**、選んで付ける手段が無かった。
+  2. その自動判定（classify）は data-layout / data-crop を指定していても
+     fx-bleed / fx-portrait を上書きする（width の !important 同士で後勝ち）。
+     縦長画像は全幅を選んでも fx-portrait の 520px に負けていた。
+  3. さらに fx-bleed の `scale(1.06)` がユーザー指定の拡大（--crop-zoom）を
+     上書きしていた（zoom=1.3 が 1.06 になるのを実測で確認）。
+- 修正（**設計=Claude、実装=Codex exec の新分業の初適用**。仕様書を渡して実装させ、
+  レビューと検証はClaude側で実施）:
+  - article-fx.js: `data-layout="full"` に fx-bleed を明示付与。classify は
+    明示指定（layout か crop）がある画像をスキップ。
+  - article-fx.css: `figure.fx-img.fx-bleed[data-zoom] img` で明示 zoom を優先。
+  - cms.js: プレビューの full → `preview-fx-full preview-fx-bleed`。
+  - cms.css: `.ar-prev-body .preview-fx-bleed`（パディング32pxを打ち消して端まで）。
+- 版: ARTICLE_FX_JS_VERSION 6→7 / ARTICLE_FX_CSS_VERSION 10→11（定数→再ビルド。
+  bump script の二重上げ（→8/12）は再ビルドで定数値に戻した。§9-58 の形）。
+  cms.css 35→36 / cms.js 103→104。cms.js 内の生成プレビュー文字列と
+  check_cms_article_generated_preview.mjs の期待値も 7/11 に追随。
+
+### コミット
+- このエントリと同一コミット。
+
+### 検証
+- headless 実測（本番と同じ article-detail 構造、修正後）:
+  full+crop16:10 → 1440px(100vw) / contained → 1200px / 指定なし横長2.5 →
+  従来どおり自動 fx-bleed / **縦長+full → 1440px**（fx-portrait に負けない）/
+  zoom1.3+full → scale 1.3（zoom未指定の自動bleedは従来どおり1.06）。
+- CMS右側プレビュー実測: full 指定が 589px（ペイン525px+はみ出し64px）、
+  contained は 525px で見分けがつく。
+- `bash scripts/preflight.sh`: 全41件成功。
+- 認証済み本番CMSでの実操作: **実機未確認**（トリミング・全幅・適用の一連操作は
+  headless では同経路を通しているが、本番では未操作）。
+
+### 変更したパターン
+- fx クラス割当 1箇所 / classify スキップ 1箇所 / zoom 優先CSS 1ルール /
+  プレビューのクラスマップ 1箇所 / プレビューCSS 1ルール / 版定数2つ+追随3箇所
+
+### 未確認の類似パターン
+- 2枚セット（pair）+ 全幅の組合せ: `.fx-image-pair figure.fx-img.fx-bleed` の既存
+  ルール（width:100%!important）があり、セット内では全幅が50%枠に収まる設計の
+  まま。意図的な既存仕様と判断して変更せず（確認済み・変更0件）
+- news.html の SPA 記事ビュー: article-fx.js を共有しているため同じ修正が効く
+  はず。個別の実測は未実施
+
+### 次の担当への注意・判断待ち
+- bump_asset_versions.py は「定数管理の生成物参照」（detail.css / article-fx.*）も
+  +1 してしまう。定数を上げて再ビルド→bump→**もう一度再ビルド**で定数値に戻す、
+  が現状の手順。2回続けて踏んだので、bump script 側で生成物参照を除外する改修を
+  検討する価値がある（未着手）。

@@ -65,7 +65,8 @@
         ? (requested === 'contained' ? 'fx-full' : 'fx-' + requested)
         : (figIndex % 3 === 1 ? 'fx-full' : (figIndex % 3 === 2 ? 'fx-right' : 'fx-left'));
       var compact = !requested && figIndex % 4 === 0 ? ' fx-compact' : '';
-      fig.className = 'fx-img ' + rhythm + compact;
+      // 全幅(full)は fx-bleed で画面端まで広げる
+      fig.className = 'fx-img ' + rhythm + compact + (requested === 'full' ? ' fx-bleed' : '');
       if (img.dataset.position) fig.dataset.position = img.dataset.position;
       if (img.dataset.crop && /^(16:10|4:3|1:1)$/.test(img.dataset.crop)) fig.dataset.crop = img.dataset.crop;
       if (img.dataset.zoom) fig.dataset.zoom = img.dataset.zoom;
@@ -94,6 +95,8 @@
       //   極端な横長(>=1.9) → fx-bleed（全幅・グリッドライン点灯）
       //   縦長(>1.15) → fx-portrait（高さ制限）
       var classify = function(){
+        // 明示指定があるときは自動判定しない（!important 同士で指定が負けるため）
+        if (requested || img.dataset.crop) return;
         if (!img.naturalWidth || !img.naturalHeight) return;
         if (img.naturalWidth >= img.naturalHeight * 1.9) fig.classList.add('fx-bleed');
         else if (img.naturalHeight > img.naturalWidth * 1.15) fig.classList.add('fx-portrait');
