@@ -427,13 +427,45 @@ body.ar-focus-open #ar-focus-preview{display:none !important}
 .ar-template-menu button:hover{background:var(--bg3)}
 .ar-editor-tabs{position:relative}
 
-/* ---------- 記事エディタ: フォント/サイズ選択の表示 ---------- */
-.ql-snow .ql-picker.ql-font .ql-picker-label::before,
-.ql-snow .ql-picker.ql-font .ql-picker-item::before{content:'DM SANS'}
-.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=bebas]::before,
-.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=bebas]::before{content:'BEBAS';font-family:'Bebas Neue',sans-serif}
-.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=mono]::before,
-.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=mono]::before{content:'MONO';font-family:'Space Mono',monospace}
+/* ---------- 記事エディタ: フォント選択の表示 ----------
+   「今どのフォントか」を3つの方法で見せる:
+   1. ツールバーのラベルがカーソル位置の書体名になる
+   2. 標準以外の書体の上にいる間はラベルが赤くなる
+   3. ドロップダウンは各候補をその書体で描画し、使用中の候補に ✓ を付ける */
+/* ⚠️ quill.snow.css は cms.css の後に読み込まれる（cms.html の <link> 順）。
+   同じ強さの `.ql-snow .ql-picker.ql-font …` では snow 側の 'Sans Serif' / 'Serif'
+   表記に負けるため、`.ar-editor-wrap > .ql-toolbar` を付けて強くしてある。
+   （実測: 従来は既定フォントが 'Sans Serif' と表示されていた） */
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-font{width:170px}
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-font .ql-picker-label::before,
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-font .ql-picker-item::before{content:'標準 (DM Sans)';font-family:var(--font-body)}
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-font .ql-picker-label[data-value=bebas]::before,
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-font .ql-picker-item[data-value=bebas]::before{content:'見出し風 (BEBAS)';font-family:'Bebas Neue',sans-serif}
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-font .ql-picker-label[data-value=mono]::before,
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-font .ql-picker-item[data-value=mono]::before{content:'等幅 (MONO)';font-family:'Space Mono',monospace}
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-font .ql-picker-label[data-value=serif]::before,
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-font .ql-picker-item[data-value=serif]::before{content:'明朝 (Serif)';font-family:Georgia,'Times New Roman',serif}
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-font .ql-picker-label[data-value=condensed]::before,
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-font .ql-picker-item[data-value=condensed]::before{content:'細身 (Condensed)';font-family:'Arial Narrow','Roboto Condensed',Arial,sans-serif}
+/* 標準以外の書体の上にカーソルがある間だけ赤くする。
+   ⚠️ 標準でもラベルに data-value="" が残る（実測）ので、[data-value] では常に赤くなる。
+   4書体を明示して指定すること。 */
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-font .ql-picker-label[data-value=bebas],
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-font .ql-picker-label[data-value=mono],
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-font .ql-picker-label[data-value=serif],
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-font .ql-picker-label[data-value=condensed]{color:var(--accent)}
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-font .ql-picker-label[data-value=bebas] .ql-stroke,
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-font .ql-picker-label[data-value=mono] .ql-stroke,
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-font .ql-picker-label[data-value=serif] .ql-stroke,
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-font .ql-picker-label[data-value=condensed] .ql-stroke{stroke:var(--accent)}
+/* ドロップダウンは snow 既定の白背景のままだと CMS のダーク配色で浮くので合わせる。
+   hover / selected は snow が `.ql-snow.ql-toolbar …` で #06c を当ててくるため、
+   `.ql-toolbar.ql-snow` を付けて上書きする */
+.ar-editor-wrap > .ql-toolbar .ql-picker-options{background:var(--bg2);border-color:var(--border)}
+.ar-editor-wrap > .ql-toolbar .ql-picker-item{color:var(--text2)}
+.ar-editor-wrap > .ql-toolbar.ql-snow .ql-picker-item:hover{color:var(--text)}
+.ar-editor-wrap > .ql-toolbar.ql-snow .ql-picker-item.ql-selected{color:var(--accent)}
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-font .ql-picker-item.ql-selected::after{content:'✓';margin-left:6px}
 #ar-body-editor .ql-font-bebas{font-family:'Bebas Neue',sans-serif;text-transform:uppercase;letter-spacing:.02em}
 #ar-body-editor .ql-font-mono{font-family:'Space Mono',monospace;font-size:.9em}
 
@@ -445,6 +477,10 @@ body.ar-focus-open #ar-focus-preview{display:none !important}
 .ar-prev-body .ql-align-right{text-align:right}
 .ar-prev-body .ql-font-bebas{font-family:'Bebas Neue',sans-serif;text-transform:uppercase;letter-spacing:.02em}
 .ar-prev-body .ql-font-mono{font-family:'Space Mono',monospace;font-size:.85em;letter-spacing:.05em}
+/* 本番（detail.css）は serif / condensed も描画する。プレビューにも同じ規則を置き、
+   「プレビューでは標準に見えるのに本番で書体が変わる」ずれを防ぐ */
+.ar-prev-body .ql-font-serif{font-family:Georgia,'Times New Roman',serif}
+.ar-prev-body .ql-font-condensed{font-family:'Arial Narrow','Roboto Condensed',Arial,sans-serif;letter-spacing:-.02em}
 .ar-prev-body .entity-link{color:var(--accent);border-bottom:1px dotted rgba(255,45,45,.5);text-decoration:none}
 
 /* ==========================================================
@@ -490,10 +526,6 @@ body.ar-focus-open #ar-focus-preview{display:none !important}
 #ar-body-editor .ql-editor a{ color:var(--accent); text-decoration:none; border-bottom:1px dotted rgba(255,45,45,.5); }
 #ar-body-editor .ql-font-serif{font-family:Georgia,'Times New Roman',serif}
 #ar-body-editor .ql-font-condensed{font-family:'Arial Narrow','Roboto Condensed',Arial,sans-serif;letter-spacing:-.02em}
-.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="serif"]::before,
-.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="serif"]::before{content:'Serif'}
-.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="condensed"]::before,
-.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="condensed"]::before{content:'Condensed'}
 
 /* ---------- プレビューを左右分割にして、押した瞬間に見えるようにする ---------- */
 @media (min-width: 1200px){

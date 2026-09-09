@@ -6280,3 +6280,60 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
   「chore: regenerate detail pages」自動コミットで同内容が入るため、コミット不要。
   邪魔なら `git checkout -- LP/` で破棄してよい。stash（preflight build side-effects）
   も同じ内容の pull 前版なので `git stash drop` してよい。
+
+## 2026-09-09 記事エディタのフォント選択を「今どの書体か分かる」表示にした
+
+### 実施
+- 依頼: 「ARTICLEのBODY入力でのフォント入力を分かりやすくしたい。
+  今使用しているフォントが何か分かりにくい」。
+- 実測で見つけた真因: **quill.snow.css が cms.css より後に読み込まれる**
+  （cms.html の link 順）ため、同じ強さの `.ql-snow .ql-picker.ql-font …` は
+  Quill 標準の表記に負けていた。既定フォントは「Sans Serif」、明朝は「Serif」と
+  表示され、cms.css に書いた「DM SANS」は一度も表示されていなかった。
+- LP/cms.css を修正（CSSのみ、JS変更なし）:
+  1. フォント選択の表記を「用途 + 書体名」の日本語に変更し、各候補をその書体
+     そのもので描画: 標準 (DM Sans) / 見出し風 (BEBAS) / 等幅 (MONO) /
+     明朝 (Serif) / 細身 (Condensed)。セレクタは `.ar-editor-wrap > .ql-toolbar`
+     を付けて snow より強くした。
+  2. 標準以外の書体の上にカーソルがある間、ツールバーのラベルを赤（--accent）に。
+     ※実測で、標準時もラベルに data-value="" が残ると判明したため、
+     `[data-value]` ではなく4書体を明示指定（空文字だと常時赤に誤点灯する）。
+  3. ドロップダウンで使用中の候補に ✓ を付け赤で表示（snow の #06c 青を
+     `.ql-toolbar.ql-snow` 付きセレクタで上書き）。背景もダーク配色に統一。
+  4. プレビュー（.ar-prev-body）に serif / condensed の描画規則を追加。
+     本番 detail.css にはあるのにプレビューに無く、「プレビューでは標準に
+     見えるのに本番で書体が変わる」ずれがあった。
+- cms.css の ?v を 33→34 に bump（bump_asset_versions.py）。
+
+### コミット
+- このエントリと同一コミット（LP/cms.css + LP/cms.html + handoff）。
+
+### 検証
+- headless Chrome での実測（check_cms_layout.mjs と同方式の使い捨てスクリプト、
+  1440px幅）: 既定ラベル「標準 (DM Sans)」・非赤 / bebas 適用でラベル追随+赤 /
+  serif 適用で「明朝 (Serif)」 / ラベルはピッカー幅170pxに収まる /
+  ドロップダウン5候補が各書体で描画・使用中に✓ / プレビューの serif=Georgia・
+  condensed=Arial Narrow を全件確認。スクリーンショットでも目視確認。
+- `bash scripts/preflight.sh`: 全41件成功（rebase 前のツリーで実行。rebase で
+  入ったのは日次の生成物コミットのみで cms.* に差分なし。push 時に pre-push
+  フックが同じ preflight を再実行する）。
+- 認証済み実機（本番 CMS）での操作: **実機未確認**（CSSのみの変更で、headless
+  実測は認証素通し方式。本番で ARTICLE を開きフォント選択を見れば1分で確認可）。
+
+### 変更したパターン
+- フォント選択の ::before ラベル定義: 5書体×label/item（cms.css 1ブロックに統合。
+  旧「DM SANS/BEBAS/MONO」ブロックと後方の serif/condensed 単独ブロックを削除）
+- 使用中書体のラベル赤ハイライト: 4書体明示×(color + .ql-stroke)
+- ドロップダウンのダーク配色 + ql-selected の✓: 5ルール
+- .ar-prev-body の ql-font-serif / ql-font-condensed: 2ルール
+
+### 未確認の類似パターン
+- ヘッダー/サイズ選択（Normal / small等）の表記は英語のまま（依頼はフォントのみ。
+  同じ snow 読み込み順の罠が当てはまるので、変える場合は同様に
+  `.ar-editor-wrap > .ql-toolbar` 付きで書くこと）
+- 記事詳細ページ本体の描画は無変更（detail.css は触っていない）。確認済み・0件
+
+### 次の担当への注意・判断待ち
+- cms.css で Quill の見た目を上書きするときは、quill.snow.css が後勝ちになる
+  読み込み順に注意。同じ強さのセレクタは静かに負ける（今回の真因）。
+- 標準書体のときもラベルに data-value="" が残る。[data-value] での判定は不可。
