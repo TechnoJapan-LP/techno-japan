@@ -162,14 +162,15 @@ window.addEventListener('load',()=>setTimeout(()=>{
   let generatedPreview='';
   const originalOpen=window.open;
   window.open=()=>({document:{open(){},write(value){generatedPreview=String(value)},close(){}}});
-  if (probeEditor) probeEditor.innerHTML='<p>[[event|Generated Preview Event|2030-01-01|Tokyo|https://example.com|Techno]]</p><p>[[calendar]]</p>';
+  if (probeEditor) probeEditor.innerHTML='<p>[[event|Generated Preview Event|2030-01-01|Tokyo|https://example.com|Probe Artist A;Probe Artist B|Techno]]</p><p>[[calendar]]</p>';
   openArticleGeneratedPreview();
   window.open=originalOpen;
   out.本番表示プレビュー={
     event:generatedPreview.includes('class="tj-event"'),
     calendar:generatedPreview.includes('class="tj-calendar"'),
+    lineup:generatedPreview.includes('class="tj-event-lineup"')&&generatedPreview.includes('Probe Artist A'),
     detailInner:generatedPreview.includes('class="article-detail-inner"'),
-    productionCss:generatedPreview.includes('/detail.css?v=29')
+    productionCss:generatedPreview.includes('/detail.css?v=30')
   };
   out.公開パネル = box(document.querySelector('#sec-article .pub-section'));
   out.パネルの親 = box(document.querySelector('#sec-article .pub-section')?.parentElement);
@@ -233,7 +234,7 @@ if(d.VENUES入力欄 && !d.VENUES入力欄.previewReopenKeepsValues) failures.pu
 if(d.イベントカード操作 && (d.イベントカード操作.officialLinkPointer!=='auto' || d.イベントカード操作.calendarLinkPointer!=='auto' || !d.イベントカード操作.hash変更なし || !d.イベントカード操作.cardHighlight)) failures.push('集中モードのイベントカード / カレンダーリンクを操作できない');
 if(d.集中モードからプレビュー表示 && (!d.集中モードからプレビュー表示.focus || !d.集中モードからプレビュー表示.preview || !d.集中モードからプレビュー表示.eventVisible)) failures.push('集中モード開始後にプレビューを表示できない');
 if(d.集中モードのイベント入力 && (!d.集中モードのイベント入力.visible || Number(d.集中モードのイベント入力.zIndex)<=2000 || !d.集中モードのイベント入力.boxVisible)) failures.push('集中モードのイベント入力ダイアログが前面に出ない');
-if(d.本番表示プレビュー && (!d.本番表示プレビュー.event || !d.本番表示プレビュー.calendar || !d.本番表示プレビュー.detailInner || !d.本番表示プレビュー.productionCss)) failures.push('本番表示プレビューにイベントカード / カレンダー / 本番CSSが反映されない');
+if(d.本番表示プレビュー && (!d.本番表示プレビュー.event || !d.本番表示プレビュー.calendar || !d.本番表示プレビュー.lineup || !d.本番表示プレビュー.detailInner || !d.本番表示プレビュー.productionCss)) failures.push('本番表示プレビューにイベントカード / カレンダー / 出演者 / 本番CSSが反映されない');
   if(failures.length){
   console.log('CMS のレイアウトに問題があります:');
   for(const f of failures) console.log('  ✗ '+f);

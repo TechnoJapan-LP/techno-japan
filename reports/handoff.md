@@ -6337,3 +6337,64 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - cms.css で Quill の見た目を上書きするときは、quill.snow.css が後勝ちになる
   読み込み順に注意。同じ強さのセレクタは静かに負ける（今回の真因）。
 - 標準書体のときもラベルに data-value="" が残る。[data-value] での判定は不可。
+
+## 2026-09-10 イベントカードに「出演者」欄を追加（案A / 補足は最後）
+
+### 実施
+- 依頼: イベントカードにアーティスト名の入力枠を追加。項目順は補足を最後に。
+- 短コードを `[[event|名前|日程|場所|URL|出演者|補足]]` に拡張（出演者=6番目、
+  `;` 区切り・任意）。**本番の [[event]] 使用は0件だったため旧5項目順との
+  互換処理は持たない**（grep で確認。docs/design/ARTICLE_EVENT_BLOCKS.md に明記）。
+- LP/article-shortcodes.js: parseEventFields に artists を追加。renderEvent が
+  LINEUP 行（`.tj-event-lineup`、各名に schema.org performer の microdata 付き）を
+  場所の下・OFFICIAL の上に描画。出演者が空なら行ごと出さない。名前はエスケープ済み。
+- LP/cms.js: イベントカードのダイアログに「出演者（任意 / ; 区切り）」欄を
+  公式URLと補足の間に追加。短コード組み立て順を変更。`|` 禁止チェックに出演者を追加。
+  🗺フェスまとめテンプレのサンプルも新形式に。
+- scripts/build-detail-pages.mjs: 記事の Event JSON-LD に
+  `performer: [{@type:Person, name}]` を追加。DETAIL_CSS_VERSION 29→30。
+- LP/detail.css / LP/cms.css: `.tj-event-lineup`（ラベルは mono 大文字、名は本文書体）を
+  本番とプレビューの両方に追加。
+- 版: cms.css 34→35 / cms.js 102→103 / article-shortcodes.js 2→3（bump script）、
+  detail.css は定数経由で 30（bump script が二重に31へ上げたため再ビルドで30に統一。
+  生成HTMLを直接 bump すると次のビルドで戻る §9-58 の形なので注意）。
+- scripts/check_cms_article_generated_preview.mjs の `article-shortcodes.js?v=2`
+  べた書きが bump で落ちたため、版に依存しない正規表現に修正。
+
+### コミット
+- このエントリと同一コミット（LP 4ファイル + scripts 4本 + docs + 生成物469ページ + handoff）。
+
+### 検証
+- `node scripts/check_article_shortcodes.mjs`: 15 assertions 成功
+  （出演者の解析 / LINEUP 描画 / performer microdata / 空なら非表示 / HTMLエスケープ）
+- headless Chrome 実測（1440px、認証素通し方式）: ダイアログ入力→「本文に挿入」→
+  短コードが新順で入る→プレビューに `LINEUP DJ NOBU · WATA IGARASHI` が
+  mono大文字ラベル付きで表示、performer 2件、補足は場所の行の末尾。
+  スクリーンショット目視も実施。
+- `bash scripts/preflight.sh`: 全41件成功（check_cms_layout.mjs の本番表示プレビューに
+  lineup 検証を追加済み）
+- 認証済み本番CMSでの実操作・Publish Now: **実機未確認**。ただし今回の cms.js 差分は
+  イベントカードのダイアログとテンプレ文字列のみで、Publish 経路の関数
+  （publishDataJs / fetchAllSheets / buildFullDataJs / publishSanityCheck /
+  canonicalizeRows）には触れていない（git diff で確認済み）。
+
+### 変更したパターン
+- 短コードの項目追加: parse 1箇所 / render 1箇所 / CMS ダイアログ1箇所 /
+  テンプレのサンプル1箇所 / JSON-LD 1箇所
+- 検査の追随: check_article_shortcodes.mjs（テスト入力を新形式に）、
+  check_cms_layout.mjs（プローブ文字列 + lineup 判定 + detail.css?v=30）、
+  check_cms_article_generated_preview.mjs（v=30 + 版非依存化）
+- ドキュメント: ARTICLE_EVENT_BLOCKS.md の書式表・例4箇所
+
+### 未確認の類似パターン
+- カレンダー（[[calendar]]）の行に出演者は出していない（意図的。カード側のみ）
+- Instagram_Post_Templates.md 等の writing ガイドに [[event]] の記載なし（確認済み・0件）
+- check_asset_versions.py の localize.js v=7/8 警告は本変更前から存在（origin/main の
+  クリーンツリーで再現確認済み。今回は触っていない）
+
+### 次の担当への注意・判断待ち
+- 次段の案B（出演者を ARTISTS と突合して /artists/ へリンク）を行う場合、
+  article-shortcodes.js は Node ビルドとブラウザ CMS の共用モジュールなので、
+  アーティスト表の渡し方（引数で注入）を設計してから触ること。
+- detail.css を変えるときは DETAIL_CSS_VERSION（定数）を上げて再ビルド。
+  bump_asset_versions.py に任せると生成HTMLだけ上がって次のビルドで戻る。

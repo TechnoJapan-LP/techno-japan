@@ -17,8 +17,11 @@
 ### 書式（本文中、1行）
 
 ```
-[[event|名前|日程|場所|公式URL|補足]]
+[[event|名前|日程|場所|公式URL|出演者|補足]]
 ```
+
+（2026-09-10 に「出演者」を6番目へ追加。補足は最後。当時 `[[event]]` の
+本番使用は0件だったため、旧5項目順との互換処理は持たない）
 
 | 位置 | 項目 | 必須 | 形式 | 例 |
 |---|---|---|---|---|
@@ -26,11 +29,12 @@
 | 2 | 日程 | ◯ | `YYYY-MM-DD` または `YYYY-MM-DD〜YYYY-MM-DD`。未定は `TBA 2027-03`（月まで） | `2026-12-28〜2027-01-08` |
 | 3 | 場所 | ◯ | `都市, 国` | `Phu Quoc, Vietnam` |
 | 4 | 公式URL | △ | `https://` から | `https://epizode.com` |
-| 5 | 補足 | △ | ジャンル・一言。`;` 区切り可 | `Techno;House;11日間` |
+| 5 | 出演者 | △ | `;` 区切り。カードに LINEUP 行として表示、JSON-LD の `performer` にも出る | `DJ NOBU;WATA IGARASHI` |
+| 6 | 補足 | △ | ジャンル・一言。`;` 区切り可 | `Techno;House;11日間` |
 
 例:
 ```
-[[event|Wonderfruit|2026-12-10〜2026-12-14|Pattaya, Thailand|https://wonderfruit.co|Art;Music]]
+[[event|Wonderfruit|2026-12-10〜2026-12-14|Pattaya, Thailand|https://wonderfruit.co|DJ NOBU;WATA IGARASHI|Art;Music]]
 ```
 
 `|` を含む名前は使えない（現状の `[[festival:id|表示名]]` と同じ制約）。
@@ -125,7 +129,7 @@
 [リード — 地域・シーズン・このまとめの視点を2〜3文]
 [[calendar]]
 <h2>[国・地域名]</h2>
-[[event|名前|YYYY-MM-DD〜YYYY-MM-DD|都市, 国|https://|ジャンル]]
+[[event|名前|YYYY-MM-DD〜YYYY-MM-DD|都市, 国|https://|出演者|ジャンル]]
 [紹介文 — なぜ行く価値があるか 2〜4文]
 （以下繰り返し）
 ```

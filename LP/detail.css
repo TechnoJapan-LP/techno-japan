@@ -80,6 +80,16 @@
   font-family: var(--font-body); font-size: 14px; line-height: 1.5;
   color: var(--text); opacity: .7;
 }
+.article-body .tj-event-lineup {
+  margin: 0 0 8px;
+  font-family: var(--font-body); font-size: 14px; line-height: 1.6;
+  color: var(--text);
+}
+.article-body .tj-event-lineup-label {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: .15em;
+  text-transform: uppercase; opacity: .55; margin-right: 10px;
+}
+.article-body .tj-event-artist-sep { opacity: .4; }
 .article-body .tj-event-link {
   display: inline-block; margin: 0;
   font-family: var(--font-mono); font-size: 9px; letter-spacing: .15em;

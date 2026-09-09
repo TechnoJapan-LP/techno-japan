@@ -5,7 +5,8 @@ import {
   safeUrl,
 } from '../LP/article-shortcodes.js';
 
-const input = 'Intro\n[[event|Epizode|2026-12-28〜2027-01-08|Phu Quoc, Vietnam|https://epizode.com|Techno;House]]\n[[calendar]]';
+// 項目の並びは [[event|名前|日程|場所|URL|出演者|補足]]（2026-09-10 に出演者を追加。補足が最後）
+const input = 'Intro\n[[event|Epizode|2026-12-28〜2027-01-08|Phu Quoc, Vietnam|https://epizode.com|DJ NOBU;WATA IGARASHI|Techno;House]]\n[[calendar]]';
 const rendered = renderArticleShortcodes(input, { lang: 'en' });
 assert.equal(rendered.events.length, 1);
 assert.equal(rendered.calendars, 1);
@@ -16,6 +17,25 @@ assert.match(rendered.html, /OFFICIAL/);
 assert.doesNotMatch(rendered.html, /<p>\s*<article class="tj-event/);
 assert.doesNotMatch(rendered.html, /<p>\s*<nav class="tj-calendar/);
 assert.doesNotMatch(rendered.html, /\[\[(event|calendar)/);
+
+// 出演者: LINEUP 行として描画され、schema.org の performer が付く
+assert.deepEqual(rendered.events[0].artists, ['DJ NOBU', 'WATA IGARASHI']);
+assert.deepEqual(rendered.events[0].tags, ['Techno', 'House']);
+assert.match(rendered.html, /class="tj-event-lineup"/);
+assert.match(rendered.html, /itemprop="performer"/);
+assert.match(rendered.html, /DJ NOBU/);
+// 出演者が空でも LINEUP 行を出さない（旧5項目形式もこの形で受ける）
+const noArtists = parseEventFields('Epizode|2026-12-28|Phu Quoc, Vietnam|https://epizode.com||Techno');
+assert.deepEqual(noArtists.artists, []);
+assert.doesNotMatch(
+  renderArticleShortcodes('[[event|Epizode|2026-12-28|Phu Quoc, Vietnam]]').html,
+  /tj-event-lineup/
+);
+// 出演者名の HTML はエスケープされる
+assert.match(
+  renderArticleShortcodes('[[event|X|2026-12-28|Tokyo||<b>A</b>]]').html,
+  /&lt;b&gt;A&lt;\/b&gt;/
+);
 
 assert.throws(
   () => parseEventFields('Name|2026/12/28|Tokyo'),
@@ -32,4 +52,4 @@ assert.throws(
 assert.equal(safeUrl('https://example.com/a?b=1'), 'https://example.com/a?b=1');
 assert.equal(safeUrl('javascript:alert(1)'), '');
 
-console.log('article shortcodes: 8 assertions passed');
+console.log('article shortcodes: 15 assertions passed');

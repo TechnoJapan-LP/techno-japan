@@ -1487,7 +1487,7 @@ function openArticleGeneratedPreview(){
   }
   const safeBody = String(previewBody).replace(/<script/gi, '&lt;script');
   win.document.open();
-  win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><link rel="stylesheet" href="/common.css?v=27"><link rel="stylesheet" href="/detail.css?v=29"><link rel="stylesheet" href="/article-fx.css?v=10"></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${title}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=6"><\/script></body></html>`);
+  win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><link rel="stylesheet" href="/common.css?v=27"><link rel="stylesheet" href="/detail.css?v=30"><link rel="stylesheet" href="/article-fx.css?v=10"></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${title}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=6"><\/script></body></html>`);
   win.document.close();
 }
 
@@ -1519,7 +1519,7 @@ const ARTICLE_TEMPLATES = {
     '<p>[リード — 地域・シーズン・このまとめの視点を2〜3文]</p><p><br></p>' +
     '[[calendar]]<p><br></p>' +
     '<h2>[国・地域名]</h2>' +
-    '[[event|イベント名|2026-12-28〜2027-01-08|都市, 国|https://公式URL|Techno;House]]' +
+    '[[event|イベント名|2026-12-28〜2027-01-08|都市, 国|https://公式URL|出演者A;出演者B|Techno;House]]' +
     '<p>[なぜ行く価値があるかを2〜4文]</p><p><br></p>' },
   column: { label: '💭 コラム', category: 'COLUMN', html:
     '<p>[問題提起・きっかけ — なぜ今これを書くのか]</p><p><br></p>' +
@@ -1854,6 +1854,7 @@ function openArticleEventForm(){
       <div class="form-group"><label>終了日（任意）</label><input id="ar-event-end" type="date"></div>
       <div class="form-group" style="grid-column:1 / -1"><label>場所 *</label><input id="ar-event-place" type="text" placeholder="Phu Quoc, Vietnam"></div>
       <div class="form-group" style="grid-column:1 / -1"><label>公式URL（任意）</label><input id="ar-event-url" type="url" placeholder="https://example.com"></div>
+      <div class="form-group" style="grid-column:1 / -1"><label>出演者（任意 / ; 区切り）</label><input id="ar-event-artists" type="text" placeholder="DJ NOBU;WATA IGARASHI;KEN ISHII"></div>
       <div class="form-group" style="grid-column:1 / -1"><label>補足（任意 / ; 区切り）</label><input id="ar-event-note" type="text" placeholder="Techno;House;11日間"></div>
     </div>
     <div class="btn-row" style="justify-content:flex-end;margin-top:14px">
@@ -1866,16 +1867,17 @@ function openArticleEventForm(){
   overlay.querySelector('#ar-event-cancel').addEventListener('click', close);
   overlay.addEventListener('click', (event) => { if (event.target === overlay) close(); });
   overlay.querySelector('#ar-event-insert').addEventListener('click', () => {
-    const fields = ['name', 'start', 'end', 'place', 'url', 'note'].reduce((out, key) => {
+    const fields = ['name', 'start', 'end', 'place', 'url', 'artists', 'note'].reduce((out, key) => {
       out[key] = overlay.querySelector('#ar-event-' + key).value.trim(); return out;
     }, {});
     const required = [['name', '名前'], ['start', '開始日'], ['place', '場所']].filter(([key]) => !fields[key]);
     if (required.length) return toast(required.map(([, label]) => label).join(' / ') + 'を入力してください', 'error');
-    if (fields.name.includes('|') || fields.place.includes('|') || fields.note.includes('|')) return toast('| は入力できません', 'error');
+    if (fields.name.includes('|') || fields.place.includes('|') || fields.artists.includes('|') || fields.note.includes('|')) return toast('| は入力できません', 'error');
     if (fields.end && fields.end < fields.start) return toast('終了日は開始日以降にしてください', 'error');
     if (fields.url && !/^https?:\/\//i.test(fields.url)) return toast('公式URLはhttps://から入力してください', 'error');
     const date = fields.end && fields.end !== fields.start ? fields.start + '〜' + fields.end : fields.start;
-    const shortcode = `[[event|${fields.name}|${date}|${fields.place}|${fields.url}|${fields.note}]]`;
+    // 項目の並びは article-shortcodes.js の parseEventFields と揃える（補足が最後）
+    const shortcode = `[[event|${fields.name}|${date}|${fields.place}|${fields.url}|${fields.artists}|${fields.note}]]`;
     insertArticleShortcode(shortcode);
     close();
   });

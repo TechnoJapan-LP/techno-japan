@@ -53,7 +53,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 29;
+const DETAIL_CSS_VERSION = 30;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -874,6 +874,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
       eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
       eventStatus: 'https://schema.org/EventScheduled',
       ...(event.url ? { url: event.url, offers: { '@type': 'Offer', url: event.url, availability: 'https://schema.org/InStock' } } : {}),
+      ...(event.artists.length ? { performer: event.artists.map((name) => ({ '@type': 'Person', name })) } : {}),
       ...(event.tags.length ? { description: event.tags.join(' · ') } : {}),
     };
   });

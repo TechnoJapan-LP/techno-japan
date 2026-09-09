@@ -67,9 +67,13 @@ function parseMonthFilter(value) {
   return { start, end };
 }
 
+/* 項目の並びは [[event|名前|日程|場所|URL|出演者|補足]]。
+   2026-09-10 に「出演者」を6番目へ追加し、補足を最後（7番目）へ移した。
+   このとき本番の [[event]] 使用は0件だったため、旧5項目順との互換処理は
+   持たない（docs/design/ARTICLE_EVENT_BLOCKS.md）。 */
 function parseEventFields(fields) {
   const values = String(fields).split('|').map((value) => value.trim());
-  const [name, date, place, officialUrl = '', note = ''] = values;
+  const [name, date, place, officialUrl = '', artistsRaw = '', note = ''] = values;
   const errors = [];
   if (!name) errors.push('eventの名前が空です');
   if (!date) errors.push('eventの日程が空です');
@@ -86,6 +90,7 @@ function parseEventFields(fields) {
   if (errors.length) throw new Error(errors.join(' / '));
   return {
     name, date: parsedDate, place, url,
+    artists: artistsRaw.split(';').map((artist) => artist.trim()).filter(Boolean),
     tags: note.split(';').map((tag) => tag.trim()).filter(Boolean),
   };
 }
@@ -125,10 +130,15 @@ function renderEvent(event, lang = 'en') {
   const official = event.url
     ? `<a class="tj-event-link" href="${escapeHtml(event.url)}" rel="noopener" target="_blank" itemprop="url">OFFICIAL ↗</a>`
     : '';
+  const lineup = event.artists.length
+    ? `<p class="tj-event-lineup"><span class="tj-event-lineup-label">LINEUP</span>` +
+      event.artists.map((artist) => `<span class="tj-event-artist" itemprop="performer" itemscope itemtype="https://schema.org/Person"><span itemprop="name">${escapeHtml(artist)}</span></span>`).join('<span class="tj-event-artist-sep"> · </span>') +
+      `</p>`
+    : '';
   return `<article class="tj-event${past ? ' is-past' : ''}" id="ev-${escapeHtml(event.slug)}" itemscope itemtype="https://schema.org/Event" data-start="${escapeHtml(event.date.start || '')}" data-end="${escapeHtml(event.date.end || '')}">` +
     `<time class="tj-event-date" datetime="${escapeHtml(event.date.start || event.date.tba)}" itemprop="startDate">${escapeHtml(formatEventDate(event.date, lang))}</time>` +
     `<h3 class="tj-event-name" itemprop="name">${escapeHtml(event.name)}</h3>` +
-    `<p class="tj-event-place" itemprop="location">${escapeHtml(event.place)}${tags}</p>${official}</article>`;
+    `<p class="tj-event-place" itemprop="location">${escapeHtml(event.place)}${tags}</p>${lineup}${official}</article>`;
 }
 
 function eventMonth(event) {
