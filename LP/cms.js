@@ -1131,7 +1131,7 @@ function initArticleEditor(){
     modules: {
       toolbar: {
         container: [
-          [{ 'header': [2, 3, false] }],
+          [{ 'header': [2, 3, 4, false] }],
           [{ 'font': ['', 'bebas', 'mono', 'serif', 'condensed'] }],
           [{ 'size': ['small', false, 'large', 'huge'] }],
           ['bold', 'italic', 'underline'],
@@ -1487,7 +1487,7 @@ function openArticleGeneratedPreview(){
   }
   const safeBody = String(previewBody).replace(/<script/gi, '&lt;script');
   win.document.open();
-  win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><link rel="stylesheet" href="/common.css?v=27"><link rel="stylesheet" href="/detail.css?v=30"><link rel="stylesheet" href="/article-fx.css?v=11"></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${title}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=7"><\/script></body></html>`);
+  win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><link rel="stylesheet" href="/common.css?v=27"><link rel="stylesheet" href="/detail.css?v=31"><link rel="stylesheet" href="/article-fx.css?v=11"></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${title}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=8"><\/script></body></html>`);
   win.document.close();
 }
 
@@ -1501,15 +1501,15 @@ const ARTICLE_TEMPLATES = {
     '<h2>総括</h2><p>[このイベントがシーンにとって持つ意味。次回への期待]</p>' },
   interview: { label: '🎤 インタビュー', category: 'INTERVIEW', html:
     '<p>[アーティスト紹介 — 経歴・活動・今回話を聞く理由を2〜3文で]</p><p><br></p>' +
-    '<h3>—— まず、最近の活動について聞かせてください。</h3><p>[回答]</p><p><br></p>' +
-    '<h3>—— [質問2]</h3><p>[回答]</p><p><br></p>' +
-    '<h3>—— [質問3]</h3><p>[回答]</p><p><br></p>' +
-    '<h3>—— 最後に、今後の予定を教えてください。</h3><p>[回答]</p><p><br></p>' +
+    '<h4>—— まず、最近の活動について聞かせてください。</h4><p>[回答]</p><p><br></p>' +
+    '<h4>—— [質問2]</h4><p>[回答]</p><p><br></p>' +
+    '<h4>—— [質問3]</h4><p>[回答]</p><p><br></p>' +
+    '<h4>—— 最後に、今後の予定を教えてください。</h4><p>[回答]</p><p><br></p>' +
     '<p><em>[締め — ライブ情報やリリース情報へのリンク]</em></p>' },
   news: { label: '⚡ ニュース', category: 'NEWS', html:
     '<p>[リード文 — 何が・いつ・どこで。1〜2文で核心を]</p><p><br></p>' +
     '<p>[詳細 — 背景、ラインナップ、注目ポイント]</p><p><br></p>' +
-    '<h3>開催情報</h3><ul><li>日程: [日付]</li><li>会場: [会場名]</li><li>チケット: [価格/リンク]</li></ul>' },
+    '<h4>開催情報</h4><ul><li>日程: [日付]</li><li>会場: [会場名]</li><li>チケット: [価格/リンク]</li></ul>' },
   weekly: { label: '📅 週間まとめ', category: 'EVENTS', html:
     '<p>[今週の見どころを2〜3文で]</p><p><br></p>' +
     '<h2>[曜日] — [イベント名]</h2><p>[会場・出演者・ひとこと]</p><p><br></p>' +

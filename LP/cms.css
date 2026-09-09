@@ -320,7 +320,8 @@ label .req-star{color:var(--accent);margin-left:4px}
 .ar-prev-body{font-family:'DM Sans',sans-serif;font-weight:300;font-size:16px;line-height:1.85;color:rgba(240,237,232,0.85)}
 .ar-prev-body p{margin:0 0 24px}
 .ar-prev-body h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(24px,3vw,32px);text-transform:uppercase;line-height:1.1;margin:48px 0 16px;color:#f0ede8;font-weight:normal}
-.ar-prev-body h3{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.15em;text-transform:uppercase;margin:36px 0 12px;color:#f0ede8}
+.ar-prev-body h3{font-family:var(--font-body);font-weight:500;font-size:clamp(18px,2.2vw,21px);line-height:1.45;margin:2.4em 0 .6em;color:var(--text);text-wrap:balance}
+.ar-prev-body h4{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.15em;text-transform:uppercase;margin:36px 0 12px;color:#f0ede8}
 .ar-prev-body ul,.ar-prev-body ol{margin:0 0 24px 24px;padding:0}
 .ar-prev-body li{margin-bottom:8px}
 .ar-prev-body a{color:#f0ede8;border-bottom:1px solid rgba(240,237,232,.3)}
@@ -329,7 +330,8 @@ label .req-star{color:var(--accent);margin-left:4px}
 .ar-preview .tj-event[data-preview-target="1"]{outline:1px solid var(--accent);outline-offset:4px}
 .ar-prev-body .tj-event{margin:24px 0;padding:13px 18px 14px 20px;border-left:2px solid var(--accent);border-top:1px solid rgba(240,237,232,.08);border-bottom:1px solid rgba(240,237,232,.08)}
 .ar-prev-body .tj-event-date{display:block;margin-bottom:6px;font-family:var(--font-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;opacity:.7}
-.ar-prev-body .tj-event-name{margin:0 0 8px;font-family:var(--font-display);font-size:clamp(28px,3.5vw,42px);line-height:.95;text-transform:uppercase;color:var(--text)}
+.ar-prev-body .tj-event-name{margin:0 0 8px;font-family:var(--font-display);font-size:clamp(28px,3.5vw,42px);line-height:.95;text-transform:uppercase;color:var(--text);font-weight:normal; /* h3の基底太さを打ち消す */}
+.ar-prev-body .tj-cal-month h3{margin:0;padding:18px 0 12px;font-family:var(--font-mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:normal}
 .ar-prev-body .tj-event-place{margin:0 0 8px;font-family:var(--font-body);font-size:14px;line-height:1.5;color:var(--text);opacity:.7}
 .ar-prev-body .tj-event-lineup{margin:0 0 8px;font-family:var(--font-body);font-size:14px;line-height:1.6;color:var(--text)}
 .ar-prev-body .tj-event-lineup-label{font-family:var(--font-mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;opacity:.55;margin-right:10px}
@@ -450,6 +452,17 @@ body.ar-focus-open #ar-focus-preview{display:none !important}
 .ar-editor-wrap > .ql-toolbar .ql-picker.ql-font .ql-picker-item[data-value=serif]::before{content:'明朝 (Serif)';font-family:Georgia,'Times New Roman',serif}
 .ar-editor-wrap > .ql-toolbar .ql-picker.ql-font .ql-picker-label[data-value=condensed]::before,
 .ar-editor-wrap > .ql-toolbar .ql-picker.ql-font .ql-picker-item[data-value=condensed]::before{content:'細身 (Condensed)';font-family:'Arial Narrow','Roboto Condensed',Arial,sans-serif}
+/* 見出しメニューは4段階を日本語で表示する */
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-header .ql-picker-label::before,
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-header .ql-picker-item::before{content:'標準'}
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-header .ql-picker-label[data-value="2"]::before,
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-header .ql-picker-item[data-value="2"]::before{content:'大見出し'}
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-header .ql-picker-label[data-value="3"]::before,
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-header .ql-picker-item[data-value="3"]::before{content:'中見出し'}
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-header .ql-picker-label[data-value="4"]::before,
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-header .ql-picker-item[data-value="4"]::before{content:'小ラベル'}
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-header .ql-picker-item[data-value="2"]::before{font-family:'Bebas Neue',sans-serif;font-size:1.15em}
+.ar-editor-wrap > .ql-toolbar .ql-picker.ql-header .ql-picker-item[data-value="4"]::before{font-family:'Space Mono',monospace;font-size:.7em;letter-spacing:.12em}
 /* 標準以外の書体の上にカーソルがある間だけ赤くする。
    ⚠️ 標準でもラベルに data-value="" が残る（実測）ので、[data-value] では常に赤くなる。
    4書体を明示して指定すること。 */
@@ -504,6 +517,10 @@ body.ar-focus-open #ar-focus-preview{display:none !important}
   text-transform:uppercase; line-height:1.1; margin:48px 0 16px; color:var(--text); font-weight:normal;
 }
 #ar-body-editor .ql-editor h3{
+  font-family:var(--font-body); font-weight:500; font-size:clamp(18px,2.2vw,21px);
+  line-height:1.45; margin:2.4em 0 .6em; color:var(--text); text-wrap:balance;
+}
+#ar-body-editor .ql-editor h4{
   font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.15em;
   text-transform:uppercase; margin:36px 0 12px; color:var(--text); font-weight:normal;
 }

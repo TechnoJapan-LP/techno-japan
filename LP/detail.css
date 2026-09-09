@@ -43,7 +43,8 @@
 .article-body { max-width: 680px; margin-inline: auto; font-family: var(--font-body); font-weight: 300; font-size: clamp(16px, 1.15vw, 18px); line-height: 1.9; color: rgba(240,237,232,0.85); text-wrap: pretty; }
 .article-body p { margin-bottom: 1.6em; }
 .article-body h2 { font-family: var(--font-display); font-size: clamp(24px, 3vw, 32px); text-transform: uppercase; line-height: 1.1; margin: 2.8em 0 .75em; color: var(--text); text-wrap: balance; }
-.article-body h3 { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; margin: 2.5em 0 .75em; color: var(--text); text-wrap: balance; }
+.article-body h3 { font-family: var(--font-body); font-weight: 500; font-size: clamp(18px, 2.2vw, 21px); line-height: 1.45; margin: 2.4em 0 .6em; color: var(--text); text-wrap: balance; }
+.article-body h4 { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; margin: 2.5em 0 .75em; color: var(--text); text-wrap: balance; }
 .article-body ul, .article-body ol { margin: 0 0 24px 24px; padding: 0; }
 .article-body li { margin-bottom: 8px; }
 .article-body a { color: var(--text); border-bottom: 1px solid rgba(240,237,232,0.3); transition: border-color 0.2s ease; }
@@ -72,7 +73,7 @@
 }
 .article-body .tj-event-name {
   margin: 0 0 8px;
-  font-family: var(--font-display); font-size: clamp(28px, 3.5vw, 42px);
+  font-family: var(--font-display); font-size: clamp(28px, 3.5vw, 42px); font-weight: normal; /* h3の基底太さを打ち消す */
   line-height: .95; text-transform: uppercase; color: var(--text);
 }
 .article-body .tj-event-place {
@@ -116,7 +117,7 @@
 .article-body .tj-cal-month + .tj-cal-month { border-top: 1px solid rgba(240,237,232,0.08); }
 .article-body .tj-cal-month h3 {
   margin: 0; padding: 18px 0 12px;
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: .18em;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .18em; font-weight: normal; /* h3の基底太さを打ち消す */
   text-transform: uppercase; color: var(--accent);
 }
 .article-body .tj-cal-month ol { margin: 0; padding: 0; list-style: none; }
