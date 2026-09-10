@@ -1352,6 +1352,24 @@ function bindArticlePreviewInteractions(root){
     setTimeout(() => target.removeAttribute('data-preview-target'), 900);
   });
 }
+function buildArticleFestivalData(festivalRows){
+  const artists = (readSheetCache('artist') || ARTIST_DB || []);
+  const names = new Map(artists.map(a => [String(a.id), a.name || a.id]));
+  const out = {};
+  (festivalRows || []).forEach(row => {
+    let editions = row.editions;
+    if (typeof editions === 'string') { try { editions = JSON.parse(editions); } catch (_) { editions = []; } }
+    if (!Array.isArray(editions)) editions = [];
+    const latest = editions.slice().sort((a, b) => Number(b.year || 0) - Number(a.year || 0))[0];
+    const lineup = Array.isArray(latest?.lineup) ? latest.lineup.map(id => names.get(String(id)) || String(id)).filter(Boolean) : [];
+    const data = {};
+    if (row.image) data.imageHtml = '<img src="/' + esc(String(row.image).replace(/^\/+/, '')) + '" alt="" loading="lazy" decoding="async">';
+    if (lineup.length) data.lineup = lineup;
+    if (data.imageHtml || data.lineup) out[String(row.id)] = data;
+  });
+  return out;
+}
+
 function updateArticlePreview(html, force){
   const el = document.getElementById('ar-preview-content');
   if (!el) return;
@@ -1380,6 +1398,7 @@ function updateArticlePreview(html, force){
         const festivalIds = festivalRows.map(r => r.id).filter(Boolean);
         el.innerHTML = shortcodeApi.renderArticleShortcodes(entityHtml, {
           lang: document.documentElement.lang === 'en' ? 'en' : 'ja',
+          festivalData: buildArticleFestivalData(festivalRows),
           ...(festivalIds.length ? { festivalIds } : {})
         }).html;
       } catch (error) {
@@ -1487,6 +1506,7 @@ function openArticleGeneratedPreview(){
       const festivalIds = festivalRows.map(r => r.id).filter(Boolean);
       previewBody = shortcodeApi.renderArticleShortcodes(entityHtml, {
         lang: 'ja',
+        festivalData: buildArticleFestivalData(festivalRows),
         ...(festivalIds.length ? { festivalIds } : {})
       }).html;
     } catch (error) {
@@ -1495,7 +1515,7 @@ function openArticleGeneratedPreview(){
   }
   const safeBody = String(previewBody).replace(/<script/gi, '&lt;script');
   win.document.open();
-  win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><link rel="stylesheet" href="/common.css?v=27"><link rel="stylesheet" href="/detail.css?v=34"><link rel="stylesheet" href="/article-fx.css?v=11"></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${title}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=8"><\/script></body></html>`);
+  win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><link rel="stylesheet" href="/common.css?v=27"><link rel="stylesheet" href="/detail.css?v=35"><link rel="stylesheet" href="/article-fx.css?v=11"></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${title}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=9"><\/script></body></html>`);
   win.document.close();
 }
 
@@ -1930,7 +1950,7 @@ function openArticleEventForm(){
       <div class="form-group"><label>終了日（任意）</label><input id="ar-event-end" type="date"></div>
       <div class="form-group" style="grid-column:1 / -1"><label>場所 *</label><input id="ar-event-place" type="text" placeholder="Phu Quoc, Vietnam"></div>
       <div class="form-group" style="grid-column:1 / -1"><label>公式URL（任意）</label><input id="ar-event-url" type="url" placeholder="https://example.com"></div>
-      <div class="form-group" style="grid-column:1 / -1"><label>出演者（任意 / ; 区切り）</label><input id="ar-event-artists" type="text" placeholder="DJ NOBU;WATA IGARASHI;KEN ISHII"></div>
+      <div class="form-group" style="grid-column:1 / -1"><label>出演者（任意 / ; 区切り）<span class="label-hint">空ならフェスのLINEUPを自動表示</span></label><input id="ar-event-artists" type="text" placeholder="DJ NOBU;WATA IGARASHI;KEN ISHII"></div>
       <div class="form-group" style="grid-column:1 / -1"><label>補足（任意 / ; 区切り）</label><input id="ar-event-note" type="text" placeholder="Techno;House;11日間"></div>
     </div>
     <div class="btn-row" style="justify-content:flex-end;margin-top:14px">

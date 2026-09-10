@@ -129,7 +129,7 @@ function formatEventDate(date, lang = 'en') {
   return `${formatDate(date.start, lang)} – ${formatDate(date.end, lang)}`;
 }
 
-function renderEvent(event, lang = 'en') {
+function renderEvent(event, lang = 'en', festivalData = null) {
   const past = event.date.end ? event.date.end < new Date().toISOString().slice(0, 10) : false;
   const tags = event.tags.length ? ` · ${event.tags.map(escapeHtml).join(' · ')}` : '';
   const official = event.url
@@ -144,15 +144,25 @@ function renderEvent(event, lang = 'en') {
   const name = festivalHref
     ? `<a class="tj-event-name-link" href="${escapeHtml(festivalHref)}">${escapeHtml(event.name)}</a>`
     : escapeHtml(event.name);
-  const lineup = event.artists.length
+  const data = event.festivalId ? (festivalData && festivalData[event.festivalId]) : null;
+  const acts = event.artists.length ? event.artists : (data?.lineup || []);
+  const visibleActs = acts.slice(0, 10);
+  const moreCount = acts.length - visibleActs.length;
+  const lineup = acts.length
     ? `<p class="tj-event-lineup"><span class="tj-event-lineup-label">LINEUP</span>` +
-      event.artists.map((artist) => `<span class="tj-event-artist" itemprop="performer" itemscope itemtype="https://schema.org/Person"><span itemprop="name">${escapeHtml(artist)}</span></span>`).join('<span class="tj-event-artist-sep"> · </span>') +
+      visibleActs.map((artist) => `<span class="tj-event-artist" itemprop="performer" itemscope itemtype="https://schema.org/Person"><span itemprop="name">${escapeHtml(artist)}</span></span>`).join('<span class="tj-event-artist-sep"> · </span>') +
+      (moreCount ? `<span class="tj-event-lineup-more">${lang === 'en' ? `+${moreCount} more` : `ほか ${moreCount} 組`}</span>` : '') +
       `</p>`
     : '';
-  return `<article class="tj-event${past ? ' is-past' : ''}" id="ev-${escapeHtml(event.slug)}" itemscope itemtype="https://schema.org/Event" data-start="${escapeHtml(event.date.start || '')}" data-end="${escapeHtml(event.date.end || '')}">` +
+  const content =
     `<time class="tj-event-date" datetime="${escapeHtml(event.date.start || event.date.tba)}" itemprop="startDate">${escapeHtml(formatEventDate(event.date, lang))}</time>` +
     `<h3 class="tj-event-name" itemprop="name">${name}</h3>` +
-    `<p class="tj-event-place" itemprop="location">${escapeHtml(event.place)}${tags}</p>${lineup}${festivalLink}${official}</article>`;
+    `<p class="tj-event-place" itemprop="location">${escapeHtml(event.place)}${tags}</p>${lineup}${festivalLink}${official}`;
+  const photo = data?.imageHtml && festivalHref
+    ? `<a class="tj-event-photo" href="${escapeHtml(festivalHref)}">${data.imageHtml}</a>`
+    : '';
+  return `<article class="tj-event${past ? ' is-past' : ''}${photo ? ' has-photo' : ''}" id="ev-${escapeHtml(event.slug)}" itemscope itemtype="https://schema.org/Event" data-start="${escapeHtml(event.date.start || '')}" data-end="${escapeHtml(event.date.end || '')}">` +
+    (photo ? `<div class="tj-event-main">${content}</div>${photo}` : content) + '</article>';
 }
 
 function eventMonth(event) {
@@ -178,11 +188,14 @@ function renderCalendar(events, range = null, lang = 'en') {
   return `<nav class="tj-calendar" aria-label="${lang === 'ja' ? '開催カレンダー' : 'Event calendar'}">${months}</nav>`;
 }
 
-function renderArticleShortcodes(source, { lang = 'en', festivalIds } = {}) {
+function renderArticleShortcodes(source, { lang = 'en', festivalIds, festivalData } = {}) {
   const text = String(source || '');
   const events = parseEvents(text);
-  if (festivalIds !== undefined) {
-    const known = festivalIds instanceof Set ? festivalIds : new Set(festivalIds || []);
+  if (festivalIds !== undefined || festivalData !== undefined) {
+    const known = new Set(festivalIds instanceof Set ? festivalIds : (festivalIds || []));
+    if (festivalData && typeof festivalData === 'object') {
+      Object.keys(festivalData).forEach((id) => known.add(id));
+    }
     for (const event of events) {
       if (event.festivalId && !known.has(event.festivalId)) {
         throw new Error(`eventのフェスIDが存在しません: ${event.festivalId}`);
@@ -200,7 +213,7 @@ function renderArticleShortcodes(source, { lang = 'en', festivalIds } = {}) {
     event.index = eventIndex;
     event.slug = `${slugify(event.name)}-${eventIndex + 1}`;
     eventIndex += 1;
-    return renderEvent(event, lang);
+    return renderEvent(event, lang, festivalData);
   });
   html = html.replace(CALENDAR_RE, (_, value) => renderCalendar(events, parseMonthFilter(value), lang));
   // CMSのQuillは短いコードを<p>[[event|...]]</p>として保存する。

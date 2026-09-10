@@ -78,4 +78,23 @@ assert.match(
   /href="\/en\/festivals\/unknown\.html"/
 );
 
-console.log('article shortcodes: 31 assertions passed');
+const festivalData = { rural: { imageHtml: '<img src="/images/rural.webp" alt="Rural">', lineup: ['A', 'B', 'C'] } };
+const autoLineup = renderArticleShortcodes(
+  '[[event|Rural|2027-05-01|Tokyo||||rural]]', { lang: 'ja', festivalData }
+);
+assert.match(autoLineup.html, /has-photo/);
+assert.match(autoLineup.html, /tj-event-photo/);
+assert.match(autoLineup.html, /src="\/images\/rural\.webp"/);
+assert.equal((autoLineup.html.match(/itemprop="performer"/g) || []).length, 3);
+const twelve = Array.from({ length: 12 }, (_, i) => `Artist ${i + 1}`);
+const capped = renderArticleShortcodes('[[event|Rural|2027-05-01|Tokyo||||rural]]', {
+  lang: 'ja', festivalData: { rural: { lineup: twelve } }
+}).html;
+assert.match(capped, /ほか 2 組/);
+assert.equal((capped.match(/itemprop="performer"/g) || []).length, 10);
+assert.match(renderArticleShortcodes('[[event|Rural|2027-05-01|Tokyo|https://example.com|Article Act||rural]]', {
+  lang: 'en', festivalData: { rural: { lineup: ['Festival Act'] } }
+}).html, /Article Act/);
+assert.doesNotMatch(renderArticleShortcodes('[[event|Rural|2027-05-01|Tokyo||||rural]]').html, /has-photo|tj-event-main/);
+
+console.log('article shortcodes: 39 assertions passed');

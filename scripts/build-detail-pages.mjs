@@ -53,7 +53,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 34;
+const DETAIL_CSS_VERSION = 35;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -65,7 +65,7 @@ const DETAIL_CSS_VERSION = 34;
    落ちる場所と直す場所がずれていて原因に辿り着けなかった。AUDIT §9-58。
 
    article-fx.js / article-fx.css を変更したら、ここを上げる。 */
-const ARTICLE_FX_JS_VERSION = 8;
+const ARTICLE_FX_JS_VERSION = 9;
 const ARTICLE_FX_CSS_VERSION = 11;
 
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
@@ -555,7 +555,28 @@ function bilingualBody(ja, en, pageLang, extraClass = '') {
   return `<div class="detail-body${extraClass ? ` ${extraClass}` : ''}"><p lang="${jaT ? 'ja' : 'en'}">${esc(only)}</p></div>`;
 }
 // 本文中の [[festival:id]] / [[artist:id]] / [[venue:id]] を詳細ページへのリンクに変換
-function makeEntityResolver(data) {
+function buildEventFestivalData({ festivals = [], editionsByFestival = new Map(), lineupsByEdition = new Map(), artists = [] }) {
+  const artistsById = new Map(artists.map((artist) => [String(artist.id), artist]));
+  return Object.fromEntries(festivals.map((f) => {
+    const editions = [...(editionsByFestival.get(String(f.id)) || [])].sort((a, b) =>
+      String(b.EDITION || b.DATE_START || '').localeCompare(String(a.EDITION || a.DATE_START || '')));
+    const latest = editions[0];
+    const lineup = latest
+      ? (lineupsByEdition.get(String(latest.EDITION_ID)) || []).map((row) => {
+          const ids = lineupArtistIds(row);
+          if (ids.length === 1 && artistsById.has(ids[0])) return artistsById.get(ids[0]).name || ids[0];
+          return row.ACT_LABEL || ids[0] || '';
+        }).filter(Boolean)
+      : [];
+    const img = f.image || f.flyer;
+    return [String(f.id), {
+      ...(img ? { imageHtml: `<img ${dimensionAttrs(cardImagePath(img))} src="/${cardImagePath(img)}"${cardSrcsetAttr(img)} alt="${esc(f.name)}" loading="lazy" decoding="async">` } : {}),
+      ...(lineup.length ? { lineup } : {}),
+    }];
+  }).filter(([, value]) => value.imageHtml || value.lineup));
+}
+
+function makeEntityResolver(data, festivalData = null) {
   const table = { festival: data.FESTIVALS || [], artist: data.ARTISTS || [], venue: data.VENUES || [], article: data.ARTICLES || [] };
   const festivalIds = new Set(table.festival.map((x) => String(x.id || '').trim()).filter(Boolean));
   return (html, lang = 'en') => {
@@ -565,7 +586,7 @@ function makeEntityResolver(data) {
     const dir = type === 'article' ? 'articles' : type + 's';
     return `<a class="entity-link" href="/${dir}/${id}.html">${esc(name)}</a>`;
     });
-    return renderArticleShortcodes(entityHtml, { lang, festivalIds }).html;
+    return renderArticleShortcodes(entityHtml, { lang, festivalIds, festivalData }).html;
   };
 }
 
@@ -812,7 +833,7 @@ function articleNewsletterHtml(canonical) {
     </section>`;
 }
 
-function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsByFestival = new Map(), venues = []) {
+function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsByFestival = new Map(), venues = [], festivalData = null) {
   // EN版は title_en / excerpt_en / body_en を使う（無い項目はJAへフォールバック）
   const L = lang === 'en'
     ? { title: a.title_en || a.title, excerpt: a.excerpt_en || a.excerpt, body: a.body_en || a.body, prefix: '/en' }
@@ -894,7 +915,9 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
       eventStatus: 'https://schema.org/EventScheduled',
       ...(event.url ? { url: event.url, offers: { '@type': 'Offer', url: event.url, availability: 'https://schema.org/InStock' } } : {}),
       ...(event.festivalId ? { sameAs: [`${BASE}/festivals/${event.festivalId}.html`] } : {}),
-      ...(event.artists.length ? { performer: event.artists.map((name) => ({ '@type': 'Person', name })) } : {}),
+      ...((event.artists.length ? event.artists : festivalData?.[event.festivalId]?.lineup || []).length
+        ? { performer: (event.artists.length ? event.artists : festivalData[event.festivalId].lineup).map((name) => ({ '@type': 'Person', name })) }
+        : {}),
       ...(event.tags.length ? { description: event.tags.join(' · ') } : {}),
     };
   });
@@ -2239,7 +2262,14 @@ function main() {
     if (!editionsByFestival.has(ed.FESTIVAL_ID)) editionsByFestival.set(ed.FESTIVAL_ID, []);
     editionsByFestival.get(ed.FESTIVAL_ID).push(ed);
   }
-  const resolveEntities = makeEntityResolver({ ARTISTS, FESTIVALS, VENUES, ARTICLES });
+  const lineupsByEdition = new Map();
+  for (const row of LINEUPS) {
+    const key = String(row.EDITION_ID || '');
+    if (!lineupsByEdition.has(key)) lineupsByEdition.set(key, []);
+    lineupsByEdition.get(key).push(row);
+  }
+  const festivalData = buildEventFestivalData({ festivals: FESTIVALS, editionsByFestival, lineupsByEdition, artists: ARTISTS });
+  const resolveEntities = makeEntityResolver({ ARTISTS, FESTIVALS, VENUES, ARTICLES }, festivalData);
   validateArticleShortcodes({ ARTISTS, FESTIVALS, VENUES, ARTICLES });
 
   // CMS未接続のローカル確認用。通常ビルドには一切含めず、reports配下へ
@@ -2253,7 +2283,7 @@ function main() {
     }
     fs.rmSync(DRAFT_PREVIEW_DIR, { recursive: true, force: true });
     for (const lang of ['ja', 'en']) {
-      const built = articlePage(draft, resolveEntities, lang, FESTIVALS, editionsByFestival);
+      const built = articlePage(draft, resolveEntities, lang, FESTIVALS, editionsByFestival, [], festivalData);
       const relative = path.relative(LP_DIR, built.file);
       const file = path.join(DRAFT_PREVIEW_DIR, relative);
       fs.mkdirSync(path.dirname(file), { recursive: true });
@@ -2271,7 +2301,6 @@ function main() {
   const artistsById = new Map(pubArtists.map((artist) => [String(artist.id), artist]));
   const festivalsById = new Map(pubFests.map((festival) => [String(festival.id), festival]));
   const editionById = new Map(EDITIONS.map((edition) => [String(edition.EDITION_ID), edition]));
-  const lineupsByEdition = new Map();
   const appearMap = new Map();
   const missingArtistRefs = new Map();
   for (const row of LINEUPS) {
@@ -2353,13 +2382,13 @@ ${FAVICON_TAGS}
   const liveFestivalIds = new Set(pubFests.map((f) => f.id));
 
   const counts = {
-    articles: writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'ja', pubFests, editionsByFestival, pubVenues)).concat(redirectStubs('articles', liveArticleIds)), 'articles'),
+    articles: writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'ja', pubFests, editionsByFestival, pubVenues, festivalData)).concat(redirectStubs('articles', liveArticleIds)), 'articles'),
     festivals: writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, ARTICLES, 'ja')).concat(redirectStubs('festivals', liveFestivalIds)), 'festivals'),
     artists: writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'ja')).concat(redirectStubs('artists', liveArtistIds)), 'artists'),
     venues: writeAll(pubVenues.map((v) => venuePage(v, 'ja')), 'venues'),
     // 英語版（/en/…）。未翻訳フィールドは articlePage 内で元データへ
     // フォールバックし、EN ハブの通常遷移先を必ず実在させる。
-    'en/articles': writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'en', pubFests, editionsByFestival, pubVenues)), 'en/articles'),
+    'en/articles': writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'en', pubFests, editionsByFestival, pubVenues, festivalData)), 'en/articles'),
     'en/festivals': writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, ARTICLES, 'en')).concat(redirectStubs('en/festivals', liveFestivalIds)), 'en/festivals'),
     'en/artists': writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'en')).concat(redirectStubs('en/artists', liveArtistIds)), 'en/artists'),
     'en/venues': writeAll(pubVenues.map((v) => venuePage(v, 'en')), 'en/venues'),

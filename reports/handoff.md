@@ -6870,3 +6870,47 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 ### 次の担当への注意・判断待ち
 - renderArticleShortcodes は festivalIds 未提供なら実在検査をしない
   （CMSのキャッシュ未読込時に書けなくなるのを防ぐ意図）。検査を必須化しないこと。
+
+## 2026-09-11 イベントカードにフェス写真とLINEUP自動反映を追加
+
+### 実施
+- 依頼: フェスID付きカードに①フェス写真（スクショの赤枠=カード右）②フェスの
+  LINEUP自動反映。設計=Claude、実装=Codex、検証=Claude。
+- モジュールAPI: renderArticleShortcodes に `festivalData`（{id:{imageHtml,lineup}}）
+  を追加。**共有モジュールはデータを持たず、呼び出し側が解決済みの素材を渡す**
+  原則を維持（imageHtmlはビルド=縮小版srcset付き/CMS=素のimg、lineupは
+  ID→表示名解決済み）。実在検査は festivalIds と festivalData キーの和集合。
+- 表示: has-photo カードは PC でテキスト左+写真右220px(3:2)、600px以下で
+  写真が上・全幅(16:9)。写真もフェスページへのリンク。写真なしカードは
+  flat構造のまま（後方互換）。
+- LINEUP: 記事側の出演者入力が優先。空ならフェスの最新開催回LINEUPを表示
+  （先頭10組+「ほか N 組」/ +N more）。JSON-LD performer は全組。
+  フェス側を更新してPublishすれば再生成時にカードも追随する。
+- ★article-fx.js: figure化ループが `.tj-event` 内のimgをスキップするガードを追加
+  （無いとカード写真が誌面画像扱いでレイアウト崩壊）。
+- 版: detail.css 35 / article-fx.js 9 / article-shortcodes.js 5 / cms.css 39 / cms.js 112。
+
+### コミット
+- このエントリと同一コミット（生成物含む）。
+
+### 検証
+- 単体テスト39件成功（写真・cap・優先順位・後方互換）
+- 本番相当実測: 1200px=写真が右/500px=写真が上、fxのfigure化なし、写真リンク先正、
+  LINEUP表示10+「ほか 2 組」、写真なしカード構造不変。スクショ目視（PC/モバイル）
+- CMSプレビュー: festivalData（画像+editions最新回lineup+artist名解決）を
+  2経路に伝搬。実装済み・単体レベル確認
+- `bash scripts/preflight.sh`: 全41件成功
+- 認証済み本番CMSでの実操作: **実機未確認**
+
+### 変更したパターン
+- モジュール（render+API）/ ビルド（buildEventFestivalData+配線4箇所+JSON-LD）/
+  fxガード1 / CSS 本番5+モバイル3+プレビュー同数 / cms.jsプレビューデータ組み立て+
+  ヒント文言 / テスト8件 / docs
+
+### 未確認の類似パターン
+- lineupの名前解決はARTISTS登録済みIDのみ（未登録はACT_LABEL/生値のまま表示。仕様）
+- フェス画像が無いフェスは写真なしの従来カードになる（仕様）
+
+### 次の担当への注意・判断待ち
+- article-fx の figure 化対象から `.tj-event` は除外済み。カード内に画像を
+  足す拡張をするときもこのガードが前提。

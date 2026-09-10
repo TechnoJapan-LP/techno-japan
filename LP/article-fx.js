@@ -54,7 +54,7 @@
     var imgs = [].slice.call(body.querySelectorAll('img'));
     var figIndex = 0;
     imgs.forEach(function(img){
-      if (img.closest('figure.fx-img')) return;   // 再実行対策（処理済みはスキップ）
+      if (img.closest('figure.fx-img') || img.closest('.tj-event')) return;   // 再実行対策（処理済みはスキップ）。イベントカード内のフェス写真は誌面画像ではないので figure 化しない
       var p = img.closest('p');
       var textOnly = p && p.textContent.trim() === '' && p.querySelectorAll('img').length === 1;
       var host = textOnly ? p : img;           // 画像単独の<p>なら<p>ごと置換

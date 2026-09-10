@@ -340,6 +340,7 @@ label .req-star{color:var(--accent);margin-left:4px}
 .ar-prev-body .tj-event-name-link:hover{color:var(--accent)}
 .ar-prev-body .tj-event-festival-link{color:var(--accent);opacity:.8;margin-right:16px}
 .ar-prev-body .tj-event-festival-link:hover{color:var(--accent);opacity:1}
+.ar-prev-body .tj-event.has-photo{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:8px 24px;align-items:start}.ar-prev-body .tj-event-photo{display:block;margin:4px 0;border-bottom:none}.ar-prev-body .tj-event-photo img{width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:4px;display:block;margin:0}.ar-prev-body .tj-event-lineup-more{opacity:.55;font-size:.85em;margin-left:6px}@media(max-width:600px){.ar-prev-body .tj-event.has-photo{grid-template-columns:1fr}.ar-prev-body .tj-event-photo{order:-1;margin:2px 0 12px}.ar-prev-body .tj-event-photo img{aspect-ratio:16/9}}
 @media(max-width:600px){.ar-prev-body .tj-event{margin:20px 0;padding:12px 14px 14px 16px}}
 .ar-prev-body strong{color:#f0ede8;font-weight:500}
 .ar-prev-body blockquote{border-left:2px solid var(--accent);padding:8px 0 8px 24px;margin:32px 0;font-style:italic;opacity:.85}
