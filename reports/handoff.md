@@ -6773,3 +6773,32 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - `AIRTABLE_TOKEN` をGitHub Secretsに設定した環境で、まず workflow の sync-site / dry-run を実行し、
   明細と件数を確認する。その後、承認済みのタイミングで初回executeを実行する。
 - 初回execute成功後にのみ、cron追加を別変更として検討すること。
+
+## 2026-09-11 sync-site 初回実行完了（追記）
+
+### 実施
+- 上記 sync-site 実装の実機実行。GitHub Actions で dry-run → ユーザー承認 → execute。
+- 途中2つの実スキーマ問題を修正: ①名前列が BOM 付き「﻿Name」（決め打ち422→
+  primaryField から動的解決+未知フィールドの事前停止ガード追加）
+  ②都市列は city ではなく city_region。
+
+### コミット
+- このエントリのみ（コード修正は直前2コミット）。
+
+### 検証
+- execute: **作成1（detox）/ 更新96 / 同名スキップ0** — Airtable の骨組みだけ
+  だった国内96レコードに Name・都市・最新開催回日程・site_managed が入った。
+- 再dry-run: **変更なし97**（冪等・全件反映を確認）。
+- 運用: 国内フェスの編集は今後もCMS→Publish。Airtable側の国内基本情報は
+  同期が上書きする。巡回は site_managed=true を除外（memory更新済み）。
+
+### 変更したパターン
+- なし（記録のみ）。
+
+### 未確認の類似パターン
+- cron 自動同期は未設定（手動 workflow のみ）。ユーザーがAirtable画面を
+  目視確認後、日次cron追加を判断する。
+
+### 次の担当への注意・判断待ち
+- Airtable のフィールド名は決め打ちしない（BOM名の実在）。sync-site の
+  schema 突合ガードを通すこと。
