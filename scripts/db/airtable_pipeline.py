@@ -243,6 +243,26 @@ def cmd_sync_site(input_path: str, execute: bool) -> int:
     if not isinstance(site_festivals, list):
         sys.exit("sync-site の入力は配列JSONである必要があります")
 
+    meta = schema()
+    festivals_table = next(t for t in meta["tables"] if t["name"] == "Festivals")
+    table_fields = festivals_table["fields"]
+    field_names = {field["name"] for field in table_fields}
+    print(f"Festivalsのフィールド: {', '.join(sorted(field_names))}")
+    primary_field_id = festivals_table.get("primaryFieldId")
+    name_field = next((field["name"] for field in table_fields
+                       if field["id"] == primary_field_id), None)
+    if not name_field:
+        sys.exit("Festivals の primaryFieldId に対応する名前フィールドが見つかりません")
+    # 2026-09-11、名前列を Name と決め打ちして422 UNKNOWN_FIELD_NAMEになった。
+
+    required_fields = {"festival_id", "country", "city", "official_url",
+                       "brand_status", "last_date_start", "last_date_end", name_field}
+    missing_fields = sorted(required_fields - field_names)
+    site_managed_missing = "site_managed" not in field_names
+    if missing_fields:
+        print(f"存在しないフィールド: {', '.join(missing_fields)}")
+        sys.exit(1)
+
     records = list_all("Festivals")
     by_id = {}
     by_name = {}
@@ -251,14 +271,11 @@ def cmd_sync_site(input_path: str, execute: bool) -> int:
         festival_id = str(fields.get("festival_id", "")).strip()
         if festival_id:
             by_id[festival_id] = record
-        name = normalized_name(fields.get("Name", ""))
+        name = normalized_name(fields.get(name_field, ""))
         if name:
             by_name.setdefault(name, []).append(record)
 
-    meta = schema()
-    festivals_table = next(t for t in meta["tables"] if t["name"] == "Festivals")
-    field_names = {field["name"] for field in festivals_table["fields"]}
-    if "site_managed" not in field_names:
+    if site_managed_missing:
         print("site_managed: checkbox 型フィールドの作成が必要")
         if execute:
             call("POST", f"/meta/bases/{BASE_ID}/tables/{festivals_table['id']}/fields",
@@ -276,8 +293,10 @@ def cmd_sync_site(input_path: str, execute: bool) -> int:
         if not festival_id:
             print("  ⚠️ festival_id が空の入力をスキップ")
             continue
-        fields = {"festival_id": festival_id, "Name": str(item.get("name", "")),
-                  "country": "JP", "site_managed": True}
+        name_value = str(item.get("name", ""))
+        fields = {"festival_id": festival_id, "country": "JP", "site_managed": True}
+        if name_value:
+            fields[name_field] = name_value
         for name in ("city", "official_url", "last_date_start", "last_date_end"):
             value = str(item.get(name, ""))
             if value:
@@ -288,7 +307,7 @@ def cmd_sync_site(input_path: str, execute: bool) -> int:
 
         existing = by_id.get(festival_id)
         if not existing:
-            same_name = by_name.get(normalized_name(fields["Name"]), [])
+            same_name = by_name.get(normalized_name(name_value), [])
             if same_name:
                 print(f"  ⚠️ {festival_id}: 同名レコードがあるためスキップ（ID不一致）")
                 same_name_skips += 1
