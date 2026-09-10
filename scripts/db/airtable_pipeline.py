@@ -254,8 +254,9 @@ def cmd_sync_site(input_path: str, execute: bool) -> int:
     if not name_field:
         sys.exit("Festivals の primaryFieldId に対応する名前フィールドが見つかりません")
     # 2026-09-11、名前列を Name と決め打ちして422 UNKNOWN_FIELD_NAMEになった。
+    # Airtable側の都市列は city_region（2026-09-11 実スキーマ確認）。
 
-    required_fields = {"festival_id", "country", "city", "official_url",
+    required_fields = {"festival_id", "country", "city_region", "official_url",
                        "brand_status", "last_date_start", "last_date_end", name_field}
     missing_fields = sorted(required_fields - field_names)
     site_managed_missing = "site_managed" not in field_names
@@ -297,10 +298,13 @@ def cmd_sync_site(input_path: str, execute: bool) -> int:
         fields = {"festival_id": festival_id, "country": "JP", "site_managed": True}
         if name_value:
             fields[name_field] = name_value
-        for name in ("city", "official_url", "last_date_start", "last_date_end"):
-            value = str(item.get(name, ""))
+        for input_name, airtable_name in (("city", "city_region"),
+                                          ("official_url", "official_url"),
+                                          ("last_date_start", "last_date_start"),
+                                          ("last_date_end", "last_date_end")):
+            value = str(item.get(input_name, ""))
             if value:
-                fields[name] = value
+                fields[airtable_name] = value
         status = str(item.get("status", "")).strip().lower()
         if status in status_map:
             fields["brand_status"] = status_map[status]
