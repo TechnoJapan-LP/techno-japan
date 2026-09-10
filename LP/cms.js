@@ -1510,12 +1510,12 @@ const ARTICLE_TEMPLATES = {
     '<p>[リード文 — 何が・いつ・どこで。1〜2文で核心を]</p><p><br></p>' +
     '<p>[詳細 — 背景、ラインナップ、注目ポイント]</p><p><br></p>' +
     '<h4>開催情報</h4><ul><li>日程: [日付]</li><li>会場: [会場名]</li><li>チケット: [価格/リンク]</li></ul>' },
-  weekly: { label: '📅 週間まとめ', category: 'EVENTS', html:
+  weekly: { label: '📅 週間まとめ', category: 'GUIDE', html:
     '<p>[今週の見どころを2〜3文で]</p><p><br></p>' +
     '<h2>[曜日] — [イベント名]</h2><p>[会場・出演者・ひとこと]</p><p><br></p>' +
     '<h2>[曜日] — [イベント名]</h2><p>[会場・出演者・ひとこと]</p><p><br></p>' +
     '<h2>[曜日] — [イベント名]</h2><p>[会場・出演者・ひとこと]</p>' },
-  roundup: { label: '🗺 フェスまとめ', category: 'EVENTS', html:
+  roundup: { label: '🗺 フェスまとめ', category: 'GUIDE', html:
     '<p>[リード — 地域・シーズン・このまとめの視点を2〜3文]</p><p><br></p>' +
     '[[calendar]]<p><br></p>' +
     '<h2>[国・地域名]</h2>' +

@@ -6503,3 +6503,42 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 ### 次の担当への注意・判断待ち
 - 見出しメニューを増減するときは、cms.css の `.ql-picker.ql-header` ブロック
   （snow 後勝ち対策の強いセレクタ）も揃えて更新すること。
+
+## 2026-09-10 記事カテゴリを6択に整理（FESTIVAL&RAVE統合・GUIDE新設）
+
+### 実施
+- ユーザー決定: カテゴリを REPORT / COLUMN / INTERVIEW / NEWS / GUIDE /
+  FESTIVAL&RAVE の6択に統一。FESTIVAL+RAVE統合、EVENTS(weekly roundup)は
+  GUIDEに吸収して廃止、PARTY/CLUB（使用0件）は削除。対象の切り口はTAGSで扱う。
+- 実装はCodex exec（設計書1通・追修正なし）、レビュー・検証はClaude。
+- 変更: cms.html のカテゴリselect（value は `FESTIVAL&amp;RAVE` とHTMLエンティティで
+  記述）/ cms.js のテンプレ2件（weekly・roundup）EVENTS→GUIDE / news.html の
+  タブ配列（旧配列にはEVENTSが無く週間まとめがタブに出ない設定漏れがあった。
+  GUIDE追加で解消）/ docs/DATA_SCHEMA.md のCATEGORY行を新6値に更新。
+- 版: cms.js 105→106。EN news ハブは build が JA から再生成（行数一致 1361/1361）。
+
+### コミット
+- このエントリと同一コミット。
+
+### 検証
+- headless実測（CMS）: プルダウンが6択、FESTIVAL&RAVE の DOM value が正しい。
+- headless実測（news）: タブが ALL+6 の7個。FESTIVAL&RAVE タブをクリックすると
+  該当カテゴリ1記事だけに絞り込まれ、activeも追随。
+- `bash scripts/preflight.sh`: 全41件成功。
+
+### 変更したパターン
+- カテゴリ選択肢: select 1箇所 / テンプレ既定カテゴリ 2箇所 / タブ配列 1箇所 /
+  スキーマ文書 1行
+
+### 未確認の類似パターン
+- **既存6記事（FESTIVAL×3・RAVE×3）のカテゴリ値はスプレッドシート側で未移行**。
+  ユーザーがCMSで各記事を開いて FESTIVAL&RAVE に変更→Publish する。
+  移行までの間、旧カテゴリの記事は新タブのどれにも属さず「ALL」でのみ表示される
+  （壊れはしない）。⚠️ Find&Replace は「RAVE」が「FESTIVAL&RAVE」に部分一致して
+  二重置換されるため使わないこと。
+- news.html の ARTICLES_FALLBACK（data.js欠落時のデモデータ）は旧カテゴリのまま
+  意図的に未変更（本番では data.js が読まれるため表示に影響しない）。
+
+### 次の担当への注意・判断待ち
+- カテゴリを増減するときは cms.html の select・news.html のタブ配列・
+  DATA_SCHEMA.md の3点セットで揃えること（今回EVENTSのタブ漏れが実在した）。

@@ -405,7 +405,7 @@
         <input type="text" id="ar-title" placeholder="Article title" oninput="onArticleTitleInput()">
         <button class="btn btn-green btn-sm" style="margin-top:4px" onclick="aiTitleSuggest()">✨ AI タイトル候補</button>
       </div>
-      <div class="form-group"><label>Category</label><select id="ar-category"><option value="REPORT">Report</option><option value="COLUMN">Column</option><option value="INTERVIEW">Interview</option><option value="NEWS">News</option><option value="EVENTS">Events (weekly roundup)</option><option value="FESTIVAL">Festival</option><option value="RAVE">Rave</option><option value="PARTY">Party</option><option value="CLUB">Club</option></select></div>
+      <div class="form-group"><label>Category</label><select id="ar-category"><option value="REPORT">Report</option><option value="COLUMN">Column</option><option value="INTERVIEW">Interview</option><option value="NEWS">News</option><option value="GUIDE">Guide (まとめ・ガイド)</option><option value="FESTIVAL&amp;RAVE">Festival &amp; Rave</option></select></div>
       <div class="form-group"><label>Date</label><input type="date" id="ar-date"></div>
       <div class="form-group"><label>Author <span class="label-hint">入力すると AUTHORS の登録者と過去の書き手から候補が出ます</span></label><div class="lineup-input-wrap"><input type="text" id="ar-author" placeholder="e.g. TECHNO JAPAN" value="TECHNO JAPAN" autocomplete="off" oninput="filterAuthors('ar-author','ar-author-ac')" onfocus="filterAuthors('ar-author','ar-author-ac',true)" onkeydown="authorAcKeydown(event,'ar-author-ac')"><div class="autocomplete-list" id="ar-author-ac"></div></div></div>
       <div class="form-group"><label>Image Path</label><input type="text" id="ar-image" placeholder="auto-filled" readonly></div>
@@ -567,6 +567,6 @@
 </div>
 
 <script type="module" src="article-shortcodes.js?v=3"></script>
-<script src="cms.js?v=105" defer></script>
+<script src="cms.js?v=106" defer></script>
 </body>
 </html>

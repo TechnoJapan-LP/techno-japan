@@ -354,7 +354,7 @@ ID 規約違反7件の是正(§1.1)ではリダイレクトを設けたが、そ
 |---|---|---|
 | ID | `transcendence-2026-report` | slug(§1.1)。**対象+年+種別**の形式。フェスIDと同名にしない |
 | TITLE / TITLE_EN | | 現TITLEは日本語 → JA正とし、TITLE_ENに英訳 |
-| CATEGORY | `REPORT` / `INTERVIEW` / `NEWS` / `FEATURE` | プルダウン(現`category`を改名・統一) |
+| CATEGORY | `REPORT` / `COLUMN` / `INTERVIEW` / `NEWS` / `GUIDE` / `FESTIVAL&RAVE` | プルダウン(現`category`を改名・統一)。2026-09-10に6択へ統一（FESTIVAL/RAVE統合・EVENTS→GUIDE吸収・PARTY/CLUB廃止） |
 | DATE | `2026-05-20` | 公開日(ISO)。**現状のDATE/date/PUBLISHATの3重複を一本化** |
 | AUTHOR_ID | `techno-japan` | AUTHORS参照(現`author`テキストと`AUTHORID`を一本化) |
 | IMAGE | `images/articles/transcendence-2026.webp` | ファイル名もslug準拠 |

@@ -1174,7 +1174,7 @@ function initStoryVisualRail() {
 function renderCategoryNav() {
   const nav = document.getElementById('category-nav');
   const previousScrollLeft = nav ? nav.scrollLeft : 0;
-  const cats = ['ALL','REPORT','COLUMN','INTERVIEW','NEWS','FESTIVAL','RAVE','PARTY','CLUB'];
+  const cats = ['ALL','REPORT','COLUMN','INTERVIEW','NEWS','GUIDE','FESTIVAL&RAVE'];
   nav.innerHTML = cats.map(c =>
     `<button class="cat-btn ${currentCategory === c ? 'active' : ''}" data-cat="${c}">${c}</button>`
   ).join('');
