@@ -22,6 +22,7 @@
   AIRTABLE_TOKEN=... python3 scripts/db/airtable_pipeline.py apply --dry-run
   AIRTABLE_TOKEN=... python3 scripts/db/airtable_pipeline.py apply --execute
   AIRTABLE_TOKEN=... python3 scripts/db/airtable_pipeline.py fix-dates --execute
+  AIRTABLE_TOKEN=... python3 scripts/db/airtable_pipeline.py sync-site --input /tmp/site-festivals.json --dry-run
 """
 from __future__ import annotations
 
@@ -34,6 +35,7 @@ import time
 import urllib.request
 import urllib.error
 import urllib.parse
+import unicodedata
 
 BASE_ID = "appv8UbrUuRfoltL1"          # TECHNO JAPAN DB
 API = "https://api.airtable.com/v0"
@@ -230,9 +232,105 @@ def cmd_fix_dates(execute: bool) -> int:
     return 0
 
 
+# ------------------------------------------------------------ sync-site
+def normalized_name(value: object) -> str:
+    return unicodedata.normalize("NFC", str(value or "")).casefold()
+
+
+def cmd_sync_site(input_path: str, execute: bool) -> int:
+    with open(input_path, encoding="utf-8") as fh:
+        site_festivals = json.load(fh)
+    if not isinstance(site_festivals, list):
+        sys.exit("sync-site の入力は配列JSONである必要があります")
+
+    records = list_all("Festivals")
+    by_id = {}
+    by_name = {}
+    for record in records:
+        fields = record.get("fields", {})
+        festival_id = str(fields.get("festival_id", "")).strip()
+        if festival_id:
+            by_id[festival_id] = record
+        name = normalized_name(fields.get("Name", ""))
+        if name:
+            by_name.setdefault(name, []).append(record)
+
+    meta = schema()
+    festivals_table = next(t for t in meta["tables"] if t["name"] == "Festivals")
+    field_names = {field["name"] for field in festivals_table["fields"]}
+    if "site_managed" not in field_names:
+        print("site_managed: checkbox 型フィールドの作成が必要")
+        if execute:
+            call("POST", f"/meta/bases/{BASE_ID}/tables/{festivals_table['id']}/fields",
+                 {"name": "site_managed", "type": "checkbox",
+                  "options": {"icon": "check", "color": "greenBright"}})
+            print("site_managed: 作成")
+
+    creates = []
+    updates = []
+    unchanged = 0
+    same_name_skips = 0
+    status_map = {"active": "active", "ended": "inactive", "inactive": "inactive"}
+    for item in site_festivals:
+        festival_id = str(item.get("festival_id", "")).strip()
+        if not festival_id:
+            print("  ⚠️ festival_id が空の入力をスキップ")
+            continue
+        fields = {"festival_id": festival_id, "Name": str(item.get("name", "")),
+                  "country": "JP", "site_managed": True}
+        for name in ("city", "official_url", "last_date_start", "last_date_end"):
+            value = str(item.get(name, ""))
+            if value:
+                fields[name] = value
+        status = str(item.get("status", "")).strip().lower()
+        if status in status_map:
+            fields["brand_status"] = status_map[status]
+
+        existing = by_id.get(festival_id)
+        if not existing:
+            same_name = by_name.get(normalized_name(fields["Name"]), [])
+            if same_name:
+                print(f"  ⚠️ {festival_id}: 同名レコードがあるためスキップ（ID不一致）")
+                same_name_skips += 1
+                continue
+            creates.append(fields)
+            for name, value in fields.items():
+                print(f"  {festival_id}: {name} （空→{value}） {'[実行]' if execute else '[dry-run]'}")
+            continue
+
+        changed = {}
+        old_fields = existing.get("fields", {})
+        for name, value in fields.items():
+            if old_fields.get(name) != value:
+                changed[name] = value
+                print(f"  {festival_id}: {name} {old_fields.get(name, '')}→{value} "
+                      f"{'[実行]' if execute else '[dry-run]'}")
+        if changed:
+            updates.append({"id": existing["id"], "fields": changed, "festival_id": festival_id})
+        else:
+            unchanged += 1
+
+    if execute:
+        for i in range(0, len(creates), 10):
+            batch = creates[i:i + 10]
+            call("POST", f"/{BASE_ID}/Festivals",
+                 {"records": [{"fields": fields} for fields in batch], "typecast": True})
+            time.sleep(0.25)
+        for i in range(0, len(updates), 10):
+            batch = updates[i:i + 10]
+            call("PATCH", f"/{BASE_ID}/Festivals",
+                 {"records": [{"id": row["id"], "fields": row["fields"]} for row in batch],
+                  "typecast": True})
+            time.sleep(0.25)
+
+    print(f"作成 {len(creates)} / 更新 {len(updates)} / 変更なし {unchanged} / 同名スキップ {same_name_skips}")
+    return 0
+
+
 def main() -> int:
     p = argparse.ArgumentParser()
-    p.add_argument("task", choices=["apply", "fix-dates"])
+    p.add_argument("task", choices=["apply", "fix-dates", "sync-site"])
+    p.add_argument("--input", help="sync-site の入力JSON")
     g = p.add_mutually_exclusive_group()
     g.add_argument("--dry-run", action="store_true", default=True)
     g.add_argument("--execute", action="store_true")
@@ -241,7 +339,11 @@ def main() -> int:
     print(f"=== {a.task} {'（本実行）' if execute else '（dry-run・書き込みなし）'} ===")
     if a.task == "apply":
         return cmd_apply(execute)
-    return cmd_fix_dates(execute)
+    if a.task == "fix-dates":
+        return cmd_fix_dates(execute)
+    if not a.input:
+        p.error("sync-site には --input が必要です")
+    return cmd_sync_site(a.input, execute)
 
 
 if __name__ == "__main__":

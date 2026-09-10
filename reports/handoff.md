@@ -6741,3 +6741,35 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 
 ### 次の担当への注意・判断待ち
 - なし。
+
+## 2026-09-11 sync-site（サイト国内フェス→Airtable）実装
+
+### 実施
+- `scripts/db/export_site_festivals.mjs` を追加し、公開済み `LP/data.js` の
+  FESTIVALS 97件を同期用JSONへ変換する処理を実装。
+- `airtable_pipeline.py sync-site` を追加。festival_id優先、NFC+casefold名照合、
+  `site_managed` checkboxのdry-run対応、空値を保持する差分更新、10件バッチを実装。
+- 手動workflowに sync-site の選択肢とJSONエクスポート分岐を追加。cronは未追加。
+
+### コミット
+- 未コミット（依頼により commit / push / stash は実施していない）。
+
+### 検証
+- `node scripts/db/export_site_festivals.mjs`: 97件、festival_id空欄0件、全7キー、日付形式を確認。
+- `python3 -m py_compile scripts/db/airtable_pipeline.py`: 成功（`PYTHONPYCACHEPREFIX=/tmp/...` を使用）。
+- `python3 scripts/db/airtable_pipeline.py sync-site --help`: 成功。
+- Airtable APIは未接続。モックでdry-runの書き込みなし、およびexecute相当の
+  checkbox作成・POST/PATCHのtypecast・差分判定を確認。
+- `bash scripts/preflight.sh`: 未実施（サイト生成物・ブラウザ検査を伴うため、レビュー側で実施）。
+
+### 変更したパターン
+- DB pipeline task 1件追加 / export script 1件追加 / 手動workflow分岐1件追加。
+
+### 未確認の類似パターン
+- 実Airtable上のフィールド型・既存レコードとの突合結果は未確認。
+- GitHub Actions上のdry-run / execute実行、および初回execute後の件数・site_managed値は未確認。
+
+### 次の担当への注意・判断待ち
+- `AIRTABLE_TOKEN` をGitHub Secretsに設定した環境で、まず workflow の sync-site / dry-run を実行し、
+  明細と件数を確認する。その後、承認済みのタイミングで初回executeを実行する。
+- 初回execute成功後にのみ、cron追加を別変更として検討すること。

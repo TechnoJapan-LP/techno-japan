@@ -14,7 +14,7 @@ on:
         description: '実行する処理'
         required: true
         type: choice
-        options: [apply, fix-dates]
+        options: [apply, fix-dates, sync-site]
       mode:
         description: 'dry-run（確認のみ）か execute（書き込み）か'
         required: true
@@ -41,4 +41,9 @@ jobs:
         run: |
           FLAG="--dry-run"
           if [ "${{ inputs.mode }}" = "execute" ]; then FLAG="--execute"; fi
-          python3 scripts/db/airtable_pipeline.py "${{ inputs.task }}" "$FLAG"
+          if [ "${{ inputs.task }}" = "sync-site" ]; then
+            node scripts/db/export_site_festivals.mjs > /tmp/site-festivals.json
+            python3 scripts/db/airtable_pipeline.py sync-site --input /tmp/site-festivals.json "$FLAG"
+          else
+            python3 scripts/db/airtable_pipeline.py "${{ inputs.task }}" "$FLAG"
+          fi
