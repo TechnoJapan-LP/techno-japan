@@ -855,3 +855,16 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   .article-body .tj-cal-month li { grid-template-columns: 1fr; gap: 4px; padding: 12px 0; }
   .article-body .tj-cal-month li a { font-size: 16px; }
 }
+
+/* ==========================================================
+   ≤900px は nav が sticky（common.css）で自身の高さを文書の流れの中に
+   持つため、fixed 前提の大きな上余白は二重取りになる。
+   詳細ページ（記事 / フェス / 会場）は nav 直下 24px まで詰める。
+   このブロックは既存の 768px / 900px の padding 指定より後ろに
+   置いて上書きする前提。前に移動させないこと。
+   ========================================================== */
+@media (max-width: 900px) {
+  .article-detail,
+  .detail-page,
+  .festival-design-v2 { padding-top: 24px; }
+}
