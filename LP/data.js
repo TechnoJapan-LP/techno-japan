@@ -748,6 +748,42 @@ const ARTISTS = [
     id: "jakojako",
     name: "JakoJako",
   },
+  {
+    id: "haruka",
+    name: "Haruka",
+  },
+  {
+    id: "herbalistek",
+    name: "Herbalistek",
+  },
+  {
+    id: "efdemin",
+    name: "Efdemin",
+  },
+  {
+    id: "anthony-linell",
+    name: "Anthony Linell",
+  },
+  {
+    id: "vril",
+    name: ".VRIL",
+  },
+  {
+    id: "rrose",
+    name: "Rrose",
+  },
+  {
+    id: "goth-trad",
+    name: "GOTH-TRAD",
+  },
+  {
+    id: "risa-taniguchi",
+    name: "RISA TANIGUCHI",
+  },
+  {
+    id: "shhhhh",
+    name: "Shhhhh",
+  },
 ];
 
 const EVENTS = [
@@ -777,7 +813,7 @@ const FESTIVALS = [
     lineup: ["Arielle Free", "Elderbrook", "Erika", "HANA", "Justice Patterson", "Kaiharubro", "Kanine", "KETTAMA", "Lovebirds", "Luude", "MPH", "Patrick Topping", "Rebūke", "Risa Taniguchi", "Sam Alfred", "Sneaky Sound System", "STÜM", "TOKiMONSTA", "Torren Foot", "Wilkinson", "William Kiss", "Yuuki Yoshiyama", "Zedena"],
     editions: [
       { year: 2026, date: "2026-03-03/2026-03-08", lineup: ["Steve Aoki", "Armand Van Helden", "Flight Facilities", "Gorgon City", "Sub Focus", "Cyril", "D.O.D", "Korolova", "Mall Grab", "Hannah Laing", "Anna Lunoe", "Bella Claxton", "Big Wet", "DJ BORING", "Choomba", "Harvey Sutherland", "Horatio Luna", "Human Movement", "Jimi The Klesis", "Kinder", "Late Nite Tuff Guy", "Loods", "Mell Hall", "Needs No Sleep", "Northeast Party House", "Paris", "Poolclash", "Slay", "STUM", "Tori Levett", "Wax Motif", "World Champion"] },
-      { year: 2027, date: "2027-03-02/2027-03-07", lineup: [] },
+      { year: 2027, date: "2027-03-02/2027-03-07", lineup: ["Arielle Free", "Elderbrook", "Erika", "HANA", "Justice Patterson", "Kaiharubro", "Kanine", "KETTAMA", "Lovebirds", "Luude", "MPH", "Patrick Topping", "Rebūke", "Risa Taniguchi", "Sam Alfred", "Sneaky Sound System", "STÜM", "TOKiMONSTA", "Torren Foot", "Wilkinson", "William Kiss", "Yuuki Yoshiyama", "Zedena"] },
     ],
   },
   {
@@ -907,7 +943,7 @@ const FESTIVALS = [
     lineup: ["CMT", "COCO", "DJ FUMI", "Eita Godo", "ge-ology", "ground", "idjut-boys", "Kengo Groove", "KIORA", "mr-disco-kid", "Naoki", "occa", "Rei Nakagawa", "RYO", "tonbo", "ÜuMA", "ysk"],
     editions: [
       { year: 2025, date: "2025-10-04/2025-10-05", lineup: ["Sound Metaphors DJs", "Poggio", "Monkey Timers", "Ground", "Eita Godo", "Yuka Mizuhara", "Noritake", "Nakame House Groove", "Lyra Tsuru", "SO", "YSK", "Remmy", "MONO SAFARI", "Ryo", "Olive Oil", "luvis", "YANBARISE", "Chuba", "MASUO", "H1b1k1", "Joma", "Neggy", "kasetsu"] },
-      { year: 2026, date: "2026-10-02/2026-10-04", lineup: [] },
+      { year: 2026, date: "2026-10-02/2026-10-04", lineup: ["CMT", "COCO", "DJ FUMI", "Eita Godo", "ge-ology", "ground", "idjut-boys", "Kengo Groove", "KIORA", "mr-disco-kid", "Naoki", "occa", "Rei Nakagawa", "RYO", "tonbo", "ÜuMA", "ysk"] },
     ],
   },
   {
@@ -948,10 +984,10 @@ const FESTIVALS = [
     desc_en: "OTSUKIMI takes place in Nagano's mountainous terrain, drawing its name from the traditional Japanese moon-viewing festival. The event brings together Japan's underground techno community in a natural setting that emphasizes the connection between electronic music and seasonal ritual.",
     ticketUrl: "https://otsukimi.zaiko.io/en/e/otsukimi-2026-openair",
     instagram: "https://www.instagram.com/technotribeotsukimi/",
-    lineup: ["Efdemin", "Erimiya", "Haruka", "Hypnotic Black Magic", "THE MOONSEEKERS"],
+    lineup: ["vril", "anthony-linell", "dj-hi-c", "Dsk × Soncho", "efdemin", "HAPPY", "haruka", "herbalistek", "qmico", "Keita", "Mitayo", "Mod.1", "Paula Koski", "so", "Yoshitake EXPE"],
     editions: [
       { year: 2025, date: "2025-09-05/2025-09-07", lineup: ["tsu", "DJ HI-C", "YouForgot", "Dsk", "Haruka", "John Plaza", "Keita", "Midnight traffic", "Sandrien", "Shhhhh", "So", "Soncho", "Suimin", "Yuka"] },
-      { year: 2026, date: "2026-09-28/2026-09-29", lineup: [] },
+      { year: 2026, date: "2026-09-25/2026-09-27", lineup: [".VRIL", "Anthony Linell", "DJ HI-C", "Dsk × Soncho", "Efdemin", "HAPPY", "Haruka", "Herbalistek", "Hypnotic Black Magic × Qmico", "Keita", "Mitayo", "Mod.1", "Paula Koski", "So", "Yama", "Yoshitake EXPE"] },
     ],
   },
   {
@@ -974,7 +1010,7 @@ const FESTIVALS = [
     lineup: ["AIZEN", "CNG", "Kenji Takashima", "Shiiba Shunsuke", "Shibuya Shiro", "swabu", "S-ZO", "woll fool", "Bit-Chang", "DJ FUMI", "DJ KENROU", "Hello Kenny", "HIKARU", "H1540", "ISPXXL", "JAMMIN", "Jinnai", "KAEDE", "Katsumi", "Kazuya", "Kuniko", "KROK", "KYON", "kzy", "Meteor", "MIHO", "Mitsu", "Musashi", "Naoki", "Naosuke", "P.YAYO", "RYO", "TATA THE MONDAY", "TIGAONE", "Toshi", "VAVA", "yui.k", "989"],
     editions: [
       { year: 2025, date: "2025-11-22/2025-11-24", lineup: ["Kojiro", "CNG", "Swabu", "Choko", "Daichi", "DAIJIRO", "DJ FUMI", "HIKARU", "Hisao", "Jinnai", "KAEDE", "Katsumi", "KEIT4MIN", "Kuniko", "Lucky", "NAGI", "naotsun", "SHIORI", "Sho-kei", "suimin", "SUNGA", "TAIHEI", "THE KLO", "take", "Meteor", "YAS", "YUSUKEV", "YUTA"] },
-      { year: 2026, date: "2026-09-25/2026-09-27", lineup: [] },
+      { year: 2026, date: "2026-09-25/2026-09-27", lineup: ["AIZEN", "CNG", "Kenji Takashima", "Shiiba Shunsuke", "Shibuya Shiro", "swabu", "S-ZO", "woll fool", "Bit-Chang", "DJ FUMI", "DJ KENROU", "Hello Kenny", "HIKARU", "H1540", "ISPXXL", "JAMMIN", "Jinnai", "KAEDE", "Katsumi", "Kazuya", "Kuniko", "KROK", "KYON", "kzy", "Meteor", "MIHO", "Mitsu", "Musashi", "Naoki", "Naosuke", "P.YAYO", "RYO", "TATA THE MONDAY", "TIGAONE", "Toshi", "VAVA", "yui.k", "989"] },
     ],
   },
   {
@@ -1000,7 +1036,7 @@ const FESTIVALS = [
     lineup: ["FLOWDANMETRIK", "GRAFIX", "MURA MASA", "nasthug", "lady-shaka", "NEKO MAFIA", "OPPIDAN", "PLUKO", "RIRIA", "RYOTA", "DREAD MC", "SOICHI TERADA", "AOTO", "CHINZA DOPENESS", "Daichi Yamamoto", "JessB", "Kaneee", "Peterparker69", "Rejjie Snow", "SIRUP", "Sonsi", "Mamiko Suzuki", "tofubeats", "WILYWNKA", "Worldwide Skippa"],
     editions: [
       { year: 2025, date: "2025-10-04/2025-10-04", lineup: ["Tohji", "SKIN ON SKIN", "underscores", "Fumiya Tanaka", "HEAVEN", "Iglooghost", "lilbesh ramko", "okadada", "Peterparker69", "SOICHI TERADA"] },
-      { year: 2026, date: "2026-09-22/2026-09-23", lineup: [] },
+      { year: 2026, date: "2026-09-22/2026-09-23", lineup: ["FLOWDANMETRIK", "GRAFIX", "MURA MASA", "nasthug", "lady-shaka", "NEKO MAFIA", "OPPIDAN", "PLUKO", "RIRIA", "RYOTA", "DREAD MC", "SOICHI TERADA", "AOTO", "CHINZA DOPENESS", "Daichi Yamamoto", "JessB", "Kaneee", "Peterparker69", "Rejjie Snow", "SIRUP", "Sonsi", "Mamiko Suzuki", "tofubeats", "WILYWNKA", "Worldwide Skippa"] },
     ],
   },
   {
@@ -1065,9 +1101,9 @@ const FESTIVALS = [
     url: "https://www.rebirth-fes.com/",
     ticketUrl: "https://rebirth.zaiko.io/en/e/rebirth-2026",
     instagram: "https://www.instagram.com/rebirthfes/",
-    lineup: ["Mathew Jonson", "SODEYAMA", "Kuniyuki", "Goth-Trad", "Risa Taniguchi", "dj-yazi", "John Plaza", "Josh Heywood"],
+    lineup: ["rrose", "Mathew Jonson × SODEYAMA", "Domestic aka Ido Ophir", "John Plaza", "Josh Heywood", "EVGHENIIA", "Migdalor", "Astrogano", "Autogenesis", "amuwa", "Seta Loto", "Airi", "Akari System", "AtemetA", "Aymjet × Woody", "Beano", "choko", "Chromatic Wave", "comm", "DANA NADA", "DANDAN", "DJ Momo", "dj-yazi", "Emiri", "GAKU SAIMURA", "Goemon Bros", "gojitmal", "goth-trad", "Hisa", "Hybrid Leisureland", "joma", "KENT ORIA", "Kojiro", "KOTARO", "kuniyuki", "LAZZZY", "LØST", "MEGU", "michika", "MOMO", "Morrieo", "MR.RESORT", "MUNEMASA", "MUSCLE ∞ BROTHERS", "naotsun", "Naudible", "NOCO", "NYAO", "jonny-rock", "Peaceful Maker", "PUSTER", "qmico", "Ree.K", "Rick Shinmi", "Rickey Shannon", "risa-taniguchi", "sakuma", "Slum & Satono", "savezearth", "ShaMANoiD", "shhhhh", "SHIHAL", "SuperUser", "taichi-kawahira", "Tak3h", "Takumi Inamoto", "Tarzan", "Titanos", "TOMOCOMO", "tsutomu", "vespertine", "Yoshitaka Shirakura", "Yuya", "tonbo"],
     editions: [
-      { year: 2026, date: "2026-09-11/2026-09-13", lineup: [] },
+      { year: 2026, date: "2026-09-11/2026-09-13", lineup: ["Rrose", "Mathew Jonson × SODEYAMA", "Domestic aka Ido Ophir", "John Plaza", "Josh Heywood", "EVGHENIIA", "Migdalor", "Astrogano", "Autogenesis", "amuwa", "Seta Loto", "Airi", "Akari System", "AtemetA", "Aymjet × Woody", "Beano", "Choko", "Chromatic Wave", "comm", "DANA NADA", "DANDAN", "DJ Momo", "DJ Yazi", "Emiri", "GAKU SAIMURA", "Goemon Bros", "gojitmal", "GOTH-TRAD", "Hisa", "Hybrid Leisureland", "Joma", "KENT ORIA", "Kojiro", "KOTARO", "Kuniyuki", "LAZZZY", "LØST", "MEGU", "michika", "MOMO", "Morrieo", "MR.RESORT", "MUNEMASA", "MUSCLE ∞ BROTHERS", "naotsun", "Naudible", "NOCO", "NYAO", "OC", "Peaceful Maker", "PUSTER", "Qmico", "Ree.K", "Rick Shinmi", "Rickey Shannon", "RISA TANIGUCHI", "Sakuma", "Slum & Satono", "savezearth", "ShaMANoiD", "Shhhhh", "SHIHAL", "SuperUser", "Taichi Kawahira", "Tak3h", "Takumi Inamoto", "Tarzan", "Titanos", "TOMOCOMO", "Tsutomu", "vespertine", "Yoshitaka Shirakura", "Yuya", "Tonbo"] },
     ],
   },
   {
@@ -1089,8 +1125,8 @@ const FESTIVALS = [
     instagram: "https://www.instagram.com/precioushall_sapporo/",
     lineup: ["JUAN ATKINS", "Keiji", "Kuniyuki", "Keisuke Uemura", "Higashi", "YAMA"],
     editions: [
-      { year: 2025, date: "2025-09-07", lineup: ["JOAQUIN \"JOE\" CLAUSSELL", "EYE", "CALM", "SOFT", "YUZO IWATA"] },
-      { year: 2026, date: "2026-09-06", lineup: [] },
+      { year: 2025, date: "2025-09-07/2025-09-07", lineup: ["JOAQUIN \"JOE\" CLAUSSELL", "EYE", "CALM", "SOFT", "YUZO IWATA"] },
+      { year: 2026, date: "2026-09-06", lineup: ["JUAN ATKINS", "Keiji", "Kuniyuki", "Keisuke Uemura", "Higashi", "YAMA"] },
     ],
   },
   {
@@ -1203,7 +1239,7 @@ const FESTIVALS = [
     lineup: ["81blend", "Abu", "Acidclank", "chazuke", "Chikara Sueda", "Nakakuni", "Dasakura", "DENKIHITSUJI", "DJ FOX-X a.k.a TAKA MARL", "dogezaExp", "H.YOROZU", "Hexee", "HALO", "JUDO", "Kaito", "Kamenomisoshiru", "Kanemah", "kannQazuja", "kiku", "MADZINE", "Manchineel", "Masayoshi Sakaguchi", "MIYAKE", "MORRIS.K", "NK", "Raio", "Ryu2", "Sacai & Taichi Tsumori", "SHA_XUE", "space kanta", "SUETAKE", "Takahiro Oisi", "Yoshihiro Kimura", "YUKAKU 'И", "zundoko-disco", "Wakoo", "Gyo-shin"],
     editions: [
       { year: 2025, date: "2025-08-30/2025-08-31", lineup: ["81blend", "aon", "CM Smooth", "dogezaExp", "Giddlah Selecta", "Haruki", "Hexee", "ironman", "kannQazuja", "kiku", "Naluu", "NSN", "Ryu2", "SHA_XUE", "SHIROH", "Space Kanta", "SUETAKE", "Tech-Bou", "ushim", "WATAYA", "Xin", "YAKO MIKA", "Yona", "H.YOROZU", "Yoshihiro Kimura"] },
-      { year: 2026, date: "2026-08-22/2026-08-23", lineup: [] },
+      { year: 2026, date: "2026-08-22/2026-08-23", lineup: ["81blend", "Abu", "Acidclank", "chazuke", "Chikara Sueda", "Nakakuni", "Dasakura", "DENKIHITSUJI", "DJ FOX-X a.k.a TAKA MARL", "dogezaExp", "H.YOROZU", "Hexee", "HALO", "JUDO", "Kaito", "Kamenomisoshiru", "Kanemah", "kannQazuja", "kiku", "MADZINE", "Manchineel", "Masayoshi Sakaguchi", "MIYAKE", "MORRIS.K", "NK", "Raio", "Ryu2", "Sacai & Taichi Tsumori", "SHA_XUE", "space kanta", "SUETAKE", "Takahiro Oisi", "Yoshihiro Kimura", "YUKAKU 'И", "zundoko-disco", "Wakoo", "Gyo-shin"] },
     ],
   },
   {
@@ -1228,7 +1264,7 @@ const FESTIVALS = [
     lineup: ["D-Leria", "Mathys Lenne", "Tohru Takahashi", "dj-miku", "dj-kensei", "moodman", "J.A.K.A.M.", "dj-yogurt", "AKIRA ARASAWA", "yakenohara", "choko", "sunga", "7e", "DANA NADA", "naotsun", "akihiro-suzuki", "Ryoichi Komagome", "tsutomu", "GAKU SAIMURA", "Shinya Miyachi", "Isamu Kobayashi", "Eiichi Kawai", "YAKO MIKA", "OYASSAN", "ken-ishii", "Q'HEY", "HIDEO KOBAYASHI", "DJ SODEYAMA", "DRUNKEN KONG", "RISA TANIGUCHI", "Yoshinori Hayashi", "nutmeg", "heykazma", "YOUTH", "liarako", "HENTAI CAMERA MAN", "Ecstasy Twins", "Shaman Riyo", "SUEPON", "AOKIYA"],
     editions: [
       { year: 2025, date: "2025-08-29/2025-08-31", lineup: ["JAMES HOLDEN", "Stefan Goldmann", "Stefan Vincent", "Tohru Takahashi", "DJ MIKU", "Kaoru Inoue", "J.A.K.A.M.", "DJ YOGURT", "HIDEO KOBAYASHI", "DRUNKEN KONG", "HENTAI CAMERA MAN", "DO SHOCK BOOZE", "Ecstasy Twins", "Sancho Meiso Chaya）", "Akira Arasawa", "7e", "Dani Savant", "ERIMIYA", "GAKU SAIMURA", "TAICHI KAWAHIRA", "Tsutomu", "AΦPOΔITA", "Tatsuo Sunaga", "DJ KENSEI", "ENUOH × MATSUNAMI", "Isamu Kobayashi", "Bob Rogue", "DJ Dante", "DANA NADA", "Akihiro Suzuki", "NUTMEG", "Eiichi Kawai", "DJ YAKO MIKA", "DJ. CHAPPY & JUNKO", "Ken2", "DIGITALBLOCK DJs", "KOTARO", "Kojiro", "SayakaStar", "NORID", "naotsun", "snipe1", "TARZAN"] },
-      { year: 2026, date: "2026-08-21/2026-08-23", lineup: [] },
+      { year: 2026, date: "2026-08-21/2026-08-23", lineup: ["D-Leria", "Mathys Lenne", "Tohru Takahashi", "dj-miku", "dj-kensei", "moodman", "J.A.K.A.M.", "dj-yogurt", "AKIRA ARASAWA", "yakenohara", "choko", "sunga", "7e", "DANA NADA", "naotsun", "akihiro-suzuki", "Ryoichi Komagome", "tsutomu", "GAKU SAIMURA", "Shinya Miyachi", "Isamu Kobayashi", "Eiichi Kawai", "YAKO MIKA", "OYASSAN", "ken-ishii", "Q'HEY", "HIDEO KOBAYASHI", "DJ SODEYAMA", "DRUNKEN KONG", "RISA TANIGUCHI", "Yoshinori Hayashi", "nutmeg", "heykazma", "YOUTH", "liarako", "HENTAI CAMERA MAN", "Ecstasy Twins", "Shaman Riyo", "SUEPON", "AOKIYA"] },
     ],
   },
   {
@@ -1251,7 +1287,7 @@ const FESTIVALS = [
     lineup: ["GIZMO", "Junko Onagi", "KANKEEY", "LAZZZY", "Louis Shannon", "MAMAZU", "NICO", "Rickey Shannon", "Ryoki Shindo", "Saeki Takuya", "SWELY", "TAAAHHH", "YUXI"],
     editions: [
       { year: 2025, date: "2025-08-16/2025-08-17", lineup: ["GIZMO", "Junko Onagi", "KANKEEY", "LAZZZY", "Louis Shannon", "MAMAZU", "NICO", "Rickey Shannon", "Ryoki Shindo", "Saeki Takuya", "SWELY", "TAAAHHH", "YUXI"] },
-      { year: 2026, date: "2026-08-15/2026-08-16", lineup: [] },
+      { year: 2026, date: "2026-08-15/2026-08-16", lineup: ["GIZMO", "Junko Onagi", "KANKEEY", "LAZZZY", "Louis Shannon", "MAMAZU", "NICO", "Rickey Shannon", "Ryoki Shindo", "Saeki Takuya", "SWELY", "TAAAHHH", "YUXI"] },
     ],
   },
   {
@@ -2062,10 +2098,10 @@ const FESTIVALS = [
     url: "https://ffkt.jp/2026-izushirahama",
     ticketUrl: "https://ffkt-fest.zaiko.io/en/e/ffkt2026-izushirahama",
     instagram: "https://www.instagram.com/ffkt_fest/",
-    lineup: ["Ayatake Ezaki", "Mia Koden", "NOOLIO", "Space Ghost", "Suzanne Kraft", "Tommy Guerrero"],
+    lineup: ["Actress", "akiram-en", "Ayatake Ezaki", "Greg Foat", "Markus Sommer", "Kei Matsumaru", "Mia Koden", "NOOLIO", "Photay", "SAMO", "Space Ghost", "Suzanne Kraft", "Tommy Guerrero"],
     editions: [
       { year: 2025, date: "2025-09-27/2025-09-28", lineup: ["AKIRAM EN", "Ash Rah", "Chanaz", "CHO CO PA CO CHO CO QUIN QUIN", "Fabiano do Nascimento", "Gigi Masin", "Greg Foat", "Huerco S.", "Fuki Kitamura", "Knopha", "Loidis", "Milian Mori", "NOOLIO", "Powder", "Shinichi Atobe", "Stones Taro"] },
-      { year: 2026, date: "2026-09-26/2026-09-27", lineup: [] },
+      { year: 2026, date: "2026-09-26/2026-09-27", lineup: ["Actress", "AKIRAM EN", "Ayatake Ezaki", "Greg Foat", "Markus Sommer", "Kei Matsumaru", "Mia Koden", "NOOLIO", "Photay", "SAMO", "Space Ghost", "Suzanne Kraft", "Tommy Guerrero"] },
     ],
   },
   {
