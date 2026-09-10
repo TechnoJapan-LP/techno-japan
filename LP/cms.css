@@ -336,6 +336,10 @@ label .req-star{color:var(--accent);margin-left:4px}
 .ar-prev-body .tj-event-lineup{margin:0 0 8px;font-family:var(--font-body);font-size:14px;line-height:1.6;color:var(--text)}
 .ar-prev-body .tj-event-lineup-label{font-family:var(--font-mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;opacity:.55;margin-right:10px}
 .ar-prev-body .tj-event-artist-sep{opacity:.4}
+.ar-prev-body .tj-event-name-link{color:inherit;border-bottom:none;text-decoration:none;transition:color .2s ease}
+.ar-prev-body .tj-event-name-link:hover{color:var(--accent)}
+.ar-prev-body .tj-event-festival-link{color:var(--accent);opacity:.8;margin-right:16px}
+.ar-prev-body .tj-event-festival-link:hover{color:var(--accent);opacity:1}
 @media(max-width:600px){.ar-prev-body .tj-event{margin:20px 0;padding:12px 14px 14px 16px}}
 .ar-prev-body strong{color:#f0ede8;font-weight:500}
 .ar-prev-body blockquote{border-left:2px solid var(--accent);padding:8px 0 8px 24px;margin:32px 0;font-style:italic;opacity:.85}

@@ -6826,3 +6826,47 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 
 ### 次の担当への注意・判断待ち
 - なし。
+
+## 2026-09-11 イベントカードからフェス詳細ページへのリンク（8番目フェスID）
+
+### 実施
+- 依頼: 記事BODYのイベントカードから既存FESTIVALページへ遷移できるように（デザイン込み）。
+- 短コードを `[[event|名前|日程|場所|URL|出演者|補足|フェスID]]` に拡張（8番目・任意・
+  末尾追加なので公開中の7項目カード14枚は無変更で後方互換）。
+- 表示: フェスIDがあるとカード名がリンクに（下線なし・hoverでアクセント）、
+  リンク行に赤の「FESTIVAL PAGE →」を OFFICIAL ↗ の左に追加。ENは /en/festivals/ へ。
+- 安全装置: renderArticleShortcodes に festivalIds オプション。ビルド
+  （makeEntityResolver / validateArticleShortcodes）とCMSプレビュー両方で
+  **実在しないIDはエラーで停止**（リンク切れを本番に出さない）。ID形式も検査。
+- CMS: イベントカードダイアログ先頭に「サイト内フェス」検索ピッカー
+  （既存fest-pickerと同型・eventFestPicker*）。選択で festivalId 設定＋
+  **空欄のみ自動入力**（名前・場所=location,city・URL・最新開催回の日程）。
+- JSON-LD: festivalId 付きイベントに sameAs（フェスページURL）。
+- レビュー修正1件: プレビューでカード名にブラウザ既定の下線が残る
+  （CMSはaのtext-decoration未リセット）→ 両CSSに text-decoration:none を明示。
+- 版: detail.css 34 / article-shortcodes.js 4 / cms.css 38 / cms.js 111。
+- 実装=Codex（設計書1通）、レビュー・検証=Claude。
+
+### コミット
+- このエントリと同一コミット（生成物含む）。
+
+### 検証
+- 単体テスト31件成功（リンク描画 JA/EN・後方互換・ID形式/実在エラー・非提供時許容）
+- headless CMS実測: 検索→選択で name/place/url/最新回日程が自動入力→挿入で
+  8項目短コード→プレビューに FESTIVAL PAGE →（アクセント色・href正）と
+  名前リンク（装飾none）→未知IDでエラー表示。スクリーンショット目視も実施。
+- `bash scripts/preflight.sh`: 全41件成功。
+
+### 変更したパターン
+- parse+render+検証 3箇所 / CSS 本番4+プレビュー4+装飾修正2 / ダイアログUI+
+  ピッカー3関数+組み立て / プレビューへのfestivalIds伝搬2箇所 / JSON-LD 1 /
+  テスト5ケース / docs 1
+
+### 未確認の類似パターン
+- 認証済み本番CMSでの実操作: **実機未確認**（headlessは認証素通し・フェス
+  キャッシュ差し込み）。本番でイベントカードのフェス検索を1回試すと良い
+- カレンダー行はリンク化していない（カードアンカーのまま・意図的）
+
+### 次の担当への注意・判断待ち
+- renderArticleShortcodes は festivalIds 未提供なら実在検査をしない
+  （CMSのキャッシュ未読込時に書けなくなるのを防ぐ意図）。検査を必須化しないこと。

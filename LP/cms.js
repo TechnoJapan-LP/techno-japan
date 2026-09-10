@@ -1376,8 +1376,11 @@ function updateArticlePreview(html, force){
     const shortcodeApi = globalThis.TJArticleShortcodes;
     if (shortcodeApi?.renderArticleShortcodes) {
       try {
+        const festivalRows = readSheetCache('festival') || [];
+        const festivalIds = festivalRows.map(r => r.id).filter(Boolean);
         el.innerHTML = shortcodeApi.renderArticleShortcodes(entityHtml, {
-          lang: document.documentElement.lang === 'en' ? 'en' : 'ja'
+          lang: document.documentElement.lang === 'en' ? 'en' : 'ja',
+          ...(festivalIds.length ? { festivalIds } : {})
         }).html;
       } catch (error) {
         el.innerHTML = '<div class="ar-prev-empty">ショートコードエラー: ' + esc(error.message) + '</div>';
@@ -1480,14 +1483,19 @@ function openArticleGeneratedPreview(){
   const shortcodeApi = globalThis.TJArticleShortcodes;
   if (shortcodeApi?.renderArticleShortcodes) {
     try {
-      previewBody = shortcodeApi.renderArticleShortcodes(entityHtml, { lang: 'ja' }).html;
+      const festivalRows = readSheetCache('festival') || [];
+      const festivalIds = festivalRows.map(r => r.id).filter(Boolean);
+      previewBody = shortcodeApi.renderArticleShortcodes(entityHtml, {
+        lang: 'ja',
+        ...(festivalIds.length ? { festivalIds } : {})
+      }).html;
     } catch (error) {
       return toast('ショートコードエラー: ' + error.message, 'error');
     }
   }
   const safeBody = String(previewBody).replace(/<script/gi, '&lt;script');
   win.document.open();
-  win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><link rel="stylesheet" href="/common.css?v=27"><link rel="stylesheet" href="/detail.css?v=33"><link rel="stylesheet" href="/article-fx.css?v=11"></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${title}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=8"><\/script></body></html>`);
+  win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><link rel="stylesheet" href="/common.css?v=27"><link rel="stylesheet" href="/detail.css?v=34"><link rel="stylesheet" href="/article-fx.css?v=11"></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${title}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=8"><\/script></body></html>`);
   win.document.close();
 }
 
@@ -1609,6 +1617,67 @@ function festPickerClear(){
   document.getElementById('ar-festivalId').value = '';
   document.getElementById('ar-festivalId-selected').hidden = true;
   markFormDirty();
+}
+
+/* ---------- 記事イベントカード用フェス検索ピッカー ---------- */
+function eventFestPickerFilter(){
+  const input = document.getElementById('ar-event-festival-search');
+  const list = document.getElementById('ar-event-festival-list');
+  if (!input || !list) return;
+  const rows = (readSheetCache('festival') || []).filter(r => r.id);
+  if (!rows.length){
+    list.innerHTML = '<div class="fp-empty">フェス一覧を読み込み中…</div>';
+    list.hidden = false;
+    ensureSheetCache('festival').then(() => {
+      const l = document.getElementById('ar-event-festival-list');
+      if (l && !l.hidden) eventFestPickerFilter();
+    });
+    return;
+  }
+  const q = input.value.toLowerCase().trim();
+  const hits = rows.filter(r => !q || String(r.name || '').toLowerCase().includes(q) || String(r.id).toLowerCase().includes(q)).slice(0, 40);
+  list.innerHTML = hits.length
+    ? hits.map(r => '<button type="button" data-id="'+esc(r.id)+'" data-name="'+esc(r.name || r.id)+'">'+esc(r.name || r.id)+'<span class="fp-id">'+esc(r.id)+'</span></button>').join('')
+    : '<div class="fp-empty">該当なし</div>';
+  list.hidden = false;
+}
+function eventFestPickerSelect(id, name){
+  const row = (readSheetCache('festival') || []).find(r => String(r.id) === String(id));
+  const setIfEmpty = (selector, value) => {
+    const input = document.querySelector(selector);
+    if (input && !input.value.trim() && value) input.value = value;
+  };
+  setIfEmpty('#ar-event-name', row?.name || name || id);
+  const place = [row?.location, row?.city].filter(Boolean).join(', ');
+  setIfEmpty('#ar-event-place', place);
+  setIfEmpty('#ar-event-url', row?.url || '');
+  let editions = row?.editions;
+  if (typeof editions === 'string') {
+    try { editions = JSON.parse(editions); } catch (_) { editions = null; }
+  }
+  if (Array.isArray(editions) && editions.length) {
+    const latest = editions
+      .map(ed => ({ ed, year: Number(ed.year || ed.YEAR || String(ed.date || ed.DATE || '').slice(0, 4)) }))
+      .filter(x => Number.isFinite(x.year) && x.year > 0)
+      .sort((a, b) => b.year - a.year)[0]?.ed;
+    const date = latest?.date || latest?.DATE || '';
+    if (date) {
+      const parts = String(date).split('/').filter(Boolean);
+      setIfEmpty('#ar-event-start', parts[0] || '');
+      if (parts[1]) setIfEmpty('#ar-event-end', parts[1]);
+    }
+  }
+  document.getElementById('ar-event-festivalId').value = id;
+  const selected = document.getElementById('ar-event-festival-selected');
+  selected.innerHTML = '◆ ' + esc(name || id) + ' <span style="opacity:.45;font-family:var(--font-mono);font-size:.75em">' + esc(id) + '</span>'
+    + '<button type="button" class="fp-clear" onclick="eventFestPickerClear()" title="解除">×</button>';
+  selected.hidden = false;
+  document.getElementById('ar-event-festival-search').value = '';
+  document.getElementById('ar-event-festival-list').hidden = true;
+}
+function eventFestPickerClear(){
+  document.getElementById('ar-event-festivalId').value = '';
+  document.getElementById('ar-event-festival-selected').hidden = true;
 }
 /* 編集を開いた時などに、保存済みIDから選択表示を復元する */
 function festPickerSetValue(id){
@@ -1849,6 +1918,13 @@ function openArticleEventForm(){
     <h3>📦 イベントカード</h3>
     <p class="label-hint">入力内容から記事本文に <code>[[event|…]]</code> を挿入します。</p>
     <div class="form-grid" style="grid-template-columns:1fr 1fr;gap:10px">
+      <div class="form-group" style="grid-column:1 / -1"><label>サイト内フェス（任意） <span class="label-hint">選ぶと空欄を自動入力し、カードから詳細ページへリンクします</span></label>
+        <div class="fest-picker" id="ar-event-festival-picker">
+          <input type="text" id="ar-event-festival-search" placeholder="フェス名で検索（例: rural / CIRCUS）" autocomplete="off" oninput="eventFestPickerFilter()" onfocus="eventFestPickerFilter()">
+          <input type="hidden" id="ar-event-festivalId">
+          <div class="fest-picker-selected" id="ar-event-festival-selected" hidden></div>
+          <div class="fest-picker-list" id="ar-event-festival-list" hidden></div>
+        </div></div>
       <div class="form-group" style="grid-column:1 / -1"><label>名前 *</label><input id="ar-event-name" type="text" placeholder="Epizode"></div>
       <div class="form-group"><label>開始日 *</label><input id="ar-event-start" type="date"></div>
       <div class="form-group"><label>終了日（任意）</label><input id="ar-event-end" type="date"></div>
@@ -1863,6 +1939,10 @@ function openArticleEventForm(){
     </div>
   </div>`;
   document.body.appendChild(overlay);
+  overlay.querySelector('#ar-event-festival-list').addEventListener('click', event => {
+    const button = event.target.closest('button[data-id]');
+    if (button) eventFestPickerSelect(button.dataset.id, button.dataset.name);
+  });
   const close = () => overlay.remove();
   overlay.querySelector('#ar-event-cancel').addEventListener('click', close);
   overlay.addEventListener('click', (event) => { if (event.target === overlay) close(); });
@@ -1870,14 +1950,15 @@ function openArticleEventForm(){
     const fields = ['name', 'start', 'end', 'place', 'url', 'artists', 'note'].reduce((out, key) => {
       out[key] = overlay.querySelector('#ar-event-' + key).value.trim(); return out;
     }, {});
+    fields.festivalId = overlay.querySelector('#ar-event-festivalId').value.trim();
     const required = [['name', '名前'], ['start', '開始日'], ['place', '場所']].filter(([key]) => !fields[key]);
     if (required.length) return toast(required.map(([, label]) => label).join(' / ') + 'を入力してください', 'error');
     if (fields.name.includes('|') || fields.place.includes('|') || fields.artists.includes('|') || fields.note.includes('|')) return toast('| は入力できません', 'error');
     if (fields.end && fields.end < fields.start) return toast('終了日は開始日以降にしてください', 'error');
     if (fields.url && !/^https?:\/\//i.test(fields.url)) return toast('公式URLはhttps://から入力してください', 'error');
     const date = fields.end && fields.end !== fields.start ? fields.start + '〜' + fields.end : fields.start;
-    // 項目の並びは article-shortcodes.js の parseEventFields と揃える（補足が最後）
-    const shortcode = `[[event|${fields.name}|${date}|${fields.place}|${fields.url}|${fields.artists}|${fields.note}]]`;
+    // 項目の並びは article-shortcodes.js の parseEventFields と揃える（フェスIDが8番目）
+    const shortcode = `[[event|${fields.name}|${date}|${fields.place}|${fields.url}|${fields.artists}|${fields.note}|${fields.festivalId}]]`;
     insertArticleShortcode(shortcode);
     close();
   });

@@ -97,6 +97,11 @@
   text-transform: uppercase; color: var(--text); opacity: .6;
 }
 .article-body .tj-event-link:hover { color: var(--accent); }
+/* イベントカード → フェス詳細への内部リンク。サイト内リンクの慣習（アクセント色）に合わせる */
+.article-body .tj-event-name-link { color: inherit; border-bottom: none; text-decoration: none; transition: color .2s ease; }
+.article-body .tj-event-name-link:hover { color: var(--accent); }
+.article-body .tj-event-festival-link { color: var(--accent); opacity: .8; margin-right: 16px; }
+.article-body .tj-event-festival-link:hover { color: var(--accent); opacity: 1; }
 .article-body .tj-calendar {
   /* common.css のサイトナビ用 `nav` は固定表示。記事内のカレンダーは
      本文の流れに置くため、ナビゲーションの共通指定を明示的に打ち消す。 */

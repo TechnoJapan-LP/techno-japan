@@ -170,7 +170,7 @@ window.addEventListener('load',()=>setTimeout(()=>{
     calendar:generatedPreview.includes('class="tj-calendar"'),
     lineup:generatedPreview.includes('class="tj-event-lineup"')&&generatedPreview.includes('Probe Artist A'),
     detailInner:generatedPreview.includes('class="article-detail-inner"'),
-    productionCss:generatedPreview.includes('/detail.css?v=33')
+    productionCss:generatedPreview.includes('/detail.css?v=34')
   };
   out.公開パネル = box(document.querySelector('#sec-article .pub-section'));
   out.パネルの親 = box(document.querySelector('#sec-article .pub-section')?.parentElement);

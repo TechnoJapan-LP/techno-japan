@@ -17,7 +17,7 @@
 ### 書式（本文中、1行）
 
 ```
-[[event|名前|日程|場所|公式URL|出演者|補足]]
+[[event|名前|日程|場所|公式URL|出演者|補足|フェスID]]
 ```
 
 （2026-09-10 に「出演者」を6番目へ追加。補足は最後。当時 `[[event]]` の
@@ -31,10 +31,11 @@
 | 4 | 公式URL | △ | `https://` から | `https://epizode.com` |
 | 5 | 出演者 | △ | `;` 区切り。カードに LINEUP 行として表示、JSON-LD の `performer` にも出る | `DJ NOBU;WATA IGARASHI` |
 | 6 | 補足 | △ | ジャンル・一言。`;` 区切り可 | `Techno;House;11日間` |
+| 8（`event` を含む） | フェスID | △ | `[a-z0-9-]`。指定するとカードからフェス詳細ページへリンク | `rural` |
 
 例:
 ```
-[[event|Wonderfruit|2026-12-10〜2026-12-14|Pattaya, Thailand|https://wonderfruit.co|DJ NOBU;WATA IGARASHI|Art;Music]]
+[[event|Wonderfruit|2026-12-10〜2026-12-14|Pattaya, Thailand|https://wonderfruit.co|DJ NOBU;WATA IGARASHI|Art;Music|wonderfruit]]
 ```
 
 `|` を含む名前は使えない（現状の `[[festival:id|表示名]]` と同じ制約）。

@@ -5,7 +5,7 @@ import {
   safeUrl,
 } from '../LP/article-shortcodes.js';
 
-// 項目の並びは [[event|名前|日程|場所|URL|出演者|補足]]（2026-09-10 に出演者を追加。補足が最後）
+// 項目の並びは [[event|名前|日程|場所|URL|出演者|補足|フェスID]]
 const input = 'Intro\n[[event|Epizode|2026-12-28〜2027-01-08|Phu Quoc, Vietnam|https://epizode.com|DJ NOBU;WATA IGARASHI|Techno;House]]\n[[calendar]]';
 const rendered = renderArticleShortcodes(input, { lang: 'en' });
 assert.equal(rendered.events.length, 1);
@@ -52,4 +52,30 @@ assert.throws(
 assert.equal(safeUrl('https://example.com/a?b=1'), 'https://example.com/a?b=1');
 assert.equal(safeUrl('javascript:alert(1)'), '');
 
-console.log('article shortcodes: 15 assertions passed');
+const linked = renderArticleShortcodes(
+  '[[event|Rural|2027-05-01|Tokyo|||Techno|rural]]',
+  { lang: 'ja', festivalIds: ['rural'] }
+);
+assert.match(linked.html, /class="tj-event-name-link"/);
+assert.match(linked.html, /class="tj-event-link tj-event-festival-link"/);
+assert.match(linked.html, /href="\/festivals\/rural\.html"/);
+assert.match(
+  renderArticleShortcodes('[[event|Rural|2027-05-01|Tokyo||||rural]]', { lang: 'en', festivalIds: ['rural'] }).html,
+  /href="\/en\/festivals\/rural\.html"/
+);
+const legacy = renderArticleShortcodes('[[event|Rural|2027-05-01|Tokyo|||Techno]]').html;
+assert.doesNotMatch(legacy, /tj-event-name-link|tj-event-festival-link/);
+assert.throws(
+  () => renderArticleShortcodes('[[event|Rural|2027-05-01|Tokyo||||Rural]]'),
+  /フェスIDが不正/
+);
+assert.throws(
+  () => renderArticleShortcodes('[[event|Rural|2027-05-01|Tokyo||||unknown]]', { festivalIds: ['rural'] }),
+  /存在しません/
+);
+assert.match(
+  renderArticleShortcodes('[[event|Rural|2027-05-01|Tokyo||||unknown]]').html,
+  /href="\/en\/festivals\/unknown\.html"/
+);
+
+console.log('article shortcodes: 31 assertions passed');
