@@ -6071,8 +6071,27 @@ function showTitleCandidates(candidates){
    mode: 'excerpt' | 'excerpt-en' | 'meta'
    ============================================================== */
 /* ---------- AI 翻訳（GAS 側の ai_translate を呼ぶ） ---------- */
+/* AI翻訳がプレーンテキスト欄にMarkdown装飾を付けて返すことがある
+   （2026-09-10 に TITLE_EN へ「**タイトル**」が混入して公開された）。
+   文中の記号は残し、全体を包む装飾だけを剥がす。 */
+function stripMarkdownDecorations_(text){
+  let t = String(text).trim();
+  t = t.replace(/^```[a-z]*\n?/, '').replace(/\n?```$/, '').trim(); // コードフェンス
+  t = t.replace(/^#{1,6}\s+/, '');                                   // 見出し記号
+  // 文中にも同じ記号がある場合は包み記号ではないので触らない
+  for (const [re, delim] of [[/^\*\*([\s\S]+)\*\*$/, '**'], [/^\*([\s\S]+)\*$/, '*'], [/^__([\s\S]+)__$/, '__'], [/^_([\s\S]+)_$/, '_']]) {
+    const m = t.match(re);
+    if (m && !m[1].includes(delim)) { t = m[1].trim(); break; }
+  }
+  return t;
+}
+
 function aiTranslate_(text, target, isHtml){
-  return gasPostJson_({ action: 'ai_translate', text: String(text).slice(0, 12000), target: target, html: !!isHtml });
+  return gasPostJson_({ action: 'ai_translate', text: String(text).slice(0, 12000), target: target, html: !!isHtml })
+    .then(d => {
+      if (d && d.status === 'ok' && d.text && !isHtml) d.text = stripMarkdownDecorations_(d.text);
+      return d;
+    });
 }
 
 /* 記事の空欄になっている英語フィールドを一括生成する。
