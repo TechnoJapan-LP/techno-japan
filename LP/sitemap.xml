@@ -1267,6 +1267,60 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://techno-japan.media/artists/haruka.html</loc>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/artists/herbalistek.html</loc>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/artists/efdemin.html</loc>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/artists/anthony-linell.html</loc>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/artists/vril.html</loc>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/artists/rrose.html</loc>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/artists/goth-trad.html</loc>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/artists/risa-taniguchi.html</loc>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/artists/shhhhh.html</loc>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://techno-japan.media/venues/womb.html</loc>
     <lastmod>2026-09-10</lastmod>
     <changefreq>monthly</changefreq>
@@ -1495,6 +1549,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://techno-japan.media/en/artists/anthony-linell.html</loc>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://techno-japan.media/en/artists/aoki-takamasa.html</loc>
     <lastmod>2026-09-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -1639,6 +1699,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://techno-japan.media/en/artists/efdemin.html</loc>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://techno-japan.media/en/artists/endorphin.html</loc>
     <lastmod>2026-09-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -1693,6 +1759,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://techno-japan.media/en/artists/goth-trad.html</loc>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://techno-japan.media/en/artists/ground.html</loc>
     <lastmod>2026-09-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -1711,7 +1783,19 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://techno-japan.media/en/artists/haruka.html</loc>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://techno-japan.media/en/artists/helena-hauff.html</loc>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/en/artists/herbalistek.html</loc>
     <lastmod>2026-09-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -1951,6 +2035,18 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://techno-japan.media/en/artists/risa-taniguchi.html</loc>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/en/artists/rrose.html</loc>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://techno-japan.media/en/artists/sakuma.html</loc>
     <lastmod>2026-09-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -1958,6 +2054,12 @@
   </url>
   <url>
     <loc>https://techno-japan.media/en/artists/sherelle.html</loc>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/en/artists/shhhhh.html</loc>
     <lastmod>2026-09-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -2036,6 +2138,12 @@
   </url>
   <url>
     <loc>https://techno-japan.media/en/artists/upsammy.html</loc>
+    <lastmod>2026-09-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/en/artists/vril.html</loc>
     <lastmod>2026-09-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>

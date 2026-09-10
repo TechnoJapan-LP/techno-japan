@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-09-10T06:40:32.018Z",
+  "_generatedAt": "2026-09-10T16:06:34.531Z",
   "count": 109,
   "items": [
     {
@@ -431,7 +431,13 @@
       "EDITION": "2025",
       "DATE_START": "2025-08-29",
       "DATE_END": "2025-08-31",
+      "LOCATION": "Sutekinamura Camping Ground",
+      "LOCATION_JA": "ステキな村キャンプ場",
       "PREF": "Gunma",
+      "ADDRESS": "群馬県吾妻郡東吾妻町本宿３３３０−５",
+      "LAT": "36.5298",
+      "LNG": "138.7423",
+      "FLYER": "images/festivals/global-ark-2025-flyer.webp",
       "STATUS": "finished"
     },
     {
@@ -612,7 +618,11 @@
       "EDITION": "2026",
       "DATE_START": "2026-08-15",
       "DATE_END": "2026-08-16",
+      "LOCATION": "Nalu Beach",
       "PREF": "Ibaraki",
+      "ADDRESS": "茨城県鉾田市汲上2525",
+      "LAT": "36.0827",
+      "LNG": "140.596",
       "STATUS": "announced"
     },
     {
@@ -819,8 +829,8 @@
       "EDITION_ID": "otsukimi-2026",
       "FESTIVAL_ID": "otsukimi",
       "EDITION": "2026",
-      "DATE_START": "2026-09-28",
-      "DATE_END": "2026-09-29",
+      "DATE_START": "2026-09-25",
+      "DATE_END": "2026-09-27",
       "LOCATION": "Healing Garden Takanami",
       "LOCATION_JA": "ヒーリングガーデンたかなみ",
       "PREF": "Niigata",

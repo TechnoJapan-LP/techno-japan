@@ -76,6 +76,19 @@
       ]
     },
     {
+      "name": "御月民 -OTSUKIMI- 2026",
+      "url": "https://techno-japan.media/festivals/otsukimi.html",
+      "start": "2026-09-25",
+      "end": "2026-09-27",
+      "venue": "Healing Garden Takanami",
+      "pref": "Niigata",
+      "lat": 36.9079,
+      "lng": 137.8872,
+      "genres": [
+        "TECHNO"
+      ]
+    },
+    {
       "name": "FFKT 2026",
       "url": "https://techno-japan.media/festivals/ffkt.html",
       "start": "2026-09-26",
@@ -89,19 +102,6 @@
         "AMBIENT",
         "LIVE",
         "OTHERS"
-      ]
-    },
-    {
-      "name": "御月民 -OTSUKIMI- 2026",
-      "url": "https://techno-japan.media/festivals/otsukimi.html",
-      "start": "2026-09-28",
-      "end": "2026-09-29",
-      "venue": "Healing Garden Takanami",
-      "pref": "Niigata",
-      "lat": 36.9079,
-      "lng": 137.8872,
-      "genres": [
-        "TECHNO"
       ]
     },
     {
