@@ -347,6 +347,40 @@ const c = makeCtx();
   c.confirm = () => true;
 }
 
+/* --- 2. 共通LINEUP列と開催回LINEUPの入力先違い ---------------------------- */
+{
+  console.log('\n共通LINEUP列への誤入力');
+  const festival = {
+    ID: 'f2', DATE: '2026-10-02', LOCATION: 'X', LOCATION_JA: '', LINEUP: 'A, B',
+    EDITIONS: JSON.stringify([{ year: 2025, lineup: ['old'] }, { year: 2026, lineup: [] }]),
+  };
+  const asked = [];
+  c.confirm = (msg) => { asked.push(msg); return false; };
+  const cancelled = c.__T.publishSanityCheck({ ...BASE, FESTIVALS: [...BASE.FESTIVALS, festival] });
+  check('共通LINEUP列だけに入力されたフェスを警告して止める',
+    cancelled.ok === false && asked[0].includes('f2') && asked[0].includes('最新2026回'), asked.join(' / '));
+
+  c.confirm = () => true;
+  const continued = c.__T.publishSanityCheck({ ...BASE, FESTIVALS: [...BASE.FESTIVALS, festival] });
+  check('警告のconfirmで続行できる', continued.ok === true);
+
+  asked.length = 0;
+  c.confirm = (msg) => { asked.push(msg); return true; };
+  const hasLineup = { ...festival,
+    EDITIONS: JSON.stringify([{ year: 2025, lineup: ['old'] }, { year: 2026, lineup: ['A'] }]) };
+  c.__T.publishSanityCheck({ ...BASE, FESTIVALS: [...BASE.FESTIVALS, hasLineup] });
+  check('最新開催回にLINEUPがあれば警告しない',
+    !asked.some(m => m.includes('フェス共通のLINEUP列')), asked.join(' / '));
+
+  asked.length = 0;
+  const broken = { ...festival, EDITIONS: '{broken' };
+  const malformed = c.__T.publishSanityCheck({ ...BASE, FESTIVALS: [...BASE.FESTIVALS, broken] });
+  check('EDITIONSのJSON不正はこの警告では止めない',
+    malformed.ok === true && !asked.some(m => m.includes('フェス共通のLINEUP列')),
+    asked.join(' / '));
+  c.confirm = () => true;
+}
+
 /* --- 6. 送る中身を数で見せる / 無変更を成功と呼ばない（§9-81） --------------
    Publish の事故は症状がいつも「静か」だった。列が落ちても件数が減るだけ、
    中身が同じなら空コミット、失敗しても3秒で消える。
@@ -410,4 +444,4 @@ const c = makeCtx();
 
 console.log();
 if (failed) { console.log(`❌ ${failed}件の判定が誤っています`); process.exit(1); }
-console.log('✅ Publish 前の重複検査はすべて正しい');
+console.log('✅ Publish 前の検査44件はすべて正しい');

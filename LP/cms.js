@@ -6338,6 +6338,35 @@ function publishSanityCheck(d){
       +'\nD列を「書式なしテキスト」にして入力し直すのが正しい状態です。'
       +'\n\nこのまま公開しますか?')) return {ok:false, message:'Publishをキャンセルしました（DATEを修正してください）'};
   }
+  // 出演者が「フェス共通の LINEUP 列」にだけ入っていて、最新開催回の lineup が
+  // 空のフェスを検出する。詳細ページの開催回ラインナップは EDITIONS 側しか
+  // 見ないため、この状態だと最新回の出演者がサイトに表示されない。
+  // 2026-09-11 に11フェスで発生（AUDIT参照）。入力先の間違いに公開前に気づかせる。
+  const lineupPlacementIssues = (d.FESTIVALS||[]).map(f => {
+    const id = (f.ID || f.id || '').trim();
+    const brand = String(f.LINEUP ?? f.lineup ?? '').split(',').map(s => s.trim()).filter(Boolean);
+    if (!brand.length) return null;
+    let eds = [];
+    try {
+      const raw = f.EDITIONS ?? f.editions;
+      eds = typeof raw === 'string' ? JSON.parse(raw || '[]') : (raw || []);
+    } catch (_) { return null; }  // JSON不正は別の検査の担当
+    if (!Array.isArray(eds) || !eds.length) return null;
+    const latest = [...eds].sort((a, b) => Number(b.year) - Number(a.year))[0];
+    if (!latest || (latest.lineup || []).length) return null;
+    return { id, year: latest.year, brand: brand.length };
+  }).filter(Boolean);
+  if (lineupPlacementIssues.length) {
+    const detail = lineupPlacementIssues.slice(0, 10).map(x =>
+      '  ・' + x.id + ' — 最新' + x.year + '回のLINEUPが空（共通LINEUP列には' + x.brand + '組）').join('\n');
+    if (!confirm('⚠️ 出演者が「フェス共通のLINEUP列」にだけ入っているフェスが '
+      + lineupPlacementIssues.length + ' 件あります。\n' + detail
+      + '\n\nこの状態だと詳細ページの最新開催回にラインナップが表示されません。'
+      + '\nFESTIVAL編集のEditionsで該当の開催回を選び、そのLINEUP欄へ入力するのが正しい場所です。'
+      + '\n\nこのまま公開しますか?')) {
+      return { ok: false, message: 'Publishをキャンセルしました（開催回のLINEUPを確認してください）' };
+    }
+  }
   const locationIssues=(d.FESTIVALS||[]).map(f=>({
     id:(f.ID||f.id||'').trim(),
     location:String(f.LOCATION??f.location??'').trim(),

@@ -6674,3 +6674,47 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 ### 次の担当への注意・判断待ち
 - ニュースレターの送信先は formsubmit.co（トップと同一メール）。宛先変更や
   配信スタック導入時は index.html と build-detail-pages.mjs の2箇所を揃えること。
+
+## 2026-09-11 フェス詳細に最新回ラインナップが出ない問題（調査→データ移行→ガード）
+
+### 実施
+- 依頼: CIRCUS ODAIBA / OTSUKIMI 等で2026のラインナップが詳細ページに出ない。
+- 調査結果（真因）: 詳細ページの開催回別ラインナップは EDITIONS（開催回JSON）の
+  lineup を表示するが、2026年の出演者は **FESTIVALSの共通LINEUP列にだけ**入力
+  されていた。同状態のフェスは**11件**（circus / otsukimi / snow-machine-japan /
+  synapse-festival / odyssey / re-birth-festival / big-fun / bondisco / global-ark /
+  loa-lost-paradise / ffkt）。CMSに共通LINEUP欄と開催回LINEUP欄の2つがあることが
+  誤入力の温床。あわせて otsukimi の2026開催回日程が 9/28-29 と誤っていた。
+- A（データ・ユーザー実施）: 貼り付け用リストを渡し、CMSで11フェス全ての最新回に
+  LINEUP入力→Publish。otsukimi 日程も 9/25-27 へ修正。
+  検証: 公開データで11件全て最新回に出演者あり（re-birth 74組等）、
+  本番の circus / otsukimi 詳細ページに 2026 のラインナップ節が表示されることを確認。
+- B（ガード・実装=Codex、設計/検証=Claude）: publishSanityCheck に
+  「最新開催回のLINEUPが空なのに共通LINEUP列には出演者がいる」フェスの
+  confirm警告を追加（非ブロック・続行可。dateIssues と同形式）。
+  EDITIONS列のJSON不正はこの警告では止めない（別検査の担当）。
+- 版: cms.js 110。
+
+### コミット
+- このエントリと同一コミット（cms.js + check_cms_publish_guard.mjs + handoff）。
+
+### 検証
+- `node scripts/check_cms_publish_guard.mjs`: 44件成功（新規4ケース: 警告して
+  止める / confirmで続行 / 最新回に入力ありなら警告なし / JSON不正はスキップ）
+- `bash scripts/preflight.sh`: 全41件成功
+- 実機の Publish Now 通過: **実機未確認**（Publish経路の変更のため必須。
+  デプロイ後にユーザーへ1回のPublish実行を依頼済み。現在該当0件なので
+  警告は出ず通常完了するのが期待動作）
+
+### 変更したパターン
+- publishSanityCheck への検査追加1 / 回帰テスト4ケース+件数表記
+
+### 未確認の類似パターン
+- 共通LINEUP欄そのものの扱い（廃止・最新回への自動転記等）は未着手。
+  今回はガードのみ。誤入力が続くようならUI側の整理を検討
+- 検証時の教訓: pull失敗（ビルド副産物の未コミット差分）に気づかず**古い
+  data.jsを読んで「全件未移行」と誤判定しかけた**。pull結果の確認を挟むこと
+
+### 次の担当への注意・判断待ち
+- デプロイ後、ユーザーの次回 Publish Now が実機確認を兼ねる。警告が誤発動したら
+  lineupPlacementIssues の判定（EDITIONS列のJSON形）を疑うこと。
