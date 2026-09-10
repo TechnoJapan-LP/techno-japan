@@ -6624,3 +6624,53 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 ### 次の担当への注意・判断待ち
 - detail.css 末尾の 900px ブロックは**順序依存**（前方の同特異度指定を上書き）。
   リファクタで場所を動かさないこと。
+
+## 2026-09-10 記事ページにシェアボタンとニュースレター登録を追加（拡散導線）
+
+### 実施
+- 背景: フェス詳細には共有ボタンがあるのに**記事ページには0個**、ニュースレター
+  登録もトップのみだった（拡散相談の実測で発見）。
+- 実装（Codex、設計・検証=Claude）:
+  - 記事本文直後に共有ボタン（X / Facebook / LINE / URLコピー）。既存の
+    `festivalShareButtons()` と `FESTIVAL_SHARE_SCRIPT` を記事テンプレでも使用。
+    detail.css の共有ボタン7ルールに `.article-share` 併記でスコープ拡張。
+  - 記事末尾（article-footer の後）にニュースレター登録
+    `articleNewsletterHtml(canonical)` を新設。index.html と同じ formsubmit.co
+    構成（honeypot / _captcha / _subject）で、**_next はそのページの canonical**
+    （EN記事なら /en/ に戻る）。
+  - 生成ページの CSP に `form-action 'self' https://formsubmit.co` を明示追加
+    （従来は form-action 無し=無制限。他ドメインへのPOSTを禁止しつつ formsubmit 許可）。
+- 版: DETAIL_CSS_VERSION 33 / cms.js v109（bump）。恒例の bump 二重上げは再ビルドで統一。
+
+### コミット
+- このエントリと同一コミット（生成物466ページ含む）。
+
+### 検証
+- 生成物検査: JA/EN 記事とも共有ボタン4個・Xリンクに canonical・コピーJS・
+  newsletter-form・_next=各言語の canonical・CSP form-action を確認。
+  フェス詳細の共有ボタンは4個のまま不変。
+- headless 実測（500px・こら headless の最小幅）: 横スクロールなし、
+  share row / newsletter とも幅内。スクリーンショット目視（共有ボタン行・
+  ニュースレター・フッター）も良好。
+- ⚠️ 計測の学び: headless Chrome は `--window-size=390` を指定しても
+  **最小幅500pxで描画**され、スクリーンショットだけ390pxに切られる。
+  390px検証をスクショで行うと「右端が見切れている」ように見える誤検知になる
+  （今回踏んだ。実測は innerWidth / scrollWidth で判定すること）。
+- `bash scripts/preflight.sh`: 全41件成功。
+- formsubmit.co への実送信・メール到達: **実機未確認**（本番公開後にユーザーの
+  メール登録テストを依頼）。
+
+### 変更したパターン
+- 記事テンプレ2挿入 + ヘルパー1新設 + extraScripts 1 + CSP 1 / CSS セレクタ拡張7 +
+  新規2ルール / 版追随3箇所
+
+### 未確認の類似パターン
+- アーティスト・会場詳細ページには共有ボタン無しのまま（今回の依頼は記事。
+  足すなら同じ `.article-share` 方式で拡張可能）
+- 生成済み記事の body 内に CMS の選択状態クラス `tj-image-selected` が1箇所
+  残存しているのを観測（bondisco）。本番CSSに該当ルールが無く表示影響ゼロだが、
+  保存時にクラスを剥がす掃除は未実装（別課題）。
+
+### 次の担当への注意・判断待ち
+- ニュースレターの送信先は formsubmit.co（トップと同一メール）。宛先変更や
+  配信スタック導入時は index.html と build-detail-pages.mjs の2箇所を揃えること。

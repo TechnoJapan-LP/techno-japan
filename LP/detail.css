@@ -485,23 +485,25 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 }
 .festival-design-v2 .detail-official:hover { opacity: 1; border-color: rgba(240,237,232,.3); }
 .festival-design-v2 .festival-social-links { display: flex; gap: 10px; }
-.festival-design-v2 .share-buttons {
+.festival-design-v2 .share-buttons, .article-share .share-buttons {
   display: flex; gap: 8px; align-items: center; margin: 0; padding: 0;
 }
-.festival-design-v2 .share-buttons-label {
+.festival-design-v2 .share-buttons-label, .article-share .share-buttons-label {
   font-family: var(--font-mono); font-size: 9px; letter-spacing: .2em;
   text-transform: uppercase; opacity: .4; margin-right: 8px;
 }
-.festival-design-v2 .share-btn {
+.festival-design-v2 .share-btn, .article-share .share-btn {
   width: 32px; height: 32px; padding: 0; display: inline-flex; align-items: center; justify-content: center;
   border: 1px solid rgba(240,237,232,.12); background: transparent; color: var(--text);
   font-family: var(--font-mono); font-size: 11px; cursor: pointer; opacity: .6;
   transition: border-color .3s ease, background .3s ease, opacity .3s ease;
 }
-.festival-design-v2 .share-btn:hover { border-color: rgba(240,237,232,.4); opacity: 1; }
-.festival-design-v2 .share-btn svg { width: 14px; height: 14px; fill: currentColor; stroke: none; }
-.festival-design-v2 .share-copy-btn svg { fill: none; stroke: currentColor; stroke-width: 1.5; }
-.festival-design-v2 .share-btn.copied { background: rgba(255,255,255,.08); opacity: 1; }
+.festival-design-v2 .share-btn:hover, .article-share .share-btn:hover { border-color: rgba(240,237,232,.4); opacity: 1; }
+.festival-design-v2 .share-btn svg, .article-share .share-btn svg { width: 14px; height: 14px; fill: currentColor; stroke: none; }
+.festival-design-v2 .share-copy-btn svg, .article-share .share-copy-btn svg { fill: none; stroke: currentColor; stroke-width: 1.5; }
+.festival-design-v2 .share-btn.copied, .article-share .share-btn.copied { background: rgba(255,255,255,.08); opacity: 1; }
+.article-share { margin: 40px 0 0; }
+.article-detail .article-newsletter { margin-top: 64px; }
 .festival-design-v2 .festival-share-section { padding: 8px 0 44px; }
 
 .festival-design-v2 .detail-section { padding: 44px 0; }

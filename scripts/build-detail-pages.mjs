@@ -53,7 +53,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 32;
+const DETAIL_CSS_VERSION = 33;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -646,7 +646,7 @@ const FAVICON_TAGS = [
 
 const PERMISSIONS_POLICY = 'geolocation=(), microphone=(), camera=(), interest-cohort=()';
 
-const CSP = `default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' https:; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://stats.g.doubleclick.net; frame-src 'self' https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests`;
+const CSP = `default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' https:; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://stats.g.doubleclick.net; frame-src 'self' https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; form-action 'self' https://formsubmit.co; base-uri 'self'; object-src 'none'; upgrade-insecure-requests`;
 
 /* 詳細ページの nav。EN ページでは EN 版が実在するリンク先だけ /en/ へ向ける。
    EN_PAGES に無いもの（index.html）は JA のままにして 404 を作らない。
@@ -793,6 +793,24 @@ function venueByPlaceName(place, venues) {
   return venues.find((v) => norm(v.name) === key) || null;
 }
 
+/* 記事末尾のニュースレター登録。index.html の formsubmit フォームと同じ構成。
+   _next は読んでいた記事へ戻す。文言はサイト全体の英語表記に合わせる。 */
+function articleNewsletterHtml(canonical) {
+  return `<section class="newsletter article-newsletter">
+      <div class="newsletter-eyebrow">NEWSLETTER</div>
+      <div class="newsletter-title">STAY IN THE LOOP.</div>
+      <div class="newsletter-desc">Monthly digest of new festivals, artists, and stories from Japan's underground.</div>
+      <form class="newsletter-form" action="https://formsubmit.co/tatsuya25shibata@gmail.com" method="POST">
+        <input type="text" name="_honey" tabindex="-1" autocomplete="off" class="tj-honeypot" aria-hidden="true">
+        <input type="email" name="email" placeholder="your@email.com" required>
+        <input type="hidden" name="_subject" value="TECHNO JAPAN — Newsletter signup">
+        <input type="hidden" name="_captcha" value="true">
+        <input type="hidden" name="_next" value="${esc(canonical)}">
+        <button type="submit">SUBSCRIBE</button>
+      </form>
+    </section>`;
+}
+
 function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsByFestival = new Map(), venues = []) {
   // EN版は title_en / excerpt_en / body_en を使う（無い項目はJAへフォールバック）
   const L = lang === 'en'
@@ -934,15 +952,17 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
     </dl>
     <div class="article-excerpt">${esc(L.excerpt || '')}</div>
     <div class="article-body">${addDriveImageSrcset(addHtmlImageDimensions(resolveEntities(L.body || '', lang)))}</div>
+    <div class="article-share">${festivalShareButtons(L.title, canonical, lang)}</div>
     ${relatedFestivalHtml}
     <div class="article-footer">
       ${tags ? `<div class="article-tags">${tags}</div>` : ''}
       <a class="article-back" href="${hubHref}" data-article-hub-back="${hubHref}" style="margin:0"><span class="arrow"></span> ALL STORIES</a>
     </div>
+    ${articleNewsletterHtml(canonical)}
   </div>
 </article>`;
 
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'articles'] : ['articles']), `${a.id}.html`), html: page({ title, desc, canonical, image, jsonLd: [jsonLd, ORG_JSONLD, breadcrumbLd('NEWS', '/news.html', L.title, canonical), ...eventJsonLd], body, lang, altHref, backgroundLayer: true, extraScripts: `\n<link rel="stylesheet" href="/article-fx.css?v=${ARTICLE_FX_CSS_VERSION}">\n<script src="/article-fx.js?v=${ARTICLE_FX_JS_VERSION}" defer></script>` + ARTICLE_HUB_BACK_SCRIPT }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'articles'] : ['articles']), `${a.id}.html`), html: page({ title, desc, canonical, image, jsonLd: [jsonLd, ORG_JSONLD, breadcrumbLd('NEWS', '/news.html', L.title, canonical), ...eventJsonLd], body, lang, altHref, backgroundLayer: true, extraScripts: `\n<link rel="stylesheet" href="/article-fx.css?v=${ARTICLE_FX_CSS_VERSION}">\n<script src="/article-fx.js?v=${ARTICLE_FX_JS_VERSION}" defer></script>` + ARTICLE_HUB_BACK_SCRIPT + FESTIVAL_SHARE_SCRIPT }) };
 }
 
 /* ---------- フェスティバルページ ---------- */
@@ -1294,6 +1314,7 @@ function festivalRelatedCards(current, lang) {
     </section>`;
 }
 
+// 記事ページでも使う共有ボタン markup。
 function festivalShareButtons(name, canonical, lang) {
   const title = encodeURIComponent(`${name} — TECHNO JAPAN`);
   const url = encodeURIComponent(canonical);
