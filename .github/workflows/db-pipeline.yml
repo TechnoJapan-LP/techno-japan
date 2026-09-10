@@ -1,13 +1,14 @@
 # TECHNO JAPAN DB（Airtable）の承認制更新パイプライン。
 #
-# 手動実行のみ（workflow_dispatch）。dry_run が既定で、
-# 「書き込む」を明示的に選んだときだけ本体へ反映する。
+# workflow_dispatch は dry_run が既定で、「書き込む」を明示的に選んだときだけ本体へ反映する。
+# sync-site は日次 cron 済み。公開済みサイトの状態を冪等に自動反映する。
 # サイト（LP / Publish 経路）には一切触れない。
-#
-# 将来: AI 巡回（research）ジョブを追加したら cron を設定する。
 name: DB Pipeline (Airtable)
 
 on:
+  schedule:
+    # UTC 20:30 = JST 翌朝 5:30
+    - cron: '30 20 * * *'
   workflow_dispatch:
     inputs:
       task:
@@ -39,11 +40,17 @@ jobs:
         env:
           AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
         run: |
-          FLAG="--dry-run"
-          if [ "${{ inputs.mode }}" = "execute" ]; then FLAG="--execute"; fi
-          if [ "${{ inputs.task }}" = "sync-site" ]; then
-            node scripts/db/export_site_festivals.mjs > /tmp/site-festivals.json
-            python3 scripts/db/airtable_pipeline.py sync-site --input /tmp/site-festivals.json "$FLAG"
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            TASK="sync-site"
+            FLAG="--execute"
           else
-            python3 scripts/db/airtable_pipeline.py "${{ inputs.task }}" "$FLAG"
+            TASK="${{ inputs.task }}"
+            FLAG="--dry-run"
+            if [ "${{ inputs.mode }}" = "execute" ]; then FLAG="--execute"; fi
+          fi
+          if [ "$TASK" = "sync-site" ]; then
+            node scripts/db/export_site_festivals.mjs > /tmp/site-festivals.json
+            python3 scripts/db/airtable_pipeline.py "$TASK" --input /tmp/site-festivals.json "$FLAG"
+          else
+            python3 scripts/db/airtable_pipeline.py "$TASK" "$FLAG"
           fi

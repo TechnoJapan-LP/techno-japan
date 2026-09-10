@@ -6802,3 +6802,27 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 ### 次の担当への注意・判断待ち
 - Airtable のフィールド名は決め打ちしない（BOM名の実在）。sync-site の
   schema 突合ガードを通すこと。
+
+## 2026-09-11 sync-site の日次cron追加（追記）
+
+### 実施
+- ユーザーがAirtable反映を目視確認 → 承認を受けて db-pipeline.yml に
+  schedule（UTC 20:30 = JST 5:30）を追加。scheduleイベントは sync-site --execute
+  固定、workflow_dispatch は従来どおり（dry-run既定）。実装はCodex。
+
+### コミット
+- このエントリと同一コミット。
+
+### 検証
+- push後の「Lint GitHub Actions」と、手動dispatch（sync-site dry-run）の成功を確認
+  （結果はこの追記の後に実施・下記コミットのCIログ参照）。
+- schedule経路の初回実行はJST明朝5:30。失敗時はActionsのメール通知で気づける。
+
+### 変更したパターン
+- workflowのトリガー1・実行ステップのタスク解決1。
+
+### 未確認の類似パターン
+- schedule初回の実実行（明朝）。翌日Actionsの実行履歴で確認するとよい。
+
+### 次の担当への注意・判断待ち
+- なし。
