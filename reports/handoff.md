@@ -6943,3 +6943,29 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 
 ### 次の担当への注意・判断待ち
 - シートの画像パスを表示に使うときは必ず webp() を通すこと（Publishと同じ規約）。
+
+## 2026-09-11 本番表示ウィンドウでカーソルが消えるバグを修正（追記）
+
+### 実施
+- 原因: 本番ページは common.css の `cursor:none` + common.js のカスタムカーソル
+  （dot/ring）の組。**本番表示ウィンドウは common.css は読むが common.js を
+  読まない**ため、消したカーソルの代役が不在だった。
+- 修正: openArticleGeneratedPreview の生成HTMLに、ネイティブカーソルを戻す
+  <style>（* cursor:auto / リンク類は pointer）を追加。cms.js 114。
+
+### コミット
+- このエントリと同一コミット。
+
+### 検証
+- 生成HTMLをそのまま描画して computed style を実測: body=auto / a=pointer。
+- check_cms_article_generated_preview の禁止パターン（見出し改行の上書きCSS）
+  には該当しない。preflight 全41件成功。
+
+### 変更したパターン
+- 生成HTML内 style 1箇所。
+
+### 未確認の類似パターン
+- 右ペインプレビューはCMS自身のカーソル（通常表示）なので無関係。確認済み・0件。
+
+### 次の担当への注意・判断待ち
+- 本番表示に common.js を将来読み込む場合はこの style を外すこと。
