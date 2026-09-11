@@ -2306,8 +2306,9 @@ function main() {
   for (const row of LINEUPS) {
     const edition = editionById.get(String(row.EDITION_ID || ''));
     if (!edition) throw new Error(`lineups.json: EDITION_ID 参照切れ "${row.EDITION_ID || ''}"`);
-    if (!lineupsByEdition.has(row.EDITION_ID)) lineupsByEdition.set(row.EDITION_ID, []);
-    lineupsByEdition.get(row.EDITION_ID).push(row);
+    // ⚠ lineupsByEdition への push はここでしない。2026-09-11、イベントカード用の
+    // 早いループ（buildEventFestivalData の前）に集約した際、この行を残して
+    // **全フェスの LINEUP が2重表示**になった。登録は1箇所だけに保つこと。
 
     if (isCompositeLineup(row)) continue;
     const artistId = lineupArtistIds(row)[0];
