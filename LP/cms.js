@@ -1363,7 +1363,9 @@ function buildArticleFestivalData(festivalRows){
     const latest = editions.slice().sort((a, b) => Number(b.year || 0) - Number(a.year || 0))[0];
     const lineup = Array.isArray(latest?.lineup) ? latest.lineup.map(id => names.get(String(id)) || String(id)).filter(Boolean) : [];
     const data = {};
-    if (row.image) data.imageHtml = '<img src="/' + esc(String(row.image).replace(/^\/+/, '')) + '" alt="" loading="lazy" decoding="async">';
+    // シートの IMAGE は .jpg の旧表記が残っている（実ファイルは webp のみ）。
+    // Publish と同じ webp() 正規化を通さないとプレビューだけ404になる（2026-09-11 実測）。
+    if (row.image) data.imageHtml = '<img src="/' + esc(webp(String(row.image).replace(/^\/+/, ''))) + '" alt="" loading="lazy" decoding="async">';
     if (lineup.length) data.lineup = lineup;
     if (data.imageHtml || data.lineup) out[String(row.id)] = data;
   });
