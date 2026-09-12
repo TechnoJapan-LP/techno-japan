@@ -65,7 +65,7 @@ const DETAIL_CSS_VERSION = 36;
    落ちる場所と直す場所がずれていて原因に辿り着けなかった。AUDIT §9-58。
 
    article-fx.js / article-fx.css を変更したら、ここを上げる。 */
-const ARTICLE_FX_JS_VERSION = 9;
+const ARTICLE_FX_JS_VERSION = 10;
 const ARTICLE_FX_CSS_VERSION = 11;
 
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない

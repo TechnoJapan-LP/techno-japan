@@ -1347,7 +1347,12 @@ function bindArticlePreviewInteractions(root){
     if (!target) return;
     event.preventDefault();
     const scroller = root.closest('.ar-preview');
-    if (scroller) scroller.scrollTop = Math.max(0, target.offsetTop - 24);
+    let scrollTarget = target.previousElementSibling;
+    while (scrollTarget && !/^H[234]$/.test(scrollTarget.tagName)) {
+      scrollTarget = scrollTarget.previousElementSibling;
+    }
+    scrollTarget = scrollTarget || target;
+    if (scroller) scroller.scrollTop = Math.max(0, scrollTarget.offsetTop - 24);
     target.setAttribute('data-preview-target', '1');
     setTimeout(() => target.removeAttribute('data-preview-target'), 900);
   });
@@ -1517,7 +1522,7 @@ function openArticleGeneratedPreview(){
   }
   const safeBody = String(previewBody).replace(/<script/gi, '&lt;script');
   win.document.open();
-  win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><link rel="stylesheet" href="/common.css?v=27"><link rel="stylesheet" href="/detail.css?v=36"><link rel="stylesheet" href="/article-fx.css?v=11"><style>/* 本番表示は common.js（カスタムカーソル）を読まないため、common.css の cursor:none だとカーソルが消える。ネイティブカーソルに戻す */*{cursor:auto !important}a,button,[role="button"],summary{cursor:pointer !important}</style></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${title}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=9"><\/script></body></html>`);
+  win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><link rel="stylesheet" href="/common.css?v=27"><link rel="stylesheet" href="/detail.css?v=36"><link rel="stylesheet" href="/article-fx.css?v=11"><style>/* 本番表示は common.js（カスタムカーソル）を読まないため、common.css の cursor:none だとカーソルが消える。ネイティブカーソルに戻す */*{cursor:auto !important}a,button,[role="button"],summary{cursor:pointer !important}</style></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${title}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=10"><\/script></body></html>`);
   win.document.close();
 }
 

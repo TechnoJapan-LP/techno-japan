@@ -119,6 +119,40 @@
       figs.forEach(function(fig){ pair.appendChild(fig); });
     });
 
+    // カレンダーのリンクは、カード直上の見出しへ着地させる。
+    // カードを紹介文の下に置く構成でも、紹介文の頭から読める（2026-09-13 決定）。
+    // 見出しが無ければ従来どおりカードへ（フォールバック）。
+    function calendarScrollTarget(card){
+      var el = card.previousElementSibling;
+      while (el) {
+        if (/^H[234]$/.test(el.tagName)) return el;
+        el = el.previousElementSibling;
+      }
+      return card;
+    }
+    function scrollToCard(card, smooth){
+      var target = calendarScrollTarget(card);
+      var nav = document.querySelector('nav');
+      var offset = nav && getComputedStyle(nav).position === 'fixed'
+        ? Math.round(nav.getBoundingClientRect().height) + 24 : 12;
+      target.style.scrollMarginTop = offset + 'px';
+      target.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
+    }
+    body.addEventListener('click', function(ev){
+      var link = ev.target.closest('.tj-calendar a[href^="#ev-"]');
+      if (!link) return;
+      var card = document.getElementById(link.getAttribute('href').slice(1));
+      if (!card) return;
+      ev.preventDefault();
+      history.replaceState(null, '', link.getAttribute('href')); // 共有URLは従来どおりカードのハッシュ
+      scrollToCard(card, true);
+    });
+    // 共有URL（#ev-…付き）で直接開いたときも同じ位置に着地させる
+    if (/^#ev-/.test(location.hash)) {
+      var shared = document.getElementById(location.hash.slice(1));
+      if (shared) setTimeout(function(){ scrollToCard(shared, false); }, 80);
+    }
+
     /* ---------- 3. リビール対象の指定 ---------- */
     var targets = [].slice.call(body.querySelectorAll('p, h2, h3, h4, blockquote, figure.fx-img, .tj-event, .tj-calendar'));
     var specs = document.querySelector('.article-specs');

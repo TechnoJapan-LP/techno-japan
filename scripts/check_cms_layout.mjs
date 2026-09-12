@@ -134,6 +134,20 @@ window.addEventListener('load',()=>setTimeout(()=>{
     hash変更なし:location.hash===beforeHash,
     cardHighlight:!!articlePreview?.querySelector('.tj-event[data-preview-target="1"]')
   };
+  articlePreview.innerHTML='<nav class="tj-calendar"><ol><li><time>JAN 01</time><a href="#ev-preview-event-2">Preview Event</a><span>Tokyo</span></li></ol></nav><p style="height:300px">spacer</p><h2 id="probe-h">見出し</h2><p style="height:900px">紹介文</p><article class="tj-event" id="ev-preview-event-2"><h3>Preview Event</h3></article>';
+  // 枠がコンテンツより高いと scrollTop が動けず誤検知になるため、検査中だけ枠を低くする
+  const probeScroller=articlePreview.closest('.ar-preview');
+  const prevScrollerHeight=[probeScroller.style.height,probeScroller.style.maxHeight];
+  probeScroller.style.height='300px'; probeScroller.style.maxHeight='300px';
+  const headingCalendarLink=articlePreview?.querySelector('.tj-calendar a');
+  headingCalendarLink?.click();
+  const probeHeading=articlePreview?.querySelector('#probe-h');
+  out.イベント見出し着地={
+    scrollTop:Math.round(articlePreview?.closest('.ar-preview')?.scrollTop||0),
+    headingOffsetTop:probeHeading?Math.round(probeHeading.offsetTop):null,
+    見出し基準:!!probeHeading && Math.abs((articlePreview.closest('.ar-preview')?.scrollTop||0) - Math.max(0, probeHeading.offsetTop - 24)) <= 2
+  };
+  probeScroller.style.height=prevScrollerHeight[0]; probeScroller.style.maxHeight=prevScrollerHeight[1];
   articleWrap.classList.remove('focus-mode','preview-mode');
   // プレビューを先に開かず集中モードへ入った場合も、後から表示できること。
   const probeEditor=document.querySelector('#ar-body-editor .ql-editor');
@@ -232,6 +246,7 @@ if(d.VENUES入力欄?.features!==13) failures.push(`VENUESのFEATURES選択肢�
 if(d.VENUES入力欄 && (!d.VENUES入力欄.subtypeVisibleForBar || !d.VENUES入力欄.subtypeHiddenForClub)) failures.push('SUBTYPEのbar限定表示が動作していない');
 if(d.VENUES入力欄 && !d.VENUES入力欄.previewReopenKeepsValues) failures.push('VENUESのプレビュー再表示で入力値が保持されていない');
 if(d.イベントカード操作 && (d.イベントカード操作.officialLinkPointer!=='auto' || d.イベントカード操作.calendarLinkPointer!=='auto' || !d.イベントカード操作.hash変更なし || !d.イベントカード操作.cardHighlight)) failures.push('集中モードのイベントカード / カレンダーリンクを操作できない');
+if(d.イベント見出し着地 && !d.イベント見出し着地.見出し基準) failures.push('カレンダーリンクがカード直上の見出しへスクロールしない');
 if(d.集中モードからプレビュー表示 && (!d.集中モードからプレビュー表示.focus || !d.集中モードからプレビュー表示.preview || !d.集中モードからプレビュー表示.eventVisible)) failures.push('集中モード開始後にプレビューを表示できない');
 if(d.集中モードのイベント入力 && (!d.集中モードのイベント入力.visible || Number(d.集中モードのイベント入力.zIndex)<=2000 || !d.集中モードのイベント入力.boxVisible)) failures.push('集中モードのイベント入力ダイアログが前面に出ない');
 if(d.本番表示プレビュー && (!d.本番表示プレビュー.event || !d.本番表示プレビュー.calendar || !d.本番表示プレビュー.lineup || !d.本番表示プレビュー.detailInner || !d.本番表示プレビュー.productionCss)) failures.push('本番表示プレビューにイベントカード / カレンダー / 出演者 / 本番CSSが反映されない');
