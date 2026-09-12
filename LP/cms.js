@@ -2404,7 +2404,11 @@ function suggestArtistCandidates(input){
     if(idKey===q || nameKey===q){ score=100; reason='完全一致'; }
     else if(qSlug && (idSlug===qSlug || nameSlug===qSlug) && !(qCompact.length<=3 && qCompact===artistCompactKey(name))){ score=95; reason='表記ゆれ'; }
     else if(q.length>=3 && (idKey.startsWith(q) || nameKey.startsWith(q))){ score=82; reason='前方一致'; }
-    else if(q.length>=4 && (idKey.includes(q) || nameKey.includes(q) || q.startsWith(idKey) || q.startsWith(nameKey))){ score=76; reason='部分一致'; }
+    else if(q.length>=4 && (
+      idKey.includes(q) || nameKey.includes(q) ||
+      (q.startsWith(idKey) && !/[a-z0-9]/.test(q[idKey.length]||'')) ||
+      (q.startsWith(nameKey) && !/[a-z0-9]/.test(q[nameKey.length]||''))
+    )){ score=76; reason='部分一致'; }
     else {
       const qWords=q.split(/[^a-z0-9]+/).filter(Boolean);
       const nWords=nameKey.split(/[^a-z0-9]+/).filter(Boolean);
@@ -2788,9 +2792,10 @@ function matchArtist(name){
   const slug=lower.replace(/[\s_]+/g,'-').replace(/[^a-z0-9-]/g,'');
   const bySlug=ARTIST_DB.find(a=>aId(a)===slug);
   if(bySlug) return bySlug.id;
-  // partial: name contains or is contained (but only for artist names >= 3 chars to avoid false positives)
-  const byPartial=ARTIST_DB.find(a=>{const nm=aName(a);return nm.length>=3&&(nm.includes(lower)||lower.includes(nm))});
-  if(byPartial) return byPartial.id;
+  // 部分一致での自動変換はしない。
+  // 「Shohei Takata」→「sho」/「YAMA」→「Yamarchy」の誤変換が実際に起きた
+  // （2026-09-13 報告）。曖昧なものは null を返し、未一致タグ（?名前）として
+  // 候補ボタンから明示採用させる（§9-25 の教訓と同じ方針）。
   return null;
 }
 

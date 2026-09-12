@@ -158,6 +158,30 @@ const key=(k,extra={})=>({key:k,preventDefault(){},...extra});
   check('既存IDと衝突したら登録しない', sent===null && /既にあります/.test(msg), msg.slice(0,36));
 }
 
+// ---- 8) 部分一致では自動変換せず、候補提示だけ行う ----
+{
+  const c=ctxOf();
+  c.__T.ARTIST_DB=[
+    {id:'sho',name:'SHO'},
+    {id:'yamarchy',name:'Yamarchy'},
+    {id:'dj-nobu',name:'DJ Nobu'},
+  ];
+  check('Shohei Takata は sho に自動変換しない',
+    c.matchArtist('Shohei Takata')===null, String(c.matchArtist('Shohei Takata')));
+  check('YAMA は Yamarchy に自動変換しない',
+    c.matchArtist('YAMA')===null, String(c.matchArtist('YAMA')));
+  check('DJ Nobu の完全一致は生きている',
+    c.matchArtist('DJ Nobu')==='dj-nobu', String(c.matchArtist('DJ Nobu')));
+  check('dj nobu の slug 一致は生きている',
+    c.matchArtist('dj nobu')==='dj-nobu', String(c.matchArtist('dj nobu')));
+  const shoCandidates=c.suggestArtistCandidates('Shohei Takata');
+  check('Shohei Takata の候補に sho を出さない',
+    !shoCandidates.some(a=>a.id==='sho'), JSON.stringify(shoCandidates));
+  const yamaCandidates=c.suggestArtistCandidates('YAMA');
+  check('YAMA の候補に Yamarchy を出す',
+    yamaCandidates.some(a=>a.id==='yamarchy'), JSON.stringify(yamaCandidates));
+}
+
 console.log('\n検証項目'.padEnd(44)+'判定  実測');
 console.log('-'.repeat(92));
 let fail=0;
