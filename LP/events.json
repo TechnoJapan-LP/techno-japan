@@ -1,7 +1,7 @@
 {
   "source": "https://techno-japan.media/",
   "license": "データの出典として techno-japan.media へのリンクを求めます",
-  "count": 15,
+  "count": 16,
   "events": [
     {
       "name": "Re:birth Festival 2026",
@@ -24,11 +24,15 @@
       "url": "https://techno-japan.media/festivals/ultra-japan.html",
       "start": "2026-09-19",
       "end": "2026-09-20",
+      "venue": "TOKYO ODAIBA ULTRA PARK",
       "pref": "Tokyo",
+      "lat": 35.6264,
+      "lng": 139.7761,
       "genres": [
         "TECHNO",
         "OTHERS"
-      ]
+      ],
+      "tickets": "https://ultrajapan.com/ja/tickets-2026"
     },
     {
       "name": "COLORS Presents SOUNDCAMP 2026",
@@ -103,6 +107,21 @@
         "LIVE",
         "OTHERS"
       ]
+    },
+    {
+      "name": "りんご音楽祭 2026",
+      "url": "https://techno-japan.media/festivals/ringo-festival.html",
+      "start": "2026-09-26",
+      "end": "2026-09-27",
+      "venue": "Matsumoto Alps Park",
+      "lat": 36.2573,
+      "lng": 137.9542,
+      "genres": [
+        "HOUSE",
+        "LIVE",
+        "OTHERS"
+      ],
+      "tickets": "https://ringofes.info/fes2026/ticket/"
     },
     {
       "name": "Synapse Festival 2026",

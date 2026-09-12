@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-09-10T16:06:34.531Z",
-  "count": 1015,
+  "_generatedAt": "2026-09-12T18:04:43.939Z",
+  "count": 1058,
   "items": [
     {
       "EDITION_ID": "waifu-2026",
@@ -424,7 +424,7 @@
     },
     {
       "EDITION_ID": "99flags-2026",
-      "ACT_LABEL": "LEVOLANT",
+      "ARTIST_ID": "levolant",
       "SET_TYPE": "dj",
       "SORT": "6"
     },
@@ -598,7 +598,7 @@
     },
     {
       "EDITION_ID": "paramount-2026",
-      "ACT_LABEL": "NOCO",
+      "ARTIST_ID": "noco",
       "SET_TYPE": "dj",
       "SORT": "7"
     },
@@ -1396,7 +1396,7 @@
     },
     {
       "EDITION_ID": "synapse-festival-2025",
-      "ACT_LABEL": "Olive Oil",
+      "ARTIST_ID": "olive-oil",
       "SET_TYPE": "dj",
       "SORT": "15"
     },
@@ -2662,7 +2662,7 @@
     },
     {
       "EDITION_ID": "rural-2026",
-      "ACT_LABEL": "LEVOLANT",
+      "ARTIST_ID": "levolant",
       "SET_TYPE": "dj",
       "SORT": "15"
     },
@@ -2728,7 +2728,7 @@
     },
     {
       "EDITION_ID": "rural-2026",
-      "ACT_LABEL": "YAMA",
+      "ARTIST_ID": "yama",
       "SET_TYPE": "dj",
       "SORT": "26"
     },
@@ -2884,7 +2884,7 @@
     },
     {
       "EDITION_ID": "moment-2026",
-      "ACT_LABEL": "Olive Oil",
+      "ARTIST_ID": "olive-oil",
       "SET_TYPE": "dj",
       "SORT": "21"
     },
@@ -2902,7 +2902,7 @@
     },
     {
       "EDITION_ID": "moment-2026",
-      "ACT_LABEL": "YAMA",
+      "ARTIST_ID": "yama",
       "SET_TYPE": "dj",
       "SORT": "24"
     },
@@ -3304,7 +3304,7 @@
     },
     {
       "EDITION_ID": "otsukimi-2026",
-      "ACT_LABEL": "Yama",
+      "ARTIST_ID": "yama",
       "SET_TYPE": "dj",
       "SORT": "15"
     },
@@ -4060,7 +4060,7 @@
     },
     {
       "EDITION_ID": "re-birth-festival-2026",
-      "ACT_LABEL": "NOCO",
+      "ARTIST_ID": "noco",
       "SET_TYPE": "dj",
       "SORT": "47"
     },
@@ -4258,7 +4258,7 @@
     },
     {
       "EDITION_ID": "big-fun-2026",
-      "ACT_LABEL": "YAMA",
+      "ARTIST_ID": "yama",
       "SET_TYPE": "dj",
       "SORT": "6"
     },
@@ -5049,6 +5049,264 @@
       "SORT": "13"
     },
     {
+      "EDITION_ID": "ultra-japan-2026",
+      "ARTIST_ID": "peggy-gou",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "ultra-japan-2026",
+      "ACT_LABEL": "The Martinez Brothers",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "ultra-japan-2026",
+      "ARTIST_ID": "sara-landry",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "ultra-japan-2026",
+      "ACT_LABEL": "Lilly Palmer",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "ultra-japan-2026",
+      "ARTIST_ID": "joris-voorn",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "ultra-japan-2026",
+      "ACT_LABEL": "TRYM",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "ultra-japan-2026",
+      "ACT_LABEL": "KEN ISHII B2B RISA TANIGUCHI",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "ultra-japan-2026",
+      "ACT_LABEL": "Mogwaa",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "ultra-japan-2026",
+      "ACT_LABEL": "DJ co.kr",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "ultra-japan-2026",
+      "ACT_LABEL": "JOMMY",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "ultra-japan-2026",
+      "ACT_LABEL": "Katimi Ai",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "ultra-japan-2026",
+      "ACT_LABEL": "ENUOH × MATSUNAMI",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "colors-presents-soundcamp-2026",
+      "ACT_LABEL": "ECHO",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "colors-presents-soundcamp-2026",
+      "ARTIST_ID": "feline",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "colors-presents-soundcamp-2026",
+      "ACT_LABEL": "Ikeda Yuhei",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "colors-presents-soundcamp-2026",
+      "ACT_LABEL": "KAZUYA PEE",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "colors-presents-soundcamp-2026",
+      "ACT_LABEL": "KNKN",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "colors-presents-soundcamp-2026",
+      "ACT_LABEL": "Naohito Uchiyama",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "colors-presents-soundcamp-2026",
+      "ACT_LABEL": "NASA",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "colors-presents-soundcamp-2026",
+      "ARTIST_ID": "noco",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "colors-presents-soundcamp-2026",
+      "ACT_LABEL": "olga",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "colors-presents-soundcamp-2026",
+      "ARTIST_ID": "occa",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "colors-presents-soundcamp-2026",
+      "ACT_LABEL": "Shohei Takata",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "colors-presents-soundcamp-2026",
+      "ACT_LABEL": "YOUFORGOT",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "colors-presents-soundcamp-2026",
+      "ARTIST_ID": "yamarchy",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "colors-presents-soundcamp-2026",
+      "ACT_LABEL": "Yukio Kanai",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "ringo-festival-2026",
+      "ACT_LABEL": "Shinichi Osawa",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "ringo-festival-2026",
+      "ACT_LABEL": "DJ WADA",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "ringo-festival-2026",
+      "ARTIST_ID": "foodman",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "ringo-festival-2026",
+      "ARTIST_ID": "sapphire-slows",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "ringo-festival-2026",
+      "ACT_LABEL": "DJ Yeiyei!",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "ringo-festival-2026",
+      "ACT_LABEL": "Wowwow!",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "ringo-festival-2026",
+      "ACT_LABEL": "Kuchu Suimin",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "ringo-festival-2026",
+      "ACT_LABEL": "XTAL",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "ringo-festival-2026",
+      "ARTIST_ID": "sunga",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "ringo-festival-2026",
+      "ACT_LABEL": "DJ MAMEZUKA",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "ringo-festival-2026",
+      "ACT_LABEL": "DJ MAYURI",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "ringo-festival-2026",
+      "ARTIST_ID": "olive-oil",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "ringo-festival-2026",
+      "ACT_LABEL": "LEF!!!CREW!!!",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "ringo-festival-2026",
+      "ACT_LABEL": "YOSHIROTTEN",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "ringo-festival-2026",
+      "ACT_LABEL": "DJ KENZI aka BLACKBEATZ",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "ringo-festival-2026",
+      "ACT_LABEL": "N²",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
+      "EDITION_ID": "ringo-festival-2026",
+      "ARTIST_ID": "levolant",
+      "SET_TYPE": "dj",
+      "SORT": "17"
+    },
+    {
       "EDITION_ID": "nu-festival-2026",
       "ACT_LABEL": "Shinichi Osawa",
       "SET_TYPE": "dj",
@@ -5362,7 +5620,7 @@
     },
     {
       "EDITION_ID": "nu-festival-2026",
-      "ACT_LABEL": "Sapphire Slows",
+      "ARTIST_ID": "sapphire-slows",
       "SET_TYPE": "dj",
       "SORT": "53"
     },

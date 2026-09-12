@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-09-10T16:06:34.531Z",
-  "count": 109,
+  "_generatedAt": "2026-09-12T18:04:43.939Z",
+  "count": 110,
   "items": [
     {
       "EDITION_ID": "99flags-2026",
@@ -242,6 +242,7 @@
       "ADDRESS": "石狩市新港中央1丁目",
       "LAT": "43.1101",
       "LNG": "141.1746",
+      "FLYER": "images/festivals/colors-presents-soundcamp-2026-flyer.webp",
       "STATUS": "announced"
     },
     {
@@ -1099,7 +1100,13 @@
       "EDITION": "2026",
       "DATE_START": "2026-09-19",
       "DATE_END": "2026-09-20",
+      "LOCATION": "TOKYO ODAIBA ULTRA PARK",
       "PREF": "Tokyo",
+      "ADDRESS": "東京都江東区青海1丁目1",
+      "LAT": "35.6264",
+      "LNG": "139.7761",
+      "TICKETURL": "https://ultrajapan.com/ja/tickets-2026",
+      "FLYER": "images/festivals/ultra-japan-2026-flyer.webp",
       "STATUS": "announced"
     },
     {
@@ -1295,6 +1302,21 @@
       "LAT": "35.9463",
       "LNG": "136.7214",
       "STATUS": "finished"
+    },
+    {
+      "EDITION_ID": "ringo-festival-2026",
+      "FESTIVAL_ID": "ringo-festival",
+      "EDITION": "2026",
+      "DATE_START": "2026-09-26",
+      "DATE_END": "2026-09-27",
+      "LOCATION": "Matsumoto Alps Park",
+      "LOCATION_JA": "松本市アルプス公園",
+      "ADDRESS": "長野県松本市蟻ケ崎2455-11",
+      "LAT": "36.2573",
+      "LNG": "137.9542",
+      "TICKETURL": "https://ringofes.info/fes2026/ticket/",
+      "FLYER": "images/festivals/ringo-festival-flyer.jpg",
+      "STATUS": "published"
     }
   ]
 }
