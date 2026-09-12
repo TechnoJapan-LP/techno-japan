@@ -237,6 +237,7 @@
           <div class="btn-row" style="margin-top:10px">
             <button class="btn btn-sm btn-blue" id="btn-fetch-lineup" onclick="fetchLineup()">Fetch Lineup (AI)</button>
             <button class="btn btn-sm" onclick="toggleBulkLineup()">Bulk Text Input</button>
+            <button type="button" class="btn btn-sm" onclick="clearLineup('f')" style="margin-left:6px">🗑 全部クリア</button>
           </div>
           <div id="bulk-lineup-wrap" style="display:none;margin-top:10px">
             <textarea id="bulk-lineup-text" rows="3" placeholder="Paste artist names (comma or newline separated)..." style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;font-size:.85rem;color:var(--text);resize:vertical"></textarea>
@@ -567,6 +568,6 @@
 </div>
 
 <script type="module" src="article-shortcodes.js?v=5"></script>
-<script src="cms.js?v=118" defer></script>
+<script src="cms.js?v=119" defer></script>
 </body>
 </html>

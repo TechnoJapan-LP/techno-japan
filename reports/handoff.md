@@ -7261,3 +7261,40 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
   `Number()` しないこと。年が必要なら `editionKeyParts(v).year`。
 - data.js の editions は `{ year: 2026, editionKey: "2026-2", … }`。
   `edition` キーは第N回（通算回数）で別物。
+
+## 2026-09-13 LINEUP の一括クリアを追加
+
+### 実施（設計=Claude / 実装=Codex / 検証=Claude）
+- 要望: 既存フェスを更新するとき、前回の出演者を1組ずつ消すのが手間。
+- 実測: フェス共通 LINEUP（lineups.f / #f-lineupTags）はタグ形式で
+  個別の × しか無かった。開催回（Editions）側は textarea だがボタンが無く不統一。
+- 追加: `clearLineup(prefix)`（フェス共通）と `clearEditionLineup(i)`（開催回）。
+  どちらも**件数を出して confirm** し、フォーム上の配列を空にするだけ
+  （シートは保存を押すまで変わらない旨をダイアログに明記）。markFormDirty で
+  未保存表示。0件のときは confirm を出さず info トーストのみ。
+- UI: フェス共通は Bulk paste の隣に「🗑 全部クリア」、開催回は textarea の下に
+  「🗑 この回のLINEUPを全部クリア」。
+- 版: cms.js 119。
+
+### コミット
+- このエントリと同一コミット。
+
+### 検証
+- `node scripts/check_cms_lineup.mjs`: **全20件成功**（新規5ケース:
+  3件→0件 / confirm=false では消えない / 0件では何もしない /
+  開催回クリアが他の回に影響しない / markFormDirty が呼ばれる）
+- 静的確認: 両ボタンの onclick が正しい関数を指す。renderEditions は
+  selectedEditionIndex を範囲内に保つため**クリア後も選択中の開催回が維持**される。
+- preflight 全42件成功
+- 認証済み本番CMSでの実操作: **実機未確認**
+
+### 変更したパターン
+- 関数2新設 / cms.html 1ボタン / renderEditions 内 1ボタン / テスト5ケース
+
+### 未確認の類似パターン
+- ARTIST セクション等に他 prefix の LINEUP 入力は無い（確認済み・0件）
+- 「元に戻す」は未実装。誤クリア時は保存せずにフェスを再選択（再読込）すれば
+  シートの値に戻る
+
+### 次の担当への注意・判断待ち
+- なし。

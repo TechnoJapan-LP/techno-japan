@@ -33,7 +33,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const CMS_PATH = path.join(ROOT, 'LP', 'cms.js');
-const BRIDGE=`;globalThis.__T={ get lineups(){return lineups}, get ARTIST_DB(){return ARTIST_DB},
+const BRIDGE=`;globalThis.__T={ get lineups(){return lineups}, get editions(){return editions}, get ARTIST_DB(){return ARTIST_DB},
   set ARTIST_DB(v){ARTIST_DB=v}, get acHighlight(){return acHighlight}, set acHighlight(v){acHighlight=v} };`;
 function ctxOf(){
   const els=new Map();
@@ -180,6 +180,55 @@ const key=(k,extra={})=>({key:k,preventDefault(){},...extra});
   const yamaCandidates=c.suggestArtistCandidates('YAMA');
   check('YAMA の候補に Yamarchy を出す',
     yamaCandidates.some(a=>a.id==='yamarchy'), JSON.stringify(yamaCandidates));
+}
+
+// ---- 9) フェス共通 LINEUP を確認後に一括クリアできるか ----
+{
+  const c=ctxOf();
+  c.__T.lineups.f.push('a','b','c');
+  let dirty=0; c.markFormDirty=()=>{dirty++;}; c.confirm=()=>true; c.toast=()=>{};
+  c.clearLineup('f');
+  check('フェス共通 LINEUP を確認後に一括クリアできる',
+    c.__T.lineups.f.length===0, JSON.stringify(c.__T.lineups.f));
+}
+
+// ---- 10) キャンセル時はフェス共通 LINEUP を消さないか ----
+{
+  const c=ctxOf();
+  c.__T.lineups.f.push('a','b','c');
+  c.confirm=()=>false; c.toast=()=>{};
+  c.clearLineup('f');
+  check('フェス共通 LINEUP はキャンセル時に消えない',
+    c.__T.lineups.f.length===3, JSON.stringify(c.__T.lineups.f));
+}
+
+// ---- 11) 空のフェス共通 LINEUP は確認なしで何もしないか ----
+{
+  const c=ctxOf();
+  let confirmed=0, type=''; c.confirm=()=>{confirmed++;return true;}; c.toast=(_,t)=>{type=t;};
+  c.clearLineup('f');
+  check('空の LINEUP は確認なしで info 通知だけ出す',
+    confirmed===0 && type==='info', `confirm=${confirmed} type=${type}`);
+}
+
+// ---- 12) 開催回 LINEUP だけを一括クリアし、他の開催回を保持するか ----
+{
+  const c=ctxOf();
+  c.__T.editions.push({year:'2026',lineup:['a','b']},{year:'2027',lineup:['c']});
+  let dirty=0; c.markFormDirty=()=>{dirty++;}; c.confirm=()=>true; c.toast=()=>{};
+  c.clearEditionLineup(0);
+  check('開催回 LINEUP のクリアが対象の開催回だけに適用される',
+    c.__T.editions[0].lineup.length===0 && c.__T.editions[1].lineup.length===1,
+    JSON.stringify(c.__T.editions));
+}
+
+// ---- 13) クリア後は未保存状態になるか ----
+{
+  const c=ctxOf();
+  c.__T.lineups.f.push('a');
+  let dirty=0; c.markFormDirty=()=>{dirty++;}; c.confirm=()=>true; c.toast=()=>{};
+  c.clearLineup('f');
+  check('LINEUP クリア後に markFormDirty が呼ばれる', dirty===1, `dirty=${dirty}`);
 }
 
 console.log('\n検証項目'.padEnd(44)+'判定  実測');

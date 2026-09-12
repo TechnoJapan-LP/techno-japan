@@ -2522,6 +2522,30 @@ async function registerLineupArtist(prefix, tag){
 }
 
 function removeLineup(prefix,id){lineups[prefix]=lineups[prefix].filter(a=>a!==id);renderLineupTags(prefix)}
+/* LINEUP を一括クリアする。前回の出演者を1組ずつ消す手間をなくす（2026-09-13 要望）。
+   ここではフォーム上の配列を空にするだけで、シートは「保存」を押すまで変わらない。
+   誤操作を防ぐため件数を見せて確認する。 */
+function clearLineup(prefix){
+  const arr = lineups[prefix] || [];
+  if (!arr.length) return toast('LINEUP は既に空です', 'info');
+  if (!confirm(arr.length + '組の出演者をすべて削除します。\n（保存を押すまでシートは変わりません）\n\n続けますか？')) return;
+  lineups[prefix] = [];
+  renderLineupTags(prefix);
+  markFormDirty();
+  toast(arr.length + '組を削除しました。保存を押すと反映されます', 'success');
+}
+
+/* 開催回（Editions）の LINEUP を一括クリアする。textarea も再描画で空になる。 */
+function clearEditionLineup(i){
+  const ed = editions[i];
+  if (!ed) return;
+  const n = (ed.lineup || []).length;
+  if (!n) return toast('この開催回の LINEUP は既に空です', 'info');
+  if (!confirm(editionLabel(ed.year) + ' の出演者 ' + n + '組をすべて削除します。\n（保存を押すまでシートは変わりません）\n\n続けますか？')) return;
+  updateEditionField(i, 'lineup', []);
+  renderEditions();
+  toast(n + '組を削除しました。保存を押すと反映されます', 'success');
+}
 function renderLineupTags(prefix){
   document.getElementById(prefix+'-lineupTags').innerHTML=lineups[prefix].map(a=>{
     const isUnmatched=a.startsWith('?');
@@ -2700,6 +2724,7 @@ function renderEditions(){
       ${editionFlyerPreview(i,ed)}
       <label class="edition-lineup-label">Lineup (1組1行 / comma-separated)
         <textarea rows="5" placeholder="1組1行、またはカンマ区切りで貼り付け" onchange="updateEditionField(${i},'lineup',parseEditionLineupText(this.value))">${esc((ed.lineup||[]).join('\n'))}</textarea>
+        <button type="button" class="btn btn-sm" onclick="clearEditionLineup(${i})" style="margin-top:6px">🗑 この回のLINEUPを全部クリア</button>
       </label>
     </div>`;
 }
