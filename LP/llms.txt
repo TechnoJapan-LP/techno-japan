@@ -1,7 +1,7 @@
 # TECHNO JAPAN
 
 > 日本のテクノ / ハウスの独立メディア。フェスティバル97件・
-> アーティスト115名・会場22件・記事8本を日英で掲載し、
+> アーティスト124名・会場22件・記事9本を日英で掲載し、
 > 開催日・場所・出演者を構造化データ（schema.org）付きで公開している。
 
 ## 今後の開催予定（15件）
@@ -33,6 +33,7 @@
 
 ## 最新記事
 
+- 2026-09-09: [【2026年9月】日本の音楽フェスティバル&レイヴまとめ](https://techno-japan.media/articles/japan-festival-2026-september.html) — 涼しさが戻り、野外がいちばん心地よい9月。北海道の果樹園から秋田の日本庭園、長野の森、宮崎の山あいまで、キャンプインの大型フェスから一夜限りのレイヴまでが全国で途切れなく続く。今月体験すべき現場をまとめて紹介する。 / [EN](https://techno-japan.media/en/articles/japan-festival-2026-september.html)
 - 2026-09-08: [Re:birthが2年半ぶり復活、長野・木曽の森で3日間のギャザリング](https://techno-japan.media/articles/rebirth-2026-info.html) — 長野・木曽の森を舞台に、Re:birthが約2年半ぶりに帰ってくる。RroseやMathew Jonson、Kuniykiら国内外80組以上が集い、天然の霧に巨大ホログラムが浮かぶ3日間。日本独自のレイヴカルチャーが、再び動き出す。 / [EN](https://techno-japan.media/en/articles/rebirth-2026-info.html)
 - 2026-08-27: [東京の森で夜通し踊る キャンプ型レイヴ FOREST SOUND CAMP が9月開催](https://techno-japan.media/articles/forest-sound-camp-info.html) — 東京の西端、日の出町の森で昼から翌日の昼まで丸一日踊り続けるキャンプ型レイヴが9月に開催。Stones TaroやTeklifeのJackieら20組超が、VOID Acousticsの音とともに森林と音楽の共存という実験に挑む。 / [EN](https://techno-japan.media/en/articles/forest-sound-camp-info.html)
 - 2026-08-22: [【2026年下半期】アジアの音楽フェスティバル&レイヴまとめ](https://techno-japan.media/articles/asia-festival-2026-second.html) — 夏の終わりから年末まで、アジアの野外シーンは止まらない。ソウル近郊の山でのキャンプイン、ウランバートルの巨大レイヴ、ヒマラヤ高地の初開催ギャザリング、バリのエコファーム、そして香港の10周年まで、日本から数時間で届く14のフロアを厳選して紹介する。 / [EN](https://techno-japan.media/en/articles/asia-festival-2026-second.html)
