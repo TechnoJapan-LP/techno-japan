@@ -210,6 +210,9 @@ body.mixed-results.rave-mode .festival-section:not(.rave-result):hover .festival
 .fest-filter-chip { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.3; transition: opacity 0.3s ease; padding: 6px 14px; white-space: nowrap; flex-shrink: 0; cursor: pointer; background: none; border: none; color: inherit; }
 .fest-filter-chip:hover { opacity: 0.7; }
 .fest-filter-chip.active { opacity: 1; border-bottom: 1px solid var(--text); }
+.fest-empty { padding: 64px 40px; text-align: center; font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; color: rgba(240,237,232,.5); }
+.fest-empty p { margin-bottom: 20px; }
+@media (max-width: 900px) { .fest-empty { padding: 48px 24px; } }
 @media (max-width: 640px) { .fest-filters { padding: 12px 20px 4px; } .fest-search-row { align-items: stretch; flex-direction: column; gap: 8px; } .fest-search { max-width: none; width: 100%; } }
 /* タッチデバイスは44pxのタップターゲットを確保（フィルタ・月ナビ） */
 @media (pointer: coarse) {
@@ -1030,6 +1033,12 @@ function isFuture(dateStr) {
   return !isNaN(end) && end >= now;
 }
 
+function esc(value) {
+  return String(value).replace(/[&<>'"]/g, char => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+  })[char]);
+}
+
 /* ========== GENRE / AREA FILTERS ========== */
 function buildFilters() {
   const box = document.getElementById('fest-filters');
@@ -1040,24 +1049,37 @@ function buildFilters() {
   const chip = (val, cur, key) =>
     `<button class="fest-filter-chip${val === cur ? ' active' : ''}" data-filter="${key}" data-val="${val}">${val}</button>`;
   const searchLabel = currentSearch ? 'ALL EVENTS' : (currentMode === 'rave' ? 'RAVES' : 'FESTIVALS');
-  box.innerHTML =
-    `<div class="fest-search-row"><input class="fest-search" id="fest-search" type="search" placeholder="SEARCH ${searchLabel}..." aria-label="Search ${searchLabel.toLowerCase()}"><span class="fest-count" id="fest-count"></span></div>` +
-    `<div class="fest-filter-row"><span class="fest-filter-key">Genre</span>${['ALL', ...genres].map(g => chip(g, currentGenre, 'genre')).join('')}</div>`;
-  const search = box.querySelector('#fest-search');
-  search.value = currentSearch;
-  let searchTimer;
-  search.addEventListener('input', () => {
-    clearTimeout(searchTimer);
-    searchTimer = setTimeout(() => {
-      currentSearch = search.value.trim();
-      document.body.classList.toggle('mixed-results', Boolean(currentSearch));
-      currentMonth = 'ALL';
-      buildFilters();
-      buildMonthNav();
-      renderFestivals();
-      syncFestivalQuery();
-    }, 150);
-  });
+  const filterRowHtml = `<div class="fest-filter-row"><span class="fest-filter-key">Genre</span>${['ALL', ...genres].map(g => chip(g, currentGenre, 'genre')).join('')}</div>`;
+  let search = box.querySelector('#fest-search');
+
+  // 検索欄は再生成しない（1文字ごとにフォーカスが失われた2026-09-13報告・IMEも壊れる）。
+  if (!search) {
+    box.innerHTML =
+      `<div class="fest-search-row"><input class="fest-search" id="fest-search" type="search" placeholder="SEARCH ${searchLabel}..." aria-label="Search ${searchLabel.toLowerCase()}"><span class="fest-count" id="fest-count"></span></div>` +
+      filterRowHtml;
+    search = box.querySelector('#fest-search');
+    search.value = currentSearch;
+    let searchTimer;
+    search.addEventListener('input', () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => {
+        currentSearch = search.value.trim();
+        document.body.classList.toggle('mixed-results', Boolean(currentSearch));
+        currentMonth = 'ALL';
+        buildFilters();
+        buildMonthNav();
+        renderFestivals();
+        syncFestivalQuery();
+      }, 150);
+    });
+  } else {
+    search.placeholder = `SEARCH ${searchLabel}...`;
+    search.setAttribute('aria-label', `Search ${searchLabel.toLowerCase()}`);
+    if (document.activeElement !== search) search.value = currentSearch;
+    const oldFilterRow = box.querySelector('.fest-filter-row');
+    if (oldFilterRow) oldFilterRow.outerHTML = filterRowHtml;
+    else box.insertAdjacentHTML('beforeend', filterRowHtml);
+  }
   box.querySelectorAll('.fest-filter-chip').forEach(b => b.addEventListener('click', () => {
     currentGenre = b.dataset.val;
     currentMonth = 'ALL';
@@ -1261,6 +1283,14 @@ function buildMonthNav() {
 }
 
 function applyMonthFilter() {
+  // 検索中は期間タブを無視して全期間を表示する。
+  // 検索は過去フェスにもヒットして件数に入るのに、ALL表示が未来のみで
+  // 「93件」と画面が食い違っていた（2026-09-13）。並びは既存ソートのまま
+  // （未来→過去・過去は新しい年から）。
+  if (currentSearch) {
+    document.querySelectorAll('.festival-month-group').forEach(g => { g.style.display = ''; });
+    return;
+  }
   document.querySelectorAll('.festival-month-group').forEach(group => {
     const gMonth = group.dataset.month;
     const gTime = group.dataset.time; // 'future' or 'past'
@@ -1346,6 +1376,21 @@ function renderFestivals() {
   const sorted = getSorted();
   const count = document.getElementById('fest-count');
   if (count) count.textContent = `${sorted.length} ${currentMode === 'rave' ? 'RAVES' : 'FESTIVALS'}`;
+
+  if (!sorted.length) {
+    const en = document.documentElement.lang === 'en';
+    main.innerHTML = `<div class="fest-empty">`
+      + `<p>${en ? 'NO RESULTS' : '該当するフェスが見つかりません'}${currentSearch ? ` — “${esc(currentSearch)}”` : ''}</p>`
+      + `<button type="button" class="fest-filter-chip" id="fest-empty-clear">${en ? 'CLEAR FILTERS' : '条件をクリア'}</button>`
+      + `</div>`;
+    document.getElementById('fest-empty-clear').addEventListener('click', () => {
+      currentSearch = ''; currentGenre = 'ALL'; currentMonth = 'ALL';
+      document.body.classList.remove('mixed-results');
+      buildFilters(); buildMonthNav(); renderFestivals(); syncFestivalQuery();
+      const s = document.getElementById('fest-search'); if (s) { s.value = ''; s.focus(); }
+    });
+    return;
+  }
 
   // Group by future/past, then by year and month. Month aloneでまとめると、
   // 2027年3月が2026年8月より先に表示されるため、年を必ず並び順に含める。
