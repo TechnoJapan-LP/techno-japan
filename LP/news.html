@@ -181,6 +181,7 @@ html.tj-page-leaving body { opacity: 0; transition: opacity .18s ease; }
 .featured-card-title {
   font-family: var(--font-body); font-size: clamp(20px, 2.7vw, 34px); font-weight: 400;
   line-height: 1.35;
+  overflow-wrap: anywhere;
 }
 .featured-card-meta {
   margin-top: 16px;
@@ -224,6 +225,7 @@ html.tj-page-leaving body { opacity: 0; transition: opacity .18s ease; }
 .side-card-title {
   font-family: var(--font-body); font-size: clamp(16px, 2vw, 22px); font-weight: 400;
   line-height: 1.4;
+  overflow-wrap: anywhere;
   padding-right: 60px;
 }
 .side-card-excerpt {
@@ -397,6 +399,7 @@ html.tj-page-leaving body { opacity: 0; transition: opacity .18s ease; }
 .feed-card-title {
   font-family: var(--font-body); font-size: clamp(16px, 1.8vw, 22px); font-weight: 400;
   line-height: 1.35;
+  overflow-wrap: anywhere; /* 英単語混在の見出しがスペース折返しで右に空くのを防ぐ。anywhere は収まらないときだけ単語内で折る */
 }
 .feed-card-excerpt {
   font-family: var(--font-body); font-size: 12px; font-weight: 300; line-height: 1.6;

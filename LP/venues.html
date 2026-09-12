@@ -299,7 +299,7 @@
   /* ヒーローの余白は ARTISTS ページ(96px/40px)に揃える。
      ハブ3枚でバラバラ（140/60等）だと、行き来したとき高さが揃わない
      （2026-08-25 ユーザー指摘）。変えるときは3枚同時に。 */
-  .page-header { padding: 96px 24px 40px; }
+  .page-header { padding: 24px 24px 40px; } /* nav が sticky なので上余白は詳細ページと同じ24px（二重取り防止） */
   .page-header-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
   #venues-list-view { padding: 8px 24px 80px; }
   .area-nav-wrap { padding-right: 24px; top: 48px; }

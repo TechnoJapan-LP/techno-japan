@@ -262,7 +262,7 @@
   .artists-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 900px) {
-  .page-header { padding: 96px 24px 40px; }
+  .page-header { padding: 24px 24px 40px; } /* nav が sticky なので上余白は詳細ページと同じ24px（二重取り防止） */
   .page-header-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
   #artists-list-view { padding: 0 0 80px; }
   .artists-toolbar { padding: 32px 24px 24px; }

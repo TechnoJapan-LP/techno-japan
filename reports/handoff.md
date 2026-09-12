@@ -7003,3 +7003,40 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 
 ### 次の担当への注意・判断待ち
 - lineupsByEdition への登録は main() 冒頭の1ループのみ。増やさないこと。
+
+## 2026-09-12 モバイル3件の修正（ハブ上余白 / newsタイトル改行 / カルーセル縦ぶれ）
+
+### 実施（設計=Claude / 実装=Codex / 検証=Claude）
+- ① festivals / artists / venues ハブの ≤900px `.page-header` 上padding 96→24px
+  （sticky nav の二重取り。詳細ページの §先行修正と同じ理屈）。news.html には
+  .page-header 無し（対象外・確認済み）。EN ハブはビルド生成・行数一致確認。
+- ② news の一覧タイトル3種（feed/featured/side）に `overflow-wrap: anywhere`。
+  英単語混在見出しがスペース折返しで右に大きく空くのを防ぐ（収まらない時だけ
+  単語内で折る性質なので和文への影響なし）。
+- ③ 関連フェスカルーセル: `.related-grid` は overflow-x:auto でも計算上
+  overflow-y:auto になり、登場アニメの translateY(28px) で縦に18pxスクロール
+  可能だった（実測 351>333px）→ 横スワイプが縦にぶれる。
+  `overflow-y:hidden` + カルーセル内の reveal は transform:none（フェードのみ）。
+- 版: detail.css 36 / cms.js 115。
+
+### コミット
+- このエントリと同一コミット（EN ハブ再生成含む）。
+
+### 検証（headless実測）
+- ① 390px: 3ハブとも nav下端→コンテンツ 32px（従来 ~128px）。1440px は 90px で不変。
+- ② computed overflow-wrap: anywhere を確認。
+- ③ grid の縦はみ出し解消（scrollHeight==clientHeight）、reveal中カードの
+  transform none。横スクロールは維持。
+- preflight 全42件成功。
+- iPhone 実機での最終見た目: **実機未確認**（ユーザーに依頼）。
+
+### 変更したパターン
+- ハブ3ファイル各1行 / news 3行 / detail.css 2箇所 / 版追随4箇所
+
+### 未確認の類似パターン
+- index.html のヒーロー上余白は構造が異なるため対象外（要望もなし）
+- 記事内の他の横スクロールUI（editions-timeline 等）に translateY reveal の
+  同型問題が無いかは未調査（症状報告があれば同じ手当て）
+
+### 次の担当への注意・判断待ち
+- 横スクロール容器の中では translateY 系の登場アニメを使わないこと（縦ぶれの温床）。

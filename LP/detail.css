@@ -734,12 +734,16 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   display: flex;
   gap: 16px;
   overflow-x: auto;
+  overflow-y: hidden;
   overscroll-behavior-x: contain;
   scroll-snap-type: x proximity;
   scrollbar-width: thin;
   scrollbar-color: rgba(240,237,232,.22) transparent;
   padding-bottom: 10px;
 }
+/* カルーセル内の登場アニメは縦移動を使わない。translateY があると
+   スクロール領域が縦に伸び、横スワイプが縦にぶれる（実測: 351>333px）。 */
+.festival-design-v2 .related-grid .related-card.reveal { transform: none; }
 .festival-design-v2 .related-card {
   display: block;
   flex: 0 0 min(28vw, 320px);
