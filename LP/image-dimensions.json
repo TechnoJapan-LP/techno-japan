@@ -291,6 +291,30 @@
     1920,
     1281
   ],
+  "images/articles/shifumiz-2026-info-1789235839305.webp": [
+    1920,
+    1280
+  ],
+  "images/articles/shifumiz-2026-info-1789236272582.webp": [
+    1920,
+    1281
+  ],
+  "images/articles/shifumiz-2026-info-1789236327552.webp": [
+    1920,
+    1080
+  ],
+  "images/articles/shifumiz-2026-info-1789236442017.webp": [
+    1920,
+    1080
+  ],
+  "images/articles/shifumiz-2026-info-1789236532256.webp": [
+    1920,
+    1280
+  ],
+  "images/articles/shifumiz-2026-info-1789236558405.webp": [
+    1920,
+    2880
+  ],
   "images/articles/shifumiz-2026-info.webp": [
     1920,
     1080
@@ -1183,6 +1207,54 @@
     480,
     270
   ],
+  "images/derivatives/card/articles/shifumiz-2026-info-1789235839305--9960f9d3-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/articles/shifumiz-2026-info-1789235839305--9960f9d3-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/articles/shifumiz-2026-info-1789236272582--54f8c90b-lg.webp": [
+    960,
+    641
+  ],
+  "images/derivatives/card/articles/shifumiz-2026-info-1789236272582--54f8c90b-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/articles/shifumiz-2026-info-1789236327552--0dff4d66-lg.webp": [
+    960,
+    540
+  ],
+  "images/derivatives/card/articles/shifumiz-2026-info-1789236327552--0dff4d66-sm.webp": [
+    480,
+    270
+  ],
+  "images/derivatives/card/articles/shifumiz-2026-info-1789236442017--6fcda319-lg.webp": [
+    960,
+    540
+  ],
+  "images/derivatives/card/articles/shifumiz-2026-info-1789236442017--6fcda319-sm.webp": [
+    480,
+    270
+  ],
+  "images/derivatives/card/articles/shifumiz-2026-info-1789236532256--4b7b47c2-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/articles/shifumiz-2026-info-1789236532256--4b7b47c2-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/articles/shifumiz-2026-info-1789236558405--11eb6ced-lg.webp": [
+    640,
+    960
+  ],
+  "images/derivatives/card/articles/shifumiz-2026-info-1789236558405--11eb6ced-sm.webp": [
+    320,
+    480
+  ],
   "images/derivatives/card/articles/snow-mashine-2027-info--4eabbf3f-fourThree-center.webp": [
     1200,
     900
@@ -1831,12 +1903,20 @@
     480,
     270
   ],
-  "images/derivatives/card/festivals/e-groove-flyer--b415fb72-lg.webp": [
-    679,
+  "images/derivatives/card/festivals/e-groove-2026-flyer--2d920cf6-lg.webp": [
+    720,
     960
   ],
-  "images/derivatives/card/festivals/e-groove-flyer--b415fb72-sm.webp": [
-    339,
+  "images/derivatives/card/festivals/e-groove-2026-flyer--2d920cf6-sm.webp": [
+    360,
+    480
+  ],
+  "images/derivatives/card/festivals/e-groove-flyer--2d920cf6-lg.webp": [
+    720,
+    960
+  ],
+  "images/derivatives/card/festivals/e-groove-flyer--2d920cf6-sm.webp": [
+    360,
     480
   ],
   "images/derivatives/card/festivals/ensou--c26d58c5-lg.webp": [
@@ -2827,9 +2907,13 @@
     1920,
     1440
   ],
+  "images/festivals/e-groove-2026-flyer.webp": [
+    1920,
+    2560
+  ],
   "images/festivals/e-groove-flyer.webp": [
     1920,
-    2715
+    2560
   ],
   "images/festivals/e-groove.webp": [
     1920,
