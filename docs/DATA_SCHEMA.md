@@ -259,9 +259,9 @@ ID 規約違反7件の是正(§1.1)ではリダイレクトを設けたが、そ
 
 | カラム | 型/例 | 備考 |
 |---|---|---|
-| EDITION_ID | `rainbow-disco-club-2026` | `{FESTIVAL_ID}-{EDITION}` |
+| EDITION_ID | `rainbow-disco-club-2026` / `rainbow-disco-club-2026-2` | `{FESTIVAL_ID}-{EDITION}`。EDITION は `YYYY` または `YYYY-N` |
 | FESTIVAL_ID | `rainbow-disco-club` | FESTIVALS参照 |
-| EDITION | `2026` | 年。年2回開催等は `2026-spring` も可 |
+| EDITION | `2026` / `2026-2` | 年または同年開催の連番。表示は `2026` / `2026 #2` |
 | DATE_START / DATE_END | `2026-04-17` / `2026-04-19` | ISO形式。1日開催はENDも同値 |
 | LOCATION | `Higashi-Izu Cross Country Course` | 会場名 |
 | LOCATION_JA | `東伊豆クロスカントリーコース` | 日本語の公式会場名。現行FESTIVALSの`location_ja`から引き継ぐ |

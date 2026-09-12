@@ -204,8 +204,8 @@ let lineupSheetRows = [];
 let editionSheetMaxRow = 0;
 let lineupSheetMaxRow = 0;
 let editionSheetLoaded = false;
-/* シート全体の EDITION_ID → 行番号。**年度ごとの上書き（upsert）に使う。**
-   EDITION_ID は {festivalId}-{年} なので、同じ年を保存し直すときは
+/* シート全体の EDITION_ID → 行番号。**EDITIONごとの上書き（upsert）に使う。**
+   EDITION_ID は {festivalId}-{EDITION} なので、同じEDITIONを保存し直すときは
    新しい行を足すのではなく、その行を書き換えるのが正しい。
    これを持たずに「_row が無い＝新規」で判定していたため、
    読み込みに失敗した回だけ末尾に重複が積み上がった（AUDIT §9-58）。 */
@@ -638,7 +638,7 @@ function renderFestivalPreview(){
   const editionsHtml=editions.map(ed=>{
     const edLineup=(ed.lineup||[]).map(a=>`<span class="pv-edition-artist">${esc(a)}</span>`).join('');
     return `<div class="pv-edition-row">
-      <div class="pv-edition-year">${esc(ed.year)}</div>
+      <div class="pv-edition-year">${esc(editionLabel(ed.editionKey || ed.year || ed.EDITION))}</div>
       <div class="pv-edition-date">${esc(ed.date)}</div>
       <div class="pv-edition-lineup">${edLineup||'<span class="pv-empty">No lineup</span>'}</div>
     </div>`;
@@ -1365,7 +1365,10 @@ function buildArticleFestivalData(festivalRows){
     let editions = row.editions;
     if (typeof editions === 'string') { try { editions = JSON.parse(editions); } catch (_) { editions = []; } }
     if (!Array.isArray(editions)) editions = [];
-    const latest = editions.slice().sort((a, b) => Number(b.year || 0) - Number(a.year || 0))[0];
+    const latest = editions.slice().sort((a, b) => {
+      const ap = editionKeyParts(a.editionKey || a.year || a.EDITION), bp = editionKeyParts(b.editionKey || b.year || b.EDITION);
+      return bp.year - ap.year || bp.seq - ap.seq;
+    })[0];
     const lineup = Array.isArray(latest?.lineup) ? latest.lineup.map(id => names.get(String(id)) || String(id)).filter(Boolean) : [];
     const data = {};
     // シートの IMAGE は .jpg の旧表記が残っている（実ファイルは webp のみ）。
@@ -1684,9 +1687,9 @@ function eventFestPickerSelect(id, name){
   }
   if (Array.isArray(editions) && editions.length) {
     const latest = editions
-      .map(ed => ({ ed, year: Number(ed.year || ed.YEAR || String(ed.date || ed.DATE || '').slice(0, 4)) }))
+      .map(ed => ({ ed, ...editionKeyParts(ed.editionKey || ed.year || ed.EDITION || ed.YEAR || String(ed.date || ed.DATE || '').slice(0, 4)) }))
       .filter(x => Number.isFinite(x.year) && x.year > 0)
-      .sort((a, b) => b.year - a.year)[0]?.ed;
+      .sort((a, b) => b.year - a.year || b.seq - a.seq)[0]?.ed;
     const date = latest?.date || latest?.DATE || '';
     if (date) {
       const parts = String(date).split('/').filter(Boolean);
@@ -2542,14 +2545,26 @@ function renderLineupTags(prefix){
 /* ==============================================================
    EDITIONS
    ============================================================== */
+/* 開催回の識別子は "YYYY" または "YYYY-N"（同年複数回・2026-09-13 対応）。
+   EDITION_ID={festivalId}-{この値} なので、同年でも一意になる。
+   表示は "2026 #2"。ビルド側 scripts/build-detail-pages.mjs の
+   editionKeyParts()/editionLabel() と同じ規則。片方だけ直さないこと。 */
+function editionKeyParts(value){
+  const m = String(value || '').trim().match(/^(\d{4})(?:-(\d+))?$/);
+  return m ? { year: Number(m[1]), seq: m[2] ? Number(m[2]) : 1 } : { year: 0, seq: 0 };
+}
+function editionLabel(value){
+  const p = editionKeyParts(value);
+  return p.year ? (p.seq > 1 ? `${p.year} #${p.seq}` : String(p.year)) : String(value || '');
+}
 function addEdition(){
   // 既存の開催回がある場合に今年を初期値にすると、同じ
   // FESTIVAL_ID-YYYY を二重登録しやすい。常に最大年の翌年を提案する。
-  const years=editions.map(e=>Number(String(e.year||'').trim()))
+  const years=editions.map(e=>editionKeyParts(e.year).year)
     .filter(y=>Number.isInteger(y)&&y>=2000&&y<=2100);
   const year = String(years.length ? Math.max(...years)+1 : new Date().getFullYear());
   if(editions.some(e=>String(e.year||'').trim()===year)){
-    return toast(year+'年の開催回は既にあります。既存の回を編集してください','error');
+    return toast('開催回 '+editionLabel(year)+' は既にあります','error');
   }
   editions.push({year,edition:'',date:'',location:'',location_ja:'',pref:'',venueId:'',address:'',lat:'',lng:'',ticketUrl:'',flyer:'',status:'announced',lineup:[]});
   selectedEditionIndex = editions.length - 1;
@@ -2571,6 +2586,27 @@ function createNextEdition(){
   markFormDirty();
   renderEditions();
   toast(nextYear+'年の開催回を作成しました。日程・チケット・フライヤー・LINEUPを入力してください','info');
+}
+/* 同じ年に2回目以降の開催回を作る。連番は既存の最大+1（2026 → 2026-2 → 2026-3）。
+   会場・住所・座標は引き継ぎ、日程・チケット・フライヤー・LINEUPは空にする
+   （createNextEdition と同じ方針）。 */
+function addSameYearEdition(){
+  const base = editions[selectedEditionIndex];
+  if (!base) return toast('先に既存の開催回を選択してください', 'error');
+  const year = editionKeyParts(base.year).year;
+  if (!year) return toast('選択中の開催回の年が不正です（例: 2026）', 'error');
+  const maxSeq = editions.reduce((m, e) => {
+    const p = editionKeyParts(e.year);
+    return p.year === year ? Math.max(m, p.seq) : m;
+  }, 0);
+  const key = `${year}-${maxSeq + 1}`;
+  if (editions.some(e => String(e.year || '').trim() === key)) return toast('開催回 ' + editionLabel(key) + ' は既にあります', 'error');
+  if (!confirm(editionLabel(key) + ' の開催回を作成します。\n日程・チケット・フライヤー・LINEUPは空欄で作成されます。')) return;
+  editions.push({ year: key, edition: '', date: '', location: base.location || '', location_ja: base.location_ja || '', pref: base.pref || '', venueId: base.venueId || '', address: base.address || '', lat: base.lat || '', lng: base.lng || '', ticketUrl: '', flyer: '', status: 'announced', lineup: [] });
+  selectedEditionIndex = editions.length - 1;
+  markFormDirty();
+  renderEditions();
+  toast(editionLabel(key) + ' を作成しました。日程・LINEUPを入力してください', 'info');
 }
 function removeEdition(i){
   editions.splice(i,1);
@@ -2636,13 +2672,14 @@ function renderEditions(){
   host.innerHTML=`
     <div class="edition-selector-row">
       <label>開催回</label>
-      <select onchange="selectEdition(this.value)">${editions.map((x,n)=>`<option value="${n}" ${n===i?'selected':''}>${esc(x.year||'年未設定')}${x.edition?`（第${esc(x.edition)}回）`:''}</option>`).join('')}</select>
+      <select onchange="selectEdition(this.value)">${editions.map((x,n)=>`<option value="${n}" ${n===i?'selected':''}>${esc(x.year ? editionLabel(x.year) : '年未設定')}${x.edition?`（第${esc(x.edition)}回）`:''}</option>`).join('')}</select>
       <button type="button" class="btn btn-sm btn-accent" onclick="createNextEdition()">次回開催を作成</button>
+      <button type="button" class="btn btn-sm" onclick="addSameYearEdition()">＋ 同じ年にもう1回</button>
       <button type="button" class="btn btn-sm" onclick="removeEdition(${i})">この回を削除</button>
     </div>
     <div class="edition-block">
       <div class="edition-fields">
-        <label>Year<input type="number" value="${val('year')}" onchange="updateEditionField(${i},'year',this.value)"></label>
+        <label>開催回 <span class="label-hint">年 または 年-連番（例: 2026 / 2026-2）</span><input type="text" placeholder="2026" value="${val('year')}" onchange="updateEditionField(${i},'year',this.value)"></label>
         <label>回数<input type="text" placeholder="例: 3" value="${val('edition')}" onchange="updateEditionField(${i},'edition',this.value)"></label>
         <label>Date range<input type="text" placeholder="YYYY-MM-DD/YYYY-MM-DD" value="${val('date')}" onchange="updateEditionField(${i},'date',this.value)"></label>
         <label>Status<select onchange="updateEditionField(${i},'status',this.value)">${['announced','on-sale','soldout','finished','cancelled'].map(s=>`<option ${ed.status===s?'selected':''}>${s}</option>`).join('')}</select></label>
@@ -3412,16 +3449,16 @@ function validateBeforeSave(section, payload){
     const years = new Set();
     eds.forEach(ed => {
       const year = String(ed.year).trim();
-      if (!/^\d{4}$/.test(year)) errors.push('EDITIONSの開催年が不正です: ' + year);
-      if (years.has(year)) errors.push('EDITIONSの開催年が重複しています: ' + year);
+      if (!/^\d{4}(-\d+)?$/.test(year)) errors.push('EDITIONSの開催回が不正です（年 または 年-連番）: ' + year);
+      if (years.has(year)) errors.push('EDITIONSの開催回が重複しています: ' + year);
       years.add(year);
       const parts = String(ed.date || '').split('/').map(s => s.trim()).filter(Boolean);
       if (parts.length && (parts.length > 2 || parts.some(d => !/^\d{4}-\d{2}-\d{2}$/.test(d)))) {
         errors.push('EDITIONS ' + year + ' の日付形式が不正です');
       } else if (parts.length === 2 && parts[0] > parts[1]) {
         errors.push('EDITIONS ' + year + ' の開始日が終了日より後です');
-      } else if (parts.length && parts[0].slice(0, 4) !== year) {
-        /* EDITION_ID は {festivalId}-{年} なので、年と日程がずれた行は
+      } else if (parts.length && parts[0].slice(0, 4) !== String(editionKeyParts(year).year)) {
+        /* EDITION_ID は {festivalId}-{EDITION} なので、開催年と日程がずれた行は
            「2025回なのに日程は2026」という状態で保存され、過去回の記録が
            壊れる。翌年へ更新するときは新しい開催回を作ること（AUDIT §9-47）。 */
         errors.push('EDITIONS ' + year + ' の日程が' + parts[0].slice(0, 4)
@@ -4260,7 +4297,7 @@ function editRow(section, rowNum){
       try{
         const eds=typeof row.editions==='string'?JSON.parse(row.editions):row.editions;
         if(Array.isArray(eds)) eds.forEach(ed=>editions.push({
-          year:ed.year||ed.EDITION||'', edition:ed.edition||'', date:ed.date||'',
+          year:ed.editionKey||ed.year||ed.EDITION||'', edition:ed.edition||'', date:ed.date||'',
           location:ed.location||ed.LOCATION||'', location_ja:ed.location_ja||ed.LOCATION_JA||'',
           address:ed.address||ed.ADDRESS||'', lat:ed.lat||ed.LAT||'', lng:ed.lng||ed.LNG||'',
           ticketUrl:ed.ticketUrl||ed.TICKETURL||'', flyer:ed.flyer||ed.FLYER||'',
@@ -4430,14 +4467,14 @@ function syncNewEditionRows(festivalId, sourceEditions=editions){
   const pendingIds=rows.map(e=>festivalId+'-'+String(e.year).trim());
   const duplicateId=pendingIds.find((id,i)=>pendingIds.indexOf(id)!==i);
   if(duplicateId){
-    return Promise.reject(new Error('同じ開催年のEDITIONSが複数あります: '+duplicateId+'。保存前に片方を削除してください'));
+    return Promise.reject(new Error('同じEDITION値のEDITIONSが複数あります: '+duplicateId+'。保存前に片方を削除してください'));
   }
   rows.forEach(e=>{
     const parts=String(e.date||'').split('/').map(s=>s.trim());
     const eid=festivalId+'-'+String(e.year).trim();
     /* 年度ごとの上書き（upsert）。
 
-       EDITION_ID は {festivalId}-{年} なので、同じ年は**シート上で必ず1行**。
+       EDITION_ID は {festivalId}-{EDITION} なので、同じEDITION値は**シート上で必ず1行**。
        既にその ID の行があるなら、末尾に足すのではなくその行を書き換える。
 
        これが無かったため、シートの読み込みに失敗した回だけ
@@ -4496,7 +4533,7 @@ function validateEditionSyncBeforeSave(festivalId, sourceEditions=editions){
     const year=String(e.year).trim();
     const eid=festivalId+'-'+year;
     if(seen.has(eid)){
-      errors.push('同じ開催年のEDITIONSが複数あります: '+eid+'。保存前に片方を削除してください');
+      errors.push('同じEDITION値のEDITIONSが複数あります: '+eid+'。保存前に片方を削除してください');
     } else {
       seen.set(eid,e);
     }
@@ -4732,9 +4769,8 @@ function syncFestivalDateToLatestEdition(date){
 function promoteLatestEditionDateToFestivalForm(){
   if(!editions.length) return;
   const latest=editions.reduce((best,e)=>{
-    const year=Number(String(e.year||'').match(/20\d{2}/)?.[0]||0);
-    const bestYear=Number(String(best?.year||'').match(/20\d{2}/)?.[0]||0);
-    return !best || year>bestYear ? e : best;
+    const p=editionKeyParts(e.editionKey || e.year || e.EDITION), bp=editionKeyParts(best?.editionKey || best?.year || best?.EDITION);
+    return !best || p.year>bp.year || (p.year===bp.year && p.seq>bp.seq) ? e : best;
   },null);
   if(!latest?.date) return;
   const parts=String(latest.date).split('/').map(s=>s.trim()).filter(Boolean);
@@ -6465,7 +6501,10 @@ function publishSanityCheck(d){
       eds = typeof raw === 'string' ? JSON.parse(raw || '[]') : (raw || []);
     } catch (_) { return null; }  // JSON不正は別の検査の担当
     if (!Array.isArray(eds) || !eds.length) return null;
-    const latest = [...eds].sort((a, b) => Number(b.year) - Number(a.year))[0];
+    const latest = [...eds].sort((a, b) => {
+      const ap = editionKeyParts(a.editionKey || a.year || a.EDITION), bp = editionKeyParts(b.editionKey || b.year || b.EDITION);
+      return bp.year - ap.year || bp.seq - ap.seq;
+    })[0];
     if (!latest || (latest.lineup || []).length) return null;
     return { id, year: latest.year, brand: brand.length };
   }).filter(Boolean);
@@ -6925,7 +6964,7 @@ function buildFestivalsJs(rows){
           l.push('    editions: [');
           eds.forEach(ed=>{
             const eLineup=(ed.lineup||[]).map(a=>'"'+q(a)+'"').join(', ');
-            l.push('      { year: '+ed.year+', date: "'+q(fmtDate(ed.date))+'", lineup: ['+eLineup+'] },');
+            l.push('      { year: '+(editionKeyParts(ed.editionKey || ed.year || ed.EDITION).year || 0)+', editionKey: "'+q(String(ed.editionKey || ed.year || ed.EDITION || ''))+'", date: "'+q(fmtDate(ed.date))+'", lineup: ['+eLineup+'] },');
           });
           l.push('    ],');
         }
@@ -7069,7 +7108,7 @@ function submitFestival(){
   if(d.url)lines.push(`    url: "${d.url}",`);
   if(d.instagram)lines.push(`    instagram: "${d.instagram}",`);
   lines.push(`    ticketUrl: "${d.ticketUrl||''}",`,`    lineup: [${lineupStr}],`);
-  if(d.editions.length){lines.push(`    editions: [`);d.editions.forEach(ed=>{const edL=ed.lineup.map(l=>`"${l}"`).join(', ');lines.push(`      { year: ${ed.year}, date: "${ed.date}", lineup: [${edL}] },`)});lines.push(`    ]`)}
+  if(d.editions.length){lines.push(`    editions: [`);d.editions.forEach(ed=>{const edL=ed.lineup.map(l=>`"${l}"`).join(', ');lines.push(`      { year: ${editionKeyParts(ed.editionKey || ed.year || ed.EDITION).year || 0}, editionKey: ${JSON.stringify(String(ed.editionKey || ed.year || ed.EDITION || ''))}, date: "${ed.date}", lineup: [${edL}] },`)});lines.push(`    ]`)}
   lines.push(`  },`);
   showOutput('festival',lines.join('\n'));toast('Code generated','success');
 }

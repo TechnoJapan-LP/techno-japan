@@ -284,13 +284,14 @@ EN ハブ5枚（festivals / artists / venues / news / index）は
 ## FESTIVAL の開催回を更新するとき
 
 - FESTIVAL_ID（ブランドID）は変更しない。開催回は EDITIONS シートの
-  `EDITION_ID={FESTIVAL_ID}-{年}` を選択・編集する。
+  `EDITION_ID={FESTIVAL_ID}-{EDITION}`（EDITION は `YYYY` または `YYYY-N`）を選択・編集する。
 - 日程、会場、住所、座標、チケット、フライヤー、ステータスは EDITIONS の値を更新する。
   FESTIVALS の `DATE` を翌年へ上書きして過去回を消してはいけない。
 - 出演者は LINEUPS シートで同じ EDITION_ID の行を編集する。ARTIST_ID は
   ARTISTS の小文字ハイフン区切り ID と完全一致させる。
 - CMS の FESTIVALS 編集画面では開催回を選択して保存できる。保存後は Publish pipeline が
   EDITIONS / LINEUPS を再取得して生成物を更新する。
+- 同年に複数回開催する場合は CMS の「＋ 同じ年にもう1回」で `2026-2` を作る。表示は `2026 #2`。
 - 新規開催回は CMS の「Add Edition」から追加する。既存の開催回を編集した場合は
   `update_row`、新規行はシート末尾への追記として保存される。保存後に公開前ガードを通す。
 - 既存の開催回から翌年を作るときは「次回開催を作成」を使う。会場・住所・座標は引き継ぐが、

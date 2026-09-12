@@ -81,6 +81,22 @@ const DRAFT_PREVIEW_ARG = process.argv.find((arg) => arg.startsWith('--draft-pre
 const DRAFT_PREVIEW_PATH = DRAFT_PREVIEW_ARG ? path.resolve(process.cwd(), DRAFT_PREVIEW_ARG.slice('--draft-preview='.length)) : '';
 const DRAFT_PREVIEW_DIR = path.join(__dirname, '..', 'reports', 'phase5-preview');
 
+/* 開催回の識別子は "YYYY" または "YYYY-N"（同年複数回・2026-09-13 対応）。
+   EDITION_ID={festivalId}-{この値} なので、同年でも一意になる。
+   表示は "2026 #2"。CMS側 LP/cms.js の editionKeyParts()/editionLabel() と
+   同じ規則。片方だけ直さないこと。 */
+function editionKeyParts(value) {
+  const m = String(value || '').trim().match(/^(\d{4})(?:-(\d+))?$/);
+  return m ? { year: Number(m[1]), seq: m[2] ? Number(m[2]) : 1 } : { year: 0, seq: 0 };
+}
+function editionLabel(value) {
+  const p = editionKeyParts(value);
+  return p.year ? (p.seq > 1 ? `${p.year} #${p.seq}` : String(p.year)) : String(value || '');
+}
+function editionIdentifier(ed) {
+  return ed?.EDITION || ed?.editionKey || (ed?.EDITION_ID ? '' : ed?.year) || '';
+}
+
 // 詳細ページとハブのJSテンプレートが同じ最新寸法を参照できるよう、
 // ページ生成のたびに実画像から派生メタデータを先に再生成する。
 await import('./build-image-dimensions.mjs');
@@ -558,8 +574,10 @@ function bilingualBody(ja, en, pageLang, extraClass = '') {
 function buildEventFestivalData({ festivals = [], editionsByFestival = new Map(), lineupsByEdition = new Map(), artists = [] }) {
   const artistsById = new Map(artists.map((artist) => [String(artist.id), artist]));
   return Object.fromEntries(festivals.map((f) => {
-    const editions = [...(editionsByFestival.get(String(f.id)) || [])].sort((a, b) =>
-      String(b.EDITION || b.DATE_START || '').localeCompare(String(a.EDITION || a.DATE_START || '')));
+    const editions = [...(editionsByFestival.get(String(f.id)) || [])].sort((a, b) => {
+      const ap = editionKeyParts(editionIdentifier(a)), bp = editionKeyParts(editionIdentifier(b));
+      return bp.year - ap.year || bp.seq - ap.seq;
+    });
     const latest = editions[0];
     const lineup = latest
       ? (lineupsByEdition.get(String(latest.EDITION_ID)) || []).map((row) => {
@@ -1070,7 +1088,7 @@ function editionDateHtml(ed, lang) {
 function editionsTable(editions, lang) {
   if (!editions.length) return '';
   const rows = editions.map((ed) => `<tr>
-      <th scope="row">${esc(ed.EDITION || ed.EDITION_ID)}</th>
+      <th scope="row">${esc(editionLabel(editionIdentifier(ed)) || ed.EDITION_ID)}</th>
       <td class="edition-date">${editionDateHtml(ed, lang)}</td>
       <td>${esc(editionPlace(ed, lang) || '—')}</td>
       <td>${esc(ed.STATUS || '—')}</td>
@@ -1142,7 +1160,7 @@ function festivalLineupsHtml(editions, lineupsByEdition, artistsById, lang) {
       .sort((a, b) => Number(a.SORT || 0) - Number(b.SORT || 0))
       .map((row) => lineupSlotHtml(row, artistsById, lang)).join('');
     return groups.length > 1
-      ? `<section class="edition-lineup"><h3>${esc(ed.EDITION || ed.EDITION_ID)}</h3><div class="lineup-list">${slots}</div></section>`
+      ? `<section class="edition-lineup"><h3>${esc(editionLabel(editionIdentifier(ed)) || ed.EDITION_ID)}</h3><div class="lineup-list">${slots}</div></section>`
       : `<div class="lineup-list">${slots}</div>`;
   }).join('');
   return `<section class="festival-lineups"><h2>LINE UP</h2>${body}</section>`;
@@ -1254,7 +1272,7 @@ function festivalFaqDetailsHtml(items, lang) {
 function festivalEditionsTimelineHtml(editions, lang) {
   if (editions.length < 2) return '';
   const rows = editions.map((ed, index) => `<tr class="edition-timeline-row reveal" style="transition-delay:${index * 100}ms">
-        <th class="edition-year" scope="row">${esc(ed.EDITION || ed.EDITION_ID)}</th>
+        <th class="edition-year" scope="row">${esc(editionLabel(editionIdentifier(ed)) || ed.EDITION_ID)}</th>
         <td class="edition-date">${editionDateHtml(ed, lang)}</td>
         <td class="edition-place">${esc(editionPlace(ed, lang) || '—')}</td>
       </tr>`).join('');
@@ -1285,7 +1303,7 @@ function festivalLineupGroupsHtml(editions, lineupsByEdition, artistsById, lang)
         <summary>${lang === 'en' ? `SHOW ALL ${slots.length} ARTISTS` : `全${slots.length}組を表示`}</summary>
         <ul class="detail-lineup-list">${overflow.join('')}</ul>
       </details>` : '';
-    return `<section class="edition-lineup reveal"><h3>${esc(ed.EDITION || ed.EDITION_ID)}</h3><ul class="detail-lineup-list">${visible}</ul>${more}</section>`;
+    return `<section class="edition-lineup reveal"><h3>${esc(editionLabel(editionIdentifier(ed)) || ed.EDITION_ID)}</h3><ul class="detail-lineup-list">${visible}</ul>${more}</section>`;
   }).join('');
 }
 
@@ -1494,10 +1512,10 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
         </a>`).join('') + `</div>`
     : '';
 
-  const editions = [...festivalEditions].sort((a, b) =>
-    String(b.DATE_START || '').localeCompare(String(a.DATE_START || '')) ||
-    String(b.EDITION || '').localeCompare(String(a.EDITION || ''))
-  );
+  const editions = [...festivalEditions].sort((a, b) => {
+    const ap = editionKeyParts(editionIdentifier(a)), bp = editionKeyParts(editionIdentifier(b));
+    return bp.year - ap.year || bp.seq - ap.seq || String(b.DATE_START || '').localeCompare(String(a.DATE_START || ''));
+  });
   const currentEdition = editions[0];
   const summary = festivalSummary(f, currentEdition, name, lang);
   const faqItems = festivalFaqItems(editions, lineupsByEdition, artistsById, name, lang);
@@ -1563,7 +1581,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
     ...(editions.length ? { subEvent: editions.map((ed) => ({
       '@type': 'Festival',
       '@id': `${BASE}/festivals/${encodeURIComponent(f.id)}.html#edition-${encodeURIComponent(ed.EDITION_ID)}`,
-      name: `${name} ${ed.EDITION || ''}`.trim(),
+      name: `${name} ${editionLabel(editionIdentifier(ed))}`.trim(),
       ...(ISO_DATE.test(String(ed.DATE_START || '')) ? { startDate: ed.DATE_START } : {}),
       ...(ISO_DATE.test(String(ed.DATE_END || '')) ? { endDate: ed.DATE_END } : {}),
       location: editionLocationLd(ed, lang),
@@ -2153,7 +2171,7 @@ function buildAiSurface({ pubFests, editionsByFestival, pubVenues, pubArtists, p
       if (end < today) continue;                                   // 終わった回は載せない
       if (String(ed.STATUS || '').trim().toLowerCase() === 'cancelled') continue;
       events.push({
-        name: `${f.name} ${ed.EDITION || ''}`.trim(),
+        name: `${f.name} ${editionLabel(editionIdentifier(ed))}`.trim(),
         url: `${BASE}/festivals/${encodeURIComponent(f.id)}.html`,
         start,
         end,

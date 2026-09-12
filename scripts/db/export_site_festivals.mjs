@@ -25,12 +25,19 @@ function dateParts(raw) {
   return [startDate || '', endDate || ''];
 }
 
+// CMS側 LP/cms.js と build-detail-pages.mjs と同じ開催回識別子の規則。
+function editionKeyParts(value) {
+  const m = String(value || '').trim().match(/^(\d{4})(?:-(\d+))?$/);
+  return m ? { year: Number(m[1]), seq: m[2] ? Number(m[2]) : 1 } : { year: 0, seq: 0 };
+}
+
 function latestDate(festival) {
   const editions = Array.isArray(festival.editions) ? festival.editions : [];
   if (editions.length) {
     const latest = editions.reduce((best, edition) => {
-      const year = Number(edition?.year);
-      return !best || year > Number(best.year) ? edition : best;
+      const p = editionKeyParts(edition?.editionKey || edition?.year);
+      const bp = editionKeyParts(best?.editionKey || best?.year);
+      return !best || p.year > bp.year || (p.year === bp.year && p.seq > bp.seq) ? edition : best;
     }, null);
     return dateParts(latest?.date);
   }

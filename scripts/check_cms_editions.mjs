@@ -52,8 +52,13 @@ const BRIDGE = `
   get editionRowById(){return editionRowById}, set editionRowById(v){editionRowById=v},
   get editionSheetLoadError(){return editionSheetLoadError}, set editionSheetLoadError(v){editionSheetLoadError=v},
   duplicateEditionRows,
+  editionKeyParts,
+  editionLabel,
   get editions(){return editions},
   addEdition,
+  addSameYearEdition,
+  validateBeforeSave,
+  buildFullDataJs,
   syncExistingEditionRows,
   get editState(){return editState},
 };`;
@@ -103,6 +108,52 @@ function makeCtx({ cityValue = 'Ibaraki' } = {}) {
 
 const results = [];
 const check = (name, pass, detail) => { results.push([name, pass, detail]); };
+
+// ---- 0b) 同年複数開催の識別子・表示規則 ------------------------------
+{
+  const c = makeCtx();
+  check('EDITION識別子を年と連番に分解する',
+    JSON.stringify(c.__T.editionKeyParts('2026')) === JSON.stringify({year:2026,seq:1})
+      && JSON.stringify(c.__T.editionKeyParts('2026-2')) === JSON.stringify({year:2026,seq:2})
+      && c.__T.editionKeyParts('').year === 0 && c.__T.editionKeyParts('26').seq === 0,
+    JSON.stringify([c.__T.editionKeyParts('2026'), c.__T.editionKeyParts('2026-2'), c.__T.editionKeyParts(''), c.__T.editionKeyParts('26')]));
+  check('EDITION表示を連番形式に整形する',
+    c.__T.editionLabel('2026') === '2026' && c.__T.editionLabel('2026-2') === '2026 #2',
+    `${c.__T.editionLabel('2026')} / ${c.__T.editionLabel('2026-2')}`);
+}
+
+// ---- 0c) 同年2件は検証を通し、同一EDITION値は弾く ----------------------
+{
+  const c = makeCtx();
+  const base = { id:'same-fest', date:'2026-08-15', editions:[
+    {year:'2026', date:'2026-08-15'}, {year:'2026-2', date:'2026-08-20'}
+  ]};
+  const valid = c.__T.validateBeforeSave('festival', base);
+  const duplicate = c.__T.validateBeforeSave('festival', {...base, editions:[...base.editions, {year:'2026-2', date:'2026-08-21'}]});
+  check('同年2件（2026 / 2026-2）の検証を通す', valid.length === 0, valid.join(' / '));
+  check('同じEDITION値の重複は検出する', duplicate.some(x => x.includes('EDITIONSの開催回が重複しています: 2026-2')), duplicate.join(' / '));
+}
+
+// ---- 0d) 同年追加・data.js出力 ----------------------------------------
+{
+  const c = makeCtx();
+  c.__T.editions.length = 0;
+  c.__T.editions.push({year:'2026', location:'Venue', address:'Address', lat:'1', lng:'2'});
+  c.toast = () => {}; c.markFormDirty = () => {}; c.renderEditions = () => {};
+  c.__T.addSameYearEdition();
+  const created = c.__T.editions.at(-1);
+  const source = c.__T.buildFullDataJs({FESTIVALS:[{id:'same-fest',name:'Same Fest',status:'published',editions:[{year:'2026-2',date:'2026-08-20',lineup:[]}]}]});
+  let evaluated = true;
+  try { new Function(source + '\nreturn FESTIVALS;'); } catch (_) { evaluated = false; }
+  check('同じ年の開催回を2026-2で追加する', created?.year === '2026-2' && created.location === 'Venue' && !created.date && !created.ticketUrl && !created.flyer && created.lineup.length === 0, JSON.stringify(created));
+  check('data.js出力は数値yearとeditionKey文字列を持ち構文評価できる', source.includes('year: 2026, editionKey: "2026-2"') && !source.includes('edition: "2026-2"') && evaluated, source.match(/year: 2026[^\n]*/)?.[0] || '該当なし');
+  const s = makeCtx();
+  s.__T.editionSheetRows = []; s.__T.lineupSheetRows = [];
+  s.__T.editionSheetMaxRow = 98; s.__T.lineupSheetMaxRow = 400; s.__T.editionSheetLoaded = true;
+  s.gasWriteSucceeded = () => true;
+  await s.syncNewEditionRows('same-fest', [{year:'2026-2', date:'2026-08-20', lineup:[]}]);
+  check('同年連番のEDITION_IDを生成する', s.__calls.find(x => x.sheet === 'EDITIONS')?.EDITION_ID === 'same-fest-2026-2', s.__calls.find(x => x.sheet === 'EDITIONS')?.EDITION_ID || 'なし');
+}
 
 // ---- 0a) 既存シートの重複を読み込み時点で止めること ------------------------
 {
@@ -192,7 +243,7 @@ const check = (name, pass, detail) => { results.push([name, pass, detail]); };
   check('新規LINEUPも全体の末尾(401)に書く', luCall?.row === 401, `row=${luCall?.row}`);
   check('新規開催回に PREF が入る（CITY を既定値に）',
     edCall?.PREF === 'Ibaraki', `PREF=${JSON.stringify(edCall?.PREF)}`);
-  check('EDITION_ID は {festivalId}-{年}',
+  check('EDITION_ID は {festivalId}-{EDITION}',
     edCall?.EDITION_ID === 'loa-lost-paradise-2026', `EDITION_ID=${edCall?.EDITION_ID}`);
 }
 

@@ -7201,3 +7201,63 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 
 ### 次の担当への注意・判断待ち
 - 生成物を push するワークフローは裸の `git push` にしないこと（競合の温床）。
+
+## 2026-09-13 同じ年に複数回の開催（EDITION）に対応
+
+### 実施（設計=Claude / 実装=Codex / 検証=Claude）
+- 要望: 2026年に複数回開催するフェスに対応したい。
+- 決定（ユーザー選択=連番方式）: 開催回の識別子（シートEDITION列 / CMSの
+  editions[].year）を **`YYYY` または `YYYY-N`** の文字列にする。
+  EDITION_ID={festivalId}-{EDITION} なので `circus-2026-2` となり
+  **既存データと後方互換・シートの列追加不要**。表示は `2026 #2`。
+- 共通ヘルパー `editionKeyParts()` / `editionLabel()` を**3箇所**に実装
+  （LP/cms.js・scripts/build-detail-pages.mjs・scripts/db/export_site_festivals.mjs）。
+  規則は同一、実行環境が違うため1本化していない（localizedValue と同じ方針）。
+  片方だけ直さないこと。
+- CMS: 入力欄を number→text（`2026-2` が打てなかった）、開催回セレクトと
+  プレビューの表示を editionLabel、検証を `/^\d{4}(-\d+)?$/` に、
+  **新ボタン「＋ 同じ年にもう1回」**（連番最大+1・会場等を引き継ぎ日程/LINEUPは空）。
+- ビルド: 開催ヒストリー・ラインナップ節・JSON-LD subEvent 名を editionLabel に。
+  並び順を (year, seq) の**数値**降順に（文字列比較では 2026-10 < 2026-2 になる）。
+- ★**設計ミスをレビューで訂正**: data.js に出す識別子キーを最初 `edition` に
+  したが、CMS の `editions[].edition` は既存の「第N回（通算回数）」で意味衝突。
+  第N回の欄に識別子が入る実害があったため **`editionKey`** に改名して解消。
+- 版: cms.js 118。
+
+### コミット
+- このエントリと同一コミット。
+
+### 検証
+- `node scripts/check_cms_editions.mjs`: **全23件成功**（新規: 識別子の分解・
+  表示整形・同年2件が検証を通る・同一EDITION値の重複は弾く・addSameYearEdition
+  の連番採番と引き継ぎ・buildFullDataJs が `editionKey` を出し `new Function` で
+  評価できる）
+- **疑似データで実ビルド**（circus に 2026-2 と 2026-10 を注入）:
+  開催ヒストリー/ラインナップ節が `2026 #10 → 2026 #2 → 2026 → 2025` の順で
+  正しく並び、JSON-LD subEvent 名も `CIRCUS ODAIBA 2026 #2` 等。**連番10以降でも
+  順序が壊れない**ことを確認。疑似データは元に戻し、既存フェスの生成結果が
+  現状と一致（回帰なし）することも確認
+- sync-site の抽出（97件・最新回の日付）が正常
+- preflight 全42件成功
+- 認証済み本番CMSでの実操作: **実機未確認**
+
+### 変更したパターン
+- ヘルパー3箇所 / CMS: 入力欄・セレクト・プレビュー・検証・addEdition・
+  createNextEdition・addSameYearEdition・最新回選択2箇所・data.js出力 /
+  ビルド: 表示4箇所・JSON-LD 1・ソート2 / sync-site 1 / テスト6ケース /
+  AGENTS.md・DATA_SCHEMA.md
+
+### 未確認の類似パターン
+- **headless の CMS UI プローブが renderEditions() を呼ぶと固まる**現象に遭遇
+  （data-o が付かない。alert を潰しても再現）。今回は vm 方式の
+  check_cms_editions.mjs と静的確認で代替した。FESTIVAL フォームを
+  headless で触る検査を書くときは注意。原因は未調査
+- LINEUPS の EDITION_ID は `festivalId-2026-2` 形式になるが、シート側の
+  既存行には影響なし（新規回だけ）。CMS の LINEUP 同期は EDITION_ID 一致で
+  動くため変更不要（テスト済み）
+
+### 次の担当への注意・判断待ち
+- `editions[].year` は**識別子文字列**（`2026` / `2026-2`）。数値として
+  `Number()` しないこと。年が必要なら `editionKeyParts(v).year`。
+- data.js の editions は `{ year: 2026, editionKey: "2026-2", … }`。
+  `edition` キーは第N回（通算回数）で別物。
