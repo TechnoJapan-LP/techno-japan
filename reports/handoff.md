@@ -7153,3 +7153,51 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 
 ### 次の担当への注意・判断待ち
 - 検索欄・入力欄の類は innerHTML 再生成の外に置くこと（フォーカスとIMEの温床）。
+
+## 2026-09-12 Publish が3段で止まった事故の復旧と、push競合の自動リトライ
+
+### 実施
+- 症状: ユーザーの Publish Now 後、CMS に赤いエラー（見張り番の失敗通知）。
+  本番データが古いまま（main 360KB / live 333KB）。
+- 3つの停止を順に解消（いずれもガードが正しく働いた結果。データ破損なし）:
+  1. **concurrency 競合でキャンセル**: 17:40 の Deploy（検索改善の push）と
+     17:41 の Publish が group:pages に並び、待機中の Publish pipeline が
+     キャンセルされた（cancel-in-progress:false でも待機の入れ替えは起きる）。
+     → 手動 workflow_dispatch で再実行。
+  2. **画像の参照切れ**: `images/festivals/ultra-japan-flyer.webp` が未同期で
+     broken_image_refs 1>0。→ Sync Drive Images を実行して取得（Drive には
+     あり、同期の遅れだった。9/10 の asia-festival と同型）。
+  3. **push 競合（non-fast-forward）**: 生成は成功したが、画像同期のコミットが
+     先に入り最終 push が弾かれた。→ 再実行で成功。
+- 復旧確認: 本番 data.js と main のハッシュ一致、見張り番 success、
+  9月まとめ記事が公開（カード12枚・写真12・LINEUP11・FESTIVAL PAGEリンク12・
+  カレンダー2ブロック・Event JSON-LD 12件を実測）。
+
+### 再発防止（このコミットの変更）
+- publish-pipeline.yml の生成物 push を**最大3回のリベース付きリトライ**に。
+  `git pull --rebase --autostash origin main` を挟んで再試行し、3回失敗で
+  ::error + exit 1（静かに成功と呼ばない）。実装=Codex。
+  push競合は 9/09・9/12（2件）で計3回起きており、毎回見張り番が鳴いていた。
+- deploy-pages.yml 側は**変更しない**（配信優先で warning 継続が正しい設計）。
+
+### コミット
+- このエントリと同一コミット（publish-pipeline.yml + handoff）。
+
+### 検証
+- YAML 構文 / 該当 run ブロックの bash -n / リトライ・rebase・exit の存在確認
+- preflight 全42件成功
+- **実際の競合時の挙動は未検証**（人為的な再現が困難。次に競合が起きたときの
+  ログで「push が競合しました（試行 N）」の warning を確認する）
+
+### 変更したパターン
+- publish-pipeline.yml の push 1箇所（リトライ化）
+
+### 未確認の類似パターン
+- **concurrency キャンセル（原因1）の自動復旧は未実装**。ユーザーに確認して
+  必要なら「キャンセルされた Publish pipeline を自動再実行する」仕組みを追加する。
+  現状は見張り番が鳴いたら手動で再実行する運用
+- 画像同期の遅れ（原因2）は2回目。CMS の「画像を今すぐ同期」を押してから
+  Publish する運用で回避できるが、Publish 前に自動で同期を待つ仕組みは未実装
+
+### 次の担当への注意・判断待ち
+- 生成物を push するワークフローは裸の `git push` にしないこと（競合の温床）。

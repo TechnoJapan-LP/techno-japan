@@ -220,7 +220,21 @@ jobs:
             echo "生成物に変更なし"
           else
             git commit -m "chore: regenerate detail pages, sitemap.xml & rss.xml [skip ci]"
-            git push
+            # 実行中に他のワークフロー（画像同期 / Deploy の生成物コミット）が
+            # push すると non-fast-forward で失敗する。生成物は同じデータから
+            # 機械的に再生成されるものなので、rebase してやり直せば安全。
+            # 裸の push で3回失敗し、そのたびに見張り番が鳴いた（2026-09-09 / 09-12）。
+            pushed=0
+            for attempt in 1 2 3; do
+              if git push; then pushed=1; break; fi
+              echo "::warning::push が競合しました（試行 $attempt）。rebase して再試行します"
+              git pull --rebase --autostash origin main || break
+              sleep 5
+            done
+            if [ "$pushed" != "1" ]; then
+              echo "::error::生成物のpushに3回失敗しました。手動で Publish pipeline を再実行してください"
+              exit 1
+            fi
           fi
 
       - name: Setup Pages
