@@ -291,6 +291,10 @@
     1920,
     1281
   ],
+  "images/articles/shifumiz-2026-info.webp": [
+    1920,
+    1080
+  ],
   "images/articles/snow-mashine-2027-info-1786954316740.webp": [
     1920,
     1280
@@ -787,6 +791,10 @@
     480,
     320
   ],
+  "images/derivatives/card/articles/japan-festival-2026-september--ccbf6b00-fourThree-center.webp": [
+    1200,
+    900
+  ],
   "images/derivatives/card/articles/japan-festival-2026-september--ccbf6b00-lg.webp": [
     960,
     671
@@ -794,6 +802,14 @@
   "images/derivatives/card/articles/japan-festival-2026-september--ccbf6b00-sm.webp": [
     480,
     336
+  ],
+  "images/derivatives/card/articles/japan-festival-2026-september--ccbf6b00-square-center.webp": [
+    1200,
+    1200
+  ],
+  "images/derivatives/card/articles/japan-festival-2026-september--ccbf6b00-wide-center.webp": [
+    1200,
+    675
   ],
   "images/derivatives/card/articles/japan-festival-2026-september-1789063996657--af510990-lg.webp": [
     797,
@@ -1158,6 +1174,14 @@
   "images/derivatives/card/articles/rebirth-2026-info-1788970978198--ee5f997f-sm.webp": [
     480,
     320
+  ],
+  "images/derivatives/card/articles/shifumiz-2026-info--9a12f748-lg.webp": [
+    960,
+    540
+  ],
+  "images/derivatives/card/articles/shifumiz-2026-info--9a12f748-sm.webp": [
+    480,
+    270
   ],
   "images/derivatives/card/articles/snow-mashine-2027-info--4eabbf3f-fourThree-center.webp": [
     1200,
@@ -1767,6 +1791,14 @@
     384,
     480
   ],
+  "images/derivatives/card/festivals/colors-presents-soundcamp-2026-flyer--40358b87-lg.webp": [
+    768,
+    960
+  ],
+  "images/derivatives/card/festivals/colors-presents-soundcamp-2026-flyer--40358b87-sm.webp": [
+    384,
+    480
+  ],
   "images/derivatives/card/festivals/colors-presents-soundcamp-flyer--3c5d19c3-lg.webp": [
     585,
     960
@@ -2183,12 +2215,12 @@
     480,
     273
   ],
-  "images/derivatives/card/festivals/odyssey-flyer--a36d3f7e-lg.webp": [
-    720,
+  "images/derivatives/card/festivals/odyssey-flyer--de30961e-lg.webp": [
+    679,
     960
   ],
-  "images/derivatives/card/festivals/odyssey-flyer--a36d3f7e-sm.webp": [
-    360,
+  "images/derivatives/card/festivals/odyssey-flyer--de30961e-sm.webp": [
+    339,
     480
   ],
   "images/derivatives/card/festivals/one-park-festival--64469430-lg.webp": [
@@ -2461,6 +2493,22 @@
   ],
   "images/derivatives/card/festivals/ultra-japan--7d23c9d0-sm.webp": [
     384,
+    480
+  ],
+  "images/derivatives/card/festivals/ultra-japan-2026-flyer--152b709b-lg.webp": [
+    720,
+    960
+  ],
+  "images/derivatives/card/festivals/ultra-japan-2026-flyer--152b709b-sm.webp": [
+    360,
+    480
+  ],
+  "images/derivatives/card/festivals/ultra-japan-flyer--152b709b-lg.webp": [
+    720,
+    960
+  ],
+  "images/derivatives/card/festivals/ultra-japan-flyer--152b709b-sm.webp": [
+    360,
     480
   ],
   "images/derivatives/card/festivals/waifu--0543de25-lg.webp": [
@@ -2759,6 +2807,10 @@
     1024,
     1280
   ],
+  "images/festivals/colors-presents-soundcamp-2026-flyer.webp": [
+    1080,
+    1350
+  ],
   "images/festivals/colors-presents-soundcamp-flyer.webp": [
     593,
     973
@@ -2968,8 +3020,8 @@
     1271
   ],
   "images/festivals/odyssey-flyer.webp": [
-    1920,
-    2560
+    842,
+    1191
   ],
   "images/festivals/odyssey.webp": [
     1920,
@@ -3107,6 +3159,14 @@
     1920,
     1286
   ],
+  "images/festivals/ultra-japan-2026-flyer.webp": [
+    1080,
+    1440
+  ],
+  "images/festivals/ultra-japan-flyer.webp": [
+    1080,
+    1440
+  ],
   "images/festivals/ultra-japan.webp": [
     1920,
     2398
@@ -3243,9 +3303,17 @@
     1280,
     1280
   ],
+  "https://lh3.googleusercontent.com/d/142VaU6zMP48eqHo9Ian4g0l9QncNhjyO=w2000": [
+    1920,
+    1090
+  ],
   "https://lh3.googleusercontent.com/d/14sdCtU97w4cMoLLknq7Q1pa087o-1AXx=w2000": [
     900,
     500
+  ],
+  "https://lh3.googleusercontent.com/d/14zeL4cXNy_3IVtM13AZwP_PalP8avX53=w2000": [
+    1920,
+    1440
   ],
   "https://lh3.googleusercontent.com/d/15UzEhFnExUjsH96kOWYCKbOe_RQ6gJIv=w2000": [
     1920,
@@ -3254,6 +3322,10 @@
   "https://lh3.googleusercontent.com/d/17CxXS08XngQT6hR7tlTcIimV9xDfKhES=w2000": [
     1920,
     1438
+  ],
+  "https://lh3.googleusercontent.com/d/17NG-AOARn4v76_Cw_l7wQSWzYfozvvAz=w2000": [
+    1920,
+    1080
   ],
   "https://lh3.googleusercontent.com/d/17XMjyJB1C74YQ7JMFG2rr5MqT7kZ9zPL=w2000": [
     1920,
@@ -3282,6 +3354,10 @@
   "https://lh3.googleusercontent.com/d/1EaXwJk4nQ7NC057bSU1pNmRfUXeo5fuQ=w2000": [
     1920,
     2400
+  ],
+  "https://lh3.googleusercontent.com/d/1FvIBPt7cDa-ZWX4HRVFFutXMNca2IoWp=w2000": [
+    1920,
+    2540
   ],
   "https://lh3.googleusercontent.com/d/1FxrmAsQ_koNkm4c35DXFU0UNl02qzBX3=w2000": [
     1920,
@@ -3339,6 +3415,14 @@
     1920,
     1280
   ],
+  "https://lh3.googleusercontent.com/d/1VDn2nt-O4VYLrL68JKptYZGjed5hvHVJ=w2000": [
+    1920,
+    1280
+  ],
+  "https://lh3.googleusercontent.com/d/1VGbbY_pc6abHfpcFjg-EEJVR_WVxwJRi=w2000": [
+    1920,
+    1281
+  ],
   "https://lh3.googleusercontent.com/d/1Vd7eHciRG2dEsD2DuN-YEBuvCiHvxZck=w2000": [
     1920,
     2400
@@ -3359,9 +3443,17 @@
     1706,
     960
   ],
+  "https://lh3.googleusercontent.com/d/1dbtmaEkGloV2uI3fCFNXP6tVa_ZtkKhL=w2000": [
+    1920,
+    1280
+  ],
   "https://lh3.googleusercontent.com/d/1dv3v1mSEhofWCRItjF-6HoQYW1RlzhXd=w2000": [
     1920,
     1323
+  ],
+  "https://lh3.googleusercontent.com/d/1eXf2mdy9RVEQaYbrYyDF0Euvvba7jUab=w2000": [
+    768,
+    512
   ],
   "https://lh3.googleusercontent.com/d/1eciMBlzEgrDIe3TRne1j7kui9UegPowJ=w2000": [
     1920,
@@ -3374,6 +3466,10 @@
   "https://lh3.googleusercontent.com/d/1gF6LTGphH2I940vkhaqm_LHN0NgeU9Xw=w2000": [
     828,
     552
+  ],
+  "https://lh3.googleusercontent.com/d/1gfKlr7WczPBvmlSEdJXZ38KW2JMZPhh0=w2000": [
+    1920,
+    1284
   ],
   "https://lh3.googleusercontent.com/d/1giKYfVimSi9sx89hQCSB8Ihn31uTbTNv=w2000": [
     1477,
@@ -3394,6 +3490,10 @@
   "https://lh3.googleusercontent.com/d/1jZ9jGEX3NrekaVtDqOVRikk0veMllOdR=w2000": [
     1108,
     1477
+  ],
+  "https://lh3.googleusercontent.com/d/1kdPmU0EzH1wbxD3bjgBI7P_IaKnhcXpc=w2000": [
+    1206,
+    1452
   ],
   "https://lh3.googleusercontent.com/d/1kpuMN9NpODSOMd70Y74C0_850aZw-4tz=w2000": [
     1920,
@@ -3423,6 +3523,10 @@
     1206,
     1452
   ],
+  "https://lh3.googleusercontent.com/d/1r2mBh-NfXNJeuaGRjjV158FDpsYg01Pg=w2000": [
+    1920,
+    1280
+  ],
   "https://lh3.googleusercontent.com/d/1s3VL1ZVlXzjS2pslw8nR4Vwt65hQvWRH=w2000": [
     963,
     1425
@@ -3446,6 +3550,10 @@
   "https://lh3.googleusercontent.com/d/1ywChGlIVARZwaNfc8IfkiMICd8XI8-PM=w2000": [
     1920,
     1442
+  ],
+  "https://lh3.googleusercontent.com/d/1zM1yzA-QeUqRCcA5p6uaoThG3CNLDIpB=w2000": [
+    1920,
+    1280
   ],
   "https://lh3.googleusercontent.com/d/1zkEeueBXV-fAdnsE5UoNVBfz6_7ehr-3=w2000": [
     1920,
