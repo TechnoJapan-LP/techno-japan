@@ -53,7 +53,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 36;
+const DETAIL_CSS_VERSION = 37;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -623,6 +623,84 @@ function makeEntityResolver(data, festivalData = null) {
   };
 }
 
+/* 記事本文に出てくるアーティスト名を、そのアーティストページへ自動でリンクする
+   （2026-09-14）。[[artist:id]] ショートコードと同じ見た目（entity-link）にする。
+
+   一般語と衝突する名前があるため（実測: "Ground" が
+   "Camping Ground, Nagano" という会場名に誤爆した）、次の条件を全て満たす
+   ときだけリンクする。条件を緩めると誤リンクが本番に出る。 */
+const AUTOLINK_DENY = new Set([
+  'ground',   // "Camping Ground, Nagano"（会場名）に誤爆した
+]);
+const AUTOLINK_EXCLUDED_TAGS = new Set(['a', 'code', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']);
+const regexEscape = (value) => String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+function autolinkArtists(html, artists = []) {
+  const candidates = artists.map((artist) => ({
+    id: String(artist.id || '').trim(),
+    name: String(artist.name || '').trim(),
+  })).filter(({ id, name }) => id && name.length >= 3 && !AUTOLINK_DENY.has(name.toLowerCase()));
+  const used = new Set();
+  const boundary = (name) => /[A-Za-z0-9]/.test(name) ? '(?<![A-Za-z0-9])' + regexEscape(name) + '(?![A-Za-z0-9])' : regexEscape(name);
+
+  const replaceText = (text) => {
+    const hits = [];
+    for (const artist of candidates) {
+      if (used.has(artist.id)) continue;
+      const match = text.match(new RegExp(boundary(artist.name), 'i'));
+      if (match) hits.push({ artist, index: match.index, length: match[0].length, value: match[0] });
+    }
+    hits.sort((a, b) => a.index - b.index || b.length - a.length);
+    const selected = [];
+    for (const hit of hits) {
+      if (selected.some((item) => hit.index < item.index + item.length && item.index < hit.index + hit.length)) continue;
+      selected.push(hit);
+      used.add(hit.artist.id);
+    }
+    selected.sort((a, b) => a.index - b.index);
+    let out = '';
+    let cursor = 0;
+    for (const hit of selected) {
+      out += text.slice(cursor, hit.index);
+      out += `<a class="entity-link" href="/artists/${encodeURIComponent(hit.artist.id)}.html">${esc(hit.value)}</a>`;
+      cursor = hit.index + hit.length;
+    }
+    return out + text.slice(cursor);
+  };
+
+  let out = '';
+  let cursor = 0;
+  let excludedDepth = 0;
+  const source = String(html || '');
+  while (cursor < source.length) {
+    const nextTag = source.indexOf('<', cursor);
+    const nextShortcode = source.indexOf('[[', cursor);
+    const next = [nextTag, nextShortcode].filter((index) => index >= 0).sort((a, b) => a - b)[0];
+    if (next === undefined) {
+      out += excludedDepth ? source.slice(cursor) : replaceText(source.slice(cursor));
+      break;
+    }
+    if (next > cursor) out += excludedDepth ? source.slice(cursor, next) : replaceText(source.slice(cursor, next));
+    if (next === nextShortcode && (nextTag < 0 || nextShortcode < nextTag)) {
+      const end = source.indexOf(']]', next + 2);
+      if (end < 0) { out += source.slice(next); break; }
+      out += source.slice(next, end + 2);
+      cursor = end + 2;
+      continue;
+    }
+    const end = source.indexOf('>', next + 1);
+    if (end < 0) { out += source.slice(next); break; }
+    const tag = source.slice(next, end + 1);
+    const closing = tag.match(/^<\s*\/\s*([a-z0-9-]+)/i);
+    const opening = tag.match(/^<\s*([a-z0-9-]+)/i);
+    if (closing && AUTOLINK_EXCLUDED_TAGS.has(closing[1].toLowerCase())) excludedDepth = Math.max(0, excludedDepth - 1);
+    out += tag;
+    if (opening && !closing && !/\/\s*>$/.test(tag) && AUTOLINK_EXCLUDED_TAGS.has(opening[1].toLowerCase())) excludedDepth += 1;
+    cursor = end + 1;
+  }
+  return out;
+}
+
 // 公開記事本文の entity shortcode は、生成前に参照先を検証する。
 // 未知のIDをそのままリンク化すると、見た目は正常でも404リンクが公開されるため、
 // draft以外の記事だけを対象にビルドを停止する（draftは未完成本文を保存できる）。
@@ -664,6 +742,10 @@ function fmtDate(d) {
   const [y, m, day] = String(d).split('/')[0].split('-').map(Number);
   if (!y || !m || !day) return '';
   return `${MONTHS[m - 1]} ${day}, ${y}`;
+}
+function fmtDateDots(d) {
+  const match = String(d || '').trim().match(/^(\d{4})-(\d{2})-(\d{2})/);
+  return match ? `${match[1]}.${match[2]}.${match[3]}` : '';
 }
 function fmtFestDate(d) {
   if (!d) return 'DATE TBA';
@@ -882,7 +964,7 @@ function relatedStoryCardsHtml(items, lang, { forceEnglishPath = false, compactD
   return cards ? `<div class="related-stories"><h2>RELATED STORIES</h2>${cards}</div>` : '';
 }
 
-function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsByFestival = new Map(), venues = [], festivalData = null, articles = []) {
+function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsByFestival = new Map(), venues = [], festivalData = null, articles = [], artists = []) {
   // EN版は title_en / excerpt_en / body_en を使う（無い項目はJAへフォールバック）
   const L = lang === 'en'
     ? { title: stripTitleMarkdown(a.title_en || a.title), excerpt: stripTitleMarkdown(a.excerpt_en || a.excerpt), body: a.body_en || a.body, prefix: '/en' }
@@ -922,7 +1004,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
     ...(about ? { about } : {}),
     inLanguage: lang,
     datePublished: isoDateTime(a.date),
-    dateModified: isoDateTime(a.updated || a.date),
+    dateModified: isoDateTime(a.updatedAt || a.date),
     author: {
       '@type': isOrganizationAuthor ? 'Organization' : 'Person',
       name: authorName,
@@ -1034,17 +1116,22 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
     ? `<section class="detail-section festival-related-stories-v2 article-related-stories">${relatedStoryCardsHtml(relatedArticles, lang, { forceEnglishPath: true, compactDate: true })}</section>`
     : '';
 
+  const updatedDate = String(a.updatedAt || '').trim();
+  const updatedHtml = updatedDate && updatedDate !== String(a.date || '').trim()
+    ? `<span class="article-updated">${lang === 'en' ? 'Updated: ' : '更新: '}${esc(fmtDateDots(updatedDate))}</span>`
+    : '';
+  const linkedBody = autolinkArtists(L.body || '', artists);
   const body = `<article class="article-detail">
   <div class="article-detail-inner">
     <a class="article-back" href="${hubHref}" data-article-hub-back="${hubHref}"><span class="arrow"></span> ALL STORIES</a>
     ${heroBlock}
     <dl class="article-specs">
       <div><dt>WORDS BY</dt><dd>${esc(a.author || 'TECHNO JAPAN')}</dd></div>
-      <div><dt>PUBLISHED</dt><dd>${esc(fmtDate(a.date) || '—')}</dd></div>
+      <div><dt>PUBLISHED</dt><dd>${esc(fmtDate(a.date) || '—')}${updatedHtml}</dd></div>
       <div><dt>READING TIME</dt><dd>${esc(a.readTime || 5)} MIN</dd></div>
     </dl>
     <div class="article-excerpt">${esc(L.excerpt || '')}</div>
-    <div class="article-body">${addDriveImageSrcset(addHtmlImageDimensions(resolveEntities(L.body || '', lang)))}</div>
+    <div class="article-body">${addDriveImageSrcset(addHtmlImageDimensions(resolveEntities(linkedBody, lang)))}</div>
     <div class="article-share">${festivalShareButtons(L.title, canonical, lang)}</div>
     ${relatedStoriesHtml}
     ${relatedFestivalHtml}
@@ -2347,7 +2434,7 @@ function main() {
     }
     fs.rmSync(DRAFT_PREVIEW_DIR, { recursive: true, force: true });
     for (const lang of ['ja', 'en']) {
-      const built = articlePage(draft, resolveEntities, lang, FESTIVALS, editionsByFestival, [], festivalData, ARTICLES);
+      const built = articlePage(draft, resolveEntities, lang, FESTIVALS, editionsByFestival, [], festivalData, ARTICLES, ARTISTS);
       const relative = path.relative(LP_DIR, built.file);
       const file = path.join(DRAFT_PREVIEW_DIR, relative);
       fs.mkdirSync(path.dirname(file), { recursive: true });
@@ -2447,13 +2534,13 @@ ${FAVICON_TAGS}
   const liveFestivalIds = new Set(pubFests.map((f) => f.id));
 
   const counts = {
-    articles: writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'ja', pubFests, editionsByFestival, pubVenues, festivalData, ARTICLES)).concat(redirectStubs('articles', liveArticleIds)), 'articles'),
+    articles: writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'ja', pubFests, editionsByFestival, pubVenues, festivalData, ARTICLES, ARTISTS)).concat(redirectStubs('articles', liveArticleIds)), 'articles'),
     festivals: writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, ARTICLES, 'ja')).concat(redirectStubs('festivals', liveFestivalIds)), 'festivals'),
     artists: writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'ja')).concat(redirectStubs('artists', liveArtistIds)), 'artists'),
     venues: writeAll(pubVenues.map((v) => venuePage(v, 'ja')), 'venues'),
     // 英語版（/en/…）。未翻訳フィールドは articlePage 内で元データへ
     // フォールバックし、EN ハブの通常遷移先を必ず実在させる。
-    'en/articles': writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'en', pubFests, editionsByFestival, pubVenues, festivalData, ARTICLES)), 'en/articles'),
+    'en/articles': writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'en', pubFests, editionsByFestival, pubVenues, festivalData, ARTICLES, ARTISTS)), 'en/articles'),
     'en/festivals': writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, ARTICLES, 'en')).concat(redirectStubs('en/festivals', liveFestivalIds)), 'en/festivals'),
     'en/artists': writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'en')).concat(redirectStubs('en/artists', liveArtistIds)), 'en/artists'),
     'en/venues': writeAll(pubVenues.map((v) => venuePage(v, 'en')), 'en/venues'),

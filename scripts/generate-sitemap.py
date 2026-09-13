@@ -80,7 +80,7 @@ def extract_article_blocks(data):
 
 def parse_article_block(block):
     out = {}
-    for key in ("id", "title", "date", "publishedAt", "status"):
+    for key in ("id", "title", "date", "publishedAt", "updatedAt", "status"):
         m = re.search(rf'{key}:\s*["\']([^"\']*)["\']', block)
         if m:
             out[key] = m.group(1)
@@ -170,6 +170,11 @@ def main():
     # data.js の ARTICLES を無条件に読むと draft も sitemap に入り、
     # 詳細ページ生成側（draft は除外）との間で404が生じる。
     article_ids = []
+    article_data = {
+        article.get("id"): article
+        for article in (parse_article_block(block) for block in extract_article_blocks(data))
+        if article.get("id")
+    }
     article_root = os.path.join(LP_DIR, "articles")
     for f in sorted(glob.glob(os.path.join(article_root, "*.html"))):
         with open(f, "r", encoding="utf-8", errors="replace") as html_file:
@@ -180,7 +185,7 @@ def main():
         article_ids.append(aid)
         urls.append({
             "loc": f"{BASE_URL}/articles/{aid}.html",
-            "lastmod": today,
+            "lastmod": article_data.get(aid, {}).get("updatedAt") or today,
             "changefreq": "monthly",
             "priority": "0.7",
         })

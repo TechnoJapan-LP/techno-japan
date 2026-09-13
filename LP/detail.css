@@ -319,6 +319,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 .article-specs > div:last-child { border-right: none; }
 .article-specs dt { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.4; margin-bottom: 6px; }
 .article-specs dd { font-family: var(--font-body); font-weight: 300; font-size: 14px; letter-spacing: 0.02em; margin: 0; text-transform: uppercase; }
+.article-updated { display: block; margin-top: 4px; font-size: 11px; opacity: .55; text-transform: none; }
 
 .article-body .ql-size-small { font-size: 0.85em; }
 .article-body .ql-size-large { font-size: 1.35em; line-height: 1.6; }

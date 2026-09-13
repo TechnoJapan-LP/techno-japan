@@ -795,7 +795,7 @@ function saveArticleDraft(){
     if (!title && !body) { localStorage.removeItem(ARTICLE_DRAFT_KEY); return; }
     const draft = {
       id: g('ar-id'), title: g('ar-title'), category: g('ar-category'),
-      date: g('ar-date'), author: g('ar-author'), image: g('ar-image'),
+      date: g('ar-date'), updatedAt: g('ar-updatedAt'), author: g('ar-author'), image: g('ar-image'),
       cardRatio: g('ar-cardRatio'), heroRatio: g('ar-heroRatio'), festivalId: g('ar-festivalId'),
       readTime: g('ar-readTime'), views: g('ar-views'),
       featured: document.getElementById('ar-featured')?.value || 'false',
@@ -819,7 +819,7 @@ function tryRecoverArticleDraft(){
   const label = draft.title || draft.id || '無題';
   if (confirm(`未保存の下書きが見つかりました：\n「${label}」(${minsAgo}分前)\n\n復元しますか？`)) {
     setVal('ar-id', draft.id); setVal('ar-title', draft.title);
-    setVal('ar-category', draft.category||'REPORT'); setVal('ar-date', fmtDate(draft.date));
+    setVal('ar-category', draft.category||'REPORT'); setVal('ar-date', fmtDate(draft.date)); setVal('ar-updatedAt', fmtDate(draft.updatedAt));
     setVal('ar-cardRatio', draft.cardRatio||''); setVal('ar-heroRatio', draft.heroRatio||'');
     festPickerSetValue(draft.festivalId||'');
     setVal('ar-author', draft.author||'TECHNO JAPAN'); setVal('ar-image', draft.image);
@@ -3874,7 +3874,7 @@ const debouncedFilterAuthor = debounce(()=>filterAuthorList(), 200);
    まだ知らない列を扱う箇所が壊れる）。AUDIT §9-69。 */
 const SHEET_FIELD_NAMES = [
   // ARTICLES
-  'title_en','excerpt_en','body_en','cardRatio','heroRatio','festivalId','readTime',
+  'title_en','excerpt_en','body_en','cardRatio','heroRatio','festivalId','readTime','updatedAt',
   'metaDescription','publishAt','ogImage','editorNotes','authorId',
   // FESTIVALS / VENUES / ARTISTS
   'name_en','desc_en','bio_en','location_ja','ticketUrl','venueId','instagramUrl',
@@ -4366,7 +4366,7 @@ function editRow(section, rowNum){
   }
   else if(section==='article'){
     setVal('ar-id',row.id); setVal('ar-title',row.title);
-    setVal('ar-category',row.category||'REPORT'); setVal('ar-date',fmtDate(row.date));
+    setVal('ar-category',row.category||'REPORT'); setVal('ar-date',fmtDate(row.date)); setVal('ar-updatedAt',fmtDate(row.updatedAt));
     setVal('ar-cardRatio',row.cardRatio||''); setVal('ar-heroRatio',row.heroRatio||'');
     festPickerSetValue(row.festivalId||'');
     setVal('ar-title_en',row.title_en||''); setVal('ar-excerpt_en',row.excerpt_en||''); setVal('ar-body_en',row.body_en||''); renderEnglishBodyAltEditor();
@@ -4639,7 +4639,7 @@ function saveEdit(section){
   }
   else if(section==='article'){
     Object.assign(payload,{id:g('ar-id'),title:g('ar-title'),category:g('ar-category'),
-      date:g('ar-date'),author:g('ar-author'),image:g('ar-image'),readTime:g('ar-readTime'),
+      date:g('ar-date'),updatedAt:g('ar-updatedAt'),author:g('ar-author'),image:g('ar-image'),readTime:g('ar-readTime'),
       cardRatio:g('ar-cardRatio'),heroRatio:g('ar-heroRatio'),festivalId:g('ar-festivalId'),
       title_en:g('ar-title_en'),excerpt_en:g('ar-excerpt_en'),body_en:g('ar-body_en'),
       views:g('ar-views'),featured:g('ar-featured'),excerpt:g('ar-excerpt'),
@@ -5762,7 +5762,7 @@ function submitToSheet(section){
   }
   else if(section==='article'){
     payload={action:'add_article',id:g('ar-id'),title:g('ar-title'),category:g('ar-category'),
-      date:g('ar-date'),author:g('ar-author'),image:g('ar-image'),readTime:g('ar-readTime'),
+      date:g('ar-date'),updatedAt:g('ar-updatedAt'),author:g('ar-author'),image:g('ar-image'),readTime:g('ar-readTime'),
       cardRatio:g('ar-cardRatio'),heroRatio:g('ar-heroRatio'),festivalId:g('ar-festivalId'),
       title_en:g('ar-title_en'),excerpt_en:g('ar-excerpt_en'),body_en:g('ar-body_en'),
       views:g('ar-views'),featured:g('ar-featured'),excerpt:g('ar-excerpt'),
@@ -6605,7 +6605,7 @@ function publishSanityCheck(d){
      **「惜しい」列だけを指す。**大小文字・記号・空白を取り除いた形が
      既知の項目と一致するものだけ挙げる。AUDIT §9-68。 */
   const ARTICLE_FIELDS = ['id','title','title_en','excerpt','excerpt_en','body','body_en',
-    'category','date','author','authorId','image','cardRatio','heroRatio','festivalId',
+    'category','date','updatedAt','author','authorId','image','cardRatio','heroRatio','festivalId',
     'featured','views','readTime','tags','status','metaDescription','publishAt','ogImage','editorNotes'];
   const norm = s => String(s).toLowerCase().replace(/[^a-z0-9]/g,'');
   const known = new Map(ARTICLE_FIELDS.map(f => [norm(f), f]));
@@ -7060,6 +7060,7 @@ function buildArticlesJs(rows){
     }
     if(r.category) l.push('    category: "'+q(r.category)+'",');
     if(r.date) l.push('    date: "'+q(fmtDate(r.date))+'",');
+    if(r.updatedAt) l.push('    updatedAt: "'+q(fmtDate(r.updatedAt))+'",');
     if(r.author) l.push('    author: "'+q(r.author)+'",');
     if(r.image) l.push('    image: "'+q(r.image)+'",');
     if(r.cardRatio) l.push('    cardRatio: "'+q(r.cardRatio)+'",');
@@ -7227,7 +7228,7 @@ function resetForm(section){
     festival:['f-id','f-name','f-city','f-location','f-location_ja','f-url','f-ticketUrl','f-instagram','f-address','f-lat','f-lng','f-dateStart','f-dateEnd','f-image','f-imagePosition','f-flyer','f-heroGradient','f-desc','f-imageUrl','f-flyerUrl'],
     artist:['a-id','a-name','a-city','a-country','a-genre','a-image','a-imagePosition','a-bio','a-instagram','a-soundcloud','a-bandcamp','a-website','a-imageUrl'],
     event:['e-name','e-date','e-venue','e-city','e-time','e-desc','e-link'],
-    article:['ar-id','ar-title','ar-category','ar-date','ar-author','ar-image','ar-imageUrl','ar-readTime','ar-views','ar-excerpt','ar-body','ar-tags','ar-cardRatio','ar-heroRatio','ar-festivalId','ar-title_en','ar-excerpt_en','ar-body_en'],
+    article:['ar-id','ar-title','ar-category','ar-date','ar-updatedAt','ar-author','ar-image','ar-imageUrl','ar-readTime','ar-views','ar-excerpt','ar-body','ar-tags','ar-cardRatio','ar-heroRatio','ar-festivalId','ar-title_en','ar-excerpt_en','ar-body_en'],
     author:['au-id','au-name','au-bio','au-image','au-instagram','au-twitter','au-website'],
   }[section];
   fields.forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});

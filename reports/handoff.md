@@ -7490,3 +7490,72 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - Search Console 実測（9/13）: 記事は**全て既にインデックス登録済み**だった。
   表示ゼロの記事は「未登録」ではなく「競合に勝てていない」状態。
   インデックス登録リクエストは不要と判明。
+
+## 2026-09-14 記事本文のアーティスト自動リンク／更新日の受け皿
+
+### 実施（設計=Claude / 実装=Codex / 検証=Claude）
+
+#### ① アーティスト名の自動リンク
+- 背景: 記事→ARTISTS のリンクが**全記事0本**だった。`[[artist:id]]` の
+  entity shortcode は既にあるが一度も使われていない。
+- 実装: build-detail-pages.mjs で本文（body / body_en）のアーティスト名を
+  検出し `entity-link` に変換。**HTMLを線形スキャンでタグ/ショートコード/
+  テキストに分割し、テキスト片だけを置換**（正規表現で全体置換しない）。
+- リンクする条件: ARTISTS の name と単語境界つき一致 / 3文字以上 /
+  大小文字は無視するが**本文の表記を保つ** / 記事内で各1回 / 除外リスト外。
+- 除外する場所: `<a>`内・`<h1>〜<h6>`内・**`[[…]]`ショートコード内**・
+  タグ属性・`<code>`/`<pre>`内。
+- ★**誤爆を実測してから設計した**: アーティスト名 `Ground` が
+  `[[event|…|Kodamanomori Camping Ground, Nagano|…]]` という**会場名**に
+  マッチした。`AUTOLINK_DENY`（理由コメント付き）に登録し、
+  ショートコード内除外と二重に防いでいる。
+- 結果: **16件**を自動リンク（rebirth 6 / japan-september 3 / transcendence 2 /
+  shifumiz 2 / snow-machine 1 / forest 1 / asia 1）。
+
+#### ② 更新日（dateModified）の受け皿
+- CMS の ARTICLE に「UPDATED（更新日）」欄（`ar-updatedAt`）を追加し、
+  保存 payload とフォーム復元に接続。
+- ビルド側は `updatedAt || date` を JSON-LD の dateModified に使い、
+  `date` と異なるときだけ記事に「更新: YYYY.MM.DD」を表示（detail.css に1行追加）。
+- sitemap.xml の記事 `<lastmod>` も `updatedAt` があればそれを使う。
+- **シートに UPDATED_AT 列が無くても動く**（無ければ従来どおり公開日）。
+- 版: cms.js 120 / detail.css 37。
+
+#### ③ 検査 scripts/check_article_links.mjs（新規・preflight 46本目）
+リンク先の実在 / `<a>`入れ子なし / ショートコード内にリンク無し（Ground 再発検知）/
+見出し内にリンク無し / 記事別リンク件数の一覧出力 / dateModified の整合。
+
+### コミット
+- このエントリと同一コミット（生成物 506ページ含む）。
+
+### 検証
+- 自動リンク16件すべてリンク先が実在。**"Ground" は0件（誤爆なし）**、
+  会場名 `Camping Ground, Nagano` は無傷
+- asia-festival で7件中1件のみリンクされた理由を個別確認 →
+  3件はイベントカードの出演者欄（除外が正しい）、3件は本文に無し（表記違い）
+- **本文テキスト（タグ除去後）がリンク挿入前と完全一致**＝文章は1文字も変えていない
+- updatedAt 未設定の現状で dateModified は datePublished と同値（回帰なし）
+- preflight 全46件成功
+
+### 変更したパターン
+- build-detail-pages.mjs（自動リンク関数1・適用2・dateModified・更新日表示）/
+  cms.html 1欄 / cms.js 6箇所 / detail.css 1行 / generate-sitemap.py 1 /
+  新検査1 / preflight 1行
+
+### 未確認の類似パターン
+- ★**CMS のブラウザ自動操作では保存できなかった**（2026-09-14 実測）。
+  DOM に値を入れて `Save to Spreadsheet` / `Save Changes` を押しても
+  シートは更新されない（GAS の get_sheet で確認: title は旧値のまま・
+  重複行なし・データは無傷）。CMS 内部の編集状態への反映経路が別にあるため。
+  **CMS のデータ変更は人手で行うこと。**
+- シートの `title_en` に `# ` は**元々入っていない**（GAS で直接確認）。
+  9/13 の handoff「シート側は未修正」は**誤り**。data.js が古かっただけで、
+  次の Publish で解消する（表示側ガードは保険として有効）
+
+### 次の担当への注意・判断待ち
+- **運用側の作業2件**:
+  1. スプレッドシート ARTICLES に `UPDATED_AT` 列を追加すると更新日が使える
+  2. Transcendence 記事のタイトルを下記に変更（検索結果で切れないため）
+     - JA: `Transcendence 長野・北相木村の森が生んだ次世代レイヴ`
+     - EN: `Transcendence: Next-Generation Rave in a Nagano Forest`
+- 自動リンクは**アーティストのみ**。フェス/会場は既存ショートコードのまま。
