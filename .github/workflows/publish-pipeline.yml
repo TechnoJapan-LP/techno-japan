@@ -102,7 +102,7 @@ jobs:
           gh workflow run "Sync Drive Images"
           # 新しい run が現れるまで待つ（最大2分）
           run_id=""
-          for i in $(seq 1 24); do
+          for _ in $(seq 1 24); do
             sleep 5
             candidate=$(gh run list --workflow "Sync Drive Images" --limit 1 --json databaseId --jq '.[0].databaseId // ""')
             if [ -n "$candidate" ] && [ "$candidate" != "$before" ]; then run_id="$candidate"; break; fi
@@ -112,7 +112,7 @@ jobs:
             exit 1
           fi
           # 完了を待つ（最大10分）
-          for i in $(seq 1 60); do
+          for _ in $(seq 1 60); do
             status=$(gh run view "$run_id" --json status --jq .status)
             [ "$status" = "completed" ] && break
             sleep 10
