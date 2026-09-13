@@ -44,6 +44,26 @@ function checkXml(file, label) {
   return xml;
 }
 
+const hasMarkdownDecoration = (value) => {
+  const text = String(value || '').trim();
+  return /^#|^```|^\*\*[\s\S]+\*\*$/.test(text);
+};
+
+function checkArticleMetadata(file, html) {
+  const title = html.match(/<title>([\s\S]*?)<\/title>/i)?.[1];
+  if (title !== undefined && hasMarkdownDecoration(title)) {
+    fail(`${file} <title> にマークダウン記号が残っている: ${title}`);
+  }
+  for (const match of html.matchAll(/<meta\b[^>]*>/gi)) {
+    const tag = match[0];
+    if (!/\bproperty=["']og:title["']/i.test(tag)) continue;
+    const value = tag.match(/\bcontent=["']([^"']*)["']/i)?.[1];
+    if (value !== undefined && hasMarkdownDecoration(value)) {
+      fail(`${file} og:title にマークダウン記号が残っている: ${value}`);
+    }
+  }
+}
+
 const articles = loadArticles();
 const published = articles.filter((article) => article?.status === 'published' && article.id);
 const rss = checkXml(path.join(root, 'articles.xml'), 'articles.xml');
@@ -57,6 +77,18 @@ for (const item of rssItems) {
 }
 const latest = [...published].sort((a, b) => String(b.publishedAt || b.date || '').localeCompare(String(a.publishedAt || a.date || '')))[0];
 if (latest && !rss.includes(`/articles/${latest.id}.html`)) fail(`articles.xml に最新記事がない: ${latest.id}`);
+
+for (const [file, label] of [[path.join(root, 'articles.xml'), 'articles.xml'], [path.join(root, 'rss.xml'), 'rss.xml']]) {
+  const xml = read(file);
+  for (const item of xml.matchAll(/<item>([\s\S]*?)<\/item>/g)) {
+    for (const field of ['title', 'description']) {
+      const value = item[1].match(new RegExp(`<${field}>([\\s\\S]*?)<\\/${field}>`, 'i'))?.[1];
+      if (value !== undefined && hasMarkdownDecoration(value)) {
+        fail(`${label} <${field}> にマークダウン記号が残っている: ${value}`);
+      }
+    }
+  }
+}
 
 const newsSitemap = checkXml(path.join(root, 'sitemap-news.xml'), 'sitemap-news.xml');
 if (newsSitemap && !newsSitemap.includes('xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"')) {
@@ -88,6 +120,7 @@ for (const lang of ['', 'en/']) {
     const file = path.join(root, lang, 'articles', `${article.id}.html`);
     const html = read(file);
     if (!html) { fail(`${lang || 'ja/'}${article.id}.html が存在しない`); continue; }
+    checkArticleMetadata(file, html);
     const section = html.match(/<section class="detail-section festival-related-stories-v2 article-related-stories">([\s\S]*?)<\/section>/)?.[1];
     if (published.length >= 2 && !section) { fail(`${file} に RELATED STORIES がない`); continue; }
     if (!section) continue;

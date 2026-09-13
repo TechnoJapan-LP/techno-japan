@@ -220,6 +220,21 @@ function safeUrl(value) {
 // 本文HTMLからタグを除いて説明文を作る（meta description 用）
 const stripTags = (html) => String(html ?? '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 
+/* AI 翻訳が残すマークダウン記号を表示側でも落とす（2026-09-13）。
+   CMS の stripMarkdownDecorations_（LP/cms.js）と同じ規則。ガード導入前に
+   翻訳されたデータが残っており、EN の <title> に "# " が出ていた。
+   本文には使わない（本文は HTML なのでそのまま出す）。 */
+function stripTitleMarkdown(text) {
+  let t = String(text == null ? '' : text).trim();
+  t = t.replace(/^```[a-z]*\n?/, '').replace(/\n?```$/, '').trim();
+  t = t.replace(/^#{1,6}\s+/, '');
+  for (const [re, delim] of [[/^\*\*([\s\S]+)\*\*$/, '**'], [/^\*([\s\S]+)\*$/, '*'], [/^__([\s\S]+)__$/, '__'], [/^_([\s\S]+)_$/, '_']]) {
+    const m = t.match(re);
+    if (m && !m[1].includes(delim)) { t = m[1].trim(); break; }
+  }
+  return t;
+}
+
 // パンくずJSON-LD（検索結果に「TECHNO JAPAN › FESTIVALS › 名前」のパスを出す）
 function breadcrumbLd(sectionLabel, sectionPath, name, canonical) {
   return {
@@ -854,7 +869,7 @@ function articleNewsletterHtml(canonical) {
 function relatedStoryCardsHtml(items, lang, { forceEnglishPath = false, compactDate = false } = {}) {
   const cards = (items || []).map((a) => {
     const englishPath = lang === 'en' && (forceEnglishPath || a.title_en || a.body_en) ? '/en' : '';
-    const title = lang === 'en' ? (a.title_en || a.title) : a.title;
+    const title = stripTitleMarkdown(lang === 'en' ? (a.title_en || a.title) : a.title);
     const date = compactDate
       ? String(a.date || '').split('/')[0].replace(/-/g, '.')
       : fmtDate(a.date);
@@ -870,8 +885,8 @@ function relatedStoryCardsHtml(items, lang, { forceEnglishPath = false, compactD
 function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsByFestival = new Map(), venues = [], festivalData = null, articles = []) {
   // EN版は title_en / excerpt_en / body_en を使う（無い項目はJAへフォールバック）
   const L = lang === 'en'
-    ? { title: a.title_en || a.title, excerpt: a.excerpt_en || a.excerpt, body: a.body_en || a.body, prefix: '/en' }
-    : { title: a.title, excerpt: a.excerpt, body: a.body, prefix: '' };
+    ? { title: stripTitleMarkdown(a.title_en || a.title), excerpt: stripTitleMarkdown(a.excerpt_en || a.excerpt), body: a.body_en || a.body, prefix: '/en' }
+    : { title: stripTitleMarkdown(a.title), excerpt: stripTitleMarkdown(a.excerpt), body: a.body, prefix: '' };
   const hasAlt = lang === 'ja' ? !!(a.title_en || a.body_en) : true;
   const altHref = hasAlt ? (lang === 'ja' ? `/en/articles/${a.id}.html` : `/articles/${a.id}.html`) : null;
   const canonical = `${BASE}${L.prefix}/articles/${a.id}.html`;

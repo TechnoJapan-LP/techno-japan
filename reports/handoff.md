@@ -7451,3 +7451,42 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - sitemap-news.xml は「48時間以内の記事が無いと空」になる。空でも正常。
 - Google News への掲載は2024年以降**申請制ではなく自動選定**。
   Publisher Center 登録は任意（ブランド管理用）。
+
+## 2026-09-14 記事タイトルのマークダウン残骸を表示側でも落とす
+
+### 実施（設計=Claude / 実装=Codex / 検証=Claude）
+- 発見: `transcendence-2025-report` の `title_en` が `# The Potential of…` と
+  **先頭に見出し記号が残り**、EN版の `<title>` / `og:title` / 関連記事カードに
+  そのまま出ていた（実測）。data.js 全記事を走査した結果、**この1件のみ**。
+- 原因: CMS の `stripMarkdownDecorations_`（LP/cms.js 6251）は `#` を落とすが、
+  この記事は**そのガード導入前に AI 翻訳された**ためデータに残骸が残っている。
+- 対応: 表示側にも同じ規則の `stripTitleMarkdown()` を追加（build-detail-pages.mjs）
+  し、記事の title / excerpt（JA/EN）と関連記事カードに適用。
+  generate-rss.py にも同規則を追加。**本文（body）には適用しない**（HTML のため）。
+- 検査を check_feeds.mjs に追加（JA/EN 全記事の `<title>`・`og:title` と
+  articles.xml のタイトル/説明文に記号が残っていないこと）。
+
+### コミット
+- このエントリと同一コミット。
+
+### 検証
+- ビルド後、EN版 transcendence の `<title>`/`og:title` から `# ` が消えた
+- 差分は当該記事と、その記事を関連記事に出している post-20251120 の**2ファイルのみ**
+  （他記事のタイトルは不変＝回帰なし）
+- **ミューテーション**: 生成HTMLの `<title>` を `## …` に書き換えると検査が
+  検出して失敗（確認後に復元）
+- preflight 全45件成功
+
+### 変更したパターン
+- build-detail-pages.mjs に関数1・適用2箇所 / generate-rss.py に同規則1 /
+  check_feeds.mjs に検査1
+
+### 未確認の類似パターン
+- **シート側のデータは未修正**（`title_en` に `# ` が残ったまま）。表示は
+  ガードで正しくなるが、CMS の編集画面では記号が見える。運用側で削除が必要
+- フェス/アーティスト/会場の DESC・BIO は未走査（記事のみ対応）
+
+### 次の担当への注意・判断待ち
+- Search Console 実測（9/13）: 記事は**全て既にインデックス登録済み**だった。
+  表示ゼロの記事は「未登録」ではなく「競合に勝てていない」状態。
+  インデックス登録リクエストは不要と判明。

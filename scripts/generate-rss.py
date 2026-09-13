@@ -19,6 +19,23 @@ SITE_TITLE = "TECHNO JAPAN"
 SITE_DESC = "Japan's underground techno and house music media platform."
 
 
+# Keep RSS titles/descriptions consistent with build-detail-pages.mjs's display-side rule.
+def strip_title_markdown(text):
+    value = str(text or "").strip()
+    value = re.sub(r"^```[a-z]*\n?", "", value)
+    value = re.sub(r"\n?```$", "", value).strip()
+    value = re.sub(r"^#{1,6}\s+", "", value)
+    for pattern, delimiter in ((r"^\*\*([\s\S]+)\*\*$", "**"),
+                               (r"^\*([\s\S]+)\*$", "*"),
+                               (r"^__([\s\S]+)__$", "__"),
+                               (r"^_([\s\S]+)_$", "_")):
+        match = re.match(pattern, value)
+        if match and delimiter not in match.group(1):
+            value = match.group(1).strip()
+            break
+    return value
+
+
 def parse_block(block):
     """Pull out common fields from a JS object literal block."""
     out = {}
@@ -121,7 +138,7 @@ def main():
         a = parse_block(block)
         if not a.get("id") or not (a.get("title") or a.get("name")):
             continue
-        title = a.get("title") or a.get("name")
+        title = strip_title_markdown(a.get("title") or a.get("name"))
         link = f"{BASE_URL}/articles/{a['id']}.html"
         pub_str = a.get("publishedAt") or a.get("publishAt")
         try:
@@ -132,7 +149,7 @@ def main():
             "title": title,
             "link": link,
             "guid": link,
-            "description": a.get("desc") or a.get("description") or "",
+            "description": strip_title_markdown(a.get("desc") or a.get("description") or ""),
             "pubDate": to_rfc822(pub),
             "category": a.get("category", "Article"),
         })
@@ -187,11 +204,11 @@ def main():
         except (ValueError, AttributeError):
             pub = datetime.now()
         article_items.append({
-            "title": a.get("title") or a.get("name"),
+            "title": strip_title_markdown(a.get("title") or a.get("name")),
             "link": link,
             "guid": link,
             "pubDate": to_rfc822(pub),
-            "description": a.get("excerpt") or a.get("desc") or a.get("description") or "",
+            "description": strip_title_markdown(a.get("excerpt") or a.get("desc") or a.get("description") or ""),
             "category": a.get("category", "Article"),
         })
 
