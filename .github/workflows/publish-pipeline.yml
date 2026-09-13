@@ -56,7 +56,7 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 32   # 画像同期の待ち（最大12分）を含む
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -84,6 +84,54 @@ jobs:
       # data.js だけ新しく data/*.json が古い、という食い違いを持ち込ませない。
       - name: Fetch data from spreadsheet
         run: npm run fetch
+
+      # 画像がまだ Drive から取り込まれていない状態で Publish されると、
+      # broken_image_refs / 構造化データ検査で止まる（2026-09-10 / 09-12 / 09-13 の
+      # 3回発生）。画像の取得と派生生成は Sync Drive Images だけが行うため、
+      # 足りないときはそれを起動して待ち、取り込んでから続ける。
+      - name: Ensure referenced images exist
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          if node scripts/check_missing_images.mjs; then
+            echo "画像は揃っています"
+            exit 0
+          fi
+          echo "::warning::参照画像が不足しています。Sync Drive Images を起動して待ちます"
+          before=$(gh run list --workflow "Sync Drive Images" --limit 1 --json databaseId --jq '.[0].databaseId // ""')
+          gh workflow run "Sync Drive Images"
+          # 新しい run が現れるまで待つ（最大2分）
+          run_id=""
+          for i in $(seq 1 24); do
+            sleep 5
+            candidate=$(gh run list --workflow "Sync Drive Images" --limit 1 --json databaseId --jq '.[0].databaseId // ""')
+            if [ -n "$candidate" ] && [ "$candidate" != "$before" ]; then run_id="$candidate"; break; fi
+          done
+          if [ -z "$run_id" ]; then
+            echo "::error::Sync Drive Images を起動できませんでした。手動で実行してから再試行してください"
+            exit 1
+          fi
+          # 完了を待つ（最大10分）
+          for i in $(seq 1 60); do
+            status=$(gh run view "$run_id" --json status --jq .status)
+            [ "$status" = "completed" ] && break
+            sleep 10
+          done
+          conclusion=$(gh run view "$run_id" --json conclusion --jq .conclusion)
+          echo "Sync Drive Images: $conclusion"
+          if [ "$conclusion" != "success" ]; then
+            echo "::error::Sync Drive Images が成功しませんでした。手動で確認してから再試行してください"
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase --autostash origin main
+          if node scripts/check_missing_images.mjs; then
+            echo "同期後に画像が揃いました"
+          else
+            echo "::error::同期しても参照画像が足りません。Drive に画像が無いか、CMS のアップロードが未完了です"
+            exit 1
+          fi
 
       - name: Build detail pages
         run: node scripts/build-detail-pages.mjs

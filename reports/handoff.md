@@ -7353,3 +7353,49 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 - GA4 側で `section` / `festival_id` / `link_kind` を**カスタムディメンションに
   登録**しないと、レポートで内訳を見られない（イベント数は見える）。
   未登録。登録するとその日以降のデータから使える。
+
+## 2026-09-13 Publish が画像不足で止まる問題を自動解消（3回目の再発を機に）
+
+### 実施（設計=Claude / 実装=Codex / 検証=Claude）
+- 症状（3回発生）: CMSで画像をアップ→すぐ Publish Now すると、画像がまだ
+  リポジトリに無く（Driveにはある）検査で停止。
+  9/10 asia-festival（broken_image_refs）/ 9/12 ultra-japan-flyer（同）/
+  9/13 shifumiz（check_jsonld の image 3種）。毎回、手で画像同期→再実行して復旧。
+- 構造上の原因: **画像の取得と派生生成は Sync Drive Images だけが行う**
+  （cron 2時間おき＋手動）。Publish pipeline は既存画像を前提にビルド・検査する。
+- 対策:
+  - 新規 `scripts/check_missing_images.mjs`: data.js と editions.json が参照する
+    `images/…` が実在するか照合（現在191件・不足0）。`--list` でパスのみ出力。
+  - publish-pipeline.yml の **ビルド前**に「Ensure referenced images exist」を追加。
+    不足時のみ `gh workflow run "Sync Drive Images"` → 新runを特定 → 完了待ち
+    （起動2分＋完了10分の上限）→ `git pull --rebase` → 再チェック。
+    同期しても足りなければ「Driveに無い/アップロード未完了」と明示して失敗。
+  - ジョブの timeout-minutes を 20→32（待ち時間ぶんの余裕）。
+  - preflight にも追加（**44本目**）。ローカルでも公開前に気づける。
+- 既存の broken_image_refs / check_jsonld は**残置**（最後の砦として二重に守る）。
+
+### コミット
+- このエントリと同一コミット。
+
+### 検証
+- `node scripts/check_missing_images.mjs`: 191件・不足0で成功
+- **ミューテーション**: data.js の画像パスを存在しない名前に差し替えると exit 1 と
+  なり当該パスを列挙（確認後に復元）。`--list` はパスのみ出力
+- YAML 構文 / 追加 run ブロックの `bash -n` / 起動・完了待ち・再チェックの存在確認
+- preflight 全44件成功
+- **実際の不足時の自動同期は未検証**（人為的な再現が困難。次に画像不足の
+  Publish が起きたときのログで「Sync Drive Images を起動して待ちます」の
+  warning と自動復旧を確認する）
+
+### 変更したパターン
+- 新検査1本 / publish-pipeline に1ステップ + timeout / preflight 1行
+
+### 未確認の類似パターン
+- 記事本文の Drive 直リンク画像（lh3.googleusercontent.com）は対象外
+  （ローカル参照のみ照合）。直リンクは404でも検査は通る
+- Sync Drive Images 自体が失敗した場合は conclusion を出力して続行し、
+  再チェックで止まる（無限待ちにはならない）
+
+### 次の担当への注意・判断待ち
+- 画像を伴う公開の流れは「CMSでアップ → Publish」でよくなった（同期待ちは自動）。
+  ただし Drive への保存自体が失敗している場合は自動では直らない。
