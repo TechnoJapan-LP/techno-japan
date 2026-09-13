@@ -220,5 +220,65 @@
       }, { threshold: 0 });
       io.observe(end);
     }
+
+    /* 5) フェス詳細の「何を見に来たか」を測る（2026-09-13）。
+          検索の入口は「フェス名＋年」が大多数で、ラインナップ/アクセスへの
+          関心は着地後の行動でしか分からない。セクション到達と
+          リンク種別をフェス単位で数える。gtag が無ければ全て no-op。 */
+    var festRoot = document.querySelector('.festival-detail-page');
+    if (festRoot) {
+      var festId = (location.pathname.match(/\/festivals\/([^/]+)\.html$/) || [])[1] || '';
+      var festLang = document.documentElement.lang === 'en' ? 'en' : 'ja';
+
+      // 5-1) セクション到達（1ページ1回だけ送る）
+      if ('IntersectionObserver' in window) {
+        var sections = [
+          ['lineup',   '.festival-program-section'],
+          ['editions', '.festival-editions-v2'],
+          ['faq',      '.festival-faq'],
+          ['related',  '.related-festivals']
+        ];
+        var seen = {};
+        var sectionIo = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            var key = entry.target.getAttribute('data-tj-section');
+            if (!key || seen[key]) return;
+            seen[key] = true;
+            track('festival_section_view', { section: key, festival_id: festId, page_lang: festLang });
+            sectionIo.unobserve(entry.target);
+          });
+        // 巨大なセクションは threshold では発火しないため、rootMargin で判定する。
+        }, { threshold: 0, rootMargin: '0px 0px -25% 0px' });
+        sections.forEach(function (pair) {
+          var el = festRoot.querySelector(pair[1]);
+          if (!el) return;
+          el.setAttribute('data-tj-section', pair[0]);
+          sectionIo.observe(el);
+        });
+      }
+
+      // 5-2) リンククリックをフェス単位で（外部・内部の両方）。
+      // 既存の outbound_click はサイト全体の外部遷移用なので、重複送信を許容する。
+      festRoot.addEventListener('click', function (e) {
+        var a = e.target.closest && e.target.closest('a[href]');
+        if (!a) return;
+        var href = a.getAttribute('href') || '';
+        var kind = '';
+        if (a.classList.contains('festival-ticket-link')) kind = 'ticket';
+        else if (a.classList.contains('festival-official-link')) kind = 'official';
+        else if (a.classList.contains('festival-social-link')) kind = 'social';
+        else if (a.classList.contains('lineup-item')) kind = 'lineup_artist';
+        else if (a.closest('.related-card')) kind = 'related_festival';
+        else if (a.classList.contains('share-btn')) kind = 'share';
+        if (!kind) return;
+        track('festival_link_click', {
+          link_kind: kind,
+          festival_id: festId,
+          page_lang: festLang,
+          link_target: href.slice(0, 100)
+        });
+      }, true);
+    }
   });
 })();

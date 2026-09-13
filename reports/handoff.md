@@ -7298,3 +7298,58 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 
 ### 次の担当への注意・判断待ち
 - なし。
+
+## 2026-09-13 フェス詳細の「来訪目的」を測る計測を追加
+
+### 実施（設計=Claude / 実装=Codex / 検証=Claude）
+- 目的: 「Festivalに来るユーザーは何が目的か（ラインナップ/開催情報/アクセス）」
+  をデータで答えられるようにする。実測の前提:
+  - Search Console: フェスページへの検索は「フェス名＋年」「会場名」が大多数。
+    ラインナップ/チケット/アクセス語のクエリは上位に無い＝**着地後の行動でしか
+    意図は測れない**
+  - GA4(28日): フェス詳細の滞在 23〜30秒 / scroll(90%)到達 約18% /
+    外部クリック 153回・88人。**総数は見えるが内訳が無い**
+- 追加した計測（LP/common.js の既存 tjTrack ブロックに追記。新規ファイルなし）:
+  - `festival_section_view`: LINEUP / 開催ヒストリー / FAQ / 関連フェス への
+    到達を1ページ1回ずつ（section, festival_id, page_lang）
+  - `festival_link_click`: ticket / official / social / lineup_artist /
+    related_festival / share を**フェス単位**で（link_kind, festival_id,
+    page_lang, link_target）
+  - 既存 `outbound_click` は役割が違うため残置（重複送信は許容・コメント済み）
+- COMMON_JS_VERSION 13→15（bump との整合で15に統一）。
+- 新検査 `scripts/check_festival_tracking.mjs` を preflight に追加（**43本目**）。
+
+### コミット
+- このエントリと同一コミット（生成物522ページ含む）。
+
+### 検証
+- `node scripts/check_festival_tracking.mjs`: 成功（4セクションの到達・
+  重複なし・festival_id 付与・official/related のクリック種別・
+  **gtag 無し環境でコンソールエラーが出ない**）
+- preflight 全43件成功
+
+### レビューで見つけて直した2件（いずれも実装/検査の穴）
+1. `threshold: 0.25` は「要素の25%が見えたら」の意味で、画面より高い
+   LINEUPセクションでは**永久に発火しない**。`rootMargin: '0px 0px -25% 0px'`
+   ＋ threshold 0 に変更。
+2. 検査が `/__check.html` でページを配信していたため `location.pathname` が
+   実ページと異なり festival_id が空になっていた。実パスで配信するよう修正。
+
+### 変更したパターン
+- common.js に計測ブロック1（IO 1 + click 1）/ 版定数1 / 新検査1本 / preflight 1行
+
+### 未確認の類似パターン
+- ★**headless Chrome では window.scrollTo が効かない（scrollY が 0 のまま）**。
+  IO をスクロールで発火させる検査は書けないため、ページ全体が入る
+  `--window-size=1280,4000` で可視判定を成立させている。
+  **この癖は今回で3回目**（カレンダー着地・記事FXでも遭遇）。スクロール依存の
+  検査を書くときは最初からビューポート拡大方式にすること。
+- 実スクロールでの発火は本番の実ブラウザで未確認（デプロイ後にGA4のリアルタイムで
+  確認する）
+- アクセス（会場・地図）セクションは**まだページに存在しない**ため計測対象外。
+  A-2（アクセス情報の追加）を実装するときに一緒に計測を足す
+
+### 次の担当への注意・判断待ち
+- GA4 側で `section` / `festival_id` / `link_kind` を**カスタムディメンションに
+  登録**しないと、レポートで内訳を見られない（イベント数は見える）。
+  未登録。登録するとその日以降のデータから使える。
