@@ -795,7 +795,7 @@ function saveArticleDraft(){
     if (!title && !body) { localStorage.removeItem(ARTICLE_DRAFT_KEY); return; }
     const draft = {
       id: g('ar-id'), title: g('ar-title'), category: g('ar-category'),
-      date: g('ar-date'), updatedAt: g('ar-updatedAt'), author: g('ar-author'), image: g('ar-image'),
+      date: g('ar-date'), updatedAt: g('ar-updatedAt'), updated_at: g('ar-updatedAt'), author: g('ar-author'), image: g('ar-image'),
       cardRatio: g('ar-cardRatio'), heroRatio: g('ar-heroRatio'), festivalId: g('ar-festivalId'),
       readTime: g('ar-readTime'), views: g('ar-views'),
       featured: document.getElementById('ar-featured')?.value || 'false',
@@ -819,7 +819,7 @@ function tryRecoverArticleDraft(){
   const label = draft.title || draft.id || '無題';
   if (confirm(`未保存の下書きが見つかりました：\n「${label}」(${minsAgo}分前)\n\n復元しますか？`)) {
     setVal('ar-id', draft.id); setVal('ar-title', draft.title);
-    setVal('ar-category', draft.category||'REPORT'); setVal('ar-date', fmtDate(draft.date)); setVal('ar-updatedAt', fmtDate(draft.updatedAt));
+    setVal('ar-category', draft.category||'REPORT'); setVal('ar-date', fmtDate(draft.date)); setVal('ar-updatedAt', fmtDate(draft.updated_at || draft.updatedAt));
     setVal('ar-cardRatio', draft.cardRatio||''); setVal('ar-heroRatio', draft.heroRatio||'');
     festPickerSetValue(draft.festivalId||'');
     setVal('ar-author', draft.author||'TECHNO JAPAN'); setVal('ar-image', draft.image);
@@ -4366,7 +4366,10 @@ function editRow(section, rowNum){
   }
   else if(section==='article'){
     setVal('ar-id',row.id); setVal('ar-title',row.title);
-    setVal('ar-category',row.category||'REPORT'); setVal('ar-date',fmtDate(row.date)); setVal('ar-updatedAt',fmtDate(row.updatedAt));
+    /* シートの列は UPDATED_AT。GAS は小文字化した updated_at で返し、
+       camelCase 版（updatedAt）は作らない（2026-09-14 実測）。
+       data.js の中では updatedAt に統一する。 */
+    setVal('ar-category',row.category||'REPORT'); setVal('ar-date',fmtDate(row.date)); setVal('ar-updatedAt',fmtDate(row.updated_at || row.updatedAt));
     setVal('ar-cardRatio',row.cardRatio||''); setVal('ar-heroRatio',row.heroRatio||'');
     festPickerSetValue(row.festivalId||'');
     setVal('ar-title_en',row.title_en||''); setVal('ar-excerpt_en',row.excerpt_en||''); setVal('ar-body_en',row.body_en||''); renderEnglishBodyAltEditor();
@@ -4639,7 +4642,7 @@ function saveEdit(section){
   }
   else if(section==='article'){
     Object.assign(payload,{id:g('ar-id'),title:g('ar-title'),category:g('ar-category'),
-      date:g('ar-date'),updatedAt:g('ar-updatedAt'),author:g('ar-author'),image:g('ar-image'),readTime:g('ar-readTime'),
+      date:g('ar-date'),updatedAt:g('ar-updatedAt'),updated_at:g('ar-updatedAt'),author:g('ar-author'),image:g('ar-image'),readTime:g('ar-readTime'),
       cardRatio:g('ar-cardRatio'),heroRatio:g('ar-heroRatio'),festivalId:g('ar-festivalId'),
       title_en:g('ar-title_en'),excerpt_en:g('ar-excerpt_en'),body_en:g('ar-body_en'),
       views:g('ar-views'),featured:g('ar-featured'),excerpt:g('ar-excerpt'),
@@ -5762,7 +5765,7 @@ function submitToSheet(section){
   }
   else if(section==='article'){
     payload={action:'add_article',id:g('ar-id'),title:g('ar-title'),category:g('ar-category'),
-      date:g('ar-date'),updatedAt:g('ar-updatedAt'),author:g('ar-author'),image:g('ar-image'),readTime:g('ar-readTime'),
+      date:g('ar-date'),updatedAt:g('ar-updatedAt'),updated_at:g('ar-updatedAt'),author:g('ar-author'),image:g('ar-image'),readTime:g('ar-readTime'),
       cardRatio:g('ar-cardRatio'),heroRatio:g('ar-heroRatio'),festivalId:g('ar-festivalId'),
       title_en:g('ar-title_en'),excerpt_en:g('ar-excerpt_en'),body_en:g('ar-body_en'),
       views:g('ar-views'),featured:g('ar-featured'),excerpt:g('ar-excerpt'),
@@ -7060,7 +7063,11 @@ function buildArticlesJs(rows){
     }
     if(r.category) l.push('    category: "'+q(r.category)+'",');
     if(r.date) l.push('    date: "'+q(fmtDate(r.date))+'",');
-    if(r.updatedAt) l.push('    updatedAt: "'+q(fmtDate(r.updatedAt))+'",');
+    /* シートの列は UPDATED_AT。GAS は小文字化した updated_at で返し、
+       camelCase 版（updatedAt）は作らない（2026-09-14 実測）。
+       data.js の中では updatedAt に統一する。 */
+    const updatedAtValue = r.updated_at || r.updatedAt;
+    if(updatedAtValue) l.push('    updatedAt: "'+q(fmtDate(updatedAtValue))+'",');
     if(r.author) l.push('    author: "'+q(r.author)+'",');
     if(r.image) l.push('    image: "'+q(r.image)+'",');
     if(r.cardRatio) l.push('    cardRatio: "'+q(r.cardRatio)+'",');

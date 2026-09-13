@@ -3,6 +3,8 @@ import path from 'node:path';
 import vm from 'node:vm';
 
 const root = path.resolve(import.meta.dirname, '..');
+const cmsSource = fs.readFileSync(path.join(root, 'LP/cms.js'), 'utf8');
+const checkCms = (condition, message) => { if (!condition) failures.push(message); };
 const dataSource = fs.readFileSync(path.join(root, 'LP/data.js'), 'utf8');
 const context = {};
 vm.createContext(context);
@@ -18,6 +20,14 @@ const files = liveArticles.map((article) => ({
 const failures = [];
 const check = (condition, message) => { if (!condition) failures.push(message); };
 let totalLinks = 0;
+
+// ARTICLES の UPDATED_AT は get_sheet では updated_at で返る（2026-09-14 実測）。
+// 読み取り側と data.js 出力側が camelCase だけに戻らないよう静的に監視する。
+checkCms(/row\.updated_at\s*\|\|\s*row\.updatedAt/.test(cmsSource),
+  'cms.js: 記事フォームが updated_at を先に読んでいません');
+checkCms(/const updatedAtValue\s*=\s*r\.updated_at\s*\|\|\s*r\.updatedAt/.test(cmsSource)
+  && /updatedAt:\s*"\'\+q\(fmtDate\(updatedAtValue\)\)/.test(cmsSource),
+  'cms.js: buildArticlesJs が updated_at から updatedAt を出力できません');
 
 for (const { article, file } of files) {
   check(fs.existsSync(file), `${article.id}: HTMLがありません`);

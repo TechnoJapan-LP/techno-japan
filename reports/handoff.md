@@ -7559,3 +7559,53 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
      - JA: `Transcendence 長野・北相木村の森が生んだ次世代レイヴ`
      - EN: `Transcendence: Next-Generation Rave in a Nagano Forest`
 - 自動リンクは**アーティストのみ**。フェス/会場は既存ショートコードのまま。
+
+## 2026-09-14 UPDATED_AT のキー名不一致を修正（昨日の実装が値を読めていなかった）
+
+### 実施（設計・検証=Claude / 実装=Codex）
+- 依頼「UPDATED_AT 列を追加したい」を受けて実シートを確認したところ、
+  **列は既に存在していた**（ARTICLES の AB列 `UPDATED_AT`）。追加は不要だった。
+- ★**実装のバグを発見**: AB2 に実際の日付を入れて GAS の `get_sheet` を叩くと、
+  返るキーは **`updated_at`**（小文字・アンダースコア）で、
+  前日の実装が読む `row.updatedAt` は **undefined** だった。
+  シートに入力しても CMS にも data.js にも反映されない状態。
+  - GAS は列名を小文字化して返す。LASTEDITEDAT / METADESCRIPTION / READTIME 等は
+    camelCase 版も併せて返るが、それは GAS 側の既知リストによるもので
+    **UPDATED_AT は対象外**。
+- 修正（LP/cms.js のみ）: シート由来の値を読む箇所を
+  `row.updated_at || row.updatedAt` に。保存 payload は両方のキーを送る
+  （GAS がどちらで列に書くか未検証のため）。data.js の中は `updatedAt` に統一。
+- 版: cms.js 121。
+
+### コミット
+- このエントリと同一コミット。
+
+### 検証
+- **エンドツーエンド（本番に出さずローカルで）**: data.js に
+  `updatedAt: "2026-09-14"` を注入してビルド →
+  - JSON-LD `dateModified: 2026-09-14T00:00:00+09:00`（datePublished 2025-06-20 と別）
+  - 記事表示「更新: 2026.09.14」/ EN「Updated: 2026.09.14」
+  - sitemap.xml `<lastmod>2026-09-14</lastmod>`
+  すべて期待どおり。注入を戻すと表示も消える（回帰なし）
+- `fmtDate` はローカル時刻ベースで**1日ずれない**ことを実データ形式
+  （`Mon Sep 14 2026 00:00:00 GMT+0900`）で確認
+- **シートに入れたテスト値は削除済み**（GAS で消えたことを確認・記事10件・
+  タイトル無傷）
+- preflight 全46件成功
+
+### 変更したパターン
+- cms.js のシート読み取り2箇所・保存 payload 3箇所・data.js 出力1箇所 /
+  check_article_links.mjs に再発検知を追加
+
+### 未確認の類似パターン
+- ★**GAS が payload のどのキーを UPDATED_AT 列に書くかは未検証**。
+  `updatedAt` と `updated_at` の両方を送ることで対処しているが、
+  **CMS から実際に保存して列に入るかは実機未確認**（自動操作では保存できないため）。
+  初回利用時に確認が必要
+- 他シート（FESTIVALS 等）にアンダースコア入りの新規列を足す場合、
+  同じキー名不一致が起きる。**列を足したら必ず get_sheet で返るキー名を確認する**
+
+### 次の担当への注意・判断待ち
+- 運用: 記事を書き直したとき CMS の「UPDATED（更新日）」に日付を入れると、
+  Google に渡す更新日・サイトマップ・記事表示に反映される。空なら公開日のまま。
+- Transcendence のタイトル変更は**ユーザー判断で見送り**（2026-09-14）。
