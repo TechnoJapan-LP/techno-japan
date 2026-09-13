@@ -6,3 +6,4 @@ Allow: /
 Disallow: /cms.html
 
 Sitemap: https://techno-japan.media/sitemap.xml
+Sitemap: https://techno-japan.media/sitemap-news.xml

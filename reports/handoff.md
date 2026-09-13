@@ -7399,3 +7399,55 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 ### 次の担当への注意・判断待ち
 - 画像を伴う公開の流れは「CMSでアップ → Publish」でよくなった（同期待ちは自動）。
   ただし Drive への保存自体が失敗している場合は自動では直らない。
+
+## 2026-09-13 記事の配信面を強化（記事RSS / ニュースサイトマップ / 関連記事）
+
+### 実施（設計=Claude / 実装=Codex / 検証=Claude）
+- 背景: 記事が月4〜6本ペースに到達（8月5本・9月13日時点4本）。8/24に決めた
+  「テーマ2」の着手条件を満たしたため実施。
+- ①記事専用RSS `LP/articles.xml`（generate-rss.py が追加出力。既存rss.xml不変）:
+  published記事のみ・新しい順・最大20本・category付き。
+- ②Googleニュース用サイトマップ `LP/sitemap-news.xml`（generate-sitemap.py が
+  追加出力）: **過去48時間以内**の記事のみ（News仕様）。0本でも空urlsetを出す。
+  robots.txt に Sitemap 行を追加。**ワークフローは無変更**（既存スクリプトが
+  追加出力する設計にしたため）。
+- ③記事末尾に RELATED STORIES: 選出は 同festivalId→同category→最新
+  （自分除外・最大3件・published のみ）。JA/EN全20ページに出た。
+- ★レビューで発見・修正: 最初の実装は related-card グリッドを使ったが、
+  そのCSSは**全て `.festival-design-v2` スコープ内**で記事には一切当たって
+  いなかった（カード縦積み・画像全幅）。既存のスコープ無し部品
+  `related-story-card`（フェス詳細v2のRELATED STORIESで使用実績）に差し替え、
+  生成コードは `relatedStoryCardsHtml()` として**共通関数に切り出して
+  フェス詳細と記事の両方から使う**形にした。CSS追加ゼロ。
+- 検査 `scripts/check_feeds.mjs` 新設 → preflight **45本目**。
+
+### コミット
+- このエントリと同一コミット（生成物含む）。
+
+### 検証
+- articles.xml: 10件・全リンクが/articles/・最新記事(shifumiz)先頭
+- sitemap-news.xml: 48時間以内=shifumiz 1件のみ（期待どおり）・news:形式
+- 関連記事: JA/EN全20ページ・自分自身なし・リンク実在・選出順を目視確認
+  （shifumiz→rebirth/forest/snow=同カテゴリ新しい順）
+- headless実測: 500px/1280px ともサムネ横並び（flex, サムネ88/120px）で
+  フェス詳細のRELATED STORIESと同一の見た目。リファクタ後のフェス詳細側も不変
+- check_feeds.mjs 全成功 / preflight 全45件成功
+- Search Console へのサイトマップ登録: この後ブラウザで実施予定
+
+### 変更したパターン
+- generate-rss.py 追加出力1 / generate-sitemap.py 追加出力1 / robots.txt 1行 /
+  build-detail-pages.mjs（共通関数化1・記事テンプレ1箇所）/ 新検査1 / preflight 1行
+
+### 未確認の類似パターン
+- ★既存問題を発見（今回のスコープ外・未修正）: 記事ページは**1280px幅で
+  本文の全幅画像が右に26pxはみ出す**（scrollWidth 1403 > 1280、犯人は
+  class無しIMG right=1306）。関連記事の有無と無関係に発生することを
+  除去版との比較で確認済み。fx-bleed の 100vw まわりが疑わしい。
+  横スクロールバーが出る実害があるため、いずれ調査する価値あり
+- EN記事の関連カードのタイトルは title_en 未入力のため JA のまま
+  （フォールバック仕様どおり。title_en を入れれば自動で英語化）
+
+### 次の担当への注意・判断待ち
+- sitemap-news.xml は「48時間以内の記事が無いと空」になる。空でも正常。
+- Google News への掲載は2024年以降**申請制ではなく自動選定**。
+  Publisher Center 登録は任意（ブランド管理用）。

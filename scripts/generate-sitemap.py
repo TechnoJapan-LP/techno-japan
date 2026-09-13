@@ -3,11 +3,14 @@
 
 Usage: python3 scripts/generate-sitemap.py
 Output: LP/sitemap.xml
+
+Google News sitemap は古い記事を受け付けないため、追加出力は publication_date
+が過去48時間以内の記事だけに限定する。
 """
 import os
 import re
 import sys
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
 from urllib.parse import quote
 from xml.sax.saxutils import escape
 
@@ -65,6 +68,36 @@ def extract_venue_ids(data):
             if id_m:
                 ids.append(id_m.group(1))
     return ids
+
+
+def extract_article_blocks(data):
+    pattern = re.compile(r'const\s+ARTICLES\s*=\s*\[(.*?)\];', re.DOTALL)
+    m = pattern.search(data)
+    if not m:
+        return []
+    return re.findall(r'\{[^{}]*\}', m.group(1))
+
+
+def parse_article_block(block):
+    out = {}
+    for key in ("id", "title", "date", "publishedAt", "status"):
+        m = re.search(rf'{key}:\s*["\']([^"\']*)["\']', block)
+        if m:
+            out[key] = m.group(1)
+    return out
+
+
+def article_publication_date(article):
+    value = article.get("publishedAt") or article.get("date")
+    if not value:
+        return None
+    if re.fullmatch(r"\d{4}-\d{2}-\d{2}", value):
+        return datetime.fromisoformat(value).replace(tzinfo=timezone(timedelta(hours=9)))
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    return parsed.replace(tzinfo=timezone.utc) if parsed.tzinfo is None else parsed
 
 
 def main():
@@ -176,6 +209,46 @@ def main():
     print(f"  Venues: {len(venue_ids)}")
     print(f"  Articles: {len(article_ids)}")
     print(f"  → {OUT_PATH}")
+
+    # Google News sitemap は直近48時間の記事だけを受け付けるため、古い記事は含めない。
+    news_path = os.path.join(LP_DIR, "sitemap-news.xml")
+    news_articles = []
+    now = datetime.now(timezone.utc)
+    for block in extract_article_blocks(data):
+        article = parse_article_block(block)
+        publication_date = article_publication_date(article)
+        if (article.get("status") == "published" and article.get("id") and
+                article.get("title") and publication_date and
+                now - timedelta(hours=48) <= publication_date.astimezone(timezone.utc) <= now):
+            news_articles.append((publication_date, article))
+    news_articles.sort(key=lambda item: item[0], reverse=True)
+    if not news_articles:
+        news_lines = ['<?xml version="1.0" encoding="UTF-8"?>',
+                      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"/>']
+    else:
+        news_lines = ['<?xml version="1.0" encoding="UTF-8"?>',
+                      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"',
+                      '        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">']
+        for publication_date, article in news_articles:
+            iso = publication_date.isoformat()
+            article_loc = escape(quote(f"{BASE_URL}/articles/{article['id']}.html", safe=":/%"))
+            news_lines.extend([
+                '  <url>',
+                f'    <loc>{article_loc}</loc>',
+                '    <news:news>',
+                '      <news:publication>',
+                '        <news:name>TECHNO JAPAN</news:name>',
+                '        <news:language>ja</news:language>',
+                '      </news:publication>',
+                f'      <news:publication_date>{iso}</news:publication_date>',
+                f'      <news:title>{escape(article["title"])}</news:title>',
+                '    </news:news>',
+                '  </url>',
+            ])
+        news_lines.append('</urlset>')
+    with open(news_path, "w") as f:
+        f.write("\n".join(news_lines) + "\n")
+    print(f"✓ sitemap-news.xml generated: {len(news_articles)} articles (過去48時間)")
 
 
 if __name__ == "__main__":

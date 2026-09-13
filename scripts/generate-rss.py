@@ -23,7 +23,7 @@ def parse_block(block):
     """Pull out common fields from a JS object literal block."""
     out = {}
     for key in ("id", "name", "title", "date", "city", "venue", "image",
-                "desc", "description", "publishedAt", "publishAt", "category"):
+                "desc", "description", "excerpt", "publishedAt", "publishAt", "category", "status"):
         m = re.search(rf'{key}:\s*["\']([^"\']*)["\']', block)
         if m:
             out[key] = m.group(1)
@@ -116,6 +116,7 @@ def main():
 
     # Articles (if any)
     article_blocks = extract_blocks(data, "ARTICLES")
+    articles = []
     for block in article_blocks:
         a = parse_block(block)
         if not a.get("id") or not (a.get("title") or a.get("name")):
@@ -135,6 +136,8 @@ def main():
             "pubDate": to_rfc822(pub),
             "category": a.get("category", "Article"),
         })
+        if a.get("status") == "published":
+            articles.append(a)
 
     # Build RSS
     now = to_rfc822(datetime.now())
@@ -166,6 +169,62 @@ def main():
 
     print(f"✓ rss.xml generated: {len(items)} items")
     print(f"  → {OUT_PATH}")
+
+    # 記事専用フィード。混在フィードの既存出力は上で維持する。
+    def article_sort_key(article):
+        value = article.get("publishedAt") or article.get("date") or ""
+        try:
+            return datetime.fromisoformat(value.replace("Z", "+00:00"))
+        except (ValueError, AttributeError):
+            return datetime.min
+
+    article_items = []
+    for a in sorted(articles, key=article_sort_key, reverse=True)[:20]:
+        link = f"{BASE_URL}/articles/{a['id']}.html"
+        pub_str = a.get("publishedAt") or a.get("date")
+        try:
+            pub = datetime.fromisoformat(pub_str.replace("Z", "+00:00")) if pub_str else datetime.now()
+        except (ValueError, AttributeError):
+            pub = datetime.now()
+        article_items.append({
+            "title": a.get("title") or a.get("name"),
+            "link": link,
+            "guid": link,
+            "pubDate": to_rfc822(pub),
+            "description": a.get("excerpt") or a.get("desc") or a.get("description") or "",
+            "category": a.get("category", "Article"),
+        })
+
+    article_lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">',
+        '  <channel>',
+        '    <title>TECHNO JAPAN — STORIES</title>',
+        f'    <link>{BASE_URL}/news.html</link>',
+        '    <description>日本のテクノ・野外レイヴの記事（レポート/ガイド/ニュース）</description>',
+        '    <language>ja-JP</language>',
+        f'    <atom:link href="{BASE_URL}/articles.xml" rel="self" type="application/rss+xml"/>',
+    ]
+    for item in article_items:
+        article_lines.extend([
+            '    <item>',
+            f'      <title>{escape_xml(item["title"])}</title>',
+            f'      <link>{item["link"]}</link>',
+            f'      <guid isPermaLink="true">{item["guid"]}</guid>',
+            f'      <pubDate>{item["pubDate"]}</pubDate>',
+        ])
+        if item["description"]:
+            article_lines.append(f'      <description>{escape_xml(item["description"])}</description>')
+        article_lines.extend([
+            f'      <category>{escape_xml(item["category"])}</category>',
+            '    </item>',
+        ])
+    article_lines.extend(['  </channel>', '</rss>'])
+    articles_out = os.path.join(LP_DIR, "articles.xml")
+    with open(articles_out, "w") as f:
+        f.write("\n".join(article_lines) + "\n")
+    print(f"✓ articles.xml generated: {len(article_items)} items")
+    print(f"  → {articles_out}")
 
 
 if __name__ == "__main__":
