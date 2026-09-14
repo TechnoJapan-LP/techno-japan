@@ -47,6 +47,10 @@ figure.fx-img .fx-fig::before { content: ''; width: 6px; height: 6px; background
 .fx-image-pair { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); grid-template-rows:1fr; grid-auto-flow:column; width:133.3333%; margin-left:-16.6667%; gap:16px; margin-top:56px; margin-bottom:56px; }
 .fx-image-pair figure.fx-img,
 .fx-image-pair figure.fx-img.fx-bleed { width:100%!important; min-width:0; max-width:none; margin:0!important; }
+/* ペアの中では figure 幅が 100% に上書きされるため、fx-full 用の
+   キャプション余白（min(50vw,600px) - 50% を使う式）が過大になり、
+   PC幅で右に 123px はみ出していた（2026-09-14 実測）。ここでは余白を戻す。 */
+.fx-image-pair figure.fx-img .fx-fig { padding: 0 !important; }
 
 /* ワイプ: 下から上へ機械的に開く */
 figure.fx-img.fx-reveal { opacity: 1; transform: none; }

@@ -7663,3 +7663,50 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 ### 次の担当への注意・判断待ち
 - `tjNoBreakNames` は **innerHTML に入る前提**。使う場合は必ずこの関数を通し、
   別途 esc() を重ねない（二重エスケープになる）。
+
+## 2026-09-14 記事ページのPC幅での横はみ出しを修正／他見出しの分断は「問題なし」を実測
+
+### 実施（設計・実装・検証=Claude ※CSS1行のため直接編集）
+
+#### 不具合A: PC幅(1280px)で記事が右に123pxはみ出す → **修正**
+- 9/13 に発見して未修正だったもの。原因を特定した:
+  - 画像ペア `.fx-image-pair` の中に `fx-full`（全幅指定）の画像があると、
+    figure の幅は `.fx-image-pair figure.fx-img { width:100%!important }` で
+    **445px に上書きされる**が、`fx-full` 用のキャプション余白
+    `padding: 0 max(24px, calc(min(50vw,600px) - 50%))` は上書きされないため、
+    50% が 222px になり **padding が 377px** に膨張。
+    caption の右端が 1403px まで伸びていた（実測）。
+- 修正: `.fx-image-pair figure.fx-img .fx-fig { padding: 0 !important; }` を
+  article-fx.css に1行追加（理由コメント付き）。ARTICLE_FX_CSS_VERSION 11→12。
+- 結果: shifumiz 記事 **scrollWidth 1403 → 1280（はみ出し 0px）**。
+  他の記事・フェス詳細も 0px のまま（回帰なし）。
+
+#### 不具合B: フェス/アーティスト/会場の見出しでも英字が分断されるのでは → **存在しなかった**
+- 前回 handoff に「未確認の類似パターン」と書いたが、実測した結果:
+  | ページ | 見出し数 | 分断 |
+  |---|---|---|
+  | 記事詳細 h1 | 1 | 0件 |
+  | artists.html | 122 | 0件 |
+  | venues.html | 22 | 0件 |
+  | festivals.html | 1 | 1件 → **`FESTIVAL<br>GUIDE '26` の意図的な改行**（誤検知） |
+- **対応不要**。tjNoBreakNames をこれらに広げる必要はない。
+
+### コミット
+- このエントリと同一コミット（生成物含む）。
+
+### 検証
+- 3ページ（記事2・フェス1）で横はみ出し 0px を確認
+- 見出しの分断を4ページ・146件で走査し、実質0件
+- preflight 全46件成功
+
+### 変更したパターン
+- article-fx.css 1行 / ARTICLE_FX_CSS_VERSION 1
+
+### 未確認の類似パターン
+- `.fx-image-pair` と組み合わせる他の指定（fx-right / fx-left / fx-compact）でも
+  同種の「余白計算式が取り残される」問題が起きうる。今回は `.fx-fig` の padding を
+  ペア内で一律 0 にしたため、pair 内では全パターンで解消している
+- モバイル幅（〜900px）は `@media (min-width:900px)` の外なので元から影響なし
+
+### 次の担当への注意・判断待ち
+- なし。
