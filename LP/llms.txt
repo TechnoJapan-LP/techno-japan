@@ -4,9 +4,8 @@
 > アーティスト124名・会場22件・記事10本を日英で掲載し、
 > 開催日・場所・出演者を構造化データ（schema.org）付きで公開している。
 
-## 今後の開催予定（16件）
+## 今後の開催予定（15件）
 
-- 2026-09-11〜2026-09-13: [Re:birth Festival 2026](https://techno-japan.media/festivals/re-birth-festival.html) — Kodamanomori Camping Ground, Nagano
 - 2026-09-19〜2026-09-20: [Ultra Japan 2026](https://techno-japan.media/festivals/ultra-japan.html) — TOKYO ODAIBA ULTRA PARK, Tokyo
 - 2026-09-20〜2026-09-22: [COLORS Presents SOUNDCAMP 2026](https://techno-japan.media/festivals/colors-presents-soundcamp.html) — Secret Location, Hokkaido
 - 2026-09-22〜2026-09-23: [CIRCUS ODAIBA 2026](https://techno-japan.media/festivals/circus.html) — Odaiba Outdoor Special Venue, Tokyo

@@ -1,24 +1,8 @@
 {
   "source": "https://techno-japan.media/",
   "license": "データの出典として techno-japan.media へのリンクを求めます",
-  "count": 16,
+  "count": 15,
   "events": [
-    {
-      "name": "Re:birth Festival 2026",
-      "url": "https://techno-japan.media/festivals/re-birth-festival.html",
-      "start": "2026-09-11",
-      "end": "2026-09-13",
-      "venue": "Kodamanomori Camping Ground",
-      "pref": "Nagano",
-      "lat": 35.9472,
-      "lng": 137.8183,
-      "genres": [
-        "TECHNO",
-        "HOUSE",
-        "AMBIENT",
-        "LIVE"
-      ]
-    },
     {
       "name": "Ultra Japan 2026",
       "url": "https://techno-japan.media/festivals/ultra-japan.html",
