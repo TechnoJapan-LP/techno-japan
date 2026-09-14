@@ -54,6 +54,7 @@ const BRIDGE = `
   duplicateEditionRows,
   editionKeyParts,
   editionLabel,
+  nextEditionYear,
   get editions(){return editions},
   addEdition,
   addSameYearEdition,
@@ -168,18 +169,37 @@ const check = (name, pass, detail) => { results.push([name, pass, detail]); };
       && dup[0].rowNums.join(',') === '108,114', JSON.stringify(dup));
 }
 
-// ---- 0) Add Edition が既存年を再利用しないこと ----------------------------
+// ---- 0) Add Edition の提案年と確認 ----------------------------------------
 {
   const c = makeCtx();
   c.__T.editions.length = 0;
+  check('開催回1件の次年を求める',
+    (c.__T.editions.push({ year: '2025' }), c.__T.nextEditionYear() === '2026'), c.__T.nextEditionYear());
+  c.__T.editions.push({ year: '2026' });
+  check('開催回2件の最大年の次年を求める', c.__T.nextEditionYear() === '2027', c.__T.nextEditionYear());
+  c.__T.editions.length = 0;
+  c.__T.editions.push({ year: '2026' }, { year: '2026-2' });
+  check('同年連番を同じ年として次年を求める', c.__T.nextEditionYear() === '2027', c.__T.nextEditionYear());
+  c.__T.editions.length = 0;
+  check('開催回が空なら今年を求める', c.__T.nextEditionYear() === String(new Date().getFullYear()), c.__T.nextEditionYear());
+
   c.__T.editions.push({ year: '2026', date: '2026-08-15' });
   c.toast = () => {};
   c.markFormDirty = () => {};
   c.renderEditions = () => {};
+  c.confirm = () => false;
+  const beforeCancel = c.__T.editions.length;
+  c.__T.addEdition();
+  check('確認キャンセル時はAdd Editionを追加しない', c.__T.editions.length === beforeCancel, `件数=${c.__T.editions.length}`);
+
+  c.__T.editions.length = 0;
+  c.__T.editions.push({ year: '2026', date: '2026-08-15' });
+  c.confirm = () => true;
+  const proposedYear = c.__T.nextEditionYear();
   c.__T.addEdition();
   check('既存回がある場合はAdd Editionを翌年で作る',
-    c.__T.editions.at(-1)?.year === '2027',
-    `追加年=${c.__T.editions.at(-1)?.year}`);
+    c.__T.editions.length === 2 && c.__T.editions.at(-1)?.year === proposedYear,
+    `件数=${c.__T.editions.length} / 追加年=${c.__T.editions.at(-1)?.year}`);
 }
 
 // ---- 1) FESTIVALS の DATE を翌年にしても、過去回を書き換えないこと ----

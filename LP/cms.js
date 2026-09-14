@@ -2581,15 +2581,20 @@ function editionLabel(value){
   const p = editionKeyParts(value);
   return p.year ? (p.seq > 1 ? `${p.year} #${p.seq}` : String(p.year)) : String(value || '');
 }
+/* 「+ 開催回を追加」で作られる年。既存の最大年+1（同じ FESTIVAL_ID-YYYY の
+   二重登録を防ぐため）。開催回がまだ無いときは今年。
+   ボタンのラベルにも出すので、addEdition と共用する（2026-09-14）。 */
+function nextEditionYear(){
+  const years = editions.map(e => editionKeyParts(e.year).year)
+    .filter(y => Number.isInteger(y) && y >= 2000 && y <= 2100);
+  return String(years.length ? Math.max(...years) + 1 : new Date().getFullYear());
+}
 function addEdition(){
-  // 既存の開催回がある場合に今年を初期値にすると、同じ
-  // FESTIVAL_ID-YYYY を二重登録しやすい。常に最大年の翌年を提案する。
-  const years=editions.map(e=>editionKeyParts(e.year).year)
-    .filter(y=>Number.isInteger(y)&&y>=2000&&y<=2100);
-  const year = String(years.length ? Math.max(...years)+1 : new Date().getFullYear());
+  const year = nextEditionYear();
   if(editions.some(e=>String(e.year||'').trim()===year)){
     return toast('開催回 '+editionLabel(year)+' は既にあります','error');
   }
+  if(!confirm(year + '年の開催回を新しく作ります。\n\n既にある開催回を直したいときは、上の「開催回」の選択欄から選んでください。\n\n続けますか？')) return;
   editions.push({year,edition:'',date:'',location:'',location_ja:'',pref:'',venueId:'',address:'',lat:'',lng:'',ticketUrl:'',flyer:'',status:'announced',lineup:[]});
   selectedEditionIndex = editions.length - 1;
   markFormDirty();
@@ -2689,7 +2694,9 @@ function uploadEditionFlyerFromUrl(i,button){
 function renderEditions(){
   const host=document.getElementById('f-editions');
   if(!host) return;
-  if(!editions.length){host.innerHTML='<div class="edition-empty">開催回がありません。「+ Add Edition」から追加してください。</div>';return;}
+  const addBtn = document.getElementById('f-add-edition-btn');
+  if (addBtn) addBtn.textContent = '+ 開催回を追加（' + nextEditionYear() + '）';
+  if(!editions.length){host.innerHTML='<div class="edition-empty">開催回がありません。「+ 開催回を追加」から追加してください。</div>';return;}
   selectedEditionIndex=Math.max(0,Math.min(selectedEditionIndex,editions.length-1));
   const ed=editions[selectedEditionIndex], i=selectedEditionIndex;
   const val=(key)=>esc(ed[key]||'');
