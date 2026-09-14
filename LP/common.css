@@ -912,6 +912,8 @@ body > div:not(.tj-bg):not(.cursor-dot):not(.cursor-ring) {
   background: rgba(240, 237, 232, 0.05);
   color: var(--accent);
 }
+/* 見出し内の英字固有名詞を改行で割らない（localize.js の tjNoBreakNames が付与） */
+.tj-nobr { white-space: nowrap; }
 @media (max-width: 640px) {
   .ssr-link-list { grid-template-columns: 1fr; }
   .ssr-link-list a { padding: 13px 16px; }

@@ -44,6 +44,40 @@
     return window.TJ_LANG === 'en' ? (e || p || j) : (j || p || e);
   };
 
+  /* 見出しの中の英字の固有名詞が、単語間のスペースで改行されて割れるのを防ぐ。
+     日本語タイトル内の2〜4語の短い英字連続だけを対象にする。長い英文タイトル全体を
+     nowrap にすると横にはみ出すため、英文タイトルは対象外にする。
+     行が入りきらない場合は要素側の overflow-wrap: anywhere が最終的に折る。 */
+  window.tjNoBreakNames = function (text) {
+    var s = String(text == null ? '' : text);
+    var escapeHtml = function (part) {
+      return part.replace(/&/g, '&amp;').replace(/</g, '&lt;')
+                 .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    };
+    // エスケープとマークアップ挿入の順序を逆にするとHTMLエンティティが壊れる（2026-09-14 実測）。
+    if (!/[\u3040-\u30ff\u3400-\u9fff]/.test(s)) return escapeHtml(s);
+
+    var re = /[A-Za-z][A-Za-z0-9.:'’&;-]*(?:\s+[A-Za-z0-9][A-Za-z0-9.:'’&;-]*){1,3}/g;
+    var out = [];
+    var last = 0;
+    var match;
+    while ((match = re.exec(s))) {
+      var name = match[0];
+      var after = s.slice(match.index + name.length);
+      // 「LOA 8月」のような日付は、末尾の数字を固有名詞に含めない。
+      if (/\s+\d+$/.test(name) && /^[月日年時分]/.test(after)) {
+        name = name.replace(/\s+\d+$/, '');
+      }
+      out.push(escapeHtml(s.slice(last, match.index)));
+      out.push(name.length <= 24
+        ? '<span class="tj-nobr">' + escapeHtml(name) + '</span>'
+        : escapeHtml(name));
+      last = match.index + name.length;
+    }
+    out.push(escapeHtml(s.slice(last)));
+    return out.join('');
+  };
+
   // data.js の画像は従来 `images/...`（JAハブでは正常な相対パス）だが、
   // /en/ 配下では /en/images/... に解決される。共有ハブでは常にルート相対へ。
   window.tjAssetPath = function (value) {
