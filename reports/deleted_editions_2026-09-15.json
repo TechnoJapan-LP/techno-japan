@@ -1,0 +1,7 @@
+{
+  "_説明": "2026-09-15 の復旧で EDITIONS から削除した孤児行のバックアップ。復元が必要ならこの内容で行を作り直す。",
+  "rows": [
+    {"_row": 62, "edition_id": "music-camp-core-2025", "festival_id": "music-camp-core", "edition": "2025", "date_start": "2025-10-03", "date_end": "2025-10-04", "pref": "Toyama", "status": "finished"},
+    {"_row": 100, "edition_id": "yagura-2026", "festival_id": "yagura", "edition": "2026", "date_start": "2026-10-10", "date_end": "2026-10-11", "pref": "Gifu", "status": "finished"}
+  ]
+}

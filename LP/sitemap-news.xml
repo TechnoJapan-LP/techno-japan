@@ -1,2 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"/>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+  <url>
+    <loc>https://techno-japan.media/articles/otsukimi-2026-info.html</loc>
+    <news:news>
+      <news:publication>
+        <news:name>TECHNO JAPAN</news:name>
+        <news:language>ja</news:language>
+      </news:publication>
+      <news:publication_date>2026-09-14T00:00:00+09:00</news:publication_date>
+      <news:title>御月民 OTSUKIMI 2026 満月の夜に始まる、北アルプスの麓の3日間。</news:title>
+    </news:news>
+  </url>
+</urlset>

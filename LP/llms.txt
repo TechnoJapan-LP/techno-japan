@@ -1,10 +1,10 @@
 # TECHNO JAPAN
 
-> 日本のテクノ / ハウスの独立メディア。フェスティバル97件・
-> アーティスト124名・会場22件・記事10本を日英で掲載し、
+> 日本のテクノ / ハウスの独立メディア。フェスティバル95件・
+> アーティスト136名・会場22件・記事11本を日英で掲載し、
 > 開催日・場所・出演者を構造化データ（schema.org）付きで公開している。
 
-## 今後の開催予定（15件）
+## 今後の開催予定（19件）
 
 - 2026-09-19〜2026-09-20: [Ultra Japan 2026](https://techno-japan.media/festivals/ultra-japan.html) — TOKYO ODAIBA ULTRA PARK, Tokyo
 - 2026-09-20〜2026-09-22: [COLORS Presents SOUNDCAMP 2026](https://techno-japan.media/festivals/colors-presents-soundcamp.html) — Secret Location, Hokkaido
@@ -14,9 +14,13 @@
 - 2026-09-26〜2026-09-27: [FFKT 2026](https://techno-japan.media/festivals/ffkt.html) — Hotel Izukyu
 - 2026-09-26〜2026-09-27: [りんご音楽祭 2026](https://techno-japan.media/festivals/ringo-festival.html) — Matsumoto Alps Park
 - 2026-10-02〜2026-10-04: [Synapse Festival 2026](https://techno-japan.media/festivals/synapse-festival.html) — INN THE PARK FUKUOKA, Fukuoka
+- 2026-10-03〜2026-10-04: [EACH STORY 2026](https://techno-japan.media/festivals/each-story.html) — Goko Ranch Auto Camp Ground, Nagano
 - 2026-10-10〜2026-10-12: [Labyrinth 2026](https://techno-japan.media/festivals/labyrinth.html) — Minakami Hodaigi Camping Ground, Gunma
-- 2026-10-10〜2026-10-11: [YAGURA 2026](https://techno-japan.media/festivals/yagura.html), Gifu
+- 2026-10-10〜2026-10-12: [TREKs 2026](https://techno-japan.media/festivals/treks.html) — Kuta Nature Village Daikurodani Camping Ground, Kyoto
+- 2026-10-17〜2026-10-18: [annahme 2026](https://techno-japan.media/festivals/annahme.html) — Green Park Hodono Omatsuri Hiroba, Kochi
+- 2026-10-17〜2026-10-18: [Lost&Find 2026](https://techno-japan.media/festivals/lost-find.html) — Tatsuyama Himitsumura, Shizuoka
 - 2026-10-22〜2026-10-25: [Wonderfruit Kyoto 2026](https://techno-japan.media/festivals/wonderfruit-kyoto.html) — Kyoto (Ohara Sanso / ACG Villa Kyoto / Kurama Mountain / Ochill TeaRoom)
+- 2026-10-23〜2026-10-25: [Sawagi Festival 2026](https://techno-japan.media/festivals/sawagi-festival.html) — Suteki Village Camping Ground, Yamanashi
 - 2026-10-31〜2026-11-01: [FESTIVAL de FRUE 2026](https://techno-japan.media/festivals/festival-de-frue.html) — TSUMAGOI RESORT SAINO SATO, Shizuoka
 - 2026-11-07〜2026-11-08: [GROW THE CULTURE OPEN AIR 2026](https://techno-japan.media/festivals/grow-the-culture-open-air.html) — Ohba Camping Village, Tokyo
 - 2026-11-20〜2026-11-22: [Mutek 2026](https://techno-japan.media/festivals/mutek.html) — Shibuya
@@ -33,6 +37,7 @@
 
 ## 最新記事
 
+- 2026-09-14: [御月民 OTSUKIMI 2026 満月の夜に始まる、北アルプスの麓の3日間。](https://techno-japan.media/articles/otsukimi-2026-info.html) — 中秋の名月に合わせて開かれる野外フェスティバルが、7年目を迎え新潟・糸魚川の池のほとりへ。EfdeminやAnthony Linell、.VRILら国内外16組が、北アルプスの麓の芝生で満月の夜から3日間をつないでいく。 / [EN](https://techno-japan.media/en/articles/otsukimi-2026-info.html)
 - 2026-09-13: [香港の谷で16時間踊り続ける Shi Fu Miz が10周年アニバーサリー](https://techno-japan.media/articles/shifumiz-2026-info.html) — 香港の摩天楼から車で10分、ライチの森に囲まれた元朗の谷で、正午から翌朝4時まで16時間踊り続ける。10周年を迎えるShi Fu Miz Festivalに、Chez DamierやDr. Rubinsteinらパイオニアとアジア各都市のコレクティブが集結する。 / [EN](https://techno-japan.media/en/articles/shifumiz-2026-info.html)
 - 2026-09-09: [【2026年9月】日本の音楽フェスティバル&レイヴまとめ](https://techno-japan.media/articles/japan-festival-2026-september.html) — 涼しさが戻り、野外がいちばん心地よい9月。北海道の果樹園から秋田の日本庭園、長野の森、宮崎の山あいまで、キャンプインの大型フェスから一夜限りのレイヴまでが全国で途切れなく続く。今月体験すべき現場をまとめて紹介する。 / [EN](https://techno-japan.media/en/articles/japan-festival-2026-september.html)
 - 2026-09-08: [Re:birthが2年半ぶり復活、長野・木曽の森で3日間のギャザリング](https://techno-japan.media/articles/rebirth-2026-info.html) — 長野・木曽の森を舞台に、Re:birthが約2年半ぶりに帰ってくる。RroseやMathew Jonson、Kuniykiら国内外80組以上が集い、天然の霧に巨大ホログラムが浮かぶ3日間。日本独自のレイヴカルチャーが、再び動き出す。 / [EN](https://techno-japan.media/en/articles/rebirth-2026-info.html)

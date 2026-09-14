@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-09-13T04:41:25.310Z",
-  "count": 124,
+  "_generatedAt": "2026-09-14T18:05:40.651Z",
+  "count": 136,
   "items": [
     {
       "ID": "dj-nobu",
@@ -806,6 +806,54 @@
     {
       "ID": "yama",
       "NAME": "YAMA"
+    },
+    {
+      "ID": "architectural",
+      "NAME": "Architectural"
+    },
+    {
+      "ID": "donato-dozzy",
+      "NAME": "Donato Dozzy"
+    },
+    {
+      "ID": "jonathan-fitoussi",
+      "NAME": "Jonathan Fitoussi"
+    },
+    {
+      "ID": "peter-van-hoesen",
+      "NAME": "Peter Van Hoesen"
+    },
+    {
+      "ID": "petar-dundov",
+      "NAME": "Petar Dundov"
+    },
+    {
+      "ID": "reeko",
+      "NAME": "Reeko"
+    },
+    {
+      "ID": "napirelly",
+      "NAME": "Napirelly"
+    },
+    {
+      "ID": "reek",
+      "NAME": "REE.K"
+    },
+    {
+      "ID": "dj-sodeyama",
+      "NAME": "DJ SODEYAMA"
+    },
+    {
+      "ID": "dj-kuri",
+      "NAME": "DJ KURI"
+    },
+    {
+      "ID": "compuma",
+      "NAME": "COMPUMA"
+    },
+    {
+      "ID": "max-cooper",
+      "NAME": "Max Cooper"
     }
   ]
 }

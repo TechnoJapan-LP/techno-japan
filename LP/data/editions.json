@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-09-13T04:41:25.310Z",
-  "count": 110,
+  "_generatedAt": "2026-09-14T18:05:40.651Z",
+  "count": 114,
   "items": [
     {
       "EDITION_ID": "99flags-2026",
@@ -40,7 +40,12 @@
       "EDITION": "2025",
       "DATE_START": "2025-10-25",
       "DATE_END": "2025-10-26",
+      "LOCATION": "Green Park Hodono Omatsuri Hiroba",
+      "LOCATION_JA": "グリーンパークほどのお祭り広場",
       "PREF": "Kochi",
+      "ADDRESS": "高知県吾川郡いの町清水上分",
+      "LAT": "33.6491",
+      "LNG": "133.2201",
       "STATUS": "finished"
     },
     {
@@ -299,7 +304,13 @@
       "EDITION": "2025",
       "DATE_START": "2025-10-04",
       "DATE_END": "2025-10-05",
+      "LOCATION": "Goko Ranch Auto Camp Ground",
+      "LOCATION_JA": "五光牧場オートキャンプ場",
       "PREF": "Nagano",
+      "ADDRESS": "長野県南佐久郡川上村樋沢1417",
+      "LAT": "35.9754",
+      "LNG": "138.4556",
+      "FLYER": "images/festivals/each-story-2025-flyer.webp",
       "STATUS": "finished"
     },
     {
@@ -346,7 +357,11 @@
       "DATE_START": "2026-10-31",
       "DATE_END": "2026-11-01",
       "LOCATION": "TSUMAGOI RESORT SAINO SATO",
+      "LOCATION_JA": "つま恋リゾート 彩の郷",
       "PREF": "Shizuoka",
+      "ADDRESS": "静岡県掛川市満水2000",
+      "LAT": "34.7645",
+      "LNG": "138.0415",
       "TICKETURL": "https://shop.frue.jp/",
       "FLYER": "images/festivals/festival-de-frue-flyer.jpg",
       "STATUS": "announced"
@@ -463,7 +478,12 @@
       "EDITION": "2025",
       "DATE_START": "2025-11-08",
       "DATE_END": "2025-11-09",
+      "LOCATION": "Ohba Camping Village",
+      "LOCATION_JA": "おおばキャンプ村",
       "PREF": "Tokyo",
+      "ADDRESS": "東京都西多摩郡日の出町大久野３７４１",
+      "LAT": "35.760438",
+      "LNG": "139.209443",
       "STATUS": "finished"
     },
     {
@@ -565,6 +585,7 @@
       "LAT": "36.8572",
       "LNG": "139.0655",
       "TICKETURL": "https://mindgames.zaiko.io/en/e/labyrinth2026",
+      "FLYER": "images/festivals/labyrinth-2026-flyer.webp",
       "STATUS": "announced"
     },
     {
@@ -632,7 +653,13 @@
       "EDITION": "2025",
       "DATE_START": "2025-10-18",
       "DATE_END": "2025-10-19",
+      "LOCATION": "Tatsuyama Himitsumura",
+      "LOCATION_JA": "龍山秘密村",
       "PREF": "Shizuoka",
+      "ADDRESS": "静岡県浜松市天竜区龍山町大嶺1371-2",
+      "LAT": "35.0747",
+      "LNG": "137.8286",
+      "FLYER": "images/festivals/lost-find-2025-flyer.webp",
       "STATUS": "finished"
     },
     {
@@ -706,15 +733,6 @@
       "DATE_START": "2025-10-11",
       "DATE_END": "2025-10-12",
       "PREF": "Tokyo",
-      "STATUS": "finished"
-    },
-    {
-      "EDITION_ID": "music-camp-core-2025",
-      "FESTIVAL_ID": "music-camp-core",
-      "EDITION": "2025",
-      "DATE_START": "2025-10-03",
-      "DATE_END": "2025-10-04",
-      "PREF": "Toyama",
       "STATUS": "finished"
     },
     {
@@ -949,7 +967,12 @@
       "EDITION": "2025",
       "DATE_START": "2025-08-22",
       "DATE_END": "2025-08-24",
+      "LOCATION": "Suteki Village Camping Ground",
+      "LOCATION_JA": "ステキな村キャンプ場",
       "PREF": "Yamanashi",
+      "ADDRESS": "群馬県吾妻郡東吾妻町本宿3330-5",
+      "LAT": "36.4989",
+      "LNG": "138.6818",
       "STATUS": "finished"
     },
     {
@@ -1091,7 +1114,13 @@
       "EDITION": "2025",
       "DATE_START": "2025-10-17",
       "DATE_END": "2025-10-19",
+      "LOCATION": "Kuta Nature Village Daikurodani Camping Ground",
+      "LOCATION_JA": "大黒谷キャンプ場",
       "PREF": "Kyoto",
+      "ADDRESS": "京都府京都市左京区久多下の町27",
+      "LAT": "35.2656",
+      "LNG": "135.8239",
+      "FLYER": "images/festivals/treks-2025-flyer.webp",
       "STATUS": "finished"
     },
     {
@@ -1149,15 +1178,6 @@
       "DATE_START": "2024-10-26",
       "DATE_END": "2024-10-27",
       "PREF": "Mie",
-      "STATUS": "finished"
-    },
-    {
-      "EDITION_ID": "yagura-2026",
-      "FESTIVAL_ID": "yagura",
-      "EDITION": "2026",
-      "DATE_START": "2026-10-10",
-      "DATE_END": "2026-10-11",
-      "PREF": "Gifu",
       "STATUS": "finished"
     },
     {
@@ -1245,6 +1265,7 @@
       "ADDRESS": "東京都西多摩郡日の出町大久野３７４１",
       "LAT": "35.760438",
       "LNG": "139.209443",
+      "TICKETURL": "https://growtheculture.jp/openair2026#tickets",
       "FLYER": "images/festivals/grow-the-culture-open-air-2026-flyer.jpg",
       "STATUS": "published"
     },
@@ -1317,6 +1338,98 @@
       "TICKETURL": "https://ringofes.info/fes2026/ticket/",
       "FLYER": "images/festivals/ringo-festival-flyer.jpg",
       "STATUS": "published"
+    },
+    {
+      "EDITION_ID": "each-story-2026",
+      "FESTIVAL_ID": "each-story",
+      "EDITION": "2026",
+      "DATE_START": "2026-10-03",
+      "DATE_END": "2026-10-04",
+      "LOCATION": "Goko Ranch Auto Camp Ground",
+      "LOCATION_JA": "五光牧場オートキャンプ場",
+      "PREF": "Nagano",
+      "ADDRESS": "長野県南佐久郡川上村樋沢1417",
+      "LAT": "35.9754",
+      "LNG": "138.4556",
+      "TICKETURL": "https://www.eachstory.net/event-details/each-story-2026-pass",
+      "STATUS": "announced"
+    },
+    {
+      "EDITION_ID": "treks-2026",
+      "FESTIVAL_ID": "treks",
+      "EDITION": "2026",
+      "DATE_START": "2026-10-10",
+      "DATE_END": "2026-10-12",
+      "LOCATION": "Kuta Nature Village Daikurodani Camping Ground",
+      "LOCATION_JA": "大黒谷キャンプ場",
+      "PREF": "Kyoto",
+      "ADDRESS": "京都府京都市左京区久多下の町27",
+      "LAT": "35.2656",
+      "LNG": "135.8239",
+      "TICKETURL": "https://treks.zaiko.io/ja/e/trek-2026-kugo",
+      "STATUS": "announced"
+    },
+    {
+      "EDITION_ID": "labyrinth-2025",
+      "FESTIVAL_ID": "labyrinth",
+      "EDITION": "2025",
+      "DATE_START": "2025-10-11",
+      "DATE_END": "2025-10-13",
+      "LOCATION": "Minakami Hodaigi Camping Ground",
+      "LOCATION_JA": "みなかみ宝台樹キャンプ場",
+      "PREF": "Gunma",
+      "ADDRESS": "群馬県利根郡みなかみ町藤原915-1",
+      "LAT": "36.8572",
+      "LNG": "139.0655",
+      "STATUS": "announced"
+    },
+    {
+      "EDITION_ID": "lost-find-2026",
+      "FESTIVAL_ID": "lost-find",
+      "EDITION": "2026",
+      "DATE_START": "2026-10-17",
+      "DATE_END": "2026-10-18",
+      "LOCATION": "Tatsuyama Himitsumura",
+      "LOCATION_JA": "龍山秘密村",
+      "PREF": "Shizuoka",
+      "ADDRESS": "静岡県浜松市天竜区龍山町大嶺1371-2",
+      "LAT": "35.0747",
+      "LNG": "137.8286",
+      "TICKETURL": "https://lost-and-find.zaiko.io/ja/e/lost-find-openair-2026",
+      "FLYER": "images/festivals/lost-find-2026-flyer.webp",
+      "STATUS": "announced"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "FESTIVAL_ID": "annahme",
+      "EDITION": "2026",
+      "DATE_START": "2026-10-17",
+      "DATE_END": "2026-10-18",
+      "LOCATION": "Green Park Hodono Omatsuri Hiroba",
+      "LOCATION_JA": "グリーンパークほどのお祭り広場",
+      "PREF": "Kochi",
+      "ADDRESS": "高知県吾川郡いの町清水上分",
+      "LAT": "33.6491",
+      "LNG": "133.2201",
+      "TICKETURL": "https://annahme.zaiko.io/ja/e/annahme-2026",
+      "FLYER": "images/festivals/annahme-2026-flyer.webp",
+      "STATUS": "announced"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "FESTIVAL_ID": "sawagi-festival",
+      "EDITION": "2026",
+      "DATE_START": "2026-10-23",
+      "DATE_END": "2026-10-25",
+      "LOCATION": "Suteki Village Camping Ground",
+      "LOCATION_JA": "ステキな村キャンプ場",
+      "PREF": "Yamanashi",
+      "ADDRESS": "群馬県吾妻郡東吾妻町本宿3330-5",
+      "LAT": "36.4989",
+      "LNG": "138.6818",
+      "TICKETURL": "https://sawagi-festival.zaiko.io/ja/e/sawagi-festival-2026",
+      "FLYER": "images/festivals/sawagi-festival-2026-flyer.webp",
+      "STATUS": "announced"
     }
   ]
 }

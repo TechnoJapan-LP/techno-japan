@@ -1,7 +1,7 @@
 {
   "source": "https://techno-japan.media/",
   "license": "データの出典として techno-japan.media へのリンクを求めます",
-  "count": 15,
+  "count": 19,
   "events": [
     {
       "name": "Ultra Japan 2026",
@@ -124,6 +124,20 @@
       ]
     },
     {
+      "name": "EACH STORY 2026",
+      "url": "https://techno-japan.media/festivals/each-story.html",
+      "start": "2026-10-03",
+      "end": "2026-10-04",
+      "venue": "Goko Ranch Auto Camp Ground",
+      "pref": "Nagano",
+      "lat": 35.9754,
+      "lng": 138.4556,
+      "genres": [
+        "AMBIENT"
+      ],
+      "tickets": "https://www.eachstory.net/event-details/each-story-2026-pass"
+    },
+    {
       "name": "Labyrinth 2026",
       "url": "https://techno-japan.media/festivals/labyrinth.html",
       "start": "2026-10-10",
@@ -132,24 +146,86 @@
       "pref": "Gunma",
       "lat": 36.8572,
       "lng": 139.0655,
+      "genres": [
+        "TECHNO",
+        "HOUSE",
+        "AMBIENT",
+        "LIVE"
+      ],
       "tickets": "https://mindgames.zaiko.io/en/e/labyrinth2026"
     },
     {
-      "name": "YAGURA 2026",
-      "url": "https://techno-japan.media/festivals/yagura.html",
+      "name": "TREKs 2026",
+      "url": "https://techno-japan.media/festivals/treks.html",
       "start": "2026-10-10",
-      "end": "2026-10-11",
-      "pref": "Gifu",
+      "end": "2026-10-12",
+      "venue": "Kuta Nature Village Daikurodani Camping Ground",
+      "pref": "Kyoto",
+      "lat": 35.2656,
+      "lng": 135.8239,
       "genres": [
-        "MIX"
-      ]
+        "TECHNO",
+        "HOUSE"
+      ],
+      "tickets": "https://treks.zaiko.io/ja/e/trek-2026-kugo"
+    },
+    {
+      "name": "annahme 2026",
+      "url": "https://techno-japan.media/festivals/annahme.html",
+      "start": "2026-10-17",
+      "end": "2026-10-18",
+      "venue": "Green Park Hodono Omatsuri Hiroba",
+      "pref": "Kochi",
+      "lat": 33.6491,
+      "lng": 133.2201,
+      "genres": [
+        "TECHNO",
+        "HOUSE"
+      ],
+      "tickets": "https://annahme.zaiko.io/ja/e/annahme-2026"
+    },
+    {
+      "name": "Lost&Find 2026",
+      "url": "https://techno-japan.media/festivals/lost-find.html",
+      "start": "2026-10-17",
+      "end": "2026-10-18",
+      "venue": "Tatsuyama Himitsumura",
+      "pref": "Shizuoka",
+      "lat": 35.0747,
+      "lng": 137.8286,
+      "genres": [
+        "TECHNO",
+        "HOUSE"
+      ],
+      "tickets": "https://lost-and-find.zaiko.io/ja/e/lost-find-openair-2026"
     },
     {
       "name": "Wonderfruit Kyoto 2026",
       "url": "https://techno-japan.media/festivals/wonderfruit-kyoto.html",
       "start": "2026-10-22",
       "end": "2026-10-25",
-      "venue": "Kyoto (Ohara Sanso / ACG Villa Kyoto / Kurama Mountain / Ochill TeaRoom)"
+      "venue": "Kyoto (Ohara Sanso / ACG Villa Kyoto / Kurama Mountain / Ochill TeaRoom)",
+      "genres": [
+        "AMBIENT",
+        "LIVE",
+        "OTHERS"
+      ]
+    },
+    {
+      "name": "Sawagi Festival 2026",
+      "url": "https://techno-japan.media/festivals/sawagi-festival.html",
+      "start": "2026-10-23",
+      "end": "2026-10-25",
+      "venue": "Suteki Village Camping Ground",
+      "pref": "Yamanashi",
+      "lat": 36.4989,
+      "lng": 138.6818,
+      "genres": [
+        "TECHNO",
+        "HOUSE",
+        "LIVE"
+      ],
+      "tickets": "https://sawagi-festival.zaiko.io/ja/e/sawagi-festival-2026"
     },
     {
       "name": "FESTIVAL de FRUE 2026",
@@ -158,6 +234,8 @@
       "end": "2026-11-01",
       "venue": "TSUMAGOI RESORT SAINO SATO",
       "pref": "Shizuoka",
+      "lat": 34.7645,
+      "lng": 138.0415,
       "genres": [
         "HOUSE",
         "LIVE"
@@ -177,7 +255,8 @@
         "TECHNO",
         "HOUSE",
         "BASS"
-      ]
+      ],
+      "tickets": "https://growtheculture.jp/openair2026#tickets"
     },
     {
       "name": "Mutek 2026",

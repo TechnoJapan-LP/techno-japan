@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-09-13T04:41:25.310Z",
-  "count": 1058,
+  "_generatedAt": "2026-09-14T18:05:40.651Z",
+  "count": 1364,
   "items": [
     {
       "EDITION_ID": "waifu-2026",
@@ -322,7 +322,7 @@
     },
     {
       "EDITION_ID": "transcendence-2026",
-      "ACT_LABEL": "DJ KURI",
+      "ARTIST_ID": "dj-kuri",
       "SET_TYPE": "dj",
       "SORT": "1"
     },
@@ -1756,7 +1756,7 @@
     },
     {
       "EDITION_ID": "mutek-2025",
-      "ACT_LABEL": "Max Cooper",
+      "ARTIST_ID": "max-cooper",
       "SET_TYPE": "dj",
       "SORT": "20"
     },
@@ -4096,7 +4096,7 @@
     },
     {
       "EDITION_ID": "re-birth-festival-2026",
-      "ACT_LABEL": "Ree.K",
+      "ARTIST_ID": "reek",
       "SET_TYPE": "dj",
       "SORT": "53"
     },
@@ -5305,6 +5305,1842 @@
       "ARTIST_ID": "levolant",
       "SET_TYPE": "dj",
       "SORT": "17"
+    },
+    {
+      "EDITION_ID": "each-story-2025",
+      "ACT_LABEL": "Jakob bro × Midori Takada",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "each-story-2025",
+      "ACT_LABEL": "Devendra Banhart",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "each-story-2025",
+      "ACT_LABEL": "Gyan Riley",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "each-story-2026",
+      "ACT_LABEL": "Goldmund",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "each-story-2026",
+      "ACT_LABEL": "Joey Dosik",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "each-story-2025",
+      "ACT_LABEL": "Noah Georgeson",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "each-story-2025",
+      "ACT_LABEL": "Gia Margaret",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "each-story-2025",
+      "ACT_LABEL": "The Vernon Spring",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "each-story-2025",
+      "ACT_LABEL": "Felbm",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "each-story-2025",
+      "ACT_LABEL": "Ayatake Ezaki",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "each-story-2025",
+      "ACT_LABEL": "Takuro Okada",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "each-story-2025",
+      "ACT_LABEL": "Manami Kakudo × Shun Ishiwaka",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "each-story-2025",
+      "ACT_LABEL": "maya ongaku",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "each-story-2025",
+      "ACT_LABEL": "Space Opera Symphonie. Vincent Moon",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "each-story-2025",
+      "ACT_LABEL": "ermhoi",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "each-story-2025",
+      "ACT_LABEL": "Yoshio Ojima + Satsuki Shibano",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "each-story-2025",
+      "ACT_LABEL": "Kuniyuki Takahashi",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "each-story-2025",
+      "ACT_LABEL": "Chihei Hatakeyama",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
+      "EDITION_ID": "each-story-2025",
+      "ACT_LABEL": "H.Takahashi",
+      "SET_TYPE": "dj",
+      "SORT": "17"
+    },
+    {
+      "EDITION_ID": "each-story-2025",
+      "ACT_LABEL": "Ryoshi Yamaguchi",
+      "SET_TYPE": "dj",
+      "SORT": "18"
+    },
+    {
+      "EDITION_ID": "each-story-2025",
+      "ACT_LABEL": "Barrio Lindo",
+      "SET_TYPE": "dj",
+      "SORT": "19"
+    },
+    {
+      "EDITION_ID": "each-story-2025",
+      "ACT_LABEL": "Calm",
+      "SET_TYPE": "dj",
+      "SORT": "20"
+    },
+    {
+      "EDITION_ID": "each-story-2025",
+      "ACT_LABEL": "Keigo Tatsumi",
+      "SET_TYPE": "dj",
+      "SORT": "21"
+    },
+    {
+      "EDITION_ID": "each-story-2025",
+      "ACT_LABEL": "Chee Shimizu",
+      "SET_TYPE": "dj",
+      "SORT": "22"
+    },
+    {
+      "EDITION_ID": "each-story-2025",
+      "ARTIST_ID": "shhhhh",
+      "SET_TYPE": "dj",
+      "SORT": "23"
+    },
+    {
+      "EDITION_ID": "each-story-2025",
+      "ACT_LABEL": "Masaaki Hara",
+      "SET_TYPE": "dj",
+      "SORT": "24"
+    },
+    {
+      "EDITION_ID": "each-story-2025",
+      "ACT_LABEL": "YAMA a.k.a Sahib",
+      "SET_TYPE": "dj",
+      "SORT": "25"
+    },
+    {
+      "EDITION_ID": "each-story-2025",
+      "ACT_LABEL": "Ryo Ishii",
+      "SET_TYPE": "dj",
+      "SORT": "26"
+    },
+    {
+      "EDITION_ID": "each-story-2026",
+      "ACT_LABEL": "KMRU",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "each-story-2026",
+      "ACT_LABEL": "Black Boboi",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "each-story-2026",
+      "ACT_LABEL": "COLA REN",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "each-story-2026",
+      "ACT_LABEL": "satomimagae",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "each-story-2026",
+      "ACT_LABEL": "Space Opera Symphony",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "each-story-2026",
+      "ACT_LABEL": "Fennesz",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "each-story-2026",
+      "ACT_LABEL": "Alice Phoebe Lou",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "each-story-2026",
+      "ACT_LABEL": "Marihiko Hara Trio",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "each-story-2026",
+      "ACT_LABEL": "Jim O'Rourke × Eiko Ishibashi",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "each-story-2026",
+      "ACT_LABEL": "Damian Dalla Torre",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "each-story-2026",
+      "ACT_LABEL": "Pardon Kimura",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "each-story-2026",
+      "ACT_LABEL": "Suso Saiz",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "each-story-2026",
+      "ACT_LABEL": "Tomo Katsurada × Jonny Nash",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "each-story-2026",
+      "ACT_LABEL": "Montonn Jira",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
+      "EDITION_ID": "each-story-2026",
+      "ACT_LABEL": "Kaoru Inoue",
+      "SET_TYPE": "dj",
+      "SORT": "17"
+    },
+    {
+      "EDITION_ID": "each-story-2026",
+      "ACT_LABEL": "COMPUMA × Naoyuki Uchida",
+      "SET_TYPE": "dj",
+      "SORT": "18"
+    },
+    {
+      "EDITION_ID": "each-story-2026",
+      "ACT_LABEL": "Aus Isoda (aus × Kenichiro Isoda)",
+      "SET_TYPE": "dj",
+      "SORT": "19"
+    },
+    {
+      "EDITION_ID": "each-story-2026",
+      "ACT_LABEL": "H TO O (H.Takahashi × Kohei Oyamada)",
+      "SET_TYPE": "dj",
+      "SORT": "20"
+    },
+    {
+      "EDITION_ID": "each-story-2026",
+      "ARTIST_ID": "shhhhh",
+      "SET_TYPE": "dj",
+      "SORT": "21"
+    },
+    {
+      "EDITION_ID": "each-story-2026",
+      "ACT_LABEL": "Masaaki Hara",
+      "SET_TYPE": "dj",
+      "SORT": "22"
+    },
+    {
+      "EDITION_ID": "each-story-2026",
+      "ACT_LABEL": "YAMA a.k.a. Sahib",
+      "SET_TYPE": "dj",
+      "SORT": "23"
+    },
+    {
+      "EDITION_ID": "each-story-2026",
+      "ACT_LABEL": "Ryo Ishii",
+      "SET_TYPE": "dj",
+      "SORT": "24"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "ACT_LABEL": "KIHIRA NAOKI",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "ACT_LABEL": "DJ MAMEZUKA",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "ACT_LABEL": "KOTARO",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "ACT_LABEL": "Naoki Serizawa",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "ACT_LABEL": "SINKICHI",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "ACT_LABEL": "KAZUMA",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "ACT_LABEL": "GYRO",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "ACT_LABEL": "Tez",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "ACT_LABEL": "KE-TA",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "ACT_LABEL": "YU-I",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "ACT_LABEL": "STEW",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "ACT_LABEL": "HOBO BRAZIL",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "ACT_LABEL": "TXY",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "ACT_LABEL": "iris",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "ACT_LABEL": "H.U.T.",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "ACT_LABEL": "Roast",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "ACT_LABEL": "Shinya.N",
+      "SET_TYPE": "dj",
+      "SORT": "17"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "ACT_LABEL": "SYNYA",
+      "SET_TYPE": "dj",
+      "SORT": "18"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "ACT_LABEL": "Hideto",
+      "SET_TYPE": "dj",
+      "SORT": "19"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "ACT_LABEL": "hammock",
+      "SET_TYPE": "dj",
+      "SORT": "20"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "ACT_LABEL": "UME",
+      "SET_TYPE": "dj",
+      "SORT": "21"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "ACT_LABEL": "startambourine",
+      "SET_TYPE": "dj",
+      "SORT": "22"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "ACT_LABEL": "Crux a.k.a. Muuta",
+      "SET_TYPE": "dj",
+      "SORT": "23"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "ACT_LABEL": "Charu",
+      "SET_TYPE": "dj",
+      "SORT": "24"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "ACT_LABEL": "DJ TOMY",
+      "SET_TYPE": "dj",
+      "SORT": "25"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "ACT_LABEL": "AKIRA a.k.a. A.BPM",
+      "SET_TYPE": "dj",
+      "SORT": "26"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "ACT_LABEL": "masato.mt",
+      "SET_TYPE": "dj",
+      "SORT": "27"
+    },
+    {
+      "EDITION_ID": "treks-2025",
+      "ACT_LABEL": "dsk",
+      "SET_TYPE": "dj",
+      "SORT": "28"
+    },
+    {
+      "EDITION_ID": "treks-2026",
+      "ACT_LABEL": "Pena",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "treks-2026",
+      "ACT_LABEL": "KIHIRA NAOKI",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "treks-2026",
+      "ACT_LABEL": "DJ MAMEZUKA",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "treks-2026",
+      "ACT_LABEL": "KAZUMA",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "treks-2026",
+      "ACT_LABEL": "H.U.T.",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "treks-2026",
+      "ACT_LABEL": "DAICHI",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "treks-2026",
+      "ACT_LABEL": "G29",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "treks-2026",
+      "ACT_LABEL": "ITA",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "treks-2026",
+      "ACT_LABEL": "Tez",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "treks-2026",
+      "ACT_LABEL": "KE-TA",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "treks-2026",
+      "ACT_LABEL": "YU-I",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "treks-2026",
+      "ACT_LABEL": "STEW",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "treks-2026",
+      "ACT_LABEL": "HOBO BRAZIL",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "treks-2026",
+      "ACT_LABEL": "Shu",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "treks-2026",
+      "ACT_LABEL": "P.S.Morris",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "treks-2026",
+      "ACT_LABEL": "startambourine",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
+      "EDITION_ID": "treks-2026",
+      "ACT_LABEL": "Hideto",
+      "SET_TYPE": "dj",
+      "SORT": "17"
+    },
+    {
+      "EDITION_ID": "treks-2026",
+      "ACT_LABEL": "Hammock",
+      "SET_TYPE": "dj",
+      "SORT": "18"
+    },
+    {
+      "EDITION_ID": "treks-2026",
+      "ACT_LABEL": "UME",
+      "SET_TYPE": "dj",
+      "SORT": "19"
+    },
+    {
+      "EDITION_ID": "treks-2026",
+      "ACT_LABEL": "DAICHI SASAKI",
+      "SET_TYPE": "dj",
+      "SORT": "20"
+    },
+    {
+      "EDITION_ID": "treks-2026",
+      "ACT_LABEL": "Crux a.k.a. Muuta",
+      "SET_TYPE": "dj",
+      "SORT": "21"
+    },
+    {
+      "EDITION_ID": "treks-2026",
+      "ACT_LABEL": "DJ TOMY",
+      "SET_TYPE": "dj",
+      "SORT": "22"
+    },
+    {
+      "EDITION_ID": "treks-2026",
+      "ACT_LABEL": "Charu",
+      "SET_TYPE": "dj",
+      "SORT": "23"
+    },
+    {
+      "EDITION_ID": "treks-2026",
+      "ACT_LABEL": "AKIRA a.k.a. A.BPM",
+      "SET_TYPE": "dj",
+      "SORT": "24"
+    },
+    {
+      "EDITION_ID": "treks-2026",
+      "ACT_LABEL": "masato.mt",
+      "SET_TYPE": "dj",
+      "SORT": "25"
+    },
+    {
+      "EDITION_ID": "treks-2026",
+      "ACT_LABEL": "dsk",
+      "SET_TYPE": "dj",
+      "SORT": "26"
+    },
+    {
+      "EDITION_ID": "labyrinth-2026",
+      "ARTIST_ID": "architectural",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "labyrinth-2026",
+      "ACT_LABEL": "Atom & Tobias.",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "labyrinth-2026",
+      "ARTIST_ID": "donato-dozzy",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "labyrinth-2026",
+      "ACT_LABEL": "Hiyoshi",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "labyrinth-2026",
+      "ARTIST_ID": "jonathan-fitoussi",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "labyrinth-2026",
+      "ACT_LABEL": "Kaito",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "labyrinth-2026",
+      "ARTIST_ID": "kyomi",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "labyrinth-2026",
+      "ARTIST_ID": "napirelly",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "labyrinth-2026",
+      "ARTIST_ID": "petar-dundov",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "labyrinth-2026",
+      "ARTIST_ID": "peter-van-hoesen",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "labyrinth-2026",
+      "ARTIST_ID": "reeko",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "labyrinth-2026",
+      "ARTIST_ID": "so",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "labyrinth-2026",
+      "ACT_LABEL": "Tobias. Doltz.",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "labyrinth-2025",
+      "ACT_LABEL": "Alex Albrecht",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "labyrinth-2025",
+      "ACT_LABEL": "Atom™ presents: Exotrax",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "labyrinth-2025",
+      "ARTIST_ID": "dj-masda",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "labyrinth-2025",
+      "ACT_LABEL": "DJ Red",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "labyrinth-2025",
+      "ACT_LABEL": "Fred P",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "labyrinth-2025",
+      "ACT_LABEL": "Grand River",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "labyrinth-2025",
+      "ACT_LABEL": "Grand River presents: Tuning the Wind",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "labyrinth-2025",
+      "ACT_LABEL": "Hiyoshi",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "labyrinth-2025",
+      "ACT_LABEL": "Kangding Ray",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "labyrinth-2025",
+      "ACT_LABEL": "Mike Parker",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "labyrinth-2025",
+      "ARTIST_ID": "peter-van-hoesen",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "labyrinth-2025",
+      "ARTIST_ID": "so",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "labyrinth-2025",
+      "ACT_LABEL": "Sunju Hargun",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "labyrinth-2025",
+      "ACT_LABEL": "Voices from the Lake",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "lost-find-2025",
+      "ACT_LABEL": "HIROSHI WATANABE a.k.a. KAITO",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "lost-find-2025",
+      "ACT_LABEL": "Shingo Nakamura",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "lost-find-2025",
+      "ACT_LABEL": "Sakura Tsuruta",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "lost-find-2025",
+      "ACT_LABEL": "SEKITOVA",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "lost-find-2025",
+      "ACT_LABEL": "Lycoriscoris",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "lost-find-2025",
+      "ACT_LABEL": "Conures & DJ NECO",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "lost-find-2025",
+      "ACT_LABEL": "Dominant Space",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "lost-find-2025",
+      "ACT_LABEL": "VINO",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "lost-find-2025",
+      "ACT_LABEL": "boys be kko",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "lost-find-2025",
+      "ACT_LABEL": "hiro.k & KAMEKAWA",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "lost-find-2025",
+      "ACT_LABEL": "Yuichiro Kotani",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "lost-find-2025",
+      "ACT_LABEL": "Chrumi",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "lost-find-2025",
+      "ACT_LABEL": "2bnsn",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "lost-find-2025",
+      "ACT_LABEL": "SHIGe",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "lost-find-2025",
+      "ACT_LABEL": "TUNE a.k.a. FUKUI",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "lost-find-2025",
+      "ACT_LABEL": "KA7TA",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
+      "EDITION_ID": "lost-find-2025",
+      "ACT_LABEL": "Ashoka",
+      "SET_TYPE": "dj",
+      "SORT": "17"
+    },
+    {
+      "EDITION_ID": "lost-find-2026",
+      "ARTIST_ID": "ken-ishii",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "lost-find-2026",
+      "ACT_LABEL": "HIROSHI WATANABE a.k.a. KAITO",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "lost-find-2026",
+      "ACT_LABEL": "Shingo Nakamura",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "lost-find-2026",
+      "ACT_LABEL": "Kenji Sekiguchi",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "lost-find-2026",
+      "ACT_LABEL": "Conures",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "lost-find-2026",
+      "ACT_LABEL": "Dominant Space & DJ NECO",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "lost-find-2026",
+      "ACT_LABEL": "Demsky",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "lost-find-2026",
+      "ACT_LABEL": "SHIGe",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "lost-find-2026",
+      "ACT_LABEL": "Kurumi",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "lost-find-2026",
+      "ACT_LABEL": "sumi",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "lost-find-2026",
+      "ACT_LABEL": "VINO",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "lost-find-2026",
+      "ACT_LABEL": "boys be kko",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "lost-find-2026",
+      "ACT_LABEL": "hiro.k & KAMEKAWA",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "lost-find-2026",
+      "ACT_LABEL": "Erkin Ekici",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "lost-find-2026",
+      "ACT_LABEL": "Tuyetmizuno",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "lost-find-2026",
+      "ACT_LABEL": "Ashoka",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
+      "EDITION_ID": "lost-find-2026",
+      "ACT_LABEL": "K.Kinu",
+      "SET_TYPE": "dj",
+      "SORT": "17"
+    },
+    {
+      "EDITION_ID": "lost-find-2026",
+      "ACT_LABEL": "Esse AT",
+      "SET_TYPE": "dj",
+      "SORT": "18"
+    },
+    {
+      "EDITION_ID": "annahme-2025",
+      "ACT_LABEL": "Aoi",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "annahme-2025",
+      "ACT_LABEL": "Armii",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "annahme-2025",
+      "ACT_LABEL": "Emily",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "annahme-2025",
+      "ARTIST_ID": "dj-yazi",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "annahme-2025",
+      "ACT_LABEL": "DJ ZEN",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "annahme-2025",
+      "ACT_LABEL": "Endurance",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "annahme-2025",
+      "ACT_LABEL": "GATARI",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "annahme-2025",
+      "ACT_LABEL": "grrrden",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "annahme-2025",
+      "ACT_LABEL": "HODAKA",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "annahme-2025",
+      "ACT_LABEL": "Kobashi Mitsuki",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "annahme-2025",
+      "ACT_LABEL": "koshi",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "annahme-2025",
+      "ACT_LABEL": "Mari Sakurai",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "annahme-2025",
+      "ACT_LABEL": "Masataro",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "annahme-2025",
+      "ACT_LABEL": "MUKTA",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "annahme-2025",
+      "ACT_LABEL": "Neo",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "annahme-2025",
+      "ACT_LABEL": "niwa",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
+      "EDITION_ID": "annahme-2025",
+      "ACT_LABEL": "Odditimana",
+      "SET_TYPE": "dj",
+      "SORT": "17"
+    },
+    {
+      "EDITION_ID": "annahme-2025",
+      "ACT_LABEL": "pAradice",
+      "SET_TYPE": "dj",
+      "SORT": "18"
+    },
+    {
+      "EDITION_ID": "annahme-2025",
+      "ACT_LABEL": "Ryo",
+      "SET_TYPE": "dj",
+      "SORT": "19"
+    },
+    {
+      "EDITION_ID": "annahme-2025",
+      "ACT_LABEL": "Shunpei",
+      "SET_TYPE": "dj",
+      "SORT": "20"
+    },
+    {
+      "EDITION_ID": "annahme-2025",
+      "ACT_LABEL": "SONO",
+      "SET_TYPE": "dj",
+      "SORT": "21"
+    },
+    {
+      "EDITION_ID": "annahme-2025",
+      "ACT_LABEL": "t0m0l0w",
+      "SET_TYPE": "dj",
+      "SORT": "22"
+    },
+    {
+      "EDITION_ID": "annahme-2025",
+      "ARTIST_ID": "yama",
+      "SET_TYPE": "dj",
+      "SORT": "23"
+    },
+    {
+      "EDITION_ID": "annahme-2025",
+      "ARTIST_ID": "yamarchy",
+      "SET_TYPE": "dj",
+      "SORT": "24"
+    },
+    {
+      "EDITION_ID": "annahme-2025",
+      "ACT_LABEL": "Yuta USHIMADO",
+      "SET_TYPE": "dj",
+      "SORT": "25"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ACT_LABEL": "DJ ZEN",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ACT_LABEL": "OOCA",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ARTIST_ID": "yamarchy",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "Akuma no Numa",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ARTIST_ID": "akira-arasawa",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "CELTER",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ARTIST_ID": "choko",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "DJ G.",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ARTIST_ID": "dj-kuri",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "DJ SHIGe",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ARTIST_ID": "dj-sodeyama",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ARTIST_ID": "dj-yazi",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "DJ Hikaru x DJ YOGURT",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "DRUNKEN KONG",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "fanta",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "free✫cinn",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "GA-SU",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "HIKARI",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "IORI x SO",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "iYAMA",
+      "SET_TYPE": "dj",
+      "SORT": "17"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "Junya Yamamura",
+      "SET_TYPE": "dj",
+      "SORT": "18"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "Kojiro x Yoshitaka Shirakura",
+      "SET_TYPE": "dj",
+      "SORT": "19"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "KURUSU",
+      "SET_TYPE": "dj",
+      "SORT": "20"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ARTIST_ID": "kyomi",
+      "SET_TYPE": "dj",
+      "SORT": "21"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "Mamazu x SUNGA",
+      "SET_TYPE": "dj",
+      "SORT": "22"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "Manbow",
+      "SET_TYPE": "dj",
+      "SORT": "23"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "Mari Sakurai",
+      "SET_TYPE": "dj",
+      "SORT": "24"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "MOMO",
+      "SET_TYPE": "dj",
+      "SORT": "25"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "NAGOMI",
+      "SET_TYPE": "dj",
+      "SORT": "26"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ARTIST_ID": "noco",
+      "SET_TYPE": "dj",
+      "SORT": "27"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ARTIST_ID": "occa",
+      "SET_TYPE": "dj",
+      "SORT": "28"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ARTIST_ID": "qmico",
+      "SET_TYPE": "dj",
+      "SORT": "29"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "Saikou",
+      "SET_TYPE": "dj",
+      "SORT": "30"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "SAITO",
+      "SET_TYPE": "dj",
+      "SORT": "31"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ARTIST_ID": "sakuma",
+      "SET_TYPE": "dj",
+      "SORT": "32"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "Shimoyan",
+      "SET_TYPE": "dj",
+      "SORT": "33"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "Shinsuke Goto",
+      "SET_TYPE": "dj",
+      "SORT": "34"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "Sho Yamamoto",
+      "SET_TYPE": "dj",
+      "SORT": "35"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "SIX x TAKAAKI ITOH",
+      "SET_TYPE": "dj",
+      "SORT": "36"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "Suepon_Dub",
+      "SET_TYPE": "dj",
+      "SORT": "37"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ARTIST_ID": "suguru-mochizuki",
+      "SET_TYPE": "dj",
+      "SORT": "38"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "t0m0l0w x Yuta USHIMADO",
+      "SET_TYPE": "dj",
+      "SORT": "39"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "TOMOYA",
+      "SET_TYPE": "dj",
+      "SORT": "40"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "Toner",
+      "SET_TYPE": "dj",
+      "SORT": "41"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ACT_LABEL": "U:ICHI",
+      "SET_TYPE": "dj",
+      "SORT": "42"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2025",
+      "ARTIST_ID": "yama",
+      "SET_TYPE": "dj",
+      "SORT": "43"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ACT_LABEL": "Black Boboi",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ACT_LABEL": "HENTAI CAMERAMAN",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ACT_LABEL": "SOFT",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ACT_LABEL": "ADAK7",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ARTIST_ID": "akira-arasawa",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ARTIST_ID": "compuma",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ARTIST_ID": "dj-kensei",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ARTIST_ID": "dj-kuri",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ARTIST_ID": "dj-sodeyama",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ACT_LABEL": "DJ ZEN",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ACT_LABEL": "ERIMIYA",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ARTIST_ID": "herbalistek",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ACT_LABEL": "KURUSU",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ARTIST_ID": "reek",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ARTIST_ID": "sunga",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ARTIST_ID": "yama",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ARTIST_ID": "ysk",
+      "SET_TYPE": "dj",
+      "SORT": "17"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ACT_LABEL": "Ra-chang",
+      "SET_TYPE": "dj",
+      "SORT": "18"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ACT_LABEL": "Riyo Mountain",
+      "SET_TYPE": "dj",
+      "SORT": "19"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ACT_LABEL": "SUEPON",
+      "SET_TYPE": "dj",
+      "SORT": "20"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ACT_LABEL": "5harpy",
+      "SET_TYPE": "dj",
+      "SORT": "21"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ACT_LABEL": "eskm",
+      "SET_TYPE": "dj",
+      "SORT": "22"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ACT_LABEL": "HARUKA KATAGATA",
+      "SET_TYPE": "dj",
+      "SORT": "23"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ACT_LABEL": "Kojiro",
+      "SET_TYPE": "dj",
+      "SORT": "24"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ACT_LABEL": "lostbaggage",
+      "SET_TYPE": "dj",
+      "SORT": "25"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ACT_LABEL": "mahogany",
+      "SET_TYPE": "dj",
+      "SORT": "26"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ACT_LABEL": "Manbow",
+      "SET_TYPE": "dj",
+      "SORT": "27"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ARTIST_ID": "occa",
+      "SET_TYPE": "dj",
+      "SORT": "28"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ACT_LABEL": "olevv",
+      "SET_TYPE": "dj",
+      "SORT": "29"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ACT_LABEL": "savezearth",
+      "SET_TYPE": "dj",
+      "SORT": "30"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ACT_LABEL": "Shinsuke Goto",
+      "SET_TYPE": "dj",
+      "SORT": "31"
+    },
+    {
+      "EDITION_ID": "sawagi-festival-2026",
+      "ARTIST_ID": "taichi-kawahira",
+      "SET_TYPE": "dj",
+      "SORT": "32"
+    },
+    {
+      "EDITION_ID": "festival-de-frue-2026",
+      "ARTIST_ID": "acid-pauli",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "festival-de-frue-2026",
+      "ARTIST_ID": "alabaster-deplume",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "festival-de-frue-2026",
+      "ARTIST_ID": "juana-molina",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "festival-de-frue-2026",
+      "ARTIST_ID": "kiko-dinucci",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "festival-de-frue-2026",
+      "ARTIST_ID": "kuo-from-sunset-rollercoaster",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "festival-de-frue-2026",
+      "ARTIST_ID": "sylvan-esso",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "festival-de-frue-2026",
+      "ARTIST_ID": "the-master-musicians-of-joujouka",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "mutek-2026",
+      "ACT_LABEL": "Dimension Plus",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "mutek-2026",
+      "ACT_LABEL": "Film Scores for No One - a Patrick Watson project",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "mutek-2026",
+      "ACT_LABEL": "Grand River",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "mutek-2026",
+      "ACT_LABEL": "Nicolás Melmann",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2025",
+      "ACT_LABEL": "Addison Groove",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2025",
+      "ACT_LABEL": "akii",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2025",
+      "ACT_LABEL": "andrew",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2025",
+      "ACT_LABEL": "comm",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2025",
+      "ACT_LABEL": "Commodo",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2025",
+      "ACT_LABEL": "DNG",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2025",
+      "ACT_LABEL": "Dx",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2025",
+      "ACT_LABEL": "Element",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2025",
+      "ACT_LABEL": "Follow The Shadows",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2025",
+      "ACT_LABEL": "hara",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2025",
+      "ACT_LABEL": "Lil Tozan",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2025",
+      "ACT_LABEL": "maidable",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2025",
+      "ACT_LABEL": "Midnight Runner",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2025",
+      "ACT_LABEL": "UKD",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2025",
+      "ACT_LABEL": "Velocity",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2025",
+      "ACT_LABEL": "yayoi",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2025",
+      "ACT_LABEL": "¥ØU$UK€ ¥UK1MAT$U",
+      "SET_TYPE": "dj",
+      "SORT": "17"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2025",
+      "ACT_LABEL": "Frankie $",
+      "SET_TYPE": "dj",
+      "SORT": "18"
+    },
+    {
+      "EDITION_ID": "topia-2025",
+      "ACT_LABEL": "Akutagawa",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "topia-2025",
+      "ACT_LABEL": "Jun Inagawa",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "topia-2025",
+      "ARTIST_ID": "ken-ishii",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "topia-2025",
+      "ACT_LABEL": "Mars89",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "topia-2025",
+      "ACT_LABEL": "Mt.Chori",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "topia-2025",
+      "ACT_LABEL": "Pointhope",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "topia-2025",
+      "ACT_LABEL": "Soichi Yoshime",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "topia-2025",
+      "ACT_LABEL": "Takuma Matsunaga",
+      "SET_TYPE": "dj",
+      "SORT": "8"
     },
     {
       "EDITION_ID": "nu-festival-2026",

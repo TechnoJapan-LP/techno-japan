@@ -7872,3 +7872,55 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 
 ### 次の担当への注意・判断待ち
 - なし。
+
+## 2026-09-15 フェス削除で開催回が消え残り Publish が止まる不具合を修正
+
+### 発生した事故
+- ユーザーが CMS でフェス2件（`yagura` / `music-camp-core`）を削除。
+- `executeDelete` は **FESTIVALS の1行を消すだけ**で EDITIONS / LINEUPS に触らないため、
+  孤児の開催回が残り、次の Publish が
+  `✗ EDITIONS yagura-2026: FESTIVAL_ID参照切れ` で**停止**した。
+- 影響: data.js 自体は本番に出ていた（フェス95件）。止まったのは詳細ページの
+  再生成とサイトマップ更新。
+- 復旧: EDITIONS 行100（yagura-2026）→ 行62（music-camp-core-2025）の順に
+  **運用側が手動削除**（ブラウザ自動操作での削除は権限で拒否される）。
+  削除内容は `reports/deleted_editions_2026-09-15.json` にバックアップ済み。
+
+### 実施（設計・検証=Claude / 実装=Codex）
+- `collectFestivalChildren_(festivalId)` を新設し、削除前に EDITIONS/LINEUPS の
+  関連行を集める。
+- 確認ダイアログに件数を表示:
+  「"YAGURA" を削除します。**開催回 2件 と 出演者 45件 も一緒に削除されます**。」
+- **削除順を 子→親、同一シート内は行番号の降順**に
+  （小さい行から消すと後続の行番号がずれ、別の行を消す事故になる）。
+- **EDITIONS を読み込めていないときは削除させない**（`editionSheetLoaded` を確認）。
+  今回と同じ取りこぼしを防ぐ。
+- 途中で失敗したら**そこで中断**し、どこまで消したかを知らせる。
+- Trash には子データも保存（復元処理の改修は今回はしない）。
+- 新検査 `scripts/check_cms_delete.mjs` → preflight **48本目**。
+- 版: cms.js 124。
+
+### コミット
+- このエントリと同一コミット。
+
+### 検証
+- `node scripts/check_cms_delete.mjs` 全項目成功。特に**削除順序**を実測:
+  `LINEUPS 31→30→28 / EDITIONS 22→20 / FESTIVALS 5`（子→親・各シート降順）
+- 他フェスの行を巻き込まない / 未読み込み時は開かない / 途中失敗で中断 /
+  関連0件は従来どおり親1回だけ
+- `npm run fetch` 後に参照切れ**0件**（開催回114・フェス95）
+- preflight 全48件成功
+- 認証済み本番CMSでの実削除: **実機未確認**（実データを壊せないため vm テストで代替）
+
+### 変更したパターン
+- cms.js（関数1新設・confirmDelete・executeDelete）/ 新検査1 / preflight 1行
+
+### 未確認の類似パターン
+- ★**VENUE / ARTIST の削除も同じ構造の問題を持つ**。
+  会場を削除すると FESTIVALS の `venueId` が、アーティストを削除すると
+  LINEUPS の `ARTIST_ID` が参照切れになりうる。**今回は未対応**
+- Trash からの復元はフェス本体のみ（子データは保存するが戻さない）
+
+### 次の担当への注意・判断待ち
+- 新しい記事を追加した直後は、**画像の派生生成**（`python3 scripts/build-image-derivatives.py`）
+  が必要なことがある。今回 otsukimi-2026-info で構造化データ検査が落ちた。

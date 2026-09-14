@@ -92,6 +92,7 @@ run "CSS / JS の参照先が実在する"       python3 scripts/check_asset_pat
 echo
 echo "▸ CMS"
 run "開催回（EDITIONS）"                node scripts/check_cms_editions.mjs
+run "CMSの削除の連鎖"                    node scripts/check_cms_delete.mjs
 run "著者の候補表示"                    node scripts/check_cms_authors.mjs
 run "認証切れの自動復帰"                node scripts/check_cms_auth_retry.mjs
 run "LINEUP の入力"                     node scripts/check_cms_lineup.mjs

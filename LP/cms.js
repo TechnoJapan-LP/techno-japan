@@ -4824,10 +4824,36 @@ function promoteLatestEditionDateToFestivalForm(){
    DELETE
    ============================================================== */
 let pendingDelete=null;
+/* フェスを消すと EDITIONS / LINEUPS に参照切れが残り、次の Publish が
+   「FESTIVAL_ID参照切れ」で止まる（2026-09-15 実際に発生）。
+   削除前に関連行を集め、件数を見せたうえで一緒に消す。 */
+function collectFestivalChildren_(festivalId){
+  const fid=String(festivalId||'').trim();
+  if(!fid) return {editions:[],lineups:[],editionIds:[]};
+  const value=(row,...keys)=>{
+    for(const key of keys){
+      if(row && row[key]!==undefined && row[key]!==null && String(row[key]).trim()) return String(row[key]).trim();
+    }
+    return '';
+  };
+  const editions=(editionSheetRows||[]).filter(r=>value(r,'festival_id','FESTIVAL_ID')===fid);
+  const editionIds=editions.map(r=>value(r,'edition_id','EDITION_ID')).filter(Boolean);
+  const lineups=(lineupSheetRows||[]).filter(r=>editionIds.includes(value(r,'edition_id','EDITION_ID')));
+  return {editions,lineups,editionIds};
+}
 function confirmDelete(section,rowNum,name){
+  if(section==='festival' && !editionSheetLoaded){
+    return toast('開催回データを読み込めていません。少し待ってからもう一度お試しください','error');
+  }
   pendingDelete={section,rowNum};
   document.getElementById('confirmTitle').textContent='DELETE';
-  document.getElementById('confirmMsg').textContent='"'+name+'" will be permanently deleted. This cannot be undone.';
+  if(section==='festival'){
+    const row=listCache.festival?.find(r=>String(r._row)===String(rowNum));
+    const children=collectFestivalChildren_(row?.id||row?.ID||'');
+    document.getElementById('confirmMsg').textContent=children.editions.length||children.lineups.length
+      ? '"'+name+'" を削除します。\n開催回 '+children.editions.length+'件 と 出演者 '+children.lineups.length+'件 も一緒に削除されます。\n元に戻せません。'
+      : '"'+name+'" will be permanently deleted. This cannot be undone.';
+  } else document.getElementById('confirmMsg').textContent='"'+name+'" will be permanently deleted. This cannot be undone.';
   document.getElementById('confirmOk').onclick=executeDelete;
   document.getElementById('confirmDialog').classList.add('show');
 }
@@ -4836,19 +4862,42 @@ function executeDelete(){
   if(!pendingDelete)return;
   const{section,rowNum}=pendingDelete;
   // 削除前に行データを保存（Undoで復元できるように）
-  const row = listCache[section]?.find(r => r._row === rowNum);
+  const row = listCache[section]?.find(r => String(r._row) === String(rowNum));
+  const children=section==='festival' ? collectFestivalChildren_(row?.id||row?.ID||'') : null;
   closeConfirm();
   toast('Deleting...','info');
-  gasPostJson_({action:'delete_row',sheet:SHEET_MAP[section],row:rowNum})
-    .then(d=>{
-      if(d.status==='ok'||d.success){
-        if(row) saveDeletedItem(section, row);
-        toast('Deleted — undo via "Trash" in sidebar','success');
-        renderTrashCount();
-        invalidateSheetCache(section);
-        loadList(section, {force:true});
-      } else toast('Delete failed: '+(d.message||''),'error');
-    }).catch(()=>toast('Delete error','error'));
+  const targets=section==='festival'
+    ? [
+        ...children.lineups.map(r=>({sheet:'LINEUPS',row:Number(r._row),label:'LINEUPS'})),
+        ...children.editions.map(r=>({sheet:'EDITIONS',row:Number(r._row),label:'EDITIONS'})),
+        {sheet:SHEET_MAP[section],row:Number(rowNum),label:'FESTIVALS'},
+      ]
+    : [{sheet:SHEET_MAP[section],row:Number(rowNum),label:SHEET_MAP[section]}];
+  // 同一シートでは行番号の大きい方から消す（行ずれ防止）。
+  const ordered=[];
+  for(const sheet of ['LINEUPS','EDITIONS']){
+    ordered.push(...targets.filter(x=>x.sheet===sheet).sort((a,b)=>b.row-a.row));
+  }
+  ordered.push(...targets.filter(x=>!['LINEUPS','EDITIONS'].includes(x.sheet)));
+  return (async()=>{
+    const deleted=[];
+    try{
+      for(const target of ordered){
+        const d=await gasPostJson_({action:'delete_row',sheet:target.sheet,row:target.row});
+        if(!(d.status==='ok'||d.success)) throw new Error(target.label+' '+(d.message||'削除に失敗しました'));
+        deleted.push(target.label+' '+target.row+'行');
+      }
+      if(row) saveDeletedItem(section,row,children&&{editions:children.editions,lineups:children.lineups});
+      toast(section==='festival'&&children&&(children.editions.length||children.lineups.length)
+        ? '削除完了（開催回・出演者も削除）。Trashから戻せるのはフェス本体のみです'
+        : 'Deleted — undo via "Trash" in sidebar','success');
+      renderTrashCount();
+      invalidateSheetCache(section);
+      loadList(section, {force:true});
+    }catch(e){
+      toast('削除を中断しました（'+(deleted.length?deleted.join('、')+'まで削除済み':'まだ削除されていません')+'）：'+e.message,'error');
+    }
+  })();
 }
 
 /* ==============================================================
@@ -5672,9 +5721,11 @@ function getTrash(){
     return items.filter(i => (now - i.deletedAt) < TRASH_TTL_MS);
   } catch(e) { return []; }
 }
-function saveDeletedItem(section, row){
+function saveDeletedItem(section, row, children){
   const items = getTrash();
-  items.unshift({ section, row: { ...row }, deletedAt: Date.now() });
+  const item={ section, row: { ...row }, deletedAt: Date.now() };
+  if(children) item.children={editions:children.editions.map(r=>({...r})),lineups:children.lineups.map(r=>({...r}))};
+  items.unshift(item);
   localStorage.setItem(TRASH_KEY, JSON.stringify(items.slice(0, 50)));
 }
 function renderTrashCount(){
