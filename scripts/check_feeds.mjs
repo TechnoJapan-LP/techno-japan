@@ -21,6 +21,47 @@ function loadArticles() {
   return Array.isArray(context.__articles) ? context.__articles : [];
 }
 
+function checkNoBreakNames() {
+  const context = { document: { documentElement: { lang: 'ja' } } };
+  context.window = context;
+  vm.createContext(context);
+  try {
+    new vm.Script(read(path.join(root, 'localize.js'))).runInContext(context);
+  } catch (error) {
+    fail(`localize.js の tjNoBreakNames を読めない: ${error.message}`);
+    return;
+  }
+  const noBreak = context.tjNoBreakNames;
+  const japanese = noBreak('【2026年9月】日本の音楽フェスティバル&レイヴまとめ');
+  if (!japanese.includes('<span class="tj-nobr">フェスティバル</span>')) {
+    fail('tjNoBreakNames が「フェスティバル」を保護していない');
+  }
+  if (!japanese.includes('<span class="tj-nobr">レイヴ</span>')) {
+    fail('tjNoBreakNames が「レイヴ」を保護していない');
+  }
+  if (!japanese.includes('&amp;') || japanese.includes('&amp</')) {
+    fail('tjNoBreakNames の & エンティティが壊れている');
+  }
+
+  const mixed = noBreak('香港の谷で16時間踊り続ける Shi Fu Miz が10周年アニバーサリー');
+  if (!mixed.includes('<span class="tj-nobr">Shi Fu Miz</span>')) {
+    fail('tjNoBreakNames が「Shi Fu Miz」を保護していない');
+  }
+  if (!mixed.includes('<span class="tj-nobr">アニバーサリー</span>')) {
+    fail('tjNoBreakNames が「アニバーサリー」を保護していない');
+  }
+
+  const longKana = noBreak('日本のアイウエオカキクケコサシス情報');
+  if (longKana.includes('<span class="tj-nobr">')) {
+    fail('tjNoBreakNames が12文字を超えるカタカナ語を保護している');
+  }
+
+  const english = 'Shi Fu Miz celebrates its anniversary';
+  if (noBreak(english) !== english) fail('英文のみのタイトルが素通りしていない');
+}
+
+checkNoBreakNames();
+
 function checkXml(file, label) {
   const xml = read(file);
   if (!xml) {

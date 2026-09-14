@@ -57,7 +57,9 @@
     // エスケープとマークアップ挿入の順序を逆にするとHTMLエンティティが壊れる（2026-09-14 実測）。
     if (!/[\u3040-\u30ff\u3400-\u9fff]/.test(s)) return escapeHtml(s);
 
-    var re = /[A-Za-z][A-Za-z0-9.:'’&;-]*(?:\s+[A-Za-z0-9][A-Za-z0-9.:'’&;-]*){1,3}/g;
+    /* カタカナ語が「フェスティ/バル」のように割れるため、連続するカタカナも
+       ひとまとまりにする（2026-09-15 実測）。12文字超は横溢れを避けて対象外。 */
+    var re = /([A-Za-z][A-Za-z0-9.:'’&;-]*(?:\s+[A-Za-z0-9][A-Za-z0-9.:'’&;-]*){1,3})|((?<![ァ-ヺー])[ァ-ヺー]{2,12}(?![ァ-ヺー]))/g;
     var out = [];
     var last = 0;
     var match;
@@ -65,11 +67,11 @@
       var name = match[0];
       var after = s.slice(match.index + name.length);
       // 「LOA 8月」のような日付は、末尾の数字を固有名詞に含めない。
-      if (/\s+\d+$/.test(name) && /^[月日年時分]/.test(after)) {
+      if (match[1] && /\s+\d+$/.test(name) && /^[月日年時分]/.test(after)) {
         name = name.replace(/\s+\d+$/, '');
       }
       out.push(escapeHtml(s.slice(last, match.index)));
-      out.push(name.length <= 24
+      out.push((match[2] || name.length <= 24)
         ? '<span class="tj-nobr">' + escapeHtml(name) + '</span>'
         : escapeHtml(name));
       last = match.index + name.length;
