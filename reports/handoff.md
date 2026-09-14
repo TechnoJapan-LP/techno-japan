@@ -7814,3 +7814,14 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 ### 次の担当への注意・判断待ち
 - 運用: 既存の開催回を編集したいときは **Add Edition を押さず**、
   開催回の選択欄から選んで編集 → 保存。
+
+### 追記（同日）: 日をまたぐと sitemap-news.xml の検査が落ちる
+- 上記コミットの push 時に pre-push の preflight が
+  `❌ sitemap-news.xml に48時間外または非公開記事: shifumiz-2026-info` で停止。
+- 原因: **sitemap-news.xml は「過去48時間の記事」だけを載せる仕様**（Google News）。
+  9/13 公開の記事は 9/15 になった時点で対象外になるが、**生成物は
+  9/14 時点のまま**だったため不一致になった。
+- 対処: `python3 scripts/generate-sitemap.py` を再実行（0件になり検査通過）。
+- **次の担当へ**: 日をまたいで作業を再開したとき、または push が
+  この検査で落ちたときは、**sitemap と rss を再生成**してから push する。
+  ビルド（build-detail-pages.mjs）だけでは更新されない。
