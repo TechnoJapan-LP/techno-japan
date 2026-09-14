@@ -7924,3 +7924,45 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 ### 次の担当への注意・判断待ち
 - 新しい記事を追加した直後は、**画像の派生生成**（`python3 scripts/build-image-derivatives.py`）
   が必要なことがある。今回 otsukimi-2026-info で構造化データ検査が落ちた。
+
+## 2026-09-15 監査: 関連記事サムネが原寸画像を読んでいた（記事ページの43%が無駄）
+
+### 実施（設計・実装・検証=Claude ※既存ヘルパー流用の小修正）
+- 定期監査の実測で発見。**9/14 に私が実装した `relatedStoryCardsHtml` が
+  srcset を使わず原寸画像を読んでいた**。
+- 実測（記事 shifumiz、モバイル幅500px）:
+  | サムネ | 表示 | 読み込み | 過剰倍率 |
+  |---|---|---|---|
+  | otsukimi | 88px | **1280px / 364KB** | 7.3倍 |
+  | forest-sound-camp | 88px | 720px / 291KB | 4.1倍 |
+  | rebirth | 88px | **1920px / 260KB** | 10.9倍 |
+  → **88px 枠のサムネ3枚で 915KB**。
+- 修正: `storyThumbSrcsetAttr`（sizes: `(max-width:640px) 88px, 120px`）を新設し、
+  `cardImagePath` + srcset + `decoding="async"` に。sizes は detail.css の
+  `.related-story-thumb`（120px / 640px以下は88px）と揃えた。
+- 結果: **記事ページ 1,832KB → 1,043KB（789KB・43%削減）**。
+  サムネ3枚は 915KB → 134KB、過剰倍率は 0.5倍（適正）。
+- フェス詳細の RELATED STORIES も同じ関数を使うため、同時に改善される。
+
+### コミット
+- このエントリと同一コミット。
+
+### 検証
+- 修正前後を**同じ方法・同じ幅**で実測して比較（上表）
+- preflight 全48件成功
+
+### 変更したパターン
+- build-detail-pages.mjs にヘルパー1・img 1箇所
+
+### 未確認の類似パターン
+- ★**記事本文に Google Drive 直リンク画像が80枚ある**
+  （transcendence 6 / post-20251120 8 / loa 5 / bondisco 4 / snow-machine 6 /
+  asia 14 / forest 4 / rebirth 6 / japan-sept 12 / shifumiz 6 / otsukimi 9）。
+  docs/DATA_SCHEMA.md は「Drive直リンクは権限・仕様変更で破損するため禁止」と
+  明記しているが**実態は違反**。1枚あたり 105〜132KB で、記事ページの
+  残り重量の大半を占める
+- `LP/images/` が **122MB**、300KB超の記事画像が56枚
+
+### 次の担当への注意・判断待ち
+- 監査レポート全文はこのセッションの最後の回答を参照（h1・meta・OGP・
+  canonical・hreflang・構造化データ・内部リンク・sitemap の実測値つき）。

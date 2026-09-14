@@ -337,6 +337,11 @@ function srcsetAttr(source, sizes) {
 }
 /* 関連カードは実測 324px 幅で表示される。960px を全端末へ配らない。 */
 const cardSrcsetAttr = (s) => srcsetAttr(s, '(max-width: 700px) 100vw, 360px');
+/* 関連記事のサムネは CSS で 120px（640px以下は 88px）に固定表示される。
+   ここを cardSrcsetAttr（360px 想定）や原寸にすると、88px の枠に 1280〜1920px の
+   画像を読み込むことになる。実測では記事1ページで 915KB の無駄が出ていた
+   （2026-09-15）。sizes は detail.css の .related-story-thumb と揃えること。 */
+const storyThumbSrcsetAttr = (s) => srcsetAttr(s, '(max-width: 640px) 88px, 120px');
 
 function articlePositionKey(value) {
   const v = String(value || '').toLowerCase();
@@ -956,7 +961,7 @@ function relatedStoryCardsHtml(items, lang, { forceEnglishPath = false, compactD
       ? String(a.date || '').split('/')[0].replace(/-/g, '.')
       : fmtDate(a.date);
     return `<a class="related-story-card" href="${englishPath}/articles/${a.id}.html">
-          ${a.image ? `<img ${dimensionAttrs(a.image)} class="related-story-thumb" src="/${String(a.image).replace(/^\//, '')}" alt="" loading="lazy">` : ''}
+          ${a.image ? `<img ${dimensionAttrs(cardImagePath(a.image))} class="related-story-thumb" src="/${cardImagePath(a.image)}"${storyThumbSrcsetAttr(a.image)} alt="" loading="lazy" decoding="async">` : ''}
           <div><div class="related-story-meta">${esc(a.category || 'STORY')} · ${esc(date)}</div>
           <div class="related-story-title">${esc(title)}</div></div>
         </a>`;
