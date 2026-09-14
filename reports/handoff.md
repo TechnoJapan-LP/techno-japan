@@ -7710,3 +7710,61 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 
 ### 次の担当への注意・判断待ち
 - なし。
+
+## 2026-09-14 フェスに国コードを持たせ、Airtable 同期の「JP固定」を廃止
+
+### 背景（ユーザーの質問から発覚した将来バグ）
+- 「Airtable を先に編集したらおかしくなる？」→ 調査の結果、
+  **毎日 日本時間5:30 に sync-site が --execute で走り、サイトの値で
+  Airtable を上書き**している（日程・都市・URL・名前・brand_status）。
+  Airtable 側の編集は翌朝消える。
+- さらに深刻な発見: `cmd_sync_site` が **`country` を "JP" 固定**で書いており、
+  かつ `export_site_festivals.mjs` は**全フェスを無条件に出力**、
+  サイトのデータには**国を示す項目が無い**。
+  → **海外フェスをサイトに載せると Airtable 上で日本のフェスに化け、
+    site_managed=true が付いて AI 巡回からも外れる**。
+- ユーザー判断: A案（COUNTRY をデータに持たせる）。
+
+### 実施（設計・検証=Claude / 実装=Codex）
+- 規約: `COUNTRY` = **ISO 3166-1 alpha-2 の2文字大文字**（JP / TH / KR …）。
+  **空欄は「不明」**で、Airtable の country を**上書きしない**。
+- cms.js: 読み取り（`row.country || row.COUNTRY`）/ 保存 payload（両キー送信）/
+  data.js 出力（値があるときだけ）。cms.html に Country 入力欄（City の隣）。
+- export_site_festivals.mjs: `country` を出力に追加。
+- **airtable_pipeline.py: `"country": "JP"` の固定を削除**し、
+  入力の country があるときだけ送る形に変更（理由コメント付き）。
+- 新検査 `scripts/check_country.mjs` → preflight **47本目**。
+- AGENTS.md / docs/DATA_SCHEMA.md に規約を追記。
+- 版: cms.js 122。
+
+### コミット
+- このエントリと同一コミット。
+
+### 検証
+- **ミューテーション**: data.js に `country: "jp"`（小文字）を注入すると
+  検査が `❌ mutek: country="jp"` で検出。`"JP"` なら通過（確認後に復元）
+- export の実測: circus に JP を入れた状態で
+  `{'festival_id':'circus','city':'Tokyo','country':'JP'}` /
+  未設定の mutek は `country: ''`（＝同期時に送られない）
+- `"country": "JP"` の固定値が**0件**であることを静的検査で確認（再発防止）
+- preflight 全47件成功
+- **Airtable への実同期は未実行**（次回の日次 cron か、dry-run での確認を推奨）
+
+### 変更したパターン
+- cms.js 3箇所 / cms.html 1欄 / export 1項目 / airtable_pipeline.py 1箇所 /
+  新検査1 / preflight 1行 / ドキュメント2
+
+### 未確認の類似パターン
+- ★**スプレッドシート FESTIVALS の `COUNTRY` 列はまだ存在しない**（AE列に追加予定）。
+  列が無い間は country が常に空になり、**Airtable の country は更新されない**
+  （＝現状維持で安全）。列追加後に既存96件へ `JP` を入れる必要がある
+- GAS が `COUNTRY` をどのキーで返すか未検証（`country` の想定。
+  UPDATED_AT は `updated_at` だった）。読み取りは両対応済み
+- **ブラウザ自動操作でのスプレッドシート書き込みは権限で拒否される**（実測）。
+  シートの変更は人手で行うこと
+
+### 次の担当への注意・判断待ち
+- **運用側の作業**: FESTIVALS シートの **AE1 に `COUNTRY`**、
+  **AE2:AE97 に `JP`** を入力（最終列は AD=location_ja のため AE が空き）。
+  以後、海外フェスを追加するときは `TH` 等を入れる。
+- 表示（カードや詳細ページに国を出す）は未実装。必要なら別タスク。

@@ -295,7 +295,13 @@ def cmd_sync_site(input_path: str, execute: bool) -> int:
             print("  ⚠️ festival_id が空の入力をスキップ")
             continue
         name_value = str(item.get("name", ""))
-        fields = {"festival_id": festival_id, "country": "JP", "site_managed": True}
+        # 2026-09-14: 国を JP 固定で書いていたため、海外フェスをサイトに載せると
+        # Airtable 上で日本のフェスに化けていた。サイト側の COUNTRY を使い、
+        # 空欄のときは country を送らない（Airtable 側の既存値を壊さない）。
+        fields = {"festival_id": festival_id, "site_managed": True}
+        country = str(item.get("country", "")).strip().upper()
+        if country:
+            fields["country"] = country
         if name_value:
             fields[name_field] = name_value
         for input_name, airtable_name in (("city", "city_region"),

@@ -212,8 +212,10 @@ ID 規約違反7件の是正(§1.1)ではリダイレクトを設けたが、そ
 | AB | DESC_EN |
 | AC | imagePosition |
 | AD | location_ja |
+| AE | COUNTRY |
 
 - `LOCATION` は既存データとの互換性を保つ英語・ローマ字表記、`location_ja` は日本語の公式会場名を保持する。日本語表示は `location_ja` を優先し、空欄なら `LOCATION` にフォールバックする。英語表示は `LOCATION` を使用する。
+- `COUNTRY` は ISO 3166-1 alpha-2 の2文字大文字（例: `JP`）。空欄は不明として扱い、Airtable同期では既存の国を上書きしない。
 - GAS の `update_row` は部分更新ではない。`buildRowFromHeaders` で行全体を組み立て直し、payload にないヘッダーの値を空文字で上書きする。そのため CMS は編集時に、`location_ja` を含むシートの全フィールドを必ず payload に含める。今後列を追加するときも、シート追加と同時に CMS の読込・フォーム・更新 payload を対応させること。
 
 #### 目標: FESTIVALSとEDITIONSの分離 【段階2・読み取り接続済み】

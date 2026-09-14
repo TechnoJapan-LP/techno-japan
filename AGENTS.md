@@ -285,6 +285,7 @@ EN ハブ5枚（festivals / artists / venues / news / index）は
 
 - FESTIVAL_ID（ブランドID）は変更しない。開催回は EDITIONS シートの
   `EDITION_ID={FESTIVAL_ID}-{EDITION}`（EDITION は `YYYY` または `YYYY-N`）を選択・編集する。
+- 海外フェスを追加するときは FESTIVALS の `COUNTRY`（ISO 2文字）を必ず入れる。空欄だと Airtable 側の国は更新されない。
 - 日程、会場、住所、座標、チケット、フライヤー、ステータスは EDITIONS の値を更新する。
   FESTIVALS の `DATE` を翌年へ上書きして過去回を消してはいけない。
 - 出演者は LINEUPS シートで同じ EDITION_ID の行を編集する。ARTIST_ID は

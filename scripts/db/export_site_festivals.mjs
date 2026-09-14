@@ -50,6 +50,7 @@ const output = festivals.map((festival) => {
     festival_id: String(festival.id || ''),
     name: String(festival.name || ''),
     city: String(festival.city || ''),
+    country: String(festival.country || ''),
     official_url: String(festival.url || ''),
     status: String(festival.status || ''),
     last_date_start,

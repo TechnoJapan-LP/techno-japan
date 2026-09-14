@@ -4303,6 +4303,7 @@ function editRow(section, rowNum){
   else if(section==='festival'){
     setVal('f-id',row.id); setVal('f-type',row.type||'festival');
     setVal('f-name',row.name); setVal('f-city',row.city);
+    setVal('f-country',row.country || row.COUNTRY || '');
     setVal('f-location',row.location); setVal('f-url',row.url);
     setVal('f-location_ja',row.location_ja);
     setVal('f-ticketUrl',row.ticketUrl); setVal('f-instagram',row.instagram); setVal('f-address',row.address);
@@ -4622,6 +4623,7 @@ function saveEdit(section){
     const ds=g('f-dateStart'),de=g('f-dateEnd');
     syncFestivalDateToLatestEdition(ds&&de?ds+'/'+de:ds);
     Object.assign(payload,{id:g('f-id'),type:g('f-type'),name:g('f-name'),city:g('f-city'),
+      country:g('f-country'),COUNTRY:g('f-country'),
       location:g('f-location'),location_ja:g('f-location_ja'),url:g('f-url'),ticketUrl:g('f-ticketUrl'),instagram:g('f-instagram'),
       address:g('f-address'),lat:g('f-lat'),lng:g('f-lng'),
       date:ds&&de?ds+'/'+de:ds,genre:getSelectedGenres('f-genre').join(', '),
@@ -5745,6 +5747,7 @@ function submitToSheet(section){
     promoteLatestEditionDateToFestivalForm();
     const ds=g('f-dateStart'),de=g('f-dateEnd');
     payload={action:'add_festival',id:g('f-id'),type:g('f-type'),name:g('f-name'),city:g('f-city'),
+      country:g('f-country'),COUNTRY:g('f-country'),
       location:g('f-location'),location_ja:g('f-location_ja'),url:g('f-url'),ticketUrl:g('f-ticketUrl'),instagram:g('f-instagram'),
       address:g('f-address'),lat:g('f-lat'),lng:g('f-lng'),date:ds&&de?ds+'/'+de:ds,
       genre:getSelectedGenres('f-genre').join(', '),image:g('f-image'),imagePosition:g('f-imagePosition'),flyer:g('f-flyer'),
@@ -6964,6 +6967,8 @@ function buildFestivalsJs(rows){
     if(r.location) l.push('    location: "'+q(r.location)+'",');
     if(r.location_ja) l.push('    location_ja: "'+q(r.location_ja)+'",');
     if(r.city) l.push('    city: "'+q(r.city)+'",');
+    const c = r.country || r.COUNTRY;
+    if(c) l.push('    country: "'+q(c)+'",');
     if(r.address) l.push('    address: "'+q(r.address)+'",');
     const lat=parseFloat(r.lat); if(!isNaN(lat)) l.push('    lat: '+lat+',');
     const lng=parseFloat(r.lng); if(!isNaN(lng)) l.push('    lng: '+lng+',');
