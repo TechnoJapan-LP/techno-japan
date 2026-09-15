@@ -846,7 +846,6 @@ function navHtml(lang, altHref) {
     <a href="${navLink(lang, 'festivals.html')}">FESTIVALS</a>
     <a href="${navLink(lang, 'artists.html')}">ARTISTS</a>
     <a href="${navLink(lang, 'venues.html')}">VENUES</a>
-    <a href="/map.html">MAP</a>
     <a href="${navLink(lang, 'about.html')}">ABOUT</a>
     ${toggle}
   </div>
@@ -859,7 +858,6 @@ function navHtml(lang, altHref) {
   <a href="${navLink(lang, 'festivals.html')}">FESTIVALS</a>
   <a href="${navLink(lang, 'artists.html')}">ARTISTS</a>
   <a href="${navLink(lang, 'venues.html')}">VENUES</a>
-  <a href="/map.html">MAP</a>
   <a href="${navLink(lang, 'about.html')}">ABOUT</a>
 ${toggle ? `  ${toggle}\n` : ''}</div>`;
 }
@@ -2169,9 +2167,6 @@ function enHubFromJa(html, page) {
   // EN 版が無いページ（index）は相対表記だと /en/index.html を指してしまう。
   // ルート相対に正規化して JA トップへ確実に戻す。
   s = s.replace(/href="index\.html"/g, 'href="/index.html"');
-  // map.html も EN 版が無い。相対のままだと /en/map.html（存在しない）を指すため
-  // ルート相対に正規化して JA の CLUB MAP へ飛ばす（2026-09-15 導線追加時に発覚）。
-  s = s.replace(/href="\/?map\.html"/g, 'href="/map.html"');
 
   // JA ハブは共有アセットを相対パスで読んでいる。/en/ に置くと /en/data-hub.js を
   // 探して 404 になり、FESTIVALS is not defined でページ全体が死ぬ。
