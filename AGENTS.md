@@ -118,10 +118,62 @@ pushは中止される。`--fast` や回避用の環境変数は本番pushには
 
 **2026-08-13 に定めた。**モックの検査だけで「直った」と言わない。
 
-### 対象
+### 対象（★2026-09-15 改訂: 関数名ではなく「ファイル」で決める）
 
-`publishDataJs` / `fetchAllSheets` / `buildFullDataJs` / `publishSanityCheck` /
-`canonicalizeRows`、および GAS の `get_sheet` / `get_all_sheets` / `publish_data_js`。
+**次のどれか1つでも触ったら必須。**
+
+- `LP/cms.js` / `LP/cms.html`（**中のどの関数でも**）
+- `scripts/fetch-data.mjs`
+- `scripts/check_asset_versions.py` の `VERSION_CHECK_EXEMPT`
+- `.github/workflows/publish-pipeline.yml`
+- Publish が生成・コミットするファイルを**増やした / 変えた**とき
+- GAS の `get_sheet` / `get_all_sheets` / `publish_data_js` / `update_row` / `delete_row`
+
+> **なぜ関数名をやめたか**: 旧版は `buildFullDataJs` 等を名指ししていたため、
+> 2026-09-15 に**新設した `buildHubDataJs`** が「対象外」と判断され、
+> CSP 違反で本番の Publish が止まった。新しい関数を足すたびに穴が開く書き方だった。
+
+### 手順（★両方やる。片方では今日の事故を防げない）
+
+**1. サーバー側 —— 自分で Publish pipeline を流す**
+
+```bash
+gh workflow run "Publish pipeline"
+# success になるまで確認する。失敗したら直して再実行。
+```
+
+**ユーザーに Publish を押させて確かめるのではない。自分で流す。**
+
+**2. ブラウザ側 —— CMS を実際に開いて、変更した処理を呼ぶ**
+
+- CMS は `?cb=<乱数>` を付けて開く（**cms.html は max-age=600 でキャッシュされる**）
+- 変更した関数を実データまたは擬似データで**実行し、例外が出ないこと**を確認
+- ⚠ **`new Function` / `eval` は CSP（`script-src 'self' 'unsafe-inline'`）で動かない**。
+  Node で動いても本番では動かない。`scripts/check_data_hub.mjs` が混入を止める
+
+**3. CMS を変更したら、ユーザーに「Cmd+Shift+R で強制リロード」を必ず伝える**
+
+### 2026-09-15 に起きたこと（このルールを強めた理由）
+
+本番の Publish を **6回** 止めた。**preflight は毎回すべて緑だった。**
+
+| # | 内容 | preflight | 実際 |
+|---|---|---|---|
+| 1 | `new Function` が CSP 違反 | 緑 | ブラウザで実行不可 |
+| 2 | 修正後もキャッシュで古い版が動作 | 緑 | 強制リロードが必要だった |
+| 3 | **update_row で記事1件のデータを破損** | 緑 | バックアップから復元 |
+| 4 | 下書きフェスを参照切れと誤判定 | 緑 | pipeline で失敗 |
+| 5 | `data-hub.js` を ?v 検査の除外に入れ忘れ | 緑 | pipeline で失敗 |
+
+**すべて「push 後、ユーザーが Publish を押して初めて発覚」した。**
+
+### ★本番データへの書き込み（2026-09-15 追加）
+
+- **動作確認のために本番データへ書き込まない。** 確認は読み取り（`get_sheet`）で行う。
+- `update_row` は **送らなかった項目を空にする**。使うときは
+  **既存の全項目を読み、それを含めて送る**。
+  （この確認を怠り、記事の title / image / excerpt / body_en 等を消した）
+- 書き込み前に「この操作で消える項目は無いか」を明示的に確認する。
 
 ### なぜこのルールが要るのか
 
