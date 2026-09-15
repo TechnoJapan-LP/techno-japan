@@ -8276,3 +8276,55 @@ CMS の Publish は `files:[data.js, data-hub.js]` を GAS に送るが、
 
 ### 次の担当への注意・判断待ち
 - 監査タスクは⑦の本文置換だけが残り。他（①②⑤⑥⑨）は完了、⑧は実装不要と判明。
+
+## 2026-09-15 【緊急修正】Publish が CSP 違反で失敗する不具合
+
+### 症状（ユーザー報告）
+Publish Now で
+`Evaluating a string as JavaScript violates the following Content Security Policy
+directive because 'unsafe-eval' is not an allowed source of script:
+script-src 'self' 'unsafe-inline'` が出て失敗。
+
+### 原因（同日の自分の変更）
+`7a04f4f3`（data-hub.js 追加）で入れた **`buildHubDataJs` が `new Function` を
+使っていた**。CMS の CSP は `script-src 'self' 'unsafe-inline'` で
+**`unsafe-eval` を許していない**ため、ブラウザ上で実行できず Publish が中断した。
+- 実装は「buildFullDataJs の出力文字列を `new Function` で評価して項目を落とす」形だった。
+- ローカル（Node）では動くため、**ブラウザで実行して初めて露呈した**。
+
+### 修正
+**入力側で不要項目を落としてから `buildFullDataJs` を通す**形に書き換え
+（入力行のキー名は出力キーと同じことを実装から確認済み）。
+`new Function` / `eval` は使わない。ヘッダーだけ文字列置換で差し替える。
+版: cms.js 126。
+
+### 再発防止
+`scripts/check_data_hub.mjs` に
+**「cms.js に eval / new Function が無い」検査**を追加（コメント行は除外）。
+CSP で動かないコードが入り込んだらローカルで止まる。
+
+### コミット
+- このエントリと同一コミット。
+
+### 検証
+- vm で cms.js を読み込み `buildHubDataJs` を実行:
+  除外5項目が FESTIVALS / ARTICLES ブロックから消え、**VENUES.desc と
+  FESTIVALS.lineup は保持**、生成物が正しい JS として評価できることを確認
+  （※検証は Node 側。ブラウザでは評価しない）
+- `check_data_hub.mjs`: data.js との件数・id順一致、保険生成との一致、
+  eval 不在 → すべて成功
+- preflight 全49件成功
+
+### 変更したパターン
+- cms.js の buildHubDataJs 1関数 / check_data_hub.mjs に検査1
+
+### 未確認の類似パターン
+- ★**CMS のコードは Node で動いてもブラウザで動くとは限らない**（CSP）。
+  今回は `new Function` だったが、`unsafe-inline` 以外の制約
+  （外部スクリプト・WebAssembly 等）も同様に効く。
+  CMS に手を入れたら、**実機の Publish を1回通すまで完了にしない**
+  （AGENTS.md「Publish の経路を触ったら実機で1回通すまで完了にしない」に該当）
+- **今回の修正自体も実機未確認**。ユーザーに Publish を試してもらう必要がある
+
+### 次の担当への注意・判断待ち
+- 監査タスク⑦（本文のDrive URL置換）は、この Publish 成功後に再開する。

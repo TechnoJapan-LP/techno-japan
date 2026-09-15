@@ -6522,29 +6522,26 @@ function buildFullDataJs(d){
    まず既存の buildFullDataJs で data.js と同じ正規化を行い、そこから
    ハブで不要な5項目だけを落とす。buildFullDataJs 自体は変更しない。 */
 function buildHubDataJs(d){
-  const full = buildFullDataJs(d);
-  const values = new Function(full + '\nreturn {FESTIVALS, ARTISTS, VENUES, ARTICLES, EVENTS};')();
-  const rows = (name) => (values[name] || []).map(row => {
-    if(name === 'EVENTS') return row;
-    return Object.fromEntries(Object.entries(row).filter(([key]) => {
-      if(name === 'ARTICLES') return key !== 'body' && key !== 'body_en';
-      if(name === 'FESTIVALS') return key !== 'desc' && key !== 'desc_en' && key !== 'editions';
-      return true;
-    }));
+  /* ⚠ new Function / eval は使わないこと。CMS の CSP は
+     script-src 'self' 'unsafe-inline' で unsafe-eval を許していないため、
+     ブラウザ上で実行すると Publish が「CSP違反」で失敗する（2026-09-15 実際に発生）。
+     入力行のキー名は buildFullDataJs の出力キーと同じなので、
+     **入力側で不要項目を落としてから** buildFullDataJs を通す。 */
+  const omit = (rows, keys) => (rows || []).map((row) => {
+    const copy = Object.assign({}, row);
+    keys.forEach((key) => { delete copy[key]; });
+    return copy;
   });
-  const header = `/* ==========================================================
+  const lite = Object.assign({}, d, {
+    FESTIVALS: omit(d.FESTIVALS, ['desc', 'desc_en', 'editions']),
+    ARTICLES: omit(d.ARTICLES, ['body', 'body_en']),
+  });
+  const hubHeader = `/* ==========================================================
    TECHNO JAPAN — HUB DATA
 
    Lightweight shared data for hub pages. Detail-only content stays in data.js.
    ========================================================== */`;
-  return [
-    header,
-    'const ARTISTS = ' + JSON.stringify(rows('ARTISTS')) + ';',
-    'const EVENTS = ' + JSON.stringify(rows('EVENTS')) + ';',
-    'const FESTIVALS = ' + JSON.stringify(rows('FESTIVALS')) + ';',
-    'const VENUES = ' + JSON.stringify(rows('VENUES')) + ';',
-    'const ARTICLES = ' + JSON.stringify(rows('ARTICLES')) + ';',
-  ].join('\n\n');
+  return buildFullDataJs(lite).replace(dataJsHeader(), hubHeader);
 }
 
 /* Publish前サニティチェック（2026-07-23 フェス全消失事故の再発防止）。

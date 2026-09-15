@@ -114,4 +114,21 @@ for (const file of enHubs) {
     fail(`EN ${file} のデータ参照が不正です（enHubFromJa で生成してください）`);
   }
 }
+
+/* ★CMS は CSP（script-src 'self' 'unsafe-inline'）で動くため、
+   ブラウザで実行されるコードに eval / new Function があると
+   Publish が「CSP違反」で落ちる（2026-09-15 実際に発生）。
+   cms.js に入り込んでいないかを機械で止める。 */
+{
+  const cms = fs.readFileSync(path.join(root, 'LP', 'cms.js'), 'utf8');
+  const hits = cms.split('\n')
+    .map((line, i) => ({ line, n: i + 1 }))
+    .filter(({ line }) => /\bnew Function\s*\(|\beval\s*\(/.test(line))
+    .filter(({ line }) => !/^\s*(\/\/|\*|\/\*)/.test(line));   // コメント行は除く
+  if (hits.length) {
+    fail(`cms.js に eval / new Function があります（CSPで実行できません）: ${hits.map(h => 'L' + h.n).join(', ')}`);
+  }
+  console.log('✅ cms.js に eval / new Function が無い（CSP違反の再発防止）');
+}
+
 console.log(`✅ ハブHTML: JA${jaHubs.length}枚 / EN${enHubs.length}枚が data-hub.js のみ参照`);
