@@ -8328,3 +8328,105 @@ CSP で動かないコードが入り込んだらローカルで止まる。
 
 ### 次の担当への注意・判断待ち
 - 監査タスク⑦（本文のDrive URL置換）は、この Publish 成功後に再開する。
+
+## 2026-09-15 【緊急修正2】下書きフェスに開催回を作ると Publish が止まる
+
+### 症状
+CSP 修正後、Publish は成功するが **Publish pipeline が失敗**:
+`✗ EDITIONS super-rave-kitakagaya-2026: FESTIVAL_ID参照切れ "super-rave-kitakagaya"`
+
+### 原因（検査の設計不備。ユーザーの操作は正しい）
+- `scripts/fetch-data.mjs` の参照チェックが、
+  **published のフェスだけで `festivalIds` を作っていた**。
+- 実データ: フェス `super-rave-kitakagaya` も開催回 `super-rave-kitakagaya-2026` も
+  **両方 STATUS=draft**。どちらも公開されないのに「参照切れ」と誤判定していた。
+- **下書きのフェスに開催回を作るのは正常な運用**であり、止める理由が無い。
+
+### 修正
+参照先の存在確認を **draft を含めた全フェス**（`knownFestivalIds`）で行い、
+そのうえで「**公開する開催回が下書きのフェスを参照している**」場合だけ別メッセージで止める。
+
+```
+if (!knownFestivalIds.has(fid))      → FESTIVAL_ID参照切れ（本当に存在しない）
+else if (pub && !festivalIds.has(fid)) → 公開する開催回が下書きのフェスを参照
+```
+
+### コミット
+- このエントリと同一コミット。
+
+### 検証（ミューテーション試験）
+| 試験 | 結果 |
+|---|---|
+| 存在しないフェスIDを参照 | ✅ 「FESTIVAL_ID参照切れ」で停止 |
+| 公開開催回が下書きフェスを参照 | ✅ 「下書きのフェスを参照」で停止 |
+| 下書きフェス＋下書き開催回（今回の状況） | ✅ **通る**（誤検知が解消） |
+- preflight 全49件成功
+
+### ★今日の一連の Publish 失敗の整理（3件とも別原因）
+1. **CSP違反**: 自分が入れた `new Function`（cms.js）→ 修正済み（v126）
+2. **ブラウザキャッシュ**: 修正後も古い cms.js v125 が読まれていた
+   → **CMS を直したら「Cmd+Shift+R で強制リロード」を必ず案内すること**
+   （cms.html は `max-age=600`。GitHub Pages ではヘッダーを変えられない）
+3. **下書きフェスの参照切れ誤判定**: 本件
+
+### 未確認の類似パターン
+- ★**LINEUPS 側にも同種の誤判定がある可能性**。実測で「参照切れの出演者 7件」が
+  出ており、下書きの開催回を参照しているものが含まれるかは未調査
+- ARTISTS / VENUES の draft も同じ構造の問題を持ちうる
+
+### 次の担当への注意・判断待ち
+- この修正が本番に入ったら、**Publish pipeline を1回再実行**して緑にすること。
+
+## 2026-09-15 【事故報告】本番データを壊した（BON DISCO 記事）＋復元
+
+### 何をして、何が起きたか
+Drive画像移行の作業中、**「GAS に書き込めるか」を確認する目的で**
+本番の ARTICLES に対して update_row を実行した:
+```js
+gasPostJson_({action:'update_row', sheet:'ARTICLES', row:row._row, id:row.id, body:row.body})
+```
+**GAS の update_row は「送られた項目だけ更新」ではなく「行を送られた内容で置き換える」**
+動作だった。結果、`bondisco-2026-info` の
+**title / title_en / excerpt / excerpt_en / category / date / author / image /
+metaDescription / readTime / featured / status / body_en がすべて空になった**
+（残ったのは id と body のみ）。
+
+### 気づいた経緯
+翌日の Publish pipeline が `check_jsonld` で失敗
+（`imageが16:9・1:1・4:3の3件で実在する — og-default.png`）。
+記事の image が空になり、デフォルト画像にフォールバックしていたため。
+
+### 復元
+- `backups/2026-09-14.json`（事故前）に全23列が残っていた。
+- CMS のコンソールから **全項目を明示して** update_row を2回実行し復元
+  （1回目で本文以外、2回目で body_en）。
+- 復元後の確認: title / image / status / category / excerpt / title_en /
+  excerpt_en がすべて戻り、**body 2,386字・body_en 3,704字**。
+- **他11記事は無傷**（全記事を機械で確認）。
+
+### ★再発防止（守ること）
+1. **本番データへの書き込みを「確認のため」に行わない。**
+   確認したいなら読み取り（get_sheet）だけにする。
+2. update_row を使うときは **必ず既存の全項目を読み、それを含めて送る**。
+   送らなかった項目は消える。
+3. 書き込み前に「この操作で消える項目は無いか」を明示的に確認する。
+
+### 併発した問題（すべて同日）
+| # | 内容 | 原因 |
+|---|---|---|
+| 1 | Publish が CSP 違反で失敗 | 自分が入れた `new Function`（cms.js）|
+| 2 | 修正後も同じエラー | **ブラウザキャッシュ**（cms.html は max-age=600）。CMS を直したら Cmd+Shift+R を案内すること |
+| 3 | 記事データ破損 | **本件** |
+| 4 | 下書きフェスで参照切れ誤判定 | fetch-data.mjs が published のみで参照先を判定していた |
+| 5 | articles.xml が10件（期待11件）| 3 の影響でローカル data.js が壊れていた。git の事故前コミットから当該ブロックを復元して解消 |
+
+### コミット
+- 4 の修正と 5 の復元を含む。
+
+### 検証
+- preflight 全49件成功
+- articles.xml 11件 / feeds OK / キャッシュバスティング正常
+- シート側は正常（fmtDate で `2026-08-13` に変換されることを実機で確認）
+
+### 次の担当への注意・判断待ち
+- この修正を push 後、**Publish pipeline を再実行**して緑にすること。

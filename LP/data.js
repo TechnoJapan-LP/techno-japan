@@ -3033,6 +3033,7 @@ const ARTICLES = [
     date: "2026-08-13",
     author: "TECHNO JAPAN",
     image: "images/articles/bondisco-2026-info.webp",
+    festivalId: "bondisco",
     readTime: 1,
     status: "published",
   },

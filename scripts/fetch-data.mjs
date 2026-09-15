@@ -272,12 +272,25 @@ async function main() {
   if (EDITIONS_FROM_SHEET) {
     // 正式ソース: EDITIONS / LINEUPS。FESTIVALSから消えた過去回も保持する。
     const festivalIds = new Set(festivals.map(f => String(f.ID || '').trim()));
+    /* 参照先の存在確認は draft を含めた全フェスで行う。
+       下書きのフェスに開催回を作るのは正常な運用で、どちらも公開されない以上
+       サイトには影響しない。ここを published だけで判定していたため、
+       「下書きのフェス＋下書きの開催回」で Publish が止まっていた
+       （2026-09-15 super-rave-kitakagaya で実際に発生）。 */
+    const knownFestivalIds = new Set(
+      (raw.FESTIVALS || []).map(f => String(f.ID || '').trim()).filter(Boolean)
+    );
     for (const r of raw.EDITIONS) {
       const id = String(r.EDITION_ID || '').trim();
       const fid = String(r.FESTIVAL_ID || '').trim();
       const pub = isPublished(r);
       validateId('EDITIONS', id, seenE, pub, r._row);
-      if (!festivalIds.has(fid)) errors.push(`EDITIONS ${id}: FESTIVAL_ID参照切れ "${fid}"`);
+      if (!knownFestivalIds.has(fid)) {
+        errors.push(`EDITIONS ${id}: FESTIVAL_ID参照切れ "${fid}"`);
+      } else if (pub && !festivalIds.has(fid)) {
+        // 公開する開催回が下書きのフェスを指していると、詳細ページが作れない
+        errors.push(`EDITIONS ${id}: 公開する開催回が下書きのフェス "${fid}" を参照しています`);
+      }
       if (!pub) continue;
       editions.push(stripMeta({
         EDITION_ID:id, FESTIVAL_ID:fid, EDITION:r.EDITION || '',
