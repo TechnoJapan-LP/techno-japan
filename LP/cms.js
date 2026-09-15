@@ -6518,6 +6518,35 @@ function buildFullDataJs(d){
   return lines.join('\n\n');
 }
 
+/* ハブは詳細ページで使う本文・開催履歴を読まない。
+   まず既存の buildFullDataJs で data.js と同じ正規化を行い、そこから
+   ハブで不要な5項目だけを落とす。buildFullDataJs 自体は変更しない。 */
+function buildHubDataJs(d){
+  const full = buildFullDataJs(d);
+  const values = new Function(full + '\nreturn {FESTIVALS, ARTISTS, VENUES, ARTICLES, EVENTS};')();
+  const rows = (name) => (values[name] || []).map(row => {
+    if(name === 'EVENTS') return row;
+    return Object.fromEntries(Object.entries(row).filter(([key]) => {
+      if(name === 'ARTICLES') return key !== 'body' && key !== 'body_en';
+      if(name === 'FESTIVALS') return key !== 'desc' && key !== 'desc_en' && key !== 'editions';
+      return true;
+    }));
+  });
+  const header = `/* ==========================================================
+   TECHNO JAPAN — HUB DATA
+
+   Lightweight shared data for hub pages. Detail-only content stays in data.js.
+   ========================================================== */`;
+  return [
+    header,
+    'const ARTISTS = ' + JSON.stringify(rows('ARTISTS')) + ';',
+    'const EVENTS = ' + JSON.stringify(rows('EVENTS')) + ';',
+    'const FESTIVALS = ' + JSON.stringify(rows('FESTIVALS')) + ';',
+    'const VENUES = ' + JSON.stringify(rows('VENUES')) + ';',
+    'const ARTICLES = ' + JSON.stringify(rows('ARTICLES')) + ';',
+  ].join('\n\n');
+}
+
 /* Publish前サニティチェック（2026-07-23 フェス全消失事故の再発防止）。
    主要シートが 0件、または前回Publish時から半分以下に減っていたら中断する。
    前回件数は localStorage に保存（初回は 0件チェックのみ）。 */
@@ -6741,7 +6770,9 @@ function exportDataJs(){
     const sane = publishSanityCheck(d);
     if(!sane.ok) return toast(sane.message,'error');
     const content=buildFullDataJs(d);
+    const hubContent=buildHubDataJs(d);
     downloadFile('data.js',content);
+    downloadFile('data-hub.js',hubContent);
     toast('data.js exported','success');
   }).catch(e=>toast('Export error: '+e.message,'error'));
 }
@@ -6855,6 +6886,7 @@ function publishDataJs(opts){
     try { localStorage.setItem('tj_publish_counts', JSON.stringify(sane.counts)); } catch(_){}
     try { localStorage.setItem('tj_publish_snapshot_pending', JSON.stringify(publishSnapshot(d))); } catch(_){}
     const content = buildFullDataJs(d);
+    const hubContent = buildHubDataJs(d);
     if (btn) btn.innerHTML = 'Checking...';
     return fetchPublishedDataJs().then((live) => {
       /* 中身が同じなら送らない。送っても空コミットになるだけで、
@@ -6872,6 +6904,10 @@ function publishDataJs(opts){
       return gasPostJson_({
       action: 'publish_data_js',
         content: content,
+        files: [
+          { path: 'LP/data.js', content },
+          { path: 'LP/data-hub.js', content: hubContent },
+        ],
         message: opts.message || 'cms: publish data.js'
       });
     });

@@ -81,6 +81,7 @@ run "SNS シェア画像"                    node scripts/check_og_image.mjs
 run "大きい画像の配信"                  node scripts/check_image_delivery.mjs
 run "画像の軽量版"                      python3 scripts/check_image_derivatives.py
 run "記事フィードと関連記事"              node scripts/check_feeds.mjs
+run "ハブ用データの整合"                  node scripts/check_data_hub.mjs
 
 echo
 echo "▸ キャッシュと配信"

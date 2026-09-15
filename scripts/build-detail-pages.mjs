@@ -170,6 +170,39 @@ function loadData() {
   return ctx.__out;
 }
 
+/* CMS の Publish でも data-hub.js を送っているが、GAS 側が複数ファイルに
+   対応していない場合に備えてビルドでも生成する（2026-09-15）。
+   除外する5項目は cms.js の buildHubDataJs と同じ。片方だけ変えないこと。 */
+function buildHubDataJs(data) {
+  const strip = (name, row) => Object.fromEntries(Object.entries(row).filter(([key]) => {
+    if (name === 'ARTICLES') return key !== 'body' && key !== 'body_en';
+    if (name === 'FESTIVALS') return key !== 'desc' && key !== 'desc_en' && key !== 'editions';
+    return true;
+  }));
+  const rows = (name) => (data[name] || []).map((row) => strip(name, row));
+  const header = `/* ==========================================================
+   TECHNO JAPAN — HUB DATA
+
+   Lightweight shared data for hub pages. Detail-only content stays in data.js.
+   ========================================================== */`;
+  return [
+    header,
+    'const ARTISTS = ' + JSON.stringify(rows('ARTISTS')) + ';',
+    'const EVENTS = ' + JSON.stringify(rows('EVENTS')) + ';',
+    'const FESTIVALS = ' + JSON.stringify(rows('FESTIVALS')) + ';',
+    'const VENUES = ' + JSON.stringify(rows('VENUES')) + ';',
+    'const ARTICLES = ' + JSON.stringify(rows('ARTICLES')) + ';',
+  ].join('\n\n');
+}
+
+function writeHubDataJs(data) {
+  const file = path.join(LP_DIR, 'data-hub.js');
+  const content = buildHubDataJs(data);
+  if (fs.existsSync(file) && fs.readFileSync(file, 'utf8') === content) return false;
+  fs.writeFileSync(file, content);
+  return true;
+}
+
 function loadDraftPreview(file) {
   const article = JSON.parse(fs.readFileSync(file, 'utf8'));
   if (!article || typeof article !== 'object' || Array.isArray(article)) {
@@ -2125,7 +2158,7 @@ function enHubFromJa(html, page) {
   // ルート相対に正規化して JA トップへ確実に戻す。
   s = s.replace(/href="index\.html"/g, 'href="/index.html"');
 
-  // JA ハブは共有アセットを相対パスで読んでいる。/en/ に置くと /en/data.js を
+  // JA ハブは共有アセットを相対パスで読んでいる。/en/ に置くと /en/data-hub.js を
   // 探して 404 になり、FESTIVALS is not defined でページ全体が死ぬ。
   // ルート相対へ正規化する。?v のクエリは維持する（キャッシュバスティング §9-11）。
   s = s.replace(/(<(?:script|link)[^>]*(?:src|href)=")((?!https?:|\/|#|mailto:|data:)[a-z0-9-]+\.(?:js|css)(?:\?v=\d+)?)"/g,
@@ -2390,7 +2423,9 @@ function buildAiSurface({ pubFests, editionsByFestival, pubVenues, pubArtists, p
 function main() {
   IMAGE_DIMENSIONS = loadImageDimensions();
   CARD_DERIVATIVES = loadCardDerivatives();
-  const { ARTISTS = [], FESTIVALS = [], VENUES = [], ARTICLES = [] } = loadData();
+  const data = loadData();
+  const { ARTISTS = [], FESTIVALS = [], VENUES = [], ARTICLES = [] } = data;
+  console.log(`Hub data: ${writeHubDataJs(data) ? 'updated' : 'unchanged'}`);
   const EDITIONS = loadItems(EDITIONS_PATH, 'editions.json');
   const LINEUPS = loadItems(LINEUPS_PATH, 'lineups.json');
 

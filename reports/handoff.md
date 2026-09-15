@@ -7966,3 +7966,58 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 ### 次の担当への注意・判断待ち
 - 監査レポート全文はこのセッションの最後の回答を参照（h1・meta・OGP・
   canonical・hreflang・構造化データ・内部リンク・sitemap の実測値つき）。
+
+## 2026-09-15 ハブ用の軽量データ data-hub.js を追加（JS転送57%削減）
+
+### 実施（設計・検証=Claude / 実装=Codex）
+- 監査タスク①。ハブ12枚（JA7/EN5）が読む `data.js` は 401KB（非圧縮）/
+  gzip 128KB。**詳細ページは data.js を読んでいない（0/95）**ことを実測。
+- 内訳を測り、**ハブが一度も参照しない項目が202KB（63%）**と判明:
+  ARTICLES `body`+`body_en` 126KB / FESTIVALS `desc`+`desc_en` 58KB /
+  FESTIVALS `editions` 17KB。
+- 各ハブの使用項目を**実コードから抽出**して保持リストを作成
+  （VENUES の `desc`/`desc_en` は venues.html が使うので残す。
+  FESTIVALS の `lineup` は index.html が使うので残す）。
+- **除外はこの5項目だけ**。`LP/data-hub.js` を新設し、ハブだけが読む。
+  **`data.js` の生成ロジック（buildFullDataJs）は一切変更していない**。
+
+### ★二重生成にした理由（重要）
+CMS の Publish は `files:[data.js, data-hub.js]` を GAS に送るが、
+**GAS 側が複数ファイルに対応しているかリポジトリから確認できない**
+（GASのコードは外部）。未対応だと data-hub.js だけ古いまま残り、
+ハブが古いデータを表示し続ける。
+そのため **build-detail-pages.mjs でも data.js から data-hub.js を生成**する
+保険を入れた。Publish pipeline はビルドを通るので、どちらの経路でも最新になる。
+**除外5項目の定義は cms.js と build-detail-pages.mjs の2箇所にある。片方だけ変えないこと。**
+
+### コミット
+- このエントリと同一コミット。
+
+### 検証（実測）
+| | 改善前 | 改善後 |
+|---|---|---|
+| ハブが読むJS（gzip） | 147KB | **62KB（57%減）** |
+| data.js 相当（gzip） | 128KB | **43KB** |
+| パース対象（非圧縮） | 401KB | **122KB** |
+- ハブ7種（JA5 + EN2）を headless で開き、**全件でカード描画・データ件数一致・
+  コンソールエラー0件**を確認（F:95 A:136 V:22 Art:11）
+- `check_data_hub.mjs`: 件数・id順・保持項目の欠落なし・除外5項目の不在・
+  ハブHTMLの参照先を検証 → preflight **49本目**
+- preflight 全49件成功
+
+### 変更したパターン
+- cms.js（buildHubDataJs 新設・Publish の files 送信）/
+  build-detail-pages.mjs（data-hub.js 生成・ハブHTMLの参照先）/
+  ハブHTML JA7枚（EN5枚は enHubFromJa が追従）/ 新検査1 / preflight 1行
+
+### 未確認の類似パターン
+- ★**GAS の publish_data_js が `files` 配列に対応しているか実機未確認**。
+  次回の Publish 後に `LP/data-hub.js` のコミットが増えるかを確認すること。
+  未対応でもビルド側の保険で更新されるため、壊れはしない
+- `data.js` は今後もリポジトリに残り本番にも配信されるが、**ブラウザからは
+  読まれない**（ビルドと検査のみ）。将来 CDN から外す余地がある
+
+### 次の担当への注意・判断待ち
+- 監査タスクの続き: ENハブ6件のsitemap追加 / EN版の日本語7件 / map.html削除
+  （ユーザー決定済み）/ タップ領域44px / meta description の言語別文字数 /
+  Drive直リンク画像80枚 / ラインナップ未入力フェスの内部リンク / 記事のFAQPage
