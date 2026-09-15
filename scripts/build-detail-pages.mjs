@@ -901,7 +901,10 @@ const GA = `<script>
 
 
 function page({ title, desc, canonical, image, ogType = 'article', jsonLd, body, lang = 'ja', altHref = null, extraScripts = '', backgroundLayer = false }) {
-  const d = truncate(desc || '', 160);
+  /* 検索結果に出る長さは言語で違う。日本語は全角のため PC で約120字、
+     英語は約155字で切られる。160 固定だと日本語の135ページが途中で切れていた
+     （2026-09-15 実測: JA 275件中120字超が135件）。 */
+  const d = truncate(desc || '', lang === 'en' ? 155 : 120);
   // hreflang: JA/EN 両方が存在するページだけ相互宣言する
   const abs = (path) => `${BASE}${path}`;
   const hreflang = altHref
@@ -1039,6 +1042,13 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
     description: desc,
     image: articleImages,
     isAccessibleForFree: true,
+    /* 音声アシスタントと生成AIに「記事の要点はここ」を明示する（2026-09-15）。
+       Google は speakable をニュース記事向けにサポートしている。
+       セレクタは実際のマークアップと一致させること（h1 と .article-excerpt）。 */
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '.article-excerpt'],
+    },
     wordCount: stripTags(L.body || '').length,
     thumbnailUrl: articleImages[0] || image,
     ...(about ? { about } : {}),
@@ -2062,7 +2072,7 @@ const EN_PAGES = new Set(['index.html', 'about.html', 'submit.html', 'festivals.
 
 // EN ハブの meta description（JA は日英併記なので英語のみに差し替える）
 const EN_HUB_DESC = {
-  'festivals.html': "Techno, house and open-air festivals across Japan. Browse by date, region and genre — the definitive guide to Japan's electronic music festivals and underground raves.",
+  'festivals.html': "Techno, house and open-air festivals across Japan. Browse by date, region and genre — the definitive guide to Japan's electronic music festivals.",
   'artists.html': "DJs and artists shaping Japan's underground techno and house scene. Profiles, genres and festival appearances.",
   'venues.html': "Clubs, warehouses and music bars across Japan. The venues that define the country's underground electronic music scene.",
   'news.html': "Stories, interviews and reports from Japan's underground techno and house scene.",
