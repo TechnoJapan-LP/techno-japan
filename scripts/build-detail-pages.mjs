@@ -532,6 +532,22 @@ function addDriveImageSrcset(html) {
   });
 }
 
+/* 本文の自サイト画像に srcset を付ける（2026-09-15）。
+   Drive 直リンクからの移行で、本文画像が /images/articles/… を指すようになった。
+   addDriveImageSrcset は Drive URL 専用なので、こちらで派生画像を割り当てる。
+   sizes は addDriveImageSrcset と同じ実測値（本文はスマホ全幅 / PC は最大1200px）。
+   派生が無い画像（登録前・外部URL）はそのまま返す。 */
+const LOCAL_ARTICLE_IMG = /(<img\b[^>]*\bsrc=(["']))(\/?images\/[^"']+)(\2[^>]*>)/gi;
+function addLocalImageSrcset(html) {
+  return String(html || '').replace(LOCAL_ARTICLE_IMG, (tag, head, _q, source, tail) => {
+    if (/\bsrcset=/i.test(tag)) return tag;           // 既にあるものは触らない
+    const attrs = srcsetAttr(source, '(max-width: 700px) 100vw, 1200px');
+    if (!attrs) return tag;                           // 派生が無いものはそのまま
+    const lazy = /\bloading=/i.test(tag) ? '' : ' loading="lazy" decoding="async"';
+    return `${head}${source}${tail.slice(0, 1)}${attrs}${lazy}${tail.slice(1)}`;
+  });
+}
+
 function addHtmlImageDimensions(html) {
   return String(html || '').replace(/<img\b(?![^>]*\bwidth=)([^>]*?)\bsrc=(["'])([^"']+)\2([^>]*)>/gi, (tag, before, quote, src, after) => {
     const attrs = dimensionAttrs(src);
@@ -1179,7 +1195,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
       <div><dt>READING TIME</dt><dd>${esc(a.readTime || 5)} MIN</dd></div>
     </dl>
     <div class="article-excerpt">${esc(L.excerpt || '')}</div>
-    <div class="article-body">${addDriveImageSrcset(addHtmlImageDimensions(resolveEntities(linkedBody, lang)))}</div>
+    <div class="article-body">${addLocalImageSrcset(addDriveImageSrcset(addHtmlImageDimensions(resolveEntities(linkedBody, lang))))}</div>
     <div class="article-share">${festivalShareButtons(L.title, canonical, lang)}</div>
     ${relatedStoriesHtml}
     ${relatedFestivalHtml}

@@ -6,10 +6,14 @@ const root = path.resolve(import.meta.dirname, '..');
 const cmsSource = fs.readFileSync(path.join(root, 'LP/cms.js'), 'utf8');
 const checkCms = (condition, message) => { if (!condition) failures.push(message); };
 const dataSource = fs.readFileSync(path.join(root, 'LP/data.js'), 'utf8');
+const derivativesSource = fs.readFileSync(path.join(root, 'LP/image-derivatives.js'), 'utf8');
 const context = {};
 vm.createContext(context);
 new vm.Script(`${dataSource}\n;globalThis.__data = { ARTICLES, ARTISTS };`).runInContext(context);
 const { ARTICLES, ARTISTS } = context.__data;
+const derivativesMatch = derivativesSource.match(/window\.TJ_IMAGE_DERIVATIVES\s*=\s*(\{[\s\S]*?\});/);
+let derivatives = {};
+try { derivatives = derivativesMatch ? JSON.parse(derivativesMatch[1]) : {}; } catch { derivatives = {}; }
 const artistIds = new Set(ARTISTS.map((artist) => String(artist.id || '').trim()).filter(Boolean));
 const liveArticles = ARTICLES.filter((article) => String(article.status || '').toLowerCase() !== 'draft');
 const files = liveArticles.map((article) => ({
@@ -20,6 +24,9 @@ const files = liveArticles.map((article) => ({
 const failures = [];
 const check = (condition, message) => { if (!condition) failures.push(message); };
 let totalLinks = 0;
+check(!!derivativesMatch, 'image-derivatives.js: 対応表を読み取れません');
+const attrValue = (tag, name) => tag.match(new RegExp(`\\b${name}\\s*=\\s*(["'])(.*?)\\1`, 'i'))?.[2] || '';
+const imageTags = (html) => [...html.matchAll(/<img\b[^>]*>/gi)].map(([tag]) => tag);
 
 // ARTICLES の UPDATED_AT は get_sheet では updated_at で返る（2026-09-14 実測）。
 // 読み取り側と data.js 出力側が camelCase だけに戻らないよう静的に監視する。
@@ -45,6 +52,30 @@ for (const { article, file } of files) {
   const headingHasLink = [...articleBody.matchAll(/<h([1-6])[^>]*>([\s\S]*?)<\/h\1>/g)]
     .some(([, , content]) => /<a\s+class="entity-link"/.test(content));
   check(!headingHasLink, `${article.id}: 見出し内に自動リンクがあります`);
+
+  for (const tag of imageTags(articleBody)) {
+    const source = attrValue(tag, 'src');
+    const srcset = attrValue(tag, 'srcset');
+    const srcsetCount = (tag.match(/\bsrcset\s*=/gi) || []).length;
+    check(srcsetCount <= 1, `${article.id}: 1つのimgにsrcsetが複数あります (${source})`);
+
+    const localSource = source.replace(/^\/+/, '');
+    const entry = /^images\/articles\//i.test(localSource) ? derivatives[localSource] : null;
+    if (entry?.srcset?.length) {
+      check(!!srcset, `${article.id}: 自サイト本文画像にsrcsetがありません (${source})`);
+      for (const candidate of srcset.split(',').map((value) => value.trim().split(/\s+/)[0]).filter(Boolean)) {
+        if (/^\/?images\//i.test(candidate)) {
+          check(fs.existsSync(path.join(root, 'LP', candidate.replace(/^\/+/, ''))),
+            `${article.id}: srcset候補ファイルがありません (${candidate})`);
+        }
+      }
+    }
+
+    if (/^https:\/\/lh3\.googleusercontent\.com\//i.test(source)) {
+      check(!srcset || srcset.split(',').every((candidate) => /^https:\/\/lh3\.googleusercontent\.com\/.*=w\d+\s+\d+w$/i.test(candidate.trim())),
+        `${article.id}: Drive画像のsrcset候補が不正です (${source})`);
+    }
+  }
 
   const ld = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)]
     .map(([, json]) => { try { return JSON.parse(json); } catch { return null; } })
