@@ -918,3 +918,26 @@ body > div:not(.tj-bg):not(.cursor-dot):not(.cursor-ring) {
   .ssr-link-list { grid-template-columns: 1fr; }
   .ssr-link-list a { padding: 13px 16px; }
 }
+
+/* ============================================================
+   タップ領域の確保（2026-09-15 監査）
+   detail.css には既に @media (pointer: coarse) でのタップ対応があるが
+   （.lineup-item / .detail-chip / .detail-links a / .nav-lang a）、
+   戻るリンク・CTA・言語切替・タブは対象外だった。
+   ⚠ headless Chrome はタッチを模擬しないため pointer:coarse は効かず、
+     この指定の効果は headless では測れない（AGENTS.md の実測ルール参照）。
+     PC の見た目を変えないよう、既存と同じくタッチ端末だけに適用する。
+   本文中のリンク（.entity-link 等）は行の中に収まる必要があるため対象外。
+   ============================================================ */
+@media (pointer: coarse) {
+  .section-cta,
+  .back-link,
+  .detail-back,
+  .article-back,
+  .lang-btn,
+  .sort-tab {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+}

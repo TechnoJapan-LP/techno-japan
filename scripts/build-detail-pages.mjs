@@ -71,7 +71,7 @@ const ARTICLE_FX_CSS_VERSION = 12;
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
 const COMMON_JS_VERSION = 15;   // 2026-09-13 フェス詳細の行動計測
-const COMMON_CSS_VERSION = 29;   // 2026-09-14 記事タイトルの英字固有名詞分断防止
+const COMMON_CSS_VERSION = 30;   // 2026-09-14 記事タイトルの英字固有名詞分断防止
 const LANG_TOGGLE_VERSION = 1;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
 const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');

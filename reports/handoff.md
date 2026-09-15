@@ -8021,3 +8021,54 @@ CMS の Publish は `files:[data.js, data-hub.js]` を GAS に送るが、
 - 監査タスクの続き: ENハブ6件のsitemap追加 / EN版の日本語7件 / map.html削除
   （ユーザー決定済み）/ タップ領域44px / meta description の言語別文字数 /
   Drive直リンク画像80枚 / ラインナップ未入力フェスの内部リンク / 記事のFAQPage
+
+## 2026-09-15 監査タスク②⑤: ENハブのsitemap収録 / タップ領域の補強
+
+### ② ENハブ6件を sitemap に追加
+- 実測: sitemap.xml 536URL のうち EN ハブは `en/submit.html` の1件だけで、
+  **`en/index` `en/festivals` `en/artists` `en/venues` `en/news` `en/about` の
+  6枚が未収録**だった（EN詳細264件は収録済み）。英語圏の入口が申告されていない状態。
+- `scripts/generate-sitemap.py` の `STATIC_PAGES` に6件追加（理由コメント付き）。
+- 結果: **536 → 542 URL**。6件とも実ファイルが存在することを確認。
+
+### ⑤ タップ領域（★監査レポートの指摘を一部訂正）
+- **訂正1**: detail.css には**既にタッチ対応があった**
+  （`@media (pointer: coarse)` で `.lineup-item` `.detail-chip`
+  `.detail-links a` `.nav-lang a`）。監査ではこれを見落として
+  「タップ領域が15px」と報告していた。
+- **訂正2**: ★**headless Chrome はタッチを模擬しない**ため、私の計測は
+  すべて「マウス環境」の値だった。`--touch-events=enabled` 等のフラグを
+  試したが `pointer: coarse` は **false のまま**（実測）。
+  つまり**実機の当たり判定は測れていない**。
+- 対応: 既存の対応から漏れていた `.section-cta` `.back-link` `.detail-back`
+  `.article-back` `.lang-btn` `.sort-tab` の6つに `min-height: 44px` を追加。
+  **既存と同じく `@media (pointer: coarse)` 内**に置き、PC の見た目は変えない。
+- 版: common.css 30。
+
+### コミット
+- このエントリと同一コミット（生成物544ページ含む）。
+
+### 検証
+- sitemap: 542URL・EN6件の実ファイル存在を確認
+- タップCSS: `@media (pointer: coarse)` 内にある / 対象6セレクタすべて /
+  `min-height: 44px` を静的に確認
+- PC幅（headless）で横はみ出し0・見た目の回帰なし
+- preflight 全49件成功
+- **実機（タッチ端末）での当たり判定は未検証**（headless では原理的に測れない）
+
+### 変更したパターン
+- generate-sitemap.py の STATIC_PAGES に6件 / common.css に1ブロック / 版定数1
+
+### 未確認の類似パターン
+- ★**headless でのタッチ検証手段が無い**。`pointer: coarse` を要する CSS は
+  今後も静的確認しかできない。CDP の `Emulation.setTouchEmulationEnabled` を
+  使えば可能だが未実装
+- 本文中のリンク（`.entity-link` 等）は行内に収まる必要があるため対象外のまま
+
+### 次の担当への注意・判断待ち
+- **map.html の扱いはユーザー判断待ち**。実装済みの「CLUB MAP」機能で、
+  llms.txt にも掲載、専用検査2本（check_map_nationwide / check_venue_maps）あり。
+  ナビから辿れないだけ。削除すると検査とllms.txtの記述も要修正
+- EN版の日本語 h1 5件（capsule / ensou / mori-michi-ichiba / otsukimi /
+  ringo-festival）は **AGENTS.md に記載の既知事項**（`name_en` 未入力方針）。
+  データ入力で解決する

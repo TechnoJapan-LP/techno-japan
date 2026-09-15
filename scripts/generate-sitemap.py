@@ -28,6 +28,14 @@ STATIC_PAGES = [
     {"path": "/about.html", "priority": "0.5", "changefreq": "monthly"},
     {"path": "/submit.html", "priority": "0.5", "changefreq": "monthly"},
     {"path": "/en/submit.html", "priority": "0.5", "changefreq": "monthly"},
+    # EN ハブは 2026-09-15 まで submit だけが収録され、入口となる6枚が
+    # sitemap に申告されていなかった（EN詳細264件は収録済み）。
+    {"path": "/en/index.html", "priority": "0.9", "changefreq": "daily"},
+    {"path": "/en/festivals.html", "priority": "0.9", "changefreq": "daily"},
+    {"path": "/en/artists.html", "priority": "0.8", "changefreq": "weekly"},
+    {"path": "/en/venues.html", "priority": "0.8", "changefreq": "weekly"},
+    {"path": "/en/news.html", "priority": "0.9", "changefreq": "daily"},
+    {"path": "/en/about.html", "priority": "0.5", "changefreq": "monthly"},
 ]
 
 
