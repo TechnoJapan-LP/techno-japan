@@ -69,7 +69,13 @@ REF_RE = re.compile(
 #
 #   代償: Publish 直後の初回表示だけ古い（SWR なので次の遷移で新しくなる）。
 #   経緯は AUDIT §9-30（導入）と §9-32（撤回）。
-VERSION_CHECK_EXEMPT = {"data.js"}
+# 【data-hub.js を除外する理由】2026-09-15 に data.js と同じ経路で落ちた。
+#
+#   data-hub.js は data.js から作るハブ用の軽量版で、**同じく CMS の
+#   Publish Now が単独で自動commitする**。上と全く同じ順序制約を持つため、
+#   ?v の更新は構造的に追随できない。導入時にここへ足し忘れていた。
+#   sw.js での扱いも data.js と揃えること（check_sw_routing.mjs が守る）。
+VERSION_CHECK_EXEMPT = {"data.js", "data-hub.js"}
 
 
 def git(*args):

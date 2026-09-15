@@ -8430,3 +8430,32 @@ metaDescription / readTime / featured / status / body_en がすべて空にな�
 
 ### 次の担当への注意・判断待ち
 - この修正を push 後、**Publish pipeline を再実行**して緑にすること。
+
+## 2026-09-15 data-hub.js を ?v 検査の除外に追加（導入時の漏れ）
+
+### 症状
+Publish pipeline が `Check asset cache busting` で失敗:
+`❌ data-hub.js → ?v=11 のまま（14参照）`
+
+### 原因（9/15 の data-hub.js 導入時の設計漏れ）
+`check_asset_versions.py` の `VERSION_CHECK_EXEMPT` には
+**data.js だけ**が入っていた。除外理由は
+「CMS の Publish Now が単独で自動commitするため ?v の更新は構造的に後追いになる」。
+**data-hub.js は data.js から作られ、同じく Publish が単独でコミットする**ため
+全く同じ制約を持つのに、導入時に除外へ足し忘れていた。
+
+### 修正
+`VERSION_CHECK_EXEMPT = {"data.js", "data-hub.js"}`（理由コメント付き）。
+
+### ★検証（今回は「同じ状況を再現して」確認した）
+| 試験 | 結果 |
+|---|---|
+| ?v を上げずに **data-hub.js だけ変更**（Publish と同じ状況） | ✅ 通る（誤検知が解消） |
+| ?v を上げずに **common.js を変更** | ✅ **今まで通り検知**（検査を緩めすぎていない） |
+| 復元後 | ✅ 正常 |
+- preflight 全49件成功
+
+### 次の担当への注意・判断待ち
+- **新しい生成物を Publish 経路に足したら、`VERSION_CHECK_EXEMPT` と
+  `sw.js` の扱いを data.js に揃えるか必ず確認すること。**
+  今回はこれを忘れて本番の Publish を1回落とした。
