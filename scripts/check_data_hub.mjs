@@ -100,7 +100,7 @@ console.log(`ℹ️ サイズ: data.js=${dataSize} bytes / data-hub.js=${hubSize
 if (hubSize >= dataSize) fail('data-hub.js が data.js 以上のサイズです');
 if (hubSize > 130 * 1024) console.warn('⚠️ data-hub.js が130KBを超えています');
 
-const jaHubs = ['index.html', 'festivals.html', 'artists.html', 'venues.html', 'news.html', 'about.html', 'favorites.html'];
+const jaHubs = ['index.html', 'festivals.html', 'artists.html', 'venues.html', 'news.html', 'about.html', 'favorites.html', 'map.html'];
 const enHubs = ['index.html', 'festivals.html', 'artists.html', 'venues.html', 'news.html'];
 for (const file of jaHubs) {
   const html = read(path.join(root, 'LP', file));

@@ -24,6 +24,7 @@ STATIC_PAGES = [
     {"path": "/festivals.html", "priority": "0.9", "changefreq": "daily"},
     {"path": "/artists.html", "priority": "0.8", "changefreq": "weekly"},
     {"path": "/venues.html", "priority": "0.8", "changefreq": "weekly"},
+    {"path": "/map.html", "priority": "0.6", "changefreq": "weekly"},
     {"path": "/news.html", "priority": "0.9", "changefreq": "daily"},
     {"path": "/about.html", "priority": "0.5", "changefreq": "monthly"},
     {"path": "/submit.html", "priority": "0.5", "changefreq": "monthly"},

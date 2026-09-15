@@ -8072,3 +8072,58 @@ CMS の Publish は `files:[data.js, data-hub.js]` を GAS に送るが、
 - EN版の日本語 h1 5件（capsule / ensou / mori-michi-ichiba / otsukimi /
   ringo-festival）は **AGENTS.md に記載の既知事項**（`name_en` 未入力方針）。
   データ入力で解決する
+
+## 2026-09-15 監査タスク④: CLUB MAP に導線とメタを追加（削除しない判断）
+
+### 実施（設計・検証=Claude / 実装=Codex + 一部直接）
+- ユーザー判断: **map.html は削除せず導線を追加**。
+  実装済みの機能（全国の会場を地図表示・23KB・llms.txt 掲載・専用検査2本）で、
+  ナビから辿れないだけだったため。
+- 対応:
+  1. **ナビに「MAP」を追加**（VENUES の直後）。手書きハブ + 詳細ページ生成コードの
+     2箇所。**279ページ**に反映
+  2. sitemap に `/map.html` を収録（542 → **543 URL**）
+  3. og:* 6種 / twitter 2種 / JSON-LD（WebPage + BreadcrumbList）を追加
+  4. **`data.js` → `data-hub.js` に切り替え**（401KB → 122KB。map は VENUES しか
+     使わないため必要項目は保持済み）
+  5. `check_data_hub.mjs` の検査対象に map.html を追加
+
+### ★実装中に見つけて直した2件
+1. **EN ハブの MAP がリンク切れになる**: `enHubFromJa` の内部リンク書き換えは
+   **ホワイトリスト方式**（index/news/festivals/artists/venues/about/submit）で、
+   `map.html` が入っていないため相対のまま残り `/en/map.html`（存在しない）を
+   指していた。**ルート相対へ正規化する1行を追加**（index.html の正規化の隣）。
+2. **`en/submit.html` のナビが全て日本語ページを指していた**（既存バグ・今回と無関係）。
+   TOP/NEWS/FESTIVALS/ARTISTS/VENUES/ABOUT の6リンクが `/index.html` 等を
+   指しており、英語ページから日本語へ飛ぶ状態だった。
+   原因: **`en/submit.html` だけが手書き**で、他のENハブ6枚は `writeEnHub` が
+   毎ビルド生成する（`HUBS` に submit が無い）ため、生成側の修正が届かない。
+   6リンクを `/en/…` に修正。
+
+### コミット
+- このエントリと同一コミット。
+
+### 検証
+- ナビ反映: フェス95/96・会場22/22・アーティスト136/144・記事11/12・
+  ハブJA9/14・ハブEN6/7。**未反映はすべてリダイレクトスタブ13件・noindex 1件・
+  map.html 自身**であることを内訳で確認（★要確認は0件）
+- EN ハブ3枚の MAP リンクが `/map.html` を指すこと、リンク先が実在することを確認
+- map.html を headless で描画: **VENUES 22件を読み、エラー0件**
+- sitemap 543URL / og 6種 / JSON-LD 2件
+- preflight 全49件成功
+
+### 変更したパターン
+- ナビ2箇所（手書きハブ + 生成コード）/ enHubFromJa に正規化1行 /
+  generate-sitemap.py 1件 / map.html（メタ + データ参照）/ en/submit.html 7リンク /
+  check_data_hub.mjs の対象
+
+### 未確認の類似パターン
+- ★**`en/submit.html` は writeEnHub の対象外（手書き）**。今後 JA 側のハブを
+  変更しても EN の submit には反映されない。`HUBS` に加えるか、手で追随するか
+  の判断が要る
+- EN 版 map.html は作っていない。EN からは JA の CLUB MAP へ飛ぶ
+  （ページ内文言は元々英語表記のため実害は小さい）
+
+### 次の担当への注意・判断待ち
+- 監査タスクの残り: meta description の言語別文字数 / Drive直リンク画像80枚 /
+  ラインナップ未入力フェスの内部リンク / 記事のFAQPage・事実要約（GEO）

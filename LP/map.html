@@ -17,11 +17,47 @@
 <title>CLUB MAP — TECHNO JAPAN</title>
 <meta name="description" content="Interactive map of underground clubs and venues across Japan. Techno Japan.">
 
+<!-- Open Graph -->
+<meta property="og:title" content="CLUB MAP — TECHNO JAPAN">
+<meta property="og:description" content="Interactive map of underground clubs and venues across Japan. Techno Japan.">
+<meta property="og:image" content="https://techno-japan.media/images/og-default.png?v=1">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://techno-japan.media/map.html">
+<meta property="og:site_name" content="TECHNO JAPAN">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://techno-japan.media/images/og-default.png?v=1">
+
 <!-- 2026-08-15 まで地図ページだけ canonical / hreflang が無かった。
      他477枚には全て入っている。AUDIT §9-90。 -->
 <link rel="canonical" href="https://techno-japan.media/map.html">
 <link rel="alternate" hreflang="ja" href="https://techno-japan.media/map.html">
 <link rel="alternate" hreflang="x-default" href="https://techno-japan.media/map.html">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "CLUB MAP — TECHNO JAPAN",
+  "url": "https://techno-japan.media/map.html",
+  "description": "Interactive map of underground clubs and venues across Japan. Techno Japan.",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "TECHNO JAPAN",
+    "url": "https://techno-japan.media/"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "TOP", "item": "https://techno-japan.media/" },
+    { "@type": "ListItem", "position": 2, "name": "CLUB MAP", "item": "https://techno-japan.media/map.html" }
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
@@ -252,10 +288,10 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
 
 <div class="hint-strip" id="hint-strip">SCROLL TO ZOOM &middot; CLICK PIN FOR INFO</div>
 
-<script src="data.js?v=10"></script>
+<script src="data-hub.js?v=10"></script>
 <script>
 /* ==========================================================
-   CLUB DATA — derived from shared VENUES in data.js
+   CLUB DATA — derived from shared VENUES in data-hub.js
    ========================================================== */
 /* 都市で絞らない。
 
