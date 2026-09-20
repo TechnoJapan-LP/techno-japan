@@ -719,6 +719,34 @@
     1920,
     1279
   ],
+  "images/articles/synapse-2026-info-1789921112443.webp": [
+    1920,
+    1280
+  ],
+  "images/articles/synapse-2026-info-1789921274343.webp": [
+    1920,
+    1280
+  ],
+  "images/articles/synapse-2026-info-1789921329789.webp": [
+    1920,
+    1280
+  ],
+  "images/articles/synapse-2026-info-1789921364518.webp": [
+    1920,
+    1280
+  ],
+  "images/articles/synapse-2026-info-1789921449548.webp": [
+    1800,
+    2400
+  ],
+  "images/articles/synapse-2026-info-1789921470258.webp": [
+    1800,
+    2400
+  ],
+  "images/articles/synapse-2026-info-1789921542743.webp": [
+    1920,
+    1280
+  ],
   "images/articles/synapse-2026-info.webp": [
     1920,
     1280
@@ -2476,6 +2504,62 @@
     640
   ],
   "images/derivatives/card/articles/synapse-2026-info-1789920530104--ef975630-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/articles/synapse-2026-info-1789921112443--174cb439-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/articles/synapse-2026-info-1789921112443--174cb439-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/articles/synapse-2026-info-1789921274343--814fdc1a-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/articles/synapse-2026-info-1789921274343--814fdc1a-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/articles/synapse-2026-info-1789921329789--dd6dba15-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/articles/synapse-2026-info-1789921329789--dd6dba15-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/articles/synapse-2026-info-1789921364518--24df8c83-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/articles/synapse-2026-info-1789921364518--24df8c83-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/articles/synapse-2026-info-1789921449548--a2ff35b1-lg.webp": [
+    720,
+    960
+  ],
+  "images/derivatives/card/articles/synapse-2026-info-1789921449548--a2ff35b1-sm.webp": [
+    360,
+    480
+  ],
+  "images/derivatives/card/articles/synapse-2026-info-1789921470258--8bb704bd-lg.webp": [
+    720,
+    960
+  ],
+  "images/derivatives/card/articles/synapse-2026-info-1789921470258--8bb704bd-sm.webp": [
+    360,
+    480
+  ],
+  "images/derivatives/card/articles/synapse-2026-info-1789921542743--b841f283-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/articles/synapse-2026-info-1789921542743--b841f283-sm.webp": [
     480,
     320
   ],
