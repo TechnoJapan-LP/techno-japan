@@ -1,0 +1,16 @@
+# techno-japan.media DNS records — 2026-09-16 11:39
+## A (GitHub Pages — 絶対に消さない)
+  185.199.110.153
+  185.199.111.153
+  185.199.109.153
+  185.199.108.153
+## AAAA
+## CNAME (www)
+  technojapan-lp.github.io.
+## MX
+## TXT
+## NS
+  dns4.p06.nsone.net.
+  dns2.p06.nsone.net.
+  dns3.p06.nsone.net.
+  dns1.p06.nsone.net.

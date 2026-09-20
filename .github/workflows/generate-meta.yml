@@ -65,6 +65,7 @@ jobs:
         run: python3 scripts/generate-rss.py
 
       - name: Commit changes
+        id: commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -82,7 +83,20 @@ jobs:
           git add -A LP/
           if git diff --cached --quiet; then
             echo "No changes"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             git commit -m "chore: regenerate detail pages, sitemap.xml & rss.xml [skip ci]"
             git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
+
+      # ★[skip ci] を付けているため、このコミットだけでは Deploy が走らない。
+      #   sitemap-news.xml は「直近48時間の記事だけ」を載せる仕様で毎日中身が変わる。
+      #   2026-09-15〜21 の6日間、生成物は正しいのに本番へ配信されず、
+      #   7日前の記事が本番の sitemap-news.xml に残り続けていた（実測）。
+      #   生成物が変わったときだけ Deploy を明示的に起動する。
+      - name: Deploy を起動（生成物を本番へ反映）
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: gh workflow run "Deploy LP to GitHub Pages"
