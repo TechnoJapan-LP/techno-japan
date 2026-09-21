@@ -8544,3 +8544,67 @@ CSP 違反で本番の Publish が止まった。
   `[skip ci]` 付きのコミットは Deploy を起こさない。
 - 次回の generate-meta 実行（毎日 UTC 3:00 = 日本時間12:00）で
   Deploy が自動起動するかを確認すること。
+
+---
+
+## 2026-09-21 記事ページの RELATED STORIES サムネが縦に伸びていた（detail.css v38）
+
+### 実施
+`.related-story-thumb` に `height: auto` を追加した（`LP/detail.css:357`）。
+`DETAIL_CSS_VERSION` を 37 → 38 に上げ、詳細ページを再生成した。
+
+**原因**: サムネの `<img>` には `dimensionAttrs()` が原画の実寸を
+`height="648"` のように書き込む（レイアウトシフト防止）。CSS 側は
+`width:120px` と `aspect-ratio:4/3` だけを指定し `height` を書いていなかったため、
+**height 属性の値がそのまま高さとして使われ、aspect-ratio が無視された**。
+結果、120×648px の縦長になっていた。
+
+フェス詳細が無事だったのは、`.festival-design-v2 .festival-related-stories-v2
+.related-story-thumb` が `height: 220px` を明示していたため。
+記事ページは `.festival-design-v2` の外にあるので、この救済が効かなかった。
+
+### コミット
+- `fix(article): RELATED STORIES のサムネが height 属性で縦に伸びる問題を修正`
+  （`LP/detail.css` / `scripts/build-detail-pages.mjs` + 再生成物）
+
+### 検証
+本番で不具合を再現 → 修正後にローカル（`python3 -m http.server 8931`）で実測。
+計測は headless Chrome に計測スクリプトを差し込んだ複製ページ（`LP/__probe/`、
+計測後に削除）で `getBoundingClientRect()` を読む方式。
+
+| ページ | 幅 | 修正前 | 修正後 |
+|---|---|---|---|
+| `articles/synapse-2026-info.html` | 1280 | **120×648** ❌ | 120×90 ✅ |
+| 同上 | 900 | — | 120×90 ✅ |
+| 同上 | 640 | — | 88×66 ✅ |
+| `en/articles/synapse-2026-info.html` | 1280 | **120×648** ❌ | 120×90 ✅ |
+| 同上 | 640 | — | 88×66 ✅ |
+| `festivals/otsukimi.html`（回帰確認） | 1280 | 367×220 | 367×220（変化なし）✅ |
+
+`bash scripts/preflight.sh` ✅ 全49件成功。
+
+### 変更したパターン
+- `.related-story-thumb`（記事詳細 JA/EN の RELATED STORIES）のみ。
+
+### 未確認の類似パターン
+**確認済み・0件。** 実ブラウザで「CSS の `aspect-ratio` が指定されているのに
+描画比率が5%以上ずれている img」を全件走査した結果:
+
+| ページ | 該当 |
+|---|---|
+| `articles/synapse-2026-info.html` | 3件（すべて `.related-story-thumb`、今回修正） |
+| `en/articles/synapse-2026-info.html` | 3件（同上） |
+| `festivals/otsukimi.html` | 0件 |
+| `artists/dj-nobu.html` | 0件 |
+| `news.html` | 0件 |
+
+`dimensionAttrs()` を使う他の10箇所（hero / flyer / related-card-img 等）は
+CSS 側で height を指定済みか aspect-ratio を使っていないため影響なし。
+
+### 次の担当への注意
+- ★**`dimensionAttrs()` で width/height 属性を付けた img に CSS で
+  `aspect-ratio` を効かせたいときは、必ず `height: auto` を併記すること。**
+  属性の height は presentational hint として効いてしまい、aspect-ratio を殺す。
+  `LP/detail.css:351` にこの理由をコメントで残した。
+- この不具合は「画像が出ている」ので、リンク切れ検査や JSON-LD 検査では
+  引っかからない。**描画サイズを測らないと見えない類**である。

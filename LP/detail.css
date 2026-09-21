@@ -354,7 +354,12 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   transition: border-color 0.25s ease; margin-bottom: 12px;
 }
 .related-story-card:hover { border-color: var(--accent); }
-.related-story-thumb { width: 120px; aspect-ratio: 4/3; object-fit: cover; flex-shrink: 0; background: rgba(240,237,232,0.05); }
+/* ⚠️ height: auto を外さないこと。img には実寸の height 属性が付く
+   （dimensionAttrs / レイアウトシフト防止）。height を auto にしないと
+   属性側の値がそのまま高さになり、aspect-ratio は無視される。
+   2026-09-21 に記事ページの関連記事サムネが 120×648px に伸びた
+   （フェス詳細は .festival-design-v2 側で height:220px を指定しているため無事だった）。 */
+.related-story-thumb { width: 120px; height: auto; aspect-ratio: 4/3; object-fit: cover; flex-shrink: 0; background: rgba(240,237,232,0.05); }
 .related-story-meta { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
 .related-story-title { font-family: var(--font-body); font-weight: 300; font-size: 16px; line-height: 1.5; color: var(--text); }
 
