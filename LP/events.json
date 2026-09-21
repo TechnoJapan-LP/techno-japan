@@ -1,23 +1,8 @@
 {
   "source": "https://techno-japan.media/",
   "license": "データの出典として techno-japan.media へのリンクを求めます",
-  "count": 19,
+  "count": 18,
   "events": [
-    {
-      "name": "Ultra Japan 2026",
-      "url": "https://techno-japan.media/festivals/ultra-japan.html",
-      "start": "2026-09-19",
-      "end": "2026-09-20",
-      "venue": "TOKYO ODAIBA ULTRA PARK",
-      "pref": "Tokyo",
-      "lat": 35.6264,
-      "lng": 139.7761,
-      "genres": [
-        "TECHNO",
-        "OTHERS"
-      ],
-      "tickets": "https://ultrajapan.com/ja/tickets-2026"
-    },
     {
       "name": "COLORS Presents SOUNDCAMP 2026",
       "url": "https://techno-japan.media/festivals/colors-presents-soundcamp.html",
