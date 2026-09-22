@@ -8662,7 +8662,11 @@ headless Chrome（実機相当 dpr3 / `mobile:true`）でローカル配信し�
   やや不自然。**実データで更新日が入ったら見た目を再確認すること。**
 - フェス／会場／アーティスト詳細の `.detail-facts`: 今回は対象外（未変更）。
   同様に縦積みで嵩むが、1ビュー目に本文が無い構造なので優先度は低い。
-- 本番反映後の実機 Safari 操作: **未確認**（push 後に確認する）。
+- 本番反映後の実機 Safari 操作: **未確認**（人の指での操作は未実施）。
+  本番URLに対する headless Chrome（393x852 / dpr3）での確認は完了:
+  `articles/synapse-2026-info.html` / `en/articles/synapse-2026-info.html` とも
+  `detail.css?v=39`・メタ1行・高さ30px・本文1行目419px、スクリーンショット目視済み。
+  Deploy run `35703450494` / `35703676568` ともに success。
 
 ### 次の担当への注意・判断待ち
 - CMS / GAS / Publish 経路は**触っていない**（CSS と再生成のみ）。
