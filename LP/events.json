@@ -1,22 +1,8 @@
 {
   "source": "https://techno-japan.media/",
   "license": "データの出典として techno-japan.media へのリンクを求めます",
-  "count": 18,
+  "count": 17,
   "events": [
-    {
-      "name": "COLORS Presents SOUNDCAMP 2026",
-      "url": "https://techno-japan.media/festivals/colors-presents-soundcamp.html",
-      "start": "2026-09-20",
-      "end": "2026-09-22",
-      "venue": "Secret Location",
-      "pref": "Hokkaido",
-      "lat": 43.1101,
-      "lng": 141.1746,
-      "genres": [
-        "TECHNO",
-        "HOUSE"
-      ]
-    },
     {
       "name": "CIRCUS ODAIBA 2026",
       "url": "https://techno-japan.media/festivals/circus.html",
