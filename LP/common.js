@@ -106,8 +106,8 @@
   }
 
   /* Keep the full-screen menu pinned to the current viewport, even when it
-     is opened deep inside a long page. The inline handlers still own the
-     toggle; this only synchronizes scroll locking after they run. */
+     is opened deep inside a long page. Opening and closing are handled here
+     (onclick attributes removed on 2026-09-24 in preparation for CSP nonces). */
   function initMobileNavOverlay() {
     const overlay = document.querySelector('.nav-overlay');
     if (!overlay) return;
@@ -116,10 +116,6 @@
       bottomClose.type = 'button';
       bottomClose.className = 'nav-close nav-close-bottom';
       bottomClose.setAttribute('aria-label', 'Close menu');
-      bottomClose.addEventListener('click', () => {
-        overlay.classList.remove('active');
-        document.querySelector('.nav-hamburger')?.classList.remove('active');
-      });
       overlay.appendChild(bottomClose);
     }
     const sync = () => {
@@ -128,9 +124,23 @@
       document.body.classList.toggle('nav-open', open);
     };
     document.addEventListener('click', (event) => {
-      if (event.target.closest('.nav-hamburger, .nav-close, .nav-overlay a')) {
-        window.setTimeout(sync, 0);
+      const hamburger = event.target.closest('.nav-hamburger');
+      const close = event.target.closest('.nav-close, .nav-overlay a');
+      const back = event.target.closest('.nav-back');
+      if (hamburger) {
+        overlay.classList.toggle('active');
+        hamburger.classList.toggle('active');
+      } else if (back) {
+        overlay.classList.remove('active');
+        document.querySelector('.nav-hamburger')?.classList.remove('active');
+        history.back();
+      } else if (close) {
+        overlay.classList.remove('active');
+        document.querySelector('.nav-hamburger')?.classList.remove('active');
+      } else {
+        return;
       }
+      window.setTimeout(sync, 0);
     });
     sync();
   }

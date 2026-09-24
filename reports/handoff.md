@@ -8727,3 +8727,51 @@ headless Chrome（実機相当 dpr3 / `mobile:true`）でローカル配信し�
   scratchpad に作成済み。次に実行する。
 - 見出し階層（7/24記事）・404 リンク（ultra-japan チケット / triangle）・記事 Drive 画像の alt は
   **CMS 側のデータ修正**なので Codex には渡さない（計画書 C1〜C3）。
+
+## 2026-09-24 WP2: インライン onclick / onerror 撤去（Codex 実装）
+
+### 実施
+- `LP/common.js` の `initMobileNavOverlay()` に document レベルのクリック委譲を実装し、ハンバーガー開閉・閉じる・戻る・オーバーレイ内リンクを処理するよう変更。既存の bottom close 個別リスナーは委譲へ統合。
+- `LP/favorites.js` の `attachHeart()` に、土台要素への一度だけの preventDefault / stopPropagation ガードを追加。
+- `LP/index.html` / `LP/news.html` の描画用インラインスクリプト先頭に capture の `error` 委譲を追加し、画像フォールバックを移管。
+- 手書き JA ページと `scripts/build-detail-pages.mjs` の対象ナビ・お気に入り土台から inline 属性を撤去。`LP/submit.html` に残っていた同型ナビ属性も完了条件の grep 対象のため撤去。
+
+### コミット
+- **未実施（ユーザー指示により commit / push なし）**。
+
+### 検証
+- `onclick=` の対象外 HTML: **0 行**。
+- `LP/index.html` / `LP/news.html` の `onerror=`: **0 行**。
+- `scripts/build-detail-pages.mjs` の `onclick`: **0 行**。
+- `node --check LP/common.js` / `node --check LP/favorites.js`: **成功**。
+- `git diff --check`: **成功**。
+- 実ブラウザ検証、preflight、ビルド、Publish pipeline: **未実施（別担当）**。
+
+### 変更したパターン
+- ハンバーガー開閉・閉じる・戻る: `LP/common.js` の `initMobileNavOverlay()`。
+- ハート押下でカードへ遷移しない処理: `LP/favorites.js` の `attachHeart()`。
+- 画像フォールバック: `LP/index.html` / `LP/news.html` の描画用インラインスクリプト先頭に置いた capture `error` listener。
+
+### 未確認の類似パターン
+- `LP/en/` および `LP/articles/` / `LP/festivals/` / `LP/artists/` / `LP/venues/` の生成物は指示どおり未変更・実ブラウザ未確認。
+- 実ブラウザでのナビ操作、戻る、ハート押下、画像エラー時の表示切替は **未確認**。
+
+### 次の担当への注意・判断待ち
+- `common.js` / `favorites.js` は構文確認済みだが、公開前に指定の実ブラウザ確認を行うこと。
+- `scripts/build-detail-pages.mjs` の変更は生成物へ反映していない。指示どおりビルドおよび `?v` 更新は未実施。
+
+### 検証（Claude 側・2026-09-24 追記）
+- Codex の差分をレビュー。`news.html` の XSS 事例コメント（`<img src=x onerror=...>` §9-44）を Codex が
+  言い換えていたので元に戻した（サニタイズの根拠なので原文を残す）。
+- `LP/en/submit.html` は自動生成の対象外（手書き EN ページ）で `onclick` が2つ残っていたため手で撤去。
+- `common.js` v15→16、`favorites.js` v2→3、`COMMON_JS_VERSION` 16、詳細ページ 530 枚を再生成。
+  生成物・手書き HTML とも `onclick=` **0**（cms.html 除く）。
+- headless Chrome（393px）で 5 ページ（TOP / festivals / フェス詳細 / EN 記事 / favorites）:
+  ハンバーガー開く→`body.nav-open` 付与、`.nav-close` で閉じる、`.nav-close-bottom` で閉じる、
+  `.nav-back` の存在 — **すべて OK**。画像フォールバック（存在しない src → `data-original-src` へ差し替え、
+  無ければ非表示）— **OK**。
+- お気に入りハートのクリックガードは **検証できず**: ハブの描画時に `window.tjFav` が未定義
+  （`favorites.js` は defer）で、headless では 4 秒待ってもハートが装着されなかった。
+  **これは今回の変更より前からの状態**（ハブでハートが出ていない可能性）。別件として要確認。
+- `bash scripts/preflight.sh` ✅ **全49件成功**。
+- WP1 の本番計測（push 後、`scripts/audit_a11y_browser.mjs` 本番モード）: タップ 0 / コントラスト 10 / 横スクロール 0。

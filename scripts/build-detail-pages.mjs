@@ -70,7 +70,7 @@ const ARTICLE_FX_CSS_VERSION = 13;
 
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
-const COMMON_JS_VERSION = 15;   // 2026-09-13 フェス詳細の行動計測
+const COMMON_JS_VERSION = 16;   // 2026-09-13 フェス詳細の行動計測
 const COMMON_CSS_VERSION = 31;   // 2026-09-14 記事タイトルの英字固有名詞分断防止
 const LANG_TOGGLE_VERSION = 1;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
@@ -865,10 +865,10 @@ function navHtml(lang, altHref) {
     <a href="${navLink(lang, 'about.html')}">ABOUT</a>
     ${toggle}
   </div>
-  <button class="nav-hamburger" aria-label="Open menu" onclick="document.querySelector('.nav-overlay').classList.toggle('active');this.classList.toggle('active')"><span></span><span></span><span></span></button>
+  <button class="nav-hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
 </nav>
 <div class="nav-overlay">
-  <button class="nav-close" aria-label="Close menu" onclick="document.querySelector('.nav-overlay').classList.remove('active');document.querySelector('.nav-hamburger').classList.remove('active')"></button>
+  <button class="nav-close" aria-label="Close menu"></button>
   <a href="${navLink(lang, 'index.html')}">TOP</a>
   <a href="${navLink(lang, 'news.html')}">NEWS</a>
   <a href="${navLink(lang, 'festivals.html')}">FESTIVALS</a>

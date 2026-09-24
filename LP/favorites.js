@@ -54,6 +54,13 @@
     },
     attachHeart(host, type, id, opts) {
       opts = opts || {};
+      if (!host.dataset.tjFavGuard) {
+        host.dataset.tjFavGuard = '1';
+        host.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        });
+      }
       const btn = document.createElement('button');
       btn.className = 'tj-fav-heart' + (opts.size === 'sm' ? ' sm' : '');
       btn.type = 'button';

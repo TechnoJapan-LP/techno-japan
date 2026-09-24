@@ -661,10 +661,10 @@
     </span>
     <span class="nav-lang"><span class="nav-lang-cur">JA</span><span class="nav-lang-sep">/</span><a href="/en/index.html">EN</a></span>
   </div>
-  <button class="nav-hamburger" aria-label="Open menu" onclick="document.querySelector('.nav-overlay').classList.toggle('active');this.classList.toggle('active')"><span></span><span></span><span></span></button>
+  <button class="nav-hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
 </nav>
 <div class="nav-overlay">
-  <button class="nav-close" aria-label="Close menu" onclick="document.querySelector('.nav-overlay').classList.remove('active');document.querySelector('.nav-hamburger').classList.remove('active')"></button>
+  <button class="nav-close" aria-label="Close menu"></button>
   <a href="index.html">TOP</a>
   <a href="news.html">NEWS</a>
     <a href="festivals.html">FESTIVALS</a>
@@ -778,8 +778,8 @@
   </div>
 </footer>
 
-<script src="common.js?v=15" defer></script>
-<script src="favorites.js?v=2" defer></script>
+<script src="common.js?v=16" defer></script>
+<script src="favorites.js?v=3" defer></script>
 <script src="search.js?v=3" defer></script>
 <!-- localize.js は defer にしない。下のインライン描画が同期実行で tjLocalized を呼ぶ -->
 <script src="localize.js?v=10"></script>
@@ -787,6 +787,13 @@
 <script src="data-hub.js?v=11"></script>
 <script src="image-dimensions.js?v=64"></script>
 <script>
+document.addEventListener('error', (e) => {
+  const img = e.target;
+  if (!(img instanceof HTMLImageElement)) return;
+  if (img.dataset.originalSrc && img.src !== img.dataset.originalSrc) img.src = img.dataset.originalSrc;
+  else img.style.display = 'none';
+}, true);
+
 /* ===== MEDIA TOP RENDERING ===== */
 (function () {
   /* --- Stories: 1 featured + up to 7 side cards (5 visible by default) --- */
@@ -826,7 +833,7 @@
       <div class="featured-col">
         <a class="featured-card" href="${articleUrl(featured)}">
           <div class="featured-card-image"${ratioAttr(featured.cardRatio)}>
-            ${featured.image ? `<img ${tjImageSizeAttrs(featured.image)} src="${tjCardAssetPath(featured.image)}" data-original-src="${tjAssetPath(featured.image)}" onerror="if(this.dataset.originalSrc&&this.src!==this.dataset.originalSrc){this.src=this.dataset.originalSrc}else{this.style.display='none'}" alt="${tjLocalized(featured.title, '', featured.title_en)}" loading="eager" fetchpriority="high" decoding="async">` : `<div class="featured-card-image-placeholder">COMING SOON</div>`}
+            ${featured.image ? `<img ${tjImageSizeAttrs(featured.image)} src="${tjCardAssetPath(featured.image)}" data-original-src="${tjAssetPath(featured.image)}" alt="${tjLocalized(featured.title, '', featured.title_en)}" loading="eager" fetchpriority="high" decoding="async">` : `<div class="featured-card-image-placeholder">COMING SOON</div>`}
             <div class="featured-card-arrow"></div>
           </div>
           <div class="featured-card-body">
