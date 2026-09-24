@@ -8775,3 +8775,44 @@ headless Chrome（実機相当 dpr3 / `mobile:true`）でローカル配信し�
   **これは今回の変更より前からの状態**（ハブでハートが出ていない可能性）。別件として要確認。
 - `bash scripts/preflight.sh` ✅ **全49件成功**。
 - WP1 の本番計測（push 後、`scripts/audit_a11y_browser.mjs` 本番モード）: タップ 0 / コントラスト 10 / 横スクロール 0。
+
+## 2026-09-24 WP3: Sync Drive Images の 1MB 超 webp 再圧縮ガード
+
+### 実施
+- `.github/workflows/sync-drive-images.yml` の webp ダウンロード直後に、1,000,000 bytes 超を quality 80 → 72 → 65 で再圧縮するガードを追加。
+- 画素サイズは維持し、quality 65 でも1MBを超える場合は警告を出して残す処理にした。
+- 対象3枚を同じ品質低下処理で一度だけ再圧縮した。派生画像・寸法表・CMS・GAS は未変更。
+
+### コミット
+- **未実施（ユーザー指示により commit / push なし）**。
+
+### 検証
+- `python3 scripts/check_sync_retry.py`: **成功**（埋め込み Python の構文検査を含む）。
+- `find LP/images -type f -size +1M`: **0件**。
+- `git diff --check`: **成功**。
+- `technogaoka.webp`: **1366KB → 949KB / 1920×2560（不変）**。
+- `sawagi-festival-flyer.webp`: **1310KB → 961KB / 1920×2402（不変）**。
+- `sawagi-festival-2026-flyer.webp`: **1310KB → 961KB / 1920×2402（不変）**。
+- 実ブラウザ確認・preflight・Publish pipeline: **未実施（画像同期ワークフロー変更のため、公開前に別途必要）**。
+
+### 変更したパターン
+- webp ダウンロード直後のサイズ判定と品質段階再圧縮（`MAX_BYTES=1_000_000`）。
+- 既存の `MAX_EDGE`、Pillow、webp 同期経路は変更なし。
+
+### 未確認の類似パターン
+- quality 65 でも1MBを超えるwebpの実Drive同期: **未確認**（現在のローカル画像は全件1MB未満）。
+- 原本拡張子から生成する新規webpの変換経路: **確認済み・0件（今回変更なし）**。
+
+### 次の担当への注意・判断待ち
+- push 前に `bash scripts/preflight.sh` を実行すること。同期ワークフロー変更のため、公開前の実ブラウザ確認と同時に行うこと。
+
+### 検証（Claude 側・2026-09-24 追記）
+- YAML 差分をレビュー: ダウンロード直後に `MAX_BYTES` 判定 → quality 80/72/65 の段階再圧縮、
+  画素サイズ維持、失敗時は警告のみ。`check_sync_retry.py` の構文検査も通過。
+- 3枚とも quality 80 で 1MB を割った（949KB / 961KB / 961KB、画素不変）。
+- 派生画像はファイル名に内容ハッシュを含むため `python3 scripts/build-image-derivatives.py` と
+  `node scripts/build-image-dimensions.mjs` を再実行（`image-derivatives.js` v37 / `image-dimensions.js` v65、
+  旧ハッシュの派生6枚を削除・新6枚を追加、記事の派生2枚も再生成で更新）。
+- `bash scripts/preflight.sh` ✅ **全49件成功**。
+- **次回の Sync Drive Images 実行で 3 枚が 1MB 未満のまま保たれるか（再圧縮ログが出るか）は未確認。**
+  次に同期が走ったら Actions のログで `Recompressed (>1MB)` を確認すること。

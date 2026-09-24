@@ -47,6 +47,7 @@ jobs:
           # 変換対象の原本拡張子。webp 以外はサイトが配信しないため、ここで webp を作る。
           SOURCE_EXTS = {'.jpg', '.jpeg', '.png', '.heic', '.heif'}
           MAX_EDGE = 1920          # CMS の compressImage と同じ長辺上限
+          MAX_BYTES = 1_000_000    # 1MB。これを超える webp は品質を落として再保存する
           convert_failures = []
 
           GAS_URL = "https://script.google.com/macros/s/AKfycbxhJ6rtGoAirNyV5TtBvzWHNOT8RuB0nfDjwglmdu8ClhpWZ-OXSbMM4UyFE_7ZsV-Lpg/exec"
@@ -131,6 +132,26 @@ jobs:
                   try:
                       urllib.request.urlretrieve(img['url'], file_path)
                       print(f"Downloaded: {name}")
+                      # CMS の compressImage（q0.85）は細密なフライヤーで 1MB を超える。
+                      # Drive の webp は同期のたびに上書きされるため、ローカルで縮めても戻る。
+                      # 同期側で縮める（2026-09-24 定量診断）。画素サイズは維持する。
+                      size = os.path.getsize(file_path)
+                      if size > MAX_BYTES:
+                          recompressed = False
+                          for quality in (80, 72, 65):
+                              try:
+                                  with Image.open(file_path) as im:
+                                      im.save(file_path, 'WEBP', quality=quality, method=6)
+                                  new_size = os.path.getsize(file_path)
+                                  if new_size <= MAX_BYTES:
+                                      print(f"Recompressed (>1MB): {name} {size/1024:.0f}KB -> {new_size/1024:.0f}KB")
+                                      recompressed = True
+                                      break
+                              except Exception as e:
+                                  print(f"Recompress failed: {name} — {e}")
+                                  break
+                          if not recompressed and os.path.getsize(file_path) > MAX_BYTES:
+                              print(f"Recompress warning (>1MB remains): {name} {os.path.getsize(file_path)/1024:.0f}KB")
                   except Exception as e:
                       print(f"Failed: {name} — {e}")
                       convert_failures.append(f"{folder_type}/{name} (download)")
