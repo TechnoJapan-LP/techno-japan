@@ -4,9 +4,8 @@
 > アーティスト136名・会場22件・記事12本を日英で掲載し、
 > 開催日・場所・出演者を構造化データ（schema.org）付きで公開している。
 
-## 今後の開催予定（17件）
+## 今後の開催予定（16件）
 
-- 2026-09-22〜2026-09-23: [CIRCUS ODAIBA 2026](https://techno-japan.media/festivals/circus.html) — Odaiba Outdoor Special Venue, Tokyo
 - 2026-09-25〜2026-09-27: [Odyssey 2026](https://techno-japan.media/festivals/odyssey.html) — Sky Lodge Ginga Village, Miyazaki
 - 2026-09-25〜2026-09-27: [御月民 -OTSUKIMI- 2026](https://techno-japan.media/festivals/otsukimi.html) — Healing Garden Takanami, Niigata
 - 2026-09-26〜2026-09-27: [FFKT 2026](https://techno-japan.media/festivals/ffkt.html) — Hotel Izukyu

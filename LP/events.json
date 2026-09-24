@@ -1,24 +1,8 @@
 {
   "source": "https://techno-japan.media/",
   "license": "データの出典として techno-japan.media へのリンクを求めます",
-  "count": 17,
+  "count": 16,
   "events": [
-    {
-      "name": "CIRCUS ODAIBA 2026",
-      "url": "https://techno-japan.media/festivals/circus.html",
-      "start": "2026-09-22",
-      "end": "2026-09-23",
-      "venue": "Odaiba Outdoor Special Venue",
-      "pref": "Tokyo",
-      "lat": 35.6258,
-      "lng": 139.7758,
-      "genres": [
-        "HOUSE",
-        "BASS",
-        "LIVE",
-        "OTHERS"
-      ]
-    },
     {
       "name": "Odyssey 2026",
       "url": "https://techno-japan.media/festivals/odyssey.html",
