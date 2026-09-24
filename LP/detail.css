@@ -9,7 +9,7 @@
 .article-back {
   display: inline-flex; align-items: center; gap: 12px;
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em;
-  text-transform: uppercase; opacity: 0.4; transition: opacity 0.3s ease;
+  text-transform: uppercase; opacity: 0.62; transition: opacity 0.3s ease;
   margin-bottom: 60px;
 }
 .article-back:hover { opacity: 1; }
@@ -192,7 +192,7 @@
 }
 .detail-facts dt {
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em;
-  text-transform: uppercase; opacity: 0.45; min-width: 120px; flex-shrink: 0;
+  text-transform: uppercase; opacity: 0.62; min-width: 120px; flex-shrink: 0;
 }
 .detail-facts dd { font-family: var(--font-body); font-weight: 300; font-size: 15px; color: rgba(240,237,232,0.9); }
 .detail-facts dd a { color: var(--accent); border-bottom: 1px solid rgba(255,45,45,0.3); word-break: break-all; }
@@ -242,8 +242,8 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 48px;
+  height: 48px;
   box-sizing: border-box;
   border: 1px solid rgba(255,255,255,.2);
   color: inherit;
@@ -317,7 +317,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 .article-specs > div { flex: 1 1 0; min-width: 140px; padding: 18px 20px 16px; border-right: 1px solid rgba(240,237,232,0.12); }
 .article-specs > div:first-child { padding-left: 0; }
 .article-specs > div:last-child { border-right: none; }
-.article-specs dt { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.4; margin-bottom: 6px; }
+.article-specs dt { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.62; margin-bottom: 6px; }
 .article-specs dd { font-family: var(--font-body); font-weight: 300; font-size: 14px; letter-spacing: 0.02em; margin: 0; text-transform: uppercase; }
 .article-updated { display: block; margin-top: 4px; font-size: 11px; opacity: .55; text-transform: none; }
 
@@ -391,7 +391,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   }
   .article-specs dd {
     font-family: var(--font-mono); font-weight: 400; font-size: 10px;
-    letter-spacing: 0.14em; opacity: 0.5;
+    letter-spacing: 0.14em; opacity: 0.62;
   }
   .article-updated { display: inline; margin-left: 8px; font-size: 10px; }
   .article-excerpt { margin-bottom: 28px; padding-bottom: 22px; }
@@ -440,7 +440,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
    ============================================================== */
 .detail-body.bilingual { position: relative; }
 .lang-toggle { display: inline-flex; margin: 0 0 18px; border: 1px solid rgba(240,237,232,0.16); border-radius: 2px; overflow: hidden; }
-.lang-btn { appearance: none; -webkit-appearance: none; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em; padding: 7px 15px; background: transparent; color: rgba(240,237,232,0.5); cursor: pointer; border: 0; line-height: 1; transition: color .18s ease, background .18s ease; }
+.lang-btn { appearance: none; -webkit-appearance: none; display: inline-flex; align-items: center; min-height: 48px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em; padding: 7px 15px; background: transparent; color: rgba(240,237,232,0.62); cursor: pointer; border: 0; line-height: 1; transition: color .18s ease, background .18s ease; }
 .lang-btn + .lang-btn { border-left: 1px solid rgba(240,237,232,0.16); }
 .lang-btn:hover { color: var(--text, #f0ede8); }
 .lang-btn.is-active { background: var(--accent); color: #fff; }
@@ -470,7 +470,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 .festival-design-v2 .detail-back {
   display: inline-flex; align-items: center; gap: 12px;
   font-family: var(--font-mono); font-size: 10px; letter-spacing: .15em;
-  text-transform: uppercase; opacity: .4; transition: opacity .3s ease;
+  text-transform: uppercase; opacity: .62; transition: opacity .3s ease;
   margin-bottom: 48px;
 }
 .festival-design-v2 .detail-back:hover { opacity: 1; }
@@ -503,9 +503,9 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   text-transform: uppercase; line-height: .95; margin: 0 0 12px;
 }
 .festival-design-v2 .detail-location {
-  display: inline-flex; align-items: center; gap: 8px; width: fit-content;
+  display: inline-flex; align-items: center; gap: 8px; width: fit-content; min-height: 48px;
   font-family: var(--font-mono); font-size: 12px; letter-spacing: .13em;
-  text-transform: uppercase; opacity: .4; margin-bottom: 24px;
+  text-transform: uppercase; opacity: .62; margin-bottom: 8px;
 }
 .festival-design-v2 .detail-location-map { transition: opacity .2s ease; }
 .festival-design-v2 .detail-location-map:hover { opacity: .8; }
@@ -524,9 +524,9 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 .festival-design-v2 .detail-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
 .festival-design-v2 .detail-official {
   display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-  height: 36px; box-sizing: border-box; font-family: var(--font-mono);
+  min-height: 48px; box-sizing: border-box; font-family: var(--font-mono);
   font-size: 10px; letter-spacing: .15em; text-transform: uppercase;
-  opacity: .5; transition: opacity .3s ease, border-color .3s ease;
+  opacity: .62; transition: opacity .3s ease, border-color .3s ease;
   padding: 0 24px; border: 1px solid rgba(240,237,232,.15);
 }
 .festival-design-v2 .detail-official:hover { opacity: 1; border-color: rgba(240,237,232,.3); }
@@ -536,7 +536,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 }
 .festival-design-v2 .share-buttons-label, .article-share .share-buttons-label {
   font-family: var(--font-mono); font-size: 9px; letter-spacing: .2em;
-  text-transform: uppercase; opacity: .4; margin-right: 8px;
+  text-transform: uppercase; opacity: .62; margin-right: 8px;
 }
 .festival-design-v2 .share-btn, .article-share .share-btn {
   width: 32px; height: 32px; padding: 0; display: inline-flex; align-items: center; justify-content: center;
@@ -555,7 +555,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 .festival-design-v2 .detail-section { padding: 44px 0; }
 .festival-design-v2 .detail-section-label {
   font-family: var(--font-mono); font-size: 9px; letter-spacing: .2em;
-  text-transform: uppercase; opacity: .3; margin-bottom: 32px;
+  text-transform: uppercase; opacity: 1; margin-bottom: 32px;
 }
 .festival-design-v2 .festival-description-inline {
   max-width: 520px; margin: 0 0 28px; font-family: var(--font-body);
@@ -563,15 +563,15 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   color: inherit;
 }
 .festival-design-v2 .festival-description-inline p { margin: 0; }
-.festival-design-v2 .festival-description-inline .lang-body { opacity: .55; }
+.festival-design-v2 .festival-description-inline .lang-body { opacity: .75; }
 .festival-design-v2 .festival-description-inline .lang-toggle {
   display: flex; gap: 4px; width: fit-content; margin: 0 0 14px; padding: 0;
   border: 0; border-radius: 0; overflow: visible;
 }
 .festival-design-v2 .festival-description-inline .lang-btn {
-  min-height: 30px; padding: 0 10px; border: 0;
+  min-height: 48px; padding: 0 10px; border: 0;
   background: rgba(240,237,232,.025); color: inherit;
-  font-size: 10px; letter-spacing: .13em; opacity: .42;
+  font-size: 10px; letter-spacing: .13em; opacity: .62;
   transition: opacity .18s ease, background .18s ease, box-shadow .18s ease;
 }
 .festival-design-v2 .festival-description-inline .lang-btn + .lang-btn { border: 0; }
@@ -810,7 +810,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 .festival-design-v2 .related-card-date,
 .festival-design-v2 .related-card-loc {
   font-family: var(--font-mono); font-size: 9px; letter-spacing: .15em;
-  opacity: .4; text-transform: uppercase;
+  opacity: .62; text-transform: uppercase;
 }
 .festival-design-v2 .related-card-date { margin-bottom: 8px; }
 .festival-design-v2 .related-card-name {
@@ -874,7 +874,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 
 .article-detail .related-festival h2 {
   font-family: var(--font-mono); font-size: 10px; letter-spacing: .2em;
-  text-transform: uppercase; opacity: .45; margin: 0 0 18px; font-weight: 400;
+  text-transform: uppercase; opacity: .62; margin: 0 0 18px; font-weight: 400;
 }
 .article-detail .related-card {
   display: block; max-width: 420px; background: rgba(240,237,232,.02);
@@ -893,7 +893,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 .article-detail .related-card-date,
 .article-detail .related-card-loc {
   font-family: var(--font-mono); font-size: 9px; letter-spacing: .15em;
-  opacity: .4; text-transform: uppercase;
+  opacity: .62; text-transform: uppercase;
 }
 .article-detail .related-card-date { margin-bottom: 8px; }
 .article-detail .related-card-name {

@@ -45,13 +45,13 @@
 <link rel="dns-prefetch" href="https://w.behold.so">
 <link rel="dns-prefetch" href="https://formsubmit.co">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="common.css?v=30">
+<link rel="stylesheet" href="common.css?v=31">
 <script>document.documentElement.classList.add('tj-festivals-hydrating');</script>
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 /* BACK */
-.back-link { display: inline-flex; align-items: center; gap: 12px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.4; transition: opacity 0.3s ease; margin-bottom: 40px; }
+.back-link { display: inline-flex; align-items: center; gap: 12px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.62; transition: opacity 0.3s ease; margin-bottom: 40px; }
 .back-link:hover { opacity: 1; }
 .back-link .arrow { width: 24px; height: 1px; background: var(--text); position: relative; display: inline-block; }
 .back-link .arrow::before { content: ''; position: absolute; left: 0; top: -3px; width: 7px; height: 7px; border-left: 1px solid var(--text); border-bottom: 1px solid var(--text); transform: rotate(45deg); }
@@ -89,7 +89,7 @@
 }
 .mode-toggle-label {
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em;
-  text-transform: uppercase; opacity: 0.35; transition: opacity 0.3s ease; cursor: pointer;
+  text-transform: uppercase; opacity: 0.62; transition: opacity 0.3s ease; cursor: pointer;
 }
 .mode-toggle-label.active { opacity: 1; }
 .mode-toggle-switch {
@@ -178,24 +178,24 @@ body.mixed-results.rave-mode .festival-section:not(.rave-result):hover .festival
   font-size: 10px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  opacity: 0.3;
+  opacity: 0.62;
   transition: opacity 0.3s ease;
   padding: 8px 24px;
   white-space: nowrap;
   flex-shrink: 0;
 }
-.month-nav a:hover { opacity: 0.7; }
+.month-nav a:hover { opacity: 0.8; }
 .month-nav a.active {
   opacity: 1;
   border-bottom: 1px solid var(--text);
 }
 .month-nav a.past-month {
-  opacity: 0.2;
+  opacity: 0.62;
   font-size: 9px;
   display: none;
 }
 .month-nav a.past-month.year-open { display: inline-block; }
-.month-nav a.past-month:hover { opacity: 0.5; }
+.month-nav a.past-month:hover { opacity: 0.8; }
 .month-nav a.past-month.active { opacity: 0.8; }
 /* GENRE / AREA discovery filters */
 .fest-filters { padding: 14px 40px 4px; display: flex; flex-direction: column; gap: 4px; }
@@ -203,12 +203,12 @@ body.mixed-results.rave-mode .festival-section:not(.rave-result):hover .festival
 .fest-search { flex: 1; max-width: 420px; background: transparent; border: 1px solid rgba(240,237,232,0.12); color: var(--text); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; padding: 12px 16px; outline: none; transition: border-color 0.3s ease; }
 .fest-search::placeholder { color: rgba(240,237,232,0.25); }
 .fest-search:focus { border-color: rgba(240,237,232,0.35); }
-.fest-count { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; opacity: 0.3; }
+.fest-count { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; opacity: 0.62; }
 .fest-filter-row { display: flex; align-items: center; gap: 2px; overflow-x: auto; scrollbar-width: none; }
 .fest-filter-row::-webkit-scrollbar { display: none; }
-.fest-filter-key { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.3; flex-shrink: 0; width: 48px; }
-.fest-filter-chip { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.3; transition: opacity 0.3s ease; padding: 6px 14px; white-space: nowrap; flex-shrink: 0; cursor: pointer; background: none; border: none; color: inherit; }
-.fest-filter-chip:hover { opacity: 0.7; }
+.fest-filter-key { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.62; flex-shrink: 0; width: 48px; }
+.fest-filter-chip { display: inline-flex; align-items: center; min-height: 48px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.62; transition: opacity 0.3s ease; padding: 6px 14px; white-space: nowrap; flex-shrink: 0; cursor: pointer; background: none; border: none; color: inherit; }
+.fest-filter-chip:hover { opacity: 0.8; }
 .fest-filter-chip.active { opacity: 1; border-bottom: 1px solid var(--text); }
 .fest-empty { padding: 64px 40px; text-align: center; font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; color: rgba(240,237,232,.5); }
 .fest-empty p { margin-bottom: 20px; }
@@ -216,14 +216,14 @@ body.mixed-results.rave-mode .festival-section:not(.rave-result):hover .festival
 @media (max-width: 640px) { .fest-filters { padding: 12px 20px 4px; } .fest-search-row { align-items: stretch; flex-direction: column; gap: 8px; } .fest-search { max-width: none; width: 100%; } }
 /* タッチデバイスは44pxのタップターゲットを確保（フィルタ・月ナビ） */
 @media (pointer: coarse) {
-  .fest-filter-chip { padding: 13px 16px; }
+  .fest-filter-chip { padding: 13px 16px; min-height: 48px; }
   .month-nav a { padding: 13px 16px; }
 }
 .month-nav .year-toggle {
   font-family: var(--font-mono);
   font-size: 9px;
   letter-spacing: 0.15em;
-  opacity: 0.25;
+  opacity: 0.62;
   padding: 8px 16px;
   white-space: nowrap;
   align-self: center;
@@ -429,11 +429,11 @@ html.tj-festivals-hydrating #festivals-main > .ssr-link-list {
 footer { padding: 60px 40px; }
 .footer-top { align-items: flex-start; flex-wrap: wrap; gap: 40px; margin-bottom: 0; }
 .footer-logo { font-family: var(--font-display); font-size: 24px; }
-.footer-links a { opacity: 0.4; }
-.footer-copy { opacity: 0.2; width: 100%; margin-top: 40px; }
+.footer-links a { opacity: 0.62; }
+.footer-copy { opacity: 0.62; width: 100%; margin-top: 40px; }
 .footer-submit {
   font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em;
-  text-transform: uppercase; opacity: 0.3;
+  text-transform: uppercase; opacity: 0.62;
   border-bottom: 1px solid rgba(240,237,232,0.2); padding-bottom: 2px;
   transition: opacity 0.3s ease; margin-top: 16px; display: inline-block;
 }

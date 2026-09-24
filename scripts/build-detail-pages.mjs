@@ -53,7 +53,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 39;
+const DETAIL_CSS_VERSION = 40;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -66,12 +66,12 @@ const DETAIL_CSS_VERSION = 39;
 
    article-fx.js / article-fx.css を変更したら、ここを上げる。 */
 const ARTICLE_FX_JS_VERSION = 10;
-const ARTICLE_FX_CSS_VERSION = 12;
+const ARTICLE_FX_CSS_VERSION = 13;
 
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
 const COMMON_JS_VERSION = 15;   // 2026-09-13 フェス詳細の行動計測
-const COMMON_CSS_VERSION = 30;   // 2026-09-14 記事タイトルの英字固有名詞分断防止
+const COMMON_CSS_VERSION = 31;   // 2026-09-14 記事タイトルの英字固有名詞分断防止
 const LANG_TOGGLE_VERSION = 1;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
 const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');

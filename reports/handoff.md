@@ -8674,3 +8674,56 @@ headless Chrome（実機相当 dpr3 / `mobile:true`）でローカル配信し�
   ずれている（今回の変更より前からの状態）。`check_cms_article_generated_preview.mjs`
   が literal 36 を期待しているため preflight は緑だが、
   **プレビューは本番と別バージョンのCSSで描画されている。**別件として要整理。
+
+## 2026-09-24 定量診断（総合69点）→ WP1: コントラスト・タップ領域の CSS 修正（Codex 実装 / Claude 検証）
+
+### 実施
+サイト全体の定量診断（5軸・100点満点）を行い、改善計画を
+[docs/design/QUANT_AUDIT_2026-09-24_PLAN.md](../docs/design/QUANT_AUDIT_2026-09-24_PLAN.md) に置いた。
+今回はその WP1（a11y の CSS 修正）を **設計 Claude → 実装 Codex（2回）→ 検証 Claude** で完了。
+
+- 文字の最低濃度を **opacity 0.62**（#080808 上で約 6.8:1）に統一。赤アクセント文字は
+  **opacity 1**（0.8 だと 3.6:1 で AA を割る）。7〜8px の文字は 9px に。
+- 操作要素（ハンバーガー / ロゴ / フィルタタブ / lang-btn / OFFICIAL・TICKETS /
+  SNS アイコン / フッターリンク / SUBSCRIBE 等）を **短辺 48px** に。アイコン・文字の
+  大きさは変えず当たり判定だけ広げた。
+- `nav .logo` は Codex の `min-height` 方式だと詳細ページ（content-box）でヘッダーが
+  79px に伸びたため、既存の「padding＋負 margin」方式で 48px に（`common.css` にコメント）。
+- `DETAIL_CSS_VERSION` 39→40、`COMMON_CSS_VERSION` 30→31、`ARTICLE_FX_CSS_VERSION` 12→13。
+- 監査用スクリプト `scripts/audit_a11y_browser.mjs` を追加（`--local` でローカル、無指定で本番）。
+
+### コミット
+- `fix(a11y): コントラスト AA とタップ領域 48px を全ページで満たす（定量診断 WP1）`
+
+### 検証
+`scripts/audit_a11y_browser.mjs --local`（393×852 / dpr3 / タッチ、12ページ、ヒットテスト済み）で
+**変更前後を同じ方法で計測**:
+
+| | 変更前 | WP1 後 | WP1b 後 | 最終（フッター48px込み） |
+|---|---|---|---|---|
+| タップ領域 <48px | 62 | 2 | 0 | **0** |
+| コントラスト <AA | 344 | 111 | 15 | **15** |
+| 横スクロール | 0 | 0 | 0 | **0** |
+
+- ヘッダー高さは変更前後で同一（モバイル 54px / PC 78px・72px）。ロゴ当たり判定 44→48px、
+  ハンバーガー 44→48px を実測。
+- `bash scripts/preflight.sh` ✅ **全49件成功**（最終状態で実行）。
+- JA/EN ハブの行数一致（6枚）。スクリーンショットで venues ハブ・フェス詳細（393px）を目視。
+- 残り15件の内訳: venues カードの写真上テキスト 9（静的に測れない）、TOP ヒーロー 48px 見出し 2
+  （画像上・大文字）、フェス説明文中のリンク 2（`.lang-body` 0.75 × アクセント色 = 2.6:1）、
+  詳細ページの `lang-btn` 2（3.71:1、原因規則は未特定）。
+
+### 変更したパターン
+- `LP/common.css` / `LP/detail.css` / `LP/article-fx.css` と JA ハブ5枚＋about.html の inline CSS。
+  クラス数: コントラスト 43 → 対応済 39、タップ 12 → 12 すべて。
+
+### 未確認の類似パターン
+- `.lang-body` 内のアクセント色リンク（2件）と `lang-btn` 3.71:1（2件）: 未対応。次の Codex 回で追う。
+- 写真の上の文字（venues カード / ヒーロー）: 計測不能。目視ではグラデーションの上に載っている。
+- 本番反映後の実機 Safari 操作: **未確認**（headless Chrome での本番計測は push 後に行う）。
+
+### 次の担当への注意・判断待ち
+- WP2（onclick 撤去 → common.js 委譲）と WP3（画像同期の 1MB ガード）の Codex 指示書は
+  scratchpad に作成済み。次に実行する。
+- 見出し階層（7/24記事）・404 リンク（ultra-japan チケット / triangle）・記事 Drive 画像の alt は
+  **CMS 側のデータ修正**なので Codex には渡さない（計画書 C1〜C3）。

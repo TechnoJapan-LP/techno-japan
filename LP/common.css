@@ -166,19 +166,22 @@ nav .logo img {
   height: 13px;
   width: auto;
 }
-/* 当たり判定を44pxへ広げる（見た目の位置は1pxも変えない）。
+/* 当たり判定を48pxへ広げる（見た目の位置は1pxも変えない）。
 
    ⚠️ ロゴを文字から画像に替えたとき、当たり判定が画像の高さ13pxまで
-   縮んだ。文字時代は行の高さで16pxあった。推奨は44px。
+   縮んだ。文字時代は行の高さで16pxあった。推奨は44px以上。
    2026-08-15 実測 158x13px（全12ページ共通）。
 
    height を増やすとヘッダーの高さが変わるので、padding で広げて
-   同じ量の負の margin で相殺する。レイアウトは動かない。 */
+   同じ量の負の margin で相殺する。レイアウトは動かない。
+   ⚠️ min-height で広げないこと。詳細ページは box-sizing が content-box
+   なので padding と足し合わさり、ヘッダーが 79px に伸びた（2026-09-24 実測）。
+   2026-09-24: 44px → 48px（定量診断のタップ領域基準）。13+17+18 = 48。 */
 nav .logo, .footer-logo {
-  padding-top: 15px;
-  padding-bottom: 16px;
-  margin-top: -15px;
-  margin-bottom: -16px;
+  padding-top: 17px;
+  padding-bottom: 18px;
+  margin-top: -17px;
+  margin-bottom: -18px;
 }
 nav .nav-links {
   display: flex;
@@ -328,7 +331,7 @@ nav .nav-links .nav-social .tj-fav-count {
 }
 .guide-label {
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
-  opacity: 0.3; margin-bottom: 8px;
+  opacity: 0.62; margin-bottom: 8px;
 }
 .guide-title {
   font-family: var(--font-display); font-size: clamp(40px, 6vw, 72px);
@@ -411,15 +414,20 @@ nav .nav-links .nav-social .tj-fav-count {
 footer .footer-links .footer-social {
   display: inline-flex;
   align-items: center;
-  gap: 14px;
-  padding-left: 14px;
+  gap: 0;
+  padding-left: 4px;
   margin-left: 4px;
   border-left: 1px solid rgba(240,237,232,0.15);
 }
+/* アイコンは 14px のまま、当たり判定だけ 48px（2026-09-24 定量診断のタップ基準）。
+   gap は 48px 箱の余白が担うので 0 にした。 */
 footer .footer-links .footer-social a {
   display: inline-flex;
   align-items: center;
-  opacity: 0.5;
+  justify-content: center;
+  min-width: 48px;
+  min-height: 48px;
+  opacity: 0.62;
   transition: opacity 0.3s ease;
 }
 footer .footer-links .footer-social a:hover { opacity: 1; }
@@ -430,19 +438,19 @@ footer .footer-links .footer-social svg { width: 14px; height: 14px; display: bl
   display: none;
   flex-direction: column;
   gap: 5px;
-  /* 44px hit area (Apple HIG minimum) while the icon stays 22px */
+  /* 48px hit area while the icon stays 22px */
   align-items: center;
   justify-content: center;
-  min-width: 44px;
-  min-height: 44px;
+  min-width: 48px;
+  min-height: 48px;
   cursor: pointer;
   padding: 4px;
   z-index: 10001;
   background: none;
   border: none;
   position: fixed;
-  top: calc(14px + var(--safe-t));
-  right: calc(38px + var(--safe-r));
+  top: calc(12px + var(--safe-t));
+  right: calc(36px + var(--safe-r));
 }
 .nav-hamburger span {
   display: block;
@@ -546,11 +554,14 @@ footer {
   gap: 32px;
 }
 .footer-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px; /* 文字は 10px のまま、当たり判定だけ 48px */
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  opacity: 0.5;
+  opacity: 0.62;
   transition: opacity 0.3s ease;
 }
 .footer-links a:hover { opacity: 1; }
@@ -634,7 +645,7 @@ footer {
   font-family: var(--font-mono);
   font-size: 9px;
   letter-spacing: 0.1em;
-  opacity: 0.3;
+  opacity: 0.62;
 }
 .footer-watermark {
   position: relative;
@@ -691,7 +702,7 @@ footer {
 .newsletter-form button {
   background: var(--text); color: var(--bg); border: none;
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em;
-  text-transform: uppercase; padding: 14px 24px; cursor: pointer;
+  text-transform: uppercase; padding: 14px 24px; min-height: 48px; cursor: pointer;
   transition: opacity 0.3s ease;
 }
 .newsletter-form button:hover { opacity: 0.85; }
@@ -938,6 +949,6 @@ body > div:not(.tj-bg):not(.cursor-dot):not(.cursor-ring) {
   .sort-tab {
     display: inline-flex;
     align-items: center;
-    min-height: 44px;
+    min-height: 48px;
   }
 }
