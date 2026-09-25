@@ -9,8 +9,14 @@ permissions:
   contents: write
 
 # scheduleとCMSからの手動実行が重なっても、Drive同期・git pushを並行させない。
+# Publish / Deploy と同じグループ。Sync の commit と Publish の生成物 commit が同時に走ると
+# non-fast-forward で落ちる（2026-09-09 / 09-12 / 09-15 の3件）。同じグループにして順番待ちにする。
 concurrency:
-  group: sync-drive-images
+  # ⚠️ ただし Publish の「Ensure referenced images exist」は原本が足りないとき
+  # `gh workflow run` でこの Sync を起動して完了を待つ。そのときまで pages グループに
+  # 入れると、Publish が席を持ったまま Sync が順番待ちになり、10分待って両方失敗する
+  # （デッドロック）。手動起動（workflow_dispatch）だけは別グループで即時に走らせる。
+  group: ${{ github.event_name == 'workflow_dispatch' && 'sync-drive-images-dispatch' || 'pages' }}
   cancel-in-progress: false
 
 jobs:

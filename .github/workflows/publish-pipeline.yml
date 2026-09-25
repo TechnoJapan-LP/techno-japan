@@ -87,8 +87,9 @@ jobs:
 
       # 画像がまだ Drive から取り込まれていない状態で Publish されると、
       # broken_image_refs / 構造化データ検査で止まる（2026-09-10 / 09-12 / 09-13 の
-      # 3回発生）。画像の取得と派生生成は Sync Drive Images だけが行うため、
-      # 足りないときはそれを起動して待ち、取り込んでから続ける。
+      # 3回発生）。原本の取得は Sync Drive Images だけが行う（Drive にしか無い）。
+      # 派生は次のステップで Publish 自身が作る。原本が足りないときは Sync を起動して待ち、
+      # 取り込んでから続ける。
       - name: Ensure referenced images exist
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -132,6 +133,18 @@ jobs:
             echo "::error::同期しても参照画像が足りません。Drive に画像が無いか、CMS のアップロードが未完了です"
             exit 1
           fi
+
+      # 記事OG用の3比率（16:9 / 1:1 / 4:3）と寸法表は data.js に載っている画像に対して作る。
+      # これまで Sync Drive Images だけが作っていたため、Publish が Sync より先に走ると
+      # 3比率が無く「image が3件で実在する」検査で止まった（2026-09-25 / AUDIT 参照）。
+      # 派生名は内容ハッシュ付きで同じ入力→同じ出力。Sync 側と二重に作っても差分は出ない。
+      - name: Set up Pillow (image derivatives)
+        run: python3 -m pip install --quiet --disable-pip-version-check Pillow
+
+      - name: Build image derivatives & dimensions
+        run: |
+          python3 scripts/build-image-derivatives.py
+          node scripts/build-image-dimensions.mjs
 
       - name: Build detail pages
         run: node scripts/build-detail-pages.mjs
@@ -273,14 +286,14 @@ jobs:
             # 機械的に再生成されるものなので、rebase してやり直せば安全。
             # 裸の push で3回失敗し、そのたびに見張り番が鳴いた（2026-09-09 / 09-12）。
             pushed=0
-            for attempt in 1 2 3; do
+            for attempt in 1 2 3 4 5; do
               if git push; then pushed=1; break; fi
               echo "::warning::push が競合しました（試行 $attempt）。rebase して再試行します"
               git pull --rebase --autostash origin main || break
-              sleep 5
+              sleep 15
             done
             if [ "$pushed" != "1" ]; then
-              echo "::error::生成物のpushに3回失敗しました。手動で Publish pipeline を再実行してください"
+              echo "::error::生成物のpushに5回失敗しました。手動で Publish pipeline を再実行してください"
               exit 1
             fi
           fi

@@ -8816,3 +8816,37 @@ headless Chrome（実機相当 dpr3 / `mobile:true`）でローカル配信し�
 - `bash scripts/preflight.sh` ✅ **全49件成功**。
 - **次回の Sync Drive Images 実行で 3 枚が 1MB 未満のまま保たれるか（再圧縮ログが出るか）は未確認。**
   次に同期が走ったら Actions のログで `Recompressed (>1MB)` を確認すること。
+
+## 2026-09-25 Publish 失敗（odyssey 記事の3比率画像）→ 恒久対策 M1/M2（Codex 実装 / Claude 検証）
+
+### 実施
+- 02:19 の Publish 失敗の原因: 記事OG用の3比率派生は `build-image-derivatives.py` が `data.js` の記事画像にだけ作り、
+  それを走らせるのは Sync Drive Images だけだった。Publish が Sync より先に走ると派生が無く検査で止まる。
+  過去30回の失敗16件を分類: 画像タイミング5 / CMS データ不整合5 / push 競合3 / ?v 2 / 外部API 1。
+  設計: [docs/design/PUBLISH_RELIABILITY_2026-09-25.md](../docs/design/PUBLISH_RELIABILITY_2026-09-25.md)
+- **M1**: `publish-pipeline.yml` に「Set up Pillow」「Build image derivatives & dimensions」を
+  「Ensure referenced images exist」の直後・「Build detail pages」の前に追加。Publish が派生を自分で作る。
+- **M2**: `sync-drive-images.yml` の concurrency を `pages` グループへ（schedule 時）。
+  ⚠️ Publish が `gh workflow run` で起動する Sync（workflow_dispatch）まで同じグループにすると、
+  Publish が席を持ったまま Sync が順番待ちになりデッドロックするため、dispatch だけ別グループ
+  （`sync-drive-images-dispatch`）にした。「Commit generated output」の push 再試行 3→5回、待ち 5→15秒。
+- 復旧: Sync を手動起動（odyssey の3比率生成。WP3 の 1MB ガードが本番で初めて動き
+  `technogaoka 1366→949KB` / `spring-love-flyer 1015→849KB` を再圧縮）。
+  `gh run rerun --failed` は古いコミットで走るため再失敗 → push 後に新規 run で確認する。
+
+### コミット
+- `ci(publish): Publish が派生画像を自分で作り、書き込むワークフローを直列化（Publish 信頼性 M1/M2）`
+
+### 検証
+- YAML ロード OK / `check_sync_retry.py` OK / `bash scripts/preflight.sh` ✅ 全49件成功。
+- **Publish pipeline の実機実行: push 後に `gh workflow run` で流し、下に追記する。**
+
+### 変更したパターン
+- `.github/workflows/publish-pipeline.yml`（ステップ追加・再試行）、`.github/workflows/sync-drive-images.yml`（concurrency）。
+
+### 未確認の類似パターン
+- Deploy（`deploy-pages.yml`）の「sync generated LP before deploy」commit と Sync の競合: Deploy も `pages` グループなので直列化済み。
+- M3（CMS 側の関門）/ M4（通知）/ M5（外部 API 検査の除外）: 未着手。
+
+### 次の担当への注意・判断待ち
+- Sync の schedule 実行は今後 Publish/Deploy と順番待ちになる（最大で数分遅れる）。
