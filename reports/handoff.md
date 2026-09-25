@@ -8867,3 +8867,7 @@ headless Chrome（実機相当 dpr3 / `mobile:true`）でローカル配信し�
   `cms.js` v126→127、preflight ✅ 全49件。
 - **未確認**: 認証済み CMS で Publish Now を実際に押す操作（実データは vm で通したが、ブラウザ上の実押下は未実施）。
   push 後に cms.html?cb= を headless で開き、JS 例外が無いことは確認する。
+- **M3 本番確認（2026-09-25）**: Deploy `36089253912` success → その後ろに並んだ Publish pipeline `36089306630` **success**
+  （M2 の直列化どおり順番待ちで実行）。本番 `cms.html?cb=` を headless で開き `cms.js?v=127` が配信され、
+  ブラウザ上で `publishSanityCheck` に参照切れの擬似データを渡すと `ok:false` で止まることを確認。
+  JS 例外はパスワード入力をキャンセルした `auth-failed` のみ（想定どおり）。認証済みでの実押下は未実施。
