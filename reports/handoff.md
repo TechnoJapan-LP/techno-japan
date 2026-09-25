@@ -8850,3 +8850,20 @@ headless Chrome（実機相当 dpr3 / `mobile:true`）でローカル配信し�
 
 ### 次の担当への注意・判断待ち
 - Sync の schedule 実行は今後 Publish/Deploy と順番待ちになる（最大で数分遅れる）。
+
+### 2026-09-25 追記: M1 実機確認 / M3・M4 実装（Codex）と検証（Claude）
+- **M1 実機**: push 後に `gh workflow run "Publish pipeline"` → run `36087973307` **success**。
+  「Build image derivatives & dimensions」136 秒、「Check structured data & AI surface」✅、生成物コミット ✅。
+  odyssey 記事はこれで公開された。
+- **M4**（`production-sync-watchdog.yml`）: 失敗ステップ名を title に、最初の ❌ 行と「次にやること」を本文に出す。
+  yaml ロード OK。実際の失敗で本文が出るかは**次に失敗が起きたときに確認**（意図的に失敗させていない）。
+- **M3**（`LP/cms.js` `publishSanityCheck`）: EDITIONS の FESTIVAL_ID 参照切れ／公開開催回が下書きフェスを参照、を押す前に止める。
+  ⚠️ Codex 版は「STATUS が published のときだけ公開」と判定していた。実データは FESTIVALS 34 件が
+  STATUS 空欄（fetch-data.mjs では空欄＝公開）で、そのままだと空欄フェスを指す開催回が全部
+  「下書き参照」で止まり Publish 不能になるところだった。fetch-data.mjs の `isPublished` と同じ規則
+  （published→公開 / draft・archived→非公開 / 空欄→公開）に直し、回帰テストを1件追加。
+- 検証: `check_cms_publish_guard.mjs` 44件 ✅（参照ガード5件＋空欄1件を含む）、
+  **実データ（festivals.json 95 / editions.json 114）を関門に通して ok** を確認、`node --check` ✅、
+  `cms.js` v126→127、preflight ✅ 全49件。
+- **未確認**: 認証済み CMS で Publish Now を実際に押す操作（実データは vm で通したが、ブラウザ上の実押下は未実施）。
+  push 後に cms.html?cb= を headless で開き、JS 例外が無いことは確認する。

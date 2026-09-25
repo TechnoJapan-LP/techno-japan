@@ -243,7 +243,7 @@ const c = makeCtx();
 
   check('重複が無ければ通す',
     c.__T.publishSanityCheck({ ...BASE, EDITIONS: [
-      { EDITION_ID: 'a-2026', _row: 2 }, { EDITION_ID: 'b-2026', _row: 3 },
+      { EDITION_ID: 'a-2026', FESTIVAL_ID: 'f1', _row: 2 }, { EDITION_ID: 'b-2026', FESTIVAL_ID: 'f1', _row: 3 },
     ] }).ok === true);
 
   check('EDITIONS を取れなかった場合は通す（Publish 自体は止めない）',
@@ -251,15 +251,64 @@ const c = makeCtx();
 
   check('EDITION_ID が空の行は重複扱いしない',
     c.__T.publishSanityCheck({ ...BASE, EDITIONS: [
-      { EDITION_ID: '', _row: 2 }, { EDITION_ID: '', _row: 3 }, { EDITION_ID: 'a-2026', _row: 4 },
+      { EDITION_ID: '', FESTIVAL_ID: 'f1', _row: 2 }, { EDITION_ID: '', FESTIVAL_ID: 'f1', _row: 3 }, { EDITION_ID: 'a-2026', FESTIVAL_ID: 'f1', _row: 4 },
     ] }).ok === true);
 
   check('LINEUPS で同じ EDITION_ID が並んでいても通す（出演者ごとに1行）',
-    c.__T.publishSanityCheck({ ...BASE, EDITIONS: [{ EDITION_ID: 'a-2026', _row: 2 }],
+    c.__T.publishSanityCheck({ ...BASE, EDITIONS: [{ EDITION_ID: 'a-2026', FESTIVAL_ID: 'f1', _row: 2 }],
       LINEUPS: [
         { EDITION_ID: 'a-2026', ACT_LABEL: 'DJ 1', _row: 2 },
         { EDITION_ID: 'a-2026', ACT_LABEL: 'DJ 2', _row: 3 },
       ] }).ok === true);
+}
+
+/* --- 2a. EDITIONS の FESTIVAL_ID 参照ガード ------------------------------ */
+{
+  console.log('\nEDITIONS の FESTIVAL_ID 参照ガード');
+
+  const broken = c.__T.publishSanityCheck({ ...BASE, EDITIONS: [
+    { EDITION_ID: 'broken-2026', FESTIVAL_ID: 'no-such-festival', _row: 42 },
+  ] });
+  check('存在しない FESTIVAL_ID は止める',
+    broken.ok === false && /no-such-festival/.test(broken.message || '') && /参照切れ/.test(broken.message || ''),
+    JSON.stringify(broken));
+
+  const draftFestival = c.__T.publishSanityCheck({ ...BASE,
+    FESTIVALS: [{ ID: 'draft-festival', STATUS: 'draft' }],
+    EDITIONS: [{ EDITION_ID: 'draft-2026', FESTIVAL_ID: 'draft-festival', STATUS: 'published', _row: 43 }],
+  });
+  check('公開扱いの開催回が下書きのフェスを参照したら止める', draftFestival.ok === false);
+
+  const valid = c.__T.publishSanityCheck({ ...BASE,
+    FESTIVALS: [{ ID: 'published-festival', STATUS: 'published' }],
+    EDITIONS: [{ EDITION_ID: 'valid-2026', FESTIVAL_ID: 'published-festival', STATUS: 'published', _row: 44 }],
+  });
+  check('存在して公開済みの FESTIVAL_ID は参照理由で止めない',
+    valid.ok === true || !/参照切れ|下書きのフェスを参照/.test(valid.message || ''), JSON.stringify(valid));
+
+  // STATUS 空欄のフェスは公開扱い（fetch-data.mjs の PUBLISH_EMPTY_STATUS=true）。
+  // 2026-09-25 実測で FESTIVALS 34 件が空欄。空欄を下書きと誤認すると、それを指す
+  // 開催回（finished / announced / published）が全部止まり Publish できなくなる。
+  const emptyStatus = c.__T.publishSanityCheck({ ...BASE,
+    FESTIVALS: [{ ID: 'empty-status-festival', STATUS: '' }],
+    EDITIONS: [
+      { EDITION_ID: 'empty-2025', FESTIVAL_ID: 'empty-status-festival', STATUS: 'finished', _row: 45 },
+      { EDITION_ID: 'empty-2026', FESTIVAL_ID: 'empty-status-festival', STATUS: 'published', _row: 46 },
+    ],
+  });
+  check('STATUS 空欄のフェスは公開扱いとして参照を通す', !(emptyStatus.ok === false && /参照/.test(emptyStatus.message)),
+    String(emptyStatus.message || 'ok'));
+
+  check('EDITIONS 未定義なら参照検査を飛ばす',
+    c.__T.publishSanityCheck({ ...BASE }).ok === true);
+
+  const lower = c.__T.canonicalizeRows([
+    { _row: 45, edition_id: 'lower-2026', festival_id: 'no-such-festival' },
+  ]);
+  const lowerResult = c.__T.publishSanityCheck({ ...BASE, EDITIONS: lower });
+  check('小文字キーの実データでも参照切れを止める',
+    lowerResult.ok === false && /no-such-festival/.test(lowerResult.message || '') && /参照切れ/.test(lowerResult.message || ''),
+    JSON.stringify(lowerResult));
 }
 
 /* --- 3. 複数の重複 ------------------------------------------------------- */

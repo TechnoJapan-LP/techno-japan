@@ -6681,6 +6681,41 @@ function publishSanityCheck(d){
       +detail+'\n\nスプレッドシートで、どちらか一方の行を削除してから再実行してください。'};
   }
 
+  /* EDITIONS の FESTIVAL_ID 参照。
+
+     2026-09-14 / 09-15 に4回、この参照切れで Publish が CI で落ちた。
+     CMS は EDITIONS を取っているのに参照を見ていなかったため、押した後
+     20分してから失敗が分かっていた。押す前に止める（docs/design/PUBLISH_RELIABILITY_2026-09-25.md M3）。
+
+     EDITIONS を取れなかったときは黙って通す（この検査のために
+     Publish 自体を止めない）。 */
+  const refIssues=[];
+  if(Array.isArray(d.EDITIONS)){
+    // 公開扱いの判定は fetch-data.mjs の isPublished と同じ規則にする:
+    // published → 公開 / draft・archived → 非公開 / 空欄 → 公開（PUBLISH_EMPTY_STATUS=true）。
+    // FESTIVALS は 34 件が STATUS 空欄で公開中（2026-09-25 実測）。空欄を非公開と
+    // 扱うと、それを指す開催回がすべて「下書き参照」で止まり、Publish できなくなる。
+    const pubOf = v => { const s=String(v==null?'':v).trim().toLowerCase(); return s==='published' ? true : (s==='draft'||s==='archived') ? false : true; };
+    const festivals = new Map((d.FESTIVALS||[]).map(f => {
+      const id=String(f.ID||f.id||'').trim();
+      return [id, pubOf(f.STATUS!=null?f.STATUS:f.status)];
+    }).filter(([id]) => id));
+    d.EDITIONS.forEach(r=>{
+      const id=String(r.EDITION_ID||'').trim();
+      const fid=String(r.FESTIVAL_ID||'').trim();
+      if(!festivals.has(fid)) refIssues.push({id,fid,row:Number(r._row)||0,reason:'FESTIVAL_ID参照切れ'});
+      else if(pubOf(r.STATUS!=null?r.STATUS:r.status) && !festivals.get(fid))
+        refIssues.push({id,fid,row:Number(r._row)||0,reason:'下書きのフェスを参照'});
+    });
+  }
+  if(refIssues.length){
+    const detail=refIssues.slice(0,10).map(x=>
+      '  ・EDITIONS "'+x.id+'" — FESTIVAL_ID "'+x.fid+'" '+x.reason+'（'+x.row+'行目）').join('\n')
+      +(refIssues.length>10?'\n  …他 '+(refIssues.length-10)+' 件':'');
+    return {ok:false, message:'⛔ 開催回（EDITIONS）の参照が切れています。このまま公開すると必ず失敗します。\n'
+      +detail+'\n\nスプレッドシートの EDITIONS で FESTIVAL_ID を FESTIVALS の ID に合わせるか、行を削除してから再実行してください。'};
+  }
+
   /* 列名の綴り違いで、値が黙って捨てられていないか。
 
      CMS はシートの列名を**完全一致**で読む。1文字でも違うと、
