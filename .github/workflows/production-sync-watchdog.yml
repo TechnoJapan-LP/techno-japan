@@ -41,12 +41,40 @@ jobs:
     if: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.conclusion != 'success' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Fail visibly and include the failed run URL
+      - name: Explain the failed run
         env:
-          FAILED_WORKFLOW: ${{ github.event.workflow_run.name }}
-          FAILED_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
-          FAILED_URL: ${{ github.event.workflow_run.html_url }}
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+          RUN_URL: ${{ github.event.workflow_run.html_url }}
         run: |
-          echo "::error title=本番公開経路の失敗::${FAILED_WORKFLOW} / ${FAILED_CONCLUSION}"
-          echo "失敗したRun: ${FAILED_URL}"
+          FAILED_STEPS="$(gh run view "$RUN_ID" --json jobs --jq '[.jobs[].steps[] | select(.conclusion=="failure") | .name] | join(", ")' 2>/dev/null || true)"
+          ERROR_LINES="$(gh run view "$RUN_ID" --log-failed 2>/dev/null | sed -E 's/^[^\t]*\t[^\t]*\t[^ ]* //' | grep -E '❌|##\[error\]' | grep -v 'Process completed' | head -5 || true)"
+
+          if [ -z "$FAILED_STEPS" ]; then
+            FAILED_STEPS="失敗ステップを取得できませんでした"
+          fi
+          if [ -z "$ERROR_LINES" ]; then
+            ERROR_LINES="失敗ログを取得できませんでした"
+          fi
+
+          case "$FAILED_STEPS" in
+            *"Fetch data"*)
+              NEXT_ACTION="CMS のデータ不整合。❌ 行の ID（参照切れ・重複）を CMS で直してから Publish Now"
+              ;;
+            *"Ensure referenced images"*)
+              NEXT_ACTION="画像が Drive にまだ無い。CMS のアップロード完了を確認して Publish Now"
+              ;;
+            *"structured data"*)
+              NEXT_ACTION='生成物の検査。Publish pipeline を手動で再実行（gh workflow run "Publish pipeline"）。同じ失敗なら開発者へ'
+              ;;
+            *"Commit generated output"*)
+              NEXT_ACTION="他のワークフローと競合。数分待って Publish pipeline を再実行"
+              ;;
+            *)
+              NEXT_ACTION="Run のログを開発者に共有"
+              ;;
+          esac
+
+          ERROR_LINES_ONE_LINE="$(printf '%s\n' "$ERROR_LINES" | paste -sd ' / ' -)"
+          echo "::error title=${FAILED_STEPS}::❌ 行: ${ERROR_LINES_ONE_LINE} | 次にやること: ${NEXT_ACTION} | 失敗したRun: ${RUN_URL}"
           exit 1
