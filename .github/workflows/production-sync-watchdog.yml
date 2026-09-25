@@ -48,7 +48,9 @@ jobs:
           RUN_URL: ${{ github.event.workflow_run.html_url }}
         run: |
           FAILED_STEPS="$(gh run view "$RUN_ID" --json jobs --jq '[.jobs[].steps[] | select(.conclusion=="failure") | .name] | join(", ")' 2>/dev/null || true)"
-          ERROR_LINES="$(gh run view "$RUN_ID" --log-failed 2>/dev/null | sed -E 's/^[^\t]*\t[^\t]*\t[^ ]* //' | grep -E '❌|##\[error\]' | grep -v 'Process completed' | head -5 || true)"
+          # --log-failed は「ジョブ名<TAB>ステップ名<TAB>時刻 本文」。3列目を取り、先頭の時刻を落とす。
+          # （sed の \t は macOS では効かないので awk で列を切る）
+          ERROR_LINES="$(gh run view "$RUN_ID" --log-failed 2>/dev/null | awk -F'\t' 'NF>=3 {print $3}' | sed -E 's/^[^ ]+Z +//' | grep -E '❌|##\[error\]' | grep -v 'Process completed' | head -5 || true)"
 
           if [ -z "$FAILED_STEPS" ]; then
             FAILED_STEPS="失敗ステップを取得できませんでした"
@@ -75,6 +77,6 @@ jobs:
               ;;
           esac
 
-          ERROR_LINES_ONE_LINE="$(printf '%s\n' "$ERROR_LINES" | paste -sd ' / ' -)"
+          ERROR_LINES_ONE_LINE="$(printf '%s\n' "$ERROR_LINES" | awk 'NR>1 {printf " / "} {printf "%s", $0}')"
           echo "::error title=${FAILED_STEPS}::❌ 行: ${ERROR_LINES_ONE_LINE} | 次にやること: ${NEXT_ACTION} | 失敗したRun: ${RUN_URL}"
           exit 1
