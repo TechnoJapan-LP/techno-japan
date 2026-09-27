@@ -1,7 +1,7 @@
 {
   "source": "https://techno-japan.media/",
   "license": "データの出典として techno-japan.media へのリンクを求めます",
-  "count": 16,
+  "count": 18,
   "events": [
     {
       "name": "Odyssey 2026",
@@ -125,6 +125,21 @@
       "tickets": "https://treks.zaiko.io/ja/e/trek-2026-kugo"
     },
     {
+      "name": "Intergalactic Festival 2026",
+      "url": "https://techno-japan.media/festivals/intergalactic.html",
+      "start": "2026-10-16",
+      "end": "2026-10-18",
+      "venue": "Ooba Camp Village",
+      "pref": "Chiba",
+      "lat": 35.7533,
+      "lng": 139.2081,
+      "genres": [
+        "TECHNO",
+        "HOUSE",
+        "BASS"
+      ]
+    },
+    {
       "name": "annahme 2026",
       "url": "https://techno-japan.media/festivals/annahme.html",
       "start": "2026-10-17",
@@ -196,6 +211,17 @@
         "LIVE"
       ],
       "tickets": "https://shop.frue.jp/"
+    },
+    {
+      "name": "PARALLEL WORLD 2026",
+      "url": "https://techno-japan.media/festivals/parallel-world.html",
+      "start": "2026-10-31",
+      "end": "2026-11-01",
+      "venue": "Secret Venue",
+      "genres": [
+        "TECHNO",
+        "HOUSE"
+      ]
     },
     {
       "name": "GROW THE CULTURE OPEN AIR 2026",

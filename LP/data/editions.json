@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-09-25T04:04:11.558Z",
-  "count": 114,
+  "_generatedAt": "2026-09-27T16:36:46.367Z",
+  "count": 117,
   "items": [
     {
       "EDITION_ID": "99flags-2026",
@@ -517,6 +517,7 @@
       "EDITION": "2025",
       "DATE_START": "2025-05-31",
       "DATE_END": "2025-05-31",
+      "LOCATION": "Secret Venue",
       "PREF": "Chiba",
       "STATUS": "finished"
     },
@@ -864,6 +865,7 @@
       "EDITION": "2024",
       "DATE_START": "2024-11-03",
       "DATE_END": "2024-11-04",
+      "LOCATION": "Secret Venue",
       "STATUS": "finished"
     },
     {
@@ -1429,6 +1431,43 @@
       "LNG": "138.6818",
       "TICKETURL": "https://sawagi-festival.zaiko.io/ja/e/sawagi-festival-2026",
       "FLYER": "images/festivals/sawagi-festival-2026-flyer.webp",
+      "STATUS": "announced"
+    },
+    {
+      "EDITION_ID": "intergalactic-2025-2",
+      "FESTIVAL_ID": "intergalactic",
+      "EDITION": "2025-2",
+      "DATE_START": "2025-10-03",
+      "DATE_END": "2025-10-05",
+      "LOCATION": "Ooba Camp Village",
+      "LOCATION_JA": "おおばキャンプ村",
+      "PREF": "Chiba",
+      "ADDRESS": "東京都西多摩郡日の出町大久野3741",
+      "LAT": "35.7533",
+      "LNG": "139.2081",
+      "STATUS": "announced"
+    },
+    {
+      "EDITION_ID": "intergalactic-2026",
+      "FESTIVAL_ID": "intergalactic",
+      "EDITION": "2026",
+      "DATE_START": "2026-10-16",
+      "DATE_END": "2026-10-18",
+      "LOCATION": "Ooba Camp Village",
+      "LOCATION_JA": "おおばキャンプ村",
+      "PREF": "Chiba",
+      "ADDRESS": "東京都西多摩郡日の出町大久野3741",
+      "LAT": "35.7533",
+      "LNG": "139.2081",
+      "STATUS": "announced"
+    },
+    {
+      "EDITION_ID": "parallel-world-2026",
+      "FESTIVAL_ID": "parallel-world",
+      "EDITION": "2026",
+      "DATE_START": "2026-10-31",
+      "DATE_END": "2026-11-01",
+      "LOCATION": "Secret Venue",
       "STATUS": "announced"
     }
   ]

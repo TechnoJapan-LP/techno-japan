@@ -1,10 +1,10 @@
 # TECHNO JAPAN
 
 > 日本のテクノ / ハウスの独立メディア。フェスティバル95件・
-> アーティスト136名・会場22件・記事13本を日英で掲載し、
+> アーティスト137名・会場22件・記事14本を日英で掲載し、
 > 開催日・場所・出演者を構造化データ（schema.org）付きで公開している。
 
-## 今後の開催予定（16件）
+## 今後の開催予定（18件）
 
 - 2026-09-25〜2026-09-27: [Odyssey 2026](https://techno-japan.media/festivals/odyssey.html) — Sky Lodge Ginga Village, Miyazaki
 - 2026-09-25〜2026-09-27: [御月民 -OTSUKIMI- 2026](https://techno-japan.media/festivals/otsukimi.html) — Healing Garden Takanami, Niigata
@@ -14,11 +14,13 @@
 - 2026-10-03〜2026-10-04: [EACH STORY 2026](https://techno-japan.media/festivals/each-story.html) — Goko Ranch Auto Camp Ground, Nagano
 - 2026-10-10〜2026-10-12: [Labyrinth 2026](https://techno-japan.media/festivals/labyrinth.html) — Minakami Hodaigi Camping Ground, Gunma
 - 2026-10-10〜2026-10-12: [TREKs 2026](https://techno-japan.media/festivals/treks.html) — Oogurodani Camping Field, Kyoto
+- 2026-10-16〜2026-10-18: [Intergalactic Festival 2026](https://techno-japan.media/festivals/intergalactic.html) — Ooba Camp Village, Chiba
 - 2026-10-17〜2026-10-18: [annahme 2026](https://techno-japan.media/festivals/annahme.html) — Green Park Hodono Omatsuri Hiroba, Kochi
 - 2026-10-17〜2026-10-18: [Lost&Find 2026](https://techno-japan.media/festivals/lost-find.html) — Tatsuyama Himitsumura, Shizuoka
 - 2026-10-22〜2026-10-25: [Wonderfruit Kyoto 2026](https://techno-japan.media/festivals/wonderfruit-kyoto.html) — Kyoto (Ohara Sanso / ACG Villa Kyoto / Kurama Mountain / Ochill TeaRoom)
 - 2026-10-23〜2026-10-25: [Sawagi Festival 2026](https://techno-japan.media/festivals/sawagi-festival.html) — Suteki Village Camping Ground, Yamanashi
 - 2026-10-31〜2026-11-01: [FESTIVAL de FRUE 2026](https://techno-japan.media/festivals/festival-de-frue.html) — TSUMAGOI RESORT SAINO SATO, Shizuoka
+- 2026-10-31〜2026-11-01: [PARALLEL WORLD 2026](https://techno-japan.media/festivals/parallel-world.html) — Secret Venue
 - 2026-11-07〜2026-11-08: [GROW THE CULTURE OPEN AIR 2026](https://techno-japan.media/festivals/grow-the-culture-open-air.html) — Ohba Camping Village, Tokyo
 - 2026-11-20〜2026-11-22: [Mutek 2026](https://techno-japan.media/festivals/mutek.html) — Shibuya
 - 2027-03-02〜2027-03-07: [Snow Machine Japan 2027](https://techno-japan.media/festivals/snow-machine-japan.html) — HAKUBA VALLEY, Nagano
@@ -34,6 +36,7 @@
 
 ## 最新記事
 
+- 2026-09-28: [【2026年10月】日本の音楽フェスティバル&レイヴ11選](https://techno-japan.media/articles/japan-festival-2026-october.html) — 紅葉が山を降りてくる野外シーズンの最終盤、10月は一年でいちばん密度の高い月になる。群馬の森で3日間を組むLabyrinth、10周年のFRUE、京都を巡る100名限定のWonderfruitから、場所を明かさないフリーパーティまで、いま体験すべき11の現場を紹介する。 / [EN](https://techno-japan.media/en/articles/japan-festival-2026-october.html)
 - 2026-09-24: [Odyssey 宮崎・標高1,000mの森と天文台に、九州の50組が集うローカルレイヴ](https://techno-japan.media/articles/odyssey-2026-info.html) — 標高1,000mの森と天文台をまるごと使い、九州の50組超が集う3日間。10年の物語の第2章となる今年のテーマはRE:ROOTS、熊本地震の復興支援と結びつく。銀河村での開催は今年が最後、森と星空のフロアを行き来しながら山で朝を迎える。 / [EN](https://techno-japan.media/en/articles/odyssey-2026-info.html)
 - 2026-09-21: [Synapse Festival、福岡・海の中道で初の3日間開催へ](https://techno-japan.media/articles/synapse-2026-info.html) — 10月2日からの3日間、福岡・海の中道海浜公園のなかにある泊まれる公園で、Synapse Festivalが会場を移して初の3日間開催を迎える。閉園後の国営公園に立つ3つのステージにGE-OLOGYやIdjut Boysら40組が集い、サウナや焚き火、朝焼けまでが一続きの時間として設計される。 / [EN](https://techno-japan.media/en/articles/synapse-2026-info.html)
 - 2026-09-14: [御月民 OTSUKIMI 2026 満月の夜に始まる、北アルプスの麓の3日間](https://techno-japan.media/articles/otsukimi-2026-info.html) — 中秋の名月に合わせて開かれる野外フェスティバルが、7年目を迎え新潟・糸魚川の池のほとりへ。EfdeminやAnthony Linell、.VRILら国内外16組が、北アルプスの麓の芝生で満月の夜から3日間をつないでいく。 / [EN](https://techno-japan.media/en/articles/otsukimi-2026-info.html)
