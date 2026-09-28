@@ -7118,3 +7118,31 @@ hard のままであることも含む）。
   デプロイが実際に失敗・滞留していることを確かめてから言う。
 - GitHub の run は、表示上の status と内部状態が食い違うことがある。
   409 の文言まで見ないと、権限不足とも状態違いとも区別できない。
+
+### §9-97 ハブの記事一覧が「スーパーリロードしないと更新されない」（2026-09-28）
+
+**症状**: トップ・NEWS などを開いても最新記事が出ず、Cmd+Shift+R で初めて出る。
+利用者が 2026-09-28 に報告。
+
+**原因**: `LP/sw.js`（Service Worker）の fetch 分岐で、`data.js` だけを network-first に
+していた。2026-09-15 に導入した **`data-hub.js`**（data.js から作るハブ用の軽量版・
+`?v=11` 固定で Publish のたびに中身だけ変わる）を同じ分岐に足し忘れ、
+`/\.js$/` の cache-first に落ちていた。一度サイトを見たブラウザには古い一覧が
+返り続ける。スーパーリロードは SW を迂回するので、そのときだけ最新が出た。
+
+**§9-17 / §9-35 と同じ「片方の経路だけ保護されている」形。** `data.js` の保護は
+sw.js・check_asset_versions（VERSION_CHECK_EXEMPT）・check_sw_routing の3か所で
+守られていたが、data-hub.js は VERSION_CHECK_EXEMPT にだけ足され、sw.js と
+check_sw_routing には足されていなかった（§9-80 と同じ「新設ファイルが検査の穴を作る」型）。
+
+**実測**: ローカルで data-hub.js の中身を A→B→C と変えながら3回表示。
+旧 sw.js: 3回目に **B**（1つ前）が出る。新 sw.js: **C** が出る。
+
+**対策**:
+- `sw.js`: `data-hub.js` を data.js と同じ network-first に。precache にも追加。`VERSION` v1.14.0→v1.15.0
+  （旧キャッシュを activate 時に捨てる）。
+- `check_sw_routing.mjs`: `data-hub.js` が cache-first に落ちたら止める検査を追加（修正前 ❌ を確認）。
+
+**教訓**: `VERSION_CHECK_EXEMPT` に足すファイルは、「?v を上げない＝SW が取り直す仕組みが
+別に要る」ということ。足すときは sw.js の network-first と check_sw_routing の
+MUST_NOT_BE_CACHE_FIRST に**同時に**足す。

@@ -8875,3 +8875,30 @@ headless Chrome（実機相当 dpr3 / `mobile:true`）でローカル配信し�
   本文に ❌ 3行＋「次にやること」＋Run URL が1行で出る。Codex 版は `sed '\t'`（macOS で無効）と
   `paste -sd ' / '`（区切りが1文字ずつ循環）で本文が崩れていたため、`awk -F'\t'` と awk 連結に直した。
   Actions（ubuntu）でも同じ結果になる書き方。実際の失敗時の見た目は次回の失敗で最終確認。
+
+## 2026-09-28 ハブの記事一覧がスーパーリロードしないと更新されない → sw.js 修正
+
+### 実施
+`LP/sw.js` の network-first 分岐に `data-hub.js` を追加（data.js と同じ扱い）、precache にも追加、
+`VERSION` v1.14.0→v1.15.0。`scripts/check_sw_routing.mjs` に data-hub.js の検査を追加。
+経緯と原因は [AUDIT §9-97](../AUDIT_TECHNO_JAPAN.md)。
+
+### コミット
+- `fix(sw): data-hub.js を network-first にし、ハブの記事一覧が古いまま残る問題を修正（§9-97）`
+
+### 検証
+- `check_sw_routing.mjs`: 修正前 `/data-hub.js?v=11 → cacheFirst ❌`、修正後 ✅。
+- 実ブラウザ（headless Chrome、SW 登録済みプロファイル、ローカル配信で data-hub.js の中身を A→B→C）:
+  旧 sw.js = 3回目に B（古い）／新 sw.js = C（最新）。
+- `bash scripts/preflight.sh`: 下に追記。
+
+### 変更したパターン
+- sw.js の fetch 分岐（data.js と data-hub.js）。
+
+### 未確認の類似パターン
+- `?v` 固定で中身が変わる他のファイル: `VERSION_CHECK_EXEMPT` は data.js / data-hub.js の2つだけ（確認済み・他 0件）。
+- 利用者のブラウザで新 SW が有効になるのは「デプロイ後 10 分（HTML の max-age）＋2回目の表示」。
+
+### 次の担当への注意
+- `VERSION_CHECK_EXEMPT` に足すときは sw.js の network-first と check_sw_routing に同時に足す（§9-97）。
+- `bash scripts/preflight.sh`: 「記事フィード」だけ ❌（sitemap-news.xml に48時間を過ぎた odyssey が残っていた＝日付依存の生成物の古さで、今回の変更とは無関係）。`generate-sitemap.py` で再生成して同じコミットに含め、push 時の preflight で全件成功を確認。

@@ -7,7 +7,7 @@
  *   届ける（バックグラウンド更新は行わない）。?v の更新漏れは
  *   scripts/check_asset_versions.py が止める。
  * - images: stale-while-revalidate（同名で差し替えられるため）
- * - data.js: network-first。CMS の Publish Now が commit するので
+ * - data.js / data-hub.js: network-first。CMS の Publish Now が commit するので
  *   人が HTML の ?v を上げる機会が無く、初回から最新データを優先する。
  *
  * ⚠ fetch ハンドラの分岐は上から順に評価され、最初に一致したところで return する。
@@ -16,7 +16,7 @@
  *   順序を守れているかは scripts/check_sw_routing.mjs が検査する。
  */
 
-const VERSION = 'v1.14.0';
+const VERSION = 'v1.15.0';
 const STATIC_CACHE = `tj-static-${VERSION}`;
 const DYNAMIC_CACHE = `tj-dynamic-${VERSION}`;
 
@@ -37,6 +37,7 @@ const PRECACHE_URLS = [
   '/article-fx.css',
   '/article-fx.js',
   '/data.js',
+  '/data-hub.js',
 ];
 
 // Install: precache core pages
@@ -96,7 +97,12 @@ self.addEventListener('fetch', event => {
   // ここの前提と矛盾する。2026-08-03 に一度足して同日に外した（AUDIT §9-32）。
   // stale-while-revalidate では初回表示に古い一覧が出るため、data.js は
   // network-first にする。ネットワーク障害時だけキャッシュへフォールバックする。
-  if (url.pathname.endsWith('/data.js')) {
+  //
+  // data-hub.js も同じ。data.js から作るハブ用の軽量版で、?v=11 のまま Publish の
+  // たびに中身が変わる（check_asset_versions の VERSION_CHECK_EXEMPT）。2026-09-15 の
+  // 導入時にここへ足し忘れ、cache-first に落ちていた。一度サイトを見たブラウザには
+  // 古い記事一覧が返り続け、スーパーリロードしないと最新が出なかった（2026-09-28）。
+  if (url.pathname.endsWith('/data.js') || url.pathname.endsWith('/data-hub.js')) {
     event.respondWith(networkFirst(request));
     return;
   }

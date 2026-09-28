@@ -52,6 +52,10 @@ const ORIGIN = 'https://techno-japan.media';
    実値に合わせてある。ズレても慌てて直す必要はない。 */
 const MUST_NOT_BE_CACHE_FIRST = [
   { path: '/data.js', query: '?v=10', why: 'Publish Now が commit するので ?v が上がらない' },
+  // 2026-09-15 に data.js から作るハブ用の軽量版として導入。?v は固定（VERSION_CHECK_EXEMPT）で
+  // 中身だけ Publish のたびに変わる。cache-first に落ちると、一度見たブラウザには
+  // 古い記事一覧が返り続け、スーパーリロードしないと最新が出ない（2026-09-28 に利用者が報告）。
+  { path: '/data-hub.js', query: '?v=11', why: 'data.js と同じく Publish が中身を変えるのに ?v が固定' },
 ];
 
 /** 逆に cache-first のままでよいことを固定するケース（戦略の取り違え防止）。 */
@@ -62,6 +66,7 @@ const EXPECTED = [
   { path: '/localize.js', query: '?v=6', want: 'cacheFirst' },
   { path: '/images/festivals/hacha-mecha.webp', query: '', want: 'staleWhileRevalidate' },
   { path: '/data.js', query: '?v=10', want: 'networkFirst' },
+  { path: '/data-hub.js', query: '?v=11', want: 'networkFirst' },
 ];
 
 /**
