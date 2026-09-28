@@ -36,7 +36,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/common.css?v=31">
-<link rel="stylesheet" href="/detail.css?v=40">
+<link rel="stylesheet" href="/detail.css?v=41">
 <script type="application/ld+json">[{"@context":"https://schema.org","@type":"Person","@id":"https://techno-japan.media/artists/moodman.html#artist","name":"MOODMAN","inLanguage":"ja","description":"東京のハウス・シーンを長年支えてきたDJ。GODFATHER、HOUSE OF LIQUID、SLOWMOTION など複数のパーティーに深く関わり、日本のクラブカルチャーを現場から形づくってきた存在として知られる。","image":["https://techno-japan.media/images/artists/moodman.webp"],"url":"https://techno-japan.media/artists/moodman.html","location":{"@type":"Place","name":"TOKYO, JAPAN"},"sameAs":["https://www.instagram.com/moodman10/"]},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"TECHNO JAPAN","item":"https://techno-japan.media/"},{"@type":"ListItem","position":2,"name":"ARTISTS","item":"https://techno-japan.media/artists.html"},{"@type":"ListItem","position":3,"name":"MOODMAN","item":"https://techno-japan.media/artists/moodman.html"}]}]</script>
 </head>
 <body>
@@ -100,7 +100,10 @@
 </footer>
 <script>
 (function(){
-  if (navigator.webdriver) return;
+  // ボット（headless / Lighthouse / 自動操作）は計測しない。
+  // 2026-09-28 の GA4 では Direct 75%・Chrome の 90% が非エンゲージで、
+  // 0秒滞在のページ8本が lighthouse.yml の URL と一致していた（自分たちの検査を利用者として数えていた）。
+  if (navigator.webdriver || /HeadlessChrome|Chrome-Lighthouse|Lighthouse|Speed Insights|PTST|GTmetrix/i.test(navigator.userAgent)) return;
   var s = document.createElement('script');
   s.async = true;
   s.src = 'https://www.googletagmanager.com/gtag/js?id=G-4MHCNR7D26';

@@ -53,7 +53,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 40;
+const DETAIL_CSS_VERSION = 41;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -797,6 +797,26 @@ function fmtDate(d) {
   if (!y || !m || !day) return '';
   return `${MONTHS[m - 1]} ${day}, ${y}`;
 }
+function fmtMetaDateJa(start, end) {
+  if (!ISO_DATE.test(String(start || ''))) return '';
+  const [sy, sm, sd] = String(start).split('-').map(Number);
+  if (!ISO_DATE.test(String(end || '')) || end === start) return `${sy}年${sm}月${sd}日`;
+  const [ey, em, ed] = String(end).split('-').map(Number);
+  if (sy === ey && sm === em) return `${sy}年${sm}月${sd}日〜${ed}日`;
+  if (sy === ey) return `${sy}年${sm}月${sd}日〜${em}月${ed}日`;
+  return `${sy}年${sm}月${sd}日〜${ey}年${em}月${ed}日`;
+}
+function fmtMetaDateEn(start, end) {
+  if (!ISO_DATE.test(String(start || ''))) return '';
+  const month = (value) => MONTHS[Number(String(value).split('-')[1]) - 1]
+    .toLowerCase().replace(/^./, (char) => char.toUpperCase());
+  const [sy, sm, sd] = String(start).split('-').map(Number);
+  if (!ISO_DATE.test(String(end || '')) || end === start) return `${month(start)} ${sd}, ${sy}`;
+  const [ey, em, ed] = String(end).split('-').map(Number);
+  if (sy === ey && sm === em) return `${month(start)} ${sd}–${ed}, ${sy}`;
+  if (sy === ey) return `${month(start)} ${sd}–${month(end)} ${ed}, ${sy}`;
+  return `${month(start)} ${sd}, ${sy}–${month(end)} ${ed}, ${ey}`;
+}
 function fmtDateDots(d) {
   const match = String(d || '').trim().match(/^(\d{4})-(\d{2})-(\d{2})/);
   return match ? `${match[1]}.${match[2]}.${match[3]}` : '';
@@ -900,7 +920,10 @@ function footerHtml(lang) {
 
 const GA = `<script>
 (function(){
-  if (navigator.webdriver) return;
+  // ボット（headless / Lighthouse / 自動操作）は計測しない。
+  // 2026-09-28 の GA4 では Direct 75%・Chrome の 90% が非エンゲージで、
+  // 0秒滞在のページ8本が lighthouse.yml の URL と一致していた（自分たちの検査を利用者として数えていた）。
+  if (navigator.webdriver || /HeadlessChrome|Chrome-Lighthouse|Lighthouse|Speed Insights|PTST|GTmetrix/i.test(navigator.userAgent)) return;
   var s = document.createElement('script');
   s.async = true;
   s.src = 'https://www.googletagmanager.com/gtag/js?id=G-4MHCNR7D26';
@@ -1212,6 +1235,26 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
 
 /* ---------- フェスティバルページ ---------- */
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+
+/* 地名の日本語表記。EDITIONS.PREF / FESTIVALS.city / VENUES.city・area は英字で入っている
+   （"Hokkaido" "TOKYO" "SHIBUYA"）。JA ページの title に "Hokkaidoのテクノ・野外フェス" と
+   出すと、利用者が実際に検索する「北海道」「札幌」「渋谷」と一致しない（2026-09-28 の GSC:
+   `big fun 札幌 2026` 277表示、`the room 渋谷` 333表示）。知らない値はそのまま返す（嘘を書かない）。 */
+const PLACE_JA = {
+  hokkaido: '北海道', aomori: '青森', iwate: '岩手', miyagi: '宮城', akita: '秋田', yamagata: '山形', fukushima: '福島',
+  ibaraki: '茨城', tochigi: '栃木', gunma: '群馬', saitama: '埼玉', chiba: '千葉', tokyo: '東京', kanagawa: '神奈川',
+  niigata: '新潟', toyama: '富山', ishikawa: '石川', fukui: '福井', yamanashi: '山梨', nagano: '長野', gifu: '岐阜',
+  shizuoka: '静岡', aichi: '愛知', mie: '三重', shiga: '滋賀', kyoto: '京都', osaka: '大阪', hyogo: '兵庫', nara: '奈良',
+  wakayama: '和歌山', tottori: '鳥取', shimane: '島根', okayama: '岡山', hiroshima: '広島', yamaguchi: '山口',
+  tokushima: '徳島', kagawa: '香川', ehime: '愛媛', kochi: '高知', fukuoka: '福岡', saga: '佐賀', nagasaki: '長崎',
+  kumamoto: '熊本', oita: '大分', miyazaki: '宮崎', kagoshima: '鹿児島', okinawa: '沖縄',
+  kanto: '関東', hakuba: '白馬', kawasaki: '川崎', sapporo: '札幌', nagoya: '名古屋', kobe: '神戸', yokohama: '横浜',
+  shibuya: '渋谷', ebisu: '恵比寿', daikanyama: '代官山', nakameguro: '中目黒', omotesando: '表参道', jingumae: '神宮前',
+  hatagaya: '幡ヶ谷', shinsaibashi: '心斎橋', umeda: '梅田', kitahama: '北浜', 'jingu-marutamachi': '神宮丸太町',
+};
+const placeJa = (value) => PLACE_JA[String(value || '').trim().toLowerCase()] || String(value || '').trim();
+const placeEn = (value) => String(value || '').trim().replace(/[A-Za-z]+/g, (w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
+
 
 function editionLocationName(ed, lang) {
   return localizedValue(ed.LOCATION, ed.LOCATION_JA, ed.LOCATION_EN, lang);
@@ -1618,8 +1661,9 @@ function festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, lang, 
   const locationName = currentEdition
     ? editionLocationName(currentEdition, lang)
     : localizedValue(f.location, f.location_ja, '', lang);
-  const locationRegion = currentEdition?.PREF || f.city;
-  const location = [locationName, locationRegion].filter(Boolean).join(' — ');
+  const locationRegion = lang === 'en' ? placeEn(currentEdition?.PREF || f.city) : placeJa(currentEdition?.PREF || f.city);
+  const locationParts = [locationName, locationRegion].filter(Boolean);
+  const location = locationParts.filter((part, index) => index === 0 || !String(locationParts[0]).toLowerCase().includes(String(part).toLowerCase())).join(', ');
   const hasGeo = !!String(currentEdition?.LAT || '').trim() && !!String(currentEdition?.LNG || '').trim()
     && Number.isFinite(Number(currentEdition.LAT)) && Number.isFinite(Number(currentEdition.LNG));
   const mapQuery = hasGeo
@@ -1677,7 +1721,7 @@ ${genres ? `        <div class="detail-tags">${genres}</div>\n` : ''}${dateHtml 
         <h1 class="detail-name">${esc(name)}</h1>
 ${location ? (mapUrl
           ? `        <a class="detail-location detail-location-map" href="${esc(safeUrl(mapUrl))}" target="_blank" rel="noopener">${esc(location)}<span aria-hidden="true">↗</span></a>\n`
-          : `        <div class="detail-location">${esc(location)}</div>\n`) : ''}${heroDescription ? `        ${heroDescription}\n` : ''}${actions ? `        <div class="detail-actions">${actions}</div>\n` : ''}
+          : `        <div class="detail-location">${esc(location)}</div>\n`) : ''}${actions ? `        <div class="detail-actions">${actions}</div>\n` : ''}${heroDescription ? `        ${heroDescription}\n` : ''}
       </div>
     </header>
 
@@ -1694,10 +1738,6 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
   const name = lang === 'en' ? (f.name_en || f.name) : f.name;
   const bodyDesc = lang === 'en' ? (f.desc_en || f.desc) : (f.desc || f.desc_en);
   const canonical = `${BASE}${prefix}/festivals/${f.id}.html`;
-  // SEO: エンティティ名だけでなく検索キーワード（テクノ フェス 日本 等）をtitleに含める
-  const title = lang === 'en'
-    ? `${name} — Techno ${f.type === 'rave' ? 'Rave' : 'Festival'} in Japan | TECHNO JAPAN`
-    : `${name}｜日本のテクノ・${f.type === 'rave' ? 'レイヴ' : '野外フェス'} — TECHNO JAPAN`;
   const desc = bodyDesc || (lang === 'en'
     ? `${name} — edition history and information for a techno / house festival in Japan.`
     : `${name}の開催履歴・基本情報。日本のテクノ／ハウスのフェスティバル情報。`);
@@ -1714,6 +1754,43 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
     return bp.year - ap.year || bp.seq - ap.seq || String(b.DATE_START || '').localeCompare(String(a.DATE_START || ''));
   });
   const currentEdition = editions[0];
+  const year = String(currentEdition?.EDITION || '').match(/^\d{4}/)?.[0] || '';
+  const prefRaw = currentEdition?.PREF || f.city || '';
+  const pref = lang === 'en' ? placeEn(prefRaw) : placeJa(prefRaw);
+  const festivalTypeJa = f.type === 'rave' ? 'テクノ・レイヴ' : 'テクノ・野外フェス';
+  const festivalTypeEn = f.type === 'rave' ? 'Rave' : 'Festival';
+  const nameYear = `${name}${year ? ` ${year}` : ''}`;
+  /* 指名検索（フェス名＋年）に「日程・出演者・チケット」で応える。長い名前では
+     検索語 → 種別 の順に削り、地名は最後まで残す（利用者が打つのは地名だから）。 */
+  const jaCandidates = [
+    `${nameYear}｜${pref || '日本'}の${festivalTypeJa} 日程・出演者・チケット — TECHNO JAPAN`,
+    `${nameYear}｜${pref || '日本'}の${festivalTypeJa} 日程・チケット — TECHNO JAPAN`,
+    `${nameYear}｜${pref || '日本'} 日程・出演者・チケット — TECHNO JAPAN`,
+    `${nameYear}｜${pref || '日本'}の${festivalTypeJa} — TECHNO JAPAN`,
+  ];
+  const enCandidates = [
+    `${nameYear} — Dates, Lineup & Tickets | Techno ${festivalTypeEn} in ${pref || 'Japan'}, Japan | TECHNO JAPAN`,
+    `${nameYear} — Dates, Lineup & Tickets | ${pref || 'Japan'}, Japan | TECHNO JAPAN`,
+    `${nameYear} — Techno ${festivalTypeEn} in ${pref || 'Japan'}, Japan | TECHNO JAPAN`,
+    `${nameYear} — Techno ${festivalTypeEn} in Japan | TECHNO JAPAN`,
+  ];
+  const title = lang === 'en'
+    ? (enCandidates.find((t) => t.length <= 70) || enCandidates[enCandidates.length - 1])
+    : (jaCandidates.find((t) => t.length <= 60) || jaCandidates[jaCandidates.length - 1]);
+  const editionDate = currentEdition
+    ? (lang === 'en'
+        ? fmtMetaDateEn(currentEdition.DATE_START, currentEdition.DATE_END)
+        : fmtMetaDateJa(currentEdition.DATE_START, currentEdition.DATE_END))
+    : '';
+  const editionLocation = currentEdition ? editionLocationName(currentEdition, lang) : '';
+  const metaLead = editionDate && editionLocation
+    ? (lang === 'en'
+        ? `${editionDate} at ${editionLocation}, ${pref || 'Japan'}. `
+        : `${editionDate}、${editionLocation}（${pref || '日本'}）で開催。`)
+    : '';
+  const metaDesc = truncate(`${metaLead}${bodyDesc || (lang === 'en'
+    ? `${name} — edition history and information for a techno / house festival in Japan.`
+    : `${name}の開催履歴・基本情報。日本のテクノ／ハウスのフェスティバル情報。`)}`, 160);
   const summary = festivalSummary(f, currentEdition, name, lang);
   const faqItems = festivalFaqItems(editions, lineupsByEdition, artistsById, name, lang);
   const performers = dedupePerformers(
@@ -1759,6 +1836,8 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
         },
         ...(f.lat && f.lng ? { geo: { '@type': 'GeoCoordinates', latitude: f.lat, longitude: f.lng } } : {}),
       } : null);
+  const parentTicketUrl = [currentEdition?.TICKETURL, f.ticketUrl, f.ticket_url, f.tickets]
+    .map((value) => String(value || '').trim()).find(Boolean) || '';
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -1773,6 +1852,8 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
     ...(parentLocation ? { location: parentLocation } : {}),
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
     eventStatus: editionStatusLd(currentEdition?.STATUS) || 'https://schema.org/EventScheduled',
+    /* 親ノードにも offers。subEvent だけだと親が「チケット情報なし」の Event として評価される（2026-09-28 GSC/GA4 分析） */
+    ...(parentTicketUrl ? { offers: { '@type': 'Offer', url: parentTicketUrl, availability: 'https://schema.org/InStock' } } : {}),
     ...(sameAs.length ? { sameAs } : {}),
     ...(performers.length ? { performer: performers } : {}),
     ...(editions.length ? { subEvent: editions.map((ed) => ({
@@ -1810,7 +1891,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
       acceptedAnswer: { '@type': 'Answer', text: item.answer },
     })),
   } : null;
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'festivals'] : ['festivals']), `${f.id}.html`), html: page({ title, desc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('FESTIVALS', '/festivals.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT + FESTIVAL_HUB_BACK_SCRIPT + FESTIVAL_SHARE_SCRIPT, backgroundLayer: true }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'festivals'] : ['festivals']), `${f.id}.html`), html: page({ title, desc: metaDesc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('FESTIVALS', '/festivals.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT + FESTIVAL_HUB_BACK_SCRIPT + FESTIVAL_SHARE_SCRIPT, backgroundLayer: true }) };
 }
 
 /* ---------- アーティストページ ---------- */
@@ -1937,6 +2018,13 @@ function venueDistance(a, b) {
 }
 
 /* ---------- ヴェニューページ ---------- */
+function venueTypeLabels(type) {
+  const key = String(type || '').trim().toLowerCase();
+  if (key === 'bar') return { ja: 'バー', en: 'Bar' };
+  if (key === 'livehouse') return { ja: 'ライブハウス', en: 'Live House' };
+  return { ja: 'クラブ', en: 'Club' };
+}
+
 function venuePage(v, lang = 'ja') {
   const prefix = lang === 'en' ? '/en' : '';
   const hubHref = `${prefix}/venues.html`;
@@ -1944,13 +2032,25 @@ function venuePage(v, lang = 'ja') {
   const name = lang === 'en' ? (v.name_en || v.name) : v.name;
   const bodyDesc = lang === 'en' ? (v.desc_en || v.desc) : (v.desc || v.desc_en);
   const canonical = `${BASE}${prefix}/venues/${v.id}.html`;
+  const cityRaw = String(v.city || '').trim();
+  const areaRaw = String(v.area || '').trim();
+  const city = lang === 'en' ? placeEn(cityRaw) : placeJa(cityRaw);
+  const areaLabel = areaRaw && areaRaw.toLowerCase() !== cityRaw.toLowerCase() ? (lang === 'en' ? placeEn(areaRaw) : placeJa(areaRaw)) : '';
+  const place = [areaRaw, cityRaw].filter(Boolean).join(', ');
+  const venueType = venueTypeLabels(v.type);
+  const titlePlace = [areaLabel, city].filter(Boolean).join(', ') || 'Japan';
   const title = lang === 'en'
-    ? `${name} — Club / Venue in ${v.city || 'Japan'} | TECHNO JAPAN`
-    : `${name}｜${v.city ? v.city + 'の' : ''}クラブ・ヴェニュー — TECHNO JAPAN`;
-  const place = [v.area, v.city].filter(Boolean).join(', ');
-  const desc = bodyDesc || (lang === 'en'
+    ? [`${name} — ${titlePlace} ${venueType.en}: Access, Hours & Events | TECHNO JAPAN`, `${name} — ${venueType.en} in ${titlePlace} | TECHNO JAPAN`].find((t) => t.length <= 70) || `${name} — ${venueType.en} in ${titlePlace} | TECHNO JAPAN`
+    : `${name}${areaLabel || city ? `（${areaLabel || city}）` : ''}｜${city ? `${city}の` : ''}${venueType.ja} アクセス・営業情報・イベント — TECHNO JAPAN`;
+  const jsonLdDesc = bodyDesc || (lang === 'en'
     ? `${name}${place ? ' (' + place + ')' : ''} — club / venue guide. Japan's underground dance music.`
     : `${name}${place ? '（' + place + '）' : ''}の基本情報。日本のアンダーグラウンド・ダンスミュージックのクラブ／ヴェニュー。`);
+  const descLead = lang === 'en'
+    ? `${city || 'Japan'}${areaLabel ? `, ${areaLabel}` : ''} ${venueType.en.toLowerCase()}.${v.address ? ` ${v.address}.` : ''} `
+    : `${city || '日本'}${areaLabel ? `・${areaLabel}` : ''}の${venueType.ja}。${v.address ? `${v.address}。` : ''}`;
+  const desc = truncate(`${descLead}${bodyDesc || (lang === 'en'
+    ? `${name} — club / venue guide. Japan's underground dance music.`
+    : `${name}の基本情報。日本のアンダーグラウンド・ダンスミュージックの会場。`)}`, 160);
   const image = absUrl(v.image);
   const venueLdType = v.type === 'bar'
     ? ['BarOrPub', 'MusicVenue']
@@ -1964,7 +2064,7 @@ function venuePage(v, lang = 'ja') {
     '@id': `${BASE}/venues/${encodeURIComponent(v.id)}.html#venue`,
     name: name,
     inLanguage: lang,
-    description: desc,
+    description: jsonLdDesc,
     ...(v.image ? { image: [image] } : {}),
     url: canonical,
     /* sameAs は「同じ主体を指す別のURL」。公式サイトと Instagram の両方を
@@ -1985,12 +2085,15 @@ function venuePage(v, lang = 'ja') {
   const practical = venueFeatures(v.features)
     .filter((feature) => Object.prototype.hasOwnProperty.call(VENUE_PRACTICAL_FEATURES, feature));
   const goodToKnow = practical.map((feature) => VENUE_PRACTICAL_FEATURES[feature][lang === 'en' ? 1 : 0]);
+  const mapQuery = v.address || (v.lat && v.lng ? `${v.lat},${v.lng}` : '');
+  const mapUrl = mapQuery ? `https://maps.google.com/?q=${encodeURIComponent(mapQuery)}` : '';
   const informationRows = [
-    v.type ? `<div><dt>${lang === 'en' ? 'TYPE' : 'タイプ'}</dt><dd>${esc(v.type)}</dd></div>` : '',
+    v.address ? `<div><dt>${lang === 'en' ? 'ADDRESS' : '住所'}</dt><dd>${esc(v.address)}</dd></div>` : '',
+    v.type ? `<div><dt>${lang === 'en' ? 'TYPE' : 'タイプ'}</dt><dd>${esc(lang === 'en' ? venueType.en : venueType.ja)}</dd></div>` : '',
     hours ? `<div><dt>HOURS</dt><dd>${esc(hours)}</dd></div>` : '',
     charge ? `<div><dt>CHARGE</dt><dd>${esc(charge)}</dd></div>` : '',
-    v.address ? `<div><dt>${lang === 'en' ? 'ADDRESS' : '住所'}</dt><dd>${esc(v.address)}</dd></div>` : '',
     v.url ? `<div><dt>${lang === 'en' ? 'OFFICIAL SITE' : '公式サイト'}</dt><dd><a href="${esc(safeUrl(v.url))}" target="_blank" rel="noopener">${esc(v.url)}</a></dd></div>` : '',
+    mapUrl ? `<div><dt>${lang === 'en' ? 'MAP' : '地図'}</dt><dd><a href="${esc(safeUrl(mapUrl))}" target="_blank" rel="noopener">${lang === 'en' ? 'Google Maps' : 'Google マップ'}</a></dd></div>` : '',
     v.instagram ? `<div><dt>Instagram</dt><dd><a href="${esc(safeUrl(v.instagram))}" target="_blank" rel="noopener">${esc(instagramHandle(v.instagram))}</a></dd></div>` : '',
   ].filter(Boolean).join('\n      ');
   const information = `<div class="detail-section-label">INFORMATION</div>
@@ -2010,8 +2113,8 @@ function venuePage(v, lang = 'ja') {
     <h1>${esc(name)}</h1>
     ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
     ${v.image ? `<div class="detail-hero"><img ${dimensionAttrs(v.image)} src="/${String(v.image).replace(/^\//, '')}"${heroSrcsetAttr(v.image)} alt="${esc(name)}"${imagePositionStyle(v)}></div>` : ''}
-    ${bilingualBody(v.desc, v.desc_en, lang)}
-    ${information}${goodToKnowHtml ? `\n    ${goodToKnowHtml}` : ''}
+    ${information}
+    ${bilingualBody(v.desc, v.desc_en, lang)}${goodToKnowHtml ? `\n    ${goodToKnowHtml}` : ''}
     ${(() => { // 回遊: 座標があれば距離順、無ければ同じ街。種別はまたぐ。
       const sameCity = XLINK.venues.filter((x) => x.id !== v.id && x.city && v.city && String(x.city).toLowerCase() === String(v.city).toLowerCase());
       const withDistance = v.lat && v.lng && XLINK.venues.some((x) => x.lat && x.lng)

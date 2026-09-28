@@ -8902,3 +8902,47 @@ headless Chrome（実機相当 dpr3 / `mobile:true`）でローカル配信し�
 ### 次の担当への注意
 - `VERSION_CHECK_EXEMPT` に足すときは sw.js の network-first と check_sw_routing に同時に足す（§9-97）。
 - `bash scripts/preflight.sh`: 「記事フィード」だけ ❌（sitemap-news.xml に48時間を過ぎた odyssey が残っていた＝日付依存の生成物の古さで、今回の変更とは無関係）。`generate-sitemap.py` で再生成して同じコミットに含め、push 時の preflight で全件成功を確認。
+
+## 2026-09-29 GA4/GSC 分析（2026-09-28）の施策 1〜5 を実装（Codex 実装 / Claude 検証）
+
+### 実施
+分析レポート: [reports/analytics/REPORT-2026-09-28.md](analytics/REPORT-2026-09-28.md)（GSC 3か月・28日、GA4 90日・28日の生データも同フォルダ）。
+- **T1 ボット除外**: gtag 初期化の判定を `navigator.webdriver` だけから UA（`HeadlessChrome|Chrome-Lighthouse|Lighthouse|Speed Insights|PTST|GTmetrix`）
+  まで広げた。テンプレート＋JA ハブ 7 枚の計 8 箇所を同一文字列に。GA4 の Direct 75%・0秒滞在 8 ページは Lighthouse CI の URL と一致していた。
+- **T2 フェス title/description**: `{NAME} {YEAR}｜{都道府県}のテクノ・野外フェス 日程・出演者・チケット — TECHNO JAPAN`（EN は
+  `— Dates, Lineup & Tickets | Techno Festival in {Pref}, Japan`）。60/70 字を超える名前は「検索語 → 種別」の順に削り地名は残す。
+  description の先頭に「{開催日}、{会場}（{都道府県}）で開催。」。JSON-LD の description は変更なし。
+- **T3 会場 title/description**: `{NAME}（渋谷）｜東京のクラブ アクセス・営業情報・イベント`。INFORMATION（住所・タイプ・公式・地図・Instagram）を
+  説明文の上へ移動、Google マップの「地図」行を追加。
+- **T4 フェス詳細ヒーロー**: 公式／チケット／Instagram のボタンを説明文の前へ（`.detail-actions` margin 16/24px）。
+- **T5 JSON-LD**: 親 `Festival` ノードに `offers`（最新開催回の TICKETURL）。`check_jsonld.mjs` に「チケット URL があれば offers がある／無ければ無い」の検査を追加。
+- Claude 側の追加修正: 地名の日本語表記マップ `PLACE_JA`（都道府県＋主要エリア。Codex 版は「Hokkaidoのテクノ・野外フェス」だった）、
+  EN は Title Case、title の縮め順を「地名を最後まで残す」に変更。
+- `detail.css` v40→41。
+
+### コミット
+- `feat(seo): 指名検索に応える title/description・概要の並び・GA4 ボット除外・Festival offers（分析タスク1〜5）`
+
+### 検証
+- 代表 title: `BIG FUN 2026｜北海道のテクノ・野外フェス 日程・出演者・チケット — TECHNO JAPAN`（53字）、
+  `Re:birth Festival 2026｜長野のテクノ・野外フェス 日程・チケット — TECHNO JAPAN`（58字）、
+  `MITSUKI（渋谷）｜東京のクラブ アクセス・営業情報・イベント — TECHNO JAPAN`（48字）。
+  最大長: JA フェス 66 / EN フェス 80 / JA 会場 59 / EN 会場 75（長い固有名のみ。最終候補まで落ちる）。
+- `offers` は 40/95 フェス（チケット URL のあるもの）。`check_jsonld.mjs` ✅。`check_festival_tracking.mjs` ✅。
+- headless Chrome 393px でフェス（big-fun）と会場（mitsuki）を目視: ボタン→説明文、INFORMATION→説明文の順。
+- `grep -c Chrome-Lighthouse` = 8 箇所すべて 1。
+- preflight: 1回目は `?v` 上げ忘れ（detail.css）で ❌ → bump 後、push 時の pre-push で全件を再実行。
+
+### 変更したパターン
+- `scripts/build-detail-pages.mjs`（GA、festivalPage の title/desc/hero、venuePage の title/desc/並び、JSON-LD offers、PLACE_JA）、
+  `scripts/check_jsonld.mjs`、`LP/detail.css`、JA ハブ 7 枚の GA スニペット、生成物 536 枚。
+
+### 未確認の類似パターン
+- アーティスト詳細の title（`{NAME}｜…`）は今回対象外。指名検索は `dj kensei` 44表示 13.7位 程度で優先度低。
+- 記事の title は CMS 入力そのまま（対象外）。
+- GA4 で実際にボットが消えたかは **翌日以降の Direct 比率で確認**（Lighthouse CI は次のデプロイで走る）。
+- PLACE_JA に無い地名はそのまま英字で出る（現状の PREF/CITY/AREA は全件カバー）。
+
+### 次の担当への注意・判断待ち
+- title の形を変えたので、GSC の CTR は 2〜4 週間後に同じ `scripts` 手順（ブラウザ抽出）で前後比較する。
+- T6（soundcamp カナ・artists ハブ定義文）、T7（抽出のスクリプト化）は未着手。

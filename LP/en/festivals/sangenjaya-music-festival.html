@@ -11,7 +11,7 @@
 <link rel="icon" type="image/png" href="/images/favicon-192.png?v=2" sizes="192x192">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
 
-<title>SANGENJAYA MUSIC FESTIVAL — Techno Festival in Japan | TECHNO JAPAN</title>
+<title>SANGENJAYA MUSIC FESTIVAL 2025 — Techno Festival in Japan | TECHNO JAPAN</title>
 <meta name="description" content="Sangenjaya Music Festival brings together Tokyo&#39;s electronic music community in the intimate setting of one of the city&#39;s most creative neighborhoods. The…">
 <link rel="canonical" href="https://techno-japan.media/en/festivals/sangenjaya-music-festival.html">
 <link rel="alternate" hreflang="en" href="https://techno-japan.media/en/festivals/sangenjaya-music-festival.html">
@@ -20,7 +20,7 @@
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#080808">
 
-<meta property="og:title" content="SANGENJAYA MUSIC FESTIVAL — Techno Festival in Japan | TECHNO JAPAN">
+<meta property="og:title" content="SANGENJAYA MUSIC FESTIVAL 2025 — Techno Festival in Japan | TECHNO JAPAN">
 <meta property="og:description" content="Sangenjaya Music Festival brings together Tokyo&#39;s electronic music community in the intimate setting of one of the city&#39;s most creative neighborhoods. The…">
 <meta property="og:image" content="https://techno-japan.media/images/og-default.png?v=1">
 <meta property="og:url" content="https://techno-japan.media/en/festivals/sangenjaya-music-festival.html">
@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="TECHNO JAPAN">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="SANGENJAYA MUSIC FESTIVAL — Techno Festival in Japan | TECHNO JAPAN">
+<meta name="twitter:title" content="SANGENJAYA MUSIC FESTIVAL 2025 — Techno Festival in Japan | TECHNO JAPAN">
 <meta name="twitter:description" content="Sangenjaya Music Festival brings together Tokyo&#39;s electronic music community in the intimate setting of one of the city&#39;s most creative neighborhoods. The…">
 <meta name="twitter:image" content="https://techno-japan.media/images/og-default.png?v=1">
 
@@ -36,7 +36,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/common.css?v=31">
-<link rel="stylesheet" href="/detail.css?v=40">
+<link rel="stylesheet" href="/detail.css?v=41">
 <script type="application/ld+json">[{"@context":"https://schema.org","@type":"Festival","@id":"https://techno-japan.media/festivals/sangenjaya-music-festival.html#festival","name":"SANGENJAYA MUSIC FESTIVAL","description":"Sangenjaya Music Festival brings together Tokyo's electronic music community in the intimate setting of one of the city's most creative neighborhoods. The festival showcases both established and emerging artists across multiple venues, reflecting the diverse underground scene that defines modern Japanese dance music culture.","inLanguage":"en","image":["https://techno-japan.media/images/og-default.png?v=1"],"url":"https://techno-japan.media/en/festivals/sangenjaya-music-festival.html","startDate":"2025-09-20","endDate":"2025-09-21","location":{"@type":"Place","name":"Tokyo","address":{"@type":"PostalAddress","addressRegion":"Tokyo","addressCountry":"JP"}},"eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","eventStatus":"https://schema.org/EventScheduled","subEvent":[{"@type":"Festival","@id":"https://techno-japan.media/festivals/sangenjaya-music-festival.html#edition-sangenjaya-music-festival-2025","name":"SANGENJAYA MUSIC FESTIVAL 2025","startDate":"2025-09-20","endDate":"2025-09-21","location":{"@type":"Place","name":"Tokyo","address":{"@type":"PostalAddress","addressRegion":"Tokyo","addressCountry":"JP"}},"eventStatus":"https://schema.org/EventScheduled","image":["https://techno-japan.media/images/og-default.png?v=1"],"description":"Sangenjaya Music Festival brings together Tokyo's electronic music community in the intimate setting of one of the city's most creative neighborhoods. The festival showcases both established and emerging artists across multiple venues, reflecting the diverse underground scene that defines modern Japanese dance music culture.","eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode"}]},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"TECHNO JAPAN","item":"https://techno-japan.media/"},{"@type":"ListItem","position":2,"name":"FESTIVALS","item":"https://techno-japan.media/festivals.html"},{"@type":"ListItem","position":3,"name":"SANGENJAYA MUSIC FESTIVAL","item":"https://techno-japan.media/en/festivals/sangenjaya-music-festival.html"}]},{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"When is SANGENJAYA MUSIC FESTIVAL held?","acceptedAnswer":{"@type":"Answer","text":"The latest listed date for SANGENJAYA MUSIC FESTIVAL is September 20, 2025 to September 21, 2025."}},{"@type":"Question","name":"Where is SANGENJAYA MUSIC FESTIVAL held?","acceptedAnswer":{"@type":"Answer","text":"SANGENJAYA MUSIC FESTIVAL is held at Tokyo."}}]}]</script>
 </head>
 <body>
@@ -159,7 +159,10 @@
 </footer>
 <script>
 (function(){
-  if (navigator.webdriver) return;
+  // ボット（headless / Lighthouse / 自動操作）は計測しない。
+  // 2026-09-28 の GA4 では Direct 75%・Chrome の 90% が非エンゲージで、
+  // 0秒滞在のページ8本が lighthouse.yml の URL と一致していた（自分たちの検査を利用者として数えていた）。
+  if (navigator.webdriver || /HeadlessChrome|Chrome-Lighthouse|Lighthouse|Speed Insights|PTST|GTmetrix/i.test(navigator.userAgent)) return;
   var s = document.createElement('script');
   s.async = true;
   s.src = 'https://www.googletagmanager.com/gtag/js?id=G-4MHCNR7D26';

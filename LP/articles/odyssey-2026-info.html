@@ -36,7 +36,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/common.css?v=31">
-<link rel="stylesheet" href="/detail.css?v=40">
+<link rel="stylesheet" href="/detail.css?v=41">
 <script type="application/ld+json">[{"@context":"https://schema.org","@type":"NewsArticle","headline":"Odyssey 宮崎・標高1,000mの森と天文台に、九州の50組が集うローカルレイヴ","description":"標高1,000mの森と天文台をまるごと使い、九州の50組超が集う3日間。10年の物語の第2章となる今年のテーマはRE:ROOTS、熊本地震の復興支援と結びつく。銀河村での開催は今年が最後、森と星空のフロアを行き来しながら山で朝を迎える。","image":["https://techno-japan.media/images/derivatives/card/articles/odyssey-2026-info--43b18a8d-wide-center.webp","https://techno-japan.media/images/derivatives/card/articles/odyssey-2026-info--43b18a8d-square-center.webp","https://techno-japan.media/images/derivatives/card/articles/odyssey-2026-info--43b18a8d-fourThree-center.webp"],"isAccessibleForFree":true,"speakable":{"@type":"SpeakableSpecification","cssSelector":["h1",".article-excerpt"]},"wordCount":1611,"thumbnailUrl":"https://techno-japan.media/images/derivatives/card/articles/odyssey-2026-info--43b18a8d-wide-center.webp","about":[{"@id":"https://techno-japan.media/festivals/odyssey.html#festival"}],"inLanguage":"ja","datePublished":"2026-09-24T00:00:00+09:00","dateModified":"2026-09-24T00:00:00+09:00","author":{"@type":"Organization","name":"TECHNO JAPAN","url":"https://techno-japan.media/"},"publisher":{"@id":"https://techno-japan.media/#org"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://techno-japan.media/articles/odyssey-2026-info.html"},"articleSection":"FESTIVAL&RAVE","keywords":"rave, miyazaki","url":"https://techno-japan.media/articles/odyssey-2026-info.html"},{"@context":"https://schema.org","@type":"NewsMediaOrganization","@id":"https://techno-japan.media/#org","name":"TECHNO JAPAN","url":"https://techno-japan.media/","logo":{"@type":"ImageObject","url":"https://techno-japan.media/images/logo-512.png?v=2","width":512,"height":512},"sameAs":["https://www.instagram.com/techno.japan_/","https://www.threads.net/@techno.japan_"],"knowsAbout":["techno","house music","music festivals in Japan","Japanese club culture"],"publishingPrinciples":"https://techno-japan.media/about.html","inLanguage":["ja","en"]},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"TECHNO JAPAN","item":"https://techno-japan.media/"},{"@type":"ListItem","position":2,"name":"NEWS","item":"https://techno-japan.media/news.html"},{"@type":"ListItem","position":3,"name":"Odyssey 宮崎・標高1,000mの森と天文台に、九州の50組が集うローカルレイヴ","item":"https://techno-japan.media/articles/odyssey-2026-info.html"}]}]</script>
 </head>
 <body>
@@ -150,7 +150,10 @@
 </footer>
 <script>
 (function(){
-  if (navigator.webdriver) return;
+  // ボット（headless / Lighthouse / 自動操作）は計測しない。
+  // 2026-09-28 の GA4 では Direct 75%・Chrome の 90% が非エンゲージで、
+  // 0秒滞在のページ8本が lighthouse.yml の URL と一致していた（自分たちの検査を利用者として数えていた）。
+  if (navigator.webdriver || /HeadlessChrome|Chrome-Lighthouse|Lighthouse|Speed Insights|PTST|GTmetrix/i.test(navigator.userAgent)) return;
   var s = document.createElement('script');
   s.async = true;
   s.src = 'https://www.googletagmanager.com/gtag/js?id=G-4MHCNR7D26';

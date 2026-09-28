@@ -36,7 +36,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/common.css?v=31">
-<link rel="stylesheet" href="/detail.css?v=40">
+<link rel="stylesheet" href="/detail.css?v=41">
 <script type="application/ld+json">[{"@context":"https://schema.org","@type":"Person","@id":"https://techno-japan.media/artists/so.html#artist","name":"So","inLanguage":"en","description":"He began DJing in Sendai at the age of 18. Since then, he has spent more than two decades as resident DJ and organizer of the open-air festival The Labyrinth. …","image":["https://techno-japan.media/images/artists/so.webp"],"url":"https://techno-japan.media/en/artists/so.html","location":{"@type":"Place","name":"TOKYO, JAPAN"},"sameAs":["https://www.instagram.com/dj.so_/","https://soundcloud.com/dj_so"]},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"TECHNO JAPAN","item":"https://techno-japan.media/"},{"@type":"ListItem","position":2,"name":"ARTISTS","item":"https://techno-japan.media/artists.html"},{"@type":"ListItem","position":3,"name":"So","item":"https://techno-japan.media/en/artists/so.html"}]}]</script>
 </head>
 <body>
@@ -103,7 +103,10 @@ More recently he has been a constant presence on Europe&#39;s major festival cir
 </footer>
 <script>
 (function(){
-  if (navigator.webdriver) return;
+  // ボット（headless / Lighthouse / 自動操作）は計測しない。
+  // 2026-09-28 の GA4 では Direct 75%・Chrome の 90% が非エンゲージで、
+  // 0秒滞在のページ8本が lighthouse.yml の URL と一致していた（自分たちの検査を利用者として数えていた）。
+  if (navigator.webdriver || /HeadlessChrome|Chrome-Lighthouse|Lighthouse|Speed Insights|PTST|GTmetrix/i.test(navigator.userAgent)) return;
   var s = document.createElement('script');
   s.async = true;
   s.src = 'https://www.googletagmanager.com/gtag/js?id=G-4MHCNR7D26';

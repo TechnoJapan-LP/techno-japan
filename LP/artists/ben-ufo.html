@@ -36,7 +36,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/common.css?v=31">
-<link rel="stylesheet" href="/detail.css?v=40">
+<link rel="stylesheet" href="/detail.css?v=41">
 <script type="application/ld+json">[{"@context":"https://schema.org","@type":"Person","@id":"https://techno-japan.media/artists/ben-ufo.html#artist","name":"Ben UFO","inLanguage":"ja","description":"レーベル Hessle Audio と共に名前が知られてきた UK のDJ。Rinse FM の番組を長年担当している。自身の制作をほとんど持たず、選曲だけで世界の第一線に立った。DJという仕事の定義そのものを、実践で押し広げてきた人である。","image":["https://techno-japan.media/images/artists/ben-ufo.webp"],"url":"https://techno-japan.media/artists/ben-ufo.html","location":{"@type":"Place","name":"UK"},"sameAs":["https://www.instagram.com/ben___ufo/","https://soundcloud.com/benufo"]},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"TECHNO JAPAN","item":"https://techno-japan.media/"},{"@type":"ListItem","position":2,"name":"ARTISTS","item":"https://techno-japan.media/artists.html"},{"@type":"ListItem","position":3,"name":"Ben UFO","item":"https://techno-japan.media/artists/ben-ufo.html"}]}]</script>
 </head>
 <body>
@@ -100,7 +100,10 @@
 </footer>
 <script>
 (function(){
-  if (navigator.webdriver) return;
+  // ボット（headless / Lighthouse / 自動操作）は計測しない。
+  // 2026-09-28 の GA4 では Direct 75%・Chrome の 90% が非エンゲージで、
+  // 0秒滞在のページ8本が lighthouse.yml の URL と一致していた（自分たちの検査を利用者として数えていた）。
+  if (navigator.webdriver || /HeadlessChrome|Chrome-Lighthouse|Lighthouse|Speed Insights|PTST|GTmetrix/i.test(navigator.userAgent)) return;
   var s = document.createElement('script');
   s.async = true;
   s.src = 'https://www.googletagmanager.com/gtag/js?id=G-4MHCNR7D26';

@@ -76,6 +76,31 @@ function loadPublishedArticles() {
   return (context.__articles || []).filter((a) => a && a.id && a.status !== 'draft');
 }
 
+function loadPublishedFestivals() {
+  const context = {};
+  vm.createContext(context);
+  new vm.Script(fs.readFileSync(path.join(LP, 'data.js'), 'utf8') + '\n;globalThis.__festivals = FESTIVALS;').runInContext(context);
+  return (context.__festivals || []).filter((f) => f && f.id && String(f.status || '').toLowerCase() !== 'draft');
+}
+
+function editionKeyParts(value) {
+  const m = String(value || '').trim().match(/^(\d{4})(?:-(\d+))?$/);
+  return m ? { year: Number(m[1]), seq: m[2] ? Number(m[2]) : 1 } : { year: 0, seq: 0 };
+}
+
+function editionIdentifier(ed) {
+  return ed?.EDITION || ed?.editionKey || (ed?.EDITION_ID ? '' : ed?.year) || '';
+}
+
+function expectedFestivalTicketUrl(festival, editions) {
+  const sorted = editions.filter((ed) => String(ed.FESTIVAL_ID) === String(festival.id)).sort((a, b) => {
+    const ap = editionKeyParts(editionIdentifier(a));
+    const bp = editionKeyParts(editionIdentifier(b));
+    return bp.year - ap.year || bp.seq - ap.seq || String(b.DATE_START || '').localeCompare(String(a.DATE_START || ''));
+  });
+  return String(sorted[0]?.TICKETURL || festival.ticketUrl || festival.ticket_url || festival.tickets || '').trim();
+}
+
 function localPathFromSiteUrl(url) {
   let parsed;
   try { parsed = new URL(url); } catch { return null; }
@@ -178,7 +203,26 @@ for (const fid of withLineup) {
 check(`出演データのあるフェス ${checkedFests}件すべてに performer が出る`,
   missingPerformer.length === 0, missingPerformer.slice(0, 5).join(', '));
 
-/* --- 4) 開催回に eventStatus --- */
+/* --- 4) 親 Festival の offers --- */
+const publishedFestivals = loadPublishedFestivals();
+const editions = JSON.parse(fs.readFileSync(path.join(LP, 'data', 'editions.json'), 'utf8')).items;
+const missingFestivalOffers = [];
+const unexpectedFestivalOffers = [];
+for (const festival of publishedFestivals) {
+  const file = path.join(LP, 'festivals', `${festival.id}.html`);
+  if (!fs.existsSync(file)) continue;
+  const festivalLd = jsonLdObjects(file).find((x) => x['@type'] === 'Festival' && !x['@id']?.includes('#edition-'));
+  const expectedUrl = expectedFestivalTicketUrl(festival, editions);
+  const actualUrl = String(festivalLd?.offers?.url || '').trim();
+  if (expectedUrl && actualUrl !== expectedUrl) missingFestivalOffers.push(`${festival.id}: ${expectedUrl}`);
+  if (!expectedUrl && actualUrl) unexpectedFestivalOffers.push(`${festival.id}: ${actualUrl}`);
+}
+check('チケットURLがある公開フェスの親 Festival に offers.url がある', missingFestivalOffers.length === 0,
+  missingFestivalOffers.slice(0, 5).join(', '));
+check('チケットURLがない公開フェスの親 Festival に offers がない', unexpectedFestivalOffers.length === 0,
+  unexpectedFestivalOffers.slice(0, 5).join(', '));
+
+/* --- 5) 開催回に eventStatus --- */
 const noStatus = [];
 for (const fid of [...withLineup].slice(0, 200)) {
   const f = path.join(LP, 'festivals', `${fid}.html`);
@@ -195,7 +239,7 @@ for (const fid of [...withLineup].slice(0, 200)) {
 check('開催回（subEvent）すべてに eventStatus が出る', noStatus.length === 0,
   [...new Set(noStatus)].slice(0, 5).join(', '));
 
-/* --- 5) events.json --- */
+/* --- 6) events.json --- */
 const evPath = path.join(LP, 'events.json');
 if (!fs.existsSync(evPath)) {
   check('events.json がある', false);
@@ -212,7 +256,7 @@ if (!fs.existsSync(evPath)) {
   }
 }
 
-/* --- 6) llms.txt --- */
+/* --- 7) llms.txt --- */
 const llmsPath = path.join(LP, 'llms.txt');
 if (!fs.existsSync(llmsPath)) {
   check('llms.txt がある', false);

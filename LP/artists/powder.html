@@ -36,7 +36,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/common.css?v=31">
-<link rel="stylesheet" href="/detail.css?v=40">
+<link rel="stylesheet" href="/detail.css?v=41">
 <script type="application/ld+json">[{"@context":"https://schema.org","@type":"Person","@id":"https://techno-japan.media/artists/powder.html#artist","name":"Powder","inLanguage":"ja","description":"長崎出身、2011年から東京を拠点とするDJ/プロデューサー Moko Shibata のソロ名義。2017年に CockTail d'Amore から EP『H』を発表。以降 Beats in Space、ESP Institute、The Trilogy Tapes などから作品を重ねている。細部まで作り込まれた…","image":["https://techno-japan.media/images/artists/powder.webp"],"url":"https://techno-japan.media/artists/powder.html","location":{"@type":"Place","name":"TOKYO, JAPAN"},"sameAs":["https://soundcloud.com/thinner_groove","https://thinnergroove.bandcamp.com/","https://powd.jp/"]},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"TECHNO JAPAN","item":"https://techno-japan.media/"},{"@type":"ListItem","position":2,"name":"ARTISTS","item":"https://techno-japan.media/artists.html"},{"@type":"ListItem","position":3,"name":"Powder","item":"https://techno-japan.media/artists/powder.html"}]}]</script>
 </head>
 <body>
@@ -100,7 +100,10 @@
 </footer>
 <script>
 (function(){
-  if (navigator.webdriver) return;
+  // ボット（headless / Lighthouse / 自動操作）は計測しない。
+  // 2026-09-28 の GA4 では Direct 75%・Chrome の 90% が非エンゲージで、
+  // 0秒滞在のページ8本が lighthouse.yml の URL と一致していた（自分たちの検査を利用者として数えていた）。
+  if (navigator.webdriver || /HeadlessChrome|Chrome-Lighthouse|Lighthouse|Speed Insights|PTST|GTmetrix/i.test(navigator.userAgent)) return;
   var s = document.createElement('script');
   s.async = true;
   s.src = 'https://www.googletagmanager.com/gtag/js?id=G-4MHCNR7D26';

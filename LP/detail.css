@@ -521,7 +521,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   line-height: 1.9; opacity: .55; max-width: 520px; margin: 0 0 28px;
   color: inherit;
 }
-.festival-design-v2 .detail-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.festival-design-v2 .detail-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin: 16px 0 24px; }
 .festival-design-v2 .detail-official {
   display: inline-flex; align-items: center; justify-content: center; gap: 10px;
   min-height: 48px; box-sizing: border-box; font-family: var(--font-mono);
