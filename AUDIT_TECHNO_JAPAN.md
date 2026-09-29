@@ -7146,3 +7146,39 @@ check_sw_routing には足されていなかった（§9-80 と同じ「新設�
 **教訓**: `VERSION_CHECK_EXEMPT` に足すファイルは、「?v を上げない＝SW が取り直す仕組みが
 別に要る」ということ。足すときは sw.js の network-first と check_sw_routing の
 MUST_NOT_BE_CACHE_FIRST に**同時に**足す。
+
+### §9-98 他サイトとの比較で「相手の画像だけ数えていなかった」（2026-09-29）
+
+**誤り**: EYESCREAM / Spincoaster と自サイトの見せ方を比較し、
+「Spincoaster は画像 46 枚を **539KB** で配っている。Techno Japan は 3 枚で 1,435KB。
+枚数を増やせない理由は容量ではない」と報告した。**539KB は誤りで、実際は 13,732KB だった。**
+
+**原因**: 計測に `performance.getEntriesByType('resource')` の `transferSize` を使った。
+この値は **別ドメインのリソースでは 0 を返す**（`Timing-Allow-Origin` ヘッダが無いため）。
+Spincoaster の画像は `storage.spincoaster.com` 配信なので、**画像がまるごと 0 として合計されていた。**
+同じ計測で EYESCREAM（画像が同一ドメイン）と自サイトは正しく出ていたため、
+**数字は整合して見え、誤りに気づけなかった。**
+
+さらに測り直しの1回目は、自サイトだけ Service Worker のキャッシュから返って
+`encodedDataLength` がほぼ 0 になり、TOP が 261KB と出た（相手には SW が無いので影響しない）。
+`Network.setBypassServiceWorker` で迂回して確定させた。
+
+**正しい値**（CDP `Network.loadingFinished.encodedDataLength` / モバイル 393px / 最下部までスクロール）:
+
+| | 画像枚数 | 画像合計 | 1枚平均 | ページ全体 |
+|---|---|---|---|---|
+| EYESCREAM | 61 | 33,043KB | 542KB | 33,883KB |
+| Spincoaster | 47 | 13,732KB | 292KB | 15,155KB |
+| Techno Japan TOP | 19 | 1,082KB | 57KB | 1,261KB |
+
+**結論がどう変わったか**: 「配信は Spincoaster に倣う」→ **誤り。自サイトが3社で最も軽い**（1/12〜1/27）。
+残る正しい指摘は「写真密度 0.3 対 4.7 枚/画面」と「64px の枠に 960px を送っていた」の2点で、
+後者は自サイトの同一ドメイン計測なので有効だった（B の施策で artists.html −82% を実測）。
+
+**教訓（§9-90 と同型）**:
+- **他サイトを測るときは `performance` API を使わない。** CDP の `Network.loadingFinished.encodedDataLength`
+  を使う。前者は他ドメインを 0 にする。
+- **自サイトを測るときは Service Worker を迂回する。** `Network.setBypassServiceWorker`。
+  相手に SW が無い場合、これを忘れると自分だけ不当に軽く出る。
+- **3者を比べて1者だけ桁が違うときは、対象ではなく計測方法を疑う。**
+  今回は「Spincoaster だけ 25 倍軽い」が手掛かりだった。
