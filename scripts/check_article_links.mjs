@@ -72,7 +72,9 @@ for (const { article, file } of files) {
     }
 
     if (/^https:\/\/lh3\.googleusercontent\.com\//i.test(source)) {
-      check(!srcset || srcset.split(',').every((candidate) => /^https:\/\/lh3\.googleusercontent\.com\/.*=w\d+\s+\d+w$/i.test(candidate.trim())),
+      /* Drive の URL は =w{幅} のあとに接尾辞が付く（2026-09-29 に -rw を追加。WebP で返させる指定）。
+         幅の直後に空白が来る前提で書くと、接尾辞を付けた瞬間に全件が不正判定になる。 */
+      check(!srcset || srcset.split(',').every((candidate) => /^https:\/\/lh3\.googleusercontent\.com\/.*=w\d+(?:-[a-z0-9]+)*\s+\d+w$/i.test(candidate.trim())),
         `${article.id}: Drive画像のsrcset候補が不正です (${source})`);
     }
   }

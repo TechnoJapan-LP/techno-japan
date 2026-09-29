@@ -9050,3 +9050,51 @@ index（side-card-meta / fest-row-lineup / venue-mini-meta 等 8〜9→11）。
 ### 次の担当への注意
 - `.festival-row-grid` の幅を `padding-right` に戻さないこと（リンクが死ぬ）。CSS にコメントあり。
 - `tjLazyBgAttr` に `'sm'` 等を渡すと実寸選択が無効になる。新しい写真枠では引数なしで呼ぶ。
+
+## 2026-09-29 記事本文の Drive 画像を WebP で受け取る（−40%）
+
+### 実施
+記事本文の画像は Google Drive（lh3.googleusercontent.com）配信で、srcset は付いていたが **JPEG のまま**だった。
+URL に `-rw` を足すと同じ画素サイズのまま WebP で返る。`scripts/build-detail-pages.mjs` の
+`addDriveImageSrcset` で srcset 候補と src の両方に `-rw` を付けた（`DRIVE_WEBP` 定数）。
+
+**選定の根拠（1枚 1200×800 で実測）**:
+| | 容量 | 形式 |
+|---|---|---|
+| `=w1200` | 357KB | JPEG |
+| `=w1200-rw` | **242KB（−32%）** | WebP・画素は同じ 1200×800 |
+| `=w1200-rw-v1` | 175KB（−51%） | WebP だが **PSNR 31.8dB で劣化が見える → 採用せず** |
+
+⚠️ `-rw` は Accept に `image/webp` が無いクライアントにも WebP を返す（実測で確認）。
+ただし**このサイトは自前画像を全て .webp で配っており既に WebP 必須**なので、新たな互換性リスクは無い。
+
+### コミット
+- `perf(articles): 記事本文の Drive 画像を WebP で受け取る（−40%）`
+
+### 検証
+本番（変更前）とローカル（変更後）を同じスクリプトで計測（`articles/synapse-2026-info.html`）:
+
+| | Drive 画像 8枚 | 形式 |
+|---|---|---|
+| モバイル dpr3 | 1,896KB → **1,146KB（−40%）** | jpeg → webp |
+| モバイル dpr2 | 997KB → **613KB（−39%）** | jpeg → webp |
+| PC dpr2 | 1,895KB → **1,146KB（−40%）** | jpeg → webp |
+
+- **8枚すべて表示できている**（`naturalWidth>0` を確認）。
+- 全記事 832 件の Drive URL に `-rw` が付き、付いていないものは 0 件。
+- `scripts/check_article_links.mjs` の検査が `=w\d+` の直後に空白を期待していて全件不正になったため、
+  **接尾辞を許す正規表現に修正**（理由をコメントで残した）。
+- `bash scripts/preflight.sh` ✅ **全49件成功**（「大きい画像の配信」も ✅）。
+- ローカル計測のページ全体（2,025KB）は本番より大きく出る。**ローカルサーバが gzip しないため**で、
+  本番では 2,424KB → 約 1,674KB になる見込み。push 後に本番で確認する。
+
+### 変更したパターン
+- `scripts/build-detail-pages.mjs` の `addDriveImageSrcset`、`scripts/check_article_links.mjs` の検査、記事28枚の再生成。
+
+### 未確認の類似パターン
+- CMS（`LP/cms.js:6996`）は Drive URL を `=w{幅}` に正規化しており `-rw` を付けない。
+  **CMS のプレビューは JPEG のまま**だが、公開ページは生成時に付くので実害なし。
+- OGP 画像・hero が Drive を指す記事があれば同様に JPEG のまま。今回は本文画像のみ。
+
+### 次の担当への注意
+- `-rw-v1` は容量が半分になるが画質が落ちる（PSNR 31.8dB）。使わないこと。理由は `DRIVE_WEBP` のコメントに記載。

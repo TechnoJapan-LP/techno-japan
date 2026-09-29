@@ -518,17 +518,31 @@ const DRIVE_IMG = /(<img\b[^>]*\bsrc=(["']))(https:\/\/lh3\.googleusercontent\.c
    =w1200 も =w2000 も同じ 1100px・208KB が返る。
    「w2000 だから1920px」とは限らない。 */
 const DRIVE_WIDTHS = [480, 800, 1200];
+/* Drive に WebP で返させる接尾辞。
+
+   2026-09-29 実測（記事 synapse-2026-info の本文画像 1枚・1200x800）:
+     =w1200        357KB  image/jpeg
+     =w1200-rw     242KB  image/webp   −32%・画素は同じ 1200x800
+     =w1200-rw-v1  175KB  image/webp   −51% だが PSNR 31.8dB で劣化が見える → 使わない
+
+   ⚠️ -rw は Accept に image/webp が無いクライアントにも WebP を返す（実測）。
+   ただしこのサイトは自前画像を全て .webp で配っており、既に WebP 必須。
+   したがって新たな互換性リスクは無い。
+
+   JPEG と WebP の差は PSNR 34.3dB。同じ原本を別方式で圧縮した差であり、
+   この容量帯では WebP の方が実質的に有利。 */
+const DRIVE_WEBP = '-rw';
 function addDriveImageSrcset(html) {
   return String(html || '').replace(DRIVE_IMG, (tag, head, _q, base, w, tail) => {
     if (/\bsrcset=/i.test(tag)) return tag;           // 既にあるものは触らない
-    const set = DRIVE_WIDTHS.map((n) => `${base}=w${n} ${n}w`).join(', ');
+    const set = DRIVE_WIDTHS.map((n) => `${base}=w${n}${DRIVE_WEBP} ${n}w`).join(', ');
     /* sizes は実測値。本文画像はスマホ484px / PC は 503px〜1332px（fx-full が全幅）。
        PC は article-fx.css で figure.fx-full が min(100vw, 1200px)。
        視差の拡大込みで実測1332px。ここを実際より小さく書くと
        ブラウザは正直に小さい画像を選び、ぼやける。 */
     const attrs = ` srcset="${esc(set)}" sizes="(max-width: 700px) 100vw, 1200px"`;
     const lazy = /\bloading=/i.test(tag) ? '' : ' loading="lazy" decoding="async"';
-    return `${head}${base}=w${w}${tail.slice(0, 1)}${attrs}${lazy}${tail.slice(1)}`;
+    return `${head}${base}=w${w}${DRIVE_WEBP}${tail.slice(0, 1)}${attrs}${lazy}${tail.slice(1)}`;
   });
 }
 
