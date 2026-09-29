@@ -849,14 +849,14 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
 
 <script src="common.js?v=16" defer></script>
 <!-- localize.js は defer にしない。下のインライン描画が同期実行で tjLocalized を呼ぶ -->
-<script src="localize.js?v=10"></script>
+<script src="localize.js?v=11"></script>
 <!-- カード画像の縮小版の対応表。これが無いと tjCardAssetPath は
      **エラーを出さず原本（最大686KB）へフォールバック**する。
      2026-08-19 まで news.html だけ読み込んでおらず、レールの記事画像が
      全部原寸で配られていた（実測 1,808KB）。AUDIT §9-93。 -->
-<script src="image-derivatives.js?v=42"></script>
+<script src="image-derivatives.js?v=43"></script>
 <script src="data-hub.js?v=11"></script>
-<script src="image-dimensions.js?v=70"></script>
+<script src="image-dimensions.js?v=71"></script>
 <script>
 document.addEventListener('error', (e) => {
   const img = e.target;
@@ -1254,7 +1254,7 @@ function renderFeed() {
     <a href="${articleDetailHref(a)}" data-article-detail-link class="feed-card reveal" style="--reveal-delay:${index * 90}ms">
       <div class="feed-card-image">
         ${a.image
-          ? `<img ${tjImageSizeAttrs(a.image)} loading="lazy" decoding="async" src="${tjCardAssetPath(a.image)}" data-original-src="${tjAssetPath(a.image)}" alt="${tjLocalized(a.title, '', a.title_en)}">`
+          ? `<img ${tjImageSizeAttrs(a.image)}${tjCardSrcsetAttr(a.image, '(max-width: 700px) 92vw, 664px')} loading="lazy" decoding="async" src="${tjCardAssetPath(a.image)}" data-original-src="${tjAssetPath(a.image)}" alt="${tjLocalized(a.title, '', a.title_en)}">`
           : `<div class="feed-card-image-placeholder">COMING SOON</div>`}
       </div>
       <div class="feed-card-tag"><span class="tag-dot"></span> ${a.category}</div>

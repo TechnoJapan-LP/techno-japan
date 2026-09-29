@@ -8946,3 +8946,54 @@ headless Chrome（実機相当 dpr3 / `mobile:true`）でローカル配信し�
 ### 次の担当への注意・判断待ち
 - title の形を変えたので、GSC の CTR は 2〜4 週間後に同じ `scripts` 手順（ブラウザ抽出）で前後比較する。
 - T6（soundcamp カナ・artists ハブ定義文）、T7（抽出のスクリプト化）は未着手。
+
+## 2026-09-29 B: カード画像を表示幅に合わせて配る（Codex 実装 / Claude 検証）
+
+### 実施
+EYESCREAM / Spincoaster との比較（[docs/design/BENCHMARK_EYESCREAM_SPINCOASTER_2026-09-29.md](../docs/design/BENCHMARK_EYESCREAM_SPINCOASTER_2026-09-29.md)）で、
+**64px の枠に 960px の画像を送っていた**（artists.html のカード137枚）ことが実測で分かった。
+
+- `build-image-derivatives.py`: 派生を `sm 480 / lg 960` の2枚 → **`xs 240 / sm 480 / md 720 / lg 960` の4枚**へ。
+- `LP/localize.js`: `tjLazyBgAttr` が候補一覧を `data-bg-set` に持たせ、`tjApplyLazyBackgrounds` が
+  **読み込む直前に要素の実寸 × dpr を測って1枚選ぶ**（`pickBySlot`）。
+  背景画像のまま選べるので、HTML と CSS は1行も変えていない。
+- `tjCardSrcsetAttr(value, sizes)` が sizes を引数で受けられるようにし、news.html の記事カードに実測値
+  （`(max-width: 700px) 92vw, 664px`）を渡した。
+- ⚠ `data-bg` 属性は残した（`check_hub_pages.py` が読んでいる）。`data-bg-set` は追加のみ。
+- 2026-08-07 の「一覧ハブで srcset を使うな」というコメントは、原因が `sizes` の固定値だったと分かったので
+  経緯を残したまま追記した。
+
+### コミット
+- `perf(images): カード画像を表示幅に合わせて配る（派生4サイズ＋実寸で選択）`
+
+### 検証
+**同じスクリプトで本番（変更前）とローカル（変更後）を計測:**
+
+| ページ | モバイル dpr3 | PC dpr2 |
+|---|---|---|
+| **artists.html** | 1,198KB → **253KB（−79%）** | 1,198KB → **219KB（−82%）** |
+| **venues.html** | 478KB → **176KB（−63%）** | 478KB → **176KB（−63%）** |
+| index.html | 1,164KB → 1,080KB（−7%） | 1,118KB → 1,047KB（−6%） |
+| news.html | 873KB → 875KB（±0） | 同左（srcset は dpr1 でのみ効く） |
+
+選択の内訳（PC dpr2 の artists.html）: xs 30枚。モバイル dpr3 では xs 26 / sm 4。
+
+`pickBySlot` の単体確認（実測スロットを入力）:
+`64px×dpr3=192px → xs` / `130px×dpr3=390px → sm` / `345px×dpr2=690px → md` / `345px×dpr3=1035px → lg` / `664px×dpr2=1328px → lg`。
+
+- `python3 scripts/check_image_derivatives.py` ✅（派生2,142枚・実体とサイズ宣言を確認）
+- `node --check LP/localize.js` ✅ / `localize.js` v10→11
+- `bash scripts/preflight.sh` ✅ **全49件成功**
+
+### 変更したパターン
+- 派生生成（4サイズ）、`tjLazyBgAttr` / `tjApplyLazyBackgrounds` / `tjCardSrcsetAttr`、news.html の記事カード。
+- 派生画像 842 ファイル（新規 xs/md と再生成）。`LP/images/derivatives` は 55MB → 83MB。
+
+### 未確認の類似パターン
+- 詳細ページの画像（`heroSrcsetAttr` / `flyerSrcsetAttr`）は `<img srcset>` で別経路。今回は未変更。
+- 記事本文の Google Drive 画像（1記事 1,898KB）は外部ドメインなので派生の対象外。**未対応**。
+- `.fest-row-bg` はモバイルで必要 1,296px に対し lg 960px。装飾背景（低不透明度）なので今回は許容。
+
+### 次の担当への注意
+- 新しいスロットを足すときは `data-bg-set` が自動で効くので、`tjLazyBgAttr(url)` を size 引数**なし**で呼ぶこと。
+  `tjLazyBgAttr(url,'sm')` のように固定すると選択が働かない（festivals.html の2箇所が現状これ）。

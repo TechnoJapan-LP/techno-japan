@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
 """カード表示用の縮小画像を、Drive同期の原本から作る。
 
-■ なぜ2サイズ作るか
+■ なぜ4サイズ作るか
 
   カードの実測表示幅は 324〜452px（2026-08-07 / headless で計測）。
   960px 1枚だけだと、スマホには必要の3倍近い画素を送ることになる。
-  480px と 960px を作り、srcset でブラウザに選ばせる。
-  高解像度ディスプレイでは 480px スロットに 960px が選ばれるので、
-  見た目は落とさずスマホの転送量だけが減る。
+  240 / 480 / 720 / 960px を作り、表示幅に合う画像を選べるようにする。
 
 ■ 原本には触らない
 
@@ -33,9 +31,11 @@ SOURCE_DIRS = ("festivals", "artists", "venues", "articles")
 OUT_ROOT = ROOT / "LP" / "images" / "derivatives" / "card"
 OUT_JS = ROOT / "LP" / "image-derivatives.js"
 # (接尾辞, 長辺上限)。srcset の候補になる。
-# カードは 324〜452px、hero はモバイル 471px / PC 約860px。
-# 480 / 960 の2枚で両方をまかなえる。
-SIZES = (("sm", 480), ("lg", 960))
+# 64px の枠（artists.html のカード 137枚）から 345px の枠まで実測で幅が5倍違う。
+# 240 / 480 / 720 / 960 の4枚で、どの枠にも1.5倍以内で収まる。
+# 2026-09-29 実測: artist-card-img は64〜80px表示で必要192px、
+# それに960pxを送っていた（AUDIT / docs/design/BENCHMARK_EYESCREAM_SPINCOASTER_2026-09-29.md）。
+SIZES = (("xs", 240), ("sm", 480), ("md", 720), ("lg", 960))
 QUALITY = 80
 ARTICLE_ASPECTS = {
     "wide": (16, 9),
@@ -127,8 +127,8 @@ def main() -> None:
             # 既定( src )は lg。srcset を解釈しない環境でも従来どおり表示できる。
             mapping[f"images/{kind}/{source.name}"] = {
                 "src": entry["lg"]["path"],
-                "srcset": [[entry["sm"]["path"], entry["sm"]["w"]],
-                           [entry["lg"]["path"], entry["lg"]["w"]]],
+                "srcset": [[entry[suffix]["path"], entry[suffix]["w"]]
+                           for suffix, _ in SIZES],
             }
             if kind == "articles" and f"images/articles/{source.name}" in article_heroes:
                 aspect_entries = {}

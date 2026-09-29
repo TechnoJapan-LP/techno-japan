@@ -112,17 +112,21 @@
      【一覧ハブでは使わないこと】festivals.html のカードは実測で
      モバイル452px / PC 848px と大きく、960px（lg）がちょうど良い。
      srcset を付けると PC で 480px が選ばれて**画質が落ちた**（2026-08-07 実測）。
+     2026-09-29 追記: 原因は srcset そのものではなく、sizes を
+     `(max-width:700px) 100vw, 480px` と固定していたこと。実測に合う sizes を
+     コンポーネントごとに渡せば srcset は正しく効く。背景画像側は
+     tjApplyLazyBackgrounds が実寸から選ぶ方式にした。
      使ってよいのは、表示幅が明確に小さいカード
      （詳細ページ下部の関連フェス = 実測324px）だけ。
      sizes は必ず実測値に合わせること。ここを実際より小さく書くと、
      ブラウザは正直に小さい画像を選んでぼやける。 */
-  window.tjCardSrcsetAttr = function (value) {
+  window.tjCardSrcsetAttr = function (value, sizes) {
     var hit = tjDerivativeEntry(value);
     if (!hit || !hit.srcset || !hit.srcset.length) return '';
     var set = hit.srcset.map(function (pair) {
       return window.tjAssetPath(pair[0]) + ' ' + pair[1] + 'w';
     }).join(', ');
-    return ' srcset="' + window.tjEscapeHtml(set) + '" sizes="(max-width: 700px) 100vw, 480px"';
+    return ' srcset="' + window.tjEscapeHtml(set) + '" sizes="' + window.tjEscapeHtml(sizes || '(max-width: 700px) 100vw, 480px') + '"';
   };
 
   /* HTML エスケープ。innerHTML に値を差し込む前に必ず通す。
@@ -170,7 +174,15 @@
      属性名を変えるなら両方直すこと。 */
   window.tjLazyBgAttr = function (url, size) {
     var u = window.tjCardAssetPath(url, size);
-    return u ? ' data-bg="' + window.tjEscapeHtml(u) + '"' : '';
+    if (!u) return '';
+    var attr = ' data-bg="' + window.tjEscapeHtml(u) + '"';
+    if (!size) {
+      var hit = tjDerivativeEntry(url);
+      if (hit && hit.srcset && hit.srcset.length > 1) {
+        attr += ' data-bg-set="' + window.tjEscapeHtml(JSON.stringify(hit.srcset)) + '"';
+      }
+    }
+    return attr;
   };
 
   var lazyBgObserver = null;
@@ -180,11 +192,26 @@
     var targets = scope.querySelectorAll ? scope.querySelectorAll('[data-bg]') : [];
     if (!targets.length) return;
 
+    function pickBySlot(el, fallback, setJson) {
+      if (!setJson) return fallback;
+      var list;
+      try { list = JSON.parse(setJson); } catch (e) { return fallback; }
+      if (!list || !list.length) return fallback;
+      var w = el.getBoundingClientRect().width;
+      if (!w) return fallback;
+      var need = w * (window.devicePixelRatio || 1);
+      for (var i = 0; i < list.length; i++) {
+        if (list[i][1] >= need) return window.tjAssetPath(list[i][0]);
+      }
+      return window.tjAssetPath(list[list.length - 1][0]);
+    }
+
     function show(el) {
-      var url = el.getAttribute('data-bg');
+      var url = pickBySlot(el, el.getAttribute('data-bg'), el.getAttribute('data-bg-set'));
       if (!url) return;
       el.style.backgroundImage = "url('" + url.replace(/'/g, "\\'") + "')";
       el.removeAttribute('data-bg');
+      el.removeAttribute('data-bg-set');
     }
 
     if (!('IntersectionObserver' in window)) {
