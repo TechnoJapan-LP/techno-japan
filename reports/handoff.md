@@ -8997,3 +8997,56 @@ EYESCREAM / Spincoaster との比較（[docs/design/BENCHMARK_EYESCREAM_SPINCOAS
 ### 次の担当への注意
 - 新しいスロットを足すときは `data-bg-set` が自動で効くので、`tjLazyBgAttr(url)` を size 引数**なし**で呼ぶこと。
   `tjLazyBgAttr(url,'sm')` のように固定すると選択が働かない（festivals.html の2箇所が現状これ）。
+
+## 2026-09-29 A+C: フェス一覧に写真を出す／一覧の文字を読める大きさに（Codex 実装 / Claude 検証）
+
+### 実施
+**A（写真）**: フェス一覧の写真は `?visual=a` / `?visual=b` という URL パラメータの裏に隠れていた
+（a はモバイルで `display:none`、b は `blur(18px) brightness(0.58)` で写真として見えない）。
+**門を外して常時表示にし、変種を1種類へ統合**。
+- PC: 行の右端に `clamp(180px, 20vw, 280px)`（従来 `clamp(120px,16vw,220px)`）
+- モバイル（≤900px）: **行の上に全幅 16:9**（従来は 96px 枠で非表示）
+- `tjLazyBgAttr(visualImage)` を **size 引数なし**で呼び、B で入れた実寸選択が効くようにした
+- 変種 b（ぼかし背景）とそれ用の CSS・日付の大きい表示を削除。**採らない理由をコメントで残した**
+
+**C（文字）**: 一覧カード・行の中で読む情報を 8〜10px → 10〜12px に。
+festivals（日付/場所/状態 10→12、ラベル/タグ 8→10、件数・フィルタ 9〜10→11〜12、月ナビ 10/9→12/11）、
+artists（city/count/genre-tab 9/10/9→11/12/11）、venues（city/genre 9→11、label 9→10、count/nav 10→12）、
+news（sort-tab/feed-label/guide-label 10→12、cat-btn 9→11、**カード内メタ 9px×9 箇所→11px**）、
+index（side-card-meta / fest-row-lineup / venue-mini-meta 等 8〜9→11）。
+
+### コミット
+- `feat(hubs): フェス一覧に写真を出し、一覧の文字を読める大きさにする（分析タスク A・C）`
+
+### 検証
+| ページ | 変更前 | 変更後 |
+|---|---|---|
+| フェス一覧 モバイル | **0.3 枚/画面** / 196KB | **1.5 枚/画面** / 1,813KB（写真 345×194） |
+| フェス一覧 PC | 0.6 枚/画面 | **3.1 枚/画面**（写真 280×111） |
+| artists.html モバイル | — | 1.9 枚/画面 / 945KB |
+| venues.html モバイル | — | 2.8 枚/画面 / 854KB |
+
+**★ Claude が見つけて直したバグ**: PC で**写真をクリックしても詳細ページへ遷移しなかった**。
+`.festival-row-grid`（z-index:2）が `padding-right` で写真ぶんを空けていたため、padding は要素の内側にあり
+**当たり判定が写真の上まで伸びて**、その下の行リンク（`.festival-card-link` / z-index:1）に届いていなかった。
+`width: calc(100% - 写真幅 - 24px)` で手前に止めて解決。理由を CSS にコメントで残した。
+実クリック検証: **1440px ✅ / 1024px ✅ / 393px ✅**（3幅とも `/festivals/synapse-festival.html` へ遷移）。
+
+- 横スクロール 0 / 5ハブとも。JA・EN の行数一致（6枚）。EN 側に `visual=` の残りは 0。
+- `bash scripts/preflight.sh` ✅ **全49件成功**。
+- 重さの位置づけ: フェス一覧 1.8MB は、Spincoaster 15.2MB・EYESCREAM 33.9MB に対して **1/8 以下**（§9-98 の訂正値）。
+
+### 変更したパターン
+- `LP/festivals.html`（写真の常時表示・CSS 統合・文字）、`LP/artists.html` `LP/venues.html` `LP/news.html` `LP/index.html`（文字）。
+- EN ハブ5枚は `enHubFromJa` で再生成。
+
+### 未確認の類似パターン
+- **`verify_ac.mjs` の PC リンク判定は当てにならない**（`scrollIntoView` で要素が画面外に出るため常に ✗ と出る）。
+  リンクの確認は `click2.mjs`（実際にマウスイベントを送る方）を使うこと。
+- フェス一覧の写真は 12 枚しか読み込まれない（フィルタで非表示の行は IntersectionObserver が発火しない）。仕様どおり。
+- 記事本文の Drive 画像（1記事 1,898KB）は未対応のまま。
+- 本番反映後の実機 Safari 操作: **未確認**。
+
+### 次の担当への注意
+- `.festival-row-grid` の幅を `padding-right` に戻さないこと（リンクが死ぬ）。CSS にコメントあり。
+- `tjLazyBgAttr` に `'sm'` 等を渡すと実寸選択が無効になる。新しい写真枠では引数なしで呼ぶ。

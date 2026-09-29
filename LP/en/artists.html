@@ -108,7 +108,7 @@
 .artists-search:focus { border-color: rgba(240,237,232,0.35); }
 
 .artists-count {
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em;
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.15em;
   opacity: 0.62; margin-left: auto;
 }
 
@@ -119,7 +119,7 @@
 }
 
 .genre-tab {
-  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.15em;
   text-transform: uppercase; padding: 10px 20px;
   background: none; border: none; color: var(--text);
   opacity: 0.62; cursor: pointer; min-height: 48px; display: inline-flex; align-items: center;
@@ -217,7 +217,7 @@
   text-transform: uppercase; line-height: 1; margin-bottom: 4px;
 }
 .artist-card-city {
-  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em;
   text-transform: uppercase; opacity: 0.62;
 }
 
@@ -275,7 +275,7 @@
   .artists-count { margin-left: 0; width: 100%; }
   .artists-genre-nav { gap: 0; overflow-x: auto; flex-wrap: nowrap; min-height: 36px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   .artists-genre-nav::-webkit-scrollbar { display: none; }
-  .genre-tab { padding: 10px 14px; font-size: 9px; min-height: 48px; }
+  .genre-tab { padding: 10px 14px; font-size: 10px; min-height: 48px; }
 }
 @media (max-width: 480px) {
   .artists-grid { grid-template-columns: repeat(2, 1fr); gap: 3px; padding: 16px; }
@@ -283,7 +283,7 @@
   .artist-card-content { padding: 12px; }
   .artist-card-name { font-size: 16px; }
   .artist-card-genre { font-size: 7px; margin-bottom: 3px; }
-  .artist-card-city { font-size: 9px; }
+  .artist-card-city { font-size: 11px; }
 }
 /* スマホは画像カードより、名前を探しやすいコンパクトなリストを優先する。 */
 @media (max-width: 640px) {
@@ -303,7 +303,7 @@
   .artist-card:hover .artist-card-img { transform: none; }
   .artist-card-genre { font-size: 7px; margin-bottom: 4px; }
   .artist-card-name { font-size: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .artist-card-city { font-size: 9px; margin-top: 4px; }
+  .artist-card-city { font-size: 11px; margin-top: 4px; }
 }
 @media (hover: none) and (pointer: coarse) {
   .artist-card, .genre-tab { cursor: pointer; }

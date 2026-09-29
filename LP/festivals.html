@@ -175,7 +175,7 @@ body.mixed-results.rave-mode .festival-section:not(.rave-result):hover .festival
 .month-nav::-webkit-scrollbar { display: none; }
 .month-nav a {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   opacity: 0.62;
@@ -203,11 +203,11 @@ body.mixed-results.rave-mode .festival-section:not(.rave-result):hover .festival
 .fest-search { flex: 1; max-width: 420px; background: transparent; border: 1px solid rgba(240,237,232,0.12); color: var(--text); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; padding: 12px 16px; outline: none; transition: border-color 0.3s ease; }
 .fest-search::placeholder { color: rgba(240,237,232,0.25); }
 .fest-search:focus { border-color: rgba(240,237,232,0.35); }
-.fest-count { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; opacity: 0.62; }
+.fest-count { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.15em; opacity: 0.62; }
 .fest-filter-row { display: flex; align-items: center; gap: 2px; overflow-x: auto; scrollbar-width: none; }
 .fest-filter-row::-webkit-scrollbar { display: none; }
-.fest-filter-key { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.62; flex-shrink: 0; width: 48px; }
-.fest-filter-chip { display: inline-flex; align-items: center; min-height: 48px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.62; transition: opacity 0.3s ease; padding: 6px 14px; white-space: nowrap; flex-shrink: 0; cursor: pointer; background: none; border: none; color: inherit; }
+.fest-filter-key { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.62; flex-shrink: 0; width: 48px; }
+.fest-filter-chip { display: inline-flex; align-items: center; min-height: 48px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.62; transition: opacity 0.3s ease; padding: 6px 14px; white-space: nowrap; flex-shrink: 0; cursor: pointer; background: none; border: none; color: inherit; }
 .fest-filter-chip:hover { opacity: 0.8; }
 .fest-filter-chip.active { opacity: 1; border-bottom: 1px solid var(--text); }
 .fest-empty { padding: 64px 40px; text-align: center; font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; color: rgba(240,237,232,.5); }
@@ -446,7 +446,7 @@ footer { padding: 60px 40px; }
   .page-header { padding: 24px 24px 40px; } /* nav が sticky なので上余白は詳細ページと同じ24px（二重取り防止） */
   .page-header-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
   .month-nav { padding: 16px 24px; top: 0; }
-  .month-nav a { padding: 6px 16px; font-size: 9px; }
+  .month-nav a { padding: 6px 16px; font-size: 11px; }
   .festivals-main { padding: 0 24px; }
   .festival-section { padding: 60px 0; }
   .festival-layout { grid-template-columns: 1fr; gap: 32px; }
@@ -471,10 +471,8 @@ footer { padding: 60px 40px; }
 }
 
 /* ===================== INDEX ROWS (P1) ===================== */
-/* The database view remains information-first. Optional visual variants are
-   URL-selectable for measurement and review without changing the link model. */
 .festival-row {
-  --festival-row-visual-width: clamp(120px, 16vw, 220px);
+  --festival-row-visual-width: clamp(180px, 20vw, 280px);
   padding: 22px 0;
   min-height: 92px;
   overflow: hidden;
@@ -489,19 +487,19 @@ footer { padding: 60px 40px; }
 .festival-row-location,
 .festival-row-status {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: .08em;
   line-height: 1.5;
 }
 .festival-row-date { display: flex; flex-direction: column; gap: 5px; }
 .festival-row-label {
-  font-size: 8px;
+  font-size: 10px;
   letter-spacing: .18em;
   opacity: .35;
   text-transform: uppercase;
 }
 .festival-row-date strong { font-weight: 400; }
-.festival-row-status { color: var(--accent); font-size: 8px; letter-spacing: .14em; text-transform: uppercase; }
+.festival-row-status { color: var(--accent); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; }
 .festival-row-main { min-width: 0; }
 .festival-row-name {
   font-family: var(--font-head);
@@ -513,7 +511,7 @@ footer { padding: 60px 40px; }
 .festival-row-location { opacity: .62; text-transform: uppercase; }
 .festival-row-meta { min-width: 0; }
 .festival-row-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
-.festival-row .festival-tag { padding: 3px 8px; font-size: 8px; }
+.festival-row .festival-tag { padding: 3px 8px; font-size: 10px; }
 .festival-row .fest-fav-mount {
   position: relative;
   top: auto;
@@ -524,64 +522,31 @@ footer { padding: 60px 40px; }
   position: absolute;
   inset: 0 0 0 auto;
   width: var(--festival-row-visual-width);
-  background-size: cover;
-  background-position: center;
-  z-index: 0;
-  pointer-events: none;
-}
-.festival-list-visual-a .festival-row .festival-row-grid,
-.festival-list-visual-b .festival-row.has-visual .festival-row-grid {
-  position: relative;
-  z-index: 2;
-  padding-right: calc(var(--festival-row-visual-width) + 24px);
-}
-.festival-row-visual-a {
-  display: none;
   aspect-ratio: 4 / 3;
   top: 50%;
   bottom: auto;
   height: min(100%, var(--festival-row-visual-width));
   transform: translateY(-50%);
+  background-size: cover;
+  background-position: center;
   border-left: 1px solid rgba(240,237,232,.12);
-}
-.festival-row-visual-b { display: none; }
-.festival-list-visual-a .festival-row.has-visual .festival-row-visual-a { display: block; }
-.festival-row-date-visual { display: none; }
-.festival-list-visual-b .festival-row.has-visual {
-  isolation: isolate;
-}
-.festival-list-visual-b .festival-row.has-visual .festival-row-visual-b {
-  display: block;
-  filter: blur(18px) grayscale(55%) brightness(0.58);
-  transform: scale(1.1);
-  width: 100%;
-  z-index: -2;
-}
-.festival-list-visual-b .festival-row.has-visual::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, rgba(8,8,8,0.62) 0%, rgba(8,8,8,0.34) 50%, rgba(8,8,8,0.12) 100%);
-  z-index: -1;
+  z-index: 0;
   pointer-events: none;
 }
-.festival-list-visual-b .festival-row.has-visual .festival-row-visual-a { display: none; }
-.festival-list-visual-b .festival-row.has-visual .festival-row-grid { padding-right: 180px; }
-.festival-list-visual-b .festival-row-date-visual {
-  display: block;
-  position: absolute;
-  right: 24px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 3;
-  color: rgba(240,237,232,.86);
-  font-family: 'Bebas Neue', var(--font-display);
-  font-size: clamp(30px, 4vw, 62px);
-  line-height: .9;
-  letter-spacing: .04em;
-  text-align: right;
-  white-space: nowrap;
+/* ⚠ padding-right で写真ぶんを空けないこと。padding は要素の内側なので
+   グリッド（z-index:2）の当たり判定が写真の上まで伸び、その下にある
+   行全体のリンク（.festival-card-link / z-index:1）に届かなくなる。
+   2026-09-29 に実測で確認: PC で写真をクリックしても遷移しなかった
+   （当たり = DIV.festival-row-grid）。width で手前に止める。 */
+.festival-row.has-visual .festival-row-grid {
+  position: relative;
+  z-index: 2;
+  width: calc(100% - var(--festival-row-visual-width) - 24px);
 }
+/* 一覧の写真。2026-09-29 まで visual パラメータ a / b の裏に隠れていた。
+   a はモバイルで display:none、b は blur(18px)+brightness(0.58) で
+   写真として見えなかった（実測 0.3 枚/画面）。両方やめて 1 種類にした。
+   b の「ぼかして背景に敷く」案は、写真が情報として読めないので採らない。 */
 .festival-row:hover { background: rgba(240,237,232,.035); }
 .festival-row:hover .festival-row-name { color: var(--accent); }
 .festival-row.rave-result .festival-row-status,
@@ -594,20 +559,25 @@ body.rave-mode .festival-row-status { color: var(--accent); }
   .festival-row-meta { grid-column: 1; }
   .festival-row .fest-fav-mount { grid-column: 2; grid-row: 3; justify-self: end; }
   .festival-row-name { font-size: clamp(25px, 8vw, 38px); }
-  .festival-row { --festival-row-visual-width: 96px; min-height: 112px; }
-  /* モバイルは画像を出さず、画像の有無で本文幅を変えない。 */
-  .festival-list-visual-a .festival-row .festival-row-grid { padding-right: 0; }
-  .festival-list-visual-a .festival-row.has-visual .festival-row-visual-a { display: none; }
-  .festival-row-visual-a { border-left: 1px solid rgba(240,237,232,.1); }
-  .festival-list-visual-b .festival-row.has-visual .festival-row-grid { padding-right: 112px; }
-  .festival-list-visual-b .festival-row-date-visual { right: 14px; font-size: 30px; }
+  /* モバイルは写真を行の上に全幅で置く。右端サムネだと 96px しか取れず、
+     「写真がある」ことが伝わらない（2026-09-29 の比較レポート 01 参照）。 */
+  .festival-row { --festival-row-visual-width: 100%; }
+  .festival-row.has-visual { padding-top: 0; }
+  .festival-row-visual {
+    position: static;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    transform: none;
+    border-left: 0;
+    margin: 0 0 14px;
+  }
+  .festival-row.has-visual .festival-row-grid { width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) {
   .festival-row:hover .festival-row-name { color: inherit; }
-  .festival-list-visual-b .festival-row-visual-b { filter: blur(18px) grayscale(55%) brightness(0.58); transform: scale(1.1); }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .festival-list-visual-b .festival-row:hover .festival-row-visual-b { filter: blur(10px) grayscale(25%) brightness(0.52); transform: scale(1.04); }
 }
 
 </style>
@@ -1334,21 +1304,10 @@ function renderFestivalCard(f, m, i) {
   const dateLabel = formatFestDate(f.date);
   const statusLabel = !f.date ? 'DATE TBA' : (isFuture(f.date) ? 'UPCOMING' : 'ARCHIVED');
   const visualImage = f.image && f.image.trim();
-  const listVisual = new URLSearchParams(window.location.search).get('visual');
   const visualClass = visualImage ? ' has-visual' : '';
-  const visualDate = (() => {
-    if (!f.date) return 'TBA';
-    const [start, end] = String(f.date).split('/').map(v => v.trim());
-    const [, sm, sd] = (start || '').split('-').map(Number);
-    const [, em, ed] = (end || start || '').split('-').map(Number);
-    if (!sm || !sd) return 'TBA';
-    return end && em && em !== sm ? `${sd}–${ed}<br>${MONTHS[sm - 1]}–${MONTHS[em - 1]}` : `${sd}${end && ed !== sd ? `–${ed}` : ''}<br>${MONTHS[sm - 1]}`;
-  })();
-  const visualMarkup = visualImage && listVisual === 'a'
-    ? `<div class="festival-row-visual festival-row-visual-a"${tjLazyBgAttr(visualImage, 'sm')}></div>`
-    : visualImage && listVisual === 'b'
-      ? `<div class="festival-row-visual festival-row-visual-b"${tjLazyBgAttr(visualImage, 'sm')}></div><div class="festival-row-date-visual" aria-hidden="true">${visualDate}</div>`
-      : '';
+  const visualMarkup = visualImage
+    ? `<div class="festival-row-visual"${tjLazyBgAttr(visualImage)} style="background-position:${f.imagePosition || 'center'}"></div>`
+    : '';
   return `
     <section class="festival-section festival-row reveal${currentSearch && (f.type || 'festival') === 'rave' ? ' rave-result' : ''}${visualClass}" data-fest-id="${f.id}" data-result-type="${f.type || 'festival'}" style="transition-delay:${i * 40}ms">
       <a class="festival-card-link" data-festival-detail-link data-thumb="${f.image ? tjCardAssetPath(f.image) : ''}" href="/festivals/${encodeURIComponent(f.id)}.html" aria-label="${name} details"></a>
@@ -1442,9 +1401,6 @@ function renderFestivals() {
   });
 
 main.innerHTML = html;
-  const visualVariant = new URLSearchParams(window.location.search).get('visual');
-  document.documentElement.classList.toggle('festival-list-visual-a', visualVariant === 'a');
-  document.documentElement.classList.toggle('festival-list-visual-b', visualVariant === 'b');
   applyMonthFilter();
 
   // Mount favorite hearts
