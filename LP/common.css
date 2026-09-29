@@ -819,12 +819,28 @@ footer         { contain-intrinsic-size: auto 320px; }
    body に .tj-bg を1つ置くだけで、固定背景として敷かれる。
    コンテンツより下（z-index:0）、body背景より上。
    ========================================================== */
+/* グレイン（粒子）。#080808 のベタ塗りは画面が「のっぺり」して見える。
+   Spincoaster が背景に微細なノイズを乗せていて紙っぽい質感が出ていたので採り入れた
+   （docs/design/BENCHMARK_EYESCREAM_SPINCOASTER_2026-09-29.md §2-5）。
+
+   ・SVG の feTurbulence を data URI で敷く。画像ファイルを増やさないので
+     画像の実在検査・寸法表・同期の経路に一切影響しない。
+   ・120px のタイルを繰り返すだけなので描画コストは無視できる。
+   ・**コンテンツより下（z-index:0）**に居るので、文字の上には重ならない。
+     2026-09-24 に直したコントラストを打ち消さない。
+   ・粒子の濃さは rect の opacity で決める。0.05 は実測で選んだ:
+     地の #080808（輝度8）に対し 0.05 で平均12.8・ばらつき1.3。
+     0.14 だと平均20.5 まで持ち上がって「黒」でなくなり、0.03 ではほぼ見えない。
+     文字のコントラストへの影響は 17.1:1 → 16.6:1 で無視できる。 */
 .tj-bg {
   position: fixed;
   inset: 0;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='120' height='120' filter='url(%23g)' opacity='0.05'/></svg>");
+  background-size: 120px 120px;
+  background-repeat: repeat;
 }
 .tj-bg::before {
   content: '';
