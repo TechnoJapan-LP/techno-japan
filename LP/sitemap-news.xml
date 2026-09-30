@@ -1,15 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
-  <url>
-    <loc>https://techno-japan.media/articles/japan-festival-2026-october.html</loc>
-    <news:news>
-      <news:publication>
-        <news:name>TECHNO JAPAN</news:name>
-        <news:language>ja</news:language>
-      </news:publication>
-      <news:publication_date>2026-09-28T00:00:00+09:00</news:publication_date>
-      <news:title>【2026年10月】日本の音楽フェスティバル&amp;レイヴ11選</news:title>
-    </news:news>
-  </url>
-</urlset>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"/>
