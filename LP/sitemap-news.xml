@@ -1,2 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"/>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+  <url>
+    <loc>https://techno-japan.media/articles/ondoland1012-2026-info.html</loc>
+    <news:news>
+      <news:publication>
+        <news:name>TECHNO JAPAN</news:name>
+        <news:language>ja</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-01T00:00:00+09:00</news:publication_date>
+      <news:title>ONDO LANDが10月12日に大阪駅5F「時空の広場」でテクノレイヴ！</news:title>
+    </news:news>
+  </url>
+</urlset>

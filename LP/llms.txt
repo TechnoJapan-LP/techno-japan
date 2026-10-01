@@ -1,7 +1,7 @@
 # TECHNO JAPAN
 
 > 日本のテクノ / ハウスの独立メディア。フェスティバル95件・
-> アーティスト137名・会場22件・記事14本を日英で掲載し、
+> アーティスト137名・会場22件・記事15本を日英で掲載し、
 > 開催日・場所・出演者を構造化データ（schema.org）付きで公開している。
 
 ## 今後の開催予定（14件）
@@ -32,6 +32,7 @@
 
 ## 最新記事
 
+- 2026-10-01: [ONDO LANDが10月12日に大阪駅5F「時空の広場」でテクノレイヴ！](https://techno-japan.media/articles/ondoland1012-2026-info.html) — 10月12日、月曜の祝日。JR大阪駅のホームを跨ぐ橋上駅舎の屋上、大阪ステーションシティ5F「時空の広場」が、18時から4時間だけフロアになる。出演はDaito Manabe、食品まつり a.k.a. Foodman、Kuniyuki Takahashi、machìnaの4組。うち3組がLIVE SETで臨む。営業中の駅の、最も人が行き交う場所で開かれるテクノレイヴだ。 / [EN](https://techno-japan.media/en/articles/ondoland1012-2026-info.html)
 - 2026-09-28: [【2026年10月】日本の音楽フェスティバル&レイヴ11選](https://techno-japan.media/articles/japan-festival-2026-october.html) — 紅葉が山を降りてくる、野外シーズンの最終盤。 10月は、一年でいちばん密度の高い月になる。群馬の森に3日間のストーリーを組むLabyrinth、10周年を迎える静岡のFRUE、京都の寺院と庭園を巡る100名限定のWonderfruit。定点として続くフェスティバルと、会場を明かさないフリーパーティが同じ月に並ぶ。 福岡から高知、静岡、長野まで、いま体験すべき11のフェスティバル&レイヴをピックアップ。 / [EN](https://techno-japan.media/en/articles/japan-festival-2026-october.html)
 - 2026-09-24: [Odyssey 宮崎・標高1,000mの森と天文台に、九州の50組が集うローカルレイヴ](https://techno-japan.media/articles/odyssey-2026-info.html) — 標高1,000mの森と天文台をまるごと使い、九州の50組超が集う3日間。10年の物語の第2章となる今年のテーマはRE:ROOTS、熊本地震の復興支援と結びつく。銀河村での開催は今年が最後、森と星空のフロアを行き来しながら山で朝を迎える。 / [EN](https://techno-japan.media/en/articles/odyssey-2026-info.html)
 - 2026-09-21: [Synapse Festival、福岡・海の中道で初の3日間開催へ](https://techno-japan.media/articles/synapse-2026-info.html) — 10月2日からの3日間、福岡・海の中道海浜公園のなかにある泊まれる公園で、Synapse Festivalが会場を移して初の3日間開催を迎える。閉園後の国営公園に立つ3つのステージにGE-OLOGYやIdjut Boysら40組が集い、サウナや焚き火、朝焼けまでが一続きの時間として設計される。 / [EN](https://techno-japan.media/en/articles/synapse-2026-info.html)
