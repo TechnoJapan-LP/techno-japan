@@ -1,38 +1,8 @@
 {
   "source": "https://techno-japan.media/",
   "license": "データの出典として techno-japan.media へのリンクを求めます",
-  "count": 14,
+  "count": 12,
   "events": [
-    {
-      "name": "Synapse Festival 2026",
-      "url": "https://techno-japan.media/festivals/synapse-festival.html",
-      "start": "2026-10-02",
-      "end": "2026-10-04",
-      "venue": "INN THE PARK FUKUOKA",
-      "pref": "Fukuoka",
-      "lat": 33.6682,
-      "lng": 130.3756,
-      "genres": [
-        "TECHNO",
-        "HOUSE",
-        "AMBIENT",
-        "LIVE"
-      ]
-    },
-    {
-      "name": "EACH STORY 2026",
-      "url": "https://techno-japan.media/festivals/each-story.html",
-      "start": "2026-10-03",
-      "end": "2026-10-04",
-      "venue": "Goko Ranch Auto Camp Ground",
-      "pref": "Nagano",
-      "lat": 35.9754,
-      "lng": 138.4556,
-      "genres": [
-        "AMBIENT"
-      ],
-      "tickets": "https://www.eachstory.net/event-details/each-story-2026-pass"
-    },
     {
       "name": "Labyrinth 2026",
       "url": "https://techno-japan.media/festivals/labyrinth.html",
