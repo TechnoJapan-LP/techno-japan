@@ -9250,3 +9250,66 @@ GSC を調べ直したところ、**当初の想定と違っていた**:
 **サイト全体でカナ「サウンドキャンプ」は1箇所も書かれていない**（name / desc / 記事本文すべて 0 件）。
 AGENTS.md「スプレッドシート『LP』が唯一のデータソース。コードにデータをハードコードしない」に従い、
 **コード側では対応しない**。ユーザー作業として依頼済み（FESTIVALS の DESC 冒頭にカナを1語入れる）。
+
+## 2026-10-07 タスク7: GA4 / Search Console の抽出を1コマンドにする
+
+### 実施
+`scripts/audit_analytics.mjs` を新設。2026-09-28 の分析はブラウザを手で動かして GSC 6表・GA4 5表を
+取得していた。毎月やるには手数が多すぎるので1コマンドにした。
+
+```
+node scripts/audit_analytics.mjs                 # GSC + GA4
+node scripts/audit_analytics.mjs --gsc           # GSC だけ
+node scripts/audit_analytics.mjs --ga4           # GA4 だけ
+node scripts/audit_analytics.mjs --range=28d     # 3m / 28d / 7d
+node scripts/audit_analytics.mjs --login         # 画面付きでログイン
+```
+
+- 出力は `reports/analytics/<実行日>/` に CSV + JSON + `summary.md`。
+  summary には各表の行数と GSC 合計（クリック / 表示 / CTR / 掲載順位）、**前回実行との比較**が入る。
+- ログイン済み Chrome プロファイルは **`~/.cache/techno-japan/analytics-profile`**。
+  認証クッキーを含むのでリポジトリには入れない。切れたら `--login`。
+- **preflight からは呼ばない**（ログインと外部ネットワークが要る）。依存パッケージも増やしていない。
+
+### コミット
+- `feat(analytics): GA4 / Search Console の抽出を1コマンドにする（分析タスク7）`
+
+### 検証（実データで動かして確認）
+```
+GSC 28d query: 478行 / 合計 クリック438 表示9680      GA4 28d all-pages-and-screens: 101行
+GSC 28d page: 263行                                   GA4 28d landing-page: 124行
+GSC 28d country: 109行 / device: 3行 / date: 28行      GA4 28d top-events: 13行 ほか
+```
+CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh` ✅ 全49件成功。
+
+### ★ Claude が見つけて直した不具合（4件）
+1. **合計が全部 `-`**: `new RegExp('…\\s…')` の書き方だとテンプレートリテラル経由で
+   エスケープが1段落ち、`\s` が文字の `s` になっていた。正規表現リテラルに変更。
+2. **`SyntaxError: Invalid regular expression: missing /`**: 素のテンプレートリテラルでは
+   `\n` が**実際の改行**になり、正規表現リテラルが行をまたいで壊れる。
+   → **ブラウザへ送るコードはすべて `String.raw` で囲む**ことにした（ファイル冒頭と各所にコメント）。
+3. **GA4 が10行しか取れない**: ビューポート未設定で headless 既定の 800×600 になっており、
+   行数セレクタ（y=664）が**画面外**で CDP のクリックがどこにも当たっていなかった。
+   1440×1600 を明示し、クリック前に `scrollIntoView` して座標を取り直すようにした。**11行 → 109行**。
+4. **CSV のセルに改行が混入**: GA4 の列名はセル内で改行している。空白に潰す修正を入れたが、
+   その修正自体が 2 と同じ罠（`String.raw` でない）に嵌まり `/s+/g`（文字の s）になっていた。
+   `String.raw` 化して解消。**同じ罠を2回踏んだので、ファイル全体を機械的に点検する手順を残した**:
+   `String.raw` でないテンプレートリテラルにバックスラッシュが含まれていないか grep する。
+
+### 変更したパターン
+- 新規 `scripts/audit_analytics.mjs` のみ。既存ファイルは一切触っていない（preflight も未変更）。
+- 初回の出力 `reports/analytics/2026-10-07/` をコミットに含めた（次回の前回比の基準になる）。
+
+### 未確認の類似パターン
+- `--login` の画面付き起動は**未実行**（既存のログイン済みプロファイルを流用したため）。
+  次にログインが切れたときに初めて通る経路。
+- GA4 のレポートIDは UI 由来。Google の画面変更で 404 になりうる。そのときは画面から辿り直す
+  （`lifecycle-events` / `lifecycle-landing-page` は既に 404 になることを確認済みで、使っていない）。
+- GSC の「クエリ×ページ」の掛け合わせ（どのページがどのクエリで出ているか）は未対応。
+  今回は query と page を別々に取っている。
+
+### 次の担当への注意
+- **ブラウザへ送るコードを書くときは必ず `String.raw` を使うこと。** 2回踏んだ。
+  `evaluate(ws, \`…\`)` と書いた時点で `\s` `\d` `\n` が壊れる。
+- 月次の使い方: `node scripts/audit_analytics.mjs --range=28d` を月初に実行し、
+  `reports/analytics/<日付>/summary.md` の前回比を見る。
