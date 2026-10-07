@@ -9313,3 +9313,30 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
   `evaluate(ws, \`…\`)` と書いた時点で `\s` `\d` `\n` が壊れる。
 - 月次の使い方: `node scripts/audit_analytics.mjs --range=28d` を月初に実行し、
   `reports/analytics/<日付>/summary.md` の前回比を見る。
+
+## 2026-10-07 Ocult Mag ベンチマーク（設計のみ・実装は未着手）
+
+### 実施
+ユーザー指示で https://ocultmag.com/ を TOP・記事（PC/スマホ）で Techno Japan と同条件で計測し、
+`docs/design/BENCHMARK_OCULT_2026-10-07.md` に設計 WP-A〜D を書いた。Artifact にスクショを並べて提示。
+
+### コミット
+- `docs(design): Ocult Mag ベンチマークと適用設計 WP-A〜D`
+
+### 検証
+- 計測は headless Chrome（PC 1440 / スマホ 393、dpr 1/2）。自サイトは `Network.setBypassServiceWorker`。
+- 主要数値: TOP 1画面目のリンク Ocult 33 / TJ 6（スマホ 19 / 3）、TOP の写真 27 / 1、
+  記事末尾30%のリンク 62 / 6、記事の写真幅 Ocult 2種（100% / 50-50）/ TJ 3種（93 / 52 / 34%）。
+- 本番サイトには何も変更していない。
+
+### 変更したパターン
+- なし（文書と handoff のみ）。
+
+### 未確認の類似パターン
+- Ocult の「The weekend guide」は埋め込みが空のまま計測された（iframe 未読込の可能性）。本物の中身は未確認。
+- 記事は1本（Hahoe）だけで測った。Ocult の他カテゴリの記事型は未確認。
+- ONDO LAND 記事で excerpt と本文1段落目が同一（公開15本中1本）。生成側ガードは WP-A に含めた、未実装。
+
+### 次の担当への注意・判断待ち
+- **ユーザーの承認待ち**。WP-A（記事の頭・写真幅）→ B（TOP 1画面目）→ C（記事末尾）→ D（カード統一・告知バー）の順を提案。
+- 各 WP の前後を同じ probe（scratchpad `ocult/probe.mjs`。リンク数・写真数・最初の写真の y・本文幅）で測って並べること。
