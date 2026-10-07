@@ -1,5 +1,10 @@
 # Ocult Mag（香港）ベンチマーク — Techno Japan への適用設計
 
+> **2026-10-07 結論: WP-A をテスト環境（別ブランチ＋ローカルサーバー）で実装して実物を見せたところ、
+> ユーザー判断で「全て戻す。微妙」となり、ブランチごと破棄した。本番には一切出ていない。**
+> WP-B〜D も未着手のまま保留。この文書は「測った事実」と「やってみて却下された案」の記録として残す。
+> 次に記事レイアウトを触るときは、先にこの経緯を読むこと。
+
 2026-10-07。対象: https://ocultmag.com/ の TOP と記事（South Korea's Hahoe electronic music festival）。
 比較対象: https://techno-japan.media/ の TOP と記事（ONDO LAND 10/12）。
 計測は headless Chrome（PC 1440×900 dpr1 / スマホ 393×852 dpr2）。自サイトは SW を迂回して測った（§9-98）。
