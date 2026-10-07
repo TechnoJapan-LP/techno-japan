@@ -79,6 +79,20 @@
   opacity: 0; animation: fadeSlideUp 0.6s ease forwards; animation-delay: 0.5s;
   color: rgba(240,237,232,0.5); padding-bottom: 12px;
 }
+/* ⚠️ .page-header-inner（横並びの flex）の中に置かないこと。
+   中に入れると見出し・サブタイトルと同じ行に3列目として並ぶ。
+   flex: 0 0 100% を付けても max-width が hypothetical size を抑えるため
+   改行されない（2026-10-07 実測: PC で x=852 のまま）。header 直下に置く。 */
+.page-intro {
+  max-width: 62ch;
+  margin-top: 14px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.9;
+  opacity: .62;
+}
+.page-intro[hidden] { display: none; }
+@media (max-width: 640px) { .page-intro { font-size: 12px; margin-top: 12px; } }
 
 /* ===================== SEARCH & FILTER ===================== */
 .artists-toolbar {
@@ -403,6 +417,8 @@
     <h1 class="page-title">ARTISTS</h1>
     <div class="page-subtitle">DJS · PRODUCERS · SELECTORS</div>
   </div>
+  <p class="page-intro" data-intro-lang="ja">日本のテクノ／レイヴシーンで活動する DJ・プロデューサー・ライブアクトの一覧。<span id="artists-intro-count"></span>フェスの出演ラインナップとあわせて更新している。ジャンル（テクノ、ハウス、ミニマルほか）や名前で絞り込める。</p>
+  <p class="page-intro" data-intro-lang="en" hidden>A directory of the DJs, producers and live acts who play Japan&#39;s techno and rave scene. <span id="artists-intro-count-en"></span>Updated alongside festival lineups. Filter by genre (techno, house, minimal and more) or by name.</p>
 </header>
 
 <!-- ARTISTS LIST VIEW -->
@@ -869,6 +885,21 @@ function initSearchSort() {
 function bindCursorExpand() {
   if (window.tjBindCursorExpand) window.tjBindCursorExpand('.artist-card');
 }
+
+/* 冒頭の定義文。静的 HTML に日英どちらも置いてあるので、ここでは表示の切替と
+   件数の差し込みだけを行う。件数を HTML に直接書くとデータが変わったとき嘘になる。 */
+(function () {
+  var lang = (window.TJ_LANG === 'en') ? 'en' : 'ja';
+  document.querySelectorAll('.page-intro').forEach(function (el) {
+    el.hidden = el.getAttribute('data-intro-lang') !== lang;
+  });
+  var total = (typeof ARTISTS !== 'undefined' && ARTISTS.length) || 0;
+  if (!total) return;
+  var ja = document.getElementById('artists-intro-count');
+  var en = document.getElementById('artists-intro-count-en');
+  if (ja) ja.textContent = '現在' + total + '組を掲載し、';
+  if (en) en.textContent = total + ' artists listed. ';
+})();
 
 /* ========== INIT ========== */
 buildGenreNav();
