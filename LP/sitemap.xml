@@ -1639,6 +1639,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://techno-japan.media/en/articles/labyrinth-2026-info.html</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://techno-japan.media/en/articles/loa-lost-paradise-2026-info.html</loc>
     <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
@@ -3248,6 +3254,12 @@
   </url>
   <url>
     <loc>https://techno-japan.media/articles/japan-festival-2026-september.html</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/articles/labyrinth-2026-info.html</loc>
     <lastmod>2026-10-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
