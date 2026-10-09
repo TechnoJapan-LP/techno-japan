@@ -9523,6 +9523,9 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - **push 後に `gh workflow run "Publish pipeline"` を流して success を確認する**（cms.js を触ったため必須。結果はこの下に追記）。
+  → **実施済み（2026-10-09）**: Publish pipeline run 37929838994 **success**。デプロイ 37929786907 success。
+  本番実測: detail.css?v=43 に `.tj-artist-card` あり、article-fx.js?v=11 に除外あり、cms.html は cms.js?v=128 / cms.css?v=41 / article-shortcodes.js?v=6、
+  記事ページは detail.css?v=43 / article-fx.js?v=11 を参照。デプロイ後の Lighthouse CI も success（12:28 / 12:34 UTC）。
 - ユーザーへ: CMS は Cmd+Shift+R で強制リロード。
 - 残りのブロック（プルクオート／折りたたみ／表）は設計書 §2-2〜2-4。着手はユーザーの指示待ち。
 - 検査の中にブラウザ側コードをテンプレート文字列で埋め込んでいる箇所（check_cms_layout.mjs の PROBE）では正規表現のバックスラッシュが消える。split 等で書く。
