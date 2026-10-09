@@ -983,6 +983,38 @@
     1920,
     1280
   ],
+  "images/articles/treak-2026-info-1791559279478.webp": [
+    1500,
+    1000
+  ],
+  "images/articles/treak-2026-info-1791559296511.webp": [
+    1500,
+    1000
+  ],
+  "images/articles/treak-2026-info-1791559372110.webp": [
+    1000,
+    1500
+  ],
+  "images/articles/treak-2026-info-1791561934443.webp": [
+    1000,
+    1500
+  ],
+  "images/articles/treak-2026-info-1791562053587.webp": [
+    1500,
+    1000
+  ],
+  "images/articles/treak-2026-info-1791562139654.webp": [
+    1500,
+    1000
+  ],
+  "images/articles/treak-2026-info-1791562171983.webp": [
+    1000,
+    1500
+  ],
+  "images/articles/treak-2026-info.webp": [
+    1500,
+    1000
+  ],
   "images/artists/acid-pauli.webp": [
     1400,
     860
@@ -5229,6 +5261,134 @@
   ],
   "images/derivatives/card/articles/transcendence-2025-report-body06-bb8aecf6--e8b9976c-xs.webp": [
     192,
+    240
+  ],
+  "images/derivatives/card/articles/treak-2026-info--22021b49-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/articles/treak-2026-info--22021b49-md.webp": [
+    720,
+    480
+  ],
+  "images/derivatives/card/articles/treak-2026-info--22021b49-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/articles/treak-2026-info--22021b49-xs.webp": [
+    240,
+    160
+  ],
+  "images/derivatives/card/articles/treak-2026-info-1791559279478--6b833be1-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/articles/treak-2026-info-1791559279478--6b833be1-md.webp": [
+    720,
+    480
+  ],
+  "images/derivatives/card/articles/treak-2026-info-1791559279478--6b833be1-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/articles/treak-2026-info-1791559279478--6b833be1-xs.webp": [
+    240,
+    160
+  ],
+  "images/derivatives/card/articles/treak-2026-info-1791559296511--6b833be1-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/articles/treak-2026-info-1791559296511--6b833be1-md.webp": [
+    720,
+    480
+  ],
+  "images/derivatives/card/articles/treak-2026-info-1791559296511--6b833be1-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/articles/treak-2026-info-1791559296511--6b833be1-xs.webp": [
+    240,
+    160
+  ],
+  "images/derivatives/card/articles/treak-2026-info-1791559372110--3fb6581f-lg.webp": [
+    640,
+    960
+  ],
+  "images/derivatives/card/articles/treak-2026-info-1791559372110--3fb6581f-md.webp": [
+    480,
+    720
+  ],
+  "images/derivatives/card/articles/treak-2026-info-1791559372110--3fb6581f-sm.webp": [
+    320,
+    480
+  ],
+  "images/derivatives/card/articles/treak-2026-info-1791559372110--3fb6581f-xs.webp": [
+    160,
+    240
+  ],
+  "images/derivatives/card/articles/treak-2026-info-1791561934443--3fb6581f-lg.webp": [
+    640,
+    960
+  ],
+  "images/derivatives/card/articles/treak-2026-info-1791561934443--3fb6581f-md.webp": [
+    480,
+    720
+  ],
+  "images/derivatives/card/articles/treak-2026-info-1791561934443--3fb6581f-sm.webp": [
+    320,
+    480
+  ],
+  "images/derivatives/card/articles/treak-2026-info-1791561934443--3fb6581f-xs.webp": [
+    160,
+    240
+  ],
+  "images/derivatives/card/articles/treak-2026-info-1791562053587--94fdec8d-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/articles/treak-2026-info-1791562053587--94fdec8d-md.webp": [
+    720,
+    480
+  ],
+  "images/derivatives/card/articles/treak-2026-info-1791562053587--94fdec8d-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/articles/treak-2026-info-1791562053587--94fdec8d-xs.webp": [
+    240,
+    160
+  ],
+  "images/derivatives/card/articles/treak-2026-info-1791562139654--695be5b0-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/articles/treak-2026-info-1791562139654--695be5b0-md.webp": [
+    720,
+    480
+  ],
+  "images/derivatives/card/articles/treak-2026-info-1791562139654--695be5b0-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/articles/treak-2026-info-1791562139654--695be5b0-xs.webp": [
+    240,
+    160
+  ],
+  "images/derivatives/card/articles/treak-2026-info-1791562171983--ca8e267f-lg.webp": [
+    640,
+    960
+  ],
+  "images/derivatives/card/articles/treak-2026-info-1791562171983--ca8e267f-md.webp": [
+    480,
+    720
+  ],
+  "images/derivatives/card/articles/treak-2026-info-1791562171983--ca8e267f-sm.webp": [
+    320,
+    480
+  ],
+  "images/derivatives/card/articles/treak-2026-info-1791562171983--ca8e267f-xs.webp": [
+    160,
     240
   ],
   "images/derivatives/card/artists/acid-pauli--e3a524ad-lg.webp": [
