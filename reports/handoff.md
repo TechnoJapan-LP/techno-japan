@@ -9415,3 +9415,36 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - headless Chrome で `--window-size=390` を使っても幅は 390 にならない（本文が右に切れる絵になる。本番は壊れていない）。
   スマホ幅は `scripts/check_mobile_language_toggles.mjs` 方式（CDP `Emulation.setDeviceMetricsOverride`）で模擬すること。
 - 記事の article-fx（スクロール演出）は画面外の要素を透明にするので、スクリーンショット前に無効化が要る。
+
+## 2026-10-09 Lighthouse CI が落ちている原因（調査のみ・未修正）
+
+### 実施
+- 失敗はすべて **artists.html の CLS 0.155（上限 0.05）**。10/7 02:33 以降ほぼ毎回落ちている（10/9 02:36 の成功は、初回描画が 2.4 秒と遅く
+  全部まとめて描かれたための偶然）。他7ページと a11y / BP / SEO は合格。
+- 動いている要素は `#artists-grid`（カード一覧）。Lighthouse 報告書3本（10/7 02:07 変更前 / 10/7 03:19 / 10/9 10:08）を並べると、
+  **同じガタつきは変更前から 0.018 で存在**し、10/7 の `f45dfae8`「アーティスト一覧の冒頭に定義文を置く」で一覧が 80px 下がった後に 0.155 へ拡大した。
+- 仕組みは festivals.html が 8/19 に直したものと同じ（`e8f21068`）: **JS 無しでも見える静的リンク一覧（`.ssr-link-list`、137件）を
+  カード一覧に差し替える瞬間が CLS として記録される**。festivals.html は `html.tj-festivals-hydrating` で差し替え完了まで
+  一覧を `visibility:hidden` + `min-height` 確保にしているが、**artists.html にはこの保護が無い**（venues / news も無いが Lighthouse の対象外）。
+- 手元の Mac では再現しない（JS 無し→有りで一覧は 30px しか動かず、layout-shift も 0 件）。CI の Linux ランナーでだけ 150〜220px 相当になる。
+  Linux 側で何が差を生むかまでは特定していない（フォントの違いを疑ったが、Web フォント遮断でも Mac は 25px）。
+
+### コミット
+- なし（調査のみ）。この handoff 追記のみ。
+
+### 検証
+- `gh run view --log` で 4 run の assertion を比較、報告書 HTML から LHR JSON を取り出して `layout-shifts` / `fullPageScreenshot` の矩形を比較。
+- 手元: CDP で JS 有無・Web フォント遮断の4条件で一覧の位置を実測（545→575 / 538→563）。`npx lighthouse@12` 本番計測は CLS 0。
+
+### 変更したパターン
+- なし。
+
+### 未確認の類似パターン
+- `LP/venues.html` / `LP/news.html` / `LP/en/*.html` の各ハブも静的リンク一覧→カード差し替えの構造が同じで保護が無い（Lighthouse 対象外のため赤くはならない）。
+
+### 次の担当への注意・判断待ち
+- **修正案（ユーザー判断待ち、実装は Codex）**: festivals.html と同じ保護を artists.html（JA/EN）に入れる。
+  head 先頭で `html.tj-artists-hydrating` を付け、`#artists-list-view`（または `#artists-grid`）を `visibility:hidden; min-height` にし、
+  `.ssr-link-list` を `display:none`、`renderArtistsList()` 完了後にクラスを外す。EN は `enHubFromJa` で生成されるので JA だけ直せばよい。
+- 直したら Lighthouse は `gh workflow run lighthouse.yml` で手動実行して確認する（CI の Linux でしか再現しないため、手元の緑は証明にならない）。
+- 10/9 02:36 のように遅い回は偶然通る。1回の緑で直ったと判断しないこと。
