@@ -134,4 +134,17 @@ assert.throws(() => renderArticleShortcodes('[[pullquote| |X]]'), /本文が空/
 assert.doesNotMatch(renderArticleShortcodes('<p>[[pullquote|本文]]</p>').html, /<p>\s*<aside/);
 assert.equal(renderArticleShortcodes('[[pullquote|本文]][[pullquote|別の本文|出典]]').pullquotes, 2);
 
-console.log('article shortcodes: 61 assertions passed');
+const details = renderArticleShortcodes('<p>[[details|見出し]]</p><p>中身</p><p>[[/details]]</p>');
+assert.match(details.html, /<details class="tj-details">/);
+assert.match(details.html, /<summary class="tj-details-summary">見出し<\/summary>/);
+assert.match(details.html, /<div class="tj-details-body"><p>中身<\/p><\/div>/);
+assert.doesNotMatch(details.html, /\[\[/);
+assert.match(renderArticleShortcodes('[[details|A]]x[[/details]]').html, /<div class="tj-details-body">x<\/div>/);
+assert.match(renderArticleShortcodes('[[details|A]]<p>[[pullquote|本文]]</p>[[/details]]').html, /tj-details-body[\s\S]*tj-pullquote/);
+assert.match(renderArticleShortcodes('[[details|<b>見出し</b>]]x[[/details]]').html, /&lt;b&gt;見出し&lt;\/b&gt;/);
+assert.equal(details.details, 1);
+assert.throws(() => renderArticleShortcodes('[[details|A]]x'), /閉じ忘れ/);
+assert.throws(() => renderArticleShortcodes('[[details|A]][[details|B]]x[[/details]][[/details]]'), /入れ子/);
+assert.throws(() => renderArticleShortcodes('[[details|]]x[[/details]]'), /見出しが空/);
+
+console.log('article shortcodes: 72 assertions passed');

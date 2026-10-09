@@ -345,6 +345,12 @@ label .req-star{color:var(--accent);margin-left:4px}
 .ar-prev-body .tj-pullquote::after{margin:24px auto 0}
 .ar-prev-body .tj-pullquote-text{margin:0;font-family:var(--font-body);font-weight:200;font-size:clamp(22px,3vw,30px);line-height:1.45}
 .ar-prev-body .tj-pullquote-source{margin:14px 0 0;font-family:var(--font-mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;opacity:.6}
+.ar-prev-body .tj-details{margin:32px 0;border-top:1px solid rgba(240,237,232,.12);border-bottom:1px solid rgba(240,237,232,.12)}
+.ar-prev-body .tj-details-summary{list-style:none;cursor:pointer;display:flex;gap:14px;padding:16px 0;font-weight:500}
+.ar-prev-body .tj-details-summary::-webkit-details-marker{display:none}
+.ar-prev-body .tj-details-summary::before{content:'+';width:18px;font-family:var(--font-mono);color:var(--accent)}
+.ar-prev-body .tj-details[open]>.tj-details-summary::before{content:'−'}
+.ar-prev-body .tj-details-body{padding:0 0 20px 32px}
 .ar-prev-body .tj-artist-card.has-photo{display:grid;grid-template-columns:132px minmax(0,1fr);gap:8px 20px}
 .ar-prev-body .tj-artist-card-photo img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:4px}
 .ar-prev-body .tj-event-date{display:block;margin-bottom:6px;font-family:var(--font-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;opacity:.7}

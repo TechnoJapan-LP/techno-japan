@@ -9571,3 +9571,36 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
   detail.css?v=44 に `.tj-pullquote` あり、記事ページは detail.css?v=44 / article-fx.js?v=12。デプロイ後の Lighthouse CI: **success**。
 - 残りのブロック（折りたたみ／表）は設計書 §2-3 / 2-4。ユーザー指示待ち。
 - 文書と CMS の説明文は2箇所（ARTICLE_BODY_FEATURES.md / ARTICLE_BODY_HELP）。機能を足したら両方。
+
+## 2026-10-10 折りたたみ `[[details|見出し]] … [[/details]]`（記事ブロック 第3フェーズ）
+
+### 実施
+- 設計 `docs/design/ARTICLE_BLOCKS_2026-10-09.md` §2-3 を実装（**実装は Codex、追加指示 0 回**。設計・検証・git は Claude）。
+- `LP/article-shortcodes.js`: `<p>[[details|見出し]]</p> … <p>[[/details]]</p>`（素の形も可）→ `<details class="tj-details"><summary>…</summary><div class="tj-details-body">…</div></details>`。
+  他のショートコードより先に変換（中の event / pullquote はその後に変換される）。閉じ忘れ・入れ子・見出し空は throw。戻り値に `details` 件数。
+- `LP/detail.css`: `.tj-details` 一式（＋／−の印、上下の細線、中身の字下げ、スマホは字下げ無し）。`LP/article-fx.js` の reveal 対象に追加。
+- CMS: 「▾ 折りたたみ」ボタン（文を選択してから押すとその範囲が中身に。無ければ3行の雛形）。「？ 使い方」の文に項目追加、「まだ無いもの」から削除。cms.css にプレビューの見た目。
+- 版: `DETAIL_CSS_VERSION 44→45`、`ARTICLE_FX_JS_VERSION 12→13`、cms.js?v=131、cms.css?v=44、article-shortcodes.js?v=8。詳細ページ再生成。
+- 文書: ARTICLE_BODY_FEATURES.md（§3 追加・§8 削除）、ARTICLE_BODY_SPEC_FOR_AI.md（§3-5 追加・チェック項目）、スタイルガイド §8、設計書の状態、AUDIT §9-103。
+  共有ページ https://claude.ai/artifact/EHnmooVsUniY79t7TGLMCr を更新版に差し替え。
+
+### コミット
+- このエントリを含むコミット（上記＋再生成した詳細ページ 540 枚＋EN ハブ）。
+
+### 検証
+- `bash scripts/preflight.sh` **全49件成功**（2026-10-10、単独実行）。単体: shortcode 72 assertions。`node --check` 3 ファイル OK。
+- 実ブラウザ相当（CDP、実記事コピー）: 閉じた状態と開いた状態（中にリスト＋プルクオート）を PC 1280 / スマホ 390 で撮影。印・線・字下げ・中のブロック変換・横スクロール無しを確認。
+- 再生成後: 540 ページが detail.css?v=45、記事 32 枚が article-fx.js?v=13。JA/EN ハブ行数一致。
+
+### 変更したパターン
+- 記事本文ショートコード（event / calendar / artist-card / pullquote / details）。details は初の「範囲を囲む」型。
+
+### 未確認の類似パターン
+- **CMS の実機操作は未確認**（認証）: 文を選択 → 「▾ 折りたたみ」→ 見出し入力 → 挿入 → プレビューで開閉 → 保存 → 再表示。Cmd+Shift+R。
+- 実記事での使用 0 件。最初の記事で JA/EN を見る。
+- 折りたたみの中に画像を置いた場合の article-fx（figure 化）は単体では未確認。開いたときに観測される設計。
+
+### 次の担当への注意・判断待ち
+- push 後に Publish pipeline を手動実行して success を確認（cms.js 変更のため）。結果はこの下に追記。
+- 残りは「表」（設計書 §2-4）。使う記事が出てから。
+- 文書と CMS の説明文は2箇所（ARTICLE_BODY_FEATURES.md / ARTICLE_BODY_HELP）。今回も両方直した。

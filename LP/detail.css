@@ -138,6 +138,7 @@
   .article-body .tj-artist-card-name { font-size: 26px; }
   .article-body .tj-pullquote { margin: 40px 0; }
   .article-body .tj-pullquote-text { font-size: 20px; text-wrap: wrap; }
+  .article-body .tj-details-body { padding-left: 0; }
 }
 .article-body .tj-calendar {
   /* common.css のサイトナビ用 `nav` は固定表示。記事内のカレンダーは
@@ -378,6 +379,17 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 .article-body .tj-pullquote::after { margin: 24px auto 0; }
 .article-body .tj-pullquote-text { margin: 0; font-family: var(--font-body); font-weight: 200; font-size: clamp(22px, 3vw, 30px); line-height: 1.45; color: var(--text); word-break: keep-all; word-break: auto-phrase; overflow-wrap: anywhere; text-wrap: balance; }
 .article-body .tj-pullquote-source { margin: 14px 0 0; font-family: var(--font-mono); font-size: 10px; letter-spacing: .15em; text-transform: uppercase; opacity: .6; }
+/* 折りたたみ（開閉できる補足）。HTML 標準の details なので JS 不要。閉じた中身も検索エンジンは読む（AUDIT §9-103） */
+.article-body .tj-details { margin: 32px 0; border-top: 1px solid rgba(240,237,232,0.12); border-bottom: 1px solid rgba(240,237,232,0.12); }
+.article-body .tj-details-summary { list-style: none; cursor: pointer; display: flex; align-items: baseline; gap: 14px; padding: 16px 0; font-family: var(--font-body); font-weight: 500; font-size: 15px; letter-spacing: .02em; color: var(--text); word-break: keep-all; word-break: auto-phrase; overflow-wrap: anywhere; }
+.article-body .tj-details-summary::-webkit-details-marker { display: none; }
+.article-body .tj-details-summary::before { content: '+'; flex: 0 0 auto; width: 18px; font-family: var(--font-mono); font-size: 16px; line-height: 1; color: var(--accent); }
+.article-body .tj-details[open] > .tj-details-summary::before { content: '−'; }
+.article-body .tj-details-summary:hover { color: var(--accent); }
+.article-body .tj-details-summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.article-body .tj-details-body { padding: 0 0 20px 32px; }
+.article-body .tj-details-body > :first-child { margin-top: 0; }
+.article-body .tj-details-body > :last-child { margin-bottom: 0; }
 
 .article-body .entity-link { color: var(--accent); border-bottom: 1px dotted rgba(255,45,45,0.5); transition: border-bottom-color 0.2s ease; }
 .article-body .entity-link:hover { border-bottom-color: var(--accent); border-bottom-style: solid; }

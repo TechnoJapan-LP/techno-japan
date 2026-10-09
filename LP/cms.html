@@ -40,7 +40,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/vendor/leaflet-1.9.4/leaflet.css?v=2">
 <script src="/vendor/leaflet-1.9.4/leaflet.js?v=2"></script>
-<link rel="stylesheet" href="cms.css?v=43">
+<link rel="stylesheet" href="cms.css?v=44">
 <link rel="stylesheet" href="/vendor/quill-1.3.7/quill.snow.css?v=1">
 <script src="/vendor/quill-1.3.7/quill.min.js?v=2"></script>
 </head>
@@ -456,6 +456,7 @@
             <button type="button" class="ar-editor-tab" id="ar-entity-toggle" onclick="toggleEntityLinkMenu()" style="margin-left:auto" title="フェス/アーティスト/ヴェニューへのリンクを本文に挿入">＠ ID</button>
             <button type="button" class="ar-editor-tab" id="ar-event-toggle" onclick="openArticleEventForm()" title="記事本文にイベントカードを挿入">📦 イベントカード</button>
             <button type="button" class="ar-editor-tab" id="ar-pullquote-toggle" onclick="openArticlePullquoteForm()" title="本文の一文を大きく抜き出して見せるプルクオートを挿入">❝ プルクオート</button>
+            <button type="button" class="ar-editor-tab" id="ar-details-toggle" onclick="openArticleDetailsForm()" title="開閉できる補足（折りたたみ）を挿入">▾ 折りたたみ</button>
             <button type="button" class="ar-editor-tab" id="ar-calendar-toggle" onclick="insertArticleCalendar()" title="記事本文に開催カレンダーを挿入">📅 カレンダーを挿入</button>
             <button type="button" class="ar-editor-tab" id="ar-template-toggle" onclick="toggleTemplateMenu()" title="記事の雛形を挿入">📄 テンプレ</button>
             <button type="button" class="ar-editor-tab" id="ar-help-toggle" onclick="openArticleBodyHelp()" title="本文で使える機能の説明">？ 使い方</button>
@@ -571,7 +572,7 @@
   </div>
 </div>
 
-<script type="module" src="article-shortcodes.js?v=7"></script>
-<script src="cms.js?v=130" defer></script>
+<script type="module" src="article-shortcodes.js?v=8"></script>
+<script src="cms.js?v=131" defer></script>
 </body>
 </html>

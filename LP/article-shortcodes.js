@@ -1,5 +1,5 @@
 /*
- * Article shortcode parser/renderer, including event, artist-card, and pullquote blocks.
+ * Article shortcode parser/renderer, including event, artist-card, pullquote, and details blocks.
  *
  * This is an ES module so the Node build and the CMS can import the same
  * implementation.  The browser global is also exposed for a CMS script that
@@ -202,6 +202,12 @@ function renderPullquote(text, source = '', lang = 'en') {
   return `<aside class="tj-pullquote"><p class="tj-pullquote-text">${escapeHtml(quote)}</p>${attribution ? `<p class="tj-pullquote-source">— ${escapeHtml(attribution)}</p>` : ''}</aside>`;
 }
 
+function renderDetails(summary, innerHtml) {
+  const heading = String(summary || '').trim();
+  if (!heading) throw new Error('detailsの見出しが空です');
+  return `<details class="tj-details"><summary class="tj-details-summary">${escapeHtml(heading)}</summary><div class="tj-details-body">${innerHtml}</div></details>`;
+}
+
 function eventMonth(event) {
   return event.date.start ? event.date.start.slice(0, 7) : event.date.tba;
 }
@@ -227,6 +233,21 @@ function renderCalendar(events, range = null, lang = 'en') {
 
 function renderArticleShortcodes(source, { lang = 'en', festivalIds, festivalData, artistData } = {}) {
   const text = String(source || '');
+  let details = 0;
+  const detailsError = 'detailsの開始と終了が対応していません（[[/details]] の閉じ忘れ、または入れ子）';
+  const replaceDetails = (summary, innerHtml) => {
+    if (innerHtml.includes('[[details|')) throw new Error(detailsError);
+    details += 1;
+    return renderDetails(summary, innerHtml);
+  };
+  // detailsを最初に変換する。中の段落に書かれた[[event]]や[[artist-card]]は、
+  // その後の置換でそのまま変換される。
+  const detailsSource = text
+    .replace(/<p>\s*\[\[details\|([^\]]*)\]\]\s*<\/p>([\s\S]*?)<p>\s*\[\[\/details\]\]\s*<\/p>/g,
+      (_, summary, innerHtml) => replaceDetails(summary, innerHtml))
+    .replace(/\[\[details\|([^\]]*)\]\]([\s\S]*?)\[\[\/details\]\]/g,
+      (_, summary, innerHtml) => replaceDetails(summary, innerHtml));
+  if (detailsSource.includes('[[details|') || detailsSource.includes('[[/details]]')) throw new Error(detailsError);
   const events = parseEvents(text);
   const artistCards = [];
   ARTIST_CARD_RE.lastIndex = 0;
@@ -259,7 +280,7 @@ function renderArticleShortcodes(source, { lang = 'en', festivalIds, festivalDat
   while ((match = CALENDAR_RE.exec(text)) !== null) calendarMatches.push({ raw: match[0], range: parseMonthFilter(match[1]) });
   if (calendarMatches.length && !events.length) throw new Error('calendarがあるのにeventカードが0件です');
   let eventIndex = 0;
-  let html = text.replace(EVENT_RE, (_, fields) => {
+  let html = detailsSource.replace(EVENT_RE, (_, fields) => {
     const event = parseEventFields(fields);
     event.index = eventIndex;
     event.slug = `${slugify(event.name)}-${eventIndex + 1}`;
@@ -280,9 +301,9 @@ function renderArticleShortcodes(source, { lang = 'en', festivalIds, festivalDat
     .replace(/<p>\s*(<nav class="tj-calendar[\s\S]*?<\/nav>)\s*<\/p>/g, '$1')
     .replace(/<p>\s*(<aside class="tj-artist-card[\s\S]*?<\/aside>)\s*<\/p>/g, '$1')
     .replace(/<p>\s*(<aside class="tj-pullquote[\s\S]*?<\/aside>)\s*<\/p>/g, '$1');
-  return { html, events, calendars: calendarMatches.length, artistCards, pullquotes: pullquotes.length };
+  return { html, events, calendars: calendarMatches.length, artistCards, pullquotes: pullquotes.length, details };
 }
 
-const API = { parseEventFields, parseEvents, parseMonthFilter, renderEvent, renderArtistCard, renderPullquote, renderCalendar, renderArticleShortcodes, safeUrl };
+const API = { parseEventFields, parseEvents, parseMonthFilter, renderEvent, renderArtistCard, renderPullquote, renderDetails, renderCalendar, renderArticleShortcodes, safeUrl };
 globalThis.TJArticleShortcodes = API;
-export { parseEventFields, parseEvents, parseMonthFilter, renderEvent, renderArtistCard, renderPullquote, renderCalendar, renderArticleShortcodes, safeUrl };
+export { parseEventFields, parseEvents, parseMonthFilter, renderEvent, renderArtistCard, renderPullquote, renderDetails, renderCalendar, renderArticleShortcodes, safeUrl };
