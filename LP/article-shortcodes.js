@@ -1,5 +1,5 @@
 /*
- * Article shortcode parser/renderer, including event and artist-card blocks.
+ * Article shortcode parser/renderer, including event, artist-card, and pullquote blocks.
  *
  * This is an ES module so the Node build and the CMS can import the same
  * implementation.  The browser global is also exposed for a CMS script that
@@ -8,6 +8,7 @@
 
 const EVENT_RE = /\[\[event\|([^\]]*)\]\]/g;
 const ARTIST_CARD_RE = /\[\[artist-card:([a-z0-9-]+)(?:\|([^\]]*))?\]\]/g;
+const PULLQUOTE_RE = /\[\[pullquote\|([^\]]*)\]\]/g;
 const CALENDAR_RE = /\[\[calendar(?:\|([^\]]+))?\]\]/g;
 const DATE_RE = /^(\d{4})-(\d{2})-(\d{2})$/;
 const TBA_RE = /^TBA\s+(\d{4})-(\d{2})$/i;
@@ -194,6 +195,13 @@ function renderArtistCard(id, note = '', lang = 'en', artistData = null) {
   return `<aside class="tj-artist-card${photo ? ' has-photo' : ''}" data-artist="${escapeHtml(id)}" itemscope itemtype="https://schema.org/Person">${photo}<div class="tj-artist-card-main">${body}</div></aside>`;
 }
 
+function renderPullquote(text, source = '', lang = 'en') {
+  const quote = String(text || '').trim();
+  const attribution = String(source || '').trim();
+  if (!quote) throw new Error('pullquoteの本文が空です');
+  return `<aside class="tj-pullquote"><p class="tj-pullquote-text">${escapeHtml(quote)}</p>${attribution ? `<p class="tj-pullquote-source">— ${escapeHtml(attribution)}</p>` : ''}</aside>`;
+}
+
 function eventMonth(event) {
   return event.date.start ? event.date.start.slice(0, 7) : event.date.tba;
 }
@@ -227,6 +235,13 @@ function renderArticleShortcodes(source, { lang = 'en', festivalIds, festivalDat
     artistCards.push(artistMatch[1]);
     if (artistData && !artistData[artistMatch[1]]) throw new Error(`artist-cardのIDが存在しません: ${artistMatch[1]}`);
   }
+  const pullquotes = [];
+  PULLQUOTE_RE.lastIndex = 0;
+  let pullquoteMatch;
+  while ((pullquoteMatch = PULLQUOTE_RE.exec(text)) !== null) {
+    const [quote, source = ''] = pullquoteMatch[1].split('|');
+    pullquotes.push({ text: quote.trim(), source: source.trim() });
+  }
   if (festivalIds !== undefined || festivalData !== undefined) {
     const known = new Set(festivalIds instanceof Set ? festivalIds : (festivalIds || []));
     if (festivalData && typeof festivalData === 'object') {
@@ -253,16 +268,21 @@ function renderArticleShortcodes(source, { lang = 'en', festivalIds, festivalDat
   });
   html = html.replace(CALENDAR_RE, (_, value) => renderCalendar(events, parseMonthFilter(value), lang));
   html = html.replace(ARTIST_CARD_RE, (_, id, note = '') => renderArtistCard(id, note, lang, artistData));
+  html = html.replace(PULLQUOTE_RE, (_, fields) => {
+    const [quote, source = ''] = fields.split('|');
+    return renderPullquote(quote, source, lang);
+  });
   // CMSのQuillは短いコードを<p>[[event|...]]</p>として保存する。
   // article/nav はpの子にできないため、ブロックの外側だけを取り除いて
   // ブラウザのHTMLパーサーによるDOMの組み替えを防ぐ。
   html = html
     .replace(/<p>\s*(<article class="tj-event[\s\S]*?<\/article>)\s*<\/p>/g, '$1')
     .replace(/<p>\s*(<nav class="tj-calendar[\s\S]*?<\/nav>)\s*<\/p>/g, '$1')
-    .replace(/<p>\s*(<aside class="tj-artist-card[\s\S]*?<\/aside>)\s*<\/p>/g, '$1');
-  return { html, events, calendars: calendarMatches.length, artistCards };
+    .replace(/<p>\s*(<aside class="tj-artist-card[\s\S]*?<\/aside>)\s*<\/p>/g, '$1')
+    .replace(/<p>\s*(<aside class="tj-pullquote[\s\S]*?<\/aside>)\s*<\/p>/g, '$1');
+  return { html, events, calendars: calendarMatches.length, artistCards, pullquotes: pullquotes.length };
 }
 
-const API = { parseEventFields, parseEvents, parseMonthFilter, renderEvent, renderArtistCard, renderCalendar, renderArticleShortcodes, safeUrl };
+const API = { parseEventFields, parseEvents, parseMonthFilter, renderEvent, renderArtistCard, renderPullquote, renderCalendar, renderArticleShortcodes, safeUrl };
 globalThis.TJArticleShortcodes = API;
-export { parseEventFields, parseEvents, parseMonthFilter, renderEvent, renderArtistCard, renderCalendar, renderArticleShortcodes, safeUrl };
+export { parseEventFields, parseEvents, parseMonthFilter, renderEvent, renderArtistCard, renderPullquote, renderCalendar, renderArticleShortcodes, safeUrl };

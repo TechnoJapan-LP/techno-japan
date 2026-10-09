@@ -123,4 +123,15 @@ assert.match(renderArticleShortcodes('[[artist-card:dj-nobu]]', { lang: 'ja', ar
 const longEnglishBio = { 'dj-nobu': { ...artistData['dj-nobu'], bioEn: 'word '.repeat(100) } };
 assert.match(renderArticleShortcodes('[[artist-card:dj-nobu]]', { lang: 'en', artistData: longEnglishBio }).html, /word…<\/p>/);
 
-console.log('article shortcodes: 52 assertions passed');
+const pullquote = renderArticleShortcodes('[[pullquote|本文]]');
+assert.match(pullquote.html, /<aside class="tj-pullquote">/);
+assert.match(pullquote.html, /class="tj-pullquote-text">本文<\/p>/);
+assert.doesNotMatch(pullquote.html, /tj-pullquote-source/);
+assert.match(renderArticleShortcodes('[[pullquote|本文|DJ Nobu]]').html, /tj-pullquote-source">— DJ Nobu<\/p>/);
+assert.match(renderArticleShortcodes('[[pullquote|<b>本文<\/b>]]').html, /&lt;b&gt;本文&lt;\/b&gt;/);
+assert.throws(() => renderArticleShortcodes('[[pullquote|]]'), /本文が空/);
+assert.throws(() => renderArticleShortcodes('[[pullquote| |X]]'), /本文が空/);
+assert.doesNotMatch(renderArticleShortcodes('<p>[[pullquote|本文]]</p>').html, /<p>\s*<aside/);
+assert.equal(renderArticleShortcodes('[[pullquote|本文]][[pullquote|別の本文|出典]]').pullquotes, 2);
+
+console.log('article shortcodes: 61 assertions passed');

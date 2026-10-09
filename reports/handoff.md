@@ -9529,3 +9529,42 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - ユーザーへ: CMS は Cmd+Shift+R で強制リロード。
 - 残りのブロック（プルクオート／折りたたみ／表）は設計書 §2-2〜2-4。着手はユーザーの指示待ち。
 - 検査の中にブラウザ側コードをテンプレート文字列で埋め込んでいる箇所（check_cms_layout.mjs の PROBE）では正規表現のバックスラッシュが消える。split 等で書く。
+
+## 2026-10-10 プルクオート `[[pullquote]]`（記事ブロック 第2フェーズ）＋ CMS「？ 使い方」パネル＋ 文書2本
+
+### 実施
+- **プルクオート**（設計 `docs/design/ARTICLE_BLOCKS_2026-10-09.md` §2-2、実装 Codex、追加指示 0 回）:
+  `LP/article-shortcodes.js` に `[[pullquote|本文|出典]]` → `<aside class="tj-pullquote">`。本文空は throw。`LP/detail.css` に見た目（既存の引用と同系統: 中央・細字・上下赤線＋出典行）、
+  既存 `.article-body blockquote` にも折り返し3指定＋balance。`LP/article-fx.js` の reveal 対象に追加。CMS に「❝ プルクオート」ボタン（選択文を初期値に、`|` `]` は全角へ正規化）。
+  `DETAIL_CSS_VERSION 43→44`、`ARTICLE_FX_JS_VERSION 11→12`、cms.css?v=42、article-shortcodes.js?v=7、cms.js?v=129。単体テスト +9（61 assertions）。
+- **「？ 使い方」パネル**（実装 Codex、追加指示 1 回）: 本文ツールバーにボタン。`cms.js` の `ARTICLE_BODY_HELP`（8 セクション 41 項目、
+  `docs/writing/ARTICLE_BODY_FEATURES.md` と同文）を開閉式で表示、検索で絞り込み、7 機能は「この機能を使う」で直接開く。cms.js?v=130、cms.css?v=43。
+- **文書**: `docs/writing/ARTICLE_BODY_FEATURES.md`（本文でできること一覧）、`docs/CMS_GUIDE.md`（CMS の使い方・共有用。同内容を Artifact ページ
+  https://claude.ai/artifact/E6z7BGLAsYdEe5u6SNWk1q に公開、閲覧はオーナーのみ）。スタイルガイド §8 にプルクオートの使いどころ。AUDIT §9-102。
+- `.gitignore` に `.scratch/` を追加（作業用。中身はコミットしない）。
+
+### コミット
+- このエントリを含むコミット（上記＋再生成した詳細ページ 540 枚＋EN ハブ）。
+
+### 検証
+- `bash scripts/preflight.sh` **全49件成功**（2026-10-10、単独実行）。
+  ※1回目は最後の「モバイルの言語切替」が 45 分止まった。私が同時に別の headless Chrome で撮影していたため。**preflight 中は他のブラウザ検査を動かさない**（前回の引き継ぎの注意の再発）。
+- 単体: shortcode 61 assertions。`node --check` cms.js / article-fx.js / article-shortcodes.js OK。
+- 実ブラウザ相当（CDP）:
+  - プルクオート: 実記事コピーに「出典なし／出典あり／既存の引用／英語」を並べ、PC 1280 と スマホ 390（dpr2）で撮影。中央・細字・赤線・出典行、文節折り返し、横スクロール無し。
+  - 「？ 使い方」: 認証を素通しにしたローカル表示で 1280 / 390。ダイアログが開き 8 セクション 41 項目、はみ出し無し。検索欄の素の白と `**` の残りを見つけて修正、再撮影で解消。
+- 再生成後: 540 ページが detail.css?v=44、記事 32 枚が article-fx.js?v=12。JA/EN ハブ行数一致。
+
+### 変更したパターン
+- 記事本文ショートコード（event / calendar / artist-card / pullquote）。blockquote の折り返し。
+- CMS 本文ツールバー（❝ プルクオート、？ 使い方）。
+
+### 未確認の類似パターン
+- **CMS の実機操作は未確認**（認証）: 「❝ プルクオート」→ 挿入 → プレビュー → 保存 → 再表示、「？ 使い方」→ 検索 → 「この機能を使う」。Cmd+Shift+R。
+- 既存「引用」の見た目のズレ: `article-fx.css` 24〜26行が blockquote::before を左の縦線に上書きし、detail.css の上の横線が消えている（AUDIT §9-102）。公開記事での使用 0 件。未修正。
+- プルクオートの実記事使用は 0 件。最初の記事で JA/EN を見る。
+
+### 次の担当への注意・判断待ち
+- push 後に Publish pipeline を手動実行して success を確認（cms.js 変更のため）。結果はこの下に追記。
+- 残りのブロック（折りたたみ／表）は設計書 §2-3 / 2-4。ユーザー指示待ち。
+- 文書と CMS の説明文は2箇所（ARTICLE_BODY_FEATURES.md / ARTICLE_BODY_HELP）。機能を足したら両方。

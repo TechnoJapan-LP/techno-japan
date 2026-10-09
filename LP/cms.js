@@ -1544,7 +1544,7 @@ function openArticleGeneratedPreview(){
   }
   const safeBody = String(previewBody).replace(/<script/gi, '&lt;script');
   win.document.open();
-  win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><link rel="stylesheet" href="/common.css?v=32"><link rel="stylesheet" href="/detail.css?v=43"><link rel="stylesheet" href="/article-fx.css?v=13"><style>/* 本番表示は common.js（カスタムカーソル）を読まないため、common.css の cursor:none だとカーソルが消える。ネイティブカーソルに戻す */*{cursor:auto !important}a,button,[role="button"],summary{cursor:pointer !important}</style></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${title}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=11"><\/script></body></html>`);
+  win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><link rel="stylesheet" href="/common.css?v=32"><link rel="stylesheet" href="/detail.css?v=44"><link rel="stylesheet" href="/article-fx.css?v=13"><style>/* 本番表示は common.js（カスタムカーソル）を読まないため、common.css の cursor:none だとカーソルが消える。ネイティブカーソルに戻す */*{cursor:auto !important}a,button,[role="button"],summary{cursor:pointer !important}</style></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${title}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=12"><\/script></body></html>`);
   win.document.close();
 }
 
@@ -1963,6 +1963,123 @@ function insertArticleCalendar(){
   insertArticleShortcode('[[calendar]]');
 }
 
+// この内容は docs/writing/ARTICLE_BODY_FEATURES.md と同じにする。片方だけ直さない。
+const ARTICLE_BODY_HELP = [
+  { title: '1. 文字の装飾', items: [
+    { name: '見出し', how: 'H2 / H3 / H4', note: 'H2 は大見出し（下に赤い線の演出）、H3 は小見出し、H4 は英字の小さなラベル。日本語の折り返しは文節単位（文字の途中で折れない）', action: null },
+    { name: '書体', how: '標準 / Bebas（英字の見出し風・大文字化）/ Mono / Serif / Condensed', note: '文字単位で変えられる。日本語は Bebas にならない（英字専用の書体）', action: null },
+    { name: '大きさ', how: '小 / 標準 / 大 / 特大', note: '', action: null },
+    { name: '太字・斜体・下線', how: 'B / I / U', note: '', action: null },
+    { name: '引用', how: '「引用」ボタン', note: '中央寄せ・細字・上下に赤い線。他人の言葉を引くときに使う。段落ごとに線が付くので、長い引用は1段落にまとめる', action: null },
+    { name: '揃え', how: '左 / 中央 / 右', note: '', action: null },
+    { name: '箇条書き', how: '番号付き / 点', note: '', action: null },
+    { name: 'リンク', how: '🔗', note: '外部サイトへ。サイト内のフェス・アーティスト・会場へは下の「＠ ID」の方が楽', action: null },
+    { name: '装飾を外す', how: '消しゴム', note: '', action: null },
+    { name: '行内で改行', how: 'Shift + Enter', note: '段落を分けずに改行する（住所や歌詞など）', action: null }
+  ]},
+  { title: '2. 画像', items: [
+    { name: '画像を入れる', how: 'ツールバーの画像ボタン、またはドラッグ＆ドロップ／ペースト', note: '入れた瞬間に端末側で webp に変換・縮小される（原寸のまま上がることはない）', action: null },
+    { name: '幅を選ぶ', how: '画像をクリック → 「レイアウト」: 中央・標準 / 左寄せ（2/3）/ 右寄せ（2/3）/ 全幅 / 小さめ', note: '「全幅」だけ画面端まで広がる', action: null },
+    { name: '切り抜く', how: '「トリミング」: なし / 16:10 / 4:3 / 1:1 ＋ 拡大率・位置（横・縦）', note: '人物の顔が切れるときは位置を動かす', action: null },
+    { name: '2枚並べる', how: '画像を選んで「2枚セット（50:50）」', note: '隣の画像と横並びになる', action: null },
+    { name: 'alt（説明文）', how: '英語版は「✨ 英語altを一括生成」', note: '日本語の alt は画像ごとに入力', action: null },
+    { name: '公開時に自動で', how: '画面幅ごとの派生画像（srcset）、幅・高さの属性（表示のガタつき防止）、遅延読み込み、スクロールで現れる演出、FIG.01 のような図版番号', note: '', action: null }
+  ]},
+  { title: '3. ブロック（本文に1行書くと、公開時にまとまった部品になる）', items: [
+    { name: 'イベントカード', how: '「📦 イベントカード」→ フォーム入力 → [[event|名前|日程|場所|URL|出演者|補足|フェスID]]', note: '日程・名前・場所・LINEUP・公式リンク。フェスIDを選ぶと写真と最新 LINEUP が自動で入り、フェス詳細へリンク', action: 'openArticleEventForm' },
+    { name: '開催カレンダー', how: '「📅 カレンダーを挿入」→ [[calendar]]（[[calendar|2026-12〜2027-02]] で月を絞れる）', note: 'その記事のイベントカードを月ごとに自動で一覧化。カードが0件だとエラー', action: 'insertArticleCalendar' },
+    { name: 'アーティストカード', how: '「＠ ID」→ アーティストを検索 → 行の右の「▣ カード」→ [[artist-card:dj-nobu]]（|一言 を足せる）', note: '写真・名前・ジャンル・拠点・経歴の冒頭・SNS。中身はスプレッドシート ARTISTS から。一言を書くと経歴の代わりに出る', action: 'toggleEntityLinkMenu' },
+    { name: 'プルクオート', how: '文を選択して「❝ プルクオート」→ [[pullquote|本文|出典]]', note: '本文の一文を中央・大きめ・上下赤線で見せる。出典は任意。自分の本文を抜き出すときに使う（他人の言葉は「引用」）', action: 'openArticlePullquoteForm' },
+    { name: 'ブロックの注意', how: '', note: 'ブロックは JS 不要の静的 HTML になる。存在しない ID を書くと公開（ビルド）が止まるので、下書きのうちにプレビューで確かめる。', action: null }
+  ]},
+  { title: '4. サイト内リンク', items: [
+    { name: 'フェス・アーティスト・会場・記事へリンク', how: '「＠ ID」または本文で @ を打つ → 名前で検索', note: '文中に名前入りのリンクが入る', action: 'toggleEntityLinkMenu' },
+    { name: 'アーティスト名の自動リンク', how: '何もしない', note: '公開時に、本文中のアーティスト名（ARTISTS に登録済み、3文字以上）が自動にアーティストページへリンクされる。誤爆しやすい一般語は除外リストあり', action: null }
+  ]},
+  { title: '5. 書くのを助ける機能', items: [
+    { name: '雛形', how: '「📄 テンプレ」: イベントレポート / インタビュー / ニュース / 週間まとめ / フェスまとめ / コラム', note: '', action: 'toggleTemplateMenu' },
+    { name: '集中モード', how: '「⛶ 集中モード」または ⌘⇧F。全画面で執筆、プレビューは右に固定できる', note: '', action: 'toggleFocusMode' },
+    { name: 'プレビュー', how: '「プレビュー」（横に並べて即時反映）', note: '', action: null },
+    { name: '本番表示', how: '「↗ 本番表示」（本番と同じ CSS/JS で別画面）', note: '', action: 'openArticleGeneratedPreview' },
+    { name: 'HTML を直接編集', how: '「HTML」タブ', note: '', action: null },
+    { name: '編集履歴', how: '「📜 履歴」', note: '', action: null },
+    { name: '保存', how: '⌘S。入力中の値は閉じて開き直しても保持される', note: '', action: null },
+    { name: '読了時間', how: '本文の長さから自動計算（手で入れた値があれば上書きしない）', note: '', action: null },
+    { name: '見出し候補・翻訳', how: 'AI でタイトル案、各欄の翻訳、本文全体の英訳', note: '', action: null }
+  ]},
+  { title: '6. 英語版', items: [
+    { name: '英語本文・タイトル・要約', how: '「🌐 ENGLISH VERSION」に英語の本文・タイトル・要約を入れると /en/articles/... に英語ページが出る', note: 'ブロック（[[event]] [[artist-card]] [[pullquote]]）は英語本文でも同じ書き方で、見出し語（LINEUP / ARTIST PAGE 等）とアーティストの経歴が英語になる。英語本文が無い記事は、英語ページも日本語本文のまま。', action: null }
+  ]},
+  { title: '7. 公開時に自動で起きること（本文から作られるもの）', items: [
+    { name: '要約', how: 'EXCERPT が空なら本文の冒頭 160 字が検索結果用の説明文になる', note: '', action: null },
+    { name: '構造化データ', how: '文字数から読了時間、本文のイベントカードから検索エンジン向けの Event 構造化データ', note: '', action: null },
+    { name: '回遊・切り替え', how: '関連記事、シェアボタン、ニュース一覧へ戻るリンク、JA/EN の切り替え', note: '', action: null },
+    { name: 'スクロール演出', how: '読み進めた量のバー、見出し・画像・ブロックがスクロールで現れる演出（動きを減らす設定の端末では止まる）', note: '', action: null }
+  ]},
+  { title: '8. まだ無いもの', items: [
+    { name: '折りたたみ（開閉できる補足）', how: '未実装。設計済み（[[details|見出し]] … [[/details]]）。指示があれば着手', note: '', action: null },
+    { name: '表', how: '未実装。設計済み（[[table|…]]）。使う記事が出てから', note: '', action: null },
+    { name: '動画の埋め込み', how: 'ボタン無し。HTML タブで <iframe> を書けば YouTube は表示できる（CSP で許可済み）が、公式の手順ではない', note: '', action: null },
+    { name: '脚注・目次', how: '無し', note: '', action: null }
+  ]}
+];
+
+function formatArticleBodyHelpText(text){
+  return esc(String(text || '')).replace(/(\[\[[^\]]+\]\]|⌘[^\s。]+)/g, '<code>$1</code>');
+}
+
+function openArticleBodyHelp(){
+  const existing = document.getElementById('ar-help-dialog');
+  if (existing?._close) existing._close();
+  const overlay = document.createElement('div');
+  overlay.id = 'ar-help-dialog';
+  overlay.className = 'dialog-overlay show';
+  overlay.style.zIndex = '2100';
+  overlay.innerHTML = `<div class="dialog-box" style="max-width:820px;max-height:86vh;display:flex;flex-direction:column">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px"><h3>？ 本文で使える機能</h3><button type="button" class="btn btn-sm" id="ar-help-close">✕</button></div>
+    <input id="ar-help-search" type="search" placeholder="例: カード、画像、Esc" style="width:100%;box-sizing:border-box;margin-bottom:12px">
+    <div id="ar-help-body" style="overflow:auto"></div>
+  </div>`;
+  document.body.appendChild(overlay);
+  const body = overlay.querySelector('#ar-help-body');
+  body.innerHTML = ARTICLE_BODY_HELP.map((section, sectionIndex) => `<details class="ar-help-sec"${sectionIndex === 0 ? ' open' : ''}>
+    <summary>${esc(section.title)}</summary>
+    <div class="ar-help-items">${section.items.map(item => `<div class="ar-help-item" data-search="${esc([item.name, item.how, item.note].join(' ').toLowerCase())}">
+      <div class="ar-help-name">${esc(item.name)}</div><div class="ar-help-how">${formatArticleBodyHelpText(item.how)}</div>${item.note ? `<div class="ar-help-note">${formatArticleBodyHelpText(item.note)}</div>` : ''}${item.action ? `<button type="button" class="btn btn-sm ar-help-go" data-action="${esc(item.action)}">この機能を使う</button>` : ''}
+    </div>`).join('')}</div>
+  </details>`).join('');
+  const close = () => {
+    overlay.remove();
+    document.removeEventListener('keydown', onEsc, true);
+  };
+  const onEsc = event => { if (event.key === 'Escape') close(); };
+  overlay._close = close;
+  overlay.querySelector('#ar-help-close').addEventListener('click', close);
+  overlay.addEventListener('click', event => { if (event.target === overlay) close(); });
+  document.addEventListener('keydown', onEsc, true);
+  overlay.querySelector('#ar-help-search').addEventListener('input', event => {
+    const query = event.target.value.trim().toLowerCase();
+    body.querySelectorAll('.ar-help-sec').forEach(section => {
+      let hits = 0;
+      section.querySelectorAll('.ar-help-item').forEach(item => {
+        const match = !query || item.dataset.search.includes(query);
+        item.hidden = !match;
+        if (match) hits++;
+      });
+      section.hidden = hits === 0;
+      if (query && hits) section.open = true;
+    });
+  });
+  body.addEventListener('click', event => {
+    const button = event.target.closest('.ar-help-go');
+    if (!button) return;
+    const action = button.dataset.action;
+    close();
+    if (typeof window[action] === 'function') window[action]();
+    else toast('この機能は開けませんでした', 'warning');
+  });
+}
+
 function openArticleEventForm(){
   document.getElementById('ar-event-dialog')?.remove();
   const overlay = document.createElement('div');
@@ -2019,6 +2136,48 @@ function openArticleEventForm(){
     close();
   });
   overlay.querySelector('#ar-event-name').focus();
+}
+
+function openArticlePullquoteForm(){
+  document.getElementById('ar-pullquote-dialog')?.remove();
+  const q = initArticleEditor();
+  const r = q?.getSelection();
+  const initialText = r && r.length ? q.getText(r.index, r.length).trim() : '';
+  const overlay = document.createElement('div');
+  overlay.id = 'ar-pullquote-dialog';
+  overlay.className = 'dialog-overlay show';
+  overlay.style.zIndex = '2100';
+  overlay.innerHTML = `<div class="dialog-box" style="max-width:620px">
+    <h3>❝ プルクオート</h3>
+    <p class="label-hint">本文の一文をそのまま抜き出して大きく見せます。1記事に1〜2本まで。</p>
+    <div class="form-grid" style="grid-template-columns:1fr;gap:10px">
+      <div class="form-group"><label>本文 *</label><textarea id="ar-pullquote-text" rows="4" placeholder="ふたつの顔、初のクロージング、そして10年ぶりの帰還。">${esc(initialText)}</textarea></div>
+      <div class="form-group"><label>出典（任意）</label><input id="ar-pullquote-source" type="text" placeholder="DJ Nobu"></div>
+    </div>
+    <div class="btn-row" style="justify-content:flex-end;margin-top:14px">
+      <button type="button" class="btn" id="ar-pullquote-cancel">キャンセル</button>
+      <button type="button" class="btn btn-accent" id="ar-pullquote-insert">本文に挿入</button>
+    </div>
+  </div>`;
+  document.body.appendChild(overlay);
+  const close = () => {
+    overlay.remove();
+    document.removeEventListener('keydown', onEsc, true);
+  };
+  const onEsc = (event) => { if (event.key === 'Escape') close(); };
+  overlay.querySelector('#ar-pullquote-cancel').addEventListener('click', close);
+  overlay.addEventListener('click', (event) => { if (event.target === overlay) close(); });
+  document.addEventListener('keydown', onEsc, true);
+  overlay.querySelector('#ar-pullquote-insert').addEventListener('click', () => {
+    const normalize = (value) => String(value || '').replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').replace(/\|/g, '｜').replace(/\]/g, '］').trim();
+    const text = normalize(overlay.querySelector('#ar-pullquote-text').value);
+    const source = normalize(overlay.querySelector('#ar-pullquote-source').value);
+    if (!text) return toast('本文を入力してください', 'warning');
+    insertArticleShortcode('[[pullquote|' + text + (source ? '|' + source : '') + ']]');
+    toast('プルクオートを挿入しました', 'success');
+    close();
+  });
+  overlay.querySelector('#ar-pullquote-text').focus();
 }
 
 /* プレビュー用: ショートコードをリンク表示に変換 */

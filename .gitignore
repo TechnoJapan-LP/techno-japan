@@ -23,3 +23,4 @@ validation-report.txt
 # 内部データベース）は絶対にコミットしないこと。git add -A でも
 # 拾われないよう、フォルダごと除外する（2026-08-19 / DB移行 Step 2）。
 data/migration/
+.scratch/

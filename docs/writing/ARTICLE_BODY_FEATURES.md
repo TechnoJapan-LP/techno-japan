@@ -1,6 +1,8 @@
 # 記事本文（BODY）でできること — 一覧（2026-10-10 時点）
 
 CMS の記事編集画面（本文エディタ）で使える機能と、公開時に自動で起きることをまとめた。
+**同じ内容は CMS の本文ツールバー「？ 使い方」からも見られる**（検索で絞り込み、「この機能を使う」でそのまま開く）。
+CMS 側の文は `LP/cms.js` の `ARTICLE_BODY_HELP` にある。機能を足したら、この文書とそちらの両方を直す。
 書き方のルールは [Techno_Japan_Web_Style_Guide.md](Techno_Japan_Web_Style_Guide.md) §8、ブロックの設計は
 [../design/ARTICLE_BLOCKS_2026-10-09.md](../design/ARTICLE_BLOCKS_2026-10-09.md)。
 

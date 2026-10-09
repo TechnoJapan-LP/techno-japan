@@ -136,6 +136,8 @@
   .article-body .tj-artist-card.has-photo { grid-template-columns: 1fr; gap: 10px; }
   .article-body .tj-artist-card-photo { width: 96px; order: -1; }
   .article-body .tj-artist-card-name { font-size: 26px; }
+  .article-body .tj-pullquote { margin: 40px 0; }
+  .article-body .tj-pullquote-text { font-size: 20px; text-wrap: wrap; }
 }
 .article-body .tj-calendar {
   /* common.css のサイトナビ用 `nav` は固定表示。記事内のカレンダーは
@@ -366,9 +368,16 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   font-family: var(--font-body); font-weight: 200; font-style: normal;
   font-size: clamp(22px, 3vw, 30px); line-height: 1.45;
   color: var(--text); opacity: 1; text-align: center; position: relative;
+  word-break: keep-all; word-break: auto-phrase; overflow-wrap: anywhere; text-wrap: balance;
 }
 .article-body blockquote::before { content: ''; display: block; width: 48px; height: 2px; background: var(--accent); margin: 0 auto 24px; }
 .article-body blockquote::after  { content: ''; display: block; width: 48px; height: 2px; background: var(--accent); margin: 24px auto 0; }
+/* プルクオート（本文の一文を抜き出して見せる）。見た目は上の blockquote と同系統。違いは出典行と <aside> の意味（AUDIT §9-102） */
+.article-body .tj-pullquote { margin: 56px 0; padding: 8px 0; text-align: center; }
+.article-body .tj-pullquote::before, .article-body .tj-pullquote::after { content: ''; display: block; width: 48px; height: 2px; background: var(--accent); margin: 0 auto 24px; }
+.article-body .tj-pullquote::after { margin: 24px auto 0; }
+.article-body .tj-pullquote-text { margin: 0; font-family: var(--font-body); font-weight: 200; font-size: clamp(22px, 3vw, 30px); line-height: 1.45; color: var(--text); word-break: keep-all; word-break: auto-phrase; overflow-wrap: anywhere; text-wrap: balance; }
+.article-body .tj-pullquote-source { margin: 14px 0 0; font-family: var(--font-mono); font-size: 10px; letter-spacing: .15em; text-transform: uppercase; opacity: .6; }
 
 .article-body .entity-link { color: var(--accent); border-bottom: 1px dotted rgba(255,45,45,0.5); transition: border-bottom-color 0.2s ease; }
 .article-body .entity-link:hover { border-bottom-color: var(--accent); border-bottom-style: solid; }
