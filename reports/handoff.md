@@ -9607,3 +9607,27 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
   デプロイ後の Lighthouse CI 37959048381 **success**。
 - 残りは「表」（設計書 §2-4）。使う記事が出てから。
 - 文書と CMS の説明文は2箇所（ARTICLE_BODY_FEATURES.md / ARTICLE_BODY_HELP）。今回も両方直した。
+
+## 2026-10-10 フォームの送信先を press@techno-japan.media に変更
+
+### 実施
+- ニュースレター登録と問い合わせ（formsubmit.co 経由）の送信先を `tatsuya25shibata@gmail.com` → `press@techno-japan.media` に変更（ユーザー指示。実装は Codex）。
+- 編集: LP/index.html / festivals.html / artists.html / venues.html / news.html / about.html（2箇所）/ en/about.html（2箇所）/ scripts/build-detail-pages.mjs（記事ページのニュースレター欄）。
+  EN ハブ 5 枚と記事ページは再生成で反映。LP 配下に旧アドレス 0 件、新アドレス 44 ファイル。
+
+### コミット
+- このエントリを含むコミット。
+
+### 検証
+- `bash scripts/preflight.sh` 全49件成功（2026-10-10、単独実行）。JA/EN ハブ行数一致。
+- **実機未確認**: フォーム送信と受信は本番でしか確かめられない。
+
+### 変更したパターン
+- `action="https://formsubmit.co/<宛先>"` の宛先（全フォーム共通）。
+
+### 未確認の類似パターン
+- GAS 側や GitHub Actions からの通知メールは別経路（今回は対象外。grep で `@techno-japan.media` 以外の通知先は無し）。
+
+### 次の担当への注意・判断待ち
+- **formsubmit.co は新しい宛先の有効化が必要**: デプロイ後にフォームを1回送信 → press@ に届く「Activate Form」のリンクを押す → もう1回送って受信を確認。押すまで届かない（ユーザーに案内済み）。
+- 有効化後に案内されるランダム文字列へ差し替えると、HTML にメールアドレスを書かずに済む（任意、未実施）。
