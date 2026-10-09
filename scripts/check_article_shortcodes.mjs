@@ -97,4 +97,30 @@ assert.match(renderArticleShortcodes('[[event|Rural|2027-05-01|Tokyo|https://exa
 }).html, /Article Act/);
 assert.doesNotMatch(renderArticleShortcodes('[[event|Rural|2027-05-01|Tokyo||||rural]]').html, /has-photo|tj-event-main/);
 
-console.log('article shortcodes: 39 assertions passed');
+const artistData = { 'dj-nobu': {
+  name: 'DJ Nobu', genre: 'Techno', place: 'CHIBA, JAPAN',
+  bio: '日本のテクノシーンを代表するDJ。長い経歴と豊かな経験を持つアーティスト。',
+  bioEn: 'A leading DJ in Japan’s techno scene with a long career and rich experience.',
+  imageHtml: '<img src="/images/dj-nobu.webp" alt="DJ Nobu">',
+  links: { instagram: 'https://instagram.com/djnobu' },
+} };
+const artistCard = renderArticleShortcodes('[[artist-card:dj-nobu]]', { lang: 'ja', artistData });
+assert.match(artistCard.html, /class="tj-artist-card has-photo"/);
+assert.match(artistCard.html, /href="\/artists\/dj-nobu\.html"/);
+assert.match(artistCard.html, /DJ Nobu/);
+assert.match(artistCard.html, /日本のテクノシーンを代表するDJ/);
+const artistNote = renderArticleShortcodes('[[artist-card:dj-nobu|この夜の<b>クロージング</b>]]', { lang: 'ja', artistData });
+assert.match(artistNote.html, /tj-artist-card-note/);
+assert.doesNotMatch(artistNote.html, /tj-artist-card-bio/);
+assert.match(renderArticleShortcodes('[[artist-card:dj-nobu]]', { lang: 'en', artistData }).html, /A leading DJ in Japan/);
+assert.match(renderArticleShortcodes('[[artist-card:dj-nobu]]', { lang: 'ja', artistData }).html, /日本のテクノシーン/);
+assert.match(artistNote.html, /&lt;b&gt;クロージング&lt;\/b&gt;/);
+assert.throws(() => renderArticleShortcodes('[[artist-card:unknown]]', { artistData }), /unknown/);
+assert.doesNotMatch(renderArticleShortcodes('<p>[[artist-card:dj-nobu]]</p>', { artistData }).html, /<p>\s*<aside/);
+assert.equal(renderArticleShortcodes('[[artist:dj-nobu]]', { artistData }).html, '[[artist:dj-nobu]]');
+const longBio = { 'dj-nobu': { ...artistData['dj-nobu'], bio: 'あ'.repeat(141) } };
+assert.match(renderArticleShortcodes('[[artist-card:dj-nobu]]', { lang: 'ja', artistData: longBio }).html, /あ{140}…/);
+const longEnglishBio = { 'dj-nobu': { ...artistData['dj-nobu'], bioEn: 'word '.repeat(100) } };
+assert.match(renderArticleShortcodes('[[artist-card:dj-nobu]]', { lang: 'en', artistData: longEnglishBio }).html, /word…<\/p>/);
+
+console.log('article shortcodes: 52 assertions passed');

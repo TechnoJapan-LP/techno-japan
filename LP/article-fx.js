@@ -54,7 +54,7 @@
     var imgs = [].slice.call(body.querySelectorAll('img'));
     var figIndex = 0;
     imgs.forEach(function(img){
-      if (img.closest('figure.fx-img') || img.closest('.tj-event')) return;   // 再実行対策（処理済みはスキップ）。イベントカード内のフェス写真は誌面画像ではないので figure 化しない
+      if (img.closest('figure.fx-img') || img.closest('.tj-event') || img.closest('.tj-artist-card')) return;   // 再実行対策（処理済みはスキップ）。イベントカード内のフェス写真、アーティストカードの写真も同様に誌面画像ではないので figure 化しない
       var p = img.closest('p');
       var textOnly = p && p.textContent.trim() === '' && p.querySelectorAll('img').length === 1;
       var host = textOnly ? p : img;           // 画像単独の<p>なら<p>ごと置換
@@ -154,7 +154,7 @@
     }
 
     /* ---------- 3. リビール対象の指定 ---------- */
-    var targets = [].slice.call(body.querySelectorAll('p, h2, h3, h4, blockquote, figure.fx-img, .tj-event, .tj-calendar'));
+    var targets = [].slice.call(body.querySelectorAll('p, h2, h3, h4, blockquote, figure.fx-img, .tj-event, .tj-calendar, .tj-artist-card'));
     var specs = document.querySelector('.article-specs');
     var excerpt = document.querySelector('.article-excerpt');
     if (specs) targets.unshift(specs);

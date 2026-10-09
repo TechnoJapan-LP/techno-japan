@@ -1379,6 +1379,23 @@ function buildArticleFestivalData(festivalRows){
   });
   return out;
 }
+function buildArticleArtistData(){
+  const out = {};
+  (readSheetCache('artist') || ARTIST_DB || []).forEach(row => {
+    if (!row.id) return;
+    const image = row.image ? webp(String(row.image).replace(/^\/+/, '')) : '';
+    out[String(row.id)] = {
+      name: row.name || row.id,
+      genre: row.genre || '',
+      place: [row.city || row.pref, row.country].filter(Boolean).join(', '),
+      bio: row.bio_ja || row.bio || '',
+      bioEn: row.bio_en || '',
+      links: { instagram: row.instagram, soundcloud: row.soundcloud, bandcamp: row.bandcamp, website: row.website },
+      ...(image ? { imageHtml: '<img src="/' + esc(image) + '" alt="" loading="lazy" decoding="async">' } : {})
+    };
+  });
+  return out;
+}
 
 function updateArticlePreview(html, force){
   const el = document.getElementById('ar-preview-content');
@@ -1409,6 +1426,7 @@ function updateArticlePreview(html, force){
         el.innerHTML = shortcodeApi.renderArticleShortcodes(entityHtml, {
           lang: document.documentElement.lang === 'en' ? 'en' : 'ja',
           festivalData: buildArticleFestivalData(festivalRows),
+          artistData: buildArticleArtistData(),
           ...(festivalIds.length ? { festivalIds } : {})
         }).html;
       } catch (error) {
@@ -1517,6 +1535,7 @@ function openArticleGeneratedPreview(){
       previewBody = shortcodeApi.renderArticleShortcodes(entityHtml, {
         lang: 'ja',
         festivalData: buildArticleFestivalData(festivalRows),
+        artistData: buildArticleArtistData(),
         ...(festivalIds.length ? { festivalIds } : {})
       }).html;
     } catch (error) {
@@ -1525,7 +1544,7 @@ function openArticleGeneratedPreview(){
   }
   const safeBody = String(previewBody).replace(/<script/gi, '&lt;script');
   win.document.open();
-  win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><link rel="stylesheet" href="/common.css?v=27"><link rel="stylesheet" href="/detail.css?v=36"><link rel="stylesheet" href="/article-fx.css?v=11"><style>/* 本番表示は common.js（カスタムカーソル）を読まないため、common.css の cursor:none だとカーソルが消える。ネイティブカーソルに戻す */*{cursor:auto !important}a,button,[role="button"],summary{cursor:pointer !important}</style></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${title}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=10"><\/script></body></html>`);
+  win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><link rel="stylesheet" href="/common.css?v=32"><link rel="stylesheet" href="/detail.css?v=43"><link rel="stylesheet" href="/article-fx.css?v=13"><style>/* 本番表示は common.js（カスタムカーソル）を読まないため、common.css の cursor:none だとカーソルが消える。ネイティブカーソルに戻す */*{cursor:auto !important}a,button,[role="button"],summary{cursor:pointer !important}</style></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${title}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=11"><\/script></body></html>`);
   win.document.close();
 }
 
@@ -1757,7 +1776,7 @@ function toggleEntityLinkMenu(caretIndex){
   menu.className = 'ar-template-menu';
   menu.style.minWidth = '300px';
   menu.innerHTML =
-    '<div style="padding:10px 14px 6px;font-family:var(--font-mono);font-size:.6rem;letter-spacing:.1em;color:var(--text3)">本文にリンクを挿入（名前で検索）</div>' +
+    '<div style="padding:10px 14px 6px;font-family:var(--font-mono);font-size:.6rem;letter-spacing:.1em;color:var(--text3)">本文にリンクやカードを挿入（名前で検索）</div>' +
     '<input id="ar-entity-search" type="text" placeholder="例: rural / DJ NOBU / womb" style="margin:0 10px 8px;padding:8px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:.85rem">' +
     '<div id="ar-entity-results" style="max-height:260px;overflow-y:auto"></div>';
   if (atCaret){
@@ -1784,7 +1803,9 @@ function toggleEntityLinkMenu(caretIndex){
     q = (q||'').toLowerCase().trim();
     const hits = opts.filter(o => !q || o.name.toLowerCase().includes(q) || o.id.includes(q)).slice(0, 30);
     results.innerHTML = hits.length
-      ? hits.map(o => '<button type="button" data-type="'+o.type+'" data-id="'+o.id+'" data-name="'+esc(o.name)+'">'+icon[o.type]+' '+esc(o.name)+' <span style="opacity:.4;font-size:.7em">'+o.type+'</span></button>').join('')
+      ? hits.map(o => o.type === 'artist'
+        ? '<span style="display:flex;align-items:center;gap:4px"><button type="button" data-type="artist" data-id="'+o.id+'" data-name="'+esc(o.name)+'" style="flex:1">'+icon[o.type]+' '+esc(o.name)+' <span style="opacity:.4;font-size:.7em">artist</span></button><button type="button" data-type="artist-card" data-id="'+o.id+'" data-name="'+esc(o.name)+'" title="カードを挿入" style="font-size:.7em;padding:4px 6px">▣ カード</button></span>'
+        : '<button type="button" data-type="'+o.type+'" data-id="'+o.id+'" data-name="'+esc(o.name)+'">'+icon[o.type]+' '+esc(o.name)+' <span style="opacity:.4;font-size:.7em">'+o.type+'</span></button>').join('')
       : '<div style="padding:10px 14px;color:var(--text3);font-size:.8rem">'+(opts.length ? '該当なし' : 'データ未読込 — 各セクションで一度 Refresh してください')+'</div>';
   }
   render('');
@@ -1819,7 +1840,12 @@ function toggleEntityLinkMenu(caretIndex){
       q.deleteText(caretIndex, 1, 'user');
       q.setSelection(caretIndex, 0, 'silent');
     }
-    insertEntityShortcode(b.dataset.type, b.dataset.id, b.dataset.name);
+    if (b.dataset.type === 'artist-card') {
+      insertArticleShortcode('[[artist-card:' + b.dataset.id + ']]');
+      toast(b.dataset.name + ' のカードを挿入しました', 'success');
+    } else {
+      insertEntityShortcode(b.dataset.type, b.dataset.id, b.dataset.name);
+    }
     menu.remove();
     document.removeEventListener('keydown', onEsc, true);
   });
@@ -2835,7 +2861,7 @@ function loadArtistDB(){
   return fetch(GAS_URL+'?action=get_sheet&sheet=ARTISTS')
     .then(r=>r.json()).then(d=>{
       if(d.status==='ok'&&d.rows&&d.rows.length){
-        ARTIST_DB=d.rows.map(r=>({id:r.id||'',name:r.name||''})).filter(a=>a.id);
+        ARTIST_DB=d.rows.map(r=>({id:r.id||'',name:r.name||'',image:r.image||'',bio:r.bio_ja||r.bio||'',bio_en:r.bio_en||'',genre:r.genre||'',city:r.city||r.pref||'',country:r.country||'',instagram:r.instagram||'',soundcloud:r.soundcloud||'',bandcamp:r.bandcamp||'',website:r.website||''})).filter(a=>a.id);
         ARTIST_LIST.length=0; ARTIST_DB.forEach(a=>ARTIST_LIST.push(a.id));
         artistDbLoaded=true;
       }

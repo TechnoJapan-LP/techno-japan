@@ -53,7 +53,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 42;
+const DETAIL_CSS_VERSION = 43;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -65,7 +65,7 @@ const DETAIL_CSS_VERSION = 42;
    落ちる場所と直す場所がずれていて原因に辿り着けなかった。AUDIT §9-58。
 
    article-fx.js / article-fx.css を変更したら、ここを上げる。 */
-const ARTICLE_FX_JS_VERSION = 10;
+const ARTICLE_FX_JS_VERSION = 11;
 const ARTICLE_FX_CSS_VERSION = 13;
 
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
@@ -370,6 +370,8 @@ function srcsetAttr(source, sizes) {
 }
 /* 関連カードは実測 324px 幅で表示される。960px を全端末へ配らない。 */
 const cardSrcsetAttr = (s) => srcsetAttr(s, '(max-width: 700px) 100vw, 360px');
+// 記事内アーティストカードの写真枠は detail.css の 132px / 96px と揃える。
+const artistCardSrcsetAttr = (s) => srcsetAttr(s, '(max-width: 600px) 96px, 132px');
 /* 関連記事のサムネは CSS で 120px（640px以下は 88px）に固定表示される。
    ここを cardSrcsetAttr（360px 想定）や原寸にすると、88px の枠に 1280〜1920px の
    画像を読み込むことになる。実測では記事1ページで 915KB の無駄が出ていた
@@ -677,7 +679,22 @@ function buildEventFestivalData({ festivals = [], editionsByFestival = new Map()
   }).filter(([, value]) => value.imageHtml || value.lineup));
 }
 
-function makeEntityResolver(data, festivalData = null) {
+function buildArtistCardData(artists = []) {
+  return Object.fromEntries(artists.map((a) => {
+    const image = a.image;
+    return [String(a.id), {
+      name: a.name,
+      genre: a.genre,
+      place: [a.city, a.country].filter(Boolean).join(', '),
+      bio: a.bio,
+      bioEn: a.bio_en,
+      links: a.links || {},
+      ...(image ? { imageHtml: `<img ${dimensionAttrs(cardImagePath(image))} src="/${cardImagePath(image)}"${artistCardSrcsetAttr(image)} alt="${esc(a.name)}" loading="lazy" decoding="async"${imagePositionStyle(a)}>` } : {}),
+    }];
+  }).filter(([id]) => id));
+}
+
+function makeEntityResolver(data, festivalData = null, artistData = null) {
   const table = { festival: data.FESTIVALS || [], artist: data.ARTISTS || [], venue: data.VENUES || [], article: data.ARTICLES || [] };
   const festivalIds = new Set(table.festival.map((x) => String(x.id || '').trim()).filter(Boolean));
   return (html, lang = 'en') => {
@@ -687,7 +704,7 @@ function makeEntityResolver(data, festivalData = null) {
     const dir = type === 'article' ? 'articles' : type + 's';
     return `<a class="entity-link" href="/${dir}/${id}.html">${esc(name)}</a>`;
     });
-    return renderArticleShortcodes(entityHtml, { lang, festivalIds, festivalData }).html;
+    return renderArticleShortcodes(entityHtml, { lang, festivalIds, festivalData, artistData }).html;
   };
 }
 
@@ -780,6 +797,7 @@ function validateArticleShortcodes(data) {
     article: new Set((data.ARTICLES || []).map((x) => String(x.id || '').trim()).filter(Boolean)),
   };
   const re = /\[\[(festival|artist|venue|article):([^\]|]+)(?:\|([^\]]+))?\]\]/g;
+  const artistCardRe = /\[\[artist-card:([a-z0-9-]+)(?:\|([^\]]*))?\]\]/g;
   const errors = [];
   for (const article of (data.ARTICLES || [])) {
     if (String(article.status || '').toLowerCase() === 'draft') continue;
@@ -792,6 +810,10 @@ function validateArticleShortcodes(data) {
         }
       }
       re.lastIndex = 0;
+      while ((match = artistCardRe.exec(text)) !== null) {
+        if (!table.artist.has(match[1])) errors.push(`${article.id || '(no-id)'}[${lang}]: artist-card:${match[1]}`);
+      }
+      artistCardRe.lastIndex = 0;
       try {
         renderArticleShortcodes(text, { lang, festivalIds: table.festival });
       } catch (error) {
@@ -1221,6 +1243,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   const updatedHtml = updatedDate && updatedDate !== String(a.date || '').trim()
     ? `<span class="article-updated">${lang === 'en' ? 'Updated: ' : '更新: '}${esc(fmtDateDots(updatedDate))}</span>`
     : '';
+  // 自動リンクを先に適用し、カードHTMLはその後に生成する（二重リンク防止）。
   const linkedBody = autolinkArtists(L.body || '', artists);
   const body = `<article class="article-detail">
   <div class="article-detail-inner">
@@ -2603,7 +2626,8 @@ function main() {
     lineupsByEdition.get(key).push(row);
   }
   const festivalData = buildEventFestivalData({ festivals: FESTIVALS, editionsByFestival, lineupsByEdition, artists: ARTISTS });
-  const resolveEntities = makeEntityResolver({ ARTISTS, FESTIVALS, VENUES, ARTICLES }, festivalData);
+  const artistData = buildArtistCardData(ARTISTS);
+  const resolveEntities = makeEntityResolver({ ARTISTS, FESTIVALS, VENUES, ARTICLES }, festivalData, artistData);
   validateArticleShortcodes({ ARTISTS, FESTIVALS, VENUES, ARTICLES });
 
   // CMS未接続のローカル確認用。通常ビルドには一切含めず、reports配下へ

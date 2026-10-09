@@ -1,17 +1,27 @@
 #!/usr/bin/env node
-/* CMS「本番表示」プレビューが、記事ビルドと同じショートコード/CSSを使うか検査する。 */
+/* CMS「本番表示」プレビューが、記事ビルドと同じショートコード/CSSを使うか検査する。
+ * 版の出どころは build-detail-pages.mjs の定数。べた書きすると本番とズレたまま緑になる（2026-10-09 に v36 で固定されていた）。 */
 import fs from 'node:fs';
 
 const cms = fs.readFileSync('LP/cms.js', 'utf8');
 const html = fs.readFileSync('LP/cms.html', 'utf8');
+const build = fs.readFileSync('scripts/build-detail-pages.mjs', 'utf8');
 const failures = [];
 const section = cms.match(/function openArticleGeneratedPreview\(\)\{([\s\S]*?)\n\}\n\n\/\* ---------- 記事テンプレート/);
 if (!section) failures.push('openArticleGeneratedPreview が見つからない');
 const source = section?.[1] || '';
 if (!source.includes('renderArticleShortcodes')) failures.push('本番表示プレビューでショートコード変換を呼んでいない');
 if (!source.includes('class="article-detail-inner"')) failures.push('本番表示プレビューが実ページと同じ article-detail-inner を使っていない');
-if (!source.includes('/common.css?v=27') || !source.includes('/detail.css?v=36') || !source.includes('/article-fx.css?v=11') || !source.includes('/article-fx.js?v=10')) {
-  failures.push('本番ページと同じCSS/JSバージョンを参照していない');
+const assetVersions = [
+  ['COMMON_CSS_VERSION', '/common.css'],
+  ['DETAIL_CSS_VERSION', '/detail.css'],
+  ['ARTICLE_FX_CSS_VERSION', '/article-fx.css'],
+  ['ARTICLE_FX_JS_VERSION', '/article-fx.js'],
+];
+for (const [name, asset] of assetVersions) {
+  const expected = (build.match(new RegExp(`const ${name} = (\\d+);`)) || [])[1] || '';
+  const actual = (source.match(new RegExp(`${asset.replace('.', '\\.') }\\?v=(\\d+)`)) || [])[1] || '';
+  if (!expected || actual !== expected) failures.push(`${asset} の版が不一致（期待 ${expected || '不明'} / cms.js の実値 ${actual || 'なし'}）`);
 }
 if (source.includes('<style>body{padding:80px 24px') || source.includes('.article-body{font-family:var(--font-body)')) {
   failures.push('本番ページの見出し改行を上書きする独自CSSが残っている');

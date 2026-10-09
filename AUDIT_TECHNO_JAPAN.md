@@ -7262,3 +7262,44 @@ layout-shift は 0 件。`npx lighthouse@12` で本番を測っても CLS 0。CI
 （`storage.googleapis.com/lighthouse-infrastructure…report.html`）の `window.__LIGHTHOUSE_JSON__` に
 LHR が丸ごと入っており、`audits['layout-shifts']`、`fullPageScreenshot.nodes`（最終位置）、
 `screenshot-thumbnails`（375ms 刻みのコマ）が取り出せる。変更前後の報告書を並べると原因と引き金を分けられる。
+
+### §9-101 記事本文に「アーティストカード」を追加（ショートコード方式の2例目）（2026-10-09）
+
+**何を足したか**: 本文に `[[artist-card:dj-nobu]]`（任意で `|一言`）と書くと、公開時に写真・名前・ジャンル・拠点・
+経歴の冒頭 140 字・SNS リンクをまとめたカード（`<aside class="tj-artist-card">`）になる。CMS の `@` メニューに
+「▣ カード」ボタンを足し、プレビューにも同じ絵が出る。設計は `docs/design/ARTICLE_BLOCKS_2026-10-09.md`。
+設計・検証は Claude、実装は Codex（設計書 → `codex exec` → 差分レビュー → 追加指示 4 回）。
+
+**なぜショートコードか**: イベントカード `[[event|…]]` と同じ経路に乗せると、エディタ（Quill 1.3.7）を改造せず、
+読者側に JS を足さず、公開ビルドと CMS プレビューが `LP/article-shortcodes.js` の1本を共有できる。
+カードの中身はスプレッドシート ARTISTS から公開時に引く（本文に名前や経歴を手書きさせない = データソースは1つ）。
+
+**既存を壊さない根拠**: 既存の `[[artist:ID]]`（文中リンク）の正規表現 `\[\[(festival|artist|venue|article):` は
+`artist-card:` に一致しない（`artist` の直後が `-`）。単体テストに「`[[artist:…]]` は変換されず残る」を入れた。
+
+**実装で発覚したこと（実ブラウザで撮って初めて分かった）**:
+1. **記事の画像演出 `article-fx.js` がカード内の写真を「本文の図版」として figure 化**し、横長写真を全幅（fx-bleed）に
+   広げて「FIG.01」キャプションを付けた。除外リスト（`img.closest('.tj-event')` の隣）に `.tj-artist-card` を追加。
+   **本文に `<img>` を持つブロックを新設するときは、必ずこの除外を見る。**
+2. スマホで写真 96px の横に経歴を並べると文の幅が約 190px になり読みにくい。写真を上（96px 正方形）に置き、文は全幅にした。
+3. 写真の `sizes` を関連カード用（360px）のまま使うと、132px の枠に大きすぎる候補を取りに行く。専用の
+   `artistCardSrcsetAttr`（`(max-width: 600px) 96px, 132px`）を切った（AGENTS「sizes は実測で決める」）。
+4. CMS 側の生データ行は経歴の列が `bio_ja`（整形後は `bio`）。両方を見ないとプレビューだけ経歴が空になる。
+5. 英語の経歴を 140 字で機械的に切ると単語の途中で切れる。半角スペースを含む文は最後のスペースで切る。
+
+6. **検査が「古い版」を固定していた。** preflight の「ARTICLE本番表示プレビュー」と「CMS フォームの重なり」は、
+   CMS の「本番表示プレビュー」が参照する CSS/JS の版を `detail.css?v=36` / `common.css?v=27` / `article-fx.css?v=11` /
+   `article-fx.js?v=10` と**べた書き**で期待していた。本番の記事ページは 43 / 32 / 13 / 11。つまり検査は
+   「本番と同じ版を使っているか」ではなく「2026-08 時点の版のままか」を見ていて、プレビューが古い CSS を読み続ける
+   状態を緑で固定していた（今回 detail.css を 43 に直したら赤くなって発覚）。
+   両検査とも `build-detail-pages.mjs` の定数を読んで照合する形に変え、cms.js 側も現在値に揃えた。
+   **版番号を検査にべた書きしない。出どころ（build の定数）を読む。** 同じ罠は §9-58（`?v` のべた書き）の検査側版。
+
+**参照切れの扱い**: 公開記事（draft 以外）に存在しない ID の `[[artist-card:…]]` があれば公開ビルドを止める
+（`validateArticleShortcodes`）。イベントカードのフェス ID と同じ。
+
+**版の更新**: `DETAIL_CSS_VERSION 42→43`、`ARTICLE_FX_JS_VERSION 10→11`、`cms.css?v=41`、`article-shortcodes.js?v=6`。
+CMS の「新しい窓でプレビュー」が参照する `/detail.css?v=36`（古いまま放置されていた）も 43 に揃えた。
+
+**未確認**: CMS の実機操作（`@` → カード挿入 → プレビュー → 保存 → 再表示）は認証が要るため、このセッションでは未実施。
+`reports/handoff.md` に「実機未確認」と明記。

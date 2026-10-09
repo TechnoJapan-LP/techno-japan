@@ -9481,3 +9481,48 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 - push 後の Lighthouse CI の結果を見る。1回の緑で判断せず、次のデプロイ後の回も見る（10/9 02:36 のような偶然の緑がある）。
 - もし CI でまだ CLS が出るなら、Linux 側の差（未特定）を疑う前に、`fullPageScreenshot.nodes` で動いた要素を再確認する。
+
+## 2026-10-09 記事本文に「アーティストカード」`[[artist-card:ID]]` を追加（記事ブロック 第1フェーズ）
+
+### 実施
+- 設計 `docs/design/ARTICLE_BLOCKS_2026-10-09.md` §2-1 を実装（**実装は Codex、設計・レビュー・検証・git は Claude**。設計書は scratchpad の design-artist-card.md、追加指示 6 回）。
+- `LP/article-shortcodes.js`: `[[artist-card:ID|一言]]` の解析・描画（`renderArtistCard`）。ARTISTS に無い ID は throw。英語の経歴は単語境界で 140 字に切る。
+- `scripts/build-detail-pages.mjs`: `buildArtistCardData`（写真は width/height 付き、`sizes` は 132px/96px 用の専用値）、`makeEntityResolver` に渡す、
+  `validateArticleShortcodes` に参照切れ検査。`DETAIL_CSS_VERSION 42→43`、`ARTICLE_FX_JS_VERSION 10→11`。
+- `LP/detail.css`: `.tj-artist-card` 一式（PC は写真 132px を左、スマホは写真 96px を上に置き文は全幅）。
+- `LP/article-fx.js`: カード内の写真を図版化（figure / fx-bleed / FIG.番号）の対象から除外、reveal 対象に追加。
+- `LP/cms.js`: `loadArtistDB` が写真・経歴・ジャンル・拠点・SNS も保持、`buildArticleArtistData`、プレビュー2箇所に `artistData`、
+  `@` メニューに「▣ カード」ボタン、「新しい窓でプレビュー」の CSS/JS 版を本番と同じ 32/43/13/11 に。`LP/cms.css` にプレビューの見た目、`LP/cms.html` の ?v（cms.css 41 / article-shortcodes.js 6 / cms.js 128）。
+- 検査: `scripts/check_article_shortcodes.mjs` に 13 本追加（52 assertions）。`check_cms_article_generated_preview.mjs` と `check_cms_layout.mjs` は
+  **版番号のべた書き（detail.css v36 等）をやめ、build の定数と照合**する形に変更（AUDIT §9-101 の 6）。
+- 文書: スタイルガイド §8 に「アーティストカードの使いどころ」、設計書を「第1フェーズ実装済み」に、AUDIT §9-101。
+
+### コミット
+- このエントリを含むコミット（上記 13 ファイル＋再生成した詳細ページ 540 枚＋EN ハブ）。
+
+### 検証
+- `bash scripts/preflight.sh` **全49件成功**（2026-10-09、途中 3 件→1 件→0 件。原因と直しは AUDIT §9-101 の 6 と「検査の罠」）。
+- 単体: `node scripts/check_article_shortcodes.mjs` 52 assertions 成功。`node --check` で cms.js / article-fx.js / article-shortcodes.js 構文 OK。
+- 実ブラウザ相当（headless Chrome + CDP、実記事 `otsukimi-2026-info.html` のコピーに dj-nobu のカード 2 枚＝経歴あり／一言ありを差し込み）:
+  - PC 1280px: 写真 132px・ジャンル／拠点・名前・経歴 4 行・リンク 4 本が1枚に収まる。一言ありは経歴の代わりに一言が出る。
+  - スマホ 390px（dpr2）: 写真 96px が上、文は全幅。横スクロール無し。
+  - 1回目の撮影で article-fx が写真を全幅に広げ FIG.01 を付けていた → 除外して再撮影で解消。
+- 再生成後: 全 540 ページが detail.css?v=43、記事 32 枚が article-fx.js?v=11。JA/EN ハブ行数一致（index 1199 / festivals 1448 / artists 932 / venues 1104 / news 1382）。
+
+### 変更したパターン
+- 記事本文のショートコード（event / calendar に artist-card が加わった）。本文に `<img>` を持つブロックは article-fx の除外リストに入れる。
+- CMS プレビュー（枠内／新しい窓）の両方にカードが出る。`@` メニューの行にリンク／カードの 2 ボタン。
+- preflight の 2 検査が版番号を build 定数から読む。
+
+### 未確認の類似パターン
+- **CMS の実機操作は未確認**（認証が要る）: `@` → 「▣ カード」→ 本文に `[[artist-card:…]]` が入る → プレビューに出る → 保存 → 再表示。
+  確認時は CMS を `?cb=<乱数>` 付きで開き **Cmd+Shift+R**。loadArtistDB は get_sheet の行から取るので、ARTISTS の列名（bio_ja / pref 等）が想定と違えば経歴・拠点が空で出る。
+- 実記事での使用は 0 件。最初に使う記事で、公開ページ（JA/EN）の見え方をもう一度見る。
+- `[[artist-card]]` を EN 本文（body_en）に書いた場合の英語経歴選択は単体テストのみ（実記事なし）。
+- Publish pipeline の手動実行は push 後に行う（下の「次の担当へ」）。
+
+### 次の担当への注意・判断待ち
+- **push 後に `gh workflow run "Publish pipeline"` を流して success を確認する**（cms.js を触ったため必須。結果はこの下に追記）。
+- ユーザーへ: CMS は Cmd+Shift+R で強制リロード。
+- 残りのブロック（プルクオート／折りたたみ／表）は設計書 §2-2〜2-4。着手はユーザーの指示待ち。
+- 検査の中にブラウザ側コードをテンプレート文字列で埋め込んでいる箇所（check_cms_layout.mjs の PROBE）では正規表現のバックスラッシュが消える。split 等で書く。

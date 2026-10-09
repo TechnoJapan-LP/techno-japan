@@ -1,5 +1,5 @@
 /*
- * Article shortcode parser/renderer.
+ * Article shortcode parser/renderer, including event and artist-card blocks.
  *
  * This is an ES module so the Node build and the CMS can import the same
  * implementation.  The browser global is also exposed for a CMS script that
@@ -7,6 +7,7 @@
  */
 
 const EVENT_RE = /\[\[event\|([^\]]*)\]\]/g;
+const ARTIST_CARD_RE = /\[\[artist-card:([a-z0-9-]+)(?:\|([^\]]*))?\]\]/g;
 const CALENDAR_RE = /\[\[calendar(?:\|([^\]]+))?\]\]/g;
 const DATE_RE = /^(\d{4})-(\d{2})-(\d{2})$/;
 const TBA_RE = /^TBA\s+(\d{4})-(\d{2})$/i;
@@ -165,6 +166,34 @@ function renderEvent(event, lang = 'en', festivalData = null) {
     (photo ? `<div class="tj-event-main">${content}</div>${photo}` : content) + '</article>';
 }
 
+function renderArtistCard(id, note = '', lang = 'en', artistData = null) {
+  const data = artistData ? artistData[id] : null;
+  const record = artistData ? data : { name: id };
+  if (!record) throw new Error(`artist-cardのIDが存在しません: ${id}`);
+  const name = record.name || id;
+  const genre = Array.isArray(record.genre) ? record.genre.join(', ') : record.genre;
+  const place = record.place;
+  const kicker = [genre, place].filter(Boolean).map(escapeHtml).join('<span class="tj-artist-card-sep"> · </span>');
+  const bioSource = lang === 'en' ? (record.bioEn || record.bio) : (record.bio || record.bioEn);
+  const bioText = String(bioSource || '');
+  const bioHead = bioText.slice(0, 140);
+  const wordBoundary = (lang === 'en' || bioText.includes(' ')) ? bioHead.lastIndexOf(' ') : -1;
+  const bio = bioText.length > 140 ? `${bioHead.slice(0, wordBoundary > 0 ? wordBoundary : bioHead.length)}…` : bioText;
+  const photo = record.imageHtml
+    ? `<a class="tj-artist-card-photo" href="/artists/${escapeHtml(id)}.html">${record.imageHtml}</a>` : '';
+  const links = ['instagram', 'soundcloud', 'bandcamp', 'website'].map((type) => {
+    const url = safeUrl(record.links?.[type]);
+    if (!url) return '';
+    return `<a class="tj-artist-card-link" href="${escapeHtml(url)}" rel="noopener" target="_blank">${type.toUpperCase()} ↗</a>`;
+  }).join('');
+  const body =
+    `<p class="tj-artist-card-kicker">ARTIST${kicker ? `<span class="tj-artist-card-sep"> · </span>${kicker}` : ''}</p>` +
+    `<h3 class="tj-artist-card-name" itemprop="name"><a href="/artists/${escapeHtml(id)}.html">${escapeHtml(name)}</a></h3>` +
+    (note ? `<p class="tj-artist-card-note">${escapeHtml(note)}</p>` : (bio ? `<p class="tj-artist-card-bio" itemprop="description">${escapeHtml(bio)}</p>` : '')) +
+    `<p class="tj-artist-card-links"><a class="tj-artist-card-link tj-artist-card-page" href="/artists/${escapeHtml(id)}.html">${lang === 'en' ? 'ARTIST PAGE →' : 'アーティストページ →'}</a>${links}</p>`;
+  return `<aside class="tj-artist-card${photo ? ' has-photo' : ''}" data-artist="${escapeHtml(id)}" itemscope itemtype="https://schema.org/Person">${photo}<div class="tj-artist-card-main">${body}</div></aside>`;
+}
+
 function eventMonth(event) {
   return event.date.start ? event.date.start.slice(0, 7) : event.date.tba;
 }
@@ -188,9 +217,16 @@ function renderCalendar(events, range = null, lang = 'en') {
   return `<nav class="tj-calendar" aria-label="${lang === 'ja' ? '開催カレンダー' : 'Event calendar'}">${months}</nav>`;
 }
 
-function renderArticleShortcodes(source, { lang = 'en', festivalIds, festivalData } = {}) {
+function renderArticleShortcodes(source, { lang = 'en', festivalIds, festivalData, artistData } = {}) {
   const text = String(source || '');
   const events = parseEvents(text);
+  const artistCards = [];
+  ARTIST_CARD_RE.lastIndex = 0;
+  let artistMatch;
+  while ((artistMatch = ARTIST_CARD_RE.exec(text)) !== null) {
+    artistCards.push(artistMatch[1]);
+    if (artistData && !artistData[artistMatch[1]]) throw new Error(`artist-cardのIDが存在しません: ${artistMatch[1]}`);
+  }
   if (festivalIds !== undefined || festivalData !== undefined) {
     const known = new Set(festivalIds instanceof Set ? festivalIds : (festivalIds || []));
     if (festivalData && typeof festivalData === 'object') {
@@ -216,15 +252,17 @@ function renderArticleShortcodes(source, { lang = 'en', festivalIds, festivalDat
     return renderEvent(event, lang, festivalData);
   });
   html = html.replace(CALENDAR_RE, (_, value) => renderCalendar(events, parseMonthFilter(value), lang));
+  html = html.replace(ARTIST_CARD_RE, (_, id, note = '') => renderArtistCard(id, note, lang, artistData));
   // CMSのQuillは短いコードを<p>[[event|...]]</p>として保存する。
   // article/nav はpの子にできないため、ブロックの外側だけを取り除いて
   // ブラウザのHTMLパーサーによるDOMの組み替えを防ぐ。
   html = html
     .replace(/<p>\s*(<article class="tj-event[\s\S]*?<\/article>)\s*<\/p>/g, '$1')
-    .replace(/<p>\s*(<nav class="tj-calendar[\s\S]*?<\/nav>)\s*<\/p>/g, '$1');
-  return { html, events, calendars: calendarMatches.length };
+    .replace(/<p>\s*(<nav class="tj-calendar[\s\S]*?<\/nav>)\s*<\/p>/g, '$1')
+    .replace(/<p>\s*(<aside class="tj-artist-card[\s\S]*?<\/aside>)\s*<\/p>/g, '$1');
+  return { html, events, calendars: calendarMatches.length, artistCards };
 }
 
-const API = { parseEventFields, parseEvents, parseMonthFilter, renderEvent, renderCalendar, renderArticleShortcodes, safeUrl };
+const API = { parseEventFields, parseEvents, parseMonthFilter, renderEvent, renderArtistCard, renderCalendar, renderArticleShortcodes, safeUrl };
 globalThis.TJArticleShortcodes = API;
-export { parseEventFields, parseEvents, parseMonthFilter, renderEvent, renderCalendar, renderArticleShortcodes, safeUrl };
+export { parseEventFields, parseEvents, parseMonthFilter, renderEvent, renderArtistCard, renderCalendar, renderArticleShortcodes, safeUrl };

@@ -32,6 +32,8 @@
 import http from 'node:http'; import { spawn, spawnSync } from 'node:child_process';
 import fs from 'node:fs'; import path from 'node:path';
 const ROOT=path.join(process.cwd(),'LP');
+const BUILD_DETAIL=fs.readFileSync(path.join(process.cwd(),'scripts','build-detail-pages.mjs'),'utf8');
+const DETAIL_CSS_VERSION=(BUILD_DETAIL.match(/const DETAIL_CSS_VERSION = (\d+);/)||[])[1]||'';
 const MIME={'.html':'text/html;charset=utf-8','.js':'text/javascript;charset=utf-8','.css':'text/css;charset=utf-8','.json':'application/json'};
 const server=http.createServer((req,res)=>{const u=new URL(req.url,'http://x');
  let p=decodeURIComponent(u.pathname); if(p==='/')p='/cms.html';
@@ -184,7 +186,8 @@ window.addEventListener('load',()=>setTimeout(()=>{
     calendar:generatedPreview.includes('class="tj-calendar"'),
     lineup:generatedPreview.includes('class="tj-event-lineup"')&&generatedPreview.includes('Probe Artist A'),
     detailInner:generatedPreview.includes('class="article-detail-inner"'),
-    productionCss:generatedPreview.includes('/detail.css?v=36')
+    // PROBE はテンプレート文字列。正規表現のバックスラッシュは消えるので使わない（2026-10-09 構文エラーで計測が止まった）
+    productionCssVersion:String(parseInt((generatedPreview.split('/detail.css?v=')[1]||''),10)||'')
   };
   out.公開パネル = box(document.querySelector('#sec-article .pub-section'));
   out.パネルの親 = box(document.querySelector('#sec-article .pub-section')?.parentElement);
@@ -249,7 +252,8 @@ if(d.イベントカード操作 && (d.イベントカード操作.officialLinkP
 if(d.イベント見出し着地 && !d.イベント見出し着地.見出し基準) failures.push('カレンダーリンクがカード直上の見出しへスクロールしない');
 if(d.集中モードからプレビュー表示 && (!d.集中モードからプレビュー表示.focus || !d.集中モードからプレビュー表示.preview || !d.集中モードからプレビュー表示.eventVisible)) failures.push('集中モード開始後にプレビューを表示できない');
 if(d.集中モードのイベント入力 && (!d.集中モードのイベント入力.visible || Number(d.集中モードのイベント入力.zIndex)<=2000 || !d.集中モードのイベント入力.boxVisible)) failures.push('集中モードのイベント入力ダイアログが前面に出ない');
-if(d.本番表示プレビュー && (!d.本番表示プレビュー.event || !d.本番表示プレビュー.calendar || !d.本番表示プレビュー.lineup || !d.本番表示プレビュー.detailInner || !d.本番表示プレビュー.productionCss)) failures.push('本番表示プレビューにイベントカード / カレンダー / 出演者 / 本番CSSが反映されない');
+if(d.本番表示プレビュー && (!d.本番表示プレビュー.event || !d.本番表示プレビュー.calendar || !d.本番表示プレビュー.lineup || !d.本番表示プレビュー.detailInner || !d.本番表示プレビュー.productionCssVersion)) failures.push('本番表示プレビューにイベントカード / カレンダー / 出演者 / 本番CSSが反映されない');
+if(d.本番表示プレビュー && d.本番表示プレビュー.productionCssVersion !== DETAIL_CSS_VERSION) failures.push(`本番表示プレビューのdetail.css版が不一致（期待 ${DETAIL_CSS_VERSION} / 実値 ${d.本番表示プレビュー.productionCssVersion || 'なし'}）`);
   if(failures.length){
   console.log('CMS のレイアウトに問題があります:');
   for(const f of failures) console.log('  ✗ '+f);
