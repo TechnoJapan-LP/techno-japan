@@ -9602,5 +9602,8 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - push 後に Publish pipeline を手動実行して success を確認（cms.js 変更のため）。結果はこの下に追記。
+  → **実施済み（2026-10-10）**: push 成功（フック preflight 全49件成功）、Publish pipeline run 37957650579 success、デプロイ 37957647580 success。
+  本番実測: cms.html は cms.js?v=131 / cms.css?v=44 / article-shortcodes.js?v=8、detail.css?v=45 に `.tj-details` あり、記事ページは detail.css?v=45 / article-fx.js?v=13。
+  デプロイ後の Lighthouse CI 37959048381 **success**。
 - 残りは「表」（設計書 §2-4）。使う記事が出てから。
 - 文書と CMS の説明文は2箇所（ARTICLE_BODY_FEATURES.md / ARTICLE_BODY_HELP）。今回も両方直した。
