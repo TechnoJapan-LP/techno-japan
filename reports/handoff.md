@@ -9372,3 +9372,46 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
      単独で回すと通る。落ちたら先に「同時に Chrome を動かしていないか」を疑う。
   4. テスト環境の作り方（worktree + serve_local.py）は使える。次回の UI 変更もこの手順で先に見せる。
 - WP-B〜D は未着手・保留。ユーザーの再指示があるまで進めない。
+
+## 2026-10-09 記事見出しの日本語折り返し（「クロージン｜グ」で割れる → 文節／読点で折る）
+
+### 実施
+- ユーザー指摘: 記事 h2「ふたつの顔、初のクロージング、そして10年ぶりの帰還。」が「クロージン／グ」で折れて「AIっぽい」。
+- `LP/detail.css`: `.article-body h2 / h3`、`.article-detail h1`、`.article-hero-overlay h1` に
+  `word-break: keep-all; word-break: auto-phrase; overflow-wrap: anywhere;` を追加。h1 は `text-wrap: balance` も追加。
+  `.article-hero-overlay h1` の `word-break: break-word` は差し替え（後勝ちで h1 に効かなかった）。
+- `LP/cms.css`: プレビュー／エディタの h2, h3 に同じ3指定（4箇所）。`LP/cms.html` の `cms.css?v=39 → 40`。
+- `scripts/build-detail-pages.mjs`: `DETAIL_CSS_VERSION 41 → 42`。詳細ページ 540 枚を再生成（差分は `?v` の1行のみ）。
+- 経緯・実測・設計理由は `AUDIT_TECHNO_JAPAN.md` §9-99。
+
+### コミュニケーション
+- 本番には**まだ出していない**（push していない）。LAN テスト環境 `http://192.168.10.121:8090/articles/otsukimi-2026-info.html`
+  （`PORT=8090 python3 scripts/serve_local.py`、このセッションで起動中）でスマホ実機から確認できる。
+
+### 検証
+- `bash scripts/preflight.sh` **全49件成功**（2026-10-09、単独実行）。
+- 実ブラウザ相当（headless Chrome + CDP で幅を模擬。実記事 `otsukimi-2026-info.html` のコピーに見出しを差し替え）:
+  - PC 1280px: h2 → 「ふたつの顔、初のクロージング、／そして10年ぶりの帰還。」 h1 → 「御月民 OTSUKIMI 2026／満月の夜に始まる、／北アルプスの麓の3日間」
+  - スマホ 390px（dpr2）: h2 → 「ふたつの顔、初の／クロージング、そして／10年ぶりの帰還。」 横スクロール無し（scrollWidth=390）
+  - 英語見出し「Behind the Decks: A Night at WOMB」: 変化なし（1行）
+  - JA / EN ハブの行数: 5枚とも一致（index 1199 / festivals 1448 / artists 918 / venues 1104 / news 1382）
+- 変更前の画像も同じ方法で撮って並べた（PC: クロージン／グ、始／まる で割れていたことを確認）。
+
+### 変更したパターン
+- 記事詳細（JA / EN）の h1・本文 h2・本文 h3 の折り返し。EN は英字なので挙動不変。
+- CMS の記事プレビュー（`.ar-prev-body`）と本文エディタ（`.ql-editor`）の h2・h3。
+
+### 未確認の類似パターン
+- **CMS プレビューは実機未確認**（認証が要る）。cms.css の値は detail.css と同じにしたが、CMS を開いて記事プレビューで
+  見出しの折れ方が変わったことは見ていない。確認時は `?cb=<乱数>` を付け、Cmd+Shift+R。
+- `LP/cms.js` の「新しい窓でプレビュー」（`document.write` 内）は `/detail.css?v=36` を参照している（今回触っていない）。
+  max-age=600 なので 10 分後には新しい CSS になるはずだが、古いまま見えたらこれが原因。cms.js を触る場合は Publish 経路の規則に従う。
+- Safari / Firefox は `auto-phrase` 未対応で keep-all（読点でだけ折る）になる。読点無しの長い見出しは
+  これまで通り文字単位で折れる（悪化はしない）。実機 Safari では未確認。
+- ハブ（news.html 等）のカード見出しは対象外。同じ指摘が出たら同じ3指定で対応できる。
+
+### 次の担当への注意・判断待ち
+- **push するかはユーザー判断**。push すれば deploy-pages.yml で本番に出る。
+- headless Chrome で `--window-size=390` を使っても幅は 390 にならない（本文が右に切れる絵になる。本番は壊れていない）。
+  スマホ幅は `scripts/check_mobile_language_toggles.mjs` 方式（CDP `Emulation.setDeviceMetricsOverride`）で模擬すること。
+- 記事の article-fx（スクロール演出）は画面外の要素を透明にするので、スクリーンショット前に無効化が要る。

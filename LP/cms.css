@@ -319,8 +319,8 @@ label .req-star{color:var(--accent);margin-left:4px}
 .ar-preview-header::before{content:'●';color:var(--accent)}
 .ar-prev-body{font-family:'DM Sans',sans-serif;font-weight:300;font-size:16px;line-height:1.85;color:rgba(240,237,232,0.85)}
 .ar-prev-body p{margin:0 0 24px}
-.ar-prev-body h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(24px,3vw,32px);text-transform:uppercase;line-height:1.1;margin:48px 0 16px;color:#f0ede8;font-weight:normal}
-.ar-prev-body h3{font-family:var(--font-body);font-weight:500;font-size:clamp(18px,2.2vw,21px);line-height:1.45;margin:2.4em 0 .6em;color:var(--text);text-wrap:balance}
+.ar-prev-body h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(24px,3vw,32px);text-transform:uppercase;line-height:1.1;margin:48px 0 16px;color:#f0ede8;font-weight:normal;word-break:keep-all;word-break:auto-phrase;overflow-wrap:anywhere}
+.ar-prev-body h3{font-family:var(--font-body);font-weight:500;font-size:clamp(18px,2.2vw,21px);line-height:1.45;margin:2.4em 0 .6em;color:var(--text);text-wrap:balance;word-break:keep-all;word-break:auto-phrase;overflow-wrap:anywhere}
 .ar-prev-body h4{font-family:'Space Mono',monospace;font-size:12px;letter-spacing:.15em;text-transform:uppercase;margin:36px 0 12px;color:#f0ede8}
 .ar-prev-body ul,.ar-prev-body ol{margin:0 0 24px 24px;padding:0}
 .ar-prev-body li{margin-bottom:8px}
@@ -520,10 +520,12 @@ body.ar-focus-open #ar-focus-preview{display:none !important}
 #ar-body-editor .ql-editor h2{
   font-family:'Bebas Neue',sans-serif; font-size:clamp(24px,3vw,32px);
   text-transform:uppercase; line-height:1.1; margin:48px 0 16px; color:var(--text); font-weight:normal;
+  word-break:keep-all; word-break:auto-phrase; overflow-wrap:anywhere; /* detail.css の .article-body h2 と同じ（読点でだけ折る） */
 }
 #ar-body-editor .ql-editor h3{
   font-family:var(--font-body); font-weight:500; font-size:clamp(18px,2.2vw,21px);
   line-height:1.45; margin:2.4em 0 .6em; color:var(--text); text-wrap:balance;
+  word-break:keep-all; word-break:auto-phrase; overflow-wrap:anywhere;
 }
 #ar-body-editor .ql-editor h4{
   font-family:'Space Mono',monospace; font-size:12px; letter-spacing:.15em;
