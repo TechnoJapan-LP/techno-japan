@@ -9448,3 +9448,33 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
   `.ssr-link-list` を `display:none`、`renderArtistsList()` 完了後にクラスを外す。EN は `enHubFromJa` で生成されるので JA だけ直せばよい。
 - 直したら Lighthouse は `gh workflow run lighthouse.yml` で手動実行して確認する（CI の Linux でしか再現しないため、手元の緑は証明にならない）。
 - 10/9 02:36 のように遅い回は偶然通る。1回の緑で直ったと判断しないこと。
+
+## 2026-10-09 artists.html のハイドレーション保護（Lighthouse CI の CLS 0.155 を止める）
+
+### 実施
+- 上の調査エントリの修正案を実装（**実装は Codex**、設計書は scratchpad の design-artists-cls.md、レビュー・検証・git は Claude）。
+- `LP/artists.html`: head で `html.tj-artists-hydrating` を付与、CSS で `#artists-list-view` を `visibility:hidden; min-height:calc(100vh - 420px)`、
+  `#artists-grid > .ssr-link-list` を `display:none`、INIT の `renderArtistsList()` を `try/finally` で包んでクラスを外す。festivals.html（`e8f21068`）と同じ型。
+- `LP/en/artists.html` は `build-detail-pages.mjs` で再生成（JA/EN とも 932 行）。
+- 経緯・原因・調べ方は `AUDIT_TECHNO_JAPAN.md` §9-100。
+
+### コミット
+- このエントリを含むコミット（artists.html JA/EN、AUDIT、handoff）。
+
+### 検証
+- `bash scripts/preflight.sh` 全49件成功（2026-10-09、単独実行）。
+- headless Chrome（CDP、412px / 1280px）で `http://localhost:8090/artists.html` と `/en/artists.html`:
+  - JS 無し: 保護クラス無し、`#artists-list-view` visible、静的一覧（.ssr-link-list）が display:grid で表示（従来どおり）
+  - JS 有り: カード 137 件、保護クラスは外れている、main visible。PC 1280 のスクリーンショットで一覧が描けていることを確認。
+- **CI の Lighthouse は push 後の自動実行（deploy 成功 → workflow_run）で確認する。手元では CLS が再現しないため、手元の緑は根拠にしない。**
+
+### 変更したパターン
+- artists ハブ（JA/EN）の初期描画: 静的一覧→カードの差し替え中は main を非表示＋高さ確保。
+
+### 未確認の類似パターン
+- venues.html / news.html / index.html は同じ構造で保護無し（Lighthouse 対象外）。今回は触っていない。
+- 実機スマホでの見え方（ちらつきの有無）は未確認。festivals で 8/19 から同じ型が動いているので同等と判断。
+
+### 次の担当への注意・判断待ち
+- push 後の Lighthouse CI の結果を見る。1回の緑で判断せず、次のデプロイ後の回も見る（10/9 02:36 のような偶然の緑がある）。
+- もし CI でまだ CLS が出るなら、Linux 側の差（未特定）を疑う前に、`fullPageScreenshot.nodes` で動いた要素を再確認する。

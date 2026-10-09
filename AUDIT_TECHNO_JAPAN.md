@@ -7222,4 +7222,43 @@ Spincoaster の画像は `storage.spincoaster.com` 配信なので、**画像が
 Chrome には同じものが `auto-phrase` として内蔵されており、依存ゼロで同じ結果になるので見送った。
 ハブ（news.html 等）のカード見出しは今回の対象外。
 
+### §9-100 Lighthouse CI が3日間落ち続けていた（artists.html の静的一覧→カード差し替え CLS）（2026-10-09）
 
+**何が起きたか**: 2026-10-07 02:33 から Lighthouse CI がほぼ毎回失敗。中身は常に
+`artists.html` の CLS（表示のガタつき）= **0.155**、上限 0.05。他の7ページと a11y / BP / SEO は合格。
+動いた要素は `#artists-grid`（カード一覧）。
+
+**原因**: festivals.html が 2026-08-19（`e8f21068`）に直したものと同じ。
+JS 無しでも見える静的リンク一覧（`.ssr-link-list`、137件）を `renderArtistsList()` が
+カード一覧へ差し替える瞬間が、Lighthouse の CLS として記録される。festivals.html には
+差し替え完了まで一覧を `visibility: hidden` にして高さを確保する保護
+（`html.tj-festivals-hydrating`）が入っていたが、**artists.html には入っていなかった**。
+
+**なぜ 10/7 から**: 変更前（10/7 02:07）の報告書にも同じガタつきは **0.018** で記録されていた。
+`f45dfae8`「アーティスト一覧の冒頭に定義文を置く」で一覧の位置が 497px → 577px に下がり、
+CLS の評価値（動いた面積 × 距離）が 0.155 へ跳ねた。**定義文は引き金であって原因ではない。**
+
+**手元では再現しなかった**: Mac の headless Chrome では、JS 無し→有りで一覧は 30px しか動かず
+layout-shift は 0 件。`npx lighthouse@12` で本番を測っても CLS 0。CI の Linux ランナーでだけ
+150〜220px 相当になる。Web フォント遮断でも Mac は 25px で、Linux 側の差の正体は未特定。
+**ハブの CLS は CI（Linux）の結果だけを根拠にする。手元の緑は証明にならない。**
+
+**偶然通る回がある**: 10/9 02:36 は初回描画が 2.4 秒と遅く、全部まとめて描かれたので 0 だった。
+1回の緑で「直った」と判断しないこと。
+
+**直し方**: artists.html に festivals.html と同じ保護を入れた（実装は Codex、設計・検証は Claude）。
+- head で `document.documentElement.classList.add('tj-artists-hydrating')`
+- `html.tj-artists-hydrating #artists-list-view { visibility: hidden; min-height: calc(100vh - 420px); }`
+  `html.tj-artists-hydrating #artists-grid > .ssr-link-list { display: none; }`
+  （ツールバーもハイドレーション中に 30px 伸びるので `main` ごと隠す）
+- INIT の `renderArtistsList()` を `try { … } finally { classList.remove(…) }` で包む。
+  例外が出ても非表示のまま残らない。`renderArtistsList()` 自体は検索・ジャンル切替で再利用されるので触らない。
+- EN 版は `enHubFromJa` で自動生成（JA/EN 932 行で一致）。
+
+**同じ構造で保護が無いもの**: venues.html / news.html / index.html（Lighthouse の対象外なので赤くならないだけ）。
+同じ指摘が出たら同じ保護を入れる。
+
+**調べ方のメモ**: `gh run view <id> --log` で assertion の行を見る。報告書 HTML
+（`storage.googleapis.com/lighthouse-infrastructure…report.html`）の `window.__LIGHTHOUSE_JSON__` に
+LHR が丸ごと入っており、`audits['layout-shifts']`、`fullPageScreenshot.nodes`（最終位置）、
+`screenshot-thumbnails`（375ms 刻みのコマ）が取り出せる。変更前後の報告書を並べると原因と引き金を分けられる。

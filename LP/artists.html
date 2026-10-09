@@ -46,6 +46,7 @@
 <link rel="dns-prefetch" href="https://formsubmit.co">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="common.css?v=32">
+<script>document.documentElement.classList.add('tj-artists-hydrating');</script>
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -150,6 +151,14 @@
 
 /* ===================== ARTISTS LIST VIEW ===================== */
 #artists-list-view { padding: 0 0 120px; }
+
+/* SSR の静的リンク一覧を、カード一覧へ差し替えるまで一時的に隠す。
+   先に表示すると、静的一覧→JSカード一覧の差し替えが Lighthouse の CLS として記録される
+   （2026-10-07〜 artists.html の CLS 0.155 で CI が失敗。festivals.html と同じ対策、AUDIT §9-100）。
+   静的リンク自体は HTML に残し、JavaScript 無効時のフォールバックとクローラー向けの導線を維持する
+   （ハイドレーション中のクラス: tj-artists-hydrating）。 */
+html.tj-artists-hydrating #artists-list-view { visibility: hidden; min-height: calc(100vh - 420px); }
+html.tj-artists-hydrating #artists-grid > .ssr-link-list { display: none; }
 
 .artists-grid {
   display: grid;
@@ -904,7 +913,12 @@ function bindCursorExpand() {
 /* ========== INIT ========== */
 buildGenreNav();
 initSearchSort();
-renderArtistsList();
+try {
+  renderArtistsList();
+} finally {
+  // 差し替えが終わったので静的一覧の隠蔽を解く（例外時も必ず戻す）
+  document.documentElement.classList.remove('tj-artists-hydrating');
+}
 </script>
 <!-- Service Worker registration -->
 <script>
