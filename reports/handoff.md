@@ -9629,5 +9629,8 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - GAS 側や GitHub Actions からの通知メールは別経路（今回は対象外。grep で `@techno-japan.media` 以外の通知先は無し）。
 
 ### 次の担当への注意・判断待ち
+- **本番反映済み（2026-10-10）**: push はユーザーの Publish（記事 treak-2026-info 追加）と前後して2回拒否 → フック preflight が「sitemap の記事数 16 / 期待 17」で止めた（正しい）→
+  生成物の差分と未追跡の生成ページを捨てて rebase → 再生成 → 再 push 成功、デプロイ 37965125250 success。本番の about / index / 記事ページのフォーム宛先はすべて press@techno-japan.media。
+  同じ Publish で CMS に「Unexpected token '<' … is not valid JSON」が出たが、GAS 側のコミット（06b24eb0）は成立し pipeline も success。返事の読み取りだけが失敗（AUDIT 未記載、対策は提案中: gasPostJson_ が JSON 以外の返事を受けたら GitHub 側の完了を自前で確認して表示する）。
 - **formsubmit.co は新しい宛先の有効化が必要**: デプロイ後にフォームを1回送信 → press@ に届く「Activate Form」のリンクを押す → もう1回送って受信を確認。押すまで届かない（ユーザーに案内済み）。
 - 有効化後に案内されるランダム文字列へ差し替えると、HTML にメールアドレスを書かずに済む（任意、未実施）。
