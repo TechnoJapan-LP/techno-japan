@@ -1,7 +1,7 @@
 # TECHNO JAPAN
 
 > 日本のテクノ / ハウスの独立メディア。フェスティバル95件・
-> アーティスト137名・会場22件・記事16本を日英で掲載し、
+> アーティスト137名・会場22件・記事17本を日英で掲載し、
 > 開催日・場所・出演者を構造化データ（schema.org）付きで公開している。
 
 ## 今後の開催予定（12件）
@@ -30,6 +30,7 @@
 
 ## 最新記事
 
+- 2026-10-10: [TREKs | 京都・久多の森が、3日間だけ"commune"になる](https://techno-japan.media/articles/treak-2026-info.html) — 10月10日の正午から12日の夕方まで。京都市左京区久多、渓流に沿って広がる大黒谷キャンプ場でTREKsが開かれる。ポルトガルからFlow Recordsを主宰するPenaを迎え、京都と各地のローカルシーンから27組。音楽のためだけではない3日間だ。 / [EN](https://techno-japan.media/en/articles/treak-2026-info.html)
 - 2026-10-09: [The Labyrinth | 標高1,000mの森で、日本を代表する野外レイヴが3日間の物語を組む。](https://techno-japan.media/articles/labyrinth-2026-info.html) — 10月10日の正午に始まり、12日まで。群馬・みなかみの宝台樹キャンプ場で、Mindgamesが主催するThe Labyrinthが開かれる。今年はARCHITECTURAL（REEKO）がふたつのセットを連続で、ATOM™ & TOBIAS.が初めて最終日のクロージングを務める。Petar Dundovのライブは10年ぶり。チケットはすでに完売している。 / [EN](https://techno-japan.media/en/articles/labyrinth-2026-info.html)
 - 2026-10-01: [ONDO LANDが10月12日に大阪駅5F「時空の広場」でテクノレイヴ！](https://techno-japan.media/articles/ondoland1012-2026-info.html) — 10月12日、月曜の祝日。JR大阪駅のホームを跨ぐ橋上駅舎の屋上、大阪ステーションシティ5F「時空の広場」が、18時から4時間だけフロアになる。出演はDaito Manabe、食品まつり a.k.a. Foodman、Kuniyuki Takahashi、machìnaの4組。うち3組がLIVE SETで臨む。営業中の駅の、最も人が行き交う場所で開かれるテクノレイヴだ。 / [EN](https://techno-japan.media/en/articles/ondoland1012-2026-info.html)
 - 2026-09-28: [【2026年10月】日本の音楽フェスティバル&レイヴ11選](https://techno-japan.media/articles/japan-festival-2026-october.html) — 紅葉が山を降りてくる、野外シーズンの最終盤。 10月は、一年でいちばん密度の高い月になる。群馬の森に3日間のストーリーを組むLabyrinth、10周年を迎える静岡のFRUE、京都の寺院と庭園を巡る100名限定のWonderfruit。定点として続くフェスティバルと、会場を明かさないフリーパーティが同じ月に並ぶ。 福岡から高知、静岡、長野まで、いま体験すべき11のフェスティバル&レイヴをピックアップ。 / [EN](https://techno-japan.media/en/articles/japan-festival-2026-october.html)
