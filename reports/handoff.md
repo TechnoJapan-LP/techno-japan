@@ -9566,5 +9566,8 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - push 後に Publish pipeline を手動実行して success を確認（cms.js 変更のため）。結果はこの下に追記。
+  → **実施済み（2026-10-10）**: push は1回目が「fetch first」で拒否（CI の sitemap/rss 再生成が先に入っていた）→ rebase（衝突なし）→ 再 push 成功（フック preflight 全49件成功）。
+  Publish pipeline run 37953679597 success、デプロイ 37953679778 success。本番実測: cms.html は cms.js?v=130 / cms.css?v=43 / article-shortcodes.js?v=7、
+  detail.css?v=44 に `.tj-pullquote` あり、記事ページは detail.css?v=44 / article-fx.js?v=12。デプロイ後の Lighthouse CI: **success**。
 - 残りのブロック（折りたたみ／表）は設計書 §2-3 / 2-4。ユーザー指示待ち。
 - 文書と CMS の説明文は2箇所（ARTICLE_BODY_FEATURES.md / ARTICLE_BODY_HELP）。機能を足したら両方。
