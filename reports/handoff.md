@@ -9467,6 +9467,9 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
   - JS 無し: 保護クラス無し、`#artists-list-view` visible、静的一覧（.ssr-link-list）が display:grid で表示（従来どおり）
   - JS 有り: カード 137 件、保護クラスは外れている、main visible。PC 1280 のスクリーンショットで一覧が描けていることを確認。
 - **CI の Lighthouse は push 後の自動実行（deploy 成功 → workflow_run）で確認する。手元では CLS が再現しないため、手元の緑は根拠にしない。**
+- **→ 結果（2026-10-09 11:16 UTC、run 37922698849）: 成功。** artists.html の CLS **0**（修正前 0.155）、ガタつきの記録 0 件。
+  初回描画 121ms / DCL 225ms と、失敗していた回（150ms / 275ms）と同じ「先に描いてから差し替える」条件での 0 なので、偶然の緑ではない。
+  性能 0.76 → 0.82、a11y / BP / SEO は 1.0。
 
 ### 変更したパターン
 - artists ハブ（JA/EN）の初期描画: 静的一覧→カードの差し替え中は main を非表示＋高さ確保。
