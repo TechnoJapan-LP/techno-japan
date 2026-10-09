@@ -8,6 +8,8 @@
  * GA4 のレポートIDは UI 由来で壊れやすい。404 になったら画面から辿って取り直すこと。
  * Search Console は sc-domain: ではなく URL プレフィックス
  * https://techno-japan.media/ のプロパティを使う（実測で権限エラーになるため）。
+ * --news は検索タイプ=ニュース（Google 検索のニュース面）、--gnews は Google ニュース（news.google.com）のレポートを取る。
+ * gnews の404はエラーではなく「まだデータが無い」。
  */
 
 import { spawn, execFileSync } from 'node:child_process';
@@ -31,6 +33,8 @@ function help() {
   console.log(`使い方:
   node scripts/audit_analytics.mjs                     # GSC + GA4
   node scripts/audit_analytics.mjs --gsc               # GSC だけ
+  node scripts/audit_analytics.mjs --gsc --news       # 検索タイプ=ニュースも取る（Google ニュース掲載の実測）
+  node scripts/audit_analytics.mjs --gnews             # Google ニュース（news.google.com）のレポートも取る
   node scripts/audit_analytics.mjs --ga4               # GA4 だけ
   node scripts/audit_analytics.mjs --range=28d         # 3m / 28d / 7d
   node scripts/audit_analytics.mjs --login             # 画面付きでログイン
@@ -40,7 +44,9 @@ function help() {
 const args = process.argv.slice(2);
 if (args.includes('--help') || args.includes('-h')) { help(); process.exit(0); }
 const loginOnly = args.includes('--login');
-const onlyGsc = args.includes('--gsc');
+const news = args.includes('--news');
+const gnews = args.includes('--gnews');
+const onlyGsc = args.includes('--gsc') || news || gnews;
 const onlyGa4 = args.includes('--ga4');
 const rangeArg = args.find(a => a.startsWith('--range='))?.slice(8) || '3m';
 if (!['3m', '28d', '7d'].includes(rangeArg)) throw new Error('--range は 3m / 28d / 7d のいずれかです');
@@ -213,16 +219,49 @@ function rangeInfo() {
   return { days, gsc: rangeArg === '3m' ? 'num_of_months=3' : `num_of_days=${days}`, start: ymd(start), end: ymd(today), label: rangeArg === '3m' ? '90d' : rangeArg };
 }
 
-function numeric(value) { return Number(String(value).replaceAll(',', '').replace('%', '').replace('万', '')) || 0; }
+function numeric(value) {
+  const text = String(value).replaceAll(',', '').replace('%', '');
+  const multiplier = text.includes('万') ? 1e4 : 1;
+  return Number(text.replace('万', '')) * multiplier || 0;
+}
 function formatTotal(value) { return value || '-'; }
 function pctChange(current, previous) { return previous ? `${((numeric(current) - numeric(previous)) / numeric(previous) * 100).toFixed(1)}%` : '—'; }
 
-async function previousGscTotals() {
+async function previousGscTotals(type = 'web') {
   try {
     const dirs = (await readdir(outRoot, { withFileTypes: true })).filter(x => x.isDirectory() && /^\d{4}-\d{2}-\d{2}$/.test(x.name)).map(x => x.name).filter(x => x < dateString).sort().reverse();
     if (!dirs[0]) return null;
-    return JSON.parse(await readFile(path.join(outRoot, dirs[0], `gsc-${rangeArg}.json`), 'utf8'));
+    const filename = type === 'news' ? `gsc-news-${rangeArg}.json` : type === 'gnews' ? `gnews-${rangeArg}.json` : `gsc-${rangeArg}.json`;
+    return JSON.parse(await readFile(path.join(outRoot, dirs[0], filename), 'utf8'));
   } catch { return null; }
+}
+
+async function extractGscTotals(ws) {
+  return evaluate(ws, String.raw`(() => {
+    const text = document.body.innerText.replace(/\n+/g, ' | ');
+    const m = text.match(/合計クリック数 \| ([\d.,万]+)[\s\S]{0,120}?合計表示回数 \| ([\d.,万]+)[\s\S]{0,120}?平均 CTR \| ([\d.]+%)[\s\S]{0,120}?平均掲載順位 \| ([\d.]+)/);
+    const find = (i) => (m ? m[i] : '');
+    return { clicks: find(1), impressions: find(2), ctr: find(3), position: find(4) };
+  })()`);
+}
+
+async function saveGscEmptyScreen(ws, dir, prefix, breakdown) {
+  const filename = `${prefix}-${rangeArg}-${breakdown}.txt`;
+  const text = await evaluate(ws, 'document.body.innerText.slice(0, 2000)');
+  await writeFile(path.join(dir, filename), `${text || ''}\n`);
+  console.log(`（画面の文言を ${filename} に保存）`);
+}
+
+async function gnewsHas404(ws) {
+  const text = await evaluate(ws, 'document.body.innerText').catch(() => '');
+  return text.includes('404');
+}
+
+function emptyGscResult(totals = {}) {
+  return { headers: [], rows: [], totals: {
+    clicks: totals.clicks || '0', impressions: totals.impressions || '0',
+    ctr: totals.ctr || '0%', position: totals.position || '',
+  } };
 }
 
 async function main() {
@@ -251,15 +290,68 @@ async function main() {
       return;
     }
     const range = rangeInfo();
-    const results = { gsc: {}, ga4: {} }; const failures = [];
-    if (!onlyGa4) for (const breakdown of GSC_BREAKDOWNS) {
+    const dir = path.join(outRoot, dateString); await mkdir(dir, { recursive: true });
+    const results = { gsc: {}, gnews: {}, ga4: {} }; const failures = [];
+    const gscTypes = news ? (args.includes('--gsc') ? ['web', 'news'] : ['news']) : (gnews && !args.includes('--gsc') ? [] : ['web']);
+    if (!onlyGa4) for (const type of gscTypes) {
+      results.gsc[type] = {};
+      for (const breakdown of GSC_BREAKDOWNS) {
+        try {
+          const searchType = type === 'news' ? '&search_type=news' : '';
+          const url = `${GSC_URL}?resource_id=${encodeURIComponent('https://techno-japan.media/')}&${range.gsc}&breakdown=${breakdown}${searchType}`;
+          await navigate(ws, url, 'document.body.innerText.includes("合計クリック数") || document.querySelectorAll("table").length > 0');
+          try {
+            results.gsc[type][breakdown] = await extractGsc(ws);
+          } catch (error) {
+            if (type !== 'news' || error.message !== 'GSC の行を取得できませんでした') throw error;
+            const totals = await extractGscTotals(ws);
+            results.gsc[type][breakdown] = emptyGscResult(totals);
+            console.log(`GSC[news] ${rangeArg} ${breakdown}: 0行（ニュース面の表示なし）`);
+            continue;
+          }
+          const t = results.gsc[type][breakdown].totals;
+          console.log(`GSC[${type}] ${rangeArg} ${breakdown}: ${results.gsc[type][breakdown].rows.length}行 / 合計 クリック${formatTotal(t.clicks)} 表示${formatTotal(t.impressions)}`);
+        } catch (error) {
+          if (error.loginExpired) throw error;
+          if (type === 'news' && error.message === '表が30秒以内に表示されませんでした') {
+            await saveGscEmptyScreen(ws, dir, 'gsc-news', breakdown);
+            results.gsc[type][breakdown] = emptyGscResult(await extractGscTotals(ws).catch(() => ({})));
+            console.log(`GSC[news] ${rangeArg} ${breakdown}: 0行（ニュース面の表示なし）`);
+            continue;
+          }
+          failures.push(`GSC[${type}] ${breakdown}: ${error.message}`); console.error(`GSC[${type}] ${rangeArg} ${breakdown}: 取得失敗`);
+        }
+      }
+    }
+    if (gnews) for (const breakdown of ['page', 'country', 'date']) {
       try {
-        const url = `${GSC_URL}?resource_id=${encodeURIComponent('https://techno-japan.media/')}&${range.gsc}&breakdown=${breakdown}`;
-        await navigate(ws, url, 'document.querySelectorAll("table tbody tr").length > 0');
-        results.gsc[breakdown] = await extractGsc(ws);
-        const t = results.gsc[breakdown].totals;
-        console.log(`GSC ${rangeArg} ${breakdown}: ${results.gsc[breakdown].rows.length}行 / 合計 クリック${formatTotal(t.clicks)} 表示${formatTotal(t.impressions)}`);
-      } catch (error) { if (error.loginExpired) throw error; failures.push(`GSC ${breakdown}: ${error.message}`); console.error(`GSC ${rangeArg} ${breakdown}: 取得失敗`); }
+        const url = `${GSC_URL.replace('/performance/search-analytics', '/performance/news')}?resource_id=${encodeURIComponent('https://techno-japan.media/')}&${range.gsc}&breakdown=${breakdown}`;
+        await navigate(ws, url, 'document.body.innerText.includes("合計クリック数") || document.querySelectorAll("table").length > 0');
+        try {
+          results.gnews[breakdown] = await extractGsc(ws);
+        } catch (error) {
+          if (error.message !== 'GSC の行を取得できませんでした') throw error;
+          const totals = await extractGscTotals(ws);
+          results.gnews[breakdown] = emptyGscResult(totals);
+          console.log(await gnewsHas404(ws)
+            ? `Google ニュース ${rangeArg} ${breakdown}: レポート無し（404 = Google ニュース経由の表示がまだ無い）`
+            : `Google ニュース ${rangeArg} ${breakdown}: 0行（Google ニュースの表示なし）`);
+          continue;
+        }
+        const t = results.gnews[breakdown].totals;
+        console.log(`Google ニュース ${rangeArg} ${breakdown}: ${results.gnews[breakdown].rows.length}行 / 合計 クリック${formatTotal(t.clicks)} 表示${formatTotal(t.impressions)}`);
+      } catch (error) {
+        if (error.loginExpired) throw error;
+        if (error.message === '表が30秒以内に表示されませんでした') {
+          await saveGscEmptyScreen(ws, dir, 'gnews', breakdown);
+          results.gnews[breakdown] = emptyGscResult(await extractGscTotals(ws).catch(() => ({})));
+          console.log(await gnewsHas404(ws)
+            ? `Google ニュース ${rangeArg} ${breakdown}: レポート無し（404 = Google ニュース経由の表示がまだ無い）`
+            : `Google ニュース ${rangeArg} ${breakdown}: 0行（Google ニュースの表示なし）`);
+          continue;
+        }
+        failures.push(`Google ニュース ${breakdown}: ${error.message}`); console.error(`Google ニュース ${rangeArg} ${breakdown}: 取得失敗`);
+      }
     }
     if (!onlyGsc) for (const report of GA4_REPORTS) {
       try {
@@ -269,18 +361,40 @@ async function main() {
         console.log(`GA4 ${range.label} ${report}: ${results.ga4[report].rows.length}行`);
       } catch (error) { if (error.loginExpired) throw error; failures.push(`GA4 ${report}: ${error.message}`); console.error(`GA4 ${range.label} ${report}: 取得失敗`); }
     }
-    const totalTables = Object.keys(results.gsc).length + Object.keys(results.ga4).length;
+    const totalGscTables = Object.values(results.gsc).reduce((total, typeResults) => total + Object.keys(typeResults).length, 0);
+    const totalTables = totalGscTables + Object.keys(results.gnews).length + Object.keys(results.ga4).length;
     if (!totalTables) { for (const failure of failures) console.error(`取得できなかった表: ${failure}`); process.exitCode = 1; return; }
-    const dir = path.join(outRoot, dateString); await mkdir(dir, { recursive: true });
-    for (const [breakdown, data] of Object.entries(results.gsc)) await writeFile(path.join(dir, `gsc-${rangeArg}-${breakdown}.csv`), csv(data.rows, data.headers));
+    for (const [type, typeResults] of Object.entries(results.gsc)) {
+      for (const [breakdown, data] of Object.entries(typeResults)) {
+        const prefix = type === 'news' ? 'gsc-news' : 'gsc';
+        await writeFile(path.join(dir, `${prefix}-${rangeArg}-${breakdown}.csv`), csv(data.rows, data.headers));
+      }
+    }
     for (const [report, data] of Object.entries(results.ga4)) await writeFile(path.join(dir, `ga4-${range.label}-${report}.csv`), csv(data.rows, data.headers));
-    if (Object.keys(results.gsc).length) await writeFile(path.join(dir, `gsc-${rangeArg}.json`), JSON.stringify(results.gsc, null, 2) + '\n');
+    if (results.gsc.web && Object.keys(results.gsc.web).length) await writeFile(path.join(dir, `gsc-${rangeArg}.json`), JSON.stringify(results.gsc.web, null, 2) + '\n');
+    if (results.gsc.news && Object.keys(results.gsc.news).length) await writeFile(path.join(dir, `gsc-news-${rangeArg}.json`), JSON.stringify(results.gsc.news, null, 2) + '\n');
+    for (const [breakdown, data] of Object.entries(results.gnews)) await writeFile(path.join(dir, `gnews-${rangeArg}-${breakdown}.csv`), csv(data.rows, data.headers));
+    if (Object.keys(results.gnews).length) await writeFile(path.join(dir, `gnews-${rangeArg}.json`), JSON.stringify(results.gnews, null, 2) + '\n');
     if (Object.keys(results.ga4).length) await writeFile(path.join(dir, `ga4-${range.label}.json`), JSON.stringify(results.ga4, null, 2) + '\n');
     const previous = await previousGscTotals();
-    const summary = [`# Analytics audit`, '', `- 実行日: ${dateString}`, `- 期間: ${rangeArg}（${range.start}〜${range.end}）`, '', '| 表 | 行数 |', '|---|---:|', ...Object.entries(results.gsc).map(([k,v]) => `| GSC ${k} | ${v.rows.length} |`), ...Object.entries(results.ga4).map(([k,v]) => `| GA4 ${k} | ${v.rows.length} |`), ''];
-    if (Object.keys(results.gsc).length) {
+    const previousNews = await previousGscTotals('news');
+    const previousGnews = await previousGscTotals('gnews');
+    const summary = [`# Analytics audit`, '', `- 実行日: ${dateString}`, `- 期間: ${rangeArg}（${range.start}〜${range.end}）`, '', '| 表 | 行数 |', '|---|---:|', ...Object.entries(results.gsc).flatMap(([type, typeResults]) => Object.entries(typeResults).map(([k,v]) => `| GSC ${type === 'news' ? 'news ' : ''}${k} | ${v.rows.length} |`)), ...Object.entries(results.gnews).map(([k,v]) => `| Google ニュース ${k} | ${v.rows.length} |`), ...Object.entries(results.ga4).map(([k,v]) => `| GA4 ${k} | ${v.rows.length} |`), ''];
+    if (results.gsc.web && Object.keys(results.gsc.web).length) {
       summary.push('| GSC 合計 | 値 | 前回比 |', '|---|---:|---:|');
-      const t = results.gsc[Object.keys(results.gsc)[0]].totals; const p = previous?.[Object.keys(results.gsc)[0]]?.totals;
+      const t = results.gsc.web[Object.keys(results.gsc.web)[0]].totals; const p = previous?.[Object.keys(results.gsc.web)[0]]?.totals;
+      for (const [label, key] of [['クリック','clicks'],['表示','impressions'],['CTR','ctr'],['掲載順位','position']]) summary.push(`| ${label} | ${formatTotal(t[key])} | ${p ? pctChange(t[key], p[key]) : '—'} |`);
+      summary.push('');
+    }
+    if (results.gsc.news && Object.keys(results.gsc.news).length) {
+      summary.push('| GSC ニュース 合計 | 値 | 前回比 |', '|---|---:|---:|');
+      const t = results.gsc.news[Object.keys(results.gsc.news)[0]].totals; const p = previousNews?.[Object.keys(results.gsc.news)[0]]?.totals;
+      for (const [label, key] of [['クリック','clicks'],['表示','impressions'],['CTR','ctr'],['掲載順位','position']]) summary.push(`| ${label} | ${formatTotal(t[key])} | ${p ? pctChange(t[key], p[key]) : '—'} |`);
+      summary.push('');
+    }
+    if (Object.keys(results.gnews).length) {
+      summary.push('| Google ニュース 合計 | 値 | 前回比 |', '|---|---:|---:|');
+      const t = results.gnews[Object.keys(results.gnews)[0]].totals; const p = previousGnews?.[Object.keys(results.gnews)[0]]?.totals;
       for (const [label, key] of [['クリック','clicks'],['表示','impressions'],['CTR','ctr'],['掲載順位','position']]) summary.push(`| ${label} | ${formatTotal(t[key])} | ${p ? pctChange(t[key], p[key]) : '—'} |`);
       summary.push('');
     }

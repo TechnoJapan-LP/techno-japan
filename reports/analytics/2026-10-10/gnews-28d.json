@@ -1,0 +1,32 @@
+{
+  "page": {
+    "headers": [],
+    "rows": [],
+    "totals": {
+      "clicks": "0",
+      "impressions": "0",
+      "ctr": "0%",
+      "position": ""
+    }
+  },
+  "country": {
+    "headers": [],
+    "rows": [],
+    "totals": {
+      "clicks": "0",
+      "impressions": "0",
+      "ctr": "0%",
+      "position": ""
+    }
+  },
+  "date": {
+    "headers": [],
+    "rows": [],
+    "totals": {
+      "clicks": "0",
+      "impressions": "0",
+      "ctr": "0%",
+      "position": ""
+    }
+  }
+}

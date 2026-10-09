@@ -9634,3 +9634,32 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
   同じ Publish で CMS に「Unexpected token '<' … is not valid JSON」が出たが、GAS 側のコミット（06b24eb0）は成立し pipeline も success。返事の読み取りだけが失敗（AUDIT 未記載、対策は提案中: gasPostJson_ が JSON 以外の返事を受けたら GitHub 側の完了を自前で確認して表示する）。
 - **formsubmit.co は新しい宛先の有効化が必要**: デプロイ後にフォームを1回送信 → press@ に届く「Activate Form」のリンクを押す → もう1回送って受信を確認。押すまで届かない（ユーザーに案内済み）。
 - 有効化後に案内されるランダム文字列へ差し替えると、HTML にメールアドレスを書かずに済む（任意、未実施）。
+
+## 2026-10-10 Google ニュース掲載の実測と、analytics スクリプトの拡張（--news / --gnews）
+
+### 実施
+- ユーザーの問い「Google ニュースに載っているか」に対し、3つの事実で回答:
+  1. Google ニュースの検索 RSS（`news.google.com/rss/search?q=site:techno-japan.media`）は **64 件**（記事＋会場・アーティスト・フェスのページ）。索引には載っている。
+  2. Search Console 検索タイプ「ニュース」（Google 検索のニュースタブ）: 28日で **0 / 0**。
+  3. Google ニュース製品レポート（performance/news）: **404**＝レポート自体が無い＝Google ニュース経由の表示がまだ無い。
+- `scripts/audit_analytics.mjs` に `--news`（検索タイプ=ニュース）と `--gnews`（Google ニュース製品）を追加（実装 Codex、追加指示 3 回）。
+  表が無い／404 は失敗ではなく「表示なし」として 0 行で出力し、画面文言を `.txt` に保存。summary の前回比で「1.06万」を数値化できず -100% と出ていた既存バグも修正。
+- `reports/analytics/2026-10-10/` に 28 日分を出力（web / news / gnews）。メモリー `google-news-publisher-center.md` に実測を追記。
+
+### コミット
+- このエントリを含むコミット（スクリプト＋ reports/analytics/2026-10-10 ＋ handoff）。
+
+### 検証
+- `node --check` OK。実行 3 回: web 491 クリック / 1.06万 表示（前回比 +12.1% / +9.5%）、news 0 / 0、gnews 404。
+- preflight は対象外（このスクリプトは preflight から呼ばれない）。push 時のフックで全件は走る。
+
+### 変更したパターン
+- analytics の取得対象（web → web / news / gnews）。出力ファイル名は web を据え置き、news は `gsc-news-*`、gnews は `gnews-*`。
+
+### 未確認の類似パターン
+- GSC の表は読み込みタイミングで **たまに取れない**（同じ条件で web query / page が落ちたり通ったりした）。落ちたら再実行で通る。再試行の自動化は未実装。
+- `--range=3m` での news / gnews は未実行。
+
+### 次の担当への注意・判断待ち
+- 「索引に載っている」と「ニュース面で表示された」は別。月次の効果測定は `--gsc --news --gnews` で3つとも取る。
+- Publisher Center の連絡先確認メール（9/21）は未クリック（掲載可否には無関係）。
