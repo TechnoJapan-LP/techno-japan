@@ -9732,3 +9732,37 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - **CARTO の表示そのものは本番でしか確認できない**（キーが本番ドメイン限定）。push 後に本番で確認し、結果をこの下に追記する。
 - 注意: 利用区分は Non-commercial で登録されている。広告・有料掲載など収益が出たら Commercial（月100万回まで無料）へ切り替える。出典表示は必須。
 
+## 2026-10-11 表示の刷新を本番へ（記事・NEWS・TOP・WRITERS・フッター・スマホ・メニュー）
+
+### 実施
+- ブランチ `design/mc-media`（worktree `../techno-japan-preview`）でユーザーが実物を確認し「問題ないので本番へ」。main へ取り込んで本番に出す。内容と経緯は AUDIT §9-105。
+- 触った主なファイル: LP/index.html, news.html, writers.html（新規）, about.html, artists.html, festivals.html, venues.html, favorites.html, submit.html, 404.html,
+  common.css, common.js, detail.css, cms.js, cms.html, scripts/build-detail-pages.mjs, .github/regression-thresholds.yml。生成物（詳細ページ・EN ハブ・sitemap・RSS）を再生成。
+- 版: COMMON_CSS 37 / COMMON_JS 17 / DETAIL_CSS 47 / ARTICLE_FX_JS 13、cms.js?v=134 / cms.css?v=46。
+
+### コミット
+- このエントリを含む main へのマージ（design/mc-media）。
+
+### 検証
+- worktree で `bash scripts/preflight.sh` 全件（結果は下の「次の担当へ」に追記）。
+- headless Chrome（CDP）での確認: PC 1440 / 1280 / 1100 と スマホ 390 / 360。
+  - フッター: 6 ページ × 3 幅 = 18 通りで1行・横スクロール無し（数値で確認）。
+  - スマホ点検: 12 ページ × 2 幅で横スクロール 0 件。FEATURED 1 本の高さ 530/522/522px → 428/393/414px。
+  - 記事: 短題｜副題・リード文・関連記事3本・関連フェスのカルーセルを画像で確認。NEWS: ヒーロー、FEATURED 3 本、ALL STORIES。TOP: 8 記事レール（STORIES 01 / 08）。
+  - スマホメニュー: TOP と記事ページで開いた状態を画像で確認（現在地の白、×1つ、JA/EN 中央）。
+  - writers.html: PC / スマホ。フォーム項目 name / email / articles / sns。
+
+### 変更したパターン
+- ハブ（TOP / NEWS）の構造、記事ページの見出し・リード文・末尾、全ページのフッターとスマホメニュー、スマホ向けの文字サイズとタップ領域。
+
+### 未確認の類似パターン
+- **実機（iPhone Safari）での確認は未実施**。メニューの滑り込みの滑らかさは静止画でしか見ていない。
+- **CMS の実機操作は未確認**（cms.js は「本番表示プレビュー」の CSS/JS の版を揃えただけ）。Cmd+Shift+R。
+- writers.html のフォーム送信→受信（formsubmit、press@ 宛）は未実施。イベント通知欄（`_subject` = Event updates signup）も同じ。
+- EN ページ（/en/）の見た目は行数一致と日本語残りの検査のみ。画像での確認は TOP と NEWS の JA 中心。
+- 詳細ページ（フェス・アーティスト・会場・記事）のフッターには SNS アイコンが無い（以前から。今回は触っていない）。
+
+### 次の担当への注意・判断待ち
+- push 後に Publish pipeline を手動実行（cms.js 変更のため）。結果と Lighthouse をこの下に追記。
+- NEWS のヒーローは最新記事の写真を背景に読む。Lighthouse の CLS / 性能が悪化していないかを CI の結果で見る（悪化していたら、ヒーローの高さ確保と画像の縮小版を検討）。
+- テスト環境の worktree とブランチは、本番反映を確認してから片付ける。

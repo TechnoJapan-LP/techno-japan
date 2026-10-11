@@ -497,7 +497,7 @@ html.nav-open, body.nav-open { overflow: hidden; }
   transform: translateY(14px);
   transition: letter-spacing .6s cubic-bezier(0.075, 0.82, 0.165, 1), color .3s, opacity .5s, transform .5s;
 }
-.nav-overlay.active > a, .nav-overlay.active > .nav-lang, .nav-overlay.active > .nav-overlay-social, .nav-overlay.active > .nav-latest { opacity: 1; transform: translateY(0); }
+.nav-overlay.active > a, .nav-overlay.active > .nav-overlay-social, .nav-overlay.active > .nav-latest { opacity: 1; transform: translateY(0); }
 .nav-overlay.active > a:nth-of-type(1) { transition-delay: .55s; }
 .nav-overlay.active > a:nth-of-type(2) { transition-delay: .61s; }
 .nav-overlay.active > a:nth-of-type(3) { transition-delay: .67s; }
@@ -506,7 +506,6 @@ html.nav-open, body.nav-open { overflow: hidden; }
 .nav-overlay.active > a:nth-of-type(6) { transition-delay: .85s; }
 .nav-overlay.active > a:nth-of-type(7) { transition-delay: .91s; }
 .nav-overlay.active > a:nth-of-type(8) { transition-delay: .97s; }
-.nav-overlay.active > .nav-lang { transition-delay: 1.03s; }
 .nav-overlay.active > .nav-overlay-social { transition-delay: 1.09s; }
 .nav-overlay.active > .nav-latest { transition-delay: 1.15s; }
 .nav-overlay a:hover, .nav-overlay a:active, .nav-overlay a:focus-visible { letter-spacing: .22em; color: var(--text); opacity: 1; }
@@ -545,8 +544,8 @@ html.nav-open, body.nav-open { overflow: hidden; }
 .nav-overlay .nav-close-bottom { display: none; }
 .nav-overlay > a:first-of-type { margin-top: calc(72px + var(--safe-t)); }
 .nav-overlay { border: 0 !important; box-shadow: none !important; }
-.nav-overlay .nav-lang { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 44px; margin: 14px 0 0; padding: 0; border: 0 !important; font-family: var(--font-mono); font-size: 12px; letter-spacing: .16em; opacity: 0; transform: translateY(14px); transition: opacity .5s, transform .5s; }
-.nav-overlay .nav-lang a, .nav-overlay .nav-lang .nav-lang-cur { display: inline-flex; align-items: center; min-height: 44px; padding: 0 10px; font-family: var(--font-mono); font-size: 12px; letter-spacing: .16em; color: var(--text); opacity: 1; transform: none; }
+.nav-overlay .nav-lang { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 44px; margin: 14px 0 0; padding: 0; border: 0 !important; font-family: var(--font-mono); font-size: 12px; letter-spacing: .16em; opacity: 1 !important; transform: none !important; transition: none !important; transition-delay: 0s !important; animation: none !important; animation-delay: 0s !important; }
+.nav-overlay .nav-lang a, .nav-overlay .nav-lang span { display: inline-flex; align-items: center; min-height: 44px; padding: 0 10px; font-family: var(--font-mono); font-size: 12px; letter-spacing: .16em; color: var(--text); opacity: 1 !important; transform: none !important; transition: none !important; transition-delay: 0s !important; animation: none !important; animation-delay: 0s !important; }
 .nav-overlay .nav-lang .nav-lang-sep { opacity: .45; }
 .nav-overlay .nav-overlay-social { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 12px; opacity: 0; transform: translateY(14px); transition: opacity .5s, transform .5s; }
 .nav-overlay .nav-overlay-social a { display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; padding: 0; font-size: 0; letter-spacing: 0; color: var(--text); opacity: .8; transform: none; }
@@ -559,7 +558,7 @@ html.nav-open, body.nav-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .nav-overlay { transform: none; transition: opacity .15s, visibility 0s; opacity: 0; }
   .nav-overlay.active { opacity: 1; }
-  .nav-overlay a, .nav-overlay .nav-lang, .nav-overlay .nav-overlay-social, .nav-overlay .nav-latest { transform: none; transition: opacity .15s, color .15s, letter-spacing .15s; }
+  .nav-overlay a, .nav-overlay .nav-overlay-social, .nav-overlay .nav-latest { transform: none; transition: opacity .15s, color .15s, letter-spacing .15s; }
 }
 html.nav-open .fx-progress, body.nav-open .fx-progress { visibility: hidden !important; opacity: 0 !important; }
 

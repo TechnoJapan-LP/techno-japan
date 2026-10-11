@@ -1,6 +1,6 @@
 # Minimal Collective ベンチマーク — 「データベース」から「メディア」へ、Techno Japan の設計提案
 
-作成: 2026-10-10 / 状態: **提案（未実装・ユーザー判断待ち）** / 設計: Claude、実装は Codex
+作成: 2026-10-10 / 状態: **第1弾を本番反映（2026-10-11、AUDIT §9-105）。WP-1 型／WP-3 埋め込みは見送り、LATEST 帯は却下** / 設計: Claude、実装は Codex
 対象: https://www.minimalcollective.digital/（Webflow 製。本拠オランダ、2016 年から）
 計測: 記事「The weight of a room」「Not a utopia」「Premiere: OK EG - Lily」、/editorial、/、/about、/events、/projects、/join-the-collective。
 headless Chrome（PC 1440 / スマホ 390）で DOM の位置・サイズ・書体を数値で取得（`.scratch/mc/dom-*.txt`）。
