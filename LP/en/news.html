@@ -783,7 +783,7 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
 
 <script src="/common.js?v=17" defer></script>
 <!-- localize.js は defer にしない。下のインライン描画が同期実行で tjLocalized を呼ぶ -->
-<script src="/localize.js?v=11"></script>
+<script src="/localize.js?v=12"></script>
 <!-- カード画像の縮小版の対応表。これが無いと tjCardAssetPath は
      **エラーを出さず原本（最大686KB）へフォールバック**する。
      2026-08-19 まで news.html だけ読み込んでおらず、レールの記事画像が
@@ -1058,20 +1058,46 @@ function renderFeaturedNews() {
   const featured = latest.filter((article) => article.featured === true);
   const items = [...featured, ...latest.filter((article) => article.featured !== true)].slice(0, 3);
 
+  const featuredImage = (article, index, side) => {
+    if (!article.image) return '';
+    const eager = index === 0 && side === 'left';
+    const srcset = tjCardSrcsetAttr(article.image, '(max-width: 700px) 100vw, 30vw');
+    const deferred = !eager;
+    return `<img ${tjImageSizeAttrs(article.image)}${deferred ? srcset.replace(' srcset=', ' data-srcset=') : srcset} loading="${eager ? 'eager' : 'lazy'}"${eager ? ' fetchpriority="high" src="' + tjCardAssetPath(article.image) + '"' : ' data-src="' + tjCardAssetPath(article.image) + '"'} data-original-src="${tjAssetPath(article.image)}" decoding="async" alt="">`;
+  };
+
   section.innerHTML = items.map((article) => {
+    const index = items.indexOf(article);
     const title = tjLocalized(article.title, '', article.title_en);
-    const image = article.image ? `<img loading="lazy" decoding="async" src="${tjAssetPath(article.image)}" alt="">` : '';
     return `<a class="featured-block" href="${articleDetailHref(article)}" data-article-detail-link>
-      <div class="featured-side featured-side-left">${image}</div>
+      <div class="featured-side featured-side-left">${featuredImage(article, index, 'left')}</div>
       <div class="featured-center">
         <div class="featured-label"><span class="tag-dot"></span>FEATURED</div>
         <h2 class="featured-title">${tjStoryTitle(title)}</h2>
         <div class="featured-meta">${article.category} · ${formatDate(article.date)} · ${article.readTime || 5} MIN READ</div>
         <span class="featured-read">READ →</span>
       </div>
-      <div class="featured-side featured-side-right">${image}</div>
+      <div class="featured-side featured-side-right">${featuredImage(article, index, 'right')}</div>
     </a>`;
   }).join('');
+
+  const loadFeaturedBlock = block => {
+    block.querySelectorAll('img[data-src]').forEach(img => {
+      if (img.dataset.srcset) img.setAttribute('srcset', img.dataset.srcset);
+      img.src = img.dataset.src;
+      delete img.dataset.src;
+      delete img.dataset.srcset;
+    });
+  };
+  if ('IntersectionObserver' in window) {
+    const featuredObserver = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        loadFeaturedBlock(entry.target);
+        featuredObserver.unobserve(entry.target);
+      }
+    }), { rootMargin: '200px 0px' });
+    section.querySelectorAll('.featured-block').forEach(block => featuredObserver.observe(block));
+  }
 }
 
 /* ========== RENDER CATEGORY NAV ========== */
@@ -1190,9 +1216,16 @@ function bindCursorExpand() {
 /* ========== NEWS HERO ========== */
 function initNewsHero() {
   const bg = document.querySelector('.news-hero-bg');
-  const article = ARTICLES[0];
+  const article = ARTICLES
+    .filter(item => String(item?.status || '').toLowerCase() !== 'draft')
+    .sort((a, b) => new Date(b.date) - new Date(a.date))[0];
   if (!bg || !article?.image) return;
-  const imageUrl = typeof tjAssetPath === 'function' ? tjAssetPath(article.image) : article.image;
+  const entry = typeof tjDerivativeEntry === 'function' ? tjDerivativeEntry(article.image) : null;
+  const targetWidth = Math.max(1, window.innerWidth * (window.devicePixelRatio || 1));
+  const candidates = entry?.srcset?.slice().sort((a, b) => a[1] - b[1]) || [];
+  const selected = candidates.find(([, width]) => width >= targetWidth) || candidates[candidates.length - 1];
+  const selectedPath = selected ? selected[0] : entry?.src || article.image;
+  const imageUrl = typeof tjAssetPath === 'function' ? tjAssetPath(selectedPath) : selectedPath;
   if (!imageUrl) return;
   bg.dataset.bg = imageUrl;
   bg.style.backgroundImage = `url("${String(imageUrl).replace(/["\\]/g, '\\$&')}")`;

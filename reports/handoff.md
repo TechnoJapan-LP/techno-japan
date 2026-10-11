@@ -9771,3 +9771,34 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
   **Lighthouse の警告（失敗ではない）: TOP の性能スコア 0.54（目安 0.6 未満）。** TOP の写真レールが 8 枚の大きな写真を持つのが原因とみられる。未対応。
 - NEWS のヒーローは最新記事の写真を背景に読む。Lighthouse の CLS / 性能が悪化していないかを CI の結果で見る（悪化していたら、ヒーローの高さ確保と画像の縮小版を検討）。
 - テスト環境の worktree とブランチは、本番反映を確認してから片付ける。
+
+## 2026-10-11 TOP / NEWS の初回表示で読む写真を減らす（Lighthouse 性能の警告への対応）
+
+### 実施
+- 配信後の Lighthouse で TOP の性能 0.54（目安 0.6 未満の警告）。原因は STORIES の 8 記事ぶんの写真（lg 960px）を最初に全部読んでいたこと（実装 Codex）。
+- TOP: 1本目だけ eager、2本目以降は data-src ＋ IntersectionObserver。大きさに合う派生画像（スマホの行は sm 480px、PC のレールは md 720px）。PC 用とスマホ用で同じ写真を二重に読まない。
+- NEWS: ヒーローの背景が原寸（569KB）で、しかも最古の記事の写真だった → 最新記事の派生画像に。FEATURED の 2・3 本目は遅延。
+- `scripts/check_hub_pages.py` は `img[data-src]` も画像として数える。
+
+### コミット
+- このエントリを含むコミット（design/mc-media → main）。
+
+### 検証
+- 同じ方法（CDP の Network 転送量、キャッシュ無し、スクロール無し 7 秒、テスト環境）で前後を測定。**画像の転送量のみ比較**（ローカル配信は JS が無圧縮なので合計は本番と一致しない）:
+  | ページ・条件 | 変更前 | 変更後 |
+  |---|---:|---:|
+  | TOP 390px dpr3 | 1,119KB | 391KB |
+  | TOP 1440px dpr1 | 1,295KB | 225KB |
+  | NEWS 390px dpr3 | 1,503KB | 169KB |
+  | NEWS 1440px dpr1 | （未測定） | 122KB |
+- 画質: 表示 px × dpr ≦ 取得 px を確認（スマホの行 104px×3=312 ≦ 480、PC レール 720×1 ≦ 720）。スマホ1本目と dpr2 の PC は派生の上限 960px（変更前と同じ）。
+- スクロール後に写真が出ることを画像で確認（TOP スマホの 8 行、NEWS の FEATURED 3 本）。preflight 全件（下に追記）。
+
+### 変更したパターン
+- ハブの重ね合わせ写真（スライド）は `loading=lazy` では遅延しない（全部が画面内扱い）。data-src ＋ IntersectionObserver を使う。
+
+### 未確認の類似パターン
+- 本番の Lighthouse スコアは配信後の CI で確認する（結果を下に追記）。festivals / artists / venues ハブは今回触っていない。
+
+### 次の担当への注意・判断待ち
+- 本番での前後比較は、同じ weigh 方式（`.scratch/weigh.mjs` 相当）で画像の転送量を見る。
