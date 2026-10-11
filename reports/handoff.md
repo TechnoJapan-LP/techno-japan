@@ -9689,51 +9689,46 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - push 後に Publish pipeline を手動実行（cms.js 変更のため）。結果はこの下に追記。
+  → **実施済み（2026-10-11）**: push 成功（フック preflight 通過）、デプロイ success、Publish pipeline run 38099030418 success、Lighthouse CI success（2回）。
+  本番実測（headless Chrome）: venues.html の地図はタイル 18 枚・ピン 27・status=ready・出典表示あり、map.html はタイル 24 枚・ピン 30。
+  本番の venues.html / map.html / cms.js?v=132 はすべて tile.openstreetmap.org を参照（cartocdn 0 件）。画像でも地図が出ることを確認。
 - 外部サービスの確認は、ステータスコードではなく**返ってきた中身**を見る（今回 200 で誤判断した）。
 - テスト環境（design/mc-media の worktree）にも venues.html の同じ関数の変更がある。main を取り込むときに衝突するので、main 側（OSM）を採る。
 - sitemap-news.xml が毎日の自動再生成で更新されなかった理由は未調査（10/10 02:07 UTC が最後）。
 
-## 2026-10-11 設計書 R スマホ表示の最適化（テスト環境）
+## 2026-10-11 CARTO dark_all と OSM 自動フォールバックへ復帰
 
 ### 実施
-- TOP STORIES を 640px 以下で「1件目の16:10大カード＋2件目以降の104px行」に変更。既存の遅延画像と8件構成、ALL STORIES 導線は維持。
-- NEWS FEATURED に日本語短題の `is-ja` 判定とモバイル向け文字組み、16:10画像、28px余白を追加。
-- TOP VENUES を 640px 以下で2列・4:5格子に変更。
-- 共通のモバイル文字サイズ下限、タップ領域、フッターの縦積みを追加。writers / about のモバイル余白・入力欄も調整。
-- `COMMON_CSS_VERSION` 34→35、`DETAIL_CSS_VERSION` 47→48。LP 配下と CMS プレビューの参照を同期。
+- `LP/venues.html` / `LP/map.html` / `LP/cms.js` の地図タイルを、キー付き CARTO `dark_all` 優先へ変更。
+- CARTO のタイルが1枚も読めない状態で `tileerror` が3回起きた場合、1回だけ OSM 標準タイルへ差し替え、`tj-map-osm` を付与。
+- 暗色フィルタを OSM フォールバック時だけに限定。`LP/cms.css`、`LP/cms.html` の版（`cms.css?v=46` / `cms.js?v=133`）も更新。
+- `scripts/check_hub_pages.py` の CARTO キー検査と、タイル失敗検査を OSM 切り替え後の `ready` 判定へ整合。
 
 ### コミット
-- 未実施（ユーザー指示により git 操作なし）。
+- 未コミット（ユーザー指示により git 操作・公開は未実施）。
 
 ### 検証
-- 未実施（ユーザー指示によりビルド・テスト・ブラウザ確認なし）。
+- `node --check LP/cms.js` 成功。
+- `LP/map.html` / `LP/venues.html` の inline script 構文確認成功。
+- preflight、実ブラウザ、Publish pipeline は未実施（ユーザー指示によりテスト実行禁止）。
 
 ### 変更したパターン
-- 640px 以下の STORIES / FEATURED / VENUES レイアウト、モバイル文字サイズ、タップターゲット、フッター、writers / about のインライン CSS。
+- CARTO のキー定数: 3箇所（`venues.html` / `map.html` / `cms.js`）。CARTO URL: 3箇所。
+- CARTO 3回失敗後の OSM 差し替え、OSM 時のみのタイル暗色フィルタ、OSM 出典表示。
 
 ### 未確認の類似パターン
-- **未確認**: 360 / 390 / 430px の実ブラウザ表示、JA / EN 各ハブ、詳細ページのタップ領域。
+- 確認済み・0件: `LP/en/venues.html` は自動生成物のため変更対象外。
+- 実機の本番ドメイン（CARTO 成功時）と localhost（CARTO 403 → OSM）の描画状態は未確認。
 
 ### 次の担当への注意・判断待ち
-- 公開前に `bash scripts/preflight.sh` と実ブラウザ確認を実施すること。CMS を変更していないため Publish pipeline は未実行。
+- `bash scripts/preflight.sh`、CARTO 成功時と OSM フォールバック時の実ブラウザ確認、必要なら Publish pipeline を実行する。
+- CMS を確認する場合は認証済み環境で座標入力後に地図が出ることを確認し、変更後は Cmd+Shift+R を使う。
 
-## 2026-10-11 設計書 R 追加修正（STORIES の線 / NEWS ヒーロー）
+### 追記（Claude、同エントリの検証と経緯）
+- 経緯: OSM への切り替え後、ユーザーが「前の地図のデザインがよかった」。CARTO の案内（carto.com/basemaps/apikey）を確認し、無料キー（非商用 月500万回、商用 月100万回、アカウント不要）で元の dark_all に戻せると判明。
+  ユーザーがキーを取得し、CARTO の管理画面で techno-japan.media に制限済み。キーは公開前提の種類（HTML に書く）。
+- 実測: キー付き＋Referer=https://techno-japan.media/ で 200・本物の黒いタイル（@2x 512px、画像で確認）。localhost / www 付き / Referer 無しは 403。
+- preflight 全49件成功（2026-10-11、単独実行）。localhost では CARTO が 403 → 3 回で OSM に切り替わり、タイル 18 枚・ピン 27・status=ready を確認。
+- **CARTO の表示そのものは本番でしか確認できない**（キーが本番ドメイン限定）。push 後に本番で確認し、結果をこの下に追記する。
+- 注意: 利用区分は Non-commercial で登録されている。広告・有料掲載など収益が出たら Commercial（月100万回まで無料）へ切り替える。出典表示は必須。
 
-### 実施
-- `LP/index.html`: 640px 以下の STORIES を左右20pxの内側幅に固定し、上下・記事間の横線だけに整理。縦線、カード背景、写真の外はみ出しを除去。
-- `LP/news.html`: 640px 以下の NEWS ヒーローを16:9へ変更し、eyebrow / NEWS / 宣言文を小型化。FEATURED 写真も16:9へ統一。
-
-### コミット
-- 未実施（ユーザー指示により git 操作なし）。
-
-### 検証
-- 未実施（ユーザー指示によりビルド・テスト・ブラウザ確認なし）。CSS上は360 / 390 / 430pxの線・写真の想定左右位置を各20pxに統一。
-
-### 変更したパターン
-- STORIES の `main-grid` / `featured-col` / `side-col` のモバイル境界線と幅、NEWS のモバイルヒーロー・FEATURED画像比率。
-
-### 未確認の類似パターン
-- **未確認**: 実機またはブラウザの `getBoundingClientRect()` による360 / 390 / 430pxの実測値。
-
-### 次の担当への注意・判断待ち
-- 公開前に実ブラウザで線と写真の左右座標、NEWS ヒーロー内の文字の収まりを確認すること。
