@@ -70,8 +70,8 @@ const ARTICLE_FX_CSS_VERSION = 13;
 
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
-const COMMON_JS_VERSION = 16;   // 2026-09-13 フェス詳細の行動計測
-const COMMON_CSS_VERSION = 35;   // 2026-10-11 スマホ表示の最適化（設計書R）
+const COMMON_JS_VERSION = 17;   // 2026-10-11 スマホメニュー演出（設計書S）
+const COMMON_CSS_VERSION = 36;   // 2026-10-11 スマホメニュー演出（設計書S）
 const LANG_TOGGLE_VERSION = 1;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
 const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');
@@ -943,6 +943,8 @@ function navHtml(lang, altHref) {
   <a href="${navLink(lang, 'artists.html')}">ARTISTS</a>
   <a href="${navLink(lang, 'venues.html')}">VENUES</a>
   <a href="${navLink(lang, 'about.html')}">ABOUT</a>
+  <a href="${lang === 'en' ? '/en/submit.html' : '/submit.html'}">APPLY</a>
+  <a href="/writers.html">WRITER</a>
 ${toggle ? `  ${toggle}\n` : ''}</div>`;
 }
 

@@ -111,12 +111,61 @@
   function initMobileNavOverlay() {
     const overlay = document.querySelector('.nav-overlay');
     if (!overlay) return;
-    if (!overlay.querySelector('.nav-close-bottom')) {
-      const bottomClose = document.createElement('button');
-      bottomClose.type = 'button';
-      bottomClose.className = 'nav-close nav-close-bottom';
-      bottomClose.setAttribute('aria-label', 'Close menu');
-      overlay.appendChild(bottomClose);
+    const normalizePath = (value) => {
+      const path = value.replace(/\/+$/, '') || '/';
+      return path === '/index.html' ? '/' : path;
+    };
+    const navRoute = (value) => {
+      const path = normalizePath(value).replace(/^\/en(?=\/|$)/, '') || '/';
+      if (path === '/' || path === '/index.html') return '/';
+      if (/^\/articles(?:\/|$)/.test(path)) return '/news.html';
+      if (/^\/festivals(?:\/|$)/.test(path)) return '/festivals.html';
+      if (/^\/artists(?:\/|$)/.test(path)) return '/artists.html';
+      if (/^\/venues(?:\/|$)/.test(path)) return '/venues.html';
+      return path;
+    };
+    const currentPath = navRoute(location.pathname);
+    const addLink = (label, href) => {
+      const targetHref = document.documentElement.lang === 'en' && /^\/(submit|writers)\.html$/.test(href) ? '/en' + href : href;
+      if ([...overlay.querySelectorAll(':scope > a')].some((a) => normalizePath(new URL(a.href, location.origin).pathname) === normalizePath(targetHref))) return;
+      const a = document.createElement('a');
+      a.href = targetHref;
+      a.textContent = label;
+      overlay.insertBefore(a, overlay.querySelector(':scope > .nav-lang, :scope > .nav-overlay-social') || null);
+    };
+    addLink('APPLY', '/submit.html');
+    addLink('WRITER', '/writers.html');
+    overlay.querySelectorAll(':scope > a[href]').forEach((a) => {
+      if (navRoute(new URL(a.href, location.origin).pathname) === currentPath) a.setAttribute('aria-current', 'page');
+    });
+    const moveSearchLink = () => {
+      const searchLink = [...overlay.querySelectorAll(':scope > a')].find((a) => a.textContent.trim() === 'SEARCH');
+      const lang = overlay.querySelector(':scope > .nav-lang');
+      if (!searchLink || !lang) return;
+      searchLink.classList.add('nav-search-link');
+      if (searchLink.nextElementSibling !== lang) overlay.insertBefore(searchLink, lang);
+    };
+    moveSearchLink();
+    new MutationObserver(moveSearchLink).observe(overlay, { childList: true });
+    if (!overlay.querySelector(':scope > .nav-overlay-social')) {
+      const social = document.createElement('span');
+      social.className = 'nav-overlay-social';
+      social.innerHTML = '<a href="https://www.instagram.com/techno.japan_/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.9" fill="currentColor" stroke="none"/></svg></a><a href="https://www.threads.net/@techno.japan_" target="_blank" rel="noopener" aria-label="Threads"><svg viewBox="0 0 976.98 1082" fill="currentColor" aria-hidden="true"><path d="M770.35 500.35c-1.35-156.85-86.39-251.37-230.02-251.37-95.87 0-176.5 43.36-218.85 112.47l92.82 64.71c24.05-37.94 57.25-69.45 118.23-69.45 68.77 0 104.34 38.28 114.5 109.42-33.2-5.08-66.4-7.79-100.61-7.79-185.65 0-273.05 84.02-273.05 195.13s87.4 179.55 216.14 179.55c141.27 0 225.62-95.19 260.18-213.09 35.91 16.26 60.64 54.2 60.64 111.12 0 152.45-175.82 235.45-324.88 235.45-219.86 0-363.5-144.32-363.5-379.08 0-287.62 190.05-471.91 445.48-471.91 171.42 0 256.11 75.21 313.7 176.16l94.86-66.4C913.31 94.5 773.4 1 563.36 1 228.65 1 1 238.48 1 583.01c0 315.06 222.91 497.99 488.51 497.99 219.52 0 441.42-128.05 441.42-347.24 0-114.5-65.72-190.39-160.58-233.41zM485.44 718.85c-48.44 0-91.13-23.04-91.13-65.38 0-66.74 81.98-87.06 162.27-87.06 30.49 0 60.3 2.03 86.72 7.79-18.97 86.72-75.21 144.66-157.87 144.66z"/></svg></a>';
+      overlay.appendChild(social);
+    }
+    const articles = typeof ARTICLES !== 'undefined' && Array.isArray(ARTICLES)
+      ? ARTICLES.filter((a) => String(a?.status || '').toLowerCase() !== 'draft').sort((a, b) => String(b.date || '').localeCompare(String(a.date || ''))).slice(0, 3)
+      : [];
+    if (articles.length) {
+      const esc = (value) => String(value == null ? '' : value).replace(/[&<>"']/g, (c) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+      const local = (article, key) => typeof window.tjLocalized === 'function' ? window.tjLocalized(article[key], article[key + '_ja'], article[key + '_en']) : (article[key + '_en'] || article[key] || '');
+      const latest = document.createElement('div');
+      latest.className = 'nav-latest';
+      latest.innerHTML = '<div class="nav-latest-title">LATEST</div>' + articles.map((a) => {
+        const prefix = document.documentElement.lang === 'en' ? '/en' : '';
+        return '<a class="nav-latest-card" href="' + prefix + '/articles/' + encodeURIComponent(a.id) + '.html"><span>' + esc((a.tags?.[0] || 'ARTICLE').toUpperCase()) + '</span><strong>' + esc(local(a, 'title')) + '</strong><small>' + esc(local(a, 'excerpt')) + ' · ' + esc(a.date || '') + '</small></a>';
+      }).join('');
+      overlay.appendChild(latest);
     }
     const sync = () => {
       const open = overlay.classList.contains('active');
