@@ -1,6 +1,8 @@
 /* ==============================================================
    CONFIG
    ============================================================== */
+/* 公開前提のキー。CARTO の管理画面で techno-japan.media に制限済み。無料枠は月 500 万回（非商用）。出典表示は必須（AUDIT §9-104）。 */
+const CARTO_KEY = 'cb1_4gpv_1_06398582bb637e335325cc2f';
 /* ==============================================================
    AUTHENTICATION
    ============================================================== */
@@ -3597,6 +3599,31 @@ function renderCalendar(section, rows){
    ============================================================== */
 const locMaps = {};
 const _locMapTimers = {};
+function addLocationTiles(map, container){
+  let layer;
+  let loadedTiles = 0;
+  let tileErrors = 0;
+  let usingOsm = false;
+  const installLayer = (osm) => {
+    usingOsm = osm;
+    layer = osm
+      ? L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors'})
+      : L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=' + CARTO_KEY,{subdomains:'abcd',maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'});
+    layer.on('tileload', () => { loadedTiles += 1; });
+    layer.on('tileerror', () => {
+      tileErrors += 1;
+      if (!usingOsm && loadedTiles === 0 && tileErrors >= 3) {
+        container.classList.add('tj-map-osm');
+        map.removeLayer(layer);
+        loadedTiles = 0;
+        tileErrors = 0;
+        installLayer(true);
+      }
+    });
+    return layer.addTo(map);
+  };
+  installLayer(false);
+}
 function updateLocationMap(prefix){
   // 手入力中の連続呼び出しを 250ms debounce（Leaflet の setView/invalidateSize は重い）
   clearTimeout(_locMapTimers[prefix]);
@@ -3617,7 +3644,7 @@ function _updateLocationMapNow(prefix){
       locMaps[prefix] = L.map(prefix+'-map', {
         center:[lat,lng], zoom:14, zoomControl:true, attributionControl:true
       });
-      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors'}).addTo(locMaps[prefix]);
+      addLocationTiles(locMaps[prefix], container);
       const icon = L.divIcon({className:'',html:'<div style="width:14px;height:14px;background:#ff2d2d;border:2px solid #fff;border-radius:50%;box-shadow:0 0 8px rgba(255,45,45,.6)"></div>',iconSize:[14,14],iconAnchor:[7,7]});
       locMaps[prefix].marker = L.marker([lat,lng],{icon}).addTo(locMaps[prefix]);
       setTimeout(()=>locMaps[prefix].invalidateSize(), 100);

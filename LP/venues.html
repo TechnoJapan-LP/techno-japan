@@ -259,7 +259,7 @@
 .venue-map-error[hidden] { display: none; }
 .venue-map-error a { color: var(--text); border-bottom: 1px solid rgba(240,237,232,0.4); }
 .leaflet-container { background: var(--bg) !important; }
-.leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) brightness(.82) contrast(.92) saturate(.35); }
+.tj-map-osm .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) brightness(.82) contrast(.92) saturate(.35); }
 .leaflet-control-attribution { background: rgba(8,8,8,.7) !important; color: rgba(240,237,232,.6) !important; font-family: var(--font-mono); font-size: 9px; letter-spacing: .04em; padding: 2px 6px; }
 .leaflet-control-attribution a { color: rgba(240,237,232,.8) !important; }
 .leaflet-control-zoom { display: none !important; }
@@ -706,6 +706,8 @@ function hideAllMaps() {
 }
 
 const MAP_TILE_TIMEOUT_MS = 15000;
+/* 公開前提のキー。CARTO の管理画面で techno-japan.media に制限済み。無料枠は月 500 万回（非商用）。出典表示は必須（AUDIT §9-104）。 */
+const CARTO_KEY = 'cb1_4gpv_1_06398582bb637e335325cc2f';
 
 function hideMapFallback() {
   const error = document.getElementById('venue-map-error');
@@ -736,14 +738,12 @@ function showMapFallback(cfg, reason) {
 
 function addVenueTiles(map, wrapId) {
   const cfg = ALL_MAPS_CFG.find(item => item.wrapId === wrapId);
-  /* 2026-10-11: CARTO がキー無しを 200 の警告画像で返すようになり、地図が警告で埋まった（失敗として検知できない）。OSM に変更。あわせて1枚の失敗や 8 秒超で地図ごと隠すのをやめた。 */
-  const layer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors'
-  });
   let settled = false;
   let loadedTiles = 0;
   let tileErrors = 0;
+  let layer = null;
+  let usingOsm = false;
+  let timer = null;
   const markReady = () => {
     if (settled) return;
     settled = true;
@@ -751,7 +751,7 @@ function addVenueTiles(map, wrapId) {
     const wrap = document.getElementById(wrapId);
     if (wrap) wrap.dataset.mapStatus = 'ready';
   };
-  const timer = setTimeout(() => {
+  const startTimer = () => { timer = setTimeout(() => {
     if (!settled) {
       if (loadedTiles > 0) markReady();
       else {
@@ -759,20 +759,40 @@ function addVenueTiles(map, wrapId) {
         showMapFallback(cfg, 'tile timeout');
       }
     }
-  }, MAP_TILE_TIMEOUT_MS);
-  layer.on('tileload', () => {
-    loadedTiles += 1;
-    markReady();
-  });
-  layer.on('tileerror', () => {
-    tileErrors += 1;
-    if (!settled && loadedTiles === 0 && tileErrors >= 6) {
-      settled = true;
-      clearTimeout(timer);
-      showMapFallback(cfg, 'tile error');
-    }
-  });
-  return layer.addTo(map);
+  }, MAP_TILE_TIMEOUT_MS); };
+  const installLayer = (osm) => {
+    usingOsm = osm;
+    layer = osm
+      ? L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors'
+        })
+      : L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=' + CARTO_KEY, {
+          subdomains: 'abcd', maxZoom: 19,
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'
+        });
+    layer.on('tileload', () => { loadedTiles += 1; markReady(); });
+    layer.on('tileerror', () => {
+      tileErrors += 1;
+      if (!settled && loadedTiles === 0 && !usingOsm && tileErrors >= 3) {
+        map.getContainer().classList.add('tj-map-osm');
+        map.removeLayer(layer);
+        loadedTiles = 0;
+        tileErrors = 0;
+        clearTimeout(timer);
+        installLayer(true);
+        startTimer();
+      } else if (!settled && usingOsm && loadedTiles === 0 && tileErrors >= 6) {
+        settled = true;
+        clearTimeout(timer);
+        showMapFallback(cfg, 'tile error');
+      }
+    });
+    return layer.addTo(map);
+  };
+  installLayer(false);
+  startTimer();
+  return layer;
 }
 
 function safeInitVenueMap(cfg) {

@@ -131,13 +131,16 @@ const tileFallback = document.getElementById('map-tile-fallback');
 tileFallback.addEventListener('load', () => {
   const win = tileFallback.contentWindow;
   const doc = tileFallback.contentDocument;
+  let tileLayerCalls = 0;
   win.L.tileLayer = () => {
     const layer = win.L.layerGroup();
+    const isCarto = tileLayerCalls++ === 0;
     const addTo = layer.addTo.bind(layer);
     layer.addTo = (map) => {
       addTo(map);
       setTimeout(() => {
-        for (let i = 0; i < 6; i += 1) layer.fire('tileerror');
+        if (isCarto) for (let i = 0; i < 3; i += 1) layer.fire('tileerror');
+        else layer.fire('tileload');
       }, 0);
       return layer;
     };
@@ -146,9 +149,8 @@ tileFallback.addEventListener('load', () => {
   doc.getElementById('area-map-btn').click();
   setTimeout(() => {
     const wrap = openWrap(doc);
-    const error = doc.getElementById('venue-map-error');
-    const ok = error && !error.hidden && wrap?.dataset.mapStatus === 'failed';
-    setResult('tileFallbackResult', ok ? 'pass' : 'fail', ok ? '' : 'tileerror fallback was not shown');
+    const ok = wrap?.dataset.mapStatus === 'ready' && wrap.querySelector('.tj-map-osm');
+    setResult('tileFallbackResult', ok ? 'pass' : 'fail', ok ? '' : 'tileerror did not switch to OSM');
   }, 300);
 });
 const enFallback = document.getElementById('map-en-fallback');
@@ -534,6 +536,10 @@ def main():
     print(f"対象   : {base}\n")
 
     failures, rows, actual = [], [], {}
+    for path in (LP / "venues.html", LP / "map.html", LP / "cms.js"):
+        source = path.read_text(encoding="utf-8")
+        if "cartocdn" in source and not re.search(r"cartocdn\.com/[^'\"\s]+\?key=", source):
+            failures.append(f"{path.relative_to(ROOT)}: cartocdn URL に ?key= がありません")
     try:
         for name, spec in pages.items():
             dom, console = render(chrome, f"{base}/{name}", args.budget)
