@@ -9764,5 +9764,10 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - push 後に Publish pipeline を手動実行（cms.js 変更のため）。結果と Lighthouse をこの下に追記。
+  → **実施済み（2026-10-11）**: worktree で preflight 全49件成功（1回目は「モバイルの言語切替」が落ちた: メニューの浮かび上がり演出で JA/EN が開いた直後 opacity 0。言語切替を演出の対象から外して解消）。
+  main へマージ → push は1回目フックで停止（cms.js を最後に触った後の ?v 上げ忘れ。135 に上げて再 push、通過）。
+  デプロイ 38109005190 success、Publish pipeline 38109005790 success、Lighthouse CI 38109525297 success。
+  本番実測: TOP に 8 記事レール、NEWS に FEATURED、/writers.html、記事に短題｜副題と関連フェスのカルーセル、全ページ common.css?v=37 と WRITER。PC / スマホの画像でも確認。
+  **Lighthouse の警告（失敗ではない）: TOP の性能スコア 0.54（目安 0.6 未満）。** TOP の写真レールが 8 枚の大きな写真を持つのが原因とみられる。未対応。
 - NEWS のヒーローは最新記事の写真を背景に読む。Lighthouse の CLS / 性能が悪化していないかを CI の結果で見る（悪化していたら、ヒーローの高さ確保と画像の縮小版を検討）。
 - テスト環境の worktree とブランチは、本番反映を確認してから片付ける。
