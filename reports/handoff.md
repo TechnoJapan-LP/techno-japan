@@ -9689,6 +9689,9 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - push 後に Publish pipeline を手動実行（cms.js 変更のため）。結果はこの下に追記。
+  → **実施済み（2026-10-11）**: push 成功（フック preflight 通過）、デプロイ success、Publish pipeline run 38099030418 success、Lighthouse CI success（2回）。
+  本番実測（headless Chrome）: venues.html の地図はタイル 18 枚・ピン 27・status=ready・出典表示あり、map.html はタイル 24 枚・ピン 30。
+  本番の venues.html / map.html / cms.js?v=132 はすべて tile.openstreetmap.org を参照（cartocdn 0 件）。画像でも地図が出ることを確認。
 - 外部サービスの確認は、ステータスコードではなく**返ってきた中身**を見る（今回 200 で誤判断した）。
 - テスト環境（design/mc-media の worktree）にも venues.html の同じ関数の変更がある。main を取り込むときに衝突するので、main 側（OSM）を採る。
 - sitemap-news.xml が毎日の自動再生成で更新されなかった理由は未調査（10/10 02:07 UTC が最後）。
