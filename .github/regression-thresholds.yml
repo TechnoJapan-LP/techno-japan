@@ -461,13 +461,13 @@ hub_pages:
     min_container_bytes: 10000
   en/news.html:
     marker: feed-card
-    ja_containers: [featured-col, side-col, feed-grid]
+    ja_containers: [news-featured, feed-grid]
     max_ja_chars: 27    # 2026-08-03 実測。記事タイトル27字。title_en が未入力（CMS の ENGLISH VERSION）
     min_markers: 1                 # 実測 1
     min_container_bytes: 0
   en/index.html:
-    ja_containers: [stories-grid, festivals-preview, artists-track, venues-preview]
-    max_ja_chars: 39    # 2026-08-03 実測。記事タイトル27字 + フェス名12字。title_en / name_en 未入力
+    ja_containers: [featured-col, side-col, festivals-preview, artists-track, venues-preview]
+    max_ja_chars: 27    # 2026-10-10 実測 0（TOP の STORIES を 8 記事の2列に変更。title_en が入れば増えないが、未入力の日本語タイトルが残る分の余裕として 27）
     # TOP は他ハブと構成が違い、<main> もカード用の共通クラスも持たない。
     # 静的に必ず存在するセクション見出し(.section-head)を存在確認に使う。
     marker: section-head

@@ -136,7 +136,9 @@ tileFallback.addEventListener('load', () => {
     const addTo = layer.addTo.bind(layer);
     layer.addTo = (map) => {
       addTo(map);
-      setTimeout(() => layer.fire('tileerror'), 0);
+      setTimeout(() => {
+        for (let i = 0; i < 6; i++) layer.fire('tileerror');
+      }, 0);
       return layer;
     };
     return layer;

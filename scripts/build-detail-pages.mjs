@@ -53,7 +53,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 45;
+const DETAIL_CSS_VERSION = 47;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -71,7 +71,7 @@ const ARTICLE_FX_CSS_VERSION = 13;
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
 const COMMON_JS_VERSION = 16;   // 2026-09-13 フェス詳細の行動計測
-const COMMON_CSS_VERSION = 32;   // 2026-09-14 記事タイトルの英字固有名詞分断防止
+const COMMON_CSS_VERSION = 33;   // 2026-10-11 WRITERフッターと折り返し対応
 const LANG_TOGGLE_VERSION = 1;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
 const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');
@@ -377,6 +377,18 @@ const artistCardSrcsetAttr = (s) => srcsetAttr(s, '(max-width: 600px) 96px, 132p
    画像を読み込むことになる。実測では記事1ページで 915KB の無駄が出ていた
    （2026-09-15）。sizes は detail.css の .related-story-thumb と揃えること。 */
 const storyThumbSrcsetAttr = (s) => srcsetAttr(s, '(max-width: 640px) 88px, 120px');
+// 記事末尾の大判は 260px 幅。
+const relatedStoryWideSrcsetAttr = (s) => srcsetAttr(s, '(max-width: 700px) 100vw, 260px');
+
+function splitArticleTitle(title) {
+  const value = String(title || '');
+  const delimiter = value.search(/[｜|]/);
+  if (delimiter < 0) return { short: value, sub: '' };
+  return {
+    short: value.slice(0, delimiter).trim(),
+    sub: value.slice(delimiter + 1).trim(),
+  };
+}
 
 function articlePositionKey(value) {
   const v = String(value || '').toLowerCase();
@@ -936,7 +948,7 @@ ${toggle ? `  ${toggle}\n` : ''}</div>`;
 
 function footerHtml(lang) {
   const submissionHref = lang === 'en' ? '/en/submit.html' : '/submit.html';
-  const submissionLabel = lang === 'en' ? 'Festival Submission' : 'FESTIVAL 掲載申請';
+  const submissionLabel = 'APPLY';
   return `<footer>
   <div class="footer-top">
     <div class="footer-logo"><img src="/images/logo-wordmark.png?v=1" alt="TECHNO JAPAN" width="158" height="13" loading="lazy" decoding="async"></div>
@@ -948,6 +960,7 @@ function footerHtml(lang) {
       <a href="${navLink(lang, 'venues.html')}">VENUES</a>
       <a href="${navLink(lang, 'about.html')}">ABOUT</a>
       <a href="${submissionHref}">${submissionLabel}</a>
+      <a href="/writers.html">WRITER</a>
     </div>
     <div class="footer-copy">&copy; 2025 TECHNO JAPAN. ALL RIGHTS RESERVED.</div>
   </div>
@@ -1064,20 +1077,97 @@ function articleNewsletterHtml(canonical) {
     </section>`;
 }
 
-function relatedStoryCardsHtml(items, lang, { forceEnglishPath = false, compactDate = false } = {}) {
+function relatedStoryCardsHtml(items, lang, { forceEnglishPath = false, compactDate = false, wide = false } = {}) {
   const cards = (items || []).map((a) => {
     const englishPath = lang === 'en' && (forceEnglishPath || a.title_en || a.body_en) ? '/en' : '';
     const title = stripTitleMarkdown(lang === 'en' ? (a.title_en || a.title) : a.title);
     const date = compactDate
       ? String(a.date || '').split('/')[0].replace(/-/g, '.')
       : fmtDate(a.date);
-    return `<a class="related-story-card" href="${englishPath}/articles/${a.id}.html">
-          ${a.image ? `<img ${dimensionAttrs(cardImagePath(a.image))} class="related-story-thumb" src="/${cardImagePath(a.image)}"${storyThumbSrcsetAttr(a.image)} alt="" loading="lazy" decoding="async">` : ''}
+    const cardClass = wide ? 'related-story-card is-wide' : 'related-story-card';
+    const thumbSrcsetAttr = wide ? relatedStoryWideSrcsetAttr : storyThumbSrcsetAttr;
+    const storyTitle = wide ? splitArticleTitle(title) : null;
+    const titleHtml = wide
+      ? `<span class="story-title-short">${esc(storyTitle.short)}</span>${storyTitle.sub ? `<span class="story-title-sub">${esc(storyTitle.sub)}</span>` : ''}`
+      : esc(title);
+    return `<a class="${cardClass}" href="${englishPath}/articles/${a.id}.html">
+          ${a.image ? `<img ${dimensionAttrs(cardImagePath(a.image))} class="related-story-thumb" src="/${cardImagePath(a.image)}"${thumbSrcsetAttr(a.image)} alt="" loading="lazy" decoding="async">` : ''}
           <div><div class="related-story-meta">${esc(a.category || 'STORY')} · ${esc(date)}</div>
-          <div class="related-story-title">${esc(title)}</div></div>
+          <div class="related-story-title">${titleHtml}</div></div>
         </a>`;
   }).join('');
   return cards ? `<div class="related-stories"><h2>RELATED STORIES</h2>${cards}</div>` : '';
+}
+
+function isPublishedFestival(festival) {
+  return festival && festival.id && String(festival.status || '').toLowerCase() !== 'draft';
+}
+
+function relatedFestivalCardHtml(festival, lang, prefix, editionsByFestival) {
+  const feds = [...(editionsByFestival.get(String(festival.id)) || [])].sort((x, y) =>
+    String(y.DATE_START || '').localeCompare(String(x.DATE_START || '')));
+  const current = feds[0];
+  const name = lang === 'en' ? (festival.name_en || festival.name) : festival.name;
+  const image = festival.image || festival.flyer;
+  const place = [
+    current ? editionLocationName(current, lang) : localizedValue(festival.location, festival.location_ja, '', lang),
+    current?.PREF || festival.city,
+  ].filter(Boolean).join(' — ');
+  const date = current?.DATE_START
+    ? [current.DATE_START, current.DATE_END].filter(Boolean).filter((v, i, arr) => arr.indexOf(v) === i).join(' — ')
+    : (festival.date || '');
+  return `<a class="related-card" href="${prefix}/festivals/${encodeURIComponent(festival.id)}.html">
+    <div class="related-card-img">${image ? `<img ${dimensionAttrs(cardImagePath(image))} src="/${cardImagePath(image)}"${cardSrcsetAttr(image)} alt="${esc(name)}" loading="lazy"${imagePositionStyle(festival)}>` : ''}</div>
+    <div class="related-card-info">
+      <div class="related-card-date">${esc(date)}</div>
+      <div class="related-card-name">${esc(name)}</div>
+      <div class="related-card-loc">${esc(place)}</div>
+    </div>
+  </a>`;
+}
+
+function selectRelatedFestivals(article, body, festivals, editionsByFestival, primaryFestivalId) {
+  const published = (festivals || []).filter(isPublishedFestival);
+  const byId = new Map(published.map((festival) => [String(festival.id), festival]));
+  const selected = [];
+  const add = (festival) => {
+    if (festival && !selected.some((item) => String(item.id) === String(festival.id)) && selected.length < 6) selected.push(festival);
+  };
+  add(byId.get(String(primaryFestivalId || '')));
+
+  const shortcodeRe = /\[\[festival:([a-z0-9-]+)(?:\|[^\]]+)?\]\]/gi;
+  let match;
+  while ((match = shortcodeRe.exec(String(body || ''))) !== null) add(byId.get(match[1]));
+
+  const plainBody = stripTags(body || '').toLocaleLowerCase();
+  for (const festival of published) {
+    const name = String(festival.name || '').trim();
+    if (name.length >= 4 && plainBody.includes(name.toLocaleLowerCase())) add(festival);
+  }
+
+  if (selected.length >= 6) return selected;
+  const today = new Date().toISOString().slice(0, 10);
+  const primaryEditions = editionsByFestival.get(String(primaryFestivalId || '')) || [];
+  const primaryPrefs = new Set(primaryEditions.map((edition) => String(edition.PREF || '').trim().toLowerCase()).filter(Boolean));
+  const upcoming = [];
+  for (const festival of published) {
+    if (selected.some((item) => String(item.id) === String(festival.id))) continue;
+    const editions = (editionsByFestival.get(String(festival.id)) || [])
+      .filter((edition) => {
+        const start = String(edition.DATE_START || '');
+        const end = ISO_DATE.test(String(edition.DATE_END || '')) ? edition.DATE_END : start;
+        return ISO_DATE.test(start) && end >= today && String(edition.STATUS || '').trim().toLowerCase() !== 'cancelled';
+      })
+      .sort((a, b) => String(a.DATE_START).localeCompare(String(b.DATE_START)));
+    if (!editions.length) continue;
+    const edition = editions[0];
+    upcoming.push({ festival, edition, samePref: primaryPrefs.has(String(edition.PREF || '').trim().toLowerCase()) });
+  }
+  upcoming.sort((a, b) => Number(b.samePref) - Number(a.samePref)
+    || String(a.edition.DATE_START).localeCompare(String(b.edition.DATE_START))
+    || String(a.festival.name || '').localeCompare(String(b.festival.name || '')));
+  upcoming.forEach(({ festival }) => add(festival));
+  return selected;
 }
 
 function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsByFestival = new Map(), venues = [], festivalData = null, articles = [], artists = []) {
@@ -1097,7 +1187,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   const articleEvents = parseEvents(L.body || '');
   const festivalId = String(a.festivalId || '').trim();
   const relatedFestival = festivalId
-    ? (festivals || []).find((f) => String(f.id) === festivalId)
+    ? (festivals || []).find((f) => String(f.id) === festivalId && isPublishedFestival(f))
     : null;
   const relatedFestivalPath = relatedFestival
     ? path.join(LP_DIR, 'festivals', `${relatedFestival.id}.html`)
@@ -1176,15 +1266,17 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
     };
   });
 
+  const { short: articleTitleShort, sub: articleTitleSub } = splitArticleTitle(L.title);
+  const articleTitleHtml = `<span class="article-title-short">${esc(articleTitleShort)}</span>${articleTitleSub ? `<span class="article-title-sub">${esc(articleTitleSub)}</span>` : ''}`;
   const heroBlock = a.image
     ? `<header class="article-hero"${ratioAttr(a.heroRatio)}>
         <img ${dimensionAttrs(a.image)} src="/${String(a.image).replace(/^\//, '')}"${heroSrcsetAttr(a.image)} alt="${esc(L.title)}" fetchpriority="high" decoding="async">
         <div class="article-hero-overlay">
           <div class="article-chips"><span class="cat-pill">${esc(a.category || 'NEWS')}</span></div>
-          <h1>${esc(L.title)}</h1>
+          <h1>${articleTitleHtml}</h1>
         </div>
       </header>`
-    : `<div class="article-meta-top"><span class="cat-pill">${esc(a.category || 'NEWS')}</span></div><h1>${esc(L.title)}</h1>`;
+    : `<div class="article-meta-top"><span class="cat-pill">${esc(a.category || 'NEWS')}</span></div><h1>${articleTitleHtml}</h1>`;
 
   /* 記事に紐づくフェス（ARTICLES.festivalId）。
 
@@ -1194,31 +1286,10 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
      §9-23 で回遊が切れたときと同じ形なので、対にしておく。
 
      カード画像はハブと同じ縮小版を使う（§9-51）。 */
-  const relatedFestivalHtml = relatedFestival ? (() => {
-    const feds = [...(editionsByFestival.get(relatedFestival.id) || [])].sort((x, y) =>
-      String(y.DATE_START || '').localeCompare(String(x.DATE_START || '')));
-    const cur = feds[0];
-    const fname = lang === 'en' ? (relatedFestival.name_en || relatedFestival.name) : relatedFestival.name;
-    const img = relatedFestival.image || relatedFestival.flyer;
-    const place = [
-      cur ? editionLocationName(cur, lang) : localizedValue(relatedFestival.location, relatedFestival.location_ja, '', lang),
-      cur?.PREF || relatedFestival.city,
-    ].filter(Boolean).join(' — ');
-    const when = cur?.DATE_START
-      ? [cur.DATE_START, cur.DATE_END].filter(Boolean).filter((v, i, arr) => arr.indexOf(v) === i).join(' — ')
-      : (relatedFestival.date || '');
-    return `<div class="related-festival">
-      <h2>${lang === 'en' ? 'RELATED FESTIVAL' : '関連フェスティバル'}</h2>
-      <a class="related-card" href="${L.prefix}/festivals/${encodeURIComponent(relatedFestival.id)}.html">
-        <div class="related-card-img">${img ? `<img ${dimensionAttrs(cardImagePath(img))} src="/${cardImagePath(img)}"${cardSrcsetAttr(img)} alt="${esc(fname)}" loading="lazy"${imagePositionStyle(relatedFestival)}>` : ''}</div>
-        <div class="related-card-info">
-          <div class="related-card-date">${esc(when)}</div>
-          <div class="related-card-name">${esc(fname)}</div>
-          <div class="related-card-loc">${esc(place)}</div>
-        </div>
-      </a>
-    </div>`;
-  })() : '';
+  const relatedFestivals = selectRelatedFestivals(a, L.body, festivals, editionsByFestival, festivalId);
+  const relatedFestivalHtml = relatedFestivals.length
+    ? `<div class="related-festivals"><h2>${lang === 'en' ? 'RELATED FESTIVALS' : '関連フェスティバル'}</h2><div class="related-festivals-track">${relatedFestivals.map((festival) => relatedFestivalCardHtml(festival, lang, L.prefix, editionsByFestival)).join('')}</div></div>`
+    : '';
 
   const articleDateKey = (item) => String(item.publishedAt || item.date || '').trim();
   const publishedArticles = (articles || [])
@@ -1236,7 +1307,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   addRelated(publishedArticles.filter((item) => a.category && item.category === a.category));
   addRelated(publishedArticles);
   const relatedStoriesHtml = relatedArticles.length
-    ? `<section class="detail-section festival-related-stories-v2 article-related-stories">${relatedStoryCardsHtml(relatedArticles, lang, { forceEnglishPath: true, compactDate: true })}</section>`
+    ? `<section class="detail-section festival-related-stories-v2 article-related-stories">${relatedStoryCardsHtml(relatedArticles, lang, { forceEnglishPath: true, compactDate: true, wide: true })}</section>`
     : '';
 
   const updatedDate = String(a.updatedAt || '').trim();
@@ -1254,7 +1325,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
       <div><dt>PUBLISHED</dt><dd>${esc(fmtDate(a.date) || '—')}${updatedHtml}</dd></div>
       <div><dt>READING TIME</dt><dd>${esc(a.readTime || 5)} MIN</dd></div>
     </dl>
-    <div class="article-excerpt">${esc(L.excerpt || '')}</div>
+    ${L.excerpt ? `<div class="article-excerpt">${esc(L.excerpt)}</div>` : ''}
     <div class="article-body">${addLocalImageSrcset(addDriveImageSrcset(addHtmlImageDimensions(resolveEntities(linkedBody, lang))))}</div>
     <div class="article-share">${festivalShareButtons(L.title, canonical, lang)}</div>
     ${relatedStoriesHtml}
@@ -2236,7 +2307,7 @@ const EN_HUB_DESC = {
 
 // 本文に残る日本語の固定文言（データ由来の日本語は対象外）
 const EN_HUB_TEXT = [
-  ['FESTIVAL 掲載申請', 'Submit a Festival'],
+  ['APPLY', 'APPLY'],
 ];
 
 /* about.html の STATEMENT を EN 版で英語にするための対訳。
@@ -2282,7 +2353,7 @@ const ABOUT_EN_TEXT = [
    "Japan's underground nightclubs, music bars and singular spaces."],
   ['コラボレーション、取材・掲載のご相談、広告掲載、その他のお問い合わせはこちらから。',
    'For collaborations, press and listing inquiries, advertising, and anything else — reach us here.'],
-  ['フェスティバルの掲載申請はこちら →', 'Submit your festival here →'],
+  ['APPLY →', 'APPLY →'],
 ];
 
 function enHubFromJa(html, page) {

@@ -551,7 +551,9 @@ footer {
 }
 .footer-links {
   display: flex;
-  gap: 32px;
+  flex-wrap: wrap;
+  row-gap: 0;
+  column-gap: 28px;
 }
 .footer-links a {
   display: inline-flex;
@@ -563,7 +565,10 @@ footer {
   text-transform: uppercase;
   opacity: 0.62;
   transition: opacity 0.3s ease;
+  white-space: nowrap;
 }
+.footer-copy { white-space: nowrap; }
+.footer-logo { margin-right: 24px; }
 .footer-links a:hover { opacity: 1; }
 
 /* footer DISCOVER toggle */
@@ -706,6 +711,25 @@ footer {
   transition: opacity 0.3s ease;
 }
 .newsletter-form button:hover { opacity: 0.85; }
+.event-signup {
+  max-width: 560px;
+  margin: 40px auto 24px;
+}
+.event-signup-label {
+  margin-bottom: 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-align: center;
+}
+.event-signup-label [lang="en"] { display: none; }
+html[lang="en"] .event-signup-label [lang="ja"] { display: none; }
+html[lang="en"] .event-signup-label [lang="en"] { display: inline; }
+.event-signup .newsletter-form { max-width: none; }
+.event-signup .newsletter-form button { white-space: nowrap; }
+@media (max-width: 640px) {
+  .event-signup .newsletter-form { flex-direction: column; }
+}
 /* Honeypot — hidden from humans, bots fill it and get rejected by FormSubmit */
 .tj-honeypot {
   position: absolute !important;
@@ -782,6 +806,10 @@ footer {
   .tj-fav-heart { width: 38px; height: 38px; }
   .tj-fav-heart.sm { width: 32px; height: 32px; }
   .share-btn, .article-share-btn { width: 38px; height: 38px; }
+}
+
+@media (max-width: 1200px) {
+  .footer-top { flex-wrap: wrap; row-gap: 16px; }
 }
 
 /* Hide custom cursor on touch devices */

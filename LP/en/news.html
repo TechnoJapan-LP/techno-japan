@@ -45,7 +45,8 @@
 <link rel="dns-prefetch" href="https://w.behold.so">
 <link rel="dns-prefetch" href="https://formsubmit.co">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/common.css?v=32">
+<link rel="stylesheet" href="/common.css?v=33">
+<script>document.documentElement.classList.add('tj-news-hydrating');</script>
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
@@ -56,28 +57,113 @@
 @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 html.tj-page-leaving body { opacity: 0; transition: opacity .18s ease; }
 
-/* ===================== TOP BAR (tagline) ===================== */
-.top-bar {
-  padding: 120px 40px 0;
-  opacity: 0; animation: fadeSlideUp 0.8s ease forwards; animation-delay: 0.2s;
+/* ===================== NEWS HERO ===================== */
+.news-hero {
+  position: relative;
+  height: 60vh;
+  min-height: 420px;
+  max-height: 720px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  margin: 0;
+  background: linear-gradient(135deg, rgba(240,237,232,0.05) 0%, rgba(240,237,232,0.01) 100%);
 }
-.tagline {
+.news-hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: brightness(.55) saturate(.9);
+  transform: scale(1.02);
+}
+.news-hero-inner { position: relative; z-index: 1; padding: 0 24px; }
+.news-hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  opacity: .8;
+  margin-bottom: 18px;
+}
+.news-hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(84px, 14vw, 180px);
+  line-height: .9;
+  letter-spacing: .02em;
+  margin: 0 0 18px;
+  text-transform: uppercase;
+}
+.news-hero-tagline {
   font-family: var(--font-body);
-  font-size: clamp(28px, 4vw, 52px);
-  font-weight: 500;
-  line-height: 1.2;
-  max-width: 640px;
+  font-weight: 400;
+  font-size: clamp(16px, 1.4vw, 20px);
+  line-height: 1.5;
+  opacity: .9;
+  margin: 0;
+  word-break: keep-all;
+  word-break: auto-phrase;
 }
-/* STORIES限定のキネティックタイプ。記事カードの位置や高さは動かさない。 */
-.kinetic-type {
-  max-width: 640px;
-  will-change: transform;
-  transition: transform .18s cubic-bezier(.16,1,.3,1);
+.news-hero-tagline br { display: none; }
+@media (min-width: 900px) {
+  .news-hero-tagline br { display: inline; }
 }
+
+/* ===================== FEATURED STORIES ===================== */
+.news-featured { border-bottom: 1px solid rgba(240,237,232,.55); }
+.featured-block {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) minmax(0,1.15fr) minmax(0,1fr);
+  gap: 0 40px;
+  align-items: center;
+  min-height: 70vh;
+  padding: 56px 40px;
+  text-decoration: none;
+  color: var(--text);
+  border-top: 1px solid rgba(240,237,232,.12);
+}
+.featured-block:first-child { border-top: none; }
+.featured-side { aspect-ratio: 11/20; overflow: hidden; background: #111; }
+.featured-side img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  filter: grayscale(.15) brightness(.85);
+  transition: transform .8s ease;
+}
+.featured-side-left img { object-position: left center; }
+.featured-side-right img { object-position: right center; }
+.featured-block:hover .featured-side img { transform: scale(1.04); }
+.featured-center { text-align: center; padding: 0 12px; }
+.featured-label {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .3em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 22px;
+}
+.featured-label .tag-dot { display: inline-block; width: 5px; height: 5px; margin-right: 8px; border-radius: 50%; background: var(--accent); }
+.featured-title .story-title-short {
+  font-family: var(--font-display); font-size: clamp(40px,4.6vw,64px); line-height: .95;
+  text-transform: uppercase; display: block;
+}
+.featured-title .story-title-sub {
+  display: block; margin-top: 14px; font-family: var(--font-body); font-weight: 300;
+  font-size: clamp(16px,1.4vw,20px); line-height: 1.5; opacity: .9;
+  word-break: keep-all; word-break: auto-phrase; overflow-wrap: anywhere;
+}
+.featured-meta {
+  margin-top: 20px; font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: .15em; text-transform: uppercase; opacity: .6;
+}
+.featured-read {
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-top: 28px; padding: 14px 34px; border: 1px solid rgba(240,237,232,.4);
+  border-radius: 999px; font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: .2em; transition: background .3s, color .3s;
+}
+.featured-block:hover .featured-read { background: var(--text); color: #0a0a0a; }
 
 /* ===================== SORT TABS (populaires / dernieres) ===================== */
 .sort-tabs {
-  padding: 40px 40px 0;
+  padding: 0;
   display: flex; gap: 0;
   opacity: 0; animation: fadeSlideUp 0.6s ease forwards; animation-delay: 0.4s;
 }
@@ -97,173 +183,23 @@ html.tj-page-leaving body { opacity: 0; transition: opacity .18s ease; }
 }
 @keyframes sortUnderline { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
-/* ===================== MAIN GRID (durevie style) ===================== */
-.main-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
-  padding: 40px 40px 0;
-  min-height: 600px;
-  opacity: 0; animation: fadeSlideUp 0.8s ease forwards; animation-delay: 0.5s;
-}
+/* ===================== ARTICLE FEED BELOW ===================== */
 
-/* Dure Vie-inspired editorial rail: the image stays in view while stories advance. */
-.stories-visual {
-  position: sticky; top: 0;
-  /* Dure Vieのように左ビジュアルを画面高いっぱいで固定する */
-  width: 100%; height: 100vh; min-height: 620px;
-  overflow: hidden; background: #080808;
-}
-.stories-visual-slide { position: absolute; inset: 0; opacity: 0; transition: opacity .55s ease; }
-.stories-visual-slide.is-active { opacity: 1; }
-.stories-visual-slide img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(12%) brightness(.9); transform: scale(1.03); transition: transform 1.2s cubic-bezier(.16,1,.3,1), filter .6s ease; }
-.stories-visual-slide.is-active img { transform: scale(1); filter: grayscale(0%) brightness(.96); }
-.stories-visual-slide::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,8,8,.12), rgba(8,8,8,.06) 55%, rgba(8,8,8,.58)); pointer-events: none; }
-.stories-visual-date { position: absolute; right: 28px; bottom: 28px; z-index: 1; font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; line-height: 1.6; text-align: right; opacity: .8; }
-.stories-visual-label { position: absolute; left: 28px; bottom: 28px; z-index: 1; font-family: var(--font-mono); font-size: 11px; letter-spacing: .2em; color: var(--accent); text-transform: uppercase; }
-.story-side-item { min-height: 50vh; display: flex; flex-direction: column; justify-content: center; }
-.story-side-item .side-card { min-height: 50vh; flex: none; }
-.story-side-mobile-image { display: none; }
-
-/* LEFT: Featured big image card */
-.featured-col {
-  position: relative;
-  display: flex; flex-direction: column;
-}
-.featured-card {
-  position: relative;
-  flex: 1;
-  overflow: hidden;
-  display: flex; flex-direction: column;
-  background: var(--card-bg);
-  --reveal-delay: 0ms;
-}
-.featured-card-image {
-  position: relative;
-  flex: 1; min-height: 480px;
-  overflow: hidden;
-}
-.featured-card-image img {
-  width: 100%; height: 100%; object-fit: cover;
-  filter: grayscale(60%) brightness(0.84);
-  transition: filter 0.6s ease, transform 0.6s ease;
-}
-.featured-card:hover .featured-card-image img {
-  filter: grayscale(20%) brightness(0.96);
-  transform: scale(1.08);
-}
-.featured-card.reveal .featured-card-body > * { opacity: 0; transform: translateY(12px); transition: opacity .55s ease, transform .55s cubic-bezier(.16,1,.3,1); transition-delay: calc(var(--reveal-delay) + 180ms); }
-.featured-card.reveal.visible .featured-card-body > * { opacity: 1; transform: translateY(0); }
-.featured-card.reveal.visible .featured-card-body > :nth-child(2) { transition-delay: calc(var(--reveal-delay) + 260ms); }
-.featured-card.reveal.visible .featured-card-body > :nth-child(3) { transition-delay: calc(var(--reveal-delay) + 340ms); }
-.featured-card.reveal.visible .featured-card-body > :nth-child(4) { transition-delay: calc(var(--reveal-delay) + 420ms); }
-.featured-card-image-placeholder {
-  width: 100%; height: 100%; min-height: 480px;
-  display: flex; align-items: center; justify-content: center;
-  background: linear-gradient(135deg, rgba(240,237,232,0.05) 0%, rgba(240,237,232,0.01) 100%);
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; opacity: 0.1; text-transform: uppercase;
-}
-.featured-card-date {
-  position: absolute; bottom: 20px; right: 20px;
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em;
-  text-align: right; line-height: 1.6;
-  opacity: 0.6;
-}
-.featured-card-body {
-  padding: 28px 0 0;
-}
-.featured-card-tag {
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--accent); margin-bottom: 12px;
-  display: flex; align-items: center; gap: 8px;
-}
-.featured-card-tag .tag-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
-.featured-card-title {
-  font-family: var(--font-body); font-size: clamp(20px, 2.7vw, 34px); font-weight: 400;
-  line-height: 1.35;
-  overflow-wrap: anywhere;
-}
-.featured-card-meta {
-  margin-top: 16px;
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; opacity: 0.62; text-transform: uppercase;
-}
-.featured-card .read-link {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
-  margin-top: 16px; opacity: 0.4; transition: opacity 0.3s ease;
-}
-.featured-card:hover .read-link { opacity: 1; }
-
-/* RIGHT: Stacked article cards */
-.side-col {
-  display: flex; flex-direction: column;
-  border-left: 1px solid var(--card-border);
-}
-.side-card {
-  display: flex; flex-direction: column; justify-content: center;
-  padding: 26px 36px;
-  flex: 1;
-  border-bottom: 1px solid var(--card-border);
-  position: relative;
-  transition: background 0.3s ease;
-  --reveal-delay: 0ms;
-}
-.side-card:last-child { border-bottom: none; }
-.side-card:hover { background: rgba(168,47,49,0.06); transform: translateX(8px); }
-/* Editorial grid break: keep the database-like list intact while giving the second story a slight offset. */
-@media (min-width: 901px) {
-  .side-card:nth-child(2) { margin-top: 16px; margin-bottom: -16px; }
-}
-.side-card.reveal .side-card-title { opacity: 0; transform: translateY(10px); transition: opacity .5s ease, transform .5s cubic-bezier(.16,1,.3,1); transition-delay: calc(var(--reveal-delay) + 160ms); }
-.side-card.reveal.visible .side-card-title { opacity: 1; transform: translateY(0); }
-.side-card-tag {
-  font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--accent); margin-bottom: 14px;
-  display: flex; align-items: center; gap: 8px;
-}
-.side-card-tag .tag-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
-.side-card-title {
-  font-family: var(--font-body); font-size: clamp(16px, 2vw, 22px); font-weight: 400;
+.story-title-short { display: block; }
+.story-title-sub {
+  display: block;
+  margin-top: .3em;
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: .78em;
   line-height: 1.4;
+  letter-spacing: 0;
+  text-transform: none;
+  opacity: .85;
+  word-break: keep-all;
+  word-break: auto-phrase;
   overflow-wrap: anywhere;
-  padding-right: 60px;
 }
-.side-card-excerpt {
-  font-family: var(--font-body); font-size: 12px; font-weight: 300; line-height: 1.6;
-  opacity: 0.3; margin-top: 10px; padding-right: 60px;
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-}
-.side-card-meta {
-  margin-top: 12px;
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; opacity: 0.62; text-transform: uppercase;
-}
-.side-card-arrow {
-  position: absolute; right: 32px; top: 50%; transform: translateY(-50%);
-  width: 44px; height: 44px; border-radius: 50%;
-  border: 1px solid rgba(240,237,232,0.12);
-  overflow: hidden;
-  transition: border-color 0.3s ease, background 0.3s ease;
-}
-.side-card:hover .side-card-arrow { border-color: rgba(168,47,49,0.55); background: rgba(168,47,49,0.08); }
-.side-card-arrow::before,
-.side-card-arrow::after {
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.side-card-arrow::before {
-  content: '→';
-  font-family: var(--font-mono); font-size: 14px; opacity: 0.5;
-}
-.side-card-arrow::after {
-  content: 'READ';
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em;
-  opacity: 0;
-  transform: translateY(8px);
-}
-.side-card:hover .side-card-arrow::before { opacity: 0; transform: translateY(-10px); }
-.side-card:hover .side-card-arrow::after { opacity: 1; transform: translateY(0); }
-
 .tag-filter-pill {
   display: inline-flex; align-items: center; gap: 10px;
   padding: 8px 14px; margin: 24px 40px 0;
@@ -323,8 +259,6 @@ html.tj-page-leaving body { opacity: 0; transition: opacity .18s ease; }
 .sort-tab:focus-visible,
 .cat-btn:focus-visible,
 .load-more-btn:focus-visible,
-.featured-card:focus-visible,
-.side-card:focus-visible,
 .feed-card:focus-visible,
 .discover-card:focus-visible {
   outline: 2px solid var(--accent);
@@ -342,6 +276,7 @@ html.tj-page-leaving body { opacity: 0; transition: opacity .18s ease; }
   grid-template-columns: 1fr 1fr;
   gap: 48px 32px;
 }
+html.tj-news-hydrating #feed-grid > .ssr-link-list { display: none; }
 .feed-empty {
   grid-column: 1 / -1;
   min-height: 140px;
@@ -538,9 +473,8 @@ html.tj-page-leaving body { opacity: 0; transition: opacity .18s ease; }
 .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; transition-delay: var(--reveal-delay, 0ms); }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 @media (prefers-reduced-motion: reduce) {
-  .kinetic-type { transform: none !important; transition: none; }
-  .featured-card.reveal .featured-card-body > *, .side-card.reveal .side-card-title, .feed-card.reveal .feed-card-title { opacity: 1; transform: none; transition: none; }
-  .side-card:hover, .feed-card:hover { transform: none; }
+  .feed-card.reveal .feed-card-title { opacity: 1; transform: none; transition: none; }
+  .feed-card:hover { transform: none; }
 }
 
 /* ===================== FOOTER (page-specific overrides) ===================== */
@@ -549,25 +483,10 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
 /* ===================== RESPONSIVE ===================== */
 @media (max-width: 1100px) {
   .feed-grid { gap: 36px 24px; }
-  .side-card-title { font-size: 16px; }
 }
 @media (max-width: 900px) {
-  .top-bar { padding: 120px 24px 0; }
-  .kinetic-type { transform: none !important; transition: none; }
-  .sort-tabs { padding: 32px 24px 0; }
-  .main-grid { padding: 32px 24px 0; grid-template-columns: 1fr; gap: 0; }
-  .side-col { border-left: none; border-top: 1px solid var(--card-border); }
-  .stories-visual { display: none; }
-  .stories-visual-label, .stories-visual-date { bottom: 16px; }
-  .stories-visual-label { left: 16px; }
-  .stories-visual-date { right: 16px; }
-  .story-side-item { min-height: 0; }
-  .story-side-item .side-card { min-height: 0; }
-  .story-side-mobile-image { display: block; margin: 0 -20px 24px; height: 56vw; max-height: 300px; overflow: hidden; }
-  .story-side-mobile-image img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(18%) brightness(.72); }
-  .side-card:nth-child(2) { margin-top: 0; margin-bottom: 0; }
-  .featured-card-image, .featured-card-image-placeholder { min-height: 320px; }
-  .feed-section { padding: 60px 24px 0; margin-top: 60px; }
+  .sort-tabs { padding: 0; }
+  .feed-section { padding: 60px 24px 0; margin-top: 0; }
   .feed-grid { grid-template-columns: 1fr; gap: 40px; }
   .guide-section { padding: 0 24px; }
   .discover-grid { grid-template-columns: repeat(2, 1fr); }
@@ -576,14 +495,13 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
   footer { padding: 60px 24px 32px; margin-top: 80px; }
 }
 @media (max-width: 768px) {
-  .tagline { font-size: 24px; }
-  .side-card { padding: 24px 20px; }
-  .side-card-arrow { right: 16px; width: 36px; height: 36px; }
-  .side-card-title { padding-right: 48px; font-size: 15px; }
-  .side-card-excerpt { display: none; }
-  .sort-tabs { padding: 24px 24px 0; }
-  .featured-card-title { font-size: 20px; }
-  .featured-card-image, .featured-card-image-placeholder { min-height: 240px; }
+  .sort-tabs { padding: 0; }
+}
+@media (max-width: 640px) {
+  .news-hero { height: 70vh; }
+  .featured-block { grid-template-columns: 1fr; gap: 20px; padding: 32px 16px; min-height: 0; }
+  .featured-side-left { aspect-ratio: 16/10; }
+  .featured-side-right { display: none; }
 }
 @media (max-width: 480px) {
   .discover-grid { grid-template-columns: 1fr; }
@@ -593,16 +511,12 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
   .sort-tab, .cat-btn, .load-more-btn, .discover-card { cursor: pointer; }
   /* タッチ端末では hover がタップ後に残るブラウザがあるため、
      レイアウトを横へ押し出す演出は無効にして、軽い押下だけ残す。 */
-  .side-card:hover { transform: none; }
   .feed-card:hover { transform: none; }
   .load-more-btn:hover { transform: none; }
-  .featured-card:hover .featured-card-image img,
   .feed-card:hover .feed-card-image img { transform: none; }
-  .side-card:active, .feed-card:active { opacity: 0.8; }
-  .featured-card:active .featured-card-image img,
+  .feed-card:active { opacity: 0.8; }
   .feed-card:active .feed-card-image img { transform: scale(1.03); }
   .reveal { transition-delay: 0ms; }
-  .side-card.reveal .side-card-title,
   .feed-card.reveal .feed-card-title { transition-delay: 80ms; }
 }
 
@@ -706,22 +620,33 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
 <!-- ===================== LIST VIEW WRAPPER ===================== -->
 <div id="list-view">
 
-<!-- ===================== TAGLINE ===================== -->
-<div class="top-bar">
-  <div class="kinetic-type" id="stories-kinetic-type">
-    <h1 class="tagline">The media exploring cultures and electronic music in Japan.</h1>
+<!-- ===================== NEWS HERO ===================== -->
+<header class="news-hero" id="news-hero">
+  <div class="news-hero-bg" data-bg="" aria-hidden="true"></div>
+  <div class="news-hero-inner">
+    <div class="news-hero-eyebrow">TECHNO JAPAN / STORIES</div>
+    <h1 class="news-hero-title">NEWS</h1>
+    <p class="news-hero-tagline">The media exploring <br>cultures and electronic music in Japan.</p>
   </div>
-</div>
+</header>
 
-<!-- ===================== SORT TABS ===================== -->
-<div class="sort-tabs">
-  <button class="sort-tab active" data-sort="latest">Latest</button>
-  <button class="sort-tab" data-sort="popular">Most Popular</button>
-</div>
+<!-- ===================== FEATURED ===================== -->
+<section class="news-featured" id="news-featured"></section>
 
-<!-- ===================== MAIN GRID ===================== -->
-<div class="main-grid" id="main-grid">
-  <div class="featured-col" id="featured-col"><!-- skeleton: data.js 描画で置換される -->
+<!-- ===================== MORE ARTICLES FEED ===================== -->
+<div class="feed-section reveal" id="archive-section">
+  <div class="feed-header">
+    <div>
+      <div class="feed-label">ALL STORIES</div>
+      <div class="feed-title">ARCHIVE</div>
+    </div>
+  </div>
+  <div class="sort-tabs">
+    <button class="sort-tab active" data-sort="latest">Latest</button>
+    <button class="sort-tab" data-sort="popular">Most Popular</button>
+  </div>
+  <div class="category-nav" id="category-nav"></div>
+  <div class="feed-grid" id="feed-grid">
     <!-- STATIC_LINKS:ARTICLES:START -->
 <ul class="ssr-link-list">
   <li><a href="/en/articles/transcendence-2025-report.html">The Potential of the Next Generation Witnessed at Transcendence, an Outdoor Techno Party</a></li>
@@ -743,22 +668,6 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
   <li><a href="/en/articles/treak-2026-info.html">TREKs | For three days only, the forests of Kuta, Kyoto become a &quot;commune&quot;</a></li>
 </ul>
 <!-- STATIC_LINKS:ARTICLES:END -->
-  </div>
-  <div class="side-col" id="side-col">
-    <div class="sk sk-card"></div><div class="sk sk-card"></div><div class="sk sk-card"></div>
-  </div>
-</div>
-
-<!-- ===================== MORE ARTICLES FEED ===================== -->
-<div class="feed-section reveal" id="archive-section">
-  <div class="feed-header">
-    <div>
-      <div class="feed-label">ALL STORIES</div>
-      <div class="feed-title">ARCHIVE</div>
-    </div>
-  </div>
-  <div class="category-nav" id="category-nav"></div>
-  <div class="feed-grid" id="feed-grid">
     <div class="sk sk-card"></div><div class="sk sk-card"></div><div class="sk sk-card"></div><div class="sk sk-card"></div>
   </div>
   <div class="load-more-wrap">
@@ -840,7 +749,8 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
       <a href="/en/artists.html">ARTISTS</a>
       <a href="/en/venues.html">VENUES</a>
       <a href="/en/about.html">ABOUT</a>
-      <a href="/en/submit.html">Submit a Festival</a>
+      <a href="/en/submit.html">APPLY</a>
+      <a href="/writers.html">WRITER</a>
       <span class="footer-social">
         <a href="https://www.instagram.com/techno.japan_/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.9" fill="currentColor" stroke="none"/></svg></a>
         <a href="https://www.threads.net/@techno.japan_" target="_blank" rel="noopener" aria-label="Threads"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.781 3.631 2.695 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.964-.065-1.19.408-2.285 1.33-3.082.88-.76 2.119-1.207 3.583-1.291a13.853 13.853 0 0 1 3.02.142c-.126-.742-.375-1.332-.74-1.757-.504-.582-1.279-.876-2.305-.875h-.024c-.815 0-1.917.224-2.617 1.272l-1.715-1.155c.96-1.388 2.413-2.085 4.318-2.085h.038c4.226.025 6.694 2.589 6.943 7.073l.34.119c1.557.555 2.694 1.452 3.34 2.628.94 1.701 1.005 4.348-1.224 6.61C18.69 23.146 16.491 23.978 12.186 24zm-.026-9.965c-.282 0-.567.011-.857.034-1.834.119-2.992.953-2.93 2.139.057 1.108 1.222 1.65 2.367 1.589 1.054-.057 2.426-.467 2.658-3.213a14.3 14.3 0 0 0-1.238-.55z"/></svg></a>
@@ -1006,12 +916,6 @@ function formatDate(dateStr) {
   if (!y || !m || !d) return '';
   return `${MONTHS_S[m-1]} ${d}, ${y}`;
 }
-function formatDateSplit(dateStr) {
-  if (!dateStr) return '';
-  const [y, m, d] = String(dateStr).split('-').map(Number);
-  if (!y || !m || !d) return '';
-  return `${MONTHS_S[m-1]} ${String(d).padStart(2,'0')}<br>${y}`;
-}
 function articleDetailHref(article) {
   const prefix = document.documentElement.lang === 'en' ? '/en' : '';
   return `${prefix}/articles/${encodeURIComponent(article.id)}.html`;
@@ -1100,6 +1004,21 @@ function restoreNewsHubScroll() {
   } catch (_) {}
 }
 
+function tjSplitTitle(title) {
+  const text = String(title ?? '');
+  const separatorIndex = text.search(/[｜|]/);
+  if (separatorIndex === -1) return { short: text, sub: '' };
+  return {
+    short: text.slice(0, separatorIndex).trim(),
+    sub: text.slice(separatorIndex + 1).trim()
+  };
+}
+
+function tjStoryTitle(title) {
+  const { short, sub } = tjSplitTitle(title);
+  return `<span class="story-title-short">${tjNoBreakNames(short)}</span>${sub ? `<span class="story-title-sub">${tjNoBreakNames(sub)}</span>` : ''}`;
+}
+
 /* ========== SORT ARTICLES ========== */
 function getSorted(arr) {
   if (currentSort === 'latest') {
@@ -1108,88 +1027,29 @@ function getSorted(arr) {
   return [...arr].sort((a, b) => (b.views || 0) - (a.views || 0));
 }
 
-/* ========== RENDER MAIN GRID ========== */
-function renderMainGrid() {
-  const sorted = getSorted(ARTICLES);
-  // Dure Vie型の右レールを6記事まで表示し、スクロール回遊を増やす。
-  const storyItems = sorted.slice(0, 6);
-  const featured = storyItems[0];
+/* ========== RENDER FEATURED STORIES ========== */
+function renderFeaturedNews() {
+  const section = document.getElementById('news-featured');
+  if (!section) return;
+  const published = ARTICLES.filter((article) => String(article?.status || '').toLowerCase() !== 'draft');
+  const latest = [...published].sort((a, b) => new Date(b.date) - new Date(a.date));
+  const featured = latest.filter((article) => article.featured === true);
+  const items = [...featured, ...latest.filter((article) => article.featured !== true)].slice(0, 3);
 
-  // Featured left
-  // 記事の title_en / excerpt_en は data.js にまだ1件も無い（CMS の
-  // 「🌐 ENGLISH VERSION」に入力されれば詳細ページと同時に効く）。
-  // 現状は JA へフォールバックする。
-  const featuredTitle = tjLocalized(featured.title, '', featured.title_en);
-  document.getElementById('featured-col').innerHTML = `<div class="stories-visual" aria-hidden="true">
-    ${storyItems.map((a, i) => `<div class="stories-visual-slide${i === 0 ? ' is-active' : ''}" data-story-visual="${i}">
-      ${a.image ? `<img ${tjImageSizeAttrs(a.image)} loading="${i === 0 ? 'eager' : 'lazy'}"${i === 0 ? ' fetchpriority="high"' : ''} decoding="async" src="${tjCardAssetPath(a.image)}" data-original-src="${tjAssetPath(a.image)}" alt="">` : ''}
-    </div>`).join('')}
-    <div class="stories-visual-label">STORIES <span id="story-visual-index">01</span> / ${String(storyItems.length).padStart(2,'0')}</div>
-    <div class="stories-visual-date" id="story-visual-date">${formatDateSplit(featured.date)}</div>
-  </div>`;
-
-  // Side right
-  document.getElementById('side-col').innerHTML = storyItems.map((a, index) => `
-    <div class="story-side-item" data-story-index="${index}"><a href="${articleDetailHref(a)}" data-article-detail-link class="side-card reveal" style="--reveal-delay:${index * 100}ms">
-      ${a.image ? `<div class="story-side-mobile-image"><img ${tjImageSizeAttrs(a.image)} loading="lazy" decoding="async" src="${tjCardAssetPath(a.image)}" data-original-src="${tjAssetPath(a.image)}" alt="${tjLocalized(a.title, '', a.title_en)}"></div>` : ''}
-      <div class="side-card-tag"><span class="tag-dot"></span> ${a.category}</div>
-      <div class="side-card-title">${tjNoBreakNames(tjLocalized(a.title, '', a.title_en))}</div>
-      <div class="side-card-excerpt">${tjLocalized(a.excerpt, '', a.excerpt_en)}</div>
-      <div class="side-card-meta">${formatDate(a.date)} · ${a.readTime || 5} MIN READ</div>
-      <div class="side-card-arrow"></div>
-    </a></div>
-  `).join('');
-  observeReveals(document.getElementById('featured-col'));
-  observeReveals(document.getElementById('side-col'));
-  initStoryVisualRail();
-}
-
-function initStoryVisualRail() {
-  const rail = document.querySelector('.stories-visual');
-  const items = [...document.querySelectorAll('[data-story-index]')];
-  if (!rail || !items.length || rail.dataset.storyRailBound === 'true') return;
-  rail.dataset.storyRailBound = 'true';
-  const slides = [...rail.querySelectorAll('[data-story-visual]')];
-  const index = rail.querySelector('#story-visual-index');
-  const date = rail.querySelector('#story-visual-date');
-  const dates = items.map(item => item.querySelector('.side-card-meta')?.textContent.split('·')[0].trim() || '');
-  const activate = (n) => {
-    slides.forEach((slide, i) => slide.classList.toggle('is-active', i === n));
-    if (index) index.textContent = String(n + 1).padStart(2, '0');
-    if (date) date.textContent = dates[n] || '';
-  };
-  let frame = 0;
-  const sync = () => {
-    frame = 0;
-    const viewportCenter = window.innerHeight / 2;
-    const visible = items.filter(item => {
-      const rect = item.getBoundingClientRect();
-      return rect.bottom > 0 && rect.top < window.innerHeight;
-    });
-    if (!visible.length) return;
-    const active = visible.sort((a, b) => {
-      const ar = a.getBoundingClientRect();
-      const br = b.getBoundingClientRect();
-      return Math.abs(ar.top + ar.height / 2 - viewportCenter) - Math.abs(br.top + br.height / 2 - viewportCenter);
-    })[0];
-    activate(Number(active.dataset.storyIndex) || 0);
-  };
-  const requestSync = () => {
-    if (!frame) frame = requestAnimationFrame(sync);
-  };
-  window.addEventListener('scroll', requestSync, { passive: true });
-  window.addEventListener('resize', requestSync, { passive: true });
-  items.forEach(item => {
-    item.addEventListener('pointerenter', () => {
-      if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-        activate(Number(item.dataset.storyIndex) || 0);
-      }
-    });
-    item.addEventListener('focusin', () => {
-      activate(Number(item.dataset.storyIndex) || 0);
-    });
-  });
-  sync();
+  section.innerHTML = items.map((article) => {
+    const title = tjLocalized(article.title, '', article.title_en);
+    const image = article.image ? `<img loading="lazy" decoding="async" src="${tjAssetPath(article.image)}" alt="">` : '';
+    return `<a class="featured-block" href="${articleDetailHref(article)}" data-article-detail-link>
+      <div class="featured-side featured-side-left">${image}</div>
+      <div class="featured-center">
+        <div class="featured-label"><span class="tag-dot"></span>FEATURED</div>
+        <h2 class="featured-title">${tjStoryTitle(title)}</h2>
+        <div class="featured-meta">${article.category} · ${formatDate(article.date)} · ${article.readTime || 5} MIN READ</div>
+        <span class="featured-read">READ →</span>
+      </div>
+      <div class="featured-side featured-side-right">${image}</div>
+    </a>`;
+  }).join('');
 }
 
 /* ========== RENDER CATEGORY NAV ========== */
@@ -1261,7 +1121,7 @@ function renderFeed() {
           : `<div class="feed-card-image-placeholder">COMING SOON</div>`}
       </div>
       <div class="feed-card-tag"><span class="tag-dot"></span> ${a.category}</div>
-      <div class="feed-card-title">${tjNoBreakNames(tjLocalized(a.title, '', a.title_en))}</div>
+      <div class="feed-card-title">${tjStoryTitle(tjLocalized(a.title, '', a.title_en))}</div>
       <div class="feed-card-excerpt">${tjLocalized(a.excerpt, '', a.excerpt_en)}</div>
       <div class="feed-card-meta">
         <span>${formatDate(a.date)}</span>
@@ -1285,7 +1145,6 @@ document.querySelectorAll('.sort-tab').forEach(tab => {
     currentSort = tab.dataset.sort;
     document.querySelectorAll('.sort-tab').forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
-    renderMainGrid();
     feedVisible = 4;
     syncNewsUrl();
     renderFeed();
@@ -1303,40 +1162,18 @@ document.getElementById('load-more-btn').addEventListener('click', () => {
 
 /* ========== CURSOR (delegated to common.js) ========== */
 function bindCursorExpand() {
-  if (window.tjBindCursorExpand) window.tjBindCursorExpand('button, .featured-card, .side-card, .feed-card, .quick-link');
+  if (window.tjBindCursorExpand) window.tjBindCursorExpand('button, .feed-card, .quick-link');
 }
 
-/* ========== KINETIC STORIES TYPE ========== */
-// Obys系の動きをSTORIESの導入見出しだけに限定する。
-// カードのレイアウト・記事一覧・検索には影響させず、モバイルと
-// prefers-reduced-motionでは静止表示にする。
-function initKineticStoriesType() {
-  const type = document.getElementById('stories-kinetic-type');
-  if (!type) return;
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  let frame = 0;
-  const update = () => {
-    frame = 0;
-    if (window.innerWidth <= 900 || reduceMotion.matches) {
-      type.style.transform = 'none';
-      return;
-    }
-    const rect = type.getBoundingClientRect();
-    if (rect.bottom < 0 || rect.top > window.innerHeight) {
-      type.style.transform = 'none';
-      return;
-    }
-    const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
-    const offset = Math.max(-18, Math.min(18, (progress - 0.5) * 36));
-    type.style.transform = `translate3d(${offset.toFixed(2)}px, 0, 0)`;
-  };
-  const requestUpdate = () => {
-    if (!frame) frame = requestAnimationFrame(update);
-  };
-  window.addEventListener('scroll', requestUpdate, { passive: true });
-  window.addEventListener('resize', requestUpdate, { passive: true });
-  reduceMotion.addEventListener?.('change', requestUpdate);
-  requestUpdate();
+/* ========== NEWS HERO ========== */
+function initNewsHero() {
+  const bg = document.querySelector('.news-hero-bg');
+  const article = ARTICLES[0];
+  if (!bg || !article?.image) return;
+  const imageUrl = typeof tjAssetPath === 'function' ? tjAssetPath(article.image) : article.image;
+  if (!imageUrl) return;
+  bg.dataset.bg = imageUrl;
+  bg.style.backgroundImage = `url("${String(imageUrl).replace(/["\\]/g, '\\$&')}")`;
 }
 
 /* ========== SCROLL REVEAL ========== */
@@ -1357,16 +1194,23 @@ function observeReveals(root = document) {
 observeReveals();
 
 /* ========== INIT ========== */
-initKineticStoriesType();
+initNewsHero();
 if (readNewsStateFromUrl()) {
-  document.querySelectorAll('.sort-tab').forEach((tab) => tab.classList.toggle('active', tab.dataset.sort === currentSort));
-  renderMainGrid();
-  renderCategoryNav();
-  renderFeed();
-  bindArticleNavigation();
-  bindCursorExpand();
-  addEventListener('pageshow', restoreNewsHubScroll);
-  addEventListener('pageshow', () => document.documentElement.classList.remove('tj-page-leaving'));
+  try {
+    document.querySelectorAll('.sort-tab').forEach((tab) => tab.classList.toggle('active', tab.dataset.sort === currentSort));
+    renderFeaturedNews();
+    renderCategoryNav();
+    renderFeed();
+    bindArticleNavigation();
+    bindCursorExpand();
+    addEventListener('pageshow', restoreNewsHubScroll);
+    addEventListener('pageshow', () => document.documentElement.classList.remove('tj-page-leaving'));
+  } finally {
+    // 差し替えが終わったので静的一覧の隠蔽を解く（例外時も必ず戻す）
+    document.documentElement.classList.remove('tj-news-hydrating');
+  }
+} else {
+  document.documentElement.classList.remove('tj-news-hydrating');
 }
 </script>
 <!-- Service Worker registration -->

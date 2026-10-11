@@ -45,7 +45,7 @@
 <link rel="dns-prefetch" href="https://w.behold.so">
 <link rel="dns-prefetch" href="https://formsubmit.co">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/common.css?v=32">
+<link rel="stylesheet" href="/common.css?v=33">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
@@ -70,7 +70,10 @@
   font-size: clamp(28px, 4vw, 52px);
   font-weight: 500;
   line-height: 1.2;
-  max-width: 780px;
+}
+.media-intro-headline br { display: none; }
+@media (min-width: 900px) {
+  .media-intro-headline br { display: inline; }
 }
 
 /* ===================== MARQUEE ===================== */
@@ -100,6 +103,7 @@
   padding: 80px 40px 24px;
   border-bottom: 1px solid var(--card-border);
 }
+.stories-section-head { padding-top: 40px; }
 .section-eyebrow {
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.25em;
   text-transform: uppercase; opacity: 0.62;
@@ -158,6 +162,21 @@
 .featured-card-tag .tag-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
 .featured-card-title {
   font-family: var(--font-body); font-size: clamp(20px, 2.5vw, 28px); font-weight: 400; line-height: 1.35;
+}
+.story-title-short { display: block; }
+.story-title-sub {
+  display: block;
+  margin-top: .3em;
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: .78em;
+  line-height: 1.4;
+  letter-spacing: 0;
+  text-transform: none;
+  opacity: .85;
+  word-break: keep-all;
+  word-break: auto-phrase;
+  overflow-wrap: anywhere;
 }
 .featured-card-meta {
   margin-top: 14px;
@@ -246,6 +265,48 @@
 .side-card-meta {
   margin-top: 10px;
   font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; opacity: 0.62; text-transform: uppercase;
+}
+
+/* ===================== STORIES RAIL (same as news.html) ===================== */
+.main-grid { display: grid; grid-template-columns: calc(50% + 20px) calc(50% - 20px); gap: 0; padding: 40px 0 0; min-height: 600px; border-bottom: 1px solid rgba(240,237,232,.55); }
+.stories-visual { position: sticky; top: 0; width: 100%; height: 100vh; min-height: 620px; overflow: hidden; background: #080808; }
+.stories-visual-slide { position: absolute; inset: 0; opacity: 0; transition: opacity .55s ease; }
+.stories-visual-slide.is-active { opacity: 1; }
+.stories-visual-slide img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(12%) brightness(.9); transform: scale(1.03); transition: transform 1.2s cubic-bezier(.16,1,.3,1), filter .6s ease; }
+.stories-visual-slide.is-active img { transform: scale(1); filter: grayscale(0%) brightness(.96); }
+.stories-visual-slide::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,8,8,.12), rgba(8,8,8,.06) 55%, rgba(8,8,8,.58)); pointer-events: none; }
+.stories-visual-date { position: absolute; right: 28px; bottom: 28px; z-index: 1; font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; line-height: 1.6; text-align: right; opacity: .8; }
+.stories-visual-label { position: absolute; left: 28px; bottom: 28px; z-index: 1; font-family: var(--font-mono); font-size: 11px; letter-spacing: .2em; color: var(--accent); text-transform: uppercase; }
+.featured-col { position: relative; display: flex; flex-direction: column; border-top: 1px solid rgba(240,237,232,.55); }
+.side-col { display: flex; flex-direction: column; border-top: 1px solid rgba(240,237,232,.55); border-left: 1px solid rgba(240,237,232,.55); }
+.story-side-item { min-height: 36vh; display: flex; flex-direction: column; justify-content: center; border-bottom: 1px solid rgba(240,237,232,.55); }
+.story-side-item .side-card { min-height: 36vh; flex: none; }
+.side-card { display: flex; flex-direction: column; justify-content: center; padding: 26px 36px; flex: 1; border-bottom: none; position: relative; transition: background .3s ease; --reveal-delay: 0ms; }
+.side-card:hover { background: rgba(168,47,49,.06); transform: translateX(8px); }
+.side-card-tag { font-family: var(--font-mono); font-size: 8px; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.side-card-tag .tag-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
+.side-card-title { font-family: var(--font-body); font-size: clamp(16px, 2vw, 22px); font-weight: 400; line-height: 1.4; overflow-wrap: anywhere; padding-right: 60px; }
+.side-card-meta { margin-top: 12px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; opacity: .62; text-transform: uppercase; }
+.side-card-arrow { position: absolute; right: 32px; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(240,237,232,.12); overflow: hidden; }
+.side-card-arrow::before { content: '→'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 14px; opacity: .5; }
+.story-side-mobile-image { display: none; }
+.stories-all-wrap { padding: 28px 40px 0; text-align: center; }
+.stories-all-wrap .fest-more-btn { text-decoration: none; }
+@media (max-width: 1100px) { .side-card-title { font-size: 16px; } }
+@media (max-width: 900px) {
+  .main-grid { padding: 32px 24px 0; grid-template-columns: 1fr; gap: 0; }
+  .side-col { border-left: 1px solid rgba(240,237,232,.55); border-top: 1px solid rgba(240,237,232,.55); }
+  .stories-visual { display: none; }
+  .story-side-item, .story-side-item .side-card { min-height: 0; }
+  .story-side-mobile-image { display: block; margin: 0 -20px 24px; height: 56vw; max-height: 300px; overflow: hidden; }
+  .story-side-mobile-image img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(18%) brightness(.72); }
+  .side-card:nth-child(2) { margin-top: 0; margin-bottom: 0; }
+  .stories-all-wrap { padding: 28px 24px 0; }
+}
+@media (max-width: 640px) {
+  .side-card { padding: 24px 20px; }
+  .side-card-arrow { right: 16px; width: 36px; height: 36px; }
+  .side-card-title { padding-right: 48px; font-size: 15px; }
 }
 
 /* ===================== FESTIVALS PREVIEW (HÖR-style rows) ===================== */
@@ -523,9 +584,10 @@
 @media (max-width: 900px) {
   .media-intro { padding: 120px 24px 0; }
   .stories-grid { grid-template-columns: 1fr; padding: 24px 24px 0; }
-  .side-col { border-left: none; border-top: 1px solid var(--card-border); }
+  .side-col { border-left: 1px solid rgba(240,237,232,.55); border-top: 1px solid rgba(240,237,232,.55); }
   .featured-card-image { min-height: 280px; }
   .section-head { padding: 60px 24px 20px; }
+  .stories-section-head { padding-top: 30px; }
   .venues-preview { padding: 24px 24px 0; gap: 3px; }
   .artists-track { padding: 0 24px; gap: 10px; }
   .artist-mini { width: 170px; }
@@ -685,7 +747,7 @@
 <!-- INTRO -->
 <section class="media-intro">
   <div class="media-intro-eyebrow">JAPAN / UNDERGROUND DANCE MUSIC / MEDIA</div>
-  <h1 class="media-intro-headline">The media exploring Japan's underground techno and house culture.</h1>
+  <h1 class="media-intro-headline">The media exploring <br>Japan's underground techno and house culture.</h1>
 </section>
 
 <!-- MARQUEE -->
@@ -694,17 +756,14 @@
 </div>
 
 <!-- STORIES -->
-<div class="section-head">
+<div class="section-head stories-section-head">
   <div class="section-eyebrow"><span class="dot"></span>STORIES</div>
-  <a href="/en/news.html" class="section-cta">VIEW ALL →</a>
 </div>
-<div class="stories-grid" id="stories-grid"><!-- rendered by JS --></div>
-<div class="fest-more-wrap" id="stories-more-wrap" style="display:none">
-  <button type="button" class="fest-more-btn" id="stories-more-btn">
-    <span class="label">MORE STORIES</span>
-    <span class="arrow">▾</span>
-  </button>
+<div class="main-grid" id="main-grid">
+  <div class="featured-col" id="featured-col"><!-- rendered by JS --></div>
+  <div class="side-col" id="side-col"><!-- rendered by JS --></div>
 </div>
+<div class="stories-all-wrap"><a class="fest-more-btn" href="/en/news.html">ALL STORIES →</a></div>
 
 <!-- FESTIVALS -->
 <div class="section-head" style="margin-top: 60px;">
@@ -718,6 +777,17 @@
     <span class="label">MORE</span>
     <span class="arrow">▾</span>
   </button>
+</div>
+<div class="event-signup">
+  <div class="event-signup-label"><span lang="ja">次のイベント情報を受け取る</span><span lang="en">Get event updates</span></div>
+  <form class="newsletter-form" action="https://formsubmit.co/press@techno-japan.media" method="POST">
+  <input type="text" name="_honey" tabindex="-1" autocomplete="off" class="tj-honeypot" aria-hidden="true">
+  <input type="email" name="email" required placeholder="your@email.com">
+  <input type="hidden" name="_subject" value="TECHNO JAPAN — Event updates signup">
+  <input type="hidden" name="_captcha" value="true">
+  <input type="hidden" name="_next" value="https://techno-japan.media/?subscribed=events">
+  <button type="submit">NOTIFY ME</button>
+  </form>
 </div>
 
 <!-- ARTISTS -->
@@ -768,7 +838,8 @@
       <a href="/en/artists.html">ARTISTS</a>
       <a href="/en/venues.html">VENUES</a>
       <a href="/en/about.html">ABOUT</a>
-      <a href="/en/submit.html">Submit a Festival</a>
+      <a href="/en/submit.html">APPLY</a>
+      <a href="/writers.html">WRITER</a>
       <span class="footer-social">
         <a href="https://www.instagram.com/techno.japan_/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.9" fill="currentColor" stroke="none"/></svg></a>
         <a href="https://www.threads.net/@techno.japan_" target="_blank" rel="noopener" aria-label="Threads"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.781 3.631 2.695 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.964-.065-1.19.408-2.285 1.33-3.082.88-.76 2.119-1.207 3.583-1.291a13.853 13.853 0 0 1 3.02.142c-.126-.742-.375-1.332-.74-1.757-.504-.582-1.279-.876-2.305-.875h-.024c-.815 0-1.917.224-2.617 1.272l-1.715-1.155c.96-1.388 2.413-2.085 4.318-2.085h.038c4.226.025 6.694 2.589 6.943 7.073l.34.119c1.557.555 2.694 1.452 3.34 2.628.94 1.701 1.005 4.348-1.224 6.61C18.69 23.146 16.491 23.978 12.186 24zm-.026-9.965c-.282 0-.567.011-.857.034-1.834.119-2.992.953-2.93 2.139.057 1.108 1.222 1.65 2.367 1.589 1.054-.057 2.426-.467 2.658-3.213a14.3 14.3 0 0 0-1.238-.55z"/></svg></a>
@@ -809,13 +880,9 @@ document.addEventListener('error', (e) => {
     if (!/^\d+:\d+$/.test(v)) return '';
     return ` data-ratio="${v}" style="aspect-ratio:${v.replace(':', '/')}"`;
   }
-  const STORY_INITIAL_SIDE = 5;
-  const STORY_MAX_SIDE = 7;
   const published = (typeof ARTICLES !== 'undefined' ? ARTICLES : [])
     .filter(a => a.status !== 'draft')
     .sort((a, b) => new Date(b.date) - new Date(a.date));
-  const featured = published.find(a => a.featured) || published[0];
-  const sideCards = published.filter(a => a.id !== (featured && featured.id)).slice(0, STORY_MAX_SIDE);
 
   /* 記事は静的ページへ直結する。'news.html#article/<id>' でも news.html 側が
      location.replace で飛ばしてくれるが、その1回のために news.html と data.js を
@@ -829,54 +896,63 @@ document.addEventListener('error', (e) => {
     if (isNaN(dt)) return '';
     return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase();
   }
+  function fmtDateSplit(d) {
+    if (!d) return '';
+    const dt = new Date(d);
+    if (isNaN(dt)) return '';
+    return `${dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase()}<br>${dt.getFullYear()}`;
+  }
+  function tjSplitTitle(title) {
+    const text = String(title ?? '');
+    const separatorIndex = text.search(/[｜|]/);
+    if (separatorIndex === -1) return { short: text, sub: '' };
+    return {
+      short: text.slice(0, separatorIndex).trim(),
+      sub: text.slice(separatorIndex + 1).trim()
+    };
+  }
+  function tjStoryTitle(title) {
+    const { short, sub } = tjSplitTitle(title);
+    return `<span class="story-title-short">${tjNoBreakNames(short)}</span>${sub ? `<span class="story-title-sub">${tjNoBreakNames(sub)}</span>` : ''}`;
+  }
 
-  const storiesEl = document.getElementById('stories-grid');
-  if (storiesEl && featured) {
-    storiesEl.innerHTML = `
-      <div class="featured-col">
-        <a class="featured-card" href="${articleUrl(featured)}">
-          <div class="featured-card-image"${ratioAttr(featured.cardRatio)}>
-            ${featured.image ? `<img ${tjImageSizeAttrs(featured.image)} src="${tjCardAssetPath(featured.image)}" data-original-src="${tjAssetPath(featured.image)}" alt="${tjLocalized(featured.title, '', featured.title_en)}" loading="eager" fetchpriority="high" decoding="async">` : `<div class="featured-card-image-placeholder">COMING SOON</div>`}
-            <div class="featured-card-arrow"></div>
-          </div>
-          <div class="featured-card-body">
-            <div class="featured-card-tag"><span class="tag-dot"></span>${featured.category || 'STORY'}</div>
-            <div class="featured-card-title">${tjLocalized(featured.title, '', featured.title_en)}</div>
-            <div class="featured-card-meta">${fmtDate(featured.date)}${featured.readTime ? ` &middot; ${featured.readTime} MIN READ` : ''}</div>
-          </div>
-        </a>
-      </div>
-      <div class="side-col">
-        ${sideCards.map((a, i) => `
-          <a class="side-card${i >= STORY_INITIAL_SIDE ? ' is-hidden' : ''}" href="${articleUrl(a)}">
-            <div class="side-card-tag"><span class="tag-dot"></span>${a.category || 'STORY'}</div>
-            <div class="side-card-title">${tjNoBreakNames(tjLocalized(a.title, '', a.title_en))}</div>
-            <div class="side-card-meta">${fmtDate(a.date)}${a.readTime ? ` &middot; ${a.readTime} MIN READ` : ''}</div>
-            <div class="side-card-arrow"></div>
-          </a>
-        `).join('')}
-      </div>
-    `;
+  const storyItems = published.slice(0, 8);
+  const featured = storyItems[0];
+  const featuredCol = document.getElementById('featured-col');
+  const sideCol = document.getElementById('side-col');
+  if (featuredCol && sideCol && featured) {
+    featuredCol.innerHTML = `<div class="stories-visual" aria-hidden="true">
+      ${storyItems.map((a, i) => `<div class="stories-visual-slide${i === 0 ? ' is-active' : ''}" data-story-visual="${i}">
+        ${a.image ? `<img ${tjImageSizeAttrs(a.image)} loading="${i === 0 ? 'eager' : 'lazy'}"${i === 0 ? ' fetchpriority="high"' : ''} decoding="async" src="${tjCardAssetPath(a.image)}" data-original-src="${tjAssetPath(a.image)}" alt="">` : ''}
+      </div>`).join('')}
+      <div class="stories-visual-label">STORIES <span id="story-visual-index">01</span> / ${String(storyItems.length).padStart(2,'0')}</div>
+      <div class="stories-visual-date" id="story-visual-date">${fmtDateSplit(featured.date)}</div>
+    </div>`;
+    sideCol.innerHTML = storyItems.map((a, index) => `<div class="story-side-item" data-story-index="${index}"><a href="${articleUrl(a)}" class="side-card reveal" style="--reveal-delay:${index * 100}ms">
+      ${a.image ? `<div class="story-side-mobile-image"><img ${tjImageSizeAttrs(a.image)} loading="lazy" decoding="async" src="${tjCardAssetPath(a.image)}" data-original-src="${tjAssetPath(a.image)}" alt="${tjLocalized(a.title, '', a.title_en)}"></div>` : ''}
+      <div class="side-card-tag"><span class="tag-dot"></span> ${a.category || 'STORY'}</div>
+      <div class="side-card-title">${tjStoryTitle(tjLocalized(a.title, '', a.title_en))}</div>
+      <div class="side-card-meta">${fmtDate(a.date)}${a.readTime ? ` &middot; ${a.readTime} MIN READ` : ''}</div>
+      <div class="side-card-arrow"></div>
+    </a></div>`).join('');
+    initStoryVisualRail();
+  }
 
-    // MORE STORIES toggle
-    const sMoreWrap = document.getElementById('stories-more-wrap');
-    const sMoreBtn = document.getElementById('stories-more-btn');
-    if (sMoreWrap && sMoreBtn) {
-      if (sideCards.length > STORY_INITIAL_SIDE) {
-        sMoreWrap.style.display = '';
-        const labelEl = sMoreBtn.querySelector('.label');
-        sMoreBtn.addEventListener('click', () => {
-          const expanded = sMoreBtn.classList.toggle('expanded');
-          storiesEl.querySelectorAll('.side-card').forEach((row, idx) => {
-            row.classList.toggle('is-hidden', !expanded && idx >= STORY_INITIAL_SIDE);
-          });
-          if (labelEl) labelEl.textContent = expanded ? 'LESS STORIES' : 'MORE STORIES';
-          if (window.tjBindCursorExpand) window.tjBindCursorExpand('.side-card');
-        });
-      } else {
-        sMoreWrap.style.display = 'none';
-      }
-    }
+  function initStoryVisualRail() {
+    const rail = document.querySelector('.stories-visual');
+    const items = [...document.querySelectorAll('[data-story-index]')];
+    if (!rail || !items.length) return;
+    const slides = [...rail.querySelectorAll('[data-story-visual]')];
+    const index = rail.querySelector('#story-visual-index');
+    const date = rail.querySelector('#story-visual-date');
+    const activate = n => { slides.forEach((slide, i) => slide.classList.toggle('is-active', i === n)); if (index) index.textContent = String(n + 1).padStart(2, '0'); if (date) date.innerHTML = fmtDateSplit(storyItems[n]?.date); };
+    const sync = () => { const center = window.innerHeight / 2; const visible = items.filter(item => { const r = item.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight; }); if (!visible.length) return; const active = visible.sort((a, b) => Math.abs(a.getBoundingClientRect().top + a.getBoundingClientRect().height / 2 - center) - Math.abs(b.getBoundingClientRect().top + b.getBoundingClientRect().height / 2 - center))[0]; activate(Number(active.dataset.storyIndex) || 0); };
+    let frame = 0;
+    const requestSync = () => { if (!frame) frame = requestAnimationFrame(() => { frame = 0; sync(); }); };
+    window.addEventListener('scroll', requestSync, { passive: true });
+    window.addEventListener('resize', requestSync, { passive: true });
+    items.forEach(item => item.addEventListener('pointerenter', () => activate(Number(item.dataset.storyIndex) || 0)));
+    requestSync();
   }
 
   /* --- Upcoming festivals --- */
@@ -897,6 +973,7 @@ document.addEventListener('error', (e) => {
   const nextFestival = upcoming[0];
   // NEXT に出したイベントは、下の一覧では重複表示しない。
   const upcomingList = upcoming.slice(1);
+
   const nextEl = document.getElementById('next-festival');
   if (nextEl && nextFestival) {
     const nextImage = nextFestival.image && nextFestival.image.trim();
