@@ -3615,9 +3615,9 @@ function _updateLocationMapNow(prefix){
   if(!locMaps[prefix]){
     setTimeout(() => {
       locMaps[prefix] = L.map(prefix+'-map', {
-        center:[lat,lng], zoom:14, zoomControl:true, attributionControl:false
+        center:[lat,lng], zoom:14, zoomControl:true, attributionControl:true
       });
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{subdomains:'abcd',maxZoom:19}).addTo(locMaps[prefix]);
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors'}).addTo(locMaps[prefix]);
       const icon = L.divIcon({className:'',html:'<div style="width:14px;height:14px;background:#ff2d2d;border:2px solid #fff;border-radius:50%;box-shadow:0 0 8px rgba(255,45,45,.6)"></div>',iconSize:[14,14],iconAnchor:[7,7]});
       locMaps[prefix].marker = L.marker([lat,lng],{icon}).addTo(locMaps[prefix]);
       setTimeout(()=>locMaps[prefix].invalidateSize(), 100);
