@@ -304,12 +304,17 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
     const doc = frame.contentDocument;
     // カードが描かれる前に読むと画像ゼロで「異常なし」に見えてしまう。
     for (let i = 0; i < 80 && doc; i++) {
-      if (doc.querySelector('img[src], [style*="background-image"], [data-bg]')) break;
+      if (doc.querySelector('img[src], img[data-src], [style*="background-image"], [data-bg]')) break;
       await wait(100);
     }
     const urls = new Set();
     if (doc) {
-      doc.querySelectorAll('img[src]').forEach(el => { if (el.src) urls.add(el.src); });
+      doc.querySelectorAll('img[src], img[data-src]').forEach(el => {
+        [el.getAttribute('src'), el.getAttribute('data-src')].forEach(value => {
+          if (!value) return;
+          try { urls.add(new URL(value, doc.baseURI).href); } catch (e) {}
+        });
+      });
       // ハブは background-image をインライン style で埋める。
       doc.querySelectorAll('[style*="background-image"]').forEach(el => {
         const m = /url\((['"]?)([^'"()]+)\1\)/.exec(el.getAttribute('style') || '');

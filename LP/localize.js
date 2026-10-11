@@ -98,6 +98,7 @@
     if (!hit) return null;
     return typeof hit === 'string' ? { src: hit, srcset: null } : hit;
   }
+  window.tjDerivativeEntry = tjDerivativeEntry;
 
   window.tjCardAssetPath = function (value, size) {
     var hit = tjDerivativeEntry(value);

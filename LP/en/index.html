@@ -895,7 +895,7 @@
 <script src="/favorites.js?v=3" defer></script>
 <script src="/search.js?v=3" defer></script>
 <!-- localize.js は defer にしない。下のインライン描画が同期実行で tjLocalized を呼ぶ -->
-<script src="/localize.js?v=11"></script>
+<script src="/localize.js?v=12"></script>
 <script src="/image-derivatives.js?v=50"></script>
 <script src="/data-hub.js?v=11"></script>
 <script src="/image-dimensions.js?v=79"></script>
@@ -960,15 +960,18 @@ document.addEventListener('error', (e) => {
   const featuredCol = document.getElementById('featured-col');
   const sideCol = document.getElementById('side-col');
   if (featuredCol && sideCol && featured) {
+    const storyRailSrcset = a => tjCardSrcsetAttr(a.image, '(max-width: 1100px) 100vw, 50vw');
+    const storyMobileSrcset = (a, index) => tjCardSrcsetAttr(a.image, index === 0 ? '100vw' : '104px');
+    const deferredSrcset = value => tjCardSrcsetAttr(value, '(max-width: 1100px) 100vw, 50vw').replace(' srcset=', ' data-srcset=');
     featuredCol.innerHTML = `<div class="stories-visual" aria-hidden="true">
       ${storyItems.map((a, i) => `<div class="stories-visual-slide${i === 0 ? ' is-active' : ''}" data-story-visual="${i}">
-        ${a.image ? `<img ${tjImageSizeAttrs(a.image)} loading="${i === 0 ? 'eager' : 'lazy'}"${i === 0 ? ' fetchpriority="high"' : ''} decoding="async" src="${tjCardAssetPath(a.image)}" data-original-src="${tjAssetPath(a.image)}" alt="">` : ''}
+        ${a.image ? `<img ${tjImageSizeAttrs(a.image)}${i === 0 ? storyRailSrcset(a) : deferredSrcset(a.image)} loading="${i === 0 ? 'eager' : 'lazy'}"${i === 0 ? ' fetchpriority="high" src="' + tjCardAssetPath(a.image) + '"' : ' data-src="' + tjCardAssetPath(a.image) + '"'} data-original-src="${tjAssetPath(a.image)}" decoding="async" alt="">` : ''}
       </div>`).join('')}
       <div class="stories-visual-label">STORIES <span id="story-visual-index">01</span> / ${String(storyItems.length).padStart(2,'0')}</div>
       <div class="stories-visual-date" id="story-visual-date">${fmtDateSplit(featured.date)}</div>
     </div>`;
     sideCol.innerHTML = storyItems.map((a, index) => `<div class="story-side-item" data-story-index="${index}"><a href="${articleUrl(a)}" class="side-card reveal" style="--reveal-delay:${index * 100}ms">
-      ${a.image ? `<div class="story-side-mobile-image"><img ${tjImageSizeAttrs(a.image)} loading="lazy" decoding="async" src="${tjCardAssetPath(a.image)}" data-original-src="${tjAssetPath(a.image)}" alt="${tjLocalized(a.title, '', a.title_en)}"></div>` : ''}
+      ${a.image ? `<div class="story-side-mobile-image"><img ${tjImageSizeAttrs(a.image)}${storyMobileSrcset(a, index)} loading="lazy" decoding="async" src="${tjCardAssetPath(a.image)}" data-original-src="${tjAssetPath(a.image)}" alt="${tjLocalized(a.title, '', a.title_en)}"></div>` : ''}
       <div class="side-card-tag"><span class="tag-dot"></span> ${a.category || 'STORY'}</div>
       <div class="side-card-title">${tjStoryTitle(tjLocalized(a.title, '', a.title_en))}</div>
       <div class="side-card-meta">${fmtDate(a.date)}${a.readTime ? ` &middot; ${a.readTime} MIN READ` : ''}</div>
@@ -984,13 +987,29 @@ document.addEventListener('error', (e) => {
     const slides = [...rail.querySelectorAll('[data-story-visual]')];
     const index = rail.querySelector('#story-visual-index');
     const date = rail.querySelector('#story-visual-date');
-    const activate = n => { slides.forEach((slide, i) => slide.classList.toggle('is-active', i === n)); if (index) index.textContent = String(n + 1).padStart(2, '0'); if (date) date.innerHTML = fmtDateSplit(storyItems[n]?.date); };
+    const desktopRail = () => window.matchMedia('(min-width: 901px)').matches;
+    const loadSlide = n => {
+      if (!desktopRail()) return;
+      const img = slides[n]?.querySelector('img[data-src]');
+      if (!img) return;
+      if (img.dataset.srcset) img.setAttribute('srcset', img.dataset.srcset);
+      img.src = img.dataset.src;
+      delete img.dataset.src;
+      delete img.dataset.srcset;
+    };
+    const activate = n => { loadSlide(n); slides.forEach((slide, i) => slide.classList.toggle('is-active', i === n)); if (index) index.textContent = String(n + 1).padStart(2, '0'); if (date) date.innerHTML = fmtDateSplit(storyItems[n]?.date); };
     const sync = () => { const center = window.innerHeight / 2; const visible = items.filter(item => { const r = item.getBoundingClientRect(); return r.bottom > 0 && r.top < window.innerHeight; }); if (!visible.length) return; const active = visible.sort((a, b) => Math.abs(a.getBoundingClientRect().top + a.getBoundingClientRect().height / 2 - center) - Math.abs(b.getBoundingClientRect().top + b.getBoundingClientRect().height / 2 - center))[0]; activate(Number(active.dataset.storyIndex) || 0); };
     let frame = 0;
     const requestSync = () => { if (!frame) frame = requestAnimationFrame(() => { frame = 0; sync(); }); };
     window.addEventListener('scroll', requestSync, { passive: true });
     window.addEventListener('resize', requestSync, { passive: true });
     items.forEach(item => item.addEventListener('pointerenter', () => activate(Number(item.dataset.storyIndex) || 0)));
+    if ('IntersectionObserver' in window) {
+      const storyObserver = new IntersectionObserver(entries => entries.forEach(entry => {
+        if (entry.isIntersecting) loadSlide(Number(entry.target.dataset.storyIndex) || 0);
+      }), { rootMargin: '300px 0px' });
+      items.forEach(item => storyObserver.observe(item));
+    }
     requestSync();
   }
 
