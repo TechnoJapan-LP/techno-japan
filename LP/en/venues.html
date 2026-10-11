@@ -259,7 +259,10 @@
 .venue-map-error[hidden] { display: none; }
 .venue-map-error a { color: var(--text); border-bottom: 1px solid rgba(240,237,232,0.4); }
 .leaflet-container { background: var(--bg) !important; }
-.leaflet-control-attribution, .leaflet-control-zoom { display: none !important; }
+.leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) brightness(.82) contrast(.92) saturate(.35); }
+.leaflet-control-attribution { background: rgba(8,8,8,.7) !important; color: rgba(240,237,232,.6) !important; font-family: var(--font-mono); font-size: 9px; letter-spacing: .04em; padding: 2px 6px; }
+.leaflet-control-attribution a { color: rgba(240,237,232,.8) !important; }
+.leaflet-control-zoom { display: none !important; }
 .vm-pin {
   width: 9px; height: 9px; border-radius: 50%;
   background: #ff2d2d; border: 2px solid rgba(8,8,8,0.8);
@@ -702,7 +705,7 @@ function hideAllMaps() {
   document.querySelectorAll('[id$="-map-wrap"]').forEach(el => el.style.display = 'none');
 }
 
-const MAP_TILE_TIMEOUT_MS = 8000;
+const MAP_TILE_TIMEOUT_MS = 15000;
 
 function hideMapFallback() {
   const error = document.getElementById('venue-map-error');
@@ -733,28 +736,41 @@ function showMapFallback(cfg, reason) {
 
 function addVenueTiles(map, wrapId) {
   const cfg = ALL_MAPS_CFG.find(item => item.wrapId === wrapId);
-  const layer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    subdomains: 'abcd', maxZoom: 19
+  /* 2026-10-11: CARTO がキー無しを 200 の警告画像で返すようになり、地図が警告で埋まった（失敗として検知できない）。OSM に変更。あわせて1枚の失敗や 8 秒超で地図ごと隠すのをやめた。 */
+  const layer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors'
   });
   let settled = false;
-  const timer = setTimeout(() => {
-    if (!settled) {
-      settled = true;
-      showMapFallback(cfg, 'tile timeout');
-    }
-  }, MAP_TILE_TIMEOUT_MS);
-  layer.once('load', () => {
+  let loadedTiles = 0;
+  let tileErrors = 0;
+  const markReady = () => {
     if (settled) return;
     settled = true;
     clearTimeout(timer);
     const wrap = document.getElementById(wrapId);
     if (wrap) wrap.dataset.mapStatus = 'ready';
+  };
+  const timer = setTimeout(() => {
+    if (!settled) {
+      if (loadedTiles > 0) markReady();
+      else {
+        settled = true;
+        showMapFallback(cfg, 'tile timeout');
+      }
+    }
+  }, MAP_TILE_TIMEOUT_MS);
+  layer.on('tileload', () => {
+    loadedTiles += 1;
+    markReady();
   });
-  layer.once('tileerror', () => {
-    if (settled) return;
-    settled = true;
-    clearTimeout(timer);
-    showMapFallback(cfg, 'tile error');
+  layer.on('tileerror', () => {
+    tileErrors += 1;
+    if (!settled && loadedTiles === 0 && tileErrors >= 6) {
+      settled = true;
+      clearTimeout(timer);
+      showMapFallback(cfg, 'tile error');
+    }
   });
   return layer.addTo(map);
 }
@@ -1043,7 +1059,7 @@ function createCityMap(city) {
        座標表を書き足すことになり、書き忘れれば的外れな場所が映る。
        その都市の会場から求める。 */
     state.map = L.map(`${slug}-map`, {
-      minZoom: 5, maxZoom: 18, zoomControl: false, attributionControl: false,
+      minZoom: 5, maxZoom: 18, zoomControl: false, attributionControl: true,
     });
     const pts = clubs.map(c => [c.lat, c.lng]);
     if (pts.length === 1) state.map.setView(pts[0], 14);

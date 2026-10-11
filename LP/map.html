@@ -223,7 +223,9 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
 .hint-strip.hidden { opacity: 0; }
 
 /* LEAFLET OVERRIDES */
-.leaflet-control-attribution { display: none !important; }
+.leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) brightness(.82) contrast(.92) saturate(.35); }
+.leaflet-control-attribution { background: rgba(8,8,8,.7) !important; color: rgba(240,237,232,.6) !important; font-family: var(--font-mono); font-size: 9px; letter-spacing: .04em; padding: 2px 6px; }
+.leaflet-control-attribution a { color: rgba(240,237,232,.8) !important; }
 .leaflet-control-zoom { display: none !important; }
 .leaflet-container { background: var(--bg) !important; }
 
@@ -316,12 +318,12 @@ const map = L.map('map', {
   minZoom: 5,
   maxZoom: 18,
   zoomControl: false,
-  attributionControl: false
+  attributionControl: true
 });
 
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-  subdomains: 'abcd',
-  maxZoom: 19
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors'
 }).addTo(map);
 
 /* ==========================================================

@@ -7351,3 +7351,27 @@ Quill は各行を `<p>` で包むので、`<p>[[details|…]]</p>` と `<p>[[/d
 文書は ARTICLE_BODY_FEATURES / ARTICLE_BODY_SPEC_FOR_AI / スタイルガイド / 設計書を同時に更新、CMS の「？ 使い方」の文も更新（2箇所同期）。
 
 **残り**: 表（§2-4）は未着手。使う記事が出てから。
+
+### §9-104 本番の地図が「API KEY REQUIRED」で埋まっていた（CARTO がキー無し利用を停止）（2026-10-11）
+
+**何が起きたか**: 会場ページの地図・地図ページ（map.html）・CMS の座標選択の地図で、背景が
+「API KEY REQUIRED carto.com/basemaps/apikey」と書かれた画像で埋まっていた。ピンだけが灰色の上に並ぶ。ユーザーの指摘で発覚。
+
+**原因**: 背景タイルを CARTO（`basemaps.cartocdn.com/dark_all`）からキー無しで取っていた。CARTO がキー無しを止め、
+**HTTP 200 のまま**警告の PNG（256×256、約 2.5KB）を返すようになった。200 なので Leaflet の `tileerror` も
+サイトのフォールバック（showMapFallback）も働かない。**失敗として検知できない壊れ方。**
+
+**私の確認の誤り**: 最初に「地図が読み込めない」と聞いて `curl` でタイルの応答を見て「200 で応答している、問題なし」と報告した。
+**中身（画像）を見ていなかった。** ステータスコードは「届いた」ことしか言わない。AGENTS「測っているものを確かめる」の同型。
+画像・HTML・JSON を返す外部サービスは、**返ってきた中身を1つ開いて見る**こと。
+
+**直し方**（実装 Codex）: 3箇所とも OpenStreetMap 標準タイル（`tile.openstreetmap.org`、キー不要）へ。
+明るい地図なので `.leaflet-tile-pane` にだけ `filter: invert(1) hue-rotate(180deg) brightness(.82) contrast(.92) saturate(.35)` を掛けて暗くした（ピンには掛けない）。
+OSM の利用条件に従い出典表示を出した（従来は `attributionControl:false` と CSS で隠していた。**CARTO のときから本来は表示が必要だった**）。
+あわせて `addVenueTiles` の判定を「最初の1枚が読めたら成功／1枚も読めず 6 枚失敗で失敗／15 秒」に変更（1枚の失敗や 8 秒超で地図ごと隠していた）。
+
+**検証**: ローカル配信の修正版を headless Chrome で開き、venues.html（タイル 18 枚・ピン 27・status=ready・出典表示あり）と
+map.html（タイル 24 枚・ピン 30）を画像で確認。preflight 全49件成功。CMS の座標選択は認証が要るため未確認。
+
+**残る注意**: OSM 標準タイルは大量アクセス向けではない（利用方針あり）。アクセスが増えたら、キー付きのタイル配信
+（CARTO / Stadia / MapTiler など）へ移す。外部の無料サービスは予告なく条件が変わる。検査に「タイル URL が cartocdn を指していないこと」を追加した。

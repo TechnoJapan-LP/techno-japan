@@ -9663,3 +9663,32 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 - 「索引に載っている」と「ニュース面で表示された」は別。月次の効果測定は `--gsc --news --gnews` で3つとも取る。
 - Publisher Center の連絡先確認メール（9/21）は未クリック（掲載可否には無関係）。
+
+## 2026-10-11 本番の地図が「API KEY REQUIRED」になっていた不具合の修正（CARTO → OpenStreetMap）
+
+### 実施
+- ユーザー指摘「本番で地図が見れない」。原因は CARTO のキー無しタイルが 200 のまま警告画像を返すようになったこと（AUDIT §9-104）。
+- `LP/venues.html` / `LP/map.html` / `LP/cms.js`（＋`cms.css`）のタイルを OpenStreetMap へ変更、タイルだけ暗色フィルタ、出典表示を表示（実装 Codex）。
+- `addVenueTiles` の失敗判定を丈夫に（最初の1枚で成功、0 枚かつ 6 失敗で失敗、15 秒）。`scripts/check_hub_pages.py` を整合。
+- `cms.html` の版: cms.js?v=132 / cms.css?v=45。EN ハブ再生成、sitemap / RSS を作り直し（sitemap-news は 48 時間経過で 2 → 1 件。古いままだと preflight が落ちる）。
+
+### コミット
+- このエントリを含むコミット。
+
+### 検証
+- preflight 全49件成功（2026-10-11、単独実行）。
+- headless Chrome（1440px、ローカル配信）: venues.html の地図 = タイル 18 枚・ピン 27・`data-map-status=ready`・出典表示あり、map.html = タイル 24 枚・ピン 30。画像で道路・地名が暗色で出ることを確認。
+
+### 変更したパターン
+- 地図タイルの配信元（3箇所）、出典表示、タイル失敗の判定。
+
+### 未確認の類似パターン
+- **CMS の座標選択の地図は実機未確認**（認証）。Cmd+Shift+R で開いて地図が出ることを見る。
+- スマホ実機での地図の見え方（暗色フィルタ）は未確認。
+- 他に外部の無料サービスへキー無しで依存している箇所の棚卸しはしていない（Google Fonts、formsubmit、behold.so など）。
+
+### 次の担当への注意・判断待ち
+- push 後に Publish pipeline を手動実行（cms.js 変更のため）。結果はこの下に追記。
+- 外部サービスの確認は、ステータスコードではなく**返ってきた中身**を見る（今回 200 で誤判断した）。
+- テスト環境（design/mc-media の worktree）にも venues.html の同じ関数の変更がある。main を取り込むときに衝突するので、main 側（OSM）を採る。
+- sitemap-news.xml が毎日の自動再生成で更新されなかった理由は未調査（10/10 02:07 UTC が最後）。
