@@ -531,6 +531,8 @@ footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 24px;
+  flex-wrap: nowrap;
   margin-bottom: 80px;
 }
 .footer-logo {
@@ -540,6 +542,8 @@ footer {
   text-transform: uppercase;
   display: flex;
   align-items: center;
+  flex-shrink: 0;
+  margin-right: 0;
 }
 /* フッターのロゴ画像。ヘッダー（nav .logo img）と同じ 13px で揃える。
    PC ではフッターのリンク群と同じ行に並び、間隔は 162px あるので
@@ -551,9 +555,10 @@ footer {
 }
 .footer-links {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   row-gap: 0;
-  column-gap: 28px;
+  column-gap: clamp(14px, 1.6vw, 28px);
+  align-items: center;
 }
 .footer-links a {
   display: inline-flex;
@@ -567,8 +572,7 @@ footer {
   transition: opacity 0.3s ease;
   white-space: nowrap;
 }
-.footer-copy { white-space: nowrap; }
-.footer-logo { margin-right: 24px; }
+.footer-copy { white-space: nowrap; flex-shrink: 0; }
 .footer-links a:hover { opacity: 1; }
 
 /* footer DISCOVER toggle */
@@ -808,8 +812,31 @@ html[lang="en"] .event-signup-label [lang="en"] { display: inline; }
   .share-btn, .article-share-btn { width: 38px; height: 38px; }
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 640px) {
+  /* Mobile legibility floor. Keep hidden honeypots out of the tap/layout rules. */
+  .side-card-tag, .feed-card-tag, .venue-mini-area, .artist-card-genre,
+  .detail-tag { font-size: 10px !important; }
+  .next-festival-lineup, .artist-mini-num, .footer-copy, .detail-chip,
+  .detail-section-label, .related-story-meta, .related-card-date,
+  .related-card-loc, .tj-event-lineup-label, .tj-event-link,
+  .share-buttons-label, .article-tag, .year-toggle, .area-nav-map,
+  label, .section-label, .footer-submit { font-size: 10.5px !important; }
+
+  .month-nav a, .month-nav .year-toggle { min-height: 44px !important; }
+  .footer-links a { min-height: 44px; }
+  footer { padding: 40px 20px 24px; }
+  .footer-top { flex-direction: column; align-items: stretch; gap: 20px; margin-bottom: 40px; text-align: center; }
+  .footer-logo { justify-content: center; }
+  .footer-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; width: 100%; }
+  .footer-links a { justify-content: center; }
+  footer .footer-links .footer-social { grid-column: 1 / -1; display: flex; justify-content: center; gap: 20px; border-left: 0; }
+  footer .footer-links .footer-social a { min-height: 44px; }
+  .footer-copy { white-space: normal; line-height: 1.5; }
+}
+
+@media (max-width: 1099px) {
   .footer-top { flex-wrap: wrap; row-gap: 16px; }
+  .footer-links { flex-wrap: wrap; }
 }
 
 /* Hide custom cursor on touch devices */

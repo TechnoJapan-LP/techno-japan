@@ -437,6 +437,12 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 }
 
 @media (max-width: 640px) {
+  .article-body .tj-event-link { display: inline-flex; align-items: center; min-height: 44px; }
+  .festival-design-v2 .share-btn, .article-share .share-btn { width: 44px; height: 44px; }
+  .festival-design-v2 .detail-tag { font-size: 10px; }
+  .festival-design-v2 .detail-chip, .festival-design-v2 .detail-section-label,
+  .article-tag, .related-story-meta, .article-detail .related-card-date,
+  .article-detail .related-card-loc { font-size: 10.5px; }
   .article-body { font-size: 16px; line-height: 1.9; }
   .article-body h2 { margin-top: 2.4em; }
   .article-body img { margin-block: 2.2em; }
