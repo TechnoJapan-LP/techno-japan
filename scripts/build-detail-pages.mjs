@@ -24,7 +24,7 @@ import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
 import { imageSizeAttrs } from './lib/image-size.mjs';
-import { parseEvents, renderArticleShortcodes } from '../LP/article-shortcodes.js';
+import { autolinkArtists, parseEvents, renderArticleShortcodes } from '../LP/article-shortcodes.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const LP_DIR = path.join(__dirname, '..', 'LP');
@@ -718,84 +718,6 @@ function makeEntityResolver(data, festivalData = null, artistData = null) {
     });
     return renderArticleShortcodes(entityHtml, { lang, festivalIds, festivalData, artistData }).html;
   };
-}
-
-/* 記事本文に出てくるアーティスト名を、そのアーティストページへ自動でリンクする
-   （2026-09-14）。[[artist:id]] ショートコードと同じ見た目（entity-link）にする。
-
-   一般語と衝突する名前があるため（実測: "Ground" が
-   "Camping Ground, Nagano" という会場名に誤爆した）、次の条件を全て満たす
-   ときだけリンクする。条件を緩めると誤リンクが本番に出る。 */
-const AUTOLINK_DENY = new Set([
-  'ground',   // "Camping Ground, Nagano"（会場名）に誤爆した
-]);
-const AUTOLINK_EXCLUDED_TAGS = new Set(['a', 'code', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']);
-const regexEscape = (value) => String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-function autolinkArtists(html, artists = []) {
-  const candidates = artists.map((artist) => ({
-    id: String(artist.id || '').trim(),
-    name: String(artist.name || '').trim(),
-  })).filter(({ id, name }) => id && name.length >= 3 && !AUTOLINK_DENY.has(name.toLowerCase()));
-  const used = new Set();
-  const boundary = (name) => /[A-Za-z0-9]/.test(name) ? '(?<![A-Za-z0-9])' + regexEscape(name) + '(?![A-Za-z0-9])' : regexEscape(name);
-
-  const replaceText = (text) => {
-    const hits = [];
-    for (const artist of candidates) {
-      if (used.has(artist.id)) continue;
-      const match = text.match(new RegExp(boundary(artist.name), 'i'));
-      if (match) hits.push({ artist, index: match.index, length: match[0].length, value: match[0] });
-    }
-    hits.sort((a, b) => a.index - b.index || b.length - a.length);
-    const selected = [];
-    for (const hit of hits) {
-      if (selected.some((item) => hit.index < item.index + item.length && item.index < hit.index + hit.length)) continue;
-      selected.push(hit);
-      used.add(hit.artist.id);
-    }
-    selected.sort((a, b) => a.index - b.index);
-    let out = '';
-    let cursor = 0;
-    for (const hit of selected) {
-      out += text.slice(cursor, hit.index);
-      out += `<a class="entity-link" href="/artists/${encodeURIComponent(hit.artist.id)}.html">${esc(hit.value)}</a>`;
-      cursor = hit.index + hit.length;
-    }
-    return out + text.slice(cursor);
-  };
-
-  let out = '';
-  let cursor = 0;
-  let excludedDepth = 0;
-  const source = String(html || '');
-  while (cursor < source.length) {
-    const nextTag = source.indexOf('<', cursor);
-    const nextShortcode = source.indexOf('[[', cursor);
-    const next = [nextTag, nextShortcode].filter((index) => index >= 0).sort((a, b) => a - b)[0];
-    if (next === undefined) {
-      out += excludedDepth ? source.slice(cursor) : replaceText(source.slice(cursor));
-      break;
-    }
-    if (next > cursor) out += excludedDepth ? source.slice(cursor, next) : replaceText(source.slice(cursor, next));
-    if (next === nextShortcode && (nextTag < 0 || nextShortcode < nextTag)) {
-      const end = source.indexOf(']]', next + 2);
-      if (end < 0) { out += source.slice(next); break; }
-      out += source.slice(next, end + 2);
-      cursor = end + 2;
-      continue;
-    }
-    const end = source.indexOf('>', next + 1);
-    if (end < 0) { out += source.slice(next); break; }
-    const tag = source.slice(next, end + 1);
-    const closing = tag.match(/^<\s*\/\s*([a-z0-9-]+)/i);
-    const opening = tag.match(/^<\s*([a-z0-9-]+)/i);
-    if (closing && AUTOLINK_EXCLUDED_TAGS.has(closing[1].toLowerCase())) excludedDepth = Math.max(0, excludedDepth - 1);
-    out += tag;
-    if (opening && !closing && !/\/\s*>$/.test(tag) && AUTOLINK_EXCLUDED_TAGS.has(opening[1].toLowerCase())) excludedDepth += 1;
-    cursor = end + 1;
-  }
-  return out;
 }
 
 // 公開記事本文の entity shortcode は、生成前に参照先を検証する。

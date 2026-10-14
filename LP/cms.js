@@ -1522,32 +1522,163 @@ function toggleArticlePreview(){
 }
 
 // 本番と同じCSS/FXを使う独立プレビュー。編集画面のDOMを一切変更しない。
-function openArticleGeneratedPreview(){
-  const body = getArticleBodyForSave();
+function previewArticleValue_(id){ return String(document.getElementById(id)?.value || '').trim(); }
+function previewStripTitleMarkdown_(text){
+  let value = String(text == null ? '' : text).trim();
+  value = value.replace(/^```[a-z]*\n?/, '').replace(/\n?```$/, '').trim();
+  value = value.replace(/^#{1,6}\s+/, '');
+  for (const [re, delim] of [[/^\*\*([\s\S]+)\*\*$/, '**'], [/^\*([\s\S]+)\*$/, '*'], [/^__([\s\S]+)__$/, '__'], [/^_([\s\S]+)_$/, '_']]) {
+    const match = value.match(re);
+    if (match && !match[1].includes(delim)) { value = match[1].trim(); break; }
+  }
+  return value;
+}
+function previewSplitArticleTitle_(title){
+  const value = String(title || '');
+  const delimiter = value.search(/[｜|]/);
+  return delimiter < 0 ? { short: value, sub: '' } : { short: value.slice(0, delimiter).trim(), sub: value.slice(delimiter + 1).trim() };
+}
+function previewFmtBuildDate_(value){
+  const match = String(value || '').split('/')[0].match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!match) return '';
+  const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  return `${months[Number(match[2]) - 1]} ${Number(match[3])}, ${match[1]}`;
+}
+function previewFmtDateDots_(value){
+  const match = String(value || '').trim().match(/^(\d{4})-(\d{2})-(\d{2})/);
+  return match ? `${match[1]}.${match[2]}.${match[3]}` : '';
+}
+function previewImageSrc_(value){
+  const source = String(value || '').trim();
+  return /^(?:https?:|data:|blob:)/i.test(source) ? source : '/' + source.replace(/^\/+/, '');
+}
+function previewTitleHtml_(doc, title){
+  const parts = previewSplitArticleTitle_(previewStripTitleMarkdown_(title));
+  const h1 = doc.createElement('h1');
+  const short = doc.createElement('span'); short.className = 'article-title-short'; short.textContent = parts.short; h1.appendChild(short);
+  if (parts.sub) { const sub = doc.createElement('span'); sub.className = 'article-title-sub'; sub.textContent = parts.sub; h1.appendChild(sub); }
+  return h1;
+}
+function previewHero_(doc, title){
+  const image = previewArticleValue_('ar-image');
+  const category = previewArticleValue_('ar-category') || 'NEWS';
+  const ratio = previewArticleValue_('ar-heroRatio');
+  if (!image) {
+    const meta = doc.createElement('div'); meta.className = 'article-meta-top';
+    const pill = doc.createElement('span'); pill.className = 'cat-pill'; pill.textContent = category; meta.appendChild(pill);
+    return [meta, previewTitleHtml_(doc, title)];
+  }
+  const hero = doc.createElement('header'); hero.className = 'article-hero';
+  if (ratio === 'auto') hero.dataset.ratio = 'auto';
+  else if (/^\d+:\d+$/.test(ratio)) { hero.dataset.ratio = ratio; hero.style.aspectRatio = ratio.replace(':', '/'); }
+  const img = doc.createElement('img'); img.src = previewImageSrc_(image); img.alt = previewStripTitleMarkdown_(title); img.setAttribute('fetchpriority', 'high'); img.setAttribute('decoding', 'async'); hero.appendChild(img);
+  const overlay = doc.createElement('div'); overlay.className = 'article-hero-overlay';
+  const chips = doc.createElement('div'); chips.className = 'article-chips';
+  const pill = doc.createElement('span'); pill.className = 'cat-pill'; pill.textContent = category; chips.appendChild(pill); overlay.appendChild(chips); overlay.appendChild(previewTitleHtml_(doc, title)); hero.appendChild(overlay);
+  return [hero];
+}
+function previewRenderBody_(body){
+  const shortcodeApi = globalThis.TJArticleShortcodes;
+  const cachedArtists = readSheetCache('artist');
+  const artists = Array.isArray(cachedArtists) && cachedArtists.length ? cachedArtists : (ARTIST_DB || []);
+  const linkedArtists = shortcodeApi?.autolinkArtists ? shortcodeApi.autolinkArtists(String(body || ''), artists) : String(body || '');
+  const entityHtml = resolveEntityLinksPreview(linkedArtists);
+  if (!shortcodeApi?.renderArticleShortcodes) return entityHtml;
+  const festivalRows = readSheetCache('festival') || [];
+  const festivalIds = festivalRows.map(r => r.id).filter(Boolean);
+  return shortcodeApi.renderArticleShortcodes(entityHtml, {
+    lang: 'ja', festivalData: buildArticleFestivalData(festivalRows), artistData: buildArticleArtistData(),
+    ...(festivalIds.length ? { festivalIds } : {})
+  }).html;
+}
+function writeArticleSimplePreview_(win, title, body){
+  const safeBody = String(body || '').replace(/<script/gi, '&lt;script');
+  win.document.open();
+  win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><link rel="stylesheet" href="/common.css?v=37"><link rel="stylesheet" href="/detail.css?v=48"><link rel="stylesheet" href="/article-fx.css?v=14"><style>/* フォールバックでは common.js を読まないためネイティブカーソルに戻す */*{cursor:auto !important}a,button,[role="button"],summary{cursor:pointer !important}</style></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${esc(title)}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=13"><\/script></body></html>`);
+  win.document.close();
+}
+async function openArticleGeneratedPreview(){
   const win = window.open('', '_blank');
   if (!win) return toast('ポップアップがブロックされています', 'warning');
-  const title = esc(document.getElementById('ar-title')?.value || 'ARTICLE PREVIEW');
-  const entityHtml = resolveEntityLinksPreview(String(body || ''));
-  let previewBody = entityHtml;
-  const shortcodeApi = globalThis.TJArticleShortcodes;
-  if (shortcodeApi?.renderArticleShortcodes) {
-    try {
-      const festivalRows = readSheetCache('festival') || [];
-      const festivalIds = festivalRows.map(r => r.id).filter(Boolean);
-      previewBody = shortcodeApi.renderArticleShortcodes(entityHtml, {
-        lang: 'ja',
-        festivalData: buildArticleFestivalData(festivalRows),
-        artistData: buildArticleArtistData(),
-        ...(festivalIds.length ? { festivalIds } : {})
-      }).html;
-    } catch (error) {
-      return toast('ショートコードエラー: ' + error.message, 'error');
-    }
+  win.document.write('<!doctype html><html><head><meta charset="utf-8"><title>読み込み中</title></head><body>読み込み中</body></html>');
+  const body = getArticleBodyForSave();
+  const rawTitle = previewArticleValue_('ar-title') || 'ARTICLE PREVIEW';
+  const title = previewStripTitleMarkdown_(rawTitle) || 'ARTICLE PREVIEW';
+  let renderedBody;
+  try {
+    const artistLoad = typeof loadArtistDB === 'function' ? Promise.resolve().then(() => loadArtistDB()) : Promise.resolve();
+    await Promise.race([
+      artistLoad,
+      new Promise(resolve => setTimeout(resolve, 5000))
+    ]);
+    renderedBody = previewRenderBody_(body);
+  } catch (error) {
+    console.error('Article preview body rendering failed:', error);
+    toast('ショートコードエラー: ' + (error && error.message || error), 'error');
+    try { win.close(); } catch (_) {}
+    return;
   }
-  const safeBody = String(previewBody).replace(/<script/gi, '&lt;script');
-  win.document.open();
-  win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><link rel="stylesheet" href="/common.css?v=37"><link rel="stylesheet" href="/detail.css?v=48"><link rel="stylesheet" href="/article-fx.css?v=14"><style>/* 本番表示は common.js（カスタムカーソル）を読まないため、common.css の cursor:none だとカーソルが消える。ネイティブカーソルに戻す */*{cursor:auto !important}a,button,[role="button"],summary{cursor:pointer !important}</style></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${title}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=13"><\/script></body></html>`);
-  win.document.close();
+  let templateDoc = null;
+  let templateId = '';
+  let templateError = '';
+  const fetchTemplate = async (id) => {
+    const response = await fetch('/articles/' + encodeURIComponent(id) + '.html', { cache: 'no-store' });
+    if (!response.ok) throw new Error('HTTP ' + response.status);
+    const html = await response.text();
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    if (!doc.querySelector('.article-detail-inner')) throw new Error('記事テンプレートが不正です');
+    return doc;
+  };
+  try {
+    const editingId = previewArticleValue_('ar-id');
+    if (editingId) {
+      try { templateDoc = await fetchTemplate(editingId); templateId = editingId; } catch (error) { templateError = error.message; }
+    }
+    if (!templateDoc) {
+      const rows = (readSheetCache('article') || []).filter(row => String(row.status || '').toLowerCase() === 'published' && row.id)
+        .sort((a, b) => String(b.publishedAt || b.date || '').localeCompare(String(a.publishedAt || a.date || '')));
+      for (const row of rows) {
+        try { templateDoc = await fetchTemplate(row.id); templateId = String(row.id); break; } catch (error) { templateError = error.message; }
+      }
+    }
+    if (!templateDoc) throw new Error(templateError || '公開済みの記事テンプレートが見つかりません');
+    const doc = templateDoc;
+    const inner = doc.querySelector('.article-detail-inner');
+    const oldVisual = inner.querySelector('.article-hero, .article-meta-top');
+    const oldH1 = Array.from(inner.children).find(el => el.tagName === 'H1');
+    if (oldH1) oldH1.remove();
+    if (oldVisual) oldVisual.replaceWith(...previewHero_(doc, title));
+    else inner.insertBefore(previewHero_(doc, title)[0], inner.firstChild);
+    const specs = inner.querySelector('.article-specs');
+    if (specs) {
+      const values = [previewArticleValue_('ar-author') || 'TECHNO JAPAN', previewFmtBuildDate_(previewArticleValue_('ar-date')) || '—', (previewArticleValue_('ar-readTime') || '5') + ' MIN'];
+      const updated = previewArticleValue_('ar-updatedAt');
+      const date = previewArticleValue_('ar-date');
+      specs.querySelectorAll('dd').forEach((dd, index) => { dd.textContent = values[index] || ''; if (index === 1 && updated && updated !== date) { const span = doc.createElement('span'); span.className = 'article-updated'; span.textContent = '更新: ' + previewFmtDateDots_(updated); dd.appendChild(span); } });
+    }
+    const excerpt = inner.querySelector('.article-excerpt');
+    const excerptValue = previewArticleValue_('ar-excerpt');
+    if (excerptValue) { if (excerpt) excerpt.textContent = excerptValue; else { const el = doc.createElement('div'); el.className = 'article-excerpt'; el.textContent = excerptValue; inner.insertBefore(el, inner.querySelector('.article-body')); } }
+    else if (excerpt) excerpt.remove();
+    const articleBody = inner.querySelector('.article-body');
+    if (articleBody) articleBody.innerHTML = String(renderedBody).replace(/<script/gi, '&lt;script');
+    const tags = previewArticleValue_('ar-tags').split(',').map(tag => tag.trim()).filter(Boolean);
+    const oldTags = inner.querySelector('.article-tags');
+    if (oldTags) oldTags.remove();
+    if (tags.length) { const footer = inner.querySelector('.article-footer'); if (footer) { const tagWrap = doc.createElement('div'); tagWrap.className = 'article-tags'; tags.forEach(tag => { const el = doc.createElement('span'); el.className = 'article-tag'; el.textContent = '#' + tag; tagWrap.appendChild(el); }); footer.insertBefore(tagWrap, footer.firstChild); } }
+    doc.title = title + ' — TECHNO JAPAN';
+    doc.querySelectorAll('script[type="application/ld+json"]').forEach(script => script.remove());
+    if (!doc.querySelector('meta[name="robots"]')) { const robots = doc.createElement('meta'); robots.name = 'robots'; robots.content = 'noindex'; doc.head.appendChild(robots); }
+    const label = doc.createElement('div'); label.textContent = templateId === previewArticleValue_('ar-id') ? 'PREVIEW' : 'PREVIEW · 関連記事・関連フェスは公開時に決まります';
+    label.style.cssText = 'position:fixed;right:12px;bottom:12px;pointer-events:none;z-index:2147483647;padding:6px 9px;background:rgba(8,8,8,.85);color:#fff;font:10px/1.2 monospace;letter-spacing:.08em'; doc.body.appendChild(label);
+    win.document.open(); win.document.write('<!doctype html>' + doc.documentElement.outerHTML); win.document.close();
+  } catch (error) {
+    console.error('Article generated preview failed:', error);
+    toast('本番表示テンプレートを取得できません: ' + error.message, 'warning');
+    try {
+      writeArticleSimplePreview_(win, title, renderedBody);
+    } catch (fallbackError) { toast('簡易プレビューにも失敗しました: ' + fallbackError.message, 'error'); }
+  }
 }
 
 /* ---------- 記事テンプレート ---------- */

@@ -7,9 +7,9 @@ const cms = fs.readFileSync('LP/cms.js', 'utf8');
 const html = fs.readFileSync('LP/cms.html', 'utf8');
 const build = fs.readFileSync('scripts/build-detail-pages.mjs', 'utf8');
 const failures = [];
-const section = cms.match(/function openArticleGeneratedPreview\(\)\{([\s\S]*?)\n\}\n\n\/\* ---------- 記事テンプレート/);
-if (!section) failures.push('openArticleGeneratedPreview が見つからない');
-const source = section?.[1] || '';
+const section = cms.match(/function previewArticleValue_\([\s\S]*?function openArticleGeneratedPreview\(\)\{[\s\S]*?\n\}\n\n\/\* ---------- 記事テンプレート/);
+if (!section) failures.push('本番表示プレビューのヘルパーまたは openArticleGeneratedPreview が見つからない');
+const source = section?.[0] || '';
 if (!source.includes('renderArticleShortcodes')) failures.push('本番表示プレビューでショートコード変換を呼んでいない');
 if (!source.includes('class="article-detail-inner"')) failures.push('本番表示プレビューが実ページと同じ article-detail-inner を使っていない');
 const assetVersions = [

@@ -9840,3 +9840,33 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - **本番反映済み（2026-10-14）**: worktree preflight 全件成功（1回目は CMS プレビューの article-fx.css 版ずれを検出 → cms.js で 14 に、cms.js?v=136）。push フック通過、デプロイ 38572651220 success、Lighthouse CI 38573453912 success、Publish pipeline 38572661200 success（`cms: publish data.js` f2288ac0 が増えたことを確認）。
   本番実測（https://techno-japan.media/articles/labyrinth-2026-info.html, CDP, 1100/1440/1920）: テスト環境と同値。1440 で本文 380–1060 / 左寄せ 380–833 / 右寄せ 607–1060。
   CMS の画面操作（ブラウザでの本番表示プレビュー）は**実機未確認**。変更は参照する CSS の版番号のみ。
+
+## 2026-10-14 CMS「↗ 本番表示」プレビューを本番の記事ページと同じ表示にする
+
+### 実施
+- 本物の記事ページを型にして下書きを差し込む方式に変更。詳細は AUDIT §9-107。実装 Codex。
+- autolinkArtists を LP/article-shortcodes.js へ移動し、build と CMS で共用。
+
+### コミット
+- このエントリを含むコミット（design/mc-media）。**本番未反映**（下記の判断待ち）。
+
+### 検証
+- 記事ページ全件（JA/EN）を変更前後でビルドし diff -r 差分 0。
+- headless Chrome 1440px で CMS の本番表示を実際に開き、本物の labyrinth 記事ページと13項目が一致（違いは JSON-LD のみ）。
+  型が同じ記事 / 別記事の両方、ショートコード誤り時のエラー表示と窓を閉じる動作も確認。スクショで見た目一致を目視。
+- preflight 全件成功。ただし INTERGALACTIC 記事の参照切れ（下記）をローカルのコピーだけで直した状態で実行。
+
+### 変更したパターン
+- CMS 本番表示: 空の窓に書く → 本物の記事ページを fetch して差し替え。
+- autolinkArtists の置き場所: build-detail-pages.mjs → article-shortcodes.js（export）。
+- check_cms_layout.mjs: await で新プレビューを呼ぶ。「記事ページを型にしているか」を追加。
+
+### 未確認の類似パターン
+- ログイン済みの実際の CMS での操作は**実機未確認**（検査は GAS を遮断した状態）。
+- EN 版の本番表示は無い（従来どおり JA のみ）。
+- スマホ幅のプレビューは未確認（CSS は本番と同じ物を読むため差は出ない想定）。
+
+### 次の担当への注意・判断待ち
+- **push できない状態**: 本番 data.js の INTERGALACTIC 記事（intergalactic-2026-info）に `[[event|…|intergalactic-festival]]` が1件残り、
+  ビルドが止まる。正しいフェスIDは `intergalactic`。データはユーザーが CMS で直す（勝手に直さない）。直って Publish が通ったら、
+  main へマージ → push → Publish pipeline 実行 → 本番で本番表示を開いて確認。CMS は Cmd+Shift+R。
