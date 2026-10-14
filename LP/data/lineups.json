@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-10-11T03:42:03.810Z",
-  "count": 1404,
+  "_generatedAt": "2026-10-14T13:38:36.403Z",
+  "count": 1431,
   "items": [
     {
       "EDITION_ID": "waifu-2026",
@@ -6454,19 +6454,19 @@
     },
     {
       "EDITION_ID": "annahme-2026",
-      "ACT_LABEL": "DJ ZEN",
+      "ACT_LABEL": "Aoi",
       "SET_TYPE": "dj",
       "SORT": "1"
     },
     {
       "EDITION_ID": "annahme-2026",
-      "ACT_LABEL": "OOCA",
+      "ACT_LABEL": "Armii",
       "SET_TYPE": "dj",
       "SORT": "2"
     },
     {
       "EDITION_ID": "annahme-2026",
-      "ARTIST_ID": "yamarchy",
+      "ACT_LABEL": "celeryman",
       "SET_TYPE": "dj",
       "SORT": "3"
     },
@@ -7381,6 +7381,168 @@
       "ARTIST_ID": "sunga",
       "SET_TYPE": "dj",
       "SORT": "5"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ACT_LABEL": "Chipu",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ACT_LABEL": "DJ ZEN",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ACT_LABEL": "Emily",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ACT_LABEL": "grrrden",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ACT_LABEL": "HODAKA",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ACT_LABEL": "ICHIRO",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ACT_LABEL": "IGAK",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ACT_LABEL": "Junya Yamamura",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ACT_LABEL": "Kobashi Mitsuki",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ACT_LABEL": "lostbaggage",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ACT_LABEL": "Masataro",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ACT_LABEL": "MUKTA",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ACT_LABEL": "NEO",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ACT_LABEL": "niwa",
+      "SET_TYPE": "dj",
+      "SORT": "17"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ARTIST_ID": "occa",
+      "SET_TYPE": "dj",
+      "SORT": "18"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ACT_LABEL": "Odditimana",
+      "SET_TYPE": "dj",
+      "SORT": "19"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ARTIST_ID": "rami",
+      "SET_TYPE": "dj",
+      "SORT": "20"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ACT_LABEL": "Ryow",
+      "SET_TYPE": "dj",
+      "SORT": "21"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ACT_LABEL": "Sho K",
+      "SET_TYPE": "dj",
+      "SORT": "22"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ACT_LABEL": "Shunpei & GATARI",
+      "SET_TYPE": "dj",
+      "SORT": "23"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ACT_LABEL": "t0m0l0w",
+      "SET_TYPE": "dj",
+      "SORT": "24"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ACT_LABEL": "TAKAYUKI",
+      "SET_TYPE": "dj",
+      "SORT": "25"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ACT_LABEL": "teppei",
+      "SET_TYPE": "dj",
+      "SORT": "26"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ACT_LABEL": "Tokarev",
+      "SET_TYPE": "dj",
+      "SORT": "27"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ACT_LABEL": "Tsutomu FRIENDS",
+      "SET_TYPE": "dj",
+      "SORT": "28"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ARTIST_ID": "yamarchy",
+      "SET_TYPE": "dj",
+      "SORT": "29"
+    },
+    {
+      "EDITION_ID": "annahme-2026",
+      "ACT_LABEL": "Yuta USHIMADO",
+      "SET_TYPE": "dj",
+      "SORT": "30"
     },
     {
       "EDITION_ID": "nu-festival-2026",
