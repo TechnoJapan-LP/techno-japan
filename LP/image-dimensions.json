@@ -211,6 +211,34 @@
     720,
     1039
   ],
+  "images/articles/intergalactic-2026-info-1791981865483.webp": [
+    1920,
+    2560
+  ],
+  "images/articles/intergalactic-2026-info-1791981928579.webp": [
+    1920,
+    2560
+  ],
+  "images/articles/intergalactic-2026-info-1791981991233.webp": [
+    1920,
+    2560
+  ],
+  "images/articles/intergalactic-2026-info-1791982442342.webp": [
+    720,
+    1039
+  ],
+  "images/articles/intergalactic-2026-info-1791982538030.webp": [
+    1920,
+    2560
+  ],
+  "images/articles/intergalactic-2026-info-1791982818891.webp": [
+    1920,
+    2560
+  ],
+  "images/articles/intergalactic-2026-info.webp": [
+    1920,
+    2560
+  ],
   "images/articles/japan-festival-2026-october-1790523854519.webp": [
     1920,
     1280
@@ -2018,6 +2046,118 @@
   "images/derivatives/card/articles/forest-sound-camp-info-body04-4acf2394--3ce85d4e-xs.webp": [
     240,
     180
+  ],
+  "images/derivatives/card/articles/intergalactic-2026-info--7204ebfb-lg.webp": [
+    720,
+    960
+  ],
+  "images/derivatives/card/articles/intergalactic-2026-info--7204ebfb-md.webp": [
+    540,
+    720
+  ],
+  "images/derivatives/card/articles/intergalactic-2026-info--7204ebfb-sm.webp": [
+    360,
+    480
+  ],
+  "images/derivatives/card/articles/intergalactic-2026-info--7204ebfb-xs.webp": [
+    180,
+    240
+  ],
+  "images/derivatives/card/articles/intergalactic-2026-info-1791981865483--39482056-lg.webp": [
+    720,
+    960
+  ],
+  "images/derivatives/card/articles/intergalactic-2026-info-1791981865483--39482056-md.webp": [
+    540,
+    720
+  ],
+  "images/derivatives/card/articles/intergalactic-2026-info-1791981865483--39482056-sm.webp": [
+    360,
+    480
+  ],
+  "images/derivatives/card/articles/intergalactic-2026-info-1791981865483--39482056-xs.webp": [
+    180,
+    240
+  ],
+  "images/derivatives/card/articles/intergalactic-2026-info-1791981928579--a477fe4e-lg.webp": [
+    720,
+    960
+  ],
+  "images/derivatives/card/articles/intergalactic-2026-info-1791981928579--a477fe4e-md.webp": [
+    540,
+    720
+  ],
+  "images/derivatives/card/articles/intergalactic-2026-info-1791981928579--a477fe4e-sm.webp": [
+    360,
+    480
+  ],
+  "images/derivatives/card/articles/intergalactic-2026-info-1791981928579--a477fe4e-xs.webp": [
+    180,
+    240
+  ],
+  "images/derivatives/card/articles/intergalactic-2026-info-1791981991233--32979dd4-lg.webp": [
+    720,
+    960
+  ],
+  "images/derivatives/card/articles/intergalactic-2026-info-1791981991233--32979dd4-md.webp": [
+    540,
+    720
+  ],
+  "images/derivatives/card/articles/intergalactic-2026-info-1791981991233--32979dd4-sm.webp": [
+    360,
+    480
+  ],
+  "images/derivatives/card/articles/intergalactic-2026-info-1791981991233--32979dd4-xs.webp": [
+    180,
+    240
+  ],
+  "images/derivatives/card/articles/intergalactic-2026-info-1791982442342--bab4ec11-lg.webp": [
+    665,
+    960
+  ],
+  "images/derivatives/card/articles/intergalactic-2026-info-1791982442342--bab4ec11-md.webp": [
+    499,
+    720
+  ],
+  "images/derivatives/card/articles/intergalactic-2026-info-1791982442342--bab4ec11-sm.webp": [
+    333,
+    480
+  ],
+  "images/derivatives/card/articles/intergalactic-2026-info-1791982442342--bab4ec11-xs.webp": [
+    166,
+    240
+  ],
+  "images/derivatives/card/articles/intergalactic-2026-info-1791982538030--7b6d52af-lg.webp": [
+    720,
+    960
+  ],
+  "images/derivatives/card/articles/intergalactic-2026-info-1791982538030--7b6d52af-md.webp": [
+    540,
+    720
+  ],
+  "images/derivatives/card/articles/intergalactic-2026-info-1791982538030--7b6d52af-sm.webp": [
+    360,
+    480
+  ],
+  "images/derivatives/card/articles/intergalactic-2026-info-1791982538030--7b6d52af-xs.webp": [
+    180,
+    240
+  ],
+  "images/derivatives/card/articles/intergalactic-2026-info-1791982818891--8e483a34-lg.webp": [
+    720,
+    960
+  ],
+  "images/derivatives/card/articles/intergalactic-2026-info-1791982818891--8e483a34-md.webp": [
+    540,
+    720
+  ],
+  "images/derivatives/card/articles/intergalactic-2026-info-1791982818891--8e483a34-sm.webp": [
+    360,
+    480
+  ],
+  "images/derivatives/card/articles/intergalactic-2026-info-1791982818891--8e483a34-xs.webp": [
+    180,
+    240
   ],
   "images/derivatives/card/articles/japan-festival-2026-october--629b7f5a-fourThree-center.webp": [
     1200,
