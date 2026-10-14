@@ -35,6 +35,11 @@ const ROOT=path.join(process.cwd(),'LP');
 const BUILD_DETAIL=fs.readFileSync(path.join(process.cwd(),'scripts','build-detail-pages.mjs'),'utf8');
 const DETAIL_CSS_VERSION=(BUILD_DETAIL.match(/const DETAIL_CSS_VERSION = (\d+);/)||[])[1]||'';
 const MIME={'.html':'text/html;charset=utf-8','.js':'text/javascript;charset=utf-8','.css':'text/css;charset=utf-8','.json':'application/json'};
+const ARTICLE_TEMPLATE_ID=fs.readdirSync(path.join(ROOT,'articles'))
+  .filter(name=>name.endsWith('.html'))
+  .map(name=>({name,html:fs.readFileSync(path.join(ROOT,'articles',name),'utf8')}))
+  .find(({html})=>html.length>10000&&html.includes('class="article-detail-inner"'))?.name.replace(/\.html$/,'');
+if(!ARTICLE_TEMPLATE_ID) throw new Error('article-detail-inner を含む本物の記事テンプレートが見つかりません');
 const server=http.createServer((req,res)=>{const u=new URL(req.url,'http://x');
  let p=decodeURIComponent(u.pathname); if(p==='/')p='/cms.html';
  const f=path.join(ROOT,p);
@@ -53,7 +58,7 @@ const server=http.createServer((req,res)=>{const u=new URL(req.url,'http://x');
 await new Promise(r=>server.listen(0,'127.0.0.1',r));
 const base=`http://127.0.0.1:${server.address().port}`;
 const PROBE=`<script>
-window.addEventListener('load',()=>setTimeout(()=>{
+window.addEventListener('load',()=>setTimeout(async()=>{
  const out={};
  try{
   // 認証で body が差し替えられていないか。innerHTML で 'Access denied' を
@@ -177,15 +182,22 @@ window.addEventListener('load',()=>setTimeout(()=>{
   // 別ウィンドウの本番表示プレビューにも短コードが変換されること。
   let generatedPreview='';
   const originalOpen=window.open;
-  window.open=()=>({document:{open(){},write(value){generatedPreview=String(value)},close(){}}});
+  window.open=()=>({document:{open(){},write(v){generatedPreview=String(v)},close(){}}, close(){}});
   if (probeEditor) probeEditor.innerHTML='<p>[[event|Generated Preview Event|2030-01-01|Tokyo|https://example.com|Probe Artist A;Probe Artist B|Techno]]</p><p>[[calendar]]</p>';
-  openArticleGeneratedPreview();
-  window.open=originalOpen;
+  const articleIdField=document.getElementById('ar-id');
+  const originalArticleId=articleIdField?.value || '';
+  if(articleIdField) articleIdField.value=${JSON.stringify(ARTICLE_TEMPLATE_ID)};
+  try { await openArticleGeneratedPreview(); }
+  finally {
+    if(articleIdField) articleIdField.value=originalArticleId;
+    window.open=originalOpen;
+  }
   out.本番表示プレビュー={
     event:generatedPreview.includes('class="tj-event"'),
     calendar:generatedPreview.includes('class="tj-calendar"'),
     lineup:generatedPreview.includes('class="tj-event-lineup"')&&generatedPreview.includes('Probe Artist A'),
     detailInner:generatedPreview.includes('class="article-detail-inner"'),
+    template:generatedPreview.includes('class="article-specs"'),
     // PROBE はテンプレート文字列。正規表現のバックスラッシュは消えるので使わない（2026-10-09 構文エラーで計測が止まった）
     productionCssVersion:String(parseInt((generatedPreview.split('/detail.css?v=')[1]||''),10)||'')
   };
@@ -253,6 +265,7 @@ if(d.イベント見出し着地 && !d.イベント見出し着地.見出し基�
 if(d.集中モードからプレビュー表示 && (!d.集中モードからプレビュー表示.focus || !d.集中モードからプレビュー表示.preview || !d.集中モードからプレビュー表示.eventVisible)) failures.push('集中モード開始後にプレビューを表示できない');
 if(d.集中モードのイベント入力 && (!d.集中モードのイベント入力.visible || Number(d.集中モードのイベント入力.zIndex)<=2000 || !d.集中モードのイベント入力.boxVisible)) failures.push('集中モードのイベント入力ダイアログが前面に出ない');
 if(d.本番表示プレビュー && (!d.本番表示プレビュー.event || !d.本番表示プレビュー.calendar || !d.本番表示プレビュー.lineup || !d.本番表示プレビュー.detailInner || !d.本番表示プレビュー.productionCssVersion)) failures.push('本番表示プレビューにイベントカード / カレンダー / 出演者 / 本番CSSが反映されない');
+if(d.本番表示プレビュー && !d.本番表示プレビュー.template) failures.push('本番表示プレビューが記事ページを型にしていない');
 if(d.本番表示プレビュー && d.本番表示プレビュー.productionCssVersion !== DETAIL_CSS_VERSION) failures.push(`本番表示プレビューのdetail.css版が不一致（期待 ${DETAIL_CSS_VERSION} / 実値 ${d.本番表示プレビュー.productionCssVersion || 'なし'}）`);
   if(failures.length){
   console.log('CMS のレイアウトに問題があります:');
