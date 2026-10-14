@@ -63,9 +63,9 @@ figure.fx-img.fx-reveal.fx-on .fx-fig { opacity: 1; }
 @media (min-width: 900px) {
   figure.fx-img.fx-full { width: min(100vw, 1200px); margin-left: calc(50% - min(50vw, 600px)); }
   figure.fx-img.fx-full .fx-fig { padding: 0 max(24px, calc(min(50vw, 600px) - 50% - 0px)); }
-  /* Editorial rail: 本文は細い中央カラム、画像だけ左右へ逃がす */
-  figure.fx-img.fx-right { width: 66.6667%; margin-left: 33.3333%; margin-right: -8vw; }
-  figure.fx-img.fx-left  { width: 66.6667%; margin-left: -8vw; margin-right: 33.3333%; }
+  /* Editorial rail: 本文は細い中央カラム、画像は本文の幅の中で左右に寄せる（はみ出さない） */
+  figure.fx-img.fx-right { width: 66.6667%; margin-left: 33.3333%; margin-right: 0; }
+  figure.fx-img.fx-left  { width: 66.6667%; margin-left: 0; margin-right: 33.3333%; }
   figure.fx-img.fx-compact.fx-right { width: 62%; margin-left: 38%; }
   figure.fx-img.fx-compact.fx-left  { width: 62%; margin-left: 0; margin-right: 38%; }
 }
