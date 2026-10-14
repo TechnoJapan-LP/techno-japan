@@ -9837,3 +9837,6 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 - 本番反映後、本番の記事で左寄せが本文の左端に揃うことを実測して追記する。
 - cms.js を変えたので push 後に Publish pipeline を手動実行する。CMS は Cmd+Shift+R で強制リロード。
+- **本番反映済み（2026-10-14）**: worktree preflight 全件成功（1回目は CMS プレビューの article-fx.css 版ずれを検出 → cms.js で 14 に、cms.js?v=136）。push フック通過、デプロイ 38572651220 success、Lighthouse CI 38573453912 success、Publish pipeline 38572661200 success（`cms: publish data.js` f2288ac0 が増えたことを確認）。
+  本番実測（https://techno-japan.media/articles/labyrinth-2026-info.html, CDP, 1100/1440/1920）: テスト環境と同値。1440 で本文 380–1060 / 左寄せ 380–833 / 右寄せ 607–1060。
+  CMS の画面操作（ブラウザでの本番表示プレビュー）は**実機未確認**。変更は参照する CSS の版番号のみ。
