@@ -1620,6 +1620,7 @@ async function openArticleGeneratedPreview(){
   }
   let templateDoc = null;
   let templateId = '';
+  let templateFromRss = false;
   let templateError = '';
   const fetchTemplate = async (id) => {
     const response = await fetch('/articles/' + encodeURIComponent(id) + '.html', { cache: 'no-store' });
@@ -1639,6 +1640,26 @@ async function openArticleGeneratedPreview(){
         .sort((a, b) => String(b.publishedAt || b.date || '').localeCompare(String(a.publishedAt || a.date || '')));
       for (const row of rows) {
         try { templateDoc = await fetchTemplate(row.id); templateId = String(row.id); break; } catch (error) { templateError = error.message; }
+      }
+    }
+    if (!templateDoc) {
+      try {
+        const response = await fetch('/rss.xml', { cache: 'no-store' });
+        if (response.ok) {
+          const rssDoc = new DOMParser().parseFromString(await response.text(), 'text/xml');
+          const ids = [];
+          const seen = new Set();
+          rssDoc.querySelectorAll('link').forEach(link => {
+            const value = link.getAttribute('href') || link.textContent || '';
+            const match = String(value).match(/(?:^|\/)articles\/([a-z0-9-]+)\.html(?:[?#]|$)/);
+            if (match && !seen.has(match[1])) { seen.add(match[1]); ids.push(match[1]); }
+          });
+          for (const id of ids) {
+            try { templateDoc = await fetchTemplate(id); templateId = id; templateFromRss = true; break; } catch (error) { templateError = error.message; }
+          }
+        }
+      } catch (error) {
+        templateError = error && error.message || String(error);
       }
     }
     if (!templateDoc) throw new Error(templateError || '公開済みの記事テンプレートが見つかりません');
@@ -1669,7 +1690,7 @@ async function openArticleGeneratedPreview(){
     doc.title = title + ' — TECHNO JAPAN';
     doc.querySelectorAll('script[type="application/ld+json"]').forEach(script => script.remove());
     if (!doc.querySelector('meta[name="robots"]')) { const robots = doc.createElement('meta'); robots.name = 'robots'; robots.content = 'noindex'; doc.head.appendChild(robots); }
-    const label = doc.createElement('div'); label.textContent = templateId === previewArticleValue_('ar-id') ? 'PREVIEW' : 'PREVIEW · 関連記事・関連フェスは公開時に決まります';
+    const label = doc.createElement('div'); label.textContent = !templateFromRss && templateId === previewArticleValue_('ar-id') ? 'PREVIEW' : 'PREVIEW · 関連記事・関連フェスは公開時に決まります';
     label.style.cssText = 'position:fixed;right:12px;bottom:12px;pointer-events:none;z-index:2147483647;padding:6px 9px;background:rgba(8,8,8,.85);color:#fff;font:10px/1.2 monospace;letter-spacing:.08em'; doc.body.appendChild(label);
     win.document.open(); win.document.write('<!doctype html>' + doc.documentElement.outerHTML); win.document.close();
   } catch (error) {

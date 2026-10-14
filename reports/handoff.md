@@ -9870,3 +9870,8 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - **push できない状態**: 本番 data.js の INTERGALACTIC 記事（intergalactic-2026-info）に `[[event|…|intergalactic-festival]]` が1件残り、
   ビルドが止まる。正しいフェスIDは `intergalactic`。データはユーザーが CMS で直す（勝手に直さない）。直って Publish が通ったら、
   main へマージ → push → Publish pipeline 実行 → 本番で本番表示を開いて確認。CMS は Cmd+Shift+R。
+- **本番反映（2026-10-15）**: INTERGALACTIC の ID 修正（ユーザーが CMS で実施）後に push。フック preflight 全件成功、デプロイ 38588520731 success、
+  Publish pipeline 38588542651 success（data.js に変化が無いので `cms: publish data.js` コミットは増えない＝正常）。
+  本番 CMS（cms.js?v=138）で本番表示を開き、本物の labyrinth ページと一致（違いは JSON-LD のみ）。
+  ただし新規記事の場合、記事キャッシュ（5分で失効）が空だと簡易表示に落ちることを本番で発見 → RSS を予備に使う修正を追加（AUDIT §9-107 追補、cms.js?v=139）。
+  テスト環境でキャッシュを消した状態で、本物の記事ページの型（ヘッダー・ヒーロー・関連記事3本・自動リンク9）になることを確認。
