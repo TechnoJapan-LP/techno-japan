@@ -9941,3 +9941,46 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
   本番を headless Chrome で 390px dpr3 / 1440px × 10ページ: JS 例外 0・横スクロール 0・Google Fonts 通信 0・/fonts/ から3書体。favorites は空表示と保存1件の表示を確認。headless からは GA を読まない。
   Lighthouse（ローカル実行・モバイル既定・朝と同じコマンド）: TOP 性能 88→99（LCP 3.3→2.1s）、festivals 87→96（3.3→2.4s）、フェス詳細 87→98（2.9→2.0s）、記事 90→100（3.1→1.4s）。描画を止める時間 約1.6s→0.04〜0.3s。TOP の「LCP 画像が遅延読み込み」は解消。
   TOP の1回目は計測値が取れず（既知の揺れ）、2回再計測して両方 99。実機（iPhone Safari）は未確認。
+
+## 2026-10-15 フェスのカタカナ名（name_ja）— 監査 §4-2
+
+### 実施
+- 「リバースフェスティバル」等カタカナで検索されるのに title が英字だけで CTR 0% だった（GSC 28日、順位5〜10位・表示1,500回超）。
+- FESTIVALS シートの末尾 AF 列にヘッダー `name_ja` を追加し、検索実績のある8件に値を入れた（Claude in Chrome、セル単位の入力。ヘッダー行の既存セルは不変、A1=ID を確認）。
+  | ID | name_ja | 根拠（GSC の検索語） |
+  |---|---|---|
+  | re-birth-festival | リバースフェスティバル | リバースフェスティバル 198表示ほか |
+  | big-fun | ビッグファン | ビッグファン 札幌 186 |
+  | colors-presents-soundcamp | サウンドキャンプ | サウンドキャンプ 92 |
+  | labyrinth | ラビリンス | ラビリンス 2026 64 |
+  | snow-machine-japan | スノーマシン | スノーマシン 2027 18 |
+  | bondisco | ボンディスコ | ボンディスコ 15 |
+  | synapse-festival | シナプスフェスティバル | シナプスフェス 2 / シナプスフェスティバル 1 |
+  | circus | サーカス | サーカスフェスティバル 3 |
+- コード（実装 Codex）: CMS に入力欄 f-name_ja（読込・保存・新規・リセット・コード出力）、buildFestivalsJs に name_ja、JA 詳細の title / description / FAQ / JSON-LD alternateName、festivals.html と search.js の検索、check_data_hub の許可キー。新検査 `scripts/check_cms_name_ja.mjs` を preflight に追加。
+- JA title の長さ予算: 長い名前では種別を先に削り、「日程・チケット」と地名は最後まで残す（最終手段の候補を「地名 日程・チケット」に変更）。既存フェスで変わったのは takarajima-beach-cleaning-party の1件（種別 → 日程・チケット）。
+
+### コミット
+- b5cad2b9（コード）、e9d26729（CMS Publish: data.js に name_ja 8行のみ追加）、このエントリ。
+
+### 検証
+- preflight 全50件成功（新検査「FESTIVALS name_ja の保持と生成」含む）。push フックでも成功。デプロイ 38714623700 success、Publish pipeline 38715081207 success。
+- ローカルで data.js のコピーに name_ja を一時注入してビルド → title / description / FAQ / alternateName を確認 → 元に戻して再ビルドし差分0を確認。
+- 本番 CMS（cms.js?v=140）で Re:birth を EDIT で開き、f-name_ja に「リバースフェスティバル」が読み込まれることを確認（保存はしていない）。
+- 本番 CMS で Publish Now。確認ダイアログ3つ（push 確認 / 差分確認 / 公開内容: FESTIVALS 95・ARTISTS 137・VENUES 22・ARTICLES 18）以外は拒否する設定で実行し、拒否は0件。
+  data.js の差分は name_ja 8行のみ、件数不変、desc_en 95/95。
+- 本番: 8ページの title にカタカナ併記、EN 詳細の title は不変、alternateName と FAQ 1問目に併記、data-hub.js に name_ja、festivals.html の検索で「リバース」→ re-birth-festival 1件。
+
+### 変更したパターン
+- FESTIVALS の列追加（末尾 AF、小文字ヘッダー）と、CMS の読込・送信の両方に新列を足すパターン（片方だけだと保存のたびに消える）。
+- JA フェス title の候補順（最終手段を「日程・チケット」に）。
+
+### 未確認の類似パターン
+- **会場（VENUES）のカタカナ名は未対応**。VENUES は GAS 側の固定列リスト（COLUMNS）で書き込むため、GAS の貼り替え・再デプロイが要る。検索実績: ジュール クラブ 29、みつき クラブ 27、ザルーム 渋谷 10、ミツキ クラブ 10、サルーン クラブ 8。
+- 他のフェスは検索実績が無いため空欄（推測で埋めない）。GSC で新しいカタカナ検索が出たら CMS の「Name (カタカナ)」に入れる。
+- iPhone 実機での表示は未確認（title と構造化データのみの変更で、見た目は変えていない）。
+
+### 次の担当への注意・判断待ち
+- 効果測定は2〜4週間後の GSC で、上表のクエリの CTR を見る（現状ほぼ 0%）。
+- CMS は Cmd+Shift+R で強制リロード（cms.js?v=140）。
+- 会場のカタカナ対応は GAS 変更を伴うので、着手前にユーザー確認。
