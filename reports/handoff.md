@@ -9879,3 +9879,28 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
   本番 CMS で「同じ記事」「新規記事＋記事キャッシュ空」の両方を開き、本物の labyrinth ページと一致（違いは JSON-LD のみ、関連記事3・自動リンク9）。
   ログインした状態での手動操作はユーザー側で未確認。CMS は Cmd+Shift+R で強制リロードが必要。
 - **ユーザー確認済み（2026-10-15）**: ログインした本番 CMS で「↗ 本番表示」を開き、問題なし（ユーザー報告「無事完了した」）。上記の「ログイン状態は未確認」は解消。
+
+## 2026-10-15 総合監査（バグ・モバイル UX・SEO/GEO・計測）— 報告のみ、コード変更なし
+
+### 実施
+- 本番 https://techno-japan.media/ を対象に、実ブラウザ a11y/重量監査（`audit_a11y_browser.mjs`）、独自 CDP プローブ（390/1280 幅・18 ページ・コンソール例外・失敗リクエスト・横スクロール・スクショ）、Lighthouse 12.6.1（4 ページ）、全 584 HTML の静的走査、外部リンク 140 本、GSC/GA4 28 日を突き合わせた。
+- 結果は `reports/audit-2026-10-15.md`。スコア: モバイル UX 78 / バグ・性能 70 / SEO・GEO 82 / 流入・導線 68。
+
+### コミット
+- このエントリと `reports/audit-2026-10-15.md` のみ。LP/ は触っていない。
+
+### 検証
+- 本番で確認した事実: `/favorites.html` が JS 例外（`tjFav.list` 未定義）で空白。9/24 の `dba4ffc4` で favorites.js に `defer` が付いたのが原因。横スクロール 0/36。コンソール例外は favorites 以外 0。
+- headless Chrome 155 で `navigator.webdriver` は `false`（`--enable-automation` 無し）。GA のボット除外は UA 文字列だけに依存している。UA を上書きした計測は GA4 に届く（今日の自分の計測で約 36 セッション分が入った。10/15 16:00 台 JST）。
+
+### 変更したパターン
+- なし（報告のみ）。
+
+### 未確認の類似パターン
+- CI の Lighthouse（treosh/lighthouse-ci-action）が GA4 に数えられているかは未確認（ローカル Lighthouse では gtag が読まれなかった）。GA4 リアルタイムで確認する手順を報告書 5-2 に書いた。
+- Lighthouse はローカル 1 回計測。CI との絶対値差あり。
+
+### 次の担当への注意・判断待ち
+- 最優先は favorites.html の `defer` 撤去（1 行）。次に GA ボット除外の 3 重化（hostname 判定 + lighthouserc の UA）。順番と WP 分割は報告書 §6。
+- FESTIVALS に `NAME_JA` を足す案（§4-2）は Publish 経路（fetch-data / GAS / build）を触るので、単独で出して実機 1 回通す。
+- データ側（CMS）: ultra-japan のチケット URL 404 は 9/28 からそのまま。
