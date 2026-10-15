@@ -9937,3 +9937,7 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 - GA4 の効果は数日後に確認: Direct の非エンゲージ・`/festivals/ala.html` 等 Lighthouse URL の 0秒 PV が減っているか。
 - 監査 §4-2（フェスの NAME_JA）はスプレッドシートに列追加が必要。ユーザー判断待ち。
+- **本番反映済み（2026-10-15）**: push フック preflight 全件成功、デプロイ 38707344236 success（a546f15a）。
+  本番を headless Chrome で 390px dpr3 / 1440px × 10ページ: JS 例外 0・横スクロール 0・Google Fonts 通信 0・/fonts/ から3書体。favorites は空表示と保存1件の表示を確認。headless からは GA を読まない。
+  Lighthouse（ローカル実行・モバイル既定・朝と同じコマンド）: TOP 性能 88→99（LCP 3.3→2.1s）、festivals 87→96（3.3→2.4s）、フェス詳細 87→98（2.9→2.0s）、記事 90→100（3.1→1.4s）。描画を止める時間 約1.6s→0.04〜0.3s。TOP の「LCP 画像が遅延読み込み」は解消。
+  TOP の1回目は計測値が取れず（既知の揺れ）、2回再計測して両方 99。実機（iPhone Safari）は未確認。
