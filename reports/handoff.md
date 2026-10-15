@@ -9985,159 +9985,30 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - CMS は Cmd+Shift+R で強制リロード（cms.js?v=140）。
 - 会場のカタカナ対応は GAS 変更を伴うので、着手前にユーザー確認。
 
-## 2026-10-15 テクノらしいインタラクション3つ（テスト環境）
+## 2026-10-16 TOP の帯を「開催予定フェス」に（テスト環境・未公開）
 
 ### 実施
-- `LP/index.html`: FESTIVALS の既存 upcoming 判定を終了日基準へ揃え、最大8件の開催帯（NOW ON / THIS WEEK / NEXT、通常リンク、JA/EN地名、タッチ停止、reduced-motion時の横スクロール）を実装。静的な飾り文はフォールバックとして保持。
-- `LP/common.css`、`scripts/build-detail-pages.mjs`、生成済み JA/EN 記事ページ: View Transitions と記事ヒーローの `tj-hero` を追加。
-- `LP/news.html`、`LP/index.html`、`LP/common.js`: NEWS/TOP/RELATED STORIES のカード画像へ pointerdown/click で遷移名を設定。同時重複は解除し、通常遷移は横取りしない。
-- `LP/article-fx.css` / `LP/article-fx.js`: 32分割LED読了メーター（1/32刻み、末尾4区画を赤、reduced-motionでも表示）へ変更。
-- `LP/cms.js` の本番表示プレビュー参照版、生成側定数、全 HTML のアセット版を更新。GAS・スプレッドシート・`LP/data.js` は変更なし。
+- ブランチ `design/techno-fx`（worktree `techno-japan-fx`）。main との差分は `LP/index.html` と生成物 `LP/en/index.html` のみ。
+- TOP の流れる帯（`.marquee`）を、固定文言から開催予定フェスの一覧に置き換えた。左端に固定の「● UPCOMING」、各件は「番号 / 状態（● NOW ON = 赤点滅、● THIS WEEK = 赤、NEXT = 灰）/ 日付 / フェス名 / 都道府県」。各件は通常の `<a href="/festivals/<id>.html">`。
+- 2周目の複製は `aria-hidden` + `tabindex=-1`。hover / focus / タッチ中は停止。`prefers-reduced-motion` では横スクロールの帯になる。
+- 副作用: TOP の `upcoming` 判定を「開始日 >= 今日」から「終了日 >= 今日」に変えたため、開催中のフェスも「UPCOMING EVENTS」一覧に残る。
+- 同じブランチで試した「カード→記事の写真遷移（View Transitions）」と「LED 読み進みメーター」はユーザー判断で不採用。関連ファイル（vt-direction.js、common.css/js、news.html、article-fx.css/js、cms.js、build-detail-pages.mjs）はすべて main と同一に戻した。経緯は d530c498〜d4db7f11 のコミットに残っている。
 
 ### コミット
-- 未コミット（ユーザー指示により commit / push なし）。
+- このエントリを含むコミット（design/techno-fx、未 push）。
 
 ### 検証
-- `node scripts/build-detail-pages.mjs` 相当の生成完了。外部 Google Drive 画像130件は取得不可のため、既存寸法を再利用。
-- `node --check LP/article-fx.js`、`node --check LP/common.js`、`node --check scripts/build-detail-pages.mjs`: 成功。
-- `check_asset_versions.py --no-diff`、`check_no_hardcoded_versions.py`、`check_asset_paths.py`、`check_cms_preview_frame.mjs`、`check_sw_routing.mjs`: 成功。
-- `check_hub_pages.py`: localhost bind が Operation not permitted のため未確認。
-- `bash scripts/preflight.sh`: 外部画像取得待ちで長時間無出力となり停止。全件成功とは報告しない。
-- 実ブラウザの表示・操作（JA/EN、PC/スマホ、タッチ、reduced-motion）は未確認。
+- `bash scripts/preflight.sh` 全50件成功（2026-10-16）。
+- headless Chrome: 390px（dpr2, touch）/ 1440px、JA / EN。帯の高さ 49〜51px、横はみ出し 0、JS 例外 0。
+- 実ブラウザ（Chrome）で PC 幅の帯を目視確認。スマホ実機は未確認。
+- 注意: `check_feeds.mjs` の「sitemap-news.xml に48時間外の記事」は日付の経過で main でも落ちる（intergalactic-2026-info が 10/14 公開）。`python3 scripts/generate-sitemap.py` で再生成すると通る。本番は Publish pipeline が再生成する。
 
 ### 変更したパターン
-- 開催日帯のデータ駆動描画、通常 `<a>` 遷移に付随する View Transition 名の設定、CSS mask/clip-path による固定32区画メーター、アセット版の生成側・CMS preview・HTML同期。
+- `LP/index.html` の `.marquee` の CSS と、`upcoming` 配列の直後の描画ブロック。
 
 ### 未確認の類似パターン
-- `pagereveal` によるブラウザバック時のカード側ヒーロー復帰は未実装（通常の戻る遷移は壊さない）。
-- RELATED STORIES 以外の共通ナビ記事カードは対象外（今回の指定導線ではない）。
-- 実機 Safari/Chrome の View Transitions、タッチ中停止、reduced-motion の実測は未確認。
+- 確認済み・0件（帯は TOP だけにある）。
 
 ### 次の担当への注意・判断待ち
-- 公開前にローカルHTTP配信または認証済み実ブラウザで、TOP/NEWS/記事のJA/EN・PC/スマホを操作確認すること。CMS変更ではないが、カード→記事とRELATED→記事を押して写真遷移と通常遷移を確認する。
-- `check_hub_pages.py` が bind 可能な環境で再実行し、preflight 全件成功を確認するまで push しない。
-
-## 2026-10-15 追加修正：開催帯の日付・重複読み上げ・View Transition CSS
-
-### 実施
-- 同月の開催期間を `OCT 16–18`、月またぎを `OCT 31–NOV 1`、単日を `OCT 24` と表示するよう `LP/index.html` を修正。
-- 帯の2回目の塊を `aria-hidden="true"` で包み、複製リンクに `tabindex="-1"` を付与。
-- `LP/common.css` の重複していた root View Transition 指定を `.25s` の1行へ統合。
-- `node scripts/build-detail-pages.mjs` でEN indexを再生成。アセット版とCMSプレビュー参照も同期。
-
-### コミット
-- 未コミット（commit / push なし）。
-
-### 検証
-- JA/EN行数一致: index 1419/1419、news 1299/1299、festivals 1458/1458、artists 941/941、venues 1149/1149。
-- `check_asset_versions.py --no-diff`、`check_no_hardcoded_versions.py`、`git diff --check`: 成功。
-- 生成側定数: common.css 40、common.js 20、article-fx.css 17、article-fx.js 16。CMS previewも同値へ同期。
-
-### 変更したパターン
-- 同月/月またぎ/単日の開催日表示、画面上は重複させつつ読み上げ・Tab操作から複製を除外する帯構造、重複CSS宣言の統合。
-
-### 未確認の類似パターン
-- 実ブラウザでの読み上げ・Tab順、reduced-motion、モバイル横スクロールは未確認。
-
-### 次の担当への注意・判断待ち
-- `check_hub_pages.py` と実ブラウザ確認は前回同様、localhost bind可能な環境で実施すること。公開前にpreflight全件成功を確認すること。
-
-## 2026-10-15 追加修正：本文終端基準の読み進みメーター
-
-### 実施
-- `LP/article-fx.js` の `updateProgress()` を、`.article-body` の上端→下端（画面下端到達）基準へ変更。本文がない場合は `.article-detail` を使用。
-- 高さは毎回 `getBoundingClientRect()` から計算し、`p >= 0.985` を満タン扱いにしたうえで1/32刻みを維持。
-- `article-fx.js` の参照版、生成側定数、CMSプレビュー参照を同期。
-
-### コミット
-- 未コミット（commit / push なし）。
-
-### 検証
-- `node scripts/build-detail-pages.mjs`: 成功（JA/EN詳細ページ生成完了）。
-- `node --check LP/article-fx.js`、`node --check scripts/build-detail-pages.mjs`: 成功。
-- `check_asset_versions.py --no-diff`、`check_no_hardcoded_versions.py`、`git diff --check`: 成功。
-- 版: common.css 41、common.js 21、article-fx.css 18、article-fx.js 17。CMS previewも同期済み。
-
-### 変更したパターン
-- 本文下端を終点とするスクロール進捗、端数吸収の0.985閾値、本文なし時の詳細コンテナフォールバック。
-
-### 未確認の類似パターン
-- 実ブラウザで画像読み込み前後・リサイズ・記事本文の短長差を操作確認していない。
-
-### 次の担当への注意・判断待ち
-- 公開前に実ブラウザで記事末尾までスクロールし、32区画目（赤）が点灯することを確認する。reduced-motionでも進捗表示が残ることを確認する。
-
-## 2026-10-15 round 2：ticker と方向付き記事遷移
-
-### 実施
-- `LP/article-fx.css` / `LP/article-fx.js` を HEAD~1 と byte-identical に復元し、生成側と CMS preview の article-fx 版を 13/14 に戻した。
-- `LP/index.html` の live UPCOMING ticker を、固定ラベル・状態 badge・日付/名前/場所・divider・fade mask・pause/reduced-motion 対応へ変更。通常の festival `<a>` は維持した。
-- `LP/vt-direction.js` を追加し、TOP/NEWS/RELATED STORIES の pointer 側を sessionStorage に保存、JA/EN の index/news と生成記事 head に blocking `vt-direction.js?v=1` を登録。`common.css` に左右の root slide と fallback class を追加。
-- `common.js` / `news.html` / `index.html` の重複した hero 設定を vt-direction.js の delegation に集約。`scripts/build-detail-pages.mjs` で JA/EN 記事を再生成した。
-
-### コミット
-- 未コミット（ユーザー指示により commit / push なし）。
-
-### 検証
-- `node scripts/build-detail-pages.mjs`: 成功。index JA/EN は 1430/1430 行、news JA/EN は 1292/1292 行。
-- `cmp` で article-fx.css/js と HEAD~1 が一致。`check_asset_versions.py --no-diff`、`check_asset_paths.py`、`check_no_hardcoded_versions.py`、`node --check` は成功。
-- `bash scripts/preflight.sh --fast`: 39件成功、5件省略。
-- `bash scripts/preflight.sh`: データ/キャッシュ/CMS/GAS/CI は通過。ただし sandbox が localhost listen を禁止するためブラウザ検査7件が EPERM。修正後の full preflight は環境制約により未完了扱い。実ブラウザ操作も未確認。
-
-### 変更したパターン
-- live ticker の状態別イベント構造と固定ラベル、pointer の左右判定、記事 pathname ごとの最大20件方向履歴、pageswap/pagereveal の左右 View Transition、記事 hero と戻り先カードの `tj-hero` 対応。
-
-### 未確認の類似パターン
-- localhost bind が可能な環境での hub/CMS/map の自動ブラウザ検査、実機 Chrome/Safari の forward/back、390px touch、reduced-motion、keyboard focus は未確認。
-
-### 次の担当への注意・判断待ち
-- 公開前に localhost bind 可能な環境で `bash scripts/preflight.sh` を省略なしで再実行し、TOP/NEWS/記事の JA/EN と PC/390px を操作確認すること。CMS preview の common.css は 41、article-fx は 14/13 で同期済み。
-
-## 2026-10-15 round 2 follow-up：Navigation API / Safari fallback
-
-### 実施
-- `LP/vt-direction.js` の activation 取得を `event.activation` / `window.navigation.activation` 対応へ修正。
-- list pathname 判定を JA/EN の `/`、`index.html`、`news.html` に対応させ、Navigation API 非対応時は pending/leaving sessionStorage fallback と戻り先カード復元を追加。
-- `transitionDirection` と復元処理の URL 解析を try/catch で保護。
-- `vt-direction.js` の版を 2 に上げ、JA/EN hub・生成記事を再生成。
-
-### コミット
-- 未コミット（ユーザー指示により commit / push なし）。
-
-### 検証
-- `node scripts/build-detail-pages.mjs`: 成功。
-- `node --check LP/vt-direction.js`、`check_asset_versions.py --no-diff`、`check_asset_paths.py`、`git diff --check`: 成功。
-- JA/EN 行数一致: index 1430/1430、news 1292/1292。
-
-### 変更したパターン
-- Navigation API activation の event/global 両対応、Safari の sessionStorage による forward/back 方向 fallback、`vt-direction.js?v=2` の全参照。
-
-### 未確認の類似パターン
-- 実ブラウザの Safari/Chrome forward/back、タッチ、keyboard、reduced-motion は未確認。
-
-### 次の担当への注意・判断待ち
-- localhost bind 可能な環境で省略なしの preflight と実ブラウザ操作を実施すること。push はその後。
-
-## 2026-10-15 follow-up：common asset cache versions
-
-### 実施
-- `LP/common.css` は commit `53001835` 後に変更されていたため、参照を全て `?v=42` に更新。
-- `LP/common.js` も同コミット比で変更されていたため、参照を全て `?v=22` に更新。
-- 生成定数、CMS preview、手書き hub、生成ページを同期し、記事ページを再生成。
-
-### コミット
-- 未コミット（ユーザー指示により commit / push なし）。
-
-### 検証
-- `node scripts/build-detail-pages.mjs`: 成功。
-- `python3 scripts/check_asset_versions.py --no-diff`: 成功。
-- `python3 scripts/check_asset_paths.py`、`git diff --check`: 成功。
-
-### 変更したパターン
-- `common.css` v41→v42、`common.js` v21→v22 の全 HTML/CMS preview 参照。
-
-### 未確認の類似パターン
-- 実ブラウザでのキャッシュ更新後の表示は未確認。
-
-### 次の担当への注意・判断待ち
-- localhost bind 可能な環境で省略なし preflight を再実行し、キャッシュ済みブラウザでも CSS/JS 更新を確認すること。
+- 本番へ出すときは main にマージ → preflight → push。Publish 経路（cms.js 等）は触っていないので pipeline の実行は不要。
+- 「開催中のフェスが UPCOMING EVENTS に残る」副作用を残すかは判断待ち。

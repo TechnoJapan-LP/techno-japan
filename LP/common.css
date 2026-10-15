@@ -25,16 +25,8 @@
 /* Cross-page fade (MPA View Transitions — progressive enhancement,
    Chrome 126+ / Safari 18+; older browsers just navigate normally) */
 @view-transition { navigation: auto; }
-::view-transition-group(tj-hero) { animation-duration: .42s; animation-timing-function: cubic-bezier(.2,.7,.2,1); }
-::view-transition-old(root), ::view-transition-new(root) { animation-duration: .25s; }
-@keyframes tj-vt-old-left { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(12%); } }
-@keyframes tj-vt-new-left { from { opacity: 0; transform: translateX(-12%); } to { opacity: 1; transform: translateX(0); } }
-@keyframes tj-vt-old-right { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(-12%); } }
-@keyframes tj-vt-new-right { from { opacity: 0; transform: translateX(12%); } to { opacity: 1; transform: translateX(0); } }
-:is(:active-view-transition-type(tj-from-left), html.tj-vt-left)::view-transition-old(root) { animation: tj-vt-old-left .42s cubic-bezier(.2,.7,.2,1) both; }
-:is(:active-view-transition-type(tj-from-left), html.tj-vt-left)::view-transition-new(root) { animation: tj-vt-new-left .42s cubic-bezier(.2,.7,.2,1) both; }
-:is(:active-view-transition-type(tj-from-right), html.tj-vt-right)::view-transition-old(root) { animation: tj-vt-old-right .42s cubic-bezier(.2,.7,.2,1) both; }
-:is(:active-view-transition-type(tj-from-right), html.tj-vt-right)::view-transition-new(root) { animation: tj-vt-new-right .42s cubic-bezier(.2,.7,.2,1) both; }
+::view-transition-old(root) { animation-duration: 0.18s; }
+::view-transition-new(root) { animation-duration: 0.18s; }
 @media (prefers-reduced-motion: reduce) {
   @view-transition { navigation: none; }
 }
@@ -71,9 +63,6 @@ body {
   opacity: 0;
   animation: bodyFadeIn 1s ease forwards;
 }
-
-html.tj-vt-nav body { animation: none; opacity: 1; }
-html.tj-vt-nav .article-hero.fx-hero img { transform: scale(1.04); transition: none; }
 
 @keyframes bodyFadeIn { to { opacity: 1; } }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
