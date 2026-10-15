@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-10-15T09:44:15.230Z",
+  "_generatedAt": "2026-10-15T09:55:36.349Z",
   "count": 95,
   "items": [
     {
@@ -26,7 +26,8 @@
       "DESC_EN": "Snow Machine Japan transforms the alpine resort town of Hakuba into a winter playground for electronic music enthusiasts. The festival combines skiing and snowboarding culture with carefully curated lineups spanning techno and house music. Set against the backdrop of the Japanese Alps, it offers an intimate alternative to the larger summer festival circuit.",
       "imagePosition": "center",
       "location_ja": "〒399-9301 長野県北安曇郡白馬村北城",
-      "COUNTRY": "JP"
+      "COUNTRY": "JP",
+      "name_ja": "スノーマシン"
     },
     {
       "ID": "mutek",
@@ -139,7 +140,8 @@
       "metaDescription": "群馬の大自然で開催される野外フェスLabyrinth。世界屈指の音響システムと緻密なサウンドデザイン、洗練されたラインナップが生む没入体験。紅葉に包まれた会場と厳格な入場制限が守るプライベート感、国内外の音楽ファンが熱狂する至高のフェスティバルの魅力を紹介します。",
       "DESC_EN": "The Labyrinth has carved out a unique presence in the Japanese underground scene, offering a one-of-a-kind, immersive, and story-driven outdoor festival experience through world-class sound systems, precise audio design, and a meticulously curated lineup. Set amidst rich nature as autumn leaves begin to turn, the festival maintains an intimate privacy and a welcoming community culture through strict attendance limits, earning passionate acclaim from music purists worldwide.",
       "imagePosition": "center bottom",
-      "location_ja": "みなかみ宝台樹キャンプ場"
+      "location_ja": "みなかみ宝台樹キャンプ場",
+      "name_ja": "ラビリンス"
     },
     {
       "ID": "synapse-festival",
@@ -163,7 +165,8 @@
       "STATUS": "published",
       "DESC_EN": "Synapse Festival brings together electronic music's cerebral edge in Fukuoka's intimate venue spaces. The event focuses on deep techno and experimental sounds, drawing artists who prioritize sonic exploration over commercial appeal. Known for its carefully curated lineups that blend local talent with international acts pushing electronic music's boundaries.",
       "location_ja": "泊まれる公園 INN THE PARK 福岡",
-      "COUNTRY": "JP"
+      "COUNTRY": "JP",
+      "name_ja": "シナプスフェスティバル"
     },
     {
       "ID": "ringo-festival",
@@ -262,7 +265,8 @@
       "DESC_EN": "\"CIRCUS × CIRCUS ODAIBA\" is an urban festival bringing together 13 cutting-edge hip-hop and electronic acts from Japan and abroad at an open-air venue in Odaiba. Highlights include a rare performance from Rejjie Snow, marking his first Japan appearance in seven years. What's more, the previous day sees a pre-party held at the same venue featuring MURA MASA and others, making this a rare two-day-long immersion in the sound of now.",
       "imagePosition": "center bottom",
       "location_ja": "お台場青海地区P区画",
-      "COUNTRY": "JP"
+      "COUNTRY": "JP",
+      "name_ja": "サーカス"
     },
     {
       "ID": "colors-presents-soundcamp",
@@ -285,7 +289,8 @@
       "STATUS": "published",
       "metaDescription": "北海道の石狩湾新港で開かれる野外レイヴが、2026年に初の3日間開催へ。深夜から朝は音を止め、日常に近いリズムで過ごすことで育つ連帯感がフロアのグルーヴを押し上げる。FELINEやNOCOら道外4名と地元勢10名の計14名が出演し、音響設計はwool100wが担う。",
       "DESC_EN": "An open-air rave held at Ishikari Bay New Port in Hokkaido. Taking advantage of an extended holiday stretch, 2026 marks the first time the event runs across three full days. Its defining trait is that the sound deliberately stops for a stretch between late night and morning. The music doesn't run non-stop because the intention is for everyone on site to share the experience on a rhythm close to that of ordinary life — and that accumulation breeds the sense of living out the same story together. The solidarity that builds slowly over those hours eventually lifts the groove on the floor.\n\nFour artists travel in from outside the prefecture — FELINE, NOCO, Yamarchy and YOUFORGOT — joined by ten locals from Hokkaido including ECHO and KAZUYA PEE, fourteen in all carrying the three days from one to the next. Sound design is handled by wool100w. On a grass floor ringed by forest and open meadow, two nights will be crossed.",
-      "COUNTRY": "JP"
+      "COUNTRY": "JP",
+      "name_ja": "サウンドキャンプ"
     },
     {
       "ID": "ultra-japan",
@@ -334,7 +339,8 @@
       "metaDescription": "2013年から日本のレイヴカルチャーを世界へ発信する野外フェス、Re:birth Festivalが約2年半ぶりに復活。2026年の舞台は長野・木曽のこだまの森。RroseやMathew Jonsonら海外勢11組を含む総勢80組以上が集結し、テクノ、ハウス、トランスと巨大ホログラム演出が森を彩る。",
       "DESC_EN": "Launched in 2013, this open-air festival flies the banner of Underground Music, Art & Technology. Futtsu Cape, a quarry, a highland resort, a ski slope — and beyond that, South Korea, Koh Phangan in Thailand, even a total solar eclipse festival in the United States. Shifting its stage to a different environment each time, it has continued to broadcast Japan's own distinct rave culture to the world. For 2026, its first edition in roughly two and a half years, it heads to Kodama no Mori in Kiso, Nagano — a site that holds the memories of countless open-air festivals. Eleven acts arrive from overseas, including Rrose, who maintains an unwavering commitment to anonymity and experimentation, and Mathew Jonson, who takes on a B2B live set with SODEYAMA. Germany's RE:SORB will project massive holograms onto Kiso's natural mist. With techno, house and trance at its core, more than 80 acts in total gather in a new forest.",
       "location_ja": "こだまの森 キャンプ場",
-      "COUNTRY": "JP"
+      "COUNTRY": "JP",
+      "name_ja": "リバースフェスティバル"
     },
     {
       "ID": "big-fun",
@@ -357,7 +363,8 @@
       "metaDescription": "札幌の名門クラブPrecious Hallが手がける屋外音楽フェスBIG FUN。北海道の大自然を舞台に、世界的レジェンドDJと地元トップアーティストが交わる特別な一夜。ハウス好きなら見逃せないフェスの魅力と楽しみ方を紹介します。",
       "DESC_EN": "This is an outdoor music festival, surrounded by nature, produced by Sapporo's legendary club \"Precious Hall.\" Transcending the confines of a mere music event, it offers a special space where world-renowned legends and top local artists come together.",
       "location_ja": "八剣山果樹園",
-      "COUNTRY": "JP"
+      "COUNTRY": "JP",
+      "name_ja": "ビッグファン"
     },
     {
       "ID": "one-park-festival",
@@ -472,7 +479,8 @@
       "metaDescription": "兵庫県三田市の森で13年目を迎えるDIYパーティBonDisco。高音質2フロアとプールを備え、全国から約40組が集結。土曜昼から日曜午後まで音が鳴り続ける。駐車場もテントも追加料金なし、18歳以下は入場無料の野外レイヴを紹介します。",
       "DESC_EN": "An independent, DIY party built entirely by the people who throw it. Now in its 13th year, it aims to create a space deep in the abundance of nature where anyone can escape the everyday to the fullest. The venue is Sanda Athletic Park in Sanda City, Hyogo Prefecture. Tucked into a forest far from the city's heatwave, two meticulously designed, high-fidelity floors are assembled, while two pools — one large, one small — cool down bodies worn out from dancing. Nearly 40 acts from across Japan, centered on the Kansai scene, come together as the sound keeps running from Saturday midday through Sunday afternoon. The only cost is the entrance fee: no extra charges for parking, tents or the pools, and admission is free for anyone 18 and under. The relationships built up over these 13 years are, quite literally, the lineup.",
       "location_ja": "三田アスレチックパーク",
-      "COUNTRY": "JP"
+      "COUNTRY": "JP",
+      "name_ja": "ボンディスコ"
     },
     {
       "ID": "global-ark",
