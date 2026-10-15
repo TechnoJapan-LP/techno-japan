@@ -4299,7 +4299,7 @@ const SHEET_FIELD_NAMES = [
   'title_en','excerpt_en','body_en','cardRatio','heroRatio','festivalId','readTime','updatedAt',
   'metaDescription','publishAt','ogImage','editorNotes','authorId',
   // FESTIVALS / VENUES / ARTISTS
-  'name_en','desc_en','bio_en','location_ja','ticketUrl','venueId','instagramUrl',
+  'name_en','desc_en','bio_en','location_ja','name_ja','ticketUrl','venueId','instagramUrl',
   'subtype','hours','charge','features',
   // EDITIONS / LINEUPS（camelCase 消費箇所向け）
   'editionId','festivalId','artistId','actLabel','setType',
@@ -4725,6 +4725,7 @@ function editRow(section, rowNum){
   else if(section==='festival'){
     setVal('f-id',row.id); setVal('f-type',row.type||'festival');
     setVal('f-name',row.name); setVal('f-city',row.city);
+    setVal('f-name_ja',row.name_ja);
     setVal('f-country',row.country || row.COUNTRY || '');
     setVal('f-location',row.location); setVal('f-url',row.url);
     setVal('f-location_ja',row.location_ja);
@@ -5046,7 +5047,7 @@ function saveEdit(section){
     syncFestivalDateToLatestEdition(ds&&de?ds+'/'+de:ds);
     Object.assign(payload,{id:g('f-id'),type:g('f-type'),name:g('f-name'),city:g('f-city'),
       country:g('f-country'),COUNTRY:g('f-country'),
-      location:g('f-location'),location_ja:g('f-location_ja'),url:g('f-url'),ticketUrl:g('f-ticketUrl'),instagram:g('f-instagram'),
+      location:g('f-location'),location_ja:g('f-location_ja'),name_ja:g('f-name_ja'),url:g('f-url'),ticketUrl:g('f-ticketUrl'),instagram:g('f-instagram'),
       address:g('f-address'),lat:g('f-lat'),lng:g('f-lng'),
       date:ds&&de?ds+'/'+de:ds,genre:getSelectedGenres('f-genre').join(', '),
       image:g('f-image'),imagePosition:g('f-imagePosition'),flyer:g('f-flyer'),heroGradient:g('f-heroGradient'),
@@ -6221,7 +6222,7 @@ function submitToSheet(section){
     const ds=g('f-dateStart'),de=g('f-dateEnd');
     payload={action:'add_festival',id:g('f-id'),type:g('f-type'),name:g('f-name'),city:g('f-city'),
       country:g('f-country'),COUNTRY:g('f-country'),
-      location:g('f-location'),location_ja:g('f-location_ja'),url:g('f-url'),ticketUrl:g('f-ticketUrl'),instagram:g('f-instagram'),
+      location:g('f-location'),location_ja:g('f-location_ja'),name_ja:g('f-name_ja'),url:g('f-url'),ticketUrl:g('f-ticketUrl'),instagram:g('f-instagram'),
       address:g('f-address'),lat:g('f-lat'),lng:g('f-lng'),date:ds&&de?ds+'/'+de:ds,
       genre:getSelectedGenres('f-genre').join(', '),image:g('f-image'),imagePosition:g('f-imagePosition'),flyer:g('f-flyer'),
       heroGradient:g('f-heroGradient'),desc:g('f-desc'),lineup:cleanLineup(lineups.f).join(', '),
@@ -7507,6 +7508,7 @@ function buildFestivalsJs(rows){
     if(r.date) l.push('    date: "'+q(fmtDate(r.date))+'",');
     if(r.location) l.push('    location: "'+q(r.location)+'",');
     if(r.location_ja) l.push('    location_ja: "'+q(r.location_ja)+'",');
+    if(r.name_ja) l.push('    name_ja: "'+q(r.name_ja)+'",');
     if(r.city) l.push('    city: "'+q(r.city)+'",');
     const c = r.country || r.COUNTRY;
     if(c) l.push('    country: "'+q(c)+'",');
@@ -7672,13 +7674,14 @@ function submitVenue(){
    GENERATE CODE — FESTIVAL
    ============================================================== */
 function submitFestival(){
-  const d={id:g('f-id'),type:g('f-type'),name:g('f-name'),city:g('f-city'),location:g('f-location'),location_ja:g('f-location_ja'),url:g('f-url'),ticketUrl:g('f-ticketUrl'),instagram:g('f-instagram'),lat:g('f-lat'),lng:g('f-lng'),dateStart:g('f-dateStart'),dateEnd:g('f-dateEnd'),genre:getSelectedGenres('f-genre'),image:g('f-image'),imagePosition:g('f-imagePosition'),flyer:g('f-flyer'),heroGradient:g('f-heroGradient'),desc:g('f-desc'),lineup:cleanLineup(lineups.f),editions:editions.map(e=>({...e}))};
+  const d={id:g('f-id'),type:g('f-type'),name:g('f-name'),name_ja:g('f-name_ja'),city:g('f-city'),location:g('f-location'),location_ja:g('f-location_ja'),url:g('f-url'),ticketUrl:g('f-ticketUrl'),instagram:g('f-instagram'),lat:g('f-lat'),lng:g('f-lng'),dateStart:g('f-dateStart'),dateEnd:g('f-dateEnd'),genre:getSelectedGenres('f-genre'),image:g('f-image'),imagePosition:g('f-imagePosition'),flyer:g('f-flyer'),heroGradient:g('f-heroGradient'),desc:g('f-desc'),lineup:cleanLineup(lineups.f),editions:editions.map(e=>({...e}))};
   if(!d.id||!d.name)return toast('ID and Name required','error');
   const genreStr=d.genre.map(g=>`"${g}"`).join(', ');
   const lineupStr=d.lineup.map(a=>`"${a}"`).join(', ');
   const dateStr=d.dateStart&&d.dateEnd?d.dateStart+'/'+d.dateEnd:d.dateStart||'';
   const lines=[`  {`,`    id: "${d.id}",`,`    type: "${d.type}",`,`    name: "${d.name}",`,`    date: "${dateStr}",`,`    location: "${d.location}",`,`    city: "${d.city}",`];
   if(d.location_ja)lines.push(`    location_ja: "${d.location_ja}",`);
+  if(d.name_ja)lines.push(`    name_ja: "${d.name_ja}",`);
   if(d.lat)lines.push(`    lat: ${d.lat},`);if(d.lng)lines.push(`    lng: ${d.lng},`);
   lines.push(`    image: "${d.image}",`,`    flyer: "${d.flyer}",`);
   if(d.imagePosition)lines.push(`    imagePosition: "${d.imagePosition}",`);
@@ -7778,7 +7781,7 @@ function copyOutput(section){navigator.clipboard.writeText(document.getElementBy
 function resetForm(section){
   const fields={
     venue:['v-id','v-name','v-city','v-area','v-subtype','v-hours','v-charge','v-image','v-imagePosition','v-capacity','v-address','v-lat','v-lng','v-url','v-instagram','v-desc','v-imageUrl'],
-    festival:['f-id','f-name','f-city','f-location','f-location_ja','f-url','f-ticketUrl','f-instagram','f-address','f-lat','f-lng','f-dateStart','f-dateEnd','f-image','f-imagePosition','f-flyer','f-heroGradient','f-desc','f-imageUrl','f-flyerUrl'],
+    festival:['f-id','f-name','f-name_ja','f-city','f-location','f-location_ja','f-url','f-ticketUrl','f-instagram','f-address','f-lat','f-lng','f-dateStart','f-dateEnd','f-image','f-imagePosition','f-flyer','f-heroGradient','f-desc','f-imageUrl','f-flyerUrl'],
     artist:['a-id','a-name','a-city','a-country','a-genre','a-image','a-imagePosition','a-bio','a-instagram','a-soundcloud','a-bandcamp','a-website','a-imageUrl'],
     event:['e-name','e-date','e-venue','e-city','e-time','e-desc','e-link'],
     article:['ar-id','ar-title','ar-category','ar-date','ar-updatedAt','ar-author','ar-image','ar-imageUrl','ar-readTime','ar-views','ar-excerpt','ar-body','ar-tags','ar-cardRatio','ar-heroRatio','ar-festivalId','ar-title_en','ar-excerpt_en','ar-body_en'],

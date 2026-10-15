@@ -892,7 +892,7 @@ body.rave-mode .festival-row-status { color: var(--accent); }
 
 <script src="common.js?v=17" defer></script>
 <script src="favorites.js?v=3"></script>
-<script src="search.js?v=3" defer></script>
+<script src="search.js?v=4" defer></script>
 <!-- localize.js は defer にしない。下のインライン描画が同期実行で tjLocalized を呼ぶ -->
 <script src="localize.js?v=12"></script>
 <script src="image-derivatives.js?v=52"></script>
@@ -984,7 +984,7 @@ function getSorted() {
     .filter(f => currentGenre === 'ALL' || genresOf(f).map(g => g.trim()).includes(currentGenre))
     .filter(f => {
       if (!currentSearch) return true;
-      const haystack = [f.name, f.name_en, f.location, f.location_ja, f.city, f.venue, f.venue_en].filter(Boolean).join(' ').toLowerCase();
+      const haystack = [f.name, f.name_en, f.name_ja, f.location, f.location_ja, f.city, f.venue, f.venue_en].filter(Boolean).join(' ').toLowerCase();
       return haystack.includes(currentSearch.toLowerCase());
     })
     .sort((a, b) => {

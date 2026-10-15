@@ -192,6 +192,7 @@
       <div class="form-group"><label>ID</label><input type="text" id="f-id" placeholder="e.g. rural-festival" oninput="autoFillFestivalImage()"></div>
       <div class="form-group"><label>Type</label><select id="f-type"><option value="festival">Festival</option><option value="rave">Rave</option></select></div>
       <div class="form-group"><label>Name</label><input type="text" id="f-name" placeholder="e.g. RURAL FESTIVAL 2026"></div>
+      <div class="form-group"><label>Name (カタカナ) <span class="label-hint">検索で打たれる読み。例: リバースフェスティバル。空欄可</span></label><input type="text" id="f-name_ja" placeholder="例: リバースフェスティバル"></div>
       <div class="form-group"><label>City</label><input type="text" id="f-city" placeholder="e.g. NIIGATA"></div>
       <div class="form-group"><label>Country <span class="label-hint">ISO 2文字（JP / TH / KR / TW / HK …）。空欄なら Airtable の国は変更しない</span></label><input type="text" id="f-country" placeholder="JP" maxlength="2" style="text-transform:uppercase"></div>
       <div class="form-group full"><label>Location <span class="label-hint">英語・ローマ字表記。施設名を入れて「📍 検索」で住所と緯度経度を自動取得</span></label><div class="input-row"><input type="text" id="f-location" placeholder="e.g. NAEBA SKI RESORT" onkeydown="if(event.key==='Enter'){event.preventDefault();geocodeFromLocation('f')}"><button class="btn btn-blue btn-sm" onclick="geocodeFromLocation('f')">📍 検索</button></div></div>
@@ -573,6 +574,6 @@
 </div>
 
 <script type="module" src="article-shortcodes.js?v=9"></script>
-<script src="cms.js?v=139" defer></script>
+<script src="cms.js?v=140" defer></script>
 </body>
 </html>

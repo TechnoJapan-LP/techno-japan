@@ -194,6 +194,7 @@
       const matches = FESTIVALS.filter(f => {
         if (!f.name) return false;
         return f.name.toLowerCase().includes(q) ||
+               (f.name_ja || '').toLowerCase().includes(q) ||
                (f.city || '').toLowerCase().includes(q) ||
                (f.location || '').toLowerCase().includes(q) ||
                (f.location_ja || '').toLowerCase().includes(q) ||

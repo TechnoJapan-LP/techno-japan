@@ -9,7 +9,7 @@ const hubPath = path.join(root, 'LP', 'data-hub.js');
 
 const REQUIRED = {
   FESTIVALS: ['id', 'name', 'name_en', 'date', 'city', 'image', 'imagePosition', 'genre',
-    'location', 'location_ja', 'type', 'venue', 'venue_en', 'lineup', 'status', 'featured', 'area', 'country'],
+    'location', 'location_ja', 'name_ja', 'type', 'venue', 'venue_en', 'lineup', 'status', 'featured', 'area', 'country'],
   ARTISTS: ['id', 'name', 'name_en', 'city', 'country', 'genre', 'image', 'imagePosition'],
   VENUES: ['id', 'name', 'name_en', 'city', 'area', 'genre', 'image', 'imagePosition', 'type',
     'subtype', 'charge', 'features', 'lat', 'lng', 'desc', 'desc_en', 'status'],

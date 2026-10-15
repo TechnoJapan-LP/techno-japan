@@ -1778,6 +1778,8 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
   const prefix = lang === 'en' ? '/en' : '';
   const altHref = (lang === 'ja' ? '/en' : '') + `/festivals/${f.id}.html`;
   const name = lang === 'en' ? (f.name_en || f.name) : f.name;
+  const nameJa = String(f.name_ja || '').trim();
+  const seoName = lang === 'ja' && nameJa && nameJa !== name ? `${name}（${nameJa}）` : name;
   const bodyDesc = lang === 'en' ? (f.desc_en || f.desc) : (f.desc || f.desc_en);
   const canonical = `${BASE}${prefix}/festivals/${f.id}.html`;
   const desc = bodyDesc || (lang === 'en'
@@ -1801,14 +1803,15 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
   const pref = lang === 'en' ? placeEn(prefRaw) : placeJa(prefRaw);
   const festivalTypeJa = f.type === 'rave' ? 'テクノ・レイヴ' : 'テクノ・野外フェス';
   const festivalTypeEn = f.type === 'rave' ? 'Rave' : 'Festival';
-  const nameYear = `${name}${year ? ` ${year}` : ''}`;
+  const nameYear = `${seoName}${year ? ` ${year}` : ''}`;
   /* 指名検索（フェス名＋年）に「日程・出演者・チケット」で応える。長い名前では
-     検索語 → 種別 の順に削り、地名は最後まで残す（利用者が打つのは地名だから）。 */
+     種別を先に削り、日程・チケットと地名は最後まで残す。 */
   const jaCandidates = [
     `${nameYear}｜${pref || '日本'}の${festivalTypeJa} 日程・出演者・チケット — TECHNO JAPAN`,
     `${nameYear}｜${pref || '日本'}の${festivalTypeJa} 日程・チケット — TECHNO JAPAN`,
     `${nameYear}｜${pref || '日本'} 日程・出演者・チケット — TECHNO JAPAN`,
     `${nameYear}｜${pref || '日本'}の${festivalTypeJa} — TECHNO JAPAN`,
+    `${nameYear}｜${pref || '日本'} 日程・チケット — TECHNO JAPAN`,
   ];
   const enCandidates = [
     `${nameYear} — Dates, Lineup & Tickets | Techno ${festivalTypeEn} in ${pref || 'Japan'}, Japan | TECHNO JAPAN`,
@@ -1830,11 +1833,15 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
         ? `${editionDate} at ${editionLocation}, ${pref || 'Japan'}. `
         : `${editionDate}、${editionLocation}（${pref || '日本'}）で開催。`)
     : '';
-  const metaDesc = truncate(`${metaLead}${bodyDesc || (lang === 'en'
+  const metaFallback = lang === 'en'
     ? `${name} — edition history and information for a techno / house festival in Japan.`
-    : `${name}の開催履歴・基本情報。日本のテクノ／ハウスのフェスティバル情報。`)}`, 160);
+    : `${name}の開催履歴・基本情報。日本のテクノ／ハウスのフェスティバル情報。`;
+  const metaDescSource = lang === 'ja' && seoName !== name
+    ? `${seoName}は、${editionDate && editionLocation ? `${editionDate}、${editionLocation}（${pref || '日本'}）で開催。` : ''}${bodyDesc || '開催履歴・基本情報。日本のテクノ／ハウスのフェスティバル情報。'}`
+    : `${metaLead}${bodyDesc || metaFallback}`;
+  const metaDesc = truncate(metaDescSource, 160);
   const summary = festivalSummary(f, currentEdition, name, lang);
-  const faqItems = festivalFaqItems(editions, lineupsByEdition, artistsById, name, lang);
+  const faqItems = festivalFaqItems(editions, lineupsByEdition, artistsById, seoName, lang);
   const performers = dedupePerformers(
     editions.flatMap((ed) => lineupsByEdition.get(ed.EDITION_ID) || [])
       .map((row) => lineupPerformerLd(row, artistsById, lang)).filter(Boolean));
@@ -1886,6 +1893,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
     '@type': 'Festival',
     '@id': `${BASE}/festivals/${encodeURIComponent(f.id)}.html#festival`,
     name: name,
+    ...(nameJa && nameJa !== name ? { alternateName: nameJa } : {}),
     description: desc,
     inLanguage: lang,
     image: [image],
