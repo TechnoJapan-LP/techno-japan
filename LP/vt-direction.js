@@ -159,6 +159,7 @@
     if (hero && hero.getBoundingClientRect().bottom < 0) hero.style.viewTransitionName = '';
   });
   if ('onpagereveal' in window) window.addEventListener('pagereveal', function (event) {
+    if (event.viewTransition) document.documentElement.classList.add('tj-vt-nav');
     var active = activation(event);
     var direction = transitionDirection(event);
     if (active) {
