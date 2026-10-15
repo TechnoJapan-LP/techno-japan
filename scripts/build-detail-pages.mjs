@@ -829,6 +829,17 @@ const PERMISSIONS_POLICY = 'geolocation=(), microphone=(), camera=(), interest-c
 
 const CSP = `default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' https:; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://stats.g.doubleclick.net; frame-src 'self' https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; form-action 'self' https://formsubmit.co; base-uri 'self'; object-src 'none'; upgrade-insecure-requests`;
 
+const FONT_HEAD = `<link rel="preload" as="font" type="font/woff2" href="/fonts/dm-sans-v17-latin.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/bebas-neue-v16-latin.woff2" crossorigin>
+<style>
+@font-face{font-family:'Bebas Neue';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/bebas-neue-v16-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Bebas Neue';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/bebas-neue-v16-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'DM Sans';font-style:normal;font-weight:200 500;font-display:swap;src:url('/fonts/dm-sans-v17-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'DM Sans';font-style:normal;font-weight:200 500;font-display:swap;src:url('/fonts/dm-sans-v17-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/space-mono-v17-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/space-mono-v17-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+</style>`;
+
 /* 詳細ページの nav。EN ページでは EN 版が実在するリンク先だけ /en/ へ向ける。
    EN_PAGES に無いもの（index.html）は JA のままにして 404 を作らない。
    これを入れる前は EN 詳細206枚の nav が全て JA を指しており、
@@ -896,7 +907,8 @@ const GA = `<script>
   // ボット（headless / Lighthouse / 自動操作）は計測しない。
   // 2026-09-28 の GA4 では Direct 75%・Chrome の 90% が非エンゲージで、
   // 0秒滞在のページ8本が lighthouse.yml の URL と一致していた（自分たちの検査を利用者として数えていた）。
-  if (navigator.webdriver || /HeadlessChrome|Chrome-Lighthouse|Lighthouse|Speed Insights|PTST|GTmetrix/i.test(navigator.userAgent)) return;
+  if (location.hostname !== 'techno-japan.media') return;
+  if (navigator.webdriver || /HeadlessChrome|Chrome-Lighthouse|Lighthouse|Speed Insights|PTST|GTmetrix|TJAudit/i.test(navigator.userAgent)) return;
   var s = document.createElement('script');
   s.async = true;
   s.src = 'https://www.googletagmanager.com/gtag/js?id=G-4MHCNR7D26';
@@ -952,9 +964,7 @@ ${hreflang}
 <meta name="twitter:description" content="${esc(d)}">
 <meta name="twitter:image" content="${esc(image)}">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+${FONT_HEAD}
 <link rel="stylesheet" href="/common.css?v=${COMMON_CSS_VERSION}">
 <link rel="stylesheet" href="/detail.css?v=${DETAIL_CSS_VERSION}">
 <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
@@ -1705,7 +1715,7 @@ function festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, lang, 
   const genres = (Array.isArray(f.genre) ? f.genre : []).map((genre) => `<span class="detail-tag">${esc(genre)}</span>`).join('');
   const heroImage = f.image || f.flyer;
   const heroHtml = heroImage ? `<div class="detail-hero-image">
-        <img ${dimensionAttrs(heroImage)} src="/${String(heroImage).replace(/^\//, '')}"${heroSrcsetAttr(heroImage)} alt="${esc(name)}"${imagePositionStyle(f)}>
+        <img ${dimensionAttrs(heroImage)} src="/${String(heroImage).replace(/^\//, '')}"${heroSrcsetAttr(heroImage)} alt="${esc(name)}" fetchpriority="high"${imagePositionStyle(f)}>
       </div>` : '<div class="detail-hero-image detail-hero-gradient" aria-hidden="true"></div>';
   const official = f.url
     ? `<a class="detail-official festival-official-link" href="${esc(safeUrl(f.url))}" target="_blank" rel="noopener">OFFICIAL SITE</a>`
@@ -2002,7 +2012,7 @@ function artistPage(a, artistsById, lang = 'ja') {
     ${place ? `<div class="detail-eyebrow">${esc(place)}</div>` : ''}
     <h1>${esc(name)}</h1>
     ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
-    ${a.image ? `<div class="detail-hero detail-hero-portrait"><img ${dimensionAttrs(a.image)} src="/${String(a.image).replace(/^\//, '')}"${heroSrcsetAttr(a.image)} alt="${esc(name)}"${imagePositionStyle(a)}></div>` : ''}
+    ${a.image ? `<div class="detail-hero detail-hero-portrait"><img ${dimensionAttrs(a.image)} src="/${String(a.image).replace(/^\//, '')}"${heroSrcsetAttr(a.image)} alt="${esc(name)}" fetchpriority="high"${imagePositionStyle(a)}></div>` : ''}
     ${bilingualBody(a.bio, a.bio_en, lang)}
     ${linkRow ? `<div class="detail-links">${linkRow}</div>` : ''}${appearancesHtml}
     <div class="article-footer"><a class="article-back" href="${hubHref}" data-artist-hub-back="${hubHref}" style="margin:0"><span class="arrow"></span> ALL ARTISTS</a></div>
@@ -2144,7 +2154,7 @@ function venuePage(v, lang = 'ja') {
     ${place ? `<div class="detail-eyebrow">${esc(place)}</div>` : ''}
     <h1>${esc(name)}</h1>
     ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
-    ${v.image ? `<div class="detail-hero"><img ${dimensionAttrs(v.image)} src="/${String(v.image).replace(/^\//, '')}"${heroSrcsetAttr(v.image)} alt="${esc(name)}"${imagePositionStyle(v)}></div>` : ''}
+    ${v.image ? `<div class="detail-hero"><img ${dimensionAttrs(v.image)} src="/${String(v.image).replace(/^\//, '')}"${heroSrcsetAttr(v.image)} alt="${esc(name)}" fetchpriority="high"${imagePositionStyle(v)}></div>` : ''}
     ${information}
     ${bilingualBody(v.desc, v.desc_en, lang)}${goodToKnowHtml ? `\n    ${goodToKnowHtml}` : ''}
     ${(() => { // 回遊: 座標があれば距離順、無ければ同じ街。種別はまたぐ。

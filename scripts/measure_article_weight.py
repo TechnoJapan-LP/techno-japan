@@ -77,7 +77,7 @@ def measure(url, width, screenshot=None):
         c.call('Page.enable'); c.call('Network.enable')
         mobile = width <= 600
         c.call('Emulation.setDeviceMetricsOverride', {'width': width, 'height': 844, 'deviceScaleFactor': 2, 'mobile': mobile})
-        c.call('Emulation.setUserAgentOverride', {'userAgent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 Version/17.5 Mobile/15E148 Safari/604.1' if mobile else 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/151.0.0.0 Safari/537.36'})
+        c.call('Emulation.setUserAgentOverride', {'userAgent': ('Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 Version/17.5 Mobile/15E148 Safari/604.1' if mobile else 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/151.0.0.0 Safari/537.36') + ' TJAudit'})
         c.call('Network.emulateNetworkConditions', {'offline': False, 'latency': 150, 'downloadThroughput': 204800, 'uploadThroughput': 75000, 'connectionType': 'cellular3g'})
         c.call('Page.addScriptToEvaluateOnNewDocument', {'source': """
           window.__tjPerf={lcp:0,cls:0};

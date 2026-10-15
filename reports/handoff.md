@@ -9904,3 +9904,36 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 最優先は favorites.html の `defer` 撤去（1 行）。次に GA ボット除外の 3 重化（hostname 判定 + lighthouserc の UA）。順番と WP 分割は報告書 §6。
 - FESTIVALS に `NAME_JA` を足す案（§4-2）は Publish 経路（fetch-data / GAS / build）を触るので、単独で出して実機 1 回通す。
 - データ側（CMS）: ultra-japan のチケット URL 404 は 9/28 からそのまま。
+
+## 2026-10-15 総合監査 §2-1〜§2-3・§5-2 即時修正
+
+### 実施
+- `favorites.html` と JA/EN の artists / festivals / venues ハブで、inline 描画より先に `favorites.js` が実行されるよう `defer` を撤去。`favorites.js` は初期実行時に DOM を直接参照せず、既存の DOMContentLoaded 処理も維持。
+- GA4 に hostname 制限と `TJAudit` UA 除外を追加。Lighthouse CI の UA に `Chrome-Lighthouse`、計測スクリプト2本に `TJAudit` を追加。
+- TOP の PC レール／スマホ画像を幅別に eager 選択し、幅変更時の遅延画像取り込みを追加。詳細ページのフェス／アーティスト／会場ヒーローに `fetchpriority="high"` を追加。
+- Google Fonts を自己ホスト6ファイルへ置換し、生成側の `FONT_HEAD` 1定義から全JA/ENページを再生成・反映。
+
+### コミット
+- このエントリを含むコミット（実装 Codex、レビュー・検証・コミットは Claude）。
+
+### 検証
+- Claude: `bash scripts/preflight.sh` 全49件成功（check_hub_pages を含む）。
+- Claude: ローカル配信（python http.server）を headless Chrome で 390px dpr3 タッチ / 1440px の2幅 × 10ページ（/, favorites, festivals, artists, venues, festivals/labyrinth, articles/labyrinth-2026-info, map, en/index, news）。
+  全ページ JS 例外 0・横スクロール 0・Google Fonts への通信 0・/fonts/ から3書体を読み込み・見出しと本文の書体は変更前と同じ。
+  TOP: スマホは1本目の行写真が eager+high で表示済み、PC はレール1枚目が eager+high。favorites: 空のとき「NOTHING SAVED YET」、labyrinth を保存して再読込すると1件表示。
+  詳細ヒーローは fetchpriority=high。localhost では GA を読まない（hostname 判定どおり）。地図タイルの 403 は localhost 由来で既知（本番ドメイン限定キー）。
+- `node scripts/build-detail-pages.mjs` 完了（画像寸法表は既存値を使用。外部画像取得が環境制限で長時間化したため、寸法再生成 import を一時停止して実行後、必ず元へ復元）。
+- `check_asset_versions.py`、`check_no_hardcoded_versions.py`、`check_asset_paths.py`、`check_jsonld.mjs`、`check_internal_links.py` は成功。JA/EN hub 行数一致: index 1353/1353、festivals 1458/1458、artists 941/941、venues 1149/1149、news 1291/1291。
+- `fonts.googleapis.com/css2` は cms.html を除き0件、全562ページの `FONT_HEAD` は生成側と完全一致。`.lighthouserc.json` はJSONとして有効。
+
+### 変更したパターン
+- `favorites.js` の同期実行、GAボット判定、TOPの `.stories-visual` / `.story-side-mobile-image` の画像優先度、詳細ヒーロー画像の優先度、Google Fonts CSS参照。
+
+### 未確認の類似パターン
+- 実機（iPhone Safari）での表示は未確認。本番反映後に本番 URL で同じ確認をしてここへ追記する。
+- cms.html は Publish 経路のため今回は Google Fonts のまま（意図的）。CSP の fonts.googleapis.com / gstatic.com も残している。
+- `LP/app/index.html` と旧URLリダイレクトHTMLはGoogle Fonts参照がなく、共通 `FONT_HEAD` 対象外（確認済み）。
+
+### 次の担当への注意・判断待ち
+- GA4 の効果は数日後に確認: Direct の非エンゲージ・`/festivals/ala.html` 等 Lighthouse URL の 0秒 PV が減っているか。
+- 監査 §4-2（フェスの NAME_JA）はスプレッドシートに列追加が必要。ユーザー判断待ち。

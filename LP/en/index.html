@@ -38,13 +38,20 @@
 <meta name="twitter:title" content="TECHNO JAPAN — Underground Dance Music Media">
 <meta name="twitter:description" content="Japan's underground techno & house — stories, festivals, artists, venues.">
 <meta name="twitter:image" content="https://techno-japan.media/images/og-default.png?v=1">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="dns-prefetch" href="https://www.google-analytics.com">
 <link rel="dns-prefetch" href="https://www.googletagmanager.com">
 <link rel="dns-prefetch" href="https://w.behold.so">
 <link rel="dns-prefetch" href="https://formsubmit.co">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="preload" as="font" type="font/woff2" href="/fonts/dm-sans-v17-latin.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/bebas-neue-v16-latin.woff2" crossorigin>
+<style>
+@font-face{font-family:'Bebas Neue';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/bebas-neue-v16-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Bebas Neue';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/bebas-neue-v16-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'DM Sans';font-style:normal;font-weight:200 500;font-display:swap;src:url('/fonts/dm-sans-v17-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'DM Sans';font-style:normal;font-weight:200 500;font-display:swap;src:url('/fonts/dm-sans-v17-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/space-mono-v17-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/space-mono-v17-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+</style>
 <link rel="stylesheet" href="/common.css?v=37">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -726,7 +733,8 @@
   // ボット（headless / Lighthouse / 自動操作）は計測しない。
   // 2026-09-28 の GA4 では Direct 75%・Chrome の 90% が非エンゲージで、
   // 0秒滞在のページ8本が lighthouse.yml の URL と一致していた（自分たちの検査を利用者として数えていた）。
-  if (navigator.webdriver || /HeadlessChrome|Chrome-Lighthouse|Lighthouse|Speed Insights|PTST|GTmetrix/i.test(navigator.userAgent)) return;
+  if (location.hostname !== 'techno-japan.media') return;
+  if (navigator.webdriver || /HeadlessChrome|Chrome-Lighthouse|Lighthouse|Speed Insights|PTST|GTmetrix|TJAudit/i.test(navigator.userAgent)) return;
   var s = document.createElement('script');
   s.async = true;
   s.src = 'https://www.googletagmanager.com/gtag/js?id=G-4MHCNR7D26';
@@ -960,18 +968,19 @@ document.addEventListener('error', (e) => {
   const featuredCol = document.getElementById('featured-col');
   const sideCol = document.getElementById('side-col');
   if (featuredCol && sideCol && featured) {
+    const isNarrow = matchMedia('(max-width: 900px)').matches;
     const storyRailSrcset = a => tjCardSrcsetAttr(a.image, '(max-width: 1100px) 100vw, 50vw');
     const storyMobileSrcset = (a, index) => tjCardSrcsetAttr(a.image, index === 0 ? '100vw' : '104px');
     const deferredSrcset = value => tjCardSrcsetAttr(value, '(max-width: 1100px) 100vw, 50vw').replace(' srcset=', ' data-srcset=');
     featuredCol.innerHTML = `<div class="stories-visual" aria-hidden="true">
       ${storyItems.map((a, i) => `<div class="stories-visual-slide${i === 0 ? ' is-active' : ''}" data-story-visual="${i}">
-        ${a.image ? `<img ${tjImageSizeAttrs(a.image)}${i === 0 ? storyRailSrcset(a) : deferredSrcset(a.image)} loading="${i === 0 ? 'eager' : 'lazy'}"${i === 0 ? ' fetchpriority="high" src="' + tjCardAssetPath(a.image) + '"' : ' data-src="' + tjCardAssetPath(a.image) + '"'} data-original-src="${tjAssetPath(a.image)}" decoding="async" alt="">` : ''}
+        ${a.image ? `<img ${tjImageSizeAttrs(a.image)}${i === 0 && !isNarrow ? storyRailSrcset(a) : deferredSrcset(a.image)} loading="${i === 0 && !isNarrow ? 'eager' : 'lazy'}"${i === 0 && !isNarrow ? ' fetchpriority="high" src="' + tjCardAssetPath(a.image) + '"' : ' data-src="' + tjCardAssetPath(a.image) + '"'} data-original-src="${tjAssetPath(a.image)}" decoding="async" alt="">` : ''}
       </div>`).join('')}
       <div class="stories-visual-label">STORIES <span id="story-visual-index">01</span> / ${String(storyItems.length).padStart(2,'0')}</div>
       <div class="stories-visual-date" id="story-visual-date">${fmtDateSplit(featured.date)}</div>
     </div>`;
     sideCol.innerHTML = storyItems.map((a, index) => `<div class="story-side-item" data-story-index="${index}"><a href="${articleUrl(a)}" class="side-card reveal" style="--reveal-delay:${index * 100}ms">
-      ${a.image ? `<div class="story-side-mobile-image"><img ${tjImageSizeAttrs(a.image)}${storyMobileSrcset(a, index)} loading="lazy" decoding="async" src="${tjCardAssetPath(a.image)}" data-original-src="${tjAssetPath(a.image)}" alt="${tjLocalized(a.title, '', a.title_en)}"></div>` : ''}
+      ${a.image ? `<div class="story-side-mobile-image"><img ${tjImageSizeAttrs(a.image)}${index === 0 && isNarrow ? storyMobileSrcset(a, index) : storyMobileSrcset(a, index).replace(' srcset=', ' data-srcset=')} loading="${index === 0 && isNarrow ? 'eager' : 'lazy'}"${index === 0 && isNarrow ? ' fetchpriority="high" src="' + tjCardAssetPath(a.image) + '"' : ' data-src="' + tjCardAssetPath(a.image) + '"'} data-original-src="${tjAssetPath(a.image)}" alt="${tjLocalized(a.title, '', a.title_en)}"></div>` : ''}
       <div class="side-card-tag"><span class="tag-dot"></span> ${a.category || 'STORY'}</div>
       <div class="side-card-title">${tjStoryTitle(tjLocalized(a.title, '', a.title_en))}</div>
       <div class="side-card-meta">${fmtDate(a.date)}${a.readTime ? ` &middot; ${a.readTime} MIN READ` : ''}</div>
@@ -988,6 +997,15 @@ document.addEventListener('error', (e) => {
     const index = rail.querySelector('#story-visual-index');
     const date = rail.querySelector('#story-visual-date');
     const desktopRail = () => window.matchMedia('(min-width: 901px)').matches;
+    const syncMobileImages = () => {
+      if (!window.matchMedia('(max-width: 900px)').matches) return;
+      document.querySelectorAll('.story-side-mobile-image img[data-src]').forEach(img => {
+        if (img.dataset.srcset) img.setAttribute('srcset', img.dataset.srcset);
+        img.src = img.dataset.src;
+        delete img.dataset.src;
+        delete img.dataset.srcset;
+      });
+    };
     const loadSlide = n => {
       if (!desktopRail()) return;
       const img = slides[n]?.querySelector('img[data-src]');
@@ -1002,7 +1020,7 @@ document.addEventListener('error', (e) => {
     let frame = 0;
     const requestSync = () => { if (!frame) frame = requestAnimationFrame(() => { frame = 0; sync(); }); };
     window.addEventListener('scroll', requestSync, { passive: true });
-    window.addEventListener('resize', requestSync, { passive: true });
+    window.addEventListener('resize', () => { requestSync(); syncMobileImages(); }, { passive: true });
     items.forEach(item => item.addEventListener('pointerenter', () => activate(Number(item.dataset.storyIndex) || 0)));
     if ('IntersectionObserver' in window) {
       const storyObserver = new IntersectionObserver(entries => entries.forEach(entry => {
@@ -1010,6 +1028,7 @@ document.addEventListener('error', (e) => {
       }), { rootMargin: '300px 0px' });
       items.forEach(item => storyObserver.observe(item));
     }
+    syncMobileImages();
     requestSync();
   }
 
