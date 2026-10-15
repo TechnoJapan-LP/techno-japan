@@ -52,7 +52,7 @@
 @font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/space-mono-v17-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
 @font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/space-mono-v17-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 </style>
-<link rel="stylesheet" href="common.css?v=37">
+<link rel="stylesheet" href="common.css?v=41">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
@@ -91,13 +91,24 @@
   overflow: hidden;
   margin: 60px 0 0;
 }
-.marquee:hover .marquee-inner { animation-play-state: paused; }
+.marquee:hover .marquee-inner, .marquee:focus-within .marquee-inner, .marquee.is-touching .marquee-inner { animation-play-state: paused; }
 .marquee-inner {
   display: inline-block;
   white-space: nowrap;
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em;
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.2em;
   text-transform: uppercase; opacity: 0.62;
   animation: marqueeScroll 60s linear infinite;
+}
+.marquee-event { display: inline-flex; align-items: center; gap: 8px; color: inherit; text-decoration: none; }
+.marquee-status { color: var(--text); font-size: .82em; letter-spacing: .12em; }
+.marquee-event.is-now .marquee-status { color: var(--accent); }
+.marquee-event.is-now i { display: inline-block; width: 6px; height: 6px; margin-right: 3px; border-radius: 50%; background: currentColor; vertical-align: 1px; animation: marqueePulse 1.2s steps(2, end) infinite; }
+.marquee-sep { opacity: .55; }
+@keyframes marqueePulse { 50% { opacity: .2; } }
+@media (prefers-reduced-motion: reduce) {
+  .marquee { overflow-x: auto; }
+  .marquee-inner { animation: none; }
+  .marquee-event.is-now i { animation: none; }
 }
 @keyframes marqueeScroll {
   from { transform: translateX(0); }
@@ -899,7 +910,7 @@
   </div>
 </footer>
 
-<script src="common.js?v=17" defer></script>
+<script src="common.js?v=21" defer></script>
 <script src="favorites.js?v=3" defer></script>
 <script src="search.js?v=4" defer></script>
 <!-- localize.js は defer にしない。下のインライン描画が同期実行で tjLocalized を呼ぶ -->
@@ -987,6 +998,7 @@ document.addEventListener('error', (e) => {
       <div class="side-card-arrow"></div>
     </a></div>`).join('');
     initStoryVisualRail();
+    bindStoryHeroTransitions();
   }
 
   function initStoryVisualRail() {
@@ -1032,20 +1044,74 @@ document.addEventListener('error', (e) => {
     requestSync();
   }
 
+  /* Card photo → article hero. Keep the normal link navigation intact. */
+  function bindStoryHeroTransitions() {
+    const clear = () => document.querySelectorAll('img').forEach(img => { img.style.viewTransitionName = ''; });
+    const setFor = link => {
+      const img = link.querySelector('img');
+      if (!img) return;
+      clear();
+      img.style.viewTransitionName = 'tj-hero';
+    };
+    document.querySelectorAll('.side-card').forEach(link => {
+      link.addEventListener('pointerdown', () => setFor(link), { passive: true });
+      link.addEventListener('click', () => setFor(link));
+    });
+  }
+
   /* --- Upcoming festivals --- */
   function festStartDate(f) {
     const s = (f.date || '').split('/')[0].trim();
     const dt = new Date(s);
     return isNaN(dt) ? null : dt;
   }
+  function festEndDate(f) {
+    const parts = String(f.date || '').split('/');
+    const dt = new Date((parts[1] || parts[0] || '').trim());
+    return isNaN(dt) ? null : dt;
+  }
   const today = new Date(); today.setHours(0,0,0,0);
   const FEST_INITIAL = 4;
   const FEST_MAX = 8;
   const upcoming = (typeof FESTIVALS !== 'undefined' ? FESTIVALS : [])
-    .map(f => ({ ...f, _start: festStartDate(f) }))
-    .filter(f => f._start && f._start >= today)
+    .map(f => ({ ...f, _start: festStartDate(f), _end: festEndDate(f) }))
+    .filter(f => f._start && f._end && f._end >= today)
     .sort((a, b) => a._start - b._start)
     .slice(0, FEST_MAX);
+
+  /* Live event strip: keep the static copy above as the no-JS/empty-data fallback. */
+  const marquee = document.querySelector('.marquee');
+  const marqueeInner = marquee?.querySelector('.marquee-inner');
+  if (marquee && marqueeInner && upcoming.length) {
+    const isEn = document.documentElement.lang === 'en';
+    const prefJa = { hokkaido:'北海道', aomori:'青森', iwate:'岩手', miyagi:'宮城', akita:'秋田', yamagata:'山形', fukushima:'福島', ibaraki:'茨城', tochigi:'栃木', gunma:'群馬', saitama:'埼玉', chiba:'千葉', tokyo:'東京', kanagawa:'神奈川', niigata:'新潟', toyama:'富山', ishikawa:'石川', fukui:'福井', yamanashi:'山梨', nagano:'長野', gifu:'岐阜', shizuoka:'静岡', aichi:'愛知', mie:'三重', shiga:'滋賀', kyoto:'京都', osaka:'大阪', hyogo:'兵庫', nara:'奈良', wakayama:'和歌山', tottori:'鳥取', shimane:'島根', okayama:'岡山', hiroshima:'広島', yamaguchi:'山口', tokushima:'徳島', kagawa:'香川', ehime:'愛媛', kochi:'高知', fukuoka:'福岡', saga:'佐賀', nagasaki:'長崎', kumamoto:'熊本', oita:'大分', miyazaki:'宮崎', kagoshima:'鹿児島', okinawa:'沖縄' };
+    const place = f => isEn ? (f.city || f.location || '') : (f.location_ja && prefJa[String(f.city || '').toLowerCase()] ? prefJa[String(f.city).toLowerCase()] : (prefJa[String(f.city || '').toLowerCase()] || f.city || f.location_ja || f.location || ''));
+    const datePart = value => { const dt = new Date(value); return isNaN(dt) ? '' : dt.toLocaleDateString('en-US', { month:'short', day:'numeric' }).toUpperCase(); };
+    const dateRange = f => {
+      if (!f._start || !f._end) return '';
+      const start = datePart(f._start);
+      const end = datePart(f._end);
+      if (f._start.getTime() === f._end.getTime()) return start;
+      const sameMonth = f._start.getFullYear() === f._end.getFullYear() && f._start.getMonth() === f._end.getMonth();
+      if (sameMonth) return `${f._start.toLocaleDateString('en-US', { month:'short' }).toUpperCase()} ${f._start.getDate()}–${f._end.getDate()}`;
+      return `${start}–${end}`;
+    };
+    const item = f => {
+      const active = f._start <= today && f._end >= today;
+      const withinWeek = !active && (f._start - today) / 86400000 <= 7;
+      const label = active ? 'NOW ON' : withinWeek ? 'THIS WEEK' : 'NEXT';
+      return `<a class="marquee-event${active ? ' is-now' : ''}" href="/festivals/${encodeURIComponent(f.id)}.html"><span class="marquee-status">${active ? '<i aria-hidden="true"></i>' : ''}${label}</span> <span>${dateRange(f)} — ${tjEscapeHtml(tjLocalized(f.name, '', f.name_en))} / ${tjEscapeHtml(place(f))}</span></a>`;
+    };
+    const contents = upcoming.map(item).join(' <span class="marquee-sep" aria-hidden="true">·</span> ');
+    const duplicateContents = contents.replace(/<a /g, '<a tabindex="-1" ');
+    marqueeInner.innerHTML = contents + ' <span class="marquee-sep" aria-hidden="true">·</span> <span aria-hidden="true">' + duplicateContents + '</span>';
+    marqueeInner.style.animationDuration = `${Math.max(14, upcoming.length * 7)}s`;
+    const stopTouch = () => marquee.classList.remove('is-touching');
+    marquee.addEventListener('pointerdown', () => marquee.classList.add('is-touching'), { passive: true });
+    marquee.addEventListener('pointerup', stopTouch, { passive: true });
+    marquee.addEventListener('pointercancel', stopTouch, { passive: true });
+    marquee.addEventListener('pointerleave', stopTouch, { passive: true });
+  }
 
   const nextFestival = upcoming[0];
   // NEXT に出したイベントは、下の一覧では重複表示しない。

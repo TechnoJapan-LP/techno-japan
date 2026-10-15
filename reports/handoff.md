@@ -9984,3 +9984,85 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 効果測定は2〜4週間後の GSC で、上表のクエリの CTR を見る（現状ほぼ 0%）。
 - CMS は Cmd+Shift+R で強制リロード（cms.js?v=140）。
 - 会場のカタカナ対応は GAS 変更を伴うので、着手前にユーザー確認。
+
+## 2026-10-15 テクノらしいインタラクション3つ（テスト環境）
+
+### 実施
+- `LP/index.html`: FESTIVALS の既存 upcoming 判定を終了日基準へ揃え、最大8件の開催帯（NOW ON / THIS WEEK / NEXT、通常リンク、JA/EN地名、タッチ停止、reduced-motion時の横スクロール）を実装。静的な飾り文はフォールバックとして保持。
+- `LP/common.css`、`scripts/build-detail-pages.mjs`、生成済み JA/EN 記事ページ: View Transitions と記事ヒーローの `tj-hero` を追加。
+- `LP/news.html`、`LP/index.html`、`LP/common.js`: NEWS/TOP/RELATED STORIES のカード画像へ pointerdown/click で遷移名を設定。同時重複は解除し、通常遷移は横取りしない。
+- `LP/article-fx.css` / `LP/article-fx.js`: 32分割LED読了メーター（1/32刻み、末尾4区画を赤、reduced-motionでも表示）へ変更。
+- `LP/cms.js` の本番表示プレビュー参照版、生成側定数、全 HTML のアセット版を更新。GAS・スプレッドシート・`LP/data.js` は変更なし。
+
+### コミット
+- 未コミット（ユーザー指示により commit / push なし）。
+
+### 検証
+- `node scripts/build-detail-pages.mjs` 相当の生成完了。外部 Google Drive 画像130件は取得不可のため、既存寸法を再利用。
+- `node --check LP/article-fx.js`、`node --check LP/common.js`、`node --check scripts/build-detail-pages.mjs`: 成功。
+- `check_asset_versions.py --no-diff`、`check_no_hardcoded_versions.py`、`check_asset_paths.py`、`check_cms_preview_frame.mjs`、`check_sw_routing.mjs`: 成功。
+- `check_hub_pages.py`: localhost bind が Operation not permitted のため未確認。
+- `bash scripts/preflight.sh`: 外部画像取得待ちで長時間無出力となり停止。全件成功とは報告しない。
+- 実ブラウザの表示・操作（JA/EN、PC/スマホ、タッチ、reduced-motion）は未確認。
+
+### 変更したパターン
+- 開催日帯のデータ駆動描画、通常 `<a>` 遷移に付随する View Transition 名の設定、CSS mask/clip-path による固定32区画メーター、アセット版の生成側・CMS preview・HTML同期。
+
+### 未確認の類似パターン
+- `pagereveal` によるブラウザバック時のカード側ヒーロー復帰は未実装（通常の戻る遷移は壊さない）。
+- RELATED STORIES 以外の共通ナビ記事カードは対象外（今回の指定導線ではない）。
+- 実機 Safari/Chrome の View Transitions、タッチ中停止、reduced-motion の実測は未確認。
+
+### 次の担当への注意・判断待ち
+- 公開前にローカルHTTP配信または認証済み実ブラウザで、TOP/NEWS/記事のJA/EN・PC/スマホを操作確認すること。CMS変更ではないが、カード→記事とRELATED→記事を押して写真遷移と通常遷移を確認する。
+- `check_hub_pages.py` が bind 可能な環境で再実行し、preflight 全件成功を確認するまで push しない。
+
+## 2026-10-15 追加修正：開催帯の日付・重複読み上げ・View Transition CSS
+
+### 実施
+- 同月の開催期間を `OCT 16–18`、月またぎを `OCT 31–NOV 1`、単日を `OCT 24` と表示するよう `LP/index.html` を修正。
+- 帯の2回目の塊を `aria-hidden="true"` で包み、複製リンクに `tabindex="-1"` を付与。
+- `LP/common.css` の重複していた root View Transition 指定を `.25s` の1行へ統合。
+- `node scripts/build-detail-pages.mjs` でEN indexを再生成。アセット版とCMSプレビュー参照も同期。
+
+### コミット
+- 未コミット（commit / push なし）。
+
+### 検証
+- JA/EN行数一致: index 1419/1419、news 1299/1299、festivals 1458/1458、artists 941/941、venues 1149/1149。
+- `check_asset_versions.py --no-diff`、`check_no_hardcoded_versions.py`、`git diff --check`: 成功。
+- 生成側定数: common.css 40、common.js 20、article-fx.css 17、article-fx.js 16。CMS previewも同値へ同期。
+
+### 変更したパターン
+- 同月/月またぎ/単日の開催日表示、画面上は重複させつつ読み上げ・Tab操作から複製を除外する帯構造、重複CSS宣言の統合。
+
+### 未確認の類似パターン
+- 実ブラウザでの読み上げ・Tab順、reduced-motion、モバイル横スクロールは未確認。
+
+### 次の担当への注意・判断待ち
+- `check_hub_pages.py` と実ブラウザ確認は前回同様、localhost bind可能な環境で実施すること。公開前にpreflight全件成功を確認すること。
+
+## 2026-10-15 追加修正：本文終端基準の読み進みメーター
+
+### 実施
+- `LP/article-fx.js` の `updateProgress()` を、`.article-body` の上端→下端（画面下端到達）基準へ変更。本文がない場合は `.article-detail` を使用。
+- 高さは毎回 `getBoundingClientRect()` から計算し、`p >= 0.985` を満タン扱いにしたうえで1/32刻みを維持。
+- `article-fx.js` の参照版、生成側定数、CMSプレビュー参照を同期。
+
+### コミット
+- 未コミット（commit / push なし）。
+
+### 検証
+- `node scripts/build-detail-pages.mjs`: 成功（JA/EN詳細ページ生成完了）。
+- `node --check LP/article-fx.js`、`node --check scripts/build-detail-pages.mjs`: 成功。
+- `check_asset_versions.py --no-diff`、`check_no_hardcoded_versions.py`、`git diff --check`: 成功。
+- 版: common.css 41、common.js 21、article-fx.css 18、article-fx.js 17。CMS previewも同期済み。
+
+### 変更したパターン
+- 本文下端を終点とするスクロール進捗、端数吸収の0.985閾値、本文なし時の詳細コンテナフォールバック。
+
+### 未確認の類似パターン
+- 実ブラウザで画像読み込み前後・リサイズ・記事本文の短長差を操作確認していない。
+
+### 次の担当への注意・判断待ち
+- 公開前に実ブラウザで記事末尾までスクロールし、32区画目（赤）が点灯することを確認する。reduced-motionでも進捗表示が残ることを確認する。

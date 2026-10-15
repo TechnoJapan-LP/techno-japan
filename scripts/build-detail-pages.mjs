@@ -65,13 +65,13 @@ const DETAIL_CSS_VERSION = 48;
    落ちる場所と直す場所がずれていて原因に辿り着けなかった。AUDIT §9-58。
 
    article-fx.js / article-fx.css を変更したら、ここを上げる。 */
-const ARTICLE_FX_JS_VERSION = 13;
-const ARTICLE_FX_CSS_VERSION = 14;
+const ARTICLE_FX_JS_VERSION = 17;
+const ARTICLE_FX_CSS_VERSION = 18;
 
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
-const COMMON_JS_VERSION = 17;   // 2026-10-11 スマホメニュー演出（設計書S）
-const COMMON_CSS_VERSION = 37;   // 2026-10-11 言語切替の即時表示
+const COMMON_JS_VERSION = 21;   // 2026-10-15 記事カードの写真遷移
+const COMMON_CSS_VERSION = 41;   // 2026-10-15 View Transitions の重複指定整理
 const LANG_TOGGLE_VERSION = 1;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
 const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');
@@ -1204,7 +1204,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   const articleTitleHtml = `<span class="article-title-short">${esc(articleTitleShort)}</span>${articleTitleSub ? `<span class="article-title-sub">${esc(articleTitleSub)}</span>` : ''}`;
   const heroBlock = a.image
     ? `<header class="article-hero"${ratioAttr(a.heroRatio)}>
-        <img ${dimensionAttrs(a.image)} src="/${String(a.image).replace(/^\//, '')}"${heroSrcsetAttr(a.image)} alt="${esc(L.title)}" fetchpriority="high" decoding="async">
+        <img ${dimensionAttrs(a.image)} src="/${String(a.image).replace(/^\//, '')}"${heroSrcsetAttr(a.image)} alt="${esc(L.title)}" fetchpriority="high" decoding="async" style="view-transition-name: tj-hero">
         <div class="article-hero-overlay">
           <div class="article-chips"><span class="cat-pill">${esc(a.category || 'NEWS')}</span></div>
           <h1>${articleTitleHtml}</h1>

@@ -228,6 +228,22 @@
   }
 
   ready(function () {
+    /* Article card photo → static article hero. This is enhancement-only: never cancel navigation. */
+    function setArticleHeroTransition(link) {
+      var img = link && link.querySelector('img');
+      if (!img) return;
+      document.querySelectorAll('img').forEach(function (node) { node.style.viewTransitionName = ''; });
+      img.style.viewTransitionName = 'tj-hero';
+    }
+    document.addEventListener('pointerdown', function (event) {
+      var link = event.target.closest && event.target.closest('.related-story-card');
+      if (link) setArticleHeroTransition(link);
+    }, { passive: true });
+    document.addEventListener('click', function (event) {
+      var link = event.target.closest && event.target.closest('.related-story-card');
+      if (link) setArticleHeroTransition(link);
+    });
+
     /* 1) お気に入り登録/解除（何が人気か） */
     document.addEventListener('tj-fav-change', function (e) {
       var d = e.detail || {};
