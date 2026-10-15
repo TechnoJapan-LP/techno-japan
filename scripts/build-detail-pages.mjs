@@ -72,7 +72,7 @@ const ARTICLE_FX_CSS_VERSION = 14;
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
 const COMMON_JS_VERSION = 22;   // 2026-10-15 関連記事遷移の delegation 集約
 const COMMON_CSS_VERSION = 43;   // 2026-10-15 View Transition navigation fade/hero suppression
-const VT_DIRECTION_VERSION = 5;
+const VT_DIRECTION_VERSION = 8;
 const LANG_TOGGLE_VERSION = 1;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
 const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');
@@ -944,6 +944,7 @@ function page({ title, desc, canonical, image, ogType = 'article', jsonLd, body,
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta http-equiv="Permissions-Policy" content="${PERMISSIONS_POLICY}">
+<style>@view-transition{navigation:auto}@media (prefers-reduced-motion:reduce){@view-transition{navigation:none}}</style>
 ${FAVICON_TAGS}
 
 <title>${esc(title)}</title>
@@ -1254,7 +1255,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   const body = `<article class="article-detail">
   <div class="article-detail-inner">
     <a class="article-back" href="${hubHref}" data-article-hub-back="${hubHref}"><span class="arrow"></span> ALL STORIES</a>
-    ${heroBlock}
+    ${heroBlock}<i id="tj-vt-anchor" hidden></i>
     <dl class="article-specs">
       <div><dt>WORDS BY</dt><dd>${esc(a.author || 'TECHNO JAPAN')}</dd></div>
       <div><dt>PUBLISHED</dt><dd>${esc(fmtDate(a.date) || '—')}${updatedHtml}</dd></div>

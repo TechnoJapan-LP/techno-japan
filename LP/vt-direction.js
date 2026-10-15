@@ -7,6 +7,8 @@
   var PENDING_KEY = 'tj-vt-pending';
   var LEAVING_KEY = 'tj-vt-leaving';
   var POINTERS = new WeakMap();
+  var CHOSEN_IMAGES = new WeakMap();
+  var PREFETCHED = Object.create(null);
   var selectors = '.side-card, [data-article-detail-link], .related-story-card';
 
   function readMap() {
@@ -40,10 +42,27 @@
     var r = el.getBoundingClientRect();
     return r.bottom > 0 && r.right > 0 && r.top < window.innerHeight && r.left < window.innerWidth;
   }
-  function heroImageFor(link) {
+  function visibleImages(link) {
+    if (!link) return [];
+    return Array.prototype.filter.call(link.querySelectorAll('img'), visible);
+  }
+  function heroImageFor(link, clientX, clientY) {
     if (!link) return null;
-    var own = link.querySelector('img');
-    if (visible(own)) return own;
+    var images = visibleImages(link);
+    if (images.length) {
+      if (typeof clientX === 'number' && typeof clientY === 'number') {
+        var hit = images.find(function (image) {
+          var r = image.getBoundingClientRect();
+          return clientX >= r.left && clientX <= r.right && clientY >= r.top && clientY <= r.bottom;
+        });
+        if (hit) return hit;
+        return images.slice().sort(function (a, b) {
+          return Math.abs(a.getBoundingClientRect().left + a.getBoundingClientRect().width / 2 - clientX) -
+            Math.abs(b.getBoundingClientRect().left + b.getBoundingClientRect().width / 2 - clientX);
+        })[0];
+      }
+      return images[0];
+    }
     var story = link.closest('[data-story-index]');
     if (!story) return null;
     var index = story.getAttribute('data-story-index');
@@ -52,10 +71,12 @@
     var railImage = slide.querySelector('img');
     return visible(railImage) ? railImage : null;
   }
-  function directionFor(link, clientX) {
-    if (!link || typeof clientX !== 'number') return 'right';
-    var image = heroImageFor(link);
-    if (!image || !link.contains(image)) image = null;
+  function directionFor(link, clientX, clientY, image) {
+    if (!link || typeof clientX !== 'number' || typeof clientY !== 'number') return 'right';
+    var images = visibleImages(link);
+    var imageRect = image && image.getBoundingClientRect();
+    var imageContainsPointer = imageRect && clientX >= imageRect.left && clientX <= imageRect.right && clientY >= imageRect.top && clientY <= imageRect.bottom;
+    if (!image || !link.contains(image) || images.length !== 1 || !imageContainsPointer) image = null;
     var rect = (image || link).getBoundingClientRect();
     return clientX < rect.left + rect.width / 2 ? 'left' : 'right';
   }
@@ -70,20 +91,39 @@
       node.style.viewTransitionName = '';
     });
   }
-  function setHero(link) {
+  function setHero(link, image) {
     clearHeroNames();
-    var image = heroImageFor(link);
+    image = image || heroImageFor(link);
     if (image) image.style.viewTransitionName = 'tj-hero';
   }
-  function record(link, clientX) {
-    var direction = directionFor(link, clientX);
+  function preloadHero(link, image) {
+    var path = articlePath(link && link.href);
+    var srcset = image && (image.getAttribute('srcset') || image.dataset.srcset);
+    if (!path || !srcset || PREFETCHED[path]) return;
+    PREFETCHED[path] = true;
+    var preload = document.createElement('link');
+    preload.rel = 'preload';
+    preload.as = 'image';
+    preload.setAttribute('imagesrcset', srcset);
+    preload.setAttribute('imagesizes', '(max-width: 700px) 100vw, 700px');
+    preload.fetchPriority = 'high';
+    document.head.appendChild(preload);
+  }
+  function record(link, clientX, clientY) {
+    var image = heroImageFor(link, clientX, clientY);
+    var direction = directionFor(link, clientX, clientY, image);
+    var images = visibleImages(link);
+    var imageIndex = images.indexOf(image);
+    if (imageIndex < 0) imageIndex = 0;
     POINTERS.set(link, direction);
-    setHero(link);
+    CHOSEN_IMAGES.set(link, image);
+    setHero(link, image);
     var path = articlePath(link && link.href);
     if (path) {
-      remember(path, direction);
+      remember(path, { d: direction, i: imageIndex });
       writeSession(PENDING_KEY, { path: path, dir: direction, ts: Date.now() });
     }
+    return image;
   }
   function isArticlePath(path) { return /\/articles\/[^/]+\.html$/.test(path || ''); }
   function isListPath(path) { return /^\/(?:en\/)?(?:index\.html|news\.html)?$/.test(path || ''); }
@@ -102,6 +142,37 @@
   function activation(event) {
     try { return (event && event.activation) || (window.navigation && navigation.activation) || null; } catch (_) { return null; }
   }
+  function entryPath(entry) {
+    try { return entry && new URL(entry.url).pathname || ''; } catch (_) { return ''; }
+  }
+  function hasSavedPath(path) {
+    return !!(path && readMap()[path]);
+  }
+  function recentSession(value, path) {
+    return !!(value && value.path === path && typeof value.ts === 'number' && Date.now() - value.ts < 5000);
+  }
+  function shouldExpectRender() {
+    var active = activation(null);
+    var current = location.pathname;
+    if (isListPath(current)) {
+      var from = entryPath(active && active.from);
+      if (active && active.navigationType === 'traverse' && isArticlePath(from) && hasSavedPath(from)) return true;
+      var leaving = readSession(LEAVING_KEY);
+      return recentSession(leaving, leaving && leaving.path) && isArticlePath(leaving.path) && hasSavedPath(leaving.path);
+    }
+    if (isArticlePath(current)) {
+      var pending = readSession(PENDING_KEY);
+      if (recentSession(pending, current) && hasSavedPath(current)) return true;
+      var fromList = entryPath(active && active.from);
+      return !!(active && isListPath(fromList) && hasSavedPath(current));
+    }
+    return false;
+  }
+  if (shouldExpectRender()) {
+    document.head.appendChild(Object.assign(document.createElement('link'), {
+      rel: 'expect', href: '#tj-vt-anchor', blocking: 'render'
+    }));
+  }
   function transitionDirection(event) {
     var active = activation(event);
     if (!active) return '';
@@ -112,20 +183,26 @@
       entry = active.entry && new URL(active.entry.url).pathname;
     } catch (_) { return ''; }
     var map = readMap();
-    if (isArticlePath(entry)) return map[entry] || '';
-    if (isArticlePath(from) && isListPath(entry)) return map[from] || '';
+    if (isArticlePath(entry)) return typeof map[entry] === 'string' ? map[entry] : map[entry] && map[entry].d || '';
+    if (isArticlePath(from) && isListPath(entry)) return typeof map[from] === 'string' ? map[from] : map[from] && map[from].d || '';
     return '';
   }
   function restoreCardForPath(path) {
     var map = readMap();
-    if (!map[path]) return;
-    var target = Array.prototype.find.call(document.querySelectorAll('a[href]'), function (link) {
-      return articlePath(link.href) === path;
-    });
-    var image = target && heroImageFor(target);
-    if (!inViewport(image)) return;
-    clearHeroNames();
-    image.style.viewTransitionName = 'tj-hero';
+    var saved = map[path];
+    if (!saved) return;
+    var imageIndex = typeof saved === 'string' ? 0 : saved.i;
+    var links = document.querySelectorAll('a[href]');
+    for (var i = 0; i < links.length; i += 1) {
+      var link = links[i];
+      if (articlePath(link.href) !== path) continue;
+      var images = visibleImages(link);
+      var image = images[imageIndex] || images[0] || heroImageFor(link);
+      if (!inViewport(image)) continue;
+      clearHeroNames();
+      image.style.viewTransitionName = 'tj-hero';
+      return;
+    }
   }
   function restoreCard(event) {
     var active = activation(event);
@@ -141,16 +218,19 @@
   }
   document.addEventListener('pointerdown', function (event) {
     var link = event.target.closest && event.target.closest(selectors);
-    if (link) record(link, event.clientX);
+    if (link) {
+      var image = record(link, event.clientX, event.clientY);
+      preloadHero(link, image);
+    }
   }, { passive: true, capture: true });
   document.addEventListener('click', function (event) {
     var link = event.target.closest && event.target.closest(selectors);
     if (!link) return;
     if (POINTERS.has(link)) {
-      setHero(link);
+      setHero(link, CHOSEN_IMAGES.get(link));
       return;
     }
-    record(link, event.detail === 0 ? undefined : event.clientX);
+    record(link, event.detail === 0 ? undefined : event.clientX, event.detail === 0 ? undefined : event.clientY);
   }, { capture: true });
   if ('onpageswap' in window) window.addEventListener('pageswap', function (event) {
     var direction = transitionDirection(event);
