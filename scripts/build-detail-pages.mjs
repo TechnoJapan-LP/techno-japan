@@ -65,13 +65,14 @@ const DETAIL_CSS_VERSION = 48;
    落ちる場所と直す場所がずれていて原因に辿り着けなかった。AUDIT §9-58。
 
    article-fx.js / article-fx.css を変更したら、ここを上げる。 */
-const ARTICLE_FX_JS_VERSION = 17;
-const ARTICLE_FX_CSS_VERSION = 18;
+const ARTICLE_FX_JS_VERSION = 13;
+const ARTICLE_FX_CSS_VERSION = 14;
 
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
-const COMMON_JS_VERSION = 21;   // 2026-10-15 記事カードの写真遷移
-const COMMON_CSS_VERSION = 41;   // 2026-10-15 View Transitions の重複指定整理
+const COMMON_JS_VERSION = 22;   // 2026-10-15 関連記事遷移の delegation 集約
+const COMMON_CSS_VERSION = 42;   // 2026-10-15 方向付き View Transitions
+const VT_DIRECTION_VERSION = 4;
 const LANG_TOGGLE_VERSION = 1;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
 const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');
@@ -922,7 +923,7 @@ const GA = `<script>
 
 
 
-function page({ title, desc, canonical, image, ogType = 'article', jsonLd, body, lang = 'ja', altHref = null, extraScripts = '', backgroundLayer = false }) {
+function page({ title, desc, canonical, image, ogType = 'article', jsonLd, body, lang = 'ja', altHref = null, extraScripts = '', headScripts = '', backgroundLayer = false }) {
   /* 検索結果に出る長さは言語で違う。日本語は全角のため PC で約120字、
      英語は約155字で切られる。160 固定だと日本語の135ページが途中で切れていた
      （2026-09-15 実測: JA 275件中120字超が135件）。 */
@@ -950,7 +951,7 @@ ${FAVICON_TAGS}
 <link rel="canonical" href="${esc(canonical)}">
 ${hreflang}
 <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#080808">
+<meta name="theme-color" content="#080808">${headScripts ? `${headScripts}\n` : ''}
 
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(d)}">
@@ -1272,7 +1273,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   </div>
 </article>`;
 
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'articles'] : ['articles']), `${a.id}.html`), html: page({ title, desc, canonical, image, jsonLd: [jsonLd, ORG_JSONLD, breadcrumbLd('NEWS', '/news.html', L.title, canonical), ...eventJsonLd], body, lang, altHref, backgroundLayer: true, extraScripts: `\n<link rel="stylesheet" href="/article-fx.css?v=${ARTICLE_FX_CSS_VERSION}">\n<script src="/article-fx.js?v=${ARTICLE_FX_JS_VERSION}" defer></script>` + ARTICLE_HUB_BACK_SCRIPT + FESTIVAL_SHARE_SCRIPT }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'articles'] : ['articles']), `${a.id}.html`), html: page({ title, desc, canonical, image, jsonLd: [jsonLd, ORG_JSONLD, breadcrumbLd('NEWS', '/news.html', L.title, canonical), ...eventJsonLd], body, lang, altHref, headScripts: `\n<script src="/vt-direction.js?v=${VT_DIRECTION_VERSION}"></script>`, backgroundLayer: true, extraScripts: `\n<link rel="stylesheet" href="/article-fx.css?v=${ARTICLE_FX_CSS_VERSION}">\n<script src="/article-fx.js?v=${ARTICLE_FX_JS_VERSION}" defer></script>` + ARTICLE_HUB_BACK_SCRIPT + FESTIVAL_SHARE_SCRIPT }) };
 }
 
 /* ---------- フェスティバルページ ---------- */

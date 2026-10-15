@@ -28,9 +28,7 @@
   function init(){
     teardown();
     var body = document.querySelector('.article-body');
-    var article = document.querySelector('.article-detail') || document.body;
-    if (!body && !article) return;
-    body = body || article;
+    if (!body) return;
     var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     /* ---------- 1. 読了プログレスバー（上端2pxのアクセントライン） ---------- */
@@ -42,16 +40,12 @@
     var rp = document.getElementById('read-progress');
     if (rp) rp.classList.remove('active');
     var fill = bar.firstChild;
-    var progressTarget = document.querySelector('.article-body') || article;
+    var article = document.querySelector('.article-detail') || document.body;
     function updateProgress(){
-      var r = progressTarget.getBoundingClientRect();
-      var start = r.top + window.scrollY;
-      var end = r.bottom + window.scrollY - window.innerHeight;
-      var span = end - start;
-      var p = span > 0 ? (window.scrollY - start) / span : 1;
-      p = Math.min(1, Math.max(0, p));
-      var stepped = p >= 0.985 ? 1 : Math.floor(p * 32) / 32;
-      fill.style.setProperty('--p', stepped);
+      var r = article.getBoundingClientRect();
+      var total = r.height - window.innerHeight;
+      var p = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 1;
+      fill.style.transform = 'scaleX(' + p + ')';
     }
 
     /* ---------- 2. 本文画像を figure 化: 交互リズム + FIG索引 + ワイプ枠 ---------- */

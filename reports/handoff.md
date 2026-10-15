@@ -10066,3 +10066,78 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - 公開前に実ブラウザで記事末尾までスクロールし、32区画目（赤）が点灯することを確認する。reduced-motionでも進捗表示が残ることを確認する。
+
+## 2026-10-15 round 2：ticker と方向付き記事遷移
+
+### 実施
+- `LP/article-fx.css` / `LP/article-fx.js` を HEAD~1 と byte-identical に復元し、生成側と CMS preview の article-fx 版を 13/14 に戻した。
+- `LP/index.html` の live UPCOMING ticker を、固定ラベル・状態 badge・日付/名前/場所・divider・fade mask・pause/reduced-motion 対応へ変更。通常の festival `<a>` は維持した。
+- `LP/vt-direction.js` を追加し、TOP/NEWS/RELATED STORIES の pointer 側を sessionStorage に保存、JA/EN の index/news と生成記事 head に blocking `vt-direction.js?v=1` を登録。`common.css` に左右の root slide と fallback class を追加。
+- `common.js` / `news.html` / `index.html` の重複した hero 設定を vt-direction.js の delegation に集約。`scripts/build-detail-pages.mjs` で JA/EN 記事を再生成した。
+
+### コミット
+- 未コミット（ユーザー指示により commit / push なし）。
+
+### 検証
+- `node scripts/build-detail-pages.mjs`: 成功。index JA/EN は 1430/1430 行、news JA/EN は 1292/1292 行。
+- `cmp` で article-fx.css/js と HEAD~1 が一致。`check_asset_versions.py --no-diff`、`check_asset_paths.py`、`check_no_hardcoded_versions.py`、`node --check` は成功。
+- `bash scripts/preflight.sh --fast`: 39件成功、5件省略。
+- `bash scripts/preflight.sh`: データ/キャッシュ/CMS/GAS/CI は通過。ただし sandbox が localhost listen を禁止するためブラウザ検査7件が EPERM。修正後の full preflight は環境制約により未完了扱い。実ブラウザ操作も未確認。
+
+### 変更したパターン
+- live ticker の状態別イベント構造と固定ラベル、pointer の左右判定、記事 pathname ごとの最大20件方向履歴、pageswap/pagereveal の左右 View Transition、記事 hero と戻り先カードの `tj-hero` 対応。
+
+### 未確認の類似パターン
+- localhost bind が可能な環境での hub/CMS/map の自動ブラウザ検査、実機 Chrome/Safari の forward/back、390px touch、reduced-motion、keyboard focus は未確認。
+
+### 次の担当への注意・判断待ち
+- 公開前に localhost bind 可能な環境で `bash scripts/preflight.sh` を省略なしで再実行し、TOP/NEWS/記事の JA/EN と PC/390px を操作確認すること。CMS preview の common.css は 41、article-fx は 14/13 で同期済み。
+
+## 2026-10-15 round 2 follow-up：Navigation API / Safari fallback
+
+### 実施
+- `LP/vt-direction.js` の activation 取得を `event.activation` / `window.navigation.activation` 対応へ修正。
+- list pathname 判定を JA/EN の `/`、`index.html`、`news.html` に対応させ、Navigation API 非対応時は pending/leaving sessionStorage fallback と戻り先カード復元を追加。
+- `transitionDirection` と復元処理の URL 解析を try/catch で保護。
+- `vt-direction.js` の版を 2 に上げ、JA/EN hub・生成記事を再生成。
+
+### コミット
+- 未コミット（ユーザー指示により commit / push なし）。
+
+### 検証
+- `node scripts/build-detail-pages.mjs`: 成功。
+- `node --check LP/vt-direction.js`、`check_asset_versions.py --no-diff`、`check_asset_paths.py`、`git diff --check`: 成功。
+- JA/EN 行数一致: index 1430/1430、news 1292/1292。
+
+### 変更したパターン
+- Navigation API activation の event/global 両対応、Safari の sessionStorage による forward/back 方向 fallback、`vt-direction.js?v=2` の全参照。
+
+### 未確認の類似パターン
+- 実ブラウザの Safari/Chrome forward/back、タッチ、keyboard、reduced-motion は未確認。
+
+### 次の担当への注意・判断待ち
+- localhost bind 可能な環境で省略なしの preflight と実ブラウザ操作を実施すること。push はその後。
+
+## 2026-10-15 follow-up：common asset cache versions
+
+### 実施
+- `LP/common.css` は commit `53001835` 後に変更されていたため、参照を全て `?v=42` に更新。
+- `LP/common.js` も同コミット比で変更されていたため、参照を全て `?v=22` に更新。
+- 生成定数、CMS preview、手書き hub、生成ページを同期し、記事ページを再生成。
+
+### コミット
+- 未コミット（ユーザー指示により commit / push なし）。
+
+### 検証
+- `node scripts/build-detail-pages.mjs`: 成功。
+- `python3 scripts/check_asset_versions.py --no-diff`: 成功。
+- `python3 scripts/check_asset_paths.py`、`git diff --check`: 成功。
+
+### 変更したパターン
+- `common.css` v41→v42、`common.js` v21→v22 の全 HTML/CMS preview 参照。
+
+### 未確認の類似パターン
+- 実ブラウザでのキャッシュ更新後の表示は未確認。
+
+### 次の担当への注意・判断待ち
+- localhost bind 可能な環境で省略なし preflight を再実行し、キャッシュ済みブラウザでも CSS/JS 更新を確認すること。
