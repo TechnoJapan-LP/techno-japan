@@ -10049,3 +10049,32 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 - 本番へ出すときは cms.js を触っているので `gh workflow run "Publish pipeline"` を自分で流し、CMS を `?cb=` 付きで開いて確認し、ユーザーに Cmd+Shift+R を伝える。
 - 派生画像は publish-pipeline / sync-drive-images でも `build-image-derivatives.py` が走るので、新規記事の xl は自動で作られる。
+
+## 2026-10-16 記事ヒーローの画質: xxl（2560px）追加・xl/xxl を品質85・幅基準（テスト環境・未公開）
+
+### 実施
+- `scripts/build-image-derivatives.py`: 記事ヒーロー専用に `xxl`（幅 min(2560, 元幅)、元幅 > 1440 のときだけ）を追加。xl / xxl は**幅**基準でリサイズ（長辺基準だと縦長の元画像で xl が 1080px になり、スマホ dpr3 が xxl を取ってしまった）。xl / xxl だけ WEBP 品質 80 → 85。xl 18枚・xxl 15枚、合計約 10.9MB。
+- `scripts/check_image_derivatives.py`: xl / xxl は幅で上限（1440 / 2560）を検査。`image-derivatives.js` v55。
+- `heroSrcsetAttr`（記事ヒーローのみ）に xxl を追加。`sizes="100vw"`。フェス / 会場 / カードの srcset は不変（再ビルド前後でフェスページ差分なし）。
+
+### コミット
+- このエントリを含むコミット（design/techno-fx、未 push）。
+
+### 検証
+- `bash scripts/preflight.sh` 全50件成功（2026-10-16）。
+- どの版が選ばれるか（headless, localhost:8092）: 1440px dpr1 → xl、1440px dpr2 → xxl、390px dpr3 → xl（縦長元画像の intergalactic も同じ）。
+- ヒーロー1枚の重さ（本番 → 今回）:
+  - japan-festival-2026-october: PC 1x 47KB → 142KB、PC Retina 70KB → 216KB、スマホ dpr3 70KB → 142KB
+  - intergalactic-2026-info: PC 1x 49KB → 143KB、PC Retina → 211KB、スマホ dpr3 49KB → 143KB
+  - ページ合計は本文の Drive 画像の遅延読込で計測ごとに揺れるため、ヒーロー単体で比較した。
+- 実画素: PC 1x 720 → 1440、PC Retina 720 → 1920〜2560、スマホ 720 → 1440。
+- 実機（Retina Mac / iPhone）での目視は未確認。
+
+### 変更したパターン
+- 上記3ファイル＋生成物（記事ページ JA/EN、image-derivatives.js、派生画像）。
+
+### 未確認の類似パターン
+- 確認済み・0件（xl / xxl は記事ヒーロー以外に無い）。
+
+### 次の担当への注意・判断待ち
+- CMS の保存上限（1920px）を記事ヒーローだけ上げる案は未着手（Publish 経路）。元が 1440px 未満の3本（forest-sound-camp / bondisco / otsukimi）は入れ直しが必要。

@@ -48,14 +48,25 @@ for source, value in mapping.items():
         article_sources += 1
         if not all(value.get("aspect", {}).get(name) for name in ("wide", "square", "fourThree")):
             raise SystemExit(f"記事画像の3アスペクト派生がありません: {source}")
-        if not value.get("heroSrcset"):
+        hero_srcset = value.get("heroSrcset") or []
+        if not hero_srcset:
             raise SystemExit(f"記事heroのxl派生がありません: {source}")
+        with Image.open(source_path) as original:
+            source_width = original.size[0]
+        if source_width > 1440 and not any(path.endswith("-xxl.webp") for path, _ in hero_srcset):
+            raise SystemExit(f"記事heroのxxl派生がありません: {source}")
     for target, declared_width in entries(value):
         target_path = ROOT / "LP" / target
         if not target_path.exists():
             raise SystemExit(f"派生画像がありません: {target}")
         with Image.open(target_path) as image:
-            if max(image.size) > 1440:
+            if target.endswith("-xxl.webp"):
+                if image.width > 2560:
+                    raise SystemExit(f"記事heroの幅が大きすぎます: {target} {image.size}")
+            elif target.endswith("-xl.webp"):
+                if image.width > 1440:
+                    raise SystemExit(f"記事heroの幅が大きすぎます: {target} {image.size}")
+            elif max(image.size) > 1440:
                 raise SystemExit(f"派生画像が大きすぎます: {target} {image.size}")
             # srcset の幅宣言が実体とずれると、ブラウザが誤った1枚を選ぶ。
             # 「小さいのに大きいと宣言」= ぼやけ、逆 = 無駄な転送。
