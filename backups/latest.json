@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "backedUpAt": "2026-10-15T15:59:55.382662+09:00"
+    "backedUpAt": "2026-10-16T15:45:33.610209+09:00"
   },
   "VENUES": [
     {
@@ -469,7 +469,8 @@
       "imageposition": "center",
       "imagePosition": "center",
       "location_ja": "〒399-9301 長野県北安曇郡白馬村北城",
-      "country": "JP"
+      "country": "JP",
+      "name_ja": "スノーマシン"
     },
     {
       "_row": 3,
@@ -616,7 +617,8 @@
       "desc_en": "The Labyrinth has carved out a unique presence in the Japanese underground scene, offering a one-of-a-kind, immersive, and story-driven outdoor festival experience through world-class sound systems, precise audio design, and a meticulously curated lineup. Set amidst rich nature as autumn leaves begin to turn, the festival maintains an intimate privacy and a welcoming community culture through strict attendance limits, earning passionate acclaim from music purists worldwide.",
       "imageposition": "center bottom",
       "imagePosition": "center bottom",
-      "location_ja": "みなかみ宝台樹キャンプ場"
+      "location_ja": "みなかみ宝台樹キャンプ場",
+      "name_ja": "ラビリンス"
     },
     {
       "_row": 8,
@@ -646,7 +648,8 @@
       "lastEditedAt": "2026-09-10T15:51:38.730Z",
       "desc_en": "Synapse Festival brings together electronic music's cerebral edge in Fukuoka's intimate venue spaces. The event focuses on deep techno and experimental sounds, drawing artists who prioritize sonic exploration over commercial appeal. Known for its carefully curated lineups that blend local talent with international acts pushing electronic music's boundaries.",
       "location_ja": "泊まれる公園 INN THE PARK 福岡",
-      "country": "JP"
+      "country": "JP",
+      "name_ja": "シナプスフェスティバル"
     },
     {
       "_row": 9,
@@ -774,7 +777,8 @@
       "imageposition": "center bottom",
       "imagePosition": "center bottom",
       "location_ja": "お台場青海地区P区画",
-      "country": "JP"
+      "country": "JP",
+      "name_ja": "サーカス"
     },
     {
       "_row": 13,
@@ -803,7 +807,8 @@
       "lasteditedat": "2026-09-12T18:45:38.476Z",
       "lastEditedAt": "2026-09-12T18:45:38.476Z",
       "desc_en": "An open-air rave held at Ishikari Bay New Port in Hokkaido. Taking advantage of an extended holiday stretch, 2026 marks the first time the event runs across three full days. Its defining trait is that the sound deliberately stops for a stretch between late night and morning. The music doesn't run non-stop because the intention is for everyone on site to share the experience on a rhythm close to that of ordinary life — and that accumulation breeds the sense of living out the same story together. The solidarity that builds slowly over those hours eventually lifts the groove on the floor.\n\nFour artists travel in from outside the prefecture — FELINE, NOCO, Yamarchy and YOUFORGOT — joined by ten locals from Hokkaido including ECHO and KAZUYA PEE, fourteen in all carrying the three days from one to the next. Sound design is handled by wool100w. On a grass floor ringed by forest and open meadow, two nights will be crossed.",
-      "country": "JP"
+      "country": "JP",
+      "name_ja": "サウンドキャンプ"
     },
     {
       "_row": 14,
@@ -866,7 +871,8 @@
       "lastEditedAt": "2026-09-12T18:47:14.179Z",
       "desc_en": "Launched in 2013, this open-air festival flies the banner of Underground Music, Art & Technology. Futtsu Cape, a quarry, a highland resort, a ski slope — and beyond that, South Korea, Koh Phangan in Thailand, even a total solar eclipse festival in the United States. Shifting its stage to a different environment each time, it has continued to broadcast Japan's own distinct rave culture to the world. For 2026, its first edition in roughly two and a half years, it heads to Kodama no Mori in Kiso, Nagano — a site that holds the memories of countless open-air festivals. Eleven acts arrive from overseas, including Rrose, who maintains an unwavering commitment to anonymity and experimentation, and Mathew Jonson, who takes on a B2B live set with SODEYAMA. Germany's RE:SORB will project massive holograms onto Kiso's natural mist. With techno, house and trance at its core, more than 80 acts in total gather in a new forest.",
       "location_ja": "こだまの森 キャンプ場",
-      "country": "JP"
+      "country": "JP",
+      "name_ja": "リバースフェスティバル"
     },
     {
       "_row": 16,
@@ -895,7 +901,8 @@
       "lastEditedAt": "2026-09-12T18:49:52.465Z",
       "desc_en": "This is an outdoor music festival, surrounded by nature, produced by Sapporo's legendary club \"Precious Hall.\" Transcending the confines of a mere music event, it offers a special space where world-renowned legends and top local artists come together.",
       "location_ja": "八剣山果樹園",
-      "country": "JP"
+      "country": "JP",
+      "name_ja": "ビッグファン"
     },
     {
       "_row": 17,
@@ -1042,7 +1049,8 @@
       "lastEditedAt": "2026-09-10T16:01:42.145Z",
       "desc_en": "An independent, DIY party built entirely by the people who throw it. Now in its 13th year, it aims to create a space deep in the abundance of nature where anyone can escape the everyday to the fullest. The venue is Sanda Athletic Park in Sanda City, Hyogo Prefecture. Tucked into a forest far from the city's heatwave, two meticulously designed, high-fidelity floors are assembled, while two pools — one large, one small — cool down bodies worn out from dancing. Nearly 40 acts from across Japan, centered on the Kansai scene, come together as the sound keeps running from Saturday midday through Sunday afternoon. The only cost is the entrance fee: no extra charges for parking, tents or the pools, and admission is free for anyone 18 and under. The relationships built up over these 13 years are, quite literally, the lineup.",
       "location_ja": "三田アスレチックパーク",
-      "country": "JP"
+      "country": "JP",
+      "name_ja": "ボンディスコ"
     },
     {
       "_row": 22,
