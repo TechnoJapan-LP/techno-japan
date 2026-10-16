@@ -10104,3 +10104,25 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - 本番へ出すときは cms.js を触っているので Publish pipeline を自分で流す。
+
+## 2026-10-16 記事 h2 のスマホ最小サイズ 24px → 22px（テスト環境・未公開）
+
+### 実施
+- 390px で `.article-body h2` の文節「創り上げたカッティングエッジな」（15字×24px=360px）が利用幅 338px に入らず、「創り上げた」が1行に孤立していた。`text-wrap: balance` でも5行の中にこれより良い割り付けは無い（実測）。22px なら4行に収まる（288/263/329/196px）。
+- `LP/detail.css` `.article-body h2`: `clamp(24px, 3vw, 32px)` → `clamp(22px, 3vw, 32px)`（PC は 3vw ≥ 24px なので不変）。detail.css v51、cms.js プレビュー参照 v142。
+
+### コミット
+- このエントリを含むコミット（design/techno-fx、未 push）。
+
+### 検証
+- `bash scripts/preflight.sh` 全51件成功（2026-10-16）。※直前の3回は「会場一覧の地図が全都市を出す」だけが落ちていた。単独では毎回通る。前日の検査が残した headless Chrome（PID 7455、23時間稼働）を止めたら全件通った。検査同士の Chrome の取り合いに弱いので、落ちたら `ps -eo pid,etime,command | grep headless` を見る。
+- 390px: transcendence-2025-report の h2 が 4行、synapse-2026-info の h2 が 3行で、文節の切れ目だけで折れていることを目視。
+
+### 変更したパターン
+- `.article-body h2` の font-size のみ。
+
+### 未確認の類似パターン
+- h3（`clamp(18px, 2.2vw, 21px)`）は同じ問題が出るほど大きくないので未変更。
+
+### 次の担当への注意・判断待ち
+- なし。
