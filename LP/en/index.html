@@ -7,7 +7,6 @@
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), interest-cohort=()">
-
 <link rel="icon" href="/favicon.ico?v=2" sizes="32x32">
 <link rel="icon" type="image/png" href="/images/favicon-192.png?v=2" sizes="192x192">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
@@ -87,17 +86,52 @@
 .marquee {
   border-top: 1px solid rgba(240,237,232,0.08);
   border-bottom: 1px solid rgba(240,237,232,0.08);
-  padding: 16px 0;
+  padding: 12px 0;
   overflow: hidden;
   margin: 60px 0 0;
+  position: relative;
 }
-.marquee:hover .marquee-inner { animation-play-state: paused; }
+.marquee::after { content: ''; position: absolute; inset: 0 0 0 auto; width: 72px; z-index: 3; pointer-events: none; background: linear-gradient(90deg, transparent, var(--bg)); }
+.marquee-label { position: absolute; inset: 0 auto 0 0; z-index: 4; display: flex; align-items: center; gap: 10px; width: 116px; padding-left: 18px; background: var(--bg); border-right: 1px solid rgba(240,237,232,.18); font-family: var(--font-mono); font-size: 10px; letter-spacing: .25em; text-transform: uppercase; opacity: .62; white-space: nowrap; }
+.marquee-label::before { content: ''; width: 6px; height: 6px; flex: none; border-radius: 50%; background: var(--accent); }
+.marquee-track { margin-left: 116px; overflow: hidden; }
+.marquee:hover .marquee-inner, .marquee:focus-within .marquee-inner, .marquee.is-touching .marquee-inner { animation-play-state: paused; }
 .marquee-inner {
   display: inline-block;
   white-space: nowrap;
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em;
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.2em;
   text-transform: uppercase; opacity: 0.62;
   animation: marqueeScroll 60s linear infinite;
+}
+.marquee.is-live { border-color: rgba(240,237,232,.12); }
+.marquee.is-live .marquee-inner { opacity: 1; letter-spacing: 0; text-transform: none; }
+.marquee-event { display: inline-flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; white-space: nowrap; }
+.marquee-index { font-family: var(--font-mono); font-size: 10px; letter-spacing: .15em; opacity: .45; }
+.marquee-status { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .25em; line-height: 1; text-transform: uppercase; }
+.marquee-status i { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+.marquee-event.is-now .marquee-status { color: var(--accent); }
+.marquee-event.is-week .marquee-status { color: var(--accent); }
+.marquee-event.is-next .marquee-status { color: rgba(240,237,232,.45); }
+.marquee-event.is-now .marquee-status i { animation: marqueePulse 1.2s steps(2, end) infinite; }
+.marquee-date { font-family: var(--font-mono); font-size: 12px; color: rgba(240,237,232,.78); }
+.marquee-name { font-family: var(--font-display); font-size: 20px; letter-spacing: .04em; color: #fff; }
+.marquee-place { font-family: var(--font-mono); font-size: 11px; opacity: .55; }
+.marquee-event:hover .marquee-name, .marquee-event:focus-visible .marquee-name { color: var(--accent); }
+.marquee-event:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.marquee-sep { display: inline-block; width: 1px; height: 18px; margin: 0 28px; background: rgba(240,237,232,.25); vertical-align: middle; }
+@keyframes marqueePulse { 50% { opacity: .2; } }
+@media (prefers-reduced-motion: reduce) {
+  .marquee { overflow-x: auto; }
+  .marquee::after { display: none; }
+  .marquee-track { overflow: visible; }
+  .marquee-inner { animation: none; }
+  .marquee-event.is-now i { animation: none; }
+}
+@media (max-width: 600px) {
+  .marquee-label { width: 102px; padding-left: 12px; font-size: 10px; }
+  .marquee-track { margin-left: 102px; }
+  .marquee-name { font-size: 18px; }
+  .marquee-sep { margin-left: 20px; margin-right: 20px; }
 }
 @keyframes marqueeScroll {
   from { transform: translateX(0); }
@@ -267,7 +301,7 @@
 }
 .side-card-tag .tag-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
 .side-card-title {
-  font-family: var(--font-body); font-size: clamp(15px, 1.6vw, 19px); font-weight: 400; line-height: 1.4;
+  font-family: var(--font-body); font-size: clamp(20px, 2.2vw, 28px); font-weight: 400; line-height: 1.4;
 }
 .side-card-meta {
   margin-top: 10px;
@@ -292,14 +326,14 @@
 .side-card:hover { background: rgba(168,47,49,.06); transform: translateX(8px); }
 .side-card-tag { font-family: var(--font-mono); font-size: 8px; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
 .side-card-tag .tag-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
-.side-card-title { font-family: var(--font-body); font-size: clamp(16px, 2vw, 22px); font-weight: 400; line-height: 1.4; overflow-wrap: anywhere; padding-right: 60px; }
+.side-card-title { font-family: var(--font-body); font-size: clamp(22px, 2.5vw, 32px); font-weight: 400; line-height: 1.4; overflow-wrap: anywhere; padding-right: 60px; }
 .side-card-meta { margin-top: 12px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; opacity: .62; text-transform: uppercase; }
 .side-card-arrow { position: absolute; right: 32px; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(240,237,232,.12); overflow: hidden; }
 .side-card-arrow::before { content: '→'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 14px; opacity: .5; }
 .story-side-mobile-image { display: none; }
 .stories-all-wrap { padding: 28px 40px 0; text-align: center; }
 .stories-all-wrap .fest-more-btn { text-decoration: none; }
-@media (max-width: 1100px) { .side-card-title { font-size: 16px; } }
+@media (max-width: 1100px) { .side-card-title { font-size: 20px; } }
 @media (max-width: 900px) {
   .main-grid { padding: 32px 24px 0; grid-template-columns: 1fr; gap: 0; }
   .side-col { border-left: 1px solid rgba(240,237,232,.55); border-top: 1px solid rgba(240,237,232,.55); }
@@ -341,7 +375,7 @@
   .story-side-item:not(:first-child) .side-card-title,
   .story-side-item:not(:first-child) .side-card-meta { grid-column: 2; }
   .story-side-item:not(:first-child) .side-card-tag { margin: 0; font-size: 10px; }
-  .story-side-item:not(:first-child) .side-card-title { padding-right: 0; font-size: 15px; line-height: 1.3; }
+  .story-side-item:not(:first-child) .side-card-title { padding-right: 0; font-size: 16px; line-height: 1.3; }
   .story-side-item:not(:first-child) .story-title-sub { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .story-side-item:not(:first-child) .side-card-meta { margin-top: 4px; font-size: 10px; }
   .story-side-item .side-card-arrow { display: none; }
@@ -799,7 +833,8 @@
 
 <!-- MARQUEE -->
 <div class="marquee">
-  <div class="marquee-inner">TECHNO &middot; HOUSE &middot; JAPAN &middot; UNDERGROUND &middot; CLUBS &middot; FESTIVALS &middot; CULTURE &middot; RAVES &middot; ARTISTS &middot; VENUES &middot; NIGHTS &middot; OPEN-AIR &middot; SCENE &middot; BILINGUAL &middot; TECHNO &middot; HOUSE &middot; JAPAN &middot; UNDERGROUND &middot; CLUBS &middot; FESTIVALS &middot; CULTURE &middot; RAVES &middot; ARTISTS &middot; VENUES &middot; NIGHTS &middot; OPEN-AIR &middot; SCENE &middot; BILINGUAL &middot;&nbsp;</div>
+  <span class="marquee-label" aria-hidden="true">UPCOMING</span>
+  <div class="marquee-track"><div class="marquee-inner">TECHNO &middot; HOUSE &middot; JAPAN &middot; UNDERGROUND &middot; CLUBS &middot; FESTIVALS &middot; CULTURE &middot; RAVES &middot; ARTISTS &middot; VENUES &middot; NIGHTS &middot; OPEN-AIR &middot; SCENE &middot; BILINGUAL &middot; TECHNO &middot; HOUSE &middot; JAPAN &middot; UNDERGROUND &middot; CLUBS &middot; FESTIVALS &middot; CULTURE &middot; RAVES &middot; ARTISTS &middot; VENUES &middot; NIGHTS &middot; OPEN-AIR &middot; SCENE &middot; BILINGUAL &middot;&nbsp;</div></div>
 </div>
 
 <!-- STORIES -->
@@ -904,9 +939,9 @@
 <script src="/search.js?v=4" defer></script>
 <!-- localize.js は defer にしない。下のインライン描画が同期実行で tjLocalized を呼ぶ -->
 <script src="/localize.js?v=12"></script>
-<script src="/image-derivatives.js?v=52"></script>
+<script src="/image-derivatives.js?v=55"></script>
 <script src="/data-hub.js?v=11"></script>
-<script src="/image-dimensions.js?v=81"></script>
+<script src="/image-dimensions.js?v=84"></script>
 <script>
 document.addEventListener('error', (e) => {
   const img = e.target;
@@ -1038,14 +1073,56 @@ document.addEventListener('error', (e) => {
     const dt = new Date(s);
     return isNaN(dt) ? null : dt;
   }
+  function festEndDate(f) {
+    const parts = String(f.date || '').split('/');
+    const dt = new Date((parts[1] || parts[0] || '').trim());
+    return isNaN(dt) ? null : dt;
+  }
   const today = new Date(); today.setHours(0,0,0,0);
   const FEST_INITIAL = 4;
   const FEST_MAX = 8;
   const upcoming = (typeof FESTIVALS !== 'undefined' ? FESTIVALS : [])
-    .map(f => ({ ...f, _start: festStartDate(f) }))
-    .filter(f => f._start && f._start >= today)
+    .map(f => ({ ...f, _start: festStartDate(f), _end: festEndDate(f) }))
+    .filter(f => f._start && f._end && f._end >= today)
     .sort((a, b) => a._start - b._start)
     .slice(0, FEST_MAX);
+
+  /* Live event strip: keep the static copy above as the no-JS/empty-data fallback. */
+  const marquee = document.querySelector('.marquee');
+  const marqueeInner = marquee?.querySelector('.marquee-inner');
+  if (marquee && marqueeInner && upcoming.length) {
+    const isEn = document.documentElement.lang === 'en';
+    const prefJa = { hokkaido:'北海道', aomori:'青森', iwate:'岩手', miyagi:'宮城', akita:'秋田', yamagata:'山形', fukushima:'福島', ibaraki:'茨城', tochigi:'栃木', gunma:'群馬', saitama:'埼玉', chiba:'千葉', tokyo:'東京', kanagawa:'神奈川', niigata:'新潟', toyama:'富山', ishikawa:'石川', fukui:'福井', yamanashi:'山梨', nagano:'長野', gifu:'岐阜', shizuoka:'静岡', aichi:'愛知', mie:'三重', shiga:'滋賀', kyoto:'京都', osaka:'大阪', hyogo:'兵庫', nara:'奈良', wakayama:'和歌山', tottori:'鳥取', shimane:'島根', okayama:'岡山', hiroshima:'広島', yamaguchi:'山口', tokushima:'徳島', kagawa:'香川', ehime:'愛媛', kochi:'高知', fukuoka:'福岡', saga:'佐賀', nagasaki:'長崎', kumamoto:'熊本', oita:'大分', miyazaki:'宮崎', kagoshima:'鹿児島', okinawa:'沖縄' };
+    const place = f => isEn ? (f.city || f.location || '') : (f.location_ja && prefJa[String(f.city || '').toLowerCase()] ? prefJa[String(f.city).toLowerCase()] : (prefJa[String(f.city || '').toLowerCase()] || f.city || f.location_ja || f.location || ''));
+    const datePart = value => { const dt = new Date(value); return isNaN(dt) ? '' : dt.toLocaleDateString('en-US', { month:'short', day:'numeric' }).toUpperCase(); };
+    const dateRange = f => {
+      if (!f._start || !f._end) return '';
+      const start = datePart(f._start);
+      const end = datePart(f._end);
+      if (f._start.getTime() === f._end.getTime()) return start;
+      const sameMonth = f._start.getFullYear() === f._end.getFullYear() && f._start.getMonth() === f._end.getMonth();
+      if (sameMonth) return `${f._start.toLocaleDateString('en-US', { month:'short' }).toUpperCase()} ${f._start.getDate()}–${f._end.getDate()}`;
+      return `${start}–${end}`;
+    };
+    const item = f => {
+      const active = f._start <= today && f._end >= today;
+      const withinWeek = !active && (f._start - today) / 86400000 <= 7;
+      const label = active ? 'NOW ON' : withinWeek ? 'THIS WEEK' : 'NEXT';
+      const stateClass = active ? ' is-now' : withinWeek ? ' is-week' : ' is-next';
+      const index = String(upcoming.indexOf(f) + 1).padStart(2, '0');
+      return `<a class="marquee-event${stateClass}" href="/en/festivals/${encodeURIComponent(f.id)}.html"><span class="marquee-index">${index}</span><span class="marquee-status">${active || withinWeek ? '<i aria-hidden="true"></i>' : ''}${label}</span><span class="marquee-date">${dateRange(f)}</span><span class="marquee-name">${tjEscapeHtml(tjLocalized(f.name, '', f.name_en))}</span><span class="marquee-place">${tjEscapeHtml(place(f))}</span></a>`;
+    };
+    const contents = upcoming.map(item).join('<span class="marquee-sep" aria-hidden="true"></span>');
+    const duplicateContents = contents.replace(/<a /g, '<a tabindex="-1" ');
+    marqueeInner.innerHTML = contents + '<span class="marquee-sep" aria-hidden="true"></span><span aria-hidden="true">' + duplicateContents + '</span>';
+    marquee.classList.add('is-live');
+    requestAnimationFrame(() => { marqueeInner.style.animationDuration = `${Math.max(14, upcoming.length * 7, (marqueeInner.scrollWidth / 2) / 65)}s`; });
+    const stopTouch = () => marquee.classList.remove('is-touching');
+    marquee.addEventListener('pointerdown', () => marquee.classList.add('is-touching'), { passive: true });
+    marquee.addEventListener('pointerup', stopTouch, { passive: true });
+    marquee.addEventListener('pointercancel', stopTouch, { passive: true });
+    marquee.addEventListener('pointerleave', stopTouch, { passive: true });
+  }
 
   const nextFestival = upcoming[0];
   // NEXT に出したイベントは、下の一覧では重複表示しない。
@@ -1339,7 +1416,6 @@ document.addEventListener('error', (e) => {
   }
 })();
 </script>
-
 <!-- Service Worker registration -->
 <script>
   if ('serviceWorker' in navigator) {

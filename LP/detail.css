@@ -4,7 +4,7 @@
    news.html の記事詳細と同じ見た目に揃えてある。
    ========================================================== */
 
-.article-detail { padding: 120px 0 80px; max-width: 760px; margin: 0 auto; }
+.article-detail { padding: 104px 0 80px; max-width: 760px; margin: 0 auto; }
 .article-detail-inner { padding: 0 40px; }
 .article-back {
   display: inline-flex; align-items: center; gap: 12px;
@@ -29,12 +29,12 @@
   line-height: 1.05; text-transform: uppercase; margin-bottom: 24px;
 }
 /* 記事タイトルも文節／読点で折る（「始｜まる」で割れていた）。フェス・会場・アーティストの h1 は英字名が主なので対象外 */
-.article-detail h1 { word-break: keep-all; word-break: auto-phrase; overflow-wrap: anywhere; text-wrap: balance; }
+.article-detail h1 { word-break: keep-all; overflow-wrap: anywhere; text-wrap: balance; }
 .article-excerpt {
   font-family: var(--font-body); font-weight: 300;
   font-size: clamp(19px, 1.9vw, 24px); line-height: 1.65; opacity: 1;
   color: var(--text); max-width: 680px; margin: 0 auto 40px; padding-bottom: 32px;
-  word-break: keep-all; word-break: auto-phrase; overflow-wrap: anywhere;
+  word-break: normal; overflow-wrap: break-word; text-wrap: pretty;
   border-bottom: 1px solid rgba(240,237,232,0.1);
 }
 .article-hero-img { margin: 0 -40px 48px; aspect-ratio: 16/9; overflow: hidden; background: rgba(240,237,232,0.04); }
@@ -45,13 +45,9 @@
 
 .article-body { max-width: 680px; margin-inline: auto; font-family: var(--font-body); font-weight: 300; font-size: clamp(16px, 1.15vw, 18px); line-height: 1.9; color: rgba(240,237,232,0.85); text-wrap: pretty; }
 .article-body p { margin-bottom: 1.6em; }
-/* 日本語見出しの折り返し（2026-10-09）。既定では文字の途中（「クロージン｜グ」）で折れて不自然だった。
-   word-break は2行書く: Chrome 系は auto-phrase（内蔵 BudouX が文節で折る）、
-   未対応の Safari / Firefox はその行を無視して keep-all（読点・句点でだけ折る）になる。
-   どちらでも収まらない長い語だけ overflow-wrap: anywhere が文字単位で折る。英語見出しの挙動は変わらない。
-   記事 h1 も同じ（下の .article-detail h1）。CMS プレビュー（cms.css）の h2/h3 も同じ値にしてある。 */
-.article-body h2 { font-family: var(--font-display); font-size: clamp(24px, 3vw, 32px); text-transform: uppercase; line-height: 1.1; margin: 2.8em 0 .75em; color: var(--text); text-wrap: balance; word-break: keep-all; word-break: auto-phrase; overflow-wrap: anywhere; }
-.article-body h3 { font-family: var(--font-body); font-weight: 500; font-size: clamp(18px, 2.2vw, 21px); line-height: 1.45; margin: 2.4em 0 .6em; color: var(--text); text-wrap: balance; word-break: keep-all; word-break: auto-phrase; overflow-wrap: anywhere; }
+/* 日本語見出しの折り返し位置は、生成時にBudouXの<wbr>として埋め込む。 */
+.article-body h2 { font-family: var(--font-display); font-size: clamp(22px, 3vw, 32px); text-transform: uppercase; line-height: 1.1; margin: 2.8em 0 .75em; color: var(--text); text-wrap: balance; word-break: keep-all; overflow-wrap: anywhere; }
+.article-body h3 { font-family: var(--font-body); font-weight: 500; font-size: clamp(18px, 2.2vw, 21px); line-height: 1.45; margin: 2.4em 0 .6em; color: var(--text); text-wrap: balance; word-break: keep-all; overflow-wrap: anywhere; }
 .article-body h4 { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; margin: 2.5em 0 .75em; color: var(--text); text-wrap: balance; }
 .article-body ul, .article-body ol { margin: 0 0 24px 24px; padding: 0; }
 .article-body li { margin-bottom: 8px; }
@@ -190,7 +186,7 @@
 }
 
 /* ----- フェス / アーティスト / ヴェニュー共通 ----- */
-.detail-page { padding: 120px 0 80px; max-width: 860px; margin: 0 auto; }
+.detail-page { padding: 96px 0 80px; max-width: 860px; margin: 0 auto; }
 .detail-inner { padding: 0 40px; }
 .detail-eyebrow {
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em;
@@ -295,15 +291,14 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 
 @media (max-width: 768px) {
   /* 固定ヘッダー直下でも戻る導線が重ならないようにする */
-  .article-detail { padding: 112px 0 60px; }
-  .detail-page { padding: 100px 0 60px; }
+  .article-detail { padding: 104px 0 60px; }
+  .detail-page { padding: 84px 0 60px; }
   .article-detail-inner, .detail-inner { padding: 0 24px; }
   .article-detail .article-back { padding: 10px 0; margin-bottom: 20px; }
   .article-hero-img, .detail-hero { margin-left: -24px; margin-right: -24px; }
   .detail-facts > div { flex-direction: column; gap: 6px; }
   /* 本文は右端まで使い、見出しの balance による不自然な改行を避ける */
   .article-body { max-width: none; margin-right: -12px; text-wrap: wrap; }
-  .article-body h2 { text-wrap: wrap; }
 }
 
 
@@ -313,22 +308,23 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
    ========================================================== */
 .article-hero {
   position: relative; left: 50%; transform: translateX(-50%);
-  width: min(96vw, 1100px);
-  aspect-ratio: 16/9; overflow: hidden;
+  width: 100vw; height: clamp(480px, 80vh, 920px);
+  aspect-ratio: auto; overflow: hidden;
   margin-bottom: 0; background: rgba(240,237,232,0.04);
 }
-.article-hero[data-ratio="auto"] { aspect-ratio: auto; }
+.article-hero[data-ratio="auto"] { width: min(96vw, 1100px); height: auto; }
 .article-hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .article-hero[data-ratio="auto"] img { height: auto; }
 .article-hero-overlay {
   position: absolute; inset: auto 0 0 0;
-  padding: clamp(24px, 5vw, 56px);
+  padding: clamp(24px, 5vw, 64px);
   background: linear-gradient(to top, rgba(8,8,8,0.92) 0%, rgba(8,8,8,0.55) 55%, transparent 100%);
 }
+.article-hero-overlay-inner { max-width: 1100px; margin: 0 auto; }
 .article-hero-overlay h1 {
   font-family: var(--font-display); font-size: clamp(34px, 5.5vw, 76px);
   line-height: 1.02; text-transform: uppercase; margin: 0;
-  max-width: 100%; overflow-wrap: anywhere; word-break: keep-all; word-break: auto-phrase; text-wrap: balance;
+  max-width: 100%; overflow-wrap: anywhere; word-break: keep-all; text-wrap: balance;
   /* 文節／読点で折り、行の長さを揃える。anywhere は収まらない語の保険（上の .article-detail h1 と同じ）。
      balance 無しだと「…北アルプスの麓の／3日間」と末尾が孤立した（2026-10-09 実測） */
 }
@@ -336,8 +332,11 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 .article-title-sub {
   display: block; margin-top: .35em; font-family: var(--font-body); font-weight: 300;
   font-size: .42em; line-height: 1.35; text-transform: none; letter-spacing: 0;
-  color: var(--text); opacity: .9; word-break: keep-all; word-break: auto-phrase;
-  overflow-wrap: anywhere; text-wrap: balance;
+  color: var(--text); opacity: .9; word-break: keep-all; overflow-wrap: anywhere; text-wrap: balance;
+}
+.article-hero-overlay h1 .tj-cl-s, .article-detail h1 .tj-cl-s,
+.article-body h2 .tj-cl-m, .article-body h3 .tj-cl-m, .article-title-sub .tj-cl-l {
+  display: inline-block; max-width: 100%;
 }
 .article-chips { display: flex; gap: 10px; margin-bottom: 14px; }
 .article-chips .cat-pill {
@@ -350,7 +349,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 
 .article-specs {
   display: flex; flex-wrap: wrap; gap: 0;
-  margin: 32px 0 40px; padding: 0;
+  margin: 40px 0 40px; padding: 0;
   border-bottom: 1px solid rgba(240,237,232,0.12);
 }
 .article-specs > div { flex: 1 1 0; min-width: 140px; padding: 18px 20px 16px; border-right: 1px solid rgba(240,237,232,0.12); }
@@ -541,7 +540,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
    試作対象だけ .festival-design-v2 を生成し、他の詳細ページへ波及させない。
    ========================================================== */
 .festival-design-v2 {
-  padding: 160px 40px 120px;
+  padding: 104px 40px 120px;
   max-width: none;
   margin: 0;
 }
@@ -899,7 +898,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 .festival-design-v2 .article-footer { margin-top: 60px; padding-top: 40px; border-top: 0; }
 
 @media (max-width: 900px) {
-  .festival-design-v2 { padding: 96px 24px 80px; }
+  .festival-design-v2 { padding: 104px 24px 80px; }
   .festival-design-v2 .festival-program-section { padding-top: 8px; }
   .festival-detail-hero { grid-template-columns: 1fr; gap: 32px; }
   .festival-design-v2 .detail-name { font-size: 42px; }
@@ -944,12 +943,6 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
    共通化して両方に効かせる手もあるが、フェス側は3〜4枚を横に並べるグリッド、
    記事側は1枚だけなので、幅の扱いが違う。無理に1本化しない。 */
 .article-detail .related-festivals { margin-top: 56px; }
-
-@media (min-width: 769px) {
-  .article-detail-inner > .article-back:first-child {
-    margin-left: calc((min(96vw, 1100px) - 760px) / -2 - 40px);
-  }
-}
 
 .article-detail .related-festivals h2 {
   font-family: var(--font-mono); font-size: 10px; letter-spacing: .2em;
@@ -1001,15 +994,8 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   .article-body .tj-cal-month li a { font-size: 16px; }
 }
 
-/* ==========================================================
-   ≤900px は nav が sticky（common.css）で自身の高さを文書の流れの中に
-   持つため、fixed 前提の大きな上余白は二重取りになる。
-   詳細ページ（記事 / フェス / 会場）は nav 直下 24px まで詰める。
-   このブロックは既存の 768px / 900px の padding 指定より後ろに
-   置いて上書きする前提。前に移動させないこと。
-   ========================================================== */
-@media (max-width: 900px) {
-  .article-detail,
-  .detail-page,
-  .festival-design-v2 { padding-top: 24px; }
+/* Full-bleed article heroes begin beneath the fixed, transparent nav. */
+.article-detail:has(> .article-detail-inner > .article-hero:not([data-ratio="auto"])) { padding-top: 0; }
+@media (max-width: 768px) {
+  .article-hero:not([data-ratio="auto"]) { height: clamp(380px, 64vh, 620px); }
 }

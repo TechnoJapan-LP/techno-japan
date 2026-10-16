@@ -9984,3 +9984,170 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 効果測定は2〜4週間後の GSC で、上表のクエリの CTR を見る（現状ほぼ 0%）。
 - CMS は Cmd+Shift+R で強制リロード（cms.js?v=140）。
 - 会場のカタカナ対応は GAS 変更を伴うので、着手前にユーザー確認。
+
+## 2026-10-16 TOP の帯を「開催予定フェス」に（テスト環境・未公開）
+
+### 実施
+- ブランチ `design/techno-fx`（worktree `techno-japan-fx`）。main との差分は `LP/index.html` と生成物 `LP/en/index.html` のみ。
+- TOP の流れる帯（`.marquee`）を、固定文言から開催予定フェスの一覧に置き換えた。左端に固定の「● UPCOMING」、各件は「番号 / 状態（● NOW ON = 赤点滅、● THIS WEEK = 赤、NEXT = 灰）/ 日付 / フェス名 / 都道府県」。各件は通常の `<a href="/festivals/<id>.html">`。
+- 2周目の複製は `aria-hidden` + `tabindex=-1`。hover / focus / タッチ中は停止。`prefers-reduced-motion` では横スクロールの帯になる。
+- 副作用: TOP の `upcoming` 判定を「開始日 >= 今日」から「終了日 >= 今日」に変えたため、開催中のフェスも「UPCOMING EVENTS」一覧に残る。
+- 同じブランチで試した「カード→記事の写真遷移（View Transitions）」と「LED 読み進みメーター」はユーザー判断で不採用。関連ファイル（vt-direction.js、common.css/js、news.html、article-fx.css/js、cms.js、build-detail-pages.mjs）はすべて main と同一に戻した。経緯は d530c498〜d4db7f11 のコミットに残っている。
+
+### コミット
+- このエントリを含むコミット（design/techno-fx、未 push）。
+
+### 検証
+- `bash scripts/preflight.sh` 全50件成功（2026-10-16）。
+- headless Chrome: 390px（dpr2, touch）/ 1440px、JA / EN。帯の高さ 49〜51px、横はみ出し 0、JS 例外 0。
+- 実ブラウザ（Chrome）で PC 幅の帯を目視確認。スマホ実機は未確認。
+- 注意: `check_feeds.mjs` の「sitemap-news.xml に48時間外の記事」は日付の経過で main でも落ちる（intergalactic-2026-info が 10/14 公開）。`python3 scripts/generate-sitemap.py` で再生成すると通る。本番は Publish pipeline が再生成する。
+
+### 変更したパターン
+- `LP/index.html` の `.marquee` の CSS と、`upcoming` 配列の直後の描画ブロック。
+
+### 未確認の類似パターン
+- 確認済み・0件（帯は TOP だけにある）。
+
+### 次の担当への注意・判断待ち
+- 本番へ出すときは main にマージ → preflight → push。Publish 経路（cms.js 等）は触っていないので pipeline の実行は不要。
+- 「開催中のフェスが UPCOMING EVENTS に残る」副作用を残すかは判断待ち。
+
+## 2026-10-16 TOP タイトル拡大・詳細ページの戻るリンク削除・記事の全幅ヒーロー（テスト環境・未公開）
+
+### 実施
+- ブランチ `design/techno-fx`。参考: crackmagazine.net の long-reads（端から端までの写真、写真の上に見出し、下に小さなメタ、本文は細い段）。
+- TOP `.side-card-title`: clamp(16px,2vw,22px) → clamp(20px,2.2vw,28px)（旧 featured カードの見出しと同じ大きさ）。1100px 以下 18px、スマホの2件目以降 16px。
+- 4種の詳細テンプレート（記事 / フェス / アーティスト / 会場）から**上部**の戻るリンク（ALL STORIES / BACK TO FESTIVALS / ALL ARTISTS / ALL VENUES）を削除。末尾のリンクは残した（`data-*-hub-back` による一覧の状態復元はそのまま動く）。
+- 1ビュー目を上へ: `.detail-page` 上余白 120→96px（スマホ 100→84px）。
+- 記事ヒーロー（`.article-hero`、`data-ratio="auto"` 以外）を全幅に: `width:100vw`、高さ clamp(480px,80vh,920px)（スマホ clamp(380px,64vh,620px)）、ページ最上部から始まり固定ナビの下に入る。見出しオーバーレイは左下のまま、内側を max-width 1100px で中央寄せ。`data-ratio="auto"` のヒーロー（縦長フライヤー等）は従来の幅のまま。
+- 全幅にすると lg（横720px）を 1440px に引き伸ばしてぼやけるため、記事ヒーロー専用の `xl`（最大1440px、元が縦長なら 1080px）を `scripts/build-image-derivatives.py` に追加。18ファイル・約3.7MB。`image-derivatives.js` v53、`check_image_derivatives.py` は xl を要求・上限 1440px に変更。ヒーロー `sizes` は `(max-width:700px) 100vw, 700px` → `100vw`。
+- 再生成で既存の派生 4ファイル（loa-lost-paradise…）のバイトが変わった（元画像が更新されていた）。
+- detail.css v49、cms.js のプレビュー参照 v141、cms.html v144。**Publish 経路（cms.js）に触れている。**
+
+### コミット
+- このエントリを含むコミット（design/techno-fx、未 push）。
+
+### 検証
+- `bash scripts/preflight.sh` 全50件成功（2026-10-16）。※「ハブページが JS 込みで描ける」の FESTIVALS カーソル検査は、headless Chrome を並行で動かして負荷が高いと落ちる（3回）。単独・負荷なしでは毎回通る。
+- 重さ（`performance.getEntriesByType('resource')`、全ドメイン、localhost）:
+  - intergalactic-2026-info: 1440px dpr1 320KB → 352KB（ヒーロー 49→81KB）、390px dpr3 320→352KB
+  - japan-festival-2026-october: 1440px dpr1 474→565KB（ヒーロー 47→115KB）、390px dpr3 598→642KB
+- 画質: 1440px dpr1 でヒーローの実画素 720 → 1440（縦長元画像は 1080）。
+- headless 1440px / 390px: 記事・フェス・アーティスト・会場・TOP で横はみ出し 0、JS 例外 0。h1 がナビと重ならないことを確認。
+- 実機 iPhone 未確認。CMS のプレビュー（detail.css v49）での記事表示は未確認。
+
+### 変更したパターン
+- `scripts/build-detail-pages.mjs`: articlePage / festivalPage / artistPage / venuePage の上部戻るリンク、`heroSrcsetAttr`（記事ヒーローのみ xl 追加・sizes 100vw）、DETAIL_CSS_VERSION。
+- `LP/detail.css`: `.article-hero*`、`.article-detail` / `.detail-page` の上余白、`.article-specs` 余白、`.article-detail-inner > .article-back:first-child` 削除。
+- `scripts/build-image-derivatives.py` / `scripts/check_image_derivatives.py`: xl。
+
+### 未確認の類似パターン
+- 記事以外（フェス / 会場）のヒーロー srcset は変更なし（フェスページの生成物を before/after で比較し差分なしを確認）。
+- `news.html` の記事プレビュー（CMS 内）が全幅ヒーローでどう見えるかは未確認。
+
+### 次の担当への注意・判断待ち
+- 本番へ出すときは cms.js を触っているので `gh workflow run "Publish pipeline"` を自分で流し、CMS を `?cb=` 付きで開いて確認し、ユーザーに Cmd+Shift+R を伝える。
+- 派生画像は publish-pipeline / sync-drive-images でも `build-image-derivatives.py` が走るので、新規記事の xl は自動で作られる。
+
+## 2026-10-16 記事ヒーローの画質: xxl（2560px）追加・xl/xxl を品質85・幅基準（テスト環境・未公開）
+
+### 実施
+- `scripts/build-image-derivatives.py`: 記事ヒーロー専用に `xxl`（幅 min(2560, 元幅)、元幅 > 1440 のときだけ）を追加。xl / xxl は**幅**基準でリサイズ（長辺基準だと縦長の元画像で xl が 1080px になり、スマホ dpr3 が xxl を取ってしまった）。xl / xxl だけ WEBP 品質 80 → 85。xl 18枚・xxl 15枚、合計約 10.9MB。
+- `scripts/check_image_derivatives.py`: xl / xxl は幅で上限（1440 / 2560）を検査。`image-derivatives.js` v55。
+- `heroSrcsetAttr`（記事ヒーローのみ）に xxl を追加。`sizes="100vw"`。フェス / 会場 / カードの srcset は不変（再ビルド前後でフェスページ差分なし）。
+
+### コミット
+- このエントリを含むコミット（design/techno-fx、未 push）。
+
+### 検証
+- `bash scripts/preflight.sh` 全50件成功（2026-10-16）。
+- どの版が選ばれるか（headless, localhost:8092）: 1440px dpr1 → xl、1440px dpr2 → xxl、390px dpr3 → xl（縦長元画像の intergalactic も同じ）。
+- ヒーロー1枚の重さ（本番 → 今回）:
+  - japan-festival-2026-october: PC 1x 47KB → 142KB、PC Retina 70KB → 216KB、スマホ dpr3 70KB → 142KB
+  - intergalactic-2026-info: PC 1x 49KB → 143KB、PC Retina → 211KB、スマホ dpr3 49KB → 143KB
+  - ページ合計は本文の Drive 画像の遅延読込で計測ごとに揺れるため、ヒーロー単体で比較した。
+- 実画素: PC 1x 720 → 1440、PC Retina 720 → 1920〜2560、スマホ 720 → 1440。
+- 実機（Retina Mac / iPhone）での目視は未確認。
+
+### 変更したパターン
+- 上記3ファイル＋生成物（記事ページ JA/EN、image-derivatives.js、派生画像）。
+
+### 未確認の類似パターン
+- 確認済み・0件（xl / xxl は記事ヒーロー以外に無い）。
+
+### 次の担当への注意・判断待ち
+- CMS の保存上限（1920px）を記事ヒーローだけ上げる案は未着手（Publish 経路）。元が 1440px 未満の3本（forest-sound-camp / bondisco / otsukimi）は入れ直しが必要。
+
+## 2026-10-16 記事の見出し・要約の折り返し（スマホ）: BudouX の文節境界を生成時に埋め込む（テスト環境・未公開）
+
+### 実施
+- 原因: 見出しの `word-break: auto-phrase` は Chrome 限定。iPhone Safari では `keep-all` + `overflow-wrap: anywhere` に落ち、行が溢れた位置（単語の途中）で切れていた。Chrome でも文節が1行より長いと同じ（例「次世代ジェネレーショ／ンの可能性」）。要約は文節折りで右側に大きな空きが出ていた。
+- `scripts/vendor/budoux/`（BudouX 0.9.3 の parser.js と日本語モデル、Apache-2.0、CI に npm install が無いので同梱）。`scripts/lib/phrase-breaks.mjs` が文節境界＋文字種の切替（漢字↔カタカナ、日本語↔2文字以上の英字）に `<wbr>` を入れる。数字の前後には入れない。1文字のひらがな（助詞）は前の文節に、1文字の漢字は次の文節に寄せる。禁則文字の前には入れない。
+- 適用先: 記事ヒーローの h1（title-short / title-sub）と本文の h2 / h3。フェス・アーティスト・会場の h1（名前）は対象外。
+- `LP/detail.css`: 見出しは `keep-all + overflow-wrap:anywhere + text-wrap:balance`（auto-phrase の二段指定を削除、スマホの h2 `text-wrap: wrap` 上書きも削除）。要約 `.article-excerpt` は `word-break: normal; overflow-wrap: break-word; text-wrap: pretty`。detail.css v50、cms.js プレビュー参照も更新。
+- `scripts/test_phrase_breaks.mjs`（5例）を preflight に追加（51件目）。
+
+### コミット
+- このエントリを含むコミット（design/techno-fx、未 push）。
+
+### 検証
+- `bash scripts/preflight.sh` 全51件成功（2026-10-16）。
+- headless iPhone UA 390px dpr2 で transcendence / synapse / labyrinth / japan-festival-2026-october の h1・h2・要約を目視: 単語途中の改行なし、要約は行末まで詰まる。
+- 実機 iPhone 未確認。CMS プレビュー（cms.css の h2/h3）は auto-phrase のまま（ブラウザ側で `<wbr>` を入れていない）。
+
+### 変更したパターン
+- `scripts/build-detail-pages.mjs`: `articleTitleHtml` の esc → phraseBreaks、本文 h2/h3 への `addHeadingPhraseBreaks`。
+
+### 未確認の類似パターン
+- TOP / NEWS のカード見出し（`.side-card-title` / `.feed-card-title`）は未対応（ブラウザ描画のため、やるなら localize.js 側で同じ規則を実装する）。
+
+### 次の担当への注意・判断待ち
+- 本番へ出すときは cms.js を触っているので Publish pipeline を自分で流す。
+
+## 2026-10-16 記事 h2 のスマホ最小サイズ 24px → 22px（テスト環境・未公開）
+
+### 実施
+- 390px で `.article-body h2` の文節「創り上げたカッティングエッジな」（15字×24px=360px）が利用幅 338px に入らず、「創り上げた」が1行に孤立していた。`text-wrap: balance` でも5行の中にこれより良い割り付けは無い（実測）。22px なら4行に収まる（288/263/329/196px）。
+- `LP/detail.css` `.article-body h2`: `clamp(24px, 3vw, 32px)` → `clamp(22px, 3vw, 32px)`（PC は 3vw ≥ 24px なので不変）。detail.css v51、cms.js プレビュー参照 v142。
+
+### コミット
+- このエントリを含むコミット（design/techno-fx、未 push）。
+
+### 検証
+- `bash scripts/preflight.sh` 全51件成功（2026-10-16）。※直前の3回は「会場一覧の地図が全都市を出す」だけが落ちていた。単独では毎回通る。前日の検査が残した headless Chrome（PID 7455、23時間稼働）を止めたら全件通った。検査同士の Chrome の取り合いに弱いので、落ちたら `ps -eo pid,etime,command | grep headless` を見る。
+- 390px: transcendence-2025-report の h2 が 4行、synapse-2026-info の h2 が 3行で、文節の切れ目だけで折れていることを目視。
+
+### 変更したパターン
+- `.article-body h2` の font-size のみ。
+
+### 未確認の類似パターン
+- h3（`clamp(18px, 2.2vw, 21px)`）は同じ問題が出るほど大きくないので未変更。
+
+### 次の担当への注意・判断待ち
+- なし。
+
+## 2026-10-16 見出しは読点の句を優先して折る（テスト環境・未公開）
+
+### 実施
+- 390px で title-sub「東京・日の出町の森が、光と／アートと音楽の別世界に変わる」のように、読点ではなく文節で折れていた（CSS には改行候補の優先順位が無い）。
+- `scripts/lib/phrase-breaks.mjs` に `clauseBreaks`: 句読点（、，。！？）の直後で句に分け、各句を `<span class="tj-clause">` で包む（中は従来の `<wbr>`）。4文字未満の句は隣に併合。子要素（`<em>` `<a>`）を含む見出しは従来の `<wbr>` のみ。
+- 句の見た目の長さ（和文1・英数0.5・記号0.5）で `tj-cl-s`（≤9）/ `tj-cl-m`（≤15）/ `tj-cl-l`（≤24）を累積付与。CSS で要素ごとに「1行に収まりうる長さの句だけ」`display:inline-block; max-width:100%` にする: h1 は s、h2/h3 は m、title-sub は l。長い句は普通に流れる（短い先頭句が1行を独占しないように。TRANSCENDENCE の h2 で実測）。
+- `LP/detail.css` v53、cms.js プレビュー参照 v144。`scripts/test_phrase_breaks.mjs` に句のケースを追加。
+
+### コミット
+- このエントリを含むコミット（design/techno-fx、未 push）。
+
+### 検証
+- `bash scripts/preflight.sh` 全51件成功（2026-10-16）。
+- 390px headless（iPhone UA）目視: intergalactic「東京・日の出町の森が、／光とアートと音楽の別世界に変わる」、labyrinth「標高1,000mの森で、／日本を代表する野外レイヴが3日間の物語を組む。」、transcendence h1 は変化なし、h2 は4行のまま（先頭句が独占しない）。
+- 実機 iPhone 未確認。
+
+### 変更したパターン
+- phrase-breaks.mjs（clauseBreaks / clauseClasses）、build-detail-pages.mjs の呼び出し、detail.css の `.tj-cl-*` 規則。
+
+### 未確認の類似パターン
+- TOP / NEWS のカード見出しは未対応（ブラウザ描画）。
+
+### 次の担当への注意・判断待ち
+- 閾値（9 / 15 / 24）は 390px・h1 34px・h2 22px・sub 約14px に合わせた概算。文字サイズを変えたら見直す。

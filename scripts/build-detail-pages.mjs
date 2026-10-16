@@ -24,6 +24,7 @@ import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
 import { imageSizeAttrs } from './lib/image-size.mjs';
+import { clauseBreaks, phraseBreaks } from './lib/phrase-breaks.mjs';
 import { autolinkArtists, parseEvents, renderArticleShortcodes } from '../LP/article-shortcodes.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -53,7 +54,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 48;
+const DETAIL_CSS_VERSION = 53;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -421,7 +422,13 @@ function articleImageVariants(source, imagePosition) {
      記事        原画 1920px        → モバイル表示 496px
 
    LCP（最初に大きな絵が出るまでの時間）に直接効く。 */
-const heroSrcsetAttr = (s) => srcsetAttr(s, '(max-width: 700px) 100vw, 700px');
+const heroSrcsetAttr = (s, sizes = '(max-width: 700px) 100vw, 700px', articleHero = false) => {
+  if (!articleHero) return srcsetAttr(s, sizes);
+  const hit = cardEntry(s);
+  if (!hit || !hit.srcset || !hit.srcset.length) return '';
+  const set = hit.srcset.concat(hit.heroSrcset || []).map(([p, w]) => `/${p} ${w}w`).join(', ');
+  return ` srcset="${esc(set)}" sizes="${esc(sizes)}"`;
+};
 
 /* 開催回のフライヤー。実測 モバイル488px / タブレット582px / PC 511px。
 
@@ -581,6 +588,15 @@ function addHtmlImageDimensions(html) {
     const attrs = dimensionAttrs(src);
     if (!attrs) throw new Error(`画像寸法メタデータがありません: ${src}`);
     return `<img ${attrs}${before}src=${quote}${src}${quote}${after}>`;
+  });
+}
+
+/* 記事本文の見出しだけに、ブラウザを問わず使える文節の折り返し位置を埋め込む。 */
+function addHeadingPhraseBreaks(html) {
+  return String(html || '').replace(/<h([23])\b([^>]*)>([\s\S]*?)<\/h\1>/gi, (block, level, attrs, contents) => {
+    const processText = /<[^>]+>/.test(contents) ? phraseBreaks : clauseBreaks;
+    const processed = contents.replace(/(^|>)([^<]+)(?=<|$)/g, (_text, prefix, text) => `${prefix}${processText(text)}`);
+    return `<h${level}${attrs}>${processed}</h${level}>`;
   });
 }
 
@@ -1201,13 +1217,15 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   });
 
   const { short: articleTitleShort, sub: articleTitleSub } = splitArticleTitle(L.title);
-  const articleTitleHtml = `<span class="article-title-short">${esc(articleTitleShort)}</span>${articleTitleSub ? `<span class="article-title-sub">${esc(articleTitleSub)}</span>` : ''}`;
+  const articleTitleHtml = `<span class="article-title-short">${clauseBreaks(articleTitleShort)}</span>${articleTitleSub ? `<span class="article-title-sub">${clauseBreaks(articleTitleSub)}</span>` : ''}`;
   const heroBlock = a.image
     ? `<header class="article-hero"${ratioAttr(a.heroRatio)}>
-        <img ${dimensionAttrs(a.image)} src="/${String(a.image).replace(/^\//, '')}"${heroSrcsetAttr(a.image)} alt="${esc(L.title)}" fetchpriority="high" decoding="async">
+        <img ${dimensionAttrs(a.image)} src="/${String(a.image).replace(/^\//, '')}"${heroSrcsetAttr(a.image, '100vw', true)} alt="${esc(L.title)}" fetchpriority="high" decoding="async">
         <div class="article-hero-overlay">
-          <div class="article-chips"><span class="cat-pill">${esc(a.category || 'NEWS')}</span></div>
-          <h1>${articleTitleHtml}</h1>
+          <div class="article-hero-overlay-inner">
+            <div class="article-chips"><span class="cat-pill">${esc(a.category || 'NEWS')}</span></div>
+            <h1>${articleTitleHtml}</h1>
+          </div>
         </div>
       </header>`
     : `<div class="article-meta-top"><span class="cat-pill">${esc(a.category || 'NEWS')}</span></div><h1>${articleTitleHtml}</h1>`;
@@ -1252,7 +1270,6 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   const linkedBody = autolinkArtists(L.body || '', artists);
   const body = `<article class="article-detail">
   <div class="article-detail-inner">
-    <a class="article-back" href="${hubHref}" data-article-hub-back="${hubHref}"><span class="arrow"></span> ALL STORIES</a>
     ${heroBlock}
     <dl class="article-specs">
       <div><dt>WORDS BY</dt><dd>${esc(a.author || 'TECHNO JAPAN')}</dd></div>
@@ -1260,7 +1277,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
       <div><dt>READING TIME</dt><dd>${esc(a.readTime || 5)} MIN</dd></div>
     </dl>
     ${L.excerpt ? `<div class="article-excerpt">${esc(L.excerpt)}</div>` : ''}
-    <div class="article-body">${addLocalImageSrcset(addDriveImageSrcset(addHtmlImageDimensions(resolveEntities(linkedBody, lang))))}</div>
+    <div class="article-body">${addLocalImageSrcset(addDriveImageSrcset(addHtmlImageDimensions(addHeadingPhraseBreaks(resolveEntities(linkedBody, lang)))))}</div>
     <div class="article-share">${festivalShareButtons(L.title, canonical, lang)}</div>
     ${relatedStoriesHtml}
     ${relatedFestivalHtml}
@@ -1754,8 +1771,6 @@ function festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, lang, 
 
   return `<article class="festival-detail-page festival-design-v2">
   <div class="festival-detail-inner">
-    <a class="detail-back" href="${hubHref}" data-festival-hub-back="${hubHref}"><span class="arrow"></span> BACK TO FESTIVALS</a>
-
     <header class="festival-detail-hero">
       ${heroHtml}
       <div class="detail-hero-info">
@@ -2016,7 +2031,6 @@ function artistPage(a, artistsById, lang = 'ja') {
 
   const body = `<article class="detail-page">
   <div class="detail-inner">
-    <a class="article-back" href="${hubHref}" data-artist-hub-back="${hubHref}"><span class="arrow"></span> ALL ARTISTS</a>
     ${place ? `<div class="detail-eyebrow">${esc(place)}</div>` : ''}
     <h1>${esc(name)}</h1>
     ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
@@ -2158,7 +2172,6 @@ function venuePage(v, lang = 'ja') {
 
   const body = `<article class="detail-page">
   <div class="detail-inner">
-    <a class="article-back" href="${hubHref}" data-venue-hub-back="${hubHref}"><span class="arrow"></span> ALL VENUES</a>
     ${place ? `<div class="detail-eyebrow">${esc(place)}</div>` : ''}
     <h1>${esc(name)}</h1>
     ${genres ? `<div class="detail-chips">${genres}</div>` : ''}

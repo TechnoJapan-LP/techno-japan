@@ -36,7 +36,11 @@ OUT_JS = ROOT / "LP" / "image-derivatives.js"
 # 2026-09-29 実測: artist-card-img は64〜80px表示で必要192px、
 # それに960pxを送っていた（AUDIT / docs/design/BENCHMARK_EYESCREAM_SPINCOASTER_2026-09-29.md）。
 SIZES = (("xs", 240), ("sm", 480), ("md", 720), ("lg", 960))
+# 記事のfull-bleed heroだけはPC幅1440px/高密度画面に対応する。
+# 原本より拡大せず、xxl は原本の幅が xl より大きい記事だけ作る。
+ARTICLE_HERO_SIZES = (("xl", 1440), ("xxl", 2560))
 QUALITY = 80
+ARTICLE_HERO_QUALITY = 85
 ARTICLE_ASPECTS = {
     "wide": (16, 9),
     "square": (1, 1),
@@ -131,6 +135,26 @@ def main() -> None:
                            for suffix, _ in SIZES],
             }
             if kind == "articles" and f"images/articles/{source.name}" in article_heroes:
+                hero_srcset = []
+                with Image.open(source) as probe:
+                    source_width = ImageOps.exif_transpose(probe).size[0]
+                for suffix, max_width in ARTICLE_HERO_SIZES:
+                    if suffix == "xxl" and source_width <= ARTICLE_HERO_SIZES[0][1]:
+                        continue
+                    hero_target = out_dir / f"{source.stem}--{digest}-{suffix}.webp"
+                    with Image.open(source) as image:
+                        image = ImageOps.exif_transpose(image)
+                        if image.mode not in ("RGB", "RGBA"):
+                            image = image.convert("RGB")
+                        target_width = min(max_width, image.width)
+                        if image.width > target_width:
+                            target_height = round(image.height * target_width / image.width)
+                            image = image.resize((target_width, target_height), Image.Resampling.LANCZOS)
+                        image.save(hero_target, "WEBP", quality=ARTICLE_HERO_QUALITY, method=6)
+                        hero_srcset.append([
+                            f"images/derivatives/card/{kind}/{hero_target.name}", image.size[0]
+                        ])
+                mapping[f"images/{kind}/{source.name}"]["heroSrcset"] = hero_srcset
                 aspect_entries = {}
                 with Image.open(source) as original:
                     original = ImageOps.exif_transpose(original)
@@ -175,6 +199,11 @@ def main() -> None:
             if key.startswith(f"images/{kind}/")
             for aspect in value.get("aspect", {}).values()
             for position in aspect.values()
+        } | {
+            Path(p).name
+            for key, value in mapping.items()
+            if key.startswith(f"images/{kind}/")
+            for p, _ in value.get("heroSrcset", [])
         }
         for stale in out_dir.glob("*.webp"):
             if stale.name not in wanted:
