@@ -10012,3 +10012,40 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 - 本番へ出すときは main にマージ → preflight → push。Publish 経路（cms.js 等）は触っていないので pipeline の実行は不要。
 - 「開催中のフェスが UPCOMING EVENTS に残る」副作用を残すかは判断待ち。
+
+## 2026-10-16 TOP タイトル拡大・詳細ページの戻るリンク削除・記事の全幅ヒーロー（テスト環境・未公開）
+
+### 実施
+- ブランチ `design/techno-fx`。参考: crackmagazine.net の long-reads（端から端までの写真、写真の上に見出し、下に小さなメタ、本文は細い段）。
+- TOP `.side-card-title`: clamp(16px,2vw,22px) → clamp(20px,2.2vw,28px)（旧 featured カードの見出しと同じ大きさ）。1100px 以下 18px、スマホの2件目以降 16px。
+- 4種の詳細テンプレート（記事 / フェス / アーティスト / 会場）から**上部**の戻るリンク（ALL STORIES / BACK TO FESTIVALS / ALL ARTISTS / ALL VENUES）を削除。末尾のリンクは残した（`data-*-hub-back` による一覧の状態復元はそのまま動く）。
+- 1ビュー目を上へ: `.detail-page` 上余白 120→96px（スマホ 100→84px）。
+- 記事ヒーロー（`.article-hero`、`data-ratio="auto"` 以外）を全幅に: `width:100vw`、高さ clamp(480px,80vh,920px)（スマホ clamp(380px,64vh,620px)）、ページ最上部から始まり固定ナビの下に入る。見出しオーバーレイは左下のまま、内側を max-width 1100px で中央寄せ。`data-ratio="auto"` のヒーロー（縦長フライヤー等）は従来の幅のまま。
+- 全幅にすると lg（横720px）を 1440px に引き伸ばしてぼやけるため、記事ヒーロー専用の `xl`（最大1440px、元が縦長なら 1080px）を `scripts/build-image-derivatives.py` に追加。18ファイル・約3.7MB。`image-derivatives.js` v53、`check_image_derivatives.py` は xl を要求・上限 1440px に変更。ヒーロー `sizes` は `(max-width:700px) 100vw, 700px` → `100vw`。
+- 再生成で既存の派生 4ファイル（loa-lost-paradise…）のバイトが変わった（元画像が更新されていた）。
+- detail.css v49、cms.js のプレビュー参照 v141、cms.html v144。**Publish 経路（cms.js）に触れている。**
+
+### コミット
+- このエントリを含むコミット（design/techno-fx、未 push）。
+
+### 検証
+- `bash scripts/preflight.sh` 全50件成功（2026-10-16）。※「ハブページが JS 込みで描ける」の FESTIVALS カーソル検査は、headless Chrome を並行で動かして負荷が高いと落ちる（3回）。単独・負荷なしでは毎回通る。
+- 重さ（`performance.getEntriesByType('resource')`、全ドメイン、localhost）:
+  - intergalactic-2026-info: 1440px dpr1 320KB → 352KB（ヒーロー 49→81KB）、390px dpr3 320→352KB
+  - japan-festival-2026-october: 1440px dpr1 474→565KB（ヒーロー 47→115KB）、390px dpr3 598→642KB
+- 画質: 1440px dpr1 でヒーローの実画素 720 → 1440（縦長元画像は 1080）。
+- headless 1440px / 390px: 記事・フェス・アーティスト・会場・TOP で横はみ出し 0、JS 例外 0。h1 がナビと重ならないことを確認。
+- 実機 iPhone 未確認。CMS のプレビュー（detail.css v49）での記事表示は未確認。
+
+### 変更したパターン
+- `scripts/build-detail-pages.mjs`: articlePage / festivalPage / artistPage / venuePage の上部戻るリンク、`heroSrcsetAttr`（記事ヒーローのみ xl 追加・sizes 100vw）、DETAIL_CSS_VERSION。
+- `LP/detail.css`: `.article-hero*`、`.article-detail` / `.detail-page` の上余白、`.article-specs` 余白、`.article-detail-inner > .article-back:first-child` 削除。
+- `scripts/build-image-derivatives.py` / `scripts/check_image_derivatives.py`: xl。
+
+### 未確認の類似パターン
+- 記事以外（フェス / 会場）のヒーロー srcset は変更なし（フェスページの生成物を before/after で比較し差分なしを確認）。
+- `news.html` の記事プレビュー（CMS 内）が全幅ヒーローでどう見えるかは未確認。
+
+### 次の担当への注意・判断待ち
+- 本番へ出すときは cms.js を触っているので `gh workflow run "Publish pipeline"` を自分で流し、CMS を `?cb=` 付きで開いて確認し、ユーザーに Cmd+Shift+R を伝える。
+- 派生画像は publish-pipeline / sync-drive-images でも `build-image-derivatives.py` が走るので、新規記事の xl は自動で作られる。

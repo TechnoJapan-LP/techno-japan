@@ -53,7 +53,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 48;
+const DETAIL_CSS_VERSION = 49;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -421,7 +421,13 @@ function articleImageVariants(source, imagePosition) {
      記事        原画 1920px        → モバイル表示 496px
 
    LCP（最初に大きな絵が出るまでの時間）に直接効く。 */
-const heroSrcsetAttr = (s) => srcsetAttr(s, '(max-width: 700px) 100vw, 700px');
+const heroSrcsetAttr = (s, sizes = '(max-width: 700px) 100vw, 700px', articleHero = false) => {
+  if (!articleHero) return srcsetAttr(s, sizes);
+  const hit = cardEntry(s);
+  if (!hit || !hit.srcset || !hit.srcset.length) return '';
+  const set = hit.srcset.concat(hit.heroSrcset || []).map(([p, w]) => `/${p} ${w}w`).join(', ');
+  return ` srcset="${esc(set)}" sizes="${esc(sizes)}"`;
+};
 
 /* 開催回のフライヤー。実測 モバイル488px / タブレット582px / PC 511px。
 
@@ -1204,10 +1210,12 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   const articleTitleHtml = `<span class="article-title-short">${esc(articleTitleShort)}</span>${articleTitleSub ? `<span class="article-title-sub">${esc(articleTitleSub)}</span>` : ''}`;
   const heroBlock = a.image
     ? `<header class="article-hero"${ratioAttr(a.heroRatio)}>
-        <img ${dimensionAttrs(a.image)} src="/${String(a.image).replace(/^\//, '')}"${heroSrcsetAttr(a.image)} alt="${esc(L.title)}" fetchpriority="high" decoding="async">
+        <img ${dimensionAttrs(a.image)} src="/${String(a.image).replace(/^\//, '')}"${heroSrcsetAttr(a.image, '100vw', true)} alt="${esc(L.title)}" fetchpriority="high" decoding="async">
         <div class="article-hero-overlay">
-          <div class="article-chips"><span class="cat-pill">${esc(a.category || 'NEWS')}</span></div>
-          <h1>${articleTitleHtml}</h1>
+          <div class="article-hero-overlay-inner">
+            <div class="article-chips"><span class="cat-pill">${esc(a.category || 'NEWS')}</span></div>
+            <h1>${articleTitleHtml}</h1>
+          </div>
         </div>
       </header>`
     : `<div class="article-meta-top"><span class="cat-pill">${esc(a.category || 'NEWS')}</span></div><h1>${articleTitleHtml}</h1>`;
@@ -1252,7 +1260,6 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   const linkedBody = autolinkArtists(L.body || '', artists);
   const body = `<article class="article-detail">
   <div class="article-detail-inner">
-    <a class="article-back" href="${hubHref}" data-article-hub-back="${hubHref}"><span class="arrow"></span> ALL STORIES</a>
     ${heroBlock}
     <dl class="article-specs">
       <div><dt>WORDS BY</dt><dd>${esc(a.author || 'TECHNO JAPAN')}</dd></div>
@@ -1754,8 +1761,6 @@ function festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, lang, 
 
   return `<article class="festival-detail-page festival-design-v2">
   <div class="festival-detail-inner">
-    <a class="detail-back" href="${hubHref}" data-festival-hub-back="${hubHref}"><span class="arrow"></span> BACK TO FESTIVALS</a>
-
     <header class="festival-detail-hero">
       ${heroHtml}
       <div class="detail-hero-info">
@@ -2016,7 +2021,6 @@ function artistPage(a, artistsById, lang = 'ja') {
 
   const body = `<article class="detail-page">
   <div class="detail-inner">
-    <a class="article-back" href="${hubHref}" data-artist-hub-back="${hubHref}"><span class="arrow"></span> ALL ARTISTS</a>
     ${place ? `<div class="detail-eyebrow">${esc(place)}</div>` : ''}
     <h1>${esc(name)}</h1>
     ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
@@ -2158,7 +2162,6 @@ function venuePage(v, lang = 'ja') {
 
   const body = `<article class="detail-page">
   <div class="detail-inner">
-    <a class="article-back" href="${hubHref}" data-venue-hub-back="${hubHref}"><span class="arrow"></span> ALL VENUES</a>
     ${place ? `<div class="detail-eyebrow">${esc(place)}</div>` : ''}
     <h1>${esc(name)}</h1>
     ${genres ? `<div class="detail-chips">${genres}</div>` : ''}

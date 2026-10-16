@@ -30,6 +30,7 @@ def entries(value):
     for aspect in value.get("aspect", {}).values():
         for position in aspect.values():
             out.append((position["path"], position.get("w")))
+    out += [(path, width) for path, width in value.get("heroSrcset", [])]
     return out
 
 data = (ROOT / "LP/data.js").read_text(encoding="utf-8")
@@ -47,12 +48,14 @@ for source, value in mapping.items():
         article_sources += 1
         if not all(value.get("aspect", {}).get(name) for name in ("wide", "square", "fourThree")):
             raise SystemExit(f"記事画像の3アスペクト派生がありません: {source}")
+        if not value.get("heroSrcset"):
+            raise SystemExit(f"記事heroのxl派生がありません: {source}")
     for target, declared_width in entries(value):
         target_path = ROOT / "LP" / target
         if not target_path.exists():
             raise SystemExit(f"派生画像がありません: {target}")
         with Image.open(target_path) as image:
-            if max(image.size) > 1200:
+            if max(image.size) > 1440:
                 raise SystemExit(f"派生画像が大きすぎます: {target} {image.size}")
             # srcset の幅宣言が実体とずれると、ブラウザが誤った1枚を選ぶ。
             # 「小さいのに大きいと宣言」= ぼやけ、逆 = 無駄な転送。
