@@ -10078,3 +10078,29 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - CMS の保存上限（1920px）を記事ヒーローだけ上げる案は未着手（Publish 経路）。元が 1440px 未満の3本（forest-sound-camp / bondisco / otsukimi）は入れ直しが必要。
+
+## 2026-10-16 記事の見出し・要約の折り返し（スマホ）: BudouX の文節境界を生成時に埋め込む（テスト環境・未公開）
+
+### 実施
+- 原因: 見出しの `word-break: auto-phrase` は Chrome 限定。iPhone Safari では `keep-all` + `overflow-wrap: anywhere` に落ち、行が溢れた位置（単語の途中）で切れていた。Chrome でも文節が1行より長いと同じ（例「次世代ジェネレーショ／ンの可能性」）。要約は文節折りで右側に大きな空きが出ていた。
+- `scripts/vendor/budoux/`（BudouX 0.9.3 の parser.js と日本語モデル、Apache-2.0、CI に npm install が無いので同梱）。`scripts/lib/phrase-breaks.mjs` が文節境界＋文字種の切替（漢字↔カタカナ、日本語↔2文字以上の英字）に `<wbr>` を入れる。数字の前後には入れない。1文字のひらがな（助詞）は前の文節に、1文字の漢字は次の文節に寄せる。禁則文字の前には入れない。
+- 適用先: 記事ヒーローの h1（title-short / title-sub）と本文の h2 / h3。フェス・アーティスト・会場の h1（名前）は対象外。
+- `LP/detail.css`: 見出しは `keep-all + overflow-wrap:anywhere + text-wrap:balance`（auto-phrase の二段指定を削除、スマホの h2 `text-wrap: wrap` 上書きも削除）。要約 `.article-excerpt` は `word-break: normal; overflow-wrap: break-word; text-wrap: pretty`。detail.css v50、cms.js プレビュー参照も更新。
+- `scripts/test_phrase_breaks.mjs`（5例）を preflight に追加（51件目）。
+
+### コミット
+- このエントリを含むコミット（design/techno-fx、未 push）。
+
+### 検証
+- `bash scripts/preflight.sh` 全51件成功（2026-10-16）。
+- headless iPhone UA 390px dpr2 で transcendence / synapse / labyrinth / japan-festival-2026-october の h1・h2・要約を目視: 単語途中の改行なし、要約は行末まで詰まる。
+- 実機 iPhone 未確認。CMS プレビュー（cms.css の h2/h3）は auto-phrase のまま（ブラウザ側で `<wbr>` を入れていない）。
+
+### 変更したパターン
+- `scripts/build-detail-pages.mjs`: `articleTitleHtml` の esc → phraseBreaks、本文 h2/h3 への `addHeadingPhraseBreaks`。
+
+### 未確認の類似パターン
+- TOP / NEWS のカード見出し（`.side-card-title` / `.feed-card-title`）は未対応（ブラウザ描画のため、やるなら localize.js 側で同じ規則を実装する）。
+
+### 次の担当への注意・判断待ち
+- 本番へ出すときは cms.js を触っているので Publish pipeline を自分で流す。

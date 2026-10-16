@@ -29,12 +29,12 @@
   line-height: 1.05; text-transform: uppercase; margin-bottom: 24px;
 }
 /* 記事タイトルも文節／読点で折る（「始｜まる」で割れていた）。フェス・会場・アーティストの h1 は英字名が主なので対象外 */
-.article-detail h1 { word-break: keep-all; word-break: auto-phrase; overflow-wrap: anywhere; text-wrap: balance; }
+.article-detail h1 { word-break: keep-all; overflow-wrap: anywhere; text-wrap: balance; }
 .article-excerpt {
   font-family: var(--font-body); font-weight: 300;
   font-size: clamp(19px, 1.9vw, 24px); line-height: 1.65; opacity: 1;
   color: var(--text); max-width: 680px; margin: 0 auto 40px; padding-bottom: 32px;
-  word-break: keep-all; word-break: auto-phrase; overflow-wrap: anywhere;
+  word-break: normal; overflow-wrap: break-word; text-wrap: pretty;
   border-bottom: 1px solid rgba(240,237,232,0.1);
 }
 .article-hero-img { margin: 0 -40px 48px; aspect-ratio: 16/9; overflow: hidden; background: rgba(240,237,232,0.04); }
@@ -45,13 +45,9 @@
 
 .article-body { max-width: 680px; margin-inline: auto; font-family: var(--font-body); font-weight: 300; font-size: clamp(16px, 1.15vw, 18px); line-height: 1.9; color: rgba(240,237,232,0.85); text-wrap: pretty; }
 .article-body p { margin-bottom: 1.6em; }
-/* 日本語見出しの折り返し（2026-10-09）。既定では文字の途中（「クロージン｜グ」）で折れて不自然だった。
-   word-break は2行書く: Chrome 系は auto-phrase（内蔵 BudouX が文節で折る）、
-   未対応の Safari / Firefox はその行を無視して keep-all（読点・句点でだけ折る）になる。
-   どちらでも収まらない長い語だけ overflow-wrap: anywhere が文字単位で折る。英語見出しの挙動は変わらない。
-   記事 h1 も同じ（下の .article-detail h1）。CMS プレビュー（cms.css）の h2/h3 も同じ値にしてある。 */
-.article-body h2 { font-family: var(--font-display); font-size: clamp(24px, 3vw, 32px); text-transform: uppercase; line-height: 1.1; margin: 2.8em 0 .75em; color: var(--text); text-wrap: balance; word-break: keep-all; word-break: auto-phrase; overflow-wrap: anywhere; }
-.article-body h3 { font-family: var(--font-body); font-weight: 500; font-size: clamp(18px, 2.2vw, 21px); line-height: 1.45; margin: 2.4em 0 .6em; color: var(--text); text-wrap: balance; word-break: keep-all; word-break: auto-phrase; overflow-wrap: anywhere; }
+/* 日本語見出しの折り返し位置は、生成時にBudouXの<wbr>として埋め込む。 */
+.article-body h2 { font-family: var(--font-display); font-size: clamp(24px, 3vw, 32px); text-transform: uppercase; line-height: 1.1; margin: 2.8em 0 .75em; color: var(--text); text-wrap: balance; word-break: keep-all; overflow-wrap: anywhere; }
+.article-body h3 { font-family: var(--font-body); font-weight: 500; font-size: clamp(18px, 2.2vw, 21px); line-height: 1.45; margin: 2.4em 0 .6em; color: var(--text); text-wrap: balance; word-break: keep-all; overflow-wrap: anywhere; }
 .article-body h4 { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; margin: 2.5em 0 .75em; color: var(--text); text-wrap: balance; }
 .article-body ul, .article-body ol { margin: 0 0 24px 24px; padding: 0; }
 .article-body li { margin-bottom: 8px; }
@@ -303,7 +299,6 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   .detail-facts > div { flex-direction: column; gap: 6px; }
   /* 本文は右端まで使い、見出しの balance による不自然な改行を避ける */
   .article-body { max-width: none; margin-right: -12px; text-wrap: wrap; }
-  .article-body h2 { text-wrap: wrap; }
 }
 
 
@@ -329,7 +324,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 .article-hero-overlay h1 {
   font-family: var(--font-display); font-size: clamp(34px, 5.5vw, 76px);
   line-height: 1.02; text-transform: uppercase; margin: 0;
-  max-width: 100%; overflow-wrap: anywhere; word-break: keep-all; word-break: auto-phrase; text-wrap: balance;
+  max-width: 100%; overflow-wrap: anywhere; word-break: keep-all; text-wrap: balance;
   /* 文節／読点で折り、行の長さを揃える。anywhere は収まらない語の保険（上の .article-detail h1 と同じ）。
      balance 無しだと「…北アルプスの麓の／3日間」と末尾が孤立した（2026-10-09 実測） */
 }
@@ -337,8 +332,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 .article-title-sub {
   display: block; margin-top: .35em; font-family: var(--font-body); font-weight: 300;
   font-size: .42em; line-height: 1.35; text-transform: none; letter-spacing: 0;
-  color: var(--text); opacity: .9; word-break: keep-all; word-break: auto-phrase;
-  overflow-wrap: anywhere; text-wrap: balance;
+  color: var(--text); opacity: .9; word-break: keep-all; overflow-wrap: anywhere; text-wrap: balance;
 }
 .article-chips { display: flex; gap: 10px; margin-bottom: 14px; }
 .article-chips .cat-pill {
