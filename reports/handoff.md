@@ -10126,3 +10126,28 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - なし。
+
+## 2026-10-16 見出しは読点の句を優先して折る（テスト環境・未公開）
+
+### 実施
+- 390px で title-sub「東京・日の出町の森が、光と／アートと音楽の別世界に変わる」のように、読点ではなく文節で折れていた（CSS には改行候補の優先順位が無い）。
+- `scripts/lib/phrase-breaks.mjs` に `clauseBreaks`: 句読点（、，。！？）の直後で句に分け、各句を `<span class="tj-clause">` で包む（中は従来の `<wbr>`）。4文字未満の句は隣に併合。子要素（`<em>` `<a>`）を含む見出しは従来の `<wbr>` のみ。
+- 句の見た目の長さ（和文1・英数0.5・記号0.5）で `tj-cl-s`（≤9）/ `tj-cl-m`（≤15）/ `tj-cl-l`（≤24）を累積付与。CSS で要素ごとに「1行に収まりうる長さの句だけ」`display:inline-block; max-width:100%` にする: h1 は s、h2/h3 は m、title-sub は l。長い句は普通に流れる（短い先頭句が1行を独占しないように。TRANSCENDENCE の h2 で実測）。
+- `LP/detail.css` v53、cms.js プレビュー参照 v144。`scripts/test_phrase_breaks.mjs` に句のケースを追加。
+
+### コミット
+- このエントリを含むコミット（design/techno-fx、未 push）。
+
+### 検証
+- `bash scripts/preflight.sh` 全51件成功（2026-10-16）。
+- 390px headless（iPhone UA）目視: intergalactic「東京・日の出町の森が、／光とアートと音楽の別世界に変わる」、labyrinth「標高1,000mの森で、／日本を代表する野外レイヴが3日間の物語を組む。」、transcendence h1 は変化なし、h2 は4行のまま（先頭句が独占しない）。
+- 実機 iPhone 未確認。
+
+### 変更したパターン
+- phrase-breaks.mjs（clauseBreaks / clauseClasses）、build-detail-pages.mjs の呼び出し、detail.css の `.tj-cl-*` 規則。
+
+### 未確認の類似パターン
+- TOP / NEWS のカード見出しは未対応（ブラウザ描画）。
+
+### 次の担当への注意・判断待ち
+- 閾値（9 / 15 / 24）は 390px・h1 34px・h2 22px・sub 約14px に合わせた概算。文字サイズを変えたら見直す。

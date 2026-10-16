@@ -108,3 +108,49 @@ export function phraseBreaks(text) {
   }
   return output;
 }
+
+function mergeShortClauses(clauses) {
+  const merged = [];
+  for (const clause of clauses) {
+    if (clause.length < 4 && merged.length) merged[merged.length - 1] += clause;
+    else merged.push(clause);
+  }
+  if (merged.length > 1 && merged.at(-1).length < 4) {
+    merged[merged.length - 2] += merged.pop();
+  }
+  return merged;
+}
+
+function visualLength(text) {
+  return Array.from(text).reduce((length, char) => {
+    if (/[A-Za-z0-9]/.test(char)) return length + 0.5;
+    if (/\p{Script=Han}|\p{Script=Hiragana}|\p{Script=Katakana}/u.test(char) || char.codePointAt(0) > 0xff) return length + 1;
+    return length + 0.5;
+  }, 0);
+}
+
+function clauseClasses(clause) {
+  const length = visualLength(clause);
+  return [length <= 9 ? 'tj-cl-s' : '', length <= 15 ? 'tj-cl-m' : '', length <= 24 ? 'tj-cl-l' : '']
+    .filter(Boolean).join(' ');
+}
+
+export function clauseBreaks(text) {
+  const value = String(text ?? '');
+  const clauses = [];
+  let start = 0;
+  for (let i = 0; i < value.length; i += 1) {
+    if (`、，。！？`.includes(value[i])) {
+      clauses.push(value.slice(start, i + 1));
+      start = i + 1;
+    }
+  }
+  if (start < value.length) clauses.push(value.slice(start));
+  if (clauses.length < 2) return phraseBreaks(value);
+  return mergeShortClauses(clauses)
+    .map((clause) => {
+      const classes = clauseClasses(clause);
+      return `<span class="tj-clause${classes ? ` ${classes}` : ''}">${phraseBreaks(clause)}</span>`;
+    })
+    .join('');
+}

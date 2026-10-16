@@ -24,7 +24,7 @@ import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
 import { imageSizeAttrs } from './lib/image-size.mjs';
-import { phraseBreaks } from './lib/phrase-breaks.mjs';
+import { clauseBreaks, phraseBreaks } from './lib/phrase-breaks.mjs';
 import { autolinkArtists, parseEvents, renderArticleShortcodes } from '../LP/article-shortcodes.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -54,7 +54,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 51;
+const DETAIL_CSS_VERSION = 53;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -594,7 +594,8 @@ function addHtmlImageDimensions(html) {
 /* 記事本文の見出しだけに、ブラウザを問わず使える文節の折り返し位置を埋め込む。 */
 function addHeadingPhraseBreaks(html) {
   return String(html || '').replace(/<h([23])\b([^>]*)>([\s\S]*?)<\/h\1>/gi, (block, level, attrs, contents) => {
-    const processed = contents.replace(/(^|>)([^<]+)(?=<|$)/g, (_text, prefix, text) => `${prefix}${phraseBreaks(text)}`);
+    const processText = /<[^>]+>/.test(contents) ? phraseBreaks : clauseBreaks;
+    const processed = contents.replace(/(^|>)([^<]+)(?=<|$)/g, (_text, prefix, text) => `${prefix}${processText(text)}`);
     return `<h${level}${attrs}>${processed}</h${level}>`;
   });
 }
@@ -1216,7 +1217,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   });
 
   const { short: articleTitleShort, sub: articleTitleSub } = splitArticleTitle(L.title);
-  const articleTitleHtml = `<span class="article-title-short">${phraseBreaks(articleTitleShort)}</span>${articleTitleSub ? `<span class="article-title-sub">${phraseBreaks(articleTitleSub)}</span>` : ''}`;
+  const articleTitleHtml = `<span class="article-title-short">${clauseBreaks(articleTitleShort)}</span>${articleTitleSub ? `<span class="article-title-sub">${clauseBreaks(articleTitleSub)}</span>` : ''}`;
   const heroBlock = a.image
     ? `<header class="article-hero"${ratioAttr(a.heroRatio)}>
         <img ${dimensionAttrs(a.image)} src="/${String(a.image).replace(/^\//, '')}"${heroSrcsetAttr(a.image, '100vw', true)} alt="${esc(L.title)}" fetchpriority="high" decoding="async">

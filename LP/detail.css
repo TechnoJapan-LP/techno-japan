@@ -334,6 +334,10 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   font-size: .42em; line-height: 1.35; text-transform: none; letter-spacing: 0;
   color: var(--text); opacity: .9; word-break: keep-all; overflow-wrap: anywhere; text-wrap: balance;
 }
+.article-hero-overlay h1 .tj-cl-s, .article-detail h1 .tj-cl-s,
+.article-body h2 .tj-cl-m, .article-body h3 .tj-cl-m, .article-title-sub .tj-cl-l {
+  display: inline-block; max-width: 100%;
+}
 .article-chips { display: flex; gap: 10px; margin-bottom: 14px; }
 .article-chips .cat-pill {
   display: inline-flex; align-items: center; gap: 6px;

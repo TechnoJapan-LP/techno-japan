@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { phraseBreaks } from './lib/phrase-breaks.mjs';
+import { clauseBreaks, phraseBreaks } from './lib/phrase-breaks.mjs';
 
 const cases = new Map([
   ['野外テクノパーティTRANSCENDENCEで見た次世代ジェネレーションの可能性', '野外<wbr>テクノパーティ<wbr>TRANSCENDENCEで<wbr>見た<wbr>次世代<wbr>ジェネレーションの<wbr>可能性'],
@@ -14,4 +14,15 @@ for (const [input, expected] of cases) {
 }
 assert.equal(phraseBreaks('TRANSCENDENCE / festival'), 'TRANSCENDENCE / festival');
 assert.equal(phraseBreaks('日本&amp;音楽'), '日本&amp;音楽');
+
+const clauseCases = new Map([
+  ['東京・日の出町の森が、光とアートと音楽の別世界に変わる', '<span class="tj-clause tj-cl-m tj-cl-l">東京・日の<wbr>出町の<wbr>森が、</span><span class="tj-clause tj-cl-l">光と<wbr>アートと<wbr>音楽の<wbr>別世界に<wbr>変わる</span>'],
+  ['TRANSCENDENCEは、日本の新たなレイヴジェネレーションが創り上げたカッティングエッジなレイヴパーティだ。', '<span class="tj-clause tj-cl-s tj-cl-m tj-cl-l">TRANSCENDENCE<wbr>は、</span><span class="tj-clause">日本の<wbr>新たな<wbr>レイヴジェネレーションが<wbr>創り上げた<wbr>カッティングエッジな<wbr>レイヴパーティだ。</span>'],
+]);
+for (const [input, expected] of clauseCases) {
+  assert.equal(clauseBreaks(input), expected, input);
+  for (const clause of clauseBreaks(input).matchAll(/<span class="tj-clause">([\s\S]*?)<\/span>/g)) {
+    assert.ok(clause[1].replaceAll('<wbr>', '').length >= 4, clause[1]);
+  }
+}
 console.log(`✅ phraseBreaks ${cases.size} samples`);
