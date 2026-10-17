@@ -10277,3 +10277,16 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 - ユーザーが GitHub secret `GA4_SA_KEY`（サービスアカウント JSON 全文）を登録し、GA4 プロパティ 535755449 に閲覧者として追加したら `gh workflow run "Monthly popular"` を流して popular.json が生成されるか確認する。失敗したらログの HTTP 本文を見る（403=権限、400=プロパティ ID）。
 - popular.json は Pages の deploy で配信される。sw.js の扱いは既存の LP/data と同じ。
+
+## 2026-10-18 本番公開（第3便）: フェス詳細のスマホ余白・NEWS のジャンル順と MONTHLY POPULAR（GA4 稼働）
+
+### 実施
+- push ee1ebd98 → deploy / Publish pipeline 成功。ユーザーが GitHub secret `GA4_SA_KEY` を登録（2026-10-17 14:49Z）。`gh workflow run "Monthly popular"` → 初回は concurrency group `pages` で deploy と競合して cancelled、再実行で success。`LP/data/popular.json` を生成（25記事、1位 japan-festival-2026-october 279 views / 30日）。
+- 生成コミット e2f18b8 は GITHUB_TOKEN の push だったため deploy-pages が起動せず、`gh workflow run deploy-pages.yml` で手動配信。popular.yml の checkout に `token: secrets.GH_TOKEN` を追加（dbd30a03、この記録と一緒に push）。
+
+### 検証（本番）
+- /news.html?sort=popular（JA/EN）: 注記「過去30日の閲覧数順 · 更新 2026-10-17」、1位「2026年10月…11選」、2位 Labyrinth、3位 ONDO LAND。
+- フェス詳細 390px: hero→program 36px、FAQ 前 12+16px（denki-bodhisattva）。
+
+### 次の担当への注意
+- 毎日 03:23 JST に popular.json が更新され、変更があれば deploy される（PAT 修正の push 後から）。GA4 側の権限が切れると run が失敗するので Actions の通知を見る。
