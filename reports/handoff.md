@@ -10250,3 +10250,14 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意
 - 詳細ページの `body { margin: 0 }` は common.css 側。ハブのインラインリセットと重複するが害はない。
+## 2026-10-17 フェス詳細のスマホのセクション間余白を詰める（design/festival-spacing）
+
+### 実施
+- `LP/detail.css` ≤900px の `.festival-design-v2`: hero margin-bottom 80→36、program-section padding 8/16、`.detail-section` 44→20、`.festival-faq` margin-top 56→12、`.detail-section-label` margin-top 40→12、`.article-footer` margin/padding 8/8、ページ下余白 80→32。PC 不変。detail.css v56、cms.js プレビュー参照更新（Publish 経路）。
+
+### 検証
+- 390px headless: hero→program 80→36px、editions→FAQ 56+44+40→12+20+12、related→BACK 60+40→8+8。sawagi / denki-bodhisattva で目視。
+- `bash scripts/preflight.sh`: 「ハブページが JS 込みで描ける」のカーソル項目だけ落ちた（単独では成功、`cursor: retry` 1回）。他51件成功。push 時の pre-push hook で再実行される。
+
+### 次の担当への注意
+- カーソル検査は仮想時間と iframe の組み合わせで依然として不安定。落ちたら単独実行で確認する。
