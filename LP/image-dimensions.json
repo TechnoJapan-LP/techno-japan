@@ -943,6 +943,38 @@
     1920,
     1280
   ],
+  "images/articles/topia-2026-info-1792223023913.webp": [
+    1920,
+    1440
+  ],
+  "images/articles/topia-2026-info-1792223124320.webp": [
+    1920,
+    1280
+  ],
+  "images/articles/topia-2026-info-1792223251552.webp": [
+    1920,
+    1280
+  ],
+  "images/articles/topia-2026-info-1792223324364.webp": [
+    1920,
+    1280
+  ],
+  "images/articles/topia-2026-info-1792224303031.webp": [
+    815,
+    1086
+  ],
+  "images/articles/topia-2026-info-1792224416002.webp": [
+    1800,
+    1799
+  ],
+  "images/articles/topia-2026-info-1792224525964.webp": [
+    1920,
+    1280
+  ],
+  "images/articles/topia-2026-info.webp": [
+    1477,
+    1108
+  ],
   "images/articles/transcendence-1784447194373.webp": [
     963,
     1425
@@ -5247,6 +5279,134 @@
     240,
     160
   ],
+  "images/derivatives/card/articles/topia-2026-info--1c35f2e9-lg.webp": [
+    960,
+    720
+  ],
+  "images/derivatives/card/articles/topia-2026-info--1c35f2e9-md.webp": [
+    720,
+    540
+  ],
+  "images/derivatives/card/articles/topia-2026-info--1c35f2e9-sm.webp": [
+    480,
+    360
+  ],
+  "images/derivatives/card/articles/topia-2026-info--1c35f2e9-xs.webp": [
+    240,
+    180
+  ],
+  "images/derivatives/card/articles/topia-2026-info-1792223023913--d5e999b4-lg.webp": [
+    960,
+    720
+  ],
+  "images/derivatives/card/articles/topia-2026-info-1792223023913--d5e999b4-md.webp": [
+    720,
+    540
+  ],
+  "images/derivatives/card/articles/topia-2026-info-1792223023913--d5e999b4-sm.webp": [
+    480,
+    360
+  ],
+  "images/derivatives/card/articles/topia-2026-info-1792223023913--d5e999b4-xs.webp": [
+    240,
+    180
+  ],
+  "images/derivatives/card/articles/topia-2026-info-1792223124320--f544588e-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/articles/topia-2026-info-1792223124320--f544588e-md.webp": [
+    720,
+    480
+  ],
+  "images/derivatives/card/articles/topia-2026-info-1792223124320--f544588e-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/articles/topia-2026-info-1792223124320--f544588e-xs.webp": [
+    240,
+    160
+  ],
+  "images/derivatives/card/articles/topia-2026-info-1792223251552--f8994f99-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/articles/topia-2026-info-1792223251552--f8994f99-md.webp": [
+    720,
+    480
+  ],
+  "images/derivatives/card/articles/topia-2026-info-1792223251552--f8994f99-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/articles/topia-2026-info-1792223251552--f8994f99-xs.webp": [
+    240,
+    160
+  ],
+  "images/derivatives/card/articles/topia-2026-info-1792223324364--ab2eee99-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/articles/topia-2026-info-1792223324364--ab2eee99-md.webp": [
+    720,
+    480
+  ],
+  "images/derivatives/card/articles/topia-2026-info-1792223324364--ab2eee99-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/articles/topia-2026-info-1792223324364--ab2eee99-xs.webp": [
+    240,
+    160
+  ],
+  "images/derivatives/card/articles/topia-2026-info-1792224303031--3c033f46-lg.webp": [
+    720,
+    960
+  ],
+  "images/derivatives/card/articles/topia-2026-info-1792224303031--3c033f46-md.webp": [
+    540,
+    720
+  ],
+  "images/derivatives/card/articles/topia-2026-info-1792224303031--3c033f46-sm.webp": [
+    360,
+    480
+  ],
+  "images/derivatives/card/articles/topia-2026-info-1792224303031--3c033f46-xs.webp": [
+    180,
+    240
+  ],
+  "images/derivatives/card/articles/topia-2026-info-1792224416002--47093807-lg.webp": [
+    960,
+    959
+  ],
+  "images/derivatives/card/articles/topia-2026-info-1792224416002--47093807-md.webp": [
+    720,
+    720
+  ],
+  "images/derivatives/card/articles/topia-2026-info-1792224416002--47093807-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/articles/topia-2026-info-1792224416002--47093807-xs.webp": [
+    240,
+    240
+  ],
+  "images/derivatives/card/articles/topia-2026-info-1792224525964--eb67e0d7-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/articles/topia-2026-info-1792224525964--eb67e0d7-md.webp": [
+    720,
+    480
+  ],
+  "images/derivatives/card/articles/topia-2026-info-1792224525964--eb67e0d7-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/articles/topia-2026-info-1792224525964--eb67e0d7-xs.webp": [
+    240,
+    160
+  ],
   "images/derivatives/card/articles/transcendence--dc186527-lg.webp": [
     960,
     640
@@ -6565,6 +6725,54 @@
   ],
   "images/derivatives/card/festivals/colors-presents-soundcamp-flyer--3c5d19c3-xs.webp": [
     146,
+    240
+  ],
+  "images/derivatives/card/festivals/denki-bodhisattva--48d61732-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/festivals/denki-bodhisattva--48d61732-md.webp": [
+    720,
+    480
+  ],
+  "images/derivatives/card/festivals/denki-bodhisattva--48d61732-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/festivals/denki-bodhisattva--48d61732-xs.webp": [
+    240,
+    160
+  ],
+  "images/derivatives/card/festivals/denki-bodhisattva-2026-flyer--8663d16b-lg.webp": [
+    720,
+    960
+  ],
+  "images/derivatives/card/festivals/denki-bodhisattva-2026-flyer--8663d16b-md.webp": [
+    540,
+    720
+  ],
+  "images/derivatives/card/festivals/denki-bodhisattva-2026-flyer--8663d16b-sm.webp": [
+    360,
+    480
+  ],
+  "images/derivatives/card/festivals/denki-bodhisattva-2026-flyer--8663d16b-xs.webp": [
+    180,
+    240
+  ],
+  "images/derivatives/card/festivals/denki-bodhisattva-flyer--8663d16b-lg.webp": [
+    720,
+    960
+  ],
+  "images/derivatives/card/festivals/denki-bodhisattva-flyer--8663d16b-md.webp": [
+    540,
+    720
+  ],
+  "images/derivatives/card/festivals/denki-bodhisattva-flyer--8663d16b-sm.webp": [
+    360,
+    480
+  ],
+  "images/derivatives/card/festivals/denki-bodhisattva-flyer--8663d16b-xs.webp": [
+    180,
     240
   ],
   "images/derivatives/card/festivals/detox--7f2244f5-lg.webp": [
@@ -7943,21 +8151,53 @@
     192,
     240
   ],
-  "images/derivatives/card/festivals/sawagi-festival--6817730c-lg.webp": [
+  "images/derivatives/card/festivals/sangenjaya-art-music-festival--54c5c603-lg.webp": [
     960,
-    707
+    640
   ],
-  "images/derivatives/card/festivals/sawagi-festival--6817730c-md.webp": [
+  "images/derivatives/card/festivals/sangenjaya-art-music-festival--54c5c603-md.webp": [
     720,
-    530
+    480
   ],
-  "images/derivatives/card/festivals/sawagi-festival--6817730c-sm.webp": [
+  "images/derivatives/card/festivals/sangenjaya-art-music-festival--54c5c603-sm.webp": [
     480,
-    353
+    320
   ],
-  "images/derivatives/card/festivals/sawagi-festival--6817730c-xs.webp": [
+  "images/derivatives/card/festivals/sangenjaya-art-music-festival--54c5c603-xs.webp": [
     240,
-    177
+    160
+  ],
+  "images/derivatives/card/festivals/sangenjaya-art-music-festival-flyer--9f523477-lg.webp": [
+    768,
+    960
+  ],
+  "images/derivatives/card/festivals/sangenjaya-art-music-festival-flyer--9f523477-md.webp": [
+    576,
+    720
+  ],
+  "images/derivatives/card/festivals/sangenjaya-art-music-festival-flyer--9f523477-sm.webp": [
+    384,
+    480
+  ],
+  "images/derivatives/card/festivals/sangenjaya-art-music-festival-flyer--9f523477-xs.webp": [
+    192,
+    240
+  ],
+  "images/derivatives/card/festivals/sawagi-festival--e832e616-lg.webp": [
+    960,
+    641
+  ],
+  "images/derivatives/card/festivals/sawagi-festival--e832e616-md.webp": [
+    720,
+    481
+  ],
+  "images/derivatives/card/festivals/sawagi-festival--e832e616-sm.webp": [
+    480,
+    321
+  ],
+  "images/derivatives/card/festivals/sawagi-festival--e832e616-xs.webp": [
+    240,
+    160
   ],
   "images/derivatives/card/festivals/sawagi-festival-2026-flyer--3e45a4d6-lg.webp": [
     767,
@@ -8135,6 +8375,22 @@
     180,
     240
   ],
+  "images/derivatives/card/festivals/takarajima-beach-cleaning-party--56c0ddb9-lg.webp": [
+    960,
+    769
+  ],
+  "images/derivatives/card/festivals/takarajima-beach-cleaning-party--56c0ddb9-md.webp": [
+    720,
+    577
+  ],
+  "images/derivatives/card/festivals/takarajima-beach-cleaning-party--56c0ddb9-sm.webp": [
+    480,
+    385
+  ],
+  "images/derivatives/card/festivals/takarajima-beach-cleaning-party--56c0ddb9-xs.webp": [
+    240,
+    192
+  ],
   "images/derivatives/card/festivals/technogaoka--8bb78a00-lg.webp": [
     720,
     960
@@ -8199,21 +8455,53 @@
     180,
     240
   ],
-  "images/derivatives/card/festivals/topia--643756ef-lg.webp": [
+  "images/derivatives/card/festivals/topia--b3bfdd53-lg.webp": [
     960,
-    677
+    640
   ],
-  "images/derivatives/card/festivals/topia--643756ef-md.webp": [
+  "images/derivatives/card/festivals/topia--b3bfdd53-md.webp": [
     720,
-    507
+    480
   ],
-  "images/derivatives/card/festivals/topia--643756ef-sm.webp": [
+  "images/derivatives/card/festivals/topia--b3bfdd53-sm.webp": [
     480,
-    338
+    320
   ],
-  "images/derivatives/card/festivals/topia--643756ef-xs.webp": [
+  "images/derivatives/card/festivals/topia--b3bfdd53-xs.webp": [
     240,
-    169
+    160
+  ],
+  "images/derivatives/card/festivals/topia-2026-flyer--cfc5d69c-lg.webp": [
+    768,
+    960
+  ],
+  "images/derivatives/card/festivals/topia-2026-flyer--cfc5d69c-md.webp": [
+    576,
+    720
+  ],
+  "images/derivatives/card/festivals/topia-2026-flyer--cfc5d69c-sm.webp": [
+    384,
+    480
+  ],
+  "images/derivatives/card/festivals/topia-2026-flyer--cfc5d69c-xs.webp": [
+    192,
+    240
+  ],
+  "images/derivatives/card/festivals/topia-flyer--cfc5d69c-lg.webp": [
+    768,
+    960
+  ],
+  "images/derivatives/card/festivals/topia-flyer--cfc5d69c-md.webp": [
+    576,
+    720
+  ],
+  "images/derivatives/card/festivals/topia-flyer--cfc5d69c-sm.webp": [
+    384,
+    480
+  ],
+  "images/derivatives/card/festivals/topia-flyer--cfc5d69c-xs.webp": [
+    192,
+    240
   ],
   "images/derivatives/card/festivals/transcendence--0afab246-lg.webp": [
     960,
@@ -8911,6 +9199,18 @@
     1920,
     1248
   ],
+  "images/festivals/denki-bodhisattva-2026-flyer.webp": [
+    1920,
+    2560
+  ],
+  "images/festivals/denki-bodhisattva-flyer.webp": [
+    1920,
+    2560
+  ],
+  "images/festivals/denki-bodhisattva.webp": [
+    1920,
+    1280
+  ],
   "images/festivals/detox-flyer.webp": [
     1144,
     1430
@@ -9255,6 +9555,14 @@
     1920,
     1280
   ],
+  "images/festivals/sangenjaya-art-music-festival-flyer.webp": [
+    1920,
+    2399
+  ],
+  "images/festivals/sangenjaya-art-music-festival.webp": [
+    1920,
+    1280
+  ],
   "images/festivals/sawagi-festival-2026-flyer.webp": [
     1920,
     2402
@@ -9265,7 +9573,7 @@
   ],
   "images/festivals/sawagi-festival.webp": [
     1920,
-    1413
+    1282
   ],
   "images/festivals/snow-machine-japan-flyer.webp": [
     1080,
@@ -9303,6 +9611,10 @@
     1920,
     1280
   ],
+  "images/festivals/takarajima-beach-cleaning-party.webp": [
+    1920,
+    1538
+  ],
   "images/festivals/technogaoka-flyer.webp": [
     1752,
     2484
@@ -9319,9 +9631,17 @@
     1920,
     1280
   ],
+  "images/festivals/topia-2026-flyer.webp": [
+    1080,
+    1350
+  ],
+  "images/festivals/topia-flyer.webp": [
+    1080,
+    1350
+  ],
   "images/festivals/topia.webp": [
     1920,
-    1353
+    1280
   ],
   "images/festivals/transcendence-flyer.webp": [
     890,
