@@ -172,11 +172,17 @@ CURSOR_TEST_HTML = """<!doctype html><html><body data-detail-result="pending" da
 <iframe id="cursor-hub" src="/festivals.html"></iframe>
 <script>
 const runCursorTest = (frame, resultName) => {
-  frame.addEventListener('load', () => {
+  let loaded = false;
+  let started = false;
+  const maybeStart = () => {
+    if (started || !loaded) return;
     const win = frame.contentWindow;
     const doc = frame.contentDocument;
-    const deadline = Date.now() + 5000;
+    if (!doc || doc.readyState !== 'complete') return;
+    started = true;
+    let ticks = 0;
     const poll = setInterval(() => {
+      ticks++;
       const dots = doc.querySelectorAll('.cursor-dot');
       const rings = doc.querySelectorAll('.cursor-ring');
       doc.dispatchEvent(new win.MouseEvent('mousemove', {
@@ -184,9 +190,7 @@ const runCursorTest = (frame, resultName) => {
       }));
       const dotMoved = dots[0]?.style.left === '123px' && dots[0]?.style.top === '234px';
       const ringMoved = !!rings[0]?.style.left && !!rings[0]?.style.top;
-      if (!dotMoved || !ringMoved) {
-        if (Date.now() < deadline) return;
-      }
+      if ((!dotMoved || !ringMoved) && ticks < 50) return;
       clearInterval(poll);
       const coarsePointer = win.matchMedia('(hover: none) and (pointer: coarse)').matches;
       const ok = !coarsePointer && dots.length === 1 && rings.length === 1 && dotMoved && ringMoved;
@@ -195,7 +199,15 @@ const runCursorTest = (frame, resultName) => {
         `coarse=${coarsePointer},dots=${dots.length},rings=${rings.length},dotMoved=${dotMoved},ringMoved=${ringMoved}`;
       frame.remove();
     }, 200);
+  };
+  frame.addEventListener('load', () => {
+    loaded = true;
+    maybeStart();
   });
+  const readyPoll = setInterval(() => {
+    maybeStart();
+    if (started) clearInterval(readyPoll);
+  }, 50);
 };
 runCursorTest(document.getElementById('cursor-detail'), 'detailResult');
 runCursorTest(document.getElementById('cursor-hub'), 'hubResult');
@@ -627,23 +639,49 @@ def main():
             if en_fallback_value != "pass":
                 failures.append(f"en/venues.html: 英語フォールバックに失敗 — {en_fallback_value}")
 
-            cursor_dom, cursor_console = render(chrome, f"{base}{CURSOR_TEST_PATH}", args.budget)
-            detail_result = re.search(r'<body[^>]*data-detail-result="([^"]+)"', cursor_dom)
-            hub_result = re.search(r'<body[^>]*data-hub-result="([^"]+)"', cursor_dom)
-            detail_value = detail_result.group(1) if detail_result else "missing"
-            hub_value = hub_result.group(1) if hub_result else "missing"
+            cursor_url = f"{base}{CURSOR_TEST_PATH}"
+            cursor_budget = max(args.budget, 15000)
+            cursor_dom, cursor_console = render(chrome, cursor_url, cursor_budget)
+
+            def cursor_values(dom):
+                detail_result = re.search(r'<body[^>]*data-detail-result="([^"]+)"', dom)
+                hub_result = re.search(r'<body[^>]*data-hub-result="([^"]+)"', dom)
+                return (
+                    detail_result.group(1) if detail_result else "missing",
+                    hub_result.group(1) if hub_result else "missing",
+                )
+
+            detail_value, hub_value = cursor_values(cursor_dom)
+            if detail_value in ("fail", "pending") or hub_value in ("fail", "pending"):
+                print("cursor: retry")
+                cursor_dom, cursor_console = render(chrome, cursor_url, cursor_budget)
+                detail_value, hub_value = cursor_values(cursor_dom)
             print(f"Custom cursor: detail={detail_value}, hub-no-duplicate={hub_value}")
+
+            def common_js_network_error(stderr):
+                for line in stderr.splitlines():
+                    if "common.js" in line and ("ERR_" in line or "Failed to load" in line):
+                        return line.strip()
+                return ""
+
+            cursor_network_error = common_js_network_error(cursor_console)
             if detail_value != "pass":
                 detail = re.search(r'data-detail-result-detail="([^"]*)"', cursor_dom)
+                detail_text = detail.group(1) if detail else detail_value
+                if cursor_network_error:
+                    detail_text += f"; {cursor_network_error}"
                 failures.append(
                     "festivals/matricaria.html: カスタムカーソルの自動生成・移動に失敗 — "
-                    + (detail.group(1) if detail else detail_value)
+                    + detail_text
                 )
             if hub_value != "pass":
                 detail = re.search(r'data-hub-result-detail="([^"]*)"', cursor_dom)
+                detail_text = detail.group(1) if detail else hub_value
+                if cursor_network_error:
+                    detail_text += f"; {cursor_network_error}"
                 failures.append(
                     "festivals.html: 既存カーソルDOMとの重複防止・移動に失敗 — "
-                    + (detail.group(1) if detail else hub_value)
+                    + detail_text
                 )
 
             # 描画後に参照される画像が実際に取得できるか（JA/EN 全ハブ）。
