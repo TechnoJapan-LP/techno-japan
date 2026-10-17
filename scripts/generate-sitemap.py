@@ -27,7 +27,9 @@ STATIC_PAGES = [
     {"path": "/news.html", "priority": "0.9", "changefreq": "daily"},
     {"path": "/about.html", "priority": "0.5", "changefreq": "monthly"},
     {"path": "/submit.html", "priority": "0.5", "changefreq": "monthly"},
+    {"path": "/writers.html", "priority": "0.5", "changefreq": "monthly"},
     {"path": "/en/submit.html", "priority": "0.5", "changefreq": "monthly"},
+    {"path": "/en/writers.html", "priority": "0.5", "changefreq": "monthly"},
     # EN ハブは 2026-09-15 まで submit だけが収録され、入口となる6枚が
     # sitemap に申告されていなかった（EN詳細264件は収録済み）。
     {"path": "/en/index.html", "priority": "0.9", "changefreq": "daily"},

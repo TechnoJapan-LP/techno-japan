@@ -10290,3 +10290,18 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意
 - 毎日 03:23 JST に popular.json が更新され、変更があれば deploy される（PAT 修正の push 後から）。GA4 側の権限が切れると run が失敗するので Actions の通知を見る。
+
+## 2026-10-18 APPLY / WRITER の言語切替（スマホのメニューに追加、WRITER の英語版を新設）
+
+### 実施
+- 原因: submit.html / writers.html の `.nav-overlay` に `.nav-lang` が無く（他ハブにはある）、スマホでは上部の切替も隠れるため切替不能だった。writers.html は EN ページ自体が無く PC でも「JA」のみ。以前からの状態（履歴 6 コミットとも overlay に nav-lang 無し）。
+- `LP/submit.html` と `LP/writers.html` の overlay に JA/EN 切替を追加（enHubFromJa が EN 版に差し替える文字列と同一）。writers.html の上部にも JA / EN。
+- `scripts/build-detail-pages.mjs`: EN_PAGES に writers.html を追加し、`EN_PAGE_TEXT['writers.html']` の対訳表で本文を置換（見つからない JA 文字列があればビルドを止める）。EN の meta description / hreflang / `_next`（/en/writers.html?sent=1）。WRITER リンクを lang 対応（/en/writers.html）。sitemap に /en/writers.html。
+- `scripts/check_mobile_language_toggles.mjs` に submit / writers の JA/EN を追加（32件）。
+
+### 検証
+- 390px / 1440px headless: 4ページとも header と menu に JA/EN があり、menu のリンクは elementFromPoint で押せる。`check_mobile_language_toggles` 32/32。
+- `bash scripts/preflight.sh` 全52件成功。英訳は handoff の上の会話でユーザーに提示済み（修正依頼あれば `EN_PAGE_TEXT` を直す）。
+
+### 次の担当への注意
+- writers.html の日本語本文を変えたら `EN_PAGE_TEXT['writers.html']` も直すこと（ビルドが止まって気づける）。

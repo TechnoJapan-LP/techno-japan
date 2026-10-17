@@ -14,6 +14,7 @@ const root = path.resolve(new URL('..', import.meta.url).pathname);
 const widths = [375, 390];
 const pages = [
   '/', '/news.html', '/festivals.html', '/artists.html', '/venues.html',
+  '/submit.html', '/writers.html', '/en/submit.html', '/en/writers.html',
   '/festivals/matricaria.html',
   '/en/index.html', '/en/news.html', '/en/festivals.html', '/en/artists.html',
   '/en/venues.html', '/en/festivals/matricaria.html',

@@ -893,7 +893,7 @@ function navHtml(lang, altHref) {
   <a href="${navLink(lang, 'venues.html')}">VENUES</a>
   <a href="${navLink(lang, 'about.html')}">ABOUT</a>
   <a href="${lang === 'en' ? '/en/submit.html' : '/submit.html'}">APPLY</a>
-  <a href="/writers.html">WRITER</a>
+  <a href="${lang === 'en' ? '/en/writers.html' : '/writers.html'}">WRITER</a>
 ${toggle ? `  ${toggle}\n` : ''}</div>`;
 }
 
@@ -911,7 +911,7 @@ function footerHtml(lang) {
       <a href="${navLink(lang, 'venues.html')}">VENUES</a>
       <a href="${navLink(lang, 'about.html')}">ABOUT</a>
       <a href="${submissionHref}">${submissionLabel}</a>
-      <a href="/writers.html">WRITER</a>
+      <a href="${lang === 'en' ? '/en/writers.html' : '/writers.html'}">WRITER</a>
     </div>
     <div class="footer-copy">&copy; 2025 TECHNO JAPAN. ALL RIGHTS RESERVED.</div>
   </div>
@@ -2248,10 +2248,12 @@ function hubLinkList(items, dirName, labelFor) {
    置換のほうが確実で、JA を直せば EN が自動追随する（二重管理が起きない）。 */
 
 // EN 版が実在するページ。ここに無いものは JA を指したままにする（404 を作らない）。
-const EN_PAGES = new Set(['index.html', 'about.html', 'submit.html', 'festivals.html', 'artists.html', 'venues.html', 'news.html']);
+const EN_PAGES = new Set(['index.html', 'about.html', 'submit.html', 'writers.html', 'festivals.html', 'artists.html', 'venues.html', 'news.html']);
 
 // EN ハブの meta description（JA は日英併記なので英語のみに差し替える）
 const EN_HUB_DESC = {
+  'submit.html': "Submit a techno or underground electronic music festival or event held in Japan for consideration by Techno Japan. Listing is free of charge.",
+  'writers.html': "Write for TECHNO JAPAN — report on Japan's underground dance music scene from the perspective of someone who is there.",
   'festivals.html': "Techno, house and open-air festivals across Japan. Browse by date, region and genre — the definitive guide to Japan's electronic music festivals.",
   'artists.html': "DJs and artists shaping Japan's underground techno and house scene. Profiles, genres and festival appearances.",
   'venues.html': "Clubs, warehouses and music bars across Japan. The venues that define the country's underground electronic music scene.",
@@ -2266,6 +2268,50 @@ const EN_HUB_TEXT = [
   ['過去30日の閲覧数順 · 更新', 'Ranked by views over the last 30 days · updated'],
   ['集計データを準備中です（過去30日の閲覧数で並びます）', 'Counting in progress — ranked by views over the last 30 days'],
 ];
+
+const EN_PAGE_TEXT = {
+  'submit.html': [
+    ['Techno Japanへのフェスティバル・イベント掲載申請。掲載は無料です。', 'Submit a festival or event for consideration by Techno Japan. Listing is free of charge.'],
+    ['本文へ移動', 'Skip to content'],
+    ['Techno Japanでは、日本国内で開催されるテクノおよびアンダーグラウンドなエレクトロニックミュージックのフェスティバル・イベント情報を掲載しています。掲載は無料です。下記フォームよりご申請ください。', 'Techno Japan lists techno and underground electronic music festivals and events held in Japan. Listing is free of charge. Please apply using the form below.'],
+    ['掲載について', 'About listings'],
+    ['掲載するフェスティバル・イベントは、編集部がメディアの方向性に照らして判断しています。掲載の考え方は', 'The editorial team reviews festival and event listings against the direction of the media. For our approach, see '],
+    ['をご覧ください。', '.'],
+    ['掲載は無料です。掲載に伴う費用は一切発生しません', 'Listing is free. There is no charge for publication.'],
+    ['申請いただいたすべてのイベントの掲載をお約束するものではありません', 'We cannot guarantee that every submitted event will be listed.'],
+    ['掲載可否の理由について、個別のご回答は行っておりません', 'We do not provide individual explanations for listing decisions.'],
+    ['提供いただいた情報は、掲載時に編集部で編集する場合があります', 'The editorial team may edit the information provided when publishing it.'],
+    ['掲載後の情報修正・削除のご依頼は、フォーム記載の連絡先より承ります', 'For corrections or removal after publication, please use the contact details in the form.'],
+    ['掲載の目安', 'What we list'],
+    ['テクノ、ハウス、ミニマル、アンビエント、エクスペリメンタルなど、エレクトロニックミュージックを軸としたフェスティバル・イベントを対象としています。', 'We focus on festivals and events centered on electronic music, including techno, house, minimal, ambient and experimental music.'],
+    ['掲載までの流れ', 'How it works'],
+    ['フォームより申請', 'Submit the form'],
+    ['編集部で内容を確認', 'The editorial team reviews your information'],
+    ['掲載が決定した場合、サイトに公開されます', 'If approved, your event will be published on the site'],
+    ['(お急ぎの場合は備考欄にその旨をお書きください)', '(If your request is urgent, please note that in the comments.)'],
+    ['申請フォームへ', 'Open application form'],
+    ['掲載後の情報更新、ラインナップの追加発表なども随時受け付けています。', 'We also accept updates after publication, including newly announced lineups.'],
+    ['同じフォームよりご連絡ください。', 'Please contact us using the same form.'],
+  ],
+  'writers.html': [
+    ['応募を受け付けました。編集部から連絡します。', "Thanks — we've received your application. The editors will be in touch."],
+    ['TECHNO JAPAN のライター募集', 'Write for TECHNO JAPAN'],
+    ['日本のアンダーグラウンドなダンスミュージックの現場を、現場にいる人の目で書き残したいと考えています。', "We want to document Japan's underground dance music scene through the eyes of the people who are actually there."],
+    ['レポート、インタビュー、ガイド、短報を募集しています。', "We're looking for reports, interviews, guides and short news pieces."],
+    ['TECHNO JAPAN で書くと', 'What you get'],
+    ['TECHNO JAPAN のフォロワー（ダンスミュージックが好きな人たち）に、記事を直接届けられる', "Your piece reaches TECHNO JAPAN's followers — people who love dance music — directly"],
+    ['署名記事として残り、筆者ページに蓄積される', "It's published under your byline and collected on your writer page"],
+    ['日本語と英語の2言語で公開される。英語版は編集部が用意する', 'Published in both Japanese and English; the editors prepare the translation'],
+    ['記事がフェス・アーティスト・会場のデータベースと自動でつながり、関連ページから読まれ続ける', 'Articles link automatically to the festival, artist and venue database, so they keep being read from related pages'],
+    ['Google ニュースの索引に載っている媒体で、ウェブ検索からも読まれる', 'TECHNO JAPAN is indexed by Google News and found through web search'],
+    ['校正・写真のレイアウト・検索向けの調整は編集部が行う。書くことに集中できる', 'Editing, photo layout and search optimisation are handled by the editors — you focus on writing'],
+    ['公開時に Instagram / Threads で告知する', 'Every piece is announced on Instagram and Threads'],
+    ['書いている人', 'Our writers'],
+    ['ライターに応募する', 'Apply to write'],
+    ['過去の執筆記事', 'Previous articles (links)'],
+    ['SNS アカウント', 'Social accounts'],
+  ],
+};
 
 /* about.html の STATEMENT を EN 版で英語にするための対訳。
    **en/about.html は writeEnHub が JA から毎ビルド生成する。**手で英語化しても
@@ -2346,7 +2392,7 @@ function enHubFromJa(html, page) {
   if (links) s = replaceHubLinksBlock(s, links.marker, links.html, `en/${page}`);
 
   // 内部リンク: EN 版があるページだけ /en/ へ。相対・絶対の両表記に対応する。
-  s = s.replace(/href="\/?((?:index|news|festivals|artists|venues|about|submit)\.html)"/g,
+  s = s.replace(/href="\/?((?:index|news|festivals|artists|venues|about|submit|writers)\.html)"/g,
     (m, p) => (EN_PAGES.has(p) ? `href="/en/${p}"` : m));
   // EN 版が無いページ（index）は相対表記だと /en/index.html を指してしまう。
   // ルート相対に正規化して JA トップへ確実に戻す。
@@ -2374,6 +2420,19 @@ function enHubFromJa(html, page) {
       s = s.split(ja).join(en);
     }
   }
+
+  const pageText = EN_PAGE_TEXT[page];
+  if (pageText) {
+    for (const [ja, en] of pageText) {
+      const occurrences = s.split(ja).length - 1;
+      if (occurrences !== 1) throw new Error(`en/${page}: 置換元の出現数が${occurrences}件（1件必須）: ${ja.slice(0, 24)}…`);
+      s = s.replace(ja, en);
+    }
+  }
+  s = s.split('メニューを開く').join('Open menu');
+  s = s.split('メニューを閉じる').join('Close menu');
+  s = s.split('本文へ移動').join('Skip to content');
+  if (page === 'writers.html') s = s.replace('https://techno-japan.media/writers.html?sent=1', 'https://techno-japan.media/en/writers.html?sent=1');
 
   // hreflang: JA 側の3行を EN 視点の3行へ「置換」する。
   // 追記にすると JA から引き継いだ分と二重になる（6本出る）。
@@ -2812,7 +2871,7 @@ ${FAVICON_TAGS}
 
   // JA ハブを正してから EN を作る。順序が逆だと、直す前の JA から EN が生まれる。
   // 静的リンクの差し替え（上の hubCounts）も EN へ引き継ぐため、この位置に置く。
-  const HUBS = ['index.html', 'about.html', 'festivals.html', 'artists.html', 'venues.html', 'news.html'];
+  const HUBS = ['index.html', 'about.html', 'submit.html', 'festivals.html', 'artists.html', 'venues.html', 'news.html', 'writers.html'];
   const jaFixed = HUBS.filter(fixJaHub);
   const enWritten = HUBS.filter(writeEnHub);
 
