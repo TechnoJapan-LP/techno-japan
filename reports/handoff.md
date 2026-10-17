@@ -10237,3 +10237,16 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 公開時は cms.js を触っているので Publish pipeline を流す。
 - 追記2: 詳細ページ（記事・フェス・アーティスト・会場）はリセット CSS が無く、ブラウザ標準の `body { margin: 8px }` が残っていてスマホのヘッダーが左右 8px ずつ内側だった。`LP/common.css` の `body` に `margin: 0` を追加（common.css v38、cms.js プレビュー参照も更新）。TOP の `.media-intro` のスマホ上余白 120px → 36px（スマホのナビは sticky で文書内にあるため 120px は不要だった）。
 - 最終: `bash scripts/preflight.sh` 全52件成功（2026-10-17、検査スクリプト `check_article_links.mjs` の修正込み）。390px headless: フェス写真 left 0 / width 390・上余白 0、ナビ left 0 / width 390（記事・フェス・アーティストで確認）。
+
+## 2026-10-17 本番公開（第2便）: フェス写真のスマホ全幅・body margin 0・TOP 導入部の余白・検索モーダル
+
+### 実施
+- design/festival-hero を main に取り込み push（f4937d0e）。deploy-pages 成功、Publish pipeline 成功（run 39036957456）。
+- push 前の preflight で「?v の上げ忘れ」が落ちた（ブランチ内で detail.css / cms.js を版上げ後にもう一度変更）。detail.css v55 / cms.js v146 に上げて再 push で全52件成功。
+
+### 検証（本番、TJAudit UA、390px）
+- フェス詳細: ナビ left 0 / width 390、写真 left 0 / width 390。TOP: ナビ 0 / 390。common.css v38・detail.css v55 配信。
+- CMS の中身は実機未確認（パスワードが要る）。ユーザーに Cmd+Shift+R を依頼。
+
+### 次の担当への注意
+- 詳細ページの `body { margin: 0 }` は common.css 側。ハブのインラインリセットと重複するが害はない。
