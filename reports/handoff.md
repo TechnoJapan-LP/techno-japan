@@ -10229,8 +10229,11 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 検証
 - 390px headless: 写真 left 0 / width 390、横スクロールなし（scrollWidth 390）。目視済み。
-- `bash scripts/preflight.sh` 全52件成功。
+- 追記: ユーザー指示でナビ下の余白も無くし、記事ページと同じく写真をページ最上部から（`.festival-design-v2:has(.detail-hero-image:not(.detail-hero-gradient)) { padding-top: 0 }`、写真の無いページは 88px のまま）。
+- `bash scripts/preflight.sh`: 1回目は「記事の自動リンクと更新日」が落ちた。原因は当日公開された新記事 topia-2026-info の `updatedAt` が `date` と同じ（公開日に更新）で、検査が「updatedAt があれば dateModified ≠ datePublished」と決めつけていたこと（pipeline 生成物でも同じ）。`scripts/check_article_links.mjs` を「期待値＝isoDateTime(updatedAt || date) と一致」の厳密比較に修正。修正後の全件結果はこのエントリの末尾に記す。
 - iPhone 実機未確認。
 
 ### 次の担当への注意
 - 公開時は cms.js を触っているので Publish pipeline を流す。
+- 追記2: 詳細ページ（記事・フェス・アーティスト・会場）はリセット CSS が無く、ブラウザ標準の `body { margin: 8px }` が残っていてスマホのヘッダーが左右 8px ずつ内側だった。`LP/common.css` の `body` に `margin: 0` を追加（common.css v38、cms.js プレビュー参照も更新）。TOP の `.media-intro` のスマホ上余白 120px → 36px（スマホのナビは sticky で文書内にあるため 120px は不要だった）。
+- 最終: `bash scripts/preflight.sh` 全52件成功（2026-10-17、検査スクリプト `check_article_links.mjs` の修正込み）。390px headless: フェス写真 left 0 / width 390・上余白 0、ナビ left 0 / width 390（記事・フェス・アーティストで確認）。

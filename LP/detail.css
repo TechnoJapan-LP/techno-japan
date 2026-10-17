@@ -899,6 +899,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 
 @media (max-width: 900px) {
   .festival-design-v2 { padding: 88px 24px 80px; }
+  .festival-design-v2:has(.detail-hero-image:not(.detail-hero-gradient)) { padding-top: 0; }
   .festival-design-v2 .festival-detail-inner { max-width: none; }
   .festival-design-v2 .detail-hero-image {
     width: 100vw;

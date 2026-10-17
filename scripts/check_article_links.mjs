@@ -24,6 +24,10 @@ const files = liveArticles.map((article) => ({
 const failures = [];
 const check = (condition, message) => { if (!condition) failures.push(message); };
 let totalLinks = 0;
+const isoDateTime = (value) => {
+  const date = String(value || '').trim();
+  return /^\d{4}-\d{2}-\d{2}$/.test(date) ? `${date}T00:00:00+09:00` : date;
+};
 check(!!derivativesMatch, 'image-derivatives.js: 対応表を読み取れません');
 const attrValue = (tag, name) => tag.match(new RegExp(`\\b${name}\\s*=\\s*(["'])(.*?)\\1`, 'i'))?.[2] || '';
 const imageTags = (html) => [...html.matchAll(/<img\b[^>]*>/gi)].map(([tag]) => tag);
@@ -85,9 +89,9 @@ for (const { article, file } of files) {
     .find((item) => item?.['@type'] === 'NewsArticle');
   check(!!ld, `${article.id}: NewsArticle JSON-LDがありません`);
   if (ld) {
-    const published = String(ld.datePublished || '');
     const modified = String(ld.dateModified || '');
-    check(article.updatedAt ? modified !== published : modified === published, `${article.id}: dateModified が期待値と異なります`);
+    const expected = isoDateTime(article.updatedAt || article.date);
+    check(modified === expected, `${article.id}: dateModified が期待値と異なります`);
   }
   console.log(`${article.id}: ${links.length} link(s)`);
 }
