@@ -2263,6 +2263,8 @@ const EN_HUB_DESC = {
 // 本文に残る日本語の固定文言（データ由来の日本語は対象外）
 const EN_HUB_TEXT = [
   ['APPLY', 'APPLY'],
+  ['過去30日の閲覧数順 · 更新', 'Ranked by views over the last 30 days · updated'],
+  ['集計データを準備中です（過去30日の閲覧数で並びます）', 'Counting in progress — ranked by views over the last 30 days'],
 ];
 
 /* about.html の STATEMENT を EN 版で英語にするための対訳。

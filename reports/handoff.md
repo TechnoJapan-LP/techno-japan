@@ -10261,3 +10261,19 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意
 - カーソル検査は仮想時間と iframe の組み合わせで依然として不安定。落ちたら単独実行で確認する。
+
+## 2026-10-17 NEWS: ジャンル順の変更と「MONTHLY POPULAR」（GA4 の過去30日閲覧数）
+
+### 実施
+- `LP/news.html`: カテゴリ順を ALL・GUIDE・FESTIVAL&RAVE・REPORT・NEWS・COLUMN・INTERVIEW に。「Most Popular」→「MONTHLY POPULAR」。並びは `/data/popular.json`（`{generatedAt, days, source, items:[{id, views}]}`）の views 順、無ければ日付順＋注記「集計データを準備中です」。従来の `a.views` 依存（どの記事にも無く、実質無効だった）を廃止。EN は enHubFromJa（build-detail-pages.mjs に注記の英訳を追加）。
+- `scripts/fetch-popular.mjs`: サービスアカウント JSON（env `GA4_SA_KEY`）で JWT→アクセストークン→GA4 Data API runReport（property 535755449、30daysAgo〜yesterday、pagePath × screenPageViews）。`/articles/<id>.html` と `/en/articles/<id>.html` を id で合算し `LP/data/popular.json` に書く。env 無しは exit 0 で何もしない。npm 依存なし。
+- `.github/workflows/popular.yml`: 毎日 18:23 UTC（03:23 JST）＋手動。変更があれば `chore: update monthly popular (GA4)` をコミット（[skip ci] なし＝deploy される）。concurrency group `pages`。
+
+### 検証
+- headless 1440px: JA/EN ともタブ順・ラベル・注記を確認。仮の popular.json を置くと Labyrinth→Synapse→Topia の順に、外すと日付順に戻ることを確認（仮ファイルは削除済み）。
+- `node scripts/fetch-popular.mjs --dry`（env 無し）: exit 0。GA4 への実通信は**未検証**（鍵が未登録）。
+- `bash scripts/preflight.sh` 全52件成功。
+
+### 次の担当への注意・判断待ち
+- ユーザーが GitHub secret `GA4_SA_KEY`（サービスアカウント JSON 全文）を登録し、GA4 プロパティ 535755449 に閲覧者として追加したら `gh workflow run "Monthly popular"` を流して popular.json が生成されるか確認する。失敗したらログの HTTP 本文を見る（403=権限、400=プロパティ ID）。
+- popular.json は Pages の deploy で配信される。sw.js の扱いは既存の LP/data と同じ。

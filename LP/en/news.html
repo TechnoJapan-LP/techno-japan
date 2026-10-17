@@ -194,6 +194,11 @@ html.tj-page-leaving body { opacity: 0; transition: opacity .18s ease; }
   transform-origin: left center; animation: sortUnderline .3s cubic-bezier(.16,1,.3,1) both;
 }
 @keyframes sortUnderline { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.popular-note {
+  margin: 2px 0 12px;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .04em;
+  opacity: .58;
+}
 
 /* ===================== ARTICLE FEED BELOW ===================== */
 
@@ -672,8 +677,9 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
   </div>
   <div class="sort-tabs">
     <button class="sort-tab active" data-sort="latest">Latest</button>
-    <button class="sort-tab" data-sort="popular">Most Popular</button>
+    <button class="sort-tab" data-sort="popular">MONTHLY POPULAR</button>
   </div>
+  <div class="popular-note" id="popular-note" hidden></div>
   <div class="category-nav" id="category-nav"></div>
   <div class="feed-grid" id="feed-grid">
     <!-- STATIC_LINKS:ARTICLES:START -->
@@ -957,6 +963,9 @@ let currentSort = 'latest';
 let currentCategory = 'ALL';
 let currentTag = null;
 let feedVisible = 4;
+let popularViews = new Map();
+let popularGeneratedAt = '';
+let hasPopularData = false;
 const NEWS_HUB_STATE_KEY = 'tj:news-hub-state:v1';
 const NEWS_QUERY_KEYS = ['sort', 'category', 'tag', 'limit'];
 
@@ -1053,10 +1062,46 @@ function tjStoryTitle(title) {
 
 /* ========== SORT ARTICLES ========== */
 function getSorted(arr) {
-  if (currentSort === 'latest') {
-    return [...arr].sort((a, b) => new Date(b.date) - new Date(a.date));
+  const byDate = (a, b) => new Date(b.date) - new Date(a.date);
+  if (currentSort === 'latest' || !hasPopularData) return [...arr].sort(byDate);
+  return [...arr].sort((a, b) => {
+    const viewsDiff = (popularViews.get(b.id) || 0) - (popularViews.get(a.id) || 0);
+    return viewsDiff || byDate(a, b);
+  });
+}
+
+function renderPopularNote() {
+  const note = document.getElementById('popular-note');
+  if (!note) return;
+  if (currentSort !== 'popular') {
+    note.hidden = true;
+    return;
   }
-  return [...arr].sort((a, b) => (b.views || 0) - (a.views || 0));
+  note.hidden = false;
+  note.textContent = hasPopularData
+    ? `Ranked by views over the last 30 days · updated ${popularGeneratedAt}`
+    : 'Counting in progress — ranked by views over the last 30 days';
+}
+
+async function loadPopularData() {
+  try {
+    const response = await fetch('/data/popular.json');
+    if (!response.ok) return;
+    const payload = await response.json();
+    const items = Array.isArray(payload?.items) ? payload.items : [];
+    const entries = items.filter(item => item && item.id && Number.isFinite(Number(item.views)));
+    if (!entries.length) return;
+    popularViews = new Map(entries.map(item => [String(item.id), Number(item.views)]));
+    popularGeneratedAt = /^\d{4}-\d{2}-\d{2}/.test(String(payload.generatedAt || ''))
+      ? String(payload.generatedAt).slice(0, 10)
+      : '';
+    hasPopularData = true;
+  } catch (_) {
+    // popular.json is optional until the GitHub Action generates it.
+  } finally {
+    renderPopularNote();
+    if (currentSort === 'popular') renderFeed();
+  }
 }
 
 /* ========== RENDER FEATURED STORIES ========== */
@@ -1114,7 +1159,7 @@ function renderFeaturedNews() {
 function renderCategoryNav() {
   const nav = document.getElementById('category-nav');
   const previousScrollLeft = nav ? nav.scrollLeft : 0;
-  const cats = ['ALL','REPORT','COLUMN','INTERVIEW','NEWS','GUIDE','FESTIVAL&RAVE'];
+  const cats = ['ALL','GUIDE','FESTIVAL&RAVE','REPORT','NEWS','COLUMN','INTERVIEW'];
   nav.innerHTML = cats.map(c =>
     `<button class="cat-btn ${currentCategory === c ? 'active' : ''}" data-cat="${c}">${c}</button>`
   ).join('');
@@ -1134,6 +1179,7 @@ function renderCategoryNav() {
 
 /* ========== RENDER FEED ========== */
 function renderFeed() {
+  renderPopularNote();
   const sorted = getSorted(ARTICLES);
   let items;
   if (currentTag) {
@@ -1260,6 +1306,7 @@ observeReveals();
 
 /* ========== INIT ========== */
 initNewsHero();
+loadPopularData();
 if (readNewsStateFromUrl()) {
   try {
     document.querySelectorAll('.sort-tab').forEach((tab) => tab.classList.toggle('active', tab.dataset.sort === currentSort));
