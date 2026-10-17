@@ -10172,3 +10172,22 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - 検査が落ちたら先に `ps -eo pid,etime,command | grep headless` で前回の残骸を確認する（2026-10-16 に23時間残っていた）。
+
+## 2026-10-17 本番公開: 帯・TOP 見出し・戻るリンク削除・記事の全幅ヒーロー（xl/xxl）・見出しと要約の改行
+
+### 実施
+- design/techno-fx（f7f5e9c1〜ad87f8e3）を main に取り込み、push（cb45c60d）。deploy-pages 成功。
+- cms.js を触っているので `gh workflow run "Publish pipeline"` を実行 → success（run 39005192735、生成物コミット 15abfa4e）。
+- push 前の preflight は4回落ちた（カーソル検査×2・フェス計測×1・リモート更新による拒否×1）。落ちた検査3本を条件待ちに直した（02400509 / cb45c60d）。5回目で全51件成功。
+
+### 検証
+- 本番 HTML（TJAudit UA）: TOP に `.marquee-event` 10件、記事に `detail.css?v=53` と `xxl.webp`、上部の戻るリンク無し（末尾の1件のみ）。
+- 本番 390px headless: transcendence-2025-report のヒーロー全幅・見出しの文節折り、TOP の帯（NOW ON 点灯）を目視。
+- CMS: `cms.html?cb=` で cms.js v144 が配信されることを確認。パスワード入力が要るため、画面の中身は**実機未確認**（ユーザーに Cmd+Shift+R と動作確認を依頼）。
+- iPhone 実機: 未確認。
+
+### 次の担当への注意・判断待ち
+- 記事ヒーローの元画像が 1440px 未満の3本（forest-sound-camp / bondisco / otsukimi）は入れ直しが必要。CMS の保存上限（1920px）引き上げは未着手（Publish 経路）。
+- TOP / NEWS のカード見出しの文節折りは未対応。
+- 開催中のフェスが TOP の UPCOMING EVENTS に残る副作用は、ユーザー了承済みのまま公開。
+- 応募通知: ライター応募は formsubmit → press@（稼働中）。フェス申請の Google フォームは「新しい回答のメール通知」をオン（2026-10-17、宛先はフォーム所有者の Gmail）。未読の申請が4件あった。
