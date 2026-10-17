@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-10-17T05:12:13.771Z",
-  "count": 1431,
+  "_generatedAt": "2026-10-17T09:25:17.401Z",
+  "count": 1470,
   "items": [
     {
       "EDITION_ID": "waifu-2026",
@@ -7114,7 +7114,7 @@
     },
     {
       "EDITION_ID": "topia-2025",
-      "ACT_LABEL": "Mars89",
+      "ARTIST_ID": "mars89",
       "SET_TYPE": "dj",
       "SORT": "4"
     },
@@ -7543,6 +7543,240 @@
       "ACT_LABEL": "Yuta USHIMADO",
       "SET_TYPE": "dj",
       "SORT": "30"
+    },
+    {
+      "EDITION_ID": "denki-bodhisattva-2026",
+      "ARTIST_ID": "dj-maria",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "denki-bodhisattva-2026",
+      "ACT_LABEL": "DUSTVOXX",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "denki-bodhisattva-2026",
+      "ACT_LABEL": "emptyworldoldheaven",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "denki-bodhisattva-2026",
+      "ARTIST_ID": "eve",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "denki-bodhisattva-2026",
+      "ACT_LABEL": "FEIYI",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "denki-bodhisattva-2026",
+      "ACT_LABEL": "HALU",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "denki-bodhisattva-2026",
+      "ACT_LABEL": "Hinode",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "denki-bodhisattva-2026",
+      "ACT_LABEL": "j!nx",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "denki-bodhisattva-2026",
+      "ACT_LABEL": "JXXNXCXXT",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "denki-bodhisattva-2026",
+      "ACT_LABEL": "kalima",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "denki-bodhisattva-2026",
+      "ACT_LABEL": "Manis Devours",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "denki-bodhisattva-2026",
+      "ARTIST_ID": "mars89",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "denki-bodhisattva-2026",
+      "ARTIST_ID": "mayudepth",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "denki-bodhisattva-2026",
+      "ACT_LABEL": "Mt.Chori",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "denki-bodhisattva-2026",
+      "ACT_LABEL": "Neutran",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "denki-bodhisattva-2026",
+      "ACT_LABEL": "Rick Shinmi",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
+      "EDITION_ID": "denki-bodhisattva-2026",
+      "ACT_LABEL": "SENAIDA",
+      "SET_TYPE": "dj",
+      "SORT": "17"
+    },
+    {
+      "EDITION_ID": "denki-bodhisattva-2026",
+      "ACT_LABEL": "SUEPON",
+      "SET_TYPE": "dj",
+      "SORT": "18"
+    },
+    {
+      "EDITION_ID": "denki-bodhisattva-2026",
+      "ACT_LABEL": "TEI TEI",
+      "SET_TYPE": "dj",
+      "SORT": "19"
+    },
+    {
+      "EDITION_ID": "denki-bodhisattva-2026",
+      "ACT_LABEL": "the2$",
+      "SET_TYPE": "dj",
+      "SORT": "20"
+    },
+    {
+      "EDITION_ID": "denki-bodhisattva-2026",
+      "ACT_LABEL": "URUHARA",
+      "SET_TYPE": "dj",
+      "SORT": "21"
+    },
+    {
+      "EDITION_ID": "denki-bodhisattva-2026",
+      "ARTIST_ID": "yellowuhuru",
+      "SET_TYPE": "dj",
+      "SORT": "22"
+    },
+    {
+      "EDITION_ID": "topia-2026",
+      "ACT_LABEL": "Baptiste Schaller",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "topia-2026",
+      "ACT_LABEL": "etheri",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "topia-2026",
+      "ACT_LABEL": "Evian Christ",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "topia-2026",
+      "ARTIST_ID": "feline",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "topia-2026",
+      "ACT_LABEL": "Frog 3",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "topia-2026",
+      "ACT_LABEL": "Fruit Cake",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "topia-2026",
+      "ACT_LABEL": "Vís",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "topia-2026",
+      "ACT_LABEL": "Pointhope",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "detox-2026",
+      "ACT_LABEL": "E.O.U",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "detox-2026",
+      "ACT_LABEL": "TAIHEI",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "detox-2026",
+      "ACT_LABEL": "CPB",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "detox-2026",
+      "ACT_LABEL": "Entropiii S",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "detox-2026",
+      "ACT_LABEL": "Horikoshit",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "detox-2026",
+      "ACT_LABEL": "KEYEYE",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "detox-2026",
+      "ACT_LABEL": "ongakubozu",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "detox-2026",
+      "ACT_LABEL": "Sizmu",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "detox-2026",
+      "ACT_LABEL": "Yamao",
+      "SET_TYPE": "dj",
+      "SORT": "9"
     },
     {
       "EDITION_ID": "nu-festival-2026",

@@ -5,7 +5,7 @@
     <link>https://techno-japan.media</link>
     <description>Japan&apos;s underground techno and house music media platform.</description>
     <language>ja-JP</language>
-    <lastBuildDate>Sat, 17 Oct 2026 07:30:45 -0000</lastBuildDate>
+    <lastBuildDate>Sat, 17 Oct 2026 09:32:51 -0000</lastBuildDate>
     <atom:link href="https://techno-japan.media/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
       <title>Snow Machine Japan</title>
@@ -14,6 +14,14 @@
       <pubDate>Tue, 02 Mar 2027 00:00:00 -0000</pubDate>
       <category>Festival</category>
       <description>Hakuba — Snow Machine Japanは、山岳リゾートタウンである白馬を、エレクトロニック・ミュージック愛好家のためのウィンター・プレイグラウンドへと変貌させる。このフェスティバルは、スキーとスノーボードのカルチャーと、テクノやハウス・ミュージックにまたがる緻密にキュレーションされたラインアップを融合させている。日本アルプスを背景に、より規模の大きい夏フェス・サーキットとは一線を画す、こぢんまりとしたオルタナティブな体験を提供してくれる。</description>
+    </item>
+    <item>
+      <title>TAKARAJIMA</title>
+      <link>https://techno-japan.media/festivals/takarajima-beach-cleaning-party.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/takarajima-beach-cleaning-party.html</guid>
+      <pubDate>Sat, 28 Nov 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Okinawa — TAKARAJIMAは、沖縄の海岸線を舞台に環境保護活動とエレクトロニック・ミュージックのプログラミングを融合させたフェスティバルだ。ビーチクリーン活動とDJセットを一体化させ、海洋保全をテーマにしながらアンダーグラウンド・ダンス・ミュージックを紹介するというユニークなフォーマットを生み出している。参加者は複数日にわたるプログラムを通じて、生態系の再生と音楽の祭典の両方に関わることになる。</description>
     </item>
     <item>
       <title>Mutek</title>
@@ -32,6 +40,14 @@
       <description>Tokyo — GROW THE CULTURE OPEN AIRは、本物のエレクトロニック・ミュージック・カルチャーを重視した屋外の場に、東京のアンダーグラウンド・ダンスミュージック・コミュニティを集結させる。複数のステージにわたって国内外のアーティストをフィーチャーし、商業的な訴求力よりもクオリティの高いプログラミングにこだわりを持ち続けている。</description>
     </item>
     <item>
+      <title>SANGENJAYA ART MUSIC FESTIVAL</title>
+      <link>https://techno-japan.media/festivals/sangenjaya-art-music-festival.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/sangenjaya-art-music-festival.html</guid>
+      <pubDate>Sat, 07 Nov 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Tokyo — 『SANGENJAYA ART MUSIC FESTIVAL（SMF）』は、ひとつの会場だけで完結するイベントではありません。音楽、フード、アート、そして三軒茶屋の街そのものを、昼から深夜まで自由に巡り、「人と出逢い、つながる」体験を楽しむ都市型・街回遊型カルチャーフェスティバルです。日本のロック・ヒップホップシーンを牽引する JESSE（RIZE / The BONEZ） や DABO、レゲエシーンから RUEED、ミクスチャーロックの雄・山嵐、次世代を担う BARK やTECHNO/HOUSEシーンのキーパーソン OSAMU M をはじめ、三軒茶屋に縁のある多種多様なアーティストたちが集結。日中の屋外メイン会場から、夜から深夜にかけてのライブハウス、バー、DJエリアまで、街のグラデーションとともに表情を変える空間を展開します。</description>
+    </item>
+    <item>
       <title>FESTIVAL de FRUE</title>
       <link>https://techno-japan.media/festivals/festival-de-frue.html</link>
       <guid isPermaLink="true">https://techno-japan.media/festivals/festival-de-frue.html</guid>
@@ -48,12 +64,20 @@
       <description>yamamotechが2012年から続けてきた、野外のフリーパーティ。開催場所は公開されず、「日本のどこか」とだけ告げられる。入場は無料、運営はドネーションとクラウドファンディングで支えられる。突如現れては消えていく、幻のような空間で非日常を体験したい。その思いから始まった企画は、DJとサウンドシステムへの偏愛が形になったものだ。</description>
     </item>
     <item>
+      <title>DENKI BODHISATTVA</title>
+      <link>https://techno-japan.media/festivals/denki-bodhisattva.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/denki-bodhisattva.html</guid>
+      <pubDate>Sat, 31 Oct 2026 00:00:00 -0000</pubDate>
+      <category>Festival</category>
+      <description>Chiba — 2026年10月31日から11月1日まで、成田空港近くの「木の根（KINONE）」を舞台に、24時間ノンストップのハロウィン・オープンエアを開催。\n今回は「中華ホラー」をテーマに、音楽、アート、空間演出を融合させ、会場全体を非日常的な異世界へと変貌させる。\n国内外から個性豊かなアーティストが集結し、ジャンルや国境を越えた自由な空間を創り出す。</description>
+    </item>
+    <item>
       <title>Topia</title>
       <link>https://techno-japan.media/festivals/topia.html</link>
       <guid isPermaLink="true">https://techno-japan.media/festivals/topia.html</guid>
       <pubDate>Sat, 24 Oct 2026 00:00:00 -0000</pubDate>
       <category>Festival</category>
-      <description>Topiaは、千葉の工業地帯にアンダーグラウンド・エレクトロニック・ミュージックを持ち込み、複数のステージで国内外のアーティストを紹介するフェスティバルだ。よりディープなテクノとハウス・サウンドに焦点を当て続けており、東京のクラブシーンから多くの人々を、より開放的な屋外の環境で音楽を体験しようと引き寄せている。</description>
+      <description>Chiba — Topiaは、関東近郊を拠点にオフサイトでパーティーを主催するクルー。「空間を主役にする」を軸に、成田空港内の私有地や真鶴半島、リニア工事の土砂が積み上がる相模原の土地など、ほかでは使われない場所で、その一夜のための空間をゼロから設計してきた。10月24日には、初の屋内会場となる千葉・外房の地下コンクリート空間でEvian Christの来日公演を開催。正確な場所はチケット購入者のみに通知される。</description>
     </item>
     <item>
       <title>Sawagi Festival</title>
@@ -101,7 +125,7 @@
       <guid isPermaLink="true">https://techno-japan.media/festivals/labyrinth.html</guid>
       <pubDate>Sat, 10 Oct 2026 00:00:00 -0000</pubDate>
       <category>Festival</category>
-      <description>Gunma — Labyrinthは群馬のアンダーグラウンド・シーンに独自の居場所を築き上げ、世界屈指の音響システムと緻密なサウンドデザイン、洗練されたラインナップにより、唯一無二の没入感とストーリー性あふれる体験を提供する野外フェスティバル。紅葉の始まる豊かな自然のなか、厳格な入場制限によるプライベート感と心地よいコミュニティ文化が守られており、国内外の熱狂的な音楽ファンから絶烈な支持を集める至高のフェスです。</description>
+      <description>Gunma — The Labyrinthは、Mindgamesが主催する日本を代表する野外レイヴ。会場は群馬・みなかみ、標高1,000mの森にある宝台樹キャンプ場。サイケデリックなテクノ、アンビエント、ディープハウスを軸に、ひとつのフロアで3日間の音を途切れなく組み上げていく。昼の光、夕暮れ、深夜、夜明け。時間の移ろいに合わせて音が変わり、3日間がひとつの物語として構成される。サウンドシステムはFunktion-One。チケットには3泊分のキャンプが含まれ、森に泊まり込んで過ごすことを前提に設計されている。</description>
     </item>
     <item>
       <title>TREKs</title>
@@ -109,7 +133,7 @@
       <guid isPermaLink="true">https://techno-japan.media/festivals/treks.html</guid>
       <pubDate>Sat, 10 Oct 2026 00:00:00 -0000</pubDate>
       <category>Festival</category>
-      <description>Kyoto — TREKsは山と渓流に囲まれた豊かな自然の中で、ダンスミュージックやアンビエントを中心とした上質なサウンドを楽しめます。単なる音楽イベントにとどまらず、キャンプや焚き火、ハンモックでのひとときなど、参加者同士が自然とゆるやかにつながる「コミュニティ空間（commune）」を体験できる点が特徴です。</description>
+      <description>Kyoto — TREKsは、京都市左京区久多の大黒谷キャンプ場で開かれる野外フェスティバル。掲げるのは「Temporary Commune of Music, Art &amp; Nature」。杉やヒノキ、天然のブナ林に囲まれ、渓流が流れる森で、キャンプやハンモック、焚き火を楽しむ人、駆け回る子どもたち、朝まで踊る人が、それぞれの時間を過ごしながらひとつの空間を共有する。音楽は時代を超えて聴かれてきたクラシックスと、現在進行形のダンスミュージック。世界で培われた感性と日本各地のカルチャーが、この森で交差する。</description>
     </item>
     <item>
       <title>EACH STORY</title>
@@ -149,7 +173,7 @@
       <guid isPermaLink="true">https://techno-japan.media/festivals/detox.html</guid>
       <pubDate>Sat, 26 Sep 2026 00:00:00 -0000</pubDate>
       <category>Festival</category>
-      <description>AICHI — 名古屋を拠点に活動するedenk1d、idiot、sabaotohaの3人によるレイヴクルー・CPBが主催する「DETOX」。CPBは、メンバーそれぞれが音楽やアートなどの活動を通して培ってきた経験や感覚を、レイヴという形で表現している。第4回となる今回は、愛知県西尾市・吉良ワイキキビーチに位置するCafe goofyを舞台に、デイイベントとして開催。これまでのシークレットかつ人数限定のスタイルを解禁し、海に隣接した開放的なロケーションで、Guest DJにE.O.UとTAIHEIを迎えるほか、東海エリアで活動する気鋭の若手ローカルDJが集結する。11時から20時まではDance Time、21時から24時まではAmbient Timeとして、時間の移り変わりとともに異なる音楽体験をつくり上げる。</description>
+      <description>Aichi — 名古屋を拠点に活動するedenk1d、idiot、sabaotohaの3人によるレイヴクルー・CPBが主催する「DETOX」。CPBは、メンバーそれぞれが音楽やアートなどの活動を通して培ってきた経験や感覚を、レイヴという形で表現している。第4回となる今回は、愛知県西尾市・吉良ワイキキビーチに位置するCafe goofyを舞台に、デイイベントとして開催。これまでのシークレットかつ人数限定のスタイルを解禁し、海に隣接した開放的なロケーションで、Guest DJにE.O.UとTAIHEIを迎えるほか、東海エリアで活動する気鋭の若手ローカルDJが集結する。11時から20時まではDance Time、21時から24時まではAmbient Timeとして、時間の移り変わりとともに異なる音楽体験をつくり上げる。</description>
     </item>
     <item>
       <title>御月民 -OTSUKIMI-</title>
@@ -224,34 +248,10 @@
       <description>Kyoto — 都府宮津市にある海のロケーション「TAKE SEA（テイク・シー）」で開催される、プライベートビーチ感覚を味わえる野外音楽イベント。「最幸天川（サイクウテンカワ）」などのコミュニティやオーガナイザーが関わっており、美しい海の絶景とともに心地よい音楽を楽しめるイベントとして企画されています</description>
     </item>
     <item>
-      <title>FOREST SOUND CAMP</title>
-      <link>https://techno-japan.media/festivals/forest-sound-camp.html</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals/forest-sound-camp.html</guid>
-      <pubDate>Sat, 05 Sep 2026 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Tokyo — 東京のクラブシーンでイベントを企画してきたUniversal Music Box/UMBが主催する、キャンプ型のオールナイトレイヴ。幼い頃から森に親しみ、林学を学んできたメンバーが、「森林と音楽の共存」をコンセプトに立ち上げた。舞台は、地域の約8割を森林が占める西多摩・日の出町のおおばキャンプ村。都心で育まれたダンスミュージックカルチャーを東京の森へ持ち込み、多摩産材の薪割りやシルクスクリーンなど、手でつくる体験も展開する。英国VOID Acousticsのサウンドが林間に響く中、昼から翌朝まで、それぞれの過ごし方で森と音楽に触れる2日間。音楽をきっかけに、森林との新しい関係をつくる実験だ。</description>
-    </item>
-    <item>
-      <title>YAMAUTO</title>
-      <link>https://techno-japan.media/festivals/yamauto.html</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals/yamauto.html</guid>
-      <pubDate>Sat, 22 Aug 2026 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Shiga — YAMAUTOは、滋賀県の山あいの地形を舞台に開催される、複数日程にわたるエレクトロニック・ミュージックの祭典として展開されている。フェスティバルはロングセットと没入感あるサウンドスケープを重視し、琵琶湖近郊の秘境的なロケーションに、国内外のアーティストたちを呼び集めている。</description>
-    </item>
-    <item>
-      <title>BonDisco</title>
-      <link>https://techno-japan.media/festivals/bondisco.html</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals/bondisco.html</guid>
-      <pubDate>Sat, 22 Aug 2026 00:00:00 -0000</pubDate>
-      <category>Festival</category>
-      <description>Hyogo — 自分たちの手で創り上げる、インディペンデントなDIYパーティ。豊かな自然の中で、誰もが最大限に日常から解放される空間を目指し、今年で13年目を迎える。会場は兵庫県三田市の三田アスレチックパーク。都会の熱波から離れた森の中に、趣向を凝らした高音質の2フロアが組まれ、大小2種のプールが踊り疲れた身体を冷やす。関西を中心に全国から40組近いアーティストが集結し、土曜の昼から日曜の午後まで音が鳴り続ける。費用はエントランス料金のみで、駐車場もテントもプールも追加料金はかからず、18歳以下は入場無料。13年のあいだに築かれてきた関係が、そのままラインナップになっている。</description>
-    </item>
-    <item>
       <title>野外テクノパーティTranscendenceで見た次世代ジェネレーションの可能性</title>
       <link>https://techno-japan.media/articles/transcendence-2025-report.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/transcendence-2025-report.html</guid>
-      <pubDate>Sat, 17 Oct 2026 07:30:45 -0000</pubDate>
+      <pubDate>Sat, 17 Oct 2026 09:32:51 -0000</pubDate>
       <category>REPORT</category>
       <description></description>
     </item>
@@ -259,7 +259,7 @@
       <title>MUTEK.JP 2025現地レポート WWWとO-EASTで体感した音と光の二日間</title>
       <link>https://techno-japan.media/articles/post-20251120.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/post-20251120.html</guid>
-      <pubDate>Sat, 17 Oct 2026 07:30:45 -0000</pubDate>
+      <pubDate>Sat, 17 Oct 2026 09:32:51 -0000</pubDate>
       <category>REPORT</category>
       <description></description>
     </item>
@@ -267,7 +267,7 @@
       <title>茨城 鉾田 nalu beachでビーチパーティLOA 8月15日開催</title>
       <link>https://techno-japan.media/articles/loa-lost-paradise-2026-info.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/loa-lost-paradise-2026-info.html</guid>
-      <pubDate>Sat, 17 Oct 2026 07:30:45 -0000</pubDate>
+      <pubDate>Sat, 17 Oct 2026 09:32:51 -0000</pubDate>
       <category>FESTIVAL&amp;RAVE</category>
       <description></description>
     </item>
@@ -275,7 +275,7 @@
       <title>BON DISCO | 兵庫・三田の森で26時間 DIYパーティが13年目の夏へ</title>
       <link>https://techno-japan.media/articles/bondisco-2026-info.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/bondisco-2026-info.html</guid>
-      <pubDate>Sat, 17 Oct 2026 07:30:45 -0000</pubDate>
+      <pubDate>Sat, 17 Oct 2026 09:32:51 -0000</pubDate>
       <category>FESTIVAL&amp;RAVE</category>
       <description></description>
     </item>
@@ -283,7 +283,7 @@
       <title>Snow Machine 2027 | 長野白馬で開催 出演者とステージ構成を解説</title>
       <link>https://techno-japan.media/articles/snow-mashine-2027-info.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/snow-mashine-2027-info.html</guid>
-      <pubDate>Sat, 17 Oct 2026 07:30:45 -0000</pubDate>
+      <pubDate>Sat, 17 Oct 2026 09:32:51 -0000</pubDate>
       <category>FESTIVAL&amp;RAVE</category>
       <description></description>
     </item>
@@ -291,7 +291,7 @@
       <title>【2026年下半期】 | アジアの音楽フェスティバル&amp;レイヴまとめ</title>
       <link>https://techno-japan.media/articles/asia-festival-2026-second.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/asia-festival-2026-second.html</guid>
-      <pubDate>Sat, 17 Oct 2026 07:30:45 -0000</pubDate>
+      <pubDate>Sat, 17 Oct 2026 09:32:51 -0000</pubDate>
       <category>GUIDE</category>
       <description></description>
     </item>
@@ -299,7 +299,7 @@
       <title>東京の森で夜通し踊る キャンプ型レイヴ FOREST SOUND CAMP が9月開催</title>
       <link>https://techno-japan.media/articles/forest-sound-camp-info.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/forest-sound-camp-info.html</guid>
-      <pubDate>Sat, 17 Oct 2026 07:30:45 -0000</pubDate>
+      <pubDate>Sat, 17 Oct 2026 09:32:51 -0000</pubDate>
       <category>FESTIVAL&amp;RAVE</category>
       <description></description>
     </item>
@@ -307,7 +307,7 @@
       <title>Re:birth | 2年半ぶり復活、長野・木曽の森で3日間のギャザリング</title>
       <link>https://techno-japan.media/articles/rebirth-2026-info.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/rebirth-2026-info.html</guid>
-      <pubDate>Sat, 17 Oct 2026 07:30:45 -0000</pubDate>
+      <pubDate>Sat, 17 Oct 2026 09:32:51 -0000</pubDate>
       <category>FESTIVAL&amp;RAVE</category>
       <description></description>
     </item>
@@ -315,7 +315,7 @@
       <title>【2026年9月】 | 日本の音楽フェスティバル&amp;レイヴまとめ</title>
       <link>https://techno-japan.media/articles/japan-festival-2026-september.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/japan-festival-2026-september.html</guid>
-      <pubDate>Sat, 17 Oct 2026 07:30:45 -0000</pubDate>
+      <pubDate>Sat, 17 Oct 2026 09:32:51 -0000</pubDate>
       <category>GUIDE</category>
       <description></description>
     </item>
@@ -323,7 +323,7 @@
       <title>香港の谷で16時間踊り続ける Shi Fu Miz が10周年アニバーサリー</title>
       <link>https://techno-japan.media/articles/shifumiz-2026-info.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/shifumiz-2026-info.html</guid>
-      <pubDate>Sat, 17 Oct 2026 07:30:45 -0000</pubDate>
+      <pubDate>Sat, 17 Oct 2026 09:32:51 -0000</pubDate>
       <category>FESTIVAL&amp;RAVE</category>
       <description></description>
     </item>
@@ -331,7 +331,7 @@
       <title>御月民 OTSUKIMI 2026 | 満月の夜に始まる、北アルプスの麓の3日間</title>
       <link>https://techno-japan.media/articles/otsukimi-2026-info.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/otsukimi-2026-info.html</guid>
-      <pubDate>Sat, 17 Oct 2026 07:30:45 -0000</pubDate>
+      <pubDate>Sat, 17 Oct 2026 09:32:51 -0000</pubDate>
       <category>FESTIVAL&amp;RAVE</category>
       <description></description>
     </item>
@@ -339,7 +339,7 @@
       <title>Synapse Festival | 福岡・海の中道で初の3日間開催へ</title>
       <link>https://techno-japan.media/articles/synapse-2026-info.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/synapse-2026-info.html</guid>
-      <pubDate>Sat, 17 Oct 2026 07:30:45 -0000</pubDate>
+      <pubDate>Sat, 17 Oct 2026 09:32:51 -0000</pubDate>
       <category>FESTIVAL&amp;RAVE</category>
       <description></description>
     </item>
@@ -347,7 +347,7 @@
       <title>Odyssey | 宮崎・標高1,000mの森と天文台に、九州の50組が集うローカルレイヴ</title>
       <link>https://techno-japan.media/articles/odyssey-2026-info.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/odyssey-2026-info.html</guid>
-      <pubDate>Sat, 17 Oct 2026 07:30:45 -0000</pubDate>
+      <pubDate>Sat, 17 Oct 2026 09:32:51 -0000</pubDate>
       <category>FESTIVAL&amp;RAVE</category>
       <description></description>
     </item>
@@ -355,7 +355,7 @@
       <title>2026年10月 | 日本の音楽フェスティバル&amp;レイヴ11選</title>
       <link>https://techno-japan.media/articles/japan-festival-2026-october.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/japan-festival-2026-october.html</guid>
-      <pubDate>Sat, 17 Oct 2026 07:30:45 -0000</pubDate>
+      <pubDate>Sat, 17 Oct 2026 09:32:51 -0000</pubDate>
       <category>GUIDE</category>
       <description></description>
     </item>
@@ -363,7 +363,7 @@
       <title>ONDO LAND | 10月12日に大阪駅5F「時空の広場」でテクノレイヴ！</title>
       <link>https://techno-japan.media/articles/ondoland1012-2026-info.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/ondoland1012-2026-info.html</guid>
-      <pubDate>Sat, 17 Oct 2026 07:30:45 -0000</pubDate>
+      <pubDate>Sat, 17 Oct 2026 09:32:51 -0000</pubDate>
       <category>NEWS</category>
       <description></description>
     </item>
@@ -371,7 +371,7 @@
       <title>The Labyrinth | 標高1,000mの森で、日本を代表する野外レイヴが3日間の物語を組む。</title>
       <link>https://techno-japan.media/articles/labyrinth-2026-info.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/labyrinth-2026-info.html</guid>
-      <pubDate>Sat, 17 Oct 2026 07:30:45 -0000</pubDate>
+      <pubDate>Sat, 17 Oct 2026 09:32:51 -0000</pubDate>
       <category>FESTIVAL&amp;RAVE</category>
       <description></description>
     </item>
@@ -379,7 +379,7 @@
       <title>TREKs | 京都・久多の森が、3日間だけ\</title>
       <link>https://techno-japan.media/articles/treak-2026-info.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/treak-2026-info.html</guid>
-      <pubDate>Sat, 17 Oct 2026 07:30:45 -0000</pubDate>
+      <pubDate>Sat, 17 Oct 2026 09:32:51 -0000</pubDate>
       <category>FESTIVAL&amp;RAVE</category>
       <description></description>
     </item>
@@ -387,7 +387,15 @@
       <title>INTERGALACTIC | 東京・日の出町の森が、光とアートと音楽の別世界に変わる</title>
       <link>https://techno-japan.media/articles/intergalactic-2026-info.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/intergalactic-2026-info.html</guid>
-      <pubDate>Sat, 17 Oct 2026 07:30:45 -0000</pubDate>
+      <pubDate>Sat, 17 Oct 2026 09:32:51 -0000</pubDate>
+      <category>FESTIVAL&amp;RAVE</category>
+      <description></description>
+    </item>
+    <item>
+      <title>Topia | 千葉・外房、まだ誰も足を踏み入れていないコンクリート空間で地下レイヴ</title>
+      <link>https://techno-japan.media/articles/topia-2026-info.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/articles/topia-2026-info.html</guid>
+      <pubDate>Sat, 17 Oct 2026 09:32:51 -0000</pubDate>
       <category>FESTIVAL&amp;RAVE</category>
       <description></description>
     </item>

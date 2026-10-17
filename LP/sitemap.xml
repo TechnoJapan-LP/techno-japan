@@ -655,6 +655,18 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://techno-japan.media/festivals/denki-bodhisattva.html</loc>
+    <lastmod>2026-10-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/festivals/sangenjaya-art-music-festival.html</loc>
+    <lastmod>2026-10-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://techno-japan.media/artists/dj-nobu.html</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
@@ -1477,6 +1489,18 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://techno-japan.media/artists/eve.html</loc>
+    <lastmod>2026-10-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/artists/mars89.html</loc>
+    <lastmod>2026-10-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://techno-japan.media/venues/womb.html</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
@@ -1700,6 +1724,12 @@
   </url>
   <url>
     <loc>https://techno-japan.media/en/articles/synapse-2026-info.html</loc>
+    <lastmod>2026-10-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/en/articles/topia-2026-info.html</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -1963,6 +1993,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://techno-japan.media/en/artists/eve.html</loc>
+    <lastmod>2026-10-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://techno-japan.media/en/artists/feline.html</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>weekly</changefreq>
@@ -2204,6 +2240,12 @@
   </url>
   <url>
     <loc>https://techno-japan.media/en/artists/mala.html</loc>
+    <lastmod>2026-10-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/en/artists/mars89.html</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -2647,6 +2689,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://techno-japan.media/en/festivals/denki-bodhisattva.html</loc>
+    <lastmod>2026-10-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://techno-japan.media/en/festivals/detox.html</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>weekly</changefreq>
@@ -2984,6 +3032,12 @@
   </url>
   <url>
     <loc>https://techno-japan.media/en/festivals/samsara.html</loc>
+    <lastmod>2026-10-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/en/festivals/sangenjaya-art-music-festival.html</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -3332,6 +3386,12 @@
   </url>
   <url>
     <loc>https://techno-japan.media/articles/synapse-2026-info.html</loc>
+    <lastmod>2026-10-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/articles/topia-2026-info.html</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
