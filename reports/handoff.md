@@ -10237,3 +10237,15 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 公開時は cms.js を触っているので Publish pipeline を流す。
 - 追記2: 詳細ページ（記事・フェス・アーティスト・会場）はリセット CSS が無く、ブラウザ標準の `body { margin: 8px }` が残っていてスマホのヘッダーが左右 8px ずつ内側だった。`LP/common.css` の `body` に `margin: 0` を追加（common.css v38、cms.js プレビュー参照も更新）。TOP の `.media-intro` のスマホ上余白 120px → 36px（スマホのナビは sticky で文書内にあるため 120px は不要だった）。
 - 最終: `bash scripts/preflight.sh` 全52件成功（2026-10-17、検査スクリプト `check_article_links.mjs` の修正込み）。390px headless: フェス写真 left 0 / width 390・上余白 0、ナビ left 0 / width 390（記事・フェス・アーティストで確認）。
+
+## 2026-10-17 フェス詳細のスマホのセクション間余白を詰める（design/festival-spacing）
+
+### 実施
+- `LP/detail.css` ≤900px の `.festival-design-v2`: hero margin-bottom 80→36、program-section padding 8/16、`.detail-section` 44→20、`.festival-faq` margin-top 56→12、`.detail-section-label` margin-top 40→12、`.article-footer` margin/padding 8/8、ページ下余白 80→32。PC 不変。detail.css v56、cms.js プレビュー参照更新（Publish 経路）。
+
+### 検証
+- 390px headless: hero→program 80→36px、editions→FAQ 56+44+40→12+20+12、related→BACK 60+40→8+8。sawagi / denki-bodhisattva で目視。
+- `bash scripts/preflight.sh`: 「ハブページが JS 込みで描ける」のカーソル項目だけ落ちた（単独では成功、`cursor: retry` 1回）。他51件成功。push 時の pre-push hook で再実行される。
+
+### 次の担当への注意
+- カーソル検査は仮想時間と iframe の組み合わせで依然として不安定。落ちたら単独実行で確認する。

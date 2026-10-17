@@ -898,16 +898,23 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 .festival-design-v2 .article-footer { margin-top: 60px; padding-top: 40px; border-top: 0; }
 
 @media (max-width: 900px) {
-  .festival-design-v2 { padding: 88px 24px 80px; }
+  .festival-design-v2 { padding: 88px 24px 32px; }
   .festival-design-v2:has(.detail-hero-image:not(.detail-hero-gradient)) { padding-top: 0; }
   .festival-design-v2 .festival-detail-inner { max-width: none; }
+  .festival-design-v2 .festival-detail-hero { margin-bottom: 36px; }
   .festival-design-v2 .detail-hero-image {
     width: 100vw;
     margin-left: calc(50% - 50vw);
     margin-right: calc(50% - 50vw);
     aspect-ratio: 16/10;
   }
-  .festival-design-v2 .festival-program-section { padding-top: 8px; }
+  .festival-design-v2 .festival-program-section { padding: 8px 0 16px; }
+  .festival-design-v2 .detail-section { padding: 20px 0; }
+  .festival-design-v2 .festival-program-section + .detail-section { padding-top: 16px; }
+  .festival-design-v2 .festival-faq { margin-top: 12px; }
+  .festival-design-v2 .detail-section-label { margin-top: 12px; }
+  .festival-design-v2 .related-festivals { padding-bottom: 12px; }
+  .festival-design-v2 .article-footer { margin-top: 8px; padding-top: 8px; }
   .festival-detail-hero { grid-template-columns: 1fr; gap: 32px; }
   .festival-design-v2 .detail-name { font-size: 42px; }
   .festival-design-v2 .detail-actions { flex-wrap: nowrap; gap: 8px; }
