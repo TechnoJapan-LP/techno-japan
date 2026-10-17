@@ -1,15 +1,15 @@
 {
-  "generatedAt": "2026-10-17T15:08:01.848Z",
+  "generatedAt": "2026-10-17T20:45:37.931Z",
   "days": 30,
   "source": "ga4",
   "items": [
     {
       "id": "japan-festival-2026-october",
-      "views": 279
+      "views": 281
     },
     {
       "id": "labyrinth-2026-info",
-      "views": 123
+      "views": 127
     },
     {
       "id": "ondoland1012-2026-info",
@@ -33,7 +33,7 @@
     },
     {
       "id": "otsukimi-2026-info",
-      "views": 49
+      "views": 50
     },
     {
       "id": "odyssey-2026-info",
@@ -44,16 +44,16 @@
       "views": 21
     },
     {
+      "id": "intergalactic-2026-info",
+      "views": 21
+    },
+    {
       "id": "asia-festival-2026-second",
       "views": 20
     },
     {
       "id": "rebirth-2026-info",
       "views": 18
-    },
-    {
-      "id": "intergalactic-2026-info",
-      "views": 16
     },
     {
       "id": "snow-mashine-2027-info",
