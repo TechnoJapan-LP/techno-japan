@@ -10305,3 +10305,15 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意
 - writers.html の日本語本文を変えたら `EN_PAGE_TEXT['writers.html']` も直すこと（ビルドが止まって気づける）。
+
+## 2026-10-18 スマホのメニューに SEARCH（ABOUT / APPLY / WRITER）
+
+### 実施
+- 原因: about.html は search.js を読んでいたが overlay に `.nav-lang` が無く、common.js の並べ替え（SEARCH を nav-lang の直前へ）が効かず先頭に残っていた。submit.html は data-hub.js / search.js を読んでおらず、writers.html は search.js を読んでいなかった。
+- `LP/submit.html` / `LP/writers.html` に `data-hub.js?v=11` と `search.js?v=5`（about.html と同じ順・属性）。`LP/about.html` の overlay に JA/EN 切替を追加。EN 版は生成。
+- `scripts/check_search_modal.mjs` に about / submit / writers（JA/EN）を追加（SEARCH が nav-lang の直前にあり、押すと #gs-input にフォーカス）。`check_mobile_language_toggles.mjs` に about を追加（36件）。
+
+### 検証
+- 390px headless: 6ページとも overlay の並びが … WRITER, SEARCH, JA/EN。検索窓が開く。
+- `bash scripts/preflight.sh` 全52件成功。
+- 記事ページのメニューには SEARCH が無いまま（data-hub.js 140KB を全記事に足すことになるため今回は見送り。判断待ち）。
