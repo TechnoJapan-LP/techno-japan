@@ -54,23 +54,52 @@ Object.defineProperty(window, 'gtag', { writable: false, configurable: false });
 const actionProbe = `
 <script>
 (async function() {
-  var wait = function(ms) { return new Promise(function(resolve) { setTimeout(resolve, ms); }); };
+  var poll = function(read, ready, timeout) {
+    timeout = timeout || 6000;
+    return new Promise(function(resolve) {
+      var deadline = Date.now() + timeout;
+      var check = function() {
+        var value = read();
+        if (ready(value) || Date.now() >= deadline) return resolve(value);
+        setTimeout(check, 200);
+      };
+      check();
+    });
+  };
   var preventTestNavigation = function(e) {
     var a = e.target.closest && e.target.closest('.festival-official-link, .related-card');
     if (a) e.preventDefault();
   };
   document.addEventListener('click', preventTestNavigation, true);
-  await wait(300);
-  for (var i = 0; i < 4; i++) {
-    window.scrollTo(0, document.body.scrollHeight);
-    await wait(200);
+  var sections = [
+    ['lineup', '.festival-program-section'],
+    ['editions', '.festival-editions-v2'],
+    ['related', '.related-festivals']
+  ];
+  var hasGtag = typeof window.gtag === 'function';
+  await poll(function() {
+    return sections.every(function(pair) {
+      var section = document.querySelector(pair[1]);
+      return section && section.getAttribute('data-tj-section') === pair[0];
+    });
+  }, function(ready) { return ready; });
+  for (var i = 0; i < sections.length; i++) {
+    var section = document.querySelector(sections[i][1]);
+    if (section) section.scrollIntoView({ block: 'center' });
+    if (hasGtag) {
+      await poll(function() {
+        return (window.__tjCheckCalls || []).some(function(call) {
+          return call.name === 'festival_section_view' && call.params.section === sections[i][0];
+        });
+      }, function(sent) { return sent; });
+    } else {
+      await new Promise(function(resolve) { setTimeout(resolve, 150); });
+    }
   }
   var official = document.querySelector('.festival-official-link');
   if (official) official.click();
-  await wait(150);
   var related = document.querySelector('.related-card');
   if (related) related.click();
-  await wait(200);
   document.body.setAttribute('data-tj-tracking-check', JSON.stringify({
     calls: window.__tjCheckCalls || [],
     errors: window.__tjCheckErrors || []
@@ -112,7 +141,7 @@ const render = (withGtag) => new Promise((resolve) => {
      本番の実ブラウザで確認する。 */
   const args = [
     '--headless=new', '--disable-gpu', '--disable-service-worker', '--no-sandbox',
-    '--no-first-run', '--window-size=1280,4000', '--virtual-time-budget=12000',
+    '--no-first-run', '--window-size=1280,4000', '--virtual-time-budget=24000',
     '--dump-dom', `${base}${pagePath}?gtag=${withGtag ? '1' : '0'}`
   ];
   const child = spawn(chrome, args, { stdio: ['ignore', 'pipe', 'ignore'] });

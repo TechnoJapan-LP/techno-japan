@@ -175,23 +175,26 @@ const runCursorTest = (frame, resultName) => {
   frame.addEventListener('load', () => {
     const win = frame.contentWindow;
     const doc = frame.contentDocument;
-    setTimeout(() => {
+    const deadline = Date.now() + 5000;
+    const poll = setInterval(() => {
       const dots = doc.querySelectorAll('.cursor-dot');
       const rings = doc.querySelectorAll('.cursor-ring');
       doc.dispatchEvent(new win.MouseEvent('mousemove', {
         bubbles: true, clientX: 123, clientY: 234
       }));
-      setTimeout(() => {
-        const dotMoved = dots[0]?.style.left === '123px' && dots[0]?.style.top === '234px';
-        const ringMoved = !!rings[0]?.style.left && !!rings[0]?.style.top;
-        const coarsePointer = win.matchMedia('(hover: none) and (pointer: coarse)').matches;
-        const ok = !coarsePointer && dots.length === 1 && rings.length === 1 && dotMoved && ringMoved;
-        document.body.dataset[resultName] = ok ? 'pass' : 'fail';
-        document.body.dataset[resultName + 'Detail'] =
-          `coarse=${coarsePointer},dots=${dots.length},rings=${rings.length},dotMoved=${dotMoved},ringMoved=${ringMoved}`;
-        frame.remove();
-      }, 150);
-    }, 100);
+      const dotMoved = dots[0]?.style.left === '123px' && dots[0]?.style.top === '234px';
+      const ringMoved = !!rings[0]?.style.left && !!rings[0]?.style.top;
+      if (!dotMoved || !ringMoved) {
+        if (Date.now() < deadline) return;
+      }
+      clearInterval(poll);
+      const coarsePointer = win.matchMedia('(hover: none) and (pointer: coarse)').matches;
+      const ok = !coarsePointer && dots.length === 1 && rings.length === 1 && dotMoved && ringMoved;
+      document.body.dataset[resultName] = ok ? 'pass' : 'fail';
+      document.body.dataset[resultName + 'Detail'] =
+        `coarse=${coarsePointer},dots=${dots.length},rings=${rings.length},dotMoved=${dotMoved},ringMoved=${ringMoved}`;
+      frame.remove();
+    }, 200);
   });
 };
 runCursorTest(document.getElementById('cursor-detail'), 'detailResult');

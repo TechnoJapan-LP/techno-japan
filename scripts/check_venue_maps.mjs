@@ -66,9 +66,17 @@ function expectedByCity() {
    タイルの読み込みは待たない（外部通信で不安定なため）。見るのは
    「入れ物が出るか」「ピンが出るか」「絞り込みが効くか」。 */
 const PROBE = `<script>
-window.addEventListener('load', () => setTimeout(async () => {
+window.addEventListener('load', async () => {
   const out = { cities: {}, errors: [] };
-  const wait = (ms) => new Promise(r => setTimeout(r, ms));
+  const poll = async (read, ready, timeout = 8000) => {
+    const deadline = Date.now() + timeout;
+    let value = read();
+    while (!ready(value) && Date.now() < deadline) {
+      await new Promise(r => setTimeout(r, 200));
+      value = read();
+    }
+    return value;
+  };
   const nav = document.getElementById('area-nav');
   const btn = document.getElementById('area-map-btn');
   const links = [].slice.call(nav.querySelectorAll('a[data-area]'))
@@ -77,32 +85,34 @@ window.addEventListener('load', () => setTimeout(async () => {
     try {
       [].slice.call(nav.querySelectorAll('a[data-area]'))
         .filter(a => a.dataset.area === city)[0].click();
-      await wait(120);
       btn.click();
-      await wait(900);
+      const wrap = await poll(() => [].slice.call(document.querySelectorAll('[id$="-map-wrap"]'))
+        .find(w => w.style.display !== 'none' && w.querySelector('.leaflet-container')),
+        w => !!w);
       const wraps = [].slice.call(document.querySelectorAll('[id$="-map-wrap"]'))
         .filter(w => w.style.display !== 'none');
-      const wrap = wraps[0] || null;
-      const pins = wrap ? wrap.querySelectorAll('.vm-pin, .vm-pin-bar').length : 0;
-      const pills = wrap ? wrap.querySelectorAll('.vm-pill').length : 0;
+      const pins = await poll(() => wrap ? wrap.querySelectorAll('.vm-pin, .vm-pin-bar').length : 0,
+        count => count > 0);
+      const pills = await poll(() => wrap ? wrap.querySelectorAll('.vm-pill').length : 0,
+        count => count > 0);
       let afterFilter = null;
       if (wrap) {
         const techno = [].slice.call(wrap.querySelectorAll('.vm-pill[data-genre]'))
           .filter(p => p.dataset.genre === 'TECHNO')[0];
-        if (techno) { techno.click(); await wait(250);
+        if (techno) { techno.click();
+          await poll(() => techno.classList.contains('active'), active => active);
           afterFilter = wrap.querySelectorAll('.vm-pin, .vm-pin-bar').length;
           const all = [].slice.call(wrap.querySelectorAll('.vm-pill[data-genre]'))
             .filter(p => p.dataset.genre === 'ALL')[0];
-          if (all) { all.click(); await wait(250); }
+          if (all) all.click();
         }
       }
       out.cities[city] = { 表示された: !!wrap, 開いた数: wraps.length, ピン: pins, 絞込ボタン: pills, TECHNOで絞った後: afterFilter };
       btn.click();   // 閉じる
-      await wait(150);
     } catch (e) { out.errors.push(city + ': ' + e.message); }
   }
   document.title = 'RES:' + JSON.stringify(out);
-}, 1200));
+});
 </script>`;
 
 const PROBE_PATH = '/__venue-maps-probe.html';
