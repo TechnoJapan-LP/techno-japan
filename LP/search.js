@@ -40,17 +40,17 @@
     // Add styles
     const style = document.createElement('style');
     style.textContent = `
-      #global-search-modal { position: fixed; inset: 0; z-index: 10500; display: none; }
+      #global-search-modal { position: fixed; inset: 0; z-index: 100001; display: none; }
       #global-search-modal.active { display: block; }
       .gs-overlay { position: absolute; inset: 0; background: rgba(8,8,8,0.92); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
-      .gs-panel { position: relative; max-width: 720px; margin: 80px auto 0; padding: 0 24px; }
+      .gs-panel { position: relative; max-width: 720px; margin: calc(var(--safe-t, 0px) + 80px) auto 0; padding: 0 24px; }
       .gs-input-wrap { display: flex; align-items: center; gap: 16px; padding: 16px 20px; border: 1px solid rgba(240,237,232,0.15); background: rgba(8,8,8,0.5); }
       .gs-icon { width: 18px; height: 18px; color: rgba(240,237,232,0.5); flex-shrink: 0; }
       #gs-input { flex: 1; background: transparent; border: none; outline: none; color: var(--text); font-family: var(--font-mono); font-size: 14px; letter-spacing: 0.05em; }
       #gs-input::placeholder { color: rgba(240,237,232,0.3); }
       .gs-close { background: none; border: none; color: var(--text); font-size: 24px; line-height: 1; opacity: 0.5; cursor: pointer; padding: 0 8px; }
       .gs-close:hover { opacity: 1; }
-      .gs-results { margin-top: 24px; max-height: 70vh; overflow-y: auto; padding-bottom: 40px; }
+      .gs-results { margin-top: 24px; max-height: calc(100dvh - var(--safe-t, 0px) - 200px); overflow-y: auto; padding-bottom: 40px; }
       .gs-hint { padding: 40px 20px; text-align: center; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; opacity: 0.3; }
       .gs-group { margin-bottom: 24px; }
       .gs-group-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; opacity: 0.4; padding: 8px 20px; border-bottom: 1px solid rgba(240,237,232,0.06); }
@@ -71,7 +71,7 @@
       .gs-trigger:hover { opacity: 1; }
       .gs-trigger svg { width: 16px; height: 16px; }
       @media (max-width: 768px) {
-        .gs-panel { margin-top: 60px; padding: 0 16px; }
+        .gs-panel { margin-top: calc(var(--safe-t, 0px) + 60px); padding: 0 16px; }
       }
     `;
     document.head.appendChild(style);
@@ -160,13 +160,17 @@
       const closeBtn = overlay.querySelector('.nav-close');
       if (closeBtn) {
         const searchLink = document.createElement('a');
+        searchLink.className = 'nav-search-link';
         searchLink.href = '#';
         searchLink.textContent = 'SEARCH';
         searchLink.style.cssText = 'cursor:pointer';
         searchLink.addEventListener('click', e => {
           e.preventDefault();
+          // Close the common mobile menu state before putting the search modal above it.
           overlay.classList.remove('active');
-          document.querySelector('.nav-hamburger')?.classList.remove('active');
+          document.querySelectorAll('.nav-hamburger').forEach(button => button.classList.remove('active'));
+          document.documentElement.classList.remove('nav-open');
+          document.body.classList.remove('nav-open');
           setTimeout(open, 200);
         });
         // Insert before ABOUT (first <a> after close)

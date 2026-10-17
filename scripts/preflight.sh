@@ -139,6 +139,8 @@ run "TOP ARTISTSランダム表示"             node scripts/check_top_artists.m
   run "会場一覧の地図が全都市を出す"    node scripts/check_venue_maps.mjs
   [ -f scripts/check_mobile_language_toggles.mjs ] \
     && run "モバイルの言語切替"         node scripts/check_mobile_language_toggles.mjs
+  [ -f scripts/check_search_modal.mjs ] \
+    && run "モバイル検索モーダル"         node scripts/check_search_modal.mjs
 fi
 
 echo

@@ -10191,3 +10191,32 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - TOP / NEWS のカード見出しの文節折りは未対応。
 - 開催中のフェスが TOP の UPCOMING EVENTS に残る副作用は、ユーザー了承済みのまま公開。
 - 応募通知: ライター応募は formsubmit → press@（稼働中）。フェス申請の Google フォームは「新しい回答のメール通知」をオン（2026-10-17、宛先はフォーム所有者の Gmail）。未読の申請が4件あった。
+
+## 2026-10-17 モバイル検索モーダルのナビ重なり修正（未公開）
+
+### 実施
+- `LP/search.js` の検索モーダルを nav より上（z-index 100001）にし、safe-area を考慮したパネル位置とスマホ向け結果スクロール領域を追加。
+- モバイルメニューの SEARCH クリック時に overlay、hamburger、`html/body.nav-open` を先に閉じる処理を追加。
+- JA/EN の全13ハブで `search.js?v=4` を `?v=5` に更新。EN は `node scripts/build-detail-pages.mjs` 実行後も同じ版であることを確認。
+- `scripts/check_search_modal.mjs` を追加し、preflight のモバイル描画検査へ接続。
+
+### コミット
+- なし（ユーザー指定どおり未コミット）。
+
+### 検証
+- `python3 scripts/check_asset_versions.py` 成功。
+- `node --check scripts/check_search_modal.mjs` 成功。
+- `bash scripts/preflight.sh` は未実行。新規 headless 検査は、ポートを bind できないため作成のみで未実行。
+- iPhone 実機および実ブラウザの検索操作は未確認。
+
+### 変更したパターン
+- `#global-search-modal` の z-index、`.gs-panel` の safe-area margin、`.gs-results` の `100dvh` max-height。
+- モバイル `.nav-search-link` から検索を開く前のメニュー状態解除。
+- `search.js` の全HTML参照版数、モバイル検索 headless 検査とpreflight接続。
+
+### 未確認の類似パターン
+- デスクトップ nav の検索トリガーは未確認。
+- iPhone以外のsafe-area値、390px以外のモバイル幅は未確認。
+
+### 次の担当への注意・判断待ち
+- 公開前に `bash scripts/preflight.sh` を省略なしで実行し、新規検索検査を通すこと。iPhone実機でメニュー→SEARCH→入力→`laby` 結果表示を確認すること。
