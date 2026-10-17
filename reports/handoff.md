@@ -10220,3 +10220,17 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - 公開前に `bash scripts/preflight.sh` を省略なしで実行し、新規検索検査を通すこと。iPhone実機でメニュー→SEARCH→入力→`laby` 結果表示を確認すること。
+
+## 2026-10-17 フェス詳細のヒーロー写真をスマホで画面幅いっぱいに（テスト環境・未公開）
+
+### 実施
+- ブランチ `design/festival-hero`。`LP/detail.css` の ≤900px ブロック: `.festival-design-v2 .detail-hero-image { width: 100vw; margin-left/right: calc(50% - 50vw) }`（祖先の余白に左右されない viewport 基準のはみ出し。最初の -24px 版は外側に 8px 残った）。`.festival-design-v2 { padding-top: 88px }` で写真をナビ直下から。PC は不変。
+- detail.css v54、cms.js プレビュー参照・cms.html を更新（Publish 経路）。
+
+### 検証
+- 390px headless: 写真 left 0 / width 390、横スクロールなし（scrollWidth 390）。目視済み。
+- `bash scripts/preflight.sh` 全52件成功。
+- iPhone 実機未確認。
+
+### 次の担当への注意
+- 公開時は cms.js を触っているので Publish pipeline を流す。
