@@ -54,7 +54,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 56;
+const DETAIL_CSS_VERSION = 58;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -1014,11 +1014,12 @@ function venueByPlaceName(place, venues) {
 
 /* 記事末尾のニュースレター登録。index.html の formsubmit フォームと同じ構成。
    _next は読んでいた記事へ戻す。文言はサイト全体の英語表記に合わせる。 */
-function articleNewsletterHtml(canonical) {
+function articleNewsletterHtml(canonical, lang = 'ja') {
+  const isEn = lang === 'en';
   return `<section class="newsletter article-newsletter">
       <div class="newsletter-eyebrow">NEWSLETTER</div>
-      <div class="newsletter-title">STAY IN THE LOOP.</div>
-      <div class="newsletter-desc">Monthly digest of new festivals, artists, and stories from Japan's underground.</div>
+      <div class="newsletter-title">${isEn ? "Get Japan's open-air festival news" : '日本の野外フェスの情報を受け取る'}</div>
+      <div class="newsletter-desc">${isEn ? 'Upcoming festivals and new stories in one email. Free, unsubscribe anytime.' : '来月の開催予定と新着記事をまとめてメールで届けます。無料、いつでも解除できます。'}</div>
       <form class="newsletter-form" action="https://formsubmit.co/press@techno-japan.media" method="POST">
         <input type="text" name="_honey" tabindex="-1" autocomplete="off" class="tj-honeypot" aria-hidden="true">
         <input type="email" name="email" placeholder="your@email.com" required>
@@ -1288,7 +1289,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
       ${tags ? `<div class="article-tags">${tags}</div>` : ''}
       <a class="article-back" href="${hubHref}" data-article-hub-back="${hubHref}" style="margin:0"><span class="arrow"></span> ALL STORIES</a>
     </div>
-    ${articleNewsletterHtml(canonical)}
+    ${articleNewsletterHtml(canonical, lang)}
   </div>
 </article>`;
 
@@ -1519,8 +1520,8 @@ function festivalSummary(festival, edition, name, lang) {
   return [first, second].filter(Boolean).join('');
 }
 
-function festivalFaqItems(editions, lineupsByEdition, artistsById, name, lang) {
-  const current = editions[0];
+function festivalFaqItems(editions, lineupsByEdition, artistsById, name, lang, lineupEdition = editions[0]) {
+  const current = lineupEdition;
   if (!current) return [];
   const date = festivalDateText(current, lang);
   const venueParts = [editionLocationName(current, lang), current.ADDRESS, current.PREF]
@@ -1546,9 +1547,13 @@ function festivalFaqItems(editions, lineupsByEdition, artistsById, name, lang) {
   if (current.TICKETURL) items.push(lang === 'en'
     ? { question: `Where can I buy tickets for ${name}?`, answer: `Tickets for ${name} are available at ${current.TICKETURL}.`, url: current.TICKETURL }
     : { question: `${name}のチケットはどこで買えますか？`, answer: `${name}のチケットは${current.TICKETURL}で購入できます。`, url: current.TICKETURL });
-  if (acts.length) items.push(lang === 'en'
-    ? { question: `Which artists are playing at ${name}?`, answer: `The lineup includes ${acts.join(', ')}.` }
-    : { question: `${name}にはどんなアーティストが出演しますか？`, answer: `出演アーティストは${acts.join('、')}です。` });
+  if (acts.length) {
+    const visibleActs = acts.slice(0, 10);
+    const remaining = Math.max(0, acts.length - visibleActs.length);
+    items.push(lang === 'en'
+      ? { question: `Which artists are playing at ${name}?`, answer: `${name} ${editionIdentifier(current)} lineup: ${visibleActs.join(', ')}${remaining ? ` and ${remaining} more.` : '.'}` }
+      : { question: `${name}にはどんなアーティストが出演しますか？`, answer: `${editionIdentifier(current)}年の出演は${visibleActs.join('、')}${remaining ? `ほか${remaining}組` : ''}です。` });
+  }
   return items;
 }
 
@@ -1715,7 +1720,7 @@ function festivalHeroDateHtml(edition) {
   return `<time datetime="${start}">${first.monthName} ${first.day}, ${first.year}</time> — <time datetime="${end}">${last.monthName} ${last.day}, ${last.year}</time>`;
 }
 
-function festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, lang, name, canonical, summary, faqItems, relatedHtml }) {
+function festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, lang, name, canonical, summary, faqItems, relatedHtml, lineupEdition }) {
   const prefix = lang === 'en' ? '/en' : '';
   const hubHref = `${prefix}/festivals.html`;
   const currentEdition = editions[0];
@@ -1757,7 +1762,7 @@ function festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, lang, 
         <div class="detail-section-label">FLYER</div>
         <div class="detail-flyer-image"><img ${dimensionAttrs(flyerPick.src)} src="/${String(flyerPick.src).replace(/^\//, '')}"${flyerSrcsetAttr(flyerPick.src)} alt="${esc(flyerAlt)}" loading="lazy"></div>
       </div>` : '';
-  const lineup = lineupGroups ? `<div class="detail-lineup-col">
+  const lineup = lineupGroups ? `<div class="detail-lineup-col" id="lineup">
         <h2 class="detail-section-label">LINE UP</h2>
         ${lineupGroups}
       </div>` : '';
@@ -1815,7 +1820,22 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
     const ap = editionKeyParts(editionIdentifier(a)), bp = editionKeyParts(editionIdentifier(b));
     return bp.year - ap.year || bp.seq - ap.seq || String(b.DATE_START || '').localeCompare(String(a.DATE_START || ''));
   });
-  const currentEdition = editions[0];
+  const latestEdition = editions[0];
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const lineupEdition = editions.find((ed) => {
+    const end = String(ed.DATE_END || ed.DATE_START || '');
+    return ISO_DATE.test(end) && new Date(`${end}T23:59:59`) >= today;
+  }) || latestEdition;
+  const currentEdition = lineupEdition;
+  const lineupRows = lineupEdition ? (lineupsByEdition.get(lineupEdition.EDITION_ID) || []) : [];
+  const lineupActs = lineupRows.map((row) => {
+    if (isCompositeLineup(row)) return String(row.ACT_LABEL || '').trim();
+    const id = lineupArtistIds(row)[0];
+    const artist = id ? artistsById.get(id) : null;
+    return artist ? (lang === 'en' ? (artist.name_en || artist.name) : artist.name) : String(row.ACT_LABEL || '').trim();
+  }).filter(Boolean);
+  const lineupCount = lineupRows.length;
+  const hasLineup = lineupCount >= 3;
   const year = String(currentEdition?.EDITION || '').match(/^\d{4}/)?.[0] || '';
   const prefRaw = currentEdition?.PREF || f.city || '';
   const pref = lang === 'en' ? placeEn(prefRaw) : placeJa(prefRaw);
@@ -1825,15 +1845,17 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
   /* 指名検索（フェス名＋年）に「日程・出演者・チケット」で応える。長い名前では
      種別を先に削り、日程・チケットと地名は最後まで残す。 */
   const jaCandidates = [
-    `${nameYear}｜${pref || '日本'}の${festivalTypeJa} 日程・出演者・チケット — TECHNO JAPAN`,
+    ...(hasLineup ? [
+      `${nameYear}｜出演者・日程・チケット（${pref || '日本'}）— TECHNO JAPAN`,
+      `${nameYear}｜出演者・日程・チケット — TECHNO JAPAN`,
+    ] : []),
     `${nameYear}｜${pref || '日本'}の${festivalTypeJa} 日程・チケット — TECHNO JAPAN`,
-    `${nameYear}｜${pref || '日本'} 日程・出演者・チケット — TECHNO JAPAN`,
     `${nameYear}｜${pref || '日本'}の${festivalTypeJa} — TECHNO JAPAN`,
     `${nameYear}｜${pref || '日本'} 日程・チケット — TECHNO JAPAN`,
   ];
   const enCandidates = [
-    `${nameYear} — Dates, Lineup & Tickets | Techno ${festivalTypeEn} in ${pref || 'Japan'}, Japan | TECHNO JAPAN`,
-    `${nameYear} — Dates, Lineup & Tickets | ${pref || 'Japan'}, Japan | TECHNO JAPAN`,
+    ...(hasLineup ? [`${nameYear} — Lineup, Dates & Tickets (${pref || 'Japan'}, Japan) | TECHNO JAPAN`] : []),
+    `${nameYear} — Dates, Tickets & Information | ${pref || 'Japan'}, Japan | TECHNO JAPAN`,
     `${nameYear} — Techno ${festivalTypeEn} in ${pref || 'Japan'}, Japan | TECHNO JAPAN`,
     `${nameYear} — Techno ${festivalTypeEn} in Japan | TECHNO JAPAN`,
   ];
@@ -1848,18 +1870,24 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
   const editionLocation = currentEdition ? editionLocationName(currentEdition, lang) : '';
   const metaLead = editionDate && editionLocation
     ? (lang === 'en'
-        ? `${editionDate} at ${editionLocation}, ${pref || 'Japan'}. `
-        : `${editionDate}、${editionLocation}（${pref || '日本'}）で開催。`)
+        ? (hasLineup
+            ? `${editionDate}, ${editionLocation} (${pref || 'Japan'}). Lineup: ${lineupActs.slice(0, 5).join(', ')}${Math.max(0, lineupCount - 5) ? ` and ${Math.max(0, lineupCount - 5)} more.` : '.'}`
+            : `${editionDate} at ${editionLocation}, ${pref || 'Japan'}. `)
+        : (hasLineup
+            ? `${seoName} ${year}は${editionDate}、${editionLocation}（${pref || '日本'}）で開催。出演は${lineupActs.slice(0, 5).join('、')}${Math.max(0, lineupCount - 5) ? `ほか${Math.max(0, lineupCount - 5)}組` : ''}。`
+            : `${editionDate}、${editionLocation}（${pref || '日本'}）で開催。`))
     : '';
   const metaFallback = lang === 'en'
     ? `${name} — edition history and information for a techno / house festival in Japan.`
     : `${name}の開催履歴・基本情報。日本のテクノ／ハウスのフェスティバル情報。`;
-  const metaDescSource = lang === 'ja' && seoName !== name
-    ? `${seoName}は、${editionDate && editionLocation ? `${editionDate}、${editionLocation}（${pref || '日本'}）で開催。` : ''}${bodyDesc || '開催履歴・基本情報。日本のテクノ／ハウスのフェスティバル情報。'}`
-    : `${metaLead}${bodyDesc || metaFallback}`;
-  const metaDesc = truncate(metaDescSource, 160);
+  const metaDescSource = hasLineup
+    ? `${metaLead}${bodyDesc || metaFallback}`
+    : (lang === 'ja' && seoName !== name
+      ? `${seoName}は、${editionDate && editionLocation ? `${editionDate}、${editionLocation}（${pref || '日本'}）で開催。` : ''}${bodyDesc || '開催履歴・基本情報。日本のテクノ／ハウスのフェスティバル情報。'}`
+      : `${metaLead}${bodyDesc || metaFallback}`);
+  const metaDesc = truncate(metaDescSource, hasLineup ? 120 : 160);
   const summary = festivalSummary(f, currentEdition, name, lang);
-  const faqItems = festivalFaqItems(editions, lineupsByEdition, artistsById, seoName, lang);
+  const faqItems = festivalFaqItems(editions, lineupsByEdition, artistsById, seoName, lang, lineupEdition);
   const performers = dedupePerformers(
     editions.flatMap((ed) => lineupsByEdition.get(ed.EDITION_ID) || [])
       .map((row) => lineupPerformerLd(row, artistsById, lang)).filter(Boolean));
@@ -1948,7 +1976,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
     })) } : {}),
   };
 
-  const body = festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, lang, name, canonical, summary, faqItems, relatedHtml });
+  const body = festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, lang, name, canonical, summary, faqItems, relatedHtml, lineupEdition });
 
   const faqLd = faqItems.length ? {
     '@context': 'https://schema.org',
@@ -2267,12 +2295,19 @@ const EN_HUB_DESC = {
 
 // 本文に残る日本語の固定文言（データ由来の日本語は対象外）
 const EN_HUB_TEXT = [
+  ['日本の野外フェスの情報を受け取る', "Get Japan's open-air festival news"],
+  ['来月の開催予定と新着記事をまとめてメールで届けます。無料、いつでも解除できます。', 'Upcoming festivals and new stories in one email. Free, unsubscribe anytime.'],
   ['APPLY', 'APPLY'],
   ['過去30日の閲覧数順 · 更新', 'Ranked by views over the last 30 days · updated'],
   ['集計データを準備中です（過去30日の閲覧数で並びます）', 'Counting in progress — ranked by views over the last 30 days'],
 ];
 
 const EN_PAGE_TEXT = {
+  'artists.html': [
+    ['日本のアンダーグラウンド・ダンスミュージックの現場で活動する${total}組。出演予定のフェスティバル、都市、ジャンルから辿れます。', "${total} DJs and artists active in Japan's underground dance music scene. Browse by upcoming festival, city and genre."],
+    ['すべてのアーティスト', 'All artists'],
+    ['出演予定', ''],
+  ],
   'submit.html': [
     ['Techno Japanへのフェスティバル・イベント掲載申請。掲載は無料です。', 'Submit a festival or event for consideration by Techno Japan. Listing is free of charge.'],
     ['本文へ移動', 'Skip to content'],

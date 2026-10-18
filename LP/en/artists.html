@@ -101,6 +101,18 @@
 }
 .page-intro[hidden] { display: none; }
 @media (max-width: 640px) { .page-intro { font-size: 12px; margin-top: 12px; } }
+.hub-intro {
+  max-width: 640px; margin: 12px 0 28px; font-family: var(--font-body);
+  font-size: 15px; line-height: 1.8; opacity: .75;
+}
+.artists-section-heading {
+  padding: 40px 40px 20px; font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: .16em; font-weight: 400; text-transform: uppercase;
+  border-bottom: 1px solid rgba(240,237,232,.08);
+}
+.artists-section-sub { margin-left: 10px; opacity: .55; text-transform: none; letter-spacing: 0; }
+.section-dot { color: var(--accent); }
+.artists-upcoming .artists-grid { padding-top: 20px; padding-bottom: 20px; }
 
 /* ===================== SEARCH & FILTER ===================== */
 .artists-toolbar {
@@ -434,8 +446,7 @@ html.tj-artists-hydrating #artists-grid > .ssr-link-list { display: none; }
     <h1 class="page-title">ARTISTS</h1>
     <div class="page-subtitle">DJS · PRODUCERS · SELECTORS</div>
   </div>
-  <p class="page-intro" data-intro-lang="ja">日本のテクノ／レイヴシーンで活動する DJ・プロデューサー・ライブアクトの一覧。<span id="artists-intro-count"></span>フェスの出演ラインナップとあわせて更新している。ジャンル（テクノ、ハウス、ミニマルほか）や名前で絞り込める。</p>
-  <p class="page-intro" data-intro-lang="en" hidden>A directory of the DJs, producers and live acts who play Japan&#39;s techno and rave scene. <span id="artists-intro-count-en"></span>Updated alongside festival lineups. Filter by genre (techno, house, minimal and more) or by name.</p>
+  <p class="hub-intro" id="artists-intro"></p>
 </header>
 
 <!-- ARTISTS LIST VIEW -->
@@ -445,9 +456,16 @@ html.tj-artists-hydrating #artists-grid > .ssr-link-list { display: none; }
       <input type="text" class="artists-search" id="artists-search" placeholder="SEARCH ARTISTS...">
       <span class="artists-count" id="artists-count"></span>
     </div>
-    <div class="artists-genre-nav" id="genre-nav"></div>
+  <div class="artists-genre-nav" id="genre-nav"></div>
   </div>
-  <div class="artists-grid" id="artists-grid">
+  <section class="artists-upcoming" id="artists-upcoming" hidden>
+    <h2 class="artists-section-heading"><span class="section-dot">●</span> UPCOMING ON STAGE <span class="artists-section-sub"></span></h2>
+    <div class="artists-grid" id="artists-upcoming-grid"></div>
+  </section>
+  <section class="artists-all" aria-labelledby="artists-all-heading">
+  <h2 class="artists-section-heading" id="artists-all-heading">All artists</h2>
+  <div class="artists-grid" id="artists-main-grid">
+  <div id="artists-grid">
     <!-- STATIC_LINKS:ARTISTS:START -->
 <ul class="ssr-link-list">
   <li><a href="/en/artists/dj-nobu.html">DJ Nobu</a></li>
@@ -592,6 +610,8 @@ html.tj-artists-hydrating #artists-grid > .ssr-link-list { display: none; }
 </ul>
 <!-- STATIC_LINKS:ARTISTS:END -->
   </div>
+  </div>
+  </section>
 </main>
 
 <aside class="artist-preview-pane" id="artist-preview" aria-hidden="true">
@@ -795,6 +815,74 @@ function getFilteredArtists() {
   return list;
 }
 
+function renderArtistCard(a, i, caption = '') {
+  const bgAttr = a.image ? tjLazyBgAttr(a.image) : '';
+  const bg = a.image
+    ? `background-position:${a.imagePosition || 'center'}`
+    : `background:${gradients[i % gradients.length]}`;
+  const genreLabel = getGenreString(a);
+  return `
+    <a href="/en/artists/${encodeURIComponent(a.id)}.html" class="artist-card reveal" data-artist-detail-link data-id="${a.id}">
+      <div class="artist-card-img"${bgAttr} style="${bg}"></div>
+      <div class="artist-card-content">
+        <div class="artist-card-genre">${genreLabel}</div>
+        <div class="artist-card-name">${tjLocalized(a.name, '', a.name_en)}</div>
+        <div class="artist-card-city">${caption || a.country || a.city || ''}</div>
+      </div>
+      <div class="artist-fav-mount" data-fav-mount="artist" data-fav-id="${a.id}"></div>
+    </a>`;
+}
+
+function renderUpcomingArtists() {
+  const section = document.getElementById('artists-upcoming');
+  const grid = document.getElementById('artists-upcoming-grid');
+  if (!section || !grid) return;
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const horizon = new Date(today); horizon.setDate(horizon.getDate() + 60);
+  const parseDate = value => { const dt = new Date(value); return isNaN(dt) ? null : dt; };
+  const dateEnd = f => {
+    const parts = String(f.date || '').split('/');
+    return parseDate((parts[1] || parts[0] || '').trim());
+  };
+  const dateStart = f => parseDate(String(f.date || '').split('/')[0].trim());
+  const festivals = (typeof FESTIVALS !== 'undefined' ? FESTIVALS : [])
+    .map(f => ({ f, start: dateStart(f), end: dateEnd(f) }))
+    .filter(x => x.start && x.end && x.end >= today && x.end <= horizon)
+    .sort((a, b) => a.start - b.start);
+  const artistById = new Map(ARTISTS.map(a => [String(a.id).toLowerCase(), a]));
+  const artistByName = new Map(ARTISTS.map(a => [String(a.name || '').trim().toLowerCase(), a]));
+  const appearances = new Map();
+  festivals.forEach(({ f, start }) => {
+    const seen = new Set();
+    (Array.isArray(f.lineup) ? f.lineup : []).forEach(entry => {
+      const id = typeof entry === 'object' ? entry.id : entry;
+      const name = typeof entry === 'object' ? (entry.name || entry.label || '') : entry;
+      const artist = artistById.get(String(id || '').trim().toLowerCase()) || artistByName.get(String(name || '').trim().toLowerCase());
+      if (!artist || seen.has(artist.id)) return;
+      seen.add(artist.id);
+      const current = appearances.get(artist.id) || { artist, count: 0, firstDate: start, festival: f };
+      current.count += 1;
+      if (start < current.firstDate) { current.firstDate = start; current.festival = f; }
+      appearances.set(artist.id, current);
+    });
+  });
+  const selected = [...appearances.values()]
+    .sort((a, b) => b.count - a.count || a.firstDate - b.firstDate || a.artist.name.localeCompare(b.artist.name, 'en'))
+    .slice(0, 12);
+  if (!selected.length) return;
+  const dateLabel = date => date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  grid.innerHTML = selected.map(({ artist, festival, firstDate }, i) => {
+    const festivalName = tjLocalized(festival.name, '', festival.name_en);
+    return renderArtistCard(artist, i, `${festivalName} · ${dateLabel(firstDate)}`);
+  }).join('');
+  section.hidden = false;
+  tjApplyLazyBackgrounds(grid);
+  grid.querySelectorAll('[data-fav-mount]').forEach(m => window.tjFav?.attachHeart(m, m.dataset.favMount, m.dataset.favId, { size: 'sm' }));
+  observeAll();
+  grid.querySelectorAll('[data-artist-detail-link]').forEach(link => link.addEventListener('click', saveArtistHubState));
+  bindCursorExpand();
+}
+
 /* ========== RENDER LIST ========== */
 function renderArtistsList() {
   const grid = document.getElementById('artists-grid');
@@ -807,25 +895,7 @@ function renderArtistsList() {
     return;
   }
 
-  grid.innerHTML = filtered.map((a, i) => {
-    // 画像は data-bg にして画面に近づいてから読む（AUDIT §9-45）。
-    // グラデーションは転送を伴わないのでそのまま style に入れる。
-    const bgAttr = a.image ? tjLazyBgAttr(a.image) : '';
-    const bg = a.image
-      ? `background-position:${a.imagePosition || 'center'}`
-      : `background:${gradients[i % gradients.length]}`;
-    const genreLabel = getGenreString(a);
-    return `
-    <a href="/en/artists/${encodeURIComponent(a.id)}.html" class="artist-card reveal" data-artist-detail-link data-id="${a.id}">
-      <div class="artist-card-img"${bgAttr} style="${bg}"></div>
-      <div class="artist-card-content">
-        <div class="artist-card-genre">${genreLabel}</div>
-        <div class="artist-card-name">${tjLocalized(a.name, '', a.name_en)}</div>
-        <div class="artist-card-city">${a.country || a.city || ''}</div>
-      </div>
-      <div class="artist-fav-mount" data-fav-mount="artist" data-fav-id="${a.id}"></div>
-    </a>`;
-  }).join('');
+  grid.innerHTML = filtered.map((a, i) => renderArtistCard(a, i)).join('');
 
   tjApplyLazyBackgrounds(grid);
 
@@ -906,24 +976,20 @@ function bindCursorExpand() {
   if (window.tjBindCursorExpand) window.tjBindCursorExpand('.artist-card');
 }
 
-/* 冒頭の定義文。静的 HTML に日英どちらも置いてあるので、ここでは表示の切替と
-   件数の差し込みだけを行う。件数を HTML に直接書くとデータが変わったとき嘘になる。 */
+/* 件数はデータから描画する。JA→EN生成時にこの2文だけ対訳へ置換する。 */
 (function () {
   var lang = (window.TJ_LANG === 'en') ? 'en' : 'ja';
-  document.querySelectorAll('.page-intro').forEach(function (el) {
-    el.hidden = el.getAttribute('data-intro-lang') !== lang;
-  });
   var total = (typeof ARTISTS !== 'undefined' && ARTISTS.length) || 0;
-  if (!total) return;
-  var ja = document.getElementById('artists-intro-count');
-  var en = document.getElementById('artists-intro-count-en');
-  if (ja) ja.textContent = '現在' + total + '組を掲載し、';
-  if (en) en.textContent = total + ' artists listed. ';
+  var intro = document.getElementById('artists-intro');
+  if (intro) intro.textContent = lang === 'en'
+    ? `${total} DJs and artists active in Japan's underground dance music scene. Browse by upcoming festival, city and genre.`
+    : `${total} DJs and artists active in Japan's underground dance music scene. Browse by upcoming festival, city and genre.`;
 })();
 
 /* ========== INIT ========== */
 buildGenreNav();
 initSearchSort();
+renderUpcomingArtists();
 try {
   renderArtistsList();
 } finally {
