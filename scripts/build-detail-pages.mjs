@@ -73,6 +73,8 @@ const ARTICLE_FX_CSS_VERSION = 14;
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
 const COMMON_JS_VERSION = 17;   // 2026-10-11 スマホメニュー演出（設計書S）
 const COMMON_CSS_VERSION = 38;   // 2026-10-17 body margin reset
+const DATA_HUB_VERSION = 11;
+const SEARCH_JS_VERSION = 6;
 const LANG_TOGGLE_VERSION = 1;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
 const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');
@@ -990,7 +992,8 @@ ${backgroundLayer ? '<div class="tj-bg" aria-hidden="true"><div class="tj-scan">
 ${body}
 ${footerHtml(lang)}
 ${GA}
-<script src="/common.js?v=${COMMON_JS_VERSION}" defer></script>${extraScripts}
+<script src="/common.js?v=${COMMON_JS_VERSION}" defer></script>
+<script src="/search.js?v=${SEARCH_JS_VERSION}" defer data-hub-src="/data-hub.js?v=${DATA_HUB_VERSION}"></script>${extraScripts}
 </body>
 </html>
 `;

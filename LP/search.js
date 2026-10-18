@@ -5,20 +5,26 @@
 (function() {
   'use strict';
 
+  // document.currentScript is only reliable while this deferred script is
+  // evaluating, so capture the lazy hub URL before ready() runs.
+  const searchScript = document.currentScript;
+  const hubSrc = searchScript?.dataset.hubSrc || '';
+
   function ready(fn) {
     if (document.readyState !== 'loading') fn();
     else document.addEventListener('DOMContentLoaded', fn);
   }
 
   ready(() => {
-    if (typeof FESTIVALS === 'undefined' && typeof ARTISTS === 'undefined') {
+    const lazy = typeof FESTIVALS === 'undefined' && typeof ARTISTS === 'undefined';
+    if (lazy && !hubSrc) {
       console.warn('[search] data.js not loaded; skipping search.');
       return;
     }
-    initSearch();
+    initSearch({ lazy });
   });
 
-  function initSearch() {
+  function initSearch({ lazy = false } = {}) {
     // Create modal
     const modal = document.createElement('div');
     modal.id = 'global-search-modal';
@@ -79,10 +85,47 @@
     const input = document.getElementById('gs-input');
     const results = document.getElementById('gs-results');
 
+    let hubLoadState = lazy ? 'idle' : 'loaded';
+    let hubLoadPromise;
+
+    function hintText() {
+      return document.documentElement.lang === 'ja' ? '読み込み中…' : 'Loading…';
+    }
+
+    function loadHub() {
+      if (!lazy || hubLoadState === 'loaded') return Promise.resolve();
+      if (hubLoadPromise) return hubLoadPromise;
+      hubLoadState = 'loading';
+      results.innerHTML = `<div class="gs-hint">${hintText()}</div>`;
+      hubLoadPromise = new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = hubSrc;
+        script.onload = () => {
+          hubLoadState = 'loaded';
+          resolve();
+        };
+        script.onerror = () => {
+          hubLoadState = 'error';
+          reject(new Error('data hub failed to load'));
+        };
+        document.head.appendChild(script);
+      });
+      return hubLoadPromise;
+    }
+
     function open() {
       modal.classList.add('active');
       document.body.style.overflow = 'hidden';
-      setTimeout(() => input.focus(), 50);
+      if (lazy) {
+        loadHub().then(() => {
+          input.focus();
+          if (input.value.trim()) doSearch(input.value);
+        }).catch(() => {
+          results.innerHTML = `<div class="gs-empty">${document.documentElement.lang === 'ja' ? '検索データを読み込めませんでした' : 'Search data unavailable'}</div>`;
+        });
+      } else {
+        setTimeout(() => input.focus(), 50);
+      }
     }
 
     function close() {

@@ -14,6 +14,7 @@ const pages = [
   '/', '/en/index.html',
   '/about.html', '/submit.html', '/writers.html',
   '/en/about.html', '/en/submit.html', '/en/writers.html',
+  '/articles/labyrinth-2026-info.html', '/festivals/matricaria.html',
 ];
 
 function chromePath() {
@@ -76,10 +77,25 @@ try {
   for (const page of pages) {
     await cdp(ws, 'Page.navigate', { url: `http://127.0.0.1:${port}${page}` });
     await delay(600);
+    const lazyPage = /^\/(?:articles|festivals|artists|venues)\//.test(page);
+    if (lazyPage) {
+      const resources = await cdp(ws, 'Runtime.evaluate', { expression: `performance.getEntriesByType('resource').some(e => /data-hub\.js(?:\?|$)/.test(e.name))`, returnByValue: true });
+      if (resources.result?.value) throw new Error(`${page}: data-hub.js loaded before search opened`);
+    }
     const open = `(() => { const b=document.querySelector('.nav-hamburger'); if(!b) return {ok:false,reason:'hamburger missing'}; b.click(); const o=document.querySelector('.nav-overlay'),s=o&&o.querySelector(':scope > .nav-search-link'),l=o&&o.querySelector(':scope > .nav-lang'); if(!s) return {ok:false,reason:'search link missing'}; if(!l||s.nextElementSibling!==l) return {ok:false,reason:'search link is not immediately before language toggle'}; s.click(); return {ok:true}; })()`;
     const opened = await cdp(ws, 'Runtime.evaluate', { expression: open, returnByValue: true });
     if (!opened.result?.value?.ok) throw new Error(`${page}: ${opened.result?.value?.reason || 'menu did not open'}`);
-    await delay(350);
+    if (lazyPage) {
+      let loaded = false;
+      for (let i = 0; i < 50; i++) {
+        const globals = await cdp(ws, 'Runtime.evaluate', { expression: `typeof FESTIVALS !== 'undefined'`, returnByValue: true });
+        if (globals.result?.value) { loaded = true; break; }
+        await delay(100);
+      }
+      if (!loaded) throw new Error(`${page}: data-hub.js did not load within 5s`);
+    } else {
+      await delay(350);
+    }
     const state = await cdp(ws, 'Runtime.evaluate', { expression: `(() => { const modal=document.querySelector('#global-search-modal'),input=document.querySelector('#gs-input'); if(!modal||!input) return {ok:false,reason:'search modal or input missing'}; const r=input.getBoundingClientRect(); const hit=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2); const hitOk=hit===input||!!hit?.closest('.gs-input-wrap'); const active=modal.classList.contains('active'); const focused=document.activeElement===input; return {ok:active&&hitOk&&focused,active,hitOk,focused}; })()`, returnByValue: true });
     const value = state.result?.value || {};
     if (!value.ok) throw new Error(`${page}: input hit=${value.hitOk} active=${value.active}`);

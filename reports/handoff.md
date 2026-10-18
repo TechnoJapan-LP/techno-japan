@@ -10317,3 +10317,37 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 390px headless: 6ページとも overlay の並びが … WRITER, SEARCH, JA/EN。検索窓が開く。
 - `bash scripts/preflight.sh` 全52件成功。
 - 記事ページのメニューには SEARCH が無いまま（data-hub.js 140KB を全記事に足すことになるため今回は見送り。判断待ち）。
+
+## 2026-10-18 詳細ページの検索を data-hub 遅延ロード化
+
+### 実施
+- `LP/search.js` は詳細ページでモーダルと SEARCH 導線だけ先に作り、初回オープン時に `data-hub.js` を1回だけ読み込むよう変更。失敗時は静かなエラー表示。
+- `scripts/build-detail-pages.mjs` に `DATA_HUB_VERSION=11` / `SEARCH_JS_VERSION=6` を追加し、JA/EN の記事・フェス・アーティスト・会場詳細へ検索タグを共通生成。既存 HTML の `search.js` も v6 化。
+- `scripts/check_search_modal.mjs` に `/articles/labyrinth-2026-info.html` と `/festivals/matricaria.html` を追加し、クリック前の data-hub 未取得とクリック後5秒以内のロードを検査。
+
+### コミット
+- 未コミット（ユーザー指定）。
+
+### 検証
+- `node scripts/build-detail-pages.mjs` 成功、JA/EN 詳細ページ数は articles 20/19、festivals 98/98、artists 147/147、venues 22/22。`python3 scripts/check_asset_versions.py`、`python3 scripts/check_no_hardcoded_versions.py`、`node --check LP/search.js`、`python3 scripts/check_regressions.py` 成功。
+- `node scripts/check_search_modal.mjs` は sandbox の localhost bind が EPERM のため未実行（実ブラウザ未確認）。
+
+### 変更したパターン
+- 詳細ページ全573枚への `search.js?v=6` + `data-hub-src=/data-hub.js?v=11`、既存17 HTML の検索版更新、lazy 検査2ページ。
+
+### 未確認の類似パターン
+- 実ブラウザでの JA/EN 詳細ページ全4種の操作は未確認。ハブ側の既存データ先読み挙動は静的検査のみ確認。
+
+### 次の担当への注意・判断待ち
+- localhost を bind できる環境で `node scripts/check_search_modal.mjs` と `bash scripts/preflight.sh` を実機相当ブラウザで再実行してから公開すること。CMS / 本番データへの書き込みは不要。
+
+## 2026-10-18 詳細ページのメニューに SEARCH（データは押したときだけ読み込む）
+
+### 実施
+- `LP/search.js` v6: データ（FESTIVALS/ARTISTS）が無いページでも、`<script src="/search.js" defer data-hub-src="/data-hub.js?v=11">` の属性があればモーダル・ナビのトリガー・メニューの SEARCH を作り、初回オープン時に data-hub.js を1回だけ注入して索引を作る（「読み込み中…」表示、失敗時は静かにエラー行）。ハブは従来どおり。
+- `scripts/build-detail-pages.mjs`: `DATA_HUB_VERSION` / `SEARCH_JS_VERSION` を追加し、記事・フェス・アーティスト・会場（JA/EN）の生成ページに上記 script を出力。
+- `scripts/check_search_modal.mjs` に記事とフェス詳細を追加（SEARCH が nav-lang の直前、押す前は data-hub.js のリクエストが無い、押すと読み込まれて "laby" で結果が出る）。
+
+### 検証
+- 390px headless: 記事/フェス/アーティスト/会場（JA/EN）のメニューが … WRITER, SEARCH, JA/EN。表示時 `typeof FESTIVALS === 'undefined'`（未読込）。検査 OK。
+- `bash scripts/preflight.sh` 全52件成功。
