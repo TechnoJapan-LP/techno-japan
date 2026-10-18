@@ -10274,6 +10274,28 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - `node scripts/fetch-popular.mjs --dry`（env 無し）: exit 0。GA4 への実通信は**未検証**（鍵が未登録）。
 - `bash scripts/preflight.sh` 全52件成功。
 
+## 2026-10-18 分析 A1 / A3 / A5
+
+### 実施
+- フェス詳細の同一開催回 LINEUP を title / meta / hero / FAQ / JSON-LD に反映。ARTISTS upcoming セクションとニュースレター文言を追加。
+- JA/EN ハブを再生成し、`detail.css` v57、`cms.js` v148、主グリッド閾値スコープを更新。
+
+### コミット
+- 未コミット（ユーザー指定）。
+
+### 検証
+- `node scripts/build-detail-pages.mjs` 成功。artists / index / news の JA/EN 行数はそれぞれ 1009/1009、1429/1429、1339/1339。
+- `check_asset_versions.py`、`check_jsonld.mjs`、`check_article_links.mjs` は成功。Labyrinth title/description を確認。
+
+### 変更したパターン
+- A1 の開催回 LINEUP SEO/ヒーロー/FAQ、A3 の upcoming/main artists、A5 の index/news/article newsletter。回帰閾値は `artists-main-grid` に限定。
+
+### 未確認の類似パターン
+- 実ブラウザの JA/EN artists とフェス詳細の操作は未確認。`bash scripts/preflight.sh` は無出力で完了せず中断、`--fast` も同様に未完了。
+
+### 次の担当への注意・判断待ち
+- localhost を bind できる環境で省略なし preflight と実ブラウザ確認を再実行してから公開すること。CMS/GAS/本番データへの書き込みはしていない。
+
 ### 次の担当への注意・判断待ち
 - ユーザーが GitHub secret `GA4_SA_KEY`（サービスアカウント JSON 全文）を登録し、GA4 プロパティ 535755449 に閲覧者として追加したら `gh workflow run "Monthly popular"` を流して popular.json が生成されるか確認する。失敗したらログの HTTP 本文を見る（403=権限、400=プロパティ ID）。
 - popular.json は Pages の deploy で配信される。sw.js の扱いは既存の LP/data と同じ。
@@ -10351,3 +10373,16 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 検証
 - 390px headless: 記事/フェス/アーティスト/会場（JA/EN）のメニューが … WRITER, SEARCH, JA/EN。表示時 `typeof FESTIVALS === 'undefined'`（未読込）。検査 OK。
 - `bash scripts/preflight.sh` 全52件成功。
+
+## 2026-10-18 インサイト施策 A1 / A3 / A5（feat/insight-a1-a3-a5）
+
+### 実施
+- A1 フェス詳細: 出演者が 3 組以上ある回は title を「{名前} {年}｜出演者・日程・チケット（{都道府県}）」、EN は「— Lineup, Dates & Tickets」。description の冒頭を「日程・会場で開催。出演は A、B、C…ほか n 組」。FAQ「どんなアーティストが出演しますか？」に年と実名（最大10組＋ほか n 組）。ヒーロー下の LINE UP 要約は一度入れたがユーザー判断で削除（情報過多）。
+- A3 ARTISTS ハブ: 見出し下に件数入りの説明文（JA/EN）。絞り込みの下に「● UPCOMING ON STAGE 出演予定」（60日以内に出演するアーティスト、出演回数順、最大12、カードに「フェス名 · 日付」）。グリッドに h2「すべてのアーティスト」。
+- A5 ニュースレター: 見出し「日本の野外フェスの情報を受け取る」/ "Get Japan's open-air festival news"、リード「来月の開催予定と新着記事をまとめてメールで届けます。無料、いつでも解除できます。」（記事末尾・TOP・NEWS）。
+- PC のフェス詳細の余白（festival-design-v2、>900px）: hero 下 80→48、program 52/36→24/24、detail-section 44→28、FAQ 前 56→16、ラベル下 32→20、editions 表の border-spacing 28→16（外側は負マージンで相殺）、footer 60/40→32/24。detail.css v58、cms.js プレビュー参照更新（Publish 経路）。
+
+### 検証
+- 1440px 実測: hero→program 48、editions→FAQ 16+28、related→footer 32+24。目視済み。390px のヒーローは変化なし。
+- `bash scripts/preflight.sh` 全52件成功。1回目は「ハブページが JS 込みで描ける」が落ちた: Codex が regression-thresholds の artists の container を外側の `artists-main-grid` に変えたため、検査が最初の `</div>` で切って 266B と誤認した。元の指定に戻して解消。
+- 効果の確認: Search Console で「ラビリンス 2026」「labyrinth 2026」系の CTR（今 1〜2%）、GA4 で /artists.html の平均エンゲージメント時間（今 3 秒）、`form_submit`（今 1/28日）を 11 月に見る。
