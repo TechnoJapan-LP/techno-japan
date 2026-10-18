@@ -181,12 +181,16 @@ html.tj-artists-hydrating #artists-grid > .ssr-link-list { display: none; }
 
 .artists-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 0 24px;
   padding: 40px;
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 701px) {
+  .artists-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1100px) {
   .artists-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
@@ -300,18 +304,14 @@ html.tj-artists-hydrating #artists-grid > .ssr-link-list { display: none; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 /* PAGE-SPECIFIC RESPONSIVE */
-@media (max-width: 1100px) {
-  .artists-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
 @media (max-width: 900px) {
   .page-header { padding: 24px 24px 40px; } /* nav が sticky なので上余白は詳細ページと同じ24px（二重取り防止） */
   .page-header-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
   #artists-list-view { padding: 0 0 80px; }
   .artists-toolbar { padding: 32px 24px 24px; }
-  .artists-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; padding: 24px; }
+  .artists-grid { gap: 0 16px; padding: 24px; }
 }
 @media (max-width: 768px) {
-  .artists-grid { grid-template-columns: repeat(2, 1fr); }
   .artists-search-row { flex-wrap: wrap; }
   .artists-search { max-width: 100%; }
   .artists-count { margin-left: 0; width: 100%; }
@@ -320,7 +320,7 @@ html.tj-artists-hydrating #artists-grid > .ssr-link-list { display: none; }
   .genre-tab { padding: 10px 14px; font-size: 10px; min-height: 48px; }
 }
 @media (max-width: 480px) {
-  .artists-grid { grid-template-columns: repeat(2, 1fr); gap: 3px; padding: 16px; }
+  .artists-grid { gap: 3px; padding: 16px; }
   .artists-toolbar { padding: 24px 16px 16px; gap: 16px; }
   .artist-card-content { padding: 12px; }
   .artist-card-name { font-size: 16px; }
@@ -464,8 +464,8 @@ html.tj-artists-hydrating #artists-grid > .ssr-link-list { display: none; }
   </section>
   <section class="artists-all" aria-labelledby="artists-all-heading">
   <h2 class="artists-section-heading" id="artists-all-heading">All artists</h2>
-  <div class="artists-grid" id="artists-main-grid">
-  <div id="artists-grid">
+  <div class="artists-main" id="artists-main-grid">
+  <div class="artists-grid" id="artists-grid">
     <!-- STATIC_LINKS:ARTISTS:START -->
 <ul class="ssr-link-list">
   <li><a href="/en/artists/dj-nobu.html">DJ Nobu</a></li>

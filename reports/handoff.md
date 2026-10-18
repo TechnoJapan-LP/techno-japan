@@ -10386,3 +10386,12 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 1440px 実測: hero→program 48、editions→FAQ 16+28、related→footer 32+24。目視済み。390px のヒーローは変化なし。
 - `bash scripts/preflight.sh` 全52件成功。1回目は「ハブページが JS 込みで描ける」が落ちた: Codex が regression-thresholds の artists の container を外側の `artists-main-grid` に変えたため、検査が最初の `</div>` で切って 266B と誤認した。元の指定に戻して解消。
 - 効果の確認: Search Console で「ラビリンス 2026」「labyrinth 2026」系の CTR（今 1〜2%）、GA4 で /artists.html の平均エンゲージメント時間（今 3 秒）、`form_submit`（今 1/28日）を 11 月に見る。
+
+## 2026-10-18 ARTISTS ハブ「すべてのアーティスト」が PC で1列になっていた不具合
+
+### 実施
+- 原因: A3 で入れた外側の `<div class="artists-grid" id="artists-main-grid">` の中に、カードを描く `#artists-grid` が入れ子になり、全カードが1マスに入っていた（A3 の変更による退行）。外側を `artists-main`（グリッドでない）に、内側の `#artists-grid` に `artists-grid` クラス。
+### 検証
+- headless: 1440px 3列 / 1000px 2列 / 390px 1列、139枚、横はみ出し 0。`bash scripts/preflight.sh` 全52件成功。
+### 未確認の類似パターン
+- UPCOMING ON STAGE のグリッドは入れ子なし（確認済み・0件）。
