@@ -451,8 +451,12 @@ function initGenreChips(id) {
   });
 }
 function getSelectedGenres(id) { return [...document.querySelectorAll('#'+id+' .chip.selected')].map(c => c.dataset.genre); }
+function parseGenreValues(value) {
+  return String(value || '').split(/[,·、]/).map(s => s.trim()).filter(Boolean);
+}
 function setSelectedGenres(id, genres) {
-  document.querySelectorAll('#'+id+' .chip').forEach(c => c.classList.toggle('selected', genres.includes(c.dataset.genre)));
+  const values = new Set((genres || []).map(s => String(s).trim().toUpperCase()).filter(Boolean));
+  document.querySelectorAll('#'+id+' .chip').forEach(c => c.classList.toggle('selected', values.has(String(c.dataset.genre).trim().toUpperCase())));
 }
 const VENUE_FEATURES = ['after-hours','daytime','vinyl','outdoor','rooftop','listening','no-cover','cash-only','cashless-only','id-required','no-photo','smoking','no-reentry'];
 function initFeatureChips(id) {
@@ -4717,7 +4721,7 @@ function editRow(section, rowNum){
     setVal('v-lat',row.lat); setVal('v-lng',row.lng);
     setVal('v-instagram',row.instagram); setVal('v-desc',row.desc);
     setVal('v-imagePosition',row.imagePosition || '');
-    setSelectedGenres('v-genre',(row.genre||'').split(',').map(s=>s.trim()).filter(Boolean));
+    setSelectedGenres('v-genre',parseGenreValues(row.genre));
     setSelectedFeatures('v-features',String(row.features||'').split(/[;,]/));
     updateVenueSubtypeVisibility();
     updateLocationMap('v');
@@ -4738,7 +4742,7 @@ function editRow(section, rowNum){
     setVal('f-imagePosition',row.imagePosition || '');
     const dates=fmtDate(row.date||'').split('/');  // date型/Date.toString混在を YYYY-MM-DD に正規化（input[type=date]が空になるのを防ぐ）
     setVal('f-dateStart',dates[0]); setVal('f-dateEnd',dates[1]);
-    setSelectedGenres('f-genre',(row.genre||'').split(',').map(s=>s.trim()).filter(Boolean));
+    setSelectedGenres('f-genre',parseGenreValues(row.genre));
     lineups.f=(row.lineup||'').split(',').map(s=>s.trim()).filter(Boolean);
     renderLineupTags('f');
     // EDITIONS（シートにはJSON文字列で保存されている）
@@ -5036,6 +5040,11 @@ function saveEdit(section){
     window.articleImageUploading = false;
   }
   if (section === 'article') flushArticleEditorSync();
+  if (['venue','festival','artist'].includes(section)
+      && String(state.genre || '').trim()
+      && !(section === 'artist' ? String(g('a-genre') || '').trim() : getSelectedGenres(section === 'venue' ? 'v-genre' : 'f-genre').length)) {
+    return toast('ジャンルが空になります。ジャンルを選び直してから保存してください。', 'error');
+  }
   const payload={action:'update_row',sheet:SHEET_MAP[section],row:state._row};
 
   if(section==='venue'){

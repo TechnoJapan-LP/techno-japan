@@ -463,12 +463,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/festivals/capsule.html</loc>
-    <lastmod>2025-10-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://techno-japan.media/festivals/one-park-riverfes.html</loc>
     <lastmod>2025-10-18</lastmod>
     <changefreq>weekly</changefreq>
@@ -495,12 +489,6 @@
   <url>
     <loc>https://techno-japan.media/festivals/treks.html</loc>
     <lastmod>2026-10-10</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/festivals/circle.html</loc>
-    <lastmod>2025-10-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -541,38 +529,14 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/festivals/festival40010.html</loc>
-    <lastmod>2025-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://techno-japan.media/festivals/gampeki.html</loc>
     <lastmod>2025-09-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/festivals/sangenjaya-music-festival.html</loc>
-    <lastmod>2025-09-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/festivals/okiraku-camp.html</loc>
-    <lastmod>2025-09-13</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://techno-japan.media/festivals/pure-rave.html</loc>
     <lastmod>2025-09-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/festivals/kyoumei-gathering.html</loc>
-    <lastmod>2025-08-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -585,12 +549,6 @@
   <url>
     <loc>https://techno-japan.media/festivals/sawagi-festival.html</loc>
     <lastmod>2025-08-22</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/festivals/specialflower-festival.html</loc>
-    <lastmod>2025-08-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -643,20 +601,8 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/festivals/dom.html</loc>
-    <lastmod>2024-10-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://techno-japan.media/festivals/wormhole.html</loc>
     <lastmod>2024-10-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/festivals/unknown.html</loc>
-    <lastmod>2024-10-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -675,6 +621,24 @@
   <url>
     <loc>https://techno-japan.media/festivals/sangenjaya-art-music-festival.html</loc>
     <lastmod>2026-10-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/festivals/prox.html</loc>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/festivals/soul-beat-asia.html</loc>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/festivals/resonance.html</loc>
+    <lastmod>2026-10-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1069,6 +1033,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://techno-japan.media/en/articles/sawagi-festival-2026-info.html</loc>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://techno-japan.media/en/articles/shifumiz-2026-info.html</loc>
     <lastmod>2026-10-20</lastmod>
     <changefreq>weekly</changefreq>
@@ -1357,19 +1327,7 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/en/festivals/capsule.html</loc>
-    <lastmod>2026-10-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://techno-japan.media/en/festivals/car-multimedia.html</loc>
-    <lastmod>2026-10-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/en/festivals/circle.html</loc>
     <lastmod>2026-10-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -1400,12 +1358,6 @@
   </url>
   <url>
     <loc>https://techno-japan.media/en/festivals/detox.html</loc>
-    <lastmod>2026-10-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/en/festivals/dom.html</loc>
     <lastmod>2026-10-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -1466,12 +1418,6 @@
   </url>
   <url>
     <loc>https://techno-japan.media/en/festivals/festival-fruezinho.html</loc>
-    <lastmod>2026-10-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/en/festivals/festival40010.html</loc>
     <lastmod>2026-10-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -1544,12 +1490,6 @@
   </url>
   <url>
     <loc>https://techno-japan.media/en/festivals/japonism.html</loc>
-    <lastmod>2026-10-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/en/festivals/kyoumei-gathering.html</loc>
     <lastmod>2026-10-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -1645,12 +1585,6 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/en/festivals/okiraku-camp.html</loc>
-    <lastmod>2026-10-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://techno-japan.media/en/festivals/one-music-camp.html</loc>
     <lastmod>2026-10-20</lastmod>
     <changefreq>weekly</changefreq>
@@ -1699,6 +1633,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://techno-japan.media/en/festivals/prox.html</loc>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://techno-japan.media/en/festivals/pure-rave.html</loc>
     <lastmod>2026-10-20</lastmod>
     <changefreq>weekly</changefreq>
@@ -1719,6 +1659,12 @@
   <url>
     <loc>https://techno-japan.media/en/festivals/re-birth-festival.html</loc>
     <lastmod>2026-10-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/en/festivals/resonance.html</loc>
+    <lastmod>2026-10-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -1747,12 +1693,6 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/en/festivals/sangenjaya-music-festival.html</loc>
-    <lastmod>2026-10-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://techno-japan.media/en/festivals/sawagi-festival.html</loc>
     <lastmod>2026-10-20</lastmod>
     <changefreq>weekly</changefreq>
@@ -1771,8 +1711,8 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://techno-japan.media/en/festivals/specialflower-festival.html</loc>
-    <lastmod>2026-10-20</lastmod>
+    <loc>https://techno-japan.media/en/festivals/soul-beat-asia.html</loc>
+    <lastmod>2026-10-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -1832,12 +1772,6 @@
   </url>
   <url>
     <loc>https://techno-japan.media/en/festivals/ultra-japan.html</loc>
-    <lastmod>2026-10-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://techno-japan.media/en/festivals/unknown.html</loc>
     <lastmod>2026-10-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -2073,6 +2007,12 @@
   <url>
     <loc>https://techno-japan.media/articles/rebirth-2026-info.html</loc>
     <lastmod>2026-09-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/articles/sawagi-festival-2026-info.html</loc>
+    <lastmod>2026-10-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-10-19T10:11:38.190Z",
-  "count": 122,
+  "_generatedAt": "2026-10-19T17:32:14.714Z",
+  "count": 113,
   "items": [
     {
       "EDITION_ID": "99flags-2026",
@@ -176,24 +176,6 @@
       "STATUS": "finished"
     },
     {
-      "EDITION_ID": "capsule-2025",
-      "FESTIVAL_ID": "capsule",
-      "EDITION": "2025",
-      "DATE_START": "2025-10-25",
-      "DATE_END": "2025-10-26",
-      "PREF": "Yamanashi",
-      "STATUS": "finished"
-    },
-    {
-      "EDITION_ID": "circle-2025",
-      "FESTIVAL_ID": "circle",
-      "EDITION": "2025",
-      "DATE_START": "2025-10-17",
-      "DATE_END": "2025-10-19",
-      "PREF": "Nagano",
-      "STATUS": "finished"
-    },
-    {
       "EDITION_ID": "circus-2025",
       "FESTIVAL_ID": "circus",
       "EDITION": "2025",
@@ -257,15 +239,6 @@
       "DATE_START": "2025-10-04",
       "DATE_END": "2025-10-05",
       "PREF": "Yamanashi",
-      "STATUS": "finished"
-    },
-    {
-      "EDITION_ID": "dom-2024",
-      "FESTIVAL_ID": "dom",
-      "EDITION": "2024",
-      "DATE_START": "2024-10-27",
-      "DATE_END": "2024-10-27",
-      "PREF": "Tokyo",
       "STATUS": "finished"
     },
     {
@@ -379,15 +352,6 @@
       "LAT": "35.7049",
       "LNG": "139.4119",
       "TICKETURL": "https://shop.frue.jp/collections/festival-fruezinho-2026",
-      "STATUS": "finished"
-    },
-    {
-      "EDITION_ID": "festival40010-2025",
-      "FESTIVAL_ID": "festival40010",
-      "EDITION": "2025",
-      "DATE_START": "2025-09-26",
-      "DATE_END": "2025-09-28",
-      "PREF": "Kochi",
       "STATUS": "finished"
     },
     {
@@ -553,15 +517,6 @@
       "LNG": "140.1652",
       "TICKETURL": "https://peatix.com/event/4921776",
       "FLYER": "images/festivals/japonism-flyer.webp",
-      "STATUS": "finished"
-    },
-    {
-      "EDITION_ID": "kyoumei-gathering-2025",
-      "FESTIVAL_ID": "kyoumei-gathering",
-      "EDITION": "2025",
-      "DATE_START": "2025-08-29",
-      "DATE_END": "2025-08-31",
-      "PREF": "Hokkaido",
       "STATUS": "finished"
     },
     {
@@ -781,15 +736,6 @@
       "STATUS": "announced"
     },
     {
-      "EDITION_ID": "okiraku-camp-2025",
-      "FESTIVAL_ID": "okiraku-camp",
-      "EDITION": "2025",
-      "DATE_START": "2025-09-13",
-      "DATE_END": "2025-09-14",
-      "PREF": "Wakayama",
-      "STATUS": "finished"
-    },
-    {
       "EDITION_ID": "one-music-camp-2025",
       "FESTIVAL_ID": "one-music-camp",
       "EDITION": "2025",
@@ -955,15 +901,6 @@
       "STATUS": "finished"
     },
     {
-      "EDITION_ID": "sangenjaya-music-festival-2025",
-      "FESTIVAL_ID": "sangenjaya-music-festival",
-      "EDITION": "2025",
-      "DATE_START": "2025-09-20",
-      "DATE_END": "2025-09-21",
-      "PREF": "Tokyo",
-      "STATUS": "finished"
-    },
-    {
       "EDITION_ID": "sawagi-festival-2025",
       "FESTIVAL_ID": "sawagi-festival",
       "EDITION": "2025",
@@ -1009,15 +946,6 @@
       "LAT": "36.6982",
       "LNG": "137.8619",
       "FLYER": "images/festivals/snow-machine-japan-flyer.jpg",
-      "STATUS": "finished"
-    },
-    {
-      "EDITION_ID": "specialflower-festival-2025",
-      "FESTIVAL_ID": "specialflower-festival",
-      "EDITION": "2025",
-      "DATE_START": "2025-08-10",
-      "DATE_END": "2025-08-11",
-      "PREF": "Ibaraki",
       "STATUS": "finished"
     },
     {
@@ -1140,15 +1068,6 @@
       "TICKETURL": "https://ultrajapan.com/ja/tickets-2026",
       "FLYER": "images/festivals/ultra-japan-2026-flyer.webp",
       "STATUS": "announced"
-    },
-    {
-      "EDITION_ID": "unknown-2024",
-      "FESTIVAL_ID": "unknown",
-      "EDITION": "2024",
-      "DATE_START": "2024-10-18",
-      "DATE_END": "2024-10-20",
-      "PREF": "Shizuoka",
-      "STATUS": "finished"
     },
     {
       "EDITION_ID": "waifu-2026",

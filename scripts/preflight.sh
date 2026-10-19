@@ -159,6 +159,7 @@ run "開催回（EDITIONS）"                node scripts/check_cms_editions.mjs
 run "FESTIVALS name_ja の保持と生成"     node scripts/check_cms_name_ja.mjs
 run "VENUES追加4列の保持と生成"          node scripts/check_cms_venue_access.mjs
 run "CMSの削除の連鎖"                    node scripts/check_cms_delete.mjs
+run "CMS ジャンルの往復"                 node scripts/check_cms_genre_roundtrip.mjs
 run "著者の候補表示"                    node scripts/check_cms_authors.mjs
 run "認証切れの自動復帰"                node scripts/check_cms_auth_retry.mjs
 run "LINEUP の入力"                     node scripts/check_cms_lineup.mjs
