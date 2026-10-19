@@ -7,13 +7,17 @@ Output: LP/rss.xml
 import os
 import re
 import sys
-from datetime import datetime, date
+import hashlib
+import json
+from datetime import datetime, date, timezone, timedelta
 from email.utils import format_datetime
 
 BASE_URL = "https://techno-japan.media"
 LP_DIR = os.path.join(os.path.dirname(__file__), "..", "LP")
 OUT_PATH = os.path.join(LP_DIR, "rss.xml")
 DATA_PATH = os.path.join(LP_DIR, "data.js")
+EDITIONS_PATH = os.path.join(LP_DIR, "data", "editions.json")
+JST = timezone(timedelta(hours=9))
 
 SITE_TITLE = "TECHNO JAPAN"
 SITE_DESC = "Japan's underground techno and house music media platform."
@@ -40,7 +44,8 @@ def parse_block(block):
     """Pull out common fields from a JS object literal block."""
     out = {}
     for key in ("id", "name", "title", "date", "city", "venue", "image",
-                "desc", "description", "excerpt", "publishedAt", "publishAt", "category", "status"):
+                "desc", "description", "excerpt", "publishedAt", "publishAt",
+                "updatedAt", "UPDATED_AT", "dateAdded", "DATE_ADDED", "category", "status"):
         m = re.search(rf'{key}:\s*["\']([^"\']*)["\']', block)
         if m:
             out[key] = m.group(1)
@@ -83,8 +88,50 @@ def parse_festival_date(s):
 
 def to_rfc822(d):
     if isinstance(d, date) and not isinstance(d, datetime):
-        d = datetime.combine(d, datetime.min.time())
+        d = datetime.combine(d, datetime.min.time(), tzinfo=JST)
+    elif d.tzinfo is None:
+        d = d.replace(tzinfo=JST)
     return format_datetime(d)
+
+
+def parse_date_value(value):
+    if not value:
+        return None
+    try:
+        value = str(value).strip()
+        if re.fullmatch(r"\d{4}-\d{2}-\d{2}", value):
+            return datetime.strptime(value, "%Y-%m-%d").replace(tzinfo=JST)
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+        return parsed.replace(tzinfo=JST) if parsed.tzinfo is None else parsed
+    except ValueError:
+        return None
+
+
+def festival_pub_date(festival, event_date, editions_by_festival, today):
+    for key in ("updatedAt", "UPDATED_AT", "dateAdded", "DATE_ADDED"):
+        parsed = parse_date_value(festival.get(key))
+        if parsed:
+            return parsed
+    for edition in editions_by_festival.get(festival.get("id"), []):
+        for key in ("updatedAt", "UPDATED_AT", "updated_at", "dateAdded", "DATE_ADDED"):
+            parsed = parse_date_value(edition.get(key))
+            if parsed:
+                return parsed
+    if event_date <= today:
+        return datetime.combine(event_date, datetime.min.time(), tzinfo=JST)
+    return None
+
+
+def previous_last_build(path, item_hash):
+    if not os.path.exists(path):
+        return None
+    with open(path, encoding="utf-8") as old:
+        text = old.read()
+    old_hash = re.search(r"<!-- items-hash: ([0-9a-f]+) -->", text)
+    old_date = re.search(r"<lastBuildDate>(.*?)</lastBuildDate>", text)
+    if old_hash and old_date and old_hash.group(1) == item_hash:
+        return old_date.group(1)
+    return None
 
 
 def escape_xml(s):
@@ -102,6 +149,12 @@ def main():
         data = f.read()
 
     items = []
+    editions_by_festival = {}
+    if os.path.exists(EDITIONS_PATH):
+        with open(EDITIONS_PATH, encoding="utf-8") as editions_file:
+            for edition in json.load(editions_file).get("items", []):
+                editions_by_festival.setdefault(edition.get("FESTIVAL_ID"), []).append(edition)
+    today = date.today()
 
     # Festivals (upcoming or recent — sorted by date desc)
     festival_blocks = extract_blocks(data, "FESTIVALS")
@@ -117,6 +170,9 @@ def main():
 
     # Take latest 30 festivals
     for d, f in festivals[:30]:
+        pub = festival_pub_date(f, d, editions_by_festival, today)
+        if pub is None:
+            continue
         title = f["name"]
         link = f"{BASE_URL}/festivals/{f['id']}.html"
         desc_text = f.get("desc") or f.get("description") or f"Festival on {d.isoformat()}"
@@ -127,7 +183,7 @@ def main():
             "link": link,
             "guid": link,
             "description": desc_text,
-            "pubDate": to_rfc822(d),
+            "pubDate": to_rfc822(pub),
             "category": "Festival",
         })
 
@@ -141,10 +197,9 @@ def main():
         title = strip_title_markdown(a.get("title") or a.get("name"))
         link = f"{BASE_URL}/articles/{a['id']}.html"
         pub_str = a.get("publishedAt") or a.get("publishAt")
-        try:
-            pub = datetime.fromisoformat(pub_str.replace("Z", "+00:00")) if pub_str else datetime.now()
-        except (ValueError, AttributeError):
-            pub = datetime.now()
+        pub = parse_date_value(pub_str) or parse_date_value(a.get("date"))
+        if pub is None:
+            continue
         items.append({
             "title": title,
             "link": link,
@@ -157,7 +212,12 @@ def main():
             articles.append(a)
 
     # Build RSS
-    now = to_rfc822(datetime.now())
+    item_signature = "\n".join(
+        f"{it['guid']}\t{it['title']}\t{it['pubDate']}\t{it['description']}\t{it['category']}"
+        for it in items
+    ).encode("utf-8")
+    item_hash = hashlib.sha256(item_signature).hexdigest()
+    now = previous_last_build(OUT_PATH, item_hash) or to_rfc822(datetime.now(JST))
     lines = [
         '<?xml version="1.0" encoding="UTF-8"?>',
         '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">',
@@ -167,6 +227,7 @@ def main():
         f'    <description>{escape_xml(SITE_DESC)}</description>',
         '    <language>ja-JP</language>',
         f'    <lastBuildDate>{now}</lastBuildDate>',
+        f'    <!-- items-hash: {item_hash} -->',
         f'    <atom:link href="{BASE_URL}/rss.xml" rel="self" type="application/rss+xml"/>',
     ]
     for it in items:
@@ -199,10 +260,9 @@ def main():
     for a in sorted(articles, key=article_sort_key, reverse=True)[:20]:
         link = f"{BASE_URL}/articles/{a['id']}.html"
         pub_str = a.get("publishedAt") or a.get("date")
-        try:
-            pub = datetime.fromisoformat(pub_str.replace("Z", "+00:00")) if pub_str else datetime.now()
-        except (ValueError, AttributeError):
-            pub = datetime.now()
+        pub = parse_date_value(pub_str) or parse_date_value(a.get("date"))
+        if pub is None:
+            continue
         article_items.append({
             "title": strip_title_markdown(a.get("title") or a.get("name")),
             "link": link,

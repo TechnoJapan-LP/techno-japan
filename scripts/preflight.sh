@@ -38,6 +38,44 @@
 set -uo pipefail
 cd "$(dirname "$0")/.."
 
+CHECK_TIMEOUT="${PREFLIGHT_CHECK_TIMEOUT:-240}"
+LOCK_ROOT="${TMPDIR:-/tmp}/techno-japan-preflight.lock"
+LOCK_PID="${LOCK_ROOT}/pid"
+if ! mkdir "$LOCK_ROOT" 2>/dev/null; then
+  old_pid="$(cat "$LOCK_PID" 2>/dev/null || true)"
+  if [ -n "$old_pid" ] && kill -0 "$old_pid" 2>/dev/null; then
+    echo "preflight is already running (PID $old_pid); exiting." >&2
+    exit 2
+  fi
+  rm -f "$LOCK_PID"
+  rmdir "$LOCK_ROOT" 2>/dev/null || { echo "preflight lock is busy; exiting." >&2; exit 2; }
+  mkdir "$LOCK_ROOT" 2>/dev/null || { echo "preflight lock is busy; exiting." >&2; exit 2; }
+fi
+echo "$$" > "$LOCK_PID"
+
+kill_headless_children() {
+  local root child command
+  for child in $(pgrep -P "${1:-$$}" 2>/dev/null || true); do
+    kill_headless_children "$child"
+    command="$(ps -p "$child" -o command= 2>/dev/null || true)"
+    case " $command " in
+      *" --headless"*|*" headless "*|*--remote-debugging-port=*)
+        kill "$child" 2>/dev/null || true
+        ;;
+    esac
+  done
+}
+
+cleanup() {
+  kill_headless_children
+  if [ "$(cat "$LOCK_PID" 2>/dev/null || true)" = "$$" ]; then
+    rm -f "$LOCK_PID"
+    rmdir "$LOCK_ROOT" 2>/dev/null || true
+  fi
+}
+trap cleanup EXIT
+trap 'exit 130' INT
+
 FAST=0
 [ "${1:-}" = "--fast" ] && FAST=1
 
@@ -46,13 +84,35 @@ failed_names=()
 
 run() {
   local name="$1"; shift
-  printf '  %-46s' "$name"
-  if out=$("$@" 2>&1); then
-    echo "✅"; pass=$((pass+1))
+  local started now elapsed pid status out_file
+  started=$(date +%s)
+  echo "  ▶ $name"
+  out_file="${TMPDIR:-/tmp}/preflight-$$-${RANDOM}.out"
+  ("$@") >"$out_file" 2>&1 &
+  pid=$!
+  while kill -0 "$pid" 2>/dev/null; do
+    now=$(date +%s); elapsed=$((now - started))
+    if [ "$elapsed" -ge "$CHECK_TIMEOUT" ]; then
+      kill_headless_children "$pid"
+      kill "$pid" 2>/dev/null || true
+      wait "$pid" 2>/dev/null || true
+      echo "  ❌ $name — TIMEOUT after ${elapsed}s (limit ${CHECK_TIMEOUT}s)"
+      fail=$((fail+1)); failed_names+=("$name (timeout)")
+      tail -12 "$out_file" | sed 's/^/      /'
+      rm -f "$out_file"
+      return
+    fi
+    sleep 1
+  done
+  wait "$pid"; status=$?
+  now=$(date +%s); elapsed=$((now - started))
+  if [ "$status" -eq 0 ]; then
+    echo "  ✅ $name (${elapsed}s)"; pass=$((pass+1))
   else
-    echo "❌"; fail=$((fail+1)); failed_names+=("$name")
-    echo "$out" | tail -12 | sed 's/^/      /'
+    echo "  ❌ $name (${elapsed}s)"; fail=$((fail+1)); failed_names+=("$name")
+    tail -12 "$out_file" | sed 's/^/      /'
   fi
+  rm -f "$out_file"
 }
 
 skip() {

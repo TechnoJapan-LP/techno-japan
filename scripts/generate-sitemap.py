@@ -10,6 +10,9 @@ Google News sitemap は古い記事を受け付けないため、追加出力は
 import os
 import re
 import sys
+import json
+import subprocess
+import xml.etree.ElementTree as ET
 from datetime import date, datetime, timedelta, timezone
 from urllib.parse import quote
 from xml.sax.saxutils import escape
@@ -110,6 +113,79 @@ def article_publication_date(article):
     return parsed.replace(tzinfo=timezone.utc) if parsed.tzinfo is None else parsed
 
 
+def parse_date(value):
+    if not value:
+        return None
+    value = str(value).strip()
+    try:
+        if re.fullmatch(r"\d{4}-\d{2}-\d{2}", value):
+            return date.fromisoformat(value)
+        return datetime.fromisoformat(value.replace("Z", "+00:00")).date()
+    except ValueError:
+        return None
+
+
+def record_date(record, *names):
+    lowered = {str(k).lower(): v for k, v in record.items()}
+    for name in names:
+        value = lowered.get(name.lower())
+        parsed = parse_date(value)
+        if parsed:
+            return parsed
+    return None
+
+
+def is_shallow_repository(repo):
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "--is-shallow-repository"],
+            cwd=repo, capture_output=True, text=True, check=False,
+        )
+        return result.stdout.strip().lower() == "true"
+    except OSError:
+        return False
+
+
+def load_previous_lastmods(path):
+    try:
+        root = ET.parse(path).getroot()
+    except (OSError, ET.ParseError):
+        return {}
+    namespace = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
+    return {
+        url.findtext(f"{namespace}loc"): url.findtext(f"{namespace}lastmod")
+        for url in root.findall(f"{namespace}url")
+        if url.findtext(f"{namespace}loc") and url.findtext(f"{namespace}lastmod")
+    }
+
+
+def git_file_date(path, loc, today, shallow, previous_lastmods):
+    if shallow:
+        return previous_lastmods.get(loc, today)
+    repo = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    relative = os.path.relpath(path, repo)
+    try:
+        result = subprocess.run(
+            ["git", "log", "-1", "--format=%cs", "--", relative],
+            cwd=repo, capture_output=True, text=True, check=False,
+        )
+        value = result.stdout.strip()
+        if re.fullmatch(r"\d{4}-\d{2}-\d{2}", value):
+            return value
+    except OSError:
+        pass
+    return today
+
+
+def load_data_file(name):
+    path = os.path.join(LP_DIR, "data", name)
+    try:
+        with open(path, encoding="utf-8") as source:
+            return json.load(source).get("items", [])
+    except (OSError, ValueError):
+        return []
+
+
 def main():
     if not os.path.exists(DATA_PATH):
         print(f"ERROR: {DATA_PATH} not found", file=sys.stderr)
@@ -120,11 +196,26 @@ def main():
 
     today = date.today().isoformat()
     urls = []
+    repo = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    shallow = is_shallow_repository(repo)
+    previous_lastmods = load_previous_lastmods(OUT_PATH) if shallow else {}
+    today_date = date.today()
+    editions = load_data_file("editions.json")
+    lineups = load_data_file("lineups.json")
+    editions_by_festival = {}
+    editions_by_id = {}
+    for edition in editions:
+        editions_by_festival.setdefault(edition.get("FESTIVAL_ID"), []).append(edition)
+        if edition.get("EDITION_ID"):
+            editions_by_id[edition["EDITION_ID"]] = edition
+    lineups_by_edition = {}
+    for lineup in lineups:
+        lineups_by_edition.setdefault(lineup.get("EDITION_ID"), []).append(lineup)
 
     for p in STATIC_PAGES:
         urls.append({
             "loc": BASE_URL + p["path"],
-            "lastmod": today,
+            "lastmod": git_file_date(os.path.join(LP_DIR, p["path"].lstrip("/")), BASE_URL + p["path"], today, shallow, previous_lastmods),
             "changefreq": p["changefreq"],
             "priority": p["priority"],
         })
@@ -132,9 +223,27 @@ def main():
     # Festivals
     festival_ids = extract_ids(data, "FESTIVALS")
     for fid in festival_ids:
+        festival_path = os.path.join(LP_DIR, "festivals", f"{fid}.html")
+        candidates = []
+        for edition in editions_by_festival.get(fid, []):
+            changed = record_date(edition, "updated_at", "updatedAt", "last_updated")
+            if changed:
+                candidates.append(changed)
+            for lineup in lineups_by_edition.get(edition.get("EDITION_ID"), []):
+                changed = record_date(lineup, "updated_at", "updatedAt", "last_updated")
+                if changed:
+                    candidates.append(changed)
+        if not candidates:
+            starts = [record_date(e, "date_start", "start", "date")
+                      for e in editions_by_festival.get(fid, [])]
+            starts = [d for d in starts if d and d <= today_date]
+            if starts:
+                candidates.append(max(starts))
+        festival_loc = f"{BASE_URL}/festivals/{fid}.html"
+        festival_lastmod = max(candidates).isoformat() if candidates else git_file_date(festival_path, festival_loc, today, shallow, previous_lastmods)
         urls.append({
-            "loc": f"{BASE_URL}/festivals/{fid}.html",
-            "lastmod": today,
+            "loc": festival_loc,
+            "lastmod": festival_lastmod,
             "changefreq": "weekly",
             "priority": "0.7",
         })
@@ -144,7 +253,7 @@ def main():
     for aid in artist_ids:
         urls.append({
             "loc": f"{BASE_URL}/artists/{aid}.html",
-            "lastmod": today,
+            "lastmod": git_file_date(os.path.join(LP_DIR, "artists", f"{aid}.html"), f"{BASE_URL}/artists/{aid}.html", today, shallow, previous_lastmods),
             "changefreq": "monthly",
             "priority": "0.6",
         })
@@ -154,7 +263,7 @@ def main():
     for vid in venue_ids:
         urls.append({
             "loc": f"{BASE_URL}/venues/{vid}.html",
-            "lastmod": today,
+            "lastmod": git_file_date(os.path.join(LP_DIR, "venues", f"{vid}.html"), f"{BASE_URL}/venues/{vid}.html", today, shallow, previous_lastmods),
             "changefreq": "monthly",
             "priority": "0.6",
         })
@@ -171,7 +280,7 @@ def main():
         rel = os.path.relpath(f, LP_DIR).replace(os.sep, "/")
         urls.append({
             "loc": f"{BASE_URL}/{rel}",
-            "lastmod": today,
+            "lastmod": git_file_date(f, f"{BASE_URL}/{rel}", today, shallow, previous_lastmods),
             "changefreq": "weekly",
             "priority": "0.5",
         })
@@ -193,9 +302,10 @@ def main():
             continue
         aid = os.path.splitext(os.path.basename(f))[0]
         article_ids.append(aid)
+        article_lastmod = record_date(article_data.get(aid, {}), "updatedAt", "date")
         urls.append({
             "loc": f"{BASE_URL}/articles/{aid}.html",
-            "lastmod": article_data.get(aid, {}).get("updatedAt") or today,
+            "lastmod": article_lastmod.isoformat() if article_lastmod else git_file_date(f, f"{BASE_URL}/articles/{aid}.html", today, shallow, previous_lastmods),
             "changefreq": "monthly",
             "priority": "0.7",
         })

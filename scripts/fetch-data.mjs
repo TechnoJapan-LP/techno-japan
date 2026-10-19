@@ -28,6 +28,23 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const OUT_DIR = path.join(ROOT, 'LP', 'data');
 
+async function writeStableDataJson(fileName, payload, generatedAt) {
+  const filePath = path.join(OUT_DIR, fileName);
+  let previous;
+  try { previous = JSON.parse(await readFile(filePath, 'utf-8')); } catch { /* first write */ }
+  const withoutTimestamp = value => {
+    const copy = { ...value };
+    delete copy._generatedAt;
+    return JSON.stringify(copy);
+  };
+  if (previous && withoutTimestamp(previous) === withoutTimestamp(payload)) {
+    payload = { ...payload, _generatedAt: previous._generatedAt };
+  } else {
+    payload = { ...payload, _generatedAt: generatedAt };
+  }
+  await writeFile(filePath, JSON.stringify(payload, null, 2) + '\n', 'utf-8');
+}
+
 const ARGS = new Set(process.argv.slice(2));
 const DRY = ARGS.has('--dry');
 const OFFLINE = ARGS.has('--offline');
@@ -553,7 +570,7 @@ async function main() {
     'events.json': { _generatedAt: gen, count: events.length, items: events },
   };
   for (const [f, data] of Object.entries(files)) {
-    await writeFile(path.join(OUT_DIR, f), JSON.stringify(data, null, 2) + '\n', 'utf-8');
+    await writeStableDataJson(f, data, gen);
     console.log(`  → LP/data/${f} (${data.count}件)`);
   }
   console.log('\n完了。');

@@ -99,7 +99,6 @@ const live = document.getElementById('map-live');
 live.addEventListener('load', () => {
   const win = live.contentWindow;
   const doc = live.contentDocument;
-  if (!win.L) { setResult('mapResult', 'fail', 'window.L missing'); return; }
   doc.getElementById('area-map-btn').click();
   const deadline = Date.now() + 12000;
   const poll = setInterval(() => {
@@ -118,19 +117,28 @@ const fallback = document.getElementById('map-fallback');
 fallback.addEventListener('load', () => {
   const win = fallback.contentWindow;
   const doc = fallback.contentDocument;
+  win.TJ_LEAFLET_SRC = '/__missing_leaflet__.js';
   win.L = undefined;
   doc.getElementById('area-map-btn').click();
-  setTimeout(() => {
+  const deadline = Date.now() + 12000;
+  const poll = setInterval(() => {
     const wrap = openWrap(doc);
     const error = doc.getElementById('venue-map-error');
     const ok = error && !error.hidden && wrap?.style.display === 'none' && error.querySelector('a[href="#venues-grid"]');
-    setResult('fallbackResult', ok ? 'pass' : 'fail', ok ? '' : 'fallback was not shown');
-  }, 300);
+    if (ok || Date.now() > deadline) {
+      clearInterval(poll);
+      setResult('fallbackResult', ok ? 'pass' : 'fail', ok ? '' : 'fallback was not shown');
+    }
+  }, 100);
 });
 const tileFallback = document.getElementById('map-tile-fallback');
-tileFallback.addEventListener('load', () => {
+tileFallback.addEventListener('load', async () => {
   const win = tileFallback.contentWindow;
   const doc = tileFallback.contentDocument;
+  try { await win.tjLoadLeaflet(); } catch (_) {
+    setResult('tileFallbackResult', 'fail', 'tileerror did not switch to OSM');
+    return;
+  }
   let tileLayerCalls = 0;
   win.L.tileLayer = () => {
     const layer = win.L.layerGroup();
@@ -147,23 +155,32 @@ tileFallback.addEventListener('load', () => {
     return layer;
   };
   doc.getElementById('area-map-btn').click();
-  setTimeout(() => {
+  const deadline = Date.now() + 5000;
+  const poll = setInterval(() => {
     const wrap = openWrap(doc);
     const ok = wrap?.dataset.mapStatus === 'ready' && wrap.querySelector('.tj-map-osm');
-    setResult('tileFallbackResult', ok ? 'pass' : 'fail', ok ? '' : 'tileerror did not switch to OSM');
-  }, 300);
+    if (ok || Date.now() > deadline) {
+      clearInterval(poll);
+      setResult('tileFallbackResult', ok ? 'pass' : 'fail', ok ? '' : 'tileerror did not switch to OSM');
+    }
+  }, 100);
 });
 const enFallback = document.getElementById('map-en-fallback');
 enFallback.addEventListener('load', () => {
   const win = enFallback.contentWindow;
   const doc = enFallback.contentDocument;
+  win.TJ_LEAFLET_SRC = '/__missing_leaflet__.js';
   win.L = undefined;
   doc.getElementById('area-map-btn').click();
-  setTimeout(() => {
+  const deadline = Date.now() + 12000;
+  const poll = setInterval(() => {
     const error = doc.getElementById('venue-map-error');
     const ok = error && !error.hidden && error.textContent.trim().startsWith('The map could not be loaded.');
-    setResult('enFallbackResult', ok ? 'pass' : 'fail', ok ? '' : 'English fallback was not shown');
-  }, 300);
+    if (ok || Date.now() > deadline) {
+      clearInterval(poll);
+      setResult('enFallbackResult', ok ? 'pass' : 'fail', ok ? '' : 'English fallback was not shown');
+    }
+  }, 100);
 });
 </script></body></html>"""
 

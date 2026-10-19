@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<script>document.documentElement.classList.add('tj-home-js');</script>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://w.behold.so; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' https:; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://stats.g.doubleclick.net https://feeds.behold.so https://w.behold.so https://formsubmit.co; frame-src 'self' https://w.behold.so https://www.google.com https://www.google.co.jp https://www.youtube.com https://www.youtube-nocookie.com; form-action 'self' https://formsubmit.co; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -31,6 +32,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="TECHNO JAPAN">
 <meta property="og:locale" content="ja_JP">
+<meta name="robots" content="max-image-preview:large">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
@@ -60,6 +62,7 @@
   --card-border: rgba(240,237,232,0.06);
 }
 @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.tj-home-js .home-ssr-links { display: none; }
 
 /* ===================== INTRO ===================== */
 .media-intro {
@@ -841,6 +844,31 @@
 <div class="section-head stories-section-head">
   <div class="section-eyebrow"><span class="dot"></span>STORIES</div>
 </div>
+<div id="top-ssr-links" class="home-ssr-links">
+  <!-- STATIC_LINKS:TOP:START -->
+<ul class="ssr-link-list">
+  <li><a href="/festivals/wonderfruit-kyoto.html">Wonderfruit Kyoto — 2026 · Kyoto (Ohara Sanso / ACG Villa Kyoto / Kurama Mountain / Ochill TeaRoom)</a></li>
+  <li><a href="/festivals/sawagi-festival.html">Sawagi Festival — 2026 · ステキな村キャンプ場, Yamanashi</a></li>
+  <li><a href="/festivals/topia.html">Topia — 2026 · Chiba</a></li>
+  <li><a href="/festivals/festival-de-frue.html">FESTIVAL de FRUE — 2026 · つま恋リゾート 彩の郷, Shizuoka</a></li>
+  <li><a href="/festivals/parallel-world.html">PARALLEL WORLD — 2026 · Secret Venue</a></li>
+  <li><a href="/festivals/denki-bodhisattva.html">DENKI BODHISATTVA — 2026 · 木の根ペンション</a></li>
+  <li><a href="/festivals/grow-the-culture-open-air.html">GROW THE CULTURE OPEN AIR — 2026 · おおばキャンプ村, Tokyo</a></li>
+  <li><a href="/festivals/sangenjaya-art-music-festival.html">SANGENJAYA ART MUSIC FESTIVAL — 2026 · 三軒茶屋駅周辺</a></li>
+  <li><a href="/festivals/mutek.html">Mutek — 2026 · 渋谷</a></li>
+  <li><a href="/festivals/takarajima-beach-cleaning-party.html">TAKARAJIMA — 2026 · Secret Location, Okinawa</a></li>
+  <li><a href="/festivals/snow-machine-japan.html">Snow Machine Japan — 2027 · HAKUBA VALLEY, Nagano</a></li>
+  <li><a href="/articles/topia-2026-info.html">Topia | 千葉・外房、まだ誰も足を踏み入れていないコンクリート空間で地下レイヴ</a></li>
+  <li><a href="/articles/intergalactic-2026-info.html">INTERGALACTIC | 東京・日の出町の森が、光とアートと音楽の別世界に変わる</a></li>
+  <li><a href="/articles/treak-2026-info.html">TREKs | 京都・久多の森が、3日間だけ&quot;commune&quot;になる</a></li>
+  <li><a href="/articles/labyrinth-2026-info.html">The Labyrinth | 標高1,000mの森で、日本を代表する野外レイヴが3日間の物語を組む。</a></li>
+  <li><a href="/articles/ondoland1012-2026-info.html">ONDO LAND | 10月12日に大阪駅5F「時空の広場」でテクノレイヴ！</a></li>
+  <li><a href="/articles/japan-festival-2026-october.html">2026年10月 | 日本の音楽フェスティバル&amp;レイヴ11選</a></li>
+  <li><a href="/articles/odyssey-2026-info.html">Odyssey | 宮崎・標高1,000mの森と天文台に、九州の50組が集うローカルレイヴ</a></li>
+  <li><a href="/articles/synapse-2026-info.html">Synapse Festival | 福岡・海の中道で初の3日間開催へ</a></li>
+</ul>
+<!-- STATIC_LINKS:TOP:END -->
+</div>
 <div class="main-grid" id="main-grid">
   <div class="featured-col" id="featured-col"><!-- rendered by JS --></div>
   <div class="side-col" id="side-col"><!-- rendered by JS --></div>
@@ -934,7 +962,7 @@
   </div>
 </footer>
 
-<script src="common.js?v=17" defer></script>
+<script src="common.js?v=18" defer></script>
 <script src="favorites.js?v=3" defer></script>
 <script src="search.js?v=6" defer></script>
 <!-- localize.js は defer にしない。下のインライン描画が同期実行で tjLocalized を呼ぶ -->
