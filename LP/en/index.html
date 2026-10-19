@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<script>document.documentElement.classList.add('tj-home-js');</script>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://w.behold.so; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' https:; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://stats.g.doubleclick.net https://feeds.behold.so https://w.behold.so https://formsubmit.co; frame-src 'self' https://w.behold.so https://www.google.com https://www.google.co.jp https://www.youtube.com https://www.youtube-nocookie.com; form-action 'self' https://formsubmit.co; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -31,6 +32,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="TECHNO JAPAN">
 <meta property="og:locale" content="en_US">
+<meta name="robots" content="max-image-preview:large">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
@@ -60,6 +62,7 @@
   --card-border: rgba(240,237,232,0.06);
 }
 @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.tj-home-js .home-ssr-links { display: none; }
 
 /* ===================== INTRO ===================== */
 .media-intro {
@@ -841,6 +844,31 @@
 <div class="section-head stories-section-head">
   <div class="section-eyebrow"><span class="dot"></span>STORIES</div>
 </div>
+<div id="top-ssr-links" class="home-ssr-links">
+  <!-- STATIC_LINKS:TOP:START -->
+<ul class="ssr-link-list">
+  <li><a href="/en/festivals/wonderfruit-kyoto.html">Wonderfruit Kyoto — 2026 · Kyoto (Ohara Sanso / ACG Villa Kyoto / Kurama Mountain / Ochill TeaRoom)</a></li>
+  <li><a href="/en/festivals/sawagi-festival.html">Sawagi Festival — 2026 · Suteki Village Camping Ground, Yamanashi</a></li>
+  <li><a href="/en/festivals/topia.html">Topia — 2026 · Chiba</a></li>
+  <li><a href="/en/festivals/festival-de-frue.html">FESTIVAL de FRUE — 2026 · TSUMAGOI RESORT SAINO SATO, Shizuoka</a></li>
+  <li><a href="/en/festivals/parallel-world.html">PARALLEL WORLD — 2026 · Secret Venue</a></li>
+  <li><a href="/en/festivals/denki-bodhisattva.html">DENKI BODHISATTVA — 2026 · Kinone Pension</a></li>
+  <li><a href="/en/festivals/grow-the-culture-open-air.html">GROW THE CULTURE OPEN AIR — 2026 · Ohba Camping Village, Tokyo</a></li>
+  <li><a href="/en/festivals/sangenjaya-art-music-festival.html">SANGENJAYA ART MUSIC FESTIVAL — 2026 · Sangen-jaya Station</a></li>
+  <li><a href="/en/festivals/mutek.html">Mutek — 2026 · Shibuya</a></li>
+  <li><a href="/en/festivals/takarajima-beach-cleaning-party.html">TAKARAJIMA — 2026 · Secret Location, Okinawa</a></li>
+  <li><a href="/en/festivals/snow-machine-japan.html">Snow Machine Japan — 2027 · HAKUBA VALLEY, Nagano</a></li>
+  <li><a href="/en/articles/topia-2026-info.html">Topia | An underground rave in a concrete space in Sotobo, Chiba, where no one has yet set foot.</a></li>
+  <li><a href="/en/articles/intergalactic-2026-info.html">INTERGALACTIC | A forest in Hinode, Tokyo, turns into another world of light, art and music.</a></li>
+  <li><a href="/en/articles/treak-2026-info.html">TREKs | For three days only, the forests of Kuta, Kyoto become a &quot;commune&quot;</a></li>
+  <li><a href="/en/articles/labyrinth-2026-info.html">The Labyrinth | In a forest 1,000 metres above sea level, Japan&#39;s defining outdoor rave weaves a three-day narrative.</a></li>
+  <li><a href="/en/articles/ondoland1012-2026-info.html">ONDO LAND brings a techno rave to Toki no Hiroba, the plaza on the 5th floor of Osaka Station, on October 12!</a></li>
+  <li><a href="/en/articles/japan-festival-2026-october.html">October 2026: 11 Music Festivals &amp; Raves to Catch in Japan</a></li>
+  <li><a href="/en/articles/odyssey-2026-info.html">Odyssey: A Local Rave Bringing 50 Kyushu Acts to a Forest and Observatory 1,000m Above Sea Level in Miyazaki</a></li>
+  <li><a href="/en/articles/synapse-2026-info.html">Synapse Festival Set for First-Ever Three-Day Edition at Uminonakamichi, Fukuoka</a></li>
+</ul>
+<!-- STATIC_LINKS:TOP:END -->
+</div>
 <div class="main-grid" id="main-grid">
   <div class="featured-col" id="featured-col"><!-- rendered by JS --></div>
   <div class="side-col" id="side-col"><!-- rendered by JS --></div>
@@ -934,7 +962,7 @@
   </div>
 </footer>
 
-<script src="/common.js?v=17" defer></script>
+<script src="/common.js?v=18" defer></script>
 <script src="/favorites.js?v=3" defer></script>
 <script src="/search.js?v=6" defer></script>
 <!-- localize.js は defer にしない。下のインライン描画が同期実行で tjLocalized を呼ぶ -->

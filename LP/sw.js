@@ -16,7 +16,7 @@
  *   順序を守れているかは scripts/check_sw_routing.mjs が検査する。
  */
 
-const VERSION = 'v1.15.0';
+const VERSION = 'v1.16.0';
 const STATIC_CACHE = `tj-static-${VERSION}`;
 const DYNAMIC_CACHE = `tj-dynamic-${VERSION}`;
 
@@ -30,14 +30,10 @@ const PRECACHE_URLS = [
   '/venues.html',
   '/news.html',
   '/favorites.html',
-  '/common.css',
-  '/common.js',
-  '/favorites.js',
-  '/search.js',
-  '/article-fx.css',
-  '/article-fx.js',
-  '/data.js',
-  '/data-hub.js',
+  '/manifest.json',
+  '/favicon.ico',
+  '/apple-touch-icon.png',
+  '/images/favicon-192.png',
 ];
 
 // Install: precache core pages
@@ -117,6 +113,10 @@ self.addEventListener('fetch', event => {
   // 画像は stale-while-revalidate。
   // CMS で同じファイル名のまま画像を差し替えることがあり、cache-first だと
   // 一度見た人には古い画像が永久に表示され続けてしまう。
+  if (url.pathname.startsWith('/images/derivatives/')) {
+    event.respondWith(cacheFirstDynamic(request));
+    return;
+  }
   if (/\.(png|jpe?g|webp|avif|svg|gif|ico)$/i.test(url.pathname)) {
     event.respondWith(staleWhileRevalidate(request));
     return;
@@ -131,7 +131,7 @@ async function networkFirst(request) {
     const fresh = await fetch(request);
     if (fresh.ok) {
       const cache = await caches.open(DYNAMIC_CACHE);
-      cache.put(request, fresh.clone());
+      await putDynamic(cache, request, fresh.clone());
     }
     return fresh;
   } catch (err) {
@@ -169,9 +169,26 @@ async function cacheFirst(request) {
 async function staleWhileRevalidate(request) {
   const cache = await caches.open(DYNAMIC_CACHE);
   const cached = await cache.match(request);
-  const fetchPromise = fetch(request).then(response => {
-    if (response.ok) cache.put(request, response.clone());
+  const fetchPromise = fetch(request).then(async response => {
+    if (response.ok) await putDynamic(cache, request, response.clone());
     return response;
   }).catch(() => cached);
   return cached || fetchPromise;
+}
+
+async function cacheFirstDynamic(request) {
+  const cached = await caches.match(request);
+  if (cached) return cached;
+  const fresh = await fetch(request);
+  if (fresh.ok) {
+    const cache = await caches.open(DYNAMIC_CACHE);
+    await putDynamic(cache, request, fresh.clone());
+  }
+  return fresh;
+}
+
+async function putDynamic(cache, request, response) {
+  await cache.put(request, response);
+  const keys = await cache.keys();
+  await Promise.all(keys.slice(0, Math.max(0, keys.length - 120)).map(key => cache.delete(key)));
 }

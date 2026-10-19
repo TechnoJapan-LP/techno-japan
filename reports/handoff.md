@@ -10395,3 +10395,72 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - headless: 1440px 3列 / 1000px 2列 / 390px 1列、139枚、横はみ出し 0。`bash scripts/preflight.sh` 全52件成功。
 ### 未確認の類似パターン
 - UPCOMING ON STAGE のグリッドは入れ子なし（確認済み・0件）。
+
+## 2026-10-19 サイト quick wins（未コミット）
+
+### 実施
+- NEWS featured のHydration中の高さ予約、VENUESナビの高さ予約、LeafletのMAP操作時lazy load、スマホcustom cursor停止。
+- SWの未バージョンprecache除去、派生画像cache-first、dynamic cache 120件上限、v1.16.0。
+- indexableページのmax-image-preview、TOP静的リンク（upcoming最大12＋記事8）、JST基準llms upcoming、common.js v18。
+
+### コミット
+- 未コミット（ユーザー指定）。
+
+### 検証
+- `node scripts/build-detail-pages.mjs` は外部画像取得リトライで長時間化したため生成結果を確認後停止。TOP/llms生成結果は反映済み。
+- JA/ENハブ5枚の行数一致、`python3 scripts/check_asset_versions.py`、変更JSの`node --check`、`node scripts/check_sw_routing.mjs` 成功。
+- 実ブラウザ／`check_hub_pages.py`／`check_venue_maps.mjs` は未確認（localhost bind不可のため、ユーザー指定どおり未実行）。
+
+### 変更したパターン
+- `LP/news.html` featured予約、`LP/venues.html` nav/map loader、`LP/sw.js` routing/cache、`LP/common.js` touch cursor、生成テンプレートと全common.js参照v18。
+
+### 未確認の類似パターン
+- 実ブラウザでのNEWS CLS、VENUES各都市MAP初期化、TOP hydration操作は未確認。
+
+### 次の担当への注意・判断待ち
+- bind可能な環境で実ブラウザ検査と`bash scripts/preflight.sh`を実行してから公開すること。CMS／本番データへの書き込みは不要。
+
+## 2026-10-19 Batch 2 build/ops（未コミット）
+
+### 実施
+- RSS の記事日付フォールバックを `date`（JST 00:00）に変更し、未来日のみのフェスを除外。item hash が同じ場合は `lastBuildDate` を維持。
+- sitemap の URL 別 lastmod、git fallback、生成 JSON の `_generatedAt` 安定化、preflight の timeout・lock・headless 子孫 cleanup を追加。deploy-pages checkout は `fetch-depth: 0` に変更。
+
+### コミット
+- 未コミット（ユーザー指定、既存の未コミット変更を保持）。
+
+### 検証
+- `python3 scripts/generate-rss.py`、`python3 scripts/generate-sitemap.py`、`bash -n scripts/preflight.sh`、`node --check scripts/fetch-data.mjs` 成功。
+- RSS 38件中 pubDate=today は0件。sitemap lastmod 上位は 2026-10-18=459、2026-10-10=3、2026-09-26=3、2026-09-05=3、2026-10-17=3。
+
+### 変更したパターン
+- `scripts/generate-rss.py`、`scripts/generate-sitemap.py`、`scripts/fetch-data.mjs`、`scripts/preflight.sh`、deploy-pages checkout。
+
+### 未確認の類似パターン
+- フル preflight と実ブラウザ操作は未実行（ユーザー指定）。GAS/CMS の本番書き込みは未実行。
+
+### 次の担当への注意・判断待ち
+- 公開前に bind 可能な環境でフル preflight と必要な実ブラウザ確認を実施すること。
+
+## 2026-10-19 今週のクイックウィン（audit-2026-10-19-site-issues.md の「コードだけで直せるもの」）
+
+### 実施
+- NEWS: hydration 中に `#news-featured` の高さを確保（モバイル低速 CLS 0.673 → 0）。
+- VENUES: type/area ナビに min-height、Leaflet を `window.tjLoadLeaflet()` で地図を開いたときに遅延読込（失敗時は従来のエラー UI。`TJ_LEAFLET_SRC` で差し替え可＝検査用）。CLS 0.093 → 0.03、先頭の同期 JS 42KB 削減。check_hub_pages の地図検査を遅延読込前提（ポーリング）に更新。
+- SW v1.16.0: precache から `/data.js` と版なし CSS/JS を除外、`/images/derivatives/` は cache-first、動的キャッシュは新しい120件まで。
+- `max-image-preview:large` を indexable な全テンプレートと手書きハブへ。
+- TOP に upcoming フェス12件＋最新記事8件の静的リンク（`STATIC_LINKS:TOP`）。JS 有効時は head の `tj-home-js` で最初から非表示（表示→非表示で CLS 0.455 が出たため）。
+- llms.txt の upcoming を JST の終了日で絞る（Intergalactic 除外）。
+- タッチ端末ではカスタムカーソルの rAF ループを回さない（common.js）。
+- RSS: 記事は publishedAt 無ければ date（JST 0時）、未来日しかないフェスは除外、`lastBuildDate` は item のハッシュ不変なら維持。pubDate=今日は 19→0件。
+- sitemap lastmod: 記事は updatedAt/date、他は実データ日付→git の最終変更日（shallow なら前回値を維持）。deploy-pages と generate-meta の checkout を fetch-depth: 0。
+- fetch-data: `_generatedAt` は中身が変わったときだけ更新（空回りコミット削減）。
+- preflight: 1件ごとに 240秒の時間制限（PREFLIGHT_CHECK_TIMEOUT）、経過秒表示、同時実行ロック、終了時に自分が起動した headless Chrome を終了。
+
+### 検証
+- 低速モバイル（390px dpr3、150ms/200KB/s、CPU4倍、SW バイパス）CLS: NEWS 0.673→0、VENUES 0.093→0.03、TOP 0。
+- `bash scripts/preflight.sh` 全52件成功、終了後の headless Chrome 0。最長は詳細ページ生成 64秒・ハブ検査 57秒。
+- 本番での LCP 比較は公開後に（ローカルサーバーは gzip 無しで比較不可）。
+
+### 未確認・判断待ち
+- bondisco 記事↔フェスの相互リンクはデータ（記事の関連フェス未設定）。ユーザーに CMS 設定を依頼済み。

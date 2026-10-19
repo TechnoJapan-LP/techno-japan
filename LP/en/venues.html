@@ -13,6 +13,7 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
 <title>VENUES — TECHNO JAPAN</title>
 <meta name="description" content="Clubs, warehouses and music bars across Japan. The venues that define the country's underground electronic music scene.">
+<meta name="robots" content="max-image-preview:large">
 <link rel="alternate" type="application/rss+xml" title="TECHNO JAPAN — RSS" href="https://techno-japan.media/rss.xml">
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#080808">
@@ -53,8 +54,7 @@
 @font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/space-mono-v17-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 </style>
 <link rel="stylesheet" href="/common.css?v=38">
-<link rel="stylesheet" href="/vendor/leaflet-1.9.4/leaflet.css?v=2">
-<script src="/vendor/leaflet-1.9.4/leaflet.js?v=2"></script>
+<link rel="stylesheet" href="/vendor/leaflet-1.9.4/leaflet.css?v=2" media="print" onload="this.media='all'">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -205,15 +205,16 @@
   border-bottom: 1px solid rgba(240,237,232,0.06);
   display: flex; flex-wrap: wrap; align-items: center;
   padding: 4px 40px;
+  min-height: 60px;
 }
-.type-nav { display: flex; gap: 0; overflow-x: auto; scrollbar-width: none; min-width: 0; max-width: 100%; padding: 6px 0; align-items: center; }
+.type-nav { display: flex; gap: 0; overflow-x: auto; scrollbar-width: none; min-width: 0; max-width: 100%; min-height: 48px; padding: 6px 0; align-items: center; }
 .type-nav::-webkit-scrollbar { display: none; }
 .type-nav a { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.62; transition: opacity 0.3s ease; padding: 10px 24px; min-height: 48px; display: inline-flex; align-items: center; white-space: nowrap; flex-shrink: 0; cursor: pointer; }
 .type-nav a:hover { opacity: 0.7; }
 .type-nav a.active { opacity: 1; border-bottom: 1px solid var(--text); }
 .area-nav {
   display: flex; gap: 0; overflow-x: auto; scrollbar-width: none; min-width: 0; max-width: 100%;
-  padding: 6px 0; align-items: center;
+  min-height: 48px; padding: 6px 0; align-items: center;
 }
 /* 1行に並んだときの「都市｜種別」の区切り。折り返した2行では消す。 */
 @media (min-width: 641px) {
@@ -337,7 +338,7 @@
 }
 /* モバイルは「検索＋MAP」を1行、件数を2行目に。縦積み(column)にすると
    flex-basis が高さに化けて検索欄が160pxに伸びる事故が起きる。 */
-@media (max-width: 640px) { .venues-toolbar { gap: 12px; } .venues-search { max-width: none; } .venues-toolbar .venues-count { flex-basis: 100%; } }
+@media (max-width: 640px) { .area-nav-wrap { min-height: 112px; } .venues-toolbar { gap: 12px; } .venues-search { max-width: none; } .venues-toolbar .venues-count { flex-basis: 100%; } }
 
 </style>
 <script type="application/ld+json">
@@ -583,7 +584,7 @@
   </div>
 </footer>
 
-<script src="/common.js?v=17" defer></script>
+<script src="/common.js?v=18" defer></script>
 <script src="/favorites.js?v=3"></script>
 <script src="/search.js?v=6" defer></script>
 <!-- localize.js は defer にしない。下のインライン描画が同期実行で tjLocalized を呼ぶ -->
@@ -634,6 +635,27 @@ function restoreVenueHubState(event) {
   if (event.persisted) return;
   try { const saved=JSON.parse(sessionStorage.getItem(VENUE_HUB_STATE_KEY)||'null'); if(!saved||saved.url!==location.pathname+location.search||Date.now()-saved.savedAt>1800000)return; sessionStorage.removeItem(VENUE_HUB_STATE_KEY); requestAnimationFrame(()=>requestAnimationFrame(()=>scrollTo(0,saved.scrollY))); } catch (_) {}
 }
+let leafletLoadPromise = null;
+function tjLoadLeaflet() {
+  if (window.L) return Promise.resolve(window.L);
+  if (leafletLoadPromise) return leafletLoadPromise;
+  leafletLoadPromise = new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    const timeout = setTimeout(() => reject(new Error('Leaflet script timed out')), 10000);
+    script.src = window.TJ_LEAFLET_SRC || '/vendor/leaflet-1.9.4/leaflet.js?v=2';
+    script.onload = () => {
+      clearTimeout(timeout);
+      window.L ? resolve(window.L) : reject(new Error('Leaflet did not initialize'));
+    };
+    script.onerror = () => {
+      clearTimeout(timeout);
+      reject(new Error('Leaflet script failed to load'));
+    };
+    document.head.appendChild(script);
+  });
+  return leafletLoadPromise;
+}
+window.tjLoadLeaflet = tjLoadLeaflet;
 readVenueQuery();
 addEventListener('pageshow', restoreVenueHubState);
 
@@ -805,16 +827,12 @@ function addVenueTiles(map, wrapId) {
 }
 
 function safeInitVenueMap(cfg) {
-  if (!window.L) {
-    showMapFallback(cfg, 'Leaflet is not loaded');
-    return;
-  }
-  try {
+  tjLoadLeaflet().then(() => {
     cfg.init();
     cfg.inited = true;
-  } catch (error) {
+  }).catch((error) => {
     showMapFallback(cfg, error instanceof Error ? error.message : String(error));
-  }
+  });
 }
 
 function applyAreaFilter() {

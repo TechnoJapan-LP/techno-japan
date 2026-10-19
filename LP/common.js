@@ -21,11 +21,12 @@
 
   // Hand-written pages already contain these nodes. Reuse them when present,
   // and create only the missing node(s) on generated detail pages.
-  const dot = ensureCursorElement('cursor-dot');
-  const ring = ensureCursorElement('cursor-ring');
+  const touchCursor = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+  const dot = touchCursor ? null : ensureCursorElement('cursor-dot');
+  const ring = touchCursor ? null : ensureCursorElement('cursor-ring');
   let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
 
-  if (dot && ring) {
+  if (!touchCursor && dot && ring) {
     document.addEventListener('mousemove', (e) => {
       mouseX = e.clientX;
       mouseY = e.clientY;

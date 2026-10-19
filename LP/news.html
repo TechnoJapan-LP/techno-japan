@@ -13,6 +13,7 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
 <title>NEWS — TECHNO JAPAN</title>
 <meta name="description" content="日本のアンダーグラウンドシーンのニュース、インタビュー、レポート。Stories, interviews and reports from Japan's underground scene.">
+<meta name="robots" content="max-image-preview:large">
 <link rel="alternate" type="application/rss+xml" title="TECHNO JAPAN — RSS" href="https://techno-japan.media/rss.xml">
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#080808">
@@ -120,6 +121,7 @@ html.tj-page-leaving body { opacity: 0; transition: opacity .18s ease; }
 
 /* ===================== FEATURED STORIES ===================== */
 .news-featured { border-bottom: 1px solid rgba(240,237,232,.55); }
+html.tj-news-hydrating #news-featured { min-height: 210vh; }
 .featured-block {
   display: grid;
   grid-template-columns: minmax(0,1fr) minmax(0,1.15fr) minmax(0,1fr);
@@ -515,6 +517,7 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
   .sort-tabs { padding: 0; }
 }
 @media (max-width: 640px) {
+  html.tj-news-hydrating #news-featured { min-height: calc(150vw + 630px); }
   .news-hero { height: auto; min-height: 0; max-height: none; aspect-ratio: 16 / 9; }
   .news-hero-inner { width: 100%; padding: 12px 20px; box-sizing: border-box; }
   .news-hero-eyebrow { font-size: 10px; margin-bottom: 8px; }
@@ -797,7 +800,7 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
   </div>
 </footer>
 
-<script src="common.js?v=17" defer></script>
+<script src="common.js?v=18" defer></script>
 <!-- localize.js は defer にしない。下のインライン描画が同期実行で tjLocalized を呼ぶ -->
 <script src="localize.js?v=12"></script>
 <!-- カード画像の縮小版の対応表。これが無いと tjCardAssetPath は

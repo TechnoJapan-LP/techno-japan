@@ -71,7 +71,7 @@ const ARTICLE_FX_CSS_VERSION = 14;
 
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
-const COMMON_JS_VERSION = 17;   // 2026-10-11 スマホメニュー演出（設計書S）
+const COMMON_JS_VERSION = 18;   // 2026-10-19 touch devices skip the custom cursor loop
 const COMMON_CSS_VERSION = 38;   // 2026-10-17 body margin reset
 const DATA_HUB_VERSION = 11;
 const SEARCH_JS_VERSION = 6;
@@ -965,6 +965,7 @@ ${FAVICON_TAGS}
 
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(d)}">
+<meta name="robots" content="max-image-preview:large">
 <link rel="canonical" href="${esc(canonical)}">
 ${hreflang}
 <link rel="manifest" href="/manifest.json">
@@ -2271,6 +2272,16 @@ function hubLinkList(items, dirName, labelFor) {
   ).join('\n')}\n</ul>`;
 }
 
+function topLinkList(items) {
+  return `<ul class="ssr-link-list">\n${items.map((item) =>
+    `  <li><a href="${item.href}">${esc(item.label)}</a></li>`
+  ).join('\n')}\n</ul>`;
+}
+
+function todayInJapan() {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Tokyo' }).format(new Date());
+}
+
 /* ---------- EN ハブページの生成 ----------
    JA ハブ（手書きHTML）を唯一のソースとし、機械置換で EN 版を作る。
    テンプレート化しない理由: ハブ4枚は互いに style 7-19% / JS 9-25% しか
@@ -2544,6 +2555,10 @@ function fixJaHub(fileName) {
 
   s = s.replace(/<html lang="[^"]*"/, '<html lang="ja"');
 
+  if (!/<meta name="robots" content="noindex(?:,|\")/.test(s) && !s.includes('max-image-preview:large')) {
+    s = s.replace(/(<meta name="description"[^>]*>)/, '$1\n<meta name="robots" content="max-image-preview:large">');
+  }
+
   if (fileName === 'index.html' || fileName === 'about.html') {
     s = ensureNewsMediaOrganization(s, fileName);
   }
@@ -2623,7 +2638,7 @@ function writeHubLinks(fileName, markerName, html) {
    **タイムスタンプを埋めない。**毎日の再生成コミット（generate-meta）で
    中身が変わっていないのに毎回差分が出る、を避ける。 */
 function buildAiSurface({ pubFests, editionsByFestival, pubVenues, pubArtists, pubArticles }) {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayInJapan();
   const events = [];
   for (const f of pubFests) {
     for (const ed of (editionsByFestival.get(String(f.id)) || [])) {
@@ -2878,7 +2893,40 @@ ${FAVICON_TAGS}
     'en/venues': writeAll(pubVenues.map((v) => venuePage(v, 'en')), 'en/venues'),
   };
 
+  const today = todayInJapan();
+  const upcomingTopFests = pubFests
+    .map((festival) => {
+      const edition = (editionsByFestival.get(String(festival.id)) || [])
+        .filter((ed) => {
+          const start = String(ed.DATE_START || '');
+          const end = ISO_DATE.test(String(ed.DATE_END || '')) ? ed.DATE_END : start;
+          return ISO_DATE.test(start) && end >= today && String(ed.STATUS || '').trim().toLowerCase() !== 'cancelled';
+        })
+        .sort((a, b) => String(a.DATE_START).localeCompare(String(b.DATE_START)))[0];
+      return edition ? { festival, edition } : null;
+    })
+    .filter(Boolean)
+    .sort((a, b) => String(a.edition.DATE_START).localeCompare(String(b.edition.DATE_START)))
+    .slice(0, 12);
+  const latestTopArticles = [...pubArticles]
+    .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')))
+    .slice(0, 8);
+  const topLinksJa = topLinkList([
+    ...upcomingTopFests.map(({ festival, edition }) => ({
+      href: `/festivals/${encodeURIComponent(festival.id)}.html`,
+      label: festivalHubLabel(festival, [edition]),
+    })),
+    ...latestTopArticles.map((article) => ({
+      href: `/articles/${encodeURIComponent(article.id)}.html`,
+      label: article.title || article.id || '',
+    })),
+  ]);
+
   const hubCounts = {
+    'index.html': {
+      total: upcomingTopFests.length + latestTopArticles.length,
+      written: writeHubLinks('index.html', 'TOP', topLinksJa),
+    },
     'news.html': {
       total: pubArticles.length,
       written: writeHubLinks('news.html', 'ARTICLES', hubLinkList(pubArticles, 'articles', (a) => a.title || '')),
@@ -2900,7 +2948,18 @@ ${FAVICON_TAGS}
   // EN ハブ用のラベル。JA と同じ items・同じ順序で、ラベルだけ EN 規則にする。
   // 件数や順序を変えると en_hub_leaks_to_ja や静的リンク数の検査とズレるため、
   // hubLinkList の呼び出し方は JA 側と対称に保つこと。
+  const topLinksEn = topLinkList([
+    ...upcomingTopFests.map(({ festival, edition }) => ({
+      href: `/festivals/${encodeURIComponent(festival.id)}.html`,
+      label: festivalHubLabel(festival, [edition], 'en'),
+    })),
+    ...latestTopArticles.map((article) => ({
+      href: `/articles/${encodeURIComponent(article.id)}.html`,
+      label: article.title_en || article.title || article.id || '',
+    })),
+  ]);
   EN_HUB_LINKS = {
+    'index.html': { marker: 'TOP', html: topLinksEn },
     'news.html': { marker: 'ARTICLES', html: hubLinkList(pubArticles, 'articles', (a) => a.title_en || a.title || '') },
     'festivals.html': { marker: 'FESTIVALS', html: hubLinkList(pubFests, 'festivals', (f) => festivalHubLabel(f, editionsByFestival.get(f.id) || [], 'en')) },
     'artists.html': { marker: 'ARTISTS', html: hubLinkList(pubArtists, 'artists', (a) => a.name_en || a.name || '') },
