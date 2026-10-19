@@ -54,7 +54,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 59;
+const DETAIL_CSS_VERSION = 60;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -1801,7 +1801,8 @@ function festivalHeroDateHtml(edition, lang = 'ja', ended = false) {
   const start = String(edition?.DATE_START || '');
   const end = String(edition?.DATE_END || '');
   if (!ISO_DATE.test(start)) return ended ? `<span class="festival-ended-label">${lang === 'en' ? 'ENDED' : '終了'}</span>` : '';
-  const label = ended ? ` <span class="festival-ended-label">${lang === 'en' ? 'ENDED' : '終了'}</span>` : '';
+  const label = ended ? `<span class="festival-ended-label">${lang === 'en' ? 'ENDED' : '終了'}</span>` : '';
+  const withLabel = (date) => `<span class="detail-date-text">${date}</span>${label}`;
   const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
   const parts = (value) => {
     const [year, month, day] = value.split('-').map(Number);
@@ -1809,16 +1810,16 @@ function festivalHeroDateHtml(edition, lang = 'ja', ended = false) {
   };
   const first = parts(start);
   if (!ISO_DATE.test(end) || end === start) {
-    return `<time datetime="${start}">${first.monthName} ${first.day}, ${first.year}</time>${label}`;
+    return withLabel(`<time datetime="${start}">${first.monthName} ${first.day}, ${first.year}</time>`);
   }
   const last = parts(end);
   if (first.year === last.year && first.month === last.month) {
-    return `<time datetime="${start}">${first.monthName} ${first.day}</time> — <time datetime="${end}">${last.day}, ${last.year}</time>${label}`;
+    return withLabel(`<time datetime="${start}">${first.monthName} ${first.day}</time> — <time datetime="${end}">${last.day}, ${last.year}</time>`);
   }
   if (first.year === last.year) {
-    return `<time datetime="${start}">${first.monthName} ${first.day}</time> — <time datetime="${end}">${last.monthName} ${last.day}, ${last.year}</time>${label}`;
+    return withLabel(`<time datetime="${start}">${first.monthName} ${first.day}</time> — <time datetime="${end}">${last.monthName} ${last.day}, ${last.year}</time>`);
   }
-  return `<time datetime="${start}">${first.monthName} ${first.day}, ${first.year}</time> — <time datetime="${end}">${last.monthName} ${last.day}, ${last.year}</time>${label}`;
+  return withLabel(`<time datetime="${start}">${first.monthName} ${first.day}, ${first.year}</time> — <time datetime="${end}">${last.monthName} ${last.day}, ${last.year}</time>`);
 }
 
 function festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, lang, name, canonical, summary, faqItems, relatedHtml, lineupEdition, ended, endedNotice, allFestivals, editionsByFestival }) {

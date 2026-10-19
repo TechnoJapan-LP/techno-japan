@@ -575,6 +575,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 }
 .festival-design-v2 .detail-hero-info { display: flex; flex-direction: column; justify-content: center; }
 .festival-design-v2 .detail-date {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 10px;
   font-family: var(--font-mono); font-size: 12px; letter-spacing: .18em;
   text-transform: uppercase; opacity: .5; margin-bottom: 16px;
 }
@@ -637,7 +638,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   font-family: var(--font-mono); font-size: 9px; letter-spacing: .2em;
   text-transform: uppercase; opacity: 1; margin-bottom: 20px;
 }
-.festival-ended-label { display: inline-block; padding: 4px 7px; border: 1px solid rgba(240,237,232,.45); color: rgba(240,237,232,.72); font-family: var(--font-mono); font-size: 9px; letter-spacing: .12em; line-height: 1; opacity: .9; vertical-align: middle; }
+.festival-ended-label { display: inline-block; padding: 3px 6px; border: 1px solid rgba(240,237,232,.45); color: rgba(240,237,232,.72); font-family: var(--font-mono); font-size: 9px; letter-spacing: .12em; line-height: 1; opacity: .9; position: relative; top: -1px; }
 .festival-ended-notice { margin: -20px 0 24px; font-size: 13px; color: rgba(240,237,232,.8); }
 .festival-design-v2 .festival-description-inline {
   max-width: 520px; margin: 0 0 28px; font-family: var(--font-body);
