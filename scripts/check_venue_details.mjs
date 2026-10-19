@@ -5,6 +5,9 @@ import path from 'node:path';
 import vm from 'node:vm';
 
 const root = path.join(process.cwd(), 'LP');
+const esc = (s) => String(s ?? '')
+  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 const dataSource = fs.readFileSync(path.join(root, 'data.js'), 'utf8');
 const context = {};
 vm.createContext(context);
@@ -26,13 +29,16 @@ for (const lang of ['ja', 'en']) {
     const ld = json.find(item => item['@type']);
     const expected = venue.type === 'bar' ? ['BarOrPub','MusicVenue'] : venue.type === 'club' ? ['NightClub','MusicVenue'] : 'MusicVenue';
     if (JSON.stringify(ld?.['@type']) !== JSON.stringify(expected)) failures.push(`${lang}/${venue.id}: JSON-LD typeが不一致`);
-    const hours = String(venue.hours || '').trim();
+    const hours = lang === 'en'
+      ? String(venue.hours_en || venue.hours || '').trim()
+      : String(venue.hours || venue.hours_en || '').trim();
     const charge = String(venue.charge || '').trim();
     const hoursLabel = lang === 'ja' ? '営業時間' : 'HOURS';
     const hoursFallback = lang === 'ja' ? 'イベントにより異なります。公式サイトでご確認ください。' : 'Hours vary by event. Check the official site for details.';
-    if (hours && !html.includes(`<dt>${hoursLabel}</dt><dd>${hours}</dd>`)) failures.push(`${lang}/${venue.id}: HOURSがINFORMATIONに無い`);
+    const escapedHours = esc(hours || hoursFallback);
+    if (hours && !html.includes(`<dt>${hoursLabel}</dt><dd>${escapedHours}</dd>`)) failures.push(`${lang}/${venue.id}: HOURSがINFORMATIONに無い`);
     if (charge && !html.includes(`<dt>CHARGE</dt><dd>${charge}</dd>`)) failures.push(`${lang}/${venue.id}: CHARGEがINFORMATIONに無い`);
-    if (!html.includes(`<dt>${hoursLabel}</dt><dd>${hours || hoursFallback}</dd>`)) failures.push(`${lang}/${venue.id}: HOURSの実値またはフォールバックが無い`);
+    if (!html.includes(`<dt>${hoursLabel}</dt><dd>${escapedHours}</dd>`)) failures.push(`${lang}/${venue.id}: HOURSの実値またはフォールバックが無い`);
     if (!charge && html.includes('<dt>CHARGE</dt>')) failures.push(`${lang}/${venue.id}: 空のCHARGE行がある`);
     const features = (Array.isArray(venue.features) ? venue.features : String(venue.features || '').split(/[;,]/)).map(x => String(x).trim());
     const hasPractical = features.some(x => practical.has(x));

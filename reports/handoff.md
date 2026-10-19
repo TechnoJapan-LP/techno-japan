@@ -10658,3 +10658,4 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - 公開前に `bash scripts/preflight.sh`（省略なし）と、CMS の入力→保存→再表示を実ブラウザで確認すること。CMS変更時は `Cmd+Shift+R` で強制リロードすること。
+- `check_venue_details.mjs` の営業時間検査を JA/EN の生成規則と HTML エスケープに一致させた。
