@@ -54,7 +54,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 58;
+const DETAIL_CSS_VERSION = 59;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -72,7 +72,7 @@ const ARTICLE_FX_CSS_VERSION = 14;
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
 const COMMON_JS_VERSION = 18;   // 2026-10-19 touch devices skip the custom cursor loop
-const COMMON_CSS_VERSION = 38;   // 2026-10-17 body margin reset
+const COMMON_CSS_VERSION = 39;   // 2026-10-19 tap targets and label contrast
 const DATA_HUB_VERSION = 11;
 const SEARCH_JS_VERSION = 6;
 const LANG_TOGGLE_VERSION = 1;
@@ -285,6 +285,50 @@ function breadcrumbLd(sectionLabel, sectionPath, name, canonical) {
 }
 
 const truncate = (s, n) => (s.length > n ? s.slice(0, n - 1) + '…' : s);
+
+function jstToday() {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Tokyo' }).format(new Date());
+}
+
+function latestEdition(editions = []) {
+  return [...editions].sort((a, b) => String(b.DATE_START || '').localeCompare(String(a.DATE_START || '')))[0] || null;
+}
+
+function isEndedFestival(editions = [], today = jstToday()) {
+  const latest = latestEdition(editions);
+  if (!latest || !ISO_DATE.test(String(latest.DATE_END || ''))) return false;
+  const hasFutureEdition = editions.some((ed) => ISO_DATE.test(String(ed.DATE_START || '')) && String(ed.DATE_START) >= today);
+  return String(latest.DATE_END) < today && !hasFutureEdition;
+}
+
+function truncateAtWord(value, max) {
+  const text = String(value || '').trim();
+  if (text.length <= max) return text;
+  if (max <= 1) return '…'.slice(0, max);
+  const cut = text.slice(0, max - 1).replace(/\s+\S*$/, '').trim();
+  return `${cut || text.slice(0, max - 1).trim()}…`;
+}
+
+function articleSeoTitle(title, festivalName = '', year = '') {
+  const parts = splitArticleTitle(title);
+  const short = parts.short;
+  const sub = parts.sub;
+  const suffix = ' | TECHNO JAPAN';
+  const subRoom = 65 - suffix.length - short.length - 3; // short + " — " + sub
+  if (sub && subRoom >= 12) {
+    return `${short} — ${truncateAtWord(sub, subRoom)}${suffix}`;
+  }
+  if (festivalName && year) {
+    const festivalTitle = `${short} ${year}: Lineup, Dates & Tickets${suffix}`;
+    if (festivalTitle.length <= 65) return festivalTitle;
+  }
+  return `${truncateAtWord(short, 65 - suffix.length)}${suffix}`;
+}
+
+function japaneseArticleSeoTitle(title) {
+  const short = String(title || '').split(/[｜|]/, 1)[0].trim();
+  return truncate(`${short} — TECHNO JAPAN`, 60);
+}
 
 // primary は既存互換の値。言語別値が未入力なら primary、さらに反対言語へ
 // フォールバックし、列追加直後でも表示を欠落させない。
@@ -1134,7 +1178,6 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   const altHref = hasAlt ? (lang === 'ja' ? `/en/articles/${a.id}.html` : `/articles/${a.id}.html`) : null;
   const canonical = `${BASE}${L.prefix}/articles/${a.id}.html`;
   const hubHref = `${L.prefix}/news.html`;
-  const title = `${L.title} — TECHNO JAPAN`;
   const desc = L.excerpt || truncate(stripTags(L.body), 160);
   const image = absUrl(a.image);
   const tags = (a.tags || []).map((t) => `<span class="article-tag">#${esc(t)}</span>`).join('');
@@ -1144,6 +1187,12 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   const relatedFestival = festivalId
     ? (festivals || []).find((f) => String(f.id) === festivalId && isPublishedFestival(f))
     : null;
+  const relatedYear = latestEdition(editionsByFestival.get(festivalId) || [])?.EDITION?.match(/^\d{4}/)?.[0]
+    || latestEdition(editionsByFestival.get(festivalId) || [])?.DATE_START?.match(/^\d{4}/)?.[0]
+    || '';
+  const title = lang === 'en'
+    ? articleSeoTitle(L.title, relatedFestival ? (relatedFestival.name_en || relatedFestival.name) : '', relatedYear)
+    : japaneseArticleSeoTitle(L.title);
   const relatedFestivalPath = relatedFestival
     ? path.join(LP_DIR, 'festivals', `${relatedFestival.id}.html`)
     : '';
@@ -1670,6 +1719,56 @@ function festivalRelatedCards(current, lang) {
     </section>`;
 }
 
+function festivalRelatedCardsForPage(current, lang, allFestivals, editionsByFestival) {
+  const today = jstToday();
+  const genresOf = (f) => (Array.isArray(f.genre) ? f.genre : String(f.genre || '').split('/'))
+    .map((g) => String(g).trim().toLowerCase()).filter(Boolean);
+  const currentEdition = latestEdition(editionsByFestival.get(String(current.id)) || []);
+  const currentPref = String(currentEdition?.PREF || current.city || '').trim().toLowerCase();
+  const currentMonth = String(currentEdition?.DATE_START || '').slice(5, 7);
+  const currentGenres = new Set(genresOf(current));
+  const ranked = (allFestivals || []).filter((f) => isPublishedFestival(f) && String(f.id) !== String(current.id))
+    .map((festival) => {
+      const edition = latestEdition(editionsByFestival.get(String(festival.id)) || []);
+      const pref = String(edition?.PREF || festival.city || '').trim().toLowerCase();
+      const month = String(edition?.DATE_START || '').slice(5, 7);
+      const sharedGenre = genresOf(festival).some((g) => currentGenres.has(g));
+      const future = !!edition && ISO_DATE.test(String(edition.DATE_START || '')) && String(edition.DATE_END || edition.DATE_START) >= today;
+      const group = pref && currentPref && pref === currentPref ? 0 : month && currentMonth && month === currentMonth ? 1 : sharedGenre ? 2 : 3;
+      return { festival, edition, group, future };
+    })
+    .sort((a, b) => a.group - b.group || Number(b.future) - Number(a.future)
+      || String(b.edition?.DATE_START || '').localeCompare(String(a.edition?.DATE_START || ''))
+      || String(a.festival.name || '').localeCompare(String(b.festival.name || '')))
+  const chosen = ranked.slice(0, 6);
+  // Keep the preference/month/genre ranking, but add a small deterministic ring
+  // so isolated festivals also receive inbound links from nearby detail pages.
+  const ringAll = (allFestivals || []).filter(isPublishedFestival).sort((a, b) => String(a.id).localeCompare(String(b.id)));
+  const currentIndex = ringAll.findIndex((f) => String(f.id) === String(current.id));
+  const ring = [1, 2, 3].map((offset) => ringAll[(currentIndex + offset + ringAll.length) % ringAll.length]).filter(Boolean);
+  for (const festival of ring) {
+    const hit = ranked.find((item) => String(item.festival.id) === String(festival.id));
+    if (hit && !chosen.some((item) => String(item.festival.id) === String(festival.id))) {
+      chosen.pop();
+      chosen.push(hit);
+    }
+  }
+  const candidates = chosen;
+  if (!candidates.length) return '';
+  const prefix = lang === 'en' ? '/en' : '';
+  const cards = candidates.map(({ festival, edition }, index) => {
+    const name = lang === 'en' ? (festival.name_en || festival.name) : festival.name;
+    const image = festival.image || festival.flyer;
+    const date = edition ? [edition.DATE_START, edition.DATE_END].filter(Boolean).filter((v, i, a) => a.indexOf(v) === i).join(' — ') : festival.date || '';
+    const place = [edition ? editionLocationName(edition, lang) : localizedValue(festival.location, festival.location_ja, '', lang), edition?.PREF || festival.city].filter(Boolean).join(' — ');
+    return `<a class="related-card reveal" style="transition-delay:${index * 100}ms" href="${prefix}/festivals/${encodeURIComponent(festival.id)}.html">
+      <div class="related-card-img">${image ? `<img ${dimensionAttrs(cardImagePath(image))} src="/${cardImagePath(image)}"${cardSrcsetAttr(image)} alt="${esc(name)}" loading="lazy"${imagePositionStyle(festival)}>` : ''}</div>
+      <div class="related-card-info"><div class="related-card-date">${esc(date)}</div><div class="related-card-name">${esc(name)}</div><div class="related-card-loc">${esc(place)}</div></div>
+    </a>`;
+  }).join('');
+  return `<section class="detail-section related-festivals"><h2 class="detail-section-label">RELATED FESTIVALS</h2><div class="related-grid">${cards}</div></section>`;
+}
+
 // 記事ページでも使う共有ボタン markup。
 function festivalShareButtons(name, canonical, lang) {
   const title = encodeURIComponent(`${name} — TECHNO JAPAN`);
@@ -1698,10 +1797,11 @@ document.querySelectorAll('.share-copy-btn').forEach(function(button) {
 });
 </script>`;
 
-function festivalHeroDateHtml(edition) {
+function festivalHeroDateHtml(edition, lang = 'ja', ended = false) {
   const start = String(edition?.DATE_START || '');
   const end = String(edition?.DATE_END || '');
-  if (!ISO_DATE.test(start)) return '';
+  if (!ISO_DATE.test(start)) return ended ? `<span class="festival-ended-label">${lang === 'en' ? 'ENDED' : '終了'}</span>` : '';
+  const label = ended ? ` <span class="festival-ended-label">${lang === 'en' ? 'ENDED' : '終了'}</span>` : '';
   const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
   const parts = (value) => {
     const [year, month, day] = value.split('-').map(Number);
@@ -1709,23 +1809,23 @@ function festivalHeroDateHtml(edition) {
   };
   const first = parts(start);
   if (!ISO_DATE.test(end) || end === start) {
-    return `<time datetime="${start}">${first.monthName} ${first.day}, ${first.year}</time>`;
+    return `<time datetime="${start}">${first.monthName} ${first.day}, ${first.year}</time>${label}`;
   }
   const last = parts(end);
   if (first.year === last.year && first.month === last.month) {
-    return `<time datetime="${start}">${first.monthName} ${first.day}</time> — <time datetime="${end}">${last.day}, ${last.year}</time>`;
+    return `<time datetime="${start}">${first.monthName} ${first.day}</time> — <time datetime="${end}">${last.day}, ${last.year}</time>${label}`;
   }
   if (first.year === last.year) {
-    return `<time datetime="${start}">${first.monthName} ${first.day}</time> — <time datetime="${end}">${last.monthName} ${last.day}, ${last.year}</time>`;
+    return `<time datetime="${start}">${first.monthName} ${first.day}</time> — <time datetime="${end}">${last.monthName} ${last.day}, ${last.year}</time>${label}`;
   }
-  return `<time datetime="${start}">${first.monthName} ${first.day}, ${first.year}</time> — <time datetime="${end}">${last.monthName} ${last.day}, ${last.year}</time>`;
+  return `<time datetime="${start}">${first.monthName} ${first.day}, ${first.year}</time> — <time datetime="${end}">${last.monthName} ${last.day}, ${last.year}</time>${label}`;
 }
 
-function festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, lang, name, canonical, summary, faqItems, relatedHtml, lineupEdition }) {
+function festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, lang, name, canonical, summary, faqItems, relatedHtml, lineupEdition, ended, endedNotice, allFestivals, editionsByFestival }) {
   const prefix = lang === 'en' ? '/en' : '';
   const hubHref = `${prefix}/festivals.html`;
   const currentEdition = editions[0];
-  const dateHtml = festivalHeroDateHtml(currentEdition);
+  const dateHtml = festivalHeroDateHtml(currentEdition, lang, ended);
   const locationName = currentEdition
     ? editionLocationName(currentEdition, lang)
     : localizedValue(f.location, f.location_ja, '', lang);
@@ -1792,13 +1892,13 @@ ${location ? (mapUrl
     </header>
 
 ${programSection ? `    ${programSection}\n` : ''}${historyHtml ? `    ${historyHtml}\n` : ''}${faqDetailsHtml ? `    ${faqDetailsHtml}\n` : ''}    ${shareHtml}
-${relatedHtml ? `    <section class="detail-section festival-related-stories-v2">${relatedHtml}</section>\n` : ''}    ${festivalRelatedCards(f, lang)}
+${relatedHtml ? `    <section class="detail-section festival-related-stories-v2">${relatedHtml}</section>\n` : ''}    ${festivalRelatedCardsForPage(f, lang, allFestivals, editionsByFestival)}
     <div class="article-footer"><a class="detail-back" href="${hubHref}" data-festival-hub-back="${hubHref}" style="margin:0"><span class="arrow"></span> BACK TO FESTIVALS</a></div>
   </div>
 </article>`;
 }
 
-function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articles, lang = 'ja') {
+function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articles, allFestivals = [], editionsByFestival = new Map(), lang = 'ja') {
   const prefix = lang === 'en' ? '/en' : '';
   const altHref = (lang === 'ja' ? '/en' : '') + `/festivals/${f.id}.html`;
   const name = lang === 'en' ? (f.name_en || f.name) : f.name;
@@ -1822,6 +1922,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
     return bp.year - ap.year || bp.seq - ap.seq || String(b.DATE_START || '').localeCompare(String(a.DATE_START || ''));
   });
   const latestEdition = editions[0];
+  const ended = isEndedFestival(editions);
   const today = new Date(); today.setHours(0, 0, 0, 0);
   const lineupEdition = editions.find((ed) => {
     const end = String(ed.DATE_END || ed.DATE_START || '');
@@ -1845,31 +1946,43 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
   const nameYear = `${seoName}${year ? ` ${year}` : ''}`;
   /* 指名検索（フェス名＋年）に「日程・出演者・チケット」で応える。長い名前では
      種別を先に削り、日程・チケットと地名は最後まで残す。 */
-  const jaCandidates = [
+  const titleName = nameJa || name;
+  const titleNameYear = `${titleName}${year ? ` ${year}` : ''}`;
+  const jaCandidates = ended ? [
+    `${seoName}｜次回開催情報・過去の出演者（${pref || '日本'}）— TECHNO JAPAN`,
+    `${seoName}｜次回開催情報・過去の出演者 — TECHNO JAPAN`,
+  ] : [
     ...(hasLineup ? [
-      `${nameYear}｜出演者・日程・チケット（${pref || '日本'}）— TECHNO JAPAN`,
-      `${nameYear}｜出演者・日程・チケット — TECHNO JAPAN`,
+    `${titleNameYear}｜出演者・日程・チケット（${pref || '日本'}）— TECHNO JAPAN`,
+      `${titleNameYear}｜出演者・日程・チケット — TECHNO JAPAN`,
     ] : []),
-    `${nameYear}｜${pref || '日本'}の${festivalTypeJa} 日程・チケット — TECHNO JAPAN`,
-    `${nameYear}｜${pref || '日本'}の${festivalTypeJa} — TECHNO JAPAN`,
-    `${nameYear}｜${pref || '日本'} 日程・チケット — TECHNO JAPAN`,
+    `${titleNameYear}｜${pref || '日本'}の${festivalTypeJa} 日程・チケット — TECHNO JAPAN`,
+    `${titleNameYear}｜${pref || '日本'}の${festivalTypeJa} — TECHNO JAPAN`,
+    `${titleNameYear}｜${pref || '日本'} 日程・チケット — TECHNO JAPAN`,
   ];
-  const enCandidates = [
-    ...(hasLineup ? [`${nameYear} — Lineup, Dates & Tickets (${pref || 'Japan'}, Japan) | TECHNO JAPAN`] : []),
-    `${nameYear} — Dates, Tickets & Information | ${pref || 'Japan'}, Japan | TECHNO JAPAN`,
-    `${nameYear} — Techno ${festivalTypeEn} in ${pref || 'Japan'}, Japan | TECHNO JAPAN`,
-    `${nameYear} — Techno ${festivalTypeEn} in Japan | TECHNO JAPAN`,
+  const enCandidates = ended ? [
+    `${name} — Next Edition & Past Lineups | TECHNO JAPAN`,
+    `${name} — Next Edition | TECHNO JAPAN`,
+    `${name} | TECHNO JAPAN`,
+  ] : [
+    ...(hasLineup ? [`${nameYear} — Lineup, Dates & Tickets (${pref || 'Japan'}) | TECHNO JAPAN`] : []),
+    `${nameYear} — Lineup, Dates & Tickets | TECHNO JAPAN`,
+    `${nameYear} | TECHNO JAPAN`,
   ];
   const title = lang === 'en'
-    ? (enCandidates.find((t) => t.length <= 70) || enCandidates[enCandidates.length - 1])
-    : (jaCandidates.find((t) => t.length <= 60) || jaCandidates[jaCandidates.length - 1]);
+    ? truncate(enCandidates.find((t) => t.length <= 65) || enCandidates[enCandidates.length - 1], 65)
+    : truncate(jaCandidates.find((t) => t.length <= 60) || jaCandidates[jaCandidates.length - 1], 60);
   const editionDate = currentEdition
     ? (lang === 'en'
         ? fmtMetaDateEn(currentEdition.DATE_START, currentEdition.DATE_END)
         : fmtMetaDateJa(currentEdition.DATE_START, currentEdition.DATE_END))
     : '';
   const editionLocation = currentEdition ? editionLocationName(currentEdition, lang) : '';
-  const metaLead = editionDate && editionLocation
+  const metaLead = ended && editionDate && editionLocation
+    ? (lang === 'en'
+        ? `${name} has been held in ${pref || 'Japan'}. The latest edition was held in ${editionDate} at ${editionLocation}. `
+        : `${seoName}は${pref || '日本'}で開催されてきた${festivalTypeJa}。直近は${editionDate}に${editionLocation}で開催。`)
+    : editionDate && editionLocation
     ? (lang === 'en'
         ? (hasLineup
             ? `${editionDate}, ${editionLocation} (${pref || 'Japan'}). Lineup: ${lineupActs.slice(0, 5).join(', ')}${Math.max(0, lineupCount - 5) ? ` and ${Math.max(0, lineupCount - 5)} more.` : '.'}`
@@ -1881,7 +1994,9 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
   const metaFallback = lang === 'en'
     ? `${name} — edition history and information for a techno / house festival in Japan.`
     : `${name}の開催履歴・基本情報。日本のテクノ／ハウスのフェスティバル情報。`;
-  const metaDescSource = hasLineup
+  const metaDescSource = ended
+    ? `${metaLead}${bodyDesc || metaFallback}`
+    : hasLineup
     ? `${metaLead}${bodyDesc || metaFallback}`
     : (lang === 'ja' && seoName !== name
       ? `${seoName}は、${editionDate && editionLocation ? `${editionDate}、${editionLocation}（${pref || '日本'}）で開催。` : ''}${bodyDesc || '開催履歴・基本情報。日本のテクノ／ハウスのフェスティバル情報。'}`
@@ -1977,7 +2092,8 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
     })) } : {}),
   };
 
-  const body = festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, lang, name, canonical, summary, faqItems, relatedHtml, lineupEdition });
+  const endedNotice = ended ? (lang === 'en' ? "The next edition hasn't been announced yet. We'll update this page." : '次回の開催は未発表です。決まり次第このページで更新します。') : '';
+  const body = festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, lang, name, canonical, summary, faqItems, relatedHtml, lineupEdition, ended, endedNotice, allFestivals, editionsByFestival });
 
   const faqLd = faqItems.length ? {
     '@context': 'https://schema.org',
@@ -2013,7 +2129,7 @@ function artistPage(a, artistsById, lang = 'ja') {
   const canonical = `${BASE}${prefix}/artists/${a.id}.html`;
   const fromJapan = !a.country || /japan/i.test(String(a.country));
   const title = lang === 'en'
-    ? `${name} — Techno DJ / Artist${fromJapan ? ' from Japan' : ''} | TECHNO JAPAN`
+    ? truncate(`${name} — Techno DJ / Artist${fromJapan ? ' from Japan' : ''} | TECHNO JAPAN`, 65)
     : `${name}｜テクノDJ・アーティスト — TECHNO JAPAN`;
   const place = [a.city, a.country].filter(Boolean).join(', ');
   // bioが無い/短い時は、ジャンル・拠点入りのキーワードリッチな定型文にフォールバック
@@ -2136,7 +2252,7 @@ function venuePage(v, lang = 'ja') {
   const venueType = venueTypeLabels(v.type);
   const titlePlace = [areaLabel, city].filter(Boolean).join(', ') || 'Japan';
   const title = lang === 'en'
-    ? [`${name} — ${titlePlace} ${venueType.en}: Access, Hours & Events | TECHNO JAPAN`, `${name} — ${venueType.en} in ${titlePlace} | TECHNO JAPAN`].find((t) => t.length <= 70) || `${name} — ${venueType.en} in ${titlePlace} | TECHNO JAPAN`
+    ? [`${name} (${areaLabel || titlePlace}) — ${venueType.en} in ${city || 'Japan'} | TECHNO JAPAN`, `${name} | TECHNO JAPAN`].find((t) => t.length <= 65) || `${name} | TECHNO JAPAN`
     : `${name}${areaLabel || city ? `（${areaLabel || city}）` : ''}｜${city ? `${city}の` : ''}${venueType.ja} アクセス・営業情報・イベント — TECHNO JAPAN`;
   const jsonLdDesc = bodyDesc || (lang === 'en'
     ? `${name}${place ? ' (' + place + ')' : ''} — club / venue guide. Japan's underground dance music.`
@@ -2882,13 +2998,13 @@ ${FAVICON_TAGS}
 
   const counts = {
     articles: writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'ja', pubFests, editionsByFestival, pubVenues, festivalData, ARTICLES, ARTISTS)).concat(redirectStubs('articles', liveArticleIds)), 'articles'),
-    festivals: writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, ARTICLES, 'ja')).concat(redirectStubs('festivals', liveFestivalIds)), 'festivals'),
+    festivals: writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, ARTICLES, pubFests, editionsByFestival, 'ja')).concat(redirectStubs('festivals', liveFestivalIds)), 'festivals'),
     artists: writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'ja')).concat(redirectStubs('artists', liveArtistIds)), 'artists'),
     venues: writeAll(pubVenues.map((v) => venuePage(v, 'ja')), 'venues'),
     // 英語版（/en/…）。未翻訳フィールドは articlePage 内で元データへ
     // フォールバックし、EN ハブの通常遷移先を必ず実在させる。
     'en/articles': writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'en', pubFests, editionsByFestival, pubVenues, festivalData, ARTICLES, ARTISTS)), 'en/articles'),
-    'en/festivals': writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, ARTICLES, 'en')).concat(redirectStubs('en/festivals', liveFestivalIds)), 'en/festivals'),
+    'en/festivals': writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, ARTICLES, pubFests, editionsByFestival, 'en')).concat(redirectStubs('en/festivals', liveFestivalIds)), 'en/festivals'),
     'en/artists': writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'en')).concat(redirectStubs('en/artists', liveArtistIds)), 'en/artists'),
     'en/venues': writeAll(pubVenues.map((v) => venuePage(v, 'en')), 'en/venues'),
   };

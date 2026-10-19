@@ -53,7 +53,7 @@
 @font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/space-mono-v17-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
 @font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/space-mono-v17-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 </style>
-<link rel="stylesheet" href="/common.css?v=38">
+<link rel="stylesheet" href="/common.css?v=39">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
@@ -108,13 +108,13 @@
 }
 .marquee.is-live { border-color: rgba(240,237,232,.12); }
 .marquee.is-live .marquee-inner { opacity: 1; letter-spacing: 0; text-transform: none; }
-.marquee-event { display: inline-flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; white-space: nowrap; }
-.marquee-index { font-family: var(--font-mono); font-size: 10px; letter-spacing: .15em; opacity: .45; }
+.marquee-event { display: inline-flex; align-items: center; min-height: 44px; gap: 10px; color: var(--text); text-decoration: none; white-space: nowrap; }
+.marquee-index { font-family: var(--font-mono); font-size: 10px; letter-spacing: .15em; color: rgba(240,237,232,.72); opacity: 1; }
 .marquee-status { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .25em; line-height: 1; text-transform: uppercase; }
 .marquee-status i { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
 .marquee-event.is-now .marquee-status { color: var(--accent); }
 .marquee-event.is-week .marquee-status { color: var(--accent); }
-.marquee-event.is-next .marquee-status { color: rgba(240,237,232,.45); }
+.marquee-event.is-next .marquee-status { color: rgba(240,237,232,.72); }
 .marquee-event.is-now .marquee-status i { animation: marqueePulse 1.2s steps(2, end) infinite; }
 .marquee-date { font-family: var(--font-mono); font-size: 12px; color: rgba(240,237,232,.78); }
 .marquee-name { font-family: var(--font-display); font-size: 20px; letter-spacing: .04em; color: #fff; }
@@ -969,7 +969,7 @@
 <script src="/localize.js?v=12"></script>
 <script src="/image-derivatives.js?v=57"></script>
 <script src="/data-hub.js?v=11"></script>
-<script src="/image-dimensions.js?v=86"></script>
+<script src="/image-dimensions.js?v=87"></script>
 <script>
 document.addEventListener('error', (e) => {
   const img = e.target;

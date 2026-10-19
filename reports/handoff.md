@@ -10464,3 +10464,43 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 未確認・判断待ち
 - bondisco 記事↔フェスの相互リンクはデータ（記事の関連フェス未設定）。ユーザーに CMS 設定を依頼済み。
+
+## 2026-10-19 SEO・終了フェス・詳細リンク batch（未コミット）
+
+### 実施
+- `build-detail-pages.mjs` に JST 日付由来の終了判定、JA/EN 終了表示・次回未発表文・SEO タイトル/説明、全フェス詳細の RELATED FESTIVALS 選定を追加。
+- EN 記事/フェス/会場タイトルを短縮し、`scripts/check_titles.mjs` を preflight に追加。JA/EN ハブ行数は 98/98。
+- `detail.css`、`common.css`、`index.html`、`festivals.html` のタップ領域・コントラスト・過去イベント表示を更新し、detail/common CSS の版を更新。
+
+### コミット
+- 未コミット（ユーザー指定、コミット・pushなし）。
+
+### 検証
+- `node scripts/check_jsonld.mjs`、`python3 scripts/check_asset_versions.py --base origin/main`、`node scripts/check_titles.mjs`、`git diff --check` 成功。
+- 生成 HTML の festival inbound 0件は 83→1（残る1件は旧ID `fulirock` のリダイレクト）。実フェス詳細97件は関連ブロック生成済み。
+- `bash scripts/preflight.sh` は 44件成功 / 9件失敗。詳細生成は外部画像寸法取得のネットワーク制限で240秒 timeout、ブラウザ系8件は sandbox の localhost listen `EPERM`。実ブラウザ操作は未確認。生成確認は既存寸法表を保持したローカル経路で実施。
+
+### 変更したパターン
+- 終了フェスの date-derived state、タイトル上限、RELATED FESTIVALS の pref/month/genre + upcoming 優先、44px tap target、灰色ラベルのコントラスト。
+
+### 未確認の類似パターン
+- 確認済み・0件：JA/EN festival detail の生成件数差、indexable title 上限、JSON-LD 構文。
+- 未確認：実機のタップ/コントラスト視認、フル preflight の外部画像取得経路。
+
+### 次の担当への注意・判断待ち
+- CMS/Publish の変更はない。公開前にフル preflight と実ブラウザで JA/EN の終了詳細、ハブカード、関連リンク、モバイル tap target を確認すること。
+
+## 2026-10-19 SEO 第2弾（feat/seo-batch-b）: 終了フェス・英語タイトル・フェス相互リンク・押しやすさ/コントラスト
+
+### 実施
+- 終了フェス（最新回の DATE_END < 今日 JST かつ未来回なし。EDITIONS.STATUS は使わない）: 日付横に「終了」/ENDED、「次回の開催は未発表です…」の1行、title を「{名}｜次回開催情報・過去の出演者（{県}）」/ EN "— Next Edition, Past Lineups ({Pref})"（長い名前は "— Next Edition & Past Lineups" → "— Next Edition" に段階短縮）、description も直近開催の事実から。ハブのカードにも終了表示。
+- EN タイトル ≤65: 記事は「{短題} — {副題を語境界で切る…} | TECHNO JAPAN」、フェスは「{名} {年} — Lineup, Dates & Tickets ({Pref})」、会場は「{NAME} ({area}) — Club in {city}」。`scripts/check_titles.mjs`（JA ≤60 / EN ≤65 / 終了フェスに過去年なし）を preflight に追加（53件目）。
+- 関連フェス: 全フェスに最大6件（同じ県 → 同じ月 → 同じジャンル、開催予定を優先）。他の詳細ページからのリンク0件のフェス 83 → 1（旧ID のリダイレクトのみ）。
+- タップ領域 ≥44px（TOP の帯、出演者チップ、共有ボタン、フッター申請リンク）、9〜11px の灰色ラベルを ≥4.5:1、記事内の過去イベントカードの多重 opacity を解消。
+
+### 検証
+- 390px headless で yamauto（終了表示・関連6件）、FESTIVALS ハブを目視。`bash scripts/preflight.sh` 全53件成功。
+
+### データの判断待ち（ユーザーに確認依頼済み）
+- intergalactic の PREF=Chiba（会場は東京・日の出町）。本番データは未反映。
+- bondisco の PREF=Gunma（会場の三田アスレチックパークは兵庫）。

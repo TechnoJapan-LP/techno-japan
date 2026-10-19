@@ -69,7 +69,8 @@
   border-top: 1px solid rgba(240,237,232,0.08);
   border-bottom: 1px solid rgba(240,237,232,0.08);
 }
-.article-body .tj-event.is-past { opacity: .6; }
+.article-body .tj-event.is-past { opacity: 1; }
+.article-body .tj-event.is-past .tj-event-photo img { opacity: .75; }
 .article-body .tj-event-date {
   display: block;
   font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em;
@@ -238,6 +239,7 @@
   padding: 8px 14px; border: 1px solid rgba(240,237,232,0.15); opacity: 0.75;
   transition: border-color 0.2s ease, opacity 0.2s ease, color 0.2s ease;
 }
+.festival-design-v2 .detail-lineup-list .lineup-item { min-height: 44px; align-items: center; display: inline-flex; }
 a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity: 1; }
 
 .detail-links { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 40px; }
@@ -617,7 +619,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   text-transform: uppercase; opacity: .62; margin-right: 8px;
 }
 .festival-design-v2 .share-btn, .article-share .share-btn {
-  width: 32px; height: 32px; padding: 0; display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; min-width: 44px; min-height: 44px; padding: 0; display: inline-flex; align-items: center; justify-content: center;
   border: 1px solid rgba(240,237,232,.12); background: transparent; color: var(--text);
   font-family: var(--font-mono); font-size: 11px; cursor: pointer; opacity: .6;
   transition: border-color .3s ease, background .3s ease, opacity .3s ease;
@@ -635,6 +637,8 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   font-family: var(--font-mono); font-size: 9px; letter-spacing: .2em;
   text-transform: uppercase; opacity: 1; margin-bottom: 20px;
 }
+.festival-ended-label { display: inline-block; padding: 4px 7px; border: 1px solid rgba(240,237,232,.45); color: rgba(240,237,232,.72); font-family: var(--font-mono); font-size: 9px; letter-spacing: .12em; line-height: 1; opacity: .9; vertical-align: middle; }
+.festival-ended-notice { margin: -20px 0 24px; font-size: 13px; color: rgba(240,237,232,.8); }
 .festival-design-v2 .festival-description-inline {
   max-width: 520px; margin: 0 0 28px; font-family: var(--font-body);
   font-size: 14px; font-weight: 200; line-height: 1.9;
@@ -824,6 +828,9 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   font-family: var(--font-mono); font-size: 9px; letter-spacing: .2em;
   text-transform: uppercase; opacity: .3; margin: 0 0 32px;
 }
+.festival-design-v2 .related-festivals .detail-section-label,
+.festival-design-v2 .festival-related-stories-v2 .related-stories h2,
+.related-story-meta { color: rgba(240,237,232,.72); opacity: 1; }
 .festival-design-v2 .festival-related-stories-v2 .related-story-card {
   display: grid;
   grid-template-columns: minmax(240px, 32%) minmax(0, 1fr);
