@@ -1,7 +1,7 @@
 # TECHNO JAPAN
 
-> 日本のテクノ / ハウスの独立メディア。フェスティバル97件・
-> アーティスト139名・会場22件・記事19本を日英で掲載し、
+> 日本のテクノ / ハウスの独立メディア。フェスティバル91件・
+> アーティスト139名・会場22件・記事20本を日英で掲載し、
 > 開催日・場所・出演者を構造化データ（schema.org）付きで公開している。
 
 ## 今後の開催予定（11件）
@@ -29,6 +29,7 @@
 
 ## 最新記事
 
+- 2026-10-19: [SAWAGI FESTIVAL | 日本を代表するローカルレイヴが、10年の節目を越えて山梨から群馬へ](https://techno-japan.media/articles/sawagi-festival-2026-info.html) — 昨年10年の節目を越え、11年目を迎えるキャンプイン型の野外フェスティバル。2026年は山梨から群馬・東吾妻町のSUTEKI VILLAGE CAMPINGへ。2ステージにLIVE 6組、DJ 52組。札幌、大阪、北九州で現場をつくってきたDJたちが群馬の山に集まる。 / [EN](https://techno-japan.media/en/articles/sawagi-festival-2026-info.html)
 - 2026-10-17: [Topia | 千葉・外房、まだ誰も足を踏み入れていないコンクリート空間で地下レイヴ](https://techno-japan.media/articles/topia-2026-info.html) — 成田空港内の私有地や相模原のリニア工事地など、オフサイトで開催を重ねてきたTopiaが初の屋内会場へ。主催が「日の当たらぬ地下神殿」と呼ぶ千葉・外房のコンクリート空間に、Evian Christが2年ぶりに来日する。 / [EN](https://techno-japan.media/en/articles/topia-2026-info.html)
 - 2026-10-14: [INTERGALACTIC | 東京・日の出町の森が、光とアートと音楽の別世界に変わる](https://techno-japan.media/articles/intergalactic-2026-info.html) — 東京を拠点とするブティック型の没入型アート＆ミュージックフェスティバルが、日の出町のおおばキャンプ村へ。2つのステージでハウスからテクノ、サイケデリックトランスへ。森にはライトインスタレーションとレーザーが点在する。 / [EN](https://techno-japan.media/en/articles/intergalactic-2026-info.html)
 - 2026-10-10: [TREKs | 京都・久多の森が、3日間だけ"commune"になる](https://techno-japan.media/articles/treak-2026-info.html) — 10月10日の正午から12日の夕方まで。京都市左京区久多、渓流に沿って広がる大黒谷キャンプ場でTREKsが開かれる。ポルトガルからFlow Recordsを主宰するPenaを迎え、京都と各地のローカルシーンから27組。音楽のためだけではない3日間だ。 / [EN](https://techno-japan.media/en/articles/treak-2026-info.html)

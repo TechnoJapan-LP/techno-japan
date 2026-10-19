@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-10-19T16:36:26.000Z",
-  "count": 98,
+  "_generatedAt": "2026-10-19T17:32:14.714Z",
+  "count": 91,
   "items": [
     {
       "ID": "snow-machine-japan",
@@ -55,7 +55,7 @@
     },
     {
       "ID": "grow-the-culture-open-air",
-      "TYPE": "festival",
+      "TYPE": "rave",
       "NAME": "GROW THE CULTURE OPEN AIR",
       "DATE": "2026-11-07/2026-11-08",
       "LOCATION": "Ohba Camping Village",
@@ -70,7 +70,7 @@
       "URL": "https://growtheculture.jp/",
       "TICKETURL": "https://growtheculture.jp/openair2026#tickets",
       "INSTAGRAM": "https://www.instagram.com/gtc_jp/",
-      "EDITIONS": "[{\"_row\":41,\"_editionId\":\"grow-the-culture-open-air-2025\",\"_sheetRow\":{\"_row\":41,\"edition_id\":\"grow-the-culture-open-air-2025\",\"festival_id\":\"grow-the-culture-open-air\",\"edition\":\"2025\",\"date_start\":\"2025-11-08\",\"date_end\":\"2025-11-09\",\"pref\":\"Tokyo\",\"status\":\"finished\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"festivalId\":\"grow-the-culture-open-air\",\"FESTIVAL_ID\":\"grow-the-culture-open-air\",\"EDITION\":\"2025\",\"DATE_START\":\"2025-11-08\",\"DATE_END\":\"2025-11-09\",\"PREF\":\"Tokyo\",\"STATUS\":\"finished\"},\"_lineupRows\":[],\"year\":\"2025\",\"edition\":\"2\",\"date\":\"2025-11-08/2025-11-09\",\"location\":\"Ohba Camping Village\",\"location_ja\":\"おおばキャンプ村\",\"pref\":\"Tokyo\",\"venueId\":\"\",\"address\":\"東京都西多摩郡日の出町大久野３７４１\",\"lat\":\"35.760438\",\"lng\":\"139.209443\",\"ticketUrl\":\"\",\"flyer\":\"\",\"status\":\"finished\",\"lineup\":[\"Addison Groove\",\"akii\",\"andrew\",\"comm\",\"Commodo\",\"DNG\",\"Dx\",\"Element\",\"Follow The Shadows\",\"hara\",\"Lil Tozan\",\"maidable\",\"Midnight Runner\",\"UKD\",\"Velocity\",\"yayoi\",\"¥ØU$UK€ ¥UK1MAT$U\",\"Frankie $\"]},{\"_row\":107,\"_editionId\":\"grow-the-culture-open-air-2026\",\"_sheetRow\":{\"_row\":107,\"edition_id\":\"grow-the-culture-open-air-2026\",\"festival_id\":\"grow-the-culture-open-air\",\"edition\":\"2026\",\"date_start\":\"2026-11-07\",\"date_end\":\"2026-11-08\",\"location\":\"Ohba Camping Village\",\"location_ja\":\"おおばキャンプ村\",\"pref\":\"Tokyo\",\"address\":\"東京都西多摩郡日の出町大久野３７４１\",\"lat\":\"35.760438\",\"lng\":\"139.209443\",\"flyer\":\"images/festivals/grow-the-culture-open-air-2026-flyer.jpg\",\"status\":\"published\",\"editionId\":\"grow-the-culture-open-air-2026\",\"EDITION_ID\":\"grow-the-culture-open-air-2026\",\"festivalId\":\"grow-the-culture-open-air\",\"FESTIVAL_ID\":\"grow-the-culture-open-air\",\"EDITION\":\"2026\",\"DATE_START\":\"2026-11-07\",\"DATE_END\":\"2026-11-08\",\"LOCATION\":\"Ohba Camping Village\",\"LOCATION_JA\":\"おおばキャンプ村\",\"PREF\":\"Tokyo\",\"ADDRESS\":\"東京都西多摩郡日の出町大久野３７４１\",\"LAT\":\"35.760438\",\"LNG\":\"139.209443\",\"FLYER\":\"images/festivals/grow-the-culture-open-air-2026-flyer.jpg\",\"STATUS\":\"published\"},\"_lineupRows\":[],\"year\":\"2026\",\"edition\":\"3\",\"date\":\"2026-11-07/2026-11-08\",\"location\":\"Ohba Camping Village\",\"location_ja\":\"おおばキャンプ村\",\"pref\":\"Tokyo\",\"venueId\":\"\",\"address\":\"東京都西多摩郡日の出町大久野３７４１\",\"lat\":\"35.760438\",\"lng\":\"139.209443\",\"ticketUrl\":\"https://growtheculture.jp/openair2026#tickets\",\"flyer\":\"images/festivals/grow-the-culture-open-air-2026-flyer.jpg\",\"status\":\"published\",\"lineup\":[]}]",
+      "EDITIONS": "[{\"_row\":41,\"_editionId\":\"grow-the-culture-open-air-2025\",\"_sheetRow\":{\"_row\":41,\"edition_id\":\"grow-the-culture-open-air-2025\",\"festival_id\":\"grow-the-culture-open-air\",\"edition\":\"2025\",\"date_start\":\"2025-11-08\",\"date_end\":\"2025-11-09\",\"location\":\"Ohba Camping Village\",\"location_ja\":\"おおばキャンプ村\",\"pref\":\"Tokyo\",\"address\":\"東京都西多摩郡日の出町大久野３７４１\",\"lat\":\"35.760438\",\"lng\":\"139.209443\",\"status\":\"finished\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"festivalId\":\"grow-the-culture-open-air\",\"FESTIVAL_ID\":\"grow-the-culture-open-air\",\"EDITION\":\"2025\",\"DATE_START\":\"2025-11-08\",\"DATE_END\":\"2025-11-09\",\"LOCATION\":\"Ohba Camping Village\",\"LOCATION_JA\":\"おおばキャンプ村\",\"PREF\":\"Tokyo\",\"ADDRESS\":\"東京都西多摩郡日の出町大久野３７４１\",\"LAT\":\"35.760438\",\"LNG\":\"139.209443\",\"STATUS\":\"finished\"},\"_lineupRows\":[{\"_row\":1405,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"Addison Groove\",\"set_type\":\"dj\",\"sort\":\"1\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"Addison Groove\",\"ACT_LABEL\":\"Addison Groove\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"1\"},{\"_row\":1406,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"akii\",\"set_type\":\"dj\",\"sort\":\"2\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"akii\",\"ACT_LABEL\":\"akii\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"2\"},{\"_row\":1407,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"andrew\",\"set_type\":\"dj\",\"sort\":\"3\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"andrew\",\"ACT_LABEL\":\"andrew\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"3\"},{\"_row\":1408,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"comm\",\"set_type\":\"dj\",\"sort\":\"4\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"comm\",\"ACT_LABEL\":\"comm\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"4\"},{\"_row\":1409,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"Commodo\",\"set_type\":\"dj\",\"sort\":\"5\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"Commodo\",\"ACT_LABEL\":\"Commodo\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"5\"},{\"_row\":1410,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"DNG\",\"set_type\":\"dj\",\"sort\":\"6\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"DNG\",\"ACT_LABEL\":\"DNG\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"6\"},{\"_row\":1411,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"Dx\",\"set_type\":\"dj\",\"sort\":\"7\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"Dx\",\"ACT_LABEL\":\"Dx\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"7\"},{\"_row\":1412,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"Element\",\"set_type\":\"dj\",\"sort\":\"8\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"Element\",\"ACT_LABEL\":\"Element\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"8\"},{\"_row\":1413,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"Follow The Shadows\",\"set_type\":\"dj\",\"sort\":\"9\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"Follow The Shadows\",\"ACT_LABEL\":\"Follow The Shadows\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"9\"},{\"_row\":1414,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"hara\",\"set_type\":\"dj\",\"sort\":\"10\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"hara\",\"ACT_LABEL\":\"hara\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"10\"},{\"_row\":1415,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"Lil Tozan\",\"set_type\":\"dj\",\"sort\":\"11\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"Lil Tozan\",\"ACT_LABEL\":\"Lil Tozan\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"11\"},{\"_row\":1416,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"maidable\",\"set_type\":\"dj\",\"sort\":\"12\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"maidable\",\"ACT_LABEL\":\"maidable\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"12\"},{\"_row\":1417,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"Midnight Runner\",\"set_type\":\"dj\",\"sort\":\"13\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"Midnight Runner\",\"ACT_LABEL\":\"Midnight Runner\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"13\"},{\"_row\":1418,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"UKD\",\"set_type\":\"dj\",\"sort\":\"14\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"UKD\",\"ACT_LABEL\":\"UKD\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"14\"},{\"_row\":1419,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"Velocity\",\"set_type\":\"dj\",\"sort\":\"15\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"Velocity\",\"ACT_LABEL\":\"Velocity\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"15\"},{\"_row\":1420,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"yayoi\",\"set_type\":\"dj\",\"sort\":\"16\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"yayoi\",\"ACT_LABEL\":\"yayoi\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"16\"},{\"_row\":1421,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"¥ØU$UK€ ¥UK1MAT$U\",\"set_type\":\"dj\",\"sort\":\"17\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"¥ØU$UK€ ¥UK1MAT$U\",\"ACT_LABEL\":\"¥ØU$UK€ ¥UK1MAT$U\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"17\"},{\"_row\":1422,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"Frankie $\",\"set_type\":\"dj\",\"sort\":\"18\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"Frankie $\",\"ACT_LABEL\":\"Frankie $\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"18\"}],\"year\":\"2025\",\"edition\":\"\",\"date\":\"2025-11-08/2025-11-09\",\"location\":\"Ohba Camping Village\",\"location_ja\":\"おおばキャンプ村\",\"pref\":\"Tokyo\",\"venueId\":\"\",\"address\":\"東京都西多摩郡日の出町大久野３７４１\",\"lat\":\"35.760438\",\"lng\":\"139.209443\",\"ticketUrl\":\"\",\"flyer\":\"\",\"status\":\"finished\",\"lineup\":[\"Addison Groove\",\"akii\",\"andrew\",\"comm\",\"Commodo\",\"DNG\",\"Dx\",\"Element\",\"Follow The Shadows\",\"hara\",\"Lil Tozan\",\"maidable\",\"Midnight Runner\",\"UKD\",\"Velocity\",\"yayoi\",\"¥ØU$UK€ ¥UK1MAT$U\",\"Frankie $\"]},{\"_row\":104,\"_editionId\":\"grow-the-culture-open-air-2026\",\"_sheetRow\":{\"_row\":104,\"edition_id\":\"grow-the-culture-open-air-2026\",\"festival_id\":\"grow-the-culture-open-air\",\"edition\":\"2026\",\"date_start\":\"2026-11-07\",\"date_end\":\"2026-11-08\",\"location\":\"Ohba Camping Village\",\"location_ja\":\"おおばキャンプ村\",\"pref\":\"Tokyo\",\"address\":\"東京都西多摩郡日の出町大久野３７４１\",\"lat\":\"35.760438\",\"lng\":\"139.209443\",\"ticketurl\":\"https://growtheculture.jp/openair2026#tickets\",\"ticketUrl\":\"https://growtheculture.jp/openair2026#tickets\",\"flyer\":\"images/festivals/grow-the-culture-open-air-2026-flyer.jpg\",\"status\":\"published\",\"editionId\":\"grow-the-culture-open-air-2026\",\"EDITION_ID\":\"grow-the-culture-open-air-2026\",\"festivalId\":\"grow-the-culture-open-air\",\"FESTIVAL_ID\":\"grow-the-culture-open-air\",\"EDITION\":\"2026\",\"DATE_START\":\"2026-11-07\",\"DATE_END\":\"2026-11-08\",\"LOCATION\":\"Ohba Camping Village\",\"LOCATION_JA\":\"おおばキャンプ村\",\"PREF\":\"Tokyo\",\"ADDRESS\":\"東京都西多摩郡日の出町大久野３７４１\",\"LAT\":\"35.760438\",\"LNG\":\"139.209443\",\"TICKETURL\":\"https://growtheculture.jp/openair2026#tickets\",\"FLYER\":\"images/festivals/grow-the-culture-open-air-2026-flyer.jpg\",\"STATUS\":\"published\"},\"_lineupRows\":[],\"year\":\"2026\",\"edition\":\"\",\"date\":\"2026-11-07/2026-11-08\",\"location\":\"Ohba Camping Village\",\"location_ja\":\"おおばキャンプ村\",\"pref\":\"Tokyo\",\"venueId\":\"\",\"address\":\"東京都西多摩郡日の出町大久野３７４１\",\"lat\":\"35.760438\",\"lng\":\"139.209443\",\"ticketUrl\":\"https://growtheculture.jp/openair2026#tickets\",\"flyer\":\"images/festivals/grow-the-culture-open-air-2026-flyer.jpg\",\"status\":\"published\",\"lineup\":[]}]",
       "STATUS": "published",
       "DESC_EN": "GROW THE CULTURE OPEN AIR brings Tokyo's underground dance music community together in an outdoor setting that prioritizes authentic electronic music culture. The festival showcases both local and international artists across multiple stages, maintaining focus on quality programming over commercial appeal.",
       "location_ja": "おおばキャンプ村"
@@ -1226,8 +1226,10 @@
       "GENRE": "TECHNO, HOUSE",
       "DESC": "TAKARAJIMAは、沖縄の海岸線を舞台に環境保護活動とエレクトロニック・ミュージックのプログラミングを融合させたフェスティバルだ。ビーチクリーン活動とDJセットを一体化させ、海洋保全をテーマにしながらアンダーグラウンド・ダンス・ミュージックを紹介するというユニークなフォーマットを生み出している。参加者は複数日にわたるプログラムを通じて、生態系の再生と音楽の祭典の両方に関わることになる。",
       "INSTAGRAM": "https://www.instagram.com/takarajima_beachcleaningparty/",
-      "EDITIONS": "[{\"_row\":88,\"_editionId\":\"takarajima-beach-cleaning-party-2025\",\"_sheetRow\":{\"_row\":88,\"edition_id\":\"takarajima-beach-cleaning-party-2025\",\"festival_id\":\"takarajima-beach-cleaning-party\",\"edition\":\"2025\",\"date_start\":\"2025-11-29\",\"date_end\":\"2025-11-30\",\"pref\":\"Okinawa\",\"status\":\"finished\",\"editionId\":\"takarajima-beach-cleaning-party-2025\",\"EDITION_ID\":\"takarajima-beach-cleaning-party-2025\",\"festivalId\":\"takarajima-beach-cleaning-party\",\"FESTIVAL_ID\":\"takarajima-beach-cleaning-party\",\"EDITION\":\"2025\",\"DATE_START\":\"2025-11-29\",\"DATE_END\":\"2025-11-30\",\"PREF\":\"Okinawa\",\"STATUS\":\"finished\"},\"_lineupRows\":[],\"year\":\"2025\",\"edition\":\"5\",\"date\":\"2025-11-29/2025-11-30\",\"location\":\"Secret Location\",\"location_ja\":\"\",\"pref\":\"Okinawa\",\"venueId\":\"\",\"address\":\"\",\"lat\":\"\",\"lng\":\"\",\"ticketUrl\":\"\",\"flyer\":\"\",\"status\":\"finished\",\"lineup\":[]},{\"year\":\"2026\",\"edition\":\"6\",\"date\":\"2026-11-28/2026-11-29\",\"location\":\"Secret Location\",\"location_ja\":\"\",\"pref\":\"Okinawa\",\"venueId\":\"\",\"address\":\"\",\"lat\":\"\",\"lng\":\"\",\"ticketUrl\":\"\",\"flyer\":\"\",\"status\":\"announced\",\"lineup\":[]}]",
+      "EDITIONS": "[{\"_row\":87,\"_editionId\":\"takarajima-beach-cleaning-party-2025\",\"_sheetRow\":{\"_row\":87,\"edition_id\":\"takarajima-beach-cleaning-party-2025\",\"festival_id\":\"takarajima-beach-cleaning-party\",\"edition\":\"2025\",\"date_start\":\"2025-11-29\",\"date_end\":\"2025-11-30\",\"location\":\"Secret Location\",\"pref\":\"Okinawa\",\"status\":\"finished\",\"editionId\":\"takarajima-beach-cleaning-party-2025\",\"EDITION_ID\":\"takarajima-beach-cleaning-party-2025\",\"festivalId\":\"takarajima-beach-cleaning-party\",\"FESTIVAL_ID\":\"takarajima-beach-cleaning-party\",\"EDITION\":\"2025\",\"DATE_START\":\"2025-11-29\",\"DATE_END\":\"2025-11-30\",\"LOCATION\":\"Secret Location\",\"PREF\":\"Okinawa\",\"STATUS\":\"finished\"},\"_lineupRows\":[],\"year\":\"2025\",\"edition\":\"\",\"date\":\"2025-11-29/2025-11-30\",\"location\":\"Secret Location\",\"location_ja\":\"\",\"pref\":\"Okinawa\",\"venueId\":\"\",\"address\":\"\",\"lat\":\"\",\"lng\":\"\",\"ticketUrl\":\"\",\"flyer\":\"\",\"status\":\"finished\",\"lineup\":[]},{\"_row\":123,\"_editionId\":\"takarajima-beach-cleaning-party-2026\",\"_sheetRow\":{\"_row\":123,\"edition_id\":\"takarajima-beach-cleaning-party-2026\",\"festival_id\":\"takarajima-beach-cleaning-party\",\"edition\":\"2026\",\"date_start\":\"2026-11-28\",\"date_end\":\"2026-11-29\",\"location\":\"Secret Location\",\"pref\":\"Okinawa\",\"status\":\"announced\",\"editionId\":\"takarajima-beach-cleaning-party-2026\",\"EDITION_ID\":\"takarajima-beach-cleaning-party-2026\",\"festivalId\":\"takarajima-beach-cleaning-party\",\"FESTIVAL_ID\":\"takarajima-beach-cleaning-party\",\"EDITION\":\"2026\",\"DATE_START\":\"2026-11-28\",\"DATE_END\":\"2026-11-29\",\"LOCATION\":\"Secret Location\",\"PREF\":\"Okinawa\",\"STATUS\":\"announced\"},\"_lineupRows\":[],\"year\":\"2026\",\"edition\":\"\",\"date\":\"2026-11-28/2026-11-29\",\"location\":\"Secret Location\",\"location_ja\":\"\",\"pref\":\"Okinawa\",\"venueId\":\"\",\"address\":\"\",\"lat\":\"\",\"lng\":\"\",\"ticketUrl\":\"\",\"flyer\":\"\",\"status\":\"announced\",\"lineup\":[]}]",
       "STATUS": "published",
+      "metaDescription": "沖縄の海岸線で開催されるTAKARAJIMAは、ビーチクリーンとDJセットを融合させた異色のフェスティバル。海洋保全をテーマに、アンダーグラウンド・ダンス・ミュージックと生態系再生を同時に体験できる複数日プログラムの全貌を紹介します。",
+      "name_en": "TAKARAJIMA",
       "DESC_EN": "TAKARAJIMA combines environmental activism with electronic music programming on Okinawa's coastline. The festival integrates beach cleaning activities with DJ sets, creating a unique format that addresses ocean conservation while showcasing underground dance music. Participants engage in both ecological restoration and musical celebration across multiple days of programming.",
       "COUNTRY": "JP",
       "name_ja": "タカラジマ"
@@ -1317,16 +1319,6 @@
       "COUNTRY": "JP"
     },
     {
-      "ID": "capsule",
-      "NAME": "CAPSULE-山中湖花火音楽祭",
-      "DATE": "2025-10-25/2025-10-26",
-      "CITY": "Yamanashi",
-      "GENRE": "TECHNO · HOUSE",
-      "DESC": "CAPSULEの恒例となった湖畔のイベントが、富士山麓に帰ってくる。山中湖の澄んだ水面を舞台に、エレクトロニック・ミュージックと日本の伝統的な花火が融合する。日本を代表する自然の絶景を背景に、国内外のアーティストを迎えながらも、フェスティバルはあくまでも小規模でアットホームな雰囲気を守り続けている。",
-      "DESC_EN": "CAPSULE's annual lakeside gathering returns to Mount Fuji's foothills, combining electronic music with traditional Japanese fireworks displays over Yamanakako's pristine waters. The festival maintains its intimate scale while showcasing both domestic and international acts against one of Japan's most iconic natural backdrops.",
-      "COUNTRY": "JP"
-    },
-    {
       "ID": "one-park-riverfes",
       "NAME": "ONE PARK RIVERFES",
       "DATE": "2025-10-18/2025-10-19",
@@ -1403,16 +1395,6 @@
       "DESC_EN": "TREKs is an open-air festival held at Daikokudani Campground in Kuta, Sakyo-ku, Kyoto. Its guiding banner reads \"Temporary Commune of Music, Art & Nature.\" In a forest of cedar, cypress and native beech, threaded by a mountain stream, campers and hammock-dwellers, people gathered around the fire, children tearing about, and dancers who keep going until morning all share a single space while moving through time at their own pace. The music spans classics that have endured across eras and dance music unfolding in the present tense. Sensibilities honed around the world meet the cultures of Japan's various regions, right here in these woods.",
       "imagePosition": "center bottom",
       "location_ja": "大黒谷キャンプ場"
-    },
-    {
-      "ID": "circle",
-      "NAME": "Circle",
-      "DATE": "2025-10-17/2025-10-19",
-      "CITY": "Nagano",
-      "GENRE": "TECHNO · HOUSE · MINIMAL",
-      "DESC": "Circleは長野の自然に囲まれた環境で開催され、アンダーグラウンド・エレクトロニック・ミュージックに焦点を当てた親密な集いを提供する。フェスティバルは、山間の人里離れたロケーションで丁寧にキュレーションされたラインナップを通じて、コミュニティとつながりを重視している。",
-      "DESC_EN": "Circle takes place in Nagano's natural surroundings, offering an intimate gathering focused on underground electronic music. The festival emphasizes community and connection through carefully curated lineups in a more secluded mountain setting.",
-      "COUNTRY": "JP"
     },
     {
       "ID": "ishinoko",
@@ -1505,16 +1487,6 @@
       "COUNTRY": "JP"
     },
     {
-      "ID": "festival40010",
-      "NAME": "Festival40010",
-      "DATE": "2025-09-26/2025-09-28",
-      "CITY": "Kochi",
-      "GENRE": "TECHNO · HOUSE",
-      "DESC": "Festival40010は高知を代表するアンダーグラウンド・エレクトロニック・ミュージックの祭典として機能しており、これまで見過ごされがちだった四国のダンスミュージック・シーンにアーティストとオーディエンスを呼び込んでいる。フェスティバルは親密な規模感を保ちながら、複数のステージで国内外のアクトを紹介している。",
-      "DESC_EN": "Festival40010 operates as Kochi's primary underground electronic music gathering, drawing artists and crowds to Shikoku's often-overlooked dance music scene. The festival maintains an intimate scale while showcasing both domestic and international acts across multiple stages.",
-      "COUNTRY": "JP"
-    },
-    {
       "ID": "gampeki",
       "NAME": "GAMPEKI",
       "DATE": "2025-09-20/2025-09-21",
@@ -1522,26 +1494,6 @@
       "GENRE": "TECHNO · HOUSE · MIX",
       "DESC": "GAMPEKIは、山形の山岳地帯を電子音楽の聖域へと変貌させ、アーティストやダンサーたちを日本の奥深い田舎へと誘うフェスティバルだ。自然環境とアンダーグラウンド・サウンドカルチャーとのつながりを重視した、複数日にわたる集いとして運営されている。",
       "DESC_EN": "GAMPEKI transforms the mountainous landscape of Yamagata into a sanctuary for electronic music, drawing artists and dancers deep into Japan's rural interior. The festival operates as a multi-day gathering that emphasizes the connection between natural environments and underground sound culture.",
-      "COUNTRY": "JP"
-    },
-    {
-      "ID": "sangenjaya-music-festival",
-      "NAME": "SANGENJAYA MUSIC FESTIVAL",
-      "DATE": "2025-09-20/2025-09-21",
-      "CITY": "Tokyo",
-      "GENRE": "TECHNO · HOUSE · MIX",
-      "DESC": "三軒茶屋ミュージックフェスティバルは、東京でも屈指のクリエイティブなエリアという親密な空間に、街のエレクトロニック・ミュージック・コミュニティを集結させる。複数の会場を舞台に、実力派から新進気鋭のアーティストまでが出演し、現代日本のダンスミュージック・カルチャーを象徴する多様なアンダーグラウンド・シーンを映し出す。",
-      "DESC_EN": "Sangenjaya Music Festival brings together Tokyo's electronic music community in the intimate setting of one of the city's most creative neighborhoods. The festival showcases both established and emerging artists across multiple venues, reflecting the diverse underground scene that defines modern Japanese dance music culture.",
-      "COUNTRY": "JP"
-    },
-    {
-      "ID": "okiraku-camp",
-      "NAME": "OKIRAKU CAMP",
-      "DATE": "2025-09-13/2025-09-14",
-      "CITY": "Wakayama",
-      "GENRE": "TECHNO · PSYCHEDELIC",
-      "DESC": "OKIRAKU CAMPは、和歌山の自然の中で、肩肘張らないアプローチによる電子音楽のプログラミングを提案する。このフェスティバルは、アンダーグラウンドなダンス・ミュージックとアンビエント／実験的なサウンドのバランスを取り、ピークタイムのエネルギーと瞑想的な時間の両方が入り込める空間を作り出している。そのリラックスした雰囲気は、都市部のクラブカルチャーの激しさに代わる何かを求めるアーティストや参加者たちを惹きつけている。",
-      "DESC_EN": "OKIRAKU CAMP presents a laid-back approach to electronic music programming in Wakayama's natural setting. The festival balances underground dance music with ambient and experimental sounds, creating space for both peak-time energy and contemplative moments. Its relaxed atmosphere attracts artists and attendees seeking an alternative to the intensity of urban club culture.",
       "COUNTRY": "JP"
     },
     {
@@ -1553,16 +1505,6 @@
       "DESC": "PURE RAVEは、商業的なフェスティバルの装飾を排し、妥協なきサウンドシステム文化を追求する、関東エリアの生々しいアンダーグラウンド・ギャザリングとして活動している。演出過多なプロダクションよりもダンスフロア体験を重視する、ディープでドライヴィングなテクノのプログラミングに一貫してフォーカスを当てているイベントだ。",
       "INSTAGRAM": "https://www.instagram.com/abductions_group/",
       "DESC_EN": "PURE RAVE operates as a raw underground gathering in the Kanto region, stripping away commercial festival aesthetics in favor of uncompromising sound system culture. The event maintains focus on deep, driving techno programming that prioritizes the dance floor experience over production spectacle.",
-      "COUNTRY": "JP"
-    },
-    {
-      "ID": "kyoumei-gathering",
-      "NAME": "KYOUMEI GatherinG",
-      "DATE": "2025-08-29/2025-08-31",
-      "CITY": "Hokkaido",
-      "GENRE": "TECHNO · PSYCHEDELIC",
-      "DESC": "KYOUMEI GatherinGは、テクノのインダストリアルな核心と日本の実験的エレクトロニックの伝統とをつなぐ、北海道発のブリッジとして機能している。このフェスティバルは、商業的なスペクタクルよりも空間音響とコミュニティの共鳴を重視した、親密な集まりをキュレーションしている。北の地に位置することで、この島特有の季節のリズムに沿った、長時間にわたる夜間プログラムが可能となっている。",
-      "DESC_EN": "KYOUMEI GatherinG operates as Hokkaido's bridge between techno's industrial core and Japan's experimental electronic traditions. The festival curates intimate gatherings that emphasize spatial acoustics and community resonance over commercial spectacle. Its northern location allows for extended nocturnal programming that follows the island's unique seasonal rhythms.",
       "COUNTRY": "JP"
     },
     {
@@ -1598,16 +1540,6 @@
       "metaDescription": "国内屈指のアンダーグラウンドDJ・アーティストが集結するオープンエア・パーティ、SAWAGI FESTIVAL。標高の高い大自然に囲まれた開放的な空間で、重厚なダンスミュージックと熱量の高いパフォーマンスに没入。自由でアットホームなコミュニティ感も魅力。",
       "DESC_EN": "SAWAGI FESTIVAL brings together top-tier domestic DJs and artists leading the underground scene, delivering high-energy performances with a heavy, immersive sound that captures the true essence of dance music. Set in an open, elevated natural landscape, this outdoor party offers a deeply immersive experience where music and spirit are shared freely within a welcoming, homey community atmosphere.",
       "location_ja": "ステキな村キャンプ場"
-    },
-    {
-      "ID": "specialflower-festival",
-      "NAME": "SPECIALFLOWER FESTIVAL",
-      "DATE": "2025-08-10/2025-08-11",
-      "CITY": "Ibaraki",
-      "GENRE": "TECHNO · HOUSE · PSYCHEDELIC",
-      "DESC": "SPECIALFLOWER FESTIVALは、茨城の自然に囲まれた環境の中で日本のアンダーグラウンド・エレクトロニック・ミュージック・コミュニティを結集させるフェスティバルだ。アーティストとオーディエンスの親密なつながりを重視し、複数のステージにわたってベテランから新鋭まで幅広いアクトをフィーチャーしている。一貫した美学的ビジョンを保ちながらエレクトロニックの幅広いスペクトラムをカバーする、丁寧にキュレーションされたラインナップで知られている。",
-      "DESC_EN": "SPECIALFLOWER FESTIVAL brings together Japan's underground electronic music community in Ibaraki's natural surroundings. The festival emphasizes intimate connections between artists and audience, featuring both established and emerging acts across multiple stages. Known for its carefully curated lineup that spans the electronic spectrum while maintaining a cohesive aesthetic vision.",
-      "COUNTRY": "JP"
     },
     {
       "ID": "euphoria",
@@ -1727,16 +1659,6 @@
       "COUNTRY": "JP"
     },
     {
-      "ID": "dom",
-      "NAME": "DOM24",
-      "DATE": "2024-10-27",
-      "CITY": "Tokyo",
-      "GENRE": "TECHNO · HOUSE · LIVE",
-      "DESC": "DOM24は、進化を続ける東京のアンダーグラウンド・シーンの中で最先端の電子音楽を紹介するという、東京のコミットメントを体現するフェスティバルだ。複数のステージにわたり国内外のアーティストを一堂に集め、日本の活況を呈するシーンにおける実力派とエマージング・タレントの双方にスポットを当てている。",
-      "DESC_EN": "DOM24 represents Tokyo's commitment to showcasing cutting-edge electronic music within the city's evolving underground landscape. The festival brings together local and international artists across multiple stages, emphasizing both established names and emerging talent from Japan's thriving scene.",
-      "COUNTRY": "JP"
-    },
-    {
       "ID": "wormhole",
       "NAME": "wormhole",
       "DATE": "2024-10-26/2024-10-27",
@@ -1744,16 +1666,6 @@
       "GENRE": "TECHNO · EXPERIMENTAL",
       "DESC": "Wormhole 2024は三重県で開催され、非日常的な空間における没入型テクノ体験を追求してきたシリーズの方向性を継続する。日本の地方フェスティバル・シーンにおいて、先進的なプログラミングと親密なスケール感を保ち続けていることが、本フェスティバルの評価を支えている。",
       "DESC_EN": "wormhole2024 takes place in Mie prefecture, continuing the series' focus on immersive techno experiences in unconventional spaces. The festival maintains its reputation for forward-thinking programming and intimate scale within Japan's regional festival circuit.",
-      "COUNTRY": "JP"
-    },
-    {
-      "ID": "unknown",
-      "NAME": "Unknown",
-      "DATE": "2024-10-18/2024-10-20",
-      "CITY": "Shizuoka",
-      "GENRE": "TECHNO · EXPERIMENTAL · AMBIENT",
-      "DESC": "Unknownは、静岡を拠点に実験的電子音楽を発信する先進的なプラットフォームとして活動しており、テクノのハードなエッジとアンビエント／実験的な領域を橋渡しする、緻密にキュレーションされたラインナップを提示している。フェスティバルは親密な規模感を保ちながら、日本のアンダーグラウンド・シーンと、電子音楽の境界を押し広げる海外アーティストとのつながりを育んでいる。",
-      "DESC_EN": "Unknown operates as a forward-thinking platform for experimental electronic music in Shizuoka, presenting carefully curated lineups that bridge techno's harder edges with ambient and experimental territories. The festival maintains an intimate scale while fostering connections between Japan's underground scenes and international artists pushing electronic music's boundaries.",
       "COUNTRY": "JP"
     },
     {
@@ -1852,6 +1764,59 @@
       "DESC_EN": "PROX is a music festival running from midday through to the following morning at DAN OISO, a site in Oiso, Kanagawa, born out of a renovated farm plot. After a daytime run of live sets, the focus shifts at 23:00 to the covered arch-shaped stage, where DJs take over. SUNGA, Dazzle Drums, カワムラユキ and others link up the sounds as the dancing carries on until 5 a.m. Come to camp, or just turn up for the night. On land that was once farmland, it's a single night where music, place and different scenes intersect.",
       "COUNTRY": "JP",
       "name_ja": "プロックス"
+    },
+    {
+      "ID": "soul-beat-asia",
+      "TYPE": "festival",
+      "NAME": "橋の下世界音楽祭",
+      "DATE": "2026-11-20/2026-11-22",
+      "LOCATION": "Toyota Obridge",
+      "CITY": "AICHI",
+      "ADDRESS": "愛知県豊田市千石町6丁目",
+      "LAT": "35.0848",
+      "LNG": "137.1656",
+      "IMAGE": "images/festivals/soul-beat-asia.webp",
+      "FLYER": "images/festivals/soul-beat-asia-flyer.webp",
+      "GENRE": "LIVE",
+      "DESC": "愛知県豊田市の豊田大橋下・千石公園にて開催される、完全 DIY 精神に基づく自給自足型の野外音楽フェスティバルです。パンクバンド TURTLE ISLAND をはじめとする有志が主宰。「伝統」「アジア」「土着」をテーマに、日本や世界各地の伝統芸能、民謡、アンダーグラウンド・ミュージックからアートまでが交差し、手作りの舞台や露店が立ち並ぶ独自のコミュニティ空間を形成します。投げ銭制（入場無料）を基本とし、投げ銭や協力金で運営される、自由で力強いエネルギーに満ちた唯一無二の草の根型カルチャー・イベントです。",
+      "URL": "https://2026.soulbeatasia.com/",
+      "TICKETURL": "https://eplus.jp/sf/detail/4134150001?P6=001&P1=0402&P59=1",
+      "INSTAGRAM": "https://www.instagram.com/soul_beat_asia/",
+      "LINEUP": "TURTLE ISLAND, OKI DUB AINU BAND, Awa Odori Nagoya Taikoren, Yuta Orisaka Band, DEATH SIDE, SAICOBAB, DEEPCOUNT, ROTARY BEGINNERS, Darthreider & DJ Oshow, Noripan, THE JINSEIS, T-Jiros, Oni no Migiude, neco nemuru, TV Continental Ondo, GIANT STEPS, Hosenkai, Hashinoshita Fujinkai",
+      "EDITIONS": "[]",
+      "STATUS": "published",
+      "metaDescription": "愛知県豊田市の豊田大橋下・千石公園で開かれる橋の下世界音楽祭を紹介。TURTLE ISLANDら有志が主宰し、伝統・アジア・土着をテーマに民謡からアンダーグラウンドまで交差。入場無料の投げ銭制で運営される完全DIYの草の根フェスの魅力とは。",
+      "name_en": "SOUL BEAT ASIA",
+      "DESC_EN": "Held beneath the Toyota Ohashi Bridge in Sengoku Park, Toyota City, Aichi Prefecture, this is a self-sufficient open-air music festival built entirely on a DIY ethos. It is organized by a collective of volunteers led by the punk band TURTLE ISLAND. Taking \"tradition,\" \"Asia,\" and \"the indigenous\" as its themes, the festival brings together traditional performing arts and folk music from Japan and around the world, underground music, and art, forming a singular community space lined with handmade stages and street stalls. Admission is free, with the event running on a donation basis — sustained by tips and contributions from those who attend. It is a one-of-a-kind grassroots cultural gathering, overflowing with a free and powerful energy.",
+      "location_ja": "豊田大橋",
+      "COUNTRY": "JP",
+      "name_ja": "ハシノシタセカイオンガクサイ"
+    },
+    {
+      "ID": "resonance",
+      "TYPE": "festival",
+      "NAME": "Resonance",
+      "DATE": "2026-11-22/2026-11-23",
+      "LOCATION": "OKS KAWAGUCHI CAMPUS",
+      "CITY": "Saitama",
+      "ADDRESS": "埼玉県川口市領家5丁目4-1",
+      "LAT": "35.7951",
+      "LNG": "139.7523",
+      "IMAGE": "images/festivals/resonance.webp",
+      "FLYER": "images/festivals/resonance-flyer.webp",
+      "DESC": "Resonanceは、ラテン語の resonare（響き返す）に由来し、その語源の通り、外界から受けた刺激が内面へと響き、新たな調和を生み出すプロセスそのものを芸術として表現することを理念としています。クラブカルチャー、インスタレーションアート、そして神経科学を横断するこの試みは、イベントを単に「鑑賞するもの」から「知覚そのものの体験」へと拡張します。川口の工場地帯に突如出現する、3,000坪を有する自然豊かな大泉工場「OKS KAWAGUCHI CAMPUS」の開放的な空間の中で、音と身体が共鳴する特別な2日間をお届けします。",
+      "URL": "https://oizumi-2026.resonance-lab.jp/",
+      "TICKETURL": "https://ja.ra.co/events/2542714",
+      "INSTAGRAM": "https://www.instagram.com/resonance.jpn/",
+      "LINEUP": "lisa-mizuno, LOIF, PERYL, Maryama Luiccioni, Fried Banana Shop, SAKURA",
+      "EDITIONS": "[]",
+      "STATUS": "published",
+      "metaDescription": "川口の工場地帯に現れる3,000坪の自然豊かな大泉工場OKS KAWAGUCHI CAMPUSで開催されるResonance。クラブカルチャー、インスタレーションアート、神経科学を横断し、音と身体が共鳴する知覚体験へ。鑑賞を超える特別な2日間。",
+      "name_en": "Resonance",
+      "DESC_EN": "Resonance takes its name from the Latin *resonare*—to sound back—and, true to that etymology, is built on the idea of treating the process itself as art: stimuli received from the outside world reverberating inward to generate a new sense of harmony. Cutting across club culture, installation art, and neuroscience, the project expands the event from something merely \"to be viewed\" into an experience of perception itself. Emerging suddenly out of Kawaguchi's factory district, the lush, 3,000-tsubo grounds of Oizumi Factory's \"OKS KAWAGUCHI CAMPUS\" provide the open setting for two special days in which sound and body resonate as one.",
+      "location_ja": "大泉工場",
+      "COUNTRY": "JP",
+      "name_ja": "レゾナンス"
     }
   ]
 }
