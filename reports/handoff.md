@@ -10542,3 +10542,24 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 判断待ち・データの疑義
 - SALOON の area が SHIBUYA（実際は UNIT と同じ建物＝代官山）。VENT の住所にビル名・階なし。TRIANGLE は公式サイトが 2012 年以降更新なし（閉店の可能性）。
+
+## 2026-10-20 CMS ジャンル空化防止（fix/cms-venue-genre）
+
+### 実施
+- VENUES/FESTIVALS のジャンル読込を `,`・`·`・`、` 分割に統一し、チップ照合を大文字小文字非依存に変更。ARTISTS を含む既存行のジャンル空化ガードを `saveEdit` に追加。FEATURES の既存 `;`/`,` 分割は保存形式（`; `）と一致するため維持。
+- `scripts/check_cms_genre_roundtrip.mjs` を追加して preflight に接続。`LP/cms.html` の `cms.js` を `?v=152` に更新。
+
+### コミット
+- 未コミット（ユーザー指定、pushなし）。
+
+### 検証
+- `node scripts/check_cms_genre_roundtrip.mjs` 5件成功、`python3 scripts/check_asset_versions.py` 全件成功、`git diff --check` 成功。
+
+### 変更したパターン
+- `setSelectedGenres`、VENUES/FESTIVALS の `editRow` 読込、VENUE/FESTIVAL/ARTIST の既存ジャンル空化防止。
+
+### 未確認の類似パターン
+- 確認済み・0件：他の `setSelectedGenres` 呼び出し、シート値を読む `split(',')` のジャンル処理。実ブラウザの認証済みCMS保存は未確認。
+
+### 次の担当への注意・判断待ち
+- 公開前に `bash scripts/preflight.sh`（省略なし）と、CMS の入力→保存→再表示を実ブラウザで確認すること。CMS変更時は `Cmd+Shift+R` で強制リロードすること。
