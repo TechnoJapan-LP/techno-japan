@@ -137,6 +137,7 @@ run "記事の自動リンクと更新日"            node scripts/check_article
 run "内部リンクが生きている"            python3 scripts/check_internal_links.py
 run "構造化データと AI 向けファイル"       node scripts/check_jsonld.mjs
 run "タイトル長と終了年"                  node scripts/check_titles.mjs
+run "アーティスト詳細ページ"              node scripts/check_artist_pages.mjs
 run "CMS の Image Position が届く"      node scripts/check_image_position.mjs
 run "ヘッダー・フッターのロゴ"      node scripts/check_header_logo.mjs
 run "SNS シェア画像"                    node scripts/check_og_image.mjs

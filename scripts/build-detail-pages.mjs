@@ -26,6 +26,7 @@ import { fileURLToPath } from 'node:url';
 import { imageSizeAttrs } from './lib/image-size.mjs';
 import { clauseBreaks, phraseBreaks } from './lib/phrase-breaks.mjs';
 import { autolinkArtists, parseEvents, renderArticleShortcodes } from '../LP/article-shortcodes.js';
+import { articleMatchesArtist } from './lib/artist-page-utils.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const LP_DIR = path.join(__dirname, '..', 'LP');
@@ -54,7 +55,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 62;
+const DETAIL_CSS_VERSION = 63;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -984,7 +985,7 @@ const GA = `<script>
 
 
 
-function page({ title, desc, canonical, image, ogType = 'article', jsonLd, body, lang = 'ja', altHref = null, extraScripts = '', backgroundLayer = false }) {
+function page({ title, desc, canonical, image, ogType = 'article', jsonLd, body, lang = 'ja', altHref = null, extraScripts = '', backgroundLayer = false, robots = 'max-image-preview:large' }) {
   /* 検索結果に出る長さは言語で違う。日本語は全角のため PC で約120字、
      英語は約155字で切られる。160 固定だと日本語の135ページが途中で切れていた
      （2026-09-15 実測: JA 275件中120字超が135件）。 */
@@ -1009,7 +1010,7 @@ ${FAVICON_TAGS}
 
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(d)}">
-<meta name="robots" content="max-image-preview:large">
+<meta name="robots" content="${robots}"${robots === 'noindex,follow' ? ' data-tj-thin="artist"' : ''}>
 <link rel="canonical" href="${esc(canonical)}">
 ${hreflang}
 <link rel="manifest" href="/manifest.json">
@@ -1076,7 +1077,7 @@ function articleNewsletterHtml(canonical, lang = 'ja') {
     </section>`;
 }
 
-function relatedStoryCardsHtml(items, lang, { forceEnglishPath = false, compactDate = false, wide = false } = {}) {
+function relatedStoryCardsHtml(items, lang, { forceEnglishPath = false, compactDate = false, wide = false, heading = 'RELATED STORIES' } = {}) {
   const cards = (items || []).map((a) => {
     const englishPath = lang === 'en' && (forceEnglishPath || a.title_en || a.body_en) ? '/en' : '';
     const title = stripTitleMarkdown(lang === 'en' ? (a.title_en || a.title) : a.title);
@@ -1095,16 +1096,18 @@ function relatedStoryCardsHtml(items, lang, { forceEnglishPath = false, compactD
           <div class="related-story-title">${titleHtml}</div></div>
         </a>`;
   }).join('');
-  return cards ? `<div class="related-stories"><h2>RELATED STORIES</h2>${cards}</div>` : '';
+  return cards ? `<div class="related-stories"><h2>${heading}</h2>${cards}</div>` : '';
 }
 
 function isPublishedFestival(festival) {
   return festival && festival.id && String(festival.status || '').toLowerCase() !== 'draft';
 }
 
-function relatedFestivalCardHtml(festival, lang, prefix, editionsByFestival) {
-  const feds = [...(editionsByFestival.get(String(festival.id)) || [])].sort((x, y) =>
-    String(y.DATE_START || '').localeCompare(String(x.DATE_START || '')));
+function relatedFestivalCardHtml(festival, lang, prefix, editionsByFestival, editionOverride = null) {
+  const feds = editionOverride
+    ? [editionOverride]
+    : [...(editionsByFestival.get(String(festival.id)) || [])].sort((x, y) =>
+      String(y.DATE_START || '').localeCompare(String(x.DATE_START || '')));
   const current = feds[0];
   const name = lang === 'en' ? (festival.name_en || festival.name) : festival.name;
   const image = festival.image || festival.flyer;
@@ -2121,7 +2124,7 @@ const artistMemberIds = (artist) => {
     .filter(Boolean);
 };
 
-function artistPage(a, artistsById, lang = 'ja') {
+function artistPage(a, artistsById, lang = 'ja', artistAppearances = new Map(), editionsByFestival = new Map(), articles = []) {
   const hubHref = `${lang === 'en' ? '/en' : ''}/artists.html`;
   const prefix = lang === 'en' ? '/en' : '';
   const altHref = (lang === 'ja' ? '/en' : '') + `/artists/${a.id}.html`;
@@ -2129,16 +2132,39 @@ function artistPage(a, artistsById, lang = 'ja') {
   const bio = lang === 'en' ? (a.bio_en || a.bio) : (a.bio || a.bio_en);
   const canonical = `${BASE}${prefix}/artists/${a.id}.html`;
   const fromJapan = !a.country || /japan/i.test(String(a.country));
+  const appearances = artistAppearances.get(String(a.id)) || [];
+  const upcoming = appearances.filter((item) => item.upcoming).sort((x, y) => {
+    const xDate = ISO_DATE.test(String(x.edition.DATE_START || '')) ? String(x.edition.DATE_START) : '9999-99-99';
+    const yDate = ISO_DATE.test(String(y.edition.DATE_START || '')) ? String(y.edition.DATE_START) : '9999-99-99';
+    return xDate.localeCompare(yDate) || String(x.festival.name || '').localeCompare(String(y.festival.name || ''));
+  });
+  const nearest = upcoming[0] || null;
+  const nearestName = nearest ? (lang === 'en' ? (nearest.festival.name_en || nearest.festival.name) : nearest.festival.name) : '';
   const title = lang === 'en'
-    ? truncate(`${name} — Techno DJ / Artist${fromJapan ? ' from Japan' : ''} | TECHNO JAPAN`, 65)
-    : `${name}｜テクノDJ・アーティスト — TECHNO JAPAN`;
+    ? (() => {
+      const candidates = nearest
+        ? [`${name} at ${nearestName} — DJ Profile | TECHNO JAPAN`, `${name} — DJ Profile & Festival Appearances | TECHNO JAPAN`, `${name} | TECHNO JAPAN`]
+        : [`${name} — DJ Profile & Festival Appearances | TECHNO JAPAN`, `${name} | TECHNO JAPAN`];
+      return candidates.find((candidate) => candidate.length <= 65) || candidates[candidates.length - 1];
+    })()
+    : (() => {
+      const candidates = nearestName
+        ? [`${name}｜${nearestName}出演・プロフィール — TECHNO JAPAN`, `${name}｜${nearestName}出演・プロフィール`, `${name}｜出演フェス・プロフィール — TECHNO JAPAN`, `${name}｜プロフィール`]
+        : [`${name}｜DJ・アーティストのプロフィールと出演フェス — TECHNO JAPAN`, `${name}｜プロフィールと出演フェス — TECHNO JAPAN`, `${name}｜プロフィール`];
+      return candidates.find((candidate) => candidate.length <= 60) || candidates[candidates.length - 1];
+    })();
   const place = [a.city, a.country].filter(Boolean).join(', ');
   // bioが無い/短い時は、ジャンル・拠点入りのキーワードリッチな定型文にフォールバック
   const bioDesc = bio ? truncate(stripTags(bio), 160) : '';
   const genreTxt = String(a.genre || '').trim();
+  const upcomingLead = nearest
+    ? (lang === 'en'
+      ? `${nearestName} (${fmtMetaDateEn(nearest.edition.DATE_START, nearest.edition.DATE_END) || 'Date TBA'}) — upcoming appearance. `
+      : `${nearestName}（${fmtMetaDateJa(nearest.edition.DATE_START, nearest.edition.DATE_END) || '日程未定'}）に出演予定。`)
+    : '';
   const desc = bioDesc.length >= 50 ? bioDesc : (lang === 'en'
-    ? `${name}${place ? ' (' + place + ')' : ''} — ${genreTxt || 'techno / house'} DJ & artist. Profile, links and festival appearances in Japan's underground scene.`
-    : `${name}${place ? '（' + place + '）' : ''} — ${genreTxt ? genreTxt + 'の' : ''}DJ／アーティスト。プロフィール・SNSリンク・日本のテクノ／ハウスシーンでの出演フェス情報。TECHNO JAPANのアーティスト名鑑。`);
+    ? `${upcomingLead}${name}${place ? ' (' + place + ')' : ''} — ${genreTxt || 'techno / house'} DJ & artist. Profile, links and festival appearances in Japan's underground scene.`
+    : `${upcomingLead}${name}${place ? '（' + place + '）' : ''} — ${genreTxt ? genreTxt + 'の' : ''}DJ／アーティスト。プロフィール・SNSリンク・日本のテクノ／ハウスシーンでの出演フェス情報。TECHNO JAPANのアーティスト名鑑。`);
   const image = absUrl(a.image);
   const links = a.links || {};
   const schemaType = artistSchemaType(a);
@@ -2173,9 +2199,31 @@ function artistPage(a, artistsById, lang = 'ja') {
     .filter(([, v]) => v)
     .map(([k, v]) => `<a class="detail-link" href="${esc(safeUrl(v))}" target="_blank" rel="noopener">${esc(k.toUpperCase())}</a>`)
     .join('');
-  const appearances = XLINK.appearMap.get(String(a.id)) || [];
-  const appearancesHtml = appearances.length
-    ? `\n    <section class="artist-appearances"><h2>${lang === 'en' ? 'APPEARANCES' : '出演フェス'}</h2>${relatedChips(appearances, 'festivals', lang)}</section>`
+  const pastByFestival = new Map();
+  for (const item of appearances.filter((entry) => !entry.upcoming)) {
+    const key = String(item.festival.id);
+    if (!pastByFestival.has(key)) pastByFestival.set(key, { festival: item.festival, editions: [] });
+    pastByFestival.get(key).editions.push(item.edition);
+  }
+  const upcomingHtml = upcoming.length
+    ? `<section class="artist-appearances artist-upcoming"><h2>${lang === 'en' ? 'UPCOMING' : '出演予定'}</h2><div class="related-grid">${upcoming.slice(0, 6).map(({ festival, edition }) => relatedFestivalCardHtml(festival, lang, prefix, editionsByFestival, edition)).join('')}</div></section>`
+    : '';
+  const pastHtml = pastByFestival.size
+    ? `<section class="artist-appearances artist-past"><h2>${lang === 'en' ? 'PAST APPEARANCES' : '過去の出演'}</h2><div class="lineup-list">${[...pastByFestival.values()].sort((x, y) => String(y.editions[0]?.DATE_START || '').localeCompare(String(x.editions[0]?.DATE_START || ''))).map(({ festival, editions }) => {
+      const years = [...new Map(editions.map((ed) => [String(ed.EDITION || editionIdentifier(ed)), ed])).values()]
+        .sort((x, y) => String(y.DATE_START || '').localeCompare(String(x.DATE_START || '')))
+        .map((ed) => editionLabel(editionIdentifier(ed))).join('・');
+      const label = `${lang === 'en' ? (festival.name_en || festival.name) : festival.name} ${years}`;
+      return `<a class="lineup-item" href="${prefix}/festivals/${encodeURIComponent(festival.id)}.html">${esc(label)}</a>`;
+    }).join('')}</div></section>`
+    : '';
+  const artistFestivalIds = appearances.map(({ festival }) => festival.id);
+  const artistArticles = (articles || []).filter((article) => String(article.status || '').toLowerCase() !== 'draft' && articleMatchesArtist(article, a, { artistFestivalIds, festivals: XLINK.fests })).slice(0, 3);
+  const articlesHtml = artistArticles.length
+    ? `<section class="detail-section artist-related">${relatedStoryCardsHtml(artistArticles, lang, { forceEnglishPath: true, compactDate: true, wide: true, heading: lang === 'en' ? 'RELATED STORIES' : '関連記事' })}</section>`
+    : '';
+  const appearancesHtml = upcomingHtml || pastHtml || articlesHtml
+    ? `\n    ${upcomingHtml}${pastHtml}${articlesHtml}`
     : '';
 
   const body = `<article class="detail-page">
@@ -2190,7 +2238,8 @@ function artistPage(a, artistsById, lang = 'ja') {
   </div>
 </article>`;
 
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'artists'] : ['artists']), `${a.id}.html`), html: page({ title, desc, canonical, image, ogType: 'profile', jsonLd: [jsonLd, breadcrumbLd('ARTISTS', '/artists.html', name, canonical)], body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT + ARTIST_HUB_BACK_SCRIPT }) };
+  const thin = !stripTags(a.bio) && !stripTags(a.bio_en);
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'artists'] : ['artists']), `${a.id}.html`), html: page({ title, desc, canonical, image, ogType: 'profile', jsonLd: [jsonLd, breadcrumbLd('ARTISTS', '/artists.html', name, canonical)], body, lang, altHref, robots: thin ? 'noindex,follow' : 'max-image-preview:large', extraScripts: LANG_TOGGLE_SCRIPT + ARTIST_HUB_BACK_SCRIPT }) };
 }
 
 /* Instagram の URL から表示用の @ハンドルを取り出す。
@@ -2972,6 +3021,7 @@ function main() {
   const festivalsById = new Map(pubFests.map((festival) => [String(festival.id), festival]));
   const editionById = new Map(EDITIONS.map((edition) => [String(edition.EDITION_ID), edition]));
   const appearMap = new Map();
+  const artistAppearances = new Map();
   const missingArtistRefs = new Map();
   for (const row of LINEUPS) {
     const edition = editionById.get(String(row.EDITION_ID || ''));
@@ -2993,6 +3043,16 @@ function main() {
     if (!festival) throw new Error(`lineups.json: FESTIVAL_ID 参照切れ "${edition.FESTIVAL_ID}"`);
     if (!appearMap.has(artistId)) appearMap.set(artistId, new Map());
     appearMap.get(artistId).set(festival.id, festival);
+    if (!artistAppearances.has(artistId)) artistAppearances.set(artistId, []);
+    const appearanceKey = `${artistId}\u0000${String(edition.EDITION_ID)}`;
+    const existingAppearances = artistAppearances.get(artistId);
+    if (existingAppearances.some((item) => item.key === appearanceKey)) continue;
+    existingAppearances.push({
+      key: appearanceKey,
+      festival,
+      edition,
+      upcoming: !ISO_DATE.test(String(edition.DATE_END || '')) || String(edition.DATE_END || '') >= jstToday(),
+    });
   }
   if (missingArtistRefs.size) {
     const details = [...missingArtistRefs.entries()]
@@ -3055,13 +3115,13 @@ ${FAVICON_TAGS}
   const counts = {
     articles: writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'ja', pubFests, editionsByFestival, pubVenues, festivalData, ARTICLES, ARTISTS)).concat(redirectStubs('articles', liveArticleIds)), 'articles'),
     festivals: writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, ARTICLES, pubFests, editionsByFestival, 'ja')).concat(redirectStubs('festivals', liveFestivalIds)), 'festivals'),
-    artists: writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'ja')).concat(redirectStubs('artists', liveArtistIds)), 'artists'),
+    artists: writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'ja', artistAppearances, editionsByFestival, pubArticles)).concat(redirectStubs('artists', liveArtistIds)), 'artists'),
     venues: writeAll(pubVenues.map((v) => venuePage(v, 'ja', pubFests, editionsByFestival, pubArticles)), 'venues'),
     // 英語版（/en/…）。未翻訳フィールドは articlePage 内で元データへ
     // フォールバックし、EN ハブの通常遷移先を必ず実在させる。
     'en/articles': writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'en', pubFests, editionsByFestival, pubVenues, festivalData, ARTICLES, ARTISTS)), 'en/articles'),
     'en/festivals': writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, ARTICLES, pubFests, editionsByFestival, 'en')).concat(redirectStubs('en/festivals', liveFestivalIds)), 'en/festivals'),
-    'en/artists': writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'en')).concat(redirectStubs('en/artists', liveArtistIds)), 'en/artists'),
+    'en/artists': writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'en', artistAppearances, editionsByFestival, pubArticles)).concat(redirectStubs('en/artists', liveArtistIds)), 'en/artists'),
     'en/venues': writeAll(pubVenues.map((v) => venuePage(v, 'en', pubFests, editionsByFestival, pubArticles)), 'en/venues'),
   };
 

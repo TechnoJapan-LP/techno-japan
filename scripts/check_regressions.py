@@ -187,7 +187,7 @@ def measure():
     app_pages = links_to_fests = 0
     for f in artists_ja:
         body = body_without_scripts(read(f))
-        if has_h2(body, "出演フェス"):
+        if has_h2(body, "出演フェス") or 'artist-upcoming' in body or 'artist-past' in body:
             app_pages += 1
         links_to_fests += len(re.findall(r'href="/?festivals/[^"]*"', body))
 

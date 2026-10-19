@@ -177,6 +177,11 @@ def git_file_date(path, loc, today, shallow, previous_lastmods):
     return today
 
 
+def is_noindex_page(html):
+    """Exclude both redirect stubs and intentionally thin pages from sitemap."""
+    return bool(re.search(r'<meta\s+name="robots"\s+content="noindex(?:[,\"]|\s)', html, re.I))
+
+
 def load_data_file(name):
     path = os.path.join(LP_DIR, "data", name)
     try:
@@ -250,13 +255,22 @@ def main():
 
     # Artists
     artist_ids = extract_ids(data, "ARTISTS")
+    artist_url_count = 0
     for aid in artist_ids:
+        artist_path = os.path.join(LP_DIR, "artists", f"{aid}.html")
+        try:
+            with open(artist_path, encoding="utf-8", errors="replace") as artist_file:
+                if is_noindex_page(artist_file.read()):
+                    continue
+        except OSError:
+            continue
         urls.append({
             "loc": f"{BASE_URL}/artists/{aid}.html",
             "lastmod": git_file_date(os.path.join(LP_DIR, "artists", f"{aid}.html"), f"{BASE_URL}/artists/{aid}.html", today, shallow, previous_lastmods),
             "changefreq": "monthly",
             "priority": "0.6",
         })
+        artist_url_count += 1
 
     # Venues (filtered)
     venue_ids = extract_venue_ids(data)
@@ -275,7 +289,7 @@ def main():
         # 旧Title Case URLなどの noindex リダイレクトスタブは検索対象ではない。
         # sitemap には転送先の正規ページだけを載せる。
         with open(f, "r", encoding="utf-8", errors="replace") as html_file:
-            if '<meta name="robots" content="noindex">' in html_file.read():
+            if is_noindex_page(html_file.read()):
                 continue
         rel = os.path.relpath(f, LP_DIR).replace(os.sep, "/")
         urls.append({
@@ -298,7 +312,7 @@ def main():
     for f in sorted(glob.glob(os.path.join(article_root, "*.html"))):
         with open(f, "r", encoding="utf-8", errors="replace") as html_file:
             html = html_file.read()
-        if '<meta name="robots" content="noindex">' in html:
+        if is_noindex_page(html):
             continue
         aid = os.path.splitext(os.path.basename(f))[0]
         article_ids.append(aid)
@@ -330,7 +344,7 @@ def main():
     print(f"✓ sitemap.xml generated: {len(urls)} URLs")
     print(f"  Static: {len(STATIC_PAGES)}")
     print(f"  Festivals: {len(festival_ids)}")
-    print(f"  Artists: {len(artist_ids)}")
+    print(f"  Artists: {artist_url_count} (source {len(artist_ids)}, noindex {len(artist_ids) - artist_url_count})")
     print(f"  Venues: {len(venue_ids)}")
     print(f"  Articles: {len(article_ids)}")
     print(f"  → {OUT_PATH}")

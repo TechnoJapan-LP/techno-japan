@@ -3,6 +3,49 @@
 セッション間の短期的な引き継ぎ専用ログです。
 長い背景説明・事故の経緯・設計判断は [AUDIT_TECHNO_JAPAN.md](../AUDIT_TECHNO_JAPAN.md) に記録し、ここからリンクしてください。
 
+## 2026-10-20 / Codex / 完了（アーティスト詳細ページ Phase A）
+
+### 実施
+- `scripts/build-detail-pages.mjs` に、bio/bio_en がともに空のアーティスト詳細（109件）の JA/EN `noindex,follow` を追加。リダイレクトスタブの `noindex` 完全一致判定とは別の印にし、ハブのリンクは維持。
+- LINEUPS → EDITIONS → FESTIVALS の開催回付き出演情報を詳細専用マップで追加。出演予定は日付順最大6カード、過去出演はフェスごとに年（同年複数回は `#2`）を表示。
+- 記事本文のアーティストリンク／安全な名前境界一致による関連記事を最大3件追加。draft は除外。
+- 出演予定を反映した JA/EN タイトル・定型 description、薄いページの sitemap 除外を実装。
+- `scripts/check_artist_pages.mjs` と `scripts/lib/artist-page-utils.mjs` を追加し、`preflight.sh` に登録。
+- 追加修正: JA/ENタイトルを候補順選択に変更し、省略記号による途中切断を廃止。同一アーティスト・同一 `EDITION_ID` の出演重複を除外し、タイトル省略記号と出演予定カード重複の検査を追加。
+- 追加修正: 5文字以下の名前一致を大文字小文字区別に変更。FUJI / `previously played Fuji Rock` の誤爆テストを追加。
+- 変更前後の全記事一致監査（除外8件、残存名前一致のみ76件、前後30字）を [artist-article-match-audit-2026-10-20.md](artist-article-match-audit-2026-10-20.md) に保存。
+- `node scripts/build-detail-pages.mjs` と `python3 scripts/generate-sitemap.py` で生成物を更新。JA/EN ハブのリンク行数は各139件で一致。
+
+### コミット
+- 未コミット。commit / push はユーザー指定により Claude が実施。
+
+### 検証
+- `node scripts/check_artist_pages.mjs`: 成功（thin=109、JA/EN noindex・sitemap、代表3件、出演日付順、過去年、名前境界）。
+- `node scripts/check_titles.mjs`: 成功（JA 60字以内、EN 65字以内）。
+- `python3 scripts/check_regressions.py`: 成功（回帰なし、出演ページ計128件）。
+- 追加修正後の再生成・再検査: `node scripts/build-detail-pages.mjs`、`python3 scripts/generate-sitemap.py`、`check_artist_pages.mjs`、`check_titles.mjs`、`check_regressions.py` がすべて成功。
+- `FUJI` の記事 `topia-2026-info` は名前一致から除外。リンク一致の挙動は維持。
+- `python3 scripts/generate-sitemap.py`: 成功（570 → 352 URL、アーティスト詳細は source139 → 30件）。
+- `PYTHONPYCACHEPREFIX=/tmp/techno-japan-pycache python3 -m py_compile scripts/generate-sitemap.py`: 成功。
+- `git diff --check`: 成功。
+- 実ブラウザ確認: 未確認（Claude が実施予定）。
+
+### 変更したパターン
+- アーティスト詳細の薄いページ判定・JA/EN robots・sitemap 除外: 109件×2。
+- 開催回付き出演予定カード、過去出演年チップ、関連記事、出演予定連動 title/description: アーティスト詳細139件×2。
+- 英数字名の境界一致（YAMA/Yamanashi、NOCO/Nocoffee）と短名除外。
+- タイトル候補選択（JA 4候補／出演予定なし3候補、EN 3候補／出演予定なし2候補）: 省略記号なし。
+- 同一 `EDITION_ID` の重複出演行: 1開催回1件へ統合。別 `EDITION_ID` は保持。
+
+### 未確認の類似パターン
+- 実ブラウザでの JA/EN アーティスト詳細の表示・カード操作: 未確認。
+- 同年複数回開催の実データ表示: 自動生成ロジック確認済み、実ブラウザは未確認。
+- 旧URLリダイレクトスタブの `Redirecting…` は、意図された完全一致 `noindex` スタブのためタイトル検査対象外。
+- ハブ・TOP の既存 `XLINK.appearMap` 利用箇所: 既存形を維持し静的検査済み、実ブラウザは未確認。
+
+### 次の担当への注意・判断待ち
+- Claude は公開前に実ブラウザで JA/EN、PC/モバイルの代表アーティストを確認すること。薄いページは `noindex,follow`、bio が入った次回生成で自動的に index/sitemap へ戻る。
+
 ## 2026-08-20 / Codex / 完了（RELATED FESTIVALS水平スクロール）
 
 ### 実施
@@ -10542,3 +10585,56 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 判断待ち・データの疑義
 - SALOON の area が SHIBUYA（実際は UNIT と同じ建物＝代官山）。VENT の住所にビル名・階なし。TRIANGLE は公式サイトが 2012 年以降更新なし（閉店の可能性）。
+
+## 2026-10-20 アーティスト詳細 Phase A 追加修正（未コミット）
+
+### 実施
+- 関連記事の名前一致を、名前だけでは採用せず、出演フェスの `festivalId` 一致または本文・タイトル内の出演フェスリンク／名称一致を必須とする規則へ変更。アーティストリンク一致は従来どおり保持。
+- 名前一致は4文字以上・英数字境界・大小無視に戻した。直前の「5文字以下は大小区別」は撤回。
+- FUJI×topia、Ground×Camp Ground、OCCA表記のデータ非依存テストを `check_artist_pages.mjs` に追加。
+- `reports/artist-article-match-audit-2026-10-20.md` を再作成。最終一致54件（規則と名前一致の前後30字つき）、旧版の名前のみ判定84件から外れた30件を列挙。
+- 詳細ページと sitemap を再生成。関連判定に使う出演フェスは LINEUPS の `ARTIST_ID(S)` → EDITIONS → `FESTIVAL_ID` で構築。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node scripts/build-detail-pages.mjs`、`python3 scripts/generate-sitemap.py` 成功（外部画像136件は前回寸法へフォールバック）。
+- `node scripts/check_artist_pages.mjs`、`node scripts/check_titles.mjs`、`python3 scripts/check_regressions.py`、`git diff --check` 成功。
+- sitemap は352 URL、アーティストは source 139件中30件（薄い109件をJA/ENとも除外）。
+
+### 変更したパターン
+- `artistNameMatches` の大小無視・境界規則、出演フェス文脈付き関連記事判定、監査一覧、静的検査テスト。
+
+### 未確認の類似パターン
+- 確認済み・0件：FUJI／Ground の文脈なし誤爆、OCCA の大文字表記、JA/EN生成、タイトルの省略記号混入。
+- 実ブラウザ確認は未確認（Claude が実施予定）。
+
+### 次の担当への注意・判断待ち
+- 公開前に実ブラウザでアーティスト詳細の関連記事・出演予定／過去出演をJA/EN、PC/モバイルで確認すること。外部画像取得を含むフル preflight は環境制約を確認して実施すること。
+
+## 2026-10-20 アーティスト出演予定カードのCSS修正（未コミット）
+
+### 実施
+- `LP/detail.css` の会場関連記事カード用ルールを `.artist-upcoming` にも適用。PCは3列、スマホはアーティスト予定のみ2列・gap 12px・名前14px。会場関連記事はスマホ1列のまま。
+- `detail.css` を v62→v63 に更新。CMS記事プレビュー内の固定参照も v63 に変更し、`LP/cms.html` の `cms.js` を v151→v152 に更新。
+- 詳細ページと sitemap を再生成。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node scripts/build-detail-pages.mjs`、`python3 scripts/generate-sitemap.py` 成功。外部画像136件は前回記録寸法へフォールバック。
+- `python3 scripts/check_asset_versions.py`、`node scripts/check_artist_pages.mjs`、`node scripts/check_titles.mjs`、`python3 scripts/check_regressions.py`、`git diff --check` 成功。
+- `bash scripts/preflight.sh` はコード系46件成功、詳細生成は外部画像取得タイムアウト、ブラウザ系8件は sandbox の localhost listen `EPERM` で失敗。
+- 実ブラウザ確認は未確認（ユーザーが確認した再現症状に対するCSS修正。Claude が実施予定）。
+
+### 変更したパターン
+- `.artist-upcoming` の関連カード画像比率、グリッド列数、gap、カード名サイズ、detail.css/CMSキャッシュバージョン。
+
+### 未確認の類似パターン
+- 確認済み・0件：`.venue-related` のスマホ1列、PCの既存3列、アーティスト予定カードのJA/EN生成。
+- 未確認：実ブラウザの390px/1280pxでの表示実測。
+
+### 次の担当への注意・判断待ち
+- ブラウザでJA/ENアーティスト詳細を390pxと1280pxで確認し、画像が4:3、本文列内、予定カードがスマホ2列になっていることを確認すること。
