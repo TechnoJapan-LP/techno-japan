@@ -117,6 +117,10 @@
       <div class="form-group"><label>Type</label><select id="v-type"><option value="club">Club</option><option value="bar">Bar</option><option value="livehouse">Livehouse</option></select></div>
       <div class="form-group" id="v-subtype-wrap" hidden><label>Bar Subtype</label><select id="v-subtype"><option value="">—</option><option value="dj-bar">DJ Bar</option><option value="music-bar">Music Bar</option><option value="listening-bar">Listening Bar</option></select></div>
       <div class="form-group"><label>Hours</label><input type="text" id="v-hours" placeholder="e.g. 19:00–03:00"></div>
+      <div class="form-group"><label>読み（カタカナ）</label><input type="text" id="v-name_kana" placeholder="例: ウーム"></div>
+      <div class="form-group full"><label>アクセス（日本語）</label><input type="text" id="v-access" placeholder="例: JR・東京メトロ渋谷駅から徒歩8分"></div>
+      <div class="form-group"><label>ACCESS (EN)</label><input type="text" id="v-access_en" placeholder="e.g. 8 min walk from Shibuya Station"></div>
+      <div class="form-group"><label>営業時間 (EN)</label><input type="text" id="v-hours_en" placeholder="e.g. 7:00 PM–3:00 AM"></div>
       <div class="form-group"><label>Charge</label><select id="v-charge"><option value="">—</option><option value="no-cover">No Cover</option><option value="cover">Cover</option><option value="varies">Varies</option></select></div>
       <div class="form-group"><label>Image Path</label><input type="text" id="v-image" placeholder="auto-filled" readonly></div>
       <div class="form-group full"><label>Genre</label><div class="chip-group" id="v-genre"></div></div>
@@ -574,6 +578,6 @@
 </div>
 
 <script type="module" src="article-shortcodes.js?v=9"></script>
-<script src="cms.js?v=150" defer></script>
+<script src="cms.js?v=151" defer></script>
 </body>
 </html>

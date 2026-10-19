@@ -447,7 +447,8 @@ const c = makeCtx();
     '  {', '    id: "y",', '  },', '];',
     '',
     'const VENUES = [', '  {', '    id: "v",',
-    '    subtype: "dj-bar",', '    hours: "20:00–03:00",',
+    '    subtype: "dj-bar",', '    hours: "20:00–03:00",', '    hours_en: "8:00 PM–3:00 AM",',
+    '    access: "渋谷駅から徒歩8分",', '    access_en: "8 min from Shibuya",',
     '    charge: "no-cover",', '    features: ["after-hours", "vinyl"],',
     '  },', '];',
     '',
@@ -463,15 +464,20 @@ const c = makeCtx();
     /ARTISTS\s+2件（紹介文 1 \/ 画像 1 \/ リンク 1）/.test(sum), sum);
   check('記事の英語本文と関連フェスの数を出す',
     /ARTICLES\s+1件（英語本文 1 \/ 関連フェス 1）/.test(sum), sum);
-  check('VENUESの4列の件数を出す',
-    /VENUES\s+1件（SUBTYPE 1 \/ HOURS 1 \/ CHARGE 1 \/ FEATURES 1）/.test(sum), sum);
+  check('VENUESの追加列の件数を出す',
+    /VENUES\s+1件（SUBTYPE 1 \/ HOURS 1 \/ HOURS_EN 1 \/ ACCESS 1 \/ FEATURES 1）/.test(sum), sum);
   const venueJs = c.__T.buildVenuesJs([{
-    id: 'v1', name: 'Test Bar', subtype: 'dj-bar', hours: '20:00–03:00',
+    id: 'v1', name: 'Test Bar', subtype: 'dj-bar', hours: '20:00–03:00', hours_en: '8:00 PM–3:00 AM',
+    name_kana: 'テストバー', access: '渋谷駅から徒歩8分', access_en: '8 min from Shibuya',
     charge: 'no-cover', features: 'after-hours;vinyl, no-cover',
   }]);
-  check('VENUESの4列をdata.jsへ出力する',
+  check('VENUESの追加列をdata.jsへ出力する',
     /subtype: "dj-bar"/.test(venueJs)
       && /hours: "20:00–03:00"/.test(venueJs)
+      && /hours_en: "8:00 PM–3:00 AM"/.test(venueJs)
+      && /name_kana: "テストバー"/.test(venueJs)
+      && /access: "渋谷駅から徒歩8分"/.test(venueJs)
+      && /access_en: "8 min from Shibuya"/.test(venueJs)
       && /charge: "no-cover"/.test(venueJs)
       && /features: \["after-hours", "vinyl", "no-cover"\]/.test(venueJs), venueJs);
   check('ファイルの大きさを出す', /ファイルの大きさ \d+KB/.test(sum), sum);
@@ -482,13 +488,16 @@ const c = makeCtx();
     .replace('    image: "i.webp",\n', '')
     .replace('    subtype: "dj-bar",\n', '')
     .replace('    hours: "20:00–03:00",\n', '')
+    .replace('    hours_en: "8:00 PM–3:00 AM",\n', '')
+    .replace('    access: "渋谷駅から徒歩8分",\n', '')
+    .replace('    access_en: "8 min from Shibuya",\n', '')
     .replace('    charge: "no-cover",\n', '')
     .replace('    features: ["after-hours", "vinyl"],\n', '');
   const sum2 = c.__T.publishPayloadSummary(dropped);
   check('列が落ちると件数が減って見える（§9-67 の再現）',
     /紹介文 0 \/ 画像 0/.test(sum2), sum2);
-  check('VENUESの4列が落ちると0件になる',
-    /VENUES\s+1件（SUBTYPE 0 \/ HOURS 0 \/ CHARGE 0 \/ FEATURES 0）/.test(sum2), sum2);
+  check('VENUESの追加列が落ちると0件になる',
+    /VENUES\s+1件（SUBTYPE 0 \/ HOURS 0 \/ HOURS_EN 0 \/ ACCESS 0 \/ FEATURES 0）/.test(sum2), sum2);
 }
 
 console.log();

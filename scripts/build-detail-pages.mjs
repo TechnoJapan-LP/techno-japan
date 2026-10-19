@@ -54,7 +54,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 60;
+const DETAIL_CSS_VERSION = 62;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -2238,7 +2238,14 @@ function venueTypeLabels(type) {
   return { ja: 'クラブ', en: 'Club' };
 }
 
-function venuePage(v, lang = 'ja') {
+function venueTitleTypeJa(type) {
+  const key = String(type || '').trim().toLowerCase();
+  if (key === 'club') return 'クラブ';
+  if (key === 'livehouse') return 'ライブハウス';
+  return 'ヴェニュー';
+}
+
+function venuePage(v, lang = 'ja', allFestivals = [], editionsByFestival = new Map(), articles = []) {
   const prefix = lang === 'en' ? '/en' : '';
   const hubHref = `${prefix}/venues.html`;
   const altHref = (lang === 'ja' ? '/en' : '') + `/venues/${v.id}.html`;
@@ -2252,15 +2259,31 @@ function venuePage(v, lang = 'ja') {
   const place = [areaRaw, cityRaw].filter(Boolean).join(', ');
   const venueType = venueTypeLabels(v.type);
   const titlePlace = [areaLabel, city].filter(Boolean).join(', ') || 'Japan';
+  const nameKana = String(v.name_kana || '').trim();
+  const areaTitle = areaLabel || city;
+  const titleTypeJa = venueTitleTypeJa(v.type);
+  const titleName = nameKana
+    ? `${name}（${nameKana}）${areaTitle}`
+    : areaTitle
+      ? `${name}（${areaTitle}）`
+      : name;
+  const titleNameWithoutArea = nameKana ? `${name}（${nameKana}）` : name;
+  const jaTitleCandidates = [
+    `${titleName}｜${titleTypeJa}のアクセス・営業時間・イベント — TECHNO JAPAN`,
+    `${titleName}｜${titleTypeJa}のアクセス・営業時間 — TECHNO JAPAN`,
+    `${titleNameWithoutArea}｜${titleTypeJa}のアクセス・営業時間 — TECHNO JAPAN`,
+  ];
   const title = lang === 'en'
     ? [`${name} (${areaLabel || titlePlace}) — ${venueType.en} in ${city || 'Japan'} | TECHNO JAPAN`, `${name} | TECHNO JAPAN`].find((t) => t.length <= 65) || `${name} | TECHNO JAPAN`
-    : `${name}${areaLabel || city ? `（${areaLabel || city}）` : ''}｜${city ? `${city}の` : ''}${venueType.ja} アクセス・営業情報・イベント — TECHNO JAPAN`;
+    : jaTitleCandidates.find((candidate) => candidate.length <= 60) || truncate(jaTitleCandidates[jaTitleCandidates.length - 1], 60);
   const jsonLdDesc = bodyDesc || (lang === 'en'
     ? `${name}${place ? ' (' + place + ')' : ''} — club / venue guide. Japan's underground dance music.`
     : `${name}${place ? '（' + place + '）' : ''}の基本情報。日本のアンダーグラウンド・ダンスミュージックのクラブ／ヴェニュー。`);
-  const descLead = lang === 'en'
-    ? `${city || 'Japan'}${areaLabel ? `, ${areaLabel}` : ''} ${venueType.en.toLowerCase()}.${v.address ? ` ${v.address}.` : ''} `
-    : `${city || '日本'}${areaLabel ? `・${areaLabel}` : ''}の${venueType.ja}。${v.address ? `${v.address}。` : ''}`;
+  const accessText = lang === 'en' ? (v.access_en || v.access) : v.access;
+  const hoursText = lang === 'en' ? (v.hours_en || v.hours) : v.hours;
+  const descLead = accessText
+    ? `${accessText}。${hoursText ? `${lang === 'en' ? 'Hours' : '営業時間'}: ${hoursText}。` : ''}`
+    : `${hoursText ? `${lang === 'en' ? 'Hours' : '営業時間'}: ${hoursText}。` : ''}`;
   const desc = truncate(`${descLead}${bodyDesc || (lang === 'en'
     ? `${name} — club / venue guide. Japan's underground dance music.`
     : `${name}の基本情報。日本のアンダーグラウンド・ダンスミュージックの会場。`)}`, 160);
@@ -2276,6 +2299,7 @@ function venuePage(v, lang = 'ja') {
     '@type': venueLdType,
     '@id': `${BASE}/venues/${encodeURIComponent(v.id)}.html#venue`,
     name: name,
+    ...(nameKana ? { alternateName: nameKana } : {}),
     inLanguage: lang,
     description: jsonLdDesc,
     ...(v.image ? { image: [image] } : {}),
@@ -2298,18 +2322,19 @@ function venuePage(v, lang = 'ja') {
   const practical = venueFeatures(v.features)
     .filter((feature) => Object.prototype.hasOwnProperty.call(VENUE_PRACTICAL_FEATURES, feature));
   const goodToKnow = practical.map((feature) => VENUE_PRACTICAL_FEATURES[feature][lang === 'en' ? 1 : 0]);
-  const mapQuery = v.address || (v.lat && v.lng ? `${v.lat},${v.lng}` : '');
+  const mapQuery = v.lat && v.lng ? `${v.lat},${v.lng}` : (v.address || '');
   const mapUrl = mapQuery ? `https://maps.google.com/?q=${encodeURIComponent(mapQuery)}` : '';
+  const hoursFallback = lang === 'en' ? 'Hours vary by event. Check the official site for details.' : 'イベントにより異なります。公式サイトでご確認ください。';
   const informationRows = [
-    v.address ? `<div><dt>${lang === 'en' ? 'ADDRESS' : '住所'}</dt><dd>${esc(v.address)}</dd></div>` : '',
+    accessText ? `<div><dt>${lang === 'en' ? 'ACCESS' : 'アクセス'}</dt><dd>${esc(accessText)}</dd></div>` : '',
+    v.address ? `<div><dt>${lang === 'en' ? 'ADDRESS' : '住所'}</dt><dd>${esc(v.address)}${mapUrl ? `&nbsp;<a class="google-map-link" href="${esc(safeUrl(mapUrl))}" target="_blank" rel="noopener">(${lang === 'en' ? 'Google Maps' : 'Google マップ'})</a>` : ''}</dd></div>` : '',
     v.type ? `<div><dt>${lang === 'en' ? 'TYPE' : 'タイプ'}</dt><dd>${esc(lang === 'en' ? venueType.en : venueType.ja)}</dd></div>` : '',
-    hours ? `<div><dt>HOURS</dt><dd>${esc(hours)}</dd></div>` : '',
+    `<div><dt>${lang === 'en' ? 'HOURS' : '営業時間'}</dt><dd>${esc(hoursText || hoursFallback)}</dd></div>`,
     charge ? `<div><dt>CHARGE</dt><dd>${esc(charge)}</dd></div>` : '',
     v.url ? `<div><dt>${lang === 'en' ? 'OFFICIAL SITE' : '公式サイト'}</dt><dd><a href="${esc(safeUrl(v.url))}" target="_blank" rel="noopener">${esc(v.url)}</a></dd></div>` : '',
-    mapUrl ? `<div><dt>${lang === 'en' ? 'MAP' : '地図'}</dt><dd><a href="${esc(safeUrl(mapUrl))}" target="_blank" rel="noopener">${lang === 'en' ? 'Google Maps' : 'Google マップ'}</a></dd></div>` : '',
     v.instagram ? `<div><dt>Instagram</dt><dd><a href="${esc(safeUrl(v.instagram))}" target="_blank" rel="noopener">${esc(instagramHandle(v.instagram))}</a></dd></div>` : '',
   ].filter(Boolean).join('\n      ');
-  const information = `<div class="detail-section-label">INFORMATION</div>
+  const information = `<div class="detail-section-label">INFO</div>
     <dl class="detail-facts">
       ${informationRows}
     </dl>`;
@@ -2319,6 +2344,33 @@ function venuePage(v, lang = 'ja') {
     <p>${lang === 'en' ? 'Check the official source for the latest information.' : '最新の情報は公式サイトでご確認ください。'}</p>
   </section>` : '';
 
+  const venueNameForMatch = String(v.name || '').trim().toLocaleLowerCase();
+  const venueFestivals = (allFestivals || []).filter(isPublishedFestival).map((festival) => {
+    const editions = editionsByFestival.get(String(festival.id)) || [];
+    const matching = editions.filter((edition) => {
+      const textMatch = [edition.LOCATION, edition.LOCATION_JA, edition.ADDRESS]
+        .some((value) => venueNameForMatch && String(value || '').toLocaleLowerCase().includes(venueNameForMatch));
+      const near = v.lat && v.lng && edition.LAT && edition.LNG
+        && venueDistance(v, { lat: edition.LAT, lng: edition.LNG }) <= 0.15;
+      return textMatch || near;
+    });
+    if (!matching.length) return null;
+    const latest = [...matching].sort((a, b) => String(b.DATE_START || '').localeCompare(String(a.DATE_START || '')))[0];
+    const end = String(latest.DATE_END || latest.DATE_START || '');
+    return { festival, latest, upcoming: !ISO_DATE.test(end) || end >= jstToday() };
+  }).filter(Boolean).sort((a, b) => Number(b.upcoming) - Number(a.upcoming)
+    || String(a.latest.DATE_START || '').localeCompare(String(b.latest.DATE_START || ''))).slice(0, 6);
+  const venueArticles = (articles || []).filter((article) => {
+    if (!article || String(article.status || '').toLowerCase() === 'draft' || !venueNameForMatch) return false;
+    return [article.title, article.title_en, article.body, article.body_en]
+      .some((value) => stripTags(value || '').toLocaleLowerCase().includes(venueNameForMatch));
+  }).slice(0, 3);
+  const venueRelatedHtml = venueFestivals.length || venueArticles.length
+    ? `<section class="detail-section venue-related"><h2>${lang === 'en' ? 'EVENTS & STORIES FROM THIS VENUE' : 'このヴェニューの開催・関連'}</h2>
+      ${venueFestivals.length ? `<div class="related-grid">${venueFestivals.map(({ festival }) => relatedFestivalCardHtml(festival, lang, prefix, editionsByFestival)).join('')}</div>` : ''}
+      ${venueArticles.length ? relatedStoryCardsHtml(venueArticles, lang, { forceEnglishPath: true, compactDate: true, wide: true }) : ''}
+    </section>` : '';
+
   const body = `<article class="detail-page">
   <div class="detail-inner">
     ${place ? `<div class="detail-eyebrow">${esc(place)}</div>` : ''}
@@ -2327,6 +2379,7 @@ function venuePage(v, lang = 'ja') {
     ${v.image ? `<div class="detail-hero"><img ${dimensionAttrs(v.image)} src="/${String(v.image).replace(/^\//, '')}"${heroSrcsetAttr(v.image)} alt="${esc(name)}" fetchpriority="high"${imagePositionStyle(v)}></div>` : ''}
     ${information}
     ${bilingualBody(v.desc, v.desc_en, lang)}${goodToKnowHtml ? `\n    ${goodToKnowHtml}` : ''}
+    ${venueRelatedHtml ? `\n    ${venueRelatedHtml}` : ''}
     ${(() => { // 回遊: 座標があれば距離順、無ければ同じ街。種別はまたぐ。
       const sameCity = XLINK.venues.filter((x) => x.id !== v.id && x.city && v.city && String(x.city).toLowerCase() === String(v.city).toLowerCase());
       const withDistance = v.lat && v.lng && XLINK.venues.some((x) => x.lat && x.lng)
@@ -2340,7 +2393,9 @@ function venuePage(v, lang = 'ja') {
   </div>
 </article>`;
 
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'venues'] : ['venues']), `${v.id}.html`), html: page({ title, desc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('VENUES', '/venues.html', name, canonical)], body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT + VENUE_HUB_BACK_SCRIPT }) };
+  const html = page({ title, desc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('VENUES', '/venues.html', name, canonical)], body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT + VENUE_HUB_BACK_SCRIPT })
+    .replace(/[ \t]+$/gm, '');
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'venues'] : ['venues']), `${v.id}.html`), html };
 }
 
 /* ---------- 実行 ---------- */
@@ -3001,13 +3056,13 @@ ${FAVICON_TAGS}
     articles: writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'ja', pubFests, editionsByFestival, pubVenues, festivalData, ARTICLES, ARTISTS)).concat(redirectStubs('articles', liveArticleIds)), 'articles'),
     festivals: writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, ARTICLES, pubFests, editionsByFestival, 'ja')).concat(redirectStubs('festivals', liveFestivalIds)), 'festivals'),
     artists: writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'ja')).concat(redirectStubs('artists', liveArtistIds)), 'artists'),
-    venues: writeAll(pubVenues.map((v) => venuePage(v, 'ja')), 'venues'),
+    venues: writeAll(pubVenues.map((v) => venuePage(v, 'ja', pubFests, editionsByFestival, pubArticles)), 'venues'),
     // 英語版（/en/…）。未翻訳フィールドは articlePage 内で元データへ
     // フォールバックし、EN ハブの通常遷移先を必ず実在させる。
     'en/articles': writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'en', pubFests, editionsByFestival, pubVenues, festivalData, ARTICLES, ARTISTS)), 'en/articles'),
     'en/festivals': writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, ARTICLES, pubFests, editionsByFestival, 'en')).concat(redirectStubs('en/festivals', liveFestivalIds)), 'en/festivals'),
     'en/artists': writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'en')).concat(redirectStubs('en/artists', liveArtistIds)), 'en/artists'),
-    'en/venues': writeAll(pubVenues.map((v) => venuePage(v, 'en')), 'en/venues'),
+    'en/venues': writeAll(pubVenues.map((v) => venuePage(v, 'en', pubFests, editionsByFestival, pubArticles)), 'en/venues'),
   };
 
   const today = todayInJapan();

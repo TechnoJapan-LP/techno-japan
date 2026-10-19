@@ -1594,7 +1594,7 @@ function previewRenderBody_(body){
 function writeArticleSimplePreview_(win, title, body){
   const safeBody = String(body || '').replace(/<script/gi, '&lt;script');
   win.document.open();
-  win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><link rel="stylesheet" href="/common.css?v=39"><link rel="stylesheet" href="/detail.css?v=60"><link rel="stylesheet" href="/article-fx.css?v=14"><style>/* フォールバックでは common.js を読まないためネイティブカーソルに戻す */*{cursor:auto !important}a,button,[role="button"],summary{cursor:pointer !important}</style></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${esc(title)}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=13"><\/script></body></html>`);
+  win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><link rel="stylesheet" href="/common.css?v=39"><link rel="stylesheet" href="/detail.css?v=62"><link rel="stylesheet" href="/article-fx.css?v=14"><style>/* フォールバックでは common.js を読まないためネイティブカーソルに戻す */*{cursor:auto !important}a,button,[role="button"],summary{cursor:pointer !important}</style></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${esc(title)}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=13"><\/script></body></html>`);
   win.document.close();
 }
 async function openArticleGeneratedPreview(){
@@ -4300,7 +4300,7 @@ const SHEET_FIELD_NAMES = [
   'metaDescription','publishAt','ogImage','editorNotes','authorId',
   // FESTIVALS / VENUES / ARTISTS
   'name_en','desc_en','bio_en','location_ja','name_ja','ticketUrl','venueId','instagramUrl',
-  'subtype','hours','charge','features',
+  'subtype','hours','hours_en','charge','features','name_kana','access','access_en',
   // EDITIONS / LINEUPS（camelCase 消費箇所向け）
   'editionId','festivalId','artistId','actLabel','setType',
   /* EDITIONS / LINEUPS の**大文字名**。ここに無かったことが LINEUPS 増殖
@@ -4710,6 +4710,8 @@ function editRow(section, rowNum){
     setVal('v-id',row.id); setVal('v-name',row.name); setVal('v-city',row.city);
     setVal('v-area',row.area); setVal('v-type',row.type||'club'); setVal('v-subtype',row.subtype);
     setVal('v-hours',row.hours); setVal('v-charge',row.charge);
+    setVal('v-name_kana',row.name_kana); setVal('v-access',row.access);
+    setVal('v-access_en',row.access_en); setVal('v-hours_en',row.hours_en);
     setVal('v-image',row.image); setVal('v-capacity',row.capacity);
     setVal('v-url',row.url); setVal('v-address',row.address);
     setVal('v-lat',row.lat); setVal('v-lng',row.lng);
@@ -5038,7 +5040,7 @@ function saveEdit(section){
 
   if(section==='venue'){
     Object.assign(payload,{id:g('v-id'),name:g('v-name'),city:g('v-city'),area:g('v-area'),
-      type:g('v-type'),subtype:g('v-subtype'),hours:g('v-hours'),charge:g('v-charge'),features:getSelectedFeatures('v-features').join('; '),image:g('v-image'),imagePosition:g('v-imagePosition'),genre:getSelectedGenres('v-genre').join(', '),
+      type:g('v-type'),subtype:g('v-subtype'),hours:g('v-hours'),hours_en:g('v-hours_en'),name_kana:g('v-name_kana'),access:g('v-access'),access_en:g('v-access_en'),charge:g('v-charge'),features:getSelectedFeatures('v-features').join('; '),image:g('v-image'),imagePosition:g('v-imagePosition'),genre:getSelectedGenres('v-genre').join(', '),
       capacity:g('v-capacity'),address:g('v-address'),lat:g('v-lat'),lng:g('v-lng'),
       url:g('v-url'),instagram:g('v-instagram'),desc:g('v-desc')});
   }
@@ -6212,7 +6214,7 @@ function submitToSheet(section){
   let payload;
   if(section==='venue'){
     payload={action:'addVenue',id:g('v-id'),name:g('v-name'),city:g('v-city'),area:g('v-area'),
-      type:g('v-type'),subtype:g('v-subtype'),hours:g('v-hours'),charge:g('v-charge'),features:getSelectedFeatures('v-features').join('; '),image:g('v-image'),imagePosition:g('v-imagePosition'),genre:getSelectedGenres('v-genre').join(', '),
+      type:g('v-type'),subtype:g('v-subtype'),hours:g('v-hours'),hours_en:g('v-hours_en'),name_kana:g('v-name_kana'),access:g('v-access'),access_en:g('v-access_en'),charge:g('v-charge'),features:getSelectedFeatures('v-features').join('; '),image:g('v-image'),imagePosition:g('v-imagePosition'),genre:getSelectedGenres('v-genre').join(', '),
       capacity:g('v-capacity'),address:g('v-address'),lat:g('v-lat'),lng:g('v-lng'),
       url:g('v-url'),instagram:g('v-instagram'),desc:g('v-desc')};
     if(!payload.id||!payload.name)return toast('ID and Name required','error');
@@ -7269,7 +7271,7 @@ function publishPayloadSummary(content) {
     '',
     `  FESTIVALS  ${items('FESTIVALS')}件`,
     `  ARTISTS    ${items('ARTISTS')}件（紹介文 ${field('ARTISTS','bio')} / 画像 ${field('ARTISTS','image')} / リンク ${field('ARTISTS','links')}）`,
-    `  VENUES     ${items('VENUES')}件（SUBTYPE ${field('VENUES','subtype')} / HOURS ${field('VENUES','hours')} / CHARGE ${field('VENUES','charge')} / FEATURES ${field('VENUES','features')}）`,
+    `  VENUES     ${items('VENUES')}件（SUBTYPE ${field('VENUES','subtype')} / HOURS ${field('VENUES','hours')} / HOURS_EN ${field('VENUES','hours_en')} / ACCESS ${field('VENUES','access')} / FEATURES ${field('VENUES','features')}）`,
     `  ARTICLES   ${items('ARTICLES')}件（英語本文 ${field('ARTICLES','body_en')} / 関連フェス ${field('ARTICLES','festivalId')}）`,
     `  EVENTS     ${items('EVENTS')}件`,
     '',
@@ -7564,6 +7566,10 @@ function buildVenuesJs(rows){
     if(r.type) l.push('    type: "'+q(r.type)+'",');
     if(r.subtype) l.push('    subtype: "'+q(r.subtype)+'",');
     if(r.hours) l.push('    hours: "'+q(r.hours)+'",');
+    if(r.hours_en) l.push('    hours_en: "'+q(r.hours_en)+'",');
+    if(r.name_kana) l.push('    name_kana: "'+q(r.name_kana)+'",');
+    if(r.access) l.push('    access: "'+q(r.access)+'",');
+    if(r.access_en) l.push('    access_en: "'+q(r.access_en)+'",');
     if(r.charge) l.push('    charge: "'+q(r.charge)+'",');
     if(r.image) l.push('    image: "'+q(webp(r.image))+'",');
     if(r.imagePosition) l.push('    imagePosition: "'+q(r.imagePosition)+'",');
@@ -7653,14 +7659,18 @@ function downloadFile(filename,content){
    GENERATE CODE — VENUE
    ============================================================== */
 function submitVenue(){
-  const d={id:g('v-id'),name:g('v-name'),city:g('v-city'),area:g('v-area'),type:g('v-type'),subtype:g('v-subtype'),hours:g('v-hours'),charge:g('v-charge'),features:getSelectedFeatures('v-features'),image:g('v-image'),imagePosition:g('v-imagePosition'),genre:getSelectedGenres('v-genre'),capacity:g('v-capacity'),address:g('v-address'),lat:g('v-lat'),lng:g('v-lng'),url:g('v-url'),instagram:g('v-instagram'),desc:g('v-desc')};
+  const d={id:g('v-id'),name:g('v-name'),city:g('v-city'),area:g('v-area'),type:g('v-type'),subtype:g('v-subtype'),name_kana:g('v-name_kana'),access:g('v-access'),access_en:g('v-access_en'),hours:g('v-hours'),hours_en:g('v-hours_en'),charge:g('v-charge'),features:getSelectedFeatures('v-features'),image:g('v-image'),imagePosition:g('v-imagePosition'),genre:getSelectedGenres('v-genre'),capacity:g('v-capacity'),address:g('v-address'),lat:g('v-lat'),lng:g('v-lng'),url:g('v-url'),instagram:g('v-instagram'),desc:g('v-desc')};
   if(!d.id||!d.name)return toast('ID and Name required','error');
   const genreStr=d.genre.map(g=>`"${g}"`).join(', ');
   const lines=[`  {`,`    id: "${d.id}",`,`    name: "${d.name}",`,`    city: "${d.city}",`,`    area: "${d.area}",`,`    type: "${d.type}",`,`    image: "${d.image}",`];
   if(d.imagePosition)lines.push(`    imagePosition: "${d.imagePosition}",`);
   lines.push(`    genre: [${genreStr}],`,`    capacity: ${d.capacity||0},`);
   if(d.subtype)lines.push(`    subtype: "${d.subtype}",`);
+  if(d.name_kana)lines.push(`    name_kana: "${d.name_kana}",`);
+  if(d.access)lines.push(`    access: "${d.access}",`);
+  if(d.access_en)lines.push(`    access_en: "${d.access_en}",`);
   if(d.hours)lines.push(`    hours: "${d.hours}",`);
+  if(d.hours_en)lines.push(`    hours_en: "${d.hours_en}",`);
   if(d.charge)lines.push(`    charge: "${d.charge}",`);
   if(d.features.length)lines.push(`    features: ${JSON.stringify(d.features)},`);
   if(d.address)lines.push(`    address: "${d.address}",`);
@@ -7780,7 +7790,7 @@ function copyOutput(section){navigator.clipboard.writeText(document.getElementBy
    ============================================================== */
 function resetForm(section){
   const fields={
-    venue:['v-id','v-name','v-city','v-area','v-subtype','v-hours','v-charge','v-image','v-imagePosition','v-capacity','v-address','v-lat','v-lng','v-url','v-instagram','v-desc','v-imageUrl'],
+    venue:['v-id','v-name','v-city','v-area','v-subtype','v-name_kana','v-access','v-access_en','v-hours','v-hours_en','v-charge','v-image','v-imagePosition','v-capacity','v-address','v-lat','v-lng','v-url','v-instagram','v-desc','v-imageUrl'],
     festival:['f-id','f-name','f-name_ja','f-city','f-location','f-location_ja','f-url','f-ticketUrl','f-instagram','f-address','f-lat','f-lng','f-dateStart','f-dateEnd','f-image','f-imagePosition','f-flyer','f-heroGradient','f-desc','f-imageUrl','f-flyerUrl'],
     artist:['a-id','a-name','a-city','a-country','a-genre','a-image','a-imagePosition','a-bio','a-instagram','a-soundcloud','a-bandcamp','a-website','a-imageUrl'],
     event:['e-name','e-date','e-venue','e-city','e-time','e-desc','e-link'],

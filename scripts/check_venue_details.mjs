@@ -28,9 +28,11 @@ for (const lang of ['ja', 'en']) {
     if (JSON.stringify(ld?.['@type']) !== JSON.stringify(expected)) failures.push(`${lang}/${venue.id}: JSON-LD typeが不一致`);
     const hours = String(venue.hours || '').trim();
     const charge = String(venue.charge || '').trim();
-    if (hours && !html.includes(`<dt>HOURS</dt><dd>${hours}</dd>`)) failures.push(`${lang}/${venue.id}: HOURSがINFORMATIONに無い`);
+    const hoursLabel = lang === 'ja' ? '営業時間' : 'HOURS';
+    const hoursFallback = lang === 'ja' ? 'イベントにより異なります。公式サイトでご確認ください。' : 'Hours vary by event. Check the official site for details.';
+    if (hours && !html.includes(`<dt>${hoursLabel}</dt><dd>${hours}</dd>`)) failures.push(`${lang}/${venue.id}: HOURSがINFORMATIONに無い`);
     if (charge && !html.includes(`<dt>CHARGE</dt><dd>${charge}</dd>`)) failures.push(`${lang}/${venue.id}: CHARGEがINFORMATIONに無い`);
-    if (!hours && html.includes('<dt>HOURS</dt>')) failures.push(`${lang}/${venue.id}: 空のHOURS行がある`);
+    if (!html.includes(`<dt>${hoursLabel}</dt><dd>${hours || hoursFallback}</dd>`)) failures.push(`${lang}/${venue.id}: HOURSの実値またはフォールバックが無い`);
     if (!charge && html.includes('<dt>CHARGE</dt>')) failures.push(`${lang}/${venue.id}: 空のCHARGE行がある`);
     const features = (Array.isArray(venue.features) ? venue.features : String(venue.features || '').split(/[;,]/)).map(x => String(x).trim());
     const hasPractical = features.some(x => practical.has(x));

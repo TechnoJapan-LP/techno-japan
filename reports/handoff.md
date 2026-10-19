@@ -10504,3 +10504,41 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### データの判断待ち（ユーザーに確認依頼済み）
 - intergalactic の PREF=Chiba（会場は東京・日の出町）。本番データは未反映。
 - bondisco の PREF=Gunma（会場の三田アスレチックパークは兵庫）。
+## 2026-10-19 VENUESアクセス情報・詳細関連ブロック（未コミット）
+
+### 実施
+- VENUES の `name_kana` / `access` / `access_en` / `hours_en` をGAS手貼りパッチ、README、CMSフォーム・編集読込・両保存payload・export・Publish summary・data.js生成へ追加。GAS_URLと本番データは未変更。
+- VENUE詳細のJA/EN title/meta、INFO、座標優先Google Maps、JSON-LD alternateName、開催フェス・関連記事の回遊を実装。22会場を再生成。
+
+### コミット
+- 未コミット（ユーザー指定、pushなし）。
+
+### 検証
+- `check_asset_versions.py`、`check_titles.mjs`、`check_jsonld.mjs`、`check_cms_venue_access.mjs`、`check_cms_name_ja.mjs`、Publish guard、VENUE詳細検査、`git diff --check` 成功。JA/ENハブ5枚の行数一致。
+- フル preflight はコード系43件成功。詳細生成は外部画像取得の240秒timeout、ブラウザ系はsandboxのlocalhost listen `EPERM`。
+
+### 変更したパターン
+- VENUES追加4列の完全な読み書き経路、任意フィールドの静的生成、会場名・位置による関連フェス（最大6）/記事（最大3）、営業時間フォールバック。
+
+### 未確認の類似パターン
+- 確認済み・0件：CMSの既存 `name_ja` 経路、JA/ENタイトル上限、JSON-LD、22会場の静的ページ。
+- 未確認：認証済みCMSの実保存/Publish、実ブラウザ操作（sandbox制約）。
+
+### 次の担当への注意・判断待ち
+- オーナーがApps Script `COLUMNS`末尾とVENUES row 1末尾へ4小文字列を追加し、Deploy → Manage deployments → edit → New version → Deployを実施すること。公開前にbind可能な環境でフルpreflightとCMS実機確認を行うこと。
+
+## 2026-10-20 会場ページの刷新（feat/venue-pages）＋ VENUES 新4列
+
+### 実施
+- VENUES に `name_kana` / `access` / `access_en` / `hours_en` を追加（`hours` は既存の JA 営業時間）。
+  - GAS: ユーザーが 2026-10-20 に Apps Script の COLUMNS 末尾へ4列を追記し、既存デプロイを新バージョンで再デプロイ（URL 不変）。スプレッドシート VENUES の1行目右端に4見出しを追記（gviz で読み取り確認: `… FEATURES name_kana access access_en hours_en`）。`live-snapshot.json` は未更新（snapshot.js 未実行）。
+  - CMS: 会場フォームに4欄、編集時の読込・両方の保存ペイロード・export・SHEET_FIELD_NAMES・buildVenuesJs・Publish 要約に追加。`scripts/check_cms_venue_access.mjs` を preflight に追加（54件目）。
+- 会場詳細（JA/EN）: title「{NAME}（{読み}）{地域}｜クラブのアクセス・営業時間・イベント」（読み無しは「{NAME}（{地域}）｜…」）、description はアクセス→営業時間→紹介文の順（ローマ字住所で始めない）、上部に INFO（アクセス／住所＋Google マップ／タイプ／営業時間（無ければ「イベントにより異なります。公式サイトでご確認ください。」）／公式サイト／Instagram）、その会場で開かれたフェスと会場名に触れる記事の一覧、JSON-LD に alternateName（読み）。
+- 下書きデータ: `reports/venues-access-draft-2026-10-19.csv`（22会場、出典と確度つき。アクセス 13、営業時間 2、徒歩分は推測しない）。
+
+### 検証
+- テスト worktree に下書きを一時注入して WOMB / OATH を 390px・1440px で目視（注入は破棄済み）。`bash scripts/preflight.sh` 全54件成功。
+- **実機未確認**: CMS で新4欄の入力→保存→再表示→Publish Now（GAS の新列が実際に保存されるか）。公開後に確認する。
+
+### 判断待ち・データの疑義
+- SALOON の area が SHIBUYA（実際は UNIT と同じ建物＝代官山）。VENT の住所にビル名・階なし。TRIANGLE は公式サイトが 2012 年以降更新なし（閉店の可能性）。
