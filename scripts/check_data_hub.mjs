@@ -12,7 +12,7 @@ const REQUIRED = {
     'location', 'location_ja', 'name_ja', 'type', 'venue', 'venue_en', 'lineup', 'status', 'featured', 'area', 'country'],
   ARTISTS: ['id', 'name', 'name_en', 'city', 'country', 'genre', 'image', 'imagePosition'],
   VENUES: ['id', 'name', 'name_en', 'city', 'area', 'genre', 'image', 'imagePosition', 'type',
-    'subtype', 'charge', 'features', 'lat', 'lng', 'desc', 'desc_en', 'status'],
+    'subtype', 'hours', 'hours_en', 'name_kana', 'access', 'access_en', 'charge', 'features', 'lat', 'lng', 'desc', 'desc_en', 'status'],
   ARTICLES: ['id', 'title', 'title_en', 'excerpt', 'excerpt_en', 'image', 'imagePosition',
     'date', 'category', 'readTime', 'tags', 'views', 'status', 'featured', 'festivalId'],
 };

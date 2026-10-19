@@ -7,13 +7,16 @@ const readme = fs.readFileSync('scripts/gas-update/README.md', 'utf8');
 /* 列名は小文字。実物の COLUMNS が小文字で、CMS のペイロードキーも小文字のため。
    当初この検査は大文字を要求しており、実物と食い違っていた（2026-08-24 訂正）。
    大文字を足すと §9-69「大文字小文字で値が消える」を再現する。 */
-const required = ['desc_en', 'subtype', 'hours', 'charge', 'features'];
-const missingPatch = required.filter((name) => !patch.includes(`'${name}'`));
+const applied = ['desc_en', 'subtype', 'hours', 'charge', 'features'];
+const pending = ['name_kana', 'access', 'access_en', 'hours_en'];
+const missingPatch = [...applied, ...pending].filter((name) => !patch.includes(`'${name}'`));
 const failures = [];
 if (missingPatch.length) failures.push(`手貼りパッチに不足: ${missingPatch.join(', ')}`);
 if (!readme.includes('デプロイ')) failures.push('READMEにGAS再デプロイ手順がない');
 if (!readme.includes('snapshot.js')) failures.push('READMEにsnapshot.js更新手順がない');
 if (!readme.includes('FEATURES n件')) failures.push('READMEにFEATURES件数の実機確認がない');
+if (!patch.includes('【未適用（2026-10-19 追加）】')) failures.push('手貼りパッチに未適用セクションがない');
+if (!readme.includes('まだ本番GASとVENUESシートに適用されていない')) failures.push('READMEが新4列を適用済みと扱っている');
 /* 大文字で書き戻されたら落とす。手順書が実物と食い違うと、次の人が
    大文字を足して §9-69 を再現する。
 

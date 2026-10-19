@@ -33,26 +33,15 @@ ARTISTS は既に name_en / bio_en / ogImage / metaDescription / editorNotes / t
 
 これがこの設計の利点。列を足すだけで拡張できる。
 
-## VENUES 4列の手貼り（2026-08-24）
+## VENUES列の手貼り（2026-10-19）
 
-### ✅ 適用済み。作業は要らない（2026-08-24 15:00 実物確認）
+### ⚠️ VENUES列の状態（2026-10-19）
 
-Apps Script「Techno Japan」の `コード.gs` 冒頭を実際に開いて確認した。
+`desc_en` / `subtype` / `hours` / `charge` / `features` は 2026-08-24 に
+適用・デプロイ済み（バージョン62）。`name_kana` / `access` / `access_en` /
+`hours_en` はまだ本番GASとVENUESシートに適用されていない。
 
-```js
-const COLUMNS = [
-  "id", "name", "city", "area", "type", "image", "genre",
-  "capacity", "address", "lat", "lng", "url", "instagram", "desc", "desc_en", "subtype", "hours", "charge",
-  "features"
-];
-```
-
-`desc_en / subtype / hours / charge / features` はすべて入っている。
-アクティブなデプロイは **バージョン62（2026/08/24 14:35）**、デプロイIDは
-`cms.js` の `GAS_URL`（`AKfycbxhJ6rtGoAirNyV5TtBvzWHNOT8RuB0nf...`）と一致。
-**保存だけでなく再デプロイまで済んでいる。**
-
-以下は再適用が必要になったときのための手順として残す。
+以下の4列はオーナーによる手貼り・再デプロイが必要である。
 
 ### ⚠️ 列名は小文字。大文字で足さないこと
 
@@ -61,23 +50,21 @@ const COLUMNS = [
 小文字（`cms.js` の venue 保存を参照）。大文字を足すと既存要素と食い違う。
 AUDIT §9-69「大文字小文字で値が消える」は、まさにこの取り違えで起きた事故。
 
-### 貼り替え手順（再適用が必要になった場合）
+### 貼り替え手順
 
 1. Apps Scriptの「Techno Japan」プロジェクトを開く。
 2. `コード.gs` 先頭の `const COLUMNS = [...]` を開く。
-3. 既存の列を削除せず、配列の末尾へ次を追加する。**小文字**であること。
+3. 既存の列を削除せず、VENUES用の並びの末尾へ次の4列を追加する。**小文字**であること。
 
    ```js
-   'desc_en', 'subtype', 'hours', 'charge', 'features'
+   'name_kana', 'access', 'access_en', 'hours_en'
    ```
 
    すでにある列は重複させない。
-4. リポジトリの [`venue-columns.patch.gs`](venue-columns.patch.gs) にある
-   `assertVenueColumnsPatch_()` を、Apps Scriptのコンソールで実行できる状態にし、
-   `OK: desc_en, subtype, hours, charge, features` が返ることを確認する。
-   （この関数は大文字小文字を問わずに突き合わせる）
+4. スプレッドシート「LP」の VENUES シート1行目の右端へ同じ4つのヘッダーを追加する。
+   **既存ヘッダーは絶対に並べ替えない。**
 5. コード.gsを保存する。
-6. **デプロイ → デプロイを管理 → 編集 → 新バージョン → デプロイ**を行う。
+6. **Deploy → Manage deployments → 対象デプロイの edit → New version → Deploy**を行う。
    保存だけでは本番のGAS実行環境は変わらない。
 7. 認証済みCMSで「Publish Now」を実行する。`publishPayloadSummary` に
    `FEATURES n件` が出て、GitHubの`cms: publish data.js`コミットで
@@ -94,8 +81,7 @@ node scripts/check_gas_sync.mjs
 ```
 
 `live-snapshot.json`はGASの実物を確認した後に更新する。先に更新して「反映済み」と
-記録してはいけない。今回のCOLUMNSは手貼り対象なので、`assertVenueColumnsPatch_()`の
-実行結果とPublishの実差分もhandoffへ記録する。
+記録してはいけない。
 
 ## CMSからの画像同期トリガー
 
