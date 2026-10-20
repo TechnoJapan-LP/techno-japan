@@ -533,6 +533,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 .editions-table a { color: var(--accent); border-bottom: 1px solid rgba(255,45,45,0.3); }
 
 /* ===== FESTIVAL FAQ ===== */
+.detail-last-updated { margin: 42px 0 0; color: rgba(240,237,232,0.48); font-size: 12px; letter-spacing: .04em; }
 .festival-faq { margin-top: 56px; }
 .festival-faq dl { margin: 0; border-top: 1px solid rgba(240,237,232,0.12); }
 .festival-faq dl > div { padding: 20px 0; border-bottom: 1px solid rgba(240,237,232,0.1); }
