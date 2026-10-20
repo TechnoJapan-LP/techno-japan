@@ -57,7 +57,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 67;
+const DETAIL_CSS_VERSION = 69;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -2584,7 +2584,7 @@ function venuePage(v, lang = 'ja', allFestivals = [], editionsByFestival = new M
       ${venueArticles.length ? relatedStoryCardsHtml(venueArticles, lang, { forceEnglishPath: true, compactDate: true, wide: true }) : ''}
     </section>` : '';
 
-  const body = `<article class="detail-page">
+  const body = `<article class="detail-page venue-detail">
   <div class="detail-inner">
     ${place ? `<div class="detail-eyebrow">${esc(place)}</div>` : ''}
     <h1>${esc(name)}</h1>

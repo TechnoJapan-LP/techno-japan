@@ -11148,3 +11148,7 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - `scripts/seed-content-dates.mjs` は一度きりの初期化用。通常の公開更新で再実行すると、意図的な変更履歴を再計算するため、実行前に日付台帳を確認すること。
 - `LP/data/content-dates.json` と `scripts/lib/content-dates.mjs` を含めてコミットする。workflowは既存の `git add -A LP/` で台帳を含む。
 - 公開前は省略なしの `bash scripts/preflight.sh` とClaude担当の実ブラウザ確認を行う。
+
+- 2026-10-21: 会場・アーティストFAQにもフェスFAQと同じCSSを適用（`detail.css` v67→v68、CMSプレビュー参照も更新）し、JA/EN詳細ページを再生成。静的検査済み、実ブラウザ再確認は未実施。
+- 2026-10-21: 会場詳細のJA/EN生成`article`へ`venue-detail`を付与して再生成。`detail.css`内の該当クラス規則はFAQ 7件のみで、他の見た目規則への波及なし。
+- 2026-10-21: 会場詳細の上部余白をアーティスト詳細と同値に統一（PC/スマホ、`detail.css` v68→v69、CMSプレビューも更新）し、JA/ENを再生成。
