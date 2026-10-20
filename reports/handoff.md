@@ -10800,3 +10800,9 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 - preflightが全件成功していないため、現時点で公開済みとは報告しないこと。ネットワーク/ブラウザ実行可能な環境で省略なしの `bash scripts/preflight.sh` を再実行すること。
 - push後、Claude が Publish pipeline を流し、`cms: publish data.js` のコミットが実際に増えたことを確認すること。CMSを開く場合は `?cb=<乱数>` を付け、変更後は `Cmd+Shift+R` を使うこと。
+
+### 2026-10-20 LINE UP 枠・要約の折り返し・出演データのつなぎ直し（本番確認）— Claude
+- 実施: フェス LINE UP の min-height 44px を外し 32px に戻した（content-box で 62px になっていた）。記事要約を本文と同じ text-wrap / 幅に。fetch-data の ACT_LABEL 解決を「名前一致 or ID一致、live は複合でない完全一致も」に拡張（scripts/lineup-label-resolution.mjs）。LINEUPS シート9行を CMS から修正（702/768/771/931/980/981/984 は ACT_LABEL に ID が入っていた → ARTIST_ID へ、122 Tonbo の大文字ID、112 Doltz.）。ARTISTS doltz の NAME を「Doltz.」に。
+- 検証（本番）: push 後 Deploy success、Publish pipeline success（run 39436923750）。dj-kensei に etsuetsu 2026 / Global Ark 2026・2025、tonbo に MATRICARIA 2026、doltz に MATRICARIA 2026、dj-krush に NU FESTIVAL 2026。iPhone 相当（390px dpr3 タッチ有効）で LINE UP 枠 32px、要約の左右端が本文と一致。
+- 未確認: Doltz. の表示名は CMS の Publish Now 後に反映（data.js は CMS 側で生成）。
+- 未確認の類似パターン: **CMS でフェスを保存すると、ACT_LABEL が空だった LINEUPS 行の ARTIST_ID が消える**（cms.js ~L4871 の keepId は ACT_LABEL と表示ラベルが一致したときだけ ID を残す）。2026-10-20 に MATRICARIA 2026 の全行で発生。fetch-data の名前解決で大半は再接続されるが、表記ゆれがあると切れる。要修正（判断待ち）。
