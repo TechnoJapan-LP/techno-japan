@@ -2360,11 +2360,7 @@ function artistPage(a, artistsById, lang = 'ja', artistAppearances = new Map(), 
 </article>`;
 
   const thin = !stripTags(a.bio) && !stripTags(a.bio_en);
-<<<<<<< HEAD
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'artists'] : ['artists']), `${a.id}.html`), html: page({ title, desc, canonical, image, ogType: 'profile', jsonLd: [jsonLd, breadcrumbLd('ARTISTS', '/artists.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, robots: thin ? 'noindex,follow' : 'max-image-preview:large', extraScripts: LANG_TOGGLE_SCRIPT + ARTIST_HUB_BACK_SCRIPT }) };
-=======
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'artists'] : ['artists']), `${a.id}.html`), html: page({ title, desc, canonical, image, ogType: 'profile', jsonLd: [jsonLd, breadcrumbLd('ARTISTS', '/artists.html', name, canonical)], body, lang, altHref, robots: thin ? 'noindex,follow' : 'max-image-preview:large', extraScripts: LANG_TOGGLE_SCRIPT + ARTIST_HUB_BACK_SCRIPT, backgroundLayer: true }) };
->>>>>>> main
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'artists'] : ['artists']), `${a.id}.html`), html: page({ title, desc, canonical, image, ogType: 'profile', jsonLd: [jsonLd, breadcrumbLd('ARTISTS', '/artists.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, robots: thin ? 'noindex,follow' : 'max-image-preview:large', extraScripts: LANG_TOGGLE_SCRIPT + ARTIST_HUB_BACK_SCRIPT, backgroundLayer: true }) };
 }
 
 /* Instagram の URL から表示用の @ハンドルを取り出す。
@@ -2612,11 +2608,7 @@ function venuePage(v, lang = 'ja', allFestivals = [], editionsByFestival = new M
   </div>
 </article>`;
 
-<<<<<<< HEAD
-  const html = page({ title, desc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('VENUES', '/venues.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT + VENUE_HUB_BACK_SCRIPT })
-=======
-  const html = page({ title, desc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('VENUES', '/venues.html', name, canonical)], body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT + VENUE_HUB_BACK_SCRIPT, backgroundLayer: true })
->>>>>>> main
+  const html = page({ title, desc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('VENUES', '/venues.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT + VENUE_HUB_BACK_SCRIPT, backgroundLayer: true })
     .replace(/[ \t]+$/gm, '');
   return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'venues'] : ['venues']), `${v.id}.html`), html };
 }
