@@ -103,7 +103,12 @@ for source, value in mapping.items():
         if not target_path.exists():
             raise SystemExit(f"派生画像がありません: {target}")
         with Image.open(target_path) as image:
-            if target.endswith("-xxl.webp"):
+            # 本文派生は表示幅に合わせて横幅で作るため、縦長画像の高さは制限しない。
+            # カード/hero派生は従来どおり長辺基準で検査する。
+            if "-body-" in target:
+                if image.width > 1440:
+                    raise SystemExit(f"本文派生の幅が大きすぎます: {target} {image.size}")
+            elif target.endswith("-xxl.webp"):
                 if image.width > 2560:
                     raise SystemExit(f"記事heroの幅が大きすぎます: {target} {image.size}")
             elif target.endswith("-xl.webp"):
