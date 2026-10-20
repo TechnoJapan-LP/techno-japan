@@ -1,0 +1,32 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft-2026-10-20.md",
+ "_appearsAt": "Transcendence 2026-05 / Sawagi Festival 2025-08 / Sawagi Festival 2026-10",
+ "fields": {
+  "CITY": {
+   "value": "Chiba（房州）",
+   "source": "Sawagi Festival 公式アーティストページ https://sawagifestival.com/artist/26-dj-kuri/「房州千葉県出身。在住。」",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JP",
+   "source": "同上",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "DJ KURI (BLACK FOREST)。房州千葉県出身・在住。アンダーグラウンドパーティー《BLACK FOREST》主催兼取締DJ（Sawagi公式）。",
+   "source": "https://sawagifestival.com/artist/26-dj-kuri/",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "tried": {
+   "value": "RA本人ページは未発見。RAイベント https://ra.co/events/1863722（lift, 2024-03-08）の主催者紹介文に『ヴァイナルによる揺るがないグルーヴ』、RA https://ra.co/events/813433 に『千葉市出身』とあるが主催者コピーで、千葉市/房州の記述が食い違うため不使用。Transcendence 2026 出演は公式サイト（画像）で文字確認できず、RAG Music の掲載のみ。Instagram 未発見。",
+   "source": "WebSearch / ra.co / transcendence-jp.com / peatix",
+   "confidence": "low",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

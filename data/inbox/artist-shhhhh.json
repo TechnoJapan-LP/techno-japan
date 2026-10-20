@@ -1,0 +1,44 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft-2026-10-20.md",
+ "_appearsAt": "御月民 2025 / Re:birth 2026 / EACH STORY 2025, 2026 / NU FESTIVAL 2026",
+ "fields": {
+  "RA": {
+   "value": "https://ra.co/dj/shhhhh",
+   "source": "御月民 Open Air 2025 の RA ラインナップにリンク（artist id 82217）。RA 本人 bio で EACH STORY のラインナップ・アドバイザーと明記",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/shhhhhsunhouse",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "Tokyo",
+   "source": "RA area / bio",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JP",
+   "source": "RA",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "東京拠点のDJ。ワールドミュージック／民族的リズムと電子音を融合。音楽ライター。Boredoms の拡張コミュニティでツアーを支え、時に彼らのためにDJ。2018年秋からホーチミン The Observatory レジデント。Worldwide FM / NTS。コロナ禍の Gamelan Mix が RA Mix of the Day。EACH STORY ラインナップ・アドバイザー。コンセプト兼レーベル El Folklore Paradox。Labyrinth 2024、Future Terror、RDC、rural 出演。",
+   "source": "https://ra.co/dj/shhhhh (RA GraphQL で取得) ; https://ja.ra.co/news/76734",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "mixcd": {
+   "value": "2013年3月 Tearbridge Productions からミックスCD『EL FOLKLORE PARADOX』",
+   "source": "https://www.bandwagon.asia/gigs/sonidosingapura-vol-5-el-folclore-featuring-shhhhh-sunhouse",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

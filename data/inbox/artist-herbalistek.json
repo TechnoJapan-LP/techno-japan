@@ -1,0 +1,38 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft-2026-10-20.md",
+ "_appearsAt": "Rural 2026-07 / 御月民 -OTSUKIMI- 2026-09 / Sawagi Festival 2026-10 / Intergalactic Festival 2026-10",
+ "fields": {
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/herbalistekmusic",
+   "source": "SoundCloud プロフィール「Duo from Tokyo」、連絡先 herbalistekdj@gmail.com。Sawagi 公式プロフィールの活動内容（リミックス等）と一致",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "Tokyo",
+   "source": "Sawagi 公式「東京を拠点に活動するプロデューサー／DJデュオ」",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JP",
+   "source": "同上",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "東京拠点のプロデューサー/DJデュオ。ダークでディープな Bass Music 中心、Techno/Dubstep/Trap/Downtempo から影響。Bassrush, Spicybois, Quality Goods Records, Wormhole Music Group, Qualia, Wubaholics, TREKKIE TRAX からリリース。2024年 THE RAMPAGE from EXILE TRIBE「SILVER RAIN」公式リミックス。2019年 EDC Japan Discovery Project 選出でメインステージ。2022年 Ultra Japan で Allen Mock と B2B。2024年 Fuji Rock（Day Dreaming Stage）初出演。2024年5月 The Rendezvous（フロリダ）で米国デビュー、9月 Infrasound Equinox（ミネソタ）。主宰イベント SECTOR（Part II: GOTH TRAD @ Sound Museum Vision、Part III: DJ KRUSH @ WOMB）。",
+   "source": "https://sawagifestival.com/artist/26-herbalistek/ ; 補足(medium): https://fuxwithit.com/2019/05/01/guest-mix-interview-herbalistek/",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "tried": {
+   "value": "Instagram は特定できず",
+   "source": "WebSearch",
+   "confidence": "low",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

@@ -1,0 +1,44 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft-2026-10-20.md",
+ "_appearsAt": "Rainbow Disco Club 2026 / FOREST SOUND CAMP 2026 / COLORS SOUNDCAMP 2026 / Topia 2026",
+ "fields": {
+  "RA": {
+   "value": "https://ra.co/dj/feline-jp",
+   "source": "RDC 2026 / FOREST SOUND CAMP 2026 / Topia 2026 の RA 出演履歴が FELINE (JP) にリンク。ra.co/dj/feline は米サンフランシスコの別人",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/feline__l/",
+   "source": "GINZA『DJとのカンバセーション04 FELINE』(2025-01-06) のプロフィール欄ボタン",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/felinefeline",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "Tokyo",
+   "source": "RA / clubasia / GINZA",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JP",
+   "source": "RA",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "1995年茨城県生まれ。10代で地元水戸でDJ開始。東京拠点。UKベースミュージック／レフトフィールド主軸（RA）、2010年代以降のベースミュージックの影響（clubasia）。2025年から clubasia THURSDAY 奇数月第1木曜をキュレーション。渋谷 Bridge・ENTER・club asia でプレイ（GINZA）。2026年は DJ Bar Bridge で『HIROSHI KAWANABE & FELINE』を毎月開催（RA）。",
+   "source": "https://ra.co/dj/feline-jp ; https://clubasia.jp/en/events/clubasia-thursday-5-1 ; https://ginzamag.com/categories/culture/474546",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

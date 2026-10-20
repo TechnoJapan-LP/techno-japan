@@ -1,0 +1,44 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft-2026-10-20.md",
+ "_appearsAt": "Snow Machine Japan 2027-03 / Re:birth Festival 2026-09 / Global Ark 2026-08",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/risa_taniguchi_rs/",
+   "source": "MUTEK.JP 公式アーティストページ https://tokyo.mutek.org/en/artists/risa-taniguchi のリンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/risataniguchi",
+   "source": "MUTEK.JP 公式アーティストページのリンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "RA": {
+   "value": "https://ra.co/dj/risataniguchi",
+   "source": "RA 本人ページ（biography を取得）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "Tokyo",
+   "source": "MUTEK.JP 公式: Tokyo born - and based producer",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JP",
+   "source": "同上",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "東京生まれ・東京拠点のDJ/プロデューサー。歪んだシンセ、アシッドベース、加工した自身のボイスサンプル（MUTEK）。クラシックピアノの素養、ロンドン滞在でUKベースに傾倒（MUTEK）。CLRのコアメンバーで同レーベルから Break It EP。他に MOOD Records / Octopus Recordings / Second State。So Loud EP が Beatport Techno (Raw/Deep/Hypnotic) 1位。WOMB・Ohjo bldg（東京）、Undercity（ソウル、日本人唯一）でレジデント。J-WAVE で番組。Rave The Planet 2回、Ultra Japan RESISTANCE ステージ出演（RA bio）。Snow Machine 2027 第1弾ラインナップに掲載（Mountainwatch 等）。",
+   "source": "https://ra.co/dj/risataniguchi/biography ; https://tokyo.mutek.org/en/artists/risa-taniguchi ; https://www.mountainwatch.com/Snow-news/snow-machine-returns-to-hakuba-valley-in-2027-with-an-electrifying-first-line-up-announcement/ ; (medium) https://www.tokyoweekender.com/entertainment/music/dj-risa-taniguchi-on-making-it-in-europe-and-why-tokyos-izakaya-keep-her-coming-back/",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

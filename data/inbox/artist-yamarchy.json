@@ -1,0 +1,50 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft-2026-10-20.md",
+ "_appearsAt": "Rural 2026 / Moment 2026 / COLORS SOUNDCAMP 2026 / annahme 2025, 2026 / SPRING LOVE 春風 2026",
+ "fields": {
+  "RA": {
+   "value": "https://ra.co/dj/yamarchy",
+   "source": "rural 2026 / Spring Love Harukaze 2026 / RDC 2026 の RA ラインナップにリンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/yamarchy/",
+   "source": "RA 本人ページ・WOMB 公式アーティストページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/yamarchy-ymd",
+   "source": "RA 本人ページ・WOMB",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "Tokyo",
+   "source": "RA area",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JP",
+   "source": "RA",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "2019年の Mitsuki（渋谷・道玄坂、RA venue 172154）開店時からレジデントDJ／ディレクター／ブッカー。コズミック・バレアリック、オブスキュアなレコード。江ノ島 OPPA-LA・青山 ZERO・八王子 SHeLTeR で自身のパーティー。Panorama Bar、Nowadays、Precious Hall、FESTIVAL de FRUE、RDC、rural、Wonderfruit、Equation 出演。",
+   "source": "https://www.womb.co.jp/en/artists/yamarchy ; https://ellarecords.jp/en/blogs/after-hours-session/yamarchy ; https://ra.co/clubs/172154",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "note": {
+   "value": "ELLA Records の『年間200本近く』は時期不明のため BIO 不使用。ELLA の英訳では Mitsuki が 'Suigetsu' と誤読されている。",
+   "source": "ellarecords.jp",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

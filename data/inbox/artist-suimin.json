@@ -1,0 +1,38 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft-2026-10-20.md",
+ "_appearsAt": "Odyssey 2025 / 御月民 2025 / Rural 2026 / etsuetsu 2026 / SPRING LOVE 春風 2026",
+ "fields": {
+  "RA": {
+   "value": "https://ra.co/dj/suimin",
+   "source": "rural 2026 / Spring Love Harukaze 2026 / 御月民 Open Air 2025 の RA ラインナップにリンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "Tokyo",
+   "source": "RA area",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JP",
+   "source": "RA",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "RA に本人 bio・SNS 記載なし。RA 出演履歴: Bonobo『渦』(空中水泳らと, 2025-10〜2026-08 に5回)、Débris『FREEDOM無国籍HOUR』5回、Bonobo『MAMACULT』5回、Aoyama Hachi『Asa-Hachi』7回、rural 2023/2026、Re:birth 2022、Moment 2022、TOPIA 2023 (clubasia)。",
+   "source": "https://ra.co/dj/suimin ; https://ra.co/events/2414593 ; https://ra.co/events/2500580",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "tried": {
+   "value": "RA本人ページ（bio空）、Web検索（suimin DJ プロフィール / Instagram）、harukaze.asia（アーティスト紹介なし）。本人 IG は見つからず。",
+   "source": "-",
+   "confidence": "low",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

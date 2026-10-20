@@ -1,0 +1,45 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft-2026-10-20.md",
+ "_appearsAt": "Rural 2026-07 / DENKI BODHISATTVA 2026-10 / etsuetsu 2026-06",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/yellowuhuru/",
+   "source": "プロフィールに FLATTOP と @flattopflattop、RA 本人ページの FLATTOP 主宰と一致",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/yellowuhuru",
+   "source": "RA 本人ページのリンク(表示名 YELLOWUHURU [FLATTOP])",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "RA": {
+   "value": "https://ra.co/dj/yellowuhuru",
+   "source": "RA news 85126 で rural 2026 出演者に掲載",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JP",
+   "source": "RA 本人ページ location: Japan",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "FLATTOP の開催地(Contact渋谷 2018 / WWW 2025)・東京のクラブ出演から。本人の明記は無い",
+   "confidence": "low",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "DJ/プロデューサー。パーティー/レーベル FLATTOP 主宰。ハウスを根底に電子音と生音を混ぜる(RA 本人バイオ)。FLATTOP は2025年1月に渋谷WWWで10周年(niewmedia)。2024年6月 SHIBUYA CLUB QUATTRO で the hatch とのオールナイト NAKED ORANGE(Time Out Tokyo)。",
+   "source": "https://ra.co/dj/yellowuhuru/biography / https://niewmedia.com/en/news/056830/ / https://www.timeout.jp/tokyo/ja/news/yellowuhuru-the-hatch-naked-orange-073024",
+   "confidence": "high",
+   "checkedAt": "2026-10-20",
+   "note": "南アフリカ出身とする出典(閉鎖済みイベントサイトの要約)は未確認のため不使用"
+  }
+ }
+}

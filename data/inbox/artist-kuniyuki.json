@@ -1,0 +1,27 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft-2026-10-20.md",
+ "_appearsAt": "Moment 2026-07 / Re:birth 2026-09 / BIG FUN 2026-09",
+ "fields": {
+  "CITY": {
+   "value": "SAPPORO",
+   "source": "Music From Memory 公式 Bandcamp(地元札幌に自宅スタジオ)/ Studio Mule 公式 Bandcamp(札幌のスタジオ)",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JP",
+   "source": "同上",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "札幌拠点のプロデューサー/DJ。Mule Musiq が主な発表の場(RA news 2017)。2002年 Joe Claussell の Natural Resource から札幌のクラブに捧げた「Precious Hall」。2018年 Music From Memory が1986〜93年の自宅録音を『Early Tape Works』としてまとめる。2025年11月 Studio Mule から12インチ『Open Window』(札幌のスタジオに差す光と風から着想)。Koss 名義でも活動。",
+   "source": "https://music-from-memory.bandcamp.com/album/early-tape-works-1986-1993-vol-1 / https://ra.co/news/40688 / https://mulemusiq.bandcamp.com/album/open-window-2 / https://en.wikipedia.org/wiki/Kuniyuki_Takahashi (Precious Hall: Discogs 出典) / https://sakanaction.jp/feature/summer2019_mnf?lang=en",
+   "confidence": "high",
+   "checkedAt": "2026-10-20",
+   "note": "Precious Hall/Natural Resource は medium(Wikipedia の Discogs 典拠+サカナクション公式特集)。本人の公式 IG/サイトは未確認"
+  }
+ }
+}

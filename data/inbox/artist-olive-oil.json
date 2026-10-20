@@ -1,0 +1,44 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft-2026-10-20.md",
+ "_appearsAt": "Synapse Festival 2025-10 / Moment 2026-07 / りんご音楽祭 2026-09",
+ "fields": {
+  "WEBSITE": {
+   "value": "http://www.oilworks.jp/",
+   "source": "りんご音楽祭 公式アーティストページ https://ringofes.info/artists/entry-35880 の OFFICIAL WEBSITE",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "BANDCAMP": {
+   "value": "https://oliveoil.bandcamp.com/",
+   "source": "oilworks.jp ABOUT ページの埋め込み（Hard Body / Rough Shape 17）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "Fukuoka",
+   "source": "りんご音楽祭 公式アーティストページの拠点表記「福岡」",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JP",
+   "source": "同上",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "プロデューサー/リミキサー/DJ。クリエイター集団OILWORKS（りんご音楽祭公式）。OILWORKSは九州を拠点とするクリエイティブレーベルで、Olive Oil（音プロデューサー/DJ）とPopy Oil（画家/VJ）を主としたユニット・レーベルとして2002年頃にスタート。CD/レコード/アパレル/本の制作流通、国内外ツアー、Webストア等をDIYで行う（oilworks.jp ABOUT）。2026-10-10に7枚目のアルバム『VITAMIN O』（全18曲）。前作『THE OTHERS』から1年10ヶ月。カセットのみのビートテープ『PROTO TAPE』、JAZZ MIX『SOURCE JAZZ』（oilworks.jp NEWS）。",
+   "source": "https://ringofes.info/artists/entry-35880 ; http://oilworks.jp/about/ ; http://oilworks.jp/vitamin-o/",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "tried": {
+   "value": "本人 Instagram は未発見（りんご音楽祭公式ページにも記載なし）",
+   "source": "WebSearch",
+   "confidence": "low",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

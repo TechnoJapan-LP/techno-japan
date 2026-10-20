@@ -1,0 +1,38 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft-2026-10-20.md",
+ "_appearsAt": "99flags 2026-05 / Rural 2026-07 / りんご音楽祭 2026-09",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/_levolant/",
+   "source": "りんご音楽祭 公式アーティストページ https://ringofes.info/artists/entry-109818 の INSTAGRAM リンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://on.soundcloud.com/MRTBTBoCNypkZbL49",
+   "source": "同ページ記載の短縮URL（展開先未確認）",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "Tokyo",
+   "source": "りんご音楽祭 公式: 拠点「東京」/ 2001年生まれ、東京を中心に活動",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JP",
+   "source": "同上",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "2001年生まれ、東京を中心に活動。東京・Mitsukiのレジデント。DJ BARから野外フェスまでプレイ。電子音楽を基盤にハウス、テクノ、エレクトロミニマルを織り交ぜる。RURAL、THE AIRHOUSE等に出演。アジアにも活動を拡大（りんご音楽祭公式プロフィール、日英併記）。",
+   "source": "https://ringofes.info/artists/entry-109818",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

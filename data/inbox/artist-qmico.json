@@ -1,0 +1,45 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft-2026-10-20.md",
+ "_appearsAt": "ALA 2026-04 / Re:birth Festival 2026-09 / Sawagi Festival 2025-08（2026 年版にも掲載）",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/qmico928/",
+   "source": "RA イベントページ QUALIA feat.Priori（promoter: Qmico）本文に Instagram ID qmico928 の記載 https://ra.co/events/2168302",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20",
+   "note": "Instagram プロフィール自体は未閲覧"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/qmico",
+   "source": "本人 SoundCloud（説明文がフェス公式プロフィールと同文、city: Tokyo）/ ENTER Shibuya のアーティストページからリンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "Tokyo",
+   "source": "Sawagi / ALA 公式「東京出身」、SoundCloud city: Tokyo",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JP",
+   "source": "同上",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "東京出身、2011年よりDJ。テクノを軸にミニマル/エクスペリメンタル/レフトフィールド/ディープハウス。rural、Paramount 等の野外フェスと全国のクラブに出演。Peter van Hoesen、Voiski、Anthony Linell 等をサポート。ALA 公式表記「Qmico (QUALIA)」。RA: QUALIA の主催者（2025-05-23 QUALIA feat.Priori、西麻布）。QUALIA は「テクノを核に据えた濃密でディープ…」と紹介。",
+   "source": "https://sawagifestival.com/artist/26-qmico/ ; https://www.ala-jp.net/artists/ ; https://entershibuya.com/artist/34349/ ; https://ra.co/events/2168302 ; https://soundcloud.com/qmico",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "note": {
+   "value": "SoundCloud の氏名欄に本名らしき記載あり（BIO には使わない）。2026-06 nagomi ソウル公演は RA が 403 で一次確認できず未使用",
+   "source": "soundcloud / de.ra.co/events/2470051",
+   "confidence": "low",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

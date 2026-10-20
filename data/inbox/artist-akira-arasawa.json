@@ -1,0 +1,32 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft-2026-10-20.md",
+ "_appearsAt": "Moment 2026-07 / Global Ark 2025-08 / Sawagi Festival 2025-08 / Sawagi Festival 2026-10",
+ "fields": {
+  "CITY": {
+   "value": "Tokyo",
+   "source": "Global Ark 公式プロフィール「東京をベースに活動する音楽プロデューサー」/ Sawagi 公式「TOKYOをBASEに」",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JP",
+   "source": "同上",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "Chill Mountain Rec 所属表記。Chill Mountain Record, WAYU, Shango Record(ギリシャ), Lump Record, KOSA Record, SABI, TOTEM TRAXX, AKBAL RECORD など海外レーベルからリリース。2022・2023年にイビサ Radio Sonica（playa d'en Bossa のスタジオ）からライブ配信。2024年に韓国 AIR HOUSE、クロアチア GOULASHDISKO / MODEM FESTIVAL、タイ WONDER FRUIT、メキシコ M.N. Roy でプレイ。DJ は deep house / organic house から nu tribal disco まで。ゆるふわギャング、YOU THE ROCK★ の楽曲をプロデュース、ヘンタイカメラ❤️のオペレーター（Sawagi 公式）。",
+   "source": "https://www.global-ark.net/home-1/akira-arasawa/ ; https://sawagifestival.com/artist/26-akira-arasawa/ ; 補足(medium): https://electronicgroove.com/series/premieres/akira-arasawa-nhii-shao-dow-mata-sounds-of-khemit/ ; https://ra.co/events/2380408",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "tried": {
+   "value": "Instagram / SoundCloud 本人アカウントは検索で特定できず（未記録）",
+   "source": "WebSearch 複数語",
+   "confidence": "low",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

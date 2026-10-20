@@ -1,0 +1,38 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft-2026-10-20.md",
+ "_appearsAt": "御月民 2025-09 / Moment 2026-07 / 御月民 2026-09",
+ "fields": {
+  "WEBSITE": {
+   "value": "https://discoveryhi-c.com/",
+   "source": "本人公式サイト。MOMENT の中心メンバーと明記",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/djhi__c/",
+   "source": "公式サイトのリンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "OSAKA",
+   "source": "Mixmag Asia インタビュー(2024-10-02)で大阪在住・アメリカ村と本人発言",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JP",
+   "source": "公式サイト",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "ターンテーブリスト・ユニット Kireek として DMC World Championship 5連覇。その後テクノへ移り、関西の野外パーティー MOMENT の中心メンバー(Mixmag では友人と立ち上げたと本人発言)。Toru Ikemoto、TENO と関西のテクノ・レーベル aum recordings を設立。2023年7月 FUJI ROCK FESTIVAL、同年末 FUTURE TERROR に出演。沖縄のラッパー RITTO のアルバム全曲をプロデュース。",
+   "source": "https://discoveryhi-c.com/ / https://mixmag.asia/read/mixmag-asia-radio-hi-c-techno-madness-moment-festival-japan-tenkawa-village-exclusive-mixes",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

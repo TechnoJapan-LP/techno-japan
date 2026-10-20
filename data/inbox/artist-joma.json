@@ -22,6 +22,19 @@
    "source": "本人 Instagram bio",
    "confidence": "high",
    "checkedAt": "2026-08-13T02:20:00+09:00"
+  },
+  "INSTAGRAM_recheck": {
+   "value": "https://www.instagram.com/jomajjj/",
+   "source": "MATRICARIA 公式 IG の 2026 フルラインナップ投稿(DVil_QvAFDQ)「Joma @jomajjj」、Synapse 2025 ラインナップ転載投稿(DPOFDVtgKMF)「Joma ＆ Neggy @jomajjj @neggy_yutaka」で再確認",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts_2026-10-20": {
+   "value": "本人IG bio: Digital hippie in Tokyo / DJ / Techno/House Party → @night_trip_ / Listening Party → @day__trip_ / Apparel → @__trippers__。Night Trip は中目黒 Solfa で開催(2025年12月19日が第6回)、Joma は各回のラインナップに名を連ね、2025年の告知では「Joma (Night Trip)」表記。2026年10月9日の回には John Plaza、Stefan Goldmann を招聘。",
+   "source": "https://www.instagram.com/jomajjj/ / https://www.instagram.com/night_trip_/ (投稿 DQjFsiJEQPN, DOYCQ83EXmk, DP0hz9UER-J, Dcf3z3Yxdaa)",
+   "confidence": "high",
+   "checkedAt": "2026-10-20",
+   "note": "『主宰』の明記は見つからず。本人が自身のパーティーとして bio に掲げる、という範囲で書く"
   }
  }
 }

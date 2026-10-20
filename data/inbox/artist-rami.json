@@ -1,0 +1,39 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft-2026-10-20.md",
+ "_appearsAt": "99flags 2026-05 / MATRICARIA 2026-05 / annahme 2026-10",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/rami.6s/",
+   "source": "MATRICARIA 公式 IG のフルラインナップ投稿(DVil_QvAFDQ)に「RAMI @rami.6s」とタグ。Ella Records のインタビューも同アカウントを掲載",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/user-76845170",
+   "source": "Ella Records インタビュー記載のリンク(本人IGのリンクは短縮URL)",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "Ella Records インタビュー(福島出身、東京拠点)",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JP",
+   "source": "同上",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "2002年生まれ、福島出身、東京拠点。渋谷のバレアリック/ニューディスコ/ディスコダブに影響を受け、2023年にレコードのみのDJとして始動。自身のパーティー lorca を不定期開催(IG表示名もRAMI（lorca）)。青山TUNNELで DNG と2年間レギュラー(RA イベントページ、主催者文)。",
+   "source": "https://ellarecords.jp/en/blogs/after-hours-session/rami / https://ra.co/events/2482090 / https://www.instagram.com/rami.6s/",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20",
+   "note": "本人発言ベースのインタビューと主催者告知。99flags の BAR99 ラインナップにも RAMI 表記(タグ無し)"
+  }
+ }
+}

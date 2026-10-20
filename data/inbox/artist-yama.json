@@ -1,0 +1,50 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft-2026-10-20.md",
+ "_appearsAt": "Rural 2026 / Moment 2026 / 御月民 2026 / BIG FUN 2026 / annahme 2025 / Sawagi Festival 2025, 2026",
+ "fields": {
+  "RA": {
+   "value": "https://ra.co/dj/yama-jposk",
+   "source": "RA rural 2026 (event 2289803) と SAWAGI FESTIVAL 2025 (event 2212644) のラインナップが YAMA(JP/OSK) にリンク。ra.co/dj/yama（米シアトルの別人）とは別",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/yama72yama/",
+   "source": "RA 本人ページ yama-jposk 掲載",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/ya-ma",
+   "source": "RA 本人ページ掲載",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "Osaka",
+   "source": "RA 本人ページ area",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JP",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "1994年DJ開始。DMR大阪勤務後、newtone records に開店時からバイヤー（和文: 現在もスタッフ / 英文: advisor）。EYEとパーティー eep を主宰。ハウス軸にテクノ・ブレイクビーツ・ジャズ等。札幌 PRECIOUS HALL に定期出演、FUTURE TERROR ゲスト。fabric London、Savage Hanoi、The Observatory HCMC、宀 Hong Kong、Nyapi Seoul、Wonderfruit 出演。英文 bio は she。",
+   "source": "https://ra.co/dj/yama-jposk (RA GraphQL で取得)",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "unverified": {
+   "value": "Moment 2026 / 御月民 2026 / BIG FUN 2026 / annahme の YAMA が同一人物かは未確認（RA の当人イベント履歴には無い）。Moment 2022/2023 は RA で同一人物にリンク。BIG FUN は Precious Hall 主催で、本人の Precious Hall 定期出演と整合するが確証なし。",
+   "source": "RA artist id 110314 events",
+   "confidence": "low",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

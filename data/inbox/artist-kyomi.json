@@ -1,0 +1,44 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft-2026-10-20.md",
+ "_appearsAt": "Moment 2026-07（表記: 鏡民）/ Labyrinth 2026-10（鏡民 / Kyomi）/ Sawagi Festival 2025-08 / NU FESTIVAL 2026-06",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/kyomi_togashi/",
+   "source": "NU FESTIVAL 公式ラインナップ KYOMI のアーティスト欄 SNS リンク https://nufestival.jp/lineup/",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "X": {
+   "value": "https://x.com/kyomi_togashi",
+   "source": "同上",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "Tokyo",
+   "source": "NU FESTIVAL 公式「東京最深部のさらに奥…を拠点に」/ RA 本人ページ（most played: Tokyo）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JP",
+   "source": "RA https://ra.co/dj/kyomi Location: Japan",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "NU FESTIVAL 公式: 東京のドープで音楽的なダンスシーンを拠点に全国で活動するDJ。ジャンルに収まらないエクスペリメンタルな選曲で、実験的かつ快楽的なセット。RA: 初出演記録2021年、最多出演クラブ WOMB / Mitsuki / Nyapi、最多地域 Tokyo / Seoul。2026-08-08 台北 Pawnshop「Kyomi 鏡民 / elsa winner」。",
+   "source": "https://nufestival.jp/lineup/ ; https://ra.co/dj/kyomi ; https://moment-jp.com/ ; https://www.mindgames.jp/artists",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "note": {
+   "value": "Sawagi 2025 の出演は公式サイトに 2025 年ページが残っておらず未確認",
+   "source": "sawagifestival.com artist-sitemap に 25 年分なし",
+   "confidence": "low",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}
