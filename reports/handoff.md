@@ -10741,3 +10741,33 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 検証（本番）: Publish Now 後、21人の JA/EN ページすべてで紹介文あり・noindex なし。sitemap の /artists/ は 60→102件。
 - 未確認の類似パターン: 紹介文の無いアーティストは残り88人（出演2回以下）。
 - 次の担当への注意: 確度「中」で入れなかったリンク（Feline の IG、Herbalistek の SC、Qmico の IG など）は下書きファイルに記載。開いて本人確認すれば追加できる。
+
+### 2026-10-20 フェスLINE UPと記事要約のモバイル表示修正 — 未コミット
+
+### 実施
+- `LP/detail.css` のフェス専用 `.detail-lineup-list .lineup-item` から `min-height: 44px` を外し、見た目優先で共通タップ領域の対象外にする理由をコメント化。後段の `padding: 9px 16px` により約32pxへ戻す。
+- `.article-excerpt` を本文と同じ `word-break: normal; overflow-wrap: normal; text-wrap: wrap` に変更し、モバイルでは本文と同じ右端（`margin-right: -12px`）へ揃えた。見出しのBudouX指定と本文側は変更していない。
+- `detail.css` を v63→v64、CMS記事プレビューの参照も v64 に更新。静的詳細HTML 544件の参照を v64 に更新した。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `git diff --check`: 実行済み。
+- `node scripts/build-detail-pages.mjs`: 外部画像寸法取得がネットワーク制限で再試行を続けたため中断。既存寸法を使う警告のみで、データ生成物は更新していない。
+- `python3 scripts/check_asset_versions.py --no-diff`: 成功。
+- `node --check LP/cms.js`: 成功。`git diff --check`: 成功。
+- `bash scripts/preflight.sh`: 「詳細ページを生成できる」で外部画像寸法取得がネットワーク制限により長時間継続したため中断（exit 130）。全件成功ではない。
+- 実ブラウザ確認: **Claude が実施**。iPhone相当390px・タッチ有効で `/festivals/transcendence.html` のLINE UP高さと `/articles/sawagi-festival-2026-info.html` の要約左右端・折り返しを確認済み。PC表示は未確認。
+
+### 変更したパターン
+- フェス詳細だけのLINE UP枠の最小高さと、記事要約のモバイル幅・折り返し。
+- `detail.css` キャッシュバージョン（生成スクリプト、CMSプレビュー、静的詳細HTML）。
+
+### 未確認の類似パターン
+- 確認済み・0件：アーティスト詳細など、`.festival-design-v2` 外の `.lineup-item` のCSSは変更していない。
+- 未確認：PC幅、記事JA/EN両言語の実ブラウザ表示、CMS認証済みプレビューの実ブラウザ表示。
+
+### 次の担当への注意・判断待ち
+- `python3 scripts/check_asset_versions.py` と省略なしの `bash scripts/preflight.sh` を実行すること。公開前に未確認のPC/JA・EN経路を実ブラウザで確認すること。
+- CMSを開く場合は `?cb=<乱数>` を付け、変更後は `Cmd+Shift+R` で強制リロードすること。

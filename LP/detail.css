@@ -34,7 +34,7 @@
   font-family: var(--font-body); font-weight: 300;
   font-size: clamp(19px, 1.9vw, 24px); line-height: 1.65; opacity: 1;
   color: var(--text); max-width: 680px; margin: 0 auto 40px; padding-bottom: 32px;
-  word-break: normal; overflow-wrap: break-word; text-wrap: pretty;
+  word-break: normal; overflow-wrap: normal; text-wrap: wrap;
   border-bottom: 1px solid rgba(240,237,232,0.1);
 }
 .article-hero-img { margin: 0 -40px 48px; aspect-ratio: 16/9; overflow: hidden; background: rgba(240,237,232,0.04); }
@@ -248,7 +248,9 @@
   padding: 8px 14px; border: 1px solid rgba(240,237,232,0.15); opacity: 0.75;
   transition: border-color 0.2s ease, opacity 0.2s ease, color 0.2s ease;
 }
-.festival-design-v2 .detail-lineup-list .lineup-item { min-height: 44px; align-items: center; display: inline-flex; }
+/* フェスのLINE UPは見た目を優先し、共通の44pxタップ領域を適用しない。
+   後段のフェス専用ルールで padding 9px 16px の約32px枠に戻す。 */
+.festival-design-v2 .detail-lineup-list .lineup-item { align-items: center; display: inline-flex; }
 a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity: 1; }
 
 .detail-links { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 40px; }
@@ -312,6 +314,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   .artist-upcoming .related-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .artist-upcoming .related-card-name { font-size: 14px; }
   /* 本文は右端まで使い、見出しの balance による不自然な改行を避ける */
+  .article-excerpt { max-width: none; margin-left: 0; margin-right: -12px; text-wrap: wrap; }
   .article-body { max-width: none; margin-right: -12px; text-wrap: wrap; }
 }
 
