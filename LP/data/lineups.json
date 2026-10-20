@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-10-20T14:12:00.801Z",
-  "count": 1470,
+  "_generatedAt": "2026-10-20T15:58:15.033Z",
+  "count": 1497,
   "items": [
     {
       "EDITION_ID": "waifu-2026",
@@ -1759,6 +1759,7 @@
     {
       "EDITION_ID": "mutek-2025",
       "ARTIST_ID": "max-cooper",
+      "ACT_LABEL": "Max Cooper",
       "SET_TYPE": "dj",
       "SORT": "20"
     },
@@ -4510,7 +4511,14 @@
     },
     {
       "EDITION_ID": "global-ark-2025",
+      "ACT_LABEL": "Tohru Takahashi",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "global-ark-2025",
       "ARTIST_ID": "dj-miku",
+      "ACT_LABEL": "DJ MIKU",
       "SET_TYPE": "dj",
       "SORT": "5"
     },
@@ -4529,6 +4537,7 @@
     {
       "EDITION_ID": "global-ark-2025",
       "ARTIST_ID": "dj-yogurt",
+      "ACT_LABEL": "DJ YOGURT",
       "SET_TYPE": "dj",
       "SORT": "8"
     },
@@ -4552,6 +4561,18 @@
     },
     {
       "EDITION_ID": "global-ark-2025",
+      "ACT_LABEL": "DO SHOCK BOOZE",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "global-ark-2025",
+      "ACT_LABEL": "Ecstasy Twins",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "global-ark-2025",
       "ACT_LABEL": "Sancho Meiso Chaya）",
       "SET_TYPE": "dj",
       "SORT": "14"
@@ -4559,6 +4580,7 @@
     {
       "EDITION_ID": "global-ark-2025",
       "ARTIST_ID": "akira-arasawa",
+      "ACT_LABEL": "Akira Arasawa",
       "SET_TYPE": "dj",
       "SORT": "15"
     },
@@ -4567,6 +4589,12 @@
       "ACT_LABEL": "7e",
       "SET_TYPE": "dj",
       "SORT": "16"
+    },
+    {
+      "EDITION_ID": "global-ark-2025",
+      "ACT_LABEL": "Dani Savant",
+      "SET_TYPE": "dj",
+      "SORT": "17"
     },
     {
       "EDITION_ID": "global-ark-2025",
@@ -4583,12 +4611,14 @@
     {
       "EDITION_ID": "global-ark-2025",
       "ARTIST_ID": "taichi-kawahira",
+      "ACT_LABEL": "TAICHI KAWAHIRA",
       "SET_TYPE": "dj",
       "SORT": "20"
     },
     {
       "EDITION_ID": "global-ark-2025",
       "ARTIST_ID": "tsutomu",
+      "ACT_LABEL": "TSUTOMU",
       "SET_TYPE": "dj",
       "SORT": "21"
     },
@@ -4607,6 +4637,7 @@
     {
       "EDITION_ID": "global-ark-2025",
       "ARTIST_ID": "dj-kensei",
+      "ACT_LABEL": "DJ KENSEI",
       "SET_TYPE": "dj",
       "SORT": "24"
     },
@@ -4639,6 +4670,12 @@
       "ACT_LABEL": "DANA NADA",
       "SET_TYPE": "dj",
       "SORT": "29"
+    },
+    {
+      "EDITION_ID": "global-ark-2025",
+      "ACT_LABEL": "Akihiro Suzuki",
+      "SET_TYPE": "dj",
+      "SORT": "30"
     },
     {
       "EDITION_ID": "global-ark-2025",
@@ -4683,36 +4720,6 @@
       "SORT": "37"
     },
     {
-      "EDITION_ID": "global-ark-2025",
-      "ACT_LABEL": "Kojiro",
-      "SET_TYPE": "dj",
-      "SORT": "38"
-    },
-    {
-      "EDITION_ID": "global-ark-2025",
-      "ACT_LABEL": "SayakaStar",
-      "SET_TYPE": "dj",
-      "SORT": "39"
-    },
-    {
-      "EDITION_ID": "global-ark-2025",
-      "ACT_LABEL": "NORID",
-      "SET_TYPE": "dj",
-      "SORT": "40"
-    },
-    {
-      "EDITION_ID": "global-ark-2025",
-      "ACT_LABEL": "snipe1",
-      "SET_TYPE": "dj",
-      "SORT": "42"
-    },
-    {
-      "EDITION_ID": "global-ark-2025",
-      "ACT_LABEL": "TARZAN",
-      "SET_TYPE": "dj",
-      "SORT": "43"
-    },
-    {
       "EDITION_ID": "global-ark-2026",
       "ACT_LABEL": "D-Leria",
       "SET_TYPE": "dj",
@@ -4723,6 +4730,12 @@
       "ACT_LABEL": "Mathys Lenne",
       "SET_TYPE": "dj",
       "SORT": "2"
+    },
+    {
+      "EDITION_ID": "global-ark-2026",
+      "ACT_LABEL": "Tohru Takahashi",
+      "SET_TYPE": "dj",
+      "SORT": "3"
     },
     {
       "EDITION_ID": "global-ark-2026",
@@ -4741,6 +4754,7 @@
     {
       "EDITION_ID": "global-ark-2026",
       "ARTIST_ID": "moodman",
+      "ACT_LABEL": "MOODMAN",
       "SET_TYPE": "dj",
       "SORT": "6"
     },
@@ -4759,6 +4773,13 @@
     },
     {
       "EDITION_ID": "global-ark-2026",
+      "ARTIST_ID": "akira-arasawa",
+      "ACT_LABEL": "AKIRA ARASAWA",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "global-ark-2026",
       "ACT_LABEL": "yakenohara",
       "SET_TYPE": "dj",
       "SORT": "10"
@@ -4766,12 +4787,14 @@
     {
       "EDITION_ID": "global-ark-2026",
       "ARTIST_ID": "choko",
+      "ACT_LABEL": "CHOKO",
       "SET_TYPE": "dj",
       "SORT": "11"
     },
     {
       "EDITION_ID": "global-ark-2026",
       "ARTIST_ID": "sunga",
+      "ACT_LABEL": "SUNGA",
       "SET_TYPE": "dj",
       "SORT": "12"
     },
@@ -4789,13 +4812,13 @@
     },
     {
       "EDITION_ID": "global-ark-2026",
-      "ACT_LABEL": "naotsun",
+      "ACT_LABEL": "Naotsun",
       "SET_TYPE": "dj",
       "SORT": "15"
     },
     {
       "EDITION_ID": "global-ark-2026",
-      "ACT_LABEL": "akihiro-suzuki",
+      "ACT_LABEL": "Akihiro Suzuki",
       "SET_TYPE": "dj",
       "SORT": "16"
     },
@@ -4808,8 +4831,15 @@
     {
       "EDITION_ID": "global-ark-2026",
       "ARTIST_ID": "tsutomu",
+      "ACT_LABEL": "TSUTOMU",
       "SET_TYPE": "dj",
       "SORT": "18"
+    },
+    {
+      "EDITION_ID": "global-ark-2026",
+      "ACT_LABEL": "GAKU SAIMURA",
+      "SET_TYPE": "dj",
+      "SORT": "19"
     },
     {
       "EDITION_ID": "global-ark-2026",
@@ -4837,6 +4867,19 @@
     },
     {
       "EDITION_ID": "global-ark-2026",
+      "ACT_LABEL": "OYASSAN",
+      "SET_TYPE": "dj",
+      "SORT": "24"
+    },
+    {
+      "EDITION_ID": "global-ark-2026",
+      "ARTIST_ID": "ken-ishii",
+      "ACT_LABEL": "KEN ISHII",
+      "SET_TYPE": "dj",
+      "SORT": "25"
+    },
+    {
+      "EDITION_ID": "global-ark-2026",
       "ACT_LABEL": "Q'HEY",
       "SET_TYPE": "dj",
       "SORT": "26"
@@ -4849,6 +4892,13 @@
     },
     {
       "EDITION_ID": "global-ark-2026",
+      "ARTIST_ID": "dj-sodeyama",
+      "ACT_LABEL": "DJ SODEYAMA",
+      "SET_TYPE": "dj",
+      "SORT": "28"
+    },
+    {
+      "EDITION_ID": "global-ark-2026",
       "ACT_LABEL": "DRUNKEN KONG",
       "SET_TYPE": "dj",
       "SORT": "29"
@@ -4856,6 +4906,7 @@
     {
       "EDITION_ID": "global-ark-2026",
       "ARTIST_ID": "risa-taniguchi",
+      "ACT_LABEL": "RISA TANIGUCHI",
       "SET_TYPE": "dj",
       "SORT": "30"
     },
@@ -4864,42 +4915,6 @@
       "ACT_LABEL": "Yoshinori Hayashi",
       "SET_TYPE": "dj",
       "SORT": "31"
-    },
-    {
-      "EDITION_ID": "global-ark-2026",
-      "ACT_LABEL": "YOUTH",
-      "SET_TYPE": "dj",
-      "SORT": "34"
-    },
-    {
-      "EDITION_ID": "global-ark-2026",
-      "ACT_LABEL": "liarako",
-      "SET_TYPE": "dj",
-      "SORT": "35"
-    },
-    {
-      "EDITION_ID": "global-ark-2026",
-      "ACT_LABEL": "Ecstasy Twins",
-      "SET_TYPE": "dj",
-      "SORT": "37"
-    },
-    {
-      "EDITION_ID": "global-ark-2026",
-      "ACT_LABEL": "Shaman Riyo",
-      "SET_TYPE": "dj",
-      "SORT": "38"
-    },
-    {
-      "EDITION_ID": "global-ark-2026",
-      "ACT_LABEL": "SUEPON",
-      "SET_TYPE": "dj",
-      "SORT": "39"
-    },
-    {
-      "EDITION_ID": "global-ark-2026",
-      "ACT_LABEL": "AOKIYA",
-      "SET_TYPE": "dj",
-      "SORT": "40"
     },
     {
       "EDITION_ID": "loa-lost-paradise-2026",
@@ -6979,6 +6994,12 @@
     },
     {
       "EDITION_ID": "mutek-2026",
+      "ACT_LABEL": "Daito Manabe x ELEVENPLAY",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "mutek-2026",
       "ACT_LABEL": "Film Scores for No One - a Patrick Watson project",
       "SET_TYPE": "dj",
       "SORT": "3"
@@ -6988,12 +7009,6 @@
       "ACT_LABEL": "Grand River",
       "SET_TYPE": "dj",
       "SORT": "4"
-    },
-    {
-      "EDITION_ID": "mutek-2026",
-      "ACT_LABEL": "Nicolás Melmann",
-      "SET_TYPE": "dj",
-      "SORT": "11"
     },
     {
       "EDITION_ID": "grow-the-culture-open-air-2025",
@@ -7786,6 +7801,169 @@
       "ACT_LABEL": "Yamao",
       "SET_TYPE": "dj",
       "SORT": "9"
+    },
+    {
+      "EDITION_ID": "global-ark-2025",
+      "ACT_LABEL": "Kojiro",
+      "SET_TYPE": "dj",
+      "SORT": "38"
+    },
+    {
+      "EDITION_ID": "global-ark-2025",
+      "ACT_LABEL": "SayakaStar",
+      "SET_TYPE": "dj",
+      "SORT": "39"
+    },
+    {
+      "EDITION_ID": "global-ark-2025",
+      "ACT_LABEL": "Norid",
+      "SET_TYPE": "dj",
+      "SORT": "40"
+    },
+    {
+      "EDITION_ID": "global-ark-2025",
+      "ACT_LABEL": "Naotsun",
+      "SET_TYPE": "dj",
+      "SORT": "41"
+    },
+    {
+      "EDITION_ID": "global-ark-2025",
+      "ACT_LABEL": "Snipe1",
+      "SET_TYPE": "dj",
+      "SORT": "42"
+    },
+    {
+      "EDITION_ID": "global-ark-2025",
+      "ACT_LABEL": "TARZAN",
+      "SET_TYPE": "dj",
+      "SORT": "43"
+    },
+    {
+      "EDITION_ID": "global-ark-2026",
+      "ACT_LABEL": "NUTMEG",
+      "SET_TYPE": "dj",
+      "SORT": "32"
+    },
+    {
+      "EDITION_ID": "global-ark-2026",
+      "ACT_LABEL": "heykazma",
+      "SET_TYPE": "dj",
+      "SORT": "33"
+    },
+    {
+      "EDITION_ID": "global-ark-2026",
+      "ACT_LABEL": "YOUTH",
+      "SET_TYPE": "dj",
+      "SORT": "34"
+    },
+    {
+      "EDITION_ID": "global-ark-2026",
+      "ACT_LABEL": "Liarako",
+      "SET_TYPE": "dj",
+      "SORT": "35"
+    },
+    {
+      "EDITION_ID": "global-ark-2026",
+      "ACT_LABEL": "HENTAI CAMERA MAN",
+      "SET_TYPE": "dj",
+      "SORT": "36"
+    },
+    {
+      "EDITION_ID": "global-ark-2026",
+      "ACT_LABEL": "Ecstasy Twins",
+      "SET_TYPE": "dj",
+      "SORT": "37"
+    },
+    {
+      "EDITION_ID": "global-ark-2026",
+      "ACT_LABEL": "Shaman Riyo",
+      "SET_TYPE": "dj",
+      "SORT": "38"
+    },
+    {
+      "EDITION_ID": "global-ark-2026",
+      "ACT_LABEL": "SUEPON",
+      "SET_TYPE": "dj",
+      "SORT": "39"
+    },
+    {
+      "EDITION_ID": "global-ark-2026",
+      "ACT_LABEL": "AOKIYA",
+      "SET_TYPE": "dj",
+      "SORT": "40"
+    },
+    {
+      "EDITION_ID": "mutek-2026",
+      "ACT_LABEL": "Hania Rani presents Chilling Bambino",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "mutek-2026",
+      "ACT_LABEL": "Johanna Elina Sulkunen & Tapani Toivanen",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "mutek-2026",
+      "ACT_LABEL": "Masayuki Azegami & Seiichi Sega",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "mutek-2026",
+      "ARTIST_ID": "max-cooper",
+      "ACT_LABEL": "Max Cooper",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "mutek-2026",
+      "ACT_LABEL": "mouse on the keys",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "mutek-2026",
+      "ACT_LABEL": "NEUROSCAN (Canblaster & Neurotypique)",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "mutek-2026",
+      "ACT_LABEL": "Nicolás Melmann",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "mutek-2026",
+      "ACT_LABEL": "Riccardo Giovinetto",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "mutek-2026",
+      "ACT_LABEL": "Robert Lippok & Lucas Gutierrez",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "mutek-2026",
+      "ACT_LABEL": "Ryoichi Kurokawa",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "mutek-2026",
+      "ACT_LABEL": "Seulement",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "mutek-2026",
+      "ACT_LABEL": "tamanaramen",
+      "SET_TYPE": "dj",
+      "SORT": "16"
     },
     {
       "EDITION_ID": "nu-festival-2026",
