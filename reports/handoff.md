@@ -10734,3 +10734,10 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
   原本1920を srcset に入れた版は PC で +30〜60%（shifumiz 2,990KB）になったため、最大候補を1440に制限した。
 - 未確認の類似パターン: TOP の `img` 8枚が src 無し（naturalWidth 0）。移行前の main でも同じで本件とは無関係・目視で欠けは無し。iPhone 実機は未確認。
 - 次の担当への注意: 新しい記事の Drive 画像は最長2時間後の同期で取り込まれ、次のデプロイで置換される。それまでは Drive 表示のまま（壊れない）。サイト全体 258MB → 301MB。
+
+### 2026-10-20 アーティスト紹介文21人の入力と本番確認 — Claude
+- 実施: reports/artist-bios-draft-2026-10-20.md の21人（ユーザー承認済み。Suimin も含む）を CMS から入力（BIO / bio_en、確度「高」のリンク、空欄だった CITY / COUNTRY）。1件ずつ保存し、シートから読み直して全員一致・name/genre/image 不変・総数173件を確認。保存時の送信項目は ARTISTS の全21列を含む（bio_en ほかは publishing 欄から送られる）。
+- ユーザー確認: 「確認できず」と書いた出演（Feline / Kyomi / NOCO / Qmico / YELLOWUHURU / RISA TANIGUCHI / DJ KURI）は出演確認済み。「YAMA a.k.a. Sahib」ほかの YAMA は同一人物。Suimin の別名義（空中水泳）は問題なし。データ変更なし。
+- 検証（本番）: Publish Now 後、21人の JA/EN ページすべてで紹介文あり・noindex なし。sitemap の /artists/ は 60→102件。
+- 未確認の類似パターン: 紹介文の無いアーティストは残り88人（出演2回以下）。
+- 次の担当への注意: 確度「中」で入れなかったリンク（Feline の IG、Herbalistek の SC、Qmico の IG など）は下書きファイルに記載。開いて本人確認すれば追加できる。
