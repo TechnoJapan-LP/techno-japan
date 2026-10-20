@@ -10873,3 +10873,36 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 未確認の類似パターン（判断待ち）:
   - フェスを開くと、開催回のラインナップは FESTIVALS の EDITIONS 列（JSON）の控えが LINEUPS シートより優先される（cms.js loadEditionsFromSheet の pending マージ）。global-ark-2026 は控え40人・シート31人で、保存するとシートが控えの40人に置き換わる（9行追記）。どちらが正しいかは未確認。
   - CMS の ARTIST_DB が初期の37件のままのことがあり、その場合 ID しか分からない行は ACT_LABEL に ID 文字列が書かれる（ARTIST_ID は保持されるのでリンクは切れない。見た目のみ）。
+
+### 2026-10-21 FESTIVALS.EDITIONS JSONの作業データ除去 — 未コミット
+
+### 実施
+- `LP/cms.js` のフェス保存 payload に `festivalEditionsForSave()` を追加し、FESTIVALS の EDITIONS JSON の送信コピーから `_sheetRow`（EDITIONS行の丸ごとコピー）と `_lineupRows`（LINEUPS行配列）を除去した。
+- `_row` / `_editionId` は `syncExistingEditionRows` / `syncNewEditionRows` の照合に使っているため保存コピーに残した。FESTIVALS.EDITIONS の読込箇所（`editRow`、`loadEditionsFromSheet`、Publish前検査等）は表示用の開催回項目だけを読むため、除去した2プロパティには依存していない。
+- 画面で使う元の `editions` 配列は変更しない。`LP/cms.html` の `cms.js` 参照を v155→v156 に更新した。
+- 既に膨らんでいる34件は、次にそのフェスを保存したときに細くなる（今回の変更は既存セルを一括修復するものではない）。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node --check LP/cms.js`: 成功。
+- `node scripts/check_cms_editions.mjs`: **全30件成功**。保存payloadのJSONに `_sheetRow` / `_lineupRows` が含まれないこと、元の `editions` 配列が変更されないことを追加検証した。
+- `git diff --check`: 成功。
+- `python3 scripts/check_asset_versions.py --no-diff`: preflight内の「?vの上げ忘れ」検査で成功。
+- `bash scripts/preflight.sh`: **49件成功 / 9件失敗**。詳細ページ生成は外部画像取得タイムアウト、ブラウザ系8件はこの環境の localhost listen `EPERM`。したがって公開可能とは判定しない。
+- 実ブラウザ確認: **未確認**。CMS変更のため、公開前に認証済みCMSを `?cb=<乱数>` で開き、フェス保存時の送信内容に `_sheetRow` / `_lineupRows` が無いことを確認すること。push後に Claude が Publish pipeline とCMS実画面の送信内容を確認すること。
+
+### 変更したパターン
+- FESTIVALS の `editions` 保存コピーから `_sheetRow` / `_lineupRows` を除外するパターン。
+- `scripts/check_cms_editions.mjs` の保存payload回帰検査。
+- `LP/cms.html` の `cms.js` キャッシュバージョン v155→v156。
+
+### 未確認の類似パターン
+- 確認済み・0件：`_sheetRow` / `_lineupRows` をFESTIVALS.EDITIONS JSONから読む箇所。
+- 未確認：認証済み本番CMSの実画面での実送信内容、Publish pipeline、本番反映後の34件の個別セル縮小。これらは本番データへ書き込まず、送信内容の確認だけを行うこと。
+
+### 次の担当への注意・判断待ち
+- 省略なしの `bash scripts/preflight.sh` を実行し、全件成功するまでpushしないこと。現在の作業ツリーには本件以外の未コミット変更もあるため、差分を混ぜてコミットしないこと。
+- push後、Claude が `gh workflow run "Publish pipeline"` を実行して成功を確認し、`cms: publish data.js` のコミット増加を確認すること。
+- CMSは `?cb=<乱数>` で開き、変更後は Cmd+Shift+R。認証済み実画面で保存処理のfetchを確認し、元の画面配列が維持されることも確認すること。

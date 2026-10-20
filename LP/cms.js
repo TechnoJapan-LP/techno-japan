@@ -4879,6 +4879,18 @@ function editRow(section, rowNum){
 function gasWriteSucceeded(result){
   return !!result && (result.status==='ok' || result.status==='success' || result.success===true);
 }
+/* FESTIVALS.EDITIONS は控えなので、画面内のシート作業台帳を保存しない。
+   _row / _editionId は同じ editions 配列を使う EDITIONS同期の照合に必要なため
+   残すが、_sheetRow / _lineupRows は正データではなくサイズも大きいので除外する。
+   元の配列は画面と後続のEDITIONS/LINEUPS同期で使うため変更しない。 */
+function festivalEditionsForSave(sourceEditions=editions){
+  return (sourceEditions||[]).filter(e=>e&&e.year).map(e=>{
+    const copy={...e};
+    delete copy._sheetRow;
+    delete copy._lineupRows;
+    return copy;
+  });
+}
 /* 開催回1つぶんの LINEUPS を「既存行の上書き＋余り行の空白化＋不足分の追記」で同期する。
 
    ■ なぜこの形か（LINEUPS 重複事故・2026-08-27）
@@ -5129,7 +5141,7 @@ function saveEdit(section){
       date:ds&&de?ds+'/'+de:ds,genre:getSelectedGenres('f-genre').join(', '),
       image:g('f-image'),imagePosition:g('f-imagePosition'),flyer:g('f-flyer'),heroGradient:g('f-heroGradient'),
       desc:g('f-desc'),lineup:cleanLineup(lineups.f).join(', '),
-      editions:editions.filter(e=>e.year).map(e=>({...e}))});
+      editions:festivalEditionsForSave()});
   }
   else if(section==='artist'){
     Object.assign(payload,{id:g('a-id'),name:g('a-name'),city:g('a-city'),country:g('a-country'),
