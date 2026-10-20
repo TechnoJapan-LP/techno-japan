@@ -10806,3 +10806,30 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 検証（本番）: push 後 Deploy success、Publish pipeline success（run 39436923750）。dj-kensei に etsuetsu 2026 / Global Ark 2026・2025、tonbo に MATRICARIA 2026、doltz に MATRICARIA 2026、dj-krush に NU FESTIVAL 2026。iPhone 相当（390px dpr3 タッチ有効）で LINE UP 枠 32px、要約の左右端が本文と一致。
 - 未確認: Doltz. の表示名は CMS の Publish Now 後に反映（data.js は CMS 側で生成）。
 - 未確認の類似パターン: **CMS でフェスを保存すると、ACT_LABEL が空だった LINEUPS 行の ARTIST_ID が消える**（cms.js ~L4871 の keepId は ACT_LABEL と表示ラベルが一致したときだけ ID を残す）。2026-10-20 に MATRICARIA 2026 の全行で発生。fetch-data の名前解決で大半は再接続されるが、表記ゆれがあると切れる。要修正（判断待ち）。
+
+### 2026-10-20 CMSフェス保存時のLINEUPS人物照合修正 — 未コミット
+
+### 実施
+- `LP/cms.js` の `syncLineupRowsForEdition` を行位置ではなく、正規化した ACT_LABEL / ARTIST_ID / ARTIST_DB の名前で未使用行へ照合する方式に変更。ACT_LABEL空の既存行も名前表示・ID保持し、SET_TYPE / STAGE / DAY / START / END を同じ人物から引き継ぐ。新規の既知アーティスト名・IDだけIDを付け、複合枠には付けない。
+- 開催回読込時のタグ表示も ACT_LABEL 空なら ARTIST_ID のアーティスト名へフォールバック。`LP/cms.html` の `cms.js` キャッシュバージョンを v154→v155。
+- `scripts/check_cms_lineup.mjs` に VM + fetch差し替えで送信 payload を検査する5ケースを追加。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node scripts/check_cms_lineup.mjs`：成功（既存13件 + 追加5ケース、全26件）。fetchを差し替え、ACT_LABEL空、先頭追加、削除、既知名・複合枠、並べ替えの送信内容を確認。
+- `node --check LP/cms.js`：成功。`git diff --check`：成功。
+- 省略なし `bash scripts/preflight.sh`：49件成功、9件失敗。詳細ページ生成は外部画像取得失敗で240秒タイムアウト、ブラウザ系8件は実行環境の localhost listen 禁止（EPERM）。今回追加の「LINEUP の入力」は成功。
+- 実ブラウザ確認：未確認。Publish 経路を変更したため、**push 後に Claude が Publish pipeline を流し、CMS 実画面で送信内容を差し替え確認する**こと。CMS は `?cb=<乱数>` で開き、変更後は Cmd+Shift+R を使う。
+
+### 変更したパターン
+- ACT_LABEL空 + ARTIST_ID、先頭追加、1人削除、既知名前・IDの新規追加、複合枠、並べ替え時のLINEUPS保存。
+
+### 未確認の類似パターン
+- 確認済み・0件：SET_TYPE / STAGE / DAY / START / END は人物照合で同じ既存行から引き継ぐ実装を VM 送信検査に含めた。
+- 未確認：実データを使ったCMS認証済み画面、Publish pipeline、実機ブラウザ。
+
+### 次の担当への注意・判断待ち
+- 本番データへは書き込まない。push後の Publish pipeline と CMS 実画面で fetch 差し替え相当の送信内容確認を行い、`cms: publish data.js` のコミット増加を確認すること。
+- 追加修正：既存行の ARTIST_ID が空でも、既知の単独アーティスト名/IDと一致すれば保存時にIDを補完するテストを追加。

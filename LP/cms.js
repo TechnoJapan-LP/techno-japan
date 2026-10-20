@@ -3200,7 +3200,7 @@ async function loadEditionsFromSheet(festivalId){
       const eid=String(row.EDITION_ID||'').trim();
       const lrRows=lineupSheetRows.filter(x=>String(x.EDITION_ID||'').trim()===eid)
         .sort((a,b)=>(Number(a.SORT)||0)-(Number(b.SORT)||0))
-        .map(x=>x.ACT_LABEL||x.ARTIST_ID||'').filter(Boolean);
+        .map(x=>lineupDisplayLabel(x)).filter(Boolean);
       const lrRaw=lineupSheetRows.filter(x=>String(x.EDITION_ID||'').trim()===eid).sort((a,b)=>(Number(a.SORT)||0)-(Number(b.SORT)||0));
       const loaded={_row:row._row,_editionId:eid,_sheetRow:{...row},_lineupRows:lrRaw,year:row.EDITION||'',edition:'',date:[row.DATE_START,row.DATE_END].filter(Boolean).join('/'),location:row.LOCATION||'',location_ja:row.LOCATION_JA||'',pref:row.PREF||'',venueId:row.VENUE_ID||'',address:row.ADDRESS||'',lat:row.LAT||'',lng:row.LNG||'',ticketUrl:row.TICKETURL||'',flyer:row.FLYER||'',status:row.STATUS||'announced',lineup:lrRows};
       const pending=pendingByYear.get(String(loaded.year));
@@ -3260,6 +3260,48 @@ function matchArtist(name){
   // （2026-09-13 報告）。曖昧なものは null を返し、未一致タグ（?名前）として
   // 候補ボタンから明示採用させる（§9-25 の教訓と同じ方針）。
   return null;
+}
+
+/* LINEUPS の人物照合は表記ではなく、ID・名前を同じ人物キーへ集約する。
+   ACT_LABEL が空の既存行でも ARTIST_ID から表示名と照合対象を復元できる。 */
+function lineupArtistKey(value){
+  return String(value||'').toLowerCase().replace(/\s+/g,' ').trim();
+}
+function lineupArtistById(id){
+  const key=lineupArtistKey(id);
+  return key ? (ARTIST_DB||[]).find(a=>lineupArtistKey(a.id)===key) || null : null;
+}
+function lineupArtistByLabel(label){
+  const key=lineupArtistKey(label);
+  if(!key) return null;
+  return (ARTIST_DB||[]).find(a=>lineupArtistKey(a.id)===key || lineupArtistKey(a.name)===key) || null;
+}
+function lineupDisplayLabel(row){
+  const raw=String(row?.ACT_LABEL||'').trim();
+  const artist=lineupArtistById(row?.ARTIST_ID);
+  return raw || (artist ? artist.name || artist.id : String(row?.ARTIST_ID||'').trim());
+}
+function lineupRowKeys(row){
+  const keys=new Set();
+  const add=value=>{const key=lineupArtistKey(value);if(key)keys.add(key);};
+  add(row?.ACT_LABEL); add(row?.ARTIST_ID);
+  const artist=lineupArtistById(row?.ARTIST_ID);
+  if(artist) add(artist.name);
+  return keys;
+}
+function lineupIsCompositeLabel(label){
+  return /&|\bb2b\b|\s+x\s|×|\/|\+|,/.test(String(label||''));
+}
+function lineupResolvedLabel(label){
+  const raw=String(label||'').trim();
+  const artist=lineupArtistByLabel(raw);
+  return {raw,artist,display:artist && lineupArtistKey(artist.id)===lineupArtistKey(raw)
+    ? (artist.name||artist.id) : raw};
+}
+function lineupKeepArtistId(matched, label, artist){
+  const existingId=String(matched?.ARTIST_ID||'').trim();
+  if(existingId) return existingId;
+  return !lineupIsCompositeLabel(label) && artist ? String(artist.id||'').trim() : '';
 }
 
 /* ==============================================================
@@ -4860,26 +4902,50 @@ function syncLineupRowsForEdition(eid, labels, existingRows, requests){
     .filter(lr=>Number.isInteger(Number(lr._row))&&Number(lr._row)>=2)
     .sort((a,b)=>Number(a._row)-Number(b._row));
   const clean=(labels||[]).map(s=>String(s||'').trim()).filter(Boolean);
+  const used=new Set();
   const written=[];
   const count=Math.max(rows.length, clean.length);
   for(let i=0;i<count;i++){
-    const label=clean[i]||'';
+    const inputLabel=clean[i]||'';
     if(i<rows.length){
-      const lr=rows[i];
-      const rowNumber=Number(lr._row);
-      if(label){
-        const keepId=String(lr.ACT_LABEL||'').trim()===label?(lr.ARTIST_ID||''):'';
+      const rowNumber=Number(rows[i]._row);
+      if(inputLabel){
+        const inputKey=lineupArtistKey(inputLabel);
+        const resolved=lineupResolvedLabel(inputLabel);
+        const matchIndex=rows.findIndex((candidate,index)=>!used.has(index)
+          && lineupRowKeys(candidate).has(inputKey));
+        const matched=matchIndex>=0 ? rows[matchIndex] : null;
+        if(matched) used.add(matchIndex);
+        const artist=resolved.artist;
+        const keepId=matched ? lineupKeepArtistId(matched,inputLabel,artist)
+          : lineupKeepArtistId(null,inputLabel,artist);
+        const actLabel=artist && lineupArtistKey(artist.id)===inputKey
+          ? (artist.name||artist.id) : inputLabel;
+        const source=matched||{};
         /* 送るのは正規の列名だけ。行オブジェクトを丸ごとスプレッドすると、
            get_sheet 由来の小文字キー（edition_id）と大文字キーが二重に載る。 */
-        requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'update_row',sheet:'LINEUPS',row:rowNumber,EDITION_ID:eid,ACT_LABEL:label,ARTIST_ID:keepId,SET_TYPE:lr.SET_TYPE||'dj',STAGE:lr.STAGE||'',DAY:lr.DAY||'',START:lr.START||'',END:lr.END||'',SORT:String(i+1)})}).then(r=>r.json()));
-        written.push({_row:rowNumber,EDITION_ID:eid,ACT_LABEL:label,ARTIST_ID:keepId,SET_TYPE:lr.SET_TYPE||'dj',SORT:String(i+1)});
+        const payload={action:'update_row',sheet:'LINEUPS',row:rowNumber,EDITION_ID:eid,ACT_LABEL:actLabel,ARTIST_ID:keepId,SET_TYPE:source.SET_TYPE||'dj',STAGE:source.STAGE||'',DAY:source.DAY||'',START:source.START||'',END:source.END||'',SORT:String(i+1)};
+        requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify(payload)}).then(r=>r.json()));
+        written.push({_row:rowNumber,EDITION_ID:eid,ACT_LABEL:actLabel,ARTIST_ID:keepId,SET_TYPE:source.SET_TYPE||'dj',STAGE:source.STAGE||'',DAY:source.DAY||'',START:source.START||'',END:source.END||'',SORT:String(i+1)});
       } else {
         requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'update_row',sheet:'LINEUPS',row:rowNumber,EDITION_ID:'',ARTIST_ID:'',ACT_LABEL:'',SET_TYPE:'',STAGE:'',DAY:'',START:'',END:'',SORT:''})}).then(r=>r.json()));
       }
     } else {
       const rowNumber=++lineupSheetMaxRow;
-      requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'update_row',sheet:'LINEUPS',row:rowNumber,EDITION_ID:eid,ARTIST_ID:'',ACT_LABEL:label,SET_TYPE:'dj',STAGE:'',DAY:'',START:'',END:'',SORT:String(i+1)})}).then(r=>r.json()));
-      written.push({_row:rowNumber,EDITION_ID:eid,ACT_LABEL:label,ARTIST_ID:'',SET_TYPE:'dj',SORT:String(i+1)});
+      const resolved=lineupResolvedLabel(inputLabel);
+      const artist=resolved.artist;
+      const inputKey=lineupArtistKey(inputLabel);
+      const matchIndex=rows.findIndex((candidate,index)=>!used.has(index)
+        && lineupRowKeys(candidate).has(inputKey));
+      const matched=matchIndex>=0 ? rows[matchIndex] : null;
+      if(matched) used.add(matchIndex);
+      const keepId=lineupKeepArtistId(matched,inputLabel,artist);
+      const source=matched||{};
+      const actLabel=artist && lineupArtistKey(artist.id)===lineupArtistKey(inputLabel)
+        ? (artist.name||artist.id) : inputLabel;
+      const payload={action:'update_row',sheet:'LINEUPS',row:rowNumber,EDITION_ID:eid,ARTIST_ID:keepId,ACT_LABEL:actLabel,SET_TYPE:source.SET_TYPE||'dj',STAGE:source.STAGE||'',DAY:source.DAY||'',START:source.START||'',END:source.END||'',SORT:String(i+1)};
+      requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify(payload)}).then(r=>r.json()));
+      written.push({_row:rowNumber,EDITION_ID:eid,ACT_LABEL:actLabel,ARTIST_ID:keepId,SET_TYPE:source.SET_TYPE||'dj',STAGE:source.STAGE||'',DAY:source.DAY||'',START:source.START||'',END:source.END||'',SORT:String(i+1)});
     }
   }
   lineupSheetRows=lineupSheetRows.filter(x=>String(x.EDITION_ID||'').trim()!==String(eid).trim()).concat(written);

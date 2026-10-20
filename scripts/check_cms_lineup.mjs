@@ -34,7 +34,10 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const CMS_PATH = path.join(ROOT, 'LP', 'cms.js');
 const BRIDGE=`;globalThis.__T={ get lineups(){return lineups}, get editions(){return editions}, get ARTIST_DB(){return ARTIST_DB},
-  set ARTIST_DB(v){ARTIST_DB=v}, get acHighlight(){return acHighlight}, set acHighlight(v){acHighlight=v} };`;
+  set ARTIST_DB(v){ARTIST_DB=v}, get acHighlight(){return acHighlight}, set acHighlight(v){acHighlight=v},
+  get lineupSheetRows(){return lineupSheetRows}, set lineupSheetRows(v){lineupSheetRows=v},
+  get lineupSheetMaxRow(){return lineupSheetMaxRow}, set lineupSheetMaxRow(v){lineupSheetMaxRow=v},
+  syncLineupRowsForEdition };`;
 function ctxOf(){
   const els=new Map();
   const mk=id=>({id,value:'',innerHTML:'',dataset:{},
@@ -61,6 +64,16 @@ function ctxOf(){
 }
 let __async=true;const results=[];const check=(n,p,d)=>results.push([n,p,d]);
 const key=(k,extra={})=>({key:k,preventDefault(){},...extra});
+async function syncCaptured(c, labels, existingRows){
+  const sent=[];
+  c.fetch=async (_url, options)=>{sent.push(JSON.parse(options.body));return {json:async()=>({status:'ok'})};};
+  const requests=[];
+  c.__T.lineupSheetRows=[...existingRows];
+  c.__T.lineupSheetMaxRow=Math.max(1,...existingRows.map(r=>Number(r._row)||0));
+  c.syncLineupRowsForEdition('fest-2026', labels, existingRows, requests);
+  await Promise.all(requests);
+  return sent;
+}
 
 // ---- 1) YAMA を打って Enter → そのまま入るか ----
 {
@@ -231,10 +244,70 @@ const key=(k,extra={})=>({key:k,preventDefault(){},...extra});
   check('LINEUP クリア後に markFormDirty が呼ばれる', dirty===1, `dirty=${dirty}`);
 }
 
+// ---- 14) 既存 LINEUPS の人物照合と属性引き継ぎ ----
+const artistRows=[
+  {id:'dj-kensei',name:'DJ KENSEI'},
+  {id:'live-a',name:'LIVE A'},
+  {id:'live-b',name:'LIVE B'},
+  {id:'new-artist',name:'NEW ARTIST'},
+];
+const lineupRows=[
+  {_row:2,EDITION_ID:'fest-2026',ACT_LABEL:'',ARTIST_ID:'dj-kensei',SET_TYPE:'dj',STAGE:'A'},
+  {_row:3,EDITION_ID:'fest-2026',ACT_LABEL:'LIVE A',ARTIST_ID:'live-a',SET_TYPE:'live',STAGE:'B'},
+  {_row:4,EDITION_ID:'fest-2026',ACT_LABEL:'LIVE B',ARTIST_ID:'live-b',SET_TYPE:'live',STAGE:'C'},
+];
+{
+  const c=ctxOf(); c.__T.ARTIST_DB=artistRows;
+  check('ACT_LABEL空・ARTIST_IDだけの行を名前表示できる',
+    c.lineupDisplayLabel(lineupRows[0])==='DJ KENSEI', c.lineupDisplayLabel(lineupRows[0]));
+  const sent=await syncCaptured(c,['DJ KENSEI','LIVE A','LIVE B'],lineupRows);
+  check('ACT_LABEL空の既存行も保存後にARTIST_IDを保持する',
+    sent[0].ARTIST_ID==='dj-kensei' && sent[0].ACT_LABEL==='DJ KENSEI', JSON.stringify(sent[0]));
+}
+{
+  const c=ctxOf(); c.__T.ARTIST_DB=[{id:'sunga',name:'SUNGA'}];
+  const rows=[{_row:2,EDITION_ID:'fest-2026',ACT_LABEL:'SUNGA',ARTIST_ID:'',SET_TYPE:'dj'}];
+  const sent=await syncCaptured(c,['SUNGA'],rows);
+  check('既存行の既知アーティストにARTIST_IDを補完する',
+    sent[0].ARTIST_ID==='sunga', JSON.stringify(sent[0]));
+}
+{
+  const c=ctxOf(); c.__T.ARTIST_DB=artistRows;
+  const sent=await syncCaptured(c,['NEW PERSON','DJ KENSEI','LIVE A','LIVE B'],lineupRows);
+  const byLabel=new Map(sent.map(x=>[x.ACT_LABEL,x]));
+  check('先頭追加でも既存全員のIDとSET_TYPEを人物単位で保持する',
+    byLabel.get('DJ KENSEI')?.ARTIST_ID==='dj-kensei' && byLabel.get('LIVE A')?.ARTIST_ID==='live-a'
+      && byLabel.get('LIVE A')?.SET_TYPE==='live' && byLabel.get('LIVE B')?.ARTIST_ID==='live-b'
+      && byLabel.get('LIVE B')?.SET_TYPE==='live', JSON.stringify(sent));
+}
+{
+  const c=ctxOf(); c.__T.ARTIST_DB=artistRows;
+  const sent=await syncCaptured(c,['DJ KENSEI','LIVE B'],lineupRows);
+  const blank=sent.find(x=>x.row===4);
+  check('1人削除で残りのIDを保持し余り行を空白化する',
+    sent[0].ARTIST_ID==='dj-kensei' && sent[1].ARTIST_ID==='live-b'
+      && blank?.EDITION_ID==='' && blank?.ARTIST_ID==='' && blank?.ACT_LABEL==='', JSON.stringify(sent));
+}
+{
+  const c=ctxOf(); c.__T.ARTIST_DB=artistRows;
+  const sent=await syncCaptured(c,['NEW ARTIST','LIVE A & LIVE B','LIVE A b2b LIVE B'],lineupRows);
+  check('既知の名前にはIDを付け複合枠には付けない',
+    sent[0].ARTIST_ID==='new-artist' && sent[0].ACT_LABEL==='NEW ARTIST'
+      && sent[1].ARTIST_ID==='' && sent[1].ACT_LABEL==='LIVE A & LIVE B'
+      && sent[2].ARTIST_ID==='' && sent[2].ACT_LABEL==='LIVE A b2b LIVE B', JSON.stringify(sent));
+}
+{
+  const c=ctxOf(); c.__T.ARTIST_DB=artistRows;
+  const sent=await syncCaptured(c,['LIVE B','DJ KENSEI','LIVE A'],lineupRows);
+  const ids=sent.filter(x=>x.EDITION_ID).map(x=>x.ARTIST_ID);
+  check('並べ替えだけで全員のIDを保持する',
+    ids.join(',')==='live-b,dj-kensei,live-a', JSON.stringify(sent));
+}
+
 console.log('\n検証項目'.padEnd(44)+'判定  実測');
 console.log('-'.repeat(92));
 let fail=0;
-for(const [n,p,d] of results){ if(!p)fail++; console.log(n.padEnd(42)+'  '+(p?'✅':'❌')+'   '+String(d).slice(0,42)); }
+for(const [n,p,d] of results){ if(!p)fail++; console.log(n.padEnd(42)+'  '+(p?'✅':'❌')+'   '+String(d).slice(0,160)); }
 console.log('-'.repeat(92));
 console.log(fail?`❌ ${fail}件 失敗`:`✅ 全${results.length}件 通過`);
 process.exit(fail ? 1 : 0);
