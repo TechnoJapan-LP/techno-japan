@@ -6,6 +6,7 @@ import vm from 'node:vm';
 
 const root = path.join(process.cwd(), 'LP');
 const errors = [];
+const warnings = [];
 const fail = (message) => errors.push(message);
 const read = (file) => fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : '';
 
@@ -140,17 +141,51 @@ const parseDate = (article) => {
   if (!value) return NaN;
   return /^\d{4}-\d{2}-\d{2}$/.test(value) ? Date.parse(`${value}T00:00:00+09:00`) : Date.parse(value);
 };
-const now = Date.now();
-const expectedNews = new Set(published.filter((article) => {
-  const time = parseDate(article);
-  return Number.isFinite(time) && time <= now && now - time <= 48 * 60 * 60 * 1000;
-}).map((article) => article.id));
-const actualNews = new Set([...newsSitemap.matchAll(/<loc>https:\/\/techno-japan\.media\/articles\/([^<]+)\.html<\/loc>/g)].map((m) => m[1]));
-for (const id of actualNews) {
-  const article = published.find((item) => item.id === id);
-  if (!article || !expectedNews.has(id)) fail(`sitemap-news.xml に48時間外または非公開記事: ${id}`);
+export function checkNewsSitemap(newsXml, articlesForLookup, now = Date.now()) {
+  const errors = [];
+  const warnings = [];
+  const publishedArticles = articlesForLookup.filter((article) => article?.status === 'published' && article.id);
+  const expectedNews = new Set(publishedArticles.filter((article) => {
+    const time = parseDate(article);
+    return Number.isFinite(time) && time <= now && now - time <= 48 * 60 * 60 * 1000;
+  }).map((article) => article.id));
+  const actualNews = new Set([...newsXml.matchAll(/<loc>https:\/\/techno-japan\.media\/articles\/([^<]+)\.html<\/loc>/g)].map((m) => m[1]));
+  for (const id of actualNews) {
+    const article = articlesForLookup.find((item) => item?.id === id);
+    if (!article || article.status !== 'published') {
+      errors.push(`sitemap-news.xml に非公開または存在しない記事: ${id}`);
+      continue;
+    }
+    const time = parseDate(article);
+    if (!Number.isFinite(time) || time > now) {
+      errors.push(`sitemap-news.xml の公開日時が不正または未来の記事: ${id}`);
+    } else if (now - time > 48 * 60 * 60 * 1000) {
+      warnings.push(`⚠ sitemap-news.xml に48時間を超えた記事が残っています: ${id}（公開時に自動で作り直されるので検査は止めません）`);
+    }
+  }
+  for (const id of expectedNews) if (!actualNews.has(id)) {
+    errors.push(`sitemap-news.xml に直近48時間の記事がない: ${id}`);
+  }
+  return { errors, warnings, actualNews };
 }
-for (const id of expectedNews) if (!actualNews.has(id)) fail(`sitemap-news.xml に直近48時間の記事がない: ${id}`);
+
+const now = Date.now();
+const newsCheck = checkNewsSitemap(newsSitemap, articles, now);
+for (const message of newsCheck.errors) fail(message);
+for (const message of newsCheck.warnings) warnings.push(message);
+
+if (process.argv.includes('--self-test')) {
+  const at = Date.parse('2026-10-21T12:00:00Z');
+  const xml = (id) => `<url><loc>https://techno-japan.media/articles/${id}.html</loc></url>`;
+  const stale = checkNewsSitemap(xml('old'), [{ id: 'old', status: 'published', publishedAt: '2026-10-18T12:00:00Z' }], at);
+  if (stale.errors.length || stale.warnings.length !== 1) throw new Error('48時間超の記事は警告のみであるべき');
+  const draft = checkNewsSitemap(xml('draft'), [{ id: 'draft', status: 'draft', publishedAt: '2026-10-21T11:00:00Z' }], at);
+  if (draft.errors.length !== 1 || draft.warnings.length) throw new Error('draft記事はfailであるべき');
+  const fresh = checkNewsSitemap(xml('fresh'), [{ id: 'fresh', status: 'published', publishedAt: '2026-10-21T11:00:00Z' }], at);
+  if (fresh.errors.length || fresh.warnings.length) throw new Error('正常な記事は成功すべき');
+  console.log('✅ check_feeds news sitemap self-test: stale warning / draft failure / fresh success');
+  process.exit(0);
+}
 
 if (!read(path.join(root, 'robots.txt')).includes('Sitemap: https://techno-japan.media/sitemap-news.xml')) {
   fail('robots.txt に sitemap-news.xml の行がない');
@@ -189,4 +224,5 @@ if (errors.length) {
   for (const error of errors) console.error(`❌ ${error}`);
   process.exit(1);
 }
-console.log(`✅ feeds OK: RSS ${rssItems.length}件 / News sitemap ${actualNews.size}件 / related stories ${published.length * 2}ページ`);
+for (const warning of warnings) console.warn(warning);
+console.log(`✅ feeds OK: RSS ${rssItems.length}件 / News sitemap ${newsCheck.actualNews.size}件 / related stories ${published.length * 2}ページ`);

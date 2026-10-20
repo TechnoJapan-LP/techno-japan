@@ -82,6 +82,12 @@ jobs:
       - name: Build detail pages for deployment
         run: node scripts/build-detail-pages.mjs
 
+      # 詳細ページの再生成で公開状態が変わるため、Google News sitemap も
+      # 毎回同じ生成物コミットへ含める。fetch-depth: 0 により sitemap.xml
+      # の git 履歴ベース lastmod を維持する。
+      - name: Generate sitemaps for deployment
+        run: python3 scripts/generate-sitemap.py
+
       - name: Commit generated output
         run: |
           git config user.name "github-actions[bot]"

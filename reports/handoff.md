@@ -3,6 +3,39 @@
 セッション間の短期的な引き継ぎ専用ログです。
 長い背景説明・事故の経緯・設計判断は [AUDIT_TECHNO_JAPAN.md](../AUDIT_TECHNO_JAPAN.md) に記録し、ここからリンクしてください。
 
+## 2026-10-21 / Codex / 完了（Google News sitemap の deploy 同期と stale 警告）
+
+### 実施
+- `.github/workflows/deploy-pages.yml` の詳細ページ再生成直後に `python3 scripts/generate-sitemap.py` を追加。既存の `git add -A LP/` により `sitemap.xml` と `sitemap-news.xml` を同じ `[skip ci]` 生成物コミットへ含める。
+- deploy の checkout は既存どおり `fetch-depth: 0`。`generate-sitemap.py` の git 履歴ベース lastmod を維持し、浅い checkout 用の既存 lastmod 引き継ぎも保持。
+- `scripts/check_feeds.mjs` に News sitemap 判定関数を切り出し、48時間超の公開済み記事は「公開時に自動で作り直されるので検査は止めない」という日本語警告、draft・存在しない記事は fail とした。
+
+### コミット
+- 未コミット・未 push（ユーザー指定どおり）。
+
+### 検証
+- `node scripts/check_feeds.mjs --self-test`: 成功（48時間超=警告のみ、draft=fail、正常=成功）。
+- `node scripts/check_feeds.mjs`: 成功（RSS 20件、News sitemap 0件、関連記事40ページ）。
+- `python3 scripts/generate-sitemap.py`: 成功（sitemap 384 URL、News sitemap 0件）。`sitemap.xml` は384 URL中86日付で、当日値は1件のみ。全件今日化していないことを確認。
+- `git diff --check`: 成功。
+- `bash scripts/preflight.sh`: 49件成功。ただし完走失敗。詳細ページ生成は外部画像取得待ちで240秒タイムアウト、ブラウザ系8件はこの sandbox の localhost listen `EPERM`。本番公開前にネットワーク・ブラウザ実行可能な環境で再実行が必要。
+- 実ブラウザ確認: 未確認（上記 sandbox 制約）。
+
+### 変更したパターン
+- deploy の詳細ページ生成→sitemap生成→同一生成物コミット: 1経路。
+- News sitemap の公開済み48時間超記事: 警告扱い。
+- News sitemap の draft・存在しない記事、未来・日時不正: fail扱い。
+- News sitemap 判定の自己テスト: stale / draft / fresh の3ケース。
+
+### 未確認の類似パターン
+- `deploy-pages.yml` の GitHub Actions 実行と、実際の生成物コミット・Pages公開: 未確認。
+- ネットワーク取得が成功する環境での `build-detail-pages` 完走: 未確認。
+- 実ブラウザでのハブ・CMS・地図・モバイル操作: 未確認（localhost listen EPERM）。
+
+### 次の担当への注意・判断待ち
+- 公開前に preflight をネットワーク／localhost listen 可能な環境で省略なし再実行し、9件の失敗が解消されたことを確認すること。`--fast` のみで公開しない。
+- deploy の push は `[skip ci]` 付き既存経路のため、生成物同期コミットによる無限 deploy は起こさない設計。
+
 ## 2026-10-20 / Codex / 完了（アーティスト詳細ページ Phase A）
 
 ### 実施
