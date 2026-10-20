@@ -243,7 +243,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.querySelectorAll('.form-grid input, .form-grid textarea, .form-grid select').forEach(el => {
     el.addEventListener('input', markFormDirty);
     el.addEventListener('change', markFormDirty);
+    if (el.id.startsWith('a-')) {
+      el.addEventListener('input', updateArtistPreviewIfOpen_);
+      el.addEventListener('change', updateArtistPreviewIfOpen_);
+    }
   });
+  document.querySelectorAll('[data-preview-size]').forEach(button => button.addEventListener('click', () => {
+    document.querySelectorAll('[data-preview-size]').forEach(b => b.classList.toggle('active', b === button));
+    const frame = document.querySelector('.artist-preview-frame');
+    if (frame) frame.style.width = button.dataset.previewSize === 'mobile' ? '390px' : '100%';
+  }));
   // バックグラウンドで全セクションを先読み（キャッシュ未存在のものだけ）
   scheduleBackgroundPreload();
 });
@@ -516,7 +525,12 @@ function updateGradientPreview(val){
 function openPreview(section){
   if(section==='festival') renderFestivalPreview();
   else if(section==='venue') renderVenuePreview();
-  else if(section==='artist') renderArtistPreview();
+  else if(section==='artist') {
+    document.getElementById('preview-overlay').classList.add('show');
+    document.body.style.overflow='hidden';
+    openArtistTemplatePreview();
+    return;
+  }
   document.getElementById('preview-overlay').classList.add('show');
   document.body.style.overflow='hidden';
 }
@@ -587,6 +601,7 @@ function renderArtistPreview(){
     bandcamp?`<a href="${esc(bandcamp)}" class="pv-link" target="_blank">BANDCAMP →</a>`:''
   ].filter(Boolean).join('');
   document.getElementById('preview-content').innerHTML=`
+    <div class="artist-preview-template-note">本番テンプレートを読めなかったため簡易表示</div>
     <div class="pv-hero">
       <div class="pv-hero-image" style="background:linear-gradient(135deg,#1a1a1a 0%,#2a2a2a 100%);${pvHeroStyle('a')}">${imgSrc?`<img src="${esc(imgSrc)}" onerror="this.style.display='none'">`:''}</div>
       <div class="pv-hero-info">
@@ -599,8 +614,115 @@ function renderArtistPreview(){
     </div>
   `;
 }
+
+let artistPreviewTemplateDoc = null;
+let artistPreviewTemplateId = '';
+let artistPreviewTemplateSameArtist = false;
+
+function artistPreviewValue_(id){ return (document.getElementById(id)?.value || '').trim(); }
+function artistPreviewBilingualBody_(ja, en){
+  const jaT=String(ja||'').trim(), enT=String(en||'').trim();
+  if(jaT && enT) return `<div class="detail-body bilingual">
+      <div class="lang-toggle" role="group" aria-label="説明文の言語">
+        <button type="button" class="lang-btn is-active" data-lang="ja">日本語</button>
+        <button type="button" class="lang-btn" data-lang="en">ENGLISH</button>
+      </div>
+      <div class="lang-body" data-lang="ja" lang="ja"><p>${esc(jaT)}</p></div>
+      <div class="lang-body" data-lang="en" lang="en" hidden><p>${esc(enT)}</p></div>
+    </div>`;
+  const only=jaT||enT;
+  return only ? `<div class="detail-body"><p lang="${jaT?'ja':'en'}">${esc(only)}</p></div>` : '';
+}
+function artistPreviewGenreHtml_(value){
+  return (Array.isArray(value) ? value : String(value||'').split('/').filter(Boolean))
+    .map(g=>`<span class="detail-chip">${esc(String(g).trim())}</span>`).join('');
+}
+function artistPreviewImageSrc_(){
+  const pvImg=document.querySelector('#preview-a-image img');
+  return resolveImgSrc(artistPreviewValue_('a-image'),artistPreviewValue_('a-imageUrl'),pvImg);
+}
+function artistPreviewLinkHtml_(){
+  return [
+    ['instagram','a-instagram'],['soundcloud','a-soundcloud'],['bandcamp','a-bandcamp'],['website','a-website']
+  ].map(([label,id])=>{ const value=artistPreviewValue_(id); return value ? `<a class="detail-link" href="${esc(value)}" target="_blank" rel="noopener">${label.toUpperCase()}</a>` : ''; }).join('');
+}
+function artistPreviewMarkup_(){
+  const name=artistPreviewValue_('a-name')||'ARTIST NAME';
+  const place=[artistPreviewValue_('a-city'),artistPreviewValue_('a-country')].filter(Boolean).join(', ');
+  const genres=artistPreviewGenreHtml_(artistPreviewValue_('a-genre'));
+  const image=artistPreviewImageSrc_();
+  const pos=artistPreviewValue_('a-imagePosition')||'center';
+  const imageHtml=image ? `<div class="detail-hero detail-hero-portrait"><img src="${esc(image)}" alt="${esc(name)}" fetchpriority="high" style="object-position:${esc(pos)}"></div>` : '';
+  const links=artistPreviewLinkHtml_();
+  return `${place?`<div class="detail-eyebrow">${esc(place)}</div>`:''}
+    <h1>${esc(name)}</h1>
+    ${genres?`<div class="detail-chips">${genres}</div>`:''}
+    ${imageHtml}
+    ${artistPreviewBilingualBody_(artistPreviewValue_('a-bio'),artistPreviewValue_('a-bioEn'))}
+    ${links?`<div class="detail-links">${links}</div>`:''}`;
+}
+function prepareArtistPreviewDocument_(doc){
+  const base=doc.createElement('base'); base.href='/'; doc.head.prepend(base);
+  doc.querySelectorAll('script').forEach(script=>{
+    const src=script.getAttribute('src')||'';
+    if(!/\/lang-toggle\.js(?:\?|$)/.test(src)) script.remove();
+  });
+  doc.querySelectorAll('link[rel="canonical"],link[rel="alternate"],link[rel="manifest"],meta[name="robots"],meta[property^="og:"],script[type="application/ld+json"]').forEach(el=>el.remove());
+  doc.querySelector('title')?.replaceChildren(doc.createTextNode('Artist Preview — TECHNO JAPAN'));
+  return doc;
+}
+function renderArtistTemplatePreview_(){
+  const host=document.getElementById('preview-content');
+  const inner=artistPreviewTemplateDoc?.querySelector('.detail-page .detail-inner');
+  if(!inner) throw new Error('アーティストテンプレートに detail-inner がありません');
+  inner.querySelectorAll('.detail-eyebrow,h1,.detail-chips,.detail-hero,.detail-body,.detail-links,.artist-preview-template-note').forEach(el=>el.remove());
+  const holder=artistPreviewTemplateDoc.createElement('div'); holder.innerHTML=artistPreviewMarkup_();
+  const anchor=inner.querySelector('.artist-appearances,.artist-related,.article-footer');
+  while(holder.firstChild) inner.insertBefore(holder.firstChild,anchor||null);
+  if(!artistPreviewTemplateSameArtist){
+    inner.querySelectorAll('.artist-appearances,.artist-related').forEach(el=>el.remove());
+    const note=artistPreviewTemplateDoc.createElement('p'); note.className='artist-preview-template-note'; note.style.cssText='font:10px/1.5 monospace;color:#999;text-align:center;margin:0 0 8px'; note.textContent='出演情報は公開時に自動で表示されます';
+    inner.insertBefore(note,inner.querySelector('.article-footer')||null);
+  }
+  const iframe=document.querySelector('.artist-preview-frame');
+  if(iframe) iframe.srcdoc='<!doctype html>'+artistPreviewTemplateDoc.documentElement.outerHTML;
+}
+function renderArtistTemplateFrame_(){
+  const host=document.getElementById('preview-content');
+  host.innerHTML='<iframe class="artist-preview-frame" title="Artist preview"></iframe>';
+  renderArtistTemplatePreview_();
+}
+async function openArtistTemplatePreview(){
+  document.getElementById('artist-preview-toolbar').hidden=false;
+  if(artistPreviewTemplateDoc){ renderArtistTemplateFrame_(); return; }
+  const fetchTemplate=async id=>{
+    const response=await fetch('/artists/'+encodeURIComponent(id)+'.html',{cache:'no-store'});
+    if(!response.ok) throw new Error('HTTP '+response.status);
+    const doc=new DOMParser().parseFromString(await response.text(),'text/html');
+    if(!doc.querySelector('.detail-page .detail-inner')) throw new Error('テンプレートが不正です');
+    return prepareArtistPreviewDocument_(doc);
+  };
+  const editingId=artistPreviewValue_('a-id');
+  try { if(editingId) { artistPreviewTemplateDoc=await fetchTemplate(editingId); artistPreviewTemplateId=editingId; artistPreviewTemplateSameArtist=true; } } catch(_) {}
+  if(!artistPreviewTemplateDoc){
+    const rows=(readSheetCache('artist')||ARTIST_DB||[]).filter(row=>row?.id && (row.bio||row.bio_en));
+    for(const row of rows){ try { artistPreviewTemplateDoc=await fetchTemplate(row.id); artistPreviewTemplateId=String(row.id); break; } catch(_) {} }
+  }
+  if(!artistPreviewTemplateDoc){ renderArtistPreview(); return; }
+  artistPreviewTemplateSameArtist=artistPreviewTemplateId===editingId;
+  renderArtistTemplateFrame_();
+}
+function updateArtistPreviewIfOpen_(){
+  if(document.getElementById('preview-overlay')?.classList.contains('show') && document.getElementById('artist-preview-toolbar')?.hidden===false){
+    if(artistPreviewTemplateDoc){ artistPreviewTemplateSameArtist=artistPreviewTemplateId===artistPreviewValue_('a-id'); renderArtistTemplatePreview_(); } else renderArtistPreview();
+  }
+}
 function closePreview(){
   document.getElementById('preview-overlay').classList.remove('show');
+  document.getElementById('artist-preview-toolbar').hidden=true;
+  artistPreviewTemplateDoc=null;
+  artistPreviewTemplateId='';
+  artistPreviewTemplateSameArtist=false;
   document.body.style.overflow='';
 }
 function formatPreviewDate(d){
@@ -1598,7 +1720,7 @@ function previewRenderBody_(body){
 function writeArticleSimplePreview_(win, title, body){
   const safeBody = String(body || '').replace(/<script/gi, '&lt;script');
   win.document.open();
-  win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><link rel="stylesheet" href="/common.css?v=39"><link rel="stylesheet" href="/detail.css?v=64"><link rel="stylesheet" href="/article-fx.css?v=14"><style>/* フォールバックでは common.js を読まないためネイティブカーソルに戻す */*{cursor:auto !important}a,button,[role="button"],summary{cursor:pointer !important}</style></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${esc(title)}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=13"><\/script></body></html>`);
+  win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><link rel="stylesheet" href="/common.css?v=39"><link rel="stylesheet" href="/detail.css?v=66"><link rel="stylesheet" href="/article-fx.css?v=14"><style>/* フォールバックでは common.js を読まないためネイティブカーソルに戻す */*{cursor:auto !important}a,button,[role="button"],summary{cursor:pointer !important}</style></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${esc(title)}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=13"><\/script></body></html>`);
   win.document.close();
 }
 async function openArticleGeneratedPreview(){
@@ -4879,6 +5001,18 @@ function editRow(section, rowNum){
 function gasWriteSucceeded(result){
   return !!result && (result.status==='ok' || result.status==='success' || result.success===true);
 }
+/* FESTIVALS.EDITIONS は控えなので、画面内のシート作業台帳を保存しない。
+   _row / _editionId は同じ editions 配列を使う EDITIONS同期の照合に必要なため
+   残すが、_sheetRow / _lineupRows は正データではなくサイズも大きいので除外する。
+   元の配列は画面と後続のEDITIONS/LINEUPS同期で使うため変更しない。 */
+function festivalEditionsForSave(sourceEditions=editions){
+  return (sourceEditions||[]).filter(e=>e&&e.year).map(e=>{
+    const copy={...e};
+    delete copy._sheetRow;
+    delete copy._lineupRows;
+    return copy;
+  });
+}
 /* 開催回1つぶんの LINEUPS を「既存行の上書き＋余り行の空白化＋不足分の追記」で同期する。
 
    ■ なぜこの形か（LINEUPS 重複事故・2026-08-27）
@@ -5129,7 +5263,7 @@ function saveEdit(section){
       date:ds&&de?ds+'/'+de:ds,genre:getSelectedGenres('f-genre').join(', '),
       image:g('f-image'),imagePosition:g('f-imagePosition'),flyer:g('f-flyer'),heroGradient:g('f-heroGradient'),
       desc:g('f-desc'),lineup:cleanLineup(lineups.f).join(', '),
-      editions:editions.filter(e=>e.year).map(e=>({...e}))});
+      editions:festivalEditionsForSave()});
   }
   else if(section==='artist'){
     Object.assign(payload,{id:g('a-id'),name:g('a-name'),city:g('a-city'),country:g('a-country'),

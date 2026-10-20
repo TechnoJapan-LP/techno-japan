@@ -61,6 +61,7 @@ const BRIDGE = `
   validateBeforeSave,
   buildFullDataJs,
   syncExistingEditionRows,
+  festivalEditionsForSave,
   get editState(){return editState},
 };`;
 const src = fs.readFileSync(CMS_PATH, 'utf8') + BRIDGE;
@@ -109,6 +110,26 @@ function makeCtx({ cityValue = 'Ibaraki' } = {}) {
 
 const results = [];
 const check = (name, pass, detail) => { results.push([name, pass, detail]); };
+
+// ---- 0e) FESTIVALS.EDITIONS の保存payloadから作業用台帳を除く ----------------
+{
+  const c = makeCtx();
+  const source = [
+    {year:'2026', _row:109, _editionId:'same-fest-2026',
+      _sheetRow:{EDITION_ID:'same-fest-2026', DATE_START:'2026-08-15'},
+      _lineupRows:[{_row:401, ACT_LABEL:'DJ'}], lineup:['DJ']}
+  ];
+  const payloadEditions = c.__T.festivalEditionsForSave(source);
+  const serialized = JSON.stringify({editions:payloadEditions});
+  check('保存payloadのEDITIONS JSONに作業用台帳を含めない',
+    !serialized.includes('_sheetRow') && !serialized.includes('_lineupRows')
+      && serialized.includes('"_row":109') && serialized.includes('"_editionId":"same-fest-2026"'),
+    serialized);
+  check('EDITIONS保存用コピーが画面のeditions配列を変更しない',
+    source[0]._sheetRow?.EDITION_ID === 'same-fest-2026'
+      && source[0]._lineupRows?.[0]?._row === 401,
+    JSON.stringify(source));
+}
 
 // ---- 0b) 同年複数開催の識別子・表示規則 ------------------------------
 {

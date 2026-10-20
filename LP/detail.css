@@ -201,6 +201,14 @@
 .detail-hero { margin: 0 -40px 48px; aspect-ratio: 16/9; overflow: hidden; background: rgba(240,237,232,0.04); }
 .detail-hero img { width: 100%; height: 100%; object-fit: cover; }
 .detail-hero-portrait { aspect-ratio: 3/2; }
+
+/* アーティスト詳細のファーストビューは、ナビ下から写真までを短く保つ。 */
+.artist-detail { padding-top: 101px; }
+.artist-detail .detail-eyebrow { margin-bottom: 8px; }
+.artist-detail h1 { margin-top: 0; margin-bottom: 14px; }
+.artist-detail .detail-chips { margin-bottom: 20px; }
+.artist-detail .detail-hero { margin-bottom: 48px; }
+
 .detail-body {
   font-family: var(--font-body); font-weight: 300; font-size: 16px;
   line-height: 1.85; color: rgba(240,237,232,0.85); margin-bottom: 40px;
@@ -306,6 +314,10 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   /* 固定ヘッダー直下でも戻る導線が重ならないようにする */
   .article-detail { padding: 104px 0 60px; }
   .detail-page { padding: 84px 0 60px; }
+  .artist-detail { padding-top: 28px; }
+  .artist-detail .detail-eyebrow { margin-bottom: 6px; }
+  .artist-detail h1 { margin-bottom: 12px; }
+  .artist-detail .detail-chips { margin-bottom: 18px; }
   .article-detail-inner, .detail-inner { padding: 0 24px; }
   .article-detail .article-back { padding: 10px 0; margin-bottom: 20px; }
   .article-hero-img, .detail-hero { margin-left: -24px; margin-right: -24px; }

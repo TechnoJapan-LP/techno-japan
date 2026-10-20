@@ -3,6 +3,70 @@
 セッション間の短期的な引き継ぎ専用ログです。
 長い背景説明・事故の経緯・設計判断は [AUDIT_TECHNO_JAPAN.md](../AUDIT_TECHNO_JAPAN.md) に記録し、ここからリンクしてください。
 
+## 2026-10-21 / Codex / CMS アーティスト英語欄の重複修正（未コミット）
+
+### 実施
+- `LP/cms.html` に追加していた静的な `<textarea id="a-bioEn">` を削除。
+- 今回のプレビュー実装で追加していた `editRow`、`saveEdit` 2箇所、AI生成、reset、アーティストコード生成の `bio_en` 重複処理を元に戻した。
+- `artistPreviewValue_('a-bioEn')` によるプレビュー参照は維持。`a-bioEn` は `buildPublishingSection` が生成する公開設定欄だけが所有する。
+- `scripts/check_cms_artist_preview.mjs` に、cms.html の静的 `a-bioEn` が0個であること、公開設定側の動的生成と `getPubFields` / `setPubFields` の `bio_en` 経路が存在することの検査を追加。
+
+### コミット
+- 未コミット・未 push（ユーザー指定どおり）。
+
+### 検証
+- `node --check LP/cms.js`: 成功。
+- `node scripts/check_cms_artist_preview.mjs`: 成功。
+- `node scripts/check_cms_genre_roundtrip.mjs`: 成功（5件）。
+- `node scripts/check_cms_preview_frame.mjs`: 成功。
+- `node scripts/check_cms_article_generated_preview.mjs`: 成功。
+- `node scripts/check_cms_publish_guard.mjs`: 成功（44件）。
+- `node scripts/check_cms_fetch_path.mjs`: 成功。
+
+### 変更したパターン
+- 静的フォーム欄と動的公開設定欄の同一 DOM id `a-bioEn` の重複: 静的欄0個・動的欄1個へ修正。
+- プレビューだけが読む `a-bioEn` は維持。
+
+### 未確認の類似パターン
+- 実ブラウザで公開設定欄に入力した英語バイオが保存される操作: 未確認（Claude 実施予定）。
+- 実ブラウザで Preview の日英切替と公開設定欄の値反映: 未確認。
+- full preflight の再実行: 未確認。
+
+### 次の担当への注意・判断待ち
+- `a-bioEn` を cms.html に再追加しないこと。追加する場合は `buildPublishingSection` の動的欄との DOM id 重複を先に検査すること。
+- 公開前に `bash scripts/preflight.sh` と実ブラウザ確認を実施すること。今回も commit / Publish / 本番データ書き込みは行っていない。
+
+## 2026-10-21 / Codex / CMS アーティスト本番表示プレビュー（未コミット）
+
+### 実施
+- `openPreview('artist')` を本番 `/artists/<id>.html` の `cache: 'no-store'` テンプレートを iframe `srcdoc` で表示する方式へ変更。`detail-inner` 内の名前・地域・ジャンル・画像・画像位置・日英バイオ・リンクを入力値で差し替え、同一アーティストなら出演情報と関連記事を保持。
+- 新規・404 などでテンプレートを取得できない場合は、紹介文のある公開済みアーティストを予備テンプレートに使用し、関連セクションを除去して公開時自動表示の注記を追加。取得自体に失敗した場合は既存簡易表示へフォールバック。
+- iframe 内は `lang-toggle.js` 以外の script を除去し、計測・Service Worker を実行しない構成にした。PC / スマホ（390px）切替と入力中のライブ差し替えを追加。
+- `bio_en` 欄（`a-bioEn`）の読込・保存・コード出力・リセットも追加。`cms.js?v=157`、`cms.css?v=47` に更新。
+- `scripts/check_cms_artist_preview.mjs` を追加して preflight に登録。
+
+### コミット
+- 未コミット・未 push（ユーザー指定どおり）。
+
+### 検証
+- `node --check LP/cms.js`: 成功。
+- `node scripts/check_cms_artist_preview.mjs`: 成功。
+- `python3 scripts/check_asset_versions.py --no-diff`: 成功。
+- 既存 `check_cms_genre_roundtrip.mjs` / `check_cms_preview_frame.mjs`: 成功。
+- `bash scripts/preflight.sh`: 49件成功 / 10件失敗。詳細ページ生成は外部画像取得制限で240秒 timeout、?v検査は実行開始時点の `cms.css?v=46` を見て失敗（修正後の単独検査は成功）、ブラウザ系8件は localhost listen `EPERM`。全件成功とは判定しない。
+
+### 変更したパターン
+- アーティストの本番詳細テンプレート取得、`detail-inner` 差し替え、日英 `detail-body bilingual` 構造、計測 script 除去、iframe の PC / 390px 切替、`bio_en` フォーム往復。
+
+### 未確認の類似パターン
+- 実ブラウザで CMS のアーティスト編集→Preview、日英切替、PC / スマホ切替、入力変更、画像位置、同一／別テンプレートの出演情報表示: 未確認（Claude 実施予定）。
+- テンプレート取得失敗時の簡易フォールバックを実ブラウザで確認: 未確認。
+- ネットワーク取得が成功する環境での詳細ページ生成完走: 未確認。
+
+### 次の担当への注意・判断待ち
+- 公開前に `bash scripts/preflight.sh` をネットワーク／localhost listen 可能な環境で省略なし再実行すること。CMS の実ブラウザ確認が終わるまで公開済みとして報告しないこと。
+- CMS を確認する際は `?cb=<乱数>` 付きで開き、`cms.js?v=157` を読み込ませる。今回の作業では本番データへの書き込み・Publish・commit は行っていない。
+
 ## 2026-10-21 / Codex / 完了（Google News sitemap の deploy 同期と stale 警告）
 
 ### 実施
@@ -10873,3 +10937,75 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 未確認の類似パターン（判断待ち）:
   - フェスを開くと、開催回のラインナップは FESTIVALS の EDITIONS 列（JSON）の控えが LINEUPS シートより優先される（cms.js loadEditionsFromSheet の pending マージ）。global-ark-2026 は控え40人・シート31人で、保存するとシートが控えの40人に置き換わる（9行追記）。どちらが正しいかは未確認。
   - CMS の ARTIST_DB が初期の37件のままのことがあり、その場合 ID しか分からない行は ACT_LABEL に ID 文字列が書かれる（ARTIST_ID は保持されるのでリンクは切れない。見た目のみ）。
+
+### 2026-10-21 FESTIVALS.EDITIONS JSONの作業データ除去 — 未コミット
+
+### 実施
+- `LP/cms.js` のフェス保存 payload に `festivalEditionsForSave()` を追加し、FESTIVALS の EDITIONS JSON の送信コピーから `_sheetRow`（EDITIONS行の丸ごとコピー）と `_lineupRows`（LINEUPS行配列）を除去した。
+- `_row` / `_editionId` は `syncExistingEditionRows` / `syncNewEditionRows` の照合に使っているため保存コピーに残した。FESTIVALS.EDITIONS の読込箇所（`editRow`、`loadEditionsFromSheet`、Publish前検査等）は表示用の開催回項目だけを読むため、除去した2プロパティには依存していない。
+- 画面で使う元の `editions` 配列は変更しない。`LP/cms.html` の `cms.js` 参照を v155→v156 に更新した。
+- 既に膨らんでいる34件は、次にそのフェスを保存したときに細くなる（今回の変更は既存セルを一括修復するものではない）。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node --check LP/cms.js`: 成功。
+- `node scripts/check_cms_editions.mjs`: **全30件成功**。保存payloadのJSONに `_sheetRow` / `_lineupRows` が含まれないこと、元の `editions` 配列が変更されないことを追加検証した。
+- `git diff --check`: 成功。
+- `python3 scripts/check_asset_versions.py --no-diff`: preflight内の「?vの上げ忘れ」検査で成功。
+- `bash scripts/preflight.sh`: **49件成功 / 9件失敗**。詳細ページ生成は外部画像取得タイムアウト、ブラウザ系8件はこの環境の localhost listen `EPERM`。したがって公開可能とは判定しない。
+- 実ブラウザ確認: **未確認**。CMS変更のため、公開前に認証済みCMSを `?cb=<乱数>` で開き、フェス保存時の送信内容に `_sheetRow` / `_lineupRows` が無いことを確認すること。push後に Claude が Publish pipeline とCMS実画面の送信内容を確認すること。
+
+### 変更したパターン
+- FESTIVALS の `editions` 保存コピーから `_sheetRow` / `_lineupRows` を除外するパターン。
+- `scripts/check_cms_editions.mjs` の保存payload回帰検査。
+- `LP/cms.html` の `cms.js` キャッシュバージョン v155→v156。
+
+### 未確認の類似パターン
+- 確認済み・0件：`_sheetRow` / `_lineupRows` をFESTIVALS.EDITIONS JSONから読む箇所。
+- 未確認：認証済み本番CMSの実画面での実送信内容、Publish pipeline、本番反映後の34件の個別セル縮小。これらは本番データへ書き込まず、送信内容の確認だけを行うこと。
+
+### 次の担当への注意・判断待ち
+- 省略なしの `bash scripts/preflight.sh` を実行し、全件成功するまでpushしないこと。現在の作業ツリーには本件以外の未コミット変更もあるため、差分を混ぜてコミットしないこと。
+- push後、Claude が `gh workflow run "Publish pipeline"` を実行して成功を確認し、`cms: publish data.js` のコミット増加を確認すること。
+- CMSは `?cb=<乱数>` で開き、変更後は Cmd+Shift+R。認証済み実画面で保存処理のfetchを確認し、元の画面配列が維持されることも確認すること。
+
+### 2026-10-21 アーティスト詳細ページ上部の余白調整 — 未コミット
+
+### 実施
+- `scripts/build-detail-pages.mjs` の `artistPage` が出す `<article>` に JA/EN とも `artist-detail` クラスを追加した。
+- `LP/detail.css` に `.artist-detail` 限定の余白規則を追加した。PC は上端101px、768px以下は28px（実測上、スマホでは `.detail-page` がナビ下端のtop54pxから始まるため）、eyebrow→名前は8px/6px、名前→chipsは14px/12px、chips→写真は20px/18px。
+- 追加修正で `detail.css` の版を65→66へ上げ、`LP/cms.js` の記事プレビュー参照も66へ合わせた。
+- 詳細ページを再生成し、JA/EN 各139件のアーティスト詳細へ反映した。写真・ジャンル無しの `/artists/yama.html` も生成結果を確認した。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node --check scripts/build-detail-pages.mjs`: 成功。
+- `node --check LP/cms.js`: 成功。
+- `git diff --check`: 成功。
+- JA/EN アーティスト詳細の `artist-detail`: 各139件。
+- JA/EN アーティストハブ行数: 各1010行（一致）。
+- 対象ページの `detail.css?v=66`: 再生成後に `taichi-kawahira` JA/EN、`yama` JAで確認済み。
+- `bash scripts/preflight.sh`: **49件成功 / 9件失敗**。詳細生成は外部Google画像取得タイムアウト、ブラウザ系8件はこの環境の localhost listen `EPERM`。公開可能とは判定しない。
+- `python3 scripts/audit_spa_vs_static.py --after`: **失敗**。既存比較基準に対し artist appearances 75→0、venue related_pages 21→0。今回の余白修正とは無関係だが要確認。
+- 実ブラウザ確認: **未確認（Claude担当）**。スマホ390px、768px前後、PC1280pxで `/artists/taichi-kawahira.html`、JA/EN、`/artists/yama.html` の表示と操作を確認すること。
+- 追加実測: スマホ390px/768pxでは `.detail-page` の開始位置がナビ下端（top54px）で、`padding-top:82px` がそのまま余白になっていたため、モバイル値を28pxへ修正。実ブラウザでの再確認は未実施。
+- 追加検証: `node --check`（build script / cms.js）、`git diff --check`、JA/ENハブ行数一致（各1010行）に成功。
+- `detail.css` v66反映後に `bash scripts/preflight.sh` を再実行: **49件成功 / 9件失敗**。結果は前回と同じく、詳細生成の外部Google画像取得タイムアウトとブラウザ系8件の localhost listen `EPERM`。公開可能とは判定しない。
+
+### 変更したパターン
+- アーティスト詳細の `artist-detail` クラス追加（JA/EN）。
+- アーティスト詳細のナビ下、eyebrow、h1、chips、hero間隔のPC/モバイル限定調整。
+- 詳細ページ全体の `detail.css` キャッシュ版更新。
+
+### 未確認の類似パターン
+- 確認済み・0件：会場・フェス・記事の `<article class="detail-page">` に `artist-detail` が付かないこと。
+- 未確認：実ブラウザでの768px前後の境界、JA/ENの実表示、写真/ジャンル無し以外のアーティスト表示。
+
+### 次の担当への注意・判断待ち
+- 実ブラウザ確認は Claude が担当。CSS更新後は `?cb=<乱数>` または Cmd+Shift+Rでキャッシュを避けること。
+- preflightの9件失敗が環境制限または外部画像取得以外の原因でないことを確認し、全件成功するまでpushしないこと。
+- `audit_spa_vs_static.py --after` の既存基準差分（artist appearances / venue related_pages）は、本件と切り分けて判断すること。
