@@ -151,6 +151,13 @@ const ARTISTS = [
   {
     id: "qmico",
     name: "Qmico",
+    city: "TOKYO",
+    country: "JAPAN",
+    bio: "東京出身のDJ。2011年にDJを始め、テクノを軸にミニマル、エクスペリメンタル、レフトフィールド、ディープハウスを行き来する。ruralやPARAMOUNTなどの野外フェスや国内各地のクラブに出演し、Peter Van Hoesen、Voiski、Anthony Linellらの公演でサポートを務めてきた。テクノを核にしたパーティー「QUALIA」を主宰する。",
+    bio_en: "Tokyo-born DJ who started playing in 2011. Techno is the anchor, with sets moving through minimal, experimental, leftfield and deep house. Qmico has played outdoor festivals like rural and PARAMOUNT as well as clubs across Japan, supported Peter Van Hoesen, Voiski and Anthony Linell, and runs QUALIA, a party built around techno.",
+    links: {
+      soundcloud: "https://soundcloud.com/qmico",
+    }
   },
   {
     id: "captain-k",
@@ -224,6 +231,12 @@ const ARTISTS = [
   {
     id: "dj-maria",
     name: "DJ MARIA.",
+    country: "JAPAN",
+    bio: "東京の新世代テクノを象徴するDJのひとり。グルーヴィーなテクノとトランスを軸に、ダウンテンポやアンビエントまでを織り込む。一晩を通して物語を立ち上げるような没入感のあるセットで知られる。ベルリンのBerghain、ベルギーのLa Nature、ノルウェーのMonument、ポルトガルのBOOMにも出演している。",
+    bio_en: "One of the DJs who define Tokyo's new-generation techno. Groovy techno and trance sit at the centre, with downtempo and ambient woven through, in sets known for building a narrative across a night. DJ MARIA. has played Berghain in Berlin, La Nature in Belgium, Monument in Norway and BOOM in Portugal.",
+    links: {
+      instagram: "https://www.instagram.com/mariasatelles/",
+    }
   },
   {
     id: "dungeoneering",
@@ -232,6 +245,13 @@ const ARTISTS = [
   {
     id: "feline",
     name: "Feline",
+    city: "TOKYO",
+    country: "JAPAN",
+    bio: "東京を拠点とするDJ。1995年に茨城県で生まれ、10代のころ地元の水戸でDJを始めた。2010年代のベースミュージックから影響を受けつつ、そこに留まらないミックスを続ける。2025年からはclub asiaの「clubasia THURSDAY」で奇数月第1木曜のキュレーションを担当。渋谷のDJ Bar Bridgeでは、HIROSHI KAWANABEとのパーティーを毎月開いている。",
+    bio_en: "Tokyo-based FELINE was born in Ibaraki in 1995 and started DJing as a teenager in hometown Mito. UK bass music and leftfield from the 2010s left a mark, but the sets don't stay inside those lines. Since 2025 FELINE has curated clubasia THURSDAY on the first Thursday of odd months, and shares a monthly night with Hiroshi Kawanabe at DJ Bar Bridge in Shibuya.",
+    links: {
+      soundcloud: "https://soundcloud.com/felinefeline",
+    }
   },
   {
     id: "floating-points",
@@ -305,6 +325,14 @@ const ARTISTS = [
   {
     id: "yamarchy",
     name: "Yamarchy",
+    city: "TOKYO",
+    country: "JAPAN",
+    bio: "東京を拠点とするDJ。2019年に渋谷・道玄坂のMitsukiが開店して以来、レジデントDJ兼ディレクターとしてブッキングを担う。コズミックやバレアリックを軸に、アンダーグラウンドの埋もれたレコードを掘り起こす。江ノ島OPPA-LA、青山ZERO、八王子SHeLTeRで自身のパーティーを主宰。ベルリンのPanorama Bar、ニューヨークのNowadays、札幌PRECIOUS HALL、タイのWonderfruitにも出演している。",
+    bio_en: "Tokyo DJ Yamarchy has been resident, director and booker at Mitsuki, the basement club in Shibuya's Dogenzaka, since it opened in 2019. The records lean cosmic and Balearic, dug from the obscure end of the underground. Yamarchy runs parties at OPPA-LA in Enoshima, ZERO in Aoyama and SHeLTeR in Hachioji, and has played Panorama Bar in Berlin, Nowadays in New York and Precious Hall in Sapporo, as well as Wonderfruit in Thailand.",
+    links: {
+      instagram: "https://www.instagram.com/yamarchy/",
+      soundcloud: "https://soundcloud.com/yamarchy-ymd",
+    }
   },
   {
     id: "suze-ijo",
@@ -344,6 +372,12 @@ const ARTISTS = [
   {
     id: "rami",
     name: "RAMI",
+    country: "JAPAN",
+    bio: "東京を拠点とするDJ。福島出身、2002年生まれ。渋谷に根づくバレアリック、ニューディスコ、ディスコダブに影響を受け、2023年にレコードのみのDJとして活動を始めた。自身のパーティー「lorca」を不定期に開くほか、青山TUNNELではDNGとともに2年間レギュラーを務めた。",
+    bio_en: "Tokyo-based DJ, born in 2002 and originally from Fukushima. Shibuya's long-running Balearic, nu disco and disco dub scene set the direction, and RAMI started out in 2023 playing vinyl only. RAMI throws an irregular party called lorca and spent two years as a regular at Aoyama TUNNEL alongside DNG.",
+    links: {
+      instagram: "https://www.instagram.com/rami.6s/",
+    }
   },
   {
     id: "pianeti-sintetici",
@@ -384,6 +418,10 @@ const ARTISTS = [
   {
     id: "joma",
     name: "Joma",
+    city: "TOKYO",
+    country: "JAPAN",
+    bio: "東京のDJ。中目黒Solfaで開かれるテクノ／ハウスのパーティー「Night Trip」を活動の軸とし、各回のラインナップに名を連ねる。同パーティーは2026年10月の回にJohn PlazaとStefan Goldmannを招いた。リスニング・パーティー「Day Trip」にも関わり、アパレルも手がける。",
+    bio_en: "Tokyo DJ whose home base is Night Trip, a techno and house party held at Solfa in Nakameguro, where Joma turns up on every lineup. The October 2026 edition brought in John Plaza and Stefan Goldmann. Joma is also involved with the listening party Day Trip and has an apparel line.",
     links: {
       instagram: "https://www.instagram.com/jomajjj/",
     }
@@ -419,6 +457,9 @@ const ARTISTS = [
   {
     id: "dj-yazi",
     name: "DJ Yazi",
+    country: "JAPAN",
+    bio: "90年代半ばから活動する東京のDJ。前衛的なヒップホップ集団Think Tankの一員として、Black Smoker Recordsと歩んできた。パーティーEl Ninoのレジデントを20年務める。Harukaとのユニット Twin Peaksでは、ライヴとDJの境界を溶かした即興を聴かせる。スタイルを横断しながら、深く沈んだグルーヴという一本の芯は動かない。",
+    bio_en: "A Tokyo DJ active since the mid-90s, part of the avant-garde hip hop collective Think Tank and its label Black Smoker Records. DJ Yazi has held a residency at the party El Nino for two decades, and as Twin Peaks with Haruka improvises across the line between live and DJ sets. The styles move freely, but the deep, tripped-out groove at the centre never does.",
   },
   {
     id: "iron",
@@ -517,6 +558,9 @@ const ARTISTS = [
   {
     id: "suimin",
     name: "Suimin",
+    country: "JAPAN",
+    bio: "東京を拠点とするDJ。Bonoboのパーティー「渦」に空中水泳らと並んで出演を重ね、Débrisの「FREEDOM無国籍HOUR」やBonoboの「MAMACULT」にも繰り返し名を連ねる。野外ではruralに2023年と2026年に出演している。",
+    bio_en: "Suimin is a Tokyo DJ who turns up again and again at Bonobo's 渦 (Uzu) nights alongside 空中水泳, as well as FREEDOM無国籍HOUR at Débris and MAMACULT at Bonobo. Outdoors, Suimin has played rural in both 2023 and 2026.",
   },
   {
     id: "dj-krush",
@@ -567,6 +611,13 @@ const ARTISTS = [
   {
     id: "yellowuhuru",
     name: "YELLOWUHURU",
+    country: "JAPAN",
+    bio: "DJ／プロデューサー。パーティー兼レーベルFLATTOPを主宰し、ハウスを根底に置きながら電子音と生音を有機的に混ぜる。FLATTOPは2025年1月、渋谷WWWで10周年を迎えた。2024年6月にはSHIBUYA CLUB QUATTROで、バンドthe hatchとのオールナイト「NAKED ORANGE」を開いた。",
+    bio_en: "DJ and producer, and the founder of FLATTOP, a party and label that marked its tenth anniversary at WWW in Shibuya in January 2025. House sits at the core, blended organically with electronics and live, acoustic sound. In June 2024 YELLOWUHURU teamed up with the band the hatch for NAKED ORANGE, an all-nighter at Shibuya CLUB QUATTRO.",
+    links: {
+      instagram: "https://www.instagram.com/yellowuhuru/",
+      soundcloud: "https://soundcloud.com/yellowuhuru",
+    }
   },
   {
     id: "clipz",
@@ -711,6 +762,10 @@ const ARTISTS = [
   {
     id: "akira-arasawa",
     name: "Akira Arasawa",
+    city: "TOKYO",
+    country: "JAPAN",
+    bio: "東京を拠点とするプロデューサー／DJ。Chill Mountain Recordを軸に、Shango Record、Lump Record、TOTEM TRAXXなど海外のレーベルから作品を発表している。2022年と2023年にはイビサのRadio Sonicaからライブ配信を行い、2024年は韓国、クロアチア、タイ、メキシコでプレイした。DJではディープハウスやオーガニックハウスからニュー・トライバル・ディスコまでを行き来する。",
+    bio_en: "Tokyo-based producer and DJ tied to Chill Mountain Rec, with tracks out on Chill Mountain Record, Shango Record, Lump Record, Totem Traxx and other overseas labels. Akira Arasawa streamed live from Radio Sonica's Ibiza studio in 2022 and 2023, and in 2024 played Goulashdisko and Modem in Croatia, Wonderfruit in Thailand and M.N. Roy in Mexico. Behind the decks, the sets move from deep and organic house to nu tribal disco.",
   },
   {
     id: "azu-tiwaline",
@@ -723,6 +778,13 @@ const ARTISTS = [
   {
     id: "dj-hi-c",
     name: "DJ HI-C",
+    country: "JAPAN",
+    bio: "大阪を拠点とするDJ／プロデューサー。ターンテーブリスト・ユニットKireekとしてDMC World Championshipを5連覇したのち、テクノへ軸足を移した。関西の野外パーティーMOMENTの中心メンバーで、Toru Ikemoto、TENOとテクノ・レーベルaum recordingsを設立。2023年にはFUJI ROCK FESTIVALとFUTURE TERRORに出演した。",
+    bio_en: "Osaka-based DJ and producer. As part of the turntablist unit Kireek, DJ HI-C won the DMC World Championship five years in a row before switching over to techno. A core member of MOMENT, the outdoor party in the Kansai region, and co-founder of the techno label aum recordings with Toru Ikemoto and TENO. 2023 brought sets at FUJI ROCK FESTIVAL in July and FUTURE TERROR at year's end.",
+    links: {
+      instagram: "https://www.instagram.com/djhi__c/",
+      website: "https://discoveryhi-c.com/",
+    }
   },
   {
     id: "chida",
@@ -735,10 +797,21 @@ const ARTISTS = [
   {
     id: "kyomi",
     name: "Kyomi",
+    city: "TOKYO",
+    country: "JAPAN",
+    bio: "鏡民（Kyomi）は、東京を拠点に全国各地の現場でプレイするDJ。ジャンルの枠に収まらないエクスペリメンタルな選曲で、実験性とダンスフロアの快楽を同じセットの中で両立させる。東京ではWOMBやMitsukiへの出演が多く、2026年8月には台北のPawnshopでもプレイした。",
+    bio_en: "Kyomi (鏡民) is a Tokyo-based DJ who plays parties all over Japan. Experimental, genre-blind selections drive sets that are as exploratory as they are fun to dance to. WOMB and Mitsuki are the most frequent Tokyo stops, and August 2026 brought a date at Pawnshop in Taipei.",
+    links: {
+      instagram: "https://www.instagram.com/kyomi_togashi/",
+    }
   },
   {
     id: "kuniyuki",
     name: "Kuniyuki",
+    city: "SAPPORO",
+    country: "JAPAN",
+    bio: "札幌を拠点とするプロデューサー／DJ。作品の多くを東京のレーベルMule Musiqから発表してきた。2002年にはJoe ClaussellのNatural Resourceから、地元札幌のクラブに捧げた「Precious Hall」をリリース。2018年にはオランダのMusic From Memoryが、1986〜93年の自宅録音を『Early Tape Works』としてまとめた。Koss名義でも活動する。",
+    bio_en: "Sapporo-based producer and DJ whose catalog lives largely on the Tokyo label Mule Musiq. In 2002 came \"Precious Hall\", a dedication to the hometown club scene, on Joe Claussell's Natural Resource. In 2018 the Dutch label Music From Memory gathered the 1986 to 1993 home recordings as Early Tape Works. Kuniyuki also records as Koss.",
   },
   {
     id: "hybrid-man",
@@ -755,6 +828,10 @@ const ARTISTS = [
   {
     id: "herbalistek",
     name: "Herbalistek",
+    city: "TOKYO",
+    country: "JAPAN",
+    bio: "東京を拠点とするプロデューサー／DJデュオ。ダークでディープなベースミュージックを軸に、テクノやダブステップ、トラップ、ダウンテンポを取り込む。TREKKIE TRAXやBassrushなどからリリース。2019年にEDC JapanのDiscovery Projectに選ばれ、2024年にFUJI ROCK FESTIVALに初出演、同年米国でもプレイした。主宰イベント「SECTOR」ではGOTH-TRADやDJ KRUSHを迎えている。",
+    bio_en: "Tokyo producer and DJ duo working in dark, deep bass music, pulling in techno, dubstep, trap and downtempo. They've released on TREKKIE TRAX, Bassrush and more, won EDC Japan's Discovery Project in 2019, and made their Fuji Rock debut in 2024, the same year they first played the US. Their own event, SECTOR, has hosted GOTH-TRAD and DJ KRUSH.",
   },
   {
     id: "efdemin",
@@ -779,10 +856,25 @@ const ARTISTS = [
   {
     id: "risa-taniguchi",
     name: "RISA TANIGUCHI",
+    city: "TOKYO",
+    country: "JAPAN",
+    bio: "東京を拠点とするDJ／プロデューサー。歪んだシンセとアシッドなベース、加工した自身のボイスサンプルを軸にテクノを作る。Chris Liebing主宰のCLRから「Break It EP」を発表し、Second Stateにも作品を残す。「So Loud EP」はBeatportのTechno (Raw/Deep/Hypnotic) チャートで1位を記録。東京のWOMB、ソウルのUndercityでレジデントを務める。",
+    bio_en: "Tokyo-based DJ and producer making techno out of distorted synths, acid bass and processed vocal samples of RISA TANIGUCHI's own voice. Chris Liebing's CLR put out the Break It EP, and there are releases on Second State too. The So Loud EP went to No. 1 on Beatport's Techno (Raw/Deep/Hypnotic) chart. Residencies include WOMB in Tokyo and Undercity in Seoul.",
+    links: {
+      instagram: "https://www.instagram.com/risa_taniguchi_rs/",
+      soundcloud: "https://soundcloud.com/risataniguchi",
+    }
   },
   {
     id: "shhhhh",
     name: "Shhhhh",
+    city: "TOKYO",
+    country: "JAPAN",
+    bio: "東京を拠点とするDJ。世界各地の民族音楽のリズムと電子音を、ひとつのグルーヴにつなぐ。Boredomsの周辺コミュニティでツアーを支え、ときに彼らのためにDJもした経験を持つ。2018年秋からはホーチミンのThe Observatoryのレジデント。「Gamelan Mix」はResident AdvisorのMix of the Dayに選ばれた。レーベル「El Folklore Paradox」を掲げ、EACH STORYではラインナップの助言役を務める。",
+    bio_en: "Tokyo DJ Shhhhh threads folk and traditional rhythms from around the world into electronic dance music. Time spent in the extended circle around Boredoms meant helping on tours and sometimes DJing for the band, and since fall 2018 Shhhhh has held a residency at The Observatory in Ho Chi Minh City. The Gamelan Mix, made during the pandemic, was picked as RA's Mix of the Day. Shhhhh also advises on the lineup for EACH STORY and runs El Folklore Paradox, a concept and label built on the idea that traditional music and the newest techno share the same DNA.",
+    links: {
+      soundcloud: "https://soundcloud.com/shhhhhsunhouse",
+    }
   },
   {
     id: "sara-landry",
@@ -799,6 +891,13 @@ const ARTISTS = [
   {
     id: "noco",
     name: "NOCO",
+    country: "JAPAN",
+    bio: "2013年から続く野外パーティーPARAMOUNTの主宰メンバーで、レジデントDJ。1995年からDJを続け、日本のアンダーグラウンド・トランスシーンの黎明期にルーツを持つ。テクノとトランスの深部を行き来し、同じセットを二度と繰り返さないことを信条とする。国外ではタイのWonderfruit、韓国のvurt.でもプレイしている。",
+    bio_en: "Co-organizer and resident DJ of PARAMOUNT, the open-air party running since 2013. NOCO has been DJing since 1995, with roots in the early days of Japan's underground trance scene, and works the deeper ends of techno and trance with a rule of never playing the same set twice. Outside Japan she has played Wonderfruit in Thailand and vurt. in South Korea.",
+    links: {
+      instagram: "https://www.instagram.com/noco_paramount/",
+      soundcloud: "https://soundcloud.com/noco_paramount",
+    }
   },
   {
     id: "foodman",
@@ -811,14 +910,37 @@ const ARTISTS = [
   {
     id: "olive-oil",
     name: "Olive Oil",
+    city: "FUKUOKA",
+    country: "JAPAN",
+    bio: "福岡を拠点とするプロデューサー／リミキサー／DJ。画家・VJのPopy Oilと2002年頃に始めた九州のクリエイティブ・レーベルOILWORKSの中心にいて、作品の制作から流通、国内外のツアーまでを自分たちの手で回す。カセットのみのビートテープ『PROTO TAPE』やジャズミックス『SOURCE JAZZ』など形を変えながら作品を出し続け、2026年10月に7枚目のアルバム『VITAMIN O』を発表した。",
+    bio_en: "Fukuoka-based producer, remixer and DJ. Around 2002 Olive Oil started OILWORKS with painter and VJ Popy Oil, a Kyushu label and crew that does everything in-house, from pressing and distributing records, tapes and apparel to running tours in Japan and abroad. The formats keep changing, from the cassette-only beat tape PROTO TAPE to the jazz mix SOURCE JAZZ, and October 2026 brought VITAMIN O, the seventh album.",
+    links: {
+      bandcamp: "https://oliveoil.bandcamp.com/",
+      website: "http://www.oilworks.jp/",
+    }
   },
   {
     id: "levolant",
     name: "LEVOLANT",
+    city: "TOKYO",
+    country: "JAPAN",
+    bio: "2001年生まれ、東京を拠点とするDJ。東京・Mitsukiのレジデントを務める。DJバーから野外フェスティバルまで場数を重ね、電子音楽を土台にハウス、テクノ、エレクトロミニマルを行き来するセットを組む。近年はアジアにも活動の場を広げている。",
+    bio_en: "Tokyo DJ, born in 2001, and a resident at Mitsuki in Tokyo. LEVOLANT has put in the hours everywhere from small DJ bars to open-air festivals, building sets that move between house, techno and electro-minimal on an electronic foundation, and lately has been taking that out across Asia.",
+    links: {
+      instagram: "https://www.instagram.com/_levolant/",
+    }
   },
   {
     id: "yama",
     name: "YAMA",
+    city: "OSAKA",
+    country: "JAPAN",
+    bio: "大阪を拠点とするDJ。1994年にDJを始め、DMR大阪での勤務を経て、newtone recordsに開店時からバイヤーとして関わってきた。2000年前後にはEYEとパーティー「eep」を主宰。ハウスを軸に、テクノやブレイクビーツ、ジャズまでをその場に合わせて行き来する。札幌PRECIOUS HALLに定期的に出演し、近年はロンドンのfabric、ソウルのNyapi、タイのWonderfruitでもプレイしている。",
+    bio_en: "Osaka-based YAMA started DJing in 1994. After working at DMR Osaka, YAMA joined newtone records as a buyer when the shop opened, and around the turn of the millennium ran the party eep with EYE. The sets center on house but move through techno, breakbeats and jazz depending on the room. YAMA plays regularly at Precious Hall in Sapporo and has recently played fabric in London, Nyapi in Seoul and Wonderfruit in Thailand.",
+    links: {
+      instagram: "https://www.instagram.com/yama72yama/",
+      soundcloud: "https://soundcloud.com/ya-ma",
+    }
   },
   {
     id: "architectural",
@@ -859,6 +981,9 @@ const ARTISTS = [
   {
     id: "dj-kuri",
     name: "DJ KURI",
+    country: "JAPAN",
+    bio: "千葉県・房州出身、現在も同地に暮らすDJ。アンダーグラウンドパーティー〈BLACK FOREST〉を主宰し、そのDJとしてフロアに立つ。",
+    bio_en: "DJ from Boshu, the southern Boso Peninsula area of Chiba, and still based there. DJ KURI runs the underground party BLACK FOREST and holds down the decks there too.",
   },
   {
     id: "compuma",
@@ -3429,8 +3554,8 @@ const ARTICLES = [
   },
   {
     id: "sawagi-festival-2026-info",
-    title: "SAWAGI FESTIVAL | 日本を代表するローカルレイヴが、10年の節目を越えて山梨から群馬へ",
-    title_en: "SAWAGI FESTIVAL | One of Japan's defining local raves passes its ten-year mark and moves from Yamanashi to Gunma.",
+    title: "SAWAGI FESTIVAL | 日本を代表するローカルフェスティバルが、10年の節目を越えて山梨から群馬へ",
+    title_en: "SAWAGI FESTIVAL | One of Japan's defining local festivals passes its ten-year mark and moves from Yamanashi to Gunma.",
     excerpt: "昨年10年の節目を越え、11年目を迎えるキャンプイン型の野外フェスティバル。2026年は山梨から群馬・東吾妻町のSUTEKI VILLAGE CAMPINGへ。2ステージにLIVE 6組、DJ 52組。札幌、大阪、北九州で現場をつくってきたDJたちが群馬の山に集まる。",
     excerpt_en: "Having passed the ten-year milestone last year, this camp-in outdoor festival now enters its eleventh edition. For 2026 it moves from Yamanashi to SUTEKI VILLAGE CAMPING in Higashiagatsuma, Gunma. Two stages, six live acts, 52 DJs. DJs who have built scenes in Sapporo, Osaka and Kitakyushu gather in the mountains of Gunma.",
     body: `<p><img src="https://lh3.googleusercontent.com/d/1Y-e5R70C9-opeGr5br4jAItKFJddrL-o=w2000"></p><p>[[pullquote|札幌、大阪、北九州。それぞれの街で現場をつくってきたDJたちが、群馬の山に集まる。]]</p><h2><em class="ql-font-bebas">SAWAGI FESTIVALとは</em></h2><p>キャンプイン型の野外フェスティバル。これまで山梨で開催を重ね、11年目の2026年、群馬へ移る。公式が掲げるのは「深化と拡張」。</p><p>2つのステージに58組が集まり、DECO / ARTとVJ / LIGHTINGのチームが会場をつくる。チケットは3日通し券のみ。テントサイトは無料で、会場に泊まり込んで過ごす前提で組まれている。</p><p><img src="https://lh3.googleusercontent.com/d/1RSxkP2Ne_IihvNAWRkHaSTUd86_KNCRF=w2000" alt="山々を背景にしたメインステージ" data-layout="compact" data-zoom="1" data-x="50" data-y="50"></p><h2><em>山々に抱かれ、地平から昇る朝日を望む</em></h2><p>会場は、群馬県吾妻郡東吾妻町のSUTEKI VILLAGE CAMPING。約1万坪の山の敷地に、オートサイト、フリーサイト、区画サイトが広がるキャンプ場だ。夜は満天の星空、朝は地平線からの日の出。</p><p>場内にはシャワー、トイレ、洗面所、キッチンがある。フェスではフラットな芝のテントサイトが無料で使え、約100㎡のオートキャンプ区画も用意される。渋谷からのシャトルバスも運行する。</p><p><img src="https://lh3.googleusercontent.com/d/1HIJ-DjxAuquAntO7ziJR98g_Ni4co4wq=w2000" alt="会場となるステキキャンプ場" data-layout="contained" data-pair-id="pair-1792426248452" data-zoom="1" data-x="50" data-y="50"></p><p><img src="https://lh3.googleusercontent.com/d/1xjPr4c74ROXfkvB3ztovbacTU1oF99wj=w2000" alt="会場となるステキキャンプ場" data-layout="contained" data-pair-id="pair-1792426248452" data-zoom="1" data-x="50" data-y="50"></p><h2><em>100台のキーボードと、1993年結成のサイケデリック・ロック</em></h2><p>ライブは6組。ASUNA + Opitopeは、100台のキーボードを使ったパフォーマンス「100 Keyboards」で海外のフェスティバルやニューヨークのBAMにも招かれたASUNAと、伊達伯欣と畠山地平が2002年に結成したOpitopeの共演。SOFTは1993年結成、サイケデリック・ロックの流れを汲むバンドだ。Black Boboi、HENTAI CAMERAMAN、Masafumi Take &amp; Sabatoj、SUEPONが続く。</p><p><img src="https://lh3.googleusercontent.com/d/1w_44mR8hPnLSY4yYL0MW7UqrK8_ZJUST=w2000" data-layout="compact" data-zoom="1" data-x="50" data-y="50"></p><h2><em>日本のクラブシーンを長く支えてきた名前が並ぶ</em></h2><p>DJは52組。DJ KENSEI、DJ KURI、DJ SODEYAMA、DJ ZEN、COMPUMA。COMPUMAは大阪NEWTONE RECORDSのバイヤーとしても知られる。</p><p>レーベルWOLSを主宰するTAKAAKI ITOH、札幌Precious Hallで「Archiv」を続けるOCCA、北九州のベニューαを運営しBerghainにも出演したYSK。ほかにMari Sakurai、REE.K、YAMA、Herbalistek、俚謡山脈など。札幌、大阪、北九州。それぞれの街で現場をつくってきたDJたちが、群馬の山に集まる。</p><p><img src="https://lh3.googleusercontent.com/d/126orDALt7yHFIaE91m87blFsh9RnLQ6O=w2000" alt="夜のDJブースと照明" data-layout="compact" data-zoom="1" data-x="50" data-y="50"></p><h2><em>山のキャンプ場を、装飾と光で仕立てる</em></h2><p>DECO / ARTはBivouac、Bubble Art Onchi、HEAVEN HUG DESIGN、R領域、SAMAYA DESIGN、STONE63の6組。VJ / LIGHTINGはcomboy、DOT TV、idealsolution、sarunotukuの4組が担う。</p><p><img src="https://lh3.googleusercontent.com/d/12VyjW5Io7yT_EUIciavIU8ZolZzF2aWu=w2000" data-layout="compact" data-zoom="1" data-x="50" data-y="50"></p><h4>開催情報</h4><ul><li>日程: 2026.10.23 (Fri) 13:00 GATE OPEN - 10.25 (Sun) 18:00 CLOSE</li><li>会場: SUTEKI VILLAGE CAMPING（群馬県吾妻郡東吾妻町本宿3330-5）</li><li>チケット: U25 ¥10,000 / Category 3 ¥16,000 / Door ¥20,000。3日通し券のみ（<a href="https://sawagi-festival.zaiko.io/ja/e/sawagi-festival-2026" rel="noopener noreferrer" target="_blank">ZAIKO</a>）</li><li>テントサイト: 無料（フラットな芝）</li><li>オートキャンプ: ¥30,000 / 1区画（約100㎡）。公式サイトのフォームから予約</li><li>場内駐車券: フリー入出庫 ¥10,000（8:00〜17:00のみ出庫・再入庫可）/ 固定駐車 ¥3,000（再入庫不可）</li><li>シャトルバス: 渋谷セルリアンタワー前発。往復 ¥10,000 / 片道 ¥7,000。公式サイトのフォームから予約</li><li>公式: <a href="https://sawagifestival.com/" rel="noopener noreferrer" target="_blank">sawagifestival.com</a> / <a href="https://www.instagram.com/sawagifestival_jp/" rel="noopener noreferrer" target="_blank">@sawagifestival_jp</a></li></ul><p>10年を越えて、新しい山へ。深化と拡張の3日間が、群馬で始まる。</p><p>[[event|SAWAGI FESTIVAL 2026|2026-10-23〜2026-10-25|Gunma, Japan|https://sawagifestival.com/|ASUNA + Opitope;Black Boboi;HENTAI CAMERAMAN;Masafumi Take and Sabatoj;SOFT;SUEPON;COMPUMA;DJ KENSEI;DJ KURI;DJ SODEYAMA;DJ ZEN;TAKAAKI ITOH;OCCA;YSK;Mari Sakurai;REE.K;YAMA;Herbalistek;Kojiro;SUNGA;TAICHI KAWAHIRA;ADAK7;AKIRA ARASAWA;ERIMIYA;5harpy;eskm;HARUKA KATAGATA;KURUSU;lostbaggage;mahogany;Manbow;olevv;Qmico;savezearth;Shinsuke Goto;TSUTOMU;YU-I;俚謡山脈;ラーチャン;スナックひろ|Techno;House;Ambient;Camp;Open-air|sawagi-festival]]</p>`,
