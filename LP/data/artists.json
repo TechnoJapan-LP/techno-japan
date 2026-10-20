@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-10-20T14:12:00.801Z",
+  "_generatedAt": "2026-10-20T17:07:36.645Z",
   "count": 139,
   "items": [
     {
@@ -153,7 +153,17 @@
     },
     {
       "ID": "mimu",
-      "NAME": "Mimu"
+      "NAME": "Mimu",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO",
+      "IMAGE": "images/artists/mimu.jpg",
+      "BIO": "日本の野外レイブ PARAMOUNT の創設者のひとり。出演者のキュレーションを手がけながら、自らもDJとしてプレイする。キュレーションを通じて触れてきた幅広い音楽を、自分の筋を通したまま重ね、ひとつの流れに組み上げるセットを聴かせる。",
+      "INSTAGRAM": "https://www.instagram.com/mimu_paramount/",
+      "SOUNDCLOUD": "https://soundcloud.com/mimu-511411431",
+      "STATUS": "published",
+      "metaDescription": "日本の野外レイブPARAMOUNT共同創設者Mimu。出演者キュレーションを担いながらDJとしても活動し、幅広い音楽を自身の美学で重ねてひとつの流れに組み上げるセットを展開。そのプロフィールとプレイスタイルを紹介します。",
+      "name_en": "Mimu",
+      "bio_en": "One of the founders of PARAMOUNT, the Japanese open-air rave, where Mimu curates the lineup as well as playing. The sets draw on the range of music that curating the party has brought in, layered into a single story without losing a personal line."
     },
     {
       "ID": "sakuma",
@@ -161,7 +171,20 @@
     },
     {
       "ID": "mayudepth",
-      "NAME": "MAYUDEPTH"
+      "NAME": "MAYUDEPTH",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO",
+      "IMAGE": "images/artists/mayudepth.jpg",
+      "BIO": "東京を拠点とするDJ/プロデューサー。DJ SHUFFLEMASTER 主宰の四季協会から1st EP『Sneakpeek』を発表し、2nd EP『Angels from Hell』では映画監督の石原海を迎えた。ロサンゼルスの ACID CAMP やベルリンの A7A からもリリースしている。DJとしてはテクノにとどまらないアーカイヴと現行の音を組み合わせる。東京のクィア・シーンを支えるパーティー MOTORPOOL を率いる。",
+      "INSTAGRAM": "https://www.instagram.com/mayudepth/",
+      "SOUNDCLOUD": "https://soundcloud.com/punkadelix23",
+      "BANDCAMP": "https://mayudepth.bandcamp.com/album/angels-from-hell-feat-umi-ishihara",
+      "STATUS": "published",
+      "metaDescription": "東京発のDJ/プロデューサーMAYUDEPTH。DJ SHUFFLEMASTER主宰の四季協会から『Sneakpeek』『Angels from Hell』を発表し、ロサンゼルスのACID CAMP、ベルリンのA7Aからもリリース。クィア・パーティーMOTORPOOLを率いる彼女の軌跡を追う。",
+      "name_en": "MAYUDEPTH",
+      "bio_en": "A Tokyo DJ and producer whose debut EP \"Sneakpeek\" came out on DJ Shufflemaster's Shiki Kyokai, followed by \"Angels from Hell\" featuring film director Umi Ishihara, and later releases on LA's ACID CAMP and Berlin's A7A. Her sets reach well beyond techno, pairing a deep archive with current records. She also leads MOTORPOOL, a major force in Tokyo's queer scene.",
+      "imagePosition": "center top"
     },
     {
       "ID": "choko",
@@ -384,7 +407,18 @@
     },
     {
       "ID": "akie",
-      "NAME": "Akie"
+      "NAME": "Akie",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO/HOUSE/MINIMAL/EXPERIMENTAL",
+      "IMAGE": "images/artists/akie.webp",
+      "BIO": "東京を拠点とするDJ、レコードバイヤー。大阪の中古レコード店 raregroove で約2年働いたのち、2018年に同じ大阪の newtone records に入り、レコードバイヤーを務めている。DJ活動は関西で始め、のちに東京へ拠点を移した。バイヤーとしてもDJとしても、扱う音楽はオールジャンル。2022年にはブリストルのレーベル do you have peace? からミックステープを発表した。",
+      "INSTAGRAM": "https://www.instagram.com/04_1404_14/",
+      "SOUNDCLOUD": "https://soundcloud.com/ak_is_error",
+      "STATUS": "published",
+      "metaDescription": "東京拠点のDJ、レコードバイヤーAkie。大阪のraregrooveを経て2018年よりnewtone recordsでバイヤーを務め、オールジャンルで選盤する。関西から東京へ活動を広げ、2022年にはブリストルのdo you have peace?よりミックステープを発表した。",
+      "name_en": "AKIE",
+      "bio_en": "A Tokyo-based DJ and record buyer. After about two years at the Osaka used-record shop raregroove, Akie joined newtone records, also in Osaka, as a buyer in 2018. The DJing started in Kansai before the move to Tokyo, and in both roles the remit is all genres. In 2022 the Bristol label do you have peace? released an Akie mixtape."
     },
     {
       "ID": "adhemar",
@@ -557,7 +591,18 @@
     },
     {
       "ID": "calpiss",
-      "NAME": "CALPISS"
+      "NAME": "CALPISS",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "HOUSE/DISCO",
+      "IMAGE": "images/artists/calpiss.jpg",
+      "BIO": "東京のDJ。三軒茶屋の天狗食堂でパーティー CALPISS SOUR を、石垣島で TAKARAJIMA を主催している。高揚感のあるカラフルなディスコから、ヒプノティックなミニマルのグルーヴまでを得意とする。",
+      "INSTAGRAM": "https://www.instagram.com/calpiss_ryo_yamazaki/",
+      "STATUS": "published",
+      "metaDescription": "東京を拠点に活動するDJ、CALPISS。三軒茶屋の天狗食堂でのパーティーCALPISS SOURと石垣島のTAKARAJIMAを主催。高揚感あふれるカラフルなディスコからヒプノティックなミニマルグルーヴまで自在に操る、その音楽性とプロフィールを紹介します。",
+      "name_en": "CALPISS",
+      "bio_en": "A Tokyo DJ who runs the party CALPISS SOUR at Tengu Shokudo in Sangenjaya and TAKARAJIMA on Ishigaki Island. Sets range from euphoric, colourful disco to hypnotic minimal grooves.",
+      "imagePosition": "center top"
     },
     {
       "ID": "space-drum-meditation",
@@ -613,11 +658,35 @@
     },
     {
       "ID": "dj-masda",
-      "NAME": "dj masda"
+      "NAME": "DJ Masda",
+      "CITY": "BERLIN",
+      "COUNTRY": "GERMANY",
+      "GENRE": "TECHNO/HOUSE",
+      "IMAGE": "images/artists/dj-masda.jpg",
+      "BIO": "静岡・富士山麓の出身で、ベルリンを拠点とするDJ。90年代からレコードを掘り続け、So Inagawa とともに東京のレーベル Cabaret Recordings を運営している。初期テクノ、未来的なエレクトロ、ハウスの遊び心を行き来し、短く効かせるミックスで新旧の曲をつないでいく。Bassiani、Dimensions、Resident Advisor、XLR8R などにミックスを提供している。",
+      "INSTAGRAM": "https://www.instagram.com/hauznated/",
+      "SOUNDCLOUD": "https://soundcloud.com/hauznated",
+      "STATUS": "published",
+      "metaDescription": "静岡出身・ベルリン拠点のDJ MASDA。90年代から掘り続けるレコードを武器に、初期テクノからエレクトロ、ハウスまでを自在に行き来する。So Inagawaとともに主宰するCabaret Recordingsや、Bassiani、Dimensions、Resident Advisorへのミックス提供まで、その軌跡を紹介。",
+      "name_en": "DJ MASDA",
+      "bio_en": "A Berlin-based DJ from the foot of Mt. Fuji in Shizuoka, digging vinyl since the '90s and running the Tokyo label Cabaret Recordings with So Inagawa. His selections move between early techno, futurist electro and the playful side of house, cut together with short, punchy mixes that put old and new side by side. He has recorded mixes for Bassiani, Dimensions, Resident Advisor and XLR8R."
     },
     {
       "ID": "guchon",
-      "NAME": "Guchon"
+      "NAME": "Guchon",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO/HOUSE/BREAKS",
+      "IMAGE": "images/artists/guchon.jpg",
+      "BIO": "東京のアンダーグラウンドなクラブシーンから出てきた、テクノ/ハウスのDJ/プロデューサー。Chiwax、Hot Haus Recs、Maximum Airtime、Moveltraxx、Trekkie Trax、System Records などからリリースしてきた。ハウスでもテクノでもブレイクスでも、キャッチーな旋律とファンキーなドラム、遊び心がトラックに通っている。イラストレーターでもあり、多くのリリースのジャケットを自作のキャラクターが飾る。",
+      "INSTAGRAM": "https://www.instagram.com/guchon_dj/",
+      "SOUNDCLOUD": "https://soundcloud.com/guchon",
+      "BANDCAMP": "https://guchon.bandcamp.com/",
+      "WEBSITE": "https://guchon.com/",
+      "STATUS": "published",
+      "metaDescription": "東京アンダーグラウンドが生んだDJ/プロデューサー、Guchon。Chiwax、Hot Haus Recs、Trekkie Traxなどからリリースし、ハウスもテクノもブレイクスもキャッチーな旋律とファンキーなドラムで鳴らす。自作キャラクターでジャケットを描くイラストレーターとしての顔も紹介。",
+      "name_en": "Guchon",
+      "bio_en": "A techno and house DJ and producer from Tokyo's underground club scene, with releases on Chiwax, Hot Haus Recs, Maximum Airtime, Moveltraxx, Trekkie Trax and System Records. Whether the track is house, techno or breaks, expect catchy melodies, funky drums and a real sense of fun. He is also an illustrator, and his cute characters front many of his own sleeves."
     },
     {
       "ID": "kohra",
@@ -642,7 +711,17 @@
     },
     {
       "ID": "nasthug",
-      "NAME": "nasthug"
+      "NAME": "nasthug",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "HIPHOP",
+      "IMAGE": "images/artists/nasthug.jpg",
+      "BIO": "東京を拠点とするDJ。千葉生まれで、ジャマイカ人の父と日本人の母を持つ。ヒップホップを軸に、ダンスホール、ジャージー・クラブ、アフロビートまで、ジャンルを決めずにプレイする。2023年に出演した Boiler Room Tokyo のセットで国外からも注目を集め、同年にはエージェンシー Wasserman と契約し、アジア10か所を回るツアーを行った。",
+      "INSTAGRAM": "https://www.instagram.com/nasthug/",
+      "STATUS": "published",
+      "metaDescription": "東京を拠点に活動するDJ nasthug。千葉生まれ、ジャマイカ人の父と日本人の母を持ち、ヒップホップを軸にダンスホールやジャージー・クラブ、アフロビートまで自在に横断する。2023年のBoiler Room Tokyo出演で世界的注目を集め、Wassermanと契約しアジア10都市ツアーを実現した軌跡に迫る。",
+      "name_en": "nasthug",
+      "bio_en": "A Tokyo DJ born in Chiba to a Jamaican father and a Japanese mother. Her sets run from hip hop into dancehall, Jersey club and Afrobeat without settling into one lane. A 2023 Boiler Room Tokyo set brought international attention, and the same year she signed with the agency Wasserman and toured ten stops across Asia."
     },
     {
       "ID": "okadada",
@@ -807,7 +886,20 @@
     },
     {
       "ID": "haruka",
-      "NAME": "Haruka"
+      "NAME": "Haruka",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO",
+      "IMAGE": "images/artists/haruka.jpg",
+      "BIO": "東京を拠点とするテクノDJ。DJ Nobu が2001年に千葉で始めたパーティー Future Terror に加わり、ともに続けてきた。Future Terror はのちに東京へ移り、海外のテクノを日本に紹介する場になった。アジア、オセアニア、南北アメリカ、ヨーロッパでもプレイしている。ダンスフロアと現代音楽のあいだを探るレーベル Protection を立ち上げた。",
+      "INSTAGRAM": "https://www.instagram.com/haruka_ptc",
+      "SOUNDCLOUD": "https://soundcloud.com/haruka_ptc",
+      "BANDCAMP": "https://protection1.bandcamp.com/",
+      "STATUS": "published",
+      "metaDescription": "東京拠点のテクノDJ Haruka。DJ Nobuが2001年に千葉で始めたパーティーFuture Terrorに加わり、海外テクノを日本へ紹介する場を共に築いてきた。世界各地でプレイし、ダンスフロアと現代音楽の間を探るレーベルProtectionも主宰する彼女の軌跡を紹介。",
+      "name_en": "Haruka",
+      "bio_en": "A Tokyo-based techno DJ who joined DJ Nobu at Future Terror, the party Nobu started in Chiba in 2001. It later moved to Tokyo and became an important route for international techno into Japan. Haruka plays regularly across Asia, Oceania and the Americas as well as in Europe, and runs Protection, a label exploring the margins between the dancefloor and contemporary music.",
+      "imagePosition": "center top"
     },
     {
       "ID": "herbalistek",
@@ -955,7 +1047,19 @@
     },
     {
       "ID": "dj-sodeyama",
-      "NAME": "DJ SODEYAMA"
+      "NAME": "DJ SODEYAMA",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO/HOUSE/AMBIENT",
+      "IMAGE": "images/artists/dj-sodeyama.jpg",
+      "BIO": "東京出身のDJ/プロデューサー。テクノ、ハウスからアンビエント、ダウンビートまでを軸に活動する。DJ SODEYAMA 名義では Nina Kraviz のレーベル трип をはじめ、Dynamic Reflection、Quartz などからリリース。別名義 THE PEOPLE IN FOG では Sound Of Vast から EP を重ね、2021年のアルバム『1977』は The Vinyl Factory の年間ベスト50に選ばれた。",
+      "INSTAGRAM": "https://www.instagram.com/djsodeyama/",
+      "SOUNDCLOUD": "https://soundcloud.com/arparecords",
+      "BANDCAMP": "https://masaseries.bandcamp.com/",
+      "STATUS": "published",
+      "metaDescription": "テクノからアンビエントまでを横断する東京のDJ兼プロデューサーDJ SODEYAMA。Nina Kravizのтрипをはじめ Dynamic Reflection、Quartzからリリースし、別名義THE PEOPLE IN FOGのアルバム1977はThe Vinyl Factory年間ベスト50入り。",
+      "name_en": "DJ SODEYAMA",
+      "bio_en": "A Tokyo-born DJ and producer whose work runs from techno and house through ambient and downtempo. As DJ Sodeyama there are releases on Nina Kraviz's трип, Dynamic Reflection and Quartz. As The People In Fog, a run of EPs on Sound Of Vast led to the 2021 album \"1977\", which made The Vinyl Factory's list of the 50 best albums of the year."
     },
     {
       "ID": "dj-kuri",
@@ -983,7 +1087,20 @@
     },
     {
       "ID": "mars89",
-      "NAME": "MARS89"
+      "NAME": "MARS89",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO/DUBSTEP/AMBIENT",
+      "IMAGE": "images/artists/mars89.jpg",
+      "BIO": "東京を拠点に、DJ、ライブ、作曲、サウンドデザインを行き来して活動するアーティスト。Contact Tokyo でのオープン・トゥ・ラストのほか、ブリストル、ベルリン、ワルシャワ、台北、ソウル、上海でもプレイしてきた。ブリストルの Noods Radio ではレジデントを持つ。初期インダストリアル、ニューウェーブ、UKダブステップ、ブリストルのベース・カルチャーを下地に、テクノやアンビエント、映画のような空気感も取り込んでセットを組む。",
+      "INSTAGRAM": "https://www.instagram.com/mars89_nocturnal",
+      "SOUNDCLOUD": "https://soundcloud.com/mars89",
+      "BANDCAMP": "http://mars89.com",
+      "STATUS": "published",
+      "metaDescription": "東京を拠点にDJ、ライブ、作曲、サウンドデザインを横断するMARS89。Contact Tokyoでのオープン・トゥ・ラストやブリストル、ベルリン、台北、ソウルでのプレイ、Noods Radioのレジデント、インダストリアルからUKダブステップまで独自の音世界を紹介する。",
+      "name_en": "MARS89",
+      "bio_en": "A Tokyo artist working across DJing, live performance, composition and sound design. He has played open to last at Contact Tokyo, taken sets to Bristol, Berlin, Warsaw, Taipei, Seoul and Shanghai, and holds a residency on Bristol's Noods Radio. The sound pulls from early industrial, new wave, UK dubstep and Bristol bass culture, alongside techno, ambient and a filmic sense of atmosphere.",
+      "imagePosition": "center top"
     }
   ]
 }

@@ -46,6 +46,19 @@ const checkUpcomingOrder = (file) => {
   const dates = [...section.matchAll(/<div class="related-card-date">([^<]*)<\/div>/g)].map((m) => m[1]).filter((x) => /^\d{4}-\d{2}-\d{2}/.test(x));
   if (dates.some((date, index) => index && date < dates[index - 1])) failures.push(`${file}: upcoming cards are not date-sorted`);
 };
+
+const isRedirectStub = (page) => /<meta http-equiv="refresh"[^>]*url=/i.test(page);
+for (const dir of ['artists', 'en/artists', 'venues', 'en/venues']) {
+  const directory = path.join(LP, dir);
+  for (const fileName of fs.readdirSync(directory).filter((name) => name.endsWith('.html'))) {
+    const file = path.join(directory, fileName);
+    const page = html(file);
+    if (isRedirectStub(page)) continue;
+    const backgroundCount = (page.match(/<div class="tj-bg"/g) || []).length;
+    if (backgroundCount !== 1) failures.push(`${dir}/${fileName}: expected exactly one tj-bg, got ${backgroundCount}`);
+  }
+}
+
 for (const dir of ['artists', 'en/artists']) {
   for (const file of fs.readdirSync(path.join(LP, dir)).filter((name) => name.endsWith('.html'))) {
     const page = html(path.join(LP, dir, file));

@@ -10971,6 +10971,40 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - push後、Claude が `gh workflow run "Publish pipeline"` を実行して成功を確認し、`cms: publish data.js` のコミット増加を確認すること。
 - CMSは `?cb=<乱数>` で開き、変更後は Cmd+Shift+R。認証済み実画面で保存処理のfetchを確認し、元の画面配列が維持されることも確認すること。
 
+### 2026-10-21 会場・アーティスト詳細ページの背景レイヤー追加 — 未コミット
+
+### 実施
+- `scripts/build-detail-pages.mjs` の `artistPage` と `venuePage` に `backgroundLayer: true` を追加し、JA/EN 詳細ページで共通背景 `.tj-bg` を生成するようにした。
+- `scripts/check_artist_pages.mjs` に、artists / venues の JA/EN 詳細ページで `.tj-bg` がちょうど1つある検査を追加した。meta refresh のリダイレクトスタブは検査対象外とした。
+- 詳細ページを再生成し、アーティスト139件×JA/EN、会場22件×JA/ENを更新した。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node --check scripts/build-detail-pages.mjs`: 成功。
+- `node --check scripts/check_artist_pages.mjs`: 成功。
+- `node scripts/check_artist_pages.mjs`: 成功（artists 139、venues JA/EN各22、既存の索引・出演情報検査を含む）。
+- `.tj-bg` 件数: `LP/artists` 139/139、`LP/en/artists` 139/139、`LP/venues` 22/22、`LP/en/venues` 22/22。各 live 詳細ページが1つ、リダイレクトスタブは artists JA/EN各8件で除外。
+- `git diff --check`: 成功。
+- `bash scripts/preflight.sh`: **50件成功 / 9件失敗**。外部 Google 画像取得を含む詳細ページ生成が240秒でタイムアウト。ブラウザ系8件はこの環境の localhost listen が `EPERM`。公開可能とは判定しない。
+- 実ブラウザ確認: **未確認（Claude担当）**。JA/EN のアーティスト詳細・会場詳細をPC/モバイルで開き、背景表示、ナビ操作、リンク遷移を確認すること。
+
+### 変更したパターン
+- `artistPage` / `venuePage` の JA/EN 詳細ページに `backgroundLayer: true` を渡すパターン。
+- artists / venues の実ページだけを対象に、`.tj-bg` ちょうど1つを確認する既存チェッカーの回帰検査。
+- 生成済み `LP/artists/*.html`、`LP/en/artists/*.html`、`LP/venues/*.html`、`LP/en/venues/*.html`。
+
+### 未確認の類似パターン
+- 確認済み・0件：リダイレクトスタブに `.tj-bg` を追加していないこと。
+- 確認済み・0件：JA/EN の会場・アーティスト詳細で `.tj-bg` が0個または2個以上のページ。
+- 未確認：実ブラウザでのPC/モバイル、JA/EN表示、背景とナビ・詳細リンクの操作。
+
+### 次の担当への注意・判断待ち
+- Claude が実ブラウザ確認を行い、URL・画面幅・操作・期待結果・実測結果を記録すること。
+- `bash scripts/preflight.sh` の9件失敗は公開前に再確認すること。外部画像取得タイムアウトと localhost listen `EPERM` が環境起因であることを確認し、全件成功するまでpushしないこと。
+- CMS変更・GAS変更・Publish pipeline実行は本件の対象外。実ブラウザ確認後も本番Publishは行わないこと。
+
 ### 2026-10-21 アーティスト詳細ページ上部の余白調整 — 未コミット
 
 ### 実施
