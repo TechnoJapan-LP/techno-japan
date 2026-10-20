@@ -10716,3 +10716,21 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 実ブラウザ（テスト環境、headless 390px dpr2 iPhone UA / 1280px）: dj-kensei, en/dj-kensei, ken-ishii, yama, artists.html, venues/womb で横はみ出し0・壊れ画像0・JS 例外0。出演予定カードはスマホ2列/PC3列。
 - 変更したパターン: 確認済み・上記の通り。未確認の類似パターン: CMS の FESTIVALS / ARTISTS の編集画面でのジャンル読込は未操作（検査 check_cms_genre_roundtrip.mjs のみ）。
 - 次の担当への注意: push 中に別 worktree の preflight が走るとロックで push が止まる。push の10分間に自動コミット（popular / sync）が入ると rejected になるので origin/main を merge して再 push。
+
+### 2026-10-20 本番確認（記事本文画像のサイト内移行）— Claude
+- 実施: main b17d63af5 を push、Deploy success。Sync Drive Images を手動実行し success（run 39374964240、「143 unique, 0 to download」、差分コミットなし）。
+- 検証（本番）: shifumiz / labyrinth / asia-festival-2026-second / sawagi-festival-2026-info / topia-2026-info の JA・EN 計10ページで `lh3.googleusercontent` 0件。
+- 重量（CDP Network で外部ドメイン込み、キャッシュ無効、全スクロール後）:
+
+| 記事 | 画面 | 前（本番・Drive） | 後（本番） | 解像度不足 前→後 |
+|---|---|---|---|---|
+| shifumiz | 390px dpr3 | 1,667KB | 1,574KB | 0/6 → 0/6 |
+| asia-festival-2026-second | 390px dpr3 | 3,559KB | 3,353KB | 1/14 → 1/14 |
+| labyrinth | 390px dpr3 | 1,722KB | 1,675KB | 1/8 → 1/8 |
+| shifumiz | 1280px dpr2 | 1,870KB | 2,003KB | 4/6 → 1/6 |
+| asia-festival-2026-second | 1280px dpr2 | 3,502KB | 3,951KB | 14/14 → 2/14 |
+| labyrinth | 1280px dpr2 | 1,571KB | 1,676KB | 5/8 → 3/8 |
+
+  原本1920を srcset に入れた版は PC で +30〜60%（shifumiz 2,990KB）になったため、最大候補を1440に制限した。
+- 未確認の類似パターン: TOP の `img` 8枚が src 無し（naturalWidth 0）。移行前の main でも同じで本件とは無関係・目視で欠けは無し。iPhone 実機は未確認。
+- 次の担当への注意: 新しい記事の Drive 画像は最長2時間後の同期で取り込まれ、次のデプロイで置換される。それまでは Drive 表示のまま（壊れない）。サイト全体 258MB → 301MB。
