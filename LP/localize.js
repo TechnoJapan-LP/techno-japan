@@ -105,7 +105,7 @@
     if (hit && size === 'sm' && hit.srcset && hit.srcset.length) {
       return window.tjAssetPath(hit.srcset[0][0]);
     }
-    return window.tjAssetPath(hit ? hit.src : String(value == null ? '' : value).trim());
+    return window.tjAssetPath(hit && hit.src ? hit.src : String(value == null ? '' : value).trim());
   };
 
   /* srcset / sizes 属性。

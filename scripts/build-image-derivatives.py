@@ -39,6 +39,9 @@ SIZES = (("xs", 240), ("sm", 480), ("md", 720), ("lg", 960))
 # 記事のfull-bleed heroだけはPC幅1440px/高密度画面に対応する。
 # 原本より拡大せず、xxl は原本の幅が xl より大きい記事だけ作る。
 ARTICLE_HERO_SIZES = (("xl", 1440), ("xxl", 2560))
+# 本文はスマホ100vwとPCのfull幅（実測最大1332px）で表示されるため、
+# dpr2の800px、dpr3の1200px、PC Retinaの1440pxを候補にする。
+ARTICLE_BODY_SIZES = (("body-md", 800), ("body-lg", 1200), ("body-xl", 1440))
 QUALITY = 80
 ARTICLE_HERO_QUALITY = 85
 ARTICLE_ASPECTS = {
@@ -49,21 +52,37 @@ ARTICLE_ASPECTS = {
 ARTICLE_POSITIONS = ("center", "top", "bottom", "left", "right")
 
 
+def articles_section() -> str:
+    data = (ROOT / "LP" / "data.js").read_text(encoding="utf-8")
+    return data.split("const ARTICLES = [", 1)[-1].split("\n];", 1)[0]
+
+
 def article_hero_sources() -> set[str]:
     """記事のヒーロー画像だけを派生対象にする。
 
     本文中の外部画像までアスペクト違いを生成すると、対象が5記事ではなく
     数十枚へ膨らみ、生成時間とリポジトリ容量を不必要に増やすため。
     """
-    data = (ROOT / "LP" / "data.js").read_text(encoding="utf-8")
-    section = data.split("const ARTICLES = [", 1)[-1].split("\n];", 1)[0]
+    section = articles_section()
     return set(re.findall(r'image:\s*"(images/articles/[^"?]+\.webp)"', section))
+
+
+def article_body_sources() -> set[str]:
+    """本文で直接参照されるローカル画像と対応表の画像だけを対象にする。"""
+    sources = set()
+    section = articles_section()
+    for body in re.findall(r"\bbody(?:_en)?:\s*`([\s\S]*?)`", section):
+        sources.update(re.findall(r"images/articles/[^\"'<>\s)]+\.webp", body))
+    map_file = ROOT / "LP" / "data" / "article-image-map.json"
+    if map_file.exists():
+        mapping = json.loads(map_file.read_text(encoding="utf-8"))
+        sources.update(str(value).lstrip("/") for value in mapping.values())
+    return sources
 
 
 def article_hero_positions() -> dict[str, set[str]]:
     """記事ごとの実際の imagePosition と center だけを返す。"""
-    data = (ROOT / "LP" / "data.js").read_text(encoding="utf-8")
-    section = data.split("const ARTICLES = [", 1)[-1].split("\n];", 1)[0]
+    section = articles_section()
     result = {}
     for block in re.findall(r"\n  \{(.*?)(?=\n  \},|\Z)", section, re.DOTALL):
         image = re.search(r'image:\s*"(images/articles/[^"?]+\.webp)"', block)
@@ -100,7 +119,9 @@ def main() -> None:
     mapping = {}
     counts = {}
     article_heroes = article_hero_sources()
+    article_bodies = article_body_sources()
     article_positions = article_hero_positions()
+    body_count = 0
     for kind in SOURCE_DIRS:
         source_dir = ROOT / "LP" / "images" / kind
         out_dir = OUT_ROOT / kind
@@ -114,26 +135,56 @@ def main() -> None:
                 continue
             raw = source.read_bytes()
             digest = hashlib.sha256(raw).hexdigest()[:8]
+            source_key = f"images/{kind}/{source.name}"
+            body_only = kind == "articles" and source_key in article_bodies and source_key not in article_heroes
             entry = {}
-            for suffix, max_edge in SIZES:
-                target = out_dir / f"{source.stem}--{digest}-{suffix}.webp"
-                with Image.open(source) as image:
-                    image = ImageOps.exif_transpose(image)
-                    if image.mode not in ("RGB", "RGBA"):
-                        image = image.convert("RGB")
-                    if max(image.size) > max_edge:
-                        image.thumbnail((max_edge, max_edge), Image.Resampling.LANCZOS)
-                    image.save(target, "WEBP", quality=QUALITY, method=6)
-                    entry[suffix] = {
-                        "path": f"images/derivatives/card/{kind}/{target.name}",
-                        "w": image.size[0],
-                    }
-            # 既定( src )は lg。srcset を解釈しない環境でも従来どおり表示できる。
-            mapping[f"images/{kind}/{source.name}"] = {
-                "src": entry["lg"]["path"],
-                "srcset": [[entry[suffix]["path"], entry[suffix]["w"]]
-                           for suffix, _ in SIZES],
-            }
+            if not body_only:
+                for suffix, max_edge in SIZES:
+                    target = out_dir / f"{source.stem}--{digest}-{suffix}.webp"
+                    with Image.open(source) as image:
+                        image = ImageOps.exif_transpose(image)
+                        if image.mode not in ("RGB", "RGBA"):
+                            image = image.convert("RGB")
+                        if max(image.size) > max_edge:
+                            image.thumbnail((max_edge, max_edge), Image.Resampling.LANCZOS)
+                        image.save(target, "WEBP", quality=QUALITY, method=6)
+                        entry[suffix] = {
+                            "path": f"images/derivatives/card/{kind}/{target.name}",
+                            "w": image.size[0],
+                        }
+                # 既定(src)はlg。srcsetを解釈しない環境でも従来どおり表示できる。
+                mapping[source_key] = {
+                    "src": entry["lg"]["path"],
+                    "srcset": [[entry[suffix]["path"], entry[suffix]["w"]]
+                               for suffix, _ in SIZES],
+                }
+            else:
+                # 本文専用画像は本文srcsetだけを持つ。カード/hero側から参照されない。
+                mapping[source_key] = {}
+            if kind == "articles" and source_key in article_bodies:
+                body_srcset = []
+                widths = set()
+                with Image.open(source) as probe:
+                    source_width = ImageOps.exif_transpose(probe).size[0]
+                for suffix, max_width in ARTICLE_BODY_SIZES:
+                    if source_width <= max_width:
+                        break
+                    body_target = out_dir / f"{source.stem}--{digest}-{suffix}.webp"
+                    with Image.open(source) as image:
+                        image = ImageOps.exif_transpose(image)
+                        if image.mode not in ("RGB", "RGBA"):
+                            image = image.convert("RGB")
+                        target_height = round(image.height * max_width / image.width)
+                        image = image.resize((max_width, target_height), Image.Resampling.LANCZOS)
+                        image.save(body_target, "WEBP", quality=QUALITY, method=6)
+                    body_srcset.append([f"images/derivatives/card/{kind}/{body_target.name}", max_width])
+                    widths.add(max_width)
+                # 1440pxを超える原本は、src属性の原本をsrcsetへ重複登録しない。
+                # 1440px以下の原本だけ、生成できる最大候補として原本を1回入れる。
+                if source_width <= ARTICLE_BODY_SIZES[-1][1] and source_width not in widths:
+                    body_srcset.append([source_key, source_width])
+                mapping[source_key]["bodySrcset"] = body_srcset
+                body_count += 1
             if kind == "articles" and f"images/articles/{source.name}" in article_heroes:
                 hero_srcset = []
                 with Image.open(source) as probe:
@@ -192,7 +243,7 @@ def main() -> None:
             Path(p).name
             for key, value in mapping.items()
             if key.startswith(f"images/{kind}/")
-            for p, _ in value["srcset"]
+            for p, _ in value.get("srcset", [])
         } | {
             Path(position["path"]).name
             for key, value in mapping.items()
@@ -204,6 +255,11 @@ def main() -> None:
             for key, value in mapping.items()
             if key.startswith(f"images/{kind}/")
             for p, _ in value.get("heroSrcset", [])
+        } | {
+            Path(p).name
+            for key, value in mapping.items()
+            if key.startswith(f"images/{kind}/")
+            for p, _ in value.get("bodySrcset", [])
         }
         for stale in out_dir.glob("*.webp"):
             if stale.name not in wanted:
@@ -219,6 +275,7 @@ def main() -> None:
     breakdown = " / ".join(f"{k} {v}" for k, v in counts.items())
     print(f"Card derivatives: {len(mapping)}枚 × {len(SIZES)}サイズ（{breakdown}）"
           f" → {OUT_ROOT.relative_to(ROOT)}")
+    print(f"Article body derivatives: {body_count}対象 / {len(article_bodies)}対象画像")
 
 
 def bump_asset_version() -> None:

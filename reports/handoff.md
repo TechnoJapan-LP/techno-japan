@@ -10660,6 +10660,55 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 公開前に `bash scripts/preflight.sh`（省略なし）と、CMS の入力→保存→再表示を実ブラウザで確認すること。CMS変更時は `Cmd+Shift+R` で強制リロードすること。
 - `check_venue_details.mjs` の営業時間検査を JA/EN の生成規則と HTML エスケープに一致させた。
 
+## 2026-10-20 記事本文画像のDrive移行（feat/article-images、未コミット）
+
+### 実施
+- `LP/data/article-image-map.json` を追加。旧 `reports/drive_image_migration_map.json` の実在80件を fileIdキー・`images/articles/...`値へ変換した。旧ファイルは監査資料として保持する。
+- `scripts/sync-article-body-images.py` を追加。JA/EN・下書きを含む `body` / `body_en` からDrive画像を抽出し、未登録または実ファイル欠落だけを取得・EXIF回転・長辺1920・WEBP quality=85/method=6で変換する。429/5xx等は3回再試行し、失敗はwarningへ出して他画像を継続する。
+- `.github/workflows/sync-drive-images.yml` の既存Drive同期後、派生画像生成前に本文画像同期を追加し、対応表もコミット対象へ追加した。
+- `scripts/lib/article-body-images.mjs` と `build-detail-pages.mjs` に生成時置換を追加。対応表にあり実在する画像は `img src` をローカルへ置換し、同じ画像を包む `a href` もDrive URLならローカルへ置換する。対応表にないURLは保持する。`srcset`・寸法・lazy属性は既存のローカル画像処理へ渡す。
+- `build-image-derivatives.py` の本文派生対象を、対応表の値と `ARTICLES.body` / `body_en` に直接書かれた `images/articles/...` に限定。対象件数を実行時に報告し、原本幅を超える派生は作らず、原本を最大候補として1回だけsrcsetへ入れる。対象外・旧重複派生はstale掃除の対象になる。
+- 本文派生を `body-md=800` / `body-lg=1200` / `body-xl=1440` の3段・カードと同じ `QUALITY=80` に変更。本文専用画像（本文対象−ARTICLES.image）はカード用xs/sm/md/lgとhero/aspectを生成せず、`bodySrcset`だけを持つ。本文兼ヒーロー画像は従来どおりカード/hero系も保持する。
+- 実測対応: 1440px超の原本は `bodySrcset` に原本を入れず、最大候補を1440pxに制限。原本幅1440px以下だけ原本を最大候補へ入れる。`src`属性は従来どおり原本のまま。
+- ネットワーク環境で取り込み済みの全件生成物（818ファイル/89MB）は再生成していない。今回の分類では本文対象143件、ヒーロー20件、本文専用143件。本文専用はカード/hero/aspect派生をstale掃除し、body派生のみを残す設計。
+- `scripts/check_article_body_images.mjs` を追加し、preflightへ接続した。
+- `LP/data/` はService Workerのprecache対象ではなく、通常のネットワーク経路で配信される。既存の `check_sw_routing.mjs` の対象経路や他の `LP/data/*.json` の扱いは変更していない。
+- `deploy-pages.yml` は `LP/**` のpushで起動し、デプロイ直前に `node scripts/build-detail-pages.mjs` を実行する。したがって、同期で対応表・画像が増えた次のデプロイで静的記事ページが再生成される。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `python3 scripts/sync-article-body-images.py --dry-run` 成功。本文画像は総数286箇所、ユニーク143 fileId、対応済み80、未対応63。取得予定は63件。
+- 対応表80件中、実ファイル80件を確認。
+- 置換関数を直接実行し、対応済み `src` / `href`、サイズ違い、既存 `srcset`、未対応URL、single quoteを確認。`drive.google.com/uc?...&id=` のID抽出も確認。
+- `git diff --check` 成功。Pythonはネットワーク取得を実行していない。
+- `article_body_sources()` の対象判定を確認。ヒーロー専用の `image` 列だけの画像は本文派生対象外。
+- `image-derivatives.js` は `scripts/build-image-derivatives.py` が生成する。本文専用エントリに `src` が無くても、`build-detail-pages.mjs` と `LP/localize.js` は原本へフォールバックし、カード表示を壊さないよう修正した。既存のカード派生参照箇所は本文専用画像をカードとして使わない。
+- `check_image_derivatives.py` / `check_image_delivery.mjs` も本文専用の `bodySrcset` と原本候補を検査できるよう更新した。
+- 実測記録（Claude記入欄）: shifumiz 本文ページ — 前: 本番Drive 1,870KB / 後: 原本あり 2,990KB / 後: 原本なし（今回修正後）未測定。
+- `build-detail-pages.mjs` の `bodySrcsetAttr()` が `bodySrcset`（原本候補を含む）を使い、既存の `sizes="(max-width: 700px) 100vw, 1200px"` を維持することを単体確認。
+- 派生生成は実行していない。指定された無関係な既存派生差分は戻し、作業ツリーに派生差分を残していない（sandboxのindex lock制約により `git checkout --` は拒否されたため、作業ツリーへ逆パッチを適用）。
+- `node scripts/build-detail-pages.mjs` はネットワーク制限下で既存の外部画像寸法取得が待ち続けたため中断。生成済み記事HTMLはそのため未再生成で、`check_article_body_images.mjs` の「対応済みDrive URLが生成物に残っていない」検査は、生成前の古いHTMLを検出して失敗する状態。CIまたはClaude実行環境で再生成後に再実行すること。
+- 実ブラウザ確認、Driveからの実ダウンロード、ページ重量の変更前後測定は未確認（Claude が実施）。
+
+### 変更したパターン
+- `lh3.googleusercontent.com/d/<fileId>=w...` の本文 `img src`、および同URLを値に持つ本文 `a href` の生成時置換。
+- `drive.google.com/uc?...id=<fileId>` / `drive.google.com/file/d/<fileId>` の同期スクリプト抽出。
+- 本文画像の `images/articles/` への同期、対応表、preflight検査、Drive同期workflowのコミット範囲。
+- 本文派生の対象判定、原本幅以下の候補生成、原本候補の重複排除、stale削除。
+- 本文専用画像のカード派生・hero/aspect派生を生成しない分類と、派生manifestの原本フォールバック。
+
+### 未確認の類似パターン
+- 確認済み・0件：生成コード内にRSS本文・`llms-full.txt`・news SPA本文の別出力はなく、`LP/rss.xml` は記事概要のみ。生成済みHTMLと寸法表には旧Drive URLが残るが、再生成前の既存生成物である。
+- 未確認：実データを取得した後の63件の画像変換結果、JA/EN静的ページの全件表示、実ブラウザでのPC/モバイル操作、利用者が受け取る全リソース重量。
+
+### 次の担当への注意・判断待ち
+- ネットワーク可能な環境で `python3 scripts/sync-article-body-images.py`、`python3 scripts/build-image-derivatives.py`、`node scripts/build-image-dimensions.mjs`、`node scripts/build-detail-pages.mjs` を実行し、対応表・派生画像・寸法表・JA/EN記事HTMLを同じ変更として確認すること。
+- その後 `node scripts/check_article_body_images.mjs` と省略なしの `bash scripts/preflight.sh` を実行すること。実ブラウザでJA/EN・PC/モバイルの本文画像、リンク、寸法、srcset選択を確認するまで公開済みとは報告しないこと。
+- 本文表示幅はスマホ100vw、PCは既存実測の最大1200px（`figure.fx-full` の実測拡大1332pxを含む）。本文用候補は原本幅に応じて800/1200/1440px以下だけを生成し、原本を最大候補にする。ネットワーク環境で全件生成後、本文専用画像にカード・hero/aspect派生が無いこと、manifestのbodySrcsetとstale削除を確認すること。
+- `addLocalImageSrcset` は本文用 `bodySrcset` →従来のカード用 `srcset` →変更なしの順でフォールバックすることを単体確認済み。
+
 ### 2026-10-20 本番確認（ジャンル修正＋アーティスト詳細）— Claude
 - 実施: main 59477f4b4 を push、Deploy success、Publish pipeline を手動実行し success（run 39361157017）。
 - 検証（本番）: cms.html → cms.js?v=153。CMS を ?cb 付きで開き、VENUES 22件読込、womb/oath/liquidroom/circus-tokyo の editRow でシートのジャンルとチップが一致。`parseGenreValues('TECHNO · House · minimal')` → TECHNO,HOUSE,MINIMAL。**保存はしていない**（本番データ書き込みなし）。

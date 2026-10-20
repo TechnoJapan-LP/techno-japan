@@ -25,17 +25,26 @@ def entries(value):
     """(パス, 宣言幅 or None) を列挙する。"""
     if isinstance(value, str):
         return [(value, None)]
-    out = [(value["src"], None)]
+    out = []
+    if value.get("src"):
+        out.append((value["src"], None))
     out += [(path, width) for path, width in value.get("srcset", [])]
     for aspect in value.get("aspect", {}).values():
         for position in aspect.values():
             out.append((position["path"], position.get("w")))
     out += [(path, width) for path, width in value.get("heroSrcset", [])]
+    out += [(path, width) for path, width in value.get("bodySrcset", [])]
     return out
 
 data = (ROOT / "LP/data.js").read_text(encoding="utf-8")
 article_section = data.split("const ARTICLES = [", 1)[-1].split("\n];", 1)[0]
 article_heroes = set(re.findall(r'image:\s*"(images/articles/[^"?]+\.webp)"', article_section))
+article_bodies = set()
+for body in re.findall(r"\bbody(?:_en)?:\s*`([\s\S]*?)`", article_section):
+    article_bodies.update(re.findall(r"images/articles/[^\"'<>\s)]+\.webp", body))
+map_file = ROOT / "LP/data/article-image-map.json"
+if map_file.exists():
+    article_bodies.update(str(value).lstrip("/") for value in json.loads(map_file.read_text(encoding="utf-8")).values())
 
 
 checked = 0
@@ -55,6 +64,40 @@ for source, value in mapping.items():
             source_width = original.size[0]
         if source_width > 1440 and not any(path.endswith("-xxl.webp") for path, _ in hero_srcset):
             raise SystemExit(f"記事heroのxxl派生がありません: {source}")
+    if source in article_bodies and source not in article_heroes and isinstance(value, dict):
+        body_srcset = value.get("bodySrcset") or []
+        if not body_srcset:
+            raise SystemExit(f"本文専用記事画像のbody派生がありません: {source}")
+        if value.get("src") or value.get("srcset") or value.get("heroSrcset") or value.get("aspect"):
+            raise SystemExit(f"本文専用記事画像に不要な派生があります: {source}")
+        with Image.open(source_path) as original:
+            source_width = original.size[0]
+        widths = [width for _, width in body_srcset]
+        if len(widths) != len(set(widths)):
+            raise SystemExit(f"本文bodySrcsetに重複幅があります: {source}")
+        if any(width > source_width or width > 1440 for width in widths):
+            raise SystemExit(f"本文bodySrcsetに原本幅超過または1440px超の候補があります: {source}")
+        has_original = any(path == source for path, _ in body_srcset)
+        if source_width > 1440 and has_original:
+            raise SystemExit(f"1440px超の本文原本がbodySrcsetに入っています: {source}")
+        if source_width <= 1440 and not has_original:
+            raise SystemExit(f"1440px以下の本文原本が最大候補にありません: {source}")
+    if source in article_bodies and source in article_heroes and isinstance(value, dict):
+        body_srcset = value.get("bodySrcset") or []
+        if not body_srcset:
+            raise SystemExit(f"本文兼ヒーロー記事画像のbody派生がありません: {source}")
+        with Image.open(source_path) as original:
+            source_width = original.size[0]
+        widths = [width for _, width in body_srcset]
+        if len(widths) != len(set(widths)):
+            raise SystemExit(f"本文bodySrcsetに重複幅があります: {source}")
+        if any(width > source_width or width > 1440 for width in widths):
+            raise SystemExit(f"本文bodySrcsetに原本幅超過または1440px超の候補があります: {source}")
+        has_original = any(path == source for path, _ in body_srcset)
+        if source_width > 1440 and has_original:
+            raise SystemExit(f"1440px超の本文原本がbodySrcsetに入っています: {source}")
+        if source_width <= 1440 and not has_original:
+            raise SystemExit(f"1440px以下の本文原本が最大候補にありません: {source}")
     for target, declared_width in entries(value):
         target_path = ROOT / "LP" / target
         if not target_path.exists():
@@ -66,6 +109,9 @@ for source, value in mapping.items():
             elif target.endswith("-xl.webp"):
                 if image.width > 1440:
                     raise SystemExit(f"記事heroの幅が大きすぎます: {target} {image.size}")
+            elif target.startswith("images/articles/") and not target.startswith("images/derivatives/"):
+                # 本文srcsetの最大候補として原本を登録することがある。
+                pass
             elif max(image.size) > 1440:
                 raise SystemExit(f"派生画像が大きすぎます: {target} {image.size}")
             # srcset の幅宣言が実体とずれると、ブラウザが誤った1枚を選ぶ。

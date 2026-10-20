@@ -67,7 +67,7 @@ for (const kind of ['festivals', 'artists', 'venues', 'articles']) {
 /* 派生の実体があるか */
 let missingFiles = 0;
 for (const entry of Object.values(DERIV)) {
-  for (const [p] of entry.srcset || []) {
+  for (const [p] of [...(entry.srcset || []), ...(entry.bodySrcset || [])]) {
     if (!fs.existsSync(path.join(LP, p))) missingFiles++;
   }
 }

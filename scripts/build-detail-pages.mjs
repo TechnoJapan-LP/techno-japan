@@ -27,6 +27,7 @@ import { imageSizeAttrs } from './lib/image-size.mjs';
 import { clauseBreaks, phraseBreaks } from './lib/phrase-breaks.mjs';
 import { autolinkArtists, parseEvents, renderArticleShortcodes } from '../LP/article-shortcodes.js';
 import { articleMatchesArtist } from './lib/artist-page-utils.mjs';
+import { loadArticleImageMap, replaceMappedArticleImages } from './lib/article-body-images.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const LP_DIR = path.join(__dirname, '..', 'LP');
@@ -80,6 +81,7 @@ const LANG_TOGGLE_VERSION = 1;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
 const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');
 const IMAGE_DIMENSIONS_PATH = path.join(LP_DIR, 'image-dimensions.json');
+const ARTICLE_IMAGE_MAP = loadArticleImageMap(path.join(__dirname, '..'));
 const BASE = 'https://techno-japan.media';
 const DRAFT_PREVIEW_ARG = process.argv.find((arg) => arg.startsWith('--draft-preview='));
 const DRAFT_PREVIEW_PATH = DRAFT_PREVIEW_ARG ? path.resolve(process.cwd(), DRAFT_PREVIEW_ARG.slice('--draft-preview='.length)) : '';
@@ -403,7 +405,7 @@ function cardEntry(source) {
 }
 function cardImagePath(source) {
   const hit = cardEntry(source);
-  return hit ? hit.src : String(source || '').trim().replace(/^\/+/, '');
+  return hit && hit.src ? hit.src : String(source || '').trim().replace(/^\/+/, '');
 }
 /* 派生画像から srcset を組む。sizes は「その画像が実際に何px幅で出るか」。
 
@@ -414,6 +416,12 @@ function srcsetAttr(source, sizes) {
   const hit = cardEntry(source);
   if (!hit || !hit.srcset || !hit.srcset.length) return '';
   const set = hit.srcset.map(([p, w]) => `/${p} ${w}w`).join(', ');
+  return ` srcset="${esc(set)}" sizes="${esc(sizes)}"`;
+}
+function bodySrcsetAttr(source, sizes) {
+  const hit = cardEntry(source);
+  if (!hit || !hit.bodySrcset || !hit.bodySrcset.length) return '';
+  const set = hit.bodySrcset.map(([p, w]) => `/${p} ${w}w`).join(', ');
   return ` srcset="${esc(set)}" sizes="${esc(sizes)}"`;
 }
 /* 関連カードは実測 324px 幅で表示される。960px を全端末へ配らない。 */
@@ -623,7 +631,9 @@ const LOCAL_ARTICLE_IMG = /(<img\b[^>]*\bsrc=(["']))(\/?images\/[^"']+)(\2[^>]*>
 function addLocalImageSrcset(html) {
   return String(html || '').replace(LOCAL_ARTICLE_IMG, (tag, head, _q, source, tail) => {
     if (/\bsrcset=/i.test(tag)) return tag;           // 既にあるものは触らない
-    const attrs = srcsetAttr(source, '(max-width: 700px) 100vw, 1200px');
+    // 本文用派生が無い既存の自サイト画像は、従来のカード用派生へフォールバックする。
+    const attrs = bodySrcsetAttr(source, '(max-width: 700px) 100vw, 1200px')
+      || srcsetAttr(source, '(max-width: 700px) 100vw, 1200px');
     if (!attrs) return tag;                           // 派生が無いものはそのまま
     const lazy = /\bloading=/i.test(tag) ? '' : ' loading="lazy" decoding="async"';
     return `${head}${source}${tail.slice(0, 1)}${attrs}${lazy}${tail.slice(1)}`;
@@ -1334,7 +1344,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
       <div><dt>READING TIME</dt><dd>${esc(a.readTime || 5)} MIN</dd></div>
     </dl>
     ${L.excerpt ? `<div class="article-excerpt">${esc(L.excerpt)}</div>` : ''}
-    <div class="article-body">${addLocalImageSrcset(addDriveImageSrcset(addHtmlImageDimensions(addHeadingPhraseBreaks(resolveEntities(linkedBody, lang)))))}</div>
+    <div class="article-body">${addLocalImageSrcset(addDriveImageSrcset(addHtmlImageDimensions(addHeadingPhraseBreaks(replaceMappedArticleImages(resolveEntities(linkedBody, lang), ARTICLE_IMAGE_MAP, path.join(__dirname, '..'))))))}</div>
     <div class="article-share">${festivalShareButtons(L.title, canonical, lang)}</div>
     ${relatedStoriesHtml}
     ${relatedFestivalHtml}

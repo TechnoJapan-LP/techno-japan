@@ -132,6 +132,7 @@ run "記事見出しのphrase breaks"          node scripts/test_phrase_breaks.m
 run "回帰のしきい値"                    python3 scripts/check_regressions.py
 run "LINEUPの表示数がソースと一致"      node scripts/check_festival_lineup_render.mjs
 run "記事データの整合性"                node scripts/check_article_data_integrity.mjs
+run "記事本文画像の対応表と置換"        node scripts/check_article_body_images.mjs
 run "記事イベントショートコード"        node scripts/check_article_shortcodes.mjs
 run "記事の自動リンクと更新日"            node scripts/check_article_links.mjs
 run "内部リンクが生きている"            python3 scripts/check_internal_links.py
