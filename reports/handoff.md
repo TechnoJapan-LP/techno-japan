@@ -10906,3 +10906,42 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 省略なしの `bash scripts/preflight.sh` を実行し、全件成功するまでpushしないこと。現在の作業ツリーには本件以外の未コミット変更もあるため、差分を混ぜてコミットしないこと。
 - push後、Claude が `gh workflow run "Publish pipeline"` を実行して成功を確認し、`cms: publish data.js` のコミット増加を確認すること。
 - CMSは `?cb=<乱数>` で開き、変更後は Cmd+Shift+R。認証済み実画面で保存処理のfetchを確認し、元の画面配列が維持されることも確認すること。
+
+### 2026-10-21 アーティスト詳細ページ上部の余白調整 — 未コミット
+
+### 実施
+- `scripts/build-detail-pages.mjs` の `artistPage` が出す `<article>` に JA/EN とも `artist-detail` クラスを追加した。
+- `LP/detail.css` に `.artist-detail` 限定の余白規則を追加した。PC は上端101px、768px以下は28px（実測上、スマホでは `.detail-page` がナビ下端のtop54pxから始まるため）、eyebrow→名前は8px/6px、名前→chipsは14px/12px、chips→写真は20px/18px。
+- 追加修正で `detail.css` の版を65→66へ上げ、`LP/cms.js` の記事プレビュー参照も66へ合わせた。
+- 詳細ページを再生成し、JA/EN 各139件のアーティスト詳細へ反映した。写真・ジャンル無しの `/artists/yama.html` も生成結果を確認した。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node --check scripts/build-detail-pages.mjs`: 成功。
+- `node --check LP/cms.js`: 成功。
+- `git diff --check`: 成功。
+- JA/EN アーティスト詳細の `artist-detail`: 各139件。
+- JA/EN アーティストハブ行数: 各1010行（一致）。
+- 対象ページの `detail.css?v=66`: 再生成後に `taichi-kawahira` JA/EN、`yama` JAで確認済み。
+- `bash scripts/preflight.sh`: **49件成功 / 9件失敗**。詳細生成は外部Google画像取得タイムアウト、ブラウザ系8件はこの環境の localhost listen `EPERM`。公開可能とは判定しない。
+- `python3 scripts/audit_spa_vs_static.py --after`: **失敗**。既存比較基準に対し artist appearances 75→0、venue related_pages 21→0。今回の余白修正とは無関係だが要確認。
+- 実ブラウザ確認: **未確認（Claude担当）**。スマホ390px、768px前後、PC1280pxで `/artists/taichi-kawahira.html`、JA/EN、`/artists/yama.html` の表示と操作を確認すること。
+- 追加実測: スマホ390px/768pxでは `.detail-page` の開始位置がナビ下端（top54px）で、`padding-top:82px` がそのまま余白になっていたため、モバイル値を28pxへ修正。実ブラウザでの再確認は未実施。
+- 追加検証: `node --check`（build script / cms.js）、`git diff --check`、JA/ENハブ行数一致（各1010行）に成功。
+- `detail.css` v66反映後に `bash scripts/preflight.sh` を再実行: **49件成功 / 9件失敗**。結果は前回と同じく、詳細生成の外部Google画像取得タイムアウトとブラウザ系8件の localhost listen `EPERM`。公開可能とは判定しない。
+
+### 変更したパターン
+- アーティスト詳細の `artist-detail` クラス追加（JA/EN）。
+- アーティスト詳細のナビ下、eyebrow、h1、chips、hero間隔のPC/モバイル限定調整。
+- 詳細ページ全体の `detail.css` キャッシュ版更新。
+
+### 未確認の類似パターン
+- 確認済み・0件：会場・フェス・記事の `<article class="detail-page">` に `artist-detail` が付かないこと。
+- 未確認：実ブラウザでの768px前後の境界、JA/ENの実表示、写真/ジャンル無し以外のアーティスト表示。
+
+### 次の担当への注意・判断待ち
+- 実ブラウザ確認は Claude が担当。CSS更新後は `?cb=<乱数>` または Cmd+Shift+Rでキャッシュを避けること。
+- preflightの9件失敗が環境制限または外部画像取得以外の原因でないことを確認し、全件成功するまでpushしないこと。
+- `audit_spa_vs_static.py --after` の既存基準差分（artist appearances / venue related_pages）は、本件と切り分けて判断すること。
