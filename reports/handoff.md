@@ -11152,3 +11152,41 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 2026-10-21: 会場・アーティストFAQにもフェスFAQと同じCSSを適用（`detail.css` v67→v68、CMSプレビュー参照も更新）し、JA/EN詳細ページを再生成。静的検査済み、実ブラウザ再確認は未実施。
 - 2026-10-21: 会場詳細のJA/EN生成`article`へ`venue-detail`を付与して再生成。`detail.css`内の該当クラス規則はFAQ 7件のみで、他の見た目規則への波及なし。
 - 2026-10-21: 会場詳細の上部余白をアーティスト詳細と同値に統一（PC/スマホ、`detail.css` v68→v69、CMSプレビューも更新）し、JA/ENを再生成。
+
+### 2026-10-21 GA4 Data APIによるAI流入集計 — 未コミット
+
+### 実施
+- `scripts/lib/ga4-api.mjs` を追加し、JWT作成・サービスアカウント検証・アクセストークン取得・GA4 `runReport` を共有化。`fetch-popular.mjs` は同じレポート本文と `popular.json` 出力形式を維持したまま共有モジュールを使用。
+- `scripts/fetch-ai-referrals.mjs` を追加。JST基準の直近28日/前28日を、AI参照元の正規表現フィルター付きと全体の2レポートで取得し、参照元別・ランディングページ上位20・全体セッション・AI割合をJSON/Markdownへ出力。`--dry` は書き込まない。`GA4_SA_KEY` 未設定時は終了。
+- `.github/workflows/popular.yml` の人気記事取得後にAI流入取得を追加し、2つのレポートを既存のコミット手順へ追加。`workflow_dispatch` は既存のまま。
+- `scripts/audit_analytics.mjs` の画面操作による `--ai` 経路を削除し、ヘルプをGA4 APIスクリプトへ案内する形に変更。
+- `scripts/test_fetch_ai_referrals.mjs` を追加し、モック応答で期間、フィルター、集計、割合、0件時、Markdown形式を確認。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node --check scripts/lib/ga4-api.mjs scripts/fetch-popular.mjs scripts/fetch-ai-referrals.mjs scripts/audit_analytics.mjs`: 成功。
+- `node scripts/test_fetch_ai_referrals.mjs`: 成功（GA4応答モック）。
+- `GA4_SA_KEY` 未設定で `fetch-popular.mjs` と `fetch-ai-referrals.mjs` を実行: いずれも書き込まず正常終了。
+- `node scripts/audit_analytics.mjs --help`: AI流入を `fetch-ai-referrals.mjs（GA4 API）` へ案内することを確認。旧 `--ai` はエラー終了。
+- `git diff --check`: 成功。
+- `bash scripts/preflight.sh`: 50件成功 / 9件失敗。詳細生成は外部Google画像取得で240秒タイムアウト、ハブ/CMS/地図/モバイル系は実行環境のlocalhost listen EPERM。公開可能とは判定しない。
+- GA4認証済みの実データ取得、GitHub Actions実行、実ブラウザ確認: 未確認（ClaudeがGitHub Actionsで実行）。
+
+### 変更したパターン
+- GA4サービスアカウントJWT認証とData API `runReport` の共有化。
+- `sessionSource` / `landingPagePlusQueryString` のAI参照元フィルター、2期間のセッション・ユーザー集計、全体セッション比率。
+- `reports/ai-referrals.json` / `reports/ai-referrals.md` の定期生成とworkflowコミット対象。
+- GA4画面操作による `audit_analytics --ai` の廃止。
+
+### 未確認の類似パターン
+- 確認済み・0件：モックによるAIフィルター、参照元別集計、ランディングページ上位20、全体0件時の割合、dry-run、秘密情報なしの終了。
+- 未確認：実GA4での権限・レスポンス列順・実データ、`totalUsers` の参照元/ランディングページ別集計、Actions上のコミット、実ブラウザ操作。
+
+### 次の担当への注意・判断待ち
+- Claudeが認証済みGitHub Actionsの手動実行（Monthly popular）で `fetch-ai-referrals.mjs` を実行し、`reports/ai-referrals.*` の内容とコミットを確認すること。
+- 実行後にGA4の `totalUsers` 集計が重複を含む仕様で問題ないか、必要なら参照元別・ランディングページ別に別レポートを分ける判断をすること。
+- 公開前は省略なしの `bash scripts/preflight.sh` を全件成功まで再実行する。今回の失敗は外部画像取得/localhost制限のため、解消後に再確認する。
+
+- 2026-10-21: `popular.yml` のAI流入取得を `continue-on-error: true` にし、AIレポートが無い場合は存在するファイルだけを `git add` するよう修正（未コミット）。
