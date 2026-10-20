@@ -10866,3 +10866,10 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 - 本番データへは書き込まない。push後の Publish pipeline と CMS 実画面で fetch 差し替え相当の送信内容確認を行い、`cms: publish data.js` のコミット増加を確認すること。
 - 追加修正：既存行の ARTIST_ID が空でも、既知の単独アーティスト名/IDと一致すれば保存時にIDを補完するテストを追加。
+
+### 2026-10-21 CMS 出演データ保存の修正・news sitemap 自動再生成（本番確認）— Claude
+- 検証（本番）: Deploy success（「Generate sitemaps for deployment」実行を確認）、Publish pipeline success（run 39449444200）、cms.js?v=155 配信。sitemap-news.xml は0件（48時間以内の記事なし＝正常）。
+- CMS 実画面（global-ark-2026）で fetch を差し替え、保存時の送信内容だけを確認（**本番書き込みなし**）: 既存の ARTIST_ID 3件（dj-miku / dj-kensei / dj-yogurt）すべて保持、新たに ken-ishii / dj-sodeyama / risa-taniguchi / yoshinori-hayashi に ID が付く。
+- 未確認の類似パターン（判断待ち）:
+  - フェスを開くと、開催回のラインナップは FESTIVALS の EDITIONS 列（JSON）の控えが LINEUPS シートより優先される（cms.js loadEditionsFromSheet の pending マージ）。global-ark-2026 は控え40人・シート31人で、保存するとシートが控えの40人に置き換わる（9行追記）。どちらが正しいかは未確認。
+  - CMS の ARTIST_DB が初期の37件のままのことがあり、その場合 ID しか分からない行は ACT_LABEL に ID 文字列が書かれる（ARTIST_ID は保持されるのでリンクは切れない。見た目のみ）。
