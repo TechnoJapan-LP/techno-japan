@@ -171,6 +171,7 @@ run "Publish 前の関門"                  node scripts/check_cms_publish_guard
 run "GAS VENUES列パッチ"                 node scripts/check_gas_venue_columns.mjs
 run "データの取得経路"                  node scripts/check_cms_fetch_path.mjs
 run "プレビューが実ページと同じ枠"    node scripts/check_cms_preview_frame.mjs
+run "CMSアーティスト本番表示プレビュー" node scripts/check_cms_artist_preview.mjs
 run "記事フォームの状態保持"            python3 scripts/check_cms_article_state.py
 
 echo

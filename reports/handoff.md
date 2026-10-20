@@ -3,6 +3,70 @@
 セッション間の短期的な引き継ぎ専用ログです。
 長い背景説明・事故の経緯・設計判断は [AUDIT_TECHNO_JAPAN.md](../AUDIT_TECHNO_JAPAN.md) に記録し、ここからリンクしてください。
 
+## 2026-10-21 / Codex / CMS アーティスト英語欄の重複修正（未コミット）
+
+### 実施
+- `LP/cms.html` に追加していた静的な `<textarea id="a-bioEn">` を削除。
+- 今回のプレビュー実装で追加していた `editRow`、`saveEdit` 2箇所、AI生成、reset、アーティストコード生成の `bio_en` 重複処理を元に戻した。
+- `artistPreviewValue_('a-bioEn')` によるプレビュー参照は維持。`a-bioEn` は `buildPublishingSection` が生成する公開設定欄だけが所有する。
+- `scripts/check_cms_artist_preview.mjs` に、cms.html の静的 `a-bioEn` が0個であること、公開設定側の動的生成と `getPubFields` / `setPubFields` の `bio_en` 経路が存在することの検査を追加。
+
+### コミット
+- 未コミット・未 push（ユーザー指定どおり）。
+
+### 検証
+- `node --check LP/cms.js`: 成功。
+- `node scripts/check_cms_artist_preview.mjs`: 成功。
+- `node scripts/check_cms_genre_roundtrip.mjs`: 成功（5件）。
+- `node scripts/check_cms_preview_frame.mjs`: 成功。
+- `node scripts/check_cms_article_generated_preview.mjs`: 成功。
+- `node scripts/check_cms_publish_guard.mjs`: 成功（44件）。
+- `node scripts/check_cms_fetch_path.mjs`: 成功。
+
+### 変更したパターン
+- 静的フォーム欄と動的公開設定欄の同一 DOM id `a-bioEn` の重複: 静的欄0個・動的欄1個へ修正。
+- プレビューだけが読む `a-bioEn` は維持。
+
+### 未確認の類似パターン
+- 実ブラウザで公開設定欄に入力した英語バイオが保存される操作: 未確認（Claude 実施予定）。
+- 実ブラウザで Preview の日英切替と公開設定欄の値反映: 未確認。
+- full preflight の再実行: 未確認。
+
+### 次の担当への注意・判断待ち
+- `a-bioEn` を cms.html に再追加しないこと。追加する場合は `buildPublishingSection` の動的欄との DOM id 重複を先に検査すること。
+- 公開前に `bash scripts/preflight.sh` と実ブラウザ確認を実施すること。今回も commit / Publish / 本番データ書き込みは行っていない。
+
+## 2026-10-21 / Codex / CMS アーティスト本番表示プレビュー（未コミット）
+
+### 実施
+- `openPreview('artist')` を本番 `/artists/<id>.html` の `cache: 'no-store'` テンプレートを iframe `srcdoc` で表示する方式へ変更。`detail-inner` 内の名前・地域・ジャンル・画像・画像位置・日英バイオ・リンクを入力値で差し替え、同一アーティストなら出演情報と関連記事を保持。
+- 新規・404 などでテンプレートを取得できない場合は、紹介文のある公開済みアーティストを予備テンプレートに使用し、関連セクションを除去して公開時自動表示の注記を追加。取得自体に失敗した場合は既存簡易表示へフォールバック。
+- iframe 内は `lang-toggle.js` 以外の script を除去し、計測・Service Worker を実行しない構成にした。PC / スマホ（390px）切替と入力中のライブ差し替えを追加。
+- `bio_en` 欄（`a-bioEn`）の読込・保存・コード出力・リセットも追加。`cms.js?v=157`、`cms.css?v=47` に更新。
+- `scripts/check_cms_artist_preview.mjs` を追加して preflight に登録。
+
+### コミット
+- 未コミット・未 push（ユーザー指定どおり）。
+
+### 検証
+- `node --check LP/cms.js`: 成功。
+- `node scripts/check_cms_artist_preview.mjs`: 成功。
+- `python3 scripts/check_asset_versions.py --no-diff`: 成功。
+- 既存 `check_cms_genre_roundtrip.mjs` / `check_cms_preview_frame.mjs`: 成功。
+- `bash scripts/preflight.sh`: 49件成功 / 10件失敗。詳細ページ生成は外部画像取得制限で240秒 timeout、?v検査は実行開始時点の `cms.css?v=46` を見て失敗（修正後の単独検査は成功）、ブラウザ系8件は localhost listen `EPERM`。全件成功とは判定しない。
+
+### 変更したパターン
+- アーティストの本番詳細テンプレート取得、`detail-inner` 差し替え、日英 `detail-body bilingual` 構造、計測 script 除去、iframe の PC / 390px 切替、`bio_en` フォーム往復。
+
+### 未確認の類似パターン
+- 実ブラウザで CMS のアーティスト編集→Preview、日英切替、PC / スマホ切替、入力変更、画像位置、同一／別テンプレートの出演情報表示: 未確認（Claude 実施予定）。
+- テンプレート取得失敗時の簡易フォールバックを実ブラウザで確認: 未確認。
+- ネットワーク取得が成功する環境での詳細ページ生成完走: 未確認。
+
+### 次の担当への注意・判断待ち
+- 公開前に `bash scripts/preflight.sh` をネットワーク／localhost listen 可能な環境で省略なし再実行すること。CMS の実ブラウザ確認が終わるまで公開済みとして報告しないこと。
+- CMS を確認する際は `?cb=<乱数>` 付きで開き、`cms.js?v=157` を読み込ませる。今回の作業では本番データへの書き込み・Publish・commit は行っていない。
+
 ## 2026-10-21 / Codex / 完了（Google News sitemap の deploy 同期と stale 警告）
 
 ### 実施
