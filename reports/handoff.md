@@ -10659,3 +10659,11 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 - 公開前に `bash scripts/preflight.sh`（省略なし）と、CMS の入力→保存→再表示を実ブラウザで確認すること。CMS変更時は `Cmd+Shift+R` で強制リロードすること。
 - `check_venue_details.mjs` の営業時間検査を JA/EN の生成規則と HTML エスケープに一致させた。
+
+### 2026-10-20 本番確認（ジャンル修正＋アーティスト詳細）— Claude
+- 実施: main 59477f4b4 を push、Deploy success、Publish pipeline を手動実行し success（run 39361157017）。
+- 検証（本番）: cms.html → cms.js?v=153。CMS を ?cb 付きで開き、VENUES 22件読込、womb/oath/liquidroom/circus-tokyo の editRow でシートのジャンルとチップが一致。`parseGenreValues('TECHNO · House · minimal')` → TECHNO,HOUSE,MINIMAL。**保存はしていない**（本番データ書き込みなし）。
+- 検証（本番ページ）: /artists/dj-kensei・/en/artists/dj-kensei・/artists/ken-ishii は index、/artists/yama は noindex,follow。sitemap の /artists/ は 60件（JA30+EN30）。
+- 実ブラウザ（テスト環境、headless 390px dpr2 iPhone UA / 1280px）: dj-kensei, en/dj-kensei, ken-ishii, yama, artists.html, venues/womb で横はみ出し0・壊れ画像0・JS 例外0。出演予定カードはスマホ2列/PC3列。
+- 変更したパターン: 確認済み・上記の通り。未確認の類似パターン: CMS の FESTIVALS / ARTISTS の編集画面でのジャンル読込は未操作（検査 check_cms_genre_roundtrip.mjs のみ）。
+- 次の担当への注意: push 中に別 worktree の preflight が走るとロックで push が止まる。push の10分間に自動コミット（popular / sync）が入ると rejected になるので origin/main を merge して再 push。
