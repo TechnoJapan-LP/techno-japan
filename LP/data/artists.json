@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-10-20T17:07:36.645Z",
+  "_generatedAt": "2026-10-20T18:52:38.751Z",
   "count": 139,
   "items": [
     {
@@ -167,7 +167,18 @@
     },
     {
       "ID": "sakuma",
-      "NAME": "Sakuma"
+      "NAME": "Sakuma",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO",
+      "IMAGE": "images/artists/sakuma.jpg",
+      "BIO": "新潟でキャリアを始め、2015年から東京を拠点にするDJ。2017年からパーティー「Modest」を主宰し、現在はWOMBを拠点にDJ NOBUやEric Cloutier、Valentino Moraらを迎えてきた。WOMB、VENT、Contactなど都内のクラブでプレイし、2023年にはFUTURE TERRORに続けて出演した。",
+      "INSTAGRAM": "https://www.instagram.com/sakuma_mdst",
+      "SOUNDCLOUD": "https://soundcloud.com/sakuma_modest",
+      "STATUS": "published",
+      "metaDescription": "新潟から東京へ。2017年よりパーティーModestを主宰し、DJ NOBUやEric Cloutier、Valentino Moraを招聘してきたDJ Sakuma。WOMB、VENT、Contactでの活動やFUTURE TERROR出演まで、その歩みを紹介する。",
+      "name_en": "SAKUMA",
+      "bio_en": "Tokyo DJ who got his start in his hometown of Niigata and moved to Tokyo in 2015. Since 2017 he has run Modest, a party now based at WOMB that has brought in DJ NOBU, Eric Cloutier and Valentino Mora. He plays WOMB, VENT and Contact around the city, and in 2023 he was booked for consecutive editions of FUTURE TERROR."
     },
     {
       "ID": "mayudepth",
@@ -357,8 +368,13 @@
     {
       "ID": "noritake",
       "NAME": "Noritake",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "HOUSE",
+      "BIO": "MATRICARIA / LAB. のレジデントDJ。",
       "INSTAGRAM": "https://www.instagram.com/nori0615/",
-      "STATUS": "published"
+      "STATUS": "published",
+      "bio_en": "A resident DJ at MATRICARIA / LAB."
     },
     {
       "ID": "eric-cloutier",
@@ -422,11 +438,36 @@
     },
     {
       "ID": "adhemar",
-      "NAME": "AdhéMar"
+      "NAME": "AdhéMar",
+      "CITY": "PARIS",
+      "COUNTRY": "FRANCE",
+      "GENRE": "TECHNO/AMBIENT",
+      "IMAGE": "images/artists/adhemar.jpg",
+      "BIO": "パリを拠点に、音楽とビジュアルの両面で活動するフランスのアーティスト。プロデュースでもDJでもトランジションの細部にこだわり、音が持つ「光」の質感を主題に置く。済州島のレーベルOslatedから『Mountain View』を発表し、同レーベルのデザインも手がける。2026年6月には、ソウルで開かれたOslatedの10周年ショーケースにヘッドライナーとして出演した。",
+      "INSTAGRAM": "https://www.instagram.com/adhemar_music/",
+      "SOUNDCLOUD": "https://soundcloud.com/adhemarmusic",
+      "BANDCAMP": "https://adhemar.bandcamp.com/",
+      "STATUS": "published",
+      "metaDescription": "パリ拠点のフランス人アーティストAdhéMar。音とビジュアルの両面から光の質感を追求し、トランジションの細部にこだわる独自の表現を展開。済州島のレーベルOslatedから『Mountain View』を発表し、ソウルでの10周年ショーケースにもヘッドライナーとして出演した注目の存在に迫る。",
+      "name_en": "AdhéMar",
+      "bio_en": "Paris-based French artist working across music and visual art. Whether producing or DJing, he puts the weight on transitions and on what he calls the luminous quality of sound. He released Mountain View on Oslated, a label from Jeju Island in Korea where he also handles the design, and headlined its tenth anniversary showcase in Seoul in June 2026."
     },
     {
       "ID": "allen-mock",
-      "NAME": "Allen Mock"
+      "NAME": "Allen Mock",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "BASS/DUBSTEP",
+      "IMAGE": "images/artists/allen-mock.jpg",
+      "BIO": "東京のプロデューサー／DJ。ダブステップやトラップなどベース・ミュージックを軸にする。名前は家族が営む店「Arenmoku」にちなむ。2017年のデビュー曲「Don't」がBeatportのFuture Bass/Trapチャートで3位に入り、2018年にはHybrid Trapから「Suna」を発表。EDC Japanに出演し、2022年にはULTRA JAPANでもプレイした。",
+      "INSTAGRAM": "https://www.instagram.com/allenmockmusic/",
+      "SOUNDCLOUD": "https://soundcloud.com/allenmock",
+      "BANDCAMP": "https://allenmock.bandcamp.com/",
+      "STATUS": "published",
+      "metaDescription": "東京を拠点に活動するプロデューサー／DJ、Allen Mockのプロフィール。ダブステップやトラップを軸としたベース・ミュージックで、デビュー曲DontがBeatportのFuture Bass/Trapチャート3位を記録。EDC JapanやULTRA JAPANへの出演歴も紹介します。",
+      "name_en": "Allen Mock",
+      "bio_en": "Tokyo producer and DJ rooted in bass music, from dubstep to trap. The name comes from Arenmoku, his family's restaurant. His 2017 debut single \"Don't\" reached No. 3 on Beatport's Future Bass/Trap chart, and \"Suna\" followed on Hybrid Trap in 2018. He has played EDC Japan and, in 2022, Ultra Japan.",
+      "imagePosition": "center top"
     },
     {
       "ID": "doltz",
@@ -445,7 +486,19 @@
     },
     {
       "ID": "suguru-mochizuki",
-      "NAME": "Suguru Mochizuki"
+      "NAME": "Suguru Mochizuki",
+      "CITY": "YAMANASHI",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO/HOUSE",
+      "IMAGE": "images/artists/suguru-mochizuki.jpg",
+      "BIO": "山梨・甲府を拠点とするDJ。2012年にDJを始め、テクノ、テックハウス、プログレッシブ・ハウスを軸にミックスする。2015年に地元山梨でテクノ・パーティー「SOL.」を立ち上げ、2022年からは甲府のDJバー「ofi」を運営している。",
+      "INSTAGRAM": "https://www.instagram.com/sgrmczk_ofi/",
+      "SOUNDCLOUD": "https://soundcloud.com/suguru-mochiduki",
+      "STATUS": "published",
+      "metaDescription": "山梨県甲府を拠点に活動するDJ Suguru Mochizuki。2012年の活動開始以来、テクノやテックハウス、プログレッシブハウスを軸にプレイ。2015年には地元でテクノパーティーSOLを立ち上げ、2022年からは甲府のDJバーofiを運営。その歩みと音楽性を紹介。",
+      "name_en": "Suguru Mochizuki",
+      "bio_en": "Kofu-based DJ who started playing in 2012, working mostly with techno, tech house and progressive house. Back home in Yamanashi, Suguru Mochizuki launched the techno party SOL. in 2015, and since 2022 has run ofi, a small DJ bar in Kofu.",
+      "imagePosition": "center top"
     },
     {
       "ID": "yukimasa",
@@ -453,7 +506,19 @@
     },
     {
       "ID": "tonbo",
-      "NAME": "Tonbo"
+      "NAME": "Tonbo",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "LIVE",
+      "IMAGE": "images/artists/tonbo.webp",
+      "BIO": "東京を拠点とするライブ・アーティスト。モジュラーシンセにインドの竹笛バンスリと自らの声を組み合わせ、テクノ、ハウス、ダウンテンポ、アンビエントを横断する即興のライブを行う。会場や時間帯に合わせてセットを変える。2025年にNory Kimijimaとレーベル「ppq rec」を設立。2026年1月にはメキシコ・トゥルムのDay Zeroに、日本人として初めて出演した。",
+      "INSTAGRAM": "https://www.instagram.com/tonboq",
+      "SOUNDCLOUD": "https://soundcloud.com/djtonbo",
+      "BANDCAMP": "https://tonbo.bandcamp.com/",
+      "WEBSITE": "https://tonbo.bandcamp.com/",
+      "STATUS": "published",
+      "name_en": "Tonbo",
+      "bio_en": "Tokyo live act working with modular synths, the bansuri (an Indian bamboo flute) and his own voice. The sets are improvised, drifting between techno, house, downtempo and ambient depending on the room and the hour. In 2025 he co-founded the label ppq rec with Nory Kimijima, and in January 2026 he became the first Japanese artist to play Day Zero in Tulum, Mexico."
     },
     {
       "ID": "sunga",
@@ -583,11 +648,34 @@
     },
     {
       "ID": "dj-krush",
-      "NAME": "DJ KRUSH"
+      "NAME": "DJ KRUSH",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "HIPHOP",
+      "IMAGE": "images/artists/dj-krush.jpg",
+      "BIO": "東京生まれのDJ/プロデューサー。1987年に MURO、DJ GO と KRUSH POSSE を結成し、1992年の解散後にソロ活動を本格化させた。1994年に1stアルバム『KRUSH』を、同年 Mo' Wax から『Strictly Turntablized』を発表。2001年の『Zen』は米 AFIM の最優秀エレクトロニカ・アルバム賞を受けた。2026年には新作『TOKYØHUM』を発表した。",
+      "INSTAGRAM": "https://www.instagram.com/djkrushofficial",
+      "SOUNDCLOUD": "https://soundcloud.com/dj-krush-official",
+      "WEBSITE": "https://djkrush.jp/",
+      "STATUS": "published",
+      "metaDescription": "東京発のDJ/プロデューサー、DJ KRUSH。MUROらとのKRUSH POSSE結成からソロ転向、Mo' Waxでの『Strictly Turntablized』、米国で評価された『Zen』、そして2026年の新作『TOKYØHUM』まで、その軌跡をたどる。",
+      "name_en": "DJ KRUSH",
+      "bio_en": "Tokyo-born DJ/producer DJ Krush formed KRUSH POSSE with MURO and DJ GO in 1987 and went solo after the group split in 1992. His debut album \"KRUSH\" and \"Strictly Turntablized\" on Mo' Wax both came out in 1994. \"Zen\" (2001) won the AFIM award for Best Electronica Album in the US, and his new album \"TOKYØHUM\" was announced in 2026."
     },
     {
       "ID": "zundoko-disco",
-      "NAME": "ZUNDOKO DISCO"
+      "NAME": "ZUNDOKO DISCO",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO",
+      "IMAGE": "images/artists/zundoko-disco.jpg",
+      "BIO": "BOWとSISINOBUによるDJデュオ。東北で10年にわたりパーティーを手がけたのち、東京に拠点を移した。B2Bはストレートなテクノから始まり、アブストラクトなビートやドラムンベースへと幅を広げてきた。ソウルのvurt.のポッドキャストにミックスを提供し、12時間におよぶロングセットにも取り組む。",
+      "INSTAGRAM": "https://www.instagram.com/zundokodisco/",
+      "SOUNDCLOUD": "https://soundcloud.com/zundokodisco",
+      "STATUS": "published",
+      "metaDescription": "BOWとSISINOBUによるDJデュオZUNDOKO DISCO。東北で10年のパーティー運営を経て東京へ。テクノを軸にアブストラクトビートやドラムンベースまで横断するB2B、ソウルのvurt.へのミックス提供、12時間ロングセットまで、その軌跡と現在地を紹介する。",
+      "name_en": "ZUNDOKO DISCO",
+      "bio_en": "DJ duo of BOW and SISINOBU, now based in Tokyo after a decade of throwing parties in the Tohoku region. Their B2B sets started out as straight techno and have since stretched into abstract beats and drum and bass. They have recorded a mix for the podcast of vurt. in Seoul and take on long sessions running up to 12 hours."
     },
     {
       "ID": "calpiss",
@@ -610,11 +698,34 @@
     },
     {
       "ID": "aoki-takamasa",
-      "NAME": "AOKI Takamasa"
+      "NAME": "AOKI Takamasa",
+      "CITY": "OSAKA",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO/HOUSE/AMBIENT/LIVE",
+      "IMAGE": "images/artists/aoki-takamasa.webp",
+      "BIO": "1976年大阪生まれの電子音楽家で、写真家としても活動する。2001年に1stアルバム『SILICOM』を発表し、ヨーロッパを拠点に活動したのち、2011年に日本へ戻った。raster-notonから『RV8』（2013）などを出し、坂本龍一のリミックスも手がけている。リズムの変調を主題にした『Rhythm Variations』は、2009年のEPから続く長期のプロジェクトだ。",
+      "INSTAGRAM": "https://www.instagram.com/aokitakamasa/",
+      "SOUNDCLOUD": "https://soundcloud.com/aoki-1",
+      "BANDCAMP": "https://aokitakamasa.bandcamp.com/",
+      "WEBSITE": "http://www.aokitakamasa.com/",
+      "STATUS": "published",
+      "metaDescription": "大阪出身の電子音楽家AOKI Takamasa。2001年のSILICOMでデビューし欧州を拠点に活動、2011年に帰国。raster-notonからRV8を発表し坂本龍一のリミックスも担当。リズム変調を追求するRhythm Variationsなど、その歩みと音楽性を紹介する。",
+      "name_en": "AOKI Takamasa",
+      "bio_en": "Osaka electronic musician and photographer, born in the city in 1976. His first album, SILICOM, came out in 2001, and after years based in Europe he moved back to Japan in 2011. His raster-noton releases include RV8 (2013), and his remix work includes a remix for Ryuichi Sakamoto. Rhythm Variations, a long-running project built around the modulation of rhythm, goes back to an EP in 2009."
     },
     {
       "ID": "daniel-bell",
-      "NAME": "DANIEL BELL"
+      "NAME": "DANIEL BELL",
+      "CITY": "BERLIN",
+      "COUNTRY": "GERMANY",
+      "GENRE": "TECHNO/MINIMAL",
+      "IMAGE": "images/artists/daniel-bell.jpg",
+      "BIO": "ミニマル・テクノのDJ/プロデューサー。サクラメントに生まれ、トロント近郊で育ち、デトロイトでは Richie Hawtin と Cybersonik として活動した。1991年にレーベル Accelerate を立ち上げ、DBX 名義で「Losing Control」（1994）などを発表。2000年にベルリンへ移り、Tresor から初のミックスCD『The Button-Down Mind of Daniel Bell』を出した。",
+      "INSTAGRAM": "https://www.instagram.com/danielbell_music/",
+      "SOUNDCLOUD": "https://soundcloud.com/daniel-bell",
+      "STATUS": "published",
+      "name_en": "DANIEL BELL",
+      "bio_en": "Minimal techno DJ and producer Daniel Bell was born in Sacramento, grew up outside Toronto, and worked with Richie Hawtin as Cybersonik in Detroit. In 1991 Bell started the Accelerate label and released a run of records as DBX, including \"Losing Control\" (1994). A move to Berlin followed in 2000, along with a first mix CD, \"The Button-Down Mind of Daniel Bell\", on Tresor."
     },
     {
       "ID": "kohei",
@@ -636,7 +747,19 @@
     },
     {
       "ID": "you-forgot",
-      "NAME": "You Forgot"
+      "NAME": "You Forgot",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO/HOUSE/EXPERIMENTAL",
+      "IMAGE": "images/artists/you-forgot.webp",
+      "BIO": "東京を拠点とするDJ。サイケデリックなアンビエンスを土台に、ジャンルやBPMにとらわれずに混ぜていくセットを組む。都内では週末のアフターアワーズの時間帯を担うことが多く、Future TerrorやMindgamesといったパーティーにも呼ばれてきた。",
+      "INSTAGRAM": "https://www.instagram.com/youforgottt/",
+      "SOUNDCLOUD": "https://soundcloud.com/youforgottt",
+      "STATUS": "published",
+      "metaDescription": "東京拠点のDJ You Forgot。サイケデリックなアンビエンスを軸に、ジャンルもBPMも越境して混ぜ合わせるセットが持ち味。週末のアフターアワーズを担い、Future TerrorやMindgamesにも出演してきた異色の選曲家に迫る。",
+      "name_en": "You Forgot",
+      "bio_en": "Tokyo DJ who builds sets on a bed of psychedelic ambience and mixes freely across genres and tempos. You Forgot is a regular in the city's weekend after-hours slots and has been booked by parties such as Future Terror and Mindgames.",
+      "imagePosition": "center top"
     },
     {
       "ID": "yellowuhuru",
@@ -650,11 +773,34 @@
     },
     {
       "ID": "clipz",
-      "NAME": "CLIPZ"
+      "NAME": "CLIPZ",
+      "CITY": "BRISTOL",
+      "COUNTRY": "UK",
+      "GENRE": "DnB/HOUSE",
+      "IMAGE": "images/artists/clipz.jpg",
+      "BIO": "ブリストル出身のDJ/プロデューサー、Hugh Pescod のジャングル/ドラムンベース名義。2000年代初頭から Full Cycle や Digital Soundboy に作品を残し、2009年には Redlight 名義とレーベル Lobster Boy を立ち上げて、ハウスやベースミュージックへ活動を広げた。その名義での約10年を経て、原点である Clipz に戻ってきた。",
+      "INSTAGRAM": "https://www.instagram.com/clipzuk/",
+      "SOUNDCLOUD": "https://soundcloud.com/user-583430017",
+      "BANDCAMP": "https://clipzdubs.bandcamp.com/music",
+      "STATUS": "published",
+      "metaDescription": "ブリストル出身のHugh PescodによるジャングルDnB名義Clipz。Full CycleやDigital Soundboyでの初期作から、Redlight名義とLobster Boy設立を経てハウスやベースへ拡張、約10年ののち原点へ回帰するまでの軌跡を紹介。",
+      "name_en": "CLIPZ",
+      "bio_en": "Clipz is the jungle and drum & bass alias of Bristol DJ/producer Hugh Pescod. He released on Full Cycle and Digital Soundboy from the early 2000s, then in 2009 switched to Redlight and launched his Lobster Boy label, pushing into house and bass music. After a decade under that name, he has come back to Clipz and the sound he started with."
     },
     {
       "ID": "dj-hype",
-      "NAME": "DJ HYPE"
+      "NAME": "DJ HYPE",
+      "CITY": "LONDON",
+      "COUNTRY": "UK",
+      "GENRE": "DnB",
+      "IMAGE": "images/artists/dj-hype.jpg",
+      "BIO": "本名 Kevin Ford。ロンドンのジャングル/ドラムンベースのDJ/プロデューサー。海賊ラジオ Fantasy FM で名を上げ、1993年に「Shot in the Dark」が全英チャート入り。1994年には Kiss 100 で番組を持った。レーベル Ganja Records を経て、DJ Zinc や Pascal らと True Playaz を結成。Fabric の Playaz でのジャンプアップのセットで知られる。",
+      "INSTAGRAM": "https://www.instagram.com/djhype_playaz/",
+      "WEBSITE": "https://shop.playaz.co.uk/",
+      "STATUS": "published",
+      "metaDescription": "本名Kevin Ford、ロンドンのジャングルとドラムンベースを牽引するDJ HYPE。海賊ラジオFantasy FMでの始動からKiss 100の番組、Ganja RecordsとTrue Playaz設立、Fabricで鳴り響くジャンプアップまで、その軌跡をたどる。",
+      "name_en": "DJ HYPE",
+      "bio_en": "Kevin Ford, aka DJ Hype, is a London jungle and drum & bass DJ/producer. DJ Hype made a name on pirate station Fantasy FM, charted in 1993 with \"Shot in the Dark\", and had a show on Kiss 100 by 1994. The Ganja Records label led to True Playaz with DJ Zinc and Pascal, and the jump-up sets at the Playaz nights at Fabric are what many people know DJ Hype for."
     },
     {
       "ID": "dj-masda",
@@ -833,7 +979,18 @@
     },
     {
       "ID": "azu-tiwaline",
-      "NAME": "Azu Tiwaline"
+      "NAME": "Azu Tiwaline",
+      "COUNTRY": "FRANCE",
+      "GENRE": "TECHNO/LIVE/EXPERIMENTAL",
+      "IMAGE": "images/artists/azu-tiwaline.jpg",
+      "BIO": "チュニジアとフランスを拠点とするプロデューサー。サハラにある自身のルーツを掘り下げ、有機的な響きと荒々しさをあわせ持つ音を作る。デビュー・アルバム『Draw Me a Silence』をフランスのI.O.T. Recordsから2部作で発表し、Livity Soundからは『Magnetic Service E.P.』を出している。",
+      "INSTAGRAM": "https://www.instagram.com/azu.tiwaline",
+      "SOUNDCLOUD": "https://soundcloud.com/azu-tiwaline",
+      "BANDCAMP": "https://azutiwaline.bandcamp.com",
+      "STATUS": "published",
+      "metaDescription": "チュニジアとフランスを拠点に活動するプロデューサー、Azu Tiwaline。サハラに宿る自身のルーツを掘り下げ、有機的な響きと荒々しさが同居する独自のビートを生み出す。I.O.T. Recordsからの2部作デビュー作やLivity Soundのリリースを軸に紹介。",
+      "name_en": "Azu Tiwaline",
+      "bio_en": "Producer splitting her time between Tunisia and France, with music that digs into her roots in the Sahara and sets organic textures against raw ones. Her debut album Draw Me a Silence came out in two parts on France's I.O.T. Records, and the Magnetic Service EP followed on Livity Sound."
     },
     {
       "ID": "cmt",
@@ -851,7 +1008,18 @@
     },
     {
       "ID": "chida",
-      "NAME": "CHIDA"
+      "NAME": "CHIDA",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "HOUSE",
+      "IMAGE": "images/artists/chida.jpg",
+      "BIO": "90年代初頭から東京のハウス・シーンで活動するDJ。12時間を超えるロングセットで知られる。2009年にレーベル「ene」を立ち上げ、Prins ThomasやEddie C、Cos Mes、Sly Mongooseらの作品を出してきた。自身のデビュー12インチ『Danca』はESP Instituteから出ている。",
+      "INSTAGRAM": "https://www.instagram.com/chida1973",
+      "SOUNDCLOUD": "https://ellarecords.jp/cdn/shop/articles/IMG_0805.webp?v=1721703250",
+      "STATUS": "published",
+      "metaDescription": "90年代初頭から東京のハウス・シーンを支えるDJ、CHIDA。12時間超のロングセットで聴衆を魅了し、2009年には自身のレーベルeneを始動。Prins ThomasやEddie C、Cos Mes、Sly Mongooseらの作品を送り出してきた彼の歩みとデビュー作Dancaを紹介。",
+      "name_en": "CHIDA",
+      "bio_en": "Tokyo DJ who has been part of the city's house scene since the early '90s, known for marathon sets that run well past 12 hours. In 2009 he launched the label ene, which has put out records by Prins Thomas, Eddie C, Cos Mes and Sly Mongoose among others. His debut 12\", Danca, came out on ESP Institute."
     },
     {
       "ID": "kazuma-onishi",
@@ -912,11 +1080,36 @@
     },
     {
       "ID": "efdemin",
-      "NAME": "Efdemin"
+      "NAME": "Efdemin",
+      "CITY": "BERLIN",
+      "COUNTRY": "GERMANY",
+      "GENRE": "TECHNO/LIVE/AMBIENT",
+      "IMAGE": "images/artists/efdemin.jpg",
+      "BIO": "ベルリンを拠点とするDJ/プロデューサー、Phillip Sollmann のテクノ名義。2004年からハンブルクのレーベル Dial で作品を発表し、アルバム『Efdemin』（2007）、『Chicago』（2010）を同レーベルから出した。2019年には Ostgut Ton から『New Atlantis』を発表。ヴァイナル限定のレーベル naïf を主宰し、本名ではドローンやアンビエントの作品も手がける。",
+      "INSTAGRAM": "https://www.instagram.com/efdemin",
+      "SOUNDCLOUD": "https://soundcloud.com/efdemin",
+      "BANDCAMP": "https://efdemindial.bandcamp.com/album/efdemin",
+      "WEBSITE": "https://onboardmusic.net/artist/efdemin",
+      "STATUS": "published",
+      "metaDescription": "ベルリンを拠点に活動するプロデューサー、Phillip Sollmannのテクノ名義Efdemin。Dialからのアルバム EfdeminやChicago、Ostgut TonのNew Atlantis、主宰レーベルnaïfや本名義のアンビエント作品まで、その歩みと音楽性を紹介します。",
+      "name_en": "Efdemin",
+      "bio_en": "Efdemin is the techno name of Berlin-based DJ/producer Phillip Sollmann. He has released on Hamburg's Dial since 2004, including the albums \"Efdemin\" (2007) and \"Chicago\" (2010), and put out \"New Atlantis\" on Ostgut Ton in 2019. He runs the vinyl-only label naïf, and under his own name makes drone and ambient work."
     },
     {
       "ID": "anthony-linell",
-      "NAME": "Anthony Linell"
+      "NAME": "Anthony Linell",
+      "CITY": "STOCKHOLM",
+      "COUNTRY": "SWEDEN",
+      "GENRE": "TECHNO/EXPERIMENTAL",
+      "IMAGE": "images/artists/anthony-linell.jpg",
+      "BIO": "ストックホルムのプロデューサー／DJ。Varg（Jonas Rönnberg）とともにレーベルNorthern Electronicsを運営する。初期はAbdulla Rashim名義で、同じ名前のレーベルから作品を出していた。近年は別名義を離れて本名で発表している。ノイズや実験音楽に近いLundin Oil、VargとのユニットUlwhednarでも活動し、テクノと実験的な電子音楽の両方にまたがる。",
+      "INSTAGRAM": "https://www.instagram.com/anthony.linell/",
+      "SOUNDCLOUD": "https://soundcloud.com/anthonylinell",
+      "BANDCAMP": "https://northernelectronics.bandcamp.com/",
+      "STATUS": "published",
+      "name_en": "Anthony Linell",
+      "bio_en": "Stockholm producer and DJ who runs Northern Electronics with Varg (Jonas Rönnberg). His early records came out as Abdulla Rashim, on a label of the same name, while more recent work drops the aliases altogether. Alongside the techno there is Lundin Oil, which edges toward noise and experimental music, and Ulwhednar, his duo with Varg.",
+      "imagePosition": "center top"
     },
     {
       "ID": "vril",
@@ -979,7 +1172,20 @@
     },
     {
       "ID": "sapphire-slows",
-      "NAME": "Sapphire Slows"
+      "NAME": "Sapphire Slows",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "LIVE",
+      "IMAGE": "images/artists/sapphire-slows.jpg",
+      "BIO": "東京のプロデューサー／DJ。2011年に寝室で制作を始め、LAのNot Not Funと東京のBig Loveからデビュー。その後ベルリンのNous DisquesやUKのKaleidoscopeからも作品を出し、2014年にアルバム『Allegoria』を発表した。シンセに囁くような自身の声を重ねる。2015年にRed Bull Music Academy（パリ）に参加し、2018年にロンドンのRinse FMのレジデントとなった。",
+      "INSTAGRAM": "https://www.instagram.com/sapphireslows/",
+      "SOUNDCLOUD": "https://soundcloud.com/sapphire-slows",
+      "BANDCAMP": "https://sapphireslows.bandcamp.com/music",
+      "STATUS": "published",
+      "metaDescription": "寝室制作から世界へ。東京のプロデューサーSapphire Slowsの軌跡を辿る。Not Not Funからのデビュー、アルバムAllegoriaで聴かせる囁き声とシンセの陶酔的な重なり、Red Bull Music Academy参加やRinse FMレジデントまでを紹介。",
+      "name_en": "Sapphire Slows",
+      "bio_en": "Tokyo producer and DJ who started making tracks in her bedroom in 2011 and debuted on LA's Not Not Fun and Tokyo's Big Love. Releases followed on Berlin's Nous Disques and the UK's Kaleidoscope, including the 2014 album Allegoria, with her own hushed vocals drifting over the synths. She took part in Red Bull Music Academy in Paris in 2015 and became a Rinse FM resident in London in 2018.",
+      "imagePosition": "center top"
     },
     {
       "ID": "olive-oil",
@@ -1015,11 +1221,35 @@
     },
     {
       "ID": "architectural",
-      "NAME": "Architectural"
+      "NAME": "Architectural",
+      "CITY": "CATALONIA",
+      "COUNTRY": "SPAON",
+      "GENRE": "TECHNO/EXPERIMENTAL/LIVE",
+      "IMAGE": "images/artists/architectural.jpg",
+      "BIO": "スペイン・アストゥリアス出身、カタルーニャ拠点のプロデューサー／DJ。Reeko名義で知られるJuan Ricoの別名義で、当初は匿名だった。自身のレーベルArchitectural Recordsから2010〜2014年に5作を出し、オランダのWolfskuilからは『Amour』（2015）を発表。PoleGroupからはReeko & Architectural名義の『The Blue Album』（2013）を出した。",
+      "INSTAGRAM": "https://www.instagram.com/_architectural_/",
+      "SOUNDCLOUD": "https://soundcloud.com/architectural-1",
+      "BANDCAMP": "https://architecturalrecs.bandcamp.com/",
+      "STATUS": "published",
+      "metaDescription": "スペイン出身でカタルーニャ拠点のプロデューサーArchitecturalを紹介。Reeko名義で知られるJuan Ricoの別名義として匿名で始動し、自身のレーベルArchitectural RecordsやWolfskuil、PoleGroupから残した作品をたどる。",
+      "name_en": "Architectural",
+      "bio_en": "Asturian producer and DJ based in Catalonia, and the second project of Juan Rico, better known as Reeko. It started out anonymous. Five records came out on his own Architectural Records between 2010 and 2014, with Amour following on the Dutch label Wolfskuil in 2015. The two aliases met on The Blue Album, credited to Reeko & Architectural, released on PoleGroup in 2013.",
+      "imagePosition": "center"
     },
     {
       "ID": "donato-dozzy",
-      "NAME": "Donato Dozzy"
+      "NAME": "Donato Dozzy",
+      "COUNTRY": "ITALY",
+      "GENRE": "TECHNO/LIVE/EXPERIMENTAL",
+      "IMAGE": "images/artists/donato-dozzy.jpg",
+      "BIO": "イタリアのDJ/プロデューサー。ローマのクラブ Brancaleone（1999年〜）、ベルリンの Panorama Bar（2004〜2006年）でレジデントを務めた。2007年に初めて Labyrinth に招かれ、翌2008年にはクロージングを担当。2008年にレーベル Aquaplano を始め、2010年に初アルバム『K』を発表した。Neel とのユニット Voices From The Lake でも活動する。",
+      "INSTAGRAM": "https://www.instagram.com/donato_dozzy",
+      "SOUNDCLOUD": "https://soundcloud.com/donato-dozzy",
+      "BANDCAMP": "https://dozz.bandcamp.com/",
+      "STATUS": "published",
+      "metaDescription": "イタリア出身のDJ/プロデューサー、Donato Dozzyのプロフィール。ローマのBrancaleoneとベルリンPanorama Barでのレジデント時代から、Labyrinth出演、レーベルAquaplano設立、アルバムK、NeelとのVoices From The Lakeまでを解説。",
+      "name_en": "Donato Dozzy",
+      "bio_en": "Italian DJ/producer Donato Dozzy held residencies at Brancaleone in Rome from 1999 and at Berlin's Panorama Bar from 2004 to 2006. Labyrinth first invited him in 2007, and he came back to close the festival in 2008. He started the Aquaplano label in 2008, released his debut album \"K\" in 2010, and also works with Neel as Voices From The Lake."
     },
     {
       "ID": "jonathan-fitoussi",
@@ -1027,7 +1257,21 @@
     },
     {
       "ID": "peter-van-hoesen",
-      "NAME": "Peter Van Hoesen"
+      "NAME": "Peter Van Hoesen",
+      "CITY": "HAKUBA",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO/EXPERIMENTAL/LIVE",
+      "IMAGE": "images/artists/peter-van-hoesen.jpg",
+      "BIO": "ベルギー出身のプロデューサー、ライブ・パフォーマー、サウンドデザイナー。低音の効いた抽象的なテクノで知られ、レーベル Time To Express と Center 91 を主宰する。Yves De Mey とのユニット Sendai では Editions Mego などから作品を出し、Atom™ とはライブ・プロジェクト SYNC. を組む。The Labyrinth には、2017年に Donato Dozzy と並ぶレジデントとして出演した。",
+      "INSTAGRAM": "https://www.instagram.com/petervanhoesen",
+      "SOUNDCLOUD": "https://soundcloud.com/petervanhoesen",
+      "BANDCAMP": "https://timetoexpress.bandcamp.com",
+      "WEBSITE": "https://petervanhoesen.com/",
+      "STATUS": "published",
+      "metaDescription": "ベルギー出身のテクノ・プロデューサー、Peter Van Hoesen。重低音と抽象性が融合した音像でTime To Expressを主宰し、SendaiやAtom™とのSYNC.でも活躍。2017年にはThe Labyrinthへレジデントとして出演した彼の軌跡を追う。",
+      "name_en": "Peter Van Hoesen",
+      "bio_en": "A Belgian producer, live performer and sound designer best known for a bass-heavy, abstract take on techno. He runs the labels Time To Express and Center 91, records with Yves De Mey as Sendai, with albums on Editions Mego among others, and plays live with Atom™ as SYNC. In 2017 he topped the bill at The Labyrinth as a resident alongside Donato Dozzy.",
+      "imagePosition": "center top"
     },
     {
       "ID": "petar-dundov",
@@ -1043,7 +1287,17 @@
     },
     {
       "ID": "reek",
-      "NAME": "REE.K"
+      "NAME": "REE.K",
+      "CITY": "MIYAZAKI",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO",
+      "IMAGE": "images/artists/reek.jpg",
+      "BIO": "東京出身のDJ。1980年代半ばに楽曲制作を始め、1992年からDJとして活動する。1997年にパーティー Space Gathering を始め、国内レイブシーンの形成に関わった。2001年のミックスCD『Cubism』、2002年に立ち上げたレーベル Hypnodisk など、作品の発表も重ねてきた。これまで10か国以上でプレイ。2012年以降は九州に拠点を移し、自給自足の暮らしを送っている。",
+      "INSTAGRAM": "https://www.instagram.com/ree_k",
+      "SOUNDCLOUD": "https://www.mixcloud.com/reek2013/",
+      "STATUS": "published",
+      "name_en": "REE.K",
+      "bio_en": "A Tokyo-born DJ who began making music in the mid-1980s and has been DJing since 1992. She launched the party Space Gathering in 1997 and helped build Japan's domestic rave scene, released the mix CD \"Cubism\" in 2001 and started her own label, Hypnodisk, in 2002. She has played in more than ten countries, and since 2012 has lived self-sufficiently in Kyushu."
     },
     {
       "ID": "dj-sodeyama",
@@ -1071,7 +1325,20 @@
     },
     {
       "ID": "compuma",
-      "NAME": "COMPUMA"
+      "NAME": "COMPUMA",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO/HOUSE/EXPERIMENTAL",
+      "IMAGE": "images/artists/compuma.jpg",
+      "BIO": "ADS（アステロイド・デザート・ソングス）、スマーフ男組での活動を経て、ジャンルを横断するDJとして全国各地の現場に立つ。自身のプロジェクト SOMETHING ABOUT からミックスCD「SOMETHING IN THE AIR」シリーズを発表し、コレクティヴ「悪魔の沼」でも活動する。2022年に初のソロアルバム『A View』、2024年に『horizons』をリリース。Berlin Atonal 2017 にも出演した。",
+      "INSTAGRAM": "https://www.instagram.com/compuma_km/",
+      "SOUNDCLOUD": "https://soundcloud.com/compuma",
+      "BANDCAMP": "https://compuma.bandcamp.com/album/horizons",
+      "STATUS": "published",
+      "metaDescription": "ADSやスマーフ男組を経て、ジャンルを横断するDJとして全国の現場に立つCOMPUMA。ミックスCDシリーズSOMETHING IN THE AIRや悪魔の沼での活動、ソロアルバムA Viewとhorizons、Berlin Atonal出演まで、その歩みと音楽性を紹介。",
+      "name_en": "COMPUMA",
+      "bio_en": "COMPUMA came through the bands ADS (Asteroid Desert Songs) and Smerf Otoko-gumi before settling into a genre-crossing DJ practice that takes him to rooms all over Japan. His SOMETHING ABOUT project puts out the \"SOMETHING IN THE AIR\" mix CD series, and he is part of the collective Akuma no Numa. Solo albums \"A View\" (2022) and \"horizons\" (2024) followed, and he played Berlin Atonal in 2017.",
+      "imagePosition": "center top"
     },
     {
       "ID": "max-cooper",
