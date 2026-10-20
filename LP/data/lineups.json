@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-10-18T13:49:44.082Z",
+  "_generatedAt": "2026-10-20T14:12:00.801Z",
   "count": 1470,
   "items": [
     {
@@ -664,7 +664,8 @@
     },
     {
       "EDITION_ID": "matricaria-2026",
-      "ACT_LABEL": "doltz.",
+      "ARTIST_ID": "doltz",
+      "ACT_LABEL": "Doltz.",
       "SET_TYPE": "live",
       "SORT": "9"
     },
@@ -724,6 +725,7 @@
     },
     {
       "EDITION_ID": "matricaria-2026",
+      "ARTIST_ID": "tonbo",
       "ACT_LABEL": "Tonbo",
       "SET_TYPE": "live",
       "SORT": "19"
@@ -3094,7 +3096,8 @@
     },
     {
       "EDITION_ID": "circus-2026",
-      "ACT_LABEL": "lady-shaka",
+      "ARTIST_ID": "lady-shaka",
+      "ACT_LABEL": "Lady Shaka",
       "SET_TYPE": "dj",
       "SORT": "5"
     },
@@ -3490,7 +3493,8 @@
     },
     {
       "EDITION_ID": "synapse-festival-2026",
-      "ACT_LABEL": "idjut-boys",
+      "ARTIST_ID": "idjut-boys",
+      "ACT_LABEL": "Idjut Boys",
       "SET_TYPE": "dj",
       "SORT": "7"
     },
@@ -3508,7 +3512,8 @@
     },
     {
       "EDITION_ID": "synapse-festival-2026",
-      "ACT_LABEL": "mr-disco-kid",
+      "ARTIST_ID": "mr-disco-kid",
+      "ACT_LABEL": "Mr. Disco Kid",
       "SET_TYPE": "dj",
       "SORT": "10"
     },
@@ -4468,7 +4473,8 @@
     },
     {
       "EDITION_ID": "bondisco-2026",
-      "ACT_LABEL": "zundoko-disco",
+      "ARTIST_ID": "zundoko-disco",
+      "ACT_LABEL": "ZUNDOKO DISCO",
       "SET_TYPE": "dj",
       "SORT": "35"
     },
@@ -4720,13 +4726,15 @@
     },
     {
       "EDITION_ID": "global-ark-2026",
-      "ACT_LABEL": "dj-miku",
+      "ARTIST_ID": "dj-miku",
+      "ACT_LABEL": "DJ MIKU",
       "SET_TYPE": "dj",
       "SORT": "4"
     },
     {
       "EDITION_ID": "global-ark-2026",
-      "ACT_LABEL": "dj-kensei",
+      "ARTIST_ID": "dj-kensei",
+      "ACT_LABEL": "DJ KENSEI",
       "SET_TYPE": "dj",
       "SORT": "5"
     },
@@ -4744,7 +4752,8 @@
     },
     {
       "EDITION_ID": "global-ark-2026",
-      "ACT_LABEL": "dj-yogurt",
+      "ARTIST_ID": "dj-yogurt",
+      "ACT_LABEL": "DJ Yogurt",
       "SET_TYPE": "dj",
       "SORT": "8"
     },
@@ -7900,7 +7909,7 @@
     },
     {
       "EDITION_ID": "nu-festival-2026",
-      "ACT_LABEL": "dj-krush",
+      "ARTIST_ID": "dj-krush",
       "SET_TYPE": "dj",
       "SORT": "21"
     },
@@ -8392,7 +8401,7 @@
     },
     {
       "EDITION_ID": "etsuetsu-2026",
-      "ACT_LABEL": "dj-kensei",
+      "ARTIST_ID": "dj-kensei",
       "SET_TYPE": "dj",
       "SORT": "31"
     },
