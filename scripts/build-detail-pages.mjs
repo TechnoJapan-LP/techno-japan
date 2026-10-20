@@ -28,6 +28,7 @@ import { clauseBreaks, phraseBreaks } from './lib/phrase-breaks.mjs';
 import { autolinkArtists, parseEvents, renderArticleShortcodes } from '../LP/article-shortcodes.js';
 import { articleMatchesArtist } from './lib/artist-page-utils.mjs';
 import { loadArticleImageMap, replaceMappedArticleImages } from './lib/article-body-images.mjs';
+import { contentHash, contentRow } from './lib/content-dates.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const LP_DIR = path.join(__dirname, '..', 'LP');
@@ -56,7 +57,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 66;
+const DETAIL_CSS_VERSION = 69;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -86,6 +87,34 @@ const BASE = 'https://techno-japan.media';
 const DRAFT_PREVIEW_ARG = process.argv.find((arg) => arg.startsWith('--draft-preview='));
 const DRAFT_PREVIEW_PATH = DRAFT_PREVIEW_ARG ? path.resolve(process.cwd(), DRAFT_PREVIEW_ARG.slice('--draft-preview='.length)) : '';
 const DRAFT_PREVIEW_DIR = path.join(__dirname, '..', 'reports', 'phase5-preview');
+const CONTENT_DATES_PATH = path.join(LP_DIR, 'data', 'content-dates.json');
+let CONTENT_DATES = {};
+let CONTENT_DATE_UPDATES = {};
+const CONTENT_SNAPSHOTS = new Map();
+
+/* 最終更新日は、ページに出るデータのハッシュを台帳で追跡する。 */
+function loadContentDates() {
+  if (!fs.existsSync(CONTENT_DATES_PATH)) return {};
+  try { return JSON.parse(fs.readFileSync(CONTENT_DATES_PATH, 'utf8')) || {}; } catch { return {}; }
+}
+function contentDate(kind, id, snapshot) {
+  const key = `${kind}:${id}`;
+  const hash = contentHash(snapshot);
+  const old = CONTENT_DATES[key];
+  if (old?.hash === hash) return old.date || '';
+  const date = jstToday();
+  CONTENT_DATE_UPDATES[key] = { hash, date };
+  return date;
+}
+function writeContentDates() {
+  const next = { ...CONTENT_DATES, ...CONTENT_DATE_UPDATES };
+  const sorted = Object.fromEntries(Object.keys(next).sort().map((key) => [key, next[key]]));
+  const text = JSON.stringify(sorted, null, 2) + '\n';
+  if (!fs.existsSync(CONTENT_DATES_PATH) || fs.readFileSync(CONTENT_DATES_PATH, 'utf8') !== text) fs.writeFileSync(CONTENT_DATES_PATH, text);
+}
+function updatedLabel(date, lang) {
+  return date ? `<p class="detail-last-updated"><time datetime="${esc(date)}">${lang === 'en' ? 'Last updated' : '最終更新'}: ${esc(date)}</time></p>` : '';
+}
 
 /* 開催回の識別子は "YYYY" または "YYYY-N"（同年複数回・2026-09-13 対応）。
    EDITION_ID={festivalId}-{この値} なので、同年でも一意になる。
@@ -1644,6 +1673,74 @@ function festivalFaqDetailsHtml(items, lang) {
     </section>`;
 }
 
+function faqJsonLd(items) {
+  return items.length ? {
+    '@context': 'https://schema.org', '@type': 'FAQPage',
+    mainEntity: items.map((item) => ({ '@type': 'Question', name: item.question,
+      acceptedAnswer: { '@type': 'Answer', text: item.answer } })),
+  } : null;
+}
+
+function venueFaqItems(v, venueName, venueFestivals, lang) {
+  const access = lang === 'en' ? (v.access_en || v.access) : v.access;
+  const hours = lang === 'en' ? (v.hours_en || v.hours) : v.hours;
+  const address = String(v.address || '').trim();
+  const genres = (Array.isArray(v.genre) ? v.genre : String(v.genre || '').split('/'))
+    .map((x) => String(x).trim()).filter(Boolean);
+  const items = [];
+  if (access) items.push(lang === 'en'
+    ? { question: `How do I get to ${venueName}?`, answer: access }
+    : { question: `${venueName}へのアクセスは？`, answer: access });
+  if (hours) items.push(lang === 'en'
+    ? { question: `What are the hours at ${venueName}?`, answer: hours }
+    : { question: `${venueName}の営業時間は？`, answer: hours });
+  if (genres.length) items.push(lang === 'en'
+    ? { question: `What genres are played at ${venueName}?`, answer: genres.join(' / ') }
+    : { question: `${venueName}ではどんなジャンルが流れる？`, answer: genres.join('／') });
+  if (address) items.push(lang === 'en'
+    ? { question: `What is the address of ${venueName}?`, answer: address }
+    : { question: `${venueName}の住所は？`, answer: address });
+  const upcoming = venueFestivals.filter((x) => x.upcoming && x.latest);
+  if (upcoming.length) {
+    const answer = upcoming.map(({ festival, latest }) => {
+      const festivalName = lang === 'en' ? (festival.name_en || festival.name) : festival.name;
+      return `${festivalName} (${festivalDateText(latest, lang) || String(latest.DATE_START || '')})`;
+    }).join(lang === 'en' ? ', ' : '、');
+    items.push(lang === 'en'
+      ? { question: `What festivals and events are scheduled at ${venueName}?`, answer }
+      : { question: `${venueName}で開催予定のフェス・イベントは？`, answer });
+  }
+  return items;
+}
+
+function artistFaqItems(name, a, nearest, pastByFestival, lang) {
+  const items = [];
+  if (nearest) {
+    const festivalName = lang === 'en' ? (nearest.festival.name_en || nearest.festival.name) : nearest.festival.name;
+    const place = editionLocationName(nearest.edition, lang);
+    const date = festivalDateText(nearest.edition, lang) || String(nearest.edition.DATE_START || '');
+    items.push(lang === 'en'
+      ? { question: `When is ${name}'s next appearance?`, answer: `${date} at ${festivalName}${place ? ` (${place})` : ''}` }
+      : { question: `${name}の次の出演はいつ？`, answer: `${date}の${festivalName}${place ? `（${place}）` : ''}` });
+  }
+  const city = String(a.city || '').trim();
+  const country = String(a.country || '').trim();
+  if (city || country) items.push(lang === 'en'
+    ? { question: `Where is ${name} based?`, answer: [city, country].filter(Boolean).join(', ') }
+    : { question: `${name}の拠点は？`, answer: [city, country].filter(Boolean).join('、') });
+  if (pastByFestival.size) {
+    const answer = [...pastByFestival.values()].slice(0, 5).map(({ festival, editions }) => {
+      const label = lang === 'en' ? (festival.name_en || festival.name) : festival.name;
+      const years = [...new Set(editions.map((ed) => editionLabel(editionIdentifier(ed))))].join('・');
+      return `${label} ${years}`;
+    }).join(lang === 'en' ? ', ' : '、');
+    items.push(lang === 'en'
+      ? { question: `What festivals has ${name} played?`, answer }
+      : { question: `${name}はどんなフェスに出演している？`, answer });
+  }
+  return items;
+}
+
 function festivalEditionsTimelineHtml(editions, lang) {
   if (editions.length < 2) return '';
   const rows = editions.map((ed, index) => `<tr class="edition-timeline-row reveal" style="transition-delay:${index * 100}ms">
@@ -1835,7 +1932,7 @@ function festivalHeroDateHtml(edition, lang = 'ja', ended = false) {
   return withLabel(`<time datetime="${start}">${first.monthName} ${first.day}, ${first.year}</time> — <time datetime="${end}">${last.monthName} ${last.day}, ${last.year}</time>`);
 }
 
-function festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, lang, name, canonical, summary, faqItems, relatedHtml, lineupEdition, ended, endedNotice, allFestivals, editionsByFestival }) {
+function festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, lang, name, canonical, summary, faqItems, relatedHtml, lineupEdition, ended, endedNotice, allFestivals, editionsByFestival, modified }) {
   const prefix = lang === 'en' ? '/en' : '';
   const hubHref = `${prefix}/festivals.html`;
   const currentEdition = editions[0];
@@ -1907,6 +2004,7 @@ ${location ? (mapUrl
 
 ${programSection ? `    ${programSection}\n` : ''}${historyHtml ? `    ${historyHtml}\n` : ''}${faqDetailsHtml ? `    ${faqDetailsHtml}\n` : ''}    ${shareHtml}
 ${relatedHtml ? `    <section class="detail-section festival-related-stories-v2">${relatedHtml}</section>\n` : ''}    ${festivalRelatedCardsForPage(f, lang, allFestivals, editionsByFestival)}
+    ${updatedLabel(modified, lang)}
     <div class="article-footer"><a class="detail-back" href="${hubHref}" data-festival-hub-back="${hubHref}" style="margin:0"><span class="arrow"></span> BACK TO FESTIVALS</a></div>
   </div>
 </article>`;
@@ -1935,6 +2033,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
     const ap = editionKeyParts(editionIdentifier(a)), bp = editionKeyParts(editionIdentifier(b));
     return bp.year - ap.year || bp.seq - ap.seq || String(b.DATE_START || '').localeCompare(String(a.DATE_START || ''));
   });
+  const modified = contentDate('festival', f.id, CONTENT_SNAPSHOTS.get(`festival:${f.id}`));
   const latestEdition = editions[0];
   const ended = isEndedFestival(editions);
   const today = new Date(); today.setHours(0, 0, 0, 0);
@@ -2074,6 +2173,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
     inLanguage: lang,
     image: [image],
     url: canonical,
+    ...(modified ? { dateModified: modified } : {}),
     ...parentDates,
     ...(parentLocation ? { location: parentLocation } : {}),
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
@@ -2107,7 +2207,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
   };
 
   const endedNotice = ended ? (lang === 'en' ? "The next edition hasn't been announced yet. We'll update this page." : '次回の開催は未発表です。決まり次第このページで更新します。') : '';
-  const body = festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, lang, name, canonical, summary, faqItems, relatedHtml, lineupEdition, ended, endedNotice, allFestivals, editionsByFestival });
+  const body = festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, lang, name, canonical, summary, faqItems, relatedHtml, lineupEdition, ended, endedNotice, allFestivals, editionsByFestival, modified });
 
   const faqLd = faqItems.length ? {
     '@context': 'https://schema.org',
@@ -2181,6 +2281,10 @@ function artistPage(a, artistsById, lang = 'ja', artistAppearances = new Map(), 
   const members = schemaType === 'MusicGroup'
     ? artistMemberIds(a).map((id) => artistsById.get(id)).filter(Boolean)
     : [];
+  const modified = contentDate('artist', a.id, CONTENT_SNAPSHOTS.get(`artist:${a.id}`));
+  const performerIn = upcoming.slice(0, 6).map(({ festival }) => ({
+    '@type': 'Festival', '@id': `${BASE}/festivals/${encodeURIComponent(festival.id)}.html#festival`,
+  }));
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -2191,6 +2295,8 @@ function artistPage(a, artistsById, lang = 'ja', artistAppearances = new Map(), 
     description: desc,
     ...(a.image ? { image: [image] } : {}),
     url: canonical,
+    ...(modified ? { dateModified: modified } : {}),
+    ...(performerIn.length ? { performerIn } : {}),
     ...(place ? { location: { '@type': 'Place', name: place } } : {}),
     ...(Array.isArray(a.genre) && a.genre.length ? { genre: a.genre } : {}),
     ...(Object.values(links).filter(Boolean).length ? { sameAs: Object.values(links).filter(Boolean) } : {}),
@@ -2227,6 +2333,10 @@ function artistPage(a, artistsById, lang = 'ja', artistAppearances = new Map(), 
       return `<a class="lineup-item" href="${prefix}/festivals/${encodeURIComponent(festival.id)}.html">${esc(label)}</a>`;
     }).join('')}</div></section>`
     : '';
+  const faqItems = stripTags(a.bio || a.bio_en) && !(!stripTags(a.bio) && !stripTags(a.bio_en))
+    ? artistFaqItems(name, a, nearest, pastByFestival, lang) : [];
+  const faqHtml = faqItems.length ? festivalFaqDetailsHtml(faqItems, lang) : '';
+  const faqLd = faqJsonLd(faqItems);
   const artistFestivalIds = appearances.map(({ festival }) => festival.id);
   const artistArticles = (articles || []).filter((article) => String(article.status || '').toLowerCase() !== 'draft' && articleMatchesArtist(article, a, { artistFestivalIds, festivals: XLINK.fests })).slice(0, 3);
   const articlesHtml = artistArticles.length
@@ -2243,13 +2353,14 @@ function artistPage(a, artistsById, lang = 'ja', artistAppearances = new Map(), 
     ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
     ${a.image ? `<div class="detail-hero detail-hero-portrait"><img ${dimensionAttrs(a.image)} src="/${String(a.image).replace(/^\//, '')}"${heroSrcsetAttr(a.image)} alt="${esc(name)}" fetchpriority="high"${imagePositionStyle(a)}></div>` : ''}
     ${bilingualBody(a.bio, a.bio_en, lang)}
-    ${linkRow ? `<div class="detail-links">${linkRow}</div>` : ''}${appearancesHtml}
+    ${linkRow ? `<div class="detail-links">${linkRow}</div>` : ''}${appearancesHtml}${faqHtml ? `\n    ${faqHtml}` : ''}
+    ${updatedLabel(modified, lang)}
     <div class="article-footer"><a class="article-back" href="${hubHref}" data-artist-hub-back="${hubHref}" style="margin:0"><span class="arrow"></span> ALL ARTISTS</a></div>
   </div>
 </article>`;
 
   const thin = !stripTags(a.bio) && !stripTags(a.bio_en);
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'artists'] : ['artists']), `${a.id}.html`), html: page({ title, desc, canonical, image, ogType: 'profile', jsonLd: [jsonLd, breadcrumbLd('ARTISTS', '/artists.html', name, canonical)], body, lang, altHref, robots: thin ? 'noindex,follow' : 'max-image-preview:large', extraScripts: LANG_TOGGLE_SCRIPT + ARTIST_HUB_BACK_SCRIPT, backgroundLayer: true }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'artists'] : ['artists']), `${a.id}.html`), html: page({ title, desc, canonical, image, ogType: 'profile', jsonLd: [jsonLd, breadcrumbLd('ARTISTS', '/artists.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, robots: thin ? 'noindex,follow' : 'max-image-preview:large', extraScripts: LANG_TOGGLE_SCRIPT + ARTIST_HUB_BACK_SCRIPT, backgroundLayer: true }) };
 }
 
 /* Instagram の URL から表示用の @ハンドルを取り出す。
@@ -2287,6 +2398,41 @@ function venueDistance(a, b) {
   const dLat = (lat2 - lat1) * rad, dLng = (lng2 - lng1) * rad;
   const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * Math.sin(dLng / 2) ** 2;
   return 6371 * 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h));
+}
+
+function venueUpcomingEditions(v, allFestivals, editionsByFestival) {
+  const venueName = String(v.name || '').trim().toLocaleLowerCase();
+  return (allFestivals || []).filter(isPublishedFestival).flatMap((festival) =>
+    (editionsByFestival.get(String(festival.id)) || []).filter((edition) => {
+      const textMatch = [edition.LOCATION, edition.LOCATION_JA, edition.ADDRESS]
+        .some((value) => venueName && String(value || '').toLocaleLowerCase().includes(venueName));
+      const near = v.lat && v.lng && edition.LAT && edition.LNG
+        && venueDistance(v, { lat: edition.LAT, lng: edition.LNG }) <= 0.15;
+      const end = String(edition.DATE_END || edition.DATE_START || '');
+      return (textMatch || near) && (!ISO_DATE.test(end) || end >= jstToday());
+    }).map((edition) => ({ festivalId: festival.id, edition: contentRow(edition) }))
+  );
+}
+function prepareContentDateSnapshots({ pubFests, pubArtists, pubVenues, editionsByFestival, lineupsByEdition, artistAppearances }) {
+  CONTENT_DATES = loadContentDates();
+  for (const artist of pubArtists) {
+    const appearances = (artistAppearances.get(String(artist.id)) || []).map(({ edition, festival }) => ({
+      festivalId: festival.id,
+      edition: { EDITION_ID: edition.EDITION_ID, DATE_START: edition.DATE_START, DATE_END: edition.DATE_END, LOCATION: edition.LOCATION, LOCATION_JA: edition.LOCATION_JA, ADDRESS: edition.ADDRESS },
+    })).sort((a, b) => String(a.edition.EDITION_ID).localeCompare(String(b.edition.EDITION_ID)));
+    CONTENT_SNAPSHOTS.set(`artist:${artist.id}`, { artist: contentRow(artist), appearances });
+  }
+  for (const venue of pubVenues) {
+    const upcoming = venueUpcomingEditions(venue, pubFests, editionsByFestival)
+      .sort((a, b) => String(a.edition.EDITION_ID).localeCompare(String(b.edition.EDITION_ID)));
+    CONTENT_SNAPSHOTS.set(`venue:${venue.id}`, { venue: contentRow(venue), upcoming });
+  }
+  for (const festival of pubFests) {
+    const editions = (editionsByFestival.get(String(festival.id)) || []).map((edition) => ({
+      edition: contentRow(edition), lineups: (lineupsByEdition.get(edition.EDITION_ID) || []).map(contentRow),
+    }));
+    CONTENT_SNAPSHOTS.set(`festival:${festival.id}`, { festival: contentRow(festival), editions });
+  }
 }
 
 /* ---------- ヴェニューページ ---------- */
@@ -2419,6 +2565,14 @@ function venuePage(v, lang = 'ja', allFestivals = [], editionsByFestival = new M
     return { festival, latest, upcoming: !ISO_DATE.test(end) || end >= jstToday() };
   }).filter(Boolean).sort((a, b) => Number(b.upcoming) - Number(a.upcoming)
     || String(a.latest.DATE_START || '').localeCompare(String(b.latest.DATE_START || ''))).slice(0, 6);
+  const modified = contentDate('venue', v.id, CONTENT_SNAPSHOTS.get(`venue:${v.id}`));
+  const eventRefs = venueFestivals.filter((x) => x.upcoming).slice(0, 6).map(({ festival }) => ({
+    '@type': 'Festival', '@id': `${BASE}/festivals/${encodeURIComponent(festival.id)}.html#festival`,
+  }));
+  const faqItems = venueFaqItems(v, name, venueFestivals, lang);
+  const faqLd = faqJsonLd(faqItems);
+  if (modified) jsonLd.dateModified = modified;
+  if (eventRefs.length) jsonLd.event = eventRefs;
   const venueArticles = (articles || []).filter((article) => {
     if (!article || String(article.status || '').toLowerCase() === 'draft' || !venueNameForMatch) return false;
     return [article.title, article.title_en, article.body, article.body_en]
@@ -2430,7 +2584,7 @@ function venuePage(v, lang = 'ja', allFestivals = [], editionsByFestival = new M
       ${venueArticles.length ? relatedStoryCardsHtml(venueArticles, lang, { forceEnglishPath: true, compactDate: true, wide: true }) : ''}
     </section>` : '';
 
-  const body = `<article class="detail-page">
+  const body = `<article class="detail-page venue-detail">
   <div class="detail-inner">
     ${place ? `<div class="detail-eyebrow">${esc(place)}</div>` : ''}
     <h1>${esc(name)}</h1>
@@ -2438,6 +2592,7 @@ function venuePage(v, lang = 'ja', allFestivals = [], editionsByFestival = new M
     ${v.image ? `<div class="detail-hero"><img ${dimensionAttrs(v.image)} src="/${String(v.image).replace(/^\//, '')}"${heroSrcsetAttr(v.image)} alt="${esc(name)}" fetchpriority="high"${imagePositionStyle(v)}></div>` : ''}
     ${information}
     ${bilingualBody(v.desc, v.desc_en, lang)}${goodToKnowHtml ? `\n    ${goodToKnowHtml}` : ''}
+    ${faqItems.length ? `\n    ${festivalFaqDetailsHtml(faqItems, lang)}` : ''}
     ${venueRelatedHtml ? `\n    ${venueRelatedHtml}` : ''}
     ${(() => { // 回遊: 座標があれば距離順、無ければ同じ街。種別はまたぐ。
       const sameCity = XLINK.venues.filter((x) => x.id !== v.id && x.city && v.city && String(x.city).toLowerCase() === String(v.city).toLowerCase());
@@ -2448,11 +2603,12 @@ function venuePage(v, lang = 'ja', allFestivals = [], editionsByFestival = new M
       if (!others.length) return '';
       return `<h2>${lang === 'en' ? 'NEARBY VENUES' : '近くの会場'}</h2>${relatedChips(others, 'venues', lang)}`;
     })()}
+    ${updatedLabel(modified, lang)}
     <div class="article-footer"><a class="article-back" href="${hubHref}" data-venue-hub-back="${hubHref}" style="margin:0"><span class="arrow"></span> ALL VENUES</a></div>
   </div>
 </article>`;
 
-  const html = page({ title, desc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('VENUES', '/venues.html', name, canonical)], body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT + VENUE_HUB_BACK_SCRIPT, backgroundLayer: true })
+  const html = page({ title, desc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('VENUES', '/venues.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT + VENUE_HUB_BACK_SCRIPT, backgroundLayer: true })
     .replace(/[ \t]+$/gm, '');
   return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'venues'] : ['venues']), `${v.id}.html`), html };
 }
@@ -3070,6 +3226,7 @@ function main() {
       .join('\n');
     throw new Error(`lineups.json: ARTIST_ID 参照切れ ${missingArtistRefs.size}件。ARTISTSシートに追加するか、LINEUPSのIDを修正してください。\n${details}`);
   }
+  prepareContentDateSnapshots({ pubFests, pubArtists, pubVenues, editionsByFestival, lineupsByEdition, artistAppearances });
   XLINK = {
     fests: FESTIVALS,
     venues: VENUES,
@@ -3134,6 +3291,7 @@ ${FAVICON_TAGS}
     'en/artists': writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'en', artistAppearances, editionsByFestival, pubArticles)).concat(redirectStubs('en/artists', liveArtistIds)), 'en/artists'),
     'en/venues': writeAll(pubVenues.map((v) => venuePage(v, 'en', pubFests, editionsByFestival, pubArticles)), 'en/venues'),
   };
+  writeContentDates();
 
   const today = todayInJapan();
   const upcomingTopFests = pubFests

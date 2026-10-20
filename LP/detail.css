@@ -203,11 +203,16 @@
 .detail-hero-portrait { aspect-ratio: 3/2; }
 
 /* アーティスト詳細のファーストビューは、ナビ下から写真までを短く保つ。 */
-.artist-detail { padding-top: 101px; }
-.artist-detail .detail-eyebrow { margin-bottom: 8px; }
-.artist-detail h1 { margin-top: 0; margin-bottom: 14px; }
-.artist-detail .detail-chips { margin-bottom: 20px; }
-.artist-detail .detail-hero { margin-bottom: 48px; }
+.artist-detail,
+.venue-detail { padding-top: 101px; }
+.artist-detail .detail-eyebrow,
+.venue-detail .detail-eyebrow { margin-bottom: 8px; }
+.artist-detail h1,
+.venue-detail h1 { margin-top: 0; margin-bottom: 14px; }
+.artist-detail .detail-chips,
+.venue-detail .detail-chips { margin-bottom: 20px; }
+.artist-detail .detail-hero,
+.venue-detail .detail-hero { margin-bottom: 48px; }
 
 .detail-body {
   font-family: var(--font-body); font-weight: 300; font-size: 16px;
@@ -314,10 +319,14 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   /* 固定ヘッダー直下でも戻る導線が重ならないようにする */
   .article-detail { padding: 104px 0 60px; }
   .detail-page { padding: 84px 0 60px; }
-  .artist-detail { padding-top: 28px; }
-  .artist-detail .detail-eyebrow { margin-bottom: 6px; }
-  .artist-detail h1 { margin-bottom: 12px; }
-  .artist-detail .detail-chips { margin-bottom: 18px; }
+  .artist-detail,
+  .venue-detail { padding-top: 28px; }
+  .artist-detail .detail-eyebrow,
+  .venue-detail .detail-eyebrow { margin-bottom: 6px; }
+  .artist-detail h1,
+  .venue-detail h1 { margin-bottom: 12px; }
+  .artist-detail .detail-chips,
+  .venue-detail .detail-chips { margin-bottom: 18px; }
   .article-detail-inner, .detail-inner { padding: 0 24px; }
   .article-detail .article-back { padding: 10px 0; margin-bottom: 20px; }
   .article-hero-img, .detail-hero { margin-left: -24px; margin-right: -24px; }
@@ -533,6 +542,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 .editions-table a { color: var(--accent); border-bottom: 1px solid rgba(255,45,45,0.3); }
 
 /* ===== FESTIVAL FAQ ===== */
+.detail-last-updated { margin: 42px 0 0; color: rgba(240,237,232,0.48); font-size: 12px; letter-spacing: .04em; }
 .festival-faq { margin-top: 56px; }
 .festival-faq dl { margin: 0; border-top: 1px solid rgba(240,237,232,0.12); }
 .festival-faq dl > div { padding: 20px 0; border-bottom: 1px solid rgba(240,237,232,0.1); }
@@ -837,19 +847,33 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   line-height: 1.6; opacity: .72; padding-top: 4px;
 }
 
-.festival-design-v2 .festival-faq-list details { padding: 0 0 28px; }
-.festival-design-v2 .festival-faq-list details + details { padding-top: 12px; }
-.festival-design-v2 .festival-faq-list summary {
+.festival-design-v2 .festival-faq-list details,
+.artist-detail .festival-faq-list details,
+.venue-detail .festival-faq-list details { padding: 0 0 28px; }
+.festival-design-v2 .festival-faq-list details + details,
+.artist-detail .festival-faq-list details + details,
+.venue-detail .festival-faq-list details + details { padding-top: 12px; }
+.festival-design-v2 .festival-faq-list summary,
+.artist-detail .festival-faq-list summary,
+.venue-detail .festival-faq-list summary {
   list-style: none; cursor: pointer; font-family: var(--font-body);
   font-size: 16px; font-weight: 400; line-height: 1.6;
 }
-.festival-design-v2 .festival-faq-list summary::-webkit-details-marker { display: none; }
-.festival-design-v2 .festival-faq-answer {
+.festival-design-v2 .festival-faq-list summary::-webkit-details-marker,
+.artist-detail .festival-faq-list summary::-webkit-details-marker,
+.venue-detail .festival-faq-list summary::-webkit-details-marker { display: none; }
+.festival-design-v2 .festival-faq-answer,
+.artist-detail .festival-faq-answer,
+.venue-detail .festival-faq-answer {
   max-width: 760px; padding-top: 12px; font-family: var(--font-body);
   font-size: 14px; font-weight: 300; line-height: 1.85; opacity: .62;
 }
-.festival-design-v2 .festival-faq-answer p { margin: 0; }
-.festival-design-v2 .festival-faq-answer a { color: var(--accent); overflow-wrap: anywhere; }
+.festival-design-v2 .festival-faq-answer p,
+.artist-detail .festival-faq-answer p,
+.venue-detail .festival-faq-answer p { margin: 0; }
+.festival-design-v2 .festival-faq-answer a,
+.artist-detail .festival-faq-answer a,
+.venue-detail .festival-faq-answer a { color: var(--accent); overflow-wrap: anywhere; }
 
 .festival-design-v2 .festival-related-stories-v2 .related-stories { margin-top: 0; }
 .festival-design-v2 .festival-related-stories-v2 .related-stories h2 {

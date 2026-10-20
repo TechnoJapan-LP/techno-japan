@@ -25,6 +25,10 @@ const GA4_REPORTS = [
   'all-pages-and-screens', 'lifecycle-traffic-acquisition-v2', 'landing-page',
   'top-events', 'user-technology-detail',
 ];
+const AI_REFERRER_HOSTS = [
+  'chatgpt.com', 'chat.openai.com', 'perplexity.ai', 'gemini.google.com',
+  'copilot.microsoft.com', 'claude.ai', 'you.com', 'phind.com',
+];
 const GSC_URL = 'https://search.google.com/search-console/performance/search-analytics';
 const GA4_URL = 'https://analytics.google.com/analytics/web/#/p535755449/reports/explorer';
 const LOGIN_MESSAGE = 'ログインが切れています。node scripts/audit_analytics.mjs --login を実行してサインインしてください。';
@@ -36,6 +40,7 @@ function help() {
   node scripts/audit_analytics.mjs --gsc --news       # 検索タイプ=ニュースも取る（Google ニュース掲載の実測）
   node scripts/audit_analytics.mjs --gnews             # Google ニュース（news.google.com）のレポートも取る
   node scripts/audit_analytics.mjs --ga4               # GA4 だけ
+  node scripts/audit_analytics.mjs --ai                # AIサービス経由のGA4流入（直近28日/前28日）
   node scripts/audit_analytics.mjs --range=28d         # 3m / 28d / 7d
   node scripts/audit_analytics.mjs --login             # 画面付きでログイン
   node scripts/audit_analytics.mjs --out=reports/analytics`);
@@ -48,9 +53,11 @@ const news = args.includes('--news');
 const gnews = args.includes('--gnews');
 const onlyGsc = args.includes('--gsc') || news || gnews;
 const onlyGa4 = args.includes('--ga4');
+const ai = args.includes('--ai');
 const rangeArg = args.find(a => a.startsWith('--range='))?.slice(8) || '3m';
 if (!['3m', '28d', '7d'].includes(rangeArg)) throw new Error('--range は 3m / 28d / 7d のいずれかです');
 if (onlyGsc && onlyGa4) throw new Error('--gsc と --ga4 は同時に指定できません');
+if (ai && onlyGsc) throw new Error('--ai と GSC系オプションは同時に指定できません');
 const outRoot = path.resolve(args.find(a => a.startsWith('--out='))?.slice(6) || 'reports/analytics');
 const today = new Date();
 const dateString = today.toLocaleDateString('sv-SE', { timeZone: 'Asia/Tokyo' });
@@ -218,6 +225,15 @@ function rangeInfo() {
   const ymd = d => d.toLocaleDateString('sv-SE', { timeZone: 'Asia/Tokyo' }).replaceAll('-', '');
   return { days, gsc: rangeArg === '3m' ? 'num_of_months=3' : `num_of_days=${days}`, start: ymd(start), end: ymd(today), label: rangeArg === '3m' ? '90d' : rangeArg };
 }
+function aiRangeInfo(previous = false) {
+  const end = new Date(today); end.setDate(end.getDate() - (previous ? 28 : 0));
+  const start = new Date(end); start.setDate(start.getDate() - 27);
+  const ymd = d => d.toLocaleDateString('sv-SE', { timeZone: 'Asia/Tokyo' }).replaceAll('-', '');
+  return { start: ymd(start), end: ymd(end), label: previous ? 'previous-28d' : '28d' };
+}
+function aiRows(data) {
+  return (data?.rows || []).filter((row) => row.some((cell) => AI_REFERRER_HOSTS.some((host) => String(cell).toLowerCase().includes(host))));
+}
 
 function numeric(value) {
   const text = String(value).replaceAll(',', '').replace('%', '');
@@ -291,7 +307,7 @@ async function main() {
     }
     const range = rangeInfo();
     const dir = path.join(outRoot, dateString); await mkdir(dir, { recursive: true });
-    const results = { gsc: {}, gnews: {}, ga4: {} }; const failures = [];
+    const results = { gsc: {}, gnews: {}, ga4: {}, ai: {} }; const failures = [];
     const gscTypes = news ? (args.includes('--gsc') ? ['web', 'news'] : ['news']) : (gnews && !args.includes('--gsc') ? [] : ['web']);
     if (!onlyGa4) for (const type of gscTypes) {
       results.gsc[type] = {};
@@ -353,7 +369,7 @@ async function main() {
         failures.push(`Google ニュース ${breakdown}: ${error.message}`); console.error(`Google ニュース ${rangeArg} ${breakdown}: 取得失敗`);
       }
     }
-    if (!onlyGsc) for (const report of GA4_REPORTS) {
+    if (!onlyGsc && !ai) for (const report of GA4_REPORTS) {
       try {
         const url = `${GA4_URL}?params=_u..nav%3Dmaui%26_u.date00%3D${range.start}%26_u.date01%3D${range.end}&r=${report}`;
         await navigate(ws, url, 'document.querySelectorAll("[role=row]").length > 1');
@@ -361,8 +377,20 @@ async function main() {
         console.log(`GA4 ${range.label} ${report}: ${results.ga4[report].rows.length}行`);
       } catch (error) { if (error.loginExpired) throw error; failures.push(`GA4 ${report}: ${error.message}`); console.error(`GA4 ${range.label} ${report}: 取得失敗`); }
     }
+    if (ai) {
+      const current = aiRangeInfo(false); const previous = aiRangeInfo(true);
+      for (const [label, period] of [['current', current], ['previous', previous]]) {
+        try {
+          const url = `${GA4_URL}?params=_u..nav%3Dmaui%26_u.date00%3D${period.start}%26_u.date01%3D${period.end}&r=lifecycle-traffic-acquisition-v2`;
+          await navigate(ws, url, 'document.querySelectorAll("[role=row]").length > 1');
+          const data = await extractGa4(ws);
+          results.ai[label] = { ...data, rows: aiRows(data) };
+          console.log(`GA4 AI ${label}: ${results.ai[label].rows.length}行`);
+        } catch (error) { if (error.loginExpired) throw error; failures.push(`GA4 AI ${label}: ${error.message}`); }
+      }
+    }
     const totalGscTables = Object.values(results.gsc).reduce((total, typeResults) => total + Object.keys(typeResults).length, 0);
-    const totalTables = totalGscTables + Object.keys(results.gnews).length + Object.keys(results.ga4).length;
+    const totalTables = totalGscTables + Object.keys(results.gnews).length + Object.keys(results.ga4).length + Object.keys(results.ai).length;
     if (!totalTables) { for (const failure of failures) console.error(`取得できなかった表: ${failure}`); process.exitCode = 1; return; }
     for (const [type, typeResults] of Object.entries(results.gsc)) {
       for (const [breakdown, data] of Object.entries(typeResults)) {
@@ -371,6 +399,7 @@ async function main() {
       }
     }
     for (const [report, data] of Object.entries(results.ga4)) await writeFile(path.join(dir, `ga4-${range.label}-${report}.csv`), csv(data.rows, data.headers));
+    for (const [period, data] of Object.entries(results.ai)) await writeFile(path.join(dir, `ga4-ai-${period}.csv`), csv(data.rows, data.headers));
     if (results.gsc.web && Object.keys(results.gsc.web).length) await writeFile(path.join(dir, `gsc-${rangeArg}.json`), JSON.stringify(results.gsc.web, null, 2) + '\n');
     if (results.gsc.news && Object.keys(results.gsc.news).length) await writeFile(path.join(dir, `gsc-news-${rangeArg}.json`), JSON.stringify(results.gsc.news, null, 2) + '\n');
     for (const [breakdown, data] of Object.entries(results.gnews)) await writeFile(path.join(dir, `gnews-${rangeArg}-${breakdown}.csv`), csv(data.rows, data.headers));
@@ -379,7 +408,8 @@ async function main() {
     const previous = await previousGscTotals();
     const previousNews = await previousGscTotals('news');
     const previousGnews = await previousGscTotals('gnews');
-    const summary = [`# Analytics audit`, '', `- 実行日: ${dateString}`, `- 期間: ${rangeArg}（${range.start}〜${range.end}）`, '', '| 表 | 行数 |', '|---|---:|', ...Object.entries(results.gsc).flatMap(([type, typeResults]) => Object.entries(typeResults).map(([k,v]) => `| GSC ${type === 'news' ? 'news ' : ''}${k} | ${v.rows.length} |`)), ...Object.entries(results.gnews).map(([k,v]) => `| Google ニュース ${k} | ${v.rows.length} |`), ...Object.entries(results.ga4).map(([k,v]) => `| GA4 ${k} | ${v.rows.length} |`), ''];
+    const summary = [`# Analytics audit`, '', `- 実行日: ${dateString}`, `- 期間: ${rangeArg}（${range.start}〜${range.end}）`, '', '| 表 | 行数 |', '|---|---:|', ...Object.entries(results.gsc).flatMap(([type, typeResults]) => Object.entries(typeResults).map(([k,v]) => `| GSC ${type === 'news' ? 'news ' : ''}${k} | ${v.rows.length} |`)), ...Object.entries(results.gnews).map(([k,v]) => `| Google ニュース ${k} | ${v.rows.length} |`), ...Object.entries(results.ga4).map(([k,v]) => `| GA4 ${k} | ${v.rows.length} |`), ...Object.entries(results.ai).map(([k,v]) => `| GA4 AI ${k} | ${v.rows.length} |`), ''];
+    if (ai) summary.push('', '## AI流入', '', `対象参照元: ${AI_REFERRER_HOSTS.join(', ')}`, '', '直近28日と前28日の行を `ga4-ai-current.csv` / `ga4-ai-previous.csv` に保存しました。GA4画面の列（セッション数・ユーザー数・ランディングページ）をそのまま比較できます。', '');
     if (results.gsc.web && Object.keys(results.gsc.web).length) {
       summary.push('| GSC 合計 | 値 | 前回比 |', '|---|---:|---:|');
       const t = results.gsc.web[Object.keys(results.gsc.web)[0]].totals; const p = previous?.[Object.keys(results.gsc.web)[0]]?.totals;

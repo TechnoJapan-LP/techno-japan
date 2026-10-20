@@ -30,6 +30,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
+import { contentHash, contentRow } from './lib/content-dates.mjs';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
@@ -82,6 +83,12 @@ function loadPublishedFestivals() {
   new vm.Script(fs.readFileSync(path.join(LP, 'data.js'), 'utf8') + '\n;globalThis.__festivals = FESTIVALS;').runInContext(context);
   return (context.__festivals || []).filter((f) => f && f.id && String(f.status || '').toLowerCase() !== 'draft');
 }
+function loadPublishedEntities(name) {
+  const context = {};
+  vm.createContext(context);
+  new vm.Script(fs.readFileSync(path.join(LP, 'data.js'), 'utf8') + `\n;globalThis.__items = ${name};`).runInContext(context);
+  return (context.__items || []).filter((x) => x && x.id && String(x.status || '').toLowerCase() !== 'draft');
+}
 
 function editionKeyParts(value) {
   const m = String(value || '').trim().match(/^(\d{4})(?:-(\d+))?$/);
@@ -110,6 +117,12 @@ function localPathFromSiteUrl(url) {
   if (pathname.endsWith('/')) pathname += 'index.html';
   if (!pathname.startsWith('/') || pathname.includes('..')) return null;
   return path.join(LP, pathname.slice(1));
+}
+
+function loadData() {
+  const context = {}; vm.createContext(context);
+  new vm.Script(fs.readFileSync(path.join(LP, 'data.js'), 'utf8') + '\n;globalThis.__data = { ARTISTS, FESTIVALS, VENUES };').runInContext(context);
+  return context.__data;
 }
 
 /* --- 1〜2) 全ページのパースと @type --- */
@@ -238,6 +251,110 @@ for (const fid of [...withLineup].slice(0, 200)) {
 }
 check('開催回（subEvent）すべてに eventStatus が出る', noStatus.length === 0,
   [...new Set(noStatus)].slice(0, 5).join(', '));
+
+/* --- 5b) GEO detail pages: visible FAQ, freshness, and entity relations --- */
+const publishedArtists = loadPublishedEntities('ARTISTS');
+const publishedVenues = loadPublishedEntities('VENUES').filter((v) => v.name && v.city && v.city !== 'undefined');
+const todayIso = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Tokyo' }).format(new Date());
+const detailDates = new Set();
+const badRelations = [];
+const badFaq = [];
+const badDates = [];
+for (const [kind, entities] of [['artists', publishedArtists], ['venues', publishedVenues], ['festivals', publishedFestivals]]) {
+  for (const entity of entities) {
+    for (const rel of [kind === 'artists' ? `artists/${entity.id}.html` : kind === 'venues' ? `venues/${entity.id}.html` : `festivals/${entity.id}.html`, kind === 'artists' ? `en/artists/${entity.id}.html` : kind === 'venues' ? `en/venues/${entity.id}.html` : `en/festivals/${entity.id}.html`]) {
+      const file = path.join(LP, rel);
+      if (!fs.existsSync(file)) continue;
+      const html = fs.readFileSync(file, 'utf8');
+      const objects = jsonLdObjects(file);
+      const main = objects.find((x) => x['@id'] && !String(x['@id']).includes('#edition-'));
+      const date = String(main?.dateModified || '');
+      if (date) { detailDates.add(date); if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || date > todayIso) badDates.push(`${rel}: dateModified=${date}`); }
+      const faq = objects.find((x) => x['@type'] === 'FAQPage');
+      const visible = (html.match(/<section class="detail-section festival-faq festival-faq-details">[\s\S]*?<\/section>/g) || []).join('').match(/<details>/g)?.length || 0;
+      if (faq && (faq.mainEntity || []).length !== visible || faq && (faq.mainEntity || []).some((q) => !String(q.acceptedAnswer?.text || '').trim())) badFaq.push(`${rel}: FAQPage=${faq.mainEntity?.length || 0}, visible=${visible}`);
+      for (const relation of [...(main?.performerIn || []), ...(main?.event || [])]) {
+        const target = localPathFromSiteUrl(String(relation['@id'] || '').replace(/#festival$/, ''));
+        if (!target || !fs.existsSync(target)) badRelations.push(`${rel}: ${relation['@id'] || ''}`);
+      }
+    }
+  }
+}
+check('会場・アーティスト・フェス詳細のFAQPageと見えるFAQの質問数が一致し、回答が空でない', badFaq.length === 0, badFaq.slice(0, 5).join(', '));
+check('dateModifiedがISO日付で未来でない', badDates.length === 0, badDates.slice(0, 3).join(', '));
+check('詳細ページのdateModifiedが全ページ同一ではない', detailDates.size > 1, [...detailDates].join(', '));
+check('performerIn / event のフェス @id が実在する', badRelations.length === 0, badRelations.slice(0, 5).join(', '));
+
+/* --- 5c) content-dates ledger --- */
+const datesPath = path.join(LP, 'data', 'content-dates.json');
+let ledger = null;
+try { ledger = JSON.parse(fs.readFileSync(datesPath, 'utf8')); } catch { ledger = null; }
+check('content-dates.json がある', !!ledger && !Array.isArray(ledger));
+if (ledger) {
+  const data = loadData();
+  const editionByFestival = new Map();
+  for (const ed of editions) {
+    const key = String(ed.FESTIVAL_ID);
+    if (!editionByFestival.has(key)) editionByFestival.set(key, []);
+    editionByFestival.get(key).push(ed);
+  }
+  const lineupsByEdition = new Map();
+  for (const row of lineups) {
+    const key = String(row.EDITION_ID || '');
+    if (!lineupsByEdition.has(key)) lineupsByEdition.set(key, []);
+    lineupsByEdition.get(key).push(row);
+  }
+  const snapshots = new Map();
+  const isComposite = (row) => {
+    const ids = String(row.ARTIST_IDS || row.ARTIST_ID || '').split(',').map((x) => x.trim()).filter(Boolean);
+    return ids.length > 1 || row.JOIN_TYPE || String(row.SET_TYPE || '').toLowerCase() === 'b2b' || (!ids.length && /\s&\s/.test(String(row.ACT_LABEL || '')));
+  };
+  const artistsById = new Map(publishedArtists.map((x) => [String(x.id), x]));
+  const artistRows = new Map();
+  for (const row of lineups) {
+    if (isComposite(row)) continue;
+    const id = String(row.ARTIST_IDS || row.ARTIST_ID || '').split(',')[0].trim();
+    const ed = editions.find((x) => String(x.EDITION_ID) === String(row.EDITION_ID));
+    if (!id || !ed || !artistsById.has(id)) continue;
+    const list = artistRows.get(id) || [];
+    if (list.some((x) => x.edition.EDITION_ID === ed.EDITION_ID)) continue;
+    list.push({ festivalId: ed.FESTIVAL_ID, edition: { EDITION_ID: ed.EDITION_ID, DATE_START: ed.DATE_START, DATE_END: ed.DATE_END, LOCATION: ed.LOCATION, LOCATION_JA: ed.LOCATION_JA, ADDRESS: ed.ADDRESS } });
+    artistRows.set(id, list);
+  }
+  for (const artist of publishedArtists) snapshots.set(`artist:${artist.id}`, { artist: contentRow(artist), appearances: (artistRows.get(String(artist.id)) || []).sort((a, b) => String(a.edition.EDITION_ID).localeCompare(String(b.edition.EDITION_ID))) });
+  const venueDistance = (a, b) => {
+    const lat1 = Number(a.lat), lng1 = Number(a.lng), lat2 = Number(b.lat), lng2 = Number(b.lng);
+    if (![lat1, lng1, lat2, lng2].every(Number.isFinite)) return Infinity;
+    const r = Math.PI / 180, dLat = (lat2 - lat1) * r, dLng = (lng2 - lng1) * r;
+    const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * r) * Math.cos(lat2 * r) * Math.sin(dLng / 2) ** 2;
+    return 6371 * 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h));
+  };
+  const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Tokyo' }).format(new Date());
+  for (const venue of publishedVenues) {
+    const name = String(venue.name || '').trim().toLowerCase();
+    const upcoming = [];
+    for (const festival of publishedFestivals) for (const ed of editionByFestival.get(String(festival.id)) || []) {
+      const text = [ed.LOCATION, ed.LOCATION_JA, ed.ADDRESS].some((x) => name && String(x || '').toLowerCase().includes(name));
+      const near = venue.lat && venue.lng && ed.LAT && ed.LNG && venueDistance(venue, { lat: ed.LAT, lng: ed.LNG }) <= 0.15;
+      const end = String(ed.DATE_END || ed.DATE_START || '');
+      if ((text || near) && (!/^\d{4}-\d{2}-\d{2}$/.test(end) || end >= today)) upcoming.push({ festivalId: festival.id, edition: contentRow(ed) });
+    }
+    upcoming.sort((a, b) => String(a.edition.EDITION_ID).localeCompare(String(b.edition.EDITION_ID)));
+    snapshots.set(`venue:${venue.id}`, { venue: contentRow(venue), upcoming });
+  }
+  for (const festival of publishedFestivals) snapshots.set(`festival:${festival.id}`, { festival: contentRow(festival), editions: (editionByFestival.get(String(festival.id)) || []).map((ed) => ({ edition: contentRow(ed), lineups: (lineupsByEdition.get(ed.EDITION_ID) || []).map(contentRow) })) });
+  const expectedKeys = new Set([...snapshots.keys()]);
+  const badLedger = [];
+  for (const key of expectedKeys) {
+    const entry = ledger[key];
+    if (!entry || typeof entry.hash !== 'string' || !Object.prototype.hasOwnProperty.call(entry, 'date')) { badLedger.push(`${key}: missing hash/date`); continue; }
+    if (entry.date && (!/^\d{4}-\d{2}-\d{2}$/.test(entry.date) || entry.date > today)) badLedger.push(`${key}: invalid date ${entry.date}`);
+    if (entry.hash !== contentHash(snapshots.get(key))) badLedger.push(`${key}: hash mismatch`);
+  }
+  const unexpectedKeys = Object.keys(ledger).filter((key) => !expectedKeys.has(key));
+  check(`content-dates.json の${expectedKeys.size}キーにhash/dateがあり現在データと一致`, badLedger.length === 0, badLedger.slice(0, 5).join(', '));
+  check('content-dates.json に不要なキーがない', unexpectedKeys.length === 0, unexpectedKeys.slice(0, 5).join(', '));
+}
 
 /* --- 6) events.json --- */
 const evPath = path.join(LP, 'events.json');

@@ -11043,3 +11043,112 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 実ブラウザ確認は Claude が担当。CSS更新後は `?cb=<乱数>` または Cmd+Shift+Rでキャッシュを避けること。
 - preflightの9件失敗が環境制限または外部画像取得以外の原因でないことを確認し、全件成功するまでpushしないこと。
 - `audit_spa_vs_static.py --after` の既存基準差分（artist appearances / venue related_pages）は、本件と切り分けて判断すること。
+
+### 2026-10-21 AI検索（GEO / AIO / LLMO）改善 — 未コミット
+
+### 実施
+- `scripts/build-detail-pages.mjs` に会場・アーティストの見えるFAQとFAQPageを追加。既存の `festivalFaqDetailsHtml()` / `festival-faq` 部品を流用し、データがある質問だけを出力した。
+- 会場に今後の開催予定を含むFAQ、アーティストに紹介文がありnoindexでない場合だけ次回出演・拠点・過去出演FAQを追加した。アーティストは最大5フェス、関係JSON-LDは最大6件。
+- 対象IDを含む `LP/data.js`、関連する `LP/data/editions.json` / `LP/data/lineups.json` のgit履歴の最大日を `dateModified` と最終更新日に使用。ビルド日・書込み日は使用せず、履歴が取れない場合は出力しない。
+- アーティストに `performerIn`、会場に `event` を追加し、既存フェス詳細の `#festival` @idだけを参照。`detail.css` の版を66→67へ更新した。
+- `scripts/audit_analytics.mjs --ai` とAI参照元定数、`scripts/check_jsonld.mjs` のFAQ・更新日・関係先検査を追加した。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node --check scripts/build-detail-pages.mjs` / `scripts/audit_analytics.mjs`: 成功。
+- `node scripts/build-detail-pages.mjs`: 成功。JA/EN詳細563ページを再生成。
+- `node scripts/check_jsonld.mjs`: 成功。FAQ件数一致、回答非空、dateModified未来日なし・複数日付、performerIn/event参照先実在を確認。
+- `node scripts/audit_analytics.mjs --help`: `--ai` の説明を確認。
+- 実ブラウザ確認: 未確認（Claude担当）。FAQ表示・開閉・関連リンク・更新日をJA/EN、PC/モバイルで確認すること。
+- GA4 `--ai` 実行: 未実施（認証が必要、Claude担当）。
+- `bash scripts/preflight.sh`: 49件成功 / 10件失敗。詳細生成は外部Google画像取得で240秒タイムアウト、ハブ/CMS/地図/モバイル系は実行環境のlocalhost listen EPERM。加えてCSS版更新後のCMSプレビュー固定値を67へ修正し、`check_cms_article_generated_preview.mjs` は成功。公開可能とは判定しない。
+
+### 変更したパターン
+- 会場FAQ（access / hours / genre / address / 今後の関連開催）。
+- アーティストFAQ（次回出演 / city・country / 過去出演最大5件、紹介文あり・noindexなしのみ）。
+- 詳細主エンティティの履歴日、見える最終更新日、`performerIn` / `event`、GA4 AI参照元比較、JSON-LD回帰検査。
+
+### 未確認の類似パターン
+- 確認済み・0件：FAQPageと見えるFAQ数の不一致、空回答、未来dateModified、関係先@idの参照切れ。
+- 未確認：実ブラウザの全JA/EN・PC/モバイル操作、GA4認証済み実行、公開環境でのAI流入データ。preflightのlocalhost検査は環境制限で未完了。
+
+### 次の担当への注意・判断待ち
+- 公開前は `bash scripts/preflight.sh` を省略なしで実行し、全件成功までpushしない。
+- 実ブラウザは `?cb=<乱数>` または Cmd+Shift+Rでキャッシュを避けて確認する。
+- 認証済み環境で `node scripts/audit_analytics.mjs --ai --out=reports/analytics` をClaudeが実行し、直近28日/前28日の結果を記録する。
+
+### 2026-10-21 dateModified台帳方式への変更 — 未コミット
+
+### 実施
+- `scripts/build-detail-pages.mjs` のpickaxe（`git log -S`）方式を削除し、`LP/data/content-dates.json` を追加した。
+- アーティストはデータ行＋出演（開催回ID・日付・会場）、会場はデータ行＋今後の関連開催、フェスはデータ行＋全開催回＋開催回ごとの出演データを、キー順JSON化してSHA-256化する方式に変更した。
+- ハッシュ一致時は台帳日付を維持し、不一致・新規時はJST当日を使う。初回は既存 `LP/sitemap.xml` のlastmodを使い、sitemapにないnoindexアーティストは日付空欄で表示しない。
+- `scripts/check_jsonld.mjs` に台帳の存在、全キーのhash/date、未来日、現在データとのhash一致、不要キーの検査を追加した。
+- `deploy-pages.yml` / `publish-pipeline.yml` / `generate-meta.yml` はいずれも `git add -A LP/` のため、台帳もコミット範囲に含まれることを確認した。workflow変更は不要。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `LP/sitemap.xml` 初期値確認: `venues/womb.html`=`2026-10-21`、`artists/dj-kensei.html`=`2026-10-21`。
+- 生成後の表示/JSON-LD: WOMB=`2026-10-21`、DJ KENSEI=`2026-10-21`、Global Ark=`2026-08-21`。
+- `node scripts/check_jsonld.mjs`: 成功。台帳252キーのhash/date一致、未来日なし、不要キーなし。
+- 台帳方式のビルド: 既存画像寸法を再利用した実測で1.14秒（台帳処理自体の増加は確認できない）。通常ビルドは外部画像143 URLの取得失敗・3回再試行により5分20秒で中断し、画像取得がボトルネック。約70秒からの増加原因は台帳ではない。
+- `git diff --check`: 成功。pickaxeコード残存なし。
+- 実ブラウザ確認・GA4実行: 未確認（前項から引き続きClaude担当）。
+
+### 変更したパターン
+- `content-dates.json` の安定ソート台帳、対象データの正規化ハッシュ、sitemap初期値、変更時のJST日付更新。
+- dateModified / 最終更新日の参照元を台帳へ変更。
+- 台帳整合性検査。
+
+### 未確認の類似パターン
+- 確認済み・0件：pickaxe参照、台帳hash不一致、未来日、不要キー、workflowの台帳コミット漏れ。
+- 未確認：外部画像取得が成功する環境での通常フルビルド時間、実ブラウザでの更新日表示、公開後の台帳コミット。
+
+### 次の担当への注意・判断待ち
+- `LP/data/content-dates.json` は生成物として必ずコミットする。`git add -A LP/` の範囲から外さない。
+- データ変更後は台帳と詳細ページを同じビルドで更新する。sitemap生成を先に行うと、初回値の参照元が変わるため順序に注意する。
+- 公開前は省略なしの `bash scripts/preflight.sh` と、Claude担当の実ブラウザ確認を行う。
+
+### 2026-10-21 content-dates初期値の履歴種まき — 未コミット
+
+### 実施
+- `scripts/lib/content-dates.mjs` を追加し、ビルドと種まきで同じ `contentRow` / キー順正規化 / SHA-256 `contentHash` を共有した。
+- `scripts/seed-content-dates.mjs` を追加。`git log --reverse --format='%H %cs' -- LP/data.js LP/data/editions.json LP/data/lineups.json` を古い順に処理し、各コミットの3ファイルを `git show` で復元して、データhashが変わった最後の `%cs` を初期dateにした。読めない履歴はスキップした。
+- sitemap lastmodを初期値に使うロジックをビルドから削除した。通常ビルドは既存台帳のhash一致時は日付を維持し、不一致時だけJST当日へ更新する。
+- 種まき後の台帳は252キー。キーは現在の公開アーティスト・会場・フェスだけに整理した。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node scripts/seed-content-dates.mjs`: 成功。142件の履歴コミットを処理。
+- 日付分布上位: `2026-09-15` 86件、`2026-10-20` 72件、`2026-08-03` 28件、`2026-09-10` 12件、`2026-10-17` 8件。2026-10-21は0件で、sitemap由来の一括当日化を解消した。
+- 対象確認: WOMB=`2026-10-20`、DJ KENSEI=`2026-10-20`、Global Ark=`2026-10-20`、ken-ishii=`2026-10-20`。Global Arkの該当コミットは `%cs` が2026-10-20（コミット時刻はUTC 2026-10-20 16:07、JSTでは10月21日未明）のため、指定された`%cs`規則では10月20日になる。
+- 台帳方式の生成（既存画像寸法を再利用）: 約1.04秒。台帳処理で約70秒から増加していない。通常の外部画像取得はネットワーク失敗時に長時間化するため別問題。
+- `node scripts/check_jsonld.mjs`: 成功。252キーのhash/date一致、未来日なし、不要キーなし。
+- `node --check scripts/seed-content-dates.mjs scripts/build-detail-pages.mjs scripts/check_jsonld.mjs`: 成功。
+- `git diff --check`: 成功。
+- 実ブラウザ確認・GA4実行: 未確認（Claude担当）。
+
+### 変更したパターン
+- sitemap初期値依存の削除。
+- 履歴コミットを使う一度きりの台帳種まき。
+- ビルド・種まき共通の正規化/hashモジュール。
+- 台帳の現在hash整合性検査。
+
+### 未確認の類似パターン
+- 確認済み・0件：現在データ252キーのhash不一致、date欠落、未来日、不要キー。
+- 未確認：外部画像取得が成功する環境でのフルビルド時間、公開後の台帳コミット、実ブラウザ表示。
+
+### 次の担当への注意・判断待ち
+- `scripts/seed-content-dates.mjs` は一度きりの初期化用。通常の公開更新で再実行すると、意図的な変更履歴を再計算するため、実行前に日付台帳を確認すること。
+- `LP/data/content-dates.json` と `scripts/lib/content-dates.mjs` を含めてコミットする。workflowは既存の `git add -A LP/` で台帳を含む。
+- 公開前は省略なしの `bash scripts/preflight.sh` とClaude担当の実ブラウザ確認を行う。
+
+- 2026-10-21: 会場・アーティストFAQにもフェスFAQと同じCSSを適用（`detail.css` v67→v68、CMSプレビュー参照も更新）し、JA/EN詳細ページを再生成。静的検査済み、実ブラウザ再確認は未実施。
+- 2026-10-21: 会場詳細のJA/EN生成`article`へ`venue-detail`を付与して再生成。`detail.css`内の該当クラス規則はFAQ 7件のみで、他の見た目規則への波及なし。
+- 2026-10-21: 会場詳細の上部余白をアーティスト詳細と同値に統一（PC/スマホ、`detail.css` v68→v69、CMSプレビューも更新）し、JA/ENを再生成。
