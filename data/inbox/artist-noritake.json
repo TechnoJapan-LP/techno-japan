@@ -23,6 +23,21 @@
    "source": "本人 Instagram bio",
    "confidence": "high",
    "checkedAt": "2026-08-13T02:20:00+09:00"
+  },
+  "RESIDENT_ADVISOR": {
+   "value": null,
+   "source": "RA に本人ページなし（MATRICARIA 2026 / MATRICARIA White の lineup にテキストで Noritake）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts_2026_10": {
+   "value": "RA の MATRICARIA 2026 (events/2371706) と MATRICARIA White (events/2366208) の lineup に Noritake。IG bio の『MATRICARIA/LAB. Resident DJ』と整合。新たな経歴情報は見つからず",
+   "source": "https://ra.co/events/2371706 / https://ra.co/events/2366208",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
   }
- }
+ },
+ "_updates": [
+  "2026-10-20: 追記（BIO 下書き v2 は reports/artist-bios-draft2-2026-10-20.md）"
+ ]
 }

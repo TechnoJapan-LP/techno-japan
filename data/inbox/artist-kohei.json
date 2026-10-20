@@ -1,0 +1,50 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "letus-music-camp 2026-05",
+ "fields": {
+  "RA": {
+   "value": "https://ra.co/dj/kohei",
+   "source": "letus music camp 2026 RA イベント 2393175 の出演者リンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/kohei_t",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug) リンク欄",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "INSTAGRAM": {
+   "value": "",
+   "source": "確認できず",
+   "confidence": "low",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "KYOTO",
+   "source": "RA bio『Based in Kyoto』",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JAPAN",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug)",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "京都拠点のテクノDJ。ミニマルなテクノ/ハウス、横揺れグルーヴと剥き出しのファンク。2019年から AOKI takamasa と Circus Osaka で MONZA。rural に複数回出演",
+   "source": "https://ra.co/dj/kohei (RA bio)",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "namesake": {
+   "value": "別人: @KOHEI(GOW™) (https://ra.co/dj/koheigow™) 東京の GOW 共同創設者",
+   "source": "RA search",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

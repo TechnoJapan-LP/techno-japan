@@ -28,6 +28,32 @@
    "confidence": "high",
    "checkedAt": "2026-08-13T07:20:00+09:00",
    "note": "紹介文 v2 執筆時に、記録漏れだった事実を追記（本文の記述を出典まで辿れるようにするため）"
+  },
+  "RA": {
+   "value": "https://ra.co/dj/jonnyrock",
+   "source": "RDC 2026 RA イベント 2250551 の出演者リンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "LONDON",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug) area",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts_2026_10": {
+   "value": "2000年代に Phonica と Blackmarket Records の店頭。Luke Solomon の Freaks でギター。リリース: Make Love in Public Spaces, Return of the Oldschool Rider, Cabin Fever, Wolf + Lamb Black, Foot & Mouth, Disco 45, Playhouse, Music for Freaks。セットにトルコのサイケ音源",
+   "source": "https://ra.co/events/752121 (2015 プロモーター文) / https://www.theransomnote.com/music/interviews/can-you-smell-what-the-rock-is-cooking-jonny-rock-talks/",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "unverified": {
+   "value": "Disco Hamam / Hamam House 運営説は set79 等のみで確認できず",
+   "source": "WebSearch",
+   "confidence": "low",
+   "checkedAt": "2026-10-20"
   }
- }
+ },
+ "_note2": "2026-10-20 追記。BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt2": "rainbow-disco-club 2026-04"
 }

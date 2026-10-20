@@ -1,0 +1,50 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "Topia 2025-11 / DENKI BODHISATTVA 2026-10",
+ "fields": {
+  "RESIDENT_ADVISOR": {
+   "value": "https://ra.co/dj/mars89",
+   "source": "RA の TOPIA 2025-11-15 と DENKI BODHISATTVA 24H HALLOWEEN RAVE 2026-10-31 の出演者として紐付く本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/mars89_nocturnal",
+   "source": "RA 本人ページのリンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/mars89",
+   "source": "RA 本人ページのリンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "WEBSITE": {
+   "value": "http://mars89.com",
+   "source": "RA 本人ページのリンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "RA",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JP",
+   "source": "RA",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "東京拠点。DJ、ライブ、作曲、サウンドデザインを横断。Contact Tokyo で Open to Last、Rural 出演、DIY レイブ SLICK、ブリストル・ベルリン・ワルシャワ・台北・ソウル・上海でのクラブ出演。Bristol の Noods Radio でレジデント、Rinse France 等にゲストミックス。初期インダストリアル、ニューウェーブ、UKダブステップ、ブリストルのベース・カルチャー、テクノ、アンビエント、映画的な空気",
+   "source": "https://ra.co/dj/mars89（biography）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

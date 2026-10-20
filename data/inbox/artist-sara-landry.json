@@ -1,0 +1,50 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "ultra-japan（2026）",
+ "fields": {
+  "RESIDENT_ADVISOR": {
+   "value": "https://ra.co/dj/saralandry",
+   "source": "RA イベント ULTRA JAPAN RESISTANCE TOKYO OFFICIAL AFTER PARTY DAY 2（WOMB）から本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/saralandrydj",
+   "source": "RA 本人ページ記載",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/sara-landry-dj",
+   "source": "RA 本人ページ記載",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "WEBSITE": {
+   "value": "https://saralandry.com",
+   "source": "RA 本人ページ記載",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "AUSTIN",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "USA",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "独学のプロデューサー／エンジニア／DJ。インダストリアル・テクノ。T-Minus / Kraftek / mau5trap。イベントシリーズ KLUBHAUS。UMF 2026 で Amelie Lens と B2B。アルバム『Divine Intervention』",
+   "source": "https://ra.co/dj/saralandry , https://prtimes.jp/main/html/rd/p/000000325.000025862.html , https://saralandry.com",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

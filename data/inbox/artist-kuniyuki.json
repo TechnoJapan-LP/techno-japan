@@ -22,6 +22,31 @@
    "confidence": "high",
    "checkedAt": "2026-10-20",
    "note": "Precious Hall/Natural Resource は medium(Wikipedia の Discogs 典拠+サカナクション公式特集)。本人の公式 IG/サイトは未確認"
+  },
+  "links_candidates_2026-10-20": {
+   "value": [
+    {
+     "type": "RA",
+     "url": "https://ra.co/dj/kuniyuki",
+     "confidence": "high",
+     "source": "Re:birth 2026 RAラインナップが artist 4212 にリンク、bio札幌"
+    },
+    {
+     "type": "WEBSITE",
+     "url": "http://www.kuniyukitakahashi.com/",
+     "confidence": "medium",
+     "source": "RA掲載だが2026-10-20時点で接続不可"
+    },
+    {
+     "type": "SOUNDCLOUD",
+     "url": "https://soundcloud.com/kuniyuki-takahashi",
+     "confidence": "medium",
+     "source": "表示名一致・Koss名義の曲。公式リンク無し、2014年以降更新無し"
+    }
+   ],
+   "source": "調査G (RA GraphQL / 各公式ページ)",
+   "confidence": "mixed",
+   "checkedAt": "2026-10-20"
   }
  }
 }

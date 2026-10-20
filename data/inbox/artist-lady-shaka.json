@@ -27,6 +27,25 @@
    "source": "Wikipedia + DJ Mag",
    "confidence": "high",
    "checkedAt": "2026-08-13T05:30:00+09:00"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/ladyshaka",
+   "source": "https://ra.co/graphql（artist slug=ladyshaka, RA 本人ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "identity": {
+   "value": "STARFESTIVAL 2026 の RA イベントに artist id 100192 としてリンク",
+   "source": "https://ra.co/events/2364016",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts_2026_10": {
+   "value": "本名 Shakaiah Perez（RA）。ロンドン拠点の Afro Pasifika DJ。Pulotu Underworld のディレクター/キュレーター。Filth, Misery, Juicebox と活動。Boiler Room, Keep Hush 出演。選曲はクィア（femme queen）としてのアイデンティティと moana・ディアスポラとのつながりを反映（本人バイオ）",
+   "source": "https://ra.co/dj/ladyshaka（GraphQL）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
   }
- }
+ },
+ "_note2": "2026-10-20 追記: BIO 下書きは reports/artist-bios-draft2-2026-10-20.md"
 }

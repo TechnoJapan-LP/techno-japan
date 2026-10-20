@@ -1,0 +1,44 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "MATRICARIA 2026-05 / NU FESTIVAL 2026-06",
+ "fields": {
+  "RESIDENT_ADVISOR": {
+   "value": "https://ra.co/dj/akie",
+   "source": "RA の MATRICARIA 2026 (events/2371706) と NU Festival 2026 DAY2 (events/2428718) の出演者として紐付く本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/04_1404_14/",
+   "source": "RA 本人ページのリンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/ak_is_error",
+   "source": "RA 本人ページのリンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "RA 本人ページ（area Tokyo / 東京に拠点を移し活動）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JP",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "大阪の中古レコード店 raregroove で約2年勤務後、2018年の大学卒業を機に大阪の newtone records に入店しレコードバイヤー。関西でDJ活動開始、現在は東京拠点。バイヤー・DJともオールジャンル。2022年ブリストルのレーベル do you have peace? からミックステープ",
+   "source": "https://ra.co/dj/akie（biography blurb）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

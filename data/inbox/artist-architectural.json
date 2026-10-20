@@ -1,0 +1,45 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "labyrinth",
+ "fields": {
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/architectural-1",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "FACEBOOK": {
+   "value": "https://www.facebook.com/architecturalrecs",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "RA": {
+   "value": "https://ra.co/dj/architectural",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": null,
+   "source": "RA: カタルーニャ拠点のアストゥリアス出身（都市名なし）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "SPAIN",
+   "source": "RA",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "Reeko（Juan Rico）の別名義、当初は匿名。Architectural Records から 2010-2014 に 001-005、2012 Semantica から Peacetime、2013 PoleGroup から Reeko & Architectural『The Blue Album』、2015 Wolfskuil から Amour。",
+   "source": "https://ra.co/dj/architectural , https://ra.co/dj/reeko",
+   "confidence": "high",
+   "checkedAt": "2026-10-20",
+   "note": "Labyrinth 2026 の出演はフェス公式で今回未確認（mindgames.jp は JS 描画で取得できず）"
+  }
+ }
+}

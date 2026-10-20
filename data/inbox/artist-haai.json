@@ -28,6 +28,38 @@
    "source": "Wikipedia + Junkee + Insomniac",
    "confidence": "high",
    "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "RA": {
+   "value": "https://ra.co/dj/haai",
+   "source": "RDC 2026 RA イベント 2250551",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "BANDCAMP": {
+   "value": "https://haai.bandcamp.com",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug) haai のリンク欄",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD_2026_10": {
+   "value": "https://soundcloud.com/haai-2",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug) リンク欄で本人と確認（8月の medium を high に）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "LONDON",
+   "source": "Mute 公式 bio『Australian-born London-based』",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts_2026_10": {
+   "value": "Mute bio: 西オーストラリアでシンガーソングライターとして出発、Baby, We're Ascending (2022), HUMANiSE (2025), DJ-Kicks (2023)。Phonox (Brixton) レジデントは Time Out / Qobuz (medium)",
+   "source": "https://mute.com/?p=220 / https://ra.co/news/79593 / https://www.timeout.com/london/nightlife/haai-phonoxs-new-resident-dj-on-landing-londons-coolest-job",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
   }
- }
+ },
+ "_note2": "2026-10-20 追記。BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt2": "rainbow-disco-club 2026-04"
 }

@@ -1,0 +1,39 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "rainbow-disco-club（2026、Sisi b2b Ouissam b2b YAMARCHY）",
+ "fields": {
+  "RESIDENT_ADVISOR": {
+   "value": "https://ra.co/dj/sisi",
+   "source": "RA イベント Rainbow Disco Club 2026 から本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "INSTAGRAM_collective": {
+   "value": "https://www.instagram.com/timothy_really",
+   "source": "Timothy Really（本人が創設とされる集団）のアカウント。個人ではない",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JAPAN",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "Timothy Really（2005年発足のレーベル／DJ集団）の創設者、00年代日本のレイヴ文化がルーツ。RA に 20 YEARS OF TIMOTHY REALLY（Mitsuki）ほか出演、YAMARCHY と共演多数",
+   "source": "https://ra.co/dj/sisi , https://ra.co/dj/timothyreallylab , https://www.ticketfairy.com/event/klymax-discotheque-27-Apr",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20",
+   "note": "創設者の記述は主催者告知文（medium）、RA の出演で裏付け。SECOBAR・Space Lab・diskunion の記述は未裏付けで不使用"
+  }
+ }
+}

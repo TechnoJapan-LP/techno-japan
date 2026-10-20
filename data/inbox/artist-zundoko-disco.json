@@ -1,0 +1,38 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "moment / spring-love-harukaze",
+ "fields": {
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/zundokodisco",
+   "source": "RA 本人ページのリンク欄",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "RA": {
+   "value": "https://ra.co/dj/zundokodisco",
+   "source": "RA 本人ページ。イベント一覧に Spring Love Harukaze 2026。Moment 公式サイトのラインナップに Zundoko Disco",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "RA / SoundCloud",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JAPAN",
+   "source": "RA",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "BOW と SISINOBU の DJ デュオ。東北で10年パーティーを手がけたのち東京へ。テクノから始まりアブストラクト・ビート/ドラムンベースへ。ソウル vurt. のポッドキャストにミックス提供、rural 出演、12時間セット。",
+   "source": "https://ra.co/dj/zundokodisco , https://soundcloud.com/zundokodisco",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

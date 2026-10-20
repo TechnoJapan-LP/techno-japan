@@ -1,0 +1,39 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "sawagi-festival",
+ "fields": {
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/compuma",
+   "source": "Sawagi 公式ページの linktr.ee/compuma と RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "WEBSITE": {
+   "value": "https://linktr.ee/compuma",
+   "source": "Sawagi Festival 公式アーティストページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JAPAN",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "ADS、スマーフ男組を経てDJ。SOMETHING ABOUT の『SOMETHING IN THE AIR』シリーズ、コレクティヴ悪魔の沼。2022『A View』、2024『horizons』。Berlin Atonal 2017、Meakusma 2018 出演。Newtone Records / El Sur Records 所属",
+   "source": "https://sawagifestival.com/artist/26-compuma/ / https://ra.co/dj/compuma",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "bio_draft_20261020": {
+   "value": "ADS（アステロイド・デザート・ソングス）、スマーフ男組での活動を経て、ジャンルを横断するDJとして全国各地の現場に立つ。自身のプロジェクト SOMETHING ABOUT からミックスCD「SOMETHING IN THE AIR」シリーズを発表し、コレクティヴ「悪魔の沼」でも活動する。2022年に初のソロアルバム『A View』、2024年に『horizons』をリリース。Berlin Atonal 2017 にも出演した。",
+   "value_en": "COMPUMA came through the bands ADS (Asteroid Desert Songs) and Smerf Otoko-gumi before settling into a genre-crossing DJ practice that takes him to rooms all over Japan. His SOMETHING ABOUT project puts out the \"SOMETHING IN THE AIR\" mix CD series, and he is part of the collective Akuma no Numa. Solo albums \"A View\" (2022) and \"horizons\" (2024) followed, and he played Berlin Atonal in 2017.",
+   "source": "https://sawagifestival.com/artist/26-compuma/（経歴すべて）/ https://ra.co/dj/compuma（Berlin Atonal 2017、悪魔の沼）",
+   "confidence": "draft",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

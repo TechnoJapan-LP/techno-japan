@@ -27,6 +27,34 @@
    "source": "RA + Bandcamp Daily",
    "confidence": "high",
    "checkedAt": "2026-08-13T04:50:00+09:00"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/guchon_dj/",
+   "source": "THE STAR FESTIVAL 公式ラインナップのリンク先 / RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "RESIDENT_ADVISOR": {
+   "value": "https://ra.co/dj/guchon",
+   "source": "RA 本人ページ。FOREST SOUND CAMP 2026 の出演者として紐付く",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "WEBSITE": {
+   "value": "http://guchon.com/",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts_2026_10": {
+   "value": "RA bio: 東京のアンダーグラウンドなクラブシーン出身のテクノ/ハウス DJ/プロデューサー。Chiwax、Hot Haus Recs、Maximum Airtime、Moveltraxx、Trekkie Trax、System Records からリリース。キャッチーな旋律・ファンキーなドラム・遊び心。イラストレーターでもあり、多くのリリースのジャケットを自作キャラクターが飾る",
+   "source": "https://ra.co/dj/guchon",
+   "confidence": "high",
+   "checkedAt": "2026-10-20",
+   "note": "8月案の『Sabacan Records を率いた』は今回一次情報で確認できず（guchon.com に Sabacan Records へのリンクはあるが役割の記載なし）。BIO から外した"
   }
- }
+ },
+ "_updates": [
+  "2026-10-20: 追記（BIO 下書き v2 は reports/artist-bios-draft2-2026-10-20.md）"
+ ]
 }

@@ -1,0 +1,56 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "ultra-japan 2026-09",
+ "fields": {
+  "festival_link": {
+   "value": "Ultra Japan 2026 第2弾発表 (2026-07-10) と DJ Mag の全ラインナップ記事に掲載",
+   "source": "https://djmag.com/news/ultra-japan-announces-full-2026-line / https://prtimes.jp/main/html/rd/p/000000329.000025862.html",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "RA": {
+   "value": "https://ra.co/dj/jorisvoorn",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/jorisvoorn",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug) リンク欄",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/joris-voorn",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug) リンク欄",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "WEBSITE": {
+   "value": "http://www.jorisvoorn.com",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug) リンク欄",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "AMSTERDAM",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug) area",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "NETHERLANDS",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug)",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "ティルブルフ生まれ。Incident (2004, Lost Memories Part 2)。アルバム Future History (2004, Sino)、From A Deep Place (2007, Green)、Nobody Knows (2014)。2005年 Edwin Oosterwal と Green 設立、Rejected も運営。Spectrum（ラジオ/イベント）",
+   "source": "https://ra.co/dj/jorisvoorn (RA bio) / https://ra.co/events/2431655",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

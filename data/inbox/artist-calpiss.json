@@ -1,0 +1,39 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "etsuetsu 2026-06 / SPRING LOVE 春風 2026-03",
+ "fields": {
+  "RESIDENT_ADVISOR": {
+   "value": "https://ra.co/dj/calpiss",
+   "source": "RA の Spring Love Harukaze 2026（2026-03-28 代々木公園）の出演者として紐付く本人ページ。etsuetsu との紐付けは未確認",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": null,
+   "source": "RA に soundcloud.com/weekly-show-9th-february-calpiss が登録されているが、アカウントではなく番組回のURLに見える。本人アカウント未確認",
+   "confidence": "low",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "RA 本人ページ area",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JP",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "三軒茶屋・天狗食堂で CALPISS SOUR、石垣島で TAKARAJIMA を主催。カラフルなディスコからヒプノティックなミニマルまでを得意とする",
+   "source": "https://ra.co/events/2448086（clubasia Thursday 告知文。主催者による紹介）",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20",
+   "note": "単独の出典。本人の公式で裏取りできていない"
+  }
+ }
+}

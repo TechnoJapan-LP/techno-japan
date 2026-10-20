@@ -16,6 +16,25 @@
    "confidence": "medium",
    "checkedAt": "2026-08-13T05:30:00+09:00",
    "note": "「Kuo」がフロントマンを指すことはバンドの通称として一般的だが、ソロ活動の一次情報は薄い。断定を避けた表現にした"
+  },
+  "CITY": {
+   "value": "TAIPEI",
+   "source": "https://festivaldefrue.com/music/kuo-from-sunset-rollercoaster.html",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "identity": {
+   "value": "FESTIVAL de FRUE 2026 公式サイトの出演者ページ（10/31 The Hall）",
+   "source": "https://festivaldefrue.com/music/kuo-from-sunset-rollercoaster.html",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts_2026_10": {
+   "value": "落日飛車の作曲・ボーカル・ギター、曾國宏。2000年代半ば〜後半に台北「地下社会」周辺で FORESTS 等の実験的バンドに参加。2011年1st『Bossa Nova』、2016年EP『Jinji Kikko』で AOR/シンセ・ファンクへ転換、2020年『SOFT STORM』で第32回金曲奨 最優秀バンド賞、NME Best Asian Albums of 2020。2024年 HYUKOH との共作『AAA』。レーベル Sunset Music（夕陽音楽）主宰。Coachella 出演",
+   "source": "https://festivaldefrue.com/music/kuo-from-sunset-rollercoaster.html（フェス公式紹介文）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
   }
- }
+ },
+ "_note2": "2026-10-20 追記: BIO 下書きは reports/artist-bios-draft2-2026-10-20.md"
 }

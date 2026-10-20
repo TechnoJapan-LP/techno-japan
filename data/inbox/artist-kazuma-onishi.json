@@ -1,0 +1,51 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "moment 2026-07",
+ "fields": {
+  "RA": {
+   "value": "https://ra.co/dj/kazumaonishi",
+   "source": "RA 本人ページ。2026-06〜08 に東京・大阪で出演が続き Moment と同時期",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20",
+   "note": "Moment 公式サイトのラインナップに『KAZUMA ONISHI Live』。RA bio は DJ として書かれている"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/ring.of.1overf.sage",
+   "source": "本人 Linktree (RA の website 欄 linktr.ee/kazumaonishi) からのリンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/kazuma-onishi",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug) リンク欄 / Linktree",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "WEBSITE": {
+   "value": "https://linktr.ee/kazumaonishi",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug) website 欄",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "MELBOURNE",
+   "source": "RA bio『based in Melbourne/Naarm』",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "AUSTRALIA",
+   "source": "RA residentCountry（国籍は日本）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "メルボルン/ナーム拠点の日本人DJ/プロデューサー。テクノを軸にミニマル、ハウス、エレクトロ、サイケ。3曲同時ミックスを多用（本人 bio）",
+   "source": "https://ra.co/dj/kazumaonishi (RA bio) / https://soundcloud.com/kazuma-onishi",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

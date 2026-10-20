@@ -35,6 +35,19 @@
    "confidence": "high",
    "checkedAt": "2026-10-20",
    "note": "『主宰』の明記は見つからず。本人が自身のパーティーとして bio に掲げる、という範囲で書く"
+  },
+  "links_candidates_2026-10-20": {
+   "value": [
+    {
+     "type": "RA",
+     "url": "https://ra.co/dj/joma-2",
+     "confidence": "high",
+     "source": "RA JOMA (2) Tokyo のIG欄が jomajjj と一致"
+    }
+   ],
+   "source": "調査G (RA GraphQL / 各公式ページ)",
+   "confidence": "mixed",
+   "checkedAt": "2026-10-20"
   }
  }
 }

@@ -11,6 +11,52 @@
    "confidence": "medium",
    "checkedAt": "2026-08-13T04:50:00+09:00",
    "note": "同一人物か未確証のため、確認まで登録しない"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/kohra_",
+   "source": "https://ra.co/graphql（artist slug=kohra, RA 本人ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/kohra",
+   "source": "https://ra.co/graphql（artist slug=kohra, RA 本人ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "BANDCAMP": {
+   "value": "https://kohra.bandcamp.com",
+   "source": "https://ra.co/graphql（artist slug=kohra, RA 本人ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "GOA",
+   "source": "RA 本人バイオ「based out of the coastal town of Goa」",
+   "confidence": "high",
+   "checkedAt": "2026-10-20",
+   "note": "RA の area 欄は Delhi。バイオ本文を優先"
+  },
+  "COUNTRY": {
+   "value": "INDIA",
+   "source": "https://ra.co/graphql（artist slug=kohra, RA 本人ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "identity": {
+   "value": "Transcendence 2026 の RA イベント https://ra.co/events/2346517 のラインナップに artist id 14994（slug kohra = Madhav Shorey）としてリンク",
+   "source": "https://ra.co/events/2346517",
+   "confidence": "high",
+   "checkedAt": "2026-10-20",
+   "note": "8月の保留（同一人物か未確証）はこれで解消"
+  },
+  "facts_2026_10": {
+   "value": "本名 Madhav Shorey。ゴア拠点。Kohra=ウルドゥー語で霧。2011年 Qilla Records 設立、2024年に100番目のリリースとしてコンピ『Chakravyuh』（35組以上）。セットは ambient/acid/trance/techno/jungle。リリース先 Bedrock, Spacelab ほか",
+   "source": "https://ra.co/dj/kohra（GraphQL で取得）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20",
+   "note": "8月メモの「2009年設立・ニューデリー」は RA 本人バイオ（2011年・ゴア）と食い違う。本人バイオを採用"
   }
- }
+ },
+ "_note2": "2026-10-20 追記: BIO 下書きは reports/artist-bios-draft2-2026-10-20.md"
 }

@@ -1,0 +1,15 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "未特定: Moment 公式ラインナップに名前のみ。紹介文・リンク・RA 本人ページが無く、同名の『CMT』との同一性を示す出典が無い",
+ "_appearsAt": "Moment 2026-07 / Synapse Festival 2026-10",
+ "fields": {
+  "tried": {
+   "value": "moment-jp.com のラインナップ（名前のみ、リンク・紹介文なし）/ synapse-festival.studio.site（ラインナップは IG のみ）/ RA GraphQL で slug cmt, djcmt, cmt-jp 等と artist 検索（該当なし）/ RA イベント検索で DJ Bar Bridge Shinjuku の CMT 出演（紹介文なし）/ Web検索で Time Out Tokyo の Deus Trapdoor 告知（日本全国を回るアンダーグラウンドの DJ）と Byron Bay の VITAMIN-Q 告知（King of House 等の宣伝文）",
+   "source": "上記",
+   "confidence": "low",
+   "checkedAt": "2026-10-20",
+   "note": "いずれも Moment / Synapse 出演の CMT と同一人物である証拠が無い"
+  }
+ }
+}

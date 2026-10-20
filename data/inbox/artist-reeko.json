@@ -1,0 +1,33 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "未特定: Labyrinth 2026 の公式発表（ZAIKO・公式IG）は名前のみでタグ・国名なし。候補のスペインの Reeko（Juan Rico）は RA に日本公演の記載なし",
+ "_appearsAt": "labyrinth（2026）",
+ "fields": {
+  "RESIDENT_ADVISOR_candidate": {
+   "value": "https://ra.co/dj/reeko",
+   "source": "候補本人の RA ページ。Labyrinth との結びつき未確認",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD_candidate": {
+   "value": "https://soundcloud.com/reeko",
+   "source": "候補の RA 本人ページ記載",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "facts_candidate": {
+   "value": "（候補・スペインの Reeko）1981年オビエド生まれ。2002年 Emergence から初リリース。2003年 Mental Disorder、2005年 Evidence 設立。Pole Group、Selección Natural（Oscar Mulero・Exium）",
+   "source": "https://ra.co/dj/reeko",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20",
+   "note": "本人ページとしては high だが Labyrinth の Reeko と同一人物か未確認"
+  },
+  "tried": {
+   "value": "ZAIKO ラインナップ / 公式IG 2026-09-07 告知（タグなし）/ mindgames.jp（ラインナップ無し）/ RA の Reeko 出演履歴（日本なし）/ Web 検索",
+   "source": "https://mindgames.zaiko.io/en/e/labyrinth2026 , https://www.instagram.com/mindgames.labyrinth/p/Dc-iyoazzVU/",
+   "confidence": "low",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

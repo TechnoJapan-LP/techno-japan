@@ -1,0 +1,50 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "moment",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/chida1973",
+   "source": "RA 本人ページの website 欄",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/enetokyo",
+   "source": "RA 本人ページ（レーベル ene records のアカウント）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "FACEBOOK": {
+   "value": "https://www.facebook.com/CHIDA73",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "RA": {
+   "value": "https://ra.co/dj/chida",
+   "source": "RA 本人ページ。Moment 公式サイトのラインナップに CHIDA",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "RA",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JAPAN",
+   "source": "RA",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "90年代初頭から東京のハウス・シーンで活動。12時間超のマラソン・セット。2009年にレーベル ene 開始（Prins Thomas / Eddie C / Cos Mes / Sly Mongoose 等）。デビュー12インチ Danca は ESP Institute。",
+   "source": "https://ra.co/dj/chida",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

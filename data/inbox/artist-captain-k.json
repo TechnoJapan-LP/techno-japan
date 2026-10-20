@@ -1,0 +1,38 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "doofing-park（2026-04、現在 FESTIVALS から削除済み）/ arch（同一人物か未確認）",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/captain_k.doofingpark/",
+   "source": "TJ の旧 FESTIVALS doofing-park（git 7e112503b）がこの IG を紐付け。プロフィール「DJ from DOOFING PARK(JAP)」",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/doofingpark",
+   "source": "本人 IG プロフィールのリンク（表示名 CAPTAIN-K (DOOFING PARK)）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JAPAN",
+   "source": "本人 IG「(JAP)」",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "DOOFING PARK の DJ。Minimal / Techno / Progressive / Breaks",
+   "source": "https://www.instagram.com/captain_k.doofingpark/",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "tried": {
+   "value": "RA（captain-k / captaink 該当なし）/ Web 検索（同名の別物のみ）",
+   "source": "—",
+   "confidence": "low",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

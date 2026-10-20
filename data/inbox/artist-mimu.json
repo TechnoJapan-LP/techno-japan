@@ -1,0 +1,27 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "PARAMOUNT 2026-05 / SuB-TiDe 2026-07",
+ "fields": {
+  "tried": {
+   "value": "RA で artist slug 該当なし。RA イベント告知文・Mixmag Asia から特定",
+   "source": "-",
+   "confidence": "-",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "PARAMOUNT の創設者（のひとり）。アーティストのキュレーションを手がけ、自らもDJとして出演。キュレーションで触れてきた多様な音楽を、自身の筋を通したまま重ねてストーリーを組むDJセット",
+   "source": "https://ra.co/events/1710495（SΛGΛ feat Mimu, 2023）/ https://ra.co/events/2398784（LAPITA showcase, 2026）/ https://mixmag.asia/read/paramount-2026-japan-mountain-festival-line-up-otodashi-soundsystem-events",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20",
+   "note": "主催者の告知文2件と Mixmag Asia が一致。本人 IG は未確認。SuB-TiDe との紐付けは未確認"
+  },
+  "COUNTRY": {
+   "value": "JP",
+   "source": "RA イベント告知（MIMU (JPN / PARAMOUNT)）",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

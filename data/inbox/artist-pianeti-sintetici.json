@@ -27,6 +27,37 @@
    "source": "Hypnus + Astral Industries + Bandcamp",
    "confidence": "high",
    "checkedAt": "2026-08-13T05:30:00+09:00"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/pianetisintetici",
+   "source": "https://ra.co/graphql（artist slug=pianetisintetici, RA 本人ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/pianetisintetici",
+   "source": "https://ra.co/graphql（artist slug=pianetisintetici, RA 本人ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "WEBSITE": {
+   "value": "https://ghost-collective.com/pianeti-sintetici",
+   "source": "https://ra.co/graphql（artist slug=pianetisintetici, RA 本人ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "identity": {
+   "value": "MATRICARIA 2026 の RA イベントに artist id 124704 としてリンク",
+   "source": "https://ra.co/events/2371706",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts_2026_10": {
+   "value": "2020年始動。ambient/techno/experimental/broken rhythms。名前はマグラテア由来。アナログシンセ/モジュラーの長尺即興→編集。Hypnus Records, Astral Industries, Samurai Music",
+   "source": "https://ra.co/dj/pianetisintetici（本人バイオ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
   }
- }
+ },
+ "_note2": "2026-10-20 追記: BIO 下書きは reports/artist-bios-draft2-2026-10-20.md"
 }

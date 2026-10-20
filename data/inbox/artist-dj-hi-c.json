@@ -33,6 +33,31 @@
    "source": "https://discoveryhi-c.com/ / https://mixmag.asia/read/mixmag-asia-radio-hi-c-techno-madness-moment-festival-japan-tenkawa-village-exclusive-mixes",
    "confidence": "high",
    "checkedAt": "2026-10-20"
+  },
+  "links_candidates_2026-10-20": {
+   "value": [
+    {
+     "type": "RA",
+     "url": "https://ra.co/dj/djhi-c",
+     "confidence": "high",
+     "source": "Website欄が discoveryhi-c.com と一致"
+    },
+    {
+     "type": "SOUNDCLOUD",
+     "url": "https://soundcloud.com/djhi-c-kireek",
+     "confidence": "high",
+     "source": "RA本人ページ掲載"
+    },
+    {
+     "type": "BANDCAMP",
+     "url": "https://aumrecordings.bandcamp.com",
+     "confidence": "high",
+     "source": "RA本人ページ掲載。共同設立レーベルのページ(個人ではない)"
+    }
+   ],
+   "source": "調査G (RA GraphQL / 各公式ページ)",
+   "confidence": "mixed",
+   "checkedAt": "2026-10-20"
   }
  }
 }

@@ -1,0 +1,51 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "moment",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/azu.tiwaline",
+   "source": "RA 本人ページ / Bandcamp",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/azu-tiwaline",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "BANDCAMP": {
+   "value": "https://azutiwaline.bandcamp.com",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "RA": {
+   "value": "https://ra.co/dj/azutiwaline",
+   "source": "RA 本人ページ。Moment 公式サイトのラインナップに Azu Tiwaline Live",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": null,
+   "source": "Bandcamp は Tunisia、RA は France。Bandcamp Daily は南チュニジアと南西フランスの往来と記載",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "TUNISIA / FRANCE",
+   "source": "Bandcamp / RA",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "サハラにルーツを持つプロデューサー（RA）。デビュー作 Draw Me a Silence を I.O.T. Records から2部作で。Livity Sound から Magnetic Service E.P.",
+   "source": "https://ra.co/dj/azutiwaline , https://azutiwaline.bandcamp.com , https://daily.bandcamp.com/features/azu-tiwaline-magnetic-service-draw-me-a-silence-interview , https://bentcrayonrecords.com/product/azu-tiwaline-draw-me-a-silence-2lp-iot , https://couvrexchefs.com/en/azu-tiwaline-livity-sound-magnetic-service/",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20",
+   "note": "サハラのルーツは high（RA）、レーベル情報は medium（媒体＋本人 Bandcamp の作品一覧）"
+  }
+ }
+}

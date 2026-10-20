@@ -16,6 +16,44 @@
    "source": "検索結果の要約",
    "confidence": "medium",
    "checkedAt": "2026-08-13T06:10:00+09:00"
+  },
+  "RESIDENT_ADVISOR": {
+   "value": "https://ra.co/dj/ouissam",
+   "source": "RA イベント Rainbow Disco Club 2026 から本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD_recheck": {
+   "value": "https://soundcloud.com/ouissamhk",
+   "source": "RA 本人ページ記載（8月の medium を確定）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "WEBSITE": {
+   "value": "http://savage-hanoi.com",
+   "source": "RA 本人ページ記載（クラブ Savage のサイト）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "HANOI",
+   "source": "RA 本人紹介（Savage を設立、Snug を主宰）",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "VIETNAM",
+   "source": "RA 本人紹介から推定。RA の国欄は France",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "facts_20261020": {
+   "value": "アジアで10年。香港で Cliché Records 設立、ディスコ／ハウス／テクノ。Homesick、Fragrant Harbour。ハノイの Savage を設立し月例クィア・パーティー Snug。Equation フェスのキュレーション",
+   "source": "https://ra.co/dj/ouissam",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
   }
- }
+ },
+ "_note_20261020": "2026-10-20 追記。BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt_20261020": "rainbow-disco-club（2026、Sisi b2b Ouissam b2b YAMARCHY）"
 }

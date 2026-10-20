@@ -1,0 +1,39 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "arch",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/endorphin__dj/",
+   "source": "ARCH 公式 IG のアーティスト紹介投稿でタグ付け",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "RA": {
+   "value": "https://ra.co/dj/djendorphin",
+   "source": "NEO GAL の紹介文が ARCH 告知と一致",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JAPAN",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "宇都宮・都内でオーガナイズ、楽曲制作にも注力（ARCH 公式）。OPIOID（渋谷 ENTER）のレジデント（RA イベント 2390397 の主催文）。NEO GAL を提唱、LOVE, FELLOW, FASHION, SEX（RA 本人ページ / ARCH）。空心才楽団に関わる（ARCH 告知・IG）",
+   "source": "https://www.instagram.com/p/DVj_y4Mk9oY/ / https://ra.co/dj/djendorphin / https://ra.co/events/2390397",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "bio_draft_20261020": {
+   "value": "関東を拠点とするDJ/プロデューサー。宇都宮と都内でパーティーをオーガナイズし、渋谷 ENTER のパーティー OPIOID ではレジデントを務める。楽曲制作にも力を入れている。グルーヴィーなテクノを軸に、自ら提唱する「NEO GAL」の考え方と、LOVE, FELLOW, FASHION, SEX の4語を掲げてフロアに立つ。",
+   "value_en": "endorphin is a DJ/producer based in the Kanto region who organizes parties in Utsunomiya and Tokyo and holds a residency at OPIOID at ENTER in Shibuya. She also puts real time into production. Her sets run on groovy techno, carried by the \"NEO GAL\" idea she champions and four words: LOVE, FELLOW, FASHION, SEX.",
+   "source": "https://www.instagram.com/p/DVj_y4Mk9oY/（宇都宮・都内でオーガナイズ、楽曲制作、グルーヴィーなテクノ、NEO GAL、4語）/ https://ra.co/events/2390397（OPIOID のレジデント）/ https://ra.co/dj/djendorphin",
+   "confidence": "draft",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

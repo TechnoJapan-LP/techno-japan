@@ -1,0 +1,50 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "WAIFU 2026-04 / DENKI BODHISATTVA 2026-10",
+ "fields": {
+  "RESIDENT_ADVISOR": {
+   "value": "https://ra.co/dj/mayudepth",
+   "source": "RA の WAIFU Rave at Narita airport (2026-04-11) と DENKI BODHISATTVA 2026-10-31 の出演者として紐付く本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/mayudepth/",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/punkadelix23",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "BANDCAMP": {
+   "value": "https://mayudepth.bandcamp.com",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "RA bio（東京を拠点）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JP",
+   "source": "RA",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "東京拠点のDJ/プロデューサー。DJ SHUFFLEMASTER 主宰の四季協会から1st EP『Sneakpeek』、2nd EP『Angels from Hell』で映画監督・石原海をフィーチャー。LA の ACID CAMP、ベルリンの A7A からリリース。テクノに留まらないアーカイヴと現行サウンド。欧州・アジア・米国でプレイ、Rainbow Disco Club 等。クィア・シーンのパーティー MOTORPOOL を率いる",
+   "source": "https://ra.co/dj/mayudepth（biography 日英）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

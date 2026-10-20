@@ -1,0 +1,44 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "rainbow-disco-club（2026）",
+ "fields": {
+  "RESIDENT_ADVISOR": {
+   "value": "https://ra.co/dj/suzeijo",
+   "source": "RA イベント Rainbow Disco Club 2026 から本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/suze.ijo",
+   "source": "RA 本人ページ記載",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/suze_ijo",
+   "source": "RA 本人ページ記載",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "ROTTERDAM",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "NETHERLANDS",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "ロッテルダム出身。Loft に影響を受けた First Floor のメンバー。シカゴ・ハウス／80年代／ソウルフル。Panorama Bar、De School、Nowadays 等。Dekmantel Connects Stage キュレーション。NTS / The Lot Radio / Dekmantel Podcast",
+   "source": "https://ra.co/dj/suzeijo",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

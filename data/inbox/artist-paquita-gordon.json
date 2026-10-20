@@ -21,6 +21,26 @@
    "source": "Triangle Agency + RA + Boiler Room",
    "confidence": "high",
    "checkedAt": "2026-08-13T04:50:00+09:00"
+  },
+  "identity": {
+   "value": "Transcendence 2026 の RA イベントに artist id 75509 としてリンク",
+   "source": "https://ra.co/events/2346517",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY_note": {
+   "value": "",
+   "source": "RA area=Milan / Triangle Agency=Italy/Spain / 一部記事=Mallorca 在住",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20",
+   "note": "拠点が揺れているため CITY は空欄推奨、COUNTRY=ITALY は維持"
+  },
+  "facts_2026_10": {
+   "value": "ヴァイナル・オンリー。セットはコズミック（psychedelia, black music, ambient, dub, folk, spiritual jazz）とクラブ（house, techno, drum and bass, trance）の2系統。音の tribal roots とライブ音楽の儀式的・集団的側面に関心（エージェンシー紹介文）。RA.639",
+   "source": "https://triangleagency.com/paquita-gordon/ ; https://ra.co/podcast/639",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
   }
- }
+ },
+ "_note2": "2026-10-20 追記: BIO 下書きは reports/artist-bios-draft2-2026-10-20.md"
 }

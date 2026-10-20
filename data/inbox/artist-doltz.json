@@ -22,6 +22,20 @@
    "source": "本人 Instagram",
    "confidence": "high",
    "checkedAt": "2026-08-13T06:10:00+09:00"
+  },
+  "RESIDENT_ADVISOR": {
+   "value": "https://ra.co/dj/doltz",
+   "source": "RA イベント Synapse Festival 2026・MATRICARIA 2026 から本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JAPAN",
+   "source": "RA 本人ページ（地域 Kyushu）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
   }
- }
+ },
+ "_note_20261020": "2026-10-20 追記。BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt_20261020": "matricaria（2026）/ synapse-festival（2026、RA）/ labyrinth（2026、Tobias. Doltz.）"
 }

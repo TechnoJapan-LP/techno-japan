@@ -1,0 +1,14 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "未特定: MATRICARIA 公式・ZAIKO に名前のみで、本人を指す紹介文・リンクが見つからない",
+ "_appearsAt": "matricaria",
+ "fields": {
+  "tried": {
+   "value": null,
+   "source": "MATRICARIA 公式 artist-2026JA（MOON LILY に Caimann, #TECHNO）/ ZAIKO 出演者一覧（Caimann は名前のみ、紹介・リンクなし）/ RA 検索（Caimann・Caiman ともにアーティストなし、RA の MATRICARIA 2026 は 'Caiman' と表記）/ Web 検索 / soundcloud.com/caimann（中身のない別アカウント、本人と結びつく情報なし）/ Instagram はレート制限で取得不可",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

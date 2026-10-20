@@ -21,6 +21,32 @@
    "source": "検索結果複数 + SoundCloud",
    "confidence": "high",
    "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/gerdjansonofficial",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug) gerdjanson のリンク欄",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "RA": {
+   "value": "https://ra.co/dj/gerdjanson",
+   "source": "RDC 2026 RA イベント 2250551 の出演者リンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "FRANKFURT",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug) area",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts_2026_10": {
+   "value": "Thorsten Scheu (Glance) と Running Back を運営。1998年 Darmstadt Café Kesselhaus で初レジデント。Robert Johnson で Thomas Hammann と Liquid を主宰。Groove / Spex に寄稿。Running Back 設立2002年は Mixmag(medium)",
+   "source": "https://ra.co/dj/gerdjanson (RA bio) / https://mixmag.net/feature/10-of-the-most-influential-disco-labels-of-the-last-decade/21 / https://www.beatportal.com/articles/1565074-label-of-the-month-running-back",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
   }
- }
+ },
+ "_note2": "2026-10-20 追記。BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt2": "rainbow-disco-club 2026-04"
 }

@@ -1,0 +1,50 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "matricaria",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/allenmock.music",
+   "source": "MATRICARIA 公式 ZAIKO の出演者リンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/allenmock",
+   "source": "RA 本人ページのリンク欄（Tokyo, 103 tracks）。ZAIKO は allen-mock-33990750 を掲載",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "RA": {
+   "value": "https://ra.co/dj/allenmock",
+   "source": "RA 本人ページ。イベント一覧に MATRICARIA 2026",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "RA / ZAIKO",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JAPAN",
+   "source": "RA",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "東京のプロデューサー/DJ。ベース・ミュージック（Dubstep/Trap）。名前は家族の店 Arenmoku に由来。2017年デビュー曲 Don't が Beatport Future Bass/Trap 3位、2018年 Hybrid Trap から Suna。EDC Japan 出演、2022年 Ultra Japan。Trekkie Trax / Circus Records / Bassrush 等から発表。",
+   "source": "https://ra.co/dj/allenmock , https://matricaria.zaiko.io/e/matricaria26",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "conflict": {
+   "value": null,
+   "source": "出身: RA は「韓国生まれ東京育ち」、ZAIKO は「東京都出身」。BIO では書かない",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

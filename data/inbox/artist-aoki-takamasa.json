@@ -1,7 +1,7 @@
 {
  "_schema": "artist-research/1",
  "_createdAt": "2026-08-13T04:50:00+09:00",
- "_note": "確度 medium は登録前に確認。BIO 下書きは reports/artists-draft-2026-08-13.md 第6弾",
+ "_note": "確度 medium は登録前に確認。BIO 下書きは reports/artists-draft-2026-08-13.md 第6弾 / 2026-10-20 追記: BIO 下書き v3 は reports/artist-bios-draft2-2026-10-20.md",
  "_appearsAt": "letus-music-camp",
  "fields": {
   "BANDCAMP": {
@@ -29,6 +29,37 @@
    "confidence": "high",
    "checkedAt": "2026-08-13T07:20:00+09:00",
    "note": "紹介文 v2 執筆時に、記録漏れだった事実を追記（本文の記述を出典まで辿れるようにするため）"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/aoki-1/",
+   "source": "公式サイト aokitakamasa.com のリンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "BANDCAMP_2026_10_20": {
+   "value": "https://aokitakamasa.bandcamp.com/",
+   "source": "公式サイト aokitakamasa.com のリンク（本人名義ページ。8月時点の『本人単独の Bandcamp は無し』を訂正）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "WEBSITE": {
+   "value": "http://www.aokitakamasa.com/",
+   "source": "RA 本人ページ（ra.co/dj/aokitakamasa）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "RA": {
+   "value": "https://ra.co/dj/aokitakamasa",
+   "source": "RA 本人ページ。イベント一覧に letus music camp 2026（2026-05-29）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts_2026_10_20": {
+   "value": "1976年大阪生まれ。2001年初頭に1stアルバム SILICOM。ヨーロッパを拠点にしたのち2011年に日本へ戻る。写真家としても活動（Bloom Gallery の写真ショップ）。",
+   "source": "https://www.aokitakamasa.com/biography/ , https://ra.co/dj/aokitakamasa",
+   "confidence": "high",
+   "checkedAt": "2026-10-20",
+   "note": "欧州拠点の開始年は取得結果が曖昧なので書かない"
   }
  }
 }

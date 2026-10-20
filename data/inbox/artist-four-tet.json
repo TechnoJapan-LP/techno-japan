@@ -27,6 +27,37 @@
    "source": "Wikipedia + Bandcamp + DIY Magazine",
    "confidence": "high",
    "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/fourtetkieran",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "LONDON",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts_20261020": {
+   "value": "Kieran Hebden。Fridge を経て1998年『Thirtysixtwentyfive』（Output）で Four Tet 開始。『Dialogue』(1999)、『Pause』(2001, Domino)、『Rounds』(2003)、『There Is Love in You』(2010)。Steve Reid との即興作品、Burial / Thom Yorke との共作",
+   "source": "https://ra.co/dj/fourtet / https://en.wikipedia.org/wiki/Four_Tet",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "bio_draft_20261020": {
+   "value": "本名 Kieran Hebden。ロンドンのプロデューサー/DJ。ポストロック・バンド Fridge を経て、1998年に36分の単曲「Thirtysixtwentyfive」で Four Tet 名義の活動を始めた。『Pause』（2001）、『Rounds』（2003）、『There Is Love in You』（2010）などのアルバムで知られ、Steve Reid との即興作品や Burial、Thom Yorke との共作もある。",
+   "value_en": "Four Tet is London producer and DJ Kieran Hebden. After the post-rock band Fridge, he started the project in 1998 with the 36-minute single \"Thirtysixtwentyfive\". Albums like \"Pause\" (2001), \"Rounds\" (2003) and \"There Is Love in You\" (2010) built his name, alongside improvised records with drummer Steve Reid and collaborations with Burial and Thom Yorke.",
+   "source": "https://ra.co/dj/fourtet（1998年の初シングル、『Pause』『Rounds』、Steve Reid）/ https://en.wikipedia.org/wiki/Four_Tet（Fridge、『There Is Love in You』、Burial・Thom Yorke）",
+   "confidence": "draft",
+   "checkedAt": "2026-10-20"
   }
- }
+ },
+ "_updates": [
+  {
+   "at": "2026-10-20T00:00:00+09:00",
+   "note": "BIO 下書き v2 は reports/artist-bios-draft2-2026-10-20.md。既存キーは上書きせず、追記のみ"
+  }
+ ]
 }

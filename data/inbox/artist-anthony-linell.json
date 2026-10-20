@@ -1,0 +1,50 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "otsukimi",
+ "fields": {
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/anthonylinell",
+   "source": "RA 本人ページ。プロフィールの日程に 26/09 Otsukimi Open Air, Itoigawa",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "BANDCAMP": {
+   "value": "https://northernelectronics.bandcamp.com",
+   "source": "RA 本人ページ（主宰レーベル）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "WEBSITE": {
+   "value": "http://northernelectronics.se",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "RA": {
+   "value": "https://ra.co/dj/anthonylinell",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "STOCKHOLM",
+   "source": "SoundCloud / Northern Electronics",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "SWEDEN",
+   "source": "RA",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "Varg（Jonas Rönnberg）と Stockholm の Northern Electronics を運営。初期は Abdulla Rashim 名義・同名レーベル、近年は本名。Lundin Oil（ノイズ/実験）、Varg とのユニット Ulwhednar。",
+   "source": "https://ra.co/dj/anthonylinell , https://soundcloud.com/anthonylinell",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

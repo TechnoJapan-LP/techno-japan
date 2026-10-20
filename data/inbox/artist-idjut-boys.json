@@ -21,6 +21,26 @@
    "source": "Bandcamp + 複数ソース",
    "confidence": "high",
    "checkedAt": "2026-08-13T06:10:00+09:00"
+  },
+  "RESIDENT_ADVISOR": {
+   "value": "https://ra.co/dj/idjutboys",
+   "source": "RA イベント Synapse Festival 2026 から本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "LONDON",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts_20261020": {
+   "value": "北ロンドンのスタジオ。同名クラブナイトから U-Star（RA は '94、8月 inbox は1993年で食い違い）、Noid、Droid。ダブの効いたディスコ・サンプリングのハウス。初アルバム『Cellar Door』（Smalltown Supersound, 2012）。2025年に Bite The Day",
+   "source": "https://ra.co/dj/idjutboys , https://smalltownsupersound.com/news/idjut-boys-debut-album-on-smalltown-supersound/ , https://idjutboys.bandcamp.com/",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
   }
- }
+ },
+ "_note_20261020": "2026-10-20 追記。BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt_20261020": "synapse-festival（2026）"
 }

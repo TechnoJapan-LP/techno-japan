@@ -1,0 +1,52 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "matricaria",
+ "fields": {
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/adhemarmusic",
+   "source": "SoundCloud（Paris）。紹介文の「sound transformations and their luminous quality」が MATRICARIA の ZAIKO 出演者紹介（音の“光”の質感、トランジションへのこだわり）と一致",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20",
+   "note": "フェス側のタグ等の直接リンクは未確認"
+  },
+  "BANDCAMP": {
+   "value": "https://adhemar.bandcamp.com/",
+   "source": "Bandcamp（Paris, France）。Oslated の Mountain View [OSP004] を掲載",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "FACEBOOK": {
+   "value": "https://www.facebook.com/adhemarmusic/",
+   "source": "Bandcamp のリンク",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "PARIS",
+   "source": "SoundCloud / Bandcamp / RA イベント 2425277 の紹介文",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "FRANCE",
+   "source": "MATRICARIA 公式 ZAIKO のラインナップ表記「Adhémar (France)」",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "音楽とビジュアルの両面で活動するマルチディシプリナリー・アーティスト。音の光の質感・トランジションへのこだわり（フェス公式紹介）。パリ拠点、Oslated（済州島のレーベル）のリリース・アーティストでレーベルのデザイナー、2026-06-20 ソウル Atdge の Oslated 10周年ショーケースでヘッドライナー。",
+   "source": "https://matricaria.zaiko.io/e/matricaria26 , https://ra.co/events/2425277 , https://oslated.bandcamp.com/",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20",
+   "note": "フェス公式紹介は high。パリ/Oslated との同一人物判定は紹介文の一致による medium"
+  },
+  "NAME": {
+   "value": "Adhémar",
+   "source": "MATRICARIA 公式サイト・ZAIKO の表記。DB の AdhéMar は Title Case 化の誤り（AUDIT §9-25 付近）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

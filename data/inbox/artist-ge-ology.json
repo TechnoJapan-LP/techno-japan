@@ -40,6 +40,38 @@
    "confidence": "high",
    "checkedAt": "2026-08-13T07:20:00+09:00",
    "note": "紹介文 v2 執筆時に、記録漏れだった事実を追記（本文の記述を出典まで辿れるようにするため）"
+  },
+  "SOUNDCLOUD_2026_10": {
+   "value": "https://soundcloud.com/geology365",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug) ge-ology のリンク欄",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "RA": {
+   "value": "https://ra.co/dj/ge-ology",
+   "source": "RA Synapse Festival 2026 イベント(id 2487954)の出演者リンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "festival_link": {
+   "value": "Synapse Festival 2026 の RA イベント 2487954 に出演者 Ge-ology としてリンク",
+   "source": "https://ra.co/events/2487954",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts_2026_10": {
+   "value": "ボルティモア生まれ、80年代にNYへ。プロデューサー/DJ/ビジュアルアーティスト。Mos Def, Talib Kweli, Jill Scott, De La Soul, Yukimi Nagano (Little Dragon) を制作。2015年 Theo Parrish の Sound Signature から Moon Circuitry feat. Mark de Clive-Lowe。最初の制作参加は1993年 The Basement Boys の Those Guys 名義",
+   "source": "https://ra.co/dj/ge-ology (RA bio) / https://ge-ology365.bandcamp.com/ (bio)",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "unverified": {
+   "value": "Synapse 告知文の『Pursuit Of The Journey』『Public Records レジデント』は一次情報で確認できず。8月版の『高校で2Pacと同じグループ』は RA では『a young Tupac Shakur と仕事をした』までしか書かれていない",
+   "source": "WebSearch 2026-10-20",
+   "confidence": "low",
+   "checkedAt": "2026-10-20"
   }
- }
+ },
+ "_note2": "2026-10-20 追記。BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt2": "synapse-festival 2026-10"
 }

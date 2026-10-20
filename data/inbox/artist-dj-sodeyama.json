@@ -1,0 +1,32 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "Sawagi Festival 2025-08 / 2026-10",
+ "fields": {
+  "RESIDENT_ADVISOR": {
+   "value": "https://ra.co/dj/djsodeyama",
+   "source": "RA 本人ページ（Tokyo）。Sawagi 公式のアーティストページと名義一致",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "Sawagi 公式「東京出身」/ RA area Tokyo",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JP",
+   "source": "同上",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "東京出身のDJ/プロデューサー。テクノ/ハウスからアンビエント、ダウンビートまで。WIRE に2011〜13年の3年連続出演、Rainbow Disco Club など。DJ SODEYAMA 名義で трип（Nina Kraviz）、Dynamic Reflection、Quartz、Children Of Tomorrow 等からリリース。THE PEOPLE IN FOG 名義で Sound Of Vast から EP 3枚（HIGHER 含む）、2014年 ADE 出演、2021年アルバム『1977』が The Vinyl Factory の2021年ベストアルバム50に選出",
+   "source": "https://sawagifestival.com/artist/26-dj-sodeyama/（wp-json/wp/v2/artist/365）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

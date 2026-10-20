@@ -1,0 +1,56 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "rebirth-festival 2026-09",
+ "fields": {
+  "RA": {
+   "value": "https://ra.co/dj/gothtrad",
+   "source": "Re:birth 2026 RA イベント 2467941 の出演者リンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "WEBSITE": {
+   "value": "http://www.gothtrad.com",
+   "source": "RA リンク欄 / Back To Chill Bandcamp プロフィール",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/goth-trad",
+   "source": "Back To Chill 公式 SoundCloud のプロフィール記載",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "BANDCAMP": {
+   "value": "https://goth-trad.bandcamp.com/",
+   "source": "Bandcamp (Tokyo, Japan / DEEP MEDi リリース掲載)",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "INSTAGRAM": {
+   "value": "",
+   "source": "公式からのリンクを確認できず",
+   "confidence": "low",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug) area",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JAPAN",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug)",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "Back To Chill は GOTH-TRAD のレーベル/パーティーで2006年から東京。Mala が Cut End を DEEP MEDi へ契約。2012年 New Epoch (DEEP MEDi)。2021年5月 SURVIVAL RESEARCH (Back To Chill)。Rebel Familia (Dry & Heavy の秋本武士と)",
+   "source": "https://soundcloud.com/backtochill / https://backtochilltokyo.bandcamp.com/album/survival-research / https://www.ableton.com/en/blog/goth-trad-after-dubstep-a-new-epoch/ (medium)",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

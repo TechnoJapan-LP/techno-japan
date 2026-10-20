@@ -1,0 +1,51 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "moment 2026-07",
+ "fields": {
+  "RA": {
+   "value": "https://ra.co/dj/jakojako",
+   "source": "RA 本人ページ。2026-07-10 SAMSARA EPISODE 14 (VENT 東京) で来日が Moment と同時期。名前が特異で別人の可能性は低い",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20",
+   "note": "Moment 公式サイトのラインナップに『JakoJako Live』"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/jakojako_live",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug) リンク欄",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "BANDCAMP": {
+   "value": "https://aequilibration.bandcamp.com",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug) リンク欄（中身は未確認）",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "WEBSITE": {
+   "value": "https://mute.com/artists/jakojako",
+   "source": "Mute 公式アーティストページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "BERLIN",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug) area",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "GERMANY",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug)",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "本名 Sibel Koçer。Berghain レジデント。モジュラー中心のライブ。SchneidersLaden で数年勤務、そこで Daniel Miller と出会う。Mute から Verve EP (2023)、Segmente EP (2024)、Têt 41 (2025, ベトナムのテト期間に録音)。以前は Tresor, Leisure System",
+   "source": "https://mute.com/artists/jakojako / https://ra.co/dj/jakojako (RA bio)",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

@@ -1,0 +1,51 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "matricaria",
+ "fields": {
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/naokifujii",
+   "source": "RA 本人ページ（MATRICARIA 2026 からリンク）、SC 表示名に MATRICARIA",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "RA": {
+   "value": "https://ra.co/dj/fuji-4",
+   "source": "MATRICARIA 2026 RA イベント",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "RA 本人ページの地域欄",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JAPAN",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "MATRICARIA / LAB. のレジデントDJ・オーガナイザー。ディープテクノとアンビエントテクノが軸、繊細で丁寧なミキシングで音の層を重ねる。空間・時間・人の流れまで含めパーティー全体を一つの体験として設計",
+   "source": "https://ra.co/dj/fuji-4",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "INSTAGRAM_tried": {
+   "value": "未特定",
+   "source": "RA の IG 欄は https://www.instagram.com/?hl=ja で無効。MATRICARIA 公式 IG はブラウザの権限で閲覧できず",
+   "confidence": "low",
+   "checkedAt": "2026-10-20"
+  },
+  "bio_draft_20261020": {
+   "value": "本名 Naoki Fujii。キャンプイン型の野外フェス MATRICARIA と、パーティー LAB. のレジデントDJ/オーガナイザー。ディープテクノとアンビエントテクノを軸に、音の層を少しずつ重ねる丁寧なミックスでセットを組む。DJとしてだけでなく、時間や空間、人の流れまで含めてパーティー全体の体験を組み立てることを目指している。",
+   "value_en": "FUJI (Naoki Fujii) is the resident DJ and organizer of the camping festival MATRICARIA and the party LAB. His sets center on deep and ambient techno, built through patient mixing that adds layers bit by bit. Beyond the booth, he aims to shape a whole gathering, from time and space to how people move through it, as one experience.",
+   "source": "https://ra.co/dj/fuji-4（全事実）/ https://soundcloud.com/naokifujii（Naoki Fujii、MATRICARIA）",
+   "confidence": "draft",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

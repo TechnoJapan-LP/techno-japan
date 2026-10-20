@@ -1,0 +1,45 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "otsukimi",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/efdemin",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/efdemin",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "BERLIN",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "GERMANY",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "本名 Phillip Sollmann（1974年カッセル生）。2004年から Dial、2007年『Efdemin』、2010年『Chicago』（Dial）。2019年『New Atlantis』（Ostgut Ton）。ヴァイナル限定レーベル naïf 主宰。本名でドローン/アンビエント作品。RA 紹介文は Berghain レジデントと記載",
+   "source": "https://ra.co/dj/efdemin / https://de.wikipedia.org/wiki/Phillip_Sollmann / https://www.berghain.berlin/en/shop/releases/efdemin-new-atlantis/",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "bio_draft_20261020": {
+   "value": "ベルリンを拠点とするDJ/プロデューサー、Phillip Sollmann のテクノ名義。2004年からハンブルクのレーベル Dial で作品を発表し、アルバム『Efdemin』（2007）、『Chicago』（2010）を同レーベルから出した。2019年には Ostgut Ton から『New Atlantis』を発表。ヴァイナル限定のレーベル naïf を主宰し、本名ではドローンやアンビエントの作品も手がける。",
+   "value_en": "Efdemin is the techno name of Berlin-based DJ/producer Phillip Sollmann. He has released on Hamburg's Dial since 2004, including the albums \"Efdemin\" (2007) and \"Chicago\" (2010), and put out \"New Atlantis\" on Ostgut Ton in 2019. He runs the vinyl-only label naïf, and under his own name makes drone and ambient work.",
+   "source": "https://ra.co/dj/efdemin（Phillip Sollmann、Dial/Ostgut Ton、2作目『Chicago』、naïf、本名でのドローン/アンビエント）/ https://de.wikipedia.org/wiki/Phillip_Sollmann（2004年から Dial、2007年1st）/ https://www.berghain.berlin/en/shop/releases/efdemin-new-atlantis/（『New Atlantis』）",
+   "confidence": "draft",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

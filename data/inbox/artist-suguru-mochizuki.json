@@ -1,0 +1,38 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "matricaria / sawagi-festival",
+ "fields": {
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/suguru-mochiduki",
+   "source": "Sawagi Festival 公式出演者ページの SoundCloud 短縮リンク（on.soundcloud.com/dayaZLTpMjusUpMfnp）の転送先。表示名 Suguru Mochizuki / Yamanashi",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "KOFU",
+   "source": "Sawagi 公式「地元である甲府」/ SoundCloud Yamanashi",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JAPAN",
+   "source": "同上",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "2012年からDJ。Techno/Tech House/Progressive House。2015年から地元山梨でテクノ・パーティー SOL. を開始。2022年から甲府の DJ BAR ofi を運営。",
+   "source": "https://sawagifestival.com/artist/26-suguru-mochizuki/ , https://matricaria.zaiko.io/e/matricaria26（出演者紹介）, https://ra.co/clubs/281264（ofi, 甲府）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "note_ra": {
+   "value": null,
+   "source": "RA に本人ページなし。RA の DJ MOCHIZUKI（in the mix, 青山）は別人",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

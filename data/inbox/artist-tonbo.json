@@ -1,0 +1,56 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "synapse-festival / re-birth-festival / matricaria",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/tonboq",
+   "source": "RA 本人ページのリンク欄",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/djtonbo",
+   "source": "RA 本人ページ / 公式サイト",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "BANDCAMP": {
+   "value": "https://tonbo.bandcamp.com/",
+   "source": "公式サイト tonboq.jp のリンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "WEBSITE": {
+   "value": "http://tonboq.jp/",
+   "source": "RA 本人ページのリンク欄",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "RA": {
+   "value": "https://ra.co/dj/tonbo",
+   "source": "RA 本人ページ。イベント一覧に Synapse Festival 2026 / Re:birth 2026 / MATRICARIA 2026",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "RA / 公式サイト",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JAPAN",
+   "source": "RA",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "東京のライブ・アーティスト。モジュラーシンセ・バンスリ・声。テクノ/ハウス/ダウンテンポ/アンビエントを横断する即興。2025年 Nory Kimijima と ppq rec 設立。2026年1月 Day Zero（トゥルム）に日本人初出演。",
+   "source": "https://ra.co/dj/tonbo , http://tonboq.jp/ , https://ppq-rec.bandcamp.com/",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

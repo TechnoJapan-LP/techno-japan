@@ -15,6 +15,37 @@
    "source": "Wikipedia + UKF",
    "confidence": "high",
    "checkedAt": "2026-08-13T05:30:00+09:00"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/clipzuk/",
+   "source": "THE STAR FESTIVAL 公式サイト 2026 ラインナップのリンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts_20261020": {
+   "value": "Hugh Pescod（Redlight と同一人物）。ブリストル出身。2000年代初頭から Full Cycle / Digital Soundboy にリリース、2009年に Redlight 名義と Lobster Boy を開始、約10年後に Clipz 名義へ戻った",
+   "source": "https://en.wikipedia.org/wiki/Redlight_(musician) / https://www.rinse.fm/shows/clipz / https://ra.co/dj/redlight",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "_correction": {
+   "value": "8月版の「2000年代のジャンプアップD&Bを牽引」「20年以上最前線」は出典で確認できず、今回の下書きから外した",
+   "source": "Wikipedia / Rinse を再確認",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "bio_draft_20261020": {
+   "value": "ブリストル出身のDJ/プロデューサー、Hugh Pescod のジャングル/ドラムンベース名義。2000年代初頭から Full Cycle や Digital Soundboy に作品を残し、2009年には Redlight 名義とレーベル Lobster Boy を立ち上げて、ハウスやベースミュージックへ活動を広げた。その名義での約10年を経て、原点である Clipz に戻ってきた。",
+   "value_en": "Clipz is the jungle and drum & bass alias of Bristol DJ/producer Hugh Pescod. He released on Full Cycle and Digital Soundboy from the early 2000s, then in 2009 switched to Redlight and launched his Lobster Boy label, pushing into house and bass music. After a decade under that name, he has come back to Clipz and the sound he started with.",
+   "source": "https://en.wikipedia.org/wiki/Redlight_(musician)（本名・出身・Full Cycle/Digital Soundboy・2009年 Redlight と Lobster Boy）/ https://www.rinse.fm/shows/clipz（約10年後に Clipz へ戻った）/ https://ra.co/dj/redlight（ブリストルのレイヴ文化で育った）",
+   "confidence": "draft",
+   "checkedAt": "2026-10-20"
   }
- }
+ },
+ "_updates": [
+  {
+   "at": "2026-10-20T00:00:00+09:00",
+   "note": "BIO 下書き v2 は reports/artist-bios-draft2-2026-10-20.md。既存キーは上書きせず、追記のみ"
+  }
+ ]
 }

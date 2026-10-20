@@ -16,6 +16,37 @@
    "source": "Wikipedia + RA + 15questions",
    "confidence": "high",
    "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "RA": {
+   "value": "https://ra.co/dj/danielbell",
+   "source": "Letus 2026 RA イベントからのリンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts_20261020": {
+   "value": "1967年サクラメント生まれ、トロント近郊育ち、デトロイトで Richie Hawtin と Cybersonik（Plus 8、3年間）。1991年 Accelerate 設立、DBX 名義。『Losing Control』(1994)。1994年に 7th City Distribution。2000年ベルリン移住、Tresor から『The Button-Down Mind of Daniel Bell』",
+   "source": "https://en.wikipedia.org/wiki/Daniel_Bell_(musician)",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "_correction": {
+   "value": "8月版の「アンダーグラウンドの国際的ヒット」は Wikipedia に無い表現なので外した",
+   "source": "Wikipedia 再確認",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "bio_draft_20261020": {
+   "value": "ミニマル・テクノのDJ/プロデューサー。サクラメントに生まれ、トロント近郊で育ち、デトロイトでは Richie Hawtin と Cybersonik として活動した。1991年にレーベル Accelerate を立ち上げ、DBX 名義で「Losing Control」（1994）などを発表。2000年にベルリンへ移り、Tresor から初のミックスCD『The Button-Down Mind of Daniel Bell』を出した。",
+   "value_en": "Minimal techno DJ and producer Daniel Bell was born in Sacramento, grew up outside Toronto, and worked with Richie Hawtin as Cybersonik in Detroit. In 1991 Bell started the Accelerate label and released a run of records as DBX, including \"Losing Control\" (1994). A move to Berlin followed in 2000, along with a first mix CD, \"The Button-Down Mind of Daniel Bell\", on Tresor.",
+   "source": "https://en.wikipedia.org/wiki/Daniel_Bell_(musician)（全事実）/ https://ra.co/dj/danielbell",
+   "confidence": "draft",
+   "checkedAt": "2026-10-20"
   }
- }
+ },
+ "_updates": [
+  {
+   "at": "2026-10-20T00:00:00+09:00",
+   "note": "BIO 下書き v2 は reports/artist-bios-draft2-2026-10-20.md。既存キーは上書きせず、追記のみ"
+  }
+ ]
 }

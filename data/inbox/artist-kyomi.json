@@ -39,6 +39,19 @@
    "source": "sawagifestival.com artist-sitemap に 25 年分なし",
    "confidence": "low",
    "checkedAt": "2026-10-20"
+  },
+  "links_candidates_2026-10-20": {
+   "value": [
+    {
+     "type": "RA",
+     "url": "https://ra.co/dj/kyomi",
+     "confidence": "high",
+     "source": "rural 2026 / NU Festival 2026 / 台北 Pawnshop「Kyomi 鏡民」の出演履歴"
+    }
+   ],
+   "source": "調査G (RA GraphQL / 各公式ページ)",
+   "confidence": "mixed",
+   "checkedAt": "2026-10-20"
   }
  }
 }

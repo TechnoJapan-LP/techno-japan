@@ -1,0 +1,40 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "labyrinth (2026-10)",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/napirelly",
+   "source": "https://ra.co/graphql（artist slug=napirelly, RA 本人ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/napirelly",
+   "source": "https://ra.co/graphql（artist slug=napirelly, RA 本人ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "RUSSIA",
+   "source": "RA country=Russia（出身）",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20",
+   "note": "居住地は RA=Netherlands、TECHNO JAPAN の Labyrinth 記事=サンクトペテルブルク。食い違うため CITY は空欄推奨"
+  },
+  "identity": {
+   "value": "Mindgames 公式 Artists ページ（https://www.mindgames.jp/artists）に名前。TECHNO JAPAN labyrinth-2026-info 記事に Immediate Proximity / Delta Funktionen との記述があり、RA 本人ページと一致",
+   "source": "https://www.mindgames.jp/artists ; https://techno-japan.media/articles/labyrinth-2026-info.html ; https://ra.co/dj/napirelly",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "本名 Diana Napirelly。レニングラード生まれ、シベリアの北極圏境界で育つ。2009年から活動（Tresor, Red Light Radio, Ahola, Signal Festival 等）。Roots United レジデント。breaks/electro/bass/techno、BPM の変化。2020年 Delta Funktionen（Niels Luinenburg）と Immediate Proximity、LP『2334』（Radio Matrix）。2023年レーベル IMPROX",
+   "source": "https://ra.co/dj/napirelly（本人バイオ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20",
+   "note": "RA バイオの Roots United レジデントは時点不明のため BIO では省略"
+  }
+ }
+}

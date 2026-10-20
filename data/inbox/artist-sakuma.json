@@ -1,0 +1,44 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "re-birth-festival / sawagi-festival",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/sakuma_mdst",
+   "source": "RA 本人ページ（ra.co/dj/sakuma-1）のリンク欄",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/sakuma_modest",
+   "source": "Sawagi Festival 公式の出演者ページ（sawagifestival.com/artist/26-sakuma/）と RA 本人ページの両方",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "RA": {
+   "value": "https://ra.co/dj/sakuma-1",
+   "source": "RA 本人ページ。紹介文に Re:birth 出演・Modest 主宰の記述、Sawagi 公式紹介文と同文",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "Sawagi 公式 / RA: 2015年以降東京拠点（RA の area は Chubu だが紹介文は東京）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JAPAN",
+   "source": "RA",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "新潟出身、2015年から東京拠点。2017年からパーティー Modest を主宰（現在 WOMB 拠点）、DJ NOBU / Eric Cloutier / Valentino Mora らと共演。WOMB・VENT・Contact に出演。2023年 FUTURE TERROR に連続出演。",
+   "source": "https://sawagifestival.com/artist/26-sakuma/ , https://ra.co/dj/sakuma-1 , RA イベント一覧（Modest @ WOMB 2026-10-09 等）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

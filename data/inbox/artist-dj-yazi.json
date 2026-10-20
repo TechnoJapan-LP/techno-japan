@@ -15,6 +15,19 @@
    "source": "RA + iFLYER + Dekmantel",
    "confidence": "high",
    "checkedAt": "2026-08-13T05:30:00+09:00"
+  },
+  "links_candidates_2026-10-20": {
+   "value": [
+    {
+     "type": "RA",
+     "url": "https://ra.co/dj/djyazi",
+     "confidence": "high",
+     "source": "RA bio: Black Smoker / El Nino / Twin Peaks / Think Tank。Re:birth 2026 RAラインナップ"
+    }
+   ],
+   "source": "調査G (RA GraphQL / 各公式ページ)",
+   "confidence": "mixed",
+   "checkedAt": "2026-10-20"
   }
  }
 }

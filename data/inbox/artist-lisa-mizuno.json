@@ -1,0 +1,21 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "未特定: フェス告知はタグ無しの平文で、候補人物との結びつきを確認できない",
+ "_appearsAt": "parallel-world (2026-10-31)",
+ "fields": {
+  "candidate": {
+   "value": "RA の Lisa Mizuno（東京、テクノ。IG https://www.instagram.com/_lisa.m26__/ 、Resonance 主宰）",
+   "source": "https://ra.co/dj/lisamizuno",
+   "confidence": "low",
+   "checkedAt": "2026-10-20",
+   "note": "PARALLEL WORLD の告知（IG __yamamotech__ の 2026-09-14 投稿）は平文で「LISA MIZUNO」と書くのみでタグ無し。本人 RA/IG にも PARALLEL WORLD の記載が見当たらない"
+  },
+  "tried": {
+   "value": "RA GraphQL（artist/events）、IG __yamamotech__ 投稿 DdQ2TS7J_lT（タグ無し）、campfire 975631（出演者名なし）、本人 IG 表示範囲、Web 検索",
+   "source": "",
+   "confidence": "low",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

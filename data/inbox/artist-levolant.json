@@ -33,6 +33,25 @@
    "source": "https://ringofes.info/artists/entry-109818",
    "confidence": "high",
    "checkedAt": "2026-10-20"
+  },
+  "links_candidates_2026-10-20": {
+   "value": [
+    {
+     "type": "SOUNDCLOUD",
+     "url": "https://soundcloud.com/levolant",
+     "confidence": "high",
+     "source": "短縮URLの302転送先。RA本人ページのSC欄と一致"
+    },
+    {
+     "type": "RA",
+     "url": "https://ra.co/dj/levolant",
+     "confidence": "high",
+     "source": "RAのIG欄が _levolant と一致"
+    }
+   ],
+   "source": "調査G (RA GraphQL / 各公式ページ)",
+   "confidence": "mixed",
+   "checkedAt": "2026-10-20"
   }
  }
 }

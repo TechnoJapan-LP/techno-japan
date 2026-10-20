@@ -1,0 +1,44 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "matricaria 2026-05",
+ "fields": {
+  "RA": {
+   "value": "https://ra.co/dj/iron-2",
+   "source": "MATRICARIA 2026 RA イベント 2371706 の出演者リンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/eisaku-ihashi",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug) iron-2 のリンク欄",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "INSTAGRAM": {
+   "value": "",
+   "source": "確認できず",
+   "confidence": "low",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug) area / bio『Based in Tokyo』",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JAPAN",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug)",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "SAMSARA (VENT) のレジデント。Peter Van Hoesen, Patrick Russell, Eric Cloutier, Sunju Hargun, Polar Inertia 等と共演。インド・韓国ツアー。2026-01-16 VANTA × SAMSARA (vurt., Seoul)",
+   "source": "https://ra.co/dj/iron-2 (RA bio / events) / https://ra.co/events/2441964",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

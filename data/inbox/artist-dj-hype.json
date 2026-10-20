@@ -22,6 +22,43 @@
    "confidence": "high",
    "checkedAt": "2026-08-13T07:20:00+09:00",
    "note": "紹介文 v2 執筆時に、記録漏れだった事実を追記（本文の記述を出典まで辿れるようにするため）"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/djhype_playaz/",
+   "source": "THE STAR FESTIVAL 公式サイト 2026 ラインナップのリンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "LONDON",
+   "source": "RA 本人ページの地域欄",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "facts_20261020": {
+   "value": "本名 Kevin Ford（1968年生）。海賊ラジオ Fantasy FM、1993年『Shot in the Dark』全英チャート入り（Suburban Base）、1994年までに Kiss 100 で番組。Ganja Records、DJ Zinc / Pascal / Rude Bwoy Monty と True Playaz。Fabric の Playaz でジャンプアップのセット",
+   "source": "https://en.wikipedia.org/wiki/DJ_Hype",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "_correction": {
+   "value": "8月版の「1996年に True Playaz 設立」「Fabric の月例 Playaz を15年主宰」は今回の再確認で出典を見つけられず BIO から外した（playazrecordings.com は工事中で About を読めない）",
+   "source": "Wikipedia / Web 検索",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "bio_draft_20261020": {
+   "value": "本名 Kevin Ford。ロンドンのジャングル/ドラムンベースのDJ/プロデューサー。海賊ラジオ Fantasy FM で名を上げ、1993年に「Shot in the Dark」が全英チャート入り。1994年には Kiss 100 で番組を持った。レーベル Ganja Records を経て、DJ Zinc や Pascal らと True Playaz を結成。Fabric の Playaz でのジャンプアップのセットで知られる。",
+   "value_en": "Kevin Ford, aka DJ Hype, is a London jungle and drum & bass DJ/producer. DJ Hype made a name on pirate station Fantasy FM, charted in 1993 with \"Shot in the Dark\", and had a show on Kiss 100 by 1994. The Ganja Records label led to True Playaz with DJ Zinc and Pascal, and the jump-up sets at the Playaz nights at Fabric are what many people know DJ Hype for.",
+   "source": "https://en.wikipedia.org/wiki/DJ_Hype（全事実）",
+   "confidence": "draft",
+   "checkedAt": "2026-10-20"
   }
- }
+ },
+ "_updates": [
+  {
+   "at": "2026-10-20T00:00:00+09:00",
+   "note": "BIO 下書き v2 は reports/artist-bios-draft2-2026-10-20.md。既存キーは上書きせず、追記のみ"
+  }
+ ]
 }

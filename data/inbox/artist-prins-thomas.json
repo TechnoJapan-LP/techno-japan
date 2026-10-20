@@ -40,6 +40,37 @@
    "confidence": "high",
    "checkedAt": "2026-08-13T07:20:00+09:00",
    "note": "紹介文 v2 執筆時に、記録漏れだった事実を追記（本文の記述を出典まで辿れるようにするため）"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/prinsthomas",
+   "source": "https://ra.co/graphql（artist slug=prinsthomas, RA 本人ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/prinsthomas",
+   "source": "https://ra.co/graphql（artist slug=prinsthomas, RA 本人ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "BANDCAMP_PERSONAL": {
+   "value": "https://prinsthomas.bandcamp.com",
+   "source": "https://ra.co/graphql（artist slug=prinsthomas, RA 本人ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "identity": {
+   "value": "MATRICARIA 2026 の RA イベントに artist id 904 としてリンク",
+   "source": "https://ra.co/events/2371706",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts_2026_10": {
+   "value": "本名 Thomas Moen Hermansen。ブレイクダンスの延長でヒップホップ/エレクトロを掛け始め、ベーシストとして多数のバンド。2003年から Lindstrøm と協働。Full Pupp / Internasjonal 運営",
+   "source": "https://ra.co/dj/prinsthomas ; https://fullpupp.bandcamp.com/",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
   }
- }
+ },
+ "_note2": "2026-10-20 追記: BIO 下書きは reports/artist-bios-draft2-2026-10-20.md"
 }

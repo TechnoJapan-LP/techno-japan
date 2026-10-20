@@ -1,0 +1,45 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "THE STAR FESTIVAL 2026-05 / CIRCUS ODAIBA 2026-09",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/nasthug/",
+   "source": "THE STAR FESTIVAL 公式ラインナップのリンク先",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "RESIDENT_ADVISOR": {
+   "value": "https://ra.co/dj/nasthug",
+   "source": "RA の CIRCUS Odaiba (2026-09-22) 出演者として紐付く本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/user-48185313",
+   "source": "RA 本人ページ登録のURL（ユーザー名が汎用IDのため要目視）",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "RA bio（東京を拠点）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JP",
+   "source": "RA",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "日本とジャマイカにルーツ、東京拠点の女性DJ。Hip Hop、Dancehall、Jersey Club など。2023年 Boiler Room Tokyo 出演、同年 Wasserman とエージェント契約、アジア10ヶ所ツアー。Astral People のプロフィールでは千葉生まれ、ジャマイカ人の父と日本人の母、Afrobeat も",
+   "source": "https://ra.co/dj/nasthug / https://astralpeople.com/tours/nasthug-jp",
+   "confidence": "high",
+   "checkedAt": "2026-10-20",
+   "note": "Boiler Room の再生数は RA『200万回以上』と Astral People『数週間で50万超』で食い違うため書かない"
+  }
+ }
+}

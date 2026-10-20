@@ -1,0 +1,51 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "Labyrinth 2025-10 / 2026-10",
+ "fields": {
+  "RESIDENT_ADVISOR": {
+   "value": "https://ra.co/dj/petervanhoesen",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/petervanhoesen",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/petervanhoesen",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "BANDCAMP": {
+   "value": "https://timetoexpress.bandcamp.com",
+   "source": "RA 本人ページ（レーベル Time To Express）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "WEBSITE": {
+   "value": "http://petervanhoesen.com",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "BE",
+   "source": "本人サイト（1970年 Schoten 生まれのベルギー人）。RA の residentCountry は Vietnam",
+   "confidence": "high",
+   "checkedAt": "2026-10-20",
+   "note": "現拠点は確認できず。CITY は空欄"
+  },
+  "facts": {
+   "value": "ベルギーのプロデューサー、ライブ・パフォーマー、サウンドデザイナー、マスタリング・エンジニア。bass-heavy で抽象的なテクノ。Time To Express（2008）、Center 91（2019）、Foton（1998-2006）。Archives Intérieures 共同設立（2013）。Yves De Mey と Sendai（Editions Mego 等）、Atom™ と SYNC.（即興のライブ・テクノ）。2025年3月 Memento Mastering 開始。2019年 Sony Japan の 360 Reality Audio 作品。RA ニュース(2017)で Labyrinth に Donato Dozzy と並ぶレジデントとしてトップ",
+   "source": "https://petervanhoesen.com/biography / https://ra.co/dj/petervanhoesen / RA ニュース 39952",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

@@ -1,0 +1,45 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "labyrinth",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/donato_dozzy",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/donato-dozzy",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "BANDCAMP": {
+   "value": "https://dozz.bandcamp.com/",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "ITALY",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "1999年ローマ Brancaleone レジデント、2004-2006 Panorama Bar レジデント。2007年 Labyrinth 初出演、2008年クロージング。2008年 Aquaplano 開始、2010年1stアルバム『K』。Neel と Voices From The Lake（2011年 Labyrinth でライブ初披露）。RA: レーベル Spazio Disponibile を共同運営",
+   "source": "https://thebunkerny.com/artists/donato-dozzy / https://ra.co/dj/donatodozzy",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "bio_draft_20261020": {
+   "value": "イタリアのDJ/プロデューサー。ローマのクラブ Brancaleone（1999年〜）、ベルリンの Panorama Bar（2004〜2006年）でレジデントを務めた。2007年に初めて Labyrinth に招かれ、翌2008年にはクロージングを担当。2008年にレーベル Aquaplano を始め、2010年に初アルバム『K』を発表した。Neel とのユニット Voices From The Lake でも活動する。",
+   "value_en": "Italian DJ/producer Donato Dozzy held residencies at Brancaleone in Rome from 1999 and at Berlin's Panorama Bar from 2004 to 2006. Labyrinth first invited him in 2007, and he came back to close the festival in 2008. He started the Aquaplano label in 2008, released his debut album \"K\" in 2010, and also works with Neel as Voices From The Lake.",
+   "source": "https://thebunkerny.com/artists/donato-dozzy（Brancaleone、Panorama Bar、Labyrinth 2007/2008、Aquaplano、『K』、Voices From The Lake）/ https://ra.co/dj/donatodozzy",
+   "confidence": "draft",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

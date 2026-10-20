@@ -39,6 +39,19 @@
    "source": "https://ra.co/dj/risataniguchi/biography ; https://tokyo.mutek.org/en/artists/risa-taniguchi ; https://www.mountainwatch.com/Snow-news/snow-machine-returns-to-hakuba-valley-in-2027-with-an-electrifying-first-line-up-announcement/ ; (medium) https://www.tokyoweekender.com/entertainment/music/dj-risa-taniguchi-on-making-it-in-europe-and-why-tokyos-izakaya-keep-her-coming-back/",
    "confidence": "high",
    "checkedAt": "2026-10-20"
+  },
+  "links_candidates_2026-10-20": {
+   "value": [
+    {
+     "type": "WEBSITE",
+     "url": "https://www.risataniguchi.com/",
+     "confidence": "high",
+     "source": "RA本人ページ掲載、確認済みIG/SCへリンク"
+    }
+   ],
+   "source": "調査G (RA GraphQL / 各公式ページ)",
+   "confidence": "mixed",
+   "checkedAt": "2026-10-20"
   }
  }
 }

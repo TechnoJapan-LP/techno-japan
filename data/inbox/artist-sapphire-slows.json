@@ -1,0 +1,44 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "ringo-music-festival / nu-festival",
+ "fields": {
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/sapphire-slows",
+   "source": "RA 本人ページのリンク欄",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "BANDCAMP": {
+   "value": "https://sapphireslows.bandcamp.com/",
+   "source": "Bandcamp（Tokyo, Facebook リンクが RA と一致）",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "RA": {
+   "value": "https://ra.co/dj/sapphireslows",
+   "source": "RA 本人ページ。RA イベント一覧に NU Festival 2026 DAY2（2026-06-27）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "RA",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JAPAN",
+   "source": "RA",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "東京のプロデューサー/DJ。2011年に寝室で制作開始、Not Not Fun と Big Love からデビュー。100% Silk / Nous Disques / Kaleidoscope からも発表、2014年アルバム Allegoria。2015年 RBMA パリ参加、2016年 Sónar、2018年から Rinse FM レジデント。",
+   "source": "https://ra.co/dj/sapphireslows（biography）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

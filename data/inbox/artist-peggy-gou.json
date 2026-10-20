@@ -1,0 +1,39 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "ultra-japan (2026-09)",
+ "fields": {
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/peggygou",
+   "source": "https://ra.co/graphql（artist slug=peggygou, RA 本人ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "WEBSITE": {
+   "value": "https://www.peggygou.com/",
+   "source": "公式サイト（タイトル Peggy Gou 페기 구）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "BERLIN",
+   "source": "https://ra.co/graphql（artist slug=peggygou, RA 本人ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "identity": {
+   "value": "ULTRA JAPAN 2026 1st ラインナップ（PR TIMES）に Peggy Gou。RESISTANCE エリアで「gou talk」をキュレーション",
+   "source": "https://prtimes.jp/main/html/rd/p/000000325.000025862.html ; https://djmag.com/news/ultra-japan-announces-full-2026-line",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "ベルリン拠点の韓国出身アーティスト。初リリース『September War』（Rekids, 2016）。Gudu Records 2019年（Pitchfork 経由 Wikipedia）。「(It Goes Like) Nanana」2023年。デビュー・アルバム『I Hear You』2024-06-07 XL Recordings（RA News 80520）",
+   "source": "https://ra.co/dj/peggygou ; https://ra.co/news/80520 ; https://en.wikipedia.org/wiki/Peggy_Gou",
+   "confidence": "high",
+   "checkedAt": "2026-10-20",
+   "note": "仁川生まれ・Kirin・Berghain 初の韓国人DJ は Wikipedia のみで未使用"
+  }
+ }
+}

@@ -1,0 +1,40 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "otsukimi（2026）",
+ "fields": {
+  "RESIDENT_ADVISOR": {
+   "value": "https://ra.co/dj/vril",
+   "source": "御月民公式IG（2026-08-19 告知・09-10 タイムテーブル「.VRIL -Live set-」、タグなし）＋同時期 2026-09-25 VENT 公演が RA 本人ページにリンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20",
+   "note": "厳密にはフェス告知にタグ無し。来日時期の一致で判断"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/vril_01",
+   "source": "RA 本人ページ記載",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/vril_01",
+   "source": "RA 本人ページ記載",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "GERMANY",
+   "source": "RA 本人ページ（地域 Lower Saxony）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "ドイツのプロデューサー。2011年 Berghain で注目。『Torus』（Giegling の Forum, 2014）。Delsin から『Portal』（2015）『Anima Mundi』（2018、2017年 Giegling カセットの再発）『Alte Seele』（2021）『Animist』（2023）",
+   "source": "https://2024.montreal.mutek.org/en/artists/vril , https://www.juno.co.uk/junodaily/2014/03/04/vril-enters-the-torus/ , https://xlr8r.com/?p=2507",
+   "confidence": "high",
+   "checkedAt": "2026-10-20",
+   "note": "『Portal』2015 は検索要約経由（RA review 16326 未開封）"
+  }
+ }
+}

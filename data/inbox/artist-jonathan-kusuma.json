@@ -21,6 +21,38 @@
    "source": "Bandwagon + Shi Fu Miz",
    "confidence": "high",
    "checkedAt": "2026-08-13T04:50:00+09:00"
+  },
+  "RA": {
+   "value": "https://ra.co/dj/jonathankusuma-id",
+   "source": "RDC 2026 RA イベント 2250551 の出演者リンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "BANDCAMP": {
+   "value": "https://jonathankusumamusic.bandcamp.com/",
+   "source": "RA の facebook 欄に誤って入っている URL / Bandcamp (Jakarta, Indonesia; Dekadenz, Cocktail D'amore 記載)",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "JAKARTA",
+   "source": "Bandcamp / RA bio『hometown of Jakarta』（RA bio は Singapore と Jakarta 拠点と書くが古い）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts_2026_10": {
+   "value": "Dekadenz（友人2人と始めたコレクティブ/レーベル/パーティー、Zodiac Jakarta）。Gong 3000 EP (2014, I'm a Cliché)、Underpass EP (2015, Love on the Rocks)、Black Magic EP (2016, Cocktail d'Amore)。Space.rec (2009-2015)、Akamady Records (Gerhan Ferdinal aka Komodo と)",
+   "source": "https://ra.co/dj/jonathankusuma-id (RA bio / events) / https://jonathankusumamusic.bandcamp.com/",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "correction": {
+   "value": "8月版の『Space.rec を共同設立』『催眠的なプロダクション』は RA bio では確認できない表現（RA は『pivotal role』）。今回は『関わった』とした",
+   "source": "RA bio",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
   }
- }
+ },
+ "_note2": "2026-10-20 追記。BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt2": "rainbow-disco-club 2026-04"
 }

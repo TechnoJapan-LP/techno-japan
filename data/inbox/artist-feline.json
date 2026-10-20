@@ -39,6 +39,19 @@
    "source": "https://ra.co/dj/feline-jp ; https://clubasia.jp/en/events/clubasia-thursday-5-1 ; https://ginzamag.com/categories/culture/474546",
    "confidence": "high",
    "checkedAt": "2026-10-20"
+  },
+  "links_candidates_2026-10-20": {
+   "value": [
+    {
+     "type": "INSTAGRAM",
+     "url": "https://www.instagram.com/feline__l/",
+     "confidence": "high",
+     "source": "GINZA記事プロフィール枠(名前FELINE・1995年茨城/水戸)のボタンがこのURL。IG表示名FELINE"
+    }
+   ],
+   "source": "調査G (RA GraphQL / 各公式ページ)",
+   "confidence": "mixed",
+   "checkedAt": "2026-10-20"
   }
  }
 }

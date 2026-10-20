@@ -39,6 +39,25 @@
    "source": "WebSearch",
    "confidence": "low",
    "checkedAt": "2026-10-20"
+  },
+  "links_candidates_2026-10-20": {
+   "value": [
+    {
+     "type": "RA",
+     "url": "https://ra.co/dj/olive-oil",
+     "confidence": "high",
+     "source": "出演履歴に Synapse 2026 福岡 / OILWORKS presents"
+    },
+    {
+     "type": "SOUNDCLOUD",
+     "url": "https://soundcloud.com/oliveoil-2",
+     "confidence": "high",
+     "source": "oilworks.jp 埋め込みSC(users/6601399)、説明欄に oilworks.jp"
+    }
+   ],
+   "source": "調査G (RA GraphQL / 各公式ページ)",
+   "confidence": "mixed",
+   "checkedAt": "2026-10-20"
   }
  }
 }

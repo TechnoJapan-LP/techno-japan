@@ -34,6 +34,32 @@
    "confidence": "high",
    "checkedAt": "2026-08-13T07:20:00+09:00",
    "note": "紹介文 v2 執筆時に、記録漏れだった事実を追記（本文の記述を出典まで辿れるようにするため）"
+  },
+  "RA": {
+   "value": "https://ra.co/dj/helenahauff",
+   "source": "RDC 2026 RA イベント 2250551",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "BANDCAMP": {
+   "value": "https://helenahauff.bandcamp.com",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug) リンク欄（Bandcamp 上の所在地表記は London で Ninja Tune 管理と思われる）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts_2026_10": {
+   "value": "Discreet Desires (2015, Werkdiscs)、Qualm (2018-08-03, Ninja Tune)、hardware-loving。自身のレーベル Return To Disorder (2015) は Ninja Tune ページ記載",
+   "source": "https://factmag.com/2018/06/19/helena-hauff-announces-new-album-qualm / https://www.ninjatune.com/release/helena-hauff/qualm",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "unverified": {
+   "value": "Golden Pudel Club / Birds and Other Instruments は Wikipedia 以外で確認できず、今回の BIO 案から外した",
+   "source": "https://en.wikipedia.org/wiki/Helena_Hauff",
+   "confidence": "low",
+   "checkedAt": "2026-10-20"
   }
- }
+ },
+ "_note2": "2026-10-20 追記。BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt2": "rainbow-disco-club 2026-04"
 }

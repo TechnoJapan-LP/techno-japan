@@ -1,0 +1,50 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "matricaria（2026）",
+ "fields": {
+  "RESIDENT_ADVISOR": {
+   "value": "https://ra.co/dj/yukimasa",
+   "source": "RA イベント MATRICARIA in the city（2026-09-19）から本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/norihiro_yukimasa",
+   "source": "RA 本人ページ記載",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/djyukimasa",
+   "source": "RA 本人ページ記載",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "BANDCAMP": {
+   "value": "https://paradigmarecords.bandcamp.com",
+   "source": "RA 本人ページ記載（共同主宰レーベル Paradigma Records のページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "RA 本人紹介「Tokyo-based」（地域欄は Kyushu で食い違い）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JAPAN",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "90年代後半にアナハイムで活動開始、2000年代初めに帰国。2007年から東京でパーティー FORCE。2019年に Drafted（伊）と Paradigma Records（日伊）",
+   "source": "https://ra.co/dj/yukimasa",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

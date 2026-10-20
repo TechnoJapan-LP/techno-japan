@@ -1,0 +1,14 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "未特定: フェス告知に名前のみ、本人を指す手がかりが見つからない",
+ "_appearsAt": "matricaria (2026-05)",
+ "fields": {
+  "tried": {
+   "value": "MATRICARIA 2026 RA イベント（2371706）の lineup に平文「Ojisan」があるのみで RA アーティストリンク無し。RA slug ojisan は存在しない。matricaria.page はラインナップ非表示、IG matricaria_festival の表示範囲に告知なし。Web 検索でも該当DJ無し",
+   "source": "https://ra.co/events/2371706",
+   "confidence": "low",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

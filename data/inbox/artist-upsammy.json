@@ -27,6 +27,38 @@
    "source": "Dekmantel + Bandcamp",
    "confidence": "high",
    "checkedAt": "2026-08-13T04:50:00+09:00"
+  },
+  "RESIDENT_ADVISOR": {
+   "value": "https://ra.co/dj/upsammy",
+   "source": "RA イベント Transcendence 2026 から本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/thessa.upsammy",
+   "source": "RA 本人ページ記載",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "WEBSITE": {
+   "value": "http://upsammy.com",
+   "source": "RA 本人ページ記載",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "AMSTERDAM",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts_20261020": {
+   "value": "デビューアルバム『Zoom』（Dekmantel, 2020。Analog Rytm / Ableton / モジュラー / フィールドレコーディング）、EP『Bend』（2021）、『Open Catalyst』（2025、ドラムンベース）。De School レジデント（閉店済み）。Whities / Nous'klaer Audio",
+   "source": "https://xlr8r.com/?p=126194 , https://archive.thevinylfactory.com/?p=150414 , https://upsammy.bandcamp.com",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
   }
- }
+ },
+ "_note_20261020": "2026-10-20 追記。BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt_20261020": "transcendence（2026）"
 }

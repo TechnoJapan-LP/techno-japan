@@ -1,0 +1,56 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "labyrinth 2026-10",
+ "fields": {
+  "festival_link": {
+   "value": "Mindgames 公式 Artists ページの Sound Design に『Jonathan Fitoussi (LIVE)』",
+   "source": "https://www.mindgames.jp/artists-1",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "RA": {
+   "value": "https://ra.co/dj/jonathanfitoussi",
+   "source": "RA 本人ページ（Paris）。Labyrinth は RA 未掲載だが同名の別人は見当たらない",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/jonathanfitoussi_",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug) リンク欄 / Bandcamp",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/jonathanfitoussi",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug) リンク欄",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "BANDCAMP": {
+   "value": "https://jfitoussi.bandcamp.com/",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug) リンク欄",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "PARIS",
+   "source": "Bandcamp / RA",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "FRANCE",
+   "source": "Bandcamp / RA",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "1978年生まれ、パリのサウンドアーティスト。ミニマル/現代音楽的形式、電子音とアコースティックの融合（Bandcamp bio）。Clemens Hourrière と Five Steps (2015, Versatile, EMS Stockholm レジデンスで Buchla 200)、Espaces Timbrés、Möbius。Suzanne Ciani と Golden Apples Of The Sun、JB Dunckel と Mirages",
+   "source": "https://jfitoussi.bandcamp.com/ / https://thequietus.com/?p=18352 / https://www.juno.co.uk/junodaily/?p=119433 (Five Steps は medium)",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

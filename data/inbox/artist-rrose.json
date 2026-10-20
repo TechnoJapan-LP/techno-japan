@@ -1,0 +1,50 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "re-birth-festival（2026）",
+ "fields": {
+  "RESIDENT_ADVISOR": {
+   "value": "https://ra.co/dj/rrose",
+   "source": "RA イベント Re:birth 2026 から本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/rrose1921",
+   "source": "RA 本人ページ記載",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/rrose1921",
+   "source": "RA 本人ページ記載",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "BANDCAMP": {
+   "value": "https://rrose.bandcamp.com",
+   "source": "RA 本人ページ記載",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "WEBSITE": {
+   "value": "http://rrose.ro",
+   "source": "RA 本人ページ記載",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "USA",
+   "source": "RA 本人ページ（地域 California）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "レーベル Eaux 主宰。EP を Sandwell District / Stroboscopic Artefacts / Infrastructure から。Bob Ostertag（Buchla 200E）、Charlemagne Palestine、Lucy と共作アルバム。初ソロアルバム『Hymn to Moisture』（Eaux, 2019年11月）",
+   "source": "https://kudosdistribution.co.uk/?p=4762 , https://xlr8r.com/page/206/?author=0 , https://ra.co/dj/rrose",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

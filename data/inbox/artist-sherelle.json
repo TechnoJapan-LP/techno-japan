@@ -35,6 +35,38 @@
    "source": "DJ Mag + RA + Bandcamp",
    "confidence": "high",
    "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "RESIDENT_ADVISOR": {
+   "value": "https://ra.co/dj/sherelle",
+   "source": "RA イベント STARFESTIVAL 2026 から本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "INSTAGRAM_recheck": {
+   "value": "https://www.instagram.com/sherelle_",
+   "source": "RA 本人ページ記載（8月の medium を確定）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD_recheck": {
+   "value": "https://soundcloud.com/iamsherelle",
+   "source": "RA 本人ページ記載（8月の medium を確定）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "LONDON",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts_20261020": {
+   "value": "160bpm 以上。HOOVERSOUND を2020年に NAINA と共同設立。BEAUTIFUL（黒人・LGBTQI アーティスト支援）。デビューアルバム『WITH A VENGEANCE』。DJ Mag Best of British 2025 Breakthrough Producer。SHERELLELAND",
+   "source": "https://ra.co/dj/sherelle , https://djmag.com/features/introducing-hooversound , https://www.carhartt-wip.com.my/blogs/journal/label-feature-hooversound",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
   }
- }
+ },
+ "_note_20261020": "2026-10-20 追記。BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt_20261020": "the-star-festival（2026）"
 }

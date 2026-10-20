@@ -27,6 +27,43 @@
    "source": "Wikipedia + Bandcamp",
    "confidence": "high",
    "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/floatingpoints",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "WEBSITE": {
+   "value": "http://www.floatingpoints.co.uk",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "LONDON",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts_20261020": {
+   "value": "本名 Sam Shepherd（1986年生）。マンチェスター育ち、UCL で神経科学の博士号。2008年 Alexander Nut と Eglo 設立、2015年 Pluto 設立。2015『Elaenia』、2021『Promises』（Pharoah Sanders、LSO、Luaka Bop）、2024『Cascade』。アニメ『LAZARUS』(2025) の音楽にも参加",
+   "source": "https://en.wikipedia.org/wiki/Floating_Points",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  },
+  "bio_draft_20261020": {
+   "value": "本名 Sam Shepherd。マンチェスターで育ち、ロンドン大学（UCL）で神経科学の博士号を取得した。2008年に Alexander Nut とレーベル Eglo を立ち上げ、2015年に自身のレーベル Pluto を設立。同年の1stアルバム『Elaenia』に続き、2021年には Pharoah Sanders、ロンドン交響楽団との『Promises』を発表した。2024年に『Cascade』をリリース。",
+   "value_en": "Sam Shepherd grew up in Manchester and earned a PhD in neuroscience at UCL. Shepherd co-founded Eglo Records with Alexander Nut in 2008 and set up the Pluto label in 2015, the year the debut Floating Points album \"Elaenia\" came out. \"Promises\", made with Pharoah Sanders and the London Symphony Orchestra, followed in 2021, and \"Cascade\" in 2024.",
+   "source": "https://en.wikipedia.org/wiki/Floating_Points（全事実）",
+   "confidence": "draft",
+   "checkedAt": "2026-10-20"
   }
- }
+ },
+ "_updates": [
+  {
+   "at": "2026-10-20T00:00:00+09:00",
+   "note": "BIO 下書き v2 は reports/artist-bios-draft2-2026-10-20.md。既存キーは上書きせず、追記のみ"
+  }
+ ]
 }

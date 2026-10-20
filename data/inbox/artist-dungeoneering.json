@@ -1,0 +1,33 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "rainbow-disco-club（2026・TJ 上は出演記録なし）",
+ "fields": {
+  "MEMBERS": {
+   "value": "Albino Sound（https://ra.co/dj/albinosound）& Daigos（https://ra.co/dj/daigos、D.A.N.）",
+   "source": "RA イベント Rainbow Disco Club 2026 のラインナップ表記「Dungeoneering (Albino Sound & Daigos) (live)」",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD_member": {
+   "value": "https://soundcloud.com/hirotaka-umetani",
+   "source": "RA の Albino Sound 本人ページ記載（ユニットではなく個人）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JAPAN",
+   "source": "RA",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "Albino Sound と Daigos（D.A.N.）のユニット。2025年結成、岩壁音楽祭・Rainbow Disco Club でライブ",
+   "source": "https://entershibuya.com/artist/27054/",
+   "confidence": "high",
+   "checkedAt": "2026-10-20",
+   "note": "綴り: RA/RDC は Dungeoneering、Enter Shibuya は Dangeoneering"
+  }
+ }
+}

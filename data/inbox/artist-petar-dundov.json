@@ -1,0 +1,56 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "labyrinth (2026-10)",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "http://instagram.com/petardundov",
+   "source": "https://www.petardundov.com/（公式サイトからのリンク）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/petardundov",
+   "source": "https://ra.co/graphql（artist slug=petardundov, RA 本人ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "BANDCAMP": {
+   "value": "https://petardundov.bandcamp.com",
+   "source": "https://www.petardundov.com/",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "WEBSITE": {
+   "value": "http://www.petardundov.com",
+   "source": "https://ra.co/graphql（artist slug=petardundov, RA 本人ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "ZAGREB",
+   "source": "https://petardundov.bandcamp.com/",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "CROATIA",
+   "source": "https://ra.co/graphql（artist slug=petardundov, RA 本人ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "identity": {
+   "value": "Mindgames 公式 Artists ページに名前（Sound Design 枠）。TECHNO JAPAN labyrinth-2026-info に「10年ぶりのライブ」",
+   "source": "https://www.mindgames.jp/artists",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "1970年代初めザグレブ生まれ。本名名義は2000年代から。Music Man と長期関係、デビュー・アルバム『Escapements』2008年。Jeff Mills の Tomorrow からミニLP『Sculptures』。複雑な旋律と slow-burning, hypnotic progressions",
+   "source": "https://ra.co/dj/petardundov（バイオ。2010年頃の記述）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

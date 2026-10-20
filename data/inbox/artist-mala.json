@@ -21,6 +21,51 @@
    "source": "Wikipedia + Bandcamp",
    "confidence": "high",
    "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/maladmz",
+   "source": "https://ra.co/graphql（artist slug=mala, RA 本人ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/maladmz",
+   "source": "https://ra.co/graphql（artist slug=mala, RA 本人ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "BANDCAMP_PERSONAL": {
+   "value": "https://mala-music.bandcamp.com",
+   "source": "https://ra.co/graphql（artist slug=mala, RA 本人ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20",
+   "note": "既存 BANDCAMP はレーベル deepmedimusik。本人名義はこちら"
+  },
+  "WEBSITE": {
+   "value": "http://www.maladmz.com",
+   "source": "https://ra.co/graphql（artist slug=mala, RA 本人ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "LONDON",
+   "source": "https://ra.co/graphql（artist slug=mala, RA 本人ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "identity": {
+   "value": "Rainbow Disco Club 2026 の RA イベントに artist id 9302 としてリンク",
+   "source": "https://ra.co/events/2250551",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts_2026_10": {
+   "value": "本名 Mark Lawrence、South Norwood 生まれ育ち。DMZ 創設メンバー。Digital Mystikz（with Coki）。DEEP MEDi MUSIK は2006年 Mala 設立（レーベル Bandcamp）。2006年「Anti War Dub」が2025年 RA の Favourite Music of the Century で2位（本人 RA バイオ）。『Mala in Cuba』2012年 Brownswood（Wikipedia）",
+   "source": "https://ra.co/dj/mala ; https://deepmedimusik.bandcamp.com/ ; https://en.wikipedia.org/wiki/Digital_Mystikz",
+   "confidence": "high",
+   "checkedAt": "2026-10-20",
+   "note": "Mala in Cuba は Wikipedia 由来（medium）。広く知られた事実だが一次未確認"
   }
- }
+ },
+ "_note2": "2026-10-20 追記: BIO 下書きは reports/artist-bios-draft2-2026-10-20.md"
 }

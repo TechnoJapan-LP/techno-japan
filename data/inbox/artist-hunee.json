@@ -35,6 +35,44 @@
    "confidence": "high",
    "checkedAt": "2026-08-13T07:20:00+09:00",
    "note": "紹介文 v2 執筆時に、記録漏れだった事実を追記（本文の記述を出典まで辿れるようにするため）"
+  },
+  "RESIDENT_ADVISOR": {
+   "value": "https://ra.co/dj/hunee",
+   "source": "RA イベント Rainbow Disco Club 2026 と同 Pre-party（WOMB）から本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/hunchmusic",
+   "source": "RA 本人ページ記載",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "BANDCAMP_recheck": {
+   "value": "https://rushhourmusichunee.bandcamp.com",
+   "source": "RA 本人ページ記載（8月の hunee.bandcamp.com と別 URL）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "WEBSITE": {
+   "value": "http://www.hunchmusic.de",
+   "source": "RA 本人ページ記載",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "AMSTERDAM",
+   "source": "RA 本人紹介「re-located to Amsterdam」（地域欄は Berlin）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts_20261020": {
+   "value": "韓国出身の両親のもとボーフムで育つ。学校を終えて3日後にベルリンへ。アムステルダムへ再移住、Rush Hour の一員。Rush Hour / W.T. / Future Times。レーベル Lifetones",
+   "source": "https://ra.co/dj/hunee",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
   }
- }
+ },
+ "_note_20261020": "2026-10-20 追記。BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt_20261020": "rainbow-disco-club（2026・TJ 上は出演記録なし）"
 }

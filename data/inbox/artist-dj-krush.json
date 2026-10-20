@@ -27,6 +27,31 @@
    "source": "djkrush.jp + TOKION + Wikipedia",
    "confidence": "high",
    "checkedAt": "2026-08-13T04:10:00+09:00"
+  },
+  "YOUTUBE": {
+   "value": "https://www.youtube.com/@djkrushofficial",
+   "source": "djkrush.jp",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts_20261020": {
+   "value": "1962年東京生まれ。1987年 MURO・DJ GO と KRUSH POSSE、1992年解散後ソロ。1994年『KRUSH』、同年 Mo' Wax『Strictly Turntablized』。2001年『Zen』が AFIM 最優秀エレクトロニカ・アルバム。2024年『Saisei』、2026年『TOKYØHUM』発表",
+   "source": "https://djkrush.jp/en/ / https://ra.co/dj/djkrush",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "bio_draft_20261020": {
+   "value": "東京生まれのDJ/プロデューサー。1987年に MURO、DJ GO と KRUSH POSSE を結成し、1992年の解散後にソロ活動を本格化させた。1994年に1stアルバム『KRUSH』を、同年 Mo' Wax から『Strictly Turntablized』を発表。2001年の『Zen』は米 AFIM の最優秀エレクトロニカ・アルバム賞を受けた。2026年には新作『TOKYØHUM』を発表した。",
+   "value_en": "Tokyo-born DJ/producer DJ Krush formed KRUSH POSSE with MURO and DJ GO in 1987 and went solo after the group split in 1992. His debut album \"KRUSH\" and \"Strictly Turntablized\" on Mo' Wax both came out in 1994. \"Zen\" (2001) won the AFIM award for Best Electronica Album in the US, and his new album \"TOKYØHUM\" was announced in 2026.",
+   "source": "https://djkrush.jp/en/（KRUSH POSSE、1992年ソロ、1994年『KRUSH』『Strictly Turntablized』、『Zen』の受賞、『TOKYØHUM』）/ https://ra.co/dj/djkrush（1962年東京生まれ、1987年結成）",
+   "confidence": "draft",
+   "checkedAt": "2026-10-20"
   }
- }
+ },
+ "_updates": [
+  {
+   "at": "2026-10-20T00:00:00+09:00",
+   "note": "BIO 下書き v2 は reports/artist-bios-draft2-2026-10-20.md。既存キーは上書きせず、追記のみ"
+  }
+ ]
 }

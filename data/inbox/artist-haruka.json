@@ -1,0 +1,57 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "御月民 -OTSUKIMI- 2025-09 / 2026-09",
+ "fields": {
+  "RESIDENT_ADVISOR": {
+   "value": "https://ra.co/dj/haruka",
+   "source": "RA の 御月民-OTSUKIMI- Open Air 2025 (events/2240451) の出演者として紐付く本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/haruka_ptc",
+   "source": "RA 本人ページのリンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/haruka_ptc",
+   "source": "RA 本人ページのリンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "BANDCAMP": {
+   "value": "https://protection1.bandcamp.com",
+   "source": "RA 本人ページのリンク（レーベル Protection）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "TOKYO",
+   "source": "RA 本人ページ（Tokyo-based）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JP",
+   "source": "RA",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "東京拠点のテクノDJ。アジア、オセアニア、南北アメリカ、ヨーロッパでプレイ。レーベル Protection を立ち上げ（ダンスフロアと現代音楽の境界を探る）。DJ Nobu が2001年に千葉で始めた Future Terror に後から加わり、Future Terror はのちに東京へ移った",
+   "source": "https://ra.co/dj/haruka / RA ニュース 77776（2022-09-07）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts_medium": {
+   "value": "Juno Plus のインタビューでは地元・鶴岡で林業に従事していたとされる",
+   "source": "https://www.juno.co.uk/junodaily/?p=127797（検索結果の要約のみ、本文未読）",
+   "confidence": "low",
+   "checkedAt": "2026-10-20",
+   "note": "BIO には使っていない"
+  }
+ }
+}

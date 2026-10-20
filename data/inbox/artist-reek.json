@@ -1,0 +1,51 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "Re:birth Festival 2026-09 / Sawagi Festival 2026-10",
+ "fields": {
+  "RESIDENT_ADVISOR": {
+   "value": "https://ra.co/dj/ree.k",
+   "source": "RA の Re:birth 2026 / SAWAGI FESTIVAL 2025 の出演者として紐付く本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/ree_k",
+   "source": "RA 本人ページ",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "MIXCLOUD": {
+   "value": "https://www.mixcloud.com/reek2013/",
+   "source": "Sawagi 公式アーティストページのリンク",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "WEBSITE": {
+   "value": "http://www.badcave.com/",
+   "source": "RA 本人ページ",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20",
+   "note": "中身未確認"
+  },
+  "COUNTRY": {
+   "value": "JP",
+   "source": "Sawagi 公式",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": null,
+   "source": "Sawagi 公式: 東京都出身、2012年以降は九州へ拠点を移動（市町村は不明）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "東京都出身。80年代半ばから楽曲制作、1992年DJ開始。1997年 Space Gathering 主催、国内レイブシーン構築に携わる。1998年バンド Kinocosmo、2001年ミックスCD『Cubism』、2002年レーベル Hypnodisk、2006年『Alpha』『Omega』。10か国以上でプレイ。2012年以降九州で自給自足の生活",
+   "source": "https://sawagifestival.com/artist/26-ree-k/ / https://ra.co/dj/ree.k",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

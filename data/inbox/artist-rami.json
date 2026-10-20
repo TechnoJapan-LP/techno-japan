@@ -34,6 +34,19 @@
    "confidence": "medium",
    "checkedAt": "2026-10-20",
    "note": "本人発言ベースのインタビューと主催者告知。99flags の BAR99 ラインナップにも RAMI 表記(タグ無し)"
+  },
+  "links_candidates_2026-10-20": {
+   "value": [
+    {
+     "type": "SOUNDCLOUD",
+     "url": "https://soundcloud.com/user-76845170",
+     "confidence": "high",
+     "source": "SC表示名RAMI、本人IG rami.6s へリンク"
+    }
+   ],
+   "source": "調査G (RA GraphQL / 各公式ページ)",
+   "confidence": "mixed",
+   "checkedAt": "2026-10-20"
   }
  }
 }

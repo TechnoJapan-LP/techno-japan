@@ -1,0 +1,56 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "rainbow-disco-club (2026-04)",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/nc4k_jp/",
+   "source": "https://nc4k.xyz/（レーベル公式からのリンク）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/nc4k",
+   "source": "https://nc4k.xyz/",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "BANDCAMP": {
+   "value": "https://nocollar4kicks.bandcamp.com/",
+   "source": "https://nc4k.xyz/",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "WEBSITE": {
+   "value": "https://nc4k.xyz/",
+   "source": "レーベル公式",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "KYOTO",
+   "source": "https://nc4k.xyz/",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "JAPAN",
+   "source": "https://nc4k.xyz/",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "identity": {
+   "value": "RDC 2026 ラインナップに「NC4K」（Hypebeast Japan が Stones Taro と Lomax のレーベルと紹介）。RA CHAOS イベント文に「Their B2B set at this year's Rainbow Disco Club」。DB 上の表記 NC4K (Stones Taro & Lomax)",
+   "source": "https://hypebeast.com/jp/2026/1/rainbow-disco-club-2026-full-lineup-release-info ; https://ra.co/events/2449138",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "NC4K=No Collar 4 Kicks、京都のレーベル。Stones Taro, Lomax（, Pee.J Anderson）運営。2017年設立、2026年5月時点でレコード6枚・デジタル含め40以上。Stones Taro（本名 中野太郎 / Taro Nakano, RA）は京都拠点、Rinse FM マンスリー・レジデント、Scuffed Recordings, Time Is Now, Hardline, Future Classic, Fast At Work。Lomax（Masahiro Shimojo, RA）は京都 West Harlem の“門番”",
+   "source": "https://nc4k.xyz/ ; https://ra.co/dj/stonestaro ; https://ra.co/dj/lomax ; https://ra.co/events/2449138",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

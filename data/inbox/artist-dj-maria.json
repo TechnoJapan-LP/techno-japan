@@ -21,6 +21,31 @@
    "source": "検索結果（RA ニュース等）",
    "confidence": "high",
    "checkedAt": "2026-08-13T03:30:00+09:00"
+  },
+  "links_candidates_2026-10-20": {
+   "value": [
+    {
+     "type": "RA",
+     "url": "https://ra.co/dj/djmaria.",
+     "confidence": "high",
+     "source": "RA本人ページのIG欄が mariasatelles と一致、bioにMoment/Transcendence共同創設"
+    },
+    {
+     "type": "SOUNDCLOUD",
+     "url": "https://soundcloud.com/djmaria-jp",
+     "confidence": "high",
+     "source": "RA本人ページ掲載"
+    },
+    {
+     "type": "WEBSITE",
+     "url": "https://linktr.ee/djmaria.japan",
+     "confidence": "high",
+     "source": "本人SCからリンク"
+    }
+   ],
+   "source": "調査G (RA GraphQL / 各公式ページ)",
+   "confidence": "mixed",
+   "checkedAt": "2026-10-20"
   }
  }
 }

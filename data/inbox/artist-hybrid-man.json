@@ -1,0 +1,51 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "moment 2026-07",
+ "fields": {
+  "RA": {
+   "value": "https://ra.co/dj/hybridman",
+   "source": "RA 本人ページ。2026-07-09 Mitsuki(東京)・07-11 West Harlem(京都)の日本ツアーが Moment(07-03〜05) と同時期",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20",
+   "note": "Moment 公式サイトのラインナップに『Hybrid Man Live』。RA に Moment イベントは無い"
+  },
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/hybrid__man",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug) hybridman のリンク欄 / hybridman.bandcamp.com",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/hybridmn",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug) リンク欄（プロフィール『Will & Julien』）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "BANDCAMP": {
+   "value": "https://hybridman.bandcamp.com/",
+   "source": "Bandcamp (Melbourne, Australia / IG hybrid__man リンク)",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "MELBOURNE",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug) area / Bandcamp",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "AUSTRALIA",
+   "source": "RA GraphQL (https://ra.co/graphql) artist(slug)",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "facts": {
+   "value": "Julien Huynh と Will Holden のデュオ（SoundCloud は Will & Julien）。ハードウェアのライブ。Lyrebird (2019, Paper-Cuts, PCLTD02)、Shapeshifting (2022, Butter Sessions BSR036)、Dust and Liquid (2023, Wax'o Paradiso WPR004)。Hearing Things は2023年 Skylab Radio の番組として開始",
+   "source": "https://hybridman.bandcamp.com/ / https://paper-cuts.bandcamp.com/artists / https://daisy-records.common-ground.io/release/22693967/Hybrid-Man-Shapeshifting / https://oye-records.com/releases/hybrid-man-dust-and-liquid-ep / https://ra.co/events/2514631",
+   "confidence": "medium",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}

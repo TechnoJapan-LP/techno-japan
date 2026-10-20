@@ -1,0 +1,51 @@
+{
+ "_schema": "artist-research/1",
+ "_createdAt": "2026-10-20T00:00:00+09:00",
+ "_note": "BIO 下書きは reports/artist-bios-draft2-2026-10-20.md",
+ "_appearsAt": "mutek (DB 上は 2025-11)",
+ "fields": {
+  "INSTAGRAM": {
+   "value": "https://www.instagram.com/maxcoopermax",
+   "source": "https://ra.co/graphql（artist slug=maxcooper, RA 本人ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "SOUNDCLOUD": {
+   "value": "https://soundcloud.com/max-cooper",
+   "source": "https://ra.co/graphql（artist slug=maxcooper, RA 本人ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "WEBSITE": {
+   "value": "http://www.maxcooper.net",
+   "source": "https://ra.co/graphql（artist slug=maxcooper, RA 本人ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "CITY": {
+   "value": "LONDON",
+   "source": "https://ra.co/graphql（artist slug=maxcooper, RA 本人ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "COUNTRY": {
+   "value": "UK",
+   "source": "https://ra.co/graphql（artist slug=maxcooper, RA 本人ページ）",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  },
+  "identity": {
+   "value": "MUTEK.JP 公式サイト https://tokyo.mutek.org/ の Edition 11（2026-11-20〜23, MoN Takanawa）出演者に「Max Cooper UK」。RA https://ra.co/events/2531963",
+   "source": "https://tokyo.mutek.org/",
+   "confidence": "high",
+   "checkedAt": "2026-10-20",
+   "note": "⚠ MUTEK.JP 2025（Edition 10, RA 2243694）の RA ラインナップには Max Cooper が無い。DB の出演回 2025-11 は 2026-11 の誤りの可能性。要確認"
+  },
+  "facts": {
+   "value": "電子音楽の作曲家/マルチ分野アーティスト、元科学者（計算生物学 PhD）、レーベル Mesh 主宰。アクロポリスの古代劇場で公演（2021-07-06）。Zaha Hadid Architects, Dolby, L-Acoustics, 4DSOUND, Barbican 等と協働。Pompidou Metz, V&A, ZKM 等で展示",
+   "source": "https://ra.co/dj/maxcooper（本人バイオ）; https://maxcooper.net/",
+   "confidence": "high",
+   "checkedAt": "2026-10-20"
+  }
+ }
+}
