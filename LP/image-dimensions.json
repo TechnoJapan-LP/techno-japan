@@ -1363,6 +1363,10 @@
     1400,
     860
   ],
+  "images/artists/adhemar.webp": [
+    796,
+    1200
+  ],
   "images/artists/akie.webp": [
     1920,
     1280
@@ -1375,6 +1379,26 @@
     640,
     480
   ],
+  "images/artists/allen-mock.webp": [
+    399,
+    501
+  ],
+  "images/artists/anthony-linell.webp": [
+    554,
+    554
+  ],
+  "images/artists/aoki-takamasa.webp": [
+    1411,
+    972
+  ],
+  "images/artists/architectural.webp": [
+    452,
+    678
+  ],
+  "images/artists/azu-tiwaline.webp": [
+    1440,
+    1440
+  ],
   "images/artists/ben-ufo.webp": [
     390,
     390
@@ -1383,17 +1407,41 @@
     800,
     800
   ],
+  "images/artists/chida.webp": [
+    1200,
+    800
+  ],
   "images/artists/choko.webp": [
     800,
     800
+  ],
+  "images/artists/clipz.webp": [
+    538,
+    640
+  ],
+  "images/artists/compuma.webp": [
+    447,
+    447
+  ],
+  "images/artists/daniel-bell.webp": [
+    1920,
+    1080
   ],
   "images/artists/daphni.webp": [
     707,
     434
   ],
+  "images/artists/dj-hype.webp": [
+    1920,
+    1080
+  ],
   "images/artists/dj-kensei.webp": [
     900,
     400
+  ],
+  "images/artists/dj-krush.webp": [
+    1920,
+    1080
   ],
   "images/artists/dj-masda.webp": [
     1440,
@@ -1414,6 +1462,14 @@
   "images/artists/dj-yogurt.webp": [
     1024,
     780
+  ],
+  "images/artists/donato-dozzy.webp": [
+    447,
+    447
+  ],
+  "images/artists/efdemin.webp": [
+    447,
+    447
   ],
   "images/artists/gonno.webp": [
     1765,
@@ -1499,9 +1555,17 @@
     1282,
     1920
   ],
+  "images/artists/sapphire-slows.webp": [
+    800,
+    800
+  ],
   "images/artists/so.webp": [
     1477,
     1108
+  ],
+  "images/artists/suguru-mochizuki.webp": [
+    722,
+    1000
   ],
   "images/artists/sunga.webp": [
     800,
@@ -1519,6 +1583,10 @@
     447,
     447
   ],
+  "images/artists/tonbo.webp": [
+    1365,
+    2048
+  ],
   "images/artists/tsutomu.webp": [
     312,
     210
@@ -1527,9 +1595,17 @@
     1440,
     1440
   ],
+  "images/artists/you-forgot.webp": [
+    1920,
+    2877
+  ],
   "images/artists/ysk.webp": [
     1920,
     2880
+  ],
+  "images/artists/zundoko-disco.webp": [
+    800,
+    800
   ],
   "images/derivatives/card/articles/asia-festival-2026-second-body01-ba88a98d--8f14b102-body-md.webp": [
     800,
@@ -6535,6 +6611,22 @@
     240,
     147
   ],
+  "images/derivatives/card/artists/adhemar--dfb876c1-lg.webp": [
+    637,
+    960
+  ],
+  "images/derivatives/card/artists/adhemar--dfb876c1-md.webp": [
+    478,
+    720
+  ],
+  "images/derivatives/card/artists/adhemar--dfb876c1-sm.webp": [
+    318,
+    480
+  ],
+  "images/derivatives/card/artists/adhemar--dfb876c1-xs.webp": [
+    159,
+    240
+  ],
   "images/derivatives/card/artists/akie--be2bc8fb-lg.webp": [
     960,
     640
@@ -6583,6 +6675,86 @@
     240,
     180
   ],
+  "images/derivatives/card/artists/allen-mock--5157bbd4-lg.webp": [
+    399,
+    501
+  ],
+  "images/derivatives/card/artists/allen-mock--5157bbd4-md.webp": [
+    399,
+    501
+  ],
+  "images/derivatives/card/artists/allen-mock--5157bbd4-sm.webp": [
+    382,
+    480
+  ],
+  "images/derivatives/card/artists/allen-mock--5157bbd4-xs.webp": [
+    191,
+    240
+  ],
+  "images/derivatives/card/artists/anthony-linell--02bef343-lg.webp": [
+    554,
+    554
+  ],
+  "images/derivatives/card/artists/anthony-linell--02bef343-md.webp": [
+    554,
+    554
+  ],
+  "images/derivatives/card/artists/anthony-linell--02bef343-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/anthony-linell--02bef343-xs.webp": [
+    240,
+    240
+  ],
+  "images/derivatives/card/artists/aoki-takamasa--6812a893-lg.webp": [
+    960,
+    661
+  ],
+  "images/derivatives/card/artists/aoki-takamasa--6812a893-md.webp": [
+    720,
+    496
+  ],
+  "images/derivatives/card/artists/aoki-takamasa--6812a893-sm.webp": [
+    480,
+    331
+  ],
+  "images/derivatives/card/artists/aoki-takamasa--6812a893-xs.webp": [
+    240,
+    165
+  ],
+  "images/derivatives/card/artists/architectural--39e394ad-lg.webp": [
+    452,
+    678
+  ],
+  "images/derivatives/card/artists/architectural--39e394ad-md.webp": [
+    452,
+    678
+  ],
+  "images/derivatives/card/artists/architectural--39e394ad-sm.webp": [
+    320,
+    480
+  ],
+  "images/derivatives/card/artists/architectural--39e394ad-xs.webp": [
+    160,
+    240
+  ],
+  "images/derivatives/card/artists/azu-tiwaline--78949592-lg.webp": [
+    960,
+    960
+  ],
+  "images/derivatives/card/artists/azu-tiwaline--78949592-md.webp": [
+    720,
+    720
+  ],
+  "images/derivatives/card/artists/azu-tiwaline--78949592-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/azu-tiwaline--78949592-xs.webp": [
+    240,
+    240
+  ],
   "images/derivatives/card/artists/ben-ufo--4fc831a3-lg.webp": [
     390,
     390
@@ -6615,6 +6787,22 @@
     240,
     240
   ],
+  "images/derivatives/card/artists/chida--b9bad40b-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/artists/chida--b9bad40b-md.webp": [
+    720,
+    480
+  ],
+  "images/derivatives/card/artists/chida--b9bad40b-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/artists/chida--b9bad40b-xs.webp": [
+    240,
+    160
+  ],
   "images/derivatives/card/artists/choko--b7cc6c74-lg.webp": [
     800,
     800
@@ -6630,6 +6818,54 @@
   "images/derivatives/card/artists/choko--b7cc6c74-xs.webp": [
     240,
     240
+  ],
+  "images/derivatives/card/artists/clipz--c07a3c7d-lg.webp": [
+    538,
+    640
+  ],
+  "images/derivatives/card/artists/clipz--c07a3c7d-md.webp": [
+    538,
+    640
+  ],
+  "images/derivatives/card/artists/clipz--c07a3c7d-sm.webp": [
+    403,
+    480
+  ],
+  "images/derivatives/card/artists/clipz--c07a3c7d-xs.webp": [
+    202,
+    240
+  ],
+  "images/derivatives/card/artists/compuma--43186a30-lg.webp": [
+    447,
+    447
+  ],
+  "images/derivatives/card/artists/compuma--43186a30-md.webp": [
+    447,
+    447
+  ],
+  "images/derivatives/card/artists/compuma--43186a30-sm.webp": [
+    447,
+    447
+  ],
+  "images/derivatives/card/artists/compuma--43186a30-xs.webp": [
+    240,
+    240
+  ],
+  "images/derivatives/card/artists/daniel-bell--eb6dbaab-lg.webp": [
+    960,
+    540
+  ],
+  "images/derivatives/card/artists/daniel-bell--eb6dbaab-md.webp": [
+    720,
+    405
+  ],
+  "images/derivatives/card/artists/daniel-bell--eb6dbaab-sm.webp": [
+    480,
+    270
+  ],
+  "images/derivatives/card/artists/daniel-bell--eb6dbaab-xs.webp": [
+    240,
+    135
   ],
   "images/derivatives/card/artists/daphni--0f03d543-lg.webp": [
     707,
@@ -6647,6 +6883,22 @@
     240,
     147
   ],
+  "images/derivatives/card/artists/dj-hype--f4000f3e-lg.webp": [
+    960,
+    540
+  ],
+  "images/derivatives/card/artists/dj-hype--f4000f3e-md.webp": [
+    720,
+    405
+  ],
+  "images/derivatives/card/artists/dj-hype--f4000f3e-sm.webp": [
+    480,
+    270
+  ],
+  "images/derivatives/card/artists/dj-hype--f4000f3e-xs.webp": [
+    240,
+    135
+  ],
   "images/derivatives/card/artists/dj-kensei--43e84160-lg.webp": [
     900,
     400
@@ -6662,6 +6914,22 @@
   "images/derivatives/card/artists/dj-kensei--43e84160-xs.webp": [
     240,
     107
+  ],
+  "images/derivatives/card/artists/dj-krush--1ae52bbb-lg.webp": [
+    960,
+    540
+  ],
+  "images/derivatives/card/artists/dj-krush--1ae52bbb-md.webp": [
+    720,
+    405
+  ],
+  "images/derivatives/card/artists/dj-krush--1ae52bbb-sm.webp": [
+    480,
+    270
+  ],
+  "images/derivatives/card/artists/dj-krush--1ae52bbb-xs.webp": [
+    240,
+    135
   ],
   "images/derivatives/card/artists/dj-masda--5040d409-lg.webp": [
     960,
@@ -6742,6 +7010,38 @@
   "images/derivatives/card/artists/dj-yogurt--ec09ee55-xs.webp": [
     240,
     183
+  ],
+  "images/derivatives/card/artists/donato-dozzy--ee99abff-lg.webp": [
+    447,
+    447
+  ],
+  "images/derivatives/card/artists/donato-dozzy--ee99abff-md.webp": [
+    447,
+    447
+  ],
+  "images/derivatives/card/artists/donato-dozzy--ee99abff-sm.webp": [
+    447,
+    447
+  ],
+  "images/derivatives/card/artists/donato-dozzy--ee99abff-xs.webp": [
+    240,
+    240
+  ],
+  "images/derivatives/card/artists/efdemin--87b2ee5c-lg.webp": [
+    447,
+    447
+  ],
+  "images/derivatives/card/artists/efdemin--87b2ee5c-md.webp": [
+    447,
+    447
+  ],
+  "images/derivatives/card/artists/efdemin--87b2ee5c-sm.webp": [
+    447,
+    447
+  ],
+  "images/derivatives/card/artists/efdemin--87b2ee5c-xs.webp": [
+    240,
+    240
   ],
   "images/derivatives/card/artists/gonno--bb092cea-lg.webp": [
     958,
@@ -7079,6 +7379,22 @@
     160,
     240
   ],
+  "images/derivatives/card/artists/sapphire-slows--c632809a-lg.webp": [
+    800,
+    800
+  ],
+  "images/derivatives/card/artists/sapphire-slows--c632809a-md.webp": [
+    720,
+    720
+  ],
+  "images/derivatives/card/artists/sapphire-slows--c632809a-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/sapphire-slows--c632809a-xs.webp": [
+    240,
+    240
+  ],
   "images/derivatives/card/artists/so--523afd19-lg.webp": [
     960,
     720
@@ -7094,6 +7410,22 @@
   "images/derivatives/card/artists/so--523afd19-xs.webp": [
     240,
     180
+  ],
+  "images/derivatives/card/artists/suguru-mochizuki--04fc0da4-lg.webp": [
+    693,
+    960
+  ],
+  "images/derivatives/card/artists/suguru-mochizuki--04fc0da4-md.webp": [
+    520,
+    720
+  ],
+  "images/derivatives/card/artists/suguru-mochizuki--04fc0da4-sm.webp": [
+    347,
+    480
+  ],
+  "images/derivatives/card/artists/suguru-mochizuki--04fc0da4-xs.webp": [
+    173,
+    240
   ],
   "images/derivatives/card/artists/sunga--f454f76d-lg.webp": [
     800,
@@ -7159,6 +7491,22 @@
     240,
     240
   ],
+  "images/derivatives/card/artists/tonbo--04ab2e95-lg.webp": [
+    640,
+    960
+  ],
+  "images/derivatives/card/artists/tonbo--04ab2e95-md.webp": [
+    480,
+    720
+  ],
+  "images/derivatives/card/artists/tonbo--04ab2e95-sm.webp": [
+    320,
+    480
+  ],
+  "images/derivatives/card/artists/tonbo--04ab2e95-xs.webp": [
+    160,
+    240
+  ],
   "images/derivatives/card/artists/tsutomu--a9f93a04-lg.webp": [
     312,
     210
@@ -7191,6 +7539,22 @@
     240,
     240
   ],
+  "images/derivatives/card/artists/you-forgot--7dc94fb0-lg.webp": [
+    641,
+    960
+  ],
+  "images/derivatives/card/artists/you-forgot--7dc94fb0-md.webp": [
+    481,
+    720
+  ],
+  "images/derivatives/card/artists/you-forgot--7dc94fb0-sm.webp": [
+    320,
+    480
+  ],
+  "images/derivatives/card/artists/you-forgot--7dc94fb0-xs.webp": [
+    160,
+    240
+  ],
   "images/derivatives/card/artists/ysk--427fd872-lg.webp": [
     640,
     960
@@ -7205,6 +7569,22 @@
   ],
   "images/derivatives/card/artists/ysk--427fd872-xs.webp": [
     160,
+    240
+  ],
+  "images/derivatives/card/artists/zundoko-disco--b5aafa32-lg.webp": [
+    800,
+    800
+  ],
+  "images/derivatives/card/artists/zundoko-disco--b5aafa32-md.webp": [
+    720,
+    720
+  ],
+  "images/derivatives/card/artists/zundoko-disco--b5aafa32-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/zundoko-disco--b5aafa32-xs.webp": [
+    240,
     240
   ],
   "images/derivatives/card/festivals/99flags--24140320-lg.webp": [
