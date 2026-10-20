@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "backedUpAt": "2026-10-19T16:21:24.483263+09:00"
+    "backedUpAt": "2026-10-20T16:12:43.147911+09:00"
   },
   "VENUES": [
     {
@@ -11,7 +11,7 @@
       "area": "SHIBUYA",
       "type": "club",
       "image": "images/venues/womb.jpg",
-      "genre": "TECHNO · HOUSE · MINIMAL · BASS · OTHERS",
+      "genre": "TECHNO, HOUSE, MINIMAL, BASS, OTHERS",
       "capacity": "800",
       "address": "2-16 Maruyama-cho, Shibuya-ku, Tokyo",
       "lat": "35.6583",
@@ -19,7 +19,15 @@
       "url": "https://www.womb.co.jp/",
       "instagram": "https://www.instagram.com/womb_tokyo/",
       "desc": "WOMBは、渋谷の地下に構える東京を代表するテクノクラブ。世界水準のサウンドシステムを備え、20年以上にわたり国内外のアーティストを迎えてきた。曲線を描くメインフロアと精度の高い音響で知られ、ダンスミュージックを深く聴く層にとっての目的地となっている。",
-      "desc_en": "WOMB stands as Tokyo's most iconic techno institution, housed in a striking underground space in Shibuya with a world-class sound system that has drawn international artists for over two decades. The venue's distinctive curved main floor and precise acoustics have cemented its reputation as a pilgrimage site for serious dance music enthusiasts."
+      "status": "published",
+      "lasteditedby": "editor",
+      "lastEditedBy": "editor",
+      "lasteditedat": "2026-10-19T17:14:18.586Z",
+      "lastEditedAt": "2026-10-19T17:14:18.586Z",
+      "desc_en": "WOMB stands as Tokyo's most iconic techno institution, housed in a striking underground space in Shibuya with a world-class sound system that has drawn international artists for over two decades. The venue's distinctive curved main floor and precise acoustics have cemented its reputation as a pilgrimage site for serious dance music enthusiasts.",
+      "name_kana": "ウーム",
+      "access": "JR渋谷駅ハチ公口から徒歩10分、京王井の頭線神泉駅から徒歩3分",
+      "access_en": "10 min walk from Shibuya Station (JR, Hachiko Exit); 3 min from Shinsen Station (Keio Inokashira Line)"
     },
     {
       "_row": 3,
@@ -29,7 +37,7 @@
       "area": "SHIBUYA",
       "type": "club",
       "image": "images/venues/circus-tokyo.jpeg",
-      "genre": "TECHNO · HOUSE · MINIMAL · BASS · OTHERS",
+      "genre": "TECHNO, HOUSE, MINIMAL, BASS, OTHERS",
       "capacity": "300",
       "address": "3-26-16 Shibuya, Shibuya-ku, Tokyo",
       "lat": "35.6542",
@@ -37,7 +45,13 @@
       "url": "https://circus-tokyo.jp/",
       "instagram": "https://www.instagram.com/circus_tokyo/",
       "desc": "CIRCUS TOKYOは、渋谷の中心部にあるアンダーグラウンドな空間。丁寧に組まれたテクノのブッキングと親密な雰囲気で知られる。国際的に活動するアーティストから国内の新しい才能までを迎え、音響の質と客層の成熟さに定評がある。コンパクトなつくりが、音楽に集中できる環境を生んでいる。",
-      "desc_en": "CIRCUS TOKYO operates as a refined underground space in the heart of Shibuya, known for its carefully curated techno programming and intimate atmosphere. The venue attracts both established international artists and emerging local talent, maintaining a reputation for quality sound systems and discerning crowds. Its compact layout creates an immersive environment where the focus remains firmly on the music."
+      "status": "published",
+      "lasteditedby": "editor",
+      "lastEditedBy": "editor",
+      "lasteditedat": "2026-10-19T17:14:58.670Z",
+      "lastEditedAt": "2026-10-19T17:14:58.670Z",
+      "desc_en": "CIRCUS TOKYO operates as a refined underground space in the heart of Shibuya, known for its carefully curated techno programming and intimate atmosphere. The venue attracts both established international artists and emerging local talent, maintaining a reputation for quality sound systems and discerning crowds. Its compact layout creates an immersive environment where the focus remains firmly on the music.",
+      "name_kana": "サーカス東京"
     },
     {
       "_row": 4,
@@ -47,7 +61,7 @@
       "area": "SHIBUYA",
       "type": "club",
       "image": "images/venues/saloon.jpeg",
-      "genre": "TECHNO · HOUSE · OTHERS",
+      "genre": "TECHNO, HOUSE, OTHERS",
       "capacity": "150",
       "address": "Za-House Building B3F, 1-34-17 Ebisu-Nishi, Shibuya-ku, Tokyo",
       "lat": "35.6471",
@@ -55,7 +69,15 @@
       "url": "https://saloon-tokyo.com/",
       "instagram": "https://www.instagram.com/saloon_tokyo/",
       "desc": "SALOONは、渋谷の地下にある小規模なクラブ。テクノ、ハウス、実験的なエレクトロニックミュージックにまたがるラインナップで知られる。低い天井と抑えた照明が没入感のある空間をつくり、演出よりも音の質とフロアの近さを重視している。国内の新しい才能と、東京のアンダーグラウンドで評価される海外アーティストの双方を迎える。",
-      "desc_en": "SALOON operates as a compact basement club in Shibuya, known for its intimate atmosphere and carefully curated lineups spanning techno, house, and experimental electronic music. The venue's low ceilings and minimal lighting create an immersive environment that prioritizes sound quality and dancefloor intimacy over spectacle. Its programming often features both emerging local talent and respected international artists within Tokyo's underground circuit."
+      "status": "published",
+      "lasteditedby": "editor",
+      "lastEditedBy": "editor",
+      "lasteditedat": "2026-10-19T17:13:50.993Z",
+      "lastEditedAt": "2026-10-19T17:13:50.993Z",
+      "desc_en": "SALOON operates as a compact basement club in Shibuya, known for its intimate atmosphere and carefully curated lineups spanning techno, house, and experimental electronic music. The venue's low ceilings and minimal lighting create an immersive environment that prioritizes sound quality and dancefloor intimacy over spectacle. Its programming often features both emerging local talent and respected international artists within Tokyo's underground circuit.",
+      "name_kana": "サルーン",
+      "access": "東急東横線代官山駅から徒歩1分",
+      "access_en": "1 min walk from Daikanyama Station (Tokyu Toyoko Line)"
     },
     {
       "_row": 5,
@@ -65,7 +87,7 @@
       "area": "NAKAMEGURO",
       "type": "club",
       "image": "images/venues/solfa.jpeg",
-      "genre": "TECHNO · HOUSE · LIVE · OTHERS",
+      "genre": "TECHNO, HOUSE, LIVE, OTHERS",
       "capacity": "200",
       "address": "Oak Build, 1-20-5 Aobadai, Meguro-ku, Tokyo.",
       "lat": "35.647",
@@ -73,7 +95,13 @@
       "url": "https://nakameguro-solfa.com/",
       "instagram": "https://www.instagram.com/solfa_nakameguro/",
       "desc": "SOLFAは、中目黒の地下にあるクラブ。音量よりも解像度を重視したサウンドシステムで、エレクトロニックミュージックを親密な環境で聴かせる。ハウスとテクノを軸にしたブッキングで評価を得ており、国内のセレクターから海外アーティストまでがコンパクトなフロアに立つ。音響設計への姿勢が、東京のアンダーグラウンドで信頼を集めている。",
-      "desc_en": "SOLFA occupies a basement space in Nakameguro, offering an intimate setting for electronic music with a sound system that prioritizes clarity over volume. The venue has cultivated a reputation for quality bookings across house and techno, attracting both local selectors and international artists to its compact dancefloor. Its understated approach and commitment to proper sound design has made it a respected destination within Tokyo's discerning underground community."
+      "status": "published",
+      "lasteditedby": "editor",
+      "lastEditedBy": "editor",
+      "lasteditedat": "2026-10-19T17:15:04.310Z",
+      "lastEditedAt": "2026-10-19T17:15:04.310Z",
+      "desc_en": "SOLFA occupies a basement space in Nakameguro, offering an intimate setting for electronic music with a sound system that prioritizes clarity over volume. The venue has cultivated a reputation for quality bookings across house and techno, attracting both local selectors and international artists to its compact dancefloor. Its understated approach and commitment to proper sound design has made it a respected destination within Tokyo's discerning underground community.",
+      "name_kana": "ソルファ"
     },
     {
       "_row": 6,
@@ -94,11 +122,14 @@
       "status": "published",
       "lasteditedby": "editor",
       "lastEditedBy": "editor",
-      "lasteditedat": "2026-05-03T15:40:16.041Z",
-      "lastEditedAt": "2026-05-03T15:40:16.041Z",
+      "lasteditedat": "2026-10-19T17:15:10.284Z",
+      "lastEditedAt": "2026-10-19T17:15:10.284Z",
       "desc_en": "UNIT stands as one of Tokyo's most respected underground venues, housed in a basement space in Daikanyama that prioritizes sound quality and intimate atmosphere over flashy production. The club's carefully curated programming spans techno, house, and experimental electronics, attracting both established international artists and Japan's finest selectors. Its compact layout and dedicated sound system create an immersive environment where music takes precedence over spectacle.",
       "imageposition": "center top",
-      "imagePosition": "center top"
+      "imagePosition": "center top",
+      "name_kana": "ユニット",
+      "access": "東急東横線代官山駅から徒歩2分",
+      "access_en": "2 min walk from Daikanyama Station (Tokyu Toyoko Line)"
     },
     {
       "_row": 7,
@@ -119,9 +150,12 @@
       "status": "published",
       "lasteditedby": "editor",
       "lastEditedBy": "editor",
-      "lasteditedat": "2026-07-31T14:42:15.416Z",
-      "lastEditedAt": "2026-07-31T14:42:15.416Z",
-      "desc_en": "Situated in Ebisu, LIQUIDROOM stands as one of Tokyo's most respected mid-sized venues, hosting everything from international electronic acts to Japan's underground scene regulars. The club's sound system and intimate yet spacious layout have made it a consistent draw for both artists and dedicated ravers since the early 2000s. Its programming spans techno, house, and experimental electronic music with a curatorial approach that balances accessibility with underground credibility."
+      "lasteditedat": "2026-10-19T17:15:16.265Z",
+      "lastEditedAt": "2026-10-19T17:15:16.265Z",
+      "desc_en": "Situated in Ebisu, LIQUIDROOM stands as one of Tokyo's most respected mid-sized venues, hosting everything from international electronic acts to Japan's underground scene regulars. The club's sound system and intimate yet spacious layout have made it a consistent draw for both artists and dedicated ravers since the early 2000s. Its programming spans techno, house, and experimental electronic music with a curatorial approach that balances accessibility with underground credibility.",
+      "name_kana": "リキッドルーム",
+      "access": "JR恵比寿駅西口・東京メトロ日比谷線恵比寿駅2番出口から徒歩3分",
+      "access_en": "3 min walk from Ebisu Station (JR West Exit / Tokyo Metro Hibiya Line Exit 2)"
     },
     {
       "_row": 8,
@@ -142,9 +176,12 @@
       "status": "published",
       "lasteditedby": "editor",
       "lastEditedBy": "editor",
-      "lasteditedat": "2026-07-31T14:43:22.249Z",
-      "lastEditedAt": "2026-07-31T14:43:22.249Z",
-      "desc_en": "A cornerstone of Shibuya's club landscape since the late 90s, CLUBASIA spans multiple floors with its main room hosting everything from techno nights to hip-hop showcases. The venue's adaptable layout and central location have made it a reliable stop for both local crews and touring international acts seeking a mid-sized room with solid sound."
+      "lasteditedat": "2026-10-19T17:15:22.346Z",
+      "lastEditedAt": "2026-10-19T17:15:22.346Z",
+      "desc_en": "A cornerstone of Shibuya's club landscape since the late 90s, CLUBASIA spans multiple floors with its main room hosting everything from techno nights to hip-hop showcases. The venue's adaptable layout and central location have made it a reliable stop for both local crews and touring international acts seeking a mid-sized room with solid sound.",
+      "name_kana": "クラブエイジア",
+      "access": "JR渋谷駅ハチ公口から徒歩10分、京王井の頭線神泉駅から徒歩5分",
+      "access_en": "10 min walk from Shibuya Station (JR, Hachiko Exit); 5 min from Shinsen Station (Keio Inokashira Line)"
     },
     {
       "_row": 9,
@@ -165,10 +202,11 @@
       "status": "published",
       "lasteditedby": "editor",
       "lastEditedBy": "editor",
-      "lasteditedat": "2026-07-31T14:47:16.298Z",
-      "lastEditedAt": "2026-07-31T14:47:16.298Z",
+      "lasteditedat": "2026-10-19T17:15:27.788Z",
+      "lastEditedAt": "2026-10-19T17:15:27.788Z",
       "desc_en": "MITSUKI operates as an intimate basement club in Tokyo's nightlife landscape, known for its focused programming of underground electronic music. The venue maintains a stripped-down aesthetic that prioritizes sound quality and dancefloor intimacy over spectacle.",
-      "features": "after-hours"
+      "features": "after-hours",
+      "name_kana": "ミツキ"
     },
     {
       "_row": 10,
@@ -178,7 +216,7 @@
       "area": "SHIBUYA",
       "type": "bar",
       "image": "images/venues/the-room.jpeg",
-      "genre": "HOUSE · OTHERS · LIVE",
+      "genre": "HOUSE, LIVE, OTHERS",
       "capacity": "80",
       "address": "15-19 Sakuragaoka-cho, Shibuya-ku, Tokyo, Daihachi Toto Building",
       "lat": "35.6565",
@@ -186,7 +224,15 @@
       "url": "https://theroom.jp/",
       "instagram": "https://www.instagram.com/theroom_shibuya/",
       "desc": "渋谷の地下にある小さなバーで、音楽を深く聴く客層に向けた場所。ディープハウスから実験的なエレクトロニクスまで幅広く扱う。意図的に控えめな雰囲気を保ち、演出よりも音の質を重視する客が集まる。コンパクトな空間が、DJとフロアの距離をリビングルームのように近づけている。",
-      "desc_en": "This intimate Shibuya basement bar operates as a low-key refuge for serious music heads, programming everything from deep house to experimental electronics. The space maintains a deliberately understated atmosphere, drawing a knowing crowd that values sound quality over spectacle. Its compact layout creates an almost living room-like intimacy between DJs and dancers."
+      "status": "published",
+      "lasteditedby": "editor",
+      "lastEditedBy": "editor",
+      "lasteditedat": "2026-10-19T17:15:33.826Z",
+      "lastEditedAt": "2026-10-19T17:15:33.826Z",
+      "desc_en": "This intimate Shibuya basement bar operates as a low-key refuge for serious music heads, programming everything from deep house to experimental electronics. The space maintains a deliberately understated atmosphere, drawing a knowing crowd that values sound quality over spectacle. Its compact layout creates an almost living room-like intimacy between DJs and dancers.",
+      "name_kana": "ザ・ルーム",
+      "access": "JR渋谷駅南口から徒歩約3分",
+      "access_en": "About 3 min walk from Shibuya Station (JR South Exit)"
     },
     {
       "_row": 11,
@@ -196,7 +242,7 @@
       "area": "SHIBUYA",
       "type": "bar",
       "image": "images/venues/oath.jpeg",
-      "genre": "HOUSE · MINIMAL · TECHNO",
+      "genre": "TECHNO, HOUSE, MINIMAL",
       "capacity": "100",
       "address": "1-6-5 Dogenzaka, Shibuya-ku, Tokyo, B1F",
       "lat": "35.6577",
@@ -204,8 +250,18 @@
       "url": "https://www.djbar-oath.com/",
       "instagram": "https://www.instagram.com/shibuya_oath/",
       "desc": "OATHは、渋谷にあるDJバー。ピークタイムのフロアを意識せずに、セレクターが深い選曲を掘り下げられる環境を保っている。小さな空間がアーティストと客の距離を近づけ、定番のアンダーグラウンドサウンドと並んで実験的なプログラムにも余地を残している。",
+      "status": "published",
+      "lasteditedby": "editor",
+      "lastEditedBy": "editor",
+      "lasteditedat": "2026-10-19T17:15:39.487Z",
+      "lastEditedAt": "2026-10-19T17:15:39.487Z",
       "desc_en": "OATH operates as a DJ bar in Shibuya, maintaining an intimate setting where selectors can explore deeper cuts without the pressure of peak-time crowd dynamics. The venue's compact layout fosters close interaction between artists and audience, creating space for more experimental programming alongside established underground sounds.",
-      "features": "after-hours"
+      "hours": "毎日 20:00〜翌5:00",
+      "features": "after-hours",
+      "name_kana": "オース",
+      "access": "渋谷駅から徒歩2分",
+      "access_en": "2 min walk from Shibuya Station",
+      "hours_en": "Daily 20:00–05:00"
     },
     {
       "_row": 12,
@@ -215,7 +271,7 @@
       "area": "SHIBUYA",
       "type": "livehouse",
       "image": "images/venues/www.jpeg",
-      "genre": "TECHNO · HOUSE · LIVE · OTHERS",
+      "genre": "TECHNO, HOUSE, LIVE, OTHERS",
       "capacity": "450",
       "address": "Cinema Rise Building B1F, 13-17 Udagawa-cho, Shibuya-ku, Tokyo",
       "lat": "35.6615",
@@ -223,7 +279,14 @@
       "url": "https://www-shibuya.jp/",
       "instagram": "https://www.instagram.com/www_shibuya/",
       "desc": "WWWは、渋谷のライブハウス。演出よりも音の質を重視した空間で、エレクトロニックアクトが演奏する。コンパクトなつくりが演者と観客の境界を曖昧にし、実績のあるアーティストから新しい才能まで、新作を試す場として選ばれている。",
-      "desc_en": "WWW operates as Shibuya's intimate livehouse where electronic acts perform in a room that prioritizes sound quality over spectacle. The venue's compact layout creates an immersive environment where the boundary between performer and audience dissolves, making it a preferred spot for both established artists and emerging talent to test new material."
+      "status": "published",
+      "lasteditedby": "editor",
+      "lastEditedBy": "editor",
+      "lasteditedat": "2026-10-19T17:16:02.742Z",
+      "lastEditedAt": "2026-10-19T17:16:02.742Z",
+      "desc_en": "WWW operates as Shibuya's intimate livehouse where electronic acts perform in a room that prioritizes sound quality over spectacle. The venue's compact layout creates an immersive environment where the boundary between performer and audience dissolves, making it a preferred spot for both established artists and emerging talent to test new material.",
+      "access": "渋谷駅ハチ公口から徒歩7分",
+      "access_en": "7 min walk from Shibuya Station (Hachiko Exit)"
     },
     {
       "_row": 13,
@@ -233,7 +296,7 @@
       "area": "SHIBUYA",
       "type": "livehouse",
       "image": "images/venues/o-east.jpeg",
-      "genre": "TECHNO · HOUSE · MINIMAL · LIVE · OTHERS",
+      "genre": "TECHNO, HOUSE, MINIMAL, LIVE, OTHERS",
       "capacity": "1300",
       "address": "2-14-8 Dogenzaka, Shibuya-ku, Tokyo",
       "lat": "35.6587",
@@ -241,7 +304,15 @@
       "url": "https://shibuya-o.com/east/",
       "instagram": "https://www.instagram.com/midnight_east/",
       "desc": "渋谷の中規模会場として90年代後半から続くSPOTIFY O-EAST。インディーロックからアンダーグラウンドのエレクトロニックアクトまで幅広く迎えてきた。装飾を抑えた設計で、確かな音響と見通しの良さはバンドのライブとDJセットのどちらにも適している。O系列の会場のひとつで、小規模クラブとコンサートホールの中間に位置する。",
-      "desc_en": "One of Shibuya's most established mid-sized venues, O-East has hosted everything from indie rock to underground electronic acts since the late 90s. The space maintains a no-frills approach with solid sound and sightlines that work equally well for live bands and DJ sets. Part of the broader O-family of venues, it sits at the sweet spot between intimate club and proper concert hall."
+      "status": "published",
+      "lasteditedby": "editor",
+      "lastEditedBy": "editor",
+      "lasteditedat": "2026-10-19T17:16:08.419Z",
+      "lastEditedAt": "2026-10-19T17:16:08.419Z",
+      "desc_en": "One of Shibuya's most established mid-sized venues, O-East has hosted everything from indie rock to underground electronic acts since the late 90s. The space maintains a no-frills approach with solid sound and sightlines that work equally well for live bands and DJ sets. Part of the broader O-family of venues, it sits at the sweet spot between intimate club and proper concert hall.",
+      "name_kana": "オー・イースト",
+      "access": "JR渋谷駅ハチ公口から徒歩10分",
+      "access_en": "10 min walk from Shibuya Station (JR, Hachiko Exit)"
     },
     {
       "_row": 14,
@@ -262,11 +333,12 @@
       "status": "published",
       "lasteditedby": "editor",
       "lastEditedBy": "editor",
-      "lasteditedat": "2026-08-24T05:50:09.278Z",
-      "lastEditedAt": "2026-08-24T05:50:09.278Z",
+      "lasteditedat": "2026-10-19T17:16:15.514Z",
+      "lastEditedAt": "2026-10-19T17:16:15.514Z",
       "desc_en": "A cozy neighborhood bar in Jingu-mae that doubles as an intimate venue for electronic music. The space attracts a discerning crowd drawn to its carefully curated sound and unpretentious atmosphere. Its compact size creates an unusually close connection between artists and audience.",
       "subtype": "dj-bar",
-      "features": "after-hours"
+      "features": "after-hours",
+      "name_kana": "ボノボ"
     },
     {
       "_row": 15,
@@ -287,9 +359,10 @@
       "status": "published",
       "lasteditedby": "editor",
       "lastEditedBy": "editor",
-      "lasteditedat": "2026-07-31T14:50:41.440Z",
-      "lastEditedAt": "2026-07-31T14:50:41.440Z",
-      "desc_en": "FORESTLIMIT operates as an intimate basement club in Shibuya, carving out space for experimental electronic music and avant-garde sound art. The venue's stripped-down aesthetic and carefully curated programming attracts artists and audiences seeking alternatives to Tokyo's mainstream club circuit. Its compact layout creates an immersive environment where the boundary between performer and audience dissolves."
+      "lasteditedat": "2026-10-19T17:16:32.629Z",
+      "lastEditedAt": "2026-10-19T17:16:32.629Z",
+      "desc_en": "FORESTLIMIT operates as an intimate basement club in Shibuya, carving out space for experimental electronic music and avant-garde sound art. The venue's stripped-down aesthetic and carefully curated programming attracts artists and audiences seeking alternatives to Tokyo's mainstream club circuit. Its compact layout creates an immersive environment where the boundary between performer and audience dissolves.",
+      "name_kana": "フォレストリミット"
     },
     {
       "_row": 16,
@@ -299,7 +372,7 @@
       "area": "OMOTESANDO",
       "type": "club",
       "image": "images/venues/vent.jpeg",
-      "genre": "TECHNO · HOUSE",
+      "genre": "TECHNO, HOUSE",
       "capacity": "400",
       "address": "3-18-19 Minami-Aoyama, Minato-ku, Tokyo",
       "lat": "35.6652",
@@ -307,8 +380,14 @@
       "url": "http://vent-tokyo.net/",
       "instagram": "https://www.instagram.com/vent.tokyo/",
       "desc": "2016年のオープン以来、妥協のないテクノのブッキングで評価を築いてきた渋谷の地下クラブ。無骨なコンクリートの内装と精度の高いサウンドシステムが、音楽を最優先する環境をつくっている。",
+      "status": "published",
+      "lasteditedby": "editor",
+      "lastEditedBy": "editor",
+      "lasteditedat": "2026-10-19T17:16:38.981Z",
+      "lastEditedAt": "2026-10-19T17:16:38.981Z",
       "desc_en": "A intimate basement club in Shibuya that has carved out a reputation for uncompromising techno programming since opening in 2016. The venue's stark concrete interior and precise sound system create an environment where the music takes absolute priority over everything else.",
-      "hours": "23:00~05:00"
+      "hours": "23:00~05:00",
+      "name_kana": "ヴェント"
     },
     {
       "_row": 17,
@@ -318,7 +397,7 @@
       "area": "SHINSAIBASHI",
       "type": "club",
       "image": "images/venues/circus-osaka.jpg",
-      "genre": "TECHNO · HOUSE · BASS · OTHERS",
+      "genre": "TECHNO, HOUSE, BASS, OTHERS",
       "capacity": "200",
       "address": "2F, Nakanishi Building, 1-8-16 Nishishinsaibashi, Chuo-ku, Osaka City, Osaka Prefecture",
       "lat": "34.675",
@@ -326,7 +405,13 @@
       "url": "https://circus-osaka.com/",
       "instagram": "https://www.instagram.com/circus_osaka/",
       "desc": "CIRCUS OSAKAは、大阪のアンダーグラウンドテクノを代表する会場のひとつ。地下のコンパクトな空間で、規模よりもサウンドシステムの質を重視している。国内外の先鋭的なテクノアクトを継続的に迎え、関西の熱心なリスナーに向けたクラブとしての評価を保っている。",
-      "desc_en": "CIRCUS OSAKA operates as one of Osaka's key underground techno destinations, housed in a compact basement space that prioritizes sound system quality over size. The venue consistently programs cutting-edge international and domestic techno acts, maintaining its reputation as a serious club for dedicated heads in the Kansai region."
+      "status": "published",
+      "lasteditedby": "editor",
+      "lastEditedBy": "editor",
+      "lasteditedat": "2026-10-19T17:16:44.347Z",
+      "lastEditedAt": "2026-10-19T17:16:44.347Z",
+      "desc_en": "CIRCUS OSAKA operates as one of Osaka's key underground techno destinations, housed in a compact basement space that prioritizes sound system quality over size. The venue consistently programs cutting-edge international and domestic techno acts, maintaining its reputation as a serious club for dedicated heads in the Kansai region.",
+      "name_kana": "サーカス大阪"
     },
     {
       "_row": 18,
@@ -336,7 +421,7 @@
       "area": "SHINSAIBASHI",
       "type": "club",
       "image": "images/venues/club-joule.jpeg",
-      "genre": "TECHNO · HOUSE · LIVE · OTHERS",
+      "genre": "TECHNO, HOUSE, LIVE, OTHERS",
       "capacity": "500",
       "address": "1st, 2nd, 3rd, 4th, and 5th floors, 2-11-7 Nishishinsaibashi, Chuo-ku, Osaka City, Osaka Prefecture",
       "lat": "34.6713",
@@ -344,7 +429,15 @@
       "url": "https://club-joule.com/ja/",
       "instagram": "https://www.instagram.com/clubjoule_official/",
       "desc": "CLUB JOULEは、大阪のアンダーグラウンドテクノを支える会場のひとつ。地下にあり、装飾よりもサウンドシステムの質を優先する。余計な演出を削ぎ落とした姿勢で、海外のテクノアクトと国内の主要なエレクトロニックアーティストの双方を定期的に迎えてきた。親密なつくりが生む密度の高いフロアが、関西のテクノシーンにおける定番となっている。",
-      "desc_en": "Club Joule operates as one of Osaka's key underground techno spaces, housed in a basement setting that prioritizes sound system quality over aesthetic flourishes. The venue maintains a stripped-back approach that lets the music define the experience, regularly hosting both international techno acts and Japan's leading electronic artists. Its intimate layout creates an intense dance floor dynamic that has made it a fixture in Kansai's techno circuit."
+      "status": "published",
+      "lasteditedby": "editor",
+      "lastEditedBy": "editor",
+      "lasteditedat": "2026-10-19T17:16:55.007Z",
+      "lastEditedAt": "2026-10-19T17:16:55.007Z",
+      "desc_en": "Club Joule operates as one of Osaka's key underground techno spaces, housed in a basement setting that prioritizes sound system quality over aesthetic flourishes. The venue maintains a stripped-back approach that lets the music define the experience, regularly hosting both international techno acts and Japan's leading electronic artists. Its intimate layout creates an intense dance floor dynamic that has made it a fixture in Kansai's techno circuit.",
+      "name_kana": "クラブジュール",
+      "access": "地下鉄四つ橋線四ツ橋駅から徒歩5分",
+      "access_en": "5 min walk from Yotsubashi Station (Osaka Metro)"
     },
     {
       "_row": 19,
@@ -354,7 +447,7 @@
       "area": "KITAHAMA",
       "type": "club",
       "image": "images/venues/compufunk.jpeg",
-      "genre": "TECHNO · HOUSE · MINIMAL · BASS · AMBIENT",
+      "genre": "TECHNO, HOUSE, MINIMAL, AMBIENT, BASS",
       "capacity": "100",
       "address": "2F, GROW Kitahama Building (Kitahama Building No. 2), 1-29 Kitahama Higashi, Chuo-ku, Osaka City, Osaka Prefecture",
       "lat": "34.6904",
@@ -362,7 +455,13 @@
       "url": "https://www.compufunk.com/",
       "instagram": "https://www.instagram.com/djcompufunk/",
       "desc": "COMPUFUNK RECORDSは、大阪でレコードショップと小規模なクラブスペースを兼ねる場所。アナログを軸にしたエレクトロニックミュージックに絞った姿勢を保つ。DJ Compufunkによるファンク、エレクトロ、初期テクノへの深い知識が、店の品揃えとブッキングの双方に反映されている。小さな空間が、規模よりも音の質を重視した環境をつくっている。",
-      "desc_en": "COMPUFUNK RECORDS operates as both record shop and intimate club space in Osaka's underground circuit. The venue maintains a focused approach to analog-driven electronic music, with DJ Compufunk's deep knowledge of obscure funk, electro and early techno informing both the shop's selection and club programming. Its compact dimensions create an immersive listening environment that prioritizes sound quality over scale."
+      "status": "published",
+      "lasteditedby": "editor",
+      "lastEditedBy": "editor",
+      "lasteditedat": "2026-10-19T17:16:59.731Z",
+      "lastEditedAt": "2026-10-19T17:16:59.731Z",
+      "desc_en": "COMPUFUNK RECORDS operates as both record shop and intimate club space in Osaka's underground circuit. The venue maintains a focused approach to analog-driven electronic music, with DJ Compufunk's deep knowledge of obscure funk, electro and early techno informing both the shop's selection and club programming. Its compact dimensions create an immersive listening environment that prioritizes sound quality over scale.",
+      "name_kana": "コンピューファンク"
     },
     {
       "_row": 20,
@@ -372,7 +471,7 @@
       "area": "UMEDA",
       "type": "bar",
       "image": "images/venues/noon.jpeg",
-      "genre": "TECHNO · HOUSE · LIVE · OTHERS",
+      "genre": "TECHNO, HOUSE, LIVE, OTHERS",
       "capacity": "100",
       "address": "3-3-8 Nakazakinishi, Kita-ku, Osaka City, Osaka Prefecture",
       "lat": "34.7071",
@@ -380,7 +479,15 @@
       "url": "https://noon-cafe.com/",
       "instagram": "https://www.instagram.com/noon_cafe_nakazaki/",
       "desc": "大阪・中崎町にある、バーとカフェを兼ねた小さな空間。昼のコーヒー文化と夜の音楽をつなぐ場所として機能する。DJセットや小規模な集まりが開かれ、形式的なクラブナイトというより私的なパーティーに近い雰囲気を持つ。アンダーグラウンドな選曲とくつろいだ空気で知られ、地元の掘り手から来訪するアーティストまでが集まる。",
-      "desc_en": "A intimate bar and cafe hybrid in Osaka's Nakazakicho district that bridges daytime coffee culture with late-night music sessions. The compact space hosts DJ sets and small gatherings that feel more like private parties than formal club nights. Known for its carefully curated selection of underground electronic music and relaxed atmosphere that attracts both local diggers and visiting artists."
+      "status": "published",
+      "lasteditedby": "editor",
+      "lastEditedBy": "editor",
+      "lasteditedat": "2026-10-19T17:17:16.811Z",
+      "lastEditedAt": "2026-10-19T17:17:16.811Z",
+      "desc_en": "A intimate bar and cafe hybrid in Osaka's Nakazakicho district that bridges daytime coffee culture with late-night music sessions. The compact space hosts DJ sets and small gatherings that feel more like private parties than formal club nights. Known for its carefully curated selection of underground electronic music and relaxed atmosphere that attracts both local diggers and visiting artists.",
+      "name_kana": "ヌーン",
+      "access": "大阪メトロ谷町線中崎町駅から徒歩5分",
+      "access_en": "5 min walk from Nakazakicho Station (Osaka Metro Tanimachi Line)"
     },
     {
       "_row": 21,
@@ -390,7 +497,7 @@
       "area": "SHINSAIBASHI",
       "type": "club",
       "image": "images/venues/triangle.jpeg",
-      "genre": "TECHNO · HOUSE · OTHERS",
+      "genre": "TECHNO, HOUSE, OTHERS",
       "capacity": "250",
       "address": "2-18-5 Nishishinsaibashi, Chuo-ku, Osaka City, Osaka Prefecture",
       "lat": "34.6722",
@@ -398,7 +505,13 @@
       "url": "https://triangle-osaka.jp/",
       "instagram": "https://www.instagram.com/triangleosaka/",
       "desc": "TRIANGLEは、大阪のアンダーグラウンドな空間のひとつ。地下のコンパクトなつくりで、規模よりも音の質を重視している。ディープな領域のテクノや実験的なエレクトロニックミュージックにまたがる丁寧なラインナップで評価を築き、市内の大箱よりも集中できる環境を求める国内外のアーティストを迎えている。",
-      "desc_en": "Triangle operates as one of Osaka's more intimate underground spaces, housed in a compact basement setting that prioritizes sound quality over scale. The venue has built a reputation for carefully curated lineups that span deeper spectrum techno and experimental electronic music, attracting both local selectors and international acts seeking a more focused environment than the city's larger clubs."
+      "status": "published",
+      "lasteditedby": "editor",
+      "lastEditedBy": "editor",
+      "lasteditedat": "2026-10-19T17:17:22.714Z",
+      "lastEditedAt": "2026-10-19T17:17:22.714Z",
+      "desc_en": "Triangle operates as one of Osaka's more intimate underground spaces, housed in a compact basement setting that prioritizes sound quality over scale. The venue has built a reputation for carefully curated lineups that span deeper spectrum techno and experimental electronic music, attracting both local selectors and international acts seeking a more focused environment than the city's larger clubs.",
+      "name_kana": "トライアングル"
     },
     {
       "_row": 22,
@@ -416,7 +529,15 @@
       "url": "https://sunhall.jp/",
       "instagram": "https://www.instagram.com/sunhall.info/",
       "desc": "SUNHALLは、大阪の中規模会場のひとつ。小規模クラブとコンサートホールの中間を埋める存在として機能する。国内のアンダーグラウンドなアクトと海外からのツアーアーティストの双方を迎えてきた実績を持ち、実験的なエレクトロニクスからハードなテクノまで対応するサウンドシステムを備える。安定したブッキングと日本橋という立地が、関西のシーンにおける定番の場所にしている。",
-      "desc_en": "SUNHALL operates as one of Osaka's essential mid-sized venues, bridging the gap between intimate club spaces and larger concert halls. The venue has built its reputation hosting both local underground acts and touring international artists, maintaining a sound system that serves everything from experimental electronics to harder techno lineups. Its consistent programming and accessible Nippombashi location have made it a reliable fixture in Kansai's electronic music circuit."
+      "status": "published",
+      "lasteditedby": "editor",
+      "lastEditedBy": "editor",
+      "lasteditedat": "2026-10-19T17:17:28.352Z",
+      "lastEditedAt": "2026-10-19T17:17:28.352Z",
+      "desc_en": "SUNHALL operates as one of Osaka's essential mid-sized venues, bridging the gap between intimate club spaces and larger concert halls. The venue has built its reputation hosting both local underground acts and touring international artists, maintaining a sound system that serves everything from experimental electronics to harder techno lineups. Its consistent programming and accessible Nippombashi location have made it a reliable fixture in Kansai's electronic music circuit.",
+      "name_kana": "サンホール",
+      "access": "地下鉄四ツ橋駅5番出口から徒歩約3分、心斎橋駅7番出口から徒歩約5分",
+      "access_en": "About 3 min walk from Yotsubashi Station (Exit 5); about 5 min from Shinsaibashi Station (Exit 7)"
     },
     {
       "_row": 23,
@@ -426,7 +547,7 @@
       "area": "JINGU-MARUTAMACHI",
       "type": "club",
       "image": "images/venues/club-metro.jpeg",
-      "genre": "TECHNO · HOUSE · LIVE · AMBIENT",
+      "genre": "TECHNO, HOUSE, AMBIENT, LIVE",
       "capacity": "300",
       "address": "82 Shimotsutsumi-cho, Sakyo-ku, Kyoto City, Kyoto Prefecture, BF",
       "lat": "35.017",
@@ -434,7 +555,15 @@
       "url": "https://www.metro.ne.jp/",
       "instagram": "https://www.instagram.com/metro_kyoto/",
       "desc": "METROは、90年代初頭から京都のアンダーグラウンドシーンを支えてきた。河原町近くの地下空間を改装した場所で営業する。コンクリートの親密な内装と丁寧に組まれたブッキングにより、ツアー中のアーティストにとって欠かせない一軒であり、関西のエレクトロニックミュージック文化の中心のひとつとなっている。",
-      "desc_en": "Metro has anchored Kyoto's underground scene since the early 90s, operating from a converted basement space near Kawaramachi. The club's intimate concrete interior and carefully curated bookings have made it a essential stop for touring artists and a cornerstone of Kansai's electronic music culture."
+      "status": "published",
+      "lasteditedby": "editor",
+      "lastEditedBy": "editor",
+      "lasteditedat": "2026-10-19T17:17:39.329Z",
+      "lastEditedAt": "2026-10-19T17:17:39.329Z",
+      "desc_en": "Metro has anchored Kyoto's underground scene since the early 90s, operating from a converted basement space near Kawaramachi. The club's intimate concrete interior and carefully curated bookings have made it a essential stop for touring artists and a cornerstone of Kansai's electronic music culture.",
+      "name_kana": "クラブメトロ",
+      "access": "京阪神宮丸太町駅2番出口直結",
+      "access_en": "Directly connected to Exit 2 of Jingu-Marutamachi Station (Keihan Line)"
     }
   ],
   "FESTIVALS": [
@@ -506,7 +635,7 @@
     {
       "_row": 4,
       "id": "grow-the-culture-open-air",
-      "type": "festival",
+      "type": "rave",
       "name": "GROW THE CULTURE OPEN AIR",
       "date": "2026-11-07/2026-11-08",
       "location": "Ohba Camping Village",
@@ -522,12 +651,12 @@
       "ticketurl": "https://growtheculture.jp/openair2026#tickets",
       "ticketUrl": "https://growtheculture.jp/openair2026#tickets",
       "instagram": "https://www.instagram.com/gtc_jp/",
-      "editions": "[{\"_row\":41,\"_editionId\":\"grow-the-culture-open-air-2025\",\"_sheetRow\":{\"_row\":41,\"edition_id\":\"grow-the-culture-open-air-2025\",\"festival_id\":\"grow-the-culture-open-air\",\"edition\":\"2025\",\"date_start\":\"2025-11-08\",\"date_end\":\"2025-11-09\",\"pref\":\"Tokyo\",\"status\":\"finished\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"festivalId\":\"grow-the-culture-open-air\",\"FESTIVAL_ID\":\"grow-the-culture-open-air\",\"EDITION\":\"2025\",\"DATE_START\":\"2025-11-08\",\"DATE_END\":\"2025-11-09\",\"PREF\":\"Tokyo\",\"STATUS\":\"finished\"},\"_lineupRows\":[],\"year\":\"2025\",\"edition\":\"2\",\"date\":\"2025-11-08/2025-11-09\",\"location\":\"Ohba Camping Village\",\"location_ja\":\"おおばキャンプ村\",\"pref\":\"Tokyo\",\"venueId\":\"\",\"address\":\"東京都西多摩郡日の出町大久野３７４１\",\"lat\":\"35.760438\",\"lng\":\"139.209443\",\"ticketUrl\":\"\",\"flyer\":\"\",\"status\":\"finished\",\"lineup\":[\"Addison Groove\",\"akii\",\"andrew\",\"comm\",\"Commodo\",\"DNG\",\"Dx\",\"Element\",\"Follow The Shadows\",\"hara\",\"Lil Tozan\",\"maidable\",\"Midnight Runner\",\"UKD\",\"Velocity\",\"yayoi\",\"¥ØU$UK€ ¥UK1MAT$U\",\"Frankie $\"]},{\"_row\":107,\"_editionId\":\"grow-the-culture-open-air-2026\",\"_sheetRow\":{\"_row\":107,\"edition_id\":\"grow-the-culture-open-air-2026\",\"festival_id\":\"grow-the-culture-open-air\",\"edition\":\"2026\",\"date_start\":\"2026-11-07\",\"date_end\":\"2026-11-08\",\"location\":\"Ohba Camping Village\",\"location_ja\":\"おおばキャンプ村\",\"pref\":\"Tokyo\",\"address\":\"東京都西多摩郡日の出町大久野３７４１\",\"lat\":\"35.760438\",\"lng\":\"139.209443\",\"flyer\":\"images/festivals/grow-the-culture-open-air-2026-flyer.jpg\",\"status\":\"published\",\"editionId\":\"grow-the-culture-open-air-2026\",\"EDITION_ID\":\"grow-the-culture-open-air-2026\",\"festivalId\":\"grow-the-culture-open-air\",\"FESTIVAL_ID\":\"grow-the-culture-open-air\",\"EDITION\":\"2026\",\"DATE_START\":\"2026-11-07\",\"DATE_END\":\"2026-11-08\",\"LOCATION\":\"Ohba Camping Village\",\"LOCATION_JA\":\"おおばキャンプ村\",\"PREF\":\"Tokyo\",\"ADDRESS\":\"東京都西多摩郡日の出町大久野３７４１\",\"LAT\":\"35.760438\",\"LNG\":\"139.209443\",\"FLYER\":\"images/festivals/grow-the-culture-open-air-2026-flyer.jpg\",\"STATUS\":\"published\"},\"_lineupRows\":[],\"year\":\"2026\",\"edition\":\"3\",\"date\":\"2026-11-07/2026-11-08\",\"location\":\"Ohba Camping Village\",\"location_ja\":\"おおばキャンプ村\",\"pref\":\"Tokyo\",\"venueId\":\"\",\"address\":\"東京都西多摩郡日の出町大久野３７４１\",\"lat\":\"35.760438\",\"lng\":\"139.209443\",\"ticketUrl\":\"https://growtheculture.jp/openair2026#tickets\",\"flyer\":\"images/festivals/grow-the-culture-open-air-2026-flyer.jpg\",\"status\":\"published\",\"lineup\":[]}]",
+      "editions": "[{\"_row\":41,\"_editionId\":\"grow-the-culture-open-air-2025\",\"_sheetRow\":{\"_row\":41,\"edition_id\":\"grow-the-culture-open-air-2025\",\"festival_id\":\"grow-the-culture-open-air\",\"edition\":\"2025\",\"date_start\":\"2025-11-08\",\"date_end\":\"2025-11-09\",\"location\":\"Ohba Camping Village\",\"location_ja\":\"おおばキャンプ村\",\"pref\":\"Tokyo\",\"address\":\"東京都西多摩郡日の出町大久野３７４１\",\"lat\":\"35.760438\",\"lng\":\"139.209443\",\"status\":\"finished\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"festivalId\":\"grow-the-culture-open-air\",\"FESTIVAL_ID\":\"grow-the-culture-open-air\",\"EDITION\":\"2025\",\"DATE_START\":\"2025-11-08\",\"DATE_END\":\"2025-11-09\",\"LOCATION\":\"Ohba Camping Village\",\"LOCATION_JA\":\"おおばキャンプ村\",\"PREF\":\"Tokyo\",\"ADDRESS\":\"東京都西多摩郡日の出町大久野３７４１\",\"LAT\":\"35.760438\",\"LNG\":\"139.209443\",\"STATUS\":\"finished\"},\"_lineupRows\":[{\"_row\":1405,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"Addison Groove\",\"set_type\":\"dj\",\"sort\":\"1\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"Addison Groove\",\"ACT_LABEL\":\"Addison Groove\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"1\"},{\"_row\":1406,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"akii\",\"set_type\":\"dj\",\"sort\":\"2\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"akii\",\"ACT_LABEL\":\"akii\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"2\"},{\"_row\":1407,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"andrew\",\"set_type\":\"dj\",\"sort\":\"3\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"andrew\",\"ACT_LABEL\":\"andrew\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"3\"},{\"_row\":1408,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"comm\",\"set_type\":\"dj\",\"sort\":\"4\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"comm\",\"ACT_LABEL\":\"comm\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"4\"},{\"_row\":1409,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"Commodo\",\"set_type\":\"dj\",\"sort\":\"5\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"Commodo\",\"ACT_LABEL\":\"Commodo\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"5\"},{\"_row\":1410,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"DNG\",\"set_type\":\"dj\",\"sort\":\"6\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"DNG\",\"ACT_LABEL\":\"DNG\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"6\"},{\"_row\":1411,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"Dx\",\"set_type\":\"dj\",\"sort\":\"7\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"Dx\",\"ACT_LABEL\":\"Dx\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"7\"},{\"_row\":1412,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"Element\",\"set_type\":\"dj\",\"sort\":\"8\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"Element\",\"ACT_LABEL\":\"Element\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"8\"},{\"_row\":1413,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"Follow The Shadows\",\"set_type\":\"dj\",\"sort\":\"9\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"Follow The Shadows\",\"ACT_LABEL\":\"Follow The Shadows\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"9\"},{\"_row\":1414,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"hara\",\"set_type\":\"dj\",\"sort\":\"10\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"hara\",\"ACT_LABEL\":\"hara\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"10\"},{\"_row\":1415,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"Lil Tozan\",\"set_type\":\"dj\",\"sort\":\"11\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"Lil Tozan\",\"ACT_LABEL\":\"Lil Tozan\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"11\"},{\"_row\":1416,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"maidable\",\"set_type\":\"dj\",\"sort\":\"12\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"maidable\",\"ACT_LABEL\":\"maidable\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"12\"},{\"_row\":1417,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"Midnight Runner\",\"set_type\":\"dj\",\"sort\":\"13\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"Midnight Runner\",\"ACT_LABEL\":\"Midnight Runner\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"13\"},{\"_row\":1418,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"UKD\",\"set_type\":\"dj\",\"sort\":\"14\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"UKD\",\"ACT_LABEL\":\"UKD\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"14\"},{\"_row\":1419,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"Velocity\",\"set_type\":\"dj\",\"sort\":\"15\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"Velocity\",\"ACT_LABEL\":\"Velocity\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"15\"},{\"_row\":1420,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"yayoi\",\"set_type\":\"dj\",\"sort\":\"16\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"yayoi\",\"ACT_LABEL\":\"yayoi\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"16\"},{\"_row\":1421,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"¥ØU$UK€ ¥UK1MAT$U\",\"set_type\":\"dj\",\"sort\":\"17\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"¥ØU$UK€ ¥UK1MAT$U\",\"ACT_LABEL\":\"¥ØU$UK€ ¥UK1MAT$U\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"17\"},{\"_row\":1422,\"edition_id\":\"grow-the-culture-open-air-2025\",\"act_label\":\"Frankie $\",\"set_type\":\"dj\",\"sort\":\"18\",\"editionId\":\"grow-the-culture-open-air-2025\",\"EDITION_ID\":\"grow-the-culture-open-air-2025\",\"actLabel\":\"Frankie $\",\"ACT_LABEL\":\"Frankie $\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"18\"}],\"year\":\"2025\",\"edition\":\"\",\"date\":\"2025-11-08/2025-11-09\",\"location\":\"Ohba Camping Village\",\"location_ja\":\"おおばキャンプ村\",\"pref\":\"Tokyo\",\"venueId\":\"\",\"address\":\"東京都西多摩郡日の出町大久野３７４１\",\"lat\":\"35.760438\",\"lng\":\"139.209443\",\"ticketUrl\":\"\",\"flyer\":\"\",\"status\":\"finished\",\"lineup\":[\"Addison Groove\",\"akii\",\"andrew\",\"comm\",\"Commodo\",\"DNG\",\"Dx\",\"Element\",\"Follow The Shadows\",\"hara\",\"Lil Tozan\",\"maidable\",\"Midnight Runner\",\"UKD\",\"Velocity\",\"yayoi\",\"¥ØU$UK€ ¥UK1MAT$U\",\"Frankie $\"]},{\"_row\":104,\"_editionId\":\"grow-the-culture-open-air-2026\",\"_sheetRow\":{\"_row\":104,\"edition_id\":\"grow-the-culture-open-air-2026\",\"festival_id\":\"grow-the-culture-open-air\",\"edition\":\"2026\",\"date_start\":\"2026-11-07\",\"date_end\":\"2026-11-08\",\"location\":\"Ohba Camping Village\",\"location_ja\":\"おおばキャンプ村\",\"pref\":\"Tokyo\",\"address\":\"東京都西多摩郡日の出町大久野３７４１\",\"lat\":\"35.760438\",\"lng\":\"139.209443\",\"ticketurl\":\"https://growtheculture.jp/openair2026#tickets\",\"ticketUrl\":\"https://growtheculture.jp/openair2026#tickets\",\"flyer\":\"images/festivals/grow-the-culture-open-air-2026-flyer.jpg\",\"status\":\"published\",\"editionId\":\"grow-the-culture-open-air-2026\",\"EDITION_ID\":\"grow-the-culture-open-air-2026\",\"festivalId\":\"grow-the-culture-open-air\",\"FESTIVAL_ID\":\"grow-the-culture-open-air\",\"EDITION\":\"2026\",\"DATE_START\":\"2026-11-07\",\"DATE_END\":\"2026-11-08\",\"LOCATION\":\"Ohba Camping Village\",\"LOCATION_JA\":\"おおばキャンプ村\",\"PREF\":\"Tokyo\",\"ADDRESS\":\"東京都西多摩郡日の出町大久野３７４１\",\"LAT\":\"35.760438\",\"LNG\":\"139.209443\",\"TICKETURL\":\"https://growtheculture.jp/openair2026#tickets\",\"FLYER\":\"images/festivals/grow-the-culture-open-air-2026-flyer.jpg\",\"STATUS\":\"published\"},\"_lineupRows\":[],\"year\":\"2026\",\"edition\":\"\",\"date\":\"2026-11-07/2026-11-08\",\"location\":\"Ohba Camping Village\",\"location_ja\":\"おおばキャンプ村\",\"pref\":\"Tokyo\",\"venueId\":\"\",\"address\":\"東京都西多摩郡日の出町大久野３７４１\",\"lat\":\"35.760438\",\"lng\":\"139.209443\",\"ticketUrl\":\"https://growtheculture.jp/openair2026#tickets\",\"flyer\":\"images/festivals/grow-the-culture-open-air-2026-flyer.jpg\",\"status\":\"published\",\"lineup\":[]}]",
       "status": "published",
       "lasteditedby": "editor",
       "lastEditedBy": "editor",
-      "lasteditedat": "2026-09-14T17:10:31.669Z",
-      "lastEditedAt": "2026-09-14T17:10:31.669Z",
+      "lasteditedat": "2026-10-19T17:01:53.536Z",
+      "lastEditedAt": "2026-10-19T17:01:53.536Z",
       "desc_en": "GROW THE CULTURE OPEN AIR brings Tokyo's underground dance music community together in an outdoor setting that prioritizes authentic electronic music culture. The festival showcases both local and international artists across multiple stages, maintaining focus on quality programming over commercial appeal.",
       "location_ja": "おおばキャンプ村"
     },
@@ -1041,14 +1170,14 @@
       "desc": "自分たちの手で創り上げる、インディペンデントなDIYパーティ。豊かな自然の中で、誰もが最大限に日常から解放される空間を目指し、今年で13年目を迎える。会場は兵庫県三田市の三田アスレチックパーク。都会の熱波から離れた森の中に、趣向を凝らした高音質の2フロアが組まれ、大小2種のプールが踊り疲れた身体を冷やす。関西を中心に全国から40組近いアーティストが集結し、土曜の昼から日曜の午後まで音が鳴り続ける。費用はエントランス料金のみで、駐車場もテントもプールも追加料金はかからず、18歳以下は入場無料。13年のあいだに築かれてきた関係が、そのままラインナップになっている。",
       "instagram": "https://www.instagram.com/bondisco.since2014/",
       "lineup": "81blend, Abu, Acidclank, chazuke, Chikara Sueda, Nakakuni, Dasakura, DENKIHITSUJI, DJ FOX-X a.k.a TAKA MARL, dogezaExp, H.YOROZU, Hexee, HALO, JUDO, Kaito, Kamenomisoshiru, Kanemah, kannQazuja, kiku, MADZINE, Manchineel, Masayoshi Sakaguchi, MIYAKE, MORRIS.K, NK, Raio, Ryu2, Sacai & Taichi Tsumori, SHA_XUE, space kanta, SUETAKE, Takahiro Oisi, Yoshihiro Kimura, YUKAKU 'И, zundoko-disco, Wakoo, Gyo-shin",
-      "editions": "[{\"_row\":13,\"_editionId\":\"bondisco-2025\",\"_sheetRow\":{\"_row\":13,\"edition_id\":\"bondisco-2025\",\"festival_id\":\"bondisco\",\"edition\":\"2025\",\"date_start\":\"2025-08-30\",\"date_end\":\"2025-08-31\",\"location\":\"Sanda Athletic Park\",\"location_ja\":\"三田アスレチックパーク\",\"pref\":\"Gunma\",\"address\":\"兵庫県三田市波豆川282-1\",\"lat\":\"34.9197\",\"lng\":\"135.2892\",\"flyer\":\"images/festivals/bondisco-2025-flyer.webp\",\"status\":\"finished\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"festivalId\":\"bondisco\",\"FESTIVAL_ID\":\"bondisco\",\"EDITION\":\"2025\",\"DATE_START\":\"2025-08-30\",\"DATE_END\":\"2025-08-31\",\"LOCATION\":\"Sanda Athletic Park\",\"LOCATION_JA\":\"三田アスレチックパーク\",\"PREF\":\"Gunma\",\"ADDRESS\":\"兵庫県三田市波豆川282-1\",\"LAT\":\"34.9197\",\"LNG\":\"135.2892\",\"FLYER\":\"images/festivals/bondisco-2025-flyer.webp\",\"STATUS\":\"finished\"},\"_lineupRows\":[{\"_row\":445,\"edition_id\":\"bondisco-2025\",\"act_label\":\"81blend\",\"set_type\":\"dj\",\"sort\":\"1\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"81blend\",\"ACT_LABEL\":\"81blend\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"1\"},{\"_row\":446,\"edition_id\":\"bondisco-2025\",\"act_label\":\"aon\",\"set_type\":\"dj\",\"sort\":\"2\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"aon\",\"ACT_LABEL\":\"aon\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"2\"},{\"_row\":447,\"edition_id\":\"bondisco-2025\",\"act_label\":\"CM Smooth\",\"set_type\":\"dj\",\"sort\":\"3\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"CM Smooth\",\"ACT_LABEL\":\"CM Smooth\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"3\"},{\"_row\":448,\"edition_id\":\"bondisco-2025\",\"act_label\":\"dogezaExp\",\"set_type\":\"dj\",\"sort\":\"4\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"dogezaExp\",\"ACT_LABEL\":\"dogezaExp\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"4\"},{\"_row\":449,\"edition_id\":\"bondisco-2025\",\"act_label\":\"Giddlah Selecta\",\"set_type\":\"dj\",\"sort\":\"5\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"Giddlah Selecta\",\"ACT_LABEL\":\"Giddlah Selecta\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"5\"},{\"_row\":450,\"edition_id\":\"bondisco-2025\",\"act_label\":\"Haruki\",\"set_type\":\"dj\",\"sort\":\"6\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"Haruki\",\"ACT_LABEL\":\"Haruki\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"6\"},{\"_row\":451,\"edition_id\":\"bondisco-2025\",\"act_label\":\"Hexee\",\"set_type\":\"dj\",\"sort\":\"7\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"Hexee\",\"ACT_LABEL\":\"Hexee\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"7\"},{\"_row\":452,\"edition_id\":\"bondisco-2025\",\"act_label\":\"ironman\",\"set_type\":\"dj\",\"sort\":\"8\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"ironman\",\"ACT_LABEL\":\"ironman\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"8\"},{\"_row\":453,\"edition_id\":\"bondisco-2025\",\"act_label\":\"kannQazuja\",\"set_type\":\"dj\",\"sort\":\"9\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"kannQazuja\",\"ACT_LABEL\":\"kannQazuja\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"9\"},{\"_row\":454,\"edition_id\":\"bondisco-2025\",\"act_label\":\"kiku\",\"set_type\":\"dj\",\"sort\":\"10\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"kiku\",\"ACT_LABEL\":\"kiku\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"10\"},{\"_row\":455,\"edition_id\":\"bondisco-2025\",\"act_label\":\"Naluu\",\"set_type\":\"dj\",\"sort\":\"11\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"Naluu\",\"ACT_LABEL\":\"Naluu\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"11\"},{\"_row\":456,\"edition_id\":\"bondisco-2025\",\"act_label\":\"NSN\",\"set_type\":\"dj\",\"sort\":\"12\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"NSN\",\"ACT_LABEL\":\"NSN\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"12\"},{\"_row\":457,\"edition_id\":\"bondisco-2025\",\"act_label\":\"Ryu2\",\"set_type\":\"dj\",\"sort\":\"13\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"Ryu2\",\"ACT_LABEL\":\"Ryu2\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"13\"},{\"_row\":458,\"edition_id\":\"bondisco-2025\",\"act_label\":\"SHA_XUE\",\"set_type\":\"dj\",\"sort\":\"14\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"SHA_XUE\",\"ACT_LABEL\":\"SHA_XUE\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"14\"},{\"_row\":459,\"edition_id\":\"bondisco-2025\",\"act_label\":\"SHIROH\",\"set_type\":\"dj\",\"sort\":\"15\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"SHIROH\",\"ACT_LABEL\":\"SHIROH\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"15\"},{\"_row\":460,\"edition_id\":\"bondisco-2025\",\"act_label\":\"Space Kanta\",\"set_type\":\"dj\",\"sort\":\"16\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"Space Kanta\",\"ACT_LABEL\":\"Space Kanta\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"16\"},{\"_row\":461,\"edition_id\":\"bondisco-2025\",\"act_label\":\"SUETAKE\",\"set_type\":\"dj\",\"sort\":\"17\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"SUETAKE\",\"ACT_LABEL\":\"SUETAKE\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"17\"},{\"_row\":462,\"edition_id\":\"bondisco-2025\",\"act_label\":\"Tech-Bou\",\"set_type\":\"dj\",\"sort\":\"18\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"Tech-Bou\",\"ACT_LABEL\":\"Tech-Bou\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"18\"},{\"_row\":463,\"edition_id\":\"bondisco-2025\",\"act_label\":\"ushim\",\"set_type\":\"dj\",\"sort\":\"19\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"ushim\",\"ACT_LABEL\":\"ushim\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"19\"},{\"_row\":464,\"edition_id\":\"bondisco-2025\",\"act_label\":\"WATAYA\",\"set_type\":\"dj\",\"sort\":\"20\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"WATAYA\",\"ACT_LABEL\":\"WATAYA\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"20\"},{\"_row\":465,\"edition_id\":\"bondisco-2025\",\"act_label\":\"Xin\",\"set_type\":\"dj\",\"sort\":\"21\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"Xin\",\"ACT_LABEL\":\"Xin\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"21\"},{\"_row\":466,\"edition_id\":\"bondisco-2025\",\"act_label\":\"YAKO MIKA\",\"set_type\":\"dj\",\"sort\":\"22\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"YAKO MIKA\",\"ACT_LABEL\":\"YAKO MIKA\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"22\"},{\"_row\":467,\"edition_id\":\"bondisco-2025\",\"act_label\":\"Yona\",\"set_type\":\"dj\",\"sort\":\"23\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"Yona\",\"ACT_LABEL\":\"Yona\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"23\"},{\"_row\":468,\"edition_id\":\"bondisco-2025\",\"act_label\":\"H.YOROZU\",\"set_type\":\"dj\",\"sort\":\"24\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"H.YOROZU\",\"ACT_LABEL\":\"H.YOROZU\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"24\"},{\"_row\":469,\"edition_id\":\"bondisco-2025\",\"act_label\":\"Yoshihiro Kimura\",\"set_type\":\"dj\",\"sort\":\"25\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"Yoshihiro Kimura\",\"ACT_LABEL\":\"Yoshihiro Kimura\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"25\"}],\"year\":\"2025\",\"edition\":\"\",\"date\":\"2025-08-30/2025-08-31\",\"location\":\"Sanda Athletic Park\",\"location_ja\":\"三田アスレチックパーク\",\"pref\":\"Gunma\",\"venueId\":\"\",\"address\":\"兵庫県三田市波豆川282-1\",\"lat\":\"34.9197\",\"lng\":\"135.2892\",\"ticketUrl\":\"\",\"flyer\":\"images/festivals/bondisco-2025-flyer.webp\",\"status\":\"finished\",\"lineup\":[\"81blend\",\"aon\",\"CM Smooth\",\"dogezaExp\",\"Giddlah Selecta\",\"Haruki\",\"Hexee\",\"ironman\",\"kannQazuja\",\"kiku\",\"Naluu\",\"NSN\",\"Ryu2\",\"SHA_XUE\",\"SHIROH\",\"Space Kanta\",\"SUETAKE\",\"Tech-Bou\",\"ushim\",\"WATAYA\",\"Xin\",\"YAKO MIKA\",\"Yona\",\"H.YOROZU\",\"Yoshihiro Kimura\"]},{\"_row\":110,\"_editionId\":\"bondisco-2026\",\"_sheetRow\":{\"_row\":110,\"edition_id\":\"bondisco-2026\",\"festival_id\":\"bondisco\",\"edition\":\"2026\",\"date_start\":\"2026-08-22\",\"date_end\":\"2026-08-23\",\"location\":\"Sanda Athletic Park\",\"location_ja\":\"三田アスレチックパーク\",\"pref\":\"Gunma\",\"address\":\"兵庫県三田市波豆川282-1\",\"lat\":\"34.9197\",\"lng\":\"135.2892\",\"status\":\"announced\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"festivalId\":\"bondisco\",\"FESTIVAL_ID\":\"bondisco\",\"EDITION\":\"2026\",\"DATE_START\":\"2026-08-22\",\"DATE_END\":\"2026-08-23\",\"LOCATION\":\"Sanda Athletic Park\",\"LOCATION_JA\":\"三田アスレチックパーク\",\"PREF\":\"Gunma\",\"ADDRESS\":\"兵庫県三田市波豆川282-1\",\"LAT\":\"34.9197\",\"LNG\":\"135.2892\",\"STATUS\":\"announced\"},\"_lineupRows\":[],\"year\":\"2026\",\"edition\":\"\",\"date\":\"2026-08-22/2026-08-23\",\"location\":\"Sanda Athletic Park\",\"location_ja\":\"三田アスレチックパーク\",\"pref\":\"Gunma\",\"venueId\":\"\",\"address\":\"兵庫県三田市波豆川282-1\",\"lat\":\"34.9197\",\"lng\":\"135.2892\",\"ticketUrl\":\"\",\"flyer\":\"\",\"status\":\"announced\",\"lineup\":[\"81blend\",\"Abu\",\"Acidclank\",\"chazuke\",\"Chikara Sueda\",\"Nakakuni\",\"Dasakura\",\"DENKIHITSUJI\",\"DJ FOX-X a.k.a TAKA MARL\",\"dogezaExp\",\"H.YOROZU\",\"Hexee\",\"HALO\",\"JUDO\",\"Kaito\",\"Kamenomisoshiru\",\"Kanemah\",\"kannQazuja\",\"kiku\",\"MADZINE\",\"Manchineel\",\"Masayoshi Sakaguchi\",\"MIYAKE\",\"MORRIS.K\",\"NK\",\"Raio\",\"Ryu2\",\"Sacai & Taichi Tsumori\",\"SHA_XUE\",\"space kanta\",\"SUETAKE\",\"Takahiro Oisi\",\"Yoshihiro Kimura\",\"YUKAKU 'И\",\"zundoko-disco\",\"Wakoo\",\"Gyo-shin\"]}]",
+      "editions": "[{\"_row\":13,\"_editionId\":\"bondisco-2025\",\"_sheetRow\":{\"_row\":13,\"edition_id\":\"bondisco-2025\",\"festival_id\":\"bondisco\",\"edition\":\"2025\",\"date_start\":\"2025-08-30\",\"date_end\":\"2025-08-31\",\"location\":\"Sanda Athletic Park\",\"location_ja\":\"三田アスレチックパーク\",\"pref\":\"Gunma\",\"address\":\"兵庫県三田市波豆川282-1\",\"lat\":\"34.9197\",\"lng\":\"135.2892\",\"flyer\":\"images/festivals/bondisco-2025-flyer.webp\",\"status\":\"finished\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"festivalId\":\"bondisco\",\"FESTIVAL_ID\":\"bondisco\",\"EDITION\":\"2025\",\"DATE_START\":\"2025-08-30\",\"DATE_END\":\"2025-08-31\",\"LOCATION\":\"Sanda Athletic Park\",\"LOCATION_JA\":\"三田アスレチックパーク\",\"PREF\":\"Gunma\",\"ADDRESS\":\"兵庫県三田市波豆川282-1\",\"LAT\":\"34.9197\",\"LNG\":\"135.2892\",\"FLYER\":\"images/festivals/bondisco-2025-flyer.webp\",\"STATUS\":\"finished\"},\"_lineupRows\":[{\"_row\":445,\"edition_id\":\"bondisco-2025\",\"act_label\":\"81blend\",\"set_type\":\"dj\",\"sort\":\"1\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"81blend\",\"ACT_LABEL\":\"81blend\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"1\"},{\"_row\":446,\"edition_id\":\"bondisco-2025\",\"act_label\":\"aon\",\"set_type\":\"dj\",\"sort\":\"2\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"aon\",\"ACT_LABEL\":\"aon\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"2\"},{\"_row\":447,\"edition_id\":\"bondisco-2025\",\"act_label\":\"CM Smooth\",\"set_type\":\"dj\",\"sort\":\"3\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"CM Smooth\",\"ACT_LABEL\":\"CM Smooth\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"3\"},{\"_row\":448,\"edition_id\":\"bondisco-2025\",\"act_label\":\"dogezaExp\",\"set_type\":\"dj\",\"sort\":\"4\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"dogezaExp\",\"ACT_LABEL\":\"dogezaExp\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"4\"},{\"_row\":449,\"edition_id\":\"bondisco-2025\",\"act_label\":\"Giddlah Selecta\",\"set_type\":\"dj\",\"sort\":\"5\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"Giddlah Selecta\",\"ACT_LABEL\":\"Giddlah Selecta\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"5\"},{\"_row\":450,\"edition_id\":\"bondisco-2025\",\"act_label\":\"Haruki\",\"set_type\":\"dj\",\"sort\":\"6\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"Haruki\",\"ACT_LABEL\":\"Haruki\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"6\"},{\"_row\":451,\"edition_id\":\"bondisco-2025\",\"act_label\":\"Hexee\",\"set_type\":\"dj\",\"sort\":\"7\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"Hexee\",\"ACT_LABEL\":\"Hexee\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"7\"},{\"_row\":452,\"edition_id\":\"bondisco-2025\",\"act_label\":\"ironman\",\"set_type\":\"dj\",\"sort\":\"8\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"ironman\",\"ACT_LABEL\":\"ironman\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"8\"},{\"_row\":453,\"edition_id\":\"bondisco-2025\",\"act_label\":\"kannQazuja\",\"set_type\":\"dj\",\"sort\":\"9\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"kannQazuja\",\"ACT_LABEL\":\"kannQazuja\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"9\"},{\"_row\":454,\"edition_id\":\"bondisco-2025\",\"act_label\":\"kiku\",\"set_type\":\"dj\",\"sort\":\"10\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"kiku\",\"ACT_LABEL\":\"kiku\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"10\"},{\"_row\":455,\"edition_id\":\"bondisco-2025\",\"act_label\":\"Naluu\",\"set_type\":\"dj\",\"sort\":\"11\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"Naluu\",\"ACT_LABEL\":\"Naluu\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"11\"},{\"_row\":456,\"edition_id\":\"bondisco-2025\",\"act_label\":\"NSN\",\"set_type\":\"dj\",\"sort\":\"12\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"NSN\",\"ACT_LABEL\":\"NSN\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"12\"},{\"_row\":457,\"edition_id\":\"bondisco-2025\",\"act_label\":\"Ryu2\",\"set_type\":\"dj\",\"sort\":\"13\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"Ryu2\",\"ACT_LABEL\":\"Ryu2\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"13\"},{\"_row\":458,\"edition_id\":\"bondisco-2025\",\"act_label\":\"SHA_XUE\",\"set_type\":\"dj\",\"sort\":\"14\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"SHA_XUE\",\"ACT_LABEL\":\"SHA_XUE\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"14\"},{\"_row\":459,\"edition_id\":\"bondisco-2025\",\"act_label\":\"SHIROH\",\"set_type\":\"dj\",\"sort\":\"15\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"SHIROH\",\"ACT_LABEL\":\"SHIROH\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"15\"},{\"_row\":460,\"edition_id\":\"bondisco-2025\",\"act_label\":\"Space Kanta\",\"set_type\":\"dj\",\"sort\":\"16\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"Space Kanta\",\"ACT_LABEL\":\"Space Kanta\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"16\"},{\"_row\":461,\"edition_id\":\"bondisco-2025\",\"act_label\":\"SUETAKE\",\"set_type\":\"dj\",\"sort\":\"17\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"SUETAKE\",\"ACT_LABEL\":\"SUETAKE\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"17\"},{\"_row\":462,\"edition_id\":\"bondisco-2025\",\"act_label\":\"Tech-Bou\",\"set_type\":\"dj\",\"sort\":\"18\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"Tech-Bou\",\"ACT_LABEL\":\"Tech-Bou\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"18\"},{\"_row\":463,\"edition_id\":\"bondisco-2025\",\"act_label\":\"ushim\",\"set_type\":\"dj\",\"sort\":\"19\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"ushim\",\"ACT_LABEL\":\"ushim\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"19\"},{\"_row\":464,\"edition_id\":\"bondisco-2025\",\"act_label\":\"WATAYA\",\"set_type\":\"dj\",\"sort\":\"20\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"WATAYA\",\"ACT_LABEL\":\"WATAYA\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"20\"},{\"_row\":465,\"edition_id\":\"bondisco-2025\",\"act_label\":\"Xin\",\"set_type\":\"dj\",\"sort\":\"21\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"Xin\",\"ACT_LABEL\":\"Xin\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"21\"},{\"_row\":466,\"edition_id\":\"bondisco-2025\",\"act_label\":\"YAKO MIKA\",\"set_type\":\"dj\",\"sort\":\"22\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"YAKO MIKA\",\"ACT_LABEL\":\"YAKO MIKA\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"22\"},{\"_row\":467,\"edition_id\":\"bondisco-2025\",\"act_label\":\"Yona\",\"set_type\":\"dj\",\"sort\":\"23\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"Yona\",\"ACT_LABEL\":\"Yona\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"23\"},{\"_row\":468,\"edition_id\":\"bondisco-2025\",\"act_label\":\"H.YOROZU\",\"set_type\":\"dj\",\"sort\":\"24\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"H.YOROZU\",\"ACT_LABEL\":\"H.YOROZU\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"24\"},{\"_row\":469,\"edition_id\":\"bondisco-2025\",\"act_label\":\"Yoshihiro Kimura\",\"set_type\":\"dj\",\"sort\":\"25\",\"editionId\":\"bondisco-2025\",\"EDITION_ID\":\"bondisco-2025\",\"actLabel\":\"Yoshihiro Kimura\",\"ACT_LABEL\":\"Yoshihiro Kimura\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"25\"}],\"year\":\"2025\",\"edition\":\"\",\"date\":\"2025-08-30/2025-08-31\",\"location\":\"Sanda Athletic Park\",\"location_ja\":\"三田アスレチックパーク\",\"pref\":\"Hyogo\",\"venueId\":\"\",\"address\":\"兵庫県三田市波豆川282-1\",\"lat\":\"34.9197\",\"lng\":\"135.2892\",\"ticketUrl\":\"\",\"flyer\":\"images/festivals/bondisco-2025-flyer.webp\",\"status\":\"finished\",\"lineup\":[\"81blend\",\"aon\",\"CM Smooth\",\"dogezaExp\",\"Giddlah Selecta\",\"Haruki\",\"Hexee\",\"ironman\",\"kannQazuja\",\"kiku\",\"Naluu\",\"NSN\",\"Ryu2\",\"SHA_XUE\",\"SHIROH\",\"Space Kanta\",\"SUETAKE\",\"Tech-Bou\",\"ushim\",\"WATAYA\",\"Xin\",\"YAKO MIKA\",\"Yona\",\"H.YOROZU\",\"Yoshihiro Kimura\"]},{\"_row\":108,\"_editionId\":\"bondisco-2026\",\"_sheetRow\":{\"_row\":108,\"edition_id\":\"bondisco-2026\",\"festival_id\":\"bondisco\",\"edition\":\"2026\",\"date_start\":\"2026-08-22\",\"date_end\":\"2026-08-23\",\"location\":\"Sanda Athletic Park\",\"location_ja\":\"三田アスレチックパーク\",\"pref\":\"Gunma\",\"address\":\"兵庫県三田市波豆川282-1\",\"lat\":\"34.9197\",\"lng\":\"135.2892\",\"status\":\"announced\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"festivalId\":\"bondisco\",\"FESTIVAL_ID\":\"bondisco\",\"EDITION\":\"2026\",\"DATE_START\":\"2026-08-22\",\"DATE_END\":\"2026-08-23\",\"LOCATION\":\"Sanda Athletic Park\",\"LOCATION_JA\":\"三田アスレチックパーク\",\"PREF\":\"Gunma\",\"ADDRESS\":\"兵庫県三田市波豆川282-1\",\"LAT\":\"34.9197\",\"LNG\":\"135.2892\",\"STATUS\":\"announced\"},\"_lineupRows\":[{\"_row\":897,\"edition_id\":\"bondisco-2026\",\"act_label\":\"81blend\",\"set_type\":\"dj\",\"sort\":\"1\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"81blend\",\"ACT_LABEL\":\"81blend\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"1\"},{\"_row\":898,\"edition_id\":\"bondisco-2026\",\"act_label\":\"Abu\",\"set_type\":\"dj\",\"sort\":\"2\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"Abu\",\"ACT_LABEL\":\"Abu\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"2\"},{\"_row\":899,\"edition_id\":\"bondisco-2026\",\"act_label\":\"Acidclank\",\"set_type\":\"dj\",\"sort\":\"3\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"Acidclank\",\"ACT_LABEL\":\"Acidclank\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"3\"},{\"_row\":900,\"edition_id\":\"bondisco-2026\",\"act_label\":\"chazuke\",\"set_type\":\"dj\",\"sort\":\"4\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"chazuke\",\"ACT_LABEL\":\"chazuke\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"4\"},{\"_row\":901,\"edition_id\":\"bondisco-2026\",\"act_label\":\"Chikara Sueda\",\"set_type\":\"dj\",\"sort\":\"5\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"Chikara Sueda\",\"ACT_LABEL\":\"Chikara Sueda\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"5\"},{\"_row\":902,\"edition_id\":\"bondisco-2026\",\"act_label\":\"Nakakuni\",\"set_type\":\"dj\",\"sort\":\"6\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"Nakakuni\",\"ACT_LABEL\":\"Nakakuni\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"6\"},{\"_row\":903,\"edition_id\":\"bondisco-2026\",\"act_label\":\"Dasakura\",\"set_type\":\"dj\",\"sort\":\"7\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"Dasakura\",\"ACT_LABEL\":\"Dasakura\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"7\"},{\"_row\":904,\"edition_id\":\"bondisco-2026\",\"act_label\":\"DENKIHITSUJI\",\"set_type\":\"dj\",\"sort\":\"8\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"DENKIHITSUJI\",\"ACT_LABEL\":\"DENKIHITSUJI\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"8\"},{\"_row\":905,\"edition_id\":\"bondisco-2026\",\"act_label\":\"DJ FOX-X a.k.a TAKA MARL\",\"set_type\":\"dj\",\"sort\":\"9\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"DJ FOX-X a.k.a TAKA MARL\",\"ACT_LABEL\":\"DJ FOX-X a.k.a TAKA MARL\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"9\"},{\"_row\":906,\"edition_id\":\"bondisco-2026\",\"act_label\":\"dogezaExp\",\"set_type\":\"dj\",\"sort\":\"10\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"dogezaExp\",\"ACT_LABEL\":\"dogezaExp\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"10\"},{\"_row\":907,\"edition_id\":\"bondisco-2026\",\"act_label\":\"H.YOROZU\",\"set_type\":\"dj\",\"sort\":\"11\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"H.YOROZU\",\"ACT_LABEL\":\"H.YOROZU\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"11\"},{\"_row\":908,\"edition_id\":\"bondisco-2026\",\"act_label\":\"Hexee\",\"set_type\":\"dj\",\"sort\":\"12\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"Hexee\",\"ACT_LABEL\":\"Hexee\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"12\"},{\"_row\":909,\"edition_id\":\"bondisco-2026\",\"act_label\":\"HALO\",\"set_type\":\"dj\",\"sort\":\"13\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"HALO\",\"ACT_LABEL\":\"HALO\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"13\"},{\"_row\":910,\"edition_id\":\"bondisco-2026\",\"act_label\":\"JUDO\",\"set_type\":\"dj\",\"sort\":\"14\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"JUDO\",\"ACT_LABEL\":\"JUDO\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"14\"},{\"_row\":911,\"edition_id\":\"bondisco-2026\",\"act_label\":\"Kaito\",\"set_type\":\"dj\",\"sort\":\"15\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"Kaito\",\"ACT_LABEL\":\"Kaito\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"15\"},{\"_row\":912,\"edition_id\":\"bondisco-2026\",\"act_label\":\"Kamenomisoshiru\",\"set_type\":\"dj\",\"sort\":\"16\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"Kamenomisoshiru\",\"ACT_LABEL\":\"Kamenomisoshiru\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"16\"},{\"_row\":913,\"edition_id\":\"bondisco-2026\",\"act_label\":\"Kanemah\",\"set_type\":\"dj\",\"sort\":\"17\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"Kanemah\",\"ACT_LABEL\":\"Kanemah\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"17\"},{\"_row\":914,\"edition_id\":\"bondisco-2026\",\"act_label\":\"kannQazuja\",\"set_type\":\"dj\",\"sort\":\"18\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"kannQazuja\",\"ACT_LABEL\":\"kannQazuja\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"18\"},{\"_row\":915,\"edition_id\":\"bondisco-2026\",\"act_label\":\"kiku\",\"set_type\":\"dj\",\"sort\":\"19\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"kiku\",\"ACT_LABEL\":\"kiku\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"19\"},{\"_row\":916,\"edition_id\":\"bondisco-2026\",\"act_label\":\"MADZINE\",\"set_type\":\"dj\",\"sort\":\"20\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"MADZINE\",\"ACT_LABEL\":\"MADZINE\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"20\"},{\"_row\":917,\"edition_id\":\"bondisco-2026\",\"act_label\":\"Manchineel\",\"set_type\":\"dj\",\"sort\":\"21\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"Manchineel\",\"ACT_LABEL\":\"Manchineel\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"21\"},{\"_row\":918,\"edition_id\":\"bondisco-2026\",\"act_label\":\"Masayoshi Sakaguchi\",\"set_type\":\"dj\",\"sort\":\"22\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"Masayoshi Sakaguchi\",\"ACT_LABEL\":\"Masayoshi Sakaguchi\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"22\"},{\"_row\":919,\"edition_id\":\"bondisco-2026\",\"act_label\":\"MIYAKE\",\"set_type\":\"dj\",\"sort\":\"23\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"MIYAKE\",\"ACT_LABEL\":\"MIYAKE\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"23\"},{\"_row\":920,\"edition_id\":\"bondisco-2026\",\"act_label\":\"MORRIS.K\",\"set_type\":\"dj\",\"sort\":\"24\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"MORRIS.K\",\"ACT_LABEL\":\"MORRIS.K\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"24\"},{\"_row\":921,\"edition_id\":\"bondisco-2026\",\"act_label\":\"NK\",\"set_type\":\"dj\",\"sort\":\"25\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"NK\",\"ACT_LABEL\":\"NK\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"25\"},{\"_row\":922,\"edition_id\":\"bondisco-2026\",\"act_label\":\"Raio\",\"set_type\":\"dj\",\"sort\":\"26\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"Raio\",\"ACT_LABEL\":\"Raio\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"26\"},{\"_row\":923,\"edition_id\":\"bondisco-2026\",\"act_label\":\"Ryu2\",\"set_type\":\"dj\",\"sort\":\"27\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"Ryu2\",\"ACT_LABEL\":\"Ryu2\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"27\"},{\"_row\":924,\"edition_id\":\"bondisco-2026\",\"act_label\":\"Sacai & Taichi Tsumori\",\"set_type\":\"dj\",\"sort\":\"28\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"Sacai & Taichi Tsumori\",\"ACT_LABEL\":\"Sacai & Taichi Tsumori\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"28\"},{\"_row\":925,\"edition_id\":\"bondisco-2026\",\"act_label\":\"SHA_XUE\",\"set_type\":\"dj\",\"sort\":\"29\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"SHA_XUE\",\"ACT_LABEL\":\"SHA_XUE\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"29\"},{\"_row\":926,\"edition_id\":\"bondisco-2026\",\"act_label\":\"space kanta\",\"set_type\":\"dj\",\"sort\":\"30\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"space kanta\",\"ACT_LABEL\":\"space kanta\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"30\"},{\"_row\":927,\"edition_id\":\"bondisco-2026\",\"act_label\":\"SUETAKE\",\"set_type\":\"dj\",\"sort\":\"31\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"SUETAKE\",\"ACT_LABEL\":\"SUETAKE\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"31\"},{\"_row\":928,\"edition_id\":\"bondisco-2026\",\"act_label\":\"Takahiro Oisi\",\"set_type\":\"dj\",\"sort\":\"32\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"Takahiro Oisi\",\"ACT_LABEL\":\"Takahiro Oisi\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"32\"},{\"_row\":929,\"edition_id\":\"bondisco-2026\",\"act_label\":\"Yoshihiro Kimura\",\"set_type\":\"dj\",\"sort\":\"33\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"Yoshihiro Kimura\",\"ACT_LABEL\":\"Yoshihiro Kimura\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"33\"},{\"_row\":930,\"edition_id\":\"bondisco-2026\",\"act_label\":\"YUKAKU 'И\",\"set_type\":\"dj\",\"sort\":\"34\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"YUKAKU 'И\",\"ACT_LABEL\":\"YUKAKU 'И\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"34\"},{\"_row\":931,\"edition_id\":\"bondisco-2026\",\"act_label\":\"zundoko-disco\",\"set_type\":\"dj\",\"sort\":\"35\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"zundoko-disco\",\"ACT_LABEL\":\"zundoko-disco\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"35\"},{\"_row\":932,\"edition_id\":\"bondisco-2026\",\"act_label\":\"Wakoo\",\"set_type\":\"dj\",\"sort\":\"36\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"Wakoo\",\"ACT_LABEL\":\"Wakoo\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"36\"},{\"_row\":933,\"edition_id\":\"bondisco-2026\",\"act_label\":\"Gyo-shin\",\"set_type\":\"dj\",\"sort\":\"37\",\"editionId\":\"bondisco-2026\",\"EDITION_ID\":\"bondisco-2026\",\"actLabel\":\"Gyo-shin\",\"ACT_LABEL\":\"Gyo-shin\",\"setType\":\"dj\",\"SET_TYPE\":\"dj\",\"SORT\":\"37\"}],\"year\":\"2026\",\"edition\":\"\",\"date\":\"2026-08-22/2026-08-23\",\"location\":\"Sanda Athletic Park\",\"location_ja\":\"三田アスレチックパーク\",\"pref\":\"Hyogo\",\"venueId\":\"\",\"address\":\"兵庫県三田市波豆川282-1\",\"lat\":\"34.9197\",\"lng\":\"135.2892\",\"ticketUrl\":\"\",\"flyer\":\"\",\"status\":\"announced\",\"lineup\":[\"81blend\",\"Abu\",\"Acidclank\",\"chazuke\",\"Chikara Sueda\",\"Nakakuni\",\"Dasakura\",\"DENKIHITSUJI\",\"DJ FOX-X a.k.a TAKA MARL\",\"dogezaExp\",\"H.YOROZU\",\"Hexee\",\"HALO\",\"JUDO\",\"Kaito\",\"Kamenomisoshiru\",\"Kanemah\",\"kannQazuja\",\"kiku\",\"MADZINE\",\"Manchineel\",\"Masayoshi Sakaguchi\",\"MIYAKE\",\"MORRIS.K\",\"NK\",\"Raio\",\"Ryu2\",\"Sacai & Taichi Tsumori\",\"SHA_XUE\",\"space kanta\",\"SUETAKE\",\"Takahiro Oisi\",\"Yoshihiro Kimura\",\"YUKAKU 'И\",\"zundoko-disco\",\"Wakoo\",\"Gyo-shin\"]}]",
       "status": "published",
       "metadescription": "兵庫県三田市の森で13年目を迎えるDIYパーティBonDisco。高音質2フロアとプールを備え、全国から約40組が集結。土曜昼から日曜午後まで音が鳴り続ける。駐車場もテントも追加料金なし、18歳以下は入場無料の野外レイヴを紹介します。",
       "metaDescription": "兵庫県三田市の森で13年目を迎えるDIYパーティBonDisco。高音質2フロアとプールを備え、全国から約40組が集結。土曜昼から日曜午後まで音が鳴り続ける。駐車場もテントも追加料金なし、18歳以下は入場無料の野外レイヴを紹介します。",
       "lasteditedby": "editor",
       "lastEditedBy": "editor",
-      "lasteditedat": "2026-09-10T16:01:42.145Z",
-      "lastEditedAt": "2026-09-10T16:01:42.145Z",
+      "lasteditedat": "2026-10-19T07:55:57.197Z",
+      "lastEditedAt": "2026-10-19T07:55:57.197Z",
       "desc_en": "An independent, DIY party built entirely by the people who throw it. Now in its 13th year, it aims to create a space deep in the abundance of nature where anyone can escape the everyday to the fullest. The venue is Sanda Athletic Park in Sanda City, Hyogo Prefecture. Tucked into a forest far from the city's heatwave, two meticulously designed, high-fidelity floors are assembled, while two pools — one large, one small — cool down bodies worn out from dancing. Nearly 40 acts from across Japan, centered on the Kansai scene, come together as the sound keeps running from Saturday midday through Sunday afternoon. The only cost is the entrance fee: no extra charges for parking, tents or the pools, and admission is free for anyone 18 and under. The relationships built up over these 13 years are, quite literally, the lineup.",
       "location_ja": "三田アスレチックパーク",
       "country": "JP",
@@ -1998,12 +2127,15 @@
       "genre": "TECHNO, HOUSE",
       "desc": "TAKARAJIMAは、沖縄の海岸線を舞台に環境保護活動とエレクトロニック・ミュージックのプログラミングを融合させたフェスティバルだ。ビーチクリーン活動とDJセットを一体化させ、海洋保全をテーマにしながらアンダーグラウンド・ダンス・ミュージックを紹介するというユニークなフォーマットを生み出している。参加者は複数日にわたるプログラムを通じて、生態系の再生と音楽の祭典の両方に関わることになる。",
       "instagram": "https://www.instagram.com/takarajima_beachcleaningparty/",
-      "editions": "[{\"_row\":88,\"_editionId\":\"takarajima-beach-cleaning-party-2025\",\"_sheetRow\":{\"_row\":88,\"edition_id\":\"takarajima-beach-cleaning-party-2025\",\"festival_id\":\"takarajima-beach-cleaning-party\",\"edition\":\"2025\",\"date_start\":\"2025-11-29\",\"date_end\":\"2025-11-30\",\"pref\":\"Okinawa\",\"status\":\"finished\",\"editionId\":\"takarajima-beach-cleaning-party-2025\",\"EDITION_ID\":\"takarajima-beach-cleaning-party-2025\",\"festivalId\":\"takarajima-beach-cleaning-party\",\"FESTIVAL_ID\":\"takarajima-beach-cleaning-party\",\"EDITION\":\"2025\",\"DATE_START\":\"2025-11-29\",\"DATE_END\":\"2025-11-30\",\"PREF\":\"Okinawa\",\"STATUS\":\"finished\"},\"_lineupRows\":[],\"year\":\"2025\",\"edition\":\"5\",\"date\":\"2025-11-29/2025-11-30\",\"location\":\"Secret Location\",\"location_ja\":\"\",\"pref\":\"Okinawa\",\"venueId\":\"\",\"address\":\"\",\"lat\":\"\",\"lng\":\"\",\"ticketUrl\":\"\",\"flyer\":\"\",\"status\":\"finished\",\"lineup\":[]},{\"year\":\"2026\",\"edition\":\"6\",\"date\":\"2026-11-28/2026-11-29\",\"location\":\"Secret Location\",\"location_ja\":\"\",\"pref\":\"Okinawa\",\"venueId\":\"\",\"address\":\"\",\"lat\":\"\",\"lng\":\"\",\"ticketUrl\":\"\",\"flyer\":\"\",\"status\":\"announced\",\"lineup\":[]}]",
+      "editions": "[{\"_row\":87,\"_editionId\":\"takarajima-beach-cleaning-party-2025\",\"_sheetRow\":{\"_row\":87,\"edition_id\":\"takarajima-beach-cleaning-party-2025\",\"festival_id\":\"takarajima-beach-cleaning-party\",\"edition\":\"2025\",\"date_start\":\"2025-11-29\",\"date_end\":\"2025-11-30\",\"location\":\"Secret Location\",\"pref\":\"Okinawa\",\"status\":\"finished\",\"editionId\":\"takarajima-beach-cleaning-party-2025\",\"EDITION_ID\":\"takarajima-beach-cleaning-party-2025\",\"festivalId\":\"takarajima-beach-cleaning-party\",\"FESTIVAL_ID\":\"takarajima-beach-cleaning-party\",\"EDITION\":\"2025\",\"DATE_START\":\"2025-11-29\",\"DATE_END\":\"2025-11-30\",\"LOCATION\":\"Secret Location\",\"PREF\":\"Okinawa\",\"STATUS\":\"finished\"},\"_lineupRows\":[],\"year\":\"2025\",\"edition\":\"\",\"date\":\"2025-11-29/2025-11-30\",\"location\":\"Secret Location\",\"location_ja\":\"\",\"pref\":\"Okinawa\",\"venueId\":\"\",\"address\":\"\",\"lat\":\"\",\"lng\":\"\",\"ticketUrl\":\"\",\"flyer\":\"\",\"status\":\"finished\",\"lineup\":[]},{\"_row\":123,\"_editionId\":\"takarajima-beach-cleaning-party-2026\",\"_sheetRow\":{\"_row\":123,\"edition_id\":\"takarajima-beach-cleaning-party-2026\",\"festival_id\":\"takarajima-beach-cleaning-party\",\"edition\":\"2026\",\"date_start\":\"2026-11-28\",\"date_end\":\"2026-11-29\",\"location\":\"Secret Location\",\"pref\":\"Okinawa\",\"status\":\"announced\",\"editionId\":\"takarajima-beach-cleaning-party-2026\",\"EDITION_ID\":\"takarajima-beach-cleaning-party-2026\",\"festivalId\":\"takarajima-beach-cleaning-party\",\"FESTIVAL_ID\":\"takarajima-beach-cleaning-party\",\"EDITION\":\"2026\",\"DATE_START\":\"2026-11-28\",\"DATE_END\":\"2026-11-29\",\"LOCATION\":\"Secret Location\",\"PREF\":\"Okinawa\",\"STATUS\":\"announced\"},\"_lineupRows\":[],\"year\":\"2026\",\"edition\":\"\",\"date\":\"2026-11-28/2026-11-29\",\"location\":\"Secret Location\",\"location_ja\":\"\",\"pref\":\"Okinawa\",\"venueId\":\"\",\"address\":\"\",\"lat\":\"\",\"lng\":\"\",\"ticketUrl\":\"\",\"flyer\":\"\",\"status\":\"announced\",\"lineup\":[]}]",
       "status": "published",
+      "metadescription": "沖縄の海岸線で開催されるTAKARAJIMAは、ビーチクリーンとDJセットを融合させた異色のフェスティバル。海洋保全をテーマに、アンダーグラウンド・ダンス・ミュージックと生態系再生を同時に体験できる複数日プログラムの全貌を紹介します。",
+      "metaDescription": "沖縄の海岸線で開催されるTAKARAJIMAは、ビーチクリーンとDJセットを融合させた異色のフェスティバル。海洋保全をテーマに、アンダーグラウンド・ダンス・ミュージックと生態系再生を同時に体験できる複数日プログラムの全貌を紹介します。",
       "lasteditedby": "editor",
       "lastEditedBy": "editor",
-      "lasteditedat": "2026-10-17T08:50:44.287Z",
-      "lastEditedAt": "2026-10-17T08:50:44.287Z",
+      "lasteditedat": "2026-10-19T17:01:13.130Z",
+      "lastEditedAt": "2026-10-19T17:01:13.130Z",
+      "name_en": "TAKARAJIMA",
       "desc_en": "TAKARAJIMA combines environmental activism with electronic music programming on Okinawa's coastline. The festival integrates beach cleaning activities with DJ sets, creating a unique format that addresses ocean conservation while showcasing underground dance music. Participants engage in both ecological restoration and musical celebration across multiple days of programming.",
       "country": "JP",
       "name_ja": "タカラジマ"
@@ -2112,17 +2244,6 @@
     },
     {
       "_row": 63,
-      "id": "capsule",
-      "name": "CAPSULE-山中湖花火音楽祭",
-      "date": "2025-10-25/2025-10-26",
-      "city": "Yamanashi",
-      "genre": "TECHNO · HOUSE",
-      "desc": "CAPSULEの恒例となった湖畔のイベントが、富士山麓に帰ってくる。山中湖の澄んだ水面を舞台に、エレクトロニック・ミュージックと日本の伝統的な花火が融合する。日本を代表する自然の絶景を背景に、国内外のアーティストを迎えながらも、フェスティバルはあくまでも小規模でアットホームな雰囲気を守り続けている。",
-      "desc_en": "CAPSULE's annual lakeside gathering returns to Mount Fuji's foothills, combining electronic music with traditional Japanese fireworks displays over Yamanakako's pristine waters. The festival maintains its intimate scale while showcasing both domestic and international acts against one of Japan's most iconic natural backdrops.",
-      "country": "JP"
-    },
-    {
-      "_row": 64,
       "id": "one-park-riverfes",
       "name": "ONE PARK RIVERFES",
       "date": "2025-10-18/2025-10-19",
@@ -2133,7 +2254,7 @@
       "country": "JP"
     },
     {
-      "_row": 65,
+      "_row": 64,
       "id": "lost-find",
       "type": "festival",
       "name": "Lost&Find",
@@ -2163,7 +2284,7 @@
       "location_ja": "龍山秘密村"
     },
     {
-      "_row": 66,
+      "_row": 65,
       "id": "asagiri-jam",
       "name": "ASAGIRI JAM",
       "date": "2025-10-18/2025-10-19",
@@ -2174,7 +2295,7 @@
       "country": "JP"
     },
     {
-      "_row": 67,
+      "_row": 66,
       "id": "dream-festival",
       "name": "DREAM FESTIVAL",
       "date": "2025-10-18/2025-10-19",
@@ -2185,7 +2306,7 @@
       "country": "JP"
     },
     {
-      "_row": 68,
+      "_row": 67,
       "id": "treks",
       "type": "rave",
       "name": "TREKs",
@@ -2218,18 +2339,7 @@
       "location_ja": "大黒谷キャンプ場"
     },
     {
-      "_row": 69,
-      "id": "circle",
-      "name": "Circle",
-      "date": "2025-10-17/2025-10-19",
-      "city": "Nagano",
-      "genre": "TECHNO · HOUSE · MINIMAL",
-      "desc": "Circleは長野の自然に囲まれた環境で開催され、アンダーグラウンド・エレクトロニック・ミュージックに焦点を当てた親密な集いを提供する。フェスティバルは、山間の人里離れたロケーションで丁寧にキュレーションされたラインナップを通じて、コミュニティとつながりを重視している。",
-      "desc_en": "Circle takes place in Nagano's natural surroundings, offering an intimate gathering focused on underground electronic music. The festival emphasizes community and connection through carefully curated lineups in a more secluded mountain setting.",
-      "country": "JP"
-    },
-    {
-      "_row": 70,
+      "_row": 68,
       "id": "ishinoko",
       "name": "ishinoko",
       "date": "2025-10-11/2025-10-13",
@@ -2240,7 +2350,7 @@
       "country": "JP"
     },
     {
-      "_row": 71,
+      "_row": 69,
       "id": "music",
       "name": "＋music",
       "date": "2025-10-11/2025-10-12",
@@ -2251,7 +2361,7 @@
       "country": "JP"
     },
     {
-      "_row": 72,
+      "_row": 70,
       "id": "each-story",
       "type": "festival",
       "name": "EACH STORY",
@@ -2283,7 +2393,7 @@
       "location_ja": "五光牧場オートキャンプ場"
     },
     {
-      "_row": 73,
+      "_row": 71,
       "id": "rare-groove",
       "name": "Rare Groove",
       "date": "2025-10-04/2025-10-05",
@@ -2294,7 +2404,7 @@
       "country": "JP"
     },
     {
-      "_row": 74,
+      "_row": 72,
       "id": "delta-commit",
       "name": "DELTA COMMIT",
       "date": "2025-10-04/2025-10-05",
@@ -2305,7 +2415,7 @@
       "country": "JP"
     },
     {
-      "_row": 75,
+      "_row": 73,
       "id": "ffkt",
       "type": "festival",
       "name": "FFKT",
@@ -2337,18 +2447,7 @@
       "country": "JP"
     },
     {
-      "_row": 76,
-      "id": "festival40010",
-      "name": "Festival40010",
-      "date": "2025-09-26/2025-09-28",
-      "city": "Kochi",
-      "genre": "TECHNO · HOUSE",
-      "desc": "Festival40010は高知を代表するアンダーグラウンド・エレクトロニック・ミュージックの祭典として機能しており、これまで見過ごされがちだった四国のダンスミュージック・シーンにアーティストとオーディエンスを呼び込んでいる。フェスティバルは親密な規模感を保ちながら、複数のステージで国内外のアクトを紹介している。",
-      "desc_en": "Festival40010 operates as Kochi's primary underground electronic music gathering, drawing artists and crowds to Shikoku's often-overlooked dance music scene. The festival maintains an intimate scale while showcasing both domestic and international acts across multiple stages.",
-      "country": "JP"
-    },
-    {
-      "_row": 77,
+      "_row": 74,
       "id": "gampeki",
       "name": "GAMPEKI",
       "date": "2025-09-20/2025-09-21",
@@ -2359,29 +2458,7 @@
       "country": "JP"
     },
     {
-      "_row": 78,
-      "id": "sangenjaya-music-festival",
-      "name": "SANGENJAYA MUSIC FESTIVAL",
-      "date": "2025-09-20/2025-09-21",
-      "city": "Tokyo",
-      "genre": "TECHNO · HOUSE · MIX",
-      "desc": "三軒茶屋ミュージックフェスティバルは、東京でも屈指のクリエイティブなエリアという親密な空間に、街のエレクトロニック・ミュージック・コミュニティを集結させる。複数の会場を舞台に、実力派から新進気鋭のアーティストまでが出演し、現代日本のダンスミュージック・カルチャーを象徴する多様なアンダーグラウンド・シーンを映し出す。",
-      "desc_en": "Sangenjaya Music Festival brings together Tokyo's electronic music community in the intimate setting of one of the city's most creative neighborhoods. The festival showcases both established and emerging artists across multiple venues, reflecting the diverse underground scene that defines modern Japanese dance music culture.",
-      "country": "JP"
-    },
-    {
-      "_row": 79,
-      "id": "okiraku-camp",
-      "name": "OKIRAKU CAMP",
-      "date": "2025-09-13/2025-09-14",
-      "city": "Wakayama",
-      "genre": "TECHNO · PSYCHEDELIC",
-      "desc": "OKIRAKU CAMPは、和歌山の自然の中で、肩肘張らないアプローチによる電子音楽のプログラミングを提案する。このフェスティバルは、アンダーグラウンドなダンス・ミュージックとアンビエント／実験的なサウンドのバランスを取り、ピークタイムのエネルギーと瞑想的な時間の両方が入り込める空間を作り出している。そのリラックスした雰囲気は、都市部のクラブカルチャーの激しさに代わる何かを求めるアーティストや参加者たちを惹きつけている。",
-      "desc_en": "OKIRAKU CAMP presents a laid-back approach to electronic music programming in Wakayama's natural setting. The festival balances underground dance music with ambient and experimental sounds, creating space for both peak-time energy and contemplative moments. Its relaxed atmosphere attracts artists and attendees seeking an alternative to the intensity of urban club culture.",
-      "country": "JP"
-    },
-    {
-      "_row": 80,
+      "_row": 75,
       "id": "pure-rave",
       "name": "PURE RAVE",
       "date": "2025-09-06/2025-09-08",
@@ -2393,18 +2470,7 @@
       "country": "JP"
     },
     {
-      "_row": 81,
-      "id": "kyoumei-gathering",
-      "name": "KYOUMEI GatherinG",
-      "date": "2025-08-29/2025-08-31",
-      "city": "Hokkaido",
-      "genre": "TECHNO · PSYCHEDELIC",
-      "desc": "KYOUMEI GatherinGは、テクノのインダストリアルな核心と日本の実験的エレクトロニックの伝統とをつなぐ、北海道発のブリッジとして機能している。このフェスティバルは、商業的なスペクタクルよりも空間音響とコミュニティの共鳴を重視した、親密な集まりをキュレーションしている。北の地に位置することで、この島特有の季節のリズムに沿った、長時間にわたる夜間プログラムが可能となっている。",
-      "desc_en": "KYOUMEI GatherinG operates as Hokkaido's bridge between techno's industrial core and Japan's experimental electronic traditions. The festival curates intimate gatherings that emphasize spatial acoustics and community resonance over commercial spectacle. Its northern location allows for extended nocturnal programming that follows the island's unique seasonal rhythms.",
-      "country": "JP"
-    },
-    {
-      "_row": 82,
+      "_row": 76,
       "id": "one-music-camp",
       "name": "ONE MUSIC CAMP",
       "date": "2025-08-23/2025-08-24",
@@ -2415,7 +2481,7 @@
       "country": "JP"
     },
     {
-      "_row": 83,
+      "_row": 77,
       "id": "sawagi-festival",
       "type": "festival",
       "name": "Sawagi Festival",
@@ -2446,18 +2512,7 @@
       "location_ja": "ステキな村キャンプ場"
     },
     {
-      "_row": 84,
-      "id": "specialflower-festival",
-      "name": "SPECIALFLOWER FESTIVAL",
-      "date": "2025-08-10/2025-08-11",
-      "city": "Ibaraki",
-      "genre": "TECHNO · HOUSE · PSYCHEDELIC",
-      "desc": "SPECIALFLOWER FESTIVALは、茨城の自然に囲まれた環境の中で日本のアンダーグラウンド・エレクトロニック・ミュージック・コミュニティを結集させるフェスティバルだ。アーティストとオーディエンスの親密なつながりを重視し、複数のステージにわたってベテランから新鋭まで幅広いアクトをフィーチャーしている。一貫した美学的ビジョンを保ちながらエレクトロニックの幅広いスペクトラムをカバーする、丁寧にキュレーションされたラインナップで知られている。",
-      "desc_en": "SPECIALFLOWER FESTIVAL brings together Japan's underground electronic music community in Ibaraki's natural surroundings. The festival emphasizes intimate connections between artists and audience, featuring both established and emerging acts across multiple stages. Known for its carefully curated lineup that spans the electronic spectrum while maintaining a cohesive aesthetic vision.",
-      "country": "JP"
-    },
-    {
-      "_row": 85,
+      "_row": 78,
       "id": "euphoria",
       "name": "Euphoria",
       "date": "2025-07-11/2025-07-12",
@@ -2468,7 +2523,7 @@
       "country": "JP"
     },
     {
-      "_row": 86,
+      "_row": 79,
       "id": "orbit",
       "type": "festival",
       "name": "ORBIT",
@@ -2497,7 +2552,7 @@
       "country": "JP"
     },
     {
-      "_row": 87,
+      "_row": 80,
       "id": "intergalactic",
       "type": "rave",
       "name": "Intergalactic Festival",
@@ -2530,7 +2585,7 @@
       "country": "JP"
     },
     {
-      "_row": 88,
+      "_row": 81,
       "id": "balance",
       "name": "Balance",
       "date": "2025-05-16/2025-05-18",
@@ -2541,7 +2596,7 @@
       "country": "JP"
     },
     {
-      "_row": 89,
+      "_row": 82,
       "id": "axiom",
       "name": "axiom",
       "date": "2025-04-19/2025-04-20",
@@ -2552,7 +2607,7 @@
       "country": "JP"
     },
     {
-      "_row": 90,
+      "_row": 83,
       "id": "lab",
       "name": "LAB.vol.6",
       "date": "2025-03-15/2025-03-16",
@@ -2563,7 +2618,7 @@
       "country": "JP"
     },
     {
-      "_row": 91,
+      "_row": 84,
       "id": "bonna-pot",
       "name": "Bonna Pot",
       "date": "2024-11-08/2024-11-10",
@@ -2574,7 +2629,7 @@
       "country": "JP"
     },
     {
-      "_row": 92,
+      "_row": 85,
       "id": "parallel-world",
       "type": "rave",
       "name": "PARALLEL WORLD",
@@ -2600,18 +2655,7 @@
       "country": "JP"
     },
     {
-      "_row": 93,
-      "id": "dom",
-      "name": "DOM24",
-      "date": "2024-10-27",
-      "city": "Tokyo",
-      "genre": "TECHNO · HOUSE · LIVE",
-      "desc": "DOM24は、進化を続ける東京のアンダーグラウンド・シーンの中で最先端の電子音楽を紹介するという、東京のコミットメントを体現するフェスティバルだ。複数のステージにわたり国内外のアーティストを一堂に集め、日本の活況を呈するシーンにおける実力派とエマージング・タレントの双方にスポットを当てている。",
-      "desc_en": "DOM24 represents Tokyo's commitment to showcasing cutting-edge electronic music within the city's evolving underground landscape. The festival brings together local and international artists across multiple stages, emphasizing both established names and emerging talent from Japan's thriving scene.",
-      "country": "JP"
-    },
-    {
-      "_row": 94,
+      "_row": 86,
       "id": "wormhole",
       "name": "wormhole",
       "date": "2024-10-26/2024-10-27",
@@ -2622,18 +2666,7 @@
       "country": "JP"
     },
     {
-      "_row": 95,
-      "id": "unknown",
-      "name": "Unknown",
-      "date": "2024-10-18/2024-10-20",
-      "city": "Shizuoka",
-      "genre": "TECHNO · EXPERIMENTAL · AMBIENT",
-      "desc": "Unknownは、静岡を拠点に実験的電子音楽を発信する先進的なプラットフォームとして活動しており、テクノのハードなエッジとアンビエント／実験的な領域を橋渡しする、緻密にキュレーションされたラインナップを提示している。フェスティバルは親密な規模感を保ちながら、日本のアンダーグラウンド・シーンと、電子音楽の境界を押し広げる海外アーティストとのつながりを育んでいる。",
-      "desc_en": "Unknown operates as a forward-thinking platform for experimental electronic music in Shizuoka, presenting carefully curated lineups that bridge techno's harder edges with ambient and experimental territories. The festival maintains an intimate scale while fostering connections between Japan's underground scenes and international artists pushing electronic music's boundaries.",
-      "country": "JP"
-    },
-    {
-      "_row": 96,
+      "_row": 87,
       "id": "detox",
       "type": "rave",
       "name": "DETOX",
@@ -2664,7 +2697,7 @@
       "country": "JP"
     },
     {
-      "_row": 97,
+      "_row": 88,
       "id": "super-rave-kitakagaya",
       "type": "festival",
       "name": "SUPER RAVE KITAKAGAYA",
@@ -2682,7 +2715,7 @@
       "lastEditedAt": "2026-09-14T18:30:44.192Z"
     },
     {
-      "_row": 98,
+      "_row": 89,
       "id": "denki-bodhisattva",
       "type": "rave",
       "name": "DENKI BODHISATTVA",
@@ -2714,7 +2747,7 @@
       "name_ja": "デンキボサツ"
     },
     {
-      "_row": 99,
+      "_row": 90,
       "id": "sangenjaya-art-music-festival",
       "type": "festival",
       "name": "SANGENJAYA ART MUSIC FESTIVAL",
@@ -2741,6 +2774,105 @@
       "location_ja": "三軒茶屋駅周辺",
       "country": "JP",
       "name_ja": "サンゲンジャヤ"
+    },
+    {
+      "_row": 91,
+      "id": "prox",
+      "type": "festival",
+      "name": "PROX",
+      "date": "2026-11-07/2026-11-07",
+      "location": "DAN OISO",
+      "city": "Kanagawa",
+      "address": "神奈川県中郡大磯町国府本郷１９５２−１",
+      "lat": "35.305",
+      "lng": "139.2783",
+      "image": "images/festivals/prox.webp",
+      "flyer": "images/festivals/prox-flyer.webp",
+      "genre": "HOUSE, LIVE, OTHERS",
+      "desc": "PROXは、畑をリニューアルして生まれた神奈川・大磯のDAN OISOで、昼から翌朝まで続く音楽フェス。日中のライブを経て、23時からは屋根付きのアーチ状ステージでDJが主役に。SUNGA、Dazzle Drums、カワムラユキらが音をつなぎ、朝5時まで踊り明かします。キャンプでも、夜からの参加でも。かつて農地だった場所で、音楽と土地、異なるシーンが交わる一夜です。",
+      "url": "https://prox-fest.jp/",
+      "ticketurl": "https://ticketme.io/event/group/04aed4f2-15e5-45cd-9ba0-126edde884d2/4a0e1302-ef83-4fb3-ab49-a0d8548282d2",
+      "ticketUrl": "https://ticketme.io/event/group/04aed4f2-15e5-45cd-9ba0-126edde884d2/4a0e1302-ef83-4fb3-ab49-a0d8548282d2",
+      "instagram": "https://www.instagram.com/prox_fest/",
+      "lineup": "HUGEN, Liberal a.k.a. Toshiki Iwama, Fried Banana Shop, IN-KYA in Canada, Yasashii Mirai, rice water Groove, Contrail Club, SHITABA from Tha Omedetaz, HATCH from Umeda Cypher, Yume (BOY), MAHLIQ, sunga, Dazzle Drums, Yuki Kawamura, BANANA-CHAN, Hiroki Uzawa, msms, YOSHITAKAKONDO, DJ Komogi, mana",
+      "editions": "[]",
+      "status": "published",
+      "metadescription": "神奈川・大磯の畑跡地DAN OISOで昼から翌朝まで続く音楽フェスPROX。23時からは屋根付きアーチステージでDJがスタート、SUNGA、Dazzle Drums、カワムラユキらが朝5時まで。キャンプでも夜からの参加でも楽しめる、音楽と土地が交わる一夜。",
+      "metaDescription": "神奈川・大磯の畑跡地DAN OISOで昼から翌朝まで続く音楽フェスPROX。23時からは屋根付きアーチステージでDJがスタート、SUNGA、Dazzle Drums、カワムラユキらが朝5時まで。キャンプでも夜からの参加でも楽しめる、音楽と土地が交わる一夜。",
+      "lasteditedby": "editor",
+      "lastEditedBy": "editor",
+      "lasteditedat": "2026-10-19T16:35:56.313Z",
+      "lastEditedAt": "2026-10-19T16:35:56.313Z",
+      "desc_en": "PROX is a music festival running from midday through to the following morning at DAN OISO, a site in Oiso, Kanagawa, born out of a renovated farm plot. After a daytime run of live sets, the focus shifts at 23:00 to the covered arch-shaped stage, where DJs take over. SUNGA, Dazzle Drums, カワムラユキ and others link up the sounds as the dancing carries on until 5 a.m. Come to camp, or just turn up for the night. On land that was once farmland, it's a single night where music, place and different scenes intersect.",
+      "country": "JP",
+      "name_ja": "プロックス"
+    },
+    {
+      "_row": 92,
+      "id": "soul-beat-asia",
+      "type": "festival",
+      "name": "橋の下世界音楽祭",
+      "date": "2026-11-20/2026-11-22",
+      "location": "Toyota Obridge",
+      "city": "AICHI",
+      "address": "愛知県豊田市千石町6丁目",
+      "lat": "35.0848",
+      "lng": "137.1656",
+      "image": "images/festivals/soul-beat-asia.webp",
+      "flyer": "images/festivals/soul-beat-asia-flyer.webp",
+      "genre": "LIVE",
+      "desc": "愛知県豊田市の豊田大橋下・千石公園にて開催される、完全 DIY 精神に基づく自給自足型の野外音楽フェスティバルです。パンクバンド TURTLE ISLAND をはじめとする有志が主宰。「伝統」「アジア」「土着」をテーマに、日本や世界各地の伝統芸能、民謡、アンダーグラウンド・ミュージックからアートまでが交差し、手作りの舞台や露店が立ち並ぶ独自のコミュニティ空間を形成します。投げ銭制（入場無料）を基本とし、投げ銭や協力金で運営される、自由で力強いエネルギーに満ちた唯一無二の草の根型カルチャー・イベントです。",
+      "url": "https://2026.soulbeatasia.com/",
+      "ticketurl": "https://eplus.jp/sf/detail/4134150001?P6=001&P1=0402&P59=1",
+      "ticketUrl": "https://eplus.jp/sf/detail/4134150001?P6=001&P1=0402&P59=1",
+      "instagram": "https://www.instagram.com/soul_beat_asia/",
+      "lineup": "TURTLE ISLAND, OKI DUB AINU BAND, Awa Odori Nagoya Taikoren, Yuta Orisaka Band, DEATH SIDE, SAICOBAB, DEEPCOUNT, ROTARY BEGINNERS, Darthreider & DJ Oshow, Noripan, THE JINSEIS, T-Jiros, Oni no Migiude, neco nemuru, TV Continental Ondo, GIANT STEPS, Hosenkai, Hashinoshita Fujinkai",
+      "editions": "[]",
+      "status": "published",
+      "metadescription": "愛知県豊田市の豊田大橋下・千石公園で開かれる橋の下世界音楽祭を紹介。TURTLE ISLANDら有志が主宰し、伝統・アジア・土着をテーマに民謡からアンダーグラウンドまで交差。入場無料の投げ銭制で運営される完全DIYの草の根フェスの魅力とは。",
+      "metaDescription": "愛知県豊田市の豊田大橋下・千石公園で開かれる橋の下世界音楽祭を紹介。TURTLE ISLANDら有志が主宰し、伝統・アジア・土着をテーマに民謡からアンダーグラウンドまで交差。入場無料の投げ銭制で運営される完全DIYの草の根フェスの魅力とは。",
+      "lasteditedby": "editor",
+      "lastEditedBy": "editor",
+      "lasteditedat": "2026-10-19T16:49:03.233Z",
+      "lastEditedAt": "2026-10-19T16:49:03.233Z",
+      "name_en": "SOUL BEAT ASIA",
+      "desc_en": "Held beneath the Toyota Ohashi Bridge in Sengoku Park, Toyota City, Aichi Prefecture, this is a self-sufficient open-air music festival built entirely on a DIY ethos. It is organized by a collective of volunteers led by the punk band TURTLE ISLAND. Taking \"tradition,\" \"Asia,\" and \"the indigenous\" as its themes, the festival brings together traditional performing arts and folk music from Japan and around the world, underground music, and art, forming a singular community space lined with handmade stages and street stalls. Admission is free, with the event running on a donation basis — sustained by tips and contributions from those who attend. It is a one-of-a-kind grassroots cultural gathering, overflowing with a free and powerful energy.",
+      "location_ja": "豊田大橋",
+      "country": "JP",
+      "name_ja": "ハシノシタセカイオンガクサイ"
+    },
+    {
+      "_row": 93,
+      "id": "resonance",
+      "type": "festival",
+      "name": "Resonance",
+      "date": "2026-11-22/2026-11-23",
+      "location": "OKS KAWAGUCHI CAMPUS",
+      "city": "Saitama",
+      "address": "埼玉県川口市領家5丁目4-1",
+      "lat": "35.7951",
+      "lng": "139.7523",
+      "image": "images/festivals/resonance.webp",
+      "flyer": "images/festivals/resonance-flyer.webp",
+      "desc": "Resonanceは、ラテン語の resonare（響き返す）に由来し、その語源の通り、外界から受けた刺激が内面へと響き、新たな調和を生み出すプロセスそのものを芸術として表現することを理念としています。クラブカルチャー、インスタレーションアート、そして神経科学を横断するこの試みは、イベントを単に「鑑賞するもの」から「知覚そのものの体験」へと拡張します。川口の工場地帯に突如出現する、3,000坪を有する自然豊かな大泉工場「OKS KAWAGUCHI CAMPUS」の開放的な空間の中で、音と身体が共鳴する特別な2日間をお届けします。",
+      "url": "https://oizumi-2026.resonance-lab.jp/",
+      "ticketurl": "https://ja.ra.co/events/2542714",
+      "ticketUrl": "https://ja.ra.co/events/2542714",
+      "instagram": "https://www.instagram.com/resonance.jpn/",
+      "lineup": "lisa-mizuno, LOIF, PERYL, Maryama Luiccioni, Fried Banana Shop, SAKURA",
+      "editions": "[]",
+      "status": "published",
+      "metadescription": "川口の工場地帯に現れる3,000坪の自然豊かな大泉工場OKS KAWAGUCHI CAMPUSで開催されるResonance。クラブカルチャー、インスタレーションアート、神経科学を横断し、音と身体が共鳴する知覚体験へ。鑑賞を超える特別な2日間。",
+      "metaDescription": "川口の工場地帯に現れる3,000坪の自然豊かな大泉工場OKS KAWAGUCHI CAMPUSで開催されるResonance。クラブカルチャー、インスタレーションアート、神経科学を横断し、音と身体が共鳴する知覚体験へ。鑑賞を超える特別な2日間。",
+      "lasteditedby": "editor",
+      "lastEditedBy": "editor",
+      "lasteditedat": "2026-10-19T16:59:39.097Z",
+      "lastEditedAt": "2026-10-19T16:59:39.097Z",
+      "name_en": "Resonance",
+      "desc_en": "Resonance takes its name from the Latin *resonare*—to sound back—and, true to that etymology, is built on the idea of treating the process itself as art: stimuli received from the outside world reverberating inward to generate a new sense of harmony. Cutting across club culture, installation art, and neuroscience, the project expands the event from something merely \"to be viewed\" into an experience of perception itself. Emerging suddenly out of Kawaguchi's factory district, the lush, 3,000-tsubo grounds of Oizumi Factory's \"OKS KAWAGUCHI CAMPUS\" provide the open setting for two special days in which sound and body resonate as one.",
+      "location_ja": "大泉工場",
+      "country": "JP",
+      "name_ja": "レゾナンス"
     }
   ],
   "ARTISTS": [
@@ -4343,15 +4475,16 @@
       "status": "published",
       "metadescription": "兵庫県三田市の森で26時間踊り続けるDIYパーティBON DISCOが13年目の夏へ。8月22日正午から翌日午後まで、高音質2フロアに約40組が出演。プールやヨガ、フードも充実。入場料7000円、18歳以下無料で駐車・テント代も不要。",
       "metaDescription": "兵庫県三田市の森で26時間踊り続けるDIYパーティBON DISCOが13年目の夏へ。8月22日正午から翌日午後まで、高音質2フロアに約40組が出演。プールやヨガ、フードも充実。入場料7000円、18歳以下無料で駐車・テント代も不要。",
-      "body": "<h2><span class=\"ql-font-mono ql-size-large\">兵庫・三田の森で、夏の週末を通しで踊るDIYパーティ</span></h2><p>8月22日の正午に始まり、翌23日の午後まで続く。自分たちの手で創り上げるインディペンデントなDIYパーティ「BON DISCO」が、兵庫県三田市の三田アスレチックパークで13年目の夏を迎える。</p><p><img src=\"https://lh3.googleusercontent.com/d/1QN2QNCMXsG-RmOt51ynnIWFPw86NDiwF=w2000\" alt=\"BON DISCO 2025のダンスフロアと参加者\" data-layout=\"contained\" data-zoom=\"1\" data-x=\"50\" data-y=\"50\"></p><h2><em class=\"ql-size-large ql-font-bebas\">BON DISCOとは</em></h2><p>自分たちの手で創り上げる、インディペンデントなDIYパーティ。豊かな自然の中で、誰もが最大限に日常から解放される空間を目指し、2026年で13年目を迎える。</p><p>大きな資本にも、流行にも寄りかからない。13年のあいだにBON DISCOが築いてきた関係が、そのままこのパーティの形になっている。</p><p><img src=\"https://lh3.googleusercontent.com/d/1xmtAAfocLc6ReqaJuWD6Jz4O5J6RDuPL=w2000\" alt=\"BON DISCO 2024のダンスフロアと参加者\" data-layout=\"contained\" data-zoom=\"1\" data-x=\"50\" data-y=\"50\"></p><h2><em class=\"ql-size-large ql-font-mono\">都会の熱波から離れた、森とプールのロケーション</em><strong><br></strong></h2><p><span class=\"ql-font-condensed\">会場は昨年に続き2年目となる、兵庫県三田市の三田アスレチックパーク。木々に囲まれた環境そのものが、このパーティの体験を形づくっている。</span></p><p><span class=\"ql-font-condensed\">魅力のひとつが、プールエリアだ。ゆったり涼める通常プールと、小さな子どもも安心して遊べる浅いプールの2種類を完備し、シャワー設備も整っている。今年はサウナやプールサイドでのDJはなく、森の息吹を静かに感じる、純粋なリラックス・スペースとして開かれる。</span></p><p><span class=\"ql-font-condensed\">踊り疲れた身体を水で冷やし、また音へ戻っていく。この往復が、真夏のBON DISCOの過ごし方だ。</span></p><p><img src=\"https://lh3.googleusercontent.com/d/1ywChGlIVARZwaNfc8IfkiMICd8XI8-PM=w2000\" alt=\"会場となる三田アスレチックスのプールサイド\" data-layout=\"contained\" data-zoom=\"1\" data-x=\"50\" data-y=\"50\"></p><h2><em class=\"ql-font-bebas\">趣向を凝らした2フロアに40組近くが集まる。</em></h2><p>高音質にこだわった2つのフロアが、より深く、没入感のある音楽体験へと導いていく。出演は関西を中心に、全国から集まる40組近いアーティストたち。</p><p>フロアの外では、Naokoによるヨガのセッションが開かれ、電子原人、佐々木ビル（Yabar食堂&amp;太陽の村）、Vamos Tacosがフードを並べる。音楽と休息と食事が、同じ森の中で地続きになっている。</p><p><img src=\"https://lh3.googleusercontent.com/d/18gYtK2UBRPWTh2SMgh5jH77OCPe8IXFb=w2000\"></p><h2><span class=\"ql-size-large ql-font-mono\">INFORMATION</span></h2><p>入場料は¥7,000。18歳以下は無料。</p><p>費用はエントランス料金のみで、駐車料金、テント料金、プールの利用料は一切発生しない。有料ロッジでの宿泊を希望する場合のみ、三田アスレチックへの直接の事前予約が必要となる。</p><p>踊って、冷やして、また踊る。<br> その繰り返しの先に、13年目の夏がある。</p><p>◯ Dates / 日程 2026.08.22 (Sat) 12:00 - 08.23 (Sun) afternoon<br>◯ Venue / 会場 Sanda Athletic Park, Sanda, Hyogo<br>🎫 Entrance ¥7,000（18歳以下無料）</p>",
+      "body": "<h2><span class=\"ql-size-large ql-font-mono\">兵庫・三田の森で、夏の週末を通しで踊るDIYパーティ</span></h2><p>8月22日の正午に始まり、翌23日の午後まで続く。自分たちの手で創り上げるインディペンデントなDIYパーティ「BON DISCO」が、兵庫県三田市の三田アスレチックパークで13年目の夏を迎える。</p><p><img src=\"https://lh3.googleusercontent.com/d/1QN2QNCMXsG-RmOt51ynnIWFPw86NDiwF=w2000\" alt=\"BON DISCO 2025のダンスフロアと参加者\" data-layout=\"contained\" data-zoom=\"1\" data-x=\"50\" data-y=\"50\"></p><h2><em class=\"ql-font-bebas ql-size-large\">BON DISCOとは</em></h2><p>自分たちの手で創り上げる、インディペンデントなDIYパーティ。豊かな自然の中で、誰もが最大限に日常から解放される空間を目指し、2026年で13年目を迎える。</p><p>大きな資本にも、流行にも寄りかからない。13年のあいだにBON DISCOが築いてきた関係が、そのままこのパーティの形になっている。</p><p><img src=\"https://lh3.googleusercontent.com/d/1xmtAAfocLc6ReqaJuWD6Jz4O5J6RDuPL=w2000\" alt=\"BON DISCO 2024のダンスフロアと参加者\" data-layout=\"contained\" data-zoom=\"1\" data-x=\"50\" data-y=\"50\"></p><h2><em class=\"ql-font-mono ql-size-large\">都会の熱波から離れた、森とプールのロケーション</em><strong><br></strong></h2><p><span class=\"ql-font-condensed\">会場は昨年に続き2年目となる、兵庫県三田市の三田アスレチックパーク。木々に囲まれた環境そのものが、このパーティの体験を形づくっている。</span></p><p><span class=\"ql-font-condensed\">魅力のひとつが、プールエリアだ。ゆったり涼める通常プールと、小さな子どもも安心して遊べる浅いプールの2種類を完備し、シャワー設備も整っている。今年はサウナやプールサイドでのDJはなく、森の息吹を静かに感じる、純粋なリラックス・スペースとして開かれる。</span></p><p><span class=\"ql-font-condensed\">踊り疲れた身体を水で冷やし、また音へ戻っていく。この往復が、真夏のBON DISCOの過ごし方だ。</span></p><p><img src=\"https://lh3.googleusercontent.com/d/1ywChGlIVARZwaNfc8IfkiMICd8XI8-PM=w2000\" alt=\"会場となる三田アスレチックスのプールサイド\" data-layout=\"contained\" data-zoom=\"1\" data-x=\"50\" data-y=\"50\"></p><h2><em class=\"ql-font-bebas\">趣向を凝らした2フロアに40組近くが集まる。</em></h2><p>高音質にこだわった2つのフロアが、より深く、没入感のある音楽体験へと導いていく。出演は関西を中心に、全国から集まる40組近いアーティストたち。</p><p>フロアの外では、Naokoによるヨガのセッションが開かれ、電子原人、佐々木ビル（Yabar食堂&amp;太陽の村）、Vamos Tacosがフードを並べる。音楽と休息と食事が、同じ森の中で地続きになっている。</p><p><img src=\"https://lh3.googleusercontent.com/d/18gYtK2UBRPWTh2SMgh5jH77OCPe8IXFb=w2000\"></p><h2><span class=\"ql-font-mono ql-size-large\">INFORMATION</span></h2><p>入場料は¥7,000。18歳以下は無料。</p><p>費用はエントランス料金のみで、駐車料金、テント料金、プールの利用料は一切発生しない。有料ロッジでの宿泊を希望する場合のみ、三田アスレチックへの直接の事前予約が必要となる。</p><p>踊って、冷やして、また踊る。<br> その繰り返しの先に、13年目の夏がある。</p><p>◯ Dates / 日程 2026.08.22 (Sat) 12:00 - 08.23 (Sun) afternoon<br>◯ Venue / 会場 Sanda Athletic Park, Sanda, Hyogo<br>🎫 Entrance ¥7,000（18歳以下無料）</p>",
       "lasteditedby": "editor",
       "lastEditedBy": "editor",
-      "lasteditedat": "2026-10-14T13:17:27.899Z",
-      "lastEditedAt": "2026-10-14T13:17:27.899Z",
+      "lasteditedat": "2026-10-19T07:27:21.255Z",
+      "lastEditedAt": "2026-10-19T07:27:21.255Z",
       "title_en": "26 Hours in the Woods of Sanda, Hyogo: DIY Party BON DISCO Heads Into Its 13th Summer",
       "excerpt_en": "Set deep in the woods of Sanda, Hyōgo, the DIY party BON DISCO — where dancing runs from noon straight through to the following afternoon — is heading into its 13th summer. Nearly 40 acts from across Japan, two floors, and a pool to cool your body down before diving back into the sound: this is a way of spending time that only midsummer can offer.",
       "category": "FESTIVAL&RAVE",
       "author": "TECHNO JAPAN",
+      "festivalid": "bondisco",
       "body_en": "<h2><span class=\"ql-font-mono ql-size-large\">A DIY party in the forests of Sanda, Hyogo — dancing straight through a summer weekend</span></h2><p>It kicks off at noon on August 22 and runs until the afternoon of the 23rd. \"BON DISCO,\" an independent DIY party built entirely by its own crew, greets its 13th summer at Sanda Athletic Park in Sanda, Hyogo.</p><p><img src=\"https://lh3.googleusercontent.com/d/1QN2QNCMXsG-RmOt51ynnIWFPw86NDiwF=w2000\" alt=\"BON DISCO 2025のダンスフロアと参加者\" class=\"\" data-layout=\"contained\" data-zoom=\"1\" data-x=\"50\" data-y=\"50\" style=\"--crop-zoom: 1; --crop-x: 50%; --crop-y: 50%;\"></p><h2><em class=\"ql-size-large ql-font-bebas\">What is BON DISCO</em></h2><p>An independent DIY party built with their own hands. Surrounded by abundant nature, it aims to create a space where anyone can break free from the everyday as fully as possible — and in 2026 it reaches its 13th year.</p><p>No leaning on big capital, no leaning on trends. The relationships BON DISCO has built up over 13 years are, quite literally, the shape this party takes.</p><p><img src=\"https://lh3.googleusercontent.com/d/1xmtAAfocLc6ReqaJuWD6Jz4O5J6RDuPL=w2000\" class=\"\" data-layout=\"contained\" data-zoom=\"1\" data-x=\"50\" data-y=\"50\" alt=\"BON DISCO 2024のダンスフロアと参加者\" style=\"--crop-zoom: 1; --crop-x: 50%; --crop-y: 50%;\"></p><h2><em class=\"ql-size-large ql-font-mono\">A setting of forest and pools, far from the city's heatwave</em><strong><br></strong></h2><p><span class=\"ql-font-condensed\">The venue is Sanda Athletic Park in Sanda, Hyogo — the second year running after last year. The tree-lined environment itself shapes the experience of this party.</span></p><p><span class=\"ql-font-condensed\">One of its charms is the pool area. There are two pools — a regular one for a leisurely cool-down, and a shallow one where even small children can play safely — plus full shower facilities. This year there will be no sauna and no poolside DJs; instead it opens as a pure relaxation space where you can quietly take in the breath of the forest.</span></p><p><span class=\"ql-font-condensed\">Cool your danced-out body in the water, then head back to the sound. That round trip is how you spend BON DISCO in the height of summer.</span></p><p><img src=\"https://lh3.googleusercontent.com/d/1ywChGlIVARZwaNfc8IfkiMICd8XI8-PM=w2000\" class=\"\" data-layout=\"contained\" data-zoom=\"1\" data-x=\"50\" data-y=\"50\" alt=\"会場となる三田アスレチックスのプールサイド\" style=\"--crop-zoom: 1; --crop-x: 50%; --crop-y: 50%;\"></p><h2><em class=\"ql-font-bebas\">Close to 40 acts across two meticulously crafted floors.</em></h2><p>Two floors built around a commitment to high-quality sound guide you toward a deeper, more immersive musical experience. The lineup features close to 40 artists, centered on Kansai but gathering from across the country.</p><p>Beyond the floors, Naoko hosts yoga sessions, while 電子原人, 佐々木ビル (Yabar食堂 &amp; 太陽の村) and Vamos Tacos line up the food. Music, rest and eating all run seamlessly together within the same forest.</p><p><img src=\"https://lh3.googleusercontent.com/d/18gYtK2UBRPWTh2SMgh5jH77OCPe8IXFb=w2000\" class=\"tj-image-selected\"></p><h2><span class=\"ql-size-large ql-font-mono\">INFORMATION</span></h2><p>Admission is ¥7,000. Free for those aged 18 and under.</p><p>The entrance fee is the only cost — there are no charges whatsoever for parking, tents or pool use. Only those wishing to stay in the paid lodges need to book directly with Sanda Athletic in advance.</p><p>Dance, cool off, dance again.<br> At the end of that cycle lies the 13th summer.</p><p>◯ Dates / 日程 2026.08.22 (Sat) 12:00 - 08.23 (Sun) afternoon<br>◯ Venue / 会場 Sanda Athletic Park, Sanda, Hyogo<br>🎫 Entrance ¥7,000 (free for ages 18 and under)</p>"
     },
     {
@@ -4732,6 +4865,32 @@
       "festivalid": "topia",
       "body_en": "<p>From 20:00 on October 24 through 7:00 the next morning. Topia brings Evian Christ to Japan for a show on the Sotobō coast of Chiba. Private land inside Narita Airport; a plot in Sagamihara where earth excavated from the maglev construction is piled high. For a crew that has built its reputation on off-site parties, this marks their first indoor venue. Baptiste Schaller and etheri also travel in from abroad.</p><p><img src=\"https://lh3.googleusercontent.com/d/1TMIcw7FZkDiWZQDhdqQ9166zx8gcGQuM=w2000\"></p><p>[[pullquote|Flipping the usual relationship—music as the lead, space as the supporting act—to \"make the space the lead.\"]]</p><h2><em>Who is Topia</em></h2><p>A crew based around the greater Kantō area, throwing off-site parties. They started out in 2021 with a small music event staged as an assignment at Musashino Art University. Their theme: \"offering time outside the everyday.\" They hold events once or twice a year, on no fixed schedule.</p><p>Flipping the usual relationship—music as the lead, space as the supporting act—to \"make the space the lead.\" Enormous video projections, objects floating out on the sea, hand-built lighting systems. Every time they change location, they design the space for that single night from scratch.</p><p><img src=\"https://lh3.googleusercontent.com/d/1fJOUaxCoKaZ0OL_wrefbPAwKDtLOsv8b=w2000\" alt=\"Held in Sagamihara: truss-built stage structures and projections\" data-layout=\"compact\" data-zoom=\"1\" data-x=\"50\" data-y=\"50\" class=\"\" style=\"--crop-zoom: 1; --crop-x: 50%; --crop-y: 50%;\"></p><h2><em class=\"ql-font-bebas\">They have always chosen stages no one else would use</em></h2><p>On a patch of private land still remaining within the grounds of Narita Airport, they built a space modeled on a vinyl greenhouse, drawing on the farming landscape that once stood there. At the Manazuru Peninsula, they raised a tipi and projected visuals onto a sphere floating on the sea. They have also co-hosted twice with みんなのきもち.</p><p>With each edition the scale has crept up, and in 2025 they staged a party on land in Sagamihara where soil excavated from the Linear Chūō Shinkansen tunnel works is being heaped into a man-made mountain. On that vast empty lot they assembled a structure out of stage trussing, with KEN ISHII and Mars89 on the bill.</p><p style=\"width: 62%; margin-left: 0px; margin-right: 0px;\"><img src=\"https://lh3.googleusercontent.com/d/1VSYAiGZRntX1lt6hP_JcJ2CiFb2NcIvz=w2000\" class=\"\" data-layout=\"compact\" data-zoom=\"1\" data-x=\"50\" data-y=\"50\" style=\"--crop-zoom: 1; --crop-x: 50%; --crop-y: 50%;\"></p><h2><em>An underground temple the sun never reaches</em></h2><p>The venue is on the Sotobō coast of Chiba. The exact location is disclosed only to ticket holders. What the organizers call an \"underground temple the sun never reaches\"—a concrete space no one has yet set foot in—becomes the floor for this one night.</p><p>It's roughly an hour and a half from Tokyo Station to the nearest station with no transfers, and there's a shuttle from the station to the venue. If you're driving, a venue parking ticket is required; there is no public parking within walking distance. The organizers have exactly one warning: sunglasses mandatory.</p><p style=\"width: 62%; margin-left: 0px; margin-right: 0px;\"><img src=\"https://lh3.googleusercontent.com/d/1T48-EluzGbn6VbOTmrq0JpI-gnRIj6-N=w2000\" class=\"\" data-layout=\"compact\" data-crop=\"16:10\" data-zoom=\"1\" data-x=\"50\" data-y=\"50\" style=\"--crop-zoom: 1; --crop-x: 50%; --crop-y: 50%;\" alt=\"The underground space that will serve as the venue\"></p><h2><em>The originator of the new-generation trance rave, back in Japan after two years</em></h2><p>Evian Christ, the UK producer the organizers introduce as \"the originator of the new-generation trance rave.\" He made his name contributing production to Kanye West's <em>Yeezus</em>, and in 2023 released the album <em>Revanchist</em> on Warp Records. He's equally known for running his own party, 〈Trance Party〉, and has previously played Fuji Rock. This is his first time back in Japan since his 2024 show at WWW in Shibuya.</p><p><img src=\"https://lh3.googleusercontent.com/d/1ZBBwY9HUFL-fy_XaHb75dOm8BEC-u9dB=w2000\" class=\"\" data-layout=\"left\" data-zoom=\"1\" data-x=\"50\" data-y=\"50\" style=\"--crop-zoom: 1; --crop-x: 50%; --crop-y: 50%;\"></p><p>Switzerland's Baptiste Schaller works in contemporary trance and techno, and has just put out new material on Mizuha 罔象, the label run by みんなのきもち. Mexico-based etheri delivers ambient techno via hybrid set.</p><p>From Japan: Pointhope, Topia's resident DJ and a member of the crew. Plus FELINE, Frog 3, Fruit Cake and Vís. Trance and techno across generations and borders, converging on a single floor.</p><p><img src=\"https://lh3.googleusercontent.com/d/1rMN2Hwi9c6nme60XDSNBeIwClsgckysD=w2000\" class=\"\" data-layout=\"compact\" data-zoom=\"1\" data-x=\"50\" data-y=\"50\" style=\"--crop-zoom: 1; --crop-x: 50%; --crop-y: 50%;\"></p><h4>Market / Food</h4><p>GB mouth / Metasequoia Radio / おむすびてしま / and more</p><h4>Event Details</h4><ul><li>Date: 2026.10.24 (Sat) 20:00 - 10.25 (Sun) 07:00</li><li>Venue: Sotobō, Chiba (exact location disclosed to ticket holders only)</li><li>Tickets: U23 ¥4,500 / Ticket ¥5,300 / Supporter Ticket ¥10,000 (<a href=\"https://topia261024.peatix.com/\" rel=\"noopener noreferrer\" target=\"_blank\">Peatix</a>)</li><li>Supporter Ticket: Introduced for this edition to support the crew's future activities. Entry is the same as a standard ticket, with added supporter perks</li><li>Parking: Advance purchase of a venue parking ticket is mandatory (<a href=\"https://topia261024parking.peatix.com/view\" rel=\"noopener noreferrer\" target=\"_blank\">Peatix</a>). Without one, arriving by car is not permitted</li><li>Door tickets: TBA</li><li>No re-entry / cloakroom available / card payments accepted / no alcohol sales to under-20s</li><li>Refunds available if cancelled before the event. No refunds for suspension or cancellation once underway</li><li>Official: <a href=\"https://www.instagram.com/35.7238716/\" rel=\"noopener noreferrer\" target=\"_blank\">@35.7238716</a></li></ul><p>The location will be revealed only to those holding a ticket. Down into the underground of Sotobō, Chiba.</p><p>[[event|Topia|2026-10-24〜2026-10-25|Chiba, Japan|https://topia261024.peatix.com/|Evian Christ;Baptiste Schaller;etheri;Pointhope;FELINE;Frog 3;Fruit Cake;Vís|Trance;Techno;Ambient;Secret Venue|topia]]</p>",
       "updated_at": "Sat Oct 17 2026 00:00:00 GMT+0900 (Japan Standard Time)"
+    },
+    {
+      "_row": 21,
+      "id": "sawagi-festival-2026-info",
+      "title": "SAWAGI FESTIVAL | 日本を代表するローカルフェスティバルが、10年の節目を越えて山梨から群馬へ",
+      "date": "Mon Oct 19 2026 00:00:00 GMT+0900 (Japan Standard Time)",
+      "image": "images/articles/sawagi-festival-2026-info.webp",
+      "readtime": "2",
+      "readTime": "2",
+      "featured": "false",
+      "excerpt": "昨年10年の節目を越え、11年目を迎えるキャンプイン型の野外フェスティバル。2026年は山梨から群馬・東吾妻町のSUTEKI VILLAGE CAMPINGへ。2ステージにLIVE 6組、DJ 52組。札幌、大阪、北九州で現場をつくってきたDJたちが群馬の山に集まる。",
+      "status": "published",
+      "metadescription": "キャンプイン型野外フェスSAWAGI FESTIVALが11年目の2026年、山梨から群馬へ。2ステージに58組、DJ KENSEI、COMPUMA、TAKAAKI ITOHら52組のDJとASUNA+Opitopeらライブ6組。10月23日から3日間、テントサイト無料。渋谷発シャトルも運行。",
+      "metaDescription": "キャンプイン型野外フェスSAWAGI FESTIVALが11年目の2026年、山梨から群馬へ。2ステージに58組、DJ KENSEI、COMPUMA、TAKAAKI ITOHら52組のDJとASUNA+Opitopeらライブ6組。10月23日から3日間、テントサイト無料。渋谷発シャトルも運行。",
+      "tags": "gunma,camp,open-air,techno,house,ambient",
+      "body": "<p><img src=\"https://lh3.googleusercontent.com/d/1Y-e5R70C9-opeGr5br4jAItKFJddrL-o=w2000\"></p><p>[[pullquote|札幌、大阪、北九州。それぞれの街で現場をつくってきたDJたちが、群馬の山に集まる。]]</p><h2><em class=\"ql-font-bebas\">SAWAGI FESTIVALとは</em></h2><p>キャンプイン型の野外フェスティバル。これまで山梨で開催を重ね、11年目の2026年、群馬へ移る。公式が掲げるのは「深化と拡張」。</p><p>2つのステージに58組が集まり、DECO / ARTとVJ / LIGHTINGのチームが会場をつくる。チケットは3日通し券のみ。テントサイトは無料で、会場に泊まり込んで過ごす前提で組まれている。</p><p><img src=\"https://lh3.googleusercontent.com/d/1RSxkP2Ne_IihvNAWRkHaSTUd86_KNCRF=w2000\" alt=\"山々を背景にしたメインステージ\" data-layout=\"compact\" data-zoom=\"1\" data-x=\"50\" data-y=\"50\"></p><h2><em>山々に抱かれ、地平から昇る朝日を望む</em></h2><p>会場は、群馬県吾妻郡東吾妻町のSUTEKI VILLAGE CAMPING。約1万坪の山の敷地に、オートサイト、フリーサイト、区画サイトが広がるキャンプ場だ。夜は満天の星空、朝は地平線からの日の出。</p><p>場内にはシャワー、トイレ、洗面所、キッチンがある。フェスではフラットな芝のテントサイトが無料で使え、約100㎡のオートキャンプ区画も用意される。渋谷からのシャトルバスも運行する。</p><p><img src=\"https://lh3.googleusercontent.com/d/1HIJ-DjxAuquAntO7ziJR98g_Ni4co4wq=w2000\" alt=\"会場となるステキキャンプ場\" data-layout=\"contained\" data-pair-id=\"pair-1792426248452\" data-zoom=\"1\" data-x=\"50\" data-y=\"50\"></p><p><img src=\"https://lh3.googleusercontent.com/d/1xjPr4c74ROXfkvB3ztovbacTU1oF99wj=w2000\" alt=\"会場となるステキキャンプ場\" data-layout=\"contained\" data-pair-id=\"pair-1792426248452\" data-zoom=\"1\" data-x=\"50\" data-y=\"50\"></p><h2><em>100台のキーボードと、1993年結成のサイケデリック・ロック</em></h2><p>ライブは6組。ASUNA + Opitopeは、100台のキーボードを使ったパフォーマンス「100 Keyboards」で海外のフェスティバルやニューヨークのBAMにも招かれたASUNAと、伊達伯欣と畠山地平が2002年に結成したOpitopeの共演。SOFTは1993年結成、サイケデリック・ロックの流れを汲むバンドだ。Black Boboi、HENTAI CAMERAMAN、Masafumi Take &amp; Sabatoj、SUEPONが続く。</p><p><img src=\"https://lh3.googleusercontent.com/d/1w_44mR8hPnLSY4yYL0MW7UqrK8_ZJUST=w2000\" data-layout=\"compact\" data-zoom=\"1\" data-x=\"50\" data-y=\"50\"></p><h2><em>日本のクラブシーンを長く支えてきた名前が並ぶ</em></h2><p>DJは52組。DJ KENSEI、DJ KURI、DJ SODEYAMA、DJ ZEN、COMPUMA。COMPUMAは大阪NEWTONE RECORDSのバイヤーとしても知られる。</p><p>レーベルWOLSを主宰するTAKAAKI ITOH、札幌Precious Hallで「Archiv」を続けるOCCA、北九州のベニューαを運営しBerghainにも出演したYSK。ほかにMari Sakurai、REE.K、YAMA、Herbalistek、俚謡山脈など。札幌、大阪、北九州。それぞれの街で現場をつくってきたDJたちが、群馬の山に集まる。</p><p><img src=\"https://lh3.googleusercontent.com/d/126orDALt7yHFIaE91m87blFsh9RnLQ6O=w2000\" alt=\"夜のDJブースと照明\" data-layout=\"compact\" data-zoom=\"1\" data-x=\"50\" data-y=\"50\"></p><h2><em>山のキャンプ場を、装飾と光で仕立てる</em></h2><p>DECO / ARTはBivouac、Bubble Art Onchi、HEAVEN HUG DESIGN、R領域、SAMAYA DESIGN、STONE63の6組。VJ / LIGHTINGはcomboy、DOT TV、idealsolution、sarunotukuの4組が担う。</p><p><img src=\"https://lh3.googleusercontent.com/d/12VyjW5Io7yT_EUIciavIU8ZolZzF2aWu=w2000\" data-layout=\"compact\" data-zoom=\"1\" data-x=\"50\" data-y=\"50\"></p><h4>開催情報</h4><ul><li>日程: 2026.10.23 (Fri) 13:00 GATE OPEN - 10.25 (Sun) 18:00 CLOSE</li><li>会場: SUTEKI VILLAGE CAMPING（群馬県吾妻郡東吾妻町本宿3330-5）</li><li>チケット: U25 ¥10,000 / Category 3 ¥16,000 / Door ¥20,000。3日通し券のみ（<a href=\"https://sawagi-festival.zaiko.io/ja/e/sawagi-festival-2026\" rel=\"noopener noreferrer\" target=\"_blank\">ZAIKO</a>）</li><li>テントサイト: 無料（フラットな芝）</li><li>オートキャンプ: ¥30,000 / 1区画（約100㎡）。公式サイトのフォームから予約</li><li>場内駐車券: フリー入出庫 ¥10,000（8:00〜17:00のみ出庫・再入庫可）/ 固定駐車 ¥3,000（再入庫不可）</li><li>シャトルバス: 渋谷セルリアンタワー前発。往復 ¥10,000 / 片道 ¥7,000。公式サイトのフォームから予約</li><li>公式: <a href=\"https://sawagifestival.com/\" rel=\"noopener noreferrer\" target=\"_blank\">sawagifestival.com</a> / <a href=\"https://www.instagram.com/sawagifestival_jp/\" rel=\"noopener noreferrer\" target=\"_blank\">@sawagifestival_jp</a></li></ul><p>10年を越えて、新しい山へ。深化と拡張の3日間が、群馬で始まる。</p><p>[[event|SAWAGI FESTIVAL 2026|2026-10-23〜2026-10-25|Gunma, Japan|https://sawagifestival.com/|ASUNA + Opitope;Black Boboi;HENTAI CAMERAMAN;Masafumi Take and Sabatoj;SOFT;SUEPON;COMPUMA;DJ KENSEI;DJ KURI;DJ SODEYAMA;DJ ZEN;TAKAAKI ITOH;OCCA;YSK;Mari Sakurai;REE.K;YAMA;Herbalistek;Kojiro;SUNGA;TAICHI KAWAHIRA;ADAK7;AKIRA ARASAWA;ERIMIYA;5harpy;eskm;HARUKA KATAGATA;KURUSU;lostbaggage;mahogany;Manbow;olevv;Qmico;savezearth;Shinsuke Goto;TSUTOMU;YU-I;俚謡山脈;ラーチャン;スナックひろ|Techno;House;Ambient;Camp;Open-air|sawagi-festival]]</p>",
+      "lasteditedby": "editor",
+      "lastEditedBy": "editor",
+      "lasteditedat": "2026-10-19T17:41:09.330Z",
+      "lastEditedAt": "2026-10-19T17:41:09.330Z",
+      "title_en": "SAWAGI FESTIVAL | One of Japan's defining local festivals passes its ten-year mark and moves from Yamanashi to Gunma.",
+      "excerpt_en": "Having passed the ten-year milestone last year, this camp-in outdoor festival now enters its eleventh edition. For 2026 it moves from Yamanashi to SUTEKI VILLAGE CAMPING in Higashiagatsuma, Gunma. Two stages, six live acts, 52 DJs. DJs who have built scenes in Sapporo, Osaka and Kitakyushu gather in the mountains of Gunma.",
+      "category": "FESTIVAL&RAVE",
+      "author": "TECHNO JAPAN",
+      "festivalid": "sawagi-festival",
+      "body_en": "<p><img src=\"https://lh3.googleusercontent.com/d/1Y-e5R70C9-opeGr5br4jAItKFJddrL-o=w2000\"></p><p>[[pullquote|Sapporo, Osaka, Kitakyushu. DJs who have built scenes in their own cities converge on a mountain in Gunma.]]</p><h2><em class=\"ql-font-bebas\">WHAT IS SAWAGI FESTIVAL</em></h2><p>A camp-in open-air festival. Held in Yamanashi for years, it moves to Gunma in 2026, its eleventh edition. The organisers' banner phrase: \"deepening and expansion.\"</p><p>Fifty-eight acts across two stages, with DECO / ART and VJ / LIGHTING teams shaping the site. Tickets are three-day passes only. The tent site is free, and the whole thing is built around staying on site for the duration.</p><p><img src=\"https://lh3.googleusercontent.com/d/1RSxkP2Ne_IihvNAWRkHaSTUd86_KNCRF=w2000\" alt=\"The main stage set against a backdrop of mountains\" data-layout=\"compact\" data-zoom=\"1\" data-x=\"50\" data-y=\"50\"></p><h2><em>Cradled by mountains, facing a sunrise off the horizon</em></h2><p>The venue is SUTEKI VILLAGE CAMPING in Higashiagatsuma, Agatsuma District, Gunma. Roughly 33,000 square metres of mountain grounds, with auto sites, free sites and sectioned plots spread across them. A sky full of stars at night; the sun climbing off the horizon in the morning.</p><p>On site there are showers, toilets, washrooms and a kitchen. For the festival, the flat grass tent site is free to use, and auto-camping plots of around 100㎡ are also available. A shuttle bus runs from Shibuya.</p><p><img src=\"https://lh3.googleusercontent.com/d/1HIJ-DjxAuquAntO7ziJR98g_Ni4co4wq=w2000\" alt=\"The lovely campground that will serve as the venue\" data-layout=\"contained\" data-pair-id=\"pair-1792426248452\" data-zoom=\"1\" data-x=\"50\" data-y=\"50\"></p><p><img src=\"https://lh3.googleusercontent.com/d/1xjPr4c74ROXfkvB3ztovbacTU1oF99wj=w2000\" alt=\"Suteki Campground, the event's venue\" data-layout=\"contained\" data-pair-id=\"pair-1792426248452\" data-zoom=\"1\" data-x=\"50\" data-y=\"50\"></p><h2><em>100 keyboards, and psychedelic rock formed in 1993</em></h2><p>Six live acts. ASUNA + Opitope pairs ASUNA — whose performance piece \"100 Keyboards,\" using one hundred keyboards, has taken him to festivals abroad and to BAM in New York — with Opitope, formed in 2002 by Tomoyoshi Date and Chihei Hatakeyama. SOFT, formed in 1993, is a band working in the lineage of psychedelic rock. Black Boboi, HENTAI CAMERAMAN, Masafumi Take &amp; Sabatoj and SUEPON follow.</p><p><img src=\"https://lh3.googleusercontent.com/d/1w_44mR8hPnLSY4yYL0MW7UqrK8_ZJUST=w2000\" data-layout=\"compact\" data-zoom=\"1\" data-x=\"50\" data-y=\"50\"></p><h2><em>Names that have held up Japan's club scene for decades</em></h2><p>Fifty-two DJs. DJ KENSEI, DJ KURI, DJ SODEYAMA, DJ ZEN, COMPUMA — the latter also known as a buyer at Osaka's NEWTONE RECORDS.</p><p>TAKAAKI ITOH, who runs the label WOLS; OCCA, who has kept \"Archiv\" going at Sapporo's Precious Hall; YSK, who runs the Kitakyushu venue α and has played Berghain. Also Mari Sakurai, REE.K, YAMA, Herbalistek, Riyo Sanmyaku and more. Sapporo, Osaka, Kitakyushu. DJs who have built scenes in their own cities converge on a mountain in Gunma.</p><p><img src=\"https://lh3.googleusercontent.com/d/126orDALt7yHFIaE91m87blFsh9RnLQ6O=w2000\" alt=\"The DJ Booth and Lights at Night\" data-layout=\"compact\" data-zoom=\"1\" data-x=\"50\" data-y=\"50\"></p><h2><em>Dressing a mountain campsite in decor and light</em></h2><p>DECO / ART comes from six crews: Bivouac, Bubble Art Onchi, HEAVEN HUG DESIGN, R領域, SAMAYA DESIGN and STONE63. VJ / LIGHTING is handled by four: comboy, DOT TV, idealsolution and sarunotuku.</p><p><img src=\"https://lh3.googleusercontent.com/d/12VyjW5Io7yT_EUIciavIU8ZolZzF2aWu=w2000\" data-layout=\"compact\" data-zoom=\"1\" data-x=\"50\" data-y=\"50\"></p><h4>Event details</h4><ul><li>Dates: 2026.10.23 (Fri) 13:00 GATE OPEN – 10.25 (Sun) 18:00 CLOSE</li><li>Venue: SUTEKI VILLAGE CAMPING (3330-5 Motojuku, Higashiagatsuma, Agatsuma District, Gunma)</li><li>Tickets: U25 ¥10,000 / Category 3 ¥16,000 / Door ¥20,000. Three-day passes only (<a href=\"https://sawagi-festival.zaiko.io/ja/e/sawagi-festival-2026\" rel=\"noopener noreferrer\" target=\"_blank\">ZAIKO</a>)</li><li>Tent site: free (flat grass)</li><li>Auto camping: ¥30,000 per plot (approx. 100㎡). Reserve via the form on the official site</li><li>On-site parking: free in/out ¥10,000 (exit and re-entry only between 8:00 and 17:00) / fixed parking ¥3,000 (no re-entry)</li><li>Shuttle bus: departs from in front of Cerulean Tower, Shibuya. Round trip ¥10,000 / one way ¥7,000. Reserve via the form on the official site</li><li>Official: <a href=\"https://sawagifestival.com/\" rel=\"noopener noreferrer\" target=\"_blank\">sawagifestival.com</a> / <a href=\"https://www.instagram.com/sawagifestival_jp/\" rel=\"noopener noreferrer\" target=\"_blank\">@sawagifestival_jp</a></li></ul><p>Past ten years, onto a new mountain. Three days of deepening and expansion begin in Gunma.</p><p>[[event|SAWAGI FESTIVAL 2026|2026-10-23〜2026-10-25|Gunma, Japan|https://sawagifestival.com/|ASUNA + Opitope;Black Boboi;HENTAI CAMERAMAN;Masafumi Take and Sabatoj;SOFT;SUEPON;COMPUMA;DJ KENSEI;DJ KURI;DJ SODEYAMA;DJ ZEN;TAKAAKI ITOH;OCCA;YSK;Mari Sakurai;REE.K;YAMA;Herbalistek;Kojiro;SUNGA;TAICHI KAWAHIRA;ADAK7;AKIRA ARASAWA;ERIMIYA;5harpy;eskm;HARUKA KATAGATA;KURUSU;lostbaggage;mahogany;Manbow;olevv;Qmico;savezearth;Shinsuke Goto;TSUTOMU;YU-I;俚謡山脈;ラーチャン;スナックひろ|Techno;House;Ambient;Camp;Open-air|sawagi-festival]]</p>"
     }
   ],
   "EDITIONS": [
@@ -4898,7 +5057,7 @@
       "date_end": "2025-08-31",
       "location": "Sanda Athletic Park",
       "location_ja": "三田アスレチックパーク",
-      "pref": "Gunma",
+      "pref": "Hyogo",
       "address": "兵庫県三田市波豆川282-1",
       "lat": "34.9197",
       "lng": "135.2892",
@@ -4927,16 +5086,6 @@
     },
     {
       "_row": 16,
-      "edition_id": "capsule-2025",
-      "festival_id": "capsule",
-      "edition": "2025",
-      "date_start": "2025-10-25",
-      "date_end": "2025-10-26",
-      "pref": "Yamanashi",
-      "status": "finished"
-    },
-    {
-      "_row": 17,
       "edition_id": "car-multimedia-2026",
       "festival_id": "car-multimedia",
       "edition": "2026",
@@ -4946,17 +5095,7 @@
       "status": "draft"
     },
     {
-      "_row": 18,
-      "edition_id": "circle-2025",
-      "festival_id": "circle",
-      "edition": "2025",
-      "date_start": "2025-10-17",
-      "date_end": "2025-10-19",
-      "pref": "Nagano",
-      "status": "finished"
-    },
-    {
-      "_row": 19,
+      "_row": 17,
       "edition_id": "circus-2025",
       "festival_id": "circus",
       "edition": "2025",
@@ -4972,7 +5111,7 @@
       "status": "finished"
     },
     {
-      "_row": 20,
+      "_row": 18,
       "edition_id": "circus-2026",
       "festival_id": "circus",
       "edition": "2026",
@@ -4987,7 +5126,7 @@
       "status": "announced"
     },
     {
-      "_row": 21,
+      "_row": 19,
       "edition_id": "colors-presents-soundcamp-2025",
       "festival_id": "colors-presents-soundcamp",
       "edition": "2025",
@@ -5002,7 +5141,7 @@
       "status": "finished"
     },
     {
-      "_row": 22,
+      "_row": 20,
       "edition_id": "colors-presents-soundcamp-2026",
       "festival_id": "colors-presents-soundcamp",
       "edition": "2026",
@@ -5017,7 +5156,7 @@
       "status": "announced"
     },
     {
-      "_row": 23,
+      "_row": 21,
       "edition_id": "delta-commit-2025",
       "festival_id": "delta-commit",
       "edition": "2025",
@@ -5027,17 +5166,7 @@
       "status": "finished"
     },
     {
-      "_row": 24,
-      "edition_id": "dom-2024",
-      "festival_id": "dom",
-      "edition": "2024",
-      "date_start": "2024-10-27",
-      "date_end": "2024-10-27",
-      "pref": "Tokyo",
-      "status": "finished"
-    },
-    {
-      "_row": 25,
+      "_row": 22,
       "edition_id": "dots-2026",
       "festival_id": "dots",
       "edition": "2026",
@@ -5047,7 +5176,7 @@
       "status": "finished"
     },
     {
-      "_row": 26,
+      "_row": 23,
       "edition_id": "dream-festival-2025",
       "festival_id": "dream-festival",
       "edition": "2025",
@@ -5057,7 +5186,7 @@
       "status": "finished"
     },
     {
-      "_row": 27,
+      "_row": 24,
       "edition_id": "e-groove-2026",
       "festival_id": "e-groove",
       "edition": "2026",
@@ -5070,7 +5199,7 @@
       "status": "published"
     },
     {
-      "_row": 28,
+      "_row": 25,
       "edition_id": "each-story-2025",
       "festival_id": "each-story",
       "edition": "2025",
@@ -5086,7 +5215,7 @@
       "status": "finished"
     },
     {
-      "_row": 29,
+      "_row": 26,
       "edition_id": "ensou-2026",
       "festival_id": "ensou",
       "edition": "2026",
@@ -5100,7 +5229,7 @@
       "status": "finished"
     },
     {
-      "_row": 30,
+      "_row": 27,
       "edition_id": "etsuetsu-2026",
       "festival_id": "etsuetsu",
       "edition": "2026",
@@ -5118,7 +5247,7 @@
       "status": "finished"
     },
     {
-      "_row": 31,
+      "_row": 28,
       "edition_id": "euphoria-2025",
       "festival_id": "euphoria",
       "edition": "2025",
@@ -5128,7 +5257,7 @@
       "status": "finished"
     },
     {
-      "_row": 32,
+      "_row": 29,
       "edition_id": "festival-de-frue-2026",
       "festival_id": "festival-de-frue",
       "edition": "2026",
@@ -5146,7 +5275,7 @@
       "status": "announced"
     },
     {
-      "_row": 33,
+      "_row": 30,
       "edition_id": "festival-fruezinho-2026",
       "festival_id": "festival-fruezinho",
       "edition": "2026",
@@ -5163,17 +5292,7 @@
       "status": "finished"
     },
     {
-      "_row": 34,
-      "edition_id": "festival40010-2025",
-      "festival_id": "festival40010",
-      "edition": "2025",
-      "date_start": "2025-09-26",
-      "date_end": "2025-09-28",
-      "pref": "Kochi",
-      "status": "finished"
-    },
-    {
-      "_row": 35,
+      "_row": 31,
       "edition_id": "ffkt-2025",
       "festival_id": "ffkt",
       "edition": "2025",
@@ -5188,7 +5307,7 @@
       "status": "finished"
     },
     {
-      "_row": 36,
+      "_row": 32,
       "edition_id": "ffkt-2026",
       "festival_id": "ffkt",
       "edition": "2026",
@@ -5202,7 +5321,7 @@
       "status": "announced"
     },
     {
-      "_row": 37,
+      "_row": 33,
       "edition_id": "fuji-rock-2026",
       "festival_id": "fuji-rock",
       "edition": "2026",
@@ -5218,7 +5337,7 @@
       "status": "finished"
     },
     {
-      "_row": 38,
+      "_row": 34,
       "edition_id": "gampeki-2025",
       "festival_id": "gampeki",
       "edition": "2025",
@@ -5228,7 +5347,7 @@
       "status": "finished"
     },
     {
-      "_row": 39,
+      "_row": 35,
       "edition_id": "global-ark-2025",
       "festival_id": "global-ark",
       "edition": "2025",
@@ -5244,7 +5363,7 @@
       "status": "finished"
     },
     {
-      "_row": 40,
+      "_row": 36,
       "edition_id": "global-ark-2026",
       "festival_id": "global-ark",
       "edition": "2026",
@@ -5262,7 +5381,7 @@
       "status": "announced"
     },
     {
-      "_row": 41,
+      "_row": 37,
       "edition_id": "grow-the-culture-open-air-2025",
       "festival_id": "grow-the-culture-open-air",
       "edition": "2025",
@@ -5277,7 +5396,7 @@
       "status": "finished"
     },
     {
-      "_row": 42,
+      "_row": 38,
       "edition_id": "hacha-mecha-2026",
       "festival_id": "hacha-mecha",
       "edition": "2026",
@@ -5295,7 +5414,7 @@
       "status": "published"
     },
     {
-      "_row": 43,
+      "_row": 39,
       "edition_id": "halola-camp-2026",
       "festival_id": "halola-camp",
       "edition": "2026",
@@ -5305,7 +5424,7 @@
       "status": "finished"
     },
     {
-      "_row": 44,
+      "_row": 40,
       "edition_id": "intergalactic-2025",
       "festival_id": "intergalactic",
       "edition": "2025",
@@ -5316,7 +5435,7 @@
       "status": "finished"
     },
     {
-      "_row": 45,
+      "_row": 41,
       "edition_id": "ishinoko-2025",
       "festival_id": "ishinoko",
       "edition": "2025",
@@ -5326,7 +5445,7 @@
       "status": "finished"
     },
     {
-      "_row": 46,
+      "_row": 42,
       "edition_id": "iyasaka-rave-festival-2025",
       "festival_id": "iyasaka-rave-festival",
       "edition": "2025",
@@ -5336,7 +5455,7 @@
       "status": "finished"
     },
     {
-      "_row": 47,
+      "_row": 43,
       "edition_id": "japonism-2026",
       "festival_id": "japonism",
       "edition": "2026",
@@ -5354,17 +5473,7 @@
       "status": "finished"
     },
     {
-      "_row": 48,
-      "edition_id": "kyoumei-gathering-2025",
-      "festival_id": "kyoumei-gathering",
-      "edition": "2025",
-      "date_start": "2025-08-29",
-      "date_end": "2025-08-31",
-      "pref": "Hokkaido",
-      "status": "finished"
-    },
-    {
-      "_row": 49,
+      "_row": 44,
       "edition_id": "lab-2025",
       "festival_id": "lab",
       "edition": "2025",
@@ -5374,7 +5483,7 @@
       "status": "finished"
     },
     {
-      "_row": 50,
+      "_row": 45,
       "edition_id": "labyrinth-2026",
       "festival_id": "labyrinth",
       "edition": "2026",
@@ -5392,7 +5501,7 @@
       "status": "announced"
     },
     {
-      "_row": 51,
+      "_row": 46,
       "edition_id": "letus-music-camp-2026",
       "festival_id": "letus-music-camp",
       "edition": "2026",
@@ -5410,7 +5519,7 @@
       "status": "finished"
     },
     {
-      "_row": 52,
+      "_row": 47,
       "edition_id": "link-open-air-2026",
       "festival_id": "link-open-air",
       "edition": "2026",
@@ -5428,7 +5537,7 @@
       "status": "finished"
     },
     {
-      "_row": 53,
+      "_row": 48,
       "edition_id": "loa-lost-paradise-2025",
       "festival_id": "loa-lost-paradise",
       "edition": "2025",
@@ -5443,7 +5552,7 @@
       "status": "finished"
     },
     {
-      "_row": 54,
+      "_row": 49,
       "edition_id": "loa-lost-paradise-2026",
       "festival_id": "loa-lost-paradise",
       "edition": "2026",
@@ -5457,7 +5566,7 @@
       "status": "announced"
     },
     {
-      "_row": 55,
+      "_row": 50,
       "edition_id": "lost-find-2025",
       "festival_id": "lost-find",
       "edition": "2025",
@@ -5473,7 +5582,7 @@
       "status": "finished"
     },
     {
-      "_row": 56,
+      "_row": 51,
       "edition_id": "matricaria-2026",
       "festival_id": "matricaria",
       "edition": "2026",
@@ -5491,7 +5600,7 @@
       "status": "finished"
     },
     {
-      "_row": 57,
+      "_row": 52,
       "edition_id": "midnight-cult-rave-2025",
       "festival_id": "midnight-cult-rave",
       "edition": "2025",
@@ -5501,7 +5610,7 @@
       "status": "finished"
     },
     {
-      "_row": 58,
+      "_row": 53,
       "edition_id": "mirrorball-village-2025",
       "festival_id": "mirrorball-village",
       "edition": "2025",
@@ -5511,7 +5620,7 @@
       "status": "finished"
     },
     {
-      "_row": 59,
+      "_row": 54,
       "edition_id": "moment-2026",
       "festival_id": "moment",
       "edition": "2026",
@@ -5526,7 +5635,7 @@
       "status": "finished"
     },
     {
-      "_row": 60,
+      "_row": 55,
       "edition_id": "mori-michi-ichiba-2026",
       "festival_id": "mori-michi-ichiba",
       "edition": "2026",
@@ -5544,7 +5653,7 @@
       "status": "finished"
     },
     {
-      "_row": 61,
+      "_row": 56,
       "edition_id": "music-2025",
       "festival_id": "music",
       "edition": "2025",
@@ -5554,7 +5663,7 @@
       "status": "finished"
     },
     {
-      "_row": 62,
+      "_row": 57,
       "edition_id": "nu-festival-2026",
       "festival_id": "nu-festival",
       "edition": "2026",
@@ -5572,7 +5681,7 @@
       "status": "finished"
     },
     {
-      "_row": 63,
+      "_row": 58,
       "edition_id": "odyssey-2025",
       "festival_id": "odyssey",
       "edition": "2025",
@@ -5587,7 +5696,7 @@
       "status": "finished"
     },
     {
-      "_row": 64,
+      "_row": 59,
       "edition_id": "odyssey-2026",
       "festival_id": "odyssey",
       "edition": "2026",
@@ -5602,17 +5711,7 @@
       "status": "announced"
     },
     {
-      "_row": 65,
-      "edition_id": "okiraku-camp-2025",
-      "festival_id": "okiraku-camp",
-      "edition": "2025",
-      "date_start": "2025-09-13",
-      "date_end": "2025-09-14",
-      "pref": "Wakayama",
-      "status": "finished"
-    },
-    {
-      "_row": 66,
+      "_row": 60,
       "edition_id": "one-music-camp-2025",
       "festival_id": "one-music-camp",
       "edition": "2025",
@@ -5622,7 +5721,7 @@
       "status": "finished"
     },
     {
-      "_row": 67,
+      "_row": 61,
       "edition_id": "one-park-festival-2026",
       "festival_id": "one-park-festival",
       "edition": "2026",
@@ -5632,7 +5731,7 @@
       "status": "announced"
     },
     {
-      "_row": 68,
+      "_row": 62,
       "edition_id": "one-park-riverfes-2025",
       "festival_id": "one-park-riverfes",
       "edition": "2025",
@@ -5642,7 +5741,7 @@
       "status": "finished"
     },
     {
-      "_row": 69,
+      "_row": 63,
       "edition_id": "osukinidouzo-2026",
       "festival_id": "osukinidouzo",
       "edition": "2026",
@@ -5658,7 +5757,7 @@
       "status": "finished"
     },
     {
-      "_row": 70,
+      "_row": 64,
       "edition_id": "otsukimi-2025",
       "festival_id": "otsukimi",
       "edition": "2025",
@@ -5673,7 +5772,7 @@
       "status": "finished"
     },
     {
-      "_row": 71,
+      "_row": 65,
       "edition_id": "otsukimi-2026",
       "festival_id": "otsukimi",
       "edition": "2026",
@@ -5688,7 +5787,7 @@
       "status": "announced"
     },
     {
-      "_row": 72,
+      "_row": 66,
       "edition_id": "parallel-world-2024",
       "festival_id": "parallel-world",
       "edition": "2024",
@@ -5698,7 +5797,7 @@
       "status": "finished"
     },
     {
-      "_row": 73,
+      "_row": 67,
       "edition_id": "paramount-2026",
       "festival_id": "paramount",
       "edition": "2026",
@@ -5716,7 +5815,7 @@
       "status": "finished"
     },
     {
-      "_row": 74,
+      "_row": 68,
       "edition_id": "pure-rave-2025",
       "festival_id": "pure-rave",
       "edition": "2025",
@@ -5726,7 +5825,7 @@
       "status": "finished"
     },
     {
-      "_row": 75,
+      "_row": 69,
       "edition_id": "rainbow-disco-club-2026",
       "festival_id": "rainbow-disco-club",
       "edition": "2026",
@@ -5742,7 +5841,7 @@
       "status": "finished"
     },
     {
-      "_row": 76,
+      "_row": 70,
       "edition_id": "rare-groove-2025",
       "festival_id": "rare-groove",
       "edition": "2025",
@@ -5752,7 +5851,7 @@
       "status": "finished"
     },
     {
-      "_row": 77,
+      "_row": 71,
       "edition_id": "re-birth-festival-2026",
       "festival_id": "re-birth-festival",
       "edition": "2026",
@@ -5768,7 +5867,7 @@
       "status": "announced"
     },
     {
-      "_row": 78,
+      "_row": 72,
       "edition_id": "rural-2026",
       "festival_id": "rural",
       "edition": "2026",
@@ -5783,7 +5882,7 @@
       "status": "announced"
     },
     {
-      "_row": 79,
+      "_row": 73,
       "edition_id": "samsara-2026",
       "festival_id": "samsara",
       "edition": "2026",
@@ -5793,17 +5892,7 @@
       "status": "finished"
     },
     {
-      "_row": 80,
-      "edition_id": "sangenjaya-music-festival-2025",
-      "festival_id": "sangenjaya-music-festival",
-      "edition": "2025",
-      "date_start": "2025-09-20",
-      "date_end": "2025-09-21",
-      "pref": "Tokyo",
-      "status": "finished"
-    },
-    {
-      "_row": 81,
+      "_row": 74,
       "edition_id": "sawagi-festival-2025",
       "festival_id": "sawagi-festival",
       "edition": "2025",
@@ -5818,7 +5907,7 @@
       "status": "finished"
     },
     {
-      "_row": 82,
+      "_row": 75,
       "edition_id": "signal-2025",
       "festival_id": "signal",
       "edition": "2025",
@@ -5828,7 +5917,7 @@
       "status": "finished"
     },
     {
-      "_row": 83,
+      "_row": 76,
       "edition_id": "signal-2026",
       "festival_id": "signal",
       "edition": "2026",
@@ -5840,7 +5929,7 @@
       "status": "finished"
     },
     {
-      "_row": 84,
+      "_row": 77,
       "edition_id": "snow-machine-japan-2026",
       "festival_id": "snow-machine-japan",
       "edition": "2026",
@@ -5855,17 +5944,7 @@
       "status": "finished"
     },
     {
-      "_row": 85,
-      "edition_id": "specialflower-festival-2025",
-      "festival_id": "specialflower-festival",
-      "edition": "2025",
-      "date_start": "2025-08-10",
-      "date_end": "2025-08-11",
-      "pref": "Ibaraki",
-      "status": "finished"
-    },
-    {
-      "_row": 86,
+      "_row": 78,
       "edition_id": "spring-love-harukaze-2026",
       "festival_id": "spring-love-harukaze",
       "edition": "2026",
@@ -5881,7 +5960,7 @@
       "status": "finished"
     },
     {
-      "_row": 87,
+      "_row": 79,
       "edition_id": "sub-tide-2026",
       "festival_id": "sub-tide",
       "edition": "2026",
@@ -5894,7 +5973,7 @@
       "status": "published"
     },
     {
-      "_row": 88,
+      "_row": 80,
       "edition_id": "takarajima-beach-cleaning-party-2025",
       "festival_id": "takarajima-beach-cleaning-party",
       "edition": "2025",
@@ -5905,7 +5984,7 @@
       "status": "finished"
     },
     {
-      "_row": 89,
+      "_row": 81,
       "edition_id": "technogaoka-2026",
       "festival_id": "technogaoka",
       "edition": "2026",
@@ -5921,7 +6000,7 @@
       "status": "finished"
     },
     {
-      "_row": 90,
+      "_row": 82,
       "edition_id": "the-star-festival-2026",
       "festival_id": "the-star-festival",
       "edition": "2026",
@@ -5939,7 +6018,7 @@
       "status": "finished"
     },
     {
-      "_row": 91,
+      "_row": 83,
       "edition_id": "topia-2025",
       "festival_id": "topia",
       "edition": "2025",
@@ -5949,7 +6028,7 @@
       "status": "finished"
     },
     {
-      "_row": 92,
+      "_row": 84,
       "edition_id": "transcendence-2026",
       "festival_id": "transcendence",
       "edition": "2026",
@@ -5965,7 +6044,7 @@
       "status": "finished"
     },
     {
-      "_row": 93,
+      "_row": 85,
       "edition_id": "treks-2025",
       "festival_id": "treks",
       "edition": "2025",
@@ -5981,7 +6060,7 @@
       "status": "finished"
     },
     {
-      "_row": 94,
+      "_row": 86,
       "edition_id": "ultra-japan-2026",
       "festival_id": "ultra-japan",
       "edition": "2026",
@@ -5998,17 +6077,7 @@
       "status": "announced"
     },
     {
-      "_row": 95,
-      "edition_id": "unknown-2024",
-      "festival_id": "unknown",
-      "edition": "2024",
-      "date_start": "2024-10-18",
-      "date_end": "2024-10-20",
-      "pref": "Shizuoka",
-      "status": "finished"
-    },
-    {
-      "_row": 96,
+      "_row": 87,
       "edition_id": "waifu-2026",
       "festival_id": "waifu",
       "edition": "2026",
@@ -6023,7 +6092,7 @@
       "status": "finished"
     },
     {
-      "_row": 97,
+      "_row": 88,
       "edition_id": "wonderfruit-kyoto-2026",
       "festival_id": "wonderfruit-kyoto",
       "edition": "2026",
@@ -6034,7 +6103,7 @@
       "status": "published"
     },
     {
-      "_row": 98,
+      "_row": 89,
       "edition_id": "wormhole-2024",
       "festival_id": "wormhole",
       "edition": "2024",
@@ -6044,7 +6113,7 @@
       "status": "finished"
     },
     {
-      "_row": 99,
+      "_row": 90,
       "edition_id": "yamauto-2025",
       "festival_id": "yamauto",
       "edition": "2025",
@@ -6054,7 +6123,7 @@
       "status": "finished"
     },
     {
-      "_row": 100,
+      "_row": 91,
       "edition_id": "synapse-festival-2025",
       "festival_id": "synapse-festival",
       "edition": "2025",
@@ -6070,7 +6139,7 @@
       "status": "finished"
     },
     {
-      "_row": 101,
+      "_row": 92,
       "edition_id": "synapse-festival-2026",
       "festival_id": "synapse-festival",
       "edition": "2026",
@@ -6085,7 +6154,7 @@
       "status": "announced"
     },
     {
-      "_row": 102,
+      "_row": 93,
       "edition_id": "snow-machine-japan-2027",
       "festival_id": "snow-machine-japan",
       "edition": "2027",
@@ -6099,7 +6168,7 @@
       "status": "announced"
     },
     {
-      "_row": 103,
+      "_row": 94,
       "edition_id": "mutek-2025",
       "festival_id": "mutek",
       "edition": "2025",
@@ -6111,7 +6180,7 @@
       "status": "finished"
     },
     {
-      "_row": 104,
+      "_row": 95,
       "edition_id": "mutek-2026",
       "festival_id": "mutek",
       "edition": "2026",
@@ -6123,7 +6192,7 @@
       "status": "announced"
     },
     {
-      "_row": 105,
+      "_row": 96,
       "edition_id": "grow-the-culture-open-air-2026",
       "festival_id": "grow-the-culture-open-air",
       "edition": "2026",
@@ -6141,7 +6210,7 @@
       "status": "published"
     },
     {
-      "_row": 106,
+      "_row": 97,
       "edition_id": "fabulous-2026",
       "festival_id": "fabulous",
       "edition": "2026",
@@ -6155,7 +6224,7 @@
       "status": "published"
     },
     {
-      "_row": 108,
+      "_row": 99,
       "edition_id": "bondisco-2026",
       "festival_id": "bondisco",
       "edition": "2026",
@@ -6163,14 +6232,14 @@
       "date_end": "2026-08-23",
       "location": "Sanda Athletic Park",
       "location_ja": "三田アスレチックパーク",
-      "pref": "Gunma",
+      "pref": "Hyogo",
       "address": "兵庫県三田市波豆川282-1",
       "lat": "34.9197",
       "lng": "135.2892",
       "status": "announced"
     },
     {
-      "_row": 109,
+      "_row": 100,
       "edition_id": "forest-sound-camp-2026",
       "festival_id": "forest-sound-camp",
       "edition": "2026",
@@ -6187,7 +6256,7 @@
       "status": "published"
     },
     {
-      "_row": 110,
+      "_row": 101,
       "edition_id": "orbit-2026",
       "festival_id": "orbit",
       "edition": "2026",
@@ -6201,7 +6270,7 @@
       "status": "finished"
     },
     {
-      "_row": 111,
+      "_row": 102,
       "edition_id": "ringo-festival-2026",
       "festival_id": "ringo-festival",
       "edition": "2026",
@@ -6218,7 +6287,7 @@
       "status": "published"
     },
     {
-      "_row": 112,
+      "_row": 103,
       "edition_id": "each-story-2026",
       "festival_id": "each-story",
       "edition": "2026",
@@ -6235,7 +6304,7 @@
       "status": "announced"
     },
     {
-      "_row": 113,
+      "_row": 104,
       "edition_id": "treks-2026",
       "festival_id": "treks",
       "edition": "2026",
@@ -6252,7 +6321,7 @@
       "status": "announced"
     },
     {
-      "_row": 114,
+      "_row": 105,
       "edition_id": "labyrinth-2025",
       "festival_id": "labyrinth",
       "edition": "2025",
@@ -6267,7 +6336,7 @@
       "status": "announced"
     },
     {
-      "_row": 115,
+      "_row": 106,
       "edition_id": "lost-find-2026",
       "festival_id": "lost-find",
       "edition": "2026",
@@ -6285,7 +6354,7 @@
       "status": "announced"
     },
     {
-      "_row": 116,
+      "_row": 107,
       "edition_id": "annahme-2026",
       "festival_id": "annahme",
       "edition": "2026",
@@ -6303,7 +6372,7 @@
       "status": "announced"
     },
     {
-      "_row": 117,
+      "_row": 108,
       "edition_id": "sawagi-festival-2026",
       "festival_id": "sawagi-festival",
       "edition": "2026",
@@ -6321,7 +6390,7 @@
       "status": "announced"
     },
     {
-      "_row": 118,
+      "_row": 109,
       "edition_id": "super-rave-kitakagaya-2026",
       "festival_id": "super-rave-kitakagaya",
       "edition": "2026",
@@ -6332,7 +6401,7 @@
       "status": "draft"
     },
     {
-      "_row": 119,
+      "_row": 110,
       "edition_id": "intergalactic-2025-2",
       "festival_id": "intergalactic",
       "edition": "2025-2",
@@ -6347,7 +6416,7 @@
       "status": "announced"
     },
     {
-      "_row": 120,
+      "_row": 111,
       "edition_id": "intergalactic-2026",
       "festival_id": "intergalactic",
       "edition": "2026",
@@ -6362,7 +6431,7 @@
       "status": "announced"
     },
     {
-      "_row": 121,
+      "_row": 112,
       "edition_id": "parallel-world-2026",
       "festival_id": "parallel-world",
       "edition": "2026",
@@ -6372,7 +6441,7 @@
       "status": "announced"
     },
     {
-      "_row": 122,
+      "_row": 113,
       "edition_id": "denki-bodhisattva-2026",
       "festival_id": "denki-bodhisattva",
       "edition": "2026",
@@ -6389,7 +6458,7 @@
       "status": "published"
     },
     {
-      "_row": 123,
+      "_row": 114,
       "edition_id": "topia-2026",
       "festival_id": "topia",
       "edition": "2026",
@@ -6402,7 +6471,7 @@
       "status": "announced"
     },
     {
-      "_row": 124,
+      "_row": 115,
       "edition_id": "takarajima-beach-cleaning-party-2026",
       "festival_id": "takarajima-beach-cleaning-party",
       "edition": "2026",
@@ -6413,7 +6482,7 @@
       "status": "announced"
     },
     {
-      "_row": 125,
+      "_row": 116,
       "edition_id": "sangenjaya-art-music-festival-2026",
       "festival_id": "sangenjaya-art-music-festival",
       "edition": "2026",
@@ -6430,7 +6499,7 @@
       "status": "published"
     },
     {
-      "_row": 126,
+      "_row": 117,
       "edition_id": "detox-2026",
       "festival_id": "detox",
       "edition": "2026",
