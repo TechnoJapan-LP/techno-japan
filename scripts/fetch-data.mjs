@@ -23,6 +23,7 @@ import { writeFile, mkdir, readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { ID_RE, resolveActLabel } from './lineup-label-resolution.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -125,7 +126,6 @@ async function fetchSheet(name) {
 // ---------- バリデーション（スキーマ §6）----------
 const errors = [];
 const warnings = [];
-const ID_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/; // 連続ハイフン・前後ハイフン禁止
 
 function isPublished(row, statusKey = 'STATUS') {
   const s = (row[statusKey] || '').trim().toLowerCase();
@@ -282,6 +282,7 @@ async function main() {
     const nm = normName(a.NAME);
     if (nm && !nameToArtist.has(nm)) nameToArtist.set(nm, (a.ID || '').trim());
   }
+  const publishedArtistIds = new Set(artists.map(a => String(a.ID || '').trim()).filter(Boolean));
 
   const seenE = new Map();
   const editions = [];
@@ -320,7 +321,6 @@ async function main() {
     }
     const editionIds = new Set(editions.map(e => e.EDITION_ID));
     // 公開されるアーティストの ID と、draft も含む ID→表示名。
-    const publishedArtistIds = new Set(artists.map(a => String(a.ID || '').trim()).filter(Boolean));
     const artistNameById = new Map(
       raw.ARTISTS.map(a => [String(a.ID || '').trim(), String(a.NAME || '').trim()]).filter(([id]) => id));
     const editionsByFestival = new Map();
@@ -371,15 +371,14 @@ async function main() {
 
          互換モードは以前からこの名前解決をしている（nameToArtist）。
          同じ規則をこちらにも通し、入力の書き方の違いで導線が消えないようにする。
-         b2b / live は「Antal & Hunee」のような複合枠なので解決しない
-         （互換モードと同一条件）。 */
+         b2b は複合枠として解決せず、live は単独名/IDの完全一致だけを解決する。 */
       const setTypeRaw = String(r.SET_TYPE || 'dj').trim().toLowerCase();
-      if (!artistId && actLabel && setTypeRaw === 'dj') {
-        const hit = nameToArtist.get(normName(actLabel));
-        if (hit && ID_RE.test(hit)) {
-          artistId = hit;
-          actLabel = '';   // 表示名は ARTISTS 側を正とする（互換モードと同じ）
-        }
+      if (!artistId && actLabel) {
+        const resolved = resolveActLabel({
+          actLabel, setType: setTypeRaw, nameToArtist, publishedArtistIds,
+        });
+        artistId = resolved.artistId;
+        actLabel = resolved.actLabel;
       }
 
       if (artistId && !publishedArtistIds.has(artistId)) {
@@ -409,8 +408,8 @@ async function main() {
       editions.push(stripMeta({EDITION_ID:editionId,FESTIVAL_ID:fid,EDITION:year,DATE_START:dStart,DATE_END:dEnd,LOCATION:r.LOCATION||'',LOCATION_JA:r.location_ja||r.LOCATION_JA||'',PREF:r.CITY||'',ADDRESS:r.ADDRESS||'',LAT:r.LAT||'',LNG:r.LNG||'',TICKETURL:r.TICKETURL||r[' TICKETURL']||'',FLYER:r.FLYER||'',STATUS:r.STATUS||''}));
       (r.LINEUP || '').split(',').map(s => s.trim()).filter(Boolean).forEach((act, i) => {
         const setType = /-live-/i.test(act) ? 'live' : (/\bb2b\b/i.test(act) ? 'b2b' : 'dj');
-        const hit = setType === 'dj' ? nameToArtist.get(normName(act)) : '';
-        lineups.push(stripMeta({EDITION_ID:editionId,ARTIST_ID:hit&&ID_RE.test(hit)?hit:'',ACT_LABEL:hit?'':act,SET_TYPE:setType,SORT:String(i+1)}));
+        const resolved = resolveActLabel({ actLabel: act, setType, nameToArtist, publishedArtistIds });
+        lineups.push(stripMeta({EDITION_ID:editionId,ARTIST_ID:resolved.artistId,ACT_LABEL:resolved.actLabel,SET_TYPE:setType,SORT:String(i+1)}));
       });
     }
 
@@ -469,11 +468,11 @@ async function main() {
       }
       acts.forEach((act, i) => {
         const setType = /-live-/i.test(act) ? 'live' : (/\bb2b\b/i.test(act) ? 'b2b' : 'dj');
-        const hit = setType === 'dj' ? nameToArtist.get(normName(act)) : '';
+        const resolved = resolveActLabel({ actLabel: act, setType, nameToArtist, publishedArtistIds });
         lineups.push(stripMeta({
           EDITION_ID: target.EDITION_ID,
-          ARTIST_ID: hit && ID_RE.test(hit) ? hit : '',
-          ACT_LABEL: hit ? '' : act,
+          ARTIST_ID: resolved.artistId,
+          ACT_LABEL: resolved.actLabel,
           SET_TYPE: setType, STAGE: '', DAY: '', START: '', END: '',
           SORT: String(i + 1),
         }));

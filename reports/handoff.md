@@ -10771,3 +10771,32 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 - `python3 scripts/check_asset_versions.py` と省略なしの `bash scripts/preflight.sh` を実行すること。公開前に未確認のPC/JA・EN経路を実ブラウザで確認すること。
 - CMSを開く場合は `?cb=<乱数>` を付け、変更後は `Cmd+Shift+R` で強制リロードすること。
+
+### 2026-10-20 出演データのACT_LABEL（アーティストID/名前）解決 — 未コミット
+
+### 実施
+- `scripts/lineup-label-resolution.mjs` に、公開アーティストの名前一致または `ID_RE` 準拠のID一致を解決する共通関数を追加。
+- `scripts/fetch-data.mjs` の正式 LINEUPS、旧互換モード、FESTIVALS.LINEUP 橋渡しの3経路を共通関数へ接続。`dj` は従来どおり、`live` は単独枠のみ、`b2b` と複合 live 枠は未解決のまま保持。draft/archived は除外。
+- `scripts/check_lineup_label_resolution.mjs` を追加し、preflightへ組み込んだ。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node scripts/check_lineup_label_resolution.mjs`: 成功（ID一致、名前一致、live単独、live複合、b2b、draftの6件）。
+- `node --check scripts/fetch-data.mjs`: 成功。
+- `git diff --check`: 成功。
+- `bash scripts/preflight.sh`: 49件成功、9件失敗。今回のACT_LABEL検査は成功。詳細ページ生成は外部画像取得失敗で240秒タイムアウト、ブラウザ系8件は実行環境のlocalhost listen禁止（EPERM）で未完了。
+
+### 変更したパターン
+- 空の `ARTIST_ID` を持つ ACT_LABEL の公開アーティスト名一致・ID一致。
+- 正式 LINEUPS、旧 `--from-festivals` 互換、旧 FESTIVALS.LINEUP 橋渡しの解決条件。
+- `scripts/preflight.sh` の単体検査項目。
+
+### 未確認の類似パターン
+- 確認済み・0件：共通関数を呼ぶ3経路以外に、fetch-data内でACT_LABELをARTIST_IDへ解決する箇所は見つからなかった。
+- 未確認：実データを再取得した本番相当の3経路出力、実ブラウザでのCMS操作、Publish pipeline。本件はPublish経路を変更したため、push後に Claude が Publish pipeline を流して確認すること。
+
+### 次の担当への注意・判断待ち
+- preflightが全件成功していないため、現時点で公開済みとは報告しないこと。ネットワーク/ブラウザ実行可能な環境で省略なしの `bash scripts/preflight.sh` を再実行すること。
+- push後、Claude が Publish pipeline を流し、`cms: publish data.js` のコミットが実際に増えたことを確認すること。CMSを開く場合は `?cb=<乱数>` を付け、変更後は `Cmd+Shift+R` を使うこと。
