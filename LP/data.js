@@ -153,15 +153,31 @@ const ARTISTS = [
     name: "Qmico",
     city: "TOKYO",
     country: "JAPAN",
+    genre: "TECHNO",
+    image: "images/artists/qmico.webp",
     bio: "東京出身のDJ。2011年にDJを始め、テクノを軸にミニマル、エクスペリメンタル、レフトフィールド、ディープハウスを行き来する。ruralやPARAMOUNTなどの野外フェスや国内各地のクラブに出演し、Peter Van Hoesen、Voiski、Anthony Linellらの公演でサポートを務めてきた。テクノを核にしたパーティー「QUALIA」を主宰する。",
     bio_en: "Tokyo-born DJ who started playing in 2011. Techno is the anchor, with sets moving through minimal, experimental, leftfield and deep house. Qmico has played outdoor festivals like rural and PARAMOUNT as well as clubs across Japan, supported Peter Van Hoesen, Voiski and Anthony Linell, and runs QUALIA, a party built around techno.",
+    name_en: "Qmico",
     links: {
+      instagram: "https://www.instagram.com/qmico928/",
       soundcloud: "https://soundcloud.com/qmico",
     }
   },
   {
     id: "captain-k",
     name: "Captain K",
+    city: "TOKYO",
+    country: "JAPAN",
+    genre: "TECHNO",
+    image: "images/artists/captain-k.webp",
+    imagePosition: "center top",
+    bio: "DOOFING PARK の DJ として活動する。ミニマル、テクノ、プログレッシブ、ブレイクスを掛ける。",
+    bio_en: "A DJ with DOOFING PARK, playing across minimal, techno, progressive and breaks.",
+    name_en: "Captain K",
+    links: {
+      instagram: "https://www.instagram.com/captain_k.doofingpark/",
+      soundcloud: "https://soundcloud.com/doofingpark",
+    }
   },
   {
     id: "mimu",
@@ -240,10 +256,35 @@ const ARTISTS = [
   {
     id: "antal",
     name: "Antal",
+    city: "AMSTERDAM",
+    country: "NETHERLANDS",
+    genre: "HOUSE/DISCO",
+    image: "images/artists/antal.webp",
+    bio: "アムステルダムの Rush Hour を1997年から仲間とともに運営する DJ。Rush Hour はレーベル、ディストリビューション、レコード店を抱え、ハウスやテクノの新作と、忘れられていた旧譜の再発を並行して出してきた。本人は自分のスタイルに名前を付けることを好まない。ハウスやテクノから、ファンク、世界各地のディスコまでを同じセットで掛ける。",
+    bio_en: "Antal has run Amsterdam's Rush Hour with a close crew since 1997, a label, distributor and record store that releases new house and techno alongside reissues of long-forgotten records. He prefers not to name his style. A single set can move from house and techno to funk and disco from anywhere in the world.",
+    name_en: "Antal",
+    links: {
+      instagram: "https://www.instagram.com/antalheitlager",
+      soundcloud: "https://soundcloud.com/antalrushhour",
+      bandcamp: "https://antalhungary.bandcamp.com/",
+    }
   },
   {
     id: "hunee",
     name: "Hunee",
+    city: "AMSTERDAM",
+    country: "NETHERLANDS",
+    genre: "HOUSE",
+    image: "images/artists/hunee.webp",
+    bio: "韓国出身の両親のもと、ドイツのボーフムで育った DJ／プロデューサー。学校を終えた3日後にベルリンへ移り、レコード店で働きながらクラブで DJ を重ねた。その後アムステルダムへ拠点を戻し、Rush Hour の一員として活動する。Rush Hour、W.T.、Future Times から作品を発表し、2015年に Rush Hour からアルバム『Hunch Music』を出した。レーベル Lifetones も運営する。",
+    bio_en: "Hunee grew up in Bochum, a former industrial city in western Germany, the son of South Korean parents. He moved to Berlin three days after finishing school, digging and working in record shops while DJing around the city. Now back in Amsterdam as part of the Rush Hour family, he has released on Rush Hour, W.T. and Future Times, including the 2015 album Hunch Music, and runs the Lifetones label.",
+    name_en: "Hunee",
+    links: {
+      instagram: "https://www.instagram.com/hunchmusic",
+      soundcloud: "https://soundcloud.com/hunee",
+      bandcamp: "https://rushhourmusichunee.bandcamp.com",
+      website: "http://www.hunchmusic.de",
+    }
   },
   {
     id: "ben-ufo",
@@ -275,25 +316,42 @@ const ARTISTS = [
   {
     id: "dj-maria",
     name: "DJ MARIA.",
+    city: "TOKYO",
     country: "JAPAN",
+    genre: "TECHNO",
+    image: "images/artists/dj-maria.webp",
     bio: "東京の新世代テクノを象徴するDJのひとり。グルーヴィーなテクノとトランスを軸に、ダウンテンポやアンビエントまでを織り込む。一晩を通して物語を立ち上げるような没入感のあるセットで知られる。ベルリンのBerghain、ベルギーのLa Nature、ノルウェーのMonument、ポルトガルのBOOMにも出演している。",
     bio_en: "One of the DJs who define Tokyo's new-generation techno. Groovy techno and trance sit at the centre, with downtempo and ambient woven through, in sets known for building a narrative across a night. DJ MARIA. has played Berghain in Berlin, La Nature in Belgium, Monument in Norway and BOOM in Portugal.",
     links: {
       instagram: "https://www.instagram.com/mariasatelles/",
+      soundcloud: "https://soundcloud.com/djmaria-jp",
     }
   },
   {
     id: "dungeoneering",
     name: "Dungeoneering",
+    country: "JAPAN",
+    genre: "LIVE",
+    image: "images/artists/dungeoneering.webp",
+    bio: "東京のプロデューサー Albino Sound と、D.A.N. の Daigos によるライブユニット。2025年に結成され、岩壁音楽祭や Rainbow Disco Club でライブを行ってきた。",
+    bio_en: "A live duo of Tokyo producer Albino Sound and Daigos of the band D.A.N. Formed in 2025, they have already played Gampeki Music Festival and Rainbow Disco Club.",
+    links: {
+      instagram: "https://www.instagram.com/dungeoneering__/",
+      bandcamp: "https://dungeon-eering.bandcamp.com/album/where-2-ep",
+    }
   },
   {
     id: "feline",
     name: "Feline",
     city: "TOKYO",
     country: "JAPAN",
+    genre: "HOUSE",
+    image: "images/artists/feline.webp",
     bio: "東京を拠点とするDJ。1995年に茨城県で生まれ、10代のころ地元の水戸でDJを始めた。2010年代のベースミュージックから影響を受けつつ、そこに留まらないミックスを続ける。2025年からはclub asiaの「clubasia THURSDAY」で奇数月第1木曜のキュレーションを担当。渋谷のDJ Bar Bridgeでは、HIROSHI KAWANABEとのパーティーを毎月開いている。",
     bio_en: "Tokyo-based FELINE was born in Ibaraki in 1995 and started DJing as a teenager in hometown Mito. UK bass music and leftfield from the 2010s left a mark, but the sets don't stay inside those lines. Since 2025 FELINE has curated clubasia THURSDAY on the first Thursday of odd months, and shares a monthly night with Hiroshi Kawanabe at DJ Bar Bridge in Shibuya.",
+    name_en: "Feline",
     links: {
+      instagram: "https://www.instagram.com/feline__l/",
       soundcloud: "https://soundcloud.com/felinefeline",
     }
   },
@@ -368,7 +426,7 @@ const ARTISTS = [
     name: "Helena Hauff",
     city: "HAMBURG",
     country: "GERMANY",
-    genre: "TECHNO/ELECTRO",
+    genre: "TECHNO/ELECTRONIC/LIVE",
     image: "images/artists/helena-hauff.webp",
     imagePosition: "center top",
     bio: "ハンブルクを拠点とするDJ/プロデューサー。テクノ、エレクトロ、アシッドを横断し、ハードウェアでトラックを組み立てる。2015年に Werkdiscs からデビューアルバム『Discreet Desires』、2018年に Ninja Tune から『Qualm』を発表。2015年には自身のレーベル Return To Disorder を立ち上げている。",
@@ -383,16 +441,41 @@ const ARTISTS = [
   {
     id: "jonathan-kusuma",
     name: "Jonathan Kusuma",
+    city: "JAKARTA",
+    country: "INDONESIA",
+    genre: "HOUSE",
+    image: "images/artists/jonathan-kusuma.webp",
+    bio: "ジャカルタ出身のミュージシャン/プロデューサー/DJ。仲間2人と始めたコレクティブ兼レーベル Dekadenz を軸に、地元でパーティーを続ける。2014年に I'm a Cliché からデビュー EP『Gong 3000』、2016年に Cocktail d'Amore から『Black Magic EP』を発表。それ以前は Space.rec（2009〜2015）や、Komodo と運営した Akamady Records にも関わった。",
+    bio_en: "Jonathan Kusuma is a musician, producer and DJ from Jakarta, where Dekadenz, the collective, label and party he started with two friends, keeps him rooted. His debut EP \"Gong 3000\" came out on I'm a Cliché in 2014, and the \"Black Magic EP\" followed on Cocktail d'Amore in 2016. Before Dekadenz he was involved with the local labels Space.rec (2009 to 2015) and Akamady Records, the latter with Gerhan Ferdinal, aka Komodo.",
+    name_en: "Jonathan Kusuma",
+    links: {
+      instagram: "https://www.instagram.com/ojonkusuma/",
+      soundcloud: "https://soundcloud.com/jonathan-kusuma",
+      bandcamp: "https://jonathankusumamusic.bandcamp.com",
+    }
   },
   {
     id: "jonny-rock",
     name: "Jonny Rock",
+    city: "LONDON",
+    country: "UK",
+    genre: "HOUSE/DISCO",
+    image: "images/artists/jonny-rock.webp",
+    bio: "ロンドンのハウス/ディスコのシーンで活動するDJ/プロデューサー。2000年代にはレコード店 Phonica と Blackmarket Records のカウンターに立ち、Luke Solomon のプロジェクト Freaks ではギターを弾いた。Make Love in Public Spaces や Playhouse などからリリースがある。シカゴハウス、ディスコ、ブギーをつなぐセットに、トルコのサイケデリックな音源を混ぜることもある。",
+    bio_en: "Jonny Rock is a London DJ and producer from the city's house and disco scene. In the 2000s he worked behind the counter at Phonica and Blackmarket Records, and he played guitar in Luke Solomon's Freaks project. Releases include Make Love in Public Spaces, Cabin Fever, Wolf + Lamb Black, Playhouse and Music for Freaks. His sets link old school Chicago house, underground disco and boogie, sometimes with Turkish psychedelic records dug up in Istanbul and Izmir.",
+    name_en: "Jonny Rock",
+    links: {
+      instagram: "https://www.instagram.com/captainrocklock/",
+      soundcloud: "https://soundcloud.com/jonnyrock",
+      bandcamp: "https://gottwax.bandcamp.com/",
+    }
   },
   {
     id: "kikiorix",
     name: "Kikiorix",
     city: "TOKYO",
     country: "JAPAN",
+    genre: "HOUSE/DISCO",
     image: "images/artists/kikiorix.webp",
     bio: "日本・東京を拠点に活動。Kikiorixは日本国内はもちろん、海外でも数多くのクラブやフェスティバルでプレイしてきた。Rush Hour x RDCによるSomewhere in Amsterdam、Dusk Camp Los Angeles、Fabric London、The End/Aka London、Space Ibiza、Tresor Berlinなど、ヨーロッパにとどまらず、ハワイ、中国、タイ、スリランカなどにも招かれている。2000年代にはロンドンを拠点とし、Tomoki Tamuraとともにレジデントを務めたHolicで多くのDJ経験を積み、その後Tresvibesの一員として日本最大級の音楽フェスティバルのひとつであるFuji Rock Festivalへの出演も果たした。平日はRealrockdesignにてデザイナーとして多忙な日々を送る。Rainbow Disco Clubのレジデントデザイナー兼DJ。",
     bio_en: "Based in Tokyo, Japan.Kikiorix has played in many clubs and festivals in Japan as well as abroad including Somewhere in Amsterdam by Rush Hour x RDC, Dusk Camp Los Angeles, Fabric London, The End/Aka London, Space Ibiza, Tresor Berlin – and not only Europe but also he was invited to Hawaii, China, Thailand, Sri Lanka etc. Being based in London in 00s, he gained a lot of DJ experiences as a Holic resident together with Tomoki Tamura, and later he got to perform at one of the biggest music festivals in Japan, Fuji Rock Festival as a member of Tresvibes. During weekdays, he is busy working as a designer at Realrockdesign. A resident DJ and designer for Rainbow Disco Club.",
@@ -404,26 +487,60 @@ const ARTISTS = [
   {
     id: "mala",
     name: "Mala",
+    city: "LONDON",
+    country: "UK",
+    genre: "DUBSTEP",
+    image: "images/artists/mala.webp",
+    imagePosition: "center top",
+    bio: "本名 Mark Lawrence。ロンドン南部サウス・ノーウッド育ちのプロデューサー/DJ。Coki とのデュオ Digital Mystikz、そして DMZ の創設メンバーとして、まだ名前のなかったダブステップを形づくった。2006年にレーベル DEEP MEDi MUSIK を設立し、2012年には『Mala in Cuba』を発表。2006年の「Anti War Dub」は、2025年に RA の今世紀の名曲投票で2位に選ばれた。",
+    bio_en: "Mark Lawrence, raised in South Norwood, South London, helped shape dubstep before it had a name, as one half of Digital Mystikz with Coki and a founding member of DMZ. He set up DEEP MEDi MUSIK in 2006 and released \"Mala in Cuba\" in 2012. In 2025 his 2006 track \"Anti War Dub\" came second in RA's Favourite Music of the Century poll.",
+    name_en: "Mala",
+    links: {
+      instagram: "https://www.instagram.com/maladmz",
+      soundcloud: "https://soundcloud.com/maladmz",
+      website: "http://www.maladmz.com",
+    }
   },
   {
     id: "nc4k",
     name: "NC4K",
-  },
-  {
-    id: "sisi",
-    name: "Sisi",
+    city: "KYOTO",
+    country: "JAPAN",
+    genre: "HOUSE",
+    image: "images/artists/nc4k.webp",
+    bio: "京都のダンスミュージック・レーベル NC4K（No Collar 4 Kicks）を動かす Stones Taro と Lomax のB2B。レーベルは2017年に始まり、2026年5月時点でデジタルを含め40以上のタイトルを出している。Stones Taro は Rinse FM のマンスリー・レジデントで、Scuffed Recordings などからも作品を発表。Lomax はレーベルの本拠、京都 West Harlem の現場を支える。",
+    bio_en: "The B2B of Stones Taro and Lomax, the pair behind the Kyoto dance music label NC4K (No Collar 4 Kicks). Started in 2017, the label had more than 40 titles out, digital included, by May 2026. Stones Taro holds a monthly residency on Rinse FM and has released on Scuffed Recordings among others; Lomax keeps the floor at West Harlem, the Kyoto club NC4K calls home.",
+    links: {
+      soundcloud: "https://soundcloud.com/nc4k",
+      website: "https://nc4k.xyz/",
+    }
   },
   {
     id: "ouissam",
     name: "Ouissam",
+    city: "HANOI",
+    country: "INDONESIA",
+    genre: "HOUSE/DISCO",
+    image: "images/artists/ouissam.webp",
+    imagePosition: "center top",
+    bio: "アジアを拠点に10年以上活動する DJ。香港でレーベル Cliché Records を設立し、ディスコ、ハウス、テクノを混ぜて掛けるスタイルを同地でいち早く広めた。その後 Homesick と Fragrant Harbour の2レーベルを立ち上げ、ベトナム・ハノイではクラブ Savage を作って月例のクィア・パーティー Snug を主宰する。フェスティバル Equation のキュレーションも手がける。",
+    bio_en: "A DJ who has spent more than a decade working across Asia. Ouissam founded Cliché Records in Hong Kong, one of the first in the city to push a mix of disco, house and techno, then started the Homesick and Fragrant Harbour labels. In Hanoi he set up the club Savage, where he runs the monthly queer night Snug, and he also curates the Equation festival.",
+    name_en: "Ouissam",
+    links: {
+      instagram: "https://www.instagram.com/ouissam.jpeg/",
+      soundcloud: "https://soundcloud.com/ouissamhk",
+    }
   },
   {
     id: "yamarchy",
     name: "Yamarchy",
     city: "TOKYO",
     country: "JAPAN",
+    genre: "HOUSE/DISCO",
+    image: "images/artists/yamarchy.webp",
     bio: "東京を拠点とするDJ。2019年に渋谷・道玄坂のMitsukiが開店して以来、レジデントDJ兼ディレクターとしてブッキングを担う。コズミックやバレアリックを軸に、アンダーグラウンドの埋もれたレコードを掘り起こす。江ノ島OPPA-LA、青山ZERO、八王子SHeLTeRで自身のパーティーを主宰。ベルリンのPanorama Bar、ニューヨークのNowadays、札幌PRECIOUS HALL、タイのWonderfruitにも出演している。",
     bio_en: "Tokyo DJ Yamarchy has been resident, director and booker at Mitsuki, the basement club in Shibuya's Dogenzaka, since it opened in 2019. The records lean cosmic and Balearic, dug from the obscure end of the underground. Yamarchy runs parties at OPPA-LA in Enoshima, ZERO in Aoyama and SHeLTeR in Hachioji, and has played Panorama Bar in Berlin, Nowadays in New York and Precious Hall in Sapporo, as well as Wonderfruit in Thailand.",
+    name_en: "Yamarchy",
     links: {
       instagram: "https://www.instagram.com/yamarchy/",
       soundcloud: "https://soundcloud.com/yamarchy-ymd",
@@ -432,6 +549,18 @@ const ARTISTS = [
   {
     id: "suze-ijo",
     name: "Suze Ijó",
+    city: "ROTTERDAM",
+    country: "NETHERLANDS",
+    genre: "HOUSE",
+    image: "images/artists/suze-ijo.webp",
+    imagePosition: "center top",
+    bio: "ロッテルダム出身の DJ。David Mancuso の Loft パーティーに影響を受けた地元のコミュニティ First Floor に加わり、レコード収集に本腰を入れた。セットではシカゴ・ハウスや80年代の曲、ソウルフルなグルーヴを掛ける。Panorama Bar、De School、Nowadays などでプレイし、Dekmantel Festival では Connects Stage のキュレーションも手がけた。",
+    bio_en: "A Rotterdam-born DJ whose record collecting stepped up when she joined First Floor, a now-closed community space in her home city modelled on David Mancuso's Loft parties. That Loft ethos runs through sets of Chicago house, uplifting 80s cuts and warm soulful grooves. She has played Panorama Bar, De School and Nowadays, and curated the Connects Stage at Dekmantel Festival.",
+    name_en: "Suze Ijó",
+    links: {
+      instagram: "https://www.instagram.com/suze.ijo",
+      soundcloud: "https://soundcloud.com/suze_ijo",
+    }
   },
   {
     id: "four-tet",
@@ -448,22 +577,6 @@ const ARTISTS = [
       soundcloud: "https://soundcloud.com/four-tet",
       bandcamp: "https://fourtet.bandcamp.com/",
       website: "https://www.fourtet.net/",
-    }
-  },
-  {
-    id: "ojisan",
-    name: "Ojisan",
-  },
-  {
-    id: "noritake",
-    name: "Noritake",
-    city: "TOKYO",
-    country: "JAPAN",
-    genre: "HOUSE",
-    bio: "MATRICARIA / LAB. のレジデントDJ。",
-    bio_en: "A resident DJ at MATRICARIA / LAB.",
-    links: {
-      instagram: "https://www.instagram.com/nori0615/",
     }
   },
   {
@@ -484,10 +597,6 @@ const ARTISTS = [
     }
   },
   {
-    id: "caimann",
-    name: "Caimann",
-  },
-  {
     id: "fuji",
     name: "FUJI",
     city: "TOKYO",
@@ -505,20 +614,51 @@ const ARTISTS = [
   {
     id: "prins-thomas",
     name: "Prins Thomas",
+    city: "OSLO",
+    country: "NORWAY",
+    genre: "HOUSE/DISCO",
+    image: "images/artists/prins-thomas.webp",
+    imagePosition: "center",
+    bio: "本名 Thomas Moen Hermansen。ノルウェーのスペースディスコを担ってきたDJ/プロデューサー/リミキサー。ブレイクダンスの延長でヒップホップやエレクトロを掛け始め、その後はベーシストとして多くのバンドで演奏した。2003年からは Lindstrøm と組んで制作を重ねる。ノルウェーの才能に絞ったレーベル Full Pupp を主宰し、サブレーベル Internasjonal なども動かしている。",
+    bio_en: "Thomas Moen Hermansen is a DJ, producer and remixer at the heart of Norwegian space disco. He started mixing hip hop and electro as an extension of breakdancing, then went on to play bass in a long run of bands. He has worked with Lindstrøm since 2003, and runs Full Pupp, a label devoted to Norwegian talent, alongside sublabels including Internasjonal.",
+    name_en: "Prins Thomas",
+    links: {
+      instagram: "https://www.instagram.com/prinsthomas",
+      soundcloud: "https://soundcloud.com/prinsthomas",
+      bandcamp: "https://prinsthomas.bandcamp.com/music",
+    }
   },
   {
     id: "rami",
     name: "RAMI",
+    city: "TOKYO",
     country: "JAPAN",
+    genre: "HOUSE/DISCO",
+    image: "images/artists/rami.webp",
     bio: "東京を拠点とするDJ。福島出身、2002年生まれ。渋谷に根づくバレアリック、ニューディスコ、ディスコダブに影響を受け、2023年にレコードのみのDJとして活動を始めた。自身のパーティー「lorca」を不定期に開くほか、青山TUNNELではDNGとともに2年間レギュラーを務めた。",
     bio_en: "Tokyo-based DJ, born in 2002 and originally from Fukushima. Shibuya's long-running Balearic, nu disco and disco dub scene set the direction, and RAMI started out in 2023 playing vinyl only. RAMI throws an irregular party called lorca and spent two years as a regular at Aoyama TUNNEL alongside DNG.",
+    name_en: "RAMI",
     links: {
       instagram: "https://www.instagram.com/rami.6s/",
+      soundcloud: "https://soundcloud.com/user-76845170",
     }
   },
   {
     id: "pianeti-sintetici",
     name: "Pianeti Sintetici",
+    city: "MILAN",
+    country: "ITALY",
+    genre: "TECHNO/AMBIENT/EXPERIMENTAL",
+    image: "images/artists/pianeti-sintetici.webp",
+    bio: "ミラノの Davide Perrone（Primal Code）によるソロ・プロジェクト。2020年に始動し、アンビエント、テクノ、実験的な電子音楽を行き来する。名前は『銀河ヒッチハイク・ガイド』の、世界が注文生産される惑星マグラテアから来ている。アナログシンセとモジュラーによる長い即興を、編集とサウンドデザインで仕上げる。Hypnus Records、Astral Industries、Samurai Music から作品を出している。",
+    bio_en: "The solo project of Milan producer Davide Perrone (Primal Code), running since 2020 across ambient, techno and experimental electronics. The name comes from Magrathea, the planet in \"The Hitchhiker's Guide to the Galaxy\" where whole worlds are built to order. Long improvisations on analogue synths and modular systems are edited into shape, with releases on Hypnus Records, Astral Industries and Samurai Music.",
+    name_en: "Pianeti Sintetici",
+    links: {
+      instagram: "https://www.instagram.com/pianetisintetici",
+      soundcloud: "https://soundcloud.com/pianetisintetici",
+      bandcamp: "https://pianetisintetici.bandcamp.com/",
+      website: "https://ghost-collective.com/pianeti-sintetici",
+    }
   },
   {
     id: "ground",
@@ -587,14 +727,30 @@ const ARTISTS = [
   {
     id: "doltz",
     name: "Doltz.",
+    city: "FUKUOKA",
+    country: "JAPAN",
+    genre: "LIVE/TECHNO/AMBIENT",
+    image: "images/artists/doltz.webp",
+    bio: "サウンドアーティスト／DJ。Omega Point と、DJ Nobu が主宰する Bitta に関わる。ノルウェーの Monument や東京の WOMB でプレイしてきた。シンセサイザーを使った制作とドローイングも手がける。",
+    bio_en: "A sound artist and DJ involved with Omega Point and with Bitta, the outfit run by DJ Nobu. Doltz has played Monument in Norway and WOMB in Tokyo, and also works with synthesizers and drawing.",
+    name_en: "Doltz.",
+    links: {
+      instagram: "https://www.instagram.com/doltzdeep/",
+      soundcloud: "https://soundcloud.com/doltzdeep",
+      bandcamp: "https://doltzdeep.bandcamp.com/",
+    }
   },
   {
     id: "joma",
     name: "Joma",
     city: "TOKYO",
     country: "JAPAN",
+    genre: "TECHNO/HOUSE",
+    image: "images/artists/joma.webp",
+    imagePosition: "center top",
     bio: "東京のDJ。中目黒Solfaで開かれるテクノ／ハウスのパーティー「Night Trip」を活動の軸とし、各回のラインナップに名を連ねる。同パーティーは2026年10月の回にJohn PlazaとStefan Goldmannを招いた。リスニング・パーティー「Day Trip」にも関わり、アパレルも手がける。",
     bio_en: "Tokyo DJ whose home base is Night Trip, a techno and house party held at Solfa in Nakameguro, where Joma turns up on every lineup. The October 2026 edition brought in John Plaza and Stefan Goldmann. Joma is also involved with the listening party Day Trip and has an apparel line.",
+    name_en: "Joma",
     links: {
       instagram: "https://www.instagram.com/jomajjj/",
     }
@@ -618,6 +774,18 @@ const ARTISTS = [
   {
     id: "yukimasa",
     name: "YUKIMASA",
+    city: "TOKYO",
+    country: "JAPAN",
+    genre: "TECHNO",
+    image: "images/artists/yukimasa.webp",
+    bio: "東京を拠点とする DJ／プロデューサー。90年代後半にカリフォルニア州アナハイムで活動を始め、2000年代初めに帰国した。2007年から東京のクラブで自身のパーティー「FORCE」を続けている。2019年にはイタリアのアーティスト Drafted とともに、日本とイタリアを拠点とするレーベル Paradigma Records を立ち上げた。",
+    bio_en: "A Tokyo-based DJ and producer who started out in Anaheim, California in the late 90s before moving back to Japan in the early 2000s. He has run his own party, FORCE, across Tokyo clubs since 2007, and in 2019 launched Paradigma Records, a label split between Japan and Italy, with Italian artist Drafted.",
+    name_en: "YUKIMASA",
+    links: {
+      instagram: "https://www.instagram.com/norihiro_yukimasa",
+      soundcloud: "https://soundcloud.com/djyukimasa",
+      bandcamp: "https://paradigmarecords.bandcamp.com",
+    }
   },
   {
     id: "tonbo",
@@ -655,13 +823,32 @@ const ARTISTS = [
   {
     id: "dj-yazi",
     name: "DJ Yazi",
+    city: "TOKYO",
     country: "JAPAN",
+    genre: "TECHNO",
+    image: "images/artists/dj-yazi.webp",
+    imagePosition: "center",
     bio: "90年代半ばから活動する東京のDJ。前衛的なヒップホップ集団Think Tankの一員として、Black Smoker Recordsと歩んできた。パーティーEl Ninoのレジデントを20年務める。Harukaとのユニット Twin Peaksでは、ライヴとDJの境界を溶かした即興を聴かせる。スタイルを横断しながら、深く沈んだグルーヴという一本の芯は動かない。",
     bio_en: "A Tokyo DJ active since the mid-90s, part of the avant-garde hip hop collective Think Tank and its label Black Smoker Records. DJ Yazi has held a residency at the party El Nino for two decades, and as Twin Peaks with Haruka improvises across the line between live and DJ sets. The styles move freely, but the deep, tripped-out groove at the centre never does.",
+    links: {
+      instagram: "https://www.instagram.com/dj_yazi_bsr/",
+      soundcloud: "https://soundcloud.com/svozupq7gv6f",
+    }
   },
   {
     id: "iron",
     name: "Iron",
+    city: "TOKYO",
+    country: "JAPAN",
+    genre: "TECHNO/HOUSE",
+    image: "images/artists/iron.webp",
+    imagePosition: "center top",
+    bio: "東京を拠点とするテクノDJ。南青山 VENT のパーティー SAMSARA でレジデントを務め、Peter Van Hoesen、Eric Cloutier、Polar Inertia ら海外からのゲストと共演してきた。インドと韓国でもツアーを行い、2026年1月にはソウルの vurt. で開かれた VANTA × SAMSARA に出演している。",
+    bio_en: "Tokyo techno DJ Iron holds a residency at SAMSARA, the party at VENT, where he has shared the bill with international guests including Peter Van Hoesen, Eric Cloutier and Polar Inertia. He has toured India and South Korea, and in January 2026 played VANTA × SAMSARA at vurt. in Seoul.",
+    links: {
+      instagram: "https://www.instagram.com/iron_eisaku/",
+      soundcloud: "https://soundcloud.com/eisaku-ihashi",
+    }
   },
   {
     id: "kiko-dinucci",
@@ -696,6 +883,17 @@ const ARTISTS = [
   {
     id: "kuo-from-sunset-rollercoaster",
     name: "Kuo From Sunset Rollercoaster",
+    city: "TAIPEI",
+    country: "TAIWAN",
+    genre: "BAND",
+    image: "images/artists/kuo-from-sunset-rollercoaster.webp",
+    bio: "台北のバンド落日飛車（Sunset Rollercoaster）で作曲、ボーカル、ギターを担う曾國宏（Kuo）。台北のライブハウス「地下社会」周辺の実験的なバンドを経て、2016年のEP『Jinji Kikko』でバンドをAORやシンセ・ファンクへ転換させた。2020年の『SOFT STORM』は台湾の金曲奨で最優秀バンド賞を受賞。2024年には韓国のHYUKOHとの共作『AAA』を発表した。",
+    bio_en: "Tseng Kuo-hung, known as Kuo, writes, sings and plays guitar in the Taipei band Sunset Rollercoaster. After years in experimental projects around Taipei's Underworld venue, the 2016 EP \"Jinji Kikko\" swung the band toward AOR and synth funk. \"SOFT STORM\" (2020) won Best Band at Taiwan's Golden Melody Awards, and \"AAA\" (2024) was made in full with Korea's HYUKOH.",
+    name_en: "Kuo From Sunset Rollercoaster",
+    links: {
+      instagram: "https://www.instagram.com/sunsetrollercoaster/",
+      website: "https://festivaldefrue.com/music/kuo-from-sunset-rollercoaster.html",
+    }
   },
   {
     id: "sylvan-esso",
@@ -756,9 +954,17 @@ const ARTISTS = [
   {
     id: "suimin",
     name: "Suimin",
+    city: "TOKYO",
     country: "JAPAN",
+    genre: "TECHNO/HOUSE/ELECTRONIC",
+    image: "images/artists/suimin.webp",
     bio: "東京を拠点とするDJ。Bonoboのパーティー「渦」に空中水泳らと並んで出演を重ね、Débrisの「FREEDOM無国籍HOUR」やBonoboの「MAMACULT」にも繰り返し名を連ねる。野外ではruralに2023年と2026年に出演している。",
     bio_en: "Suimin is a Tokyo DJ who turns up again and again at Bonobo's 渦 (Uzu) nights alongside 空中水泳, as well as FREEDOM無国籍HOUR at Débris and MAMACULT at Bonobo. Outdoors, Suimin has played rural in both 2023 and 2026.",
+    name_en: "Suimin",
+    links: {
+      instagram: "https://www.instagram.com/djsuimin/",
+      soundcloud: "https://soundcloud.com/min-ing",
+    }
   },
   {
     id: "dj-krush",
@@ -809,6 +1015,18 @@ const ARTISTS = [
   {
     id: "space-drum-meditation",
     name: "Space Drum Meditation",
+    city: "HAMBURG",
+    country: "GERMANY",
+    genre: "TECHNO/AMBIENT/ELECTRONIC",
+    image: "images/artists/space-drum-meditation.webp",
+    bio: "ハンブルクを拠点とするプロジェクト。打楽器を軸にしたトラックを作り、2018年の『SDM001』から続く自主の SDM シリーズを重ねてきた。2024年にはアルバム『Four Tusks』を発表している。",
+    bio_en: "A Hamburg-based project built around percussion-driven tracks, releasing the self-run SDM series since SDM001 in 2018, with the album Four Tusks following in 2024.",
+    name_en: "Space Drum Meditation",
+    links: {
+      instagram: "https://www.instagram.com/spacedrummeditation",
+      soundcloud: "https://soundcloud.com/spacedrummeditation",
+      bandcamp: "https://spacedrummeditation.bandcamp.com",
+    }
   },
   {
     id: "aoki-takamasa",
@@ -845,6 +1063,17 @@ const ARTISTS = [
   {
     id: "kohei",
     name: "Kohei",
+    city: "KYOTO",
+    country: "JAPAN",
+    genre: "TECHNO/HOUSE/MINIMAL",
+    image: "images/artists/kohei.webp",
+    bio: "京都を拠点とするテクノDJ。ミニマルなテクノやハウスを軸に、横揺れのグルーヴと剥き出しのファンクを重ねるプレイで知られる。2019年から、旧友の AOKI takamasa と大阪の Circus Osaka でレギュラーパーティー MONZA を主宰。各地のクラブやフェスに出演し、rural にも複数回出ている。",
+    bio_en: "Kyoto-based techno DJ Kohei works through minimal techno and house, leaning on a swinging groove and stripped-down funk. Since 2019 he has run the regular party MONZA at Circus Osaka with his longtime friend AOKI takamasa, and he plays clubs and festivals across Japan, including several appearances at rural.",
+    name_en: "Kohei",
+    links: {
+      instagram: "https://www.instagram.com/kohei_tempelgarten/",
+      soundcloud: "https://soundcloud.com/kohei_t",
+    }
   },
   {
     id: "akiram-en",
@@ -879,7 +1108,9 @@ const ARTISTS = [
   {
     id: "yellowuhuru",
     name: "YELLOWUHURU",
+    city: "TOKYO",
     country: "JAPAN",
+    genre: "HOUSE",
     bio: "DJ／プロデューサー。パーティー兼レーベルFLATTOPを主宰し、ハウスを根底に置きながら電子音と生音を有機的に混ぜる。FLATTOPは2025年1月、渋谷WWWで10周年を迎えた。2024年6月にはSHIBUYA CLUB QUATTROで、バンドthe hatchとのオールナイト「NAKED ORANGE」を開いた。",
     bio_en: "DJ and producer, and the founder of FLATTOP, a party and label that marked its tenth anniversary at WWW in Shibuya in January 2025. House sits at the core, blended organically with electronics and live, acoustic sound. In June 2024 YELLOWUHURU teamed up with the band the hatch for NAKED ORANGE, an all-nighter at Shibuya CLUB QUATTRO.",
     links: {
@@ -953,10 +1184,36 @@ const ARTISTS = [
   {
     id: "kohra",
     name: "Kohra",
+    city: "GOA",
+    country: "INDIA",
+    genre: "TECHNO/AMBIENT/TRANCE/JUNGLE",
+    image: "images/artists/kohra.webp",
+    bio: "インド・ゴアを拠点とするDJ/プロデューサー。名前はウルドゥー語で「霧」を意味する。2011年にレーベル Qilla Records を設立し、2024年には100番目のリリースとして35組以上が参加したコンピレーション『Chakravyuh』を出した。セットはアンビエント、アシッド、トランス、テクノ、ジャングルを行き来する。作品は Bedrock や Spacelab からも出ている。",
+    bio_en: "A DJ and producer based in Goa, India, whose name is Urdu for fog. Kohra founded Qilla Records in 2011, and in 2024 the label marked its 100th release with \"Chakravyuh\", a compilation of more than 35 artists. His sets drift through ambient, acid, trance, techno and jungle, and his own records have also landed on Bedrock and Spacelab.",
+    name_en: "Kohra",
+    links: {
+      instagram: "https://www.instagram.com/kohra_",
+      soundcloud: "https://soundcloud.com/kohra",
+      bandcamp: "https://kohra.bandcamp.com",
+    }
   },
   {
     id: "lady-shaka",
     name: "Lady Shaka",
+    city: "LONDON",
+    country: "UK",
+    genre: "ELECTRONIC/HIPHOP/EXPERIMENTAL",
+    image: "images/artists/lady-shaka.webp",
+    imagePosition: "center top",
+    bio: "アオテアロア（ニュージーランド）出身、ロンドンを拠点とするアフロ・パシフィカのDJ。マオリ、タヒチ、カーボベルデなどにルーツを持つ。2019年に太平洋文化のコレクティブ Pulotu Underworld を立ち上げ、ディレクター兼キュレーターを務める。Boiler Room や Keep Hush にも出演。選曲には、クィアとしての自身と、海（モアナ）とディアスポラへのつながりが映る。",
+    bio_en: "An Afro Pasifika DJ from Aotearoa, based in London, with Māori, Tahitian and Cape Verdean roots among others. In 2019 she founded Pulotu Underworld, the Pacific collective she still directs and curates, and she has played Boiler Room and Keep Hush. Her selections carry her queer identity as a femme queen and her ties to the moana, the ocean, and its diaspora.",
+    name_en: "Lady Shaka",
+    links: {
+      instagram: "https://www.instagram.com/ladyshaka",
+      soundcloud: "https://soundcloud.com/ladyshaka",
+      bandcamp: "https://ladyshaka.bandcamp.com/",
+      website: "https://www.lady-shaka.com",
+    }
   },
   {
     id: "moodman",
@@ -1003,6 +1260,16 @@ const ARTISTS = [
   {
     id: "paquita-gordon",
     name: "Paquita Gordon",
+    country: "ITALY/SPAIN",
+    genre: "TECHNO/HOUSE/AMBIENT/DnB/TRANCE",
+    image: "images/artists/paquita-gordon.webp",
+    bio: "イタリアとスペインを拠点に、すべてレコードでプレイするDJ。セットには二つの顔がある。サイケデリア、ブラックミュージック、アンビエント、ダブ、フォーク、スピリチュアルジャズをめぐるコズミックな面と、ハウスやテクノからドラムンベース、トランスまでを通るクラブの面だ。音の部族的なルーツと、ライブ音楽が持つ儀式的で集団的な側面に関心を寄せる。RA のポッドキャスト RA.639 を手がけている。",
+    bio_en: "A vinyl-only DJ working between Italy and Spain. Her sets have two sides: a cosmic one that moves through psychedelia, black music, ambient, dub, folk and spiritual jazz, and a club one that runs from house and techno to drum and bass and trance. She is drawn to the tribal roots of sound and the ritual, collective side of live music, and recorded RA.639 for the RA podcast.",
+    name_en: "Paquita Gordon",
+    links: {
+      soundcloud: "https://soundcloud.com/paquitagordon",
+      website: "https://triangleagency.com/paquita-gordon/",
+    }
   },
   {
     id: "powder",
@@ -1022,10 +1289,35 @@ const ARTISTS = [
   {
     id: "sherelle",
     name: "SHERELLE",
+    city: "LONDON",
+    country: "UK",
+    genre: "JUNGLE/DnB/TECHNO",
+    image: "images/artists/sherelle.webp",
+    bio: "ロンドンの DJ／プロデューサー。160BPM 以上の高速ダンスミュージックを軸にする。2020年に NAINA とレーベル HOOVERSOUND を共同設立し、黒人や LGBTQI のアーティストを支える BEAUTIFUL も運営する。デビューアルバム『WITH A VENGEANCE』を発表し、DJ Mag の Best of British 2025 で Breakthrough Producer を受賞した。",
+    bio_en: "A London DJ and producer who has made 160bpm and up her home turf. She co-founded HOOVERSOUND with NAINA in 2020 and runs BEAUTIFUL, a project that opens studio access to Black and LGBTQI artists. She has released her debut album WITH A VENGEANCE and took DJ Mag's Best of British 2025 award for Breakthrough Producer.",
+    name_en: "SHERELLE",
+    links: {
+      instagram: "https://www.instagram.com/sherelle_",
+      soundcloud: "https://soundcloud.com/iamsherelle",
+      bandcamp: "https://sherelle.bandcamp.com/",
+    }
   },
   {
     id: "upsammy",
     name: "upsammy",
+    city: "AMSTERDAM",
+    country: "NETHERLANDS",
+    genre: "TECHNO/DnB/AMBIENT/EXPERIMENTAL",
+    image: "images/artists/upsammy.webp",
+    bio: "アムステルダムを拠点とするプロデューサー／DJ。2020年に Dekmantel からデビューアルバム『Zoom』を発表した。ドラムマシン、Ableton、モジュラーシンセ、フィールドレコーディングだけで作った作品だ。同レーベルからは EP『Bend』（2021）と、ドラムンベースに振った『Open Catalyst』（2025）も出ている。De School のレジデントを務め、Whities からのリリースもある。",
+    bio_en: "An Amsterdam-based producer and DJ whose debut album Zoom came out on Dekmantel in 2020, made with nothing more than an Analog Rytm, Ableton, a modular synth and field recordings. Dekmantel has since put out her Bend EP (2021) and Open Catalyst (2025), a turn toward drum and bass. She was a resident at De School and has also released on Whities.",
+    name_en: "upsammy",
+    links: {
+      instagram: "https://www.instagram.com/upsammy_/",
+      soundcloud: "https://soundcloud.com/upsammy",
+      bandcamp: "https://upsammy.bandcamp.com/",
+      website: "https://upsammy.com/",
+    }
   },
   {
     id: "occa",
@@ -1061,6 +1353,18 @@ const ARTISTS = [
   {
     id: "idjut-boys",
     name: "Idjut Boys",
+    city: "LONDON",
+    country: "UK",
+    genre: "HOUSE/DISCO",
+    image: "images/artists/idjut-boys.webp",
+    bio: "Dan Tyler と Conrad McDonnell によるロンドンのデュオ。同名のクラブナイトを母体にレーベル U-Star を始め、Noid、Droid と3つのレーベルを運営してきた。ダブの効いた、ディスコをサンプリングしたハウスで知られる。2012年に Smalltown Supersound から初のアルバム『Cellar Door』を発表。2025年には新しいレーベル Bite The Day を始めた。",
+    bio_en: "Dan Tyler and Conrad McDonnell work out of a North London studio as Idjut Boys. They started U-Star off the back of their club night of the same name, went on to run Noid and Droid too, and became known for dub-heavy, disco-sampling house. Their first album, Cellar Door, came out on Smalltown Supersound in 2012, and in 2025 they launched a new label, Bite The Day.",
+    name_en: "Idjut Boys",
+    links: {
+      instagram: "https://www.instagram.com/idjut_boys/",
+      soundcloud: "https://soundcloud.com/idjutboys",
+      bandcamp: "https://idjutboys.bandcamp.com/",
+    }
   },
   {
     id: "ysk",
@@ -1081,6 +1385,18 @@ const ARTISTS = [
   {
     id: "mr-disco-kid",
     name: "Mr. Disco Kid",
+    city: "TOKYO",
+    country: "JAPAN",
+    genre: "HOUSE/DISCO",
+    image: "images/artists/mr-disco-kid.webp",
+    imagePosition: "center top",
+    bio: "東京の DJ。10代から DJ と、レコードの個人ディーラーとして活動してきた。レア・グルーヴからハウス、テクノ、ワールドミュージックまでを掛ける。2024年と2025年にはヨーロッパをツアーし、ロンドンの Giant Steps で2年続けてオールナイトのセットを務めた。ディーラーとしては Gilles Peterson や Antal を顧客に持つ。",
+    bio_en: "A Tokyo DJ who started out in his teens both behind the decks and as a private record dealer. His sets run from rare grooves to house, techno and world music. He toured Europe in 2024 and 2025, playing all night long at Giant Steps in London both years, and his dealing clients include Gilles Peterson and Antal.",
+    name_en: "Mr. Disco Kid",
+    links: {
+      instagram: "https://www.instagram.com/mr_disco_kid",
+      soundcloud: "https://soundcloud.com/mrdiscokid",
+    }
   },
   {
     id: "so",
@@ -1101,8 +1417,16 @@ const ARTISTS = [
     name: "Akira Arasawa",
     city: "TOKYO",
     country: "JAPAN",
+    genre: "HOUSE",
+    image: "images/artists/akira-arasawa.webp",
+    imagePosition: "center",
     bio: "東京を拠点とするプロデューサー／DJ。Chill Mountain Recordを軸に、Shango Record、Lump Record、TOTEM TRAXXなど海外のレーベルから作品を発表している。2022年と2023年にはイビサのRadio Sonicaからライブ配信を行い、2024年は韓国、クロアチア、タイ、メキシコでプレイした。DJではディープハウスやオーガニックハウスからニュー・トライバル・ディスコまでを行き来する。",
     bio_en: "Tokyo-based producer and DJ tied to Chill Mountain Rec, with tracks out on Chill Mountain Record, Shango Record, Lump Record, Totem Traxx and other overseas labels. Akira Arasawa streamed live from Radio Sonica's Ibiza studio in 2022 and 2023, and in 2024 played Goulashdisko and Modem in Croatia, Wonderfruit in Thailand and M.N. Roy in Mexico. Behind the decks, the sets move from deep and organic house to nu tribal disco.",
+    name_en: "Akira Arasawa",
+    links: {
+      instagram: "https://www.instagram.com/akiraarasawa/",
+      soundcloud: "https://soundcloud.com/akiraarasawa",
+    }
   },
   {
     id: "azu-tiwaline",
@@ -1122,15 +1446,32 @@ const ARTISTS = [
   {
     id: "cmt",
     name: "CMT",
+    city: "NAGANO",
+    country: "JAPAN",
+    genre: "HOUSE/DISCO/TECHNO",
+    image: "images/artists/cmt.webp",
+    bio: "2000年活動スタート、現在長野県軽井沢在住。東京、大阪、奈良、長野と拠点を変えながら全国各地の最重要アンダーグラウンドパーティシーンと共鳴。ハウス、テクノ、ディスコ、チルアウト、エクスペリメンタルを自在に横断する、緻密なミックススキルと豊かなストーリー性を持ったプレイスタイルが特徴です。",
+    bio_en: "Active since 2000, now based in Karuizawa, Nagano. Having shifted bases from Tokyo to Osaka, Nara and Nagano, they have resonated with the most vital underground party scenes across Japan. Their style is defined by meticulous mixing skills and a rich sense of narrative, moving freely between house, techno, disco, chill-out and experimental.",
+    name_en: "CMT",
+    links: {
+      instagram: "https://www.instagram.com/xxcmtxx/",
+      soundcloud: "https://soundcloud.com/dj_cmt",
+    }
   },
   {
     id: "dj-hi-c",
     name: "DJ HI-C",
+    city: "OSAKA",
     country: "JAPAN",
+    genre: "TECHNO",
+    image: "images/artists/dj-hi-c.webp",
     bio: "大阪を拠点とするDJ／プロデューサー。ターンテーブリスト・ユニットKireekとしてDMC World Championshipを5連覇したのち、テクノへ軸足を移した。関西の野外パーティーMOMENTの中心メンバーで、Toru Ikemoto、TENOとテクノ・レーベルaum recordingsを設立。2023年にはFUJI ROCK FESTIVALとFUTURE TERRORに出演した。",
     bio_en: "Osaka-based DJ and producer. As part of the turntablist unit Kireek, DJ HI-C won the DMC World Championship five years in a row before switching over to techno. A core member of MOMENT, the outdoor party in the Kansai region, and co-founder of the techno label aum recordings with Toru Ikemoto and TENO. 2023 brought sets at FUJI ROCK FESTIVAL in July and FUTURE TERROR at year's end.",
+    name_en: "DJ HI-C",
     links: {
       instagram: "https://www.instagram.com/djhi__c/",
+      soundcloud: "https://soundcloud.com/djhi-c-kireek",
+      bandcamp: "https://aumrecordings.bandcamp.com/",
       website: "https://discoveryhi-c.com/",
     }
   },
@@ -1152,16 +1493,28 @@ const ARTISTS = [
   {
     id: "kazuma-onishi",
     name: "KAZUMA ONISHI",
+    city: "OSAKA",
+    country: "JAPAN",
+    genre: "TECHNO",
+    image: "images/artists/kazuma-onishi.webp",
+    bio: "メルボルン（ナーム）を拠点とする日本人DJ/プロデューサー。テクノを軸に、ミニマル、ハウス、エレクトロ、サイケデリックな要素を混ぜ合わせる。3曲を同時に重ねるミックスを多用し、ループやリズムが少しずつ形を変えていくセットを組み立てる。",
+    bio_en: "Kazuma Onishi is a Japanese DJ and producer based in Naarm/Melbourne. His sets are rooted in techno and draw in minimal, house, electro and psychedelic elements, often with three tracks running at once so that loops and rhythms keep shifting.",
+    name_en: "KAZUMA ONISHI",
   },
   {
     id: "kyomi",
     name: "Kyomi",
     city: "TOKYO",
     country: "JAPAN",
+    genre: "HOUSE/TECHNO/ELECTRONIC/AMBIENT",
+    image: "images/artists/kyomi.webp",
+    imagePosition: "center",
     bio: "鏡民（Kyomi）は、東京を拠点に全国各地の現場でプレイするDJ。ジャンルの枠に収まらないエクスペリメンタルな選曲で、実験性とダンスフロアの快楽を同じセットの中で両立させる。東京ではWOMBやMitsukiへの出演が多く、2026年8月には台北のPawnshopでもプレイした。",
     bio_en: "Kyomi (鏡民) is a Tokyo-based DJ who plays parties all over Japan. Experimental, genre-blind selections drive sets that are as exploratory as they are fun to dance to. WOMB and Mitsuki are the most frequent Tokyo stops, and August 2026 brought a date at Pawnshop in Taipei.",
+    name_en: "Kyomi",
     links: {
       instagram: "https://www.instagram.com/kyomi_togashi/",
+      soundcloud: "https://soundcloud.com/user-202919141",
     }
   },
   {
@@ -1169,16 +1522,50 @@ const ARTISTS = [
     name: "Kuniyuki",
     city: "SAPPORO",
     country: "JAPAN",
+    genre: "LIVE/TECHNO/HOUSE",
+    image: "images/artists/kuniyuki.webp",
+    imagePosition: "center top",
     bio: "札幌を拠点とするプロデューサー／DJ。作品の多くを東京のレーベルMule Musiqから発表してきた。2002年にはJoe ClaussellのNatural Resourceから、地元札幌のクラブに捧げた「Precious Hall」をリリース。2018年にはオランダのMusic From Memoryが、1986〜93年の自宅録音を『Early Tape Works』としてまとめた。Koss名義でも活動する。",
     bio_en: "Sapporo-based producer and DJ whose catalog lives largely on the Tokyo label Mule Musiq. In 2002 came \"Precious Hall\", a dedication to the hometown club scene, on Joe Claussell's Natural Resource. In 2018 the Dutch label Music From Memory gathered the 1986 to 1993 home recordings as Early Tape Works. Kuniyuki also records as Koss.",
+    name_en: "Kuniyuki",
+    links: {
+      instagram: "https://www.instagram.com/kuniyuki_takahashi_music/",
+      soundcloud: "https://soundcloud.com/kuniyuki-takahashi",
+      bandcamp: "https://mulemusiq.bandcamp.com/",
+    }
   },
   {
     id: "hybrid-man",
     name: "Hybrid Man",
+    city: "MELBOURNE",
+    country: "AUSTRALIA",
+    genre: "LIVE/TECHNO",
+    image: "images/artists/hybrid-man.webp",
+    bio: "メルボルン（ナーム）を拠点とする、Julien Huynh と Will Holden のデュオ。ハードウェアによるライブセットを軸に活動する。2019年に地元レーベル Paper-Cuts から初の EP『Lyrebird』、2022年に Butter Sessions から『Shapeshifting』を発表。2023年には Skylab Radio で、ダンスフロア向けではない曲をかける番組 Hearing Things を始めた。",
+    bio_en: "Hybrid Man is the Naarm/Melbourne duo of Julien Huynh and Will Holden, built around hardware live sets. Their first EP, \"Lyrebird\", came out on local label Paper-Cuts in 2019, followed by \"Shapeshifting\" on Butter Sessions in 2022. In 2023 they started Hearing Things on Skylab Radio, a show for tracks that sit outside dancefloor styles.",
+    name_en: "Hybrid Man",
+    links: {
+      instagram: "https://www.instagram.com/hybrid__man",
+      soundcloud: "https://soundcloud.com/hybridmn",
+      bandcamp: "https://hybridman.bandcamp.com/",
+    }
   },
   {
     id: "jakojako",
     name: "JakoJako",
+    city: "BERLIN",
+    country: "GERMANY",
+    genre: "LIVE/TECHNO",
+    image: "images/artists/jakojako.webp",
+    bio: "ベルリンを拠点とするプロデューサー/DJで、Berghain のレジデント。本名は Sibel Koçer。モジュラーシンセを中心にしたライブで知られ、シンセ専門店 SchneidersLaden で数年働いた。そこで出会った Daniel Miller の Mute から、2023年に EP『Verve』、2024年に『Segmente』を出し、2025年にはベトナムのテト（旧正月）の時期に録音したアルバム『Têt 41』を発表した。",
+    bio_en: "JakoJako is Sibel Koçer, a Berlin producer, live performer and Berghain resident. Modular synthesis sits at the centre of her studio and stage work, and she spent several years at SchneidersLaden, the Berlin synth shop where she first met Mute founder Daniel Miller. Mute released her EPs \"Verve\" (2023) and \"Segmente\" (2024), then her album \"Têt 41\" (2025), recorded in Vietnam over the Tết Lunar New Year.",
+    name_en: "JakoJako",
+    links: {
+      instagram: "https://www.instagram.com/jakojako_live/",
+      soundcloud: "https://soundcloud.com/jakojako_live",
+      bandcamp: "https://jakojako.bandcamp.com/",
+      website: "https://jakojako.com/",
+    }
   },
   {
     id: "haruka",
@@ -1202,8 +1589,15 @@ const ARTISTS = [
     name: "Herbalistek",
     city: "TOKYO",
     country: "JAPAN",
+    genre: "BASS/DUNSTEP",
+    image: "images/artists/herbalistek.webp",
     bio: "東京を拠点とするプロデューサー／DJデュオ。ダークでディープなベースミュージックを軸に、テクノやダブステップ、トラップ、ダウンテンポを取り込む。TREKKIE TRAXやBassrushなどからリリース。2019年にEDC JapanのDiscovery Projectに選ばれ、2024年にFUJI ROCK FESTIVALに初出演、同年米国でもプレイした。主宰イベント「SECTOR」ではGOTH-TRADやDJ KRUSHを迎えている。",
     bio_en: "Tokyo producer and DJ duo working in dark, deep bass music, pulling in techno, dubstep, trap and downtempo. They've released on TREKKIE TRAX, Bassrush and more, won EDC Japan's Discovery Project in 2019, and made their Fuji Rock debut in 2024, the same year they first played the US. Their own event, SECTOR, has hosted GOTH-TRAD and DJ KRUSH.",
+    links: {
+      instagram: "https://www.instagram.com/herbalistekmusic/",
+      soundcloud: "https://soundcloud.com/herbalistekmusic",
+      bandcamp: "https://herbalistekmusic.bandcamp.com/",
+    }
   },
   {
     id: "efdemin",
@@ -1242,10 +1636,34 @@ const ARTISTS = [
   {
     id: "vril",
     name: ".VRIL",
+    country: "GERMANY",
+    genre: "TECHNO",
+    image: "images/artists/vril.webp",
+    bio: "ドイツのプロデューサー。2011年に Berghain でのプレイで注目を集めた。2014年に Giegling 傘下の Forum から初のアルバム『Torus』を発表。その後はアムステルダムの Delsin から『Portal』（2015）、『Anima Mundi』（2018）、『Alte Seele』（2021）、『Animist』（2023）とアルバムを重ねている。",
+    bio_en: "A German producer who first drew attention playing Berghain in 2011. His debut album Torus came out in 2014 on Forum, the Giegling offshoot, and since then Amsterdam's Delsin has released a run of albums: Portal (2015), Anima Mundi (2018), Alte Seele (2021) and Animist (2023).",
+    name_en: ".VRIL",
+    links: {
+      instagram: "https://www.instagram.com/vril_01",
+      soundcloud: "https://soundcloud.com/vril_01",
+      bandcamp: "https://vrilofficial.bandcamp.com/",
+    }
   },
   {
     id: "rrose",
     name: "Rrose",
+    city: "CALIFORNIA",
+    country: "USA",
+    genre: "TECHNO",
+    image: "images/artists/rrose.webp",
+    bio: "カリフォルニアを拠点とするテクノのプロデューサー。自身のレーベル Eaux を運営し、Sandwell District、Stroboscopic Artefacts、Infrastructure から EP を出してきた。Bob Ostertag、Charlemagne Palestine、Lucy とはそれぞれ共作アルバムがある。初のソロアルバムは2019年の『Hymn to Moisture』。",
+    bio_en: "A California-based techno producer who runs the Eaux label, with EPs on Sandwell District, Stroboscopic Artefacts and Infrastructure. Rrose has also made collaborative albums with Bob Ostertag, Charlemagne Palestine and Lucy. The first solo album, Hymn to Moisture, came out on Eaux in 2019.",
+    name_en: "Rrose",
+    links: {
+      instagram: "https://www.instagram.com/rrose1921",
+      soundcloud: "https://soundcloud.com/rrose1921",
+      bandcamp: "https://rrose.bandcamp.com",
+      website: "http://rrose.ro",
+    }
   },
   {
     id: "goth-trad",
@@ -1269,11 +1687,15 @@ const ARTISTS = [
     name: "RISA TANIGUCHI",
     city: "TOKYO",
     country: "JAPAN",
+    genre: "TECHNO",
+    image: "images/artists/risa-taniguchi.webp",
     bio: "東京を拠点とするDJ／プロデューサー。歪んだシンセとアシッドなベース、加工した自身のボイスサンプルを軸にテクノを作る。Chris Liebing主宰のCLRから「Break It EP」を発表し、Second Stateにも作品を残す。「So Loud EP」はBeatportのTechno (Raw/Deep/Hypnotic) チャートで1位を記録。東京のWOMB、ソウルのUndercityでレジデントを務める。",
     bio_en: "Tokyo-based DJ and producer making techno out of distorted synths, acid bass and processed vocal samples of RISA TANIGUCHI's own voice. Chris Liebing's CLR put out the Break It EP, and there are releases on Second State too. The So Loud EP went to No. 1 on Beatport's Techno (Raw/Deep/Hypnotic) chart. Residencies include WOMB in Tokyo and Undercity in Seoul.",
+    name_en: "RISA TANIGUCHI",
     links: {
       instagram: "https://www.instagram.com/risa_taniguchi_rs/",
       soundcloud: "https://soundcloud.com/risataniguchi",
+      website: "https://www.risataniguchi.com/",
     }
   },
   {
@@ -1281,30 +1703,78 @@ const ARTISTS = [
     name: "Shhhhh",
     city: "TOKYO",
     country: "JAPAN",
+    genre: "TECHNO/HOUSE/ELECTRONIC",
+    image: "images/artists/shhhhh.webp",
+    imagePosition: "center top",
     bio: "東京を拠点とするDJ。世界各地の民族音楽のリズムと電子音を、ひとつのグルーヴにつなぐ。Boredomsの周辺コミュニティでツアーを支え、ときに彼らのためにDJもした経験を持つ。2018年秋からはホーチミンのThe Observatoryのレジデント。「Gamelan Mix」はResident AdvisorのMix of the Dayに選ばれた。レーベル「El Folklore Paradox」を掲げ、EACH STORYではラインナップの助言役を務める。",
     bio_en: "Tokyo DJ Shhhhh threads folk and traditional rhythms from around the world into electronic dance music. Time spent in the extended circle around Boredoms meant helping on tours and sometimes DJing for the band, and since fall 2018 Shhhhh has held a residency at The Observatory in Ho Chi Minh City. The Gamelan Mix, made during the pandemic, was picked as RA's Mix of the Day. Shhhhh also advises on the lineup for EACH STORY and runs El Folklore Paradox, a concept and label built on the idea that traditional music and the newest techno share the same DNA.",
+    name_en: "Shhhhh",
     links: {
+      instagram: "https://www.instagram.com/shhhhh_kaneko/",
       soundcloud: "https://soundcloud.com/shhhhhsunhouse",
     }
   },
   {
     id: "sara-landry",
     name: "Sara Landry",
+    city: "AUSTIN",
+    country: "USA",
+    genre: "TECHNO",
+    image: "images/artists/sara-landry.webp",
+    bio: "テキサス州オースティンを拠点とする DJ／プロデューサー。制作とエンジニアリングを独学で身につけ、インダストリアル・テクノを T-Minus、Kraftek、mau5trap から発表してきた。ウェアハウスと配信のイベントシリーズ KLUBHAUS を主宰する。2026年の Ultra Music Festival では Amelie Lens と B2B を行い、アルバム『Divine Intervention』を発表している。",
+    bio_en: "An Austin, Texas DJ and producer, self-taught in both production and audio engineering, whose industrial techno has landed on T-Minus, Kraftek and mau5trap. She runs KLUBHAUS, a warehouse and livestream event series, went B2B with Amelie Lens at Ultra Music Festival in 2026, and has her album Divine Intervention out now.",
+    name_en: "Sara Landry",
+    links: {
+      instagram: "https://www.instagram.com/saralandrydj",
+      soundcloud: "https://soundcloud.com/sara-landry-dj",
+      bandcamp: "https://saralandry.bandcamp.com/",
+      website: "https://saralandry.com",
+    }
   },
   {
     id: "peggy-gou",
     name: "Peggy Gou",
+    city: "BERLIN",
+    country: "GERMANY",
+    genre: "HOUSE",
+    image: "images/artists/peggy-gou.webp",
+    bio: "韓国出身、ベルリンを拠点とするDJ/プロデューサー。2016年に Rekids からEP『September War』を出して作品を発表し始め、2019年に自身のレーベル Gudu Records を立ち上げた。2023年のシングル「(It Goes Like) Nanana」を経て、2024年6月に XL Recordings からデビュー・アルバム『I Hear You』を発表している。",
+    bio_en: "A Korean-born, Berlin-based DJ and producer. Her first release, the \"September War\" EP, came out on Rekids in 2016, and in 2019 she launched her own label, Gudu Records. The 2023 single \"(It Goes Like) Nanana\" led into her debut album \"I Hear You\", released on XL Recordings in June 2024.",
+    name_en: "Peggy Gou",
+    links: {
+      instagram: "https://www.instagram.com/peggygou_/",
+      soundcloud: "https://soundcloud.com/peggygou",
+      bandcamp: "https://peggygou.bandcamp.com/",
+      website: "https://www.peggygou.com/",
+    }
   },
   {
     id: "joris-voorn",
     name: "Joris Voorn",
+    city: "AMSTERDAM",
+    country: "NETHERLANDS",
+    genre: "TECHNO/HOUSE",
+    image: "images/artists/joris-voorn.webp",
+    bio: "オランダ・ティルブルフ生まれ、アムステルダムを拠点とするDJ/プロデューサー。2004年の「Incident」で名を広め、同じ年に Sino からアルバム『Future History』を発表した。2005年に Edwin Oosterwal とレーベル Green を立ち上げ、『From A Deep Place』（2007）や『Nobody Knows』（2014）を出した。Rejected も運営し、Spectrum を主宰する。",
+    bio_en: "Born in Tilburg and based in Amsterdam, Joris Voorn broke through with \"Incident\" in 2004, the same year his debut album \"Future History\" came out on Sino. In 2005 he founded Green with Edwin Oosterwal, home to \"From A Deep Place\" (2007) and \"Nobody Knows\" (2014), and he also runs the house-leaning Rejected. Spectrum is his radio show and event series.",
+    name_en: "Joris Voorn",
+    links: {
+      instagram: "https://www.instagram.com/jorisvoorn",
+      soundcloud: "https://soundcloud.com/joris-voorn",
+      bandcamp: "https://jorisvoorn.bandcamp.com/music",
+      website: "http://www.jorisvoorn.com",
+    }
   },
   {
     id: "noco",
     name: "NOCO",
+    city: "TOKYO",
     country: "JAPAN",
+    genre: "TECHNO",
+    image: "images/artists/noco.webp",
     bio: "2013年から続く野外パーティーPARAMOUNTの主宰メンバーで、レジデントDJ。1995年からDJを続け、日本のアンダーグラウンド・トランスシーンの黎明期にルーツを持つ。テクノとトランスの深部を行き来し、同じセットを二度と繰り返さないことを信条とする。国外ではタイのWonderfruit、韓国のvurt.でもプレイしている。",
     bio_en: "Co-organizer and resident DJ of PARAMOUNT, the open-air party running since 2013. NOCO has been DJing since 1995, with roots in the early days of Japan's underground trance scene, and works the deeper ends of techno and trance with a rule of never playing the same set twice. Outside Japan she has played Wonderfruit in Thailand and vurt. in South Korea.",
+    name_en: "NOCO",
     links: {
       instagram: "https://www.instagram.com/noco_paramount/",
       soundcloud: "https://soundcloud.com/noco_paramount",
@@ -1315,7 +1785,7 @@ const ARTISTS = [
     name: "Foodman",
     city: "AICHI",
     country: "JAPAN",
-    genre: "LIVE",
+    genre: "LIVE/ELECTRONIC/TECHNO",
     image: "images/artists/foodman.webp",
     bio: "名古屋を拠点とするプロデューサー/DJ/画家。食品まつり a.k.a foodman として、ジューク/フットワークを足場にアンビエントやハウス、ノイズまでを解体して組み直す音を作る。米国の Orange Milk からデビューアルバムを出し、Good Enuff などからも作品を発表。Hyperdub から出たアルバム『Yasuragi Land』は Pitchfork の2021年のベスト・エレクトロニックに選ばれた。",
     bio_en: "Nagoya-based producer, DJ and painter Takahide Higuchi, aka Shokuhin Matsuri or foodman, starts from juke and footwork and pulls in ambient, house and noise, taking each apart and reassembling it. His debut album came out on Orange Milk, with later records on labels including Good Enuff, and \"Yasuragi Land\" on Hyperdub made Pitchfork's best electronic music of 2021.",
@@ -1348,9 +1818,13 @@ const ARTISTS = [
     name: "Olive Oil",
     city: "FUKUOKA",
     country: "JAPAN",
+    genre: "HIPHOP",
+    image: "images/artists/olive-oil.webp",
     bio: "福岡を拠点とするプロデューサー／リミキサー／DJ。画家・VJのPopy Oilと2002年頃に始めた九州のクリエイティブ・レーベルOILWORKSの中心にいて、作品の制作から流通、国内外のツアーまでを自分たちの手で回す。カセットのみのビートテープ『PROTO TAPE』やジャズミックス『SOURCE JAZZ』など形を変えながら作品を出し続け、2026年10月に7枚目のアルバム『VITAMIN O』を発表した。",
     bio_en: "Fukuoka-based producer, remixer and DJ. Around 2002 Olive Oil started OILWORKS with painter and VJ Popy Oil, a Kyushu label and crew that does everything in-house, from pressing and distributing records, tapes and apparel to running tours in Japan and abroad. The formats keep changing, from the cassette-only beat tape PROTO TAPE to the jazz mix SOURCE JAZZ, and October 2026 brought VITAMIN O, the seventh album.",
+    name_en: "Olive Oil",
     links: {
+      instagram: "https://www.instagram.com/olvoill/",
       bandcamp: "https://oliveoil.bandcamp.com/",
       website: "http://www.oilworks.jp/",
     }
@@ -1360,10 +1834,14 @@ const ARTISTS = [
     name: "LEVOLANT",
     city: "TOKYO",
     country: "JAPAN",
+    genre: "TECHNO/HOUSE/ELECTRONIC",
+    image: "images/artists/levolant.webp",
     bio: "2001年生まれ、東京を拠点とするDJ。東京・Mitsukiのレジデントを務める。DJバーから野外フェスティバルまで場数を重ね、電子音楽を土台にハウス、テクノ、エレクトロミニマルを行き来するセットを組む。近年はアジアにも活動の場を広げている。",
     bio_en: "Tokyo DJ, born in 2001, and a resident at Mitsuki in Tokyo. LEVOLANT has put in the hours everywhere from small DJ bars to open-air festivals, building sets that move between house, techno and electro-minimal on an electronic foundation, and lately has been taking that out across Asia.",
+    name_en: "LEVOLANT",
     links: {
       instagram: "https://www.instagram.com/_levolant/",
+      soundcloud: "https://soundcloud.com/levolant",
     }
   },
   {
@@ -1371,8 +1849,11 @@ const ARTISTS = [
     name: "YAMA",
     city: "OSAKA",
     country: "JAPAN",
+    genre: "HOUSE/TECHNO",
+    image: "images/artists/yama.webp",
     bio: "大阪を拠点とするDJ。1994年にDJを始め、DMR大阪での勤務を経て、newtone recordsに開店時からバイヤーとして関わってきた。2000年前後にはEYEとパーティー「eep」を主宰。ハウスを軸に、テクノやブレイクビーツ、ジャズまでをその場に合わせて行き来する。札幌PRECIOUS HALLに定期的に出演し、近年はロンドンのfabric、ソウルのNyapi、タイのWonderfruitでもプレイしている。",
     bio_en: "Osaka-based YAMA started DJing in 1994. After working at DMR Osaka, YAMA joined newtone records as a buyer when the shop opened, and around the turn of the millennium ran the party eep with EYE. The sets center on house but move through techno, breakbeats and jazz depending on the room. YAMA plays regularly at Precious Hall in Sapporo and has recently played fabric in London, Nyapi in Seoul and Wonderfruit in Thailand.",
+    name_en: "YAMA",
     links: {
       instagram: "https://www.instagram.com/yama72yama/",
       soundcloud: "https://soundcloud.com/ya-ma",
@@ -1413,6 +1894,18 @@ const ARTISTS = [
   {
     id: "jonathan-fitoussi",
     name: "Jonathan Fitoussi",
+    city: "PARIS",
+    country: "FRANCE",
+    genre: "HOUSE/MINIMAL/LIVE",
+    image: "images/artists/jonathan-fitoussi.webp",
+    bio: "パリを拠点とするサウンドアーティスト（1978年生まれ）。ミニマルで現代音楽的な形式を軸に、電子音とアコースティックの音を組み合わせる。Clemens Hourrière とは、ストックホルムの EMS で Buchla 200 を使って録った『Five Steps』を2015年に Versatile から出した。Suzanne Ciani や JB Dunckel との共作もある。",
+    bio_en: "Paris-based sound artist Jonathan Fitoussi (born 1978) works in minimalist and contemporary forms, blending electronic and acoustic sound. With Clemens Hourrière he recorded \"Five Steps\" on a Buchla 200 during a residency at EMS in Stockholm, released by Versatile in 2015. His catalogue also includes collaborations with Suzanne Ciani (\"Golden Apples Of The Sun\") and JB Dunckel (\"Mirages\").",
+    name_en: "Jonathan Fitoussi",
+    links: {
+      instagram: "https://www.instagram.com/jonathanfitoussi_",
+      soundcloud: "https://soundcloud.com/jonathanfitoussi",
+      bandcamp: "https://jfitoussi.bandcamp.com",
+    }
   },
   {
     id: "peter-van-hoesen",
@@ -1435,14 +1928,33 @@ const ARTISTS = [
   {
     id: "petar-dundov",
     name: "Petar Dundov",
-  },
-  {
-    id: "reeko",
-    name: "Reeko",
+    city: "ZAGREB",
+    country: "CROATIA",
+    genre: "TECHNO/LIVE",
+    image: "images/artists/petar-dundov.webp",
+    bio: "クロアチア・ザグレブのプロデューサー。1970年代初めに同地で生まれ、本名で作品を出し始めたのは2000年代に入ってから。ベルギーの Music Man と長く関わり、2008年に同レーベルからデビュー・アルバム『Escapements』を発表した。Jeff Mills のレーベル Tomorrow からはミニLP『Sculptures』を出している。複雑な旋律と、ゆっくり熱を上げていく催眠的な展開を持つテクノで知られる。",
+    bio_en: "A Zagreb producer, born in the city in the early 70s, who only began releasing under his own name after 2000. A long relationship with Belgium's Music Man produced his 2008 debut album \"Escapements\", and he made the \"Sculptures\" mini LP for Jeff Mills' Tomorrow label. His techno is known for intricate melodies and slow-burning, hypnotic progressions.",
+    name_en: "Petar Dundov",
+    links: {
+      instagram: "http://instagram.com/petardundov",
+      soundcloud: "https://soundcloud.com/petardundov",
+      bandcamp: "https://petardundov.bandcamp.com",
+      website: "http://www.petardundov.com",
+    }
   },
   {
     id: "napirelly",
     name: "Napirelly",
+    country: "RUSSIA",
+    genre: "TECHNO/BREAKS/ELECTRONIC/BASS",
+    image: "images/artists/napirelly.webp",
+    bio: "レニングラード生まれ、北極圏に接するシベリアの街で育ったDJ。2009年から活動し、Tresor などでプレイを重ねてきた。ブレイクス、エレクトロ、ベース、テクノを、BPMを大きく動かしながらつなぐ。2020年に Delta Funktionen とユニット Immediate Proximity を結成し、Radio Matrix からLP『2334』を発表。2023年には2人のレーベル IMPROX を立ち上げた。",
+    bio_en: "Born in Leningrad and raised near the Arctic Circle in Siberia, Napirelly has been DJing since 2009, with Tresor among the rooms along the way. Her sets juggle breaks, electro, bass and techno with big swings in tempo. In 2020 she formed Immediate Proximity with Delta Funktionen, releasing the LP \"2334\" on Radio Matrix, and in 2023 the pair started their own label, IMPROX.",
+    name_en: "Napirelly",
+    links: {
+      instagram: "https://www.instagram.com/napirelly",
+      soundcloud: "https://soundcloud.com/napirelly",
+    }
   },
   {
     id: "reek",
@@ -1478,9 +1990,16 @@ const ARTISTS = [
   {
     id: "dj-kuri",
     name: "DJ KURI",
+    city: "CHIBA",
     country: "JAPAN",
-    bio: "千葉県・房州出身、現在も同地に暮らすDJ。アンダーグラウンドパーティー〈BLACK FOREST〉を主宰し、そのDJとしてフロアに立つ。",
-    bio_en: "DJ from Boshu, the southern Boso Peninsula area of Chiba, and still based there. DJ KURI runs the underground party BLACK FOREST and holds down the decks there too.",
+    genre: "TECHNO",
+    image: "images/artists/dj-kuri.webp",
+    bio: "千葉県・房州出身、現在も同地に暮らすDJ。アンダーグラウンドパーティー〈BLACK FOREST〉を主宰し、そのDJとしてフロアに立つ。秘蔵のヴァイナルディープテクノコレクションを携えて、全国各地の怪奇的シーンを行脚し漆黒のグルーヴを奏でる",
+    bio_en: "A DJ born and still based in Bōshū, Chiba Prefecture. He runs the underground party 〈BLACK FOREST〉, where he also takes to the floor as a DJ. Armed with a treasured collection of deep techno vinyl, he makes pilgrimages to the more uncanny corners of the scene across Japan, conjuring pitch-black grooves wherever he goes.",
+    name_en: "DJ KURI",
+    links: {
+      instagram: "https://www.instagram.com/dj_kuri_bf/",
+    }
   },
   {
     id: "compuma",
@@ -1502,10 +2021,34 @@ const ARTISTS = [
   {
     id: "max-cooper",
     name: "Max Cooper",
+    city: "LONDON",
+    country: "UK",
+    genre: "LIVE",
+    image: "images/artists/max-cooper.webp",
+    imagePosition: "center",
+    bio: "ロンドンを拠点とする電子音楽の作曲家/マルチメディア・アーティスト。計算生物学の博士号を持つ元研究者で、レーベル Mesh を主宰する。音楽と映像で芸術と科学の交差を探り、3D/AV ライブやインスタレーションを手がけてきた。2021年にはアテネのアクロポリスの古代劇場で公演。Zaha Hadid Architects などと協働し、V&A などで作品を展示している。",
+    bio_en: "A London-based electronic composer and multimedia artist, and a former scientist with a PhD in computational biology, who runs the label Mesh. His work sits where art and science meet, built into 3D/AV live shows and installations. He played the ancient theatre at the Acropolis in Athens in 2021, has worked with Zaha Hadid Architects, and has shown work at the V&A.",
+    name_en: "Max Cooper",
+    links: {
+      instagram: "https://www.instagram.com/maxcoopermax",
+      soundcloud: "https://soundcloud.com/max-cooper",
+      website: "http://www.maxcooper.net",
+    }
   },
   {
     id: "lisa-mizuno",
     name: "LISA MIZUNO",
+    city: "TOKYO",
+    country: "JAPAN",
+    genre: "TECHNO/EXPERIMENTAL",
+    image: "images/artists/lisa-mizuno.webp",
+    bio: "音楽とダンスを、娯楽ではなく集合的な祈りのかたちとして捉えるDJ / アーティスト。コミュニティを結び、個を超えていく精神的な力としての音楽。その視点が表現の核にある。イベントシリーズ「Resonance レゾナンス」のオーガナイザー。日本の文化の根底をなす「間」「和」「祈り」といった要素を、現代の体験へと翻訳していく。その射程は音楽だけにとどまらず、空間のデザインや身体表現にも及び、ひとつの現代的な儀式として組み上げられる。",
+    bio_en: "A DJ and artist who approaches music and dance not as entertainment but as a form of collective prayer. Music as a spiritual force that binds communities together and carries the individual beyond the self — this perspective sits at the core of the work. Organizer of the event series \"Resonance.\" Elements that form the bedrock of Japanese culture — *ma* (interval), *wa* (harmony), and prayer — are translated into contemporary experience. The scope reaches beyond music alone, extending into spatial design and physical expression, assembled into a single contemporary ritual.",
+    name_en: "LISA MIZUNO",
+    links: {
+      instagram: "https://www.instagram.com/_lisa.m26__/",
+      soundcloud: "https://soundcloud.com/lisamizuno",
+    }
   },
   {
     id: "eve",
