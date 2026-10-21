@@ -54,13 +54,17 @@ const BRIDGE = `
   duplicateEditionRows,
   editionKeyParts,
   editionLabel,
+  editionDraft,
+  get lineups(){return lineups},
   nextEditionYear,
   get editions(){return editions},
   addEdition,
   addSameYearEdition,
+  ensureFestivalEditionForSave,
   validateBeforeSave,
   buildFullDataJs,
   syncExistingEditionRows,
+  syncNewFestivalAfterAdd,
   festivalEditionsForSave,
   get editState(){return editState},
 };`;
@@ -110,6 +114,28 @@ function makeCtx({ cityValue = 'Ibaraki' } = {}) {
 
 const results = [];
 const check = (name, pass, detail) => { results.push([name, pass, detail]); };
+
+// ---- 0e) 開催回ゼロ＋日程ありの保存救済 -------------------------------
+{
+  const c = makeCtx();
+  c.__T.editions.length = 0;
+  c.__T.lineups.f = ['artist-id', 'Artist label'];
+  c.toast = () => {}; c.markFormDirty = () => {}; c.renderEditions = () => {};
+  const originalGet = c.document.getElementById;
+  c.document.getElementById = (id) => {
+    const values = {'f-location':'Venue','f-location_ja':'会場','f-city':'TOKYO','f-address':'Address','f-lat':'35','f-lng':'139','f-ticketUrl':'https://tickets.example','f-flyer':'flyer.webp','f-status':'published'};
+    return {...originalGet(id), value: values[id] || ''};
+  };
+  c.__T.ensureFestivalEditionForSave('2026-08-15', '2026-08-16');
+  const created = c.__T.editions[0];
+  check('開催回0件＋日程ありで同年の開催回を1件作る', c.__T.editions.length === 1 && created.year === '2026' && created.date === '2026-08-15/2026-08-16', JSON.stringify(created));
+  check('自動作成回へフォーム値を引き継ぐ', created.location === 'Venue' && created.location_ja === '会場' && created.pref === 'TOKYO' && created.address === 'Address' && created.lat === '35' && created.lng === '139' && created.ticketUrl === 'https://tickets.example' && created.flyer === 'flyer.webp' && created.status === 'published', JSON.stringify(created));
+  check('自動作成回へフェスLINEUPを引き継ぐ', JSON.stringify(created.lineup) === JSON.stringify(['artist-id', 'Artist label']), JSON.stringify(created.lineup));
+  c.__T.editions.length = 0;
+  check('日程が無い場合は開催回を作らない', c.__T.ensureFestivalEditionForSave('', '') === '' && c.__T.editions.length === 0, JSON.stringify(c.__T.editions));
+  c.__T.editions.push({year:'2025'});
+  check('既存の開催回がある場合は動作を変えない', c.__T.ensureFestivalEditionForSave('2026-08-15', '') === '' && c.__T.editions.length === 1, JSON.stringify(c.__T.editions));
+}
 
 // ---- 0e) FESTIVALS.EDITIONS の保存payloadから作業用台帳を除く ----------------
 {
@@ -247,6 +273,26 @@ const check = (name, pass, detail) => { results.push([name, pass, detail]); };
   check('同じ年の開催回には同期する',
     c.__T.editions[1].date === '2026-08-15/2026-08-16' && c.__T.editions[0].date === '2025-08-16/2025-08-17',
     `2026回=${c.__T.editions[1].date} / 2025回=${c.__T.editions[0].date}`);
+}
+
+// ---- 2e) 新規フェス保存後もEDITIONS / LINEUPSへ同期する ----------------
+{
+  const c = makeCtx();
+  c.__T.editionSheetLoaded = true;
+  c.__T.editionSheetMaxRow = 98; c.__T.lineupSheetMaxRow = 400;
+  c.__T.editionSheetRows = []; c.__T.lineupSheetRows = [];
+  await c.__T.syncNewFestivalAfterAdd('new-festival', [{year:'2026',date:'2026-08-15',location:'Venue',lineup:['Noripan']}]);
+  const edition = c.__calls.find(x => x.sheet === 'EDITIONS');
+  const lineup = c.__calls.find(x => x.sheet === 'LINEUPS');
+  check('新規フェス保存後にEDITIONSとLINEUPSへ書き込む',
+    edition?.EDITION_ID === 'new-festival-2026' && lineup?.EDITION_ID === 'new-festival-2026' && lineup?.ACT_LABEL === 'Noripan',
+    JSON.stringify({edition,lineup}));
+  const blocked = makeCtx();
+  blocked.__T.editionSheetLoaded = false;
+  let blockedError = null;
+  await blocked.__T.syncNewFestivalAfterAdd('new-festival', [{year:'2026',lineup:['Noripan']}]).catch(e => blockedError = e);
+  check('EDITIONSを読めていない新規フェスは書き込まない',
+    blockedError && blocked.__calls.length === 0, blockedError?.message || '書き込みが発生');
 }
 
 // ---- 3) 新規開催回はシート全体の末尾に追記されること ----

@@ -3097,6 +3097,9 @@ function editionLabel(value){
   const p = editionKeyParts(value);
   return p.year ? (p.seq > 1 ? `${p.year} #${p.seq}` : String(p.year)) : String(value || '');
 }
+function editionDraft(year, fields={}){
+  return {year,edition:'',date:'',location:'',location_ja:'',pref:'',venueId:'',address:'',lat:'',lng:'',ticketUrl:'',flyer:'',status:'announced',lineup:[],...fields};
+}
 /* 「+ 開催回を追加」で作られる年。既存の最大年+1（同じ FESTIVAL_ID-YYYY の
    二重登録を防ぐため）。開催回がまだ無いときは今年。
    ボタンのラベルにも出すので、addEdition と共用する（2026-09-14）。 */
@@ -3111,7 +3114,7 @@ function addEdition(){
     return toast('開催回 '+editionLabel(year)+' は既にあります','error');
   }
   if(!confirm(year + '年の開催回を新しく作ります。\n\n既にある開催回を直したいときは、上の「開催回」の選択欄から選んでください。\n\n続けますか？')) return;
-  editions.push({year,edition:'',date:'',location:'',location_ja:'',pref:'',venueId:'',address:'',lat:'',lng:'',ticketUrl:'',flyer:'',status:'announced',lineup:[]});
+  editions.push(editionDraft(year));
   selectedEditionIndex = editions.length - 1;
   markFormDirty();
   renderEditions();
@@ -5001,6 +5004,33 @@ function editRow(section, rowNum){
 function gasWriteSucceeded(result){
   return !!result && (result.status==='ok' || result.status==='success' || result.success===true);
 }
+function queueGasWrite(requests, payload, label, kind='lineup'){
+  requests.push({payload, label, kind});
+}
+async function runGasWrites(requests){
+  const failed=[];
+  for(const request of requests){
+    let result=null;
+    for(let attempt=0;attempt<2;attempt++){
+      try{
+        const response=await fetch(GAS_URL,{method:'POST',body:JSON.stringify(request.payload)});
+        result=await response.json();
+      }catch(_){ result=null; }
+      if(gasWriteSucceeded(result)) break;
+    }
+    if(!gasWriteSucceeded(result)) failed.push(request);
+  }
+  if(failed.length){
+    const lineupFailed=failed.filter(request=>request.kind==='lineup');
+    const editionFailed=failed.length-lineupFailed.length;
+    const names=lineupFailed.map(request=>request.label).filter(Boolean).join('、');
+    const message=lineupFailed.length
+      ? lineupFailed.length+'件の出演者を保存できませんでした'+(names?': '+names:'')
+      : editionFailed+'件の開催回を保存できませんでした';
+    aiFail('開催回の保存', message);
+    throw new Error(message);
+  }
+}
 /* FESTIVALS.EDITIONS は控えなので、画面内のシート作業台帳を保存しない。
    _row / _editionId は同じ editions 配列を使う EDITIONS同期の照合に必要なため
    残すが、_sheetRow / _lineupRows は正データではなくサイズも大きいので除外する。
@@ -5059,10 +5089,10 @@ function syncLineupRowsForEdition(eid, labels, existingRows, requests){
         /* 送るのは正規の列名だけ。行オブジェクトを丸ごとスプレッドすると、
            get_sheet 由来の小文字キー（edition_id）と大文字キーが二重に載る。 */
         const payload={action:'update_row',sheet:'LINEUPS',row:rowNumber,EDITION_ID:eid,ACT_LABEL:actLabel,ARTIST_ID:keepId,SET_TYPE:source.SET_TYPE||'dj',STAGE:source.STAGE||'',DAY:source.DAY||'',START:source.START||'',END:source.END||'',SORT:String(i+1)};
-        requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify(payload)}).then(r=>r.json()));
+        queueGasWrite(requests, payload, actLabel);
         written.push({_row:rowNumber,EDITION_ID:eid,ACT_LABEL:actLabel,ARTIST_ID:keepId,SET_TYPE:source.SET_TYPE||'dj',STAGE:source.STAGE||'',DAY:source.DAY||'',START:source.START||'',END:source.END||'',SORT:String(i+1)});
       } else {
-        requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'update_row',sheet:'LINEUPS',row:rowNumber,EDITION_ID:'',ARTIST_ID:'',ACT_LABEL:'',SET_TYPE:'',STAGE:'',DAY:'',START:'',END:'',SORT:''})}).then(r=>r.json()));
+        queueGasWrite(requests, {action:'update_row',sheet:'LINEUPS',row:rowNumber,EDITION_ID:'',ARTIST_ID:'',ACT_LABEL:'',SET_TYPE:'',STAGE:'',DAY:'',START:'',END:'',SORT:''}, '行'+rowNumber);
       }
     } else {
       const rowNumber=++lineupSheetMaxRow;
@@ -5078,7 +5108,7 @@ function syncLineupRowsForEdition(eid, labels, existingRows, requests){
       const actLabel=artist && lineupArtistKey(artist.id)===lineupArtistKey(inputLabel)
         ? (artist.name||artist.id) : inputLabel;
       const payload={action:'update_row',sheet:'LINEUPS',row:rowNumber,EDITION_ID:eid,ARTIST_ID:keepId,ACT_LABEL:actLabel,SET_TYPE:source.SET_TYPE||'dj',STAGE:source.STAGE||'',DAY:source.DAY||'',START:source.START||'',END:source.END||'',SORT:String(i+1)};
-      requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify(payload)}).then(r=>r.json()));
+      queueGasWrite(requests, payload, actLabel);
       written.push({_row:rowNumber,EDITION_ID:eid,ACT_LABEL:actLabel,ARTIST_ID:keepId,SET_TYPE:source.SET_TYPE||'dj',STAGE:source.STAGE||'',DAY:source.DAY||'',START:source.START||'',END:source.END||'',SORT:String(i+1)});
     }
   }
@@ -5096,10 +5126,10 @@ function syncExistingEditionRows(festivalId, sourceEditions=editions){
     delete base._row;
     const rowNumber=Number(e._row);
     if(!Number.isInteger(rowNumber)||rowNumber<2) throw new Error('EDITIONSの行番号が不正です: '+e._row);
-    requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'update_row',sheet:'EDITIONS',row:rowNumber,...base,
+    queueGasWrite(requests, {action:'update_row',sheet:'EDITIONS',row:rowNumber,...base,
       EDITION_ID:e._editionId,FESTIVAL_ID:festivalId,EDITION:e.year||'',DATE_START:parts[0]||'',DATE_END:parts[1]||parts[0]||'',
       LOCATION:e.location||'',LOCATION_JA:e.location_ja||'',PREF:e.pref||(e._sheetRow||{}).PREF||'',ADDRESS:e.address||'',LAT:e.lat||'',LNG:e.lng||'',
-      TICKETURL:e.ticketUrl||'',FLYER:e.flyer||'',STATUS:e.status||''})}).then(r=>r.json()));
+      TICKETURL:e.ticketUrl||'',FLYER:e.flyer||'',STATUS:e.status||''}, 'EDITION '+e._editionId, 'edition');
     (e._lineupRows||[]).forEach(lr=>{
       const lineupRowNumber=Number(lr._row);
       if(!Number.isInteger(lineupRowNumber)||lineupRowNumber<2) throw new Error('LINEUPSの行番号が不正です: '+lr._row);
@@ -5108,10 +5138,7 @@ function syncExistingEditionRows(festivalId, sourceEditions=editions){
        黙って消え、削除すると古い行が残った。増減両対応の同期に置き換える。 */
     e._lineupRows=syncLineupRowsForEdition(e._editionId, e.lineup, e._lineupRows, requests);
   });
-  return Promise.all(requests).then(results=>{
-    const failed=results.filter(r=>!gasWriteSucceeded(r));
-    if(failed.length) throw new Error('EDITIONSの更新に失敗しました');
-  });
+  return runGasWrites(requests);
 }
 
 function syncNewEditionRows(festivalId, sourceEditions=editions){
@@ -5144,7 +5171,7 @@ function syncNewEditionRows(festivalId, sourceEditions=editions){
     if(!existingRow) usedRows.add(targetRow);
     // GASの既存 update_row は指定行が末尾の次でも追記できるため、
     // 新規専用ハンドラを要求せず同じ認証・ヘッダー写像を使う。
-    requests.push(fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'update_row',sheet:'EDITIONS',row:targetRow,EDITION_ID:eid,FESTIVAL_ID:festivalId,EDITION:e.year,DATE_START:parts[0]||'',DATE_END:parts[1]||parts[0]||'',LOCATION:e.location||'',LOCATION_JA:e.location_ja||'',VENUE_ID:e.venueId||'',PREF:e.pref||festivalPrefFallback(),ADDRESS:e.address||'',LAT:e.lat||'',LNG:e.lng||'',TICKETURL:e.ticketUrl||'',FLYER:e.flyer||'',STATUS:e.status||''})}).then(r=>r.json()));
+    queueGasWrite(requests, {action:'update_row',sheet:'EDITIONS',row:targetRow,EDITION_ID:eid,FESTIVAL_ID:festivalId,EDITION:e.year,DATE_START:parts[0]||'',DATE_END:parts[1]||parts[0]||'',LOCATION:e.location||'',LOCATION_JA:e.location_ja||'',VENUE_ID:e.venueId||'',PREF:e.pref||festivalPrefFallback(),ADDRESS:e.address||'',LAT:e.lat||'',LNG:e.lng||'',TICKETURL:e.ticketUrl||'',FLYER:e.flyer||'',STATUS:e.status||''}, 'EDITION '+eid, 'edition');
     /* LINEUPS も EDITIONS と同じく upsert。以前はここが無条件の末尾追記で、
        保存のたびに全ラインナップが積み上がった（重複事故の本体）。
        この開催回の既存行はセッション台帳（lineupSheetRows）から引く。
@@ -5168,10 +5195,11 @@ function syncNewEditionRows(festivalId, sourceEditions=editions){
       if(r){ editionRowById.set(eid, r); usedRows.delete(r); }
     }
   });
-  return Promise.all(requests).then(results=>{
-    const failed=results.filter(r=>!gasWriteSucceeded(r));
-    if(failed.length) throw new Error('新規EDITIONSの追加に失敗しました');
-  });
+  return runGasWrites(requests);
+}
+function syncNewFestivalAfterAdd(festivalId, sourceEditions=editions){
+  if(!editionSheetLoaded) return Promise.reject(new Error(editionSheetLoadError || 'EDITIONS シートを読み込めていません'));
+  return syncNewEditionRows(festivalId, sourceEditions);
 }
 
 /* FESTIVALS本体を保存する前のEDITION同期チェック。
@@ -5210,6 +5238,25 @@ function validateEditionSyncBeforeSave(festivalId, sourceEditions=editions){
 // 新規開催回でも取り違えないよう、フォームの CITY を既定値にする。
 function festivalPrefFallback(){
   return String(document.getElementById('f-city')?.value || '').trim();
+}
+
+/* 新規フェスを「開催回を追加」なしで保存した場合の救済。日程があるとき
+   だけフォーム値を引き継いだ回を作り、通常の同期経路へ渡す。 */
+function ensureFestivalEditionForSave(dateStart, dateEnd){
+  if(editions.length || !dateStart) return '';
+  const year=String(dateStart).match(/20\d{2}/)?.[0] || '';
+  if(!year) return '';
+  editions.push(editionDraft(year, {
+    date: dateEnd ? dateStart+'/'+dateEnd : dateStart,
+    location:g('f-location'), location_ja:g('f-location_ja'), pref:g('f-city'),
+    address:g('f-address'), lat:g('f-lat'), lng:g('f-lng'),
+    ticketUrl:g('f-ticketUrl'), flyer:g('f-flyer'), status:g('f-status') || 'announced',
+    lineup:[...(lineups.f||[])],
+  }));
+  selectedEditionIndex=editions.length-1;
+  markFormDirty();
+  renderEditions();
+  return year;
 }
 
 function saveEdit(section){
@@ -5255,6 +5302,7 @@ function saveEdit(section){
   }
   else if(section==='festival'){
     const ds=g('f-dateStart'),de=g('f-dateEnd');
+    const autoEditionYear=ensureFestivalEditionForSave(ds,de);
     syncFestivalDateToLatestEdition(ds&&de?ds+'/'+de:ds);
     Object.assign(payload,{id:g('f-id'),type:g('f-type'),name:g('f-name'),city:g('f-city'),
       country:g('f-country'),COUNTRY:g('f-country'),
@@ -5331,11 +5379,11 @@ function saveEdit(section){
     .then(d=>{
       if(d.status==='ok'||d.success){
         toast('Updated ✓','success');
+        if(autoEditionYear) toast(autoEditionYear+'年の開催回を自動で作成しました','success');
         if(section==='festival'){
-          Promise.all([
-            syncExistingEditionRows(payload.id,editionsForSync||[]),
-            syncNewEditionRows(payload.id,editionsForSync||[])
-          ]).catch(()=>{
+          syncExistingEditionRows(payload.id,editionsForSync||[])
+          .then(()=>syncNewEditionRows(payload.id,editionsForSync||[]))
+          .catch(()=>{
             toast('開催回の同期に失敗しました。公開せず、フェスを再読み込みして確認してください','error');
             invalidateSheetCache('festival');
           });
@@ -6420,7 +6468,7 @@ function removeTrashPermanent(idx){
    ============================================================== */
 function submitToSheet(section){
   if (section === 'article') flushArticleEditorSync();
-  let payload;
+  let payload, autoCreatedEditionYear='';
   if(section==='venue'){
     payload={action:'addVenue',id:g('v-id'),name:g('v-name'),city:g('v-city'),area:g('v-area'),
       type:g('v-type'),subtype:g('v-subtype'),hours:g('v-hours'),hours_en:g('v-hours_en'),name_kana:g('v-name_kana'),access:g('v-access'),access_en:g('v-access_en'),charge:g('v-charge'),features:getSelectedFeatures('v-features').join('; '),image:g('v-image'),imagePosition:g('v-imagePosition'),genre:getSelectedGenres('v-genre').join(', '),
@@ -6431,13 +6479,14 @@ function submitToSheet(section){
   else if(section==='festival'){
     promoteLatestEditionDateToFestivalForm();
     const ds=g('f-dateStart'),de=g('f-dateEnd');
+    autoCreatedEditionYear=ensureFestivalEditionForSave(ds,de);
     payload={action:'add_festival',id:g('f-id'),type:g('f-type'),name:g('f-name'),city:g('f-city'),
       country:g('f-country'),COUNTRY:g('f-country'),
       location:g('f-location'),location_ja:g('f-location_ja'),name_ja:g('f-name_ja'),url:g('f-url'),ticketUrl:g('f-ticketUrl'),instagram:g('f-instagram'),
       address:g('f-address'),lat:g('f-lat'),lng:g('f-lng'),date:ds&&de?ds+'/'+de:ds,
       genre:getSelectedGenres('f-genre').join(', '),image:g('f-image'),imagePosition:g('f-imagePosition'),flyer:g('f-flyer'),
       heroGradient:g('f-heroGradient'),desc:g('f-desc'),lineup:cleanLineup(lineups.f).join(', '),
-      editions:editions};
+      editions:festivalEditionsForSave()};
     if(!payload.id||!payload.name)return toast('ID and Name required','error');
   }
   else if(section==='artist'){
@@ -6500,6 +6549,12 @@ function submitToSheet(section){
       console.log('Save response:',r);
       if(r.success||r.status==='ok'){
         toast('Saved ✓','success');
+        if(section==='festival' && payload.editions?.length){
+          if(autoCreatedEditionYear) toast(autoCreatedEditionYear+'年の開催回を自動で作成しました','success');
+          loadEditionsFromSheet(payload.id)
+            .then(()=>syncNewFestivalAfterAdd(payload.id, payload.editions))
+            .catch(()=>toast('フェスは保存しました。開催回の保存に失敗したので、フェスを開き直して保存してください','error'));
+        }
           if(unregisteredArtists.length) notifyUnregisteredArtists(unregisteredArtists);
         // 正式な行番号を取り込むため裏で再読込（syncing 行が実データに置き換わる）
         loadList(section, {force:true});
