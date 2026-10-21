@@ -11633,3 +11633,33 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - 公開前にlocalhost bind可能な環境で実ブラウザ確認と省略なしpreflightを再実行すること。preflightの既存記事フィード不整合も要確認。commit・pushは未実施。
+
+### 2026-10-22 書き手表示・筆者ページとアーティスト一覧のプレビュー削除を公開（Claude）
+
+### 実施
+- 上の「記事の書き手表示・筆者ページ」「組織名の表示統一」「筆者ページ追加修正」「筆者ページ見出しまわりの余白調整」（各「未コミット」表記は当時の状態）をレビューのうえ main に統合。
+- アーティスト一覧（LP/artists.html / en）のマウスオーバーで出る紹介パネル（.artist-preview-pane / bindArtistHoverPreview）を削除（ユーザー要望）。カードの画像拡大・カーソルの輪は維持。
+- main で build-detail-pages.mjs と generate-sitemap.py を再実行し生成物を更新。
+
+### コミット
+- feat(articles) 書き手ページ / style(writers) 余白 / fix(artists) プレビュー削除、および生成物の再生成コミット。
+
+### 検証
+- テスト環境（http://192.168.0.8:8095 / 8097、LAN 配信。テスト配信時のみ CSP の upgrade-insecure-requests を外して配信）をユーザーが確認し「公開して」。
+- headless Chrome（390px dpr2 / 1280px）: /writers/masafumi-take.html・記事2種・news・writers・EN 筆者ページで画像読み込み失敗0・横はみ出し0・例外0。
+- 筆者ページ見出しの位置を実測し、アーティスト詳細と一致（PC: 101/124/214px、スマホ: 82/103/153px）。
+- 実 Chrome（1509px）で artists.html の「すべてのアーティスト」カードにホバーし、パネルが出ないことを確認。
+- JA/EN の行数一致: news 1344/1344、artists 946/946、writers 196/196。
+- `bash scripts/preflight.sh` 全件（結果は push 時に記録）。
+
+### 変更したパターン
+- 記事 WORDS BY のリンク化、NEWS カードの BY 名前、/writers.html 一覧のリンク化、筆者ページ生成（AUTHORS 取り込み）、組織名表示（JA 編集部 / EN Editorial）、CMS 既定値、アーティスト一覧ホバープレビュー削除。
+
+### 未確認の類似パターン
+- TOP（index.html）や関連記事カード（relatedStoryCardsHtml）には書き手名を出していない（確認済み・今回は対象外）。
+- NEWS の FEATURED 枠には BY を出していない（確認済み・意図どおり）。
+- 未確認: 本番 Publish pipeline での AUTHORS 取得（push 後に実行して確認する）。
+
+### 次の担当への注意・判断待ち
+- AUTHORS シートに BIO / IMAGE を入れると筆者ページに出る（現在 Masafumi Take は Instagram のみ）。
+- 既存記事の author 値「TECHNO JAPAN」はデータを書き換えず、表示だけ「TECHNO JAPAN 編集部」に変換している。
