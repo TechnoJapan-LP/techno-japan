@@ -1097,6 +1097,29 @@ function venueByPlaceName(place, venues) {
   return venues.find((v) => norm(v.name) === key) || null;
 }
 
+function venueByEdition(edition, venues) {
+  const id = String(edition?.VENUE_ID || edition?.venueId || '').trim();
+  if (!id) return null;
+  return (venues || []).find((venue) => String(venue.id || '').trim() === id) || null;
+}
+
+function articleEventEdition(event, festivalId, editionsByFestival) {
+  if (!festivalId || !event?.date?.start) return null;
+  return (editionsByFestival.get(festivalId) || []).find((edition) => (
+    String(edition.DATE_START || '') === event.date.start
+    && String(edition.DATE_END || edition.DATE_START || '') === event.date.end
+  )) || null;
+}
+
+function venueAddressLd(venue) {
+  return postalAddressLd({
+    streetAddress: venue?.address || venue?.ADDRESS,
+    addressLocality: venue?.city || venue?.CITY,
+    addressRegion: venue?.pref || venue?.PREF,
+    addressCountry: 'JP',
+  });
+}
+
 /* 記事末尾のニュースレター登録。index.html の formsubmit フォームと同じ構成。
    _next は読んでいた記事へ戻す。文言はサイト全体の英語表記に合わせる。 */
 function articleNewsletterHtml(canonical, lang = 'ja') {
@@ -1282,33 +1305,38 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
     url: canonical,
   };
   const eventJsonLd = articleEvents.map((event) => {
-    const venue = venueByPlaceName(event.place, venues);
+    const eventFestivalId = String(event.festivalId || festivalId).trim();
+    const eventFestival = eventFestivalId
+      ? (festivals || []).find((f) => String(f.id) === eventFestivalId && isPublishedFestival(f))
+      : null;
+    const eventEdition = articleEventEdition(event, eventFestivalId, editionsByFestival);
+    const venue = venueByPlaceName(event.place, venues) || venueByEdition(eventEdition, venues);
+    const eventAddress = editionAddressLd(eventEdition || {}) || venueAddressLd(venue);
     return {
       '@context': 'https://schema.org',
       '@type': 'Event',
       name: event.name,
-      ...(event.date.start ? { startDate: event.date.start, endDate: event.date.end } : {}),
+      ...(event.date.start ? { startDate: event.date.start, endDate: event.date.end || event.date.start } : {}),
       location: venue
         ? {
             '@type': 'Place',
             name: venue.name,
-            address: {
-              '@type': 'PostalAddress',
-              ...(venue.address ? { streetAddress: venue.address } : {}),
-              addressLocality: venue.city || '',
-              addressCountry: 'JP',
-            },
+            ...(eventAddress ? { address: eventAddress } : {}),
             ...(venue.lat && venue.lng ? { geo: { '@type': 'GeoCoordinates', latitude: venue.lat, longitude: venue.lng } } : {}),
           }
-        : { '@type': 'Place', name: event.place },
+        : {
+            '@type': 'Place',
+            name: event.place,
+            ...(eventAddress ? { address: eventAddress } : {}),
+          },
       eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-      eventStatus: 'https://schema.org/EventScheduled',
-      ...(event.url ? { url: event.url, offers: { '@type': 'Offer', url: event.url, availability: 'https://schema.org/InStock' } } : {}),
-      ...(event.festivalId ? { sameAs: [`${BASE}/festivals/${event.festivalId}.html`] } : {}),
+      ...eventLdShared({ festival: eventFestival, edition: eventEdition, lang }),
+      eventStatus: editionStatusLd(eventEdition?.STATUS),
+      ...(event.url ? { url: event.url } : {}),
+      ...(eventFestivalId ? { sameAs: [`${BASE}/festivals/${eventFestivalId}.html`] } : {}),
       ...((event.artists.length ? event.artists : festivalData?.[event.festivalId]?.lineup || []).length
         ? { performer: (event.artists.length ? event.artists : festivalData[event.festivalId].lineup).map((name) => ({ '@type': 'Person', name })) }
         : {}),
-      ...(event.tags.length ? { description: event.tags.join(' · ') } : {}),
     };
   });
 
@@ -1419,16 +1447,34 @@ function editionPlace(ed, lang) {
   return [editionLocationName(ed, lang), ed.PREF].filter(Boolean).join(', ');
 }
 
+function postalAddressLd({ streetAddress = '', addressLocality = '', addressRegion = '', addressCountry = '' } = {}) {
+  const fields = [
+    ['streetAddress', streetAddress],
+    ['addressLocality', addressLocality],
+    ['addressRegion', addressRegion],
+    ['addressCountry', addressCountry],
+  ].filter(([, value]) => String(value || '').trim());
+  return fields.length
+    ? { '@type': 'PostalAddress', ...Object.fromEntries(fields.map(([key, value]) => [key, String(value).trim()])) }
+    : null;
+}
+
+function editionAddressLd(ed) {
+  return postalAddressLd({
+    streetAddress: ed.ADDRESS,
+    addressLocality: ed.CITY || ed.city,
+    addressRegion: ed.PREF,
+    // EDITIONS は日本のフェス開催回データなので、国コードはデータの前提に従う。
+    addressCountry: 'JP',
+  });
+}
+
 function editionLocationLd(ed, lang) {
+  const address = editionAddressLd(ed);
   return {
     '@type': 'Place',
     name: editionLocationName(ed, lang) || ed.PREF || 'Japan',
-    address: {
-      '@type': 'PostalAddress',
-      addressRegion: ed.PREF || '',
-      addressCountry: 'JP',
-      ...(ed.ADDRESS ? { streetAddress: ed.ADDRESS } : {}),
-    },
+    ...(address ? { address } : {}),
     ...(ed.LAT && ed.LNG ? {
       geo: { '@type': 'GeoCoordinates', latitude: ed.LAT, longitude: ed.LNG },
     } : {}),
@@ -1476,6 +1522,24 @@ function editionStatusLd(status) {
   return `https://schema.org/${value || 'EventScheduled'}`;
 }
 
+function eventLdShared({ festival, edition, lang }) {
+  if (!festival) return {};
+  const festivalName = lang === 'en' ? (festival.name_en || festival.name) : festival.name;
+  const officialUrl = safeUrl(festival.url);
+  const ticketUrl = safeUrl(String(
+    edition?.TICKETURL || festival.ticketUrl || festival.ticket_url || festival.tickets || '',
+  ).trim());
+  const imageSource = String((pickFlyer(festival, edition).src || festival.image || '')).trim();
+  const description = lang === 'en' ? (festival.desc_en || festival.desc) : (festival.desc || festival.desc_en);
+  return {
+    eventStatus: editionStatusLd(edition?.STATUS),
+    ...(officialUrl ? { organizer: { '@type': 'Organization', name: festivalName, url: officialUrl } } : {}),
+    ...(ticketUrl ? { offers: { '@type': 'Offer', url: ticketUrl } } : {}),
+    ...(imageSource ? { image: absUrl(imageSource) } : {}),
+    ...(description ? { description } : {}),
+  };
+}
+
 /* 開催回を参照するページ（フェス・アーティスト・会場）で共用する
    最小のイベントノード。開催回の実データが不足している場合は、
    検索エンジンに不完全な Event を渡さない。 */
@@ -1494,8 +1558,8 @@ function editionEventLd({ festival, edition, lang, idSuffix = '#festival', inclu
     '@id': `${BASE}/festivals/${encodeURIComponent(festival.id)}.html${idSuffix}`,
     name: `${festivalName || ''} ${editionLabel(editionIdentifier(edition))}`.trim(),
     startDate,
-    ...(ISO_DATE.test(String(edition.DATE_END || '')) ? { endDate: edition.DATE_END } : {}),
-    eventStatus: editionStatusLd(edition.STATUS),
+    endDate: ISO_DATE.test(String(edition.DATE_END || '')) ? edition.DATE_END : startDate,
+    ...eventLdShared({ festival, edition, lang }),
     location: editionLocationLd(edition, lang),
     ...(includeUrl ? { url: `${BASE}${festivalPath}` } : {}),
   };
@@ -2163,13 +2227,13 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
     if (currentEdition) {
       return {
         ...(ISO_DATE.test(String(currentEdition.DATE_START || '')) ? { startDate: currentEdition.DATE_START } : {}),
-        ...(ISO_DATE.test(String(currentEdition.DATE_END || '')) ? { endDate: currentEdition.DATE_END } : {}),
+        endDate: ISO_DATE.test(String(currentEdition.DATE_END || '')) ? currentEdition.DATE_END : currentEdition.DATE_START,
       };
     }
     const [ds, de] = String(f.date || '').split('/');
     return {
       ...(ISO_DATE.test(String(ds || '')) ? { startDate: ds } : {}),
-      ...(ISO_DATE.test(String(de || '')) ? { endDate: de } : {}),
+      ...(ISO_DATE.test(String(de || '')) ? { endDate: de } : (ISO_DATE.test(String(ds || '')) ? { endDate: ds } : {})),
     };
   })();
   const parentLocation = currentEdition
@@ -2187,6 +2251,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
       } : null);
   const parentTicketUrl = [currentEdition?.TICKETURL, f.ticketUrl, f.ticket_url, f.tickets]
     .map((value) => String(value || '').trim()).find(Boolean) || '';
+  const parentOfficialUrl = safeUrl(f.url);
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -2204,7 +2269,8 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
     eventStatus: editionStatusLd(currentEdition?.STATUS) || 'https://schema.org/EventScheduled',
     /* 親ノードにも offers。subEvent だけだと親が「チケット情報なし」の Event として評価される（2026-09-28 GSC/GA4 分析） */
-    ...(parentTicketUrl ? { offers: { '@type': 'Offer', url: parentTicketUrl, availability: 'https://schema.org/InStock' } } : {}),
+    ...(parentTicketUrl && safeUrl(parentTicketUrl) ? { offers: { '@type': 'Offer', url: safeUrl(parentTicketUrl) } } : {}),
+    ...(parentOfficialUrl ? { organizer: { '@type': 'Organization', name, url: parentOfficialUrl } } : {}),
     ...(sameAs.length ? { sameAs } : {}),
     ...(performers.length ? { performer: performers } : {}),
     ...(editions.length ? { subEvent: editions.map((ed) => ({

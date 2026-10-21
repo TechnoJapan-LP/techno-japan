@@ -176,6 +176,54 @@ for (const f of htmlFiles(LP)) {
 check('全ページの Event / Festival / MusicEvent に name・startDate・location がある',
   incompleteEventNodes.length === 0, `${incompleteEventNodes.length}件${incompleteEventNodes.length ? `: ${incompleteEventNodes.slice(0, 5).join('; ')}` : ''}`);
 
+/* --- 2c) Search Console の Event 推奨項目を全件集計 --- */
+const eventLdNodes = [];
+for (const f of htmlFiles(LP)) {
+  const rel = path.relative(LP, f);
+  if (rel.startsWith('vendor') || rel === 'cms.html') continue;
+  for (const block of jsonLdObjects(f)) {
+    walkJsonLd(block, (node) => {
+      const types = Array.isArray(node['@type']) ? node['@type'] : [node['@type']];
+      if (types.some((type) => ['Event', 'Festival', 'MusicEvent'].includes(type))) {
+        eventLdNodes.push({ rel, node });
+      }
+    });
+  }
+}
+const eventLdMissing = Object.fromEntries([
+  ['organizer', (node) => !node.organizer],
+  ['offers', (node) => !node.offers],
+  ['image', (node) => !node.image],
+  ['description', (node) => !node.description],
+  ['address', (node) => !node.location?.address],
+  ['endDate', (node) => !node.endDate],
+  ['eventStatus', (node) => !node.eventStatus],
+].map(([key, missing]) => [key, eventLdNodes.filter(({ node }) => missing(node)).length]));
+const badEventUrls = eventLdNodes.flatMap(({ rel, node }) => [
+  ...(node.organizer?.url && !/^https?:\/\/[^\s]+$/i.test(node.organizer.url) ? [`${rel}: organizer.url`] : []),
+  ...(node.offers?.url && !/^https?:\/\/[^\s]+$/i.test(node.offers.url) ? [`${rel}: offers.url`] : []),
+]);
+const eventPriceFields = eventLdNodes.flatMap(({ rel, node }) => {
+  const offer = node.offers || {};
+  return ['price', 'priceCurrency', 'validFrom', 'availability']
+    .filter((key) => Object.prototype.hasOwnProperty.call(offer, key))
+    .map((key) => `${rel}: offers.${key}`);
+});
+const emptyAddressFields = eventLdNodes.flatMap(({ rel, node }) => {
+  const address = node.location?.address;
+  if (!address || typeof address !== 'object') return [];
+  return Object.entries(address)
+    .filter(([key, value]) => key !== '@type' && typeof value === 'string' && !value.trim())
+    .map(([key]) => `${rel}: location.address.${key}`);
+});
+console.log(`Event 推奨項目集計（全${eventLdNodes.length}件）:`);
+console.log(`  organizer=${eventLdMissing.organizer} offers=${eventLdMissing.offers} image=${eventLdMissing.image} description=${eventLdMissing.description} address=${eventLdMissing.address} endDate=${eventLdMissing.endDate} eventStatus=${eventLdMissing.eventStatus}`);
+check('Event の endDate 欠落が0件', eventLdMissing.endDate === 0, `${eventLdMissing.endDate}件`);
+check('Event の eventStatus 欠落が0件', eventLdMissing.eventStatus === 0, `${eventLdMissing.eventStatus}件`);
+check('organizer.url / offers.url がURL形式', badEventUrls.length === 0, badEventUrls.slice(0, 5).join(', '));
+check('offers に価格系の値がない', eventPriceFields.length === 0, eventPriceFields.slice(0, 5).join(', '));
+check('空文字の住所項目がない', emptyAddressFields.length === 0, emptyAddressFields.slice(0, 5).join(', '));
+
 /* --- NewsMediaOrganization / NewsArticle 差分 --- */
 const ORG_ID = 'https://techno-japan.media/#org';
 const orgPages = ['index.html', 'about.html', 'en/index.html', 'en/about.html'];

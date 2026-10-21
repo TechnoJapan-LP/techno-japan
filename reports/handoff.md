@@ -11299,3 +11299,64 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 公開前に環境制限を解消して、省略なしの `bash scripts/preflight.sh` を全件成功させること。特に外部画像取得と localhost listen の失敗が残っている。
 - 公開後は `artists/<id>.html` と `venues/<id>.html` の JSON-LD を実ブラウザまたは取得 HTML で確認し、Search Console のイベント拡張結果を再確認すること。
 - CMS変更・本番データ書き込み・Publish pipeline実行は行っていない。
+
+### 2026-10-21 Search Console「イベント」警告対策（追加）— 未コミット
+
+### 実施
+- `scripts/build-detail-pages.mjs` の `eventLdShared` / `editionEventLd` と記事内イベント生成を更新。FESTIVALS.URL がある場合だけ organizer、開催回またはフェスのチケットURLがある場合だけ offers、開催回フライヤー→フェスフライヤー→フェス画像の順で image、言語別 desc、実データの住所、同じ開催回の eventStatus/endDate を出すようにした。
+- 記事内イベントは既存の `festivalId` と日付一致する開催回、VENUE_IDまたは会場名で住所を解決し、未紐付け・住所なしは推測で補完しない。offers に price / priceCurrency / validFrom / availability は出力しない。
+- `scripts/check_jsonld.mjs` に全561件の Event / Festival / MusicEvent 集計、URL形式、価格系キー混入検査を追加。JA/EN詳細ページを再生成し、ハブ行数一致を確認した。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。変更ファイルは生成物を含む258件。
+
+### 検証
+- `node scripts/check_jsonld.mjs`: 成功。endDate欠落0、eventStatus欠落0、organizer.url/offers.url不正0、価格系キー0。
+- `git diff --check`: 成功。
+- 修正前後の同一集計（全561件）: organizer 561→301、offers 349→226、image 145→28、description 137→28、address 77→207、endDate 0→0、eventStatus 0→0。
+- `bash scripts/preflight.sh`: 51件成功 / 9件失敗。詳細ページ生成は外部画像取得待ちで240秒タイムアウト、ブラウザ系は環境の localhost listen EPERM。JSON-LDを含む他の検査は成功。
+- 実ブラウザ、Publish pipeline、Search Console再クロール、本番データ書き込み: 未確認・未実施。
+
+### 変更したパターン
+- フェス詳細の親 Festival、subEvent、アーティスト・会場参照イベント、記事内 Event の organizer / offers / image / description / address / endDate / eventStatus。
+- 記事イベントの開催回・会場住所解決と、JSON-LD全件の警告項目集計・価格系混入防止。
+- JA/EN詳細生成とハブ行数検査。
+
+### 未確認の類似パターン
+- 確認済み・0件：全Event系ノードのendDate/eventStatus欠落、URL形式不正、価格系キー混入、JSON-LDパースエラー、JA/ENハブ行数差分。
+- 未確認：実ブラウザのPC/モバイル表示、Search Console反映、Publish pipeline、本番取得HTML、外部画像取得がタイムアウトしない環境でのpreflight全件。
+
+### 次の担当への注意・判断待ち
+- localhost listen と外部画像取得の環境制限を解消し、省略なしの `bash scripts/preflight.sh` を全件成功させるまでpushしないこと。
+- 公開前に記事イベント、フェス詳細、アーティスト、会場のJA/ENページを実ブラウザで確認し、公開後はSearch Consoleのイベント拡張結果を再確認すること。
+- 今回はcommit・push・Publish pipeline・本番データ書き込みを行っていない。
+
+### 2026-10-21 Search Consoleイベント住所項目の追加修正 — 未コミット
+
+### 実施
+- `scripts/build-detail-pages.mjs` に `postalAddressLd()` / `editionAddressLd()` を追加し、`streetAddress` / `addressLocality` / `addressRegion` / `addressCountry` を空でない項目だけで PostalAddress にした。1項目以上ある場合は address を出し、全項目が無い場合だけ省略する。
+- 開催回は ADDRESS・CITY・PREF・JP、記事内イベントは開催回または会場の利用可能項目を使用。`Secret location` など推測できない住所は補完しない。
+- `scripts/check_jsonld.mjs` に空文字の住所項目検査を追加し、JA/EN生成物を再生成した。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node scripts/check_jsonld.mjs`: 成功。全561件、address欠落0、endDate欠落0、eventStatus欠落0、organizer=301、offers=226、image=28、description=28、空文字住所項目0、価格系キー0。
+- `git diff --check`: 成功。
+- `fix/event-ld` の生成物との同一集計: address 77→0、organizer 561→301、offers 349→226、image 145→28、description 137→28、endDate 0→0、eventStatus 0→0。
+- `bash scripts/preflight.sh`: 今回は省略（前回実行で外部画像取得タイムアウトと localhost listen EPERM が発生）。実ブラウザ、Publish pipeline、Search Console再クロール、本番データ書き込みも未確認・未実施。
+
+### 変更したパターン
+- フェス詳細・アーティスト・会場・記事イベントの `location.address` 項目別生成。
+- 空文字項目を出さない住所生成と全Event系ノードの住所欠落・空文字検査。
+- JA/EN詳細ページ再生成。
+
+### 未確認の類似パターン
+- 確認済み・0件：address欠落の増加、空文字住所項目、organizer/offers/image/description/endDate/eventStatusの悪化、URL形式不正、価格系キー混入。
+- 未確認：実ブラウザのPC/モバイル表示、Search Console反映、Publish pipeline、localhost制限を解消したpreflight全件。
+
+### 次の担当への注意・判断待ち
+- 公開前に省略なしの `bash scripts/preflight.sh` を再実行し、外部画像取得と localhost listen の制限を解消すること。
+- 公開前後に記事・フェス・アーティスト・会場のJA/ENページを実ブラウザで確認し、Search Consoleのイベント拡張結果を再確認すること。
+- 今回もcommit・push・Publish pipeline・本番データ書き込みは行っていない。
