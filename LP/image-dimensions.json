@@ -1527,9 +1527,25 @@
     1442,
     811
   ],
+  "images/artists/fuji.webp": [
+    1920,
+    1280
+  ],
+  "images/artists/ge-ology.webp": [
+    1920,
+    1280
+  ],
+  "images/artists/gerd-janson.webp": [
+    1442,
+    811
+  ],
   "images/artists/gonno.webp": [
     1765,
     1768
+  ],
+  "images/artists/goth-trad.webp": [
+    1442,
+    811
   ],
   "images/artists/ground.webp": [
     1334,
@@ -1538,6 +1554,10 @@
   "images/artists/guchon.webp": [
     678,
     378
+  ],
+  "images/artists/haai.webp": [
+    1920,
+    1440
   ],
   "images/artists/haruka.webp": [
     1440,
@@ -7323,6 +7343,54 @@
     240,
     135
   ],
+  "images/derivatives/card/artists/fuji--b03fc5c5-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/artists/fuji--b03fc5c5-md.webp": [
+    720,
+    480
+  ],
+  "images/derivatives/card/artists/fuji--b03fc5c5-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/artists/fuji--b03fc5c5-xs.webp": [
+    240,
+    160
+  ],
+  "images/derivatives/card/artists/ge-ology--bae71f98-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/artists/ge-ology--bae71f98-md.webp": [
+    720,
+    480
+  ],
+  "images/derivatives/card/artists/ge-ology--bae71f98-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/artists/ge-ology--bae71f98-xs.webp": [
+    240,
+    160
+  ],
+  "images/derivatives/card/artists/gerd-janson--b0089546-lg.webp": [
+    960,
+    540
+  ],
+  "images/derivatives/card/artists/gerd-janson--b0089546-md.webp": [
+    720,
+    405
+  ],
+  "images/derivatives/card/artists/gerd-janson--b0089546-sm.webp": [
+    480,
+    270
+  ],
+  "images/derivatives/card/artists/gerd-janson--b0089546-xs.webp": [
+    240,
+    135
+  ],
   "images/derivatives/card/artists/gonno--bb092cea-lg.webp": [
     958,
     960
@@ -7338,6 +7406,22 @@
   "images/derivatives/card/artists/gonno--bb092cea-xs.webp": [
     240,
     240
+  ],
+  "images/derivatives/card/artists/goth-trad--d7cabbf1-lg.webp": [
+    960,
+    540
+  ],
+  "images/derivatives/card/artists/goth-trad--d7cabbf1-md.webp": [
+    720,
+    405
+  ],
+  "images/derivatives/card/artists/goth-trad--d7cabbf1-sm.webp": [
+    480,
+    270
+  ],
+  "images/derivatives/card/artists/goth-trad--d7cabbf1-xs.webp": [
+    240,
+    135
   ],
   "images/derivatives/card/artists/ground--2bf4b4ea-lg.webp": [
     960,
@@ -7370,6 +7454,22 @@
   "images/derivatives/card/artists/guchon--61a75a26-xs.webp": [
     240,
     134
+  ],
+  "images/derivatives/card/artists/haai--2a213c7f-lg.webp": [
+    960,
+    720
+  ],
+  "images/derivatives/card/artists/haai--2a213c7f-md.webp": [
+    720,
+    540
+  ],
+  "images/derivatives/card/artists/haai--2a213c7f-sm.webp": [
+    480,
+    360
+  ],
+  "images/derivatives/card/artists/haai--2a213c7f-xs.webp": [
+    240,
+    180
   ],
   "images/derivatives/card/artists/haruka--96a3f8bb-lg.webp": [
     960,
