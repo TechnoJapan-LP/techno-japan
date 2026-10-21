@@ -11361,6 +11361,36 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 公開前後に記事・フェス・アーティスト・会場のJA/ENページを実ブラウザで確認し、Search Consoleのイベント拡張結果を再確認すること。
 - 今回もcommit・push・Publish pipeline・本番データ書き込みは行っていない。
 
+### 2026-10-21 ニュースレター写真つき2列カード — 未コミット
+
+### 実施
+- `scripts/newsletter-draft.mjs` を Markdown 箇条書きから table / inline style の完全なHTML下書き生成へ変更。フェス候補最大6枚、先月記事、写真のある出演予定アーティストを2列カード化し、写真のないアーティストはリンク列にした。
+- 追加確認対応: フェス表示名をサイトと同じ規則へ戻し、全体を固定レイアウトの最大600px列に統一。390pxでも外枠・カード・一覧が縮小・折り返す指定に更新。見出し・区切り線・ひとこと欄も `colspan="2" width="100%"` に統一。
+- `LP/image-derivatives.js` の派生画像を優先して絶対HTTPS URL化し、カード背景は #1b1b1b（#f0ede8 8%を #080808 に混色）にした。Buttondown API は同件名の draft のみ PATCH、なければ POST。`template: "naked"` と解除リンクを付けた。
+- `scripts/check_newsletter.mjs` にHTML、色、画像URL、UTM、2列、draft限定更新の検査を追加。`docs/newsletter.md` に公式仕様とNakedテンプレートの注意を追記。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node scripts/newsletter-draft.mjs --dry --month=2026-11`: JA/ENの完全HTMLを生成（各約19KB）。
+- `node --check scripts/newsletter-draft.mjs scripts/check_newsletter.mjs`: 確認済み。
+- `node scripts/check_newsletter.mjs`: 成功。Buttondown 44フォーム、HTML下書き2本、カードセル28、formsubmit専用項目0件。
+- インプロセスAPIモック: 同件名の `draft-ja` のみPATCH、同件名の `sent-ja` は未変更。localhost listen はEPERMのため未使用。
+- Buttondown実API、実ブラウザ、メールクライアント表示、preflight、Publish pipelineは未実施。APIの送信済み保護は静的検査のみ。
+
+### 変更したパターン
+- 月次下書きのHTML化、派生画像URL、カード2列、奇数時の空セル、JA/EN文言、draft同件名PATCH。
+
+### 未確認の類似パターン
+- 確認済み・0件：生成HTML内のclass/styleタグ/flex/grid、許可外の6桁色、非HTTPS画像、通常リンクのUTM欠落、カードセル数の奇数。
+- 未確認：Gmail / Outlook / iOS Mailでの実表示、Buttondown実アカウントでのNakedテンプレート適用、APIモックを使った実PATCH分岐。
+
+### 次の担当への注意・判断待ち
+- `node scripts/check_newsletter.mjs` を実行し、必要ならButtondown APIモックでdraftだけがPATCHされることを確認すること。
+- `reports/newsletter/2026-11-ja.html` と `-en.html` はブラウザで開いて確認する。Naked mode はProfessional planの公式仕様で、Buttondown設定でもNakedを選ぶ必要がある。
+- 今回もcommit・push・Publish pipeline・本番データ書き込みは行っていない。
+
 ### 2026-10-21 Search Console「イベント」エラー・警告の対策（本番確認）— Claude
 - 原因（エラー）: 同日追加の artist performerIn / venue event が `{@type, @id}` だけを出し、Google が name/startDate/location の無いイベントとして無効扱い（全ページ68個）。共通関数 editionEventLd で実データ（名前・日付・開催状況・会場・住所・URL）を入れ、0個に。check_jsonld.mjs に必須3項目の検査を追加。
 - 警告（全561イベント、前→後）: organizer 561→301（公式サイトのあるフェスのみ）、offers 349→226（チケットURLのあるもののみ。価格系は入れない）、image 145→28、description 137→28、address 77→0（あるパーツだけで PostalAddress。空文字は出さない）、endDate/eventStatus 欠落0。一度 address が 207 に悪化したのを前後比較で検出して修正。

@@ -47,7 +47,28 @@ for (const expected of ['https://buttondown.com/api/emails/embed-subscribe/', 'n
   if (!generator.includes(expected)) fail(`Buttondown 切り替え処理が見つかりません: ${expected}`);
 }
 const draftGenerator = read('scripts/newsletter-draft.mjs');
-for (const expected of ['return date >= `${previous}-01` && date <= createdDate', 'summary ? ` — ${summary}` : \'\'']) {
+for (const expected of ['return date >= `${previous}-01` && date <= createdDate', 'status: \'draft\'', 'method: \'PATCH\'', 'query.searchParams.set(\'status\', \'draft\')', 'template: \'naked\'', ": festival.name;", "festival.name_en || festival.name"]) {
   if (!draftGenerator.includes(expected)) fail(`下書きの月・要約処理が見つかりません: ${expected}`);
 }
-console.log(`✅ Buttondown newsletters: ${buttondownForms} forms, formsubmit-only fields: ${formsubmitOnlyFields}, preserved formsubmit forms: ${preservedFormsubmitCount}`);
+const newsletterFiles = ['reports/newsletter/2026-11-ja.html', 'reports/newsletter/2026-11-en.html'];
+const allowedColors = new Set(['#080808', '#1b1b1b', '#f0ede8', '#ff2d2d']);
+let cardCells = 0;
+for (const file of newsletterFiles) {
+  const html = read(file);
+  if (!/^<!-- Subject:[\s\S]*<!doctype html>/i.test(html)) fail(`${file}: 完全なHTML下書きではありません`);
+  if (/<style\b|\bclass\s*=|display\s*:\s*(?:flex|grid)/i.test(html)) fail(`${file}: メール互換性に反する style/class/flex/grid があります`);
+  const colors = [...html.matchAll(/#[0-9a-f]{6}\b/gi)].map((match) => match[0].toLowerCase());
+  for (const color of colors) if (!allowedColors.has(color)) fail(`${file}: 許可されていない色 ${color}`);
+  for (const match of html.matchAll(/<img\b[^>]*\bsrc="([^"]+)"/gi)) if (!/^https:\/\//.test(match[1])) fail(`${file}: 画像URLがHTTPS絶対URLではありません: ${match[1]}`);
+  for (const match of html.matchAll(/<a\b[^>]*\bhref="([^"]+)"/gi)) if (match[1] !== '{{ unsubscribe_url }}' && !match[1].includes('utm_source=newsletter')) fail(`${file}: UTMのないリンクがあります: ${match[1]}`);
+  const images = [...html.matchAll(/<img\b[^>]*\balt="([^"]+)"/gi)];
+  if (images.some((match) => !match[1])) fail(`${file}: 画像altが空です`);
+  cardCells += (html.match(/<td width="50%"/g) || []).length;
+  if (!/<table[^>]+width="600"/.test(html)) fail(`${file}: 600px外枠がありません`);
+  if (!html.includes('border-radius:12px') || !html.includes('height:auto')) fail(`${file}: カードの角丸または可変幅画像がありません`);
+  if (!html.includes('table-layout:fixed') || !html.includes('max-width:600px')) fail(`${file}: 固定レイアウトまたは600px上限がありません`);
+  if (/<td\s+colspan="2"(?!\s+width="100%")/i.test(html)) fail(`${file}: 全幅ブロックのcolspan/width指定がありません`);
+}
+if (cardCells === 0 || cardCells % 2 !== 0) fail(`カードセルが2列単位ではありません: ${cardCells}`);
+if (!draftGenerator.includes("email.status === 'draft'") || draftGenerator.includes('/send-draft')) fail('送信済み、または送信エンドポイントに触れる実装があります');
+console.log(`✅ Buttondown newsletters: ${buttondownForms} forms, HTML drafts: ${newsletterFiles.length}, card cells: ${cardCells}, formsubmit-only fields: ${formsubmitOnlyFields}, preserved formsubmit forms: ${preservedFormsubmitCount}`);

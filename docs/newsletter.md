@@ -28,13 +28,21 @@
 
 ## 毎月の流れ
 
-毎月25日に GitHub Actions が下書きを作ります。API キーが登録済みなら Buttondown に JA/EN の下書きが2本作られ、未登録なら `reports/newsletter/` に Markdown の下書きが作られます。
+毎月25日に GitHub Actions が下書きを作ります。API キーが登録済みなら Buttondown に JA/EN の下書きが2本作られ、同じ件名の既存 draft があればその draft を PATCH して上書きします。送信済み・予約済みなど draft 以外のメールは検索・更新しません。未登録なら `reports/newsletter/YYYY-MM-ja.html` / `-en.html` に完全なHTMLの下書きが作られます。
 
 1. 編集部のひとことを3〜4行で書く。
 2. 「今月の注目（候補）」から3本を選ぶ。
 3. 本文、リンク、言語、タグを確認する。
 4. Buttondown で予約送信する。
 5. 翌月に開封率を確認する。
+
+## HTML下書きとButtondownのテンプレート
+
+`scripts/newsletter-draft.mjs --dry --month=YYYY-MM` は、メールクライアント向けに table レイアウトとインライン style だけを使ったHTMLを `reports/newsletter/` に出力します。Buttondown Emails API の `body` は HTML または Markdown を受け付け、HTML は自動判定されます。下書きの API payload では `template: "naked"` を指定し、生成した本文の外側に Buttondown の標準テンプレートを重ねない形にしています。
+
+Buttondown のテンプレート設定で外枠を確認し、本文をそのまま使う `Naked`（API値は `naked`）を選んでください。Naked mode は Professional plan で利用でき、解除リンクとして `{{ unsubscribe_url }}` を本文に含める必要があります。Naked 以外のテンプレートでは本文の外側にテンプレートが付くため、600pxの外枠が二重になる可能性があります。テンプレートを切り替えた場合は、プレビューで外枠と配信停止リンクを確認してください。
+
+参照: [Creating an email](https://docs.buttondown.com/api-emails-create)、[Email template](https://docs.buttondown.com/api-emails-template)、[Naked mode](https://docs.buttondown.com/naked-mode)、[Drafting emails via the API](https://docs.buttondown.com/drafting-emails-via-the-api)。
 
 下書きは既存データにある日付、名称、場所、紹介文だけを使います。公開情報にない説明は追加しません。
 
