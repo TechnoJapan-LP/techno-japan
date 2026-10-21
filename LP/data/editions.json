@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-10-21T05:04:23.239Z",
+  "_generatedAt": "2026-10-21T14:11:14.476Z",
   "count": 117,
   "items": [
     {
@@ -915,12 +915,12 @@
       "EDITION": "2025",
       "DATE_START": "2025-08-22",
       "DATE_END": "2025-08-24",
-      "LOCATION": "Suteki Village Camping Ground",
-      "LOCATION_JA": "ステキな村キャンプ場",
+      "LOCATION": "Village HAKUSHU",
+      "LOCATION_JA": "ヴィレッヂ白州",
       "PREF": "Yamanashi",
-      "ADDRESS": "群馬県吾妻郡東吾妻町本宿3330-5",
-      "LAT": "36.4989",
-      "LNG": "138.6818",
+      "ADDRESS": "山梨県北杜市白州町白須上教来石平久保2124",
+      "LAT": "35.8484",
+      "LNG": "138.2662",
       "STATUS": "finished"
     },
     {
@@ -1354,7 +1354,7 @@
       "DATE_END": "2026-10-25",
       "LOCATION": "Suteki Village Camping Ground",
       "LOCATION_JA": "ステキな村キャンプ場",
-      "PREF": "Yamanashi",
+      "PREF": "Gunma",
       "ADDRESS": "群馬県吾妻郡東吾妻町本宿3330-5",
       "LAT": "36.4989",
       "LNG": "138.6818",

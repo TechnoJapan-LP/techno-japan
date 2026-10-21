@@ -12,8 +12,8 @@
     "date": "2026-10-21"
   },
   "artist:akira-arasawa": {
-    "hash": "169d264093039f2c6a9956dd8f5d1885afe6b5ae8a08e18d95e60c3e39e7dbad",
-    "date": "2026-10-20"
+    "hash": "ca5c26e204aae32dd09f5783aaf0fb0f1b3b64b7617dc9bee0b085724331f67b",
+    "date": "2026-10-21"
   },
   "artist:akiram-en": {
     "hash": "a04771b16d1f00e1b799ab25316007bae619356df743b4266fb03740bbf64b2f",
@@ -68,8 +68,8 @@
     "date": "2026-10-21"
   },
   "artist:choko": {
-    "hash": "58786744371bcdd730d29faedba6ccd1810bd0aa33fb0e962a4ca264244111fe",
-    "date": "2026-09-27"
+    "hash": "e3e8248d51051c10d15037c559a764caca4f928b32619b5a965b5088a66df472",
+    "date": "2026-10-21"
   },
   "artist:clipz": {
     "hash": "b874efaff932c993f014a107996ebd25cb436a8ef0b5798f9c0c48e34656df47",
@@ -108,8 +108,8 @@
     "date": "2026-10-21"
   },
   "artist:dj-kuri": {
-    "hash": "87282050cd0fb0c446e0e916cb960b53a87ec4fba6edef30558aa5a9feb260b9",
-    "date": "2026-10-20"
+    "hash": "f675167f202903cd4f7515437f006f86359a496e332c67311caf3f15b6658503",
+    "date": "2026-10-21"
   },
   "artist:dj-maria": {
     "hash": "e243c1311f518a470101e71ef9df57a676093808b3c0e91d84cc445dc185c561",
@@ -128,12 +128,12 @@
     "date": "2026-08-03"
   },
   "artist:dj-sodeyama": {
-    "hash": "80aafa632f40782b4662c8ca84b550ce5021faeb98884e6dcd7b97fe7f4fee41",
+    "hash": "d3af199807ea6d6da17b34042aa9d1a03853c8e63d76cbae97234b3044876b87",
     "date": "2026-10-21"
   },
   "artist:dj-yazi": {
-    "hash": "ac030d5e9a551e5260bd4c1ff84db1b9e68b0c2d1ec11d72a6ca5461220ebd98",
-    "date": "2026-10-20"
+    "hash": "7e9f10a146006be457f0f76ce67bd05a85a5dc89a3a667d4f7f66acc9dd155fb",
+    "date": "2026-10-21"
   },
   "artist:dj-yogurt": {
     "hash": "78ed13ef0f665e5c76ddff7da10fbdb3b435bf57ad88ae97638c530b34237abf",
@@ -312,8 +312,8 @@
     "date": "2026-09-15"
   },
   "artist:kyomi": {
-    "hash": "acb83a99c1e3a98692dbebb8e1f178a4ae9bc734d0ffebc7a034e77e26a7b38d",
-    "date": "2026-10-20"
+    "hash": "89be915a0e93df1aec6b0a3f870993ec47e1a7bf82b195face84d68ff42dcd15",
+    "date": "2026-10-21"
   },
   "artist:lady-shaka": {
     "hash": "9831e1b6b1f48b400e17463e36f1c91e88fa76cd745b373f0e1b51c1d80b002c",
@@ -368,16 +368,16 @@
     "date": "2026-08-03"
   },
   "artist:noco": {
-    "hash": "4cc0b5e4cf9b72a0ef7210a81be57613075f42761890f54b61db3fc26cfde47a",
-    "date": "2026-10-20"
+    "hash": "3d9da747668f54eca3a498d1c312b13b6088699ad8c75e88ee0cc32b399aed69",
+    "date": "2026-10-21"
   },
   "artist:noritake": {
     "hash": "2bb95597a459193b1d4c8b26346753bfa28ede3047d19a6a04330f953066f96b",
     "date": "2026-10-21"
   },
   "artist:occa": {
-    "hash": "6d9d411c70dda634b2fa985de2440b8248b965cf5efbd6df0144a29029517669",
-    "date": "2026-10-14"
+    "hash": "d6a3a51e22f8be4089ccc7f72daa94b73dcc6dfdf219802a75f1b1595cb8c9b8",
+    "date": "2026-10-21"
   },
   "artist:ojisan": {
     "hash": "bfa2bbcd8407f1f6f6cb18e961fa5bbcf598ccc7ab4352e5e449b28b63088df7",
@@ -424,8 +424,8 @@
     "date": "2026-08-03"
   },
   "artist:qmico": {
-    "hash": "7bba4b89356ceaddfe4fb0f7c1fb19253eaa5cd07290d7923258d58ef192b745",
-    "date": "2026-10-20"
+    "hash": "c97f212e883b3c7371f08f790606ee99d212649ea62d0cf96648cdc7f50c7236",
+    "date": "2026-10-21"
   },
   "artist:rami": {
     "hash": "087790796e75562098ad3f92d5972ff3d8cff3d403e2fde8b38c80e567cc8609",
@@ -448,7 +448,7 @@
     "date": "2026-09-10"
   },
   "artist:sakuma": {
-    "hash": "74e527a5f1617abbe37c1ef0834e9fc72d47ae54faa251fc1004d93f37e5bfb8",
+    "hash": "92fc7c650ec81b04b6b6be021d9fa0a8d3016fe1cb722fbbd54534b10d763b77",
     "date": "2026-10-21"
   },
   "artist:sapphire-slows": {
@@ -480,7 +480,7 @@
     "date": "2026-08-06"
   },
   "artist:suguru-mochizuki": {
-    "hash": "cfa551a15e0673836a06ac9d3a7e7b5dbfa36899595b5cf29e68d6b3e3bf9a3c",
+    "hash": "56dbe7dacbc7558b223e743526d0d2bcb1eead33254b48f65e3d76ca3d98f1dd",
     "date": "2026-10-21"
   },
   "artist:suimin": {
@@ -528,8 +528,8 @@
     "date": "2026-08-01"
   },
   "artist:yama": {
-    "hash": "637ffa870672f2a934d25717a20ee045b7642b7383f4ecc9541e52e50cdc5ace",
-    "date": "2026-10-20"
+    "hash": "2600eff285a36aedc91e4dab74f2731c0be71852e563a429c5b4a82c876910cf",
+    "date": "2026-10-21"
   },
   "artist:yamarchy": {
     "hash": "d3a7aa3256e56b8e544ce7403728f46f797e67e8c462bb784007ee68a9511946",
@@ -848,7 +848,7 @@
     "date": "2026-10-17"
   },
   "festival:sawagi-festival": {
-    "hash": "71375237da4ac38ce59a5fd989c30702fca6a3c6106612ec4dd5931f13a8c846",
+    "hash": "22798b5341b05a8d41460beaf325fcb4cd652308e24b0571914df98dc8a67f25",
     "date": "2026-10-21"
   },
   "festival:signal": {

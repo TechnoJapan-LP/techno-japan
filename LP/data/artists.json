@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-10-20T18:52:38.751Z",
+  "_generatedAt": "2026-10-21T14:11:14.476Z",
   "count": 139,
   "items": [
     {
@@ -213,7 +213,17 @@
     },
     {
       "ID": "endorphin",
-      "NAME": "endorphin"
+      "NAME": "endorphin",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO/HOUSE",
+      "IMAGE": "images/artists/endorphin.jpg",
+      "BIO": "関東を拠点とするDJ/プロデューサー。宇都宮と都内でパーティーをオーガナイズし、渋谷 ENTER のパーティー OPIOID ではレジデントを務める。楽曲制作にも力を入れている。グルーヴィーなテクノを軸に、自ら提唱する「NEO GAL」の考え方と、LOVE, FELLOW, FASHION, SEX の4語を掲げてフロアに立つ。",
+      "INSTAGRAM": "https://www.instagram.com/endorphin__dj/",
+      "SOUNDCLOUD": "https://soundcloud.com/endorphin-jp",
+      "STATUS": "published",
+      "metaDescription": "宇都宮と都内でパーティーを主催し、渋谷ENTERのOPIOIDでレジデントを務めるDJ/プロデューサーendorphin。グルーヴィーなテクノを軸に、独自に提唱するNEO GALの思想とLOVE、FELLOW、FASHION、SEXの4語を掲げてフロアに立つ。その活動と音楽性を紹介。",
+      "name_en": "endorphin",
+      "bio_en": "endorphin is a DJ/producer based in the Kanto region who organizes parties in Utsunomiya and Tokyo and holds a residency at OPIOID at ENTER in Shibuya. She also puts real time into production. Her sets run on groovy techno, carried by the \"NEO GAL\" idea she champions and four words: LOVE, FELLOW, FASHION, SEX."
     },
     {
       "ID": "antal",
@@ -275,11 +285,36 @@
     },
     {
       "ID": "floating-points",
-      "NAME": "Floating Points"
+      "NAME": "Floating Points",
+      "CITY": "LONDON",
+      "COUNTRY": "UK",
+      "GENRE": "HOUSE",
+      "IMAGE": "images/artists/floating-points.jpg",
+      "BIO": "本名 Sam Shepherd。マンチェスターで育ち、ロンドン大学（UCL）で神経科学の博士号を取得した。2008年に Alexander Nut とレーベル Eglo を立ち上げ、2015年に自身のレーベル Pluto を設立。同年の1stアルバム『Elaenia』に続き、2021年には Pharoah Sanders、ロンドン交響楽団との『Promises』を発表した。2024年に『Cascade』をリリース。",
+      "INSTAGRAM": "https://www.instagram.com/floatingpoints",
+      "SOUNDCLOUD": "https://soundcloud.com/floatingpoints",
+      "BANDCAMP": "https://floatingpoints.bandcamp.com/",
+      "WEBSITE": "http://www.floatingpoints.co.uk",
+      "STATUS": "published",
+      "metaDescription": "神経科学の博士号を持つロンドンの鬼才 Sam Shepherd ことFloating Points。Eglo と Pluto の設立から、Elaenia、Pharoah Sanders との Promises、2024年の Cascade まで、その軌跡をたどる。",
+      "name_en": "Floating Points",
+      "bio_en": "Sam Shepherd grew up in Manchester and earned a PhD in neuroscience at UCL. Shepherd co-founded Eglo Records with Alexander Nut in 2008 and set up the Pluto label in 2015, the year the debut Floating Points album \"Elaenia\" came out. \"Promises\", made with Pharoah Sanders and the London Symphony Orchestra, followed in 2021, and \"Cascade\" in 2024."
     },
     {
       "ID": "gerd-janson",
-      "NAME": "Gerd Janson"
+      "NAME": "Gerd Janson",
+      "CITY": "FRANKFURT",
+      "COUNTRY": "GERMANY",
+      "GENRE": "HOUSE/DISCO",
+      "IMAGE": "images/artists/gerd-janson.jpg",
+      "BIO": "フランクフルトを拠点とするDJ。2002年に Thorsten Scheu（Glance）とレーベル Running Back を立ち上げ、ハウスとディスコを軸にリリースを重ねてきた。1998年にダルムシュタットの Café Kesselhaus で初のレジデントを得て、のちにフランクフルトの Robert Johnson で Thomas Hammann とパーティー Liquid を主宰。Groove や Spex に寄稿する音楽ライターでもあった。",
+      "INSTAGRAM": "https://www.instagram.com/gerdjansonofficial",
+      "SOUNDCLOUD": "https://soundcloud.com/runningback",
+      "BANDCAMP": "https://runningbackrecords.bandcamp.com",
+      "STATUS": "published",
+      "metaDescription": "フランクフルトを拠点に活躍するDJ、Gerd Jansonの軌跡。2002年設立のレーベルRunning Backでハウスとディスコを発信し、Robert Johnsonでのパーティー主宰や音楽ライターとしての顔も持つ重要人物を紹介します。",
+      "name_en": "Gerd Janson",
+      "bio_en": "Frankfurt-based DJ Gerd Janson co-founded Running Back with Thorsten Scheu (Glance) in 2002, and the label has stayed rooted in house and disco ever since. His first residency came in 1998 at Café Kesselhaus in Darmstadt; later he hosted the Liquid nights at Frankfurt's Robert Johnson alongside Thomas Hammann. Away from the booth, he wrote about music for Groove and Spex."
     },
     {
       "ID": "gonno",
@@ -359,7 +394,20 @@
     },
     {
       "ID": "four-tet",
-      "NAME": "Four Tet"
+      "NAME": "Four Tet",
+      "CITY": "LONDON",
+      "COUNTRY": "UK",
+      "GENRE": "HOUSE",
+      "IMAGE": "images/artists/four-tet.jpg",
+      "BIO": "本名 Kieran Hebden。ロンドンのプロデューサー/DJ。ポストロック・バンド Fridge を経て、1998年に36分の単曲「Thirtysixtwentyfive」で Four Tet 名義の活動を始めた。『Pause』（2001）、『Rounds』（2003）、『There Is Love in You』（2010）などのアルバムで知られ、Steve Reid との即興作品や Burial、Thom Yorke との共作もある。",
+      "INSTAGRAM": "https://www.instagram.com/fourtetkieran",
+      "SOUNDCLOUD": "https://soundcloud.com/four-tet",
+      "BANDCAMP": "https://fourtet.bandcamp.com/",
+      "WEBSITE": "https://www.fourtet.net/",
+      "STATUS": "published",
+      "metaDescription": "ロンドンのプロデューサー Kieran Hebden ことFour Tet。Fridgeを経て1998年にソロ始動し、PauseやRounds、There Is Love in Youで知られる。Steve Reidとの即興、BurialやThom Yorkeとの共作まで、その音楽遍歴をたどる。",
+      "name_en": "Four Tet",
+      "bio_en": "Four Tet is London producer and DJ Kieran Hebden. After the post-rock band Fridge, he started the project in 1998 with the 36-minute single \"Thirtysixtwentyfive\". Albums like \"Pause\" (2001), \"Rounds\" (2003) and \"There Is Love in You\" (2010) built his name, alongside improvised records with drummer Steve Reid and collaborations with Burial and Thom Yorke."
     },
     {
       "ID": "ojisan",
@@ -378,7 +426,20 @@
     },
     {
       "ID": "eric-cloutier",
-      "NAME": "Eric Cloutier"
+      "NAME": "Eric Cloutier",
+      "CITY": "BERLIN",
+      "COUNTRY": "GERMANY",
+      "GENRE": "TECHNO",
+      "IMAGE": "images/artists/eric-cloutier.jpg",
+      "BIO": "デトロイト出身、ベルリンを拠点とするDJ。ニューヨークのパーティー The Bunker で長く腕を磨いたのちベルリンへ移り、現在は Tresor のレジデントを務める。キャリアは25年を超え、深く催眠的でダブの効いた質感を探してレコードを掘り続けてきた。レーベル Palinoia を主宰し、自作のほか新しい作り手の作品も送り出している。",
+      "INSTAGRAM": "https://www.instagram.com/ericcloutier",
+      "SOUNDCLOUD": "https://soundcloud.com/cloutier",
+      "BANDCAMP": "https://palinoiarecords.bandcamp.com/",
+      "WEBSITE": "http://www.eric-cloutier.com/",
+      "STATUS": "published",
+      "metaDescription": "デトロイト生まれベルリン在住のDJ、Eric Cloutier。ニューヨークのThe Bunkerで培った長尺ミックスの技術を武器に、現在はTresorのレジデントとして活躍。25年以上のキャリアで掘り続けた深く催眠的なダブ・テクノの美学と、主宰レーベルPalinoiaの活動を紹介する。",
+      "name_en": "Eric Cloutier",
+      "bio_en": "Detroit-born, Berlin-based DJ Eric Cloutier spent years as a mainstay of New York's The Bunker before moving to Berlin, where he is now a resident at Tresor. Over a 25-plus year career he has kept digging for deep, hypnotic, dubby records. His label Palinoia releases his own productions alongside music from newer names."
     },
     {
       "ID": "caimann",
@@ -386,7 +447,18 @@
     },
     {
       "ID": "fuji",
-      "NAME": "FUJI"
+      "NAME": "FUJI",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO",
+      "IMAGE": "images/artists/fuji.webp",
+      "BIO": "本名 Naoki Fujii。キャンプイン型の野外フェス MATRICARIA と、パーティー LAB. のレジデントDJ/オーガナイザー。ディープテクノとアンビエントテクノを軸に、音の層を少しずつ重ねる丁寧なミックスでセットを組む。DJとしてだけでなく、時間や空間、人の流れまで含めてパーティー全体の体験を組み立てることを目指している。",
+      "INSTAGRAM": "https://www.instagram.com/naoki__fujii/",
+      "SOUNDCLOUD": "https://soundcloud.com/naokifujii",
+      "STATUS": "published",
+      "metaDescription": "野外フェスMATRICARIAとパーティーLAB.を主宰するDJ/オーガナイザーFUJI（Naoki Fujii）。ディープテクノとアンビエントテクノを軸に音の層を丁寧に重ねるミックスで、時間と空間を含めたパーティー体験そのものを設計する。",
+      "name_en": "FUJI",
+      "bio_en": "本名 Naoki Fujii。キャンプイン型の野外フェス MATRICARIA と、パーティー LAB. のレジデントDJ/オーガナイザー。ディープテクノとアンビエントテクノを軸に、音の層を少しずつ重ねる丁寧なミックスでセットを組む。DJとしてだけでなく、時間や空間、人の流れまで含めてパーティー全体の体験を組み立てることを目指している。"
     },
     {
       "ID": "prins-thomas",
@@ -928,7 +1000,19 @@
     },
     {
       "ID": "ge-ology",
-      "NAME": "GE-OLOGY"
+      "NAME": "GE-OLOGY",
+      "CITY": "NEW YORK",
+      "COUNTRY": "USA",
+      "GENRE": "HOUSE",
+      "IMAGE": "images/artists/ge-ology.webp",
+      "BIO": "ボルティモア生まれ、80年代からニューヨークを拠点とするプロデューサー/DJ/ビジュアルアーティスト。Mos Def、Talib Kweli、Jill Scott、De La Soul らの作品を手がけてきた。ヒップホップ中心の制作を経て、2015年に Theo Parrish の Sound Signature から「Moon Circuitry」を発表。最初の制作参加は1993年、ボルティモアの The Basement Boys との仕事だった。",
+      "INSTAGRAM": "https://www.instagram.com/geology365",
+      "SOUNDCLOUD": "https://soundcloud.com/geology365",
+      "BANDCAMP": "https://ge-ology365.bandcamp.com",
+      "STATUS": "published",
+      "metaDescription": "ボルティモア出身、NY拠点のプロデューサー/DJ/ビジュアルアーティストGE-OLOGY。Mos DefやDe La Soulらヒップホップ作品を手がけ、2015年にTheo ParrishのSound SignatureからMoon Circuitryを発表した異色のキャリアを辿る。",
+      "name_en": "GE-OLOGY",
+      "bio_en": "Born in Baltimore and based in New York since the 80s, GE-OLOGY is a producer, DJ and visual artist whose production credits include Mos Def, Talib Kweli, Jill Scott, De La Soul and Little Dragon's Yukimi Nagano. After years working mostly at hip hop tempos, he released \"Moon Circuitry\" featuring Mark de Clive-Lowe on Theo Parrish's Sound Signature in 2015. His first production credit goes back to 1993, with Baltimore house outfit The Basement Boys."
     },
     {
       "ID": "idjut-boys",
@@ -1121,7 +1205,20 @@
     },
     {
       "ID": "goth-trad",
-      "NAME": "GOTH-TRAD"
+      "NAME": "GOTH-TRAD",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "DUBSTEP",
+      "IMAGE": "images/artists/goth-trad.jpg",
+      "BIO": "東京を拠点とするプロデューサー/DJ。2006年から、自身のレーベル兼パーティー Back To Chill を東京で続けている。Mala に見出された「Cut End」が DEEP MEDi Musik から出て、2012年には同レーベルからアルバム『New Epoch』を発表した。2021年には Back To Chill から『SURVIVAL RESEARCH』を出している。",
+      "INSTAGRAM": "https://www.instagram.com/gothtrad/",
+      "SOUNDCLOUD": "https://soundcloud.com/goth-trad",
+      "BANDCAMP": "https://backtochilltokyo.bandcamp.com/",
+      "WEBSITE": "http://www.gothtrad.com",
+      "STATUS": "published",
+      "metaDescription": "東京発のプロデューサー兼DJ、GOTH-TRADのプロフィール。2006年から主宰するレーベル兼パーティーBack To Chill、Malaに見出されDEEP MEDi Musikから放ったCut End、アルバムNew EpochやSURVIVAL RESEARCHまで、その歩みを紹介します。",
+      "name_en": "GOTH-TRAD",
+      "bio_en": "Tokyo producer and DJ GOTH-TRAD has run Back To Chill, a label and club night of the same name, in the city since 2006. Mala signed the track \"Cut End\" to DEEP MEDi Musik, and in 2012 the label released the album \"New Epoch\". \"SURVIVAL RESEARCH\" followed on Back To Chill in 2021."
     },
     {
       "ID": "risa-taniguchi",
@@ -1168,7 +1265,19 @@
     },
     {
       "ID": "foodman",
-      "NAME": "Foodman"
+      "NAME": "Foodman",
+      "CITY": "AICHI",
+      "COUNTRY": "JAPAN",
+      "GENRE": "LIVE",
+      "IMAGE": "images/artists/foodman.webp",
+      "BIO": "名古屋を拠点とするプロデューサー/DJ/画家。食品まつり a.k.a foodman として、ジューク/フットワークを足場にアンビエントやハウス、ノイズまでを解体して組み直す音を作る。米国の Orange Milk からデビューアルバムを出し、Good Enuff などからも作品を発表。Hyperdub から出たアルバム『Yasuragi Land』は Pitchfork の2021年のベスト・エレクトロニックに選ばれた。",
+      "INSTAGRAM": "https://www.instagram.com/tyousinkai/",
+      "SOUNDCLOUD": "https://soundcloud.com/shokuhin-maturi",
+      "BANDCAMP": "https://foodman.bandcamp.com/",
+      "STATUS": "published",
+      "metaDescription": "名古屋発のプロデューサー/DJ/画家、食品まつり a.k.a foodman。ジュークやフットワークを軸にアンビエント、ハウス、ノイズを解体し再構築する独自の音像。Orange MilkやHyperdubから作品を発表し、『Yasuragi Land』はPitchforkの2021年ベストに選出。",
+      "name_en": "Foodman",
+      "bio_en": "Nagoya-based producer, DJ and painter Takahide Higuchi, aka Shokuhin Matsuri or foodman, starts from juke and footwork and pulls in ambient, house and noise, taking each apart and reassembling it. His debut album came out on Orange Milk, with later records on labels including Good Enuff, and \"Yasuragi Land\" on Hyperdub made Pitchfork's best electronic music of 2021."
     },
     {
       "ID": "sapphire-slows",
@@ -1350,7 +1459,19 @@
     },
     {
       "ID": "eve",
-      "NAME": "EVE"
+      "NAME": "EVE",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO",
+      "IMAGE": "images/artists/eve.jpg",
+      "BIO": "東京を拠点とするテクノ/ハードテクノのDJ/プロデューサー。2000年に韓国で生まれ、7歳で日本へ移った。2021年にDJを始め、2022年に FUJI ROCK FESTIVAL でデビュー。同年から楽曲制作も手がける。ハードテクノとハードコアのパーティー/レーベル VIXLATIXN を主宰し、パーティー TRAPEZE も運営。2024年にはベルリンの配信プラットフォーム HÖR に出演した。",
+      "INSTAGRAM": "https://www.instagram.com/eve_violet",
+      "SOUNDCLOUD": "https://soundcloud.com/eve_violet",
+      "BANDCAMP": "https://vixlatixn.bandcamp.com/",
+      "STATUS": "published",
+      "name_en": "EVE",
+      "bio_en": "EVE is a Tokyo-based techno and hard techno DJ/producer. Born in South Korea in 2000, she moved to Japan at seven, started DJing in 2021 and made her debut at FUJI ROCK FESTIVAL in 2022, the same year she began producing. She runs VIXLATIXN, a hard techno and hardcore party and label, along with the party TRAPEZE, and played Berlin's HÖR in 2024.",
+      "imagePosition": "center top"
     },
     {
       "ID": "mars89",
