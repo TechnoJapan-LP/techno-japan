@@ -175,6 +175,38 @@
     1179,
     790
   ],
+  "images/articles/denki-bodhisattva-2026-info-1792586344478.webp": [
+    1920,
+    1280
+  ],
+  "images/articles/denki-bodhisattva-2026-info-1792586482437.webp": [
+    1567,
+    1045
+  ],
+  "images/articles/denki-bodhisattva-2026-info-1792586550730.webp": [
+    1920,
+    1280
+  ],
+  "images/articles/denki-bodhisattva-2026-info-1792586617888.webp": [
+    1920,
+    2880
+  ],
+  "images/articles/denki-bodhisattva-2026-info-1792586650350.webp": [
+    1045,
+    1567
+  ],
+  "images/articles/denki-bodhisattva-2026-info-1792586728647.webp": [
+    1920,
+    1280
+  ],
+  "images/articles/denki-bodhisattva-2026-info-1792586750853.webp": [
+    1179,
+    781
+  ],
+  "images/articles/denki-bodhisattva-2026-info.webp": [
+    1179,
+    781
+  ],
   "images/articles/forest-sound-camp-info-1788967609622.webp": [
     1206,
     1452
@@ -1471,6 +1503,30 @@
     447,
     447
   ],
+  "images/artists/endorphin.webp": [
+    1442,
+    811
+  ],
+  "images/artists/eric-cloutier.webp": [
+    1280,
+    849
+  ],
+  "images/artists/eve.webp": [
+    904,
+    786
+  ],
+  "images/artists/floating-points.webp": [
+    1920,
+    960
+  ],
+  "images/artists/foodman.webp": [
+    1009,
+    1009
+  ],
+  "images/artists/four-tet.webp": [
+    1442,
+    811
+  ],
   "images/artists/gonno.webp": [
     1765,
     1768
@@ -2226,6 +2282,134 @@
   "images/derivatives/card/articles/bondisco-2026-info-body04-a6595f06--9ee159b6-body-xl.webp": [
     1440,
     1082
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info--9ae927ac-lg.webp": [
+    960,
+    636
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info--9ae927ac-md.webp": [
+    720,
+    477
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info--9ae927ac-sm.webp": [
+    480,
+    318
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info--9ae927ac-xs.webp": [
+    240,
+    159
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586344478--48d61732-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586344478--48d61732-md.webp": [
+    720,
+    480
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586344478--48d61732-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586344478--48d61732-xs.webp": [
+    240,
+    160
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586482437--70c2cb83-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586482437--70c2cb83-md.webp": [
+    720,
+    480
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586482437--70c2cb83-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586482437--70c2cb83-xs.webp": [
+    240,
+    160
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586550730--0543de25-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586550730--0543de25-md.webp": [
+    720,
+    480
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586550730--0543de25-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586550730--0543de25-xs.webp": [
+    240,
+    160
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586617888--bc3a4d38-lg.webp": [
+    640,
+    960
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586617888--bc3a4d38-md.webp": [
+    480,
+    720
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586617888--bc3a4d38-sm.webp": [
+    320,
+    480
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586617888--bc3a4d38-xs.webp": [
+    160,
+    240
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586650350--802a0772-lg.webp": [
+    640,
+    960
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586650350--802a0772-md.webp": [
+    480,
+    720
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586650350--802a0772-sm.webp": [
+    320,
+    480
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586650350--802a0772-xs.webp": [
+    160,
+    240
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586728647--5c0ebc39-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586728647--5c0ebc39-md.webp": [
+    720,
+    480
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586728647--5c0ebc39-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586728647--5c0ebc39-xs.webp": [
+    240,
+    160
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586750853--5cfca319-lg.webp": [
+    960,
+    636
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586750853--5cfca319-md.webp": [
+    720,
+    477
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586750853--5cfca319-sm.webp": [
+    480,
+    318
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586750853--5cfca319-xs.webp": [
+    240,
+    159
   ],
   "images/derivatives/card/articles/forest-sound-camp-info--bab4ec11-fourThree-center.webp": [
     720,
@@ -7042,6 +7226,102 @@
   "images/derivatives/card/artists/efdemin--87b2ee5c-xs.webp": [
     240,
     240
+  ],
+  "images/derivatives/card/artists/endorphin--0aee4ed2-lg.webp": [
+    960,
+    540
+  ],
+  "images/derivatives/card/artists/endorphin--0aee4ed2-md.webp": [
+    720,
+    405
+  ],
+  "images/derivatives/card/artists/endorphin--0aee4ed2-sm.webp": [
+    480,
+    270
+  ],
+  "images/derivatives/card/artists/endorphin--0aee4ed2-xs.webp": [
+    240,
+    135
+  ],
+  "images/derivatives/card/artists/eric-cloutier--17969339-lg.webp": [
+    960,
+    637
+  ],
+  "images/derivatives/card/artists/eric-cloutier--17969339-md.webp": [
+    720,
+    478
+  ],
+  "images/derivatives/card/artists/eric-cloutier--17969339-sm.webp": [
+    480,
+    318
+  ],
+  "images/derivatives/card/artists/eric-cloutier--17969339-xs.webp": [
+    240,
+    159
+  ],
+  "images/derivatives/card/artists/eve--dc198373-lg.webp": [
+    904,
+    786
+  ],
+  "images/derivatives/card/artists/eve--dc198373-md.webp": [
+    720,
+    626
+  ],
+  "images/derivatives/card/artists/eve--dc198373-sm.webp": [
+    480,
+    417
+  ],
+  "images/derivatives/card/artists/eve--dc198373-xs.webp": [
+    240,
+    209
+  ],
+  "images/derivatives/card/artists/floating-points--ad136da6-lg.webp": [
+    960,
+    480
+  ],
+  "images/derivatives/card/artists/floating-points--ad136da6-md.webp": [
+    720,
+    360
+  ],
+  "images/derivatives/card/artists/floating-points--ad136da6-sm.webp": [
+    480,
+    240
+  ],
+  "images/derivatives/card/artists/floating-points--ad136da6-xs.webp": [
+    240,
+    120
+  ],
+  "images/derivatives/card/artists/foodman--1a128a53-lg.webp": [
+    960,
+    960
+  ],
+  "images/derivatives/card/artists/foodman--1a128a53-md.webp": [
+    720,
+    720
+  ],
+  "images/derivatives/card/artists/foodman--1a128a53-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/foodman--1a128a53-xs.webp": [
+    240,
+    240
+  ],
+  "images/derivatives/card/artists/four-tet--53bc819d-lg.webp": [
+    960,
+    540
+  ],
+  "images/derivatives/card/artists/four-tet--53bc819d-md.webp": [
+    720,
+    405
+  ],
+  "images/derivatives/card/artists/four-tet--53bc819d-sm.webp": [
+    480,
+    270
+  ],
+  "images/derivatives/card/artists/four-tet--53bc819d-xs.webp": [
+    240,
+    135
   ],
   "images/derivatives/card/artists/gonno--bb092cea-lg.webp": [
     958,
