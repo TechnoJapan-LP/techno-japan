@@ -11190,6 +11190,7 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 公開前は省略なしの `bash scripts/preflight.sh` を全件成功まで再実行する。今回の失敗は外部画像取得/localhost制限のため、解消後に再確認する。
 
 - 2026-10-21: `popular.yml` のAI流入取得を `continue-on-error: true` にし、AIレポートが無い場合は存在するファイルだけを `git add` するよう修正（未コミット）。
+- 2026-10-21: `check_cms_publish_guard.mjs` を逐次送信タスク＋`runGasWrites` 前提に更新し、LINEUPSの掃除・追記・空白化・別人ID非継承を実送信payloadで検証（全44件成功）。
 
 ### 2026-10-21 新規フェスの開催回同期とLINEUPS再送 — 未コミット
 

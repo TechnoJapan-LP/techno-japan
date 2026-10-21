@@ -49,6 +49,7 @@ const BRIDGE = `;globalThis.__T = {
     editionRowById = new Map(rows || []);
   },
   syncLineupRowsForEdition,
+  runGasWrites,
   canonicalizeRows,
   setLineupSheetState: (rows, max) => { lineupSheetRows = rows; lineupSheetMaxRow = max; },
   getLineupSheetState: () => ({ rows: lineupSheetRows, max: lineupSheetMaxRow })
@@ -131,11 +132,13 @@ const c = makeCtx();
     return { json: async () => ({ status: 'ok' }) };
   };
   const row = (n, label, extra = {}) => ({ _row: n, EDITION_ID: 'test-2026', ACT_LABEL: label, ARTIST_ID: '', SET_TYPE: 'dj', SORT: '1', ...extra });
+  const flush = async (requests) => c.__T.runGasWrites(requests);
 
   // (1) 事故の再現形: 同じラインナップが2重に積まれたシートを1回保存すると掃除される
   c.__T.setLineupSheetState([row(2,'A'), row(3,'B'), row(4,'A'), row(5,'B')], 5);
   const reqs1 = [];
   c.__T.syncLineupRowsForEdition('test-2026', ['A','B'], c.__T.getLineupSheetState().rows, reqs1);
+  await flush(reqs1);
   const blanks1 = sent.filter(b => b.sheet==='LINEUPS' && b.EDITION_ID==='' && b.ACT_LABEL==='');
   const appends1 = sent.filter(b => b.sheet==='LINEUPS' && b.row > 5);
   check('重複が積まれたシートは保存1回で掃除される（余り2行を空白化）', blanks1.length === 2, `blank=${blanks1.length}`);
@@ -145,26 +148,33 @@ const c = makeCtx();
   sent.length = 0;
   const reqs2 = [];
   c.__T.syncLineupRowsForEdition('test-2026', ['A','B'], c.__T.getLineupSheetState().rows, reqs2);
+  await flush(reqs2);
   const appends2 = sent.filter(b => b.sheet==='LINEUPS' && b.row > 5);
   const blanks2 = sent.filter(b => b.EDITION_ID==='');
   check('同じ内容の再保存で行が増えない（旧: 保存のたび全行追記）', appends2.length === 0 && blanks2.length === 0, `append=${appends2.length} blank=${blanks2.length}`);
 
   // (3) アーティスト追加は末尾追記、位置は台帳の続きから
   sent.length = 0;
-  c.__T.syncLineupRowsForEdition('test-2026', ['A','B','C'], c.__T.getLineupSheetState().rows, []);
+  const reqs3 = [];
+  c.__T.syncLineupRowsForEdition('test-2026', ['A','B','C'], c.__T.getLineupSheetState().rows, reqs3);
+  await flush(reqs3);
   const appends3 = sent.filter(b => b.row > 5);
   check('追加した1名だけが末尾に追記される', appends3.length === 1 && appends3[0].ACT_LABEL === 'C', JSON.stringify(appends3));
 
   // (4) アーティスト削除は行の空白化（行削除で行番号をずらさない）
   sent.length = 0;
-  c.__T.syncLineupRowsForEdition('test-2026', ['A'], c.__T.getLineupSheetState().rows, []);
+  const reqs4 = [];
+  c.__T.syncLineupRowsForEdition('test-2026', ['A'], c.__T.getLineupSheetState().rows, reqs4);
+  await flush(reqs4);
   const blanks4 = sent.filter(b => b.EDITION_ID==='');
   check('削除ぶんは空白化される', blanks4.length >= 1, `blank=${blanks4.length}`);
 
   // (5) ARTIST_ID はラベルが変わった行に引き継がない（別人のIDが付く事故防止）
   sent.length = 0;
   c.__T.setLineupSheetState([row(2,'A',{ARTIST_ID:'artist-a'})], 2);
-  c.__T.syncLineupRowsForEdition('test-2026', ['B'], c.__T.getLineupSheetState().rows, []);
+  const reqs5 = [];
+  c.__T.syncLineupRowsForEdition('test-2026', ['B'], c.__T.getLineupSheetState().rows, reqs5);
+  await flush(reqs5);
   const relabeled = sent.find(b => b.ACT_LABEL === 'B');
   check('ラベルが変わった行はARTIST_IDを引き継がない', relabeled && relabeled.ARTIST_ID === '', JSON.stringify(relabeled));
 
@@ -180,7 +190,9 @@ const c = makeCtx();
     JSON.stringify(snake[0]));
   sent.length = 0;
   c.__T.setLineupSheetState(snake, 3);
-  c.__T.syncLineupRowsForEdition('snake-2026', ['dj-a','dj-b'], c.__T.getLineupSheetState().rows, []);
+  const snakeRequests = [];
+  c.__T.syncLineupRowsForEdition('snake-2026', ['dj-a','dj-b'], c.__T.getLineupSheetState().rows, snakeRequests);
+  await flush(snakeRequests);
   const snakeAppends = sent.filter(b => b.row > 3);
   check('実物のキー形状（小文字）でも再保存で行が増えない', snakeAppends.length === 0, `append=${snakeAppends.length}`);
 
