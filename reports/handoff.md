@@ -11258,3 +11258,11 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - push後にClaudeが `Publish pipeline` を実行し、`SYNTHESIZED` 回のLINE UP・開催ヒストリー・JSON-LDを確認すること。
 - CMSは `cms.html?cb=<乱数>` またはCmd+Shift+Rで強制リロードし、新規フェスの入力→保存→EDITIONS/LINEUPS追記を認証済み実画面で確認すること。
 - `bash scripts/preflight.sh` が全件成功するまでpushしないこと。今回の作業ではcommit・push・本番データ書き込みをしていない。
+
+### 2026-10-21 開催回の無いフェスの LINE UP 修正と再発防止（本番確認）— Claude
+- 原因: CMS の新規フェス保存（submitToSheet / add_festival）は FESTIVALS だけを書き、EDITIONS / LINEUPS を書かなかった。resonance / prox / soul-beat-asia / car-multimedia の4件が該当。
+- データ修正（CMS 経由、保存後にシートで確認）: 4件に2026年の開催回を作成。soul-beat-asia-2026 は LINEUPS の行1599（Noripan）だけ書き込みが黙って失敗していたため、空行を確認してから書き込み。car-multimedia-2026 は STATUS=draft で作られ公開処理が除外していたため published に。
+- 再発防止（cms.js v161 / fetch-data.mjs）: 新規保存でも開催回と出演データを書く（無ければ日程から自動作成）／LINEUPS 書き込みを逐次化・失敗は1回再送・2回失敗で名前つきの消えないパネル／公開時に EDITIONS の無い公開フェスは FESTIVALS から開催回を補う（SYNTHESIZED、警告あり）。
+- 検証（本番）: preflight 全60件成功 → push、Deploy success、Publish pipeline success（run 39554802521）。LINE UP 表示 resonance 6 / prox 20 / soul-beat-asia 18 / car-multimedia 9。cms.js?v=161 配信。
+- 未確認: 新規フェス作成の画面操作そのものは本番では未実施（本番データを作るため）。検査 check_cms_editions.mjs（37件）で送信内容を確認済み。
+- 次の担当への注意: CMS の作業中にタブが固まったときは、別タブでシート（gviz）を読んで途中状態を確かめてから続ける。
