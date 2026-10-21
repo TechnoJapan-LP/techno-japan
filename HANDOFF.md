@@ -29,7 +29,7 @@ Search Console: 認証済み
 Behold.so feed-id: KSdgYwJwBxsVTQksVCVP
 Instagram: @techno.japan_
 Threads: @techno.japan_
-Newsletter送信先: tatsuya25shibata@gmail.com (FormSubmit)
+Newsletter: Buttondown（technojapan / 送信元 news@techno-japan.media）。問い合わせフォームは FormSubmit → press@techno-japan.media（2026-10-22 確認）
 ```
 
 ---
