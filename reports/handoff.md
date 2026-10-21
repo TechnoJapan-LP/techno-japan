@@ -11400,3 +11400,34 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - `bash scripts/preflight.sh` の外部画像取得と localhost 制限を解消し、全件成功してから公開すること。今回も commit / push は行っていない。
 - 2026-10-21: newsletter-draft は号の月（通常は翌月）を開催予定・件名・ファイル名・UTMへ使い、記事は前月1日〜作成日、空要約には ` — ` を付けない仕様へ修正。11月号を再生成済み。
 - 2026-10-21: newsletter.md の送信元・返信先を news@techno-japan.media に更新し、独自ドメインDNS、Gmail転送、Buttondownユーザー名と表示名の区別を追記。
+
+### 2026-10-21 Buttondown切り替え・生成物更新 — 未コミット
+
+### 実施
+- `scripts/newsletter-config.json` を `{ "provider": "buttondown", "buttondownUsername": "technojapan" }` に変更。
+- `node scripts/build-detail-pages.mjs` でJA/EN記事詳細とTOP/NEWSハブを再生成。Buttondownの送信ドメイン `techno-japan.media` 認証済み、JA/ENタグ運用を `docs/newsletter.md` の現在の状態へ追記。
+- `scripts/check_newsletter.mjs` を切り替え後の検査へ更新し、対象フォーム数・専用項目数・formsubmit維持数・ハブ行数を検査。
+
+### コミット
+- 未コミット（ユーザー指定）。commit / push / Publish pipeline / 本番データ書き込みは未実施。
+
+### 検証
+- `node scripts/check_newsletter.mjs`: 成功。Buttondown 44フォーム、formsubmit専用項目0件、ライター応募のformsubmit 2件。
+- JA/ENハブ行数一致: `index 1457/1457`、`news 1342/1342`、`festivals 1458/1458`、`artists 1011/1011`、`venues 1168/1168`。
+- `node --check scripts/check_newsletter.mjs scripts/build-detail-pages.mjs`、`git diff --check`: 成功。
+- `git pull --ff-only`: worktree親リポジトリの `FETCH_HEAD` 権限制限で未実施。`bash scripts/preflight.sh`、実ブラウザ確認、Publish pipelineは未実施。
+
+### 変更したパターン
+- 記事詳細JA/EN各20件、TOP/NEWS JA/ENのニュースレターを Buttondown action `https://buttondown.com/api/emails/embed-subscribe/technojapan` へ切り替え、JA=`ja` / EN=`en` のtagと `embed=1` のみを出力。
+- Buttondownフォームから `_honey` / `_subject` / `_captcha` / `_next` / `_template` を除去。
+- `docs/newsletter.md` の現在の状態、切り替え後の `check_newsletter.mjs`、設定JSONを更新。
+
+### 未確認の類似パターン
+- 確認済み・0件：対象44フォームのaction不正、JA/EN tag不正、formsubmit専用項目混入、JA/ENハブ行数不一致。
+- 確認済み：ライター応募formsubmit 2件は維持。フェス申請ページはformsubmit action 0件（Googleフォーム等の外部埋め込みもなし）。
+- 未確認：Buttondownへの実登録・ダブルオプトイン、実ブラウザのPC/モバイル操作、Publish pipeline、本番HTML、preflight全件。
+
+### 次の担当への注意・判断待ち
+- 公開前に `bash scripts/preflight.sh` を省略なしで実行し、CMS変更扱いの手順に従って実ブラウザでJA/ENフォームを確認すること。CMS変更ではないためPublish pipelineは今回未実施。
+- Buttondown APIキーはリポジトリへ保存せず、必要なら `gh secret set BUTTONDOWN_API_KEY` で登録すること。
+- 今回もcommit・push・本番データ書き込みは行っていない。
