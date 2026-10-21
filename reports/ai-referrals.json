@@ -1,0 +1,258 @@
+{
+  "generatedAt": "2026-10-21T03:26:09.485Z",
+  "propertyId": "535755449",
+  "periods": {
+    "current": {
+      "startDate": "2026-09-24",
+      "endDate": "2026-10-21",
+      "label": "直近28日"
+    },
+    "previous": {
+      "startDate": "2026-08-27",
+      "endDate": "2026-09-23",
+      "label": "前の28日"
+    }
+  },
+  "current": {
+    "sessions": 61,
+    "totalUsers": 60,
+    "share": 0.024341580207501996,
+    "bySource": [
+      {
+        "source": "chatgpt.com",
+        "sessions": 60,
+        "totalUsers": 59
+      },
+      {
+        "source": "gemini.google.com",
+        "sessions": 1,
+        "totalUsers": 1
+      }
+    ],
+    "topLandingPages": [
+      {
+        "landingPage": "/",
+        "sessions": 9,
+        "totalUsers": 8
+      },
+      {
+        "landingPage": "/festivals/festival-de-frue.html",
+        "sessions": 9,
+        "totalUsers": 9
+      },
+      {
+        "landingPage": "/en/festivals/labyrinth.html",
+        "sessions": 8,
+        "totalUsers": 8
+      },
+      {
+        "landingPage": "/articles/japan-festival-2026-september.html",
+        "sessions": 6,
+        "totalUsers": 6
+      },
+      {
+        "landingPage": "/en/festivals/lost-find.html",
+        "sessions": 4,
+        "totalUsers": 4
+      },
+      {
+        "landingPage": "/en/articles/japan-festival-2026-october.html",
+        "sessions": 3,
+        "totalUsers": 3
+      },
+      {
+        "landingPage": "/festivals/yagura.html",
+        "sessions": 3,
+        "totalUsers": 3
+      },
+      {
+        "landingPage": "(not set)",
+        "sessions": 2,
+        "totalUsers": 2
+      },
+      {
+        "landingPage": "/articles/otsukimi-2026-info.html",
+        "sessions": 2,
+        "totalUsers": 2
+      },
+      {
+        "landingPage": "/en/articles/asia-festival-2026-second.html",
+        "sessions": 2,
+        "totalUsers": 2
+      },
+      {
+        "landingPage": "/articles/forest-sound-camp-info.html",
+        "sessions": 1,
+        "totalUsers": 1
+      },
+      {
+        "landingPage": "/articles/rebirth-2026-info.html",
+        "sessions": 1,
+        "totalUsers": 1
+      },
+      {
+        "landingPage": "/articles/synapse-2026-info.html",
+        "sessions": 1,
+        "totalUsers": 1
+      },
+      {
+        "landingPage": "/artists/powder.html",
+        "sessions": 1,
+        "totalUsers": 1
+      },
+      {
+        "landingPage": "/en/articles/forest-sound-camp-info.html",
+        "sessions": 1,
+        "totalUsers": 1
+      },
+      {
+        "landingPage": "/en/articles/intergalactic-2026-info.html",
+        "sessions": 1,
+        "totalUsers": 1
+      },
+      {
+        "landingPage": "/en/articles/japan-festival-2026-september.html",
+        "sessions": 1,
+        "totalUsers": 1
+      },
+      {
+        "landingPage": "/en/articles/odyssey-2026-info.html",
+        "sessions": 1,
+        "totalUsers": 1
+      },
+      {
+        "landingPage": "/en/articles/synapse-2026-info.html",
+        "sessions": 1,
+        "totalUsers": 1
+      },
+      {
+        "landingPage": "/en/festivals/rural.html",
+        "sessions": 1,
+        "totalUsers": 1
+      }
+    ],
+    "allSessions": 2506,
+    "allTotalUsers": 2145
+  },
+  "previous": {
+    "sessions": 0,
+    "totalUsers": 0,
+    "share": 0,
+    "bySource": [
+      {
+        "source": "chatgpt.com",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
+        "source": "gemini.google.com",
+        "sessions": 0,
+        "totalUsers": 0
+      }
+    ],
+    "topLandingPages": [
+      {
+        "landingPage": "(not set)",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
+        "landingPage": "/",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
+        "landingPage": "/articles/forest-sound-camp-info.html",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
+        "landingPage": "/articles/japan-festival-2026-september.html",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
+        "landingPage": "/articles/otsukimi-2026-info.html",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
+        "landingPage": "/articles/rebirth-2026-info.html",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
+        "landingPage": "/articles/synapse-2026-info.html",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
+        "landingPage": "/artists/powder.html",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
+        "landingPage": "/en/articles/asia-festival-2026-second.html",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
+        "landingPage": "/en/articles/forest-sound-camp-info.html",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
+        "landingPage": "/en/articles/intergalactic-2026-info.html",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
+        "landingPage": "/en/articles/japan-festival-2026-october.html",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
+        "landingPage": "/en/articles/japan-festival-2026-september.html",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
+        "landingPage": "/en/articles/odyssey-2026-info.html",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
+        "landingPage": "/en/articles/synapse-2026-info.html",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
+        "landingPage": "/en/festivals/labyrinth.html",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
+        "landingPage": "/en/festivals/lost-find.html",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
+        "landingPage": "/en/festivals/rural.html",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
+        "landingPage": "/en/festivals/sawagi-festival.html",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
+        "landingPage": "/festivals/festival-de-frue.html",
+        "sessions": 0,
+        "totalUsers": 0
+      }
+    ],
+    "allSessions": 0,
+    "allTotalUsers": 0
+  }
+}
