@@ -11190,3 +11190,71 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 公開前は省略なしの `bash scripts/preflight.sh` を全件成功まで再実行する。今回の失敗は外部画像取得/localhost制限のため、解消後に再確認する。
 
 - 2026-10-21: `popular.yml` のAI流入取得を `continue-on-error: true` にし、AIレポートが無い場合は存在するファイルだけを `git add` するよう修正（未コミット）。
+- 2026-10-21: `check_cms_publish_guard.mjs` を逐次送信タスク＋`runGasWrites` 前提に更新し、LINEUPSの掃除・追記・空白化・別人ID非継承を実送信payloadで検証（全44件成功）。
+
+### 2026-10-21 新規フェスの開催回同期とLINEUPS再送 — 未コミット
+
+### 実施
+- `submitToSheet('festival')` の `add_festival` 成功後、保存前に作った開催回のコピーを保持し、`loadEditionsFromSheet` 成功後に既存のEDITIONS upsert / LINEUPS同期経路へ渡すよう修正した。シート未読込時は書き込まず、「フェスは保存しました。開催回の保存に失敗したので、フェスを開き直して保存してください」と表示する。
+- EDITIONS / LINEUPSの書き込みタスクを逐次実行する `runGasWrites` を追加した。各GAS書き込み結果を確認し、失敗した行だけ1回再送し、2回失敗したら `aiFail` の消えないパネルへ出演者名付きで表示する。
+- `saveEdit` の既存回同期と新規回同期も逐次化し、GASへの同時書き込みを避けた。
+- `LP/cms.html` のキャッシュバスターを `cms.js?v=161` に更新した。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node --check LP/cms.js`: 成功。
+- `node scripts/check_cms_editions.mjs`: 成功（全36件。新規フェス相当のEDITIONS/LINEUPS書き込み、シート未読込時の停止を含む）。
+- `node scripts/check_cms_lineup.mjs`: 成功（全30件。1回再送、2回失敗時の表示を含む）。
+- `git diff --check`: 次担当が最終確認すること。
+- 実GAS書き込み、Publish pipeline、CMS実画面、新規フェスの実ブラウザ保存操作: 未確認。push後にClaudeが確認すること。本番データへの書き込みは行っていない。
+
+### 変更したパターン
+- 新規フェス `add_festival` 成功後のEDITIONS / LINEUPS同期。
+- GAS書き込みの逐次実行、失敗行の1回再送、最終失敗の永続エラー表示。
+- `saveEdit` 内の開催回同期順序。
+- CMSキャッシュバスター更新と回帰検査。
+
+### 未確認の類似パターン
+- 確認済み・0件：新規回のEDITIONS/LINEUPS書き込み、シート未読込時の無書き込み、成功/1回失敗/2回失敗の同期検査。
+- 未確認：実GASの同時実行制限下での挙動、18件以上の実LINEUPS、既存行更新と空白化を含む実ブラウザ操作、Publish後の静的詳細ページ。
+
+### 次の担当への注意・判断待ち
+- push後にClaudeがCMSへ `?cb=<乱数>` 付きで入り、新規フェスを日程・LINEUP付きで保存し、EDITIONS/LINEUPSの追記と再表示を確認すること。
+- 実データで失敗した場合は、永続パネルの出演者名・行番号を記録してから再試行すること。
+- `bash scripts/preflight.sh` を省略せず全件成功させるまでpushしないこと。
+
+### 2026-10-21 開催回（EDITIONS）が無いフェスのLINE UP再発防止 — 未コミット
+
+### 実施
+- `LP/cms.js` のフェス保存時、開催回が0件かつ日程がある場合に、その年の開催回を自動作成する救済を追加した。フォームの日程・会場・住所・座標・地域・チケットURL・フライヤー・状態と `lineups.f` を引き継ぎ、既存の `syncNewEditionRows` / LINEUPS同期経路へ渡す。手動のAdd Editionとは共通の初期値関数を使用する。
+- `scripts/fetch-data.mjs` の正式EDITIONS経路で、公開フェスに対応するEDITIONSが無い場合、FESTIVALSのDATE等から `{festivalId}-{年}` の `SYNTHESIZED: '1'` 開催回を補う。旧FESTIVALS.LINEUP橋渡しの `resolveActLabel` をそのまま通し、警告を出す。
+- `LP/cms.html` の `cms.js` キャッシュバスターを `?v=160` に更新した。
+- `scripts/check_fetch_data_editions.mjs` とCMS既存検査への回帰ケースを追加し、preflightにも登録した。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node --check LP/cms.js`: 成功。
+- `node --check scripts/fetch-data.mjs`: 成功。
+- `node scripts/check_fetch_data_editions.mjs`: 成功（EDITIONS無し＋DATEあり / DATE無し / EDITIONSあり）。
+- `node scripts/check_cms_editions.mjs`: 成功（全35件。開催回0件＋日程あり、LINEUP引継ぎ、日程なし、既存回ありを含む）。
+- `bash scripts/preflight.sh`: 開始したが、既存の「詳細ページを生成できる」ステップが外部画像取得待ちで長時間継続したため、他の検査へ進む前に手動停止。全件成功ではないため、次担当が再実行すること。
+- Publish pipeline、CMS実画面のPublish Now、実ブラウザでの保存操作、実機確認: 未確認。push後にClaudeがPublish pipelineを実行し、CMSを強制リロードして実画面確認すること。本番データへの書き込みは行っていない。
+
+### 変更したパターン
+- CMSの開催回ゼロ＋日程あり保存時の自動開催回生成と、既存同期経路への接続。
+- 正式EDITIONS経路におけるFESTIVALSからの開催回・LINEUP橋渡し。
+- `SYNTHESIZED`内部フラグと補完警告、cms.jsのキャッシュバスター更新。
+- fetch-data / CMSの境界条件回帰検査。
+
+### 未確認の類似パターン
+- 確認済み・0件：日程なし、既存EDITIONSあり、既存Add Editionの初期値、補完回の年ID、CMSフォーム値とLINEUP引継ぎ。
+- 未確認：実GAS保存、既存EDITIONSとLINEUPSが混在する実データ、build-detail-pages.mjsでの補完回の実生成、JA/EN・PC/モバイルの実ブラウザ表示。
+
+### 次の担当への注意・判断待ち
+- push後にClaudeが `Publish pipeline` を実行し、`SYNTHESIZED` 回のLINE UP・開催ヒストリー・JSON-LDを確認すること。
+- CMSは `cms.html?cb=<乱数>` またはCmd+Shift+Rで強制リロードし、新規フェスの入力→保存→EDITIONS/LINEUPS追記を認証済み実画面で確認すること。
+- `bash scripts/preflight.sh` が全件成功するまでpushしないこと。今回の作業ではcommit・push・本番データ書き込みをしていない。

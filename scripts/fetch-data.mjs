@@ -22,7 +22,7 @@
 import { writeFile, mkdir, readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { ID_RE, resolveActLabel } from './lineup-label-resolution.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -208,6 +208,36 @@ function stripMeta(obj) {
   return o;
 }
 
+// EDITIONS移行中のフェスを止めないための橋渡し。正式なEDITIONSが1行も
+// 無い公開フェスだけを対象にし、DATEがある場合に限ってFESTIVALSから仮の
+// 開催回を作る。LINEUPは下の旧列橋渡しで通常の名前解決を通す。
+export function synthesizeMissingFestivalEditions({ festivals, editions, warnings: warningSink = [], dateNormalizer = normalizeDate }) {
+  const existingFestivalIds = new Set(editions.map(e => String(e.FESTIVAL_ID || '').trim()));
+  const synthesized = [];
+  for (const festival of festivals) {
+    const fid = String(festival.ID || '').trim();
+    if (!fid || existingFestivalIds.has(fid)) continue;
+    const rawDate = String(festival.DATE || '').split('/').map(s => s.trim());
+    const dateStart = dateNormalizer('EDITIONS', fid, rawDate[0] || '');
+    if (!dateStart) continue;
+    const year = (dateStart.match(/(\d{4})/) || [])[1] || '';
+    if (!year) continue;
+    const edition = stripMeta({
+      EDITION_ID: `${fid}-${year}`, FESTIVAL_ID: fid, EDITION: year,
+      DATE_START: dateStart, DATE_END: dateNormalizer('EDITIONS', fid, rawDate[1] || rawDate[0] || ''),
+      LOCATION: festival.LOCATION || '', LOCATION_JA: festival.LOCATION_JA || festival.location_ja || '',
+      PREF: festival.CITY || '', ADDRESS: festival.ADDRESS || '', LAT: festival.LAT || '', LNG: festival.LNG || '',
+      TICKETURL: festival.TICKETURL || festival.ticketUrl || '', FLYER: festival.FLYER || '',
+      STATUS: festival.STATUS || '', SYNTHESIZED: '1',
+    });
+    editions.push(edition);
+    existingFestivalIds.add(fid);
+    synthesized.push(edition);
+    warningSink.push(`EDITIONS が無いため FESTIVALS から開催回を補った: ${fid}`);
+  }
+  return synthesized;
+}
+
 // ---------- メイン ----------
 async function main() {
   console.log(`fetch-data.mjs — ${OFFLINE ? 'OFFLINE' : 'LIVE'}${DRY ? ' (dry-run)' : ''}`);
@@ -319,6 +349,7 @@ async function main() {
         TICKETURL:r.TICKETURL || '', FLYER:r.FLYER || '', STATUS:r.STATUS || '',
       }));
     }
+    synthesizeMissingFestivalEditions({ festivals, editions, warnings });
     const editionIds = new Set(editions.map(e => e.EDITION_ID));
     // 公開されるアーティストの ID と、draft も含む ID→表示名。
     const artistNameById = new Map(
@@ -477,10 +508,12 @@ async function main() {
           SORT: String(i + 1),
         }));
       });
-      warnings.push(
-        `FESTIVALS "${fid}": LINEUP列の${acts.length}名を ${target.EDITION_ID} へ導出しました`
-        + `（LINEUPS シートへ移すとステージ・日別・時間も持てます）`
-      );
+      if (!target.SYNTHESIZED) {
+        warnings.push(
+          `FESTIVALS "${fid}": LINEUP列の${acts.length}名を ${target.EDITION_ID} へ導出しました`
+          + `（LINEUPS シートへ移すとステージ・日別・時間も持てます）`
+        );
+      }
     }
   }
 
@@ -575,4 +608,6 @@ async function main() {
   console.log('\n完了。');
 }
 
-main().catch(e => { console.error('FATAL:', e.message); process.exit(1); });
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main().catch(e => { console.error('FATAL:', e.message); process.exit(1); });
+}

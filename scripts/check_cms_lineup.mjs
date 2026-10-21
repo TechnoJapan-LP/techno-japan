@@ -37,7 +37,7 @@ const BRIDGE=`;globalThis.__T={ get lineups(){return lineups}, get editions(){re
   set ARTIST_DB(v){ARTIST_DB=v}, get acHighlight(){return acHighlight}, set acHighlight(v){acHighlight=v},
   get lineupSheetRows(){return lineupSheetRows}, set lineupSheetRows(v){lineupSheetRows=v},
   get lineupSheetMaxRow(){return lineupSheetMaxRow}, set lineupSheetMaxRow(v){lineupSheetMaxRow=v},
-  syncLineupRowsForEdition };`;
+  syncLineupRowsForEdition, runGasWrites };`;
 function ctxOf(){
   const els=new Map();
   const mk=id=>({id,value:'',innerHTML:'',dataset:{},
@@ -71,8 +71,25 @@ async function syncCaptured(c, labels, existingRows){
   c.__T.lineupSheetRows=[...existingRows];
   c.__T.lineupSheetMaxRow=Math.max(1,...existingRows.map(r=>Number(r._row)||0));
   c.syncLineupRowsForEdition('fest-2026', labels, existingRows, requests);
-  await Promise.all(requests);
+  await c.__T.runGasWrites(requests);
   return sent;
+}
+
+// ---- 0) LINEUPSは逐次送信し、失敗行だけ1回再送する ---------------------
+{
+  const c=ctxOf();
+  const requests=[{payload:{action:'update_row',sheet:'LINEUPS',row:1599},label:'Noripan',kind:'lineup'}];
+  let attempts=0; c.fetch=async()=>{ attempts++; return {json:async()=>({status:attempts===2?'ok':'error'})}; };
+  await c.__T.runGasWrites(requests);
+  check('LINEUPSの失敗行を1回だけ再送する', attempts===2, `送信回数=${attempts}`);
+}
+{
+  const c=ctxOf();
+  const requests=[{payload:{action:'update_row',sheet:'LINEUPS',row:1599},label:'Noripan',kind:'lineup'}];
+  let attempts=0, toastMessage=''; c.fetch=async()=>{ attempts++; return {json:async()=>({status:'error'})}; }; c.toast=(message)=>{toastMessage=message;};
+  let failed=false; try{ await c.__T.runGasWrites(requests); }catch(_){ failed=true; }
+  check('LINEUPSが2回失敗したら処理を失敗にする', failed && attempts===2, `失敗=${failed} / 送信回数=${attempts}`);
+  check('LINEUPS最終失敗を表示する', toastMessage.includes('開催回の保存に失敗しました'), toastMessage);
 }
 
 // ---- 1) YAMA を打って Enter → そのまま入るか ----
