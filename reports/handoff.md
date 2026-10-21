@@ -11461,3 +11461,34 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 公開前に `bash scripts/preflight.sh` を省略なしで実行し、CMS変更扱いの手順に従って実ブラウザでJA/ENフォームを確認すること。CMS変更ではないためPublish pipelineは今回未実施。
 - Buttondown APIキーはリポジトリへ保存せず、必要なら `gh secret set BUTTONDOWN_API_KEY` で登録すること。
 - 今回もcommit・push・本番データ書き込みは行っていない。
+### 2026-10-21 CMS保存成功後のReferenceError修正 — 未コミット
+
+### 実施
+- `LP/cms.js` の `saveEdit` で `autoEditionYear` を関数スコープの `let` にし、festival分岐内は代入へ変更。`venue / artist / article / festival` の成功応答で保存後処理が例外にならない検査を追加し、festival は `syncExistingEditionRows` → `syncNewEditionRows` の順に呼ばれることを確認。
+- `saveEdit` と `submitToSheet` の成功応答後処理を `try/catch` で囲み、後処理例外は `保存は完了しましたが、後処理でエラーが発生しました: ...` の消えない `aiFail` パネルへ出すよう変更。fetch / JSON取得失敗は従来どおり通信エラーとして扱う。
+- `LP/cms.html` の `cms.js` キャッシュバスターを v161 → v162 に更新。
+- 原因は cms.js v161 の公開から発生。影響は、全セクションで保存自体は成功するが通信エラー表示になり、特にフェス保存時に開催回・LINEUPSが未同期になった可能性があること。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node --check LP/cms.js`: 成功。
+- `node --check scripts/check_cms_editions.mjs`: 成功。
+- `node scripts/check_cms_editions.mjs`: 43件成功。成功応答モックで4セクションの `saveEdit`、festivalの2段階同期、後処理例外と通信エラーの分離を確認。
+- `git diff --check`: 成功。
+- `bash scripts/preflight.sh`: 51件成功 / 9件失敗。詳細ページ生成は外部画像取得待ちで240秒タイムアウト、ハブ/CMSフォーム/会場フィルタ/計測/地図/モバイル系8件は sandbox の localhost listen `EPERM`。変更に関係するCMS検査は成功。実ブラウザでのCMS保存操作、Publish pipeline、本番データへの書き込みは未実施。
+
+### 変更したパターン
+- 既存保存 `saveEdit` のブロックスコープ変数、成功応答後の同期・再読込、後処理エラー表示。
+- 新規保存 `submitToSheet` の成功応答後処理エラー表示。
+- CMS `cms.js` キャッシュバージョン。
+- CMS VM検査の成功応答モック（venue / artist / article / festival）。
+
+### 未確認の類似パターン
+- 確認済み・0件：`saveEdit` 内の `autoEditionYear` のブロック外参照、`submitToSheet` の `autoCreatedEditionYear` のスコープ。
+- 未確認：実ブラウザでの認証済みCMS操作、実GAS通信、Publish pipeline、本番データのフェス保存後に実シートでEDITIONS / LINEUPSが同期されたこと。
+
+### 次の担当への注意・判断待ち
+- 公開前に `bash scripts/preflight.sh` を省略なしで実行し、成功後にCMSを `?cb=<乱数>` で開いて Cmd+Shift+R 相当の強制再読込を行うこと。今回の変更はPublish経路（`LP/cms.js`）なので、Publish pipelineと実ブラウザ確認が必須。
+- 本番データへの書き込みを伴う実操作はまだ行っていない。実機確認できるまで公開済みとして扱わないこと。

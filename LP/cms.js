@@ -5261,6 +5261,7 @@ function ensureFestivalEditionForSave(dateStart, dateEnd){
 
 function saveEdit(section){
   const state=editState[section];
+  let autoEditionYear='';
   if(!state)return;
   if(section==='festival' && editionsLoadingPromise){
     toast('開催回データを読み込み中です。完了後に保存します','info');
@@ -5302,7 +5303,7 @@ function saveEdit(section){
   }
   else if(section==='festival'){
     const ds=g('f-dateStart'),de=g('f-dateEnd');
-    const autoEditionYear=ensureFestivalEditionForSave(ds,de);
+    autoEditionYear=ensureFestivalEditionForSave(ds,de);
     syncFestivalDateToLatestEdition(ds&&de?ds+'/'+de:ds);
     Object.assign(payload,{id:g('f-id'),type:g('f-type'),name:g('f-name'),city:g('f-city'),
       country:g('f-country'),COUNTRY:g('f-country'),
@@ -5378,19 +5379,24 @@ function saveEdit(section){
   gasPostJson_(payload)
     .then(d=>{
       if(d.status==='ok'||d.success){
-        toast('Updated ✓','success');
-        if(autoEditionYear) toast(autoEditionYear+'年の開催回を自動で作成しました','success');
-        if(section==='festival'){
-          syncExistingEditionRows(payload.id,editionsForSync||[])
-          .then(()=>syncNewEditionRows(payload.id,editionsForSync||[]))
-          .catch(()=>{
-            toast('開催回の同期に失敗しました。公開せず、フェスを再読み込みして確認してください','error');
-            invalidateSheetCache('festival');
-          });
+        try {
+          toast('Updated ✓','success');
+          if(autoEditionYear) toast(autoEditionYear+'年の開催回を自動で作成しました','success');
+          if(section==='festival'){
+            syncExistingEditionRows(payload.id,editionsForSync||[])
+            .then(()=>syncNewEditionRows(payload.id,editionsForSync||[]))
+            .catch(()=>{
+              toast('開催回の同期に失敗しました。公開せず、フェスを再読み込みして確認してください','error');
+              invalidateSheetCache('festival');
+            });
+          }
+          if(unregisteredArtists.length) notifyUnregisteredArtists(unregisteredArtists);
+          // 裏で正データに置き換え（画面はすでに更新済みなので silent）
+          loadList(section, {force:true, silent:true});
+        } catch(e) {
+          console.error('[CMS save post-processing]', e);
+          aiFail('保存後処理', '保存は完了しましたが、後処理でエラーが発生しました: '+(e?.message || e));
         }
-        if(unregisteredArtists.length) notifyUnregisteredArtists(unregisteredArtists);
-        // 裏で正データに置き換え（画面はすでに更新済みなので silent）
-        loadList(section, {force:true, silent:true});
       } else {
         toast('保存失敗: '+(d.message||'')+' — リストを再読込します','error');
         invalidateSheetCache(section);
@@ -6548,16 +6554,21 @@ function submitToSheet(section){
     .then(r=>r.json()).then(r=>{
       console.log('Save response:',r);
       if(r.success||r.status==='ok'){
-        toast('Saved ✓','success');
-        if(section==='festival' && payload.editions?.length){
-          if(autoCreatedEditionYear) toast(autoCreatedEditionYear+'年の開催回を自動で作成しました','success');
-          loadEditionsFromSheet(payload.id)
-            .then(()=>syncNewFestivalAfterAdd(payload.id, payload.editions))
-            .catch(()=>toast('フェスは保存しました。開催回の保存に失敗したので、フェスを開き直して保存してください','error'));
-        }
+        try {
+          toast('Saved ✓','success');
+          if(section==='festival' && payload.editions?.length){
+            if(autoCreatedEditionYear) toast(autoCreatedEditionYear+'年の開催回を自動で作成しました','success');
+            loadEditionsFromSheet(payload.id)
+              .then(()=>syncNewFestivalAfterAdd(payload.id, payload.editions))
+              .catch(()=>toast('フェスは保存しました。開催回の保存に失敗したので、フェスを開き直して保存してください','error'));
+          }
           if(unregisteredArtists.length) notifyUnregisteredArtists(unregisteredArtists);
-        // 正式な行番号を取り込むため裏で再読込（syncing 行が実データに置き換わる）
-        loadList(section, {force:true});
+          // 正式な行番号を取り込むため裏で再読込（syncing 行が実データに置き換わる）
+          loadList(section, {force:true});
+        } catch(e) {
+          console.error('[CMS new-save post-processing]', e);
+          aiFail('保存後処理', '保存は完了しましたが、後処理でエラーが発生しました: '+(e?.message || e));
+        }
       } else {
         const msg=r.message||r.error||'Save failed';
         console.error('Save failed:',r);

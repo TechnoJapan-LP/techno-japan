@@ -65,6 +65,7 @@ const BRIDGE = `
   buildFullDataJs,
   syncExistingEditionRows,
   syncNewFestivalAfterAdd,
+  saveEdit,
   festivalEditionsForSave,
   get editState(){return editState},
 };`;
@@ -114,6 +115,68 @@ function makeCtx({ cityValue = 'Ibaraki' } = {}) {
 
 const results = [];
 const check = (name, pass, detail) => { results.push([name, pass, detail]); };
+
+// ---- 0f) 保存成功後の処理は全セクションで例外にならず、フェス同期も実行する ----
+for (const section of ['venue', 'artist', 'article', 'festival']) {
+  const c = makeCtx();
+  const values = {
+    'v-id': 'venue-id', 'v-name': 'Venue',
+    'a-id': 'artist-id', 'a-name': 'Artist',
+    'ar-id': 'article-id', 'ar-title': 'Article',
+    'f-id': 'festival-id', 'f-name': 'Festival',
+  };
+  const originalGet = c.document.getElementById;
+  c.document.getElementById = (id) => ({...originalGet(id), value: values[id] || ''});
+  c.__T.editState[section] = {_row: 12};
+  c.__T.editions.length = 0;
+  c.__T.editionSheetLoaded = true;
+  c.__T.lineups.f = [];
+  c.gasPostJson_ = async () => ({status: 'ok'});
+  c.validateBeforeSave = () => [];
+  c.getPubFields = () => ({});
+  c.applyOptimisticUpdate = () => {};
+  c.clearFormDirty = () => {};
+  c.cancelEdit = () => {};
+  c.switchTab = () => {};
+  c.rerenderListFromCache = () => {};
+  c.loadList = () => {};
+  c.toast = () => {};
+  c.flushArticleEditorSync = () => {};
+  c.getArticleBodyForSave = () => 'body';
+  c.syncFestivalDateToLatestEdition = () => {};
+  const syncCalls = [];
+  c.syncExistingEditionRows = async () => { syncCalls.push('existing'); };
+  c.syncNewEditionRows = async () => { syncCalls.push('new'); };
+  let postProcessError = null;
+  c.aiFail = (_where, message) => { postProcessError = message; };
+  c.saveEdit(section);
+  await new Promise(resolve => setTimeout(resolve, 0));
+  check(`saveEdit(${section}) の成功応答で後処理例外が起きない`, postProcessError === null, postProcessError || '例外なし');
+  if (section === 'festival') {
+    check('フェス保存成功後に既存回・新規回の同期を呼ぶ', syncCalls.join(',') === 'existing,new', syncCalls.join(',') || '呼び出しなし');
+  }
+}
+
+// 成功応答後の例外は通信エラーではなく、保存完了後処理として表示する。
+{
+  const c = makeCtx();
+  c.__T.editState.venue = {_row: 12};
+  c.gasPostJson_ = async () => ({status: 'ok'});
+  c.validateBeforeSave = () => [];
+  c.getPubFields = () => ({});
+  c.applyOptimisticUpdate = () => {};
+  c.clearFormDirty = () => {};
+  c.cancelEdit = () => {};
+  c.switchTab = () => {};
+  c.rerenderListFromCache = () => {};
+  c.toast = () => {};
+  c.loadList = () => { throw new Error('reload failed'); };
+  let message = '';
+  c.aiFail = (_where, text) => { message = text; };
+  c.saveEdit('venue');
+  await new Promise(resolve => setTimeout(resolve, 0));
+  check('保存成功後の例外を通信エラーと区別して表示する', message.includes('保存は完了しましたが、後処理でエラーが発生しました: reload failed'), message || '表示なし');
+}
 
 // ---- 0e) 開催回ゼロ＋日程ありの保存救済 -------------------------------
 {
