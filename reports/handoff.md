@@ -11461,6 +11461,34 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 公開前に `bash scripts/preflight.sh` を省略なしで実行し、CMS変更扱いの手順に従って実ブラウザでJA/ENフォームを確認すること。CMS変更ではないためPublish pipelineは今回未実施。
 - Buttondown APIキーはリポジトリへ保存せず、必要なら `gh secret set BUTTONDOWN_API_KEY` で登録すること。
 - 今回もcommit・push・本番データ書き込みは行っていない。
+
+### 2026-10-21 ニュースレター候補・人気記事・3:2画像
+
+### 実施
+- `scripts/newsletter-draft.mjs` に `--picks id1,id2`、人気記事4件、記事カード用公開画像URL、`--prepare-images` を追加。
+- `scripts/newsletter-images.py` を追加し、記事画像をimagePositionを考慮して600×400 WebPへ変換。
+- workflow_dispatch の `picks` / `month`、Pillow導入、画像のcommit・pull --rebase・push（3回リトライ、popular.ymlと同じ形。Actions上ではブラウザ検査が動かないためpreflightは入れない）を追加。`docs/newsletter.md` に編集部向けの月次手順と送信前プレビュー確認を追記。
+
+### コミット
+- feat(newsletter) コミット（Claude がレビュー後にコミット）。
+
+### 検証
+- Claude: `--picks mutek,resonance --dry` の出力をローカル配信し headless Chrome（390px dpr2 / 1280px）で描画。画像の読み込み失敗0・横はみ出し0、記事4枚が3:2で揃うことを目視確認。
+- `node scripts/newsletter-draft.mjs --month 2026-11 --dry`: 成功。
+- `node scripts/newsletter-draft.mjs --month 2026-11 --picks mutek,grow-the-culture-open-air --dry`: 成功。指定順・確定見出しを確認。
+- `node scripts/newsletter-draft.mjs --month 2026-11 --prepare-images --dry`: 4枚生成、全て600×400 WebP。
+- `git diff --check`: 成功。`bash scripts/preflight.sh --fast`: 47件成功、5件省略、外部画像取得による詳細ページ生成タイムアウト1件。
+
+### 変更したパターン
+- ニュースレターのフェス候補／確定2件、popular.jsonによる記事4件、記事カード画像の3:2固定、workflow_dispatch入力、画像自動コミット手順。
+
+### 未確認の類似パターン
+- 確認済み・0件：フェス画像・アーティスト画像の非crop、記事画像のwidth/height、指定なし候補6件、指定あり2件。
+- 未確認：GitHub Actions上の実workflow、Buttondownへの実下書き更新、実ブラウザ／メーラーでのプレビュー。
+
+### 次の担当への注意・判断待ち
+- `bash scripts/preflight.sh --fast` の失敗は既存の外部画像取得タイムアウト。省略なしpreflightが全件成功するまでpush・公開しないこと。
+- 2026-11 の4枚はこのコミットに含めた。以後の月は workflow が生成・コミットする。
 ### 2026-10-21 CMS保存成功後のReferenceError修正 — 未コミット
 
 ### 実施

@@ -4,26 +4,87 @@ on:
   schedule:
     - cron: '0 0 25 * *'
   workflow_dispatch:
+    inputs:
+      picks:
+        description: '注目するFESTIVAL_IDを2件（id1,id2）'
+        required: false
+        type: string
+      month:
+        description: '対象月（YYYY-MM）'
+        required: false
+        type: string
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   draft:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_TOKEN }}
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      - name: Install Pillow
+        run: python3 -m pip install pillow
+      - name: Validate inputs
+        env:
+          NEWSLETTER_PICKS: ${{ inputs.picks }}
+          NEWSLETTER_MONTH: ${{ inputs.month }}
+        run: |
+          if [ -n "$NEWSLETTER_PICKS" ] && [[ ! "$NEWSLETTER_PICKS" =~ ^[a-z0-9-]+(,[a-z0-9-]+)*$ ]]; then
+            echo 'picks は小文字英数字・ハイフンのIDをカンマ区切りで指定してください' >&2
+            exit 1
+          fi
+          if [ -n "$NEWSLETTER_MONTH" ] && [[ ! "$NEWSLETTER_MONTH" =~ ^[0-9]{4}-[0-9]{2}$ ]]; then
+            echo 'month は YYYY-MM で指定してください' >&2
+            exit 1
+          fi
+      - name: Prepare article images
+        env:
+          NEWSLETTER_PICKS: ${{ inputs.picks }}
+          NEWSLETTER_MONTH: ${{ inputs.month }}
+        run: |
+          args=(--prepare-images)
+          if [ -n "$NEWSLETTER_MONTH" ]; then args+=(--month "$NEWSLETTER_MONTH"); fi
+          if [ -n "$NEWSLETTER_PICKS" ]; then args+=(--picks "$NEWSLETTER_PICKS"); fi
+          node scripts/newsletter-draft.mjs "${args[@]}"
+      - name: Commit and push new article images
+        env:
+          NEWSLETTER_MONTH: ${{ inputs.month }}
+        run: |
+          if [ -z "$(git status --porcelain -- LP/images/newsletter)" ]; then
+            echo 'No new newsletter images'
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add LP/images/newsletter
+          month="$NEWSLETTER_MONTH"
+          if [ -z "$month" ]; then month=$(date -u -d 'next month' +%Y-%m); fi
+          git commit -m "chore(newsletter): ${month} の記事画像（3:2）"
+          for i in 1 2 3; do
+            git pull --rebase --autostash origin main || exit 1
+            if git push; then break; fi
+            echo "push が弾かれました。取り込んでやり直します [$i/3]"
+            if [ "$i" -eq 3 ]; then exit 1; fi
+            sleep $((i * 5))
+          done
       - name: Create monthly drafts
         env:
           BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
+          NEWSLETTER_PICKS: ${{ inputs.picks }}
+          NEWSLETTER_MONTH: ${{ inputs.month }}
         run: |
+          args=()
+          if [ -n "$NEWSLETTER_MONTH" ]; then args+=(--month "$NEWSLETTER_MONTH"); fi
+          if [ -n "$NEWSLETTER_PICKS" ]; then args+=(--picks "$NEWSLETTER_PICKS"); fi
           if [ -n "$BUTTONDOWN_API_KEY" ]; then
-            node scripts/newsletter-draft.mjs --push | tee newsletter-output.txt
+            node scripts/newsletter-draft.mjs --push "${args[@]}" | tee newsletter-output.txt
           else
-            node scripts/newsletter-draft.mjs --dry | tee newsletter-output.txt
+            node scripts/newsletter-draft.mjs --dry "${args[@]}" | tee newsletter-output.txt
           fi
           {
             echo '## Newsletter draft'
