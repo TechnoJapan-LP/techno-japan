@@ -1,11 +1,15 @@
 {
-  "_generatedAt": "2026-10-21T00:00:00.000Z",
+  "_generatedAt": "2026-10-21T19:00:09.216Z",
   "count": 1,
   "items": [
     {
       "id": "masafumi-take",
       "name": "Masafumi Take",
-      "instagram": "https://www.instagram.com/masafumi_katharsis/"
+      "bio": "",
+      "image": "",
+      "instagram": "https://www.instagram.com/masafumi_katharsis/",
+      "twitter": "",
+      "website": ""
     }
   ]
 }

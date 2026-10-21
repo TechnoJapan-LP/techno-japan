@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-10-21T05:04:23.239Z",
+  "_generatedAt": "2026-10-21T19:00:09.216Z",
   "count": 1550,
   "items": [
     {
@@ -652,7 +652,7 @@
     },
     {
       "EDITION_ID": "matricaria-2026",
-      "ARTIST_ID": "caimann",
+      "ACT_LABEL": "Caimann",
       "SET_TYPE": "dj",
       "SORT": "7"
     },
@@ -695,13 +695,13 @@
     },
     {
       "EDITION_ID": "matricaria-2026",
-      "ARTIST_ID": "noritake",
+      "ACT_LABEL": "Noritake",
       "SET_TYPE": "dj",
       "SORT": "14"
     },
     {
       "EDITION_ID": "matricaria-2026",
-      "ARTIST_ID": "ojisan",
+      "ACT_LABEL": "Ojisan",
       "SET_TYPE": "dj",
       "SORT": "15"
     },
@@ -1350,7 +1350,7 @@
     },
     {
       "EDITION_ID": "synapse-festival-2025",
-      "ARTIST_ID": "noritake",
+      "ACT_LABEL": "Noritake",
       "SET_TYPE": "dj",
       "SORT": "7"
     },
@@ -6070,7 +6070,7 @@
     },
     {
       "EDITION_ID": "labyrinth-2026",
-      "ARTIST_ID": "reeko",
+      "ACT_LABEL": "Reeko",
       "SET_TYPE": "dj",
       "SORT": "11"
     },
