@@ -84,6 +84,12 @@ const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');
 const IMAGE_DIMENSIONS_PATH = path.join(LP_DIR, 'image-dimensions.json');
 const ARTICLE_IMAGE_MAP = loadArticleImageMap(path.join(__dirname, '..'));
 const BASE = 'https://techno-japan.media';
+const NEWSLETTER_CONFIG_PATH = path.join(__dirname, 'newsletter-config.json');
+const NEWSLETTER_CONFIG = fs.existsSync(NEWSLETTER_CONFIG_PATH)
+  ? JSON.parse(fs.readFileSync(NEWSLETTER_CONFIG_PATH, 'utf8'))
+  : { provider: 'formsubmit', buttondownUsername: '' };
+const BUTTONDOWN_USERNAME = String(NEWSLETTER_CONFIG.buttondownUsername || '').trim();
+const USE_BUTTONDOWN = NEWSLETTER_CONFIG.provider === 'buttondown' && Boolean(BUTTONDOWN_USERNAME);
 const DRAFT_PREVIEW_ARG = process.argv.find((arg) => arg.startsWith('--draft-preview='));
 const DRAFT_PREVIEW_PATH = DRAFT_PREVIEW_ARG ? path.resolve(process.cwd(), DRAFT_PREVIEW_ARG.slice('--draft-preview='.length)) : '';
 const DRAFT_PREVIEW_DIR = path.join(__dirname, '..', 'reports', 'phase5-preview');
@@ -929,7 +935,7 @@ const FAVICON_TAGS = [
 
 const PERMISSIONS_POLICY = 'geolocation=(), microphone=(), camera=(), interest-cohort=()';
 
-const CSP = `default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' https:; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://stats.g.doubleclick.net; frame-src 'self' https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; form-action 'self' https://formsubmit.co; base-uri 'self'; object-src 'none'; upgrade-insecure-requests`;
+const CSP = `default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' https:; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://stats.g.doubleclick.net; frame-src 'self' https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; form-action 'self' https://formsubmit.co https://buttondown.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests`;
 
 const FONT_HEAD = `<link rel="preload" as="font" type="font/woff2" href="/fonts/dm-sans-v17-latin.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="/fonts/bebas-neue-v16-latin.woff2" crossorigin>
@@ -1120,22 +1126,38 @@ function venueAddressLd(venue) {
   });
 }
 
-/* 記事末尾のニュースレター登録。index.html の formsubmit フォームと同じ構成。
-   _next は読んでいた記事へ戻す。文言はサイト全体の英語表記に合わせる。 */
+function newsletterFormHtml({ canonical = '', lang = 'ja', indent = '        ' } = {}) {
+  if (USE_BUTTONDOWN) {
+    return [
+      `<form class="newsletter-form" action="https://buttondown.com/api/emails/embed-subscribe/${esc(BUTTONDOWN_USERNAME)}" method="POST">`,
+      `${indent}<input type="email" name="email" placeholder="your@email.com" required>`,
+      `${indent}<input type="hidden" name="embed" value="1">`,
+      `${indent}<input type="hidden" name="tag" value="${lang === 'en' ? 'en' : 'ja'}">`,
+      `${indent}<button type="submit">SUBSCRIBE</button>`,
+      `${indent.slice(0, -2)}</form>`,
+    ].join('\n');
+  }
+  return [
+    `<form class="newsletter-form" action="https://formsubmit.co/press@techno-japan.media" method="POST">`,
+    `${indent}<input type="text" name="_honey" tabindex="-1" autocomplete="off" class="tj-honeypot" aria-hidden="true">`,
+    `${indent}<input type="email" name="email" placeholder="your@email.com" required>`,
+    `${indent}<input type="hidden" name="_subject" value="TECHNO JAPAN — Newsletter signup">`,
+    `${indent}<input type="hidden" name="_captcha" value="true">`,
+    `${indent}<input type="hidden" name="_next" value="${esc(canonical)}">`,
+    `${indent}<button type="submit">SUBSCRIBE</button>`,
+    `${indent.slice(0, -2)}</form>`,
+  ].join('\n');
+}
+
+/* 記事末尾のニュースレター登録。provider が formsubmit の間は従来の
+   フォームをそのまま出し、Buttondown に切り替えた時だけ専用項目にする。 */
 function articleNewsletterHtml(canonical, lang = 'ja') {
   const isEn = lang === 'en';
   return `<section class="newsletter article-newsletter">
       <div class="newsletter-eyebrow">NEWSLETTER</div>
       <div class="newsletter-title">${isEn ? "Get Japan's open-air festival news" : '日本の野外フェスの情報を受け取る'}</div>
       <div class="newsletter-desc">${isEn ? 'Upcoming festivals and new stories in one email. Free, unsubscribe anytime.' : '来月の開催予定と新着記事をまとめてメールで届けます。無料、いつでも解除できます。'}</div>
-      <form class="newsletter-form" action="https://formsubmit.co/press@techno-japan.media" method="POST">
-        <input type="text" name="_honey" tabindex="-1" autocomplete="off" class="tj-honeypot" aria-hidden="true">
-        <input type="email" name="email" placeholder="your@email.com" required>
-        <input type="hidden" name="_subject" value="TECHNO JAPAN — Newsletter signup">
-        <input type="hidden" name="_captcha" value="true">
-        <input type="hidden" name="_next" value="${esc(canonical)}">
-        <button type="submit">SUBSCRIBE</button>
-      </form>
+      ${newsletterFormHtml({ canonical, lang })}
     </section>`;
 }
 
@@ -2911,6 +2933,12 @@ function enHubFromJa(html, page) {
     s = replaceCollectionPageDesc(s, d, page);
   }
 
+  // Buttondown の言語タグだけは固定 HTML 属性を置換する。JS の式や
+  // data.js の参照を置換すると、別の式まで巻き込むため行わない。
+  if (USE_BUTTONDOWN && (page === 'index.html' || page === 'news.html')) {
+    s = s.split('name="tag" value="ja"').join('name="tag" value="en"');
+  }
+
   // 静的リンク一覧のラベルを EN 版へ差し替える。
   // href はこの下の /en/ 書き換えに任せるので、JA と同じ表記で出しておく。
   // 日本語名のフェス（森、道、市場 等）は name_en が無いので JA のまま残るが、
@@ -3032,6 +3060,23 @@ function fixJaHub(fileName) {
   const before = s;
 
   s = s.replace(/<html lang="[^"]*"/, '<html lang="ja"');
+  s = s.replace(/(<meta http-equiv="Content-Security-Policy" content=")[^"]*/, `$1${CSP}`);
+
+  if (USE_BUTTONDOWN && (fileName === 'index.html' || fileName === 'news.html')) {
+    s = s.replace(/(<section class="newsletter"[\s\S]*?<form class="newsletter-form")[^>]*>[\s\S]*?<\/form>([\s\S]*?<\/section>)/,
+      (match, formStart, afterForm) => {
+        const button = match.match(/<button type="submit">([\s\S]*?)<\/button>/)?.[1] || 'SUBSCRIBE';
+        const form = [
+          `${formStart} action="https://buttondown.com/api/emails/embed-subscribe/${esc(BUTTONDOWN_USERNAME)}" method="POST">`,
+          '    <input type="email" name="email" required placeholder="your@email.com">',
+          '    <input type="hidden" name="embed" value="1">',
+          '    <input type="hidden" name="tag" value="ja">',
+          `    <button type="submit">${button}</button>`,
+          '  </form>',
+        ].join('\n');
+        return `${form}${afterForm}`;
+      });
+  }
 
   if (!/<meta name="robots" content="noindex(?:,|\")/.test(s) && !s.includes('max-image-preview:large')) {
     s = s.replace(/(<meta name="description"[^>]*>)/, '$1\n<meta name="robots" content="max-image-preview:large">');

@@ -11366,3 +11366,36 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 警告（全561イベント、前→後）: organizer 561→301（公式サイトのあるフェスのみ）、offers 349→226（チケットURLのあるもののみ。価格系は入れない）、image 145→28、description 137→28、address 77→0（あるパーツだけで PostalAddress。空文字は出さない）、endDate/eventStatus 欠落0。一度 address が 207 に悪化したのを前後比較で検出して修正。
 - 検証（本番）: preflight 全60件 → push、Deploy success。artists/sunga・festivals/topia・articles/topia-2026-info・en/artists/dj-kensei でイベントの必須欠落0。
 - 次の担当への注意・判断待ち: Search Console で「修正を検証」はユーザー操作。sawagi-festival-2026 の EDITIONS.PREF が Yamanashi のまま（住所は群馬）。push 時に「詳細ページを生成できる」が外部画像取得の遅延で 240s 超になることがある（再実行で通る）。
+
+### 2026-10-21 Buttondown移行準備 — 未コミット
+
+### 実施
+- `scripts/newsletter-config.json` を追加。初期値は `provider: formsubmit` / `buttondownUsername: ""` とし、ユーザー名が入るまでは既存フォームを維持。
+- `scripts/build-detail-pages.mjs` に Buttondown の切り替えを追加。Buttondown 時は `email` / `embed=1` / 言語タグだけを出し、formsubmit 専用項目を出さない。記事、TOP、NEWS の JA/EN に対応し、EN ハブは固定属性 `name="tag" value="ja"` だけを `en` に置換する。
+- 全 HTML の `form-action` に `https://buttondown.com` を追加し、`https://formsubmit.co` は残した。
+- `scripts/newsletter-draft.mjs`、`.github/workflows/newsletter-draft.yml`、`docs/newsletter.md`、`scripts/check_newsletter.mjs` を追加。API の `filters` はタグIDが必要なため、`--push` は JA/EN の draft を2本作るだけにした。
+
+### コミット
+- 未コミット（ユーザー指定）。commit / push / Publish pipeline / 本番データ書き込みは未実施。
+
+### 検証
+- `node scripts/check_newsletter.mjs`: 成功。formsubmit フォールバック、CSP、下書き出力、UTM、切り替えコードを確認。
+- `node scripts/newsletter-draft.mjs --dry --month=2026-10`: JA/EN を生成。UTM 付きリンク、既存データ由来のタイトル・要約・紹介文、編集部欄の仮置きを確認。
+- `node --check scripts/newsletter-draft.mjs scripts/check_newsletter.mjs scripts/build-detail-pages.mjs`: 成功。
+- `git diff --check`: 成功。
+- `bash scripts/preflight.sh`: 51件成功 / 9件失敗。詳細ページ生成は外部画像取得待ちで240秒タイムアウト。ブラウザ系8件は環境の localhost listen EPERM。コード検査は成功したが、preflight全件成功ではないため公開・push不可。
+
+### 変更したパターン
+- ニュースレターの provider 設定、記事末尾フォーム、TOP/NEWS のニュースレター section、JA/EN の Buttondown 言語タグ。
+- 587枚の HTML の CSP `form-action`。他用途の formsubmit フォームは変更していない。
+- 月次下書きの翌月開催フェス、先月記事、翌月出演アーティスト、UTM URL、Buttondown draft API、月次 GitHub Actions。
+
+### 未確認の類似パターン
+- 確認済み・0件：初期設定での formsubmit 送信先消失、Buttondown 専用項目への formsubmit 項目混入、JA/EN の CSP 欠落、下書きの UTM 欠落。
+- 未確認：Buttondown アカウント作成後の実登録、ダブルオプトイン確認画面、Buttondown API キーありの実 draft 作成、実ブラウザのPC/モバイル操作、Publish pipeline。
+
+### 次の担当への注意・判断待ち
+- `scripts/newsletter-config.json` に実ユーザー名を入れる前に公開しない。入れる場合は `provider` を `buttondown` に変更し、preflight と実ブラウザで JA/EN の `tag` を確認すること。
+- API キーは `gh secret set BUTTONDOWN_API_KEY` で登録する。キーをリポジトリへ書かない。
+- `bash scripts/preflight.sh` の外部画像取得と localhost 制限を解消し、全件成功してから公開すること。今回も commit / push は行っていない。
+- 2026-10-21: newsletter-draft は号の月（通常は翌月）を開催予定・件名・ファイル名・UTMへ使い、記事は前月1日〜作成日、空要約には ` — ` を付けない仕様へ修正。11月号を再生成済み。

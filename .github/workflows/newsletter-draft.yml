@@ -1,0 +1,32 @@
+name: Newsletter draft
+
+on:
+  schedule:
+    - cron: '0 0 25 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  draft:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Create monthly drafts
+        env:
+          BUTTONDOWN_API_KEY: ${{ secrets.BUTTONDOWN_API_KEY }}
+        run: |
+          if [ -n "$BUTTONDOWN_API_KEY" ]; then
+            node scripts/newsletter-draft.mjs --push | tee newsletter-output.txt
+          else
+            node scripts/newsletter-draft.mjs --dry | tee newsletter-output.txt
+          fi
+          {
+            echo '## Newsletter draft'
+            echo
+            cat newsletter-output.txt
+          } >> "$GITHUB_STEP_SUMMARY"
