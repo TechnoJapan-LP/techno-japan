@@ -1431,6 +1431,10 @@
     1920,
     1280
   ],
+  "images/artists/akira-arasawa.webp": [
+    720,
+    899
+  ],
   "images/artists/akiram-en.webp": [
     843,
     1264
@@ -1442,6 +1446,10 @@
   "images/artists/allen-mock.webp": [
     399,
     501
+  ],
+  "images/artists/antal.webp": [
+    1200,
+    1500
   ],
   "images/artists/anthony-linell.webp": [
     554,
@@ -1467,6 +1475,10 @@
     800,
     800
   ],
+  "images/artists/captain-k.webp": [
+    225,
+    225
+  ],
   "images/artists/chida.webp": [
     1200,
     800
@@ -1478,6 +1490,10 @@
   "images/artists/clipz.webp": [
     538,
     640
+  ],
+  "images/artists/cmt.webp": [
+    1567,
+    1045
   ],
   "images/artists/compuma.webp": [
     447,
@@ -1491,6 +1507,10 @@
     707,
     434
   ],
+  "images/artists/dj-hi-c.webp": [
+    1440,
+    1440
+  ],
   "images/artists/dj-hype.webp": [
     1920,
     1080
@@ -1502,6 +1522,14 @@
   "images/artists/dj-krush.webp": [
     1920,
     1080
+  ],
+  "images/artists/dj-kuri.webp": [
+    1920,
+    1920
+  ],
+  "images/artists/dj-maria.webp": [
+    1920,
+    1280
   ],
   "images/artists/dj-masda.webp": [
     1440,
@@ -1519,13 +1547,25 @@
     1126,
     750
   ],
+  "images/artists/dj-yazi.webp": [
+    1440,
+    1440
+  ],
   "images/artists/dj-yogurt.webp": [
     1024,
     780
   ],
+  "images/artists/doltz.webp": [
+    1920,
+    2880
+  ],
   "images/artists/donato-dozzy.webp": [
     447,
     447
+  ],
+  "images/artists/dungeoneering.webp": [
+    1000,
+    1500
   ],
   "images/artists/efdemin.webp": [
     447,
@@ -1542,6 +1582,10 @@
   "images/artists/eve.webp": [
     904,
     786
+  ],
+  "images/artists/feline.webp": [
+    828,
+    1134
   ],
   "images/artists/floating-points.webp": [
     1920,
@@ -1595,17 +1639,61 @@
     1440,
     1440
   ],
+  "images/artists/herbalistek.webp": [
+    1200,
+    1200
+  ],
   "images/artists/hidai.webp": [
     225,
     225
+  ],
+  "images/artists/hunee.webp": [
+    900,
+    643
   ],
   "images/artists/hybrid-man.webp": [
     1000,
     663
   ],
+  "images/artists/idjut-boys.webp": [
+    1920,
+    2560
+  ],
+  "images/artists/iron.webp": [
+    1920,
+    2022
+  ],
+  "images/artists/jakojako.webp": [
+    1000,
+    999
+  ],
+  "images/artists/joma.webp": [
+    194,
+    259
+  ],
+  "images/artists/jonathan-fitoussi.webp": [
+    1201,
+    1595
+  ],
+  "images/artists/jonathan-kusuma.webp": [
+    1100,
+    770
+  ],
+  "images/artists/jonny-rock.webp": [
+    999,
+    561
+  ],
+  "images/artists/joris-voorn.webp": [
+    1442,
+    811
+  ],
   "images/artists/juana-molina.webp": [
     1200,
     1200
+  ],
+  "images/artists/kazuma-onishi.webp": [
+    1440,
+    1440
   ],
   "images/artists/ken-ishii.webp": [
     640,
@@ -1619,13 +1707,53 @@
     1280,
     1510
   ],
+  "images/artists/kohei.webp": [
+    780,
+    780
+  ],
+  "images/artists/kohra.webp": [
+    1440,
+    1440
+  ],
   "images/artists/kotsu.webp": [
     1440,
     1440
   ],
+  "images/artists/kuniyuki.webp": [
+    1182,
+    1181
+  ],
+  "images/artists/kuo-from-sunset-rollercoaster.webp": [
+    800,
+    508
+  ],
+  "images/artists/kyomi.webp": [
+    1080,
+    1080
+  ],
+  "images/artists/lady-shaka.webp": [
+    1000,
+    1000
+  ],
+  "images/artists/levolant.webp": [
+    499,
+    500
+  ],
+  "images/artists/lisa-mizuno.webp": [
+    1440,
+    1440
+  ],
+  "images/artists/mala.webp": [
+    1000,
+    1500
+  ],
   "images/artists/mars89.webp": [
     447,
     447
+  ],
+  "images/artists/max-cooper.webp": [
+    650,
+    650
   ],
   "images/artists/mayudepth.webp": [
     1000,
@@ -1639,9 +1767,25 @@
     400,
     400
   ],
+  "images/artists/mr-disco-kid.webp": [
+    1170,
+    1231
+  ],
+  "images/artists/napirelly.webp": [
+    1440,
+    1440
+  ],
   "images/artists/nasthug.webp": [
     1440,
     1440
+  ],
+  "images/artists/nc4k.webp": [
+    1200,
+    1200
+  ],
+  "images/artists/noco.webp": [
+    1024,
+    722
   ],
   "images/artists/occa.webp": [
     1920,
@@ -1651,17 +1795,61 @@
     1440,
     1440
   ],
+  "images/artists/olive-oil.webp": [
+    1800,
+    2400
+  ],
+  "images/artists/ouissam.webp": [
+    1440,
+    1440
+  ],
+  "images/artists/paquita-gordon.webp": [
+    600,
+    409
+  ],
+  "images/artists/peggy-gou.webp": [
+    1600,
+    1000
+  ],
+  "images/artists/petar-dundov.webp": [
+    1688,
+    1039
+  ],
   "images/artists/peter-van-hoesen.webp": [
     1440,
     1440
+  ],
+  "images/artists/pianeti-sintetici.webp": [
+    1920,
+    1280
   ],
   "images/artists/powder.webp": [
     940,
     940
   ],
+  "images/artists/prins-thomas.webp": [
+    1000,
+    1400
+  ],
+  "images/artists/qmico.webp": [
+    1920,
+    1920
+  ],
+  "images/artists/rami.webp": [
+    1024,
+    682
+  ],
   "images/artists/reek.webp": [
     800,
     800
+  ],
+  "images/artists/risa-taniguchi.webp": [
+    1280,
+    853
+  ],
+  "images/artists/rrose.webp": [
+    1000,
+    707
   ],
   "images/artists/sakuma.webp": [
     1282,
@@ -1671,17 +1859,41 @@
     800,
     800
   ],
+  "images/artists/sara-landry.webp": [
+    1280,
+    720
+  ],
+  "images/artists/sherelle.webp": [
+    1442,
+    811
+  ],
+  "images/artists/shhhhh.webp": [
+    1440,
+    1440
+  ],
   "images/artists/so.webp": [
     1477,
     1108
+  ],
+  "images/artists/space-drum-meditation.webp": [
+    1080,
+    1080
   ],
   "images/artists/suguru-mochizuki.webp": [
     722,
     1000
   ],
+  "images/artists/suimin.webp": [
+    1400,
+    933
+  ],
   "images/artists/sunga.webp": [
     800,
     800
+  ],
+  "images/artists/suze-ijo.webp": [
+    1200,
+    1200
   ],
   "images/artists/sylvan-esso.webp": [
     639,
@@ -1703,9 +1915,29 @@
     312,
     210
   ],
+  "images/artists/upsammy.webp": [
+    683,
+    1024
+  ],
+  "images/artists/vril.webp": [
+    1800,
+    800
+  ],
   "images/artists/wata-igarashi.webp": [
     1440,
     1440
+  ],
+  "images/artists/yama.webp": [
+    500,
+    500
+  ],
+  "images/artists/yamarchy.webp": [
+    1256,
+    736
+  ],
+  "images/artists/yellowuhuru.webp": [
+    800,
+    800
   ],
   "images/artists/you-forgot.webp": [
     1920,
@@ -1714,6 +1946,10 @@
   "images/artists/ysk.webp": [
     1920,
     2880
+  ],
+  "images/artists/yukimasa.webp": [
+    1640,
+    1920
   ],
   "images/artists/zundoko-disco.webp": [
     800,
@@ -6963,6 +7199,22 @@
     240,
     160
   ],
+  "images/derivatives/card/artists/akira-arasawa--6b645f91-lg.webp": [
+    720,
+    899
+  ],
+  "images/derivatives/card/artists/akira-arasawa--6b645f91-md.webp": [
+    577,
+    720
+  ],
+  "images/derivatives/card/artists/akira-arasawa--6b645f91-sm.webp": [
+    384,
+    480
+  ],
+  "images/derivatives/card/artists/akira-arasawa--6b645f91-xs.webp": [
+    192,
+    240
+  ],
   "images/derivatives/card/artists/akiram-en--03490710-lg.webp": [
     640,
     960
@@ -7009,6 +7261,22 @@
   ],
   "images/derivatives/card/artists/allen-mock--5157bbd4-xs.webp": [
     191,
+    240
+  ],
+  "images/derivatives/card/artists/antal--f68b2751-lg.webp": [
+    768,
+    960
+  ],
+  "images/derivatives/card/artists/antal--f68b2751-md.webp": [
+    576,
+    720
+  ],
+  "images/derivatives/card/artists/antal--f68b2751-sm.webp": [
+    384,
+    480
+  ],
+  "images/derivatives/card/artists/antal--f68b2751-xs.webp": [
+    192,
     240
   ],
   "images/derivatives/card/artists/anthony-linell--02bef343-lg.webp": [
@@ -7107,6 +7375,22 @@
     240,
     240
   ],
+  "images/derivatives/card/artists/captain-k--ccf957f7-lg.webp": [
+    225,
+    225
+  ],
+  "images/derivatives/card/artists/captain-k--ccf957f7-md.webp": [
+    225,
+    225
+  ],
+  "images/derivatives/card/artists/captain-k--ccf957f7-sm.webp": [
+    225,
+    225
+  ],
+  "images/derivatives/card/artists/captain-k--ccf957f7-xs.webp": [
+    225,
+    225
+  ],
   "images/derivatives/card/artists/chida--b9bad40b-lg.webp": [
     960,
     640
@@ -7154,6 +7438,22 @@
   "images/derivatives/card/artists/clipz--c07a3c7d-xs.webp": [
     202,
     240
+  ],
+  "images/derivatives/card/artists/cmt--3bc55ce0-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/artists/cmt--3bc55ce0-md.webp": [
+    720,
+    480
+  ],
+  "images/derivatives/card/artists/cmt--3bc55ce0-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/artists/cmt--3bc55ce0-xs.webp": [
+    240,
+    160
   ],
   "images/derivatives/card/artists/compuma--43186a30-lg.webp": [
     447,
@@ -7203,6 +7503,22 @@
     240,
     147
   ],
+  "images/derivatives/card/artists/dj-hi-c--760e3cc4-lg.webp": [
+    960,
+    960
+  ],
+  "images/derivatives/card/artists/dj-hi-c--760e3cc4-md.webp": [
+    720,
+    720
+  ],
+  "images/derivatives/card/artists/dj-hi-c--760e3cc4-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/dj-hi-c--760e3cc4-xs.webp": [
+    240,
+    240
+  ],
   "images/derivatives/card/artists/dj-hype--f4000f3e-lg.webp": [
     960,
     540
@@ -7250,6 +7566,38 @@
   "images/derivatives/card/artists/dj-krush--1ae52bbb-xs.webp": [
     240,
     135
+  ],
+  "images/derivatives/card/artists/dj-kuri--a7b8ef63-lg.webp": [
+    960,
+    960
+  ],
+  "images/derivatives/card/artists/dj-kuri--a7b8ef63-md.webp": [
+    720,
+    720
+  ],
+  "images/derivatives/card/artists/dj-kuri--a7b8ef63-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/dj-kuri--a7b8ef63-xs.webp": [
+    240,
+    240
+  ],
+  "images/derivatives/card/artists/dj-maria--4b7b47c2-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/artists/dj-maria--4b7b47c2-md.webp": [
+    720,
+    480
+  ],
+  "images/derivatives/card/artists/dj-maria--4b7b47c2-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/artists/dj-maria--4b7b47c2-xs.webp": [
+    240,
+    160
   ],
   "images/derivatives/card/artists/dj-masda--5040d409-lg.webp": [
     960,
@@ -7315,6 +7663,22 @@
     240,
     160
   ],
+  "images/derivatives/card/artists/dj-yazi--b1a6c48a-lg.webp": [
+    960,
+    960
+  ],
+  "images/derivatives/card/artists/dj-yazi--b1a6c48a-md.webp": [
+    720,
+    720
+  ],
+  "images/derivatives/card/artists/dj-yazi--b1a6c48a-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/dj-yazi--b1a6c48a-xs.webp": [
+    240,
+    240
+  ],
   "images/derivatives/card/artists/dj-yogurt--ec09ee55-lg.webp": [
     960,
     731
@@ -7331,6 +7695,22 @@
     240,
     183
   ],
+  "images/derivatives/card/artists/doltz--fcabbbac-lg.webp": [
+    640,
+    960
+  ],
+  "images/derivatives/card/artists/doltz--fcabbbac-md.webp": [
+    480,
+    720
+  ],
+  "images/derivatives/card/artists/doltz--fcabbbac-sm.webp": [
+    320,
+    480
+  ],
+  "images/derivatives/card/artists/doltz--fcabbbac-xs.webp": [
+    160,
+    240
+  ],
   "images/derivatives/card/artists/donato-dozzy--ee99abff-lg.webp": [
     447,
     447
@@ -7345,6 +7725,22 @@
   ],
   "images/derivatives/card/artists/donato-dozzy--ee99abff-xs.webp": [
     240,
+    240
+  ],
+  "images/derivatives/card/artists/dungeoneering--a851d8aa-lg.webp": [
+    640,
+    960
+  ],
+  "images/derivatives/card/artists/dungeoneering--a851d8aa-md.webp": [
+    480,
+    720
+  ],
+  "images/derivatives/card/artists/dungeoneering--a851d8aa-sm.webp": [
+    320,
+    480
+  ],
+  "images/derivatives/card/artists/dungeoneering--a851d8aa-xs.webp": [
+    160,
     240
   ],
   "images/derivatives/card/artists/efdemin--87b2ee5c-lg.webp": [
@@ -7410,6 +7806,22 @@
   "images/derivatives/card/artists/eve--dc198373-xs.webp": [
     240,
     209
+  ],
+  "images/derivatives/card/artists/feline--6253304e-lg.webp": [
+    701,
+    960
+  ],
+  "images/derivatives/card/artists/feline--6253304e-md.webp": [
+    526,
+    720
+  ],
+  "images/derivatives/card/artists/feline--6253304e-sm.webp": [
+    350,
+    480
+  ],
+  "images/derivatives/card/artists/feline--6253304e-xs.webp": [
+    175,
+    240
   ],
   "images/derivatives/card/artists/floating-points--ad136da6-lg.webp": [
     960,
@@ -7619,6 +8031,22 @@
     240,
     240
   ],
+  "images/derivatives/card/artists/herbalistek--2d6e5a49-lg.webp": [
+    960,
+    960
+  ],
+  "images/derivatives/card/artists/herbalistek--2d6e5a49-md.webp": [
+    720,
+    720
+  ],
+  "images/derivatives/card/artists/herbalistek--2d6e5a49-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/herbalistek--2d6e5a49-xs.webp": [
+    240,
+    240
+  ],
   "images/derivatives/card/artists/hidai--ac316014-lg.webp": [
     225,
     225
@@ -7634,6 +8062,22 @@
   "images/derivatives/card/artists/hidai--ac316014-xs.webp": [
     225,
     225
+  ],
+  "images/derivatives/card/artists/hunee--2bd5a79c-lg.webp": [
+    900,
+    643
+  ],
+  "images/derivatives/card/artists/hunee--2bd5a79c-md.webp": [
+    720,
+    514
+  ],
+  "images/derivatives/card/artists/hunee--2bd5a79c-sm.webp": [
+    480,
+    343
+  ],
+  "images/derivatives/card/artists/hunee--2bd5a79c-xs.webp": [
+    240,
+    171
   ],
   "images/derivatives/card/artists/hybrid-man--a2996d58-lg.webp": [
     960,
@@ -7651,6 +8095,134 @@
     240,
     159
   ],
+  "images/derivatives/card/artists/idjut-boys--8c059a32-lg.webp": [
+    720,
+    960
+  ],
+  "images/derivatives/card/artists/idjut-boys--8c059a32-md.webp": [
+    540,
+    720
+  ],
+  "images/derivatives/card/artists/idjut-boys--8c059a32-sm.webp": [
+    360,
+    480
+  ],
+  "images/derivatives/card/artists/idjut-boys--8c059a32-xs.webp": [
+    180,
+    240
+  ],
+  "images/derivatives/card/artists/iron--ed6c8247-lg.webp": [
+    912,
+    960
+  ],
+  "images/derivatives/card/artists/iron--ed6c8247-md.webp": [
+    684,
+    720
+  ],
+  "images/derivatives/card/artists/iron--ed6c8247-sm.webp": [
+    456,
+    480
+  ],
+  "images/derivatives/card/artists/iron--ed6c8247-xs.webp": [
+    228,
+    240
+  ],
+  "images/derivatives/card/artists/jakojako--98154812-lg.webp": [
+    960,
+    959
+  ],
+  "images/derivatives/card/artists/jakojako--98154812-md.webp": [
+    720,
+    719
+  ],
+  "images/derivatives/card/artists/jakojako--98154812-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/jakojako--98154812-xs.webp": [
+    240,
+    240
+  ],
+  "images/derivatives/card/artists/joma--51d4393b-lg.webp": [
+    194,
+    259
+  ],
+  "images/derivatives/card/artists/joma--51d4393b-md.webp": [
+    194,
+    259
+  ],
+  "images/derivatives/card/artists/joma--51d4393b-sm.webp": [
+    194,
+    259
+  ],
+  "images/derivatives/card/artists/joma--51d4393b-xs.webp": [
+    180,
+    240
+  ],
+  "images/derivatives/card/artists/jonathan-fitoussi--be10b322-lg.webp": [
+    723,
+    960
+  ],
+  "images/derivatives/card/artists/jonathan-fitoussi--be10b322-md.webp": [
+    542,
+    720
+  ],
+  "images/derivatives/card/artists/jonathan-fitoussi--be10b322-sm.webp": [
+    361,
+    480
+  ],
+  "images/derivatives/card/artists/jonathan-fitoussi--be10b322-xs.webp": [
+    181,
+    240
+  ],
+  "images/derivatives/card/artists/jonathan-kusuma--9860b6ce-lg.webp": [
+    960,
+    672
+  ],
+  "images/derivatives/card/artists/jonathan-kusuma--9860b6ce-md.webp": [
+    720,
+    504
+  ],
+  "images/derivatives/card/artists/jonathan-kusuma--9860b6ce-sm.webp": [
+    480,
+    336
+  ],
+  "images/derivatives/card/artists/jonathan-kusuma--9860b6ce-xs.webp": [
+    240,
+    168
+  ],
+  "images/derivatives/card/artists/jonny-rock--f17ef6ff-lg.webp": [
+    960,
+    539
+  ],
+  "images/derivatives/card/artists/jonny-rock--f17ef6ff-md.webp": [
+    720,
+    404
+  ],
+  "images/derivatives/card/artists/jonny-rock--f17ef6ff-sm.webp": [
+    480,
+    270
+  ],
+  "images/derivatives/card/artists/jonny-rock--f17ef6ff-xs.webp": [
+    240,
+    135
+  ],
+  "images/derivatives/card/artists/joris-voorn--16842502-lg.webp": [
+    960,
+    540
+  ],
+  "images/derivatives/card/artists/joris-voorn--16842502-md.webp": [
+    720,
+    405
+  ],
+  "images/derivatives/card/artists/joris-voorn--16842502-sm.webp": [
+    480,
+    270
+  ],
+  "images/derivatives/card/artists/joris-voorn--16842502-xs.webp": [
+    240,
+    135
+  ],
   "images/derivatives/card/artists/juana-molina--e4a43f90-lg.webp": [
     960,
     960
@@ -7664,6 +8236,22 @@
     480
   ],
   "images/derivatives/card/artists/juana-molina--e4a43f90-xs.webp": [
+    240,
+    240
+  ],
+  "images/derivatives/card/artists/kazuma-onishi--a6da19c4-lg.webp": [
+    960,
+    960
+  ],
+  "images/derivatives/card/artists/kazuma-onishi--a6da19c4-md.webp": [
+    720,
+    720
+  ],
+  "images/derivatives/card/artists/kazuma-onishi--a6da19c4-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/kazuma-onishi--a6da19c4-xs.webp": [
     240,
     240
   ],
@@ -7715,6 +8303,38 @@
     203,
     240
   ],
+  "images/derivatives/card/artists/kohei--8c594472-lg.webp": [
+    780,
+    780
+  ],
+  "images/derivatives/card/artists/kohei--8c594472-md.webp": [
+    720,
+    720
+  ],
+  "images/derivatives/card/artists/kohei--8c594472-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/kohei--8c594472-xs.webp": [
+    240,
+    240
+  ],
+  "images/derivatives/card/artists/kohra--fbfe5a2d-lg.webp": [
+    960,
+    960
+  ],
+  "images/derivatives/card/artists/kohra--fbfe5a2d-md.webp": [
+    720,
+    720
+  ],
+  "images/derivatives/card/artists/kohra--fbfe5a2d-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/kohra--fbfe5a2d-xs.webp": [
+    240,
+    240
+  ],
   "images/derivatives/card/artists/kotsu--53a1a831-lg.webp": [
     960,
     960
@@ -7731,6 +8351,118 @@
     240,
     240
   ],
+  "images/derivatives/card/artists/kuniyuki--a1e1417c-lg.webp": [
+    960,
+    959
+  ],
+  "images/derivatives/card/artists/kuniyuki--a1e1417c-md.webp": [
+    720,
+    719
+  ],
+  "images/derivatives/card/artists/kuniyuki--a1e1417c-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/kuniyuki--a1e1417c-xs.webp": [
+    240,
+    240
+  ],
+  "images/derivatives/card/artists/kuo-from-sunset-rollercoaster--769e3603-lg.webp": [
+    800,
+    508
+  ],
+  "images/derivatives/card/artists/kuo-from-sunset-rollercoaster--769e3603-md.webp": [
+    720,
+    457
+  ],
+  "images/derivatives/card/artists/kuo-from-sunset-rollercoaster--769e3603-sm.webp": [
+    480,
+    305
+  ],
+  "images/derivatives/card/artists/kuo-from-sunset-rollercoaster--769e3603-xs.webp": [
+    240,
+    152
+  ],
+  "images/derivatives/card/artists/kyomi--998ee8a1-lg.webp": [
+    960,
+    960
+  ],
+  "images/derivatives/card/artists/kyomi--998ee8a1-md.webp": [
+    720,
+    720
+  ],
+  "images/derivatives/card/artists/kyomi--998ee8a1-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/kyomi--998ee8a1-xs.webp": [
+    240,
+    240
+  ],
+  "images/derivatives/card/artists/lady-shaka--0d8b184d-lg.webp": [
+    960,
+    960
+  ],
+  "images/derivatives/card/artists/lady-shaka--0d8b184d-md.webp": [
+    720,
+    720
+  ],
+  "images/derivatives/card/artists/lady-shaka--0d8b184d-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/lady-shaka--0d8b184d-xs.webp": [
+    240,
+    240
+  ],
+  "images/derivatives/card/artists/levolant--4f98e291-lg.webp": [
+    499,
+    500
+  ],
+  "images/derivatives/card/artists/levolant--4f98e291-md.webp": [
+    499,
+    500
+  ],
+  "images/derivatives/card/artists/levolant--4f98e291-sm.webp": [
+    479,
+    480
+  ],
+  "images/derivatives/card/artists/levolant--4f98e291-xs.webp": [
+    240,
+    240
+  ],
+  "images/derivatives/card/artists/lisa-mizuno--41692497-lg.webp": [
+    960,
+    960
+  ],
+  "images/derivatives/card/artists/lisa-mizuno--41692497-md.webp": [
+    720,
+    720
+  ],
+  "images/derivatives/card/artists/lisa-mizuno--41692497-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/lisa-mizuno--41692497-xs.webp": [
+    240,
+    240
+  ],
+  "images/derivatives/card/artists/mala--c3f94e4f-lg.webp": [
+    640,
+    960
+  ],
+  "images/derivatives/card/artists/mala--c3f94e4f-md.webp": [
+    480,
+    720
+  ],
+  "images/derivatives/card/artists/mala--c3f94e4f-sm.webp": [
+    320,
+    480
+  ],
+  "images/derivatives/card/artists/mala--c3f94e4f-xs.webp": [
+    160,
+    240
+  ],
   "images/derivatives/card/artists/mars89--010650d1-lg.webp": [
     447,
     447
@@ -7744,6 +8476,22 @@
     447
   ],
   "images/derivatives/card/artists/mars89--010650d1-xs.webp": [
+    240,
+    240
+  ],
+  "images/derivatives/card/artists/max-cooper--552d7bd5-lg.webp": [
+    650,
+    650
+  ],
+  "images/derivatives/card/artists/max-cooper--552d7bd5-md.webp": [
+    650,
+    650
+  ],
+  "images/derivatives/card/artists/max-cooper--552d7bd5-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/max-cooper--552d7bd5-xs.webp": [
     240,
     240
   ],
@@ -7795,6 +8543,38 @@
     240,
     240
   ],
+  "images/derivatives/card/artists/mr-disco-kid--dceca637-lg.webp": [
+    912,
+    960
+  ],
+  "images/derivatives/card/artists/mr-disco-kid--dceca637-md.webp": [
+    684,
+    720
+  ],
+  "images/derivatives/card/artists/mr-disco-kid--dceca637-sm.webp": [
+    456,
+    480
+  ],
+  "images/derivatives/card/artists/mr-disco-kid--dceca637-xs.webp": [
+    228,
+    240
+  ],
+  "images/derivatives/card/artists/napirelly--46646eed-lg.webp": [
+    960,
+    960
+  ],
+  "images/derivatives/card/artists/napirelly--46646eed-md.webp": [
+    720,
+    720
+  ],
+  "images/derivatives/card/artists/napirelly--46646eed-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/napirelly--46646eed-xs.webp": [
+    240,
+    240
+  ],
   "images/derivatives/card/artists/nasthug--2d645ace-lg.webp": [
     960,
     960
@@ -7810,6 +8590,38 @@
   "images/derivatives/card/artists/nasthug--2d645ace-xs.webp": [
     240,
     240
+  ],
+  "images/derivatives/card/artists/nc4k--866273af-lg.webp": [
+    960,
+    960
+  ],
+  "images/derivatives/card/artists/nc4k--866273af-md.webp": [
+    720,
+    720
+  ],
+  "images/derivatives/card/artists/nc4k--866273af-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/nc4k--866273af-xs.webp": [
+    240,
+    240
+  ],
+  "images/derivatives/card/artists/noco--d6d693e7-lg.webp": [
+    960,
+    677
+  ],
+  "images/derivatives/card/artists/noco--d6d693e7-md.webp": [
+    720,
+    508
+  ],
+  "images/derivatives/card/artists/noco--d6d693e7-sm.webp": [
+    480,
+    338
+  ],
+  "images/derivatives/card/artists/noco--d6d693e7-xs.webp": [
+    240,
+    169
   ],
   "images/derivatives/card/artists/occa--7a6d4db4-lg.webp": [
     640,
@@ -7843,6 +8655,86 @@
     240,
     240
   ],
+  "images/derivatives/card/artists/olive-oil--53e818d9-lg.webp": [
+    720,
+    960
+  ],
+  "images/derivatives/card/artists/olive-oil--53e818d9-md.webp": [
+    540,
+    720
+  ],
+  "images/derivatives/card/artists/olive-oil--53e818d9-sm.webp": [
+    360,
+    480
+  ],
+  "images/derivatives/card/artists/olive-oil--53e818d9-xs.webp": [
+    180,
+    240
+  ],
+  "images/derivatives/card/artists/ouissam--7fe09ac8-lg.webp": [
+    960,
+    960
+  ],
+  "images/derivatives/card/artists/ouissam--7fe09ac8-md.webp": [
+    720,
+    720
+  ],
+  "images/derivatives/card/artists/ouissam--7fe09ac8-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/ouissam--7fe09ac8-xs.webp": [
+    240,
+    240
+  ],
+  "images/derivatives/card/artists/paquita-gordon--f9c53bc9-lg.webp": [
+    600,
+    409
+  ],
+  "images/derivatives/card/artists/paquita-gordon--f9c53bc9-md.webp": [
+    600,
+    409
+  ],
+  "images/derivatives/card/artists/paquita-gordon--f9c53bc9-sm.webp": [
+    480,
+    327
+  ],
+  "images/derivatives/card/artists/paquita-gordon--f9c53bc9-xs.webp": [
+    240,
+    164
+  ],
+  "images/derivatives/card/artists/peggy-gou--6c792ce5-lg.webp": [
+    960,
+    600
+  ],
+  "images/derivatives/card/artists/peggy-gou--6c792ce5-md.webp": [
+    720,
+    450
+  ],
+  "images/derivatives/card/artists/peggy-gou--6c792ce5-sm.webp": [
+    480,
+    300
+  ],
+  "images/derivatives/card/artists/peggy-gou--6c792ce5-xs.webp": [
+    240,
+    150
+  ],
+  "images/derivatives/card/artists/petar-dundov--e71c48f4-lg.webp": [
+    960,
+    591
+  ],
+  "images/derivatives/card/artists/petar-dundov--e71c48f4-md.webp": [
+    720,
+    443
+  ],
+  "images/derivatives/card/artists/petar-dundov--e71c48f4-sm.webp": [
+    480,
+    295
+  ],
+  "images/derivatives/card/artists/petar-dundov--e71c48f4-xs.webp": [
+    240,
+    148
+  ],
   "images/derivatives/card/artists/peter-van-hoesen--30a4beac-lg.webp": [
     960,
     960
@@ -7858,6 +8750,22 @@
   "images/derivatives/card/artists/peter-van-hoesen--30a4beac-xs.webp": [
     240,
     240
+  ],
+  "images/derivatives/card/artists/pianeti-sintetici--a10d8294-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/artists/pianeti-sintetici--a10d8294-md.webp": [
+    720,
+    480
+  ],
+  "images/derivatives/card/artists/pianeti-sintetici--a10d8294-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/artists/pianeti-sintetici--a10d8294-xs.webp": [
+    240,
+    160
   ],
   "images/derivatives/card/artists/powder--42a24202-lg.webp": [
     940,
@@ -7875,6 +8783,54 @@
     240,
     240
   ],
+  "images/derivatives/card/artists/prins-thomas--61303a8d-lg.webp": [
+    686,
+    960
+  ],
+  "images/derivatives/card/artists/prins-thomas--61303a8d-md.webp": [
+    514,
+    720
+  ],
+  "images/derivatives/card/artists/prins-thomas--61303a8d-sm.webp": [
+    343,
+    480
+  ],
+  "images/derivatives/card/artists/prins-thomas--61303a8d-xs.webp": [
+    171,
+    240
+  ],
+  "images/derivatives/card/artists/qmico--4e6a7615-lg.webp": [
+    960,
+    960
+  ],
+  "images/derivatives/card/artists/qmico--4e6a7615-md.webp": [
+    720,
+    720
+  ],
+  "images/derivatives/card/artists/qmico--4e6a7615-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/qmico--4e6a7615-xs.webp": [
+    240,
+    240
+  ],
+  "images/derivatives/card/artists/rami--d2f21729-lg.webp": [
+    960,
+    639
+  ],
+  "images/derivatives/card/artists/rami--d2f21729-md.webp": [
+    720,
+    480
+  ],
+  "images/derivatives/card/artists/rami--d2f21729-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/artists/rami--d2f21729-xs.webp": [
+    240,
+    160
+  ],
   "images/derivatives/card/artists/reek--83159c78-lg.webp": [
     800,
     800
@@ -7890,6 +8846,38 @@
   "images/derivatives/card/artists/reek--83159c78-xs.webp": [
     240,
     240
+  ],
+  "images/derivatives/card/artists/risa-taniguchi--e6fddb37-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/artists/risa-taniguchi--e6fddb37-md.webp": [
+    720,
+    480
+  ],
+  "images/derivatives/card/artists/risa-taniguchi--e6fddb37-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/artists/risa-taniguchi--e6fddb37-xs.webp": [
+    240,
+    160
+  ],
+  "images/derivatives/card/artists/rrose--a72c2fd1-lg.webp": [
+    960,
+    679
+  ],
+  "images/derivatives/card/artists/rrose--a72c2fd1-md.webp": [
+    720,
+    509
+  ],
+  "images/derivatives/card/artists/rrose--a72c2fd1-sm.webp": [
+    480,
+    339
+  ],
+  "images/derivatives/card/artists/rrose--a72c2fd1-xs.webp": [
+    240,
+    170
   ],
   "images/derivatives/card/artists/sakuma--9dbf0ba3-lg.webp": [
     641,
@@ -7923,6 +8911,54 @@
     240,
     240
   ],
+  "images/derivatives/card/artists/sara-landry--36ac6abf-lg.webp": [
+    960,
+    540
+  ],
+  "images/derivatives/card/artists/sara-landry--36ac6abf-md.webp": [
+    720,
+    405
+  ],
+  "images/derivatives/card/artists/sara-landry--36ac6abf-sm.webp": [
+    480,
+    270
+  ],
+  "images/derivatives/card/artists/sara-landry--36ac6abf-xs.webp": [
+    240,
+    135
+  ],
+  "images/derivatives/card/artists/sherelle--b538e117-lg.webp": [
+    960,
+    540
+  ],
+  "images/derivatives/card/artists/sherelle--b538e117-md.webp": [
+    720,
+    405
+  ],
+  "images/derivatives/card/artists/sherelle--b538e117-sm.webp": [
+    480,
+    270
+  ],
+  "images/derivatives/card/artists/sherelle--b538e117-xs.webp": [
+    240,
+    135
+  ],
+  "images/derivatives/card/artists/shhhhh--597e0e75-lg.webp": [
+    960,
+    960
+  ],
+  "images/derivatives/card/artists/shhhhh--597e0e75-md.webp": [
+    720,
+    720
+  ],
+  "images/derivatives/card/artists/shhhhh--597e0e75-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/shhhhh--597e0e75-xs.webp": [
+    240,
+    240
+  ],
   "images/derivatives/card/artists/so--523afd19-lg.webp": [
     960,
     720
@@ -7938,6 +8974,22 @@
   "images/derivatives/card/artists/so--523afd19-xs.webp": [
     240,
     180
+  ],
+  "images/derivatives/card/artists/space-drum-meditation--161e7cb1-lg.webp": [
+    960,
+    960
+  ],
+  "images/derivatives/card/artists/space-drum-meditation--161e7cb1-md.webp": [
+    720,
+    720
+  ],
+  "images/derivatives/card/artists/space-drum-meditation--161e7cb1-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/space-drum-meditation--161e7cb1-xs.webp": [
+    240,
+    240
   ],
   "images/derivatives/card/artists/suguru-mochizuki--04fc0da4-lg.webp": [
     693,
@@ -7955,6 +9007,22 @@
     173,
     240
   ],
+  "images/derivatives/card/artists/suimin--b0c71423-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/artists/suimin--b0c71423-md.webp": [
+    720,
+    480
+  ],
+  "images/derivatives/card/artists/suimin--b0c71423-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/artists/suimin--b0c71423-xs.webp": [
+    240,
+    160
+  ],
   "images/derivatives/card/artists/sunga--f454f76d-lg.webp": [
     800,
     800
@@ -7968,6 +9036,22 @@
     480
   ],
   "images/derivatives/card/artists/sunga--f454f76d-xs.webp": [
+    240,
+    240
+  ],
+  "images/derivatives/card/artists/suze-ijo--14bf0ee3-lg.webp": [
+    960,
+    960
+  ],
+  "images/derivatives/card/artists/suze-ijo--14bf0ee3-md.webp": [
+    720,
+    720
+  ],
+  "images/derivatives/card/artists/suze-ijo--14bf0ee3-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/suze-ijo--14bf0ee3-xs.webp": [
     240,
     240
   ],
@@ -8051,6 +9135,38 @@
     240,
     162
   ],
+  "images/derivatives/card/artists/upsammy--adfb2510-lg.webp": [
+    640,
+    960
+  ],
+  "images/derivatives/card/artists/upsammy--adfb2510-md.webp": [
+    480,
+    720
+  ],
+  "images/derivatives/card/artists/upsammy--adfb2510-sm.webp": [
+    320,
+    480
+  ],
+  "images/derivatives/card/artists/upsammy--adfb2510-xs.webp": [
+    160,
+    240
+  ],
+  "images/derivatives/card/artists/vril--5da520e9-lg.webp": [
+    960,
+    427
+  ],
+  "images/derivatives/card/artists/vril--5da520e9-md.webp": [
+    720,
+    320
+  ],
+  "images/derivatives/card/artists/vril--5da520e9-sm.webp": [
+    480,
+    213
+  ],
+  "images/derivatives/card/artists/vril--5da520e9-xs.webp": [
+    240,
+    107
+  ],
   "images/derivatives/card/artists/wata-igarashi--588d8680-lg.webp": [
     960,
     960
@@ -8064,6 +9180,54 @@
     480
   ],
   "images/derivatives/card/artists/wata-igarashi--588d8680-xs.webp": [
+    240,
+    240
+  ],
+  "images/derivatives/card/artists/yama--cfc4f27e-lg.webp": [
+    500,
+    500
+  ],
+  "images/derivatives/card/artists/yama--cfc4f27e-md.webp": [
+    500,
+    500
+  ],
+  "images/derivatives/card/artists/yama--cfc4f27e-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/yama--cfc4f27e-xs.webp": [
+    240,
+    240
+  ],
+  "images/derivatives/card/artists/yamarchy--954ea754-lg.webp": [
+    960,
+    563
+  ],
+  "images/derivatives/card/artists/yamarchy--954ea754-md.webp": [
+    720,
+    422
+  ],
+  "images/derivatives/card/artists/yamarchy--954ea754-sm.webp": [
+    480,
+    281
+  ],
+  "images/derivatives/card/artists/yamarchy--954ea754-xs.webp": [
+    240,
+    141
+  ],
+  "images/derivatives/card/artists/yellowuhuru--096c093c-lg.webp": [
+    800,
+    800
+  ],
+  "images/derivatives/card/artists/yellowuhuru--096c093c-md.webp": [
+    720,
+    720
+  ],
+  "images/derivatives/card/artists/yellowuhuru--096c093c-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/yellowuhuru--096c093c-xs.webp": [
     240,
     240
   ],
@@ -8097,6 +9261,22 @@
   ],
   "images/derivatives/card/artists/ysk--427fd872-xs.webp": [
     160,
+    240
+  ],
+  "images/derivatives/card/artists/yukimasa--eb22d9ff-lg.webp": [
+    820,
+    960
+  ],
+  "images/derivatives/card/artists/yukimasa--eb22d9ff-md.webp": [
+    615,
+    720
+  ],
+  "images/derivatives/card/artists/yukimasa--eb22d9ff-sm.webp": [
+    410,
+    480
+  ],
+  "images/derivatives/card/artists/yukimasa--eb22d9ff-xs.webp": [
+    205,
     240
   ],
   "images/derivatives/card/artists/zundoko-disco--b5aafa32-lg.webp": [
