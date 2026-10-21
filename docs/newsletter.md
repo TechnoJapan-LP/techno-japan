@@ -28,13 +28,18 @@
 
 ## 毎月の流れ
 
-毎月25日に GitHub Actions が下書きを作ります。API キーが登録済みなら Buttondown に JA/EN の下書きが2本作られ、同じ件名の既存 draft があればその draft を PATCH して上書きします。送信済み・予約済みなど draft 以外のメールは検索・更新しません。未登録なら `reports/newsletter/YYYY-MM-ja.html` / `-en.html` に完全なHTMLの下書きが作られます。
+毎月25日に GitHub Actions が「今月の注目（候補）」つきの下書きを自動で作ります。API キーが登録済みなら Buttondown に JA/EN の下書きが2本作られ、同じ件名の既存 draft があればその draft を PATCH して上書きします。送信済み・予約済みなど draft 以外のメールは検索・更新しません。未登録なら `reports/newsletter/YYYY-MM-ja.html` / `-en.html` に完全なHTMLの下書きが作られます。
 
 1. 編集部のひとことを3〜4行で書く。
-2. 「今月の注目（候補）」から3本を選ぶ。
-3. 本文、リンク、言語、タグを確認する。
-4. Buttondown で予約送信する。
-5. 翌月に開封率を確認する。
+2. 「今月の注目（候補）」から注目2件を決め、Claude に FESTIVAL_ID を伝える。
+3. Claude が `picks=id1,id2` 付きで workflow を再実行する。同じ号の下書きが上書きされ、「今月の注目」だけが確定版になる。
+4. 本文、リンク、言語、タグを確認する。送信前にプレビューで記事カード画像が表示されているか確認する。
+5. Buttondown で予約送信する。
+6. 翌月に開封率を確認する。
+
+workflow_dispatch では `picks`（FESTIVAL_IDを2件、カンマ区切り）と `month`（YYYY-MM）を任意で指定できます。`picks` を指定した場合、対象月に開催予定がないIDはエラーになります。記事は前月1日から下書き作成日までを対象に、`LP/data/popular.json` の閲覧数順で最大4件を掲載します。
+
+記事カード画像は、下書き作成時に `LP/images/newsletter/<月>/<記事ID>.webp` として600×400（3:2）に準備されます。既存画像は再作成しません。フェスのフライヤーとアーティスト写真は切り抜きません。
 
 ## HTML下書きとButtondownのテンプレート
 
