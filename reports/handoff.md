@@ -11577,3 +11577,31 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - 公開前に外部画像取得が可能な環境で`bash scripts/preflight.sh --fast`を再実行し、成功後に省略なしpreflightと実ブラウザ確認を行うこと。commit・pushは未実施。
+
+### 2026-10-22 筆者ページ見出しまわりの余白調整 — 未コミット
+
+### 実施
+- `LP/detail.css` の余白ルールに `.writer-detail` を追加し、PC/モバイルの上端・eyebrow・h1 間隔をアーティスト／会場詳細と統一。
+- `.writer-detail .detail-links` の下余白をPC 20px、モバイル18pxに設定。
+- `detail.css` の版数を71へ更新し、CMS本番表示プレビューの参照も `v=71` に同期。
+- `node scripts/build-detail-pages.mjs` で詳細ページを再生成。
+
+### コミット
+- 未コミット（ユーザー指定）。commit・push・Publish pipeline・本番データ書き込みは未実施。
+
+### 検証
+- `node scripts/build-detail-pages.mjs`: 成功。全567ページを生成し、JA/EN筆者ページを含む詳細ページへ `detail.css?v=71` を反映。
+- `python3 scripts/check_asset_versions.py`: 成功。
+- `bash scripts/preflight.sh`: 49件成功。外部Google画像取得による詳細ページ生成タイムアウト、既存記事フィード不整合、sandboxのlocalhost bind制限によるブラウザ検査失敗あり。
+- 実ブラウザでの筆者ページ操作確認: 未実施（sandboxのlocalhost bind制限）。
+
+### 変更したパターン
+- `.artist-detail` / `.venue-detail` と同じPC/モバイル余白グループへの `.writer-detail` 追加。
+- 筆者ページの `.detail-links` 下余白、詳細CSS版数、CMS記事プレビューCSS版数。
+
+### 未確認の類似パターン
+- 確認済み・0件：アーティスト／会場ページの生成構造変更、JA/EN筆者ページの `v=71` 反映。
+- 未確認：実ブラウザでの1280px/モバイル筆者ページの実測値。
+
+### 次の担当への注意・判断待ち
+- 公開前にlocalhost bind可能な環境で実ブラウザ確認と省略なしpreflightを再実行すること。preflightの既存記事フィード不整合も要確認。commit・pushは未実施。
