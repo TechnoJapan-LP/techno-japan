@@ -147,6 +147,7 @@ run "画像の軽量版"                      python3 scripts/check_image_deriva
 run "記事フィードと関連記事"              node scripts/check_feeds.mjs
 run "ハブ用データの整合"                  node scripts/check_data_hub.mjs
 run "LINEUP ACT_LABELの解決"             node scripts/check_lineup_label_resolution.mjs
+run "LINEUP 非公開アーティストの参照判定" node scripts/check_lineup_draft_refs.mjs
 run "EDITIONS欠落フェスの公開補完"        node scripts/check_fetch_data_editions.mjs
 
 echo

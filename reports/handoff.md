@@ -11663,3 +11663,37 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 - AUTHORS シートに BIO / IMAGE を入れると筆者ページに出る（現在 Masafumi Take は Instagram のみ）。
 - 既存記事の author 値「TECHNO JAPAN」はデータを書き換えず、表示だけ「TECHNO JAPAN 編集部」に変換している。
+
+### 2026-10-22 LINEUPSの非公開アーティスト参照を許容 — 未コミット
+
+### 実施
+- `scripts/build-detail-pages.mjs` が `LP/data/artists.json`（シート全行）を参照し、公開ARTISTSに無いがシートにあるIDを非公開アーティストとして名前のみ表示するよう修正。
+- 非公開アーティストは詳細ページリンク・JSON-LDの`@id`/`url`を出さず、アーティスト出演履歴にも追加しない。シートにも無いIDは従来どおり参照切れで停止。
+- `writeContentDates` を今回の公開対象スナップショットだけで再構成し、非公開・削除済みエンティティの台帳キーを除去。
+- `scripts/check_lineup_draft_refs.mjs` を追加し、draft／STATUS空欄とシート外IDの判定をpreflightへ追加。
+- 生成物を再生成し、matricaria等の対象ページを更新。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node scripts/build-detail-pages.mjs`: 成功。`Lineup: 非公開アーティスト 4件はリンク無しで表示 (caimann, noritake, ojisan, reeko)`。
+- `LP/festivals/matricaria.html`: Caimann / Noritake / Ojisan はリンク無しの`MusicGroup`名および文字表示。`sisi`はLINEUPS参照なし。
+- `node scripts/check_jsonld.mjs`: 成功。content-datesの不要キーなし。
+- `node scripts/check_festival_lineup_render.mjs`: 成功。
+- `node scripts/check_lineup_draft_refs.mjs`: 成功。
+- `bash scripts/preflight.sh --fast`: 画像寸法取得（Google外部画像150件）の240秒タイムアウトで詳細ページ生成が失敗。その他47件は成功、5件は`--fast`で省略。コード修正起因ではなく、同コマンド内の既存外部画像取得待ち。
+- 実ブラウザ確認、Publish pipeline、本番データ書き込み: 未実施。
+
+### 変更したパターン
+- 公開ARTISTSと`LP/data/artists.json`全行を分離したLINEUP参照解決。
+- 非公開出演者のリンク無しHTML／名前のみJSON-LD、出演履歴除外、ビルドログ集計。
+- content-dates台帳の公開対象キー再構成。
+- 非公開／シート外IDの回帰検査とpreflight登録。
+
+### 未確認の類似パターン
+- 確認済み・0件：対象4ID以外の現行LINEUPSで、シートに無い非複合ARTIST_ID参照切れ。
+- 未確認：実ブラウザでJA/ENのmatricaria・synapse・labyrinthを操作する確認。
+
+### 次の担当への注意・判断待ち
+- 外部Google画像取得が240秒を超える環境では`preflight --fast`が失敗するため、ネットワーク安定環境で再実行すること。実ブラウザ確認と省略なしpreflightが未完了のため、公開扱いにしない。
