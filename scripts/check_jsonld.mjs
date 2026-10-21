@@ -70,6 +70,16 @@ function jsonLdObjects(file) {
   });
 }
 
+function walkJsonLd(value, visit) {
+  if (Array.isArray(value)) {
+    for (const item of value) walkJsonLd(item, visit);
+    return;
+  }
+  if (!value || typeof value !== 'object') return;
+  visit(value);
+  for (const child of Object.values(value)) walkJsonLd(child, visit);
+}
+
 function loadPublishedArticles() {
   const context = {};
   vm.createContext(context);
@@ -148,6 +158,23 @@ console.log(`対象: ${pages}ページ / ${blocks}ブロック\n`);
 check('全ブロックが JSON としてパースできる', parseErrors.length === 0,
   parseErrors.slice(0, 3).join(', '));
 check('全ブロックに @type がある', noType.length === 0, noType.slice(0, 3).join(', '));
+
+/* --- 2b) Event系ノードの必須項目 --- */
+const incompleteEventNodes = [];
+for (const f of htmlFiles(LP)) {
+  const rel = path.relative(LP, f);
+  if (rel.startsWith('vendor') || rel === 'cms.html') continue;
+  for (const block of jsonLdObjects(f)) {
+    walkJsonLd(block, (node) => {
+      const types = Array.isArray(node['@type']) ? node['@type'] : [node['@type']];
+      if (!types.some((type) => ['Event', 'Festival', 'MusicEvent'].includes(type))) return;
+      const missing = ['name', 'startDate', 'location'].filter((key) => !node[key]);
+      if (missing.length) incompleteEventNodes.push(`${rel} ${node['@id'] || types.join('/')} missing ${missing.join(',')}`);
+    });
+  }
+}
+check('全ページの Event / Festival / MusicEvent に name・startDate・location がある',
+  incompleteEventNodes.length === 0, `${incompleteEventNodes.length}件${incompleteEventNodes.length ? `: ${incompleteEventNodes.slice(0, 5).join('; ')}` : ''}`);
 
 /* --- NewsMediaOrganization / NewsArticle 差分 --- */
 const ORG_ID = 'https://techno-japan.media/#org';

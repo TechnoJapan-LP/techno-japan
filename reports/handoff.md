@@ -11266,3 +11266,36 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 検証（本番）: preflight 全60件成功 → push、Deploy success、Publish pipeline success（run 39554802521）。LINE UP 表示 resonance 6 / prox 20 / soul-beat-asia 18 / car-multimedia 9。cms.js?v=161 配信。
 - 未確認: 新規フェス作成の画面操作そのものは本番では未実施（本番データを作るため）。検査 check_cms_editions.mjs（37件）で送信内容を確認済み。
 - 次の担当への注意: CMS の作業中にタブが固まったときは、別タブでシート（gviz）を読んで途中状態を確かめてから続ける。
+
+### 2026-10-21 Search Console「イベント」必須項目欠落の修正 — 未コミット
+
+### 実施
+- `scripts/build-detail-pages.mjs` に `editionEventLd` を追加し、フェス詳細の開催回・アーティストの `performerIn`・会場の `event` で開催回データ（`name` / `startDate` / `endDate` / `eventStatus` / `location` / `url`）を共通生成するよう修正した。
+- `startDate` または開催回の実データとしての location が無い場合、アーティスト・会場の参照イベントは出さない。関係先の `@id` は既存の `#festival` を維持した。
+- `scripts/check_jsonld.mjs` に、全 JSON-LD を再帰的に走査して Event / Festival / MusicEvent の `name`・`startDate`・`location` を確認する検査を追加した。修正前は 68 件を検出した。
+- JA/EN 詳細ページを再生成し、JA/EN ハブの静的リンク行数一致を確認した。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node scripts/check_jsonld.mjs`: 成功。Event / Festival / MusicEvent 必須項目の欠落 0 件。
+- `python3 scripts/check_regressions.py`: 成功。JA/EN ハブ静的リンク行数差分 0 件。
+- `git diff --check`: 成功。
+- `bash scripts/preflight.sh`: 51件成功 / 9件失敗。詳細ページ生成は外部画像取得待ちで240秒タイムアウト、ハブ/CMS/地図/モバイル系の実ブラウザ検査は実行環境の localhost listen EPERM。JSON-LD検査を含む他の検査は成功。
+- 実ブラウザでの Search Console 反映確認、Publish pipeline、実機確認: 未確認。今回の変更は静的 JSON-LD 生成で、公開はしていない。
+
+### 変更したパターン
+- アーティスト詳細の `performerIn` と会場詳細の `event` に、該当開催回の実データを持つ最小 `Festival` ノードを生成。
+- フェス詳細の開催回 JSON-LD と参照イベントの開催回データ生成を `editionEventLd` に共有。
+- JSON-LD 内のネストした Event 系ノード必須項目検査。
+- JA/EN 詳細ページの再生成。
+
+### 未確認の類似パターン
+- 確認済み・0件：全ページの `Event` / `Festival` / `MusicEvent` の `name`・`startDate`・`location` 欠落、JA/EN ハブ行数差分、JSON-LD パースエラー。
+- 未確認：実ブラウザでの JA/EN・PC/モバイル表示、Google Search Console の再クロール後のリッチリザルト状態、Publish pipeline。
+
+### 次の担当への注意・判断待ち
+- 公開前に環境制限を解消して、省略なしの `bash scripts/preflight.sh` を全件成功させること。特に外部画像取得と localhost listen の失敗が残っている。
+- 公開後は `artists/<id>.html` と `venues/<id>.html` の JSON-LD を実ブラウザまたは取得 HTML で確認し、Search Console のイベント拡張結果を再確認すること。
+- CMS変更・本番データ書き込み・Publish pipeline実行は行っていない。

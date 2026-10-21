@@ -1476,6 +1476,31 @@ function editionStatusLd(status) {
   return `https://schema.org/${value || 'EventScheduled'}`;
 }
 
+/* 開催回を参照するページ（フェス・アーティスト・会場）で共用する
+   最小のイベントノード。開催回の実データが不足している場合は、
+   検索エンジンに不完全な Event を渡さない。 */
+function editionEventLd({ festival, edition, lang, idSuffix = '#festival', includeUrl = true }) {
+  const startDate = String(edition?.DATE_START || '');
+  const locationAvailable = [
+    edition?.LOCATION, edition?.LOCATION_JA, edition?.LOCATION_EN,
+    edition?.PREF, edition?.ADDRESS, edition?.LAT, edition?.LNG,
+  ].some((value) => String(value ?? '').trim());
+  if (!festival || !edition || !ISO_DATE.test(startDate) || !locationAvailable) return null;
+
+  const festivalName = lang === 'en' ? (festival.name_en || festival.name) : festival.name;
+  const festivalPath = `${lang === 'en' ? '/en' : ''}/festivals/${encodeURIComponent(festival.id)}.html`;
+  return {
+    '@type': 'Festival',
+    '@id': `${BASE}/festivals/${encodeURIComponent(festival.id)}.html${idSuffix}`,
+    name: `${festivalName || ''} ${editionLabel(editionIdentifier(edition))}`.trim(),
+    startDate,
+    ...(ISO_DATE.test(String(edition.DATE_END || '')) ? { endDate: edition.DATE_END } : {}),
+    eventStatus: editionStatusLd(edition.STATUS),
+    location: editionLocationLd(edition, lang),
+    ...(includeUrl ? { url: `${BASE}${festivalPath}` } : {}),
+  };
+}
+
 function editionDateHtml(ed, lang) {
   const start = String(ed.DATE_START || '');
   const end = String(ed.DATE_END || '');
@@ -2183,16 +2208,16 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, articl
     ...(sameAs.length ? { sameAs } : {}),
     ...(performers.length ? { performer: performers } : {}),
     ...(editions.length ? { subEvent: editions.map((ed) => ({
-      '@type': 'Festival',
-      '@id': `${BASE}/festivals/${encodeURIComponent(f.id)}.html#edition-${encodeURIComponent(ed.EDITION_ID)}`,
-      name: `${name} ${editionLabel(editionIdentifier(ed))}`.trim(),
-      ...(ISO_DATE.test(String(ed.DATE_START || '')) ? { startDate: ed.DATE_START } : {}),
-      ...(ISO_DATE.test(String(ed.DATE_END || '')) ? { endDate: ed.DATE_END } : {}),
-      location: editionLocationLd(ed, lang),
+      ...editionEventLd({
+        festival: f,
+        edition: ed,
+        lang,
+        idSuffix: `#edition-${encodeURIComponent(ed.EDITION_ID)}`,
+        includeUrl: false,
+      }),
       ...((lineupsByEdition.get(ed.EDITION_ID) || []).map((row) => lineupPerformerLd(row, artistsById, lang)).filter(Boolean).length
         ? { performer: (lineupsByEdition.get(ed.EDITION_ID) || []).map((row) => lineupPerformerLd(row, artistsById, lang)).filter(Boolean) }
         : {}),
-      ...(editionStatusLd(ed.STATUS) ? { eventStatus: editionStatusLd(ed.STATUS) } : {}),
       /* image / description は SC で「任意項目なし」警告が各11件出ていた（2026-08-27）。
          開催回に固有の画像・説明は無いので、フェス本体のものを渡す。 */
       image: [image],
@@ -2282,9 +2307,9 @@ function artistPage(a, artistsById, lang = 'ja', artistAppearances = new Map(), 
     ? artistMemberIds(a).map((id) => artistsById.get(id)).filter(Boolean)
     : [];
   const modified = contentDate('artist', a.id, CONTENT_SNAPSHOTS.get(`artist:${a.id}`));
-  const performerIn = upcoming.slice(0, 6).map(({ festival }) => ({
-    '@type': 'Festival', '@id': `${BASE}/festivals/${encodeURIComponent(festival.id)}.html#festival`,
-  }));
+  const performerIn = upcoming.slice(0, 6)
+    .map(({ festival, edition }) => editionEventLd({ festival, edition, lang }))
+    .filter(Boolean);
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -2566,9 +2591,9 @@ function venuePage(v, lang = 'ja', allFestivals = [], editionsByFestival = new M
   }).filter(Boolean).sort((a, b) => Number(b.upcoming) - Number(a.upcoming)
     || String(a.latest.DATE_START || '').localeCompare(String(b.latest.DATE_START || ''))).slice(0, 6);
   const modified = contentDate('venue', v.id, CONTENT_SNAPSHOTS.get(`venue:${v.id}`));
-  const eventRefs = venueFestivals.filter((x) => x.upcoming).slice(0, 6).map(({ festival }) => ({
-    '@type': 'Festival', '@id': `${BASE}/festivals/${encodeURIComponent(festival.id)}.html#festival`,
-  }));
+  const eventRefs = venueFestivals.filter((x) => x.upcoming).slice(0, 6)
+    .map(({ festival, latest }) => editionEventLd({ festival, edition: latest, lang }))
+    .filter(Boolean);
   const faqItems = venueFaqItems(v, name, venueFestivals, lang);
   const faqLd = faqJsonLd(faqItems);
   if (modified) jsonLd.dateModified = modified;
