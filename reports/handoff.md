@@ -11520,3 +11520,116 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 - 公開前に `bash scripts/preflight.sh` を省略なしで実行し、成功後にCMSを `?cb=<乱数>` で開いて Cmd+Shift+R 相当の強制再読込を行うこと。今回の変更はPublish経路（`LP/cms.js`）なので、Publish pipelineと実ブラウザ確認が必須。
 - 本番データへの書き込みを伴う実操作はまだ行っていない。実機確認できるまで公開済みとして扱わないこと。
+
+### 2026-10-21 記事の書き手表示・筆者ページ — 未コミット
+
+### 実施
+- AUTHORS公開CSVの取得と`LP/data/authors.json`への保存（取得失敗時は既存JSONを保持）を追加。
+- 公開記事と名前照合した`/writers/<id>.html`・`/en/writers/<id>.html`、記事の筆者リンク/Person JSON-LD、NEWSカードのBY表示を追加。
+- writers募集ページの筆者一覧リンク、sitemap、ProfilePage/Person検査、ハブデータAUTHORSを更新。
+
+### コミット
+- 未コミット（ユーザー指定）。commit / push / Publish pipeline / 本番データ書き込みは未実施。
+
+### 検証
+- `node scripts/build-detail-pages.mjs`: 成功。Masafumi TakeのJA/EN筆者ページを生成。
+- `python3 scripts/generate-sitemap.py`: 成功。JA/EN筆者ページを掲載。
+- `node scripts/check_jsonld.mjs`: 成功。ProfilePage/Personのname・urlを確認。
+- `python3 scripts/check_asset_versions.py`: 成功。
+- `bash scripts/preflight.sh --fast`: 外部Google画像取得待ちの詳細ページ生成が240秒でタイムアウト。その他の検査は成功したが、全体は2件失敗。実ブラウザ確認とPublish pipelineは未実施。
+
+### 変更したパターン
+- `fetch-data.mjs`の既存GIDSとは別のAUTHORS CSV取得、ID/NAME検証、安定JSON出力。
+- 詳細ページ生成の筆者照合、記事WORDS BY、NewsArticle author、ProfilePage/Person、ハブ/募集ページの筆者リンク。
+- `generate-sitemap.py`のJA/EN筆者URL列挙と`check_jsonld.mjs`の筆者検査。
+
+### 未確認の類似パターン
+- 確認済み・0件：AUTHORS未登録個人のリンク無し、TECHNO JAPANのaboutリンク、JA/EN行数、長い名前の省略CSS、CMS/GASコード。
+- 未確認：実ブラウザでの390px NEWSカード表示、実サイトのPublish pipeline、本番AUTHORS CSVの全行取得結果。
+
+### 次の担当への注意・判断待ち
+- `bash scripts/preflight.sh`省略なしを通し、実ブラウザでJA/ENのNEWSカード・記事WORDS BY・筆者ページを確認してから公開すること。今回はcommit・pushを行っていない。
+
+### 2026-10-21 組織名の表示統一 — 未コミット
+
+### 実施
+- 記事表示の組織判定・表示名をビルド側の`authorPresentation()`とブラウザ側の`tjAuthorPresentation()`に追加。空欄および大文字小文字を問わず`TECHNO JAPAN`を含むauthorを、JAは`TECHNO JAPAN 編集部`、ENは`TECHNO JAPAN Editorial`として表示。
+- 記事WORDS BY、NEWSカードBY、JA/EN writers一覧の集計・表示を更新。writers一覧では組織表記を1行に統合し、記事数を合算。JSON-LDのOrganization名は`TECHNO JAPAN`のまま保持。
+- CMS新規記事のauthor既定値・placeholderを更新し、候補表示でも組織表記を統合。`cms.js?v=164`、`localize.js?v=14`へ更新。
+- `node scripts/build-detail-pages.mjs`で静的記事ページを再生成。
+
+### コミット
+- 未コミット（ユーザー指定）。commit / push / Publish pipeline / 本番データ書き込みは未実施。
+
+### 検証
+- `node scripts/build-detail-pages.mjs`: 成功。記事21枚（JA）・20枚（EN）を生成、組織表示とOrganization JSON-LDを確認。
+- JA/EN writers.htmlの行構造・共有表示関数・localize.js同期読み込みを確認。
+- `bash scripts/preflight.sh --fast`: 47件成功、5件省略、1件失敗。外部Google画像取得13件が240秒タイムアウトしたため、詳細ページ生成検査のみ失敗。CMS著者候補検査は再実行で成功。
+- 実ブラウザ確認: 未実施（NEWSカード、記事WORDS BY、writers一覧、CMS入力を未確認）。
+
+### 変更したパターン
+- `author`の表示時組織名解決、記事詳細・NEWSハブ・writers集計、CMS author既定値／候補の組織名正規化、CMS/共有JSのキャッシュバージョン。
+
+### 未確認の類似パターン
+- 確認済み・0件：記事データ・data-hub.jsのauthor値、JSON-LD Organization name、個人筆者表示、JA/EN表示関数の同期。
+- 未確認：実ブラウザのJA/EN NEWSカード・記事WORDS BY・writers一覧・CMS新規記事フォーム。
+
+### 次の担当への注意・判断待ち
+- 外部画像取得が安定した環境で`bash scripts/preflight.sh --fast`を再実行し、詳細ページ生成も成功させること。実ブラウザ確認と、必要なら省略なしの`bash scripts/preflight.sh`を完了するまで公開扱いにしないこと。CMS変更のため確認時は`?cb=<乱数>`とCmd+Shift+R相当の強制再読込を使う。
+
+### 2026-10-22 筆者ページ追加修正 — 未コミット
+
+### 実施
+- AUTHORSのHTML応答・必須ヘッダー欠落・有効行0件を検出し、既存authors.jsonを保持するよう修正。
+- JA筆者ページのtitle/descriptionを日本語化し、SNSリンク表示をINSTAGRAM/X/WEBSITEの固定ラベル化。
+- 記事WORDS BYのインラインstyleを`.article-author-link`へ移し、detail.cssをv70へ更新。
+- 再ビルドし、JA/EN 5ハブとwritersハブの行数一致を確認。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node --check scripts/fetch-data.mjs`: 成功。
+- `node --check scripts/build-detail-pages.mjs`: 成功。
+- `node scripts/build-detail-pages.mjs`: 成功。
+- JA/EN index・news・festivals・artists・venues・writersの行数一致: 確認済み。
+- `bash scripts/preflight.sh --fast`: 47件成功、5件省略、詳細ページ生成のみ外部Google画像取得待ちで240秒タイムアウト。全体は失敗。
+- 実ブラウザ確認、Publish pipeline、本番データ書き込み: 未実施。
+
+### 変更したパターン
+- AUTHORS CSVのHTML/ヘッダー/空結果ガード、writerPageのJAメタ情報とSNS表示ラベル、記事筆者リンクのCSS化・detail.css版数。
+
+### 未確認の類似パターン
+- 確認済み・0件：生成記事の`article-author-link`インラインstyle残存、JA/ENハブ行数不一致。
+- 未確認：外部画像取得が安定した環境でのpreflight詳細ページ生成、実ブラウザでのJA/EN筆者ページと記事WORDS BY操作。
+
+### 次の担当への注意・判断待ち
+- 公開前に外部画像取得が可能な環境で`bash scripts/preflight.sh --fast`を再実行し、成功後に省略なしpreflightと実ブラウザ確認を行うこと。commit・pushは未実施。
+
+### 2026-10-22 筆者ページ見出しまわりの余白調整 — 未コミット
+
+### 実施
+- `LP/detail.css` の余白ルールに `.writer-detail` を追加し、PC/モバイルの上端・eyebrow・h1 間隔をアーティスト／会場詳細と統一。
+- `.writer-detail .detail-links` の下余白をPC 20px、モバイル18pxに設定。
+- `detail.css` の版数を71へ更新し、CMS本番表示プレビューの参照も `v=71` に同期。
+- `node scripts/build-detail-pages.mjs` で詳細ページを再生成。
+
+### コミット
+- 未コミット（ユーザー指定）。commit・push・Publish pipeline・本番データ書き込みは未実施。
+
+### 検証
+- `node scripts/build-detail-pages.mjs`: 成功。全567ページを生成し、JA/EN筆者ページを含む詳細ページへ `detail.css?v=71` を反映。
+- `python3 scripts/check_asset_versions.py`: 成功。
+- `bash scripts/preflight.sh`: 49件成功。外部Google画像取得による詳細ページ生成タイムアウト、既存記事フィード不整合、sandboxのlocalhost bind制限によるブラウザ検査失敗あり。
+- 実ブラウザでの筆者ページ操作確認: 未実施（sandboxのlocalhost bind制限）。
+
+### 変更したパターン
+- `.artist-detail` / `.venue-detail` と同じPC/モバイル余白グループへの `.writer-detail` 追加。
+- 筆者ページの `.detail-links` 下余白、詳細CSS版数、CMS記事プレビューCSS版数。
+
+### 未確認の類似パターン
+- 確認済み・0件：アーティスト／会場ページの生成構造変更、JA/EN筆者ページの `v=71` 反映。
+- 未確認：実ブラウザでの1280px/モバイル筆者ページの実測値。
+
+### 次の担当への注意・判断待ち
+- 公開前にlocalhost bind可能な環境で実ブラウザ確認と省略なしpreflightを再実行すること。preflightの既存記事フィード不整合も要確認。commit・pushは未実施。

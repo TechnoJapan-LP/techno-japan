@@ -204,13 +204,17 @@
 
 /* アーティスト詳細のファーストビューは、ナビ下から写真までを短く保つ。 */
 .artist-detail,
-.venue-detail { padding-top: 101px; }
+.venue-detail,
+.writer-detail { padding-top: 101px; }
 .artist-detail .detail-eyebrow,
-.venue-detail .detail-eyebrow { margin-bottom: 8px; }
+.venue-detail .detail-eyebrow,
+.writer-detail .detail-eyebrow { margin-bottom: 8px; }
 .artist-detail h1,
-.venue-detail h1 { margin-top: 0; margin-bottom: 14px; }
+.venue-detail h1,
+.writer-detail h1 { margin-top: 0; margin-bottom: 14px; }
 .artist-detail .detail-chips,
-.venue-detail .detail-chips { margin-bottom: 20px; }
+.venue-detail .detail-chips,
+.writer-detail .detail-links { margin-bottom: 20px; }
 .artist-detail .detail-hero,
 .venue-detail .detail-hero { margin-bottom: 48px; }
 
@@ -320,13 +324,17 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   .article-detail { padding: 104px 0 60px; }
   .detail-page { padding: 84px 0 60px; }
   .artist-detail,
-  .venue-detail { padding-top: 28px; }
+  .venue-detail,
+  .writer-detail { padding-top: 28px; }
   .artist-detail .detail-eyebrow,
-  .venue-detail .detail-eyebrow { margin-bottom: 6px; }
+  .venue-detail .detail-eyebrow,
+  .writer-detail .detail-eyebrow { margin-bottom: 6px; }
   .artist-detail h1,
-  .venue-detail h1 { margin-bottom: 12px; }
+  .venue-detail h1,
+  .writer-detail h1 { margin-bottom: 12px; }
   .artist-detail .detail-chips,
-  .venue-detail .detail-chips { margin-bottom: 18px; }
+  .venue-detail .detail-chips,
+  .writer-detail .detail-links { margin-bottom: 18px; }
   .article-detail-inner, .detail-inner { padding: 0 24px; }
   .article-detail .article-back { padding: 10px 0; margin-bottom: 20px; }
   .article-hero-img, .detail-hero { margin-left: -24px; margin-right: -24px; }
@@ -1006,6 +1014,12 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 }
 @media (max-width: 480px) {
   .festival-design-v2 .related-card { flex-basis: 78vw; }
+}
+
+.article-author-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 /* ---------- 記事ページの「関連フェスティバル」 ----------
