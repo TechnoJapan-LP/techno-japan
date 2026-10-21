@@ -1,7 +1,7 @@
 # TECHNO JAPAN
 
 > 日本のテクノ / ハウスの独立メディア。フェスティバル91件・
-> アーティスト139名・会場22件・記事20本を日英で掲載し、
+> アーティスト139名・会場22件・記事21本を日英で掲載し、
 > 開催日・場所・出演者を構造化データ（schema.org）付きで公開している。
 
 ## 今後の開催予定（14件）
@@ -32,6 +32,7 @@
 
 ## 最新記事
 
+- 2026-10-21: [電気菩薩 | 頭上を飛行機が行き交う成田の木の根ペンションで、24時間のハロウィン・レイヴ](https://techno-japan.media/articles/denki-bodhisattva-2026-info.html) — 2021年に東京で始まったパーティーコレクティブが、2年ぶりの野外へ。成田空港建設への反対運動の拠点だった木の根ペンションで、テーマ「中華ホラー」のハロウィン・レイヴが24時間続く。DJ MARIA.ら国内外22組が出演。 / [EN](https://techno-japan.media/en/articles/denki-bodhisattva-2026-info.html)
 - 2026-10-19: [SAWAGI FESTIVAL | 日本を代表するローカルフェスティバルが、10年の節目を越えて山梨から群馬へ](https://techno-japan.media/articles/sawagi-festival-2026-info.html) — 昨年10年の節目を越え、11年目を迎えるキャンプイン型の野外フェスティバル。2026年は山梨から群馬・東吾妻町のSUTEKI VILLAGE CAMPINGへ。2ステージにLIVE 6組、DJ 52組。札幌、大阪、北九州で現場をつくってきたDJたちが群馬の山に集まる。 / [EN](https://techno-japan.media/en/articles/sawagi-festival-2026-info.html)
 - 2026-10-17: [Topia | 千葉・外房、まだ誰も足を踏み入れていないコンクリート空間で地下レイヴ](https://techno-japan.media/articles/topia-2026-info.html) — 成田空港内の私有地や相模原のリニア工事地など、オフサイトで開催を重ねてきたTopiaが初の屋内会場へ。主催が「日の当たらぬ地下神殿」と呼ぶ千葉・外房のコンクリート空間に、Evian Christが2年ぶりに来日する。 / [EN](https://techno-japan.media/en/articles/topia-2026-info.html)
 - 2026-10-14: [INTERGALACTIC | 東京・日の出町の森が、光とアートと音楽の別世界に変わる](https://techno-japan.media/articles/intergalactic-2026-info.html) — 東京を拠点とするブティック型の没入型アート＆ミュージックフェスティバルが、日の出町のおおばキャンプ村へ。2つのステージでハウスからテクノ、サイケデリックトランスへ。森にはライトインスタレーションとレーザーが点在する。 / [EN](https://techno-japan.media/en/articles/intergalactic-2026-info.html)
@@ -51,7 +52,6 @@
 - 2026-08-13: [BON DISCO | 兵庫・三田の森で26時間 DIYパーティが13年目の夏へ](https://techno-japan.media/articles/bondisco-2026-info.html) — 兵庫県三田市の森を舞台に、正午から翌日午後まで踊り続けるDIYパーティBON DISCOが13年目の夏を迎える。全国から集まる40組近いアーティストと2つのフロア、そしてプールで身体を冷やしてまた音へ戻る、真夏だけの過ごし方がここにある。 / [EN](https://techno-japan.media/en/articles/bondisco-2026-info.html)
 - 2026-08-09: [茨城 鉾田 nalu beachでビーチパーティLOA 8月15日開催](https://techno-japan.media/articles/loa-lost-paradise-2026-info.html) — かつて大洋村と呼ばれた茨城・鉾田の隠れたビーチに、28時間止まらないフロアが立ち上がる。夕日で始まり、砂浜で朝日を迎え、二度目の夕日で幕を閉じるビーチパーティLOA。海の家もない太平洋を前に波打ち際で音を鳴らす。 / [EN](https://techno-japan.media/en/articles/loa-lost-paradise-2026-info.html)
 - 2026-01-09: [MUTEK.JP 2025現地レポート WWWとO-EASTで体感した音と光の二日間](https://techno-japan.media/articles/post-20251120.html) — 電子音楽の最前線を体験できるアジア有数のプラットフォーム、MUTEK.JPが2025年も開催。石橋英子やアルヴァ・ノトら世界的アーティストが、音と光とテクノロジーの融合による未体験のパフォーマンスを繰り広げた。 / [EN](https://techno-japan.media/en/articles/post-20251120.html)
-- 2025-06-20: [野外テクノパーティTranscendenceで見た次世代ジェネレーションの可能性](https://techno-japan.media/articles/transcendence-2025-report.html) — 北相木村の森に響き渡る先進的なテクノビート。若き世代が創造するTranscendenceで、日本の野外レイヴカルチャーの可能性と未来を目撃した。 / [EN](https://techno-japan.media/en/articles/transcendence-2025-report.html)
 
 ## 機械可読データ
 

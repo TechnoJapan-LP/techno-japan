@@ -203,6 +203,34 @@
     1179,
     781
   ],
+  "images/articles/denki-bodhisattva-2026-info-body01-d6309a7a.webp": [
+    1920,
+    1280
+  ],
+  "images/articles/denki-bodhisattva-2026-info-body02-f12c24ff.webp": [
+    1567,
+    1045
+  ],
+  "images/articles/denki-bodhisattva-2026-info-body03-c26f5324.webp": [
+    1920,
+    1280
+  ],
+  "images/articles/denki-bodhisattva-2026-info-body04-ad51123a.webp": [
+    1280,
+    1920
+  ],
+  "images/articles/denki-bodhisattva-2026-info-body05-074fa2d8.webp": [
+    1045,
+    1567
+  ],
+  "images/articles/denki-bodhisattva-2026-info-body06-9bfcbac3.webp": [
+    1920,
+    1280
+  ],
+  "images/articles/denki-bodhisattva-2026-info-body07-c8502864.webp": [
+    1179,
+    781
+  ],
   "images/articles/denki-bodhisattva-2026-info.webp": [
     1179,
     781
@@ -1563,9 +1591,17 @@
     1440,
     1440
   ],
+  "images/artists/helena-hauff.webp": [
+    1440,
+    1440
+  ],
   "images/artists/hidai.webp": [
     225,
     225
+  ],
+  "images/artists/hybrid-man.webp": [
+    1000,
+    663
   ],
   "images/artists/juana-molina.webp": [
     1200,
@@ -2303,6 +2339,10 @@
     1440,
     1082
   ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info--9ae927ac-fourThree-center.webp": [
+    1179,
+    884
+  ],
   "images/derivatives/card/articles/denki-bodhisattva-2026-info--9ae927ac-lg.webp": [
     960,
     636
@@ -2314,6 +2354,18 @@
   "images/derivatives/card/articles/denki-bodhisattva-2026-info--9ae927ac-sm.webp": [
     480,
     318
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info--9ae927ac-square-center.webp": [
+    1179,
+    1179
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info--9ae927ac-wide-center.webp": [
+    1179,
+    663
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info--9ae927ac-xl.webp": [
+    1179,
+    781
   ],
   "images/derivatives/card/articles/denki-bodhisattva-2026-info--9ae927ac-xs.webp": [
     240,
@@ -2430,6 +2482,70 @@
   "images/derivatives/card/articles/denki-bodhisattva-2026-info-1792586750853--5cfca319-xs.webp": [
     240,
     159
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-body01-d6309a7a--d5d0fab6-body-lg.webp": [
+    1200,
+    800
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-body01-d6309a7a--d5d0fab6-body-md.webp": [
+    800,
+    533
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-body01-d6309a7a--d5d0fab6-body-xl.webp": [
+    1440,
+    960
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-body02-f12c24ff--e7c12b45-body-lg.webp": [
+    1200,
+    800
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-body02-f12c24ff--e7c12b45-body-md.webp": [
+    800,
+    534
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-body02-f12c24ff--e7c12b45-body-xl.webp": [
+    1440,
+    960
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-body03-c26f5324--9b07b1f0-body-lg.webp": [
+    1200,
+    800
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-body03-c26f5324--9b07b1f0-body-md.webp": [
+    800,
+    533
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-body03-c26f5324--9b07b1f0-body-xl.webp": [
+    1440,
+    960
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-body04-ad51123a--9ffebc45-body-lg.webp": [
+    1200,
+    1800
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-body04-ad51123a--9ffebc45-body-md.webp": [
+    800,
+    1200
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-body05-074fa2d8--20434555-body-md.webp": [
+    800,
+    1200
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-body06-9bfcbac3--78f7bad7-body-lg.webp": [
+    1200,
+    800
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-body06-9bfcbac3--78f7bad7-body-md.webp": [
+    800,
+    533
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-body06-9bfcbac3--78f7bad7-body-xl.webp": [
+    1440,
+    960
+  ],
+  "images/derivatives/card/articles/denki-bodhisattva-2026-info-body07-c8502864--b55c2505-body-md.webp": [
+    800,
+    530
   ],
   "images/derivatives/card/articles/forest-sound-camp-info--bab4ec11-fourThree-center.webp": [
     720,
@@ -7487,6 +7603,22 @@
     240,
     240
   ],
+  "images/derivatives/card/artists/helena-hauff--6a929243-lg.webp": [
+    960,
+    960
+  ],
+  "images/derivatives/card/artists/helena-hauff--6a929243-md.webp": [
+    720,
+    720
+  ],
+  "images/derivatives/card/artists/helena-hauff--6a929243-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/artists/helena-hauff--6a929243-xs.webp": [
+    240,
+    240
+  ],
   "images/derivatives/card/artists/hidai--ac316014-lg.webp": [
     225,
     225
@@ -7502,6 +7634,22 @@
   "images/derivatives/card/artists/hidai--ac316014-xs.webp": [
     225,
     225
+  ],
+  "images/derivatives/card/artists/hybrid-man--a2996d58-lg.webp": [
+    960,
+    636
+  ],
+  "images/derivatives/card/artists/hybrid-man--a2996d58-md.webp": [
+    720,
+    477
+  ],
+  "images/derivatives/card/artists/hybrid-man--a2996d58-sm.webp": [
+    480,
+    318
+  ],
+  "images/derivatives/card/artists/hybrid-man--a2996d58-xs.webp": [
+    240,
+    159
   ],
   "images/derivatives/card/artists/juana-molina--e4a43f90-lg.webp": [
     960,
@@ -11603,6 +11751,10 @@
     1920,
     1090
   ],
+  "https://lh3.googleusercontent.com/d/14KMOJSay4GUVBSe_ovO0ycJS9yE6Y-TK=w2000": [
+    1920,
+    1280
+  ],
   "https://lh3.googleusercontent.com/d/14sdCtU97w4cMoLLknq7Q1pa087o-1AXx=w2000": [
     900,
     500
@@ -11618,6 +11770,10 @@
   "https://lh3.googleusercontent.com/d/16-v-dZMC_YOjnXiTjKS1qRPJcE3ygMIq=w2000": [
     1920,
     2880
+  ],
+  "https://lh3.googleusercontent.com/d/16GxAAmxcwt6QgFV9kse0bRcGPeMNkDRN=w2000": [
+    1045,
+    1567
   ],
   "https://lh3.googleusercontent.com/d/17CxXS08XngQT6hR7tlTcIimV9xDfKhES=w2000": [
     1920,
@@ -12023,6 +12179,14 @@
     1920,
     1536
   ],
+  "https://lh3.googleusercontent.com/d/1lJqfqNts_UH36VFLEgengxnQ0USJcL-P=w2000": [
+    1179,
+    781
+  ],
+  "https://lh3.googleusercontent.com/d/1lOKvpjVZX7Tf_Jg9NHK5iK_cvengnbHQ=w2000": [
+    1567,
+    1045
+  ],
   "https://lh3.googleusercontent.com/d/1lsbtyST3m4Z3GXBHAEGoCGWgMsaQV_6T=w2000": [
     1920,
     1280
@@ -12036,6 +12200,14 @@
     1278
   ],
   "https://lh3.googleusercontent.com/d/1m8M4jmCXcUkZMUx7TXmehOVFgebMNOEy=w2000": [
+    1920,
+    2880
+  ],
+  "https://lh3.googleusercontent.com/d/1mMutbd2CITy-sINmpcBwXRLZA_TgbdAZ=w2000": [
+    1920,
+    1280
+  ],
+  "https://lh3.googleusercontent.com/d/1mfJkAJcn75eIhXjViQ1uQuYW0aUxb2f2=w2000": [
     1920,
     2880
   ],
@@ -12084,6 +12256,10 @@
     2247
   ],
   "https://lh3.googleusercontent.com/d/1sgDFI-VhQzjeiIsw_3GtAXSapi5wB8Sm=w2000": [
+    1920,
+    1280
+  ],
+  "https://lh3.googleusercontent.com/d/1tIhlY9iYq1T0HEVAFUV_VMtq3Il0ULe2=w2000": [
     1920,
     1280
   ],

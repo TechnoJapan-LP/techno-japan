@@ -156,52 +156,52 @@
     "date": "2026-10-21"
   },
   "artist:endorphin": {
-    "hash": "4769a1803f58d21747119f1444068e1da56a2d672904debd92d529a3830559b6",
-    "date": "2026-08-03"
+    "hash": "3df09ddd1f4371aa8051156a29dd29c86ab1177dc760c94e14de15315ba3817e",
+    "date": "2026-10-22"
   },
   "artist:eric-cloutier": {
-    "hash": "797aabfa068d58cfc22e125e70fe88eedc6a66b071c1ddc30f334d585b02287b",
-    "date": "2026-08-03"
+    "hash": "9f2d9bdcee29844ff57884cb01236c17c5da97bb90ec4c817a9dd34147c8a007",
+    "date": "2026-10-22"
   },
   "artist:eve": {
-    "hash": "ad0a823e5c4db46c7cbbd59ffedd4781afaab38347022a1d4be41d813fff31fd",
-    "date": "2026-10-17"
+    "hash": "2c7615cbb7d44fd1d8194c7ccd879fc18620eed2d52eb5ba61b4ba0ddc0e0631",
+    "date": "2026-10-22"
   },
   "artist:feline": {
     "hash": "8b1d8636054bbe7a45d4c7bba76ba5d12474eaea173bb5103b5cf264af6d866b",
     "date": "2026-10-20"
   },
   "artist:floating-points": {
-    "hash": "510a15fbe1831d1e3b8941dae149218ec0c1b811099496a2b77bb8ee5ea54140",
-    "date": "2026-08-03"
+    "hash": "8500be1ef11a6ba2ccae964a844c59c7aa57b01d4475e63f4d5b090de7d70339",
+    "date": "2026-10-22"
   },
   "artist:foodman": {
-    "hash": "04c376d56d987b6ab7fd6945c36cd7aa922562ac75fba2bed2f35ff16e9f625d",
-    "date": "2026-09-12"
+    "hash": "8e235166952bc13828c73ad9e867944280eb4379cb3f93c52bdedb0a70c7ad74",
+    "date": "2026-10-22"
   },
   "artist:four-tet": {
-    "hash": "5a28437bac09b711832836019a9cb98b7b5d533f23dcc8806f76394775a06cd6",
-    "date": "2026-08-03"
+    "hash": "1589526bd78785f5c00b170fc648bfbe2f9666bd9b74532dc01152edd2a39e3f",
+    "date": "2026-10-22"
   },
   "artist:fuji": {
-    "hash": "6341e34a01cdc840765fd56d64b6387ccadf805f26cd67f5d98b4fca5db9dfe1",
-    "date": "2026-08-03"
+    "hash": "ffd3daeb6659fb7789c2e2f182a25f5fe546d72f4bcd44f5760f5f5f4a9ab447",
+    "date": "2026-10-22"
   },
   "artist:ge-ology": {
-    "hash": "7b6c2ffea86ec7f2034a5aabfd6eb908ffa862cc54296adfe733a2b57e782a20",
-    "date": "2026-09-10"
+    "hash": "d2331c4869573151d74cef94c9b0c4baff6010d16e30cbeb0f4ff48b12045f08",
+    "date": "2026-10-22"
   },
   "artist:gerd-janson": {
-    "hash": "00eea0fbd53db82e322436421340592c7cd24f30ead1b5a760698ba20d990b6c",
-    "date": "2026-08-03"
+    "hash": "00ad827404596083ed49ba9dc1fe4993a21944c99f2735d113b16f567a79ad62",
+    "date": "2026-10-22"
   },
   "artist:gonno": {
     "hash": "5f74210f70d464079db5b79457c00c2ddb5404308190443d253792a61a1da26b",
     "date": "2026-08-24"
   },
   "artist:goth-trad": {
-    "hash": "4285c263c9e8106d1dbe6812a871edd93cdb4457a77fb2ffa02b85a582645dce",
-    "date": "2026-09-10"
+    "hash": "46cd8db49674be0924a4f560df9b758e775aa43dae752ecb20fa31ac5e4d8102",
+    "date": "2026-10-22"
   },
   "artist:ground": {
     "hash": "d10cb40257396a57e0d6954be47e0ddb6111429988d9362740fd949d86f0e1b0",
@@ -212,16 +212,16 @@
     "date": "2026-10-21"
   },
   "artist:haai": {
-    "hash": "79c13f5132a1c8bc493331c255c77cdc19b447be03d2f28a38f1ea7072446e87",
-    "date": "2026-08-04"
+    "hash": "d9a5e39ee890b13b8324baa47b403bbc3b539e2d1e72d2083b41e55c8c3b657c",
+    "date": "2026-10-22"
   },
   "artist:haruka": {
     "hash": "7767931d40a547c7e4d61150ab5f41d541d29cdfc81595004b527dfcb55ecfd9",
     "date": "2026-10-21"
   },
   "artist:helena-hauff": {
-    "hash": "5eb50c9084a3c31135302286c6f2993590949fe8b2fe809cd9ed64ed335433d8",
-    "date": "2026-08-03"
+    "hash": "fe678a01f860822981ff31c1910cdafb576cc79827706d5530d3728921078eb0",
+    "date": "2026-10-22"
   },
   "artist:herbalistek": {
     "hash": "00594e186780e76f9a31f0bf34fd8ac5060a815b851cadcbe4d69159ec950856",
@@ -808,8 +808,8 @@
     "date": "2026-09-15"
   },
   "festival:prox": {
-    "hash": "614082c339dc417298cf8173b215cfae91a607d0bdba4d88374b79473fb0668d",
-    "date": "2026-10-21"
+    "hash": "718ee55c7fadd5e7055e9f862414951041b7fda4df08352e6e318e2280899e50",
+    "date": "2026-10-22"
   },
   "festival:pure-rave": {
     "hash": "c99b3a7e7952f61145a2b1c358163f1127c0a7f69a88fe1c065aebd28ad052bb",
@@ -828,8 +828,8 @@
     "date": "2026-10-15"
   },
   "festival:resonance": {
-    "hash": "e9025fecf4905e40e89d4d2fe1b8ac7f8c0774c0af91de1d45e1443136239f16",
-    "date": "2026-10-21"
+    "hash": "f35ddc5efc7c9e68c87dbcf69469d42192987ddb4eda0e0da4101982ff581f4b",
+    "date": "2026-10-22"
   },
   "festival:ringo-festival": {
     "hash": "c17b7d2f3e9dc6963e4a35edb6575f849edaf91adbea5ef112623ac31213d003",
@@ -848,8 +848,8 @@
     "date": "2026-10-17"
   },
   "festival:sawagi-festival": {
-    "hash": "22798b5341b05a8d41460beaf325fcb4cd652308e24b0571914df98dc8a67f25",
-    "date": "2026-10-21"
+    "hash": "d9f2a838fc1aa57c55cc8b94c2a3313c73c0661759e060d47cd98affac1b88ae",
+    "date": "2026-10-22"
   },
   "festival:signal": {
     "hash": "f265874037759a51280e02a06ba3406f2f95ee3d4a1d8c2f876a4155ebc0ef79",
@@ -860,8 +860,8 @@
     "date": "2026-10-15"
   },
   "festival:soul-beat-asia": {
-    "hash": "b91b9dce7b568222a405f106cdadd794be8037250c209fa254cce0e648a360db",
-    "date": "2026-10-21"
+    "hash": "c693492fd4ea1da3a7a7d3818667c603fc5053ba4d4e19d3b2eda7a15d4f820d",
+    "date": "2026-10-22"
   },
   "festival:spring-love-harukaze": {
     "hash": "d461d997f3f3ea8fb8817970fa701e03f5833a6737f96353c9c9242692c9a274",
