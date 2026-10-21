@@ -5,23 +5,26 @@
 ## 最初の設定
 
 1. [Buttondown](https://buttondown.com/) でアカウントを作成する。
-2. 送信者名を `TECHNO JAPAN`、返信先を `press@techno-japan.media` にする。
-3. 住所・連絡先を表示する。これは特定電子メール法に対応するために必要です。
-4. ダブルオプトインを有効にする。
-5. `ja` と `en` のタグを作る。サイトのフォームは、日本語ページからの登録に `ja`、英語ページからの登録に `en` を付けます。
-6. API キーを作り、リポジトリの作業ディレクトリで次を自分で実行する。
+2. 送信者名（表示名）を `TECHNO JAPAN`、返信先を `news@techno-japan.media` にする。送信元アドレスも `news@techno-japan.media` にする。
+3. Buttondown の「独自ドメインからの送信」で `techno-japan.media` を登録する。Buttondown に表示される DNS レコード（SPF / DKIM / Return-Path）を DNS に追加する。既存の SPF レコードがある場合は、SPF を複数にせず、既存の内容と Buttondown の指定を1本にまとめる。
+4. `news@techno-japan.media` を Gmail に転送しておく。返信や配信停止の連絡が届く窓口です。
+5. 住所・連絡先を表示する。これは特定電子メール法に対応するために必要です。
+6. ダブルオプトインを有効にする。
+7. `ja` と `en` のタグを作る。サイトのフォームは、日本語ページからの登録に `ja`、英語ページからの登録に `en` を付けます。
+8. API キーを作り、リポジトリの作業ディレクトリで次を自分で実行する。
 
    ```bash
    gh secret set BUTTONDOWN_API_KEY
    ```
 
-7. `scripts/newsletter-config.json` の `buttondownUsername` に Buttondown のユーザー名を入れ、`provider` を `buttondown` に変更する。
+9. Buttondown の設定にある「ユーザー名」と「表示名」は別物です。ユーザー名は URL `https://buttondown.com/○○○` の `○○○` 部分（英数字）で、サイトのフォームに使うのはこのユーザー名です。表示名（`TECHNO JAPAN`）を `buttondownUsername` に入れないでください。
+10. `scripts/newsletter-config.json` の `buttondownUsername` に Buttondown のユーザー名を入れ、`provider` を `buttondown` に変更する。
 
    ```json
    { "provider": "buttondown", "buttondownUsername": "あなたのユーザー名" }
    ```
 
-8. `bash scripts/preflight.sh` を実行して確認してから公開する。フォームの切り替え後は、JA/EN のフォームがそれぞれ `ja`/`en` になっていることを確認する。
+11. `bash scripts/preflight.sh` を実行して確認してから公開する。フォームの切り替え後は、JA/EN のフォームがそれぞれ `ja`/`en` になっていることを確認する。
 
 ## 毎月の流れ
 

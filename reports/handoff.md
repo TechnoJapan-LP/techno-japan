@@ -11399,3 +11399,4 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - API キーは `gh secret set BUTTONDOWN_API_KEY` で登録する。キーをリポジトリへ書かない。
 - `bash scripts/preflight.sh` の外部画像取得と localhost 制限を解消し、全件成功してから公開すること。今回も commit / push は行っていない。
 - 2026-10-21: newsletter-draft は号の月（通常は翌月）を開催予定・件名・ファイル名・UTMへ使い、記事は前月1日〜作成日、空要約には ` — ` を付けない仕様へ修正。11月号を再生成済み。
+- 2026-10-21: newsletter.md の送信元・返信先を news@techno-japan.media に更新し、独自ドメインDNS、Gmail転送、Buttondownユーザー名と表示名の区別を追記。
