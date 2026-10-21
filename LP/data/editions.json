@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-10-19T17:32:14.714Z",
-  "count": 113,
+  "_generatedAt": "2026-10-21T04:51:28.653Z",
+  "count": 116,
   "items": [
     {
       "EDITION_ID": "99flags-2026",
@@ -1454,6 +1454,50 @@
       "LNG": "137.0864",
       "TICKETURL": "https://gray-mart.com/2026/08/09/event-news-2026-9-26satdetox-vol-4-cafe-goofy/",
       "FLYER": "images/festivals/detox-flyer.webp",
+      "STATUS": "published"
+    },
+    {
+      "EDITION_ID": "resonance-2026",
+      "FESTIVAL_ID": "resonance",
+      "EDITION": "2026",
+      "DATE_START": "2026-11-22",
+      "DATE_END": "2026-11-23",
+      "LOCATION": "OKS KAWAGUCHI CAMPUS",
+      "LOCATION_JA": "大泉工場",
+      "ADDRESS": "埼玉県川口市領家5丁目4-1",
+      "LAT": "35.7951",
+      "LNG": "139.7523",
+      "TICKETURL": "https://ja.ra.co/events/2542714",
+      "FLYER": "images/festivals/resonance-flyer.webp",
+      "STATUS": "published"
+    },
+    {
+      "EDITION_ID": "prox-2026",
+      "FESTIVAL_ID": "prox",
+      "EDITION": "2026",
+      "DATE_START": "2026-11-07",
+      "DATE_END": "2026-11-07",
+      "LOCATION": "DAN OISO",
+      "ADDRESS": "神奈川県中郡大磯町国府本郷１９５２−１",
+      "LAT": "35.305",
+      "LNG": "139.2783",
+      "TICKETURL": "https://ticketme.io/event/group/04aed4f2-15e5-45cd-9ba0-126edde884d2/4a0e1302-ef83-4fb3-ab49-a0d8548282d2",
+      "FLYER": "images/festivals/prox-flyer.webp",
+      "STATUS": "published"
+    },
+    {
+      "EDITION_ID": "soul-beat-asia-2026",
+      "FESTIVAL_ID": "soul-beat-asia",
+      "EDITION": "2026",
+      "DATE_START": "2026-11-20",
+      "DATE_END": "2026-11-22",
+      "LOCATION": "Toyota Obridge",
+      "LOCATION_JA": "豊田大橋",
+      "ADDRESS": "愛知県豊田市千石町6丁目",
+      "LAT": "35.0848",
+      "LNG": "137.1656",
+      "TICKETURL": "https://eplus.jp/sf/detail/4134150001?P6=001&P1=0402&P59=1",
+      "FLYER": "images/festivals/soul-beat-asia-flyer.webp",
       "STATUS": "published"
     }
   ]

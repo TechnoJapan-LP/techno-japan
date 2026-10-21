@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-10-20T15:58:15.033Z",
+  "_generatedAt": "2026-10-21T04:51:28.653Z",
   "count": 91,
   "items": [
     {
@@ -1760,7 +1760,7 @@
       "TICKETURL": "https://ticketme.io/event/group/04aed4f2-15e5-45cd-9ba0-126edde884d2/4a0e1302-ef83-4fb3-ab49-a0d8548282d2",
       "INSTAGRAM": "https://www.instagram.com/prox_fest/",
       "LINEUP": "HUGEN, Liberal a.k.a. Toshiki Iwama, Fried Banana Shop, IN-KYA in Canada, Yasashii Mirai, rice water Groove, Contrail Club, SHITABA from Tha Omedetaz, HATCH from Umeda Cypher, Yume (BOY), MAHLIQ, sunga, Dazzle Drums, Yuki Kawamura, BANANA-CHAN, Hiroki Uzawa, msms, YOSHITAKAKONDO, DJ Komogi, mana",
-      "EDITIONS": "[]",
+      "EDITIONS": "[{\"year\":\"2026\",\"edition\":\"\",\"date\":\"2026-11-07/2026-11-07\",\"location\":\"DAN OISO\",\"location_ja\":\"\",\"address\":\"神奈川県中郡大磯町国府本郷１９５２−１\",\"lat\":\"35.305\",\"lng\":\"139.2783\",\"ticketUrl\":\"https://ticketme.io/event/group/04aed4f2-15e5-45cd-9ba0-126edde884d2/4a0e1302-ef83-4fb3-ab49-a0d8548282d2\",\"flyer\":\"images/festivals/prox-flyer.webp\",\"status\":\"published\",\"lineup\":[\"HUGEN\",\"Liberal a.k.a. Toshiki Iwama\",\"Fried Banana Shop\",\"IN-KYA in Canada\",\"Yasashii Mirai\",\"rice water Groove\",\"Contrail Club\",\"SHITABA from Tha Omedetaz\",\"HATCH from Umeda Cypher\",\"Yume (BOY)\",\"MAHLIQ\",\"sunga\",\"Dazzle Drums\",\"Yuki Kawamura\",\"BANANA-CHAN\",\"Hiroki Uzawa\",\"msms\",\"YOSHITAKAKONDO\",\"DJ Komogi\",\"mana\"]}]",
       "STATUS": "published",
       "metaDescription": "神奈川・大磯の畑跡地DAN OISOで昼から翌朝まで続く音楽フェスPROX。23時からは屋根付きアーチステージでDJがスタート、SUNGA、Dazzle Drums、カワムラユキらが朝5時まで。キャンプでも夜からの参加でも楽しめる、音楽と土地が交わる一夜。",
       "DESC_EN": "PROX is a music festival running from midday through to the following morning at DAN OISO, a site in Oiso, Kanagawa, born out of a renovated farm plot. After a daytime run of live sets, the focus shifts at 23:00 to the covered arch-shaped stage, where DJs take over. SUNGA, Dazzle Drums, カワムラユキ and others link up the sounds as the dancing carries on until 5 a.m. Come to camp, or just turn up for the night. On land that was once farmland, it's a single night where music, place and different scenes intersect.",
@@ -1785,7 +1785,7 @@
       "TICKETURL": "https://eplus.jp/sf/detail/4134150001?P6=001&P1=0402&P59=1",
       "INSTAGRAM": "https://www.instagram.com/soul_beat_asia/",
       "LINEUP": "TURTLE ISLAND, OKI DUB AINU BAND, Awa Odori Nagoya Taikoren, Yuta Orisaka Band, DEATH SIDE, SAICOBAB, DEEPCOUNT, ROTARY BEGINNERS, Darthreider & DJ Oshow, Noripan, THE JINSEIS, T-Jiros, Oni no Migiude, neco nemuru, TV Continental Ondo, GIANT STEPS, Hosenkai, Hashinoshita Fujinkai",
-      "EDITIONS": "[]",
+      "EDITIONS": "[{\"year\":\"2026\",\"edition\":\"\",\"date\":\"2026-11-20/2026-11-22\",\"location\":\"Toyota Obridge\",\"location_ja\":\"豊田大橋\",\"address\":\"愛知県豊田市千石町6丁目\",\"lat\":\"35.0848\",\"lng\":\"137.1656\",\"ticketUrl\":\"https://eplus.jp/sf/detail/4134150001?P6=001&P1=0402&P59=1\",\"flyer\":\"images/festivals/soul-beat-asia-flyer.webp\",\"status\":\"published\",\"lineup\":[\"TURTLE ISLAND\",\"OKI DUB AINU BAND\",\"Awa Odori Nagoya Taikoren\",\"Yuta Orisaka Band\",\"DEATH SIDE\",\"SAICOBAB\",\"DEEPCOUNT\",\"ROTARY BEGINNERS\",\"Darthreider & DJ Oshow\",\"Noripan\",\"THE JINSEIS\",\"T-Jiros\",\"Oni no Migiude\",\"neco nemuru\",\"TV Continental Ondo\",\"GIANT STEPS\",\"Hosenkai\",\"Hashinoshita Fujinkai\"]}]",
       "STATUS": "published",
       "metaDescription": "愛知県豊田市の豊田大橋下・千石公園で開かれる橋の下世界音楽祭を紹介。TURTLE ISLANDら有志が主宰し、伝統・アジア・土着をテーマに民謡からアンダーグラウンドまで交差。入場無料の投げ銭制で運営される完全DIYの草の根フェスの魅力とは。",
       "name_en": "SOUL BEAT ASIA",
@@ -1811,7 +1811,7 @@
       "TICKETURL": "https://ja.ra.co/events/2542714",
       "INSTAGRAM": "https://www.instagram.com/resonance.jpn/",
       "LINEUP": "lisa-mizuno, LOIF, PERYL, Maryama Luiccioni, Fried Banana Shop, SAKURA",
-      "EDITIONS": "[]",
+      "EDITIONS": "[{\"year\":\"2026\",\"edition\":\"\",\"date\":\"2026-11-22/2026-11-23\",\"location\":\"OKS KAWAGUCHI CAMPUS\",\"location_ja\":\"大泉工場\",\"address\":\"埼玉県川口市領家5丁目4-1\",\"lat\":\"35.7951\",\"lng\":\"139.7523\",\"ticketUrl\":\"https://ja.ra.co/events/2542714\",\"flyer\":\"images/festivals/resonance-flyer.webp\",\"status\":\"published\",\"lineup\":[\"lisa-mizuno\",\"LOIF\",\"PERYL\",\"Maryama Luiccioni\",\"Fried Banana Shop\",\"SAKURA\"]}]",
       "STATUS": "published",
       "metaDescription": "川口の工場地帯に現れる3,000坪の自然豊かな大泉工場OKS KAWAGUCHI CAMPUSで開催されるResonance。クラブカルチャー、インスタレーションアート、神経科学を横断し、音と身体が共鳴する知覚体験へ。鑑賞を超える特別な2日間。",
       "name_en": "Resonance",

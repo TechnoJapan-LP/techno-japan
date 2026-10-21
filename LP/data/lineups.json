@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-10-20T15:58:15.033Z",
-  "count": 1497,
+  "_generatedAt": "2026-10-21T04:51:28.653Z",
+  "count": 1541,
   "items": [
     {
       "EDITION_ID": "waifu-2026",
@@ -7964,6 +7964,272 @@
       "ACT_LABEL": "tamanaramen",
       "SET_TYPE": "dj",
       "SORT": "16"
+    },
+    {
+      "EDITION_ID": "resonance-2026",
+      "ARTIST_ID": "lisa-mizuno",
+      "ACT_LABEL": "LISA MIZUNO",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "resonance-2026",
+      "ACT_LABEL": "LOIF",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "resonance-2026",
+      "ACT_LABEL": "PERYL",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "resonance-2026",
+      "ACT_LABEL": "Maryama Luiccioni",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "resonance-2026",
+      "ACT_LABEL": "Fried Banana Shop",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "resonance-2026",
+      "ACT_LABEL": "SAKURA",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "prox-2026",
+      "ACT_LABEL": "HUGEN",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "prox-2026",
+      "ACT_LABEL": "Liberal a.k.a. Toshiki Iwama",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "prox-2026",
+      "ACT_LABEL": "Fried Banana Shop",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "prox-2026",
+      "ACT_LABEL": "IN-KYA in Canada",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "prox-2026",
+      "ACT_LABEL": "Yasashii Mirai",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "prox-2026",
+      "ACT_LABEL": "rice water Groove",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "prox-2026",
+      "ACT_LABEL": "Contrail Club",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "prox-2026",
+      "ACT_LABEL": "SHITABA from Tha Omedetaz",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "prox-2026",
+      "ACT_LABEL": "HATCH from Umeda Cypher",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "prox-2026",
+      "ACT_LABEL": "Yume (BOY)",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "prox-2026",
+      "ACT_LABEL": "MAHLIQ",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "prox-2026",
+      "ARTIST_ID": "sunga",
+      "ACT_LABEL": "SUNGA",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "prox-2026",
+      "ACT_LABEL": "Dazzle Drums",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "prox-2026",
+      "ACT_LABEL": "Yuki Kawamura",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "prox-2026",
+      "ACT_LABEL": "BANANA-CHAN",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "prox-2026",
+      "ACT_LABEL": "Hiroki Uzawa",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
+      "EDITION_ID": "prox-2026",
+      "ACT_LABEL": "msms",
+      "SET_TYPE": "dj",
+      "SORT": "17"
+    },
+    {
+      "EDITION_ID": "prox-2026",
+      "ACT_LABEL": "YOSHITAKAKONDO",
+      "SET_TYPE": "dj",
+      "SORT": "18"
+    },
+    {
+      "EDITION_ID": "prox-2026",
+      "ACT_LABEL": "DJ Komogi",
+      "SET_TYPE": "dj",
+      "SORT": "19"
+    },
+    {
+      "EDITION_ID": "prox-2026",
+      "ACT_LABEL": "mana",
+      "SET_TYPE": "dj",
+      "SORT": "20"
+    },
+    {
+      "EDITION_ID": "soul-beat-asia-2026",
+      "ACT_LABEL": "TURTLE ISLAND",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "soul-beat-asia-2026",
+      "ACT_LABEL": "OKI DUB AINU BAND",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "soul-beat-asia-2026",
+      "ACT_LABEL": "Awa Odori Nagoya Taikoren",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "soul-beat-asia-2026",
+      "ACT_LABEL": "Yuta Orisaka Band",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "soul-beat-asia-2026",
+      "ACT_LABEL": "DEATH SIDE",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "soul-beat-asia-2026",
+      "ACT_LABEL": "SAICOBAB",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "soul-beat-asia-2026",
+      "ACT_LABEL": "DEEPCOUNT",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "soul-beat-asia-2026",
+      "ACT_LABEL": "ROTARY BEGINNERS",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "soul-beat-asia-2026",
+      "ACT_LABEL": "Darthreider & DJ Oshow",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "soul-beat-asia-2026",
+      "ACT_LABEL": "Noripan",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "soul-beat-asia-2026",
+      "ACT_LABEL": "THE JINSEIS",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "soul-beat-asia-2026",
+      "ACT_LABEL": "T-Jiros",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "soul-beat-asia-2026",
+      "ACT_LABEL": "Oni no Migiude",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "soul-beat-asia-2026",
+      "ACT_LABEL": "neco nemuru",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "soul-beat-asia-2026",
+      "ACT_LABEL": "TV Continental Ondo",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "soul-beat-asia-2026",
+      "ACT_LABEL": "GIANT STEPS",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
+      "EDITION_ID": "soul-beat-asia-2026",
+      "ACT_LABEL": "Hosenkai",
+      "SET_TYPE": "dj",
+      "SORT": "17"
+    },
+    {
+      "EDITION_ID": "soul-beat-asia-2026",
+      "ACT_LABEL": "Hashinoshita Fujinkai",
+      "SET_TYPE": "dj",
+      "SORT": "18"
     },
     {
       "EDITION_ID": "nu-festival-2026",
