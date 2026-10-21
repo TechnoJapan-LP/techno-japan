@@ -11360,3 +11360,9 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 公開前に省略なしの `bash scripts/preflight.sh` を再実行し、外部画像取得と localhost listen の制限を解消すること。
 - 公開前後に記事・フェス・アーティスト・会場のJA/ENページを実ブラウザで確認し、Search Consoleのイベント拡張結果を再確認すること。
 - 今回もcommit・push・Publish pipeline・本番データ書き込みは行っていない。
+
+### 2026-10-21 Search Console「イベント」エラー・警告の対策（本番確認）— Claude
+- 原因（エラー）: 同日追加の artist performerIn / venue event が `{@type, @id}` だけを出し、Google が name/startDate/location の無いイベントとして無効扱い（全ページ68個）。共通関数 editionEventLd で実データ（名前・日付・開催状況・会場・住所・URL）を入れ、0個に。check_jsonld.mjs に必須3項目の検査を追加。
+- 警告（全561イベント、前→後）: organizer 561→301（公式サイトのあるフェスのみ）、offers 349→226（チケットURLのあるもののみ。価格系は入れない）、image 145→28、description 137→28、address 77→0（あるパーツだけで PostalAddress。空文字は出さない）、endDate/eventStatus 欠落0。一度 address が 207 に悪化したのを前後比較で検出して修正。
+- 検証（本番）: preflight 全60件 → push、Deploy success。artists/sunga・festivals/topia・articles/topia-2026-info・en/artists/dj-kensei でイベントの必須欠落0。
+- 次の担当への注意・判断待ち: Search Console で「修正を検証」はユーザー操作。sawagi-festival-2026 の EDITIONS.PREF が Yamanashi のまま（住所は群馬）。push 時に「詳細ページを生成できる」が外部画像取得の遅延で 240s 超になることがある（再実行で通る）。
