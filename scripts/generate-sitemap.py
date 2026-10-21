@@ -207,6 +207,7 @@ def main():
     today_date = date.today()
     editions = load_data_file("editions.json")
     lineups = load_data_file("lineups.json")
+    authors = load_data_file("authors.json")
     editions_by_festival = {}
     editions_by_id = {}
     for edition in editions:
@@ -280,6 +281,30 @@ def main():
             "lastmod": git_file_date(os.path.join(LP_DIR, "venues", f"{vid}.html"), f"{BASE_URL}/venues/{vid}.html", today, shallow, previous_lastmods),
             "changefreq": "monthly",
             "priority": "0.6",
+        })
+
+    # Writers: only authors with at least one published article receive a page.
+    article_blocks = extract_article_blocks(data)
+    published_author_names = set()
+    for block in article_blocks:
+        article = parse_article_block(block)
+        if article.get("status") != "draft":
+            author = re.search(r'author:\s*["\']([^"\']*)["\']', block)
+            if author and author.group(1).strip():
+                published_author_names.add(author.group(1).strip().casefold())
+    for author in authors:
+        aid = str(author.get("id") or "").strip()
+        name = str(author.get("name") or "").strip()
+        if not aid or not name or name.casefold() not in published_author_names:
+            continue
+        writer_path = os.path.join(LP_DIR, "writers", f"{aid}.html")
+        if not os.path.exists(writer_path):
+            continue
+        urls.append({
+            "loc": f"{BASE_URL}/writers/{quote(aid, safe='')}.html",
+            "lastmod": git_file_date(writer_path, f"{BASE_URL}/writers/{aid}.html", today, shallow, previous_lastmods),
+            "changefreq": "monthly",
+            "priority": "0.5",
         })
 
     # English pages (/en/...) — 生成済みファイルをそのまま列挙する

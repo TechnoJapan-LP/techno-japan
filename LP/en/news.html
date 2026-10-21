@@ -365,6 +365,7 @@ html.tj-news-hydrating #feed-grid > .ssr-link-list { display: none; }
   font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; opacity: 0.62; text-transform: uppercase;
   display: flex; gap: 10px; align-items: center;
 }
+.feed-card-author { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .feed-card-meta .meta-dot { width: 2px; height: 2px; border-radius: 50%; background: var(--text); }
 .feed-card .read-link {
   display: inline-flex; align-items: center; gap: 6px;
@@ -802,7 +803,7 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
 
 <script src="/common.js?v=18" defer></script>
 <!-- localize.js は defer にしない。下のインライン描画が同期実行で tjLocalized を呼ぶ -->
-<script src="/localize.js?v=13"></script>
+<script src="/localize.js?v=14"></script>
 <!-- カード画像の縮小版の対応表。これが無いと tjCardAssetPath は
      **エラーを出さず原本（最大686KB）へフォールバック**する。
      2026-08-19 まで news.html だけ読み込んでおらず、レールの記事画像が
@@ -1234,6 +1235,7 @@ function renderFeed() {
         <span>${formatDate(a.date)}</span>
         <span class="meta-dot"></span>
         <span>${a.readTime || 5} MIN READ</span>
+        <span class="meta-dot"></span><span class="feed-card-author">BY ${tjEscapeHtml(tjAuthorPresentation(a.author).name)}</span>
       </div>
       <div class="read-link">READ <span>→</span></div>
     </a>

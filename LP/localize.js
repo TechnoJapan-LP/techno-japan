@@ -44,6 +44,17 @@
     return window.TJ_LANG === 'en' ? (e || p || j) : (j || p || e);
   };
 
+  // scripts/build-detail-pages.mjs の authorPresentation() と同じ判定・表示規則。
+  // author の保存値や JSON-LD の組織名は変えず、ハブ上の表示名だけを解決する。
+  window.tjAuthorPresentation = function (authorName) {
+    var raw = String(authorName == null ? '' : authorName).trim();
+    var isOrganization = !raw || /TECHNO JAPAN/i.test(raw);
+    return {
+      isOrganization: isOrganization,
+      name: isOrganization ? (window.TJ_LANG === 'en' ? 'TECHNO JAPAN Editorial' : 'TECHNO JAPAN 編集部') : raw
+    };
+  };
+
   /* 見出しの中の英字の固有名詞が、単語間のスペースで改行されて割れるのを防ぐ。
      日本語タイトル内の2〜4語の短い英字連続だけを対象にする。長い英文タイトル全体を
      nowrap にすると横にはみ出すため、英文タイトルは対象外にする。

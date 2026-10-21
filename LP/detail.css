@@ -1008,6 +1008,12 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   .festival-design-v2 .related-card { flex-basis: 78vw; }
 }
 
+.article-author-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 /* ---------- 記事ページの「関連フェスティバル」 ----------
 
    記事 → フェスの導線。2026-08-07 まで、紐づけ（ARTICLES.festivalId）は

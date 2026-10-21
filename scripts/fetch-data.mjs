@@ -65,6 +65,7 @@ const GIDS = {
   EDITIONS: '1765363054',
   LINEUPS: '580984930',
 };
+const AUTHORS_CSV_URL = 'https://docs.google.com/spreadsheets/d/1DqBbvxhuDh1f1eZibaBfllaVGiMaqO7IjD3Mm-yIZIA/gviz/tq?tqx=out:csv&sheet=AUTHORS';
 
 // GENRE 正規リスト（スキーマ §1.3。必要に応じて追記）
 const GENRE_ALLOWED = new Set([
@@ -100,7 +101,7 @@ function parseCSV(text) {
 function csvToObjects(text) {
   const rows = parseCSV(text).filter(r => r.some(c => c.trim() !== ''));
   if (!rows.length) return [];
-  const headers = rows[0].map(h => h.trim());
+  const headers = rows[0].map(h => h.replace(/^\uFEFF/, '').trim());
   return rows.slice(1).map((r, i) => {
     const o = {};
     headers.forEach((h, i) => { o[h] = (r[i] ?? '').trim(); });
@@ -121,6 +122,21 @@ async function fetchSheet(name) {
   const res = await fetch(url, { redirect: 'follow' });
   if (!res.ok) throw new Error(`${name}: HTTP ${res.status}`);
   return csvToObjects(await res.text());
+}
+
+async function fetchAuthors() {
+  const res = await fetch(AUTHORS_CSV_URL, { redirect: 'follow' });
+  if (!res.ok) throw new Error(`AUTHORS: HTTP ${res.status}`);
+  const text = await res.text();
+  if (text.trimStart().startsWith('<')) {
+    throw new Error('AUTHORS: CSVではないHTML応答');
+  }
+  const parsed = parseCSV(text).filter(r => r.some(c => c.trim() !== ''));
+  const headers = (parsed[0] || []).map(h => h.replace(/^\uFEFF/, '').trim());
+  if (!headers.includes('ID') || !headers.includes('NAME')) {
+    throw new Error('AUTHORS: ヘッダーに ID と NAME がありません');
+  }
+  return csvToObjects(text);
 }
 
 // ---------- バリデーション（スキーマ §6）----------
@@ -247,6 +263,47 @@ async function main() {
   for (const [name, rows] of fetched) {
     raw[name] = rows;
     console.log(`  ${name}: ${rows.length} 行`);
+  }
+
+  // AUTHORS は公開CSVのGID経路に含まれない。取得不能でも既存のJSONを残し、
+  // 記事や他シートのPublishを止めない（AUTHORSだけ任意データ）。
+  let authors = null;
+  try {
+    const rows = await fetchAuthors();
+    const seenAuthors = new Set();
+    authors = [];
+    for (const r of rows) {
+      const id = String(r.ID || '').trim();
+      const name = String(r.NAME || '').trim();
+      if (!id || !/^[a-z0-9-]+$/.test(id)) {
+        warnings.push(`AUTHORS: ID形式違反を除外 "${id}"（${r._row || '?'}行目）`);
+        continue;
+      }
+      if (!name) {
+        warnings.push(`AUTHORS: NAME空欄を除外（${id}・${r._row || '?'}行目）`);
+        continue;
+      }
+      if (seenAuthors.has(id)) {
+        warnings.push(`AUTHORS: ID重複を除外 "${id}"（${r._row || '?'}行目）`);
+        continue;
+      }
+      seenAuthors.add(id);
+      authors.push({ id, name, bio: String(r.BIO || '').trim(), image: String(r.IMAGE || '').trim(),
+        instagram: String(r.INSTAGRAM || '').trim(), twitter: String(r.TWITTER || '').trim(), website: String(r.WEBSITE || '').trim() });
+    }
+    let existingAuthorCount = 0;
+    try {
+      const existing = JSON.parse(await readFile(path.join(OUT_DIR, 'authors.json'), 'utf-8'));
+      existingAuthorCount = Array.isArray(existing.items) ? existing.items.length : 0;
+    } catch { /* 初回取得 */ }
+    if (authors.length === 0 && existingAuthorCount > 0) {
+      authors = null;
+      console.warn(`  ⚠ AUTHORS: 有効行が0件のため既存のauthors.jsonを保持（既存 ${existingAuthorCount} 件）`);
+    } else {
+      console.log(`  AUTHORS: ${authors.length} 行`);
+    }
+  } catch (error) {
+    console.warn(`  ⚠ AUTHORS取得失敗: ${error.message}（既存のauthors.jsonを保持）`);
   }
 
   const artistIds = new Set(raw.ARTISTS.map(r => r.ID).filter(Boolean));
@@ -601,6 +658,7 @@ async function main() {
     'lineups.json': { _generatedAt: gen, count: lineups.length, items: lineups },
     'events.json': { _generatedAt: gen, count: events.length, items: events },
   };
+  if (authors) files['authors.json'] = { _generatedAt: gen, count: authors.length, items: authors };
   for (const [f, data] of Object.entries(files)) {
     await writeStableDataJson(f, data, gen);
     console.log(`  → LP/data/${f} (${data.count}件)`);

@@ -357,10 +357,15 @@ function loadAuthorsForDropdown(){
    ============================================================== */
 let AUTHOR_DB = [];
 
+function authorDisplayName(name){
+  const raw = String(name||'').trim();
+  return !raw || /TECHNO JAPAN/i.test(raw) ? 'TECHNO JAPAN 編集部' : raw;
+}
+
 function authorCandidates(query){
   const seen = new Map();
   const add = (name, id, reason) => {
-    const key = String(name||'').trim();
+    const key = authorDisplayName(name);
     if(!key || seen.has(key.toLowerCase())) return;
     seen.set(key.toLowerCase(), {name:key, id:id||'', reason});
   };
@@ -385,7 +390,7 @@ function filterAuthors(inputId, listId, showAll){
   const val = input.value.trim();
   // 入力済みの値とぴったり同じ候補しか無いなら出す意味がない。
   const matches = authorCandidates(showAll ? '' : val)
-    .filter(a => a.name.toLowerCase() !== val.toLowerCase());
+    .filter(a => !val || a.name.toLowerCase() !== authorDisplayName(val).toLowerCase());
   // 閉じるときは中身も消す。残しておくと、次に開いた瞬間に
   // 古い候補が一瞬見える（描画前に show が付くため）。
   if(!matches.length){ list.innerHTML = ''; list.classList.remove('show'); return; }
@@ -950,7 +955,7 @@ function tryRecoverArticleDraft(){
     setVal('ar-category', draft.category||'REPORT'); setVal('ar-date', fmtDate(draft.date)); setVal('ar-updatedAt', fmtDate(draft.updated_at || draft.updatedAt));
     setVal('ar-cardRatio', draft.cardRatio||''); setVal('ar-heroRatio', draft.heroRatio||'');
     festPickerSetValue(draft.festivalId||'');
-    setVal('ar-author', draft.author||'TECHNO JAPAN'); setVal('ar-image', draft.image);
+    setVal('ar-author', draft.author||'TECHNO JAPAN 編集部'); setVal('ar-image', draft.image);
     setVal('ar-readTime', draft.readTime); setVal('ar-views', draft.views);
     setVal('ar-featured', draft.featured); setVal('ar-status', draft.status||'published');
     setVal('ar-excerpt', draft.excerpt);
@@ -1798,7 +1803,7 @@ async function openArticleGeneratedPreview(){
     else inner.insertBefore(previewHero_(doc, title)[0], inner.firstChild);
     const specs = inner.querySelector('.article-specs');
     if (specs) {
-      const values = [previewArticleValue_('ar-author') || 'TECHNO JAPAN', previewFmtBuildDate_(previewArticleValue_('ar-date')) || '—', (previewArticleValue_('ar-readTime') || '5') + ' MIN'];
+      const values = [previewArticleValue_('ar-author') || 'TECHNO JAPAN 編集部', previewFmtBuildDate_(previewArticleValue_('ar-date')) || '—', (previewArticleValue_('ar-readTime') || '5') + ' MIN'];
       const updated = previewArticleValue_('ar-updatedAt');
       const date = previewArticleValue_('ar-date');
       specs.querySelectorAll('dd').forEach((dd, index) => { dd.textContent = values[index] || ''; if (index === 1 && updated && updated !== date) { const span = doc.createElement('span'); span.className = 'article-updated'; span.textContent = '更新: ' + previewFmtDateDots_(updated); dd.appendChild(span); } });
@@ -4970,7 +4975,7 @@ function editRow(section, rowNum){
     setVal('ar-cardRatio',row.cardRatio||''); setVal('ar-heroRatio',row.heroRatio||'');
     festPickerSetValue(row.festivalId||'');
     setVal('ar-title_en',row.title_en||''); setVal('ar-excerpt_en',row.excerpt_en||''); setVal('ar-body_en',row.body_en||''); renderEnglishBodyAltEditor();
-    setVal('ar-author',row.author||'TECHNO JAPAN');
+    setVal('ar-author',row.author||'TECHNO JAPAN 編集部');
     setVal('ar-image',row.image); setVal('ar-readTime',row.readTime);
     setVal('ar-views',row.views); setVal('ar-featured',String(row.featured==='true'||row.featured===true));
     setVal('ar-status',row.status||'published');
@@ -8036,7 +8041,7 @@ function submitArticle(){
     `    body: \`${(d.body||'').replace(/`/g,'\\`')}\`,`,
     `    category: '${d.category}',`,
     `    date: '${d.date}',`,
-    `    author: '${escSingle(d.author||'TECHNO JAPAN')}',`,
+    `    author: '${escSingle(d.author||'TECHNO JAPAN 編集部')}',`,
     `    image: '${d.image}',`,
   ];
   if(d.featured==='true')lines.push(`    featured: true,`);
@@ -8079,7 +8084,7 @@ function resetForm(section){
   if(section==='festival'){document.getElementById('f-type').value='festival';document.querySelectorAll('#f-genre .chip').forEach(c=>c.classList.remove('selected'));document.querySelectorAll('#f-gradientPresets .gradient-swatch').forEach(s=>s.classList.remove('selected'));lineups.f=[];renderLineupTags('f');editions.length=0;renderEditions();document.getElementById('lineup-fetch-status').style.display='none';document.getElementById('gradient-preview').style.display='none';document.getElementById('bulk-lineup-wrap').style.display='none'}
   if(section==='festival') setFestivalDateEditingMode(false);
   if(section==='event'){lineups.e=[];renderLineupTags('e')}
-  if(section==='article'){document.getElementById('ar-category').value='REPORT';document.getElementById('ar-featured').value='false';document.getElementById('ar-status').value='published';document.getElementById('ar-author').value='TECHNO JAPAN';setArticleBody('')}
+  if(section==='article'){document.getElementById('ar-category').value='REPORT';document.getElementById('ar-featured').value='false';document.getElementById('ar-status').value='published';document.getElementById('ar-author').value='TECHNO JAPAN 編集部';setArticleBody('')}
   // Publishing fields をクリア（author以外）
   if(section !== 'author') clearPubFields(section);
   // author には出力ボックスが無い（無い場合に落ちると保存フローが途中で死ぬ）

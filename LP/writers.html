@@ -160,19 +160,31 @@
   </div>
 </footer>
 <script src="/common.js?v=18" defer></script>
+<script src="/localize.js?v=14"></script>
 <script src="/data-hub.js?v=11"></script>
 <script src="/search.js?v=6" defer></script>
 <script>
   (() => {
     const authors = new Map();
+    const authorRecords = new Map((typeof AUTHORS !== 'undefined' ? AUTHORS : []).map(author => [String(author.name || '').trim().toLocaleLowerCase(), author]));
+    const normalize = value => String(value || '').trim().toLocaleLowerCase();
+    const prefix = document.documentElement.lang === 'en' ? '/en' : '';
+    const escape = value => {
+      const node = document.createElement('span');
+      node.textContent = String(value || '');
+      return node.innerHTML;
+    };
     ARTICLES.forEach(article => {
-      const name = typeof article.author === 'string' ? article.author.trim() : '';
-      if (name) authors.set(name, (authors.get(name) || 0) + 1);
+      const name = tjAuthorPresentation(article.author).name;
+      authors.set(name, (authors.get(name) || 0) + 1);
     });
     const list = document.getElementById('author-list');
     [...authors.entries()].sort((a, b) => a[0].localeCompare(b[0], 'ja')).forEach(([name, count]) => {
       const item = document.createElement('li');
-      item.innerHTML = `<span>${name}</span><span class="author-count">${count}本</span>`;
+      const record = authorRecords.get(normalize(name));
+      const href = /TECHNO JAPAN/i.test(name) ? `${prefix}/about.html` : (record ? `${prefix}/writers/${encodeURIComponent(record.id)}.html` : '');
+      const label = href ? `<a href="${href}">${escape(name)}</a>` : `<span>${escape(name)}</span>`;
+      item.innerHTML = `${label}<span class="author-count">${count}${document.documentElement.lang === 'en' ? ' articles' : '本'}</span>`;
       list.append(item);
     });
     if (new URLSearchParams(location.search).get('sent') === '1') {

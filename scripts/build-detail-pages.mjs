@@ -57,7 +57,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 69;
+const DETAIL_CSS_VERSION = 70;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -81,6 +81,7 @@ const SEARCH_JS_VERSION = 6;
 const LANG_TOGGLE_VERSION = 1;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
 const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');
+const AUTHORS_PATH = path.join(LP_DIR, 'data', 'authors.json');
 const IMAGE_DIMENSIONS_PATH = path.join(LP_DIR, 'image-dimensions.json');
 const ARTICLE_IMAGE_MAP = loadArticleImageMap(path.join(__dirname, '..'));
 const BASE = 'https://techno-japan.media';
@@ -233,6 +234,7 @@ function buildHubDataJs(data) {
     'const FESTIVALS = ' + JSON.stringify(rows('FESTIVALS')) + ';',
     'const VENUES = ' + JSON.stringify(rows('VENUES')) + ';',
     'const ARTICLES = ' + JSON.stringify(rows('ARTICLES')) + ';',
+    'const AUTHORS = ' + JSON.stringify(rows('AUTHORS')) + ';',
   ].join('\n\n');
 }
 
@@ -262,6 +264,11 @@ function loadItems(file, label) {
     throw new Error(`${label}: count=${data.count} と items=${data.items.length} が一致しません`);
   }
   return data.items;
+}
+
+function loadOptionalItems(file, label) {
+  if (!fs.existsSync(file)) return [];
+  return loadItems(file, label);
 }
 
 /* ---------- ユーティリティ ---------- */
@@ -379,6 +386,17 @@ function localizedValue(primary, ja, en, lang) {
   return lang === 'en'
     ? (values.en || values.primary || values.ja)
     : (values.ja || values.primary || values.en);
+}
+
+// ブラウザ側の tjAuthorPresentation() と同じ判定・表示規則。
+// 記事データの author 値と JSON-LD の組織名は変更せず、表示名だけを解決する。
+function authorPresentation(authorName, lang) {
+  const raw = String(authorName ?? '').trim();
+  const isOrganization = !raw || /TECHNO JAPAN/i.test(raw);
+  return {
+    isOrganization,
+    name: isOrganization ? (lang === 'en' ? 'TECHNO JAPAN Editorial' : 'TECHNO JAPAN 編集部') : raw,
+  };
 }
 
 function isoDateTime(value) {
@@ -1183,6 +1201,68 @@ function relatedStoryCardsHtml(items, lang, { forceEnglishPath = false, compactD
   return cards ? `<div class="related-stories"><h2>${heading}</h2>${cards}</div>` : '';
 }
 
+function authorMatches(articleName, authorName) {
+  return String(articleName || '').trim().toLocaleLowerCase() === String(authorName || '').trim().toLocaleLowerCase();
+}
+
+function buildAuthorIndex(authors, articles) {
+  const published = (articles || []).filter((article) => article && String(article.status || '').toLowerCase() !== 'draft');
+  return new Map((authors || []).filter((author) => author?.id && author?.name).map((author) => {
+    const stories = published.filter((article) => authorMatches(article.author, author.name))
+      .sort((a, b) => String(b.publishedAt || b.date || '').localeCompare(String(a.publishedAt || a.date || '')));
+    return [author.id, { ...author, stories }];
+  }));
+}
+
+function resolveAuthor(authorName, authorIndex) {
+  const name = String(authorName || '').trim();
+  return [...(authorIndex || new Map()).values()].find((author) => authorMatches(name, author.name)) || null;
+}
+
+function authorHref(author, lang) {
+  return `${lang === 'en' ? '/en' : ''}/writers/${encodeURIComponent(author.id)}.html`;
+}
+
+function writerPage(author, lang, authorIndex) {
+  const prefix = lang === 'en' ? '/en' : '';
+  const canonical = `${BASE}${authorHref(author, lang)}`;
+  const altHref = `${lang === 'ja' ? '/en' : ''}/writers/${encodeURIComponent(author.id)}.html`;
+  const name = author.name;
+  const bio = String(author.bio || '').trim();
+  const stories = author.stories || [];
+  const image = absUrl(author.image);
+  const links = [
+    ['INSTAGRAM', author.instagram],
+    ['X', author.twitter],
+    ['WEBSITE', author.website],
+  ].map(([label, value]) => ({ label, href: String(value || '').trim() })).filter(({ href }) => href);
+  const title = lang === 'ja' ? `${name}（ライター）| TECHNO JAPAN` : `${name} — Writer | TECHNO JAPAN`;
+  const desc = bio || (lang === 'ja' ? `${name} が TECHNO JAPAN に書いた記事の一覧。` : `${name} — writer at TECHNO JAPAN.`);
+  const person = {
+    '@type': 'Person', name, url: canonical,
+    ...(bio ? { description: bio } : {}),
+    ...(author.image ? { image } : {}),
+    ...(links.length ? { sameAs: links.map(({ href }) => href) } : {}),
+  };
+  const jsonLd = {
+    '@context': 'https://schema.org', '@type': 'ProfilePage', name: `${name} | TECHNO JAPAN`, url: canonical,
+    mainEntity: person, inLanguage: lang,
+  };
+  const linkHtml = links.map(({ label, href }) => `<a class="detail-link" href="${esc(safeUrl(href))}" target="_blank" rel="me noopener">${label}</a>`).join('');
+  const body = `<article class="detail-page writer-detail">
+  <div class="detail-inner">
+    <div class="detail-eyebrow">WRITER</div>
+    <h1>${esc(name)}</h1>
+    ${author.image ? `<div class="detail-hero detail-hero-portrait"><img ${dimensionAttrs(author.image)} src="/${String(author.image).replace(/^\//, '')}"${heroSrcsetAttr(author.image)} alt="${esc(name)}" fetchpriority="high"></div>` : ''}
+    ${bio ? `<div class="detail-body"><p>${esc(bio)}</p></div>` : ''}
+    ${linkHtml ? `<div class="detail-links">${linkHtml}</div>` : ''}
+    ${stories.length ? `<section class="detail-section writer-stories">${relatedStoryCardsHtml(stories, lang, { forceEnglishPath: true, compactDate: true, wide: true, heading: 'STORIES' })}</section>` : ''}
+    <div class="article-footer"><a class="article-back" href="${prefix}/writers.html" style="margin:0"><span class="arrow"></span> WRITERS</a></div>
+  </div>
+</article>`;
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'writers'] : ['writers']), `${author.id}.html`), html: page({ title, desc, canonical, image, ogType: 'profile', jsonLd: [jsonLd, breadcrumbLd('WRITERS', '/writers.html', name, canonical)], body, lang, altHref, backgroundLayer: true }) };
+}
+
 function isPublishedFestival(festival) {
   return festival && festival.id && String(festival.status || '').toLowerCase() !== 'draft';
 }
@@ -1256,7 +1336,7 @@ function selectRelatedFestivals(article, body, festivals, editionsByFestival, pr
   return selected;
 }
 
-function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsByFestival = new Map(), venues = [], festivalData = null, articles = [], artists = []) {
+function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsByFestival = new Map(), venues = [], festivalData = null, articles = [], artists = [], authorIndex = new Map()) {
   // EN版は title_en / excerpt_en / body_en を使う（無い項目はJAへフォールバック）
   const L = lang === 'en'
     ? { title: stripTitleMarkdown(a.title_en || a.title), excerpt: stripTitleMarkdown(a.excerpt_en || a.excerpt), body: a.body_en || a.body, prefix: '/en' }
@@ -1268,7 +1348,9 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   const desc = L.excerpt || truncate(stripTags(L.body), 160);
   const image = absUrl(a.image);
   const tags = (a.tags || []).map((t) => `<span class="article-tag">#${esc(t)}</span>`).join('');
-  const authorName = a.author || 'TECHNO JAPAN';
+  const rawAuthorName = String(a.author || '').trim();
+  const authorView = authorPresentation(rawAuthorName, lang);
+  const author = resolveAuthor(rawAuthorName, authorIndex);
   const articleEvents = parseEvents(L.body || '');
   const festivalId = String(a.festivalId || '').trim();
   const relatedFestival = festivalId
@@ -1287,7 +1369,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
     ? [{ '@id': `${BASE}/festivals/${encodeURIComponent(relatedFestival.id)}.html#festival` }]
     : undefined;
   const articleImages = articleImageVariants(a.image, a.imagePosition);
-  const isOrganizationAuthor = /TECHNO JAPAN/i.test(authorName);
+  const isOrganizationAuthor = authorView.isOrganization;
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -1309,11 +1391,11 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
     inLanguage: lang,
     datePublished: isoDateTime(a.date),
     dateModified: isoDateTime(a.updatedAt || a.date),
-    author: {
-      '@type': isOrganizationAuthor ? 'Organization' : 'Person',
-      name: authorName,
-      ...(isOrganizationAuthor ? { url: `${BASE}/` } : {}),
-    },
+    author: isOrganizationAuthor
+      ? { '@type': 'Organization', name: 'TECHNO JAPAN', url: `${BASE}/` }
+      : author
+        ? { '@type': 'Person', name: rawAuthorName, url: `${BASE}${authorHref(author, lang)}`, ...(author.instagram || author.twitter || author.website ? { sameAs: [author.instagram, author.twitter, author.website].filter(Boolean) } : {}) }
+        : { '@type': 'Person', name: rawAuthorName },
     publisher: { '@id': ORG_ID },
     mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
     articleSection: a.category || 'NEWS',
@@ -1418,7 +1500,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   <div class="article-detail-inner">
     ${heroBlock}
     <dl class="article-specs">
-      <div><dt>WORDS BY</dt><dd>${esc(a.author || 'TECHNO JAPAN')}</dd></div>
+      <div><dt>WORDS BY</dt><dd>${isOrganizationAuthor ? `<a class="article-author-link" href="${lang === 'en' ? '/en/about.html' : '/about.html'}">${esc(authorView.name)}</a>` : author ? `<a class="article-author-link" href="${authorHref(author, lang)}">${esc(authorView.name)}</a>` : esc(authorView.name)}</dd></div>
       <div><dt>PUBLISHED</dt><dd>${esc(fmtDate(a.date) || '—')}${updatedHtml}</dd></div>
       <div><dt>READING TIME</dt><dd>${esc(a.readTime || 5)} MIN</dd></div>
     </dl>
@@ -3253,6 +3335,8 @@ function main() {
   IMAGE_DIMENSIONS = loadImageDimensions();
   CARD_DERIVATIVES = loadCardDerivatives();
   const data = loadData();
+  const AUTHORS = loadOptionalItems(AUTHORS_PATH, 'authors.json');
+  data.AUTHORS = AUTHORS;
   const { ARTISTS = [], FESTIVALS = [], VENUES = [], ARTICLES = [] } = data;
   console.log(`Hub data: ${writeHubDataJs(data) ? 'updated' : 'unchanged'}`);
   const EDITIONS = loadItems(EDITIONS_PATH, 'editions.json');
@@ -3292,6 +3376,7 @@ function main() {
   const artistData = buildArtistCardData(ARTISTS);
   const resolveEntities = makeEntityResolver({ ARTISTS, FESTIVALS, VENUES, ARTICLES }, festivalData, artistData);
   validateArticleShortcodes({ ARTISTS, FESTIVALS, VENUES, ARTICLES });
+  const authorIndex = buildAuthorIndex(AUTHORS, ARTICLES);
 
   // CMS未接続のローカル確認用。通常ビルドには一切含めず、reports配下へ
   // JA/ENの静的ページだけを書き出す。公開データのdraft除外ルールは維持する。
@@ -3304,7 +3389,7 @@ function main() {
     }
     fs.rmSync(DRAFT_PREVIEW_DIR, { recursive: true, force: true });
     for (const lang of ['ja', 'en']) {
-      const built = articlePage(draft, resolveEntities, lang, FESTIVALS, editionsByFestival, [], festivalData, ARTICLES, ARTISTS);
+      const built = articlePage(draft, resolveEntities, lang, FESTIVALS, editionsByFestival, [], festivalData, ARTICLES, ARTISTS, authorIndex);
       const relative = path.relative(LP_DIR, built.file);
       const file = path.join(DRAFT_PREVIEW_DIR, relative);
       fs.mkdirSync(path.dirname(file), { recursive: true });
@@ -3319,6 +3404,7 @@ function main() {
   const pubFests = FESTIVALS.filter(valid);
   const pubArtists = ARTISTS.filter(valid);
   const pubVenues = VENUES.filter(valid).filter((v) => v.name && v.city && v.city !== 'undefined');
+  const pubAuthors = [...authorIndex.values()].filter((author) => author.stories.length > 0);
   const artistsById = new Map(pubArtists.map((artist) => [String(artist.id), artist]));
   const festivalsById = new Map(pubFests.map((festival) => [String(festival.id), festival]));
   const editionById = new Map(EDITIONS.map((edition) => [String(edition.EDITION_ID), edition]));
@@ -3416,16 +3502,18 @@ ${FAVICON_TAGS}
   const liveFestivalIds = new Set(pubFests.map((f) => f.id));
 
   const counts = {
-    articles: writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'ja', pubFests, editionsByFestival, pubVenues, festivalData, ARTICLES, ARTISTS)).concat(redirectStubs('articles', liveArticleIds)), 'articles'),
+    articles: writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'ja', pubFests, editionsByFestival, pubVenues, festivalData, ARTICLES, ARTISTS, authorIndex)).concat(redirectStubs('articles', liveArticleIds)), 'articles'),
     festivals: writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, ARTICLES, pubFests, editionsByFestival, 'ja')).concat(redirectStubs('festivals', liveFestivalIds)), 'festivals'),
     artists: writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'ja', artistAppearances, editionsByFestival, pubArticles)).concat(redirectStubs('artists', liveArtistIds)), 'artists'),
     venues: writeAll(pubVenues.map((v) => venuePage(v, 'ja', pubFests, editionsByFestival, pubArticles)), 'venues'),
+    writers: writeAll(pubAuthors.map((author) => writerPage(author, 'ja', authorIndex)), 'writers'),
     // 英語版（/en/…）。未翻訳フィールドは articlePage 内で元データへ
     // フォールバックし、EN ハブの通常遷移先を必ず実在させる。
-    'en/articles': writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'en', pubFests, editionsByFestival, pubVenues, festivalData, ARTICLES, ARTISTS)), 'en/articles'),
+    'en/articles': writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'en', pubFests, editionsByFestival, pubVenues, festivalData, ARTICLES, ARTISTS, authorIndex)), 'en/articles'),
     'en/festivals': writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, ARTICLES, pubFests, editionsByFestival, 'en')).concat(redirectStubs('en/festivals', liveFestivalIds)), 'en/festivals'),
     'en/artists': writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'en', artistAppearances, editionsByFestival, pubArticles)).concat(redirectStubs('en/artists', liveArtistIds)), 'en/artists'),
     'en/venues': writeAll(pubVenues.map((v) => venuePage(v, 'en', pubFests, editionsByFestival, pubArticles)), 'en/venues'),
+    'en/writers': writeAll(pubAuthors.map((author) => writerPage(author, 'en', authorIndex)), 'en/writers'),
   };
   writeContentDates();
 

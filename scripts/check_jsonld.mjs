@@ -239,6 +239,20 @@ for (const rel of orgPages) {
 }
 
 const publishedArticles = loadPublishedArticles();
+const authorsData = JSON.parse(fs.readFileSync(path.join(LP, 'data', 'authors.json'), 'utf8')).items || [];
+const publishedAuthorNames = new Set(publishedArticles.map((article) => String(article.author || '').trim().toLocaleLowerCase()).filter(Boolean));
+for (const author of authorsData) {
+  if (!publishedAuthorNames.has(String(author.name || '').trim().toLocaleLowerCase())) continue;
+  for (const rel of [`writers/${author.id}.html`, `en/writers/${author.id}.html`]) {
+    const file = path.join(LP, rel);
+    check(`${rel} が存在する`, fs.existsSync(file));
+    if (!fs.existsSync(file)) continue;
+    const profile = jsonLdObjects(file).find((x) => x['@type'] === 'ProfilePage');
+    check(`${rel} がProfilePageを持つ`, !!profile);
+    const person = profile?.mainEntity;
+    check(`${rel} のPersonがname/urlを持つ`, person?.['@type'] === 'Person' && !!person.name && !!person.url);
+  }
+}
 const articleLdByLang = new Map();
 for (const article of publishedArticles) {
   const id = String(article.id);
