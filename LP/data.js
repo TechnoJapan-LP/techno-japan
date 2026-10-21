@@ -226,6 +226,16 @@ const ARTISTS = [
   {
     id: "endorphin",
     name: "endorphin",
+    country: "JAPAN",
+    genre: "TECHNO/HOUSE",
+    image: "images/artists/endorphin.webp",
+    bio: "関東を拠点とするDJ/プロデューサー。宇都宮と都内でパーティーをオーガナイズし、渋谷 ENTER のパーティー OPIOID ではレジデントを務める。楽曲制作にも力を入れている。グルーヴィーなテクノを軸に、自ら提唱する「NEO GAL」の考え方と、LOVE, FELLOW, FASHION, SEX の4語を掲げてフロアに立つ。",
+    bio_en: "endorphin is a DJ/producer based in the Kanto region who organizes parties in Utsunomiya and Tokyo and holds a residency at OPIOID at ENTER in Shibuya. She also puts real time into production. Her sets run on groovy techno, carried by the \"NEO GAL\" idea she champions and four words: LOVE, FELLOW, FASHION, SEX.",
+    name_en: "endorphin",
+    links: {
+      instagram: "https://www.instagram.com/endorphin__dj/",
+      soundcloud: "https://soundcloud.com/endorphin-jp",
+    }
   },
   {
     id: "antal",
@@ -290,10 +300,35 @@ const ARTISTS = [
   {
     id: "floating-points",
     name: "Floating Points",
+    city: "LONDON",
+    country: "UK",
+    genre: "HOUSE",
+    image: "images/artists/floating-points.webp",
+    bio: "本名 Sam Shepherd。マンチェスターで育ち、ロンドン大学（UCL）で神経科学の博士号を取得した。2008年に Alexander Nut とレーベル Eglo を立ち上げ、2015年に自身のレーベル Pluto を設立。同年の1stアルバム『Elaenia』に続き、2021年には Pharoah Sanders、ロンドン交響楽団との『Promises』を発表した。2024年に『Cascade』をリリース。",
+    bio_en: "Sam Shepherd grew up in Manchester and earned a PhD in neuroscience at UCL. Shepherd co-founded Eglo Records with Alexander Nut in 2008 and set up the Pluto label in 2015, the year the debut Floating Points album \"Elaenia\" came out. \"Promises\", made with Pharoah Sanders and the London Symphony Orchestra, followed in 2021, and \"Cascade\" in 2024.",
+    name_en: "Floating Points",
+    links: {
+      instagram: "https://www.instagram.com/floatingpoints",
+      soundcloud: "https://soundcloud.com/floatingpoints",
+      bandcamp: "https://floatingpoints.bandcamp.com/",
+      website: "http://www.floatingpoints.co.uk",
+    }
   },
   {
     id: "gerd-janson",
     name: "Gerd Janson",
+    city: "FRANKFURT",
+    country: "GERMANY",
+    genre: "HOUSE/DISCO",
+    image: "images/artists/gerd-janson.webp",
+    bio: "フランクフルトを拠点とするDJ。2002年に Thorsten Scheu（Glance）とレーベル Running Back を立ち上げ、ハウスとディスコを軸にリリースを重ねてきた。1998年にダルムシュタットの Café Kesselhaus で初のレジデントを得て、のちにフランクフルトの Robert Johnson で Thomas Hammann とパーティー Liquid を主宰。Groove や Spex に寄稿する音楽ライターでもあった。",
+    bio_en: "Frankfurt-based DJ Gerd Janson co-founded Running Back with Thorsten Scheu (Glance) in 2002, and the label has stayed rooted in house and disco ever since. His first residency came in 1998 at Café Kesselhaus in Darmstadt; later he hosted the Liquid nights at Frankfurt's Robert Johnson alongside Thomas Hammann. Away from the booth, he wrote about music for Groove and Spex.",
+    name_en: "Gerd Janson",
+    links: {
+      instagram: "https://www.instagram.com/gerdjansonofficial",
+      soundcloud: "https://soundcloud.com/runningback",
+      bandcamp: "https://runningbackrecords.bandcamp.com",
+    }
   },
   {
     id: "gonno",
@@ -314,10 +349,36 @@ const ARTISTS = [
   {
     id: "haai",
     name: "HAAi",
+    city: "LONDON",
+    country: "UK",
+    genre: "HOUSE",
+    image: "images/artists/haai.webp",
+    bio: "西オーストラリア出身、ロンドンを拠点とするプロデューサー/DJ。本名は Teneil Throssell。シンガーソングライターとして活動を始め、ロンドンではブリクストンのクラブ Phonox でレジデントを務めた。Mute から2022年にデビューアルバム『Baby, We're Ascending』、2025年に『HUMANiSE』を発表。2023年には !K7 のミックスシリーズ DJ-Kicks を手がけている。",
+    bio_en: "HAAi is Teneil Throssell, a producer and DJ from Western Australia now based in London. She started out as a singer-songwriter, and in London held a residency at Phonox in Brixton. Her debut album \"Baby, We're Ascending\" came out on Mute in 2022, followed by \"HUMANiSE\" on the same label in 2025. In 2023 she mixed an instalment of !K7's DJ-Kicks series.",
+    name_en: "HAAi",
+    links: {
+      instagram: "https://www.instagram.com/haaihaaihaai",
+      soundcloud: "https://soundcloud.com/haai-2",
+      bandcamp: "https://haai.bandcamp.com",
+      website: "https://mute.com/?p=220",
+    }
   },
   {
     id: "helena-hauff",
     name: "Helena Hauff",
+    city: "HAMBURG",
+    country: "GERMANY",
+    genre: "TECHNO/ELECTRO",
+    image: "images/artists/helena-hauff.webp",
+    imagePosition: "center top",
+    bio: "ハンブルクを拠点とするDJ/プロデューサー。テクノ、エレクトロ、アシッドを横断し、ハードウェアでトラックを組み立てる。2015年に Werkdiscs からデビューアルバム『Discreet Desires』、2018年に Ninja Tune から『Qualm』を発表。2015年には自身のレーベル Return To Disorder を立ち上げている。",
+    bio_en: "Hamburg DJ and producer Helena Hauff moves across techno, electro and acid, building tracks on hardware. The debut album \"Discreet Desires\" came out on Werkdiscs in 2015, followed by \"Qualm\" on Ninja Tune in 2018. 2015 also saw the launch of Helena Hauff's own label, Return To Disorder.",
+    name_en: "Helena Hauff",
+    links: {
+      instagram: "https://www.instagram.com/helena_hauff_fanpage/",
+      soundcloud: "https://soundcloud.com/helena-hauff",
+      bandcamp: "https://helenahauff.bandcamp.com",
+    }
   },
   {
     id: "jonathan-kusuma",
@@ -375,6 +436,19 @@ const ARTISTS = [
   {
     id: "four-tet",
     name: "Four Tet",
+    city: "LONDON",
+    country: "UK",
+    genre: "HOUSE",
+    image: "images/artists/four-tet.webp",
+    bio: "本名 Kieran Hebden。ロンドンのプロデューサー/DJ。ポストロック・バンド Fridge を経て、1998年に36分の単曲「Thirtysixtwentyfive」で Four Tet 名義の活動を始めた。『Pause』（2001）、『Rounds』（2003）、『There Is Love in You』（2010）などのアルバムで知られ、Steve Reid との即興作品や Burial、Thom Yorke との共作もある。",
+    bio_en: "Four Tet is London producer and DJ Kieran Hebden. After the post-rock band Fridge, he started the project in 1998 with the 36-minute single \"Thirtysixtwentyfive\". Albums like \"Pause\" (2001), \"Rounds\" (2003) and \"There Is Love in You\" (2010) built his name, alongside improvised records with drummer Steve Reid and collaborations with Burial and Thom Yorke.",
+    name_en: "Four Tet",
+    links: {
+      instagram: "https://www.instagram.com/fourtetkieran",
+      soundcloud: "https://soundcloud.com/four-tet",
+      bandcamp: "https://fourtet.bandcamp.com/",
+      website: "https://www.fourtet.net/",
+    }
   },
   {
     id: "ojisan",
@@ -395,6 +469,19 @@ const ARTISTS = [
   {
     id: "eric-cloutier",
     name: "Eric Cloutier",
+    city: "BERLIN",
+    country: "GERMANY",
+    genre: "TECHNO",
+    image: "images/artists/eric-cloutier.webp",
+    bio: "デトロイト出身、ベルリンを拠点とするDJ。ニューヨークのパーティー The Bunker で長く腕を磨いたのちベルリンへ移り、現在は Tresor のレジデントを務める。キャリアは25年を超え、深く催眠的でダブの効いた質感を探してレコードを掘り続けてきた。レーベル Palinoia を主宰し、自作のほか新しい作り手の作品も送り出している。",
+    bio_en: "Detroit-born, Berlin-based DJ Eric Cloutier spent years as a mainstay of New York's The Bunker before moving to Berlin, where he is now a resident at Tresor. Over a 25-plus year career he has kept digging for deep, hypnotic, dubby records. His label Palinoia releases his own productions alongside music from newer names.",
+    name_en: "Eric Cloutier",
+    links: {
+      instagram: "https://www.instagram.com/ericcloutier",
+      soundcloud: "https://soundcloud.com/cloutier",
+      bandcamp: "https://palinoiarecords.bandcamp.com/",
+      website: "http://www.eric-cloutier.com/",
+    }
   },
   {
     id: "caimann",
@@ -403,6 +490,17 @@ const ARTISTS = [
   {
     id: "fuji",
     name: "FUJI",
+    city: "TOKYO",
+    country: "JAPAN",
+    genre: "TECHNO",
+    image: "images/artists/fuji.webp",
+    bio: "本名 Naoki Fujii。キャンプイン型の野外フェス MATRICARIA と、パーティー LAB. のレジデントDJ/オーガナイザー。ディープテクノとアンビエントテクノを軸に、音の層を少しずつ重ねる丁寧なミックスでセットを組む。DJとしてだけでなく、時間や空間、人の流れまで含めてパーティー全体の体験を組み立てることを目指している。",
+    bio_en: "本名 Naoki Fujii。キャンプイン型の野外フェス MATRICARIA と、パーティー LAB. のレジデントDJ/オーガナイザー。ディープテクノとアンビエントテクノを軸に、音の層を少しずつ重ねる丁寧なミックスでセットを組む。DJとしてだけでなく、時間や空間、人の流れまで含めてパーティー全体の体験を組み立てることを目指している。",
+    name_en: "FUJI",
+    links: {
+      instagram: "https://www.instagram.com/naoki__fujii/",
+      soundcloud: "https://soundcloud.com/naokifujii",
+    }
   },
   {
     id: "prins-thomas",
@@ -947,6 +1045,18 @@ const ARTISTS = [
   {
     id: "ge-ology",
     name: "GE-OLOGY",
+    city: "NEW YORK",
+    country: "USA",
+    genre: "HOUSE",
+    image: "images/artists/ge-ology.webp",
+    bio: "ボルティモア生まれ、80年代からニューヨークを拠点とするプロデューサー/DJ/ビジュアルアーティスト。Mos Def、Talib Kweli、Jill Scott、De La Soul らの作品を手がけてきた。ヒップホップ中心の制作を経て、2015年に Theo Parrish の Sound Signature から「Moon Circuitry」を発表。最初の制作参加は1993年、ボルティモアの The Basement Boys との仕事だった。",
+    bio_en: "Born in Baltimore and based in New York since the 80s, GE-OLOGY is a producer, DJ and visual artist whose production credits include Mos Def, Talib Kweli, Jill Scott, De La Soul and Little Dragon's Yukimi Nagano. After years working mostly at hip hop tempos, he released \"Moon Circuitry\" featuring Mark de Clive-Lowe on Theo Parrish's Sound Signature in 2015. His first production credit goes back to 1993, with Baltimore house outfit The Basement Boys.",
+    name_en: "GE-OLOGY",
+    links: {
+      instagram: "https://www.instagram.com/geology365",
+      soundcloud: "https://soundcloud.com/geology365",
+      bandcamp: "https://ge-ology365.bandcamp.com",
+    }
   },
   {
     id: "idjut-boys",
@@ -1140,6 +1250,19 @@ const ARTISTS = [
   {
     id: "goth-trad",
     name: "GOTH-TRAD",
+    city: "TOKYO",
+    country: "JAPAN",
+    genre: "DUBSTEP",
+    image: "images/artists/goth-trad.webp",
+    bio: "東京を拠点とするプロデューサー/DJ。2006年から、自身のレーベル兼パーティー Back To Chill を東京で続けている。Mala に見出された「Cut End」が DEEP MEDi Musik から出て、2012年には同レーベルからアルバム『New Epoch』を発表した。2021年には Back To Chill から『SURVIVAL RESEARCH』を出している。",
+    bio_en: "Tokyo producer and DJ GOTH-TRAD has run Back To Chill, a label and club night of the same name, in the city since 2006. Mala signed the track \"Cut End\" to DEEP MEDi Musik, and in 2012 the label released the album \"New Epoch\". \"SURVIVAL RESEARCH\" followed on Back To Chill in 2021.",
+    name_en: "GOTH-TRAD",
+    links: {
+      instagram: "https://www.instagram.com/gothtrad/",
+      soundcloud: "https://soundcloud.com/goth-trad",
+      bandcamp: "https://backtochilltokyo.bandcamp.com/",
+      website: "http://www.gothtrad.com",
+    }
   },
   {
     id: "risa-taniguchi",
@@ -1190,6 +1313,18 @@ const ARTISTS = [
   {
     id: "foodman",
     name: "Foodman",
+    city: "AICHI",
+    country: "JAPAN",
+    genre: "LIVE",
+    image: "images/artists/foodman.webp",
+    bio: "名古屋を拠点とするプロデューサー/DJ/画家。食品まつり a.k.a foodman として、ジューク/フットワークを足場にアンビエントやハウス、ノイズまでを解体して組み直す音を作る。米国の Orange Milk からデビューアルバムを出し、Good Enuff などからも作品を発表。Hyperdub から出たアルバム『Yasuragi Land』は Pitchfork の2021年のベスト・エレクトロニックに選ばれた。",
+    bio_en: "Nagoya-based producer, DJ and painter Takahide Higuchi, aka Shokuhin Matsuri or foodman, starts from juke and footwork and pulls in ambient, house and noise, taking each apart and reassembling it. His debut album came out on Orange Milk, with later records on labels including Good Enuff, and \"Yasuragi Land\" on Hyperdub made Pitchfork's best electronic music of 2021.",
+    name_en: "Foodman",
+    links: {
+      instagram: "https://www.instagram.com/tyousinkai/",
+      soundcloud: "https://soundcloud.com/shokuhin-maturi",
+      bandcamp: "https://foodman.bandcamp.com/",
+    }
   },
   {
     id: "sapphire-slows",
@@ -1375,6 +1510,19 @@ const ARTISTS = [
   {
     id: "eve",
     name: "EVE",
+    city: "TOKYO",
+    country: "JAPAN",
+    genre: "TECHNO",
+    image: "images/artists/eve.webp",
+    imagePosition: "center top",
+    bio: "東京を拠点とするテクノ/ハードテクノのDJ/プロデューサー。2000年に韓国で生まれ、7歳で日本へ移った。2021年にDJを始め、2022年に FUJI ROCK FESTIVAL でデビュー。同年から楽曲制作も手がける。ハードテクノとハードコアのパーティー/レーベル VIXLATIXN を主宰し、パーティー TRAPEZE も運営。2024年にはベルリンの配信プラットフォーム HÖR に出演した。",
+    bio_en: "EVE is a Tokyo-based techno and hard techno DJ/producer. Born in South Korea in 2000, she moved to Japan at seven, started DJing in 2021 and made her debut at FUJI ROCK FESTIVAL in 2022, the same year she began producing. She runs VIXLATIXN, a hard techno and hardcore party and label, along with the party TRAPEZE, and played Berlin's HÖR in 2024.",
+    name_en: "EVE",
+    links: {
+      instagram: "https://www.instagram.com/eve_violet",
+      soundcloud: "https://soundcloud.com/eve_violet",
+      bandcamp: "https://vixlatixn.bandcamp.com/",
+    }
   },
   {
     id: "mars89",
@@ -2905,7 +3053,7 @@ const FESTIVALS = [
     location: "Suteki Village Camping Ground",
     location_ja: "ステキな村キャンプ場",
     name_ja: "サワギフェスティバル",
-    city: "GUNMA",
+    city: "Gunma",
     country: "JP",
     address: "群馬県吾妻郡東吾妻町本宿3330-5",
     lat: 36.4989,
@@ -3148,6 +3296,9 @@ const FESTIVALS = [
     ticketUrl: "https://ticketme.io/event/group/04aed4f2-15e5-45cd-9ba0-126edde884d2/4a0e1302-ef83-4fb3-ab49-a0d8548282d2",
     instagram: "https://www.instagram.com/prox_fest/",
     lineup: ["HUGEN", "Liberal a.k.a. Toshiki Iwama", "Fried Banana Shop", "IN-KYA in Canada", "Yasashii Mirai", "rice water Groove", "Contrail Club", "SHITABA from Tha Omedetaz", "HATCH from Umeda Cypher", "Yume (BOY)", "MAHLIQ", "sunga", "Dazzle Drums", "Yuki Kawamura", "BANANA-CHAN", "Hiroki Uzawa", "msms", "YOSHITAKAKONDO", "DJ Komogi", "mana"],
+    editions: [
+      { year: 2026, editionKey: "2026", date: "2026-11-07/2026-11-07", lineup: ["HUGEN", "Liberal a.k.a. Toshiki Iwama", "Fried Banana Shop", "IN-KYA in Canada", "Yasashii Mirai", "rice water Groove", "Contrail Club", "SHITABA from Tha Omedetaz", "HATCH from Umeda Cypher", "Yume (BOY)", "MAHLIQ", "sunga", "Dazzle Drums", "Yuki Kawamura", "BANANA-CHAN", "Hiroki Uzawa", "msms", "YOSHITAKAKONDO", "DJ Komogi", "mana"] },
+    ],
   },
   {
     id: "soul-beat-asia",
@@ -3172,6 +3323,9 @@ const FESTIVALS = [
     ticketUrl: "https://eplus.jp/sf/detail/4134150001?P6=001&P1=0402&P59=1",
     instagram: "https://www.instagram.com/soul_beat_asia/",
     lineup: ["TURTLE ISLAND", "OKI DUB AINU BAND", "Awa Odori Nagoya Taikoren", "Yuta Orisaka Band", "DEATH SIDE", "SAICOBAB", "DEEPCOUNT", "ROTARY BEGINNERS", "Darthreider & DJ Oshow", "Noripan", "THE JINSEIS", "T-Jiros", "Oni no Migiude", "neco nemuru", "TV Continental Ondo", "GIANT STEPS", "Hosenkai", "Hashinoshita Fujinkai"],
+    editions: [
+      { year: 2026, editionKey: "2026", date: "2026-11-20/2026-11-22", lineup: ["TURTLE ISLAND", "OKI DUB AINU BAND", "Awa Odori Nagoya Taikoren", "Yuta Orisaka Band", "DEATH SIDE", "SAICOBAB", "DEEPCOUNT", "ROTARY BEGINNERS", "Darthreider & DJ Oshow", "Noripan", "THE JINSEIS", "T-Jiros", "Oni no Migiude", "neco nemuru", "TV Continental Ondo", "GIANT STEPS", "Hosenkai", "Hashinoshita Fujinkai"] },
+    ],
   },
   {
     id: "resonance",
@@ -3195,6 +3349,9 @@ const FESTIVALS = [
     ticketUrl: "https://ja.ra.co/events/2542714",
     instagram: "https://www.instagram.com/resonance.jpn/",
     lineup: ["lisa-mizuno", "LOIF", "PERYL", "Maryama Luiccioni", "Fried Banana Shop", "SAKURA"],
+    editions: [
+      { year: 2026, editionKey: "2026", date: "2026-11-22/2026-11-23", lineup: ["lisa-mizuno", "LOIF", "PERYL", "Maryama Luiccioni", "Fried Banana Shop", "SAKURA"] },
+    ],
   },
 ];
 
@@ -3868,7 +4025,7 @@ const ARTICLES = [
     excerpt_en: "Monday, October 12 — a public holiday. For four hours from 6pm, the rooftop of the bridge-style station building spanning the platforms of JR Osaka Station — \"Toki no Hiroba\" on the 5th floor of Osaka Station City — becomes a dancefloor. On the bill: Daito Manabe, 食品まつり a.k.a. Foodman, Kuniyuki Takahashi and machìna, three of whom will be performing LIVE SETs. A techno rave held in the busiest thoroughfare of a fully operational train station.",
     body: `<h2><span class="ql-font-bebas">一日75万人が行き交うJR大阪駅、そのホームの真上がフロアになる</span></h2><p>10月12日、月曜の祝日。JR大阪駅のホームを跨ぐ橋上駅舎の屋上、大阪ステーションシティ5F「時空の広場」が、18時から4時間だけフロアになる。出演はDaito Manabe、食品まつり a.k.a. Foodman、Kuniyuki Takahashi、machìnaの4組。うち3組がLIVE SETで臨む。営業中の駅の、最も人が行き交う場所で開かれるテクノレイヴだ。</p><p><img src="https://lh3.googleusercontent.com/d/1ozgrK6SNNYVQeraGawi6TxKdy1xTqv03=w2000" alt="会場となる「時空の広場」" data-layout="contained" data-zoom="1" data-x="50" data-y="50"></p><h3><em class="ql-size-large">ONDO LANDとは</em></h3><p>公共空間やユニークベニューを舞台に、その場所の記憶や空気感と響き合う音楽体験をつくる、大阪発の音楽コミュニティ。前身となったのは、2025年10月の「<strong><em>OSAKA STATION RAVE</em></strong>」。終電後のJR大阪駅の改札内で、100人限定、3時間だけ開かれたレイヴだった。誰もいなくなった駅で音が鳴り、人が踊る。駅という公共空間が夜のベニューになりうるかを探る実験だった。</p><p>それから1年。舞台は改札の中から、駅の真上へ移る。深夜の無人の駅ではなく、営業中の駅の広場で。周囲には買い物帰りの人、待ち合わせの人、列車を眺める人がいる。その日常の中に、レイヴという非日常の空間を置くことが、今回の狙いだ。</p><p><img src="https://lh3.googleusercontent.com/d/1zPuwco1exRulGGz30tRCyuhGVOfnKZRO=w2000" alt="OSAKA STATION RAVEの様子" data-layout="compact" data-zoom="1" data-x="50" data-y="50"></p><h3><em class="ql-size-large">鉄骨の反復と、列車の往来と、テクノのビート</em></h3><p>会場は、駅のホームを跨ぐ橋上駅舎の屋上にあたり、ノースゲートビルディングとサウスゲートビルディングをつないでいる。西日本最大級のターミナルの中心に位置し、大屋根の下に広がる開放的な空間からは、眼下のホームに入る列車と、絶えず動き続ける人の流れを見渡せる。南北に置かれた「金時計」「銀時計」は、大阪駅の待ち合わせ場所として広く親しまれている。</p><p>広場を覆う大屋根は、17列の鉄骨トラスが連なるインダストリアルな建築だ。同じ形の骨組みが一定の間隔で繰り返され、視線の先まで続いていく。テクノもまた、同じビートを繰り返しながら少しずつ変化していく反復の音楽。異なるリズムが、同じ空間で重なっていく。</p><p><img src="https://lh3.googleusercontent.com/d/140e26M4SgTvYopZkJsiwh5hTy0VF1gEa=w2000" data-pair-id="pair-1790819059371"><img src="https://lh3.googleusercontent.com/d/1PpH5Ikg0oqw2qUERQZ78mZzfEVWVYSsD=w2000" data-pair-id="pair-1790819059371"></p><h3><em class="ql-size-large">3組のLIVE SETと、Rhizomatiksを率いる1人</em></h3><p>LIVE SETでは、モジュラーシンセやドラムマシンを直接操り、リズムや音色をその場で組み立てていく。フロアの熱気が、そのまま音に反映される。そこにDaito Manabeが加わり、テクノを軸に、音楽とテクノロジーが交差する夜になる。</p><h3><em class="ql-size-large">Daito Manabe</em></h3><p>アーティスト、プログラマ、コンポーザー。2006年にRhizomatiksを設立し、プログラミング、音楽、映像、身体表現を融合した作品を国内外で発表してきた。2016年リオデジャネイロオリンピック閉会式の東京への引き継ぎセレモニーでは、演出技術の開発と映像・光の演出システムを担当。Perfume、坂本龍一、Björk、Squarepusherらとのコラボレーションを続け、生命や知能の振る舞いから音楽と映像を生成する表現を、ライブパフォーマンスや公共空間で展開している。</p><p><img src="https://lh3.googleusercontent.com/d/1WzZMkeEiwIUSIQ4VQFuLt8RJ4piRjMXh=w2000" alt="Daito Manabe" data-layout="left" data-zoom="1" data-x="50" data-y="50"></p><h3><strong class="ql-size-large"><em>Foodman</em></strong><em class="ql-size-large">（LIVE SET）</em></h3><p>名古屋出身の電子音楽家。2012年のデビュー以降、国内外のレーベルからリリースを重ね、UnsoundやBoiler Roomに出演。2021年にUKの〈Hyperdub〉から発表したアルバム『Yasuragi Land』はPitchforkの年間ベストに選出され、2026年7月には同レーベルから最新作『HIKARIGASASHIKOMU』をリリースした。沖縄のルーツとシカゴ・フットワークが交差する独自のサウンドで知られ、NTS Radioのレジデントも務める。</p><p><img src="https://lh3.googleusercontent.com/d/1bPP5x7PFG0ybfmRB40H55NFAcfb38EMd=w2000" alt="Foodman" data-layout="right" data-zoom="1" data-x="50" data-y="50"></p><h3><strong class="ql-size-large"><em>Kuniyuki Takahashi</em></strong><em class="ql-size-large">（LIVE SET）</em></h3><p>札幌を拠点に活動するプロデューサー。Joe Claussell主宰の〈Natural Resource〉や〈Mule Musiq〉からのリリースで世界のDJから支持を集め、2018年にはオランダの〈Music From Memory〉から80〜90年代の過去作品が発表された。近年はヨーロッパ、南アフリカ、ブラジルなどでライブを重ね、Henrik SchwarzやFloating Pointsとのセッションライブも行う。即興性とダンスミュージックを融合した、独自のライブスタイルで知られる。</p><p><img src="https://lh3.googleusercontent.com/d/1BVrskCXsLZredKtznEaXls0fALISznPu=w2000" alt="Kuniyuki Takahashi" data-layout="left" data-zoom="1" data-x="50" data-y="50"></p><h3><strong class="ql-size-large"><em>machìna</em></strong><em class="ql-size-large">（LIVE SET）</em></h3><p>東京とベルリンを拠点に活動する韓国出身のアーティスト。モジュラーシンセを中心とした即興演奏とボーカルを組み合わせたライブで知られ、MUTEK JapanやベルリンのBerghainに出演、2023年にはRichie Hawtinとの欧米ツアーに参加した。Tresorのコンピレーションへの参加やBicep「Hawk」へのフィーチャリングに加え、Prada、Miu Miu、NIKEとのコラボレーションも手がける。</p><p><img src="https://lh3.googleusercontent.com/d/1B0SViOBq61parRKmmJnhamGdnrBE3jjl=w2000" alt="machìna" data-layout="right" data-zoom="1" data-x="50" data-y="50"></p><p>サウンドシステムには、レイヴの現場で多く採用されているTW AUDIOを導入。広場の空間特性に合わせて構成される。</p><h3><em class="ql-size-large">INFORMATION</em></h3><p>チケットは前売¥2,000、U-23 ¥1,000、当日¥2,500。ZAIKOおよびResident Advisorで販売中。入退場は自由で、入場料にドリンク代は含まれない。前売券が完売した場合、当日券の販売はない。</p><p>U-23チケットは、入場時に年齢を確認できる証明書の提示が必要。中学生以下は保護者同伴で入場無料、18歳以下の入場には保護者の同伴が必要となる。会場は屋根付きのため、雨天でも開催される。</p><p>列車を見下ろしながら、踊る。<br> 一日75万人が行き交う駅の真上で、都市のリズムとテクノが重なる一夜。</p><p><br></p>`,
     body_en: `<h2><span class="ql-font-bebas">750,000 people pass through JR Osaka Station each day — and the floor sits directly above its platforms</span></h2><p>Monday, October 12, a national holiday. On the rooftop of the bridge-style station building spanning the platforms of JR Osaka Station, the 5F "Toki no Hiroba" plaza of Osaka Station City becomes a dancefloor for four hours only, from 18:00. The lineup: Daito Manabe, 食品まつり a.k.a. Foodman, Kuniyuki Takahashi, and machìna — three of the four performing LIVE SETS. A techno rave held at the busiest crossing point of a station still in full operation.</p><p><img src="https://lh3.googleusercontent.com/d/1ozgrK6SNNYVQeraGawi6TxKdy1xTqv03=w2000" alt="Jiku no Hiroba, the venue for the event" data-layout="contained" data-zoom="1" data-x="50" data-y="50"></p><h3><em class="ql-size-large">What is ONDO LAND</em></h3><p>An Osaka-born music community that stages musical experiences in public spaces and unique venues, resonating with the memory and atmosphere of each site. Its predecessor was "<strong><em>OSAKA STATION RAVE</em></strong>" in October 2025 — a rave held inside the ticket gates of JR Osaka Station after the last train, capped at 100 people and lasting just three hours. Sound ringing out in an emptied station, people dancing. It was an experiment in whether a station, as public space, could become a venue by night.</p><p>A year on, the stage shifts from inside the gates to directly above the station. Not a deserted station at midnight, but the plaza of a station in full operation. All around are people heading home from shopping, people waiting to meet friends, people watching the trains. Placing the extraordinary space of a rave inside that everyday scene is the aim this time.</p><p style="width: 62%; margin-left: 0px; margin-right: 0px;"><img src="https://lh3.googleusercontent.com/d/1zPuwco1exRulGGz30tRCyuhGVOfnKZRO=w2000" class="" data-layout="compact" data-zoom="1" data-x="50" data-y="50" alt="Scenes from OSAKA STATION RAVE" style="--crop-zoom: 1; --crop-x: 50%; --crop-y: 50%;"></p><h3><em class="ql-size-large">The repetition of steel trusses, the passing of trains, and the techno beat</em></h3><p>The venue occupies the rooftop of the bridge-style station building that straddles the platforms, linking the North Gate Building and the South Gate Building. Positioned at the heart of one of western Japan's largest terminals, this open space beneath the great roof looks out over the trains pulling into the platforms below and the ceaseless flow of people. The "Gold Clock" and "Silver Clock" set at its north and south ends are long-beloved meeting points at Osaka Station.</p><p>The great roof covering the plaza is an industrial structure of 17 rows of steel trusses. Identically shaped frames repeat at fixed intervals, extending as far as the eye can follow. Techno, too, is music of repetition — the same beat recurring while shifting little by little. Different rhythms layering within a single space.</p><p style="display: inline-block; vertical-align: top; width: calc(50% - 8px); margin-right: 12px;"><img src="https://lh3.googleusercontent.com/d/140e26M4SgTvYopZkJsiwh5hTy0VF1gEa=w2000" class="" data-pair-id="pair-1790819059371"></p><p style="display: inline-block; vertical-align: top; width: calc(50% - 8px); margin-right: 0px;"><img src="https://lh3.googleusercontent.com/d/1PpH5Ikg0oqw2qUERQZ78mZzfEVWVYSsD=w2000" class="" data-pair-id="pair-1790819059371"></p><h3><em class="ql-size-large">Three LIVE SETS, and the man behind Rhizomatiks</em></h3><p>In a LIVE SET, modular synths and drum machines are handled directly, with rhythms and textures assembled on the spot. The heat of the floor feeds straight back into the sound. Add Daito Manabe to the mix, and the result is a night where music and technology intersect, with techno at its core.</p><h3><em class="ql-size-large">Daito Manabe</em></h3><p>Artist, programmer, composer. He founded Rhizomatiks in 2006 and has presented work fusing programming, music, visuals and physical expression both in Japan and abroad. For the Tokyo handover ceremony at the closing of the 2016 Rio de Janeiro Olympics, he developed the staging technology and the visual and lighting systems. Continuing collaborations with Perfume, Ryuichi Sakamoto, Björk and Squarepusher, he generates music and imagery from the behavior of life and intelligence, deploying the results in live performances and public spaces.</p><p style="width: 66.6667%; margin-left: 0px; margin-right: auto;"><img src="https://lh3.googleusercontent.com/d/1WzZMkeEiwIUSIQ4VQFuLt8RJ4piRjMXh=w2000" class="" data-layout="left" data-zoom="1" data-x="50" data-y="50" style="--crop-zoom: 1; --crop-x: 50%; --crop-y: 50%;" alt="Daito Manabe"></p><h3><strong class="ql-size-large"><em>Foodman</em></strong><em class="ql-size-large">（LIVE SET）</em></h3><p>Electronic musician from Nagoya. Since debuting in 2012 he has released on labels in Japan and overseas and performed at Unsound and Boiler Room. <em>Yasuragi Land</em>, released on the UK's 〈Hyperdub〉 in 2021, was named among Pitchfork's best of the year, and July 2026 saw his latest work <em>HIKARIGASASHIKOMU</em> arrive on the same label. Known for a singular sound where Okinawan roots cross with Chicago footwork, he also serves as an NTS Radio resident.</p><p style="width: 66.6667%; margin-left: auto; margin-right: 0px;"><img alt="Foofman" src="https://lh3.googleusercontent.com/d/1bPP5x7PFG0ybfmRB40H55NFAcfb38EMd=w2000" class="" data-layout="right" data-zoom="1" data-x="50" data-y="50" style="--crop-zoom: 1; --crop-x: 50%; --crop-y: 50%;"></p><h3><strong class="ql-size-large"><em>Kuniyuki Takahashi</em></strong><em class="ql-size-large">（LIVE SET）</em></h3><p>Producer based in Sapporo. Releases on Joe Claussell's 〈Natural Resource〉 and 〈Mule Musiq〉 won him support from DJs worldwide, and in 2018 the Dutch label 〈Music From Memory〉 issued his past works from the '80s and '90s. In recent years he has performed across Europe, South Africa and Brazil, and has played session live sets with Henrik Schwarz and Floating Points. He is known for a distinctive live style that fuses improvisation with dance music.</p><p style="width: 66.6667%; margin-left: 0px; margin-right: auto;"><img src="https://lh3.googleusercontent.com/d/1BVrskCXsLZredKtznEaXls0fALISznPu=w2000" class="" data-layout="left" data-zoom="1" data-x="50" data-y="50" style="--crop-zoom: 1; --crop-x: 50%; --crop-y: 50%;" alt="Kuniyuki Takahashi"></p><h3><strong class="ql-size-large"><em>machìna</em></strong><em class="ql-size-large">（LIVE SET）</em></h3><p>Korean-born artist based between Tokyo and Berlin. Known for live sets combining vocals with improvisation centered on modular synths, she has performed at MUTEK Japan and Berlin's Berghain, and in 2023 joined Richie Hawtin on tour across Europe and the US. Alongside appearances on a Tresor compilation and a feature on Bicep's "Hawk," she has collaborated with Prada, Miu Miu and NIKE.</p><p style="width: 66.6667%; margin-left: auto; margin-right: 0px;"><img src="https://lh3.googleusercontent.com/d/1B0SViOBq61parRKmmJnhamGdnrBE3jjl=w2000" class="tj-image-selected" data-layout="right" data-zoom="1" data-x="50" data-y="50" style="--crop-zoom: 1; --crop-x: 50%; --crop-y: 50%;" alt="machìna"></p><p>The sound system is TW AUDIO, widely adopted at rave sites, configured to suit the spatial characteristics of the plaza.</p><h3><em class="ql-size-large">INFORMATION</em></h3><p>Tickets are ¥2,000 advance, ¥1,000 for U-23, ¥2,500 at the door. On sale now via ZAIKO and Resident Advisor. Re-entry is permitted; admission does not include a drink. If advance tickets sell out, no door tickets will be sold.</p><p>U-23 tickets require ID verifying age at entry. Junior high school students and younger enter free when accompanied by a guardian, and anyone 18 or under must be accompanied by a guardian. The venue is covered, so the event goes ahead rain or shine.</p><p>Dancing while looking down on the trains.<br> One night directly above a station that 750,000 people pass through each day, where the rhythm of the city and techno overlap.</p><p><br></p>`,
-    category: "NEWS",
+    category: "FESTIVAL&RAVE",
     date: "2026-10-01",
     author: "TECHNO JAPAN",
     image: "images/articles/ondoland1012-2026-info.webp",
@@ -3960,6 +4117,23 @@ const ARTICLES = [
     festivalId: "sawagi-festival",
     readTime: 2,
     tags: ["gunma","camp","open-air","techno","house","ambient"],
+    status: "published",
+  },
+  {
+    id: "denki-bodhisattva-2026-info",
+    title: "電気菩薩 | 頭上を飛行機が行き交う成田の木の根ペンションで、24時間のハロウィン・レイヴ",
+    title_en: "Denki Bodhisattva | A 24-hour Halloween rave at Kinone Pension in Narita, with planes passing overhead.",
+    excerpt: "2021年に東京で始まったパーティーコレクティブが、2年ぶりの野外へ。成田空港建設への反対運動の拠点だった木の根ペンションで、テーマ「中華ホラー」のハロウィン・レイヴが24時間続く。DJ MARIA.ら国内外22組が出演。",
+    excerpt_en: "A party collective that started in Tokyo in 2021 heads outdoors for the first time in two years. At Kinone Pension — once a base for the movement opposing the construction of Narita Airport — a 24-hour Halloween rave unfolds under the theme of \"Chinese horror.\" Twenty-two acts from Japan and abroad, including DJ MARIA., are set to perform.",
+    body: `<p><img src="https://lh3.googleusercontent.com/d/1tIhlY9iYq1T0HEVAFUV_VMtq3Il0ULe2=w2000" alt="前回の電気菩薩の野外ダンスフロア" data-layout="contained" data-zoom="1" data-x="50" data-y="50"></p><p>[[pullquote|仮面をかぶる日だからこそ、本当の自分になれる。|電気菩薩]]</p><h2><em class="ql-font-bebas">電気菩薩とは</em></h2><p>電気菩薩（DENKI BODHISATTVA）は、2021年に東京で始まったアンダーグラウンド・パーティーコレクティブ。音楽、アート、ファッションを混ぜ合わせ、東洋の神秘性やカオスから着想を得た世界観で、視覚、音、空間が一体になった体験をつくってきた。</p><p>東京のクラブシーンを拠点に、野外レイヴや海外でのイベントへと活動を広げている。掲げるのは、国籍、文化、年齢、価値観の違いを越えて、誰もが自分自身を解放できる場所。</p><p><img src="https://lh3.googleusercontent.com/d/1lOKvpjVZX7Tf_Jg9NHK5iK_cvengnbHQ=w2000" data-layout="compact" data-zoom="1" data-x="50" data-y="50"></p><h2><em>空港に反対した拠点が、いまはカルチャーの場になっている</em></h2><p>会場は、成田空港のすぐそばにある木の根ペンション。1960年代、成田空港の建設に反対する運動の拠点となった場所で、1989年にペンションへと姿を変えた。いまは音楽やアートなど、さまざまなカルチャーの場として使われている。</p><p>頭上を巨大な飛行機が行き交い、離着陸を間近に感じながら踊ることになる。夕暮れから深夜、そして朝日が昇るまで、空の景色が変わっていく中で24時間が続く。</p><p><img src="https://lh3.googleusercontent.com/d/1mMutbd2CITy-sINmpcBwXRLZA_TgbdAZ=w2000" alt="会場となる木の根ペンション" data-layout="compact" data-zoom="1" data-x="50" data-y="50"></p><h2>中華ホラー。会場全体が、ハロウィンの異世界になる。</h2><p>音楽、アート、空間演出を組み合わせ、会場全体をハロウィンの異世界に仕立てる。仮装での来場向けに、HALLOWEEN COSTUMEチケットも用意されている。</p><p>場内にはKOBINAIのPOP UP、燃蛾茶会 ran-e / kaiの茶席、没入型のVR RAVE体験、フード出店が並ぶ。出店者や特別コンテンツは、今後も追加で発表される予定。</p><p><img src="https://lh3.googleusercontent.com/d/1mfJkAJcn75eIhXjViQ1uQuYW0aUxb2f2=w2000" alt="中華ホラー" data-layout="contained" data-pair-id="pair-1792586665870" data-zoom="1" data-x="50" data-y="50"></p><p><img src="https://lh3.googleusercontent.com/d/16GxAAmxcwt6QgFV9kse0bRcGPeMNkDRN=w2000" alt="仮装した観客" data-layout="contained" data-pair-id="pair-1792586665870" data-zoom="1" data-x="50" data-y="50"></p><h2>テクノからダークサイ、ハイテックまで。ジャンルの異なる音が24時間つながる。</h2><p>注目は、日本を拠点に活動し、ベルリンのBerghainやジョージアのBassianiにも出演してきたDJ MARIA.。サイケデリック・テクノ、アシッド、トランスを行き来するヒプノティックなセットで、世界各地のアンダーグラウンドのフロアで支持を集めている。</p><p>海外からは、上海でFinderShanghaiを主宰するFEIYIと、実験的なサウンドとテクノロジーを組み合わせるベルリンのSENAIDA。東京を拠点に、インダストリアルとテクノを軸にしたサウンドを展開するEVEも加わる。</p><p>国内からは、日本各地のアンダーグラウンドシーンで活動するDJが集まる。MARS89、Mt.Chori、TEI TEI、SUEPON、URUHARA、YELLOWUHURU、HALU、MAYUDEPTH、Rick Shinmiほか。鳴るのは、テクノ、ヒプノティック、インダストリアル、トランス、アンビエント、ドラムンベース、サイケデリック、ダークサイ、サイコア、ハイテック。</p><p><img src="https://lh3.googleusercontent.com/d/14KMOJSay4GUVBSe_ovO0ycJS9yE6Y-TK=w2000" alt="夜のDJブース" data-layout="contained" data-pair-id="pair-1792586758903" data-zoom="1" data-x="50" data-y="50"></p><p><img src="https://lh3.googleusercontent.com/d/1lJqfqNts_UH36VFLEgengxnQ0USJcL-P=w2000" data-pair-id="pair-1792586758903"></p><h4>開催情報</h4><ul><li>日時: 2026.10.31 (Sat) 16:00 - 11.01 (Sun) 16:00（24時間）</li><li>会場: 木の根ペンション（KINONE）, 成田, 千葉</li><li>チケット: EARLY BIRD ¥5,000（数量限定）/ GENERAL ¥8,000 / DOOR ¥9,000 / HALLOWEEN COSTUME ¥6,000 / U25 ¥5,000 / DAY TICKET ¥3,500（11/1 06:00〜）</li><li>SUPER EARLY BIRD（¥4,000）は完売</li><li>チケット購入は主催アカウントのプロフィールリンクから</li><li>POP UP / コンテンツ: KOBINAI / 燃蛾茶会 ran-e / kai / VR RAVE体験 / More TBA</li><li>公式: <a href="https://www.instagram.com/denki.bodhisattva/" rel="noopener noreferrer" target="_blank">@denki.bodhisattva</a></li></ul><p>飛行機が頭上を横切る成田の空の下、仮面をかぶった24時間が始まる。</p><p>[[event|電気菩薩 2026|2026-10-31〜2026-11-01|Chiba, Japan||DJ MARIA.;DUSTVOXX;emptyworldoldheaven;EVE;FEIYI;HALU;Hinode;j!nx;JXXNXCXXT;kalima;Manis Devours;MARS89;MAYUDEPTH;Mt.Chori;Neutran;Rick Shinmi;SENAIDA;SUEPON;TEI TEI;the2$;URUHARA;YELLOWUHURU|Techno;Trance;Psychedelic;Industrial;Halloween;Open-air|denki-bodhisattva]]</p>`,
+    body_en: `<p><img src="https://lh3.googleusercontent.com/d/1tIhlY9iYq1T0HEVAFUV_VMtq3Il0ULe2=w2000" data-layout="contained" data-zoom="1" data-x="50" data-y="50" alt="The open-air dance floor at the last Denki Bodhisattva"></p><p>[[pullquote|It's precisely because it's a day for wearing masks that you can become your true self.|DENKI BODHISATTVA]]</p><h2><em class="ql-font-bebas">What is DENKI BODHISATTVA</em></h2><p>電気菩薩 (DENKI BODHISATTVA) is an underground party collective that started in Tokyo in 2021. Blending music, art and fashion, and drawing on a worldview inspired by Eastern mysticism and chaos, they have built experiences where visuals, sound and space become one.</p><p>Based in Tokyo's club scene, they have expanded into open-air raves and events overseas. What they stand for is a place where anyone can set themselves free, beyond differences of nationality, culture, age and values.</p><p><img src="https://lh3.googleusercontent.com/d/1lOKvpjVZX7Tf_Jg9NHK5iK_cvengnbHQ=w2000" data-layout="compact" data-zoom="1" data-x="50" data-y="50"></p><h2><em>A base of airport opposition, now a space for culture</em></h2><p>The venue is Kinone Pension, right next to Narita Airport. In the 1960s it served as a base for the movement opposing the construction of Narita Airport, and in 1989 it was transformed into a guest house. Today it's used as a space for all kinds of culture, from music to art.</p><p>Enormous planes pass overhead, and you'll dance with takeoffs and landings happening up close. From dusk through midnight until sunrise, 24 hours unfold as the sky keeps changing.</p><p><img alt="Kinone Pension, the venue for the event" src="https://lh3.googleusercontent.com/d/1mMutbd2CITy-sINmpcBwXRLZA_TgbdAZ=w2000" data-layout="compact" data-zoom="1" data-x="50" data-y="50"></p><h2>Chinese horror. The entire venue becomes a Halloween otherworld.</h2><p>Combining music, art and spatial production, the whole site is turned into a Halloween otherworld. For those coming in costume, a HALLOWEEN COSTUME ticket is also available.</p><p>On site you'll find a KOBINAI POP UP, a tea ceremony by 燃蛾茶会 ran-e / kai, an immersive VR RAVE experience, and food stalls. More vendors and special content are set to be announced.</p><p><img src="https://lh3.googleusercontent.com/d/1mfJkAJcn75eIhXjViQ1uQuYW0aUxb2f2=w2000" alt="Chinese horror" data-layout="contained" data-pair-id="pair-1792586665870" data-zoom="1" data-x="50" data-y="50"></p><p><img src="https://lh3.googleusercontent.com/d/16GxAAmxcwt6QgFV9kse0bRcGPeMNkDRN=w2000" alt="Costumed crowd" data-layout="contained" data-pair-id="pair-1792586665870" data-zoom="1" data-x="50" data-y="50"></p><h2>From techno to dark psy and hi-tech. Sounds from different genres connect across 24 hours.</h2><p>One to watch is DJ MARIA., based in Japan and with appearances at Berlin's Berghain and Georgia's Bassiani. Her hypnotic sets, moving between psychedelic techno, acid and trance, have won support on underground floors around the world.</p><p>From abroad come FEIYI, who runs FinderShanghai in Shanghai, and Berlin's SENAIDA, who fuses experimental sound with technology. Tokyo-based EVE, whose sound centers on industrial and techno, also joins the bill.</p><p>From Japan, DJs active in underground scenes across the country gather: MARS89, Mt.Chori, TEI TEI, SUEPON, URUHARA, YELLOWUHURU, HALU, MAYUDEPTH, Rick Shinmi and more. Expect techno, hypnotic, industrial, trance, ambient, drum'n'bass, psychedelic, dark psy, psycore and hi-tech.</p><p><img src="https://lh3.googleusercontent.com/d/14KMOJSay4GUVBSe_ovO0ycJS9yE6Y-TK=w2000" alt="The DJ Booth at Night" data-layout="contained" data-pair-id="pair-1792586758903" data-zoom="1" data-x="50" data-y="50"></p><p><img src="https://lh3.googleusercontent.com/d/1lJqfqNts_UH36VFLEgengxnQ0USJcL-P=w2000" data-pair-id="pair-1792586758903"></p><h4>Event Information</h4><ul><li>Date & Time: 2026.10.31 (Sat) 16:00 – 11.01 (Sun) 16:00 (24 hours)</li><li>Venue: Kinone Pension (KINONE), Narita, Chiba</li><li>Tickets: EARLY BIRD ¥5,000 (limited quantity) / GENERAL ¥8,000 / DOOR ¥9,000 / HALLOWEEN COSTUME ¥6,000 / U25 ¥5,000 / DAY TICKET ¥3,500 (from 11/1 06:00)</li><li>SUPER EARLY BIRD (¥4,000) is sold out</li><li>Tickets available via the link in the organizer's profile</li><li>POP UP / Content: KOBINAI / 燃蛾茶会 ran-e / kai / VR RAVE experience / More TBA</li><li>Official: @[organizer account]</li></ul><p>Under the Narita sky, with planes crossing overhead, 24 masked hours begin.</p><p>[[event|電気菩薩 2026|2026-10-31〜2026-11-01|Chiba, Japan||DJ MARIA.;DUSTVOXX;emptyworldoldheaven;EVE;FEIYI;HALU;Hinode;j!nx;JXXNXCXXT;kalima;Manis Devours;MARS89;MAYUDEPTH;Mt.Chori;Neutran;Rick Shinmi;SENAIDA;SUEPON;TEI TEI;the2$;URUHARA;YELLOWUHURU|Techno;Trance;Psychedelic;Industrial;Halloween;Open-air|denki-bodhisattva]]</p>`,
+    category: "FESTIVAL&RAVE",
+    date: "2026-10-21",
+    author: "TECHNO JAPAN",
+    image: "images/articles/denki-bodhisattva-2026-info.webp",
+    festivalId: "denki-bodhisattva",
+    readTime: 2,
+    tags: ["chiba","narita","rave","halloween","techno","open-air"],
     status: "published",
   },
 ];
