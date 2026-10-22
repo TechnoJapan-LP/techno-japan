@@ -165,7 +165,14 @@
 }
 
 /* ===================== ARTISTS LIST VIEW ===================== */
-#artists-list-view { padding: 0 0 120px; }
+#artists-list-view {
+  padding: 0 0 120px;
+  /* 再描画中にブラウザがスクロール位置を自動補正しない。 */
+  overflow-anchor: none;
+}
+.artists-upcoming,
+.artists-all,
+.artists-grid { overflow-anchor: none; }
 
 /* SSR の静的リンク一覧を、カード一覧へ差し替えるまで一時的に隠す。
    先に表示すると、静的一覧→JSカード一覧の差し替えが Lighthouse の CLS として記録される
@@ -765,7 +772,7 @@ function buildGenreNav() {
     if (!btn) return;
     currentGenre = btn.dataset.genre;
     nav.querySelectorAll('.genre-tab').forEach(b => b.classList.toggle('active', b === btn));
-    renderArtistsList();
+    renderArtistResultsFromInteraction();
     syncArtistQuery();
   });
 }
@@ -798,6 +805,58 @@ function getFilteredArtists() {
   list.sort((a, b) => a.name.localeCompare(b.name, 'en'));
 
   return list;
+}
+
+function artistResultsHeading() {
+  const upcoming = document.querySelector('#artists-upcoming:not([hidden]) .artists-section-heading');
+  return upcoming || document.getElementById('artists-all-heading');
+}
+
+function artistToolbarOffset() {
+  const navHeight = parseFloat(getComputedStyle(document.documentElement)
+    .getPropertyValue('--tj-nav-height')) || 0;
+  const toolbar = document.querySelector('.artists-toolbar');
+  return navHeight + (toolbar ? toolbar.getBoundingClientRect().height : 0);
+}
+
+function shouldScrollArtistResults() {
+  const heading = artistResultsHeading();
+  if (!heading) return false;
+  return heading.getBoundingClientRect().top < artistToolbarOffset();
+}
+
+let artistScrollRequestId = 0;
+
+function scrollArtistResultsToTop(requestId, correctOnce = true) {
+  if (requestId !== artistScrollRequestId) return;
+  const heading = artistResultsHeading();
+  if (!heading) return;
+  const top = Math.max(0, heading.getBoundingClientRect().top + window.scrollY - artistToolbarOffset());
+  window.scrollTo({ top, behavior: 'auto' });
+  if (correctOnce) {
+    window.setTimeout(() => {
+      if (requestId !== artistScrollRequestId) return;
+      const currentHeading = artistResultsHeading();
+      if (!currentHeading) return;
+      const delta = currentHeading.getBoundingClientRect().top - artistToolbarOffset();
+      if (Math.abs(delta) > 4) {
+        const correctedTop = Math.max(0, currentHeading.getBoundingClientRect().top + window.scrollY - artistToolbarOffset());
+        window.scrollTo({ top: correctedTop, behavior: 'auto' });
+      }
+    }, 150);
+  }
+}
+
+function renderArtistResultsFromInteraction() {
+  const shouldScroll = shouldScrollArtistResults();
+  const requestId = ++artistScrollRequestId;
+  renderArtistsList();
+  // 描画・リビール開始後のレイアウトを待ってから、表示中の見出しを測る。
+  if (shouldScroll) {
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      scrollArtistResultsToTop(requestId);
+    }));
+  }
 }
 
 function renderArtistCard(a, i, caption = '') {
@@ -910,7 +969,7 @@ function initSearchSort() {
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => {
       currentSearch = searchInput.value.trim();
-      renderArtistsList();
+      renderArtistResultsFromInteraction();
       syncArtistQuery();
     }, 200);
   });
