@@ -59,10 +59,58 @@ STATIC_LINKS_RE = re.compile(
 # （en/index.html の "テクノジャパン"）。ここを込みで 0 を目指すと、
 # 正しい構造化データを消す方向に圧力がかかる。
 JSONLD_JA_ALLOWED_KEYS = {"alternateName"}
+CUSTOM_PROPERTY_RE = re.compile(r"(?P<name>--[A-Za-z0-9_-]+)\s*:\s*(?P<value>[^;{}]+)")
+VAR_REFERENCE_RE = re.compile(r"var\(\s*(--[A-Za-z0-9_-]+)")
 
 
 def read(p):
     return p.read_text(encoding="utf-8", errors="replace")
+
+
+def custom_property_cycles():
+    """CSS custom-property の直接・間接循環参照を検出する。
+
+    ハブの inline CSS も含め、生成物と生成テンプレートを同じ検査対象にする。
+    宣言のスコープ差はここでは問題にせず、循環の存在を保守的に止める。
+    """
+    files = sorted(LP.rglob("*.html")) + sorted(LP.rglob("*.css"))
+    generator = ROOT / "scripts" / "build-detail-pages.mjs"
+    if generator.exists():
+        files.append(generator)
+
+    graph = {}
+    locations = {}
+    for path in files:
+        text = read(path)
+        for match in CUSTOM_PROPERTY_RE.finditer(text):
+            name = match.group("name")
+            refs = set(VAR_REFERENCE_RE.findall(match.group("value")))
+            graph.setdefault(name, set()).update(refs)
+            line = text.count("\n", 0, match.start()) + 1
+            locations.setdefault((name, path), line)
+
+    cycles = []
+    state = {}
+    stack = []
+
+    def visit(name):
+        state[name] = 1
+        stack.append(name)
+        for target in sorted(graph.get(name, ())):
+            if target not in graph:
+                continue
+            if state.get(target) == 1:
+                start = stack.index(target)
+                cycles.append(" → ".join(stack[start:] + [target]))
+            elif state.get(target, 0) == 0:
+                visit(target)
+        stack.pop()
+        state[name] = 2
+
+    for name in sorted(graph):
+        if state.get(name, 0) == 0:
+            visit(name)
+    return sorted(set(cycles))
 
 
 def body_without_scripts(html):
@@ -464,6 +512,13 @@ def measure():
 
 
 def main():
+    cycles = custom_property_cycles()
+    if cycles:
+        print("CSS カスタムプロパティの循環参照:")
+        for cycle in cycles:
+            print(f"  ✗ {cycle}")
+        return 1
+
     conf = yaml.safe_load(THRESHOLDS.read_text(encoding="utf-8"))
     metrics = conf["metrics"]
     actual = measure()

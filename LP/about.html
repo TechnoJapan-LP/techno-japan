@@ -56,7 +56,7 @@
 <!-- 資産は必ず絶対パス（/）で書く。相対だと en/about.html にコピーされたとき
      /en/common.css を探して 404 になり、CSS も JS も一切効かない状態になる。
      2026-08-14 に英語版が素の HTML で公開されていた。AUDIT §9-82。 -->
-<link rel="stylesheet" href="/common.css?v=39">
+<link rel="stylesheet" href="/common.css?v=40">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 h1, h2 { word-break: keep-all; word-break: auto-phrase; }
@@ -87,8 +87,8 @@ h1, h2 { word-break: keep-all; word-break: auto-phrase; }
 }
 .hero-grid::before {
   background-image:
-    repeating-linear-gradient(90deg, rgba(240,237,232,0.03) 0, rgba(240,237,232,0.03) 1px, transparent 1px, transparent),
-    repeating-linear-gradient(0deg, rgba(240,237,232,0.03) 0, rgba(240,237,232,0.03) 1px, transparent 1px, transparent);
+    repeating-linear-gradient(90deg, var(--text-a03) 0, var(--text-a03) 1px, transparent 1px, transparent),
+    repeating-linear-gradient(0deg, var(--text-a03) 0, var(--text-a03) 1px, transparent 1px, transparent);
   background-size: 80px 80px;
   animation: gridDrift 20s linear infinite;
 }
@@ -104,7 +104,7 @@ h1, h2 { word-break: keep-all; word-break: auto-phrase; }
   left: 0;
   right: 0;
   height: 1px;
-  background: rgba(240,237,232,0.06);
+  background: var(--text-a06);
   z-index: 1;
   animation: scanDown 6s linear infinite;
 }
@@ -132,7 +132,7 @@ h1, h2 { word-break: keep-all; word-break: auto-phrase; }
   opacity: 0;
   animation: fadeSlideUp 0.6s ease forwards;
   animation-delay: 0.4s;
-  color: rgba(240,237,232,0.5);
+  color: var(--text-a50);
 }
 
 .hero-title {
@@ -162,7 +162,7 @@ h1, h2 { word-break: keep-all; word-break: auto-phrase; }
   opacity: 0;
   animation: fadeIn 0.6s ease forwards;
   animation-delay: 0.9s;
-  color: rgba(240,237,232,0.5);
+  color: var(--text-a50);
   padding-bottom: 12px;
 }
 
@@ -183,7 +183,7 @@ h1, h2 { word-break: keep-all; word-break: auto-phrase; }
 .scroll-indicator .line {
   width: 1px;
   height: 40px;
-  background: rgba(240,237,232,0.3);
+  background: var(--text-a30);
   animation: pulse 2s ease-in-out infinite;
 }
 .scroll-indicator span {
@@ -199,8 +199,8 @@ h1, h2 { word-break: keep-all; word-break: auto-phrase; }
 
 /* ===================== MARQUEE ===================== */
 .marquee {
-  border-top: 1px solid rgba(240,237,232,0.08);
-  border-bottom: 1px solid rgba(240,237,232,0.08);
+  border-top: 1px solid var(--text-a08);
+  border-bottom: 1px solid var(--text-a08);
   overflow: hidden;
   white-space: nowrap;
   padding: 16px 0;
@@ -238,7 +238,7 @@ section { padding: 120px 40px; scroll-margin-top: 64px; }
   content: '';
   flex: 1;
   height: 1px;
-  background: rgba(240,237,232,0.12);
+  background: var(--text-a12);
 }
 
 /* Scroll animation base */
@@ -268,8 +268,8 @@ section { padding: 120px 40px; scroll-margin-top: 64px; }
   position: absolute;
   inset: 0;
   background-image:
-    repeating-linear-gradient(90deg, rgba(240,237,232,0.03) 0, rgba(240,237,232,0.03) 1px, transparent 1px, transparent),
-    repeating-linear-gradient(0deg, rgba(240,237,232,0.03) 0, rgba(240,237,232,0.03) 1px, transparent 1px, transparent);
+    repeating-linear-gradient(90deg, var(--text-a03) 0, var(--text-a03) 1px, transparent 1px, transparent),
+    repeating-linear-gradient(0deg, var(--text-a03) 0, var(--text-a03) 1px, transparent 1px, transparent);
   background-size: 80px 80px;
   animation: gridDrift 20s linear infinite;
 }
@@ -279,7 +279,7 @@ section { padding: 120px 40px; scroll-margin-top: 64px; }
   left: 0;
   right: 0;
   height: 1px;
-  background: rgba(240,237,232,0.06);
+  background: var(--text-a06);
   z-index: 1;
   animation: scanDown 6s linear infinite;
 }
@@ -306,8 +306,8 @@ section { padding: 120px 40px; scroll-margin-top: 64px; }
   position: absolute;
   inset: 0;
   background-image:
-    repeating-linear-gradient(90deg, rgba(240,237,232,0.03) 0, rgba(240,237,232,0.03) 1px, transparent 1px, transparent),
-    repeating-linear-gradient(0deg, rgba(240,237,232,0.03) 0, rgba(240,237,232,0.03) 1px, transparent 1px, transparent);
+    repeating-linear-gradient(90deg, var(--text-a03) 0, var(--text-a03) 1px, transparent 1px, transparent),
+    repeating-linear-gradient(0deg, var(--text-a03) 0, var(--text-a03) 1px, transparent 1px, transparent);
   background-size: 80px 80px;
   animation: gridDrift 20s linear infinite;
 }
@@ -316,7 +316,7 @@ section { padding: 120px 40px; scroll-margin-top: 64px; }
   position: absolute;
   width: 60vw; height: 60vw;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,45,45,0.06) 0%, transparent 60%);
+  background: radial-gradient(circle, var(--accent-a06) 0%, transparent 60%);
   filter: blur(40px);
   animation: glowFloat 18s ease-in-out infinite;
   pointer-events: none;
@@ -325,7 +325,7 @@ section { padding: 120px 40px; scroll-margin-top: 64px; }
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 1px;
-  background: rgba(240,237,232,0.06);
+  background: var(--text-a06);
   z-index: 1;
   animation: scanDown 8s linear infinite;
   pointer-events: none;
@@ -363,8 +363,8 @@ section { padding: 120px 40px; scroll-margin-top: 64px; }
 
 /* STATEMENT: キーワードごとの開閉式（2026-08-26 ユーザー要望）。
    details/summary のネイティブ開閉を使う。JS 不要で CSP・アクセシビリティとも安全。 */
-.statement-keywords { border-top: 1px solid rgba(240,237,232,0.08); }
-.statement-item { border-bottom: 1px solid rgba(240,237,232,0.08); }
+.statement-keywords { border-top: 1px solid var(--text-a08); }
+.statement-item { border-bottom: 1px solid var(--text-a08); }
 .statement-summary {
   padding: 28px 48px 28px 0;
   cursor: pointer;
@@ -394,7 +394,7 @@ details[open] > .statement-summary::after { transform: translateY(-50%) rotate(4
   display: inline-block;
   width: 6px;
   height: 6px;
-  background: #ff2d2d;
+  background: var(--accent);
   margin-right: 20px;
   vertical-align: middle;
 }
@@ -425,11 +425,11 @@ details[open] .statement-panel p {
 .stat-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  border: 1px solid rgba(240,237,232,0.1);
+  border: 1px solid var(--text-a10);
 }
 .stat-cell {
   padding: 32px;
-  border: 1px solid rgba(240,237,232,0.1);
+  border: 1px solid var(--text-a10);
 }
 .stat-cell .stat-value {
   font-family: var(--font-display);
@@ -472,11 +472,11 @@ details[open] .statement-panel p {
 .discover-card-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.55) 100%);
+  background: linear-gradient(to bottom, var(--black-a15) 0%, var(--black-a55) 100%);
   transition: background 0.4s ease;
 }
 .discover-card:hover .discover-card-overlay {
-  background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.45) 100%);
+  background: linear-gradient(to bottom, var(--black-a05) 0%, var(--black-a45) 100%);
 }
 .discover-card-content {
   position: absolute;
@@ -495,7 +495,7 @@ details[open] .statement-panel p {
   text-transform: uppercase;
   line-height: 1;
   margin-bottom: 12px;
-  text-shadow: 0 2px 16px rgba(0,0,0,0.5);
+  text-shadow: 0 2px 16px var(--black-a50);
 }
 .discover-card-desc {
   font-family: var(--font-body);
@@ -504,7 +504,7 @@ details[open] .statement-panel p {
   line-height: 1.7;
   opacity: 0.7;
   max-width: 220px;
-  text-shadow: 0 1px 6px rgba(0,0,0,0.3);
+  text-shadow: 0 1px 6px var(--black-a30);
 }
 .discover-card-arrow {
   position: absolute;
@@ -512,7 +512,7 @@ details[open] .statement-panel p {
   right: 20px;
   width: 32px;
   height: 32px;
-  border: 1px solid rgba(255,255,255,0.3);
+  border: 1px solid var(--white-a30);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -559,19 +559,19 @@ details[open] .statement-panel p {
 }
 .insta-cell {
   aspect-ratio: 1;
-  background: #1a1a1a;
+  background: var(--palette-1a1a1a);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  border: 1px solid rgba(240,237,232,0.04);
+  border: 1px solid var(--text-a04);
   transition: border-color 0.3s ease, filter 0.3s ease;
   padding: 16px;
   text-align: center;
 }
 .insta-cell:hover {
-  border-color: rgba(240,237,232,0.2);
+  border-color: var(--text-a20);
   filter: brightness(1.15);
 }
 .insta-cell .cell-type {
@@ -598,7 +598,7 @@ details[open] .statement-panel p {
   letter-spacing: 0.2em;
   text-transform: uppercase;
   padding: 14px 40px;
-  border: 1px solid rgba(240,237,232,0.3);
+  border: 1px solid var(--text-a30);
   background: transparent;
   color: var(--text);
   transition: background 0.4s ease, color 0.4s ease;
@@ -646,7 +646,7 @@ details[open] .statement-panel p {
 .form-group textarea,
 .form-group select {
   background: transparent;
-  border: 1px solid rgba(240,237,232,0.12);
+  border: 1px solid var(--text-a12);
   color: var(--text);
   font-family: var(--font-body);
   font-weight: 200;
@@ -661,7 +661,7 @@ details[open] .statement-panel p {
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
-  border-color: rgba(240,237,232,0.4);
+  border-color: var(--text-a40);
 }
 .form-group textarea { resize: vertical; min-height: 120px; }
 .form-group select {
@@ -671,7 +671,7 @@ details[open] .statement-panel p {
   background-position: right 16px center;
 }
 .form-group select option {
-  background: #080808;
+  background: var(--bg);
   color: var(--text);
 }
 .contact-submit {
@@ -682,7 +682,7 @@ details[open] .statement-panel p {
   letter-spacing: 0.2em;
   text-transform: uppercase;
   padding: 16px 40px;
-  border: 1px solid rgba(240,237,232,0.3);
+  border: 1px solid var(--text-a30);
   background: transparent;
   color: var(--text);
   cursor: none;
@@ -972,7 +972,7 @@ details[open] .statement-panel p {
   <div class="discover-section">
     <div class="discover-grid">
       <a href="news.html" class="discover-card reveal">
-        <div class="discover-card-bg" style="background:linear-gradient(135deg, #2d0a0a 0%, #6e1414 40%, #ff2d2d 100%)"></div>
+        <div class="discover-card-bg" style="background:linear-gradient(135deg, var(--palette-2d0a0a) 0%, var(--palette-6e1414) 40%, var(--accent) 100%)"></div>
         <div class="discover-card-overlay"></div>
         <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
         <div class="discover-card-content">
@@ -981,7 +981,7 @@ details[open] .statement-panel p {
         </div>
       </a>
       <a href="festivals.html" class="discover-card reveal">
-        <div class="discover-card-bg" style="background:linear-gradient(135deg, #1a0533 0%, #4a1942 40%, #c2185b 100%)"></div>
+        <div class="discover-card-bg" style="background:linear-gradient(135deg, var(--palette-1a0533) 0%, var(--palette-4a1942) 40%, var(--palette-c2185b) 100%)"></div>
         <div class="discover-card-overlay"></div>
         <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
         <div class="discover-card-content">
@@ -990,7 +990,7 @@ details[open] .statement-panel p {
         </div>
       </a>
       <a href="artists.html" class="discover-card reveal">
-        <div class="discover-card-bg" style="background:linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%)"></div>
+        <div class="discover-card-bg" style="background:linear-gradient(135deg, var(--palette-1a1a2e) 0%, var(--palette-16213e) 40%, var(--palette-0f3460) 100%)"></div>
         <div class="discover-card-overlay"></div>
         <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
         <div class="discover-card-content">
@@ -999,7 +999,7 @@ details[open] .statement-panel p {
         </div>
       </a>
       <a href="venues.html" class="discover-card reveal">
-        <div class="discover-card-bg" style="background:linear-gradient(135deg, #0a1f33 0%, #1a5e8a 40%, #6dc5e8 100%)"></div>
+        <div class="discover-card-bg" style="background:linear-gradient(135deg, var(--palette-0a1f33) 0%, var(--palette-1a5e8a) 40%, var(--palette-6dc5e8) 100%)"></div>
         <div class="discover-card-overlay"></div>
         <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
         <div class="discover-card-content">

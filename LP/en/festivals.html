@@ -53,7 +53,7 @@
 @font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/space-mono-v17-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
 @font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/space-mono-v17-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 </style>
-<link rel="stylesheet" href="/common.css?v=39">
+<link rel="stylesheet" href="/common.css?v=40">
 <script>document.documentElement.classList.add('tj-festivals-hydrating');</script>
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -67,7 +67,7 @@
 /* ===================== HERO HEADER ===================== */
 .page-header {
   padding: 160px 40px 80px;
-  border-bottom: 1px solid rgba(240,237,232,0.08);
+  border-bottom: 1px solid var(--text-a08);
   transition: background 0.6s ease;
 }
 .page-header-inner { display: flex; justify-content: space-between; align-items: flex-end; }
@@ -84,7 +84,7 @@
   font-size: 10px;
   letter-spacing: 0.2em;
   opacity: 0; animation: fadeSlideUp 0.6s ease forwards; animation-delay: 0.5s;
-  color: rgba(240,237,232,0.5);
+  color: var(--text-a50);
   padding-bottom: 12px;
   max-width: 420px;
   line-height: 1.8;
@@ -102,7 +102,7 @@
 .mode-toggle-label.active { opacity: 1; }
 .mode-toggle-switch {
   width: 52px; height: 26px; border-radius: 13px;
-  border: 1px solid rgba(240,237,232,0.2); background: transparent;
+  border: 1px solid var(--text-a20); background: transparent;
   position: relative; cursor: pointer; transition: all 0.4s ease;
   flex-shrink: 0;
 }
@@ -111,9 +111,9 @@
   width: 18px; height: 18px; border-radius: 50%;
   background: var(--text); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.mode-toggle-switch.rave { border-color: #ff2d2d; }
+.mode-toggle-switch.rave { border-color: var(--accent); }
 .mode-toggle-switch.rave::after {
-  left: 29px; background: #ff2d2d;
+  left: 29px; background: var(--accent);
 }
 
 /* ===================== RAVE MODE ===================== */
@@ -121,19 +121,19 @@ body.rave-mode {
   --rave-accent: #ff2d2d;
 }
 body.rave-mode .page-header {
-  background: linear-gradient(180deg, rgba(255,45,45,0.06) 0%, transparent 100%);
+  background: linear-gradient(180deg, var(--accent-a06) 0%, transparent 100%);
 }
-body.rave-mode .page-title { color: #ff2d2d; }
+body.rave-mode .page-title { color: var(--accent); }
 body.rave-mode .month-nav {
   background: rgba(20,0,0,0.85);
-  border-bottom-color: rgba(255,45,45,0.1);
+  border-bottom-color: var(--accent-a10);
 }
 body.rave-mode .month-nav a.active {
-  color: #ff2d2d;
-  border-bottom-color: #ff2d2d;
+  color: var(--accent);
+  border-bottom-color: var(--accent);
 }
 body.rave-mode .festival-section:hover {
-  background: rgba(255,45,45,0.03);
+  background: var(--accent-a03);
 }
 body.rave-mode .festival-image-wrap img {
   filter: grayscale(100%) contrast(1.2);
@@ -142,38 +142,38 @@ body.rave-mode .festival-section:hover .festival-image-wrap img {
   filter: grayscale(0%) contrast(1.2) saturate(1.3);
 }
 body.rave-mode .festival-tag {
-  border-color: rgba(255,45,45,0.2);
+  border-color: var(--accent-a20);
 }
 body.rave-mode .festival-name {
   transition: color 0.3s ease;
 }
 body.rave-mode .festival-section:hover .festival-name {
-  color: #ff2d2d;
+  color: var(--accent);
 }
 /* 検索中は Festival / Rave が混在するため、カード単位で色を決める。 */
-body.mixed-results .festival-section.rave-result:hover { background: rgba(255,45,45,0.03); }
+body.mixed-results .festival-section.rave-result:hover { background: var(--accent-a03); }
 body.mixed-results .festival-section.rave-result .festival-image-wrap img { filter: grayscale(100%) contrast(1.2); }
 body.mixed-results .festival-section.rave-result:hover .festival-image-wrap img { filter: grayscale(0%) contrast(1.2) saturate(1.3); }
-body.mixed-results .festival-section.rave-result .festival-tag { border-color: rgba(255,45,45,0.2); }
-body.mixed-results .festival-section.rave-result:hover .festival-name { color: #ff2d2d; }
+body.mixed-results .festival-section.rave-result .festival-tag { border-color: var(--accent-a20); }
+body.mixed-results .festival-section.rave-result:hover .festival-name { color: var(--accent); }
 /* Raveモードから検索した場合も、Festivalカードは通常色を保つ。 */
-body.mixed-results.rave-mode .festival-section:not(.rave-result):hover { background: rgba(240,237,232,0.03); }
+body.mixed-results.rave-mode .festival-section:not(.rave-result):hover { background: var(--text-a03); }
 body.mixed-results.rave-mode .festival-section:not(.rave-result) .festival-image-wrap img { filter: grayscale(100%); }
 body.mixed-results.rave-mode .festival-section:not(.rave-result):hover .festival-image-wrap img { filter: grayscale(0%); }
-body.mixed-results.rave-mode .festival-section:not(.rave-result) .festival-tag { border-color: rgba(240,237,232,0.12); }
+body.mixed-results.rave-mode .festival-section:not(.rave-result) .festival-tag { border-color: var(--text-a12); }
 body.mixed-results.rave-mode .festival-section:not(.rave-result):hover .festival-name { color: inherit; }
 .festival-result-type { font-family: var(--font-mono); font-size: 8px; letter-spacing: .18em; text-transform: uppercase; opacity: .5; margin-bottom: 10px; }
-.festival-section.rave-result .festival-result-type { color: #ff2d2d; opacity: .9; }
+.festival-section.rave-result .festival-result-type { color: var(--accent); opacity: .9; }
 
 /* ===================== STICKY MONTH NAV ===================== */
 .month-nav {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(8,8,8,0.85);
+  background: var(--bg-a85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(240,237,232,0.06);
+  border-bottom: 1px solid var(--text-a06);
   padding: 20px 40px;
   display: flex;
   gap: 0;
@@ -208,9 +208,9 @@ body.mixed-results.rave-mode .festival-section:not(.rave-result):hover .festival
 /* GENRE / AREA discovery filters */
 .fest-filters { padding: 14px 40px 4px; display: flex; flex-direction: column; gap: 4px; }
 .fest-search-row { display: flex; align-items: center; gap: 16px; padding-bottom: 10px; }
-.fest-search { flex: 1; max-width: 420px; background: transparent; border: 1px solid rgba(240,237,232,0.12); color: var(--text); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; padding: 12px 16px; outline: none; transition: border-color 0.3s ease; }
-.fest-search::placeholder { color: rgba(240,237,232,0.25); }
-.fest-search:focus { border-color: rgba(240,237,232,0.35); }
+.fest-search { flex: 1; max-width: 420px; background: transparent; border: 1px solid var(--text-a12); color: var(--text); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; padding: 12px 16px; outline: none; transition: border-color 0.3s ease; }
+.fest-search::placeholder { color: var(--text-a25); }
+.fest-search:focus { border-color: var(--text-a35); }
 .fest-count { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.15em; opacity: 0.62; }
 .fest-filter-row { display: flex; align-items: center; gap: 2px; overflow-x: auto; scrollbar-width: none; }
 .fest-filter-row::-webkit-scrollbar { display: none; }
@@ -218,7 +218,7 @@ body.mixed-results.rave-mode .festival-section:not(.rave-result):hover .festival
 .fest-filter-chip { display: inline-flex; align-items: center; min-height: 48px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.62; transition: opacity 0.3s ease; padding: 6px 14px; white-space: nowrap; flex-shrink: 0; cursor: pointer; background: none; border: none; color: inherit; }
 .fest-filter-chip:hover { opacity: 0.8; }
 .fest-filter-chip.active { opacity: 1; border-bottom: 1px solid var(--text); }
-.fest-empty { padding: 64px 40px; text-align: center; font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; color: rgba(240,237,232,.5); }
+.fest-empty { padding: 64px 40px; text-align: center; font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em; color: var(--text-a50); }
 .fest-empty p { margin-bottom: 20px; }
 @media (max-width: 900px) { .fest-empty { padding: 48px 24px; } }
 @media (max-width: 640px) { .fest-filters { padding: 12px 20px 4px; } .fest-search-row { align-items: stretch; flex-direction: column; gap: 8px; } .fest-search { max-width: none; width: 100%; } }
@@ -243,7 +243,7 @@ body.mixed-results.rave-mode .festival-section:not(.rave-result):hover .festival
   flex-shrink: 0;
 }
 .month-nav .year-toggle:first-of-type {
-  border-left: 1px solid rgba(240,237,232,0.1);
+  border-left: 1px solid var(--text-a10);
   margin-left: 8px;
 }
 .month-nav .year-toggle:hover { opacity: 0.6; }
@@ -275,11 +275,11 @@ html.tj-festivals-hydrating #festivals-main > .ssr-link-list {
 .festival-section {
   position: relative;
   padding: 100px 0;
-  border-bottom: 1px solid rgba(240,237,232,0.06);
+  border-bottom: 1px solid var(--text-a06);
   transition: background 0.4s ease;
 }
 .festival-section:hover {
-  background: rgba(240,237,232,0.03);
+  background: var(--text-a03);
 }
 .festival-section:last-child { border-bottom: none; }
 
@@ -363,7 +363,7 @@ html.tj-festivals-hydrating #festivals-main > .ssr-link-list {
 
 .festival-info-bottom {
   padding-top: 32px;
-  border-top: 1px solid rgba(240,237,232,0.08);
+  border-top: 1px solid var(--text-a08);
 }
 
 .festival-meta-row {
@@ -373,7 +373,7 @@ html.tj-festivals-hydrating #festivals-main > .ssr-link-list {
   padding: 10px 0;
 }
 .festival-meta-row + .festival-meta-row {
-  border-top: 1px solid rgba(240,237,232,0.04);
+  border-top: 1px solid var(--text-a04);
 }
 
 .festival-meta-label {
@@ -401,7 +401,7 @@ html.tj-festivals-hydrating #festivals-main > .ssr-link-list {
   font-size: 8px;
   letter-spacing: 0.15em;
   padding: 4px 12px;
-  border: 1px solid rgba(240,237,232,0.12);
+  border: 1px solid var(--text-a12);
   text-transform: uppercase;
   opacity: 0.5;
 }
@@ -442,7 +442,7 @@ footer { padding: 60px 40px; }
 .footer-submit {
   font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em;
   text-transform: uppercase; opacity: 0.62;
-  border-bottom: 1px solid rgba(240,237,232,0.2); padding-bottom: 2px;
+  border-bottom: 1px solid var(--text-a20); padding-bottom: 2px;
   transition: opacity 0.3s ease; margin-top: 16px; display: inline-block;
 }
 .footer-submit:hover { opacity: 0.7; }
@@ -469,7 +469,7 @@ footer { padding: 60px 40px; }
   /* Show color images on touch since no hover */
   .festival-image-wrap img { filter: grayscale(0%) brightness(0.98) !important; }
   /* Tap feedback on mobile (simulates hover) */
-  .festival-section:active { background: rgba(240,237,232,0.03); }
+  .festival-section:active { background: var(--text-a03); }
   .festival-section:active .festival-image-wrap img { transform: scale(1.05); }
   .year-toggle { cursor: pointer; }
 }
@@ -508,7 +508,7 @@ footer { padding: 60px 40px; }
 }
 .festival-row-date strong { font-weight: 400; }
 .festival-row-status { color: var(--accent); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; }
-.festival-ended-label { display: inline-block; margin-left: 8px; padding: 3px 6px; border: 1px solid rgba(240,237,232,.45); color: rgba(240,237,232,.72); font-size: 9px; letter-spacing: .1em; line-height: 1; }
+.festival-ended-label { display: inline-block; margin-left: 8px; padding: 3px 6px; border: 1px solid var(--text-a45); color: var(--text-a72); font-size: 9px; letter-spacing: .1em; line-height: 1; }
 .festival-row-main { min-width: 0; }
 .festival-row-name {
   font-family: var(--font-head);
@@ -538,7 +538,7 @@ footer { padding: 60px 40px; }
   transform: translateY(-50%);
   background-size: cover;
   background-position: center;
-  border-left: 1px solid rgba(240,237,232,.12);
+  border-left: 1px solid var(--text-a12);
   z-index: 0;
   pointer-events: none;
 }
@@ -556,7 +556,7 @@ footer { padding: 60px 40px; }
    a はモバイルで display:none、b は blur(18px)+brightness(0.58) で
    写真として見えなかった（実測 0.3 枚/画面）。両方やめて 1 種類にした。
    b の「ぼかして背景に敷く」案は、写真が情報として読めないので採らない。 */
-.festival-row:hover { background: rgba(240,237,232,.035); }
+.festival-row:hover { background: var(--text-a035); }
 .festival-row:hover .festival-row-name { color: var(--accent); }
 .festival-row.rave-result .festival-row-status,
 body.rave-mode .festival-row-status { color: var(--accent); }
@@ -813,7 +813,7 @@ body.rave-mode .festival-row-status { color: var(--accent); }
   </div>
   <div class="discover-grid">
     <a href="/en/news.html" class="discover-card reveal">
-      <div class="discover-card-bg" style="background:linear-gradient(135deg, #2d0a0a 0%, #6e1414 40%, #ff2d2d 100%)"></div>
+      <div class="discover-card-bg" style="background:linear-gradient(135deg, var(--palette-2d0a0a) 0%, var(--palette-6e1414) 40%, var(--accent) 100%)"></div>
       <div class="discover-card-overlay"></div>
       <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
       <div class="discover-card-content">
@@ -822,7 +822,7 @@ body.rave-mode .festival-row-status { color: var(--accent); }
       </div>
     </a>
     <a href="/en/festivals.html" class="discover-card reveal">
-      <div class="discover-card-bg" style="background:linear-gradient(135deg, #1a0533 0%, #4a1942 40%, #c2185b 100%)"></div>
+      <div class="discover-card-bg" style="background:linear-gradient(135deg, var(--palette-1a0533) 0%, var(--palette-4a1942) 40%, var(--palette-c2185b) 100%)"></div>
       <div class="discover-card-overlay"></div>
       <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
       <div class="discover-card-content">
@@ -831,7 +831,7 @@ body.rave-mode .festival-row-status { color: var(--accent); }
       </div>
     </a>
     <a href="/en/artists.html" class="discover-card reveal">
-      <div class="discover-card-bg" style="background:linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%)"></div>
+      <div class="discover-card-bg" style="background:linear-gradient(135deg, var(--palette-1a1a2e) 0%, var(--palette-16213e) 40%, var(--palette-0f3460) 100%)"></div>
       <div class="discover-card-overlay"></div>
       <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
       <div class="discover-card-content">
@@ -840,7 +840,7 @@ body.rave-mode .festival-row-status { color: var(--accent); }
       </div>
     </a>
     <a href="/en/venues.html" class="discover-card reveal">
-      <div class="discover-card-bg" style="background:linear-gradient(135deg, #0a1f33 0%, #1a5e8a 40%, #6dc5e8 100%)"></div>
+      <div class="discover-card-bg" style="background:linear-gradient(135deg, var(--palette-0a1f33) 0%, var(--palette-1a5e8a) 40%, var(--palette-6dc5e8) 100%)"></div>
       <div class="discover-card-overlay"></div>
       <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
       <div class="discover-card-content">
