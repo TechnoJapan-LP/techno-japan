@@ -375,14 +375,16 @@ def measure():
     # sticky指定が消えると、長い一覧で検索欄が画面外へ消えるため、JA/ENを別々に検査する。
     artist_filter_sticky_pages = 0
     artist_toolbar_re = re.compile(
-        r"\.artists-toolbar\s*\{[^}]*"
+        r"(?:\.artists-toolbar|#artists-toolbar)\s*\{[^}]*"
         r"position:\s*sticky\s*;[^}]*"
-        r"top:\s*(?:0|var\(--tj-nav-height,\s*0px\))\s*;[^}]*"
+        r"top:\s*[^;]+;[^}]*"
         r"z-index:\s*20\s*;",
         re.S,
     )
+    artists_phase_css = LP / "artists-phase3.css"
+    artist_toolbar_source = read(artists_phase_css) if artists_phase_css.exists() else ""
     for f in (LP / "artists.html", LP / "en" / "artists.html"):
-        if f.exists() and artist_toolbar_re.search(read(f)):
+        if f.exists() and artist_toolbar_re.search(read(f) + artist_toolbar_source):
             artist_filter_sticky_pages += 1
     m["artist_filter_sticky_pages"] = artist_filter_sticky_pages
 

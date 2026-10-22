@@ -37,6 +37,7 @@ window.window = window;
 const IntersectionObserver = function () { this.observe = () => {}; this.unobserve = () => {}; };
 const context = vm.createContext({console, document, window, IntersectionObserver, Set, Date, Math, String, Object, Array, encodeURIComponent});
 vm.runInContext(fs.readFileSync('LP/data-hub.js', 'utf8'), context, {filename: 'LP/data-hub.js'});
+vm.runInContext(fs.readFileSync('LP/magazine.js', 'utf8'), context, {filename: 'LP/magazine.js'});
 vm.runInContext(html, context, {filename: 'LP/top-phase2.js'});
 const cards = [...(rendered['.top2-artist-grid'] || '').matchAll(/<h3>([^<]+)<\/h3>/g)].map((match) => match[1]);
 if (cards.length !== 6) failures.push(`Playing soon の描画カードが${cards.length}人（6人ではない）`);

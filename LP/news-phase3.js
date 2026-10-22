@@ -172,6 +172,7 @@
     document.getElementById('news-shown').textContent = `${Math.min(state.visible, items.length)} / ${items.length}`;
     document.getElementById('load-more-btn').hidden = state.visible >= items.length;
     bindArticleNavigation();
+    window.tjBindCursorExpand?.('a, button');
     document.documentElement.classList.remove('tj-news-hydrating');
   }
 

@@ -130,6 +130,7 @@
     root.querySelectorAll('[data-fav-mount]').forEach(function (mount) {
       window.tjFav?.attachHeart(mount, 'festival', mount.dataset.favId, { size: 'sm' });
     });
+    window.tjBindCursorExpand?.('a, button');
   }
 
   root.querySelector('[data-filter="season"]').addEventListener('click', function (event) {

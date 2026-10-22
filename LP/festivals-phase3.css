@@ -222,6 +222,9 @@
     content: attr(data-city) ' · ';
     color: var(--text-a62);
   }
+  .festivals-phase3 .phase3-list-row .phase3-list-status[data-city=""]::before {
+    content: '';
+  }
 }
 @media (max-width: 760px) {
   .festivals-phase3 .phase3-grid {

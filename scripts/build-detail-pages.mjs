@@ -3002,9 +3002,7 @@ const EN_HUB_TEXT = [
 
 const EN_PAGE_TEXT = {
   'artists.html': [
-    ['日本のアンダーグラウンド・ダンスミュージックの現場で活動する${total}組。出演予定のフェスティバル、都市、ジャンルから辿れます。', "${total} DJs and artists active in Japan's underground dance music scene. Browse by upcoming festival, city and genre."],
-    ['すべてのアーティスト', 'All artists'],
-    ['出演予定', ''],
+    ['アーティスト一覧', 'All artists'],
   ],
   'submit.html': [
     ['Techno Japanへのフェスティバル・イベント掲載申請。掲載は無料です。', 'Submit a festival or event for consideration by Techno Japan. Listing is free of charge.'],
