@@ -1,82 +1,86 @@
 {
-  "generatedAt": "2026-10-21T21:51:24.929Z",
+  "generatedAt": "2026-10-22T21:56:29.871Z",
   "days": 30,
   "source": "ga4",
   "items": [
     {
       "id": "japan-festival-2026-october",
-      "views": 337
+      "views": 346
     },
     {
       "id": "topia-2026-info",
-      "views": 169
+      "views": 199
     },
     {
       "id": "labyrinth-2026-info",
-      "views": 139
+      "views": 141
     },
     {
       "id": "ondoland1012-2026-info",
-      "views": 117
+      "views": 118
     },
     {
       "id": "sawagi-festival-2026-info",
-      "views": 72
+      "views": 76
     },
     {
       "id": "transcendence-2025-report",
-      "views": 71
-    },
-    {
-      "id": "synapse-2026-info",
-      "views": 58
+      "views": 70
     },
     {
       "id": "treak-2026-info",
       "views": 57
     },
     {
+      "id": "synapse-2026-info",
+      "views": 51
+    },
+    {
       "id": "odyssey-2026-info",
       "views": 49
     },
     {
-      "id": "japan-festival-2026-september",
-      "views": 47
+      "id": "otsukimi-2026-info",
+      "views": 39
     },
     {
-      "id": "otsukimi-2026-info",
-      "views": 41
+      "id": "japan-festival-2026-september",
+      "views": 38
     },
     {
       "id": "intergalactic-2026-info",
       "views": 30
     },
     {
-      "id": "forest-sound-camp-info",
+      "id": "asia-festival-2026-second",
       "views": 21
     },
     {
-      "id": "asia-festival-2026-second",
+      "id": "forest-sound-camp-info",
       "views": 20
     },
     {
       "id": "rebirth-2026-info",
-      "views": 16
+      "views": 15
+    },
+    {
+      "id": "denki-bodhisattva-2026-info",
+      "views": 13
     },
     {
       "id": "snow-mashine-2027-info",
-      "views": 11
+      "views": 13
     },
     {
       "id": "test",
       "views": 7
     },
     {
-      "id": "shifumiz-2026-info",
-      "views": 6
+      "id": "post-20251120",
+      "views": 5
     },
     {
-      "id": "post-20251120",
+      "id": "shifumiz-2026-info",
       "views": 5
     },
     {
