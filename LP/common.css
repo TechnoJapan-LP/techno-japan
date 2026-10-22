@@ -10,6 +10,18 @@
   --text: #f0ede8;
   --accent: #ff2d2d;          /* sharp neon — small accents, dots, active states */
   --accent-soft: #a82f31;     /* editorial wine — warmer hovers, section tints */
+  /* Design tokens: preserve existing rendered values while making the next
+     visual system changeable from one place. */
+  --bg-rgb: 8, 8, 8; --text-rgb: 240, 237, 232;
+  --accent-rgb: 255, 45, 45; --accent-soft-rgb: 168, 47, 49;
+  --black: #000; --white: #fff;
+  --text-a01: rgba(var(--text-rgb), .01); --text-a02: rgba(var(--text-rgb), .02); --text-a025: rgba(var(--text-rgb), .025); --text-a03: rgba(var(--text-rgb), .03); --text-a035: rgba(var(--text-rgb), .035); --text-a04: rgba(var(--text-rgb), .04); --text-a05: rgba(var(--text-rgb), .05); --text-a06: rgba(var(--text-rgb), .06); --text-a065: rgba(var(--text-rgb), .065); --text-a075: rgba(var(--text-rgb), .075); --text-a08: rgba(var(--text-rgb), .08); --text-a10: rgba(var(--text-rgb), .1); --text-a11: rgba(var(--text-rgb), .11); --text-a12: rgba(var(--text-rgb), .12); --text-a14: rgba(var(--text-rgb), .14); --text-a15: rgba(var(--text-rgb), .15); --text-a16: rgba(var(--text-rgb), .16); --text-a18: rgba(var(--text-rgb), .18); --text-a20: rgba(var(--text-rgb), .2); --text-a22: rgba(var(--text-rgb), .22); --text-a25: rgba(var(--text-rgb), .25); --text-a28: rgba(var(--text-rgb), .28); --text-a30: rgba(var(--text-rgb), .3); --text-a35: rgba(var(--text-rgb), .35); --text-a40: rgba(var(--text-rgb), .4); --text-a45: rgba(var(--text-rgb), .45); --text-a48: rgba(var(--text-rgb), .48); --text-a50: rgba(var(--text-rgb), .5); --text-a55: rgba(var(--text-rgb), .55); --text-a60: rgba(var(--text-rgb), .6); --text-a62: rgba(var(--text-rgb), .62); --text-a72: rgba(var(--text-rgb), .72); --text-a75: rgba(var(--text-rgb), .75); --text-a78: rgba(var(--text-rgb), .78); --text-a80: rgba(var(--text-rgb), .8); --text-a85: rgba(var(--text-rgb), .85); --text-a90: rgba(var(--text-rgb), .9);
+  --bg-a02: rgba(var(--bg-rgb), .02); --bg-a06: rgba(var(--bg-rgb), .06); --bg-a10: rgba(var(--bg-rgb), .1); --bg-a12: rgba(var(--bg-rgb), .12); --bg-a18: rgba(var(--bg-rgb), .18); --bg-a30: rgba(var(--bg-rgb), .3); --bg-a34: rgba(var(--bg-rgb), .34); --bg-a40: rgba(var(--bg-rgb), .4); --bg-a55: rgba(var(--bg-rgb), .55); --bg-a58: rgba(var(--bg-rgb), .58); --bg-a62: rgba(var(--bg-rgb), .62); --bg-a70: rgba(var(--bg-rgb), .7); --bg-a78: rgba(var(--bg-rgb), .78); --bg-a80: rgba(var(--bg-rgb), .8); --bg-a82: rgba(var(--bg-rgb), .82); --bg-a85: rgba(var(--bg-rgb), .85); --bg-a90: rgba(var(--bg-rgb), .9); --bg-a92: rgba(var(--bg-rgb), .92); --bg-a95: rgba(var(--bg-rgb), .95); --bg-a97: rgba(var(--bg-rgb), .97);
+  --accent-a03: rgba(var(--accent-rgb), .03); --accent-a05: rgba(var(--accent-rgb), .05); --accent-a06: rgba(var(--accent-rgb), .06); --accent-a10: rgba(var(--accent-rgb), .1); --accent-a20: rgba(var(--accent-rgb), .2); --accent-a30: rgba(var(--accent-rgb), .3); --accent-a45: rgba(var(--accent-rgb), .45); --accent-a50: rgba(var(--accent-rgb), .5); --accent-a65: rgba(var(--accent-rgb), .65);
+  --accent-soft-a06: rgba(var(--accent-soft-rgb), .06); --accent-soft-a08: rgba(var(--accent-soft-rgb), .08); --accent-soft-a18: rgba(var(--accent-soft-rgb), .18); --accent-soft-a55: rgba(var(--accent-soft-rgb), .55); --accent-soft-a60: rgba(var(--accent-soft-rgb), .6); --accent-soft-a70: rgba(var(--accent-soft-rgb), .7);
+  --black-a00: rgba(0, 0, 0, 0); --black-a05: rgba(0, 0, 0, .05); --black-a15: rgba(0, 0, 0, .15); --black-a28: rgba(0, 0, 0, .28); --black-a30: rgba(0, 0, 0, .3); --black-a45: rgba(0, 0, 0, .45); --black-a50: rgba(0, 0, 0, .5); --black-a55: rgba(0, 0, 0, .55); --black-a70: rgba(0, 0, 0, .7); --black-a85: rgba(0, 0, 0, .85);
+  --white-a08: rgba(255, 255, 255, .08); --white-a20: rgba(255, 255, 255, .2); --white-a30: rgba(255, 255, 255, .3);
+  --palette-0a0a0a:#0a0a0a; --palette-0a0a12:#0a0a12; --palette-0a1210:#0a1210; --palette-0a1f33:#0a1f33; --palette-0f0f1a:#0f0f1a; --palette-0f1123:#0f1123; --palette-0f1a14:#0f1a14; --palette-0f3460:#0f3460; --palette-111:#111; --palette-120a0a:#120a0a; --palette-12120a:#12120a; --palette-16213e:#16213e; --palette-1a0533:#1a0533; --palette-1a0f0f:#1a0f0f; --palette-1a1a0f:#1a1a0f; --palette-1a1a1a:#1a1a1a; --palette-1a1a2e:#1a1a2e; --palette-1a5e8a:#1a5e8a; --palette-1b1b2e:#1b1b2e; --palette-1b2d1e:#1b2d1e; --palette-2d0a0a:#2d0a0a; --palette-2d1b2e:#2d1b2e; --palette-2e1b1b:#2e1b1b; --palette-2e2e1b:#2e2e1b; --palette-4a1942:#4a1942; --palette-6dc5e8:#6dc5e8; --palette-6e1414:#6e1414; --palette-c2185b:#c2185b; --palette-feed:#feed;
   --font-display: 'Bebas Neue', sans-serif;
   /* Editorial headings can be upgraded independently of navigation/body text. */
   --font-head: var(--font-display);
@@ -95,7 +107,7 @@ button:not(:disabled):active,
   overscroll-behavior-x: contain;
   scroll-snap-type: x proximity;
   scrollbar-width: thin;
-  scrollbar-color: rgba(240,237,232,0.35) transparent;
+  scrollbar-color: var(--text-a35) transparent;
   -webkit-overflow-scrolling: touch;
 }
 .tj-strip > * {
@@ -104,7 +116,7 @@ button:not(:disabled):active,
 }
 .tj-strip::-webkit-scrollbar { height: 4px; }
 .tj-strip::-webkit-scrollbar-track { background: transparent; }
-.tj-strip::-webkit-scrollbar-thumb { background: rgba(240,237,232,0.35); }
+.tj-strip::-webkit-scrollbar-thumb { background: var(--text-a35); }
 
 /* ===================== CUSTOM CURSOR ===================== */
 .cursor-dot, .cursor-ring {
@@ -198,7 +210,7 @@ nav .nav-links .nav-lang {
   white-space: nowrap;
   margin-left: 4px;
   padding-left: 16px;
-  border-left: 1px solid rgba(240,237,232,0.15);
+  border-left: 1px solid var(--text-a15);
 }
 nav .nav-links .nav-lang .nav-lang-sep { opacity: 0.45; }
 nav .nav-links a {
@@ -224,8 +236,8 @@ nav .nav-dropdown-menu {
 }
 nav .nav-dropdown:hover .nav-dropdown-menu { opacity: 1; pointer-events: auto; }
 nav .nav-dropdown-menu-inner {
-  background: rgba(8,8,8,0.95);
-  border: 1px solid rgba(240,237,232,0.1);
+  background: var(--bg-a95);
+  border: 1px solid var(--text-a10);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   padding: 12px 0;
@@ -245,7 +257,7 @@ nav .nav-dropdown-menu-inner a {
 }
 nav .nav-dropdown-menu-inner a:hover {
   opacity: 1;
-  background: rgba(240,237,232,0.05);
+  background: var(--text-a05);
 }
 
 /* social icons in nav */
@@ -255,7 +267,7 @@ nav .nav-links .nav-social {
   gap: 14px;
   padding-left: 16px;
   margin-left: 4px;
-  border-left: 1px solid rgba(240,237,232,0.15);
+  border-left: 1px solid var(--text-a15);
 }
 nav .nav-links .nav-social a {
   display: inline-flex;
@@ -324,7 +336,7 @@ nav .nav-links .nav-social .tj-fav-count {
 .guide-section {
   padding: 0 40px;
   margin-top: 80px;
-  border-top: 1px solid rgba(240,237,232,0.06);
+  border-top: 1px solid var(--text-a06);
 }
 .guide-header {
   padding-top: 60px;
@@ -358,11 +370,11 @@ nav .nav-links .nav-social .tj-fav-count {
 .discover-card:hover .discover-card-bg { transform: scale(1.06); }
 .discover-card-overlay {
   position: absolute; inset: 0;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.55) 100%);
+  background: linear-gradient(to bottom, var(--black-a15) 0%, var(--black-a55) 100%);
   transition: background 0.4s ease;
 }
 .discover-card:hover .discover-card-overlay {
-  background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.45) 100%);
+  background: linear-gradient(to bottom, var(--black-a05) 0%, var(--black-a45) 100%);
 }
 .discover-card-content {
   position: absolute; inset: 0;
@@ -377,18 +389,18 @@ nav .nav-links .nav-social .tj-fav-count {
   font-size: 42px;
   text-transform: uppercase; line-height: 1;
   margin-bottom: 12px;
-  text-shadow: 0 2px 16px rgba(0,0,0,0.5);
+  text-shadow: 0 2px 16px var(--black-a50);
 }
 .discover-card-desc {
   font-family: var(--font-body); font-weight: 200;
   font-size: 12px; line-height: 1.7;
   opacity: 0.7; max-width: 220px;
-  text-shadow: 0 1px 6px rgba(0,0,0,0.3);
+  text-shadow: 0 1px 6px var(--black-a30);
 }
 .discover-card-arrow {
   position: absolute; top: 20px; right: 20px;
   width: 32px; height: 32px;
-  border: 1px solid rgba(255,255,255,0.3); border-radius: 50%;
+  border: 1px solid var(--white-a30); border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   opacity: 0; transform: translateY(6px);
   transition: opacity 0.4s ease, transform 0.4s ease;
@@ -418,7 +430,7 @@ footer .footer-links .footer-social {
   gap: 0;
   padding-left: 4px;
   margin-left: 4px;
-  border-left: 1px solid rgba(240,237,232,0.15);
+  border-left: 1px solid var(--text-a15);
 }
 /* アイコンは 14px のまま、当たり判定だけ 48px（2026-09-24 定量診断のタップ基準）。
    gap は 48px 箱の余白が担うので 0 にした。 */
@@ -469,7 +481,7 @@ footer .footer-links .footer-social svg { width: 14px; height: 14px; display: bl
   display: flex;
   position: fixed !important;
   inset: 0 !important;
-  background: #0a0a0a;
+  background: var(--palette-0a0a0a);
   z-index: 100002 !important;
   height: 100dvh;
   max-height: 100dvh;
@@ -493,7 +505,7 @@ html.nav-open, body.nav-open { overflow: hidden; }
   letter-spacing: .14em;
   line-height: 1.25;
   text-transform: uppercase;
-  color: rgba(240,237,232,.5);
+  color: var(--text-a50);
   opacity: 0;
   transform: translateY(14px);
   transition: letter-spacing .6s cubic-bezier(0.075, 0.82, 0.165, 1), color .3s, opacity .5s, transform .5s;
@@ -551,11 +563,11 @@ html.nav-open, body.nav-open { overflow: hidden; }
 .nav-overlay .nav-overlay-social { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 12px; opacity: 0; transform: translateY(14px); transition: opacity .5s, transform .5s; }
 .nav-overlay .nav-overlay-social a { display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; padding: 0; font-size: 0; letter-spacing: 0; color: var(--text); opacity: .8; transform: none; }
 .nav-overlay .nav-overlay-social svg { width: 20px; height: 20px; display: block; }
-.nav-overlay .nav-latest { width: min(360px, 100%); margin-top: 16px; padding-top: 18px; border-top: 1px solid rgba(240,237,232,.18); opacity: 0; transform: translateY(14px); transition: opacity .5s, transform .5s; }
-.nav-overlay .nav-latest-title { margin-bottom: 10px; color: rgba(240,237,232,.55); font-family: var(--font-mono); font-size: 10px; letter-spacing: .2em; }
+.nav-overlay .nav-latest { width: min(360px, 100%); margin-top: 16px; padding-top: 18px; border-top: 1px solid var(--text-a18); opacity: 0; transform: translateY(14px); transition: opacity .5s, transform .5s; }
+.nav-overlay .nav-latest-title { margin-bottom: 10px; color: var(--text-a55); font-family: var(--font-mono); font-size: 10px; letter-spacing: .2em; }
 .nav-overlay .nav-latest-card { display: block; margin: 0; padding: 10px 0; color: var(--text); font-family: var(--font-mono); font-size: 11px; line-height: 1.35; letter-spacing: .04em; text-transform: none; }
 .nav-overlay .nav-latest-card strong { display: block; font-family: var(--font-display); font-size: 18px; letter-spacing: .06em; }
-.nav-overlay .nav-latest-card small { display: block; margin-top: 4px; color: rgba(240,237,232,.55); font-size: 10px; }
+.nav-overlay .nav-latest-card small { display: block; margin-top: 4px; color: var(--text-a55); font-size: 10px; }
 @media (prefers-reduced-motion: reduce) {
   .nav-overlay { transform: none; transition: opacity .15s, visibility 0s; opacity: 0; }
   .nav-overlay.active { opacity: 1; }
@@ -566,7 +578,7 @@ html.nav-open .fx-progress, body.nav-open .fx-progress { visibility: hidden !imp
 /* ===================== FOOTER ===================== */
 footer {
   padding: 60px calc(40px + var(--safe-r)) calc(40px + var(--safe-b)) calc(40px + var(--safe-l));
-  border-top: 1px solid rgba(240,237,232,0.08);
+  border-top: 1px solid var(--text-a08);
 }
 .footer-top {
   display: flex;
@@ -652,8 +664,8 @@ footer {
   bottom: 100%;
   left: 50%;
   transform: translateX(-50%) translateY(-8px);
-  background: rgba(8,8,8,0.97);
-  border: 1px solid rgba(240,237,232,0.1);
+  background: var(--bg-a97);
+  border: 1px solid var(--text-a10);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   padding: 12px 0;
@@ -681,7 +693,7 @@ footer {
   white-space: nowrap;
   text-align: center;
 }
-.footer-discover-menu a:hover { opacity: 1; background: rgba(240,237,232,0.05); }
+.footer-discover-menu a:hover { opacity: 1; background: var(--text-a05); }
 @media (hover: hover) and (pointer: fine) {
   .footer-discover:hover .footer-discover-btn::after { transform: rotate(45deg); }
   .footer-discover:hover .footer-discover-menu {
@@ -701,7 +713,7 @@ footer {
   position: relative;
   margin-top: 40px;
   padding-top: 40px;
-  border-top: 1px solid rgba(240,237,232,0.06);
+  border-top: 1px solid var(--text-a06);
   text-align: center;
   overflow: hidden;
 }
@@ -715,17 +727,17 @@ footer {
 
 /* ===================== NEWSLETTER ===================== */
 .newsletter {
-  border-top: 1px solid rgba(240,237,232,0.08);
+  border-top: 1px solid var(--text-a08);
   padding: 80px 40px;
   text-align: center;
   position: relative;
   overflow: hidden;
   /* very subtle wine wash for warmth */
-  background: radial-gradient(120% 140% at 50% 100%, rgba(168,47,49,0.08) 0%, transparent 60%);
+  background: radial-gradient(120% 140% at 50% 100%, var(--accent-soft-a08) 0%, transparent 60%);
 }
 .newsletter-eyebrow {
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.25em;
-  text-transform: uppercase; color: rgba(240,237,232,.72); opacity: 1; margin-bottom: 16px;
+  text-transform: uppercase; color: var(--text-a72); opacity: 1; margin-bottom: 16px;
 }
 
 .footer-submit { display: inline-flex; align-items: center; min-height: 44px; }
@@ -742,7 +754,7 @@ footer {
 .newsletter-form {
   display: flex; gap: 0;
   max-width: 440px; margin: 0 auto;
-  border: 1px solid rgba(240,237,232,0.15);
+  border: 1px solid var(--text-a15);
 }
 .newsletter-form input {
   flex: 1; min-width: 0;
@@ -750,7 +762,7 @@ footer {
   font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em;
   color: var(--text); padding: 14px 20px;
 }
-.newsletter-form input::placeholder { color: rgba(240,237,232,0.3); }
+.newsletter-form input::placeholder { color: var(--text-a30); }
 .newsletter-form button {
   background: var(--text); color: var(--bg); border: none;
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em;
@@ -808,8 +820,8 @@ html[lang="en"] .event-signup-label [lang="en"] { display: inline; }
     mix-blend-mode: difference;
   }
   nav.nav-scrolled {
-    background: rgba(8,8,8,0.78);
-    border-bottom-color: rgba(240,237,232,0.12);
+    background: var(--bg-a78);
+    border-bottom-color: var(--text-a12);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     mix-blend-mode: normal;
@@ -825,8 +837,8 @@ html[lang="en"] .event-signup-label [lang="en"] { display: inline; }
     left: 0 !important;
     right: 0 !important;
     z-index: 100000 !important;
-    background: rgba(8,8,8,0.82);
-    border-bottom: 1px solid rgba(240,237,232,0.12);
+    background: var(--bg-a82);
+    border-bottom: 1px solid var(--text-a12);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     mix-blend-mode: normal;
@@ -917,7 +929,7 @@ footer         { contain-intrinsic-size: auto 320px; }
    body に .tj-bg を1つ置くだけで、固定背景として敷かれる。
    コンテンツより下（z-index:0）、body背景より上。
    ========================================================== */
-/* グレイン（粒子）。#080808 のベタ塗りは画面が「のっぺり」して見える。
+/* グレイン（粒子）。var(--bg) のベタ塗りは画面が「のっぺり」して見える。
    Spincoaster が背景に微細なノイズを乗せていて紙っぽい質感が出ていたので採り入れた
    （docs/design/BENCHMARK_EYESCREAM_SPINCOASTER_2026-09-29.md §2-5）。
 
@@ -927,7 +939,7 @@ footer         { contain-intrinsic-size: auto 320px; }
    ・**コンテンツより下（z-index:0）**に居るので、文字の上には重ならない。
      2026-09-24 に直したコントラストを打ち消さない。
    ・粒子の濃さは rect の opacity で決める。0.05 は実測で選んだ:
-     地の #080808（輝度8）に対し 0.05 で平均12.8・ばらつき1.3。
+     地の var(--bg)（輝度8）に対し 0.05 で平均12.8・ばらつき1.3。
      0.14 だと平均20.5 まで持ち上がって「黒」でなくなり、0.03 ではほぼ見えない。
      文字のコントラストへの影響は 17.1:1 → 16.6:1 で無視できる。 */
 .tj-bg {
@@ -945,8 +957,8 @@ footer         { contain-intrinsic-size: auto 320px; }
   position: absolute;
   inset: -80px;                 /* ドリフト分を外側に逃がして継ぎ目を隠す */
   background-image:
-    repeating-linear-gradient(90deg, rgba(240,237,232,0.03) 0, rgba(240,237,232,0.03) 1px, transparent 1px, transparent),
-    repeating-linear-gradient(0deg, rgba(240,237,232,0.03) 0, rgba(240,237,232,0.03) 1px, transparent 1px, transparent);
+    repeating-linear-gradient(90deg, var(--text-a03) 0, var(--text-a03) 1px, transparent 1px, transparent),
+    repeating-linear-gradient(0deg, var(--text-a03) 0, var(--text-a03) 1px, transparent 1px, transparent);
   background-size: 80px 80px;
   animation: gridDrift 20s linear infinite;
   will-change: transform;
@@ -958,7 +970,7 @@ footer         { contain-intrinsic-size: auto 320px; }
   top: 0; left: 0;
   width: 60vw; height: 60vw;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,45,45,0.05) 0%, transparent 60%);
+  background: radial-gradient(circle, var(--accent-a05) 0%, transparent 60%);
   filter: blur(40px);
   animation: glowFloat 18s ease-in-out infinite;
   will-change: transform;
@@ -967,7 +979,7 @@ footer         { contain-intrinsic-size: auto 320px; }
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 1px;
-  background: rgba(240,237,232,0.06);
+  background: var(--text-a06);
   animation: scanDown 8s linear infinite;
   will-change: transform;
 }
@@ -1017,8 +1029,8 @@ body > div:not(.tj-bg):not(.cursor-dot):not(.cursor-ring) {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1px;
-  background: rgba(240, 237, 232, 0.06);
-  border: 1px solid rgba(240, 237, 232, 0.06);
+  background: var(--text-a06);
+  border: 1px solid var(--text-a06);
 }
 .ssr-link-list li { background: var(--bg); }
 .ssr-link-list a {
@@ -1034,7 +1046,7 @@ body > div:not(.tj-bg):not(.cursor-dot):not(.cursor-ring) {
 }
 .ssr-link-list a:hover,
 .ssr-link-list a:focus-visible {
-  background: rgba(240, 237, 232, 0.05);
+  background: var(--text-a05);
   color: var(--accent);
 }
 /* 見出し内の英字固有名詞を改行で割らない（localize.js の tjNoBreakNames が付与） */

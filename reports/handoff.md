@@ -11957,3 +11957,115 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - 公開前に実ブラウザでCMS記事プレビューを確認し、必要なら `Cmd+Shift+R` で強制再読み込みすること。
+
+### 2026-10-22 デザイントークン整理・ビジュアル比較ツール — 未コミット
+
+### 実施
+- `LP/common.css` に既存値と完全一致する背景・文字・アクセント・透明度・フォント・既存パレットのトークンを追加。
+- 共通CSS、詳細CSS、記事演出、JAハブのインラインCSS、詳細ページ生成元の直書き色・フォント使用をトークン参照へ変更。ENハブと詳細ページを生成。
+- `scripts/visual-snapshot.mjs` と `docs/design/STYLE_MAP.md` を追加。manifest、theme-color、ニュースレター、SVG内色はCSS変数が効かないため個別管理として記録。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node scripts/build-detail-pages.mjs`: 成功。詳細557ページ、ENハブ7枚を生成。外部画像150件はネットワーク制限のため既存寸法を使用。
+- JA/ENハブ行数: 7枚すべて一致。
+- `python3 scripts/check_asset_versions.py`: 成功。`common.css` v40、`detail.css` v73、`article-fx.css` v16、CMS v167。
+- `node scripts/check_cms_article_generated_preview.mjs`: 成功。`git diff --check` と構文検査も成功。
+- `bash scripts/preflight.sh --fast`: 48件成功、5件省略、詳細ページ生成だけ外部画像取得の240秒タイムアウトで失敗。
+- 直書き集計（対象ソース）: `rgba(240,237,232,*)` 252→1、`rgba(8,8,8,*)` 32→0、16進カラー129→42。残りはトークン定義とtheme-color、SVG data URIの1件。
+- `visual-snapshot` capture/compare: 未実施。localhost bind が環境制限（EPERM）で拒否されたため、差分0は未確認。
+
+### 変更したパターン
+- 共通色RGBと透明度、黒・白、既存グラデーション色、フォント利用、CSS版数参照。
+
+### 未確認の類似パターン
+- 確認済み・0件：JA/ENハブの行数差、対象ソース内の直接フォント利用（@font-face定義を除く）。
+- 未確認：実ブラウザでの表示・操作、画像比較による差分0、CSS変数が使えないmanifest/theme-color/ニュースレター/OG画像の実機確認。
+
+### 次の担当への注意・判断待ち
+- localhost bind可能な環境で変更前後のcapture/compareを実行し、差分0を確認すること。preflightは外部画像取得が安定した環境で再実行すること。未確認のため公開扱いにしない。
+
+### 2026-10-22 自己参照トークン修正・visual-snapshot 撮影失敗検出 — 未コミット
+
+### 実施
+- JA/EN の index・news ハブで `--accent: var(--accent)` を削除し、ページ固有の `--rave-accent` は元の値へ復元。
+- NEWS の進捗バー、共通お気に入り色、詳細言語ボタンの自己参照フォールバックを元のフォールバック値へ復元。
+- NEWS の `#feed-grid` セレクタをトークン化で壊れた状態から復元。
+- `check_regressions.py` に CSS カスタムプロパティの直接・間接循環参照検査を追加。
+- `visual-snapshot.mjs` に演出解除、フォント・画像待機、乱数固定、単色画像の撮影失敗判定、compare 前検査を追加。
+- 詳細ページを再生成。コミット・pushはしていない。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node scripts/build-detail-pages.mjs`: 成功。
+- `python3 scripts/check_asset_versions.py`: 成功。
+- `python3 scripts/check_regressions.py`: 成功。循環参照0件。
+- `node --check scripts/visual-snapshot.mjs` と Python構文検査: 成功。
+- `bash scripts/preflight.sh --fast`: 48件成功、5件省略。詳細ページ生成のみ外部Google画像取得の240秒タイムアウトで失敗。
+- `visual-snapshot capture`: 未確認。localhost bind が環境制限（EPERM）で拒否された。
+
+### 変更したパターン
+- CSS変数の自己参照・循環参照防止、NEWSハブのfeedセレクタ、スクリーンショットの描画安定化と単色検査。
+
+### 未確認の類似パターン
+- 確認済み・0件：LP配下のHTML/CSSと生成元に残る直接の自己参照・検出可能な循環参照。
+- 未確認：localhost bind可能な実ブラウザでの変更前後capture/compareと差分0。
+
+### 次の担当への注意・判断待ち
+- localhost bind可能で外部画像取得が安定した環境で、capture/compare と `preflight.sh --fast` を再実行するまで公開扱いにしないこと。
+
+### 2026-10-22 style-snapshot 追加 — 未コミット
+
+### 実施
+- `scripts/style-snapshot.mjs` に `capture <out.json>` / `compare <a.json> <b.json>` を追加。
+- visual-snapshot と同じ20ページ・390px/1280px・Content-Type付き配信・乱数固定・安定化CSSで、全要素とcontent付き`::before`/`::after`の計算後スタイルを記録・比較するようにした。
+- `docs/design/STYLE_MAP.md` に整理時はstyle-snapshot、デザイン変更時はvisual-snapshotで目視する使い分けを追記。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node --check scripts/style-snapshot.mjs`: 成功。
+- `git diff --check`: 成功。
+- capture: 未実施。実行環境のlocalhost bindが`EPERM`で拒否されたため。
+
+### 変更したパターン
+- 計算後スタイルのJSON保存、HOST正規化、要素数・要素識別子・プロパティ単位の比較と終了コード1。
+
+### 未確認の類似パターン
+- 確認済み・0件：なし。
+- localhost bind可能な環境での20ページcaptureと差分0比較: 未確認。
+
+### 次の担当への注意・判断待ち
+- localhost bind可能な環境で前後JSONをcaptureし、`compare` の差分結果を確認すること。未確認のため公開扱いにしないこと。
+
+### 2026-10-22 デザイン v2 切り替えの下準備（Claude・公開）
+
+### 実施
+- 色・透明度・フォントの直書きを CSS 変数へ集約（rgba(240,237,232,*) 252→1、背景 32→0、16進 129→42。残りは :root の定義・theme-color・SVG data URI）。値は等価のみ置換。
+- 途中で `--accent: var(--accent)`（自己参照＝無効）を index.html / news.html に作ってしまい、NEWS の「● FEATURED」の赤が白になる不具合が出た → 削除し、循環参照を検出する検査を check_regressions.py に追加。
+- 画像比較ツール scripts/visual-snapshot.mjs ＋ scripts/visual-compare.py（Pillow）。初版は data URL 方式で判定・比較が壊れており（別ページ同士で差 0%）、Pillow 方式に作り直した。
+- docs/design/STYLE_MAP.md（見た目の地図）、docs/design/V2_PLAN.md（v2 実装の段取り）、docs/design/v2-mock/（Claude Design「Techno Japan — TOP Redesign」の写し）。
+
+### コミット
+- chore(design): トークン集約・比較ツール・設計資料。
+
+### 検証
+- 計算後スタイルの全要素比較（Claude の試作スクリプト。navigate 後 2.5 秒待って全要素の color / background / border / font / opacity / filter 等を取得）:
+  20ページ（JA/EN ハブ・詳細・記事・書き手・submit/favorites/404）× 390/1280px、約2.5万要素で、差はアニメーション途中の値2件のみ（整理前同士でも出る）。
+- visual-compare --self-test OK。visual-snapshot は同じページ同士で最大約4%の揺れがあり、目視用と位置づけた。
+- style-snapshot（計算後スタイル比較の道具化）は誤検出が多く採用せず（同一ページ2回取りで 3.6万行の差）。
+
+### 変更したパターン
+- common.css / detail.css / article-fx.css / 各ハブのインライン <style> / build-detail-pages.mjs の生成 style の色・フォント指定。
+
+### 未確認の類似パターン
+- cms.css は対象外（CMS 専用、未トークン化）。
+- manifest.json / theme-color / newsletter-draft.mjs の COLORS は CSS 変数が使えないため個別管理（STYLE_MAP.md に一覧）。
+
+### 次の担当への注意・判断待ち
+- v2 実装前にユーザー判断が4つ（V2_PLAN.md §4: 切り替え幅 900/700px、Noto Sans JP の配信方法、公開単位、TOP カルーセルのスマホ挙動）。

@@ -53,14 +53,13 @@
 @font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/space-mono-v17-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
 @font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/space-mono-v17-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 </style>
-<link rel="stylesheet" href="/common.css?v=39">
+<link rel="stylesheet" href="/common.css?v=40">
 <script>document.documentElement.classList.add('tj-news-hydrating');</script>
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
-  --accent: #ff2d2d;
-  --card-bg: rgba(240,237,232,0.03);
-  --card-border: rgba(240,237,232,0.06);
+  --card-bg: var(--text-a03);
+  --card-border: var(--text-a06);
 }
 @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 html.tj-page-leaving body { opacity: 0; transition: opacity .18s ease; }
@@ -77,7 +76,7 @@ html.tj-page-leaving body { opacity: 0; transition: opacity .18s ease; }
   text-align: center;
   overflow: hidden;
   margin: 0;
-  background: linear-gradient(135deg, rgba(240,237,232,0.05) 0%, rgba(240,237,232,0.01) 100%);
+  background: linear-gradient(135deg, var(--text-a05) 0%, var(--text-a01) 100%);
 }
 .news-hero-bg {
   position: absolute;
@@ -120,7 +119,7 @@ html.tj-page-leaving body { opacity: 0; transition: opacity .18s ease; }
 }
 
 /* ===================== FEATURED STORIES ===================== */
-.news-featured { border-bottom: 1px solid rgba(240,237,232,.55); }
+.news-featured { border-bottom: 1px solid var(--text-a55); }
 html.tj-news-hydrating #news-featured { min-height: 210vh; }
 .featured-block {
   display: grid;
@@ -131,10 +130,10 @@ html.tj-news-hydrating #news-featured { min-height: 210vh; }
   padding: 56px 40px;
   text-decoration: none;
   color: var(--text);
-  border-top: 1px solid rgba(240,237,232,.12);
+  border-top: 1px solid var(--text-a12);
 }
 .featured-block:first-child { border-top: none; }
-.featured-side { aspect-ratio: 11/20; overflow: hidden; background: #111; }
+.featured-side { aspect-ratio: 11/20; overflow: hidden; background: var(--palette-111); }
 .featured-side img {
   width: 100%; height: 100%; object-fit: cover; display: block;
   filter: grayscale(.15) brightness(.85);
@@ -169,11 +168,11 @@ html.tj-news-hydrating #news-featured { min-height: 210vh; }
 }
 .featured-read {
   display: inline-flex; align-items: center; justify-content: center;
-  margin-top: 28px; padding: 14px 34px; border: 1px solid rgba(240,237,232,.4);
+  margin-top: 28px; padding: 14px 34px; border: 1px solid var(--text-a40);
   border-radius: 999px; font-family: var(--font-mono); font-size: 11px;
   letter-spacing: .2em; transition: background .3s, color .3s;
 }
-.featured-block:hover .featured-read { background: var(--text); color: #0a0a0a; }
+.featured-block:hover .featured-read { background: var(--text); color: var(--palette-0a0a0a); }
 
 /* ===================== SORT TABS (populaires / dernieres) ===================== */
 .sort-tabs {
@@ -223,7 +222,7 @@ html.tj-news-hydrating #news-featured { min-height: 210vh; }
   display: inline-flex; align-items: center; gap: 10px;
   padding: 8px 14px; margin: 24px 40px 0;
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
-  border: 1px solid var(--accent); color: var(--accent); background: rgba(255,45,45,0.06);
+  border: 1px solid var(--accent); color: var(--accent); background: var(--accent-a06);
 }
 .tag-filter-pill .clear {
   background: none; border: none; color: var(--accent); cursor: none;
@@ -342,7 +341,7 @@ html.tj-news-hydrating #feed-grid > .ssr-link-list { display: none; }
   display: flex; align-items: center; justify-content: center;
   font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
   opacity: 0.08;
-  background: linear-gradient(135deg, rgba(240,237,232,0.04) 0%, rgba(240,237,232,0.01) 100%);
+  background: linear-gradient(135deg, var(--text-a04) 0%, var(--text-a01) 100%);
 }
 .feed-card-tag {
   font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase;
@@ -386,13 +385,13 @@ html.tj-news-hydrating #feed-grid > .ssr-link-list { display: none; }
   min-height: 44px;
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
   padding: 12px 56px;
-  border: 1px solid rgba(240,237,232,0.12);
+  border: 1px solid var(--text-a12);
   background: transparent; color: var(--text);
   cursor: none;
   position: relative;
   transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
 }
-.load-more-btn:hover { border-color: rgba(240,237,232,0.35); background: rgba(240,237,232,0.03); transform: translateY(-3px); }
+.load-more-btn:hover { border-color: var(--text-a35); background: var(--text-a03); transform: translateY(-3px); }
 .load-more-btn:active { transform: translateY(0); }
 
 /* ===================== DISCOVER CARDS (index style) ===================== */
@@ -433,11 +432,11 @@ html.tj-news-hydrating #feed-grid > .ssr-link-list { display: none; }
 .discover-card:hover .discover-card-bg { transform: scale(1.06); }
 .discover-card-overlay {
   position: absolute; inset: 0;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.55) 100%);
+  background: linear-gradient(to bottom, var(--black-a15) 0%, var(--black-a55) 100%);
   transition: background 0.4s ease;
 }
 .discover-card:hover .discover-card-overlay {
-  background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.45) 100%);
+  background: linear-gradient(to bottom, var(--black-a05) 0%, var(--black-a45) 100%);
 }
 .discover-card-content {
   position: absolute; inset: 0;
@@ -452,18 +451,18 @@ html.tj-news-hydrating #feed-grid > .ssr-link-list { display: none; }
   font-size: 42px;
   text-transform: uppercase; line-height: 1;
   margin-bottom: 12px;
-  text-shadow: 0 2px 16px rgba(0,0,0,0.5);
+  text-shadow: 0 2px 16px var(--black-a50);
 }
 .discover-card-desc {
   font-family: var(--font-body); font-weight: 200;
   font-size: 12px; line-height: 1.7;
   opacity: 0.7; max-width: 220px;
-  text-shadow: 0 1px 6px rgba(0,0,0,0.3);
+  text-shadow: 0 1px 6px var(--black-a30);
 }
 .discover-card-arrow {
   position: absolute; top: 20px; right: 20px;
   width: 32px; height: 32px;
-  border: 1px solid rgba(255,255,255,0.3); border-radius: 50%;
+  border: 1px solid var(--white-a30); border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   opacity: 0; transform: translateY(6px);
   transition: opacity 0.4s ease, transform 0.4s ease;
@@ -558,7 +557,7 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
 }
 
 /* ===== SKELETON LOADING（data.js描画前のプレースホルダー・stepsで機械的に点滅） ===== */
-.sk { background: linear-gradient(100deg, rgba(240,237,232,0.05) 40%, rgba(240,237,232,0.11) 50%, rgba(240,237,232,0.05) 60%); background-size: 200% 100%; animation: skSlide 1.1s steps(7) infinite; }
+.sk { background: linear-gradient(100deg, var(--text-a05) 40%, var(--text-a11) 50%, var(--text-a05) 60%); background-size: 200% 100%; animation: skSlide 1.1s steps(7) infinite; }
 .sk-hero { aspect-ratio: 16/9; margin-bottom: 18px; }
 .sk-card { height: 96px; margin-bottom: 20px; }
 .sk-line { height: 14px; margin: 10px 0; }
@@ -726,7 +725,7 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
   </div>
   <div class="discover-grid">
     <a href="/en/news.html" class="discover-card reveal">
-      <div class="discover-card-bg" style="background:linear-gradient(135deg, #2d0a0a 0%, #6e1414 40%, #ff2d2d 100%)"></div>
+      <div class="discover-card-bg" style="background:linear-gradient(135deg, var(--palette-2d0a0a) 0%, var(--palette-6e1414) 40%, var(--accent) 100%)"></div>
       <div class="discover-card-overlay"></div>
       <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
       <div class="discover-card-content">
@@ -735,7 +734,7 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
       </div>
     </a>
     <a href="/en/festivals.html" class="discover-card reveal">
-      <div class="discover-card-bg" style="background:linear-gradient(135deg, #1a0533 0%, #4a1942 40%, #c2185b 100%)"></div>
+      <div class="discover-card-bg" style="background:linear-gradient(135deg, var(--palette-1a0533) 0%, var(--palette-4a1942) 40%, var(--palette-c2185b) 100%)"></div>
       <div class="discover-card-overlay"></div>
       <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
       <div class="discover-card-content">
@@ -744,7 +743,7 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
       </div>
     </a>
     <a href="/en/artists.html" class="discover-card reveal">
-      <div class="discover-card-bg" style="background:linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%)"></div>
+      <div class="discover-card-bg" style="background:linear-gradient(135deg, var(--palette-1a1a2e) 0%, var(--palette-16213e) 40%, var(--palette-0f3460) 100%)"></div>
       <div class="discover-card-overlay"></div>
       <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
       <div class="discover-card-content">
@@ -753,7 +752,7 @@ footer { padding: 80px 40px 40px; border-top: 1px solid var(--card-border); marg
       </div>
     </a>
     <a href="/en/venues.html" class="discover-card reveal">
-      <div class="discover-card-bg" style="background:linear-gradient(135deg, #0a1f33 0%, #1a5e8a 40%, #6dc5e8 100%)"></div>
+      <div class="discover-card-bg" style="background:linear-gradient(135deg, var(--palette-0a1f33) 0%, var(--palette-1a5e8a) 40%, var(--palette-6dc5e8) 100%)"></div>
       <div class="discover-card-overlay"></div>
       <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
       <div class="discover-card-content">

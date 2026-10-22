@@ -53,7 +53,7 @@
 @font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/space-mono-v17-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
 @font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/space-mono-v17-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 </style>
-<link rel="stylesheet" href="common.css?v=39">
+<link rel="stylesheet" href="common.css?v=40">
 <link rel="stylesheet" href="/vendor/leaflet-1.9.4/leaflet.css?v=2" media="print" onload="this.media='all'">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -65,29 +65,29 @@
 .back-link .arrow::before { content: ''; position: absolute; left: 0; top: -3px; width: 7px; height: 7px; border-left: 1px solid var(--text); border-bottom: 1px solid var(--text); transform: rotate(45deg); }
 
 /* HEADER */
-.page-header { padding: 160px 40px 80px; border-bottom: 1px solid rgba(240,237,232,0.08); }
+.page-header { padding: 160px 40px 80px; border-bottom: 1px solid var(--text-a08); }
 .page-header-inner { display: flex; justify-content: space-between; align-items: flex-end; }
 .page-title { font-family: var(--font-display); font-size: clamp(64px, 12vw, 180px); line-height: 0.9; text-transform: uppercase; opacity: 0; animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; animation-delay: 0.3s; }
-.page-subtitle { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; opacity: 0; animation: fadeSlideUp 0.6s ease forwards; animation-delay: 0.5s; color: rgba(240,237,232,0.5); padding-bottom: 12px; }
+.page-subtitle { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; opacity: 0; animation: fadeSlideUp 0.6s ease forwards; animation-delay: 0.5s; color: var(--text-a50); padding-bottom: 12px; }
 
 /* ===================== VENUES LIST ===================== */
 #venues-list-view { padding: 60px 40px 120px; }
 .venues-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
 .venue-card {
   display: block; position: relative; padding: 48px 32px; min-height: 220px;
-  border: 1px solid rgba(240,237,232,0.06); overflow: hidden; transition: border-color 0.3s ease;
+  border: 1px solid var(--text-a06); overflow: hidden; transition: border-color 0.3s ease;
 }
 .venue-card-visual {
   position: absolute; inset: 0 0 0 auto; width: 42%;
   background-size: cover; background-position: center;
   opacity: .72; pointer-events: none;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.7) 28%, #000 100%);
-  mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.7) 28%, #000 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, var(--black-a70) 28%, var(--black) 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, var(--black-a70) 28%, var(--black) 100%);
 }
 .venue-card.has-visual .venue-card-content { padding-right: 30%; }
 .venue-card.has-visual::after {
   content: ''; position: absolute; inset: 0;
-  background: linear-gradient(90deg, rgba(8,8,8,.02), rgba(8,8,8,.18)); pointer-events: none;
+  background: linear-gradient(90deg, var(--bg-a02), var(--bg-a18)); pointer-events: none;
 }
 /* 画像自体がホバー時の視線誘導を担うため、面を塗る演出は重ねない。 */
 .venue-card-content { position: relative; z-index: 1; }
@@ -96,11 +96,11 @@
 .venue-card-area { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.3; margin-bottom: 16px; }
 .venue-card-genre { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.62; }
 .venue-card-labels { position: absolute; top: 16px; right: 76px; z-index: 2; display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end; max-width: 55%; }
-.venue-card-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text); border: 1px solid rgba(240,237,232,0.22); padding: 4px 6px; background: rgba(8,8,8,0.62); }
-.venue-card-label.subtype { color: var(--accent); border-color: rgba(255,45,45,0.45); }
+.venue-card-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text); border: 1px solid var(--text-a22); padding: 4px 6px; background: var(--bg-a62); }
+.venue-card-label.subtype { color: var(--accent); border-color: var(--accent-a45); }
 .venue-card-arrow {
   position: absolute; right: 24px; bottom: 24px; z-index: 1;
-  width: 56px; height: 56px; border: 1px solid rgba(240,237,232,0.18); border-radius: 50%;
+  width: 56px; height: 56px; border: 1px solid var(--text-a18); border-radius: 50%;
   display: inline-flex; align-items: center; justify-content: center;
   font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
   color: var(--text); opacity: 0.62;
@@ -118,21 +118,21 @@
   top: 50%; right: 32px;
   transform: translateY(-50%) translateX(20px);
   width: 360px; max-width: 38vw;
-  background: rgba(8,8,8,0.92);
-  border: 1px solid rgba(240,237,232,0.1);
+  background: var(--bg-a92);
+  border: 1px solid var(--text-a10);
   backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.25s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 1500;
-  box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+  box-shadow: 0 24px 60px var(--black-a50);
 }
 .vp-pane.is-active { opacity: 1; transform: translateY(-50%) translateX(0); }
 .vp-pane.is-left { right:auto; left:32px; transform:translateY(-50%) translateX(-20px); }
 .vp-pane.is-left.is-active { transform:translateY(-50%) translateX(0); }
 .vp-img {
   position: relative; width: 100%; aspect-ratio: 4/3;
-  overflow: hidden; background: rgba(240,237,232,0.04);
+  overflow: hidden; background: var(--text-a04);
 }
 .vp-img img {
   position: absolute; inset: 0; width: 100%; height: 100%;
@@ -201,8 +201,8 @@
    （2026-08-25 ユーザー指摘）。 */
 .area-nav-wrap {
   position: sticky; top: 52px; z-index: 50;
-  background: rgba(8,8,8,0.97); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(240,237,232,0.06);
+  background: var(--bg-a97); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--text-a06);
   display: flex; flex-wrap: wrap; align-items: center;
   padding: 4px 40px;
   min-height: 60px;
@@ -218,7 +218,7 @@
 }
 /* 1行に並んだときの「都市｜種別」の区切り。折り返した2行では消す。 */
 @media (min-width: 641px) {
-  .type-nav { margin-left: 16px; padding-left: 24px; border-left: 1px solid rgba(240,237,232,0.1); }
+  .type-nav { margin-left: 16px; padding-left: 24px; border-left: 1px solid var(--text-a10); }
 }
 .area-nav::-webkit-scrollbar { display: none; }
 .area-nav a {
@@ -230,56 +230,56 @@
 .area-nav-map {
   flex-shrink: 0;
   font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
-  padding: 13px 16px; border: 1px solid rgba(240,237,232,0.15); background: transparent;
-  color: rgba(240,237,232,0.5); cursor: pointer; transition: all 0.3s ease;
+  padding: 13px 16px; border: 1px solid var(--text-a15); background: transparent;
+  color: var(--text-a50); cursor: pointer; transition: all 0.3s ease;
   display: flex; align-items: center; gap: 8px;
 }
-.area-nav-map:hover { border-color: rgba(240,237,232,0.4); color: var(--text); }
-.area-nav-map.active { background: #ff2d2d; color: var(--bg); border-color: #ff2d2d; }
+.area-nav-map:hover { border-color: var(--text-a40); color: var(--text); }
+.area-nav-map.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
 .area-nav-map .pin-icon {
-  width: 6px; height: 6px; border-radius: 50%; background: #ff2d2d; transition: background 0.3s ease;
+  width: 6px; height: 6px; border-radius: 50%; background: var(--accent); transition: background 0.3s ease;
 }
 .area-nav-map.active .pin-icon { background: var(--bg); }
 /* 検索とMAPは同じ「操作の行」。stretch で高さを検索欄に揃える。
    件数(span)だけ中央に戻し、狭い画面では2行目へ折り返す。 */
 .venues-toolbar { display: flex; align-items: stretch; gap: 16px; padding: 18px 0 20px; flex-wrap: wrap; }
 .venues-toolbar .venues-count { align-self: center; }
-.venues-search { flex: 1 1 160px; min-width: 0; max-width: 420px; background: transparent; border: 1px solid rgba(240,237,232,0.12); color: var(--text); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; padding: 12px 16px; outline: none; transition: border-color 0.3s ease; }
-.venues-search::placeholder { color: rgba(240,237,232,0.25); }
-.venues-search:focus { border-color: rgba(240,237,232,0.35); }
+.venues-search { flex: 1 1 160px; min-width: 0; max-width: 420px; background: transparent; border: 1px solid var(--text-a12); color: var(--text); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; padding: 12px 16px; outline: none; transition: border-color 0.3s ease; }
+.venues-search::placeholder { color: var(--text-a25); }
+.venues-search:focus { border-color: var(--text-a35); }
 .venues-count { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.15em; opacity: .62; }
 /* 都市ごとの id を並べない。都市が増えるたびに書き足す形は、
    足し忘れに気づけない（AUDIT §9-78）。クラスで受ける。 */
 .city-map-wrap {
-  display: none; margin: 0 40px 32px; border: 1px solid rgba(240,237,232,0.1);
+  display: none; margin: 0 40px 32px; border: 1px solid var(--text-a10);
   overflow: hidden;
 }
 .city-map-filters {
   display: flex; gap: 8px; padding: 12px 16px; flex-wrap: wrap;
-  background: rgba(8,8,8,0.9); border-bottom: 1px solid rgba(240,237,232,0.06);
+  background: var(--bg-a90); border-bottom: 1px solid var(--text-a06);
 }
 .city-map { height: 420px; background: var(--bg); }
 .venue-map-error {
   margin: 0 40px 32px; padding: 24px;
-  border: 1px solid rgba(255,45,45,0.45); color: rgba(240,237,232,0.75);
+  border: 1px solid var(--accent-a45); color: var(--text-a75);
   font-family: var(--font-mono); font-size: 11px; line-height: 1.8; letter-spacing: 0.08em;
 }
 .venue-map-error[hidden] { display: none; }
-.venue-map-error a { color: var(--text); border-bottom: 1px solid rgba(240,237,232,0.4); }
+.venue-map-error a { color: var(--text); border-bottom: 1px solid var(--text-a40); }
 .leaflet-container { background: var(--bg) !important; }
 .tj-map-osm .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) brightness(.82) contrast(.92) saturate(.35); }
-.leaflet-control-attribution { background: rgba(8,8,8,.7) !important; color: rgba(240,237,232,.6) !important; font-family: var(--font-mono); font-size: 9px; letter-spacing: .04em; padding: 2px 6px; }
-.leaflet-control-attribution a { color: rgba(240,237,232,.8) !important; }
+.leaflet-control-attribution { background: var(--bg-a70) !important; color: var(--text-a60) !important; font-family: var(--font-mono); font-size: 9px; letter-spacing: .04em; padding: 2px 6px; }
+.leaflet-control-attribution a { color: var(--text-a80) !important; }
 .leaflet-control-zoom { display: none !important; }
 .vm-pin {
   width: 9px; height: 9px; border-radius: 50%;
-  background: #ff2d2d; border: 2px solid rgba(8,8,8,0.8);
+  background: var(--accent); border: 2px solid var(--bg-a80);
   cursor: pointer; transition: all 0.2s ease;
 }
 .vm-pin:hover { width: 13px; height: 13px; border-color: var(--text); margin-left: -2px; margin-top: -2px; }
 .vm-pin-bar {
   width: 8px; height: 8px; border-radius: 1px;
-  background: #ff2d2d; border: 1.5px solid rgba(8,8,8,0.8);
+  background: var(--accent); border: 1.5px solid var(--bg-a80);
   transform: rotate(45deg); cursor: pointer; transition: all 0.2s ease;
 }
 .vm-pin-bar:hover { width: 12px; height: 12px; border-color: var(--text); margin-left: -2px; margin-top: -2px; }
@@ -287,16 +287,16 @@
   font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.1em;
   color: var(--text); text-transform: uppercase; white-space: nowrap;
   pointer-events: none;
-  background: rgba(8,8,8,0.9); border: 1px solid rgba(240,237,232,0.15);
+  background: var(--bg-a90); border: 1px solid var(--text-a15);
   border-radius: 0; padding: 4px 10px; box-shadow: none;
 }
 .vm-label::before { display: none; }
 .vm-pill {
   font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase;
-  padding: 4px 12px; border: 1px solid rgba(240,237,232,0.15); border-radius: 0;
-  background: transparent; color: rgba(240,237,232,0.4); cursor: pointer; transition: all 0.2s ease;
+  padding: 4px 12px; border: 1px solid var(--text-a15); border-radius: 0;
+  background: transparent; color: var(--text-a40); cursor: pointer; transition: all 0.2s ease;
 }
-.vm-pill:hover { border-color: rgba(240,237,232,0.4); color: var(--text); }
+.vm-pill:hover { border-color: var(--text-a40); color: var(--text); }
 .vm-pill.active { background: var(--text); color: var(--bg); border-color: var(--text); }
 /* タップ端末では押せる範囲を 44px に（見た目の変更はタップ端末に限る）。§9-79 */
 .vm-pill { touch-action: manipulation; }
@@ -510,7 +510,7 @@
   </div>
   <div class="discover-grid">
     <a href="news.html" class="discover-card reveal">
-      <div class="discover-card-bg" style="background:linear-gradient(135deg, #2d0a0a 0%, #6e1414 40%, #ff2d2d 100%)"></div>
+      <div class="discover-card-bg" style="background:linear-gradient(135deg, var(--palette-2d0a0a) 0%, var(--palette-6e1414) 40%, var(--accent) 100%)"></div>
       <div class="discover-card-overlay"></div>
       <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
       <div class="discover-card-content">
@@ -519,7 +519,7 @@
       </div>
     </a>
     <a href="festivals.html" class="discover-card reveal">
-      <div class="discover-card-bg" style="background:linear-gradient(135deg, #1a0533 0%, #4a1942 40%, #c2185b 100%)"></div>
+      <div class="discover-card-bg" style="background:linear-gradient(135deg, var(--palette-1a0533) 0%, var(--palette-4a1942) 40%, var(--palette-c2185b) 100%)"></div>
       <div class="discover-card-overlay"></div>
       <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
       <div class="discover-card-content">
@@ -528,7 +528,7 @@
       </div>
     </a>
     <a href="artists.html" class="discover-card reveal">
-      <div class="discover-card-bg" style="background:linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%)"></div>
+      <div class="discover-card-bg" style="background:linear-gradient(135deg, var(--palette-1a1a2e) 0%, var(--palette-16213e) 40%, var(--palette-0f3460) 100%)"></div>
       <div class="discover-card-overlay"></div>
       <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
       <div class="discover-card-content">
@@ -537,7 +537,7 @@
       </div>
     </a>
     <a href="venues.html" class="discover-card reveal">
-      <div class="discover-card-bg" style="background:linear-gradient(135deg, #0a1f33 0%, #1a5e8a 40%, #6dc5e8 100%)"></div>
+      <div class="discover-card-bg" style="background:linear-gradient(135deg, var(--palette-0a1f33) 0%, var(--palette-1a5e8a) 40%, var(--palette-6dc5e8) 100%)"></div>
       <div class="discover-card-overlay"></div>
       <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
       <div class="discover-card-content">
@@ -1066,7 +1066,7 @@ function createCityMap(city) {
     if (!bar) return;
     bar.innerHTML =
       MAP_GENRES.map(g => `<button class="vm-pill${state.genre === g ? ' active' : ''}" data-genre="${g}">${g}</button>`).join('')
-      + '<span style="width:1px;height:16px;background:rgba(240,237,232,0.08);margin:0 4px"></span>'
+      + '<span style="width:1px;height:16px;background:var(--text-a08);margin:0 4px"></span>'
       + MAP_TYPES.map(([t, label]) => `<button class="vm-pill${state.type === t ? ' active' : ''}" data-type="${t}">${label}</button>`).join('');
     bar.querySelectorAll('.vm-pill[data-genre]').forEach(pill => {
       pill.addEventListener('click', () => { state.genre = pill.dataset.genre; renderFilters(); renderMarkers(); });

@@ -58,7 +58,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 72;
+const DETAIL_CSS_VERSION = 73;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -71,12 +71,12 @@ const DETAIL_CSS_VERSION = 72;
 
    article-fx.js / article-fx.css を変更したら、ここを上げる。 */
 const ARTICLE_FX_JS_VERSION = 13;
-const ARTICLE_FX_CSS_VERSION = 15;
+const ARTICLE_FX_CSS_VERSION = 16;
 
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
 const COMMON_JS_VERSION = 18;   // 2026-10-19 touch devices skip the custom cursor loop
-const COMMON_CSS_VERSION = 39;   // 2026-10-19 tap targets and label contrast
+const COMMON_CSS_VERSION = 40;   // 2026-10-22 design tokens, rendered values unchanged
 const DATA_HUB_VERSION = 11;
 const SEARCH_JS_VERSION = 6;
 const LANG_TOGGLE_VERSION = 1;

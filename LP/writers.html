@@ -33,7 +33,7 @@
 @font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/space-mono-v17-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
 @font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/space-mono-v17-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 </style>
-<link rel="stylesheet" href="/common.css?v=39">
+<link rel="stylesheet" href="/common.css?v=40">
 <style>
   *, *::before, *::after { box-sizing: border-box; }
   h1, h2 { word-break: keep-all; word-break: auto-phrase; }
@@ -48,18 +48,18 @@
   .writers-copy + .writers-copy { margin-top: 20px; }
   .writers-list { padding-left: 1.2em; font-family: var(--font-body); font-size: 15px; font-weight: 200; line-height: 2; opacity: .72; }
   .writers-list li + li { margin-top: 8px; }
-  .author-list { list-style: none; border-top: 1px solid rgba(240,237,232,.14); }
-  .author-list li { display: flex; justify-content: space-between; gap: 20px; padding: 15px 0; border-bottom: 1px solid rgba(240,237,232,.1); font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; }
+  .author-list { list-style: none; border-top: 1px solid var(--text-a14); }
+  .author-list li { display: flex; justify-content: space-between; gap: 20px; padding: 15px 0; border-bottom: 1px solid var(--text-a10); font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; }
   .author-count { opacity: .45; }
   .contact-form { display: flex; flex-direction: column; gap: 24px; }
   .form-group { display: flex; flex-direction: column; gap: 8px; }
   .form-group label { font-family: var(--font-mono); font-size: 9px; letter-spacing: .2em; opacity: .45; }
-  .form-group input, .form-group textarea { width: 100%; background: transparent; border: 1px solid rgba(240,237,232,.16); color: var(--text); font: 200 14px var(--font-body); padding: 14px 16px; outline: none; border-radius: 0; }
-  .form-group input:focus, .form-group textarea:focus { border-color: rgba(240,237,232,.45); }
+  .form-group input, .form-group textarea { width: 100%; background: transparent; border: 1px solid var(--text-a16); color: var(--text); font: 200 14px var(--font-body); padding: 14px 16px; outline: none; border-radius: 0; }
+  .form-group input:focus, .form-group textarea:focus { border-color: var(--text-a45); }
   .form-group textarea { min-height: 170px; resize: vertical; }
-  .contact-submit { align-self: flex-start; padding: 16px 40px; border: 1px solid rgba(240,237,232,.3); background: transparent; color: var(--text); font: 10px var(--font-mono); letter-spacing: .2em; cursor: pointer; }
+  .contact-submit { align-self: flex-start; padding: 16px 40px; border: 1px solid var(--text-a30); background: transparent; color: var(--text); font: 10px var(--font-mono); letter-spacing: .2em; cursor: pointer; }
   .contact-submit:hover { background: var(--text); color: var(--bg); }
-  .notice { padding: 16px 20px; margin-bottom: 44px; border: 1px solid rgba(240,237,232,.25); font-size: 14px; line-height: 1.8; }
+  .notice { padding: 16px 20px; margin-bottom: 44px; border: 1px solid var(--text-a25); font-size: 14px; line-height: 1.8; }
   .tj-honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
   @media (max-width: 900px) { main { padding: 120px 24px 80px; } .writers-grid { grid-template-columns: 1fr; gap: 0; } .writers-section { margin-bottom: 64px; } }
   @media (max-width: 640px) {

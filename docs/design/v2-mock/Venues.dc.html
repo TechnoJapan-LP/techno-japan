@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Techno Japan — Venues</title>
+<script src="./support.js"></script>
+<script src="./tj-data.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=Space+Mono:wght@400;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap">
+<style>
+body{margin:0;background:#080808}
+a{color:#f0ede8;text-decoration:none}a:hover{color:#a82f31}
+.tj{position:relative;overflow:hidden;font-family:"DM Sans","Noto Sans JP",system-ui,sans-serif;font-weight:300;color:#f0ede8;background:#080808;background-image:repeating-linear-gradient(90deg,rgba(240,237,232,.03) 0 1px,transparent 1px 80px),repeating-linear-gradient(0deg,rgba(240,237,232,.03) 0 1px,transparent 1px 80px);-webkit-font-smoothing:antialiased}
+.glow{position:absolute;top:-20vw;right:-20vw;width:70vw;height:70vw;border-radius:50%;background:radial-gradient(circle,rgba(255,45,45,.07) 0,transparent 60%);filter:blur(40px);pointer-events:none}
+.disp{font-family:"Bebas Neue","Noto Sans JP",sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:.01em;line-height:.95;margin:0}
+.mono{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(240,237,232,.62)}
+.red{color:var(--accent)}
+.wrap{position:relative;max-width:1360px;margin:0 auto;padding:0 40px;box-sizing:border-box}
+.chip{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(240,237,232,.62);background:none;border:1px solid rgba(240,237,232,.18);padding:10px 14px;cursor:pointer;min-height:36px}
+.chip:hover{border-color:#a82f31;color:#f0ede8}
+.chip.on{border-color:var(--accent);color:var(--accent)}
+.img{overflow:hidden;background:rgba(240,237,232,.04)}
+.img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+a:hover .img img{transform:scale(1.04)}
+.card{display:flex;flex-direction:column;gap:10px;min-width:0}
+.card .t{font-size:28px}
+.card:hover .t{color:#a82f31}
+.nav a{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase}
+.nav a.on{color:var(--accent)}
+.ham{display:none}
+.rule{border-top:1px solid rgba(240,237,232,.12)}
+.map{position:relative;background:rgba(240,237,232,.03);background-image:repeating-linear-gradient(90deg,rgba(240,237,232,.06) 0 1px,transparent 1px 48px),repeating-linear-gradient(0deg,rgba(240,237,232,.06) 0 1px,transparent 1px 48px)}
+.dot{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px rgba(255,45,45,.15);animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 4px rgba(255,45,45,.18)}50%{box-shadow:0 0 0 12px rgba(255,45,45,0)}}
+.feat{display:grid;grid-template-columns:7fr 5fr;gap:40px;align-items:stretch}
+@media (max-width:900px){
+ .wrap{padding:0 16px}.nav,.hdate{display:none !important}.ham{display:flex}
+ .g4,.feat{grid-template-columns:repeat(1,minmax(0,1fr)) !important}
+ .pagehead{font-size:88px !important}
+}
+</style>
+</helmet>
+
+<div class="tj" style="--accent:{{accent}};display:flex;flex-direction:column;min-height:100%">
+  <div class="glow" aria-hidden="true"></div>
+
+  <header class="wrap" style="width:100%;display:flex;align-items:center;justify-content:space-between;height:64px">
+    <a href="Main.dc.html" aria-label="Techno Japan" style="display:flex;align-items:center;gap:10px"><img src="/_blob/db15f8596059fbbb809b7d38fffd003e" alt="" style="width:28px;height:28px;display:block"><img src="/_blob/59688f5f9a8d2f2293bf1adeda0ddc56" alt="Techno Japan" style="height:15px;width:auto;display:block"></a>
+    <nav class="nav" style="display:flex;gap:28px" aria-label="Main"><a href="Main.dc.html">Top</a><a href="News.dc.html">News</a><a href="Festivals.dc.html">Festivals</a><a href="Artists.dc.html">Artists</a><a href="Venues.dc.html" class="on">Venues</a><a href="#about">About</a></nav>
+    <div style="display:flex;align-items:center;gap:18px">
+      <span class="mono hdate red">2026.10.22</span>
+      <button onClick="{{openSearch}}" aria-label="Search" style="display:flex;align-items:center;gap:8px;height:44px;min-width:44px;padding:0 12px;background:none;border:1px solid rgba(240,237,232,.18);color:#f0ede8;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="hdate">Search</span></button>
+      <span class="mono" style="color:#f0ede8">JA <span style="color:rgba(240,237,232,.4)">/</span> <a href="#en" style="color:rgba(240,237,232,.62)">EN</a></span>
+      <button class="ham" onClick="{{openMenu}}" aria-label="Menu" aria-haspopup="dialog" style="background:none;border:0;color:#f0ede8;padding:0;width:44px;height:44px;align-items:center;justify-content:flex-end;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 8h18M3 16h18"></path></svg></button>
+    </div>
+  </header>
+
+  <!-- PAGE HEAD -->
+  <section class="wrap" style="width:100%;padding-top:40px;display:flex;flex-direction:column;gap:28px">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap">
+      <h1 class="disp pagehead" style="font-size:168px;line-height:.85;letter-spacing:-.01em">Venues</h1>
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;padding-bottom:12px"><span class="mono red">{{count}} venues</span><span class="mono">Clubs · Livehouses · Bars</span></div>
+    </div>
+    <div class="rule" style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:18px">
+      <div style="display:flex;gap:8px;flex-wrap:wrap" role="group" aria-label="City"><sc-for list="{{cityChips}}" as="c" hint-placeholder-count="4"><button class="{{c.cls}}" onClick="{{c.pick}}">{{c.label}}</button></sc-for></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap" role="group" aria-label="Type"><sc-for list="{{typeChips}}" as="c" hint-placeholder-count="4"><button class="{{c.cls}}" onClick="{{c.pick}}">{{c.label}}</button></sc-for></div>
+    </div>
+  </section>
+
+  <!-- MAP + FEATURED -->
+  <section class="wrap" style="width:100%;padding-top:40px">
+    <div class="feat">
+      <div class="map" style="aspect-ratio:16/9">
+        <span class="mono" style="position:absolute;left:14px;top:12px">Map · {{list.length}} pins</span>
+        <i class="dot" style="left:71%;top:48%" aria-hidden="true"></i><i class="dot" style="left:70%;top:52%" aria-hidden="true"></i><i class="dot" style="left:56%;top:58%" aria-hidden="true"></i><i class="dot" style="left:55%;top:55%" aria-hidden="true"></i><i class="dot" style="left:58%;top:53%" aria-hidden="true"></i>
+        <span class="mono" style="position:absolute;right:14px;bottom:12px;color:#f0ede8">Open full map →</span>
+      </div>
+      <a href="VenueDetail.dc.html" class="card" style="justify-content:space-between">
+        <div class="img" style="aspect-ratio:4/3"><img src="{{feat.img}}" alt=""></div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span class="mono red">Featured venue</span>
+          <h2 class="disp t" style="font-size:56px">{{feat.name}}</h2>
+          <span class="mono">{{feat.metaLine}} · {{feat.typeLine}}</span>
+          <p style="font-size:14px;line-height:1.8;margin:0;color:rgba(240,237,232,.7)">{{feat.desc}}</p>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- GRID -->
+  <section class="wrap" style="width:100%;padding-top:64px">
+    <div class="g4 rule" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:40px 24px;padding-top:40px">
+      <sc-for list="{{list}}" as="v" hint-placeholder-count="8">
+        <a href="VenueDetail.dc.html" class="card">
+          <div class="img" style="aspect-ratio:4/3"><img src="{{v.img}}" alt=""></div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-top:4px"><h3 class="disp t">{{v.name}}</h3><span class="mono">{{v.city}}</span></div>
+          <span class="mono">{{v.typeLine}}</span>
+          <span class="mono" style="color:rgba(240,237,232,.4)">{{v.genreLine}}</span>
+        </a>
+      </sc-for>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding-top:40px" class="mono"><span>{{list.length}} / {{count}}</span><span>Sort · A–Z</span></div>
+  </section>
+
+  <dc-import name="Search" is-open="{{searchOpen}}" on-close="{{closeSearch}}" hint-size="0px,0px"></dc-import>
+  <dc-import name="Menu" is-open="{{menuOpen}}" on-close="{{closeMenu}}" on-search="{{menuSearch}}" current="venues" hint-size="0px,0px"></dc-import>
+
+  <footer class="wrap" style="width:100%;padding:112px 40px 40px;display:flex;flex-direction:column;gap:32px">
+    <div class="rule" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px;padding-top:40px">
+      <img src="/_blob/59688f5f9a8d2f2293bf1adeda0ddc56" alt="Techno Japan" style="height:15px;width:auto;display:block;align-self:center">
+      <nav class="nav" style="display:flex;gap:24px;flex-wrap:wrap" aria-label="Footer"><a href="News.dc.html">News</a><a href="Festivals.dc.html">Festivals</a><a href="Artists.dc.html">Artists</a><a href="Venues.dc.html">Venues</a><a href="#about">About</a><a href="#apply">Apply</a><a href="#writer">Writer</a></nav>
+      <div style="display:flex;gap:20px" class="mono"><a href="#ig" style="color:rgba(240,237,232,.62)">Instagram</a><a href="#th" style="color:rgba(240,237,232,.62)">Threads</a></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px" class="mono"><span>© 2026 Techno Japan</span><span style="color:#f0ede8">Japan's Underground, Curated.</span></div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#ff2d2d","options":["#ff2d2d","#a82f31","#f0ede8"]},"$preview":{"width":1440,"height":3400}}'>
+class Component extends DCLogic {
+  constructor(p){ super(p); this.state = { city:'ALL', type:'all', data: (typeof window !== 'undefined' && window.TJ_DATA) || null }; }
+  componentDidMount(){ if(!this.state.data){ fetch('./tj-data.json').then(r=>r.json()).then(d=>this.setState({data:d})).catch(()=>{}); } }
+  renderVals() {
+    const D = this.state.data || {venues:[]};
+    const V = D.venues.map(v => ({...v, genreLine: (v.genre||[]).slice(0,3).join(' / ')}));
+    const c = this.state.city, t = this.state.type;
+    const cities = ['ALL', ...Array.from(new Set(V.map(v=>v.city).filter(Boolean)))];
+    const types = ['all', ...Array.from(new Set(V.map(v=>v.type).filter(Boolean)))];
+    const list = V.filter(v => (c==='ALL' || v.city===c) && (t==='all' || v.type===t));
+    const feat = list[0] || V[0] || {name:'',desc:'',metaLine:'',typeLine:'',img:''};
+    return {
+      accent: this.props.accent ?? '#ff2d2d',
+      searchOpen: !!this.state.searchOpen, openSearch: () => this.setState({searchOpen: true}), closeSearch: () => this.setState({searchOpen: false}),
+      menuOpen: !!this.state.menuOpen, openMenu: () => this.setState({menuOpen: true}), closeMenu: () => this.setState({menuOpen: false}), menuSearch: () => this.setState({menuOpen: false, searchOpen: true}),
+      count: V.length, feat, list: list.slice(1),
+      cityChips: cities.map(k=>({label:k, cls:'chip'+(c===k?' on':''), pick:()=>this.setState({city:k})})),
+      typeChips: types.map(k=>({label:k.toUpperCase(), cls:'chip'+(t===k?' on':''), pick:()=>this.setState({type:k})}))
+    };
+  }
+}
+</script>
+</body>
+</html>
