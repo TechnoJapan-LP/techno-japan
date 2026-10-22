@@ -58,7 +58,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 71;
+const DETAIL_CSS_VERSION = 72;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -71,7 +71,7 @@ const DETAIL_CSS_VERSION = 71;
 
    article-fx.js / article-fx.css を変更したら、ここを上げる。 */
 const ARTICLE_FX_JS_VERSION = 13;
-const ARTICLE_FX_CSS_VERSION = 14;
+const ARTICLE_FX_CSS_VERSION = 15;
 
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
@@ -485,6 +485,12 @@ function bodySrcsetAttr(source, sizes) {
 }
 /* 関連カードは実測 324px 幅で表示される。960px を全端末へ配らない。 */
 const cardSrcsetAttr = (s) => srcsetAttr(s, '(max-width: 700px) 100vw, 360px');
+/* 記事ページの関連フェスはPCで左の見出し列を除いた3等分になる。
+   表示幅の2倍を取得できるよう、各ブレークポイントの実測幅を sizes に反映する。 */
+const articleRelatedFestivalSrcsetAttr = (s) => srcsetAttr(
+  s,
+  '(max-width: 700px) 80vw, (max-width: 1279px) 200px, (max-width: 1439px) 277px, 346px',
+);
 // 記事内アーティストカードの写真枠は detail.css の 132px / 96px と揃える。
 const artistCardSrcsetAttr = (s) => srcsetAttr(s, '(max-width: 600px) 96px, 132px');
 /* 関連記事のサムネは CSS で 120px（640px以下は 88px）に固定表示される。
@@ -1273,7 +1279,7 @@ function isPublishedFestival(festival) {
   return festival && festival.id && String(festival.status || '').toLowerCase() !== 'draft';
 }
 
-function relatedFestivalCardHtml(festival, lang, prefix, editionsByFestival, editionOverride = null) {
+function relatedFestivalCardHtml(festival, lang, prefix, editionsByFestival, editionOverride = null, imageSrcsetAttr = cardSrcsetAttr) {
   const feds = editionOverride
     ? [editionOverride]
     : [...(editionsByFestival.get(String(festival.id)) || [])].sort((x, y) =>
@@ -1289,7 +1295,7 @@ function relatedFestivalCardHtml(festival, lang, prefix, editionsByFestival, edi
     ? [current.DATE_START, current.DATE_END].filter(Boolean).filter((v, i, arr) => arr.indexOf(v) === i).join(' — ')
     : (festival.date || '');
   return `<a class="related-card" href="${prefix}/festivals/${encodeURIComponent(festival.id)}.html">
-    <div class="related-card-img">${image ? `<img ${dimensionAttrs(cardImagePath(image))} src="/${cardImagePath(image)}"${cardSrcsetAttr(image)} alt="${esc(name)}" loading="lazy"${imagePositionStyle(festival)}>` : ''}</div>
+    <div class="related-card-img">${image ? `<img ${dimensionAttrs(cardImagePath(image))} src="/${cardImagePath(image)}"${imageSrcsetAttr(image)} alt="${esc(name)}" loading="lazy"${imagePositionStyle(festival)}>` : ''}</div>
     <div class="related-card-info">
       <div class="related-card-date">${esc(date)}</div>
       <div class="related-card-name">${esc(name)}</div>
@@ -1303,7 +1309,7 @@ function selectRelatedFestivals(article, body, festivals, editionsByFestival, pr
   const byId = new Map(published.map((festival) => [String(festival.id), festival]));
   const selected = [];
   const add = (festival) => {
-    if (festival && !selected.some((item) => String(item.id) === String(festival.id)) && selected.length < 6) selected.push(festival);
+    if (festival && !selected.some((item) => String(item.id) === String(festival.id)) && selected.length < 3) selected.push(festival);
   };
   add(byId.get(String(primaryFestivalId || '')));
 
@@ -1317,7 +1323,7 @@ function selectRelatedFestivals(article, body, festivals, editionsByFestival, pr
     if (name.length >= 4 && plainBody.includes(name.toLocaleLowerCase())) add(festival);
   }
 
-  if (selected.length >= 6) return selected;
+  if (selected.length >= 3) return selected;
   const today = new Date().toISOString().slice(0, 10);
   const primaryEditions = editionsByFestival.get(String(primaryFestivalId || '')) || [];
   const primaryPrefs = new Set(primaryEditions.map((edition) => String(edition.PREF || '').trim().toLowerCase()).filter(Boolean));
@@ -1474,7 +1480,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
      カード画像はハブと同じ縮小版を使う（§9-51）。 */
   const relatedFestivals = selectRelatedFestivals(a, L.body, festivals, editionsByFestival, festivalId);
   const relatedFestivalHtml = relatedFestivals.length
-    ? `<div class="related-festivals"><h2>${lang === 'en' ? 'RELATED FESTIVALS' : '関連フェスティバル'}</h2><div class="related-festivals-track">${relatedFestivals.map((festival) => relatedFestivalCardHtml(festival, lang, L.prefix, editionsByFestival)).join('')}</div></div>`
+    ? `<div class="related-festivals"><h2>${lang === 'en' ? '<span>RELATED</span><span>FESTIVALS</span>' : '<span>関連</span><span>フェスティバル</span>'}</h2><div class="related-festivals-track">${relatedFestivals.map((festival) => relatedFestivalCardHtml(festival, lang, L.prefix, editionsByFestival, null, articleRelatedFestivalSrcsetAttr)).join('')}</div></div>`
     : '';
 
   const articleDateKey = (item) => String(item.publishedAt || item.date || '').trim();

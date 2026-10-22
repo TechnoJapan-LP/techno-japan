@@ -11857,3 +11857,52 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - 外部画像取得可能な環境で省略なしの `bash scripts/preflight.sh` と実ブラウザ確認を再実行すること。未確認経路とpreflight失敗があるため公開扱いにしない。
+### 2026-10-22 記事ページの見た目調整 — 未コミット
+
+### 実施
+- スマホ本文の通常画像を本文カラムの24px分だけ左へ戻し、viewport左端に揃うよう修正。拡大画像は既存の`.fx-frame { overflow: hidden }`でクリップする構造を維持。
+- 記事の関連フェスをPCで大見出し列＋3列カードに変更し、1024/1280/1546px帯に対応する画像`sizes`を生成。
+- `node scripts/build-detail-pages.mjs`で詳細ページを再生成。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node scripts/build-detail-pages.mjs`: 成功。
+- `bash scripts/preflight.sh --fast`: 失敗。外部画像取得による詳細ページ生成タイムアウト、既存の二重エスケープ2件、既存変更の`article-shortcodes.js`の`?v`据え置き。その他の実行検査は成功、ブラウザ検査は`--fast`で省略。
+- 実ブラウザ確認、Publish pipeline: 未実施。
+
+### 変更したパターン
+- `.article-body`内のスマホ全幅`figure.fx-img`の左端位置。
+- 記事ページの`.related-festivals`のPC見出し・3列グリッド・カード画像`sizes`。
+
+### 未確認の類似パターン
+- 実ブラウザでの390px/1280px/1546px表示: 未確認。
+- `fx-compact`、画像ペア、フェス／アーティスト／会場ページの関連カード: 確認済み・0件（今回の対象外）。
+
+### 次の担当への注意・判断待ち
+- preflightの既存3件を解消し、実ブラウザで記事JA/ENのスマホとPCを確認するまで公開しないこと。
+
+### 2026-10-22 関連フェス見出しのPC改行固定 — 未コミット
+
+### 実施
+- `scripts/build-detail-pages.mjs` の記事ページ見出しを、JAは「関連／フェスティバル」、ENは「RELATED／FESTIVALS」の span 構造に変更。
+- `LP/detail.css` の1024px以上で各spanをblock・nowrapにし、見出しサイズを `clamp(32px, 3.2vw, 48px)` に調整。スマホ・タブレットの小さい1行表示は維持。
+- 詳細ページを再生成。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node scripts/build-detail-pages.mjs`: 成功。記事JA/EN 42ページを更新。
+- `bash scripts/preflight.sh --fast`: 失敗。詳細ページ生成が外部Google画像取得の240秒タイムアウト。後続の48件は成功、5件は`--fast`で省略。
+- 実ブラウザ確認: 未実施（1024px〜PCの表示確認は未確認）。
+
+### 変更したパターン
+- 記事詳細 `.related-festivals h2` のJA/EN見出しの文節単位span化と、1024px以上のnowrap/block表示。
+
+### 未確認の類似パターン
+- 確認済み・0件：フェス・アーティスト・会場詳細ページの同名見出し。今回の対象外。
+
+### 次の担当への注意・判断待ち
+- 外部画像取得が安定した環境でpreflightを再実行し、実ブラウザで記事JA/ENの1024px〜PC表示を確認するまで公開扱いにしないこと。

@@ -160,6 +160,12 @@ def location_language_inversions():
 def measure():
     """全メトリクスを実測して dict で返す。"""
     m = {}
+    double_escaped = []
+    for f in LP.rglob("*.html"):
+        if re.search(r"&amp;(?:amp|lt|gt|quot|#)", read(f), re.I):
+            double_escaped.append(str(f.relative_to(ROOT)))
+    m["double_escaped_entities"] = len(double_escaped)
+    m["_double_escaped_entity_list"] = double_escaped
 
     fest = sorted((LP / "festivals").glob("*.html"))
     fest_all = fest + sorted((LP / "en" / "festivals").glob("*.html"))
@@ -519,6 +525,10 @@ def main():
     if actual["_article_sitemap_missing_list"]:
         print("\nsitemap の記事URLが存在しません:")
         for item in actual["_article_sitemap_missing_list"]:
+            print(f"  - {item}")
+    if actual["_double_escaped_entity_list"]:
+        print("\n二重エスケープされたHTMLエンティティ:")
+        for item in actual["_double_escaped_entity_list"]:
             print(f"  - {item}")
 
     if failures:
