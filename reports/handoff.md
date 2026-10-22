@@ -11931,3 +11931,29 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - article-shortcodes.js を CMS と共有しているため ?v を上げた。公開後に Publish pipeline と CMS の強制再読み込みが必要。
+
+### 2026-10-22 CMS記事プレビューのCSS版数同期 — 未コミット
+
+### 実施
+- `LP/cms.js` の記事本番表示プレビューを `detail.css?v=72`、`article-fx.css?v=15` に同期。
+- `LP/cms.html` の `cms.js?v` を `165→166` に更新。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node scripts/check_cms_article_generated_preview.mjs`: 成功。
+- `python3 scripts/check_asset_versions.py`: 成功。
+- `git diff --check`: 成功。
+- 実ブラウザ確認・Publish pipeline: 未実施。
+
+### 変更したパターン
+- CMS記事本番表示プレビューの `detail.css` / `article-fx.css` 参照版数。
+- CMS本体 `cms.js` のキャッシュバスト版数。
+
+### 未確認の類似パターン
+- 確認済み・0件：同プレビュー内の `common.css?v=39`、`article-fx.js?v=13` は生成側定数と一致。
+- 実ブラウザでのCMS操作と本番表示プレビュー描画: 未確認。
+
+### 次の担当への注意・判断待ち
+- 公開前に実ブラウザでCMS記事プレビューを確認し、必要なら `Cmd+Shift+R` で強制再読み込みすること。
