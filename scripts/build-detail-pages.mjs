@@ -3352,6 +3352,37 @@ function replaceHubLinksBlock(source, markerName, html, label) {
   return source.replace(pattern, `${start}\n${html}\n${end}`);
 }
 
+function festivalHubExtraBlock(festivals) {
+  const today = todayInJapan();
+  const desc = {};
+  for (const festival of festivals) {
+    const range = String(festival.date || '').split('/');
+    const end = range[1] || range[0];
+    if (!ISO_DATE.test(range[0]) || !ISO_DATE.test(end) || end < today) continue;
+    if (festival.desc || festival.desc_en) {
+      desc[festival.id] = {
+        ...(festival.desc ? { ja: truncate(festival.desc, 160) } : {}),
+        ...(festival.desc_en ? { en: truncateAtWord(festival.desc_en, 280) } : {}),
+      };
+    }
+  }
+  const allDates = { ...CONTENT_DATES, ...CONTENT_DATE_UPDATES };
+  const updated = Object.entries(allDates)
+    .filter(([key]) => key.startsWith('festival:'))
+    .map(([, value]) => value.date)
+    .filter(Boolean)
+    .sort()
+    .pop() || '';
+  const json = JSON.stringify({ updated, desc }).replace(/<\/script/gi, '<\\/script');
+  return `<!-- HUB_EXTRA:FESTIVALS:START -->\n<script type="application/json" id="festival-hub-extra">${json}</script>\n<!-- HUB_EXTRA:FESTIVALS:END -->`;
+}
+
+function replaceFestivalHubExtra(source, block, label) {
+  const pattern = /<!-- HUB_EXTRA:FESTIVALS:START -->[\s\S]*?<!-- HUB_EXTRA:FESTIVALS:END -->/;
+  if (!pattern.test(source)) throw new Error(`${label}: FESTIVALS HUB_EXTRA marker missing`);
+  return source.replace(pattern, block);
+}
+
 function writeHubLinks(fileName, markerName, html) {
   const file = path.join(LP_DIR, fileName);
   const source = fs.readFileSync(file, 'utf8');
@@ -3715,6 +3746,10 @@ ${FAVICON_TAGS}
       written: writeHubLinks('venues.html', 'VENUES', hubLinkList(pubVenues, 'venues', (v) => v.name || '')),
     },
   };
+  const festivalExtra = festivalHubExtraBlock(pubFests);
+  const festivalHubFile = path.join(LP_DIR, 'festivals.html');
+  const festivalHubSource = fs.readFileSync(festivalHubFile, 'utf8');
+  fs.writeFileSync(festivalHubFile, replaceFestivalHubExtra(festivalHubSource, festivalExtra, 'festivals.html'));
 
   // EN ハブ用のラベル。JA と同じ items・同じ順序で、ラベルだけ EN 規則にする。
   // 件数や順序を変えると en_hub_leaks_to_ja や静的リンク数の検査とズレるため、

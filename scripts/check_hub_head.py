@@ -58,6 +58,8 @@ def check_page(relative):
     missing_types = expected - jsonld_types(head)
     if missing_types:
         errors.append(f'JSON-LD missing {", ".join(sorted(missing_types))}')
+    if "navigator.serviceWorker.register('/sw.js')" not in html:
+        errors.append('Service Worker registration is missing')
     return errors
 
 

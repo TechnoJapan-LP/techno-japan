@@ -409,10 +409,10 @@ metrics:
 #   書き換えないので、この値は意図的に更新すること。
 hub_pages:
   festivals.html:
-    container: festivals-main
-    marker: festival-row           # フェス行。JS の renderFestivals が生成
-    min_markers: 50                # 実測 70（86件中、表示対象のフェスカード）
-    min_container_bytes: 60000     # 実測 112,911。JS 停止時は 9,130 まで落ちた
+    container: festivals-phase3
+    marker: phase3-card
+    min_markers: 50
+    min_container_bytes: 20000
   artists.html:
     marker: artist-card
     min_markers: 70                # 実測 101
@@ -458,9 +458,9 @@ hub_pages:
   # EN ハブ（build-detail-pages.mjs が JA から機械生成する）。
   # marker と閾値は JA と同じでよい。同じ data.js を読むのでカード数も一致する。
   en/festivals.html:
-    container: festivals-main
-    marker: festival-row
-    ja_containers: [festivals-main]
+    container: festivals-phase3
+    marker: phase3-card
+    ja_containers: [festivals-phase3]
     max_ja_chars: 27    # 2026-08-08 実測。日本語名のフェスが5件→6件に増えたぶん。
                         # 11,196 → 35 →（LOCATION 逆転修正で）21 → 27。
                         # 内訳: SPRING LOVE 春風 / 円相芸術音楽祭 / 森、道、市場 /
@@ -468,8 +468,8 @@ hub_pages:
                         # name_en は入力しない方針（AGENTS.md）なので、日本語名の
                         # フェスが増えれば増える。**コードの不具合ではない。**
                         # 減る方向（英語名のフェスが日本語で出る）は引き続き検出する。
-    min_markers: 50                # 実測 71
-    min_container_bytes: 60000
+    min_markers: 50
+    min_container_bytes: 20000
   en/artists.html:
     marker: artist-card
     ja_containers: [artists-grid]

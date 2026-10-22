@@ -23,15 +23,13 @@
   );
 
   const articleDetailHref = (article) => `${isEnglish ? '/en' : ''}/articles/${encodeURIComponent(article.id)}.html`;
-  const sortNewest = (left, right) => new Date(right.date) - new Date(left.date);
-  const dateDots = (date) => String(date || '').replace(/-/g, '.');
+  const sortNewest = (left, right) => String(right.date || '').localeCompare(String(left.date || ''));
+  const dateDots = (date) => tjMagDot(date);
   const latestDate = () => dateDots([...published].sort(sortNewest)[0]?.date);
 
   function splitTitle(value) {
-    const text = String(value || '');
-    const separator = text.search(/[｜|]/);
-    if (separator < 0) return { title: text.trim(), sub: '' };
-    return { title: text.slice(0, separator).trim(), sub: text.slice(separator + 1).trim() };
+    const parts = tjMagSplitTitle(value);
+    return { title: parts.main, sub: parts.sub };
   }
 
   function titleMarkup(article, headingTag) {

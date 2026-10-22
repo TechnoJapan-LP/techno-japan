@@ -154,16 +154,12 @@
 
 .news-read { color: var(--text); }
 
-.news-two-section,
-.news-three-section {
-  border-top: 1px solid var(--text-a12);
-}
-
 .news-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 40px;
   padding-top: 40px;
+  border-top: 1px solid var(--text-a12);
 }
 
 .news-three {
@@ -171,6 +167,7 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 40px 32px;
   padding-top: 40px;
+  border-top: 1px solid var(--text-a12);
 }
 
 .news-list {
@@ -216,7 +213,7 @@
   text-align: center;
 }
 
-.ssr-link-list { display: none; }
+.tj-news-hydrating .ssr-link-list { display: none; }
 
 @media (max-width: 900px) {
   .news-head-row { align-items: flex-end; }

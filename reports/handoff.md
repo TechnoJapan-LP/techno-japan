@@ -12552,3 +12552,42 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - 無くした機能（特に MONTHLY POPULAR とニュースレター欄）を戻すかはユーザー判断待ち。
+
+### 2026-10-23 redesign/magazine フェーズ3-2 FESTIVALS 一覧＋共通の小道具（Claude 検証・コミット。本番未反映）
+
+### 実施
+- `LP/festivals.html` をモック（Festivals.dc.html）の構成へ置き換え（旧ページの CSS 520行・JS 550行・旧マークアップを削除）。EN は生成。
+  見出し `Festivals`＋`N upcoming · M indexed`・`Updated`／Season（Upcoming・Archive・All）・Type（All types・Festival・Rave）・View（Grid・List）のチップ／Next up（3:2、日程は折り返さない、説明は4行）／Grid（4列→1100px以下3列→760px以下2列）／List／`N results · Sort · Date`。
+- 本番の「見た目でない機能」は残した: `?type=rave`（本番のリンク）、記事から戻った時の位置復元、ハート（フェスのお気に入りはここでしか付けられない）。URL に `?season=` `?view=` を追加。
+- **`LP/magazine.js`（新規）**: 日付・タイトル分割・Image Position を全ページ共通に。TOP・NEWS もこれに切り替え。
+  - TOP の不具合を2つ直した: ①アメリカ等（日本より時間が遅い地域）から見るとフェスの日付が1日前にずれていた（`new Date('2026-10-22')` が UTC 扱い）。②CMS の Image Position（アーティスト28名が「上合わせ」）が TOP で効いていなかった。
+- ビルド時に festivals.html へ小さな JSON（`HUB_EXTRA:FESTIVALS`）を書き出す: 今後のフェスの説明文（JA 160字・EN 280字）と更新日（詳細ページの dateModified と同じ値）。hub 用データ（data-hub.js）に説明文が無いため。JA と EN の一致を検査に追加。
+- `tjHeroSrcsetAttr` に元画像を最大の候補として追加（フェスの画像は派生が 960px までしか無く、元は 1920px）。
+- そのほか: favorites.js の参照を全ページ `?v=4` に統一（フェーズ1で中身を変えたのに12ページが v3 のままだった）、NEWS の区切り線の位置、NEWS の Service Worker 登録の復元（フェーズ3-1 で消えていた）と検査、cms.js の `?v=171`（フェーズ3-1 で中身を変えたのに上げていなかった）。
+
+### コミット
+- このエントリを含むコミット（redesign/magazine）。push・本番公開はしていない。
+
+### 検証
+- headless Chrome（390px@3x / 1000px / 1280px@2x、JA/EN、`$CLAUDE_JOB_DIR/tmp/festverify.mjs`）で 126/126:
+  並び順（今後=開始日の早い順・Archive=新しい順・All=今後→過去）をデータから計算した期待値と完全一致／Next up＝並びの先頭／チップの選択表示がクリックに追従／URL の保存と再読み込みでの復元／`?type=rave`／
+  XSS（`?type=` `?season=` に攻撃文字列）／グリッドの列数（4・3・2）／日付が折り返さない／ハートがカードの中にある（List 表示も）／戻るボタンで位置が戻る／横はみ出し 0／JS エラー 0／
+  日付が東京とロサンゼルスで同じ／JS 無効の時は静的リンク91件が見える・JS 有効の時は見えない。
+- 途中で見つけて直したもの: 旧ページの CSS が残り左右の余白が 0／h1 が2つ／`?season=all` が戻らない／チップを押しても選択の表示が変わらない／List 表示でハートがページ右上に重なる／静的リンク一覧が描画後も見える。
+- 画質: Next up（PC）は元画像 1920px を使用（3:2 に切るので約 1962px 必要。元画像が最大）。グリッドは全件 OK。
+- 重さ: 元画像を候補に足しても TOP・NEWS はほぼ変わらない（TOP の画像 PC 3,045→3,099KB は Playing soon のランダム表示による揺れを含む。NEWS は同じ）。
+- TOP: カルーセルの 01→04 の切り替わり位置が変更前と同じ（390px / 1280px）。
+- NEWS の再確認 72/72（チップの選択表示の追従を追加）。JA/EN 行数一致（festivals 371/371 ほか）。check_asset_versions / check_hub_head / check_shared_chrome / check_regressions 成功。
+
+### 変更したパターン
+- 本番 festivals.html から無くしたもの（モックに無い）: ページ内の検索（`?q=`）、ジャンルのチップ（`?genre=`）、月のナビ（`?period=`）、FESTIVAL/RAVE の切替スイッチ（Type のチップに置き換え。初期は「すべての種別」）、見出し「FESTIVAL GUIDE '26」と説明文。
+- `N results` は Next up を含めた件数にした（モックはグリッドの件数。見出しの「N upcoming」と数が合う方を選んだ）。
+
+### 未確認の類似パターン
+- EN ページで日本語名のフェスが5件そのまま出る（りんご音楽祭・御月民・森、道、市場・円相芸術音楽祭・SPRING LOVE 春風）。データ側（name_en）の課題でフェーズ8で扱う。
+- スマホの List 表示で、都市が空のフェスは状態欄が「· UPCOMING」と点から始まる。次の作業（3-3）で直す。
+- 実機（iPhone）での確認は未実施。
+
+### 次の担当への注意・判断待ち
+- **cms.js を変えている（記事プレビュー用の CSS の版数のみ）**。本番に出す時は AGENTS.md の「Publish の経路を触ったら」に従い、Publish pipeline を流して CMS で確認すること。
+- 無くした機能（特にページ内検索・ジャンル・月のナビ）を戻すかはユーザー判断待ち。

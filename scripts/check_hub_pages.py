@@ -615,6 +615,20 @@ def main():
     print(f"対象   : {base}\n")
 
     failures, rows, actual = [], [], {}
+    if not args.base:
+        extra_pattern = re.compile(r'<!-- HUB_EXTRA:FESTIVALS:START -->([\s\S]*?)<!-- HUB_EXTRA:FESTIVALS:END -->')
+        ja_extra = extra_pattern.search((LP / 'festivals.html').read_text(encoding='utf-8'))
+        en_extra = extra_pattern.search((LP / 'en' / 'festivals.html').read_text(encoding='utf-8'))
+        if not ja_extra or not en_extra:
+            failures.append('festivals HUB_EXTRA が JA/EN のどちらかにありません')
+        elif ja_extra.group(1) != en_extra.group(1):
+            failures.append('festivals HUB_EXTRA が JA/EN で一致しません')
+        else:
+            payload = re.search(r'<script type="application/json" id="festival-hub-extra">([\s\S]*?)</script>', ja_extra.group(1))
+            try:
+                json.loads(payload.group(1) if payload else '')
+            except (TypeError, json.JSONDecodeError):
+                failures.append('festivals HUB_EXTRA の JSON が不正です')
     for path in (LP / "venues.html", LP / "map.html", LP / "cms.js"):
         source = path.read_text(encoding="utf-8")
         if "cartocdn" in source and not re.search(r"cartocdn\.com/[^'\"\s]+\?key=", source):

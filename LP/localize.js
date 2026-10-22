@@ -151,6 +151,11 @@
     hit.srcset.concat(hit.heroSrcset || []).forEach(function (pair) {
       if (Array.isArray(pair) && pair.length >= 2) byWidth.set(String(pair[1]), pair);
     });
+    var originalSize = window.tjImageDimensions && window.tjImageDimensions(value);
+    var maxWidth = Math.max.apply(null, Array.from(byWidth.keys()).map(Number));
+    if (originalSize && originalSize[0] > maxWidth) {
+      byWidth.set(String(originalSize[0]), [window.tjAssetPath(value), originalSize[0]]);
+    }
     var set = Array.from(byWidth.values()).sort(function (a, b) { return Number(a[1]) - Number(b[1]); }).map(function (pair) {
       return window.tjAssetPath(pair[0]) + ' ' + pair[1] + 'w';
     }).join(', ');
