@@ -38,6 +38,8 @@
 - メタ：**Space Mono** 10px、`letter-spacing:.15em`、uppercase（`.mono`）
 - Bebas Neue / DM Sans / Space Mono は本番と同じセルフホスト（`/fonts/`）を使う。
 - **Noto Sans JP は Google Fonts から読み込む**（2026-10-22 ユーザー決定。300/400/500/700、`display=swap`、preconnect。日本語は自前配信だと数 MB になるため）。
+  - 2026-10-23 計測（スマホ 390px・dpr3、ネットワークの実バイト）: TOP 577KB → 1,138KB、記事 1,398KB → 2,268KB（増分はほぼ書体ファイル）。
+    「端末の書体を使う」「太さを1種類に絞る」案を示したうえで、ユーザーが**今のまま（4種類）**を選択（2026-10-23）。表示開始の遅れは小さい（display=swap）。
 
 ### 共通部品
 - **固定ヘッダー `.hdr`**：`position:sticky; top:0; z-index:40; background:rgba(8,8,8,.72); backdrop-filter:blur(12px)`、高さ 64px。左ロゴ（ワードマーク、高さ 15px）／中央ナビ（Top / News / Festivals / Artists / Venues / About、等幅 10px）／右に Search ボタン・JA/EN・ハンバーガー。**左のアイコンと赤い日付は無し**。スマホでは Search を隠し（メニュー内にある）、ハンバーガーのみ。

@@ -12350,3 +12350,170 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 - フェーズ2（TOP）はユーザーへ報告後に開始。FUTURE は featured の2記事（現在 featured は1本のみ。ユーザーに CMS でもう1本付けてもらう）。
 - docs/design/v2-mock/ と V2_PLAN.md は古い（REDESIGN_SPEC.md と docs/design-mock/ が正）。
+
+### 2026-10-23 redesign/magazine フェーズ2 TOP（未コミット）
+
+### 実施
+- `LP/index.html` / `LP/en/index.html` にTOP phase 2のシェルを追加し、`LP/top-phase2.css` / `LP/top-phase2.js`でマーキー、4本リード、FUTURE、UPCOMING、STORIES、FESTIVAL INDEX、Playing soon、VENUES、NEWSLETTERを実装。
+- 記事は公開済みを日付順、FUTUREのfeatured優先、見出しの`|`/`｜`分割、フェスは開催回の日付、アーティストは今後のlineupから次回出演順で整形。JA/ENは同一JSと`tjLocalized`で分岐。
+- `scripts/check_top_artists.mjs`をPlaying soon 6人ランダム＋Shuffleの検査へ更新。`favorites.js`のキャッシュ版をv4へ更新。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node --check LP/top-phase2.js`: 成功。
+- `node scripts/check_top_artists.mjs`: 成功。
+- `python3 scripts/check_shared_chrome.py`: 成功（557ページ）。
+- `python3 scripts/check_asset_versions.py`: 成功（警告: favorites.js v3/v4の意図的な混在）。
+- `bash scripts/preflight.sh --fast`: 48件成功、5件省略、2件失敗。詳細ページ生成は外部Google画像取得の240秒timeout、?v検査は実行前にv4へ更新して再検査済み。
+- JA/EN `index.html` の行数は1515/1515で一致。実ブラウザ確認は未実施。
+
+### 変更したパターン
+- TOP本文の表示・データ整形・スクロールカルーセル・レスポンシブカード・ニュースレター表示、TOP artists検査。
+
+### 未確認の類似パターン
+- 未確認：実ブラウザのJA/EN、PC/モバイル、スクロール固定、Shuffle、UPCOMINGフィルタ、Buttondown送信。
+- 未確認：外部画像取得が成功する環境での完全な`node scripts/build-detail-pages.mjs`とfull preflight。
+
+### 次の担当への注意・判断待ち
+- 外部画像取得可能な環境でビルドとブラウザ確認を再実行するまで公開扱いにしない。CMS変更はなく、本番データへの書き込みはしていない。
+
+### 2026-10-23 TOP 空表示の修正（未コミット）
+
+### 実施
+- `LP/top-phase2.js` の `window.ARTICLES/FESTIVALS/ARTISTS/VENUES` 参照を、`typeof XXX !== 'undefined' ? XXX : []` に変更。`data-hub.js` のトップレベル `const` を読むよう修正。
+- `LP/index.html` の `top-phase2.js` を `?v=2` に更新。`scripts/check_top_artists.mjs` を実描画ハーネスでカード数・名前まで検査する形に変更。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node --check LP/top-phase2.js`: 成功。
+- `node scripts/build-detail-pages.mjs`: 成功、詳細557ページ、変更0件。
+- `node scripts/check_top_artists.mjs`: 成功、6人のカード名を実描画で確認。
+- `python3 scripts/check_asset_versions.py`: 成功（favorites.js v3/v4の警告のみ）。
+- JA/EN `index.html`: 1519行/1519行で一致。
+- 派生画像の実測: `src` と `srcset` が `/images/derivatives/card/...` を指すことを確認。
+- `LP/` の `window.ARTICLES/FESTIVALS/ARTISTS/VENUES` 残存: 確認済み・0件。
+
+### 変更したパターン
+- TOPの共有データ参照、TOP artists実描画検査、TOPスクリプトのキャッシュバスター。
+
+### 未確認の類似パターン
+- 確認済み・0件：`LP/` 内の同じ `window.XXX` データ参照。
+- 未確認：実ブラウザでのJA/EN・390px/1280px操作、スクロールカルーセル、UPCOMINGフィルタ、Shuffle、Newsletter送信。
+
+### 次の担当への注意・判断待ち
+- 実ブラウザ確認とfull preflightは未実施のため、公開扱いにしないこと。CMS変更・本番データへの書き込みはない。
+
+### 2026-10-23 TOP 仕上げ修正（未コミット）
+
+### 実施
+- `LP/top-phase2.css` / `LP/top-phase2.js` を修正。カード名を Bebas Neue・uppercase に統一、900px 以下の FUTURE を1列化、UPCOMING のスマホ位置表示、Newsletter フォーム接続、JS 実行時の SSR 一覧非表示、sticky top を含むカルーセル span を反映。
+- `LP/index.html` / `LP/en/index.html` の `?v` を更新し、旧 `.section-head.stories-section-head` 見出しを削除。静的リンク一覧 HTML は保持。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node --check LP/top-phase2.js`: 成功。
+- `node scripts/build-detail-pages.mjs`: 成功、詳細557ページ、変更0件。
+- `node scripts/check_top_artists.mjs`: 成功。
+- `python3 scripts/check_asset_versions.py`: 成功（既存の favorites.js v3/v4 混在警告のみ）。
+- JA/EN `index.html`: 1519行/1519行で一致。
+
+### 変更したパターン
+- TOP phase 2 の typography、FUTURE レスポンシブ、UPCOMING mobile metadata、Newsletter form、SSR fallback visibility、carousel scroll span。
+
+### 未確認の類似パターン
+- 確認済み・0件：JA/EN の TOP ハブ生成結果、旧 STORIES 見出し要素。
+- 未確認：実ブラウザでの JA/EN・390px/1280px の表示／操作、カルーセル固定解除位置、Buttondown 送信。
+
+### 次の担当への注意・判断待ち
+- 実ブラウザ確認と full preflight は未実施。公開扱いにしないこと。CMS変更・本番データへの書き込みはない。
+
+### 2026-10-23 TOP旧部品削除・Newsletterフォーム修正（未コミット）
+
+### 実施
+- `LP/index.html` から旧TOP専用CSS・マークアップ・描画用インラインJS（Stories、旧イベント／フェス、旧Artists、旧Venues、旧formsubmitフォーム）を削除。
+- `LP/top-phase2.css` でTOPのNewsletterフォームを枠なし・最大520px・横一列、入力48px、hover時アクセント色に修正。`?v` を更新。
+- `node scripts/build-detail-pages.mjs` でENをJAから再生成。静的リンク目印は保持。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node --check LP/top-phase2.js`: 成功。
+- `node scripts/build-detail-pages.mjs`: 成功、詳細557ページ、変更0件。
+- `python3 scripts/check_asset_versions.py`: 成功（既存のfavorites.js v3/v4警告のみ）。
+- `python3 scripts/check_shared_chrome.py`: 成功（557ページ）。
+- `node scripts/check_top_artists.mjs`: 成功。
+- JA/EN `index.html`: 321行/321行で一致。旧TOP識別子は共有CSP/dns-prefetch以外0件。
+- `bash scripts/preflight.sh --fast`: 49件成功、5件省略、1件失敗。詳細ページ生成が外部画像取得の240秒timeout。
+
+### 変更したパターン
+- 旧TOP専用のHTML／インラインCSS／インライン描画JSの削除、TOP phase 2 Newsletterフォームのレイアウトと状態、JA→ENハブ再生成。
+
+### 未確認の類似パターン
+- 未確認：実ブラウザでのJA/EN・PC/モバイル表示とNewsletter入力操作、外部画像取得可能環境でのpreflight再実行。
+
+### 次の担当への注意・判断待ち
+- preflightのtimeoutと実ブラウザ確認が未解決のため公開扱いにしないこと。CMS変更・本番データへの書き込みはない。
+
+### 2026-10-23 TOP画像srcset画質修正（未コミット）
+
+### 実施
+- `LP/localize.js` にカード用 `srcset` と `heroSrcset` を幅重複なしで統合する `tjHeroSrcsetAttr(value, sizes)` を追加。
+- `LP/top-phase2.js` のリードカルーセル（`100vw`）と FUTURE（`(max-width: 900px) calc(100vw - 32px), 50vw`）だけを hero 候補対応に変更。STORIES・UPCOMING・Artists・Venues はカード用のまま。
+- `localize.js` の参照を全ハブで `?v=15` に更新。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node --check LP/localize.js LP/top-phase2.js`: 成功。
+- `node scripts/build-detail-pages.mjs`: 成功。外部画像1件は取得失敗のため前回寸法を使用。
+- JA/EN `index.html` / `festivals.html` / `artists.html` / `venues.html` / `news.html`: すべて行数一致。
+- `python3 scripts/check_asset_versions.py`: 成功（既存のfavorites.js v3/v4混在警告のみ）。
+- `node scripts/check_cms_article_generated_preview.mjs`: 成功。
+- 実ブラウザでの画質実測・操作確認、full preflight: 未実施。
+
+### 変更したパターン
+- TOPリードカルーセルとFUTURE記事カードの画像候補を、カード用最大960pxから記事ヒーロー候補（最大1179px）まで拡張。hero候補がない画像はカード用候補へフォールバック。
+
+### 未確認の類似パターン
+- 確認済み・0件：指定されたSTORIES・UPCOMING・Artists・Venuesの呼び出しは未変更。
+
+### 次の担当への注意・判断待ち
+- 実ブラウザで390px@3x／1280px@2x相当の取得ピクセル確認と、必要ならfull preflightを実施すること。公開扱いにしない。CMS変更・本番データへの書き込みはない。
+
+### 2026-10-23 redesign/magazine フェーズ2（TOP）完了（Claude 検証・コミット）
+
+### 実施
+- LP/index.html を新しい TOP に置き換え（top-phase2.css / top-phase2.js）。マーキー（sticky）、リードカルーセル4本（スクロール連動・lerp 0.055・dwell 0.1・パララックス・スマホも同じ動き）、FUTURE（featured 2本、足りなければ GUIDE で補完、カルーセルから除外）、UPCOMING（チップ All/This week/Festival/Rave、スマホは「場所 · 種別」）、STORIES（中央に ALL STORIES ボタン）、FESTIVAL INDEX、Playing soon（12人から6人ランダム・Shuffle）、VENUES、NEWSLETTER（Buttondown、横一列）。
+- 古い TOP の部品・インライン CSS/JS・旧 formsubmit の登録フォームを削除（1,519行→約320行）。
+- localize.js に tjHeroSrcsetAttr（カード srcset ＋ heroSrcset）を追加し、カルーセルと FUTURE の画像を記事ヒーロー並みの解像度に。
+- 検査: check_top_artists.mjs を「描画結果で6人・Shuffle」を確かめる形に、check_hub_pages の TOP 期待値を新しいコンテナ（id 付き）に更新。
+
+### コミット
+- feat(redesign): フェーズ2 TOP（このコミット）。
+
+### 検証
+- `bash scripts/preflight.sh` 全62件成功。29ページ×2幅の共通部品確認も問題なし（404 は英語ページで正しい）。
+- カルーセル計測（PC/スマホ）: 進行 0→85% で sticky top 64・カウンター 01→04、最後で固定が外れる。1枚目 eager・fetchpriority=high。
+- 画質計測（取得画像の実ピクセル）: カルーセル スマホ 1179〜1440px（必要 1170）、FUTURE スマホ 1440（必要 1074）・PC 1440（必要 1160）。PC カルーセルは 1179〜1920（必要 2560、手持ちの最大）。
+- 重さ（画像は実ファイルサイズで集計）: 画像 スマホ 1,318KB（本番 1,299KB）、PC 2,084KB（本番 1,745KB）。書体（Noto Sans JP）は別途 約0.5〜0.6MB（ユーザー了承済み）。
+  ※ CDP のネットワークイベントでの集計は画像を取りこぼした（132KB と出た）ため不採用。
+- 撮影（スマホ・PC・EN、スクロールしながら各欄）: デザインどおり。EN は見出し・本文・ニュースレターまで英語。
+- 途中の不具合: window.ARTICLES（const は window に載らない）で全欄が空 → typeof で読むよう修正、check_top_artists が空でも通っていた → 描画結果で確認する形に。
+
+### 変更したパターン
+- TOP の描画を top-phase2.js に集約（data-hub の const を typeof で参照）、ヒーロー級画像は tjHeroSrcsetAttr。
+
+### 未確認の類似パターン
+- 実機 iPhone でのカルーセルの手触り（headless のタッチ模擬まで）。
+- data-hub の const を window.XXX で読んでいる箇所が他にあるか（Codex に検索させた。TOP 以外は今回未修正）。
+
+### 次の担当への注意・判断待ち
+- FUTURE の2本目はユーザーが CMS で featured を付けるまで GUIDE の「9月のまとめ」で補完される。

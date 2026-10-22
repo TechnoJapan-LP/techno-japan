@@ -141,6 +141,22 @@
     return ' srcset="' + window.tjEscapeHtml(set) + '" sizes="' + window.tjEscapeHtml(sizes || '(max-width: 700px) 100vw, 480px') + '"';
   };
 
+  /* カード用に加えて hero 用の大きい候補も使う画像。
+     同じ幅の候補は後から追加した hero 側を優先して1本にする。
+     heroSrcset が無い画像はカード用と同じ候補だけを返す。 */
+  window.tjHeroSrcsetAttr = function (value, sizes) {
+    var hit = tjDerivativeEntry(value);
+    if (!hit || !hit.srcset || !hit.srcset.length) return '';
+    var byWidth = new Map();
+    hit.srcset.concat(hit.heroSrcset || []).forEach(function (pair) {
+      if (Array.isArray(pair) && pair.length >= 2) byWidth.set(String(pair[1]), pair);
+    });
+    var set = Array.from(byWidth.values()).sort(function (a, b) { return Number(a[1]) - Number(b[1]); }).map(function (pair) {
+      return window.tjAssetPath(pair[0]) + ' ' + pair[1] + 'w';
+    }).join(', ');
+    return ' srcset="' + window.tjEscapeHtml(set) + '" sizes="' + window.tjEscapeHtml(sizes || '(max-width: 700px) 100vw, 700px') + '"';
+  };
+
   /* HTML エスケープ。innerHTML に値を差し込む前に必ず通す。
      テンプレートリテラルで組み立てた文字列を innerHTML に代入する箇所が
      ハブ全体で71ある。そのうち攻撃者が制御できるのは URL パラメータ由来の

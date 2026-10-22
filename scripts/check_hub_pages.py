@@ -543,6 +543,48 @@ def measure(dom, spec):
     return n, len(inner)
 
 
+def class_count(html, class_name):
+    """Count an exact class token in rendered HTML."""
+    return len(re.findall(
+        r'class="(?:[^"]*\s)?' + re.escape(class_name) + r'(?=[\s"])', html
+    ))
+
+
+def check_top2(dom, spec):
+    """Check the phase-2 TOP's JS-rendered sections and ordinary detail links."""
+    top = spec.get("top2")
+    if not top:
+        return []
+    body = strip_style(dom)
+    failures = []
+    heads = class_count(body, top["head_marker"])
+    if heads < top["min_heads"]:
+        failures.append(
+            f'.{top["head_marker"]} が {heads} 個（min {top["min_heads"]}）'
+            " — TOP の JS 描画見出しが不足"
+        )
+    for item in top["containers"]:
+        inner = container_inner(body, item["id"])
+        count = class_count(inner or "", item["marker"])
+        if inner is None:
+            failures.append(f'#{item["id"]} が見つからない')
+        elif count < item["min"]:
+            failures.append(
+                f'#{item["id"]} の .{item["marker"]} が {count} 個'
+                f'（min {item["min"]}）'
+            )
+    links = re.findall(
+        r'<a\b[^>]*href="/(?:en/)?(?:articles|festivals|artists|venues)/[^"#?]+\.html"',
+        body,
+    )
+    if len(links) < top.get("min_detail_links", 1):
+        failures.append(
+            f'詳細ページへの通常の a[href] が {len(links)} 個'
+            f'（min {top.get("min_detail_links", 1)}）'
+        )
+    return failures
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--base", help="検査対象のベースURL。省略時は LP/ をローカル配信")
@@ -594,6 +636,7 @@ def main():
                 for m in [UNCAUGHT_RE.search(line)] if m
             ]
             n, size = measure(dom, spec)
+            top2_failures = check_top2(dom, spec)
             ja, ja_missing = count_ja(dom, spec)
             actual[name] = {"markers": n, "container_bytes": size}
             if ja is not None:
@@ -623,6 +666,9 @@ def main():
                     f"{name}: ja_containers が見つからない（{', '.join(ja_missing)}）"
                     " — コンテナ名の変更か描画失敗"
                 )
+            for failure in top2_failures:
+                status = "FAIL"
+                failures.append(f"{name}: {failure}")
             limit = spec.get("max_ja_chars")
             if limit is not None and ja is not None and ja > limit:
                 status = "FAIL"

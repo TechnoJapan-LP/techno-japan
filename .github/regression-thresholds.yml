@@ -425,6 +425,23 @@ hub_pages:
     marker: feed-card              # news は <main> を使わず別コンテナへ描画する
     min_markers: 1                 # 実測 1（ARTICLES が1件のみのため）
     min_container_bytes: 0         # <main> は空が正常
+  index.html:
+    # TOP phase 2 は専用の描画領域を持つ。JA/EN とも同じ要件で検査する。
+    marker: top2-head
+    min_markers: 7
+    min_container_bytes: 0
+    top2:
+      head_marker: top2-head
+      min_heads: 7
+      min_detail_links: 1
+      containers:
+        - {id: top2-lead-track, marker: top2-panel, min: 4}
+        - {id: top2-future-grid, marker: top2-future-card, min: 2}
+        - {id: top2-festival-grid, marker: top2-festival-card, min: 1}
+        - {id: top2-story-grid, marker: top2-story-card, min: 1}
+        - {id: top2-index-table, marker: top2-index-row, min: 1}
+        - {id: top2-artist-grid, marker: top2-artist-card, min: 6}
+        - {id: top2-venue-list, marker: top2-venue-card, min: 1}
   # submit は静的ページで JS 描画を持たない。marker は静的セクションを数えるので
   # 「JS が描画したか」ではなく「ページが正しく配信され本文が存在するか」の検査になる。
   # Uncaught 例外の検出は他ページと同じく有効。
@@ -472,10 +489,22 @@ hub_pages:
     min_markers: 1                 # 実測 1
     min_container_bytes: 0
   en/index.html:
-    ja_containers: [featured-col, side-col, festivals-preview, artists-track, venues-preview]
+    ja_containers: [top2-lead-track, top2-future-grid, top2-festival-grid, top2-story-grid, top2-index-table, top2-artist-grid, top2-venue-list]
     max_ja_chars: 27    # 2026-10-10 実測 0（TOP の STORIES を 8 記事の2列に変更。title_en が入れば増えないが、未入力の日本語タイトルが残る分の余裕として 27）
-    # TOP は他ハブと構成が違い、<main> もカード用の共通クラスも持たない。
-    # 静的に必ず存在するセクション見出し(.section-head)を存在確認に使う。
-    marker: section-head
-    min_markers: 4                 # 実測 4（NEWS / FESTIVALS / ARTISTS / VENUES）
+    # TOP phase 2 は専用の描画領域を持つ。JA と同じ描画要件を
+    # scripts/check_hub_pages.py の top2 で検査する。
+    marker: top2-head
+    min_markers: 7
     min_container_bytes: 0
+    top2:
+      head_marker: top2-head
+      min_heads: 7
+      min_detail_links: 1
+      containers:
+        - {id: top2-lead-track, marker: top2-panel, min: 4}
+        - {id: top2-future-grid, marker: top2-future-card, min: 2}
+        - {id: top2-festival-grid, marker: top2-festival-card, min: 1}
+        - {id: top2-story-grid, marker: top2-story-card, min: 1}
+        - {id: top2-index-table, marker: top2-index-row, min: 1}
+        - {id: top2-artist-grid, marker: top2-artist-card, min: 6}
+        - {id: top2-venue-list, marker: top2-venue-card, min: 1}
