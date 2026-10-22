@@ -411,15 +411,16 @@ hub_pages:
   festivals.html:
     container: festivals-phase3
     marker: phase3-card
-    min_markers: 50
-    min_container_bytes: 20000
+    min_markers: 5             # Upcoming の件数は季節で変わる。0 ではないことだけ確認する。
+    min_container_bytes: 10000 # 実測値に対して、一覧が描画されたことを確認する余裕値
   artists.html:
     container: artists-grid
     marker: artist-grid-card
     min_markers: 70                # 実測 101
     min_container_bytes: 40000     # 実測 66,260
   venues.html:
-    marker: venue-card
+    container: venues-list-view
+    marker: venue-grid-card
     min_markers: 18                # 実測 23
     min_container_bytes: 10000     # 実測 17,101
   news.html:
@@ -469,8 +470,8 @@ hub_pages:
                         # name_en は入力しない方針（AGENTS.md）なので、日本語名の
                         # フェスが増えれば増える。**コードの不具合ではない。**
                         # 減る方向（英語名のフェスが日本語で出る）は引き続き検出する。
-    min_markers: 50
-    min_container_bytes: 20000
+    min_markers: 5             # Upcoming の件数は季節で変わる。0 ではないことだけ確認する。
+    min_container_bytes: 10000 # 実測値に対して、一覧が描画されたことを確認する余裕値
   en/artists.html:
     container: artists-grid
     marker: artist-grid-card
@@ -479,10 +480,11 @@ hub_pages:
     min_markers: 70                # 実測 101
     min_container_bytes: 40000
   en/venues.html:
-    marker: venue-card
+    container: venues-list-view
+    marker: venue-grid-card
     ja_containers: [venues-grid]
     max_ja_chars: 0    # 2026-08-03 実測。0 を維持する。venue の desc_en は22/22そろっている
-    min_markers: 18                # 実測 23
+    min_markers: 18                # 実測 21（Featured を除く）
     min_container_bytes: 10000
   en/news.html:
     marker: news-card

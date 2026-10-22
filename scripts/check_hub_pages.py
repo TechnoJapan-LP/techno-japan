@@ -69,120 +69,86 @@ CONSOLE_IGNORE = re.compile(
 UNCAUGHT_RE = re.compile(r'CONSOLE:\d+\]\s*"?(Uncaught[^"]*)', re.I)
 
 VENUE_MAP_TEST_PATH = "/__venue-map-test.html"
+VENUE_NO_LEAFLET_PATH = "/__venues-no-leaflet.html"
+EN_VENUE_NO_LEAFLET_PATH = "/__en-venues-no-leaflet.html"
+VENUE_TILE_TEST_PATH = "/__venue-tile-test.html"
 CURSOR_TEST_PATH = "/__cursor-test.html"
 VENUE_MAP_TEST_HTML = """<!doctype html><html><body data-map-result="pending" data-fallback-result="pending" data-tile-fallback-result="pending" data-en-fallback-result="pending">
 <iframe id="map-live" src="/venues.html"></iframe>
-<iframe id="map-fallback" src="/venues.html"></iframe>
-<iframe id="map-tile-fallback" src="/venues.html"></iframe>
-<iframe id="map-en-fallback" src="/en/venues.html"></iframe>
+<iframe id="map-fallback" src="/__venues-no-leaflet.html"></iframe>
+<iframe id="map-tile-fallback" src="/__venue-tile-test.html"></iframe>
+<iframe id="map-en-fallback" src="/__en-venues-no-leaflet.html"></iframe>
 <script>
 const setResult = (name, value, detail = '') => {
   document.body.dataset[name] = value;
   if (detail) document.body.dataset[name + 'Detail'] = detail;
-  if (document.body.dataset.mapResult !== 'pending' &&
-      document.body.dataset.fallbackResult !== 'pending' &&
-      document.body.dataset.tileFallbackResult !== 'pending' &&
-      document.body.dataset.enFallbackResult !== 'pending') {
-    document.querySelectorAll('iframe').forEach((frame) => frame.remove());
-  }
 };
-/* 入れ物の id を直接指さない。
-   以前は東京の 'venue-map-wrap' を決め打ちしていたが、venues.html の地図が
-   都市ごとに自動生成される形になり、id が都市名から作られるようになった
-   （AUDIT §9-78）。**検査が特定の都市に依存していると、都市を増やすたびに
-   検査の方が壊れる。**開いている入れ物をクラスで取る。 */
-const openWrap = (doc) =>
-  [].slice.call(doc.querySelectorAll('.city-map-wrap'))
-    .filter((w) => w.style.display !== 'none')[0]
-  || doc.querySelector('.city-map-wrap');
+const waitFor = (read, ok, timeout = 12000) => new Promise(resolve => {
+  const deadline = Date.now() + timeout;
+  const poll = () => {
+    const value = read();
+    if (ok(value) || Date.now() > deadline) return resolve(value);
+    setTimeout(poll, 100);
+  };
+  poll();
+});
+const expectedPins = fetch('/data-hub.js').then(r => r.text()).then(s => {
+  const match = s.match(/const VENUES\s*=\s*(\[[\s\S]*?\]);/);
+  if (!match) throw new Error('VENUES が見つかりません');
+  return JSON.parse(match[1]).filter(venue =>
+    Number.isFinite(Number(venue.lat)) && Number.isFinite(Number(venue.lng))
+  ).length;
+});
 const live = document.getElementById('map-live');
-live.addEventListener('load', () => {
-  const win = live.contentWindow;
+live.addEventListener('load', async () => {
   const doc = live.contentDocument;
-  doc.getElementById('area-map-btn').click();
-  const deadline = Date.now() + 12000;
-  const poll = setInterval(() => {
-    const wrap = openWrap(doc);
-    const error = doc.getElementById('venue-map-error');
-    if (wrap?.dataset.mapStatus === 'ready' && wrap.querySelector('.leaflet-container, .leaflet-pane')) {
-      clearInterval(poll); setResult('mapResult', 'pass');
-    } else if (error && !error.hidden) {
-      clearInterval(poll); setResult('mapResult', 'fail', error.textContent.trim());
-    } else if (Date.now() > deadline) {
-      clearInterval(poll); setResult('mapResult', 'fail', 'test timeout');
-    }
-  }, 100);
+  const expected = await expectedPins;
+  const value = await waitFor(() => {
+    const map = doc.getElementById('venue-map');
+    return {status: map?.dataset.mapStatus, leaflet: !!map?.querySelector('.leaflet-container'), pins: map?.querySelectorAll('.club-pin, .bar-pin').length || 0};
+  }, value => value.status === 'ready' && value.leaflet);
+  setResult('mapResult', value.status === 'ready' && value.leaflet && value.pins === expected ? 'pass' : 'fail', JSON.stringify(value));
 });
 const fallback = document.getElementById('map-fallback');
-fallback.addEventListener('load', () => {
-  const win = fallback.contentWindow;
+fallback.addEventListener('load', async () => {
   const doc = fallback.contentDocument;
-  win.TJ_LEAFLET_SRC = '/__missing_leaflet__.js';
-  win.L = undefined;
-  doc.getElementById('area-map-btn').click();
-  const deadline = Date.now() + 12000;
-  const poll = setInterval(() => {
-    const wrap = openWrap(doc);
-    const error = doc.getElementById('venue-map-error');
-    const ok = error && !error.hidden && wrap?.style.display === 'none' && error.querySelector('a[href="#venues-grid"]');
-    if (ok || Date.now() > deadline) {
-      clearInterval(poll);
-      setResult('fallbackResult', ok ? 'pass' : 'fail', ok ? '' : 'fallback was not shown');
-    }
-  }, 100);
+  const expected = await expectedPins;
+  const value = await waitFor(() => {
+    const map = doc.getElementById('venue-map');
+    return {status: map?.dataset.mapStatus, pins: map?.querySelectorAll('.lpin').length || 0};
+  }, value => value.status === 'offline');
+  setResult('fallbackResult', value.status === 'offline' && value.pins === expected ? 'pass' : 'fail', JSON.stringify(value));
 });
 const tileFallback = document.getElementById('map-tile-fallback');
 tileFallback.addEventListener('load', async () => {
-  const win = tileFallback.contentWindow;
   const doc = tileFallback.contentDocument;
-  try { await win.tjLoadLeaflet(); } catch (_) {
-    setResult('tileFallbackResult', 'fail', 'tileerror did not switch to OSM');
-    return;
-  }
-  let tileLayerCalls = 0;
-  win.L.tileLayer = () => {
-    const layer = win.L.layerGroup();
-    const isCarto = tileLayerCalls++ === 0;
-    const addTo = layer.addTo.bind(layer);
-    layer.addTo = (map) => {
-      addTo(map);
-      setTimeout(() => {
-        if (isCarto) for (let i = 0; i < 3; i += 1) layer.fire('tileerror');
-        else layer.fire('tileload');
-      }, 0);
-      return layer;
-    };
-    return layer;
-  };
-  doc.getElementById('area-map-btn').click();
-  const deadline = Date.now() + 5000;
-  const poll = setInterval(() => {
-    const wrap = openWrap(doc);
-    const ok = wrap?.dataset.mapStatus === 'ready' && wrap.querySelector('.tj-map-osm');
-    if (ok || Date.now() > deadline) {
-      clearInterval(poll);
-      setResult('tileFallbackResult', ok ? 'pass' : 'fail', ok ? '' : 'tileerror did not switch to OSM');
-    }
-  }, 100);
+  const value = await waitFor(() => ({osm: !!doc.querySelector('.tj-map-osm')}), value => value.osm, 5000);
+  setResult('tileFallbackResult', value.osm ? 'pass' : 'fail', value.osm ? '' : 'tileerror did not switch to OSM');
 });
 const enFallback = document.getElementById('map-en-fallback');
-enFallback.addEventListener('load', () => {
-  const win = enFallback.contentWindow;
+enFallback.addEventListener('load', async () => {
   const doc = enFallback.contentDocument;
-  win.TJ_LEAFLET_SRC = '/__missing_leaflet__.js';
-  win.L = undefined;
-  doc.getElementById('area-map-btn').click();
-  const deadline = Date.now() + 12000;
-  const poll = setInterval(() => {
-    const error = doc.getElementById('venue-map-error');
-    const ok = error && !error.hidden && error.textContent.trim().startsWith('The map could not be loaded.');
-    if (ok || Date.now() > deadline) {
-      clearInterval(poll);
-      setResult('enFallbackResult', ok ? 'pass' : 'fail', ok ? '' : 'English fallback was not shown');
-    }
-  }, 100);
+  const expected = await expectedPins;
+  const value = await waitFor(() => {
+    const map = doc.getElementById('venue-map');
+    return {status: map?.dataset.mapStatus, pins: map?.querySelectorAll('.lpin').length || 0, text: map?.textContent || ''};
+  }, value => value.status === 'offline');
+  const japanese = /[ぁ-ゟ゠-ヿ㐀-鿿ー々]/.test(value.text);
+  setResult('enFallbackResult', value.status === 'offline' && value.pins === expected && !japanese ? 'pass' : 'fail', JSON.stringify(value));
 });
 </script></body></html>"""
+VENUE_TILE_TEST_HTML = """<!doctype html><html><head><link rel="stylesheet" href="/vendor/leaflet-1.9.4/leaflet.css?v=2"></head><body><div id="map" style="width:320px;height:240px"></div><script src="/vendor/leaflet-1.9.4/leaflet.js?v=2"></script><script src="/map-tiles.js?v=1"></script><script>
+const map = L.map('map', {center:[35.6,139.7], zoom:8});
+let calls = 0;
+L.tileLayer = () => {
+  const layer = L.layerGroup();
+  const add = layer.addTo.bind(layer);
+  layer.addTo = target => { add(target); setTimeout(() => { if (calls++ === 0) { for (let i = 0; i < 3; i++) layer.fire('tileerror'); } else layer.fire('tileload'); }, 0); return layer; };
+  return layer;
+};
+tjAddMapTiles(map, {timeout: 1000});
+</script></body></html>"""
+
 
 CURSOR_TEST_HTML = """<!doctype html><html><body data-detail-result="pending" data-hub-result="pending">
 <iframe id="cursor-detail" src="/festivals/matricaria.html"></iframe>
@@ -411,11 +377,18 @@ class Server(threading.Thread):
             def do_GET(self):
                 test_pages = {
                     VENUE_MAP_TEST_PATH: VENUE_MAP_TEST_HTML,
+                    VENUE_TILE_TEST_PATH: VENUE_TILE_TEST_HTML,
                     CURSOR_TEST_PATH: CURSOR_TEST_HTML,
                     XSS_TEST_PATH: XSS_TEST_HTML,
                     IMAGE_TEST_PATH: IMAGE_TEST_HTML,
                 }
-                test_html = test_pages.get(urlsplit(self.path).path)
+                request_path = urlsplit(self.path).path
+                if request_path in (VENUE_NO_LEAFLET_PATH, EN_VENUE_NO_LEAFLET_PATH):
+                    source_name = "/en/venues.html" if request_path == EN_VENUE_NO_LEAFLET_PATH else "/venues.html"
+                    source = (root_dir + source_name)
+                    test_html = Path(source).read_text(encoding="utf-8").replace("<head>", "<head><script>window.TJ_LEAFLET_SRC='/__missing_leaflet__.js'</script>", 1)
+                else:
+                    test_html = test_pages.get(request_path)
                 if test_html is not None:
                     payload = test_html.encode("utf-8")
                     self.send_response(200)
@@ -528,15 +501,27 @@ def measure(dom, spec):
 
     cid = spec.get("container")
     if cid:
-        # 開始タグからタグ名を取り、同じタグの閉じまでを取る。
+        # 開始タグからタグ名を取り、同じタグの深さが 0 に戻る閉じまでを取る。
         # </div> 等で止めると入れ子の最初の閉じで切れてしまう（411B 事故）。
         om = re.search(rf'<(\w+)[^>]*id="{re.escape(cid)}"[^>]*>', body)
         if not om:
             return n, 0
         tag = om.group(1)
         rest = body[om.end():]
-        cm = re.search(rf"</{tag}>", rest)
-        inner = rest[:cm.start()] if cm else rest
+        depth = 1
+        inner_end = None
+        void_tags = {"area", "base", "br", "col", "embed", "hr", "img",
+                     "input", "link", "meta", "param", "source", "track", "wbr"}
+        for tm in re.finditer(rf"<(/?){re.escape(tag)}\b[^>]*>", rest, re.I):
+            token = tm.group(0)
+            if tm.group(1):
+                depth -= 1
+                if depth == 0:
+                    inner_end = tm.start()
+                    break
+            elif tag.lower() not in void_tags and not re.search(r"/\s*>$", token):
+                depth += 1
+        inner = rest[:inner_end] if inner_end is not None else rest
     else:
         m = re.search(r"<main[^>]*>(.*?)</main>", body, re.S)
         inner = m.group(1) if m else ""

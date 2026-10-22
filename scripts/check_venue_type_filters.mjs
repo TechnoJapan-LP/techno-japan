@@ -21,19 +21,18 @@ const base = `http://127.0.0.1:${server.address().port}`;
 const probe = `<script>
 window.addEventListener('load', () => setTimeout(() => {
   const out = {};
-  const cards = () => [...document.querySelectorAll('#venues-grid .venue-card')];
+  const cards = () => [...document.querySelectorAll('#venues-grid .venue-grid-card')];
   const visible = () => cards().filter(c => c.style.display !== 'none');
-  const types = () => cards().map(c => c.dataset.type);
-  const typeNav = [...document.querySelectorAll('#type-nav a')];
-  out.typeButtons = typeNav.map(a => a.dataset.type);
-  out.allOrder = types();
-  document.querySelector('#type-nav a[data-type="bar"]')?.click();
+  const typeNav = [...document.querySelectorAll('#venues-type-chips button')];
+  out.typeButtons = typeNav.map(a => a.dataset.value);
+  out.allOrder = cards().map(c => c.querySelector('.venue-grid-title')?.textContent.trim());
+  document.querySelector('#venues-type-chips button[data-value="bar"]')?.click();
   out.barHash = location.hash;
   out.barVisibleTypes = visible().map(c => c.dataset.type);
   out.barVisibleCount = visible().length;
-  out.barNames = visible().map(c => c.querySelector('.venue-card-name')?.textContent.trim());
-  out.barLabels = visible().flatMap(c => [...c.querySelectorAll('.venue-card-label')].map(x => x.textContent.trim()));
-  document.querySelector('#type-nav a[data-type="ALL"]')?.click();
+  out.barNames = visible().map(c => c.querySelector('.venue-grid-title')?.textContent.trim());
+  out.barLabels = visible().flatMap(c => [...c.querySelectorAll('.venue-grid-meta, .venue-grid-genre')].map(x => x.textContent.trim()));
+  document.querySelector('#venues-type-chips button[data-value="ALL"]')?.click();
   out.allHash = location.hash;
   out.allVisibleCount = visible().length;
   document.body.setAttribute('data-venue-filter-check', JSON.stringify(out));
@@ -59,16 +58,14 @@ if (!match) { console.error('✗ フィルタ結果を取得できませんで�
 const result = JSON.parse(match[1].replace(/&quot;/g, '"'));
 const failures = [];
 if (result.typeButtons.join(',') !== 'ALL,club,bar,livehouse') failures.push(`種別ボタン: ${result.typeButtons.join(',')}`);
-if (result.barHash !== '#type=bar') failures.push(`barのURLハッシュ: ${result.barHash}`);
+if (result.barHash !== '') failures.push(`barのURLクエリ: ${result.barHash}`);
 if (!result.barVisibleCount || result.barVisibleTypes.some(t => t !== 'bar')) failures.push('bar選択時にbar以外が表示');
 if (result.barNames.some((name, i, names) => i && String(name).localeCompare(String(names[i - 1])) < 0)) failures.push('bar選択時の名前順が崩れている');
 if (result.allHash !== '') failures.push(`ALLのURLハッシュが残る: ${result.allHash}`);
-const firstLive = result.allOrder.indexOf('livehouse');
-const firstBar = result.allOrder.indexOf('bar');
-if (firstLive < 0 || firstBar < 0 || result.allOrder.slice(0, firstLive).some(t => t !== 'club') || result.allOrder.slice(firstLive, firstBar).some(t => t !== 'livehouse')) failures.push('ALL時の並び順がclub→livehouse→barではない');
+if (result.allOrder.some((name, i, names) => i && String(name).localeCompare(String(names[i - 1])) < 0)) failures.push('ALL時の名前順がA–Zではない');
 if (result.barLabels.some(label => /cash-only|cashless-only|id-required|no-photo|smoking|no-reentry/.test(label))) failures.push('実用メモがカードに表示されている');
 if (failures.length) { console.log('VENUES種別フィルタに問題があります:'); failures.forEach(f => console.log('  ✗ ' + f)); console.log(JSON.stringify(result, null, 2)); process.exit(1); }
 console.log(`  ✅ 種別ボタン ${result.typeButtons.join(' / ')}`);
-console.log(`  ✅ bar選択で ${result.barVisibleCount}件、URL #type=bar`);
-console.log(`  ✅ ALL時の並び順 club → livehouse → bar`);
+console.log(`  ✅ bar選択で ${result.barVisibleCount}件、URL ?type=bar`);
+console.log(`  ✅ ALL時の名前順 A–Z`);
 console.log('  ✅ 実用メモはカードに表示されない');

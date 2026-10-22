@@ -299,6 +299,7 @@ body { background: var(--bg); color: var(--text); font-family: var(--font-body);
 <div class="hint-strip" id="hint-strip">SCROLL TO ZOOM &middot; CLICK PIN FOR INFO</div>
 
 <script src="data-hub.js?v=11"></script>
+<script src="map-tiles.js?v=1"></script>
 <script>
 /* ==========================================================
    CLUB DATA — derived from shared VENUES in data-hub.js
@@ -316,8 +317,6 @@ const CLUBS = VENUES.filter(v => v.lat && v.lng).map(v => ({
 /* ==========================================================
    MAP SETUP
    ========================================================== */
-const CARTO_KEY = 'cb1_4gpv_1_06398582bb637e335325cc2f';
-/* 公開前提のキー。CARTO の管理画面で techno-japan.media に制限済み。無料枠は月 500 万回（非商用）。出典表示は必須（AUDIT §9-104）。 */
 const map = L.map('map', {
   center: [35.6600, 139.6980],
   zoom: 13,
@@ -330,32 +329,7 @@ const map = L.map('map', {
   attributionControl: true
 });
 
-function addMapTiles(map) {
-  let layer;
-  let loadedTiles = 0;
-  let tileErrors = 0;
-  let usingOsm = false;
-  const installLayer = (osm) => {
-    usingOsm = osm;
-    layer = osm
-      ? L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors' })
-      : L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=' + CARTO_KEY, { subdomains: 'abcd', maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>' });
-    layer.on('tileload', () => { loadedTiles += 1; });
-    layer.on('tileerror', () => {
-      tileErrors += 1;
-      if (!usingOsm && loadedTiles === 0 && tileErrors >= 3) {
-        map.getContainer().classList.add('tj-map-osm');
-        map.removeLayer(layer);
-        loadedTiles = 0;
-        tileErrors = 0;
-        installLayer(true);
-      }
-    });
-    return layer.addTo(map);
-  };
-  installLayer(false);
-}
-addMapTiles(map);
+tjAddMapTiles(map);
 
 /* ==========================================================
    STATE

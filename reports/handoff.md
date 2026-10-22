@@ -12630,3 +12630,35 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 - 件数を見出しに出すか（2026-10-22 に「件数は表示しなくてよい」と言われたのは旧ページの検索欄の横の件数）。
 - グリッドのサムネイルの画質と重さの兼ね合い。
+
+### 2026-10-23 redesign/magazine フェーズ3-4 VENUES 一覧＋地図タイルの共通化（Claude 検証・コミット。本番未反映）
+
+### 実施
+- `LP/venues.html` をモック（Venues.dc.html）の構成へ置き換え（旧ページの CSS・JS・マークアップを削除）。EN は生成。
+  見出し `Venues`＋`22 venues`／City・Type のチップ／**マップ＋Featured**（ピンに hover・スマホはタップで右の Featured が切り替わる。選択中のピンは白く光り名前が出る。絞り込むとピンも絞られて自動ズーム）／グリッド（PC 4列・スマホ 1列、A–Z）。
+- 地図は Leaflet（自前配信）＋CARTO（キー付き）。読めない時は OSM の反転表示 → それも無理なら自前の地図（offline）。**CSP は変えていない**。
+- **`LP/map-tiles.js`（新規）**: CARTO と OSM 切り替えの処理を1つにまとめ、map.html もこれを使うように（map.html の見た目・動きは変えていない）。
+- 本番の「見た目でない機能」は残した: `?area=<CITY>`（本番のリンク）、`#type=`（本番の形）と `?type=`、記事から戻った時の位置復元、ハート。
+- 前のフェーズの残り: magazine.js の版数をそろえた、festivals-phase3.css/js・news-phase3.js・top-phase2.js の `?v`（3-3 で中身を変えたのに上げていなかった）。
+
+### コミット
+- このエントリを含むコミット（redesign/magazine）。push・本番公開はしていない。
+
+### 検証
+- headless Chrome（390px@3x / 1280px@2x、JA/EN、`$CLAUDE_JOB_DIR/tmp/venverify.mjs`）で 90/92:
+  ピン 22 本＝座標のある会場数／Featured＝絞り込み後の先頭／ピンに hover（PC）・タップ（スマホ）で Featured と光るピンが切り替わる（重なっていないピンを選んで操作）／OSAKA・OSAKA+BAR でピン・グリッド・URL が絞られる／再読み込みで復元／`#type=club`／XSS（`?area=`）／
+  ピンの形が崩れていない・名前ラベルが水平／地図の上端が整数の位置（タイルの継ぎ目が出ない）／Leaflet を遮断すると自前の地図に全ピン／JS 無効で静的リンクが見える／map.html はタイルとマーカーが出る／EN に日本語 0／JS エラー 0。
+  残り2件は PC の画像がわずかに足りない（Featured 991px 必要→960px、グリッド 754→720px。3〜5%）。
+- 途中で見つけて直したもの: タイルの行の境目に横線（地図の入れ物が小数の位置にあった → 上端を整数にそろえる。256.5px に広げる回避策は縦線が出たので撤回）／バーのピン（菱形）の名前が45度に傾く／ピンの形が span で崩れる／検査の期待値がフェスの座標まで数えていた（80 本）。
+- `python3 scripts/check_hub_pages.py` 全ハブ成功（地図: init・fallback・tileerror・en_fallback すべて pass）。検査の `measure()` を入れ子の div でも正しく測れるように直した（ARTISTS が 897B と誤って測られていた）。FESTIVALS の下限を「今後の件数は季節で変わる」前提の値に。
+- check_venue_maps / check_venue_type_filters / check_asset_versions / check_regressions / check_hub_head 成功。JA/EN 行数一致（5ハブ）。
+
+### 変更したパターン
+- 本番 venues.html から無くしたもの（モックに無い）: ページ内の検索（`?q=`）、エリア／タイプのナビ（チップに置き換え）、都市別の地図ボタンと都市ごとの地図、hover のプレビュー欄、ジャンルの絞り込み。
+
+### 未確認の類似パターン
+- 本番の CARTO の地図（キーは techno-japan.media 限定のため localhost では 403 → OSM の反転表示で確認）。本番に出した後に見た目を確認すること。
+- 実機（iPhone）での確認は未実施。
+
+### 次の担当への注意・判断待ち
+- 無くした機能（特にページ内検索）を戻すかはユーザー判断待ち。
