@@ -1108,15 +1108,21 @@ function normalizeStaticChrome(fileName, lang) {
   let navRest = next.slice(firstNav);
   while (/<nav\b/i.test(navRest)) navRest = replaceElement(navRest, 'nav', 0, '');
   next = navPrefix + navHtml(lang, altHref, currentKey) + navRest;
-  next = next.replace(/<!-- tj:footer:start -->|<!-- tj:footer:end -->/g, '');
+  // 目印だけを消すと、その行の改行が残って毎ビルド空行が増える。
+  // 既存の累積分も含め、目印は行ごと除去して枠の前後を1改行に戻す。
+  next = next.replace(/[ \t]*<!-- tj:footer:(?:start|end) -->[ \t]*(?:\r?\n|$)/g, '');
+  next = next.replace(/(?:\r?\n[ \t]*){2,}(?=<footer\b)/g, '\n');
   const footer = footerHtml(lang);
   const footerStart = next.indexOf('<footer');
   next = footerStart < 0
     ? next.replace(/<\/body>/i, `${footer}\n</body>`)
     : replaceElement(next, 'footer', footerStart, footer);
+  next = next.replace(/(<\/footer>)(?:\r?\n[ \t]*){2,}(?=<script\b)/g, '$1\n');
   next = next.replace(/href="(?:\.\/|\/)?common\.css\?v=\d+"/g, `href="/common.css?v=${COMMON_CSS_VERSION}"`)
     .replace(/(?:src|href)="(?:\.\/)?common\.js\?v=\d+"/g, (m) => m.replace(/"[^"/]*common\.js/, `"/common.js`).replace(/\?v=\d+/, `?v=${COMMON_JS_VERSION}`));
   next = next.replace(/((?:src|href)=")(?!\/|https?:|#|data:)([^"\s]+\.(?:js|css)(?:\?v=\d+)?)(")/g, '$1/$2$3');
+  // 旧版の累積分も含め、手書きページの連続空行は最大2行に揃える。
+  next = next.replace(/(?:\r?\n[ \t]*){3,}/g, '\n\n');
   if (next !== before) fs.writeFileSync(file, next);
   return next !== before;
 }

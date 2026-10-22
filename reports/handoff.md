@@ -12662,3 +12662,52 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - 無くした機能（特にページ内検索）を戻すかはユーザー判断待ち。
+
+### 2026-10-23 ページ生成の冪等化（未コミット）
+
+### 実施
+- `normalizeStaticChrome()` のフッター目印除去を改行ごとの除去に変更し、フッター前後・手書きページの連続空行を正規化。
+- `scripts/check_build_idempotent.mjs` を追加し、LP 配下の HTML / JSON / txt / XML 601ファイルをビルド前後で SHA-256 比較。差分時はファイル名と最初の差分行を表示。
+- `scripts/preflight.sh` の「詳細ページを生成できる」直後に冪等性検査を登録。
+
+### コミット
+- なし（ユーザー指示により commit / push 未実施）。
+
+### 検証
+- `node --check scripts/build-detail-pages.mjs` / `scripts/check_build_idempotent.mjs`: 成功。
+- `node scripts/build-detail-pages.mjs` を2回実行し、2回目は詳細ページ更新0件。冪等性検査も `601ファイルに変化なし` で成功。
+- `python3 scripts/check_shared_chrome.py`: 557ページ成功。
+- JA/EN行数一致: index 260/260、news 219/219、festivals 316/316、artists 430/430、venues 239/239、about 1171/1171、submit 122/122、writers 216/216、favorites 414/414。
+
+### 変更したパターン
+- `<!-- tj:footer:start/end -->` の目印行と、目印前後・共通 script 前後の累積空行。
+- LP の手書き JA/EN 19枚と `preflight.sh` の検査登録。
+
+### 未確認の類似パターン
+- 生成詳細ページの本文内容・画像表示は変更なし。実ブラウザでの全ページ再確認は未実施。
+
+### 次の担当への注意・判断待ち
+- 外部画像150件は取得不能だったため、既存の寸法へ退避する既存仕様の警告が毎ビルド出る。コミット・pushは未実施。
+
+### 2026-10-23 redesign/magazine ページ生成の冪等化（空行が増え続ける不具合）（Claude 検証・コミット。本番未反映）
+
+### 実施
+- `node scripts/build-detail-pages.mjs` を流すたびに、手書きのページ19枚（index・news・festivals・artists・venues・about・submit・writers・favorites・404 の JA/EN）で空行が1行ずつ増えていた（フェーズ1 の共通フッターの差し込みが、目印を消すときに改行を残していた）。
+  毎日の generate-meta で「中身が変わらない日にも差分が出て、ページが伸び続ける」状態だった。目印の除去を改行ごとにし、連続した空行を2行までに整理。これまでに溜まった空行（約2,000行。index だけで約120行）も消えた。
+- 再発防止: `scripts/check_build_idempotent.mjs`（ビルドをもう一度流して、LP/ の 601 ファイルが1つも変わらないことを確かめる）を preflight の「詳細ページを生成できる」の直後に登録。
+
+### コミット
+- このエントリを含むコミット（redesign/magazine）。push・本番公開はしていない。本番（main）のページはこの処理を通っていないので影響なし。
+
+### 検証
+- ビルドを2回流して2回目に差分 0（git status でも確認）。消えた行はすべて空行（空でない行の削除 0）。
+- check_build_idempotent（601 ファイル変化なし）・check_hub_pages 全ハブ成功・check_hub_head・check_shared_chrome（557ページ）・check_asset_versions 成功。JA/EN 行数一致（9組）。
+
+### 変更したパターン
+- 共通フッターの差し込み（normalizeStaticChrome）の目印の除去と空行の整理のみ。見た目の変化なし。
+
+### 未確認の類似パターン
+- 確認済み・0件: ほかの生成物（JSON・txt・xml を含む 601 ファイル）の非冪等。
+
+### 次の担当への注意・判断待ち
+- なし。

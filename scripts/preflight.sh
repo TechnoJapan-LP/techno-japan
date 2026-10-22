@@ -128,6 +128,7 @@ echo "▸ 生成物とデータ"
 run "参照画像の実在"                    node scripts/check_missing_images.mjs
 run "フェスの国コード"                  node scripts/check_country.mjs
 run "詳細ページを生成できる"            node scripts/build-detail-pages.mjs
+run "ビルドの冪等性"                    node scripts/check_build_idempotent.mjs
 run "記事見出しのphrase breaks"          node scripts/test_phrase_breaks.mjs
 run "回帰のしきい値"                    python3 scripts/check_regressions.py
 run "LINEUPの表示数がソースと一致"      node scripts/check_festival_lineup_render.mjs
