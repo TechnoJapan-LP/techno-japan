@@ -75,10 +75,10 @@ const ARTICLE_FX_CSS_VERSION = 16;
 
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
-const COMMON_JS_VERSION = 18;   // 2026-10-19 touch devices skip the custom cursor loop
-const COMMON_CSS_VERSION = 40;   // 2026-10-22 design tokens, rendered values unchanged
+const COMMON_JS_VERSION = 19;   // 2026-10-22 design v2 shared menu behavior
+const COMMON_CSS_VERSION = 45;   // 2026-10-23 footer social selector and hit area
 const DATA_HUB_VERSION = 11;
-const SEARCH_JS_VERSION = 6;
+const SEARCH_JS_VERSION = 8;
 const LANG_TOGGLE_VERSION = 1;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
 const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');
@@ -967,7 +967,10 @@ const PERMISSIONS_POLICY = 'geolocation=(), microphone=(), camera=(), interest-c
 
 const CSP = `default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' https:; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://stats.g.doubleclick.net; frame-src 'self' https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; form-action 'self' https://formsubmit.co https://buttondown.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests`;
 
-const FONT_HEAD = `<link rel="preload" as="font" type="font/woff2" href="/fonts/dm-sans-v17-latin.woff2" crossorigin>
+const FONT_HEAD = `<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="preload" as="font" type="font/woff2" href="/fonts/dm-sans-v17-latin.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="/fonts/bebas-neue-v16-latin.woff2" crossorigin>
 <style>
 @font-face{font-family:'Bebas Neue';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/bebas-neue-v16-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
@@ -986,7 +989,34 @@ function navLink(lang, page) {
   return (lang === 'en' && EN_PAGES.has(page)) ? `/en/${page}` : `/${page}`;
 }
 
-function navHtml(lang, altHref) {
+function menuOverlayHtml(lang, currentKey = '', altHref = null) {
+  const en = lang === 'en';
+  const prefix = en ? '/en' : '';
+  const labels = en
+    ? [['top', 'Top', '', 'index.html'], ['news', 'News', 'Stories', 'news.html'], ['festivals', 'Festivals', 'Index', 'festivals.html'], ['artists', 'Artists', 'Database', 'artists.html'], ['venues', 'Venues', 'Clubs & sites', 'venues.html'], ['about', 'About', '', 'about.html']]
+    : [['top', 'Top', 'トップ', 'index.html'], ['news', 'News', 'ニュース・記事', 'news.html'], ['festivals', 'Festivals', 'フェス一覧', 'festivals.html'], ['artists', 'Artists', 'アーティスト', 'artists.html'], ['venues', 'Venues', 'クラブ・会場', 'venues.html'], ['about', 'About', 'テクノジャパンについて', 'about.html']];
+  const href = (file) => `${prefix}/${file}`;
+  const items = labels.map(([key, label, note, file], i) => `    <a href="${href(file)}" class="nav-ov-item" style="animation-delay:${(0.06 + i * 0.06).toFixed(2)}s"${key === currentKey ? ' aria-current="page"' : ''}><span class="nav-ov-num">${String(i + 1).padStart(2, '0')}</span><span class="nav-ov-label">${label}</span><span class="nav-ov-note">${note}</span></a>`).join('\n');
+  const language = altHref
+    ? (en
+      ? `<a href="${altHref}" class="nav-ov-lang">JA</a><span class="nav-ov-lang-current" aria-current="true">EN</span>`
+      : `<span class="nav-ov-lang-current" aria-current="true">JA</span><a href="${altHref}" class="nav-ov-lang">EN</a>`)
+    : '';
+  return `<div class="nav-overlay" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="nav-ov-top"><a href="${href('index.html')}" class="nav-ov-logo" aria-label="TECHNO JAPAN"><img src="/images/logo-wordmark.png?v=1" alt="TECHNO JAPAN" width="158" height="13"></a><button class="nav-close" type="button" aria-label="${en ? 'Close menu' : 'メニューを閉じる'}"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 3l12 12M15 3L3 15"/></svg></button></div>
+  <button class="nav-search-link" type="button"><svg class="nav-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span>${en ? 'Festival, artist, venue, city…' : 'フェス、アーティスト、会場、都市…'}</span></button>
+  <nav class="nav-ov-main" aria-label="Main">
+${items}
+  </nav>
+  <div class="nav-ov-foot">
+    <div class="nav-ov-sub"><a href="${prefix}/submit.html">${en ? 'Apply' : '掲載申請'}</a><a href="${prefix}/writers.html">${en ? 'Writer' : 'ライター募集'}</a><a href="${en ? '/en/favorites.html' : '/favorites.html'}">Favorites</a></div>
+    <div class="nav-ov-row">${altHref ? `<div class="nav-lang" role="group" aria-label="Language">${language}</div>` : ''}<div class="nav-ov-social"><a href="https://www.instagram.com/techno.japan_/" target="_blank" rel="noopener">Instagram</a><a href="https://www.threads.net/@techno.japan_" target="_blank" rel="noopener">Threads</a></div></div>
+    <span class="nav-ov-tag">${en ? "Japan's Underground, Curated." : '日本のアンダーグラウンドを、キュレーションする。'}</span>
+  </div>
+</div>`;
+}
+
+function navHtml(lang, altHref, currentKey = '') {
   // 言語トグル: 対になるページがある時だけ JA / EN を出す
   const toggle = altHref
     ? (lang === 'ja'
@@ -1002,31 +1032,23 @@ function navHtml(lang, altHref) {
     <a href="${navLink(lang, 'artists.html')}">ARTISTS</a>
     <a href="${navLink(lang, 'venues.html')}">VENUES</a>
     <a href="${navLink(lang, 'about.html')}">ABOUT</a>
+    <button class="gs-trigger" type="button" aria-label="Search"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.35-4.35M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg><span>SEARCH</span></button>
     ${toggle}
   </div>
   <button class="nav-hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
 </nav>
-<div class="nav-overlay">
-  <button class="nav-close" aria-label="Close menu"></button>
-  <a href="${navLink(lang, 'index.html')}">TOP</a>
-  <a href="${navLink(lang, 'news.html')}">NEWS</a>
-  <a href="${navLink(lang, 'festivals.html')}">FESTIVALS</a>
-  <a href="${navLink(lang, 'artists.html')}">ARTISTS</a>
-  <a href="${navLink(lang, 'venues.html')}">VENUES</a>
-  <a href="${navLink(lang, 'about.html')}">ABOUT</a>
-  <a href="${lang === 'en' ? '/en/submit.html' : '/submit.html'}">APPLY</a>
-  <a href="${lang === 'en' ? '/en/writers.html' : '/writers.html'}">WRITER</a>
-${toggle ? `  ${toggle}\n` : ''}</div>`;
+${menuOverlayHtml(lang, currentKey, altHref)}`;
 }
 
 function footerHtml(lang) {
   const submissionHref = lang === 'en' ? '/en/submit.html' : '/submit.html';
   const submissionLabel = 'APPLY';
-  return `<footer>
+  const favoritesHref = lang === 'en' ? '/en/favorites.html' : '/favorites.html';
+  return `<!-- tj:footer:start -->
+<footer>
   <div class="footer-top">
     <div class="footer-logo"><img src="/images/logo-wordmark.png?v=1" alt="TECHNO JAPAN" width="158" height="13" loading="lazy" decoding="async"></div>
     <div class="footer-links">
-      <a href="${navLink(lang, 'index.html')}">TOP</a>
       <a href="${navLink(lang, 'news.html')}">NEWS</a>
       <a href="${navLink(lang, 'festivals.html')}">FESTIVALS</a>
       <a href="${navLink(lang, 'artists.html')}">ARTISTS</a>
@@ -1034,10 +1056,69 @@ function footerHtml(lang) {
       <a href="${navLink(lang, 'about.html')}">ABOUT</a>
       <a href="${submissionHref}">${submissionLabel}</a>
       <a href="${lang === 'en' ? '/en/writers.html' : '/writers.html'}">WRITER</a>
+      <a href="${favoritesHref}">FAVORITES</a>
     </div>
-    <div class="footer-copy">&copy; 2025 TECHNO JAPAN. ALL RIGHTS RESERVED.</div>
+    <span class="footer-social"><a href="https://www.instagram.com/techno.japan_/" target="_blank" rel="noopener">INSTAGRAM</a><a href="https://www.threads.net/@techno.japan_" target="_blank" rel="noopener">THREADS</a></span>
   </div>
-</footer>`;
+  <div class="footer-copy"><span>&copy; 2026 Techno Japan</span><span>Japan's Underground, Curated.</span></div>
+</footer>
+<!-- tj:footer:end -->`;
+}
+
+/* 手書きページも、生成詳細ページと同じ枠を使う。タグの対応する閉じタグを
+   数えて範囲を求めるため、閉じタグの並びを境界にしない（AUDIT §9-16）。 */
+function replaceElement(html, tag, startAt, replacement) {
+  const open = new RegExp(`<${tag}\\b[^>]*>`, 'i');
+  const close = new RegExp(`</${tag}>`, 'ig');
+  const startMatch = open.exec(html.slice(startAt));
+  if (!startMatch) return html;
+  const start = startAt + startMatch.index;
+  const bodyStart = start + startMatch[0].length;
+  const token = new RegExp(`<${tag}\\b[^>]*>|</${tag}>`, 'ig');
+  token.lastIndex = bodyStart;
+  let depth = 1;
+  let match;
+  while ((match = token.exec(html))) {
+    if (match[0][1] === '/') depth -= 1;
+    else depth += 1;
+    if (depth === 0) return html.slice(0, start) + replacement + html.slice(token.lastIndex);
+  }
+  throw new Error(`${tag} の対応する閉じタグが見つかりません`);
+}
+
+function normalizeStaticChrome(fileName, lang) {
+  const file = path.join(LP_DIR, fileName);
+  if (!fs.existsSync(file)) throw new Error(`${fileName}: 静的ページがありません`);
+  const before = fs.readFileSync(file, 'utf8');
+  const currentKey = ({ 'index.html': 'top', 'news.html': 'news', 'festivals.html': 'festivals', 'artists.html': 'artists', 'venues.html': 'venues', 'about.html': 'about', 'favorites.html': 'favorites' })[path.basename(fileName)] || '';
+  const is404 = path.basename(fileName) === '404.html';
+  const altHref = is404
+    ? (lang === 'en' ? '/index.html' : '/en/index.html')
+    : (lang === 'en' ? `/${path.basename(fileName)}` : `/en/${path.basename(fileName)}`);
+  let next = before;
+  // 旧版が複数の overlay を持つ場合も、生成した1個だけを残す。
+  let oldOverlay;
+  while ((oldOverlay = next.search(/<div\b[^>]*class="nav-overlay"/i)) >= 0) {
+    next = replaceElement(next, 'div', oldOverlay, '');
+  }
+  // 既存の手書き／前回の中間版が複数あっても、先に全 nav を除去して1個だけ挿入する。
+  const firstNav = next.search(/<nav\b/i);
+  if (firstNav < 0) throw new Error(`${fileName}: nav がありません`);
+  const navPrefix = next.slice(0, firstNav);
+  let navRest = next.slice(firstNav);
+  while (/<nav\b/i.test(navRest)) navRest = replaceElement(navRest, 'nav', 0, '');
+  next = navPrefix + navHtml(lang, altHref, currentKey) + navRest;
+  next = next.replace(/<!-- tj:footer:start -->|<!-- tj:footer:end -->/g, '');
+  const footer = footerHtml(lang);
+  const footerStart = next.indexOf('<footer');
+  next = footerStart < 0
+    ? next.replace(/<\/body>/i, `${footer}\n</body>`)
+    : replaceElement(next, 'footer', footerStart, footer);
+  next = next.replace(/href="(?:\.\/|\/)?common\.css\?v=\d+"/g, `href="/common.css?v=${COMMON_CSS_VERSION}"`)
+    .replace(/(?:src|href)="(?:\.\/)?common\.js\?v=\d+"/g, (m) => m.replace(/"[^"/]*common\.js/, `"/common.js`).replace(/\?v=\d+/, `?v=${COMMON_JS_VERSION}`));
+  next = next.replace(/((?:src|href)=")(?!\/|https?:|#|data:)([^"\s]+\.(?:js|css)(?:\?v=\d+)?)(")/g, '$1/$2$3');
+  if (next !== before) fs.writeFileSync(file, next);
+  return next !== before;
 }
 
 const GA = `<script>
@@ -1060,7 +1141,7 @@ const GA = `<script>
 
 
 
-function page({ title, desc, canonical, image, ogType = 'article', jsonLd, body, lang = 'ja', altHref = null, extraScripts = '', backgroundLayer = false, robots = 'max-image-preview:large' }) {
+function page({ title, desc, canonical, image, ogType = 'article', jsonLd, body, lang = 'ja', altHref = null, currentKey = '', extraScripts = '', backgroundLayer = false, robots = 'max-image-preview:large' }) {
   /* 検索結果に出る長さは言語で違う。日本語は全角のため PC で約120字、
      英語は約155字で切られる。160 固定だと日本語の135ページが途中で切れていた
      （2026-09-15 実測: JA 275件中120字超が135件）。 */
@@ -1109,7 +1190,7 @@ ${FONT_HEAD}
 <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>
 </head>
 <body>
-${backgroundLayer ? '<div class="tj-bg" aria-hidden="true"><div class="tj-scan"></div></div>\n' : ''}${navHtml(lang, altHref)}
+${backgroundLayer ? '<div class="tj-bg" aria-hidden="true"><div class="tj-scan"></div></div>\n' : ''}${navHtml(lang, altHref, currentKey)}
 ${body}
 ${footerHtml(lang)}
 ${GA}
@@ -1272,7 +1353,7 @@ function writerPage(author, lang, authorIndex) {
     <div class="article-footer"><a class="article-back" href="${prefix}/writers.html" style="margin:0"><span class="arrow"></span> WRITERS</a></div>
   </div>
 </article>`;
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'writers'] : ['writers']), `${author.id}.html`), html: page({ title, desc, canonical, image, ogType: 'profile', jsonLd: [jsonLd, breadcrumbLd('WRITERS', '/writers.html', name, canonical)], body, lang, altHref, backgroundLayer: true }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'writers'] : ['writers']), `${author.id}.html`), html: page({ title, desc, canonical, image, ogType: 'profile', jsonLd: [jsonLd, breadcrumbLd('WRITERS', '/writers.html', name, canonical)], body, lang, altHref, currentKey: 'about', backgroundLayer: true }) };
 }
 
 function isPublishedFestival(festival) {
@@ -1530,7 +1611,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   </div>
 </article>`;
 
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'articles'] : ['articles']), `${a.id}.html`), html: page({ title, desc, canonical, image, jsonLd: [jsonLd, ORG_JSONLD, breadcrumbLd('NEWS', '/news.html', L.title, canonical), ...eventJsonLd], body, lang, altHref, backgroundLayer: true, extraScripts: `\n<link rel="stylesheet" href="/article-fx.css?v=${ARTICLE_FX_CSS_VERSION}">\n<script src="/article-fx.js?v=${ARTICLE_FX_JS_VERSION}" defer></script>` + ARTICLE_HUB_BACK_SCRIPT + FESTIVAL_SHARE_SCRIPT }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'articles'] : ['articles']), `${a.id}.html`), html: page({ title, desc, canonical, image, jsonLd: [jsonLd, ORG_JSONLD, breadcrumbLd('NEWS', '/news.html', L.title, canonical), ...eventJsonLd], body, lang, altHref, currentKey: 'news', backgroundLayer: true, extraScripts: `\n<link rel="stylesheet" href="/article-fx.css?v=${ARTICLE_FX_CSS_VERSION}">\n<script src="/article-fx.js?v=${ARTICLE_FX_JS_VERSION}" defer></script>` + ARTICLE_HUB_BACK_SCRIPT + FESTIVAL_SHARE_SCRIPT }) };
 }
 
 /* ---------- フェスティバルページ ---------- */
@@ -2436,7 +2517,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, allArt
       acceptedAnswer: { '@type': 'Answer', text: item.answer },
     })),
   } : null;
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'festivals'] : ['festivals']), `${f.id}.html`), html: page({ title, desc: metaDesc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('FESTIVALS', '/festivals.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT + FESTIVAL_HUB_BACK_SCRIPT + FESTIVAL_SHARE_SCRIPT, backgroundLayer: true }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'festivals'] : ['festivals']), `${f.id}.html`), html: page({ title, desc: metaDesc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('FESTIVALS', '/festivals.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, currentKey: 'festivals', extraScripts: LANG_TOGGLE_SCRIPT + FESTIVAL_HUB_BACK_SCRIPT + FESTIVAL_SHARE_SCRIPT, backgroundLayer: true }) };
 }
 
 /* ---------- アーティストページ ---------- */
@@ -2578,7 +2659,7 @@ function artistPage(a, artistsById, lang = 'ja', artistAppearances = new Map(), 
 </article>`;
 
   const thin = !stripTags(a.bio) && !stripTags(a.bio_en);
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'artists'] : ['artists']), `${a.id}.html`), html: page({ title, desc, canonical, image, ogType: 'profile', jsonLd: [jsonLd, breadcrumbLd('ARTISTS', '/artists.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, robots: thin ? 'noindex,follow' : 'max-image-preview:large', extraScripts: LANG_TOGGLE_SCRIPT + ARTIST_HUB_BACK_SCRIPT, backgroundLayer: true }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'artists'] : ['artists']), `${a.id}.html`), html: page({ title, desc, canonical, image, ogType: 'profile', jsonLd: [jsonLd, breadcrumbLd('ARTISTS', '/artists.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, currentKey: 'artists', robots: thin ? 'noindex,follow' : 'max-image-preview:large', extraScripts: LANG_TOGGLE_SCRIPT + ARTIST_HUB_BACK_SCRIPT, backgroundLayer: true }) };
 }
 
 /* Instagram の URL から表示用の @ハンドルを取り出す。
@@ -2826,7 +2907,7 @@ function venuePage(v, lang = 'ja', allFestivals = [], editionsByFestival = new M
   </div>
 </article>`;
 
-  const html = page({ title, desc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('VENUES', '/venues.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, extraScripts: LANG_TOGGLE_SCRIPT + VENUE_HUB_BACK_SCRIPT, backgroundLayer: true })
+  const html = page({ title, desc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('VENUES', '/venues.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, currentKey: 'venues', extraScripts: LANG_TOGGLE_SCRIPT + VENUE_HUB_BACK_SCRIPT, backgroundLayer: true })
     .replace(/[ \t]+$/gm, '');
   return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'venues'] : ['venues']), `${v.id}.html`), html };
 }
@@ -2895,7 +2976,7 @@ function todayInJapan() {
    置換のほうが確実で、JA を直せば EN が自動追随する（二重管理が起きない）。 */
 
 // EN 版が実在するページ。ここに無いものは JA を指したままにする（404 を作らない）。
-const EN_PAGES = new Set(['index.html', 'about.html', 'submit.html', 'writers.html', 'festivals.html', 'artists.html', 'venues.html', 'news.html']);
+const EN_PAGES = new Set(['index.html', 'about.html', 'submit.html', 'writers.html', 'festivals.html', 'artists.html', 'venues.html', 'news.html', 'favorites.html']);
 
 // EN ハブの meta description（JA は日英併記なので英語のみに差し替える）
 const EN_HUB_DESC = {
@@ -2907,6 +2988,7 @@ const EN_HUB_DESC = {
   'news.html': "Stories, interviews and reports from Japan's underground techno and house scene.",
   'index.html': "Japan's underground techno & house — stories, festivals, artists, venues.",
   'about.html': "About TECHNO JAPAN — a selective media for Japan's underground dance music scene. AUTHENTIC / SELECTIVE / BORDERLESS / INDEPENDENT.",
+  'favorites.html': "Your saved festivals, artists, and venues from Japan's underground scene.",
 };
 
 // 本文に残る日本語の固定文言（データ由来の日本語は対象外）
@@ -3016,6 +3098,14 @@ const ABOUT_EN_TEXT = [
 function enHubFromJa(html, page) {
   let s = html;
   const abs = (p) => `${BASE}/${p === 'index.html' ? '' : p}`;
+  const menuKey = ({ 'index.html': 'top', 'news.html': 'news', 'festivals.html': 'festivals', 'artists.html': 'artists', 'venues.html': 'venues', 'about.html': 'about', 'favorites.html': 'favorites' })[page] || '';
+  const jaMenu = menuOverlayHtml('ja', menuKey, `/en/${page}`);
+  const enMenu = menuOverlayHtml('en', menuKey, `/${page}`);
+  if (!s.includes(jaMenu)) throw new Error(`${page}: JAメニューが見つからない（生成と不整合）`);
+  s = s.split(jaMenu).join(enMenu);
+  const jaFooter = footerHtml('ja');
+  if (!s.includes(jaFooter)) throw new Error(`${page}: JAフッターが見つからない（生成と不整合）`);
+  s = s.split(jaFooter).join(footerHtml('en'));
 
   // 言語シグナル
   s = s.replace(/<html lang="[^"]*"/, '<html lang="en"');
@@ -3052,7 +3142,7 @@ function enHubFromJa(html, page) {
   if (links) s = replaceHubLinksBlock(s, links.marker, links.html, `en/${page}`);
 
   // 内部リンク: EN 版があるページだけ /en/ へ。相対・絶対の両表記に対応する。
-  s = s.replace(/href="\/?((?:index|news|festivals|artists|venues|about|submit|writers)\.html)"/g,
+  s = s.replace(/href="\/?((?:index|news|festivals|artists|venues|about|submit|writers|favorites)\.html)"/g,
     (m, p) => (EN_PAGES.has(p) ? `href="/en/${p}"` : m));
   // EN 版が無いページ（index）は相対表記だと /en/index.html を指してしまう。
   // ルート相対に正規化して JA トップへ確実に戻す。
@@ -3163,6 +3253,26 @@ function fixJaHub(fileName) {
   const file = path.join(LP_DIR, fileName);
   let s = fs.readFileSync(file, 'utf8');
   const before = s;
+  const menuKey = ({ 'index.html': 'top', 'news.html': 'news', 'festivals.html': 'festivals', 'artists.html': 'artists', 'venues.html': 'venues', 'about.html': 'about' })[fileName] || '';
+  const menuStart = s.indexOf('<div class="nav-overlay"');
+  const menuEndCandidates = menuStart < 0 ? [] : ['\n<!--', '\n<main', '\n<section', '\n<footer'].map((marker) => s.indexOf(marker, menuStart)).filter((index) => index >= 0);
+  const menuEnd = menuEndCandidates.length ? Math.min(...menuEndCandidates) : -1;
+  if (menuStart < 0 || menuEnd < 0) throw new Error(`${fileName}: nav-overlay の境界が見つからない`);
+  const menu = menuOverlayHtml('ja', menuKey, `/en/${fileName}`);
+  s = s.slice(0, menuStart) + menu + s.slice(menuEnd);
+
+  // favorites.js が更新する見出しを共通部品の差し替えで失わない。
+  // EN はこの JA ハブから生成するため、ここで構造を復元しておく。
+  if (fileName === 'favorites.html' && !s.includes('id="page-subtitle"')) {
+    s = s.replace(
+      '<div class="nav-overlay"',
+      '<header class="page-header">\n' +
+      '  <h1 class="page-title">FAVORITES</h1>\n' +
+      '  <div class="page-subtitle" id="page-subtitle">YOUR SAVED FESTIVALS · ARTISTS · VENUES</div>\n' +
+      '</header>\n' +
+      '<div class="nav-overlay"',
+    );
+  }
 
   s = s.replace(/<html lang="[^"]*"/, '<html lang="ja"');
   s = s.replace(/(<meta http-equiv="Content-Security-Policy" content=")[^"]*/, `$1${CSP}`);
@@ -3629,9 +3739,16 @@ ${FAVICON_TAGS}
 
   // JA ハブを正してから EN を作る。順序が逆だと、直す前の JA から EN が生まれる。
   // 静的リンクの差し替え（上の hubCounts）も EN へ引き継ぐため、この位置に置く。
-  const HUBS = ['index.html', 'about.html', 'submit.html', 'festivals.html', 'artists.html', 'venues.html', 'news.html', 'writers.html'];
+  const STATIC_CHROME_PAGES = [
+    'index.html', 'about.html', 'submit.html', 'festivals.html', 'artists.html', 'venues.html',
+    'news.html', 'about.html', 'submit.html', 'writers.html', 'favorites.html', '404.html',
+  ];
+  const staticChromeUpdated = STATIC_CHROME_PAGES.filter((fileName, index, all) =>
+    all.indexOf(fileName) === index && normalizeStaticChrome(fileName, fileName === '404.html' ? 'en' : 'ja'));
+  const HUBS = ['index.html', 'about.html', 'submit.html', 'festivals.html', 'artists.html', 'venues.html', 'news.html', 'writers.html', 'favorites.html'];
   const jaFixed = HUBS.filter(fixJaHub);
   const enWritten = HUBS.filter(writeEnHub);
+  console.log(`Shared chrome: ${staticChromeUpdated.length} JA pages normalized (app/cms/map/redirect stubs excluded)`);
 
   buildAiSurface({ pubFests, editionsByFestival, pubVenues, pubArtists, pubArticles });
 

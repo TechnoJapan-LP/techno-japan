@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Techno Japan — Menu</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=Space+Mono:wght@400;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="font-family:'DM Sans','Noto Sans JP',system-ui,sans-serif;font-weight:300;color:#f0ede8">
+  <style>
+    .tjm-ov{animation:tjmIn .3s cubic-bezier(.22,.61,.36,1) both}
+    @keyframes tjmIn{from{opacity:0}to{opacity:1}}
+    .tjm-li{opacity:0;transform:translateY(24px);animation:tjmUp .55s cubic-bezier(.22,.61,.36,1) both}
+    @keyframes tjmUp{to{opacity:1;transform:none}}
+    .tjm-li:nth-child(1){animation-delay:.06s}.tjm-li:nth-child(2){animation-delay:.11s}.tjm-li:nth-child(3){animation-delay:.16s}.tjm-li:nth-child(4){animation-delay:.21s}.tjm-li:nth-child(5){animation-delay:.26s}.tjm-li:nth-child(6){animation-delay:.31s}
+    .tjm-li:hover .tjm-n{color:#a82f31}
+    .tjm-x:hover{border-color:#ff2d2d !important;color:#ff2d2d !important}
+    .tjm-foot{opacity:0;animation:tjmIn .5s .4s both}
+    @media (prefers-reduced-motion:reduce){.tjm-ov,.tjm-li,.tjm-foot{animation:none;opacity:1;transform:none}}
+  </style>
+
+  <sc-if value="{{isClosedPreview}}" hint-placeholder-val="{{ false }}">
+    <button onClick="{{reopen}}" style="margin:16px;height:44px;padding:0 18px;background:none;border:1px solid rgba(240,237,232,.3);color:#f0ede8;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer">Open menu</button>
+  </sc-if>
+
+  <sc-if value="{{open}}" hint-placeholder-val="{{ true }}">
+  <div class="tjm-ov" role="dialog" aria-modal="true" aria-label="Menu" style="{{ovStyle}}">
+    <div aria-hidden="true" style="position:absolute;bottom:-30vw;right:-30vw;width:90vw;height:90vw;border-radius:50%;background:radial-gradient(circle,rgba(255,45,45,.10) 0,transparent 60%);filter:blur(40px);pointer-events:none"></div>
+
+    <!-- top bar (mirrors the page header so the logo doesn't jump) -->
+    <div style="position:relative;display:flex;align-items:center;justify-content:space-between;height:64px;padding:0 16px;border-bottom:1px solid rgba(240,237,232,.08)">
+      <a href="Main.dc.html" aria-label="Techno Japan" style="display:flex;align-items:center"><img src="img/logo-wordmark.png" alt="Techno Japan" style="height:15px;width:auto;display:block"></a>
+      <button class="tjm-x" onClick="{{close}}" aria-label="Close menu" style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;background:none;border:1px solid rgba(240,237,232,.25);color:#f0ede8;cursor:pointer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"></path></svg>
+      </button>
+    </div>
+
+    <!-- search shortcut -->
+    <div style="position:relative;padding:20px 16px 0">
+      <button onClick="{{search}}" style="width:100%;display:flex;align-items:center;gap:12px;height:52px;padding:0 16px;background:rgba(240,237,232,.04);border:1px solid rgba(240,237,232,.18);color:rgba(240,237,232,.6);cursor:pointer;font-family:'DM Sans','Noto Sans JP',sans-serif;font-size:15px;font-weight:300;text-align:left">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+        {{placeholder}}
+      </button>
+    </div>
+
+    <!-- main nav -->
+    <nav aria-label="Main" style="position:relative;display:flex;flex-direction:column;padding:16px 16px 0">
+      <sc-for list="{{links}}" as="l" hint-placeholder-count="6">
+        <a href="{{l.href}}" class="tjm-li" aria-current="{{l.aria}}" style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid rgba(240,237,232,.1);color:#f0ede8;text-decoration:none">
+          <span style="display:flex;align-items:baseline;gap:14px">
+            <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;color:rgba(240,237,232,.4);width:22px">{{l.num}}</span>
+            <span class="tjm-n" style="{{l.style}}">{{l.label}}</span>
+          </span>
+          <span style="font-family:'Space Mono','Noto Sans JP',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(240,237,232,.5)">{{l.note}}</span>
+        </a>
+      </sc-for>
+    </nav>
+
+    <!-- footer of the menu -->
+    <div class="tjm-foot" style="position:relative;margin-top:auto;padding:32px 16px 28px;display:flex;flex-direction:column;gap:20px">
+      <div style="display:flex;gap:24px">
+        <a href="Apply.dc.html" style="font-family:'Space Mono','Noto Sans JP',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#f0ede8;text-decoration:none;min-height:44px;display:flex;align-items:center">{{applyLabel}}</a>
+        <a href="Writer.dc.html" style="font-family:'Space Mono','Noto Sans JP',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#f0ede8;text-decoration:none;min-height:44px;display:flex;align-items:center">{{writerLabel}}</a>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(240,237,232,.12);padding-top:18px">
+        <div role="group" aria-label="Language" style="display:flex;border:1px solid rgba(240,237,232,.25)">
+          <sc-for list="{{langs}}" as="g" hint-placeholder-count="2">
+            <button onClick="{{g.pick}}" aria-pressed="{{g.pressed}}" style="{{g.style}}">{{g.label}}</button>
+          </sc-for>
+        </div>
+        <div style="display:flex;gap:20px">
+          <a href="#ig" style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(240,237,232,.62);text-decoration:none;min-height:44px;display:flex;align-items:center">Instagram</a>
+          <a href="#th" style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(240,237,232,.62);text-decoration:none;min-height:44px;display:flex;align-items:center">Threads</a>
+        </div>
+      </div>
+      <span style="font-family:'Space Mono','Noto Sans JP',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(240,237,232,.4)">{{tagline}}</span>
+    </div>
+  </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"isOpen":{"editor":null,"tsType":"boolean"},"onClose":{"editor":null,"tsType":"() => void"},"onSearch":{"editor":null,"tsType":"() => void"},"current":{"editor":"enum","options":["top","news","festivals","artists","venues","about"],"default":"top"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p){
+    super(p);
+    let lang = 'ja';
+    try { lang = window.localStorage.getItem('tj-lang') || 'ja'; } catch(e) {}
+    this.state = { closed: false, lang };
+  }
+  setLang(l){
+    this.setState({lang: l});
+    try { window.localStorage.setItem('tj-lang', l); } catch(e) {}
+    try { document.documentElement.lang = l; } catch(e) {}
+  }
+  close(){ if(this.props.onClose) this.props.onClose(); else this.setState({closed: true}); }
+  renderVals() {
+    const standalone = this.props.isOpen === undefined;
+    const open = standalone ? !this.state.closed : !!this.props.isOpen;
+    const cur = this.props.current || 'top';
+    const ja = this.state.lang === 'ja';
+    const defs = [
+      ['top','Top','Main.dc.html','', 'トップ'],
+      ['news','News','News.dc.html','Stories', 'ニュース・記事'],
+      ['festivals','Festivals','Festivals.dc.html','Index', 'フェス一覧'],
+      ['artists','Artists','Artists.dc.html','Database', 'アーティスト'],
+      ['venues','Venues','Venues.dc.html','Clubs & sites', 'クラブ・会場'],
+      ['about','About','About.dc.html','', 'テクノジャパンについて']
+    ];
+    const links = defs.map(([k,label,href,noteEn,noteJa], i) => ({
+      note: ja ? noteJa : noteEn,
+      label, href, num: String(i + 1).padStart(2, '0'), aria: k === cur ? 'page' : 'false',
+      style: "font-family:'Bebas Neue',sans-serif;font-size:52px;line-height:.95;letter-spacing:.01em;text-transform:uppercase;color:" + (k === cur ? '#ff2d2d' : '#f0ede8')
+    }));
+    return {
+      ovStyle: (standalone ? 'position:relative;height:844px;' : 'position:fixed;inset:0;') + 'z-index:100;background:#080808;background-image:repeating-linear-gradient(90deg,rgba(240,237,232,.03) 0 1px,transparent 1px 80px),repeating-linear-gradient(0deg,rgba(240,237,232,.03) 0 1px,transparent 1px 80px);display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden',
+      open, isClosedPreview: standalone && this.state.closed,
+      reopen: () => this.setState({closed: false}),
+      close: () => this.close(),
+      search: () => { if(this.props.onSearch) this.props.onSearch(); else this.close(); },
+      links,
+      langs: [['ja','JA'],['en','EN']].map(([k,label]) => ({
+        label, pressed: this.state.lang === k ? 'true' : 'false',
+        pick: () => this.setLang(k),
+        style: "display:flex;align-items:center;height:40px;min-width:44px;justify-content:center;padding:0 14px;border:0;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;" + (this.state.lang === k ? 'background:#f0ede8;color:#080808' : 'background:none;color:#f0ede8')
+      })),
+      placeholder: ja ? 'フェス、アーティスト、会場、都市…' : 'Festival, artist, venue, city…',
+      applyLabel: ja ? '掲載申請' : 'Apply',
+      writerLabel: ja ? 'ライター募集' : 'Writer',
+      tagline: ja ? '日本のアンダーグラウンドを、キュレーションする。' : "Japan's Underground, Curated."
+    };
+  }
+}
+</script>
+</body>
+</html>

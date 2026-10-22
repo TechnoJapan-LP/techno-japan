@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Techno Japan — Apply</title>
+<script src="./support.js"></script>
+<script src="./tj-data.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=DM+Sans:wght@300;400;500&amp;family=Space+Mono:wght@400;700&amp;family=Noto+Sans+JP:wght@300;400;500;700&amp;display=swap">
+<style>
+body{margin:0;background:#080808}
+a{color:#f0ede8;text-decoration:none}a:hover{color:#a82f31}
+.tj{position:relative;overflow:clip;font-family:"DM Sans","Noto Sans JP",system-ui,sans-serif;font-weight:300;color:#f0ede8;background:#080808;background-image:repeating-linear-gradient(90deg,rgba(240,237,232,.03) 0 1px,transparent 1px 80px),repeating-linear-gradient(0deg,rgba(240,237,232,.03) 0 1px,transparent 1px 80px);-webkit-font-smoothing:antialiased}
+.glow{position:absolute;top:-20vw;right:-20vw;width:70vw;height:70vw;border-radius:50%;background:radial-gradient(circle,rgba(255,45,45,.07) 0,transparent 60%);filter:blur(40px);pointer-events:none}
+.disp{font-family:"Bebas Neue","Noto Sans JP",sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:.01em;line-height:.95;margin:0}
+.mono{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(240,237,232,.62)}
+.red{color:var(--accent)}
+.wrap{position:relative;max-width:1360px;margin:0 auto;padding:0 40px;box-sizing:border-box}
+.chip{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(240,237,232,.62);background:none;border:1px solid rgba(240,237,232,.18);padding:10px 14px;cursor:pointer;min-height:36px}
+.chip:hover{border-color:#a82f31;color:#f0ede8}
+.chip.on{border-color:var(--accent);color:var(--accent)}
+.img{overflow:hidden;background:rgba(240,237,232,.04)}
+.img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+a:hover .img img{transform:scale(1.04)}
+.card{display:flex;flex-direction:column;gap:10px;min-width:0}
+.card .t{font-size:28px}
+.card:hover .t{color:#a82f31}
+.nav a{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase}
+.nav a.on{color:var(--accent)}
+.ham{display:none}
+.rule{border-top:1px solid rgba(240,237,232,.12)}
+@media (max-width:900px){
+ .wrap{padding:0 16px}.nav,.hdate{display:none !important}.ham{display:flex}
+ .pagehead{font-size:88px !important}
+}
+
+/* ===== moving background (same as live .tj-bg: grain + drifting 80px grid + floating red glow + scan line) ===== */
+.tj{background:transparent !important}
+.tjbg{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background-image:url(img/grain.png);background-size:120px 120px}
+.tjbg::before{content:"";position:absolute;inset:-80px;background-image:repeating-linear-gradient(90deg,rgba(240,237,232,.035) 0 1px,transparent 1px 80px),repeating-linear-gradient(0deg,rgba(240,237,232,.035) 0 1px,transparent 1px 80px);animation:tjGrid 20s linear infinite;will-change:transform}
+.tjbg::after{content:"";position:absolute;top:0;left:0;width:60vw;height:60vw;border-radius:50%;background:radial-gradient(circle,rgba(255,45,45,.06) 0%,transparent 60%);filter:blur(40px);animation:tjGlow 18s ease-in-out infinite;will-change:transform}
+.tjbg i{position:absolute;top:0;left:0;right:0;height:1px;background:rgba(240,237,232,.07);animation:tjScan 8s linear infinite;will-change:transform}
+@keyframes tjGrid{from{transform:translate(0,0)}to{transform:translate(80px,80px)}}
+@keyframes tjGlow{0%,100%{transform:translate(-10vw,-20vh)}50%{transform:translate(50vw,60vh)}}
+@keyframes tjScan{from{transform:translateY(-2vh)}to{transform:translateY(102vh)}}
+@media (prefers-reduced-motion:reduce){.tjbg::before,.tjbg::after,.tjbg i{animation:none}.tjbg i{display:none}}
+.hdr{position:sticky;top:0;z-index:40;background:rgba(8,8,8,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(240,237,232,.08)}
+
+/* page kit */
+.pagehead{font-size:168px;line-height:.85;letter-spacing:-.01em}
+.sec{border-top:1px solid rgba(240,237,232,.14);padding-top:18px}
+.num{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+.lead{font-size:20px;line-height:1.85;color:rgba(240,237,232,.9);margin:0;max-width:720px}
+.body{font-size:16px;line-height:1.95;color:rgba(240,237,232,.85);max-width:640px;margin:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;height:48px;padding:0 28px;background:#f0ede8;color:#080808;font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;border:0;cursor:pointer}
+.btn:hover{background:var(--accent);color:#f0ede8}
+.btn2{display:inline-flex;align-items:center;justify-content:center;height:48px;padding:0 24px;border:1px solid rgba(240,237,232,.4);color:#f0ede8;font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;background:none;cursor:pointer}
+.btn2:hover{border-color:var(--accent);color:var(--accent)}
+.field{display:flex;flex-direction:column;gap:8px}
+.field label{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(240,237,232,.62)}
+.field input,.field textarea,.field select{height:48px;background:transparent;border:0;border-bottom:1px solid rgba(240,237,232,.3);color:#f0ede8;padding:0;font-family:"DM Sans","Noto Sans JP",sans-serif;font-size:15px;outline:none;border-radius:0;-webkit-appearance:none}
+.field textarea{height:auto;min-height:140px;padding:12px 0;resize:vertical}
+.field input:focus,.field textarea:focus,.field select:focus{border-bottom-color:var(--accent)}
+.field select option{background:#080808}
+.li{display:grid;grid-template-columns:40px 1fr;gap:16px;padding:18px 0;border-top:1px solid rgba(240,237,232,.1);font-size:15px;line-height:1.7}
+.li .num{padding-top:4px}
+.stmt{display:grid;grid-template-columns:5fr 7fr;gap:48px;padding:48px 0;border-top:1px solid rgba(240,237,232,.14)}
+.stmt h3{font-size:clamp(40px,5vw,72px);margin:0}
+.stmt .jp{font-size:20px;color:rgba(240,237,232,.9);margin:8px 0 0;font-weight:300}
+.tile{display:flex;flex-direction:column;gap:12px;padding:28px 0;border-top:1px solid rgba(240,237,232,.14)}
+.tile:hover .t{color:#a82f31}
+.tile .t{font-size:44px}
+.marquee{overflow:hidden;white-space:nowrap;border-top:1px solid rgba(240,237,232,.12);border-bottom:1px solid rgba(240,237,232,.12)}
+.marquee .track{display:inline-block;animation:mq 40s linear infinite;padding:10px 0}
+.marquee .track span{display:inline-block;padding:0 28px;font-size:18px}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
+.gform{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px 40px}
+.gform .full{grid-column:1 / -1}
+.ok{border:1px solid var(--accent);padding:18px 20px;font-size:15px;line-height:1.7}
+@media (max-width:900px){
+ .pagehead{font-size:88px !important}
+ .stmt,.g2,.g4,.gform{grid-template-columns:repeat(1,minmax(0,1fr)) !important}
+ .stmt{gap:16px;padding:36px 0}
+ .lead{font-size:17px}
+ .tile .t{font-size:36px}
+}
+</style>
+</helmet>
+
+<div class="tj" style="--accent:{{accent}};display:flex;flex-direction:column;min-height:100%">
+  <div class="tjbg" aria-hidden="true"><i></i></div>
+  <div class="glow" aria-hidden="true"></div>
+
+  <header class="hdr">
+   <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;height:64px">
+    <a href="Main.dc.html" aria-label="Techno Japan" style="display:flex;align-items:center;gap:10px"><img src="img/logo-wordmark.png" alt="Techno Japan" style="height:15px;width:auto;display:block"></a>
+    <nav class="nav" style="display:flex;gap:28px" aria-label="Main"><a href="Main.dc.html">Top</a><a href="News.dc.html">News</a><a href="Festivals.dc.html">Festivals</a><a href="Artists.dc.html">Artists</a><a href="Venues.dc.html">Venues</a><a href="About.dc.html">About</a></nav>
+    <div style="display:flex;align-items:center;gap:18px">
+      
+      <button class="hdate" onClick="{{openSearch}}" aria-label="Search" style="display:flex;align-items:center;gap:8px;height:44px;min-width:44px;padding:0 12px;background:none;border:1px solid rgba(240,237,232,.18);color:#f0ede8;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="hdate">Search</span></button>
+      <span class="mono" style="color:#f0ede8">JA <span style="color:rgba(240,237,232,.4)">/</span> <a href="#en" style="color:rgba(240,237,232,.62)">EN</a></span>
+      <button class="ham" onClick="{{openMenu}}" aria-label="Menu" aria-haspopup="dialog" style="background:none;border:0;color:#f0ede8;padding:0;width:44px;height:44px;align-items:center;justify-content:flex-end;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 8h18M3 16h18"></path></svg></button>
+    </div>
+   </div>
+  </header>
+
+  <!-- HEAD -->
+  <section class="wrap" style="width:100%;padding-top:56px;display:flex;flex-direction:column;gap:28px">
+    <span class="mono">Submission · 掲載は無料</span>
+    <h1 class="disp pagehead">Apply</h1>
+    <div class="g2" style="align-items:end; grid-template-columns: minmax(0,1fr) auto; column-gap: 48px">
+      <p class="lead" style="max-width: 760px; text-wrap: pretty; word-break: auto-phrase; line-break: strict; line-height: 1.9">Techno Japanでは、日本国内で開催されるテクノおよびアンダーグラウンドな<wbr>エレクトロニックミュージックのフェスティバル・イベント情報を掲載しています。<wbr>掲載は無料です。<wbr>下記フォームよりご申請ください。</p>
+      <div style="display:flex;gap:10px;justify-self:end;flex-wrap:wrap"><a href="#form" class="btn">申請フォームへ</a><a href="About.dc.html" class="btn2">Statement →</a></div>
+    </div>
+  </section>
+
+  <!-- 01 GUIDELINES -->
+  <section class="wrap" style="width:100%;padding-top:96px">
+    <div class="sec g2">
+      <div style="display:flex;flex-direction:column;gap:16px"><span class="num">01 — 掲載について</span><h2 class="disp" style="font-size:clamp(40px,5vw,72px)">How it works</h2><p class="body">掲載するフェスティバル・イベントは、編集部がメディアの方向性に照らして判断しています。掲載の考え方は STATEMENT をご覧ください。</p></div>
+      <div style="display:flex;flex-direction:column">
+        <div class="li"><span class="num">01</span><span>掲載は無料です。掲載に伴う費用は一切発生しません</span></div>
+        <div class="li"><span class="num">02</span><span>申請いただいたすべてのイベントの掲載をお約束するものではありません</span></div>
+        <div class="li"><span class="num">03</span><span>掲載可否の理由について、個別のご回答は行っておりません</span></div>
+        <div class="li"><span class="num">04</span><span>提供いただいた情報は、掲載時に編集部で編集する場合があります</span></div>
+        <div class="li" style="border-bottom:1px solid rgba(240,237,232,.1)"><span class="num">05</span><span>掲載後の情報修正・削除のご依頼は、フォーム記載の連絡先より承ります</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 CRITERIA + 03 FLOW -->
+  <section class="wrap" style="width:100%;padding-top:96px">
+    <div class="g2">
+      <div class="sec" style="display:flex;flex-direction:column;gap:16px">
+        <span class="num">02 — 掲載の目安</span>
+        <h2 class="disp" style="font-size:44px">Genres</h2>
+        <p class="body">テクノ、ハウス、ミニマル、アンビエント、エクスペリメンタルなど、エレクトロニックミュージックを軸としたフェスティバル・イベントを対象としています。</p>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; align-items: flex-start"><span class="chip on" style="height: auto; min-height: 0; align-self: flex-start; padding: 8px 14px; line-height: 1.2">Techno</span><span class="chip on" style="height: auto; min-height: 0; align-self: flex-start; padding: 8px 14px; line-height: 1.2">House</span><span class="chip on" style="height: auto; min-height: 0; align-self: flex-start; padding: 8px 14px; line-height: 1.2">Minimal</span><span class="chip on" style="height: auto; min-height: 0; align-self: flex-start; padding: 8px 14px; line-height: 1.2">Ambient</span><span class="chip on" style="height: auto; min-height: 0; align-self: flex-start; padding: 8px 14px; line-height: 1.2">Experimental</span><span class="chip on" style="height: auto; min-height: 0; align-self: flex-start; padding: 8px 14px; line-height: 1.2">Electronic</span></div>
+      </div>
+      <div class="sec" style="display:flex;flex-direction:column;gap:16px">
+        <span class="num">03 — 掲載までの流れ</span>
+        <h2 class="disp" style="font-size:44px">Flow</h2>
+        <div style="display:flex;flex-direction:column">
+          <div class="li"><span class="num">01</span><span>フォームより申請</span></div>
+          <div class="li"><span class="num">02</span><span>編集部で内容を確認</span></div>
+          <div class="li" style="border-bottom:1px solid rgba(240,237,232,.1)"><span class="num">03</span><span>掲載が決定した場合、サイトに公開されます（お急ぎの場合は備考欄にその旨をお書きください）</span></div>
+        </div>
+        <p class="body" style="font-size:14px">掲載後の情報更新、ラインナップの追加発表なども随時受け付けています。同じフォームよりご連絡ください。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 FORM -->
+  <section class="wrap" id="form" style="width:100%;padding-top:96px">
+    <div class="sec" style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:32px;flex-wrap:wrap;gap:12px"><div style="display:flex;flex-direction:column;gap:12px"><span class="num">04 — 申請フォーム</span><h2 class="disp" style="font-size:clamp(40px,5vw,72px)">Submit an event</h2></div><span class="mono">このフォームから直接 Google フォームに送信（回答は今までのスプレッドシートに）</span></div>
+    <sc-if value="{{notSent}}" hint-placeholder-val="{{ true }}">
+    <form class="gform" style="margin:0;max-width:960px" onSubmit="{{submit}}">
+      <div class="field"><label for="a-name">イベント / フェス名</label><input id="a-name" type="text" required=""></div>
+      <div class="field"><label for="a-type">種別</label><select id="a-type"><option>Festival</option><option>Rave</option><option>Club night</option></select></div>
+      <div class="field"><label for="a-date">日程</label><input id="a-date" type="text" placeholder="2026.11.07 – 11.08"></div>
+      <div class="field"><label for="a-venue">会場 / 都道府県</label><input id="a-venue" type="text"></div>
+      <div class="field"><label for="a-genre">ジャンル</label><input id="a-genre" type="text" placeholder="Techno / House / Ambient"></div>
+      <div class="field"><label for="a-url">公式 URL / チケット</label><input id="a-url" type="url"></div>
+      <div class="field full"><label for="a-lineup">ラインナップ</label><textarea id="a-lineup" style="min-height:90px"></textarea></div>
+      <div class="field full"><label for="a-desc">イベントの紹介文</label><textarea id="a-desc"></textarea></div>
+      <div class="field"><label for="a-contact">担当者名</label><input id="a-contact" type="text"></div>
+      <div class="field"><label for="a-email">Email</label><input id="a-email" type="email" required=""></div>
+      <div class="field full"><label for="a-note">備考（お急ぎの場合はこちらに）</label><textarea id="a-note" style="min-height:80px"></textarea></div>
+      <div class="full" style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><button class="btn" type="submit">申請する</button><span class="mono">フライヤー画像はフォーム送信後にメールで受け付けます</span></div>
+    </form>
+    </sc-if>
+    <sc-if value="{{sent}}" hint-placeholder-val="{{ false }}"><div class="ok" style="max-width:960px"><span class="mono red" style="display:block;margin-bottom:8px">Received</span>申請を受け付けました。編集部で確認のうえ、掲載が決まった場合はサイトに公開されます。</div></sc-if>
+  </section>
+
+  <!-- RECENT ADDITIONS -->
+  <section class="wrap" style="width:100%;padding-top:96px">
+    <div class="sec" style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px"><h2 class="disp" style="font-size:44px">Recently listed</h2><a href="Festivals.dc.html" class="mono">All festivals →</a></div>
+    <div class="g4">
+      <sc-for list="{{recent}}" as="f" hint-placeholder-count="4">
+        <a href="FestivalDetail.dc.html" class="card">
+          <div class="img" style="aspect-ratio:3/2"><img src="{{f.img}}" alt=""></div>
+          <span class="mono red">{{f.date}}</span>
+          <span class="disp t">{{f.name}}</span>
+          <span class="mono">{{f.metaLine}}</span>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+
+  <dc-import name="Search" is-open="{{searchOpen}}" on-close="{{closeSearch}}" hint-size="0px,0px"></dc-import>
+  <dc-import name="Menu" is-open="{{menuOpen}}" on-close="{{closeMenu}}" on-search="{{menuSearch}}" current="apply" hint-size="0px,0px"></dc-import>
+
+  <footer class="wrap" style="width:100%;padding:112px 40px 40px;display:flex;flex-direction:column;gap:32px">
+    <div class="rule" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px;padding-top:40px">
+      <img src="img/logo-wordmark.png" alt="Techno Japan" style="height:15px;width:auto;display:block;align-self:center">
+      <nav class="nav" style="display:flex;gap:24px;flex-wrap:wrap" aria-label="Footer"><a href="News.dc.html">News</a><a href="Festivals.dc.html">Festivals</a><a href="Artists.dc.html">Artists</a><a href="Venues.dc.html">Venues</a><a href="About.dc.html">About</a><a href="Apply.dc.html">Apply</a><a href="Writer.dc.html">Writer</a></nav>
+      <div style="display:flex;gap:20px" class="mono"><a href="#ig" style="color:rgba(240,237,232,.62)">Instagram</a><a href="#th" style="color:rgba(240,237,232,.62)">Threads</a></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px" class="mono"><span>© 2026 Techno Japan</span><span style="color:#f0ede8">Japan's Underground, Curated.</span></div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#ff2d2d","options":["#ff2d2d","#a82f31","#f0ede8"]},"$preview":{"width":1440,"height":4000}}'>
+class Component extends DCLogic {
+  constructor(p){ super(p); this.state = { sent:false, data: (typeof window !== 'undefined' && window.TJ_DATA) || null }; }
+  componentDidMount(){ if(!this.state.data){ fetch('./tj-data.json').then(r=>r.json()).then(d=>this.setState({data:d})).catch(()=>{}); } }
+  renderVals() {
+    const D = this.state.data || {articles:[],festivals:[],artists:[],venues:[]};
+    const recent = D.festivals.filter(f => f.upcoming).slice(0,4);
+    return { accent: this.props.accent ?? '#ff2d2d',
+      searchOpen: !!this.state.searchOpen, openSearch: () => this.setState({searchOpen: true}), closeSearch: () => this.setState({searchOpen: false}),
+      menuOpen: !!this.state.menuOpen, openMenu: () => this.setState({menuOpen: true}), closeMenu: () => this.setState({menuOpen: false}), menuSearch: () => this.setState({menuOpen: false, searchOpen: true}),
+      sent: !!this.state.sent, notSent: !this.state.sent, submit: (e) => { if(e && e.preventDefault) e.preventDefault(); this.setState({sent:true}); },
+      recent };
+  }
+}
+</script>
+</body>
+</html>

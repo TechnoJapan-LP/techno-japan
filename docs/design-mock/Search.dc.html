@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Techno Japan — Search</title>
+<script src="./support.js"></script>
+<script src="./tj-data.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=Space+Mono:wght@400;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="font-family:'DM Sans','Noto Sans JP',system-ui,sans-serif;font-weight:300;color:#f0ede8">
+  <style>
+    .tjs-ov{animation:tjsIn .28s cubic-bezier(.22,.61,.36,1) both}
+    @keyframes tjsIn{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
+    .tjs-row{transition:background .2s ease}
+    .tjs-row:hover{background:rgba(240,237,232,.05)}
+    .tjs-row:hover .tjs-t{color:#a82f31}
+    .tjs-chip:hover{border-color:#a82f31 !important;color:#f0ede8 !important}
+    .tjs-x:hover{border-color:#ff2d2d !important;color:#ff2d2d !important}
+    .tjs-in::placeholder{color:rgba(240,237,232,.28)}
+    .tjs-in:focus{outline:none;border-bottom-color:#ff2d2d !important}
+    @media (max-width:900px){
+      .tjs-wrap{padding:0 16px !important}
+      .tjs-in{font-size:26px !important;height:56px !important}
+      .tjs-grid{grid-template-columns:repeat(1,minmax(0,1fr)) !important}
+      .tjs-tabs{overflow-x:auto;flex-wrap:nowrap !important}
+    }
+    @media (prefers-reduced-motion:reduce){.tjs-ov{animation:none}}
+  </style>
+
+  <sc-if value="{{isClosedPreview}}" hint-placeholder-val="{{ false }}">
+    <button onClick="{{reopen}}" style="margin:24px;height:44px;padding:0 18px;background:none;border:1px solid rgba(240,237,232,.3);color:#f0ede8;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer">Open search</button>
+  </sc-if>
+
+  <sc-if value="{{open}}" hint-placeholder-val="{{ true }}">
+  <div class="tjs-ov" role="dialog" aria-modal="true" aria-label="Search Techno Japan" style="{{ovStyle}}">
+
+    <!-- top bar -->
+    <div class="tjs-wrap" style="width:100%;max-width:1360px;margin:0 auto;padding:0 40px;box-sizing:border-box">
+      <div style="display:flex;align-items:center;justify-content:space-between;height:64px">
+        <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#ff2d2d">● Search</span>
+        <button class="tjs-x" onClick="{{close}}" aria-label="Close search" style="height:44px;padding:0 16px;background:none;border:1px solid rgba(240,237,232,.25);color:#f0ede8;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer">Close ✕</button>
+      </div>
+      <label for="tjs-q" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Search news, festivals, artists, venues</label>
+      <input id="tjs-q" class="tjs-in" ref="{{inputRef}}" type="search" value="{{q}}" onChange="{{onQ}}" onKeyDown="{{onKey}}" placeholder="Festival, artist, venue, city…" autocomplete="off" style="width:100%;height:88px;background:transparent;border:0;border-bottom:1px solid rgba(240,237,232,.3);color:#f0ede8;font-family:'DM Sans','Noto Sans JP',sans-serif;font-weight:300;font-size:48px;padding:0;box-sizing:border-box">
+
+      <!-- tabs -->
+      <div class="tjs-tabs" role="tablist" style="display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid rgba(240,237,232,.1)">
+        <sc-for list="{{tabs}}" as="t" hint-placeholder-count="5">
+          <button role="tab" onClick="{{t.pick}}" style="{{t.style}}">{{t.label}} <span style="color:rgba(240,237,232,.4)">{{t.n}}</span></button>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- results -->
+    <div style="flex:1;overflow-y:auto">
+      <div class="tjs-wrap" style="width:100%;max-width:1360px;margin:0 auto;padding:0 40px 64px;box-sizing:border-box">
+
+        <!-- empty query: suggestions -->
+        <sc-if value="{{isEmpty}}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-direction:column;gap:12px;padding-top:28px">
+            <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(240,237,232,.62)">Try</span>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <sc-for list="{{suggest}}" as="s" hint-placeholder-count="8">
+                <button class="tjs-chip" onClick="{{s.pick}}" style="height:40px;padding:0 14px;background:none;border:1px solid rgba(240,237,232,.18);color:rgba(240,237,232,.75);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer">{{s.label}}</button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- grouped results -->
+        <sc-for list="{{groups}}" as="g" hint-placeholder-count="2">
+          <section style="padding-top:36px">
+            <div style="display:flex;justify-content:space-between;align-items:flex-end;border-top:1px solid rgba(240,237,232,.14);padding-top:14px;margin-bottom:8px">
+              <h2 style="margin:0;font-family:'Bebas Neue','Noto Sans JP',sans-serif;font-weight:400;font-size:32px;letter-spacing:.01em;line-height:1">{{g.title}} <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;color:rgba(240,237,232,.5);vertical-align:.5em">{{g.n}}</span></h2>
+              <sc-if value="{{g.hasMore}}" hint-placeholder-val="{{ false }}"><button onClick="{{g.more}}" style="background:none;border:0;color:#f0ede8;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;min-height:44px">See all →</button></sc-if>
+            </div>
+            <div class="tjs-grid" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px">
+              <sc-for list="{{g.items}}" as="r" hint-placeholder-count="4">
+                <a href="{{r.href}}" class="tjs-row" style="display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;align-items:center;padding:12px 0;border-bottom:1px solid rgba(240,237,232,.08);color:#f0ede8;text-decoration:none">
+                  <div style="width:72px;height:54px;overflow:hidden;background:rgba(240,237,232,.05)">
+                    <sc-if value="{{r.img}}" hint-placeholder-val="{{ true }}"><img src="{{r.img}}" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></sc-if>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:4px;min-width:0">
+                    <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#ff2d2d">{{r.kind}} · <span style="color:rgba(240,237,232,.6)">{{r.meta}}</span></span>
+                    <span class="tjs-t" style="font-family:'Bebas Neue','Noto Sans JP',sans-serif;font-size:22px;line-height:1.05;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{r.title}}</span>
+                    <span style="font-size:13px;line-height:1.4;color:rgba(240,237,232,.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{r.sub}}</span>
+                  </div>
+                </a>
+              </sc-for>
+            </div>
+          </section>
+        </sc-for>
+
+        <sc-if value="{{noHits}}" hint-placeholder-val="{{ false }}">
+          <div style="padding-top:56px;display:flex;flex-direction:column;gap:12px">
+            <span style="font-family:'Bebas Neue',sans-serif;font-size:40px;line-height:1">No results for “{{q}}”</span>
+            <span style="font-size:14px;color:rgba(240,237,232,.65)">英語・日本語どちらでも検索できます。都市名（Tokyo / 京都）やジャンル（Techno / Ambient）でもお試しください。</span>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"isOpen":{"editor":null,"tsType":"boolean"},"onClose":{"editor":null,"tsType":"() => void"},"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(p){
+    super(p);
+    this.state = { q: 'Kyoto', tab: 'all', closed: false, data: (typeof window !== 'undefined' && window.TJ_DATA) || null };
+    this.input = null;
+  }
+  componentDidMount(){
+    if(!this.state.data){ fetch('./tj-data.json').then(r=>r.json()).then(d=>this.setState({data:d})).catch(()=>{}); }
+    if(this.props.isOpen === undefined) return;          // standalone artboard: leave the demo query in place
+    this.setState({q: ''});
+  }
+  componentDidUpdate(prev){
+    if(this.props.isOpen && !prev.isOpen){ this.setState({q: '', tab: 'all'}); setTimeout(() => { if(this.input) this.input.focus(); }, 30); }
+  }
+  close(){ if(this.props.onClose) this.props.onClose(); else this.setState({closed: true}); }
+  renderVals() {
+    const D = this.state.data || {articles:[],festivals:[],artists:[],venues:[]};
+    const standalone = this.props.isOpen === undefined;
+    const open = standalone ? !this.state.closed : !!this.props.isOpen;
+    const norm = (s) => String(s || '').normalize('NFKC').toLowerCase();
+
+    // one flat index across the four databases
+    const idx = [
+      ...D.articles.map(a => ({key:'news', kind:'News', title:a.h1, sub:a.h2 || a.excerpt, meta:a.dateJp, img:a.img, href:'NewsDetail.dc.html', hay:[a.h1,a.h2,a.cat,a.excerpt]})),
+      ...D.festivals.map(f => ({key:'festivals', kind:'Festival', title:f.name, sub:f.metaLine, meta:f.date + ' · ' + (f.upcoming ? 'Upcoming' : 'Archive'), img:f.img, href:'FestivalDetail.dc.html', hay:[f.name,f.nameJa,f.location,f.city,(f.genre||[]).join(' '),(f.lineupLabels||[]).join(' '),f.type], up:f.upcoming})),
+      ...D.artists.map(a => ({key:'artists', kind:'Artist', title:a.name, sub:a.genreLine, meta:a.metaLine, img:a.img, href:'ArtistDetail.dc.html', hay:[a.name,a.city,a.country,(a.genre||[]).join(' ')]})),
+      ...D.venues.map(v => ({key:'venues', kind:'Venue', title:v.name, sub:v.typeLine, meta:v.metaLine, img:v.img, href:'VenueDetail.dc.html', hay:[v.name,v.kana,v.area,v.city,v.type,(v.genre||[]).join(' ')]}))
+    ];
+
+    const q = this.state.q || '';
+    const terms = norm(q).split(/\s+/).filter(Boolean);
+    let hits = [];
+    if(terms.length){
+      hits = idx.map(it => {
+        const t = norm(it.title), h = norm(it.hay.join(' ') + ' ' + it.title);
+        if(!terms.every(x => h.includes(x))) return null;
+        const score = (t.startsWith(terms[0]) ? 3 : t.includes(terms[0]) ? 2 : 1) + (it.up ? .5 : 0);
+        return {...it, score};
+      }).filter(Boolean).sort((a,b) => b.score - a.score);
+    }
+
+    const defs = [['all','All'],['news','News'],['festivals','Festivals'],['artists','Artists'],['venues','Venues']];
+    const count = (k) => k === 'all' ? hits.length : hits.filter(h => h.key === k).length;
+    const tab = this.state.tab;
+    const tabs = defs.map(([k,label]) => ({
+      label, n: terms.length ? count(k) : '',
+      pick: () => this.setState({tab: k}),
+      style: 'background:none;border:0;border-bottom:2px solid ' + (tab===k ? '#ff2d2d' : 'transparent') + ';margin-bottom:-1px;padding:16px 16px;min-height:44px;white-space:nowrap;cursor:pointer;font-family:Space Mono,monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:' + (tab===k ? '#f0ede8' : 'rgba(240,237,232,.6)')
+    }));
+
+    let groups = [];
+    if(terms.length){
+      const keys = tab === 'all' ? ['festivals','news','artists','venues'] : [tab];
+      groups = keys.map(k => {
+        const all = hits.filter(h => h.key === k);
+        const lim = tab === 'all' ? 4 : 60;
+        return {title: defs.find(d => d[0]===k)[1], n: all.length, items: all.slice(0, lim), hasMore: tab === 'all' && all.length > lim, more: () => this.setState({tab: k})};
+      }).filter(g => g.n > 0);
+    } else {
+      // no query yet: next festivals and latest stories as a starting point
+      const up = idx.filter(i => i.key === 'festivals' && i.up).slice(0, 6);
+      const news = idx.filter(i => i.key === 'news').slice(0, 4);
+      groups = [{title:'Upcoming', n:'', items:up, hasMore:false, more:null}, {title:'Latest stories', n:'', items:news, hasMore:false, more:null}];
+    }
+
+    const words = ['Techno','Ambient','Open-air','Tokyo','京都','Osaka','Rave','Asia'];
+    return {
+      // on its own artboard the panel sits in the frame (fixed layers don't show on the canvas); inside a page it covers the screen
+      ovStyle: (standalone ? 'position:relative;height:900px;' : 'position:fixed;inset:0;') + 'z-index:100;background:rgba(8,8,8,.97);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);display:flex;flex-direction:column;overflow:hidden',
+      open, isClosedPreview: standalone && this.state.closed,
+      reopen: () => this.setState({closed: false}),
+      close: () => this.close(),
+      q, onQ: (e) => this.setState({q: e.target.value, tab: 'all'}),
+      onKey: (e) => { if(e.key === 'Escape') this.close(); },
+      inputRef: (el) => { this.input = el; },
+      tabs, groups, isEmpty: !terms.length, noHits: terms.length > 0 && hits.length === 0,
+      suggest: words.map(w => ({label: w, pick: () => this.setState({q: w, tab: 'all'})}))
+    };
+  }
+}
+</script>
+</body>
+</html>

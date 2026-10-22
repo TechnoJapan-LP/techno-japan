@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Techno Japan — Artists</title>
+<script src="./support.js"></script>
+<script src="./tj-data.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=Space+Mono:wght@400;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap">
+<style>
+body{margin:0;background:#080808}
+a{color:#f0ede8;text-decoration:none}a:hover{color:#a82f31}
+.tj{position:relative;overflow:clip;font-family:"DM Sans","Noto Sans JP",system-ui,sans-serif;font-weight:300;color:#f0ede8;background:#080808;background-image:repeating-linear-gradient(90deg,rgba(240,237,232,.03) 0 1px,transparent 1px 80px),repeating-linear-gradient(0deg,rgba(240,237,232,.03) 0 1px,transparent 1px 80px);-webkit-font-smoothing:antialiased}
+.glow{position:absolute;top:-20vw;left:30vw;width:70vw;height:70vw;border-radius:50%;background:radial-gradient(circle,rgba(255,45,45,.07) 0,transparent 60%);filter:blur(40px);pointer-events:none}
+.disp{font-family:"Bebas Neue","Noto Sans JP",sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:.01em;line-height:.95;margin:0}
+.mono{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(240,237,232,.62)}
+.red{color:var(--accent)}
+.wrap{position:relative;max-width:1360px;margin:0 auto;padding:0 40px;box-sizing:border-box}
+.chip{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(240,237,232,.62);background:none;border:1px solid rgba(240,237,232,.18);padding:10px 14px;cursor:pointer;min-height:36px}
+.chip:hover{border-color:#a82f31;color:#f0ede8}
+.chip.on{border-color:var(--accent);color:var(--accent)}
+.img{overflow:hidden;background:rgba(240,237,232,.04)}
+.img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+a:hover .img img{transform:scale(1.04)}
+.card{display:flex;flex-direction:column;gap:10px;min-width:0}
+.card .t{font-size:26px}
+.card:hover .t{color:#a82f31}
+.nav a{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase}
+.nav a.on{color:var(--accent)}
+.ham{display:none}
+.rule{border-top:1px solid rgba(240,237,232,.12)}
+.feat{display:grid;grid-template-columns:5fr 7fr;gap:48px;align-items:end}
+.feat .t{font-size:clamp(56px,7vw,120px)}
+.feat:hover .t{color:#a82f31}
+/* featured carousel (pinned under the 64px header) */
+.fcar{position:relative;height:calc(3 * (min(100vh,860px) - 64px) + 20vh)}
+.fcar-sticky{position:sticky;top:64px;height:calc(min(100vh,860px) - 64px);overflow:hidden}
+.fcar-track{display:flex;width:300%;height:100%;will-change:transform}
+.fcar-panel{flex:0 0 33.3333%;width:33.3333%;height:100%;display:flex;align-items:center;box-sizing:border-box;padding:0 0 56px}
+.fcar-panel .feat{width:100%}
+.fimg{width:100%;aspect-ratio:4/5;max-width:calc((min(100vh,860px) - 160px) * .8)}
+.fcar-panel .fimg img{will-change:transform}
+.fcar-panel::after{content:"";position:absolute;inset:0;background:#080808;opacity:var(--dim,0);pointer-events:none}
+.fcar-panel{position:relative}
+.fcar-ui{position:absolute;left:0;right:0;bottom:20px;display:flex;align-items:center;gap:16px}
+.fdot{width:28px;height:2px;background:rgba(240,237,232,.25);transition:background .3s ease}
+.fdot.on{background:var(--accent)}
+@media (max-width:900px){
+ .fcar-panel .feat{display:flex !important;flex-direction:column;justify-content:flex-end;gap:16px}
+ .fimg{max-width:none;max-height:46vh}
+ .fcar-panel p{display:none}
+}
+@media (max-width:900px){
+ .wrap{padding:0 16px}.nav,.hdate{display:none !important}.ham{display:flex}
+ .g5{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+ .feat{grid-template-columns:repeat(1,minmax(0,1fr)) !important}
+ .pagehead{font-size:88px !important}
+ .card .t{font-size:22px}
+}
+
+/* ===== moving background (same as live .tj-bg: grain + drifting 80px grid + floating red glow + scan line) ===== */
+.tj{background:transparent !important}
+.tjbg{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background-image:url(img/grain.png);background-size:120px 120px}
+.tjbg::before{content:"";position:absolute;inset:-80px;background-image:repeating-linear-gradient(90deg,rgba(240,237,232,.035) 0 1px,transparent 1px 80px),repeating-linear-gradient(0deg,rgba(240,237,232,.035) 0 1px,transparent 1px 80px);animation:tjGrid 20s linear infinite;will-change:transform}
+.tjbg::after{content:"";position:absolute;top:0;left:0;width:60vw;height:60vw;border-radius:50%;background:radial-gradient(circle,rgba(255,45,45,.06) 0%,transparent 60%);filter:blur(40px);animation:tjGlow 18s ease-in-out infinite;will-change:transform}
+.tjbg i{position:absolute;top:0;left:0;right:0;height:1px;background:rgba(240,237,232,.07);animation:tjScan 8s linear infinite;will-change:transform}
+@keyframes tjGrid{from{transform:translate(0,0)}to{transform:translate(80px,80px)}}
+@keyframes tjGlow{0%,100%{transform:translate(-10vw,-20vh)}50%{transform:translate(50vw,60vh)}}
+@keyframes tjScan{from{transform:translateY(-2vh)}to{transform:translateY(102vh)}}
+@media (prefers-reduced-motion:reduce){.tjbg::before,.tjbg::after,.tjbg i{animation:none}.tjbg i{display:none}}
+.hdr{position:sticky;top:0;z-index:40;background:rgba(8,8,8,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(240,237,232,.08)}
+</style>
+</helmet>
+
+<div class="tj" style="--accent:{{accent}};display:flex;flex-direction:column;min-height:100%">
+  <div class="tjbg" aria-hidden="true"><i></i></div>
+  <div class="glow" aria-hidden="true"></div>
+
+  <header class="hdr">
+   <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;height:64px">
+    <a href="Main.dc.html" aria-label="Techno Japan" style="display:flex;align-items:center;gap:10px"><img src="img/logo-wordmark.png" alt="Techno Japan" style="height:15px;width:auto;display:block"></a>
+    <nav class="nav" style="display:flex;gap:28px" aria-label="Main"><a href="Main.dc.html">Top</a><a href="News.dc.html">News</a><a href="Festivals.dc.html">Festivals</a><a href="Artists.dc.html" class="on">Artists</a><a href="Venues.dc.html">Venues</a><a href="About.dc.html">About</a></nav>
+    <div style="display:flex;align-items:center;gap:18px">
+      
+      <button class="hdate" onClick="{{openSearch}}" aria-label="Search" style="display:flex;align-items:center;gap:8px;height:44px;min-width:44px;padding:0 12px;background:none;border:1px solid rgba(240,237,232,.18);color:#f0ede8;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="hdate">Search</span></button>
+      <span class="mono" style="color:#f0ede8">JA <span style="color:rgba(240,237,232,.4)">/</span> <a href="#en" style="color:rgba(240,237,232,.62)">EN</a></span>
+      <button class="ham" onClick="{{openMenu}}" aria-label="Menu" aria-haspopup="dialog" style="background:none;border:0;color:#f0ede8;padding:0;width:44px;height:44px;align-items:center;justify-content:flex-end;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 8h18M3 16h18"></path></svg></button>
+    </div>
+   </div>
+  </header>
+
+  <!-- PAGE HEAD -->
+  <section class="wrap" style="width:100%;padding-top:40px;display:flex;flex-direction:column;gap:28px">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap">
+      <h1 class="disp pagehead" style="font-size:168px;line-height:.85;letter-spacing:-.01em">Artists</h1>
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;padding-bottom:12px"><span class="mono red">{{count}} artists</span><span class="mono">Japan's underground, indexed</span></div>
+    </div>
+    <div class="rule" style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:18px">
+      <div style="display:flex;gap:8px;flex-wrap:wrap" role="group" aria-label="Genre"><sc-for list="{{genreChips}}" as="c" hint-placeholder-count="5"><button class="{{c.cls}}" onClick="{{c.pick}}">{{c.label}}</button></sc-for></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap" role="group" aria-label="Origin"><sc-for list="{{originChips}}" as="c" hint-placeholder-count="3"><button class="{{c.cls}}" onClick="{{c.pick}}">{{c.label}}</button></sc-for></div>
+    </div>
+  </section>
+
+  <!-- FEATURED: 3 artists, pinned; scrolling slides them in from the right (same motion as the TOP carousel) -->
+  <section class="fcar" style="margin-top:40px">
+    <div class="fcar-sticky">
+      <div class="fcar-track">
+        <sc-for list="{{feats}}" as="f" hint-placeholder-count="3">
+          <div class="fcar-panel">
+            <a href="ArtistDetail.dc.html" class="feat wrap">
+              <div class="img fimg"><img src="{{f.img}}" alt=""></div>
+              <div style="display:flex;flex-direction:column;gap:18px;padding-bottom:8px">
+                <span class="mono red">Featured {{f.num}} · {{f.genreLine}}</span>
+                <h2 class="disp t">{{f.name}}</h2>
+                <span class="mono">{{f.metaLine}}</span>
+                <sc-if value="{{f.next}}" hint-placeholder-val="{{ true }}"><span class="mono" style="color:#f0ede8">Next · {{f.nextLine}}</span></sc-if>
+                <p style="font-size:16px;line-height:1.9;margin:0;max-width:640px;color:rgba(240,237,232,.85)">{{f.bio}}</p>
+                <span class="mono" style="color:#f0ede8">Profile →</span>
+              </div>
+            </a>
+          </div>
+        </sc-for>
+      </div>
+      <div class="wrap fcar-ui" aria-hidden="true">
+        <div style="display:flex;gap:6px"><sc-for list="{{fdots}}" as="d" hint-placeholder-count="3"><span class="{{d.cls}}"></span></sc-for></div>
+        <span class="mono" style="color:#f0ede8">{{fIdx}} <span style="color:rgba(240,237,232,.4)">/</span> 03</span>
+        <span class="mono" style="margin-left:auto">Scroll ↓</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- GRID -->
+  <section class="wrap" style="width:100%;padding-top:64px">
+    <div class="g5 rule" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:32px 20px;padding-top:40px">
+      <sc-for list="{{list}}" as="a" hint-placeholder-count="10">
+        <a href="ArtistDetail.dc.html" class="card">
+          <div class="img" style="aspect-ratio:1/1"><img src="{{a.img}}" alt=""></div>
+          <h3 class="disp t">{{a.name}}</h3>
+          <span class="mono">{{a.genreLine}}</span>
+          <span class="mono" style="color:rgba(240,237,232,.4)">{{a.metaLine}}</span>
+        </a>
+      </sc-for>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding-top:40px" class="mono"><span>{{list.length}} / {{count}}</span><span>A — Z</span></div>
+  </section>
+
+  <dc-import name="Search" is-open="{{searchOpen}}" on-close="{{closeSearch}}" hint-size="0px,0px"></dc-import>
+  <dc-import name="Menu" is-open="{{menuOpen}}" on-close="{{closeMenu}}" on-search="{{menuSearch}}" current="artists" hint-size="0px,0px"></dc-import>
+
+  <footer class="wrap" style="width:100%;padding:112px 40px 40px;display:flex;flex-direction:column;gap:32px">
+    <div class="rule" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px;padding-top:40px">
+      <img src="img/logo-wordmark.png" alt="Techno Japan" style="height:15px;width:auto;display:block;align-self:center">
+      <nav class="nav" style="display:flex;gap:24px;flex-wrap:wrap" aria-label="Footer"><a href="News.dc.html">News</a><a href="Festivals.dc.html">Festivals</a><a href="Artists.dc.html">Artists</a><a href="Venues.dc.html">Venues</a><a href="About.dc.html">About</a><a href="Apply.dc.html">Apply</a><a href="Writer.dc.html">Writer</a></nav>
+      <div style="display:flex;gap:20px" class="mono"><a href="#ig" style="color:rgba(240,237,232,.62)">Instagram</a><a href="#th" style="color:rgba(240,237,232,.62)">Threads</a></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px" class="mono"><span>© 2026 Techno Japan</span><span style="color:#f0ede8">Japan's Underground, Curated.</span></div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#ff2d2d","options":["#ff2d2d","#a82f31","#f0ede8"]},"$preview":{"width":1440,"height":3200}}'>
+class Component extends DCLogic {
+  constructor(p){ super(p); this.state = { genre: 'ALL', origin: 'ALL', data: (typeof window !== 'undefined' && window.TJ_DATA) || null }; }
+  componentDidMount(){ if(!this.state.data){ fetch('./tj-data.json').then(r=>r.json()).then(d=>this.setState({data:d})).catch(()=>{}); } this.carousel(); }
+  componentWillUnmount(){ if(this.onScroll) window.removeEventListener('scroll', this.onScroll); }
+  carousel(){
+    // same scroll-driven carousel as TOP: track eases toward the scroll position, image drifts, leaving panel dims
+    const N = 3, dwell = .12, ease = (t) => t * t * (3 - 2 * t);
+    let target = 0, cur = 0, raf = null;
+    const paint = () => {
+      const track = document.querySelector('.fcar-track'); if(!track) return;
+      cur += (target - cur) * 0.055; if(Math.abs(target - cur) < 0.0003) cur = target;
+      track.style.transform = 'translate3d(' + (-cur * 100 / N) + '%,0,0)';
+      Array.from(track.children).forEach((p, i) => {
+        const d = i - cur; const img = p.querySelector('.fimg img');
+        if(img) img.style.transform = 'translate3d(' + (d * 10) + '%,0,0) scale(1.12)';
+        p.style.setProperty('--dim', String(Math.min(.55, Math.abs(d) * .55)));
+      });
+      const idx = Math.round(cur); if(idx !== this.state.fK) this.setState({fK: idx});
+      raf = (cur !== target) ? requestAnimationFrame(paint) : null;
+    };
+    this.onScroll = () => {
+      const sec = document.querySelector('.fcar'), st = document.querySelector('.fcar-sticky'); if(!sec || !st) return;
+      const r = sec.getBoundingClientRect(); const span = r.height - st.offsetHeight;
+      const prog = span > 0 ? Math.min(1, Math.max(0, (64 - r.top) / span)) : 0;
+      const p = prog * (N - 1); const i = Math.min(N - 2, Math.floor(p)); const f = p - i;
+      const e = f < dwell ? 0 : f > 1 - dwell ? 1 : ease((f - dwell) / (1 - 2 * dwell));
+      target = Math.min(N - 1, i + e);
+      if(!raf) raf = requestAnimationFrame(paint);
+    };
+    window.addEventListener('scroll', this.onScroll, {passive:true}); this.onScroll();
+  }
+  renderVals() {
+    const D = this.state.data || {artists:[]};
+    const A = D.artists;
+    const g = this.state.genre, o = this.state.origin;
+    // same genre tabs as the live artists.html: ALL → fixed order → any other genre found in the data
+    const found = new Set(A.flatMap(a => a.genre.map(x => x.toUpperCase())));
+    const genres = ['ALL', ...['TECHNO','HOUSE','MINIMAL','EXPERIMENTAL','AMBIENT','ELECTRONIC','LIVE'].filter(x => found.has(x))];
+    found.forEach(x => { if(!genres.includes(x)) genres.push(x); });
+    const origins = ['ALL','JAPAN','INTERNATIONAL'];
+    const list = A.filter(a => (g==='ALL' || a.genre.some(x => x.toUpperCase() === g)) && (o==='ALL' || (o==='JAPAN' ? a.country==='JAPAN' : a.country!=='JAPAN')));
+    // FEATURED: 3 artists — those playing an upcoming festival first (soonest first), then the rest of the list
+    const soon = list.filter(a => a.next).sort((x, y) => x.next.date.localeCompare(y.next.date));
+    const feats = [...soon, ...list.filter(a => !a.next)].slice(0, 3).map((a, i) => ({...a, num: '0' + (i + 1)}));
+    const featIds = new Set(feats.map(a => a.id));
+    const fK = this.state.fK || 0;
+    return {
+      accent: this.props.accent ?? '#ff2d2d',
+      searchOpen: !!this.state.searchOpen, openSearch: () => this.setState({searchOpen: true}), closeSearch: () => this.setState({searchOpen: false}),
+      menuOpen: !!this.state.menuOpen, openMenu: () => this.setState({menuOpen: true}), closeMenu: () => this.setState({menuOpen: false}), menuSearch: () => this.setState({menuOpen: false, searchOpen: true}),
+      count: A.length, feats, list: list.filter(a => !featIds.has(a.id)),
+      fIdx: '0' + (fK + 1), fdots: [0,1,2].map(i => ({cls: 'fdot' + (i === fK ? ' on' : '')})),
+      genreChips: genres.map(k=>({label:k, cls:'chip'+(g===k?' on':''), pick:()=>this.setState({genre:k})})),
+      originChips: origins.map(k=>({label:k, cls:'chip'+(o===k?' on':''), pick:()=>this.setState({origin:k})}))
+    };
+  }
+}
+</script>
+</body>
+</html>

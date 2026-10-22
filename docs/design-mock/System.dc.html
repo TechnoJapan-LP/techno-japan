@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Techno Japan Editorial System v2</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=Space+Mono:wght@400;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap">
+<style>
+body{margin:0;background:#080808}
+a{color:#f0ede8}a:hover{color:#a82f31}
+.tj{font-family:"DM Sans","Noto Sans JP",system-ui,sans-serif;font-weight:300;color:#f0ede8;background:#080808;background-image:repeating-linear-gradient(90deg,rgba(240,237,232,.03) 0 1px,transparent 1px 80px),repeating-linear-gradient(0deg,rgba(240,237,232,.03) 0 1px,transparent 1px 80px);-webkit-font-smoothing:antialiased}
+.disp{font-family:"Bebas Neue","Noto Sans JP",sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:.01em;line-height:.95;margin:0}
+.mono{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(240,237,232,.62)}
+.red{color:#ff2d2d}
+.sec{border-top:1px solid rgba(240,237,232,.3);padding-top:12px;margin:0;font-size:28px}
+.body{font-size:13px;line-height:1.75;color:rgba(240,237,232,.8);margin:0}
+.sw{display:flex;flex-direction:column;gap:8px}
+.sw div{height:56px;border:1px solid rgba(240,237,232,.12)}
+.pill{display:inline-flex;align-items:center;gap:6px;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#f0ede8;border:1px solid rgba(240,237,232,.35);padding:5px 12px}
+.pill::before{content:"";width:5px;height:5px;border-radius:50%;background:#ff2d2d}
+.code{font-family:"Space Mono",monospace;font-size:11px;line-height:1.8;color:rgba(240,237,232,.85);background:rgba(240,237,232,.04);padding:14px 16px;border:1px solid rgba(240,237,232,.1);white-space:pre-wrap;margin:0}
+</style>
+</helmet>
+
+<div class="tj" style="width:1100px;box-sizing:border-box;padding:48px;display:flex;flex-direction:column;gap:48px">
+
+  <div style="display:flex;flex-direction:column;gap:12px">
+    <span class="mono red">Techno Japan — Editorial System v2 · 2026.10.22</span>
+    <h1 class="disp" style="font-size:64px">雑誌の「読ませる」とデータベースの「探せる」を、ひとつの声で。</h1>
+    <p class="body" style="max-width:760px;font-size:14px">現サイトの資産（Bebas Neue / DM Sans / Space Mono、#080808 + 生成りの白 + 赤、80pxグリッドの背景線、記事ヒーローのオーバーレイ、Related Storiesの横長カード）をそのまま土台にして、T-mag / Minimal Collective 的な「写真が最初・見出しは大きく・情報は等幅で小さく」の組み方へ寄せた。</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:200px 1fr;gap:40px">
+    <h2 class="sec disp">01 Color</h2>
+    <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px">
+      <div class="sw"><div style="background:#080808;background-image:repeating-linear-gradient(90deg,rgba(240,237,232,.08) 0 1px,transparent 1px 12px),repeating-linear-gradient(0deg,rgba(240,237,232,.08) 0 1px,transparent 1px 12px)"></div><span class="mono" style="color:#f0ede8">Ground + grid</span><span class="mono">#080808 · 80px grid 3%（現 .tj-bg）</span></div>
+      <div class="sw"><div style="background:#f0ede8"></div><span class="mono" style="color:#f0ede8">Ink</span><span class="mono">#f0ede8 · 本文・見出し</span></div>
+      <div class="sw"><div style="background:rgba(240,237,232,.62)"></div><span class="mono" style="color:#f0ede8">Meta</span><span class="mono">Ink 62% · 日付・場所・ラベル</span></div>
+      <div class="sw"><div style="background:#ff2d2d"></div><span class="mono" style="color:#f0ede8">Accent</span><span class="mono">#ff2d2d · ●・日付・選択中・entity link</span></div>
+      <div class="sw"><div style="background:#a82f31"></div><span class="mono" style="color:#f0ede8">Accent soft</span><span class="mono">#a82f31 · hover のみ</span></div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:200px 1fr;gap:40px">
+    <h2 class="sec disp">02 Type</h2>
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <div style="display:grid;grid-template-columns:1fr 260px;gap:24px;align-items:baseline;border-bottom:1px solid rgba(240,237,232,.1);padding-bottom:14px"><span class="disp" style="font-size:96px">Headline</span><span class="mono">Bebas Neue · ページ見出し 168px / ヒーロー 76–92px / カード 28–34px</span></div>
+      <div style="display:grid;grid-template-columns:1fr 260px;gap:24px;align-items:baseline;border-bottom:1px solid rgba(240,237,232,.1);padding-bottom:14px"><span style="font-size:24px;line-height:1.35">標高1,000mの森で、日本を代表する野外レイヴが3日間の物語を組む。</span><span class="mono">Sub · DM Sans 300 / Noto Sans JP 300 · 見出しの .42em</span></div>
+      <div style="display:grid;grid-template-columns:1fr 260px;gap:24px;align-items:baseline;border-bottom:1px solid rgba(240,237,232,.1);padding-bottom:14px"><span style="font-size:16px;line-height:1.95">本文。DM Sans 300、16px / 行間1.95。最大幅720px。</span><span class="mono">Body</span></div>
+      <div style="display:grid;grid-template-columns:1fr 260px;gap:24px;align-items:baseline;border-bottom:1px solid rgba(240,237,232,.1);padding-bottom:14px"><span class="mono red">FESTIVAL&amp;RAVE · 2026.10.21</span><span class="mono">Meta · Space Mono 10px · .15em · 記事は赤、DBは灰</span></div>
+      <div style="display:grid;grid-template-columns:1fr 260px;gap:24px;align-items:baseline"><span class="pill">Festival&amp;Rave</span><span class="mono">cat-pill · 現サイトのまま</span></div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:200px 1fr;gap:40px">
+    <h2 class="sec disp">03 Modules</h2>
+    <ol class="body" style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px">
+      <li><strong style="color:#f0ede8">Hero overlay</strong>（記事・TOPリード・フェス詳細）：全幅写真 + 下からのグラデーション + cat-pill + Bebas見出し + サブ。現 .article-hero を共通化。</li>
+      <li><strong style="color:#f0ede8">Story card</strong>：写真（16:9 / 4:3）→ 赤メタ → Bebas見出し → サブ。3段の順番は固定。</li>
+      <li><strong style="color:#f0ede8">Related story（横長）</strong>：260px 16:9サムネ + 見出し。現 .related-story-card.is-wide を一覧の下部（リスト表示）にも流用。</li>
+      <li><strong style="color:#f0ede8">DB row</strong>：日付（Bebas大）/ 名前 / 場所 / 種別 / ステータス。Festivals・Venue詳細・Artist詳細で同一。</li>
+      <li><strong style="color:#f0ede8">Fact strip</strong>：6マスの等幅ラベル + 値。フェス詳細のDATE / LOCATION / PREF / GENRE / LINEUP / EDITIONS。</li>
+      <li><strong style="color:#f0ede8">Filter chips</strong>：等幅10px、選択中は赤枠。Season / Type / City / Genre / View。</li>
+    </ol>
+  </div>
+
+  <div style="display:grid;grid-template-columns:200px 1fr;gap:40px">
+    <h2 class="sec disp">04 Motion</h2>
+    <ul class="body" style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px">
+      <li>マーキー（TOP上部）：40s linear、Bebas 18px。</li>
+      <li>画像 hover：scale 1.04 / 0.7s。全ページカラー表示。</li>
+      <li>見出し hover：Ink → Accent soft。</li>
+      <li>地図ピン：赤、2.4s pulse。背景のグリッドドリフト・スキャンラインは現サイトのまま維持（prefers-reduced-motion で停止）。</li>
+    </ul>
+  </div>
+
+  <div style="display:grid;grid-template-columns:200px 1fr;gap:40px">
+    <h2 class="sec disp">05 Data sync</h2>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <p class="body">このキャンバスの全ページは <span class="mono" style="color:#f0ede8">project/tj-data.js</span> を読んで描画している。元データは本番と同じ LP/data（festivals / editions / artists / venues）と data.js の ARTICLES。更新手順：</p>
+      <pre class="code">cd ~/Developer/techno-japan
+node .scratch/tj-design-sync/sync.mjs     # LP/data → design-data.json + img/
+# → Claude に「同期して」と言えば画像の再アップロードと tj-data.js の差し替えまで行う</pre>
+      <p class="body">本実装では同じ構造（記事＝ARTICLES、DB＝festivals/editions/artists/venues/lineups）をそのまま使えるので、このモックは実装仕様書として Claude Code / Codex に渡せる。</p>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1100,"height":2300}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

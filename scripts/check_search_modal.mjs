@@ -82,7 +82,7 @@ try {
       const resources = await cdp(ws, 'Runtime.evaluate', { expression: `performance.getEntriesByType('resource').some(e => /data-hub\.js(?:\?|$)/.test(e.name))`, returnByValue: true });
       if (resources.result?.value) throw new Error(`${page}: data-hub.js loaded before search opened`);
     }
-    const open = `(() => { const b=document.querySelector('.nav-hamburger'); if(!b) return {ok:false,reason:'hamburger missing'}; b.click(); const o=document.querySelector('.nav-overlay'),s=o&&o.querySelector(':scope > .nav-search-link'),l=o&&o.querySelector(':scope > .nav-lang'); if(!s) return {ok:false,reason:'search link missing'}; if(!l||s.nextElementSibling!==l) return {ok:false,reason:'search link is not immediately before language toggle'}; s.click(); return {ok:true}; })()`;
+    const open = `(() => { const b=document.querySelector('.nav-hamburger'); if(!b) return {ok:false,reason:'hamburger missing'}; b.click(); const o=document.querySelector('.nav-overlay'),s=o&&o.querySelector(':scope > .nav-search-link'); if(!s) return {ok:false,reason:'search entry missing'}; s.click(); return {ok:true}; })()`;
     const opened = await cdp(ws, 'Runtime.evaluate', { expression: open, returnByValue: true });
     if (!opened.result?.value?.ok) throw new Error(`${page}: ${opened.result?.value?.reason || 'menu did not open'}`);
     if (lazyPage) {

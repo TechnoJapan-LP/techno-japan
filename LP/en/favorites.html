@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' https:; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://stats.g.doubleclick.net; frame-src 'self' https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; form-action 'self' https://formsubmit.co https://buttondown.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), interest-cohort=()">
+
+<link rel="icon" href="/favicon.ico?v=2" sizes="32x32">
+<link rel="icon" type="image/png" href="/images/favicon-192.png?v=2" sizes="192x192">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
+<title>FAVORITES — TECHNO JAPAN</title>
+<meta name="description" content="Your saved festivals, artists, and venues from Japan's underground scene.">
+<link rel="alternate" type="application/rss+xml" title="TECHNO JAPAN — RSS" href="https://techno-japan.media/rss.xml">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#080808">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TECHNO JAPAN">
+<link rel="canonical" href="https://techno-japan.media/en/favorites.html">
+<link rel="alternate" hreflang="en" href="https://techno-japan.media/en/favorites.html">
+<link rel="alternate" hreflang="ja" href="https://techno-japan.media/favorites.html">
+<link rel="alternate" hreflang="x-default" href="https://techno-japan.media/en/favorites.html">
+
+<!-- Open Graph -->
+<meta property="og:title" content="FAVORITES — TECHNO JAPAN">
+<meta property="og:description" content="Your saved festivals, artists, and venues from Japan's underground scene.">
+<meta property="og:image" content="https://techno-japan.media/images/og-default.png?v=1">
+<meta property="og:url" content="https://techno-japan.media/en/favorites.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="TECHNO JAPAN">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="FAVORITES — TECHNO JAPAN">
+<meta name="twitter:description" content="Your saved festivals, artists, and venues from Japan's underground scene.">
+<meta name="twitter:image" content="https://techno-japan.media/images/og-default.png?v=1">
+
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="dns-prefetch" href="https://www.google-analytics.com">
+<link rel="dns-prefetch" href="https://www.googletagmanager.com">
+<link rel="dns-prefetch" href="https://w.behold.so">
+<link rel="dns-prefetch" href="https://formsubmit.co">
+<link rel="preload" as="font" type="font/woff2" href="/fonts/dm-sans-v17-latin.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/bebas-neue-v16-latin.woff2" crossorigin>
+<style>
+@font-face{font-family:'Bebas Neue';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/bebas-neue-v16-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Bebas Neue';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/bebas-neue-v16-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'DM Sans';font-style:normal;font-weight:200 500;font-display:swap;src:url('/fonts/dm-sans-v17-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'DM Sans';font-style:normal;font-weight:200 500;font-display:swap;src:url('/fonts/dm-sans-v17-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/space-mono-v17-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/space-mono-v17-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/common.css?v=45">
+
+<!-- Google Analytics 4 -->
+<script>
+(function(){
+  // ボット（ヘッドレスブラウザ等）は計測しない
+  // ボット（headless / Lighthouse / 自動操作）は計測しない。
+  // 2026-09-28 の GA4 では Direct 75%・Chrome の 90% が非エンゲージで、
+  // 0秒滞在のページ8本が lighthouse.yml の URL と一致していた（自分たちの検査を利用者として数えていた）。
+  if (location.hostname !== 'techno-japan.media') return;
+  if (navigator.webdriver || /HeadlessChrome|Chrome-Lighthouse|Lighthouse|Speed Insights|PTST|GTmetrix|TJAudit/i.test(navigator.userAgent)) return;
+  var s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://www.googletagmanager.com/gtag/js?id=G-4MHCNR7D26';
+  document.head.appendChild(s);
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function(){ dataLayer.push(arguments); };
+  gtag('js', new Date());
+  gtag('config', 'G-4MHCNR7D26');
+})();
+</script>
+
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+nav .nav-links { align-items: center; }
+
+/* PAGE HEADER */
+.page-header { padding: 160px 40px 60px; border-bottom: 1px solid rgba(240,237,232,0.08); }
+.page-title { font-family: var(--font-display); font-size: clamp(64px, 12vw, 180px); line-height: 0.9; text-transform: uppercase; opacity: 0; animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; animation-delay: 0.2s; }
+.page-subtitle { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; opacity: 0; animation: fadeSlideUp 0.6s ease forwards; animation-delay: 0.4s; color: rgba(240,237,232,0.5); margin-top: 16px; }
+
+/* SECTIONS */
+.fav-main { max-width: 1400px; margin: 0 auto; padding: 60px 40px 120px; }
+.fav-section { margin-bottom: 80px; }
+.fav-section-header {
+  display: flex; align-items: baseline; gap: 16px; padding-bottom: 16px;
+  border-bottom: 1px solid rgba(240,237,232,0.08); margin-bottom: 32px;
+}
+.fav-section-title {
+  font-family: var(--font-display); font-size: clamp(28px, 4vw, 48px);
+  text-transform: uppercase; line-height: 1;
+}
+.fav-section-count {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em;
+  opacity: 0.4;
+}
+
+.fav-grid {
+  display: grid; gap: 6px;
+  grid-template-columns: repeat(3, 1fr);
+}
+@media (max-width: 900px) { .fav-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .fav-grid { grid-template-columns: 1fr; } }
+
+.fav-card {
+  position: relative; aspect-ratio: 4/3;
+  background: rgba(240,237,232,0.04);
+  border: 1px solid rgba(240,237,232,0.06);
+  overflow: hidden; cursor: pointer;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+  display: block;
+}
+.fav-card:hover { border-color: rgba(240,237,232,0.2); transform: translateY(-4px); }
+.fav-card-img {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+}
+.fav-card-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 60%, rgba(0,0,0,0) 100%);
+}
+.fav-card-content {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 20px;
+}
+.fav-card-meta {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em;
+  text-transform: uppercase; opacity: 0.5; margin-bottom: 6px;
+}
+.fav-card-name {
+  font-family: var(--font-display); font-size: 22px;
+  text-transform: uppercase; line-height: 1.05;
+}
+.fav-card-fav-mount {
+  position: absolute; top: 12px; right: 12px;
+  z-index: 5;
+}
+
+/* EMPTY STATE */
+.fav-empty {
+  text-align: center; padding: 80px 20px;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.15em;
+  opacity: 0.3; text-transform: uppercase;
+}
+.fav-empty a {
+  text-decoration: underline; opacity: 0.6;
+}
+.fav-empty a:hover { opacity: 1; }
+
+.fav-totals-empty {
+  text-align: center; padding: 120px 20px;
+}
+.fav-totals-empty-title {
+  font-family: var(--font-display); font-size: clamp(36px, 5vw, 64px);
+  text-transform: uppercase; margin-bottom: 16px; opacity: 0.4;
+}
+.fav-totals-empty-desc {
+  font-family: var(--font-body); font-weight: 200; font-size: 14px;
+  line-height: 1.8; opacity: 0.4; max-width: 400px; margin: 0 auto 32px;
+}
+.fav-totals-empty-cta {
+  display: inline-block;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em;
+  text-transform: uppercase; padding: 14px 28px;
+  border: 1px solid rgba(240,237,232,0.3); transition: border-color 0.3s ease, opacity 0.3s ease;
+  opacity: 0.7;
+}
+.fav-totals-empty-cta:hover { border-color: rgba(240,237,232,0.6); opacity: 1; }
+
+/* FOOTER (page-specific overrides) */
+.footer-top { gap: 32px; flex-wrap: wrap; margin-bottom: 0; }
+.footer-links { align-items: center; flex-wrap: wrap; }
+
+@media (max-width: 900px) {
+  .page-header { padding: 140px 24px 40px; }
+  .fav-main { padding: 40px 24px 80px; }
+  .fav-section { margin-bottom: 60px; }
+}
+@media (hover: none) and (pointer: coarse) {
+  .fav-card { cursor: pointer; }
+}
+
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "FAVORITES — TECHNO JAPAN",
+  "url": "https://techno-japan.media/favorites.html",
+  "description": "Your saved festivals, artists, and venues from Japan's underground scene.",
+  "isPartOf": {"@type": "WebSite", "name": "TECHNO JAPAN", "url": "https://techno-japan.media"}
+}
+</script>
+</head>
+<body>
+<a href="#main-content" class="skip-to-content">Skip to content</a>
+
+
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<nav>
+  <a href="/en/index.html" class="logo"><img src="/images/logo-wordmark.png?v=1" alt="TECHNO JAPAN" width="158" height="13" decoding="async"></a>
+  <div class="nav-links">
+    <a href="/en/index.html">TOP</a>
+    <a href="/en/news.html">NEWS</a>
+    <a href="/en/festivals.html">FESTIVALS</a>
+    <a href="/en/artists.html">ARTISTS</a>
+    <a href="/en/venues.html">VENUES</a>
+    <a href="/en/about.html">ABOUT</a>
+    <button class="gs-trigger" type="button" aria-label="Search"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.35-4.35M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg><span>SEARCH</span></button>
+    <span class="nav-lang"><a href="/favorites.html">JA</a><span class="nav-lang-sep">/</span><span class="nav-lang-cur">EN</span></span>
+  </div>
+  <button class="nav-hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+</nav>
+<header class="page-header">
+  <h1 class="page-title">FAVORITES</h1>
+  <div class="page-subtitle" id="page-subtitle">YOUR SAVED FESTIVALS · ARTISTS · VENUES</div>
+</header>
+<div class="nav-overlay" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="nav-ov-top"><a href="/en/index.html" class="nav-ov-logo" aria-label="TECHNO JAPAN"><img src="/images/logo-wordmark.png?v=1" alt="TECHNO JAPAN" width="158" height="13"></a><button class="nav-close" type="button" aria-label="Close menu"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 3l12 12M15 3L3 15"/></svg></button></div>
+  <button class="nav-search-link" type="button"><svg class="nav-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span>Festival, artist, venue, city…</span></button>
+  <nav class="nav-ov-main" aria-label="Main">
+    <a href="/en/index.html" class="nav-ov-item" style="animation-delay:0.06s"><span class="nav-ov-num">01</span><span class="nav-ov-label">Top</span><span class="nav-ov-note"></span></a>
+    <a href="/en/news.html" class="nav-ov-item" style="animation-delay:0.12s"><span class="nav-ov-num">02</span><span class="nav-ov-label">News</span><span class="nav-ov-note">Stories</span></a>
+    <a href="/en/festivals.html" class="nav-ov-item" style="animation-delay:0.18s"><span class="nav-ov-num">03</span><span class="nav-ov-label">Festivals</span><span class="nav-ov-note">Index</span></a>
+    <a href="/en/artists.html" class="nav-ov-item" style="animation-delay:0.24s"><span class="nav-ov-num">04</span><span class="nav-ov-label">Artists</span><span class="nav-ov-note">Database</span></a>
+    <a href="/en/venues.html" class="nav-ov-item" style="animation-delay:0.30s"><span class="nav-ov-num">05</span><span class="nav-ov-label">Venues</span><span class="nav-ov-note">Clubs & sites</span></a>
+    <a href="/en/about.html" class="nav-ov-item" style="animation-delay:0.36s"><span class="nav-ov-num">06</span><span class="nav-ov-label">About</span><span class="nav-ov-note"></span></a>
+  </nav>
+  <div class="nav-ov-foot">
+    <div class="nav-ov-sub"><a href="/en/submit.html">Apply</a><a href="/en/writers.html">Writer</a><a href="/en/favorites.html">Favorites</a></div>
+    <div class="nav-ov-row"><div class="nav-lang" role="group" aria-label="Language"><a href="/en/favorites.html" class="nav-ov-lang">JA</a><span class="nav-ov-lang-current" aria-current="true">EN</span></div><div class="nav-ov-social"><a href="https://www.instagram.com/techno.japan_/" target="_blank" rel="noopener">Instagram</a><a href="https://www.threads.net/@techno.japan_" target="_blank" rel="noopener">Threads</a></div></div>
+    <span class="nav-ov-tag">Japan's Underground, Curated.</span>
+  </div>
+</div>
+<main class="fav-main" id="fav-main"></main>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- tj:footer:start -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-logo"><img src="/images/logo-wordmark.png?v=1" alt="TECHNO JAPAN" width="158" height="13" loading="lazy" decoding="async"></div>
+    <div class="footer-links">
+      <a href="/en/news.html">NEWS</a>
+      <a href="/en/festivals.html">FESTIVALS</a>
+      <a href="/en/artists.html">ARTISTS</a>
+      <a href="/en/venues.html">VENUES</a>
+      <a href="/en/about.html">ABOUT</a>
+      <a href="/en/submit.html">APPLY</a>
+      <a href="/en/writers.html">WRITER</a>
+      <a href="/en/favorites.html">FAVORITES</a>
+    </div>
+    <span class="footer-social"><a href="https://www.instagram.com/techno.japan_/" target="_blank" rel="noopener">INSTAGRAM</a><a href="https://www.threads.net/@techno.japan_" target="_blank" rel="noopener">THREADS</a></span>
+  </div>
+  <div class="footer-copy"><span>&copy; 2026 Techno Japan</span><span>Japan's Underground, Curated.</span></div>
+</footer>
+<!-- tj:footer:end -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="/common.js?v=19" defer></script>
+<script src="/data-hub.js?v=11"></script>
+<script src="/favorites.js?v=3"></script>
+<script src="/search.js?v=8" defer></script>
+<script>
+const gradients = [
+  'linear-gradient(135deg, #1a0533 0%, #4a1942 40%, #c2185b 100%)',
+  'linear-gradient(135deg, #0d1b2a 0%, #1b2838 40%, #415a77 100%)',
+  'linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%)',
+  'linear-gradient(135deg, #2d1b2e 0%, #1a1a2e 50%, #0f1123 100%)',
+  'linear-gradient(135deg, #2e1b1b 0%, #1a0f0f 50%, #120a0a 100%)',
+];
+
+function makeCardImg(image, idx) {
+  if (image) return `background-image:url('${image}')`;
+  return `background:${gradients[idx % gradients.length]}`;
+}
+
+function render() {
+  const main = document.getElementById('fav-main');
+  const festIds = window.tjFav.list('festival');
+  const artistIds = window.tjFav.list('artist');
+  const venueIds = window.tjFav.list('venue');
+
+  const total = festIds.length + artistIds.length + venueIds.length;
+  document.getElementById('page-subtitle').textContent = total === 0
+    ? 'NOTHING SAVED YET'
+    : `${total} SAVED · FESTIVALS · ARTISTS · VENUES`;
+
+  if (total === 0) {
+    main.innerHTML = `
+      <div class="fav-totals-empty">
+        <div class="fav-totals-empty-title">Empty for now.</div>
+        <div class="fav-totals-empty-desc">Tap the heart icon on any festival, artist, or venue to save it here for later.</div>
+        <a href="/en/festivals.html" class="fav-totals-empty-cta">Browse Festivals</a>
+      </div>`;
+    return;
+  }
+
+  let html = '';
+
+  // Festivals
+  const festivals = (typeof FESTIVALS !== 'undefined' ? FESTIVALS : []).filter(f => festIds.includes(f.id));
+  if (festivals.length) {
+    html += `
+      <div class="fav-section">
+        <div class="fav-section-header">
+          <div class="fav-section-title">Festivals</div>
+          <div class="fav-section-count">${festivals.length} SAVED</div>
+        </div>
+        <div class="fav-grid">
+          ${festivals.map((f, i) => `
+            <a href="/en/festivals/${encodeURIComponent(f.id)}.html" class="fav-card">
+              <div class="fav-card-img" style="${makeCardImg(f.image, i)}"></div>
+              <div class="fav-card-overlay"></div>
+              <div class="fav-card-content">
+                <div class="fav-card-meta">${f.city || ''} ${f.date ? '— ' + f.date.split('/')[0] : ''}</div>
+                <div class="fav-card-name">${f.name}</div>
+              </div>
+              <div class="fav-card-fav-mount" data-fav-mount="festival" data-fav-id="${f.id}"></div>
+            </a>
+          `).join('')}
+        </div>
+      </div>`;
+  }
+
+  // Artists
+  const artists = (typeof ARTISTS !== 'undefined' ? ARTISTS : []).filter(a => artistIds.includes(a.id));
+  if (artists.length) {
+    html += `
+      <div class="fav-section">
+        <div class="fav-section-header">
+          <div class="fav-section-title">Artists</div>
+          <div class="fav-section-count">${artists.length} SAVED</div>
+        </div>
+        <div class="fav-grid">
+          ${artists.map((a, i) => `
+            <a href="/en/artists/${encodeURIComponent(a.id)}.html" class="fav-card">
+              <div class="fav-card-img" style="${makeCardImg(a.image, i)}"></div>
+              <div class="fav-card-overlay"></div>
+              <div class="fav-card-content">
+                <div class="fav-card-meta">${a.country || a.city || ''}${a.genre ? ' — ' + (Array.isArray(a.genre) ? a.genre.join(' / ') : a.genre) : ''}</div>
+                <div class="fav-card-name">${a.name}</div>
+              </div>
+              <div class="fav-card-fav-mount" data-fav-mount="artist" data-fav-id="${a.id}"></div>
+            </a>
+          `).join('')}
+        </div>
+      </div>`;
+  }
+
+  // Venues
+  const venues = (typeof VENUES !== 'undefined' ? VENUES : []).filter(v => venueIds.includes(v.id));
+  if (venues.length) {
+    html += `
+      <div class="fav-section">
+        <div class="fav-section-header">
+          <div class="fav-section-title">Venues</div>
+          <div class="fav-section-count">${venues.length} SAVED</div>
+        </div>
+        <div class="fav-grid">
+          ${venues.map((v, i) => `
+            <a href="/en/venues/${encodeURIComponent(v.id)}.html" class="fav-card">
+              <div class="fav-card-img" style="${makeCardImg(v.image, i)}"></div>
+              <div class="fav-card-overlay"></div>
+              <div class="fav-card-content">
+                <div class="fav-card-meta">${v.city || ''}${v.area ? ' — ' + v.area : ''}</div>
+                <div class="fav-card-name">${v.name}</div>
+              </div>
+              <div class="fav-card-fav-mount" data-fav-mount="venue" data-fav-id="${v.id}"></div>
+            </a>
+          `).join('')}
+        </div>
+      </div>`;
+  }
+
+  main.innerHTML = html;
+
+  // Mount hearts
+  if (window.tjFav) {
+    main.querySelectorAll('[data-fav-mount]').forEach(mount => {
+      const type = mount.dataset.favMount;
+      const id = mount.dataset.favId;
+      window.tjFav.attachHeart(mount, type, id);
+    });
+  }
+}
+
+document.addEventListener('tj-fav-change', () => {
+  render();
+  if (window.tjBindCursorExpand) window.tjBindCursorExpand('.fav-card');
+});
+render();
+window.addEventListener('DOMContentLoaded', () => {
+  if (window.tjBindCursorExpand) window.tjBindCursorExpand('.fav-card');
+});
+</script>
+<!-- Service Worker registration -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(err => console.warn('SW registration failed:', err));
+    });
+  }
+</script>
+</body>
+</html>

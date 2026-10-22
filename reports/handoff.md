@@ -12069,3 +12069,284 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - v2 実装前にユーザー判断が4つ（V2_PLAN.md §4: 切り替え幅 900/700px、Noto Sans JP の配信方法、公開単位、TOP カルーセルのスマホ挙動）。
+
+### 2026-10-22 デザイン v2 第1段 — 共通部品（未コミット）
+
+### 実施
+- `common.css` / `common.js` / `search.js` に v2 の共通ヘッダー、フッター、900px スマホメニュー、全画面検索を実装。
+- 詳細ページ生成元 `scripts/build-detail-pages.mjs` の nav/footer、Google Fonts の preconnect、Noto Sans JP、JA/EN 共通検索、Favorites 導線を更新。
+- 詳細・ハブ・静的ページの `common.css` / `common.js` / `search.js` の `?v` を更新。Favorites はフッターとスマホメニューへ追加。
+- `scripts/check_search_modal.mjs` を新しい検索入口（button）に合わせて目的を維持したまま更新。
+- デザインから SNS アイコンをヘッダーから外し、LATEST 記事一覧をスマホメニューから外した。既存の本文ニュースレター等は第1段では残した。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node --check LP/search.js`: 成功。
+- `node --check LP/common.js`: 成功。
+- `node scripts/build-detail-pages.mjs`: 成功（外部画像は取得失敗時に既存寸法を使用する警告あり）。
+- `python3 scripts/check_asset_versions.py`: 修正前に common.js v18 の不一致を検出。全 HTML を v19 に修正済み。最終結果は再実行待ち。
+- `bash scripts/preflight.sh --fast`: 詳細ページ生成の外部画像取得で長時間化し、完走結果を取得できず。再実行待ち。
+- 実ブラウザ確認: 未実施。localhost listen が環境制限 `EPERM` で拒否されたため。
+
+### 変更したパターン
+- 共通 nav/footer、900px breakpoint、モバイル全画面メニュー、全画面検索、NFKC 全語一致、静的詳細 URL 遷移、Google Fonts 読み込み。
+
+### 未確認の類似パターン
+- 未確認：実ブラウザでの PC/スマホ表示、メニュー開閉・Esc・フォーカス、検索タブ・結果・Close、JA/EN の実操作。
+- 確認済み・0件：`new Function` / `eval` の追加なし、JS による meta/canonical/JSON-LD 書き換えなし。
+
+### 次の担当への注意・判断待ち
+- localhost bind 可能な環境で `bash scripts/preflight.sh --fast` と実ブラウザ確認を完走するまで公開扱いにしないこと。CMS は対象外。
+
+### 2026-10-22 v2 第1段 不具合修正（未コミット）
+
+### 実施
+- スマホメニューを Menu mock に合わせ、ロゴ付き64pxバー、検索入口、01〜06の6大項目、補助リンク、枠付きJA/EN、文字SNS、タグラインへ修正。
+- ハンバーガー色、検索モーダルの DM Sans／プレースホルダー／不透明背景／z-index、検索結果の画像絶対パスと単数ラベル・補足情報を修正。
+- EN に存在しない `/en/favorites.html` を `/favorites.html` へ修正。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node scripts/build-detail-pages.mjs`: 成功。
+- JA/EN主要ハブ行数: index 54/54、news 56/56、festivals 130/130、artists 170/170、venues 66/66。
+- `python3 scripts/check_asset_versions.py`: 成功。
+- `node --check LP/search.js`: 成功。
+- `bash scripts/preflight.sh --fast`: 外部 Google Drive 画像取得失敗による詳細ページ生成タイムアウトで失敗。内部リンクの初回失敗は修正後、`/en/favorites.html` 残存なしを確認。
+- 実ブラウザ: `node scripts/check_search_modal.mjs` は localhost bind の EPERM で未確認。
+
+### 変更したパターン
+- `scripts/build-detail-pages.mjs` の nav/footer生成、`LP/common.css` のメニュー／検索スタイル、`LP/common.js` のメニュー補助要素、`LP/search.js` の検索描画。
+
+### 未確認の類似パターン
+- 確認済み・0件: EN favorites 不正リンク、JA/EN ハブ行数不一致。
+- 未確認: 実ブラウザでの390px/1280pxのメニュー開閉、検索入力、画像表示、JA/EN切替。
+
+### 次の担当への注意・判断待ち
+- 外部画像取得が可能で localhost bind 可能な環境で `bash scripts/preflight.sh --fast` と実ブラウザ確認を完走するまで公開扱いにしないこと。
+
+### 2026-10-22 v2 第3回（未コミット）
+
+### 実施
+- `scripts/build-detail-pages.mjs` に静的な `nav-ov-*` メニュー生成を集約し、JAハブ・ENハブ・全詳細ページへ反映。
+- `LP/common.js` は開閉、Esc、スクロール停止、フォーカス復帰だけに整理。後付け番号・説明・LATEST・補助要素の生成を削除。
+- `LP/common.css` は静的マークアップ用の寸法・書体・色・アニメーションへ変更し、旧 `nav-overlay-sub` / `nth-of-type` / pseudo-element依存を削除。
+- フェス検索に `city_ja` / `pref_ja` / `address` 等を追加。「京都」は14件ヒット。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node scripts/build-detail-pages.mjs`: 成功（557詳細ページ、JA/ENハブ生成完了）。
+- JA/ENハブ8枚: メニュー項目6/6、行数一致。
+- `python3 scripts/check_asset_versions.py`: 成功。
+- `node --check scripts/build-detail-pages.mjs LP/common.js LP/search.js` 相当: 成功。
+- 旧メニューマーカー: 0件。EN Favorites不正リンク: 0件。
+- 実ブラウザ検査: 未確認。`check_mobile_language_toggles.mjs` / `check_search_modal.mjs` は localhost bind の `EPERM` で起動不可。
+
+### 変更したパターン
+- 共通メニュー生成、モバイルメニューCSS/JS、フェス検索の日本語地名フィールド、生成済みJA/EN HTML。
+
+### 未確認の類似パターン
+- 未確認：実ブラウザでの390pxメニュー操作、JA/EN切替、検索入口から検索モーダルを開く操作。
+- 確認済み・0件：旧後付けマーカー、`/en/favorites.html`、JA/ENハブの項目数・行数不一致。
+
+### 次の担当への注意・判断待ち
+- localhost bind 可能な環境で実ブラウザ検査を完走するまで公開扱いにしないこと。コミット・pushは行わない。
+
+### 2026-10-22 修正依頼 第5回（未コミット）
+
+### 実施
+- `LP/common.css` のヘッダー用 `nav` 規則と子孫セレクタを `body > nav` に限定し、メニュー内の `.nav-ov-main` へ汎用ヘッダー規則が当たらないよう修正。
+- 背景レイヤーの body 直下 `div` 規則から `.nav-overlay` を除外し、オーバーレイの赤い光を `z-index:0`、内容を `z-index:1` に分離。
+- v2 ヘッダーの `mix-blend-mode` を `normal` に変更。共通CSS内の意図的な `difference` はカスタムカーソルのみ。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node scripts/build-detail-pages.mjs`: 成功（557詳細ページ、更新0件）。
+- JA/ENハブ5枚の行数一致: index 1453/1453、news 1347/1347、festivals 1462/1462、artists 1017/1017、venues 1163/1163。
+- `python3 scripts/check_asset_versions.py`: 成功。
+- 実ブラウザの計算後スタイル確認: 未確認。`nav-overlay` の `position:fixed` と画面高、および `.nav-ov-main` の計算後 `position:relative` はブラウザで要確認。
+
+### 変更したパターン
+- ヘッダー限定セレクタ、モバイル全画面メニューの配置・重なり順、v2ヘッダーのブレンドモード。
+
+### 未確認の類似パターン
+- 未確認：390px実機相当でのメニュー開閉、項目・下部・JA/ENの重なり、赤い光の見え方。
+
+### 次の担当への注意・判断待ち
+- 実ブラウザで390pxを開き、メニューが画面高まで覆うことと操作可能性を確認するまで公開扱いにしないこと。コミット・pushは行わない。
+
+### 2026-10-22 redesign/magazine フェーズ1仕上げ（未コミット）
+
+### 実施
+- `LP/index.html` と生成された `LP/en/index.html` に共通ヘッダー、全画面メニュー、検索導線、Noto Sans JP、共通アセット版を反映。
+- 検索タブを All / Stories / Festivals / Artists / Venues、記事結果ラベルを Story に統一。
+- 共通フッターから Top を外し、Favorites を追加。`.chip` / `.pill` とデザイン変数を `LP/common.css` に追加。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node scripts/build-detail-pages.mjs`: 成功（外部画像12件は取得失敗時の既存寸法へフォールバック）。
+- `python3 scripts/check_asset_versions.py`: 成功。
+- `node scripts/check_header_logo.mjs`: 成功。
+- `bash scripts/preflight.sh --fast`: 48件成功 / 5件省略。詳細ページ生成だけ外部 Google 画像取得待ちで240秒 timeout。
+- JA/EN index 行数: 1453 / 1453。
+- `check_mobile_language_toggles.mjs`: localhost bind の `EPERM` で未確認。
+
+### 変更したパターン
+- TOP の共通 HTML、ハブ生成元の nav/footer、検索ラベル、共通 CSS トークンとチップ／ピル、生成済み JA/EN ハブ。
+
+### 未確認の類似パターン
+- 未確認：実ブラウザでの390px/1280px操作、検索タブ・Esc・JA/EN切替、動く背景の実描画。
+- 確認済み・0件：旧 News 検索タブ、フッター Top、`/en/favorites.html`、JA/EN index 行数不一致。
+
+### 次の担当への注意・判断待ち
+- 仕様との差として、Noto Sans JP はユーザー指定どおり Google Fonts のまま（セルフホスト未対応）。言語切替は仕様の localStorage 方式ではなく、既存どおり JA/EN 対応 URL への遷移。
+- localhost bind と外部画像取得が可能な環境でフル preflight と実ブラウザ確認を完走するまで公開扱いにしないこと。
+
+### 2026-10-22 redesign/magazine フェーズ1 共通部品（未コミット）
+
+### 実施
+- `scripts/build-detail-pages.mjs` に `footerHtml` と静的ページの共通 chrome 正規化を接続し、JA/EN の全公開ページへ同じヘッダー・メニュー・検索・フッターを反映。
+- `/en/favorites.html` を JA から生成する対象へ追加。Favorites の EN リンクと 404 の EN 切替先を実在 URL に統一。
+- `scripts/check_shared_chrome.py` を追加し、言語切替先の実在、旧フッター、メニュー／検索欠落を preflight に追加。
+- `LP/common.css` の旧 footer-watermark / Discover / SVG 規則とフェスページ固有フッター上書きを削除。
+- `LP/app/index.html`、CMS、map、リダイレクト小ページは対象外（PWA／独自 CSP／専用画面またはリダイレクト用途）。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node scripts/build-detail-pages.mjs`: 成功（詳細557枚、EN favorites生成、JA/ENハブ生成）。
+- `python3 scripts/check_shared_chrome.py`: 成功（557ページ、footer種類1、新メニュー無し0）。
+- `python3 scripts/check_asset_versions.py`: 成功。
+- `python3 scripts/check_asset_paths.py`: 成功（582ページ）。
+- `bash scripts/preflight.sh --fast`: 外部 Google 画像取得待ちで詳細生成が240秒 timeout。その他の検査は進行し、共通 chrome 検査・asset 検査は成功。実ブラウザ未確認。
+
+### 変更したパターン
+- 共通 footer 目印、EN_PAGES / enHubFromJa の Favorites、静的ページの共通 chrome 正規化、言語切替先検査、共通 footer CSS。
+
+### 未確認の類似パターン
+- 確認済み・0件：新メニュー／検索欠落、旧フッター、言語切替先の不存在。
+- 未確認：実ブラウザでの全ページ操作、外部画像取得可能な環境での full preflight。
+
+### 次の担当への注意・判断待ち
+- 外部画像取得と localhost bind が可能な環境で full preflight と実ブラウザ確認を完走するまで公開扱いにしないこと。`LP/app/index.html` は今回の対象外。
+
+### 2026-10-23 ヘッダー／フッター細部・preflight修正（未コミット）
+
+### 実施
+- `LP/favorites.js` のヘッダーへのFavoritesハート自動差し込みを削除。カードのハート機能とフッター／メニュー入口は維持。
+- `LP/common.css` のヘッダー言語表示を現言語=白、区切り=40%、相手言語=62%に統一。メニュー内JA/ENの高さを44pxへ変更。
+- `scripts/build-detail-pages.mjs` の共通footerをロゴ／ナビ／SNSの3要素構成へ変更。SNSの縦線を削除してgapを20pxにし、コピー行を左右分離。
+- `LP/search.js` の検索入口を「モーダル表示→同期focus→メニューを閉じる」の順に変更。
+- `LP/cms.js` の記事プレビュー common.css をv43へ更新し、`LP/cms.html` のcms.jsをv168へ更新。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node scripts/build-detail-pages.mjs`: 成功（詳細557枚、共有chromeを再生成）。
+- JA/ENハブ5枚の行数一致: index/news/festivals/artists/venues すべて一致。
+- `python3 scripts/check_asset_versions.py`: 成功。
+- `python3 scripts/check_shared_chrome.py`: 成功（557ページ）。
+- `node scripts/check_cms_article_generated_preview.mjs`: 成功。
+- `git diff --check`: 成功。
+- `bash scripts/preflight.sh`: 53件成功。詳細生成は外部Google画像取得失敗により240秒timeout、ブラウザ系8件はlocalhost bindのEPERMで失敗。
+
+### 変更したパターン
+- Favoritesのヘッダー自動挿入、共有ヘッダー言語表示、共有footer構造／SNS間隔／コピー行、メニュー言語ボタン、検索モーダル同期focus、CMS記事プレビューのcommon.css版。
+
+### 未確認の類似パターン
+- 未確認：実ブラウザでの検索focus、モバイル言語切替、ヘッダー／フッターの実描画。localhost bind EPERMのため自動ブラウザ検査を起動できず。
+- 確認済み・0件：共有chrome欠落、JA/ENハブ行数不一致、CMS記事プレビュー版不一致、アセット版不一致。
+
+### 次の担当への注意・判断待ち
+- 外部画像取得とlocalhost bindが可能な環境でfull preflightと実ブラウザ操作を完走するまで公開扱いにしないこと。CMSはcommon.cssがv43のため、今後common.cssを上げる場合はcms.js側も同じ値へ更新する。
+
+### 2026-10-23 フッターSNS書体・縦位置（未コミット）
+
+### 実施
+- `LP/common.css` の共通footer SNSリンクを Space Mono 10px・字間 .15em・大文字・`--text-a62` に統一し、hover色を `--accent-soft` に変更。既存の `.footer-top` / `.footer-links` の縦中央揃えを維持。
+- `scripts/build-detail-pages.mjs` の `COMMON_CSS_VERSION`、CMS記事プレビュー、`LP/cms.html` の版数を更新し、生成済みページへ反映。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node scripts/build-detail-pages.mjs`: 成功（詳細557枚、共有chrome再生成）。
+- `python3 scripts/check_asset_versions.py`: 成功（common.css v44 / cms.js v169）。
+- `node scripts/check_cms_article_generated_preview.mjs`: 成功。
+- `python3 scripts/check_shared_chrome.py`: 成功（557ページ、footer種類1）。
+
+### 変更したパターン
+- 共通footerのSNSテキスト表示、共通CSS版数、CMS記事プレビューのcommon.css参照。
+
+### 未確認の類似パターン
+- 未確認：実ブラウザでの1280px表示とSNS hover色、モバイル表示。
+- 確認済み・0件：共通footerの種類違い、アセット版数不一致、CMSプレビュー版不一致。
+
+### 次の担当への注意・判断待ち
+- 実ブラウザ確認とfull preflightが未実施のため、公開扱いにしないこと。外部画像取得・localhost bind可能な環境で確認する。
+
+### 2026-10-23 フッターSNSセレクタ修正（未コミット）
+
+### 実施
+- `LP/common.css` のSNS規則を現在の `.footer-top` 直下構造に合わせて `footer .footer-social` / `footer .footer-social a` へ修正。
+- SNSをSpace Mono 10px・字間`.15em`・大文字・`--text-a62`、hover=`--accent-soft`、gap20px、縦線なし、リンクの最小高さ44pxに統一。旧 `.footer-links .footer-social` と重複するスマホ／後段規則を削除し、`.footer-top` の縦中央揃えを維持。
+- `common.css` をv45、CMS記事プレビューもv45、`cms.js`をv170へ更新。詳細ページを再生成。
+
+### コミット
+- 未コミット（ユーザー指定、commit・pushなし）。
+
+### 検証
+- `node scripts/build-detail-pages.mjs`: 成功（詳細557ページ、538ページ更新）。
+- `python3 scripts/check_asset_versions.py`: 成功（common.css v45 / cms.js v170）。
+- `node scripts/check_cms_article_generated_preview.mjs`: 成功。
+- `python3 scripts/check_shared_chrome.py`: 成功（557ページ、footer種類1）。
+
+### 変更したパターン
+- フッターSNSの構造対応セレクタ、表示仕様、タップ領域、共通CSS版数、CMSプレビュー版数。
+
+### 未確認の類似パターン
+- 確認済み・0件：旧 `.footer-links .footer-social` 規則、重複するSNS後段規則、共通footer構造の不一致。
+- 未確認：実ブラウザでのSNS表示・hover・モバイル操作。
+
+### 次の担当への注意・判断待ち
+- 実ブラウザ確認とfull preflightは未実施のため、公開扱いにしないこと。今回もcommit・pushは行っていない。
+
+### 2026-10-23 redesign/magazine フェーズ1（共通部品）完了（Claude 検証・コミット）
+
+### 実施
+- `main` から `redesign/magazine` を作成。docs/REDESIGN_SPEC.md・docs/design-mock/ を追加（ユーザー提供）。仕様に3点のユーザー決定を追記（Noto Sans JP は Google Fonts／メニューの JA/EN はページ全体を /en/ 版へ切替／TOP の FUTURE は CMS「トップ掲載」の2記事）と、フェーズ8「英語版の完成」。
+- 共通部品: 固定ヘッダー（ロゴ / ナビ / Search・JA/EN・ハンバーガー、900px 以下はハンバーガーのみ）、全画面スマホメニュー（menuOverlayHtml、番号付き・今のページ赤・掲載申請/ライター募集/Favorites・JA/EN・SNS・タグライン）、全画面検索（Stories/Festivals/Artists/Venues タブ、候補チップ、Esc、JA/EN の遷移先）、フッター（siteFooterHtml、全557ページで1種類）、`.chip` `.pill`、Noto Sans JP（Google Fonts）。
+- /en/favorites.html を新設。404 は英語ページとしてメニュー・フッターも EN にそろえた。ヘッダーへのお気に入りハート差し込み（favorites.js）を廃止（お気に入りはフッターとメニューから）。
+- 検査追加: scripts/check_shared_chrome.py（フッター1種類・新メニュー全ページ・JA/EN 切替先の実在）を preflight に組み込み。
+
+### コミット
+- feat(redesign): フェーズ1 共通部品（このコミット）。
+
+### 検証
+- `bash scripts/preflight.sh` 全62件成功（最終版で実行）。
+- Claude の自動操作確認（headless Chrome・CDP、390px dpr2 タッチ有効 / 1280px）: JA/EN 計29ページ×2幅でヘッダー・メニュー（position fixed・全画面・6項目・背景スクロール停止）・検索（開く→フォーカス→「sawagi」で結果→Esc で閉じる、EN は /en/ へ遷移）・フッターのリンク先実在・言語切替先実在・横はみ出し0・JS 例外0。（404 は英語ページなので EN の結果が正しい。自前の検査の判定だけが誤検知）
+- 途中で見つけて直した不具合: メニューが body>div の共通規則で position:relative になり全画面にならない／ヘッダー用の `nav{}` 規則がメニュー内の nav に当たる／`mix-blend-mode:difference` でハンバーガーが黒／虫眼鏡 SVG が黒い円／お気に入りの #page-subtitle 消失で JS 例外／404 に search.js 無し／メニューの検索入口から開くと sync() の遅延フォーカス復帰でハンバーガーに奪われる（iPhone でキーボードが閉じる）／フッター SNS のセレクタが構造変更で当たらない。
+- 撮影で確認: スマホメニュー JA/EN、PC 検索、ヘッダー（ハート無し・JA 白）、フッター（SNS 等幅10px 62%、2段目の左右配置）、/en/favorites。
+
+### 変更したパターン
+- 全ページの共通ヘッダー・メニュー・検索・フッターの生成を build-detail-pages.mjs の関数に一本化し、ハブ・静的ページ・詳細ページに同じものを差し込む方式。
+
+### 未確認の類似パターン
+- 実機 iPhone での確認は未実施（headless のタッチ模擬まで）。キーボード表示は実機でのみ確認できる。
+- LP/app/index.html（PWA、独自の厳しい CSP）は対象外。cms.html・map.html も対象外。
+- 英語ページに見える日本語（2026-10-22 計測: 259/277 ページ。内訳は日本語/ENGLISH の切替ボタン、FAQ の住所、日本語名のフェス、開催回の日本語の場所 等）はフェーズ8で対応。
+
+### 次の担当への注意・判断待ち
+- フェーズ2（TOP）はユーザーへ報告後に開始。FUTURE は featured の2記事（現在 featured は1本のみ。ユーザーに CMS でもう1本付けてもらう）。
+- docs/design/v2-mock/ と V2_PLAN.md は古い（REDESIGN_SPEC.md と docs/design-mock/ が正）。

@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Techno Japan — Article</title>
+<script src="./support.js"></script>
+<script src="./tj-data.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=DM+Sans:wght@300;400;500&amp;family=Space+Mono:wght@400;700&amp;family=Noto+Sans+JP:wght@300;400;500;700&amp;display=swap">
+<style>
+body{margin:0;background:#080808}
+a{color:#f0ede8;text-decoration:none}a:hover{color:#a82f31}
+.tj{position:relative;overflow:clip;font-family:"DM Sans","Noto Sans JP",system-ui,sans-serif;font-weight:300;color:#f0ede8;background:#080808;background-image:repeating-linear-gradient(90deg,rgba(240,237,232,.03) 0 1px,transparent 1px 80px),repeating-linear-gradient(0deg,rgba(240,237,232,.03) 0 1px,transparent 1px 80px);-webkit-font-smoothing:antialiased}
+.disp{font-family:"Bebas Neue","Noto Sans JP",sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:.01em;line-height:.95;margin:0}
+.mono{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(240,237,232,.62)}
+.red{color:var(--accent)}
+.wrap{position:relative;max-width:1180px;margin:0 auto;padding:0 40px;box-sizing:border-box}
+.pill{display:inline-flex;align-items:center;gap:6px;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#f0ede8;border:1px solid rgba(240,237,232,.35);padding:5px 12px;white-space:nowrap}
+.pill::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--accent)}
+.img{overflow:hidden;background:rgba(240,237,232,.04)}
+.img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+a:hover .img img{transform:scale(1.04)}
+.nav a{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase}
+.nav a.on{color:var(--accent)}
+.ham{display:none}
+.hero{position:relative;height:clamp(480px,80vh,920px);overflow:hidden}
+.hmeta{display:none}
+.fest-card{display:none}
+.card{display:flex;flex-direction:column;gap:8px;min-width:0}.card:hover .t{color:#a82f31}
+.card .img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s cubic-bezier(.2,.7,.2,1)}.card:hover .img img{transform:scale(1.04)}
+.hero img{width:100%;height:100%;object-fit:cover;display:block}
+.hero .ov{position:absolute;inset:auto 0 0 0;padding:64px 40px 56px;background:linear-gradient(to top,rgba(8,8,8,.94) 0%,rgba(8,8,8,.55) 55%,transparent 100%)}
+.hero h1{font-size:clamp(34px,5.5vw,76px);max-width:1100px}
+.hero .sub{display:block;margin-top:.35em;font-weight:300;font-size:clamp(16px,1.9vw,30px);line-height:1.35;color:rgba(240,237,232,.9)}
+.specs{display:flex;flex-wrap:wrap;margin:40px 0;border-bottom:1px solid rgba(240,237,232,.12)}
+.specs > div{flex:1 1 0;min-width:140px;padding:18px 20px 16px;border-right:1px solid rgba(240,237,232,.12)}
+.specs > div:first-child{padding-left:0}.specs > div:last-child{border-right:0}
+.specs dt{font-family:"Space Mono",monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;opacity:.62;margin-bottom:6px}
+.specs dd{margin:0;font-size:14px;letter-spacing:.02em;text-transform:uppercase}
+.excerpt{font-size:19px;line-height:1.8;color:rgba(240,237,232,.9);max-width:760px}
+.body{max-width:720px;font-size:16px;line-height:1.95}
+.body p{margin:0 0 1.6em}
+.body h2{font-family:"Bebas Neue","Noto Sans JP",sans-serif;font-weight:400;text-transform:uppercase;font-size:34px;line-height:1.05;margin:2.4em 0 .8em;letter-spacing:.01em;position:relative;padding-bottom:10px}
+/* same as live article-fx.css: red underline that draws itself in when the heading scrolls into view */
+.body h2::after{content:"";position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--accent);transform:scaleX(0);transform-origin:0 50%;transition:transform .7s cubic-bezier(.22,.61,.36,1) .25s}
+.body h2.fx-on::after{transform:scaleX(1)}
+@media (prefers-reduced-motion:reduce){.body h2::after{transition:none}}
+.body h3{font-size:13px;letter-spacing:.2em;text-transform:uppercase;font-family:"Space Mono",monospace;color:var(--accent);margin:2.2em 0 .8em}
+.body h4{font-family:"Bebas Neue","Noto Sans JP",sans-serif;font-weight:400;text-transform:uppercase;font-size:24px;line-height:1.1;margin:2em 0 .6em;letter-spacing:.01em}
+.body ul{margin:0 0 1.6em;padding-left:1.2em}.body li{margin:0 0 .4em}
+.body a{color:var(--accent);border-bottom:1px dotted rgba(255,45,45,.5)}.body a:hover{border-bottom-style:solid}
+.body figure{margin:2.4em 0;padding:0}.body figure img{width:100%;height:auto;display:block;border-radius:2px}
+.body figcaption{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(240,237,232,.5);margin-top:10px}
+.body figure.l-contained{margin-left:0;margin-right:0}
+.body figure.l-compact{max-width:70%;margin-left:auto;margin-right:auto}
+.body figure.l-left{float:left;width:46%;margin:.4em 32px 1.2em 0}
+.body figure.l-right{float:right;width:46%;margin:.4em 0 1.2em 32px}
+.body h2,.body h3,.body h4,.body .info{clear:both}
+.body::after{content:"";display:block;clear:both}
+.body .ent{color:var(--accent);border-bottom:1px dotted rgba(255,45,45,.5)}
+.body .ent:hover{border-bottom-style:solid}
+.body blockquote{margin:2.2em 0;padding-left:24px;border-left:2px solid var(--accent);font-size:22px;line-height:1.5;font-weight:300}
+.body .info{font-family:"Space Mono",monospace;font-size:12px;line-height:1.9;letter-spacing:.04em;border-top:1px solid rgba(240,237,232,.12);border-bottom:1px solid rgba(240,237,232,.12);padding:18px 0;margin:2em 0}
+.rs{display:grid;grid-template-columns:260px minmax(0,1fr);gap:0 22px;align-items:center;padding:18px 0;border-top:1px solid rgba(240,237,232,.12)}
+.rs:hover .t{color:#a82f31}
+.rs .t{font-size:30px}
+.rs .sub{font-weight:300;font-size:15px;line-height:1.45;color:rgba(240,237,232,.85);margin:0}
+.track{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px}
+.track a{flex:0 0 240px;scroll-snap-align:start;display:flex;flex-direction:column;gap:8px}
+.track a:hover .n{color:#a82f31}
+.share{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border:1px solid rgba(240,237,232,.2)}
+.share:hover{border-color:var(--accent)}
+.rule{border-top:1px solid rgba(240,237,232,.12)}
+@media (max-width:900px){
+ .wrap{padding:0 16px}.nav,.hdate{display:none !important}.ham{display:flex}
+ .hero{height:min(80vh,640px)}.hero .ov{padding:48px 16px 28px}
+ /* T-mag style: vertical meta strip on the right edge of the hero, reads bottom → top */
+ .hmeta{display:flex !important;flex-direction:row;align-items:center;gap:22px;position:absolute;top:16px;right:12px;margin:0;padding:0;writing-mode:vertical-rl;transform:rotate(180deg);transform-origin:center;height:auto;max-height:calc(100% - 32px)}
+ .hmeta > div{display:flex;flex-direction:row;gap:6px;white-space:nowrap}
+ .hmeta dt{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(240,237,232,.62);margin:0}
+ .hmeta dd{margin:0;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#f0ede8}
+ .hmeta dt::after{content:"·";margin:0;color:rgba(240,237,232,.4)}
+ article aside .specs{display:none !important}
+ .fest-txt{display:none !important}.fest-card{display:flex !important}
+ article aside .info{display:none !important}
+ .specs{margin:24px 0}.specs > div{flex:1 1 100%;border-right:0;padding:10px 0;border-bottom:1px solid rgba(240,237,232,.08)}
+ .rs{grid-template-columns:1fr !important;gap:12px 0}.rs .t{font-size:26px}
+ .excerpt{font-size:17px}
+ .body figure.l-compact{max-width:100%}.body figure.l-left,.body figure.l-right{float:none;width:100%;margin:2em 0}
+ article{grid-template-columns:minmax(0,1fr) !important;column-gap:0 !important}
+ article aside{grid-column:1 !important;grid-row:auto !important;position:static !important;margin-top:40px}
+}
+
+/* ===== moving background (same as live .tj-bg: grain + drifting 80px grid + floating red glow + scan line) ===== */
+.tj{background:transparent !important}
+.tjbg{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background-image:url(img/grain.png);background-size:120px 120px}
+.tjbg::before{content:"";position:absolute;inset:-80px;background-image:repeating-linear-gradient(90deg,rgba(240,237,232,.035) 0 1px,transparent 1px 80px),repeating-linear-gradient(0deg,rgba(240,237,232,.035) 0 1px,transparent 1px 80px);animation:tjGrid 20s linear infinite;will-change:transform}
+.tjbg::after{content:"";position:absolute;top:0;left:0;width:60vw;height:60vw;border-radius:50%;background:radial-gradient(circle,rgba(255,45,45,.06) 0%,transparent 60%);filter:blur(40px);animation:tjGlow 18s ease-in-out infinite;will-change:transform}
+.tjbg i{position:absolute;top:0;left:0;right:0;height:1px;background:rgba(240,237,232,.07);animation:tjScan 8s linear infinite;will-change:transform}
+@keyframes tjGrid{from{transform:translate(0,0)}to{transform:translate(80px,80px)}}
+@keyframes tjGlow{0%,100%{transform:translate(-10vw,-20vh)}50%{transform:translate(50vw,60vh)}}
+@keyframes tjScan{from{transform:translateY(-2vh)}to{transform:translateY(102vh)}}
+@media (prefers-reduced-motion:reduce){.tjbg::before,.tjbg::after,.tjbg i{animation:none}.tjbg i{display:none}}
+/* reading progress — same as live article-fx: 2px accent line under the header, fills with the article's read ratio */
+.fx-progress{position:absolute;left:0;right:0;bottom:-1px;height:2px;background:rgba(240,237,232,.22);pointer-events:none}
+.fx-progress-fill{height:100%;background:var(--accent);box-shadow:0 0 6px rgba(255,45,45,.65);transform:scaleX(0);transform-origin:0 50%}
+.hdr{position:sticky;top:0;z-index:40;background:rgba(8,8,8,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(240,237,232,.08)}
+</style>
+</helmet>
+
+<div class="tj" style="--accent:{{accent}};display:flex;flex-direction:column;min-height:100%">
+  <div class="tjbg" aria-hidden="true"><i></i></div>
+
+  <header class="hdr">
+   <div class="fx-progress" aria-hidden="true"><div class="fx-progress-fill"></div></div>
+   <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;height:64px">
+    <a href="Main.dc.html" aria-label="Techno Japan" style="display:flex;align-items:center;gap:10px"><img src="img/logo-wordmark.png" alt="Techno Japan" style="height:15px;width:auto;display:block"></a>
+    <nav class="nav" style="display:flex;gap:28px" aria-label="Main"><a href="Main.dc.html">Top</a><a href="News.dc.html" class="on">News</a><a href="Festivals.dc.html">Festivals</a><a href="Artists.dc.html">Artists</a><a href="Venues.dc.html">Venues</a><a href="About.dc.html">About</a></nav>
+    <div style="display:flex;align-items:center;gap:18px">
+      
+      <button class="hdate" onClick="{{openSearch}}" aria-label="Search" style="display:flex;align-items:center;gap:8px;height:44px;min-width:44px;padding:0 12px;background:none;border:1px solid rgba(240,237,232,.18);color:#f0ede8;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="hdate">Search</span></button>
+      <span class="mono" style="color:#f0ede8">JA <span style="color:rgba(240,237,232,.4)">/</span> <a href="#en" style="color:rgba(240,237,232,.62)">EN</a></span>
+      <button class="ham" onClick="{{openMenu}}" aria-label="Menu" aria-haspopup="dialog" style="background:none;border:0;color:#f0ede8;padding:0;width:44px;height:44px;align-items:center;justify-content:flex-end;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 8h18M3 16h18"></path></svg></button>
+    </div>
+   </div>
+  </header>
+
+  <!-- HERO (current article-hero) -->
+  <div class="hero">
+    <img src="{{art.img}}" alt="">
+    <!-- mobile only: author / date / reading time at the top-right of the hero (test) -->
+    <dl class="hmeta">
+      <div><dt>Words by</dt><dd>{{art.author}}</dd></div>
+      <div><dt>Published</dt><dd>{{art.dateJp}}</dd></div>
+      <div><dt>Reading time</dt><dd>{{art.readTime}} min</dd></div>
+    </dl>
+    <div class="ov">
+      <div style="max-width:1100px;margin:0 auto">
+        <div style="display:flex;gap:10px;margin-bottom:14px"><span class="pill">{{art.cat}}</span></div>
+        <h1 class="disp">{{art.h1}}<sc-if value="{{art.hasH2}}" hint-placeholder-val="{{ true }}"><span class="sub">{{art.h2}}</span></sc-if></h1>
+      </div>
+    </div>
+  </div>
+
+  <article class="wrap" style="width:100%; display: grid; grid-template-columns: minmax(0, 1fr) 300px; column-gap: 56px; align-items: start">
+    
+    <p class="excerpt" style="margin: 0 0 32px; font-size: 18px; line-height: 1.8; grid-column: 1; min-width: 0">{{art.excerpt}}</p>
+
+    <div class="body" style="grid-column: 1; min-width: 0" data-body="">
+      <p>{{art.excerpt}}</p>
+    </div>
+
+    <!-- SHARE -->
+    <div style="display:flex; align-items:center; gap:12px; margin-top:48px; grid-column: 1; min-width: 0"><span class="mono" style="margin-right:8px">Share</span>
+      <a href="#x" class="share" aria-label="Share on X"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 4l16 16M20 4L4 20"></path></svg></a>
+      <a href="#line" class="share" aria-label="Share on LINE"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12a8 7 0 1 1 16 0 8 7 0 0 1-8 7l-4 2v-3"></path></svg></a>
+      <button class="share" aria-label="Copy link" style="background:none;color:#f0ede8;cursor:pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M10 14a4 4 0 0 1 0-5.6l3-3a4 4 0 0 1 5.6 5.6l-1.5 1.5M14 10a4 4 0 0 1 0 5.6l-3 3a4 4 0 0 1-5.6-5.6L7 11.5"></path></svg></button>
+    </div>
+
+  <aside style="grid-column:2; grid-row: 1 / span 3; position:sticky; top:88px; align-self:start; display:flex; flex-direction:column; gap:28px; min-width:0; border-right: none; box-shadow: none"><dl class="specs" style="display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; justify-items: stretch; justify-content: start; margin: 0; grid-column: auto; min-width: 0; border-top: none; padding-top: 0; padding-right: 0px; padding-bottom: 0px; border-right: none">
+      <div style="min-width: 0; margin: 0; padding-left: 0; border-left-width: 0px; border-left-style: initial; border-left-color: initial; text-align: left; justify-self: stretch; border-right: none; box-shadow: none"><dt style="font-size: 9px; margin: 0 0 1px; line-height: 1.2; padding-left: 0; border-right: none; box-shadow: none">Words by</dt><dd style="margin: 0; overflow-wrap: anywhere; font-size: 12px; line-height: 1.3; padding-left: 0; border-right: none; box-shadow: none"><a href="About.dc.html">{{art.author}}</a></dd></div>
+      <div style="min-width: 0; margin: 0; padding-left: 0; border-left-width: 0px; border-left-style: initial; border-left-color: initial; text-align: left; justify-self: stretch; border-right: none; box-shadow: none"><dt style="font-size: 9px; margin: 0 0 1px; line-height: 1.2; padding-left: 0; text-align: left; border-right: none; box-shadow: none">Published</dt><dd style="margin: 0; overflow-wrap: anywhere; font-size: 12px; line-height: 1.3; padding-left: 0; text-align: left; border-right: none; box-shadow: none">{{art.dateJp}}</dd></div>
+      <div style="min-width: 0; margin: 0; padding-left: 0; border-left-width: 0px; border-left-style: initial; border-left-color: initial; text-align: left; justify-self: stretch; border-right: none; box-shadow: none"><dt style="font-size: 9px; margin: 0 0 1px; line-height: 1.2; padding-left: 0; border-right: none; box-shadow: none">Reading time</dt><dd style="margin: 0; overflow-wrap: anywhere; font-size: 12px; line-height: 1.3; padding-left: 0; border-right: none; box-shadow: none">{{art.readTime}} min</dd></div>
+      
+    </dl><div style="display:flex;flex-direction:column;gap:12px;border-top:1px solid rgba(240,237,232,.3);padding-top:14px"><span class="mono red" style="font-size:10px;letter-spacing:.15em;text-transform:uppercase">Festival</span><a href="FestivalDetail.dc.html" class="disp fest-txt" style="font-size:34px;line-height:1.05;color:#f0ede8">{{fest.name}}</a><a href="FestivalDetail.dc.html" class="mono fest-txt" style="color:#f0ede8;font-size:10px;letter-spacing:.15em;text-transform:uppercase" style-hover="color:#ff2d2d">Festival details →</a>
+      <!-- mobile only: the festival as an event card (same card as the Festivals grid) -->
+      <a href="FestivalDetail.dc.html" class="fest-card" style="display:none;align-items:center;gap:14px;border:1px solid rgba(240,237,232,.14);padding:10px">
+        <div class="img" style="flex:0 0 96px;width:96px;aspect-ratio:1/1"><img src="{{fest.img}}" alt=""></div>
+        <div style="display:flex;flex-direction:column;gap:5px;min-width:0">
+          <span class="mono {{festStCls}}">{{fest.date}} · {{festStatus}}</span>
+          <span class="disp" style="font-size:26px;line-height:1;color:#f0ede8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{fest.name}}</span>
+          <span class="mono" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{fest.metaLine}}</span>
+        </div>
+        <span class="mono" style="margin-left:auto;color:#f0ede8">→</span>
+      </a></div><div class="info" style="margin: 0; border-top: 1px solid rgba(240,237,232,.3); padding-top: 14px; display: flex; flex-direction: column; gap: 12px; font-size: 12px; line-height: 1.5; min-width: 0"><span class="mono red" style="font-size:10px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:4px">Overview</span>
+        <div><span class="mono" style="display:block;font-size:9px;letter-spacing:.15em;color:rgba(240,237,232,.62);margin-bottom:2px">DATE</span>{{ov.date}}</div>
+        <div><span class="mono" style="display:block;font-size:9px;letter-spacing:.15em;color:rgba(240,237,232,.62);margin-bottom:2px">VENUE</span>{{ov.venue}}</div>
+        <div><span class="mono" style="display:block;font-size:9px;letter-spacing:.15em;color:rgba(240,237,232,.62);margin-bottom:2px">ARTISTS</span><span style="display:flex;flex-wrap:wrap;gap:0 6px"><sc-for list="{{ov.artists}}" as="a" hint-placeholder-count="6"><a href="{{a.href}}" class="{{a.cls}}">{{a.name}}</a></sc-for></span></div>
+        <div><span class="mono" style="display:block;font-size:9px;letter-spacing:.15em;color:rgba(240,237,232,.62);margin-bottom:2px">GENRE</span>{{ov.genre}}</div>
+        <sc-if value="{{ov.hasSound}}" hint-placeholder-val="{{ true }}"><div><span class="mono" style="display:block;font-size:9px;letter-spacing:.15em;color:rgba(240,237,232,.62);margin-bottom:2px">SOUND</span>{{ov.sound}}</div></sc-if>
+        <sc-if value="{{ov.hasStatus}}" hint-placeholder-val="{{ true }}"><div class="red">{{ov.status}}</div></sc-if>
+        <span class="mono" style="font-size:9px;color:rgba(240,237,232,.4)">From festivals DB · {{ov.src}}</span>
+      </div><div style="display:flex;flex-direction:column;gap:12px;border-top:1px solid rgba(240,237,232,.3);padding-top:14px"><a href="News.dc.html" class="mono" style="color:rgba(240,237,232,.62);font-size:10px;letter-spacing:.15em;text-transform:uppercase" style-hover="color:#f0ede8">All stories →</a></div></aside></article>
+
+  <div class="wrap" style="width:100%">
+    <!-- RELATED STORIES (kept from current site) -->
+    <section style="margin-top:80px; grid-column: 1 / -1; min-width: 0">
+      <h2 class="disp" style="font-size:40px;margin-bottom:20px">Related Stories</h2>
+      <sc-for list="{{related}}" as="a" hint-placeholder-count="3">
+        <a href="NewsDetail.dc.html" class="rs">
+          <div class="img" style="aspect-ratio:16/9;border-radius:4px"><img src="{{a.img}}" alt=""></div>
+          <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+            <span class="mono red">{{a.meta}}</span>
+            <span class="disp t">{{a.h1}}</span>
+            <sc-if value="{{a.hasH2}}" hint-placeholder-val="{{ true }}"><p class="sub">{{a.h2}}</p></sc-if>
+          </div>
+        </a>
+      </sc-for>
+      <div class="rule"></div>
+    </section>
+
+    <!-- RELATED FESTIVALS (database) -->
+    <section style="margin-top:72px; grid-column: 1 / -1; min-width: 0">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px"><h2 class="disp" style="font-size:40px">関連フェスティバル</h2><a href="Festivals.dc.html" class="mono">All festivals →</a></div>
+      <div class="track">
+        <sc-for list="{{fests}}" as="f" hint-placeholder-count="5">
+          <a href="FestivalDetail.dc.html">
+            <div class="img" style="aspect-ratio:3/2"><img src="{{f.img}}" alt=""></div>
+            <span class="mono">{{f.dateFull}}</span>
+            <span class="n disp" style="font-size:24px">{{f.name}}</span>
+            <span class="mono">{{f.metaLine}}</span>
+          </a>
+        </sc-for>
+      </div>
+    </section>
+  </div>
+
+  <dc-import name="Search" is-open="{{searchOpen}}" on-close="{{closeSearch}}" hint-size="0px,0px"></dc-import>
+  <dc-import name="Menu" is-open="{{menuOpen}}" on-close="{{closeMenu}}" on-search="{{menuSearch}}" current="news" hint-size="0px,0px"></dc-import>
+
+  <footer class="wrap" style="width:100%;max-width:1360px;padding:112px 40px 40px;display:flex;flex-direction:column;gap:32px">
+    <div class="rule" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px;padding-top:40px">
+      <img src="img/logo-wordmark.png" alt="Techno Japan" style="height:15px;width:auto;display:block;align-self:center">
+      <nav class="nav" style="display:flex;gap:24px;flex-wrap:wrap" aria-label="Footer"><a href="News.dc.html">News</a><a href="Festivals.dc.html">Festivals</a><a href="Artists.dc.html">Artists</a><a href="Venues.dc.html">Venues</a><a href="About.dc.html">About</a><a href="Apply.dc.html">Apply</a><a href="Writer.dc.html">Writer</a></nav>
+      <div style="display:flex;gap:20px" class="mono"><a href="#ig" style="color:rgba(240,237,232,.62)">Instagram</a><a href="#th" style="color:rgba(240,237,232,.62)">Threads</a></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px" class="mono"><span>© 2026 Techno Japan</span><span style="color:#f0ede8">Japan's Underground, Curated.</span></div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#ff2d2d","options":["#ff2d2d","#a82f31","#f0ede8"]},"$preview":{"width":1440,"height":4200}}'>
+class Component extends DCLogic {
+  constructor(p){ super(p); this.state = { data: (typeof window !== 'undefined' && window.TJ_DATA) || null }; }
+  componentDidMount(){ if(!this.state.data){ fetch('./tj-data.json').then(r=>r.json()).then(d=>this.setState({data:d})).catch(()=>{}); } this.syncBody(); this.progress(); }
+  progress(){
+    // read ratio = how far the article block (lead → share) has scrolled past the viewport, as on the live site
+    const fill = document.querySelector('.fx-progress-fill'); if(!fill) return;
+    const art = () => document.querySelector('article');
+    let ticking = false;
+    const update = () => { ticking = false; const a = art(); if(!a) return; const r = a.getBoundingClientRect(); const total = r.height - window.innerHeight + 64; const p = total > 0 ? Math.min(1, Math.max(0, (64 - r.top) / total)) : 1; fill.style.transform = 'scaleX(' + p.toFixed(4) + ')'; };
+    this.onProg = () => { if(!ticking){ ticking = true; requestAnimationFrame(update); } };
+    window.addEventListener('scroll', this.onProg, {passive:true}); window.addEventListener('resize', this.onProg, {passive:true}); update();
+  }
+  componentDidUpdate(){ this.syncBody(); }
+  syncBody(){
+    // live article body (data.js ARTICLES.body, images re-pointed by the sync script) → rendered as on the site, plus the CMS image layouts
+    const el = document.querySelector('[data-body]'); if(!el) return;
+    const vals = this.renderVals(); const html = vals.art.body || ''; if(!html || html === this.bodyKey) return; this.bodyKey = html;
+    const doc = new DOMParser().parseFromString('<div>'+html+'</div>', 'text/html'); const root = doc.body.firstChild;
+    root.querySelectorAll('img').forEach(img => {
+      const fig = doc.createElement('figure'); fig.className = 'l-' + (img.getAttribute('data-layout') || 'contained');
+      const alt = img.getAttribute('alt'); img.removeAttribute('width'); img.removeAttribute('height'); img.setAttribute('loading','lazy');
+      const p = img.closest('p'); fig.appendChild(img); if(alt){ const c = doc.createElement('figcaption'); c.textContent = alt; fig.appendChild(c); }
+      if(p && p.textContent.trim()==='' && p.children.length===0) p.replaceWith(fig); else if(p) p.parentNode.insertBefore(fig, p.nextSibling); else root.appendChild(fig);
+    });
+    root.querySelectorAll('a').forEach(a => { const h = a.getAttribute('href')||''; if(/\/artists\//.test(h)){ a.setAttribute('href','ArtistDetail.dc.html'); a.classList.add('ent'); } else if(/\/festivals\//.test(h)){ a.setAttribute('href','FestivalDetail.dc.html'); a.classList.add('ent'); } else if(/\/venues\//.test(h)){ a.setAttribute('href','VenueDetail.dc.html'); a.classList.add('ent'); } else { a.setAttribute('target','_blank'); a.setAttribute('rel','noopener'); } });
+    root.querySelectorAll('[style]').forEach(n => n.removeAttribute('style'));
+    root.querySelectorAll('p').forEach(pp => { if(pp.innerHTML.trim()==='<br>' || pp.textContent.trim()==='' && !pp.querySelector('img')) pp.remove(); });
+    el.innerHTML = root.innerHTML;
+    // underline reveal (IntersectionObserver, like the live site); fallback = always on
+    if(this.fxObs) this.fxObs.disconnect();
+    const hs = el.querySelectorAll('h2');
+    if('IntersectionObserver' in window){ this.fxObs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ e.target.classList.add('fx-on'); this.fxObs.unobserve(e.target); } }), {rootMargin:'0px 0px -12% 0px'}); hs.forEach(h => this.fxObs.observe(h)); }
+    else hs.forEach(h => h.classList.add('fx-on'));
+  }
+  componentWillUnmount(){ if(this.fxObs) this.fxObs.disconnect(); if(this.onProg){ window.removeEventListener('scroll', this.onProg); window.removeEventListener('resize', this.onProg); } }
+  renderVals() {
+    const D = this.state.data || {articles:[],festivals:[]};
+    const art = D.articles.find(a => a.id==='labyrinth-2026-info') || D.articles[0] || {h1:'',h2:'',hasH2:false,cat:'',dateJp:'',readTime:'',author:'',excerpt:'',img:''};
+    const fest = D.festivals.find(f => f.id===art.festivalId) || D.festivals.find(f=>f.id==='labyrinth') || {name:''};
+    const related = D.articles.filter(a => a.id!==art.id).slice(0,3);
+    const fests = D.festivals.filter(f => f.upcoming).slice(0,6);
+    // Overview = pulled from the festival record linked to this article (CMS: festivals / editions / lineups / artists)
+    const ed = (fest.editions||[]).find(e => e.year===fest.year) || (fest.editions||[])[0] || {};
+    const pretty = (id) => id.split('-').map(w => w ? w[0].toUpperCase()+w.slice(1) : w).join(' ');
+    const artists = (fest.lineup||[]).map(x => { const a = D.artists.find(v => v.id===x || v.name.toLowerCase()===x.toLowerCase()); return a ? {name:a.name, href:'ArtistDetail.dc.html', cls:'ent'} : {name:/^[a-z0-9-]+$/.test(x) ? pretty(x) : x, href:'#', cls:''}; });
+    const sound = fest.sound || ed.sound || '';
+    const ov = {
+      date: (fest.dateStart||'').replace(/-/g,'.') + (fest.dateEnd && fest.dateEnd!==fest.dateStart ? ' – ' + fest.dateEnd.replace(/-/g,'.') : ''),
+      venue: [fest.location, fest.city].filter(Boolean).join(', '),
+      artists, genre: (fest.genre||[]).join(' / '),
+      hasSound: !!sound, sound,
+      hasStatus: !!(ed.status && ed.status!=='announced'), status: (ed.status||'').toUpperCase(),
+      src: fest.id + (ed.edition ? ' · ' + ed.edition : '')
+    };
+    return { accent: this.props.accent ?? '#ff2d2d',
+      searchOpen: !!this.state.searchOpen, openSearch: () => this.setState({searchOpen: true}), closeSearch: () => this.setState({searchOpen: false}),
+      menuOpen: !!this.state.menuOpen, openMenu: () => this.setState({menuOpen: true}), closeMenu: () => this.setState({menuOpen: false}), menuSearch: () => this.setState({menuOpen: false, searchOpen: true}), art, fest, related, fests, ov, festStatus: fest.upcoming ? 'Upcoming' : 'Archive', festStCls: fest.upcoming ? 'red' : '', festTypeLine: [fest.type, (fest.genre||[]).slice(0,3).join(' / ')].filter(Boolean).join(' · ').toUpperCase() };
+  }
+}
+</script>
+</body>
+</html>

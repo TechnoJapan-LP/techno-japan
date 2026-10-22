@@ -1,5 +1,8 @@
 # TECHNO JAPAN v2 デザイン切り替え — 実装の段取り
 
+> **2026-10-23 追記: この段取りは `docs/REDESIGN_SPEC.md`（ユーザー作成の実装仕様）に置き換えた。**実装は `redesign/magazine` ブランチで、仕様のフェーズ順に進める。モックの正は `docs/design-mock/`（`docs/design/v2-mock/` は古い写し）。
+
+
 作成: 2026-10-22（Claude）。元デザイン: claude.ai のデザイン「Techno Japan — TOP Redesign」
 （https://claude.ai/artifact/DSq6nxQVHgXkG9wBK8xc5X）。同じ内容の写しを `docs/design/v2-mock/` に置いた。
 

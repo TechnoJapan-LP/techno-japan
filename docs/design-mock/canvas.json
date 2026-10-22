@@ -1,0 +1,326 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "About.dc.html": {
+      "expand": "fill",
+      "h": 4200,
+      "is_interactive": true,
+      "title": "ABOUT — Desktop",
+      "w": 1440,
+      "x": 0,
+      "y": 22400
+    },
+    "Apply.dc.html": {
+      "expand": "fill",
+      "h": 4000,
+      "is_interactive": true,
+      "title": "APPLY — Desktop",
+      "w": 1440,
+      "x": 1990,
+      "y": 22400
+    },
+    "ArtistDetail.dc.html": {
+      "expand": "fill",
+      "h": 3400,
+      "is_interactive": true,
+      "title": "ARTIST 詳細 — Desktop",
+      "w": 1440,
+      "x": 1990,
+      "y": 18400
+    },
+    "Artists.dc.html": {
+      "expand": "fill",
+      "h": 3200,
+      "is_interactive": true,
+      "title": "ARTISTS — Desktop",
+      "w": 1440,
+      "x": 1990,
+      "y": 5800
+    },
+    "FestivalDetail.dc.html": {
+      "expand": "fill",
+      "h": 4000,
+      "is_interactive": true,
+      "title": "FESTIVAL 詳細 — Desktop",
+      "w": 1440,
+      "x": 1990,
+      "y": 13800
+    },
+    "Festivals.dc.html": {
+      "expand": "fill",
+      "h": 3600,
+      "is_interactive": true,
+      "title": "FESTIVALS — Desktop",
+      "w": 1440,
+      "x": 0,
+      "y": 9800
+    },
+    "Main.dc.html": {
+      "expand": "fill",
+      "h": 7000,
+      "is_interactive": true,
+      "title": "TOP — Desktop（確定：カルーセル4記事＋FUTURE）",
+      "w": 1440,
+      "x": 0,
+      "y": 0
+    },
+    "Menu.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "MENU — スマホのハンバーガーメニュー（全ページ共通）",
+      "w": 390,
+      "x": 4690,
+      "y": 0
+    },
+    "Mobile.dc.html": {
+      "expand": "fill",
+      "h": 7000,
+      "is_interactive": true,
+      "title": "TOP — Mobile",
+      "w": 390,
+      "x": 1520,
+      "y": 0
+    },
+    "MobileAbout.dc.html": {
+      "expand": "fill",
+      "h": 4200,
+      "is_interactive": true,
+      "title": "ABOUT — Mobile",
+      "w": 390,
+      "x": 1520,
+      "y": 22400
+    },
+    "MobileApply.dc.html": {
+      "expand": "fill",
+      "h": 4000,
+      "is_interactive": true,
+      "title": "APPLY — Mobile",
+      "w": 390,
+      "x": 3510,
+      "y": 22400
+    },
+    "MobileArtistDetail.dc.html": {
+      "expand": "fill",
+      "h": 3400,
+      "is_interactive": true,
+      "title": "ARTIST 詳細 — Mobile",
+      "w": 390,
+      "x": 3510,
+      "y": 18400
+    },
+    "MobileArtists.dc.html": {
+      "expand": "fill",
+      "h": 3200,
+      "is_interactive": true,
+      "title": "ARTISTS — Mobile",
+      "w": 390,
+      "x": 3510,
+      "y": 5800
+    },
+    "MobileFestivalDetail.dc.html": {
+      "expand": "fill",
+      "h": 4000,
+      "is_interactive": true,
+      "title": "FESTIVAL 詳細 — Mobile",
+      "w": 390,
+      "x": 3510,
+      "y": 13800
+    },
+    "MobileFestivals.dc.html": {
+      "expand": "fill",
+      "h": 3600,
+      "is_interactive": true,
+      "title": "FESTIVALS — Mobile",
+      "w": 390,
+      "x": 1520,
+      "y": 9800
+    },
+    "MobileNews.dc.html": {
+      "expand": "fill",
+      "h": 3600,
+      "is_interactive": true,
+      "title": "NEWS — Mobile",
+      "w": 390,
+      "x": 1520,
+      "y": 5800
+    },
+    "MobileNewsDetail.dc.html": {
+      "expand": "fill",
+      "h": 4200,
+      "is_interactive": true,
+      "title": "NEWS 詳細 — Mobile",
+      "w": 390,
+      "x": 1520,
+      "y": 13800
+    },
+    "MobileVenueDetail.dc.html": {
+      "expand": "fill",
+      "h": 3600,
+      "is_interactive": true,
+      "title": "VENUE 詳細 — Mobile",
+      "w": 390,
+      "x": 1520,
+      "y": 18400
+    },
+    "MobileVenues.dc.html": {
+      "expand": "fill",
+      "h": 3400,
+      "is_interactive": true,
+      "title": "VENUES — Mobile",
+      "w": 390,
+      "x": 3510,
+      "y": 9800
+    },
+    "MobileWriter.dc.html": {
+      "expand": "fill",
+      "h": 4000,
+      "is_interactive": true,
+      "title": "WRITER — Mobile",
+      "w": 390,
+      "x": 1520,
+      "y": 27000
+    },
+    "News.dc.html": {
+      "expand": "fill",
+      "h": 3600,
+      "is_interactive": true,
+      "title": "NEWS — Desktop",
+      "w": 1440,
+      "x": 0,
+      "y": 5800
+    },
+    "NewsDetail.dc.html": {
+      "expand": "fill",
+      "h": 4200,
+      "is_interactive": true,
+      "title": "NEWS 詳細 — Desktop",
+      "w": 1440,
+      "x": 0,
+      "y": 13800
+    },
+    "Search.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "title": "SEARCH — 全ページ共通の検索（ヘッダーの Search から開く）",
+      "w": 1440,
+      "x": 3170,
+      "y": 0
+    },
+    "System.dc.html": {
+      "h": 2300,
+      "title": "Editorial System v2",
+      "w": 1100,
+      "x": 1990,
+      "y": 0
+    },
+    "VenueDetail.dc.html": {
+      "expand": "fill",
+      "h": 3600,
+      "is_interactive": true,
+      "title": "VENUE 詳細 — Desktop",
+      "w": 1440,
+      "x": 0,
+      "y": 18400
+    },
+    "Venues.dc.html": {
+      "expand": "fill",
+      "h": 3400,
+      "is_interactive": true,
+      "title": "VENUES — Desktop",
+      "w": 1440,
+      "x": 1990,
+      "y": 9800
+    },
+    "Writer.dc.html": {
+      "expand": "fill",
+      "h": 4000,
+      "is_interactive": true,
+      "title": "WRITER — Desktop",
+      "w": 1440,
+      "x": 0,
+      "y": 27000
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-10-22T03:05:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "view": "canvas"
+  },
+  "notes": {
+    "t1": {
+      "kind": "title1",
+      "maxW": 3090,
+      "text": "TECHNO JAPAN v2 — 実データ同期（LP/data）・Bebas / DM Sans / Space Mono・インタラクション付き",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "t2": {
+      "kind": "title1",
+      "maxW": 3900,
+      "text": "一覧 — NEWS / ARTISTS（カテゴリ・ジャンルのフィルターが動作）",
+      "w": 240,
+      "x": 0,
+      "y": 5500
+    },
+    "t3": {
+      "kind": "title1",
+      "maxW": 3900,
+      "text": "一覧 — FESTIVALS / VENUES（Season・Type・Cityのフィルター、Grid / List 切替）",
+      "w": 240,
+      "x": 0,
+      "y": 9500
+    },
+    "t4": {
+      "kind": "title1",
+      "maxW": 3900,
+      "text": "詳細 — 記事（現サイトのヒーロー構成を継承）/ フェス（タブ切替）",
+      "w": 240,
+      "x": 0,
+      "y": 13500
+    },
+    "t5": {
+      "kind": "title1",
+      "maxW": 3900,
+      "text": "詳細 — 会場 / アーティスト",
+      "w": 240,
+      "x": 0,
+      "y": 18100
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Mobile.dc.html",
+    "System.dc.html",
+    "News.dc.html",
+    "MobileNews.dc.html",
+    "Artists.dc.html",
+    "MobileArtists.dc.html",
+    "Festivals.dc.html",
+    "MobileFestivals.dc.html",
+    "Venues.dc.html",
+    "MobileVenues.dc.html",
+    "NewsDetail.dc.html",
+    "MobileNewsDetail.dc.html",
+    "FestivalDetail.dc.html",
+    "MobileFestivalDetail.dc.html",
+    "VenueDetail.dc.html",
+    "MobileVenueDetail.dc.html",
+    "ArtistDetail.dc.html",
+    "MobileArtistDetail.dc.html",
+    "Search.dc.html",
+    "Menu.dc.html",
+    "About.dc.html",
+    "MobileAbout.dc.html",
+    "Apply.dc.html",
+    "MobileApply.dc.html",
+    "Writer.dc.html",
+    "MobileWriter.dc.html"
+  ],
+  "pages": [],
+  "title": "Techno Japan — TOP Redesign"
+}

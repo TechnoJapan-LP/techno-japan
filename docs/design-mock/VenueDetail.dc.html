@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Techno Japan — Venue</title>
+<script src="./support.js"></script>
+<script src="./tj-data.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=DM+Sans:wght@300;400;500&amp;family=Space+Mono:wght@400;700&amp;family=Noto+Sans+JP:wght@300;400;500;700&amp;display=swap">
+<style>
+body{margin:0;background:#080808}
+a{color:#f0ede8;text-decoration:none}a:hover{color:#a82f31}
+.tj{position:relative;overflow:clip;font-family:"DM Sans","Noto Sans JP",system-ui,sans-serif;font-weight:300;color:#f0ede8;background:#080808;background-image:repeating-linear-gradient(90deg,rgba(240,237,232,.03) 0 1px,transparent 1px 80px),repeating-linear-gradient(0deg,rgba(240,237,232,.03) 0 1px,transparent 1px 80px);-webkit-font-smoothing:antialiased}
+.disp{font-family:"Bebas Neue","Noto Sans JP",sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:.01em;line-height:.95;margin:0}
+.mono{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(240,237,232,.62)}
+.red{color:var(--accent)}
+.wrap{position:relative;max-width:1360px;margin:0 auto;padding:0 40px;box-sizing:border-box}
+.pill{display:inline-flex;align-items:center;gap:6px;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#f0ede8;border:1px solid rgba(240,237,232,.35);padding:5px 12px;white-space:nowrap}
+.pill::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--accent)}
+.img{overflow:hidden;background:rgba(240,237,232,.04)}
+.img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+a:hover .img img{transform:scale(1.04)}
+.nav a{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase}
+.nav a.on{color:var(--accent)}
+.ham{display:none}
+.rule{border-top:1px solid rgba(240,237,232,.12)}
+.head{display:grid;grid-template-columns:7fr 5fr;gap:48px;align-items:end}
+.head h1{font-size:clamp(64px,10vw,160px)}
+.fact{display:grid;grid-template-columns:120px 1fr;gap:16px;padding:14px 0;border-top:1px solid rgba(240,237,232,.1);font-size:15px;align-items:baseline}
+.btn2{display:inline-flex;align-items:center;justify-content:center;height:48px;padding:0 24px;border:1px solid rgba(240,237,232,.4);color:#f0ede8;font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase}
+.btn2:hover{border-color:var(--accent);color:var(--accent)}
+.row{display:grid;grid-template-columns:100px 1fr 1fr 140px;gap:24px;align-items:center;padding:16px 0;border-top:1px solid rgba(240,237,232,.1)}
+.row:hover .n{color:#a82f31}
+.card{display:flex;flex-direction:column;gap:10px;min-width:0}
+.card:hover .t{color:#a82f31}
+.map{position:relative;background:rgba(240,237,232,.03);background-image:repeating-linear-gradient(90deg,rgba(240,237,232,.06) 0 1px,transparent 1px 48px),repeating-linear-gradient(0deg,rgba(240,237,232,.06) 0 1px,transparent 1px 48px)}
+.dot{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px rgba(255,45,45,.15)}
+.chip{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(240,237,232,.62);background:none;border:1px solid rgba(240,237,232,.18);padding:10px 14px;cursor:pointer;min-height:36px}
+.chip.on{border-color:var(--accent);color:var(--accent)}
+@media (max-width:900px){
+ .wrap{padding:0 16px}.nav,.hdate{display:none !important}.ham{display:flex}
+ .head,.g2,.g3,.g4{grid-template-columns:repeat(1,minmax(0,1fr)) !important}
+ .row{grid-template-columns:72px 1fr 90px}.row .hide{display:none}
+ .gal{grid-template-columns:1fr !important;grid-auto-rows:220px !important}.gal > div{grid-column:span 1 !important;grid-row:span 1 !important}
+}
+
+/* ===== moving background (same as live .tj-bg: grain + drifting 80px grid + floating red glow + scan line) ===== */
+.tj{background:transparent !important}
+.tjbg{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background-image:url(img/grain.png);background-size:120px 120px}
+.tjbg::before{content:"";position:absolute;inset:-80px;background-image:repeating-linear-gradient(90deg,rgba(240,237,232,.035) 0 1px,transparent 1px 80px),repeating-linear-gradient(0deg,rgba(240,237,232,.035) 0 1px,transparent 1px 80px);animation:tjGrid 20s linear infinite;will-change:transform}
+.tjbg::after{content:"";position:absolute;top:0;left:0;width:60vw;height:60vw;border-radius:50%;background:radial-gradient(circle,rgba(255,45,45,.06) 0%,transparent 60%);filter:blur(40px);animation:tjGlow 18s ease-in-out infinite;will-change:transform}
+.tjbg i{position:absolute;top:0;left:0;right:0;height:1px;background:rgba(240,237,232,.07);animation:tjScan 8s linear infinite;will-change:transform}
+@keyframes tjGrid{from{transform:translate(0,0)}to{transform:translate(80px,80px)}}
+@keyframes tjGlow{0%,100%{transform:translate(-10vw,-20vh)}50%{transform:translate(50vw,60vh)}}
+@keyframes tjScan{from{transform:translateY(-2vh)}to{transform:translateY(102vh)}}
+@media (prefers-reduced-motion:reduce){.tjbg::before,.tjbg::after,.tjbg i{animation:none}.tjbg i{display:none}}
+.hdr{position:sticky;top:0;z-index:40;background:rgba(8,8,8,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(240,237,232,.08)}
+</style>
+</helmet>
+
+<div class="tj" style="--accent:{{accent}};display:flex;flex-direction:column;min-height:100%">
+  <div class="tjbg" aria-hidden="true"><i></i></div>
+
+  <header class="hdr">
+   <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;height:64px">
+    <a href="Main.dc.html" aria-label="Techno Japan" style="display:flex;align-items:center;gap:10px"><img src="img/logo-wordmark.png" alt="Techno Japan" style="height:15px;width:auto;display:block"></a>
+    <nav class="nav" style="display:flex;gap:28px" aria-label="Main"><a href="Main.dc.html">Top</a><a href="News.dc.html">News</a><a href="Festivals.dc.html">Festivals</a><a href="Artists.dc.html">Artists</a><a href="Venues.dc.html" class="on">Venues</a><a href="About.dc.html">About</a></nav>
+    <div style="display:flex;align-items:center;gap:18px">
+      
+      <button class="hdate" onClick="{{openSearch}}" aria-label="Search" style="display:flex;align-items:center;gap:8px;height:44px;min-width:44px;padding:0 12px;background:none;border:1px solid rgba(240,237,232,.18);color:#f0ede8;cursor:pointer;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg><span class="hdate">Search</span></button>
+      <span class="mono" style="color:#f0ede8">JA <span style="color:rgba(240,237,232,.4)">/</span> <a href="#en" style="color:rgba(240,237,232,.62)">EN</a></span>
+      <button class="ham" onClick="{{openMenu}}" aria-label="Menu" aria-haspopup="dialog" style="background:none;border:0;color:#f0ede8;padding:0;width:44px;height:44px;align-items:center;justify-content:flex-end;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 8h18M3 16h18"></path></svg></button>
+    </div>
+   </div>
+  </header>
+
+  <!-- GALLERY SPREAD -->
+  <section class="wrap" style="width:100%;padding-top:24px">
+    <!-- CMS: IMAGE (main) + GALLERY (up to 2 sub photos). With only the main image the spread is one full-width photo. -->
+    <sc-if value="{{hasGallery}}" hint-placeholder-val="{{ true }}">
+    <div class="gal" style="display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-auto-rows:230px;gap:12px">
+      <div class="img" style="grid-column:span 8;grid-row:span 2"><img src="{{v.img}}" alt=""></div>
+      <div class="img" style="grid-column:span 4"><img src="{{gal1}}" alt=""></div>
+      <div class="img" style="grid-column:span 4"><img src="{{gal2}}" alt=""></div>
+    </div>
+    </sc-if>
+    <sc-if value="{{noGallery}}" hint-placeholder-val="{{ false }}"><div class="img" style="aspect-ratio:21/9"><img src="{{v.img}}" alt=""></div></sc-if>
+
+  </section>
+
+  <!-- HEAD -->
+  <section class="wrap" style="width:100%;padding-top:40px;display:flex;flex-direction:column;gap:32px">
+    <nav class="mono" style="display:flex;gap:10px" aria-label="Breadcrumb"><a href="Venues.dc.html" style="color:rgba(240,237,232,.62)">Venues</a><span>/</span><span>{{v.city}}</span><span>/</span><span style="color:#f0ede8">{{v.name}}</span></nav>
+    <div class="head">
+      <div style="display:flex;flex-direction:column;gap:20px;min-width:0">
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="pill">{{v.typeUpper}}</span><span class="mono">{{v.metaLine}}</span></div>
+        <h1 class="disp">{{v.name}}</h1>
+        <span class="mono">{{v.kana}}</span>
+        <p style="font-size:18px;line-height:1.8;margin:0;max-width:680px;color:rgba(240,237,232,.9)">{{v.desc}}</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px"><a href="{{v.url}}" class="btn2">Website ↗</a><a href="{{v.ig}}" class="btn2">Instagram ↗</a><a href="#map" class="btn2">Google Maps ↗</a></div>
+      </div>
+      <div style="display:flex;flex-direction:column;min-width:0">
+        <span class="mono red" style="padding-bottom:12px;border-bottom:1px solid rgba(240,237,232,.3)">Facts</span>
+        <div class="fact" style="border-top:0"><span class="mono">Type</span><span>{{v.typeUpper}}</span></div>
+        <div class="fact"><span class="mono">Area</span><span>{{v.area}} · {{v.city}}</span></div>
+        <div class="fact"><span class="mono">Capacity</span><span>{{v.capacity}}</span></div>
+        <div class="fact"><span class="mono">Address</span><span>{{v.address}}</span></div>
+        <div class="fact"><span class="mono">Access</span><span>{{v.access}}</span></div>
+        <div class="fact"><span class="mono">Genre</span><span class="mono" style="color:#f0ede8">{{v.genreLine}}</span></div>
+        <!-- CMS: HOURS / FEATURES — rows appear only when the venue has them filled in -->
+        <sc-if value="{{v.hasHours}}" hint-placeholder-val="{{ true }}"><div class="fact"><span class="mono">Hours</span><span>{{v.hours}}</span></div></sc-if>
+        <sc-if value="{{v.hasFeatures}}" hint-placeholder-val="{{ true }}"><div class="fact"><span class="mono">Features</span><span style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{v.featureChips}}" as="f" hint-placeholder-count="2"><span class="pill" style="padding:4px 10px">{{f.label}}</span></sc-for></span></div></sc-if>
+        <div style="border-top:1px solid rgba(240,237,232,.1)"></div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- UPCOMING HERE -->
+  <section class="wrap" style="width:100%;padding-top:104px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;border-top:1px solid rgba(240,237,232,.14);padding-top:18px;margin-bottom:32px"><h2 class="disp" style="font-size:44px">Upcoming at {{v.name}}</h2><div style="display:flex;gap:8px"><button class="chip on">Upcoming</button><button class="chip">Past</button></div></div>
+    <div class="row mono" style="border-top:0;padding:0 0 10px"><span>Date</span><span>Event</span><span class="hide">Lineup</span><span>Status</span></div>
+    <sc-for list="{{events}}" as="e" hint-placeholder-count="3">
+      <a href="FestivalDetail.dc.html" class="row">
+        <span class="disp" style="font-size:30px">{{e.date}}</span>
+        <span class="n" style="font-weight:400;font-size:17px">{{e.name}}</span>
+        <span class="hide" style="font-size:14px;color:rgba(240,237,232,.7)">{{e.lineupLine}}</span>
+        <span class="mono red">{{e.statusLabel}}</span>
+      </a>
+    </sc-for>
+    <div class="rule"></div>
+    <p class="mono" style="margin:14px 0 0">イベントDBと接続：VENUES.ID ↔ EVENTS.VENUE_ID で自動表示</p>
+  </section>
+
+  <!-- NEARBY -->
+  <section class="wrap" style="width:100%;padding-top:96px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;border-top:1px solid rgba(240,237,232,.14);padding-top:18px;margin-bottom:32px"><h2 class="disp" style="font-size:44px">Nearby · {{v.city}}</h2><a href="Venues.dc.html" class="mono">All venues →</a></div>
+    <div class="g4" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px">
+      <sc-for list="{{nearby}}" as="n" hint-placeholder-count="4">
+        <a href="VenueDetail.dc.html" class="card">
+          <div class="img" style="aspect-ratio:4/3"><img src="{{n.img}}" alt=""></div>
+          <span class="disp t" style="font-size:28px">{{n.name}}</span>
+          <span class="mono">{{n.metaLine}} · {{n.typeLine}}</span>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- STORIES -->
+  <section class="wrap" style="width:100%;padding-top:96px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;border-top:1px solid rgba(240,237,232,.14);padding-top:18px;margin-bottom:32px"><h2 class="disp" style="font-size:44px">Stories</h2><a href="News.dc.html" class="mono">All stories →</a></div>
+    <div class="g3" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px">
+      <sc-for list="{{stories}}" as="a" hint-placeholder-count="3">
+        <a href="NewsDetail.dc.html" class="card">
+          <div class="img" style="aspect-ratio:4/3"><img src="{{a.img}}" alt=""></div>
+          <span class="mono red">{{a.meta}}</span>
+          <span class="disp t" style="font-size:28px">{{a.h1}}</span>
+          <span style="font-size:15px;line-height:1.45;color:rgba(240,237,232,.85)">{{a.h2}}</span>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+
+  <dc-import name="Search" is-open="{{searchOpen}}" on-close="{{closeSearch}}" hint-size="0px,0px"></dc-import>
+  <dc-import name="Menu" is-open="{{menuOpen}}" on-close="{{closeMenu}}" on-search="{{menuSearch}}" current="venues" hint-size="0px,0px"></dc-import>
+
+  <footer class="wrap" style="width:100%;padding:112px 40px 40px;display:flex;flex-direction:column;gap:32px">
+    <div class="rule" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px;padding-top:40px">
+      <img src="img/logo-wordmark.png" alt="Techno Japan" style="height:15px;width:auto;display:block;align-self:center">
+      <nav class="nav" style="display:flex;gap:24px;flex-wrap:wrap" aria-label="Footer"><a href="News.dc.html">News</a><a href="Festivals.dc.html">Festivals</a><a href="Artists.dc.html">Artists</a><a href="Venues.dc.html">Venues</a><a href="About.dc.html">About</a><a href="Apply.dc.html">Apply</a><a href="Writer.dc.html">Writer</a></nav>
+      <div style="display:flex;gap:20px" class="mono"><a href="#ig" style="color:rgba(240,237,232,.62)">Instagram</a><a href="#th" style="color:rgba(240,237,232,.62)">Threads</a></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px" class="mono"><span>© 2026 Techno Japan</span><span style="color:#f0ede8">Japan's Underground, Curated.</span></div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#ff2d2d","options":["#ff2d2d","#a82f31","#f0ede8"]},"$preview":{"width":1440,"height":3600}}'>
+class Component extends DCLogic {
+  constructor(p){ super(p); this.state = { data: (typeof window !== 'undefined' && window.TJ_DATA) || null }; }
+  componentDidMount(){ if(!this.state.data){ fetch('./tj-data.json').then(r=>r.json()).then(d=>this.setState({data:d})).catch(()=>{}); } }
+  renderVals() {
+    const D = this.state.data || {articles:[],festivals:[],venues:[]};
+    const V = D.venues;
+    const v0 = V.find(x => x.id==='oath') || V[0] || {name:'',city:'',area:'',type:'',kana:'',desc:'',url:'#',ig:'#',address:'',access:'',capacity:'',genre:[],metaLine:'',img:''};
+    const FEAT = {'after-hours':'After-hours','daytime':'Daytime','vinyl':'Vinyl','outdoor':'Outdoor','rooftop':'Rooftop','listening':'Listening','no-cover':'No cover','cash-only':'Cash only','cashless-only':'Cashless only','id-required':'ID required','no-photo':'No photo','smoking':'Smoking','no-reentry':'No re-entry'};
+    const v = {...v0, typeUpper:(v0.type||'').toUpperCase(), genreLine:(v0.genre||[]).join(' / '), hasHours: !!v0.hours, hasFeatures: !!(v0.features||[]).length, featureChips: (v0.features||[]).map(k => ({label: FEAT[k] || k}))};
+    const same = V.filter(x => x.id!==v.id && x.city===v.city);
+    const gal = (v0.gallery||[]).filter(Boolean); const hasGallery = gal.length >= 2;
+    const galNote = hasGallery ? 'Photos · 1 main + ' + gal.length + ' gallery' : 'Photo · main only (add 2 gallery photos in the CMS for the 3-up spread)';
+    const events = D.festivals.filter(f=>f.upcoming).slice(0,3).map(f => ({...f, lineupLine: (f.lineupLabels||[]).slice(0,3).join(', ')}));
+    const stories = D.articles.filter(a => a.cat==='GUIDE' || a.cat==='REPORT').slice(0,3);
+    return { accent: this.props.accent ?? '#ff2d2d',
+      searchOpen: !!this.state.searchOpen, openSearch: () => this.setState({searchOpen: true}), closeSearch: () => this.setState({searchOpen: false}),
+      menuOpen: !!this.state.menuOpen, openMenu: () => this.setState({menuOpen: true}), closeMenu: () => this.setState({menuOpen: false}), menuSearch: () => this.setState({menuOpen: false, searchOpen: true}), v, hasGallery, noGallery: !hasGallery, gal1: gal[0]||'', gal2: gal[1]||'', galNote, events, nearby: same.slice(0,4), stories };
+  }
+}
+</script>
+</body>
+</html>
