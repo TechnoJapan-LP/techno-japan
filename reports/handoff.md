@@ -11697,3 +11697,163 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - 外部Google画像取得が240秒を超える環境では`preflight --fast`が失敗するため、ネットワーク安定環境で再実行すること。実ブラウザ確認と省略なしpreflightが未完了のため、公開扱いにしない。
+
+### 2026-10-22 アーティスト一覧の検索欄をナビ下へ固定 — 未コミット
+
+### 実施
+- `LP/artists.html` の `.artists-toolbar` の sticky `top` を、実測した `<nav>` 高さの `--tj-nav-height` に変更。
+- `ResizeObserver` と resize / fonts.ready でナビ高さを再計測し、JA から `enHubFromJa` で EN artists を再生成。
+- `scripts/check_regressions.py` が CSS 変数の sticky top も検査できるよう回帰ガードを更新。
+
+### コミット
+- 未コミット（ユーザー指定）。commit・push・Publish pipeline・本番データ書き込みは未実施。
+
+### 検証
+- `node scripts/build-detail-pages.mjs`: 成功。EN artists を生成。JA/EN とも954行、toolbar/search/genre各1件。
+- `python3 scripts/check_regressions.py`: 成功。`artist_filter_sticky_pages` は2/2。
+- `bash scripts/preflight.sh --fast`: 48件成功、5件省略。外部Google画像取得が240秒でtimeoutし、詳細ページ生成のみ失敗。
+- CDPの390x844 dpr2 / 1280x900 / 1546x900実測: 未実施。sandboxでローカルHTTPサーバーのbindが拒否された。
+
+### 変更したパターン
+- artists JA/EN のナビ高さ連動 sticky toolbar。
+- CSS変数を使う artists sticky を認識する回帰検査。
+
+### 未確認の類似パターン
+- 確認済み・0件：festivals.html / venues.html は今回変更なし。
+- 未確認：実ブラウザでの3 viewport、入力中のキーボード表示、JA/ENの操作確認。
+
+### 次の担当への注意・判断待ち
+- localhost bind可能かつ外部画像取得可能な環境で、指定CDP実測と`bash scripts/preflight.sh --fast`を再実行すること。未確認経路があるため公開扱いにしない。
+
+### 2026-10-22 アーティスト出演予定への絞り込み反映 — 未コミット
+
+### 実施
+- `LP/artists.html` にジャンル・検索の共通判定 `artistMatchesFilters` を追加し、全アーティスト一覧と「UPCOMING ON STAGE」で共有。
+- 条件変更時に出演予定も再描画し、該当0件ではセクションを`hidden`にする。出演回数順・上位12件の規則は維持。
+- `enHubFromJa` 経由で `LP/en/artists.html` を再生成。コミット・pushなし。
+
+### コミット
+- 未コミット（ユーザー指定）。commit・pushなし。
+
+### 検証
+- `node scripts/build-detail-pages.mjs`: 成功。EN artists を生成。JA/EN とも961行。
+- `python3 scripts/check_regressions.py`: 成功。artist_filter_sticky_pages 2/2、回帰なし。
+- データ確認: 全件ALL、TECHNO、出演予定0件になるジャンル候補（JUNGLE等）をデータ上で確認。JUNGLEは全アーティストには存在するが、今後60日の出演予定集合には0件。
+- `bash scripts/preflight.sh --fast`: 詳細ページ生成が外部Google画像取得待ち240秒でtimeoutし1件失敗。その他48件成功、5件省略。
+- headless Chrome操作: 未確認。sandboxのローカルHTTPサーバーbind拒否、`file://`接続もChrome起動timeout。
+
+### 変更したパターン
+- `renderUpcomingArtists` のフィルタ反映・再描画・空セクション隠蔽。
+- `getFilteredArtists` と出演予定で共有するジャンル／検索判定。
+
+### 未確認の類似パターン
+- 確認済み・0件：JA/ENの生成行数、静的回帰検査、データ上のALL/TECHNO/空結果候補。
+- 未確認：実ブラウザでのJA/EN、URL `?genre=`初期表示、検索入力、ハート・遅延画像・カーソル・状態保存の再描画後動作。
+
+### 次の担当への注意・判断待ち
+- localhost bind可能な環境で、ALL→TECHNO→JUNGLE等→検索語の実ブラウザ確認を実施すること。未確認経路があるため公開扱いにしない。
+
+### 2026-10-22 アーティスト一覧の件数表示削除 — 未コミット
+
+### 実施
+- `LP/artists.html` から `#artists-count` の要素・CSS・`textContent` 更新を削除。
+- JA を生成元として `node scripts/build-detail-pages.mjs` を実行し、`LP/en/artists.html` も再生成。
+- スマホでは検索欄を行いっぱいにし、固定ツールバー本体を 100px（上12px + 検索40px + gap8px + ジャンル40px）に維持。PC は検索欄の右側を空ける既存の最大幅を維持。
+- 0件時の `No artists found` は維持。
+
+### コミット
+- 未コミット（ユーザー指定）。commit・pushなし。
+
+### 検証
+- `node scripts/build-detail-pages.mjs`: 成功。EN artists を生成。
+- JA/EN artists: ともに954行。
+- `#artists-count` 参照: `LP/` と `scripts/` で0件。
+- `bash scripts/preflight.sh --fast`: 48件成功、5件省略。外部Google画像取得待ちの「詳細ページを生成できる」が240秒でtimeoutし、全体は1件失敗。
+- 実ブラウザ確認: 未実施。`--fast` のためブラウザ検査は省略。
+
+### 変更したパターン
+- artists JA/EN の件数表示要素、CSS、描画更新。
+- スマホ検索行の全幅化。
+
+### 未確認の類似パターン
+- 確認済み・0件：`#artists-count` の `LP/`・`scripts/` 参照。
+- 未確認：実ブラウザでのスマホ固定ツールバー操作、PC表示、JA/EN操作。
+
+### 次の担当への注意・判断待ち
+- 外部Google画像取得可能な環境で `bash scripts/preflight.sh --fast` を再実行すること。実ブラウザ確認と省略なしpreflightが未完了のため、公開扱いにしない。
+
+### 2026-10-22 アーティスト一覧の検索・ジャンル切替時の結果先頭復帰 — 未コミット
+
+### 実施
+- `LP/artists.html` に、検索（既存200msデバウンス後）・ジャンル切替の再描画時だけ結果見出しへ戻す処理を追加。
+- 出演予定セクションが表示中ならその見出し、非表示なら「すべてのアーティスト」見出しを対象にした。
+- `--tj-nav-height` と `.artists-toolbar` の実測高を合算して位置を計算し、初回描画・URL／状態復元では自動スクロールしない。
+- JA を生成元として `node scripts/build-detail-pages.mjs` を実行し、`LP/en/artists.html` を再生成。commit・pushなし。
+
+### コミット
+- 未コミット（ユーザー指定）。commit・pushなし。
+
+### 検証
+- `node scripts/build-detail-pages.mjs`: 成功。JA/EN artists とも985行、ENは `enHubFromJa` 生成。
+- `bash scripts/preflight.sh --fast`: 48件成功、5件省略。外部Google画像取得待ちで「詳細ページを生成できる」が240秒timeoutし、全体は1件失敗。
+- 実ブラウザ確認: 未実施。`--fast` ではブラウザ検査が省略される。
+
+### 変更したパターン
+- artists の検索／ジャンル操作後の見出し位置復帰、固定ツールバー高の実測。
+
+### 未確認の類似パターン
+- 確認済み・0件：JA/EN行数一致（985/985）、初回描画・URL／状態復元経路の自動スクロール呼び出し。
+- 未確認：実ブラウザでのPC／スマホ操作、入力中のキーボード・フォーカス保持、prefers-reduced-motion環境。
+
+### 次の担当への注意・判断待ち
+- 外部画像取得可能な環境で `bash scripts/preflight.sh --fast` を再実行し、実ブラウザで検索入力・ジャンル切替・URL `?genre=`・戻る操作を確認すること。未確認経路があるため公開扱いにしない。
+
+### 2026-10-22 アーティスト一覧の描画後スクロール補正 — 未コミット
+
+### 実施
+- `LP/artists.html` の検索・ジャンル切替共通処理を、一覧と出演予定の再描画後に `requestAnimationFrame` で見出しを再取得して位置計算するよう修正。
+- JA を生成元として `node scripts/build-detail-pages.mjs` を実行し、`LP/en/artists.html` を再生成。commit・pushなし。
+
+### コミット
+- 未コミット（ユーザー指定）。commit・pushなし。
+
+### 検証
+- 再生成: 成功。JA/EN artists とも986行で一致。ENは `enHubFromJa` 生成。
+- `bash scripts/preflight.sh --fast`: 48件成功、5件省略、1件失敗。外部Google画像取得待ちの「詳細ページを生成できる」が240秒でtimeout。
+- 実ブラウザ確認: 未実施。`--fast` ではブラウザ検査が省略される。
+
+### 変更したパターン
+- アーティスト一覧の検索・ジャンル切替後、描画完了後に表示中の結果見出しへスクロールする処理。
+
+### 未確認の類似パターン
+- 未確認：実ブラウザでの390×844／1546×900、JA/EN、検索入力、HOUSE切替、出演予定表示／非表示の操作結果。
+- 確認済み・0件：JA/EN行数一致、ENハブの生成経路、`preflight --fast` のtimeout以外の検査。
+
+### 次の担当への注意・判断待ち
+- 外部画像取得可能な環境で preflight を再実行すること。実ブラウザ確認が未完了のため公開扱いにしない。
+
+### 2026-10-22 アーティスト一覧のジャンル切替スクロール安定化 — 未コミット
+
+### 実施
+- `LP/artists.html` の一覧領域（出演予定・全件一覧・グリッド）に `overflow-anchor: none` を追加。
+- 検索・ジャンル切替後のスクロールを2回の `requestAnimationFrame` 後に実行し、約150ms後に見出し位置を再確認して1回だけ補正する処理へ変更。
+- 連続操作時に古い補正が効かないよう、操作ごとのリクエスト番号を追加。戻るボタンの位置復元処理は変更なし。
+- JAを生成元として `node scripts/build-detail-pages.mjs` を実行し、ENハブを再生成。commit・pushなし。
+
+### コミット
+- 未コミット（ユーザー指定）。commit・pushなし。
+
+### 検証
+- 再生成: 成功。JA/EN artists とも1013行で一致。ENは `enHubFromJa` 生成。
+- `bash scripts/preflight.sh --fast`: 48件成功、5件省略、1件失敗。外部Google画像取得待ちの「詳細ページを生成できる」が240秒でtimeout。
+- 実ブラウザ確認: 未実施。`--fast` ではブラウザ検査が省略される。
+
+### 変更したパターン
+- アーティスト一覧の検索・ジャンル切替後の描画待ちスクロール、遅延レイアウト後の1回限り補正、一覧領域のスクロールアンカー抑止。
+
+### 未確認の類似パターン
+- 未確認：実ブラウザでの390px／1546px、JA/EN、ALL/HOUSE/TECHNO/JUNGLE、検索操作、遅延画像・リビール後の実測。
+- 確認済み・0件：戻るボタンの位置復元処理への変更、JA/EN行数不一致。
+
+### 次の担当への注意・判断待ち
+- 外部画像取得可能な環境で省略なしの `bash scripts/preflight.sh` と実ブラウザ確認を再実行すること。未確認経路とpreflight失敗があるため公開扱いにしない。

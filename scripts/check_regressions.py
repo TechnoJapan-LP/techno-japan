@@ -292,7 +292,7 @@ def measure():
     artist_toolbar_re = re.compile(
         r"\.artists-toolbar\s*\{[^}]*"
         r"position:\s*sticky\s*;[^}]*"
-        r"top:\s*0\s*;[^}]*"
+        r"top:\s*(?:0|var\(--tj-nav-height,\s*0px\))\s*;[^}]*"
         r"z-index:\s*20\s*;",
         re.S,
     )
