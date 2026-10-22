@@ -422,7 +422,7 @@ hub_pages:
     min_markers: 18                # 実測 23
     min_container_bytes: 10000     # 実測 17,101
   news.html:
-    marker: feed-card              # news は <main> を使わず別コンテナへ描画する
+    marker: news-card              # news は <main> を使わず別コンテナへ描画する
     min_markers: 1                 # 実測 1（ARTICLES が1件のみのため）
     min_container_bytes: 0         # <main> は空が正常
   index.html:
@@ -483,7 +483,7 @@ hub_pages:
     min_markers: 18                # 実測 23
     min_container_bytes: 10000
   en/news.html:
-    marker: feed-card
+    marker: news-card
     ja_containers: [news-featured, feed-grid]
     max_ja_chars: 27    # 2026-08-03 実測。記事タイトル27字。title_en が未入力（CMS の ENGLISH VERSION）
     min_markers: 1                 # 実測 1

@@ -20,6 +20,7 @@
   --accent-rgb: 255, 45, 45; --accent-soft-rgb: 168, 47, 49;
   --black: #000; --white: #fff;
   --text-a01: rgba(var(--text-rgb), .01); --text-a02: rgba(var(--text-rgb), .02); --text-a025: rgba(var(--text-rgb), .025); --text-a03: rgba(var(--text-rgb), .03); --text-a035: rgba(var(--text-rgb), .035); --text-a04: rgba(var(--text-rgb), .04); --text-a05: rgba(var(--text-rgb), .05); --text-a06: rgba(var(--text-rgb), .06); --text-a065: rgba(var(--text-rgb), .065); --text-a075: rgba(var(--text-rgb), .075); --text-a08: rgba(var(--text-rgb), .08); --text-a10: rgba(var(--text-rgb), .1); --text-a11: rgba(var(--text-rgb), .11); --text-a12: rgba(var(--text-rgb), .12); --text-a14: rgba(var(--text-rgb), .14); --text-a15: rgba(var(--text-rgb), .15); --text-a16: rgba(var(--text-rgb), .16); --text-a18: rgba(var(--text-rgb), .18); --text-a20: rgba(var(--text-rgb), .2); --text-a22: rgba(var(--text-rgb), .22); --text-a25: rgba(var(--text-rgb), .25); --text-a28: rgba(var(--text-rgb), .28); --text-a30: rgba(var(--text-rgb), .3); --text-a35: rgba(var(--text-rgb), .35); --text-a40: rgba(var(--text-rgb), .4); --text-a45: rgba(var(--text-rgb), .45); --text-a48: rgba(var(--text-rgb), .48); --text-a50: rgba(var(--text-rgb), .5); --text-a55: rgba(var(--text-rgb), .55); --text-a60: rgba(var(--text-rgb), .6); --text-a62: rgba(var(--text-rgb), .62); --text-a72: rgba(var(--text-rgb), .72); --text-a75: rgba(var(--text-rgb), .75); --text-a78: rgba(var(--text-rgb), .78); --text-a80: rgba(var(--text-rgb), .8); --text-a85: rgba(var(--text-rgb), .85); --text-a90: rgba(var(--text-rgb), .9);
+  --text-a65: rgba(var(--text-rgb), .65); --text-a92: rgba(var(--text-rgb), .92);
   --bg-a02: rgba(var(--bg-rgb), .02); --bg-a06: rgba(var(--bg-rgb), .06); --bg-a10: rgba(var(--bg-rgb), .1); --bg-a12: rgba(var(--bg-rgb), .12); --bg-a18: rgba(var(--bg-rgb), .18); --bg-a30: rgba(var(--bg-rgb), .3); --bg-a34: rgba(var(--bg-rgb), .34); --bg-a40: rgba(var(--bg-rgb), .4); --bg-a55: rgba(var(--bg-rgb), .55); --bg-a58: rgba(var(--bg-rgb), .58); --bg-a62: rgba(var(--bg-rgb), .62); --bg-a70: rgba(var(--bg-rgb), .7); --bg-a78: rgba(var(--bg-rgb), .78); --bg-a80: rgba(var(--bg-rgb), .8); --bg-a82: rgba(var(--bg-rgb), .82); --bg-a85: rgba(var(--bg-rgb), .85); --bg-a90: rgba(var(--bg-rgb), .9); --bg-a92: rgba(var(--bg-rgb), .92); --bg-a95: rgba(var(--bg-rgb), .95); --bg-a97: rgba(var(--bg-rgb), .97);
   --accent-a03: rgba(var(--accent-rgb), .03); --accent-a05: rgba(var(--accent-rgb), .05); --accent-a06: rgba(var(--accent-rgb), .06); --accent-a10: rgba(var(--accent-rgb), .1); --accent-a20: rgba(var(--accent-rgb), .2); --accent-a30: rgba(var(--accent-rgb), .3); --accent-a45: rgba(var(--accent-rgb), .45); --accent-a50: rgba(var(--accent-rgb), .5); --accent-a65: rgba(var(--accent-rgb), .65);
   --accent-soft-a06: rgba(var(--accent-soft-rgb), .06); --accent-soft-a08: rgba(var(--accent-soft-rgb), .08); --accent-soft-a18: rgba(var(--accent-soft-rgb), .18); --accent-soft-a55: rgba(var(--accent-soft-rgb), .55); --accent-soft-a60: rgba(var(--accent-soft-rgb), .6); --accent-soft-a70: rgba(var(--accent-soft-rgb), .7);
@@ -42,22 +43,24 @@
 .chip {
   display: inline-flex;
   align-items: center;
-  min-height: 32px;
-  padding: 0 12px;
+  min-height: 36px;
+  padding: 0 14px;
   border: 1px solid var(--text-a18);
   background: transparent;
-  color: var(--text-a72);
+  color: var(--text-a62);
   font: 10px var(--font-mono);
-  letter-spacing: .12em;
+  letter-spacing: .15em;
   text-transform: uppercase;
+  cursor: pointer;
 }
-.chip.is-active, .chip[aria-selected="true"] { border-color: var(--accent); color: var(--accent); }
+.chip:hover { border-color: var(--accent-soft); color: var(--text); }
+.chip.is-active, .chip[aria-pressed="true"], .chip[aria-selected="true"] { border-color: var(--accent); color: var(--accent); }
 .pill {
   display: inline-flex;
   align-items: center;
   gap: 7px;
   min-height: 28px;
-  padding: 0 10px;
+  padding: 5px 12px;
   border: 1px solid var(--text-a35);
   color: var(--text);
   font: 10px var(--font-mono);
@@ -65,6 +68,18 @@
   text-transform: uppercase;
 }
 .pill::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+.wrap { max-width: 1360px; margin: 0 auto; padding: 0 40px; box-sizing: border-box; }
+.disp { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; line-height: .95; margin: 0; }
+.mono { font-family: var(--font-mono); font-size: 10px; letter-spacing: .15em; text-transform: uppercase; }
+.red { color: var(--accent); }
+.rule { border-top: 1px solid var(--text-a12); }
+.pagehead { font-size: 168px; }
+.btn2 { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 28px; border: 1px solid var(--text-a40); color: var(--text); background: none; font: 11px var(--font-mono); letter-spacing: .2em; text-transform: uppercase; cursor: pointer; }
+.btn2:hover { border-color: var(--accent-soft); color: var(--text); }
+@media (max-width: 900px) {
+  .wrap { padding-left: 16px; padding-right: 16px; }
+  .pagehead { font-size: 88px; }
+}
 
 /* Cross-page fade (MPA View Transitions — progressive enhancement,
    Chrome 126+ / Safari 18+; older browsers just navigate normally) */

@@ -76,7 +76,7 @@ const ARTICLE_FX_CSS_VERSION = 16;
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
 const COMMON_JS_VERSION = 19;   // 2026-10-22 design v2 shared menu behavior
-const COMMON_CSS_VERSION = 45;   // 2026-10-23 footer social selector and hit area
+const COMMON_CSS_VERSION = 46;   // 2026-10-23 magazine primitives
 const DATA_HUB_VERSION = 11;
 const SEARCH_JS_VERSION = 8;
 const LANG_TOGGLE_VERSION = 1;

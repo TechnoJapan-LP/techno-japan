@@ -12517,3 +12517,38 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - FUTURE の2本目はユーザーが CMS で featured を付けるまで GUIDE の「9月のまとめ」で補完される。
+
+### 2026-10-23 redesign/magazine フェーズ3-1 NEWS 一覧（Claude 検証・コミット。本番未反映）
+
+### 実施
+- `LP/news.html` をモック（docs/design-mock/News.dc.html）の構成へ置き換え。EN は `build-detail-pages.mjs` が JA から生成。
+  見出し `News`＋件数・更新日（公開記事の最新日付）／カテゴリのチップ／リード（3:2）／2本（16:9）／3本（4:3、`featured` の記事を優先し `Feature ·`）／横長リスト（260px）／Load more（+6）。
+- 本番の「見た目でない機能」は残した: `#article/<id>` → 記事ページへ転送、`#tag/<tag>`・`?tag=`（events.html から来る）でタグ絞り込み（`#tag ×` のチップで解除）、`?category=` `?limit=`、記事から戻った時のスクロール位置の復元。
+- 共通部品（`.wrap` `.disp` `.mono` `.red` `.rule` `.pagehead` `.btn2`、`.chip` をモックの値に）を `LP/common.css` に1か所で定義。`--text-a65` / `--text-a92` を追加（TOP で `--text-a92` が未定義だった）。
+- 再発防止の検査を2つ追加: `scripts/check_hub_head.py`（ハブ12枚の head に GA4・OG・twitter・manifest・JSON-LD 等がそろっているか。preflight に登録）、`scripts/check_regressions.py` に「未定義の CSS 変数」。
+
+### コミット
+- このエントリを含むコミット（redesign/magazine）。push・本番公開はしていない。
+
+### 検証
+- Codex の1回目の実装で、head から **GA4・og:image・twitter・manifest・CollectionPage の JSON-LD** 等が消えていた（main と head のタグを機械比較して発見）→ 復元し、上の head 検査で止まるようにした。
+- headless Chrome（390px@3x / 1280px@2x、JA/EN、`$CLAUDE_JOB_DIR/tmp/newsverify.mjs`）で 68/68:
+  h1 は `News` の1つだけ／初期 1・2・3・6 本／記事リンクの重複 0／Load more で +6 → 最後でボタンが消える／カテゴリで絞り込み・URL に反映・ALL で戻る／
+  `#tag/` でタグのチップが出て ALL で解除／`?tag=<img onerror>` が実行されない／`#article/<id>` が記事ページへ転送／リストの9本目を開いて戻ると位置と表示本数（18）が戻る／
+  EN に日本語の表示 0／横はみ出し 0／JS エラー 0（記事へ素早く移動した時のブラウザの View Transition 中断の通知だけ。本番と同じ仕組み）。
+- 画質（表示px×dpr ≦ 取得px）: スマホは全画像 OK（リード 1074 必要→1179、2本・3本 1074→1440、リスト 360→480）。
+  PC のリードだけ 1344 必要→1179（**元画像が 1179px しかない**。一番大きい候補を使っている）。
+- 計算後のスタイルで確認: 見出しの上の余白（h1 の既定 margin が残っていた → 0）、リスト行の崩れ（見出しが画像の下に落ちていた → 右列へ）、サブの文字 10px → モックの px。
+- JA/EN 行数一致（news 216/216、index 350/350）、check_asset_versions / check_shared_chrome / check_hub_head / check_og_image / check_jsonld / check_regressions / check_cms_article_generated_preview 成功。
+
+### 変更したパターン
+- 本番 news.html から無くしたもの（モックに無い）: ヒーローの説明文、MONTHLY POPULAR（30日の閲覧数順）の並べ替え、GUIDE のカード4枚、ページ内のニュースレター登録欄、読了バー、読み込み中のスケルトン。
+- 記事カードのハートは付けていない（本番の news.html にも無く、お気に入りはフェス・アーティスト・会場だけを扱う）。
+
+### 未確認の類似パターン
+- 2本・3本の区切り線がリードの直下に付いている（モックは 64px 空けてから線）。フェーズ3-2 の作業で一緒に直す。
+- favorites.js の参照が12ページ v=3・2ページ v=4 に分かれている（フェーズ1で中身を変えた）。フェーズ3-2 でそろえる。
+- 実機（iPhone）での確認は未実施。
+
+### 次の担当への注意・判断待ち
+- 無くした機能（特に MONTHLY POPULAR とニュースレター欄）を戻すかはユーザー判断待ち。

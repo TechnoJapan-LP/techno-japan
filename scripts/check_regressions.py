@@ -61,6 +61,9 @@ STATIC_LINKS_RE = re.compile(
 JSONLD_JA_ALLOWED_KEYS = {"alternateName"}
 CUSTOM_PROPERTY_RE = re.compile(r"(?P<name>--[A-Za-z0-9_-]+)\s*:\s*(?P<value>[^;{}]+)")
 VAR_REFERENCE_RE = re.compile(r"var\(\s*(--[A-Za-z0-9_-]+)")
+VAR_CALL_RE = re.compile(r"var\(\s*(--[A-Za-z0-9_-]+)([^)]*)\)")
+RUNTIME_PROPERTY_RE = re.compile(r"style\.setProperty\(\s*['\"](--[A-Za-z0-9_-]+)")
+STYLE_ATTRIBUTE_PROPERTY_RE = re.compile(r"(?:style\s*=\s*['\"]|['\"]style['\"]\s*:\s*['\"])[^'\"]*?(--[A-Za-z0-9_-]+)\s*:")
 
 
 def read(p):
@@ -111,6 +114,34 @@ def custom_property_cycles():
         if state.get(name, 0) == 0:
             visit(name)
     return sorted(set(cycles))
+
+
+def runtime_custom_properties():
+    """JS/HTML から実行時に設定されるカスタムプロパティを集める。"""
+    names = set()
+    for path in sorted(LP.rglob("*.js")) + sorted(LP.rglob("*.html")):
+        text = read(path)
+        names.update(RUNTIME_PROPERTY_RE.findall(text))
+        names.update(STYLE_ATTRIBUTE_PROPERTY_RE.findall(text))
+    return names
+
+
+def undefined_css_variables():
+    """フォールバック無しの var() が common.css/自身で定義されているか検査する。"""
+    common_text = read(LP / "common.css")
+    common_defs = {m.group("name") for m in CUSTOM_PROPERTY_RE.finditer(common_text)}
+    runtime = runtime_custom_properties()
+    issues = []
+    for path in sorted(LP.rglob("*.css")):
+        text = read(path)
+        own_defs = {m.group("name") for m in CUSTOM_PROPERTY_RE.finditer(text)}
+        for match in VAR_CALL_RE.finditer(text):
+            name, rest = match.groups()
+            if "," in rest or name in common_defs or name in own_defs or name in runtime:
+                continue
+            line = text.count("\n", 0, match.start()) + 1
+            issues.append(f"{path.relative_to(ROOT)}:{line}: {name}")
+    return sorted(set(issues))
 
 
 def body_without_scripts(html):
@@ -517,6 +548,13 @@ def main():
         print("CSS カスタムプロパティの循環参照:")
         for cycle in cycles:
             print(f"  ✗ {cycle}")
+        return 1
+
+    undefined = undefined_css_variables()
+    if undefined:
+        print("未定義の CSS カスタムプロパティ（フォールバック無し）:")
+        for issue in undefined:
+            print(f"  ✗ {issue}")
         return 1
 
     conf = yaml.safe_load(THRESHOLDS.read_text(encoding="utf-8"))
