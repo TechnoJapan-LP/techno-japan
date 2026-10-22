@@ -1305,11 +1305,12 @@ function relatedFestivalCardHtml(festival, lang, prefix, editionsByFestival, edi
 }
 
 function selectRelatedFestivals(article, body, festivals, editionsByFestival, primaryFestivalId) {
+  const maxRelatedFestivals = 6;
   const published = (festivals || []).filter(isPublishedFestival);
   const byId = new Map(published.map((festival) => [String(festival.id), festival]));
   const selected = [];
   const add = (festival) => {
-    if (festival && !selected.some((item) => String(item.id) === String(festival.id)) && selected.length < 3) selected.push(festival);
+    if (festival && !selected.some((item) => String(item.id) === String(festival.id)) && selected.length < maxRelatedFestivals) selected.push(festival);
   };
   add(byId.get(String(primaryFestivalId || '')));
 
@@ -1323,7 +1324,7 @@ function selectRelatedFestivals(article, body, festivals, editionsByFestival, pr
     if (name.length >= 4 && plainBody.includes(name.toLocaleLowerCase())) add(festival);
   }
 
-  if (selected.length >= 3) return selected;
+  if (selected.length >= maxRelatedFestivals) return selected;
   const today = new Date().toISOString().slice(0, 10);
   const primaryEditions = editionsByFestival.get(String(primaryFestivalId || '')) || [];
   const primaryPrefs = new Set(primaryEditions.map((edition) => String(edition.PREF || '').trim().toLowerCase()).filter(Boolean));
