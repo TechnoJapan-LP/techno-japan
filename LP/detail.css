@@ -1051,7 +1051,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 }
 .article-detail .related-card:hover { transform: translateY(-4px); }
 .article-detail .related-card-img {
-  aspect-ratio: 4/3; overflow: hidden; background: rgba(240,237,232,.04);
+  aspect-ratio: 4/5; overflow: hidden; background: rgba(240,237,232,.04);
 }
 .article-detail .related-card-img img {
   width: 100%; height: 100%; object-fit: cover; filter: grayscale(40%) brightness(.92);
@@ -1069,6 +1069,28 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   font-family: var(--font-display); font-size: 18px; text-transform: uppercase;
   line-height: 1; margin-bottom: 6px;
 }
+
+@media (min-width: 1024px) {
+  .article-detail .related-festivals {
+    width: min(calc(100vw - 80px), 1440px); margin-left: 50%; transform: translateX(-50%);
+    display: grid; grid-template-columns: minmax(220px, .8fr) minmax(0, 2.2fr); gap: 40px; align-items: start;
+  }
+  .article-detail .related-festivals h2 {
+    margin-top: 0; color: var(--text); opacity: 1;
+    font-family: var(--font-display); font-size: clamp(32px, 3.2vw, 48px);
+    letter-spacing: .01em; line-height: .95;
+  }
+  .article-detail .related-festivals h2 span {
+    display: block; white-space: nowrap;
+  }
+  .article-detail .related-festivals-track { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; overflow: visible; }
+  .article-detail .related-festivals-track .related-card { min-width: 0; flex-basis: auto; }
+}
+@media (min-width: 701px) and (max-width: 1023px) {
+  .article-detail .related-festivals-track { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: visible; }
+  .article-detail .related-festivals-track .related-card { min-width: 0; flex-basis: auto; }
+}
+
 .related-story-title .story-title-short { display: block; }
 .related-story-title .story-title-sub {
   display: block; margin-top: .25em; font-size: .8em; font-weight: 300;

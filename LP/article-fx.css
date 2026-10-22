@@ -73,6 +73,26 @@ figure.fx-img.fx-reveal.fx-on .fx-fig { opacity: 1; }
   .fx-image-pair { grid-template-columns:1fr; grid-auto-flow:row; width:100%; margin-left:0; gap:28px; }
 }
 
+/* 記事本文の通常画像だけは、スマホで本文カラムを抜けて画面端まで広げる。
+   compact とペアは編集意図を優先し、キャプション（FIG）は本文幅に残す。 */
+@media (max-width: 700px) {
+  figure.fx-img:not(.fx-compact):not(.fx-portrait) {
+    width: 100vw !important; max-width: none;
+    /* .article-body は mobile で右へ -12px 広げているため、中央寄せ式では
+       6px右へずれる。本文カラムの24pxパディングだけを戻してviewportに揃える。 */
+    margin-left: -24px !important; margin-right: 0 !important;
+  }
+  figure.fx-img:not(.fx-compact):not(.fx-portrait) .fx-fig {
+    max-width: 760px; margin-left: auto; margin-right: auto;
+    padding-left: 24px !important; padding-right: 24px !important;
+  }
+  .fx-image-pair figure.fx-img,
+  .fx-image-pair figure.fx-img.fx-bleed {
+    width: 100% !important; margin-left: 0 !important; margin-right: 0 !important;
+  }
+  .article-detail .related-festivals-track .related-card { flex-basis: min(80vw, 320px); }
+}
+
 /* 横長画像（w/h >= 1.4）: カラムを突き破りビューポート端から端まで。
    リズムのどの位置でも fx-bleed が幅指定を上書きする */
 figure.fx-img.fx-bleed { width: 100vw !important; max-width: none; margin-left: calc(50% - 50vw) !important; margin-right: calc(50% - 50vw); }

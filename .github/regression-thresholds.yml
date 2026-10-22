@@ -31,6 +31,12 @@ baseline_commit: e763cbf   # Regenerate festival pages with FAQ and refreshed da
 baseline_measured_at: 2026-08-01
 
 metrics:
+  double_escaped_entities:
+    description: 生成HTMLに残る二重エスケープ済みエンティティの件数
+    max: 0
+    target: 0
+    note: "記事本文とイベントカードはエンティティを正規化してから1回だけエスケープする。"
+
   festival_performer_pages:
     description: JSON-LD の Festival.performer を1件以上持つフェスページ数（JA）
     min: 9

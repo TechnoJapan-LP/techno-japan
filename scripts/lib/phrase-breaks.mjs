@@ -74,8 +74,27 @@ function mergeTinyChunks(text, breaks) {
   }
 }
 
+function decodeHtmlEntities(text) {
+  let value = String(text ?? '');
+  for (let i = 0; i < 3; i += 1) {
+    const decoded = value.replace(/&(amp|lt|gt|quot|apos|#39|#x27|#(\d+)|#x([\da-f]+));/gi, (match, name, decimal, hex) => {
+      const lower = name.toLowerCase();
+      if (lower === 'amp') return '&';
+      if (lower === 'lt') return '<';
+      if (lower === 'gt') return '>';
+      if (lower === 'quot') return '"';
+      if (lower === 'apos' || lower === '#39' || lower === '#x27') return "'";
+      const code = decimal ? Number(decimal) : parseInt(hex, 16);
+      return Number.isFinite(code) ? String.fromCodePoint(code) : match;
+    });
+    if (decoded === value) break;
+    value = decoded;
+  }
+  return value;
+}
+
 function escapeHtml(text) {
-  return String(text)
+  return decodeHtmlEntities(text)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }

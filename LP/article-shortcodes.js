@@ -15,8 +15,27 @@ const TBA_RE = /^TBA\s+(\d{4})-(\d{2})$/i;
 const MONTHS_EN = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 const MONTHS_JA = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
 
+function decodeHtmlEntities(value) {
+  let text = String(value ?? '');
+  for (let i = 0; i < 3; i += 1) {
+    const decoded = text.replace(/&(amp|lt|gt|quot|apos|#39|#x27|#(\d+)|#x([\da-f]+));/gi, (match, name, decimal, hex) => {
+      const lower = name.toLowerCase();
+      if (lower === 'amp') return '&';
+      if (lower === 'lt') return '<';
+      if (lower === 'gt') return '>';
+      if (lower === 'quot') return '"';
+      if (lower === 'apos' || lower === '#39' || lower === '#x27') return "'";
+      const code = decimal ? Number(decimal) : parseInt(hex, 16);
+      return Number.isFinite(code) ? String.fromCodePoint(code) : match;
+    });
+    if (decoded === text) break;
+    text = decoded;
+  }
+  return text;
+}
+
 function escapeHtml(value) {
-  return String(value ?? '').replace(/[&<>"']/g, (char) => ({
+  return decodeHtmlEntities(value).replace(/[&<>"']/g, (char) => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   }[char]));
 }
@@ -170,7 +189,9 @@ function parseEventFields(fields) {
   if (errors.length) throw new Error(errors.join(' / '));
   return {
     name, date: parsedDate, place, url,
-    artists: artistsRaw.split(';').map((artist) => artist.trim()).filter(Boolean),
+    // 本文中の &amp; のセミコロンを出演者区切りと誤認しないよう、先にデコードする。
+    // HTMLエスケープは renderEvent の出力時に一度だけ行う。
+    artists: decodeHtmlEntities(artistsRaw).split(';').map((artist) => artist.trim()).filter(Boolean),
     tags: note.split(';').map((tag) => tag.trim()).filter(Boolean),
     festivalId,
   };
