@@ -40,7 +40,7 @@
     var rp = document.getElementById('read-progress');
     if (rp) rp.classList.remove('active');
     var fill = bar.firstChild;
-    var article = document.querySelector('.article-detail') || document.body;
+    var article = document.querySelector('.article-content') || document.querySelector('.article-detail') || document.body;
     function updateProgress(){
       var r = article.getBoundingClientRect();
       var total = r.height - window.innerHeight;
@@ -62,7 +62,7 @@
       var fig = document.createElement('figure');
       var requested = img.dataset.layout;
       var rhythm = ['contained', 'left', 'right', 'full', 'compact'].indexOf(requested) >= 0
-        ? (requested === 'contained' ? 'fx-full' : 'fx-' + requested)
+        ? (requested === 'contained' ? 'fx-contained' : 'fx-' + requested)
         : (figIndex % 3 === 1 ? 'fx-full' : (figIndex % 3 === 2 ? 'fx-right' : 'fx-left'));
       var compact = !requested && figIndex % 4 === 0 ? ' fx-compact' : '';
       // 全幅(full)は fx-bleed で画面端まで広げる
@@ -82,7 +82,7 @@
       grid.className = 'fx-gridlines';
       var cap = document.createElement('figcaption');
       cap.className = 'fx-fig';
-      cap.textContent = 'FIG.' + String(figIndex).padStart(2, '0');
+      cap.textContent = img.getAttribute('alt') || 'FIG.' + String(figIndex).padStart(2, '0');
       host.parentNode.replaceChild(fig, host);
       frame.appendChild(img);
       frame.appendChild(grid);

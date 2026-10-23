@@ -4,8 +4,8 @@
    news.html の記事詳細と同じ見た目に揃えてある。
    ========================================================== */
 
-.article-detail { padding: 104px 0 80px; max-width: 760px; margin: 0 auto; }
-.article-detail-inner { padding: 0 40px; }
+.article-detail { padding: 0 0 112px; margin: 0 auto; overflow: clip; }
+.article-detail-inner { max-width: 1360px; margin: 0 auto; padding: 0 40px; }
 .article-back {
   display: inline-flex; align-items: center; gap: 12px;
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em;
@@ -16,49 +16,34 @@
 .article-back .arrow { width: 24px; height: 1px; background: var(--text); position: relative; display: inline-block; }
 .article-back .arrow::before { content: ''; position: absolute; left: 0; top: -3px; width: 7px; height: 7px; border-left: 1px solid var(--text); border-bottom: 1px solid var(--text); transform: rotate(45deg); }
 
-.article-meta-top {
-  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em;
-  text-transform: uppercase; opacity: 0.5; margin-bottom: 24px;
-}
-.article-meta-top .cat-pill { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); opacity: 1; }
-.article-meta-top .cat-pill::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
-
-.article-detail h1, .detail-page h1 {
-  font-family: var(--font-display); font-size: clamp(36px, 6vw, 72px);
-  line-height: 1.05; text-transform: uppercase; margin-bottom: 24px;
-}
-/* 記事タイトルも文節／読点で折る（「始｜まる」で割れていた）。フェス・会場・アーティストの h1 は英字名が主なので対象外 */
+.article-meta-top { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding: 120px 0 40px; }
 .article-detail h1 { word-break: keep-all; overflow-wrap: anywhere; text-wrap: balance; }
 .article-excerpt {
-  font-family: var(--font-body); font-weight: 300;
-  font-size: clamp(19px, 1.9vw, 24px); line-height: 1.65; opacity: 1;
-  color: var(--text); max-width: 680px; margin: 0 auto 40px; padding-bottom: 32px;
-  word-break: normal; overflow-wrap: normal; text-wrap: wrap;
-  border-bottom: 1px solid var(--text-a10);
+  margin: 0 0 36px; max-width: 720px; font-family: var(--font-body); font-weight: 300;
+  font-size: 18px; line-height: 1.8; color: var(--text); text-wrap: pretty;
+  word-break: normal; overflow-wrap: normal;
 }
-.article-hero-img { margin: 0 -40px 48px; aspect-ratio: 16/9; overflow: hidden; background: var(--text-a04); }
-.article-hero-img img { width: 100%; height: 100%; object-fit: cover; }
-/* CMS で「元画像のまま」を選んだ記事は切り抜かず、写真本来の縦横比で出す */
-.article-hero-img[data-ratio="auto"] { aspect-ratio: auto; }
-.article-hero-img[data-ratio="auto"] img { height: auto; display: block; }
-
-.article-body { max-width: 680px; margin-inline: auto; font-family: var(--font-body); font-weight: 300; font-size: clamp(16px, 1.15vw, 18px); line-height: 1.9; color: var(--text-a85); text-wrap: pretty; }
+.article-main-grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; column-gap: 56px; align-items: start; }
+.article-content { min-width: 0; max-width: 720px; }
+.article-sidebar { position: sticky; top: 88px; align-self: start; min-width: 0; display: flex; flex-direction: column; gap: 28px; }
+.article-body { max-width: 720px; margin: 0; font-family: var(--font-body); font-weight: 300; font-size: 16px; line-height: 1.95; color: var(--text-a85); text-wrap: pretty; }
 .article-body p { margin-bottom: 1.6em; }
 /* 日本語見出しの折り返し位置は、生成時にBudouXの<wbr>として埋め込む。 */
-.article-body h2 { font-family: var(--font-display); font-size: clamp(22px, 3vw, 32px); text-transform: uppercase; line-height: 1.1; margin: 2.8em 0 .75em; color: var(--text); text-wrap: balance; word-break: keep-all; overflow-wrap: anywhere; }
-.article-body h3 { font-family: var(--font-body); font-weight: 500; font-size: clamp(18px, 2.2vw, 21px); line-height: 1.45; margin: 2.4em 0 .6em; color: var(--text); text-wrap: balance; word-break: keep-all; overflow-wrap: anywhere; }
-.article-body h4 { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; margin: 2.5em 0 .75em; color: var(--text); text-wrap: balance; }
+.article-body h2 { clear: both; font-family: var(--font-display); font-size: 34px; text-transform: uppercase; line-height: .95; margin: 2.8em 0 1em; color: var(--text); text-wrap: balance; word-break: keep-all; overflow-wrap: anywhere; }
+.article-body h3 { clear: both; font-family: var(--font-mono); font-weight: 400; font-size: 13px; line-height: 1.45; letter-spacing: .12em; margin: 2.4em 0 .75em; color: var(--accent); text-transform: uppercase; text-wrap: balance; word-break: keep-all; overflow-wrap: anywhere; }
+.article-body h4 { clear: both; font-family: var(--font-display); font-size: 24px; line-height: .95; margin: 2.5em 0 .75em; color: var(--text); text-wrap: balance; }
 .article-body ul, .article-body ol { margin: 0 0 24px 24px; padding: 0; }
 .article-body li { margin-bottom: 8px; }
 .article-body a { color: var(--text); border-bottom: 1px solid var(--text-a30); transition: border-color 0.2s ease; }
 .article-body a:hover { border-bottom-color: var(--text); }
+.article-body a.entity-link, .article-body a.ent { color: var(--accent); border-bottom: 1px dotted var(--accent-a50); }
 .article-body strong { color: var(--text); font-weight: 500; }
 .article-body em { font-style: italic; }
-.article-body blockquote { border-left: 2px solid var(--accent); padding: 8px 0 8px 24px; margin: 32px 0; font-style: italic; opacity: 0.85; }
-.article-body img { max-width: 100%; height: auto; display: block; margin: 2.6em auto; border-radius: 4px; }
+.article-body blockquote { clear: both; border-left: 2px solid var(--accent); padding: 8px 0 8px 24px; margin: 32px 0; font-style: italic; opacity: .85; }
+.article-body img { max-width: 100%; height: auto; display: block; margin: 2.6em auto; border-radius: 0; }
 .article-body figure { margin: 32px 0; }
-.article-body figcaption { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-a50); margin-top: 12px; text-align: center; }
+.article-body figcaption { font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em; color: var(--text-a50); margin-top: 10px; text-align: left; }
+.article-body .info { clear: both; }
 
 /* ----- 記事内イベントカード / 開催カレンダー -----
    JSを持たない静的HTML。カードの高さを先に確保し、リビールはtransformだけで行う。 */
@@ -320,8 +305,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 }
 
 @media (max-width: 768px) {
-  /* 固定ヘッダー直下でも戻る導線が重ならないようにする */
-  .article-detail { padding: 104px 0 60px; }
+  .article-detail { padding: 0 0 60px; }
   .detail-page { padding: 84px 0 60px; }
   .artist-detail,
   .venue-detail,
@@ -342,9 +326,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   .venue-related .related-grid { grid-template-columns: 1fr; }
   .artist-upcoming .related-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .artist-upcoming .related-card-name { font-size: 14px; }
-  /* 本文は右端まで使い、見出しの balance による不自然な改行を避ける */
-  .article-excerpt { max-width: none; margin-left: 0; margin-right: -12px; text-wrap: wrap; }
-  .article-body { max-width: none; margin-right: -12px; text-wrap: wrap; }
+  .article-excerpt, .article-body { max-width: none; text-wrap: wrap; }
 }
 
 
@@ -1109,4 +1091,107 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 .article-detail:has(> .article-detail-inner > .article-hero:not([data-ratio="auto"])) { padding-top: 0; }
 @media (max-width: 768px) {
   .article-hero:not([data-ratio="auto"]) { height: clamp(380px, 64vh, 620px); }
+}
+
+/* ==========================================================
+   NEWS DETAIL — phase 4-1 final article layout
+   ========================================================== */
+.article-detail { padding-bottom: 112px; overflow: clip; }
+.article-detail-inner { max-width: 1360px; padding: 0 40px; }
+.article-main-grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; column-gap: 56px; align-items: start; }
+.article-content { min-width: 0; max-width: 720px; }
+.article-sidebar { position: sticky; top: 88px; align-self: start; min-width: 0; display: flex; flex-direction: column; gap: 28px; }
+.article-hero { height: clamp(480px, 80vh, 920px); }
+.article-hero-overlay { padding: clamp(28px, 5vw, 64px); }
+.article-hero-overlay h1 { font-size: clamp(34px, 5.5vw, 76px); max-width: 1100px; }
+.article-hero-meta { display: none; }
+.article-specs { display: flex; flex-direction: column; gap: 18px; margin: 0; padding: 0; border: 0; }
+.article-specs > div { min-width: 0; padding: 0; border: 0; }
+.article-specs dt, .article-overview dt { margin-bottom: 4px; font: 9px var(--font-mono); letter-spacing: .15em; text-transform: uppercase; color: var(--text-a62); }
+.article-specs dd { margin: 0; font: 12px/1.4 var(--font-body); letter-spacing: 0; text-transform: none; overflow-wrap: anywhere; }
+.article-updated { display: block; margin-top: 4px; font-size: 10px; }
+.article-festival, .article-overview, .article-sidebar-back { border-top: 1px solid var(--line-strong); padding-top: 14px; }
+.article-festival-desktop { display: flex; flex-direction: column; gap: 12px; }
+.article-festival-name { font-size: 34px; line-height: 1.05; }
+.article-festival-details { color: var(--text); }
+.article-festival-details:hover, .article-sidebar-back:hover { color: var(--accent); }
+.article-festival-mobile { display: none; }
+.article-overview h2 { margin: 0 0 14px; font-weight: 400; }
+.article-overview dl { display: flex; flex-direction: column; gap: 12px; margin: 0; }
+.article-overview-row dd { margin: 0; font: 12px/1.5 var(--font-body); overflow-wrap: anywhere; }
+.article-overview-artists { display: flex; flex-wrap: wrap; gap: 0 6px; }
+.article-overview-artists .ent { color: var(--accent); border-bottom: 1px dotted var(--accent-a50); }
+.article-overview-sep { color: var(--text-a50); }
+.article-overview-row.is-status dd { color: var(--accent); text-transform: uppercase; }
+.article-overview-source { margin: 16px 0 0; color: var(--text-a40); font-size: 9px; letter-spacing: .08em; }
+.article-sidebar-back { display: block; color: var(--text-a62); }
+.article-body h2 { clear: both; font-size: 34px; line-height: .95; }
+.article-body h3 { clear: both; font: 400 13px/1.45 var(--font-mono); letter-spacing: .12em; color: var(--accent); text-transform: uppercase; }
+.article-body h4 { clear: both; font: 400 24px/.95 var(--font-display); }
+.article-body blockquote { clear: both; border-left: 2px solid var(--accent); padding: 8px 0 8px 24px; margin: 32px 0; font-style: italic; text-align: left; }
+.article-body blockquote::before, .article-body blockquote::after { display: none; }
+.article-body .info { clear: both; border-top: 1px solid var(--text-a12); border-bottom: 1px solid var(--text-a12); padding: 16px 0; font-family: var(--font-mono); font-size: .85em; }
+.article-related-stories { margin-top: 80px; }
+.article-related-stories .related-stories h2 { margin: 0 0 20px; font: 40px/.95 var(--font-display); text-transform: uppercase; }
+.article-related-stories .related-story-card.is-wide { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 0 22px; align-items: center; padding: 18px 0; border-top: 1px solid var(--text-a12); }
+.article-related-stories .related-story-card.is-wide .related-story-thumb { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
+.article-related-stories .related-story-card.is-wide .related-story-title { font-size: 30px; line-height: 1.15; }
+.article-related-stories .related-story-title .story-title-short, .article-related-stories .related-story-title .story-title-sub { display: block; }
+.article-related-stories .related-story-title .story-title-sub { margin-top: .25em; font-size: .55em; line-height: 1.4; }
+.related-festivals { margin-top: 72px; }
+.related-section-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; margin-bottom: 20px; }
+.related-section-head h2 { font-size: 40px; }
+.related-section-head a { color: var(--text-a62); }
+.related-section-head a:hover { color: var(--text); }
+.article-detail .related-festivals-track { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; overflow: visible; }
+.article-detail .related-festivals-track .related-card { min-width: 0; max-width: none; flex-basis: auto; }
+.article-detail .related-card-img { aspect-ratio: 3 / 2; }
+.article-detail .related-card-info { padding: 16px 0; }
+.article-detail .related-card-date, .article-detail .related-card-loc { font: 9px var(--font-mono); letter-spacing: .15em; opacity: .62; text-transform: uppercase; }
+.article-detail .related-card-name { font: 24px/.95 var(--font-display); margin: 8px 0 6px; text-transform: uppercase; }
+.article-detail .related-card-status { color: var(--accent); }
+.article-footer { margin-top: 48px; padding-top: 32px; }
+
+@media (max-width: 900px) {
+  .article-detail-inner { padding: 0 16px; }
+  .article-hero { height: min(80vh, 640px); }
+  .article-hero-overlay { padding: 48px 16px 28px; }
+  .article-hero-overlay-inner { max-width: none; }
+  .article-hero-meta { position: absolute; z-index: 1; top: 24px; right: 12px; display: flex; flex-direction: column; gap: 14px; margin: 0; writing-mode: vertical-rl; transform: rotate(180deg); font: 10px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+  .article-hero-meta div { display: flex; align-items: flex-start; gap: 6px; }
+  .article-hero-meta dt { color: var(--text-a50); }
+  .article-hero-meta dd { margin: 0; color: var(--text-a85); }
+  .article-main-grid { display: block; }
+  .article-content { max-width: none; }
+  .article-sidebar { position: static; display: block; margin-top: 40px; }
+  .article-sidebar .article-specs, .article-sidebar .article-overview { display: none; }
+  .article-festival { margin-top: 0; padding-top: 0; border-top: 0; }
+  .article-festival-desktop { display: none; }
+  .article-festival-mobile { display: flex; align-items: center; gap: 14px; min-width: 0; padding: 10px; border: 1px solid var(--text-a14); }
+  .article-festival-thumb { flex: 0 0 96px; width: 96px; aspect-ratio: 1; overflow: hidden; background: var(--text-a04); }
+  .article-festival-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .article-festival-copy { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+  .article-festival-copy .disp { font-size: 26px; line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .article-festival-copy .mono { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .article-festival-arrow { margin-left: auto; color: var(--text); }
+  .article-sidebar-back { display: block; margin-top: 28px; }
+  .article-related-stories { margin-top: 64px; }
+  .article-related-stories .related-story-card.is-wide { grid-template-columns: 1fr; gap: 12px; }
+  .article-related-stories .related-story-card.is-wide .related-story-title { font-size: 26px; }
+  .related-festivals { margin-top: 56px; }
+  .related-section-head h2 { font-size: 40px; }
+  .article-detail .related-festivals-track { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; scrollbar-width: none; }
+  .article-detail .related-festivals-track::-webkit-scrollbar { display: none; }
+  .article-detail .related-festivals-track .related-card { flex: 0 0 240px; scroll-snap-align: start; }
+  .article-detail .related-card-name { font-size: 24px; }
+  .article-detail .article-body { font-size: 16px; line-height: 1.9; }
+  .article-detail .article-body h2 { margin-top: 2.4em; }
+}
+
+@media (max-width: 600px) {
+  .article-detail .related-festivals-track .related-card { flex-basis: 240px; }
+  .article-body .tj-event { margin: 20px 0; padding: 12px 14px 14px 16px; }
+  .article-body .tj-event-name { font-size: 32px; }
+  .article-body .tj-cal-month li { grid-template-columns: 1fr; gap: 4px; padding: 12px 0; }
+  .article-body .tj-cal-month li a { font-size: 16px; }
 }

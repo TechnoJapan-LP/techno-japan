@@ -58,7 +58,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 73;
+const DETAIL_CSS_VERSION = 74;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -70,8 +70,8 @@ const DETAIL_CSS_VERSION = 73;
    落ちる場所と直す場所がずれていて原因に辿り着けなかった。AUDIT §9-58。
 
    article-fx.js / article-fx.css を変更したら、ここを上げる。 */
-const ARTICLE_FX_JS_VERSION = 13;
-const ARTICLE_FX_CSS_VERSION = 16;
+const ARTICLE_FX_JS_VERSION = 14;
+const ARTICLE_FX_CSS_VERSION = 17;
 
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
@@ -1366,7 +1366,7 @@ function isPublishedFestival(festival) {
   return festival && festival.id && String(festival.status || '').toLowerCase() !== 'draft';
 }
 
-function relatedFestivalCardHtml(festival, lang, prefix, editionsByFestival, editionOverride = null, imageSrcsetAttr = cardSrcsetAttr) {
+function relatedFestivalCardHtml(festival, lang, prefix, editionsByFestival, editionOverride = null, imageSrcsetAttr = cardSrcsetAttr, articleContext = false) {
   const feds = editionOverride
     ? [editionOverride]
     : [...(editionsByFestival.get(String(festival.id)) || [])].sort((x, y) =>
@@ -1381,10 +1381,15 @@ function relatedFestivalCardHtml(festival, lang, prefix, editionsByFestival, edi
   const date = current?.DATE_START
     ? [current.DATE_START, current.DATE_END].filter(Boolean).filter((v, i, arr) => arr.indexOf(v) === i).join(' — ')
     : (festival.date || '');
+  const today = jstToday();
+  const end = current?.DATE_END || current?.DATE_START || '';
+  const status = ISO_DATE.test(String(end)) && end >= today
+    ? (lang === 'en' ? 'Upcoming' : '開催予定')
+    : (lang === 'en' ? 'Archive' : '過去');
   return `<a class="related-card" href="${prefix}/festivals/${encodeURIComponent(festival.id)}.html">
     <div class="related-card-img">${image ? `<img ${dimensionAttrs(cardImagePath(image))} src="/${cardImagePath(image)}"${imageSrcsetAttr(image)} alt="${esc(name)}" loading="lazy"${imagePositionStyle(festival)}>` : ''}</div>
     <div class="related-card-info">
-      <div class="related-card-date">${esc(date)}</div>
+      <div class="related-card-date">${esc(date)}${articleContext ? ` · <span class="related-card-status">${esc(status)}</span>` : ''}</div>
       <div class="related-card-name">${esc(name)}</div>
       <div class="related-card-loc">${esc(place)}</div>
     </div>
@@ -1436,7 +1441,51 @@ function selectRelatedFestivals(article, body, festivals, editionsByFestival, pr
   return selected;
 }
 
-function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsByFestival = new Map(), venues = [], festivalData = null, articles = [], artists = [], authorIndex = new Map()) {
+function articleOverviewHtml(festival, edition, lineupsByEdition, artists, allArtists, lang) {
+  if (!festival || !edition) return '';
+  const publicArtistsById = new Map((artists || []).map((artist) => [String(artist.id || '').trim(), artist]));
+  const allArtistsById = new Map((allArtists || []).map((artist) => [String(artist.ID || artist.id || '').trim(), artist]).filter(([id]) => id));
+  const lineupRows = lineupsByEdition.get(String(edition.EDITION_ID || '')) || [];
+  const lineup = lineupRows.map((row) => {
+    if (isCompositeLineup(row)) return `<span>${esc(row.ACT_LABEL || '')}</span>`;
+    const id = lineupArtistIds(row)[0];
+    const resolved = resolveLineupArtist(row, publicArtistsById, allArtistsById);
+    if (resolved.status === 'published') {
+      const artist = resolved.artist;
+      const name = lang === 'en' ? (artist.name_en || artist.name) : artist.name;
+      return `<a class="ent" href="${lang === 'en' ? '/en' : ''}/artists/${encodeURIComponent(id)}.html">${esc(name)}</a>`;
+    }
+    const artist = resolved.artist;
+    const name = String(row.ACT_LABEL || artist?.NAME || artist?.name || id || '').trim();
+    return `<span>${esc(name)}</span>`;
+  }).filter(Boolean).join('<span class="article-overview-sep">, </span>');
+  const date = lang === 'en'
+    ? fmtMetaDateEn(edition.DATE_START, edition.DATE_END)
+    : fmtMetaDateJa(edition.DATE_START, edition.DATE_END);
+  const venue = [editionLocationName(edition, lang), festival.city].filter(Boolean).join(', ');
+  const genre = Array.isArray(festival.genre) ? festival.genre.join(' / ') : String(festival.genre || '').trim();
+  const sound = String(festival.sound || festival.SOUND || '').trim();
+  const status = String(edition.STATUS || '').trim();
+  const statusHtml = status && status.toLowerCase() !== 'announced'
+    ? `<div class="article-overview-row is-status"><dt>STATUS</dt><dd>${esc(status)}</dd></div>`
+    : '';
+  const optionalRows = [
+    lineup ? `<div class="article-overview-row"><dt>ARTISTS</dt><dd class="article-overview-artists">${lineup}</dd></div>` : '',
+    genre ? `<div class="article-overview-row"><dt>GENRE</dt><dd>${esc(genre)}</dd></div>` : '',
+    sound ? `<div class="article-overview-row"><dt>SOUND</dt><dd>${esc(sound)}</dd></div>` : '',
+    statusHtml,
+  ].filter(Boolean).join('\n    ');
+  return `<section class="article-overview">
+  <h2 class="mono red">Overview</h2>
+  <dl>
+    <div class="article-overview-row"><dt>DATE</dt><dd>${esc(date || '—')}</dd></div>
+    <div class="article-overview-row"><dt>VENUE</dt><dd>${esc(venue || '—')}</dd></div>
+${optionalRows ? `    ${optionalRows}\n` : ''}  </dl>
+  <p class="article-overview-source mono">From festivals DB · ${esc(edition.EDITION_ID || edition.EDITION || '')}</p>
+</section>`;
+}
+
+function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsByFestival = new Map(), venues = [], festivalData = null, articles = [], artists = [], authorIndex = new Map(), lineupsByEdition = new Map(), allArtists = []) {
   // EN版は title_en / excerpt_en / body_en を使う（無い項目はJAへフォールバック）
   const L = lang === 'en'
     ? { title: stripTitleMarkdown(a.title_en || a.title), excerpt: stripTitleMarkdown(a.excerpt_en || a.excerpt), body: a.body_en || a.body, prefix: '/en' }
@@ -1470,6 +1519,8 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
     : undefined;
   const articleImages = articleImageVariants(a.image, a.imagePosition);
   const isOrganizationAuthor = authorView.isOrganization;
+  const relatedEdition = relatedFestival ? latestEdition(editionsByFestival.get(festivalId) || []) : null;
+  const articleOverview = articleOverviewHtml(relatedFestival, relatedEdition, lineupsByEdition, artists, allArtists, lang);
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -1546,17 +1597,23 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
 
   const { short: articleTitleShort, sub: articleTitleSub } = splitArticleTitle(L.title);
   const articleTitleHtml = `<span class="article-title-short">${clauseBreaks(articleTitleShort)}</span>${articleTitleSub ? `<span class="article-title-sub">${clauseBreaks(articleTitleSub)}</span>` : ''}`;
+  const articleHeroMeta = `<dl class="article-hero-meta" aria-label="Article information">
+      <div><dt>WORDS BY</dt><dd>${esc(authorView.name)}</dd></div>
+      <div><dt>${lang === 'en' ? 'PUBLISHED' : '公開日'}</dt><dd>${esc(fmtDate(a.date) || '—')}</dd></div>
+      <div><dt>${lang === 'en' ? 'READING TIME' : '読了時間'}</dt><dd>${esc(a.readTime || 5)} MIN</dd></div>
+    </dl>`;
   const heroBlock = a.image
     ? `<header class="article-hero"${ratioAttr(a.heroRatio)}>
-        <img ${dimensionAttrs(a.image)} src="/${String(a.image).replace(/^\//, '')}"${heroSrcsetAttr(a.image, '100vw', true)} alt="${esc(L.title)}" fetchpriority="high" decoding="async">
+        <img ${dimensionAttrs(a.image)} src="/${String(a.image).replace(/^\//, '')}"${heroSrcsetAttr(a.image, '100vw', true)}${imagePositionStyle(a)} alt="${esc(L.title)}" fetchpriority="high" decoding="async">
+        ${articleHeroMeta}
         <div class="article-hero-overlay">
           <div class="article-hero-overlay-inner">
             <div class="article-chips"><span class="cat-pill">${esc(a.category || 'NEWS')}</span></div>
-            <h1>${articleTitleHtml}</h1>
+            <h1 class="disp">${articleTitleHtml}</h1>
           </div>
         </div>
       </header>`
-    : `<div class="article-meta-top"><span class="cat-pill">${esc(a.category || 'NEWS')}</span></div><h1>${articleTitleHtml}</h1>`;
+    : `<header class="article-meta-top"><span class="pill">${esc(a.category || 'NEWS')}</span>${articleHeroMeta}</header><h1 class="disp">${articleTitleHtml}</h1>`;
 
   /* 記事に紐づくフェス（ARTICLES.festivalId）。
 
@@ -1568,7 +1625,10 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
      カード画像はハブと同じ縮小版を使う（§9-51）。 */
   const relatedFestivals = selectRelatedFestivals(a, L.body, festivals, editionsByFestival, festivalId);
   const relatedFestivalHtml = relatedFestivals.length
-    ? `<div class="related-festivals"><h2>${lang === 'en' ? '<span>RELATED</span><span>FESTIVALS</span>' : '<span>関連</span><span>フェスティバル</span>'}</h2><div class="related-festivals-track">${relatedFestivals.map((festival) => relatedFestivalCardHtml(festival, lang, L.prefix, editionsByFestival, null, articleRelatedFestivalSrcsetAttr)).join('')}</div></div>`
+    ? `<section class="related-festivals">
+    <div class="related-section-head"><h2 class="disp">${lang === 'en' ? 'Related Festivals' : '関連フェスティバル'}</h2><a class="mono" href="${L.prefix}/festivals.html">${lang === 'en' ? 'All festivals' : 'All festivals'} →</a></div>
+    <div class="related-festivals-track">${relatedFestivals.map((festival) => relatedFestivalCardHtml(festival, lang, L.prefix, editionsByFestival, null, articleRelatedFestivalSrcsetAttr, true)).join('')}</div>
+  </section>`
     : '';
 
   const articleDateKey = (item) => String(item.publishedAt || item.date || '').trim();
@@ -1587,26 +1647,67 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   addRelated(publishedArticles.filter((item) => a.category && item.category === a.category));
   addRelated(publishedArticles);
   const relatedStoriesHtml = relatedArticles.length
-    ? `<section class="detail-section festival-related-stories-v2 article-related-stories">${relatedStoryCardsHtml(relatedArticles, lang, { forceEnglishPath: true, compactDate: true, wide: true })}</section>`
+    ? `<section class="detail-section festival-related-stories-v2 article-related-stories">${relatedStoryCardsHtml(relatedArticles, lang, { forceEnglishPath: true, compactDate: true, wide: true, heading: lang === 'en' ? 'RELATED STORIES' : '関連記事' })}</section>`
     : '';
 
   const updatedDate = String(a.updatedAt || '').trim();
   const updatedHtml = updatedDate && updatedDate !== String(a.date || '').trim()
     ? `<span class="article-updated">${lang === 'en' ? 'Updated: ' : '更新: '}${esc(fmtDateDots(updatedDate))}</span>`
     : '';
+  const authorHtml = isOrganizationAuthor
+    ? `<a class="article-author-link" href="${lang === 'en' ? '/en/about.html' : '/about.html'}">${esc(authorView.name)}</a>`
+    : author
+      ? `<a class="article-author-link" href="${authorHref(author, lang)}">${esc(authorView.name)}</a>`
+      : esc(authorView.name);
+  const festivalName = relatedFestival
+    ? (lang === 'en' ? (relatedFestival.name_en || relatedFestival.name) : relatedFestival.name)
+    : '';
+  const festivalImage = relatedFestival?.image || relatedFestival?.flyer || '';
+  const festivalDate = relatedEdition
+    ? (lang === 'en' ? fmtMetaDateEn(relatedEdition.DATE_START, relatedEdition.DATE_END) : fmtMetaDateJa(relatedEdition.DATE_START, relatedEdition.DATE_END))
+    : '';
+  const festivalPlace = relatedEdition
+    ? [editionLocationName(relatedEdition, lang), relatedFestival.city].filter(Boolean).join(' · ')
+    : '';
+  const festivalStatus = relatedEdition && ISO_DATE.test(String(relatedEdition.DATE_END || relatedEdition.DATE_START || '')) && String(relatedEdition.DATE_END || relatedEdition.DATE_START) >= jstToday()
+    ? (lang === 'en' ? 'Upcoming' : '開催予定')
+    : (lang === 'en' ? 'Archive' : '過去');
+  const festivalHref = relatedFestival ? `${L.prefix}/festivals/${encodeURIComponent(relatedFestival.id)}.html` : '';
+  const festivalAside = relatedFestival
+    ? `<section class="article-festival">
+    <div class="article-festival-desktop">
+      <h2 class="mono red">Festival</h2>
+      <a class="article-festival-name disp" href="${festivalHref}">${esc(festivalName)}</a>
+      <a class="article-festival-details mono" href="${festivalHref}">${lang === 'en' ? 'Festival details' : 'フェス詳細'} →</a>
+    </div>
+    <a class="article-festival-mobile" href="${festivalHref}">
+      <span class="article-festival-thumb">${festivalImage ? `<img ${dimensionAttrs(cardImagePath(festivalImage))} src="/${cardImagePath(festivalImage)}"${articleRelatedFestivalSrcsetAttr(festivalImage)} alt="${esc(festivalName)}" loading="lazy" decoding="async"${imagePositionStyle(relatedFestival)}>` : ''}</span>
+      <span class="article-festival-copy"><span class="mono red">${esc(festivalDate)} · ${esc(festivalStatus)}</span><span class="disp">${esc(festivalName)}</span><span class="mono">${esc(festivalPlace)}</span></span>
+      <span class="mono article-festival-arrow" aria-hidden="true">→</span>
+    </a>
+  </section>`
+    : '';
   // 自動リンクを先に適用し、カードHTMLはその後に生成する（二重リンク防止）。
   const linkedBody = autolinkArtists(L.body || '', artists);
+  const renderedBody = addLocalImageSrcset(addDriveImageSrcset(addHtmlImageDimensions(addHeadingPhraseBreaks(replaceMappedArticleImages(resolveEntities(linkedBody, lang), ARTICLE_IMAGE_MAP, path.join(__dirname, '..'))))));
   const body = `<article class="article-detail">
   <div class="article-detail-inner">
     ${heroBlock}
-    <dl class="article-specs">
-      <div><dt>WORDS BY</dt><dd>${isOrganizationAuthor ? `<a class="article-author-link" href="${lang === 'en' ? '/en/about.html' : '/about.html'}">${esc(authorView.name)}</a>` : author ? `<a class="article-author-link" href="${authorHref(author, lang)}">${esc(authorView.name)}</a>` : esc(authorView.name)}</dd></div>
-      <div><dt>PUBLISHED</dt><dd>${esc(fmtDate(a.date) || '—')}${updatedHtml}</dd></div>
-      <div><dt>READING TIME</dt><dd>${esc(a.readTime || 5)} MIN</dd></div>
-    </dl>
-    ${L.excerpt ? `<div class="article-excerpt">${esc(L.excerpt)}</div>` : ''}
-    <div class="article-body">${addLocalImageSrcset(addDriveImageSrcset(addHtmlImageDimensions(addHeadingPhraseBreaks(replaceMappedArticleImages(resolveEntities(linkedBody, lang), ARTICLE_IMAGE_MAP, path.join(__dirname, '..'))))))}</div>
-    <div class="article-share">${festivalShareButtons(L.title, canonical, lang)}</div>
+    <div class="article-main-grid">
+      <div class="article-content">
+        <div class="article-excerpt">${esc(L.excerpt || '')}</div>
+        <div class="article-body">${renderedBody}</div>
+        <div class="article-share">${festivalShareButtons(L.title, canonical, lang)}</div>
+      </div>
+      <aside class="article-sidebar">
+        <dl class="article-specs">
+          <div><dt>WORDS BY</dt><dd>${authorHtml}</dd></div>
+          <div><dt>PUBLISHED</dt><dd>${esc(fmtDate(a.date) || '—')}${updatedHtml}</dd></div>
+          <div><dt>READING TIME</dt><dd>${esc(a.readTime || 5)} MIN</dd></div>
+        </dl>
+${festivalAside ? `        ${festivalAside}\n` : ''}${articleOverview ? `        ${articleOverview}\n` : ''}        <a class="article-sidebar-back mono" href="${hubHref}" data-article-hub-back="${hubHref}">${lang === 'en' ? 'All stories' : 'ALL STORIES'} →</a>
+      </aside>
+    </div>
     ${relatedStoriesHtml}
     ${relatedFestivalHtml}
     <div class="article-footer">
@@ -3558,7 +3659,7 @@ function main() {
     }
     fs.rmSync(DRAFT_PREVIEW_DIR, { recursive: true, force: true });
     for (const lang of ['ja', 'en']) {
-      const built = articlePage(draft, resolveEntities, lang, FESTIVALS, editionsByFestival, [], festivalData, ARTICLES, ARTISTS, authorIndex);
+      const built = articlePage(draft, resolveEntities, lang, FESTIVALS, editionsByFestival, [], festivalData, ARTICLES, ARTISTS, authorIndex, lineupsByEdition, ALL_ARTISTS);
       const relative = path.relative(LP_DIR, built.file);
       const file = path.join(DRAFT_PREVIEW_DIR, relative);
       fs.mkdirSync(path.dirname(file), { recursive: true });
@@ -3684,14 +3785,14 @@ ${FAVICON_TAGS}
   const liveFestivalIds = new Set(pubFests.map((f) => f.id));
 
   const counts = {
-    articles: writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'ja', pubFests, editionsByFestival, pubVenues, festivalData, ARTICLES, ARTISTS, authorIndex)).concat(redirectStubs('articles', liveArticleIds)), 'articles'),
+    articles: writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'ja', pubFests, editionsByFestival, pubVenues, festivalData, ARTICLES, ARTISTS, authorIndex, lineupsByEdition, ALL_ARTISTS)).concat(redirectStubs('articles', liveArticleIds)), 'articles'),
     festivals: writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, allArtistsById, ARTICLES, pubFests, editionsByFestival, 'ja')).concat(redirectStubs('festivals', liveFestivalIds)), 'festivals'),
     artists: writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'ja', artistAppearances, editionsByFestival, pubArticles)).concat(redirectStubs('artists', liveArtistIds)), 'artists'),
     venues: writeAll(pubVenues.map((v) => venuePage(v, 'ja', pubFests, editionsByFestival, pubArticles)), 'venues'),
     writers: writeAll(pubAuthors.map((author) => writerPage(author, 'ja', authorIndex)), 'writers'),
     // 英語版（/en/…）。未翻訳フィールドは articlePage 内で元データへ
     // フォールバックし、EN ハブの通常遷移先を必ず実在させる。
-    'en/articles': writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'en', pubFests, editionsByFestival, pubVenues, festivalData, ARTICLES, ARTISTS, authorIndex)), 'en/articles'),
+    'en/articles': writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'en', pubFests, editionsByFestival, pubVenues, festivalData, ARTICLES, ARTISTS, authorIndex, lineupsByEdition, ALL_ARTISTS)), 'en/articles'),
     'en/festivals': writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, allArtistsById, ARTICLES, pubFests, editionsByFestival, 'en')).concat(redirectStubs('en/festivals', liveFestivalIds)), 'en/festivals'),
     'en/artists': writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'en', artistAppearances, editionsByFestival, pubArticles)).concat(redirectStubs('en/artists', liveArtistIds)), 'en/artists'),
     'en/venues': writeAll(pubVenues.map((v) => venuePage(v, 'en', pubFests, editionsByFestival, pubArticles)), 'en/venues'),

@@ -16,10 +16,10 @@ let derivatives = {};
 try { derivatives = derivativesMatch ? JSON.parse(derivativesMatch[1]) : {}; } catch { derivatives = {}; }
 const artistIds = new Set(ARTISTS.map((artist) => String(artist.id || '').trim()).filter(Boolean));
 const liveArticles = ARTICLES.filter((article) => String(article.status || '').toLowerCase() !== 'draft');
-const files = liveArticles.map((article) => ({
-  article,
-  file: path.join(root, 'LP/articles', `${article.id}.html`),
-}));
+const files = liveArticles.flatMap((article) => [
+  { article, lang: 'ja', file: path.join(root, 'LP/articles', `${article.id}.html`) },
+  { article, lang: 'en', file: path.join(root, 'LP/en/articles', `${article.id}.html`) },
+]);
 
 const failures = [];
 const check = (condition, message) => { if (!condition) failures.push(message); };
@@ -40,10 +40,12 @@ checkCms(/const updatedAtValue\s*=\s*r\.updated_at\s*\|\|\s*r\.updatedAt/.test(c
   && /updatedAt:\s*"\'\+q\(fmtDate\(updatedAtValue\)\)/.test(cmsSource),
   'cms.js: buildArticlesJs が updated_at から updatedAt を出力できません');
 
-for (const { article, file } of files) {
+for (const { article, lang, file } of files) {
   check(fs.existsSync(file), `${article.id}: HTMLがありません`);
   if (!fs.existsSync(file)) continue;
   const html = fs.readFileSync(file, 'utf8');
+  check(/<h1\b[^>]*>[\s\S]*?<\/h1>/.test(html), `${article.id} (${lang}): h1がありません`);
+  check(/<div class="article-excerpt">[\s\S]*?<\/div>/.test(html), `${article.id} (${lang}): .article-excerptがありません`);
   const links = [...html.matchAll(/<a\s+class="entity-link"\s+href="\/artists\/([^"./]+)\.html">/g)];
   totalLinks += links.length;
   for (const [, id] of links) {

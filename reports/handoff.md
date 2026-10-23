@@ -6882,6 +6882,31 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 ### 次の担当への注意・判断待ち
 - なし。
 
+### 2026-10-23 redesign/magazine フェーズ4-1 記事詳細ページ（未コミット）
+
+### 実施
+- `scripts/build-detail-pages.mjs` の `articlePage` を、モック準拠のヒーロー・本文/サイドバー2カラム・Overview・関連記事・関連フェスティバル6件へ更新。JA/ENフォールバック、既存の本文変換、JSON-LD、共有、タグ、戻るリンク、ニュースレターは維持。
+- `LP/detail.css`、`LP/article-fx.css`、`LP/article-fx.js` を更新し、記事ヒーロー、本文書式、data-layout（contained/compact/left/right/full）、スマホ画像全幅、モバイル縦書きメタ情報を反映。
+- `LP/cms.js` の記事プレビュー用アセット版数を更新。`scripts/check_article_links.mjs` はJA/ENのh1・article-excerptも検査。
+
+### コミット
+- なし（依頼どおり commit / push 未実施）。
+
+### 検証
+- `node scripts/build-detail-pages.mjs` 完了。`node scripts/check_build_idempotent.mjs` は `601ファイルに変化なし` で成功。`git diff --check` と記事42ページの h1 / `.article-excerpt` / speakable / 関連フェス6件検査も成功。
+- node --check、feeds、article links、article data、body images、shortcodes、CMS preview/state、phrase breaks、image position、JSON-LD、OG、internal links、shared chrome、regressions、asset versions は成功。
+- `bash scripts/preflight.sh` は、外部画像150件の取得待ちタイムアウトと、この環境の localhost bind `EPERM` によるブラウザ検査失敗で未完了。Claudeによる実ブラウザ確認は未実施。
+
+### 変更したパターン
+- 静的記事詳細ページのヒーロー、サイドバー、フェスOverview、関連Stories、関連Festivals、記事本文画像レイアウト、JA/EN記事見出し・excerpt検査。
+
+### 未確認の類似パターン
+- 確認済み・0件: 生成対象21記事のJA/EN静的構造・JSON-LD・リンク・画像・CMSプレビュー。
+- 未確認: 実ブラウザでのJA/EN・PC/モバイルの表示と操作、外部画像の実取得。
+
+### 次の担当への注意・判断待ち
+- Claudeが記事詳細を実ブラウザで確認すること。確認URL、画面幅、操作、期待結果、実測結果を必要に応じてこのエントリへ追記する。公開・pushはまだ行わない。
+
 ## 2026-09-11 sync-site（サイト国内フェス→Airtable）実装
 
 ### 実施
@@ -12711,3 +12736,31 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - なし。
+
+### 2026-10-23 redesign/magazine フェーズ4-1 記事の詳細ページ（Claude 検証・コミット。本番未反映）
+
+### 実施
+- 記事ページ（`articlePage`。JA/EN 42ページ）をモック（NewsDetail.dc.html）の構成へ: 写真いっぱいのヒーロー（カテゴリ・見出し・サブ）／PC は本文＋右の追従する欄（書き手・公開日・読了時間 → フェス → 概要（日程・会場・出演者（DB にいる人はリンク）・ジャンル）→ All stories）／関連記事／関連フェス6件（PC 3列×2段・スマホ横スクロール。ユーザー確認済み）。
+- 残したもの: JSON-LD（NewsArticle の speakable `h1`・`.article-excerpt` と一致）、本文の変換（自動リンク・画像の置換・見出しの文節改行）、article-fx（読了バー・h2 の赤線・画像の配置とキャプション・全幅）、スマホの本文画像の全幅、書き手の表示、シェア、タグ、戻るリンクと位置復元、記事末のニュースレター。
+- 画像の `data-layout`（compact 70%・left/right 46% の回り込み・contained・full）をモックの寸法に。
+
+### コミット
+- このエントリを含むコミット（redesign/magazine）。push・本番公開はしていない。
+
+### 検証
+- headless Chrome（390px@3x / 1280px@2x、JA/EN、記事4本、`$CLAUDE_JOB_DIR/tmp/articleverify.mjs`）で 252/268。
+  h1 は1つ・`.article-excerpt` と speakable が一致・JSON-LD／ヒーロー画像の先読み／PC の追従する欄（sticky）と概要／スマホの縦書きの情報と小さなフェスのカード／関連記事3・関連フェス6（PC 3列・スマホ横スクロール）／読了バーが進む／h2 の赤線／画像の配置／横はみ出し 0／JS エラー 0。
+  残りは検査側の数え方（イベントカードの写真・2枚組の写真・本文中の引用の aside を拾った）と、スマホのヒーロー写真の画質（下）。
+- check_build_idempotent（601 ファイル変化なし）・check_asset_versions・check_regressions・check_jsonld・check_cms_article_generated_preview 成功。
+
+### 変更したパターン
+- 記事ページから無くしたものは無い。
+
+### 未確認の類似パターン
+- スマホのヒーロー写真: 縦長の枠に横長の写真を切り抜くため約2.5倍に拡大され、今の候補（1440px）では粗い。次の作業で、拡大率に合わせて大きい候補を読むようにする。
+- スマホの縦書きの情報で、日本語（編集部・公開日・読了時間）が上下逆さまに表示される。次の作業でモックどおり英語のラベル＋向きを直す。
+- EN ページの本文の写真のキャプションに日本語が出る（本文の画像の alt が日本語のまま）。データ（記事の英語本文）の課題でフェーズ8で扱う。
+- 実機（iPhone）での確認は未実施。
+
+### 次の担当への注意・判断待ち
+- cms.js を変えている（記事プレビューの版数のみ）。本番に出す時は Publish pipeline と CMS の確認が必要（AGENTS.md）。

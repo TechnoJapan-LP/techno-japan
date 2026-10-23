@@ -61,30 +61,28 @@ figure.fx-img.fx-reveal.fx-on .fx-fig { opacity: 1; }
 
 /* 交互リズム: full-bleed → 右 → 左（参考: minimal collective の editorial 文法） */
 @media (min-width: 900px) {
+  figure.fx-img.fx-contained { width: 100%; margin-left: 0; margin-right: 0; }
+  figure.fx-img.fx-compact { width: 70%; margin-left: auto; margin-right: auto; }
   figure.fx-img.fx-full { width: min(100vw, 1200px); margin-left: calc(50% - min(50vw, 600px)); }
   figure.fx-img.fx-full .fx-fig { padding: 0 max(24px, calc(min(50vw, 600px) - 50% - 0px)); }
-  /* Editorial rail: 本文は細い中央カラム、画像は本文の幅の中で左右に寄せる（はみ出さない） */
-  figure.fx-img.fx-right { width: 66.6667%; margin-left: 33.3333%; margin-right: 0; }
-  figure.fx-img.fx-left  { width: 66.6667%; margin-left: 0; margin-right: 33.3333%; }
-  figure.fx-img.fx-compact.fx-right { width: 62%; margin-left: 38%; }
-  figure.fx-img.fx-compact.fx-left  { width: 62%; margin-left: 0; margin-right: 38%; }
+  /* CMS の左右配置は本文を回り込ませる float。見出し側の clear は detail.css で指定する。 */
+  figure.fx-img.fx-right { float: right; width: 46%; margin: 12px 0 32px 32px; }
+  figure.fx-img.fx-left { float: left; width: 46%; margin: 12px 32px 32px 0; }
 }
 @media (max-width: 899px) {
-  .fx-image-pair { grid-template-columns:1fr; grid-auto-flow:row; width:100%; margin-left:0; gap:28px; }
+  .fx-image-pair { grid-template-columns:1fr; grid-auto-flow:row; width:100vw; margin-left:calc(50% - 50vw); gap:28px; }
 }
 
-/* 記事本文の通常画像だけは、スマホで本文カラムを抜けて画面端まで広げる。
-   compact とペアは編集意図を優先し、キャプション（FIG）は本文幅に残す。 */
+/* スマホでは編集上の data-layout に関係なく、本文画像を画面幅いっぱいにする。 */
 @media (max-width: 700px) {
-  figure.fx-img:not(.fx-compact):not(.fx-portrait) {
+  figure.fx-img {
     width: 100vw !important; max-width: none;
-    /* .article-body は mobile で右へ -12px 広げているため、中央寄せ式では
-       6px右へずれる。本文カラムの24pxパディングだけを戻してviewportに揃える。 */
-    margin-left: -24px !important; margin-right: 0 !important;
+    margin-left: calc(50% - 50vw) !important; margin-right: calc(50% - 50vw) !important;
+    float: none !important;
   }
-  figure.fx-img:not(.fx-compact):not(.fx-portrait) .fx-fig {
+  figure.fx-img .fx-fig {
     max-width: 760px; margin-left: auto; margin-right: auto;
-    padding-left: 24px !important; padding-right: 24px !important;
+    padding-left: 16px !important; padding-right: 16px !important;
   }
   .fx-image-pair figure.fx-img,
   .fx-image-pair figure.fx-img.fx-bleed {
