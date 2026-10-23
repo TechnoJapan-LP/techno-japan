@@ -14,7 +14,11 @@
 
   function apply(root, lang) {
     var btns = root.querySelectorAll('.lang-btn');
-    for (var i = 0; i < btns.length; i++) btns[i].classList.toggle('is-active', btns[i].getAttribute('data-lang') === lang);
+    for (var i = 0; i < btns.length; i++) {
+      var selected = btns[i].getAttribute('data-lang') === lang;
+      btns[i].classList.toggle('is-active', selected);
+      btns[i].setAttribute('aria-pressed', selected ? 'true' : 'false');
+    }
     var bodies = root.querySelectorAll('.lang-body');
     for (var j = 0; j < bodies.length; j++) bodies[j].hidden = bodies[j].getAttribute('data-lang') !== lang;
   }

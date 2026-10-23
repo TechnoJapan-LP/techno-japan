@@ -13026,3 +13026,111 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - TOKYO の5区分の割り当て（HATAGAYA→SHINJUKU、EBISU / NAKAMEGURO→DAIKANYAMA、JINGUMAE / OMOTESANDO→AOYAMA、ROPPONGI は会場0件で非表示）はユーザー確認待ち。
 - データ: saloon の AREA は SHIBUYA だが住所は UNIT と同じ恵比寿西（DAIKANYAMA）。EN の英語住所（ADDRESS_EN）はフェーズ8。
 - cms.js / cms.html を変えている（版数のみ）→ 本番に出す時は Publish pipeline ＋ CMS の確認が必要（AGENTS.md）。
+
+### 2026-10-23 redesign/magazine フェーズ4-3 アーティスト詳細（未コミット・未公開）
+
+### 実施
+- `scripts/build-detail-pages.mjs` の `artistPage` を ArtistDetail モック準拠へ置換。パンくず、4:5ヘッド、JA/EN bioチップ、全リンク、Facts、出演行、Related artists、Stories、FAQ、更新日、ALL ARTISTS を静的生成する構造にした。
+- 出演予定は全件を日付順、過去はフェスごとに全開催回の年を保持して表示。関連アーティストは共通ジャンル・bio・写真・拠点・安定ハッシュで決定的に選択。
+- `LP/detail.css` の旧アーティスト用指定を置換し、フェス詳細の見出し行・FAQ表示と関連記事カード部品を再利用。`detail.css` を v80、`lang-toggle.js` を v2へ更新し、言語チップの `aria-pressed` も同期。
+- `scripts/check_artist_pages.mjs` を新しい出演行（`data-edition-id` / `data-date` / `data-status`）向けに更新。画像位置検査と `venues-phase3.js` の版数も現状へ合わせた。
+
+### コミット
+- なし（ユーザー指示により commit / push 未実施）。
+
+### 検証
+- `node --check`、`node scripts/build-detail-pages.mjs` 成功。
+- `node scripts/check_build_idempotent.mjs` 成功（601ファイルに変化なし）。外部画像150件は取得失敗のため既存寸法へフォールバックした警告あり。
+- `python3 scripts/check_asset_versions.py`、`python3 scripts/check_regressions.py`、`node scripts/check_artist_pages.mjs`、`node scripts/check_cms_artist_preview.mjs`、`node scripts/check_jsonld.mjs`、`node scripts/check_image_position.mjs`、`node scripts/check_og_image.mjs`、`python3 scripts/check_internal_links.py` 成功。
+- 実ブラウザ確認、`bash scripts/preflight.sh`、Publish pipeline は未実行（Claude確認待ち）。
+
+### 変更したパターン
+- 旧アーティストの `detail-hero` / `related-card` / `lineup-list` を新しい静的 head・出演表・Related・Stories構造へ置換。
+- 関連記事ヘルパーに gridカードと副題表示のオプションを追加。共有フェス見出し行とFAQの見た目をアーティストでも使用。
+- アーティスト詳細全JA/EN生成HTML、共有 `detail.css`、`lang-toggle.js`、検査スクリプト、キャッシュ版数を更新。
+
+### 未確認の類似パターン
+- 確認済み・0件: 記事・フェス・会場の共有CSSセレクタ消失、JSON-LD/FAQ数、画像位置、内部リンク、アセット版数。
+- 未確認: 実ブラウザでのアーティストJA/EN・PC/390px表示、bio切替操作、390pxの実測scrollWidth、画像選択、Publish経路。
+
+### 次の担当への注意・判断待ち
+- Claudeが実ブラウザで `?cb=<乱数>` 付きのアーティスト詳細をJA/EN・PC/モバイルで確認し、未確認経路を記録すること。公開前に `bash scripts/preflight.sh` を実行すること。
+
+### 2026-10-24 redesign/magazine フェーズ4-3 ブラウザ確認前の修正（未コミット・未公開）
+
+### 実施
+- 言語チップを `JA` / `EN` に統一し、`aria-label` と `aria-pressed` を付与。フェス・会場・アーティストの bilingualBody で共通の枠なしチップ表示にした。
+- 900px以下の出演表を Date / Festival / Status の3列へ変更し、Locationを隠し、日付のellipsisを解除。Related / Stories / FAQのモバイル見出しとリンク折返しを調整した。
+- Artist FAQを他セクションと同じ見出し行の `FAQ` に変更。Related画像は原画像比率によるcover幅補正、Stories画像はwide候補と3列/1列のsizesを生成するよう変更した。
+- `detail.css` を v81、`lang-toggle.js` を v3へ更新。CMS記事プレビューの `detail.css` 参照も v81へ同期した。
+
+### コミット
+- なし（ユーザー指示により commit / push 未実施）。
+
+### 検証
+- 成功: `node --check`（build-detail-pages / lang-toggle / cms）、`node scripts/build-detail-pages.mjs`、`node scripts/check_build_idempotent.mjs`（601ファイル差分なし）。
+- 成功: `python3 scripts/check_asset_versions.py`、`python3 scripts/check_regressions.py`、`node scripts/check_artist_pages.mjs`、`node scripts/check_cms_artist_preview.mjs`、`node scripts/check_jsonld.mjs`、`node scripts/check_cms_article_generated_preview.mjs`。
+- 外部画像150件は取得失敗時に前回寸法へフォールバックする警告あり。実ブラウザ確認、`bash scripts/preflight.sh`、Publish pipelineは未実行。
+
+### 変更したパターン
+- `lang-toggle` の共通チップ表示、アーティスト出演表のモバイル列、セクション見出し、アーティストFAQ見出し。
+- アーティストRelatedのcover補正付きsizes、Storiesのwide srcsetとグリッドsizes、detail.css/lang-toggle.js/CMSプレビュー版数。
+
+### 未確認の類似パターン
+- 確認済み・0件: フェス・会場のFAQ数、bilingualBody構造、JSON-LD、全134アーティストの出演行、アセット版数。
+- 未確認: 実ブラウザでのJA/EN切替操作、PC/スマホの実寸レイアウト、画像の実選択、Publish経路。
+
+### 次の担当への注意・判断待ち
+- Claudeが `?cb=<乱数>` 付きのJA/ENアーティスト詳細をPC・スマホで確認し、未確認経路を記録すること。CMS変更を含むため、公開前は強制リロードと `bash scripts/preflight.sh` が必要。
+
+### 2026-10-24 redesign/magazine アーティスト詳細の残り3点（未コミット・未公開）
+
+### 実施
+- 出演表の日付列をPC／スマホとも150px固定にし、日付のellipsisを削除。ENの月名入り日付も1行表示にした。
+- Appearances / Related / Stories / FAQ のモバイル見出しを34pxに固定し、共有フェス用ルールの後段でも適用されるようにした。
+- Storiesグリッドは `fourThree` 派生がある記事だけ4:3画像を使い、無い記事は従来の画像経路を維持。`detail.css` とCMSプレビューをv82へ同期した。
+
+### コミット
+- なし（ユーザー指示により commit / push 未実施）。既存の未コミット変更は保持。
+
+### 検証
+- 成功: `node --check`、`node scripts/build-detail-pages.mjs`、`node scripts/check_build_idempotent.mjs`（601ファイル差分なし）。
+- 成功: `python3 scripts/check_asset_versions.py`、`python3 scripts/check_regressions.py`、`node scripts/check_artist_pages.mjs`、`node scripts/check_cms_article_generated_preview.mjs`、`git diff --check`。
+- 外部画像150件は取得失敗時に前回寸法へフォールバックする警告あり。実ブラウザ確認と `bash scripts/preflight.sh` は未実行。
+
+### 変更したパターン
+- アーティスト出演表の固定日付列、モバイル見出しサイズ、記事4:3派生画像の選択、detail.css版数、CMS記事プレビュー版数。
+
+### 未確認の類似パターン
+- 確認済み・0件: fourThreeが無い記事の従来経路、JA/EN静的生成、全134アーティストの検査、他ページ用共有CSSセレクタの削除なし。
+- 未確認: 実ブラウザでのJA/EN・PC/スマホの実寸表示、日付の視認、Stories画像の実ロード、Publish経路。
+
+### 次の担当への注意・判断待ち
+- 公開前に`?cb=<乱数>`付きのJA/ENアーティスト詳細をPC・スマホで強制リロードして確認し、CMS変更のため必要ならPublish pipelineも実行すること。
+
+### 2026-10-24 redesign/magazine フェーズ4-3 アーティスト詳細ページ（Claude 検証・コミット。本番未反映）
+
+### 実施
+- `artistPage` をモックの作りへ: パンくず、4:5 の写真＋名前（長い1語は字を小さくして収める・文字途中で折らない）、bio の JA / EN 切替（チップ `JA` `EN`。`bilingualBody` 共通のためフェス詳細・会場詳細の説明文の切替も同じ見た目）、リンク（Instagram / SoundCloud / Bandcamp / Website ↗）、Facts（Based in / Genre）。
+- Appearances: 出演予定（日付の近い順）→過去（新しい順）を1つの表に。PC は Date / Festival / Location / Status、スマホは Location を隠す。日付は省略・折り返しなし、列の幅を固定してフェス名の左端をそろえる。`artist-upcoming` / `artist-past` のクラスは維持（check_regressions / check_artist_pages が数える）。
+- Related · ジャンル 5人（決まった順。共通ジャンル→bio→写真→拠点の区分→本人と相手の id のハッシュ）、Stories（4:3 のカード、記事の fourThree 派生を優先）、FAQ（見出し `FAQ`、FAQPage と数一致）、更新日、ALL ARTISTS。
+- `lang-toggle.js` が `aria-pressed` も更新するように。`check_artist_pages.mjs` を新しい作りに合わせ「見つからなければ失敗」に。
+
+### コミット
+- このエントリを含むコミット。
+
+### 検証
+- build / 冪等性（601ファイル）/ asset versions / regressions / check_artist_pages（134人）/ check_cms_artist_preview / check_jsonld / internal links 成功。
+- 実ブラウザ相当（CDP、PC 1280 dpr2 / スマホ 390 dpr3、JA/EN、dj-maria・ken-ishii・dungeoneering・yellowuhuru（写真なし）・kuo-from-sunset-rollercoaster）: 362/362。全134人の名前が PC・スマホで枠に収まり横にはみ出さない。EN ページの画面に見える日本語 0。
+- 影響確認: フェス詳細 356/356、記事 290 中 284（既知: スマホ本文画像 8% 不足）。detail.css の置き換えでアーティスト以外のセレクタの消失 0（機械的に比較）。
+
+### 変更したパターン
+- 日付に `text-overflow: ellipsis` を使わない（情報が消える）。列の幅で収める。
+- 表の行ごとに列の幅が変わる（max-content）と、隣の列の左端がそろわない → 固定幅。
+- 4:3 の枠に 16:9 の切り抜きを使うと必要画素が増える → 枠に合う切り抜きの派生を使う。
+
+### 未確認の類似パターン
+- 会場詳細（4-4）は次に作る。iPhone 実機は未確認。
+
+### 次の担当への注意・判断待ち
+- なし（本番には未反映。公開は全フェーズ確認後にユーザー判断）。

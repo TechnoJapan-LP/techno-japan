@@ -47,7 +47,7 @@
 @font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/space-mono-v17-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 </style>
 <link rel="stylesheet" href="/common.css?v=50">
-<link rel="stylesheet" href="/detail.css?v=79">
+<link rel="stylesheet" href="/detail.css?v=82">
 <script type="application/ld+json">[{"@context":"https://schema.org","@type":["NightClub","MusicVenue"],"@id":"https://techno-japan.media/venues/vent.html#venue","name":"VENT","alternateName":"ヴェント","inLanguage":"ja","description":"2016年のオープン以来、妥協のないテクノのブッキングで評価を築いてきた渋谷の地下クラブ。無骨なコンクリートの内装と精度の高いサウンドシステムが、音楽を最優先する環境をつくっている。","image":["https://techno-japan.media/images/venues/vent.webp"],"url":"https://techno-japan.media/venues/vent.html","sameAs":["http://vent-tokyo.net/","https://www.instagram.com/vent.tokyo/"],"address":{"@type":"PostalAddress","addressLocality":"TOKYO","addressCountry":"JP","streetAddress":"3-18-19 Minami-Aoyama, Minato-ku, Tokyo"},"geo":{"@type":"GeoCoordinates","latitude":35.6652,"longitude":139.7129},"maximumAttendeeCapacity":400,"dateModified":"2026-10-20"},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"TECHNO JAPAN","item":"https://techno-japan.media/"},{"@type":"ListItem","position":2,"name":"VENUES","item":"https://techno-japan.media/venues.html"},{"@type":"ListItem","position":3,"name":"VENT","item":"https://techno-japan.media/venues/vent.html"}]},{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"VENTの営業時間は？","acceptedAnswer":{"@type":"Answer","text":"23:00~05:00"}},{"@type":"Question","name":"VENTではどんなジャンルが流れる？","acceptedAnswer":{"@type":"Answer","text":"TECHNO／HOUSE"}},{"@type":"Question","name":"VENTの住所は？","acceptedAnswer":{"@type":"Answer","text":"3-18-19 Minami-Aoyama, Minato-ku, Tokyo"}}]}]</script>
 </head>
 <body>
@@ -99,8 +99,8 @@
     </dl>
     <div class="detail-body bilingual">
       <div class="lang-toggle" role="group" aria-label="説明文の言語">
-        <button type="button" class="lang-btn is-active" data-lang="ja">日本語</button>
-        <button type="button" class="lang-btn" data-lang="en">ENGLISH</button>
+        <button type="button" class="lang-btn is-active" data-lang="ja" aria-label="日本語" aria-pressed="true">JA</button>
+        <button type="button" class="lang-btn" data-lang="en" aria-label="English" aria-pressed="false">EN</button>
       </div>
       <div class="lang-body" data-lang="ja" lang="ja"><p>2016年のオープン以来、妥協のないテクノのブッキングで評価を築いてきた渋谷の地下クラブ。無骨なコンクリートの内装と精度の高いサウンドシステムが、音楽を最優先する環境をつくっている。</p></div>
       <div class="lang-body" data-lang="en" lang="en" hidden><p>A intimate basement club in Shibuya that has carved out a reputation for uncompromising techno programming since opening in 2016. The venue&#39;s stark concrete interior and precise sound system create an environment where the music takes absolute priority over everything else.</p></div>
@@ -186,7 +186,7 @@
 </script>
 <script src="/common.js?v=20" defer></script>
 <script src="/search.js?v=8" defer data-hub-src="/data-hub.js?v=11"></script>
-<script src="/lang-toggle.js?v=1" defer></script>
+<script src="/lang-toggle.js?v=3" defer></script>
 <script>
 function bindVenueHubBackLinks() {
   document.querySelectorAll('[data-venue-hub-back]').forEach((link) => {

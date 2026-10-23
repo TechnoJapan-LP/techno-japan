@@ -50,7 +50,8 @@ const KINDS = [
 /* hero の <img> を取り出す。回遊カード（related-card-img）は別物なので除く。 */
 function heroImgTag(html) {
   const m = html.match(/<div class="detail-hero[^"]*">\s*<img\b[^>]*>/)
-        || html.match(/<div class="detail-hero-image">\s*<img\b[^>]*>/);
+        || html.match(/<div class="detail-hero-image">\s*<img\b[^>]*>/)
+        || html.match(/<div class="artist-head-photo img">\s*<img\b[^>]*>/);
   return m ? m[0] : null;
 }
 

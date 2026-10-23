@@ -58,7 +58,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 79;
+const DETAIL_CSS_VERSION = 82;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -79,7 +79,7 @@ const COMMON_JS_VERSION = 20;   // 2026-10-23 festival tab section tracking
 const COMMON_CSS_VERSION = 50;   // 2026-10-23 magazine newsletter, article layout, and detail polish
 const DATA_HUB_VERSION = 11;
 const SEARCH_JS_VERSION = 8;
-const LANG_TOGGLE_VERSION = 1;
+const LANG_TOGGLE_VERSION = 3;
 const MAGAZINE_JS_VERSION = 5;
 const FAVORITES_JS_VERSION = 4;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
@@ -486,6 +486,44 @@ function imageSourceWidth(source) {
   return size && Number(size[0]) > 0 ? Number(size[0]) : 0;
 }
 
+function coverSizes(source, boxAspect, sizes) {
+  const key = String(source || '').split(/[?#]/)[0].replace(/^\/+/, '');
+  const size = IMAGE_DIMENSIONS[String(source || '').split(/[?#]/)[0]] || IMAGE_DIMENSIONS[key];
+  const imageAspect = size && Number(size[0]) > 0 && Number(size[1]) > 0
+    ? Number(size[0]) / Number(size[1])
+    : 1;
+  const frameAspect = Number(boxAspect) > 0 ? Number(boxAspect) : 1;
+  const scale = Math.max(1, imageAspect / frameAspect);
+  if (scale <= 1.0001) return sizes;
+  const parts = [];
+  let start = 0;
+  let depth = 0;
+  const rawSizes = String(sizes || '');
+  for (let index = 0; index < rawSizes.length; index += 1) {
+    if (rawSizes[index] === '(') depth += 1;
+    if (rawSizes[index] === ')') depth -= 1;
+    if (rawSizes[index] === ',' && depth === 0) {
+      parts.push(rawSizes.slice(start, index));
+      start = index + 1;
+    }
+  }
+  parts.push(rawSizes.slice(start));
+  return parts.map((part) => {
+    const value = part.trim();
+    const factor = Math.round(scale * 1000) / 1000;
+    const calcIndex = value.lastIndexOf('calc(');
+    if (calcIndex >= 0 && value.endsWith(')')) {
+      const prefix = value.slice(0, calcIndex);
+      const calc = value.slice(calcIndex);
+      return `${prefix}calc((${calc.slice(5, -1)}) * ${factor})`;
+    }
+    const match = value.match(/(\d+(?:\.\d+)?(?:vw|vh|px|rem))\s*$/);
+    if (!match) return value;
+    const scaled = `calc(${match[1]} * ${factor})`;
+    return value.slice(0, match.index) + scaled;
+  }).join(', ');
+}
+
 function largeSrcsetAttr(source, sizes) {
   const hit = cardEntry(source);
   const candidates = (hit?.srcset || []).concat(hit?.heroSrcset || []);
@@ -522,6 +560,11 @@ function articleWideImagePath(source, imagePosition) {
   const position = articlePositionKey(imagePosition);
   return wide?.[position]?.path || wide?.center?.path || cardImagePath(source);
 }
+function articleFourThreeImagePath(source, imagePosition) {
+  const fourThree = cardEntry(source)?.aspect?.fourThree;
+  const position = articlePositionKey(imagePosition);
+  return fourThree?.[position]?.path || fourThree?.center?.path || cardImagePath(source);
+}
 function articleWideSrcsetAttr(source, imagePosition, sizes) {
   const wide = cardEntry(source)?.aspect?.wide;
   const position = articlePositionKey(imagePosition);
@@ -545,8 +588,17 @@ function articleWideSrcsetAttr(source, imagePosition, sizes) {
   const set = unique.map(([pathName, width]) => `/${pathName} ${width}w`).join(', ');
   return ` srcset="${esc(set)}" sizes="${esc(sizes)}"`;
 }
+function articleFourThreeSrcsetAttr(source, imagePosition, sizes) {
+  const fourThree = cardEntry(source)?.aspect?.fourThree;
+  const position = articlePositionKey(imagePosition);
+  const entry = fourThree?.[position] || fourThree?.center;
+  if (!entry) return articleWideSrcsetAttr(source, imagePosition, sizes);
+  return ` srcset="/${esc(entry.path)} ${esc(String(entry.w))}w" sizes="${esc(sizes)}"`;
+}
 // 記事末尾の大判は 260px 幅。
 const relatedStoryWideSrcsetAttr = (s) => srcsetAttr(s, '(max-width: 700px) 100vw, 260px');
+const artistRelatedSizes = '(max-width: 900px) calc((100vw - 48px) / 2), calc((min(100vw, 1360px) - 80px - 80px) / 5)';
+const artistStoryGridSizes = '(max-width: 900px) calc(100vw - 32px), calc((min(100vw, 1360px) - 80px - 64px) / 3)';
 
 function splitArticleTitle(title) {
   const value = String(title || '');
@@ -847,8 +899,8 @@ function bilingualBody(ja, en, pageLang, extraClass = '') {
     const act = (l) => (l === pageLang ? ' is-active' : '');
     return `<div class="detail-body bilingual${extraClass ? ` ${extraClass}` : ''}">
       <div class="lang-toggle" role="group" aria-label="${pageLang === 'en' ? 'Description language' : '説明文の言語'}">
-        <button type="button" class="lang-btn${act('ja')}" data-lang="ja">日本語</button>
-        <button type="button" class="lang-btn${act('en')}" data-lang="en">ENGLISH</button>
+        <button type="button" class="lang-btn${act('ja')}" data-lang="ja" aria-label="日本語" aria-pressed="${pageLang === 'ja' ? 'true' : 'false'}">JA</button>
+        <button type="button" class="lang-btn${act('en')}" data-lang="en" aria-label="English" aria-pressed="${pageLang === 'en' ? 'true' : 'false'}">EN</button>
       </div>
       <div class="lang-body" data-lang="ja" lang="ja"${hid('ja')}><p>${esc(jaT)}</p></div>
       <div class="lang-body" data-lang="en" lang="en"${hid('en')}><p>${esc(enT)}</p></div>
@@ -1328,26 +1380,37 @@ function articleNewsletterHtml(canonical, lang = 'ja') {
     </section>`;
 }
 
-function relatedStoryCardsHtml(items, lang, { forceEnglishPath = false, compactDate = false, wide = false, heading = 'RELATED STORIES' } = {}) {
+function relatedStoryCardsHtml(items, lang, { forceEnglishPath = false, compactDate = false, wide = false, grid = false, heading = 'RELATED STORIES' } = {}) {
   const cards = (items || []).map((a) => {
     const englishPath = lang === 'en' && (forceEnglishPath || a.title_en || a.body_en) ? '/en' : '';
     const title = stripTitleMarkdown(lang === 'en' ? (a.title_en || a.title) : a.title);
     const date = compactDate
       ? String(a.date || '').split('/')[0].replace(/-/g, '.')
       : fmtDate(a.date);
-    const cardClass = wide ? 'related-story-card is-wide' : 'related-story-card';
-    const thumbSrcsetAttr = wide ? relatedStoryWideSrcsetAttr : storyThumbSrcsetAttr;
+    const cardClass = wide ? 'related-story-card is-wide' : (grid ? 'related-story-card is-grid' : 'related-story-card');
+    const thumbSrcsetAttr = wide
+      ? relatedStoryWideSrcsetAttr
+      : grid
+        ? (source) => articleFourThreeSrcsetAttr(source, a.imagePosition, artistStoryGridSizes)
+        : storyThumbSrcsetAttr;
     const storyTitle = wide ? splitArticleTitle(title) : null;
     const titleHtml = wide
       ? `<span class="story-title-short">${esc(storyTitle.short)}</span>${storyTitle.sub ? `<span class="story-title-sub">${esc(storyTitle.sub)}</span>` : ''}`
       : esc(title);
+    const excerpt = grid ? truncate(stripTags(lang === 'en' ? (a.excerpt_en || a.excerpt) : (a.excerpt || a.excerpt_en)), 140) : '';
+    const storyImagePath = grid
+      ? articleFourThreeImagePath(a.image, a.imagePosition)
+      : cardImagePath(a.image);
+    const thumb = grid
+      ? `<div class="related-story-thumb artist-story-thumb">${a.image ? `<img ${dimensionAttrs(storyImagePath)} src="/${storyImagePath}"${thumbSrcsetAttr(a.image)} alt="" loading="lazy" decoding="async">` : ''}</div>`
+      : (a.image ? `<img ${dimensionAttrs(storyImagePath)} class="related-story-thumb" src="/${storyImagePath}"${thumbSrcsetAttr(a.image)} alt="" loading="lazy" decoding="async">` : '');
     return `<a class="${cardClass}" href="${englishPath}/articles/${a.id}.html">
-          ${a.image ? `<img ${dimensionAttrs(cardImagePath(a.image))} class="related-story-thumb" src="/${cardImagePath(a.image)}"${thumbSrcsetAttr(a.image)} alt="" loading="lazy" decoding="async">` : ''}
+          ${thumb}
           <div><div class="related-story-meta">${esc(a.category || 'STORY')} · ${esc(date)}</div>
-          <div class="related-story-title">${titleHtml}</div></div>
+          <div class="related-story-title">${titleHtml}</div>${excerpt ? `<div class="related-story-excerpt">${esc(excerpt)}</div>` : ''}</div>
         </a>`;
   }).join('');
-  return cards ? `<div class="related-stories"><h2>${heading}</h2>${cards}</div>` : '';
+  return cards ? `<div class="related-stories">${heading ? `<h2>${heading}</h2>` : ''}${cards}</div>` : '';
 }
 
 function authorMatches(articleName, authorName) {
@@ -2118,13 +2181,16 @@ function festivalFaqHtml(items, lang) {
   ).join('')}</dl></section>`;
 }
 
-function festivalFaqDetailsHtml(items, lang) {
+function festivalFaqDetailsHtml(items, lang, artistHeading = false) {
   if (!items.length) return '';
   const answerHtml = (item) => item.url
     ? esc(item.answer).replace(esc(item.url), `<a href="${esc(safeUrl(item.url))}" target="_blank" rel="noopener">${esc(item.url)}</a>`)
     : esc(item.answer);
+  const heading = artistHeading
+    ? '<div class="festival-section-heading"><h2 class="disp">FAQ</h2></div>'
+    : `<h2 class="detail-section-label">${lang === 'en' ? 'FREQUENTLY ASKED QUESTIONS' : 'よくある質問'}</h2>`;
   return `<section class="detail-section festival-faq festival-faq-details">
-      <h2 class="detail-section-label">${lang === 'en' ? 'FREQUENTLY ASKED QUESTIONS' : 'よくある質問'}</h2>
+      ${heading}
       <div class="festival-faq-list">${items.map((item) => `<details>
         <summary>${esc(item.question)}</summary>
         <div class="festival-faq-answer"><p>${answerHtml(item)}</p></div>
@@ -2819,6 +2885,40 @@ const artistMemberIds = (artist) => {
     .filter(Boolean);
 };
 
+function artistGenres(artist) {
+  const values = Array.isArray(artist?.genre) ? artist.genre : String(artist?.genre || '').split(/[\/,]/);
+  return values.map((genre) => String(genre).trim()).filter(Boolean);
+}
+
+function artistLinkLabel(key) {
+  const labels = {
+    instagram: 'Instagram',
+    soundcloud: 'SoundCloud',
+    bandcamp: 'Bandcamp',
+    website: 'Website',
+  };
+  const raw = String(key || '').trim();
+  return labels[raw.toLowerCase()] || `${raw.charAt(0).toUpperCase()}${raw.slice(1).toLowerCase()}`;
+}
+
+function artistNameClass(name) {
+  const words = String(name || '').trim().split(/\s+/).filter(Boolean);
+  const longest = Math.max(0, ...words.map((word) => [...word].length));
+  if (longest > 16) return ' artist-title-longest';
+  if (longest > 10) return ' artist-title-long';
+  return '';
+}
+
+function artistStableHash(left, right) {
+  const value = `${left}\u0000${right}`;
+  let hash = 2166136261;
+  for (const character of value) {
+    hash ^= character.codePointAt(0);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+}
+
 function artistPage(a, artistsById, lang = 'ja', artistAppearances = new Map(), editionsByFestival = new Map(), articles = []) {
   const hubHref = `${lang === 'en' ? '/en' : ''}/artists.html`;
   const prefix = lang === 'en' ? '/en' : '';
@@ -2893,54 +2993,129 @@ function artistPage(a, artistsById, lang = 'ja', artistAppearances = new Map(), 
     })) } : {}),
   };
 
-  const genres = (Array.isArray(a.genre) ? a.genre : String(a.genre || '').split('/').filter(Boolean))
-    .map((g) => `<span class="detail-chip">${esc(String(g).trim())}</span>`).join('');
-
+  const genreList = artistGenres(a);
+  const genreLine = genreList.join(' / ');
+  const localizedCity = lang === 'en' ? placeEn(a.city) : placeJa(a.city);
+  const localizedCountry = lang === 'en' ? placeEn(a.country) : placeJa(a.country);
+  const basedIn = [localizedCity, localizedCountry].filter(Boolean).join(' · ');
   const linkRow = Object.entries(links)
-    .filter(([, v]) => v)
-    .map(([k, v]) => `<a class="detail-link" href="${esc(safeUrl(v))}" target="_blank" rel="noopener">${esc(k.toUpperCase())}</a>`)
+    .filter(([, value]) => value)
+    .map(([key, value]) => `<a class="btn2" href="${esc(safeUrl(value))}" target="_blank" rel="noopener">${esc(artistLinkLabel(key))} ↗</a>`)
     .join('');
   const pastByFestival = new Map();
   for (const item of appearances.filter((entry) => !entry.upcoming)) {
     const key = String(item.festival.id);
     if (!pastByFestival.has(key)) pastByFestival.set(key, { festival: item.festival, editions: [] });
-    pastByFestival.get(key).editions.push(item.edition);
+    const group = pastByFestival.get(key);
+    const editionKey = String(item.edition.EDITION_ID || editionIdentifier(item.edition));
+    if (!group.editions.some((edition) => String(edition.EDITION_ID || editionIdentifier(edition)) === editionKey)) group.editions.push(item.edition);
   }
-  const upcomingHtml = upcoming.length
-    ? `<section class="artist-appearances artist-upcoming"><h2>${lang === 'en' ? 'UPCOMING' : '出演予定'}</h2><div class="related-grid">${upcoming.slice(0, 6).map(({ festival, edition }) => relatedFestivalCardHtml(festival, lang, prefix, editionsByFestival, edition)).join('')}</div></section>`
+  const appearanceLocation = (edition) => [
+    editionLocationName(edition, lang),
+    lang === 'en' ? placeEn(edition.PREF) : placeJa(edition.PREF),
+  ].filter(Boolean).join(' · ');
+  const appearanceRow = ({ festival, edition, upcoming: isUpcoming, yearLabels = null, editionIds = [] }) => {
+    const festivalName = lang === 'en' ? (festival.name_en || festival.name) : festival.name;
+    const date = festivalShortDateText(edition, lang) || '—';
+    const yearLine = yearLabels || editionLabel(editionIdentifier(edition));
+    const ids = editionIds.length ? editionIds : [edition.EDITION_ID || editionIdentifier(edition)];
+    return `<a class="artist-appearance-row row" href="${prefix}/festivals/${encodeURIComponent(festival.id)}.html" data-edition-id="${esc(ids.join(','))}" data-date="${esc(String(edition.DATE_START || ''))}" data-status="${isUpcoming ? 'upcoming' : 'archive'}">
+      <span class="artist-appearance-date"><span class="disp">${esc(date)}</span><span class="mono">${esc(yearLine || '—')}</span></span>
+      <span class="artist-appearance-festival">${esc(festivalName)}</span>
+      <span class="artist-appearance-location hide">${esc(appearanceLocation(edition) || '—')}</span>
+      <span class="mono${isUpcoming ? ' red' : ''}">${isUpcoming ? 'UPCOMING' : 'ARCHIVE'}</span>
+    </a>`;
+  };
+  const upcomingRows = upcoming.map((item) => appearanceRow(item)).join('');
+  const pastGroups = [...pastByFestival.values()]
+    .map((group) => ({ ...group, editions: [...group.editions].sort((x, y) => String(y.DATE_START || '').localeCompare(String(x.DATE_START || ''))) }))
+    .sort((x, y) => String(y.editions[0]?.DATE_START || '').localeCompare(String(x.editions[0]?.DATE_START || '')));
+  const pastRows = pastGroups.map(({ festival, editions }) => {
+    const latest = editions[0];
+    const years = editions.map((edition) => editionLabel(editionIdentifier(edition))).filter(Boolean).join(' · ');
+    const ids = editions.map((edition) => edition.EDITION_ID || editionIdentifier(edition));
+    return appearanceRow({ festival, edition: latest, upcoming: false, yearLabels: years, editionIds: ids });
+  }).join('');
+  const upcomingBlock = upcomingRows ? `\n      <div class="artist-upcoming">${upcomingRows}</div>` : '';
+  const pastBlock = pastRows ? `\n      <div class="artist-past">${pastRows}</div>` : '';
+  const appearancesHtml = upcoming.length || pastGroups.length
+    ? `<section class="artist-appearances">
+      <div class="festival-section-heading"><h2 class="disp">Appearances</h2></div>
+      <div class="artist-appearance-columns row mono"><span>Date</span><span>Festival</span><span class="hide">Location</span><span>Status</span></div>${upcomingBlock}${pastBlock}
+    </section>`
     : '';
-  const pastHtml = pastByFestival.size
-    ? `<section class="artist-appearances artist-past"><h2>${lang === 'en' ? 'PAST APPEARANCES' : '過去の出演'}</h2><div class="lineup-list">${[...pastByFestival.values()].sort((x, y) => String(y.editions[0]?.DATE_START || '').localeCompare(String(x.editions[0]?.DATE_START || ''))).map(({ festival, editions }) => {
-      const years = [...new Map(editions.map((ed) => [String(ed.EDITION || editionIdentifier(ed)), ed])).values()]
-        .sort((x, y) => String(y.DATE_START || '').localeCompare(String(x.DATE_START || '')))
-        .map((ed) => editionLabel(editionIdentifier(ed))).join('・');
-      const label = `${lang === 'en' ? (festival.name_en || festival.name) : festival.name} ${years}`;
-      return `<a class="lineup-item" href="${prefix}/festivals/${encodeURIComponent(festival.id)}.html">${esc(label)}</a>`;
-    }).join('')}</div></section>`
+  const relatedCandidates = [...artistsById.values()]
+    .filter((artist) => String(artist.id) !== String(a.id))
+    .map((artist) => {
+      const common = genreList.filter((genre) => artistGenres(artist).includes(genre)).length;
+      const hasBio = Boolean(stripTags(artist.bio || artist.bio_en));
+      const hasPhoto = Boolean(artist.image);
+      const sameOrigin = fromJapan === (!artist.country || /japan/i.test(String(artist.country)));
+      return { artist, common, hasBio, hasPhoto, sameOrigin, hash: artistStableHash(a.id, artist.id) };
+    });
+  const relatedComparator = (left, right) => right.common - left.common
+    || Number(right.hasBio) - Number(left.hasBio)
+    || Number(right.hasPhoto) - Number(left.hasPhoto)
+    || Number(right.sameOrigin) - Number(left.sameOrigin)
+    || left.hash - right.hash;
+  const relatedArtists = [
+    ...relatedCandidates.filter((candidate) => candidate.common > 0).sort(relatedComparator),
+    ...relatedCandidates.filter((candidate) => candidate.common === 0 && candidate.sameOrigin).sort(relatedComparator),
+    ...relatedCandidates.filter((candidate) => candidate.common === 0 && !candidate.sameOrigin).sort(relatedComparator),
+  ].slice(0, 5);
+  const relatedHeading = genreLine ? `Related · ${genreLine}` : 'Related artists';
+  const relatedHtml = relatedArtists.length
+    ? `<section class="artist-related-artists">
+      <div class="festival-section-heading"><h2 class="disp">${esc(relatedHeading)}</h2><a class="mono" href="${hubHref}">All artists →</a></div>
+      <div class="artist-related-grid">${relatedArtists.map(({ artist }) => {
+        const relatedName = lang === 'en' ? (artist.name_en || artist.name) : artist.name;
+        const relatedGenres = artistGenres(artist).join(' / ');
+        const relatedImage = artist.image;
+        return `<a class="artist-related-card card" href="${prefix}/artists/${encodeURIComponent(artist.id)}.html">
+          <div class="artist-related-image img">${relatedImage ? `<img ${dimensionAttrs(cardImagePath(relatedImage))} src="/${cardImagePath(relatedImage)}"${largeSrcsetAttr(relatedImage, coverSizes(relatedImage, 1, artistRelatedSizes))} alt="${esc(relatedName)}" loading="lazy" decoding="async"${imagePositionStyle(artist)}>` : ''}</div>
+          <span class="disp artist-related-name">${esc(relatedName)}</span>
+          <span class="mono">${esc(relatedGenres)}</span>
+        </a>`;
+      }).join('')}</div>
+    </section>`
     : '';
   const faqItems = stripTags(a.bio || a.bio_en) && !(!stripTags(a.bio) && !stripTags(a.bio_en))
     ? artistFaqItems(name, a, nearest, pastByFestival, lang) : [];
-  const faqHtml = faqItems.length ? festivalFaqDetailsHtml(faqItems, lang) : '';
+  const faqHtml = faqItems.length ? festivalFaqDetailsHtml(faqItems, lang, true) : '';
   const faqLd = faqJsonLd(faqItems);
   const artistFestivalIds = appearances.map(({ festival }) => festival.id);
   const artistArticles = (articles || []).filter((article) => String(article.status || '').toLowerCase() !== 'draft' && articleMatchesArtist(article, a, { artistFestivalIds, festivals: XLINK.fests })).slice(0, 3);
   const articlesHtml = artistArticles.length
-    ? `<section class="detail-section artist-related">${relatedStoryCardsHtml(artistArticles, lang, { forceEnglishPath: true, compactDate: true, wide: true, heading: lang === 'en' ? 'RELATED STORIES' : '関連記事' })}</section>`
+    ? `<section class="artist-stories">
+      <div class="festival-section-heading"><h2 class="disp">Stories</h2><a class="mono" href="${prefix}/news.html">All stories →</a></div>
+      ${relatedStoryCardsHtml(artistArticles, lang, { forceEnglishPath: true, compactDate: true, grid: true, heading: '' })}
+    </section>`
     : '';
-  const appearancesHtml = upcomingHtml || pastHtml || articlesHtml
-    ? `\n    ${upcomingHtml}${pastHtml}${articlesHtml}`
+  const bioHtml = bilingualBody(a.bio, a.bio_en, lang, 'artist-bio').replaceAll('class="lang-btn', 'class="lang-btn chip');
+  const factsHtml = `<div class="artist-facts facts">
+      <div class="fact"><span class="mono">Based in</span><span>${esc(basedIn || '—')}</span></div>
+      <div class="fact"><span class="mono">Genre</span><span>${esc(genreLine || '—')}</span></div>
+    </div>`;
+  const headImage = a.image
+    ? `<img ${dimensionAttrs(a.image)} src="/${String(a.image).replace(/^\//, '')}"${heroSrcsetAttr(a.image, '(max-width: 900px) calc(100vw - 32px), min(510px, 41vw)')} alt="${esc(name)}" fetchpriority="high"${imagePositionStyle(a)}>`
+    : '';
+  const sectionsHtml = appearancesHtml || relatedHtml || articlesHtml || faqHtml
+    ? `\n    ${appearancesHtml}${relatedHtml}${articlesHtml}${faqHtml}`
     : '';
 
-  const body = `<article class="detail-page artist-detail">
-  <div class="detail-inner">
-    ${place ? `<div class="detail-eyebrow">${esc(place)}</div>` : ''}
-    <h1>${esc(name)}</h1>
-    ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
-    ${a.image ? `<div class="detail-hero detail-hero-portrait"><img ${dimensionAttrs(a.image)} src="/${String(a.image).replace(/^\//, '')}"${heroSrcsetAttr(a.image)} alt="${esc(name)}" fetchpriority="high"${imagePositionStyle(a)}></div>` : ''}
-    ${bilingualBody(a.bio, a.bio_en, lang)}
-    ${linkRow ? `<div class="detail-links">${linkRow}</div>` : ''}${appearancesHtml}${faqHtml ? `\n    ${faqHtml}` : ''}
+  const body = `<article class="detail-page artist-detail artist-detail-v2">
+  <div class="wrap artist-detail-wrap">
+    <nav class="artist-breadcrumb mono" aria-label="Breadcrumb"><a href="${hubHref}">Artists</a><span>/</span><span>${esc(name)}</span></nav>
+    <section class="artist-head">
+      <div class="artist-head-photo img">${headImage}</div>
+      <div class="artist-head-copy">
+        <h1 class="disp artist-title${artistNameClass(name)}">${esc(name)}</h1>
+        ${bioHtml}${linkRow ? `\n        <div class="artist-links">${linkRow}</div>` : ''}
+        ${factsHtml}
+      </div>
+    </section>${sectionsHtml}
     ${updatedLabel(modified, lang)}
-    <div class="article-footer"><a class="article-back" href="${hubHref}" data-artist-hub-back="${hubHref}" style="margin:0"><span class="arrow"></span> ALL ARTISTS</a></div>
+    <div class="article-footer artist-footer"><a class="article-back" href="${hubHref}" data-artist-hub-back="${hubHref}"><span class="arrow"></span> ALL ARTISTS</a></div>
   </div>
 </article>`;
 

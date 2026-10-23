@@ -13,6 +13,11 @@ const dataContext = {};
 vm.createContext(dataContext);
 new vm.Script(fs.readFileSync(path.join(LP, 'data.js'), 'utf8') + '\n;globalThis.__artistCheck={ARTISTS};').runInContext(dataContext);
 const artists = dataContext.__artistCheck.ARTISTS || [];
+const lineups = JSON.parse(fs.readFileSync(path.join(LP, 'data', 'lineups.json'), 'utf8')).items || [];
+const appearanceArtistIds = new Set(lineups.flatMap((row) => {
+  const value = row.ARTIST_IDS || row.ARTIST_ID || [];
+  return (Array.isArray(value) ? value : String(value).split(',')).map((id) => String(id).trim()).filter(Boolean);
+}));
 const sitemap = html(path.join(LP, 'sitemap.xml'));
 const failures = [];
 const hasSitemap = (prefix, id) => sitemap.includes(`https://techno-japan.media${prefix}/artists/${id}.html`);
@@ -41,10 +46,13 @@ for (const id of ['ken-ishii', 'dj-nobu', 'powder']) {
 
 const checkUpcomingOrder = (file) => {
   const page = html(file);
-  const section = page.match(/<section class="artist-appearances artist-upcoming">([\s\S]*?)<\/section>/)?.[1];
-  if (!section) return;
-  const dates = [...section.matchAll(/<div class="related-card-date">([^<]*)<\/div>/g)].map((m) => m[1]).filter((x) => /^\d{4}-\d{2}-\d{2}/.test(x));
+  const rows = [...page.matchAll(/<a class="artist-appearance-row row"[^>]*data-edition-id="([^"]*)"[^>]*data-date="([^"]*)"[^>]*data-status="([^"]+)"/g)];
+  const upcomingRows = rows.filter(([, , , status]) => status === 'upcoming');
+  const dates = upcomingRows.map(([, , date]) => date).filter(Boolean);
   if (dates.some((date, index) => index && date < dates[index - 1])) failures.push(`${file}: upcoming cards are not date-sorted`);
+  if (appearanceArtistIds.has(path.basename(file, '.html')) && !rows.length) failures.push(`${file}: artist has appearances but no appearance rows were found`);
+  const editionIds = upcomingRows.flatMap(([ , ids]) => ids.split(',').map((id) => id.trim()).filter(Boolean));
+  if (new Set(editionIds).size !== editionIds.length) failures.push(`${file}: duplicate upcoming edition row`);
 };
 
 const isRedirectStub = (page) => /<meta http-equiv="refresh"[^>]*url=/i.test(page);
@@ -66,13 +74,8 @@ for (const dir of ['artists', 'en/artists']) {
     const redirectStub = /<meta name="robots" content="noindex">/i.test(page);
     if (!redirectStub && title.includes('…')) failures.push(`${dir}/${file}: title contains an ellipsis`);
     checkUpcomingOrder(path.join(LP, dir, file));
-    const upcoming = page.match(/<section class="artist-appearances artist-upcoming">([\s\S]*?)<\/section>/)?.[1];
-    if (upcoming) {
-      const cards = [...upcoming.matchAll(/<a class="related-card" href="([^"]+)">([\s\S]*?)<\/a>/g)];
-      const cardKeys = cards.map((match) => `${match[1]}|${match[2].match(/<div class="related-card-date">([^<]*)<\/div>/)?.[1] || ''}`);
-      if (new Set(cardKeys).size !== cardKeys.length) failures.push(`${dir}/${file}: duplicate upcoming festival card`);
-    }
-    if (page.includes('artist-past') && !/\b(?:19|20)\d{2}(?: #\d+)?\b/.test(page)) failures.push(`${dir}/${file}: past appearance has no year`);
+    const past = page.match(/<div class="artist-past">([\s\S]*?)<\/div>\s*<\/section>/)?.[1];
+    if (page.includes('artist-past') && (!past || !/\b(?:19|20)\d{2}(?: #\d+)?\b/.test(past))) failures.push(`${dir}/${file}: past appearance has no year`);
   }
 }
 
