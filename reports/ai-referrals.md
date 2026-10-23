@@ -1,28 +1,29 @@
 # AI経由の流入
 
-取得日時: 2026-10-22T21:56:32.538Z
+取得日時: 2026-10-23T21:32:10.726Z
 
 | 期間 | AIセッション | 全体セッション | AI割合 |
 |---|---:|---:|---:|
-| 直近28日（2026-09-26〜2026-10-23） | 65 | 2570 | 2.53% |
-| 前の28日（2026-08-29〜2026-09-25） | 0 | 0 | 0.00% |
+| 直近28日（2026-09-27〜2026-10-24） | 68 | 2601 | 2.61% |
+| 前の28日（2026-08-30〜2026-09-26） | 0 | 0 | 0.00% |
 
 ## 直近28日：参照元別
 
 | 参照元 | セッション | ユーザー |
 |---|---:|---:|
-| chatgpt.com | 64 | 63 |
+| chatgpt.com | 67 | 66 |
 | gemini.google.com | 1 | 1 |
 
 ### 直近28日：ランディングページ上位20
 
 | ランディングページ | セッション | ユーザー |
 |---|---:|---:|
-| / | 9 | 8 |
+| / | 10 | 9 |
 | /festivals/festival-de-frue.html | 9 | 9 |
 | /en/festivals/labyrinth.html | 8 | 8 |
 | /articles/japan-festival-2026-september.html | 6 | 6 |
 | /en/festivals/lost-find.html | 4 | 4 |
+| /en/articles/denki-bodhisattva-2026-info.html | 3 | 3 |
 | /en/articles/japan-festival-2026-october.html | 3 | 3 |
 | /en/articles/topia-2026-info.html | 3 | 3 |
 | /festivals/yagura.html | 3 | 3 |
@@ -33,7 +34,6 @@
 | /articles/rebirth-2026-info.html | 1 | 1 |
 | /articles/synapse-2026-info.html | 1 | 1 |
 | /artists/powder.html | 1 | 1 |
-| /en/articles/denki-bodhisattva-2026-info.html | 1 | 1 |
 | /en/articles/forest-sound-camp-info.html | 1 | 1 |
 | /en/articles/intergalactic-2026-info.html | 1 | 1 |
 | /en/articles/japan-festival-2026-september.html | 1 | 1 |

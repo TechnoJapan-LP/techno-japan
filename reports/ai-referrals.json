@@ -1,27 +1,27 @@
 {
-  "generatedAt": "2026-10-22T21:56:32.538Z",
+  "generatedAt": "2026-10-23T21:32:10.726Z",
   "propertyId": "535755449",
   "periods": {
     "current": {
-      "startDate": "2026-09-26",
-      "endDate": "2026-10-23",
+      "startDate": "2026-09-27",
+      "endDate": "2026-10-24",
       "label": "直近28日"
     },
     "previous": {
-      "startDate": "2026-08-29",
-      "endDate": "2026-09-25",
+      "startDate": "2026-08-30",
+      "endDate": "2026-09-26",
       "label": "前の28日"
     }
   },
   "current": {
-    "sessions": 65,
-    "totalUsers": 64,
-    "share": 0.02529182879377432,
+    "sessions": 68,
+    "totalUsers": 67,
+    "share": 0.026143790849673203,
     "bySource": [
       {
         "source": "chatgpt.com",
-        "sessions": 64,
-        "totalUsers": 63
+        "sessions": 67,
+        "totalUsers": 66
       },
       {
         "source": "gemini.google.com",
@@ -32,8 +32,8 @@
     "topLandingPages": [
       {
         "landingPage": "/",
-        "sessions": 9,
-        "totalUsers": 8
+        "sessions": 10,
+        "totalUsers": 9
       },
       {
         "landingPage": "/festivals/festival-de-frue.html",
@@ -54,6 +54,11 @@
         "landingPage": "/en/festivals/lost-find.html",
         "sessions": 4,
         "totalUsers": 4
+      },
+      {
+        "landingPage": "/en/articles/denki-bodhisattva-2026-info.html",
+        "sessions": 3,
+        "totalUsers": 3
       },
       {
         "landingPage": "/en/articles/japan-festival-2026-october.html",
@@ -106,11 +111,6 @@
         "totalUsers": 1
       },
       {
-        "landingPage": "/en/articles/denki-bodhisattva-2026-info.html",
-        "sessions": 1,
-        "totalUsers": 1
-      },
-      {
         "landingPage": "/en/articles/forest-sound-camp-info.html",
         "sessions": 1,
         "totalUsers": 1
@@ -131,8 +131,8 @@
         "totalUsers": 1
       }
     ],
-    "allSessions": 2570,
-    "allTotalUsers": 2170
+    "allSessions": 2601,
+    "allTotalUsers": 2184
   },
   "previous": {
     "sessions": 0,
