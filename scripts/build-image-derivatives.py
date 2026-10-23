@@ -39,6 +39,9 @@ SIZES = (("xs", 240), ("sm", 480), ("md", 720), ("lg", 960))
 # 記事のfull-bleed heroだけはPC幅1440px/高密度画面に対応する。
 # 原本より拡大せず、xxl は原本の幅が xl より大きい記事だけ作る。
 ARTICLE_HERO_SIZES = (("xl", 1440), ("xxl", 2560))
+# フェス詳細のヒーローとフライヤーは、カード用lgの次に1440pxを使う。
+# 原寸に近いxxlは候補にしても転送量がほとんど減らないため、フェスでは作らない。
+FESTIVAL_HERO_SIZES = (("xl", 1440),)
 # 本文はスマホ100vwとPCのfull幅（実測最大1332px）で表示されるため、
 # dpr2の800px、dpr3の1200px、PC Retinaの1440pxを候補にする。
 ARTICLE_BODY_SIZES = (("body-md", 800), ("body-lg", 1200), ("body-xl", 1440))
@@ -50,6 +53,15 @@ ARTICLE_ASPECTS = {
     "fourThree": (4, 3),
 }
 ARTICLE_POSITIONS = ("center", "top", "bottom", "left", "right")
+
+
+def save_derivative_if_missing(target: Path, image: Image.Image, quality: int) -> tuple[int, int]:
+    """既存の同一ハッシュ派生は保存し直さず、実体の寸法だけ返す。"""
+    if target.exists():
+        with Image.open(target) as existing:
+            return existing.size
+    image.save(target, "WEBP", quality=quality, method=6)
+    return image.size
 
 
 def articles_section() -> str:
@@ -147,10 +159,10 @@ def main() -> None:
                             image = image.convert("RGB")
                         if max(image.size) > max_edge:
                             image.thumbnail((max_edge, max_edge), Image.Resampling.LANCZOS)
-                        image.save(target, "WEBP", quality=QUALITY, method=6)
+                        saved_size = save_derivative_if_missing(target, image, QUALITY)
                         entry[suffix] = {
                             "path": f"images/derivatives/card/{kind}/{target.name}",
-                            "w": image.size[0],
+                            "w": saved_size[0],
                         }
                 # 既定(src)はlg。srcsetを解釈しない環境でも従来どおり表示できる。
                 mapping[source_key] = {
@@ -158,6 +170,28 @@ def main() -> None:
                     "srcset": [[entry[suffix]["path"], entry[suffix]["w"]]
                                for suffix, _ in SIZES],
                 }
+                if kind == "festivals":
+                    festival_hero_srcset = []
+                    with Image.open(source) as probe:
+                        source_image = ImageOps.exif_transpose(probe)
+                        source_edge = max(source_image.size)
+                    if source_edge > FESTIVAL_HERO_SIZES[0][1]:
+                        for suffix, max_edge in FESTIVAL_HERO_SIZES:
+                            hero_target = out_dir / f"{source.stem}--{digest}-{suffix}.webp"
+                            with Image.open(source) as image:
+                                image = ImageOps.exif_transpose(image)
+                                if image.mode not in ("RGB", "RGBA"):
+                                    image = image.convert("RGB")
+                                if max(image.size) > max_edge:
+                                    image.thumbnail((max_edge, max_edge), Image.Resampling.LANCZOS)
+                                saved_size = save_derivative_if_missing(
+                                    hero_target, image, ARTICLE_HERO_QUALITY
+                                )
+                            festival_hero_srcset.append([
+                                f"images/derivatives/card/{kind}/{hero_target.name}",
+                                saved_size[0],
+                            ])
+                        mapping[source_key]["heroSrcset"] = festival_hero_srcset
             else:
                 # 本文専用画像は本文srcsetだけを持つ。カード/hero側から参照されない。
                 mapping[source_key] = {}
@@ -176,7 +210,7 @@ def main() -> None:
                             image = image.convert("RGB")
                         target_height = round(image.height * max_width / image.width)
                         image = image.resize((max_width, target_height), Image.Resampling.LANCZOS)
-                        image.save(body_target, "WEBP", quality=QUALITY, method=6)
+                        save_derivative_if_missing(body_target, image, QUALITY)
                     body_srcset.append([f"images/derivatives/card/{kind}/{body_target.name}", max_width])
                     widths.add(max_width)
                 # 1440pxを超える原本は、src属性の原本をsrcsetへ重複登録しない。
@@ -201,9 +235,11 @@ def main() -> None:
                         if image.width > target_width:
                             target_height = round(image.height * target_width / image.width)
                             image = image.resize((target_width, target_height), Image.Resampling.LANCZOS)
-                        image.save(hero_target, "WEBP", quality=ARTICLE_HERO_QUALITY, method=6)
+                        saved_size = save_derivative_if_missing(
+                            hero_target, image, ARTICLE_HERO_QUALITY
+                        )
                         hero_srcset.append([
-                            f"images/derivatives/card/{kind}/{hero_target.name}", image.size[0]
+                            f"images/derivatives/card/{kind}/{hero_target.name}", saved_size[0]
                         ])
                 mapping[f"images/{kind}/{source.name}"]["heroSrcset"] = hero_srcset
                 aspect_entries = {}
@@ -225,11 +261,11 @@ def main() -> None:
                                 method=Image.Resampling.LANCZOS,
                                 centering=crop_centering(position),
                             )
-                            cropped.save(target, "WEBP", quality=QUALITY, method=6)
+                            saved_size = save_derivative_if_missing(target, cropped, QUALITY)
                             positions[position] = {
                                 "path": f"images/derivatives/card/{kind}/{target.name}",
-                                "w": target_w,
-                                "h": target_h,
+                                "w": saved_size[0],
+                                "h": saved_size[1],
                             }
                         aspect_entries[aspect_name] = positions
                 mapping[f"images/{kind}/{source.name}"]["aspect"] = aspect_entries

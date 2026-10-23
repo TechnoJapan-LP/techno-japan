@@ -4,7 +4,7 @@ import json
 import re
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageOps
 
 ROOT = Path(__file__).resolve().parents[1]
 source_dir = ROOT / "LP/images/festivals"
@@ -49,10 +49,24 @@ if map_file.exists():
 
 checked = 0
 article_sources = 0
+festival_sources = 0
 for source, value in mapping.items():
     source_path = ROOT / "LP" / source
     if not source_path.exists():
         raise SystemExit(f"原本がありません: {source}")
+    if source.startswith("images/festivals/"):
+        festival_sources += 1
+        if not isinstance(value, dict):
+            raise SystemExit(f"フェス画像のmanifest項目が不正です: {source}")
+        with Image.open(source_path) as original:
+            source_edge = max(ImageOps.exif_transpose(original).size)
+        if source_edge > 1440:
+            hero_srcset = value.get("heroSrcset") or []
+            xl_entries = [(path, width) for path, width in hero_srcset if path.endswith("-xl.webp")]
+            if len(xl_entries) != 1:
+                raise SystemExit(f"1440px超のフェス画像にxl派生がありません: {source}")
+            if any(path.endswith("-xxl.webp") for path, _ in hero_srcset):
+                raise SystemExit(f"フェス画像に不要なxxl派生があります: {source}")
     if source in article_heroes and isinstance(value, dict):
         article_sources += 1
         if not all(value.get("aspect", {}).get(name) for name in ("wide", "square", "fourThree")):
@@ -112,6 +126,8 @@ for source, value in mapping.items():
                 if image.width > 2560:
                     raise SystemExit(f"記事heroの幅が大きすぎます: {target} {image.size}")
             elif target.endswith("-xl.webp"):
+                if target.startswith("images/derivatives/card/festivals/") and max(image.size) > 1440:
+                    raise SystemExit(f"フェスheroの長辺が大きすぎます: {target} {image.size}")
                 if image.width > 1440:
                     raise SystemExit(f"記事heroの幅が大きすぎます: {target} {image.size}")
             elif target.startswith("images/articles/") and not target.startswith("images/derivatives/"):
@@ -127,4 +143,4 @@ for source, value in mapping.items():
                     f"宣言={declared_width}w 実体={image.size[0]}px"
                 )
         checked += 1
-print(f"✅ 派生画像 {checked}枚（原本{len(mapping)}件、記事{article_sources}件）、実体・サイズ・幅宣言を確認")
+print(f"✅ 派生画像 {checked}枚（原本{len(mapping)}件、フェス{festival_sources}件、記事{article_sources}件）、実体・サイズ・幅宣言を確認")

@@ -646,13 +646,21 @@ const heroSrcsetAttr = (s, sizes = '100vw', _articleHero = false) => largeSrcset
 /* 記事ヒーローはモバイルで min(80vh, 640px) の縦長枠に cover する。
    横長写真をそのまま 100vw で読むと、表示に必要な横幅を満たさず粗くなるため、
    dimensionAttrs と同じ原画寸法から cover の拡大率を sizes に反映する。 */
-function articleHeroSizes(source) {
+function coverHeroSizes(source, frameAspect) {
   const key = String(source || '').split(/[?#]/)[0].replace(/^\/+/, '');
   const size = IMAGE_DIMENSIONS[String(source || '').split(/[?#]/)[0]] || IMAGE_DIMENSIONS[key];
   if (!size || !size[0] || !size[1]) return '100vw';
-  const scale = Math.max(1, (size[0] / size[1]) / 0.6);
+  const scale = Math.max(1, (size[0] / size[1]) / frameAspect);
   const factor = Math.round(scale * 1000) / 1000;
   return `(max-width: 900px) calc(100vw * ${factor}), 100vw`;
+}
+
+function articleHeroSizes(source) {
+  return coverHeroSizes(source, 0.6);
+}
+
+function festivalHeroSizes(source) {
+  return coverHeroSizes(source, 0.7);
 }
 
 /* 開催回のフライヤー。実測 モバイル488px / タブレット582px / PC 511px。
@@ -2542,7 +2550,7 @@ function festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, allArt
     .map((genre) => String(genre).trim()).filter(Boolean);
   const heroImage = f.image || f.flyer;
   const heroHtml = heroImage ? `<div class="detail-hero-image">
-        <img ${dimensionAttrs(heroImage)} src="/${String(heroImage).replace(/^\//, '')}"${heroSrcsetAttr(heroImage, '100vw')} alt="${esc(name)}" fetchpriority="high" decoding="async"${imagePositionStyle(f)}>
+        <img ${dimensionAttrs(heroImage)} src="/${String(heroImage).replace(/^\//, '')}"${heroSrcsetAttr(heroImage, festivalHeroSizes(heroImage))} alt="${esc(name)}" fetchpriority="high" decoding="async"${imagePositionStyle(f)}>
       </div>` : '<div class="detail-hero-image detail-hero-gradient" aria-hidden="true"></div>';
   const official = f.url
     ? `<a class="btn festival-official-link" href="${esc(safeUrl(f.url))}" target="_blank" rel="noopener">Official site ↗</a>`

@@ -13134,3 +13134,81 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - なし（本番には未反映。公開は全フェーズ確認後にユーザー判断）。
+
+### 2026-10-24 redesign/magazine フェス画像 xl 派生追加（未コミット・未公開）
+
+### 実施
+- `scripts/build-image-derivatives.py` に、`LP/images/festivals/` の長辺1440px超の画像へ品質85・長辺1440pxの `xl` 派生を作る処理を追加。ヒーローとフライヤーの両方を対象にし、フェスでは転送量がほぼ変わらない `xxl` は作らない。
+- 同名のハッシュ付き派生が存在する場合は再保存せず、既存ファイルの寸法だけ読んでmanifestへ反映するよう、カード・記事hero・本文・アスペクト派生の保存処理を変更。
+- `scripts/check_image_derivatives.py` に、長辺1440px超のフェス原本の `xl` とmanifest掲載、フェス`xxl`不在、派生の長辺上限を検査する項目を追加。
+- `LP/image-derivatives.js`、フェスJA/EN詳細ページ、`LP/image-dimensions.js` / `.json` を再生成。`largeSrcsetAttr` は既存のまま `srcset` と `heroSrcset` を結合し、フェスのヒーロー・フライヤー双方で`xl`候補を使用することを確認。`sizes` は変更なし。
+- `.github/workflows/sync-drive-images.yml` は変更なし。ワークフロー内の呼び出し手順も変更なし。
+
+### コミット
+- なし（ユーザー指示により commit / push 未実施）。既存の未コミット変更は保持。
+
+### 検証
+- 成功: `python3 scripts/build-image-derivatives.py`、`python3 scripts/check_image_derivatives.py`、`node scripts/build-detail-pages.mjs`、`node scripts/check_build_idempotent.mjs`（601ファイルに変化なし）、`python3 scripts/check_regressions.py`。
+- 成功: 既存派生2551枚のSHA-256全件一致。新規フェス`-xl.webp`は110ファイル、合計23,528,390 bytes（22.44 MiB）。manifest変更はフェス110項目の`heroSrcset`追加のみで、`xxl`は0件。
+- 確認例: 横長画像は`-xl.webp 1440w`、縦長フライヤーは`-xl.webp`の実幅（1024〜1152w）を出力。
+- `python3 scripts/check_asset_versions.py` は既存の`cms.js`版不一致（`?v=174`導入後にアセットが変更）で失敗。今回`cms.js`は変更していないため範囲外として未修正。
+- `git pull --ff-only` は共有worktreeの親`.git/worktrees/.../FETCH_HEAD`書き込み不可で実行できず。実ブラウザ確認、`bash scripts/preflight.sh`、Publish pipelineは未実行。
+
+### 変更したパターン
+- フェス原本の長辺1440px超に対する品質85の`xl`生成、manifestの`heroSrcset`、既存派生の再保存抑止、フェス派生検査、フェス詳細JA/ENのヒーロー・フライヤー`srcset`。
+
+### 未確認の類似パターン
+- 確認済み・0件: フェス以外の既存派生バイト差分、フェス`xxl`生成、`largeSrcsetAttr`の`heroSrcset`結合、JA/EN詳細ページの`xl`幅宣言、`sizes`の変更なし、Sync Driveワークフロー手順の変更なし。
+- 未確認: 実ブラウザでのJA/EN・PC/モバイルの実際の画像選択と表示、Publish pipeline、本番データ経路。
+
+### 次の担当への注意・判断待ち
+- 公開前に`cms.js`の既存版不一致を解消して`check_asset_versions.py`を再実行し、実ブラウザ確認と`bash scripts/preflight.sh`を実施すること。CMSの変更は今回なし。
+
+### 2026-10-24 redesign/magazine 小修正（未コミット・未公開）
+
+### 実施
+- フェス詳細ヒーローの `sizes` を、`IMAGE_DIMENSIONS` の原画比率とスマホ枠比率0.7から計算するよう変更。記事ヒーローの計算は従来値を維持。
+- `LP/cms.html` の `cms.js?v=174` を `cms.js?v=175` に更新。
+
+### コミット
+- なし（ユーザー指示により commit / push 未実施）。既存の xl 派生画像を保持。
+
+### 検証
+- 成功: `node --check scripts/build-detail-pages.mjs`、`node scripts/build-detail-pages.mjs`、`node scripts/check_build_idempotent.mjs`（601ファイルに変化なし）。
+- 成功: `python3 scripts/check_asset_versions.py`、`python3 scripts/check_regressions.py`、`python3 scripts/check_image_derivatives.py`。
+- 生成確認: `LP/festivals/sawagi-festival.html` のヒーロー `sizes="(max-width: 900px) calc(100vw * 2.14), 100vw"`。
+
+### 変更したパターン
+- フェスヒーローの cover 用 `sizes`、CMS JavaScript のキャッシュ版数。
+
+### 未確認の類似パターン
+- 確認済み・0件: 記事ヒーローの従来出力、JA/ENフェス詳細の生成、xl派生の実体・幅宣言。
+- 未確認: 実ブラウザでの画像選択・表示、PC/モバイルの操作確認、Publish pipeline。
+
+### 次の担当への注意・判断待ち
+- 公開前に実ブラウザ確認と `bash scripts/preflight.sh` を実施すること。今回の作業では公開していない。
+
+### 2026-10-24 redesign/magazine フェスの写真・フライヤーに長辺 1440px の派生画像（Claude 検証・コミット。本番未反映）
+
+### 実施
+- ユーザー承認（2026-10-24「画質は今のまま、中間の画像を足して軽くする」）。`scripts/build-image-derivatives.py` で、長辺が 1440px を超えるフェスの画像（ヒーロー・フライヤー）に `xl`（長辺 1440px・q85）を作り、マニフェストの `heroSrcset` に載せる。110枚・22.4MB 増。
+- 既にある派生画像は保存し直さない（ファイル名に原本のハッシュが入っているため）。手元と CI の Pillow / libwebp の版の違いで、既存 2,551 枚のバイトが変わる巨大な差分を防ぐ。既存の派生画像の差分 0 を SHA-256 で確認。
+- フェス詳細のヒーローの `sizes` を、切り抜きを考えた値に（スマホの枠 390×560 に横長の写真を cover で入れるため。例 sawagi `(max-width: 900px) calc(100vw * 2.14), 100vw`）。xl を足した直後は `100vw` のままでスマホのヒーローの画質が下がっていた（1440 / 必要 2520）→ 元どおり原寸が選ばれる。
+- `check_image_derivatives.py` に xl の確認を追加。`LP/cms.html` の `cms.js?v` を 175 へ（直前の cms.js の版数変更の上げ忘れ）。
+
+### コミット
+- このエントリを含むコミット。
+
+### 検証
+- 派生画像 3,221枚の検査、build / 冪等性 / asset versions / regressions 成功。フェス詳細 4件 356/356（全画像 表示px × dpr ≦ 取得px、原寸が上限のものは除く）。
+- 重さ（同じ方法・全スクロール・外部込み）: labyrinth スマホ 1,370→1,320KB / PC 1,464→1,413KB、sawagi スマホ 2,488→2,126KB / PC 2,570→2,208KB（フライヤーが原寸 961KB → xl 598KB）。
+
+### 変更したパターン
+- srcset に中間の候補を足すと、`sizes` が切り抜きを考えていない画像では小さい候補が選ばれて画質が下がる → 候補を足すときは `sizes` も切り抜きを考えた値にする。
+
+### 未確認の類似パターン
+- 会場の詳細ページのヒーロー（21:9）も同じ考え方で `sizes` を決める（4-4 で確認する）。
+- `.github/workflows/sync-drive-images.yml` は手順を変えていない（中のスクリプトの動きだけ変わる）。本番に出したあと、次回の自動同期で差分が出ないことを確認する。
+
+### 次の担当への注意・判断待ち
+- 本番未反映。cms.js / cms.html は版数のみの変更だが、公開時は Publish pipeline ＋ CMS の確認が必要。
