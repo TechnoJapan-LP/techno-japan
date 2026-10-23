@@ -12826,3 +12826,33 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - cms.js・cms.html を変えている（版数）。本番に出す時は Publish pipeline と CMS の確認が必要。
+
+### 2026-10-23 redesign/magazine フェーズ4-2 フェス詳細ページ（未コミット）
+
+### 実施
+- `scripts/build-detail-pages.mjs` の `festivalPage` / `festivalPageV2Body` をモック準拠へ置換。写真いっぱいのヒーロー、6列Fact strip、公式／チケット／Save／Instagram、静的HTMLの4タブ、Overview（説明・言語切替・フライヤー・Access・Feature story・FAQ）、Lineup、Editions、Stories、関連フェス6件を追加。
+- `festivalLineupGroupsHtml` の内容・リンク解決・開催回単位の1回表示を保持。`festivalRelatedCardsForPage` の順位・輪の導線、JSON-LD、行動計測クラス、終了回、地図、戻るリンクは保持。
+- `LP/detail.css` の旧フェスV2 CSSを置換し、`LP/cms.js` / `LP/cms.html` の詳細CSS／CMS版数を更新。`scripts/check_regressions.py` / `scripts/check_feeds.mjs` は新しい静的Lineup／Storiesパネルを旧検査と同じ目的で数えるよう対応。`scripts/check_cms_preview_frame.mjs` はviewport依存ヒーローを固定比率比較しないよう対応。
+
+### コミット
+- なし（ユーザー指示により commit / push 未実施）。生成により既存の詳細HTML（JA/EN、記事・アーティスト・会場を含む）も `detail.css?v=76` へ更新。
+
+### 検証
+- `node --check`（生成器、`LP/magazine.js`、`LP/favorites.js`、`LP/cms.js`）成功。
+- `node scripts/build-detail-pages.mjs` 完了。`node scripts/check_build_idempotent.mjs` はCMS版数更新後に再実行中。
+- check_festival_lineup_render（75開催回、JA/EN一致）、check_jsonld、check_image_position、check_og_image、check_internal_links、check_regressions、check_asset_versions、check_feeds、check_cms_preview_frame、check_cms_article_generated_preview 成功。
+- `bash scripts/preflight.sh` は52/64成功。外部画像寸法取得による詳細生成／冪等性の240秒timeout、sandboxのlocalhost bind `EPERM`によるブラウザ系検査が未通過。CMS preview frame とfeedsの検査はその後の単体実行で成功。
+- `check_festival_tracking.mjs` は検査内容ではなく sandbox の localhost bind `EPERM` で未実行。実ブラウザ確認はClaude確認待ち。
+
+### 変更したパターン
+- `.festival-design-v2` の旧左右分割レイアウトを、モックのヒーロー／Fact／タブ／2列Overview／2列Lineup／Edition行／記事行／3列関連フェスへ置換。
+- JS有効時のタブ切替（`aria-selected` / `aria-pressed` / URL hash）とSave状態（`tjFav.toggle('festival', id)`）を追加。JS無効時は全パネルを表示。
+- `editionPlace` と関連フェスの場所をJA/ENで表示し、関連フェスの日付をカード用短縮表示へ変更。
+
+### 未確認の類似パターン
+- 確認済み・0件: 出演者重複、FAQとFAQPageの質問数差、画像位置、OG画像、内部リンク、回帰メトリクス、CSP禁止の`eval`/`new Function`混入。
+- `check_feeds` のsitemap古記事警告（denki-bodhisattva-2026-info）は既存の警告で、検査は成功。
+- 未確認: 実ブラウザでJA/EN・PC/モバイルのタブ、hash遷移、Save表示、説明文切替、地図・外部リンク操作。Claude確認待ち。
+
+### 次の担当への注意・判断待ち
+- 実ブラウザ確認と `check_festival_tracking.mjs` の実行結果が揃うまで公開済みとは報告しない。公開時は `bash scripts/preflight.sh` 後にPublish経路の実機確認を行う。

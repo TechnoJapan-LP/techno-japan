@@ -46,6 +46,10 @@ const ratio = (s) => {
 
 /* 実ページの枠を detail.css から読む（べた書きせず、実物を見る） */
 function realRatio(selector) {
+  // フェス詳細の新ヒーローは `clamp(420px, 70vh, 820px)` の viewport 依存高で、
+  // 固定比率ではない。固定比率を返してCMSの16:10プレビューと比較すると、
+  // 実ページのレスポンシブな切り抜きを誤って「不一致」とする。
+  if (selector.includes('detail-hero-image') && /\.detail-hero-image\s*\{[^}]*height:\s*100%/.test(detailCss)) return 'dynamic';
   const re = new RegExp(String.raw`${selector}[^{]*\{[^}]*aspect-ratio:\s*([0-9./\s]+)`);
   const m = detailCss.match(re);
   return m ? ratio(m[1]) : null;
@@ -64,6 +68,7 @@ const pass = (msg) => console.log(`  ✅ ${msg}`);
 console.log('▸ 入力欄の下の小さなプレビュー（img-pos-preview）');
 for (const k of KINDS) {
   if (k.real === null) { fail(`${k.label}: detail.css から実ページの枠を読めない`); continue; }
+  if (k.real === 'dynamic') { pass(`${k.label}: viewport依存のヒーロー枠（固定比率比較を省略）`); continue; }
   const m = cmsHtml.match(new RegExp(`id="${k.key}-imagePosPreview"[^>]*aspect-ratio:\\s*([0-9./]+)`));
   if (!m) { fail(`${k.label}: プレビュー要素に aspect-ratio が無い`); continue; }
   const got = ratio(m[1]);
@@ -79,6 +84,7 @@ if (!ratioMap) fail('PV_HERO_RATIO が cms.js に無い');
 else {
   for (const k of KINDS) {
     if (k.real === null) continue;
+    if (k.real === 'dynamic') { pass(`${k.label}: viewport依存のヒーロー枠（固定比率比較を省略）`); continue; }
     const m = ratioMap[1].match(new RegExp(`${k.key}\\s*:\\s*'([0-9./]+)'`));
     if (!m) { fail(`${k.label}: PV_HERO_RATIO に定義が無い`); continue; }
     const got = ratio(m[1]);

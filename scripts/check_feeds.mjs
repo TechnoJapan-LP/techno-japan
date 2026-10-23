@@ -213,7 +213,10 @@ const festivalHtml = read(festivalFixture);
 if (!festivalHtml) {
   fail('フェス関連記事の確認対象が存在しない: re-birth-festival.html');
 } else {
-  const festivalSection = festivalHtml.match(/<section class="detail-section festival-related-stories-v2">([\s\S]*?)<\/section>/)?.[1];
+  // フェス詳細はStoriesを静的タブパネルに出す。旧版の
+  // `festival-related-stories-v2` も受け付け、関連記事とリンク先の検査は維持する。
+  const festivalSection = festivalHtml.match(/<section\b[^>]*\bdata-festival-panel="stories"[^>]*>([\s\S]*?)<\/section>/)?.[1]
+    || festivalHtml.match(/<section class="detail-section festival-related-stories-v2">([\s\S]*?)<\/section>/)?.[1];
   if (!festivalSection || !festivalSection.includes('class="related-stories"')) fail('フェス関連記事の既存セクションが維持されていない');
   for (const link of festivalSection.matchAll(/href="([^"]*\/articles\/([^"/]+)\.html)"/g)) {
     if (!fs.existsSync(path.join(root, 'articles', `${link[2]}.html`))) fail(`フェス関連記事リンク先がない: ${link[1]}`);

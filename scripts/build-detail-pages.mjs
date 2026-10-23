@@ -58,7 +58,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 75;
+const DETAIL_CSS_VERSION = 76;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -80,6 +80,8 @@ const COMMON_CSS_VERSION = 48;   // 2026-10-23 background glow and pill sizing
 const DATA_HUB_VERSION = 11;
 const SEARCH_JS_VERSION = 8;
 const LANG_TOGGLE_VERSION = 1;
+const MAGAZINE_JS_VERSION = 4;
+const FAVORITES_JS_VERSION = 4;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
 const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');
 const ARTISTS_PATH = path.join(LP_DIR, 'data', 'artists.json');
@@ -1758,7 +1760,8 @@ function editionLocationName(ed, lang) {
 }
 
 function editionPlace(ed, lang) {
-  return [editionLocationName(ed, lang), ed.PREF].filter(Boolean).join(', ');
+  const pref = lang === 'en' ? placeEn(ed.PREF) : placeJa(ed.PREF);
+  return [editionLocationName(ed, lang), pref].filter(Boolean).join(', ');
 }
 
 function postalAddressLd({ streetAddress = '', addressLocality = '', addressRegion = '', addressCountry = '' } = {}) {
@@ -2181,7 +2184,7 @@ function festivalLineupGroupsHtml(editions, lineupsByEdition, artistsById, allAr
   return groups.map(({ ed, rows }) => {
     const slots = [...rows]
       .sort((a, b) => Number(a.SORT || 0) - Number(b.SORT || 0))
-      .map((row) => `<li>${lineupSlotHtml(row, artistsById, allArtistsById, lang)}</li>`);
+      .map((row, index) => `<li class="festival-act"><span class="festival-act-number mono">${String(index + 1).padStart(2, '0')}</span>${lineupSlotHtml(row, artistsById, allArtistsById, lang)}</li>`);
     const visible = slots.slice(0, 30).join('');
     const overflow = slots.slice(30);
     const more = overflow.length ? `<details class="lineup-more">
@@ -2282,14 +2285,15 @@ function festivalRelatedCardsForPage(current, lang, allFestivals, editionsByFest
   const cards = candidates.map(({ festival, edition }, index) => {
     const name = lang === 'en' ? (festival.name_en || festival.name) : festival.name;
     const image = festival.image || festival.flyer;
-    const date = edition ? [edition.DATE_START, edition.DATE_END].filter(Boolean).filter((v, i, a) => a.indexOf(v) === i).join(' — ') : festival.date || '';
-    const place = [edition ? editionLocationName(edition, lang) : localizedValue(festival.location, festival.location_ja, '', lang), edition?.PREF || festival.city].filter(Boolean).join(' — ');
+    const date = edition ? festivalShortDateText(edition, lang) : String(festival.date || '').replace(/-/g, '.');
+    const region = edition?.PREF || festival.city;
+    const place = [edition ? editionLocationName(edition, lang) : localizedValue(festival.location, festival.location_ja, '', lang), lang === 'en' ? placeEn(region) : placeJa(region)].filter(Boolean).join(' · ');
     return `<a class="related-card reveal" style="transition-delay:${index * 100}ms" href="${prefix}/festivals/${encodeURIComponent(festival.id)}.html">
       <div class="related-card-img">${image ? `<img ${dimensionAttrs(cardImagePath(image))} src="/${cardImagePath(image)}"${cardSrcsetAttr(image)} alt="${esc(name)}" loading="lazy"${imagePositionStyle(festival)}>` : ''}</div>
       <div class="related-card-info"><div class="related-card-date">${esc(date)}</div><div class="related-card-name">${esc(name)}</div><div class="related-card-loc">${esc(place)}</div></div>
     </a>`;
   }).join('');
-  return `<section class="detail-section related-festivals"><h2 class="detail-section-label">RELATED FESTIVALS</h2><div class="related-grid">${cards}</div></section>`;
+  return `<section class="detail-section related-festivals festival-more-festivals"><div class="festival-section-heading"><h2 class="disp">More festivals</h2><a class="mono" href="${prefix}/festivals.html">Full index →</a></div><div class="related-grid">${cards}</div></section>`;
 }
 
 // 記事ページでも使う共有ボタン markup。
@@ -2345,80 +2349,190 @@ function festivalHeroDateHtml(edition, lang = 'ja', ended = false) {
   return withLabel(`<time datetime="${start}">${first.monthName} ${first.day}, ${first.year}</time> — <time datetime="${end}">${last.monthName} ${last.day}, ${last.year}</time>`);
 }
 
-function festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, allArtistsById, lang, name, canonical, summary, faqItems, relatedHtml, lineupEdition, ended, endedNotice, allFestivals, editionsByFestival, modified }) {
+function festivalShortDateText(edition, lang = 'ja') {
+  const start = String(edition?.DATE_START || '');
+  const end = String(edition?.DATE_END || '');
+  if (!ISO_DATE.test(start)) return '';
+  const [, startMonth, startDay] = start.split('-').map(Number);
+  const formatMonth = (month) => lang === 'en'
+    ? ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][month - 1]
+    : String(month);
+  if (!ISO_DATE.test(end) || end === start) return `${formatMonth(startMonth)}.${startDay}`;
+  const [, endMonth, endDay] = end.split('-').map(Number);
+  if (startMonth === endMonth) return `${formatMonth(startMonth)}.${startDay}–${endDay}`;
+  return `${formatMonth(startMonth)}.${startDay}–${formatMonth(endMonth)}.${endDay}`;
+}
+
+const FESTIVAL_TABS_SCRIPT = `
+<script>
+(function() {
+  'use strict';
+  var root = document.querySelector('.festival-detail-page');
+  if (!root) return;
+  var buttons = Array.prototype.slice.call(root.querySelectorAll('[data-festival-tab]'));
+  var panels = Array.prototype.slice.call(root.querySelectorAll('[data-festival-panel]'));
+  var valid = buttons.map(function(button) { return button.getAttribute('data-festival-tab'); });
+  if (!buttons.length || !panels.length) return;
+  function apply(tab, writeHash) {
+    if (valid.indexOf(tab) < 0) tab = 'overview';
+    root.classList.add('festival-tabs-ready');
+    buttons.forEach(function(button) {
+      var selected = button.getAttribute('data-festival-tab') === tab;
+      button.setAttribute('aria-selected', selected ? 'true' : 'false');
+      button.setAttribute('aria-pressed', selected ? 'true' : 'false');
+      button.classList.toggle('is-active', selected);
+    });
+    panels.forEach(function(panel) {
+      var active = panel.getAttribute('data-festival-panel') === tab;
+      panel.classList.toggle('is-active', active);
+      panel.setAttribute('aria-hidden', active ? 'false' : 'true');
+    });
+    if (writeHash && window.history && window.history.replaceState) {
+      window.history.replaceState(null, '', tab === 'overview' ? window.location.pathname + window.location.search : '#' + tab);
+    }
+  }
+  buttons.forEach(function(button) {
+    button.addEventListener('click', function() { apply(button.getAttribute('data-festival-tab'), true); });
+  });
+  window.addEventListener('hashchange', function() { apply(window.location.hash.slice(1), false); });
+  apply(window.location.hash.slice(1), false);
+})();
+</script>`;
+
+function festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, allArtistsById, lang, name, canonical, summary, faqItems, relatedHtml, relatedArticles, lineupEdition, ended, endedNotice, allFestivals, editionsByFestival, modified }) {
   const prefix = lang === 'en' ? '/en' : '';
   const hubHref = `${prefix}/festivals.html`;
-  const currentEdition = editions[0];
+  const currentEdition = lineupEdition || editions[0];
   const dateHtml = festivalHeroDateHtml(currentEdition, lang, ended);
   const locationName = currentEdition
     ? editionLocationName(currentEdition, lang)
     : localizedValue(f.location, f.location_ja, '', lang);
   const locationRegion = lang === 'en' ? placeEn(currentEdition?.PREF || f.city) : placeJa(currentEdition?.PREF || f.city);
   const locationParts = [locationName, locationRegion].filter(Boolean);
-  const location = locationParts.filter((part, index) => index === 0 || !String(locationParts[0]).toLowerCase().includes(String(part).toLowerCase())).join(', ');
+  const location = locationParts.filter((part, index) => index === 0 || !String(locationParts[0]).toLowerCase().includes(String(part).toLowerCase())).join(' · ');
   const hasGeo = !!String(currentEdition?.LAT || '').trim() && !!String(currentEdition?.LNG || '').trim()
     && Number.isFinite(Number(currentEdition.LAT)) && Number.isFinite(Number(currentEdition.LNG));
   const mapQuery = hasGeo
     ? `${Number(currentEdition.LAT)},${Number(currentEdition.LNG)}`
     : [locationName, locationRegion].filter(Boolean).join(' ');
   const mapUrl = mapQuery ? `https://maps.google.com/?q=${encodeURIComponent(mapQuery)}` : '';
-  const genres = (Array.isArray(f.genre) ? f.genre : []).map((genre) => `<span class="detail-tag">${esc(genre)}</span>`).join('');
+  const genres = (Array.isArray(f.genre) ? f.genre : String(f.genre || '').split('/'))
+    .map((genre) => String(genre).trim()).filter(Boolean);
   const heroImage = f.image || f.flyer;
   const heroHtml = heroImage ? `<div class="detail-hero-image">
-        <img ${dimensionAttrs(heroImage)} src="/${String(heroImage).replace(/^\//, '')}"${heroSrcsetAttr(heroImage)} alt="${esc(name)}" fetchpriority="high"${imagePositionStyle(f)}>
+        <img ${dimensionAttrs(heroImage)} src="/${String(heroImage).replace(/^\//, '')}"${heroSrcsetAttr(heroImage)} alt="${esc(name)}" fetchpriority="high" decoding="async"${imagePositionStyle(f)}>
       </div>` : '<div class="detail-hero-image detail-hero-gradient" aria-hidden="true"></div>';
   const official = f.url
-    ? `<a class="detail-official festival-official-link" href="${esc(safeUrl(f.url))}" target="_blank" rel="noopener">OFFICIAL SITE</a>`
+    ? `<a class="btn festival-official-link" href="${esc(safeUrl(f.url))}" target="_blank" rel="noopener">Official site ↗</a>`
     : '';
   const tickets = currentEdition?.TICKETURL
-    ? `<a class="detail-official festival-ticket-link" href="${esc(safeUrl(currentEdition.TICKETURL))}" target="_blank" rel="noopener">TICKETS</a>`
+    ? `<a class="btn2 festival-ticket-link" href="${esc(safeUrl(currentEdition.TICKETURL))}" target="_blank" rel="noopener">Tickets</a>`
     : '';
-  const instagram = f.instagram ? `<div class="festival-social-links">
-        <a class="festival-social-link" href="${esc(safeUrl(f.instagram))}" target="_blank" rel="noopener" aria-label="Instagram">
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1"></circle></svg>
-        </a>
-      </div>` : '';
-  const actions = [official, tickets, instagram].filter(Boolean).join('');
-  const lineupGroups = festivalLineupGroupsHtml(editions, lineupsByEdition, artistsById, allArtistsById, lang);
-  const lineupCount = editions.reduce((total, edition) => total + (lineupsByEdition.get(edition.EDITION_ID) || []).length, 0);
+  const instagram = f.instagram
+    ? `<a class="btn2 festival-social-link" href="${esc(safeUrl(f.instagram))}" target="_blank" rel="noopener" aria-label="Instagram">Instagram</a>`
+    : '';
+  const lineupRows = currentEdition ? (lineupsByEdition.get(currentEdition.EDITION_ID) || []) : [];
+  const lineupCount = lineupRows.length;
+  const firstYear = editions.map((edition) => editionKeyParts(editionIdentifier(edition)).year).filter(Boolean).sort((a, b) => a - b)[0] || '';
   const flyerPick = pickFlyer(f, currentEdition);
   const flyerAlt = flyerPick.edition ? `${name} ${flyerPick.edition} Flyer` : `${name} Flyer`;
   const flyer = flyerPick.src ? `<div class="detail-flyer-col">
-        <div class="detail-section-label">FLYER</div>
+        <div class="mono red festival-overview-label">Flyer</div>
         <div class="detail-flyer-image"><img ${dimensionAttrs(flyerPick.src)} src="/${String(flyerPick.src).replace(/^\//, '')}"${flyerSrcsetAttr(flyerPick.src)} alt="${esc(flyerAlt)}" loading="lazy"></div>
       </div>` : '';
-  const lineup = lineupGroups ? `<div class="detail-lineup-col" id="lineup">
-        <h2 class="detail-section-label">LINE UP</h2>
-        ${lineupGroups}
-      </div>` : '';
-  const flyerLineup = flyer || lineup
-    ? `<div class="detail-flyer-lineup${flyer && !lineup ? ' flyer-only' : ''}${flyer && lineup && lineupCount > 3 ? ' has-two-columns' : ''}">${flyer}${lineup}</div>`
-    : '';
+  const lineupGroups = festivalLineupGroupsHtml(currentEdition ? [currentEdition] : [], lineupsByEdition, artistsById, allArtistsById, lang);
+  const pastEditions = currentEdition ? editions.filter((edition) => edition.EDITION_ID !== currentEdition.EDITION_ID) : editions;
+  const pastLineupGroups = festivalLineupGroupsHtml(pastEditions, lineupsByEdition, artistsById, allArtistsById, lang);
   const historyHtml = festivalEditionsTimelineHtml(editions, lang);
   const faqDetailsHtml = festivalFaqDetailsHtml(faqItems, lang);
   const shareHtml = `<section class="festival-share-section">${festivalShareButtons(name, canonical, lang)}</section>`;
   const hasDescription = !!String(f.desc || f.desc_en || '').trim();
   const description = hasDescription ? bilingualBody(f.desc, f.desc_en, lang, 'festival-description-inline') : '';
-  const heroDescription = description || (summary ? `<p class="detail-desc festival-summary">${esc(summary)}</p>` : '');
-  const programSection = flyerLineup ? `<section class="festival-program-section">${flyerLineup}</section>` : '';
+  const overviewDescription = description || (summary ? `<p class="festival-summary">${esc(summary)}</p>` : '');
+  const featureStory = [...(relatedArticles || [])].sort((a, b) => String(b.publishedAt || b.date || '').localeCompare(String(a.publishedAt || a.date || '')))[0];
+  const featureStoryHref = featureStory ? `${lang === 'en' ? '/en' : ''}/articles/${featureStory.id}.html` : '';
+  const featureStoryTitle = featureStory ? stripTitleMarkdown(lang === 'en' ? (featureStory.title_en || featureStory.title) : featureStory.title) : '';
+  const featureStoryHtml = featureStory ? `<a class="festival-feature-story" href="${featureStoryHref}">
+        <span class="mono red">Feature story</span>
+        ${featureStory.image ? `<img ${dimensionAttrs(cardImagePath(featureStory.image))} src="/${cardImagePath(featureStory.image)}"${storyThumbSrcsetAttr(featureStory.image)} alt="" loading="lazy" decoding="async">` : ''}
+        <span class="disp">${esc(featureStoryTitle)}</span>
+        <span class="mono red">Read →</span>
+      </a>` : '';
+  const actionButtons = [official, tickets,
+    `<button class="btn2 festival-save" type="button" data-festival-save="${esc(f.id)}" aria-pressed="false">Save</button>`,
+    instagram].filter(Boolean).join('');
+  const shortDate = festivalShortDateText(currentEdition, lang) || String(f.date || '').replace(/-/g, '.');
+  const statusLabel = ended ? 'ARCHIVE' : 'UPCOMING';
+  const statusClass = ended ? '' : 'red';
+  const typeLabel = f.type === 'rave' ? 'RAVE' : 'FESTIVAL';
+  const locationMapHtml = mapUrl
+    ? `<a class="festival-map" href="${esc(safeUrl(mapUrl))}" target="_blank" rel="noopener"><span class="festival-map-dot" aria-hidden="true"></span><span class="mono">Google Maps ↗</span></a>`
+    : `<div class="festival-map"><span class="festival-map-dot" aria-hidden="true"></span></div>`;
+  const currentLineupPanel = `<section class="festival-tab-panel festival-program-section" id="lineup" data-festival-panel="lineup" role="tabpanel" aria-labelledby="festival-tab-lineup">
+      <div class="festival-panel-heading"><h2 class="disp">Lineup</h2><span class="mono">${esc(editionLabel(editionIdentifier(currentEdition)) || '')}</span></div>
+      ${lineupGroups || `<p class="festival-empty mono">${lang === 'en' ? 'Lineup information is not available.' : '出演者情報はありません。'}</p>`}
+    </section>`;
+  const editionsPanel = `<section class="festival-tab-panel festival-editions-v2" id="editions" data-festival-panel="editions" role="tabpanel" aria-labelledby="festival-tab-editions">
+      <div class="festival-panel-heading"><h2 class="disp">Editions</h2><span class="mono">${editions.length} ${lang === 'en' ? 'indexed' : '開催回'}</span></div>
+      <div class="festival-edition-rows">${editions.map((edition) => {
+        const editionStatus = String(edition.STATUS || '').trim().toLowerCase();
+        const editionEnded = editionStatus === 'finished' || (ISO_DATE.test(String(edition.DATE_END || edition.DATE_START || '')) && String(edition.DATE_END || edition.DATE_START) < jstToday());
+        const place = editionPlace(edition, lang);
+        return `<div class="festival-edition-row"><span class="disp festival-edition-year">${esc(editionLabel(editionIdentifier(edition)) || edition.EDITION_ID)}</span><span class="festival-edition-name">${esc(name)} ${esc(editionLabel(editionIdentifier(edition)) || '')}</span><span class="festival-edition-place">${esc(place || '—')}</span><span class="mono ${editionEnded ? '' : 'red'}">${editionEnded ? 'ARCHIVE' : 'UPCOMING'}</span></div>`;
+      }).join('')}</div>
+      ${pastLineupGroups ? `<div class="festival-past-lineups"><h3 class="mono red">${lang === 'en' ? 'Past lineups' : '過去の出演者'}</h3>${pastLineupGroups}</div>` : ''}
+      ${historyHtml || ''}
+    </section>`;
+  const storiesPanel = relatedHtml ? `<section class="festival-tab-panel festival-stories-panel" id="stories" data-festival-panel="stories" role="tabpanel" aria-labelledby="festival-tab-stories"><div class="festival-panel-heading"><h2 class="disp">Stories</h2><span class="mono">${relatedArticles.length}</span></div>${relatedHtml}</section>` : '';
 
   return `<article class="festival-detail-page festival-design-v2">
   <div class="festival-detail-inner">
     <header class="festival-detail-hero">
       ${heroHtml}
-      <div class="detail-hero-info">
-${genres ? `        <div class="detail-tags">${genres}</div>\n` : ''}${dateHtml ? `        <div class="detail-date">${dateHtml}</div>\n` : ''}
-        <h1 class="detail-name">${esc(name)}</h1>
-${location ? (mapUrl
-          ? `        <a class="detail-location detail-location-map" href="${esc(safeUrl(mapUrl))}" target="_blank" rel="noopener">${esc(location)}<span aria-hidden="true">↗</span></a>\n`
-          : `        <div class="detail-location">${esc(location)}</div>\n`) : ''}${actions ? `        <div class="detail-actions">${actions}</div>\n` : ''}${heroDescription ? `        ${heroDescription}\n` : ''}
-      </div>
+      <div class="festival-hero-overlay"><div class="wrap">
+        <div class="festival-hero-meta"><span class="pill">${typeLabel}</span><span class="mono ${statusClass}">${statusLabel}${editionLabel(editionIdentifier(currentEdition)) ? ` · ${esc(editionLabel(editionIdentifier(currentEdition)))}` : ''}</span></div>
+        <h1 class="disp festival-hero-title">${esc(name)}</h1>
+      </div></div>
     </header>
 
-${programSection ? `    ${programSection}\n` : ''}${historyHtml ? `    ${historyHtml}\n` : ''}${faqDetailsHtml ? `    ${faqDetailsHtml}\n` : ''}    ${shareHtml}
-${relatedHtml ? `    <section class="detail-section festival-related-stories-v2">${relatedHtml}</section>\n` : ''}    ${festivalRelatedCardsForPage(f, lang, allFestivals, editionsByFestival)}
-    ${updatedLabel(modified, lang)}
-    <div class="article-footer"><a class="detail-back" href="${hubHref}" data-festival-hub-back="${hubHref}" style="margin:0"><span class="arrow"></span> BACK TO FESTIVALS</a></div>
+    <div class="wrap festival-content">
+      <section class="festival-facts facts" aria-label="Festival facts">
+        <div class="fact"><span class="mono">Date</span><span class="disp fact-big fact-date">${esc(shortDate)}</span><span class="mono">${esc(String(currentEdition?.DATE_START || '').slice(0, 4))}</span></div>
+        <div class="fact"><span class="mono">Location</span><b>${esc(locationName || '—')}</b>${mapUrl ? `<a class="mono red" href="${esc(safeUrl(mapUrl))}" target="_blank" rel="noopener">Map ↗</a>` : ''}</div>
+        <div class="fact"><span class="mono">Prefecture</span><b>${esc(locationRegion || '—')}</b><span class="mono">Japan</span></div>
+        <div class="fact"><span class="mono">Genre</span><b>${esc(genres.join(' / ') || '—')}</b></div>
+        <div class="fact"><span class="mono">Lineup</span><span class="disp fact-big">${lineupCount}</span><span class="mono">artists</span></div>
+        <div class="fact"><span class="mono">Editions</span><span class="disp fact-big">${editions.length}</span><span class="mono">since ${esc(String(firstYear || '—'))}</span></div>
+      </section>
+
+      ${endedNotice ? `<p class="festival-ended-notice mono">${esc(endedNotice)}</p>` : ''}
+      <div class="festival-actions"><div class="festival-action-buttons">${actionButtons}</div>${relatedArticles.length ? `<span class="mono festival-shared">Shared by ${relatedArticles.length} ${relatedArticles.length === 1 ? 'story' : 'stories'} on Techno Japan</span>` : ''}</div>
+
+      <nav class="tabs festival-tabs" role="tablist" aria-label="Festival details">
+        <button class="tab is-active" id="festival-tab-overview" type="button" role="tab" data-festival-tab="overview" aria-controls="overview" aria-selected="true" aria-pressed="true">Overview</button>
+        <button class="tab" id="festival-tab-lineup" type="button" role="tab" data-festival-tab="lineup" aria-controls="lineup" aria-selected="false" aria-pressed="false">Lineup</button>
+        <button class="tab" id="festival-tab-editions" type="button" role="tab" data-festival-tab="editions" aria-controls="editions" aria-selected="false" aria-pressed="false">Editions</button>
+        ${relatedHtml ? '<button class="tab" id="festival-tab-stories" type="button" role="tab" data-festival-tab="stories" aria-controls="stories" aria-selected="false" aria-pressed="false">Stories</button>' : ''}
+      </nav>
+
+      <section class="festival-tab-panel festival-overview-panel" id="overview" data-festival-panel="overview" role="tabpanel" aria-labelledby="festival-tab-overview">
+        <div class="festival-overview-grid">
+          <div class="festival-overview-copy">${overviewDescription}${flyer ? `<div class="festival-flyer-wrap">${flyer}</div>` : ''}</div>
+          <aside class="festival-access"><div class="festival-panel-heading"><h2 class="mono red">Access</h2></div>${locationMapHtml}<span class="mono">${esc(location || '—')}</span>${featureStoryHtml}</aside>
+        </div>
+        ${faqDetailsHtml || ''}
+      </section>
+      ${currentLineupPanel}
+      ${editionsPanel}
+      ${storiesPanel}
+    </div>
+
+    <div class="wrap festival-lower-content">
+      ${shareHtml}
+      ${festivalRelatedCardsForPage(f, lang, allFestivals, editionsByFestival)}
+      ${updatedLabel(modified, lang)}
+      <div class="article-footer"><a class="detail-back" href="${hubHref}" data-festival-hub-back="${hubHref}" style="margin:0"><span class="arrow"></span> BACK TO FESTIVALS</a></div>
+    </div>
   </div>
 </article>`;
 }
@@ -2439,7 +2553,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, allArt
   // このフェスに紐づく記事（ARTICLES.festivalId で関連付け）
   const related = (articles || []).filter((a) => a.festivalId === f.id && a.status !== 'draft');
   const relatedHtml = related.length
-    ? relatedStoryCardsHtml(related, lang)
+    ? relatedStoryCardsHtml(related, lang, { forceEnglishPath: true, compactDate: true, wide: true, heading: 'Stories' })
     : '';
 
   const editions = [...festivalEditions].sort((a, b) => {
@@ -2622,7 +2736,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, allArt
   };
 
   const endedNotice = ended ? (lang === 'en' ? "The next edition hasn't been announced yet. We'll update this page." : '次回の開催は未発表です。決まり次第このページで更新します。') : '';
-  const body = festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, allArtistsById, lang, name, canonical, summary, faqItems, relatedHtml, lineupEdition, ended, endedNotice, allFestivals, editionsByFestival, modified });
+  const body = festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, allArtistsById, lang, name, canonical, summary, faqItems, relatedHtml, relatedArticles: related, lineupEdition, ended, endedNotice, allFestivals, editionsByFestival, modified });
 
   const faqLd = faqItems.length ? {
     '@context': 'https://schema.org',
@@ -2633,7 +2747,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, allArt
       acceptedAnswer: { '@type': 'Answer', text: item.answer },
     })),
   } : null;
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'festivals'] : ['festivals']), `${f.id}.html`), html: page({ title, desc: metaDesc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('FESTIVALS', '/festivals.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, currentKey: 'festivals', extraScripts: LANG_TOGGLE_SCRIPT + FESTIVAL_HUB_BACK_SCRIPT + FESTIVAL_SHARE_SCRIPT, backgroundLayer: true }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'festivals'] : ['festivals']), `${f.id}.html`), html: page({ title, desc: metaDesc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('FESTIVALS', '/festivals.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, currentKey: 'festivals', extraScripts: LANG_TOGGLE_SCRIPT + FESTIVAL_HUB_BACK_SCRIPT + FESTIVAL_SHARE_SCRIPT + FESTIVAL_TABS_SCRIPT + `\n<script src="/magazine.js?v=${MAGAZINE_JS_VERSION}"></script>\n<script src="/favorites.js?v=${FAVORITES_JS_VERSION}"></script>\n<script>\n(function() {\n  var buttons = document.querySelectorAll('[data-festival-save]');\n  buttons.forEach(function(button) {\n    var id = button.getAttribute('data-festival-save');\n    var update = function() {\n      var saved = window.tjFav && window.tjFav.has('festival', id);\n      button.textContent = saved ? 'Saved' : 'Save';\n      button.setAttribute('aria-pressed', saved ? 'true' : 'false');\n    };\n    button.addEventListener('click', function() {\n      if (window.tjFav) window.tjFav.toggle('festival', id);\n      update();\n    });\n    update();\n  });\n})();\n</script>`, backgroundLayer: true }) };
 }
 
 /* ---------- アーティストページ ---------- */

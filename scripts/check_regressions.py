@@ -255,7 +255,9 @@ def measure():
     for f in fest:
         html = read(f)
         body = body_without_scripts(html)
-        if has_h2(body, "LINE UP"):
+        # 新テンプレートはタブの見出しを `Lineup` とし、JS無効時にも全パネルを
+        # 静的出力する。旧テンプレートの h2 も引き続き受け付ける。
+        if has_h2(body, "LINE UP") or re.search(r'data-festival-panel="lineup"', body):
             lineup_pages += 1
         links_to_artists += len(re.findall(r'href="/?artists/[^"]*"', body))
         performers, subevents = [], []
