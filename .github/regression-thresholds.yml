@@ -430,11 +430,11 @@ hub_pages:
   index.html:
     # TOP phase 2 は専用の描画領域を持つ。JA/EN とも同じ要件で検査する。
     marker: top2-head
-    min_markers: 7
+    min_markers: 6            # 2026-10-23 Featured の見出しを削除（モックに無い）
     min_container_bytes: 0
     top2:
       head_marker: top2-head
-      min_heads: 7
+      min_heads: 6            # 2026-10-23 Featured の見出しを削除（モックに無い）
       min_detail_links: 1
       containers:
         - {id: top2-lead-track, marker: top2-panel, min: 4}
@@ -498,11 +498,11 @@ hub_pages:
     # TOP phase 2 は専用の描画領域を持つ。JA と同じ描画要件を
     # scripts/check_hub_pages.py の top2 で検査する。
     marker: top2-head
-    min_markers: 7
+    min_markers: 6            # 2026-10-23 Featured の見出しを削除（モックに無い）
     min_container_bytes: 0
     top2:
       head_marker: top2-head
-      min_heads: 7
+      min_heads: 6            # 2026-10-23 Featured の見出しを削除（モックに無い）
       min_detail_links: 1
       containers:
         - {id: top2-lead-track, marker: top2-panel, min: 4}

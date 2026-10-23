@@ -93,6 +93,7 @@
 }
 .festivals-phase3 .phase3-card-top {
   display: flex;
+  justify-content: space-between;
   align-items: baseline;
   gap: 8px;
   flex-wrap: wrap;
@@ -100,11 +101,14 @@
 .festivals-phase3 .phase3-card-date {
   font-size: 26px;
   white-space: nowrap;
+  flex: 0 1 auto;
 }
 .festivals-phase3 .phase3-card-status {
   font: 9px var(--font-mono);
   letter-spacing: .14em;
   color: var(--accent);
+  margin-left: auto;
+  white-space: nowrap;
 }
 .festivals-phase3 .phase3-card-status.is-archive {
   color: var(--text-a50);

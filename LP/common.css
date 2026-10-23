@@ -59,7 +59,6 @@
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  min-height: 28px;
   padding: 5px 12px;
   border: 1px solid var(--text-a35);
   color: var(--text);
@@ -115,7 +114,8 @@ html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  background: var(--bg);
+  position: relative;
+  background: radial-gradient(circle at 85vw 15vw, rgba(255,45,45,.07) 0, transparent 21vw) no-repeat, var(--bg);
   color: var(--text);
   font-family: var(--font-body);
   overflow-x: hidden;
@@ -657,6 +657,34 @@ html[lang="en"] .event-signup-label [lang="en"] { display: inline; }
   pointer-events: none !important;
 }
 
+/* Shared magazine newsletter used by TOP and NEWS. */
+.mag-newsletter {
+  max-width: 1280px;
+  margin-top: 120px;
+  padding: 64px 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  border-top: 1px solid var(--text-a14);
+  border-bottom: 1px solid var(--text-a14);
+}
+.mag-newsletter-meta { margin: 0 0 16px; font: 10px var(--font-mono); letter-spacing: .15em; color: var(--accent); text-transform: uppercase; }
+.mag-newsletter h2 { margin: 0 0 14px; font: 400 clamp(34px, 4vw, 60px)/.95 var(--font-display); text-transform: uppercase; }
+.mag-newsletter p:not(.mag-newsletter-meta) { margin: 0; font-size: 15px; line-height: 1.5; color: var(--text-a78); }
+.mag-newsletter [lang="en"] { display: none; }
+.mag-newsletter .newsletter-form { display: flex; flex-direction: row; align-items: center; width: 100%; max-width: 520px; margin: 0; padding: 0; border: 0; align-self: center; justify-self: stretch; }
+.mag-newsletter input[type="email"] { flex: 1 1 auto; min-width: 0; height: 48px; background: transparent; border: 1px solid var(--text-a30); border-right: 0; color: var(--text); font: 14px var(--font-body); padding: 0 14px; }
+.mag-newsletter button { height: 48px; min-width: max-content; padding: 0 18px; background: var(--text); color: var(--bg); border: 1px solid var(--text); font: 10px var(--font-mono); letter-spacing: .15em; cursor: pointer; }
+.mag-newsletter button:hover { background: var(--accent); border-color: var(--accent); color: var(--white); }
+html[lang="en"] .mag-newsletter [lang="ja"] { display: none; }
+html[lang="en"] .mag-newsletter [lang="en"] { display: inline; }
+@media (max-width: 900px) {
+  .mag-newsletter { padding: 48px 24px; grid-template-columns: 1fr; gap: 40px; margin-left: 24px; margin-right: 24px; }
+}
+@media (max-width: 760px) {
+  .mag-newsletter { margin-left: 16px; margin-right: 16px; }
+}
+
 /* ===================== RESPONSIVE (shared chrome only) ===================== */
 @media (max-width: 900px) {
   /* アプリ内ブラウザでは :focus-visible の判定が不安定で、
@@ -775,30 +803,17 @@ footer         { contain-intrinsic-size: auto 320px; }
 }
 
 /* ==========================================================
-   TJ 背景レイヤー（about.html のグリッド + スキャンラインを全ページ共通化）
-   body に .tj-bg を1つ置くだけで、固定背景として敷かれる。
-   コンテンツより下（z-index:0）、body背景より上。
+   TJ 背景レイヤー（モック共通: grain + 80px grid + scanline）
+   grain.png を画素を変えず可逆 WebP にした bg-grain.webp を使う。
+   モック実測は黒地（#080808）に平均輝度14.1・ばらつき3.8。
    ========================================================== */
-/* グレイン（粒子）。var(--bg) のベタ塗りは画面が「のっぺり」して見える。
-   Spincoaster が背景に微細なノイズを乗せていて紙っぽい質感が出ていたので採り入れた
-   （docs/design/BENCHMARK_EYESCREAM_SPINCOASTER_2026-09-29.md §2-5）。
-
-   ・SVG の feTurbulence を data URI で敷く。画像ファイルを増やさないので
-     画像の実在検査・寸法表・同期の経路に一切影響しない。
-   ・120px のタイルを繰り返すだけなので描画コストは無視できる。
-   ・**コンテンツより下（z-index:0）**に居るので、文字の上には重ならない。
-     2026-09-24 に直したコントラストを打ち消さない。
-   ・粒子の濃さは rect の opacity で決める。0.05 は実測で選んだ:
-     地の var(--bg)（輝度8）に対し 0.05 で平均12.8・ばらつき1.3。
-     0.14 だと平均20.5 まで持ち上がって「黒」でなくなり、0.03 ではほぼ見えない。
-     文字のコントラストへの影響は 17.1:1 → 16.6:1 で無視できる。 */
 .tj-bg {
   position: fixed;
   inset: 0;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='120' height='120' filter='url(%23g)' opacity='0.05'/></svg>");
+  background-image: url("/images/bg-grain.webp");
   background-size: 120px 120px;
   background-repeat: repeat;
 }
@@ -863,6 +878,24 @@ body > div:not(.tj-bg):not(.cursor-dot):not(.cursor-ring):not(.nav-overlay) {
   .tj-bg::before, .tj-bg::after, .tj-bg .tj-scan { animation: none; }
   .tj-bg .tj-scan { display: none; }
 }
+
+/* Shared dark CARTO/OSM treatment for the VENUES map and full map page. */
+.tj-map {
+  position: relative;
+  background: #080808;
+}
+.tj-map:not(.tjmap-local)::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 350;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(90deg, rgba(240,237,232,.035) 0 1px, transparent 1px 80px), repeating-linear-gradient(0deg, rgba(240,237,232,.035) 0 1px, transparent 1px 80px);
+}
+.tj-map .leaflet-container,
+.tj-map.leaflet-container { background: #080808 !important; }
+.tj-map .leaflet-tile-pane { filter: grayscale(1) brightness(.72) contrast(1.18); }
+.tj-map.tj-map-osm .leaflet-tile-pane { filter: invert(1) grayscale(1) brightness(.6) contrast(1.2); }
 
 /* ===================== SSR LINK LIST =====================
    ハブページの静的リンク一覧（build-detail-pages.mjs が

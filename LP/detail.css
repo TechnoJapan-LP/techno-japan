@@ -476,7 +476,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   /* ----- スマホのメタ情報は「1行の署名」に畳む -----
      3段に折り返すスペック表は高さ216pxあり、393x852 の実機相当で本文1行目を
      641px まで押し下げていた（Safari の実表示は約700pxなので、1ビュー目に
-     読めるのは約2行）。ラベル（WORDS BY / PUBLISHED / READING TIME）は
+     読めるのは約2行）。ラベル（Words by / Published / Reading time）は
      値そのものが意味を語るので視覚的には落とし、読み上げ用に dt は残す。
      計測: 本文1行目 641px -> 419px / メタ高さ 216px -> 30px（2026-09-22）。 */
   .article-specs {
@@ -1157,7 +1157,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   .article-hero { height: min(80vh, 640px); }
   .article-hero-overlay { padding: 48px 16px 28px; }
   .article-hero-overlay-inner { max-width: none; }
-  .article-hero-meta { position: absolute; z-index: 1; top: 24px; right: 12px; display: flex; flex-direction: column; gap: 14px; margin: 0; writing-mode: vertical-rl; transform: rotate(180deg); font: 10px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+  .article-hero-meta { position: absolute; z-index: 1; top: 24px; right: 12px; display: flex; flex-direction: column; gap: 14px; margin: 0; writing-mode: vertical-rl; text-orientation: sideways; font: 10px var(--font-mono); letter-spacing: .08em; text-transform: none; }
   .article-hero-meta div { display: flex; align-items: flex-start; gap: 6px; }
   .article-hero-meta dt { color: var(--text-a50); }
   .article-hero-meta dd { margin: 0; color: var(--text-a85); }

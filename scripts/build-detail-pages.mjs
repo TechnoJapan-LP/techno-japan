@@ -58,7 +58,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 74;
+const DETAIL_CSS_VERSION = 75;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -76,7 +76,7 @@ const ARTICLE_FX_CSS_VERSION = 17;
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
 const COMMON_JS_VERSION = 19;   // 2026-10-22 design v2 shared menu behavior
-const COMMON_CSS_VERSION = 46;   // 2026-10-23 magazine primitives
+const COMMON_CSS_VERSION = 48;   // 2026-10-23 background glow and pill sizing
 const DATA_HUB_VERSION = 11;
 const SEARCH_JS_VERSION = 8;
 const LANG_TOGGLE_VERSION = 1;
@@ -550,6 +550,18 @@ const heroSrcsetAttr = (s, sizes = '(max-width: 700px) 100vw, 700px', articleHer
   return ` srcset="${esc(set)}" sizes="${esc(sizes)}"`;
 };
 
+/* 記事ヒーローはモバイルで min(80vh, 640px) の縦長枠に cover する。
+   横長写真をそのまま 100vw で読むと、表示に必要な横幅を満たさず粗くなるため、
+   dimensionAttrs と同じ原画寸法から cover の拡大率を sizes に反映する。 */
+function articleHeroSizes(source) {
+  const key = String(source || '').split(/[?#]/)[0].replace(/^\/+/, '');
+  const size = IMAGE_DIMENSIONS[String(source || '').split(/[?#]/)[0]] || IMAGE_DIMENSIONS[key];
+  if (!size || !size[0] || !size[1]) return '100vw';
+  const scale = Math.max(1, (size[0] / size[1]) / 0.6);
+  const factor = Math.round(scale * 1000) / 1000;
+  return `(max-width: 900px) calc(100vw * ${factor}), 100vw`;
+}
+
 /* 開催回のフライヤー。実測 モバイル488px / タブレット582px / PC 511px。
 
    ⚠️ hero を直した直後の計測で、**フライヤーが 624KB で最大の重量**だと
@@ -900,10 +912,7 @@ function validateArticleShortcodes(data) {
 
 const MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
 function fmtDate(d) {
-  if (!d) return '';
-  const [y, m, day] = String(d).split('/')[0].split('-').map(Number);
-  if (!y || !m || !day) return '';
-  return `${MONTHS[m - 1]} ${day}, ${y}`;
+  return fmtDateDots(d);
 }
 function fmtMetaDateJa(start, end) {
   if (!ISO_DATE.test(String(start || ''))) return '';
@@ -1598,13 +1607,13 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   const { short: articleTitleShort, sub: articleTitleSub } = splitArticleTitle(L.title);
   const articleTitleHtml = `<span class="article-title-short">${clauseBreaks(articleTitleShort)}</span>${articleTitleSub ? `<span class="article-title-sub">${clauseBreaks(articleTitleSub)}</span>` : ''}`;
   const articleHeroMeta = `<dl class="article-hero-meta" aria-label="Article information">
-      <div><dt>WORDS BY</dt><dd>${esc(authorView.name)}</dd></div>
-      <div><dt>${lang === 'en' ? 'PUBLISHED' : '公開日'}</dt><dd>${esc(fmtDate(a.date) || '—')}</dd></div>
-      <div><dt>${lang === 'en' ? 'READING TIME' : '読了時間'}</dt><dd>${esc(a.readTime || 5)} MIN</dd></div>
+      <div><dt>Words by</dt><dd>${esc(authorView.name)}</dd></div>
+      <div><dt>Published</dt><dd>${esc(fmtDate(a.date) || '—')}</dd></div>
+      <div><dt>Reading time</dt><dd>${esc(a.readTime || 5)} MIN</dd></div>
     </dl>`;
   const heroBlock = a.image
     ? `<header class="article-hero"${ratioAttr(a.heroRatio)}>
-        <img ${dimensionAttrs(a.image)} src="/${String(a.image).replace(/^\//, '')}"${heroSrcsetAttr(a.image, '100vw', true)}${imagePositionStyle(a)} alt="${esc(L.title)}" fetchpriority="high" decoding="async">
+        <img ${dimensionAttrs(a.image)} src="/${String(a.image).replace(/^\//, '')}"${heroSrcsetAttr(a.image, articleHeroSizes(a.image), true)}${imagePositionStyle(a)} alt="${esc(L.title)}" fetchpriority="high" decoding="async">
         ${articleHeroMeta}
         <div class="article-hero-overlay">
           <div class="article-hero-overlay-inner">
@@ -1647,7 +1656,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   addRelated(publishedArticles.filter((item) => a.category && item.category === a.category));
   addRelated(publishedArticles);
   const relatedStoriesHtml = relatedArticles.length
-    ? `<section class="detail-section festival-related-stories-v2 article-related-stories">${relatedStoryCardsHtml(relatedArticles, lang, { forceEnglishPath: true, compactDate: true, wide: true, heading: lang === 'en' ? 'RELATED STORIES' : '関連記事' })}</section>`
+    ? `<section class="detail-section festival-related-stories-v2 article-related-stories">${relatedStoryCardsHtml(relatedArticles, lang, { forceEnglishPath: true, compactDate: true, wide: true, heading: 'Related Stories' })}</section>`
     : '';
 
   const updatedDate = String(a.updatedAt || '').trim();
@@ -1678,7 +1687,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
     <div class="article-festival-desktop">
       <h2 class="mono red">Festival</h2>
       <a class="article-festival-name disp" href="${festivalHref}">${esc(festivalName)}</a>
-      <a class="article-festival-details mono" href="${festivalHref}">${lang === 'en' ? 'Festival details' : 'フェス詳細'} →</a>
+      <a class="article-festival-details mono" href="${festivalHref}">Festival details →</a>
     </div>
     <a class="article-festival-mobile" href="${festivalHref}">
       <span class="article-festival-thumb">${festivalImage ? `<img ${dimensionAttrs(cardImagePath(festivalImage))} src="/${cardImagePath(festivalImage)}"${articleRelatedFestivalSrcsetAttr(festivalImage)} alt="${esc(festivalName)}" loading="lazy" decoding="async"${imagePositionStyle(relatedFestival)}>` : ''}</span>

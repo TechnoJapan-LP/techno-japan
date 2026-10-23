@@ -8,7 +8,7 @@
   var esc = window.tjEscapeHtml || function (value) { return String(value == null ? '' : value); };
   var loc = window.tjLocalized || function (primary, ja, en) { return isEn ? (en || primary || ja || '') : (primary || ja || en || ''); };
   var venues = (typeof VENUES !== 'undefined' ? VENUES : []).filter(function (venue) { return venue && venue.id; });
-  var state = { city: 'ALL', type: 'ALL', featuredId: '', restored: false };
+  var state = { city: 'ALL', subarea: 'ALL', type: 'ALL', featuredId: '', restored: false };
   var stateKey = 'tj:venue-hub-state:v1';
   var mapWrap = document.getElementById('venue-map');
   var mapSurface = document.getElementById('venue-map-surface');
@@ -42,29 +42,47 @@
   function cityValues() {
     return Array.from(new Set(venues.map(function (venue) { return String(venue.city || '').trim(); }).filter(Boolean))).sort(function (a, b) { return a.localeCompare(b, 'en'); });
   }
+  function subareaValues(city) {
+    if (!city || city === 'ALL') return [];
+    var counts = new Map();
+    venues.filter(function (venue) { return venue.city === city && String(venue.area || '').trim(); }).forEach(function (venue) {
+      var area = String(venue.area).trim();
+      counts.set(area, (counts.get(area) || 0) + 1);
+    });
+    return Array.from(counts.keys()).sort(function (a, b) {
+      return counts.get(b) - counts.get(a) || a.localeCompare(b, 'en');
+    });
+  }
   function isValidState() {
-    return cityValues().indexOf(state.city) >= 0 || state.city === 'ALL';
+    return (cityValues().indexOf(state.city) >= 0 || state.city === 'ALL')
+      && (state.subarea === 'ALL' || subareaValues(state.city).indexOf(state.subarea) >= 0);
   }
   function readUrl() {
     var params = new URLSearchParams(location.search);
     var area = params.get('area');
+    var subarea = params.get('subarea');
     var type = params.get('type') || new URLSearchParams(location.hash.replace(/^#/, '')).get('type');
     if (area && cityValues().indexOf(area) >= 0) state.city = area;
+    if (subarea && subareaValues(state.city).indexOf(subarea) >= 0) state.subarea = subarea;
     if (type && typeValues().indexOf(type) >= 0) state.type = type;
-    if (!isValidState()) state.city = 'ALL';
+    if (!isValidState()) { state.city = 'ALL'; state.subarea = 'ALL'; }
   }
   function syncUrl() {
     var url = new URL(location.href);
     url.searchParams.delete('area');
     url.searchParams.delete('type');
+    url.searchParams.delete('subarea');
     if (state.city !== 'ALL') url.searchParams.set('area', state.city);
+    if (state.subarea !== 'ALL') url.searchParams.set('subarea', state.subarea);
     if (state.type !== 'ALL') url.searchParams.set('type', state.type);
     url.hash = '';
     history.replaceState(history.state, '', url.pathname + url.search);
   }
   function filtered() {
     return venues.filter(function (venue) {
-      return (state.city === 'ALL' || venue.city === state.city) && (state.type === 'ALL' || venue.type === state.type);
+      return (state.city === 'ALL' || venue.city === state.city)
+        && (state.subarea === 'ALL' || venue.area === state.subarea)
+        && (state.type === 'ALL' || venue.type === state.type);
     }).sort(function (a, b) { return String(a.name || '').localeCompare(String(b.name || ''), 'en'); });
   }
   function genreLine(venue) {
@@ -75,9 +93,7 @@
     return String(venue.type || '').toUpperCase();
   }
   function metaLine(venue) {
-    var values = [venue.area, venue.city, typeLine(venue)];
-    if (venue.capacity !== undefined && venue.capacity !== null && String(venue.capacity).trim()) values.push('CAP. ' + venue.capacity);
-    return values.filter(Boolean).join(' · ');
+    return [venue.area, venue.city, typeLine(venue)].filter(Boolean).join(' · ');
   }
   function imageMarkup(venue, sizes, eager, className) {
     if (!venue.image || !String(venue.image).trim()) return '<div class="venue-image-placeholder" aria-hidden="true"></div>';
@@ -101,6 +117,10 @@
   }
   function renderChips() {
     document.getElementById('venues-city-chips').innerHTML = ['ALL'].concat(cityValues()).map(function (city) { return chip(city, city, state.city); }).join('');
+    var subareas = subareaValues(state.city);
+    var subareaGroup = document.getElementById('venues-subarea-chips');
+    subareaGroup.hidden = subareas.length < 2;
+    subareaGroup.innerHTML = subareas.length >= 2 ? ['ALL'].concat(subareas).map(function (area) { return chip(area, area, state.subarea); }).join('') : '';
     document.getElementById('venues-type-chips').innerHTML = ['ALL'].concat(typeValues()).map(function (type) { return chip(type, type.toUpperCase(), state.type); }).join('');
   }
   function updateMapLabels(count, featured) {
@@ -118,7 +138,7 @@
     var cards = list.filter(function (venue) { return !featured || venue.id !== featured.id; });
     var grid = document.getElementById('venues-grid');
     grid.innerHTML = cards.length ? cards.map(function (venue) {
-      return '<a class="venue-grid-card" data-venue-detail-link data-type="' + esc(venue.type || '') + '" href="' + detailHref(venue) + '"><div class="venue-grid-image">' + imageMarkup(venue, '(max-width: 900px) calc(100vw - 32px), (max-width: 1360px) calc(25vw - 40px), 302px', false) + '<span class="venue-fav-mount" data-fav-mount="venue" data-fav-id="' + esc(venue.id) + '"></span></div><div class="venue-grid-title-row"><h3 class="disp venue-grid-title">' + esc(loc(venue.name, '', venue.name_en)) + '</h3><span class="mono venue-grid-city">' + esc(venue.city || '') + '</span></div><span class="mono venue-grid-meta">' + esc([typeLine(venue), venue.capacity ? 'CAP. ' + venue.capacity : ''].filter(Boolean).join(' · ')) + '</span><span class="mono venue-grid-genre">' + esc(genreLine(venue)) + '</span></a>';
+      return '<a class="venue-grid-card" data-venue-detail-link data-type="' + esc(venue.type || '') + '" href="' + detailHref(venue) + '"><div class="venue-grid-image">' + imageMarkup(venue, '(max-width: 900px) calc(100vw - 32px), (max-width: 1360px) calc(25vw - 40px), 302px', false) + '<span class="venue-fav-mount" data-fav-mount="venue" data-fav-id="' + esc(venue.id) + '"></span></div><div class="venue-grid-title-row"><h3 class="disp venue-grid-title">' + esc(loc(venue.name, '', venue.name_en)) + '</h3><span class="mono venue-grid-city">' + esc(venue.city || '') + '</span></div><span class="mono venue-grid-meta">' + esc(typeLine(venue)) + '</span><span class="mono venue-grid-genre">' + esc(genreLine(venue)) + '</span></a>';
     }).join('') : '<p class="venues-empty">' + (isEn ? 'No venues match.' : '該当する会場はありません。') + '</p>';
     document.getElementById('venues-grid-count').textContent = cards.length + ' / ' + venues.length;
     grid.querySelectorAll('[data-fav-mount]').forEach(function (mount) { window.tjFav?.attachHeart(mount, 'venue', mount.dataset.favId, { size: 'sm' }); });
@@ -137,6 +157,7 @@
   }
   function renderLocal() {
     if (!mapSurface) return;
+    mapSurface.classList.add('tjmap-local');
     var current = values();
     var pins = current.pins;
     var points = pins.map(function (venue) { return [Number(venue.lng), Math.log(Math.tan(Math.PI / 4 + Number(venue.lat) * Math.PI / 360))]; });
@@ -223,6 +244,7 @@
   window.tjLoadLeaflet = tjLoadLeaflet;
   function initLeaflet() {
     if (!window.L || leafletMap || !mapSurface) return;
+    mapSurface.classList.remove('tjmap-local');
     leafletMap = L.map(mapSurface, { center: [35.658, 139.699], zoom: 13, minZoom: 5, maxZoom: 18, zoomControl: false, attributionControl: true, scrollWheelZoom: false });
     mapWrap.dataset.mapStatus = 'ready';
     window.tjAddMapTiles(leafletMap, { timeout: 15000, onOffline: function () { if (leafletMap) { leafletMap.remove(); leafletMap = null; } renderLocal(); } });
@@ -250,8 +272,10 @@
     else if (mapWrap.dataset.mapStatus === 'offline') renderLocal();
     scheduleMapTopAlignment();
     document.getElementById('venues-total').textContent = venues.length + ' venues';
-    document.querySelectorAll('#venues-city-chips button, #venues-type-chips button').forEach(function (button) {
-      button.setAttribute('aria-pressed', String(button.dataset.value === (button.closest('#venues-city-chips') ? state.city : state.type)));
+    document.querySelectorAll('#venues-city-chips button, #venues-subarea-chips button, #venues-type-chips button').forEach(function (button) {
+      var group = button.closest('.venues-chip-group');
+      var current = group && group.id === 'venues-city-chips' ? state.city : group && group.id === 'venues-subarea-chips' ? state.subarea : state.type;
+      button.setAttribute('aria-pressed', String(button.dataset.value === current));
     });
     window.tjBindCursorExpand?.('a, button');
   }
@@ -260,7 +284,9 @@
     if (chipButton) {
       var group = chipButton.closest('.venues-chip-group');
       if (group.id === 'venues-city-chips') state.city = chipButton.dataset.value;
+      else if (group.id === 'venues-subarea-chips') state.subarea = chipButton.dataset.value;
       else state.type = chipButton.dataset.value;
+      if (group.id === 'venues-city-chips') state.subarea = 'ALL';
       state.featuredId = '';
       syncUrl();
       render();

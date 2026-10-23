@@ -12764,3 +12764,65 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - cms.js を変えている（記事プレビューの版数のみ）。本番に出す時は Publish pipeline と CMS の確認が必要（AGENTS.md）。
+
+### 2026-10-23 redesign/magazine ハブ追加修正（未コミット）
+
+### 実施
+- NEWS の `popular.json` による Latest / Popular 切り替え、URL復元、注記、人気順レイアウト、Load more、ニュースレターを追加。
+- TOP と NEWS のニュースレターを `magazine.js` / `common.css` の共通部品へ統合。
+- FESTIVALS / TOP の開催地・状態位置・ジャンル区切りをモックに合わせ、ARTISTS の FEATURED条件・選出・パネル・画像候補を修正。
+- VENUES の CAP. 表示を削除し、データ由来のサブエリア絞り込みと URL復元、VENUES / map の共通地図配色を追加。
+- TOP の Featured 見出しを削除し、Upcoming カードと背景を調整。モックの grain を可逆 WebP 化して共通背景に使用。
+- 記事詳細の縦書きメタ、日付、固定文言、スマホヒーロー画像の sizes を修正。CMS プレビューの CSS 版数とキャッシュ版数も更新。
+
+### コミット
+- なし（ユーザー指示により commit / push 未実施）。
+
+### 検証
+- `node --check`（変更 JS）成功。
+- `node scripts/build-detail-pages.mjs` 完了、`node scripts/check_build_idempotent.mjs` 成功（601ファイルに変化なし）。
+- `python3 scripts/check_asset_versions.py`、`python3 scripts/check_hub_head.py`、`python3 scripts/check_regressions.py`、`node scripts/check_cms_article_generated_preview.mjs` 成功。
+- JA/EN 行数一致: index 259/259、news 221/221。`node scripts/check_top_artists.mjs` 成功。
+- 実ブラウザ確認は未実施（Claude確認待ち）。`python3 scripts/check_hub_pages.py` は sandbox の localhost bind 権限不足で未実施。
+
+### 変更したパターン
+- `?sort=popular`、`?subarea=`、人気順のフォールバック注記、ニュースレター共通部品、開催地ローカライズ、CAP. 非表示、背景 grain、CARTO/OSM の共通フィルター、記事ヒーローの cover 拡大率。
+
+### 未確認の類似パターン
+- 確認済み・0件: news/index の JA/EN 行数、変更 JS の構文、キャッシュ版数、生成ページ冪等性、回帰検査。
+- 未確認: 実ブラウザでの PC/モバイル・JA/EN の操作、Buttondown 送信、実際の `popular.json` 取得後の表示、地図タイルの実景。
+- データ課題として報告: `snow-machine-japan` の `location_ja` に住所が入っているため、そのまま表示される。
+
+### 次の担当への注意・判断待ち
+- Claude の実ブラウザ確認が完了するまで公開可とは報告しない。公開時は `bash scripts/preflight.sh` 後に Publish 経路の実機確認を行う。
+
+### 2026-10-23 redesign/magazine ハブ・TOP・記事の追加修正（ユーザーの要望・指摘）（Claude 検証・コミット。本番未反映）
+
+### 実施（すべて 2026-10-23 のユーザーの判断・指摘による）
+- NEWS: 人気順（MONTHLY POPULAR。`/data/popular.json` の30日閲覧数順・`?sort=popular`・注記は JA/EN）とページ内のニュースレター欄を戻した。ニュースレター欄は TOP と共通の部品（common.css の `.mag-newsletter`・magazine.js）に。
+- フェスのカード（FESTIVALS・TOP）をモックに: 状態（UPCOMING/ARCHIVE・TOP は種別）を日付の行の右端に、JA ページは日本語の会場名（`location_ja`）、ジャンルは ` / ` 区切り（`FESTIVAL · HOUSE / LIVE`）。`tjMagFestivalPlace` で共通化。
+- ARTISTS: FEATURED は絞り込み無しの時だけ・出演予定のある人からランダムに3名（開くたびに入れ替わる）／件数を消した／パネル全体を1つのリンクにして hover で名前が赤／紹介文は DM Sans 300・やや暗い白・ちょうど4行で切る／サムネイルは切り抜きの拡大率に合わせて大きい候補を読む（`tjMagCoverSizes`）。
+- VENUES: CAP. を消した／都市を選ぶとサブエリア（AREA の値から自動。`?subarea=`）／地図を白黒・暗めに（案A。map.html も同じ）＋細い格子。
+- TOP: 「Featured」の見出しを削除（モックに無い）／1枚目の記事が開いた直後に画面内に収まる／`.pill` の高さを 40px → 27px（min-height を削除。全ページ共通）／UPCOMING の写真の明るさの演出。
+- 全ページの背景をモックと同じに: 粒子をモックの grain.png（可逆 WebP `images/bg-grain.webp`）に、右上の固定の赤い光を body の背景（radial-gradient）で追加。最初は疑似要素で作り**横に 20vw はみ出して、スマホが縮小表示になった**ので、はみ出さない形に直した。
+- 記事: スマホの縦書き（Words by / Published / Reading time）を英語＋`text-orientation: sideways`（日本語が逆さまになっていた）、日付を `YYYY.MM.DD`、`Festival details →`・`Related Stories`、スマホのヒーロー写真は切り抜きの拡大率に合わせて大きい候補。
+
+### コミット
+- このエントリを含むコミット（redesign/magazine）。push・本番公開はしていない。
+
+### 検証
+- headless Chrome（390px@3x / 1280px@2x、JA/EN）: NEWS 86/86、FESTIVALS 141/141、ARTISTS 114/114、VENUES 110/112、記事 284/290、TOP（カルーセルの切り替わり位置は変更前と同じ・1枚目が画面内・pill 27px・日付は東京とロサンゼルスで同じ）。
+  残りは画素がわずかに足りないもの（会場の Featured 991→960px、グリッド 754→720px、記事のスマホ本文の写真 1299→1200px＝スクロール演出の拡大分）。
+- 重さ（全部スクロールして画像をすべて読んだ時）: ARTISTS スマホ 4,277→4,973KB・PC 2,696→3,687KB（ユーザーが約1MB の増加を了承済み）、記事 labyrinth スマホ 1,307→1,450KB（ヒーローのみ）・PC 変わらず。
+- preflight: 63/64 → 落ちたのは TOP の見出しの数の下限（Featured の見出しを消したため）。しきい値を 6 に直し、check_hub_pages 全ハブ成功。check_build_idempotent・check_asset_versions 成功。
+
+### 変更したパターン
+- 共通: `.pill` の高さ・背景の粒子と赤い光・地図の色（map.html も）。
+
+### 未確認の類似パターン
+- 地図の色（案A）は本番の CARTO のタイルでしか確かめられない（localhost はキーの制限で OSM 表示）。本番に出したら見た目を確認すること。
+- snow-machine-japan の `location_ja` に住所が入っている（日本語ページの会場名に住所が出る）。データの修正はユーザーの作業。
+- 実機（iPhone）での確認は未実施。
+
+### 次の担当への注意・判断待ち
+- cms.js・cms.html を変えている（版数）。本番に出す時は Publish pipeline と CMS の確認が必要。

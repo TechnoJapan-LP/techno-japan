@@ -64,7 +64,9 @@
   }
 
   function place(festival) {
-    return [festival.location || festival.location_ja, festival.city].filter(Boolean).join(' · ');
+    return typeof window.tjMagFestivalPlace === 'function'
+      ? window.tjMagFestivalPlace(festival)
+      : [festival.location_ja || festival.location, festival.city].filter(Boolean).join(' · ');
   }
 
   function heart(festival) {
@@ -73,6 +75,7 @@
 
   function card(festival) {
     var upcoming = isUpcoming(festival);
+    var genreLine = (Array.isArray(festival.genre) ? festival.genre : []).map(function (genre) { return String(genre).trim(); }).filter(Boolean).join(' / ');
     return '<a class="phase3-card" href="' + (isEn ? '/en' : '') + '/festivals/' + encodeURIComponent(festival.id)
       + '.html" data-festival-detail-link><div class="phase3-card-image">' + image(festival, false) + heart(festival)
       + '</div><div class="phase3-card-top"><span class="disp phase3-card-date">' + tjMagRangeShort(festival.range)
@@ -80,7 +83,7 @@
       + (upcoming ? 'UPCOMING' : 'ARCHIVE') + '</span></div><h3 class="disp phase3-card-name">'
       + esc(loc(festival.name, '', festival.name_en)) + '</h3><span class="mono phase3-card-meta">'
       + esc(place(festival)) + '</span><span class="mono phase3-card-meta">'
-      + esc([String(festival.type || 'festival').toUpperCase(), ...(Array.isArray(festival.genre) ? festival.genre : [])].join(' · '))
+      + esc([String(festival.type || 'festival').toUpperCase(), genreLine].filter(Boolean).join(' · '))
       + '</span></a>';
   }
 

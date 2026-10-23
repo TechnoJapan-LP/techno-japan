@@ -2,11 +2,14 @@
   'use strict';
 
   const NEWS_HUB_STATE_KEY = 'tj:news-hub-state:v1';
-  const NEWS_QUERY_KEYS = ['category', 'tag', 'limit'];
+  const NEWS_QUERY_KEYS = ['category', 'tag', 'limit', 'sort'];
   const isEnglish = document.documentElement.lang === 'en';
   const published = (typeof ARTICLES !== 'undefined' ? ARTICLES : [])
     .filter((article) => String(article?.status || '').toLowerCase() !== 'draft');
-  const state = { category: 'ALL', tag: null, visible: 12 };
+  const state = { category: 'ALL', tag: null, sort: 'latest', visible: 12 };
+  let popularity = null;
+  let popularityError = false;
+  let popularityLoading = false;
 
   const escapeHtml = (value) => (
     typeof tjEscapeHtml === 'function'
@@ -24,6 +27,10 @@
 
   const articleDetailHref = (article) => `${isEnglish ? '/en' : ''}/articles/${encodeURIComponent(article.id)}.html`;
   const sortNewest = (left, right) => String(right.date || '').localeCompare(String(left.date || ''));
+  const sortPopular = (left, right) => {
+    const views = (article) => popularity?.viewsById.get(String(article.id)) || 0;
+    return views(right) - views(left) || sortNewest(left, right);
+  };
   const dateDots = (date) => tjMagDot(date);
   const latestDate = () => dateDots([...published].sort(sortNewest)[0]?.date);
 
@@ -81,6 +88,7 @@
     if (params.get('tag')) state.tag = sanitizeTag(params.get('tag'));
     const limit = Number(params.get('limit'));
     if (Number.isInteger(limit) && limit >= 12) state.visible = limit;
+    if (params.get('sort') === 'popular') state.sort = 'popular';
     const articleMatch = location.hash.match(/^#article\/([^/?#]+)/);
     if (articleMatch) {
       const id = decodeURIComponent(articleMatch[1]);
@@ -101,6 +109,7 @@
     NEWS_QUERY_KEYS.forEach((key) => url.searchParams.delete(key));
     if (state.category !== 'ALL') url.searchParams.set('category', state.category);
     if (state.tag) url.searchParams.set('tag', state.tag);
+    if (state.sort === 'popular') url.searchParams.set('sort', 'popular');
     if (state.visible > 12) url.searchParams.set('limit', String(state.visible));
     url.hash = '';
     history.replaceState(null, '', url);
@@ -122,7 +131,7 @@
   }
 
   function filteredArticles() {
-    return [...published].sort(sortNewest).filter((article) => {
+    return [...published].sort(state.sort === 'popular' && popularity ? sortPopular : sortNewest).filter((article) => {
       const categoryMatches = state.category === 'ALL' || String(article.category || '').toUpperCase() === state.category;
       const tagMatches = !state.tag || (Array.isArray(article.tags) && article.tags.some((tag) => String(tag).toLowerCase() === state.tag.toLowerCase()));
       return categoryMatches && tagMatches;
@@ -136,6 +145,19 @@
       ? `<button class="chip is-active tag-filter-chip" type="button" data-clear-tag aria-label="${isEnglish ? 'Clear tag filter' : 'タグの絞り込みを解除'}" aria-pressed="true">#${escapeHtml(state.tag)} ×</button>`
       : '';
     nav.innerHTML = `${tagChip}${categories.map((category) => `<button class="chip${state.category === category && !state.tag ? ' is-active' : ''}" type="button" data-category="${escapeHtml(category)}" aria-pressed="${state.category === category && !state.tag}">${escapeHtml(category)}</button>`).join('')}`;
+    const sort = document.getElementById('news-sort');
+    if (sort) {
+      sort.innerHTML = `<span>Sort ·</span><button class="mono${state.sort === 'latest' ? ' is-active' : ''}" type="button" data-sort="latest" aria-pressed="${state.sort === 'latest'}">Latest</button><button class="mono${state.sort === 'popular' ? ' is-active' : ''}" type="button" data-sort="popular" aria-pressed="${state.sort === 'popular'}">Popular</button>`;
+    }
+    const note = document.getElementById('news-popularity-note');
+    if (note) {
+      note.hidden = state.sort !== 'popular';
+      note.textContent = state.sort !== 'popular'
+        ? ''
+        : popularityError || !popularity
+          ? (isEnglish ? 'Popularity data is not ready yet (showing latest).' : '集計データを準備中です（新着順で表示しています）')
+          : (isEnglish ? `Most read in the last 30 days · Updated ${popularity.updated}` : `過去30日の閲覧数順 · 更新 ${popularity.updated}`);
+    }
   }
 
   function render() {
@@ -146,7 +168,7 @@
     const pool = items.slice(3);
     const featured = pool.filter((article) => article.featured === true);
     const regular = pool.filter((article) => article.featured !== true);
-    const three = [...featured, ...regular].slice(0, 3);
+    const three = state.sort === 'popular' ? pool.slice(0, 3) : [...featured, ...regular].slice(0, 3);
     const used = new Set([...(lead ? [lead] : []), ...wide, ...three].map((article) => article.id));
     const rest = visible.filter((article) => !used.has(article.id));
     const empty = isEnglish ? 'No stories in this category.' : 'このカテゴリの記事はありません。';
@@ -167,7 +189,7 @@
     document.getElementById('news-two-section').innerHTML = wide.length
       ? `<div class="news-grid">${wide.map((article, index) => cardMarkup(article, 'wide', false, index)).join('')}</div>` : '';
     document.getElementById('news-three-section').innerHTML = three.length
-      ? `<div class="news-three">${three.map((article, index) => cardMarkup(article, 'three', article.featured === true, index)).join('')}</div>` : '';
+      ? `<div class="news-three">${three.map((article, index) => cardMarkup(article, 'three', state.sort !== 'popular' && article.featured === true, index)).join('')}</div>` : '';
     document.getElementById('feed-grid').innerHTML = rest.map((article) => cardMarkup(article, 'list')).join('');
     document.getElementById('news-shown').textContent = `${Math.min(state.visible, items.length)} / ${items.length}`;
     document.getElementById('load-more-btn').hidden = state.visible >= items.length;
@@ -191,18 +213,53 @@
       state.category = button.dataset.category;
       if (state.category === 'ALL') state.tag = null;
     }
+    if (button.dataset.sort) state.sort = button.dataset.sort;
     state.visible = 12;
     syncUrl();
     render();
+  });
+  document.getElementById('news-sort')?.addEventListener('click', (event) => {
+    const button = event.target.closest('button[data-sort]');
+    if (!button) return;
+    state.sort = button.dataset.sort;
+    state.visible = 12;
+    syncUrl();
+    render();
+    loadPopularity();
   });
   document.getElementById('load-more-btn').addEventListener('click', () => {
     state.visible += 6;
     syncUrl();
     render();
   });
+  if (typeof tjMagNewsletter === 'function') tjMagNewsletter(document.getElementById('news-newsletter'));
+
+  function loadPopularity() {
+    if (state.sort !== 'popular' || popularity || popularityLoading || popularityError) return;
+    popularityLoading = true;
+    fetch('/data/popular.json', { credentials: 'same-origin' })
+      .then((response) => {
+        if (!response.ok) throw new Error(`popular.json: ${response.status}`);
+        return response.json();
+      })
+      .then((data) => {
+        const items = Array.isArray(data.items) ? data.items : [];
+        const date = String(data.generatedAt || '').slice(0, 10).replace(/-/g, '.');
+        if (!items.length || !date) throw new Error('popular.json has no usable items');
+        popularity = { viewsById: new Map(items.map((item) => [String(item.id), Number(item.views) || 0])), updated: date };
+        popularityLoading = false;
+        render();
+      })
+      .catch(() => {
+        popularityLoading = false;
+        popularityError = true;
+        render();
+      });
+  }
 
   if (readStateFromUrl()) {
     render();
+    loadPopularity();
     addEventListener('pageshow', restoreHubScroll);
   } else {
     document.documentElement.classList.remove('tj-news-hydrating');

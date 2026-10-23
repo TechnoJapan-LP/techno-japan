@@ -230,6 +230,7 @@ const CASES = [
   ['/festivals.html?type=', 'festivals:type'],
   ['/artists.html?genre=', 'artists:genre'],
   ['/venues.html?area=', 'venues:area'],
+  ['/venues.html?subarea=', 'venues:subarea'],
   ['/en/news.html?tag=', 'en-news:tag'],
 ];
 // onerror が動けば親フレームに印を付ける。同一オリジンなので親を触れる。

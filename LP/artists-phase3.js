@@ -14,6 +14,7 @@
   var today = window.tjMagToday();
   var next = window.tjMagNextAppearances(artists, festivals, today);
   var state = { genre: 'ALL', origin: 'ALL', q: '', restored: false };
+  var featuredSelection = null;
   var scrollRequest = 0;
   var activeCarousel = null;
   var genreOrder = ['ALL', 'TECHNO', 'HOUSE', 'MINIMAL', 'EXPERIMENTAL', 'AMBIENT', 'ELECTRONIC', 'LIVE'];
@@ -62,10 +63,13 @@
     document.getElementById('artists-genre-chips').innerHTML = genres().map(function (value) { return chipMarkup(value, state.genre); }).join('');
     document.getElementById('artists-origin-chips').innerHTML = ['ALL', 'JAPAN', 'INTERNATIONAL'].map(function (value) { return chipMarkup(value, state.origin); }).join('');
   }
-  function imageMarkup(artist, sizes, eager) {
+  function imageMarkup(artist, sizes, eager, boxAspect) {
     if (!artist.image) return '<span class="artist-image-placeholder" aria-hidden="true"></span>';
     var src = typeof tjCardAssetPath === 'function' ? tjCardAssetPath(artist.image) : artist.image;
-    var attrs = typeof tjCardSrcsetAttr === 'function' ? tjCardSrcsetAttr(artist.image, sizes) : '';
+    var coverSizes = typeof window.tjMagCoverSizes === 'function' && boxAspect
+      ? window.tjMagCoverSizes(artist.image, boxAspect, sizes)
+      : sizes;
+    var attrs = typeof tjCardSrcsetAttr === 'function' ? tjCardSrcsetAttr(artist.image, coverSizes) : '';
     var dimensions = typeof tjImageSizeAttrs === 'function' ? tjImageSizeAttrs(artist.image) : '';
     return '<img ' + dimensions + attrs + ' src="' + esc(src) + '" alt="" loading="' + (eager ? 'eager' : 'lazy') + '"' + (eager ? ' fetchpriority="high"' : '') + ' decoding="async" style="' + (window.tjMagObjectPosition(artist.imagePosition) || '') + '">';
   }
@@ -77,13 +81,29 @@
     var genre = genresOf(artist).join(' / ');
     var nextLine = appearance ? '<div class="mono featured-next">Next · ' + esc(loc(appearance.festival.name, '', appearance.festival.name_en)) + ' ' + esc(dateLabel(appearance.range)) + '</div>' : '';
     var bio = loc(artist.bio, '', artist.bio_en);
-    return '<article class="artists-featured-panel"><div class="wrap artists-featured-content"><div class="artists-featured-image"><a href="/artists/' + encodeURIComponent(artist.id) + '.html">' + imageMarkup(artist, '(max-width: 900px) 100vw, 42vw', index === 0) + '</a><div class="fav-mount" data-fav-id="' + esc(artist.id) + '"></div></div><div class="artists-featured-copy"><div class="mono red">Featured ' + String(index + 1).padStart(2, '0') + ' · ' + esc(genre) + '</div><h2 class="disp">' + esc(loc(artist.name, '', artist.name_en)) + '</h2><div class="mono">' + esc(placeOf(artist)) + '</div>' + nextLine + (bio ? '<p class="artist-bio">' + esc(bio) + '</p>' : '') + '<a class="featured-profile" href="/artists/' + encodeURIComponent(artist.id) + '.html">Profile →</a></div></div></article>';
+    var href = (isEn ? '/en' : '') + '/artists/' + encodeURIComponent(artist.id) + '.html';
+    return '<article class="artists-featured-panel"><a class="wrap artists-featured-link artists-featured-content" href="' + href + '"><div class="artists-featured-image">' + imageMarkup(artist, '(max-width: 900px) 100vw, 42vw', index === 0, 4 / 5) + '<span class="fav-mount" data-fav-id="' + esc(artist.id) + '"></span></div><div class="artists-featured-copy"><div class="mono red">Featured ' + String(index + 1).padStart(2, '0') + ' · ' + esc(genre) + '</div><h2 class="disp">' + esc(loc(artist.name, '', artist.name_en)) + '</h2><div class="mono featured-place">' + esc(placeOf(artist)) + '</div>' + nextLine + (bio ? '<p class="artist-bio">' + esc(bio) + '</p>' : '') + '<span class="featured-profile">Profile →</span></div></a></article>';
   }
   function gridMarkup(artist) {
-    return '<a class="artist-grid-card" data-artist-detail-link href="/artists/' + encodeURIComponent(artist.id) + '.html"><div class="artist-grid-image">' + imageMarkup(artist, '(max-width: 900px) calc(50vw - 22px), 18vw', false) + '<div class="fav-mount" data-fav-id="' + esc(artist.id) + '"></div></div><h3 class="disp">' + esc(loc(artist.name, '', artist.name_en)) + '</h3><div class="mono">' + esc(genresOf(artist).join(' / ')) + '</div><div class="mono artist-place">' + esc(placeOf(artist)) + '</div></a>';
+    return '<a class="artist-grid-card" data-artist-detail-link href="' + (isEn ? '/en' : '') + '/artists/' + encodeURIComponent(artist.id) + '.html"><div class="artist-grid-image">' + imageMarkup(artist, '(max-width: 900px) calc(50vw - 22px), 18vw', false, 1) + '<div class="fav-mount" data-fav-id="' + esc(artist.id) + '"></div></div><h3 class="disp">' + esc(loc(artist.name, '', artist.name_en)) + '</h3><div class="mono">' + esc(genresOf(artist).join(' / ')) + '</div><div class="mono artist-place">' + esc(placeOf(artist)) + '</div></a>';
   }
   function featuredArtists(list) {
-    return list.slice().sort(function (a, b) {
+    if (!featuredSelection) {
+      var scheduled = artists.filter(function (artist) { return next.has(artist.id); });
+      var shuffled = scheduled.slice().sort(function () { return Math.random() - .5; }).slice(0, 3);
+      var chosen = shuffled.slice();
+      artists.slice().sort(function (a, b) { return String(a.name || '').localeCompare(String(b.name || ''), 'en'); }).forEach(function (artist) {
+        if (chosen.length < 3 && !chosen.some(function (item) { return item.id === artist.id; })) chosen.push(artist);
+      });
+      featuredSelection = chosen.sort(function (a, b) {
+        var ad = next.get(a.id), bd = next.get(b.id);
+        if (ad && bd) return ad.range.start.localeCompare(bd.range.start);
+        if (ad) return -1;
+        if (bd) return 1;
+        return String(a.name || '').localeCompare(String(b.name || ''), 'en');
+      });
+    }
+    return list.filter(function (artist) { return featuredSelection.some(function (selected) { return selected.id === artist.id; }); }).sort(function (a, b) {
       var ad = next.get(a.id), bd = next.get(b.id);
       if (ad && bd) return ad.range.start.localeCompare(bd.range.start);
       if (ad) return -1;
@@ -137,7 +157,8 @@
   }
   function render() {
     var list = filtered();
-    var feats = featuredArtists(list);
+    var showFeatured = state.genre === 'ALL' && state.origin === 'ALL' && !state.q;
+    var feats = showFeatured ? featuredArtists(list) : [];
     var featureIds = new Set(feats.map(function (artist) { return artist.id; }));
     var grid = list.filter(function (artist) { return !featureIds.has(artist.id); });
     var featured = document.getElementById('artists-featured');
@@ -147,8 +168,6 @@
     syncFeaturedCopyHeight(featured);
     document.getElementById('artists-grid-heading').textContent = isEn ? 'All artists' : 'アーティスト一覧';
     document.getElementById('artists-grid').innerHTML = grid.length ? grid.map(gridMarkup).join('') : '<p class="artists-empty">' + (isEn ? 'No artists match.' : '該当するアーティストはいません。') + '</p>';
-    document.getElementById('artists-grid-count').textContent = grid.length + ' / ' + artists.length;
-    document.getElementById('artists-total').textContent = artists.length + ' artists';
     renderChips();
     document.getElementById('artists-search').value = state.q;
     document.getElementById('artists-search').placeholder = isEn ? 'Artist, city or genre' : 'アーティスト名・都市・ジャンル';

@@ -116,6 +116,9 @@ html.tj-artists-hydrating .ssr-link-list {
   gap: 48px;
   width: 100%;
 }
+.artists-featured-link { color: inherit; text-decoration: none; }
+.artists-featured-link:hover .artists-featured-copy h2 { color: var(--accent-soft); }
+.artists-featured-link:hover .artists-featured-image img { transform: scale(1.04) !important; }
 .artists-featured-image {
   position: relative;
   overflow: hidden;
@@ -160,12 +163,19 @@ html.tj-artists-hydrating .ssr-link-list {
 }
 .artists-featured-copy .artist-bio {
   max-width: 640px;
-  max-height: 8.5em;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
   overflow: hidden;
   font-size: 16px;
+  font-family: var(--font-body);
+  font-weight: 300;
   line-height: 1.9;
   margin: 20px 0 28px;
+  color: rgba(240,237,232,.85);
 }
+.artists-featured-copy .featured-place { color: var(--text-a62); }
+.artists-featured-copy .featured-next { color: var(--text); }
 .artists-featured-panel::after {
   content: '';
   position: absolute;
