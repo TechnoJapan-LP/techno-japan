@@ -35,10 +35,9 @@ function renderedCounts(directory) {
 
     for (const match of sections) {
       const sectionBody = match[1];
-      const year = sectionBody.match(/<h3\b[^>]*>\s*(\d{4})\s*<\/h3>/i)?.[1];
-      if (!year) continue;
-
-      const editionId = `${festivalId}-${year}`;
+      const editionId = match[0].match(/\bdata-edition-id\s*=\s*["']([^"']+)["']/i)?.[1]
+        || `${festivalId}-${sectionBody.match(/<h3\b[^>]*>\s*(\d{4})\s*<\/h3>/i)?.[1] || ''}`;
+      if (!editionId || editionId.endsWith('-')) continue;
       const displayedCount = (sectionBody.match(/\bdata-lineup-slot\b/g) || []).length;
       counts.set(editionId, (counts.get(editionId) || 0) + displayedCount);
     }

@@ -138,7 +138,7 @@ enFallback.addEventListener('load', async () => {
   const value = await waitFor(() => {
     const map = doc.getElementById('venue-map');
     return {status: map?.dataset.mapStatus, pins: map?.querySelectorAll('.lpin').length || 0, text: map?.textContent || ''};
-  }, value => value.status === 'offline');
+  }, value => value.status === 'offline', 25000);
   const japanese = /[ぁ-ゟ゠-ヿ㐀-鿿ー々]/.test(value.text);
   setResult('enFallbackResult', value.status === 'offline' && value.pins === expected && !japanese ? 'pass' : 'fail', JSON.stringify(value));
 });
@@ -716,17 +716,27 @@ def main():
                 )
 
         if server:
-            map_dom, map_console = render(chrome, f"{base}{VENUE_MAP_TEST_PATH}", max(args.budget, 15000))
-            map_result = re.search(r'<body[^>]*data-map-result="([^"]+)"', map_dom)
-            fallback_result = re.search(r'<body[^>]*data-fallback-result="([^"]+)"', map_dom)
-            tile_fallback_result = re.search(r'<body[^>]*data-tile-fallback-result="([^"]+)"', map_dom)
-            en_fallback_result = re.search(r'<body[^>]*data-en-fallback-result="([^"]+)"', map_dom)
-            mobile_lazy_result = re.search(r'<body[^>]*data-mobile-lazy-result="([^"]+)"', map_dom)
-            map_value = map_result.group(1) if map_result else "missing"
-            fallback_value = fallback_result.group(1) if fallback_result else "missing"
-            tile_fallback_value = tile_fallback_result.group(1) if tile_fallback_result else "missing"
-            en_fallback_value = en_fallback_result.group(1) if en_fallback_result else "missing"
-            mobile_lazy_value = mobile_lazy_result.group(1) if mobile_lazy_result else "missing"
+            map_budget = max(args.budget, 30000)
+            map_dom, map_console = render(chrome, f"{base}{VENUE_MAP_TEST_PATH}", map_budget)
+
+            def map_values(dom):
+                def read(name):
+                    result = re.search(rf'<body[^>]*data-{name}="([^"]+)"', dom)
+                    return result.group(1) if result else "missing"
+                return {name: read(name) for name in (
+                    "map-result", "fallback-result", "tile-fallback-result",
+                    "en-fallback-result", "mobile-lazy-result",
+                )}
+
+            map_state = map_values(map_dom)
+            if "pending" in map_state.values():
+                map_dom, map_console = render(chrome, f"{base}{VENUE_MAP_TEST_PATH}", map_budget)
+                map_state = map_values(map_dom)
+            map_value = map_state["map-result"]
+            fallback_value = map_state["fallback-result"]
+            tile_fallback_value = map_state["tile-fallback-result"]
+            en_fallback_value = map_state["en-fallback-result"]
+            mobile_lazy_value = map_state["mobile-lazy-result"]
             print(f"Venue map: init={map_value}, fallback={fallback_value}, "
                   f"tileerror={tile_fallback_value}, en_fallback={en_fallback_value}, mobile_lazy={mobile_lazy_value}")
             if map_value != "pass":

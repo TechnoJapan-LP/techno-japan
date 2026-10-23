@@ -57,6 +57,17 @@
       scrollTo({ top: mapScrollTarget(), behavior: 'instant' });
     });
   }
+  function scrollFeaturedBelowFilters() {
+    requestAnimationFrame(function () {
+      var featured = root.querySelector('.venues-featured-section');
+      var toolbar = root.querySelector('.venues-filters');
+      if (!featured || !toolbar) return;
+      var featuredTop = featured.getBoundingClientRect().top;
+      var toolbarBottom = toolbar.getBoundingClientRect().bottom;
+      if (featuredTop >= toolbarBottom) return;
+      scrollTo({ top: Math.max(0, scrollY + featuredTop - toolbarBottom), behavior: 'instant' });
+    });
+  }
   function updateMapVisibility() {
     var isMobile = mobileQuery.matches;
     if (mapToggle) {
@@ -367,6 +378,7 @@
       state.featuredId = '';
       syncUrl();
       render();
+      scrollFeaturedBelowFilters();
       return;
     }
     var link = event.target.closest('[data-venue-detail-link]');

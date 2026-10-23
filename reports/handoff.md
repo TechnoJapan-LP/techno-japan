@@ -12886,3 +12886,143 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - Claude が実ブラウザ確認を行うまで公開可とは報告しない。公開前に `bash scripts/preflight.sh` を完走し、Publish 経路の実機確認と `reports/handoff.md` の結果更新を行う。
+
+### 2026-10-23 redesign/magazine フェーズ4-2 ブラウザ確認後の残修正（未コミット・未公開）
+
+### 実施
+- フェス詳細: 行動計測対象の重複クラスを解消し、タブ切替時の計測検査を利用者操作に合わせた。タブのARIA／左右キー／roving tabindex、スマホ幅、Instagramボタン、ラインナップの番号箱・枠なし・折返し、現行開催回の年重複、会場名BudouXを修正した。
+- 画像: フェスheroとフライヤーに原寸候補を含むsrcset、hero `sizes="100vw"`、Feature storyの3:2横長派生、詳細・記事の関連フェス3列向けsizesを追加した。
+- EN: 日本語住所をFAQの文面に使わず、会場名＋県名へフォールバックした。FAQ表示とFAQPage JSON-LDは同じ生成データを使用している。
+- TOP / FESTIVALS / VENUES / 記事: ニュースレター余白・入力幅・見出し位置、空ロケーションの区切り、一覧のハート余白、PCのMAP非表示、絞り込み後スクロール、関連フェス見出し・画質、シェアボタンサイズを修正した。
+- `LP/cms.js` の記事プレビューCSS版を現行の `common.css?v=50` / `detail.css?v=78` / `article-fx.css?v=18` に更新した。
+
+### コミット
+- なし（ユーザー指示により commit / push 未実施）。
+
+### 検証
+- `node scripts/build-detail-pages.mjs` 完了。`node scripts/check_build_idempotent.mjs` 成功（601ファイルに変化なし）。外部Drive画像150件は取得失敗のため既存寸法へフォールバックした警告あり。
+- `node --check`（生成器、検査スクリプト、CMS、TOP、VENUES）成功。`check_asset_versions.py`、`check_regressions.py`、`check_festival_lineup_render.mjs`（75開催回JA/EN一致）、`check_jsonld.mjs`、`check_image_position.mjs`、`check_og_image.mjs`、`check_internal_links.py`、`check_image_delivery.mjs`、`check_cms_article_generated_preview.mjs` 成功。
+- 生成HTMLでタブの`aria-pressed`残存0件、詳細ごとの`festival-editions-v2` 1件、EN会場FAQの日本語住所0件、画像候補とsizesを確認した。
+
+### 変更したパターン
+- `scripts/build-detail-pages.mjs`、`LP/detail.css`、`LP/common.css`、`LP/top-phase2.css`、`LP/venues-phase3.js` / `.css`、`LP/festivals-phase3.css`、`LP/cms.js`、`scripts/check_festival_tracking.mjs`、`scripts/check_festival_lineup_render.mjs`、JA/EN生成HTML。
+- 画像版数: `detail.css` 77→78、共通CSS 49→50、TOP 7→8、VENUES 4→5、FESTIVALS 6→7。
+
+### 未確認の類似パターン
+- 未確認: 実ブラウザでのJA/EN・1280px@2x／390px@3xの表示と操作、タブ左右キー、画像の実転送量、CMS入力保持、Publish経路。
+- `check_festival_tracking.mjs` と記事シェア検査はsandboxのlocalhost bind `EPERM`で実行不可。実ブラウザで計測イベントのlineup／editions／relatedが各1回、festival_id、クリックイベントを確認すること。
+- `bash scripts/preflight.sh` は未実行。公開前に必ず完走させること。
+
+### 次の担当への注意・判断待ち
+- 実ブラウザ確認とpreflight完走までは公開可として扱わない。CMSを変更したため、本番前は強制リロードを含むCMS確認とPublish経路の確認が必要。
+
+### 2026-10-23 redesign/magazine 小さな残修正（未コミット・未公開）
+
+### 実施
+- `LP/map.html` の `common.css` を `v=50` に統一。
+- `scripts/check_festival_tracking.mjs` のタブ操作後待機を `setTimeout(150)` に変更。
+- フェス詳細のInstagramボタンをv2では幅自動にし、Feature story画像を3:2・`height:auto`・ブロック表示に変更。
+- Feature storyに記事ヒーロー系派生画像と原寸を含むsrcsetを追加し、More festivalsと記事側関連フェスの`sizes`を共通化。
+- FESTIVALS一覧スマホの既存 `padding-right:56px` を維持し、ハートとの余白8px以上を確保。
+
+### コミット
+- なし（ユーザー指示により commit / push 未実施）。
+
+### 検証
+- `node --check`（生成器・検査スクリプト）成功。
+- `node scripts/build-detail-pages.mjs` 完了。
+- `node scripts/check_build_idempotent.mjs` 成功（601ファイルに変化なし）。外部画像150件は取得失敗のため既存寸法へフォールバックした警告あり。
+- `python3 scripts/check_asset_versions.py`、`python3 scripts/check_regressions.py`、`node scripts/check_festival_lineup_render.mjs`、`node scripts/check_jsonld.mjs` 成功。
+- ブラウザ検査 `check_festival_tracking` はユーザー指定によりClaude確認待ち。
+
+### 変更したパターン
+- `COMMON_CSS_VERSION=50`、`DETAIL_CSS_VERSION=79`、v2のsocial link / feature story画像、関連フェス共通sizes、tracking検査待機。
+
+### 未確認の類似パターン
+- 実ブラウザでのJA/EN・PC/モバイル表示、画像の実転送量、タブ計測イベント、Publish経路は未確認。
+- 確認済み・0件: `common.css?v=49` の残存、旧 `articleRelatedFestivalSrcsetAttr` の残存、More festivalsの旧sizes残存。
+
+### 次の担当への注意・判断待ち
+- 実ブラウザ確認と `bash scripts/preflight.sh` 完走までは公開可として扱わない。公開時はCMS／Publish経路と強制リロードも確認すること。
+
+### 2026-10-23 redesign/magazine 小さな修正（未コミット・未公開）
+
+### 実施
+- フェス詳細のタブ操作で `tj:festival-section` を発火し、`lineup` / `editions` を既存の `seen` 経由で1回だけ計測するよう修正。
+- FESTIVALS一覧スマホの行右余白を56pxから60pxに変更。
+- `common.js` を v20、`festivals-phase3.css` を v8へ更新し、生成HTMLを再生成。
+
+### コミット
+- なし（ユーザー指示により commit / push 未実施）。
+
+### 検証
+- `node --check`、`node scripts/build-detail-pages.mjs` 成功。
+- `node scripts/check_build_idempotent.mjs` 成功（601ファイルに変化なし）。外部画像150件は取得失敗のため既存寸法へフォールバックした警告あり。
+- `python3 scripts/check_asset_versions.py`、`python3 scripts/check_regressions.py` 成功。
+- ブラウザ検査 `check_festival_tracking.mjs` は未実行（Claude確認待ち）。
+
+### 変更したパターン
+- タブ操作時のフェスセクション計測、スマホ一覧行の右padding、共通JS / FESTIVALS CSSのキャッシュ版数。
+
+### 未確認の類似パターン
+- 実ブラウザでのタブ計測、JA/EN・PC/モバイル表示、Publish経路は未確認。
+
+### 次の担当への注意・判断待ち
+- 実ブラウザ確認と `bash scripts/preflight.sh` 完走までは公開可として扱わないこと。
+
+### 2026-10-23 redesign/magazine preflight 残り3件の修正（未コミット・未公開）
+
+### 実施
+- `LP/cms.js` の記事本番プレビューを `detail.css?v=79` に更新し、`LP/cms.html` の `cms.js` を v174 に更新。
+- `scripts/check_article_share.mjs` を空きポート・一時プロファイル・CDPの `Runtime.evaluate` を使うJA/EN×PC/スマホ検査へ変更。Chrome終了とプロファイル削除をfinallyで保証。
+- `scripts/check_hub_pages.py` の英語フォールバックの完了待ちを25秒へ延長し、地図検査の仮想時間予算を30秒へ拡張。pending時は再試行するよう変更。
+
+### コミット
+- なし（ユーザー指示により commit / push 未実施）。
+
+### 検証
+- `node --check scripts/check_article_share.mjs`、`python3 scripts/check_asset_versions.py`、`node scripts/check_cms_article_generated_preview.mjs`、`python3 -c "import ast; ast.parse(open('scripts/check_hub_pages.py').read())"` 成功。
+- `git diff --check` 成功。
+- ブラウザ検査はsandboxのlocalhost bind `EPERM`で実行不可。実ブラウザで記事シェアとハブ英語フォールバックを確認すること。
+
+### 変更したパターン
+- 記事プレビューの `detail.css` / CMSスクリプト版数、記事シェア検査のCDP実行経路、会場地図の英語フォールバック待機。
+
+### 未確認の類似パターン
+- 確認済み・0件: 指定された静的確認4件、アセット版数の一致、CMS本番プレビューの版数。
+- 未確認: 実ブラウザでのJA/EN・PC/スマホのシェアボタン計測、preflight内でのハブ英語フォールバック。
+
+### 次の担当への注意・判断待ち
+- `bash scripts/preflight.sh` と、localhostを許可した実ブラウザ環境での2検査を完走するまで公開可として扱わないこと。
+
+### 2026-10-23 redesign/magazine フェーズ4-2 フェス詳細 ＋ ユーザー確認後の修正（2回目）（Claude 検証・コミット。本番未反映）
+
+### 実施
+- フェス詳細（フェーズ4-2）をモックの作りへ: 全幅ヒーロー、Fact strip（Date / Location / Prefecture / Genre / Lineup / Editions）、ボタンの行（Official site / Tickets / Save / Instagram）、4タブ（Overview / Lineup / Editions / Stories。中身は静的 HTML、JS で切替、`#lineup` 等で開く、矢印キー、`aria-selected` のみ）、More festivals 6件。LINEUP の解決・JSON-LD・FAQ（FAQPage と数一致）・終了回・地図・戻るリンク・計測は保持。JA の会場名は BudouX で文節折り。EN の文に日本語の住所を出さない。
+- ユーザー指摘（2回目）: TOP（ニュースレターの余白と幅・Upcoming のチップをスマホで見出しの下に1列・見出しの赤線を h2 に・Festival Index のスマホの状態欄）、NEWS（Sort の文字を削除・Latest / Popular の切替ボタン・LOAD MORE の下の余白）、FESTIVALS（スマホのリストを2段・同じ年の終了日は年を省く）、ARTISTS（FEATURED の行間 18px・NEXT のピル・長い名前を字の大きさで収める・古い GUIDE 欄を削除）、VENUES（スマホは MAP ボタンで地図・開くまで Leaflet を読まない・フィルタの帯を固定・TOKYO を5区分・絞り込み後に結果の先頭へ）、記事（消えていたシェアボタンの CSS を戻す・読了バーをヘッダー下端へ・写真の下の余白・関連フェスの見出しを上に・All festivals を削除・カードの sizes）。
+- EN の TOP の詳細リンク 38件が日本語ページを指していた → `/en` へ。`check_hub_pages.py` に「EN ハブに日本語の詳細ページへのリンクが 0 件」を追加。
+- フェス詳細の計測: タブを開いた時点でも `festival_section_view` を送る（IntersectionObserver と二重に送らない）。`check_festival_tracking.mjs` と新設の `check_article_share.mjs` を `--dump-dom` から CDP（描画あり）へ。
+
+### コミット
+- 30814d1fa（WIP フェス詳細）、7081640f0（WIP ユーザー修正2回目）、このエントリを含むコミット（残りの修正・検査）。
+
+### 検証
+- `bash scripts/preflight.sh`: 全65件成功（記事のシェアボタンの検査を含む）。CMS の実操作・Publish の実機確認は未（cms.js は版数のみの変更。本番に出す前に必要）
+- 実ブラウザ相当（CDP、PC 1280〜1440 dpr2 / スマホ 390・360 dpr3、JA/EN）: フェス詳細 356/356、ユーザー修正 297/297、NEWS 86/86、FESTIVALS 141/141、ARTISTS 114/114、VENUES 114 中 112（既知: カード画像が 3〜5% 不足）、記事 290 中 284（既知: スマホ本文画像が 8% 不足。fx の拡大）。`check_festival_tracking.mjs` 3回連続成功。計測は lineup / editions / related が各1回（重複なし）を CDP で確認。
+- 重さ（同じ方法・全スクロール・外部ドメイン込み）: フェス詳細 labyrinth スマホ 941→1,370KB / PC 785→1,464KB、sawagi スマホ 1,156→2,488KB / PC 1,006→2,570KB（全幅ヒーローとフライヤーの候補に原寸を入れたため）。
+
+### 変更したパターン
+- 共有 CSS を置き換えたときに他ページのセレクタまで消える（記事の `.article-share`、アイコンが 720px に巨大化）→ 復旧し、記事のシェアボタンの大きさの検査を追加。以後の指示書に「消えたセレクタを git diff で確認」を入れた。
+- ページの wrap（`.top2-wrap`）と部品のクラスを同じ要素に付けて余白が打ち消される → 部品を内側の要素に。後から読まれる CSS に打ち消される指定は、打ち消されない書き方に。
+- 旧デザインの固定幅（`.festival-social-link` 48px、`.newsletter-form` max-width 440px）が新しい部品に効く → 上書き。
+- タブで隠した区画は IntersectionObserver の計測が送られない（dump-dom の検査では特に）→ タブ切替時にも送る＋検査を CDP に。
+
+### 未確認の類似パターン
+- アーティスト・会場の詳細ページは 4-3 / 4-4 で作り直す（指示書に共有 CSS の削除確認を追加済み）。
+- iPhone の実機確認は未。CARTO のキーは本番ドメインだけで効くため、地図の配色（案A）は本番に出してから確認が必要。
+
+### 次の担当への注意・判断待ち
+- フェス詳細の画像の重さ（上記）はユーザー判断待ち。中間サイズの派生画像（フェスのヒーロー・フライヤー）を作れば、例えば sawagi のフライヤー 961KB → 約600KB に下げられる（`scripts/build-image-derivatives.py`、Drive 同期の定期ワークフローに関わる）。
+- TOKYO の5区分の割り当て（HATAGAYA→SHINJUKU、EBISU / NAKAMEGURO→DAIKANYAMA、JINGUMAE / OMOTESANDO→AOYAMA、ROPPONGI は会場0件で非表示）はユーザー確認待ち。
+- データ: saloon の AREA は SHIBUYA だが住所は UNIT と同じ恵比寿西（DAIKANYAMA）。EN の英語住所（ADDRESS_EN）はフェーズ8。
+- cms.js / cms.html を変えている（版数のみ）→ 本番に出す時は Publish pipeline ＋ CMS の確認が必要（AGENTS.md）。

@@ -700,6 +700,7 @@ html[lang="en"] .event-signup-label [lang="en"] { display: inline; }
   flex-direction: row;
   align-items: center;
   width: 100%;
+  max-width: none;
   margin: 0;
   padding: 0;
   border: 0;

@@ -253,21 +253,31 @@
       var festLang = document.documentElement.lang === 'en' ? 'en' : 'ja';
 
       // 5-1) セクション到達（1ページ1回だけ送る）
+      var sections = [
+        ['lineup',   '.festival-program-section'],
+        ['editions', '.festival-editions-v2'],
+        ['faq',      '.festival-faq'],
+        ['related',  '.related-festivals']
+      ];
+      var seen = {};
+      var sendSectionView = function (key) {
+        if (!key || seen[key]) return;
+        seen[key] = true;
+        track('festival_section_view', { section: key, festival_id: festId, page_lang: festLang });
+      };
+      document.addEventListener('tj:festival-section', function (e) {
+        var key = e.detail && e.detail.section;
+        if (key !== 'lineup' && key !== 'editions') return;
+        sendSectionView(key);
+      });
+
       if ('IntersectionObserver' in window) {
-        var sections = [
-          ['lineup',   '.festival-program-section'],
-          ['editions', '.festival-editions-v2'],
-          ['faq',      '.festival-faq'],
-          ['related',  '.related-festivals']
-        ];
-        var seen = {};
         var sectionIo = new IntersectionObserver(function (entries) {
           entries.forEach(function (entry) {
             if (!entry.isIntersecting) return;
             var key = entry.target.getAttribute('data-tj-section');
             if (!key || seen[key]) return;
-            seen[key] = true;
-            track('festival_section_view', { section: key, festival_id: festId, page_lang: festLang });
+            sendSectionView(key);
             sectionIo.unobserve(entry.target);
           });
         // 巨大なセクションは threshold では発火しないため、rootMargin で判定する。

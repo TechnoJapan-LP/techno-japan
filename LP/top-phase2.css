@@ -73,3 +73,23 @@
   }
 }
 html.tj-home-js #main-content > #top-ssr-links{display:none!important}html:not(.tj-home-js) #main-content > #top-ssr-links{display:block!important}
+
+/* Keep the newsletter spacing after the generic top2-wrap reset. */
+.top2-wrap.top2-newsletter { margin-top: 112px; }
+
+@media (max-width: 900px) {
+  .top2-head { display: flex; }
+  #top2-upcoming .top2-head {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+  #top2-upcoming .top2-chips {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  #top2-upcoming .top2-chips::-webkit-scrollbar { display: none; }
+  .top2-index-row .top2-status[data-city=""]::before { content: ""; }
+}
