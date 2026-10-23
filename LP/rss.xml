@@ -5,9 +5,17 @@
     <link>https://techno-japan.media</link>
     <description>Japan&apos;s underground techno and house music media platform.</description>
     <language>ja-JP</language>
-    <lastBuildDate>Thu, 22 Oct 2026 12:40:45 +0900</lastBuildDate>
-    <!-- items-hash: 983cd7257c51c2c513edc22e6d45613286428749f3b36062fff25ea5fe5c2bb6 -->
+    <lastBuildDate>Fri, 23 Oct 2026 17:14:22 +0900</lastBuildDate>
+    <!-- items-hash: 8cae6c00d03ebcd9699ee3975f0e1e4656052e97debec213d250417503bed0fa -->
     <atom:link href="https://techno-japan.media/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Sawagi Festival</title>
+      <link>https://techno-japan.media/festivals/sawagi-festival.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/sawagi-festival.html</guid>
+      <pubDate>Fri, 23 Oct 2026 00:00:00 +0900</pubDate>
+      <category>Festival</category>
+      <description>Gunma — SAWAGI FESTIVALはアンダーグラウンド・シーンを牽引する国内屈指のDJ・アーティストが一堂に集結し、ダンスミュージックの真髄を極めた重厚なサウンドと熱量の高いパフォーマンスを展開。標高の高い豊かな自然に囲まれた開放的な空間で、音とスピリットを全身で共有する圧倒的な没入感と、自由でアットホームなコミュニティ感が魅力のオープンエア・パーティです。</description>
+    </item>
     <item>
       <title>Wonderfruit Kyoto</title>
       <link>https://techno-japan.media/festivals/wonderfruit-kyoto.html</link>
