@@ -12856,3 +12856,33 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - 実ブラウザ確認と `check_festival_tracking.mjs` の実行結果が揃うまで公開済みとは報告しない。公開時は `bash scripts/preflight.sh` 後にPublish経路の実機確認を行う。
+
+### 2026-10-23 redesign/magazine ユーザー確認後の修正（未コミット・未公開）
+
+### 実施
+- TOP / NEWS: ニュースレターをページ幅内の内側部品へ変更し、PC・スマホの余白、入力幅、見出し改行を調整。NEWS の並べ替え UI と LOAD MORE の余白を調整。
+- TOP / FESTIVALS: モバイルの UPCOMING・Festival Index・リスト行を修正し、同年の日付を短縮表示。TOP の詳細リンクを EN では `/en/` 付きに統一。
+- ARTISTS: FEATURED の行間・NEXT 表示・長い名前の折返しを調整し、古い GUIDE 欄を削除。
+- VENUES: モバイルの MAP 開閉・初回 Leaflet 遅延読込、sticky フィルタ、TOKYO の5区分を追加。地図のモバイル遅延検査を追加。
+- 記事詳細: シェアボタンのサイズ指定を復元、読了バー位置、ヒーロー下余白、関連フェス配置を修正。JA/EN のシェアサイズ検査を追加。
+- 生成ページを再生成し、変更した CSS / JS の版数を更新。
+
+### コミット
+- なし（ユーザー指示により commit / push 未実施）。
+
+### 検証
+- 変更 JS の `node --check` 成功。
+- `python3 scripts/check_asset_versions.py`、`python3 scripts/check_regressions.py`、`python3 scripts/check_hub_head.py` 成功。
+- `node scripts/build-detail-pages.mjs` 完了、`node scripts/check_build_idempotent.mjs` 成功結果あり。
+- JA/EN ハブ5枚の行数一致: index 259/259、news 221/221、festivals 316/316、artists 381/381、venues 245/245。
+- `python3 scripts/check_hub_pages.py`、`node scripts/check_article_share.mjs`、`node scripts/check_venue_maps.mjs` は sandbox の localhost bind `EPERM` により未実行。
+
+### 変更したパターン
+- `.mag-newsletter` の内側部品化、TOP 見出し下線、NEWS sort 切替、開催回リストの日付短縮、EN 詳細 URL、FEATURED コピー、VENUES の `?subarea=`、Leaflet の mobile lazy-load、article share / progress / related festivals。
+- 確認済み・0件: `GUIDE LINKS` の ARTISTS 残存、古い FESTIVALS 非表示用 CSS、EN TOP の未 `/en` 詳細リンク、JA/EN ハブ行数差。
+
+### 未確認の類似パターン
+- 実ブラウザでの PC / モバイル、JA / EN の見た目と操作、ニュースレター送信、MAP 開閉後の実タイル、記事シェアボタン実測。
+
+### 次の担当への注意・判断待ち
+- Claude が実ブラウザ確認を行うまで公開可とは報告しない。公開前に `bash scripts/preflight.sh` を完走し、Publish 経路の実機確認と `reports/handoff.md` の結果更新を行う。

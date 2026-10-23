@@ -542,6 +542,65 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 
 /* ARTICLE FX styles → article-fx.css に移設（news.html と共有するため） */
 
+.article-share .share-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+.article-share .share-buttons-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  opacity: .62;
+  margin-right: 8px;
+}
+.article-share .share-btn {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--text-a12);
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  cursor: pointer;
+  opacity: .6;
+  transition: border-color .3s ease, background .3s ease, opacity .3s ease;
+}
+.article-share .share-btn:hover {
+  border-color: var(--text-a40);
+  opacity: 1;
+}
+.article-share .share-btn svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+  stroke: none;
+}
+.article-share .share-copy-btn svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+}
+.article-share .share-btn.copied {
+  background: var(--white-a08);
+  opacity: 1;
+}
+.article-share {
+  margin: 40px 0 0;
+}
+.article-detail .article-newsletter {
+  margin-top: 64px;
+}
+
 /* ==============================================================
    LANG TOGGLE — 説明文の日本語/英語インライン切替（lang-toggle.js と対）
    ============================================================== */
@@ -1137,11 +1196,11 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 .article-related-stories .related-story-card.is-wide .related-story-title { font-size: 30px; line-height: 1.15; }
 .article-related-stories .related-story-title .story-title-short, .article-related-stories .related-story-title .story-title-sub { display: block; }
 .article-related-stories .related-story-title .story-title-sub { margin-top: .25em; font-size: .55em; line-height: 1.4; }
+.article-hero + .article-main-grid { margin-top: 56px; }
 .related-festivals { margin-top: 72px; }
-.related-section-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; margin-bottom: 20px; }
+.article-detail .related-festivals { display: block; }
+.related-section-head { display: block; margin-bottom: 20px; }
 .related-section-head h2 { font-size: 40px; }
-.related-section-head a { color: var(--text-a62); }
-.related-section-head a:hover { color: var(--text); }
 .article-detail .related-festivals-track { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; overflow: visible; }
 .article-detail .related-festivals-track .related-card { min-width: 0; max-width: none; flex-basis: auto; }
 .article-detail .related-card-img { aspect-ratio: 3 / 2; }
@@ -1160,6 +1219,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   .article-hero-meta div { display: flex; align-items: flex-start; gap: 6px; }
   .article-hero-meta dt { color: var(--text-a50); }
   .article-hero-meta dd { margin: 0; color: var(--text-a85); }
+  .article-hero + .article-main-grid { margin-top: 40px; }
   .article-main-grid { display: block; }
   .article-content { max-width: none; }
   .article-sidebar { position: static; display: block; margin-top: 40px; }

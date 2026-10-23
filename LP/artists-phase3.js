@@ -76,13 +76,31 @@
   function attachHeart(mount, artist) {
     if (window.tjFav && mount && artist) window.tjFav.attachHeart(mount, 'artist', artist.id, { size: 'sm' });
   }
+  function longestNameWord(value) {
+    var words = String(value || '').split(/\s+/).map(function (word) {
+      return Array.from(word).length;
+    });
+    return Math.max.apply(null, words.concat([1]));
+  }
   function featuredMarkup(artist, index) {
     var appearance = next.get(artist.id);
     var genre = genresOf(artist).join(' / ');
-    var nextLine = appearance ? '<div class="mono featured-next">Next · ' + esc(loc(appearance.festival.name, '', appearance.festival.name_en)) + ' ' + esc(dateLabel(appearance.range)) + '</div>' : '';
+    var artistName = loc(artist.name, '', artist.name_en);
+    var nextLine = appearance
+      ? '<div class="featured-next"><span class="pill">Next</span>'
+        + '<span class="featured-next-name">' + esc(loc(appearance.festival.name, '', appearance.festival.name_en)) + '</span>'
+        + '<span class="mono featured-next-date">' + esc(dateLabel(appearance.range)) + '</span></div>'
+      : '';
     var bio = loc(artist.bio, '', artist.bio_en);
     var href = (isEn ? '/en' : '') + '/artists/' + encodeURIComponent(artist.id) + '.html';
-    return '<article class="artists-featured-panel"><a class="wrap artists-featured-link artists-featured-content" href="' + href + '"><div class="artists-featured-image">' + imageMarkup(artist, '(max-width: 900px) 100vw, 42vw', index === 0, 4 / 5) + '<span class="fav-mount" data-fav-id="' + esc(artist.id) + '"></span></div><div class="artists-featured-copy"><div class="mono red">Featured ' + String(index + 1).padStart(2, '0') + ' · ' + esc(genre) + '</div><h2 class="disp">' + esc(loc(artist.name, '', artist.name_en)) + '</h2><div class="mono featured-place">' + esc(placeOf(artist)) + '</div>' + nextLine + (bio ? '<p class="artist-bio">' + esc(bio) + '</p>' : '') + '<span class="featured-profile">Profile →</span></div></a></article>';
+    return '<article class="artists-featured-panel"><a class="wrap artists-featured-link artists-featured-content" href="' + href + '">'
+      + '<div class="artists-featured-image">' + imageMarkup(artist, '(max-width: 900px) 100vw, 42vw', index === 0, 4 / 5)
+      + '<span class="fav-mount" data-fav-id="' + esc(artist.id) + '"></span></div>'
+      + '<div class="artists-featured-copy" style="--name-chars:' + longestNameWord(artistName) + '">'
+      + '<div class="mono red">Featured ' + String(index + 1).padStart(2, '0') + ' · ' + esc(genre) + '</div>'
+      + '<h2 class="disp">' + esc(artistName) + '</h2><div class="mono featured-place">' + esc(placeOf(artist)) + '</div>'
+      + nextLine + (bio ? '<p class="artist-bio">' + esc(bio) + '</p>' : '')
+      + '<span class="featured-profile">Profile →</span></div></a></article>';
   }
   function gridMarkup(artist) {
     return '<a class="artist-grid-card" data-artist-detail-link href="' + (isEn ? '/en' : '') + '/artists/' + encodeURIComponent(artist.id) + '.html"><div class="artist-grid-image">' + imageMarkup(artist, '(max-width: 900px) calc(50vw - 22px), 18vw', false, 1) + '<div class="fav-mount" data-fav-id="' + esc(artist.id) + '"></div></div><h3 class="disp">' + esc(loc(artist.name, '', artist.name_en)) + '</h3><div class="mono">' + esc(genresOf(artist).join(' / ')) + '</div><div class="mono artist-place">' + esc(placeOf(artist)) + '</div></a>';

@@ -58,7 +58,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 76;
+const DETAIL_CSS_VERSION = 77;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -71,16 +71,16 @@ const DETAIL_CSS_VERSION = 76;
 
    article-fx.js / article-fx.css を変更したら、ここを上げる。 */
 const ARTICLE_FX_JS_VERSION = 14;
-const ARTICLE_FX_CSS_VERSION = 17;
+const ARTICLE_FX_CSS_VERSION = 18;
 
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
 const COMMON_JS_VERSION = 19;   // 2026-10-22 design v2 shared menu behavior
-const COMMON_CSS_VERSION = 48;   // 2026-10-23 background glow and pill sizing
+const COMMON_CSS_VERSION = 49;   // 2026-10-23 magazine newsletter and article layout
 const DATA_HUB_VERSION = 11;
 const SEARCH_JS_VERSION = 8;
 const LANG_TOGGLE_VERSION = 1;
-const MAGAZINE_JS_VERSION = 4;
+const MAGAZINE_JS_VERSION = 5;
 const FAVORITES_JS_VERSION = 4;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
 const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');
@@ -1637,7 +1637,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   const relatedFestivals = selectRelatedFestivals(a, L.body, festivals, editionsByFestival, festivalId);
   const relatedFestivalHtml = relatedFestivals.length
     ? `<section class="related-festivals">
-    <div class="related-section-head"><h2 class="disp">${lang === 'en' ? 'Related Festivals' : '関連フェスティバル'}</h2><a class="mono" href="${L.prefix}/festivals.html">${lang === 'en' ? 'All festivals' : 'All festivals'} →</a></div>
+    <div class="related-section-head"><h2 class="disp">${lang === 'en' ? 'Related festivals' : '関連フェスティバル'}</h2></div>
     <div class="related-festivals-track">${relatedFestivals.map((festival) => relatedFestivalCardHtml(festival, lang, L.prefix, editionsByFestival, null, articleRelatedFestivalSrcsetAttr, true)).join('')}</div>
   </section>`
     : '';
@@ -3231,6 +3231,9 @@ const EN_HUB_TEXT = [
 ];
 
 const EN_PAGE_TEXT = {
+  'news.html': [
+    ['並べ替え', 'Sort'],
+  ],
   'artists.html': [
     ['アーティスト一覧', 'All artists'],
   ],

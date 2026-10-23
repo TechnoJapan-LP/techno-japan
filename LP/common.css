@@ -659,32 +659,102 @@ html[lang="en"] .event-signup-label [lang="en"] { display: inline; }
 
 /* Shared magazine newsletter used by TOP and NEWS. */
 .mag-newsletter {
-  max-width: 1280px;
-  margin-top: 120px;
-  padding: 64px 40px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 64px;
-  border-top: 1px solid var(--text-a14);
-  border-bottom: 1px solid var(--text-a14);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 48px;
+  align-items: center;
+  border-top: 1px solid var(--text-a30);
+  border-bottom: 1px solid var(--text-a30);
+  padding: 56px 0;
 }
-.mag-newsletter-meta { margin: 0 0 16px; font: 10px var(--font-mono); letter-spacing: .15em; color: var(--accent); text-transform: uppercase; }
-.mag-newsletter h2 { margin: 0 0 14px; font: 400 clamp(34px, 4vw, 60px)/.95 var(--font-display); text-transform: uppercase; }
-.mag-newsletter p:not(.mag-newsletter-meta) { margin: 0; font-size: 15px; line-height: 1.5; color: var(--text-a78); }
-.mag-newsletter [lang="en"] { display: none; }
-.mag-newsletter .newsletter-form { display: flex; flex-direction: row; align-items: center; width: 100%; max-width: 520px; margin: 0; padding: 0; border: 0; align-self: center; justify-self: stretch; }
-.mag-newsletter input[type="email"] { flex: 1 1 auto; min-width: 0; height: 48px; background: transparent; border: 1px solid var(--text-a30); border-right: 0; color: var(--text); font: 14px var(--font-body); padding: 0 14px; }
-.mag-newsletter button { height: 48px; min-width: max-content; padding: 0 18px; background: var(--text); color: var(--bg); border: 1px solid var(--text); font: 10px var(--font-mono); letter-spacing: .15em; cursor: pointer; }
-.mag-newsletter button:hover { background: var(--accent); border-color: var(--accent); color: var(--white); }
-html[lang="en"] .mag-newsletter [lang="ja"] { display: none; }
-html[lang="en"] .mag-newsletter [lang="en"] { display: inline; }
+.top2-newsletter {
+  margin-top: 112px;
+}
+.news-newsletter {
+  margin-top: 80px;
+}
+.mag-newsletter-meta {
+  margin: 0 0 16px;
+  font: 10px var(--font-mono);
+  letter-spacing: .15em;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+.mag-newsletter h2 {
+  margin: 0 0 14px;
+  font: 400 clamp(34px, 4vw, 56px)/.95 var(--font-display);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.mag-newsletter p:not(.mag-newsletter-meta) {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text-a78);
+}
+.mag-newsletter [lang="en"] {
+  display: none;
+}
+.mag-newsletter .newsletter-form {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  align-self: center;
+  justify-self: stretch;
+}
+.mag-newsletter input[type="email"] {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 48px;
+  background: transparent;
+  border: 1px solid var(--text-a30);
+  border-right: 0;
+  color: var(--text);
+  font: 14px var(--font-body);
+  padding: 0 14px;
+}
+.mag-newsletter button {
+  height: 48px;
+  min-width: max-content;
+  padding: 0 18px;
+  background: var(--text);
+  color: var(--bg);
+  border: 1px solid var(--text);
+  font: 11px var(--font-mono);
+  letter-spacing: .15em;
+  cursor: pointer;
+}
+.mag-newsletter button:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--white);
+}
+html[lang="en"] .mag-newsletter [lang="ja"] {
+  display: none;
+}
+html[lang="en"] .mag-newsletter [lang="en"] {
+  display: inline;
+}
 @media (max-width: 900px) {
-  .mag-newsletter { padding: 48px 24px; grid-template-columns: 1fr; gap: 40px; margin-left: 24px; margin-right: 24px; }
+  .top2-newsletter {
+    margin-top: 112px;
+  }
+  .news-newsletter {
+    margin-top: 72px;
+  }
+  .mag-newsletter {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 48px 0;
+  }
+  .mag-newsletter h2 {
+    white-space: nowrap;
+  }
 }
-@media (max-width: 760px) {
-  .mag-newsletter { margin-left: 16px; margin-right: 16px; }
-}
-
 /* ===================== RESPONSIVE (shared chrome only) ===================== */
 @media (max-width: 900px) {
   /* アプリ内ブラウザでは :focus-visible の判定が不安定で、

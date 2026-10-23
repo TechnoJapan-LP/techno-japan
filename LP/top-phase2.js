@@ -26,26 +26,82 @@
   function dateText(d) { return tjMagDot(d); }
   function range(f) { return tjMagRangeShort(f._range); }
   function place(f) { return typeof window.tjMagFestivalPlace === 'function' ? window.tjMagFestivalPlace(f) : [f.location_ja || f.location, f.city].filter(Boolean).join(' · '); }
+  function detailHref(type, id) {
+    return (isEn ? '/en' : '') + '/' + type + '/' + encodeURIComponent(id) + '.html';
+  }
   function img(value, sizes, eager, useHero, position) { var u = asset(value); return '<img src="' + esc(u) + '"' + (useHero ? heroSrcset(value, sizes) : srcset(value, sizes)) + ' alt="" loading="' + (eager ? 'eager' : 'lazy') + '"' + (eager ? ' fetchpriority="high"' : '') + ' decoding="async" style="' + tjMagObjectPosition(position) + '">'; }
-  function articleCard(a, cls) { var t = title(a); var sizes = cls === 'top2-future-card' ? '(max-width: 900px) calc(100vw - 32px), 50vw' : '(max-width: 900px) 50vw, 33vw'; return '<a class="top2-card top2-fx ' + cls + '" href="/articles/' + encodeURIComponent(a.id) + '.html"><div class="top2-image">' + img(a.image, sizes, false, cls === 'top2-future-card') + '</div><span class="top2-card-meta">' + esc(a.category || 'STORY') + ' · ' + dateText(a.date) + '</span><h3>' + esc(t.h1) + '</h3>' + (t.h2 ? '<p>' + esc(t.h2) + '</p>' : '') + '</a>'; }
+  function articleCard(a, cls) {
+    var t = title(a);
+    var sizes = cls === 'top2-future-card'
+      ? '(max-width: 900px) calc(100vw - 32px), 50vw'
+      : '(max-width: 900px) 50vw, 33vw';
+    return '<a class="top2-card top2-fx ' + cls + '" href="' + detailHref('articles', a.id) + '"><div class="top2-image">'
+      + img(a.image, sizes, false, cls === 'top2-future-card') + '</div><span class="top2-card-meta">'
+      + esc(a.category || 'STORY') + ' · ' + dateText(a.date) + '</span><h3>' + esc(t.h1) + '</h3>'
+      + (t.h2 ? '<p>' + esc(t.h2) + '</p>' : '') + '</a>';
+  }
   function articleMeta(a) { var t = title(a); return '<div class="top2-meta"><span class="pill">' + esc(a.category || 'STORY') + '</span> ' + dateText(a.date) + (a.readTime ? ' · ' + esc(a.readTime) + ' min' : '') + '</div><h1>' + esc(t.h1) + '</h1>' + (t.h2 ? '<h2>' + esc(t.h2) + '</h2>' : ''); }
   var future = articles.filter(function (a) { return a.featured === true || String(a.featured).toLowerCase() === 'true'; }).slice(0, 2); if (future.length < 2) future = future.concat(articles.filter(function (a) { return String(a.category || '').toUpperCase() === 'GUIDE' && future.indexOf(a) < 0; }).slice(0, 2 - future.length));
   var futureIds = new Set(future.map(function (a) { return a.id; }));
   var leads = articles.filter(function (a) { return !futureIds.has(a.id); }).slice(0, 4);
   var stories = articles.filter(function (a) { return !futureIds.has(a.id) && leads.indexOf(a) < 0; }).slice(0, 6);
   var leadTrack = document.getElementById('top2-lead-track');
-  leadTrack.innerHTML = leads.map(function (a, i) { var t = title(a); return '<a class="top2-panel" href="/articles/' + encodeURIComponent(a.id) + '.html"><div class="top2-panel-photo">' + img(a.image, '100vw', i === 0, true) + '</div><div class="top2-panel-content">' + articleMeta(a) + '</div></a>'; }).join('');
+  leadTrack.innerHTML = leads.map(function (a, i) {
+    return '<a class="top2-panel" href="' + detailHref('articles', a.id) + '"><div class="top2-panel-photo">'
+      + img(a.image, '100vw', i === 0, true) + '</div><div class="top2-panel-content">'
+      + articleMeta(a) + '</div></a>';
+  }).join('');
   document.querySelector('.top2-future-grid').innerHTML = future.map(function (a) { return articleCard(a, 'top2-future-card'); }).join('');
   document.querySelector('.top2-story-grid').innerHTML = stories.map(function (a) { return articleCard(a, 'top2-story-card'); }).join('');
-  function festivalCard(f) { var type = String(f.type || 'festival').toLowerCase(), location = place(f); return '<a class="top2-festival-card top2-fx" data-type="' + esc(type) + '" href="/festivals/' + encodeURIComponent(f.id) + '.html"><div class="top2-image">' + img(f.image, '(max-width: 760px) 240px, 33vw', false, false, f.imagePosition) + '</div><div class="top2-festival-meta"><div class="top2-date">' + range(f) + '</div><span class="top2-kind">' + esc(type) + '</span></div><h3>' + esc(loc(f.name, '', f.name_en)) + '</h3><p>' + esc(location) + '</p></a>'; }
+  function festivalCard(f) {
+    var type = String(f.type || 'festival').toLowerCase();
+    var location = place(f);
+    return '<a class="top2-festival-card top2-fx" data-type="' + esc(type) + '" href="'
+      + detailHref('festivals', f.id) + '"><div class="top2-image">'
+      + img(f.image, '(max-width: 760px) 240px, 33vw', false, false, f.imagePosition)
+      + '</div><div class="top2-festival-meta"><div class="top2-date">' + range(f)
+      + '</div><span class="top2-kind">' + esc(type) + '</span></div><h3>'
+      + esc(loc(f.name, '', f.name_en)) + '</h3><p>' + esc(location) + '</p></a>';
+  }
   function renderFestivals(filter) { var list = futureFestivals.filter(function (f) { return filter === 'all' || (filter === 'week' ? f._range.start === today : String(f.type || '').toLowerCase() === filter); }).slice(0, 6); document.querySelector('.top2-festival-grid').innerHTML = list.map(festivalCard).join(''); document.querySelector('.top2-upcoming-count').textContent = futureFestivals.length + ' events · upcoming'; observe(); }
   renderFestivals('all'); root.querySelectorAll('.top2-chips .chip').forEach(function (b) { b.addEventListener('click', function () { root.querySelectorAll('.top2-chips .chip').forEach(function (x) { x.classList.remove('is-on'); }); b.classList.add('is-on'); renderFestivals(b.dataset.filter); }); });
-  var index = festivals.slice().sort(function (a, b) { var af = tjMagIsUpcoming(a._range, today), bf = tjMagIsUpcoming(b._range, today); return af !== bf ? (af ? -1 : 1) : (af ? a._range.start.localeCompare(b._range.start) : b._range.start.localeCompare(a._range.start)); }).slice(0, 8); document.querySelector('.top2-index-table').innerHTML = '<div class="top2-index-row"><span>Date</span><span>Festival</span><span class="top2-location">Location</span><span class="top2-type">Type</span><span>Status</span></div>' + index.map(function (f) { var upcoming = tjMagIsUpcoming(f._range, today); return '<a class="top2-index-row" href="/festivals/' + encodeURIComponent(f.id) + '.html"><span>' + range(f) + '</span><span>' + esc(loc(f.name, '', f.name_en)) + '</span><span class="top2-location">' + esc(place(f)) + '</span><span class="top2-type">' + esc(f.type || 'Festival') + '</span><span class="top2-status ' + (upcoming ? 'is-future' : '') + '" data-location="' + esc(place(f)) + '">' + (upcoming ? 'UPCOMING' : 'PAST') + '</span></a>'; }).join('');
+  var index = festivals.slice().sort(function (a, b) {
+    var af = tjMagIsUpcoming(a._range, today);
+    var bf = tjMagIsUpcoming(b._range, today);
+    return af !== bf ? (af ? -1 : 1) : (af ? a._range.start.localeCompare(b._range.start) : b._range.start.localeCompare(a._range.start));
+  }).slice(0, 8);
+  document.querySelector('.top2-index-table').innerHTML = '<div class="top2-index-row"><span>Date</span><span>Festival</span><span class="top2-location">Location</span><span class="top2-type">Type</span><span>Status</span></div>'
+    + index.map(function (f) {
+      var upcoming = tjMagIsUpcoming(f._range, today);
+      var city = String(f.city || '').toUpperCase();
+      return '<a class="top2-index-row" href="' + detailHref('festivals', f.id) + '"><span>' + range(f)
+        + '</span><span>' + esc(loc(f.name, '', f.name_en)) + '</span><span class="top2-location">'
+        + esc(place(f)) + '</span><span class="top2-type">' + esc(f.type || 'Festival')
+        + '</span><span class="top2-status ' + (upcoming ? 'is-future' : 'is-archive') + '" data-city="'
+        + esc(city) + '">' + (upcoming ? 'UPCOMING' : 'ARCHIVE') + '</span></a>';
+    }).join('');
   var nextByArtist = window.tjMagNextAppearances(artists, festivals, today); var pool = artists.filter(function (a) { return nextByArtist.has(a.id) && a.image; }).sort(function (a, b) { return nextByArtist.get(a.id).range.start.localeCompare(nextByArtist.get(b.id).range.start); }).slice(0, 12); var shown = [];
   function shuffle(list) { return list.slice().sort(function () { return Math.random() - .5; }); }
-  function renderArtists() { shown = shuffle(pool).slice(0, 6); document.querySelector('.top2-artist-grid').innerHTML = shown.map(function (a) { var item = nextByArtist.get(a.id), f = item.festival; return '<a class="top2-card top2-artist-card top2-fx" href="/artists/' + encodeURIComponent(a.id) + '.html"><div class="top2-image">' + img(a.image, '(max-width: 760px) 30vw, 14vw', false, false, a.imagePosition) + '</div><h3>' + esc(loc(a.name, '', a.name_en)) + '</h3><p>' + esc(loc(f.name, '', f.name_en)) + ' · ' + tjMagRangeShort(item.range) + '</p></a>'; }).join(''); observe(); }
+  function renderArtists() {
+    shown = shuffle(pool).slice(0, 6);
+    document.querySelector('.top2-artist-grid').innerHTML = shown.map(function (a) {
+      var item = nextByArtist.get(a.id);
+      var f = item.festival;
+      return '<a class="top2-card top2-artist-card top2-fx" href="' + detailHref('artists', a.id)
+        + '"><div class="top2-image">' + img(a.image, '(max-width: 760px) 30vw, 14vw', false, false, a.imagePosition)
+        + '</div><h3>' + esc(loc(a.name, '', a.name_en)) + '</h3><p>'
+        + esc(loc(f.name, '', f.name_en)) + ' · ' + tjMagRangeShort(item.range) + '</p></a>';
+    }).join('');
+    observe();
+  }
   renderArtists(); root.querySelector('.top2-shuffle').addEventListener('click', renderArtists);
-  var venueList = shuffle(venues.filter(function (v) { return v.image; })).slice(0, 6); document.querySelector('.top2-venue-list').innerHTML = venueList.map(function (v) { return '<a class="top2-venue-card top2-fx" href="/venues/' + encodeURIComponent(v.id) + '.html"><div class="top2-image">' + img(v.image, '96px', false, false, v.imagePosition) + '</div><div><h3>' + esc(loc(v.name, '', v.name_en)) + '</h3><p>' + esc([v.area, v.city, v.type].filter(Boolean).join(' · ')) + '</p></div></a>'; }).join('');
+  var venueList = shuffle(venues.filter(function (v) { return v.image; })).slice(0, 6);
+  document.querySelector('.top2-venue-list').innerHTML = venueList.map(function (v) {
+    return '<a class="top2-venue-card top2-fx" href="' + detailHref('venues', v.id) + '"><div class="top2-image">'
+      + img(v.image, '96px', false, false, v.imagePosition) + '</div><div><h3>'
+      + esc(loc(v.name, '', v.name_en)) + '</h3><p>' + esc([v.area, v.city, v.type].filter(Boolean).join(' · '))
+      + '</p></div></a>';
+  }).join('');
   if (typeof window.tjMagNewsletter === 'function') window.tjMagNewsletter(root.querySelector('[data-tj-newsletter]'));
   var leadCarousel = window.tjMagPinnedCarousel({section: document.getElementById('top2-lead'), sticky: document.querySelector('.top2-lead-sticky'), track: leadTrack, panels: leadTrack.querySelectorAll('.top2-panel'), dwell: .1, shift: 14, scale: 1.16, dimScale: .28, stickyTop: function () { return parseFloat(window.getComputedStyle(document.querySelector('.top2-lead-sticky')).top) || 0; }, startAt: 0, onIndex: function (panel) { document.getElementById('top2-counter').textContent = String(Math.min(4, panel + 1)).padStart(2, '0') + ' / 04'; document.getElementById('top2-dots').innerHTML = [0,1,2,3].map(function (i) { return '<i class="top2-dot ' + (i === panel ? 'is-on' : '') + '"></i>'; }).join(''); }});
   if (leadCarousel.reduced) document.querySelector('.top2-lead').classList.add('is-reduced');

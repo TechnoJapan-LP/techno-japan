@@ -130,7 +130,7 @@
 }
 .festivals-phase3 .phase3-list-head, .festivals-phase3 .phase3-list-row {
   display: grid;
-  grid-template-columns: 140px 1fr 1fr 110px 120px;
+  grid-template-columns: 220px minmax(0, 1fr) 1fr 110px 120px;
   gap: 24px;
   align-items: center;
 }
@@ -149,6 +149,9 @@
 }
 .festivals-phase3 .phase3-list-name {
   font-size: 26px;
+}
+.festivals-phase3 .phase3-list-date {
+  white-space: nowrap;
 }
 .festivals-phase3 .phase3-list-status {
   color: var(--accent);
@@ -216,11 +219,37 @@
     padding-top: 48px;
   }
   .festivals-phase3 .phase3-list-head, .festivals-phase3 .phase3-list-row {
-    grid-template-columns: 72px 1fr auto;
-    gap: 12px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 7px 12px;
   }
-  .festivals-phase3 .phase3-list-head .phase3-hide, .festivals-phase3 .phase3-list-row .phase3-hide {
+  .festivals-phase3 .phase3-list-head {
     display: none;
+  }
+  .festivals-phase3 .phase3-list-row .phase3-hide {
+    display: none;
+  }
+  .festivals-phase3 .phase3-list-row {
+    padding: 16px 48px 16px 0;
+  }
+  .festivals-phase3 .phase3-list-row .phase3-list-date {
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 0;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  .festivals-phase3 .phase3-list-row .phase3-list-name {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    min-width: 0;
+    font-size: 24px;
+    line-height: 1;
+  }
+  .festivals-phase3 .phase3-list-row .phase3-list-status {
+    grid-column: 2;
+    grid-row: 1;
+    text-align: right;
+    white-space: nowrap;
   }
   .festivals-phase3 .phase3-list-row .phase3-list-status::before {
     content: attr(data-city) ' · ';
@@ -235,10 +264,4 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 32px 16px;
   }
-}
-.page-header, .month-nav, .fest-filters, .guide-section {
-  display: none !important;
-}
-html.tj-festivals-phase3-ready #festivals-main {
-  display: none !important;
 }

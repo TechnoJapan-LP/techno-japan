@@ -17,6 +17,18 @@
   var leafletLoadPromise = null;
   var leafletCssReady = false;
   var mapAlignFrame = 0;
+  var mapToggle = root.querySelector('[data-venues-map-toggle]');
+  var mapOpen = false;
+  var mobileQuery = window.matchMedia('(max-width: 900px)');
+  // TOKYO はユーザー指定の大きな区分だけを出す。
+  // 区分を増やすときはここへ足し、会場データの AREA 自体は変更しない。
+  var TOKYO_SUBAREA_GROUPS = [
+    { name: 'SHIBUYA', areas: ['SHIBUYA'] },
+    { name: 'DAIKANYAMA', areas: ['DAIKANYAMA', 'EBISU', 'NAKAMEGURO'] },
+    { name: 'SHINJUKU', areas: ['SHINJUKU', 'HATAGAYA'] },
+    { name: 'AOYAMA', areas: ['AOYAMA', 'OMOTESANDO', 'JINGUMAE', 'HARAJUKU'] },
+    { name: 'ROPPONGI', areas: ['ROPPONGI', 'NISHIAZABU', 'AZABU', 'AKASAKA'] }
+  ];
 
   function alignMapTop() {
     if (!mapWrap) return;
@@ -34,6 +46,48 @@
       alignMapTop();
     });
   }
+  function mapScrollTarget() {
+    var toolbar = root.querySelector('.venues-filters');
+    var navHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tj-nav-height')) || 64;
+    var toolbarHeight = toolbar ? toolbar.getBoundingClientRect().height : 0;
+    return Math.max(0, mapWrap.getBoundingClientRect().top + scrollY - navHeight - toolbarHeight);
+  }
+  function scrollMapIntoView() {
+    requestAnimationFrame(function () {
+      scrollTo({ top: mapScrollTarget(), behavior: 'instant' });
+    });
+  }
+  function updateMapVisibility() {
+    var isMobile = mobileQuery.matches;
+    if (mapToggle) {
+      mapToggle.hidden = !isMobile;
+      mapToggle.setAttribute('aria-expanded', String(isMobile && mapOpen));
+    }
+    if (isMobile) {
+      mapWrap.hidden = !mapOpen;
+    } else {
+      mapOpen = true;
+      mapWrap.hidden = false;
+    }
+    if (!isMobile && !leafletMap && !mapWrap.classList.contains('tjmap-local')) {
+      tjLoadLeaflet().then(initLeaflet).catch(function () { renderLocal(); });
+    }
+    scheduleMapTopAlignment();
+  }
+  function toggleMap() {
+    mapOpen = !mapOpen;
+    updateMapVisibility();
+    if (!mapOpen) return;
+    if (!leafletMap && mapWrap.dataset.mapStatus !== 'offline') {
+      tjLoadLeaflet().then(initLeaflet).catch(function () { renderLocal(); });
+    } else if (leafletMap) {
+      leafletMap.invalidateSize({ pan: false });
+      renderLeaflet();
+    } else {
+      renderLocal();
+    }
+    scrollMapIntoView();
+  }
 
   function typeValues() {
     var order = ['club', 'bar', 'livehouse'];
@@ -44,6 +98,13 @@
   }
   function subareaValues(city) {
     if (!city || city === 'ALL') return [];
+    if (city === 'TOKYO') {
+      return TOKYO_SUBAREA_GROUPS.filter(function (group) {
+        return venues.some(function (venue) {
+          return venue.city === city && group.areas.indexOf(String(venue.area || '').trim().toUpperCase()) >= 0;
+        });
+      }).map(function (group) { return group.name; });
+    }
     var counts = new Map();
     venues.filter(function (venue) { return venue.city === city && String(venue.area || '').trim(); }).forEach(function (venue) {
       var area = String(venue.area).trim();
@@ -53,9 +114,16 @@
       return counts.get(b) - counts.get(a) || a.localeCompare(b, 'en');
     });
   }
+  function matchesSubarea(venue) {
+    if (state.subarea === 'ALL') return true;
+    if (state.city === 'TOKYO') {
+      var group = TOKYO_SUBAREA_GROUPS.find(function (item) { return item.name === state.subarea; });
+      return Boolean(group && group.areas.indexOf(String(venue.area || '').trim().toUpperCase()) >= 0);
+    }
+    return venue.area === state.subarea;
+  }
   function isValidState() {
-    return (cityValues().indexOf(state.city) >= 0 || state.city === 'ALL')
-      && (state.subarea === 'ALL' || subareaValues(state.city).indexOf(state.subarea) >= 0);
+    return cityValues().indexOf(state.city) >= 0 || state.city === 'ALL';
   }
   function readUrl() {
     var params = new URLSearchParams(location.search);
@@ -64,8 +132,12 @@
     var type = params.get('type') || new URLSearchParams(location.hash.replace(/^#/, '')).get('type');
     if (area && cityValues().indexOf(area) >= 0) state.city = area;
     if (subarea && subareaValues(state.city).indexOf(subarea) >= 0) state.subarea = subarea;
+    else if (subarea) state.subarea = 'ALL';
     if (type && typeValues().indexOf(type) >= 0) state.type = type;
-    if (!isValidState()) { state.city = 'ALL'; state.subarea = 'ALL'; }
+    if (!isValidState()) {
+      state.city = 'ALL';
+      state.subarea = 'ALL';
+    }
   }
   function syncUrl() {
     var url = new URL(location.href);
@@ -81,7 +153,7 @@
   function filtered() {
     return venues.filter(function (venue) {
       return (state.city === 'ALL' || venue.city === state.city)
-        && (state.subarea === 'ALL' || venue.area === state.subarea)
+        && matchesSubarea(venue)
         && (state.type === 'ALL' || venue.type === state.type);
     }).sort(function (a, b) { return String(a.name || '').localeCompare(String(b.name || ''), 'en'); });
   }
@@ -249,6 +321,7 @@
     mapWrap.dataset.mapStatus = 'ready';
     window.tjAddMapTiles(leafletMap, { timeout: 15000, onOffline: function () { if (leafletMap) { leafletMap.remove(); leafletMap = null; } renderLocal(); } });
     renderLeaflet();
+    leafletMap.invalidateSize({ pan: false });
   }
   function saveState() {
     try { sessionStorage.setItem(stateKey, JSON.stringify({ url: location.pathname + location.search, scrollY: scrollY, savedAt: Date.now() })); } catch (_) {}
@@ -280,6 +353,10 @@
     window.tjBindCursorExpand?.('a, button');
   }
   root.addEventListener('click', function (event) {
+    if (event.target.closest('[data-venues-map-toggle]')) {
+      toggleMap();
+      return;
+    }
     var chipButton = event.target.closest('.venues-chip-group button');
     if (chipButton) {
       var group = chipButton.closest('.venues-chip-group');
@@ -308,10 +385,11 @@
     new ResizeObserver(scheduleMapTopAlignment).observe(mapWrap);
   }
   window.addEventListener('resize', scheduleMapTopAlignment);
+  mobileQuery.addEventListener?.('change', updateMapVisibility);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(scheduleMapTopAlignment);
   window.addEventListener('pageshow', restoreState);
+  updateMapVisibility();
   render();
   root.querySelector('.ssr-link-list')?.remove();
   document.documentElement.classList.remove('tj-venues-hydrating');
-  tjLoadLeaflet().then(initLeaflet).catch(function () { renderLocal(); });
 }());

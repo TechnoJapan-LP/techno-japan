@@ -147,7 +147,8 @@
     nav.innerHTML = `${tagChip}${categories.map((category) => `<button class="chip${state.category === category && !state.tag ? ' is-active' : ''}" type="button" data-category="${escapeHtml(category)}" aria-pressed="${state.category === category && !state.tag}">${escapeHtml(category)}</button>`).join('')}`;
     const sort = document.getElementById('news-sort');
     if (sort) {
-      sort.innerHTML = `<span>Sort ·</span><button class="mono${state.sort === 'latest' ? ' is-active' : ''}" type="button" data-sort="latest" aria-pressed="${state.sort === 'latest'}">Latest</button><button class="mono${state.sort === 'popular' ? ' is-active' : ''}" type="button" data-sort="popular" aria-pressed="${state.sort === 'popular'}">Popular</button>`;
+      sort.innerHTML = `<button class="mono${state.sort === 'latest' ? ' is-active' : ''}" type="button" data-sort="latest" aria-pressed="${state.sort === 'latest'}">Latest</button>`
+        + `<button class="mono${state.sort === 'popular' ? ' is-active' : ''}" type="button" data-sort="popular" aria-pressed="${state.sort === 'popular'}">Popular</button>`;
     }
     const note = document.getElementById('news-popularity-note');
     if (note) {

@@ -205,6 +205,7 @@ else
 run "VENUES 詳細ページ"                 node scripts/check_venue_details.mjs
 run "VENUES CMSエクスポート"             python3 scripts/check_venue_export_cms.py
 run "ARTICLE本番表示プレビュー"          node scripts/check_cms_article_generated_preview.mjs
+run "記事シェアボタンの描画サイズ"          node scripts/check_article_share.mjs
 run "TOP ARTISTSランダム表示"             node scripts/check_top_artists.mjs
   run "フェス詳細の行動計測"                node scripts/check_festival_tracking.mjs
   run "地図が全国の会場を出す"          node scripts/check_map_nationwide.mjs

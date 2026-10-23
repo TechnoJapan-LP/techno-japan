@@ -73,7 +73,7 @@ VENUE_NO_LEAFLET_PATH = "/__venues-no-leaflet.html"
 EN_VENUE_NO_LEAFLET_PATH = "/__en-venues-no-leaflet.html"
 VENUE_TILE_TEST_PATH = "/__venue-tile-test.html"
 CURSOR_TEST_PATH = "/__cursor-test.html"
-VENUE_MAP_TEST_HTML = """<!doctype html><html><body data-map-result="pending" data-fallback-result="pending" data-tile-fallback-result="pending" data-en-fallback-result="pending">
+VENUE_MAP_TEST_HTML = """<!doctype html><html><body data-map-result="pending" data-fallback-result="pending" data-tile-fallback-result="pending" data-en-fallback-result="pending" data-mobile-lazy-result="pending">
 <iframe id="map-live" src="/venues.html"></iframe>
 <iframe id="map-fallback" src="/__venues-no-leaflet.html"></iframe>
 <iframe id="map-tile-fallback" src="/__venue-tile-test.html"></iframe>
@@ -103,6 +103,10 @@ const live = document.getElementById('map-live');
 live.addEventListener('load', async () => {
   const doc = live.contentDocument;
   const expected = await expectedPins;
+  const mobile = doc.defaultView.matchMedia('(max-width: 900px)').matches;
+  const initialLeaflet = !!doc.defaultView.L || !!doc.querySelector('.leaflet-container');
+  setResult('mobileLazyResult', !mobile || !initialLeaflet ? 'pass' : 'fail', `mobile=${mobile},initialLeaflet=${initialLeaflet}`);
+  doc.querySelector('[data-venues-map-toggle]')?.click();
   const value = await waitFor(() => {
     const map = doc.getElementById('venue-map');
     return {status: map?.dataset.mapStatus, leaflet: !!map?.querySelector('.leaflet-container'), pins: map?.querySelectorAll('.club-pin, .bar-pin').length || 0};
@@ -113,6 +117,7 @@ const fallback = document.getElementById('map-fallback');
 fallback.addEventListener('load', async () => {
   const doc = fallback.contentDocument;
   const expected = await expectedPins;
+  doc.querySelector('[data-venues-map-toggle]')?.click();
   const value = await waitFor(() => {
     const map = doc.getElementById('venue-map');
     return {status: map?.dataset.mapStatus, pins: map?.querySelectorAll('.lpin').length || 0};
@@ -129,6 +134,7 @@ const enFallback = document.getElementById('map-en-fallback');
 enFallback.addEventListener('load', async () => {
   const doc = enFallback.contentDocument;
   const expected = await expectedPins;
+  doc.querySelector('[data-venues-map-toggle]')?.click();
   const value = await waitFor(() => {
     const map = doc.getElementById('venue-map');
     return {status: map?.dataset.mapStatus, pins: map?.querySelectorAll('.lpin').length || 0, text: map?.textContent || ''};
@@ -571,6 +577,15 @@ def check_top2(dom, spec):
     return failures
 
 
+def check_en_detail_links(dom):
+    """EN ハブの描画後 DOM に JA 詳細ページへのリンクが残っていないか調べる。"""
+    body = strip_style(dom)
+    return re.findall(
+        r'<a\b[^>]*href="/(?:festivals|artists|venues|articles|writers)/[^"#?]+\.html"',
+        body,
+    )
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--base", help="検査対象のベースURL。省略時は LP/ をローカル配信")
@@ -601,6 +616,7 @@ def main():
     print(f"対象   : {base}\n")
 
     failures, rows, actual = [], [], {}
+    rendered = {}
     if not args.base:
         extra_pattern = re.compile(r'<!-- HUB_EXTRA:FESTIVALS:START -->([\s\S]*?)<!-- HUB_EXTRA:FESTIVALS:END -->')
         ja_extra = extra_pattern.search((LP / 'festivals.html').read_text(encoding='utf-8'))
@@ -630,6 +646,7 @@ def main():
             # この再試行では救済されず、従来どおり検出される。
             if len(strip_style(dom)) < 2000:
                 dom, console = render(chrome, f"{base}/{name}", args.budget * 2)
+            rendered[name] = dom
             uncaught = [
                 m.group(1).strip()
                 for line in console.splitlines() if not CONSOLE_IGNORE.search(line)
@@ -680,18 +697,38 @@ def main():
                          spec.get("min_container_bytes", 0), len(uncaught), status,
                          ja, spec.get("max_ja_chars")))
 
+        en_hubs = [
+            "en/index.html",
+            "en/news.html",
+            "en/festivals.html",
+            "en/artists.html",
+            "en/venues.html",
+            "en/about.html",
+        ]
+        for name in en_hubs:
+            if name not in rendered:
+                rendered[name], _ = render(chrome, f"{base}/{name}", args.budget)
+            leaked = check_en_detail_links(rendered[name])
+            if leaked:
+                failures.append(
+                    f"{name}: JA詳細ページへのリンクが {len(leaked)} 件"
+                    "（EN の /en/ 詳細URLにすること）"
+                )
+
         if server:
             map_dom, map_console = render(chrome, f"{base}{VENUE_MAP_TEST_PATH}", max(args.budget, 15000))
             map_result = re.search(r'<body[^>]*data-map-result="([^"]+)"', map_dom)
             fallback_result = re.search(r'<body[^>]*data-fallback-result="([^"]+)"', map_dom)
             tile_fallback_result = re.search(r'<body[^>]*data-tile-fallback-result="([^"]+)"', map_dom)
             en_fallback_result = re.search(r'<body[^>]*data-en-fallback-result="([^"]+)"', map_dom)
+            mobile_lazy_result = re.search(r'<body[^>]*data-mobile-lazy-result="([^"]+)"', map_dom)
             map_value = map_result.group(1) if map_result else "missing"
             fallback_value = fallback_result.group(1) if fallback_result else "missing"
             tile_fallback_value = tile_fallback_result.group(1) if tile_fallback_result else "missing"
             en_fallback_value = en_fallback_result.group(1) if en_fallback_result else "missing"
+            mobile_lazy_value = mobile_lazy_result.group(1) if mobile_lazy_result else "missing"
             print(f"Venue map: init={map_value}, fallback={fallback_value}, "
-                  f"tileerror={tile_fallback_value}, en_fallback={en_fallback_value}")
+                  f"tileerror={tile_fallback_value}, en_fallback={en_fallback_value}, mobile_lazy={mobile_lazy_value}")
             if map_value != "pass":
                 detail = re.search(r'data-map-result-detail="([^"]*)"', map_dom)
                 failures.append(f"venues.html: Leaflet地図の初期化に失敗 — {detail.group(1) if detail else map_value}")
@@ -701,6 +738,8 @@ def main():
                 failures.append(f"venues.html: タイル失敗時のフォールバックに失敗 — {tile_fallback_value}")
             if en_fallback_value != "pass":
                 failures.append(f"en/venues.html: 英語フォールバックに失敗 — {en_fallback_value}")
+            if mobile_lazy_value != "pass":
+                failures.append(f"venues.html: モバイル初期表示で地図を遅延できていない — {mobile_lazy_value}")
 
             cursor_url = f"{base}{CURSOR_TEST_PATH}"
             cursor_budget = max(args.budget, 15000)

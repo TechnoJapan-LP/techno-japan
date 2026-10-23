@@ -57,9 +57,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/common.css?v=48">
+<link rel="stylesheet" href="/common.css?v=49">
 <link rel="stylesheet" href="/vendor/leaflet-1.9.4/leaflet.css?v=2" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="/venues-phase3.css?v=3">
+<link rel="stylesheet" href="/venues-phase3.css?v=4">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -151,7 +151,10 @@
   </section>
   <section class="wrap venues-filters rule" aria-label="Venue filters">
     <div class="venues-filter-stack">
-      <div class="venues-chip-group" id="venues-city-chips" role="group" aria-label="City"></div>
+      <div class="venues-city-row">
+        <div class="venues-chip-group" id="venues-city-chips" role="group" aria-label="City"></div>
+        <button class="venues-map-toggle" type="button" data-venues-map-toggle hidden aria-expanded="false" aria-controls="venue-map"><span class="venues-map-icon" aria-hidden="true">⌖</span> MAP</button>
+      </div>
       <div class="venues-chip-group venues-subarea-chips" id="venues-subarea-chips" role="group" aria-label="Area"></div>
     </div>
     <div class="venues-chip-group" id="venues-type-chips" role="group" aria-label="Type"></div>
@@ -220,7 +223,7 @@
 <!-- tj:footer:end -->
 
 <script src="/common.js?v=19" defer></script>
-<script src="/magazine.js?v=4"></script>
+<script src="/magazine.js?v=5"></script>
 <script src="/favorites.js?v=4"></script>
 <script src="/search.js?v=8" defer></script>
 <!-- localize.js は defer にしない。下の描画スクリプトが同期実行で tjLocalized を呼ぶ -->
@@ -229,7 +232,7 @@
 <script src="/image-dimensions.js?v=99"></script>
 <script src="/data-hub.js?v=11"></script>
 <script src="/map-tiles.js?v=1"></script>
-<script src="/venues-phase3.js?v=3"></script>
+<script src="/venues-phase3.js?v=4"></script>
 <!-- Service Worker registration -->
 <script>
   if ('serviceWorker' in navigator) {

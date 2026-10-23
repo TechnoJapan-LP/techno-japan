@@ -90,11 +90,13 @@
   function row(festival) {
     var upcoming = isUpcoming(festival);
     return '<a class="phase3-list-row" href="' + (isEn ? '/en' : '') + '/festivals/' + encodeURIComponent(festival.id)
-      + '.html" data-festival-detail-link><span class="mono">' + tjMagRangeFull(festival.range)
-      + '</span><span class="disp phase3-list-name">' + esc(loc(festival.name, '', festival.name_en))
-      + '</span><span class="mono phase3-hide">' + esc(place(festival)) + '</span><span class="mono phase3-hide">'
-      + esc(String(festival.type || 'festival')) + '</span><span class="mono phase3-list-status '
-      + (upcoming ? '' : 'is-archive') + '" data-city="' + esc(festival.city || '') + '">'
+      + '.html" data-festival-detail-link>'
+      + '<span class="mono phase3-list-date">' + window.tjMagRangeList(festival.range) + '</span>'
+      + '<span class="disp phase3-list-name">' + esc(loc(festival.name, '', festival.name_en)) + '</span>'
+      + '<span class="mono phase3-hide">' + esc(place(festival)) + '</span>'
+      + '<span class="mono phase3-hide">' + esc(String(festival.type || 'festival')) + '</span>'
+      + '<span class="mono phase3-list-status ' + (upcoming ? '' : 'is-archive')
+      + '" data-city="' + esc(String(festival.city || '').toUpperCase()) + '">'
       + (upcoming ? 'UPCOMING' : 'ARCHIVE') + '</span>' + heart(festival) + '</a>';
   }
 
