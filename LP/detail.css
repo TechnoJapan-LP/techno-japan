@@ -878,6 +878,254 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   padding-top: 32px;
   border-top: 1px solid var(--text-a12);
 }
+
+/* ==========================================================
+   VENUE DETAIL — magazine redesign
+   ========================================================== */
+.venue-detail-v2 {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0 0 112px;
+  overflow: clip;
+}
+.venue-detail-v2 .venue-detail-wrap {
+  width: 100%;
+  max-width: 1360px;
+  padding-top: 24px;
+}
+.venue-detail-v2 .venue-gallery {
+  width: 100%;
+  overflow: hidden;
+  background: var(--text-a04);
+}
+.venue-detail-v2 .venue-gallery-single {
+  aspect-ratio: 21 / 9;
+}
+.venue-detail-v2 .venue-gallery-spread {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-auto-rows: 230px;
+  gap: 12px;
+  background: transparent;
+  overflow: visible;
+}
+.venue-detail-v2 .venue-gallery-main {
+  grid-column: span 8;
+  grid-row: span 2;
+}
+.venue-detail-v2 .venue-gallery-small {
+  grid-column: span 4;
+}
+.venue-detail-v2 .venue-gallery .img {
+  min-width: 0;
+  overflow: hidden;
+  background: var(--text-a04);
+}
+.venue-detail-v2 .venue-gallery img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.venue-detail-v2 .venue-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 32px 0 40px;
+  color: var(--text-a62);
+}
+.venue-detail-v2 .venue-breadcrumb a:hover { color: var(--accent); }
+.venue-detail-v2 .venue-breadcrumb span:last-child { color: var(--text); }
+.venue-head {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  gap: 48px;
+  align-items: end;
+}
+.venue-head-copy,
+.venue-facts { min-width: 0; }
+.venue-head-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  container-type: inline-size;
+}
+.venue-head-meta,
+.venue-links,
+.venue-event-tabs,
+.venue-feature-list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.venue-title {
+  max-width: 100%;
+  font-size: clamp(52px, 14cqw, 160px);
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+  text-wrap: balance;
+}
+.venue-title-long { font-size: clamp(40px, 11cqw, 108px); }
+.venue-title-longest { font-size: clamp(36px, 8cqw, 92px); }
+.venue-kana { margin-top: -8px; }
+.venue-description {
+  max-width: 680px;
+  margin: 0;
+  color: var(--text-a90);
+  font-size: 18px;
+  line-height: 1.8;
+}
+.venue-description .lang-toggle {
+  display: inline-flex;
+  gap: 8px;
+  margin: 0 0 20px;
+}
+.venue-description .lang-btn.chip {
+  min-height: 36px;
+  padding: 10px 14px;
+}
+.venue-description .lang-btn.chip.is-active { color: var(--accent); border-color: var(--accent); }
+.venue-description .lang-body p { margin: 0; }
+.venue-links { margin-top: 8px; }
+.venue-links .btn2 { white-space: nowrap; }
+.venue-facts-heading {
+  display: block;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--text-a30);
+}
+.venue-fact {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 16px;
+  align-items: baseline;
+  min-width: 0;
+  padding: 14px 0;
+  border-top: 1px solid var(--text-a10);
+  color: var(--text-a90);
+  font-size: 15px;
+}
+.venue-fact-first { border-top: 0; }
+.venue-fact > :last-child { min-width: 0; overflow-wrap: anywhere; }
+.venue-fact-value { color: var(--text); }
+.venue-fact-link { color: var(--accent); white-space: nowrap; }
+.venue-feature-list { align-items: baseline; gap: 6px; }
+.venue-feature-list .pill { padding: 4px 10px; }
+.venue-good-to-know {
+  margin-top: 14px;
+  padding: 20px 0 0;
+  border-top: 1px solid var(--text-a10);
+}
+.venue-good-to-know .mono { display: block; margin-bottom: 14px; }
+.venue-good-to-know-items {
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.venue-good-to-know p {
+  margin: 12px 0 0;
+  color: var(--text-a62);
+  font-size: 12px;
+}
+.venue-events,
+.venue-nearby,
+.venue-stories,
+.venue-faq { margin-top: 104px; }
+.venue-detail-v2 .festival-section-heading,
+.venue-detail-v2 .festival-faq-details > .festival-section-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 32px;
+  padding-top: 18px;
+  border-top: 1px solid var(--text-a12);
+}
+.venue-detail-v2 .festival-section-heading h2 { margin: 0; font-size: 44px; line-height: .95; }
+.venue-detail-v2 .festival-section-heading a { color: var(--text-a72); }
+.venue-detail-v2 .festival-section-heading a:hover { color: var(--accent); }
+.venue-event-tabs { justify-content: flex-end; gap: 8px; }
+.venue-event-tabs .chip { min-height: 36px; }
+.venue-event-columns,
+.venue-event-row {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr) minmax(0, 1fr) 140px;
+  gap: 24px;
+  align-items: center;
+  min-width: 0;
+}
+.venue-event-columns {
+  padding: 0 0 10px;
+  color: var(--text-a62);
+}
+.venue-event-row {
+  padding: 16px 0;
+  border-top: 1px solid var(--text-a10);
+}
+.venue-event-row:hover .venue-event-name { color: var(--accent); }
+.venue-event-date {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 5px;
+  white-space: nowrap;
+}
+.venue-event-date .disp { font-size: 30px; white-space: nowrap; }
+.venue-event-date .mono { white-space: nowrap; }
+.venue-event-name {
+  min-width: 0;
+  color: var(--text);
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.25;
+  overflow-wrap: normal;
+  word-break: keep-all;
+}
+.venue-event-lineup {
+  min-width: 0;
+  color: var(--text-a72);
+  font-size: 14px;
+  line-height: 1.35;
+  overflow-wrap: normal;
+  word-break: keep-all;
+}
+.venue-nearby { margin-top: 96px; }
+.venue-nearby-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+}
+.venue-nearby-card { display: flex; min-width: 0; flex-direction: column; gap: 10px; }
+.venue-nearby-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--text-a04);
+}
+.venue-nearby-image img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .7s cubic-bezier(.2,.7,.2,1); }
+.venue-nearby-card:hover .venue-nearby-image img { transform: scale(1.04); }
+.venue-nearby-name {
+  font-size: 28px;
+  line-height: .95;
+  overflow-wrap: normal;
+  word-break: keep-all;
+}
+.venue-nearby-card:hover .venue-nearby-name { color: var(--accent); }
+.venue-stories { margin-top: 96px; }
+.venue-faq { margin-top: 96px; }
+.venue-detail-v2 .festival-faq-details { margin-top: 0; }
+.venue-detail-v2 .festival-faq-list details { padding: 0 0 24px; border-top: 1px solid var(--text-a10); }
+.venue-detail-v2 .festival-faq-list summary { padding-top: 18px; cursor: pointer; list-style: none; font-size: 16px; font-weight: 400; line-height: 1.6; }
+.venue-detail-v2 .festival-faq-list summary::-webkit-details-marker { display: none; }
+.venue-detail-v2 .festival-faq-answer { max-width: 760px; padding-top: 10px; color: var(--text-a72); font-size: 14px; line-height: 1.85; }
+.venue-detail-v2 .festival-faq-answer p { margin: 0; }
+.venue-detail-v2 .festival-faq-answer a { color: var(--accent); overflow-wrap: anywhere; }
+.venue-footer { margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--text-a12); }
+
 @media (max-width: 900px) {
   .artist-detail-v2 .artist-detail-wrap {
     padding-top: 24px;
@@ -931,6 +1179,27 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
     font-size: 34px;
   }
   .artist-detail-v2 .festival-section-heading a { flex: 0 0 auto; white-space: nowrap; }
+  .venue-detail-v2 .venue-detail-wrap { padding-top: 16px; }
+  .venue-detail-v2 .venue-gallery-spread { grid-template-columns: 1fr; grid-auto-rows: 220px; gap: 12px; }
+  .venue-detail-v2 .venue-gallery-main,
+  .venue-detail-v2 .venue-gallery-small { grid-column: span 1; grid-row: span 1; }
+  .venue-detail-v2 .venue-breadcrumb { margin: 24px 0 32px; }
+  .venue-head { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .venue-title { font-size: clamp(48px, 14cqw, 96px); }
+  .venue-title-long { font-size: clamp(40px, 11cqw, 78px); }
+  .venue-title-longest { font-size: clamp(36px, 8cqw, 66px); }
+  .venue-detail-v2 .festival-section-heading { gap: 12px; }
+  .venue-detail-v2 .festival-section-heading h2 { min-width: 0; font-size: 34px; }
+  .venue-detail-v2 .festival-section-heading a { flex: 0 0 auto; white-space: nowrap; }
+  .venue-event-columns,
+  .venue-event-row { grid-template-columns: 150px minmax(0, 1fr) max-content; gap: 12px; }
+  .venue-event-columns .hide,
+  .venue-event-row .hide { display: none; }
+  .venue-event-columns > span,
+  .venue-event-row > .mono { white-space: nowrap; }
+  .venue-event-date .disp { font-size: clamp(24px, 7vw, 30px); }
+  .venue-event-name { font-size: 15px; }
+  .venue-nearby-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 16px; }
 }
 @media (max-width: 760px) {
   .artist-related-grid .artist-related-card:nth-child(n + 5) {

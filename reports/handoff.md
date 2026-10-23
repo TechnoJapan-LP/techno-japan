@@ -13212,3 +13212,110 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - 本番未反映。cms.js / cms.html は版数のみの変更だが、公開時は Publish pipeline ＋ CMS の確認が必要。
+
+### 2026-10-24 redesign/magazine フェーズ4-4 会場詳細ページ（未コミット・未公開）
+
+### 実施
+- `scripts/build-detail-pages.mjs` の `venuePage` を VenueDetail モックに合わせて再設計。21:9写真／将来のGALLERY 3枚スプレッド、パンくず、英語固定ラベルのFacts、Website・Instagram（@ハンドル）・Google Maps、HOURSフォールバック、Charge、Features、GOOD TO KNOW、開催回のUpcoming/Past切替、Nearby、Stories、FAQ、更新日、ALL VENUESを静的生成するよう変更。
+- 開催回の出演者表示のため `lineupsByEdition` とアーティスト索引を `venuePage` に渡した。Capacityは画面へ出さず、既存JSON-LDの `maximumAttendeeCapacity` は維持。
+- `LP/detail.css` に会場レイアウトとスマホ（1列ギャラリー220px、Nearby 2列、開催行の場所列非表示）を追加し、`detail.css` を83へ更新。`LP/cms.js` の記事プレビューも同版へ更新。
+- `scripts/check_venue_details.mjs` / `scripts/check_venue_details_browser.mjs` を新DOMへ対応。FAQ表示数とJSON-LD件数、HOURS、空Charge、GOOD TO KNOW、Nearby上限、Capacity非表示を検査。`scripts/check_image_position.mjs` は会場ギャラリーをheroとして認識するよう更新。
+
+### コミット
+- なし（ユーザー指示により commit / push 未実施）。生成されたJA/EN詳細ページの変更を含む。
+
+### 検証
+- 成功: `node --check`、`node scripts/build-detail-pages.mjs`、`node scripts/check_build_idempotent.mjs`（601ファイル差分なし）。
+- 成功: `python3 scripts/check_asset_versions.py`、`python3 scripts/check_regressions.py`、`node scripts/check_venue_details.mjs`、`node scripts/check_jsonld.mjs`、`node scripts/check_image_position.mjs`、`node scripts/check_og_image.mjs`、`python3 scripts/check_internal_links.py`、`node scripts/check_cms_article_generated_preview.mjs`、`git diff --check`。
+- `scripts/check_venue_details_browser.mjs` はlocalhost待受が実行環境のEPERMで起動できず未確認。外部画像150件はネットワーク制限により既存寸法へフォールバックする警告あり。
+
+### 変更したパターン
+- 旧 `detail-inner` / `detail-facts` / `lineup-list` の会場詳細を、アーティスト詳細と同じ `wrap`・`festival-section-heading`・`row`・`card`・`festival-faq-details` 系の静的構造へ変更。`heroSrcsetAttr`、`dimensionAttrs`、`imagePositionStyle`、実表示幅に合わせた `sizes` は維持・適用。
+- 共有 `LP/detail.css` は追加のみで、記事・フェス・アーティスト用セレクタの消失は確認済み・0件。
+
+### 未確認の類似パターン
+- 確認済み・0件: JA/EN静的生成、写真なし会場の空箱、過去開催のみのPast初期選択、FAQ数一致、4件以内のNearby、Capacityの画面非表示、既存JSON-LDキーの維持。
+- 未確認: 実ブラウザでのJA/EN・390/1280px表示、Upcoming/Pastクリック操作、将来GALLERY入力時の実画像選択、Publish pipeline、本番CMS操作。
+
+### 次の担当への注意・判断待ち
+- 公開前に実ブラウザ確認を行い、390pxで `scrollWidth <= innerWidth`、イベント切替の `aria-pressed`、リンク遷移、画像表示を確認すること。CMS／Publish経路は未実行のため、公開前に通常手順で確認すること。
+
+### 2026-10-24 redesign/magazine 会場詳細の残り3点（未コミット・未公開）
+
+### 実施
+- 会場 h1 に `container-type: inline-size` と `cqw` 基準の文字サイズを追加し、最長語の文字数に応じたクラス閾値を調整。途中で折らず、22会場の長い名前を対応。
+- `name_kana` の可視表示を JA のみに限定。EN の JSON-LD `alternateName` は維持。
+- `check_venue_details_browser.mjs` の Facts / Nearby 判定を大文字小文字非依存に変更。Capacity と横幅判定は維持。
+- `detail.css` の版数を84へ更新し、生成済みJA/EN詳細ページとCMSプレビューへ反映。
+
+### コミット
+- なし（ユーザー指示により commit / push 未実施）。
+
+### 検証
+- 成功: `node --check`、`node scripts/build-detail-pages.mjs`、`node scripts/check_build_idempotent.mjs`（601ファイル差分なし）。
+- 成功: `python3 scripts/check_asset_versions.py`、`python3 scripts/check_regressions.py`、`node scripts/check_venue_details.mjs`、`node scripts/check_jsonld.mjs`、`git diff --check`。
+- 代替Chrome実測成功: 実CSS・実フォントで22会場を390px/1280pxに描画し、全h1が `scrollWidth <= clientWidth`。
+- `node scripts/check_venue_details_browser.mjs` はlocalhost待受が実行環境のEPERMで起動できず未確認。判定式の変更はソース確認済み。
+
+### 変更したパターン
+- `.venue-head-copy` のコンテナクエリ、`.venue-title` / long / longest の `cqw` サイズ、会場タイトルクラス閾値。
+- EN会場詳細の可視読みがな、ブラウザ検査のFacts / Nearby比較、detail.css版数84。
+
+### 未確認の類似パターン
+- 確認済み・0件: JA/EN 22会場の静的生成、JSON-LD alternateName、Capacity非表示、既存共有CSSセレクタの消失、390px/1280pxのh1横幅。
+- 未確認: localhostを使う公式ブラウザ検査の完走、Publish pipeline、本番CMS操作。
+
+### 次の担当への注意・判断待ち
+- 公開前に実行環境で `node scripts/check_venue_details_browser.mjs` を再実行し、成功結果を確認すること。CMS／Publish経路は未実行のため、公開前に通常手順で確認すること。
+
+### 2026-10-24 redesign/magazine 会場詳細の幅修正（未コミット・未公開）
+
+### 実施
+- `LP/detail.css` の `.venue-detail-v2` に `width: 100%` / `max-width: none` を追加し、旧 `.detail-page { max-width: 860px }` を上書き。共通 `.wrap` の最大1360pxと左右40pxの内側幅を使うようにした。
+- 会場ギャラリーの `sizes` を、単独21:9ヒーローは `(max-width: 900px) calc(100vw - 32px), calc(min(100vw, 1360px) - 80px)`、スプレッドはPCのグリッド実幅とモバイル1列幅へ合わせて更新。画像の切り抜き枠に対して表示幅を過小申告しない。
+- `detail.css` の版数を84から85へ上げ、生成済みJA/EN詳細ページとCMS記事プレビューへ反映。アーティスト用・フェス用・記事用の共有セレクタは削除していない。
+
+### コミット
+- なし（ユーザー指示により commit / push 未実施）。
+
+### 検証
+- 成功: `node --check scripts/build-detail-pages.mjs`、`node --check LP/cms.js`。
+- 成功: `node scripts/build-detail-pages.mjs`（最後まで完了）、`node scripts/check_build_idempotent.mjs`（601ファイルに変化なし）。
+- 成功: `python3 scripts/check_asset_versions.py`（detail.css ?v=85）、`python3 scripts/check_regressions.py`、`node scripts/check_venue_details.mjs`（22件 × JA/EN）。
+- 未確認: `node scripts/check_venue_details_browser.mjs` は localhost 待受が実行環境の `EPERM` で起動できず。Publish pipeline、本番CMS操作も未実行。
+
+### 変更したパターン
+- `.detail-page` の最大幅を v2 会場ページだけ解除し、`.wrap` の最大1360pxを利用するパターン。
+- 単独21:9ヒーロー、将来の2枚ギャラリースプレッドのPC/モバイル `sizes` パターン。
+- `detail.css` キャッシュバスティング版数84→85。
+
+### 未確認の類似パターン
+- 確認済み・0件: JA/EN全22会場の静的生成、会場詳細のJSON-LD/Facts/FAQ/近隣会場、アーティスト・フェス・記事の共有CSSセレクタ消失。
+- 未確認: 実ブラウザでの1280px/390pxの実測幅、h1の実描画、将来GALLERY入力時の画像選択、Publish pipeline、本番CMS操作。
+
+### 次の担当への注意・判断待ち
+- 公開前に localhost が利用できる環境で `node scripts/check_venue_details_browser.mjs` を再実行し、1280pxで会場ページの横幅・写真・Head・表・カードが意図どおり広がることを確認すること。CMS／Publish経路は未実行のため、公開前に通常手順で確認すること。
+
+### 2026-10-24 redesign/magazine フェーズ4-4 会場詳細ページ（Claude 検証・コミット。本番未反映）
+
+### 実施
+- `venuePage` をモックの作りへ: 写真（`gallery` が2枚以上なら 12列の3枚スプレッド、今は全会場 21:9 の1枚。GALLERY の入力欄はフェーズ6）、パンくず（Venues / 都市 / 名前）、Head（タイプのピル・エリア · 都市・名前（長い名前は字を小さく）・読みがな（JA のみ）・説明文の JA / EN 切替・Website / Instagram / Google Maps のボタン）、Facts（Type / Area / Address / Access / Genre / Hours（値が無ければ今のフォールバック文）/ Charge / Features、GOOD TO KNOW を維持）。
+- **Capacity は画面に出さない**（2026-10-23 ユーザー決定「不確定なため」）。JSON-LD の `maximumAttendeeCapacity` は今回触らず維持。
+- Upcoming / Past（この会場で開かれたフェスを行で、チップで切替、出演者3組まで）、Nearby · 都市 4件（カード）、Stories、FAQ（見出し `FAQ`、FAQPage と数一致）、更新日、ALL VENUES。
+- 旧 `.detail-page` の `max-width: 860px` が効いて PC で左6割に収まっていた → `venue-detail-v2` は幅いっぱい。`check_venue_details.mjs` / `check_venue_details_browser.mjs` を新しい作りに合わせる（大文字表示の見出しは大文字小文字を区別せず比較）。
+
+### コミット
+- このエントリを含むコミット。
+
+### 検証
+- `bash scripts/preflight.sh` 全65件成功。
+- 実ブラウザ相当（CDP、PC 1280 dpr2 / スマホ 390 dpr3、JA/EN、womb・oath・vent・circus-osaka・club-metro・compufunk）: 322/322。全22会場の名前が PC・スマホで枠に収まり横にはみ出さない。EN の画面に見える日本語 0（読みがなは EN で非表示）。detail.css の置き換えで会場以外のセレクタの消失 0。
+
+### 変更したパターン
+- 旧デザインの外枠の幅（`.detail-page` の max-width）が新しいページに効く → v2 のページで `max-width: none`。
+
+### 未確認の類似パターン
+- GALLERY の3枚スプレッドは、データが入るまで実画面で確認できない（フェーズ6で CMS に入力欄を足したあとに確認）。iPhone 実機は未確認。
+
+### 次の担当への注意・判断待ち
+- 本番未反映。フェーズ4（詳細4種）が揃った。公開の判断はユーザー。公開時は cms.js / cms.html の版数変更があるため Publish pipeline ＋ CMS の確認が必要。

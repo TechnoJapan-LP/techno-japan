@@ -51,7 +51,8 @@ const KINDS = [
 function heroImgTag(html) {
   const m = html.match(/<div class="detail-hero[^"]*">\s*<img\b[^>]*>/)
         || html.match(/<div class="detail-hero-image">\s*<img\b[^>]*>/)
-        || html.match(/<div class="artist-head-photo img">\s*<img\b[^>]*>/);
+        || html.match(/<div class="artist-head-photo img">\s*<img\b[^>]*>/)
+        || html.match(/<div class="venue-gallery[^"]*">\s*<img\b[^>]*>/);
   return m ? m[0] : null;
 }
 

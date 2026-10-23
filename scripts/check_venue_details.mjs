@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* VENUES §6-3: 詳細ページのJSON-LD / INFORMATION / 回遊回帰検査 */
+/* VENUES §6-3: 詳細ページのJSON-LD / Facts / 回遊回帰検査 */
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
@@ -33,19 +33,27 @@ for (const lang of ['ja', 'en']) {
       ? String(venue.hours_en || venue.hours || '').trim()
       : String(venue.hours || venue.hours_en || '').trim();
     const charge = String(venue.charge || '').trim();
-    const hoursLabel = lang === 'ja' ? '営業時間' : 'HOURS';
+    const hoursLabel = 'Hours';
     const hoursFallback = lang === 'ja' ? 'イベントにより異なります。公式サイトでご確認ください。' : 'Hours vary by event. Check the official site for details.';
     const escapedHours = esc(hours || hoursFallback);
-    if (hours && !html.includes(`<dt>${hoursLabel}</dt><dd>${escapedHours}</dd>`)) failures.push(`${lang}/${venue.id}: HOURSがINFORMATIONに無い`);
-    if (charge && !html.includes(`<dt>CHARGE</dt><dd>${charge}</dd>`)) failures.push(`${lang}/${venue.id}: CHARGEがINFORMATIONに無い`);
-    if (!html.includes(`<dt>${hoursLabel}</dt><dd>${escapedHours}</dd>`)) failures.push(`${lang}/${venue.id}: HOURSの実値またはフォールバックが無い`);
-    if (!charge && html.includes('<dt>CHARGE</dt>')) failures.push(`${lang}/${venue.id}: 空のCHARGE行がある`);
+    const facts = html.match(/<div class="fact venue-fact[\s\S]*?<\/div>/g) || [];
+    const factFor = (label) => facts.find((fact) => fact.includes(`>${label}</span>`)) || '';
+    const hoursFact = factFor(hoursLabel);
+    if (!hoursFact || !hoursFact.includes(escapedHours)) failures.push(`${lang}/${venue.id}: HOURSの実値またはフォールバックが無い`);
+    const chargeFact = factFor('Charge');
+    if (charge && (!chargeFact || !chargeFact.includes(esc(charge)))) failures.push(`${lang}/${venue.id}: CHARGEがFactsに無い`);
+    if (!charge && chargeFact) failures.push(`${lang}/${venue.id}: 空のCHARGE行がある`);
     const features = (Array.isArray(venue.features) ? venue.features : String(venue.features || '').split(/[;,]/)).map(x => String(x).trim());
     const hasPractical = features.some(x => practical.has(x));
     if (hasPractical && !html.includes('GOOD TO KNOW')) failures.push(`${lang}/${venue.id}: GOOD TO KNOWが無い`);
-    const nearby = html.match(/<h2>(?:近くの会場|NEARBY VENUES)<\/h2><div class="lineup-list">([\s\S]*?)<\/div>/);
-    const count = nearby ? (nearby[1].match(/class="lineup-item"/g) || []).length : 0;
+    if (html.includes('<span class="mono">Capacity</span>') || html.includes('>Capacity<')) failures.push(`${lang}/${venue.id}: Capacityが表示されている`);
+    const nearby = html.match(/<section class="venue-nearby">([\s\S]*?)<\/section>/);
+    const count = nearby ? (nearby[1].match(/class="venue-nearby-card card"/g) || []).length : 0;
     if (count > 4) failures.push(`${lang}/${venue.id}: 近隣会場が${count}件`);
+    const faqVisible = (html.match(/<summary>/g) || []).length;
+    const faqLd = json.find((item) => item['@type'] === 'FAQPage');
+    const faqJson = faqLd?.mainEntity?.length || 0;
+    if (faqVisible !== faqJson) failures.push(`${lang}/${venue.id}: FAQの表示数(${faqVisible})とJSON-LD(${faqJson})が不一致`);
     if (lang === 'ja') nearbyCount += count;
   }
 }

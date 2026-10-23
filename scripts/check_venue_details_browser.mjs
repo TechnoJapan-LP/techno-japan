@@ -16,7 +16,7 @@ const server = http.createServer((req, res) => {
 });
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 const base = `http://127.0.0.1:${server.address().port}`;
-const probe = `<script>window.addEventListener('load',()=>setTimeout(()=>{const t=document.body.innerText;document.body.setAttribute('data-venue-detail-check',JSON.stringify({info:t.includes('INFORMATION'),near:t.includes('NEARBY VENUES')||t.includes('近くの会場'),undef:t.includes('undefined')}));},2500));</script>`;
+const probe = `<script>window.addEventListener('load',()=>setTimeout(()=>{const t=document.body.innerText;document.body.setAttribute('data-venue-detail-check',JSON.stringify({facts:/facts/i.test(t),near:/nearby ·/i.test(t),undef:t.includes('undefined'),capacity:!t.match(/(^|\\n)Capacity(\\s|\\n)/),wide:document.documentElement.scrollWidth<=window.innerWidth}));},2500));</script>`;
 const source = (p) => fs.readFileSync(path.join(root, p), 'utf8').replace('</body>', probe + '</body>');
 server.on('request', (req, res) => {
   if (new URL(req.url, 'http://x').pathname === '/__check.html') { res.writeHead(200, {'Content-Type':'text/html;charset=utf-8'}); return res.end(source('venues/bonobo.html')); }
@@ -41,7 +41,7 @@ for (const width of [390, 1280]) {
       const match = html.match(/data-venue-detail-check="([^\"]*)"/);
       if (!match) { failures.push(`${lang}/${id} ${width}px: DOM取得失敗`); continue; }
       const result = JSON.parse(match[1].replace(/&quot;/g, '"'));
-      if (!result.info || !result.near || result.undef) failures.push(`${lang}/${id} ${width}px: 詳細表示不正`);
+      if (!result.facts || !result.near || result.undef || !result.capacity || !result.wide) failures.push(`${lang}/${id} ${width}px: 詳細表示不正`);
     }
   }
 }

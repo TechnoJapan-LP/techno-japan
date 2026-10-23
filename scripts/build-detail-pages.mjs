@@ -58,7 +58,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 82;
+const DETAIL_CSS_VERSION = 85;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -3159,6 +3159,62 @@ function venueFeatures(value) {
     .map((item) => String(item).trim()).filter(Boolean);
 }
 
+const VENUE_FEATURE_LABELS = {
+  'after-hours': 'After-hours',
+  daytime: 'Daytime',
+  vinyl: 'Vinyl',
+  outdoor: 'Outdoor',
+  rooftop: 'Rooftop',
+  listening: 'Listening',
+  'no-cover': 'No cover',
+};
+
+function venueFeatureLabel(feature, lang) {
+  const key = String(feature || '').trim();
+  if (Object.prototype.hasOwnProperty.call(VENUE_PRACTICAL_FEATURES, key)) {
+    return VENUE_PRACTICAL_FEATURES[key][lang === 'en' ? 1 : 0];
+  }
+  return VENUE_FEATURE_LABELS[key] || key;
+}
+
+function venueTitleClass(name) {
+  const longest = Math.max(0, ...String(name || '').trim().split(/\s+/).filter(Boolean).map((word) => [...word].length));
+  if (longest > 16) return ' venue-title-longest';
+  if (longest > 8) return ' venue-title-long';
+  return '';
+}
+
+function venueGallerySources(value) {
+  return (Array.isArray(value) ? value : String(value || '').split(','))
+    .map((item) => String(item || '').trim()).filter(Boolean).slice(0, 2);
+}
+
+const VENUE_EVENTS_SCRIPT = `
+<script>
+(function() {
+  'use strict';
+  document.querySelectorAll('[data-venue-events]').forEach(function(section) {
+    var buttons = Array.prototype.slice.call(section.querySelectorAll('[data-venue-event-toggle]'));
+    var rows = Array.prototype.slice.call(section.querySelectorAll('[data-venue-event-row]'));
+    if (!buttons.length || !rows.length) return;
+    function apply(status) {
+      buttons.forEach(function(button) {
+        var selected = button.getAttribute('data-venue-event-toggle') === status;
+        button.setAttribute('aria-pressed', selected ? 'true' : 'false');
+        button.classList.toggle('is-active', selected);
+      });
+      rows.forEach(function(row) {
+        row.hidden = row.getAttribute('data-venue-event-status') !== status;
+      });
+    }
+    buttons.forEach(function(button) {
+      button.addEventListener('click', function() { apply(button.getAttribute('data-venue-event-toggle')); });
+    });
+    apply(section.getAttribute('data-venue-event-default') || 'upcoming');
+  });
+}());
+</script>`;
+
 function venueDistance(a, b) {
   const lat1 = Number(a.lat), lng1 = Number(a.lng), lat2 = Number(b.lat), lng2 = Number(b.lng);
   if (![lat1, lng1, lat2, lng2].every(Number.isFinite)) return Infinity;
@@ -3218,7 +3274,7 @@ function venueTitleTypeJa(type) {
   return 'ヴェニュー';
 }
 
-function venuePage(v, lang = 'ja', allFestivals = [], editionsByFestival = new Map(), articles = []) {
+function venuePage(v, lang = 'ja', allFestivals = [], editionsByFestival = new Map(), articles = [], lineupsByEdition = new Map(), artistsById = new Map(), allArtistsById = new Map()) {
   const prefix = lang === 'en' ? '/en' : '';
   const hubHref = `${prefix}/venues.html`;
   const altHref = (lang === 'ja' ? '/en' : '') + `/venues/${v.id}.html`;
@@ -3289,33 +3345,23 @@ function venuePage(v, lang = 'ja', allFestivals = [], editionsByFestival = new M
   };
 
   const genres = (Array.isArray(v.genre) ? v.genre : String(v.genre || '').split('/').filter(Boolean))
-    .map((g) => `<span class="detail-chip">${esc(String(g).trim())}</span>`).join('');
-  const hours = String(v.hours || '').trim();
+    .map((g) => String(g).trim()).filter(Boolean);
+  const genreLine = genres.join(' / ');
   const charge = String(v.charge || '').trim();
-  const practical = venueFeatures(v.features)
-    .filter((feature) => Object.prototype.hasOwnProperty.call(VENUE_PRACTICAL_FEATURES, feature));
-  const goodToKnow = practical.map((feature) => VENUE_PRACTICAL_FEATURES[feature][lang === 'en' ? 1 : 0]);
+  const features = venueFeatures(v.features);
+  const practical = features.filter((feature) => Object.prototype.hasOwnProperty.call(VENUE_PRACTICAL_FEATURES, feature));
+  const goodToKnow = practical.map((feature) => venueFeatureLabel(feature, lang));
   const mapQuery = v.lat && v.lng ? `${v.lat},${v.lng}` : (v.address || '');
   const mapUrl = mapQuery ? `https://maps.google.com/?q=${encodeURIComponent(mapQuery)}` : '';
   const hoursFallback = lang === 'en' ? 'Hours vary by event. Check the official site for details.' : 'イベントにより異なります。公式サイトでご確認ください。';
-  const informationRows = [
-    accessText ? `<div><dt>${lang === 'en' ? 'ACCESS' : 'アクセス'}</dt><dd>${esc(accessText)}</dd></div>` : '',
-    v.address ? `<div><dt>${lang === 'en' ? 'ADDRESS' : '住所'}</dt><dd>${esc(v.address)}${mapUrl ? `&nbsp;<a class="google-map-link" href="${esc(safeUrl(mapUrl))}" target="_blank" rel="noopener">(${lang === 'en' ? 'Google Maps' : 'Google マップ'})</a>` : ''}</dd></div>` : '',
-    v.type ? `<div><dt>${lang === 'en' ? 'TYPE' : 'タイプ'}</dt><dd>${esc(lang === 'en' ? venueType.en : venueType.ja)}</dd></div>` : '',
-    `<div><dt>${lang === 'en' ? 'HOURS' : '営業時間'}</dt><dd>${esc(hoursText || hoursFallback)}</dd></div>`,
-    charge ? `<div><dt>CHARGE</dt><dd>${esc(charge)}</dd></div>` : '',
-    v.url ? `<div><dt>${lang === 'en' ? 'OFFICIAL SITE' : '公式サイト'}</dt><dd><a href="${esc(safeUrl(v.url))}" target="_blank" rel="noopener">${esc(v.url)}</a></dd></div>` : '',
-    v.instagram ? `<div><dt>Instagram</dt><dd><a href="${esc(safeUrl(v.instagram))}" target="_blank" rel="noopener">${esc(instagramHandle(v.instagram))}</a></dd></div>` : '',
-  ].filter(Boolean).join('\n      ');
-  const information = `<div class="detail-section-label">INFO</div>
-    <dl class="detail-facts">
-      ${informationRows}
-    </dl>`;
-  const goodToKnowHtml = goodToKnow.length ? `<section class="detail-good-to-know">
-    <div class="detail-section-label">GOOD TO KNOW</div>
-    <div class="detail-good-to-know-items">${goodToKnow.map((item) => `<span>${esc(item)}</span>`).join(' · ')}</div>
-    <p>${lang === 'en' ? 'Check the official source for the latest information.' : '最新の情報は公式サイトでご確認ください。'}</p>
-  </section>` : '';
+  const typeUpper = String(v.type || '').trim().toUpperCase();
+  const areaCity = [areaLabel, city].filter(Boolean).join(' · ') || '—';
+  const featureChips = features.map((feature) => `<span class="pill">${esc(venueFeatureLabel(feature, lang))}</span>`).join('');
+  const goodToKnowHtml = goodToKnow.length ? `<div class="venue-good-to-know">
+        <span class="mono red">GOOD TO KNOW</span>
+        <div class="venue-good-to-know-items">${goodToKnow.map((item) => `<span>${esc(item)}</span>`).join(' · ')}</div>
+        <p>${lang === 'en' ? 'Check the official source for the latest information.' : '最新の情報は公式サイトでご確認ください。'}</p>
+      </div>` : '';
 
   const venueNameForMatch = String(v.name || '').trim().toLocaleLowerCase();
   const venueFestivals = (allFestivals || []).filter(isPublishedFestival).map((festival) => {
@@ -3346,37 +3392,123 @@ function venuePage(v, lang = 'ja', allFestivals = [], editionsByFestival = new M
     return [article.title, article.title_en, article.body, article.body_en]
       .some((value) => stripTags(value || '').toLocaleLowerCase().includes(venueNameForMatch));
   }).slice(0, 3);
-  const venueRelatedHtml = venueFestivals.length || venueArticles.length
-    ? `<section class="detail-section venue-related"><h2>${lang === 'en' ? 'EVENTS & STORIES FROM THIS VENUE' : 'このヴェニューの開催・関連'}</h2>
-      ${venueFestivals.length ? `<div class="related-grid">${venueFestivals.map(({ festival }) => relatedFestivalCardHtml(festival, lang, prefix, editionsByFestival)).join('')}</div>` : ''}
-      ${venueArticles.length ? relatedStoryCardsHtml(venueArticles, lang, { forceEnglishPath: true, compactDate: true, wide: true }) : ''}
+  const gallery = venueGallerySources(v.gallery || v.GALLERY);
+  const galleryImage = (source, sizes, loading = 'lazy') => {
+    const sourcePath = String(source || '').trim().replace(/^\/+/, '');
+    const src = /^https?:/i.test(sourcePath) ? sourcePath : `/${sourcePath}`;
+    const srcset = loading === 'high' ? heroSrcsetAttr(source, sizes) : largeSrcsetAttr(source, sizes);
+    return `<img ${dimensionAttrs(sourcePath)} src="${esc(src)}"${srcset} alt="${esc(name)}" ${loading === 'high' ? 'fetchpriority="high"' : `loading="${loading}"`} decoding="async"${imagePositionStyle(v)}>`;
+  };
+  const hasGallery = gallery.length >= 2;
+  const galleryHtml = hasGallery
+    ? `<div class="venue-gallery venue-gallery-spread">
+        <div class="venue-gallery-main img">${v.image ? galleryImage(v.image, '(max-width: 900px) calc(100vw - 32px), calc((min(100vw, 1360px) - 80px - 132px) * 2 / 3 + 84px)', 'high') : ''}</div>
+        <div class="venue-gallery-small img">${galleryImage(gallery[0], '(max-width: 900px) calc(100vw - 32px), calc((min(100vw, 1360px) - 80px - 132px) / 3 + 36px)')}</div>
+        <div class="venue-gallery-small img">${galleryImage(gallery[1], '(max-width: 900px) calc(100vw - 32px), calc((min(100vw, 1360px) - 80px - 132px) / 3 + 36px)')}</div>
+      </div>`
+    : `<div class="venue-gallery venue-gallery-single img">${v.image ? galleryImage(v.image, '(max-width: 900px) calc(100vw - 32px), calc(min(100vw, 1360px) - 80px)', 'high') : ''}</div>`;
+  const buttonLink = (label, url, suffix = '') => url
+    ? `<a class="btn2" href="${esc(safeUrl(url))}" target="_blank" rel="noopener">${label}${suffix ? ` ${esc(suffix)}` : ''} ↗</a>` : '';
+  const linkRow = [
+    buttonLink('Website', v.url),
+    buttonLink('Instagram', v.instagram, instagramHandle(v.instagram)),
+    buttonLink('Google Maps', mapUrl),
+  ].filter(Boolean).join('');
+  const addressValue = v.address
+    ? `${esc(v.address)}${mapUrl ? ` <a class="mono venue-fact-link" href="${esc(safeUrl(mapUrl))}" target="_blank" rel="noopener">Google Maps ↗</a>` : ''}`
+    : '—';
+  const factsHtml = `<div class="venue-facts">
+      <span class="mono red venue-facts-heading">Facts</span>
+      <div class="fact venue-fact venue-fact-first"><span class="mono">Type</span><span>${esc(typeUpper || '—')}</span></div>
+      <div class="fact venue-fact"><span class="mono">Area</span><span>${esc(areaCity)}</span></div>
+      <div class="fact venue-fact"><span class="mono">Address</span><span>${addressValue}</span></div>
+      <div class="fact venue-fact"><span class="mono">Access</span><span>${esc(accessText || '—')}</span></div>
+      <div class="fact venue-fact"><span class="mono">Genre</span><span class="mono venue-fact-value">${esc(genreLine || '—')}</span></div>
+      <div class="fact venue-fact"><span class="mono">Hours</span><span>${esc(hoursText || hoursFallback)}</span></div>
+      ${charge ? `<div class="fact venue-fact"><span class="mono">Charge</span><span>${esc(charge)}</span></div>` : ''}
+      ${features.length ? `<div class="fact venue-fact"><span class="mono">Features</span><span class="venue-feature-list">${featureChips}</span></div>` : ''}
+      ${goodToKnowHtml}
+    </div>`;
+
+  const lineupLine = (edition) => {
+    const lineupRows = [...(lineupsByEdition.get(String(edition.EDITION_ID || '')) || [])]
+      .sort((a, b) => Number(a.SORT || 0) - Number(b.SORT || 0));
+    const acts = lineupRows.map((row) => {
+      const ids = lineupArtistIds(row);
+      const artist = ids.length === 1 ? (artistsById.get(ids[0]) || allArtistsById.get(ids[0])) : null;
+      return artist ? (lang === 'en' ? (artist.name_en || artist.name || artist.NAME) : (artist.name || artist.NAME)) : (row.ACT_LABEL || ids[0] || '');
+    }).filter(Boolean).slice(0, 3);
+    if (acts.length) return acts.join(' · ');
+    return [editionLocationName(edition, lang), lang === 'en' ? placeEn(edition.PREF) : placeJa(edition.PREF)].filter(Boolean).join(' · ') || '—';
+  };
+  const venueEventRows = venueFestivals.map(({ festival, latest, upcoming }) => {
+    const festivalName = lang === 'en' ? (festival.name_en || festival.name) : festival.name;
+    const date = festivalShortDateText(latest, lang) || '—';
+    const year = editionLabel(editionIdentifier(latest)) || String(latest.DATE_START || '').slice(0, 4) || '—';
+    const status = upcoming ? 'upcoming' : 'past';
+    return `<a class="venue-event-row row" href="${prefix}/festivals/${encodeURIComponent(festival.id)}.html" data-venue-event-row data-venue-event-status="${status}">
+        <span class="venue-event-date"><span class="disp">${esc(date)}</span><span class="mono">${esc(year)}</span></span>
+        <span class="venue-event-name">${esc(festivalName)}</span>
+        <span class="venue-event-lineup hide">${esc(lineupLine(latest))}</span>
+        <span class="mono${upcoming ? ' red' : ''}">${upcoming ? 'UPCOMING' : 'PAST'}</span>
+      </a>`;
+  }).join('');
+  const upcomingCount = venueFestivals.filter((item) => item.upcoming).length;
+  const eventsHtml = venueFestivals.length ? `<section class="venue-events" data-venue-events data-venue-event-default="${upcomingCount ? 'upcoming' : 'past'}">
+      <div class="festival-section-heading"><h2 class="disp">Upcoming at ${esc(name)}</h2><div class="venue-event-tabs"><button class="chip${upcomingCount ? ' is-active' : ''}" type="button" data-venue-event-toggle="upcoming" aria-pressed="${upcomingCount ? 'true' : 'false'}">Upcoming</button><button class="chip${upcomingCount ? '' : ' is-active'}" type="button" data-venue-event-toggle="past" aria-pressed="${upcomingCount ? 'false' : 'true'}">Past</button></div></div>
+      <div class="venue-event-columns row mono"><span>Date</span><span>Event</span><span class="hide">Lineup</span><span>Status</span></div>
+      ${venueEventRows}
+    </section>` : '';
+  const sameCity = XLINK.venues.filter((x) => x.id !== v.id && x.city && v.city && String(x.city).toLowerCase() === String(v.city).toLowerCase());
+  const withDistance = v.lat && v.lng && XLINK.venues.some((x) => x.lat && x.lng)
+    ? XLINK.venues.filter((x) => x.id !== v.id && x.lat && x.lng).sort((a, b) => venueDistance(v, a) - venueDistance(v, b))
+    : sameCity;
+  const nearby = withDistance.slice(0, 4);
+  const nearbyCardSizes = '(max-width: 900px) calc((100vw - 48px) / 2), calc((min(100vw, 1360px) - 80px - 72px) / 4)';
+  const nearbyHtml = nearby.length ? `<section class="venue-nearby">
+      <div class="festival-section-heading"><h2 class="disp">Nearby · ${esc(city || 'Japan')}</h2><a class="mono" href="${hubHref}">All venues →</a></div>
+      <div class="venue-nearby-grid">${nearby.map((near) => {
+        const nearName = lang === 'en' ? (near.name_en || near.name) : near.name;
+        const nearArea = lang === 'en' ? placeEn(near.area || near.city) : placeJa(near.area || near.city);
+        const nearType = String(near.type || '').trim().toUpperCase();
+        const nearImage = near.image ? cardImagePath(near.image) : '';
+        const nearSrc = nearImage ? (/^https?:/i.test(nearImage) ? nearImage : `/${nearImage}`) : '';
+        return `<a class="venue-nearby-card card" href="${prefix}/venues/${encodeURIComponent(near.id)}.html">
+          <div class="venue-nearby-image img">${nearSrc ? `<img ${dimensionAttrs(nearImage)} src="${esc(nearSrc)}"${largeSrcsetAttr(near.image, nearbyCardSizes)} alt="${esc(nearName)}" loading="lazy" decoding="async"${imagePositionStyle(near)}>` : ''}</div>
+          <span class="disp venue-nearby-name">${esc(nearName)}</span>
+          <span class="mono">${esc([nearArea, nearType].filter(Boolean).join(' · '))}</span>
+        </a>`;
+      }).join('')}</div>
+    </section>` : '';
+  const storiesHtml = venueArticles.length ? `<section class="artist-stories venue-stories">
+      <div class="festival-section-heading"><h2 class="disp">Stories</h2><a class="mono" href="${prefix}/news.html">All stories →</a></div>
+      ${relatedStoryCardsHtml(venueArticles, lang, { forceEnglishPath: true, compactDate: true, grid: true, heading: '' })}
     </section>` : '';
 
-  const body = `<article class="detail-page venue-detail">
-  <div class="detail-inner">
-    ${place ? `<div class="detail-eyebrow">${esc(place)}</div>` : ''}
-    <h1>${esc(name)}</h1>
-    ${genres ? `<div class="detail-chips">${genres}</div>` : ''}
-    ${v.image ? `<div class="detail-hero"><img ${dimensionAttrs(v.image)} src="/${String(v.image).replace(/^\//, '')}"${heroSrcsetAttr(v.image)} alt="${esc(name)}" fetchpriority="high"${imagePositionStyle(v)}></div>` : ''}
-    ${information}
-    ${bilingualBody(v.desc, v.desc_en, lang)}${goodToKnowHtml ? `\n    ${goodToKnowHtml}` : ''}
-    ${faqItems.length ? `\n    ${festivalFaqDetailsHtml(faqItems, lang)}` : ''}
-    ${venueRelatedHtml ? `\n    ${venueRelatedHtml}` : ''}
-    ${(() => { // 回遊: 座標があれば距離順、無ければ同じ街。種別はまたぐ。
-      const sameCity = XLINK.venues.filter((x) => x.id !== v.id && x.city && v.city && String(x.city).toLowerCase() === String(v.city).toLowerCase());
-      const withDistance = v.lat && v.lng && XLINK.venues.some((x) => x.lat && x.lng)
-        ? XLINK.venues.filter((x) => x.id !== v.id && x.lat && x.lng).sort((a, b) => venueDistance(v, a) - venueDistance(v, b))
-        : sameCity;
-      const others = withDistance.slice(0, 4);
-      if (!others.length) return '';
-      return `<h2>${lang === 'en' ? 'NEARBY VENUES' : '近くの会場'}</h2>${relatedChips(others, 'venues', lang)}`;
-    })()}
+  const body = `<article class="detail-page venue-detail venue-detail-v2">
+  <div class="wrap venue-detail-wrap">
+    ${galleryHtml}
+    <nav class="venue-breadcrumb mono" aria-label="Breadcrumb"><a href="${hubHref}">Venues</a><span>/</span>${city ? `<a href="${hubHref}?area=${encodeURIComponent(cityRaw)}">${esc(city)}</a><span>/</span>` : ''}<span>${esc(name)}</span></nav>
+    <section class="venue-head">
+      <div class="venue-head-copy">
+        <div class="venue-head-meta"><span class="pill">${esc(typeUpper || 'VENUE')}</span><span class="mono">${esc(areaCity)}</span></div>
+        <h1 class="disp venue-title${venueTitleClass(name)}">${esc(name)}</h1>
+        ${lang === 'ja' && nameKana ? `<span class="mono venue-kana">${esc(nameKana)}</span>` : ''}
+        ${bilingualBody(v.desc, v.desc_en, lang, 'venue-description').replaceAll('class="lang-btn', 'class="lang-btn chip')}
+        ${linkRow ? `<div class="venue-links">${linkRow}</div>` : ''}
+      </div>
+      ${factsHtml}
+    </section>
+    ${eventsHtml}
+    ${nearbyHtml}
+    ${storiesHtml}
+    ${faqItems.length ? `\n    <section class="venue-faq">${festivalFaqDetailsHtml(faqItems, lang, true)}</section>` : ''}
     ${updatedLabel(modified, lang)}
-    <div class="article-footer"><a class="article-back" href="${hubHref}" data-venue-hub-back="${hubHref}" style="margin:0"><span class="arrow"></span> ALL VENUES</a></div>
+    <div class="article-footer venue-footer"><a class="article-back" href="${hubHref}" data-venue-hub-back="${hubHref}" style="margin:0"><span class="arrow"></span> ALL VENUES</a></div>
   </div>
 </article>`;
 
-  const html = page({ title, desc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('VENUES', '/venues.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, currentKey: 'venues', extraScripts: LANG_TOGGLE_SCRIPT + VENUE_HUB_BACK_SCRIPT, backgroundLayer: true })
+  const html = page({ title, desc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('VENUES', '/venues.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, currentKey: 'venues', extraScripts: LANG_TOGGLE_SCRIPT + VENUE_HUB_BACK_SCRIPT + (eventsHtml ? VENUE_EVENTS_SCRIPT : ''), backgroundLayer: true })
     .replace(/[ \t]+$/gm, '');
   return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'venues'] : ['venues']), `${v.id}.html`), html };
 }
@@ -4153,14 +4285,14 @@ ${FAVICON_TAGS}
     articles: writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'ja', pubFests, editionsByFestival, pubVenues, festivalData, ARTICLES, ARTISTS, authorIndex, lineupsByEdition, ALL_ARTISTS)).concat(redirectStubs('articles', liveArticleIds)), 'articles'),
     festivals: writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, allArtistsById, ARTICLES, pubFests, editionsByFestival, 'ja')).concat(redirectStubs('festivals', liveFestivalIds)), 'festivals'),
     artists: writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'ja', artistAppearances, editionsByFestival, pubArticles)).concat(redirectStubs('artists', liveArtistIds)), 'artists'),
-    venues: writeAll(pubVenues.map((v) => venuePage(v, 'ja', pubFests, editionsByFestival, pubArticles)), 'venues'),
+    venues: writeAll(pubVenues.map((v) => venuePage(v, 'ja', pubFests, editionsByFestival, pubArticles, lineupsByEdition, artistsById, allArtistsById)), 'venues'),
     writers: writeAll(pubAuthors.map((author) => writerPage(author, 'ja', authorIndex)), 'writers'),
     // 英語版（/en/…）。未翻訳フィールドは articlePage 内で元データへ
     // フォールバックし、EN ハブの通常遷移先を必ず実在させる。
     'en/articles': writeAll(pubArticles.map((a) => articlePage(a, resolveEntities, 'en', pubFests, editionsByFestival, pubVenues, festivalData, ARTICLES, ARTISTS, authorIndex, lineupsByEdition, ALL_ARTISTS)), 'en/articles'),
     'en/festivals': writeAll(pubFests.map((f) => festivalPage(f, editionsByFestival.get(f.id) || [], lineupsByEdition, artistsById, allArtistsById, ARTICLES, pubFests, editionsByFestival, 'en')).concat(redirectStubs('en/festivals', liveFestivalIds)), 'en/festivals'),
     'en/artists': writeAll(pubArtists.map((a) => artistPage(a, artistsById, 'en', artistAppearances, editionsByFestival, pubArticles)).concat(redirectStubs('en/artists', liveArtistIds)), 'en/artists'),
-    'en/venues': writeAll(pubVenues.map((v) => venuePage(v, 'en', pubFests, editionsByFestival, pubArticles)), 'en/venues'),
+    'en/venues': writeAll(pubVenues.map((v) => venuePage(v, 'en', pubFests, editionsByFestival, pubArticles, lineupsByEdition, artistsById, allArtistsById)), 'en/venues'),
     'en/writers': writeAll(pubAuthors.map((author) => writerPage(author, 'en', authorIndex)), 'en/writers'),
   };
   writeContentDates();
