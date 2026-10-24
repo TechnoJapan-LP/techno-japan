@@ -262,6 +262,7 @@
   .news-lead .news-title { font-size: clamp(40px, 10vw, 62px); }
   .news-list-card { grid-template-columns: 120px 1fr; gap: 16px; }
   .news-list-card .news-title { font-size: 23px; }
+  .news-list-card .news-title-sub { font-size: 12px; line-height: 1.45; }
   .news-copy { gap: 14px; }
   .news-excerpt { font-size: 13px; }
 }

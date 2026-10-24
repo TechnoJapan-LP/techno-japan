@@ -185,6 +185,7 @@ button:not(:disabled):active,
   display: flex;
   gap: 16px;
   overflow-x: auto;
+  overflow-y: hidden;
   overscroll-behavior-x: contain;
   scroll-snap-type: x proximity;
   scrollbar-width: thin;
@@ -713,6 +714,14 @@ html[lang="en"] .event-signup-label [lang="en"] { display: inline; }
   letter-spacing: .15em;
   color: var(--accent);
   text-transform: uppercase;
+}
+.mag-newsletter-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.mag-newsletter-copy > * {
+  margin: 0;
 }
 .mag-newsletter h2 {
   margin: 0 0 14px;

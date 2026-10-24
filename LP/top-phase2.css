@@ -76,6 +76,11 @@ html.tj-home-js #main-content > #top-ssr-links{display:none!important}html:not(.
 /* Keep the newsletter spacing after the generic top2-wrap reset. */
 .top2-wrap.top2-newsletter { margin-top: 112px; }
 
+.top2-festival-grid {
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+}
+
 @media (max-width: 900px) {
   .top2-head { display: flex; }
   #top2-upcoming .top2-head {
@@ -91,4 +96,12 @@ html.tj-home-js #main-content > #top-ssr-links{display:none!important}html:not(.
   }
   #top2-upcoming .top2-chips::-webkit-scrollbar { display: none; }
   .top2-index-row .top2-status[data-city=""]::before { content: ""; }
+
+  .top2-story-card h3 { font-size: 18px; line-height: 1; }
+  .top2-story-card p { font-size: 12px; line-height: 1.4; }
+  .top2-story-card .top2-card-meta { font-size: 9px; letter-spacing: .1em; }
+}
+
+@media (max-width: 760px) {
+  .top2-festival-grid .top2-fx { transform: none; }
 }

@@ -270,17 +270,22 @@ html.tj-artists-hydrating .ssr-link-list {
     flex-direction: column;
     align-items: stretch;
     justify-content: end;
-    gap: 16px;
+    gap: 10px;
   }
+  .artists-featured-panel { padding-bottom: 24px; }
   .artists-featured-image {
     --artists-featured-vertical-margin: 0px;
-    width: min(100%, calc((var(--artists-featured-h) - var(--artists-featured-copy-h) - 56px - 16px) * .8));
-    max-height: min(calc(var(--artists-featured-h) - var(--artists-featured-copy-h) - 56px - 16px), calc((100vw - 32px) * 1.25));
+    width: min(100%, calc(100vw - 32px), calc((var(--artists-featured-h) - var(--artists-featured-copy-h) - 24px - 10px) * .8));
+    max-height: min(calc(var(--artists-featured-h) - var(--artists-featured-copy-h) - 24px - 10px), calc((100vw - 32px) * 1.25));
     margin: 0 auto;
   }
+  .artists-featured-copy { gap: 10px; }
   .artists-featured-copy h2 { margin: 0; font-size: min(clamp(40px, 12vw, 56px), calc(100cqw / (var(--name-chars) * .46))); }
   .artists-featured-copy .featured-profile { margin-top: 0; }
+  .artists-featured-copy .featured-profile { display: none; }
   .artists-featured-copy .artist-bio { display: none; }
+  .artists-featured-copy .featured-next { gap: 6px; }
+  .artists-featured-copy .featured-next-name { font-size: 14px; }
   .artists-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 12px; }
   .artist-grid-card h3 { font-size: 22px; }
   .artists-results-heading h2 { font-size: 34px; }

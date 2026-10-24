@@ -13491,3 +13491,182 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 - ABOUT の Instagram の最新投稿を出すか（CSP に Behold を許すか）はユーザー判断。
 - 公開時は cms.js / cms.html の版数変更があるため Publish pipeline ＋ CMS の確認が必要。
+
+### 2026-10-24 redesign/magazine フェーズ6 SOUND / GALLERY（未コミット・未公開）
+
+### 実施
+
+- `LP/cms.html` / `LP/cms.js` に FESTIVALS の SOUND、VENUES の GALLERY（追加写真2枠、URL取込・圧縮アップロード・プレビュー・削除）を追加。
+- 新規作成では両項目を無効化し、既存行の編集でシート列の存在を確認した場合だけ `update_row` payload に含めるようにした。列が無い場合は見出し末尾への追加案内を表示。
+- `buildFestivalsJs` は SOUND を、`buildVenuesJs` は webp化した最大2枚の GALLERY 配列を出力。data-hub からは両方を除外。
+- Bulk Assist・一括画像・Find & Replace は保存直前に `get_sheet` で最新行を読み、変更項目だけを重ねて保存するようにした。
+- `scripts/check_cms_sound_gallery.mjs` を追加し、preflight の CMS 検査へ登録。`docs/DATA_SCHEMA.md` に SOUND/GALLERY の型・列追加・新規作成制約を追記。
+
+### コミット
+
+- なし（ユーザー指示どおり commit / push 未実施）。
+
+### 検証
+
+- 成功: `node --check LP/cms.js`、`node scripts/check_cms_sound_gallery.mjs`、既存CMS/Publish/data-hub/画像/回帰検査、`python3 scripts/check_asset_versions.py --no-diff`、`node scripts/build-detail-pages.mjs`、`node scripts/check_build_idempotent.mjs`（601ファイル変化なし）。
+- `bash scripts/preflight.sh --fast` は、外部画像150件の取得待ちにより既定240秒で「詳細ページを生成できる」「ビルドの冪等性」がタイムアウト。それ以外は成功（52成功・5省略）。単独実行では両検査とも成功。
+- 未確認: 実ブラウザでのCMS入力→プレビュー→保存→再表示、Publish pipeline、認証済みCMSでの Publish Now。本番データ／本物のGASへの書き込み・送信はしていない。
+
+### 変更したパターン
+
+- `sound` / `gallery` のキー有無でシート列の存在を判定し、既存行の更新だけに限定する保存payload。
+- GALLERY は `<id>-2.webp` / `<id>-3.webp` を使い、メイン画像を上書きしない2枠アップロード。
+- data.js の詳細専用項目と data-hub の除外項目を `cms.js`・`build-detail-pages.mjs`・`check_data_hub.mjs` で一致させるパターン。
+
+### 未確認の類似パターン
+
+- 確認済み・0件: SOUND/GALLERY の build 出力、空欄時の無出力、webp配列の最大2件、列落ち防止の最新行マージ、既存CMS検査との互換性。
+- 未確認: 実ブラウザのPC/モバイル表示、GAS側 `add_festival` / `addVenue` の新列対応（新規作成では送らないため影響回避）。
+
+### 次の担当への注意・判断待ち
+
+- スプレッドシートの `FESTIVALS` 見出しの最後に `SOUND`、`VENUES` 見出しの最後に `GALLERY` を追加してから、既存行をCMSで編集・保存する。新規行では入力できない。
+- CMS変更のため、公開前に `?cb=<乱数>` 付きCMSを強制再読み込みし、実データで編集→プレビュー→閉じる→再表示→保存を確認する。Publish Now と生成コミットの確認は未実施。
+
+### 2026-10-24 TOP / NEWS モバイル表示修正（未コミット・未公開）
+
+### 実施
+
+- 共通ニュースレターの左列を `display:flex; flex-direction:column; gap:14px` に変更し、TOP と NEWS のラベル・見出し・説明文へ適用した。
+- TOPカルーセルの送りを85%で完了して4枚目を保持し、Upcoming の横列を縦スクロール不可にした。TOP STORIES、NEWS一覧、詳細ページの関連フェス／More festivals のスマホ表示も指定値へ調整した。
+- `common.css` v52、`magazine.js` v6、TOP CSS/JS v10/v9、NEWS CSS v6、詳細CSS v86へ更新し、CMSプレビューと生成ページの参照を同期した。
+
+### コミット
+
+- なし（ユーザー指示により commit / push 未実施）。フェーズ6の未コミット変更は保持。
+
+### 検証
+
+- 成功: `node scripts/build-detail-pages.mjs`（最後まで完了）、`node scripts/check_build_idempotent.mjs`（601ファイル差分なし）、`python3 scripts/check_asset_versions.py`、`node scripts/check_cms_article_generated_preview.mjs`、`python3 scripts/check_regressions.py`、`git diff --check`。
+- 未確認: `python3 scripts/check_hub_pages.py` は実行環境の localhost bind `PermissionError` で起動できず。Publish pipeline、実機／認証済みCMSの操作確認も未実施。
+
+### 変更したパターン
+
+- `.mag-newsletter-copy` の flex gap によるニュースレター縦間隔、`tjMagPinnedCarousel` の `endAt` オプション、横カード列の `overflow-y:hidden` と `overscroll-behavior-x:contain`。
+- TOP STORIES のスマホ値（見出し18px、補足12px/1.4、メタ9px/.1em）と NEWS一覧補足（12px/1.45）。
+
+### 未確認の類似パターン
+
+- 確認済み・0件: TOP／NEWSニュースレター、TOP Upcoming、TOP STORIES、記事詳細の関連フェス、フェス詳細 More festivals の対象CSS・版数。
+- 未確認: 実ブラウザでのPC/390px操作、ARTISTS FEATUREDを含む他ページの実機描画、localhost bind が可能な環境での `check_hub_pages.py`。
+
+### 次の担当への注意・判断待ち
+
+- 公開前に localhost を使える環境で `python3 scripts/check_hub_pages.py` を再実行し、TOP/NEWSのPC・モバイル表示を実ブラウザで確認する。CMS変更の未確認フロー（フェーズ6）も同時に残っているため、公開前に既存のCMS確認手順を完了する。
+
+### 2026-10-24 GALLERY送信安全化 / TOP・ARTISTSカルーセル端点・スマホ表示（未コミット・未公開）
+
+### 実施
+
+- GALLERYの画面用 `venue-gallery-2/3` を、GAS送信時だけ `type:'venue'`・`id:'<id>-2|3'`・同名filenameへ変換する共通処理に変更。ファイル、ブラウザ圧縮URL、CORS時の `upload_from_url` の3経路を対象にした。
+- 返却パスに枠IDが含まれない場合は保存せずエラー表示。`scripts/check_cms_sound_gallery.mjs` に3経路の共通変換とメイン写真パス拒否の検査を追加。
+- 共通 `tjMagPinnedCarousel` に先頭10%・末尾15%の停止区間を追加し、TOPとARTISTS FEATUREDへ適用。ARTISTSの900px以下ではコピーの間隔・NEXT行を詰め、Profileを隠して写真の表示幅を拡大。
+- 変更したCSS/JSの参照版数を更新。コミット・push・本物のGAS送信はしていない。
+
+### コミット
+
+- なし（ユーザー指示どおり commit / push 未実施）。既存の未コミット変更は保持。
+
+### 検証
+
+- 成功: `node --check`（cms / magazine / TOP / ARTISTS）、`node scripts/check_cms_sound_gallery.mjs`、`node scripts/build-detail-pages.mjs`、`node scripts/check_build_idempotent.mjs`（601ファイル差分なし）、`python3 scripts/check_asset_versions.py`、`python3 scripts/check_regressions.py`、`git diff --check`。
+- `bash scripts/preflight.sh`: CMSを含む静的検査は成功。詳細生成・冪等性は外部画像取得の240秒タイムアウト、ブラウザ系は実行環境のlocalhost bind `EPERM`で失敗。
+- 未確認: 実ブラウザでのTOP/ARTISTSのPC・390px操作、認証済みCMSでのGALLERY実送信確認、Publish pipeline。本物のGASへの送信はしていない。
+
+### 変更したパターン
+
+- GALLERYのUI typeとGAS契約type/idを分離し、返却パスを保存前に検証するアップロード経路。
+- 縦スクロールの端点停止区間を共通カルーセルへ追加し、TOP/ARTISTS双方で同じ割合を指定するパターン。
+- `--artists-featured-copy-h` を使ったスマホ画像高さ計算から余白を減らし、viewport幅も上限にするパターン。
+
+### 未確認の類似パターン
+
+- 確認済み・0件: GALLERYの3アップロード経路、メイン写真パス拒否、TOP/ARTISTSのカルーセル呼び出し、CSS/JS版数参照。
+- 未確認: 実ブラウザでの他ページのカルーセル、実GASが返す実パスの命名差、Publish後のキャッシュ反映。
+
+### 次の担当への注意・判断待ち
+
+- localhost bind可能な環境でpreflightを再実行すること。公開前に `?cb=<乱数>` 付きCMSを強制再読み込みし、GALLERYのファイル/URL/CORSフォールバックの送信bodyと返却パスを実GASへ書き込まず確認すること。CMS変更のため、確認後にPublish pipelineを実行すること。
+
+### 2026-10-24 SOUND / GALLERY 一括保存安全策（未コミット・未公開）
+
+### 実施
+
+- CORS時の `upload_from_url` bodyを4キー（`action` / `imageUrl` / GAS用`type` / GAS用`id`）に固定し、原寸保存経路へ `filename` を送らないよう修正。
+- `bulkSaveRow` に大小文字違いの同名キー同期と、`id` → `name` → `title` の識別値比較を追加。行ずれ時はPOSTせず再読み込みエラーにする検査を追加。
+- `LP/cms.html` の `cms.js` を `?v=181` に更新。本物のGASへの送信、commit、pushは未実施。
+
+### コミット
+
+- なし（ユーザー指示により commit / push 未実施）。既存の未コミット変更は保持。
+
+### 検証
+
+- 成功: `node --check LP/cms.js`、`node scripts/check_cms_sound_gallery.mjs`、CMS既存検査群、`python3 scripts/check_asset_versions.py`、`python3 scripts/check_regressions.py`、`git diff --check`。
+- `bash scripts/preflight.sh` は詳細ページ生成の外部画像取得が240秒でタイムアウトしたため中断。CMS検査群は個別実行で全件成功。
+- 未確認: 実ブラウザでのGAS送信body確認、Publish pipeline。
+
+### 変更したパターン
+
+- URL取込の原寸フォールバックと、webp化済みのファイル／圧縮URLアップロードを分離するbody生成。
+- bulk保存時に大小文字を無視して同名キーへ同じ値を適用し、行番号だけでなく識別値を確認する保存前ガード。
+
+### 未確認の類似パターン
+
+- 確認済み・0件: 会場メイン写真、フェスフライヤー、GALLERY 2/3枠のbody、大小文字違いキー、行ずれ時のPOST抑止。
+- 未確認: 実GASの返却パス・実データでの保存確認、実ブラウザのPC/モバイル操作。
+
+### 次の担当への注意・判断待ち
+
+- `?cb=<乱数>` 付きCMSを強制再読み込みし、GASへ書き込まずに実際の送信bodyと返却パスを確認すること。確認後に必要ならPublish pipelineを実行すること。
+
+### 2026-10-24 redesign/magazine フェーズ6 ＋ TOP/NEWS/ARTISTS 修正の検証とコミット（Claude、未公開）
+
+### 実施
+
+- 上の3件（フェーズ6 SOUND/GALLERY、TOP/NEWS のモバイル修正、GALLERY 送信安全化＋カルーセル端点）を Claude が実ブラウザ相当（headless Chrome / CDP）で確認し、コミットした。
+- レビューで2点を見つけ、Codex に直させた（`tmp/spec-p6-safety.md`）。
+  - 「URL から取り込む」の CORS 失敗時（GAS `upload_from_url`）で、**メイン写真・フライヤーにも `filename:'<id>.webp'` が付くようになっていた**。この経路は原寸の jpg/heic を保存するため、名前だけ webp になり Drive 同期の変換をすり抜けるおそれがあった → `uploadFromUrlBody()` で `{action,imageUrl,type,id}` の4つだけに戻した（GALLERY は `type:'venue'`・`id:'<id>-2|3'`）。
+  - `bulkSaveRow`: `get_sheet` は1列を `imageposition` と `imagePosition` の2つの名前で返すため、片方だけ更新すると古い値が残る → 大文字小文字を無視して同名キー全部に入れる。行番号だけで行を決めていた → `id`（無ければ `name` / `title`）が違えば送らずにエラー。
+  - その結果、Find & Replace が置換後の行で照合して「行ずれ」と誤判定する形になったため、照合は置換前の元の行で行うよう直させた（`tmp/spec-p6-fr-identity.md`、`cms.js?v=182`）。
+- ARTISTS FEATURED のスマホは写真を大きくするため拠点→NEXT の間を 18px → 10px に詰めた（ユーザー依頼「写真が小さい」への対応、PC は 18px のまま）。2回目の指摘で入れた検査（`tmp/followverify.mjs` の「≥16px」）はスマホだけ「≥10px」に更新した。
+
+### コミット
+
+- （このエントリを含むコミット。redesign/magazine、push なし）
+
+### 検証
+
+- CMS（`tmp/cmsverify.mjs`、cms.js の GAS 通信を差し替え＋ script.google.com をブラウザで遮断。**本物の GAS・本番データへの送信 0 件**）: 20/20（cms.js v182）
+  - 列あり／列なし（入力不可・案内・payload に入らない）、新規作成で不可、GALLERY の読み込み・1枚消して保存（メイン写真は不変）。
+  - アップロード3経路: ファイル（`type:'venue'`,`id:'womb-3'`,`filename:'womb-3.webp'`）／URL・ブラウザ圧縮（`womb-2.webp`）／URL・CORS 失敗の予備（body は `action,id,imageUrl,type` のみ、`womb-3`）。メイン写真の予備経路の body が変更前と同じ（`type:'venue'`,`id:'womb'`、filename なし）。GAS がメイン写真のパスを返したら GALLERY に入れない。
+  - 一括保存: 最新の行を読み直して SOUND を保持・変更を重ねる／2つの名前の列の両方に新しい値／行がずれたら送らない。
+- TOP カルーセル（`tmp/topdwell.mjs`、各位置で 2.5 秒待って計測）: 390×844・1280×900 とも、固定の始まり +0/+80/+140px は1枚目のずれ 0px、外れる 260/120/0px 前は4枚目のずれ 0〜1px（04 / 04）。
+- ARTISTS FEATURED（`tmp/artfeat2.mjs`）: 390×844 で写真 358×447（変更前 293×367）、390×667 で 231×289（同 152×190）。始まりで1人目、外れる直前で3人目のずれ 0px（PC も同じ）。
+- ページ全体の回帰（CDP）: TOP（カルーセル・最初の1枚・時差に左右されない）合格、NEWS 86/86、FESTIVALS 141/141、ARTISTS 114/114、VENUES 112/114、記事 284/290、追加確認一式 297/297（スマホの拠点→NEXT の間の基準を更新後）、ABOUT 54/54、APPLY 68/68、WRITER 30/30、フェス詳細 356/356、アーティスト詳細 362/362、会場詳細 322/322、CMS 20/20。
+  - VENUES の2件・記事の6件はすべて「画像の細かさ」で、**直前のコミット 3d285cde1 でも同じ項目・同じ数値**（同じ検査を別のサーバーで実行して比較）。今回の変更による悪化ではない（下の「未確認の類似パターン」参照）。
+- `bash scripts/preflight.sh`（省略なし）: 全67件成功（Publish の経路の変更ありの注意表示 → 下の「未確認」のとおり実機未確認）
+- 未確認: Publish pipeline の実行、認証済み CMS での保存・Publish Now（cms.js を変えたため公開前に必須）、実 GAS の `upload_image` / `upload_from_url` が返す実際のパス名、iPhone 実機でのカルーセルの止まり方。
+
+### 変更したパターン
+
+- GAS へ送る body を1つの関数で作り、メイン写真の契約（type / id / filename の有無）を変えずに GALLERY だけ別名にするパターン（`imageUploadTarget` / `uploadFromUrlBody` / `assertImageUploadPath`）。
+- 一括保存は「保存直前に `get_sheet` で読み直し → 同じ行か確かめる → 変更だけを大文字小文字を無視して重ねる」。
+- カルーセルの端点で止まる区間（`tjMagPinnedCarousel` の `dwell` 0.1 / `endDwell` 0.15）を TOP と ARTISTS で共有。
+
+### 未確認の類似パターン
+
+- 確認済み・0件: 一括の道具で `bulkSaveRow` を通らずに `update_row` を丸ごと送る箇所（Find & Replace も `bulkSaveRow` 経由に変更済み）。
+- 既知（今回以前から）: 会場一覧の PC（dpr 2）で FEATURED の bonobo が 960px／必要 991px、グリッドの md が 720px／必要 754〜759px。記事本文の写真（スマホ dpr 3・スクロール演出で 433px 表示）が 1200px／必要 1299〜1301px。いずれも 3〜8% の不足で、3d285cde1 でも同じ。フェーズ7（画像・Lighthouse）で扱うか判断する。
+- 未確認: 開催回（EDITIONS）の `update_row` は今回触っていない（`get_sheet` の2つの名前の列の扱いは同じ形の可能性がある）。EDITIONS のフライヤーの `upload_from_url`（cms.js `uploadEditionFlyerFromUrl`）と一括画像の `upload_from_url` は filename を送らない従来の形のまま。
+
+### 次の担当への注意・判断待ち
+
+- スプレッドシートの列は**新しい CMS の公開後に**、FESTIVALS の見出しの最後に `SOUND`、VENUES の見出しの最後に `GALLERY` を足す（途中に挿入しない・他の見出しに触らない）。今の本番 CMS で行を保存すると、送られない列が空になるため。
+- GAS の新規作成（`add_festival` / `addVenue`）が新しい列を受け取るかは不明なので、SOUND / GALLERY は既存行の編集でだけ入力できる。
+- 公開時は `?cb=<乱数>` 付き CMS で強制再読み込み → 実データで編集→プレビュー→閉じる→再表示→保存、Publish pipeline の実行、`cms: publish data.js` コミットの確認まで行う（AGENTS.md）。

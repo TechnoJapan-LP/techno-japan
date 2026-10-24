@@ -58,7 +58,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 85;
+const DETAIL_CSS_VERSION = 86;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -76,11 +76,11 @@ const ARTICLE_FX_CSS_VERSION = 18;
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
 const COMMON_JS_VERSION = 20;   // 2026-10-23 festival tab section tracking
-const COMMON_CSS_VERSION = 51;   // 2026-10-24 shared TOP/ABOUT marquee component
+const COMMON_CSS_VERSION = 52;   // 2026-10-24 newsletter spacing and horizontal mobile strips
 const DATA_HUB_VERSION = 11;
 const SEARCH_JS_VERSION = 8;
 const LANG_TOGGLE_VERSION = 3;
-const MAGAZINE_JS_VERSION = 5;
+const MAGAZINE_JS_VERSION = 7;
 const FAVORITES_JS_VERSION = 4;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
 const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');
@@ -222,11 +222,12 @@ function loadData() {
 
 /* CMS の Publish でも data-hub.js を送っているが、GAS 側が複数ファイルに
    対応していない場合に備えてビルドでも生成する（2026-09-15）。
-   除外する5項目は cms.js の buildHubDataJs と同じ。片方だけ変えないこと。 */
+   除外する7項目は cms.js の buildHubDataJs と同じ。片方だけ変えないこと。 */
 function buildHubDataJs(data) {
   const strip = (name, row) => Object.fromEntries(Object.entries(row).filter(([key]) => {
     if (name === 'ARTICLES') return key !== 'body' && key !== 'body_en';
-    if (name === 'FESTIVALS') return key !== 'desc' && key !== 'desc_en' && key !== 'editions';
+    if (name === 'FESTIVALS') return key !== 'desc' && key !== 'desc_en' && key !== 'editions' && key !== 'sound';
+    if (name === 'VENUES') return key !== 'gallery';
     return true;
   }));
   const rows = (name) => (data[name] || []).map((row) => strip(name, row));

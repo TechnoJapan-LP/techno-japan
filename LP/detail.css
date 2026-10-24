@@ -1666,7 +1666,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   .artist-detail-v2 .festival-section-heading h2 {
     font-size: 34px;
   }
-  .festival-design-v2 .related-grid { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 10px; scroll-snap-type: x proximity; }
+  .festival-design-v2 .related-grid { display: flex; gap: 16px; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; padding-bottom: 10px; scroll-snap-type: x proximity; }
   .festival-design-v2 .related-card { flex: 0 0 min(78vw, 320px); scroll-snap-align: start; }
   .festival-design-v2 .tab { padding-left: 10px; padding-right: 10px; letter-spacing: .15em; }
   .article-detail .related-section-head h2 { font: 400 34px/.95 var(--font-display); letter-spacing: .01em; opacity: 1; text-transform: none; }
@@ -1698,7 +1698,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   text-transform: uppercase; opacity: .62; margin: 0 0 18px; font-weight: 400;
 }
 .article-detail .related-festivals-track {
-  display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory;
+  display: flex; gap: 16px; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scroll-snap-type: x mandatory;
   padding-bottom: 8px; scrollbar-width: none;
 }
 .article-detail .related-festivals-track::-webkit-scrollbar { display: none; }
@@ -1859,7 +1859,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   .article-related-stories .related-story-card.is-wide .related-story-title { font-size: 26px; }
   .related-festivals { margin-top: 56px; }
   .related-section-head h2 { font-size: 40px; }
-  .article-detail .related-festivals-track { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; scrollbar-width: none; }
+  .article-detail .related-festivals-track { display: flex; gap: 16px; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; padding-bottom: 8px; scrollbar-width: none; }
   .article-detail .related-festivals-track::-webkit-scrollbar { display: none; }
   .article-detail .related-festivals-track .related-card { flex: 0 0 240px; scroll-snap-align: start; }
   .article-detail .related-card-name { font-size: 24px; }

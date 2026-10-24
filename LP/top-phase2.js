@@ -103,7 +103,28 @@
       + '</p></div></a>';
   }).join('');
   if (typeof window.tjMagNewsletter === 'function') window.tjMagNewsletter(root.querySelector('[data-tj-newsletter]'));
-  var leadCarousel = window.tjMagPinnedCarousel({section: document.getElementById('top2-lead'), sticky: document.querySelector('.top2-lead-sticky'), track: leadTrack, panels: leadTrack.querySelectorAll('.top2-panel'), dwell: .1, shift: 14, scale: 1.16, dimScale: .28, stickyTop: function () { return parseFloat(window.getComputedStyle(document.querySelector('.top2-lead-sticky')).top) || 0; }, startAt: 0, onIndex: function (panel) { document.getElementById('top2-counter').textContent = String(Math.min(4, panel + 1)).padStart(2, '0') + ' / 04'; document.getElementById('top2-dots').innerHTML = [0,1,2,3].map(function (i) { return '<i class="top2-dot ' + (i === panel ? 'is-on' : '') + '"></i>'; }).join(''); }});
+  var leadCarousel = window.tjMagPinnedCarousel({
+    section: document.getElementById('top2-lead'),
+    sticky: document.querySelector('.top2-lead-sticky'),
+    track: leadTrack,
+    panels: leadTrack.querySelectorAll('.top2-panel'),
+    dwell: .1,
+    startDwell: .1,
+    endDwell: .15,
+    shift: 14,
+    scale: 1.16,
+    dimScale: .28,
+    stickyTop: function () {
+      return parseFloat(window.getComputedStyle(document.querySelector('.top2-lead-sticky')).top) || 0;
+    },
+    startAt: 0,
+    onIndex: function (panel) {
+      document.getElementById('top2-counter').textContent = String(Math.min(4, panel + 1)).padStart(2, '0') + ' / 04';
+      document.getElementById('top2-dots').innerHTML = [0,1,2,3].map(function (i) {
+        return '<i class="top2-dot ' + (i === panel ? 'is-on' : '') + '"></i>';
+      }).join('');
+    }
+  });
   if (leadCarousel.reduced) document.querySelector('.top2-lead').classList.add('is-reduced');
   function observe() { if (!('IntersectionObserver' in window)) { root.querySelectorAll('.top2-fx').forEach(function (x) { x.classList.add('is-in'); }); return; } var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } }); }, {rootMargin:'0px 0px -8%'}); root.querySelectorAll('.top2-fx:not(.is-in)').forEach(function (x) { io.observe(x); }); }
   observe();

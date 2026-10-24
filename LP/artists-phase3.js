@@ -194,7 +194,7 @@
       attachHeart(mount, artist);
     });
     if (activeCarousel && activeCarousel.destroy) activeCarousel.destroy();
-    var carousel = window.tjMagPinnedCarousel({section: featured, sticky: featured.querySelector('.artists-featured-sticky'), track: featured.querySelector('.artists-featured-track'), panels: featured.querySelectorAll('.artists-featured-panel'), dwell: .12, shift: 10, scale: 1.12, stickyTop: function () { return (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tj-nav-height')) || 64) + (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--artists-toolbar-h')) || 0); }, onIndex: function (index) {
+    var carousel = window.tjMagPinnedCarousel({section: featured, sticky: featured.querySelector('.artists-featured-sticky'), track: featured.querySelector('.artists-featured-track'), panels: featured.querySelectorAll('.artists-featured-panel'), dwell: .12, startDwell: .1, endDwell: .15, shift: 10, scale: 1.12, stickyTop: function () { return (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tj-nav-height')) || 64) + (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--artists-toolbar-h')) || 0); }, onIndex: function (index) {
       var dots = featured.querySelectorAll('.fdot');
       dots.forEach(function (dot, dotIndex) { dot.classList.toggle('is-on', dotIndex === index); });
       var counter = featured.querySelector('[data-featured-counter]');

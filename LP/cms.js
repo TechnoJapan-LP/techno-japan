@@ -239,6 +239,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   initArticleEditor();
   injectFormSectionLabels();
   markRequiredFields();
+  setSoundGalleryAvailability('festival', false);
+  setSoundGalleryAvailability('venue', false);
   // フォーム入力の dirty 追跡（保存忘れ防止）
   document.querySelectorAll('.form-grid input, .form-grid textarea, .form-grid select').forEach(el => {
     el.addEventListener('input', markFormDirty);
@@ -560,6 +562,7 @@ function renderVenuePreview(){
   const imgSrc=resolveImgSrc(imagePath,imageUrl,pvImg);
   const genres=Array.from(document.querySelectorAll('#v-genre .chip.selected')).map(c=>c.textContent.trim());
   const features=getSelectedFeatures('v-features');
+  const gallery=getGalleryPaths();
   const tagsHtml=genres.map(g=>`<span class="pv-tag">${esc(g)}</span>`).join('');
   const featuresHtml=features.map(f=>`<span class="pv-tag">${esc(f)}</span>`).join('');
   const linksHtml=[
@@ -578,6 +581,7 @@ function renderVenuePreview(){
         ${featuresHtml?'<div class="pv-tags">'+featuresHtml+'</div>':''}
         ${desc?'<div class="pv-desc">'+esc(desc)+'</div>':'<div class="pv-empty" style="margin-bottom:28px">No description</div>'}
         ${address?'<div class="pv-location" style="margin-bottom:16px">📍 '+esc(address)+'</div>':''}
+        ${gallery.length?'<div class="pv-tags">'+gallery.map((p,i)=>'<span class="pv-tag">PHOTO '+(i+2)+'</span>').join('')+'</div>':''}
         <div class="pv-links">${linksHtml}</div>
       </div>
     </div>
@@ -743,6 +747,7 @@ function renderFestivalPreview(){
   const location=g('f-location');
   const locationJa=g('f-location_ja');
   const city=g('f-city');
+  const sound=g('f-sound');
   const ds=g('f-dateStart'),de=g('f-dateEnd');
   const dateStr=ds&&de?ds+'/'+de:ds;
   const url=g('f-url');
@@ -793,6 +798,7 @@ function renderFestivalPreview(){
         <div class="pv-date">${esc(formatPreviewDate(dateStr))}</div>
         <div class="pv-name">${esc(name)}</div>
         <div class="pv-location">${esc(locStr)}</div>
+        ${sound?'<div class="pv-location">SOUND · '+esc(sound)+'</div>':''}
         ${tagsHtml?'<div class="pv-tags">'+tagsHtml+'</div>':''}
         ${desc?'<div class="pv-desc">'+esc(desc)+'</div>':'<div class="pv-empty" style="margin-bottom:28px">No description yet</div>'}
         <div class="pv-links">${urlHtml}${ticketHtml}</div>
@@ -815,6 +821,119 @@ function renderFestivalPreview(){
 function autoFillVenueImage() {
   const id = document.getElementById('v-id').value.trim();
   document.getElementById('v-image').value = id ? 'images/venues/'+id+'.jpg' : '';
+}
+
+/* SOUND / GALLERY は新規追加のGAS契約が未確認なので、既存行の編集だけ許可する。 */
+const GALLERY_SLOTS = [2, 3];
+function hasSheetField(row, field){
+  if(!row || typeof row !== 'object') return false;
+  return Object.prototype.hasOwnProperty.call(row, field)
+    || Object.prototype.hasOwnProperty.call(row, field.toUpperCase());
+}
+function setSoundGalleryAvailability(section, available){
+  const enabled = !!available;
+  if(section === 'festival'){
+    const input = document.getElementById('f-sound');
+    if(input) input.disabled = !enabled;
+    const note = document.getElementById('f-sound-note');
+    if(note) note.textContent = enabled
+      ? '入力できます。空欄で保存すると SOUND 列も空になります。'
+      : '新規作成では入力できません。保存したあと、編集画面で入力できます。スプレッドシートの FESTIVALS シートの見出しの最後に SOUND 列を足すと入力できます。';
+  }
+  if(section === 'venue'){
+    document.querySelectorAll('#form-venue [data-gallery-control]').forEach(el=>{
+      if('disabled' in el) el.disabled = !enabled;
+      el.setAttribute('aria-disabled', enabled ? 'false' : 'true');
+      el.style.pointerEvents = enabled ? '' : 'none';
+      el.style.opacity = enabled ? '' : '.5';
+    });
+    ['v-gallery-2-path','v-gallery-3-path'].forEach(id=>{
+      const el=document.getElementById(id); if(el) el.disabled=!enabled;
+    });
+    ['v-gallery-2-url','v-gallery-3-url'].forEach(id=>{
+      const el=document.getElementById(id); if(el) el.disabled=!enabled;
+    });
+    const note=document.getElementById('v-gallery-note');
+    if(note) note.textContent = enabled
+      ? 'ファイル名はメイン写真と分け、<id>-2 / <id>-3 で保存します。空欄で保存すると GALLERY 列も空になります。'
+      : '新規作成では入力できません。保存したあと、編集画面で入力できます。スプレッドシートの VENUES シートの見出しの最後に GALLERY 列を足すと入力できます。';
+  }
+}
+function parseGalleryValue(value){
+  if(Array.isArray(value)) return value.map(v=>String(v||'').trim()).filter(Boolean).slice(0,2);
+  return String(value||'').split(',').map(v=>v.trim()).filter(Boolean).slice(0,2);
+}
+function getGalleryPaths(){
+  return GALLERY_SLOTS.map(slot=>String(document.getElementById('v-gallery-'+slot+'-path')?.value||'').trim()).filter(Boolean).slice(0,2);
+}
+function syncGalleryValue(){
+  const hidden=document.getElementById('v-gallery');
+  if(hidden) hidden.value=getGalleryPaths().join(', ');
+}
+function setGalleryValue(value){
+  const paths=parseGalleryValue(value);
+  GALLERY_SLOTS.forEach((slot,index)=>{
+    const path=paths[index]||'';
+    const pathEl=document.getElementById('v-gallery-'+slot+'-path');
+    if(pathEl) pathEl.value=path;
+    const urlEl=document.getElementById('v-gallery-'+slot+'-url');
+    if(urlEl) urlEl.value='';
+    const previewId='preview-v-gallery-'+slot;
+    const preview=document.getElementById(previewId);
+    if(preview){preview.style.display='none';preview.innerHTML='';}
+    if(path) showCurrentImage(previewId,path,'clearGallerySlot('+slot+')');
+  });
+  syncGalleryValue();
+}
+function clearGallerySlot(slot){
+  const pathEl=document.getElementById('v-gallery-'+slot+'-path');
+  const oldPath=String(pathEl?.value||'').trim();
+  if(oldPath) releasePendingImagePreview(oldPath);
+  if(pathEl) pathEl.value='';
+  const urlEl=document.getElementById('v-gallery-'+slot+'-url');
+  if(urlEl) urlEl.value='';
+  const preview=document.getElementById('preview-v-gallery-'+slot);
+  if(preview){preview.style.display='none';preview.innerHTML='';}
+  const files=document.querySelectorAll('#form-venue .gallery-slot input[type=file]');
+  const file=files[slot-2];
+  if(file) file.value='';
+  syncGalleryValue();
+  toast('追加写真をクリアしました（保存で反映）','info');
+}
+/* 画面上の venue-gallery-2/3 と、GASへ送る契約を分離する。
+   GALLERYはGAS既知の type=venue を使い、idにも枠番号を含める。 */
+function imageUploadTarget(type,id,ext){
+  const uiType=String(type||'');
+  const baseId=String(id||'').trim();
+  const match=uiType.match(/^venue-gallery-(2|3)$/);
+  const uploadId=match ? baseId+'-'+match[1] : baseId;
+  const filename=type === 'festival-flyer' ? uploadId+'-flyer.'+ext : uploadId+'.'+ext;
+  return {
+    type: match ? 'venue' : uiType,
+    id: uploadId,
+    filename
+  };
+}
+/* CORSフォールバックはGAS側で原寸を保存するため、filenameを送らない。
+   GALLERYだけは画面用のtype/idをGASの契約へ変換する。 */
+function uploadFromUrlBody(url,type,id){
+  const target=imageUploadTarget(type,id,'webp');
+  return {
+    action:'upload_from_url',
+    imageUrl:url,
+    type:target.type,
+    id:target.id
+  };
+}
+function assertImageUploadPath(type,id,imagePath){
+  const path=String(imagePath||'').trim();
+  const target=imageUploadTarget(type,id,'webp');
+  if(/^venue-gallery-(2|3)$/.test(String(type||'')) && (!path || !path.includes(target.id))){
+    const error=new Error('GALLERYの保存先名が不正です（'+target.id+' を含まないパス）');
+    error.code='UNEXPECTED_GALLERY_PATH';
+    throw error;
+  }
+  return path;
 }
 function autoFillFestivalImage() {
   const id = document.getElementById('f-id').value.trim();
@@ -1725,7 +1844,7 @@ function previewRenderBody_(body){
 function writeArticleSimplePreview_(win, title, body){
   const safeBody = String(body || '').replace(/<script/gi, '&lt;script');
   win.document.open();
-     win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><link rel="stylesheet" href="/common.css?v=51"><link rel="stylesheet" href="/detail.css?v=85"><link rel="stylesheet" href="/article-fx.css?v=18"><style>/* フォールバックでは common.js を読まないためネイティブカーソルに戻す */*{cursor:auto !important}a,button,[role="button"],summary{cursor:pointer !important}</style></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${esc(title)}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=14"><\/script></body></html>`);
+     win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><link rel="stylesheet" href="/common.css?v=52"><link rel="stylesheet" href="/detail.css?v=86"><link rel="stylesheet" href="/article-fx.css?v=18"><style>/* フォールバックでは common.js を読まないためネイティブカーソルに戻す */*{cursor:auto !important}a,button,[role="button"],summary{cursor:pointer !important}</style></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${esc(title)}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=14"><\/script></body></html>`);
   win.document.close();
 }
 async function openArticleGeneratedPreview(){
@@ -4155,13 +4274,18 @@ async function compressUrlAndUpload(url, type, id){
   try { comp = await compressImage(blob); } // 画像でなければ img.onerror で reject
   catch(_) { return null; }
   const action = type.startsWith('festival') ? 'upload_festival_image' : 'upload_image';
-  const filename = type === 'festival-flyer' ? (id+'-flyer.'+comp.ext) : (id+'.'+comp.ext);
+  const target=imageUploadTarget(type,id,comp.ext);
   try {
     const d = await gasPostJson_({
-      action, imageData:comp.dataUrl, mimeType:comp.mimeType, id, type, filename
+      action, imageData:comp.dataUrl, mimeType:comp.mimeType, ...target
     });
-    if(d.status==='ok' || d.success) return { path: d.imagePath||d.path||'', comp };
-  } catch(_) {}
+    if(d.status==='ok' || d.success){
+      const path=assertImageUploadPath(type,id,d.imagePath||d.path||'');
+      return { path, comp };
+    }
+  } catch(error) {
+    if(error && error.code==='UNEXPECTED_GALLERY_PATH') throw error;
+  }
   return null;
 }
 
@@ -4270,7 +4394,9 @@ function uploadImage(input,type,prefix){
   const id=document.getElementById(prefix+'-id')?.value?.trim();
   if(!id)return toast('Enter ID first','error');
   const origMB=(file.size/1024/1024).toFixed(1);
-  const previewId='preview-'+prefix+'-'+(type==='festival-flyer'?'flyer':'image');
+  const galleryMatch=String(type||'').match(/^venue-gallery-(2|3)$/);
+  const previewId=galleryMatch ? 'preview-'+prefix+'-gallery-'+galleryMatch[1]
+    : 'preview-'+prefix+'-'+(type==='festival-flyer'?'flyer':'image');
   const previewEl=document.getElementById(previewId);
 
   toast('Compressing... ('+origMB+'MB)','info');
@@ -4284,16 +4410,24 @@ function uploadImage(input,type,prefix){
     }
     // festival系は upload_festival_image、それ以外は upload_image
     const action=type.startsWith('festival')?'upload_festival_image':'upload_image';
-    const filename = type === 'festival-flyer' ? (id+'-flyer.'+ext) : (id+'.'+ext);
-    const body={action,imageData:dataUrl,mimeType,id,type,filename};
+    const target=imageUploadTarget(type,id,ext);
+    const body={action,imageData:dataUrl,mimeType,...target};
     return gasPostJson_(body).then(d=>{
       if(d.status==='ok'||d.success){
         const imagePath=d.imagePath||d.path||'';
+        try { assertImageUploadPath(type,id,imagePath); }
+        catch(error){
+          toast(error.message,'error');
+          renderUploadFailed(previewEl,'✗ '+error.message,prefix,type);
+          return;
+        }
         toast('Driveへのアップロード完了 — Save Changes後に画像同期ボタンを押してください','success');
         if(imagePath&&prefix){
-          const target=type==='festival-flyer'?prefix+'-flyer':prefix+'-image';
+          const target=galleryMatch ? prefix+'-gallery-'+galleryMatch[1]+'-path'
+            : type==='festival-flyer'?prefix+'-flyer':prefix+'-image';
           const el=document.getElementById(target);
           if(el)el.value=imagePath;
+          if(galleryMatch) syncGalleryValue();
         }
         if(previewEl){
           const localUrl=rememberPendingImagePreview(imagePath,blob);
@@ -4322,11 +4456,14 @@ function uploadImage(input,type,prefix){
 function renderUploadFailed(previewEl,message,prefix,type){
   if(!previewEl) return;
   // Clear the path field that uploadImage may have set partially
-  const pathFieldId=prefix+'-'+(type==='festival-flyer'?'flyer':'image');
+  const galleryMatch=String(type||'').match(/^venue-gallery-(2|3)$/);
+  const pathFieldId=galleryMatch ? prefix+'-gallery-'+galleryMatch[1]+'-path'
+    : prefix+'-'+(type==='festival-flyer'?'flyer':'image');
   const pathEl=document.getElementById(pathFieldId);
   const oldPath=(pathEl?.value||'').trim();
   if(oldPath) releasePendingImagePreview(oldPath);
   if(pathEl){pathEl.removeAttribute('readonly');pathEl.value='';pathEl.setAttribute('readonly','');}
+  if(galleryMatch) syncGalleryValue();
   previewEl.style.display='block';
   previewEl.innerHTML='<div class="preview-info" style="color:#ff6b6b">'+esc(message)+' <button type="button" class="btn btn-sm" style="margin-left:8px;padding:2px 8px;font-size:.65rem" onclick="this.closest(\'.img-preview\').style.display=\'none\';this.closest(\'.img-preview\').innerHTML=\'\'">Dismiss</button></div>';
 }
@@ -4356,8 +4493,15 @@ function uploadFromUrl(prefix,type,pathFieldId,urlFieldId,previewId){
   if(previewEl)previewEl.style.display='none';
   const done=()=>{btn.disabled=false;btn.textContent='UPLOAD';};
   const showOk=(path,extra,blob)=>{
+    try { assertImageUploadPath(type,id,path); }
+    catch(error){
+      toast(error.message,'error');
+      renderUploadFailed(previewEl,'✗ '+error.message,prefix,type);
+      return false;
+    }
     toast('Driveへのアップロード完了 — Save Changes後に画像同期ボタンを押してください','success');
     document.getElementById(pathFieldId).value=path||'';
+    if(/^venue-gallery-(2|3)$/.test(type)) syncGalleryValue();
     if(previewEl){
       const localUrl=rememberPendingImagePreview(path,blob);
       previewEl.style.display='block';
@@ -4369,8 +4513,15 @@ function uploadFromUrl(prefix,type,pathFieldId,urlFieldId,previewId){
   // 「完了」だけ出して黙っていると、サイトに出ないことに気づけない（webp 化は
   // Sync Drive Images 側で行うため即時反映されない）。
   const showFallback=(path)=>{
+    try { assertImageUploadPath(type,id,path); }
+    catch(error){
+      toast(error.message,'error');
+      renderUploadFailed(previewEl,'✗ '+error.message,prefix,type);
+      return false;
+    }
     toast('Driveへのアップロード完了 — Save Changes後に画像同期ボタンを押してください','warning');
     document.getElementById(pathFieldId).value=path||'';
+    if(/^venue-gallery-(2|3)$/.test(type)) syncGalleryValue();
     if(previewEl){
       previewEl.style.display='block';
       previewEl.innerHTML='<img src="'+esc(url)+'" alt="preview" onerror="this.style.display=\'none\'">'
@@ -4384,10 +4535,10 @@ function uploadFromUrl(prefix,type,pathFieldId,urlFieldId,previewId){
   // まずブラウザ側で圧縮を試す（1920px/webp）。CORS等で不可なら従来の原寸経路へ。
   compressUrlAndUpload(url,type,id).then(r=>{
     if(r){ done(); showOk(r.path, ' — '+(r.comp.blob.size/1024/1024).toFixed(2)+'MB WebP', r.comp.blob); return; }
-    return gasPostJson_({action:'upload_from_url',imageUrl:url,type:type,id:id})
+    return gasPostJson_(uploadFromUrlBody(url,type,id))
       .then(d=>{
         done();
-        if(d.success){ showFallback(d.path); }
+        if(d.success){ showFallback(d.path||d.imagePath||''); }
         else { toast(d.error||'アップロード失敗','error'); renderUploadFailed(previewEl,'✗ '+(d.error||'アップロード失敗'),prefix,type); }
       });
   }).catch(e=>{
@@ -4476,7 +4627,7 @@ const SHEET_FIELD_NAMES = [
   'metaDescription','publishAt','ogImage','editorNotes','authorId',
   // FESTIVALS / VENUES / ARTISTS
   'name_en','desc_en','bio_en','location_ja','name_ja','ticketUrl','venueId','instagramUrl',
-  'subtype','hours','hours_en','charge','features','name_kana','access','access_en',
+  'subtype','hours','hours_en','charge','features','name_kana','access','access_en','sound','gallery',
   // EDITIONS / LINEUPS（camelCase 消費箇所向け）
   'editionId','festivalId','artistId','actLabel','setType',
   /* EDITIONS / LINEUPS の**大文字名**。ここに無かったことが LINEUPS 増殖
@@ -4892,6 +5043,8 @@ function editRow(section, rowNum){
     setVal('v-url',row.url); setVal('v-address',row.address);
     setVal('v-lat',row.lat); setVal('v-lng',row.lng);
     setVal('v-instagram',row.instagram); setVal('v-desc',row.desc);
+    setGalleryValue(row.gallery ?? row.GALLERY ?? '');
+    setSoundGalleryAvailability('venue', hasSheetField(row,'gallery'));
     setVal('v-imagePosition',row.imagePosition || '');
     setSelectedGenres('v-genre',parseGenreValues(row.genre));
     setSelectedFeatures('v-features',String(row.features||'').split(/[;,]/));
@@ -4907,6 +5060,8 @@ function editRow(section, rowNum){
     setVal('f-country',row.country || row.COUNTRY || '');
     setVal('f-location',row.location); setVal('f-url',row.url);
     setVal('f-location_ja',row.location_ja);
+    setVal('f-sound',row.sound ?? row.SOUND ?? '');
+    setSoundGalleryAvailability('festival', hasSheetField(row,'sound'));
     setVal('f-ticketUrl',row.ticketUrl); setVal('f-instagram',row.instagram); setVal('f-address',row.address);
     setVal('f-lat',row.lat); setVal('f-lng',row.lng);
     setVal('f-image',row.image); setVal('f-flyer',row.flyer);
@@ -5305,6 +5460,7 @@ function saveEdit(section){
       type:g('v-type'),subtype:g('v-subtype'),hours:g('v-hours'),hours_en:g('v-hours_en'),name_kana:g('v-name_kana'),access:g('v-access'),access_en:g('v-access_en'),charge:g('v-charge'),features:getSelectedFeatures('v-features').join('; '),image:g('v-image'),imagePosition:g('v-imagePosition'),genre:getSelectedGenres('v-genre').join(', '),
       capacity:g('v-capacity'),address:g('v-address'),lat:g('v-lat'),lng:g('v-lng'),
       url:g('v-url'),instagram:g('v-instagram'),desc:g('v-desc')});
+    if(hasSheetField(state,'gallery')) payload.gallery=g('v-gallery');
   }
   else if(section==='festival'){
     const ds=g('f-dateStart'),de=g('f-dateEnd');
@@ -5318,6 +5474,7 @@ function saveEdit(section){
       image:g('f-image'),imagePosition:g('f-imagePosition'),flyer:g('f-flyer'),heroGradient:g('f-heroGradient'),
       desc:g('f-desc'),lineup:cleanLineup(lineups.f).join(', '),
       editions:festivalEditionsForSave()});
+    if(hasSheetField(state,'sound')) payload.sound=g('f-sound');
   }
   else if(section==='artist'){
     Object.assign(payload,{id:g('a-id'),name:g('a-name'),city:g('a-city'),country:g('a-country'),
@@ -5676,19 +5833,20 @@ async function findReplaceExecute(){
   const byRow={};
   window._frResults.forEach(r=>{
     const key=r.section+'_'+r.row._row;
-    if(!byRow[key])byRow[key]={section:r.section,row:{...r.row}};
-    const val=String(byRow[key].row[r.field]||'');
+    if(!byRow[key]){
+      byRow[key]={section:r.section,row:r.row,workingRow:{...r.row},patch:{}};
+    }
+    const val=String(byRow[key].workingRow[r.field]||'');
     const re=caseSensitive?new RegExp(escRegExp(find),'g'):new RegExp(escRegExp(find),'gi');
-    byRow[key].row[r.field]=val.replace(re, replace);
+    byRow[key].workingRow[r.field]=val.replace(re, replace);
+    byRow[key].patch[r.field]=byRow[key].workingRow[r.field];
   });
   toast('Updating '+Object.keys(byRow).length+' items...','info');
   let done=0,errors=0;
   for(const k of Object.keys(byRow)){
     const {section,row}=byRow[k];
-    const payload={action:'update_row',sheet:SHEET_MAP[section],row:row._row,...row};
-    delete payload._row;
     try {
-      const r=await fetch(GAS_URL,{method:'POST',body:JSON.stringify(payload)}).then(r=>r.json());
+      const r=await bulkSaveRow(section,row,byRow[k].patch);
       if(r.status==='ok'||r.success)done++; else errors++;
     } catch(e){errors++}
   }
@@ -5953,7 +6111,7 @@ async function biImgRun(){
       }
       if(path){
         const row = {...byId.get(p.id)}; row[field] = path;
-        await bulkSaveRow(section, row); done++;
+        await bulkSaveRow(section, row, {[field]:path}); done++;
       } else fail++;
     } catch(e){ fail++; }
     await new Promise(r=>setTimeout(r,800));
@@ -5965,11 +6123,55 @@ async function biImgRun(){
   invalidateSheetCache(section);
 }
 
-async function bulkSaveRow(section, row){
-  const payload = { action:'update_row', sheet:SHEET_MAP[section], row:row._row, ...row };
+function bulkPatchPayload(payload, patch){
+  Object.entries(patch).forEach(([key,value])=>{
+    const lowerKey=String(key).toLowerCase();
+    const matchingKeys=Object.keys(payload).filter(existingKey=>
+      String(existingKey).toLowerCase()===lowerKey);
+    if(matchingKeys.length){
+      matchingKeys.forEach(existingKey=>{ payload[existingKey]=value; });
+    } else {
+      payload[key]=value;
+    }
+  });
+}
+
+function bulkRowIdentityField(row, latest){
+  const hasField=(value, field)=>value && Object.prototype.hasOwnProperty.call(value,field);
+  if(hasField(row,'id') && hasField(latest,'id')) return 'id';
+  if(hasField(row,'name') && hasField(latest,'name')) return 'name';
+  if(hasField(row,'title') && hasField(latest,'title')) return 'title';
+  return '';
+}
+
+async function bulkSaveRow(section, row, changes){
+  /* get_all_sheets は新しい列を落とすため、保存直前に get_sheet で行全体を読む。
+     row は検索・AI・画像処理のための古いスナップショットであり、そのまま送らない。 */
+  const sheet=SHEET_MAP[section];
+  const latestResponse=await fetch(GAS_URL+'?action=get_sheet&sheet='+sheet).then(r=>r.json());
+  if(latestResponse.status!=='ok' || !Array.isArray(latestResponse.rows)) throw new Error('最新の行を取得できません');
+  const latestRows=canonicalizeRows(latestResponse.rows);
+  const latest=latestRows.find(candidate=>String(candidate._row)===String(row._row));
+  if(!latest) throw new Error('保存対象の行が見つかりません: '+row._row);
+  const identityField=bulkRowIdentityField(row,latest);
+  if(!identityField || String(row[identityField]??'').trim() !== String(latest[identityField]??'').trim()){
+    throw new Error('行の位置が変わっています。ページを再読み込みしてからやり直してください');
+  }
+  const patch=changes && typeof changes==='object' ? {...changes} : {};
+  if(!Object.keys(patch).length){
+    Object.keys(row).forEach(key=>{
+      const latestKey=Object.keys(latest).find(latestKey=>
+        String(latestKey).toLowerCase()===String(key).toLowerCase());
+      if(key.startsWith('_') || !latestKey) return;
+      if(JSON.stringify(row[key]) !== JSON.stringify(latest[latestKey])) patch[key]=row[key];
+    });
+  }
+  const payload = { action:'update_row', sheet, row:latest._row, ...latest };
   delete payload._row;
+  bulkPatchPayload(payload,patch);
   const r = await fetch(GAS_URL,{method:'POST',body:JSON.stringify(payload)}).then(r=>r.json());
   if(!(r.status==='ok'||r.success)) throw new Error(r.message||'save failed');
+  return r;
 }
 const bulkProg = msg => { const el=document.getElementById('bulk-progress'); if(el) el.textContent = msg; };
 
@@ -5992,7 +6194,7 @@ async function bulkAiRun(section, field){
         url: row.url || row.website || '', instagram: row.instagram || '' };
       const d = await fetch(GAS_URL,{method:'POST',body:JSON.stringify(body)}).then(r=>r.json());
       const val = d && (d.bio || d.desc);
-      if(d && d.success && val){ row[field]=val; await bulkSaveRow(section,row); done++; }
+      if(d && d.success && val){ row[field]=val; await bulkSaveRow(section,row,{[field]:val}); done++; }
       else fail++;
     } catch(e){ fail++; }
     await new Promise(r=>setTimeout(r,1200)); // レート制限対策
@@ -6017,7 +6219,7 @@ async function bulkGeoRun(section){
       const d = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+encodeURIComponent(row.address)).then(r=>r.json());
       if(Array.isArray(d) && d[0] && d[0].lat && d[0].lon){
         row.lat = parseFloat(d[0].lat).toFixed(4); row.lng = parseFloat(d[0].lon).toFixed(4);
-        await bulkSaveRow(section,row); done++;
+        await bulkSaveRow(section,row,{lat:row.lat,lng:row.lng}); done++;
       } else fail++;
     } catch(e){ fail++; }
     await new Promise(r=>setTimeout(r,1100)); // Nominatim: 1リクエスト/秒 ポリシー順守
@@ -7218,7 +7420,7 @@ function buildFullDataJs(d){
 
 /* ハブは詳細ページで使う本文・開催履歴を読まない。
    まず既存の buildFullDataJs で data.js と同じ正規化を行い、そこから
-   ハブで不要な5項目だけを落とす。buildFullDataJs 自体は変更しない。 */
+   ハブで不要な7項目だけを落とす。buildFullDataJs 自体は変更しない。 */
 function buildHubDataJs(d){
   /* ⚠ new Function / eval は使わないこと。CMS の CSP は
      script-src 'self' 'unsafe-inline' で unsafe-eval を許していないため、
@@ -7231,7 +7433,8 @@ function buildHubDataJs(d){
     return copy;
   });
   const lite = Object.assign({}, d, {
-    FESTIVALS: omit(d.FESTIVALS, ['desc', 'desc_en', 'editions']),
+    FESTIVALS: omit(d.FESTIVALS, ['desc', 'desc_en', 'editions', 'sound']),
+    VENUES: omit(d.VENUES, ['gallery']),
     ARTICLES: omit(d.ARTICLES, ['body', 'body_en']),
   });
   const hubHeader = `/* ==========================================================
@@ -7791,6 +7994,7 @@ function buildFestivalsJs(rows){
     if(r.location) l.push('    location: "'+q(r.location)+'",');
     if(r.location_ja) l.push('    location_ja: "'+q(r.location_ja)+'",');
     if(r.name_ja) l.push('    name_ja: "'+q(r.name_ja)+'",');
+    if(r.sound) l.push('    sound: "'+q(r.sound)+'",');
     if(r.city) l.push('    city: "'+q(r.city)+'",');
     const c = r.country || r.COUNTRY;
     if(c) l.push('    country: "'+q(c)+'",');
@@ -7853,6 +8057,8 @@ function buildVenuesJs(rows){
     if(r.charge) l.push('    charge: "'+q(r.charge)+'",');
     if(r.image) l.push('    image: "'+q(webp(r.image))+'",');
     if(r.imagePosition) l.push('    imagePosition: "'+q(r.imagePosition)+'",');
+    const gallery = parseGalleryValue(r.gallery ?? r.GALLERY).map(webp).slice(0,2);
+    if(gallery.length) l.push('    gallery: ['+gallery.map(path=>`"${q(path)}"`).join(', ')+'],');
     if(r.genre){
       const arr=String(r.genre).split(/[,·]/).map(s=>'"'+q(s.trim())+'"').filter(s=>s!=='""');
       if(arr.length) l.push('    genre: ['+arr.join(', ')+'],');
@@ -7939,7 +8145,7 @@ function downloadFile(filename,content){
    GENERATE CODE — VENUE
    ============================================================== */
 function submitVenue(){
-  const d={id:g('v-id'),name:g('v-name'),city:g('v-city'),area:g('v-area'),type:g('v-type'),subtype:g('v-subtype'),name_kana:g('v-name_kana'),access:g('v-access'),access_en:g('v-access_en'),hours:g('v-hours'),hours_en:g('v-hours_en'),charge:g('v-charge'),features:getSelectedFeatures('v-features'),image:g('v-image'),imagePosition:g('v-imagePosition'),genre:getSelectedGenres('v-genre'),capacity:g('v-capacity'),address:g('v-address'),lat:g('v-lat'),lng:g('v-lng'),url:g('v-url'),instagram:g('v-instagram'),desc:g('v-desc')};
+  const d={id:g('v-id'),name:g('v-name'),city:g('v-city'),area:g('v-area'),type:g('v-type'),subtype:g('v-subtype'),name_kana:g('v-name_kana'),access:g('v-access'),access_en:g('v-access_en'),hours:g('v-hours'),hours_en:g('v-hours_en'),charge:g('v-charge'),features:getSelectedFeatures('v-features'),image:g('v-image'),imagePosition:g('v-imagePosition'),gallery:getGalleryPaths(),genre:getSelectedGenres('v-genre'),capacity:g('v-capacity'),address:g('v-address'),lat:g('v-lat'),lng:g('v-lng'),url:g('v-url'),instagram:g('v-instagram'),desc:g('v-desc')};
   if(!d.id||!d.name)return toast('ID and Name required','error');
   const genreStr=d.genre.map(g=>`"${g}"`).join(', ');
   const lines=[`  {`,`    id: "${d.id}",`,`    name: "${d.name}",`,`    city: "${d.city}",`,`    area: "${d.area}",`,`    type: "${d.type}",`,`    image: "${d.image}",`];
@@ -7953,6 +8159,7 @@ function submitVenue(){
   if(d.hours_en)lines.push(`    hours_en: "${d.hours_en}",`);
   if(d.charge)lines.push(`    charge: "${d.charge}",`);
   if(d.features.length)lines.push(`    features: ${JSON.stringify(d.features)},`);
+  if(d.gallery.length)lines.push(`    gallery: ${JSON.stringify(d.gallery.map(webp))},`);
   if(d.address)lines.push(`    address: "${d.address}",`);
   if(d.lat)lines.push(`    lat: ${d.lat},`);if(d.lng)lines.push(`    lng: ${d.lng},`);
   if(d.url)lines.push(`    url: "${d.url}",`);if(d.instagram)lines.push(`    instagram: "${d.instagram}",`);
@@ -7964,7 +8171,7 @@ function submitVenue(){
    GENERATE CODE — FESTIVAL
    ============================================================== */
 function submitFestival(){
-  const d={id:g('f-id'),type:g('f-type'),name:g('f-name'),name_ja:g('f-name_ja'),city:g('f-city'),location:g('f-location'),location_ja:g('f-location_ja'),url:g('f-url'),ticketUrl:g('f-ticketUrl'),instagram:g('f-instagram'),lat:g('f-lat'),lng:g('f-lng'),dateStart:g('f-dateStart'),dateEnd:g('f-dateEnd'),genre:getSelectedGenres('f-genre'),image:g('f-image'),imagePosition:g('f-imagePosition'),flyer:g('f-flyer'),heroGradient:g('f-heroGradient'),desc:g('f-desc'),lineup:cleanLineup(lineups.f),editions:editions.map(e=>({...e}))};
+  const d={id:g('f-id'),type:g('f-type'),name:g('f-name'),name_ja:g('f-name_ja'),city:g('f-city'),location:g('f-location'),location_ja:g('f-location_ja'),sound:g('f-sound'),url:g('f-url'),ticketUrl:g('f-ticketUrl'),instagram:g('f-instagram'),lat:g('f-lat'),lng:g('f-lng'),dateStart:g('f-dateStart'),dateEnd:g('f-dateEnd'),genre:getSelectedGenres('f-genre'),image:g('f-image'),imagePosition:g('f-imagePosition'),flyer:g('f-flyer'),heroGradient:g('f-heroGradient'),desc:g('f-desc'),lineup:cleanLineup(lineups.f),editions:editions.map(e=>({...e}))};
   if(!d.id||!d.name)return toast('ID and Name required','error');
   const genreStr=d.genre.map(g=>`"${g}"`).join(', ');
   const lineupStr=d.lineup.map(a=>`"${a}"`).join(', ');
@@ -7976,6 +8183,7 @@ function submitFestival(){
   lines.push(`    image: "${d.image}",`,`    flyer: "${d.flyer}",`);
   if(d.imagePosition)lines.push(`    imagePosition: "${d.imagePosition}",`);
   if(d.heroGradient)lines.push(`    heroGradient: "${d.heroGradient}",`);
+  if(d.sound)lines.push(`    sound: "${d.sound}",`);
   lines.push(`    genre: [${genreStr}],`,`    desc: "${escDesc(d.desc)}",`);
   if(d.url)lines.push(`    url: "${d.url}",`);
   if(d.instagram)lines.push(`    instagram: "${d.instagram}",`);
@@ -8070,8 +8278,8 @@ function copyOutput(section){navigator.clipboard.writeText(document.getElementBy
    ============================================================== */
 function resetForm(section){
   const fields={
-    venue:['v-id','v-name','v-city','v-area','v-subtype','v-name_kana','v-access','v-access_en','v-hours','v-hours_en','v-charge','v-image','v-imagePosition','v-capacity','v-address','v-lat','v-lng','v-url','v-instagram','v-desc','v-imageUrl'],
-    festival:['f-id','f-name','f-name_ja','f-city','f-location','f-location_ja','f-url','f-ticketUrl','f-instagram','f-address','f-lat','f-lng','f-dateStart','f-dateEnd','f-image','f-imagePosition','f-flyer','f-heroGradient','f-desc','f-imageUrl','f-flyerUrl'],
+    venue:['v-id','v-name','v-city','v-area','v-subtype','v-name_kana','v-access','v-access_en','v-hours','v-hours_en','v-charge','v-image','v-imagePosition','v-gallery','v-gallery-2-path','v-gallery-3-path','v-capacity','v-address','v-lat','v-lng','v-url','v-instagram','v-desc','v-imageUrl','v-gallery-2-url','v-gallery-3-url'],
+    festival:['f-id','f-name','f-name_ja','f-city','f-sound','f-location','f-location_ja','f-url','f-ticketUrl','f-instagram','f-address','f-lat','f-lng','f-dateStart','f-dateEnd','f-image','f-imagePosition','f-flyer','f-heroGradient','f-desc','f-imageUrl','f-flyerUrl'],
     artist:['a-id','a-name','a-city','a-country','a-genre','a-image','a-imagePosition','a-bio','a-instagram','a-soundcloud','a-bandcamp','a-website','a-imageUrl'],
     event:['e-name','e-date','e-venue','e-city','e-time','e-desc','e-link'],
     article:['ar-id','ar-title','ar-category','ar-date','ar-updatedAt','ar-author','ar-image','ar-imageUrl','ar-readTime','ar-views','ar-excerpt','ar-body','ar-tags','ar-cardRatio','ar-heroRatio','ar-festivalId','ar-title_en','ar-excerpt_en','ar-body_en'],
@@ -8080,9 +8288,9 @@ function resetForm(section){
   fields.forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   // プレビューをクリア
   document.querySelectorAll('.img-preview').forEach(p=>{p.style.display='none';p.innerHTML='';});
-  if(section==='venue'){document.getElementById('v-type').value='club';document.querySelectorAll('#v-genre .chip').forEach(c=>c.classList.remove('selected'));setSelectedFeatures('v-features',[]);updateVenueSubtypeVisibility()}
+  if(section==='venue'){document.getElementById('v-type').value='club';document.querySelectorAll('#v-genre .chip').forEach(c=>c.classList.remove('selected'));setSelectedFeatures('v-features',[]);setGalleryValue([]);setSoundGalleryAvailability('venue',false);updateVenueSubtypeVisibility()}
   if(section==='festival'){document.getElementById('f-type').value='festival';document.querySelectorAll('#f-genre .chip').forEach(c=>c.classList.remove('selected'));document.querySelectorAll('#f-gradientPresets .gradient-swatch').forEach(s=>s.classList.remove('selected'));lineups.f=[];renderLineupTags('f');editions.length=0;renderEditions();document.getElementById('lineup-fetch-status').style.display='none';document.getElementById('gradient-preview').style.display='none';document.getElementById('bulk-lineup-wrap').style.display='none'}
-  if(section==='festival') setFestivalDateEditingMode(false);
+  if(section==='festival') { setFestivalDateEditingMode(false); setSoundGalleryAvailability('festival',false); }
   if(section==='event'){lineups.e=[];renderLineupTags('e')}
   if(section==='article'){document.getElementById('ar-category').value='REPORT';document.getElementById('ar-featured').value='false';document.getElementById('ar-status').value='published';document.getElementById('ar-author').value='TECHNO JAPAN 編集部';setArticleBody('')}
   // Publishing fields をクリア（author以外）

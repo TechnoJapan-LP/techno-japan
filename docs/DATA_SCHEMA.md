@@ -94,6 +94,7 @@
 | URL / INSTAGRAM | | fetchスクリプトで相互混入チェック(§6) |
 | DESC_JA / DESC_EN | | 現DESCは英語 → DESC_ENへ移動 |
 | imagePosition | `center top` | 表示用 |
+| GALLERY | `images/venues/womb-2.webp, images/venues/womb-3.webp` | 追加写真の画像パスをカンマ区切りで最大2つ。見出しの最後に列を足す。新規作成時は入力できず、既存行の編集でのみ保存する |
 | (共通メタ §1.6) | | |
 
 ### 2.2 ARTISTS
@@ -213,6 +214,9 @@ ID 規約違反7件の是正(§1.1)ではリダイレクトを設けたが、そ
 | AC | imagePosition |
 | AD | location_ja |
 | AE | COUNTRY |
+| AF | SOUND |
+
+`SOUND`（音響、例 `Funktion-One`）を追加する場合は、FESTIVALS シートの見出しの最後に列を足す。CMS の新規作成では入力できず、列追加後に既存行を編集して保存する。
 
 - `LOCATION` は既存データとの互換性を保つ英語・ローマ字表記、`location_ja` は日本語の公式会場名を保持する。日本語表示は `location_ja` を優先し、空欄なら `LOCATION` にフォールバックする。英語表示は `LOCATION` を使用する。
 - `COUNTRY` は ISO 3166-1 alpha-2 の2文字大文字（例: `JP`）。空欄は不明として扱い、Airtable同期では既存の国を上書きしない。

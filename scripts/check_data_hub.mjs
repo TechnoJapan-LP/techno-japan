@@ -17,7 +17,8 @@ const REQUIRED = {
     'date', 'category', 'readTime', 'tags', 'views', 'status', 'featured', 'festivalId'],
 };
 const EXCLUDED = {
-  FESTIVALS: ['desc', 'desc_en', 'editions'],
+  FESTIVALS: ['desc', 'desc_en', 'editions', 'sound'],
+  VENUES: ['gallery'],
   ARTICLES: ['body', 'body_en'],
 };
 const DATASETS = ['FESTIVALS', 'ARTISTS', 'VENUES', 'ARTICLES', 'EVENTS'];
@@ -48,7 +49,8 @@ const expectedHub = {};
 for (const name of DATASETS) {
   expectedHub[name] = (data[name] || []).map((row) => Object.fromEntries(Object.entries(row).filter(([key]) => {
     if (name === 'ARTICLES') return key !== 'body' && key !== 'body_en';
-    if (name === 'FESTIVALS') return key !== 'desc' && key !== 'desc_en' && key !== 'editions';
+    if (name === 'FESTIVALS') return key !== 'desc' && key !== 'desc_en' && key !== 'editions' && key !== 'sound';
+    if (name === 'VENUES') return key !== 'gallery';
     return true;
   })));
 }
@@ -92,7 +94,7 @@ for (const [name, fields] of Object.entries(EXCLUDED)) {
   }));
 }
 if (excludedFound.length) fail(`除外項目が data-hub.js に残っています:\n${excludedFound.join('\n')}`);
-console.log('✅ 除外5項目: data-hub.js に含まれていません');
+console.log('✅ 詳細専用7項目: data-hub.js に含まれていません');
 
 const dataSize = fs.statSync(dataPath).size;
 const hubSize = fs.statSync(hubPath).size;

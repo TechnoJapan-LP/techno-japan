@@ -98,7 +98,7 @@
     var month = now.getMonth() === 11
       ? String(now.getFullYear() + 1) + '-01'
       : String(now.getFullYear()) + '-' + String(now.getMonth() + 2).padStart(2, '0');
-    root.innerHTML = '<div class="mag-newsletter"><div><p class="mag-newsletter-meta">Newsletter · <span>' + month.replace('-', '.') + '</span></p>'
+    root.innerHTML = '<div class="mag-newsletter"><div class="mag-newsletter-copy"><p class="mag-newsletter-meta">Newsletter · <span>' + month.replace('-', '.') + '</span></p>'
       + '<h2><span lang="ja">日本の野外フェスの<br>情報を受け取る</span><span lang="en">Get updates from<br>Japan\'s outdoor festivals</span></h2>'
       + '<p><span lang="ja">来月の開催予定と新着記事をまとめてメールで届けます。無料、いつでも解除できます。</span><span lang="en">A monthly digest of upcoming festivals and new stories from Japan.</span></p></div>'
       + '<form class="newsletter-form" action="https://buttondown.com/api/emails/embed-subscribe/technojapan" method="POST">'
@@ -151,6 +151,9 @@
     var shift = Number(options.shift || 0);
     var scale = Number(options.scale || 1);
     var dimScale = Number(options.dimScale == null ? 0.55 : options.dimScale);
+    var startDwell = Math.max(0, Math.min(0.45, Number(options.startDwell == null ? 0.1 : options.startDwell)));
+    var endDwell = Math.max(0, Math.min(0.45, Number(options.endDwell == null ? 0.15 : options.endDwell)));
+    if (startDwell + endDwell >= 0.95) endDwell = 0.95 - startDwell;
     var stickyTop = options.stickyTop || function () { return 0; };
     var paint = function () {
       current += (target - current) * 0.055;
@@ -172,7 +175,11 @@
       var span = Math.max(1, rect.height - sticky.offsetHeight - top);
       var startAt = options.startAt == null ? top : Number(options.startAt);
       var progress = Math.max(0, Math.min(1, (startAt - rect.top) / span));
-      var position = progress * (count - 1);
+      var motion = Math.max(0.01, 1 - startDwell - endDwell);
+      var motionProgress = progress <= startDwell ? 0
+        : progress >= 1 - endDwell ? 1
+        : (progress - startDwell) / motion;
+      var position = Math.max(0, Math.min(1, motionProgress)) * (count - 1);
       var base = Math.min(count - 2, Math.floor(position));
       var fraction = position - base;
       var eased = fraction < dwell ? 0 : fraction > 1 - dwell ? 1 : (function (x) { return x * x * (3 - 2 * x); })((fraction - dwell) / (1 - 2 * dwell));
