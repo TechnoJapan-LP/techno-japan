@@ -73,6 +73,7 @@ VENUE_NO_LEAFLET_PATH = "/__venues-no-leaflet.html"
 EN_VENUE_NO_LEAFLET_PATH = "/__en-venues-no-leaflet.html"
 VENUE_TILE_TEST_PATH = "/__venue-tile-test.html"
 CURSOR_TEST_PATH = "/__cursor-test.html"
+HUB_CONTENT_TEST_PATH = "/__hub-content-test.html"
 VENUE_MAP_TEST_HTML = """<!doctype html><html><body data-map-result="pending" data-fallback-result="pending" data-tile-fallback-result="pending" data-en-fallback-result="pending" data-mobile-lazy-result="pending">
 <iframe id="map-live" src="/venues.html"></iframe>
 <iframe id="map-fallback" src="/__venues-no-leaflet.html"></iframe>
@@ -201,6 +202,77 @@ const runCursorTest = (frame, resultName) => {
 runCursorTest(document.getElementById('cursor-detail'), 'detailResult');
 runCursorTest(document.getElementById('cursor-hub'), 'hubResult');
 </script></body></html>"""
+
+
+HUB_CONTENT_TEST_HTML = """<!doctype html>
+<html>
+<body data-hub-content-result="pending" data-hub-content-detail="">
+<script>
+const pages = [
+  ['/about.html', 'about'],
+  ['/en/about.html', 'en/about'],
+  ['/submit.html', 'submit'],
+  ['/en/submit.html', 'en/submit'],
+  ['/writers.html', 'writers'],
+  ['/en/writers.html', 'en/writers'],
+];
+
+const checkPage = (path, label) => new Promise(resolve => {
+  const frame = document.createElement('iframe');
+  frame.style.cssText = 'width:1280px;height:1200px;border:0;position:absolute;left:-10000px;top:0';
+  frame.addEventListener('load', () => {
+    // body のフェードイン開始直後でも、レイアウト上の表示状態は判定できる。
+    setTimeout(() => {
+      const doc = frame.contentDocument;
+      const main = doc?.getElementById('main-content');
+      const sections = main
+        ? [...main.children].filter(element => element.tagName === 'SECTION')
+        : [];
+      const hiddenSections = sections.filter(section => {
+        const style = frame.contentWindow.getComputedStyle(section);
+        return style.display === 'none'
+          || style.visibility === 'hidden'
+          || section.getBoundingClientRect().height <= 0;
+      });
+      const heading = main?.querySelector('h1');
+      const headingStyle = heading ? frame.contentWindow.getComputedStyle(heading) : null;
+      const headingVisible = !!heading
+        && headingStyle.display !== 'none'
+        && headingStyle.visibility !== 'hidden'
+        && heading.getBoundingClientRect().width > 0
+        && heading.getBoundingClientRect().height > 0;
+      const ok = !!main
+        && sections.length > 0
+        && hiddenSections.length === 0
+        && headingVisible;
+      resolve({
+        label,
+        sections: sections.length,
+        hidden: hiddenSections.length,
+        h1: headingVisible,
+        ok,
+      });
+      frame.remove();
+    }, 80);
+  }, {once: true});
+  frame.src = path;
+  document.body.appendChild(frame);
+});
+
+(async () => {
+  const results = [];
+  for (const [path, label] of pages) {
+    results.push(await checkPage(path, label));
+  }
+  const failed = results.filter(result => !result.ok);
+  document.body.dataset.hubContentResult = failed.length ? 'fail' : 'pass';
+  document.body.dataset.hubContentDetail = failed.length
+    ? failed.map(result => `${result.label}:sections=${result.sections},hidden=${result.hidden},h1=${result.h1}`).join('|')
+    : results.map(result => `${result.label}:sections=${result.sections}`).join('|');
+})();
+</script>
+</body>
+</html>"""
 
 
 def find_chrome():
@@ -386,6 +458,7 @@ class Server(threading.Thread):
                     VENUE_MAP_TEST_PATH: VENUE_MAP_TEST_HTML,
                     VENUE_TILE_TEST_PATH: VENUE_TILE_TEST_HTML,
                     CURSOR_TEST_PATH: CURSOR_TEST_HTML,
+                    HUB_CONTENT_TEST_PATH: HUB_CONTENT_TEST_HTML,
                     XSS_TEST_PATH: XSS_TEST_HTML,
                     IMAGE_TEST_PATH: IMAGE_TEST_HTML,
                 }
@@ -714,6 +787,30 @@ def main():
                     f"{name}: JA詳細ページへのリンクが {len(leaked)} 件"
                     "（EN の /en/ 詳細URLにすること）"
                 )
+
+        # ABOUT/APPLY/WRITER は TOP 専用 CSS の影響で本文全体が消えると、
+        # 静的 HTML の存在だけでは検出できない。実ブラウザの計算済み表示状態を
+        # JA/EN の全6ページで確認する。TOP は意図的に対象外。
+        content_dom, _ = render(
+            chrome,
+            f"{base}{HUB_CONTENT_TEST_PATH}",
+            max(args.budget, 30000),
+        )
+        content_result = re.search(
+            r'<body[^>]*data-hub-content-result="([^"]+)"',
+            content_dom,
+        )
+        content_value = content_result.group(1) if content_result else "missing"
+        content_detail = re.search(
+            r'<body[^>]*data-hub-content-detail="([^"]*)"',
+            content_dom,
+        )
+        print(f"ABOUT/APPLY/WRITER 本文表示: {content_value}")
+        if content_value != "pass":
+            failures.append(
+                "ABOUT/APPLY/WRITER の本文表示検査に失敗 — "
+                + (content_detail.group(1) if content_detail else content_value)
+            )
 
         if server:
             map_budget = max(args.budget, 30000)

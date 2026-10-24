@@ -75,6 +75,40 @@
 .pagehead { font-size: 168px; }
 .btn2 { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 28px; border: 1px solid var(--text-a40); color: var(--text); background: none; font: 11px var(--font-mono); letter-spacing: .2em; text-transform: uppercase; cursor: pointer; }
 .btn2:hover { border-color: var(--accent-soft); color: var(--text); }
+
+/* Shared marquee component for TOP and magazine pages.
+   Keep page-specific visibility rules out of common.css: a shared component
+   must not hide unrelated page content. */
+.top2-marquee {
+  position: sticky;
+  top: 64px;
+  z-index: 49;
+  overflow: hidden;
+  white-space: nowrap;
+  background: var(--bg);
+  border-top: 1px solid var(--text-a14);
+  border-bottom: 1px solid var(--text-a14);
+}
+.top2-marquee-track {
+  display: inline-flex;
+  align-items: center;
+  animation: top2mq 40s linear infinite;
+  padding: 10px 0;
+  font: 18px var(--font-display);
+  text-transform: uppercase;
+}
+.top2-marquee span { padding: 0 28px; }
+.top2-marquee b {
+  color: var(--accent);
+  font-weight: 400;
+}
+@keyframes top2mq {
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .top2-marquee-track { animation: none; }
+}
+
 @media (max-width: 900px) {
   .wrap { padding-left: 16px; padding-right: 16px; }
   .pagehead { font-size: 88px; }

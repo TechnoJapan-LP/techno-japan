@@ -59,686 +59,339 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/common.css?v=50">
+<link rel="stylesheet" href="/common.css?v=51">
 <style>
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-h1, h2 { word-break: keep-all; word-break: auto-phrase; }
-
-/* ===================== HERO ===================== */
-.hero {
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+body {
+  overflow-x: hidden;
+}
+.about-page {
   position: relative;
-  height: 100vh;
-  width: 100%;
+  overflow: clip;
+}
+.about-page main {
+  position: relative;
+  z-index: 1;
+}
+.about-hero {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  padding: 0 40px 60px;
-  overflow: hidden;
+  gap: 28px;
+  width: 100%;
+  padding-top: 56px;
 }
-
-/* Animated grid background */
-.hero-grid {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  z-index: 0;
+.about-hero h1 {
+  white-space: nowrap;
 }
-.hero-grid::before, .hero-grid::after {
-  content: '';
-  position: absolute;
-  inset: 0;
+.about-hero-foot {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 48px;
+  align-items: end;
 }
-.hero-grid::before {
-  background-image:
-    repeating-linear-gradient(90deg, var(--text-a03) 0, var(--text-a03) 1px, transparent 1px, transparent),
-    repeating-linear-gradient(0deg, var(--text-a03) 0, var(--text-a03) 1px, transparent 1px, transparent);
-  background-size: 80px 80px;
-  animation: gridDrift 20s linear infinite;
+.about-hero-tagline {
+  margin: 0;
+  color: var(--text-a90);
+  font-size: 20px;
+  line-height: 1.85;
+  max-width: 720px;
 }
-@keyframes gridDrift {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(80px, 80px); }
+.about-hero-counts {
+  justify-self: end;
+  text-align: right;
 }
-
-/* Scan line */
-.scan-line {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: var(--text-a06);
-  z-index: 1;
-  animation: scanDown 6s linear infinite;
+.about-section {
+  width: 100%;
+  padding-top: 96px;
 }
-@keyframes scanDown {
-  0% { top: -2%; }
-  100% { top: 102%; }
-}
-
-.hero-bottom {
-  position: relative;
-  z-index: 2;
+.about-section-head {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  width: 100%;
+  gap: 24px;
+  margin-bottom: 8px;
 }
-
-.hero-eyebrow {
-  position: absolute;
-  top: -60px;
-  left: 0;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  opacity: 0;
-  animation: fadeSlideUp 0.6s ease forwards;
-  animation-delay: 0.4s;
-  color: var(--text-a50);
+.about-section-head .mono {
+  color: var(--text-a62);
 }
-
-.hero-title {
-  font-family: var(--font-display);
-  font-size: clamp(96px, 18vw, 260px);
-  line-height: 0.85;
-  text-transform: uppercase;
+.about-rule {
+  border-top: 1px solid var(--text-a14);
+  padding-top: 18px;
 }
-.hero-title .line {
-  display: block;
-  overflow: hidden;
+.about-g2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 48px;
 }
-.hero-title .line span {
-  display: block;
-  transform: translateY(100%);
-  animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-.hero-title .line:nth-child(1) span { animation-delay: 0.5s; }
-.hero-title .line:nth-child(2) span { animation-delay: 0.65s; }
-
-.hero-label {
-  text-align: right;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  line-height: 2;
-  opacity: 0;
-  animation: fadeIn 0.6s ease forwards;
-  animation-delay: 0.9s;
-  color: var(--text-a50);
-  padding-bottom: 12px;
-}
-
-.scroll-indicator {
-  position: absolute;
-  bottom: 60px;
-  left: 50%;
-  transform: translateX(-50%);
+.about-intro {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  opacity: 0;
-  animation: fadeIn 0.6s ease forwards;
-  animation-delay: 1.2s;
-  z-index: 2;
-}
-.scroll-indicator .line {
-  width: 1px;
-  height: 40px;
-  background: var(--text-a30);
-  animation: pulse 2s ease-in-out infinite;
-}
-.scroll-indicator span {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  opacity: 0.4;
-}
-@keyframes pulse {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 0.8; }
-}
-
-/* ===================== MARQUEE ===================== */
-.marquee {
-  border-top: 1px solid var(--text-a08);
-  border-bottom: 1px solid var(--text-a08);
-  overflow: hidden;
-  white-space: nowrap;
-  padding: 16px 0;
-}
-.marquee:hover .marquee-inner { animation-play-state: paused; }
-.marquee-inner {
-  display: inline-block;
-  animation: marqueeScroll 40s linear infinite;
-  font-family: var(--font-display);
-  font-size: 13px;
-  letter-spacing: 0.25em;
-  opacity: 0.62;
-  text-transform: uppercase;
-}
-@keyframes marqueeScroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-/* ===================== SECTIONS COMMON ===================== */
-section { padding: 120px 40px; scroll-margin-top: 64px; }
-
-.section-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 60px;
-  opacity: 0.5;
-}
-.section-label::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: var(--text-a12);
-}
-
-/* Scroll animation base */
-.reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ===================== ABOUT ===================== */
-#about {
-  position: relative;
-  overflow: hidden;
-}
-.about-bg {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-}
-.about-bg::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    repeating-linear-gradient(90deg, var(--text-a03) 0, var(--text-a03) 1px, transparent 1px, transparent),
-    repeating-linear-gradient(0deg, var(--text-a03) 0, var(--text-a03) 1px, transparent 1px, transparent);
-  background-size: 80px 80px;
-  animation: gridDrift 20s linear infinite;
-}
-.about-scan {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: var(--text-a06);
-  z-index: 1;
-  animation: scanDown 6s linear infinite;
-}
-#about > .section-label,
-#about > .about-grid {
-  position: relative;
-  z-index: 2;
-}
-
-/* ===================== SHARED ANIMATED SECTION BG ===================== */
-#media, #instagram, #contact {
-  position: relative;
-  overflow: hidden;
-}
-.section-bg {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-.section-bg::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    repeating-linear-gradient(90deg, var(--text-a03) 0, var(--text-a03) 1px, transparent 1px, transparent),
-    repeating-linear-gradient(0deg, var(--text-a03) 0, var(--text-a03) 1px, transparent 1px, transparent);
-  background-size: 80px 80px;
-  animation: gridDrift 20s linear infinite;
-}
-.section-bg::after {
-  content: '';
-  position: absolute;
-  width: 60vw; height: 60vw;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--accent-a06) 0%, transparent 60%);
-  filter: blur(40px);
-  animation: glowFloat 18s ease-in-out infinite;
-  pointer-events: none;
-}
-.section-scan {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 1px;
-  background: var(--text-a06);
-  z-index: 1;
-  animation: scanDown 8s linear infinite;
-  pointer-events: none;
-}
-@keyframes glowFloat {
-  0%, 100% { top: -20%; left: -10%; }
-  50% { top: 60%; left: 50%; }
-}
-#media > *:not(.section-bg):not(.section-scan),
-#instagram > *:not(.section-bg):not(.section-scan),
-#contact > *:not(.section-bg):not(.section-scan) {
-  position: relative;
-  z-index: 2;
-}
-.about-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
-  margin-bottom: 80px;
-}
-.about-headline {
-  font-family: var(--font-display);
-  font-size: clamp(48px, 6vw, 96px);
-  line-height: 1;
-  text-transform: uppercase;
-}
-.about-body p {
-  font-family: var(--font-body);
-  font-weight: 200;
-  font-size: 15px;
-  line-height: 1.9;
-  opacity: 0.7;
-  margin-bottom: 24px;
-}
-
-/* STATEMENT: キーワードごとの開閉式（2026-08-26 ユーザー要望）。
-   details/summary のネイティブ開閉を使う。JS 不要で CSP・アクセシビリティとも安全。 */
-.statement-keywords { border-top: 1px solid var(--text-a08); }
-.statement-item { border-bottom: 1px solid var(--text-a08); }
-.statement-summary {
-  padding: 28px 48px 28px 0;
-  cursor: pointer;
-  position: relative;
-  list-style: none;
-  display: block;
-}
-.statement-summary::-webkit-details-marker { display: none; }
-.statement-summary::after {
-  content: '+';
-  position: absolute; right: 8px; top: 50%;
-  transform: translateY(-50%);
-  font-family: var(--font-mono); font-size: 22px; font-weight: 200;
-  opacity: 0.4;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-}
-.statement-summary:hover::after { opacity: 0.8; }
-details[open] > .statement-summary::after { transform: translateY(-50%) rotate(45deg); }
-.statement-word {
-  font-family: var(--font-display);
-  font-size: clamp(40px, 6vw, 96px);
-  line-height: 1;
-  text-transform: uppercase;
-}
-.statement-word::before {
-  content: '';
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  background: var(--accent);
-  margin-right: 20px;
-  vertical-align: middle;
-}
-.statement-line {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.15em;
-  opacity: 0.5;
-  margin-top: 10px;
-}
-.statement-panel { max-width: 720px; padding: 4px 0 40px; }
-.statement-panel p {
-  font-family: var(--font-body);
-  font-weight: 200;
-  font-size: 15px;
-  line-height: 1.9;
-  opacity: 0;
-  transform: translateY(8px);
-  margin-bottom: 24px;
-}
-details[open] .statement-panel p {
-  opacity: 0.7;
-  transform: none;
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
-.statement-panel p:last-child { margin-bottom: 0; }
-
-.stat-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  border: 1px solid var(--text-a10);
-}
-.stat-cell {
-  padding: 32px;
-  border: 1px solid var(--text-a10);
-}
-.stat-cell .stat-value {
-  font-family: var(--font-display);
-  font-size: 32px;
-  margin-bottom: 6px;
-}
-.stat-cell .stat-label {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  opacity: 0.4;
-  text-transform: uppercase;
-}
-
-/* ===================== DISCOVER CARDS (durevie style) ===================== */
-.discover-section {
-  padding: 0 40px 0;
-}
-.discover-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
   gap: 16px;
 }
-.discover-card {
-  display: block;
-  position: relative;
-  aspect-ratio: 3 / 4;
-  border-radius: 14px;
-  overflow: hidden;
-  cursor: none;
-}
-.discover-card-bg {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.discover-card:hover .discover-card-bg { transform: scale(1.06); }
-.discover-card-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, var(--black-a15) 0%, var(--black-a55) 100%);
-  transition: background 0.4s ease;
-}
-.discover-card:hover .discover-card-overlay {
-  background: linear-gradient(to bottom, var(--black-a05) 0%, var(--black-a45) 100%);
-}
-.discover-card-content {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 32px 24px;
-  text-align: center;
-  z-index: 1;
-}
-.discover-card-title {
-  font-family: var(--font-display);
-  font-size: 42px;
-  text-transform: uppercase;
-  line-height: 1;
-  margin-bottom: 12px;
-  text-shadow: 0 2px 16px var(--black-a50);
-}
-.discover-card-desc {
-  font-family: var(--font-body);
-  font-weight: 200;
-  font-size: 12px;
-  line-height: 1.7;
-  opacity: 0.7;
-  max-width: 220px;
-  text-shadow: 0 1px 6px var(--black-a30);
-}
-.discover-card-arrow {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 32px;
-  height: 32px;
-  border: 1px solid var(--white-a30);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transform: translateY(6px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
-.discover-card:hover .discover-card-arrow { opacity: 1; transform: translateY(0); }
-.discover-card-arrow svg { width: 12px; height: 12px; stroke: var(--text); fill: none; stroke-width: 2; }
-
-/* ===================== INSTAGRAM ===================== */
-.insta-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 40px;
-}
-.insta-header a {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.15em;
-  opacity: 0.5;
-  transition: opacity 0.3s ease;
-}
-.insta-header a:hover { opacity: 1; }
-
-.insta-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2px;
-  margin-bottom: 60px;
-}
-.insta-feed {
-  margin-bottom: 60px;
-  --behold-row-gap: 2px;
-  --behold-column-gap: 2px;
-  --behold-border-radius: 0;
-  --behold-background-color: transparent;
-}
-.insta-feed behold-widget {
-  display: block;
-  width: 100%;
-}
-.insta-cell {
-  aspect-ratio: 1;
-  background: var(--palette-1a1a1a);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  border: 1px solid var(--text-a04);
-  transition: border-color 0.3s ease, filter 0.3s ease;
-  padding: 16px;
-  text-align: center;
-}
-.insta-cell:hover {
-  border-color: var(--text-a20);
-  filter: brightness(1.15);
-}
-.insta-cell .cell-type {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  opacity: 0.35;
-}
-.insta-cell .cell-title {
-  font-family: var(--font-display);
-  font-size: 22px;
-  text-transform: uppercase;
-}
-
-.cta-wrap { text-align: center; }
-.cta-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  padding: 14px 40px;
-  border: 1px solid var(--text-a30);
-  background: transparent;
-  color: var(--text);
-  transition: background 0.4s ease, color 0.4s ease;
-  cursor: none;
-}
-.cta-btn:hover {
-  background: var(--text);
-  color: var(--bg);
-}
-
-/* ===================== CONTACT ===================== */
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
-}
-.contact-headline {
-  font-family: var(--font-display);
+.about-intro h2 {
   font-size: clamp(48px, 6vw, 96px);
-  line-height: 1;
+}
+.about-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 8px;
+}
+.about-copy p {
+  max-width: 640px;
+  margin: 0;
+  color: var(--text-a85);
+  font-size: 17px;
+  line-height: 1.95;
+}
+.about-statement {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  gap: 48px;
+  padding: 48px 0;
+  border-top: 1px solid var(--text-a14);
+}
+.about-statement:last-child {
+  border-bottom: 1px solid var(--text-a14);
+}
+.about-statement h3 {
+  font-size: clamp(40px, 5vw, 72px);
+}
+.about-statement .jp {
+  margin: 8px 0 0;
+  color: var(--text-a90);
+  font-size: 20px;
+}
+.about-statement details {
+  border-bottom: 1px solid var(--text-a14);
+  padding-bottom: 16px;
+}
+.about-statement summary {
+  cursor: pointer;
+  padding: 4px 0;
+  color: var(--text);
+  font: 10px var(--font-mono);
+  letter-spacing: .15em;
   text-transform: uppercase;
 }
-.contact-body {
-  font-family: var(--font-body);
-  font-weight: 200;
-  font-size: 15px;
-  line-height: 1.9;
-  opacity: 0.7;
-  margin-bottom: 40px;
+.about-statement summary::marker {
+  color: var(--accent);
 }
-.contact-form {
+.about-statement details[open] summary {
+  color: var(--accent);
+}
+.about-statement .body {
+  max-width: 640px;
+  margin: 16px 0 0;
+  color: var(--text-a85);
+  font-size: 16px;
+  line-height: 1.95;
+}
+.about-cover-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+}
+.about-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  padding: 28px 0;
+  border-top: 1px solid var(--text-a14);
+}
+.about-tile:hover .about-tile-title {
+  color: var(--accent-soft);
+}
+.about-tile-title {
+  font-size: 44px;
+}
+.about-tile-description {
+  min-height: 5.7em;
+  color: var(--text-a85);
+  font-size: 14px;
+  line-height: 1.7;
+}
+.about-tile-link {
+  color: var(--text);
+}
+.about-instagram {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
-.form-group { display: flex; flex-direction: column; gap: 8px; }
-.form-group label {
-  font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  opacity: 0.4;
+.about-instagram-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
 }
-.form-group input,
-.form-group textarea,
-.form-group select {
-  background: transparent;
-  border: 1px solid var(--text-a12);
-  color: var(--text);
-  font-family: var(--font-body);
-  font-weight: 200;
-  font-size: 14px;
-  padding: 14px 16px;
+.about-instagram-head h2 {
+  margin-top: 12px;
+  font-size: 44px;
+}
+.about-instagram-copy {
+  max-width: 640px;
+  margin: 0;
+  color: var(--text-a85);
+  font-size: 16px;
+  line-height: 1.8;
+}
+.about-instagram-actions {
+  display: flex;
+  justify-content: flex-start;
+}
+.about-contact {
+  align-items: start;
+}
+.about-contact-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.about-contact-copy h2 {
+  font-size: clamp(48px, 6vw, 96px);
+}
+:lang(ja) .about-page h1,
+:lang(ja) .about-page h2,
+:lang(ja) .about-page h3 {
+  word-break: keep-all;
+}
+.about-contact-copy p {
+  max-width: 640px;
+  margin: 0;
+  color: var(--text-a85);
+  font-size: 16px;
+  line-height: 1.9;
+}
+.about-contact-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.about-contact-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px 40px;
+  margin: 0;
+  padding-top: 8px;
+}
+.about-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.about-field.full {
+  grid-column: 1 / -1;
+}
+.about-field label {
+  color: var(--text-a62);
+  font: 10px var(--font-mono);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+.about-field input,
+.about-field textarea,
+.about-field select {
+  height: 48px;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid var(--text-a30);
+  border-radius: 0;
   outline: none;
-  transition: border-color 0.3s ease;
+  background: transparent;
+  color: var(--text);
+  font: 15px var(--font-body);
   -webkit-appearance: none;
   appearance: none;
-  border-radius: 0;
 }
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
-  border-color: var(--text-a40);
+.about-field textarea {
+  min-height: 140px;
+  padding: 12px 0;
+  resize: vertical;
 }
-.form-group textarea { resize: vertical; min-height: 120px; }
-.form-group select {
-  cursor: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(240,237,232,0.4)'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 16px center;
+.about-field input:focus,
+.about-field textarea:focus,
+.about-field select:focus {
+  border-bottom-color: var(--accent);
 }
-.form-group select option {
+.about-field select option {
   background: var(--bg);
-  color: var(--text);
 }
-.contact-submit {
-  display: inline-block;
-  align-self: flex-start;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  padding: 16px 40px;
-  border: 1px solid var(--text-a30);
-  background: transparent;
-  color: var(--text);
-  cursor: none;
-  transition: background 0.4s ease, color 0.4s ease;
+.about-submit {
+  grid-column: 1 / -1;
+  justify-self: start;
+  min-height: 48px;
 }
-.contact-submit:hover {
-  background: var(--text);
-  color: var(--bg);
+.about-counts[hidden],
+.about-tile-count[hidden] {
+  display: none;
 }
-
-/* ===================== PAGE-SPECIFIC RESPONSIVE ===================== */
+.about-page .top2-newsletter {
+  margin-top: 112px;
+}
 @media (max-width: 900px) {
-  /* スマホはセクション境界ごとに 80+80=160px の空白が6箇所あり、
-     ページの約2割が余白だった（2026-08-26 実測）。48px に詰める。 */
-  section { padding: 48px 24px; }
-  /* スマホのヒーローは 75vh だと上半分が空グリッドだけになる。
-     タイトルが下寄せのデザインは保ちつつ 56vh に（2026-08-26）。 */
-  .hero { padding: 0 24px 40px; height: 56vh; min-height: 420px; }
-  .about-grid { grid-template-columns: 1fr; gap: 32px; margin-bottom: 0; }
-  .contact-grid { grid-template-columns: 1fr; gap: 32px; }
-  .discover-grid { grid-template-columns: repeat(2, 1fr); }
-  .discover-card { aspect-ratio: 1; }
-  .discover-card-title { font-size: 28px; }
-  .insta-grid { grid-template-columns: repeat(2, 1fr); }
-  .hero-bottom { flex-direction: column; align-items: flex-start; gap: 24px; }
-  .hero-label { text-align: left; padding-bottom: 0; }
-  .hero-eyebrow { top: -40px; }
+  .about-hero-foot {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .about-hero-counts {
+    justify-self: start;
+    text-align: left;
+  }
+  .about-section {
+    padding-top: 64px;
+  }
+  .about-g2,
+  .about-statement,
+  .about-cover-grid,
+  .about-contact-form {
+    grid-template-columns: 1fr;
+  }
+  .about-statement {
+    gap: 16px;
+    padding: 36px 0;
+  }
+  .about-statement .jp {
+    font-size: 17px;
+  }
+  .about-tile-title {
+    font-size: 36px;
+  }
+  .about-tile-description {
+    min-height: 0;
+  }
+  .about-instagram-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .about-instagram-head h2 {
+    font-size: 40px;
+  }
+  .about-contact-form {
+    gap: 24px;
+  }
+  .about-field.full {
+    grid-column: auto;
+  }
 }
-
-@media (max-width: 768px) {
-  .discover-grid { grid-template-columns: repeat(2, 1fr); }
-  .discover-card { aspect-ratio: 1; }
-  .insta-grid { grid-template-columns: 1fr 1fr; }
-  .stat-grid { grid-template-columns: 1fr; }
-  .scroll-indicator { display: none; }
-  .hero h1 { font-size: clamp(60px, 18vw, 120px); }
-  .section-label { font-size: 9px; }
-  .about-text h2 { font-size: clamp(36px, 10vw, 72px); }
-  .contact-left h2 { font-size: clamp(36px, 10vw, 72px); }
-  .statement-summary { padding: 20px 40px 20px 0; }
-  .statement-panel { padding-bottom: 32px; }
-}
-
 @media (max-width: 640px) {
-  section { padding-top: 40px; padding-bottom: 40px; }
-  .about-grid { gap: 40px; }
+  .about-hero {
+    padding-top: 40px;
+  }
+  .about-hero-tagline {
+    font-size: 17px;
+  }
+  .about-section {
+    padding-top: 48px;
+  }
+  .about-contact-copy h2,
+  .about-intro h2 {
+    font-size: clamp(48px, 15vw, 72px);
+  }
 }
-
-@media (max-width: 480px) {
-  .discover-grid { grid-template-columns: 1fr; }
-  .discover-card { aspect-ratio: 1; }
-}
-
 </style>
 <script type="application/ld+json">
 {
@@ -836,8 +489,7 @@ details[open] .statement-panel p {
   ]
 }
 </script>
-</head>
-<body>
+</head><body class="about-page">
 <a href="#main-content" class="skip-to-content">Skip to content</a>
 
 <!-- Custom Cursor -->
@@ -876,212 +528,192 @@ details[open] .statement-panel p {
     <span class="nav-ov-tag">日本のアンダーグラウンドを、キュレーションする。</span>
   </div>
 </div>
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-grid"></div>
-  <div class="scan-line"></div>
-  <div class="hero-eyebrow">JAPAN / UNDERGROUND DANCE MUSIC / MEDIA</div>
-  <div class="hero-bottom">
-    <h1 class="hero-title">
-      <span class="line"><span>TECHNO</span></span>
-      <span class="line"><span>JAPAN</span></span>
-    </h1>
-    <div class="hero-label">
-      UNDERGROUND DANCE MUSIC<br>
-      JAPAN — EST. 2024
+<!-- 背景レイヤー（グリッド + スキャンライン / common.css の .tj-bg） -->
+<div class="tj-bg" aria-hidden="true"><div class="tj-scan"></div></div>
+<main id="main-content">
+  <!-- HERO -->
+  <section class="about-hero wrap">
+    <span class="mono">Japan / Underground dance music / Media — est. 2024</span>
+    <h1 class="disp pagehead">Techno<br>Japan</h1>
+    <div class="about-hero-foot">
+      <p class="about-hero-tagline">Japan's Underground, Curated.</p>
+      <span class="mono about-hero-counts" data-about-counts hidden><span data-about-count="festivals"></span> festivals · <span data-about-count="artists"></span> artists · <span data-about-count="venues"></span> venues · <span data-about-count="articles"></span> stories</span>
     </div>
-  </div>
-  <div class="scroll-indicator">
-    <div class="line"></div>
-    <span>SCROLL</span>
-  </div>
-</section>
+  </section>
 
-<!-- MARQUEE -->
-<div class="marquee">
-  <div class="marquee-inner">TECHNO &middot; HOUSE &middot; JAPAN &middot; UNDERGROUND &middot; CLUBS &middot; FESTIVALS &middot; CULTURE &middot; RAVES &middot; ARTISTS &middot; VENUES &middot; NIGHTS &middot; OPEN-AIR &middot; SCENE &middot; BILINGUAL &middot; TECHNO &middot; HOUSE &middot; JAPAN &middot; UNDERGROUND &middot; CLUBS &middot; FESTIVALS &middot; CULTURE &middot; RAVES &middot; ARTISTS &middot; VENUES &middot; NIGHTS &middot; OPEN-AIR &middot; SCENE &middot; BILINGUAL &middot;&nbsp;</div>
-</div>
+  <!-- MARQUEE -->
+  <div class="top2-marquee" aria-hidden="true"><div class="top2-marquee-track"><span>The media exploring Japan's underground culture.</span><b>/</b><span>Japan's Underground, Curated.</span><b>/</b><span>News · Festivals · Artists · Venues</span><b>/</b><span>Techno / House / Ambient</span><b>/</b><span>Covering Japan and Asia's underground scenes.</span><b>/</b><span>The media exploring Japan's underground culture.</span><b>/</b><span>Japan's Underground, Curated.</span><b>/</b><span>News · Festivals · Artists · Venues</span><b>/</b><span>Techno / House / Ambient</span><b>/</b><span>Covering Japan and Asia's underground scenes.</span><b>/</b></div></div>
 
-<!-- ABOUT -->
-<section id="about">
-  <div class="about-bg"></div>
-  <div class="about-scan"></div>
-  <div class="section-label reveal">01 — ABOUT</div>
-  <div class="about-grid">
-    <div class="about-headline reveal">JAPAN'S<br>UNDERGROUND,<br>CURATED.</div>
-    <div class="about-body reveal">
-      <p>Techno Japanは、日本のアンダーグラウンドなテクノ/ハウスシーンを扱うカルチャーメディアです。イベント情報の羅列にとどまらず、アーティスト、会場、フェスティバル、クラブカルチャーを、編集的な視点とシーンへの理解をもって紹介します。</p>
-      <p>国内外の読者に向けて、日本のアンダーグラウンドをより見えやすく、より意味のあるものにすること。それが私たちの存在理由です。</p>
+  <!-- 01 ABOUT -->
+  <section class="about-section wrap">
+    <div class="about-rule about-g2">
+      <div class="about-intro">
+        <span class="num red">01 — About</span>
+        <h2 class="disp">Japan's<br>Underground,<br>Curated.</h2>
+      </div>
+      <div class="about-copy">
+        <p>Techno Japanは、日本のアンダーグラウンドなテクノ/ハウスシーンを扱うカルチャーメディアです。イベント情報の羅列にとどまらず、アーティスト、会場、フェスティバル、クラブカルチャーを、編集的な視点とシーンへの理解をもって紹介します。</p>
+        <p>国内外の読者に向けて、日本のアンダーグラウンドをより見えやすく、より意味のあるものにすること。それが私たちの存在理由です。</p>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- STATEMENT -->
-<section id="statement">
-  <div class="section-label reveal">02 — STATEMENT</div>
-  <div class="statement-keywords">
-    <details class="statement-item reveal">
-      <summary class="statement-summary">
-        <div class="statement-word">AUTHENTIC</div>
-        <div class="statement-line">本物の音楽体験だけを。</div>
-      </summary>
-      <div class="statement-panel">
-        <p>日本のダンスフロアには、世界に誇るべき圧倒的なクオリティ、細部に宿るホスピタリティ、そして真摯な音楽体験が存在します。</p>
-        <p>私たちの目的は、音楽そのものを目的に世界中から人々が訪れるような、持続可能で熱量ある循環を、この地に生み出すことです。</p>
+  <!-- 02 STATEMENT -->
+  <section class="about-section wrap">
+    <div class="about-section-head about-rule">
+      <span class="num red">02 — Statement</span>
+      <span class="mono">4 principles</span>
+    </div>
+    <div class="about-statement">
+      <div>
+        <h3 class="disp">Authentic</h3>
+        <p class="jp">本物の音楽体験だけを。</p>
       </div>
-    </details>
-    <details class="statement-item reveal">
-      <summary class="statement-summary">
-        <div class="statement-word">SELECTIVE</div>
-        <div class="statement-line">すべては発信しない。厳選して届ける。</div>
-      </summary>
-      <div class="statement-panel">
-        <p>しかし、アンダーグラウンドカルチャーの美しさは、「ただ広めればいい」というものではありません。知る人ぞ知る場の空気感、限られた空間だからこそ成り立つ純度。それは、私たちが何よりも守るべき境界線です。</p>
-        <p>だからこそ、Techno Japanは、すべての情報を発信するメディアではありません。現場で感じ、深く賛同したイベントとカルチャーだけを、厳選して届けます。</p>
+      <div>
+        <details>
+          <summary>続きを読む +</summary>
+          <p class="body">日本のダンスフロアには、世界に誇るべき圧倒的なクオリティ、細部に宿るホスピタリティ、そして真摯な音楽体験が存在します。</p>
+          <p class="body">私たちの目的は、音楽そのものを目的に世界中から人々が訪れるような、持続可能で熱量ある循環を、この地に生み出すことです。</p>
+        </details>
       </div>
-    </details>
-    <details class="statement-item reveal">
-      <summary class="statement-summary">
-        <div class="statement-word">BORDERLESS</div>
-        <div class="statement-line">日本と世界を、交差させる。</div>
-      </summary>
-      <div class="statement-panel">
-        <p>私たちの視線は日本の内側にとどまりません。世界のダンスフロアで生まれるムーブメントを日本へ、日本の熱量を世界へ。本物の音楽体験に、国境はないからです。</p>
-        <p>日本と世界をボーダレスに交差させることが、シーンを次へと進めていく。私たちはそう信じています。</p>
+    </div>
+    <div class="about-statement">
+      <div>
+        <h3 class="disp">Selective</h3>
+        <p class="jp">すべては発信しない。厳選して届ける。</p>
       </div>
-    </details>
-    <details class="statement-item reveal">
-      <summary class="statement-summary">
-        <div class="statement-word">INDEPENDENT</div>
-        <div class="statement-line">どこにも偏らず、フラットであり続ける。</div>
-      </summary>
-      <div class="statement-panel">
-        <p>そして、ひとつの約束を。特定の資本や過度な商業的思惑、偏った思想を介入させず、客観的でフラットな視点を貫き続けます。</p>
-        <p>私たちが目指すのは、人、場所、音楽をつなぐ、シーンの接続点となるフラットなメディアです。</p>
-        <p>Techno Japanは、この姿勢で届けていきます。</p>
+      <div>
+        <details>
+          <summary>続きを読む +</summary>
+          <p class="body">しかし、アンダーグラウンドカルチャーの美しさは、「ただ広めればいい」というものではありません。知る人ぞ知る場の空気感、限られた空間だからこそ成り立つ純度。それは、私たちが何よりも守るべき境界線です。</p>
+          <p class="body">だからこそ、Techno Japanは、すべての情報を発信するメディアではありません。現場で感じ、深く賛同したイベントとカルチャーだけを、厳選して届けます。</p>
+        </details>
       </div>
-    </details>
-  </div>
-</section>
+    </div>
+    <div class="about-statement">
+      <div>
+        <h3 class="disp">Borderless</h3>
+        <p class="jp">日本と世界を、交差させる。</p>
+      </div>
+      <div>
+        <details>
+          <summary>続きを読む +</summary>
+          <p class="body">私たちの視線は日本の内側にとどまりません。世界のダンスフロアで生まれるムーブメントを日本へ、日本の熱量を世界へ。本物の音楽体験に、国境はないからです。</p>
+          <p class="body">日本と世界をボーダレスに交差させることが、シーンを次へと進めていく。私たちはそう信じています。</p>
+        </details>
+      </div>
+    </div>
+    <div class="about-statement">
+      <div>
+        <h3 class="disp">Independent</h3>
+        <p class="jp">どこにも偏らず、フラットであり続ける。</p>
+      </div>
+      <div>
+        <details>
+          <summary>続きを読む +</summary>
+          <p class="body">そして、ひとつの約束を。特定の資本や過度な商業的思惑、偏った思想を介入させず、客観的でフラットな視点を貫き続けます。</p>
+          <p class="body">私たちが目指すのは、人、場所、音楽をつなぐ、シーンの接続点となるフラットなメディアです。</p>
+          <p class="body">Techno Japanは、この姿勢で届けていきます。</p>
+        </details>
+      </div>
+    </div>
+  </section>
 
-<!-- MEDIA PILLARS -->
-<section id="media">
-  <div class="section-bg"></div>
-  <div class="section-scan"></div>
-  <div class="section-label reveal">03 — NEWS</div>
-  <div class="discover-section">
-    <div class="discover-grid">
-      <a href="news.html" class="discover-card reveal">
-        <div class="discover-card-bg" style="background:linear-gradient(135deg, var(--palette-2d0a0a) 0%, var(--palette-6e1414) 40%, var(--accent) 100%)"></div>
-        <div class="discover-card-overlay"></div>
-        <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
-        <div class="discover-card-content">
-          <div class="discover-card-title">NEWS</div>
-          <div class="discover-card-desc">日本のアンダーグラウンドシーンの最新記事、インタビュー、特集など。</div>
-        </div>
+  <!-- 03 WHAT WE COVER -->
+  <section class="about-section wrap">
+    <div class="about-section-head about-rule">
+      <span class="num red">03 — What we cover</span>
+      <span class="mono">Database</span>
+    </div>
+    <div class="about-cover-grid">
+      <a href="/news.html" class="about-tile">
+        <span class="mono red about-tile-count" data-about-count-label="articles" hidden><span data-about-count="articles"></span> stories</span>
+        <span class="disp about-tile-title">News</span>
+        <span class="about-tile-description">日本のアンダーグラウンドシーンの最新記事、インタビュー、特集など。</span>
+        <span class="mono about-tile-link">All stories →</span>
       </a>
-      <a href="festivals.html" class="discover-card reveal">
-        <div class="discover-card-bg" style="background:linear-gradient(135deg, var(--palette-1a0533) 0%, var(--palette-4a1942) 40%, var(--palette-c2185b) 100%)"></div>
-        <div class="discover-card-overlay"></div>
-        <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
-        <div class="discover-card-content">
-          <div class="discover-card-title">FESTIVALS</div>
-          <div class="discover-card-desc">オープンエアのギャザリング、レイヴ、そして日本を代表する野外電子音楽フェスティバル。</div>
-        </div>
+      <a href="/festivals.html" class="about-tile">
+        <span class="mono red about-tile-count" data-about-count-label="festivals" hidden><span data-about-count="festivals"></span> indexed</span>
+        <span class="disp about-tile-title">Festivals</span>
+        <span class="about-tile-description">オープンエアのギャザリング、レイヴ、そして日本を代表する野外電子音楽フェスティバル。</span>
+        <span class="mono about-tile-link">All festivals →</span>
       </a>
-      <a href="artists.html" class="discover-card reveal">
-        <div class="discover-card-bg" style="background:linear-gradient(135deg, var(--palette-1a1a2e) 0%, var(--palette-16213e) 40%, var(--palette-0f3460) 100%)"></div>
-        <div class="discover-card-overlay"></div>
-        <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
-        <div class="discover-card-content">
-          <div class="discover-card-title">ARTISTS</div>
-          <div class="discover-card-desc">新しい才能から、確かなセレクターまで。日本のサウンドを形づくるアーティスト達。</div>
-        </div>
+      <a href="/artists.html" class="about-tile">
+        <span class="mono red about-tile-count" data-about-count-label="artists" hidden><span data-about-count="artists"></span> profiles</span>
+        <span class="disp about-tile-title">Artists</span>
+        <span class="about-tile-description">新しい才能から、確かなセレクターまで。日本のサウンドを形づくるアーティスト達。</span>
+        <span class="mono about-tile-link">All artists →</span>
       </a>
-      <a href="venues.html" class="discover-card reveal">
-        <div class="discover-card-bg" style="background:linear-gradient(135deg, var(--palette-0a1f33) 0%, var(--palette-1a5e8a) 40%, var(--palette-6dc5e8) 100%)"></div>
-        <div class="discover-card-overlay"></div>
-        <div class="discover-card-arrow"><svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg></div>
-        <div class="discover-card-content">
-          <div class="discover-card-title">VENUES</div>
-          <div class="discover-card-desc">日本のアンダーグラウンドなナイトクラブやミュージックバー、そしてユニークな空間。</div>
-        </div>
+      <a href="/venues.html" class="about-tile">
+        <span class="mono red about-tile-count" data-about-count-label="venues" hidden><span data-about-count="venues"></span> venues</span>
+        <span class="disp about-tile-title">Venues</span>
+        <span class="about-tile-description">日本のアンダーグラウンドなナイトクラブやミュージックバー、そしてユニークな空間。</span>
+        <span class="mono about-tile-link">All venues →</span>
       </a>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- INSTAGRAM -->
-<section id="instagram">
-  <div class="section-bg"></div>
-  <div class="section-scan"></div>
-  <div class="section-label reveal">04 — INSTAGRAM</div>
-  <div class="insta-header reveal">
-    <span style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.15em;opacity:0.5;">LATEST POSTS</span>
-    <a href="https://www.instagram.com/techno.japan_/" target="_blank" rel="noopener">@TECHNO.JAPAN_</a>
-  </div>
-  <div class="insta-feed reveal">
-    <behold-widget feed-id="KSdgYwJwBxsVTQksVCVP"></behold-widget>
-  </div>
-  <div class="cta-wrap reveal">
-    <a href="https://www.instagram.com/techno.japan_/" target="_blank" rel="noopener" class="cta-btn">FOLLOW ON INSTAGRAM</a>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact">
-  <div class="section-bg"></div>
-  <div class="section-scan"></div>
-  <div class="section-label reveal">05 — CONTACT</div>
-  <div class="contact-grid">
-    <div class="contact-headline reveal">GET IN<br>TOUCH.</div>
-    <div class="reveal">
-      <p class="contact-body">コラボレーション、取材・掲載のご相談、広告掲載、その他のお問い合わせはこちらから。</p>
-      <p class="contact-body" style="margin-top:14px"><a href="/submit.html">APPLY →</a></p>
-      <form class="contact-form" action="https://formsubmit.co/press@techno-japan.media" method="POST">
-        <div class="form-group">
-          <label>NAME</label>
-          <input type="text" name="name" required placeholder="Your name">
-        </div>
-        <div class="form-group">
-          <label>EMAIL</label>
-          <input type="email" name="email" required placeholder="your@email.com">
-        </div>
-        <div class="form-group">
-          <label>SUBJECT</label>
-          <select name="subject" required>
-            <option value="" disabled selected>Select a topic</option>
-            <option value="collaboration">Collaboration</option>
-            <option value="press">Press / Media</option>
-            <option value="advertising">Advertising</option>
-            <option value="general">General Inquiry</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>MESSAGE</label>
-          <textarea name="message" required placeholder="Your message"></textarea>
-        </div>
-        <button type="submit" class="contact-submit">SEND MESSAGE</button>
-      </form>
+  <!-- 04 INSTAGRAM -->
+  <section class="about-section wrap">
+    <div class="about-section-head about-rule about-instagram-head">
+      <div>
+        <span class="num red">04 — Instagram</span>
+        <h2 class="disp">Instagram</h2>
+      </div>
+      <a href="https://www.instagram.com/techno.japan_/" target="_blank" rel="noopener" class="btn2">@techno.japan_ ↗</a>
     </div>
-  </div>
-</section>
+    <div class="about-instagram">
+      <p class="about-instagram-copy">最新の投稿とお知らせをInstagramで。</p>
+      <div class="about-instagram-actions">
+        <a href="https://www.instagram.com/techno.japan_/" target="_blank" rel="noopener" class="btn2">Follow on Instagram ↗</a>
+      </div>
+    </div>
+  </section>
 
-<!-- NEWSLETTER -->
-<section class="newsletter">
-  <div class="newsletter-eyebrow">Newsletter</div>
-  <div class="newsletter-title">Stay in the loop.</div>
-  <div class="newsletter-desc">Monthly digest of new festivals, artists, and stories from Japan's underground.</div>
-  <form class="newsletter-form" action="https://formsubmit.co/press@techno-japan.media" method="POST">
-    <input type="text" name="_honey" tabindex="-1" autocomplete="off" class="tj-honeypot" aria-hidden="true">
-    <input type="email" name="email" required placeholder="your@email.com">
-    <input type="hidden" name="_subject" value="Newsletter signup — TECHNO JAPAN">
-    <input type="hidden" name="_template" value="table">
-    <input type="hidden" name="_next" value="https://techno-japan.media/?subscribed=1">
-    <button type="submit">Subscribe</button>
-  </form>
-</section>
+  <!-- 05 CONTACT -->
+  <section class="about-section wrap">
+    <div class="about-rule about-g2 about-contact">
+      <div class="about-contact-copy">
+        <span class="num red">05 — Contact</span>
+        <h2 class="disp">Get in<br>touch.</h2>
+        <p>コラボレーション、取材・掲載のご相談、広告掲載、その他のお問い合わせはこちらから。</p>
+        <div class="about-contact-links">
+          <a href="/submit.html" class="btn2">APPLY →</a>
+          <a href="/writers.html" class="btn2">WRITE FOR US →</a>
+        </div>
+      </div>
+      <div>
+        <form class="about-contact-form" action="https://formsubmit.co/press@techno-japan.media" method="POST">
+          <div class="about-field">
+            <label for="about-name">NAME</label>
+            <input id="about-name" type="text" name="name" required placeholder="Your name">
+          </div>
+          <div class="about-field">
+            <label for="about-email">EMAIL</label>
+            <input id="about-email" type="email" name="email" required placeholder="your@email.com">
+          </div>
+          <div class="about-field full">
+            <label for="about-subject">SUBJECT</label>
+            <select id="about-subject" name="subject" required>
+              <option value="" disabled selected>Select a topic</option>
+              <option value="collaboration">Collaboration</option>
+              <option value="press">Press / Media</option>
+              <option value="advertising">Advertising</option>
+              <option value="general">General Inquiry</option>
+            </select>
+          </div>
+          <div class="about-field full">
+            <label for="about-message">MESSAGE</label>
+            <textarea id="about-message" name="message" required placeholder="Your message"></textarea>
+          </div>
+          <button type="submit" class="btn2 about-submit">Send message</button>
+        </form>
+      </div>
+    </div>
+  </section>
 
+  <section class="wrap top2-newsletter" data-tj-newsletter></section>
+</main>
 <!-- FOOTER -->
 <!-- tj:footer:start -->
 <footer>
@@ -1102,40 +734,37 @@ details[open] .statement-panel p {
   <div class="footer-copy"><span>&copy; 2026 Techno Japan</span><span>Japan's Underground, Curated.</span></div>
 </footer>
 <!-- tj:footer:end -->
-
 <script src="/common.js?v=20" defer></script>
+<script src="/magazine.js?v=5"></script>
+<script src="/favorites.js?v=4" defer></script>
+<script src="/search.js?v=8" defer></script>
+<script src="/data-hub.js?v=11"></script>
 <script>
-/* Page-specific extra hover targets (cursor expand). */
-window.addEventListener('DOMContentLoaded', () => {
-  if (window.tjBindCursorExpand) {
-    window.tjBindCursorExpand('.cta-btn, .discover-card, .insta-cell');
-  }
-});
-</script>
-
-<!-- BEHOLD INSTAGRAM WIDGET LOADER (lazy via IntersectionObserver) -->
-<script>
-  (() => {
-    const target = document.querySelector('behold-widget');
-    if (!target) return;
-    const load = () => {
-      const d = document, s = d.createElement('script');
-      s.type = 'module';
-      s.src = 'https://w.behold.so/widget.js';
-      d.head.append(s);
-    };
-    if ('IntersectionObserver' in window) {
-      const io = new IntersectionObserver((entries) => {
-        if (entries.some(e => e.isIntersecting)) {
-          load();
-          io.disconnect();
-        }
-      }, { rootMargin: '300px' });
-      io.observe(target);
-    } else {
-      load();
-    }
-  })();
+(() => {
+  const published = (items) => Array.isArray(items) ? items.filter((item) => String(item?.status || '').toLowerCase() !== 'draft') : [];
+  const source = {
+    articles: typeof ARTICLES !== 'undefined' ? ARTICLES : [],
+    festivals: typeof FESTIVALS !== 'undefined' ? FESTIVALS : [],
+    artists: typeof ARTISTS !== 'undefined' ? ARTISTS : [],
+    venues: typeof VENUES !== 'undefined' ? VENUES : []
+  };
+  const counts = {
+    articles: published(source.articles).length,
+    festivals: published(source.festivals).length,
+    artists: published(source.artists).length,
+    venues: published(source.venues).length
+  };
+  document.querySelectorAll('[data-about-count]').forEach((node) => {
+    const key = node.dataset.aboutCount;
+    node.textContent = String(counts[key] ?? 0);
+    const label = node.closest('[data-about-count-label]');
+    if (label) label.hidden = false;
+  });
+  const heroCounts = document.querySelector('[data-about-counts]');
+  if (heroCounts) heroCounts.hidden = false;
+  const newsletter = document.querySelector('[data-tj-newsletter]');
+  if (typeof window.tjMagNewsletter === 'function') window.tjMagNewsletter(newsletter);
+})();
 </script>
 <!-- Service Worker registration -->
 <script>
@@ -1145,13 +774,7 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
 </script>
-<script src="/data-hub.js?v=11"></script>
-<script src="/favorites.js?v=4" defer></script>
-<script src="/search.js?v=8" defer></script>
 <script>
-/* ハッシュ着地の補正。scroll-behavior:smooth の環境では、ロード時の
-   アンカー移動が描画中に打ち切られ、#about でも先頭に留まっていた（2026-08-25 実測）。
-   読み込み完了後に一度だけ即時ジャンプで着地させる。ページ内クリックは従来通り smooth。 */
 (function () {
   if (!location.hash) return;
   window.addEventListener('load', function () {

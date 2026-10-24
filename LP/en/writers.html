@@ -36,42 +36,52 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/common.css?v=50">
+<link rel="stylesheet" href="/common.css?v=51">
 <style>
-  *, *::before, *::after { box-sizing: border-box; }
-  h1, h2 { word-break: keep-all; word-break: auto-phrase; }
-  main { padding: 150px 40px 120px; }
-  .writers-wrap { max-width: 1120px; margin: 0 auto; }
-  .page-title { font-family: var(--font-display); font-size: clamp(64px, 12vw, 180px); line-height: .9; text-transform: uppercase; margin-bottom: 72px; }
-  .writers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
-  .writers-section { margin-bottom: 72px; }
-  .section-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: .2em; opacity: .5; margin-bottom: 28px; }
-  h2 { font-family: var(--font-body); font-size: clamp(24px, 3vw, 38px); font-weight: 300; line-height: 1.3; margin-bottom: 28px; }
-  .writers-copy { font-family: var(--font-body); font-size: 15px; font-weight: 200; line-height: 2; opacity: .72; }
-  .writers-copy + .writers-copy { margin-top: 20px; }
-  .writers-list { padding-left: 1.2em; font-family: var(--font-body); font-size: 15px; font-weight: 200; line-height: 2; opacity: .72; }
-  .writers-list li + li { margin-top: 8px; }
-  .author-list { list-style: none; border-top: 1px solid var(--text-a14); }
-  .author-list li { display: flex; justify-content: space-between; gap: 20px; padding: 15px 0; border-bottom: 1px solid var(--text-a10); font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; }
-  .author-count { opacity: .45; }
-  .contact-form { display: flex; flex-direction: column; gap: 24px; }
-  .form-group { display: flex; flex-direction: column; gap: 8px; }
-  .form-group label { font-family: var(--font-mono); font-size: 9px; letter-spacing: .2em; opacity: .45; }
-  .form-group input, .form-group textarea { width: 100%; background: transparent; border: 1px solid var(--text-a16); color: var(--text); font: 200 14px var(--font-body); padding: 14px 16px; outline: none; border-radius: 0; }
-  .form-group input:focus, .form-group textarea:focus { border-color: var(--text-a45); }
-  .form-group textarea { min-height: 170px; resize: vertical; }
-  .contact-submit { align-self: flex-start; padding: 16px 40px; border: 1px solid var(--text-a30); background: transparent; color: var(--text); font: 10px var(--font-mono); letter-spacing: .2em; cursor: pointer; }
-  .contact-submit:hover { background: var(--text); color: var(--bg); }
-  .notice { padding: 16px 20px; margin-bottom: 44px; border: 1px solid var(--text-a25); font-size: 14px; line-height: 1.8; }
-  .tj-honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
-  @media (max-width: 900px) { main { padding: 120px 24px 80px; } .writers-grid { grid-template-columns: 1fr; gap: 0; } .writers-section { margin-bottom: 64px; } }
-  @media (max-width: 640px) {
-    main { padding: 96px 20px 60px; }
-    .page-title { font-size: clamp(40px, 13vw, 56px); margin-bottom: 40px; }
-    .writers-section { margin-bottom: 40px; }
-    .form-group input, .form-group textarea { min-height: 48px; }
-    .contact-submit { width: 100%; min-height: 48px; }
-  }
+*,*::before,*::after{box-sizing:border-box}
+body{overflow-x:hidden}
+.writer-page{position:relative;overflow:clip;padding-bottom:40px}
+.writer-page::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background-image:repeating-linear-gradient(90deg,var(--text-a03) 0 1px,transparent 1px 80px),repeating-linear-gradient(0deg,var(--text-a03) 0 1px,transparent 1px 80px)}
+.writer-wrap{position:relative;width:100%;max-width:1360px;margin:0 auto;padding:0 40px}
+.disp{font-family:var(--font-display);font-weight:400;line-height:.95;text-transform:uppercase;margin:0}
+.mono{font-family:var(--font-mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--text-a62)}
+.red{color:var(--accent)}
+.writer-head{padding-top:56px;display:flex;flex-direction:column;gap:28px}
+.writer-page h1{font-size:clamp(88px,12vw,168px);letter-spacing:-.01em}
+.writer-lead{max-width:760px;margin:0;color:var(--text-a90);font-size:20px;line-height:1.9}
+.writer-head-grid{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:48px}
+.writer-actions{display:flex;gap:10px;justify-self:end;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;height:48px;padding:0 28px;border:0;background:var(--text);color:var(--bg);font:11px var(--font-mono);letter-spacing:.2em;text-transform:uppercase;cursor:pointer}
+.btn:hover{background:var(--accent);color:var(--text)}
+.btn2{display:inline-flex;align-items:center;justify-content:center;height:48px;padding:0 24px;border:1px solid var(--text-a40);background:none;color:var(--text);font:11px var(--font-mono);letter-spacing:.2em;text-transform:uppercase;cursor:pointer}
+.btn2:hover{border-color:var(--accent);color:var(--accent)}
+.writer-section{padding-top:96px}
+.writer-section-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px}
+.writer-sec{border-top:1px solid var(--text-a14);padding-top:18px}
+.writer-sec h2{font-size:clamp(40px,5vw,72px)}
+.writer-sec-head{display:flex;flex-direction:column;gap:16px}
+.writer-body{max-width:640px;margin:0;color:var(--text-a85);font-size:16px;line-height:1.95}
+.writer-list{display:flex;flex-direction:column}
+.writer-list-item{display:grid;grid-template-columns:40px 1fr;gap:16px;padding:18px 0;border-top:1px solid var(--text-a10);font-size:15px;line-height:1.7;color:var(--text-a90)}
+.writer-list-item:last-child{border-bottom:1px solid var(--text-a10)}
+.writer-list-item .mono{padding-top:4px;color:var(--accent)}
+.writer-form-head{display:flex;flex-direction:column;gap:20px}
+.writer-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px 40px;padding-top:8px}
+.writer-field{display:flex;flex-direction:column;gap:8px}
+.writer-field.full{grid-column:1 / -1}
+.writer-field label{color:var(--text-a62);font:10px var(--font-mono);letter-spacing:.2em;text-transform:uppercase}
+.writer-field input,.writer-field textarea{width:100%;height:48px;padding:12px 0;border:0;border-bottom:1px solid var(--text-a30);border-radius:0;outline:none;background:transparent;color:var(--text);font:15px var(--font-body)}
+.writer-field textarea{height:auto;min-height:140px;resize:vertical}
+.writer-field input:focus,.writer-field textarea:focus{border-bottom-color:var(--accent)}
+.writer-submit{grid-column:1 / -1;align-self:flex-start}
+.notice{max-width:960px;margin:0 0 44px;padding:18px 20px;border:1px solid var(--text-a25);font-size:14px;line-height:1.8}
+.tj-honeypot{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.writer-form-note{color:var(--text-a62);font-size:12px;line-height:1.7}
+:lang(ja) .writer-page h1,
+:lang(ja) .writer-page h2,
+:lang(ja) .writer-page h3{word-break:keep-all}
+@media(max-width:900px){.writer-wrap{padding:0 16px}.writer-head-grid,.writer-section-grid,.writer-form{grid-template-columns:1fr}.writer-actions{justify-self:start}.writer-sec h2{font-size:56px}.writer-field.full,.writer-submit{grid-column:auto}.writer-page h1{font-size:88px}}
+@media(max-width:560px){.writer-page h1{font-size:64px}.writer-lead{font-size:17px}.writer-section{padding-top:72px}.writer-form{gap:24px}.writer-actions{width:100%}.writer-actions .btn,.writer-actions .btn2{width:100%}.writer-submit{width:100%;min-height:48px}}
 </style>
 </head>
 <body>
@@ -108,56 +118,85 @@
     <span class="nav-ov-tag">Japan's Underground, Curated.</span>
   </div>
 </div>
-<main id="main-content">
-  <div class="writers-wrap">
-    <h1 class="page-title">WRITERS WANTED</h1>
-    <div id="sent-notice" class="notice" hidden>Thanks — we've received your application. The editors will be in touch.</div>
-    <div class="writers-grid">
-      <div>
-        <section class="writers-section">
-          <div class="section-label">01 — ABOUT</div>
-          <h2>Write for TECHNO JAPAN</h2>
-          <p class="writers-copy">We want to document Japan's underground dance music scene through the eyes of the people who are actually there.</p>
-          <p class="writers-copy">We're looking for reports, interviews, guides and short news pieces.</p>
-        </section>
-        <section class="writers-section">
-          <div class="section-label">02 — WHY WRITE</div>
-          <h2>What you get</h2>
-          <ul class="writers-list">
-            <li>Your piece reaches TECHNO JAPAN's followers — people who love dance music — directly</li>
-            <li>It's published under your byline and collected on your writer page</li>
-            <li>Published in both Japanese and English; the editors prepare the translation</li>
-            <li>Articles link automatically to the festival, artist and venue database, so they keep being read from related pages</li>
-            <li>TECHNO JAPAN is indexed by Google News and found through web search</li>
-            <li>Editing, photo layout and search optimisation are handled by the editors — you focus on writing</li>
-            <li>Every piece is announced on Instagram and Threads</li>
-          </ul>
-        </section>
+<main id="main-content" class="writer-page">
+  <section class="writer-wrap writer-head">
+    <span class="mono">WRITERS WANTED · Reports / Interviews / Guides / News</span>
+    <h1 class="disp">WRITER</h1>
+    <div class="writer-head-grid"><p class="writer-lead">We want to document Japan's underground dance music scene through the eyes of the people who are actually there.</p><div class="writer-actions"><a class="btn" href="#form">Application form</a><a class="btn2" href="/en/news.html">Stories →</a></div></div>
+  </section>
+
+  <section class="writer-wrap writer-section">
+    <div class="writer-section-grid">
+      <div class="writer-sec writer-sec-head">
+        <span class="mono red">01 — About</span>
+        <h2 class="disp">Write for TECHNO JAPAN</h2>
       </div>
-      <div>
-        <section class="writers-section">
-          <div class="section-label">03 — WRITERS</div>
-          <h2>Our writers</h2>
-          <ul id="author-list" class="author-list" aria-live="polite"></ul>
-        </section>
-        <section class="writers-section">
-          <div class="section-label">04 — APPLY</div>
-          <h2>Apply to write</h2>
-          <form class="contact-form" action="https://formsubmit.co/press@techno-japan.media" method="POST">
-            <div class="form-group"><label for="name">NAME</label><input id="name" type="text" name="name" required></div>
-            <div class="form-group"><label for="email">EMAIL</label><input id="email" type="email" name="email" required></div>
-            <div class="form-group"><label for="articles">Previous articles (links)</label><textarea id="articles" name="articles" rows="3" placeholder="URL を改行で。無ければ空欄で構いません"></textarea></div>
-            <div class="form-group"><label for="sns">Social accounts</label><input id="sns" type="text" name="sns" placeholder="Instagram / X / Threads など"></div>
-            <input type="text" name="_honey" tabindex="-1" autocomplete="off" class="tj-honeypot" aria-hidden="true">
-            <input type="hidden" name="_subject" value="TECHNO JAPAN — Writer application">
-            <input type="hidden" name="_captcha" value="true">
-            <input type="hidden" name="_next" value="https://techno-japan.media/en/writers.html?sent=1">
-            <button type="submit" class="contact-submit">APPLY</button>
-          </form>
-        </section>
+      <div class="writer-sec writer-sec-head"><p class="writer-body">We're looking for reports, interviews, guides and short news pieces.</p></div>
+    </div>
+  </section>
+
+  <section class="writer-wrap writer-section">
+    <div class="writer-section-grid">
+      <div class="writer-sec writer-sec-head">
+        <span class="mono red">02 — Why write</span>
+        <h2 class="disp">What you get</h2>
+      </div>
+      <div class="writer-list">
+        <div class="writer-list-item"><span class="mono">01</span><span>Your piece reaches TECHNO JAPAN's followers — people who love dance music — directly</span></div>
+        <div class="writer-list-item"><span class="mono">02</span><span>It's published under your byline and collected on your writer page</span></div>
+        <div class="writer-list-item"><span class="mono">03</span><span>Published in both Japanese and English; the editors prepare the translation</span></div>
+        <div class="writer-list-item"><span class="mono">04</span><span>Articles link automatically to the festival, artist and venue database, so they keep being read from related pages</span></div>
+        <div class="writer-list-item"><span class="mono">05</span><span>TECHNO JAPAN is indexed by Google News and found through web search</span></div>
+        <div class="writer-list-item"><span class="mono">06</span><span>Editing, photo layout and search optimisation are handled by the editors — you focus on writing</span></div>
+        <div class="writer-list-item"><span class="mono">07</span><span>Every piece is announced on Instagram and Threads</span></div>
       </div>
     </div>
-  </div>
+  </section>
+
+  <section class="writer-wrap writer-section">
+    <div class="writer-sec" style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:8px"><span class="mono red">Formats</span><span class="mono">4 formats</span></div>
+    <div class="writer-section-grid" style="gap:0 24px">
+      <div class="writer-sec writer-sec-head"><span class="disp" style="font-size:44px">Report</span><p class="writer-body" style="font-size:14px">Reports from festivals and parties — sound, space and movement, seen by someone who was there.</p></div>
+      <div class="writer-sec writer-sec-head"><span class="disp" style="font-size:44px">Interview</span><p class="writer-body" style="font-size:14px">Interviews with artists, organisers and venues.</p></div>
+      <div class="writer-sec writer-sec-head"><span class="disp" style="font-size:44px">Guide</span><p class="writer-body" style="font-size:14px">Guides by city, season and genre — for first-timers and regulars alike.</p></div>
+      <div class="writer-sec writer-sec-head"><span class="disp" style="font-size:44px">News</span><p class="writer-body" style="font-size:14px">News including new festival announcements and lineup reveals.</p></div>
+    </div>
+  </section>
+
+  <section class="writer-wrap writer-section">
+    <div class="writer-sec" style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:24px">
+      <div class="writer-sec-head">
+        <span class="mono red">03 — Writers</span>
+        <h2 class="disp" style="font-size:44px">Our writers</h2>
+      </div>
+      <span class="mono">authors DB</span>
+    </div>
+    <ul id="author-list" class="author-list" aria-live="polite"></ul>
+  </section>
+
+  <section class="writer-wrap writer-section" id="form">
+    <div class="writer-section-grid">
+      <div class="writer-sec writer-form-head">
+        <span class="mono red">04 — Apply</span>
+        <h2 class="disp">Apply to write</h2>
+        <p class="writer-body">The editors will review your previous work and social accounts. Tell us briefly what you would like to write about.</p>
+      </div>
+      <div class="writer-sec">
+        <div id="sent-notice" class="notice" hidden>Thanks — we've received your application. The editors will be in touch.</div>
+        <form class="writer-form" action="https://formsubmit.co/press@techno-japan.media" method="POST">
+          <div class="writer-field"><label for="name">NAME</label><input id="name" type="text" name="name" required></div>
+          <div class="writer-field"><label for="email">EMAIL</label><input id="email" type="email" name="email" required></div>
+          <div class="writer-field full"><label for="articles">Previous articles (links)</label><textarea id="articles" name="articles" rows="3" placeholder="One URL per line; leave blank if none"></textarea></div>
+          <div class="writer-field full"><label for="sns">Social accounts</label><input id="sns" type="text" name="sns" placeholder="Instagram / X / Threads etc."></div>
+          <input type="text" name="_honey" tabindex="-1" autocomplete="off" class="tj-honeypot" aria-hidden="true">
+          <input type="hidden" name="_subject" value="TECHNO JAPAN — Writer application">
+          <input type="hidden" name="_captcha" value="true">
+          <input type="hidden" name="_next" value="https://techno-japan.media/en/writers.html?sent=1">
+          <button type="submit" class="btn writer-submit">APPLY</button>
+        </form>
+      </div>
+    </div>
+  </section>
 </main>
 <!-- tj:footer:start -->
 <footer>

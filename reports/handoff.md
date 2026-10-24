@@ -13319,3 +13319,175 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - 本番未反映。フェーズ4（詳細4種）が揃った。公開の判断はユーザー。公開時は cms.js / cms.html の版数変更があるため Publish pipeline ＋ CMS の確認が必要。
+
+### 2026-10-24 redesign/magazine フェーズ5-1 ABOUT（未コミット・未公開）
+
+### 実施
+- `LP/about.html` を About モック準拠へ差し替え。Techno Japan の168px相当ヒーロー、TOPと同じマーキー、About / Statement / What we cover / Instagram / Contact、共通 Buttondown ニュースレター、既存の共通ヘッダー・メニュー・フッターを実装。
+- 件数はコードに固定せず、`data-hub.js` の公開配列を読み込んだ後に Festivals 91 / Artists 134 / Venues 22 / Stories 21 を表示。JS 無効時は件数行を隠す。
+- Instagram はAPI／画像ウィジェットを使わず、アカウント名・説明・`Follow on Instagram ↗` のボタンだけに変更。問い合わせフォームの FormSubmit action / method / name / hidden項目 / required と `?sent=1` の受付表示を維持。
+- `scripts/build-detail-pages.mjs` に ABOUT の新しい日本語文言（Instagram説明、Read more、送信受付）の英語対訳を追加し、EN を生成。`LP/cms.html` は既存 `cms.js` の版数不一致解消のため `?v=175` → `?v=176` のみ更新。
+
+### コミット
+- なし（ユーザー指示により commit / push 未実施）。既存の未コミット変更と未追跡の `scripts/fixtures/apply-google-form.json` は保持。
+
+### 検証
+- 成功: `node scripts/build-detail-pages.mjs`、`node scripts/check_build_idempotent.mjs`（601ファイルに変化なし）、`python3 scripts/check_hub_head.py`、`python3 scripts/check_regressions.py`、`python3 scripts/check_asset_versions.py`。
+- 成功: JA/EN行数一致（810 / 810）、EN画面に見える日本語0件、旧 `discover-*` / Behold / 旧ヒーロー / 旧ニュースレターのABOUT内残存0件。`data-hub.js` の実測件数は Stories 21 / Festivals 91 / Artists 134 / Venues 22。
+- 未確認: `python3 scripts/check_hub_pages.py` はローカルHTTPサーバーのbindが環境のEPERMで拒否され起動できず、実ブラウザでのJA/EN・PC/モバイル操作確認、`bash scripts/preflight.sh`、Publish pipelineは未実行。
+
+### 変更したパターン
+- 旧 `hero` / `discover-card` / Behold Instagram / FormSubmitニュースレターのページ固有構造を削除し、`wrap` / `disp` / `mono` / `red` / `rule` / `btn2` / `top2-marquee` / `tjMagNewsletter` を使うモック構造へ置換。
+- `data-hub.js` のトップレベル `const` をブラウザのグローバル lexical binding として読み、公開件数を描画するパターン。EN は `enHubFromJa` の機械生成と固定対訳で同期。
+
+### 未確認の類似パターン
+- 確認済み・0件: head 必須要素、JSON-LD、JA/EN行数、EN可視日本語、旧ABOUTセレクタ、FormSubmit項目、Buttondownニュースレター、件数固定値。
+- 未確認: 実ブラウザの390px/1280px表示、Statementの開閉、問い合わせ入力値保持と送信後表示、モバイルのリンク操作、外部Instagramリンク到達、Publish pipeline。
+
+### 次の担当への注意・判断待ち
+- 公開前にローカルHTTPサーバーが使える環境でABOUTのJA/EN・PC/モバイルを実ブラウザ確認し、件数・Statement開閉・フォーム入力保持・送信後表示・ニュースレター表示を確認すること。その後 `bash scripts/preflight.sh` を通し、Publish pipeline は別手順で実行すること。今回はコミット／pushしていない。
+
+### 2026-10-24 redesign/magazine フェーズ5-2 APPLY / WRITER（未コミット・未公開）
+
+### 実施
+- `LP/submit.html` を Apply モック準拠へ差し替え、掲載について5項目、ジャンルチップ、3ステップ、サイト内申請フォーム、Upcoming on Techno Japan の4カードを追加。
+- APPLY は `scripts/fixtures/apply-google-form.json` の16問を `entry.*`・型・必須・選択肢まで反映し、`LP/submit-form.js` から Google Form へ `no-cors` POST。迷惑送信対策、送信中ロック、受付／失敗表示、日付3分割送信を実装。
+- `LP/writers.html` は既存 FormSubmit の action / 項目名 / hidden / honeypot / required / sent-notice を維持したままモック構造へ差し替え。EN は `enHubFromJa` で生成。
+- `scripts/check_apply_form.mjs` を追加し、preflight に組み込んだ。submit の CSP にだけ `docs.google.com` を追加。
+
+### コミット
+- なし（ユーザー指示により commit / push 未実施）。ABOUT の既存未コミット変更は保持。
+
+### 検証
+- 成功: `node scripts/check_apply_form.mjs`（16問 × JA/EN、ネットワーク送信なし）、変更 JS の `node --check`、`node scripts/build-detail-pages.mjs`、`node scripts/check_build_idempotent.mjs`（601ファイルに変化なし）、`python3 scripts/check_asset_versions.py`、`python3 scripts/check_regressions.py`。
+- 成功: JA/ENのApply/Writer生成、EN可視日本語（都道府県のfixture由来 bilingual 選択肢を除く）確認。Recently は掲載初出日の確実なデータが無いため、開催終了日が現在以降の公開データを開催開始日の近い順に4件表示し、見出しを `Upcoming on Techno Japan` とした。
+- 未確認: `python3 scripts/check_hub_pages.py --budget 15000` と実ブラウザでのJA/EN・PC/モバイル操作、送信 fetch 差し替え確認は localhost bind のEPERMで未完了。Publish pipeline / 本番CMS操作も未実行。
+
+### 変更したパターン
+- Apply/Writer の旧単一カラム・CTA構造を `wrap` / `disp` / `mono` / `chip` / `btn2` 相当のモック構造へ置換。
+- Google Form の short text / date / dropdown / checkbox / paragraph のHTML属性をfixtureから照合し、送信時だけ date を `_year` / `_month` / `_day` に分解。
+- EN 固定文言は `EN_PAGE_TEXT` に対訳を追加し、JSの式やデータ由来値は置換していない。
+
+### 未確認の類似パターン
+- 確認済み・0件: Apply 16問の entry ID・型・required・選択肢、CSP、WRITER FormSubmit属性、JA/EN生成冪等性。
+- 未確認: 実ブラウザの390px/1280px表示、必須エラー位置、送信成功／失敗／honeypot表示、Upcomingカードの画像・詳細リンク到達。
+
+### 次の担当への注意・判断待ち
+- localhostを使える実行環境で Apply/Writer のJA/ENをPC・モバイル実ブラウザ確認し、Applyは入力→必須エラー→fetch差し替え送信→受付／失敗保持、WriterはFormSubmitの既存送信経路を確認すること。その後 `bash scripts/preflight.sh` を省略なしで通すこと。今回はコミット／pushしていない。
+
+### 2026-10-24 redesign/magazine ABOUT 修正（未コミット・未公開）
+
+### 実施
+- ABOUT のマーキーを TOP と同じ `top2-marquee` マークアップ・文言に統一し、`top-phase2.css` を ABOUT JA/EN でも読み込むよう修正。
+- 04 の見出しを `Instagram` に変更。
+- お問い合わせフォームから `_honey` / `_subject` / `_next` / `_template` と送信後 `?sent=1` 表示処理を削除し、name / email / subject / message の4項目だけに復元。
+
+### コミット
+- なし（ユーザー指示により commit / push 未実施）。ABOUT・APPLY・WRITER の既存未コミット変更は保持。
+
+### 検証
+- `node --check`、`node scripts/build-detail-pages.mjs`、`node scripts/check_build_idempotent.mjs`（601ファイルに変化なし）、`python3 scripts/check_asset_versions.py`、`python3 scripts/check_regressions.py`、`python3 scripts/check_hub_head.py` 成功。
+- ABOUT JA/EN は790行で一致。ABOUT EN の可視テキスト中の日本語は0件。
+
+### 変更したパターン
+- TOP と共通のマーキー CSS を ABOUT に追加し、`prefers-reduced-motion` と横 overflow の既存ルールを共有。
+- FormSubmit のお問い合わせフォームを元の4項目へ戻し、送信後表示の専用状態を除去。
+
+### 未確認の類似パターン
+- 確認済み・0件: ABOUT JA/EN のマーキー構造、見出し、フォーム追加 hidden 項目、`?sent=1` 処理。
+- 未確認: 実ブラウザの390px/1280px表示・操作。`python3 scripts/check_hub_pages.py` は localhost bind の EPERM で起動できなかった。
+
+### 次の担当への注意・判断待ち
+- localhost を使える環境で ABOUT JA/EN をPC・モバイル実ブラウザ確認し、マーキーの流れ／停止、横スクロールなし、Instagram見出し、フォーム入力保持を確認すること。今回はコミット／pushしていない。
+
+### 2026-10-24 redesign/magazine APPLY / WRITER / ABOUT 小修正（未コミット・未公開）
+
+### 実施
+- APPLY の `[hidden]` をページ内で確実に `display: none !important` とし、送信後にフォームが残る問題と受付・エラー表示の hidden 表示を修正。
+- APPLY の制作メモを JA/EN から削除。都道府県の先頭を `value=""`・`selected` の `選択してください` / `Select` に変更し、fixture の48選択肢は維持。
+- `check_apply_form.mjs` は空の先頭 option を明示検査したうえで空 option を除外し、fixture の48件と厳密比較するよう変更。
+- ABOUT / APPLY / WRITER の JA 見出しに `word-break: keep-all` を適用し、WRITER の日本語 h2 に BudouX の `<wbr>` を追加。`submit-form.js` の参照を `?v=2` に更新。
+
+### コミット
+- なし（ユーザー指示により commit / push 未実施）。既存の未コミット変更は保持。
+
+### 検証
+- 成功: `node --check`、`node scripts/check_apply_form.mjs`、`node scripts/build-detail-pages.mjs`（最後まで完了）、`node scripts/check_build_idempotent.mjs`（601ファイル差分なし）。
+- 成功: `python3 scripts/check_asset_versions.py`、`python3 scripts/check_regressions.py`、`python3 scripts/check_hub_head.py`、JA/EN行数比較（ABOUT 795、APPLY 323、WRITER 255で一致）。
+- 成功: EN ABOUT/APPLY/WRITER の可視テキスト抽出で日本語0件。実ブラウザ操作、Publish pipeline、本番CMS操作は未確認。
+
+### 変更したパターン
+- CSS Grid のフォームに対する `[hidden]` の強制非表示、placeholder option の先頭固定、fixture比較からの空 option 除外。
+- `phrase-breaks.mjs` の BudouX による JA 見出しの文節境界 `<wbr>` と `:lang(ja)` 限定の `word-break: keep-all`。
+- EN は `enHubFromJa` と `EN_PAGE_TEXT` で生成し、JA/ENの行数を一致させるパターン。
+
+### 未確認の類似パターン
+- 確認済み・0件: APPLY の16問、JA/ENの先頭placeholder、fixture48選択肢、受付／エラー／各入力エラーの hidden 属性、WRITERのJA見出し4箇所。
+- 未確認: 実ブラウザの390px/1280px操作、送信成功／失敗時の表示、Publish pipeline、本番CMS操作。
+
+### 次の担当への注意・判断待ち
+- 公開前に実ブラウザで APPLY の初期都道府県が空、空のまま送信が止まる、入力保持、送信後フォーム非表示・Received表示をJA/EN・PC/モバイルで確認すること。WRITER/ABOUTの見出し折返しも確認し、公開時は通常のpreflight／Publish手順を実行すること。
+
+### 2026-10-24 redesign/magazine ABOUT 本文消失修正（未コミット・未公開）
+
+### 実施
+
+- `LP/about.html` と生成後の `LP/en/about.html` から TOP 専用 `top-phase2.css` の参照を削除。`#main-content > :not(#top-phase2)` による本文 section 全消失を解消した。
+- TOP と ABOUT の `top2-marquee` を `LP/common.css` の共通部品へ移し、帯・アニメーション・`prefers-reduced-motion` を同じ CSS で提供。共通 CSS にはページ専用の「他を隠す」指定を置かないコメントを追加した。
+- `common.css` を v51、TOP 専用 CSS を v9 に更新し、手書きの `LP/map.html` も common.css v51 に揃えた。
+- `scripts/check_hub_pages.py` に ABOUT / APPLY / WRITER の JA/EN 6ページを実ブラウザで iframe 描画し、`#main-content` 直下 section の表示・高さ・h1 の可視性を確認する検査を追加した。TOP は対象外。
+
+### コミット
+
+- なし（ユーザー指示により commit / push 未実施）。既存の未コミット変更は保持。
+
+### 検証
+
+- 成功: `node scripts/build-detail-pages.mjs`（最後まで完了）、`node scripts/check_build_idempotent.mjs`（601ファイル差分なし）。EN は `enHubFromJa` で再生成された。
+- 成功: `python3 scripts/check_asset_versions.py`、`python3 scripts/check_regressions.py`、`python3 scripts/check_hub_head.py`、JA/EN行数比較（index / festivals / artists / venues / news / about / submit / writers の全8ページ一致）。
+- 成功: `check_hub_pages.py` の Python 構文確認、`git diff --check`、共通 CSS の版数・ABOUT の TOP CSS 参照なしの静的確認。
+- 未確認: `python3 scripts/check_hub_pages.py --budget 15000` は実行環境の localhost bind `EPERM` で起動できず、追加した実ブラウザ検査の pass は未取得。PC/モバイルの実ブラウザ操作、Publish pipeline、本番 CMS 操作も未実施。
+
+### 変更したパターン
+
+- `.top2-marquee` / `.top2-marquee-track` と流れるアニメーションをページ共通 CSS へ移し、TOP 専用の表示制御 CSS と分離。
+- ABOUT / APPLY / WRITER の直下 section をブラウザの計算済み `display`・`visibility`・高さで検査し、h1 の実レイアウト矩形も確認するパターン。
+- CSS 変更に伴う `common.css` v50→51、`top-phase2.css` v8→9 のキャッシュバスティング。
+
+### 未確認の類似パターン
+
+- 確認済み・0件: ABOUT JA/EN の `top-phase2.css` 参照、common.css v50 残存、TOP/ABOUT の共通マーキー宣言の重複、JA/EN 8ページの行数不一致。
+- 未確認: 実ブラウザでの ABOUT/APPLY/WRITER の JA/EN・PC/モバイル表示と操作、TOP マーキーの見た目・動きの実機比較。
+
+### 次の担当への注意・判断待ち
+
+- localhost を使える実行環境で `python3 scripts/check_hub_pages.py --budget 15000` を再実行し、ABOUT/APPLY/WRITER の6ページが pass することを確認すること。ユーザー指定どおりブラウザ検査後に `bash scripts/preflight.sh` を通し、公開時は通常の Publish 手順を実行すること。今回はコミット／pushしていない。
+
+### 2026-10-24 redesign/magazine フェーズ5 ABOUT / APPLY / WRITER（Claude 検証・コミット。本番未反映）
+
+### 実施
+- ABOUT: モックの作り（ヒーロー＋DB の件数（data-hub.js から JS で数える）・マーキー（TOP と共通の部品を common.css へ移した）・01 About・02 Statement・03 What we cover（4枚・件数）・04 Instagram・05 Contact）。本文は今の about.html と同じ。お問い合わせフォーム（FormSubmit press@）は元の項目のまま。ニュースレターは古い FormSubmit から共通の Buttondown（tjMagNewsletter）へ。
+- ABOUT の Instagram: 今まで入っていた埋め込み（Behold）は、サイトの CSP（script-src）で読み込みが止められ、**本番でも何も表示されていなかった**。今回は出さず、アカウントへのリンクと説明だけ（見出しも投稿が無くても正しい言葉に）。最新投稿を出すには about だけ CSP に Behold を許す必要があり、ユーザー判断待ち。
+- APPLY: サイト内の申請フォームから **Google フォームへ直接送る**（`fetch` の `no-cors` POST、`formResponse`）。質問は Google フォームの公開ページから読み取った16問（`scripts/fixtures/apply-google-form.json`）と完全に一致（日付は `_year/_month/_day` に分ける、都道府県48・ジャンル8・許諾1 の文字列も一致）。必須の確認、送信中の二重送信防止、迷惑送信よけ、送信後は受付の表示（フォームは隠す）、失敗時は入力を残して Google フォームへのリンク、常に「うまく送れない場合は Google フォームから」。CSP の connect-src に docs.google.com を submit.html / en/submit.html だけ足した。Recently listed は初出の日付データが無いため `Upcoming on Techno Japan`（開催の近い順4件）。
+- WRITER: モックの作り。応募フォームは今の FormSubmit（press@）のまま（REDESIGN_SPEC §4 の「WRITER も Google フォーム」は事実と違っていた）。
+- 日本語の見出しは文節の切れ目で折る（BudouX の `<wbr>` ＋ keep-all）。新しい検査 `scripts/check_apply_form.mjs`（ネットワークに出ずに16問の対応を確認）を preflight に追加。check_hub_pages に ABOUT / APPLY / WRITER の「本文が描画されている」確認を追加。
+
+### コミット
+- このエントリを含むコミット。
+
+### 検証
+- preflight: 66件中65件成功、落ちた1件（CMS の記事プレビューの common.css の版数）は直して単独で成功。
+- 実ブラウザ相当（CDP、PC 1280 / スマホ 390、JA/EN）: ABOUT 54/54、APPLY 68/68（**Google への送信はしない**: fetch を差し替え、さらに docs.google.com への通信をブラウザ側で遮断して、送る中身を取り出して確認）、WRITER 30/30。TOP（マーキーの移動）のカルーセル・1枚目・日付・マーキーに崩れなし。
+
+### 変更したパターン
+- 部品を使い回すために**他のページ専用の CSS ファイルを読み込まない**（top-phase2.css の `#main-content > :not(#top-phase2){display:none}` で ABOUT の本文が全部消えた）→ 共通の部品は common.css に置く。描画検査に「本文が見えている」を追加。
+- 見本のデザイン上のメモ（「回答は今までのスプレッドシートに」）を画面に出さない。
+- `display` を指定した要素は `[hidden]` が効かない → `[hidden]{display:none}` を明示。
+
+### 未確認の類似パターン
+- **Google フォームへの実際の送信は未確認**（本物の回答が入るためテストで送らなかった）。本番に出す前に、ユーザーにテスト環境から1回だけ送ってもらい、Google フォームの回答に届くことを確認する（その回答は削除してもらう）。
+- Google フォームに連絡先（メール）の質問が無い（今の状態のまま）。必要ならユーザーが Google フォームに足し、fixture とサイトのフォームを更新する。
+
+### 次の担当への注意・判断待ち
+- ABOUT の Instagram の最新投稿を出すか（CSP に Behold を許すか）はユーザー判断。
+- 公開時は cms.js / cms.html の版数変更があるため Publish pipeline ＋ CMS の確認が必要。

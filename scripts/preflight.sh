@@ -159,6 +159,7 @@ run "?v の上げ忘れが無い"               python3 scripts/check_asset_vers
 run "生成側に ?v のべた書きが無い"      python3 scripts/check_no_hardcoded_versions.py
 run "Service Worker の経路"             node scripts/check_sw_routing.mjs
 run "CSS / JS の参照先が実在する"       python3 scripts/check_asset_paths.py
+run "APPLY Google Form 対応"            node scripts/check_apply_form.mjs
 
 echo
 echo "▸ CMS"

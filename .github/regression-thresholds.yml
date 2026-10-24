@@ -446,17 +446,40 @@ hub_pages:
         - {id: top2-venue-list, marker: top2-venue-card, min: 1}
   # submit は静的ページで JS 描画を持たない。marker は静的セクションを数えるので
   # 「JS が描画したか」ではなく「ページが正しく配信され本文が存在するか」の検査になる。
+  # 2026-10-24 の APPLY 作り直しで本文の目印を submit-section から apply-sec に変更。
   # Uncaught 例外の検出は他ページと同じく有効。
   submit.html:
     container: main-content
-    marker: submit-section
-    min_markers: 3                 # 実測 3
-    min_container_bytes: 800       # 実測 1,100
+    marker: apply-sec
+    min_markers: 5                 # 実測 5
+    min_container_bytes: 12000     # 実測 約16,800B。本文が大きく欠落した場合に検出。
   en/submit.html:
     container: main-content
-    marker: submit-section
-    min_markers: 3                 # 実測 3
-    min_container_bytes: 800       # 実測 1,640
+    marker: apply-sec
+    min_markers: 5                 # 実測 5
+    min_container_bytes: 11000     # 実測 約15,900B。本文が大きく欠落した場合に検出。
+  # ABOUT / WRITER も静的ページの本文区画を目印にする。2026-10-24 現在、JA/EN とも
+  # 5区画で構成されており、クラス名は現在のHTMLと一致する。
+  about.html:
+    container: main-content
+    marker: about-section
+    min_markers: 5                 # 実測 5
+    min_container_bytes: 9000      # 実測 約10,500B
+  en/about.html:
+    container: main-content
+    marker: about-section
+    min_markers: 5                 # 実測 5
+    min_container_bytes: 8000      # 実測 約9,500B
+  writers.html:
+    container: main-content
+    marker: writer-section
+    min_markers: 5                 # 実測 5
+    min_container_bytes: 5000      # 実測 約6,300B
+  en/writers.html:
+    container: main-content
+    marker: writer-section
+    min_markers: 5                 # 実測 5
+    min_container_bytes: 4500      # 実測 約5,900B
   # EN ハブ（build-detail-pages.mjs が JA から機械生成する）。
   # marker と閾値は JA と同じでよい。同じ data.js を読むのでカード数も一致する。
   en/festivals.html:

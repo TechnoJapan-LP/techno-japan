@@ -1,0 +1,181 @@
+{
+  "formId": "1FAIpQLSfh7ahIgtN5zflxeSbKBGLqTB07SS1DbCFpm0SrCU-5-PLDvg",
+  "action": "https://docs.google.com/forms/d/e/1FAIpQLSfh7ahIgtN5zflxeSbKBGLqTB07SS1DbCFpm0SrCU-5-PLDvg/formResponse",
+  "viewform": "https://docs.google.com/forms/d/e/1FAIpQLSfh7ahIgtN5zflxeSbKBGLqTB07SS1DbCFpm0SrCU-5-PLDvg/viewform",
+  "extra": {
+    "fvv": "1",
+    "pageHistory": "0"
+  },
+  "fetchedAt": "2026-10-24",
+  "questions": [
+    {
+      "entry": "entry.543696836",
+      "type": "short_text",
+      "required": true,
+      "title": "1.フェスティバル名 / Festival name"
+    },
+    {
+      "entry": "entry.1641677491",
+      "type": "date",
+      "required": true,
+      "title": "2.開催日 / Start date",
+      "params": [
+        "entry.1641677491_year",
+        "entry.1641677491_month",
+        "entry.1641677491_day"
+      ]
+    },
+    {
+      "entry": "entry.1594578578",
+      "type": "date",
+      "required": false,
+      "title": "3.終了日 / End date\n※ 複数日開催の場合 / For multi-day events",
+      "params": [
+        "entry.1594578578_year",
+        "entry.1594578578_month",
+        "entry.1594578578_day"
+      ]
+    },
+    {
+      "entry": "entry.1656132161",
+      "type": "short_text",
+      "required": true,
+      "title": "4.会場名 / Venue name"
+    },
+    {
+      "entry": "entry.1344266315",
+      "type": "dropdown",
+      "required": true,
+      "title": "5.都道府県 / Prefecture",
+      "options": [
+        "北海道 / Hokkaido",
+        "青森県 / Aomori",
+        "岩手県 / Iwate",
+        "宮城県 / Miyagi",
+        "秋田県 / Akita",
+        "山形県 / Yamagata",
+        "福島県 / Fukushima",
+        "群馬県 / Gunma",
+        "栃木県 / Tochigi",
+        "茨城県 / Ibaraki",
+        "埼玉県 / Saitama",
+        "千葉県 / Chiba",
+        "東京都 / Tokyo",
+        "神奈川県 / Kanagawa",
+        "新潟県 / Niigata",
+        "富山県 / Toyama",
+        "石川県 / Ishikawa",
+        "福井県 / Fukui",
+        "山梨県 / Yamanashi",
+        "長野県 / Nagano",
+        "岐阜県 / Gifu",
+        "静岡県 / Shizuoka",
+        "愛知県 / Aichi",
+        "三重県 / Mie",
+        "滋賀県 / Shiga",
+        "京都府 / Kyoto",
+        "大阪府 / Osaka",
+        "兵庫県 / Hyogo",
+        "奈良県 / Nara",
+        "和歌山県 / Wakayama",
+        "鳥取県 / Tottori",
+        "島根県 / Shimane",
+        "岡山県 / Okayama",
+        "広島県 / Hiroshima",
+        "山口県 / Yamaguchi",
+        "徳島県 / Tokushima",
+        "香川県 / Kagawa",
+        "愛媛県 / Ehime",
+        "高知県 / Kochi",
+        "福岡県 / Fukuoka",
+        "佐賀県 / Saga",
+        "長崎県 / Nagasaki",
+        "熊本県 / Kumamoto",
+        "大分県 / Oita",
+        "宮崎県 / Miyazaki",
+        "鹿児島県 / Kagoshima",
+        "沖縄県 / Okinawa",
+        "その他 / Other"
+      ]
+    },
+    {
+      "entry": "entry.1637789076",
+      "type": "short_text",
+      "required": false,
+      "title": "6.会場住所 / Venue address\n※ シークレットロケーションの場合や、公開前の場合は未記入で構いません\n※ Leave blank for secret locations or if not yet announced"
+    },
+    {
+      "entry": "entry.1908017718",
+      "type": "short_text",
+      "required": false,
+      "title": "7.公式サイトURL / Official website\n※ 公式サイトがない場合は未記入で構いません。SNSのみでも掲載可能です\n※ Optional. Social media accounts alone are sufficient"
+    },
+    {
+      "entry": "entry.562932451",
+      "type": "short_text",
+      "required": false,
+      "title": "8.公式Instagram / Official Instagram"
+    },
+    {
+      "entry": "entry.796790857",
+      "type": "short_text",
+      "required": false,
+      "title": "9.チケット販売URL / Ticket page\n※ 未定・未公開の場合は未記入で構いません。決まり次第ご連絡いただければ追記します\n※ Leave blank if not yet available. Let us know once tickets go on sale"
+    },
+    {
+      "entry": "entry.132078991",
+      "type": "checkbox",
+      "required": true,
+      "title": "10.ジャンル / Genre",
+      "options": [
+        "TECHNO",
+        "HOUSE",
+        "MINIMAL",
+        "AMBIENT",
+        "EXPERIMENTAL",
+        "BASS",
+        "PSYCHEDELIC",
+        "OTHERS"
+      ]
+    },
+    {
+      "entry": "entry.1469144877",
+      "type": "paragraph",
+      "required": false,
+      "title": "11.紹介文(日本語) / Description in Japanese\n※ 200字程度"
+    },
+    {
+      "entry": "entry.123427584",
+      "type": "paragraph",
+      "required": false,
+      "title": "12.紹介文(英語) / Description in English\n※ 200 words or fewer"
+    },
+    {
+      "entry": "entry.479036330",
+      "type": "paragraph",
+      "required": false,
+      "title": "13.ラインナップ / Lineup\n※ 1行につき1組ご記入ください。発表済みの範囲で構いません\n※ One artist per line. Announced acts only is fine"
+    },
+    {
+      "entry": "entry.91142027",
+      "type": "paragraph",
+      "required": false,
+      "title": "14.プレスキット・その他資料のURL / Press kit or other materials\n※ プレスキット、素材フォルダ、リリース文など\n※ 画像をアップロードできない場合は、画像URLをこちらにご記入ください\n※ Press kits, asset folders, or press releases\n※ If you are unable to upload images, please provide image URLs here"
+    },
+    {
+      "entry": "entry.1816401197",
+      "type": "paragraph",
+      "required": false,
+      "title": "15.備考・特記事項 / Remarks\n※ 掲載にあたってお伝えしたいことがあればご自由にどうぞ\n※ Anything else you would like us to know"
+    },
+    {
+      "entry": "entry.974040165",
+      "type": "checkbox",
+      "required": true,
+      "title": "16.掲載許諾 / Permission",
+      "options": [
+        "提供した画像・情報のTechno Japan上での掲載に許諾します（I grant permission to publish the submitted images and information on Techno Japan）"
+      ]
+    }
+  ]
+}

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' https:; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://stats.g.doubleclick.net; frame-src 'self' https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; form-action 'self' https://formsubmit.co https://buttondown.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' https:; connect-src 'self' https://docs.google.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://stats.g.doubleclick.net; frame-src 'self' https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; form-action 'self' https://formsubmit.co https://buttondown.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), interest-cohort=()">
@@ -43,9 +43,80 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/common.css?v=50">
+<link rel="stylesheet" href="/common.css?v=51">
 <style>
-.submit-page{max-width:860px;margin:0 auto;padding:160px 40px 100px}.submit-eyebrow{font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;color:var(--accent);margin-bottom:20px}.submit-page h1{font-family:var(--font-display);font-size:clamp(54px,9vw,100px);font-weight:400;line-height:.95;margin:0 0 36px}.submit-page h1 .no-break{white-space:nowrap}.submit-lead{font-size:clamp(18px,2.5vw,24px);font-weight:200;line-height:1.8;max-width:760px;margin-bottom:72px}.submit-section{padding:48px 0;border-top:1px solid rgba(240,237,232,.12)}.submit-section h2{font-family:var(--font-display);font-size:clamp(30px,5vw,48px);font-weight:400;margin:0 0 24px}.submit-section p,.submit-section li{font-size:16px;font-weight:300;line-height:1.9;color:rgba(240,237,232,.82)}.submit-section ul,.submit-section ol{margin:24px 0 0;padding-left:1.5em}.submit-section li+li{margin-top:8px}.submit-cta{display:inline-flex;align-items:center;justify-content:center;margin:20px 0 64px;padding:17px 28px;border:1px solid var(--accent);background:var(--accent);font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;transition:.2s}.submit-cta:hover{background:transparent;color:var(--accent)}.submit-note{padding:28px;border:1px solid rgba(240,237,232,.14);font-size:14px;font-weight:300;line-height:1.8;color:rgba(240,237,232,.75)}@media(max-width:768px){.submit-page{padding:120px 24px 72px}.submit-lead{margin-bottom:48px}.submit-section{padding:36px 0}}
+*,*::before,*::after{box-sizing:border-box}
+body{overflow-x:hidden}
+.apply-page{position:relative;overflow:clip;padding-bottom:40px}
+.apply-page::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background-image:repeating-linear-gradient(90deg,var(--text-a03) 0 1px,transparent 1px 80px),repeating-linear-gradient(0deg,var(--text-a03) 0 1px,transparent 1px 80px)}
+.apply-wrap{position:relative;width:100%;max-width:1360px;margin:0 auto;padding:0 40px}
+.disp{font-family:var(--font-display);font-weight:400;line-height:.95;text-transform:uppercase;margin:0}
+.mono{font-family:var(--font-mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--text-a62)}
+.red{color:var(--accent)}
+.apply-head{padding-top:56px;display:flex;flex-direction:column;gap:28px}
+.apply-page h1{font-size:clamp(88px,12vw,168px);letter-spacing:-.01em}
+.apply-lead{max-width:760px;margin:0;color:var(--text-a90);font-size:20px;line-height:1.9}
+.apply-head-actions{display:flex;gap:10px;justify-self:end;flex-wrap:wrap}
+.apply-head-grid{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:48px}
+.btn{display:inline-flex;align-items:center;justify-content:center;height:48px;padding:0 28px;border:0;background:var(--text);color:var(--bg);font:11px var(--font-mono);letter-spacing:.2em;text-transform:uppercase;cursor:pointer}
+.btn:hover{background:var(--accent);color:var(--text)}
+.btn2{display:inline-flex;align-items:center;justify-content:center;height:48px;padding:0 24px;border:1px solid var(--text-a40);background:none;color:var(--text);font:11px var(--font-mono);letter-spacing:.2em;text-transform:uppercase;cursor:pointer}
+.btn2:hover{border-color:var(--accent);color:var(--accent)}
+.apply-section{padding-top:96px}
+.apply-section-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px}
+.apply-sec{border-top:1px solid var(--text-a14);padding-top:18px}
+.apply-sec-head{display:flex;flex-direction:column;gap:16px}
+.apply-sec h2{font-size:clamp(40px,5vw,72px)}
+.apply-body{max-width:640px;margin:0;color:var(--text-a85);font-size:16px;line-height:1.95}
+.apply-list{display:flex;flex-direction:column}
+.apply-list-item{display:grid;grid-template-columns:40px 1fr;gap:16px;padding:18px 0;border-top:1px solid var(--text-a10);font-size:15px;line-height:1.7;color:var(--text-a90)}
+.apply-list-item:last-child{border-bottom:1px solid var(--text-a10)}
+.apply-list-item .mono{padding-top:4px;color:var(--accent)}
+.apply-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.chip{min-height:36px;padding:8px 14px;border:1px solid var(--text-a18);background:none;color:var(--text-a62);font:10px var(--font-mono);letter-spacing:.15em;text-transform:uppercase}
+.chip.on{border-color:var(--accent);color:var(--accent)}
+.apply-form-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:32px}
+.apply-form-head .mono{max-width:520px;line-height:1.7;text-align:right}
+.apply-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px 40px;max-width:960px}
+.apply-field{display:flex;flex-direction:column;gap:8px;min-width:0}
+.apply-field.full{grid-column:1 / -1}
+.apply-field label,.apply-field legend{color:var(--text-a62);font:10px var(--font-mono);letter-spacing:.2em;text-transform:uppercase}
+.apply-field input,.apply-field textarea,.apply-field select{width:100%;height:48px;padding:0;border:0;border-bottom:1px solid var(--text-a30);border-radius:0;outline:none;background:transparent;color:var(--text);font:15px var(--font-body);-webkit-appearance:none;appearance:none}
+.apply-field textarea{height:auto;min-height:140px;padding:12px 0;resize:vertical}
+.apply-field select option{background:var(--bg);color:var(--text)}
+.apply-field input:focus,.apply-field textarea:focus,.apply-field select:focus{border-bottom-color:var(--accent)}
+.apply-field fieldset{margin:0;padding:0;border:0}
+.apply-field.checkbox-group{gap:12px}
+.apply-options{display:flex;gap:8px;flex-wrap:wrap}
+.apply-option{display:inline-flex;align-items:center;gap:8px;min-height:36px;padding:8px 12px;border:1px solid var(--text-a18);color:var(--text-a85);font:11px var(--font-mono);cursor:pointer}
+.apply-option:has(input:checked){border-color:var(--accent);color:var(--accent)}
+.apply-option input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.apply-honeypot{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.apply-field-note{margin:0;color:var(--text-a62);font-size:12px;line-height:1.7}
+.apply-error{margin:0;color:#ff7777;font-size:12px;line-height:1.6}
+.apply-page [hidden]{display:none !important}
+:lang(ja) .apply-page h1,
+:lang(ja) .apply-page h2,
+:lang(ja) .apply-page h3{word-break:keep-all}
+.apply-invalid input,.apply-invalid textarea,.apply-invalid select{border-bottom-color:#ff7777}
+.apply-invalid .apply-option{border-color:rgba(255,119,119,.45)}
+.apply-form-actions{grid-column:1 / -1;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.apply-form-actions .mono{line-height:1.7}
+.apply-fallback{margin:20px 0 0;color:var(--text-a62);font-size:12px;line-height:1.7}
+.apply-fallback a{color:var(--text);text-decoration:underline;text-underline-offset:3px}
+.apply-received{max-width:960px;border:1px solid var(--accent);padding:18px 20px;font-size:15px;line-height:1.8;color:var(--text-a90)}
+.apply-received .mono{display:block;margin-bottom:8px}
+.apply-recent-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:24px}
+.apply-recent-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
+.apply-card{display:flex;flex-direction:column;gap:10px;min-width:0;color:var(--text);text-decoration:none}
+.apply-card-image{aspect-ratio:3/2;overflow:hidden;background:var(--text-a04)}
+.apply-card-image img{width:100%;height:100%;display:block;object-fit:cover;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+.apply-card:hover .apply-card-image img{transform:scale(1.04)}
+.apply-card-title{font-size:28px}
+.apply-card:hover .apply-card-title{color:var(--accent)}
+.apply-card-meta{font:10px var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--text-a62)}
+@media(max-width:900px){.apply-wrap{padding:0 16px}.apply-head-grid,.apply-section-grid,.apply-form{grid-template-columns:1fr}.apply-head-actions{justify-self:start}.apply-sec h2{font-size:56px}.apply-form .full{grid-column:auto}.apply-form-actions{grid-column:auto}.apply-recent-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 16px}.apply-recent-head{align-items:flex-start;flex-direction:column}.apply-form-head .mono{text-align:left}.apply-page h1{font-size:88px}}
+@media(max-width:560px){.apply-page h1{font-size:64px}.apply-lead{font-size:17px}.apply-section{padding-top:72px}.apply-form{gap:24px}.apply-recent-grid{grid-template-columns:1fr 1fr}.apply-card-title{font-size:22px}.apply-head-actions .btn,.apply-head-actions .btn2{width:100%}.apply-head-actions{width:100%}}
 </style>
 <script type="application/ld+json">
 [{"@context":"https://schema.org","@type":"WebPage","name":"APPLY","description":"Techno Japanへのフェスティバル・イベント掲載申請。掲載は無料です。","url":"https://techno-japan.media/submit.html","inLanguage":"ja"},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"TECHNO JAPAN","item":"https://techno-japan.media/"},{"@type":"ListItem","position":2,"name":"APPLY","item":"https://techno-japan.media/submit.html"}]}]
@@ -85,15 +156,122 @@
     <span class="nav-ov-tag">日本のアンダーグラウンドを、キュレーションする。</span>
   </div>
 </div>
-<main id="main-content" class="submit-page">
-  <div class="submit-eyebrow">SUBMISSION</div>
-  <h1>APPLY</h1>
-  <p class="submit-lead">Techno Japanでは、日本国内で開催されるテクノおよびアンダーグラウンドなエレクトロニックミュージックのフェスティバル・イベント情報を掲載しています。掲載は無料です。下記フォームよりご申請ください。</p>
-  <section class="submit-section"><h2>掲載について</h2><p>掲載するフェスティバル・イベントは、編集部がメディアの方向性に照らして判断しています。掲載の考え方は <a href="/about.html#statement">STATEMENT</a> をご覧ください。</p><ul><li>掲載は無料です。掲載に伴う費用は一切発生しません</li><li>申請いただいたすべてのイベントの掲載をお約束するものではありません</li><li>掲載可否の理由について、個別のご回答は行っておりません</li><li>提供いただいた情報は、掲載時に編集部で編集する場合があります</li><li>掲載後の情報修正・削除のご依頼は、フォーム記載の連絡先より承ります</li></ul></section>
-  <section class="submit-section"><h2>掲載の目安</h2><p>テクノ、ハウス、ミニマル、アンビエント、エクスペリメンタルなど、エレクトロニックミュージックを軸としたフェスティバル・イベントを対象としています。</p></section>
-  <section class="submit-section"><h2>掲載までの流れ</h2><ol><li>フォームより申請</li><li>編集部で内容を確認</li><li>掲載が決定した場合、サイトに公開されます<br>(お急ぎの場合は備考欄にその旨をお書きください)</li></ol></section>
-  <a class="submit-cta" href="https://docs.google.com/forms/d/e/1FAIpQLSfh7ahIgtN5zflxeSbKBGLqTB07SS1DbCFpm0SrCU-5-PLDvg/viewform" target="_blank" rel="noopener">申請フォームへ</a>
-  <p class="submit-note">掲載後の情報更新、ラインナップの追加発表なども随時受け付けています。<br>同じフォームよりご連絡ください。</p>
+<main id="main-content" class="apply-page">
+  <section class="apply-wrap apply-head">
+    <span class="mono">SUBMISSION · 掲載は無料</span>
+    <h1 class="disp">APPLY</h1>
+    <div class="apply-head-grid">
+      <p class="apply-lead">Techno Japanでは、日本国内で開催されるテクノおよびアンダーグラウンドなエレクトロニックミュージックのフェスティバル・イベント情報を掲載しています。掲載は無料です。下記フォームよりご申請ください。</p>
+      <div class="apply-head-actions"><a class="btn" href="#form">応募フォームへ</a><a class="btn2" href="/about.html#statement">STATEMENT →</a></div>
+    </div>
+  </section>
+
+  <section class="apply-wrap apply-section">
+    <div class="apply-section-grid">
+      <div class="apply-sec apply-sec-head"><span class="mono red">01 — 掲載について</span><h2 class="disp">How it works</h2><p class="apply-body">掲載するフェスティバル・イベントは、編集部がメディアの方向性に照らして判断しています。掲載の考え方は <a href="/about.html#statement">STATEMENT</a> をご覧ください。</p></div>
+      <div class="apply-list">
+        <div class="apply-list-item"><span class="mono">01</span><span>掲載は無料です。掲載に伴う費用は一切発生しません</span></div>
+        <div class="apply-list-item"><span class="mono">02</span><span>申請いただいたすべてのイベントの掲載をお約束するものではありません</span></div>
+        <div class="apply-list-item"><span class="mono">03</span><span>掲載可否の理由について、個別のご回答は行っておりません</span></div>
+        <div class="apply-list-item"><span class="mono">04</span><span>提供いただいた情報は、掲載時に編集部で編集する場合があります</span></div>
+        <div class="apply-list-item"><span class="mono">05</span><span>掲載後の情報修正・削除のご依頼は、フォーム記載の連絡先より承ります</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="apply-wrap apply-section">
+    <div class="apply-section-grid">
+      <div class="apply-sec apply-sec-head"><span class="mono red">02 — 掲載の目安</span><h2 class="disp">Genres</h2><p class="apply-body">テクノ、ハウス、ミニマル、アンビエント、エクスペリメンタルなど、エレクトロニックミュージックを軸としたフェスティバル・イベントを対象としています。</p><div class="apply-chips"><span class="chip on">Techno</span><span class="chip on">House</span><span class="chip on">Minimal</span><span class="chip on">Ambient</span><span class="chip on">Experimental</span><span class="chip on">Electronic</span></div></div>
+      <div class="apply-sec apply-sec-head"><span class="mono red">03 — 掲載までの流れ</span><h2 class="disp">Flow</h2><div class="apply-list"><div class="apply-list-item"><span class="mono">01</span><span>フォームより申請</span></div><div class="apply-list-item"><span class="mono">02</span><span>編集部で内容を確認</span></div><div class="apply-list-item"><span class="mono">03</span><span>掲載が決定した場合、サイトに公開されます<br>(お急ぎの場合は備考欄にその旨をお書きください)</span></div></div><p class="apply-body">掲載後の情報更新、ラインナップの追加発表なども随時受け付けています。<br>同じフォームよりご連絡ください。</p></div>
+    </div>
+  </section>
+
+  <section class="apply-wrap apply-section" id="form">
+    <div class="apply-sec apply-form-head">
+      <div class="apply-sec-head">
+        <span class="mono red">04 — 申請フォーム</span>
+        <h2 class="disp">Submit an event</h2>
+      </div>
+    </div>
+    <div id="apply-received" class="apply-received" role="status" aria-live="polite" hidden><span class="mono red">Received</span>申請を受け付けました。編集部で確認のうえ、掲載が決まった場合はサイトに公開されます。</div>
+    <div id="apply-error" class="apply-received" role="alert" hidden><span class="mono red">Unable to send</span>送信できませんでした。入力内容は保持しています。<a href="https://docs.google.com/forms/d/e/1FAIpQLSfh7ahIgtN5zflxeSbKBGLqTB07SS1DbCFpm0SrCU-5-PLDvg/viewform" target="_blank" rel="noopener">こちらのフォーム</a>から送信してください。</div>
+    <form id="apply-form" class="apply-form" action="https://docs.google.com/forms/d/e/1FAIpQLSfh7ahIgtN5zflxeSbKBGLqTB07SS1DbCFpm0SrCU-5-PLDvg/formResponse" method="post">
+      <div class="apply-field" data-question="1"><label for="apply-name"><span class="apply-field-number">01</span> フェスティバル名</label><input id="apply-name" type="text" name="entry.543696836" required aria-describedby="apply-error-1"><p class="apply-error" id="apply-error-1" role="alert" hidden></p></div>
+      <div class="apply-field" data-question="2"><label for="apply-start"><span class="apply-field-number">02</span> 開催日</label><input id="apply-start" type="date" name="entry.1641677491" required aria-describedby="apply-error-2"><p class="apply-error" id="apply-error-2" role="alert" hidden></p></div>
+      <div class="apply-field" data-question="3"><label for="apply-end"><span class="apply-field-number">03</span> 終了日</label><input id="apply-end" type="date" name="entry.1594578578" aria-describedby="apply-note-3 apply-error-3"><p class="apply-field-note" id="apply-note-3">※ 複数日開催の場合</p><p class="apply-error" id="apply-error-3" role="alert" hidden></p></div>
+      <div class="apply-field" data-question="4"><label for="apply-venue"><span class="apply-field-number">04</span> 会場名</label><input id="apply-venue" type="text" name="entry.1656132161" required aria-describedby="apply-error-4"><p class="apply-error" id="apply-error-4" role="alert" hidden></p></div>
+      <div class="apply-field" data-question="5"><label for="apply-prefecture"><span class="apply-field-number">05</span> 都道府県</label><select id="apply-prefecture" name="entry.1344266315" required data-require-change="true" aria-describedby="apply-error-5">
+        <option value="" selected>選択してください</option>
+        <option value="北海道 / Hokkaido">北海道 / Hokkaido</option>
+        <option value="青森県 / Aomori">青森県 / Aomori</option>
+        <option value="岩手県 / Iwate">岩手県 / Iwate</option>
+        <option value="宮城県 / Miyagi">宮城県 / Miyagi</option>
+        <option value="秋田県 / Akita">秋田県 / Akita</option>
+        <option value="山形県 / Yamagata">山形県 / Yamagata</option>
+        <option value="福島県 / Fukushima">福島県 / Fukushima</option>
+        <option value="群馬県 / Gunma">群馬県 / Gunma</option>
+        <option value="栃木県 / Tochigi">栃木県 / Tochigi</option>
+        <option value="茨城県 / Ibaraki">茨城県 / Ibaraki</option>
+        <option value="埼玉県 / Saitama">埼玉県 / Saitama</option>
+        <option value="千葉県 / Chiba">千葉県 / Chiba</option>
+        <option value="東京都 / Tokyo">東京都 / Tokyo</option>
+        <option value="神奈川県 / Kanagawa">神奈川県 / Kanagawa</option>
+        <option value="新潟県 / Niigata">新潟県 / Niigata</option>
+        <option value="富山県 / Toyama">富山県 / Toyama</option>
+        <option value="石川県 / Ishikawa">石川県 / Ishikawa</option>
+        <option value="福井県 / Fukui">福井県 / Fukui</option>
+        <option value="山梨県 / Yamanashi">山梨県 / Yamanashi</option>
+        <option value="長野県 / Nagano">長野県 / Nagano</option>
+        <option value="岐阜県 / Gifu">岐阜県 / Gifu</option>
+        <option value="静岡県 / Shizuoka">静岡県 / Shizuoka</option>
+        <option value="愛知県 / Aichi">愛知県 / Aichi</option>
+        <option value="三重県 / Mie">三重県 / Mie</option>
+        <option value="滋賀県 / Shiga">滋賀県 / Shiga</option>
+        <option value="京都府 / Kyoto">京都府 / Kyoto</option>
+        <option value="大阪府 / Osaka">大阪府 / Osaka</option>
+        <option value="兵庫県 / Hyogo">兵庫県 / Hyogo</option>
+        <option value="奈良県 / Nara">奈良県 / Nara</option>
+        <option value="和歌山県 / Wakayama">和歌山県 / Wakayama</option>
+        <option value="鳥取県 / Tottori">鳥取県 / Tottori</option>
+        <option value="島根県 / Shimane">島根県 / Shimane</option>
+        <option value="岡山県 / Okayama">岡山県 / Okayama</option>
+        <option value="広島県 / Hiroshima">広島県 / Hiroshima</option>
+        <option value="山口県 / Yamaguchi">山口県 / Yamaguchi</option>
+        <option value="徳島県 / Tokushima">徳島県 / Tokushima</option>
+        <option value="香川県 / Kagawa">香川県 / Kagawa</option>
+        <option value="愛媛県 / Ehime">愛媛県 / Ehime</option>
+        <option value="高知県 / Kochi">高知県 / Kochi</option>
+        <option value="福岡県 / Fukuoka">福岡県 / Fukuoka</option>
+        <option value="佐賀県 / Saga">佐賀県 / Saga</option>
+        <option value="長崎県 / Nagasaki">長崎県 / Nagasaki</option>
+        <option value="熊本県 / Kumamoto">熊本県 / Kumamoto</option>
+        <option value="大分県 / Oita">大分県 / Oita</option>
+        <option value="宮崎県 / Miyazaki">宮崎県 / Miyazaki</option>
+        <option value="鹿児島県 / Kagoshima">鹿児島県 / Kagoshima</option>
+        <option value="沖縄県 / Okinawa">沖縄県 / Okinawa</option>
+        <option value="その他 / Other">その他 / Other</option>
+      </select><p class="apply-error" id="apply-error-5" role="alert" hidden></p></div>
+      <div class="apply-field" data-question="6"><label for="apply-address"><span class="apply-field-number">06</span> 会場住所</label><input id="apply-address" type="text" name="entry.1637789076" aria-describedby="apply-note-6 apply-error-6"><p class="apply-field-note" id="apply-note-6">※ シークレットロケーションの場合や、公開前の場合は未記入で構いません</p><p class="apply-error" id="apply-error-6" role="alert" hidden></p></div>
+      <div class="apply-field" data-question="7"><label for="apply-site"><span class="apply-field-number">07</span> 公式サイトURL</label><input id="apply-site" type="url" name="entry.1908017718" aria-describedby="apply-note-7 apply-error-7"><p class="apply-field-note" id="apply-note-7">※ 公式サイトがない場合は未記入で構いません。SNSのみでも掲載可能です</p><p class="apply-error" id="apply-error-7" role="alert" hidden></p></div>
+      <div class="apply-field" data-question="8"><label for="apply-instagram"><span class="apply-field-number">08</span> 公式Instagram</label><input id="apply-instagram" type="text" name="entry.562932451" aria-describedby="apply-error-8"><p class="apply-error" id="apply-error-8" role="alert" hidden></p></div>
+      <div class="apply-field" data-question="9"><label for="apply-ticket"><span class="apply-field-number">09</span> チケット販売URL</label><input id="apply-ticket" type="url" name="entry.796790857" aria-describedby="apply-note-9 apply-error-9"><p class="apply-field-note" id="apply-note-9">※ 未定・未公開の場合は未記入で構いません。決まり次第ご連絡いただければ追記します</p><p class="apply-error" id="apply-error-9" role="alert" hidden></p></div>
+      <fieldset class="apply-field checkbox-group full" data-question="10" data-checkbox-group="entry.132078991" data-required="true"><legend><span class="apply-field-number">10</span> ジャンル</legend><div class="apply-options"><label class="apply-option"><input type="checkbox" name="entry.132078991" value="TECHNO" required>TECHNO</label><label class="apply-option"><input type="checkbox" name="entry.132078991" value="HOUSE">HOUSE</label><label class="apply-option"><input type="checkbox" name="entry.132078991" value="MINIMAL">MINIMAL</label><label class="apply-option"><input type="checkbox" name="entry.132078991" value="AMBIENT">AMBIENT</label><label class="apply-option"><input type="checkbox" name="entry.132078991" value="EXPERIMENTAL">EXPERIMENTAL</label><label class="apply-option"><input type="checkbox" name="entry.132078991" value="BASS">BASS</label><label class="apply-option"><input type="checkbox" name="entry.132078991" value="PSYCHEDELIC">PSYCHEDELIC</label><label class="apply-option"><input type="checkbox" name="entry.132078991" value="OTHERS">OTHERS</label></div><p class="apply-error" id="apply-error-10" role="alert" hidden></p></fieldset>
+      <div class="apply-field full" data-question="11"><label for="apply-desc-ja"><span class="apply-field-number">11</span> 紹介文(日本語)</label><textarea id="apply-desc-ja" name="entry.1469144877" aria-describedby="apply-note-11 apply-error-11"></textarea><p class="apply-field-note" id="apply-note-11">※ 200字程度</p><p class="apply-error" id="apply-error-11" role="alert" hidden></p></div>
+      <div class="apply-field full" data-question="12"><label for="apply-desc-en"><span class="apply-field-number">12</span> 紹介文(英語)</label><textarea id="apply-desc-en" name="entry.123427584" aria-describedby="apply-note-12 apply-error-12"></textarea><p class="apply-field-note" id="apply-note-12">※ 200 words or fewer</p><p class="apply-error" id="apply-error-12" role="alert" hidden></p></div>
+      <div class="apply-field full" data-question="13"><label for="apply-lineup"><span class="apply-field-number">13</span> ラインナップ</label><textarea id="apply-lineup" name="entry.479036330" aria-describedby="apply-note-13 apply-error-13"></textarea><p class="apply-field-note" id="apply-note-13">※ 1行につき1組ご記入ください。発表済みの範囲で構いません</p><p class="apply-error" id="apply-error-13" role="alert" hidden></p></div>
+      <div class="apply-field full" data-question="14"><label for="apply-materials"><span class="apply-field-number">14</span> プレスキット・その他資料のURL</label><textarea id="apply-materials" name="entry.91142027" aria-describedby="apply-note-14 apply-error-14"></textarea><p class="apply-field-note" id="apply-note-14">※ プレスキット、素材フォルダ、リリース文など<br>※ 画像をアップロードできない場合は、画像URLをこちらにご記入ください</p><p class="apply-error" id="apply-error-14" role="alert" hidden></p></div>
+      <div class="apply-field full" data-question="15"><label for="apply-remarks"><span class="apply-field-number">15</span> 備考・特記事項</label><textarea id="apply-remarks" name="entry.1816401197" aria-describedby="apply-note-15 apply-error-15"></textarea><p class="apply-field-note" id="apply-note-15">※ 掲載にあたってお伝えしたいことがあればご自由にどうぞ</p><p class="apply-error" id="apply-error-15" role="alert" hidden></p></div>
+      <fieldset class="apply-field checkbox-group full" data-question="16" data-checkbox-group="entry.974040165" data-required="true"><legend><span class="apply-field-number">16</span> 掲載許諾</legend><div class="apply-options"><label class="apply-option"><input type="checkbox" name="entry.974040165" value="提供した画像・情報のTechno Japan上での掲載に許諾します（I grant permission to publish the submitted images and information on Techno Japan）" required><span>提供した画像・情報のTechno Japan上での掲載に許諾します</span></label></div><p class="apply-error" id="apply-error-16" role="alert" hidden></p></fieldset>
+      <div class="apply-field apply-honeypot" aria-hidden="true"><label for="apply-website">Website</label><input id="apply-website" type="text" name="website" tabindex="-1" autocomplete="off"></div>
+      <div class="apply-form-actions"><button id="apply-submit" class="btn" type="submit">申請する</button><span class="mono">フライヤー画像はフォーム送信後にメールで受け付けます</span></div>
+    </form>
+    <p class="apply-fallback">うまく送れない場合は <a href="https://docs.google.com/forms/d/e/1FAIpQLSfh7ahIgtN5zflxeSbKBGLqTB07SS1DbCFpm0SrCU-5-PLDvg/viewform" target="_blank" rel="noopener">Google フォームから</a></p>
+  </section>
+
+  <section class="apply-wrap apply-section">
+    <div class="apply-sec apply-recent-head"><h2 class="disp">Upcoming on Techno Japan</h2><a class="mono" href="/festivals.html">All festivals →</a></div>
+    <div id="recent-festivals" class="apply-recent-grid" aria-live="polite"></div>
+  </section>
 </main>
 <!-- tj:footer:start -->
 <footer>
@@ -117,6 +295,29 @@
 
 <script src="/common.js?v=20" defer></script>
 <script src="/data-hub.js?v=11"></script>
+<script src="/submit-form.js?v=2"></script>
+<script>
+  (() => {
+    const list = document.getElementById('recent-festivals');
+    const isEnglish = document.documentElement.lang === 'en';
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const endDate = value => String(value || '').split('/').pop();
+    const startDate = value => String(value || '').split('/')[0];
+    const formatDate = value => String(value || '').split('/').map(part => part.replace(/-/g, '.')).join(' — ');
+    const escape = value => { const node = document.createElement('span'); node.textContent = String(value || ''); return node.innerHTML; };
+    const festivals = (typeof FESTIVALS !== 'undefined' ? FESTIVALS : []).filter(festival => {
+      const end = new Date(`${endDate(festival.date)}T23:59:59`);
+      const status = String(festival?.status || 'published').toLowerCase();
+      return festival && festival.id && festival.image && (status === 'published' || status === '') && !Number.isNaN(end.valueOf()) && end >= today;
+    }).sort((a, b) => startDate(a.date).localeCompare(startDate(b.date))).slice(0, 4);
+    list.innerHTML = festivals.map(festival => {
+      const name = isEnglish ? (festival.name || festival.name_ja) : (festival.name_ja || festival.name);
+      const location = isEnglish ? (festival.location || festival.location_ja) : (festival.location_ja || festival.location);
+      const href = `${isEnglish ? '/en' : ''}/festivals/${encodeURIComponent(festival.id)}.html`;
+      return `<a class="apply-card" href="${href}"><span class="apply-card-image"><img src="/${escape(festival.image)}" alt="" loading="lazy" decoding="async"></span><span class="apply-card-meta red">${escape(formatDate(festival.date))}</span><span class="disp apply-card-title">${escape(name)}</span><span class="apply-card-meta">${escape(location || festival.city || '')}</span></a>`;
+    }).join('');
+  })();
+</script>
 <script src="/search.js?v=8" defer></script>
 </body>
 </html>

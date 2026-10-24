@@ -76,7 +76,7 @@ const ARTICLE_FX_CSS_VERSION = 18;
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
 const COMMON_JS_VERSION = 20;   // 2026-10-23 festival tab section tracking
-const COMMON_CSS_VERSION = 50;   // 2026-10-23 magazine newsletter, article layout, and detail polish
+const COMMON_CSS_VERSION = 51;   // 2026-10-24 shared TOP/ABOUT marquee component
 const DATA_HUB_VERSION = 11;
 const SEARCH_JS_VERSION = 8;
 const LANG_TOGGLE_VERSION = 3;
@@ -1076,6 +1076,7 @@ const FAVICON_TAGS = [
 const PERMISSIONS_POLICY = 'geolocation=(), microphone=(), camera=(), interest-cohort=()';
 
 const CSP = `default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' https:; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://stats.g.doubleclick.net; frame-src 'self' https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; form-action 'self' https://formsubmit.co https://buttondown.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests`;
+const APPLY_CSP = CSP.replace("connect-src 'self'", "connect-src 'self' https://docs.google.com");
 
 const FONT_HEAD = `<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -3596,6 +3597,9 @@ const EN_HUB_DESC = {
 const EN_HUB_TEXT = [
   ['日本の野外フェスの情報を受け取る', "Get Japan's open-air festival news"],
   ['来月の開催予定と新着記事をまとめてメールで届けます。無料、いつでも解除できます。', 'Upcoming festivals and new stories in one email. Free, unsubscribe anytime.'],
+  ['最新の投稿とお知らせをInstagramで。', 'Latest posts and updates on Instagram.'],
+  ['お問い合わせを受け付けました。編集部から返信します。', "We've received your message. The editors will be in touch."],
+  ['続きを読む +', 'Read more +'],
   ['APPLY', 'APPLY'],
   ['過去30日の閲覧数順 · 更新', 'Ranked by views over the last 30 days · updated'],
   ['集計データを準備中です（過去30日の閲覧数で並びます）', 'Counting in progress — ranked by views over the last 30 days'],
@@ -3627,16 +3631,60 @@ const EN_PAGE_TEXT = {
     ['編集部で内容を確認', 'The editorial team reviews your information'],
     ['掲載が決定した場合、サイトに公開されます', 'If approved, your event will be published on the site'],
     ['(お急ぎの場合は備考欄にその旨をお書きください)', '(If your request is urgent, please note that in the comments.)'],
-    ['申請フォームへ', 'Open application form'],
     ['掲載後の情報更新、ラインナップの追加発表なども随時受け付けています。', 'We also accept updates after publication, including newly announced lineups.'],
     ['同じフォームよりご連絡ください。', 'Please contact us using the same form.'],
+    ['SUBMISSION · 掲載は無料', 'SUBMISSION · Listing is free'],
+    ['応募フォームへ', 'Application form'],
+    ['STATEMENT →', 'STATEMENT →'],
+    ['04 — 申請フォーム', '04 — Application form'],
+    ['Genres', 'Genres'],
+    ['Flow', 'Flow'],
+    ['Submit an event', 'Submit an event'],
+    ['選択してください', 'Select'],
+    ['フェスティバル名', 'Festival name'],
+    ['開催日', 'Start date'],
+    ['終了日', 'End date'],
+    ['※ 複数日開催の場合', '※ For multi-day events'],
+    ['会場名', 'Venue name'],
+    ['都道府県', 'Prefecture'],
+    ['会場住所', 'Venue address'],
+    ['※ シークレットロケーションの場合や、公開前の場合は未記入で構いません', '※ Leave blank for secret locations or if not yet announced'],
+    ['公式サイトURL', 'Official website'],
+    ['※ 公式サイトがない場合は未記入で構いません。SNSのみでも掲載可能です', '※ Optional. Social media accounts alone are sufficient'],
+    ['公式Instagram', 'Official Instagram'],
+    ['チケット販売URL', 'Ticket page'],
+    ['※ 未定・未公開の場合は未記入で構いません。決まり次第ご連絡いただければ追記します', '※ Leave blank if not yet available. Let us know once tickets go on sale'],
+    ['ジャンル', 'Genre'],
+    ['紹介文(日本語)', 'Description in Japanese'],
+    ['※ 200字程度', '※ About 200 Japanese characters'],
+    ['紹介文(英語)', 'Description in English'],
+    ['※ 200 words or fewer', '※ 200 words or fewer'],
+    ['ラインナップ', 'Lineup'],
+    ['※ 1行につき1組ご記入ください。発表済みの範囲で構いません', '※ One artist per line. Announced acts only is fine'],
+    ['プレスキット・その他資料のURL', 'Press kit or other materials'],
+    ['※ プレスキット、素材フォルダ、リリース文など', '※ Press kits, asset folders, or press releases'],
+    ['※ 画像をアップロードできない場合は、画像URLをこちらにご記入ください', '※ If you are unable to upload images, please provide image URLs here'],
+    ['備考・特記事項', 'Remarks'],
+    ['※ 掲載にあたってお伝えしたいことがあればご自由にどうぞ', '※ Anything else you would like us to know'],
+    ['掲載許諾', 'Permission'],
+    ['<span>提供した画像・情報のTechno Japan上での掲載に許諾します</span>', '<span>I grant permission to publish the submitted images and information on Techno Japan</span>'],
+    ['フライヤー画像はフォーム送信後にメールで受け付けます', 'Flyer images can be sent by email after submitting the form'],
+    ['申請する', 'Apply'],
+    ['うまく送れない場合は', 'If the form does not work, use'],
+    ['こちらのフォーム', 'this form'],
+    ['Google フォームから', 'Google Forms'],
+    ['Upcoming on Techno Japan', 'Upcoming on Techno Japan'],
+    ['All festivals →', 'All festivals →'],
+    ['申請を受け付けました。編集部で確認のうえ、掲載が決まった場合はサイトに公開されます。', 'The editorial team will review your submission and publish it if approved.'],
+    ['送信できませんでした。入力内容は保持しています。', 'We could not send your application. Your entries have been kept.'],
+    ['から送信してください。', ' to send it.'],
   ],
   'writers.html': [
     ['応募を受け付けました。編集部から連絡します。', "Thanks — we've received your application. The editors will be in touch."],
-    ['TECHNO JAPAN のライター募集', 'Write for TECHNO JAPAN'],
+    ['TECHNO JAPAN の<wbr>ライター募集', 'Write for TECHNO JAPAN'],
     ['日本のアンダーグラウンドなダンスミュージックの現場を、現場にいる人の目で書き残したいと考えています。', "We want to document Japan's underground dance music scene through the eyes of the people who are actually there."],
     ['レポート、インタビュー、ガイド、短報を募集しています。', "We're looking for reports, interviews, guides and short news pieces."],
-    ['TECHNO JAPAN で書くと', 'What you get'],
+    ['TECHNO JAPAN で<wbr>書くと', 'What you get'],
     ['TECHNO JAPAN のフォロワー（ダンスミュージックが好きな人たち）に、記事を直接届けられる', "Your piece reaches TECHNO JAPAN's followers — people who love dance music — directly"],
     ['署名記事として残り、筆者ページに蓄積される', "It's published under your byline and collected on your writer page"],
     ['日本語と英語の2言語で公開される。英語版は編集部が用意する', 'Published in both Japanese and English; the editors prepare the translation'],
@@ -3644,10 +3692,27 @@ const EN_PAGE_TEXT = {
     ['Google ニュースの索引に載っている媒体で、ウェブ検索からも読まれる', 'TECHNO JAPAN is indexed by Google News and found through web search'],
     ['校正・写真のレイアウト・検索向けの調整は編集部が行う。書くことに集中できる', 'Editing, photo layout and search optimisation are handled by the editors — you focus on writing'],
     ['公開時に Instagram / Threads で告知する', 'Every piece is announced on Instagram and Threads'],
-    ['書いている人', 'Our writers'],
-    ['ライターに応募する', 'Apply to write'],
+    ['書いている<wbr>人', 'Our writers'],
+    ['ライターに<wbr>応募する', 'Apply to write'],
     ['過去の執筆記事', 'Previous articles (links)'],
     ['SNS アカウント', 'Social accounts'],
+    ['URL を改行で。無ければ空欄で構いません', 'One URL per line; leave blank if none'],
+    ['Instagram / X / Threads など', 'Instagram / X / Threads etc.'],
+    ['WRITERS WANTED · レポート / インタビュー / ガイド / ニュース', 'WRITERS WANTED · Reports / Interviews / Guides / News'],
+    ['応募フォームへ', 'Application form'],
+    ['Stories →', 'Stories →'],
+    ['01 — About', '01 — About'],
+    ['02 — Why write', '02 — Why write'],
+    ['Formats', 'Formats'],
+    ['03 — Writers', '03 — Writers'],
+    ['04 — Apply', '04 — Apply'],
+    ['4 formats', '4 formats'],
+    ['フェスやパーティの現場レポート。音、空間、人の動きを、その場にいた人の目で。', 'Reports from festivals and parties — sound, space and movement, seen by someone who was there.'],
+    ['アーティスト、オーガナイザー、ベニューへのインタビュー。', 'Interviews with artists, organisers and venues.'],
+    ['街、季節、ジャンルごとのガイド。初めて来る人にも、通う人にも。', 'Guides by city, season and genre — for first-timers and regulars alike.'],
+    ['新しいフェスの告知、ラインナップ発表などのニュース。', 'News including new festival announcements and lineup reveals.'],
+    ['authors DB', 'authors DB'],
+    ['過去の記事や SNS を見て、編集部から連絡します。書きたいテーマがあれば一言添えてください。', 'The editors will review your previous work and social accounts. Tell us briefly what you would like to write about.'],
   ],
 };
 
@@ -3877,7 +3942,7 @@ function fixJaHub(fileName) {
   }
 
   s = s.replace(/<html lang="[^"]*"/, '<html lang="ja"');
-  s = s.replace(/(<meta http-equiv="Content-Security-Policy" content=")[^"]*/, `$1${CSP}`);
+  s = s.replace(/(<meta http-equiv="Content-Security-Policy" content=")[^"]*/, `$1${fileName === 'submit.html' ? APPLY_CSP : CSP}`);
 
   if (USE_BUTTONDOWN && (fileName === 'index.html' || fileName === 'news.html')) {
     s = s.replace(/(<section class="newsletter"[\s\S]*?<form class="newsletter-form")[^>]*>[\s\S]*?<\/form>([\s\S]*?<\/section>)/,
