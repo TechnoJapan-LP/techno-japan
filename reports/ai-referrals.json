@@ -1,27 +1,27 @@
 {
-  "generatedAt": "2026-10-23T21:32:10.726Z",
+  "generatedAt": "2026-10-24T20:59:41.943Z",
   "propertyId": "535755449",
   "periods": {
     "current": {
-      "startDate": "2026-09-27",
-      "endDate": "2026-10-24",
+      "startDate": "2026-09-28",
+      "endDate": "2026-10-25",
       "label": "直近28日"
     },
     "previous": {
-      "startDate": "2026-08-30",
-      "endDate": "2026-09-26",
+      "startDate": "2026-08-31",
+      "endDate": "2026-09-27",
       "label": "前の28日"
     }
   },
   "current": {
-    "sessions": 68,
-    "totalUsers": 67,
-    "share": 0.026143790849673203,
+    "sessions": 73,
+    "totalUsers": 72,
+    "share": 0.02780952380952381,
     "bySource": [
       {
         "source": "chatgpt.com",
-        "sessions": 67,
-        "totalUsers": 66
+        "sessions": 72,
+        "totalUsers": 71
       },
       {
         "source": "gemini.google.com",
@@ -32,7 +32,12 @@
     "topLandingPages": [
       {
         "landingPage": "/",
-        "sessions": 10,
+        "sessions": 11,
+        "totalUsers": 10
+      },
+      {
+        "landingPage": "/en/festivals/labyrinth.html",
+        "sessions": 9,
         "totalUsers": 9
       },
       {
@@ -41,14 +46,14 @@
         "totalUsers": 9
       },
       {
-        "landingPage": "/en/festivals/labyrinth.html",
-        "sessions": 8,
-        "totalUsers": 8
-      },
-      {
         "landingPage": "/articles/japan-festival-2026-september.html",
         "sessions": 6,
         "totalUsers": 6
+      },
+      {
+        "landingPage": "/en/articles/topia-2026-info.html",
+        "sessions": 5,
+        "totalUsers": 5
       },
       {
         "landingPage": "/en/festivals/lost-find.html",
@@ -62,11 +67,6 @@
       },
       {
         "landingPage": "/en/articles/japan-festival-2026-october.html",
-        "sessions": 3,
-        "totalUsers": 3
-      },
-      {
-        "landingPage": "/en/articles/topia-2026-info.html",
         "sessions": 3,
         "totalUsers": 3
       },
@@ -131,8 +131,8 @@
         "totalUsers": 1
       }
     ],
-    "allSessions": 2601,
-    "allTotalUsers": 2184
+    "allSessions": 2625,
+    "allTotalUsers": 2202
   },
   "previous": {
     "sessions": 0,
