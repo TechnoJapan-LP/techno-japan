@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-10-19T17:32:14.714Z",
+  "_generatedAt": "2026-10-24T07:03:00.476Z",
   "count": 22,
   "items": [
     {
@@ -46,7 +46,7 @@
       "ID": "saloon",
       "NAME": "SALOON",
       "CITY": "TOKYO",
-      "AREA": "SHIBUYA",
+      "AREA": "DAIKANYAMA",
       "TYPE": "club",
       "IMAGE": "images/venues/saloon.jpeg",
       "GENRE": "TECHNO, HOUSE, OTHERS",
