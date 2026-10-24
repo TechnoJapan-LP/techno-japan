@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "backedUpAt": "2026-10-23T16:01:00.788576+09:00"
+    "backedUpAt": "2026-10-24T15:53:28.880269+09:00"
   },
   "VENUES": [
     {
@@ -58,7 +58,7 @@
       "id": "saloon",
       "name": "SALOON",
       "city": "TOKYO",
-      "area": "SHIBUYA",
+      "area": "DAIKANYAMA",
       "type": "club",
       "image": "images/venues/saloon.jpeg",
       "genre": "TECHNO, HOUSE, OTHERS",
@@ -72,8 +72,8 @@
       "status": "published",
       "lasteditedby": "editor",
       "lastEditedBy": "editor",
-      "lasteditedat": "2026-10-19T17:13:50.993Z",
-      "lastEditedAt": "2026-10-19T17:13:50.993Z",
+      "lasteditedat": "2026-10-24T05:10:42.568Z",
+      "lastEditedAt": "2026-10-24T05:10:42.568Z",
       "desc_en": "SALOON operates as a compact basement club in Shibuya, known for its intimate atmosphere and carefully curated lineups spanning techno, house, and experimental electronic music. The venue's low ceilings and minimal lighting create an immersive environment that prioritizes sound quality and dancefloor intimacy over spectacle. Its programming often features both emerging local talent and respected international artists within Tokyo's underground circuit.",
       "name_kana": "サルーン",
       "access": "東急東横線代官山駅から徒歩1分",
