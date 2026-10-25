@@ -1,32 +1,32 @@
 {
-  "generatedAt": "2026-10-24T20:59:41.943Z",
+  "generatedAt": "2026-10-25T21:11:06.373Z",
   "propertyId": "535755449",
   "periods": {
     "current": {
-      "startDate": "2026-09-28",
-      "endDate": "2026-10-25",
+      "startDate": "2026-09-29",
+      "endDate": "2026-10-26",
       "label": "直近28日"
     },
     "previous": {
-      "startDate": "2026-08-31",
-      "endDate": "2026-09-27",
+      "startDate": "2026-09-01",
+      "endDate": "2026-09-28",
       "label": "前の28日"
     }
   },
   "current": {
-    "sessions": 73,
-    "totalUsers": 72,
-    "share": 0.02780952380952381,
+    "sessions": 80,
+    "totalUsers": 78,
+    "share": 0.03048780487804878,
     "bySource": [
       {
         "source": "chatgpt.com",
-        "sessions": 72,
-        "totalUsers": 71
+        "sessions": 78,
+        "totalUsers": 76
       },
       {
         "source": "gemini.google.com",
-        "sessions": 1,
-        "totalUsers": 1
+        "sessions": 2,
+        "totalUsers": 2
       }
     ],
     "topLandingPages": [
@@ -43,7 +43,12 @@
       {
         "landingPage": "/festivals/festival-de-frue.html",
         "sessions": 9,
-        "totalUsers": 9
+        "totalUsers": 8
+      },
+      {
+        "landingPage": "/en/articles/topia-2026-info.html",
+        "sessions": 7,
+        "totalUsers": 7
       },
       {
         "landingPage": "/articles/japan-festival-2026-september.html",
@@ -51,14 +56,14 @@
         "totalUsers": 6
       },
       {
-        "landingPage": "/en/articles/topia-2026-info.html",
-        "sessions": 5,
-        "totalUsers": 5
-      },
-      {
         "landingPage": "/en/festivals/lost-find.html",
         "sessions": 4,
         "totalUsers": 4
+      },
+      {
+        "landingPage": "/en/articles/asia-festival-2026-second.html",
+        "sessions": 3,
+        "totalUsers": 3
       },
       {
         "landingPage": "/en/articles/denki-bodhisattva-2026-info.html",
@@ -86,11 +91,6 @@
         "totalUsers": 2
       },
       {
-        "landingPage": "/en/articles/asia-festival-2026-second.html",
-        "sessions": 2,
-        "totalUsers": 2
-      },
-      {
         "landingPage": "/articles/forest-sound-camp-info.html",
         "sessions": 1,
         "totalUsers": 1
@@ -111,6 +111,11 @@
         "totalUsers": 1
       },
       {
+        "landingPage": "/en/",
+        "sessions": 1,
+        "totalUsers": 1
+      },
+      {
         "landingPage": "/en/articles/forest-sound-camp-info.html",
         "sessions": 1,
         "totalUsers": 1
@@ -124,14 +129,9 @@
         "landingPage": "/en/articles/japan-festival-2026-september.html",
         "sessions": 1,
         "totalUsers": 1
-      },
-      {
-        "landingPage": "/en/articles/odyssey-2026-info.html",
-        "sessions": 1,
-        "totalUsers": 1
       }
     ],
-    "allSessions": 2625,
+    "allSessions": 2624,
     "allTotalUsers": 2202
   },
   "previous": {
@@ -192,6 +192,11 @@
         "totalUsers": 0
       },
       {
+        "landingPage": "/en/",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
         "landingPage": "/en/articles/asia-festival-2026-second.html",
         "sessions": 0,
         "totalUsers": 0
@@ -227,27 +232,22 @@
         "totalUsers": 0
       },
       {
+        "landingPage": "/en/articles/rebirth-2026-info.html",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
+        "landingPage": "/en/articles/sawagi-festival-2026-info.html",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
         "landingPage": "/en/articles/synapse-2026-info.html",
         "sessions": 0,
         "totalUsers": 0
       },
       {
         "landingPage": "/en/articles/topia-2026-info.html",
-        "sessions": 0,
-        "totalUsers": 0
-      },
-      {
-        "landingPage": "/en/festivals/labyrinth.html",
-        "sessions": 0,
-        "totalUsers": 0
-      },
-      {
-        "landingPage": "/en/festivals/lost-find.html",
-        "sessions": 0,
-        "totalUsers": 0
-      },
-      {
-        "landingPage": "/en/festivals/rural.html",
         "sessions": 0,
         "totalUsers": 0
       }
