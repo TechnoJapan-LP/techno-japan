@@ -4,11 +4,8 @@
 > アーティスト134名・会場22件・記事21本を日英で掲載し、
 > 開催日・場所・出演者を構造化データ（schema.org）付きで公開している。
 
-## 今後の開催予定（14件）
+## 今後の開催予定（11件）
 
-- 2026-10-22〜2026-10-25: [Wonderfruit Kyoto 2026](https://techno-japan.media/festivals/wonderfruit-kyoto.html) — Kyoto (Ohara Sanso / ACG Villa Kyoto / Kurama Mountain / Ochill TeaRoom)
-- 2026-10-23〜2026-10-25: [Sawagi Festival 2026](https://techno-japan.media/festivals/sawagi-festival.html) — Suteki Village Camping Ground, Gunma
-- 2026-10-24〜2026-10-25: [Topia 2026](https://techno-japan.media/festivals/topia.html), Chiba
 - 2026-10-31〜2026-11-01: [DENKI BODHISATTVA 2026](https://techno-japan.media/festivals/denki-bodhisattva.html) — Kinone Pension
 - 2026-10-31〜2026-11-01: [FESTIVAL de FRUE 2026](https://techno-japan.media/festivals/festival-de-frue.html) — TSUMAGOI RESORT SAINO SATO, Shizuoka
 - 2026-10-31〜2026-11-01: [PARALLEL WORLD 2026](https://techno-japan.media/festivals/parallel-world.html) — Secret Venue

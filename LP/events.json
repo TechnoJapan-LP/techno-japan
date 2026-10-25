@@ -1,47 +1,8 @@
 {
   "source": "https://techno-japan.media/",
   "license": "データの出典として techno-japan.media へのリンクを求めます",
-  "count": 14,
+  "count": 11,
   "events": [
-    {
-      "name": "Wonderfruit Kyoto 2026",
-      "url": "https://techno-japan.media/festivals/wonderfruit-kyoto.html",
-      "start": "2026-10-22",
-      "end": "2026-10-25",
-      "venue": "Kyoto (Ohara Sanso / ACG Villa Kyoto / Kurama Mountain / Ochill TeaRoom)",
-      "genres": [
-        "AMBIENT",
-        "LIVE",
-        "OTHERS"
-      ]
-    },
-    {
-      "name": "Sawagi Festival 2026",
-      "url": "https://techno-japan.media/festivals/sawagi-festival.html",
-      "start": "2026-10-23",
-      "end": "2026-10-25",
-      "venue": "Suteki Village Camping Ground",
-      "pref": "Gunma",
-      "lat": 36.4989,
-      "lng": 138.6818,
-      "genres": [
-        "TECHNO",
-        "HOUSE",
-        "LIVE"
-      ],
-      "tickets": "https://sawagi-festival.zaiko.io/ja/e/sawagi-festival-2026"
-    },
-    {
-      "name": "Topia 2026",
-      "url": "https://techno-japan.media/festivals/topia.html",
-      "start": "2026-10-24",
-      "end": "2026-10-25",
-      "pref": "Chiba",
-      "genres": [
-        "TECHNO"
-      ],
-      "tickets": "https://topia261024.peatix.com/view"
-    },
     {
       "name": "DENKI BODHISATTVA 2026",
       "url": "https://techno-japan.media/festivals/denki-bodhisattva.html",
