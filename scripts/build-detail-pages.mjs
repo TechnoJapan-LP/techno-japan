@@ -58,7 +58,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 88;
+const DETAIL_CSS_VERSION = 89;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -76,7 +76,7 @@ const ARTICLE_FX_CSS_VERSION = 18;
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
 const COMMON_JS_VERSION = 20;   // 2026-10-23 festival tab section tracking
-const COMMON_CSS_VERSION = 54;   // 2026-10-26 CARTO/OSM map rendering
+const COMMON_CSS_VERSION = 55;   // 2026-10-26 mobile menu search sizing
 const DATA_HUB_VERSION = 11;
 const SEARCH_JS_VERSION = 8;
 const LANG_TOGGLE_VERSION = 3;
@@ -1390,7 +1390,7 @@ function articleNewsletterHtml(canonical, lang = 'ja') {
     </section>`;
 }
 
-function relatedStoryCardsHtml(items, lang, { forceEnglishPath = false, compactDate = false, wide = false, grid = false, heading = 'RELATED STORIES' } = {}) {
+function relatedStoryCardsHtml(items, lang, { forceEnglishPath = false, compactDate = false, wide = false, grid = false, heading = 'RELATED STORIES', clauseBreakSub = false } = {}) {
   const cards = (items || []).map((a) => {
     const englishPath = lang === 'en' && (forceEnglishPath || a.title_en || a.body_en) ? '/en' : '';
     const title = stripTitleMarkdown(lang === 'en' ? (a.title_en || a.title) : a.title);
@@ -1404,8 +1404,11 @@ function relatedStoryCardsHtml(items, lang, { forceEnglishPath = false, compactD
         ? (source) => articleFourThreeSrcsetAttr(source, a.imagePosition, artistStoryGridSizes)
         : storyThumbSrcsetAttr;
     const storyTitle = wide || grid ? splitArticleTitle(title) : null;
+    const titleSubHtml = storyTitle?.sub
+      ? (clauseBreakSub && lang === 'ja' ? clauseBreaks(storyTitle.sub) : esc(storyTitle.sub))
+      : '';
     const titleHtml = storyTitle
-      ? `<span class="story-title-short">${esc(storyTitle.short)}</span>${storyTitle.sub ? `<span class="story-title-sub">${esc(storyTitle.sub)}</span>` : ''}`
+      ? `<span class="story-title-short">${esc(storyTitle.short)}</span>${titleSubHtml ? `<span class="story-title-sub">${titleSubHtml}</span>` : ''}`
       : esc(title);
     const storyImagePath = grid
       ? articleFourThreeImagePath(a.image, a.imagePosition)
@@ -2707,7 +2710,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, allArt
   // このフェスに紐づく記事（ARTICLES.festivalId で関連付け）
   const related = (articles || []).filter((a) => a.festivalId === f.id && a.status !== 'draft');
   const relatedHtml = related.length
-    ? relatedStoryCardsHtml(related, lang, { forceEnglishPath: true, compactDate: true, wide: true, heading: 'Stories' })
+    ? relatedStoryCardsHtml(related, lang, { forceEnglishPath: true, compactDate: true, wide: true, heading: 'Stories', clauseBreakSub: true })
     : '';
 
   const editions = [...festivalEditions].sort((a, b) => {

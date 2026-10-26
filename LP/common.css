@@ -532,7 +532,9 @@ footer .footer-social a:hover { color: var(--accent-soft); opacity: 1; }
 .nav-overlay .nav-close{position:static;display:flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;background:none;border:1px solid var(--text-a25);color:var(--text);cursor:pointer}
 .nav-overlay .nav-close svg{width:18px;height:18px;display:block}
 .nav-overlay .nav-close:hover{border-color:var(--accent);color:var(--accent)}
-.nav-overlay .nav-search-link{position:relative;display:flex;align-items:center;gap:12px;width:calc(100% - 32px);height:52px;margin:20px 16px 0;padding:0 16px;box-sizing:border-box;background:var(--text-a04);border:1px solid var(--text-a18);color:var(--text-a60);font-family:var(--font-body);font-size:15px;font-weight:300;letter-spacing:0;text-transform:none;text-align:left;cursor:pointer}
+.nav-overlay .nav-search-link{
+  position:relative;display:flex;align-items:center;flex:0 0 auto;gap:12px;width:calc(100% - 32px);height:56px;margin:20px 16px 0;padding:0 16px;box-sizing:border-box;background:var(--text-a04);border:1px solid var(--text-a18);color:var(--text-a60);font-family:var(--font-body);font-size:15px;font-weight:300;letter-spacing:0;text-transform:none;text-align:left;cursor:pointer
+}
 .nav-overlay .nav-search-link .nav-search-icon{width:16px;height:16px;min-width:16px;flex:0 0 16px;display:block;fill:none;stroke:currentColor;stroke-width:1.8}
 .nav-overlay .nav-search-link span{min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .nav-ov-main{position:relative;display:flex;flex-direction:column;padding:16px 16px 0}

@@ -1680,6 +1680,18 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 .festival-design-v2 .festival-stories-panel .related-story-meta { margin-bottom: 8px; color: var(--accent); }
 .festival-design-v2 .festival-stories-panel .related-story-title { font-family: var(--font-display); font-size: 30px; line-height: 1.05; }
 .festival-design-v2 .festival-stories-panel .related-story-title span { display: block; }
+.festival-design-v2 .festival-stories-panel .related-story-title .story-title-sub {
+  margin-top: 10px;
+  color: rgba(240,237,232,.9);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.5;
+  letter-spacing: 0;
+  text-transform: none;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
 .festival-design-v2 .festival-stories-panel .related-story-card:hover .related-story-title { color: var(--accent); }
 .festival-design-v2 .festival-lower-content { padding-top: 104px; }
 .festival-design-v2 .festival-share-section { padding: 18px 0 44px; border-top: 1px solid var(--text-a12); }

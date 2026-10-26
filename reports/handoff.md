@@ -13848,3 +13848,33 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 
 - ヒーローの補足文は「最新の関連記事のタイトルの後ろ半分」。記事が更新されると補足文も変わる。フェス自体の短い説明を別に持つかはユーザー判断（今は持たない）。
+
+### 2026-10-26 redesign/magazine スマホのメニューの検索欄 ＋ フェス詳細 STORIES の補足文（Claude 検証・コミット。本番未反映）
+
+### 実施
+
+- ユーザー指摘「スマホのメニューの検索の縦幅を少し大きく」: `.nav-overlay .nav-search-link` は 52px 指定（モックも 52px）だが、メニューの縦並びの中身が画面より多く `flex-shrink` で 48.7px に縮んでいた → `flex: 0 0 auto` ＋ 高さ 56px（`common.css?v=55`）。
+- ユーザー指摘「フェス詳細の STORIES の補足文の大きさを FEATURE STORY と同じに」: STORIES の `.story-title-sub` が 24px の Bebas Neue だった → FEATURE STORY の補足文と同じ 14px・行間 21px・太さ 300・本文の書体・rgba(.9)、日本語は文節の切れ目で改行（`detail.css?v=89`）。記事詳細の同じ部品は変えていない（16.5px のまま）。
+- ユーザー確認済み（2026-10-26）: フェス詳細・アーティスト詳細・FAVORITES。
+
+### コミット
+
+- （このエントリを含むコミット。redesign/magazine、push なし）
+
+### 検証
+
+- `tmp/menuverify.mjs` 27/27（390×844 / 667、JA/EN・フェス詳細: 56px・縮まない・アイコン中央・押すと検索画面・667 でもメニューはスクロール可・JS エラーなし）。
+- `tmp/storiessub.mjs` 6/6（1440 / 390、JA/EN で STORIES の補足文が FEATURE STORY と一致、日本語は keep-all ＋ `<wbr>`）。
+- `python3 scripts/check_asset_versions.py`、`node scripts/check_cms_article_generated_preview.mjs`、build の冪等性（Codex）成功。preflight（省略なし）は次の「スクロールで隠す」の修正と合わせて実施する。
+
+### 変更したパターン
+
+- 縦並びの flex の中で高さを決めたい部品は `flex-shrink: 0` にする（中身が多い画面で縮まないように）。
+
+### 未確認の類似パターン
+
+- 未確認: メニューの他の部品（項目・言語切替）も縮みうるが、指摘が無いため変えていない。
+
+### 次の担当への注意・判断待ち
+
+- APPLY の応募は Google フォーム（1FAIpQLSfh7ah…）の回答に入る。メールが届くかは Google フォームの「新しい回答についてのメール通知」の設定次第（ユーザーに案内済み）。WRITER は FormSubmit で press@techno-japan.media。
