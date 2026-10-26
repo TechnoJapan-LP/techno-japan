@@ -88,7 +88,6 @@
   }
   function toolbarMustStayVisible() {
     return !mobileQuery.matches
-      || mapOpen
       || toolbarOpenUntil > performance.now()
       || toolbar.matches(':focus-within')
       || window.scrollY <= toolbarStartY - toolbarNavHeight();
