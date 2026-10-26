@@ -47,7 +47,7 @@
 @font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/space-mono-v17-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 </style>
 <link rel="stylesheet" href="/common.css?v=54">
-<link rel="stylesheet" href="/detail.css?v=86">
+<link rel="stylesheet" href="/detail.css?v=88">
 <script type="application/ld+json">[{"@context":"https://schema.org","@type":"Festival","@id":"https://techno-japan.media/festivals/fuji-rock.html#festival","name":"FUJI ROCK","description":"フジロックフェスティバルは、毎夏、苗場の山々を日本を代表する野外音楽の祭典へと変貌させる。多彩なロックやオルタナティブのラインナップで主に知られているが、近年は複数のステージでエレクトロニック・アクトの起用も増えている。自然に囲まれたロケーションが没入感のある体験を生み出し、日本のフェス文化と海外のアンダーグラウンド・サウンドを繋いでいる。","inLanguage":"ja","image":["https://techno-japan.media/images/festivals/fuji-rock.webp"],"url":"https://techno-japan.media/festivals/fuji-rock.html","dateModified":"2026-09-15","startDate":"2026-07-24","endDate":"2026-07-26","location":{"@type":"Place","name":"苗場スキー場","address":{"@type":"PostalAddress","streetAddress":"新潟県南魚沼郡湯沢町三国202","addressRegion":"Niigata","addressCountry":"JP"},"geo":{"@type":"GeoCoordinates","latitude":"36.7919","longitude":"138.7847"}},"eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode","eventStatus":"https://schema.org/EventScheduled","organizer":{"@type":"Organization","name":"FUJI ROCK","url":"https://www.fujirockfestival.com/"},"sameAs":["https://www.fujirockfestival.com/","https://www.instagram.com/fujirock_jp/"],"subEvent":[{"@type":"Festival","@id":"https://techno-japan.media/festivals/fuji-rock.html#edition-fuji-rock-2026","name":"FUJI ROCK 2026","startDate":"2026-07-24","endDate":"2026-07-26","eventStatus":"https://schema.org/EventScheduled","organizer":{"@type":"Organization","name":"FUJI ROCK","url":"https://www.fujirockfestival.com/"},"image":["https://techno-japan.media/images/festivals/fuji-rock.webp"],"description":"フジロックフェスティバルは、毎夏、苗場の山々を日本を代表する野外音楽の祭典へと変貌させる。多彩なロックやオルタナティブのラインナップで主に知られているが、近年は複数のステージでエレクトロニック・アクトの起用も増えている。自然に囲まれたロケーションが没入感のある体験を生み出し、日本のフェス文化と海外のアンダーグラウンド・サウンドを繋いでいる。","location":{"@type":"Place","name":"苗場スキー場","address":{"@type":"PostalAddress","streetAddress":"新潟県南魚沼郡湯沢町三国202","addressRegion":"Niigata","addressCountry":"JP"},"geo":{"@type":"GeoCoordinates","latitude":"36.7919","longitude":"138.7847"}},"eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode"}]},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"TECHNO JAPAN","item":"https://techno-japan.media/"},{"@type":"ListItem","position":2,"name":"FESTIVALS","item":"https://techno-japan.media/festivals.html"},{"@type":"ListItem","position":3,"name":"FUJI ROCK","item":"https://techno-japan.media/festivals/fuji-rock.html"}]},{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"FUJI ROCKの開催日はいつですか？","acceptedAnswer":{"@type":"Answer","text":"FUJI ROCKの最新の開催日は2026年7月24日から2026年7月26日です。"}},{"@type":"Question","name":"FUJI ROCKの会場はどこですか？","acceptedAnswer":{"@type":"Answer","text":"FUJI ROCKの会場は苗場スキー場、新潟県南魚沼郡湯沢町三国202、Niigataです。"}}]}]</script>
 </head>
 <body>
@@ -89,6 +89,7 @@
       <div class="detail-hero-image">
         <img width="1400" height="700" src="/images/festivals/fuji-rock.webp" srcset="/images/derivatives/card/festivals/fuji-rock--02ffa3c3-xs.webp 240w, /images/derivatives/card/festivals/fuji-rock--02ffa3c3-sm.webp 480w, /images/derivatives/card/festivals/fuji-rock--02ffa3c3-md.webp 720w, /images/derivatives/card/festivals/fuji-rock--02ffa3c3-lg.webp 960w, /images/festivals/fuji-rock.webp 1400w" sizes="(max-width: 900px) calc(100vw * 2.857), 100vw" alt="FUJI ROCK" fetchpriority="high" decoding="async" style="object-position:center">
       </div>
+      <div class="festival-hero-fav" data-festival-fav="fuji-rock"></div>
       <div class="festival-hero-overlay"><div class="wrap">
         <div class="festival-hero-meta"><span class="pill">FESTIVAL</span><span class="mono ">ARCHIVE · 2026</span></div>
         <h1 class="disp festival-hero-title">FUJI ROCK</h1>
@@ -308,19 +309,34 @@ document.querySelectorAll('.share-copy-btn').forEach(function(button) {
 <script>
 (function() {
   var buttons = document.querySelectorAll('[data-festival-save]');
-  buttons.forEach(function(button) {
-    var id = button.getAttribute('data-festival-save');
-    var update = function() {
+  var mounts = document.querySelectorAll('[data-festival-fav]');
+  var update = function() {
+    buttons.forEach(function(button) {
+      var id = button.getAttribute('data-festival-save');
       var saved = window.tjFav && window.tjFav.has('festival', id);
       button.textContent = saved ? 'Saved' : 'Save';
       button.setAttribute('aria-pressed', saved ? 'true' : 'false');
-    };
+    });
+    mounts.forEach(function(mount) {
+      var id = mount.getAttribute('data-festival-fav');
+      var saved = window.tjFav && window.tjFav.has('festival', id);
+      var heart = mount.querySelector('.tj-fav-heart');
+      if (heart) heart.classList.toggle('active', saved);
+    });
+  };
+  mounts.forEach(function(mount) {
+    var id = mount.getAttribute('data-festival-fav');
+    if (window.tjFav) window.tjFav.attachHeart(mount, 'festival', id);
+  });
+  buttons.forEach(function(button) {
+    var id = button.getAttribute('data-festival-save');
     button.addEventListener('click', function() {
       if (window.tjFav) window.tjFav.toggle('festival', id);
       update();
     });
-    update();
   });
+  document.addEventListener('tj-fav-change', update);
+  update();
 })();
 </script>
 </body>

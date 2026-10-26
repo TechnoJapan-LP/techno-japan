@@ -13806,3 +13806,45 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 
 - 公開時、本番で VENUES の地図が CARTO の黒い地図（加工なし）で出ることを確認する。cms.js を変えているため Publish pipeline ＋ CMS の確認も必要。
+
+### 2026-10-26 redesign/magazine フェス詳細・アーティスト詳細・会場詳細の修正（ユーザー確認後の指摘、Claude 検証・コミット。本番未反映）
+
+### 実施
+
+- フェス詳細（`tmp/spec-detail-festival-artist.md`、Codex）
+  - ヒーローに「タイトル補足文章」: FEATURE STORY の記事タイトルを `splitArticleTitle` で分けた sub を `p.festival-hero-sub` で表示（JA は title、EN は title_en || title。記事・sub が無いフェスは出さない）。ユーザーの言う「タイトル補足文章」＝ TOP の STORIES 等と同じ記事タイトルの「｜」の後ろ、と解釈した（モックのヒーローには補足文が無い）。
+  - FEATURE STORY のカードをタイトル（short、display 書体）と補足文（sub、本文の書体・大文字にしない）に分割（JA・EN）。
+  - LINEUP と過去の出演者: 公開中の登録アーティストで画像がある人は、番号の四角の場所に写真（56px、スマホ 48px、`sizes` を表示幅にして xs 派生）。番号は写真の左下に小さな札で残す。未登録・組み合わせ・画像なしは番号の四角のまま。
+  - 開催ヒストリー: 旧デザインの `.detail-section-label { margin: 40px 0 -24px }`（下がマイナス）で表が見出しに食い込んでいた → v2 で正の余白に。
+  - スマホ（900px 以下）: SAVE ボタンを隠し、ヒーロー右上に `tjFav.attachHeart(host, 'festival', id)` のハート（保存先は PC の Save と同じ）。PC は今のまま。
+  - 補足文（ヒーロー・FEATURE STORY）は `clauseBreaks()` ＋ `word-break: keep-all` で文節の切れ目でだけ改行（「3日間」の途中で折れていた）。
+- アーティスト詳細・会場詳細の STORIES（`relatedStoryCardsHtml` の grid）: タイトルを short / sub に分け、導入文（excerpt）を出さない（モックの ArtistDetail / VenueDetail と同じ）。
+- 会場詳細（`tmp/spec-venue-detail-2.md`、Codex）: パンくず（VENUES / 東京 / WOMB）をヒーロー画像の上へ（アーティスト詳細と同じ並び）。Instagram のボタンを「Instagram」だけに（ハンドルは aria-label）。
+- `detail.css`・`cms.js`（記事プレビューの版数）・`cms.html` の版数を更新。
+
+### コミット
+
+- （このエントリを含むコミット。redesign/magazine、push なし）
+
+### 検証
+
+- `tmp/detailfix.mjs`: 48/48（labyrinth JA/EN × 1440/390: ヒーローの補足文・「3日間」が1行に収まる（keep-all ＋ `<wbr>`）・FEATURE STORY の分割・LINEUP は登録 8 名すべて写真付きで番号を保持・名前の位置と行の高さがそろう・写真は xs/sm 派生で実ピクセル ≥ 表示幅×dpr・過去の出演者 3/3 写真付き・開催ヒストリーの見出しと表の間 17px・PC は Save ボタン／スマホはヒーロー右上 44px のハートで tjFav に保存。compuma / unit の記事カードは分割・導入文なし）。
+- `tmp/venuefix.mjs`: 28/28（womb / unit / bonobo、JA・EN、1440/390: パンくずがヒーロー画像より上・Instagram は「INSTAGRAM」だけ（aria-label にハンドル）・スマホのボタンは2行・横はみ出しなし）。
+- 回帰: `tmp/festdetailverify.mjs` 356/356（番号の四角の基準を 48px → PC 56px / スマホ 48px に更新）、`artdetailverify` 362/362、`vendetailverify` 322/322、`articleverify` 284/290（失敗6件は以前からの画像の細かさ、値も同じ）、`followverify` 297/297、`cursorverify` 65/65。
+- `bash scripts/preflight.sh`（省略なし）: 全67件成功。
+- 未確認: iPhone 実機でのハートの押し心地、CMS の確認・Publish pipeline（cms.js の版数を変えたため公開前に必須）。
+
+### 変更したパターン
+
+- 記事タイトルの「｜」で分けるのは `splitArticleTitle` 1か所。ヒーロー・FEATURE STORY・記事カード（grid / wide）で共有。
+- 出演者の行の写真は「登録・公開・画像あり」のときだけ、番号の四角と同じ大きさで差し替え、番号は札で残す。
+- 保存のハートは `tjFav.attachHeart` を使い、ボタンとハートで保存先を共有する。
+
+### 未確認の類似パターン
+
+- 確認済み・0件: `.detail-section-label` のマイナスの余白で重なる v2 の詳細ページ（他は Codex の報告と CDP で確認）。
+- 未確認: 記事詳細の関連記事（wide・通常のカード）は今回変えていない。記事のないフェスはヒーローの補足文が無い（意図どおり）。
+
+### 次の担当への注意・判断待ち
+
+- ヒーローの補足文は「最新の関連記事のタイトルの後ろ半分」。記事が更新されると補足文も変わる。フェス自体の短い説明を別に持つかはユーザー判断（今は持たない）。

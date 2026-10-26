@@ -861,6 +861,18 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   font-size: 28px;
   line-height: .98;
 }
+.artist-stories .related-story-title .story-title-short,
+.artist-stories .related-story-title .story-title-sub { display: block; }
+.artist-stories .related-story-title .story-title-sub {
+  margin-top: .35em;
+  color: rgba(240,237,232,.9);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.45;
+  letter-spacing: 0;
+  text-transform: none;
+}
 .artist-stories .related-story-card.is-grid:hover .related-story-title {
   color: var(--accent);
 }
@@ -878,6 +890,8 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   padding-top: 32px;
   border-top: 1px solid var(--text-a12);
 }
+.artist-detail-v2 .detail-section-label,
+.venue-detail-v2 .detail-section-label { margin-bottom: 16px; }
 
 /* ==========================================================
    VENUE DETAIL — magazine redesign
@@ -892,7 +906,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 .venue-detail-v2 .venue-detail-wrap {
   width: 100%;
   max-width: 1360px;
-  padding-top: 24px;
+  padding-top: 32px;
 }
 .venue-detail-v2 .venue-gallery {
   width: 100%;
@@ -932,11 +946,15 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin: 32px 0 40px;
+  margin: 0 0 32px;
   color: var(--text-a62);
 }
+.venue-detail-v2 .venue-breadcrumb > * { min-width: 0; }
 .venue-detail-v2 .venue-breadcrumb a:hover { color: var(--accent); }
-.venue-detail-v2 .venue-breadcrumb span:last-child { color: var(--text); }
+.venue-detail-v2 .venue-breadcrumb span:last-child {
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
 .venue-head {
   display: grid;
   grid-template-columns: 7fr 5fr;
@@ -1179,11 +1197,10 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
     font-size: 34px;
   }
   .artist-detail-v2 .festival-section-heading a { flex: 0 0 auto; white-space: nowrap; }
-  .venue-detail-v2 .venue-detail-wrap { padding-top: 16px; }
+  .venue-detail-v2 .venue-detail-wrap { padding-top: 24px; }
   .venue-detail-v2 .venue-gallery-spread { grid-template-columns: 1fr; grid-auto-rows: 220px; gap: 12px; }
   .venue-detail-v2 .venue-gallery-main,
   .venue-detail-v2 .venue-gallery-small { grid-column: span 1; grid-row: span 1; }
-  .venue-detail-v2 .venue-breadcrumb { margin: 24px 0 32px; }
   .venue-head { grid-template-columns: minmax(0, 1fr); gap: 32px; }
   .venue-title { font-size: clamp(48px, 14cqw, 96px); }
   .venue-title-long { font-size: clamp(40px, 11cqw, 78px); }
@@ -1271,6 +1288,33 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   letter-spacing: .01em;
   overflow-wrap: anywhere;
 }
+.festival-design-v2 .festival-hero-sub {
+  max-width: 32em;
+  margin: 16px 0 0;
+  color: rgba(240,237,232,.92);
+  font-family: var(--font-body);
+  font-size: 20px;
+  font-weight: 300;
+  line-height: 1.5;
+  letter-spacing: 0;
+  text-transform: none;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+.festival-design-v2 .festival-hero-fav {
+  position: absolute;
+  z-index: 2;
+  top: 24px;
+  right: 24px;
+  display: none;
+}
+.festival-design-v2 .festival-hero-fav .tj-fav-heart {
+  width: 44px;
+  height: 44px;
+  opacity: .9;
+}
+.festival-design-v2 .detail-section-label { margin-bottom: 16px; }
+.festival-design-v2 .detail-good-to-know .detail-section-label { margin: 0 0 14px; }
 .festival-design-v2 .festival-content { padding-top: 32px; }
 .festival-design-v2 .facts {
   display: grid;
@@ -1483,8 +1527,24 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   aspect-ratio: 3 / 2;
   object-fit: cover;
 }
-.festival-design-v2 .festival-feature-story .disp { font-size: 38px; line-height: 1.05; }
-.festival-design-v2 .festival-feature-story:hover .disp { color: var(--accent); }
+.festival-design-v2 .festival-feature-story-title {
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 38px;
+  line-height: 1.05;
+}
+.festival-design-v2 .festival-feature-story-sub {
+  color: rgba(240,237,232,.9);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.5;
+  letter-spacing: 0;
+  text-transform: none;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+.festival-design-v2 .festival-feature-story:hover .festival-feature-story-title { color: var(--accent); }
 .festival-design-v2 .festival-ended-notice { margin: 0; padding: 16px 0 0; color: var(--text-a72); }
 .festival-design-v2 .festival-empty { margin: 0; color: var(--text-a62); }
 .festival-design-v2 .detail-lineup-list {
@@ -1504,9 +1564,9 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   border-top: 1px solid var(--text-a10);
 }
 .festival-design-v2 .festival-act-number {
-  flex: 0 0 48px;
-  width: 48px;
-  height: 48px;
+  flex: 0 0 56px;
+  width: 56px;
+  height: 56px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1514,6 +1574,28 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   color: var(--text-a62);
   font-size: 11px;
   letter-spacing: .02em;
+}
+.festival-design-v2 .festival-act-number-image {
+  position: relative;
+  overflow: hidden;
+  background: var(--text-a04);
+}
+.festival-design-v2 .festival-act-photo,
+.festival-design-v2 .festival-act-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.festival-design-v2 .festival-act-photo img { object-fit: cover; }
+.festival-design-v2 .festival-act-number-label {
+  position: absolute;
+  left: 4px;
+  bottom: 4px;
+  padding: 3px 4px;
+  background: rgba(8,8,8,.72);
+  color: var(--text);
+  font-size: 9px;
+  line-height: 1;
 }
 .festival-design-v2 .festival-act .lineup-item {
   min-width: 0;
@@ -1638,6 +1720,8 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   .festival-design-v2 .festival-detail-inner > .wrap { padding-left: 16px; padding-right: 16px; }
   .festival-design-v2 .festival-detail-hero { height: min(70vh, 560px); }
   .festival-design-v2 .festival-hero-overlay { padding: 48px 0 24px; }
+  .festival-design-v2 .festival-hero-fav { top: 16px; right: 16px; display: block; }
+  .festival-design-v2 .festival-hero-sub { max-width: 32em; margin-top: 12px; font-size: 15px; line-height: 1.5; }
   .festival-design-v2 .festival-content { padding-top: 24px; }
   .festival-design-v2 .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .festival-design-v2 .fact { padding: 14px 0; border-left: 0; border-top: 1px solid var(--text-a08); }
@@ -1648,13 +1732,16 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   .festival-design-v2 .festival-action-buttons .btn,
   .festival-design-v2 .festival-action-buttons .btn2 { width: 100%; padding-left: 12px; padding-right: 12px; }
   .festival-design-v2 .festival-action-buttons .btn:first-child { grid-column: 1 / -1; }
+  .festival-design-v2 .festival-action-buttons .festival-save { display: none; }
   .festival-design-v2 .festival-shared { line-height: 1.6; }
   .festival-design-v2 .festival-tab-panel { padding-top: 32px; }
   .festival-design-v2 .festival-overview-grid { grid-template-columns: 1fr; gap: 40px; }
   .festival-design-v2 .festival-overview-copy .festival-description-inline,
   .festival-design-v2 .festival-overview-copy .festival-summary { font-size: 19px; }
-  .festival-design-v2 .festival-feature-story .disp { font-size: 30px; }
+  .festival-design-v2 .festival-feature-story-title { font-size: 30px; }
+  .festival-design-v2 .festival-feature-story-sub { font-size: 14px; }
   .festival-design-v2 .detail-lineup-list { grid-template-columns: 1fr; }
+  .festival-design-v2 .festival-act-number { flex-basis: 48px; width: 48px; height: 48px; }
   .festival-design-v2 .festival-act .lineup-item { font-size: 24px; }
   .festival-design-v2 .festival-edition-row { grid-template-columns: 72px minmax(0, 1fr) 90px; gap: 12px; }
   .festival-design-v2 .festival-edition-place { display: none; }
