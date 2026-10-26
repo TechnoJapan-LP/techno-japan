@@ -20,6 +20,13 @@
   var mapToggle = root.querySelector('[data-venues-map-toggle]');
   var mapOpen = false;
   var mobileQuery = window.matchMedia('(max-width: 900px)');
+  var toolbar = root.querySelector('.venues-filters');
+  var toolbarScrollFrame = 0;
+  var toolbarLastY = window.scrollY;
+  var toolbarDirection = 0;
+  var toolbarDirectionAnchor = window.scrollY;
+  var toolbarOpenUntil = 0;
+  var toolbarStartY = toolbar ? toolbar.getBoundingClientRect().top + window.scrollY : 0;
   // TOKYO はユーザー指定の大きな区分だけを出す。
   // 区分を増やすときはここへ足し、会場データの AREA 自体は変更しない。
   var TOKYO_SUBAREA_GROUPS = [
@@ -58,6 +65,7 @@
     });
   }
   function scrollFeaturedBelowFilters() {
+    holdToolbarOpen(700);
     requestAnimationFrame(function () {
       var featured = root.querySelector('.venues-featured-section');
       var toolbar = root.querySelector('.venues-filters');
@@ -66,6 +74,49 @@
       var toolbarBottom = toolbar.getBoundingClientRect().bottom;
       if (featuredTop >= toolbarBottom) return;
       scrollTo({ top: Math.max(0, scrollY + featuredTop - toolbarBottom), behavior: 'instant' });
+    });
+  }
+  function toolbarNavHeight() {
+    return parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tj-nav-height')) || 64;
+  }
+  function showToolbar() {
+    toolbar.classList.remove('is-hidden');
+  }
+  function holdToolbarOpen(duration) {
+    toolbarOpenUntil = Math.max(toolbarOpenUntil, performance.now() + duration);
+    showToolbar();
+  }
+  function toolbarMustStayVisible() {
+    return !mobileQuery.matches
+      || mapOpen
+      || toolbarOpenUntil > performance.now()
+      || toolbar.matches(':focus-within')
+      || window.scrollY <= toolbarStartY - toolbarNavHeight();
+  }
+  function updateToolbarVisibility() {
+    if (toolbarScrollFrame) return;
+    toolbarScrollFrame = requestAnimationFrame(function () {
+      toolbarScrollFrame = 0;
+      var y = window.scrollY;
+      if (toolbarMustStayVisible()) {
+        showToolbar();
+        toolbarLastY = y;
+        toolbarDirection = 0;
+        toolbarDirectionAnchor = y;
+        return;
+      }
+      var delta = y - toolbarLastY;
+      if (Math.abs(delta) >= 1) {
+        var direction = delta > 0 ? 1 : -1;
+        if (direction !== toolbarDirection) {
+          toolbarDirection = direction;
+          toolbarDirectionAnchor = y;
+        } else if (Math.abs(y - toolbarDirectionAnchor) >= 10) {
+          toolbar.classList.toggle('is-hidden', direction > 0);
+          toolbarDirectionAnchor = y;
+        }
+      }
+      toolbarLastY = y;
     });
   }
   function updateMapVisibility() {
@@ -366,6 +417,7 @@
   root.addEventListener('click', function (event) {
     if (event.target.closest('[data-venues-map-toggle]')) {
       toggleMap();
+      if (mapOpen) holdToolbarOpen(700);
       return;
     }
     var chipButton = event.target.closest('.venues-chip-group button');
@@ -398,6 +450,9 @@
   }
   window.addEventListener('resize', scheduleMapTopAlignment);
   mobileQuery.addEventListener?.('change', updateMapVisibility);
+  toolbar.addEventListener('focusin', showToolbar);
+  window.addEventListener('scroll', updateToolbarVisibility, { passive: true });
+  mobileQuery.addEventListener?.('change', updateToolbarVisibility);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(scheduleMapTopAlignment);
   window.addEventListener('pageshow', restoreState);
   updateMapVisibility();

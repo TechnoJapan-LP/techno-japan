@@ -960,6 +960,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   grid-template-columns: 7fr 5fr;
   gap: 48px;
   align-items: end;
+  margin-top: 32px;
 }
 .venue-head-copy,
 .venue-facts { min-width: 0; }
@@ -978,6 +979,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   flex-wrap: wrap;
   gap: 10px;
 }
+.venue-head-meta + .venue-title { margin-top: -10px; }
 .venue-title {
   max-width: 100%;
   font-size: clamp(52px, 14cqw, 160px);
@@ -1198,9 +1200,12 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   }
   .artist-detail-v2 .festival-section-heading a { flex: 0 0 auto; white-space: nowrap; }
   .venue-detail-v2 .venue-detail-wrap { padding-top: 24px; }
+  .venue-detail-v2 .venue-gallery-single { aspect-ratio: 3 / 2; }
   .venue-detail-v2 .venue-gallery-spread { grid-template-columns: 1fr; grid-auto-rows: 220px; gap: 12px; }
   .venue-detail-v2 .venue-gallery-main,
-  .venue-detail-v2 .venue-gallery-small { grid-column: span 1; grid-row: span 1; }
+  .venue-detail-v2 .venue-gallery-small { grid-column: span 1; grid-row: span 1; aspect-ratio: 3 / 2; }
+  .venue-detail-v2 .venue-gallery-spread { grid-auto-rows: auto; }
+  .venue-head { margin-top: 24px; }
   .venue-head { grid-template-columns: minmax(0, 1fr); gap: 32px; }
   .venue-title { font-size: clamp(48px, 14cqw, 96px); }
   .venue-title-long { font-size: clamp(40px, 11cqw, 78px); }

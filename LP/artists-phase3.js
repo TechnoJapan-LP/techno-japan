@@ -17,6 +17,14 @@
   var featuredSelection = null;
   var scrollRequest = 0;
   var activeCarousel = null;
+  var toolbar = document.getElementById('artists-toolbar');
+  var mobileQuery = window.matchMedia('(max-width: 900px)');
+  var toolbarScrollFrame = 0;
+  var toolbarLastY = window.scrollY;
+  var toolbarDirection = 0;
+  var toolbarDirectionAnchor = window.scrollY;
+  var toolbarOpenUntil = 0;
+  var toolbarStartY = toolbar ? toolbar.getBoundingClientRect().top + window.scrollY : 0;
   var genreOrder = ['ALL', 'TECHNO', 'HOUSE', 'MINIMAL', 'EXPERIMENTAL', 'AMBIENT', 'ELECTRONIC', 'LIVE'];
   var stateKey = 'tj:artist-hub-state:v1';
 
@@ -130,7 +138,6 @@
     }).slice(0, 3);
   }
   function syncToolbarHeight() {
-    var toolbar = document.getElementById('artists-toolbar');
     var update = function () { document.documentElement.style.setProperty('--artists-toolbar-h', toolbar.getBoundingClientRect().height + 'px'); };
     update();
     if (window.ResizeObserver) new ResizeObserver(update).observe(toolbar);
@@ -151,6 +158,53 @@
       copies.forEach(function (copy) { featured.__artistsCopyObserver.observe(copy); });
     }
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(update);
+  }
+  function toolbarNavHeight() {
+    return parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tj-nav-height')) || 64;
+  }
+  function showToolbar() {
+    toolbar.classList.remove('is-hidden');
+  }
+  function holdToolbarOpen(duration) {
+    toolbarOpenUntil = Math.max(toolbarOpenUntil, performance.now() + duration);
+    showToolbar();
+  }
+  function featuredIsActive() {
+    var featured = document.getElementById('artists-featured');
+    return Boolean(featured && !featured.hidden && featured.getBoundingClientRect().bottom > toolbarNavHeight());
+  }
+  function toolbarMustStayVisible() {
+    return !mobileQuery.matches
+      || toolbarOpenUntil > performance.now()
+      || toolbar.matches(':focus-within')
+      || window.scrollY <= toolbarStartY - toolbarNavHeight()
+      || featuredIsActive();
+  }
+  function updateToolbarVisibility() {
+    if (toolbarScrollFrame) return;
+    toolbarScrollFrame = requestAnimationFrame(function () {
+      toolbarScrollFrame = 0;
+      var y = window.scrollY;
+      if (toolbarMustStayVisible()) {
+        showToolbar();
+        toolbarLastY = y;
+        toolbarDirection = 0;
+        toolbarDirectionAnchor = y;
+        return;
+      }
+      var delta = y - toolbarLastY;
+      if (Math.abs(delta) >= 1) {
+        var direction = delta > 0 ? 1 : -1;
+        if (direction !== toolbarDirection) {
+          toolbarDirection = direction;
+          toolbarDirectionAnchor = y;
+        } else if (Math.abs(y - toolbarDirectionAnchor) >= 10) {
+          toolbar.classList.toggle('is-hidden', direction > 0);
+          toolbarDirectionAnchor = y;
+        }
+      }
+      toolbarLastY = y;
+    });
   }
   function shouldScroll() {
     var heading = document.getElementById('artists-featured');
@@ -221,6 +275,7 @@
     } catch (_) {}
   }
   function onFilterChange() {
+    holdToolbarOpen(700);
     var wasScrolled = shouldScroll();
     scrollRequest += 1;
     render();
@@ -245,6 +300,9 @@
     onFilterChange();
   });
   window.addEventListener('pageshow', restoreState);
+  toolbar.addEventListener('focusin', showToolbar);
+  window.addEventListener('scroll', updateToolbarVisibility, { passive: true });
+  mobileQuery.addEventListener?.('change', updateToolbarVisibility);
   syncToolbarHeight();
   try { render(); } finally { document.documentElement.classList.remove('tj-artists-hydrating'); }
 }());

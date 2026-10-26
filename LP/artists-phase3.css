@@ -30,6 +30,11 @@ html.tj-artists-hydrating .ssr-link-list {
   border-bottom: 1px solid var(--line);
   padding-top: 14px;
   padding-bottom: 14px;
+  transition: transform .22s ease;
+}
+#artists-toolbar.is-hidden { transform: translateY(-100%); }
+@media (prefers-reduced-motion: reduce) {
+  #artists-toolbar { transition: none; }
 }
 .artists-toolbar-row {
   display: flex;

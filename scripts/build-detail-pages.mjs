@@ -58,7 +58,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 89;
+const DETAIL_CSS_VERSION = 90;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -78,7 +78,7 @@ const ARTICLE_FX_CSS_VERSION = 18;
 const COMMON_JS_VERSION = 20;   // 2026-10-23 festival tab section tracking
 const COMMON_CSS_VERSION = 55;   // 2026-10-26 mobile menu search sizing
 const DATA_HUB_VERSION = 11;
-const SEARCH_JS_VERSION = 8;
+const SEARCH_JS_VERSION = 9;
 const LANG_TOGGLE_VERSION = 3;
 const MAGAZINE_JS_VERSION = 7;
 const FAVORITES_JS_VERSION = 4;
@@ -3693,7 +3693,6 @@ const EN_PAGE_TEXT = {
     ['※ 1行につき1組ご記入ください。発表済みの範囲で構いません', '※ One artist per line. Announced acts only is fine'],
     ['プレスキット・その他資料のURL', 'Press kit or other materials'],
     ['※ プレスキット、素材フォルダ、リリース文など', '※ Press kits, asset folders, or press releases'],
-    ['※ 画像をアップロードできない場合は、画像URLをこちらにご記入ください', '※ If you are unable to upload images, please provide image URLs here'],
     ['備考・特記事項', 'Remarks'],
     ['※ 掲載にあたってお伝えしたいことがあればご自由にどうぞ', '※ Anything else you would like us to know'],
     ['掲載許諾', 'Permission'],
