@@ -13770,3 +13770,39 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 - スマホの ARTISTS FEATURED の重なり（上記）は次の修正で直す（カウンターの列の分の余白を、写真の大きさの計算に入れる）。
 - cms.js（記事プレビューの common.css の版数）と cms.html の版数を変えたため、公開時は Publish pipeline ＋ CMS の確認が必要（フェーズ6 から継続）。
+
+### 2026-10-26 redesign/magazine VENUES の地図を最初の黒い地図に ＋ ARTISTS スマホ FEATURED の重なり（Claude 検証・コミット。本番未反映）
+
+### 実施
+
+- ユーザー指示「VENUE は地図の色や形だけ再度調整したい。日本全体の形も違うし、一番最初に使っていた黒の地図が理想」。最初（2026-04）も今の本番も CARTO dark_all（今はキー付き・本番ドメイン限定）。
+  - 原因1: 4872c45d2 で入れた `.tj-map .leaflet-tile-pane { filter: grayscale(1) brightness(.72) contrast(1.18) }` が CARTO にも掛かり、本番に出すと海が陸と同じ暗さになり日本の形と道路が消える（本番の CARTO を同じ範囲で表示して確認）→ **削除（CARTO は加工なし）**。
+  - 原因2: テスト環境は CARTO が 403 → OSM 代替。OSM は日本の陸地の大半を森の緑で塗るため、白黒にすると海と陸の明るさの差が 1（CARTO は 37.6）で形が見えない → OSM 代替だけ、インライン SVG の色行列（`#tj-map-osm-dark`、B−R で水域だけ明るく）で CARTO の配色に置き換え。`venues.html` / `map.html` に SVG 定義、`common.css?v=54`。
+- ARTISTS スマホ FEATURED: NEXT の行が2行に折り返すと（長いフェス名の人が選ばれたとき）下のカウンターの列に 2px 重なっていた → 下の余白を `--artists-featured-bottom-reserve: 48px` にし、写真の大きさの計算にも同じ値を使う。
+- CMS の記事プレビューの common.css の版を 54 にそろえた（`cms.js?v=184`）。
+
+### コミット
+
+- （このエントリを含むコミット。redesign/magazine、push なし）
+
+### 検証
+
+- `tmp/mapverify.mjs` 12/12（venues JA/EN・map.html）: OSM 代替は色行列、CARTO 側は filter none、SVG 定義は場所を取らない、CSP・JS エラーなし。テスト環境の代替の色を CARTO（本番の表示）と同じ範囲・同じ方法で測定: 海 (44,53,60)／(44,53,60)、陸 (14,14,13)／(14,14,14)。
+- `tmp/featov2.mjs` 18/18: 390×844/700/667/600、JA/EN、NEXT を長いフェス名にして2行にしても、文字の列とカウンターの列の間が 13px 以上。写真は3名の中で一番高い文字の列に合わせるため、2行の人がいると 390×844 で 358×447 → 353×442、390×667 で 212×265。
+- `tmp/venverify.mjs` 112/114（失敗2件は以前からの画像の細かさ。地図の検査は新しい作りに更新）、`tmp/artverify.mjs` 114/114、`tmp/followverify.mjs` 297/297、`tmp/cursorverify.mjs` 65/65、`node scripts/check_cms_article_generated_preview.mjs` 成功。
+- preflight（省略なし）はこの後のフェス詳細・アーティスト詳細の修正と合わせて実施する。
+- 未確認: 本番ドメインでの CARTO の表示（本番でしか読めない。本番の CLUB MAP で同じ範囲を表示した画像で確認）、iPhone 実機での SVG の色行列（Safari）。
+
+### 変更したパターン
+
+- 外部の地図タイルには加工を掛けず、読めないときの代替だけを本物の配色に寄せる（色行列はインライン SVG、外部・data: URL を使わない）。
+- 位置を絶対指定した部品（カウンターの列）の分の余白は、CSS 変数1つにまとめ、写真の大きさの計算と共有する。
+
+### 未確認の類似パターン
+
+- 確認済み・0件: `.tj-map` を使うページ（venues JA/EN・map.html 以外は無い）。CMS の地図（`cms.css` の `.tj-map-osm`）は対象外のまま。
+- 未確認: 他の詳細ページの地図（フェス詳細は Google Maps へのリンクのみで地図タイル無し）。
+
+### 次の担当への注意・判断待ち
+
+- 公開時、本番で VENUES の地図が CARTO の黒い地図（加工なし）で出ることを確認する。cms.js を変えているため Publish pipeline ＋ CMS の確認も必要。

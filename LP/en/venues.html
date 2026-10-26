@@ -57,7 +57,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/common.css?v=53">
+<link rel="stylesheet" href="/common.css?v=54">
 <link rel="stylesheet" href="/vendor/leaflet-1.9.4/leaflet.css?v=2" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="/venues-phase3.css?v=5">
 <script type="application/ld+json">
@@ -105,6 +105,14 @@
 </script>
 </head>
 <body>
+
+<!-- CARTO が読めないときの OSM を、CARTO の配色（陸 #0e0e0e・海 #2c353c）に寄せる。
+     B−R で水域だけを明るくする色行列。CARTO のタイルには適用しない。 -->
+<svg class="tj-map-filter-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
+  <filter id="tj-map-osm-dark" color-interpolation-filters="sRGB">
+    <feColorMatrix type="matrix" values="-0.494 -0.117 0.447 0 0.209  -0.640 -0.152 0.580 0 0.255  -0.753 -0.179 0.682 0 0.290  0 0 0 1 0"/>
+  </filter>
+</svg>
 
 <!-- 背景レイヤー（グリッド + スキャンライン / common.css の .tj-bg） -->
 <div class="tj-bg" aria-hidden="true"><div class="tj-scan"></div></div>

@@ -280,6 +280,7 @@ html.tj-artists-hydrating .ssr-link-list {
   #artists-genre-chips { padding-top: 6px; }
   .artists-featured {
     --artists-featured-copy-h: 0px;
+    --artists-featured-bottom-reserve: 48px;
   }
   .artists-featured-content {
     display: flex;
@@ -288,11 +289,11 @@ html.tj-artists-hydrating .ssr-link-list {
     justify-content: end;
     gap: 10px;
   }
-  .artists-featured-panel { padding-bottom: 24px; }
+  .artists-featured-panel { padding-bottom: var(--artists-featured-bottom-reserve); }
   .artists-featured-image {
     --artists-featured-vertical-margin: 0px;
-    width: min(100%, calc(100vw - 32px), calc((var(--artists-featured-h) - var(--artists-featured-copy-h) - 24px - 10px) * .8));
-    max-height: min(calc(var(--artists-featured-h) - var(--artists-featured-copy-h) - 24px - 10px), calc((100vw - 32px) * 1.25));
+    width: min(100%, calc(100vw - 32px), calc((var(--artists-featured-h) - var(--artists-featured-copy-h) - var(--artists-featured-bottom-reserve) - 10px) * .8));
+    max-height: min(calc(var(--artists-featured-h) - var(--artists-featured-copy-h) - var(--artists-featured-bottom-reserve) - 10px), calc((100vw - 32px) * 1.25));
     margin: 0 auto;
   }
   .artists-featured-copy { gap: 10px; }

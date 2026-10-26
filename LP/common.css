@@ -1009,8 +1009,7 @@ body > div:not(.tj-bg):not(.cursor-dot):not(.cursor-ring):not(.nav-overlay) {
 }
 .tj-map .leaflet-container,
 .tj-map.leaflet-container { background: #080808 !important; }
-.tj-map .leaflet-tile-pane { filter: grayscale(1) brightness(.72) contrast(1.18); }
-.tj-map.tj-map-osm .leaflet-tile-pane { filter: invert(1) grayscale(1) brightness(.6) contrast(1.2); }
+.tj-map.tj-map-osm .leaflet-tile-pane { filter: url(#tj-map-osm-dark); }
 
 /* ===================== SSR LINK LIST =====================
    ハブページの静的リンク一覧（build-detail-pages.mjs が
