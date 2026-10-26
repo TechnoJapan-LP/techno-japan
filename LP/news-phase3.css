@@ -160,7 +160,7 @@
 }
 
 .news-title-sub {
-  margin: 8px 0 0;
+  margin: 0;
   font-family: var(--font-body);
   font-size: 15px;
   font-weight: 300;
@@ -171,6 +171,10 @@
 }
 
 .news-lead .news-title-sub { font-size: 20px; }
+.news-wide-card .news-title-sub,
+.news-three-card .news-title-sub {
+  margin-top: 12px;
+}
 .news-wide-card .news-title-sub { font-size: 16px; }
 .news-three-card .news-title-sub,
 .news-list-card .news-title-sub { font-size: 15px; }
@@ -264,6 +268,8 @@
   .news-list-card .news-title { font-size: 23px; }
   .news-list-card .news-title-sub { font-size: 12px; line-height: 1.45; }
   .news-copy { gap: 14px; }
+  /* リードはスマホの gap が14pxなので、補足の文だけ4px足して18pxにそろえる。 */
+  .news-lead .news-title-sub { margin-top: 4px; }
   .news-excerpt { font-size: 13px; }
 }
 

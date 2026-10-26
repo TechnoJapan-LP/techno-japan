@@ -13670,3 +13670,37 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - スプレッドシートの列は**新しい CMS の公開後に**、FESTIVALS の見出しの最後に `SOUND`、VENUES の見出しの最後に `GALLERY` を足す（途中に挿入しない・他の見出しに触らない）。今の本番 CMS で行を保存すると、送られない列が空になるため。
 - GAS の新規作成（`add_festival` / `addVenue`）が新しい列を受け取るかは不明なので、SOUND / GALLERY は既存行の編集でだけ入力できる。
 - 公開時は `?cb=<乱数>` 付き CMS で強制再読み込み → 実データで編集→プレビュー→閉じる→再表示→保存、Publish pipeline の実行、`cms: publish data.js` コミットの確認まで行う（AGENTS.md）。
+
+### 2026-10-26 redesign/magazine NEWS のタイトル → 補足の文の間をモックにそろえる（Claude 検証・コミット。本番未反映）
+
+### 実施
+
+- ユーザー指摘「NEWS の記事のタイトルとサブタイトルの間をモックと同じ間隔に」。モック（`docs/design-mock/News.dc.html`）を同じ書体・同じ指定で再現したページ（`tmp/mockrepro/newslist.html`）と並べて測ったところ、4種類のカードすべてでずれていた。
+  - 下の一覧の行: モック 8px / 今 16px（`.news-list-copy` の gap 8px に `.news-title-sub` の `margin-top:8px` が二重にかかっていた）
+  - リード: モック 18px / 今 22px（スマホ）・26px（PC）
+  - 2本・3本の枠: モック 12px / 今 8px
+- Codex に `LP/news-phase3.css` を直させた（`tmp/spec-news-title-sub-gap.md`）。`.news-title-sub` の margin を 0、2本・3本の枠は `margin-top:12px`、スマホのリードは `margin-top:4px`（`.news-copy` の gap 14px ＋ 4 = 18）。`news-phase3.css?v=7`。
+- 日付が 2026-10-26 に変わったため、ビルドで終了したフェス（10/25 まで）が「今後の開催」から外れる等の再生成差分も同じコミットに含む。
+
+### コミット
+
+- （このエントリを含むコミット。redesign/magazine、push なし）
+
+### 検証
+
+- `tmp/newsgap3.mjs`（390 / 700 / 1440 幅 × JA / EN の24通り）: タイトル → 補足の文がモックの値（リード 18・枠 12・一覧 8）と一致。画像 → カテゴリ、カテゴリ → タイトル、補足 → 紹介文、文字の大きさは**変更前と同じ**。
+- 見た目の間（文字の上下端どうし）もモックとの差 1.3px 以内（行の高さ .98 / 1.4 とモックの .95 / 1.45 の差、スマホの一覧の文字の大きさの差による）。
+- NEWS ページの確認一式・preflight: NEWS（`tmp/newsverify.mjs`）86/86、`bash scripts/preflight.sh`（省略なし）全67件成功。
+
+### 変更したパターン
+
+- NEWS のカードの「タイトル → 補足の文」の間は、補足の文の margin ではなく、カードごとにモックの値（flex の gap、または block のカードでは margin-top）で決める。
+
+### 未確認の類似パターン
+
+- 確認済み・0件: NEWS 以外で `.news-title-sub` を使うページ（他のページの CSS には無い）。
+- 未確認（ユーザー判断待ち）: スマホの一覧の文字の大きさはモックがタイトル 28px・補足 15px、今は 20px・12px（520px 以下）／23px・12px（900px 以下）。PC の3本の枠のタイトルはモック 28px・今 34px。前回「補足の文をモックと同じ大きさに」で 12px にしたのは TOP の STORIES に合わせた値で、モックの値ではなかった。
+
+### 次の担当への注意・判断待ち
+
+- 上の文字の大きさの違いをモックに合わせるかはユーザーに確認中。合わせる場合、スマホの一覧はタイトルが大きくなり、長い日本語のタイトルは行が増える。
