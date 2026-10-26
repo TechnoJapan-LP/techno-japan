@@ -204,6 +204,7 @@ button:not(:disabled):active,
 .cursor-dot, .cursor-ring {
   position: fixed;
   top: 0; left: 0;
+  box-sizing: border-box;
   border-radius: 50%;
   pointer-events: none;
   z-index: 99999;

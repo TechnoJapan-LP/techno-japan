@@ -76,7 +76,7 @@ const ARTICLE_FX_CSS_VERSION = 18;
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
 const COMMON_JS_VERSION = 20;   // 2026-10-23 festival tab section tracking
-const COMMON_CSS_VERSION = 52;   // 2026-10-24 newsletter spacing and horizontal mobile strips
+const COMMON_CSS_VERSION = 53;   // 2026-10-26 cursor sizing parity with production
 const DATA_HUB_VERSION = 11;
 const SEARCH_JS_VERSION = 8;
 const LANG_TOGGLE_VERSION = 3;

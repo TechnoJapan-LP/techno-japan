@@ -13730,3 +13730,43 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 
 - NEWS の文字の大きさをモックに合わせる提案はしない（ユーザー決定済み）。ユーザー確認済みのページは FESTIVALS 一覧・TOP・NEWS。残りは ARTISTS・VENUES・詳細4種・ABOUT / APPLY / WRITER。
+
+### 2026-10-26 redesign/magazine ARTISTS の写真の拡大の入れ替え ＋ マウスカーソルを本番と同じに（Claude 検証・コミット。本番未反映）
+
+### 実施
+
+- ユーザー指摘1「ARTISTS の FEATURED 3名でマウスを乗せると写真が拡大される演出をやめたい。逆に一覧の写真に、今の本番のような拡大がほしい」。
+  - FEATURED: `artists-phase3.css` の `.artists-featured-link:hover .artists-featured-image img { transform: scale(1.04) !important; }` を削除（カルーセルが毎フレーム入れる `translate3d(..) scale(1.12)` を上書きしていた）。名前の色が変わる動きは残す。
+  - 一覧: 本番 `.artist-card-img` と同じ `scale(1.08)`・`transition: transform .6s cubic-bezier(.16,1,.3,1)`。写真は枠（overflow:hidden）の中で大きくなる（新しいグリッドは写真が大きく、枠ごと大きくすると隣や名前に重なるため）。`@media (hover: hover) and (pointer: fine)` の中だけ。動きを減らす設定では拡大しない（最初の実装は指定の強さで負けて一瞬で拡大していた → 同じ強さの規則を足して修正）。
+- ユーザー指摘2「全体で、今の本番のマウスの演出（小さい点に丸が追いついてくる）をそのまま真似して」。本番と redesign を同じ方法で測った結果、仕組み（`common.js` / `common.css`）は同じで、違いは次の3点だった → すべて本番に合わせた。
+  - 丸と点の大きさ: redesign は `box-sizing` が content-box で丸が 38px（リンクの上で 54px）。本番は border-box で 36px（52px）→ `.cursor-dot, .cursor-ring` に `box-sizing: border-box` を明示（`common.css?v=53`、cms.js の記事プレビューの版数と `cms.js?v=183` もそろえた）。
+  - アーティストのカード: 本番 `.artist-card { cursor: none; }`（カードの上は点と丸だけ）→ `.artist-grid-card, .artists-featured-link { cursor: none; }`、タッチ端末は pointer。
+  - **地図ページ（map.html）でカーソルが何も見えなかった**: 4872c45d2 で `common.css` を読むようになり `body { cursor: none }` が効く一方、点と丸を作る `common.js` は読まないため。本番の地図ページは普通のカーソルなので、`map.html` に `body { cursor: auto; }` を足した。同じ状態のページは他に無い（LP/*.html・LP/en/*.html を検索）。
+
+### コミット
+
+- （このエントリを含むコミット。redesign/magazine、push なし）
+
+### 検証
+
+- `tmp/artshover.mjs` 25/25: FEATURED は乗せても transform・大きさが変わらない（JA/EN、動きを減らす設定でも）。一覧は 0.6 秒で 1.08 倍（途中の値 1.05 前後を確認）→ 離すと 1 に戻る。枠・名前・ハートの位置は変わらない。動きを減らす設定では拡大しない。スマホ相当（タッチ）では拡大の規則が効かない。
+- `tmp/cursorverify.mjs` 65/65: 21ページ（ハブ・詳細・ABOUT/APPLY/WRITER・お気に入り・404・EN）で点 6px・丸 36px・リンクの上で 52px・body の cursor none・z-index 99999・mix-blend-mode difference。map.html は本番と同じ普通のカーソル。アーティストのカードはマウスで cursor none、タッチで pointer。
+- 本番との比較は `tmp/cursorprobe.mjs` / `cursorhover.mjs` / `cursorshot.mjs`（本番 https://techno-japan.media を読み取りのみ）。
+- ARTISTS（`tmp/artverify.mjs`）・追加確認一式（`tmp/followverify.mjs`）・preflight: ARTISTS 111/114（失敗3件はスマホの FEATURED で出演予定の行が2行に折り返したとき下のカウンターの列に 2px 重なるもので、**今回の変更とは無関係・以前から**。FEATURED は同じ出演日の人から毎回入れ替わって選ばれ、フェス名が長い人（DENKI BODHISATTVA 等）が選ばれると起きる。直前のコミット db0e2199a でも同じ人が選ばれたときに copy の下端 811px > カウンター上端 809px を測定。次の修正で直す）、追加確認一式 297/297、`bash scripts/preflight.sh` 65/67（失敗2件「ハブページが JS 込みで描ける」の時間切れ・「フェス詳細の行動計測」の一時フォルダ削除失敗は、同時に別のブラウザ確認を流していたための混雑。単独で再実行して両方成功）。
+
+### 変更したパターン
+
+- マウスを乗せたときの写真の拡大は「枠の中で img を拡大」「`hover: hover` かつ `pointer: fine` の中だけ」「動きを減らす設定では、:hover の規則と同じ強さで打ち消す」。
+- カーソルの部品は全体の box-sizing に頼らず、部品側に `box-sizing` を明示する。
+- `common.css` を読むが `common.js` を読まないページは、`body { cursor: auto; }` で普通のカーソルを戻す。
+
+### 未確認の類似パターン
+
+- 確認済み・0件: `common.css` あり・`common.js` なしのページ（map.html 以外）。カーソルの大きさが本番と違うページ（21ページ）。
+- 本番自体が統一されていない点（そのまま）: 本番でもニュース・フェス・TOP のカード、ジャンルのボタン等では普通の指カーソルも出る。ボタンの多くでは丸が大きくならない。redesign も同じ（ARTISTS のカードだけ本番どおり指カーソルなし）。どこでも点と丸だけにするかはユーザーに確認中。
+- 検索画面を開くと、点と丸は検索画面（z-index 100010、本番は 100001）の下に隠れる。本番も同じ。
+
+### 次の担当への注意・判断待ち
+
+- スマホの ARTISTS FEATURED の重なり（上記）は次の修正で直す（カウンターの列の分の余白を、写真の大きさの計算に入れる）。
+- cms.js（記事プレビューの common.css の版数）と cms.html の版数を変えたため、公開時は Publish pipeline ＋ CMS の確認が必要（フェーズ6 から継続）。
