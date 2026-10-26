@@ -1,27 +1,27 @@
 # AI経由の流入
 
-取得日時: 2026-10-25T21:11:06.373Z
+取得日時: 2026-10-26T22:47:06.805Z
 
 | 期間 | AIセッション | 全体セッション | AI割合 |
 |---|---:|---:|---:|
-| 直近28日（2026-09-29〜2026-10-26） | 80 | 2624 | 3.05% |
-| 前の28日（2026-09-01〜2026-09-28） | 0 | 0 | 0.00% |
+| 直近28日（2026-09-30〜2026-10-27） | 85 | 2610 | 3.26% |
+| 前の28日（2026-09-02〜2026-09-29） | 0 | 0 | 0.00% |
 
 ## 直近28日：参照元別
 
 | 参照元 | セッション | ユーザー |
 |---|---:|---:|
-| chatgpt.com | 78 | 76 |
+| chatgpt.com | 83 | 81 |
 | gemini.google.com | 2 | 2 |
 
 ### 直近28日：ランディングページ上位20
 
 | ランディングページ | セッション | ユーザー |
 |---|---:|---:|
-| / | 11 | 10 |
+| /en/articles/topia-2026-info.html | 10 | 10 |
+| / | 9 | 8 |
 | /en/festivals/labyrinth.html | 9 | 9 |
 | /festivals/festival-de-frue.html | 9 | 8 |
-| /en/articles/topia-2026-info.html | 7 | 7 |
 | /articles/japan-festival-2026-september.html | 6 | 6 |
 | /en/festivals/lost-find.html | 4 | 4 |
 | /en/articles/asia-festival-2026-second.html | 3 | 3 |
@@ -30,14 +30,14 @@
 | /festivals/yagura.html | 3 | 3 |
 | (not set) | 2 | 2 |
 | /articles/otsukimi-2026-info.html | 2 | 2 |
+| /en/ | 2 | 2 |
+| /en/articles/sawagi-festival-2026-info.html | 2 | 2 |
+| /index.html | 2 | 2 |
 | /articles/forest-sound-camp-info.html | 1 | 1 |
 | /articles/rebirth-2026-info.html | 1 | 1 |
 | /articles/synapse-2026-info.html | 1 | 1 |
 | /artists/powder.html | 1 | 1 |
-| /en/ | 1 | 1 |
 | /en/articles/forest-sound-camp-info.html | 1 | 1 |
-| /en/articles/intergalactic-2026-info.html | 1 | 1 |
-| /en/articles/japan-festival-2026-september.html | 1 | 1 |
 
 ## 前の28日：参照元別
 
