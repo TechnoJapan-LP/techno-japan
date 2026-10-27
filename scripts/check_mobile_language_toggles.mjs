@@ -79,8 +79,40 @@ try {
     for (const page of pages) {
       await cdp(ws, 'Page.navigate', { url: `http://127.0.0.1:${port}${page}` });
       await delay(600);
-      const expr = `(() => { const b=document.querySelector('.nav-hamburger'); if(!b) return {ok:false,reason:'hamburger missing'}; b.click(); const e=document.querySelector('.nav-overlay .nav-lang'); if(!e) return {ok:false,reason:'overlay toggle missing'}; const s=getComputedStyle(e),r=e.getBoundingClientRect(),a=e.querySelector('a'),ar=a&&a.getBoundingClientRect(); const ok=s.display!=='none'&&s.visibility!=='hidden'&&Number(s.opacity)>0&&r.width>=44&&r.height>=44&&!!a&&ar.width>=44&&ar.height>=44; return {ok,reason:ok?'':('style='+s.display+'/'+s.visibility+'/'+s.opacity+' rect='+r.width+'x'+r.height+' link='+(ar&&ar.width)+'x'+(ar&&ar.height)),rect:[r.width,r.height],href:a&&a.getAttribute('href')}; })()`;
-      const out = await cdp(ws, 'Runtime.evaluate', { expression: expr, returnByValue: true });
+      const expr = `(async () => {
+        const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+        const waitUntil = async (predicate, timeout) => {
+          const end = Date.now() + timeout;
+          while (Date.now() < end) {
+            if (predicate()) return true;
+            await wait(100);
+          }
+          return predicate();
+        };
+        const b = document.querySelector('.nav-hamburger');
+        if (!b) return {ok:false,reason:'hamburger missing'};
+        if (!await waitUntil(() => document.readyState === 'complete', 5000)) {
+          return {ok:false,reason:'document not ready'};
+        }
+        const menuOpened = () => {
+          const overlay = document.querySelector('.nav-overlay');
+          const e = document.querySelector('.nav-overlay .nav-lang');
+          return overlay?.classList.contains('active') || (e && getComputedStyle(e).visibility !== 'hidden');
+        };
+        b.click();
+        let opened = await waitUntil(menuOpened, 3000);
+        if (!opened) {
+          b.click();
+          opened = await waitUntil(menuOpened, 3000);
+        }
+        if (!opened) return {ok:false,reason:'menu not open'};
+        const e = document.querySelector('.nav-overlay .nav-lang');
+        if (!e) return {ok:false,reason:'overlay toggle missing'};
+        const s=getComputedStyle(e),r=e.getBoundingClientRect(),a=e.querySelector('a'),ar=a&&a.getBoundingClientRect();
+        const ok=s.display!=='none'&&s.visibility!=='hidden'&&Number(s.opacity)>0&&r.width>=44&&r.height>=44&&!!a&&ar.width>=44&&ar.height>=44;
+        return {ok,reason:ok?'':('style='+s.display+'/'+s.visibility+'/'+s.opacity+' rect='+r.width+'x'+r.height+' link='+(ar&&ar.width)+'x'+(ar&&ar.height)),rect:[r.width,r.height],href:a&&a.getAttribute('href')};
+      })()`;
+      const out = await cdp(ws, 'Runtime.evaluate', { expression: expr, awaitPromise: true, returnByValue: true });
       const value = out.result?.value || { ok: false, reason: 'no result' };
       if (value.ok) passed++; else failures.push(`${width}px ${page}: ${value.reason}`);
     }

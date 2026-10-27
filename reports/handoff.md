@@ -14021,3 +14021,8 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 - `APPLY Google Form 対応`（`scripts/check_apply_form.mjs`）1件だけ失敗（67成功）。今日足したブラウザでの送信の検査が、07 公式サイトURL・09 チケット販売URL（`type="url"`）に URL でない文字を入れていて、フォームの入力チェックで送信が止まっていた（検査を足した Codex の環境ではブラウザが動かず、一度も実行されていなかった）。APPLY 自体は `tmp/applynotify.mjs` 21/21 で正常。
 - 検査を修正（URL の欄に正しい形の URL、送信を最大5秒待つ、止まったときに不正な欄を表示）→ `node scripts/check_apply_form.mjs` 成功。仕組みどおり、1回目の push では本番に何も出ていない。
+
+#### 追記（公開の2回目も pre-push の preflight で止まった）
+
+- `モバイルの言語切替`（`scripts/check_mobile_language_toggles.mjs`）が 31/36（ばらばらの5ページで言語切替が visibility: hidden）。単独で流すと 36/36 を2回。ページを開いて 600ms 後にハンバーガーを押し、同じ評価の中ですぐ測っていたため、混んでいるとメニューを開く処理が間に合わないことがあった（タイミング）。
+- 検査を修正（読み込み完了を待つ・メニューが開くまで最大3秒待つ・開かなければ1回だけ押し直す。合格の条件は変えない）→ 36/36。本番には何も出ていない。
