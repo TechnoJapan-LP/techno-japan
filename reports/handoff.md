@@ -14030,3 +14030,36 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 #### 追記（公開の3回目は「ハブページが JS 込みで描ける」の時間切れで止まった）
 
 - `check_hub_pages.py --budget 15000` は単独でも 209 秒（制限 240 秒）で、全体の preflight の中では 240 秒を超えた（ハブページが新デザインで重くなった分）。検査の中身・合格の条件は変えず、`scripts/preflight.sh` でこの1件だけ制限を 480 秒にした（`run_timeout`。環境変数で外から緩める方式ではない）。本番には何も出ていない。
+
+### 2026-10-27 新デザインの本番公開・公開後の確認（Claude）
+
+### 実施
+
+- `git push origin redesign/magazine:main` が4回目で通った（5d5ce0245..d4792a15f）。1〜3回目は pre-push の preflight が検査側の問題（APPLY の検査の入力値／スマホの言語切替の検査の待ち時間／ハブページの検査の時間切れ）で止まり、それぞれ検査を直してから再実行（上のエントリの追記）。本番に不完全なものは出ていない。
+- Deploy LP to GitHub Pages（run 40451644083）成功。デプロイが `chore: sync generated LP before deploy`（cef8fb170）をコミット。
+- `gh workflow run "Publish pipeline"`（run 40452897041）: 成功（データに変化が無いため `cms: publish data.js` のコミットは作られない＝正しい動き）。
+
+### コミット
+
+- 本番の main: d4792a15f（公開）＋ cef8fb170（デプロイの生成物の同期）。このエントリは redesign/magazine にコミットし、次の push で main に入る。
+
+### 検証
+
+- 本番 `tmp/prodcheck.mjs` 120/120（https://techno-japan.media の主要20ページ（JA/EN のハブ・詳細・ABOUT/APPLY/WRITER/FAVORITES/CLUB MAP）× 1440 / 390: 新デザイン（common.css v55）、スクロール、JS / CSP エラーなし、VENUES の地図は CARTO の黒い地図・加工なし・タイル読み込み済み）。
+- 本番の preflight（pre-push）: 全68件成功。
+- **実機未確認**: CMS（`?cb=` 付き・Cmd+Shift+R → 編集 → プレビュー → 閉じる → 再表示 → 保存、Publish Now 1回、`cms: publish data.js` のコミットが増えること）はユーザーのログインが必要で未実施。iPhone 実機、APPLY のテスト送信（Google フォームの回答・press@ のメール・FormSubmit の有効化）も未実施。
+
+### 変更したパターン
+
+- なし（公開の記録）。
+
+### 未確認の類似パターン
+
+- ユーザーが本番で確認する: 会場詳細・ABOUT・APPLY・WRITER。
+
+### 次の担当への注意・判断待ち
+
+- メインの作業フォルダ（~/Developer/techno-japan、main）に、未追跡の `docs/REDESIGN_SPEC.md`（main のものより古い版）と `docs/design-mock/`（main と同じ内容）が残っており、そのままでは `git pull` が止まる。片づけ方はユーザーに確認中。
+- スプレッドシートの `SOUND` / `GALLERY` 列は、CMS の確認が済んでから足してもらう。
+- NEWS の「12 / 21」と表示13本のずれ（注目記事を表示中の12本から選ぶ）を次に直す。
+- **Lighthouse CI（公開後、run 40452085222）が失敗**: festivals.html の CLS 0.458（基準 ≤0.05）・性能 0.47（基準 0.6、警告）。他のページは性能の値が出ない（`Audit did not produce a value`）。新デザインで初めての測定。フェーズ7（表示速度・Lighthouse）で最初に直す（FESTIVALS の JS で後から入る見出し・NEXT UP・一覧の場所取り、帯の差し込みを疑う）。
