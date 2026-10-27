@@ -14182,3 +14182,31 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 
 - Lighthouse CI がこの後も CLS で落ちる場合は、書体以外の原因。CI でトレース（`lighthouse --save-assets`）を取って調べる。
+
+### 2026-10-27 Lighthouse CI の書体対応の結果確認（Claude）
+
+### 実施
+
+- d475031a9（Lighthouse CI の実行マシンに `fonts-noto-cjk`）を push 後、Lighthouse CI を手動で2回、順番に流した（同時に流すと concurrency で前の回が取り消されるため）。
+
+### コミット
+
+- このエントリのみ（docs）。次の push で main に入る。
+
+### 検証
+
+- 「Lint GitHub Actions」（run 40493230206）成功。書体の導入は約10秒、`fc-list :lang=ja` で Noto CJK JP を確認。
+- Lighthouse CI run 40493291539・40493909025 とも**成功**。10 URL すべてで CLS ≤ 0.009（womb 0.000 / 0.000、記事 0.000 / 0.000）、性能の値はすべて出ている（0.57〜0.90、warn の床 0.6 を下回るのは記事・TOP の一部で従来どおり）、a11y / BP / SEO 合格。
+- 以前ずれが出た条件（最初の表示が 1.3 秒台）の回でも 0（記事 obsFCP 1322 / 1360ms、dj-nobu 1331ms）。書体を入れる前は公開後3回中2回失敗（womb 0.069 ×2、記事 0.050 / 0.039）。
+
+### 変更したパターン
+
+- なし（確認のみ）。
+
+### 未確認の類似パターン
+
+- womb は書体導入後の2回とも最初の表示が速い回（約 0.3 秒）だった。遅い回の womb は未観測。今後の Lighthouse CI で落ちたら、トレースを取って調べる。
+
+### 次の担当への注意・判断待ち
+
+- なし（Lighthouse CI は合格に戻った）。CMS の実機確認などユーザー待ちの項目は前のエントリのとおり。
