@@ -241,5 +241,6 @@
   syncFilterHeight();
   render();
   root.querySelector('.ssr-link-list')?.remove();
+  document.documentElement.classList.add('tj-festivals-rendered');
   document.documentElement.classList.add('tj-festivals-phase3-ready');
 }());

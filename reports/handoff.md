@@ -14063,3 +14063,37 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - スプレッドシートの `SOUND` / `GALLERY` 列は、CMS の確認が済んでから足してもらう。
 - NEWS の「12 / 21」と表示13本のずれ（注目記事を表示中の12本から選ぶ）を次に直す。
 - **Lighthouse CI（公開後、run 40452085222）が失敗**: festivals.html の CLS 0.458（基準 ≤0.05）・性能 0.47（基準 0.6、警告）。他のページは性能の値が出ない（`Audit did not produce a value`）。新デザインで初めての測定。フェーズ7（表示速度・Lighthouse）で最初に直す（FESTIVALS の JS で後から入る見出し・NEXT UP・一覧の場所取り、帯の差し込みを疑う）。
+
+### 2026-10-27 FESTIVALS 一覧の読み込み中のずれ（Lighthouse CI の失敗）＋ NEWS の件数のずれ（Claude 検証・コミット）
+
+### 実施
+
+- ユーザー「全て進めて。GitHub もエラーが出ている」。GitHub の失敗は公開後の **Lighthouse CI**（run 40452085222 / 40453522580）だけで、原因は `festivals.html` の **CLS 0.4577（基準 ≤ 0.05）**（性能は warn 扱いで止める条件ではない。a11y / BP / SEO は合格）。
+- 手元で同じ条件（412×823・CPU 4倍・遅い回線）で 0.4577 を再現。ずれの元は `footer` と `.phase3-results`: 読み込み直後は head / NEXT UP / 一覧が空でページが短くフッターが最初の画面に見え、約 3.8 秒後に JS が中身を差し込んでフッターを押し出していた。`tj-festivals-hydrating` は描き終えても外れない（SEO 用リンク一覧を隠すだけ）。
+- 修正（Codex、`tmp/spec-cls-news.md`）: JS が描き終えたら `<html>` に `tj-festivals-rendered` を付け、**それまでの間だけ** head・NEXT UP の高さと一覧の `min-height: 100vh` を空けておく。描き終えた後の見た目は同じ。
+- NEWS: 記事21本で「表示13本・件数 12 / 21」だった（3本の枠の注目記事を表示中の12本の外からも選んでいた）→ モックどおり `vis.slice(3)` から選ぶ。
+- メインの作業フォルダ（~/Developer/techno-japan）を片づけ（ユーザー了承）: 未追跡の `docs/design-mock/`（main と同じ）を削除、旧版の `docs/REDESIGN_SPEC.md` を `~/Developer/techno-japan-local-backup/REDESIGN_SPEC.2026-10-22-local.md` へ移し、`git pull --ff-only` で main（cef8fb170）にそろえた。
+
+### コミット
+
+- （このエントリを含むコミット。redesign/magazine → main へ push）
+
+### 検証
+
+- `tmp/clsprobe.mjs`（layout-shift の合計）: festivals.html JA/EN とも 412×823（スロットリング）・1350×940 で **0**（修正前 0.4577 / 0.2593）。
+- `tmp/newscount.mjs` 16/16（1440 / 390、JA/EN: 表示本数＝件数、Load more 後・Popular でも一致、JS エラーなし）。
+- 回帰: `festverify` 126/126、`newsverify` 86/86（一覧 6 行に戻った）、`aboutfest` 28/28（FESTIVALS の帯・ABOUT のスクロール）、`followverify` 297/297。build・冪等性・版数・CMS プレビュー・回帰（Codex）成功。
+- 本番の Lighthouse CI は push 後に自動で走る → 結果は次のエントリ／報告で確認。
+
+### 変更したパターン
+
+- JS で後から描くハブは「描き終えた目印」を付け、それまでの間だけ描いた後の高さを空けておく（読み込み中の目印とは分ける）。
+
+### 未確認の類似パターン
+
+- 他のハブ（NEWS・ARTISTS・VENUES・TOP）は Lighthouse の CLS が合格しているため変えていない（Lighthouse の対象 URL は TOP・FESTIVALS・ARTISTS・詳細4種）。NEWS・VENUES は Lighthouse の対象外なので、必要なら同じ方法で測る。
+- 性能（warn）の値が出ないページがある（`Audit did not produce a value`、本文のフェードインで LCP が取れない既知の事象・§9-80）。フェーズ7で扱う。
+
+### 次の担当への注意・判断待ち
+
+- CMS の実機確認（ユーザーのログイン）、SOUND/GALLERY 列、APPLY のテスト送信はユーザー待ち。

@@ -166,10 +166,10 @@
     const visible = items.slice(0, state.visible);
     const lead = visible[0];
     const wide = visible.slice(1, 3);
-    const pool = items.slice(3);
+    const pool = visible.slice(3);
     const featured = pool.filter((article) => article.featured === true);
     const regular = pool.filter((article) => article.featured !== true);
-    const three = state.sort === 'popular' ? pool.slice(0, 3) : [...featured, ...regular].slice(0, 3);
+    const three = [...featured, ...regular].slice(0, 3);
     const used = new Set([...(lead ? [lead] : []), ...wide, ...three].map((article) => article.id));
     const rest = visible.filter((article) => !used.has(article.id));
     const empty = isEnglish ? 'No stories in this category.' : 'このカテゴリの記事はありません。';

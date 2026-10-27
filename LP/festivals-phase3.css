@@ -196,6 +196,15 @@
   height: 28px;
 }
 .tj-festivals-hydrating .ssr-link-list { display: none; }
+html.tj-festivals-hydrating:not(.tj-festivals-rendered) #festival-phase3-head {
+  min-height: 160px;
+}
+html.tj-festivals-hydrating:not(.tj-festivals-rendered) #festival-phase3-next {
+  min-height: 590px;
+}
+html.tj-festivals-hydrating:not(.tj-festivals-rendered) #festival-phase3-results {
+  min-height: 100vh;
+}
 @media (max-width: 1100px) {
   .festivals-phase3 .phase3-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -242,6 +251,12 @@
   .festivals-phase3 .phase3-next {
     grid-template-columns: 1fr;
     gap: 24px;
+  }
+  html.tj-festivals-hydrating:not(.tj-festivals-rendered) #festival-phase3-head {
+    min-height: 144px;
+  }
+  html.tj-festivals-hydrating:not(.tj-festivals-rendered) #festival-phase3-next {
+    min-height: calc((100vw - 32px) * 2 / 3 + 364px);
   }
   .festivals-phase3 .phase3-date {
     font-size: clamp(36px, 13vw, 56px);
