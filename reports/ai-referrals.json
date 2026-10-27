@@ -1,22 +1,22 @@
 {
-  "generatedAt": "2026-10-26T22:47:06.805Z",
+  "generatedAt": "2026-10-27T22:26:07.334Z",
   "propertyId": "535755449",
   "periods": {
     "current": {
-      "startDate": "2026-09-30",
-      "endDate": "2026-10-27",
+      "startDate": "2026-10-01",
+      "endDate": "2026-10-28",
       "label": "直近28日"
     },
     "previous": {
-      "startDate": "2026-09-02",
-      "endDate": "2026-09-29",
+      "startDate": "2026-09-03",
+      "endDate": "2026-09-30",
       "label": "前の28日"
     }
   },
   "current": {
     "sessions": 85,
     "totalUsers": 83,
-    "share": 0.032567049808429116,
+    "share": 0.03217259651778955,
     "bySource": [
       {
         "source": "chatgpt.com",
@@ -131,8 +131,8 @@
         "totalUsers": 1
       }
     ],
-    "allSessions": 2610,
-    "allTotalUsers": 2179
+    "allSessions": 2642,
+    "allTotalUsers": 2187
   },
   "previous": {
     "sessions": 0,
