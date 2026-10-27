@@ -1077,7 +1077,7 @@ const FAVICON_TAGS = [
 const PERMISSIONS_POLICY = 'geolocation=(), microphone=(), camera=(), interest-cohort=()';
 
 const CSP = `default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' https:; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://stats.g.doubleclick.net; frame-src 'self' https://www.google.com https://www.youtube.com https://www.youtube-nocookie.com; form-action 'self' https://formsubmit.co https://buttondown.com; base-uri 'self'; object-src 'none'; upgrade-insecure-requests`;
-const APPLY_CSP = CSP.replace("connect-src 'self'", "connect-src 'self' https://docs.google.com");
+const APPLY_CSP = CSP.replace("connect-src 'self'", "connect-src 'self' https://docs.google.com https://formsubmit.co");
 
 const FONT_HEAD = `<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

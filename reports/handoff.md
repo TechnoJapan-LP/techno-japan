@@ -13941,3 +13941,40 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 
 - ユーザーが「全部まとめて本番に出す」を選択（2026-10-27）。ABOUT のスクロール不具合・APPLY の通知（press@）・FESTIVALS の帯を直してから、main を取り込み、全体の検査を通して出す。
+
+### 2026-10-27 redesign/magazine ABOUT がスクロールできない不具合 ＋ APPLY の通知を press@ に ＋ FESTIVALS の並び替えを残して種類を隠す（Claude 検証・コミット。本番未反映）
+
+### 実施
+
+- **ABOUT がスクロールできない（不具合）**: フェーズ5（3d285cde1）で `<body class="about-page">` に付けた `.about-page { overflow: clip }` がビューポートに伝わり、PC・スマホともホイールでも指でもスクロールできなかった → `overflow-x: clip` に（横のはみ出しだけ隠す）。同じ指定の他のページは無い。
+- **再発防止**: 全ページで実際にスクロールできるかの検査 `scripts/check_page_scroll.mjs` を追加し preflight に登録（ハブ JA/EN・詳細 各種・ABOUT/APPLY/WRITER/FAVORITES/404 × PC・タッチのスマホ）。タッチの送り方の誤りは次のコミットで直す。
+- **APPLY の通知（ユーザー指示「通知先を press@techno-japan.media に」）**: Google フォームへの記録（formResponse）はそのまま、その後に FormSubmit の AJAX（`https://formsubmit.co/ajax/press@techno-japan.media`）へ16問の回答（画面の言語の見出しをキー）・`_subject`（掲載申請: フェス名）・`_template: table` を送る。ハニーポット時はどちらにも送らない。FormSubmit が失敗しても応募者にはエラーを見せない（記録は Google フォームにある）。CSP の connect-src に formsubmit.co を足したのは APPLY のページだけ。
+- **WRITER の送り先**: 本番・redesign とも、JA・EN とも既に `formsubmit.co/press@techno-japan.media`（変更なし）。
+- **FESTIVALS（ユーザー指示「PC とスマホ両方とも、下にスクロールした時にソートが残るように、絞り込みが隠れるように」、残す段はユーザーが UPCOMING / ARCHIVE / ALL ＋ GRID / LIST を選択）**: 上の帯（UPCOMING… ＋ GRID / LIST）をメニューの下に固定、下の帯（種類）は下スクロールで上の帯の裏へ隠れ、上で出る。最初の実装は2つの帯を包む要素の高さが帯2本分で sticky が効かず流れていた → 包みを `display: contents` 相当にして修正。
+- CDP 検査の後片付け（一時プロフィールの削除）が Chrome の書き込み中で ENOTEMPTY になり落ちることがあった（`check_festival_tracking.mjs` 等）→ プロセス終了を待ってから再試行つきで削除、失敗しても結果に影響させない。
+
+### コミット
+
+- （このエントリを含むコミット。redesign/magazine、push なし）
+
+### 検証
+
+- `tmp/aboutfest.mjs` 28/28（ABOUT: 1440 / 390 × JA/EN でホイール・スワイプでスクロール、横はみ出しなし。FESTIVALS: 一番上で全部見える・UPCOMING と GRID が同じ行、下スクロールで上の帯がメニューの下に残り種類の段が隠れる（手前の要素で判定）、上で戻る、JS エラーなし）。
+- `tmp/applynotify.mjs` 21/21（fetch 差し替え＋ docs.google.com / formsubmit.co をブラウザで遮断。**本物には送っていない**。Google フォーム1回・FormSubmit AJAX 1回（宛先・POST・JSON）・件名・16問・言語の見出し・成功表示・ハニーポットで両方とも送らない・FormSubmit 失敗でも成功表示・他のページの CSP に formsubmit.co が無い）。
+- `node scripts/check_festival_tracking.mjs` 成功。build・冪等性・版数・回帰・`check_apply_form.mjs`（Codex）成功。
+- 未確認: FormSubmit の実際の配信（宛先ごとに最初の1回だけ有効化メールが press@ に届くことがある。WRITER で有効化済みなら不要）→ 公開後のテスト送信で確認する。
+
+### 変更したパターン
+
+- body（ビューポートに伝わる要素）には縦方向の overflow を付けない。横のはみ出しは `overflow-x: clip`。
+- sticky の帯は、固定したい範囲いっぱいの要素の子にする（帯だけを包む要素の中では効かない）。
+- 応募の記録（Google フォーム）と通知（FormSubmit）は別々に送り、通知の失敗で応募者の表示を変えない。
+
+### 未確認の類似パターン
+
+- 確認済み・0件: body に `overflow: clip` / `hidden` を付けている他のページ。
+- 未確認: NEWS のスマホの絞り込み（指摘なし）。
+
+### 次の担当への注意・判断待ち
+
+- 公開後、APPLY のテスト送信1回で「Google フォームの回答に入る」「press@ にメールが届く（初回は有効化メールの可能性）」を確認する。

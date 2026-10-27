@@ -129,20 +129,35 @@ async function stopProcess(child) {
   if (child.exitCode !== null || child.signalCode !== null) return;
 
   child.kill('SIGTERM');
-  await new Promise((resolve) => {
-    let finished = false;
-    const finish = () => {
-      if (finished) return;
-      finished = true;
+  const exited = await new Promise((resolve) => {
+    const timer = setTimeout(() => resolve(false), 2000);
+    child.once('close', () => {
       clearTimeout(timer);
-      resolve();
-    };
-    const timer = setTimeout(finish, 2000);
-    child.once('close', finish);
+      resolve(true);
+    });
   });
-
-  if (child.exitCode === null && child.signalCode === null) {
+  if (!exited && child.exitCode === null && child.signalCode === null) {
     child.kill('SIGKILL');
+    await new Promise((resolve) => {
+      if (child.exitCode !== null || child.signalCode !== null) {
+        resolve();
+        return;
+      }
+      child.once('close', resolve);
+    });
+  }
+}
+
+function removeProfileDir(dir) {
+  try {
+    fs.rmSync(dir, {
+      recursive: true,
+      force: true,
+      maxRetries: 5,
+      retryDelay: 200,
+    });
+  } catch (error) {
+    console.warn(`⚠️ 一時プロフィールの削除に失敗しました（検査結果には影響しません）: ${error.message}`);
   }
 }
 
@@ -289,7 +304,7 @@ async function runBrowser(base, withGtag) {
   } finally {
     if (ws) ws.close();
     await stopProcess(browser);
-    fs.rmSync(profileDir, { recursive: true, force: true });
+    removeProfileDir(profileDir);
   }
 }
 

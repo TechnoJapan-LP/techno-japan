@@ -202,6 +202,7 @@ if [ "$FAST" = "1" ]; then
   skip "モバイルの言語切替"
 else
   run "ハブページが JS 込みで描ける"    python3 scripts/check_hub_pages.py --budget 15000
+  run "全ページのスクロール"            node scripts/check_page_scroll.mjs
   run "CMS フォームの重なり"            node scripts/check_cms_layout.mjs
   run "VENUES 種別フィルタ"              node scripts/check_venue_type_filters.mjs
 run "VENUES 詳細ページ"                 node scripts/check_venue_details.mjs

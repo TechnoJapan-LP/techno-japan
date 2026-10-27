@@ -18,9 +18,32 @@
 .festivals-phase3 .phase3-filters {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 16px;
-  flex-wrap: wrap;
   padding-top: 18px;
+  background: var(--bg);
+}
+.festivals-phase3 .phase3-main-filters {
+  position: sticky;
+  top: var(--tj-nav-height, 64px);
+  z-index: 32;
+  flex-wrap: nowrap;
+}
+.festivals-phase3 .phase3-type-filters {
+  position: sticky;
+  top: calc(var(--tj-nav-height, 64px) + var(--phase3-main-filter-h, 55px));
+  z-index: 31;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  transition: transform .22s ease;
+}
+.festivals-phase3 .phase3-type-filters.is-hidden {
+  transform: translateY(-100%);
+  visibility: hidden;
+  pointer-events: none;
+}
+.festivals-phase3 .phase3-filter-stack {
+  display: contents;
 }
 .festivals-phase3 .phase3-filter-groups {
   display: flex;
@@ -191,22 +214,30 @@
     padding-bottom: 0;
   }
   .festivals-phase3 .phase3-filters {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 12px 8px;
-    align-items: end;
+    gap: 8px;
+    padding-top: 9px;
+    padding-bottom: 9px;
   }
-  .festivals-phase3 .phase3-filter-groups {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  .festivals-phase3 .phase3-main-filters {
+    justify-content: space-between;
+    flex-wrap: nowrap;
   }
   .festivals-phase3 .phase3-filter-group {
     gap: 6px;
+    min-width: 0;
   }
   .festivals-phase3 .phase3-filters .chip {
-    padding: 9px 10px;
-    letter-spacing: .1em;
+    min-width: 0;
+    padding: 8px 8px;
+    letter-spacing: .08em;
+    font-size: 9px;
+    white-space: nowrap;
+  }
+  .festivals-phase3 .phase3-main-filters .phase3-filter-group {
+    flex-wrap: nowrap;
+  }
+  .festivals-phase3 .phase3-type-filters .phase3-filter-group {
+    flex-wrap: wrap;
   }
   .festivals-phase3 .phase3-next {
     grid-template-columns: 1fr;
@@ -263,5 +294,10 @@
   .festivals-phase3 .phase3-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 32px 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .festivals-phase3 .phase3-type-filters {
+    transition: none;
   }
 }

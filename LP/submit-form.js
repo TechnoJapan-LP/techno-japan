@@ -30,6 +30,23 @@
   const fields = [...form.querySelectorAll('[data-question]')];
   const fieldFor = question => fields.find(field => field.dataset.question === String(question));
   const controlsFor = field => [...field.querySelectorAll('input, textarea, select')];
+  const questionLabel = field => {
+    const heading = field?.querySelector('label, legend');
+    return heading ? heading.textContent.replace(/^\s*\d+\s*/, '').trim() : '';
+  };
+  const formSubmitPayload = () => {
+    const payload = {
+      _subject: `TECHNO JAPAN — ${isEnglish ? 'Listing application' : '掲載申請'}: ${controlsFor(fieldFor(1))[0]?.value || ''}`,
+      _template: 'table'
+    };
+    fields.forEach(field => {
+      const values = controlsFor(field).filter(control => {
+        return control.type !== 'checkbox' || control.checked;
+      }).map(control => control.value);
+      payload[questionLabel(field)] = values.join(', ');
+    });
+    return payload;
+  };
   const showError = (question, message) => {
     const field = fieldFor(question);
     if (!field) return;
@@ -130,6 +147,14 @@
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body
       });
+      void fetch('https://formsubmit.co/ajax/press@techno-japan.media', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+        body: JSON.stringify(formSubmitPayload())
+      }).catch(() => {});
       receive();
     } catch {
       document.getElementById('apply-error').hidden = false;

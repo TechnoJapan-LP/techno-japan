@@ -24,6 +24,18 @@
     type: ['festival', 'rave'].includes(params.get('type')) ? params.get('type') : 'all',
     view: params.get('view') === 'list' ? 'list' : 'grid'
   };
+  var filterStack = root.querySelector('#festival-phase3-filters');
+  var mainFilters = root.querySelector('.phase3-main-filters');
+  var typeFilters = root.querySelector('.phase3-type-filters');
+  var filterScrollFrame = 0;
+  var filterLastY = window.scrollY;
+  var filterDirection = 0;
+  var filterDirectionAnchor = window.scrollY;
+  var filterOpenUntil = 0;
+  var filterStartElement = mainFilters || filterStack;
+  var filterStartY = filterStartElement
+    ? filterStartElement.getBoundingClientRect().top + window.scrollY
+    : 0;
   var festivals = (typeof FESTIVALS !== 'undefined' ? FESTIVALS : [])
     .map(function (festival) {
       return Object.assign({}, festival, { range: tjMagRange(festival.date) });
@@ -109,6 +121,57 @@
     history.replaceState(null, '', url);
   }
 
+  function filterNavHeight() {
+    return parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tj-nav-height')) || 64;
+  }
+
+  function showTypeFilters() {
+    typeFilters?.classList.remove('is-hidden');
+  }
+
+  function holdTypeFiltersOpen(duration) {
+    filterOpenUntil = Math.max(filterOpenUntil, performance.now() + duration);
+    showTypeFilters();
+  }
+
+  function typeFiltersMustStayVisible() {
+    return filterOpenUntil > performance.now()
+      || filterStack?.matches(':focus-within')
+      || window.scrollY <= filterStartY - filterNavHeight();
+  }
+
+  function updateTypeFiltersVisibility() {
+    if (filterScrollFrame) return;
+    filterScrollFrame = requestAnimationFrame(function () {
+      filterScrollFrame = 0;
+      var y = window.scrollY;
+      if (typeFiltersMustStayVisible()) {
+        showTypeFilters();
+        filterLastY = y;
+        filterDirection = 0;
+        filterDirectionAnchor = y;
+        return;
+      }
+      var delta = y - filterLastY;
+      if (Math.abs(delta) >= 1) {
+        var direction = delta > 0 ? 1 : -1;
+        if (direction !== filterDirection) {
+          filterDirection = direction;
+          filterDirectionAnchor = y;
+        } else if (Math.abs(y - filterDirectionAnchor) >= 10) {
+          typeFilters?.classList.toggle('is-hidden', direction > 0);
+          filterDirectionAnchor = y;
+        }
+      }
+      filterLastY = y;
+    });
+  }
+
+  function syncFilterHeight() {
+    if (!mainFilters) return;
+    root.style.setProperty('--phase3-main-filter-h', mainFilters.getBoundingClientRect().height + 'px');
+  }
+
   function render() {
     root.querySelectorAll('[data-filter]').forEach(function (group) {
       group.querySelectorAll('button').forEach(function (button) {
@@ -141,6 +204,7 @@
   root.querySelector('[data-filter="season"]').addEventListener('click', function (event) {
     var button = event.target.closest('button');
     if (!button) return;
+    holdTypeFiltersOpen(700);
     state.season = button.dataset.value;
     syncUrl();
     render();
@@ -148,6 +212,7 @@
   root.querySelector('[data-filter="type"]').addEventListener('click', function (event) {
     var button = event.target.closest('button');
     if (!button) return;
+    holdTypeFiltersOpen(700);
     state.type = button.dataset.value;
     syncUrl();
     render();
@@ -155,6 +220,7 @@
   root.querySelector('[data-filter="view"]').addEventListener('click', function (event) {
     var button = event.target.closest('button');
     if (!button) return;
+    holdTypeFiltersOpen(700);
     state.view = button.dataset.value;
     syncUrl();
     render();
@@ -166,6 +232,13 @@
     var link = event.target.closest('[data-festival-detail-link]');
     if (link) sessionStorage.setItem('tj:festival-hub-state:v1', JSON.stringify({ url: location.href, scrollY: scrollY, savedAt: Date.now() }));
   });
+  typeFilters?.addEventListener('focusin', showTypeFilters);
+  window.addEventListener('scroll', updateTypeFiltersVisibility, { passive: true });
+  window.addEventListener('resize', syncFilterHeight);
+  if (typeof ResizeObserver === 'function' && mainFilters) {
+    new ResizeObserver(syncFilterHeight).observe(mainFilters);
+  }
+  syncFilterHeight();
   render();
   root.querySelector('.ssr-link-list')?.remove();
   document.documentElement.classList.add('tj-festivals-phase3-ready');
