@@ -30,6 +30,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const LP = path.join(ROOT, 'LP');
 const BASE = 'https://techno-japan.media';
+const imageDimensions = JSON.parse(fs.readFileSync(path.join(LP, 'image-dimensions.json'), 'utf8'));
 
 let failed = 0;
 const fail = (m) => { console.log(`  ❌ ${m}`); failed++; };
@@ -49,9 +50,18 @@ const localPath = (url) => {
   return path.join(LP, u.split('?')[0].replace(/^\//, ''));
 };
 
+const expectedDimensions = (url) => {
+  const local = localPath(url);
+  if (!local) return null;
+  const relative = path.relative(LP, local);
+  if (relative === 'images/og-default.png') return [1200, 630];
+  return imageDimensions[relative] || null;
+};
+
 const missing = [];
 const mismatched = [];
 const broken = new Set();
+const dimensionMismatches = [];
 const counts = new Map();
 let checked = 0;
 
@@ -60,6 +70,8 @@ for (const f of htmls) {
   const rel = path.relative(LP, f);
   const og = grab(html, 'og:image', 'property');
   const tw = grab(html, 'twitter:image', 'name');
+  const width = grab(html, 'og:image:width', 'property');
+  const height = grab(html, 'og:image:height', 'property');
   // OG を持たないページ（CMS 等）は対象外
   if (!og && !tw && !/og:title|twitter:card/.test(html)) continue;
   checked++;
@@ -68,6 +80,12 @@ for (const f of htmls) {
   counts.set(og, (counts.get(og) || 0) + 1);
   const lp = localPath(og);
   if (lp && !fs.existsSync(lp)) broken.add(`${rel} → ${og}`);
+  const expected = expectedDimensions(og);
+  if (expected && (!width || !height || Number(width) !== expected[0] || Number(height) !== expected[1])) {
+    dimensionMismatches.push(`${rel} (${width || '?'}x${height || '?'}, expected ${expected.join('x')})`);
+  } else if ((width || height) && (!width || !height || !expected || Number(width) !== expected[0] || Number(height) !== expected[1])) {
+    dimensionMismatches.push(`${rel} (${width || '?'}x${height || '?'}, expected ${expected ? expected.join('x') : 'known image dimensionsなし'})`);
+  }
 }
 
 console.log('▸ 宣言');
@@ -83,6 +101,15 @@ if (broken.size) {
   for (const b of [...broken].slice(0, 5)) console.log(`      ${b}`);
 } else {
   pass('参照先の画像はすべて実在する');
+}
+
+console.log();
+console.log('▸ OGP 画像寸法');
+if (dimensionMismatches.length) {
+  fail(`${dimensionMismatches.length}ページの og:image 寸法が実ファイルと一致しない`);
+  for (const item of dimensionMismatches.slice(0, 5)) console.log(`      ${item}`);
+} else {
+  pass('記載された og:image の寸法は実画像の寸法と一致している');
 }
 
 console.log();

@@ -209,6 +209,7 @@ else
   # 実測で単独でも209秒、preflight全体では240秒を超えたため。検査の中身は変えない。
   run_timeout 480 "ハブページが JS 込みで描ける"    python3 scripts/check_hub_pages.py --budget 15000
   run "全ページのスクロール"            node scripts/check_page_scroll.mjs
+  run_timeout 600 "読み込み中のずれ（CLS）"       node scripts/check_hub_cls.mjs
   run "CMS フォームの重なり"            node scripts/check_cms_layout.mjs
   run "VENUES 種別フィルタ"              node scripts/check_venue_type_filters.mjs
 run "VENUES 詳細ページ"                 node scripts/check_venue_details.mjs

@@ -75,8 +75,8 @@ const ARTICLE_FX_CSS_VERSION = 18;
 
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
-const COMMON_JS_VERSION = 20;   // 2026-10-23 festival tab section tracking
-const COMMON_CSS_VERSION = 55;   // 2026-10-26 mobile menu search sizing
+const COMMON_JS_VERSION = 21;   // 2026-10-27 reduced-motion cursor ring and idle frames
+const COMMON_CSS_VERSION = 56;   // 2026-10-27 remove page and nav fade-in
 const DATA_HUB_VERSION = 11;
 const SEARCH_JS_VERSION = 9;
 const LANG_TOGGLE_VERSION = 3;
@@ -1271,6 +1271,13 @@ function page({ title, desc, canonical, image, ogType = 'article', jsonLd, body,
         ? `<link rel="alternate" hreflang="ja" href="${esc(canonical)}">\n<link rel="alternate" hreflang="en" href="${esc(abs(altHref))}">\n<link rel="alternate" hreflang="x-default" href="${esc(abs(altHref))}">`
         : `<link rel="alternate" hreflang="en" href="${esc(canonical)}">\n<link rel="alternate" hreflang="ja" href="${esc(abs(altHref))}">\n<link rel="alternate" hreflang="x-default" href="${esc(canonical)}">`)
     : '';
+  const imagePath = String(image || '').replace(/^https?:\/\/[^/]+\//, '').split(/[?#]/)[0].replace(/^\/+/, '');
+  const ogImageSize = imagePath === 'images/og-default.png'
+    ? [1200, 630]
+    : IMAGE_DIMENSIONS[imagePath];
+  const ogImageDimensions = ogImageSize
+    ? `\n<meta property="og:image:width" content="${ogImageSize[0]}">\n<meta property="og:image:height" content="${ogImageSize[1]}">`
+    : '';
   return `<!DOCTYPE html>
 <html lang="${lang}">
 <head>
@@ -1293,6 +1300,7 @@ ${hreflang}
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(d)}">
 <meta property="og:image" content="${esc(image)}">
+${ogImageDimensions}
 <meta property="og:url" content="${esc(canonical)}">
 <meta property="og:type" content="${ogType}">
 <meta property="og:site_name" content="TECHNO JAPAN">

@@ -14103,3 +14103,49 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - `git push origin redesign/magazine:main` 1回で通過（pre-push の preflight 全68件、cef8fb170..97caa4eb7）。Deploy（run 40458606022）成功、**Lighthouse CI（run 40459101078）成功**（8 URL・全アサーション合格。GitHub の赤い表示は解消）。
 - 本番の festivals.html で layout-shift の合計を直接測定: 412×823（スロットリング）・1350×940 とも 0。
 - このエントリは redesign/magazine にコミット（docs のみ・次の push で main に入る）。
+
+### 2026-10-27 フェーズ7（仕上げ: OGP / URL / 動きを減らす設定 / Lighthouse）＋ ABOUT の帯の削除（Claude 検証・コミット）
+
+### 実施
+
+- ユーザー「進めて」（フェーズ7）。実装はすべて Codex（`tmp/spec-phase7.md` / `spec-phase7b.md` / `spec-phase7c.md` / `spec-about-marquee.md`）。
+- **既存 URL・sitemap**: 本番の sitemap 554 URL がすべて 200・新テンプレート、canonical / JSON-LD 正常、og:image 242 件すべて 200、内部リンク切れなし、旧ページの転送先も有効（`tmp/urlaudit.mjs`、本番は読むだけ）。
+- **OGP**: 共有タグは公開前（5d5ce0245）と同一で、新デザインで崩れていないことを確認。足りなかった writers.html（JA/EN）の twitter:card 等を追加。全ページに og:image:width / height（og-default は 1200×630、詳細ページは `image-dimensions.json` に実寸があるときだけ）。`check_og_image.mjs` が寸法と実ファイルの一致を検査。
+- **Lighthouse**: 本番 CI で詳細ページの性能が「値が出ない」（NO_LCP、フェス詳細は6回中5回）。手元に CI と同じ Lighthouse 12.6.1 を入れて再現し、原因を **body とヘッダーのフェードイン**（旧サイトから引き継ぎ、モックには無い）と特定 → 廃止。2026-08-13 の「混雑した CI 環境のせい」という判断は誤りだった（AUDIT §9-108）。
+- フェードが隠していた**読み込み中のずれ**（NEWS 0.356 / VENUES 0.712）を、FESTIVALS と同じく「描き終えるまで場所を空けておく」方式で修正（`tj-news-rendered` / `tj-venues-rendered`）。
+- 読み込み中のずれの検査 `scripts/check_hub_cls.mjs` を新設し preflight に登録（ハブ JA/EN・詳細4種 × スマホ（CPU 4倍・遅い回線）/ PC、毎ページ初回読み込み、0.05 超で失敗）。Lighthouse CI の対象に news.html / venues.html を追加し、`.lighthouserc.json` の誤った note を訂正。
+- **動きを減らす設定**: CSS のアニメーションは共通ブロックで既に止まっていた（主要13ページ × PC/スマホで、実行中のアニメーション 0）。JS で動いていたマウスに付いてくる丸だけ、設定時は遅れなしに。あわせて丸が追いついたら毎フレームの処理を止める。
+- ユーザー「About ページの帯をなくして。本番からも！」→ ABOUT（JA/EN）の流れる帯（`.top2-marquee`、スクロールしてもメニューの下に貼り付いていた）を削除。TOP の帯は残す。
+- 版: common.css 56 / common.js 21 / news-phase3 8 / venues-phase3 8 / cms.js 190（記事プレビューの common.css の版）。
+
+### コミット
+
+- （このエントリを含むコミット。redesign/magazine → main へ push。main の 77017f15b（スプレッドシートのバックアップのみ）を取り込み済み）
+
+### 検証
+
+- Lighthouse（手元、CI と同じ版・設定、各2回）: 直した後は20回すべて値が出た（直す前は10ページ中6ページで「測れない」）。会場詳細 0.62 → 0.93、アーティスト詳細 0.65 → 0.83〜0.90、NEWS のずれ 0.356 → 0.009、VENUES 0.718 → 0.000。表は AUDIT §9-108。
+- `node scripts/check_hub_cls.mjs`: 28件すべて合格（最大 0.009、約300秒）。NEWS / VENUES の修正だけ戻した状態では6件を失敗にすることを確認（最初の版はブラウザのキャッシュと `sw.js` の cache-first で2ページ目以降を見逃していたため2回直した。今は条件が崩れると検査自身が失敗する）。
+- `tmp/nofade.mjs` 24/24（12ページ × PC/スマホ: DOMContentLoaded の時点で本文とヘッダーが不透明、フェードのアニメーションなし）、`tmp/ringmotion.mjs` 12/12（通常は今までどおり遅れて付いてくる、動きを減らす設定ではすぐ重なる、追いついたら止まる）、`tmp/ogverify.py`（og:image のある 557 ページすべて寸法一致、writers の twitter タグ）、`check_og_image.mjs` 成功。
+- ABOUT: `tmp/aboutverify.mjs` 54/54（帯が無いことを確かめる形に変更）、`tmp/aboutband.mjs` 16/16（JA/EN × 1440 / 390: 帯の要素なし、スクロール中にメニュー下へ貼り付くものなし、スクロールできる、JS エラーなし）。目視: ヒーロー → 区切り線 → 「01 — About」。
+- 回帰（CDP）: NEWS 86/86・FESTIVALS 126/126・ARTISTS 114/114・VENUES 112/114（以前からの画像の細かさ2件）・TOP（カルーセル・最初の1枚・時差）合格・追加確認一式 296/297・スクロールで隠す帯 38/38・ABOUT / FESTIVALS の帯 28/28・メニュー 27/27・フェス詳細 356/356・アーティスト詳細 361/362・会場詳細 321/322・記事 284/290（以前からの画像の細かさ6件）・APPLY 68/68（本物には送っていない）・WRITER 30/30・カーソル 65/65・地図 12/12・`node scripts/check_page_scroll.mjs` 58ページ0失敗。2列同時に流して落ちた3件（英語の FESTIVALS 一覧の過去・アーティスト詳細の JA/EN 切替・会場名の収まり）は、同じ待ち時間のまま単独で3回ずつ流して全部合格（`tmp/recheck3.mjs`。PC の混雑で読み込みが間に合わなかった）。
+- build（最後まで）・冪等性（601ファイル）・版数・`check_regressions.py` 成功。
+- `bash scripts/preflight.sh`（pre-push で省略なしに実行）: pre-push で省略なしに実行（新しい「読み込み中のずれ（CLS）」を含む。push が通った＝全件成功）。
+
+### 変更したパターン
+
+- ページ全体／ヘッダーを `opacity: 0` から始める演出をやめた（`check_regressions.py` に回帰ガード）。
+- JS で後から描くハブは「描き終えた目印」（`tj-*-rendered`）が付くまで、描いた後の高さを空けておく（FESTIVALS / NEWS / VENUES の3つ）。
+- 読み込み中のずれは、毎ページ初回読み込み（キャッシュ・サービスワーカーなし）で測る。条件が崩れたら検査自身が失敗する。
+
+### 未確認の類似パターン
+
+- TOP・ARTISTS はずれ 0.003 以下のため変更なし。詳細ページはフェス・アーティスト・会場・記事を各1件測定（最大 0.005）。同じテンプレートの他の詳細ページは未測定。
+- iPhone 実機での「フェードなし」の見た目は未確認（headless の模擬のみ）。
+- 本番の Lighthouse CI（10 URL）は push 後に自動で走る → 結果は次の報告で確認。
+
+### 次の担当への注意・判断待ち
+
+- 日本語書体（Noto Sans JP、4種類）は、旧デザインより最初の表示が遅い残りの主因だが、2026-10-23 のユーザー決定（今のまま）を維持。再提案しない（AUDIT §9-108 に数値だけ記録）。
+- Publish の経路: cms.js / cms.html の版を上げたため、push 後に `gh workflow run "Publish pipeline"` を流す。CMS の実機確認（`?cb=` 付き・Cmd+Shift+R → 編集 → プレビュー → 閉じる → 再表示 → 保存、Publish Now、`cms: publish data.js` のコミット）はユーザーのログイン待ちで「**実機未確認**」のまま。
+- SOUND / GALLERY 列、APPLY のテスト送信、会場詳細・APPLY・WRITER の本番確認はユーザー待ち（前のエントリのとおり）。

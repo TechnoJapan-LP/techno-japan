@@ -154,12 +154,8 @@ body {
   font-family: var(--font-body);
   overflow-x: hidden;
   cursor: none;
-  opacity: 0;
-  animation: bodyFadeIn 1s ease forwards;
 }
 
-@keyframes bodyFadeIn { to { opacity: 1; } }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 @keyframes fadeSlideUp {
   from { opacity: 0; transform: translateY(12px); }
@@ -234,9 +230,6 @@ body > nav {
   align-items: center;
   padding: calc(28px + var(--safe-t)) calc(40px + var(--safe-r)) 28px calc(40px + var(--safe-l));
   mix-blend-mode: normal;
-  opacity: 0;
-  animation: fadeIn 0.6s ease forwards;
-  animation-delay: 0.3s;
   transition: background-color 0.25s ease, border-color 0.25s ease, backdrop-filter 0.25s ease;
 }
 body > nav .logo {

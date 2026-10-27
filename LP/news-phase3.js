@@ -196,6 +196,7 @@
     document.getElementById('load-more-btn').hidden = state.visible >= items.length;
     bindArticleNavigation();
     window.tjBindCursorExpand?.('a, button');
+    document.documentElement.classList.add('tj-news-rendered');
     document.documentElement.classList.remove('tj-news-hydrating');
   }
 
@@ -263,6 +264,7 @@
     loadPopularity();
     addEventListener('pageshow', restoreHubScroll);
   } else {
+    document.documentElement.classList.add('tj-news-rendered');
     document.documentElement.classList.remove('tj-news-hydrating');
   }
 })();

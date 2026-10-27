@@ -25,23 +25,51 @@
   const dot = touchCursor ? null : ensureCursorElement('cursor-dot');
   const ring = touchCursor ? null : ensureCursorElement('cursor-ring');
   let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+  const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let ringAnimationFrame = 0;
 
   if (!touchCursor && dot && ring) {
+    function setRingPosition() {
+      ring.style.left = ringX + 'px';
+      ring.style.top = ringY + 'px';
+    }
+
+    function animateRing() {
+      ringAnimationFrame = 0;
+      if (reducedMotionQuery.matches) {
+        ringX = mouseX;
+        ringY = mouseY;
+        setRingPosition();
+        return;
+      }
+      ringX += (mouseX - ringX) * 0.15;
+      ringY += (mouseY - ringY) * 0.15;
+      setRingPosition();
+      if (Math.max(Math.abs(mouseX - ringX), Math.abs(mouseY - ringY)) >= 0.1) {
+        ringAnimationFrame = requestAnimationFrame(animateRing);
+      }
+    }
+
+    function scheduleRingAnimation() {
+      if (reducedMotionQuery.matches) {
+        if (ringAnimationFrame) cancelAnimationFrame(ringAnimationFrame);
+        ringAnimationFrame = 0;
+        ringX = mouseX;
+        ringY = mouseY;
+        setRingPosition();
+        return;
+      }
+      if (!ringAnimationFrame) ringAnimationFrame = requestAnimationFrame(animateRing);
+    }
+
     document.addEventListener('mousemove', (e) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
       dot.style.left = mouseX + 'px';
       dot.style.top = mouseY + 'px';
+      scheduleRingAnimation();
     });
-
-    function animateRing() {
-      ringX += (mouseX - ringX) * 0.15;
-      ringY += (mouseY - ringY) * 0.15;
-      ring.style.left = ringX + 'px';
-      ring.style.top = ringY + 'px';
-      requestAnimationFrame(animateRing);
-    }
-    animateRing();
+    reducedMotionQuery.addEventListener?.('change', scheduleRingAnimation);
 
     /* Default hover targets — every link expands the ring. */
     bindCursorExpand('a');

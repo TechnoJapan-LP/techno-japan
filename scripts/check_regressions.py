@@ -66,6 +66,23 @@ RUNTIME_PROPERTY_RE = re.compile(r"style\.setProperty\(\s*['\"](--[A-Za-z0-9_-]+
 STYLE_ATTRIBUTE_PROPERTY_RE = re.compile(r"(?:style\s*=\s*['\"]|['\"]style['\"]\s*:\s*['\"])[^'\"]*?(--[A-Za-z0-9_-]+)\s*:")
 
 
+def check_common_fade_rules():
+    """ページ全体／ヘッダーの遅延表示を再導入しない。"""
+    css = read(LP / "common.css")
+    issues = []
+    # Lighthouse の NO_LCP / NO_FCP は body の透明な1秒間に起きていた。
+    # 2026-10-27 の実測で body のフェードを廃止し、同じ描画遅延を戻さない。
+    if "bodyFadeIn" in css:
+        issues.append("LP/common.css に bodyFadeIn が残っている")
+    for selector in (r"^body\s*\{([^}]*)\}", r"^body\s*>\s*nav\s*\{([^}]*)\}"):
+        match = re.search(selector, css, re.M)
+        if not match:
+            issues.append(f"LP/common.css の {selector} が見つからない")
+        elif re.search(r"\bopacity\s*:\s*0(?:\s*!important)?\s*;?", match.group(1)):
+            issues.append(f"LP/common.css の {selector} が opacity: 0 で始まっている")
+    return issues
+
+
 def read(p):
     return p.read_text(encoding="utf-8", errors="replace")
 
@@ -547,6 +564,13 @@ def measure():
 
 
 def main():
+    fade_issues = check_common_fade_rules()
+    if fade_issues:
+        print("共通フェードの回帰:")
+        for issue in fade_issues:
+            print(f"  ✗ {issue}")
+        return 1
+
     cycles = custom_property_cycles()
     if cycles:
         print("CSS カスタムプロパティの循環参照:")

@@ -457,5 +457,6 @@
   updateMapVisibility();
   render();
   root.querySelector('.ssr-link-list')?.remove();
+  document.documentElement.classList.add('tj-venues-rendered');
   document.documentElement.classList.remove('tj-venues-hydrating');
 }());

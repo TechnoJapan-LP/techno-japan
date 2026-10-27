@@ -1,6 +1,24 @@
 /* VENUES magazine phase 3-4. */
 html.tj-venues-hydrating .ssr-link-list { display: none; }
 
+/* フィルタと注目カードの実描画後の高さを、データ到着前から予約する。
+   2026-10-27 の低速回線・CPU 4倍の実測で確認した配置を使い、描画後は
+   tj-venues-rendered で解除する。スマホでは地図を先に表示しない。 */
+html.tj-venues-hydrating:not(.tj-venues-rendered) .venues-meta {
+  min-height: 48px;
+}
+html.tj-venues-hydrating:not(.tj-venues-rendered) .venues-city-row,
+html.tj-venues-hydrating:not(.tj-venues-rendered) #venues-city-chips,
+html.tj-venues-hydrating:not(.tj-venues-rendered) #venues-type-chips {
+  min-height: 36px;
+}
+html.tj-venues-hydrating:not(.tj-venues-rendered) .venues-subarea-chips {
+  display: none;
+}
+html.tj-venues-hydrating:not(.tj-venues-rendered) .venues-grid-section {
+  min-height: 100vh;
+}
+
 #venues-list-view { padding-top: 40px; padding-bottom: 96px; }
 #venues-list-view .venues-head,
 #venues-list-view .venues-filters,
@@ -73,6 +91,19 @@ html.tj-venues-hydrating .ssr-link-list { display: none; }
 .leaflet-control-attribution a { color: var(--text-a80) !important; }
 
 @media (max-width: 900px) {
+  html.tj-venues-hydrating:not(.tj-venues-rendered) .venues-meta {
+    min-height: 36px;
+  }
+  html.tj-venues-hydrating:not(.tj-venues-rendered) .venues-map-toggle[hidden] {
+    display: inline-flex;
+    visibility: hidden;
+  }
+  html.tj-venues-hydrating:not(.tj-venues-rendered) #venue-map {
+    display: none;
+  }
+  html.tj-venues-hydrating:not(.tj-venues-rendered) #venue-featured-card {
+    min-height: 476px;
+  }
   #venues-list-view { padding-top: 24px; padding-bottom: 80px; }
   .venues-head .pagehead { font-size: 88px; }
   .venues-meta { align-items: flex-start; padding-bottom: 0; }

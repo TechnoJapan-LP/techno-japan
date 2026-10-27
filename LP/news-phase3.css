@@ -248,9 +248,33 @@
   text-align: center;
 }
 
-.tj-news-hydrating .ssr-link-list { display: none; }
+html.tj-news-hydrating .ssr-link-list { display: none; }
+
+/* 描画前の空のDOMにも、描画後の大きなリードと一覧の位置を予約する。
+   Lighthouse の NO_FCP / NO_LCP と CLS を、遅い回線で描画順が変わっても
+   再発させないための実測値（2026-10-27）。描画後は rendered で解除する。 */
+html.tj-news-hydrating:not(.tj-news-rendered) #news-head {
+  min-height: 265px;
+}
+html.tj-news-hydrating:not(.tj-news-rendered) #news-sort {
+  min-height: 38px;
+}
+html.tj-news-hydrating:not(.tj-news-rendered) #news-featured {
+  min-height: 519px;
+}
+html.tj-news-hydrating:not(.tj-news-rendered) #news-two-section,
+html.tj-news-hydrating:not(.tj-news-rendered) #news-three-section,
+html.tj-news-hydrating:not(.tj-news-rendered) .news-list-section {
+  min-height: calc(100vh / 3);
+}
 
 @media (max-width: 900px) {
+  html.tj-news-hydrating:not(.tj-news-rendered) #news-head {
+    min-height: 241px;
+  }
+  html.tj-news-hydrating:not(.tj-news-rendered) #news-featured {
+    min-height: calc((100vw - 32px) * 2 / 3 + 385px);
+  }
   .news-head-row { align-items: flex-end; }
   .news-count { padding-bottom: 8px; }
   .news-filter { align-items: flex-start; }
@@ -274,6 +298,9 @@
 }
 
 @media (max-width: 520px) {
+  html.tj-news-hydrating:not(.tj-news-rendered) #news-featured {
+    min-height: calc((100vw - 32px) * 2 / 3 + 405px);
+  }
   .news-head-row { gap: 8px; }
   .news-count { align-items: flex-start; }
   .news-count .mono { font-size: 8px; }
