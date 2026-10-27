@@ -83,6 +83,11 @@ pass=0; fail=0; skipped=0
 failed_names=()
 
 run() {
+  run_timeout "$CHECK_TIMEOUT" "$@"
+}
+
+run_timeout() {
+  local timeout="$1"; shift
   local name="$1"; shift
   local started now elapsed pid status out_file
   started=$(date +%s)
@@ -92,11 +97,11 @@ run() {
   pid=$!
   while kill -0 "$pid" 2>/dev/null; do
     now=$(date +%s); elapsed=$((now - started))
-    if [ "$elapsed" -ge "$CHECK_TIMEOUT" ]; then
+    if [ "$elapsed" -ge "$timeout" ]; then
       kill_headless_children "$pid"
       kill "$pid" 2>/dev/null || true
       wait "$pid" 2>/dev/null || true
-      echo "  ❌ $name — TIMEOUT after ${elapsed}s (limit ${CHECK_TIMEOUT}s)"
+      echo "  ❌ $name — TIMEOUT after ${elapsed}s (limit ${timeout}s)"
       fail=$((fail+1)); failed_names+=("$name (timeout)")
       tail -12 "$out_file" | sed 's/^/      /'
       rm -f "$out_file"
@@ -201,7 +206,8 @@ if [ "$FAST" = "1" ]; then
   skip "会場一覧の地図が全都市を出す"
   skip "モバイルの言語切替"
 else
-  run "ハブページが JS 込みで描ける"    python3 scripts/check_hub_pages.py --budget 15000
+  # 実測で単独でも209秒、preflight全体では240秒を超えたため。検査の中身は変えない。
+  run_timeout 480 "ハブページが JS 込みで描ける"    python3 scripts/check_hub_pages.py --budget 15000
   run "全ページのスクロール"            node scripts/check_page_scroll.mjs
   run "CMS フォームの重なり"            node scripts/check_cms_layout.mjs
   run "VENUES 種別フィルタ"              node scripts/check_venue_type_filters.mjs
