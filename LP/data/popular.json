@@ -1,91 +1,99 @@
 {
-  "generatedAt": "2026-10-21T21:51:24.929Z",
+  "generatedAt": "2026-10-26T22:47:05.086Z",
   "days": 30,
   "source": "ga4",
   "items": [
     {
       "id": "japan-festival-2026-october",
-      "views": 337
+      "views": 375
     },
     {
       "id": "topia-2026-info",
-      "views": 169
+      "views": 255
     },
     {
       "id": "labyrinth-2026-info",
-      "views": 139
+      "views": 149
     },
     {
       "id": "ondoland1012-2026-info",
-      "views": 117
+      "views": 118
     },
     {
       "id": "sawagi-festival-2026-info",
-      "views": 72
+      "views": 92
     },
     {
       "id": "transcendence-2025-report",
-      "views": 71
-    },
-    {
-      "id": "synapse-2026-info",
-      "views": 58
+      "views": 59
     },
     {
       "id": "treak-2026-info",
-      "views": 57
+      "views": 58
     },
     {
-      "id": "odyssey-2026-info",
-      "views": 49
-    },
-    {
-      "id": "japan-festival-2026-september",
-      "views": 47
-    },
-    {
-      "id": "otsukimi-2026-info",
+      "id": "denki-bodhisattva-2026-info",
       "views": 41
     },
     {
       "id": "intergalactic-2026-info",
+      "views": 34
+    },
+    {
+      "id": "synapse-2026-info",
       "views": 30
     },
     {
-      "id": "forest-sound-camp-info",
-      "views": 21
+      "id": "japan-festival-2026-september",
+      "views": 29
+    },
+    {
+      "id": "odyssey-2026-info",
+      "views": 29
     },
     {
       "id": "asia-festival-2026-second",
-      "views": 20
+      "views": 22
+    },
+    {
+      "id": "forest-sound-camp-info",
+      "views": 17
+    },
+    {
+      "id": "otsukimi-2026-info",
+      "views": 13
     },
     {
       "id": "rebirth-2026-info",
-      "views": 16
+      "views": 13
     },
     {
       "id": "snow-mashine-2027-info",
-      "views": 11
+      "views": 13
     },
     {
       "id": "test",
       "views": 7
     },
     {
-      "id": "shifumiz-2026-info",
-      "views": 6
-    },
-    {
       "id": "post-20251120",
-      "views": 5
+      "views": 4
     },
     {
       "id": "card-test",
       "views": 3
     },
     {
+      "id": "shifumiz-2026-info",
+      "views": 3
+    },
+    {
       "id": "test-before",
       "views": 3
+    },
+    {
+      "id": "loa-lost-paradise-2026-info",
+      "views": 2
     },
     {
       "id": "test-ap",
@@ -97,10 +105,6 @@
     },
     {
       "id": "details-test",
-      "views": 1
-    },
-    {
-      "id": "loa-lost-paradise-2026-info",
       "views": 1
     },
     {
