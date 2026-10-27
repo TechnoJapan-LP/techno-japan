@@ -14097,3 +14097,9 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 
 - CMS の実機確認（ユーザーのログイン）、SOUND/GALLERY 列、APPLY のテスト送信はユーザー待ち。
+
+#### 追記（2026-10-27 公開後）
+
+- `git push origin redesign/magazine:main` 1回で通過（pre-push の preflight 全68件、cef8fb170..97caa4eb7）。Deploy（run 40458606022）成功、**Lighthouse CI（run 40459101078）成功**（8 URL・全アサーション合格。GitHub の赤い表示は解消）。
+- 本番の festivals.html で layout-shift の合計を直接測定: 412×823（スロットリング）・1350×940 とも 0。
+- このエントリは redesign/magazine にコミット（docs のみ・次の push で main に入る）。
