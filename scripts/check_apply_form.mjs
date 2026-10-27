@@ -248,6 +248,8 @@ async function runApplyBrowserCheck() {
             const control = controls[0];
             if (control.type === 'date') control.value = index === 1 ? '2026-11-01' : '2026-11-02';
             else if (control.tagName === 'SELECT') control.value = control.options[1].value;
+            else if (control.type === 'url') control.value = 'https://example.com/fixture-' + (index + 1);
+            else if (control.type === 'email') control.value = 'fixture-' + (index + 1) + '@example.com';
             else control.value = index === 0 ? 'Fixture Festival' : 'Fixture answer ' + (index + 1);
             control.dispatchEvent(new Event('input', { bubbles: true }));
             control.dispatchEvent(new Event('change', { bubbles: true }));
@@ -257,11 +259,33 @@ async function runApplyBrowserCheck() {
         return { labels: fields.map(field => (field.querySelector('label, legend')?.textContent || '').replace(/^\\s*\\d+\\s*/, '').trim()) };
       })()`);
       if (result?.error) fail(`${page}: ${result.error}`);
-      await delay(250);
-      const calls = await evaluate(ws, 'window.__applyFetchCalls');
+      const callResult = await evaluate(ws, `(async () => {
+        const deadline = Date.now() + 5000;
+        while (Date.now() < deadline) {
+          const calls = window.__applyFetchCalls || [];
+          const hasGoogle = calls.some(call => call.url.includes('docs.google.com/forms/d/e/'));
+          const hasFormSubmit = calls.some(call => call.url === 'https://formsubmit.co/ajax/press@techno-japan.media');
+          if (hasGoogle && hasFormSubmit) return { calls, timedOut: false };
+          await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        const form = document.querySelector('#apply-form');
+        return {
+          calls: window.__applyFetchCalls || [],
+          timedOut: true,
+          valid: form?.checkValidity() ?? false,
+          invalidNames: form ? [...form.querySelectorAll('input, textarea, select')]
+            .filter(control => !control.validity.valid)
+            .map(control => control.name)
+            .filter(Boolean) : []
+        };
+      })()`);
+      const calls = callResult?.calls || [];
       const google = calls?.find(call => call.url.includes('docs.google.com/forms/d/e/'));
       const formSubmit = calls?.find(call => call.url === 'https://formsubmit.co/ajax/press@techno-japan.media');
-      if (!google || google.method !== 'POST' || google.mode !== 'no-cors') fail(`${page}: Google Form の送信が変わった`);
+      const validityDetails = ` (form.checkValidity()=${callResult?.valid ?? 'unknown'}, invalid names=${(callResult?.invalidNames || []).join(', ') || 'なし'})`;
+      if (!google || google.method !== 'POST' || google.mode !== 'no-cors') {
+        fail(`${page}: Google Form の送信が変わった${validityDetails}`);
+      }
       const googleEntries = new Map(google?.body || []);
       for (const question of fixture.questions) {
         if (question.type === 'date') {
@@ -272,7 +296,7 @@ async function runApplyBrowserCheck() {
           fail(`${page}: Google Form の ${question.entry} がない`);
         }
       }
-      if (!formSubmit) fail(`${page}: FormSubmit の AJAX 送信がない`);
+      if (!formSubmit) fail(`${page}: FormSubmit の AJAX 送信がない${validityDetails}`);
       if (formSubmit?.method !== 'POST') fail(`${page}: FormSubmit がPOSTではない`);
       if (formSubmit?.headers?.['Content-Type'] !== 'application/json' || formSubmit?.headers?.Accept !== 'application/json') {
         fail(`${page}: FormSubmit のJSONヘッダーが違う`);
@@ -297,6 +321,8 @@ async function runApplyBrowserCheck() {
           if (control.type === 'checkbox') control.checked = true;
           else if (control.tagName === 'SELECT') { control.value = control.options[1].value; control.dispatchEvent(new Event('change', { bubbles: true })); }
           else if (control.type === 'date') control.value = '2026-11-01';
+          else if (control.type === 'url') control.value = 'https://example.com/fixture-' + (index + 1);
+          else if (control.type === 'email') control.value = 'fixture-' + (index + 1) + '@example.com';
           else control.value = index === 0 ? 'Fixture Festival' : 'Fixture answer ' + (index + 1);
         });
         document.querySelector('[name="website"]').value = 'bot';
