@@ -14150,3 +14150,35 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 日本語書体（Noto Sans JP、4種類）は、旧デザインより最初の表示が遅い残りの主因だが、2026-10-23 のユーザー決定（今のまま）を維持。再提案しない（AUDIT §9-108 に数値だけ記録）。
 - Publish の経路: cms.js / cms.html の版を上げたため、push 後に `gh workflow run "Publish pipeline"` を流す。CMS の実機確認（`?cb=` 付き・Cmd+Shift+R → 編集 → プレビュー → 閉じる → 再表示 → 保存、Publish Now、`cms: publish data.js` のコミット）はユーザーのログイン待ちで「**実機未確認**」のまま。
 - SOUND / GALLERY 列、APPLY のテスト送信、会場詳細・APPLY・WRITER の本番確認はユーザー待ち（前のエントリのとおり）。
+
+### 2026-10-27 Lighthouse CI の実行マシンに日本語の書体を入れる（Claude 検証・コミット）
+
+### 実施
+
+- フェーズ7公開後の Lighthouse CI が CLS で3回中2回失敗（womb 0.069 ×2、記事 0.050 / 0.039。他の URL は合格、10 URL すべてで性能の値は出ている）。
+- 手元（Mac）では Lighthouse 12.6.1（CI と同じ設定）・CDP・CPU 6倍遅くした条件で本番を24回以上測り、0.000〜0.002 で再現しない。
+- CI の画面写真で日本語が豆腐で描かれていた（ubuntu ランナーに日本語の書体が無い）。書体の当てはめが最初の表示の後にずれ込んだ回だけ行数が変わって約100px ずれる、と特定（AUDIT §9-108 追補）。
+- `.github/workflows/lighthouse.yml` に `fonts-noto-cjk` を入れる手順を追加（`timeout-minutes` 12 → 15）。`.lighthouserc.json` の合格の基準・集計方法・URL は変えず、note に理由を2行。実装は Codex（`tmp/spec-phase7e.md`）。
+
+### コミット
+
+- （このエントリを含むコミット。redesign/magazine → main へ push）
+
+### 検証
+
+- YAML / JSON の構文、`check_regressions.py`、`git diff --check` 成功（Codex）。actionlint は push 後の「Lint GitHub Actions」で確認する。
+- push 後に Lighthouse CI を手動で2回流して、CLS が合格し続けるかを確認する（結果は次の報告で）。
+- `bash scripts/preflight.sh`: pre-push で省略なしに実行（push が通った＝全件成功）。
+
+### 変更したパターン
+
+- 測る環境を利用者の条件に合わせる（日本語の書体）。合格の基準は変えない。
+
+### 未確認の類似パターン
+
+- `check_hub_cls.mjs`（手元の preflight）は Mac で動くため、日本語の書体がある条件で測っている（利用者と同じ）。CI だけの豆腐の問題は手元では再現しない（確認済み・0件）。
+- 他の CI（regression-check 等）でブラウザが日本語を描く検査があれば同じ条件差がありうる（未確認）。
+
+### 次の担当への注意・判断待ち
+
+- Lighthouse CI がこの後も CLS で落ちる場合は、書体以外の原因。CI でトレース（`lighthouse --save-assets`）を取って調べる。
