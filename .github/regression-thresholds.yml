@@ -464,7 +464,7 @@ hub_pages:
     container: main-content
     marker: about-section
     min_markers: 5                 # 実測 5
-    min_container_bytes: 9000      # 実測 約10,500B
+    min_container_bytes: 7500      # 実測 約8,800B（2026-10-27、ユーザー指示で流れる帯を削除した後）
   en/about.html:
     container: main-content
     marker: about-section

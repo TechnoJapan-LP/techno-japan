@@ -34,6 +34,8 @@
       ring.style.top = ringY + 'px';
     }
 
+    setRingPosition();
+
     function animateRing() {
       ringAnimationFrame = 0;
       if (reducedMotionQuery.matches) {

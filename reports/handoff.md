@@ -14116,7 +14116,8 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 読み込み中のずれの検査 `scripts/check_hub_cls.mjs` を新設し preflight に登録（ハブ JA/EN・詳細4種 × スマホ（CPU 4倍・遅い回線）/ PC、毎ページ初回読み込み、0.05 超で失敗）。Lighthouse CI の対象に news.html / venues.html を追加し、`.lighthouserc.json` の誤った note を訂正。
 - **動きを減らす設定**: CSS のアニメーションは共通ブロックで既に止まっていた（主要13ページ × PC/スマホで、実行中のアニメーション 0）。JS で動いていたマウスに付いてくる丸だけ、設定時は遅れなしに。あわせて丸が追いついたら毎フレームの処理を止める。
 - ユーザー「About ページの帯をなくして。本番からも！」→ ABOUT（JA/EN）の流れる帯（`.top2-marquee`、スクロールしてもメニューの下に貼り付いていた）を削除。TOP の帯は残す。
-- 版: common.css 56 / common.js 21 / news-phase3 8 / venues-phase3 8 / cms.js 190（記事プレビューの common.css の版）。
+- 版: common.css 56 / common.js 22 / news-phase3 8 / venues-phase3 8 / cms.js 190（記事プレビューの common.css の版）。
+- **1回目の push は pre-push の preflight で止まった**（68/69 成功、「ハブページが JS 込みで描ける」が失敗。本番には出ていない）: (1) ABOUT の本文量が基準未満（帯を消したため 約10,500B → 8,825B、基準 9,000B）→ `regression-thresholds.yml` の about.html を 7,500 に（意図した変更）。(2) マウスの丸の検査（`--dump-dom` ＋ 仮想時間の iframe）で丸に位置が入らない → 丸の位置を requestAnimationFrame の中でしか書かなくなっていたため。以前と同じく初期化時に 0px を同期で入れる1行を足した（`tmp/spec-phase7d.md`、common.js 22）。単独で `check_hub_pages.py` 成功・`tmp/ringmotion.mjs` 12/12 を確認して再 push。
 
 ### コミット
 
@@ -14130,7 +14131,7 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - ABOUT: `tmp/aboutverify.mjs` 54/54（帯が無いことを確かめる形に変更）、`tmp/aboutband.mjs` 16/16（JA/EN × 1440 / 390: 帯の要素なし、スクロール中にメニュー下へ貼り付くものなし、スクロールできる、JS エラーなし）。目視: ヒーロー → 区切り線 → 「01 — About」。
 - 回帰（CDP）: NEWS 86/86・FESTIVALS 126/126・ARTISTS 114/114・VENUES 112/114（以前からの画像の細かさ2件）・TOP（カルーセル・最初の1枚・時差）合格・追加確認一式 296/297・スクロールで隠す帯 38/38・ABOUT / FESTIVALS の帯 28/28・メニュー 27/27・フェス詳細 356/356・アーティスト詳細 361/362・会場詳細 321/322・記事 284/290（以前からの画像の細かさ6件）・APPLY 68/68（本物には送っていない）・WRITER 30/30・カーソル 65/65・地図 12/12・`node scripts/check_page_scroll.mjs` 58ページ0失敗。2列同時に流して落ちた3件（英語の FESTIVALS 一覧の過去・アーティスト詳細の JA/EN 切替・会場名の収まり）は、同じ待ち時間のまま単独で3回ずつ流して全部合格（`tmp/recheck3.mjs`。PC の混雑で読み込みが間に合わなかった）。
 - build（最後まで）・冪等性（601ファイル）・版数・`check_regressions.py` 成功。
-- `bash scripts/preflight.sh`（pre-push で省略なしに実行）: pre-push で省略なしに実行（新しい「読み込み中のずれ（CLS）」を含む。push が通った＝全件成功）。
+- `bash scripts/preflight.sh`（pre-push で省略なしに実行）: pre-push で省略なしに実行（新しい「読み込み中のずれ（CLS）」を含む）。1回目は上記の1件で失敗、修正後の2回目で push が通った＝全件成功。
 
 ### 変更したパターン
 

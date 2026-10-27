@@ -75,7 +75,7 @@ const ARTICLE_FX_CSS_VERSION = 18;
 
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
-const COMMON_JS_VERSION = 21;   // 2026-10-27 reduced-motion cursor ring and idle frames
+const COMMON_JS_VERSION = 22;   // 2026-10-27 synchronous initial cursor ring position
 const COMMON_CSS_VERSION = 56;   // 2026-10-27 remove page and nav fade-in
 const DATA_HUB_VERSION = 11;
 const SEARCH_JS_VERSION = 9;
