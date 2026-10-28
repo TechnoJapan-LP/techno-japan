@@ -14319,3 +14319,37 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - cms.js 193（記事プレビューの common.css の版）: push 後に Publish pipeline。CMS を開くときは Cmd+Shift+R。
 - 毎月: AI 回答ログに GA4 の AI 経由のセッション（`reports/ai-referrals.md`）を入れる。誤りが記録されたら該当ページを直す。
 - 文章ガイドへの追記（記事の冒頭に事実をまとめる、内容を大きく直したら更新日を入れる）は未。
+
+### 2026-10-28 APPLY のラベルの左寄せ・ARTISTS（PC）のジャンルを1行で横スクロール・FESTIVALS の種類の段を追従させない（Claude 検証・コミット）
+
+### 実施
+
+- ユーザーの指摘（スクリーンショット付き）を Codex で修正（`tmp/spec-apply-label.md`、`tmp/spec-artists-fest-filters.md`）:
+  - **APPLY**「04 — 申請フォーム」が PC で右に寄っていた → 原因は `submit.html` の `.apply-form-head .mono{…text-align:right}`（見出しの横の補足文用。補足文は既に無く、中のラベルに当たっていた）。`.apply-form-head > .mono` に限定。EN も同じ。
+  - **ARTISTS（PC）**: ジャンルの絞り込みが2行に折り返していた → PC も1行・横スクロールに。続きがあるとき端を薄く（`is-scroll-start` / `is-scroll-end` / `is-scrollable`）、PC は細いスクロールバー。縦のホイールを横に変える処理は入れない。スマホは今のまま。
+  - **FESTIVALS**: 種類の段（ALL TYPES / FESTIVAL / RAVE）を追従させない（`position: static`、隠す／出す処理を削除）。上の段（UPCOMING / ARCHIVE / ALL と GRID / LIST）は今までどおり追従。
+
+### コミット
+
+- このエントリを含むコミット（redesign/magazine → main）。
+
+### 検証
+
+- APPLY: PC 1440 で「04 — 申請フォーム」の文字の左端＝見出し「SUBMIT AN EVENT」の左端（80px）、JA/EN。スマホは変わらず。`tmp/applyverify.mjs` 68/68。
+- `tmp/filters2.mjs` 34/35: ARTISTS は 1440 / 1280 で1行に収まり、1100 で1行・横スクロール・端の印の切り替え・右端の TRANCE で絞り込み（131 → 2）、390 は変わらず、横のはみ出しなし。FESTIVALS は種類の段が static・上の段が sticky、下にスクロールすると種類の段が流れて消え上の段がメニューの直下（PC / スマホ / EN）。失敗 1 件はスマホで少し上に戻したときにページの上まで戻り、種類の段が本来の位置に見えただけ（検査側の問題、ページ上の位置が変わらないことを確認）。目視で確認。
+- 回帰: ARTISTS 114/114・FESTIVALS 126/126・スクロールで隠す帯 38/38・`check_page_scroll.mjs`・`check_hub_cls.mjs`（28 件）成功。`tmp/aboutfest.mjs` 24/28 の失敗 4 件は「上に戻すと種類の段が戻る」という古い期待（今回の指示で意図して変えた動き）。
+- build 冪等性（601）・版数・回帰・CMS プレビュー成功。`bash scripts/preflight.sh`: pre-push で実行（push が通った＝全件成功）。
+
+### 変更したパターン
+
+- 共通の指定を子孫セレクタで書くと、後から中に入った同じクラスの要素に当たる（APPLY のラベル）。用途の要素に限定する。
+- PC の横スクロールは、端のフェードと細いスクロールバーで続きがあることを見せる。
+
+### 未確認の類似パターン
+
+- 他ページの `.mono` に子孫セレクタで `text-align: right` が当たっている箇所は未調査（APPLY のみ確認）。
+- iPhone 実機での ARTISTS の横スクロール・FESTIVALS の帯は未確認（headless の模擬のみ）。
+
+### 次の担当への注意・判断待ち
+
+- フェス詳細の ACCESS MAP はモックどおりの飾りの枠（格子＋点＋Google Maps のリンク）で、実際の地図が無い。ユーザー指摘「真っ暗」→ VENUES 一覧と同じ CARTO の地図を出す実装を次に行う。

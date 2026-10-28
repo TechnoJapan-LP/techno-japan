@@ -25,6 +25,7 @@
   var toolbarDirectionAnchor = window.scrollY;
   var toolbarOpenUntil = 0;
   var toolbarStartY = toolbar ? toolbar.getBoundingClientRect().top + window.scrollY : 0;
+  var genreChipRow = document.getElementById('artists-genre-chips');
   var genreOrder = ['ALL', 'TECHNO', 'HOUSE', 'MINIMAL', 'EXPERIMENTAL', 'AMBIENT', 'ELECTRONIC', 'LIVE'];
   var stateKey = 'tj:artist-hub-state:v1';
 
@@ -68,8 +69,25 @@
     return '<button class="chip' + (value === current ? ' is-active' : '') + '" type="button" data-filter-value="' + esc(value) + '" aria-pressed="' + (value === current ? 'true' : 'false') + '">' + esc(value) + '</button>';
   }
   function renderChips() {
-    document.getElementById('artists-genre-chips').innerHTML = genres().map(function (value) { return chipMarkup(value, state.genre); }).join('');
+    genreChipRow.innerHTML = genres().map(function (value) { return chipMarkup(value, state.genre); }).join('');
     document.getElementById('artists-origin-chips').innerHTML = ['ALL', 'JAPAN', 'INTERNATIONAL'].map(function (value) { return chipMarkup(value, state.origin); }).join('');
+    updateGenreChipScrollHints();
+  }
+  function updateGenreChipScrollHints() {
+    if (!genreChipRow) return;
+    var scrollable = genreChipRow.scrollWidth > genreChipRow.clientWidth + 1;
+    genreChipRow.classList.toggle('is-scrollable', scrollable);
+    genreChipRow.classList.toggle('is-scroll-start', !scrollable || genreChipRow.scrollLeft <= 1);
+    genreChipRow.classList.toggle('is-scroll-end', !scrollable || genreChipRow.scrollLeft + genreChipRow.clientWidth >= genreChipRow.scrollWidth - 1);
+  }
+  function setupGenreChipScrollHints() {
+    if (!genreChipRow) return;
+    genreChipRow.addEventListener('scroll', updateGenreChipScrollHints, { passive: true });
+    if (typeof ResizeObserver === 'function') {
+      new ResizeObserver(updateGenreChipScrollHints).observe(genreChipRow);
+    }
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(updateGenreChipScrollHints);
+    updateGenreChipScrollHints();
   }
   function imageMarkup(artist, sizes, eager, boxAspect) {
     if (!artist.image) return '<span class="artist-image-placeholder" aria-hidden="true"></span>';
@@ -286,6 +304,7 @@
     }
   }
   readUrl();
+  setupGenreChipScrollHints();
   renderChips();
   document.getElementById('artists-search').addEventListener('input', function () {
     clearTimeout(window.__tjArtistSearchTimer);

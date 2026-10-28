@@ -59,7 +59,26 @@ html.tj-artists-hydrating .ssr-link-list {
   gap: 8px;
 }
 .artists-chip-row .chip { min-height: 32px; padding: 0 12px; }
-#artists-genre-chips { padding-top: 10px; }
+#artists-genre-chips {
+  padding-top: 10px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+#artists-genre-chips .chip { flex: 0 0 auto; }
+#artists-genre-chips.is-scrollable.is-scroll-start.is-scroll-end {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 20px, #000 calc(100% - 20px), transparent);
+  mask-image: linear-gradient(to right, transparent, #000 20px, #000 calc(100% - 20px), transparent);
+}
+#artists-genre-chips.is-scrollable.is-scroll-end:not(.is-scroll-start) {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 20px, #000 100%);
+  mask-image: linear-gradient(to right, transparent, #000 20px, #000 100%);
+}
+#artists-genre-chips.is-scrollable.is-scroll-start:not(.is-scroll-end) {
+  -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 20px), transparent);
+  mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 20px), transparent);
+}
 #artists-origin-chips { justify-content: end; }
 .artists-results-heading {
   display: flex;
@@ -282,7 +301,13 @@ html.tj-artists-hydrating .ssr-link-list {
   .artists-chip-row { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
   .artists-chip-row::-webkit-scrollbar { display: none; }
   #artists-origin-chips { justify-content: start; padding-top: 6px; }
-  #artists-genre-chips { padding-top: 6px; }
+  #artists-genre-chips {
+    padding-top: 6px;
+    scrollbar-width: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  #artists-genre-chips::-webkit-scrollbar { display: none; }
   .artists-featured {
     --artists-featured-copy-h: 0px;
     --artists-featured-bottom-reserve: 48px;
