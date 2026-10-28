@@ -14398,3 +14398,37 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - **cms.js 194: 実機未確認**。push 後に Publish pipeline を流し、CMS を `?cb=` 付きで開いて記事のプレビュー（`writeArticleSimplePreview_`）が例外なく動くことを確かめる。ユーザーには Cmd+Shift+R を伝える。
 - 座標の無いフェス 36 件（asagiri-jam axiom balance body-soul bonna-pot brightness car-multimedia delta-commit dots dream-festival e-groove ensou euphoria gampeki halola-camp ishinoko iyasaka-rave-festival lab midnight-cult-rave mirrorball-village music mutek one-music-camp one-park-festival one-park-riverfes parallel-world pure-rave rare-groove samsara signal sub-tide takarajima-beach-cleaning-party topia wonderfruit-kyoto wormhole yamauto）は地図が出ない。CMS で開催回の座標を入れれば出る（データの判断はユーザー）。
 - push 後: 本番で同じ方法で重さと Lighthouse を測り直し、上の値と並べる。
+
+### 2026-10-28 座標の無いフェスでは ACCESS の地図の枠を出さない（Claude 検証・コミット）
+
+### 実施
+
+- ユーザー判断「座標がないフェスのは ACCESS MAP の表示はなくそう」。直前のコミット（51aa6995c）で残した飾りの枠（格子＋決まった位置の赤い点＋会場名で検索する「Google Maps ↗」）を、座標の無いフェス（JA/EN 各 36 件）で出さないようにした（Codex、`tmp/spec-festival-map-nogeo.md`）。ACCESS の見出し・会場名の行・FEATURE STORY は残す。座標のあるフェスの地図は変えていない。
+- `check_festival_access_map.mjs` の静的な確認を逆に（座標の無いページは `festival-map` を持たず、地図の script も読まない。ACCESS の欄・見出し・会場名の行はある）。AUDIT §9-110 に追記。
+
+### コミット
+
+- このエントリを含むコミット（redesign/magazine → main）。
+
+### 検証
+
+- 生成物の差分は座標の無いフェス 72 ページの ACCESS の枠だけ（68 件＋FEATURE STORY のある 4 件）。座標のあるページの ACCESS は差分 0。
+- 手元（CDP、`tmp/fmapverify.mjs` を NOGEO=1 で）64/64: asagiri-jam（PC 1440・EN 390）は地図の枠なし、見出し「Access」と会場名（静岡 / Shizuoka）が見える、見出しとの間隔 29px、地図の部品の通信なし、横のはみ出しなし。座標のある labyrinth の地図の確認は前回どおりすべて成功。目視（PC・スマホ）。CSS は変えていない（間隔は地図があるときと同程度）。
+- `check_festival_access_map.mjs` 成功。わざと asagiri-jam に枠を戻すと「座標なしページに ACCESS の地図枠があります」で失敗することを確認（戻した後は元どおり）。
+- build 冪等性（601）・版数・回帰・CMS プレビュー・`git diff --check`（Codex 実行）。
+- 前回分の本番確認（578fd44d6）: labyrinth の地図が CARTO の黒い地図で出る（出典に CARTO、PC/スマホ/EN、64/64）。重さは同じ方法で比較し、スマホで開いた時点は +3〜4KB、ACCESS まで下げると +80〜138KB、PC で開いた時点は +91〜261KB（PC では ACCESS が最初の画面のすぐ下にあり、すぐ読み込む）。CMS の記事プレビュー（cms.js 194、パスワードは入れずに入力欄を閉じて確認）は例外なし・detail.css?v=91 を読み込む。Lighthouse CI 成功。
+- `bash scripts/preflight.sh`: pre-push で省略なしに実行（push が通った＝全件成功）。
+
+### 変更したパターン
+
+- 実際の位置を示せない飾りの地図は出さない（座標がある時だけ地図を出す）。
+
+### 未確認の類似パターン
+
+- 会場の詳細ページ（`LP/venues/*.html`、womb で確認）: 飾りの地図の枠は無く、「Google Maps」へのボタンと住所の横のリンクだけ（確認済み・0件）。アーティストの詳細ページにも地図の枠は無い（確認済み・0件）。
+- iPhone 実機での地図は未確認（headless の模擬のみ）。
+
+### 次の担当への注意・判断待ち
+
+- 座標の無いフェス 36 件は ACCESS に会場名だけが出る。地図を出したいフェスは CMS で開催回の座標（LAT / LNG）を入れて Publish する（データの判断はユーザー）。
+- cms.js 194: Publish pipeline（run 40684491624、2026-10-28 12:01 開始）は成功、データの変化なしでコミットは増えていない。CMS の記事プレビューも本番で確認済み（上の検証）。前のエントリの「実機未確認」はこれで解消。CMS を開くときは Cmd+Shift+R。

@@ -2661,9 +2661,7 @@ function festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, allArt
       </div>
       <script src="/map-tiles.js?v=${MAP_TILES_JS_VERSION}" defer></script>
       <script src="/festival-map.js?v=${FESTIVAL_MAP_JS_VERSION}" defer></script>`
-    : mapUrl
-      ? `<a class="festival-map" href="${esc(safeUrl(mapUrl))}" target="_blank" rel="noopener"><span class="festival-map-dot" aria-hidden="true"></span><span class="mono">Google Maps ↗</span></a>`
-      : `<div class="festival-map"><span class="festival-map-dot" aria-hidden="true"></span></div>`;
+    : '';
   const currentLineupPanel = `<section class="festival-tab-panel festival-program-section" id="lineup" data-festival-panel="lineup" role="tabpanel" aria-labelledby="festival-tab-lineup">
       <div class="festival-panel-heading"><h2 class="disp">Lineup</h2><span class="mono">${esc(editionLabel(editionIdentifier(currentEdition)) || '')}</span></div>
       ${lineupGroups || `<p class="festival-empty mono">${lang === 'en' ? 'Lineup information is not available.' : '出演者情報はありません。'}</p>`}

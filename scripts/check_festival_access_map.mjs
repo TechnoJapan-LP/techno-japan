@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/* フェス詳細 ACCESS MAP の遅延初期化、座標、操作性、フォールバックを確認する。 */
+/* フェス詳細 ACCESS MAP の遅延初期化、座標、操作性、フォールバックと、
+ * 座標なしページで地図を出さないことを確認する。 */
 import http from 'node:http';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -318,10 +319,14 @@ function inspectStaticPages() {
     for (const name of files) {
       const html = fs.readFileSync(path.join(locale.dir, name), 'utf8');
       if (!html.includes('class="festival-detail-page')) continue;
-      const hasMap = html.includes('class="festival-map"') || html.includes('class="festival-map tj-map"');
       const hasCoordinateMap = html.includes('class="festival-map tj-map"');
       const scripts = [...html.matchAll(/<script\b[^>]+src="([^"]*(?:map-tiles|festival-map)\.js\?v=\d+)"[^>]*>/g)];
-      if (!hasMap) throw new Error(`${locale.label} ${name}: ACCESSのfestival-mapがありません`);
+      const allMapScripts = [...html.matchAll(/<script\b[^>]+src="[^"]*(?:map-tiles|festival-map)\.js(?:\?[^" ]*)?"[^>]*>/g)];
+      const access = html.match(/<aside class="festival-access">([\s\S]*?)<\/aside>/)?.[1] || '';
+      if (!access) throw new Error(`${locale.label} ${name}: ACCESS欄がありません`);
+      if (!/<div class="festival-panel-heading"><h2 class="mono red">Access<\/h2><\/div>/.test(access)) {
+        throw new Error(`${locale.label} ${name}: ACCESS見出しがありません`);
+      }
       if (hasCoordinateMap) {
         localeCoordinateCount += 1;
         const hasDeferredMapTiles = scripts.some((match) => /map-tiles\.js\?v=\d+/.test(match[1]) && /\sdefer(?:\s|>)/.test(match[0]));
@@ -331,7 +336,11 @@ function inspectStaticPages() {
         }
       } else {
         localeNoCoordinateCount += 1;
-        if (scripts.length) throw new Error(`${locale.label} ${name}: 座標なしページに map script があります`);
+        if (html.includes('class="festival-map')) throw new Error(`${locale.label} ${name}: 座標なしページにACCESSの地図枠があります`);
+        if (!/<div class="festival-panel-heading"><h2 class="mono red">Access<\/h2><\/div><span class="mono">[^<]*<\/span>/.test(access)) {
+          throw new Error(`${locale.label} ${name}: 座標なしページに会場名の行がありません`);
+        }
+        if (allMapScripts.length) throw new Error(`${locale.label} ${name}: 座標なしページに map script があります`);
         if (!noCoordinatePage && locale.label === 'JA') noCoordinatePage = `${locale.urlPrefix}${name}`;
       }
     }
@@ -389,18 +398,24 @@ try {
       throw new Error(`座標なしページ ${noCoordinatePage} が読み込めませんでした`);
     }
     const noMap = await evaluate(ws, `({
-      map: !!document.querySelector('.festival-map[data-lat][data-lng]'),
       frame: !!document.querySelector('.festival-map'),
-      googleLink: (() => {
-        var link = document.querySelector('a.festival-map[href^="https://maps.google.com/?q="]');
-        return !!link || !document.querySelector('.festival-map .mono');
+      access: !!document.querySelector('aside.festival-access'),
+      heading: (() => {
+        var heading = document.querySelector('aside.festival-access .festival-panel-heading h2');
+        return heading && heading.textContent.trim() === 'Access';
+      })(),
+      venue: (() => {
+        var venue = document.querySelector('aside.festival-access .festival-panel-heading + .mono');
+        if (!venue) return false;
+        var rect = venue.getBoundingClientRect();
+        return !!venue.textContent.trim() && rect.width > 0 && rect.height > 0;
       })(),
       mapScript: performance.getEntriesByType('resource').some(function(entry) { return /(?:map-tiles|festival-map)\\.js(?:\\?|$)/.test(entry.name); }),
       leaflet: performance.getEntriesByType('resource').some(function(entry) { return /\\/leaflet(?:\\.min)?\\.js(?:\\?|$)/.test(entry.name); }),
       errors: window.__tjFestivalMapErrors || []
     })`);
-    if (noMap.map || !noMap.frame || !noMap.googleLink || noMap.mapScript || noMap.leaflet || noMap.errors.length) throw new Error(`座標なしページ ${noCoordinatePage} のACCESS枠または通信が不正です`);
-    console.log(`  ✅ 座標なしフェス ${noCoordinatePage}: ACCESS枠あり / 地図通信なし`);
+    if (noMap.frame || !noMap.access || !noMap.heading || !noMap.venue || noMap.mapScript || noMap.leaflet || noMap.errors.length) throw new Error(`座標なしページ ${noCoordinatePage} のACCESS欄または通信が不正です`);
+    console.log(`  ✅ 座標なしフェス ${noCoordinatePage}: ACCESS見出し・会場名あり / 地図通信なし`);
   }
   if (deferredChecks < 2) throw new Error(`遠い初期表示の遅延読み込み確認が${deferredChecks}回で、2回未満`);
   console.log(`  ✅ 遠い初期表示の遅延確認: ${deferredChecks}回`);
