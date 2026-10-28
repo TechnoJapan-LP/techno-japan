@@ -14210,3 +14210,42 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 
 - なし（Lighthouse CI は合格に戻った）。CMS の実機確認などユーザー待ちの項目は前のエントリのとおり。
+
+### 2026-10-28 フェーズ8（英語版の完成）: 棚卸し・UI・データの英訳入力・見える日本語の検査（Claude 検証・コミット）
+
+### 実施
+
+- ユーザー「進めて」（フェーズ8）。英語ページ 278 枚（転送 9 枚除く）を実ブラウザ相当で描き、見える日本語を集計（`tmp/eninventory.mjs`）: **67 枚・109 種類**。スマホ幅・メニュー・検索も確認し、UI の日本語は APPLY の都道府県だけだった。
+- UI（Codex `tmp/spec-phase8a.md`）: APPLY 英語ページの都道府県を英語表示（value は Google フォームと同じまま、`enHubFromJa` で毎回適用）、説明文の言語切替ボタンに `lang` 属性。
+- データ（ユーザーが案を承認し「入力して」、Claude が入力）: FESTIVALS の name_en 5 件（根拠つき、AUDIT §9-109）、ARTISTS fuji の bio_en（日本語が入っていた → 英訳）、ARTICLES 8 本の body_en（日英併記ラベルの日本語を削除、写真の説明文 7 枚を英訳、フェス名を英語名に）。入力方法は AUDIT §9-109（行全体を読む → 照合 → 変更点だけ重ねる → 全列を読み直して照合）。Publish Now はユーザーが押した（f71ada044 `cms: publish data.js`、Publish pipeline 成功、d84552d9c 再生成）。
+- 検査（Codex `spec-phase8a/8b/8c.md`）: `scripts/check_en_visible_japanese.mjs`（新規・preflight）。英語ページ全部、4 並行、画像・書体を止め、動きを減らす設定、約 65 秒。基準は `scripts/fixtures/en-visible-japanese-baseline.json`。最初は 10 分を超えた（原因と対策は AUDIT §9-109）。`check_hub_cls.mjs` にも子の Chrome の後片付けと時限を追加。
+- CMS の潜在的な不具合を修正: `bulkSaveRow` が記事の日付型セルを別の形の文字列で書き戻すおそれ → cms.js 191（AUDIT §9-109）。
+
+### コミット
+
+- 094821447（UI・検査・CMS）、main（f71ada044 / d84552d9c / ce1a31165）の取り込み、このエントリを含むコミット。
+
+### 検証
+
+- 見える日本語: **67 枚・109 種類 → 13 枚・21 種類**。残りはすべて英文中の日本語の固有名（電子原人、燃蛾茶会、暗黒ニラ、鏡民 / Kyomi 等）。フェーズ8の完了条件（固有名を除いて 0）を満たす。
+- 本番データ: 14 行とも、変わったのは対象の欄だけ（lastEditedAt は GAS の自動更新）、値は計画どおり、記事の公開日は同じ日付のまま。本番の英語ページで反映を確認（見出しの英語名・FUJI の英語プロフィール・写真の説明文・ラベル）。
+- `check_en_visible_japanese.mjs`: 合格（増加 0、64.7 秒、終了後に Chrome の残り 0）。英語の ABOUT に日本語を 1 つ足した複製では「増加 1 件」で失敗することを確認。
+- `check_apply_form.mjs`（16 問 × 2 ページ、実送信なし）、`check_cms_sound_gallery.mjs`（一括保存の日付保護 3 ケース）、版数、回帰、build 冪等性（601）成功。
+- `bash scripts/preflight.sh`: pre-push で省略なしに実行（push が通った＝全件成功）。
+
+### 変更したパターン
+
+- 本番データの書き込みは「行全体を読む → 控えと照合 → 変更点だけ重ねる → 送る → 全列を読み直して照合」。日付型セルは `fmtDate`。
+- 英語ページの見える日本語は基準ファイルで管理し、増えたら preflight で止まる。headless の検査は動きを減らす設定で開き、子の Chrome を必ず終わらせる。
+
+### 未確認の類似パターン
+
+- 英文中の日本語の固有名 21 件はそのまま（公式のローマ字表記が確認できない）。tsutomu の bio_en の「Spring Love 春風」を英語名（SPRING LOVE HARUKAZE）に合わせるかは未決。
+- CMS 一括保存の修正は、本番での実際の一括保存では未確認（**実機未確認**、モックの検査のみ）。
+- 開催回の英語の場所（LOCATION）28 件は英語ページに表示されないため、見える日本語としては 0（確認済み）。
+
+### 次の担当への注意・判断待ち
+
+- cms.js 191: push 後に `gh workflow run "Publish pipeline"`。CMS を開くときは Cmd+Shift+R。
+- データに日本語の固有名が増えると `check_en_visible_japanese` が止まる。中身を確認し、固有名なら `--update` で基準に入れる。
+- 次の作業: SEO / AIO / LLMO の対策（ユーザー依頼 2026-10-28、調査結果は会話と次のエントリ）。

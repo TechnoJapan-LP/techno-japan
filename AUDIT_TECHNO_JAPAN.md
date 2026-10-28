@@ -7509,3 +7509,29 @@ map.html（タイル 24 枚・ピン 30）を画像で確認。preflight 全49�
   CI は描画が遅い（最初の表示 1.3 秒、書体のファイルは 0.45 秒で到着）ため、当てはめが最初の表示の後にずれ込んだ回だけ行数が変わって約100px ずれる
   （最初の表示が 2.3 秒の回は 0）。利用者の端末には必ず日本語の書体があり全角の幅がほぼ同じなので、CI の手順で `fonts-noto-cjk` を入れて条件を合わせた（合格の基準は変えない）。
   フェードはこのずれも隠していた。
+
+### §9-109 フェーズ8（英語版の完成）: 英語名の決定・本番データの安全な書き込み・検査が遅かった理由（2026-10-28）
+
+**英語名（FESTIVALS.name_en、ユーザー承認 2026-10-28）**: 公式の表記を根拠にした。推測で作らない（AGENTS.md 事実主義）。
+
+| ID | 日本語名 | name_en | 根拠 |
+|---|---|---|---|
+| ringo-festival | りんご音楽祭 | RINGO FES. | 公式サイト ringofes.info のメニュー「RINGO FES.2026」・著作権表記 |
+| otsukimi | 御月民 -OTSUKIMI- | OTSUKIMI | 名前に含まれるローマ字。RA の掲載名「OTSUKIMI Open Air」 |
+| mori-michi-ichiba | 森、道、市場 | MORI MICHI ICHIBA | 公式サイト morimichiichiba.jp の著作権表記 |
+| ensou | 円相芸術音楽祭 | ENSO ART MUSIC FES | 公式の英語表記なし。主催の Instagram 名 ensoartmusicfes |
+| spring-love-harukaze | SPRING LOVE 春風 | SPRING LOVE HARUKAZE | 公式は漢字。ローマ字は公式ドメイン harukaze.asia |
+
+（soul-beat-asia は既に SOUL BEAT ASIA。英文中の人・グループ・店の日本語名は公式のローマ字が確認できないため、そのまま。）
+
+**本番データの書き込み方（このとき確立）**: CMS の画面（ログイン済み）の中で、`get_sheet` で行全体を読む → 控えと1文字も違わないことを確認 → 値のある列をすべて含め、変更点だけ重ねて `update_row` → 送った後に全列を読み直して照合。
+`get_sheet` は空の列を返さないので、全列を含めて送っても空の列が増えることはない。保存のたびに GAS が lastEditedAt を自動で更新する。
+**ARTICLES の date は日付型セルで、`get_sheet` は "Sat Oct 10 2026 00:00:00 GMT+0900 (日本標準時)" の形で返す。** そのまま書き戻すと公開日が文字列に置き換わるので、通常の保存と同じく `fmtDate` で YYYY-MM-DD にして送る（読み直すと日付型のまま同じ日付）。
+CMS の `bulkSaveRow`（検索して置換・一括処理）はこれをそのまま書き戻していた → cms.js 191 で修正（ARTICLES の日付は YYYY-MM-DD、それ以外の日付型の列は中止）。
+Publish Now は自動操作の安全確認（本番への反映）で止まるため、ユーザーが押す。
+
+**検査が遅かった理由（`check_en_visible_japanese.mjs`）**: 最初の版は 278 ページで 10 分を超えて終わらなかった。
+(1) Chrome を `--disable-gpu` で起動し、背景の無限アニメーション（`.tj-bg`）を CPU で描き続けていた（描画プロセス 1 つで CPU 70〜90%）。
+(2) 止めた検査の子の Chrome が残り、40 分以上 CPU を使い続けて後続を遅くしていた。
+→ 動きを減らす設定で開く・GPU を外さない・SIGTERM/SIGINT/exit で子を確実に終了・CDP 1 回 20 秒の時限。278 ページ 約 65 秒になった。
+**教訓**: headless の検査で「遅い」ときは、まず CPU を使っているプロセスを見る。無限アニメーションのあるサイトは、検査では動きを減らす設定で開く。子プロセスは、親が止められても終わる作りにする。

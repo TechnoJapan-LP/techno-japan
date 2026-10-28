@@ -5,6 +5,8 @@
  * 許す。データの英訳が入って日本語が減ったときは --update で基準を縮める。
  * 基準ファイルの更新は意図した変更のときだけ行うこと。
  * 速さのために画像・書体を止めている（文字の検査には関係ない）。
+ * 背景の無限アニメーションで Chrome の CPU を使い切らないよう、各ページで
+ * prefers-reduced-motion を指定してから検査する。
  *
  * ローカルサーバーと CDP の起動・後片付けは check_page_scroll.mjs 等と同じ。
  */
@@ -20,6 +22,7 @@ import { setTimeout as delay } from 'node:timers/promises';
 const ROOT = path.join(process.cwd(), 'LP');
 const BASELINE_PATH = path.join(process.cwd(), 'scripts/fixtures/en-visible-japanese-baseline.json');
 const UPDATE = process.argv.includes('--update');
+const CDP_TIMEOUT_MS = 20000;
 const MIME = {
   '.html': 'text/html;charset=utf-8',
   '.js': 'text/javascript;charset=utf-8',
@@ -59,16 +62,41 @@ function freePort() {
 
 function cdp(ws, method, params = {}) {
   const id = ++cdp.nextId;
-  ws.send(JSON.stringify({ id, method, params }));
   return new Promise((resolve, reject) => {
-    const onMessage = (event) => {
-      const message = JSON.parse(event.data);
-      if (message.id !== id) return;
+    let settled = false;
+    const timer = setTimeout(() => {
+      if (settled) return;
+      settled = true;
       ws.removeEventListener('message', onMessage);
-      if (message.error) reject(new Error(JSON.stringify(message.error)));
-      else resolve(message.result);
+      const error = new Error(`CDPタイムアウト: ${method}`);
+      error.code = 'CDP_TIMEOUT';
+      reject(error);
+    }, CDP_TIMEOUT_MS);
+    const finish = (callback, value) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      ws.removeEventListener('message', onMessage);
+      callback(value);
+    };
+    const onMessage = (event) => {
+      let message;
+      try {
+        message = JSON.parse(event.data);
+      } catch (error) {
+        finish(reject, error);
+        return;
+      }
+      if (message.id !== id) return;
+      if (message.error) finish(reject, new Error(JSON.stringify(message.error)));
+      else finish(resolve, message.result);
     };
     ws.addEventListener('message', onMessage);
+    try {
+      ws.send(JSON.stringify({ id, method, params }));
+    } catch (error) {
+      finish(reject, error);
+    }
   });
 }
 cdp.nextId = 0;
@@ -203,15 +231,40 @@ const server = http.createServer((request, response) => {
   response.end(fs.readFileSync(file));
 });
 
-async function runWorker(workerPages, base, browser) {
+const activeBrowsers = new Set();
+const activeProfiles = new Set();
+let cleanupDone = false;
+function cleanupSync() {
+  if (cleanupDone) return;
+  cleanupDone = true;
+  for (const child of activeBrowsers) {
+    if (child.exitCode === null && child.signalCode === null) child.kill('SIGKILL');
+  }
+  if (server.listening) server.close();
+  for (const profileDir of activeProfiles) removeProfileDir(profileDir);
+}
+process.on('exit', cleanupSync);
+process.on('SIGTERM', () => {
+  cleanupSync();
+  process.exit(128 + 15);
+});
+process.on('SIGINT', () => {
+  cleanupSync();
+  process.exit(128 + 2);
+});
+
+async function runWorker(workerPages, base, browser, workerNumber) {
   const debugPort = await freePort();
   const profileDir = fs.mkdtempSync(path.join(os.tmpdir(), 'tj-en-visible-japanese-'));
+  activeProfiles.add(profileDir);
   const child = spawn(browser, [
-    '--headless=new', '--no-sandbox', '--disable-gpu', '--no-first-run', '--disable-extensions',
+    '--headless=new', '--no-sandbox', '--no-first-run', '--disable-extensions',
     `--user-data-dir=${profileDir}`, `--remote-debugging-port=${debugPort}`, 'about:blank',
   ], { stdio: 'ignore' });
+  activeBrowsers.add(child);
   let ws;
   const results = [];
+  const failures = [];
   try {
     let target;
     for (let attempt = 0; attempt < 100 && !target; attempt += 1) {
@@ -245,27 +298,41 @@ async function runWorker(workerPages, base, browser) {
       width: 1440, height: 900, deviceScaleFactor: 1, mobile: false,
     });
 
+    let completed = 0;
     for (const page of workerPages) {
-      await cdp(ws, 'Page.navigate', { url: `${base}/en/${page}` });
-      await waitForPage(ws);
-      let y = 0;
-      while (true) {
-        const dimensions = await evaluate(ws, `({ height: Math.max(document.body.scrollHeight, document.documentElement.scrollHeight), viewport: window.innerHeight })`);
-        await evaluate(ws, `window.scrollTo(0, ${Math.min(y, Math.max(0, dimensions.height - dimensions.viewport))})`);
-        await delay(40);
-        if (y >= dimensions.height) break;
-        y += 900;
+      try {
+        await cdp(ws, 'Emulation.setEmulatedMedia', {
+          features: [{ name: 'prefers-reduced-motion', value: 'reduce' }],
+        });
+        await cdp(ws, 'Page.navigate', { url: `${base}/en/${page}` });
+        await waitForPage(ws);
+        let y = 0;
+        while (true) {
+          const dimensions = await evaluate(ws, `({ height: Math.max(document.body.scrollHeight, document.documentElement.scrollHeight), viewport: window.innerHeight })`);
+          await evaluate(ws, `window.scrollTo(0, ${Math.min(y, Math.max(0, dimensions.height - dimensions.viewport))})`);
+          await delay(40);
+          if (y >= dimensions.height) break;
+          y += 900;
+        }
+        await evaluate(ws, 'window.scrollTo(0, 0)');
+        await delay(100);
+        results.push({ page, entries: await evaluate(ws, collectScript) });
+      } catch (error) {
+        const message = error.code === 'CDP_TIMEOUT' ? `タイムアウト（${error.message}）` : error.message;
+        failures.push({ page, error: message });
+        console.log(`❌ worker ${workerNumber}: ${page}: ${message}`);
       }
-      await evaluate(ws, 'window.scrollTo(0, 0)');
-      await delay(100);
-      results.push({ page, entries: await evaluate(ws, collectScript) });
+      completed += 1;
+      if (completed % 25 === 0) console.log(`worker ${workerNumber}: ${completed}/${workerPages.length}`);
     }
   } finally {
     if (ws) ws.close();
     await stopProcess(child);
+    activeBrowsers.delete(child);
+    activeProfiles.delete(profileDir);
     removeProfileDir(profileDir);
   }
-  return results;
+  return { results, failures };
 }
 
 const startedAt = Date.now();
@@ -300,11 +367,15 @@ const workerCount = Number.isFinite(requestedWorkers) && requestedWorkers > 0
 const chunks = Array.from({ length: workerCount }, () => []);
 allPages.forEach((page, index) => chunks[index % workerCount].push(page));
 const currentEntries = {};
+const pageFailures = [];
 try {
-  const settled = await Promise.allSettled(chunks.map((pages) => runWorker(pages, base, browser)));
+  const settled = await Promise.allSettled(chunks.map((pages, index) => runWorker(pages, base, browser, index + 1)));
   const rejected = settled.find((result) => result.status === 'rejected');
   if (rejected) throw rejected.reason;
-  for (const result of settled.flatMap((item) => item.value)) currentEntries[result.page] = result.entries;
+  for (const item of settled) {
+    for (const result of item.value.results) currentEntries[result.page] = result.entries;
+    pageFailures.push(...item.value.failures);
+  }
 } finally {
   await new Promise((resolve) => server.close(resolve));
 }
@@ -313,7 +384,11 @@ const current = Object.fromEntries(allPages.map((page) => [
   (currentEntries[page] || []).map((entry) => entry.text).sort((a, b) => a.localeCompare(b, 'ja')),
 ]));
 
-if (UPDATE) {
+if (pageFailures.length) {
+  console.error(`❌ EN 可視日本語検査で ${pageFailures.length}ページ失敗`);
+  pageFailures.forEach(({ page, error }) => console.error(`  ${page}: ${error}`));
+  process.exitCode = 1;
+} else if (UPDATE) {
   fs.mkdirSync(path.dirname(BASELINE_PATH), { recursive: true });
   fs.writeFileSync(BASELINE_PATH, `${JSON.stringify(current, null, 2)}\n`);
   console.log(`✅ EN 可視日本語の基準を更新: ${allPages.length}ページ / ${Object.values(current).reduce((total, values) => total + values.length, 0)}件`);

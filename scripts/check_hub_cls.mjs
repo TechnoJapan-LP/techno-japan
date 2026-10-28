@@ -46,6 +46,7 @@ const MIME = {
 };
 const COMPRESSIBLE = new Set(['.html', '.js', '.css', '.json', '.svg', '.xml']);
 const CLS_LIMIT = 0.05;
+const CDP_TIMEOUT_MS = 20000;
 const DOWNLOAD = 1600 * 1024 / 8;
 const UPLOAD = 750 * 1024 / 8;
 const startedAt = Date.now();
@@ -76,16 +77,41 @@ function freePort() {
 
 function cdp(ws, method, params = {}) {
   const id = ++cdp.nextId;
-  ws.send(JSON.stringify({ id, method, params }));
   return new Promise((resolve, reject) => {
-    const onMessage = (event) => {
-      const message = JSON.parse(event.data);
-      if (message.id !== id) return;
+    let settled = false;
+    const timer = setTimeout(() => {
+      if (settled) return;
+      settled = true;
       ws.removeEventListener('message', onMessage);
-      if (message.error) reject(new Error(JSON.stringify(message.error)));
-      else resolve(message.result);
+      const error = new Error(`CDPタイムアウト: ${method}`);
+      error.code = 'CDP_TIMEOUT';
+      reject(error);
+    }, CDP_TIMEOUT_MS);
+    const finish = (callback, value) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      ws.removeEventListener('message', onMessage);
+      callback(value);
+    };
+    const onMessage = (event) => {
+      let message;
+      try {
+        message = JSON.parse(event.data);
+      } catch (error) {
+        finish(reject, error);
+        return;
+      }
+      if (message.id !== id) return;
+      if (message.error) finish(reject, new Error(JSON.stringify(message.error)));
+      else finish(resolve, message.result);
     };
     ws.addEventListener('message', onMessage);
+    try {
+      ws.send(JSON.stringify({ id, method, params }));
+    } catch (error) {
+      finish(reject, error);
+    }
   });
 }
 cdp.nextId = 0;
@@ -170,6 +196,28 @@ const server = http.createServer((request, response) => {
   response.end(body);
 });
 
+const activeBrowsers = new Set();
+const activeProfiles = new Set();
+let cleanupDone = false;
+function cleanupSync() {
+  if (cleanupDone) return;
+  cleanupDone = true;
+  for (const child of activeBrowsers) {
+    if (child.exitCode === null && child.signalCode === null) child.kill('SIGKILL');
+  }
+  if (server.listening) server.close();
+  for (const profileDir of activeProfiles) removeProfileDir(profileDir);
+}
+process.on('exit', cleanupSync);
+process.on('SIGTERM', () => {
+  cleanupSync();
+  process.exit(128 + 15);
+});
+process.on('SIGINT', () => {
+  cleanupSync();
+  process.exit(128 + 2);
+});
+
 const observerScript = `(() => {
   const state = { value: 0, entries: [] };
   window.__tjCls = state;
@@ -212,10 +260,12 @@ await new Promise((resolve, reject) => {
 
 const debugPort = await freePort();
 const profileDir = fs.mkdtempSync(path.join(os.tmpdir(), 'tj-hub-cls-'));
+activeProfiles.add(profileDir);
 const browser = spawn(browserPath, [
   '--headless=new', '--no-sandbox', '--disable-gpu', '--no-first-run', '--disable-extensions',
   `--user-data-dir=${profileDir}`, `--remote-debugging-port=${debugPort}`, 'about:blank',
 ], { stdio: 'ignore' });
+activeBrowsers.add(browser);
 let ws;
 const failures = [];
 let checked = 0;
@@ -308,6 +358,8 @@ try {
 } finally {
   if (ws) ws.close();
   await stopProcess(browser);
+  activeBrowsers.delete(browser);
+  activeProfiles.delete(profileDir);
   await new Promise((resolve) => server.close(resolve));
   removeProfileDir(profileDir);
   console.log(`⏱ 所要時間: ${((Date.now() - startedAt) / 1000).toFixed(1)}秒`);
