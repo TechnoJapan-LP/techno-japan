@@ -1,27 +1,27 @@
 {
-  "generatedAt": "2026-10-27T22:26:07.334Z",
+  "generatedAt": "2026-10-28T22:52:18.260Z",
   "propertyId": "535755449",
   "periods": {
     "current": {
-      "startDate": "2026-10-01",
-      "endDate": "2026-10-28",
+      "startDate": "2026-10-02",
+      "endDate": "2026-10-29",
       "label": "直近28日"
     },
     "previous": {
-      "startDate": "2026-09-03",
-      "endDate": "2026-09-30",
+      "startDate": "2026-09-04",
+      "endDate": "2026-10-01",
       "label": "前の28日"
     }
   },
   "current": {
-    "sessions": 85,
-    "totalUsers": 83,
-    "share": 0.03217259651778955,
+    "sessions": 86,
+    "totalUsers": 84,
+    "share": 0.03255109765329296,
     "bySource": [
       {
         "source": "chatgpt.com",
-        "sessions": 83,
-        "totalUsers": 81
+        "sessions": 84,
+        "totalUsers": 82
       },
       {
         "source": "gemini.google.com",
@@ -81,6 +81,11 @@
         "totalUsers": 3
       },
       {
+        "landingPage": "/index.html",
+        "sessions": 3,
+        "totalUsers": 3
+      },
+      {
         "landingPage": "(not set)",
         "sessions": 2,
         "totalUsers": 2
@@ -97,11 +102,6 @@
       },
       {
         "landingPage": "/en/articles/sawagi-festival-2026-info.html",
-        "sessions": 2,
-        "totalUsers": 2
-      },
-      {
-        "landingPage": "/index.html",
         "sessions": 2,
         "totalUsers": 2
       },
@@ -132,7 +132,7 @@
       }
     ],
     "allSessions": 2642,
-    "allTotalUsers": 2187
+    "allTotalUsers": 2171
   },
   "previous": {
     "sessions": 0,

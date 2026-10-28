@@ -1,17 +1,17 @@
 # AI経由の流入
 
-取得日時: 2026-10-27T22:26:07.334Z
+取得日時: 2026-10-28T22:52:18.260Z
 
 | 期間 | AIセッション | 全体セッション | AI割合 |
 |---|---:|---:|---:|
-| 直近28日（2026-10-01〜2026-10-28） | 85 | 2642 | 3.22% |
-| 前の28日（2026-09-03〜2026-09-30） | 0 | 0 | 0.00% |
+| 直近28日（2026-10-02〜2026-10-29） | 86 | 2642 | 3.26% |
+| 前の28日（2026-09-04〜2026-10-01） | 0 | 0 | 0.00% |
 
 ## 直近28日：参照元別
 
 | 参照元 | セッション | ユーザー |
 |---|---:|---:|
-| chatgpt.com | 83 | 81 |
+| chatgpt.com | 84 | 82 |
 | gemini.google.com | 2 | 2 |
 
 ### 直近28日：ランディングページ上位20
@@ -28,11 +28,11 @@
 | /en/articles/denki-bodhisattva-2026-info.html | 3 | 3 |
 | /en/articles/japan-festival-2026-october.html | 3 | 3 |
 | /festivals/yagura.html | 3 | 3 |
+| /index.html | 3 | 3 |
 | (not set) | 2 | 2 |
 | /articles/otsukimi-2026-info.html | 2 | 2 |
 | /en/ | 2 | 2 |
 | /en/articles/sawagi-festival-2026-info.html | 2 | 2 |
-| /index.html | 2 | 2 |
 | /articles/forest-sound-camp-info.html | 1 | 1 |
 | /articles/rebirth-2026-info.html | 1 | 1 |
 | /articles/synapse-2026-info.html | 1 | 1 |
