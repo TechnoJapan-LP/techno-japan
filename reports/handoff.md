@@ -14353,3 +14353,45 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 
 - フェス詳細の ACCESS MAP はモックどおりの飾りの枠（格子＋点＋Google Maps のリンク）で、実際の地図が無い。ユーザー指摘「真っ暗」→ VENUES 一覧と同じ CARTO の地図を出す実装を次に行う。
+
+### 2026-10-28 フェス詳細の ACCESS に実際の地図（VENUES と同じ CARTO の黒い地図）（Claude 検証・コミット）
+
+### 実施
+
+- ユーザー指摘「Festival 詳細の ACCESS MAP が表示されていない。真っ暗になってる」。ACCESS はモックどおりの飾りの枠で、地図の埋め込みは元から無かった。Codex で実装（`tmp/spec-festival-map.md` → 手直し `tmp/spec-festival-map-fix.md` → 検査の測り方 `tmp/spec-festival-map-check.md`）。
+  - 座標のあるフェス（JA/EN 各 55 件）: ACCESS が画面に近づいたら Leaflet を読み込み、CARTO dark_all（読めなければ OSM を暗く加工）を表示。開催地に赤い点。PC は拡大縮小・ドラッグ可、スマホは動かせない（ページのスクロールを妨げない）。「Google Maps ↗」は地図の右上（右下は出典表示）。
+  - 座標の無いフェス（JA/EN 各 36 件）: 変更前とまったく同じ枠（会場名で検索する Google マップのリンク付き）。地図の部品も読み込まない。
+  - Leaflet を読み込む処理を `venues-phase3.js` から `map-tiles.js` へ移し、VENUES 一覧とフェス詳細で共有（`map-tiles.js?v=2`、`venues-phase3.js?v=9`、`festival-map.js?v=1`、`detail.css?v=91`、cms.js 194 は記事プレビューの detail.css の版のみ）。
+  - 新しい検査 `scripts/check_festival_access_map.mjs` を preflight に追加。
+- 設計の理由と、検査の測り方を2回誤った経緯は AUDIT §9-110。
+
+### コミット
+
+- このエントリを含むコミット（redesign/magazine → main）。
+
+### 検証
+
+- 手元（127.0.0.1:8095、CDP、`tmp/fmapverify.mjs`）64/64: PC 1440 / 1280・スマホ 390、JA/EN。地図が出る（localhost は CARTO が 403 → OSM を暗く加工。`#tj-map-osm-dark` が効いている）、赤い点 1 つ（押せない・フォーカスしない）、「Google Maps ↗」は右上・高さ 46px・押せる・出典表示とも拡大縮小ボタンとも重ならない、出典 10px、スマホはドラッグ不可で `touch-action: auto`、地図の読み込み中のずれ 0、横のはみ出しなし、エラーなし。スマホでは開いた時点で Leaflet を読み込まない（ACCESS は 1,516px 下）。座標の無い asagiri-jam は元の枠とリンクのまま、地図の部品の通信なし。目視（PC・スマホのスクリーンショット）。
+- `check_festival_access_map.mjs` 成功（ready 6 件、座標あり 110 / なし 72 ページ、遅延確認 2 回）。わざと壊す試験 3/3 で失敗を検出（リンクを右下に戻す→出典と重なり／目印を押せる状態に→検出／遅延読み込みを外す→スマホで検出）。`check_venue_maps.mjs`（22 ピン・都市の絞り込み）成功。
+- build 冪等性（601）・版数・回帰・CMS プレビュー・`git diff --check`・JA/EN 行数一致（Codex 実行）。
+- 変更前の本番を測った値（比較用、CDP の通信量で外部ドメインも含む、キャッシュ無効）: labyrinth PC 開いた時 1,311KB／ACCESS まで下げた後 1,614KB、スマホ 1,158KB／1,804KB。ala PC 911KB／1,045KB、スマホ 910KB／1,143KB。Lighthouse（モバイル・CI と同じ設定、2回）: ala 0.62 / 0.87、labyrinth 0.59 / 0.80（1回目はどちらも遅く、ばらつきが大きい）。
+- `bash scripts/preflight.sh`: pre-push で省略なしに実行（push が通った＝全件成功）。
+
+### 変更したパターン
+
+- 地図・外部タイルのように重い部品は、画面に近づいてから読み込む（`IntersectionObserver`）。
+- 地図の上に置く独自のリンクは、出典表示（右下）と拡大縮小ボタン（左上）を避けて右上に置く。
+- 生成物の HTML を条件で出し分けるときは、条件から外れる側（今回は座標の無いフェス）が変更前と同じかを差分で確かめる。
+
+### 未確認の類似パターン
+
+- VENUES 一覧の地図の出典表示は 9px のまま（サイトの決まりは 10px 以上。今回は変えていない）。
+- `map.html`（旧地図ページ）は `map-tiles.js?v=2` に上げただけで、表示は未確認。
+- iPhone 実機での地図（動かせないこと・スクロールできること）は未確認（headless の模擬のみ）。
+- 本番の CARTO の地図（キーはドメイン制限付きなので本番でしか出ない）は push 後に確認する。
+
+### 次の担当への注意・判断待ち
+
+- **cms.js 194: 実機未確認**。push 後に Publish pipeline を流し、CMS を `?cb=` 付きで開いて記事のプレビュー（`writeArticleSimplePreview_`）が例外なく動くことを確かめる。ユーザーには Cmd+Shift+R を伝える。
+- 座標の無いフェス 36 件（asagiri-jam axiom balance body-soul bonna-pot brightness car-multimedia delta-commit dots dream-festival e-groove ensou euphoria gampeki halola-camp ishinoko iyasaka-rave-festival lab midnight-cult-rave mirrorball-village music mutek one-music-camp one-park-festival one-park-riverfes parallel-world pure-rave rare-groove samsara signal sub-tide takarajima-beach-cleaning-party topia wonderfruit-kyoto wormhole yamauto）は地図が出ない。CMS で開催回の座標を入れれば出る（データの判断はユーザー）。
+- push 後: 本番で同じ方法で重さと Lighthouse を測り直し、上の値と並べる。

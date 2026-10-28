@@ -1,6 +1,46 @@
-/* Shared Leaflet tile setup for map.html and the VENUES hub. */
+/* Shared Leaflet loader and tile setup for map.html, the VENUES hub, and detail maps. */
 (function () {
   'use strict';
+
+  var leafletLoadPromise = null;
+  var leafletCssReady = false;
+
+  function ensureLeafletCss() {
+    if (leafletCssReady || document.querySelector('link[data-tj-leaflet], link[href*="/vendor/leaflet-1.9.4/leaflet.css"]')) {
+      leafletCssReady = true;
+      return Promise.resolve();
+    }
+    return new Promise(function (resolve) {
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = '/vendor/leaflet-1.9.4/leaflet.css?v=2';
+      link.dataset.tjLeaflet = '1';
+      link.onload = function () { leafletCssReady = true; resolve(); };
+      link.onerror = function () { resolve(); };
+      document.head.appendChild(link);
+    });
+  }
+
+  function tjLoadLeaflet() {
+    if (window.L) return Promise.resolve(window.L);
+    if (leafletLoadPromise) return leafletLoadPromise;
+    leafletLoadPromise = ensureLeafletCss().then(function () {
+      return new Promise(function (resolve, reject) {
+        var script = document.createElement('script');
+        var timer = setTimeout(function () { reject(new Error('Leaflet script timed out')); }, 10000);
+        script.src = window.TJ_LEAFLET_SRC || '/vendor/leaflet-1.9.4/leaflet.js?v=2';
+        script.onload = function () {
+          clearTimeout(timer);
+          window.L ? resolve(window.L) : reject(new Error('Leaflet did not initialize'));
+        };
+        script.onerror = function () { clearTimeout(timer); reject(new Error('Leaflet script failed to load')); };
+        document.head.appendChild(script);
+      });
+    });
+    return leafletLoadPromise;
+  }
+
+  window.tjLoadLeaflet = tjLoadLeaflet;
 
   /* Public CARTO key. The key is restricted to techno-japan.media in CARTO's
      dashboard; the free plan is used within its monthly allowance. Attribution
@@ -10,6 +50,16 @@
   var OSM_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
   var ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors, &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>';
   var OSM_ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors';
+
+  function mapRoot(map) {
+    var container = map.getContainer();
+    return container.closest('.tj-map') || container;
+  }
+
+  function markOsm(map) {
+    map.getContainer().classList.add('tj-map-osm');
+    mapRoot(map).classList.add('tj-map-osm');
+  }
 
   window.tjAddMapTiles = function (map, options) {
     options = options || {};
@@ -53,7 +103,7 @@
       layer.on('tileerror', function () {
         tileErrors += 1;
         if (!usingOsm && loadedTiles === 0 && tileErrors >= 3) {
-          map.getContainer().classList.add('tj-map-osm');
+          markOsm(map);
           map.removeLayer(layer);
           install(true);
         } else if (usingOsm && loadedTiles === 0 && tileErrors >= 6) {
@@ -71,7 +121,7 @@
         if (loadedTiles > 0) ready();
         else if (usingOsm) offline('tile timeout');
         else {
-          map.getContainer().classList.add('tj-map-osm');
+          markOsm(map);
           if (layer) map.removeLayer(layer);
           install(true);
           timer = setTimeout(function () {

@@ -14,8 +14,6 @@
   var mapSurface = document.getElementById('venue-map-surface');
   var leafletMap = null;
   var leafletMarkers = {};
-  var leafletLoadPromise = null;
-  var leafletCssReady = false;
   var mapAlignFrame = 0;
   var mapToggle = root.querySelector('[data-venues-map-toggle]');
   var mapOpen = false;
@@ -347,34 +345,6 @@
     updateMapLabels(current.pins.length, current.featured);
     setActivePin(current.featured && current.featured.id);
   }
-  function ensureLeafletCss() {
-    if (leafletCssReady || document.querySelector('link[data-tj-leaflet], link[href*="/vendor/leaflet-1.9.4/leaflet.css"]')) { leafletCssReady = true; return Promise.resolve(); }
-    return new Promise(function (resolve) {
-      var link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = '/vendor/leaflet-1.9.4/leaflet.css?v=2';
-      link.dataset.tjLeaflet = '1';
-      link.onload = function () { leafletCssReady = true; resolve(); };
-      link.onerror = function () { resolve(); };
-      document.head.appendChild(link);
-    });
-  }
-  function tjLoadLeaflet() {
-    if (window.L) return Promise.resolve(window.L);
-    if (leafletLoadPromise) return leafletLoadPromise;
-    leafletLoadPromise = ensureLeafletCss().then(function () {
-      return new Promise(function (resolve, reject) {
-        var script = document.createElement('script');
-        var timer = setTimeout(function () { reject(new Error('Leaflet script timed out')); }, 10000);
-        script.src = window.TJ_LEAFLET_SRC || '/vendor/leaflet-1.9.4/leaflet.js?v=2';
-        script.onload = function () { clearTimeout(timer); window.L ? resolve(window.L) : reject(new Error('Leaflet did not initialize')); };
-        script.onerror = function () { clearTimeout(timer); reject(new Error('Leaflet script failed to load')); };
-        document.head.appendChild(script);
-      });
-    });
-    return leafletLoadPromise;
-  }
-  window.tjLoadLeaflet = tjLoadLeaflet;
   function initLeaflet() {
     if (!window.L || leafletMap || !mapSurface) return;
     mapSurface.classList.remove('tjmap-local');

@@ -144,7 +144,7 @@ enFallback.addEventListener('load', async () => {
   setResult('enFallbackResult', value.status === 'offline' && value.pins === expected && !japanese ? 'pass' : 'fail', JSON.stringify(value));
 });
 </script></body></html>"""
-VENUE_TILE_TEST_HTML = """<!doctype html><html><head><link rel="stylesheet" href="/vendor/leaflet-1.9.4/leaflet.css?v=2"></head><body><div id="map" style="width:320px;height:240px"></div><script src="/vendor/leaflet-1.9.4/leaflet.js?v=2"></script><script src="/map-tiles.js?v=1"></script><script>
+VENUE_TILE_TEST_HTML = """<!doctype html><html><head><link rel="stylesheet" href="/vendor/leaflet-1.9.4/leaflet.css?v=2"></head><body><div id="map" style="width:320px;height:240px"></div><script src="/vendor/leaflet-1.9.4/leaflet.js?v=2"></script><script src="/map-tiles.js?v=2"></script><script>
 const map = L.map('map', {center:[35.6,139.7], zoom:8});
 let calls = 0;
 L.tileLayer = () => {

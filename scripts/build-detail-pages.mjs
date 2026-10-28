@@ -58,7 +58,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 90;
+const DETAIL_CSS_VERSION = 91;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -82,6 +82,8 @@ const SEARCH_JS_VERSION = 9;
 const LANG_TOGGLE_VERSION = 3;
 const MAGAZINE_JS_VERSION = 8;   // 2026-10-28 preferred source link in newsletter blocks
 const FAVORITES_JS_VERSION = 4;
+const MAP_TILES_JS_VERSION = 2;
+const FESTIVAL_MAP_JS_VERSION = 1;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
 const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');
 const ARTISTS_PATH = path.join(LP_DIR, 'data', 'artists.json');
@@ -2646,9 +2648,22 @@ function festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, allArt
   const statusLabel = ended ? 'ARCHIVE' : 'UPCOMING';
   const statusClass = ended ? '' : 'red';
   const typeLabel = f.type === 'rave' ? 'RAVE' : 'FESTIVAL';
-  const locationMapHtml = mapUrl
-    ? `<a class="festival-map" href="${esc(safeUrl(mapUrl))}" target="_blank" rel="noopener"><span class="festival-map-dot" aria-hidden="true"></span><span class="mono">Google Maps ↗</span></a>`
-    : `<div class="festival-map"><span class="festival-map-dot" aria-hidden="true"></span></div>`;
+  const locationMapHtml = hasGeo
+    ? `<div class="festival-map tj-map" data-lat="${esc(String(Number(currentEdition.LAT)))}" data-lng="${esc(String(Number(currentEdition.LNG)))}" data-map-label="${esc(location || name)}" data-map-status="loading" aria-label="${esc(lang === 'en' ? 'Map for ' + (location || name) : (location || name) + ' の地図')}">
+        <div class="festival-map-surface"></div>
+        <svg class="tj-map-filter-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
+          <filter id="tj-map-osm-dark" color-interpolation-filters="sRGB">
+            <feColorMatrix type="matrix" values="-0.494 -0.117 0.447 0 0.209  -0.640 -0.152 0.580 0 0.255  -0.753 -0.179 0.682 0 0.290  0 0 0 1 0"/>
+          </filter>
+        </svg>
+        <span class="festival-map-dot festival-map-fallback-dot" aria-hidden="true"></span>
+        ${mapUrl ? `<a class="festival-map-link mono" href="${esc(safeUrl(mapUrl))}" target="_blank" rel="noopener">Google Maps ↗</a>` : ''}
+      </div>
+      <script src="/map-tiles.js?v=${MAP_TILES_JS_VERSION}" defer></script>
+      <script src="/festival-map.js?v=${FESTIVAL_MAP_JS_VERSION}" defer></script>`
+    : mapUrl
+      ? `<a class="festival-map" href="${esc(safeUrl(mapUrl))}" target="_blank" rel="noopener"><span class="festival-map-dot" aria-hidden="true"></span><span class="mono">Google Maps ↗</span></a>`
+      : `<div class="festival-map"><span class="festival-map-dot" aria-hidden="true"></span></div>`;
   const currentLineupPanel = `<section class="festival-tab-panel festival-program-section" id="lineup" data-festival-panel="lineup" role="tabpanel" aria-labelledby="festival-tab-lineup">
       <div class="festival-panel-heading"><h2 class="disp">Lineup</h2><span class="mono">${esc(editionLabel(editionIdentifier(currentEdition)) || '')}</span></div>
       ${lineupGroups || `<p class="festival-empty mono">${lang === 'en' ? 'Lineup information is not available.' : '出演者情報はありません。'}</p>`}
@@ -2919,7 +2934,6 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, allArt
 
   const endedNotice = ended ? (lang === 'en' ? "The next edition hasn't been announced yet. We'll update this page." : '次回の開催は未発表です。決まり次第このページで更新します。') : '';
   const body = festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, allArtistsById, lang, name, canonical, summary, faqItems, relatedHtml, relatedArticles: related, lineupEdition, ended, endedNotice, allFestivals, editionsByFestival, modified });
-
   const faqLd = faqItems.length ? {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
