@@ -14432,3 +14432,37 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 - 座標の無いフェス 36 件は ACCESS に会場名だけが出る。地図を出したいフェスは CMS で開催回の座標（LAT / LNG）を入れて Publish する（データの判断はユーザー）。
 - cms.js 194: Publish pipeline（run 40684491624、2026-10-28 12:01 開始）は成功、データの変化なしでコミットは増えていない。CMS の記事プレビューも本番で確認済み（上の検証）。前のエントリの「実機未確認」はこれで解消。CMS を開くときは Cmd+Shift+R。
+
+### 2026-10-28 VENUES 一覧の地図: 出典表示を 10px に・下の文字が出典に重なっていたのを解消（Claude 検証・コミット）
+
+### 実施
+
+- ユーザー「進めて」（前の報告の「VENUES 一覧の地図の出典表示が 9px のまま。そろえる場合はお知らせください」への返答）。Codex で修正（`tmp/spec-venues-attribution.md`、`tmp/spec-venues-labels.md`）。
+  - `venues-phase3.css` の `.leaflet-control-attribution` を 9px → 10px（フェス詳細の地図とそろえる。AUDIT §9-105 のスマホで 10px 未満をなくす決まり）。`venues-phase3.css?v=8`。
+  - 確認中に、地図の下の「TAP A PIN · …」「Open full map →」（`bottom:12px`）が出典表示に重なっているのを見つけた（本番の 9px のときから。PC は右の1つ、スマホは2つとも）→ `bottom:30px` に上げた。
+  - `check_venue_maps.mjs` に「地図の下半分のラベルの下端 ≦ 出典表示の上端」「出典表示 10px 以上」を追加（縦の位置関係で見るので画面幅によらない）。
+
+### コミット
+
+- このエントリを含むコミット（redesign/magazine → main）。
+
+### 検証
+
+- 手元（CDP、`tmp/vattr2.mjs`）9/9: PC 1440・スマホ 390（JA/EN）で出典 10px・地図の中・1行、重なり 0、横のはみ出しなし。同じ検査で本番（9px）は重なりあり（前からの問題だったことの確認）。目視（PC・スマホ）。
+- `check_venue_maps.mjs` 成功（22 ピン・絞り込み・出典 10px・ラベルの下端 872 ≦ 出典の上端 884）。わざと「Open full map →」を `bottom:12px` に戻すと失敗（890 > 884）を確認、戻した後は元どおり。
+- build 冪等性（601）・版数・回帰・`git diff --check`・JA/EN 行数一致（Codex 実行）。
+- `bash scripts/preflight.sh`: pre-push で省略なしに実行（push が通った＝全件成功）。
+
+### 変更したパターン
+
+- 地図の上に重ねる文字は、地図の部品（出典表示・拡大縮小ボタン）の位置を避けて置く（フェス詳細の地図と同じ考え方）。
+
+### 未確認の類似パターン
+
+- 「Open full map →」（スマホで高さ約 23px）は押せる範囲 44px の決まりを満たしていない（今回は位置だけ直した）。
+- CMS の地図（`cms.css` の `.loc-map .leaflet-control-attribution`）は 9px のまま（公開ページではないため対象外）。
+- `map.html`（全画面の地図）の出典表示・重なりは未確認。
+
+### 次の担当への注意・判断待ち
+
+- なし（本番の確認は push 後に行う）。

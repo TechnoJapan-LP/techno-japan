@@ -87,7 +87,7 @@ html.tj-venues-hydrating:not(.tj-venues-rendered) .venues-grid-section {
 @keyframes venue-pin-pulse { 0%,100% { box-shadow: 0 0 0 4px rgba(255,45,45,.18); } 50% { box-shadow: 0 0 0 12px rgba(255,45,45,0); } }
 .leaflet-container { background: #080808 !important; font-family: var(--font-mono); }
 .leaflet-control-zoom { display: none !important; }
-.leaflet-control-attribution { background: rgba(8,8,8,.7) !important; color: var(--text-a60) !important; font-family: var(--font-mono); font-size: 9px; letter-spacing: .04em; padding: 2px 6px; }
+.leaflet-control-attribution { background: rgba(8,8,8,.7) !important; color: var(--text-a60) !important; font-family: var(--font-mono); font-size: 10px; letter-spacing: .04em; padding: 2px 6px; }
 .leaflet-control-attribution a { color: var(--text-a80) !important; }
 
 @media (max-width: 900px) {
