@@ -76,11 +76,11 @@ const ARTICLE_FX_CSS_VERSION = 18;
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
 const COMMON_JS_VERSION = 22;   // 2026-10-27 synchronous initial cursor ring position
-const COMMON_CSS_VERSION = 56;   // 2026-10-27 remove page and nav fade-in
+const COMMON_CSS_VERSION = 58;   // 2026-10-28 preferred source link sizing
 const DATA_HUB_VERSION = 11;
 const SEARCH_JS_VERSION = 9;
 const LANG_TOGGLE_VERSION = 3;
-const MAGAZINE_JS_VERSION = 7;
+const MAGAZINE_JS_VERSION = 8;   // 2026-10-28 preferred source link in newsletter blocks
 const FAVORITES_JS_VERSION = 4;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
 const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');
@@ -89,6 +89,7 @@ const AUTHORS_PATH = path.join(LP_DIR, 'data', 'authors.json');
 const IMAGE_DIMENSIONS_PATH = path.join(LP_DIR, 'image-dimensions.json');
 const ARTICLE_IMAGE_MAP = loadArticleImageMap(path.join(__dirname, '..'));
 const BASE = 'https://techno-japan.media';
+const PREFERRED_SOURCE_URL = 'https://www.google.com/preferences/source?q=techno-japan.media';
 const NEWSLETTER_CONFIG_PATH = path.join(__dirname, 'newsletter-config.json');
 const NEWSLETTER_CONFIG = fs.existsSync(NEWSLETTER_CONFIG_PATH)
   ? JSON.parse(fs.readFileSync(NEWSLETTER_CONFIG_PATH, 'utf8'))
@@ -1156,19 +1157,25 @@ function footerHtml(lang) {
   const submissionHref = lang === 'en' ? '/en/submit.html' : '/submit.html';
   const submissionLabel = 'APPLY';
   const favoritesHref = lang === 'en' ? '/en/favorites.html' : '/favorites.html';
+  const preferredSourceLabel = lang === 'en'
+    ? 'Add TECHNO JAPAN as a preferred source on Google'
+    : 'Google で TECHNO JAPAN を優先ソースに追加';
   return `<!-- tj:footer:start -->
 <footer>
   <div class="footer-top">
     <div class="footer-logo"><img src="/images/logo-wordmark.png?v=1" alt="TECHNO JAPAN" width="158" height="13" loading="lazy" decoding="async"></div>
-    <div class="footer-links">
-      <a href="${navLink(lang, 'news.html')}">NEWS</a>
-      <a href="${navLink(lang, 'festivals.html')}">FESTIVALS</a>
-      <a href="${navLink(lang, 'artists.html')}">ARTISTS</a>
-      <a href="${navLink(lang, 'venues.html')}">VENUES</a>
-      <a href="${navLink(lang, 'about.html')}">ABOUT</a>
-      <a href="${submissionHref}">${submissionLabel}</a>
-      <a href="${lang === 'en' ? '/en/writers.html' : '/writers.html'}">WRITER</a>
-      <a href="${favoritesHref}">FAVORITES</a>
+    <div class="footer-link-group">
+      <div class="footer-links">
+        <a href="${navLink(lang, 'news.html')}">NEWS</a>
+        <a href="${navLink(lang, 'festivals.html')}">FESTIVALS</a>
+        <a href="${navLink(lang, 'artists.html')}">ARTISTS</a>
+        <a href="${navLink(lang, 'venues.html')}">VENUES</a>
+        <a href="${navLink(lang, 'about.html')}">ABOUT</a>
+        <a href="${submissionHref}">${submissionLabel}</a>
+        <a href="${lang === 'en' ? '/en/writers.html' : '/writers.html'}">WRITER</a>
+        <a href="${favoritesHref}">FAVORITES</a>
+      </div>
+      <a class="preferred-source preferred-source-footer" href="${PREFERRED_SOURCE_URL}" target="_blank" rel="noopener">${preferredSourceLabel} ↗</a>
     </div>
     <span class="footer-social"><a href="https://www.instagram.com/techno.japan_/" target="_blank" rel="noopener">INSTAGRAM</a><a href="https://www.threads.net/@techno.japan_" target="_blank" rel="noopener">THREADS</a></span>
   </div>
@@ -1231,7 +1238,8 @@ function normalizeStaticChrome(fileName, lang) {
     : replaceElement(next, 'footer', footerStart, footer);
   next = next.replace(/(<\/footer>)(?:\r?\n[ \t]*){2,}(?=<script\b)/g, '$1\n');
   next = next.replace(/href="(?:\.\/|\/)?common\.css\?v=\d+"/g, `href="/common.css?v=${COMMON_CSS_VERSION}"`)
-    .replace(/(?:src|href)="(?:\.\/)?common\.js\?v=\d+"/g, (m) => m.replace(/"[^"/]*common\.js/, `"/common.js`).replace(/\?v=\d+/, `?v=${COMMON_JS_VERSION}`));
+    .replace(/(?:src|href)="(?:\.\/)?common\.js\?v=\d+"/g, (m) => m.replace(/"[^"/]*common\.js/, `"/common.js`).replace(/\?v=\d+/, `?v=${COMMON_JS_VERSION}`))
+    .replace(/src="(?:\.\/|\/)?magazine\.js\?v=\d+"/g, `src="/magazine.js?v=${MAGAZINE_JS_VERSION}"`);
   next = next.replace(/((?:src|href)=")(?!\/|https?:|#|data:)([^"\s]+\.(?:js|css)(?:\?v=\d+)?)(")/g, '$1/$2$3');
   // 旧版の累積分も含め、手書きページの連続空行は最大2行に揃える。
   next = next.replace(/(?:\r?\n[ \t]*){3,}/g, '\n\n');
@@ -1396,6 +1404,14 @@ function articleNewsletterHtml(canonical, lang = 'ja') {
       <div class="newsletter-desc">${isEn ? 'Upcoming festivals and new stories in one email. Free, unsubscribe anytime.' : '来月の開催予定と新着記事をまとめてメールで届けます。無料、いつでも解除できます。'}</div>
       ${newsletterFormHtml({ canonical, lang })}
     </section>`;
+}
+
+function articlePreferredSourceHtml(lang = 'ja') {
+  const isEn = lang === 'en';
+  return `<div class="preferred-source preferred-source-article">
+      <span class="preferred-source-label">${isEn ? 'Google Search' : 'Google 検索'}</span>
+      <a href="${PREFERRED_SOURCE_URL}" target="_blank" rel="noopener">${isEn ? 'See more TECHNO JAPAN stories in Google Search' : 'Google 検索で TECHNO JAPAN の記事を見つけやすくできます'} ↗</a>
+    </div>`;
 }
 
 function relatedStoryCardsHtml(items, lang, { forceEnglishPath = false, compactDate = false, wide = false, grid = false, heading = 'RELATED STORIES', clauseBreakSub = false } = {}) {
@@ -1831,6 +1847,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
         <div class="article-excerpt">${esc(L.excerpt || '')}</div>
         <div class="article-body">${renderedBody}</div>
         <div class="article-share">${festivalShareButtons(L.title, canonical, lang)}</div>
+        ${articlePreferredSourceHtml(lang)}
       </div>
       <aside class="article-sidebar">
         <dl class="article-specs">

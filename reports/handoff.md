@@ -14249,3 +14249,73 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - cms.js 191: push 後に `gh workflow run "Publish pipeline"`。CMS を開くときは Cmd+Shift+R。
 - データに日本語の固有名が増えると `check_en_visible_japanese` が止まる。中身を確認し、固有名なら `--update` で基準に入れる。
 - 次の作業: SEO / AIO / LLMO の対策（ユーザー依頼 2026-10-28、調査結果は会話と次のエントリ）。
+
+### 2026-10-28 優先ソース案内リンクの文字サイズ・タップ領域修正（Codex）
+
+### 実施
+
+- `LP/common.css` の優先ソース基準9pxを廃止。フッター案内を10px mono・48px領域・既存フッターリンク相当の色/hoverに、記事末尾リンクを本文13px・`--text-a80`・44px領域に修正。フッター長文は390px幅で折り返す指定を追加。
+- `COMMON_CSS_VERSION` と参照を58へ統一。記事プレビューの `cms.js` と `cms.html` も更新。ニュースレター欄の指定は変更していない。
+
+### コミット
+
+- 未コミット（ユーザー指定により commit / push なし）。
+
+### 検証
+
+- `node scripts/build-detail-pages.mjs` 成功、`node scripts/check_build_idempotent.mjs` 成功（601ファイル差分なし）。
+- 版数、CMS記事プレビュー、優先ソース、回帰、`git diff --check` はすべて成功。
+- 実ブラウザ確認はClaude実施予定（**実機未確認**）。
+
+### 変更したパターン
+
+- `.preferred-source-footer`、`.preferred-source-label`、`.preferred-source-article a` の文字サイズ・書体・タップ領域・折り返し。
+- `common.css` の版数参照（58）、CMSプレビュー参照、`cms.js` 版数（193）。
+
+### 未確認の類似パターン
+
+- 実ブラウザでのPC / 390px表示、クリック範囲、記事末尾リンクの視認性は未確認。
+- ニュースレター欄は変更なし・検査済み。
+
+### 次の担当への注意・判断待ち
+
+- ClaudeがPCと390pxでフッター案内、記事末尾案内を強制リロード後に確認する。問題がなければ既存の未コミット変更と併せてコミット可。
+
+### 2026-10-28 SEO / AIO / LLMO 対策: 調査・優先ソースのリンク・AI 回答ログ・毎週の本番点検（Claude 検証・コミット）
+
+### 実施
+
+- ユーザー依頼「最新の SEO や AIO、LLMO の対策をインプットして対策をしていきたい」→ 指定の URL 10 件を調査（調査用エージェント。x.com の 3 件はログインが必要で読めず）。要点と方針は `docs/aio/AIO_LLMO_2026-10-28.md`。旧指示書 `GEO_TECHNO_JAPAN.md`（Next.js 前提）に新しい文書への案内を追記。
+- ユーザー「4〜6は作成して」（実装は Codex、`tmp/spec-seo-a/b/c/d.md`）:
+  - **4. 優先ソースの案内リンク**（`https://www.google.com/preferences/source?q=techno-japan.media`）を、全ページのフッター・記事の末尾（JA/EN）・サイト内のニュースレター欄（magazine.js）・メルマガの下書き（newsletter-draft.mjs）に置いた。公式の JS ボタンは CSP の変更が要るので使わない。文字はフッター 10px・当たり判定 48px（既存のフッターのリンクと同じ）、記事の末尾 13px・44px。検査 `scripts/check_preferred_source.mjs`（URL の完全一致と配置）。
+  - **5. AI 回答ログ**（claude.ai のアーティファクト https://claude.ai/artifact/1hHBW51iJjWu2qpiJ2xt15 、非公開、db に保存）: 質問 40 問（日英各 20、情報・比較・おすすめ・行動）、毎月は★10 問 × ChatGPT・Google AI モード、3 か月ごとに全問 × 4 つの AI。10 月分として GA4 の AI 経由 85 セッションを入力。質問集と手順は `docs/aio/ai-answer-log.md`。
+  - **6. 本番の全ページの毎週の自動点検**: `scripts/audit_production_site.mjs`（サイトマップの全 URL を GET だけで点検。応答・転送・noindex・canonical・JSON-LD・hreflang・サイト内リンク切れ・title/description の重複・og:image・孤立ページ）、`.github/workflows/site-audit.yml`（毎週月曜 9:30 JST、`reports/site-audit/` をコミットしてから、エラーがあればジョブを失敗に）。
+
+### コミット
+
+- このエントリを含むコミット（redesign/magazine → main）。
+
+### 検証
+
+- 本番の点検の試運転（554 URL、約 44 秒）: 最初はエラー 4 件（`${href}` へのリンク切れ）→ ページ内のスクリプトのテンプレート文字列を拾った誤検知だったため、script / style を除いて抽出するよう修正。言語違いで title が同じ 8 組は hreflang で対応づけ済みなので参考扱いに。修正版で 1 回例外（文字列を URL として扱っていた）→ 修正。最終: **エラー 0・注意 1**（トップの正式な URL `/` へのリンクが無い。ナビとロゴは `/index.html`）。
+- 優先ソースのリンク（CDP、1440 / 390）: 記事の末尾 13px・高さ 44px、フッター 10px・48px、ニュースレター欄 15px・45px、横のはみ出しなし。記事の末尾とニュースレター欄を目視。
+- `check_preferred_source.mjs`（581 ページ）、`check_newsletter.mjs`（下書きを手元で生成して確認。送信用の鍵なし＝外部送信なし。生成物は削除）、build 冪等性（601）、版数、回帰、CMS プレビュー、`check_en_visible_japanese.mjs`（増加 0）成功。
+- AI 回答ログ: db の書き込みと読み出しを確認（`months/2026-10`）。
+- `bash scripts/preflight.sh`: pre-push で省略なしに実行（push が通った＝全件成功）。
+
+### 変更したパターン
+
+- 外部サービスの JS を足さず、リンクで導線を作る（CSP を変えない）。
+- 本番の点検は GET だけ・週 1 回・レポートを残してから失敗にする。HTML からリンクを取り出すときは script / style / template / コメントを除く。
+
+### 未確認の類似パターン
+
+- ナビとロゴのトップへのリンクが `/index.html`（正式な URL は `/`）。全ページのナビを変える修正になるため未対応（毎週の点検の注意に残る）。
+- `site-audit.yml` は push 後の手動実行で初回を確かめる。
+- ユーザーの確認待ち: Search Console の「検索の生成 AI」が「含める」か、優先ソースの設定ツールに techno-japan.media が出るか。
+
+### 次の担当への注意・判断待ち
+
+- cms.js 193（記事プレビューの common.css の版）: push 後に Publish pipeline。CMS を開くときは Cmd+Shift+R。
+- 毎月: AI 回答ログに GA4 の AI 経由のセッション（`reports/ai-referrals.md`）を入れる。誤りが記録されたら該当ページを直す。
+- 文章ガイドへの追記（記事の冒頭に事実をまとめる、内容を大きく直したら更新日を入れる）は未。

@@ -1,5 +1,9 @@
 # GEO/AIO 実装指示書 — Techno Japan
 
+> **2026-10-28 追記**: この指示書は Next.js 前提の旧版。実際のサイトは静的 HTML ＋ 生成スクリプトで、多くは独自の形で実装済み。
+> 最新の調査と方針は [docs/aio/AIO_LLMO_2026-10-28.md](docs/aio/AIO_LLMO_2026-10-28.md) を優先する。
+
+
 > このファイルはターミナルの Claude Code / Codex に作業を渡すための指示書です。
 > リポジトリのルートに置いて `AGENTS.md` から参照するか、そのまま貼り付けて使ってください。
 > 技術スタック前提: **Next.js (App Router 想定) / React / TypeScript**

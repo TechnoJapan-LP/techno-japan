@@ -1,0 +1,63 @@
+name: Weekly production site audit
+
+on:
+  schedule:
+    - cron: '30 0 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: site-audit
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: '20'
+
+      - name: Audit production site
+        id: audit
+        shell: bash
+        run: |
+          set +e
+          node scripts/audit_production_site.mjs --base https://techno-japan.media --out reports/site-audit
+          status=$?
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Commit and push report
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add reports/site-audit/
+          if git diff --staged --quiet; then
+            echo "No report changes to commit"
+            exit 0
+          fi
+          git commit -m "[skip ci] chore: weekly production site audit"
+          for i in 1 2 3; do
+            git pull --rebase --autostash origin main
+            if git push; then
+              exit 0
+            fi
+            echo "push が弾かれました。取り込んでやり直します [$i/3]"
+            if [ "$i" -eq 3 ]; then exit 1; fi
+            sleep $((i * 5))
+          done
+
+      - name: Fail when the audit found errors
+        if: steps.audit.outputs.status != '0'
+        run: exit 1

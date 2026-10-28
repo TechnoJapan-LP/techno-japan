@@ -4,13 +4,13 @@ import path from 'node:path';
 
 const root = path.resolve(new URL('..', import.meta.url).pathname);
 const config = JSON.parse(fs.readFileSync(path.join(root, 'scripts/newsletter-config.json'), 'utf8'));
+const PREFERRED_SOURCE_URL = 'https://www.google.com/preferences/source?q=techno-japan.media';
 const fail = (message) => { throw new Error(message); };
 if (config.provider !== 'buttondown' || config.buttondownUsername !== 'technojapan') fail('Buttondown の設定が technojapan になっていません');
 
 const read = (file) => fs.readFileSync(path.join(root, file), 'utf8');
 const articleFiles = (dir) => fs.readdirSync(path.join(root, dir)).filter((file) => file.endsWith('.html'));
 const targetFiles = [
-  'LP/index.html', 'LP/news.html', 'LP/en/index.html', 'LP/en/news.html',
   ...articleFiles('LP/articles').map((file) => `LP/articles/${file}`).filter((file) => read(file).includes('class="newsletter article-newsletter"')),
   ...articleFiles('LP/en/articles').map((file) => `LP/en/articles/${file}`).filter((file) => read(file).includes('class="newsletter article-newsletter"')),
 ];
@@ -26,6 +26,7 @@ for (const file of targetFiles) {
   const expectedTag = file.startsWith('LP/en/') ? 'en' : 'ja';
   if (!form.includes('action="https://buttondown.com/api/emails/embed-subscribe/technojapan"')) fail(`${file}: Buttondown action が不正です`);
   if (!form.includes(`name="tag" value="${expectedTag}"`)) fail(`${file}: tag=${expectedTag} がありません`);
+  if (!html.includes(PREFERRED_SOURCE_URL)) fail(`${file}: 優先ソースの案内リンクがありません`);
   buttondownForms += 1;
   formsubmitOnlyFields += (form.match(/name="(?:_honey|_subject|_captcha|_next|_template)"/g) || []).length;
 }
@@ -46,8 +47,20 @@ const generator = read('scripts/build-detail-pages.mjs');
 for (const expected of ['https://buttondown.com/api/emails/embed-subscribe/', 'name="embed" value="1"', 'name="tag" value="${lang === \'en\' ? \'en\' : \'ja\'}"']) {
   if (!generator.includes(expected)) fail(`Buttondown 切り替え処理が見つかりません: ${expected}`);
 }
+const magazine = read('LP/magazine.js');
+for (const expected of [
+  'action="https://buttondown.com/api/emails/embed-subscribe/technojapan"',
+  'name="tag" value="',
+  '(isEn ? \'en\' : \'ja\')',
+  PREFERRED_SOURCE_URL,
+]) {
+  if (!magazine.includes(expected)) fail(`ハブのニュースレター生成処理が見つかりません: ${expected}`);
+}
+for (const file of ['LP/index.html', 'LP/news.html', 'LP/about.html', 'LP/en/index.html', 'LP/en/news.html', 'LP/en/about.html']) {
+  if (!read(file).includes('data-tj-newsletter')) fail(`${file}: ニュースレター欄がありません`);
+}
 const draftGenerator = read('scripts/newsletter-draft.mjs');
-for (const expected of ['return date >= `${previous}-01` && date <= createdDate', 'status: \'draft\'', 'method: \'PATCH\'', 'query.searchParams.set(\'status\', \'draft\')', 'template: \'naked\'', ": festival.name;", "festival.name_en || festival.name"]) {
+for (const expected of ['return date >= `${previous}-01` && date <= createdDate', 'status: \'draft\'', 'method: \'PATCH\'', 'query.searchParams.set(\'status\', \'draft\')', 'template: \'naked\'', ": festival.name;", "festival.name_en || festival.name", PREFERRED_SOURCE_URL, 'preferredSource']) {
   if (!draftGenerator.includes(expected)) fail(`下書きの月・要約処理が見つかりません: ${expected}`);
 }
 const newsletterFiles = ['reports/newsletter/2026-11-ja.html', 'reports/newsletter/2026-11-en.html'];
@@ -60,7 +73,14 @@ for (const file of newsletterFiles) {
   const colors = [...html.matchAll(/#[0-9a-f]{6}\b/gi)].map((match) => match[0].toLowerCase());
   for (const color of colors) if (!allowedColors.has(color)) fail(`${file}: 許可されていない色 ${color}`);
   for (const match of html.matchAll(/<img\b[^>]*\bsrc="([^"]+)"/gi)) if (!/^https:\/\//.test(match[1])) fail(`${file}: 画像URLがHTTPS絶対URLではありません: ${match[1]}`);
-  for (const match of html.matchAll(/<a\b[^>]*\bhref="([^"]+)"/gi)) if (match[1] !== '{{ unsubscribe_url }}' && !match[1].includes('utm_source=newsletter')) fail(`${file}: UTMのないリンクがあります: ${match[1]}`);
+  for (const match of html.matchAll(/<a\b[^>]*\bhref="([^"]+)"/gi)) {
+    if (match[1] === PREFERRED_SOURCE_URL) continue;
+    if (match[1] !== '{{ unsubscribe_url }}' && !match[1].includes('utm_source=newsletter')) fail(`${file}: UTMのないリンクがあります: ${match[1]}`);
+  }
+  const preferredCount = html.split(PREFERRED_SOURCE_URL).length - 1;
+  if (preferredCount !== 1) fail(`${file}: 優先ソースリンクが ${preferredCount} 件です（1件にしてください）`);
+  const preferredLabel = file.endsWith('-ja.html') ? 'Google で TECHNO JAPAN を優先ソースに追加' : 'Add TECHNO JAPAN as a preferred source on Google';
+  if (!html.includes(preferredLabel)) fail(`${file}: 優先ソースの文言がありません`);
   const images = [...html.matchAll(/<img\b[^>]*\balt="([^"]+)"/gi)];
   if (images.some((match) => !match[1])) fail(`${file}: 画像altが空です`);
   cardCells += (html.match(/<td width="50%"/g) || []).length;

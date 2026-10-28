@@ -148,6 +148,7 @@ run "アーティスト詳細ページ"              node scripts/check_artist_p
 run "CMS の Image Position が届く"      node scripts/check_image_position.mjs
 run "ヘッダー・フッターのロゴ"      node scripts/check_header_logo.mjs
 run "共通ヘッダー・メニュー・フッター" python3 scripts/check_shared_chrome.py
+run "Google 優先ソース導線"           node scripts/check_preferred_source.mjs
 run "ハブのSEO・計測ヘッダー"          python3 scripts/check_hub_head.py
 run "SNS シェア画像"                    node scripts/check_og_image.mjs
 run "大きい画像の配信"                  node scripts/check_image_delivery.mjs

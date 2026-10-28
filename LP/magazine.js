@@ -2,6 +2,8 @@
 (function () {
   'use strict';
 
+  var PREFERRED_SOURCE_URL = 'https://www.google.com/preferences/source?q=techno-japan.media';
+
   function isoDate(value) {
     var match = String(value || '').trim().match(/^(\d{4})-(\d{2})-(\d{2})$/);
     if (!match) return null;
@@ -98,13 +100,23 @@
     var month = now.getMonth() === 11
       ? String(now.getFullYear() + 1) + '-01'
       : String(now.getFullYear()) + '-' + String(now.getMonth() + 2).padStart(2, '0');
-    root.innerHTML = '<div class="mag-newsletter"><div class="mag-newsletter-copy"><p class="mag-newsletter-meta">Newsletter · <span>' + month.replace('-', '.') + '</span></p>'
+    root.innerHTML = '<div class="mag-newsletter">'
+      + '<div class="mag-newsletter-copy">'
+      + '<p class="mag-newsletter-meta">Newsletter · <span>' + month.replace('-', '.') + '</span></p>'
       + '<h2><span lang="ja">日本の野外フェスの<br>情報を受け取る</span><span lang="en">Get updates from<br>Japan\'s outdoor festivals</span></h2>'
-      + '<p><span lang="ja">来月の開催予定と新着記事をまとめてメールで届けます。無料、いつでも解除できます。</span><span lang="en">A monthly digest of upcoming festivals and new stories from Japan.</span></p></div>'
+      + '<p><span lang="ja">来月の開催予定と新着記事をまとめてメールで届けます。無料、いつでも解除できます。</span><span lang="en">A monthly digest of upcoming festivals and new stories from Japan.</span></p>'
+      + '</div>'
       + '<form class="newsletter-form" action="https://buttondown.com/api/emails/embed-subscribe/technojapan" method="POST">'
       + '<input type="email" name="email" required placeholder="your@email.com">'
-      + '<input type="hidden" name="embed" value="1"><input type="hidden" name="tag" value="' + (isEn ? 'en' : 'ja') + '">'
-      + '<input type="text" name="_honey" tabindex="-1" autocomplete="off" class="tj-honeypot" aria-hidden="true"><button type="submit">SUBSCRIBE</button></form></div>';
+      + '<input type="hidden" name="embed" value="1">'
+      + '<input type="hidden" name="tag" value="' + (isEn ? 'en' : 'ja') + '">'
+      + '<input type="text" name="_honey" tabindex="-1" autocomplete="off" class="tj-honeypot" aria-hidden="true">'
+      + '<button type="submit">SUBSCRIBE</button>'
+      + '</form>'
+      + '<p class="mag-newsletter-preferred-source"><a href="' + PREFERRED_SOURCE_URL + '" target="_blank" rel="noopener">'
+      + (isEn ? 'Add TECHNO JAPAN as a preferred source on Google' : 'Google で TECHNO JAPAN を優先ソースに追加')
+      + ' ↗</a></p>'
+      + '</div>';
   };
 
   window.tjMagNextAppearances = function (artists, festivals, today) {
