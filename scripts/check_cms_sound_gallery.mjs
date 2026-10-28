@@ -145,9 +145,52 @@ try {
 check(movedError === '行の位置が変わっています。ページを再読み込みしてからやり直してください', '行ずれをエラーにしていない');
 check(sent.length === 0, '行ずれ時にupdate_rowを送っている');
 
+// Date型セルを get_sheet が返す JS Date.toString() 形式から、
+// ARTICLES の日付列だけ YYYY-MM-DD に戻す。GAS へは送らず fetch を記録する。
+sent.length = 0;
+latestRows = [{
+  _row: 4,
+  id: 'article-1',
+  title: 'Article',
+  date: 'Sat Oct 10 2026 00:00:00 GMT+0900 (日本標準時)',
+}];
+await ctx.__T.bulkSaveRow('article', {_row:4, id:'article-1', title:'Article'}, {title:'Changed'});
+const articlePayload = sent[0] || {};
+check(articlePayload.date === '2026-10-10', 'ARTICLES の date を YYYY-MM-DD に正規化していない');
+
+sent.length = 0;
+latestRows = [{
+  _row: 5,
+  id: 'festival-1',
+  name: 'Festival',
+  date: '2026-09-26/2026-09-27',
+}];
+await ctx.__T.bulkSaveRow('festival', {_row:5, id:'festival-1', name:'Festival'}, {name:'Changed'});
+const festivalPayload = sent[0] || {};
+check(festivalPayload.date === '2026-09-26/2026-09-27', 'FESTIVALS の文字列 date を変更している');
+
+sent.length = 0;
+latestRows = [{
+  _row: 6,
+  id: 'article-2',
+  title: 'Article 2',
+  internalDate: 'Sat Oct 10 2026 00:00:00 GMT+0900 (日本標準時)',
+}];
+let unexpectedDateError = '';
+try {
+  await ctx.__T.bulkSaveRow('article', {_row:6, id:'article-2', title:'Article 2'}, {title:'Changed'});
+} catch (error) {
+  unexpectedDateError = error.message;
+}
+check(
+  unexpectedDateError === '日付型の列 internalDate があるため一括保存を中止しました',
+  '想定外の列の日付型セルをエラーにしていない',
+);
+check(sent.length === 0, '想定外の列の日付型セルで update_row を送っている');
+
 if (failures.length) {
   console.error('❌ CMS SOUND/GALLERY 検査');
   failures.forEach(message => console.error(`  - ${message}`));
   process.exit(1);
 }
-console.log('✅ CMS SOUND/GALLERY: フォーム・列安全策・生成・一括保存を確認');
+console.log('✅ CMS SOUND/GALLERY・一括保存の日付保護: フォーム・列安全策・生成・保存を確認');

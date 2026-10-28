@@ -14,7 +14,9 @@ const pages = ['LP/submit.html', 'LP/en/submit.html'];
 const escapeRegExp = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const attr = (tag, name) => tag.match(new RegExp(`\\b${escapeRegExp(name)}="([^"]*)"`))?.[1] ?? null;
 const hasRequired = tag => /\brequired(?:\s|=|>|$)/.test(tag);
+const japanese = /[ぁ-ヿ㐀-鿿ｦ-ﾟ]/;
 const fail = message => { throw new Error(message); };
+const dropdownValues = new Map();
 
 for (const page of pages) {
   const html = fs.readFileSync(page, 'utf8');
@@ -44,8 +46,23 @@ for (const page of pages) {
         fail(`${page}: ${question.entry} の先頭に selected な空の選択肢がない`);
       }
       const options = rawOptions.filter(option => option.value !== '').map(({value, text}) => ({value, text}));
-      const expected = question.options.map(value => ({value, text: value}));
+      const expected = question.options.map(value => ({
+        value,
+        text: page.startsWith('LP/en/') ? (value.split(' / ')[1] || value) : value,
+      }));
       if (JSON.stringify(options) !== JSON.stringify(expected)) fail(`${page}: ${question.entry} の選択肢が fixture と違う`);
+      if (page === 'LP/submit.html') {
+        dropdownValues.set(question.entry, options.map(option => option.value));
+      } else {
+        const jaValues = dropdownValues.get(question.entry);
+        if (JSON.stringify(options.map(option => option.value)) !== JSON.stringify(jaValues)) {
+          fail(`${page}: ${question.entry} の value が JA ページと違う`);
+        }
+        const japaneseOptions = options.filter(option => japanese.test(option.text));
+        if (japaneseOptions.length) {
+          fail(`${page}: ${question.entry} の EN 表示に日本語がある: ${japaneseOptions.map(option => option.text).join(', ')}`);
+        }
+      }
     }
     if (question.type === 'checkbox') {
       const options = inputTags.filter(tag => attr(tag, 'type') === 'checkbox').map(tag => attr(tag, 'value'));

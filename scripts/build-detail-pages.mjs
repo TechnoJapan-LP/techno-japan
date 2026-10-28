@@ -908,8 +908,8 @@ function bilingualBody(ja, en, pageLang, extraClass = '') {
     const act = (l) => (l === pageLang ? ' is-active' : '');
     return `<div class="detail-body bilingual${extraClass ? ` ${extraClass}` : ''}">
       <div class="lang-toggle" role="group" aria-label="${pageLang === 'en' ? 'Description language' : '説明文の言語'}">
-        <button type="button" class="lang-btn${act('ja')}" data-lang="ja" aria-label="日本語" aria-pressed="${pageLang === 'ja' ? 'true' : 'false'}">JA</button>
-        <button type="button" class="lang-btn${act('en')}" data-lang="en" aria-label="English" aria-pressed="${pageLang === 'en' ? 'true' : 'false'}">EN</button>
+        <button type="button" class="lang-btn${act('ja')}" data-lang="ja" lang="ja" aria-label="日本語" aria-pressed="${pageLang === 'ja' ? 'true' : 'false'}">JA</button>
+        <button type="button" class="lang-btn${act('en')}" data-lang="en" lang="en" aria-label="English" aria-pressed="${pageLang === 'en' ? 'true' : 'false'}">EN</button>
       </div>
       <div class="lang-body" data-lang="ja" lang="ja"${hid('ja')}><p>${esc(jaT)}</p></div>
       <div class="lang-body" data-lang="en" lang="en"${hid('en')}><p>${esc(enT)}</p></div>
@@ -3883,6 +3883,7 @@ function enHubFromJa(html, page) {
       s = s.replace(ja, en);
     }
   }
+  if (page === 'submit.html') s = localizeEnglishApplyPrefectureOptions(s);
   s = s.split('メニューを開く').join('Open menu');
   s = s.split('メニューを閉じる').join('Close menu');
   s = s.split('本文へ移動').join('Skip to content');
@@ -3905,6 +3906,24 @@ function enHubFromJa(html, page) {
   s = s.split(jaToggle).join(enToggle);
 
   return s;
+}
+
+/* Google Form の value は JA/EN で共通のまま、EN 版の表示だけ英語にする。
+   value を変えるとフォームの選択肢と一致せず送信できなくなるため、option の
+   value 属性から表示文字列を作る。手編集で戻る事故を防ぐため、EN ハブ生成時に
+   毎回適用する。 */
+function localizeEnglishApplyPrefectureOptions(html) {
+  const selectPattern = /(<select\b[^>]*\bid="apply-prefecture"[^>]*>)([\s\S]*?)(<\/select>)/;
+  const match = html.match(selectPattern);
+  if (!match) throw new Error('en/submit.html: apply-prefecture が見つからない');
+  const body = match[2].replace(/(<option\b[^>]*\bvalue="([^"]*)"[^>]*>)([\s\S]*?)(<\/option>)/g,
+    (option, open, value, _text, close) => {
+      if (!value) return option;
+      const separator = value.indexOf(' / ');
+      const label = separator >= 0 ? value.slice(separator + 3) : value;
+      return `${open}${label}${close}`;
+    });
+  return html.replace(selectPattern, `${match[1]}${body}${match[3]}`);
 }
 
 /* JSON-LD の description を EN 版へ。

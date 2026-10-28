@@ -6168,6 +6168,22 @@ async function bulkSaveRow(section, row, changes){
   }
   const payload = { action:'update_row', sheet, row:latest._row, ...latest };
   delete payload._row;
+
+  /* get_sheet は日付型セルを Date.toString() 形式で返すことがある。
+     ARTICLES の日付列だけは通常保存と同じ YYYY-MM-DD に戻す。
+     それ以外の列は、列名を把握しないまま日付型セルを書き戻すと
+     データを壊すため、変更点を重ねる前に保存を止める。 */
+  Object.keys(payload).forEach(key=>{
+    if(!/GMT[+-]\d{4}/.test(String(payload[key]))) return;
+    const isArticleDate = sheet === 'ARTICLES'
+      && /^(date|updatedAt|updated_at|publishAt)$/i.test(key);
+    if(!isArticleDate){
+      throw new Error('日付型の列 '+key+' があるため一括保存を中止しました');
+    }
+    payload[key] = fmtDate(payload[key]);
+  });
+
+  // 明示的な変更値は、日付型セルの正規化後に重ねてそのまま使う。
   bulkPatchPayload(payload,patch);
   const r = await fetch(GAS_URL,{method:'POST',body:JSON.stringify(payload)}).then(r=>r.json());
   if(!(r.status==='ok'||r.success)) throw new Error(r.message||'save failed');
