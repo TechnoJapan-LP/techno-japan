@@ -1,0 +1,15 @@
+{
+  "generated_at": "2026-10-28T07:37:50.246Z",
+  "base": "https://techno-japan.media",
+  "url_count": 554,
+  "error_count": 0,
+  "warning_count": 1,
+  "localized_title_duplicate_groups": 8,
+  "errors": [],
+  "warnings": [
+    {
+      "url": "https://techno-japan.media/",
+      "message": "サイトマップにはありますが、サイト内のaリンクからたどれません（孤立ページ。`/index.html` へのリンクはある）"
+    }
+  ]
+}
