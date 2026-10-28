@@ -54,6 +54,32 @@ async function cdp(ws, method, params = {}) {
 }
 cdp.nextId = 0;
 
+async function waitForPageReady(ws, expectedPath, timeout = 15000) {
+  const end = Date.now() + timeout;
+  let last = { pathname: '(unavailable)', readyState: '(unavailable)', hamburger: false };
+  while (Date.now() < end) {
+    try {
+      const out = await cdp(ws, 'Runtime.evaluate', {
+        expression: `(() => ({
+          pathname: location.pathname,
+          readyState: document.readyState,
+          hamburger: Boolean(document.querySelector('.nav-hamburger')),
+        }))()`,
+        returnByValue: true,
+      });
+      const value = out.result?.value;
+      if (value) {
+        last = value;
+        if (value.pathname === expectedPath && value.readyState !== 'loading' && value.hamburger) {
+          return { ok: true };
+        }
+      }
+    } catch {}
+    await delay(100);
+  }
+  return { ok: false, last };
+}
+
 const port = await freePort();
 const http = spawn(process.execPath, ['-e', `require('http').createServer((q,r)=>{const u=(q.url||'/').split('?')[0].replace(/^\\/+/, '')||'index.html'; require('fs').createReadStream(require('path').join(${JSON.stringify(root + '/LP')},u)).on('error',()=>{r.statusCode=404;r.end()}).pipe(r)}).listen(${port},'127.0.0.1')`], { stdio: 'ignore' });
 const chrome = spawn(chromePath(), [
@@ -78,7 +104,12 @@ try {
     await cdp(ws, 'Emulation.setDeviceMetricsOverride', { width, height: 800, deviceScaleFactor: 1, mobile: true });
     for (const page of pages) {
       await cdp(ws, 'Page.navigate', { url: `http://127.0.0.1:${port}${page}` });
-      await delay(600);
+      const loaded = await waitForPageReady(ws, page);
+      if (!loaded.ok) {
+        const { pathname, readyState, hamburger } = loaded.last;
+        failures.push(`${width}px ${page}: page not loaded (pathname=${pathname}, readyState=${readyState}, hamburger=${hamburger})`);
+        continue;
+      }
       const expr = `(async () => {
         const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
         const waitUntil = async (predicate, timeout) => {
@@ -89,8 +120,10 @@ try {
           }
           return predicate();
         };
+        if (!await waitUntil(() => document.readyState !== 'loading' && document.querySelector('.nav-hamburger'), 10000)) {
+          return {ok:false,reason:'hamburger missing'};
+        }
         const b = document.querySelector('.nav-hamburger');
-        if (!b) return {ok:false,reason:'hamburger missing'};
         if (!await waitUntil(() => document.readyState === 'complete', 5000)) {
           return {ok:false,reason:'document not ready'};
         }
@@ -112,7 +145,13 @@ try {
         const ok=s.display!=='none'&&s.visibility!=='hidden'&&Number(s.opacity)>0&&r.width>=44&&r.height>=44&&!!a&&ar.width>=44&&ar.height>=44;
         return {ok,reason:ok?'':('style='+s.display+'/'+s.visibility+'/'+s.opacity+' rect='+r.width+'x'+r.height+' link='+(ar&&ar.width)+'x'+(ar&&ar.height)),rect:[r.width,r.height],href:a&&a.getAttribute('href')};
       })()`;
-      const out = await cdp(ws, 'Runtime.evaluate', { expression: expr, awaitPromise: true, returnByValue: true });
+      let out;
+      try {
+        out = await cdp(ws, 'Runtime.evaluate', { expression: expr, awaitPromise: true, returnByValue: true });
+      } catch (error) {
+        failures.push(`${width}px ${page}: Runtime.evaluate failed: ${error.message}`);
+        continue;
+      }
       const value = out.result?.value || { ok: false, reason: 'no result' };
       if (value.ok) passed++; else failures.push(`${width}px ${page}: ${value.reason}`);
     }
