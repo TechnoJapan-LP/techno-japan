@@ -14550,3 +14550,34 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 
 - データの食い違い（`reports/festival-coords-2026-10-29.md` の末尾）はユーザーの判断待ち。Balance の会場は LABYRINTH と同じ宝台樹キャンプ場だが、調べた座標と LABYRINTH の座標が約 3.6km 離れている（どちらかがずれている可能性。OpenStreetMap の検索では施設が引けない）。
+
+### 2026-10-29 MUTEK 2026 の会期を 11/20〜23 に（本番データ、Claude 入力。サイトへの反映は次の Publish Now）
+
+### 実施
+
+- ユーザー「MUTEK の会期は 11/20〜23 に直して」。production-data-safe-edit の手順で 2 行を書き換え:
+  - EDITIONS mutek-2026（95 行目）: DATE_END 2026-11-22 → 2026-11-23
+  - FESTIVALS mutek（3 行目）: date 2026-11-20/2026-11-22 → 2026-11-20/2026-11-23
+- 公式は会期 11/20〜23。ただし 23 日の会場は公式に未記載（調査メモ）。会場は MoN Takanawa のまま。
+
+### コミット
+
+- このエントリを含むコミット（redesign/magazine → main）。
+
+### 検証
+
+- 書き込み後に読み直し: EDITIONS は date_end だけ、FESTIVALS は date と lastEditedAt（自動）だけが変化。FESTIVALS の紹介文・会場・座標・出演者・画像などは控えと一致。
+- **サイトへの反映は未**（2026-10-29 時点で Publish Now は押されておらず、本番の data-hub.js は 2026-11-20/2026-11-22 のまま）。
+
+### 変更したパターン
+
+- なし（前回と同じ手順）。
+
+### 未確認の類似パターン
+
+- FESTIVALS の `editions` 列（CMS が以前に保存した開催回の JSON の控え、約 10KB）に mutek-2026 の古い値（11/22・渋谷）が残っている。前回の Publish でも本番は EDITIONS シートの値（MoN Takanawa）になったので、表示には使われていない。触っていない。
+
+### 次の担当への注意・判断待ち
+
+- **次の Publish Now で MUTEK の会期（11/23）が反映される**。反映後に /festivals/mutek.html と TOP・FESTIVALS 一覧の日付を確認する。
+- プロジェクトはユーザーの判断で 2026-10-29 にいったん区切り。保留の判断事項は `reports/festival-coords-2026-10-29.md` 末尾と memory の festival-coords-2026-10 にある。
