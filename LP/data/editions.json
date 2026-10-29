@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-10-21T14:11:14.476Z",
+  "_generatedAt": "2026-10-29T04:33:13.873Z",
   "count": 117,
   "items": [
     {
@@ -70,6 +70,8 @@
       "DATE_START": "2025-10-18",
       "DATE_END": "2025-10-19",
       "PREF": "Shizuoka",
+      "LAT": "35.3842",
+      "LNG": "138.5839",
       "STATUS": "finished"
     },
     {
@@ -139,6 +141,8 @@
       "LOCATION": "Kiranah Garden Toyosu",
       "LOCATION_JA": "キラナガーデン豊洲",
       "PREF": "Tokyo",
+      "LAT": "35.6417",
+      "LNG": "139.7784",
       "TICKETURL": "http://www.bodyandsoul-japan.com/",
       "STATUS": "finished"
     },
@@ -164,6 +168,8 @@
       "DATE_START": "2024-11-08",
       "DATE_END": "2024-11-10",
       "PREF": "Shizuoka",
+      "LAT": "34.8034",
+      "LNG": "138.7953",
       "STATUS": "finished"
     },
     {
@@ -173,6 +179,8 @@
       "DATE_START": "2025-10-25",
       "DATE_END": "2025-10-26",
       "PREF": "Kawasaki",
+      "LAT": "35.5044",
+      "LNG": "139.7724",
       "STATUS": "finished"
     },
     {
@@ -248,6 +256,8 @@
       "DATE_START": "2025-10-04",
       "DATE_END": "2025-10-05",
       "PREF": "Yamanashi",
+      "LAT": "35.8485",
+      "LNG": "138.2664",
       "STATUS": "finished"
     },
     {
@@ -257,6 +267,8 @@
       "DATE_START": "2026-06-19",
       "DATE_END": "2026-06-21",
       "PREF": "Hokkaido",
+      "LAT": "42.9321",
+      "LNG": "141.4131",
       "STATUS": "finished"
     },
     {
@@ -266,6 +278,8 @@
       "DATE_START": "2025-10-18",
       "DATE_END": "2025-10-19",
       "PREF": "Yamanashi",
+      "LAT": "35.4198",
+      "LNG": "138.901",
       "STATUS": "finished"
     },
     {
@@ -276,7 +290,7 @@
       "DATE_END": "2026-08-01",
       "LOCATION": "Japanese Secret Garden",
       "LOCATION_JA": "日本庭園",
-      "PREF": "Hokkaido",
+      "PREF": "Akita",
       "FLYER": "images/festivals/e-groove-flyer.webp",
       "STATUS": "published"
     },
@@ -751,6 +765,8 @@
       "DATE_START": "2025-08-23",
       "DATE_END": "2025-08-24",
       "PREF": "Hyogo",
+      "LAT": "34.9593",
+      "LNG": "135.2925",
       "STATUS": "finished"
     },
     {
@@ -760,6 +776,8 @@
       "DATE_START": "2026-09-05",
       "DATE_END": "2026-09-06",
       "PREF": "Fukui",
+      "LAT": "36.0652",
+      "LNG": "136.2195",
       "STATUS": "announced"
     },
     {
@@ -769,6 +787,8 @@
       "DATE_START": "2025-10-18",
       "DATE_END": "2025-10-19",
       "PREF": "Gifu",
+      "LAT": "35.4381",
+      "LNG": "137.0324",
       "STATUS": "finished"
     },
     {
@@ -1117,7 +1137,12 @@
       "EDITION": "2025",
       "DATE_START": "2025-08-09",
       "DATE_END": "2025-08-18",
+      "LOCATION": "Ecotopia YAMAUTO",
+      "LOCATION_JA": "山水人エコビレッジ",
       "PREF": "Shiga",
+      "ADDRESS": "滋賀県高島市朽木生杉",
+      "LAT": "35.3587",
+      "LNG": "135.7912",
       "STATUS": "finished"
     },
     {
@@ -1179,8 +1204,11 @@
       "EDITION": "2026",
       "DATE_START": "2026-11-20",
       "DATE_END": "2026-11-22",
-      "LOCATION": "Shibuya",
-      "LOCATION_JA": "渋谷",
+      "LOCATION": "MoN Takanawa",
+      "LOCATION_JA": "MoN Takanawa",
+      "ADDRESS": "東京都港区三田3-16-1",
+      "LAT": "35.6394",
+      "LNG": "139.7417",
       "FLYER": "images/festivals/mutek-2026-flyer.jpg",
       "STATUS": "announced"
     },

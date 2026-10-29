@@ -332,8 +332,8 @@
     "date": "2026-10-21"
   },
   "artist:max-cooper": {
-    "hash": "1eaa32ec5e981000f3e406ed87a993ac6afe5c55570efdd74dba319875b85092",
-    "date": "2026-10-22"
+    "hash": "8bad17a33508988a661480b3ebd0199554b15d614ac00bf5f73d09dd6101a670",
+    "date": "2026-10-29"
   },
   "artist:mayudepth": {
     "hash": "d3f174dc2a9281ec02e7d59784ea426d82a29a5f1acc33aa9baf3774c03c54a3",
@@ -552,8 +552,8 @@
     "date": "2026-09-15"
   },
   "festival:asagiri-jam": {
-    "hash": "0e080b0aafe735cdeeae3e57c72399db572052b6a988e37458ac42d213cf8b4d",
-    "date": "2026-09-15"
+    "hash": "3c229f8c71481cb9bbb986131d75acde96f145703c2b2173811577f7a68ea364",
+    "date": "2026-10-29"
   },
   "festival:axiom": {
     "hash": "69733ef0e26e2a9605f37534a44fff9f4a6a0cba197b755a1dca9dc3a03015eb",
@@ -568,20 +568,20 @@
     "date": "2026-10-15"
   },
   "festival:body-soul": {
-    "hash": "02489b34ba26e898c73cf40f630703f84fd1b6d4bd2c08b5e8974e125d03afc3",
-    "date": "2026-09-15"
+    "hash": "d5798f2ffd188ea16cc619b20b6f08b7fa4bbf521978edcd2e38c6bca28bbb94",
+    "date": "2026-10-29"
   },
   "festival:bondisco": {
     "hash": "f68bde8d0d7d1f3abb118aa2db7193186361d56b22603acb682c9bfadd2121ac",
     "date": "2026-10-20"
   },
   "festival:bonna-pot": {
-    "hash": "8294de6119536e988f63d8d1e446b87151d950283b5110fe1932c2a8eb5f327e",
-    "date": "2026-09-15"
+    "hash": "b79357dcd8fb005d88a380992b709f3233f70467be8048bb7b0abe32df2f7816",
+    "date": "2026-10-29"
   },
   "festival:brightness": {
-    "hash": "7775334c515870d09f485b89d9eb6a4cd74433ceeace32cae3fb912c8c2aa9c4",
-    "date": "2026-09-15"
+    "hash": "c0e8f8351ad257017c37cbaad882d0c3e5d6664b918e3562866fb794055c26a0",
+    "date": "2026-10-29"
   },
   "festival:car-multimedia": {
     "hash": "94cd853b892a3eb26883422750c72d8d381f20b73c6f36e663ab1e7b3f86e33a",
@@ -596,8 +596,8 @@
     "date": "2026-10-15"
   },
   "festival:delta-commit": {
-    "hash": "d613f3450160aa19f0f2b8ff560c42996ff825084d832228a4e7f23c1d827d66",
-    "date": "2026-09-15"
+    "hash": "11910bedeede0fc3786ebb9cca9f070573fb21c6967f19c9933760dbf8d42963",
+    "date": "2026-10-29"
   },
   "festival:denki-bodhisattva": {
     "hash": "411b3e647a47953c29ed5ae1c49d3eefb2b2a7f676e0de91155a68a789decd3e",
@@ -608,16 +608,16 @@
     "date": "2026-10-17"
   },
   "festival:dots": {
-    "hash": "e144af80dd2eab7cd041c466f286924d774b0bc0c3336f0c0c99ed51a4267d33",
-    "date": "2026-09-15"
+    "hash": "c6d31093c32d2fb9632d6e49e35e7cef31e92c4efb3e35393d1f571741f7bcf0",
+    "date": "2026-10-29"
   },
   "festival:dream-festival": {
-    "hash": "7dea874f4b6fd2fdb244a9d71226767e5738c8a3c8e0a8368b9c20ba6a9b2a01",
-    "date": "2026-09-15"
+    "hash": "abaabe7ecc63db57d61b2af57a9317701d3f90afcf89219141e5bd6dd6b3af6b",
+    "date": "2026-10-29"
   },
   "festival:e-groove": {
-    "hash": "ace652d4aae7240cf620f2dfbb7e0e76a5e59820e5d056767c686ddb587dba4a",
-    "date": "2026-09-15"
+    "hash": "2306b4e9b7715a7607a1b52bc925df4e45c1f29d013af1c39d0aff1133d50d92",
+    "date": "2026-10-29"
   },
   "festival:each-story": {
     "hash": "6b76502132dbe5bf233836c4c48bf25d31edc975cdaf82e4794bc7af2d35bf12",
@@ -744,8 +744,8 @@
     "date": "2026-09-15"
   },
   "festival:mutek": {
-    "hash": "32077276ba3c9f3a4e8c89947f43fc4322d02d127d9dd1be6aba75b31b0dc4c9",
-    "date": "2026-10-20"
+    "hash": "81d14ed3eab25c280641045a2d9ef8908fb51661ae9136bbcccb55fb5715e8c2",
+    "date": "2026-10-29"
   },
   "festival:nu-festival": {
     "hash": "3e7280f1e6e44e8e8c264b4c9b95da0a1bb5615ae00bec87b8026f074e7cd971",
@@ -756,16 +756,16 @@
     "date": "2026-09-15"
   },
   "festival:one-music-camp": {
-    "hash": "e3153f1de5688ad91e87c1464d706a41edd9c54e1ea5eb21f869bd9e39a0bda6",
-    "date": "2026-09-15"
+    "hash": "ffdae0f0007d68439321d2c46c46a41c1d913247e81d0f54c1d39df4dd869d43",
+    "date": "2026-10-29"
   },
   "festival:one-park-festival": {
-    "hash": "baabc686c47917e4441023d70a14cea759def1920d01eaa06518404fd6b9352e",
-    "date": "2026-09-15"
+    "hash": "85021e86f2aaed81d46745495488859eecaa6e21705d4c3230327d7805352478",
+    "date": "2026-10-29"
   },
   "festival:one-park-riverfes": {
-    "hash": "3606d42cfbe13724104ff1f2d89fc2737654b6dcc0fe67dff6aea373c5658082",
-    "date": "2026-09-15"
+    "hash": "04c1eb8f3461295127ec23ea4aba2cf4a9239ba40b30a505fae9f1100695ec61",
+    "date": "2026-10-29"
   },
   "festival:orbit": {
     "hash": "b60fcfb90beb4f533ed98a8e6eebf341f506f29b78ff9962c5705b3f966a4c78",
@@ -896,8 +896,8 @@
     "date": "2026-09-15"
   },
   "festival:yamauto": {
-    "hash": "b356ef0dfd6b520bba75076a692dcb7879b7f9b383610f46a4dee815d071d7d9",
-    "date": "2026-09-15"
+    "hash": "1bc528c80b9f4c082b141b6fcf044ab5bfc67f15e31102d7875d672ab1137c83",
+    "date": "2026-10-29"
   },
   "venue:bonobo": {
     "hash": "aa8834cb92ee05f0bca175308cdd636f02028d8fe3f70839c0cbe842520acbea",

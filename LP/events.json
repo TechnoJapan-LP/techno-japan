@@ -93,7 +93,9 @@
       "url": "https://techno-japan.media/festivals/mutek.html",
       "start": "2026-11-20",
       "end": "2026-11-22",
-      "venue": "Shibuya",
+      "venue": "MoN Takanawa",
+      "lat": 35.6394,
+      "lng": 139.7417,
       "genres": [
         "TECHNO",
         "HOUSE",
