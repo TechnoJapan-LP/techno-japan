@@ -77,6 +77,7 @@ let browser;
 let ws;
 let profileDir;
 let cdpId = 0;
+const skipTopIntro = `try { if (location.pathname === '/' || location.pathname === '/index.html' || location.pathname === '/en/' || location.pathname === '/en/index.html') sessionStorage.setItem('tj-intro', '1'); } catch (e) {}`;
 function cdp(method, params = {}) {
   const id = ++cdpId;
   ws.send(JSON.stringify({ id, method, params }));
@@ -158,6 +159,7 @@ try {
   ws = new WebSocket(target.webSocketDebuggerUrl);
   await new Promise((resolve, reject) => { ws.addEventListener('open', resolve); ws.addEventListener('error', reject); });
   await cdp('Page.enable'); await cdp('Runtime.enable');
+  await cdp('Page.addScriptToEvaluateOnNewDocument', { source: skipTopIntro });
   await setFixedDate(fixedIso);
   const failures = [];
   for (const [pathname, lang] of [['/', 'ja'], ['/en/', 'en']]) {

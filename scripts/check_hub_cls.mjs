@@ -115,6 +115,7 @@ function cdp(ws, method, params = {}) {
   });
 }
 cdp.nextId = 0;
+const skipTopIntro = `try { if (location.pathname === '/' || location.pathname === '/index.html' || location.pathname === '/en/' || location.pathname === '/en/index.html') sessionStorage.setItem('tj-intro', '1'); } catch (e) {}`;
 
 async function evaluate(ws, expression) {
   const result = await cdp(ws, 'Runtime.evaluate', {
@@ -289,6 +290,7 @@ try {
   });
   await cdp(ws, 'Page.enable');
   await cdp(ws, 'Runtime.enable');
+  await cdp(ws, 'Page.addScriptToEvaluateOnNewDocument', { source: skipTopIntro });
   await cdp(ws, 'Network.enable');
   await cdp(ws, 'Network.setBypassServiceWorker', { bypass: true });
   await cdp(ws, 'Network.setCacheDisabled', { cacheDisabled: true });

@@ -53,6 +53,7 @@ async function cdp(ws, method, params = {}) {
   });
 }
 cdp.nextId = 0;
+const skipTopIntro = `try { if (location.pathname === '/' || location.pathname === '/index.html' || location.pathname === '/en/' || location.pathname === '/en/index.html') sessionStorage.setItem('tj-intro', '1'); } catch (e) {}`;
 
 async function waitForPageReady(ws, expectedPath, timeout = 15000) {
   const end = Date.now() + timeout;
@@ -98,6 +99,7 @@ try {
   await new Promise((resolve, reject) => { ws.addEventListener('open', resolve); ws.addEventListener('error', reject); });
   await cdp(ws, 'Page.enable');
   await cdp(ws, 'Runtime.enable');
+  await cdp(ws, 'Page.addScriptToEvaluateOnNewDocument', { source: skipTopIntro });
   let passed = 0;
   const failures = [];
   for (const width of widths) {

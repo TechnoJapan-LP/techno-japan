@@ -92,6 +92,7 @@ try{
   const ws=new WebSocket(t.webSocketDebuggerUrl);
   await new Promise((r,j)=>{ws.addEventListener('open',r);ws.addEventListener('error',j);});
   await cdp(ws,'Page.enable');await cdp(ws,'Runtime.enable');await cdp(ws,'Network.enable');
+  await cdp(ws,'Page.addScriptToEvaluateOnNewDocument',{source:`try { if (location.pathname === '/' || location.pathname === '/index.html' || location.pathname === '/en/' || location.pathname === '/en/index.html') sessionStorage.setItem('tj-intro','1'); } catch (e) {}`});
   await cdp(ws,'Network.setCacheDisabled',{cacheDisabled:true});
   await cdp(ws,'Page.addScriptToEvaluateOnNewDocument',{source:`new PerformanceObserver(l=>{for(const e of l.getEntries()) window.__lcp=Math.round(e.startTime);}).observe({type:'largest-contentful-paint',buffered:true});`});
   const out=[];

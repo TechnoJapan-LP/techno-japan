@@ -14581,3 +14581,44 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 - **次の Publish Now で MUTEK の会期（11/23）が反映される**。反映後に /festivals/mutek.html と TOP・FESTIVALS 一覧の日付を確認する。
 - プロジェクトはユーザーの判断で 2026-10-29 にいったん区切り。保留の判断事項は `reports/festival-coords-2026-10-29.md` 末尾と memory の festival-coords-2026-10 にある。
+
+### 2026-10-29 TOP オープニング（ローダー）を実装（REDESIGN_SPEC §2.0、ブランチ redesign/magazine、Codex 実装・Claude 検証・コミット）
+
+### 実施
+
+- `LP/index.html` に 5 秒のオープニングを追加（CSS keyframes のみ、GSAP なし）。シンボル左右の組み合わせ → 文字 → グレーのバー5本 → 上下マーキー → 点滅 → ロゴ縮小 → バーが閉じる → 5.0s でヘッダー・帯・リードカルーセルを 1 秒でフェードイン。右下 Skip（1.5s 以降）。
+- 再生条件: `prefers-reduced-motion` でない、かつ `sessionStorage['tj-intro']` が無い（再生開始時に立てる。sessionStorage が使えない環境では再生しない）。`<head>` の小さなインライン script が判定して `html.tj-intro-playing` を付け、画像3枚を JS で preload。
+- ローダーの HTML は `<template id="tj-intro-tpl">` に置き、再生する時だけ body 先頭へ複製する（再生しない訪問・JS 無効では画像を一切読まない。静的 HTML に preload を書かないのはこのため）。
+- サイズはユーザー指示で仕様（132px / 13px）より大きく: シンボル PC 168px・スマホ 120px、文字 高さ 16px・12px、間隔 26px、滑り込み ±72px。
+- 素材 `LP/images/intro/`（元: docs/design-mock/img/）: mark-left/right 520×270（12.0KB / 10.7KB）、wordmark-text 471×48（13.3KB）。168px×dpr3=504 / 16px×dpr3=48 を満たす。`image-dimensions.json` に追加し `image-dimensions.js?v=101→102`（全ハブ）。
+- EN（`LP/en/index.html`）は `enHubFromJa` で再生成。JA/EN とも 280 行。
+- 検査 `scripts/check_top_intro.mjs` を新設し preflight に登録。TOP を開く他の headless 検査 8 本（page_scroll / search_modal / hub_cls / mobile_language_toggles / en_visible_japanese / top_this_week / audit_a11y_browser / visual-snapshot）は `Page.addScriptToEvaluateOnNewDocument` で再生済みにして開く（LP 側に検査用の抜け道は作っていない）。
+
+### コミット
+
+- このエントリを含むコミット（redesign/magazine）。**push していない。このブランチの upstream は origin/main なので、素の `git push` は本番公開になる。**
+
+### 検証
+
+- headless Chrome（CDP の screencast で実時間録画、PC 1280×800 dpr1 / スマホ 390×844 dpr2 タッチ）でフレームを目視し、GIF をユーザーが確認して了承。録画中の実測: シンボル幅 168 / 120px、再生中の nav・帯・リードの opacity 0、5.1s で 0.005 → 5.5s で 0.41 → 6.2s で 1。
+- `node scripts/check_top_intro.mjs` PASS: ローダーが fixed / z-index 200 / 画面全体を覆う（PC・スマホ）、バーの再生前の幅 0、2.5s で全開、Skip 表示、終了後の DOM 削除・スクロール復帰・html が static / pointer-events auto、リロードで再生しない、Skip で即終了、reduce で再生せず画像も取得しない、console エラー無し。
+- `bash scripts/preflight.sh`（完全版）: 75 件成功・1 件失敗。失敗は「ハブページが JS 込みで描ける」の時間切れ（480s）。単独で流すと 217s で成功（以前の単独 209s とほぼ同じ）。実行中のマシン負荷が高かった（load average 20〜35、Wi-Fi のシステム処理が CPU 70%、Google Fonts の応答 0.4〜5.3s）。**push 前に完全版をもう一度全件通すこと。**
+- 1 回目の完全版で落ちた「全ページのスクロール」「モバイル検索モーダル」は、TOP を開いた直後にオープニング中（スクロール停止・ヘッダー非表示）を測っていたため。上の 8 本の対処後、単独・完全版とも成功。「記事見出しの折り返し」は単独で成功（負荷による時間切れ）。
+
+### 変更したパターン
+
+- 見つけて直した不具合3件（どれも最初の自動検査では緑だった。録画で発覚）:
+  1. 再生中クラスとローダー本体が同名 `tj-intro` で、ローダー用の `position:fixed; pointer-events:none` 等が `<html>` に当たっていた → html 側を `tj-intro-playing` に
+  2. `common.css` の `body > div:not(.tj-bg):not(.cursor-dot):not(.cursor-ring):not(.nav-overlay){position:relative;z-index:1}`（詳細度 0,4,2）が `.tj-intro` に勝ち、ローダーが高さ 0 → `#tj-intro` の ID 指定に（common.css は触っていない）
+  3. nav は z-index 1000 でローダーより上。透明にしただけで、見えないまま押せた → `visibility:hidden` も付けた（`opacity:0 !important` も残す）
+- モックの不具合を引き継がなかった: モックは「消える」側の barOut / mqOut に `both` を使っていて再生前から最終状態になる。実装は `forwards`。
+
+### 未確認の類似パターン
+
+- 実機（iPhone / Android の実端末）では未確認。確認は headless のタッチ模擬まで。
+- body 直下に新しく fixed の div を足すと、2 と同じく common.css の規則に負ける。JS で body 直下に足される他の要素（検索モーダル等）が同じ規則に当たっていないかは未確認（検索モーダルの検査は合格している）。
+
+### 次の担当への注意・判断待ち
+
+- push 前に完全版の `bash scripts/preflight.sh` を全件通す（今回は負荷による時間切れ1件が残っている）。
+- 続けて TOP の帯（`.top2-marquee`）の文言をオープニングのマーキーと同じ単語の並びにする（ユーザー決定 2026-10-29「単語だけにする」）。別コミットで行う。

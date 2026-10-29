@@ -94,6 +94,7 @@ async function capture(outDir) {
   try {
     await cdp(b.ws, 'Page.enable'); await cdp(b.ws, 'Runtime.enable');
     await cdp(b.ws, 'Page.addScriptToEvaluateOnNewDocument', { source: deterministicScript });
+    await cdp(b.ws, 'Page.addScriptToEvaluateOnNewDocument', { source: `try { if (location.pathname === '/' || location.pathname === '/index.html' || location.pathname === '/en/' || location.pathname === '/en/index.html') sessionStorage.setItem('tj-intro', '1'); } catch (e) {}` });
     await cdp(b.ws, 'Emulation.setScrollbarsHidden', { hidden: true });
     for (const viewport of widths) for (const page of pages) {
       await cdp(b.ws, 'Emulation.setDeviceMetricsOverride', { width: viewport.width, height: 900, deviceScaleFactor: viewport.dpr, mobile: viewport.mobile });

@@ -222,6 +222,7 @@ run "ARTICLE本番表示プレビュー"          node scripts/check_cms_article
   run_timeout 120 "記事見出しの折り返し"        node scripts/check_article_heading_breaks.mjs
   run_timeout 120 "TOP THIS WEEK"             node scripts/check_top_this_week.mjs
 run "TOP ARTISTSランダム表示"             node scripts/check_top_artists.mjs
+  run "TOP オープニング"                  node scripts/check_top_intro.mjs
   run "フェス詳細の行動計測"                node scripts/check_festival_tracking.mjs
   run "地図が全国の会場を出す"          node scripts/check_map_nationwide.mjs
   run "会場一覧の地図が全都市を出す"    node scripts/check_venue_maps.mjs

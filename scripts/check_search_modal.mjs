@@ -54,6 +54,7 @@ async function cdp(ws, method, params = {}) {
   });
 }
 cdp.nextId = 0;
+const skipTopIntro = `try { if (location.pathname === '/' || location.pathname === '/index.html' || location.pathname === '/en/' || location.pathname === '/en/index.html') sessionStorage.setItem('tj-intro', '1'); } catch (e) {}`;
 
 const port = await freePort();
 const http = spawn(process.execPath, ['-e', `require('http').createServer((q,r)=>{const u=(q.url||'/').split('?')[0].replace(/^\\/+/, '')||'index.html'; require('fs').createReadStream(require('path').join(${JSON.stringify(root + '/LP')},u)).on('error',()=>{r.statusCode=404;r.end()}).pipe(r)}).listen(${port},'127.0.0.1')`], { stdio: 'ignore' });
@@ -73,6 +74,7 @@ try {
   await new Promise((resolve, reject) => { ws.addEventListener('open', resolve); ws.addEventListener('error', reject); });
   await cdp(ws, 'Page.enable');
   await cdp(ws, 'Runtime.enable');
+  await cdp(ws, 'Page.addScriptToEvaluateOnNewDocument', { source: skipTopIntro });
 
   for (const page of pages) {
     await cdp(ws, 'Page.navigate', { url: `http://127.0.0.1:${port}${page}` });
