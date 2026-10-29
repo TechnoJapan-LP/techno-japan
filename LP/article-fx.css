@@ -4,7 +4,7 @@
    ============================================================== */
 
 /* 読了プログレスバー */
-.fx-progress { position: fixed !important; top: calc(var(--tj-nav-height, 64px) - 2px + var(--safe-t)) !important; left: 0 !important; right: 0 !important; height: 2px !important; z-index: 100001 !important; pointer-events: none; background: var(--text-a08); }
+.fx-progress { position: fixed !important; top: calc(var(--tj-nav-height, 64px) - 2px) !important; left: 0 !important; right: 0 !important; height: 2px !important; z-index: 100001 !important; pointer-events: none; background: var(--text-a08); }
 .fx-progress-fill { height: 100%; background: var(--accent); box-shadow: 0 0 6px var(--accent-a65); transform: scaleX(0); transform-origin: 0 50%; }
 
 /* テキストのリビール: わずかに沈んだ状態から立ち上がる */

@@ -71,14 +71,14 @@ const DETAIL_CSS_VERSION = 92;
 
    article-fx.js / article-fx.css を変更したら、ここを上げる。 */
 const ARTICLE_FX_JS_VERSION = 14;
-const ARTICLE_FX_CSS_VERSION = 18;
+const ARTICLE_FX_CSS_VERSION = 19;
 
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
 const COMMON_JS_VERSION = 22;   // 2026-10-27 synchronous initial cursor ring position
-const COMMON_CSS_VERSION = 58;   // 2026-10-28 preferred source link sizing
+const COMMON_CSS_VERSION = 59;   // 2026-10-30 safe-area header geometry
 const DATA_HUB_VERSION = 11;
-const SEARCH_JS_VERSION = 9;
+const SEARCH_JS_VERSION = 10;
 const LANG_TOGGLE_VERSION = 3;
 const MAGAZINE_JS_VERSION = 8;   // 2026-10-28 preferred source link in newsletter blocks
 const FAVORITES_JS_VERSION = 4;

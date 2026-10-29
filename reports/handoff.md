@@ -14656,3 +14656,41 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 
 - REDESIGN_SPEC §2.1（帯の書体・大きさ）は、仕様書側をまだ直していない（仕様書の変更は main の作業フォルダに未コミットのまま残っている）。
+
+### 2026-10-30 iPhone のホーム画面アプリでヘッダーがステータスバーに重なるのを修正（＋前日の TOP オープニングの公開記録）
+
+### 実施
+
+- 症状（ユーザーの iPhone 17 Pro、ホーム画面に追加した表示）: ロゴが時刻の裏に入り、メニューボタンだけが下にずれて TOP の帯に乗る。全ページ共通。通常の Safari では safe-area-inset-top が 0 なので起きない。2026-10-27 の新デザイン公開時から（`common.css` の DESIGN V2 ブロックが nav を `height:64px; padding:0 40px !important` に固定し、旧来の safe-t の padding を潰していた。ハンバーガーだけ `top: calc(10px + var(--safe-t))` が残っていた）。
+- `LP/common.css` に `--tj-nav-height: calc(64px + var(--safe-t))` を定義し、nav の高さ・padding（上 safe-t、左右 safe-l/r）を対応。TOP の帯（`.top2-marquee`）の sticky 位置を変数に。
+- `LP/top-phase2.css` のリード sticky、`LP/article-fx.css` の読了バーを `--tj-nav-height` 基準に（article-fx は safe-t の二重加算を削除）。
+- 全画面メニュー上部、検索モーダル（`LP/search.js`）、TOP オープニングの Skip に safe-area を加算。
+- `scripts/check_safe_area_header.mjs` を追加し preflight に登録（「safe-area ヘッダー」）。CDP `Emulation.setSafeAreaInsetsOverride`（未対応なら失敗）で、402×874 safe-top 62 / safe-area 0 / PC 1280×800 × 5 URL を検査。
+- 版数: common.css 59、search.js 10、article-fx.css 19、top-phase2.css 14（`bump_asset_versions.py`、詳細ページ生成側の定数も一致）。CMS 記事プレビュー（`LP/cms.js` 1847 行）の common.css / article-fx.css の版も 59 / 19 に合わせ、cms.js?v=196。
+- 前日（10-29）分: TOP オープニングと帯の変更（`e9c1019f3` / `970191a76`）を 2026-10-29 15:02 UTC に push、Deploy LP to GitHub Pages は success。本番 `https://techno-japan.media/` と `/en/` を取得し、`#tj-intro-tpl`、帯の新文言6本、`top-phase2.css?v=13`（92s）、`/images/intro/mark-left.png` 200 を確認。
+
+### コミット
+
+- このエントリと同じコミット（fix(header): …safe-area…）。
+
+### 検証
+
+- 修正前の再現（Claude、headless Chrome、CDP safe-area override top 62）: 402×874 dpr2 で nav 0–64、ロゴ img top 25、ハンバーガー 72–120、帯 top 64。TOP / festivals / artists / 記事 / EN TOP の5枚とも同じ。
+- 修正後: nav 0–126（padding-top 62）、ロゴ top 87、ハンバーガー 72–120（nav 内でロゴと同じ高さ）、帯は nav の直下、300px スクロール後も同じ。全画面メニューを開いた状態も上端がステータスバーの下から始まることを画像で確認。safe-area 0 と PC 1280 では従来と同じ位置。
+- 新検査は修正前の common.css に戻すと失敗（nav height 64 / burger top 72 を検出）、修正後は15パターンすべて ok。
+- `bash scripts/preflight.sh`（省略なし）: 1回目 77件中2件失敗（CMS 記事プレビューの版不一致＝上記で修正、記事見出しの折り返し＝混雑時の時間切れで単独では成功）。2回目 全77件成功。
+
+### 変更したパターン
+
+- nav の高さ 64px 固定 → safe-area 込み、TOP 帯 / TOP リードの sticky 位置、記事の読了バー位置、全画面メニュー上部、検索モーダル、TOP Skip、関連アセットと CMS プレビューの版数。
+
+### 未確認の類似パターン
+
+- `artists-phase3.js` / `venues-phase3.css` / `festivals-phase3.css` / `artists-phase3.css` は既に `--tj-nav-height` 基準（確認済み・変更不要）。`detail.css` の余白、画像 sizes の 64px、カード gap は nav と無関係（確認済み・0件）。
+- **実機 iPhone のホーム画面アプリでは未確認**（headless の safe-area 模擬まで）。
+- **`LP/cms.js` を触ったので Publish 経路のルールが適用。push 後に Publish pipeline の実行と CMS 記事プレビューの確認が必要（実機未確認）**。CMS は Cmd+Shift+R で強制リロード。
+
+### 次の担当への注意・判断待ち
+
+- push 後: `gh workflow run "Publish pipeline"` を流して success を確認。CMS（`?cb=<乱数>`）で記事プレビューを開き、例外が無く表示されることを確認（認証が要るのでユーザーに依頼）。
+- ユーザーにホーム画面アプリで一度開き直してもらい、ヘッダーの位置を見てもらう。

@@ -81,7 +81,7 @@
    must not hide unrelated page content. */
 .top2-marquee {
   position: sticky;
-  top: 64px;
+  top: var(--tj-nav-height, 64px);
   z-index: 49;
   overflow: hidden;
   white-space: nowrap;
@@ -520,7 +520,7 @@ footer .footer-social a:hover { color: var(--accent-soft); opacity: 1; }
 .nav-overlay.active{opacity:1;visibility:visible;transition-delay:0s}
 .nav-overlay::before{content:"";position:absolute;z-index:0;bottom:-30vw;right:-30vw;width:90vw;height:90vw;border-radius:50%;background:radial-gradient(circle,rgba(var(--accent-rgb),.10) 0,transparent 60%);filter:blur(40px);pointer-events:none}
 .nav-overlay > *{position:relative;z-index:1}
-.nav-ov-top{position:relative;display:flex;align-items:center;justify-content:space-between;height:64px;padding:0 16px;border-bottom:1px solid var(--text-a08);flex:0 0 auto}
+.nav-ov-top{position:relative;display:flex;align-items:center;justify-content:space-between;height:calc(64px + var(--safe-t));padding:var(--safe-t) calc(16px + var(--safe-r)) 0 calc(16px + var(--safe-l));box-sizing:border-box;border-bottom:1px solid var(--text-a08);flex:0 0 auto}
 .nav-ov-top img{height:15px;width:auto;display:block}
 .nav-overlay .nav-close{position:static;display:flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;background:none;border:1px solid var(--text-a25);color:var(--text);cursor:pointer}
 .nav-overlay .nav-close svg{width:18px;height:18px;display:block}
@@ -1160,13 +1160,14 @@ body > div:not(.tj-bg):not(.cursor-dot):not(.cursor-ring):not(.nav-overlay) {
 :root {
   --font-body: 'DM Sans', 'Noto Sans JP', system-ui, sans-serif;
   --font-display: 'Bebas Neue', 'Noto Sans JP', sans-serif;
+  --tj-nav-height: calc(64px + var(--safe-t));
 }
 
 body > nav {
   position: sticky !important;
-  height: 64px;
+  height: var(--tj-nav-height);
   box-sizing: border-box;
-  padding: 0 40px !important;
+  padding: var(--safe-t) calc(40px + var(--safe-r)) 0 calc(40px + var(--safe-l)) !important;
   background: rgba(var(--bg-rgb), .72) !important;
   border-bottom: 1px solid var(--text-a08);
   backdrop-filter: blur(12px);
@@ -1202,7 +1203,7 @@ footer .footer-copy span:first-child { color: var(--text-a62); }
 footer .footer-copy span:last-child { color: var(--text); }
 
 @media (max-width: 900px) {
-  body > nav { padding: 0 16px !important; }
+  body > nav { padding: var(--safe-t) calc(16px + var(--safe-r)) 0 calc(16px + var(--safe-l)) !important; }
   body > nav .nav-links { display: none; }
   .nav-hamburger { display: flex; }
   .footer-top { flex-direction: column; gap: 22px; margin-bottom: 32px; }

@@ -231,6 +231,8 @@ run "TOP ARTISTSランダム表示"             node scripts/check_top_artists.m
     && run "モバイルの言語切替"         node scripts/check_mobile_language_toggles.mjs
   [ -f scripts/check_search_modal.mjs ] \
     && run "モバイル検索モーダル"         node scripts/check_search_modal.mjs
+  [ -f scripts/check_safe_area_header.mjs ] \
+    && run "safe-area ヘッダー"            node scripts/check_safe_area_header.mjs
 fi
 
 echo
