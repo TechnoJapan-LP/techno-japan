@@ -14511,3 +14511,42 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - **cms.js 195: 実機未確認**。push 後に Publish pipeline を流し、CMS の記事プレビューを確かめる。ユーザーには Cmd+Shift+R。
 - 座標の入力はユーザーの判断待ち（高 10 件は「進めて」を受けて入力に進む。MUTEK は会場データの食い違いがあるため保留、中 8 件は中身を見せてから）。
 - データの食い違い（E-GROOVE の都道府県、MUTEK 2026 の会場と会期、YAMAUTO の座標と住所と 2026 年の開催回、Brightness の都道府県欄、PURE RAVE の Instagram、実在を確認できない 6 件 など）は `reports/festival-coords-2026-10-29.md` を見てユーザーが判断する。
+
+### 2026-10-29 座標の無いフェスのうち 10 件の開催回に座標を入力（本番データ、Claude 入力・ユーザーが Publish）
+
+### 実施
+
+- `reports/festival-coords-2026-10-29.md` の確からしさ「高」11 件のうち 10 件の EDITIONS に LAT / LNG を入力（ユーザー「進めて」）。手順は memory の production-data-safe-edit（AUDIT §9-109）: ユーザーがログインした Chrome で CMS を開き、`get_sheet` で行全体を読む → 控えを取る → 1 件試す → 行全体＋LAT/LNG で `update_row` → 読み直して照合、を 1 件ずつ。
+  - asagiri-jam-2025（6 行目）35.3842, 138.5839 / body-soul-2026（12）35.6417, 139.7784 / bonna-pot-2024（14）34.8034, 138.7953 / brightness-2025（15）35.5044, 139.7724 / delta-commit-2025（21）35.8485, 138.2664 / dots-2026（22）42.9321, 141.4131 / dream-festival-2025（23）35.4198, 138.901 / one-music-camp-2025（60）34.9593, 135.2925 / one-park-festival-2026（61）36.0652, 136.2195 / one-park-riverfes-2025（62）35.4381, 137.0324
+- **入れなかったもの**: MUTEK（2026 年の会場が MoN Takanawa に変わったのにデータは「渋谷」のまま。座標だけ入れると表示と地図が食い違う）。「中」8 件はユーザーが中身を見てから。会場名（LOCATION / LOCATION_JA）は 9 件で空のまま（日本語名だけを入れると英語ページに日本語が出るため、入れていない）。
+- **続けてユーザーの判断で直したもの**（「SuB-TiDe はシークレットのまま。MUTEK は MoN Takanawa で。E-GROOVE は秋田。YAMAUTO は山水人エコビレッジ。で進めて」）:
+  - EDITIONS e-groove-2026（24 行目）: PREF Hokkaido → Akita
+  - EDITIONS mutek-2026（95）: LOCATION / LOCATION_JA 渋谷 → MoN Takanawa、ADDRESS 東京都港区三田3-16-1、LAT/LNG 35.6394, 139.7417
+  - FESTIVALS mutek（3）: location / location_ja / address / lat / lng を 2025 年の渋谷（道玄坂）から MoN Takanawa に
+  - EDITIONS yamauto-2025（90）: LOCATION Ecotopia YAMAUTO、LOCATION_JA 山水人エコビレッジ、ADDRESS 滋賀県高島市朽木生杉、LAT/LNG 35.3587, 135.7912（生杉集落の位置。施設は地図データに無い）
+  - FESTIVALS yamauto（20）: location Sansuibito Eco Village → Ecotopia YAMAUTO（山水人の読みは「やまうと」。公式の英語表記）、address 朽木針畑 → 朽木生杉、lat/lng 35.3056, 135.8369（約 7km 離れた別の集落）→ 35.3587, 135.7912
+  - 出典: MoN Takanawa の住所は Time Out 東京・ウォーカープラス等で一致、YAMAUTO は公式 yamauto.net/access（「会場：滋賀県高島市朽木生杉・エコトピア山水人」／英語「Ecotopia YAMAUTO, Kutsuki Oisugi」）
+  - SuB-TiDe はシークレットのまま（座標を入れない）。MUTEK の会期（データ 11/22 まで、公式 11/20〜23）はユーザー未判断のため変えていない。
+
+### コミット
+
+- このエントリを含むコミット（本番データの変更そのものはシートへの書き込み。サイトへの反映はユーザーの Publish Now で完了）。
+
+### 検証
+
+- 書き込み前: 10 行とも EDITION_ID が 1 行だけ・LAT/LNG が空。書き込み後: 10 行とも変わったのは lat / lng / LAT / LNG だけ（日程・都道府県・状態などは 1 文字も変わらず）、表の行数 118 のまま。dream-festival の LNG は表で 138.901 と表示（同じ値）。
+- 続けて直した 5 行も、1 件ずつ読み直して想定どおりの欄だけが変わったことを確認（FESTIVALS は lastEditedAt の自動更新のみ追加）。表の行数は EDITIONS 118・FESTIVALS 92 のまま。MUTEK・YAMAUTO の紹介文（日本語・英語）・出演者・日程・画像などは控えと一致。
+- ユーザーが Publish Now（2026-10-29 13:32 `cms: publish data.js` d930b5c8b → Publish pipeline 成功 → `chore: regenerate detail pages` ec9346b78）。公開データに 10 件の座標と 5 行の修正がすべて入っていることを `LP/data/editions.json` / `data-hub.js` で確認。
+- 本番の詳細ページ: 座標を入れた 12 件（10 件＋MUTEK＋YAMAUTO）すべてに地図（`data-lat/lng` が入力値と一致）。ACCESS は MUTEK「MoN Takanawa · 東京」、YAMAUTO「山水人エコビレッジ · 滋賀」、E-GROOVE「日本庭園 · 秋田」（地図なし）。CDP で mutek（JA/EN）・asagiri-jam・yamauto（EN）・dots が CARTO の地図・目印 1 つ・拡大率 14・エラーなし（10/10）。EN は「MoN Takanawa · Tokyo」「Ecotopia YAMAUTO · Shiga」。
+
+### 変更したパターン
+
+- 本番データの書き込みは 1 件試してから残りを 1 件ずつ、毎回読み直して照合（前回と同じ）。
+
+### 未確認の類似パターン
+
+- 確からしさ「中」8 件・MUTEK・会場名が空の 9 件は未入力（判断待ち）。
+
+### 次の担当への注意・判断待ち
+
+- データの食い違い（`reports/festival-coords-2026-10-29.md` の末尾）はユーザーの判断待ち。Balance の会場は LABYRINTH と同じ宝台樹キャンプ場だが、調べた座標と LABYRINTH の座標が約 3.6km 離れている（どちらかがずれている可能性。OpenStreetMap の検索では施設が引けない）。
