@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "backedUpAt": "2026-10-28T16:56:52.682988+09:00"
+    "backedUpAt": "2026-10-29T17:04:30.575946+09:00"
   },
   "VENUES": [
     {
@@ -1739,12 +1739,12 @@
       "id": "mutek",
       "type": "festival",
       "name": "Mutek",
-      "date": "2026-11-20/2026-11-22",
-      "location": "Shibuya",
+      "date": "2026-11-20/2026-11-23",
+      "location": "MoN Takanawa",
       "city": "Tokyo",
-      "address": "東京都渋谷区道玄坂２丁目１４−８",
-      "lat": "35.658667",
-      "lng": "139.695611",
+      "address": "東京都港区三田3-16-1",
+      "lat": "35.6394",
+      "lng": "139.7417",
       "image": "images/festivals/mutek.webp",
       "flyer": "images/festivals/mutek-flyer.jpg",
       "genre": "TECHNO, HOUSE, AMBIENT, LIVE, OTHERS",
@@ -1760,10 +1760,10 @@
       "metaDescription": "モントリオール発の電子音楽フェスMUTEKが東京に上陸。最先端のオーディオビジュアル表現とデジタルアートのインスタレーション、ライブエレクトロニックが交差する実験の場へ。MUTEK Tokyoの魅力と見どころを紹介します。",
       "lasteditedby": "editor",
       "lastEditedBy": "editor",
-      "lasteditedat": "2026-10-20T15:56:55.263Z",
-      "lastEditedAt": "2026-10-20T15:56:55.263Z",
+      "lasteditedat": "2026-10-29T05:04:26.918Z",
+      "lastEditedAt": "2026-10-29T05:04:26.918Z",
       "desc_en": "MUTEK Tokyo brings the Montreal-based festival's signature blend of audiovisual performance and electronic experimentation to Japan's capital. The event showcases cutting-edge digital art installations alongside live electronic music performances, maintaining the brand's focus on innovation at the intersection of sound and visual technology.",
-      "location_ja": "渋谷"
+      "location_ja": "MoN Takanawa"
     },
     {
       "_row": 4,
@@ -2267,11 +2267,11 @@
       "type": "rave",
       "name": "YAMAUTO",
       "date": "2026-08-22/2026-08-30",
-      "location": "Sansuibito Eco Village",
+      "location": "Ecotopia YAMAUTO",
       "city": "Shiga",
-      "address": "滋賀県高島市朽木針畑",
-      "lat": "35.3056",
-      "lng": "135.8369",
+      "address": "滋賀県高島市朽木生杉",
+      "lat": "35.3587",
+      "lng": "135.7912",
       "image": "images/festivals/yamauto.webp",
       "flyer": "images/festivals/yamauto-flyer.webp",
       "genre": "TECHNO, OTHERS",
@@ -2282,8 +2282,8 @@
       "status": "published",
       "lasteditedby": "editor",
       "lastEditedBy": "editor",
-      "lasteditedat": "2026-08-05T16:46:31.304Z",
-      "lastEditedAt": "2026-08-05T16:46:31.304Z",
+      "lasteditedat": "2026-10-29T04:04:41.211Z",
+      "lastEditedAt": "2026-10-29T04:04:41.211Z",
       "desc_en": "YAMAUTO operates as a multi-day electronic music gathering set against the mountainous terrain of Shiga Prefecture. The festival emphasizes extended sets and immersive soundscapes, drawing both local and international acts to its remote location near Lake Biwa.",
       "location_ja": "山水人エコビレッジ",
       "country": "JP"
@@ -7765,6 +7765,8 @@
       "date_start": "2025-10-18",
       "date_end": "2025-10-19",
       "pref": "Shizuoka",
+      "lat": "35.3842",
+      "lng": "138.5839",
       "status": "finished"
     },
     {
@@ -7840,6 +7842,8 @@
       "location": "Kiranah Garden Toyosu",
       "location_ja": "キラナガーデン豊洲",
       "pref": "Tokyo",
+      "lat": "35.6417",
+      "lng": "139.7784",
       "ticketurl": "http://www.bodyandsoul-japan.com/",
       "ticketUrl": "http://www.bodyandsoul-japan.com/",
       "status": "finished"
@@ -7868,6 +7872,8 @@
       "date_start": "2024-11-08",
       "date_end": "2024-11-10",
       "pref": "Shizuoka",
+      "lat": "34.8034",
+      "lng": "138.7953",
       "status": "finished"
     },
     {
@@ -7878,6 +7884,8 @@
       "date_start": "2025-10-25",
       "date_end": "2025-10-26",
       "pref": "Kawasaki",
+      "lat": "35.5044",
+      "lng": "139.7724",
       "status": "finished"
     },
     {
@@ -7959,6 +7967,8 @@
       "date_start": "2025-10-04",
       "date_end": "2025-10-05",
       "pref": "Yamanashi",
+      "lat": "35.8485",
+      "lng": "138.2664",
       "status": "finished"
     },
     {
@@ -7969,6 +7979,8 @@
       "date_start": "2026-06-19",
       "date_end": "2026-06-21",
       "pref": "Hokkaido",
+      "lat": "42.9321",
+      "lng": "141.4131",
       "status": "finished"
     },
     {
@@ -7979,6 +7991,8 @@
       "date_start": "2025-10-18",
       "date_end": "2025-10-19",
       "pref": "Yamanashi",
+      "lat": "35.4198",
+      "lng": "138.901",
       "status": "finished"
     },
     {
@@ -7990,7 +8004,7 @@
       "date_end": "2026-08-01",
       "location": "Japanese Secret Garden",
       "location_ja": "日本庭園",
-      "pref": "Hokkaido",
+      "pref": "Akita",
       "flyer": "images/festivals/e-groove-flyer.webp",
       "status": "published"
     },
@@ -8514,6 +8528,8 @@
       "date_start": "2025-08-23",
       "date_end": "2025-08-24",
       "pref": "Hyogo",
+      "lat": "34.9593",
+      "lng": "135.2925",
       "status": "finished"
     },
     {
@@ -8524,6 +8540,8 @@
       "date_start": "2026-09-05",
       "date_end": "2026-09-06",
       "pref": "Fukui",
+      "lat": "36.0652",
+      "lng": "136.2195",
       "status": "announced"
     },
     {
@@ -8534,6 +8552,8 @@
       "date_start": "2025-10-18",
       "date_end": "2025-10-19",
       "pref": "Gifu",
+      "lat": "35.4381",
+      "lng": "137.0324",
       "status": "finished"
     },
     {
@@ -8915,7 +8935,12 @@
       "edition": "2025",
       "date_start": "2025-08-09",
       "date_end": "2025-08-18",
+      "location": "Ecotopia YAMAUTO",
+      "location_ja": "山水人エコビレッジ",
       "pref": "Shiga",
+      "address": "滋賀県高島市朽木生杉",
+      "lat": "35.3587",
+      "lng": "135.7912",
       "status": "finished"
     },
     {
@@ -8981,9 +9006,12 @@
       "festival_id": "mutek",
       "edition": "2026",
       "date_start": "2026-11-20",
-      "date_end": "2026-11-22",
-      "location": "Shibuya",
-      "location_ja": "渋谷",
+      "date_end": "2026-11-23",
+      "location": "MoN Takanawa",
+      "location_ja": "MoN Takanawa",
+      "address": "東京都港区三田3-16-1",
+      "lat": "35.6394",
+      "lng": "139.7417",
       "flyer": "images/festivals/mutek-2026-flyer.jpg",
       "status": "announced"
     },
