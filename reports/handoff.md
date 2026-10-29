@@ -14590,7 +14590,7 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 再生条件: `prefers-reduced-motion` でない、かつ `sessionStorage['tj-intro']` が無い（再生開始時に立てる。sessionStorage が使えない環境では再生しない）。`<head>` の小さなインライン script が判定して `html.tj-intro-playing` を付け、画像3枚を JS で preload。
 - ローダーの HTML は `<template id="tj-intro-tpl">` に置き、再生する時だけ body 先頭へ複製する（再生しない訪問・JS 無効では画像を一切読まない。静的 HTML に preload を書かないのはこのため）。
 - サイズはユーザー指示で仕様（132px / 13px）より大きく: シンボル PC 168px・スマホ 120px、文字 高さ 16px・12px、間隔 26px、滑り込み ±72px。
-- 素材 `LP/images/intro/`（元: docs/design-mock/img/）: mark-left/right 520×270（12.0KB / 10.7KB）、wordmark-text 471×48（13.3KB）。168px×dpr3=504 / 16px×dpr3=48 を満たす。`image-dimensions.json` に追加し `image-dimensions.js?v=101→102`（全ハブ）。
+- 素材 `LP/images/intro/`（元: docs/design-mock/img/）: mark-left/right 520×270（12.0KB / 10.7KB）、wordmark-text 471×48（13.3KB）。168px×dpr3=504 / 16px×dpr3=48 を満たす。`image-dimensions.json` に追加し `image-dimensions.js?v=101→103`（全ハブ。素材を作り直した時にもう一段上がった。2026-10-29 訂正: 当初 101→102 と誤記）。
 - EN（`LP/en/index.html`）は `enHubFromJa` で再生成。JA/EN とも 280 行。
 - 検査 `scripts/check_top_intro.mjs` を新設し preflight に登録。TOP を開く他の headless 検査 8 本（page_scroll / search_modal / hub_cls / mobile_language_toggles / en_visible_japanese / top_this_week / audit_a11y_browser / visual-snapshot）は `Page.addScriptToEvaluateOnNewDocument` で再生済みにして開く（LP 側に検査用の抜け道は作っていない）。
 
@@ -14622,3 +14622,37 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 - push 前に完全版の `bash scripts/preflight.sh` を全件通す（今回は負荷による時間切れ1件が残っている）。
 - 続けて TOP の帯（`.top2-marquee`）の文言をオープニングのマーキーと同じ単語の並びにする（ユーザー決定 2026-10-29「単語だけにする」）。別コミットで行う。
+
+### 2026-10-29 TOP の帯をオープニングのマーキーと同じ文言・書体・大きさに（ユーザー指示、Codex 実装・Claude 検証・コミット）
+
+### 実施
+
+- `LP/index.html` の `.top2-marquee-track` を `TECHNO · HOUSE · JAPAN · … · BILINGUAL ·`（オープニングの上下マーキーと同じ14語）に。旧来の英文5本と赤い `/` 区切りは廃止。説明文「Japan's Underground, Curated.」はフッターとメニューに残っている。
+- 書体・大きさをオープニングと同じに: Space Mono 10px、letter-spacing .2em、大文字、`rgba(240,237,232,.85)`。スマホ（760px 以下）も 10px。**REDESIGN_SPEC §2.1 の「Bebas 18px」から変えた（ユーザー指示 2026-10-29）。**
+- 上書きは TOP 専用の `LP/top-phase2.css` に書いた（読み込みは LP/index.html と LP/en/index.html のみ）。`LP/common.css` は変えていない。`top-phase2.css?v=12→13`。
+- 中身は「14語の文字列」の span を 1周に3本・同じ内容で2周（計6本）。common.css の `.top2-marquee span{padding:0 28px}` は TOP で 0 に打ち消し、各 span の末尾の空白は `&nbsp;`（inline-flex の子の末尾の空白は詰められ、つなぎ目が「BILINGUAL ·TECHNO」になっていた）。
+- 速さ: 1周の長さが変わったので `animation-duration:92s`（TOP 専用。`animation` の一括指定は使わず、reduce の `animation:none` は効いたまま）。
+- EN は `enHubFromJa` で再生成（置換は足していない）。JA/EN 同じ行数。
+
+### コミット
+
+- このエントリを含むコミット（redesign/magazine、オープニングのコミット f0806ad76 の次）。push していない。
+
+### 検証
+
+- 速さ（headless, CDP。1周 = track.scrollWidth / 2）: 変更前の帯は 1433px / 40s = 35.8px/s。書体変更後は 3313px / 40s = 82.8px/s（2.3倍）→ 92s で 36.0px/s。録画フレームの帯の移動量からも 36.0px/s。1周 3313px は 2560px 幅の画面より長い。
+- 録画（PC 1280 / スマホ 390 タッチ）を目視し、GIF をユーザーが確認して了承: オープニング → 帯の切り替わり、中黒が単語の中央、つなぎ目の間隔、帯（top:64px, z-index:49）とリードカルーセルの重なりに不具合なし。
+- `bash scripts/preflight.sh`（完全版）: **76 件すべて成功**（オープニングと帯の両方を含む状態）。
+
+### 変更したパターン
+
+- TOP の帯の文言・区切り・書体・大きさ・余白・速さ（TOP 専用 CSS での上書き）。
+
+### 未確認の類似パターン
+
+- `common.css` の帯の部品を使う他のページ: HTML を検索して `top2-marquee` を使うのは TOP（JA/EN）だけ。確認済み・0件。
+- 実機（iPhone / Android）は未確認。
+
+### 次の担当への注意・判断待ち
+
+- REDESIGN_SPEC §2.1（帯の書体・大きさ）は、仕様書側をまだ直していない（仕様書の変更は main の作業フォルダに未コミットのまま残っている）。
