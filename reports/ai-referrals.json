@@ -1,27 +1,27 @@
 {
-  "generatedAt": "2026-10-28T22:52:18.260Z",
+  "generatedAt": "2026-10-29T22:52:28.582Z",
   "propertyId": "535755449",
   "periods": {
     "current": {
-      "startDate": "2026-10-02",
-      "endDate": "2026-10-29",
+      "startDate": "2026-10-03",
+      "endDate": "2026-10-30",
       "label": "直近28日"
     },
     "previous": {
-      "startDate": "2026-09-04",
-      "endDate": "2026-10-01",
+      "startDate": "2026-09-05",
+      "endDate": "2026-10-02",
       "label": "前の28日"
     }
   },
   "current": {
-    "sessions": 86,
-    "totalUsers": 84,
-    "share": 0.03255109765329296,
+    "sessions": 89,
+    "totalUsers": 87,
+    "share": 0.032962962962962965,
     "bySource": [
       {
         "source": "chatgpt.com",
-        "sessions": 84,
-        "totalUsers": 82
+        "sessions": 87,
+        "totalUsers": 85
       },
       {
         "source": "gemini.google.com",
@@ -31,14 +31,14 @@
     ],
     "topLandingPages": [
       {
-        "landingPage": "/en/articles/topia-2026-info.html",
-        "sessions": 10,
+        "landingPage": "/",
+        "sessions": 11,
         "totalUsers": 10
       },
       {
-        "landingPage": "/",
-        "sessions": 9,
-        "totalUsers": 8
+        "landingPage": "/en/articles/topia-2026-info.html",
+        "sessions": 10,
+        "totalUsers": 10
       },
       {
         "landingPage": "/en/festivals/labyrinth.html",
@@ -131,8 +131,8 @@
         "totalUsers": 1
       }
     ],
-    "allSessions": 2642,
-    "allTotalUsers": 2171
+    "allSessions": 2700,
+    "allTotalUsers": 2201
   },
   "previous": {
     "sessions": 0,
