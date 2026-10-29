@@ -49,6 +49,8 @@ html.tj-venues-hydrating:not(.tj-venues-rendered) .venues-grid-section {
 .tjmap-local .lgrid { position: absolute; inset: 0; background-image: repeating-linear-gradient(90deg, rgba(240,237,232,.06) 0 1px, transparent 1px 48px), repeating-linear-gradient(0deg, rgba(240,237,232,.06) 0 1px, transparent 1px 48px); }
 .maplbl { position: absolute; z-index: 500; pointer-events: none; background: rgba(8,8,8,.68); padding: 4px 6px; }
 .maplbl a { pointer-events: auto; color: var(--text); }
+.maplbl-full-map { pointer-events: auto; }
+.maplbl-full-map::after { content: ""; position: absolute; z-index: 0; pointer-events: auto; inset: -11px 0 -10px; }
 .maplbl-featured { color: var(--text); }
 .venue-featured-card { display: flex; flex-direction: column; justify-content: space-between; gap: 10px; min-width: 0; align-self: stretch; overflow: hidden; }
 .venue-featured-image { flex: 1 1 0; min-height: 180px; overflow: hidden; background: rgba(240,237,232,.04); }

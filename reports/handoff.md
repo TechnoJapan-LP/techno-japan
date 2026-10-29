@@ -14466,3 +14466,48 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 
 - なし（本番の確認は push 後に行う）。
+
+### 2026-10-29 TOP の THIS WEEK・スマホの記事見出しの折り返し・フェス詳細の地図の拡大率・VENUES の地図のリンク・トップへのリンクを「/」に・文章ガイド（Claude 検証・コミット）
+
+### 実施
+
+- ユーザーの指摘と「残っている作業を 1〜4 も進めて」を受けて、Codex で実装（`tmp/spec-ui-batch-1029.md`、手直し `tmp/spec-ui-batch-fix.md`）。経緯と数値は AUDIT §9-111。
+  1. **TOP の THIS WEEK**: 「今日始まるもの」だけ → 「今日から 7 日間に開催期間が重なるもの」。0 件のときの案内文、件数の行を絞り込みごとに。`top-phase2.js?v=11`・`top-phase2.css?v=12`。
+  2. **記事の見出し（h2）**: 装飾タグで包まれた見出しにも読点のまとまりを適用、スマホでは `clamp(26px, 7.5vw, 34px)`。`detail.css?v=92`、cms.js 195（記事プレビューの版）。
+  3. **フェス詳細の地図**: 最初の拡大率 12 → 14（本番で 12〜15 を比べて決定）。`festival-map.js?v=2`。
+  4. **VENUES の「Open full map →」**: 本番でも押せなかった（`pointer-events: none`）のを直し、見た目を変えずに押せる範囲 44px。`venues-phase3.css?v=10`。
+  5. **トップへのリンク**: 日本語ページの `/index.html` を正式な URL の `/` に（1,114 本）。英語は canonical が `/en/index.html` なので据え置き（1,112 本）。
+  6. **文章ガイド** §8 に「記事の冒頭に事実をまとめる」「大きく直したら UPDATED（更新日）」を追記（Claude）。`docs/aio/AIO_LLMO_2026-10-28.md` の表も更新。
+  7. **座標の無いフェス 36 件の調査**（読み取りだけ、サブエージェント）: `reports/festival-coords-2026-10-29.md` / `.json`。高 11・中 8・低 17。データの食い違いも同じファイルに列挙（直していない）。
+- 新しい検査: `check_top_this_week.mjs`、`check_article_heading_breaks.mjs`、`check_top_links.py`。`check_festival_access_map.mjs`（拡大率 14）・`check_venue_maps.mjs`（リンクの当たり判定）を追加修正。
+
+### コミット
+
+- このエントリを含むコミット（redesign/magazine → main）。
+
+### 検証
+
+- 手元（127.0.0.1:8095、CDP）: TOP の THIS WEEK は JA/EN とも festival-de-frue / parallel-world / denki-bodhisattva の 3 件、「3 events · this week」、ロゴと TOP は JA `/`・EN `/en/index.html`。denki の h2 は 29.25px で「空港に反対した拠点が、 / いまはカルチャーの / 場になっている」。地図は拡大率 14。「Open full map →」は中心・上端 10px 上・下端 9px 下とも押せる（本番は 3 点とも地図に当たっていた）。目視（TOP・見出し・地図）。
+- `check_top_this_week.mjs`（JA/EN × 390/1440、0 件の日 2026-01-01 で案内文）、`check_article_heading_breaks.mjs`（22 記事 × 360/390/430px、34px に戻すと 10 件で失敗）、`check_festival_access_map.mjs`、`check_venue_maps.mjs`、`check_top_links.py`、`check_mobile_language_toggles.mjs`（36/36）、`test_phrase_breaks.mjs` 成功。
+- build 冪等性（601）・版数・回帰・内部リンク・CMS プレビュー・`git diff --check`・JA/EN 行数一致（Codex 実行）。
+- `bash scripts/preflight.sh`: pre-push で省略なしに実行（push が通った＝全件成功）。
+
+### 変更したパターン
+
+- 日付の絞り込みは「開始日の一致」ではなく「期間の重なり」で判定する。
+- 見出しの折り返しは、文字の大きさと1行に入る文字数を合わせて考える（スマホで約 12 文字）。
+- `pointer-events: none` の重ね表示の中のリンクは、リンク自身に `pointer-events: auto` が要る。
+- 内部リンクは正式な URL（canonical）へ向ける。
+
+### 未確認の類似パターン
+
+- CMS の「本番表示」プレビューは見出しに文節・読点の処理をしていない（前からの違い。見出しの見え方が本番と少し違う）。
+- 記事タイトル（h1）・h3 は今回の検査の対象外（タイトルは 80 件中おかしな折り返し 0 件を確認済み）。
+- iPhone 実機（Safari）での見出し・TOP の確認は未実施（headless の模擬のみ）。
+- ほかのページの重ね表示（`pointer-events: none`）の中のリンクは未調査。
+
+### 次の担当への注意・判断待ち
+
+- **cms.js 195: 実機未確認**。push 後に Publish pipeline を流し、CMS の記事プレビューを確かめる。ユーザーには Cmd+Shift+R。
+- 座標の入力はユーザーの判断待ち（高 10 件は「進めて」を受けて入力に進む。MUTEK は会場データの食い違いがあるため保留、中 8 件は中身を見せてから）。
+- データの食い違い（E-GROOVE の都道府県、MUTEK 2026 の会場と会期、YAMAUTO の座標と住所と 2026 年の開催回、Brightness の都道府県欄、PURE RAVE の Instagram、実在を確認できない 6 件 など）は `reports/festival-coords-2026-10-29.md` を見てユーザーが判断する。

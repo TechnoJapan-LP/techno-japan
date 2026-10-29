@@ -24,7 +24,7 @@ import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
 import { imageSizeAttrs } from './lib/image-size.mjs';
-import { clauseBreaks, phraseBreaks } from './lib/phrase-breaks.mjs';
+import { addHeadingPhraseBreaks, clauseBreaks } from './lib/phrase-breaks.mjs';
 import { autolinkArtists, parseEvents, renderArticleShortcodes } from '../LP/article-shortcodes.js';
 import { articleMatchesArtist } from './lib/artist-page-utils.mjs';
 import { loadArticleImageMap, replaceMappedArticleImages } from './lib/article-body-images.mjs';
@@ -58,7 +58,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 91;
+const DETAIL_CSS_VERSION = 92;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -83,7 +83,7 @@ const LANG_TOGGLE_VERSION = 3;
 const MAGAZINE_JS_VERSION = 8;   // 2026-10-28 preferred source link in newsletter blocks
 const FAVORITES_JS_VERSION = 4;
 const MAP_TILES_JS_VERSION = 2;
-const FESTIVAL_MAP_JS_VERSION = 1;
+const FESTIVAL_MAP_JS_VERSION = 2;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
 const LINEUPS_PATH = path.join(LP_DIR, 'data', 'lineups.json');
 const ARTISTS_PATH = path.join(LP_DIR, 'data', 'artists.json');
@@ -830,15 +830,6 @@ function addHtmlImageDimensions(html) {
   });
 }
 
-/* 記事本文の見出しだけに、ブラウザを問わず使える文節の折り返し位置を埋め込む。 */
-function addHeadingPhraseBreaks(html) {
-  return String(html || '').replace(/<h([23])\b([^>]*)>([\s\S]*?)<\/h\1>/gi, (block, level, attrs, contents) => {
-    const processText = /<[^>]+>/.test(contents) ? phraseBreaks : clauseBreaks;
-    const processed = contents.replace(/(^|>)([^<]+)(?=<|$)/g, (_text, prefix, text) => `${prefix}${processText(text)}`);
-    return `<h${level}${attrs}>${processed}</h${level}>`;
-  });
-}
-
 /* ---------- 回遊導線（ページ間の相互リンク）。main() が索引をセットする ---------- */
 let XLINK = { fests: [], venues: [], appearMap: new Map() };
 
@@ -1097,10 +1088,11 @@ const FONT_HEAD = `<link rel="preconnect" href="https://fonts.googleapis.com">
 </style>`;
 
 /* 詳細ページの nav。EN ページでは EN 版が実在するリンク先だけ /en/ へ向ける。
-   EN_PAGES に無いもの（index.html）は JA のままにして 404 を作らない。
+   EN_PAGES に無いものは JA のままにして 404 を作らない。
    これを入れる前は EN 詳細206枚の nav が全て JA を指しており、
    英語ユーザーはどこを押しても日本語ページに出てしまっていた。 */
 function navLink(lang, page) {
+  if (page === 'index.html') return lang === 'en' ? '/en/index.html' : '/';
   return (lang === 'en' && EN_PAGES.has(page)) ? `/en/${page}` : `/${page}`;
 }
 
@@ -1110,7 +1102,7 @@ function menuOverlayHtml(lang, currentKey = '', altHref = null) {
   const labels = en
     ? [['top', 'Top', '', 'index.html'], ['news', 'News', 'Stories', 'news.html'], ['festivals', 'Festivals', 'Index', 'festivals.html'], ['artists', 'Artists', 'Database', 'artists.html'], ['venues', 'Venues', 'Clubs & sites', 'venues.html'], ['about', 'About', '', 'about.html']]
     : [['top', 'Top', 'トップ', 'index.html'], ['news', 'News', 'ニュース・記事', 'news.html'], ['festivals', 'Festivals', 'フェス一覧', 'festivals.html'], ['artists', 'Artists', 'アーティスト', 'artists.html'], ['venues', 'Venues', 'クラブ・会場', 'venues.html'], ['about', 'About', 'テクノジャパンについて', 'about.html']];
-  const href = (file) => `${prefix}/${file}`;
+  const href = (file) => file === 'index.html' ? (en ? '/en/index.html' : '/') : `${prefix}/${file}`;
   const items = labels.map(([key, label, note, file], i) => `    <a href="${href(file)}" class="nav-ov-item" style="animation-delay:${(0.06 + i * 0.06).toFixed(2)}s"${key === currentKey ? ' aria-current="page"' : ''}><span class="nav-ov-num">${String(i + 1).padStart(2, '0')}</span><span class="nav-ov-label">${label}</span><span class="nav-ov-note">${note}</span></a>`).join('\n');
   const language = altHref
     ? (en
@@ -1139,7 +1131,7 @@ function navHtml(lang, altHref, currentKey = '') {
         : `<span class="nav-lang"><a href="${altHref}">JA</a><span class="nav-lang-sep">/</span><span class="nav-lang-cur">EN</span></span>`)
     : '';
   return `<nav>
-  <a href="/index.html" class="logo"><img src="/images/logo-wordmark.png?v=1" alt="TECHNO JAPAN" width="158" height="13" decoding="async"></a>
+  <a href="${navLink(lang, 'index.html')}" class="logo"><img src="/images/logo-wordmark.png?v=1" alt="TECHNO JAPAN" width="158" height="13" decoding="async"></a>
   <div class="nav-links">
     <a href="${navLink(lang, 'index.html')}">TOP</a>
     <a href="${navLink(lang, 'news.html')}">NEWS</a>
@@ -1214,8 +1206,10 @@ function normalizeStaticChrome(fileName, lang) {
   const currentKey = ({ 'index.html': 'top', 'news.html': 'news', 'festivals.html': 'festivals', 'artists.html': 'artists', 'venues.html': 'venues', 'about.html': 'about', 'favorites.html': 'favorites' })[path.basename(fileName)] || '';
   const is404 = path.basename(fileName) === '404.html';
   const altHref = is404
-    ? (lang === 'en' ? '/index.html' : '/en/index.html')
-    : (lang === 'en' ? `/${path.basename(fileName)}` : `/en/${path.basename(fileName)}`);
+    ? (lang === 'en' ? '/' : '/en/index.html')
+    : (lang === 'en'
+      ? (path.basename(fileName) === 'index.html' ? '/' : `/${path.basename(fileName)}`)
+      : `/en/${path.basename(fileName)}`);
   let next = before;
   // 旧版が複数の overlay を持つ場合も、生成した1個だけを残す。
   let oldOverlay;
@@ -3833,7 +3827,7 @@ function enHubFromJa(html, page) {
   const abs = (p) => `${BASE}/${p === 'index.html' ? '' : p}`;
   const menuKey = ({ 'index.html': 'top', 'news.html': 'news', 'festivals.html': 'festivals', 'artists.html': 'artists', 'venues.html': 'venues', 'about.html': 'about', 'favorites.html': 'favorites' })[page] || '';
   const jaMenu = menuOverlayHtml('ja', menuKey, `/en/${page}`);
-  const enMenu = menuOverlayHtml('en', menuKey, `/${page}`);
+  const enMenu = menuOverlayHtml('en', menuKey, page === 'index.html' ? '/__ja-top__' : `/${page}`);
   if (!s.includes(jaMenu)) throw new Error(`${page}: JAメニューが見つからない（生成と不整合）`);
   s = s.split(jaMenu).join(enMenu);
   const jaFooter = footerHtml('ja');
@@ -3877,9 +3871,11 @@ function enHubFromJa(html, page) {
   // 内部リンク: EN 版があるページだけ /en/ へ。相対・絶対の両表記に対応する。
   s = s.replace(/href="\/?((?:index|news|festivals|artists|venues|about|submit|writers|favorites)\.html)"/g,
     (m, p) => (EN_PAGES.has(p) ? `href="/en/${p}"` : m));
-  // EN 版が無いページ（index）は相対表記だと /en/index.html を指してしまう。
-  // ルート相対に正規化して JA トップへ確実に戻す。
-  s = s.replace(/href="index\.html"/g, 'href="/index.html"');
+  // JA の正式なトップURLを EN 側の正式なトップURLへ変換する。
+  // EN メニュー内の JA 切替だけは後でルートへ戻すため一時的な印を使う。
+  s = s.replace(/href="\/"/g, 'href="/en/index.html"');
+  s = s.replace(/href="\/__ja-top__"/g, 'href="/"');
+  s = s.replace(/href="\/index\.html"/g, 'href="/"');
 
   // JA ハブは共有アセットを相対パスで読んでいる。/en/ に置くと /en/data-hub.js を
   // 探して 404 になり、FESTIVALS is not defined でページ全体が死ぬ。
@@ -3930,7 +3926,7 @@ function enHubFromJa(html, page) {
   // 詳細ビューのマークアップ152行を巻き込んで消す事故を起こした。
   // 実際に生成される固定文字列だけを対象にする。
   const jaToggle = `<span class="nav-lang"><span class="nav-lang-cur">JA</span><span class="nav-lang-sep">/</span><a href="/en/${page}">EN</a></span>`;
-  const enToggle = `<span class="nav-lang"><a href="/${page}">JA</a><span class="nav-lang-sep">/</span><span class="nav-lang-cur">EN</span></span>`;
+  const enToggle = `<span class="nav-lang"><a href="${page === 'index.html' ? '/' : `/${page}`}">JA</a><span class="nav-lang-sep">/</span><span class="nav-lang-cur">EN</span></span>`;
   if (!s.includes(jaToggle)) throw new Error(`${page}: 言語トグルが見つからない（JA 側の生成と不整合）`);
   s = s.split(jaToggle).join(enToggle);
 

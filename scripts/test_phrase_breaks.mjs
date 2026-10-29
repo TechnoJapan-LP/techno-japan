@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { clauseBreaks, phraseBreaks } from './lib/phrase-breaks.mjs';
+import { addHeadingPhraseBreaks, clauseBreaks, phraseBreaks } from './lib/phrase-breaks.mjs';
 
 const cases = new Map([
   ['野外テクノパーティTRANSCENDENCEで見た次世代ジェネレーションの可能性', '野外<wbr>テクノパーティ<wbr>TRANSCENDENCEで<wbr>見た<wbr>次世代<wbr>ジェネレーションの<wbr>可能性'],
@@ -25,4 +25,9 @@ for (const [input, expected] of clauseCases) {
     assert.ok(clause[1].replaceAll('<wbr>', '').length >= 4, clause[1]);
   }
 }
+const decoratedHeading = '<h2><em>空港に反対した拠点が、いまはカルチャーの場になっている</em></h2>';
+const decoratedOutput = addHeadingPhraseBreaks(decoratedHeading);
+assert.match(decoratedOutput, /^<h2><em>.*<span class="tj-clause[^>]*>.*<\/span>.*<\/em><\/h2>$/);
+assert.match(addHeadingPhraseBreaks('<h2><em class="ql-font-bebas">空港に反対した拠点が、いまはカルチャーの場になっている</em></h2>'), /<em class="ql-font-bebas">.*<span class="tj-clause/);
+assert.equal(addHeadingPhraseBreaks('<h2>空港に<strong>反対した</strong>拠点が、いまはカルチャーの場になっている</h2>'), '<h2>空港に<strong>反対した</strong>拠点が、<wbr>いまは<wbr>カルチャーの<wbr>場に<wbr>なっている</h2>');
 console.log(`✅ phraseBreaks ${cases.size} samples`);

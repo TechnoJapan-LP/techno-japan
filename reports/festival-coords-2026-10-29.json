@@ -1,0 +1,648 @@
+[
+ {
+  "festival_id": "asagiri-jam",
+  "edition_id": "asagiri-jam-2025",
+  "edition_dates": "2025-10-18/2025-10-19",
+  "venue_name": "Asagiri Arena / Fumotoppara (foot of Mt. Fuji)",
+  "venue_name_ja": "富士山麓 朝霧アリーナ・ふもとっぱら",
+  "address": "静岡県富士宮市麓487-5（朝霧アリーナ＝朝霧自然公園）。キャンプエリアのふもとっぱらは富士宮市麓156",
+  "lat": "35.3842",
+  "lng": "138.5839",
+  "confidence": "high",
+  "sources": [
+   "https://asagirijam.jp/2025/",
+   "https://asagirijam.jp/2025/access/",
+   "https://www.navitime.co.jp/category/0101002001/22207/",
+   "https://asagirijam.jp/"
+  ],
+  "geocoder": "nominatim",
+  "geocoder_match": "朝霧自然公園, 富士宮市, 静岡県, 日本 (leisure/park)",
+  "notes": "公式の会場表記は「富士山麓 朝霧アリーナ・ふもとっぱら」（静岡県富士宮市朝霧高原 周辺）。ステージ＝朝霧アリーナ、キャンプ＝ふもとっぱら。座標は朝霧アリーナ（施設の正式名は朝霧自然公園、NAVITIME で同一施設として掲載）。百科事典系ページの朝霧アリーナの座標（35.3830,138.5833）と約150mで一致。ふもとっぱら（Nominatim: 35.3985,138.5659）は約2.5km北西。公式サイトで2026年は開催休止と告知。"
+ },
+ {
+  "festival_id": "axiom",
+  "edition_id": "axiom-2025",
+  "edition_dates": "2025-04-19/2025-04-20",
+  "venue_name": null,
+  "venue_name_ja": null,
+  "address": null,
+  "lat": null,
+  "lng": null,
+  "confidence": "low",
+  "sources": [
+   "https://technotrancetokyo.com/archives/89031144.html"
+  ],
+  "geocoder": "none",
+  "geocoder_match": null,
+  "notes": "英語・日本語、RA（検索結果経由）、ZAIKO/Peatix/LivePocket/iFLYER/Instagram を探したが、2025-04-19/20 山梨の「axiom」の開催記録は techno-japan.media 以外に見つからない。2025年の国内野外パーティー一覧（technotrancetokyo）の該当週にも無い。実在・日付とも未確認。データ（URL・Instagram 空欄）の出どころの確認を推奨。"
+ },
+ {
+  "festival_id": "balance",
+  "edition_id": "balance-2025",
+  "edition_dates": "2025-05-16/2025-05-18",
+  "venue_name": "Minakami Hodaigi Camping Ground",
+  "venue_name_ja": "群馬みなかみほうだいぎキャンプ場（旧称 宝台樹キャンプ場）",
+  "address": "群馬県利根郡みなかみ町藤原915-1",
+  "lat": "36.8258",
+  "lng": "139.0764",
+  "confidence": "medium",
+  "sources": [
+   "https://mindgames.zaiko.io/en/e/balance-2025",
+   "https://www.nap-camp.com/gunma/10786",
+   "https://rurubu.jp/andmore/spot/80008341"
+  ],
+  "geocoder": "none",
+  "geocoder_match": "Nominatim・GSI では施設を特定できず（GSI は「藤原」地区の代表点＝約9km北を返すので不採用）。座標は なっぷ の施設ページの地図位置 36.8258,139.0764。るるぶの施設ページの位置 36.8256,139.0763 と約20mで一致",
+  "notes": "会場・住所は主催 Mindgames の公式チケット（ZAIKO, 5/16 19:30〜5/18 17:00）で確認。The Labyrinth と同じキャンプ場。座標は地図サービスではなく掲載サイト2つの位置が一致したもので、実用上は信頼できるが定義上 medium。2026年の Balance は見つからず。"
+ },
+ {
+  "festival_id": "body-soul",
+  "edition_id": "body-soul-2026",
+  "edition_dates": "2026-06-07",
+  "venue_name": "Kiranah Garden Toyosu",
+  "venue_name_ja": "キラナガーデン豊洲",
+  "address": "東京都江東区豊洲6-5-27",
+  "lat": "35.6417",
+  "lng": "139.7784",
+  "confidence": "high",
+  "sources": [
+   "http://www.bodyandsoul-japan.com/",
+   "https://bodyandsoul-japan.zaiko.io/e/bodyandsoul26"
+  ],
+  "geocoder": "nominatim",
+  "geocoder_match": "豊洲水素ステーション, 27, 豊洲六丁目, 豊洲, 江東区, 東京, 135-0061, 日本（住所「豊洲6-5-27」での検索）",
+  "notes": "会場名と住所は公式サイトと公式チケット（ZAIKO, 2026-06-07 12:00–21:00）で一致。施設名は地図データに無いため住所で検索し、同じ番地（豊洲6-5-27）の東京ガス豊洲水素ステーションに一致。施設情報サイト（ウォーカープラス）の地図位置 35.6426,139.7777 とは約120m。"
+ },
+ {
+  "festival_id": "bonna-pot",
+  "edition_id": "bonna-pot-2024",
+  "edition_dates": "2024-11-08/2024-11-10",
+  "venue_name": "Auto Camp Ginga",
+  "venue_name_ja": "オートキャンプ銀河",
+  "address": "静岡県賀茂郡西伊豆町一色1986-1",
+  "lat": "34.8034",
+  "lng": "138.7953",
+  "confidence": "high",
+  "sources": [
+   "https://bonnapot.zaiko.io/e/bonnapot24"
+  ],
+  "geocoder": "nominatim",
+  "geocoder_match": "オートキャンプ銀河, 西伊豆町, 賀茂郡, 静岡県, 410-3512, 日本 (tourism/camp_site)",
+  "notes": "公式チケット（ZAIKO）で 2024-11-08〜10・会場・住所を確認。2025・2026年の開催は見つからず、最新回が2年前（2024年）のまま。"
+ },
+ {
+  "festival_id": "brightness",
+  "edition_id": "brightness-2025",
+  "edition_dates": "2025-10-25/2025-10-26",
+  "venue_name": "Higashi-Ogishima East Park",
+  "venue_name_ja": "東扇島東公園",
+  "address": "神奈川県川崎市川崎区東扇島58-1",
+  "lat": "35.5044",
+  "lng": "139.7724",
+  "confidence": "high",
+  "sources": [
+   "https://brightness-music.com/"
+  ],
+  "geocoder": "nominatim",
+  "geocoder_match": "東扇島東公園, 川崎区, 川崎市, 神奈川県, 210-0000, 日本 (leisure/park, Wikidata Q11527049)",
+  "notes": "公式サイトで日程（10/25〜26）・会場・住所を確認。住所（58-1）を GSI で引くと約2.9km離れた港湾道路上を返すため不採用し、公園名での一致を採用。データの PREF が「Kawasaki」（市名）。都道府県なら Kanagawa。"
+ },
+ {
+  "festival_id": "car-multimedia",
+  "edition_id": "car-multimedia-2026",
+  "edition_dates": "2026-07-25",
+  "venue_name": null,
+  "venue_name_ja": null,
+  "address": null,
+  "lat": null,
+  "lng": null,
+  "confidence": "low",
+  "sources": [
+   "https://www.instagram.com/wagon_r_157/"
+  ],
+  "geocoder": "none",
+  "geocoder_match": null,
+  "notes": "主催 WAGON R の Instagram にも他の媒体にも会場の記載なし。自サイトの紹介文も「埼玉の山奥・場所は非公開」。非公開として座標は空欄。"
+ },
+ {
+  "festival_id": "delta-commit",
+  "edition_id": "delta-commit-2025",
+  "edition_dates": "2025-10-04/2025-10-05",
+  "venue_name": "Village Hakushu",
+  "venue_name_ja": "ヴィレッヂ白州",
+  "address": "山梨県北杜市白州町上教来石平久保2124",
+  "lat": "35.8485",
+  "lng": "138.2664",
+  "confidence": "high",
+  "sources": [
+   "https://www.deltacommit.com/",
+   "https://deltacommit.zaiko.io/e/artparty2025"
+  ],
+  "geocoder": "nominatim",
+  "geocoder_match": "ヴィレッヂ白州, 北杜市, 山梨県, 408-0318, 日本 (tourism/camp_site)",
+  "notes": "公式サイトで日程（2025.10.4–5）・会場・住所を確認。公式の表記は「Village HAKUSHU / ヴィレッジ白州」、施設側は「ヴィレッヂ白州」。2026年の開催は見つからず。"
+ },
+ {
+  "festival_id": "dots",
+  "edition_id": "dots-2026",
+  "edition_dates": "2026-06-19/2026-06-21",
+  "venue_name": "Airin",
+  "venue_name_ja": "藍鱗",
+  "address": "北海道札幌市清田区有明376-3",
+  "lat": "42.9321",
+  "lng": "141.4131",
+  "confidence": "high",
+  "sources": [
+   "https://dots.zaiko.io/e/dotsfest26"
+  ],
+  "geocoder": "nominatim",
+  "geocoder_match": "藍鱗, 真駒内御料札幌線, 有明, 清田区, 札幌市, 石狩振興局, 北海道, 北海道地方, 004-0821, 日本 (leisure/fishing)",
+  "notes": "公式チケット（ZAIKO「DOTS MUSIC FESTIVAL2026」）で会場・住所を確認。藍鱗は釣り堀・BBQ・キャンプ場の複合施設で、地図データの同名施設に一致。住所での GSI 結果（42.9355,141.4088）とは約500m。英字表記 Airin は読みからの表記で公式未確認。紹介文（DESC）の「札幌のクラブ」という記述は会場の実態（屋外）と合わない。"
+ },
+ {
+  "festival_id": "dream-festival",
+  "edition_id": "dream-festival-2025",
+  "edition_dates": "2025-10-18/2025-10-19",
+  "venue_name": "Yamanakako Exchange Plaza Kirara",
+  "venue_name_ja": "山中湖交流プラザきらら",
+  "address": "山梨県南都留郡山中湖村平野479-2",
+  "lat": "35.4198",
+  "lng": "138.9010",
+  "confidence": "high",
+  "sources": [
+   "https://prtimes.jp/main/html/rd/p/000000009.000142227.html",
+   "https://www.yamanashi-kankou.jp/fc/location/17/17014.html"
+  ],
+  "geocoder": "nominatim",
+  "geocoder_match": "きらら, 富士吉田山中湖自転車道線, 平野, 山中湖村, 南都留郡, 山梨県, 401-5052, 日本 (leisure/sports_centre)",
+  "notes": "主催のプレスリリース（PR TIMES）で日程・会場・住所を確認。地図データの「きらら」は山梨県観光サイトの地図位置（35.4193,138.9013）とも約60mで一致。住所の GSI 結果（35.4127,138.8948）は約950mずれるため不採用。プレスリリースによれば2024年は千葉県開催で、会場は回ごとに変わる。2026年の開催は見つからず。"
+ },
+ {
+  "festival_id": "e-groove",
+  "edition_id": "e-groove-2026",
+  "edition_dates": "2026-08-01",
+  "venue_name": "A Japanese garden in Yuwa, Akita City (facility not disclosed)",
+  "venue_name_ja": "秋田市雄和の日本庭園（施設名は非公開）",
+  "address": null,
+  "lat": null,
+  "lng": null,
+  "confidence": "low",
+  "sources": [
+   "https://www.instagram.com/e_groove.jp/"
+  ],
+  "geocoder": "none",
+  "geocoder_match": null,
+  "notes": "主催 Instagram の表記は「秋田市雄和 日本庭園」までで、施設名・住所は出していない（2026-08 時点の bio は「チケット、会場はDMへ」）。施設を特定できないため空欄。※データの誤り: editions.json の PREF が「Hokkaido」だが、実際は秋田県（Instagram「Rave in Akita Japan」、FESTIVALS の city も Akita）。詳細ページの ACCESS が「日本庭園 · 北海道」と表示されている。Instagram では同じ場所での 9/21 開催と 10/30（場所表記「高尾山」）の告知もあるが、editions.json は 8/1 回のみ。"
+ },
+ {
+  "festival_id": "ensou",
+  "edition_id": "ensou-2026",
+  "edition_dates": "2026-05-15/2026-05-17",
+  "venue_name": null,
+  "venue_name_ja": null,
+  "address": null,
+  "lat": null,
+  "lng": null,
+  "confidence": "low",
+  "sources": [
+   "https://sonminentertainment.zaiko.io/e/ensoufest2026"
+  ],
+  "geocoder": "none",
+  "geocoder_match": null,
+  "notes": "公式チケットに「栃木県南部某所」「チケット購入者に場所公開します」と明記。主催が会場を伏せているため空欄（掲載時も伏せるべき）。"
+ },
+ {
+  "festival_id": "euphoria",
+  "edition_id": "euphoria-2025",
+  "edition_dates": "2025-07-11/2025-07-12",
+  "venue_name": null,
+  "venue_name_ja": null,
+  "address": null,
+  "lat": null,
+  "lng": null,
+  "confidence": "low",
+  "sources": [
+   "https://technotrancetokyo.com/archives/89031144.html"
+  ],
+  "geocoder": "none",
+  "geocoder_match": null,
+  "notes": "主催者・公式の情報が見つからない。唯一の手がかりは二次情報の国内野外一覧（technotrancetokyo 2025年版）の「7月12日～13日 Euphoria@おおばキャンプ場」だが、日付がデータ（7/11〜12）と1日ずれており、主催者の告知で裏づけできないため空欄。同名の都内クラブイベントは日付が合わず別物。"
+ },
+ {
+  "festival_id": "gampeki",
+  "edition_id": "gampeki-2025",
+  "edition_dates": "2025-09-20/2025-09-21",
+  "venue_name": "Uriwari Sekitei Park (URIWARI STONE PARK YAMAGATA)",
+  "venue_name_ja": "瓜割石庭公園",
+  "address": "山形県東置賜郡高畠町安久津（番地なし）",
+  "lat": "38.0101",
+  "lng": "140.2280",
+  "confidence": "medium",
+  "sources": [
+   "https://www.gampeki.com/",
+   "https://niewmedia.com/en/news/068731/",
+   "https://tenki.jp/lite/leisure/2/9/35/30261/",
+   "https://tabi-mag.jp/yg0260/"
+  ],
+  "geocoder": "none",
+  "geocoder_match": "Nominatim・GSI では施設名が引けない（Nominatim は和歌山県の道路を返したので不採用、GSI は安久津地区の代表点＝約1.9km北）。座標は日本気象協会 tenki.jp のスポット「高畠石採石場 瓜割石庭公園」の地図位置。観光情報の「国道113号沿い」と整合",
+  "notes": "公式サイト（岩壁音楽祭 THE FINAL）の会場表記は「URIWARI STONE PARK YAMAGATA」。日付は公式ページ本文に無く、ニュース記事で 2025-09-20/21・高畠町を確認。最終回と告知されており、今後の開催は無い見込み。"
+ },
+ {
+  "festival_id": "halola-camp",
+  "edition_id": "halola-camp-2026",
+  "edition_dates": "2026-06-27/2026-06-28",
+  "venue_name": null,
+  "venue_name_ja": null,
+  "address": null,
+  "lat": null,
+  "lng": null,
+  "confidence": "low",
+  "sources": [
+   "https://technotrancetokyo.com/archives/90050667.html"
+  ],
+  "geocoder": "none",
+  "geocoder_match": null,
+  "notes": "2026-06-27/28 北海道の「HALOLA CAMP」の開催記録は techno-japan.media 以外に見つからない（英語・日本語、2026年の国内野外一覧も確認）。名称の誤記の可能性。元の申告（INBOX）の確認を推奨。"
+ },
+ {
+  "festival_id": "ishinoko",
+  "edition_id": "ishinoko-2025",
+  "edition_dates": "2025-10-11/2025-10-13",
+  "venue_name": "Takigahara Farm",
+  "venue_name_ja": "TAKIGAHARA FARM（滝ヶ原ファーム）",
+  "address": "石川県小松市滝ケ原町ヲ66",
+  "lat": "36.2974",
+  "lng": "136.4210",
+  "confidence": "medium",
+  "sources": [
+   "https://ishinoko.notion.site/2025",
+   "https://ishinoko.notion.site/Access-2372a3f2572680a98e6ce4e31d87bc52",
+   "https://www.mlit.go.jp/tagengo-db/en/R1-01229.html"
+  ],
+  "geocoder": "nominatim",
+  "geocoder_match": "滝ケ原町, 小松市, 石川県, 923-0334, 日本 (place/quarter＝集落の位置)",
+  "notes": "公式ページ（Notion）で 2025-10-11〜13・Takigahara Farm を確認（JS 表示のため検索エンジンの抜粋で確認）。住所は観光庁の多言語DB（O-66 Takigahara-machi）。施設は地図データに無く、座標は滝ケ原町の集落の位置で施設そのものではない。GSI の滝ケ原町代表点（36.2838,136.4293）は集落から約1.6km南東に外れるため不採用。2023・2024年と同じ会場。2026年は見つからず。"
+ },
+ {
+  "festival_id": "iyasaka-rave-festival",
+  "edition_id": "iyasaka-rave-festival-2025",
+  "edition_dates": "2025-11-14/2025-11-16",
+  "venue_name": "Pension Yonahadake",
+  "venue_name_ja": "ペンション与那覇岳",
+  "address": "沖縄県国頭郡国頭村奥間2040-101",
+  "lat": "26.7292",
+  "lng": "128.1903",
+  "confidence": "medium",
+  "sources": [
+   "https://de.ra.co/events/2272451",
+   "https://travel.yahoo.co.jp/00912721/access/",
+   "https://www.jalan.net/yad380512/"
+  ],
+  "geocoder": "none",
+  "geocoder_match": "Nominatim・GSI では施設を特定できず（GSI は奥間地区の代表点）。座標は Yahoo!トラベル・じゃらんの施設ページの地図位置（両者一致）。RA の「国頭村森林公園の隣」という説明と整合（森林公園まで約400m）",
+  "notes": "会場の根拠は RA のイベントページ（タイトル「IYASAKA RAVE FEST 2025 bei Yonahadake Pension, Okinawa」、2025-11-14〜16）のみ。RA は直接開けず、検索結果の抜粋で確認。主催の公式サイト・SNS・チケットページは見つからない。住所は宿泊予約サイトの記載。RA の表記は「IYASAKA RAVE FEST」（データは FESTIVAL）。"
+ },
+ {
+  "festival_id": "lab",
+  "edition_id": "lab-2025",
+  "edition_dates": "2025-03-15/2025-03-16",
+  "venue_name": null,
+  "venue_name_ja": null,
+  "address": null,
+  "lat": null,
+  "lng": null,
+  "confidence": "low",
+  "sources": [
+   "https://technotrancetokyo.com/archives/89031144.html"
+  ],
+  "geocoder": "none",
+  "geocoder_match": null,
+  "notes": "「LAB.vol.6」（山梨・2025-03-15/16）の開催記録は techno-japan.media 以外に見つからない。紹介文の「Kyokankaku Labo」も他で確認できない。2025年の国内野外一覧にも3月の山梨の該当なし。実在・日付とも未確認。"
+ },
+ {
+  "festival_id": "midnight-cult-rave",
+  "edition_id": "midnight-cult-rave-2025",
+  "edition_dates": "2025-11-01/2025-11-02",
+  "venue_name": null,
+  "venue_name_ja": null,
+  "address": null,
+  "lat": null,
+  "lng": null,
+  "confidence": "low",
+  "sources": [
+   "https://www.midnightcult.com/rave",
+   "https://technotrancetokyo.com/archives/89031144.html"
+  ],
+  "geocoder": "none",
+  "geocoder_match": null,
+  "notes": "公式ページで「MIDNIGHT CULT RAVE 07」（2025-11-01〜02）は都心から車で2〜3時間のシークレット会場、場所は登録者にメールで通知と明記。主催が会場を伏せているため空欄。PREF「Yamanashi」の根拠は二次情報の一覧のみで、公式は県名を出していない。"
+ },
+ {
+  "festival_id": "mirrorball-village",
+  "edition_id": "mirrorball-village-2025",
+  "edition_dates": "2025-11-01/2025-11-03",
+  "venue_name": "Cloud Nine Sonogi Campsite",
+  "venue_name_ja": "クラウドナイン彼杵（オートキャンプ場）",
+  "address": "長崎県東彼杵郡東彼杵町中岳郷1535",
+  "lat": "33.0203",
+  "lng": "129.9810",
+  "confidence": "medium",
+  "sources": [
+   "https://ra.co/events/2223360",
+   "https://technotrancetokyo.com/archives/89031144.html",
+   "https://www.clubcloudnine-sonogi.com/"
+  ],
+  "geocoder": "gsi",
+  "geocoder_match": "長崎県東彼杵町中岳郷（地区の代表点）",
+  "notes": "会場は RA のイベント掲載（検索結果の抜粋：2025-11-01 15:00〜11-03 15:00、Cloud Nine の彼杵キャンプ場）と国内野外一覧（「クラウドナイン彼杵キャンプ場(長崎)」）の2つで一致。主催の公式情報は見つからない。住所はキャンプ場の公式サイト。施設が地図データに無く、座標は「中岳郷」地区の代表点で施設の正確な位置ではない（NAVITIME では千綿駅から徒歩約50分）。"
+ },
+ {
+  "festival_id": "music",
+  "edition_id": "music-2025",
+  "edition_dates": "2025-10-11/2025-10-12",
+  "venue_name": null,
+  "venue_name_ja": null,
+  "address": null,
+  "lat": null,
+  "lng": null,
+  "confidence": "low",
+  "sources": [
+   "https://technotrancetokyo.com/archives/89031144.html"
+  ],
+  "geocoder": "none",
+  "geocoder_match": null,
+  "notes": "「＋music」（東京・2025-10-11/12）の開催記録は techno-japan.media 以外に見つからない（検索で「+」が落ちるため別表記も試した）。その週末の都内の一覧掲載イベントにも該当なし。元の出どころの確認を推奨。"
+ },
+ {
+  "festival_id": "mutek",
+  "edition_id": "mutek-2026",
+  "edition_dates": "2026-11-20/2026-11-22",
+  "venue_name": "MoN Takanawa: The Museum of Narratives (TAKANAWA GATEWAY CITY)",
+  "venue_name_ja": "MoN Takanawa: The Museum of Narratives（高輪ゲートウェイシティ内）",
+  "address": "東京都港区三田3-16-1",
+  "lat": "35.6394",
+  "lng": "139.7417",
+  "confidence": "high",
+  "sources": [
+   "https://tokyo.mutek.org/en/news/mutek-jp-2026-edition-11",
+   "https://tokyo.mutek.org/",
+   "https://www.timeout.jp/tokyo/ja/things-to-do/mon-takanawa"
+  ],
+  "geocoder": "nominatim",
+  "geocoder_match": "モン タカナワ:ザ ミュージアム オブ ナラティブス, 第一京浜, 高輪二丁目, 高輪, 港区, 東京, 108-0074, 日本 (tourism/gallery)",
+  "notes": "公式発表で2026年（第11回）の会場は MoN Takanawa（JR東日本共催）。住所の GSI 結果（35.6397,139.7417）とも一致。※データとの食い違い: editions.json の LOCATION「Shibuya / 渋谷」と FESTIVALS の住所・座標（道玄坂2-14-8＝2025年の会場）は2025年のまま。公式は会期を 11/20〜23 の4日間としており、DATE_END（2026-11-22）と違う（23日は追加日で、23日の会場は公式に未記載）。ZAIKO の早割チケットは会場「都内某所」表記のまま。"
+ },
+ {
+  "festival_id": "one-music-camp",
+  "edition_id": "one-music-camp-2025",
+  "edition_dates": "2025-08-23/2025-08-24",
+  "venue_name": "Sanda Athletic outdoor stage",
+  "venue_name_ja": "兵庫県三田アスレチック 野外ステージ",
+  "address": "兵庫県三田市波豆川281",
+  "lat": "34.9593",
+  "lng": "135.2925",
+  "confidence": "high",
+  "sources": [
+   "https://www.onemusiccamp.com/",
+   "https://www.onemusiccamp.com/onemusiccamp2026/",
+   "https://www.nap-camp.com/hyogo/12919"
+  ],
+  "geocoder": "nominatim",
+  "geocoder_match": "三田アスレチック, 波豆川, 三田市, 兵庫県, 669-1411, 日本 (tourism/camp_site)",
+  "notes": "公式サイトで 2025-08-23/24・会場・住所を確認。なっぷの地図位置（34.9593,135.2925）とも一致。住所の GSI 結果（34.9668,135.2912）は約800m北で、施設名の一致を優先。2026年は「2027年へ延期」と公式告知（2025年が最新のまま）。"
+ },
+ {
+  "festival_id": "one-park-festival",
+  "edition_id": "one-park-festival-2026",
+  "edition_dates": "2026-09-05/2026-09-06",
+  "venue_name": "Fukui City Central Park (special venue)",
+  "venue_name_ja": "福井市中央公園 特設会場",
+  "address": "福井県福井市大手（福井市中央公園。番地は公式に記載なし）",
+  "lat": "36.0652",
+  "lng": "136.2195",
+  "confidence": "high",
+  "sources": [
+   "https://oneparkfestival.jp/",
+   "https://oneparkfestival.jp/access/"
+  ],
+  "geocoder": "nominatim",
+  "geocoder_match": "中央公園, 大手, 福井市, 福井県, 日本 (leisure/park)",
+  "notes": "公式サイトで 2026-09-05/06・「福井市中央公園 特設会場」（JR福井駅から徒歩3分）を確認。FESTIVALS 側には住所・座標（36.0645,136.2201）が入っているが、editions.json の開催回に LOCATION・LAT・LNG が無いため地図が出ていない。両者は約100mで一致。"
+ },
+ {
+  "festival_id": "one-park-riverfes",
+  "edition_id": "one-park-riverfes-2025",
+  "edition_dates": "2025-10-18/2025-10-19",
+  "venue_name": "River Port Park Minokamo (special venue)",
+  "venue_name_ja": "リバーポートパーク美濃加茂 特設会場",
+  "address": "岐阜県美濃加茂市御門町2-6-6",
+  "lat": "35.4381",
+  "lng": "137.0324",
+  "confidence": "high",
+  "sources": [
+   "https://oneparkriverfes.jp/",
+   "https://hamoni.jp/en/shop/zykknOOTOBxuoH7iCIHg"
+  ],
+  "geocoder": "gsi",
+  "geocoder_match": "岐阜県美濃加茂市御門町二丁目６番６号",
+  "notes": "公式サイトで 2025-10-18/19・「リバーポートパーク美濃加茂」を確認。住所は公式に無く施設情報サイトの記載。GSI は号まで一致し、施設情報サイトの地図位置（35.4386,137.0339）とも約150mで一致。2026年は「開催見送り」と公式告知（2025年が最新のまま）。福井の ONE PARK FESTIVAL とは別イベント。"
+ },
+ {
+  "festival_id": "parallel-world",
+  "edition_id": "parallel-world-2026",
+  "edition_dates": "2026-10-31/2026-11-01",
+  "venue_name": null,
+  "venue_name_ja": null,
+  "address": null,
+  "lat": null,
+  "lng": null,
+  "confidence": "low",
+  "sources": [
+   "https://camp-fire.jp/projects/975631/view",
+   "https://www.instagram.com/__yamamotech__/"
+  ],
+  "geocoder": "none",
+  "geocoder_match": null,
+  "notes": "クラウドファンディングのページに「開催場所は非公開です」、告知は「SOMEWHERE IN JAPAN」。主催が会場を伏せているため空欄。"
+ },
+ {
+  "festival_id": "pure-rave",
+  "edition_id": "pure-rave-2025",
+  "edition_dates": "2025-09-06/2025-09-08",
+  "venue_name": null,
+  "venue_name_ja": null,
+  "address": null,
+  "lat": null,
+  "lng": null,
+  "confidence": "low",
+  "sources": [
+   "https://www.timeout.com/tokyo/nightlife/pure-rave",
+   "https://purerave2025.peatix.com/"
+  ],
+  "geocoder": "none",
+  "geocoder_match": null,
+  "notes": "Time Out は「Somewhere in Kanto」、正確な場所はチケットが必要。Peatix（主催 ゆるふわギャング）にも会場の記載なし。非公開として空欄。データの INSTAGRAM（abductions_group）は別の主催者のもの（既存の調査メモでも指摘済み）。PREF「Kanto」は県名ではない。"
+ },
+ {
+  "festival_id": "rare-groove",
+  "edition_id": "rare-groove-2025",
+  "edition_dates": "2025-10-04/2025-10-05",
+  "venue_name": null,
+  "venue_name_ja": null,
+  "address": null,
+  "lat": null,
+  "lng": null,
+  "confidence": "low",
+  "sources": [
+   "https://technotrancetokyo.com/archives/89031144.html",
+   "https://livedoor.blogimg.jp/yukitakeishi/imgs/c/9/c9e859c7.jpg",
+   "https://technotrancetokyo.com/archives/90050667.html"
+  ],
+  "geocoder": "none",
+  "geocoder_match": null,
+  "notes": "主催のフライヤー（一覧ブログの再掲画像）は「At Yamanashi Camp Village / Please contact us!」で、施設名を出さず問い合わせ制。会場は非公開扱いとして空欄。フライヤーに公式 Instagram「rare_groove_」の記載あり（データには未登録）。国内野外一覧に 2026-10-03〜04 の開催（「山梨シークレットキャンプ村」）があるが editions.json に無い。"
+ },
+ {
+  "festival_id": "samsara",
+  "edition_id": "samsara-2026",
+  "edition_dates": "2026-06-20/2026-06-21",
+  "venue_name": "Windera CAMPGROUNDS Yatsugatake",
+  "venue_name_ja": "Windera CAMPGROUNDS 八ヶ岳",
+  "address": "長野県諏訪郡富士見町落合991",
+  "lat": "35.8672",
+  "lng": "138.2833",
+  "confidence": "medium",
+  "sources": [
+   "https://livedoor.blogimg.jp/yukitakeishi/imgs/8/2/829b058c.png",
+   "https://technotrancetokyo.com/archives/90050667.html",
+   "https://www.nap-camp.com/nagano/15654"
+  ],
+  "geocoder": "gsi",
+  "geocoder_match": "長野県富士見町落合９９１番地",
+  "notes": "会場名は主催のフライヤー（Instagram の画面をブログが再掲したもの）に「SAMSARA OPEN AIR 2026.6.20-6.21 Windera CAMPGROUNDS Yatsugatake」とある。主催 Instagram 本体では読めず（ハイライト「open air 2026」）。住所はキャンプ場予約サイト（なっぷ）の記載で、キャンプ場の公式サイトは無い。GSI は番地まで一致し、なっぷの地図位置（35.8696,138.2838）とも約270mで一致。既存の調査メモの座標（35.9146,138.2407＝富士見町の中心）は会場ではないので使わない。"
+ },
+ {
+  "festival_id": "signal",
+  "edition_id": "signal-2026",
+  "edition_dates": "2026-06-13/2026-06-14",
+  "venue_name": null,
+  "venue_name_ja": null,
+  "address": null,
+  "lat": null,
+  "lng": null,
+  "confidence": "low",
+  "sources": [
+   "https://www.instagram.com/signal_open_air/",
+   "https://technotrancetokyo.com/archives/90050667.html"
+  ],
+  "geocoder": "none",
+  "geocoder_match": null,
+  "notes": "公式フライヤーは「Venue YAMANASHI」（120人限定）のみ、Instagram も会場を出していない。非公開として空欄。"
+ },
+ {
+  "festival_id": "sub-tide",
+  "edition_id": "sub-tide-2026",
+  "edition_dates": "2026-07-31/2026-08-02",
+  "venue_name": "Uzumaku Hiroba (directly below Minamiaiki Dam)",
+  "venue_name_ja": "ウズマク広場（ウズマクヒロバ・南相木ダムの真下）",
+  "address": "長野県南佐久郡南相木村三川（番地なし）",
+  "lat": "36.0049",
+  "lng": "138.6519",
+  "confidence": "medium",
+  "sources": [
+   "https://sub-tide.com/2026",
+   "https://tabi-mag.jp/minamiaiki-dam/"
+  ],
+  "geocoder": "nominatim",
+  "geocoder_match": "南相木ダム, 南相木村, 南佐久郡, 長野県, 日本 (waterway/dam)",
+  "notes": "公式サイト（2026年版）の Location 節に「ウズマク広場」「長野県南佐久郡南相木村三川」「南相木ダム隣接」「堤体の真下」と記載（ページは JS 表示のため、サイトが公開しているページデータで確認）。広場は地図データに無く、隣接する南相木ダムの位置で代用（広場はダムの下流側の足元で、数百mの差がありうる）。※データでは「Secret Location」だが公式サイトは会場を公開している。ただし公式ページは検索除外（noindex）設定で、イベントは「シークレット・レイヴ」を名乗るため、地図を出すかは編集判断。"
+ },
+ {
+  "festival_id": "takarajima-beach-cleaning-party",
+  "edition_id": "takarajima-beach-cleaning-party-2026",
+  "edition_dates": "2026-11-28/2026-11-29",
+  "venue_name": null,
+  "venue_name_ja": null,
+  "address": null,
+  "lat": null,
+  "lng": null,
+  "confidence": "low",
+  "sources": [
+   "https://www.instagram.com/takarajima_beachcleaningparty/",
+   "https://takarajima2025.peatix.com/"
+  ],
+  "geocoder": "none",
+  "geocoder_match": null,
+  "notes": "Instagram で 11/28–29 と石垣島北部の海岸を守るパーティーであることは確認できるが、会場は「SOMEWHERE IN K…」で詳細は後日。チケットページにも会場なし。まだ公表されていないため空欄。開催前に再確認。"
+ },
+ {
+  "festival_id": "topia",
+  "edition_id": "topia-2026",
+  "edition_dates": "2026-10-24/2026-10-25",
+  "venue_name": null,
+  "venue_name_ja": null,
+  "address": null,
+  "lat": null,
+  "lng": null,
+  "confidence": "low",
+  "sources": [
+   "https://topia261024.peatix.com/view",
+   "https://www.instagram.com/35.7238716/"
+  ],
+  "geocoder": "none",
+  "geocoder_match": null,
+  "notes": "Peatix・Instagram とも会場の記載なし。自サイトの紹介文どおり、正確な場所はチケット購入者のみ。非公開として空欄。Instagram のアカウント名「35.7238716」は緯度のように見えるが、公表された会場ではないので座標として使わない。参考: 過去回 topia-2025 の PREF は Chiba だが、国内野外一覧（二次情報）では 2025-11-15〜16 の Topia は「神奈川県北西部」。"
+ },
+ {
+  "festival_id": "wonderfruit-kyoto",
+  "edition_id": "wonderfruit-kyoto-2026",
+  "edition_dates": "2026-10-22/2026-10-25",
+  "venue_name": "Multiple venues in Kyoto: Ohara Sanso / ACG Villa Kyoto / Kurama Mountain / Ochill TeaRoom",
+  "venue_name_ja": "大原山荘 / ACG Villa Kyoto / 鞍馬山 / Ochill TeaRoom（京都の複数会場）",
+  "address": null,
+  "lat": null,
+  "lng": null,
+  "confidence": "low",
+  "sources": [
+   "https://chapterskyoto.co/"
+  ],
+  "geocoder": "none",
+  "geocoder_match": null,
+  "notes": "公式サイトは京都の4か所を巡る形式で、拠点となる会場の指定なし。1点のピンは誤解を招くため空欄。地図を出す場合は、どの会場を代表にするか編集判断が必要。"
+ },
+ {
+  "festival_id": "wormhole",
+  "edition_id": "wormhole-2024",
+  "edition_dates": "2024-10-26/2024-10-27",
+  "venue_name": null,
+  "venue_name_ja": null,
+  "address": null,
+  "lat": null,
+  "lng": null,
+  "confidence": "low",
+  "sources": [],
+  "geocoder": "none",
+  "geocoder_match": null,
+  "notes": "2024-10-26/27 三重の「wormhole」の開催記録は techno-japan.media 以外に見つからない（日本語・英語で約10通り検索）。実在・日付とも未確認。データの出どころの確認を推奨。"
+ },
+ {
+  "festival_id": "yamauto",
+  "edition_id": "yamauto-2025",
+  "edition_dates": "2025-08-09/2025-08-18",
+  "venue_name": "Yamauto Eco Village (Ecotopia Yamauto)",
+  "venue_name_ja": "山水人エコビレッジ（エコトピア山水人）",
+  "address": "滋賀県高島市朽木生杉（〒520-1442）",
+  "lat": "35.3587",
+  "lng": "135.7912",
+  "confidence": "medium",
+  "sources": [
+   "https://ecotopia-yamauto.blogspot.com/2025/02/yamauto-2025.html",
+   "https://yamauto.net/",
+   "https://yamauto.net/access/"
+  ],
+  "geocoder": "nominatim",
+  "geocoder_match": "朽木生杉, 高島市, 滋賀県, 520-1592, 日本 (place/quarter＝集落の位置)",
+  "notes": "公式ブログで2025年（8/9〜18）の会場「滋賀県高島市朽木生杉 山水人エコビレッジ」を確認。2026年も同じ会場（公式サイト）。施設は地図データに無く、座標は生杉集落の位置（公式アクセス案内では生杉バス停から徒歩10〜15分）。※データとの食い違い: FESTIVALS 側の座標（35.3056,135.8369）は朽木平良付近で、生杉から約7km離れており会場と合わない。住所「朽木針畑」も公式表記（朽木生杉）と違う。FESTIVALS の日付は2026年（8/22〜30）だが editions.json には2025年回しか無く、詳細ページは2025年回を表示している。"
+ }
+]

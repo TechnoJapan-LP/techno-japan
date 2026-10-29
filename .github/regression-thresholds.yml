@@ -266,7 +266,7 @@ metrics:
     target: null              # ハブが増えれば増える
     note: >-
       「存在するか」ではなく「相手言語の正しいURLへリンクしているか」まで見る。
-      JA→/en/xxx.html、EN→/xxx.html。片方向だけ壊れる事故を検出するため。
+      JA→/en/xxx.html、EN→/xxx.html（TOPだけ正式URLの /）。片方向だけ壊れる事故を検出するため。
       判定に正規表現を使わない: nav-lang の中身は JA/EN で非対称
       （JA は </a></span>、EN は </span></span> で終わる）ため、
       `<span class="nav-lang">(.*?)</span></span>` と書くと JA 側だけ

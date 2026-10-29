@@ -173,3 +173,19 @@ export function clauseBreaks(text) {
     })
     .join('');
 }
+
+const HEADING_DECORATION_TAGS = new Set(['em', 'strong', 'b', 'i', 'span', 'u', 's']);
+
+/* 装飾タグが見出し全体だけを包む場合は、句読点単位の折り返しを
+ * タグの内側へ入れる。タグが混在する見出しは既存どおりに処理する。 */
+export function addHeadingPhraseBreaks(html) {
+  return String(html || '').replace(/<h([23])\b([^>]*)>([\s\S]*?)<\/h\1>/gi, (block, level, attrs, contents) => {
+    const wrapped = contents.match(/^<(em|strong|b|i|span|u|s)(\s[^>]*)?>([^<]*)<\/\1>$/i);
+    if (wrapped && HEADING_DECORATION_TAGS.has(wrapped[1].toLowerCase())) {
+      return `<h${level}${attrs}><${wrapped[1]}${wrapped[2] || ''}>${clauseBreaks(wrapped[3])}</${wrapped[1]}></h${level}>`;
+    }
+    const processText = /<[^>]+>/.test(contents) ? phraseBreaks : clauseBreaks;
+    const processed = contents.replace(/(^|>)([^<]+)(?=<|$)/g, (_text, prefix, text) => `${prefix}${processText(text)}`);
+    return `<h${level}${attrs}>${processed}</h${level}>`;
+  });
+}

@@ -378,7 +378,7 @@ def measure():
             html = read(f)
             cur = "JA" if lang == "ja" else "EN"
             other_lang = "EN" if lang == "ja" else "JA"
-            other_href = f"/en/{name}" if lang == "ja" else f"/{name}"
+            other_href = f"/en/{name}" if lang == "ja" else ("/" if name == "index.html" else f"/{name}")
             if (f'<span class="nav-lang-cur">{cur}</span>' in html
                     and f'href="{other_href}">{other_lang}</a>' in html):
                 toggle_ok += 1

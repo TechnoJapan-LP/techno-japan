@@ -15,7 +15,7 @@ const expectedPins = JSON.parse(venuesMatch[1]).filter((venue) => Number.isFinit
 const PROBE_PATH = '/__venue-map-probe.html';
 const PROBE = `<script>
 window.addEventListener('load', async () => {
-  const out = { errors: [], ready: false, status: '', pins: 0, filteredPins: 0, mapRect: null, attribution: null, lowerLabels: [] };
+  const out = { errors: [], ready: false, status: '', pins: 0, filteredPins: 0, mapRect: null, attribution: null, lowerLabels: [], fullMapHitTests: null, attributionCenterHit: false };
   const wait = async (read, ok, timeout = 12000) => { const deadline = Date.now() + timeout; let value = read(); while (!ok(value) && Date.now() < deadline) { await new Promise(r => setTimeout(r, 100)); value = read(); } return value; };
   try {
     const map = await wait(() => document.getElementById('venue-map'), el => el?.dataset.mapStatus === 'ready' && el.querySelector('.leaflet-container'));
@@ -33,6 +33,21 @@ window.addEventListener('load', async () => {
         height: attributionRect.height,
         fontSize: parseFloat(getComputedStyle(attribution).fontSize),
       } : null;
+      const fullMap = map.querySelector('.maplbl-full-map');
+      const fullMapRect = fullMap?.getBoundingClientRect();
+      const hit = (x, y) => {
+        const element = document.elementFromPoint(x, y);
+        return !!element && (element === fullMap || fullMap.contains(element));
+      };
+      out.fullMapHitTests = fullMap && fullMapRect ? {
+        center: hit(fullMapRect.left + fullMapRect.width / 2, fullMapRect.top + fullMapRect.height / 2),
+        top: hit(fullMapRect.left + fullMapRect.width / 2, fullMapRect.top - 10),
+        bottom: hit(fullMapRect.left + fullMapRect.width / 2, fullMapRect.bottom + 9),
+      } : null;
+      out.attributionCenterHit = !!attributionRect && (() => {
+        const element = document.elementFromPoint(attributionRect.left + attributionRect.width / 2, attributionRect.top + attributionRect.height / 2);
+        return element === attribution || attribution.contains(element);
+      })();
       const lowerHalf = mapRect.top + mapRect.height / 2;
       out.lowerLabels = [...map.querySelectorAll('.maplbl')].map((label) => {
         const rect = label.getBoundingClientRect();
@@ -86,6 +101,8 @@ if (!result.ready || result.status !== 'ready') failures.push(`Leaflet map statu
 if (result.pins !== expectedPins) failures.push(`座標ピン ${result.pins}件（期待 ${expectedPins}件）`);
 if (!result.filteredPins || result.filteredPins > result.pins) failures.push(`City filter pins=${result.filteredPins}`);
 if (!result.attribution) failures.push('出典表示の矩形を取得できません');
+if (!result.fullMapHitTests || !result.fullMapHitTests.center || !result.fullMapHitTests.top || !result.fullMapHitTests.bottom) failures.push('Open full map の中心・上下44px当たり判定がリンクではない');
+if (!result.attributionCenterHit) failures.push('出典表示の中心が出典表示ではない');
 if (result.attribution && (!Number.isFinite(result.attribution.fontSize) || result.attribution.fontSize < 10)) failures.push(`出典表示 font-size=${result.attribution.fontSize}px（10px未満または計測不能）`);
 if (result.attribution) {
   result.lowerLabels.forEach((label) => {

@@ -35,7 +35,7 @@
       var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       var map = L.map(surface, {
         center: [lat, lng],
-        zoom: 12,
+        zoom: 14,
         scrollWheelZoom: false,
         attributionControl: true,
         zoomControl: !touchDevice,
@@ -49,7 +49,7 @@
       });
       mapWrap._tjMap = map;
       surface._tjMap = map;
-      map.setView([lat, lng], 12, { animate: false });
+      map.setView([lat, lng], 14, { animate: false });
 
       var marker = L.marker([lat, lng], {
         interactive: false,

@@ -142,6 +142,7 @@ run "記事本文画像の対応表と置換"        node scripts/check_article_
 run "記事イベントショートコード"        node scripts/check_article_shortcodes.mjs
 run "記事の自動リンクと更新日"            node scripts/check_article_links.mjs
 run "内部リンクが生きている"            python3 scripts/check_internal_links.py
+run "日本語・英語トップURL"              python3 scripts/check_top_links.py
 run "構造化データと AI 向けファイル"       node scripts/check_jsonld.mjs
 run "タイトル長と終了年"                  node scripts/check_titles.mjs
 run "アーティスト詳細ページ"              node scripts/check_artist_pages.mjs
@@ -217,7 +218,9 @@ else
 run "VENUES 詳細ページ"                 node scripts/check_venue_details.mjs
 run "VENUES CMSエクスポート"             python3 scripts/check_venue_export_cms.py
 run "ARTICLE本番表示プレビュー"          node scripts/check_cms_article_generated_preview.mjs
-run "記事シェアボタンの描画サイズ"          node scripts/check_article_share.mjs
+  run "記事シェアボタンの描画サイズ"          node scripts/check_article_share.mjs
+  run_timeout 120 "記事見出しの折り返し"        node scripts/check_article_heading_breaks.mjs
+  run_timeout 120 "TOP THIS WEEK"             node scripts/check_top_this_week.mjs
 run "TOP ARTISTSランダム表示"             node scripts/check_top_artists.mjs
   run "フェス詳細の行動計測"                node scripts/check_festival_tracking.mjs
   run "地図が全国の会場を出す"          node scripts/check_map_nationwide.mjs

@@ -29,7 +29,7 @@
 .article-body { max-width: 720px; margin: 0; font-family: var(--font-body); font-weight: 300; font-size: 16px; line-height: 1.95; color: var(--text-a85); text-wrap: pretty; }
 .article-body p { margin-bottom: 1.6em; }
 /* 日本語見出しの折り返し位置は、生成時にBudouXの<wbr>として埋め込む。 */
-.article-body h2 { clear: both; font-family: var(--font-display); font-size: 34px; text-transform: uppercase; line-height: .95; margin: 2.8em 0 1em; color: var(--text); text-wrap: balance; word-break: keep-all; overflow-wrap: anywhere; }
+.article-body h2 { clear: both; font-family: var(--font-display); font-size: clamp(26px, 7.5vw, 34px); text-transform: uppercase; line-height: .95; margin: 2.8em 0 1em; color: var(--text); text-wrap: balance; word-break: keep-all; overflow-wrap: anywhere; }
 .article-body h3 { clear: both; font-family: var(--font-mono); font-weight: 400; font-size: 13px; line-height: 1.45; letter-spacing: .12em; margin: 2.4em 0 .75em; color: var(--accent); text-transform: uppercase; text-wrap: balance; word-break: keep-all; overflow-wrap: anywhere; }
 .article-body h4 { clear: both; font-family: var(--font-display); font-size: 24px; line-height: .95; margin: 2.5em 0 .75em; color: var(--text); text-wrap: balance; }
 .article-body ul, .article-body ol { margin: 0 0 24px 24px; padding: 0; }
@@ -1966,7 +1966,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 .article-overview-row.is-status dd { color: var(--accent); text-transform: uppercase; }
 .article-overview-source { margin: 16px 0 0; color: var(--text-a40); font-size: 9px; letter-spacing: .08em; }
 .article-sidebar-back { display: block; color: var(--text-a62); }
-.article-body h2 { clear: both; font-size: 34px; line-height: .95; }
+.article-body h2 { clear: both; font-size: clamp(26px, 7.5vw, 34px); line-height: .95; }
 .article-body h3 { clear: both; font: 400 13px/1.45 var(--font-mono); letter-spacing: .12em; color: var(--accent); text-transform: uppercase; }
 .article-body h4 { clear: both; font: 400 24px/.95 var(--font-display); }
 .article-body blockquote { clear: both; border-left: 2px solid var(--accent); padding: 8px 0 8px 24px; margin: 32px 0; font-style: italic; text-align: left; }

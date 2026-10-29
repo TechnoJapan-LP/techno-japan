@@ -15,7 +15,8 @@
   var tjMagToday = window.tjMagToday || function () { var now = new Date(); return now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0'); };
   var root = document.getElementById('top-phase2');
   if (!root) return;
-  var isEn = document.documentElement.lang === 'en';
+  var currentLang = typeof window.TJ_LANG === 'string' ? window.TJ_LANG : document.documentElement.lang;
+  var isEn = currentLang === 'en';
   // data-hub.js はトップレベル const を使うため、window のプロパティにはならない。
   // 同じ classic script の字句環境から直接読み、未読込時だけ空配列にする。
   var articles = (typeof ARTICLES !== 'undefined' ? ARTICLES : []).filter(function (a) { return a && a.id && String(a.status || '').toLowerCase() !== 'draft'; }).sort(function (a, b) { return String(b.date || '').localeCompare(String(a.date || '')); });
@@ -63,7 +64,24 @@
       + '</div><span class="top2-kind">' + esc(type) + '</span></div><h3>'
       + esc(loc(f.name, '', f.name_en)) + '</h3><p>' + esc(location) + '</p></a>';
   }
-  function renderFestivals(filter) { var list = futureFestivals.filter(function (f) { return filter === 'all' || (filter === 'week' ? f._range.start === today : String(f.type || '').toLowerCase() === filter); }).slice(0, 6); document.querySelector('.top2-festival-grid').innerHTML = list.map(festivalCard).join(''); document.querySelector('.top2-upcoming-count').textContent = futureFestivals.length + ' events · upcoming'; observe(); }
+  function addDays(date, days) { var parts = date.split('-').map(Number); var value = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2])); value.setUTCDate(value.getUTCDate() + days); return value.toISOString().slice(0, 10); }
+  var weekEnd = addDays(today, 6);
+  function renderFestivals(filter) {
+    var selected = futureFestivals.filter(function (f) {
+      if (filter === 'all') return true;
+      if (filter === 'week') return f._range.start <= weekEnd && f._range.end >= today;
+      return String(f.type || '').toLowerCase() === filter;
+    });
+    var list = selected.slice(0, 6);
+    var grid = document.querySelector('.top2-festival-grid');
+    var emptyMessage = filter === 'week'
+      ? (isEn ? 'No events this week.' : '今週開催のイベントはありません。')
+      : (isEn ? 'No upcoming events.' : '開催予定のイベントはありません。');
+    grid.innerHTML = list.length ? list.map(festivalCard).join('') : '<p class="top2-empty">' + emptyMessage + '</p>';
+    var label = filter === 'week' ? 'this week' : filter === 'all' ? 'upcoming' : filter;
+    document.querySelector('.top2-upcoming-count').textContent = selected.length + ' events · ' + label;
+    observe();
+  }
   renderFestivals('all'); root.querySelectorAll('.top2-chips .chip').forEach(function (b) { b.addEventListener('click', function () { root.querySelectorAll('.top2-chips .chip').forEach(function (x) { x.classList.remove('is-on'); }); b.classList.add('is-on'); renderFestivals(b.dataset.filter); }); });
   var index = festivals.slice().sort(function (a, b) {
     var af = tjMagIsUpcoming(a._range, today);

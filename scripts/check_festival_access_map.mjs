@@ -257,6 +257,7 @@ async function checkPage(ws, base, page, viewport) {
     return {
       status: map?.dataset.mapStatus || '',
       center: leafletMap ? leafletMap.getCenter() : null,
+      zoom: leafletMap ? leafletMap.getZoom() : null,
       markers: map ? map.querySelectorAll('.festival-map-marker').length : 0,
       dragEnabled: leafletMap ? leafletMap.dragging.enabled() : null,
       googleHref: link?.href || '',
@@ -286,6 +287,7 @@ async function checkPage(ws, base, page, viewport) {
     const latDiff = Math.abs(Number(result.center?.lat) - Number(expectedEdition.LAT));
     const lngDiff = Math.abs(Number(result.center?.lng) - Number(expectedEdition.LNG));
     if (latDiff > 0.001 || lngDiff > 0.001) failures.push(`中心座標が不一致 (${result.center?.lat}, ${result.center?.lng})`);
+    if (result.zoom !== 14) failures.push(`初期ズームが${result.zoom}（期待 14）`);
     if (result.markers !== 1) failures.push(`赤い目印 ${result.markers}件`);
     if (viewport.mobile && result.dragEnabled !== false) failures.push('390pxでドラッグが無効になっていない');
     if (result.linksOverlapAttribution) failures.push('Google Mapsリンクと出典表示が重なっている');
