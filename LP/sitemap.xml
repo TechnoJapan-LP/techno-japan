@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://techno-japan.media/</loc>
-    <lastmod>2026-10-30</lastmod>
+    <lastmod>2026-10-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -638,6 +638,12 @@
   </url>
   <url>
     <loc>https://techno-japan.media/festivals/resonance.html</loc>
+    <lastmod>2026-10-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/festivals/raptvana.html</loc>
     <lastmod>2026-10-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -1610,6 +1616,12 @@
   </url>
   <url>
     <loc>https://techno-japan.media/en/articles/intergalactic-2026-info.html</loc>
+    <lastmod>2026-10-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/en/articles/japan-festival-2026-november.html</loc>
     <lastmod>2026-10-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -2911,6 +2923,12 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://techno-japan.media/en/festivals/raptvana.html</loc>
+    <lastmod>2026-10-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://techno-japan.media/en/festivals/rare-groove.html</loc>
     <lastmod>2026-10-30</lastmod>
     <changefreq>weekly</changefreq>
@@ -3225,6 +3243,12 @@
   <url>
     <loc>https://techno-japan.media/articles/intergalactic-2026-info.html</loc>
     <lastmod>2026-10-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/articles/japan-festival-2026-november.html</loc>
+    <lastmod>2026-10-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

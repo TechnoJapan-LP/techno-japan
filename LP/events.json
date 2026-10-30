@@ -1,7 +1,7 @@
 {
   "source": "https://techno-japan.media/",
   "license": "データの出典として techno-japan.media へのリンクを求めます",
-  "count": 11,
+  "count": 12,
   "events": [
     {
       "name": "DENKI BODHISATTVA 2026",
@@ -116,6 +116,19 @@
         "LIVE"
       ],
       "tickets": "https://eplus.jp/sf/detail/4134150001?P6=001&P1=0402&P59=1"
+    },
+    {
+      "name": "RAPTVANA 2026",
+      "url": "https://techno-japan.media/festivals/raptvana.html",
+      "start": "2026-11-21",
+      "end": "2026-11-22",
+      "venue": "Oguteko Campsite",
+      "pref": "Nagano",
+      "lat": 35.4312,
+      "lng": 137.7842,
+      "genres": [
+        "TECHNO"
+      ]
     },
     {
       "name": "Resonance 2026",

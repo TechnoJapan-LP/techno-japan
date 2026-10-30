@@ -5,8 +5,8 @@
     <link>https://techno-japan.media</link>
     <description>Japan&apos;s underground techno and house music media platform.</description>
     <language>ja-JP</language>
-    <lastBuildDate>Mon, 26 Oct 2026 13:27:23 +0900</lastBuildDate>
-    <!-- items-hash: 61bc9c47663cad184dbdbbe3f3318a75b64454e1c76f880e19106451bfcd64eb -->
+    <lastBuildDate>Sat, 31 Oct 2026 01:27:31 +0900</lastBuildDate>
+    <!-- items-hash: b1fbcfcdeff8a0758e9cc8d31e88e44d654f7f5a5bb7e96959902e3fcfe3273e -->
     <atom:link href="https://techno-japan.media/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
       <title>Topia</title>
@@ -151,14 +151,6 @@
       <pubDate>Sat, 19 Sep 2026 00:00:00 +0900</pubDate>
       <category>Festival</category>
       <description>Tokyo — Ultra Japanは、グローバルなEDMフランチャイズを東京湾に持ち込み、その象徴的なメインステージ・スペクタクルを目当てに、お台場へ大勢の観客を集めている。フェスティバルには通常、海外の大物DJたちに加え、選び抜かれた日本人アーティストも出演し、複数のステージにわたってピークタイム向けのエレクトロニック・ミュージックに主眼を置くUltraブランドらしさを貫いている。RESISTANCEステージでは、今流行りのTechnoアーティストが見れる。</description>
-    </item>
-    <item>
-      <title>Re:birth Festival</title>
-      <link>https://techno-japan.media/festivals/re-birth-festival.html</link>
-      <guid isPermaLink="true">https://techno-japan.media/festivals/re-birth-festival.html</guid>
-      <pubDate>Fri, 11 Sep 2026 00:00:00 +0900</pubDate>
-      <category>Festival</category>
-      <description>Nagano — 2013年に始まった、Underground Music, Art &amp; Technologyを掲げる野外フェスティバル。富津岬、採石場、高原リゾート、スキー場。さらには韓国、タイ・パンガン島、アメリカの皆既日蝕フェスティバルまで、その時々で異なる環境を舞台にしながら、日本独自のレイヴカルチャーを世界へ発信し続けてきた。約2年半ぶりとなる2026年は、数々の野外フェスの記憶が宿る長野・木曽のこだまの森へ。海外からは匿名性と実験性を貫くRrose、SODEYAMAとB2B LIVEで臨むMathew Jonsonら11組。ドイツのRE:SORBは木曽の天然の霧に巨大なホログラムを映し出す。テクノ、ハウス、トランスを軸に、総勢80組以上が新たな森に集う。</description>
     </item>
     <item>
       <title>Transcendence | 野外テクノパーティで見た次世代ジェネレーションの可能性</title>
@@ -326,6 +318,14 @@
       <guid isPermaLink="true">https://techno-japan.media/articles/denki-bodhisattva-2026-info.html</guid>
       <pubDate>Wed, 21 Oct 2026 00:00:00 +0900</pubDate>
       <category>FESTIVAL&amp;RAVE</category>
+      <description></description>
+    </item>
+    <item>
+      <title>【2026年11月】 | 日本の音楽フェスティバル&amp;レイヴまとめ</title>
+      <link>https://techno-japan.media/articles/japan-festival-2026-november.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/articles/japan-festival-2026-november.html</guid>
+      <pubDate>Fri, 30 Oct 2026 00:00:00 +0900</pubDate>
+      <category>GUIDE</category>
       <description></description>
     </item>
   </channel>

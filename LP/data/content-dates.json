@@ -744,8 +744,8 @@
     "date": "2026-09-15"
   },
   "festival:mutek": {
-    "hash": "a71e6f9e3c5a6c22edf77c7e663348c3a2476e60f4fafb41426d62452ef5dc02",
-    "date": "2026-10-30"
+    "hash": "5e47b045a4b1bdde66cb030234b84cfc5e51e334d8d0e806172af1af076fb5ef",
+    "date": "2026-10-31"
   },
   "festival:nu-festival": {
     "hash": "3e7280f1e6e44e8e8c264b4c9b95da0a1bb5615ae00bec87b8026f074e7cd971",
@@ -798,6 +798,10 @@
   "festival:rainbow-disco-club": {
     "hash": "07be629adf22489627f02bd171f3af4e8a0220e9ccfda4032bfbbd3bca170c7e",
     "date": "2026-09-15"
+  },
+  "festival:raptvana": {
+    "hash": "c3741fa889d00eb1945ddb7fe6b0ec74d6725b921be176689d1b96dc7354254b",
+    "date": "2026-10-31"
   },
   "festival:rare-groove": {
     "hash": "a7fe63be5b7df8263040390eb08cf8c454099162290c5ba869054f7d2118a511",

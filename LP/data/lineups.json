@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-10-21T19:00:09.216Z",
-  "count": 1550,
+  "_generatedAt": "2026-10-30T16:23:28.742Z",
+  "count": 1556,
   "items": [
     {
       "EDITION_ID": "waifu-2026",
@@ -8284,6 +8284,42 @@
       "ACT_LABEL": "Hashinoshita Fujinkai",
       "SET_TYPE": "dj",
       "SORT": "18"
+    },
+    {
+      "EDITION_ID": "raptvana-2026",
+      "ACT_LABEL": "MIKU",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "raptvana-2026",
+      "ACT_LABEL": "Holdyourcat",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "raptvana-2026",
+      "ACT_LABEL": "Rochus",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "raptvana-2026",
+      "ACT_LABEL": "TENTEN",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "raptvana-2026",
+      "ACT_LABEL": "rik",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "raptvana-2026",
+      "ACT_LABEL": "salt",
+      "SET_TYPE": "dj",
+      "SORT": "6"
     },
     {
       "EDITION_ID": "nu-festival-2026",

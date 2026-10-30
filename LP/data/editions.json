@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-10-30T06:59:49.466Z",
-  "count": 117,
+  "_generatedAt": "2026-10-30T16:23:28.742Z",
+  "count": 118,
   "items": [
     {
       "EDITION_ID": "99flags-2026",
@@ -1536,6 +1536,20 @@
       "TICKETURL": "https://eplus.jp/sf/detail/4134150001?P6=001&P1=0402&P59=1",
       "FLYER": "images/festivals/soul-beat-asia-flyer.webp",
       "STATUS": "published"
+    },
+    {
+      "EDITION_ID": "raptvana-2026",
+      "FESTIVAL_ID": "raptvana",
+      "EDITION": "2026",
+      "DATE_START": "2026-11-21",
+      "DATE_END": "2026-11-22",
+      "LOCATION": "Oguteko Campsite",
+      "LOCATION_JA": "おおぐて湖キャンプ場",
+      "PREF": "Nagano",
+      "ADDRESS": "長野県下伊那郡下條村睦沢7144",
+      "LAT": "35.4312",
+      "LNG": "137.7842",
+      "STATUS": "announced"
     }
   ]
 }

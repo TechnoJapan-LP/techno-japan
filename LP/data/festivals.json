@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-10-30T06:59:49.466Z",
-  "count": 91,
+  "_generatedAt": "2026-10-30T16:23:28.742Z",
+  "count": 92,
   "items": [
     {
       "ID": "snow-machine-japan",
@@ -1824,6 +1824,31 @@
       "location_ja": "大泉工場",
       "COUNTRY": "JP",
       "name_ja": "レゾナンス"
+    },
+    {
+      "ID": "raptvana",
+      "TYPE": "rave",
+      "NAME": "RAPTVANA",
+      "DATE": "2026-11-21/2026-11-22",
+      "LOCATION": "Oguteko Campsite",
+      "CITY": "NAGANO",
+      "ADDRESS": "長野県下伊那郡下條村睦沢7144",
+      "LAT": "35.4312",
+      "LNG": "137.7842",
+      "IMAGE": "images/festivals/raptvana.webp",
+      "FLYER": "images/festivals/raptvana-flyer.webp",
+      "GENRE": "TECHNO",
+      "DESC": "RAPTVANAは、おおぐて湖キャンプ場内のモンゴル式ゲル「COSMOS」で開催する1回目の野外パーティ。湖畔のキャンプ場に、11月下旬の信州の冷え込みのなかでテクノの音が鳴る一夜になる。",
+      "INSTAGRAM": "https://www.instagram.com/raptvana/",
+      "LINEUP": "dj-miku, Holdyourcat, Rochus, TENTEN, rik, salt",
+      "EDITIONS": "[{\"_row\":121,\"_editionId\":\"raptvana-2026\",\"year\":\"2026\",\"edition\":\"\",\"date\":\"2026-11-21/2026-11-22\",\"location\":\"Oguteko Campsite\",\"location_ja\":\"おおぐて湖キャンプ場\",\"pref\":\"Nagano\",\"venueId\":\"\",\"address\":\"長野県下伊那郡下條村睦沢7144\",\"lat\":\"35.4312\",\"lng\":\"137.7842\",\"ticketUrl\":\"\",\"flyer\":\"\",\"status\":\"announced\",\"lineup\":[\"MIKU\",\"Holdyourcat\",\"Rochus\",\"TENTEN\",\"rik\",\"salt\"]}]",
+      "STATUS": "published",
+      "metaDescription": "信州おおぐて湖キャンプ場のモンゴル式ゲルCOSMOSで開催される初の野外パーティRAPTVANA。11月下旬、冷え込む湖畔にテクノが鳴り響く一夜。キャンプとダンスが溶け合う特別な夜の詳細をチェック。",
+      "name_en": "RAPTVANA",
+      "DESC_EN": "RAPTVANAは、おおぐて湖キャンプ場内のモンゴル式ゲル「COSMOS」で開催する1回目の野外パーティ。湖畔のキャンプ場に、11月下旬の信州の冷え込みのなかでテクノの音が鳴る一夜になる。",
+      "location_ja": "おおぐで湖キャンプ場",
+      "COUNTRY": "JP",
+      "name_ja": "ラプドヴァーナ"
     }
   ]
 }
