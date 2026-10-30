@@ -319,6 +319,10 @@
     1920,
     2560
   ],
+  "images/articles/japan-festival-2026-november.webp": [
+    1920,
+    1440
+  ],
   "images/articles/japan-festival-2026-october-1790523854519.webp": [
     1920,
     1280
@@ -3058,6 +3062,22 @@
   "images/derivatives/card/articles/intergalactic-2026-info-body05-c8c87239--9a8b7826-body-md.webp": [
     800,
     1067
+  ],
+  "images/derivatives/card/articles/japan-festival-2026-november--b4ab6293-lg.webp": [
+    960,
+    720
+  ],
+  "images/derivatives/card/articles/japan-festival-2026-november--b4ab6293-md.webp": [
+    720,
+    540
+  ],
+  "images/derivatives/card/articles/japan-festival-2026-november--b4ab6293-sm.webp": [
+    480,
+    360
+  ],
+  "images/derivatives/card/articles/japan-festival-2026-november--b4ab6293-xs.webp": [
+    240,
+    180
   ],
   "images/derivatives/card/articles/japan-festival-2026-october--629b7f5a-fourThree-center.webp": [
     1200,
@@ -11363,6 +11383,42 @@
     192,
     240
   ],
+  "images/derivatives/card/festivals/raptvana--2d7b334c-lg.webp": [
+    960,
+    720
+  ],
+  "images/derivatives/card/festivals/raptvana--2d7b334c-md.webp": [
+    720,
+    540
+  ],
+  "images/derivatives/card/festivals/raptvana--2d7b334c-sm.webp": [
+    480,
+    360
+  ],
+  "images/derivatives/card/festivals/raptvana--2d7b334c-xl.webp": [
+    1440,
+    1080
+  ],
+  "images/derivatives/card/festivals/raptvana--2d7b334c-xs.webp": [
+    240,
+    180
+  ],
+  "images/derivatives/card/festivals/raptvana-flyer--430f3636-lg.webp": [
+    747,
+    960
+  ],
+  "images/derivatives/card/festivals/raptvana-flyer--430f3636-md.webp": [
+    560,
+    720
+  ],
+  "images/derivatives/card/festivals/raptvana-flyer--430f3636-sm.webp": [
+    373,
+    480
+  ],
+  "images/derivatives/card/festivals/raptvana-flyer--430f3636-xs.webp": [
+    187,
+    240
+  ],
   "images/derivatives/card/festivals/re-birth-festival--29631340-lg.webp": [
     960,
     640
@@ -13046,6 +13102,14 @@
   "images/festivals/rainbow-disco-club.webp": [
     1920,
     1280
+  ],
+  "images/festivals/raptvana-flyer.webp": [
+    896,
+    1152
+  ],
+  "images/festivals/raptvana.webp": [
+    1477,
+    1108
   ],
   "images/festivals/re-birth-festival-flyer.webp": [
     201,
