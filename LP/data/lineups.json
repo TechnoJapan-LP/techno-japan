@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-10-30T16:23:28.742Z",
-  "count": 1556,
+  "_generatedAt": "2026-10-30T16:39:46.887Z",
+  "count": 1573,
   "items": [
     {
       "EDITION_ID": "waifu-2026",
@@ -7072,7 +7072,7 @@
     },
     {
       "EDITION_ID": "grow-the-culture-open-air-2025",
-      "ACT_LABEL": "akii",
+      "ACT_LABEL": "Akii",
       "SET_TYPE": "dj",
       "SORT": "2"
     },
@@ -8320,6 +8320,109 @@
       "ACT_LABEL": "salt",
       "SET_TYPE": "dj",
       "SORT": "6"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2026",
+      "ACT_LABEL": "Akii",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2026",
+      "ACT_LABEL": "Big Animal Theory",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2026",
+      "ACT_LABEL": "Dayzero",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2026",
+      "ACT_LABEL": "Dx",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2026",
+      "ACT_LABEL": "Fracture",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2026",
+      "ACT_LABEL": "Frankie $",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2026",
+      "ACT_LABEL": "Karnage",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2026",
+      "ACT_LABEL": "maidable",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2026",
+      "ACT_LABEL": "michika",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2026",
+      "ACT_LABEL": "Midnight Runner",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2026",
+      "ACT_LABEL": "mileZ",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2026",
+      "ACT_LABEL": "Neffa-T",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2026",
+      "ARTIST_ID": "okadada",
+      "ACT_LABEL": "okadada",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2026",
+      "ACT_LABEL": "Oyubi",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2026",
+      "ACT_LABEL": "Stones Taro",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2026",
+      "ACT_LABEL": "Submerse",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
+      "EDITION_ID": "grow-the-culture-open-air-2026",
+      "ACT_LABEL": "Velocity",
+      "SET_TYPE": "dj",
+      "SORT": "17"
     },
     {
       "EDITION_ID": "nu-festival-2026",
