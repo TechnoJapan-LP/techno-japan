@@ -25,6 +25,10 @@
   var toolbarDirectionAnchor = window.scrollY;
   var toolbarOpenUntil = 0;
   var toolbarStartY = toolbar ? toolbar.getBoundingClientRect().top + window.scrollY : 0;
+  function navHeight() {
+    var nav = document.querySelector('body > nav');
+    return nav ? nav.getBoundingClientRect().height : 64;
+  }
   var genreChipRow = document.getElementById('artists-genre-chips');
   var genreOrder = ['ALL', 'TECHNO', 'HOUSE', 'MINIMAL', 'EXPERIMENTAL', 'AMBIENT', 'ELECTRONIC', 'LIVE'];
   var stateKey = 'tj:artist-hub-state:v1';
@@ -178,7 +182,7 @@
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(update);
   }
   function toolbarNavHeight() {
-    return parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tj-nav-height')) || 64;
+    return navHeight();
   }
   function showToolbar() {
     toolbar.classList.remove('is-hidden');
@@ -227,7 +231,7 @@
   function shouldScroll() {
     var heading = document.getElementById('artists-featured');
     if (!heading || heading.hidden) heading = document.getElementById('artists-results-anchor');
-    return heading && heading.getBoundingClientRect().top < (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tj-nav-height')) || 64) + document.getElementById('artists-toolbar').getBoundingClientRect().height;
+    return heading && heading.getBoundingClientRect().top < navHeight() + document.getElementById('artists-toolbar').getBoundingClientRect().height;
   }
   function scrollResults(id) {
     if (id !== scrollRequest) return;
@@ -235,7 +239,7 @@
     var heading = featured && !featured.hidden ? featured : document.getElementById('artists-results-anchor');
     if (!heading) return;
     var toolbar = document.getElementById('artists-toolbar');
-    var offset = (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tj-nav-height')) || 64) + toolbar.getBoundingClientRect().height;
+    var offset = navHeight() + toolbar.getBoundingClientRect().height;
     scrollTo({top: Math.max(0, heading.getBoundingClientRect().top + scrollY - offset), behavior: 'instant'});
     if (activeCarousel && activeCarousel.snapNow) activeCarousel.snapNow();
     setTimeout(function () {
@@ -266,7 +270,7 @@
       attachHeart(mount, artist);
     });
     if (activeCarousel && activeCarousel.destroy) activeCarousel.destroy();
-    var carousel = window.tjMagPinnedCarousel({section: featured, sticky: featured.querySelector('.artists-featured-sticky'), track: featured.querySelector('.artists-featured-track'), panels: featured.querySelectorAll('.artists-featured-panel'), dwell: .12, startDwell: .1, endDwell: .15, shift: 10, scale: 1.12, stickyTop: function () { return (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tj-nav-height')) || 64) + (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--artists-toolbar-h')) || 0); }, onIndex: function (index) {
+    var carousel = window.tjMagPinnedCarousel({section: featured, sticky: featured.querySelector('.artists-featured-sticky'), track: featured.querySelector('.artists-featured-track'), panels: featured.querySelectorAll('.artists-featured-panel'), dwell: .12, startDwell: .1, endDwell: .15, shift: 10, scale: 1.12, stickyTop: function () { return navHeight() + (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--artists-toolbar-h')) || 0); }, onIndex: function (index) {
       var dots = featured.querySelectorAll('.fdot');
       dots.forEach(function (dot, dotIndex) { dot.classList.toggle('is-on', dotIndex === index); });
       var counter = featured.querySelector('[data-featured-counter]');

@@ -4,6 +4,8 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawn, spawnSync } from 'node:child_process';
+import { createServer } from 'node:net';
+import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
@@ -114,3 +116,91 @@ console.log(`  ✅ Leaflet map ready / coordinate pins ${result.pins}件`);
 console.log(`  ✅ City filter pins ${result.filteredPins}件`);
 console.log(`  ✅ attribution top=${result.attribution.top}px bottom=${result.attribution.bottom}px height=${result.attribution.height}px font-size=${result.attribution.fontSize}px`);
 result.lowerLabels.forEach((label) => console.log(`  ✅ ${label.id || '.maplbl'} top=${label.top}px bottom=${label.bottom}px <= attribution top=${result.attribution.top}px`));
+
+// Chrome does not reproduce Safari's zero-height grid/aspect-ratio bug, so the
+// mobile guard checks both the expected geometry and the Safari-specific
+// computed align-self fix. The safe-area check uses the same CDP override as
+// the header guard and fails when the method is unavailable.
+const freePort = () => new Promise((resolve, reject) => {
+  const probe = createServer();
+  probe.once('error', reject);
+  probe.listen(0, '127.0.0.1', () => { const port = probe.address().port; probe.close(() => resolve(port)); });
+});
+const mobilePort = await freePort();
+const debugPort = await freePort();
+const mobileChrome = spawn(chrome, ['--headless=new', '--no-sandbox', '--disable-gpu', '--no-first-run', '--disable-extensions', `--remote-debugging-port=${debugPort}`, 'about:blank'], { stdio: 'ignore' });
+let mobileWs;
+let cdpId = 0;
+const cdp = (method, params = {}) => {
+  const id = ++cdpId;
+  mobileWs.send(JSON.stringify({ id, method, params }));
+  return new Promise((resolve, reject) => {
+    const onMessage = (event) => {
+      const message = JSON.parse(event.data);
+      if (message.id !== id) return;
+      mobileWs.removeEventListener('message', onMessage);
+      if (message.error) reject(new Error(JSON.stringify(message.error)));
+      else resolve(message.result);
+    };
+    mobileWs.addEventListener('message', onMessage);
+  });
+};
+const mobileServer = http.createServer((req, res) => {
+  const requestPath = decodeURIComponent(new URL(req.url, 'http://x').pathname);
+  const file = path.join(LP, requestPath);
+  if (!file.startsWith(LP) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) { res.writeHead(404); return res.end(); }
+  res.writeHead(200, { 'Content-Type': MIME[path.extname(file)] || 'application/octet-stream' });
+  res.end(fs.readFileSync(file));
+});
+await new Promise(resolve => mobileServer.listen(mobilePort, '127.0.0.1', resolve));
+try {
+  let target;
+  for (let i = 0; i < 50 && !target; i++) {
+    await delay(100);
+    try { target = (await (await fetch(`http://127.0.0.1:${debugPort}/json`)).json()).find(t => t.type === 'page'); } catch {}
+  }
+  if (!target) throw new Error('Chrome DevTools のページに接続できません');
+  mobileWs = new WebSocket(target.webSocketDebuggerUrl);
+  await new Promise((resolve, reject) => { mobileWs.addEventListener('open', resolve); mobileWs.addEventListener('error', reject); });
+  await cdp('Page.enable');
+  await cdp('Runtime.enable');
+  await cdp('Emulation.setDeviceMetricsOverride', { width: 402, height: 874, deviceScaleFactor: 2, mobile: true });
+  try {
+    await cdp('Emulation.setSafeAreaInsetsOverride', { insets: { top: 62, bottom: 34, left: 0, right: 0 } });
+  } catch (error) {
+    throw new Error(`setSafeAreaInsetsOverride が利用できません: ${error.message}`);
+  }
+  await cdp('Page.navigate', { url: `http://127.0.0.1:${mobilePort}/venues.html?venue-map-check=1` });
+  await delay(500);
+  const clickAndMeasure = await cdp('Runtime.evaluate', { returnByValue: true, awaitPromise: true, expression: `(async () => {
+    const wait = async (read, ok, timeout = 12000) => { const deadline = Date.now() + timeout; let value = read(); while (!ok(value) && Date.now() < deadline) { await new Promise(r => setTimeout(r, 100)); value = read(); } return value; };
+    const button = document.querySelector('[data-venues-map-toggle]');
+    if (!button) throw new Error('MAP toggle が見つかりません');
+    button.click();
+    const map = await wait(() => document.querySelector('#venue-map'), el => el && !el.hidden && el.dataset.mapStatus === 'ready');
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+    const rect = map.getBoundingClientRect();
+    const filters = document.querySelector('.venues-filters').getBoundingClientRect();
+    return { map: { top: rect.top, bottom: rect.bottom, width: rect.width, height: rect.height }, filters: { bottom: filters.bottom }, alignSelf: getComputedStyle(map).alignSelf, expanded: button.getAttribute('aria-expanded') };
+  })()` });
+  if (clickAndMeasure.exceptionDetails) throw new Error(`モバイル計測で例外: ${clickAndMeasure.exceptionDetails.exception?.description || clickAndMeasure.exceptionDetails.text}`);
+  const mobileResult = clickAndMeasure.result?.value;
+  const mobileFailures = [];
+  if (!mobileResult) mobileFailures.push('モバイル計測結果を取得できません');
+  else {
+    const expectedHeight = mobileResult.map.width * 0.75;
+    if (Math.abs(mobileResult.map.height - expectedHeight) > 2) mobileFailures.push(`モバイル地図 height=${mobileResult.map.height}px（期待 ${expectedHeight}px ±2）`);
+    if (mobileResult.alignSelf !== 'start') mobileFailures.push(`モバイル地図 align-self=${mobileResult.alignSelf}（期待 start）`);
+    if (mobileResult.map.top + 1 < mobileResult.filters.bottom) mobileFailures.push(`モバイル地図 top=${mobileResult.map.top}px < filter bottom=${mobileResult.filters.bottom}px`);
+    if (mobileResult.expanded !== 'true') mobileFailures.push(`MAP aria-expanded=${mobileResult.expanded}`);
+  }
+  if (mobileFailures.length) { console.log('VENUESモバイル地図に問題があります:'); mobileFailures.forEach(f => console.log('  ✗ ' + f)); process.exitCode = 1; }
+  else {
+    console.log(`  ✅ mobile MAP tap / map ${mobileResult.map.width}px × ${mobileResult.map.height}px / align-self=${mobileResult.alignSelf}`);
+    console.log(`  ✅ safe-area top=${mobileResult.map.top}px >= filters bottom=${mobileResult.filters.bottom}px`);
+  }
+} finally {
+  mobileWs?.close();
+  mobileChrome.kill('SIGTERM');
+  mobileServer.close();
+}

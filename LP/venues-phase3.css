@@ -119,7 +119,11 @@ html.tj-venues-hydrating:not(.tj-venues-rendered) .venues-grid-section {
   #venues-type-chips { width: 100%; }
   .venues-map-toggle:not([hidden]) { display: inline-flex; flex: 0 0 auto; }
   .venues-featured { grid-template-columns: 1fr; gap: 28px; }
-  .venue-map { aspect-ratio: 4 / 3; }
+  .venue-map {
+    aspect-ratio: 4 / 3;
+    /* Safari lets grid stretch win over aspect-ratio here, collapsing the absolute-only map to 0px (2026-10-30). */
+    align-self: start;
+  }
   .venue-featured-image { min-height: 260px; }
   .venue-featured-copy h2 { font-size: 48px; }
   .venues-grid { grid-template-columns: 1fr; gap: 32px; }

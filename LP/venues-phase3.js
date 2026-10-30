@@ -25,6 +25,10 @@
   var toolbarDirectionAnchor = window.scrollY;
   var toolbarOpenUntil = 0;
   var toolbarStartY = toolbar ? toolbar.getBoundingClientRect().top + window.scrollY : 0;
+  function navHeight() {
+    var nav = document.querySelector('body > nav');
+    return nav ? nav.getBoundingClientRect().height : 64;
+  }
   // TOKYO はユーザー指定の大きな区分だけを出す。
   // 区分を増やすときはここへ足し、会場データの AREA 自体は変更しない。
   var TOKYO_SUBAREA_GROUPS = [
@@ -53,9 +57,9 @@
   }
   function mapScrollTarget() {
     var toolbar = root.querySelector('.venues-filters');
-    var navHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tj-nav-height')) || 64;
+    var navHeightValue = navHeight();
     var toolbarHeight = toolbar ? toolbar.getBoundingClientRect().height : 0;
-    return Math.max(0, mapWrap.getBoundingClientRect().top + scrollY - navHeight - toolbarHeight);
+    return Math.max(0, mapWrap.getBoundingClientRect().top + scrollY - navHeightValue - toolbarHeight);
   }
   function scrollMapIntoView() {
     requestAnimationFrame(function () {
@@ -75,7 +79,7 @@
     });
   }
   function toolbarNavHeight() {
-    return parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tj-nav-height')) || 64;
+    return navHeight();
   }
   function showToolbar() {
     toolbar.classList.remove('is-hidden');

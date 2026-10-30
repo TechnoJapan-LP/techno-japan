@@ -14736,3 +14736,48 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 - localhost listen が許可された環境で `node scripts/check_top_intro.mjs` を実行し、PC/スマホの wheel・touch・sticky を確認すること。
 - UI 変更のため、公開前に実機 iPhone のホーム画面アプリで再生中・終了後を確認し、使用 URL・画面幅・操作・期待結果・実測結果を追記すること。CMS の Cmd+Shift+R は今回の対象外。
+
+## 2026-10-30 / Codex / VENUES モバイル地図の Safari 高さ・safe-area 修正
+
+### 実施
+
+- `LP/venues-phase3.css` の 900px 以下 `.venue-map` に `align-self: start` を追加。Safari では grid の stretch が aspect-ratio に勝ち、絶対配置だけの地図が高さ 0px になるため。PC の2列レイアウトは変更していない。
+- `LP/venues-phase3.js` / `LP/artists-phase3.js` の `--tj-nav-height` parseFloat 読み取りを、各ファイル内の `navHeight()`（`body > nav` の実測高さ、無ければ64px）へ統一。
+- `scripts/check_venue_maps.mjs` に 402×874 mobile の MAP タップ後の幅×0.75、高さ、computed `align-self:start`、safe-area top 62 の filter 下端ガードを追加。`Emulation.setSafeAreaInsetsOverride` 非対応は失敗扱い。
+- `python3 scripts/bump_asset_versions.py` で `venues-phase3.css` 11、`venues-phase3.js` 10、`artists-phase3.js` 11（JA/EN）へ更新。
+
+### コミット
+
+- **未コミット・未 push**（ユーザー指示どおり）。
+
+### 検証
+
+- Safari 27 の最小再現値（幅370px）を記録: 修正前 0px / `align-self:start` 278px / `height:0;padding-top:75%` 278px。
+- `node --check LP/venues-phase3.js`: 成功。
+- `node --check LP/artists-phase3.js`: 成功。
+- `node --check scripts/check_venue_maps.mjs`: 成功。
+- `git diff --check`: 成功。
+- JA/EN ハブ行数: festivals 323/323、artists 386/386、venues 258/258、news 226/226、index 280/280。
+- `python3 scripts/check_asset_versions.py`: 外部 JS・クエリ無し・変更3件の版数更新までは成功。その後の「現在の ?v 導入後」履歴検査が長時間無出力となり、手動中断（完走未確認）。
+- `node scripts/check_venue_maps.mjs`（Claude 実行）: PASS（mobile map 370×277.5px / align-self=start / safe-area 62 で地図上端 226px = フィルタ下端 226px）。修正前の venues-phase3.css/js に戻すと「align-self=auto」「地図 top=164px < フィルタ下端 226px」の2件で FAIL。Codex 版の検査は式が `async () => {...}` のまま呼ばれておらず結果が空だったため Claude が `(async () => {...})()` に直し、例外時は throw するようにした。
+- Safari での確認（Claude）: Mac の Safari 27（iPhone と同じ WebKit）で最小再現ページを開き、幅370px で 現状 0px / `align-self:start` 278px を実測。症状はユーザーの画面録画（ScreenRecording_10-30-2026 16-37-17_1.MP4）で確認: MAP 押下後ボタンは赤くなるが地図が出ない。
+- `node scripts/build-detail-pages.mjs`（Claude 実行）: 完了、詳細ページは unchanged。JA/EN 5ハブの行数一致（280/323/386/258/226）。`python3 scripts/check_asset_versions.py`: 正常。
+
+### 変更したパターン
+
+- `venues-featured` の 900px 以下1列 grid 内で、absolute-only の `venue-map` を stretch させず aspect-ratio を有効にする修正。
+- `--tj-nav-height` の parseFloat 依存を、実測 `body > nav` 高さへ置換（venues 2箇所、artists 4箇所）。
+- VENUES 地図検査の mobile MAP タップ / Safari guard / safe-area guard。
+
+### 未確認の類似パターン
+
+- `LP/detail.css` の `.festival-map` は通常のブロック要素で、1列 grid の stretch 子・absolute-only には該当しない。確認済み・0件。
+- LP 配下に `--tj-nav-height` を `parseFloat` する箇所は確認済み・0件。残りは CSS の var 参照と artists.html の px 実測上書き。
+- `LP/top-phase2.css`、`LP/festivals-phase3.css`、`LP/artists-phase3.css` の aspect-ratio 要素は画像・通常フロー内容で、今回と同型の修正対象なし。確認済み・0件。
+- **実機 iPhone Safari / ホーム画面アプリは未確認**。本番 URL、402×874 の実ブラウザ操作も未確認。
+
+### 次の担当への注意・判断待ち
+
+- localhost listen が許可された環境で `node scripts/check_venue_maps.mjs` を完走し、MAP タップ後の高さ・align-self・safe-area の実測値を確認すること。
+- `node scripts/build-detail-pages.mjs` を git pull 後の最新データで再実行し、JA/EN 行数一致と差分を確認すること。
+- `bash scripts/preflight.sh`（省略なし）を実行し、UI変更として実ブラウザ（iPhone Safari 相当を含む）で venues.html の MAP を操作確認するまで公開しないこと。
