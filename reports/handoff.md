@@ -14781,3 +14781,4 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - localhost listen が許可された環境で `node scripts/check_venue_maps.mjs` を完走し、MAP タップ後の高さ・align-self・safe-area の実測値を確認すること。
 - `node scripts/build-detail-pages.mjs` を git pull 後の最新データで再実行し、JA/EN 行数一致と差分を確認すること。
 - `bash scripts/preflight.sh`（省略なし）を実行し、UI変更として実ブラウザ（iPhone Safari 相当を含む）で venues.html の MAP を操作確認するまで公開しないこと。
+- CI では Node 20 のためモバイル地図検査が省略され、ローカル preflight（Node 22+）が実質のガードとなる。

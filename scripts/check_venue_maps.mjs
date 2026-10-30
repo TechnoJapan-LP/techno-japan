@@ -117,21 +117,24 @@ console.log(`  ✅ City filter pins ${result.filteredPins}件`);
 console.log(`  ✅ attribution top=${result.attribution.top}px bottom=${result.attribution.bottom}px height=${result.attribution.height}px font-size=${result.attribution.fontSize}px`);
 result.lowerLabels.forEach((label) => console.log(`  ✅ ${label.id || '.maplbl'} top=${label.top}px bottom=${label.bottom}px <= attribution top=${result.attribution.top}px`));
 
-// Chrome does not reproduce Safari's zero-height grid/aspect-ratio bug, so the
-// mobile guard checks both the expected geometry and the Safari-specific
-// computed align-self fix. The safe-area check uses the same CDP override as
-// the header guard and fails when the method is unavailable.
-const freePort = () => new Promise((resolve, reject) => {
+if (typeof WebSocket === 'undefined') {
+  console.log(`  ⚠ モバイル地図の検査は省略（Node ${process.versions.node} に WebSocket が無い。ローカルの preflight（Node 22+）で実行される）`);
+} else {
+  // Chrome does not reproduce Safari's zero-height grid/aspect-ratio bug, so the
+  // mobile guard checks both the expected geometry and the Safari-specific
+  // computed align-self fix. The safe-area check uses the same CDP override as
+  // the header guard and fails when the method is unavailable.
+  const freePort = () => new Promise((resolve, reject) => {
   const probe = createServer();
   probe.once('error', reject);
   probe.listen(0, '127.0.0.1', () => { const port = probe.address().port; probe.close(() => resolve(port)); });
-});
-const mobilePort = await freePort();
-const debugPort = await freePort();
-const mobileChrome = spawn(chrome, ['--headless=new', '--no-sandbox', '--disable-gpu', '--no-first-run', '--disable-extensions', `--remote-debugging-port=${debugPort}`, 'about:blank'], { stdio: 'ignore' });
-let mobileWs;
-let cdpId = 0;
-const cdp = (method, params = {}) => {
+  });
+  const mobilePort = await freePort();
+  const debugPort = await freePort();
+  const mobileChrome = spawn(chrome, ['--headless=new', '--no-sandbox', '--disable-gpu', '--no-first-run', '--disable-extensions', `--remote-debugging-port=${debugPort}`, 'about:blank'], { stdio: 'ignore' });
+  let mobileWs;
+  let cdpId = 0;
+  const cdp = (method, params = {}) => {
   const id = ++cdpId;
   mobileWs.send(JSON.stringify({ id, method, params }));
   return new Promise((resolve, reject) => {
@@ -144,16 +147,16 @@ const cdp = (method, params = {}) => {
     };
     mobileWs.addEventListener('message', onMessage);
   });
-};
-const mobileServer = http.createServer((req, res) => {
+  };
+  const mobileServer = http.createServer((req, res) => {
   const requestPath = decodeURIComponent(new URL(req.url, 'http://x').pathname);
   const file = path.join(LP, requestPath);
   if (!file.startsWith(LP) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) { res.writeHead(404); return res.end(); }
   res.writeHead(200, { 'Content-Type': MIME[path.extname(file)] || 'application/octet-stream' });
   res.end(fs.readFileSync(file));
-});
-await new Promise(resolve => mobileServer.listen(mobilePort, '127.0.0.1', resolve));
-try {
+  });
+  await new Promise(resolve => mobileServer.listen(mobilePort, '127.0.0.1', resolve));
+  try {
   let target;
   for (let i = 0; i < 50 && !target; i++) {
     await delay(100);
@@ -199,8 +202,9 @@ try {
     console.log(`  ✅ mobile MAP tap / map ${mobileResult.map.width}px × ${mobileResult.map.height}px / align-self=${mobileResult.alignSelf}`);
     console.log(`  ✅ safe-area top=${mobileResult.map.top}px >= filters bottom=${mobileResult.filters.bottom}px`);
   }
-} finally {
-  mobileWs?.close();
-  mobileChrome.kill('SIGTERM');
-  mobileServer.close();
+  } finally {
+    mobileWs?.close();
+    mobileChrome.kill('SIGTERM');
+    mobileServer.close();
+  }
 }
