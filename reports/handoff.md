@@ -14694,3 +14694,45 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 - push 後: `gh workflow run "Publish pipeline"` を流して success を確認。CMS（`?cb=<乱数>`）で記事プレビューを開き、例外が無く表示されることを確認（認証が要るのでユーザーに依頼）。
 - ユーザーにホーム画面アプリで一度開き直してもらい、ヘッダーの位置を見てもらう。
+
+## 2026-10-30 / Codex / TOP オープニング後の iPhone sticky 無効化修正
+
+### 実施
+
+- 症状: iPhone のホーム画面アプリで TOP オープニング終了後に、記事カルーセル（`.top2-lead-sticky`）、固定ヘッダー、帯の sticky が効かず、カルーセル高さ分の空白だけがスクロールされた。
+- 原因: `LP/index.html` の `html.tj-intro-playing{overflow:hidden}` により、オープニング中だけ html/body の overflow 構造を変えていた。終了後にクラスを外しても iOS WebKit が body をスクロールコンテナとして残し、sticky の基準が壊れていた。
+- 修正: html/body の overflow を変更する指定を削除。イントロ挿入時に window の `wheel` / `touchmove`（`passive:false`）とスクロールキーの `keydown` をリスナーで抑止し、再生中の `scroll` は `scrollTo(0,0)` で戻す。`finish()` で全リスナーを解除し、Skip ボタンの Space / Enter は許可。
+- `scripts/check_top_intro.mjs` を更新し、再生前の html/body computed overflow との一致、再生中の CDP wheel / touch で `scrollY === 0`、終了後のスクロール復帰、PC/スマホの sticky 位置（lead の rect.top と nav の下端、±1px）を検査するようにした。JA/EN の TOP を生成して同じインライン修正を反映。
+
+### コミット
+
+- safe-area 修正と同じ push に含める（このエントリと同じコミット）。
+
+### 検証
+
+- `node --check scripts/check_top_intro.mjs`: 成功。
+- `git diff --check`: 成功。
+- `python3 scripts/check_asset_versions.py`: 成功。インライン変更のため `?v` 追加は不要。
+- `node scripts/build-detail-pages.mjs`: 完了。EN hub を生成し、詳細ページの更新・削除は0件。
+- `node scripts/check_top_intro.mjs`（Claude 実行）: PASS。修正前の `LP/index.html` に戻すと「PC t≈0.3s」「終了t≈6.3s」「スマホ終了後」の3項目で FAIL（html overflow の変化を検出）。検査は Codex 版に括弧の不足（SyntaxError で evaluate が undefined を返していた）・滑らかスクロール途中での計測・スマホのタッチ慣性の3点があり Claude が修正。evaluate は例外時に throw するように変更。
+- headless Chrome（402×874 モバイル模擬）で修正後もオープニング後にカルーセルが nav 直下（64px）に留まることを確認。ただし iOS WebKit の不具合自体は Chrome では再現しないため、検査が守るのは「原因（overflow の切り替え）を再び入れない」こと。
+- 症状はユーザーの画面録画（ScreenRecording_10-30-2026 11-55-46_1.MP4）のコマで確認: 6.5s でカルーセル表示 → 7.0〜9.0s で空白が流れる。
+- 実機 iPhone / ホーム画面アプリ: **未確認**。
+
+### 変更したパターン
+
+- TOP オープニング中の html overflow ロックを削除し、wheel / touchmove / scroll-key / scroll の JS リスナー制御へ変更。
+- オープニング終了時の listener cleanup。
+- `check_top_intro.mjs` の computed overflow、PC/スマホの wheel・touch、終了後 sticky 検査。
+- JA/EN TOP hub の同一インラインスクリプト。
+
+### 未確認の類似パターン
+
+- 実ブラウザでの Skip ボタンへのフォーカス後 Space / Enter 操作: 未確認。
+- iPhone 実機のホーム画面アプリで、オープニング中のスワイプ抑止と終了後のヘッダー・帯・カルーセル sticky: 未確認。
+- PC/スマホ CDP の `check_top_intro.mjs` 完走: localhost listen 制限のため未確認。
+
+### 次の担当への注意・判断待ち
+
+- localhost listen が許可された環境で `node scripts/check_top_intro.mjs` を実行し、PC/スマホの wheel・touch・sticky を確認すること。
+- UI 変更のため、公開前に実機 iPhone のホーム画面アプリで再生中・終了後を確認し、使用 URL・画面幅・操作・期待結果・実測結果を追記すること。CMS の Cmd+Shift+R は今回の対象外。
