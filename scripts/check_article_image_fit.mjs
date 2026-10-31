@@ -87,6 +87,30 @@ const injectImages = `
     images[0].dataset.pairId = 'article-image-fit-check';
     images[1].dataset.pairId = 'article-image-fit-check';
     images[2].dataset.layout = 'full';
+
+    // 明示左右寄せの回り込み規則を、article-fx.js 実行前に本文へ追加する。
+    const src = images[0].getAttribute('src');
+    const a = document.createElement('p');
+    const aImg = document.createElement('img');
+    aImg.id = 'article-image-wrap-a-img';
+    aImg.dataset.layout = 'left';
+    aImg.src = src;
+    aImg.alt = 'wrap A';
+    a.append(aImg, document.createTextNode('回り込む文字。画像と同じ段落に改行なしで続く文章を数行分入れて、画像の右側に表示されることを確認するための検査用テキストです。'));
+    const aNext = document.createElement('p');
+    aNext.id = 'article-image-wrap-a-next';
+    aNext.textContent = 'Aの次の段落';
+    const b = document.createElement('p');
+    const bImg = document.createElement('img');
+    bImg.id = 'article-image-wrap-b-img';
+    bImg.dataset.layout = 'right';
+    bImg.src = src;
+    bImg.alt = 'wrap B';
+    b.appendChild(bImg);
+    const bNext = document.createElement('p');
+    bNext.id = 'article-image-wrap-b-next';
+    bNext.textContent = 'Bの次の段落';
+    body.append(a, aNext, b, bNext);
   };
   if (document.readyState === 'interactive') inject();
   else document.addEventListener('readystatechange', inject);
@@ -159,6 +183,12 @@ try {
         const body = document.querySelector('.article-body').getBoundingClientRect();
         const sidebar = document.querySelector('.article-sidebar')?.getBoundingClientRect() || null;
         const pair = document.querySelector('.fx-image-pair');
+        const aImg = document.getElementById('article-image-wrap-a-img');
+        const bImg = document.getElementById('article-image-wrap-b-img');
+        const aFig = aImg?.closest('figure.fx-img');
+        const bFig = bImg?.closest('figure.fx-img');
+        const aNext = document.getElementById('article-image-wrap-a-next');
+        const bNext = document.getElementById('article-image-wrap-b-next');
         const figures = [...document.querySelectorAll('.article-body figure.fx-img')];
         const rect = el => { const r = el.getBoundingClientRect(); return { left: r.left, right: r.right, top: r.top, bottom: r.bottom }; };
         const bounds = el => ({ element: el.className, rect: rect(el) });
@@ -181,6 +211,25 @@ try {
         } else {
           const phoneItems = [...document.querySelectorAll('.fx-image-pair > figure.fx-img, figure.fx-img.fx-bleed')];
           phoneItems.forEach(item => { const r = rect(item); if (r.left < -1 || r.right > viewport.width + 1 || Math.abs(r.left) > 1 || Math.abs(r.right - viewport.width) > 1) errors.push({ reason: 'phone image is not viewport width', element: item.className, rect: r, viewport: viewport.width }); });
+        }
+        if (!aFig || !bFig || !aNext || !bNext) {
+          errors.push({ reason: 'wrap fixture missing' });
+        } else {
+          const ar = rect(aFig), br = rect(bFig);
+          const aText = [...aFig.parentElement.childNodes].find(node => node.nodeType === Node.TEXT_NODE && node.textContent.trim());
+          const textRect = aText ? (() => { const range = document.createRange(); range.setStart(aText, 0); range.setEnd(aText, 1); return rect(range); })() : null;
+          const aNextRect = rect(aNext), bNextRect = rect(bNext);
+          if (viewport.width >= 900) {
+            if (Math.abs(ar.left - body.left) > 1 || Math.abs(ar.width - body.width * .46) > 2) errors.push({ reason: 'explicit left figure geometry', figure: ar, body: rect(document.querySelector('.article-body')) });
+            if (!textRect || textRect.left < ar.right - 1 || textRect.top >= ar.bottom) errors.push({ reason: 'same-paragraph text does not wrap right of left figure', figure: ar, text: textRect });
+            if (aNextRect.top < ar.bottom - 1) errors.push({ reason: 'next paragraph overlaps explicit left figure', figure: ar, next: aNextRect });
+            if (Math.abs(br.right - body.right) > 1) errors.push({ reason: 'explicit right figure geometry', figure: br, body: rect(document.querySelector('.article-body')) });
+            if (bNextRect.top < br.bottom - 1) errors.push({ reason: 'next paragraph overlaps standalone right figure', figure: br, next: bNextRect });
+          }
+          if (viewport.width <= 600) {
+            if (Math.abs(ar.left) > 1 || Math.abs(ar.right - viewport.width) > 1 || Math.abs(br.left) > 1 || Math.abs(br.right - viewport.width) > 1) errors.push({ reason: 'explicit figures are not full width on mobile', left: ar, right: br });
+            if (!textRect || textRect.top < ar.bottom - 1) errors.push({ reason: 'mobile same-paragraph text is beside figure', figure: ar, text: textRect });
+          }
         }
         if (document.documentElement.scrollWidth > viewport.width) errors.push({ reason: 'horizontal scroll', element: 'document', scrollWidth: document.documentElement.scrollWidth, viewport: viewport.width });
         return { errors, figureCount: figures.length, body: { left: body.left, right: body.right }, scrollWidth: document.documentElement.scrollWidth };

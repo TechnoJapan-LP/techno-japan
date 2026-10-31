@@ -67,6 +67,8 @@
       var compact = !requested && figIndex % 4 === 0 ? ' fx-compact' : '';
       // 全幅(full)は fx-bleed で画面端まで広げる
       fig.className = 'fx-img ' + rhythm + compact + (requested === 'full' ? ' fx-bleed' : '');
+      // 明示指定と自動配置をCSSで区別する。自動配置には属性を付けない。
+      if (requested) fig.dataset.layout = requested;
       if (img.dataset.position) fig.dataset.position = img.dataset.position;
       if (img.dataset.crop && /^(16:10|4:3|1:1)$/.test(img.dataset.crop)) fig.dataset.crop = img.dataset.crop;
       if (img.dataset.zoom) fig.dataset.zoom = img.dataset.zoom;

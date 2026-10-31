@@ -62,6 +62,18 @@ figure.fx-img.fx-reveal.fx-on .fx-fig { opacity: 1; }
   /* CMS の左右配置は本文を回り込ませる float。見出し側の clear は detail.css で指定する。 */
   figure.fx-img.fx-right { float: right; width: 46%; margin: 12px 0 32px 32px; }
   figure.fx-img.fx-left { float: left; width: 46%; margin: 12px 32px 32px 0; }
+  /* 明示した左右寄せは、画像と同じ段落だけを回り込ませる。画像単独なら次の要素を下へ送る。 */
+  .article-body p:has(> figure.fx-img[data-layout="left"]),
+  .article-body p:has(> figure.fx-img[data-layout="right"]) { display: flow-root; }
+  .article-body > figure.fx-img[data-layout="left"] + *,
+  .article-body > figure.fx-img[data-layout="right"] + * { clear: both; }
+  /* 2枚セットのレイアウトは pair 側の指定を優先する。 */
+  .article-body .fx-image-pair p:has(> figure.fx-img[data-layout="left"]),
+  .article-body .fx-image-pair p:has(> figure.fx-img[data-layout="right"]) { display: block; }
+}
+@media (max-width: 899px) {
+  figure.fx-img.fx-left,
+  figure.fx-img.fx-right { float: none; }
 }
 @media (max-width: 700px) {
   .fx-image-pair { grid-template-columns:1fr; grid-auto-flow:row; width:100vw; margin-left:calc(50% - 50vw); gap:28px; }

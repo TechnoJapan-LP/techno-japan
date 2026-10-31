@@ -14835,3 +14835,48 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - **データの要修正（判断待ち）**: RAPTVANA の DESC_EN を英語にする（CMS → Publish）。直したら EN 可視日本語の基準から該当行が不要になる。
 - PC の全幅は本文列（最大 720px）の幅。1440px では本文とサイドバーの間に約 340px の余白がある（レイアウト側の仕様で今回は変えていない）。
 - `sizes`（1200px）は据え置き。全幅が最大 720px になったので軽くできる余地はあるが、実測してから別途。
+
+## 2026-10-31 / Codex / 左右寄せ画像の段落単位回り込み
+
+### 実施
+
+- `LP/article-fx.js`: 明示された `data-layout` だけを figure の `data-layout` に引き継ぐよう変更。
+- `LP/article-fx.css`: 900px 以上で明示 left/right の figure を同じ段落内に float し、段落内を `flow-root` 化。画像単独の直後は `clear: both`。自動配置と pair は対象外、899px 以下は float 無し。
+- `LP/cms.css` / `LP/cms.js` / `LP/cms.html`: 編集欄と CMS プレビューを本番と同じ 46% float・段落単位回り込みへ変更。left/right の案内文と選択肢表記を更新。CMS asset version を更新。
+- `scripts/build-detail-pages.mjs`: `ARTICLE_FX_JS_VERSION` 14→15、`ARTICLE_FX_CSS_VERSION` 20→21。
+- `scripts/check_article_image_fit.mjs`: 実在記事の既存画像 src を使った A（同一段落）/ B（画像単独）の left/right fixture を追加し、PC/mobile の figure・文字・次段落位置を検査。
+
+### コミット
+
+- 未コミット・未 push（ユーザー指示どおり）。
+
+### 検証
+
+- `node --check LP/article-fx.js`: 成功。
+- `node --check LP/cms.js`: 成功。
+- `node --check scripts/check_article_image_fit.mjs`: 成功。
+- `node scripts/check_cms_article_generated_preview.mjs`: 成功。
+- `git diff --check`: 成功。
+- `node scripts/check_article_image_fit.mjs`（Claude 実行）: 6/6。修正前の article-fx.css に差し替えると「次の段落が明示 left の画像に重なる」4件・「単独 right の画像に重なる」4件で失敗（検出できることを確認）。
+- 本番記事の見た目（Claude、headless Chrome 1280px、japan-festival-2026-november に注入）: 改行なしの文は画像の右に回り込み、Enter の次の段落・単独右寄せの次の段落は画像の下から。スクリーンショットで目視確認。
+- CMS 編集画面（Claude、cms.html を認証素通しで 1440px 表示）: setArticleBody で左寄せ画像＋文字を読み込み、画像 float:left（283〜784px）・同段落の文字は 816px から。実操作（画像の右をクリック→「【右に追記】」入力→Enter→「【改行後】」入力）で、追記は同じ段落の画像の右（left 1198 / top 58）、改行後は新しい段落で画像の下（top 375 > 画像下端 315）。`getArticleBodyForSave()` の本文に `data-layout="left"` が残ることを確認。
+- `bash scripts/preflight.sh`: 未実行。生成物の再ビルド前で、localhost bind 制約もあるため、今回の作業では実行していない。
+- `node scripts/build-detail-pages.mjs`: 未実行（ユーザー指示どおり、Claude が実行）。
+
+### 変更したパターン
+
+- 本文内の明示 `data-layout="left|right"` 画像を、同一 `<p>` の文字だけ回り込ませるパターン。
+- 明示左右画像が本文直下で単独 figure になるパターンの、次要素 clear。
+- CMS Quill 編集欄・CMS 本番表示プレビューの同一レイアウト、案内文、選択肢表記、asset version。
+
+### 未確認の類似パターン
+
+- CMS Quill 入力→Enter→次段落は確認済み（上記）。**未確認**: CMS プレビュー（.ar-prev-body）の目視、認証済みの本番 CMS での保存→Publish。
+- 既存本番記事の 3記事8枚は生成物を再ビルドしていないため、Claude のビルド後に確認が必要。
+- 自動配置（figure の `data-layout` 無し）と pair の実ブラウザ回帰: CSS の対象外指定は静的確認済み、ブラウザ実測は未確認。
+
+### 次の担当への注意・判断待ち
+
+- `git pull` 後、`node scripts/build-detail-pages.mjs` を実行し、JA/EN の生成物と asset version を確認すること。
+- `bash scripts/preflight.sh` を省略なしで実行し、PC 1280/1024 と mobile 390、および CMS の実ブラウザ操作を確認すること。
+- CMS を開く際は `cms.html?cb=<乱数>` または Cmd+Shift+R を使い、更新後の `cms.css?v=49` / `cms.js?v=198` を読み込むこと。
