@@ -14787,6 +14787,8 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 実施
 
+- LP/cms.js のフォールバック記事プレビューを article-fx.css?v=20 に更新し、LP/cms.html の cms.js?v=196 → 197。
+
 - `LP/article-fx.css`: 701px 以上の `.fx-image-pair`、`fx-full`、`fx-bleed` を `.article-body` の幅・左右端へ揃え、全幅キャプションの padding / max-width を解除。700px 以下の 100vw、縦積み、グリッド線、scale は維持。pair の縦積みメディアクエリを `max-width:700px` に修正。
 - `LP/cms.css`: CMS の `.preview-image-pair` を width 100%、margin-left 0 に変更。
 - `LP/cms.html`: `cms.css?v=47` → `48`。
@@ -14826,5 +14828,10 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 
 - cms.html（cms.css の ?v）を変えたので Publish 経路の確認対象。公開後に `gh workflow run "Publish pipeline"` の成功を確認する。ユーザーには CMS を Cmd+Shift+R で強制リロードしてもらう。
+- **公開の1回目は pre-push の preflight で止まった（本番には何も出ていない）**: 5件失敗。
+  (1) ARTICLE本番表示プレビュー: cms.js のフォールバックプレビューが article-fx.css?v=19 のまま → 20 に修正、cms.js?v 197（Codex）。
+  (2) EN画面の可視日本語 +4件: RAPTVANA の DESC_EN に日本語の説明がそのまま入っている／japan-festival-2026-november の EN 版で「橋の下世界音楽祭」が日本語表記。**どちらも既に本番に出ている内容で、本番の main（3501a6d34）でも同じ4件で失敗**（今回の変更とは無関係）。ユーザー判断「既知として登録し公開」で `check_en_visible_japanese.mjs --update`（基準 25件）。
+  (3) TOP オープニング / 地図が全国の会場を出す / 会場一覧の地図: 時間切れ（load average 11）。単独で 16秒 / 87秒 / 11秒で合格。
+- **データの要修正（判断待ち）**: RAPTVANA の DESC_EN を英語にする（CMS → Publish）。直したら EN 可視日本語の基準から該当行が不要になる。
 - PC の全幅は本文列（最大 720px）の幅。1440px では本文とサイドバーの間に約 340px の余白がある（レイアウト側の仕様で今回は変えていない）。
 - `sizes`（1200px）は据え置き。全幅が最大 720px になったので軽くできる余地はあるが、実測してから別途。
