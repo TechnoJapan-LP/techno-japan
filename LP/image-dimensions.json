@@ -723,6 +723,50 @@
     1920,
     1280
   ],
+  "images/articles/mutek-jp-2026-info-body01-fd6094fd.webp": [
+    1920,
+    1440
+  ],
+  "images/articles/mutek-jp-2026-info-body02-6b3dd7c1.webp": [
+    1920,
+    1277
+  ],
+  "images/articles/mutek-jp-2026-info-body03-84e6e442.webp": [
+    1920,
+    1440
+  ],
+  "images/articles/mutek-jp-2026-info-body04-459a5d2e.webp": [
+    1920,
+    1440
+  ],
+  "images/articles/mutek-jp-2026-info-body05-c5275f03.webp": [
+    1920,
+    1440
+  ],
+  "images/articles/mutek-jp-2026-info-body06-7af33420.webp": [
+    1920,
+    1080
+  ],
+  "images/articles/mutek-jp-2026-info-body07-1c9f8da2.webp": [
+    1920,
+    1280
+  ],
+  "images/articles/mutek-jp-2026-info-body08-731fbed2.webp": [
+    1886,
+    1920
+  ],
+  "images/articles/mutek-jp-2026-info-body09-cd3d0de3.webp": [
+    554,
+    554
+  ],
+  "images/articles/mutek-jp-2026-info-body10-71f34313.webp": [
+    1440,
+    1440
+  ],
+  "images/articles/mutek-jp-2026-info-body11-3a03fb1a.webp": [
+    1920,
+    1280
+  ],
   "images/articles/mutek-jp-2026-info.webp": [
     1920,
     1280
@@ -4674,6 +4718,122 @@
   "images/derivatives/card/articles/mutek-jp-2026-info-1793431360476--f813ca37-xs.webp": [
     240,
     160
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body01-fd6094fd--ff0d6fb9-body-lg.webp": [
+    1200,
+    900
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body01-fd6094fd--ff0d6fb9-body-md.webp": [
+    800,
+    600
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body01-fd6094fd--ff0d6fb9-body-xl.webp": [
+    1440,
+    1080
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body02-6b3dd7c1--a7d27156-body-lg.webp": [
+    1200,
+    798
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body02-6b3dd7c1--a7d27156-body-md.webp": [
+    800,
+    532
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body02-6b3dd7c1--a7d27156-body-xl.webp": [
+    1440,
+    958
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body03-84e6e442--98187a2d-body-lg.webp": [
+    1200,
+    900
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body03-84e6e442--98187a2d-body-md.webp": [
+    800,
+    600
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body03-84e6e442--98187a2d-body-xl.webp": [
+    1440,
+    1080
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body04-459a5d2e--91be6745-body-lg.webp": [
+    1200,
+    900
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body04-459a5d2e--91be6745-body-md.webp": [
+    800,
+    600
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body04-459a5d2e--91be6745-body-xl.webp": [
+    1440,
+    1080
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body05-c5275f03--3fdfff8b-body-lg.webp": [
+    1200,
+    900
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body05-c5275f03--3fdfff8b-body-md.webp": [
+    800,
+    600
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body05-c5275f03--3fdfff8b-body-xl.webp": [
+    1440,
+    1080
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body06-7af33420--bcca65e1-body-lg.webp": [
+    1200,
+    675
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body06-7af33420--bcca65e1-body-md.webp": [
+    800,
+    450
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body06-7af33420--bcca65e1-body-xl.webp": [
+    1440,
+    810
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body07-1c9f8da2--9d59255c-body-lg.webp": [
+    1200,
+    800
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body07-1c9f8da2--9d59255c-body-md.webp": [
+    800,
+    533
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body07-1c9f8da2--9d59255c-body-xl.webp": [
+    1440,
+    960
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body08-731fbed2--b410a8d5-body-lg.webp": [
+    1200,
+    1222
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body08-731fbed2--b410a8d5-body-md.webp": [
+    800,
+    814
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body08-731fbed2--b410a8d5-body-xl.webp": [
+    1440,
+    1466
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body10-71f34313--6522729c-body-lg.webp": [
+    1200,
+    1200
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body10-71f34313--6522729c-body-md.webp": [
+    800,
+    800
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body11-3a03fb1a--070b2bd0-body-lg.webp": [
+    1200,
+    800
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body11-3a03fb1a--070b2bd0-body-md.webp": [
+    800,
+    533
+  ],
+  "images/derivatives/card/articles/mutek-jp-2026-info-body11-3a03fb1a--070b2bd0-body-xl.webp": [
+    1440,
+    960
   ],
   "images/derivatives/card/articles/odyssey-2026-info--43b18a8d-fourThree-center.webp": [
     1200,
