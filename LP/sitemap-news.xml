@@ -12,15 +12,4 @@
       <news:title>MUTEK.JP 2026 | 11回目のMUTEK.JPは、高輪ゲートウェイシティのMoN Takanawaへ</news:title>
     </news:news>
   </url>
-  <url>
-    <loc>https://techno-japan.media/articles/japan-festival-2026-november.html</loc>
-    <news:news>
-      <news:publication>
-        <news:name>TECHNO JAPAN</news:name>
-        <news:language>ja</news:language>
-      </news:publication>
-      <news:publication_date>2026-10-30T00:00:00+09:00</news:publication_date>
-      <news:title>【2026年11月】 | 日本の音楽フェスティバル&amp;レイヴまとめ</news:title>
-    </news:news>
-  </url>
 </urlset>
