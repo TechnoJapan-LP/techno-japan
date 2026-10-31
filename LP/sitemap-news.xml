@@ -2,6 +2,17 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://techno-japan.media/articles/mutek-jp-2026-info.html</loc>
+    <news:news>
+      <news:publication>
+        <news:name>TECHNO JAPAN</news:name>
+        <news:language>ja</news:language>
+      </news:publication>
+      <news:publication_date>2026-10-31T00:00:00+09:00</news:publication_date>
+      <news:title>MUTEK.JP 2026 | 11回目のMUTEK.JPは、高輪ゲートウェイシティのMoN Takanawaへ</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://techno-japan.media/articles/japan-festival-2026-november.html</loc>
     <news:news>
       <news:publication>

@@ -5,9 +5,33 @@
     <link>https://techno-japan.media</link>
     <description>Japan&apos;s underground techno and house music media platform.</description>
     <language>ja-JP</language>
-    <lastBuildDate>Sat, 31 Oct 2026 01:27:31 +0900</lastBuildDate>
-    <!-- items-hash: b1fbcfcdeff8a0758e9cc8d31e88e44d654f7f5a5bb7e96959902e3fcfe3273e -->
+    <lastBuildDate>Sat, 31 Oct 2026 18:01:35 +0900</lastBuildDate>
+    <!-- items-hash: d003a76186ad9591c314a49f76ee6e6790a982ae0f9f2b51c7177cac1d576fd7 -->
     <atom:link href="https://techno-japan.media/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>FESTIVAL de FRUE</title>
+      <link>https://techno-japan.media/festivals/festival-de-frue.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/festival-de-frue.html</guid>
+      <pubDate>Sat, 31 Oct 2026 00:00:00 +0900</pubDate>
+      <category>Festival</category>
+      <description>Shizuoka — FESTIVAL de FRUEは、静岡県掛川市の「つま恋リゾート 彩の郷」で開催される、ジャンルや国境を越えた唯一無二の音楽フェスティバルです。「魂の震える音楽」をコンセプトに、ジャズ、ブラジル音楽、テクノ、サイケデリック、ロックなど、世界中から選りすぐられた本物のアーティストがラインナップ。妥協のない高品位なサウンドシステムと、豊かな緑に囲まれた開放的なロケーションが極上の音響体験を生み出します。商用感のない親密で自由な空気感と、多様な音楽文化が交差するディープな没入感が魅力の、音楽愛好家から絶大な信頼を集める特別なオープンエア・イベントです。</description>
+    </item>
+    <item>
+      <title>PARALLEL WORLD</title>
+      <link>https://techno-japan.media/festivals/parallel-world.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/parallel-world.html</guid>
+      <pubDate>Sat, 31 Oct 2026 00:00:00 +0900</pubDate>
+      <category>Festival</category>
+      <description>yamamotechが2012年から続けてきた、野外のフリーパーティ。開催場所は公開されず、「日本のどこか」とだけ告げられる。入場は無料、運営はドネーションとクラウドファンディングで支えられる。突如現れては消えていく、幻のような空間で非日常を体験したい。その思いから始まった企画は、DJとサウンドシステムへの偏愛が形になったものだ。</description>
+    </item>
+    <item>
+      <title>DENKI BODHISATTVA</title>
+      <link>https://techno-japan.media/festivals/denki-bodhisattva.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/denki-bodhisattva.html</guid>
+      <pubDate>Sat, 31 Oct 2026 00:00:00 +0900</pubDate>
+      <category>Festival</category>
+      <description>Chiba — 電気菩薩（DENKI BODHISATTVA）は、2021年に東京で始まったアンダーグラウンド・パーティーコレクティブ。音楽、アート、ファッションを混ぜ合わせ、東洋の神秘性やカオスから着想を得た世界観で、視覚、音、空間が一体になった非日常の体験をつくっている。東京のクラブシーンを拠点に、野外レイヴや海外でのイベントへと活動を広げてきた。掲げるのは、国籍、文化、年齢、価値観の違いを越えて、誰もが自分自身を解放できる場所。現実と非現実が交差する、もうひとつの世界を追い続けている。</description>
+    </item>
     <item>
       <title>Topia</title>
       <link>https://techno-japan.media/festivals/topia.html</link>
@@ -326,6 +350,14 @@
       <guid isPermaLink="true">https://techno-japan.media/articles/japan-festival-2026-november.html</guid>
       <pubDate>Fri, 30 Oct 2026 00:00:00 +0900</pubDate>
       <category>GUIDE</category>
+      <description></description>
+    </item>
+    <item>
+      <title>MUTEK.JP 2026 | 11回目のMUTEK.JPは、高輪ゲートウェイシティのMoN Takanawaへ</title>
+      <link>https://techno-japan.media/articles/mutek-jp-2026-info.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/articles/mutek-jp-2026-info.html</guid>
+      <pubDate>Sat, 31 Oct 2026 00:00:00 +0900</pubDate>
+      <category>FESTIVAL&amp;RAVE</category>
       <description></description>
     </item>
   </channel>
