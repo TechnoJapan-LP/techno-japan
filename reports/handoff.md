@@ -14783,6 +14783,45 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - `bash scripts/preflight.sh`（省略なし）を実行し、UI変更として実ブラウザ（iPhone Safari 相当を含む）で venues.html の MAP を操作確認するまで公開しないこと。
 - CI では Node 20 のためモバイル地図検査が省略され、ローカル preflight（Node 22+）が実質のガードとなる。
 
+## 2026-10-31 / 日本語記事の `<title>`・`og:title` に副題を追加
+
+### 実施
+
+- `scripts/build-detail-pages.mjs` の `japaneseArticleSeoTitle()` を、既存の `splitArticleTitle()` で短題・副題に分ける実装へ変更。
+- 短題が `】` `」` `』` で終わる場合は連結、それ以外は `｜` で連結。60文字を超える場合は副題末尾を `…` で切り詰め、8文字未満になる場合は従来の短題のみへフォールバック。
+- `scripts/check_titles.mjs` に、JA記事の副題がSEOタイトルへ反映されているかの回帰検査を追加。
+- `node scripts/build-detail-pages.mjs` で再生成。JA記事22ページが更新され、他の詳細ページは更新なし。
+
+### コミット
+
+- 未コミット。ユーザー指示により git commit / push は実行していない。
+
+### 検証
+
+- `node --check scripts/build-detail-pages.mjs`: 成功。
+- `node --check scripts/check_titles.mjs`: 成功。
+- `node scripts/check_titles.mjs`: 成功（JA 60文字以内、EN 65文字以内、副題反映）。
+- `git diff --check`: 成功。
+- 旧生成物に対して回帰検査を実行し、副題付きJA記事22件を検出して失敗することを確認。再ビルド後は成功。
+- 3例（11月ガイド、電気菩薩、BON DISCO）で `<title>` と `og:title` の一致を確認。JSON-LD `headline` は変更なし。
+- 生成結果（Claude 確認）: JA 記事22本の `<title>` / `og:title` / `twitter:title` が副題付きに。例「【2026年11月】日本の音楽フェスティバル&レイヴまとめ — TECHNO JAPAN」「The Labyrinth｜標高1,000mの森で、日本を代表する野外レイヴが3日間の物… — TECHNO JAPAN」。`node scripts/check_titles.mjs` 成功（60字以内）。
+- `bash scripts/preflight.sh`: main へ統合後、pre-push で省略なしに実行。
+
+### 変更したパターン
+
+- JA記事の `<title>`、`og:title`、および同じSEOタイトル値を使うTwitterメタタイトルの副題反映（22ページ）。
+- `check_titles.mjs` のデータタイトルと生成HTMLタイトルの副題反映ガード。
+
+### 未確認の類似パターン
+
+- 英語記事SEOタイトル、JSON-LD `headline`、h1、パンくず、共有ボタン文言: 確認済み・変更なし。
+- 副題の切り詰め境界（末尾の `、` `・` `，` 空白除去、および8文字未満フォールバック）の専用fixture: 未確認。
+
+### 次の担当への注意・判断待ち
+
+- 公開前に `bash scripts/preflight.sh` を実行すること。実ブラウザ確認が必要な場合は、JA記事のタブ表示とSNSメタ相当の生成結果を確認すること。
+- 生成物22ページの差分を確認してから、必要に応じてコミット判断を行うこと。
+
 ## 2026-10-31 / Claude 設計・Codex 実装 / 記事本文画像（2枚セット・全幅）を本文列内へ収める
 
 ### 実施

@@ -10,7 +10,7 @@ const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Tokyo' }).forma
 const year = Number(today.slice(0, 4));
 const context = {};
 vm.createContext(context);
-new vm.Script(fs.readFileSync(path.join(LP, 'data.js'), 'utf8') + '\n;globalThis.__data={FESTIVALS};').runInContext(context);
+new vm.Script(fs.readFileSync(path.join(LP, 'data.js'), 'utf8') + '\n;globalThis.__data={FESTIVALS,ARTICLES};').runInContext(context);
 const editions = JSON.parse(fs.readFileSync(path.join(LP, 'data', 'editions.json'), 'utf8')).items || [];
 const byFestival = new Map();
 for (const ed of editions) {
@@ -26,6 +26,31 @@ const ended = new Set((context.__data.FESTIVALS || []).filter((f) => {
 }).map((f) => String(f.id)));
 
 const offenders = [];
+const splitArticleTitle = (title) => {
+  const value = String(title || '');
+  const delimiter = value.search(/[｜|]/);
+  if (delimiter < 0) return { short: value, sub: '' };
+  return {
+    short: value.slice(0, delimiter).trim(),
+    sub: value.slice(delimiter + 1).trim(),
+  };
+};
+const expectedJapaneseArticleTitle = (title) => {
+  const { short, sub } = splitArticleTitle(title);
+  const suffix = ' — TECHNO JAPAN';
+  const shortOnly = () => {
+    const value = `${short}${suffix}`;
+    return value.length > 60 ? value.slice(0, 59) + '…' : value;
+  };
+  if (!sub) return shortOnly();
+  const joiner = /[】」』]$/.test(short) ? '' : '｜';
+  const subRoom = 60 - suffix.length - short.length - joiner.length;
+  if (sub.length <= subRoom) return `${short}${joiner}${sub}${suffix}`;
+  const kept = sub.slice(0, Math.max(0, subRoom - 1)).replace(/[、・，\s]+$/, '');
+  if (kept.length < 8) return shortOnly();
+  return `${short}${joiner}${kept}…${suffix}`;
+};
+const jaArticleById = new Map((context.__data.ARTICLES || []).map((a) => [String(a.id), a]));
 const checkDir = (dir, max, lang) => {
   if (!fs.existsSync(dir)) return;
   for (const file of fs.readdirSync(dir).filter((name) => name.endsWith('.html'))) {
@@ -34,6 +59,15 @@ const checkDir = (dir, max, lang) => {
     const title = (html.match(/<title>([\s\S]*?)<\/title>/i)?.[1] || '')
       .replace(/&amp;/g, '&').replace(/&#39;/g, "'").replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
     if (title.length > max) offenders.push(`${rel}: ${title.length} > ${max} — ${title}`);
+    if (lang === 'ja' && rel.startsWith('articles/')) {
+      const article = jaArticleById.get(file.slice(0, -5));
+      const expected = article ? expectedJapaneseArticleTitle(article.title) : '';
+      const { sub } = article ? splitArticleTitle(article.title) : { sub: '' };
+      const subtitlePrefix = sub.slice(0, 8);
+      if (article && sub.length >= 8 && expected.includes(subtitlePrefix) && !title.includes(subtitlePrefix)) {
+        offenders.push(`${rel}: JA article subtitle is missing from <title> — ${title}`);
+      }
+    }
     if (lang === 'ja' && rel.startsWith('festivals/')) {
       const id = file.slice(0, -5);
       if (ended.has(id) && new RegExp(`\\b(?:19|20)\\d{2}\\b`).test(title) && !title.includes(String(year))) {

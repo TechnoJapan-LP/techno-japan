@@ -383,8 +383,18 @@ function articleSeoTitle(title, festivalName = '', year = '') {
 }
 
 function japaneseArticleSeoTitle(title) {
-  const short = String(title || '').split(/[｜|]/, 1)[0].trim();
-  return truncate(`${short} — TECHNO JAPAN`, 60);
+  const { short, sub } = splitArticleTitle(title);
+  const suffix = ' — TECHNO JAPAN';
+  const shortOnly = () => truncate(`${short}${suffix}`, 60);
+  if (!sub) return shortOnly();
+
+  const joiner = /[】」』]$/.test(short) ? '' : '｜';
+  const subRoom = 60 - suffix.length - short.length - joiner.length;
+  if (sub.length <= subRoom) return `${short}${joiner}${sub}${suffix}`;
+
+  const kept = sub.slice(0, Math.max(0, subRoom - 1)).replace(/[、・，\s]+$/, '');
+  if (kept.length < 8) return shortOnly();
+  return `${short}${joiner}${kept}…${suffix}`;
 }
 
 // primary は既存互換の値。言語別値が未入力なら primary、さらに反対言語へ
