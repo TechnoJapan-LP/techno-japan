@@ -22,7 +22,7 @@
 .article-body blockquote.fx-on::before { transform: scaleY(1); }
 
 /* 画像 figure: ハードエッジのクリップワイプ + FIG索引 */
-/* fx-full / fx-bleed のはみ出しは viewport 基準で防ぐ */
+/* モバイルの 100vw 画像が横にはみ出さないようにする */
 body { overflow-x: clip; }
 figure.fx-img { margin: 56px 0; }
 figure.fx-img .fx-frame { overflow: hidden; background: var(--text-a04); position: relative; }
@@ -43,9 +43,7 @@ figure.fx-img .fx-fig::before { content: ''; width: 6px; height: 6px; background
 .fx-image-pair { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); grid-template-rows:1fr; grid-auto-flow:column; width:133.3333%; margin-left:-16.6667%; gap:16px; margin-top:56px; margin-bottom:56px; }
 .fx-image-pair figure.fx-img,
 .fx-image-pair figure.fx-img.fx-bleed { width:100%!important; min-width:0; max-width:none; margin:0!important; }
-/* ペアの中では figure 幅が 100% に上書きされるため、fx-full 用の
-   キャプション余白（min(50vw,600px) - 50% を使う式）が過大になり、
-   PC幅で右に 123px はみ出していた（2026-09-14 実測）。ここでは余白を戻す。 */
+/* ペアのキャプションは画像列の左右端に揃える。 */
 .fx-image-pair figure.fx-img .fx-fig { padding: 0 !important; }
 
 /* ワイプ: 下から上へ機械的に開く */
@@ -65,7 +63,7 @@ figure.fx-img.fx-reveal.fx-on .fx-fig { opacity: 1; }
   figure.fx-img.fx-right { float: right; width: 46%; margin: 12px 0 32px 32px; }
   figure.fx-img.fx-left { float: left; width: 46%; margin: 12px 32px 32px 0; }
 }
-@media (max-width: 899px) {
+@media (max-width: 700px) {
   .fx-image-pair { grid-template-columns:1fr; grid-auto-flow:row; width:100vw; margin-left:calc(50% - 50vw); gap:28px; }
 }
 
@@ -87,8 +85,7 @@ figure.fx-img.fx-reveal.fx-on .fx-fig { opacity: 1; }
   .article-detail .related-festivals-track .related-card { flex-basis: min(80vw, 320px); }
 }
 
-/* 横長画像（w/h >= 1.4）: カラムを突き破りビューポート端から端まで。
-   リズムのどの位置でも fx-bleed が幅指定を上書きする */
+/* 横長画像（w/h >= 1.4）の全幅表示。PC では本文列内に収める。 */
 figure.fx-img.fx-bleed { width: 100vw !important; max-width: none; margin-left: calc(50% - 50vw) !important; margin-right: calc(50% - 50vw); }
 figure.fx-img.fx-bleed .fx-fig { max-width: 760px; margin-left: auto; margin-right: auto; padding: 0 40px !important; }
 figure.fx-img.fx-bleed img { transform: scale(1.06); }
@@ -102,6 +99,16 @@ figure.fx-img.fx-bleed .fx-gridlines::after { content: ''; position: absolute; t
 figure.fx-img.fx-bleed .fx-gridlines::before { left: 33.33%; }
 figure.fx-img.fx-bleed .fx-gridlines::after { left: 66.66%; }
 figure.fx-img.fx-bleed.fx-on .fx-gridlines { opacity: 1; transition: opacity .8s ease .6s; }
+
+/* PC・タブレットでは、ペアと全幅画像を本文列の左右端に揃える。
+   スマホの 100vw 表示は下の max-width:700px で従来どおり維持する。 */
+@media (min-width: 701px) {
+  .fx-image-pair { width: 100%; margin-left: 0; margin-right: 0; }
+  figure.fx-img.fx-full,
+  figure.fx-img.fx-bleed { width: 100% !important; max-width: none; margin-left: 0 !important; margin-right: 0 !important; }
+  figure.fx-img.fx-full .fx-fig,
+  figure.fx-img.fx-bleed .fx-fig { max-width: none; margin-left: 0; margin-right: 0; padding: 0 !important; }
+}
 
 /* ポートレートは中央・高さ制限（原寸で巨大化させない） */
 figure.fx-img.fx-portrait { width: min(100%, 520px) !important; margin-left: auto !important; margin-right: auto !important; }

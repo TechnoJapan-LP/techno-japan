@@ -14782,3 +14782,49 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - `node scripts/build-detail-pages.mjs` を git pull 後の最新データで再実行し、JA/EN 行数一致と差分を確認すること。
 - `bash scripts/preflight.sh`（省略なし）を実行し、UI変更として実ブラウザ（iPhone Safari 相当を含む）で venues.html の MAP を操作確認するまで公開しないこと。
 - CI では Node 20 のためモバイル地図検査が省略され、ローカル preflight（Node 22+）が実質のガードとなる。
+
+## 2026-10-31 / Claude 設計・Codex 実装 / 記事本文画像（2枚セット・全幅）を本文列内へ収める
+
+### 実施
+
+- `LP/article-fx.css`: 701px 以上の `.fx-image-pair`、`fx-full`、`fx-bleed` を `.article-body` の幅・左右端へ揃え、全幅キャプションの padding / max-width を解除。700px 以下の 100vw、縦積み、グリッド線、scale は維持。pair の縦積みメディアクエリを `max-width:700px` に修正。
+- `LP/cms.css`: CMS の `.preview-image-pair` を width 100%、margin-left 0 に変更。
+- `LP/cms.html`: `cms.css?v=47` → `48`。
+- `scripts/build-detail-pages.mjs`: `ARTICLE_FX_CSS_VERSION` 19 → 20。Claude が git pull 後にビルドし、記事 44 ページ×JA/EN の `article-fx.css?v` だけが変わったことを確認。
+- 発端（ユーザー指摘）: 50:50 の2枚セットが右のサイドメニューに飛び出す／全幅も調整して。修正前の実測（denki-bodhisattva-2026-info）: 2枚セット 1440px で -80〜880（本文 40〜760）、1024px で -58〜726（サイドバー 684〜）。全幅（forest-sound-camp-info）1440px で -320〜1120（サイドバー 1100〜）。旧デザイン（本文中央・サイドバー無し）前提の `133%` / `calc(50% - 50vw)` が原因。
+- `scripts/check_article_image_fit.mjs`: CDP で 1440 / 1280 / 1024 / 900 / 768 / 390px を実測し、既存または注入した pair / full 画像の本文列内収まり、横並び、スマホ全幅、横スクロールを検査する回帰ガードを新設。pair 座標を `rect()` で取得し、sticky サイドバーは縦位置に関係なく右端を判定。
+- `scripts/preflight.sh`: ブラウザ検査の並びに記事画像検査を追加。
+
+### コミット
+
+- この handoff を含むコミットで main へ push（ユーザー指示「今すぐ公開」）。
+
+### 検証
+
+- `node --check scripts/check_article_image_fit.mjs`: 成功。
+- `git diff --check`: 成功。
+- 検査の pair 判定を修正: 要素配列の `.top` / `.left` 参照を廃止し、`rect()` の top 差 ≤2px、left 差 ≥10px とした。
+- 検査のサイドバー判定を修正: sticky のため縦方向の重なり条件を外し、サイドバーが本文右に並ぶ場合だけ `right ≤ sidebar.left + 1` を要求。
+- 900px ではサイドバーが本文下段に回る実測（sidebar 16–884 / top 5346、本文 16–736）に合わせ、サイドバーの `left ≥ body.right` のときだけ横並び判定を行うよう修正。
+- 768×1024（mobile:false）を追加し、701〜899px の2列レイアウトを検査対象にした。
+- Codex の環境では localhost bind が `EPERM` でブラウザ検査を実行できず、以下は Claude が実行。
+- `node scripts/check_article_image_fit.mjs`（Claude）: 修正後 **6/6**。修正前の article-fx.css に差し替えると **1/6**（サイドバー重なり8件・本文列外）で検出できることを確認。検査の初版は pair 判定が常に失敗・900px でサイドバー誤判定の不具合があり、Codex に修正させた。
+- 修正後の実測（headless Chrome、dpr1、本文 = .article-body）: 1440 / 1280 は 2枚セット 40〜760・全幅 40〜760（サイドバー 1100 / 940〜）、1024 は 40〜628（サイドバー 684〜）、900 は 16〜736、390 は 0〜390（スマホは従来どおり画面幅いっぱい・縦積み）。横スクロール無し。スクリーンショットで 1024px の2枚セットと 1440px の全幅を目視確認。
+- `bash scripts/preflight.sh`: pre-push フックで省略なしに実行（通らないと push されない）。
+
+### 変更したパターン
+
+- 701px 以上の本文画像の列内収容（pair / fx-full / fx-bleed）と、CMS 2枚セットプレビューの幅指定。
+- 記事本文画像を article-fx の figure 化前に注入し、実際の figure 化後のレイアウトを測る CDP 検査。
+
+### 未確認の類似パターン
+
+- 自動リズムの `fx-full`（data-layout 無しの画像）も同じ原因で本文列外に出ていたため、同時に修正（確認済み）。
+- `fx-portrait` / `fx-left` / `fx-right` / `fx-compact` / `fx-contained` は幅が本文列基準で、検査の全 figure 判定で列内を確認済み・0件。
+- **未確認**: CMS のプレビュー（2枚セットの幅）の実画面、iPhone 実機。
+
+### 次の担当への注意・判断待ち
+
+- cms.html（cms.css の ?v）を変えたので Publish 経路の確認対象。公開後に `gh workflow run "Publish pipeline"` の成功を確認する。ユーザーには CMS を Cmd+Shift+R で強制リロードしてもらう。
+- PC の全幅は本文列（最大 720px）の幅。1440px では本文とサイドバーの間に約 340px の余白がある（レイアウト側の仕様で今回は変えていない）。
+- `sizes`（1200px）は据え置き。全幅が最大 720px になったので軽くできる余地はあるが、実測してから別途。

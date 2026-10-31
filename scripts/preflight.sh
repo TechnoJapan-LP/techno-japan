@@ -229,6 +229,8 @@ run "TOP ARTISTSランダム表示"             node scripts/check_top_artists.m
   run "フェス詳細ACCESS地図"            node scripts/check_festival_access_map.mjs
   [ -f scripts/check_mobile_language_toggles.mjs ] \
     && run "モバイルの言語切替"         node scripts/check_mobile_language_toggles.mjs
+  [ -f scripts/check_article_image_fit.mjs ] \
+    && run "記事本文の画像が本文の列に収まる" node scripts/check_article_image_fit.mjs
   [ -f scripts/check_search_modal.mjs ] \
     && run "モバイル検索モーダル"         node scripts/check_search_modal.mjs
   [ -f scripts/check_safe_area_header.mjs ] \

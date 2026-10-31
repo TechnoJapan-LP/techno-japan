@@ -71,7 +71,7 @@ const DETAIL_CSS_VERSION = 92;
 
    article-fx.js / article-fx.css を変更したら、ここを上げる。 */
 const ARTICLE_FX_JS_VERSION = 14;
-const ARTICLE_FX_CSS_VERSION = 19;
+const ARTICLE_FX_CSS_VERSION = 20;
 
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
