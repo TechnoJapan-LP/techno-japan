@@ -174,17 +174,23 @@ if (typeof WebSocket === 'undefined') {
     throw new Error(`setSafeAreaInsetsOverride が利用できません: ${error.message}`);
   }
   await cdp('Page.navigate', { url: `http://127.0.0.1:${mobilePort}/venues.html?venue-map-check=1` });
-  await delay(500);
   const clickAndMeasure = await cdp('Runtime.evaluate', { returnByValue: true, awaitPromise: true, expression: `(async () => {
     const wait = async (read, ok, timeout = 12000) => { const deadline = Date.now() + timeout; let value = read(); while (!ok(value) && Date.now() < deadline) { await new Promise(r => setTimeout(r, 100)); value = read(); } return value; };
-    const button = document.querySelector('[data-venues-map-toggle]');
-    if (!button) throw new Error('MAP toggle が見つかりません');
+    const ready = await wait(() => ({ complete: document.readyState === 'complete', button: document.querySelector('[data-venues-map-toggle]') }), value => value.complete && value.button);
+    if (!ready.complete) throw new Error('document が complete になりません');
+    if (!ready.button) throw new Error('MAP toggle が見つかりません');
+    const button = ready.button;
     button.click();
+    let expanded = await wait(() => button.getAttribute('aria-expanded'), value => value === 'true');
+    if (expanded !== 'true') {
+      button.click();
+      expanded = await wait(() => button.getAttribute('aria-expanded'), value => value === 'true');
+    }
     const map = await wait(() => document.querySelector('#venue-map'), el => el && !el.hidden && el.dataset.mapStatus === 'ready');
     await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
     const rect = map.getBoundingClientRect();
     const filters = document.querySelector('.venues-filters').getBoundingClientRect();
-    return { map: { top: rect.top, bottom: rect.bottom, width: rect.width, height: rect.height }, filters: { bottom: filters.bottom }, alignSelf: getComputedStyle(map).alignSelf, expanded: button.getAttribute('aria-expanded') };
+    return { map: { top: rect.top, bottom: rect.bottom, width: rect.width, height: rect.height }, filters: { bottom: filters.bottom }, alignSelf: getComputedStyle(map).alignSelf, expanded };
   })()` });
   if (clickAndMeasure.exceptionDetails) throw new Error(`モバイル計測で例外: ${clickAndMeasure.exceptionDetails.exception?.description || clickAndMeasure.exceptionDetails.text}`);
   const mobileResult = clickAndMeasure.result?.value;

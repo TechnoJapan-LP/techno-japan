@@ -14919,3 +14919,32 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - `git pull` 後、`node scripts/build-detail-pages.mjs` を実行し、JA/EN の生成物と asset version を確認すること。
 - `bash scripts/preflight.sh` を省略なしで実行し、PC 1280/1024 と mobile 390、および CMS の実ブラウザ操作を確認すること。
 - CMS を開く際は `cms.html?cb=<乱数>` または Cmd+Shift+R を使い、更新後の `cms.css?v=49` / `cms.js?v=198` を読み込むこと。
+
+## 2026-10-31 / Codex / VENUESモバイル地図検査の待機安定化
+
+### 実施
+
+- `scripts/check_venue_maps.mjs`: `Page.navigate` 後に `document.readyState === 'complete'` と MAP toggle の存在を既存の最大12秒 `wait()` で待つよう変更した。
+- MAP toggle 押下後も `aria-expanded="true"` を `wait()` で待ち、開かなければ1回だけ押し直すよう変更した。
+
+### コミット
+
+- 未コミット・未 push（ユーザー指示どおり）。
+
+### 検証
+
+- `node --check scripts/check_venue_maps.mjs`: 成功。
+- `git diff --check`: 成功。
+- `node scripts/check_venue_maps.mjs`: 未実行。localhost bind が `listen EPERM: operation not permitted 127.0.0.1` で拒否され、検査起動前に終了した。
+
+### 変更したパターン
+
+- VENUES モバイル地図検査のページ準備待ち、MAP toggle 検索待ち、押下後の展開状態待ち、1回限りの再クリック。
+
+### 未確認の類似パターン
+
+- 確認済み・0件: 合格条件（幅×0.75、align-self、safe-area、フィルタ下端との位置関係）の判定ロジック。
+
+### 次の担当への注意・判断待ち
+
+- 今回は検査の待ち方だけを変更しており、`git commit` / `git push` はしていない。localhost を bind できる環境で `node scripts/check_venue_maps.mjs` を実行すること。
