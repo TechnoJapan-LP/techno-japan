@@ -1,58 +1,54 @@
 {
-  "generatedAt": "2026-10-30T22:30:19.547Z",
+  "generatedAt": "2026-10-31T21:45:08.363Z",
   "days": 30,
   "source": "ga4",
   "items": [
     {
       "id": "japan-festival-2026-october",
-      "views": 357
+      "views": 351
     },
     {
       "id": "topia-2026-info",
-      "views": 277
+      "views": 283
     },
     {
       "id": "labyrinth-2026-info",
-      "views": 149
+      "views": 152
     },
     {
       "id": "denki-bodhisattva-2026-info",
-      "views": 142
+      "views": 147
     },
     {
       "id": "ondoland1012-2026-info",
-      "views": 119
+      "views": 116
     },
     {
       "id": "sawagi-festival-2026-info",
-      "views": 98
+      "views": 100
     },
     {
       "id": "treak-2026-info",
-      "views": 58
+      "views": 60
     },
     {
       "id": "transcendence-2025-report",
-      "views": 47
+      "views": 44
     },
     {
       "id": "intergalactic-2026-info",
-      "views": 36
-    },
-    {
-      "id": "odyssey-2026-info",
-      "views": 21
+      "views": 38
     },
     {
       "id": "asia-festival-2026-second",
-      "views": 20
+      "views": 18
+    },
+    {
+      "id": "odyssey-2026-info",
+      "views": 18
     },
     {
       "id": "snow-mashine-2027-info",
-      "views": 15
-    },
-    {
-      "id": "synapse-2026-info",
       "views": 15
     },
     {
@@ -60,16 +56,24 @@
       "views": 14
     },
     {
-      "id": "otsukimi-2026-info",
+      "id": "synapse-2026-info",
+      "views": 12
+    },
+    {
+      "id": "japan-festival-2026-november",
       "views": 11
     },
     {
+      "id": "otsukimi-2026-info",
+      "views": 8
+    },
+    {
       "id": "rebirth-2026-info",
-      "views": 9
+      "views": 8
     },
     {
       "id": "japan-festival-2026-september",
-      "views": 8
+      "views": 7
     },
     {
       "id": "test",
@@ -85,6 +89,10 @@
     },
     {
       "id": "loa-lost-paradise-2026-info",
+      "views": 3
+    },
+    {
+      "id": "mutek-jp-2026-info",
       "views": 3
     },
     {

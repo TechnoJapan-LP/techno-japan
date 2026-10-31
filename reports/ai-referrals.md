@@ -1,26 +1,26 @@
 # AI経由の流入
 
-取得日時: 2026-10-30T22:30:21.634Z
+取得日時: 2026-10-31T21:45:10.147Z
 
 | 期間 | AIセッション | 全体セッション | AI割合 |
 |---|---:|---:|---:|
-| 直近28日（2026-10-04〜2026-10-31） | 90 | 2771 | 3.25% |
-| 前の28日（2026-09-06〜2026-10-03） | 0 | 0 | 0.00% |
+| 直近28日（2026-10-05〜2026-11-01） | 87 | 2832 | 3.07% |
+| 前の28日（2026-09-07〜2026-10-04） | 0 | 0 | 0.00% |
 
 ## 直近28日：参照元別
 
 | 参照元 | セッション | ユーザー |
 |---|---:|---:|
-| chatgpt.com | 87 | 85 |
+| chatgpt.com | 84 | 83 |
 | gemini.google.com | 3 | 3 |
 
 ### 直近28日：ランディングページ上位20
 
 | ランディングページ | セッション | ユーザー |
 |---|---:|---:|
-| / | 10 | 9 |
 | /en/articles/topia-2026-info.html | 10 | 10 |
 | /en/festivals/labyrinth.html | 9 | 9 |
+| / | 8 | 8 |
 | /festivals/festival-de-frue.html | 8 | 7 |
 | /articles/japan-festival-2026-september.html | 6 | 6 |
 | /en/articles/denki-bodhisattva-2026-info.html | 5 | 5 |
@@ -29,10 +29,10 @@
 | /en/articles/japan-festival-2026-october.html | 3 | 3 |
 | /festivals/yagura.html | 3 | 3 |
 | /index.html | 3 | 3 |
-| (not set) | 2 | 2 |
 | /articles/otsukimi-2026-info.html | 2 | 2 |
 | /en/ | 2 | 2 |
 | /en/articles/sawagi-festival-2026-info.html | 2 | 2 |
+| (not set) | 1 | 1 |
 | /articles/denki-bodhisattva-2026-info.html | 1 | 1 |
 | /articles/forest-sound-camp-info.html | 1 | 1 |
 | /articles/rebirth-2026-info.html | 1 | 1 |

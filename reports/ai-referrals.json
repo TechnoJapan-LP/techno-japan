@@ -1,27 +1,27 @@
 {
-  "generatedAt": "2026-10-30T22:30:21.634Z",
+  "generatedAt": "2026-10-31T21:45:10.147Z",
   "propertyId": "535755449",
   "periods": {
     "current": {
-      "startDate": "2026-10-04",
-      "endDate": "2026-10-31",
+      "startDate": "2026-10-05",
+      "endDate": "2026-11-01",
       "label": "直近28日"
     },
     "previous": {
-      "startDate": "2026-09-06",
-      "endDate": "2026-10-03",
+      "startDate": "2026-09-07",
+      "endDate": "2026-10-04",
       "label": "前の28日"
     }
   },
   "current": {
-    "sessions": 90,
-    "totalUsers": 88,
-    "share": 0.03247924936845904,
+    "sessions": 87,
+    "totalUsers": 86,
+    "share": 0.03072033898305085,
     "bySource": [
       {
         "source": "chatgpt.com",
-        "sessions": 87,
-        "totalUsers": 85
+        "sessions": 84,
+        "totalUsers": 83
       },
       {
         "source": "gemini.google.com",
@@ -31,11 +31,6 @@
     ],
     "topLandingPages": [
       {
-        "landingPage": "/",
-        "sessions": 10,
-        "totalUsers": 9
-      },
-      {
         "landingPage": "/en/articles/topia-2026-info.html",
         "sessions": 10,
         "totalUsers": 10
@@ -44,6 +39,11 @@
         "landingPage": "/en/festivals/labyrinth.html",
         "sessions": 9,
         "totalUsers": 9
+      },
+      {
+        "landingPage": "/",
+        "sessions": 8,
+        "totalUsers": 8
       },
       {
         "landingPage": "/festivals/festival-de-frue.html",
@@ -86,11 +86,6 @@
         "totalUsers": 3
       },
       {
-        "landingPage": "(not set)",
-        "sessions": 2,
-        "totalUsers": 2
-      },
-      {
         "landingPage": "/articles/otsukimi-2026-info.html",
         "sessions": 2,
         "totalUsers": 2
@@ -104,6 +99,11 @@
         "landingPage": "/en/articles/sawagi-festival-2026-info.html",
         "sessions": 2,
         "totalUsers": 2
+      },
+      {
+        "landingPage": "(not set)",
+        "sessions": 1,
+        "totalUsers": 1
       },
       {
         "landingPage": "/articles/denki-bodhisattva-2026-info.html",
@@ -131,8 +131,8 @@
         "totalUsers": 1
       }
     ],
-    "allSessions": 2771,
-    "allTotalUsers": 2248
+    "allSessions": 2832,
+    "allTotalUsers": 2291
   },
   "previous": {
     "sessions": 0,
