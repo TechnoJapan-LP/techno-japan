@@ -1,22 +1,22 @@
 {
-  "generatedAt": "2026-10-31T21:45:10.147Z",
+  "generatedAt": "2026-11-01T22:13:04.543Z",
   "propertyId": "535755449",
   "periods": {
     "current": {
-      "startDate": "2026-10-05",
-      "endDate": "2026-11-01",
+      "startDate": "2026-10-06",
+      "endDate": "2026-11-02",
       "label": "直近28日"
     },
     "previous": {
-      "startDate": "2026-09-07",
-      "endDate": "2026-10-04",
+      "startDate": "2026-09-08",
+      "endDate": "2026-10-05",
       "label": "前の28日"
     }
   },
   "current": {
-    "sessions": 87,
-    "totalUsers": 86,
-    "share": 0.03072033898305085,
+    "sessions": 88,
+    "totalUsers": 87,
+    "share": 0.030303030303030304,
     "bySource": [
       {
         "source": "chatgpt.com",
@@ -25,8 +25,8 @@
       },
       {
         "source": "gemini.google.com",
-        "sessions": 3,
-        "totalUsers": 3
+        "sessions": 4,
+        "totalUsers": 4
       }
     ],
     "topLandingPages": [
@@ -101,6 +101,11 @@
         "totalUsers": 2
       },
       {
+        "landingPage": "/en/festivals/rural.html",
+        "sessions": 2,
+        "totalUsers": 2
+      },
+      {
         "landingPage": "(not set)",
         "sessions": 1,
         "totalUsers": 1
@@ -124,15 +129,10 @@
         "landingPage": "/articles/synapse-2026-info.html",
         "sessions": 1,
         "totalUsers": 1
-      },
-      {
-        "landingPage": "/artists/powder.html",
-        "sessions": 1,
-        "totalUsers": 1
       }
     ],
-    "allSessions": 2832,
-    "allTotalUsers": 2291
+    "allSessions": 2904,
+    "allTotalUsers": 2304
   },
   "previous": {
     "sessions": 0,

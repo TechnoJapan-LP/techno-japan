@@ -1,18 +1,18 @@
 # AI経由の流入
 
-取得日時: 2026-10-31T21:45:10.147Z
+取得日時: 2026-11-01T22:13:04.543Z
 
 | 期間 | AIセッション | 全体セッション | AI割合 |
 |---|---:|---:|---:|
-| 直近28日（2026-10-05〜2026-11-01） | 87 | 2832 | 3.07% |
-| 前の28日（2026-09-07〜2026-10-04） | 0 | 0 | 0.00% |
+| 直近28日（2026-10-06〜2026-11-02） | 88 | 2904 | 3.03% |
+| 前の28日（2026-09-08〜2026-10-05） | 0 | 0 | 0.00% |
 
 ## 直近28日：参照元別
 
 | 参照元 | セッション | ユーザー |
 |---|---:|---:|
 | chatgpt.com | 84 | 83 |
-| gemini.google.com | 3 | 3 |
+| gemini.google.com | 4 | 4 |
 
 ### 直近28日：ランディングページ上位20
 
@@ -32,12 +32,12 @@
 | /articles/otsukimi-2026-info.html | 2 | 2 |
 | /en/ | 2 | 2 |
 | /en/articles/sawagi-festival-2026-info.html | 2 | 2 |
+| /en/festivals/rural.html | 2 | 2 |
 | (not set) | 1 | 1 |
 | /articles/denki-bodhisattva-2026-info.html | 1 | 1 |
 | /articles/forest-sound-camp-info.html | 1 | 1 |
 | /articles/rebirth-2026-info.html | 1 | 1 |
 | /articles/synapse-2026-info.html | 1 | 1 |
-| /artists/powder.html | 1 | 1 |
 
 ## 前の28日：参照元別
 
