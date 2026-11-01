@@ -4,11 +4,8 @@
 > アーティスト134名・会場22件・記事23本を日英で掲載し、
 > 開催日・場所・出演者を構造化データ（schema.org）付きで公開している。
 
-## 今後の開催予定（12件）
+## 今後の開催予定（9件）
 
-- 2026-10-31〜2026-11-01: [DENKI BODHISATTVA 2026](https://techno-japan.media/festivals/denki-bodhisattva.html) — Kinone Pension
-- 2026-10-31〜2026-11-01: [FESTIVAL de FRUE 2026](https://techno-japan.media/festivals/festival-de-frue.html) — TSUMAGOI RESORT SAINO SATO, Shizuoka
-- 2026-10-31〜2026-11-01: [PARALLEL WORLD 2026](https://techno-japan.media/festivals/parallel-world.html) — Secret Venue
 - 2026-11-07〜2026-11-08: [GROW THE CULTURE OPEN AIR 2026](https://techno-japan.media/festivals/grow-the-culture-open-air.html) — Ohba Camping Village, Tokyo
 - 2026-11-07: [PROX 2026](https://techno-japan.media/festivals/prox.html) — DAN OISO
 - 2026-11-07: [SANGENJAYA ART MUSIC FESTIVAL 2026](https://techno-japan.media/festivals/sangenjaya-art-music-festival.html) — Sangen-jaya Station

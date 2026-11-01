@@ -1,47 +1,8 @@
 {
   "source": "https://techno-japan.media/",
   "license": "データの出典として techno-japan.media へのリンクを求めます",
-  "count": 12,
+  "count": 9,
   "events": [
-    {
-      "name": "DENKI BODHISATTVA 2026",
-      "url": "https://techno-japan.media/festivals/denki-bodhisattva.html",
-      "start": "2026-10-31",
-      "end": "2026-11-01",
-      "venue": "Kinone Pension",
-      "lat": 35.763,
-      "lng": 140.3842,
-      "genres": [
-        "TECHNO"
-      ],
-      "tickets": "https://www.plvr.io/events/denki-bodhisattva-24h-open-air-rave-20261031-jp"
-    },
-    {
-      "name": "FESTIVAL de FRUE 2026",
-      "url": "https://techno-japan.media/festivals/festival-de-frue.html",
-      "start": "2026-10-31",
-      "end": "2026-11-01",
-      "venue": "TSUMAGOI RESORT SAINO SATO",
-      "pref": "Shizuoka",
-      "lat": 34.7645,
-      "lng": 138.0415,
-      "genres": [
-        "HOUSE",
-        "LIVE"
-      ],
-      "tickets": "https://shop.frue.jp/"
-    },
-    {
-      "name": "PARALLEL WORLD 2026",
-      "url": "https://techno-japan.media/festivals/parallel-world.html",
-      "start": "2026-10-31",
-      "end": "2026-11-01",
-      "venue": "Secret Venue",
-      "genres": [
-        "TECHNO",
-        "HOUSE"
-      ]
-    },
     {
       "name": "GROW THE CULTURE OPEN AIR 2026",
       "url": "https://techno-japan.media/festivals/grow-the-culture-open-air.html",
