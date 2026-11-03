@@ -14948,3 +14948,37 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 
 - 今回は検査の待ち方だけを変更しており、`git commit` / `git push` はしていない。localhost を bind できる環境で `node scripts/check_venue_maps.mjs` を実行すること。
+
+## 2026-11-03 / Claude / 未公開7コミットの本番公開
+
+### 実施
+
+- 2026-11-02 に止まっていた7コミット（記事本文画像の列内収容・左右寄せ画像の回り込み・JA記事 <title> 副題・cms.js の article-fx.css 版・EN可視日本語の基準・check_venue_maps.mjs の待ち方）を本番へ push した。
+- push 前に `git pull --rebase` と `node scripts/build-detail-pages.mjs` を実行（生成物の差分なし）。
+
+### コミット
+
+- origin/main `31af8c245..b5503b19a`（7コミット）。その後 CI が `e3b0c5497`（sync generated LP）を追加。
+
+### 検証
+
+- `caffeinate -dims git push`（pre-push の省略なし preflight）1回目: 77/78。`APPLY Google Form 対応` が「Chrome DevTools のページに接続できません」で失敗。今回の変更は APPLY に無関係。`node scripts/check_apply_form.mjs` 単独で成功（16問×2ページ）。
+- 2回目: 全件成功 → push 完了。
+- Deploy LP to GitHub Pages（run 41604702056）: success。Lighthouse CI: success。
+- `gh workflow run "Publish pipeline"`（run 41604736818）: success。
+- 本番（https://techno-japan.media）を curl で確認: `/articles/japan-festival-2026-november.html` の <title> が「【2026年11月】日本の音楽フェスティバル&レイヴまとめ — TECHNO JAPAN」、`article-fx.css?v=21`。`/cms.html` が `cms.css?v=49` / `cms.js?v=198`。
+
+### 変更したパターン
+
+- なし（今回は公開作業のみ。コード変更は 2026-11-02 までの各エントリを参照）。
+
+### 未確認の類似パターン
+
+- **実機未確認**: 認証済み CMS での Publish Now 押下と `cms: publish data.js` コミットの増加（Publish pipeline は workflow_dispatch で成功のみ確認）。
+- **未確認**: 公開後の本番記事ページでの左右寄せ画像・2枚セットの実ブラウザ目視（手元の headless では確認済み）。CMS プレビュー（.ar-prev-body）の目視。
+
+### 次の担当への注意・判断待ち
+
+- ユーザーへ: CMS は Cmd+Shift+R で強制リロードしてから使う。
+- preflight の失敗は2回目以降も負荷由来（ブラウザ接続・時間切れ）が多い。単独再実行で切り分けてから全件をやり直すこと。
+- データ不備（RAPTVANA の DESC_EN が日本語・11月記事 title_en の余計な文字）はユーザー対応待ちのまま。
