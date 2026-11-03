@@ -15017,3 +15017,10 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 - 縦長ぎみの写真を「全幅」にすると 1440px で画面の高さをほぼ埋める。横長写真向けの指定であることを CMS の案内に足すかは未判断。
 - CMS は Cmd+Shift+R で強制リロード（cms.js?v=199）。
+
+### 追記（2026-11-03 公開結果）
+
+- push（`0a74bdd9e..4474df79a`）: pre-push の省略なし preflight 全件合格。直前の1回は `APPLY Google Form 対応` が DevTools 接続待ち6秒切れで失敗（4回中2回目）→ `scripts/check_apply_form.mjs` の待ちを最大30秒に延長（Codex 実装・単独合格）して再実行。
+- Deploy LP to GitHub Pages（41623290171）・Publish pipeline（41623320408, workflow_dispatch）・Lighthouse CI: success。
+- 本番実測（https://techno-japan.media/articles/forest-sound-camp-info.html、headless Chrome）: 1920 → 全幅 0〜1284（サイドメニュー 1340）／1440 → 0〜1044（同 1100）／1024 → 0〜628／900 → 0〜900／390 → 0〜390。横スクロールなし。`article-fx.css?v=22`、`cms.js?v=199` を配信中。
+- **実機未確認**: 認証済み CMS での Publish Now（cms.js は版数のみの変更）。
