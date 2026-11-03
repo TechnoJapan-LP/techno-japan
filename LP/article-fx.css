@@ -122,6 +122,39 @@ figure.fx-img.fx-bleed.fx-on .fx-gridlines { opacity: 1; transition: opacity .8s
   figure.fx-img.fx-bleed .fx-fig { max-width: none; margin-left: 0; margin-right: 0; padding: 0 !important; }
 }
 
+/* 明示した「全幅」を中央・標準と区別するため、サイドメニュー手前まで広げる。 */
+/* キャプションは本文左端に揃え、サイドメニューには重ねない。 */
+/* .article-detail-inner は最大1440px・左右padding 40px（≤900pxは16px）、サイドメニュー300px＋gap 56pxを前提にした式。 */
+@media (min-width: 901px) {
+  .article-main-grid .article-body figure.fx-img[data-layout="full"]:not(.fx-image-pair figure) {
+    width: auto !important;
+    margin-left: calc(-1 * ((100vw - min(100vw, 1440px)) / 2 + 40px)) !important;
+    margin-right: calc(-1 * max(0px, min(100vw, 1440px) - 80px - 356px - 720px)) !important;
+    clear: both;
+  }
+  .article-main-grid .article-body figure.fx-img[data-layout="full"]:not(.fx-image-pair figure) .fx-fig {
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: calc((100vw - min(100vw, 1440px)) / 2 + 40px) !important;
+    padding-right: max(0px, min(100vw, 1440px) - 80px - 356px - 720px) !important;
+  }
+}
+
+@media (min-width: 701px) and (max-width: 900px) {
+  .article-main-grid .article-body figure.fx-img[data-layout="full"]:not(.fx-image-pair figure) {
+    width: 100vw !important;
+    margin-left: -16px !important;
+    margin-right: 0 !important;
+    clear: both;
+  }
+  .article-main-grid .article-body figure.fx-img[data-layout="full"]:not(.fx-image-pair figure) .fx-fig {
+    max-width: none;
+    margin: 0;
+    padding: 0 16px !important;
+  }
+}
+
 /* ポートレートは中央・高さ制限（原寸で巨大化させない） */
 figure.fx-img.fx-portrait { width: min(100%, 520px) !important; margin-left: auto !important; margin-right: auto !important; }
 figure.fx-img.fx-portrait .fx-fig { padding: 0 !important; }

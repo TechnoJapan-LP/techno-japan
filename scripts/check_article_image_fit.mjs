@@ -12,8 +12,10 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const lpRoot = path.join(root, 'LP');
 const viewports = [
   { width: 1440, height: 900, mobile: false },
+  { width: 1920, height: 1000, mobile: false },
   { width: 1280, height: 800, mobile: false },
   { width: 1024, height: 768, mobile: false },
+  { width: 901, height: 800, mobile: false },
   { width: 900, height: 800, mobile: false },
   { width: 768, height: 1024, mobile: false },
   { width: 390, height: 844, mobile: true },
@@ -190,6 +192,9 @@ try {
         const aNext = document.getElementById('article-image-wrap-a-next');
         const bNext = document.getElementById('article-image-wrap-b-next');
         const figures = [...document.querySelectorAll('.article-body figure.fx-img')];
+        const explicitFullFigures = figures.filter(fig =>
+          fig.matches('figure.fx-img[data-layout="full"]') && !fig.closest('.fx-image-pair')
+        );
         const rect = el => { const r = el.getBoundingClientRect(); return { left: r.left, right: r.right, top: r.top, bottom: r.bottom }; };
         const bounds = el => ({ element: el.className, rect: rect(el) });
         const errors = [];
@@ -199,7 +204,18 @@ try {
           if (sidebar && sidebar.left >= body.right && r.right > sidebar.left + 1) errors.push({ reason: 'sidebar overlap', element: item.className, rect: r, body: { left: body.left, right: body.right }, sidebar: rect(document.querySelector('.article-sidebar')) });
         };
         if (viewport.width >= 701) {
-          figures.forEach(fig => inside(fig, 'figure outside article-body'));
+          figures.forEach(fig => {
+            if (explicitFullFigures.includes(fig)) return;
+            inside(fig, 'figure outside article-body');
+          });
+          explicitFullFigures.forEach(fig => {
+            const r = rect(fig);
+            const geometryOk = viewport.width >= 901
+              ? Math.abs(r.left) <= 1 && r.right >= body.right - 1 &&
+                (!sidebar || sidebar.left < body.right || r.right <= sidebar.left - 56 + 1)
+              : Math.abs(r.left) <= 1 && Math.abs(r.right - viewport.width) <= 1;
+            if (!geometryOk) errors.push({ reason: 'explicit full figure geometry', element: fig.className, rect: r, body: { left: body.left, right: body.right }, sidebar: sidebar && rect(document.querySelector('.article-sidebar')), viewport: viewport.width });
+          });
           if (!pair) errors.push({ reason: 'missing pair', element: '.fx-image-pair' });
           else {
             inside(pair, 'pair outside article-body');
