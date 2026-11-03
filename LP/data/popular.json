@@ -1,31 +1,31 @@
 {
-  "generatedAt": "2026-11-03T01:04:57.480Z",
+  "generatedAt": "2026-11-03T23:30:40.815Z",
   "days": 30,
   "source": "ga4",
   "items": [
     {
       "id": "japan-festival-2026-october",
-      "views": 351
+      "views": 344
     },
     {
       "id": "topia-2026-info",
-      "views": 287
+      "views": 291
     },
     {
       "id": "denki-bodhisattva-2026-info",
-      "views": 152
+      "views": 157
     },
     {
       "id": "labyrinth-2026-info",
-      "views": 152
+      "views": 153
     },
     {
       "id": "sawagi-festival-2026-info",
-      "views": 101
+      "views": 104
     },
     {
       "id": "ondoland1012-2026-info",
-      "views": 99
+      "views": 96
     },
     {
       "id": "treak-2026-info",
@@ -33,23 +33,27 @@
     },
     {
       "id": "japan-festival-2026-november",
-      "views": 43
+      "views": 59
+    },
+    {
+      "id": "intergalactic-2026-info",
+      "views": 42
     },
     {
       "id": "transcendence-2025-report",
       "views": 42
     },
     {
-      "id": "intergalactic-2026-info",
-      "views": 41
+      "id": "mutek-jp-2026-info",
+      "views": 27
+    },
+    {
+      "id": "asia-festival-2026-second",
+      "views": 19
     },
     {
       "id": "odyssey-2026-info",
       "views": 19
-    },
-    {
-      "id": "asia-festival-2026-second",
-      "views": 18
     },
     {
       "id": "forest-sound-camp-info",
@@ -57,27 +61,23 @@
     },
     {
       "id": "snow-mashine-2027-info",
-      "views": 14
+      "views": 12
     },
     {
-      "id": "mutek-jp-2026-info",
-      "views": 13
-    },
-    {
-      "id": "synapse-2026-info",
+      "id": "otsukimi-2026-info",
       "views": 10
     },
     {
+      "id": "synapse-2026-info",
+      "views": 9
+    },
+    {
       "id": "japan-festival-2026-september",
-      "views": 8
+      "views": 7
     },
     {
       "id": "test",
       "views": 7
-    },
-    {
-      "id": "otsukimi-2026-info",
-      "views": 6
     },
     {
       "id": "post-20251120",
