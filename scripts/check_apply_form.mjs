@@ -228,7 +228,8 @@ async function runApplyBrowserCheck() {
   let ws;
   try {
     let target;
-    for (let attempt = 0; attempt < 60 && !target; attempt += 1) {
+    // 新しい user-data-dir の Chrome 初回起動が混雑時に遅くなるため、接続待ちを最大30秒にする
+    for (let attempt = 0; attempt < 300 && !target; attempt += 1) {
       await delay(100);
       try {
         const targets = await (await fetch(`http://127.0.0.1:${debugPort}/json`)).json();
