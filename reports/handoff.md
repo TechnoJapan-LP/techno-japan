@@ -14982,3 +14982,38 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - ユーザーへ: CMS は Cmd+Shift+R で強制リロードしてから使う。
 - preflight の失敗は2回目以降も負荷由来（ブラウザ接続・時間切れ）が多い。単独再実行で切り分けてから全件をやり直すこと。
 - データ不備（RAPTVANA の DESC_EN が日本語・11月記事 title_en の余計な文字）はユーザー対応待ちのまま。
+
+## 2026-11-03 / Claude（設計・検証）＋ Codex（実装）/ 記事本文「全幅」画像をサイドメニュー手前まで広げる
+
+### 実施
+
+- 2026-11-02 の列内収容修正で、明示「全幅」（`data-layout="full"`）が「中央・標準」と同じ本文列幅になっていた。ユーザー判断（案1）で、≥901px は画面左端〜左トラック右端（サイドメニューとの gap 56px を保つ）、701〜900px は画面幅いっぱいに変更。≤700px は従来どおり。
+- `LP/article-fx.css`（v22）、`scripts/build-detail-pages.mjs`（ARTICLE_FX_CSS_VERSION 22）、`LP/cms.js`（簡易プレビューの article-fx.css?v=22）、`LP/cms.html`（cms.js?v=199）、`scripts/check_article_image_fit.mjs`（明示 full の位置判定、1920/901px 追加）。
+- 式は `.article-detail-inner` 最大 1440px・padding 40px（≤900px は 16px）、サイドメニュー 300px＋gap 56px が前提。レイアウト側を変えたら article-fx.css の式も直すこと。
+
+### コミット
+
+- 「feat(article): 本文の「全幅」画像を、画面の左端からサイドメニューの手前まで広げる」（本エントリの直前のコミット）。
+
+### 検証
+
+- 初版（Codex）は前提の最大幅を 1360px としていて、1440/1920px で画面外へ -40px はみ出していた。headless Chrome の実測で発見し修正。
+- 実測（headless Chrome、forest-sound-camp-info.html、dpr 1）: 1920 → 0〜1284（サイドメニュー 1340）／1440 → 0〜1044（同 1100）／1280 → 0〜884／1024 → 0〜628（本文 40〜628）／901 → 0〜505／900 → 0〜900／768 → 0〜768／390 → 0〜390。全幅で scrollWidth = 画面幅。キャプション左端 = 本文左端。スクリーンショット 1440/1920/900 を目視。
+- `node scripts/check_article_image_fit.mjs`: 8/8。式を 1360px に戻すと 1440/1920px が `explicit full figure geometry` で不合格（6/8）になることを確認し、元に戻した。
+- `python3 scripts/check_asset_versions.py`: 正常。
+- `bash scripts/preflight.sh`: push 時の pre-push で実行（結果は下の追記または git log を参照）。
+
+### 変更したパターン
+
+- 明示 `data-layout="full"` の本文 figure（ペア外、`.article-main-grid` 内）の幅とキャプション位置（≥901px / 701〜900px）。
+
+### 未確認の類似パターン
+
+- 確認済み・0件: 自動配置の fx-full / fx-bleed、2枚セット、左右寄せ（検査 8/8 で本文列内のまま）。
+- **未確認**: Windows のスクロールバーあり環境（100vw が約15px大きく、>1440px で左に約8px はみ出すが overflow:clip で切れる想定）。CMS の生成プレビュー（cms.js:1924 系）での見た目。認証済み CMS での Publish Now（cms.js は版数のみの変更）。
+- 「全幅」を使っている公開記事は forest-sound-camp-info の1本のみ。
+
+### 次の担当への注意・判断待ち
+
+- 縦長ぎみの写真を「全幅」にすると 1440px で画面の高さをほぼ埋める。横長写真向けの指定であることを CMS の案内に足すかは未判断。
+- CMS は Cmd+Shift+R で強制リロード（cms.js?v=199）。
