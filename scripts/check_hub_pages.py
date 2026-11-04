@@ -128,7 +128,8 @@ fallback.addEventListener('load', async () => {
 const tileFallback = document.getElementById('map-tile-fallback');
 tileFallback.addEventListener('load', async () => {
   const doc = tileFallback.contentDocument;
-  const value = await waitFor(() => ({osm: !!doc.querySelector('.tj-map-osm')}), value => value.osm, 5000);
+  // 混雑時に5秒では足りず誤って失敗した（2026-11-04）。合格条件は不変
+  const value = await waitFor(() => ({osm: !!doc.querySelector('.tj-map-osm')}), value => value.osm, 15000);
   setResult('tileFallbackResult', value.osm ? 'pass' : 'fail', value.osm ? '' : 'tileerror did not switch to OSM');
 });
 const enFallback = document.getElementById('map-en-fallback');

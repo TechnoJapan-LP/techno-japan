@@ -15101,3 +15101,30 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - Deploy（41796531698）・Publish pipeline（41796561767, workflow_dispatch）・Lighthouse CI: success。
 - 本番: `detail.css?v=93`（`.article-body h2 .tj-clause` あり）、`cms.js?v=200`、cms.html に「全幅（横長の写真向け）」。390px・iPhone UA で mutek-jp-2026-info / bondisco-2026-info / snow-mashine-2027-info の h2 13本を実測: 句読点の後で途中で折る 0本、文字 23.4px。
 - **実機未確認**: 認証済み CMS での Publish Now、実機 iPhone Safari。
+
+## 2026-11-04 / Claude（検証）＋ Codex（実装）/ 会場地図のタイル失敗フォールバック検査の待ちを5→15秒
+
+### 実施
+
+- `scripts/check_hub_pages.py`: VENUE_MAP_TEST_HTML のタイル失敗フォールバック判定の待ちを 5000ms → 15000ms。合格条件（`.tj-map-osm` に切り替わる）は不変。
+
+### コミット
+
+- 「test(venues): 地図のタイル失敗時の切替の待ちを5秒→15秒に…」（本エントリと同じコミット）。
+
+### 検証
+
+- 2026-11-04 の push で preflight 混雑時にこの判定だけ `fail`（単独実行は2回とも pass）。
+- 変更後 `python3 scripts/check_hub_pages.py --budget 15000`: Venue map すべて pass。fixture の tileerror 発火を止めると `tileerror=fail`（検出できることを確認、元に戻した）。
+
+### 変更したパターン
+
+- 検査の待ち時間のみ（本番コードの変更なし）。
+
+### 未確認の類似パターン
+
+- 同日の他の混雑時タイムアウト（APPLY は 30秒に延長済み）以外で、固定の短い待ちを持つ検査（check_mobile_language_toggles / check_search_modal の DevTools 接続待ち 5秒など）は未対応。
+
+### 次の担当への注意・判断待ち
+
+- preflight は電池駆動でふたを閉じるとスリープして大量 TIMEOUT になる。push 中はふたを開けたまま。
