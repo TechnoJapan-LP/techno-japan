@@ -15094,3 +15094,10 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 - 短いまとまりが1行に残る（「会場は、 / ひとつの敷地ではなく白馬全域」）のはこのルールの限界。
 - CMS は Cmd+Shift+R（cms.js?v=200）。
+
+### 追記（2026-11-04 公開結果）
+
+- push `a51d5b6d7..9e39e236b`: 1回目は検査中に Mac がスリープ（電池駆動でふたを閉じると caffeinate が効かない。pmset ログ 15:39〜16:42）し17件が TIMEOUT → ふたを開けて再実行し全件合格。
+- Deploy（41796531698）・Publish pipeline（41796561767, workflow_dispatch）・Lighthouse CI: success。
+- 本番: `detail.css?v=93`（`.article-body h2 .tj-clause` あり）、`cms.js?v=200`、cms.html に「全幅（横長の写真向け）」。390px・iPhone UA で mutek-jp-2026-info / bondisco-2026-info / snow-mashine-2027-info の h2 13本を実測: 句読点の後で途中で折る 0本、文字 23.4px。
+- **実機未確認**: 認証済み CMS での Publish Now、実機 iPhone Safari。
