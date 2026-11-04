@@ -1,19 +1,19 @@
 {
-  "generatedAt": "2026-11-03T23:30:40.815Z",
+  "generatedAt": "2026-11-04T23:57:48.985Z",
   "days": 30,
   "source": "ga4",
   "items": [
     {
       "id": "japan-festival-2026-october",
-      "views": 344
+      "views": 343
     },
     {
       "id": "topia-2026-info",
-      "views": 291
+      "views": 298
     },
     {
       "id": "denki-bodhisattva-2026-info",
-      "views": 157
+      "views": 159
     },
     {
       "id": "labyrinth-2026-info",
@@ -21,55 +21,51 @@
     },
     {
       "id": "sawagi-festival-2026-info",
-      "views": 104
+      "views": 106
     },
     {
       "id": "ondoland1012-2026-info",
-      "views": 96
+      "views": 84
+    },
+    {
+      "id": "japan-festival-2026-november",
+      "views": 72
     },
     {
       "id": "treak-2026-info",
       "views": 60
     },
     {
-      "id": "japan-festival-2026-november",
-      "views": 59
+      "id": "mutek-jp-2026-info",
+      "views": 45
     },
     {
       "id": "intergalactic-2026-info",
-      "views": 42
+      "views": 44
     },
     {
       "id": "transcendence-2025-report",
-      "views": 42
-    },
-    {
-      "id": "mutek-jp-2026-info",
-      "views": 27
+      "views": 41
     },
     {
       "id": "asia-festival-2026-second",
-      "views": 19
+      "views": 18
     },
     {
       "id": "odyssey-2026-info",
-      "views": 19
+      "views": 18
     },
     {
       "id": "forest-sound-camp-info",
-      "views": 14
+      "views": 17
     },
     {
       "id": "snow-mashine-2027-info",
-      "views": 12
+      "views": 14
     },
     {
       "id": "otsukimi-2026-info",
-      "views": 10
-    },
-    {
-      "id": "synapse-2026-info",
-      "views": 9
+      "views": 11
     },
     {
       "id": "japan-festival-2026-september",
@@ -81,7 +77,11 @@
     },
     {
       "id": "post-20251120",
-      "views": 5
+      "views": 6
+    },
+    {
+      "id": "synapse-2026-info",
+      "views": 6
     },
     {
       "id": "rebirth-2026-info",
@@ -104,12 +104,12 @@
       "views": 3
     },
     {
-      "id": "test-ap",
+      "id": "bondisco-2026-info",
       "views": 2
     },
     {
-      "id": "bondisco-2026-info",
-      "views": 1
+      "id": "test-ap",
+      "views": 2
     },
     {
       "id": "details-test",

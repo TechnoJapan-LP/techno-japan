@@ -1,27 +1,27 @@
 {
-  "generatedAt": "2026-11-03T23:30:42.606Z",
+  "generatedAt": "2026-11-04T23:57:51.176Z",
   "propertyId": "535755449",
   "periods": {
     "current": {
-      "startDate": "2026-10-08",
-      "endDate": "2026-11-04",
+      "startDate": "2026-10-09",
+      "endDate": "2026-11-05",
       "label": "直近28日"
     },
     "previous": {
-      "startDate": "2026-09-10",
-      "endDate": "2026-10-07",
+      "startDate": "2026-09-11",
+      "endDate": "2026-10-08",
       "label": "前の28日"
     }
   },
   "current": {
     "sessions": 88,
-    "totalUsers": 87,
-    "share": 0.030199039121482498,
+    "totalUsers": 86,
+    "share": 0.029993183367416496,
     "bySource": [
       {
         "source": "chatgpt.com",
         "sessions": 84,
-        "totalUsers": 83
+        "totalUsers": 82
       },
       {
         "source": "gemini.google.com",
@@ -76,6 +76,11 @@
         "totalUsers": 3
       },
       {
+        "landingPage": "/en/index.html",
+        "sessions": 3,
+        "totalUsers": 2
+      },
+      {
         "landingPage": "/index.html",
         "sessions": 3,
         "totalUsers": 3
@@ -97,11 +102,6 @@
       },
       {
         "landingPage": "/en/festivals/rural.html",
-        "sessions": 2,
-        "totalUsers": 2
-      },
-      {
-        "landingPage": "/festivals/yagura.html",
         "sessions": 2,
         "totalUsers": 2
       },
@@ -131,8 +131,8 @@
         "totalUsers": 1
       }
     ],
-    "allSessions": 2914,
-    "allTotalUsers": 2307
+    "allSessions": 2934,
+    "allTotalUsers": 2332
   },
   "previous": {
     "sessions": 0,
