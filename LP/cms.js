@@ -1851,7 +1851,7 @@ function previewRenderBody_(body){
 function writeArticleSimplePreview_(win, title, body){
   const safeBody = String(body || '').replace(/<script/gi, '&lt;script');
   win.document.open();
-      win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><link rel="stylesheet" href="/common.css?v=59"><link rel="stylesheet" href="/detail.css?v=92"><link rel="stylesheet" href="/article-fx.css?v=22"><style>/* フォールバックでは common.js を読まないためネイティブカーソルに戻す */*{cursor:auto !important}a,button,[role="button"],summary{cursor:pointer !important}</style></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${esc(title)}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=15"><\/script></body></html>`);
+      win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><link rel="stylesheet" href="/common.css?v=59"><link rel="stylesheet" href="/detail.css?v=93"><link rel="stylesheet" href="/article-fx.css?v=22"><style>/* フォールバックでは common.js を読まないためネイティブカーソルに戻す */*{cursor:auto !important}a,button,[role="button"],summary{cursor:pointer !important}</style></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${esc(title)}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=15"><\/script></body></html>`);
   win.document.close();
 }
 async function openArticleGeneratedPreview(){
@@ -2390,7 +2390,7 @@ const ARTICLE_BODY_HELP = [
   ]},
   { title: '2. 画像', items: [
     { name: '画像を入れる', how: 'ツールバーの画像ボタン、またはドラッグ＆ドロップ／ペースト', note: '入れた瞬間に端末側で webp に変換・縮小される（原寸のまま上がることはない）', action: null },
-    { name: '幅を選ぶ', how: '画像をクリック → 「レイアウト」: 中央・標準 / 左寄せ（2/3）/ 右寄せ（2/3）/ 全幅 / 小さめ', note: '「全幅」だけ画面端まで広がる', action: null },
+    { name: '幅を選ぶ', how: '画像をクリック → 「レイアウト」: 中央・標準 / 左寄せ（2/3）/ 右寄せ（2/3）/ 全幅 / 小さめ', note: '「全幅」は画面の左端からサイドメニューの手前まで広がる（スマホは画面いっぱい）。横長の写真向け。縦長の写真は画面を埋めるほど大きくなる', action: null },
     { name: '切り抜く', how: '「トリミング」: なし / 16:10 / 4:3 / 1:1 ＋ 拡大率・位置（横・縦）', note: '人物の顔が切れるときは位置を動かす', action: null },
     { name: '2枚並べる', how: '画像を選んで「2枚セット（50:50）」', note: '隣の画像と横並びになる', action: null },
     { name: 'alt（説明文）', how: '英語版は「✨ 英語altを一括生成」', note: '日本語の alt は画像ごとに入力', action: null },

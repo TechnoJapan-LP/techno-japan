@@ -61,14 +61,16 @@ function mergeTinyChunks(text, breaks) {
       const leadingParticle = HIRAGANA.test(text[start]) && KINSOKU_CLOSE.has(text[start + 1] || '');
       if (chunk.length !== 1 && !leadingParticle) continue;
       if (HIRAGANA.test(chunk) || leadingParticle) {
-        breaks.delete(start);
-        changed = true;
-        break;
+        if (breaks.delete(start)) {
+          changed = true;
+          break;
+        }
       }
       if (HAN.test(chunk)) {
-        breaks.delete(end);
-        changed = true;
-        break;
+        if (breaks.delete(end)) {
+          changed = true;
+          break;
+        }
       }
     }
   }
@@ -148,6 +150,7 @@ function visualLength(text) {
   }, 0);
 }
 
+// CSSからは参照していない（2026-11-03に全まとまりを塊にした）。
 function clauseClasses(clause) {
   const length = visualLength(clause);
   return [length <= 9 ? 'tj-cl-s' : '', length <= 15 ? 'tj-cl-m' : '', length <= 24 ? 'tj-cl-l' : '']
@@ -176,6 +179,23 @@ export function clauseBreaks(text) {
 
 const HEADING_DECORATION_TAGS = new Set(['em', 'strong', 'b', 'i', 'span', 'u', 's']);
 
+function hasVisibleText(html) {
+  return html.replace(/<[^>]*>/g, '').trim() !== '';
+}
+
+function headingTextUsesClauses(contents, textStart, textEnd) {
+  const breaks = [...contents.matchAll(/<br\b[^>]*>/gi)].map((match) => ({
+    start: match.index,
+    end: match.index + match[0].length,
+  }));
+  const previousBreak = breaks.filter((br) => br.end <= textStart).at(-1);
+  const nextBreak = breaks.find((br) => br.start >= textEnd);
+  const lineStart = previousBreak ? previousBreak.end : 0;
+  const lineEnd = nextBreak ? nextBreak.start : contents.length;
+  return !hasVisibleText(contents.slice(lineStart, textStart))
+    && !hasVisibleText(contents.slice(textEnd, lineEnd));
+}
+
 /* 装飾タグが見出し全体だけを包む場合は、句読点単位の折り返しを
  * タグの内側へ入れる。タグが混在する見出しは既存どおりに処理する。 */
 export function addHeadingPhraseBreaks(html) {
@@ -184,8 +204,15 @@ export function addHeadingPhraseBreaks(html) {
     if (wrapped && HEADING_DECORATION_TAGS.has(wrapped[1].toLowerCase())) {
       return `<h${level}${attrs}><${wrapped[1]}${wrapped[2] || ''}>${clauseBreaks(wrapped[3])}</${wrapped[1]}></h${level}>`;
     }
-    const processText = /<[^>]+>/.test(contents) ? phraseBreaks : clauseBreaks;
-    const processed = contents.replace(/(^|>)([^<]+)(?=<|$)/g, (_text, prefix, text) => `${prefix}${processText(text)}`);
+    const mixedTags = /<[^>]+>/.test(contents);
+    const processed = contents.replace(/(^|>)([^<]+)(?=<|$)/g, (_text, prefix, text, offset) => {
+      if (!mixedTags) return `${prefix}${clauseBreaks(text)}`;
+      const textStart = offset + prefix.length;
+      const useClauses = headingTextUsesClauses(contents, textStart, textStart + text.length);
+      // 同じ行のリンクや強調と隣り合うテキストは phraseBreaks にする。
+      // 例えば「MUTEK</a>は、」を句読点単位にすると「は、」だけが独立し、リンクとの間で折れるため。
+      return `${prefix}${useClauses ? clauseBreaks(text) : phraseBreaks(text)}`;
+    });
     return `<h${level}${attrs}>${processed}</h${level}>`;
   });
 }

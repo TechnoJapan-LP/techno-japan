@@ -30,4 +30,8 @@ const decoratedOutput = addHeadingPhraseBreaks(decoratedHeading);
 assert.match(decoratedOutput, /^<h2><em>.*<span class="tj-clause[^>]*>.*<\/span>.*<\/em><\/h2>$/);
 assert.match(addHeadingPhraseBreaks('<h2><em class="ql-font-bebas">空港に反対した拠点が、いまはカルチャーの場になっている</em></h2>'), /<em class="ql-font-bebas">.*<span class="tj-clause/);
 assert.equal(addHeadingPhraseBreaks('<h2>空港に<strong>反対した</strong>拠点が、いまはカルチャーの場になっている</h2>'), '<h2>空港に<strong>反対した</strong>拠点が、<wbr>いまは<wbr>カルチャーの<wbr>場に<wbr>なっている</h2>');
+const snowMashineHeading = addHeadingPhraseBreaks('<h2><em class="ql-font-bebas">-FESTIVAL STRUCTURE-</em><strong class="ql-font-bebas"><br><em>1日は、4つの層で組み立てられている</em></strong></h2>');
+assert.match(snowMashineHeading, /<br><em><span class="tj-clause[^>]*>1日は、/);
+const linkedHeading = addHeadingPhraseBreaks('<h2><a href="/x">MUTEK</a>は、電子音楽の新たな地平</h2>');
+assert.doesNotMatch(linkedHeading, /tj-clause/);
 console.log(`✅ phraseBreaks ${cases.size} samples`);

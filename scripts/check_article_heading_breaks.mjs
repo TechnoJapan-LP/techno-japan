@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* 記事本文 h2 のモバイル折り返しを全記事・3幅で検査する。 */
+/* 記事見出し（タイトル・副題・h2・h3）のモバイル折り返しを全記事・3幅で検査する。 */
 import http from 'node:http';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -73,6 +73,14 @@ async function stopProcess(child) {
 const katakana = /^[\u30a0-\u30ff]$/;
 const badHead = /^[、。，．！？）」』ーぁぃぅぇぉっゃゅょァィゥェォッャュョ]/;
 const onlyPunctuation = /^[、。，．！？）」』ー]+$/;
+const clausePunctuation = /[、，。！？]/;
+const lineEndingPunctuation = /[、，。！？）」』）]$/;
+
+function danglingClause(lines) {
+  return lines.slice(0, -1).some((line) => {
+    return clausePunctuation.test(line.slice(0, -1)) && !lineEndingPunctuation.test(line);
+  });
+}
 
 try {
   const port = await freePort();
@@ -120,7 +128,7 @@ try {
           lines.sort((a, b) => a.top - b.top);
           return lines.map((line) => line.text);
         };
-        return [...document.querySelectorAll('.article-body h2')].map((heading) => ({
+        return [...document.querySelectorAll('.article-detail h1 .article-title-short, .article-detail h1 .article-title-sub, .article-body h2, .article-body h3')].map((heading) => ({
           text: heading.textContent.trim(), lines: readLines(heading),
         })).filter((heading) => japanese.test(heading.text));
       })()`);
@@ -131,12 +139,15 @@ try {
           const last = [...line].at(-1); const first = [...next].at(0);
           return katakana.test(last || '') && katakana.test(first || '') && last !== '・' && first !== '・';
         });
-        if (badLines.length || brokenKatakana) failures.push(`${file} ${width}px: ${heading.text} / lines=${JSON.stringify(heading.lines)}`);
+        if (badLines.length || brokenKatakana || danglingClause(heading.lines)) {
+          const reason = danglingClause(heading.lines) ? '句読点の後で次のまとまりを始めて途中で折っている' : '';
+          failures.push(`${file} ${width}px: ${heading.text} ${reason} / lines=${JSON.stringify(heading.lines)}`);
+        }
       }
     }
   }
   if (failures.length) throw new Error(failures.join('\n'));
-  console.log(`  ✅ 記事 h2 の折り返し: ${articleFiles.length}記事 × 360/390/430px`);
+  console.log(`  ✅ 記事見出し（タイトル・副題・h2・h3）の折り返し: ${articleFiles.length}記事 × 360/390/430px`);
 } finally {
   if (ws) ws.close();
   await stopProcess(browser);

@@ -15024,3 +15024,73 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - Deploy LP to GitHub Pages（41623290171）・Publish pipeline（41623320408, workflow_dispatch）・Lighthouse CI: success。
 - 本番実測（https://techno-japan.media/articles/forest-sound-camp-info.html、headless Chrome）: 1920 → 全幅 0〜1284（サイドメニュー 1340）／1440 → 0〜1044（同 1100）／1024 → 0〜628／900 → 0〜900／390 → 0〜390。横スクロールなし。`article-fx.css?v=22`、`cms.js?v=199` を配信中。
 - **実機未確認**: 認証済み CMS での Publish Now（cms.js は版数のみの変更）。
+
+## 2026-11-03 / Codex / 記事本文 h2 のスマホ行数と CMS「全幅」案内
+
+### 実施
+
+- `LP/detail.css` の記事本文 h2 2箇所を `clamp(21px, 6vw, 34px)` / `line-height: 1.1` に変更し、2026-11-03 の実測（390px、186行→149行）をコメントで記録。
+- `LP/cms.js` と `LP/cms.html` の「全幅」案内を、サイドメニュー手前まで広がること・スマホでは画面いっぱいになること・横長写真向けであることが分かる文言に変更。
+- detail.css の版数を 92→93（ビルド定数、CMS プレビュー、手書き writer ページ）、cms.js の版数を 199→200（cms.html）に更新。生成物は変更していない。
+
+### コミット
+
+- なし（ユーザー指示により commit / push は未実施）。
+
+### 検証
+
+- `git diff --check`: 成功。
+- `node --check LP/cms.js`: 成功。
+- 実ブラウザ確認・ビルド・`bash scripts/preflight.sh`: **未実施（Claude 側で実施予定）**。
+
+### 変更したパターン
+
+- `.article-body h2` の2定義、CMS の画像レイアウト選択肢とヘルプ文、detail.css / cms.js のキャッシュ版数参照。
+
+### 未確認の類似パターン
+
+- 確認済み・0件: `LP/cms.js` / `LP/cms.html` / `LP/cms.css` 内の「全幅」説明文は指定の2箇所のみ。
+- **未確認**: 生成後の `LP/articles/*.html` 等における実際の h2 行数、CMS の実ブラウザ表示・操作、ビルド後の全参照整合性。
+
+### 次の担当への注意・判断待ち
+
+- h2 の変更後に 390/360/430px のブラウザ実測と、CMS の強制リロード（Cmd+Shift+R）後の「全幅」案内表示を確認すること。
+- 生成物のビルドと preflight は Claude 側で実行すること。push は行わないこと。
+
+## 2026-11-04 / Claude（設計・検証）＋ Codex（実装）/ 記事見出しの改行ルールを統一
+
+### 実施
+
+- ユーザー指摘「文字を小さくしても改行の仕組みが改善されなければ意味がない」を受けて測り直した。h2 を 6vw にするだけでは「句読点の後で次のまとまりを書き始めて途中で折る」（例: 兵庫・三田の森で、夏の / 週末を…）が 3→10本に**悪化**していた（前エントリの報告では未計測）。
+- 他メディア調査（CINRA / Qetic / WIRED / 日経 / Fashion Press / Numéro / Casa BRUTUS / フイナム / VOGUE / OTOTOY / Mikiki / GQ の記事ページを 390px・iPhone UA で実測）: 12サイトとも文節処理なし（wbr / BudouX / auto-phrase / inline-block 0）。見出しは 18〜28px。共通の仕組みは無く、サイト内で統一する方針をユーザーが選択。
+- `LP/detail.css`: 句読点のまとまり（`.tj-clause`）を長さに関係なく inline-block に統一（h1・副題・h2・h3。旧: h1 は9字以下、h2/h3 は15字以下、副題は24字以下だけ）。h2 は `clamp(21px, 6vw, 34px)` / `line-height: 1.1`（前エントリ）。
+- `scripts/lib/phrase-breaks.mjs`: タグ混在の見出しでも、`<br>` で区切られ1行を占めるテキストには `clauseBreaks` を適用（同じ行にリンク等があるテキストは従来どおり phraseBreaks）。`mergeTinyChunks` の無限ループ（`breaks.delete` が何も消さなくても changed=true）を修正。`clauseClasses` は CSS 未参照になったがクラス付与は維持（生成物の差分を出さないため）。
+- `scripts/check_article_heading_breaks.mjs`: 対象をタイトル・副題・h2・h3 に拡張し、`danglingClause()`（句読点の後で次のまとまりを始めて途中で折る）を失敗条件に追加。`scripts/test_phrase_breaks.mjs` にケース2件追加。
+
+### コミット
+
+- 「feat(article): 記事見出しの改行ルールを統一…」（本エントリと同じコミット）。
+
+### 検証
+
+- 実測（headless Chrome、iPhone UA、dpr 3、全24記事）。390px: h2 合計 186→157行、句読点以外で改行 32→19、途中で折る 3→0。副題 途中で折る 1→0（36→37行）。h1・h3 は変化なし。1280px: h2 113→118行、途中で折る 12→0、句読点以外で改行 17→7。
+- `node scripts/check_article_heading_breaks.mjs`: 24記事 × 360/390/430px 合格（拡張前の CSS では snow-mashine の1本で `句読点の後で次のまとまりを始めて途中で折っている` を検出 → 生成側の修正で合格）。
+- `node scripts/test_phrase_breaks.mjs`・`check_asset_versions.py`・`check_article_image_fit.mjs`（8/8）: 合格。
+- 生成物の差分: detail.css?v=93 の版数と、snow-mashine の h2 1本のみ（word-diff で確認）。
+- スクリーンショット（390px）: mutek-jp-2026-info / bondisco-2026-info の h2 を目視。
+- CMS: 「全幅（横長の写真向け）」の表示は headless で cms.html が認証処理で止まり**未確認**（文言はファイルで確認）。
+- `bash scripts/preflight.sh`: push 時の pre-push で実行。
+
+### 変更したパターン
+
+- 記事見出し（h1 タイトル・副題・本文 h2・h3）の句読点まとまりの塊化、h2 のスマホ文字サイズと行間、タグ混在見出しの行単位の clause 化。
+
+### 未確認の類似パターン
+
+- **未確認**: TOP / NEWS のカード見出し、フェス詳細の副題（`festivalSubText`）、関連記事カードの副題（clauseBreaks を使うが CSS で塊化していない）。
+- **未確認**: 実機 iPhone Safari（headless Chrome での実測のみ）。CMS 画面の目視と Publish Now。
+
+### 次の担当への注意・判断待ち
+
+- 短いまとまりが1行に残る（「会場は、 / ひとつの敷地ではなく白馬全域」）のはこのルールの限界。
+- CMS は Cmd+Shift+R（cms.js?v=200）。
