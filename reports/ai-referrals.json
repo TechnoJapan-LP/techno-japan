@@ -1,27 +1,27 @@
 {
-  "generatedAt": "2026-11-04T23:57:51.176Z",
+  "generatedAt": "2026-11-05T23:52:37.249Z",
   "propertyId": "535755449",
   "periods": {
     "current": {
-      "startDate": "2026-10-09",
-      "endDate": "2026-11-05",
+      "startDate": "2026-10-10",
+      "endDate": "2026-11-06",
       "label": "直近28日"
     },
     "previous": {
-      "startDate": "2026-09-11",
-      "endDate": "2026-10-08",
+      "startDate": "2026-09-12",
+      "endDate": "2026-10-09",
       "label": "前の28日"
     }
   },
   "current": {
-    "sessions": 88,
-    "totalUsers": 86,
-    "share": 0.029993183367416496,
+    "sessions": 91,
+    "totalUsers": 89,
+    "share": 0.03169627307558342,
     "bySource": [
       {
         "source": "chatgpt.com",
-        "sessions": 84,
-        "totalUsers": 82
+        "sessions": 87,
+        "totalUsers": 85
       },
       {
         "source": "gemini.google.com",
@@ -37,13 +37,13 @@
       },
       {
         "landingPage": "/",
-        "sessions": 8,
-        "totalUsers": 8
+        "sessions": 9,
+        "totalUsers": 9
       },
       {
         "landingPage": "/en/festivals/labyrinth.html",
-        "sessions": 8,
-        "totalUsers": 8
+        "sessions": 9,
+        "totalUsers": 9
       },
       {
         "landingPage": "/festivals/festival-de-frue.html",
@@ -96,6 +96,11 @@
         "totalUsers": 2
       },
       {
+        "landingPage": "/en/articles/forest-sound-camp-info.html",
+        "sessions": 2,
+        "totalUsers": 2
+      },
+      {
         "landingPage": "/en/articles/sawagi-festival-2026-info.html",
         "sessions": 2,
         "totalUsers": 2
@@ -124,15 +129,10 @@
         "landingPage": "/articles/rebirth-2026-info.html",
         "sessions": 1,
         "totalUsers": 1
-      },
-      {
-        "landingPage": "/articles/synapse-2026-info.html",
-        "sessions": 1,
-        "totalUsers": 1
       }
     ],
-    "allSessions": 2934,
-    "allTotalUsers": 2332
+    "allSessions": 2871,
+    "allTotalUsers": 2222
   },
   "previous": {
     "sessions": 0,

@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-11-04T23:57:48.985Z",
+  "generatedAt": "2026-11-05T23:52:35.205Z",
   "days": 30,
   "source": "ga4",
   "items": [
     {
       "id": "japan-festival-2026-october",
-      "views": 343
+      "views": 332
     },
     {
       "id": "topia-2026-info",
@@ -17,27 +17,27 @@
     },
     {
       "id": "labyrinth-2026-info",
-      "views": 153
+      "views": 155
     },
     {
       "id": "sawagi-festival-2026-info",
-      "views": 106
+      "views": 107
     },
     {
       "id": "ondoland1012-2026-info",
-      "views": 84
+      "views": 75
     },
     {
       "id": "japan-festival-2026-november",
-      "views": 72
+      "views": 74
     },
     {
       "id": "treak-2026-info",
-      "views": 60
+      "views": 62
     },
     {
       "id": "mutek-jp-2026-info",
-      "views": 45
+      "views": 46
     },
     {
       "id": "intergalactic-2026-info",
@@ -48,16 +48,16 @@
       "views": 41
     },
     {
+      "id": "odyssey-2026-info",
+      "views": 20
+    },
+    {
       "id": "asia-festival-2026-second",
       "views": 18
     },
     {
-      "id": "odyssey-2026-info",
-      "views": 18
-    },
-    {
       "id": "forest-sound-camp-info",
-      "views": 17
+      "views": 18
     },
     {
       "id": "snow-mashine-2027-info",
@@ -65,22 +65,18 @@
     },
     {
       "id": "otsukimi-2026-info",
-      "views": 11
-    },
-    {
-      "id": "japan-festival-2026-september",
-      "views": 7
+      "views": 12
     },
     {
       "id": "test",
       "views": 7
     },
     {
-      "id": "post-20251120",
+      "id": "japan-festival-2026-september",
       "views": 6
     },
     {
-      "id": "synapse-2026-info",
+      "id": "post-20251120",
       "views": 6
     },
     {
@@ -97,6 +93,10 @@
     },
     {
       "id": "shifumiz-2026-info",
+      "views": 3
+    },
+    {
+      "id": "synapse-2026-info",
       "views": 3
     },
     {
