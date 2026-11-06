@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-11-05T23:52:35.205Z",
+  "generatedAt": "2026-11-06T23:18:35.446Z",
   "days": 30,
   "source": "ga4",
   "items": [
     {
       "id": "japan-festival-2026-october",
-      "views": 332
+      "views": 321
     },
     {
       "id": "topia-2026-info",
@@ -24,12 +24,8 @@
       "views": 107
     },
     {
-      "id": "ondoland1012-2026-info",
-      "views": 75
-    },
-    {
       "id": "japan-festival-2026-november",
-      "views": 74
+      "views": 75
     },
     {
       "id": "treak-2026-info",
@@ -37,26 +33,30 @@
     },
     {
       "id": "mutek-jp-2026-info",
-      "views": 46
+      "views": 49
+    },
+    {
+      "id": "ondoland1012-2026-info",
+      "views": 48
     },
     {
       "id": "intergalactic-2026-info",
-      "views": 44
+      "views": 47
     },
     {
       "id": "transcendence-2025-report",
-      "views": 41
-    },
-    {
-      "id": "odyssey-2026-info",
-      "views": 20
+      "views": 37
     },
     {
       "id": "asia-festival-2026-second",
-      "views": 18
+      "views": 19
     },
     {
       "id": "forest-sound-camp-info",
+      "views": 18
+    },
+    {
+      "id": "odyssey-2026-info",
       "views": 18
     },
     {
@@ -104,12 +104,12 @@
       "views": 3
     },
     {
-      "id": "bondisco-2026-info",
+      "id": "test-ap",
       "views": 2
     },
     {
-      "id": "test-ap",
-      "views": 2
+      "id": "bondisco-2026-info",
+      "views": 1
     },
     {
       "id": "details-test",

@@ -1,27 +1,27 @@
 {
-  "generatedAt": "2026-11-05T23:52:37.249Z",
+  "generatedAt": "2026-11-06T23:18:36.872Z",
   "propertyId": "535755449",
   "periods": {
     "current": {
-      "startDate": "2026-10-10",
-      "endDate": "2026-11-06",
+      "startDate": "2026-10-11",
+      "endDate": "2026-11-07",
       "label": "直近28日"
     },
     "previous": {
-      "startDate": "2026-09-12",
-      "endDate": "2026-10-09",
+      "startDate": "2026-09-13",
+      "endDate": "2026-10-10",
       "label": "前の28日"
     }
   },
   "current": {
-    "sessions": 91,
-    "totalUsers": 89,
-    "share": 0.03169627307558342,
+    "sessions": 92,
+    "totalUsers": 90,
+    "share": 0.03391079985256174,
     "bySource": [
       {
         "source": "chatgpt.com",
-        "sessions": 87,
-        "totalUsers": 85
+        "sessions": 88,
+        "totalUsers": 86
       },
       {
         "source": "gemini.google.com",
@@ -47,8 +47,8 @@
       },
       {
         "landingPage": "/festivals/festival-de-frue.html",
-        "sessions": 8,
-        "totalUsers": 7
+        "sessions": 7,
+        "totalUsers": 6
       },
       {
         "landingPage": "/articles/japan-festival-2026-september.html",
@@ -67,6 +67,11 @@
       },
       {
         "landingPage": "/en/articles/asia-festival-2026-second.html",
+        "sessions": 3,
+        "totalUsers": 3
+      },
+      {
+        "landingPage": "/en/articles/intergalactic-2026-info.html",
         "sessions": 3,
         "totalUsers": 3
       },
@@ -124,15 +129,10 @@
         "landingPage": "/articles/forest-sound-camp-info.html",
         "sessions": 1,
         "totalUsers": 1
-      },
-      {
-        "landingPage": "/articles/rebirth-2026-info.html",
-        "sessions": 1,
-        "totalUsers": 1
       }
     ],
-    "allSessions": 2871,
-    "allTotalUsers": 2222
+    "allSessions": 2713,
+    "allTotalUsers": 2106
   },
   "previous": {
     "sessions": 0,
