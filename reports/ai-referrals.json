@@ -1,27 +1,27 @@
 {
-  "generatedAt": "2026-11-06T23:18:36.872Z",
+  "generatedAt": "2026-11-07T22:10:33.962Z",
   "propertyId": "535755449",
   "periods": {
     "current": {
-      "startDate": "2026-10-11",
-      "endDate": "2026-11-07",
+      "startDate": "2026-10-12",
+      "endDate": "2026-11-08",
       "label": "直近28日"
     },
     "previous": {
-      "startDate": "2026-09-13",
-      "endDate": "2026-10-10",
+      "startDate": "2026-09-14",
+      "endDate": "2026-10-11",
       "label": "前の28日"
     }
   },
   "current": {
-    "sessions": 92,
-    "totalUsers": 90,
-    "share": 0.03391079985256174,
+    "sessions": 94,
+    "totalUsers": 92,
+    "share": 0.03601532567049808,
     "bySource": [
       {
         "source": "chatgpt.com",
-        "sessions": 88,
-        "totalUsers": 86
+        "sessions": 90,
+        "totalUsers": 88
       },
       {
         "source": "gemini.google.com",
@@ -46,14 +46,14 @@
         "totalUsers": 9
       },
       {
-        "landingPage": "/festivals/festival-de-frue.html",
-        "sessions": 7,
-        "totalUsers": 6
-      },
-      {
         "landingPage": "/articles/japan-festival-2026-september.html",
         "sessions": 6,
         "totalUsers": 6
+      },
+      {
+        "landingPage": "/festivals/festival-de-frue.html",
+        "sessions": 6,
+        "totalUsers": 5
       },
       {
         "landingPage": "/en/articles/denki-bodhisattva-2026-info.html",
@@ -84,6 +84,11 @@
         "landingPage": "/en/index.html",
         "sessions": 3,
         "totalUsers": 2
+      },
+      {
+        "landingPage": "/en/venues.html?area=OSAKA",
+        "sessions": 3,
+        "totalUsers": 3
       },
       {
         "landingPage": "/index.html",
@@ -124,15 +129,10 @@
         "landingPage": "/articles/denki-bodhisattva-2026-info.html",
         "sessions": 1,
         "totalUsers": 1
-      },
-      {
-        "landingPage": "/articles/forest-sound-camp-info.html",
-        "sessions": 1,
-        "totalUsers": 1
       }
     ],
-    "allSessions": 2713,
-    "allTotalUsers": 2106
+    "allSessions": 2610,
+    "allTotalUsers": 2005
   },
   "previous": {
     "sessions": 0,
