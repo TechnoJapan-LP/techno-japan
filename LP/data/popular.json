@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-11-07T22:10:31.474Z",
+  "generatedAt": "2026-11-08T22:25:57.645Z",
   "days": 30,
   "source": "ga4",
   "items": [
     {
       "id": "japan-festival-2026-october",
-      "views": 315
+      "views": 324
     },
     {
       "id": "topia-2026-info",
@@ -13,11 +13,11 @@
     },
     {
       "id": "denki-bodhisattva-2026-info",
-      "views": 162
+      "views": 165
     },
     {
       "id": "labyrinth-2026-info",
-      "views": 156
+      "views": 144
     },
     {
       "id": "sawagi-festival-2026-info",
@@ -25,7 +25,7 @@
     },
     {
       "id": "japan-festival-2026-november",
-      "views": 76
+      "views": 81
     },
     {
       "id": "treak-2026-info",
@@ -33,7 +33,7 @@
     },
     {
       "id": "mutek-jp-2026-info",
-      "views": 51
+      "views": 54
     },
     {
       "id": "intergalactic-2026-info",
@@ -41,11 +41,11 @@
     },
     {
       "id": "ondoland1012-2026-info",
-      "views": 37
+      "views": 32
     },
     {
       "id": "transcendence-2025-report",
-      "views": 36
+      "views": 30
     },
     {
       "id": "asia-festival-2026-second",
@@ -53,23 +53,19 @@
     },
     {
       "id": "forest-sound-camp-info",
-      "views": 19
+      "views": 18
     },
     {
       "id": "odyssey-2026-info",
-      "views": 19
+      "views": 18
+    },
+    {
+      "id": "otsukimi-2026-info",
+      "views": 14
     },
     {
       "id": "snow-mashine-2027-info",
       "views": 13
-    },
-    {
-      "id": "otsukimi-2026-info",
-      "views": 12
-    },
-    {
-      "id": "test",
-      "views": 7
     },
     {
       "id": "post-20251120",
@@ -84,10 +80,6 @@
       "views": 5
     },
     {
-      "id": "card-test",
-      "views": 3
-    },
-    {
       "id": "loa-lost-paradise-2026-info",
       "views": 3
     },
@@ -97,14 +89,6 @@
     },
     {
       "id": "synapse-2026-info",
-      "views": 3
-    },
-    {
-      "id": "test-before",
-      "views": 3
-    },
-    {
-      "id": "test-ap",
       "views": 2
     },
     {
@@ -113,14 +97,6 @@
     },
     {
       "id": "details-test",
-      "views": 1
-    },
-    {
-      "id": "orig",
-      "views": 1
-    },
-    {
-      "id": "pq-test",
       "views": 1
     }
   ]

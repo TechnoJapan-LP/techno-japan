@@ -1,27 +1,27 @@
 {
-  "generatedAt": "2026-11-07T22:10:33.962Z",
+  "generatedAt": "2026-11-08T22:26:00.090Z",
   "propertyId": "535755449",
   "periods": {
     "current": {
-      "startDate": "2026-10-12",
-      "endDate": "2026-11-08",
+      "startDate": "2026-10-13",
+      "endDate": "2026-11-09",
       "label": "直近28日"
     },
     "previous": {
-      "startDate": "2026-09-14",
-      "endDate": "2026-10-11",
+      "startDate": "2026-09-15",
+      "endDate": "2026-10-12",
       "label": "前の28日"
     }
   },
   "current": {
-    "sessions": 94,
-    "totalUsers": 92,
-    "share": 0.03601532567049808,
+    "sessions": 95,
+    "totalUsers": 93,
+    "share": 0.036580670003850596,
     "bySource": [
       {
         "source": "chatgpt.com",
-        "sessions": 90,
-        "totalUsers": 88
+        "sessions": 91,
+        "totalUsers": 89
       },
       {
         "source": "gemini.google.com",
@@ -66,6 +66,11 @@
         "totalUsers": 4
       },
       {
+        "landingPage": "/en/index.html",
+        "sessions": 4,
+        "totalUsers": 3
+      },
+      {
         "landingPage": "/en/articles/asia-festival-2026-second.html",
         "sessions": 3,
         "totalUsers": 3
@@ -79,11 +84,6 @@
         "landingPage": "/en/articles/japan-festival-2026-october.html",
         "sessions": 3,
         "totalUsers": 3
-      },
-      {
-        "landingPage": "/en/index.html",
-        "sessions": 3,
-        "totalUsers": 2
       },
       {
         "landingPage": "/en/venues.html?area=OSAKA",
@@ -131,8 +131,8 @@
         "totalUsers": 1
       }
     ],
-    "allSessions": 2610,
-    "allTotalUsers": 2005
+    "allSessions": 2597,
+    "allTotalUsers": 1989
   },
   "previous": {
     "sessions": 0,
