@@ -1,10 +1,72 @@
 {
-  "generated_at": "2026-11-02T06:37:46.790Z",
+  "generated_at": "2026-11-09T07:00:37.095Z",
   "base": "https://techno-japan.media",
   "url_count": 560,
-  "error_count": 0,
-  "warning_count": 0,
+  "error_count": 11,
+  "warning_count": 2,
   "localized_title_duplicate_groups": 8,
-  "errors": [],
-  "warnings": []
+  "errors": [
+    {
+      "url": "https://techno-japan.media/articles/post-20251120.html",
+      "message": "HTTP 503 が返りました（200ではありません）"
+    },
+    {
+      "url": "https://techno-japan.media/articles/post-20251120.html",
+      "message": "canonical がありません"
+    },
+    {
+      "url": "https://techno-japan.media/articles/post-20251120.html",
+      "message": "サイト内リンクのリンク先がHTTP 503 です",
+      "from": "https://techno-japan.media/news.html"
+    },
+    {
+      "url": "https://techno-japan.media/articles/post-20251120.html",
+      "message": "サイト内リンクのリンク先がHTTP 503 です",
+      "from": "https://techno-japan.media/festivals/mutek.html"
+    },
+    {
+      "url": "https://techno-japan.media/articles/post-20251120.html",
+      "message": "サイト内リンクのリンク先がHTTP 503 です",
+      "from": "https://techno-japan.media/venues/www.html"
+    },
+    {
+      "url": "https://techno-japan.media/articles/post-20251120.html",
+      "message": "サイト内リンクのリンク先がHTTP 503 です",
+      "from": "https://techno-japan.media/venues/o-east.html"
+    },
+    {
+      "url": "https://techno-japan.media/articles/post-20251120.html",
+      "message": "サイト内リンクのリンク先がHTTP 503 です",
+      "from": "https://techno-japan.media/writers/masafumi-take.html"
+    },
+    {
+      "url": "https://techno-japan.media/articles/post-20251120.html",
+      "message": "サイト内リンクのリンク先がHTTP 503 です",
+      "from": "https://techno-japan.media/en/articles/post-20251120.html"
+    },
+    {
+      "url": "https://techno-japan.media/articles/post-20251120.html",
+      "message": "サイト内リンクのリンク先がHTTP 503 です",
+      "from": "https://techno-japan.media/articles/mutek-jp-2026-info.html"
+    },
+    {
+      "url": "https://techno-japan.media/articles/post-20251120.html",
+      "message": "サイト内リンクのリンク先がHTTP 503 です",
+      "from": "https://techno-japan.media/articles/transcendence-2025-report.html"
+    },
+    {
+      "url": "https://techno-japan.media/en/articles/post-20251120.html",
+      "message": "hreflang=ja の相手がHTTP 503 です: https://techno-japan.media/articles/post-20251120.html"
+    }
+  ],
+  "warnings": [
+    {
+      "url": "https://techno-japan.media/articles/post-20251120.html",
+      "message": "meta description がありません"
+    },
+    {
+      "url": "https://techno-japan.media/articles/post-20251120.html",
+      "message": "og:image がありません"
+    }
+  ]
 }
