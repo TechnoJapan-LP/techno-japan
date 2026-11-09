@@ -1,24 +1,8 @@
 {
   "source": "https://techno-japan.media/",
   "license": "データの出典として techno-japan.media へのリンクを求めます",
-  "count": 7,
+  "count": 6,
   "events": [
-    {
-      "name": "GROW THE CULTURE OPEN AIR 2026",
-      "url": "https://techno-japan.media/festivals/grow-the-culture-open-air.html",
-      "start": "2026-11-07",
-      "end": "2026-11-08",
-      "venue": "Ohba Camping Village",
-      "pref": "Tokyo",
-      "lat": 35.760438,
-      "lng": 139.209443,
-      "genres": [
-        "TECHNO",
-        "HOUSE",
-        "BASS"
-      ],
-      "tickets": "https://growtheculture.jp/openair2026#tickets"
-    },
     {
       "name": "Mutek 2026",
       "url": "https://techno-japan.media/festivals/mutek.html",
