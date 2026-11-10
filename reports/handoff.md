@@ -15128,3 +15128,43 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 
 - preflight は電池駆動でふたを閉じるとスリープして大量 TIMEOUT になる。push 中はふたを開けたまま。
+
+## 2026-11-10 / Claude（設計・検証）+ Codex（実装） / デプロイ停止の解消: TOP Playing soon の補充・申請ページの英語名
+
+### 実施
+
+- 原因: 2026-11-08 夕方から Deploy LP が4回連続失敗。`regression / check` の `check_hub_pages.py` が `#top2-artist-grid` のカード4枚（min 6）で停止。日付が進み「出演予定あり かつ 写真あり」が4人に減ったため（コード破損ではない）。止まっていたのは自動生成コミットのみ（人気ランキング・詳細ページ再生成）。
+- `LP/top-phase2.js`: 出演予定かつ写真ありの pool を優先し、6人未満なら pool 外の写真ありアーティストをランダム補充。補充カードは `genre · city` を表示（フェス名・日付は出さない）。出演予定カードの表示は従来どおり。Shuffle で補充分も選び直す。
+- `LP/index.html` / `LP/en/index.html`: `top-phase2.js?v=11` → `?v=12`。
+- `scripts/check_top_artists.mjs`: 実データ／出演予定0人／出演予定5人の3場面を検査。
+- `LP/submit.html` / `LP/en/submit.html`: 近日開催カードで英語版は `name_en` を優先（`en || primary || ja`）。日付が進み soul-beat-asia（name=橋の下世界音楽祭 / name_en=SOUL BEAT ASIA）が4枠に入ったことで `check_en_visible_japanese.mjs` が失敗していた。EN は build-detail-pages.mjs の EN_PAGES で JA から生成されるため両方同一コード。
+
+### コミット
+
+- このエントリを含むコミット（下記 git log 参照）。
+
+### 検証
+
+- `bash scripts/preflight.sh`: 全78件成功（1回目は EN 可視日本語 1件で失敗 → submit を修正して再実行）。
+- headless Chrome（CDP、ローカル http.server）で `/index.html` `/en/index.html` を 1440px と 390px（mobile, dpr3）で表示: カード6枚、出演予定4人（Max Cooper / LISA MIZUNO / DJ MIKU / RISA TANIGUCHI）が先頭、補充2枚は `TECHNO · TOKYO` 形式、Shuffle で補充分が入れ替わる、JS 例外なし、scrollWidth = 画面幅。初回のみ画像未読込（会場の画像も同様で起動直後のコールドロード。2回目以降は全画像表示）。
+- 同じ方法で `/submit.html` `/en/submit.html` を 1440px / 390px: JA は「橋の下世界音楽祭」、EN は「SOUL BEAT ASIA」、リンクは各言語の詳細ページ、JS 例外なし。
+- JA/EN の行数: submit.html 328/328 で一致。
+
+### 変更したパターン
+
+- TOP Playing soon の出演予定優先・写真あり補充・補充カードのサブテキスト。
+- TOP phase 2 のキャッシュ版数。
+- TOP アーティスト検査の3シナリオ化。
+- 申請ページ近日開催カードの名前の言語分岐。
+
+### 未確認の類似パターン
+
+- 「日付が進むと件数が減って検査が落ちる」型: TOP の他の min 付き枠（future / festival / story / index / venue）は min 1 で、現データで満たす（preflight 合格）。確認済み・0件。
+- EN でフェス名を `festival.name` のまま出している他の箇所: preflight の EN 可視日本語検査で増加0件。確認済み・0件。
+- CMS / Publish / GAS は変更なし（対象外）。
+
+### 次の担当への注意・判断待ち
+
+- フェスの少ない時期は Playing soon の後半が補充アーティストになる（設計どおり）。
+- 本番の Deploy 成功は push 後に確認する（下記の続報を参照）。
+

@@ -98,17 +98,22 @@
         + '</span><span class="top2-status ' + (upcoming ? 'is-future' : 'is-archive') + '" data-city="'
         + esc(city) + '">' + (upcoming ? 'UPCOMING' : 'ARCHIVE') + '</span></a>';
     }).join('');
-  var nextByArtist = window.tjMagNextAppearances(artists, festivals, today); var pool = artists.filter(function (a) { return nextByArtist.has(a.id) && a.image; }).sort(function (a, b) { return nextByArtist.get(a.id).range.start.localeCompare(nextByArtist.get(b.id).range.start); }).slice(0, 12); var shown = [];
+  var nextByArtist = window.tjMagNextAppearances(artists, festivals, today); var pool = artists.filter(function (a) { return nextByArtist.has(a.id) && a.image; }).sort(function (a, b) { return nextByArtist.get(a.id).range.start.localeCompare(nextByArtist.get(b.id).range.start); }).slice(0, 12);
+  var backupPool = artists.filter(function (a) { return a.image && pool.indexOf(a) < 0; }); var shown = [];
   function shuffle(list) { return list.slice().sort(function () { return Math.random() - .5; }); }
   function renderArtists() {
-    shown = shuffle(pool).slice(0, 6);
+    var planned = shuffle(pool).slice(0, 6);
+    var backups = planned.length < 6 ? shuffle(backupPool).slice(0, 6 - planned.length) : [];
+    shown = planned.concat(backups);
     document.querySelector('.top2-artist-grid').innerHTML = shown.map(function (a) {
       var item = nextByArtist.get(a.id);
-      var f = item.festival;
+      var sub = item
+        ? loc(item.festival.name, '', item.festival.name_en) + ' · ' + tjMagRangeShort(item.range)
+        : [a.genre, a.city].filter(Boolean).join(' · ');
       return '<a class="top2-card top2-artist-card top2-fx" href="' + detailHref('artists', a.id)
         + '"><div class="top2-image">' + img(a.image, '(max-width: 760px) 30vw, 14vw', false, false, a.imagePosition)
         + '</div><h3>' + esc(loc(a.name, '', a.name_en)) + '</h3><p>'
-        + esc(loc(f.name, '', f.name_en)) + ' · ' + tjMagRangeShort(item.range) + '</p></a>';
+        + esc(sub) + '</p></a>';
     }).join('');
     observe();
   }

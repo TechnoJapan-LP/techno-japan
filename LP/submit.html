@@ -316,7 +316,7 @@ body{overflow-x:hidden}
       return festival && festival.id && festival.image && (status === 'published' || status === '') && !Number.isNaN(end.valueOf()) && end >= today;
     }).sort((a, b) => startDate(a.date).localeCompare(startDate(b.date))).slice(0, 4);
     list.innerHTML = festivals.map(festival => {
-      const name = festival.name || festival.name_ja;
+      const name = isEnglish ? (festival.name_en || festival.name || festival.name_ja) : (festival.name || festival.name_ja || festival.name_en);
       const location = isEnglish ? (festival.location || festival.location_ja) : (festival.location_ja || festival.location);
       const href = `${isEnglish ? '/en' : ''}/festivals/${encodeURIComponent(festival.id)}.html`;
       return `<a class="apply-card" href="${href}"><span class="apply-card-image"><img src="/${escape(festival.image)}" alt="" loading="lazy" decoding="async"></span><span class="apply-card-meta red">${escape(formatDate(festival.date))}</span><span class="disp apply-card-title">${escape(name)}</span><span class="apply-card-meta">${escape(location || festival.city || '')}</span></a>`;
