@@ -15168,3 +15168,8 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - フェスの少ない時期は Playing soon の後半が補充アーティストになる（設計どおり）。
 - 本番の Deploy 成功は push 後に確認する（下記の続報を参照）。
 
+
+### 続報（2026-11-10 公開結果）
+
+- `105447610` を push（pre-push の preflight 全件合格）→ Deploy LP to GitHub Pages run 42762865655 が success（11/08 以来の連続失敗が解消）。
+- 本番 https://techno-japan.media で確認: `index.html` が `top-phase2.js?v=12` を参照、`/en/submit.html` に name_en 優先のコードあり。headless Chrome（UA に TJAudit）で `/index.html` `/en/index.html` を 1440px / 390px 表示し、各6枚・出演予定4人が先頭・補充カードは genre · city・JS 例外なし・横はみ出しなし。
