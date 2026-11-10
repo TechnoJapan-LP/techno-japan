@@ -1,23 +1,23 @@
 {
-  "generatedAt": "2026-11-10T01:40:28.004Z",
+  "generatedAt": "2026-11-10T23:34:34.496Z",
   "days": 30,
   "source": "ga4",
   "items": [
     {
-      "id": "japan-festival-2026-october",
-      "views": 320
+      "id": "topia-2026-info",
+      "views": 300
     },
     {
-      "id": "topia-2026-info",
-      "views": 299
+      "id": "japan-festival-2026-october",
+      "views": 298
     },
     {
       "id": "denki-bodhisattva-2026-info",
-      "views": 167
+      "views": 171
     },
     {
       "id": "labyrinth-2026-info",
-      "views": 128
+      "views": 118
     },
     {
       "id": "sawagi-festival-2026-info",
@@ -25,11 +25,11 @@
     },
     {
       "id": "japan-festival-2026-november",
-      "views": 87
+      "views": 90
     },
     {
       "id": "mutek-jp-2026-info",
-      "views": 55
+      "views": 59
     },
     {
       "id": "intergalactic-2026-info",
@@ -37,19 +37,15 @@
     },
     {
       "id": "treak-2026-info",
-      "views": 38
-    },
-    {
-      "id": "ondoland1012-2026-info",
-      "views": 29
-    },
-    {
-      "id": "transcendence-2025-report",
-      "views": 21
+      "views": 25
     },
     {
       "id": "asia-festival-2026-second",
-      "views": 20
+      "views": 21
+    },
+    {
+      "id": "ondoland1012-2026-info",
+      "views": 19
     },
     {
       "id": "forest-sound-camp-info",
@@ -57,19 +53,19 @@
     },
     {
       "id": "odyssey-2026-info",
-      "views": 18
+      "views": 17
+    },
+    {
+      "id": "snow-mashine-2027-info",
+      "views": 15
     },
     {
       "id": "otsukimi-2026-info",
       "views": 13
     },
     {
-      "id": "snow-mashine-2027-info",
+      "id": "transcendence-2025-report",
       "views": 13
-    },
-    {
-      "id": "post-20251120",
-      "views": 5
     },
     {
       "id": "rebirth-2026-info",
@@ -81,6 +77,10 @@
     },
     {
       "id": "loa-lost-paradise-2026-info",
+      "views": 3
+    },
+    {
+      "id": "post-20251120",
       "views": 3
     },
     {

@@ -1,27 +1,27 @@
 {
-  "generatedAt": "2026-11-10T01:40:29.684Z",
+  "generatedAt": "2026-11-10T23:34:36.753Z",
   "propertyId": "535755449",
   "periods": {
     "current": {
-      "startDate": "2026-10-14",
-      "endDate": "2026-11-10",
+      "startDate": "2026-10-15",
+      "endDate": "2026-11-11",
       "label": "直近28日"
     },
     "previous": {
-      "startDate": "2026-09-16",
-      "endDate": "2026-10-13",
+      "startDate": "2026-09-17",
+      "endDate": "2026-10-14",
       "label": "前の28日"
     }
   },
   "current": {
-    "sessions": 97,
-    "totalUsers": 95,
-    "share": 0.03796477495107632,
+    "sessions": 98,
+    "totalUsers": 97,
+    "share": 0.03937324226597027,
     "bySource": [
       {
         "source": "chatgpt.com",
-        "sessions": 93,
-        "totalUsers": 91
+        "sessions": 94,
+        "totalUsers": 93
       },
       {
         "source": "gemini.google.com",
@@ -32,8 +32,8 @@
     "topLandingPages": [
       {
         "landingPage": "/",
-        "sessions": 11,
-        "totalUsers": 11
+        "sessions": 12,
+        "totalUsers": 12
       },
       {
         "landingPage": "/en/articles/topia-2026-info.html",
@@ -51,14 +51,19 @@
         "totalUsers": 6
       },
       {
-        "landingPage": "/festivals/festival-de-frue.html",
-        "sessions": 6,
-        "totalUsers": 5
-      },
-      {
         "landingPage": "/en/articles/denki-bodhisattva-2026-info.html",
         "sessions": 5,
         "totalUsers": 5
+      },
+      {
+        "landingPage": "/festivals/festival-de-frue.html",
+        "sessions": 5,
+        "totalUsers": 5
+      },
+      {
+        "landingPage": "/en/articles/asia-festival-2026-second.html",
+        "sessions": 4,
+        "totalUsers": 4
       },
       {
         "landingPage": "/en/festivals/lost-find.html",
@@ -68,11 +73,6 @@
       {
         "landingPage": "/en/index.html",
         "sessions": 4,
-        "totalUsers": 3
-      },
-      {
-        "landingPage": "/en/articles/asia-festival-2026-second.html",
-        "sessions": 3,
         "totalUsers": 3
       },
       {
@@ -131,8 +131,8 @@
         "totalUsers": 1
       }
     ],
-    "allSessions": 2555,
-    "allTotalUsers": 1953
+    "allSessions": 2489,
+    "allTotalUsers": 1894
   },
   "previous": {
     "sessions": 0,
