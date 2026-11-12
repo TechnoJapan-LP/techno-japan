@@ -1,35 +1,35 @@
 {
-  "generatedAt": "2026-11-10T23:34:34.496Z",
+  "generatedAt": "2026-11-12T01:02:36.209Z",
   "days": 30,
   "source": "ga4",
   "items": [
     {
       "id": "topia-2026-info",
-      "views": 300
+      "views": 302
     },
     {
       "id": "japan-festival-2026-october",
-      "views": 298
+      "views": 289
     },
     {
       "id": "denki-bodhisattva-2026-info",
-      "views": 171
-    },
-    {
-      "id": "labyrinth-2026-info",
-      "views": 118
+      "views": 176
     },
     {
       "id": "sawagi-festival-2026-info",
       "views": 108
     },
     {
+      "id": "labyrinth-2026-info",
+      "views": 100
+    },
+    {
       "id": "japan-festival-2026-november",
-      "views": 90
+      "views": 95
     },
     {
       "id": "mutek-jp-2026-info",
-      "views": 59
+      "views": 60
     },
     {
       "id": "intergalactic-2026-info",
@@ -37,19 +37,15 @@
     },
     {
       "id": "treak-2026-info",
-      "views": 25
-    },
-    {
-      "id": "asia-festival-2026-second",
       "views": 21
     },
     {
-      "id": "ondoland1012-2026-info",
-      "views": 19
+      "id": "asia-festival-2026-second",
+      "views": 20
     },
     {
       "id": "forest-sound-camp-info",
-      "views": 18
+      "views": 17
     },
     {
       "id": "odyssey-2026-info",
@@ -61,11 +57,15 @@
     },
     {
       "id": "otsukimi-2026-info",
-      "views": 13
+      "views": 14
     },
     {
       "id": "transcendence-2025-report",
       "views": 13
+    },
+    {
+      "id": "ondoland1012-2026-info",
+      "views": 12
     },
     {
       "id": "rebirth-2026-info",
