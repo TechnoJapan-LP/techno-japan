@@ -2067,6 +2067,10 @@
     1640,
     1920
   ],
+  "images/artists/yuta.webp": [
+    1080,
+    1350
+  ],
   "images/artists/zundoko-disco.webp": [
     800,
     800
@@ -9837,6 +9841,22 @@
   ],
   "images/derivatives/card/artists/yukimasa--eb22d9ff-xs.webp": [
     205,
+    240
+  ],
+  "images/derivatives/card/artists/yuta--cf911d6c-lg.webp": [
+    768,
+    960
+  ],
+  "images/derivatives/card/artists/yuta--cf911d6c-md.webp": [
+    576,
+    720
+  ],
+  "images/derivatives/card/artists/yuta--cf911d6c-sm.webp": [
+    384,
+    480
+  ],
+  "images/derivatives/card/artists/yuta--cf911d6c-xs.webp": [
+    192,
     240
   ],
   "images/derivatives/card/artists/zundoko-disco--b5aafa32-lg.webp": [
