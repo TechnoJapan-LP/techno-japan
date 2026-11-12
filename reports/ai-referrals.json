@@ -1,27 +1,27 @@
 {
-  "generatedAt": "2026-11-12T01:02:38.008Z",
+  "generatedAt": "2026-11-12T23:43:06.086Z",
   "propertyId": "535755449",
   "periods": {
     "current": {
-      "startDate": "2026-10-16",
-      "endDate": "2026-11-12",
+      "startDate": "2026-10-17",
+      "endDate": "2026-11-13",
       "label": "直近28日"
     },
     "previous": {
-      "startDate": "2026-09-18",
-      "endDate": "2026-10-15",
+      "startDate": "2026-09-19",
+      "endDate": "2026-10-16",
       "label": "前の28日"
     }
   },
   "current": {
-    "sessions": 98,
-    "totalUsers": 97,
-    "share": 0.040345821325648415,
+    "sessions": 100,
+    "totalUsers": 99,
+    "share": 0.04128819157720892,
     "bySource": [
       {
         "source": "chatgpt.com",
-        "sessions": 94,
-        "totalUsers": 93
+        "sessions": 96,
+        "totalUsers": 95
       },
       {
         "source": "gemini.google.com",
@@ -32,8 +32,8 @@
     "topLandingPages": [
       {
         "landingPage": "/",
-        "sessions": 12,
-        "totalUsers": 12
+        "sessions": 13,
+        "totalUsers": 13
       },
       {
         "landingPage": "/en/articles/topia-2026-info.html",
@@ -42,8 +42,8 @@
       },
       {
         "landingPage": "/en/festivals/labyrinth.html",
-        "sessions": 9,
-        "totalUsers": 9
+        "sessions": 8,
+        "totalUsers": 8
       },
       {
         "landingPage": "/articles/japan-festival-2026-september.html",
@@ -131,8 +131,8 @@
         "totalUsers": 1
       }
     ],
-    "allSessions": 2429,
-    "allTotalUsers": 1848
+    "allSessions": 2422,
+    "allTotalUsers": 2105
   },
   "previous": {
     "sessions": 0,
