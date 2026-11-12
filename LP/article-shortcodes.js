@@ -297,6 +297,69 @@ function renderPullquote(text, source = '', lang = 'en') {
   return `<aside class="tj-pullquote"><p class="tj-pullquote-text">${escapeHtml(quote)}</p>${attribution ? `<p class="tj-pullquote-source">— ${escapeHtml(attribution)}</p>` : ''}</aside>`;
 }
 
+function splitFirstSemicolon(value) {
+  const decoded = decodeHtmlEntities(value);
+  const index = decoded.indexOf(';');
+  if (index < 0) return null;
+  return [decoded.slice(0, index).trim(), decoded.slice(index + 1).trim()];
+}
+
+function renderQuote(text, speaker = '', lang = 'en') {
+  const fields = String(text ?? '').split('|').map((value) => value.trim());
+  if (!fields[0]) throw new Error('quoteの本文が空です');
+  if (fields.length > 2) throw new Error('quoteの項目が多すぎます（本文|話者名）');
+  const quote = fields[0];
+  const attribution = String(speaker || fields[1] || '').trim();
+  return `<figure class="tj-quote"><p class="tj-quote-text">${escapeHtml(quote)}</p>${attribution ? `<figcaption class="tj-quote-speaker">— ${escapeHtml(attribution)}</figcaption>` : ''}</figure>`;
+}
+
+function renderQuestion(text, lang = 'en') {
+  const fields = String(text ?? '').split('|').map((value) => value.trim());
+  if (!fields[0]) throw new Error('qの質問文が空です');
+  if (fields.length > 1) throw new Error('qの項目が多すぎます（質問文のみ）');
+  return `<p class="tj-q"><span class="tj-q-mark">Q</span><span class="tj-q-text">${escapeHtml(fields[0])}</span></p>`;
+}
+
+function parseTimelineFields(fields) {
+  const values = String(fields ?? '').split('|').map((value) => value.trim());
+  if (!values.length || (values.length === 1 && !values[0])) throw new Error('timelineの項目がありません');
+  return values.map((value) => {
+    const pair = splitFirstSemicolon(value);
+    if (!pair) throw new Error(`timelineの項目に「;」がありません: ${value}`);
+    const [year, event] = pair;
+    if (!year) throw new Error('timelineの年が空です');
+    if (!event) throw new Error('timelineの出来事が空です');
+    return { year, event };
+  });
+}
+
+function renderTimeline(fields, lang = 'en') {
+  const items = parseTimelineFields(fields);
+  return `<ol class="tj-timeline">${items.map(({ year, event }) => `<li class="tj-timeline-item"><span class="tj-timeline-year">${escapeHtml(year)}</span><span class="tj-timeline-text">${escapeHtml(event)}</span></li>`).join('')}</ol>`;
+}
+
+function parseProfileFields(fields) {
+  const values = String(fields ?? '').split('|').map((value) => value.trim());
+  const name = values.shift() || '';
+  if (!name) throw new Error('profileの名前が空です');
+  return { name, items: values.map((value) => {
+    const pair = splitFirstSemicolon(value);
+    if (!pair) throw new Error(`profileの項目に「;」がありません: ${value}`);
+    const [label, itemValue] = pair;
+    if (!label) throw new Error('profileの項目名が空です');
+    if (!itemValue) throw new Error('profileの値が空です');
+    return { label, value: itemValue };
+  }) };
+}
+
+function renderProfile(fields, lang = 'en') {
+  const profile = parseProfileFields(fields);
+  const list = profile.items.length
+    ? `<dl class="tj-profile-list">${profile.items.map(({ label, value }) => `<div class="tj-profile-row"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`).join('')}</dl>`
+    : '';
+  return `<aside class="tj-profile" aria-label="Profile"><p class="tj-profile-kicker">PROFILE</p><p class="tj-profile-name">${escapeHtml(profile.name)}</p>${list}</aside>`;
+}
+
 function renderDetails(summary, innerHtml) {
   const heading = String(summary || '').trim();
   if (!heading) throw new Error('detailsの見出しが空です');
@@ -388,6 +451,20 @@ function renderArticleShortcodes(source, { lang = 'en', festivalIds, festivalDat
     const [quote, source = ''] = fields.split('|');
     return renderPullquote(quote, source, lang);
   });
+  const blockCounts = { quotes: 0, questions: 0, timelines: 0, profiles: 0 };
+  html = html.replace(/<p(?:\s[^>]*)?>\s*(\[\[(quote|q|timeline|profile)\|[^\]]*\]\])\s*<\/p>/g, (_, shortcode, type) => {
+    const match = /^\[\[(quote|q|timeline|profile)\|([^\]]*)\]\]$/.exec(shortcode);
+    const fields = match[2];
+    blockCounts[type === 'quote' ? 'quotes' : type === 'q' ? 'questions' : `${type}s`] += 1;
+    if (type === 'quote') return renderQuote(fields, '', lang);
+    if (type === 'q') return renderQuestion(fields, lang);
+    if (type === 'timeline') return renderTimeline(fields, lang);
+    return renderProfile(fields, lang);
+  });
+  if (/\[\[(quote|q|timeline|profile)(?:\||\]\])/.test(html)) {
+    const type = html.match(/\[\[(quote|q|timeline|profile)/)?.[1] || 'shortcode';
+    throw new Error(`${type}は1行・1段落で書いてください: [[${type}|…]]`);
+  }
   // CMSのQuillは短いコードを<p>[[event|...]]</p>として保存する。
   // article/nav はpの子にできないため、ブロックの外側だけを取り除いて
   // ブラウザのHTMLパーサーによるDOMの組み替えを防ぐ。
@@ -396,9 +473,9 @@ function renderArticleShortcodes(source, { lang = 'en', festivalIds, festivalDat
     .replace(/<p>\s*(<nav class="tj-calendar[\s\S]*?<\/nav>)\s*<\/p>/g, '$1')
     .replace(/<p>\s*(<aside class="tj-artist-card[\s\S]*?<\/aside>)\s*<\/p>/g, '$1')
     .replace(/<p>\s*(<aside class="tj-pullquote[\s\S]*?<\/aside>)\s*<\/p>/g, '$1');
-  return { html, events, calendars: calendarMatches.length, artistCards, pullquotes: pullquotes.length, details };
+  return { html, events, calendars: calendarMatches.length, artistCards, pullquotes: pullquotes.length, details, ...blockCounts };
 }
 
-const API = { parseEventFields, parseEvents, renderEvent, renderArtistCard, renderPullquote, renderDetails, renderCalendar, renderArticleShortcodes, autolinkArtists, safeUrl };
+const API = { parseEventFields, parseEvents, renderEvent, renderArtistCard, renderPullquote, renderQuote, renderQuestion, renderTimeline, renderProfile, renderDetails, renderCalendar, renderArticleShortcodes, autolinkArtists, safeUrl };
 globalThis.TJArticleShortcodes = API;
-export { parseEventFields, parseEvents, parseMonthFilter, renderEvent, renderArtistCard, renderPullquote, renderDetails, renderCalendar, renderArticleShortcodes, autolinkArtists, safeUrl };
+export { parseEventFields, parseEvents, parseMonthFilter, renderEvent, renderArtistCard, renderPullquote, renderQuote, renderQuestion, renderTimeline, renderProfile, renderDetails, renderCalendar, renderArticleShortcodes, autolinkArtists, safeUrl };
