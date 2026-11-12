@@ -15238,6 +15238,7 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - `LP/cms.js`: 使える機能一覧に4行、英語版の注記、「📄 テンプレ」のインタビュー雛形を新構成に。記事プレビューの detail.css / article-fx.js の版を追随。
 - `docs/writing/ARTICLE_BODY_SPEC_FOR_AI.md` / `ARTICLE_BODY_FEATURES.md`: 4節とインタビュー記事の構成。META の `RELATED_ARTISTS` を実装済みの `artistIds` / `venueIds` に訂正。
 - `scripts/check_article_shortcodes.mjs`: 正常系・境界値・不正書式のテスト追加。
+- 使い方の説明（CMS の「？ 使い方」= `ARTICLE_BODY_HELP` と `docs/writing/ARTICLE_BODY_FEATURES.md`、同文）: 4種の説明を詳しくし「インタビュー記事の組み立て」を追加、「ブロックの注意」に公開が止まる条件、§4 を「サイト内リンク・関連付け」にして関連フェス／関連アーティスト・関連会場の欄の使い方を追加。local CMS で「？ 使い方」を開き表示を確認。
 - ?v: DETAIL_CSS_VERSION 95 / ARTICLE_FX_JS_VERSION 16 / article-shortcodes.js 11 / cms.css 54 / cms.js 203。
 
 ### コミット
