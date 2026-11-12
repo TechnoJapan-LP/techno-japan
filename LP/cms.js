@@ -1049,6 +1049,7 @@ function saveArticleDraft(){
       id: g('ar-id'), title: g('ar-title'), category: g('ar-category'),
       date: g('ar-date'), updatedAt: g('ar-updatedAt'), updated_at: g('ar-updatedAt'), author: g('ar-author'), image: g('ar-image'),
       cardRatio: g('ar-cardRatio'), heroRatio: g('ar-heroRatio'), festivalId: g('ar-festivalId'),
+      artistIds: g('ar-artistIds'), venueIds: g('ar-venueIds'),
       readTime: g('ar-readTime'), views: g('ar-views'),
       featured: document.getElementById('ar-featured')?.value || 'false',
       status: g('ar-status'), excerpt: g('ar-excerpt'),
@@ -1074,6 +1075,8 @@ function tryRecoverArticleDraft(){
     setVal('ar-category', draft.category||'REPORT'); setVal('ar-date', fmtDate(draft.date)); setVal('ar-updatedAt', fmtDate(draft.updated_at || draft.updatedAt));
     setVal('ar-cardRatio', draft.cardRatio||''); setVal('ar-heroRatio', draft.heroRatio||'');
     festPickerSetValue(draft.festivalId||'');
+    entityPickerSetValue('artist', draft.artistIds || '');
+    entityPickerSetValue('venue', draft.venueIds || '');
     setVal('ar-author', draft.author||'TECHNO JAPAN 編集部'); setVal('ar-image', draft.image);
     setVal('ar-readTime', draft.readTime); setVal('ar-views', draft.views);
     setVal('ar-featured', draft.featured); setVal('ar-status', draft.status||'published');
@@ -1851,7 +1854,7 @@ function previewRenderBody_(body){
 function writeArticleSimplePreview_(win, title, body){
   const safeBody = String(body || '').replace(/<script/gi, '&lt;script');
   win.document.open();
-      win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><link rel="stylesheet" href="/common.css?v=59"><link rel="stylesheet" href="/detail.css?v=93"><link rel="stylesheet" href="/article-fx.css?v=22"><style>/* フォールバックでは common.js を読まないためネイティブカーソルに戻す */*{cursor:auto !important}a,button,[role="button"],summary{cursor:pointer !important}</style></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${esc(title)}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=15"><\/script></body></html>`);
+      win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><link rel="stylesheet" href="/common.css?v=59"><link rel="stylesheet" href="/detail.css?v=94"><link rel="stylesheet" href="/article-fx.css?v=22"><style>/* フォールバックでは common.js を読まないためネイティブカーソルに戻す */*{cursor:auto !important}a,button,[role="button"],summary{cursor:pointer !important}</style></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${esc(title)}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=15"><\/script></body></html>`);
   win.document.close();
 }
 async function openArticleGeneratedPreview(){
@@ -2153,6 +2156,71 @@ function festPickerSetValue(id){
     });
   }
 }
+function entityPickerRows(entity) { return readSheetCache(entity) || []; }
+function entityPickerFilter(entity) {
+  const input = document.getElementById('ar-' + entity + 'Ids-search');
+  const list = document.getElementById('ar-' + entity + 'Ids-list');
+  if (!input || !list) return;
+  const rows = entityPickerRows(entity).filter((row) => row.id);
+  if (!rows.length) {
+    list.innerHTML = '<div class="fp-empty">一覧を読み込み中…</div>';
+    list.hidden = false;
+    ensureSheetCache(entity).then(() => { if (!list.hidden) entityPickerFilter(entity); });
+    return;
+  }
+  const q = input.value.toLocaleLowerCase().trim();
+  const selected = new Set(g('ar-' + entity + 'Ids').split(',').filter(Boolean));
+  const hits = rows.filter((row) => {
+    const names = [row.name, row.name_en, row.NAME, row.NAME_EN, row.id].filter(Boolean).map(String).join(' ').toLocaleLowerCase();
+    return (!q || names.includes(q)) && !selected.has(String(row.id));
+  }).slice(0, 40);
+  list.innerHTML = hits.length
+    ? hits.map((row) => '<button type="button" data-picker-entity="'+entity+'" data-id="'+esc(row.id)+'" data-name="'+esc(row.name || row.name_en || row.id)+'">'+esc(row.name || row.name_en || row.id)+'<span class="fp-id">'+esc(row.id)+'</span></button>').join('')
+    : '<div class="fp-empty">該当なし</div>';
+  list.hidden = false;
+}
+function entityPickerSelect(entity, id, name) {
+  const input = document.getElementById('ar-' + entity + 'Ids');
+  const ids = input.value.split(',').map((value) => value.trim()).filter(Boolean);
+  if (!ids.includes(id)) ids.push(id);
+  input.value = ids.join(',');
+  const selected = document.getElementById('ar-' + entity + 'Ids-selected');
+  selected.innerHTML = ids.map((value) => '<span class="entity-chip">'+esc((value === id ? name : (entityPickerRows(entity).find((row) => String(row.id) === value)?.name || value)))+' <button type="button" class="fp-clear" data-picker-remove="'+esc(value)+'" data-picker-entity="'+entity+'" title="解除">×</button></span>').join('');
+  selected.hidden = false;
+  document.getElementById('ar-' + entity + 'Ids-search').value = '';
+  document.getElementById('ar-' + entity + 'Ids-list').hidden = true;
+  markFormDirty();
+}
+function entityPickerRemove(entity, id) {
+  const ids = g('ar-' + entity + 'Ids').split(',').filter((value) => value && value !== id);
+  document.getElementById('ar-' + entity + 'Ids').value = ids.join(',');
+  entityPickerRender(entity);
+  markFormDirty();
+}
+function entityPickerRender(entity) {
+  const input = document.getElementById('ar-' + entity + 'Ids');
+  const selected = document.getElementById('ar-' + entity + 'Ids-selected');
+  if (!input || !selected || !input.value) { if (selected) selected.hidden = true; return; }
+  selected.innerHTML = input.value.split(',').filter(Boolean).map((id) => {
+    const row = entityPickerRows(entity).find((item) => String(item.id) === id);
+    return '<span class="entity-chip">'+esc(row?.name || id)+' <button type="button" class="fp-clear" data-picker-remove="'+esc(id)+'" data-picker-entity="'+entity+'" title="解除">×</button></span>';
+  }).join('');
+  selected.hidden = false;
+}
+function entityPickerSetValue(entity, value) {
+  const ids = (Array.isArray(value) ? value : String(value || '').split(',')).map((id) => String(id).trim()).filter(Boolean);
+  const input = document.getElementById('ar-' + entity + 'Ids');
+  if (!input) return;
+  input.value = [...new Set(ids)].join(',');
+  entityPickerRender(entity);
+  if (!entityPickerRows(entity).length) ensureSheetCache(entity).then(() => entityPickerRender(entity));
+}
+document.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-picker-entity][data-id]');
+  if (button) entityPickerSelect(button.dataset.pickerEntity, button.dataset.id, button.dataset.name);
+  const remove = event.target.closest('[data-picker-remove]');
+  if (remove) entityPickerRemove(remove.dataset.pickerEntity, remove.dataset.pickerRemove);
+});
 document.addEventListener('click', e => {
   const wrap = document.getElementById('ar-festivalId-picker');
   const list = document.getElementById('ar-festivalId-list');
@@ -4630,7 +4698,7 @@ const debouncedFilterAuthor = debounce(()=>filterAuthorList(), 200);
    まだ知らない列を扱う箇所が壊れる）。AUDIT §9-69。 */
 const SHEET_FIELD_NAMES = [
   // ARTICLES
-  'title_en','excerpt_en','body_en','cardRatio','heroRatio','festivalId','readTime','updatedAt',
+  'title_en','excerpt_en','body_en','cardRatio','heroRatio','festivalId','artistIds','venueIds','readTime','updatedAt',
   'metaDescription','publishAt','ogImage','editorNotes','authorId',
   // FESTIVALS / VENUES / ARTISTS
   'name_en','desc_en','bio_en','location_ja','name_ja','ticketUrl','venueId','instagramUrl',
@@ -5136,6 +5204,8 @@ function editRow(section, rowNum){
     setVal('ar-category',row.category||'REPORT'); setVal('ar-date',fmtDate(row.date)); setVal('ar-updatedAt',fmtDate(row.updated_at || row.updatedAt));
     setVal('ar-cardRatio',row.cardRatio||''); setVal('ar-heroRatio',row.heroRatio||'');
     festPickerSetValue(row.festivalId||'');
+    entityPickerSetValue('artist', row.artistIds || row.artistids || '');
+    entityPickerSetValue('venue', row.venueIds || row.venueids || '');
     setVal('ar-title_en',row.title_en||''); setVal('ar-excerpt_en',row.excerpt_en||''); setVal('ar-body_en',row.body_en||''); renderEnglishBodyAltEditor();
     setVal('ar-author',row.author||'TECHNO JAPAN 編集部');
     setVal('ar-image',row.image); setVal('ar-readTime',row.readTime);
@@ -5497,7 +5567,7 @@ function saveEdit(section){
   else if(section==='article'){
     Object.assign(payload,{id:g('ar-id'),title:g('ar-title'),category:g('ar-category'),
       date:g('ar-date'),updatedAt:g('ar-updatedAt'),updated_at:g('ar-updatedAt'),author:g('ar-author'),image:g('ar-image'),readTime:g('ar-readTime'),
-      cardRatio:g('ar-cardRatio'),heroRatio:g('ar-heroRatio'),festivalId:g('ar-festivalId'),
+      cardRatio:g('ar-cardRatio'),heroRatio:g('ar-heroRatio'),festivalId:g('ar-festivalId'),artistIds:g('ar-artistIds'),venueIds:g('ar-venueIds'),
       title_en:g('ar-title_en'),excerpt_en:g('ar-excerpt_en'),body_en:g('ar-body_en'),
       views:g('ar-views'),featured:g('ar-featured'),excerpt:g('ar-excerpt'),
       body:getArticleBodyForSave(),tags:g('ar-tags'),status:g('ar-status')});
@@ -6739,7 +6809,7 @@ function submitToSheet(section){
   else if(section==='article'){
     payload={action:'add_article',id:g('ar-id'),title:g('ar-title'),category:g('ar-category'),
       date:g('ar-date'),updatedAt:g('ar-updatedAt'),updated_at:g('ar-updatedAt'),author:g('ar-author'),image:g('ar-image'),readTime:g('ar-readTime'),
-      cardRatio:g('ar-cardRatio'),heroRatio:g('ar-heroRatio'),festivalId:g('ar-festivalId'),
+      cardRatio:g('ar-cardRatio'),heroRatio:g('ar-heroRatio'),festivalId:g('ar-festivalId'),artistIds:g('ar-artistIds'),venueIds:g('ar-venueIds'),
       title_en:g('ar-title_en'),excerpt_en:g('ar-excerpt_en'),body_en:g('ar-body_en'),
       views:g('ar-views'),featured:g('ar-featured'),excerpt:g('ar-excerpt'),
       body:getArticleBodyForSave(),tags:g('ar-tags'),status:g('ar-status')};
@@ -7654,7 +7724,7 @@ function publishSanityCheck(d){
      **「惜しい」列だけを指す。**大小文字・記号・空白を取り除いた形が
      既知の項目と一致するものだけ挙げる。AUDIT §9-68。 */
   const ARTICLE_FIELDS = ['id','title','title_en','excerpt','excerpt_en','body','body_en',
-    'category','date','updatedAt','author','authorId','image','cardRatio','heroRatio','festivalId',
+    'category','date','updatedAt','author','authorId','image','cardRatio','heroRatio','festivalId','artistIds','venueIds',
     'featured','views','readTime','tags','status','metaDescription','publishAt','ogImage','editorNotes'];
   const norm = s => String(s).toLowerCase().replace(/[^a-z0-9]/g,'');
   const known = new Map(ARTICLE_FIELDS.map(f => [norm(f), f]));
@@ -7772,13 +7842,27 @@ function publishPayloadSummary(content) {
   };
   const items = (name) => (block(name).match(/\n    id: "/g) || []).length;
   const field = (name, key) => (block(name).match(new RegExp('\\n    ' + key + ':', 'g')) || []).length;
+  const articleEntityRefWarnings = (articlesBlock, entityBlock, fieldName) => {
+    const refs = [...articlesBlock.matchAll(new RegExp(`${fieldName}: \\[([^\\]]*)\\]`, 'g'))]
+      .flatMap((match) => [...match[1].matchAll(/"([a-z0-9-]+)"/g)].map((match) => match[1]));
+    const known = new Set([...entityBlock.matchAll(/\n    id: "([a-z0-9-]+)"/g)]
+      .map((match) => match[1]));
+    return [...new Set(refs.filter((id) => !known.has(id)))];
+  };
+  const artistWarnings = articleEntityRefWarnings(block('ARTICLES'), block('ARTISTS'), 'artistIds');
+  const venueWarnings = articleEntityRefWarnings(block('ARTICLES'), block('VENUES'), 'venueIds');
+  const warningLines = (label, missing) => missing.length
+    ? [`  ⚠ ${label}参照警告: 未登録または非公開 ${missing.length}件 (${missing.join(', ')})`]
+    : [];
   return [
     'これから公開する内容',
     '',
     `  FESTIVALS  ${items('FESTIVALS')}件`,
     `  ARTISTS    ${items('ARTISTS')}件（紹介文 ${field('ARTISTS','bio')} / 画像 ${field('ARTISTS','image')} / リンク ${field('ARTISTS','links')}）`,
     `  VENUES     ${items('VENUES')}件（SUBTYPE ${field('VENUES','subtype')} / HOURS ${field('VENUES','hours')} / HOURS_EN ${field('VENUES','hours_en')} / ACCESS ${field('VENUES','access')} / FEATURES ${field('VENUES','features')}）`,
-    `  ARTICLES   ${items('ARTICLES')}件（英語本文 ${field('ARTICLES','body_en')} / 関連フェス ${field('ARTICLES','festivalId')}）`,
+    `  ARTICLES   ${items('ARTICLES')}件（英語本文 ${field('ARTICLES','body_en')} / 関連フェス ${field('ARTICLES','festivalId')} / 関連アーティスト ${field('ARTICLES','artistIds')} / 関連会場 ${field('ARTICLES','venueIds')}）`,
+    ...warningLines('アーティスト', artistWarnings),
+    ...warningLines('会場', venueWarnings),
     `  EVENTS     ${items('EVENTS')}件`,
     '',
     `  ファイルの大きさ ${Math.round(content.length / 1024)}KB`,
@@ -8135,6 +8219,11 @@ function buildArticlesJs(rows){
     if(r.image) l.push('    image: "'+q(r.image)+'",');
     if(r.cardRatio) l.push('    cardRatio: "'+q(r.cardRatio)+'",');
     if(r.festivalId) l.push('    festivalId: "'+q(r.festivalId)+'",');
+    const articleRefIds = (value) => [...new Set((Array.isArray(value) ? value : String(value || '').split(',')).map(v => String(v).trim().toLowerCase()).filter(v => /^[a-z0-9-]+$/.test(v)))];
+    const artistIds = articleRefIds(r.artistIds || r.artistids);
+    const venueIds = articleRefIds(r.venueIds || r.venueids);
+    if(artistIds.length) l.push('    artistIds: '+JSON.stringify(artistIds)+',');
+    if(venueIds.length) l.push('    venueIds: '+JSON.stringify(venueIds)+',');
     if(r.heroRatio) l.push('    heroRatio: "'+q(r.heroRatio)+'",');
     if(r.featured === true || r.featured === 'true' || r.featured === 'TRUE') l.push('    featured: true,');
     if(r.views) l.push('    views: '+(parseInt(r.views,10)||0)+',');
@@ -8305,7 +8394,7 @@ function resetForm(section){
     festival:['f-id','f-name','f-name_ja','f-city','f-sound','f-location','f-location_ja','f-url','f-ticketUrl','f-instagram','f-address','f-lat','f-lng','f-dateStart','f-dateEnd','f-image','f-imagePosition','f-flyer','f-heroGradient','f-desc','f-imageUrl','f-flyerUrl'],
     artist:['a-id','a-name','a-city','a-country','a-genre','a-image','a-imagePosition','a-bio','a-instagram','a-soundcloud','a-bandcamp','a-website','a-imageUrl'],
     event:['e-name','e-date','e-venue','e-city','e-time','e-desc','e-link'],
-    article:['ar-id','ar-title','ar-category','ar-date','ar-updatedAt','ar-author','ar-image','ar-imageUrl','ar-readTime','ar-views','ar-excerpt','ar-body','ar-tags','ar-cardRatio','ar-heroRatio','ar-festivalId','ar-title_en','ar-excerpt_en','ar-body_en'],
+    article:['ar-id','ar-title','ar-category','ar-date','ar-updatedAt','ar-author','ar-image','ar-imageUrl','ar-readTime','ar-views','ar-excerpt','ar-body','ar-tags','ar-cardRatio','ar-heroRatio','ar-festivalId','ar-artistIds','ar-venueIds','ar-title_en','ar-excerpt_en','ar-body_en'],
     author:['au-id','au-name','au-bio','au-image','au-instagram','au-twitter','au-website'],
   }[section];
   fields.forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
@@ -8315,7 +8404,7 @@ function resetForm(section){
   if(section==='festival'){document.getElementById('f-type').value='festival';document.querySelectorAll('#f-genre .chip').forEach(c=>c.classList.remove('selected'));document.querySelectorAll('#f-gradientPresets .gradient-swatch').forEach(s=>s.classList.remove('selected'));lineups.f=[];renderLineupTags('f');editions.length=0;renderEditions();document.getElementById('lineup-fetch-status').style.display='none';document.getElementById('gradient-preview').style.display='none';document.getElementById('bulk-lineup-wrap').style.display='none'}
   if(section==='festival') { setFestivalDateEditingMode(false); setSoundGalleryAvailability('festival',false); }
   if(section==='event'){lineups.e=[];renderLineupTags('e')}
-  if(section==='article'){document.getElementById('ar-category').value='REPORT';document.getElementById('ar-featured').value='false';document.getElementById('ar-status').value='published';document.getElementById('ar-author').value='TECHNO JAPAN 編集部';setArticleBody('')}
+  if(section==='article'){document.getElementById('ar-category').value='REPORT';document.getElementById('ar-featured').value='false';document.getElementById('ar-status').value='published';document.getElementById('ar-author').value='TECHNO JAPAN 編集部';entityPickerRender('artist');entityPickerRender('venue');setArticleBody('')}
   // Publishing fields をクリア（author以外）
   if(section !== 'author') clearPubFields(section);
   // author には出力ボックスが無い（無い場合に落ちると保存フローが途中で死ぬ）

@@ -474,8 +474,8 @@ const c = makeCtx();
   check('フェスの件数を出す', /FESTIVALS\s+2件/.test(sum), sum);
   check('アーティストの件数と内訳を出す',
     /ARTISTS\s+2件（紹介文 1 \/ 画像 1 \/ リンク 1）/.test(sum), sum);
-  check('記事の英語本文と関連フェスの数を出す',
-    /ARTICLES\s+1件（英語本文 1 \/ 関連フェス 1）/.test(sum), sum);
+  check('記事の英語本文と関連フェス・アーティスト・会場の数を出す',
+    /ARTICLES\s+1件（英語本文 1 \/ 関連フェス 1 \/ 関連アーティスト 0 \/ 関連会場 0）/.test(sum), sum);
   check('VENUESの追加列の件数を出す',
     /VENUES\s+1件（SUBTYPE 1 \/ HOURS 1 \/ HOURS_EN 1 \/ ACCESS 1 \/ FEATURES 1）/.test(sum), sum);
   const venueJs = c.__T.buildVenuesJs([{

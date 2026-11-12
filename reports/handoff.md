@@ -15173,3 +15173,51 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 - `105447610` を push（pre-push の preflight 全件合格）→ Deploy LP to GitHub Pages run 42762865655 が success（11/08 以来の連続失敗が解消）。
 - 本番 https://techno-japan.media で確認: `index.html` が `top-phase2.js?v=12` を参照、`/en/submit.html` に name_en 優先のコードあり。headless Chrome（UA に TJAudit）で `/index.html` `/en/index.html` を 1440px / 390px 表示し、各6枚・出演予定4人が先頭・補充カードは genre · city・JS 例外なし・横はみ出しなし。
+
+
+## 2026-11-12 / 記事 ⇄ アーティスト・会場の明示的な紐づけ（artistIds / venueIds）
+
+設計 Claude / 実装 Codex（設計書と修正指示5回）/ レビュー・検証 Claude。
+
+### 実施
+
+- ARTICLES に `artistIds` / `venueIds`（ID のカンマ区切り、複数可）を新設。列はオーナーがシート見出し行の末尾に追加済み（2026-11-12）。GAS 変更なし（buildRowFromHeaders）。
+- CMS（`LP/cms.html` / `LP/cms.js`）: 「関連アーティスト（複数可）」「関連会場（複数可）」の検索付き複数選択ピッカー（チップ＋×解除）。下書き保存/復元・既存行読み込み・保存2経路（update_row / add_article）・resetForm・`SHEET_FIELD_NAMES`・`ARTICLE_FIELDS`・data.js 生成（配列で出力、trim/重複/不正ID除去）・公開前サマリ（件数＋未登録/非公開IDの警告。止めない）。
+- ビルド（`scripts/build-detail-pages.mjs`、共通ロジック `scripts/lib/article-entity-links.mjs`）:
+  - アーティスト詳細 / 会場詳細の Stories: 明示紐づけの記事を先頭、その後に既存の自動一致（上限3は据え置き）
+  - 記事詳細: 本文直後・Related Stories の前に「この記事に登場する / In this story」（88px 正方形サムネの横長カード）。紐づけ無しなら出さない
+  - Related Stories: festivalId 一致の次に、同じアーティスト/会場を紐づけた記事を優先
+  - JSON-LD: アーティストを `about`、会場を `mentions`（詳細ページの URL）
+- 検査 `scripts/check_article_entity_links.mjs` を新設し preflight に追加。`check_cms_publish_guard.mjs` の期待値更新。
+- DETAIL_CSS_VERSION 93→94（CMS の記事プレビューも 94）、cms.js?v=202、cms.css?v=50。
+- `docs/DATA_SCHEMA.md` §3.1 を実装に合わせて更新（未実装だった RELATED_* 案を置き換え）。
+
+### コミット
+
+- このエントリを含むコミット（本文参照）。
+
+### 検証
+
+- 生成: 既存記事 `mutek-jp-2026-info` に一時的に `artistIds:["dj-nobu"]` `venueIds:["womb"]` を足して生成 → 記事 JA/EN にカード・JSON-LD、`/artists/dj-nobu.html` `/venues/womb.html` の Stories に記事リンクを確認。その後 data.js を git checkout で戻し、実データで再生成。
+- 実ブラウザ（headless Chrome CDP、local `serve_local.py`）: 390px dpr2/dpr3・1280px dpr1 で撮影。セクション高さ PC 1313px（初版の4:5カード）→169px。横はみ出しなし（scrollWidth=幅）。
+- 画質: 初版は sizes 不足で 312px 表示に 163px 取得 → `coverSizes(image,1,'88px')`（=calc(88px*1.5)）に修正。dpr3 で 480×320 を選択（高さ 320 ≥ 264）。
+- CMS（local、ダミートークン・fetch/XHR/gasPostJson_ を差し替え、本番への送信0件）: 検索→クリック選択→チップ、選択済みは候補から除外、×解除、下書き保存→reset→復元、get_sheet の小文字列名（artistids）での読み込み、保存ペイロード（update_row に artistIds/venueIds を含む）、buildArticlesJs の正規化、公開前サマリの未登録警告（実在IDは警告なし）すべて期待どおり。
+- レビューで直したもの: 公開前警告の正規表現が二重エスケープで実在IDを1件も拾えなかった（全件誤警告になる）/ articleRefIds の重複定義 / 未定義トークン --text-a24 / cms.css?v 据え置き / CMS プレビューの detail.css 版。
+- `bash scripts/preflight.sh`（省略なし）: 3回目で 78/79 合格。落ちた1件「読み込み中のずれ（CLS）」は CDP の Page.navigate タイムアウト（9ページ、計測前に失敗）。2回目の実行では合格しており、単独再実行 `node scripts/check_hub_cls.mjs` で 28ページ合格（最大 CLS 0.009）。push 時の pre-push で全件を再実行。
+
+### 変更したパターン
+
+- 記事→エンティティの紐づけ: festivalId（単一・既存）に加え artistIds / venueIds（複数）。
+- エンティティ詳細の Stories 選定: 「明示 → 自動一致」の順（artist / venue の2箇所）。
+- CMS の記事保存項目を足すときに触る箇所: saveArticleDraft / tryRecoverArticleDraft / editRow / saveEdit / submitToSheet / resetForm / SHEET_FIELD_NAMES / ARTICLE_FIELDS / buildArticlesJs / publishPayloadSummary（10箇所）。
+
+### 未確認の類似パターン
+
+- CMS 本番での実機確認（ピッカー表示・Publish Now → `cms: publish data.js` コミット）: **実機未確認**（push 後に実施して追記する）。
+- ハブ（news.html 等）の記事カードはアーティスト/会場を表示しない（data-hub.js には artistIds/venueIds が入るが未使用）: 確認済み・意図どおり。
+- EVENTS の LINEUP など他の参照系は変更なし: 確認済み・0件。
+
+### 次の担当への注意・判断待ち
+
+- 紐づけは Publish Now 後に反映。インタビュー記事はオーナーが CMS で作成予定（「関連アーティスト」で選ぶ）。
+- `festivalId` の複数化は今回の範囲外。

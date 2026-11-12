@@ -1,3 +1,5 @@
+import { articleRefIds } from './article-entity-links.mjs';
+
 function escapeRegExp(value) {
   return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
@@ -26,6 +28,7 @@ function festivalRecordsFor(artistFestivalIds, festivals) {
 export function articleMatchReason(article, artist, { artistFestivalIds = [], festivals = [] } = {}) {
   if (!article || !artist) return null;
   const id = String(artist.id || '').trim();
+  if (articleRefIds(article, 'artistIds').includes(id.toLowerCase())) return 'artist-id';
   const link = id && new RegExp(`(?:/en)?/artists/${escapeRegExp(id)}\\.html(?:["'#?]|$)`, 'i');
   const fields = fieldsOf(article);
   if (link && fields.some((value) => link.test(value))) return 'artist-link';

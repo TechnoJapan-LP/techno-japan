@@ -27,6 +27,7 @@ import { imageSizeAttrs } from './lib/image-size.mjs';
 import { addHeadingPhraseBreaks, clauseBreaks } from './lib/phrase-breaks.mjs';
 import { autolinkArtists, parseEvents, renderArticleShortcodes } from '../LP/article-shortcodes.js';
 import { articleMatchesArtist } from './lib/artist-page-utils.mjs';
+import { articleRefIds, prioritizeEntityArticles } from './lib/article-entity-links.mjs';
 import { loadArticleImageMap, replaceMappedArticleImages } from './lib/article-body-images.mjs';
 import { contentHash, contentRow } from './lib/content-dates.mjs';
 import { resolveLineupArtist } from './lib/lineup-artist.mjs';
@@ -58,7 +59,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 93;
+const DETAIL_CSS_VERSION = 94;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -1551,6 +1552,31 @@ function relatedFestivalCardHtml(festival, lang, prefix, editionsByFestival, edi
   </a>`;
 }
 
+function relatedEntityCardHtml(entity, kind, lang, prefix) {
+  const id = String(entity.id || '').trim();
+  const isArtist = kind === 'artist';
+  const name = lang === 'en' ? (entity.name_en || entity.name) : entity.name;
+  const detail = isArtist
+    ? artistGenres(entity).join(' / ')
+    : (lang === 'en' ? placeEn(entity.city || entity.area) : placeJa(entity.city || entity.area));
+  const sub = `${isArtist ? (lang === 'en' ? 'Artist' : 'アーティスト') : (lang === 'en' ? 'Venue' : '会場')}${detail ? ` · ${detail}` : ''}`;
+  const image = entity.image ? cardImagePath(entity.image) : '';
+  const href = `${prefix}/${isArtist ? 'artists' : 'venues'}/${encodeURIComponent(id)}.html`;
+  return `<a class="article-entity-card" href="${href}">
+    <div class="article-entity-thumb">${image ? `<img ${dimensionAttrs(image)} src="/${image}"${largeSrcsetAttr(entity.image, coverSizes(entity.image, 1, '88px'))} alt="${esc(name)}" loading="lazy" decoding="async"${imagePositionStyle(entity)}>` : ''}</div>
+    <div class="article-entity-copy"><div class="article-entity-name">${esc(name)}</div><div class="article-entity-meta">${esc(sub)}</div></div>
+  </a>`;
+}
+
+function relatedEntityHtml(artists, venues, lang, prefix) {
+  const items = [
+    ...(artists || []).map((item) => ({ item, kind: 'artist' })),
+    ...(venues || []).map((item) => ({ item, kind: 'venue' })),
+  ];
+  if (!items.length) return '';
+  return `<section class="article-entities"><div class="related-section-head"><h2 class="disp">${lang === 'en' ? 'In this story' : 'この記事に登場する'}</h2></div><div class="article-entities-grid">${items.map(({ item, kind }) => relatedEntityCardHtml(item, kind, lang, prefix)).join('')}</div></section>`;
+}
+
 function selectRelatedFestivals(article, body, festivals, editionsByFestival, primaryFestivalId) {
   const maxRelatedFestivals = 6;
   const published = (festivals || []).filter(isPublishedFestival);
@@ -1669,9 +1695,15 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   const relatedFestivalPath = relatedFestival
     ? path.join(LP_DIR, 'festivals', `${relatedFestival.id}.html`)
     : '';
+  const linkedArtists = (artists || []).filter((artist) => articleRefIds(a, 'artistIds').includes(String(artist.id || '').toLowerCase()) && String(artist.status || '').toLowerCase() !== 'draft');
+  const linkedVenues = (venues || []).filter((venue) => articleRefIds(a, 'venueIds').includes(String(venue.id || '').toLowerCase()) && String(venue.status || '').toLowerCase() !== 'draft');
   const about = relatedFestival && fs.existsSync(relatedFestivalPath)
     ? [{ '@id': `${BASE}/festivals/${encodeURIComponent(relatedFestival.id)}.html#festival` }]
-    : undefined;
+    : [];
+  about.push(...linkedArtists.map((artist) => {
+    const url = `${BASE}${L.prefix}/artists/${encodeURIComponent(artist.id)}.html`;
+    return { '@type': artistSchemaType(artist), name: lang === 'en' ? (artist.name_en || artist.name) : artist.name, url, sameAs: url };
+  }));
   const articleImages = articleImageVariants(a.image, a.imagePosition);
   const isOrganizationAuthor = authorView.isOrganization;
   const relatedEdition = relatedFestival ? latestEdition(editionsByFestival.get(festivalId) || []) : null;
@@ -1693,7 +1725,8 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
     },
     wordCount: stripTags(L.body || '').length,
     thumbnailUrl: articleImages[0] || image,
-    ...(about ? { about } : {}),
+    ...(about.length ? { about } : {}),
+    ...(linkedVenues.length ? { mentions: linkedVenues.map((venue) => { const url = `${BASE}${L.prefix}/venues/${encodeURIComponent(venue.id)}.html`; return { '@type': 'Place', name: venue.name, url, sameAs: url }; }) } : {}),
     inLanguage: lang,
     datePublished: isoDateTime(a.date),
     dateModified: isoDateTime(a.updatedAt || a.date),
@@ -1785,6 +1818,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
     <div class="related-festivals-track">${relatedFestivals.map((festival) => relatedFestivalCardHtml(festival, lang, L.prefix, editionsByFestival, null, relatedFestivalSrcsetAttr, true)).join('')}</div>
   </section>`
     : '';
+  const linkedEntityHtml = relatedEntityHtml(linkedArtists, linkedVenues, lang, L.prefix);
 
   const articleDateKey = (item) => String(item.publishedAt || item.date || '').trim();
   const publishedArticles = (articles || [])
@@ -1799,6 +1833,10 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
     }
   };
   addRelated(publishedArticles.filter((item) => festivalId && String(item.festivalId || '').trim() === festivalId));
+  addRelated(publishedArticles.filter((item) => (
+    articleRefIds(a, 'artistIds').some((id) => articleRefIds(item, 'artistIds').includes(id))
+    || articleRefIds(a, 'venueIds').some((id) => articleRefIds(item, 'venueIds').includes(id))
+  )));
   addRelated(publishedArticles.filter((item) => a.category && item.category === a.category));
   addRelated(publishedArticles);
   const relatedStoriesHtml = relatedArticles.length
@@ -1864,6 +1902,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
 ${festivalAside ? `        ${festivalAside}\n` : ''}${articleOverview ? `        ${articleOverview}\n` : ''}        <a class="article-sidebar-back mono" href="${hubHref}" data-article-hub-back="${hubHref}">${lang === 'en' ? 'All stories' : 'ALL STORIES'} →</a>
       </aside>
     </div>
+    ${linkedEntityHtml}
     ${relatedStoriesHtml}
     ${relatedFestivalHtml}
     <div class="article-footer">
@@ -3160,7 +3199,7 @@ function artistPage(a, artistsById, lang = 'ja', artistAppearances = new Map(), 
   const faqHtml = faqItems.length ? festivalFaqDetailsHtml(faqItems, lang, true) : '';
   const faqLd = faqJsonLd(faqItems);
   const artistFestivalIds = appearances.map(({ festival }) => festival.id);
-  const artistArticles = (articles || []).filter((article) => String(article.status || '').toLowerCase() !== 'draft' && articleMatchesArtist(article, a, { artistFestivalIds, festivals: XLINK.fests })).slice(0, 3);
+  const artistArticles = prioritizeEntityArticles(articles, a.id, 'artistIds', (article) => articleMatchesArtist(article, a, { artistFestivalIds, festivals: XLINK.fests }));
   const articlesHtml = artistArticles.length
     ? `<section class="artist-stories">
       <div class="festival-section-heading"><h2 class="disp">Stories</h2><a class="mono" href="${prefix}/news.html">All stories →</a></div>
@@ -3455,11 +3494,11 @@ function venuePage(v, lang = 'ja', allFestivals = [], editionsByFestival = new M
   const faqLd = faqJsonLd(faqItems);
   if (modified) jsonLd.dateModified = modified;
   if (eventRefs.length) jsonLd.event = eventRefs;
-  const venueArticles = (articles || []).filter((article) => {
-    if (!article || String(article.status || '').toLowerCase() === 'draft' || !venueNameForMatch) return false;
+  const venueArticles = prioritizeEntityArticles(articles, v.id, 'venueIds', (article) => {
+    if (!article || !venueNameForMatch) return false;
     return [article.title, article.title_en, article.body, article.body_en]
       .some((value) => stripTags(value || '').toLocaleLowerCase().includes(venueNameForMatch));
-  }).slice(0, 3);
+  });
   const gallery = venueGallerySources(v.gallery || v.GALLERY);
   const galleryImage = (source, sizes, loading = 'lazy') => {
     const sourcePath = String(source || '').trim().replace(/^\/+/, '');

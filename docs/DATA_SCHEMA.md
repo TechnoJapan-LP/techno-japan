@@ -376,8 +376,8 @@ ID 規約違反7件の是正(§1.1)ではリダイレクトを設けたが、そ
 | FEATURED | `TRUE` / 空欄 | トップ掲載フラグ |
 | EXCERPT / EXCERPT_EN | | |
 | body | HTML | セル上限5万字に注意。超える場合はGoogle Docs参照方式に移行を検討 |
-| RELATED_FESTIVALS | `transcendence` | ★新設。フェスIDのカンマ区切り。フェスページに関連記事を自動表示 |
-| RELATED_ARTISTS / RELATED_VENUES | | ★新設。同上 |
+| artistIds | `dj-nobu,wata-igarashi` | 関連アーティストIDのカンマ区切り。アーティスト詳細の Stories と記事詳細の導線に表示 |
+| venueIds | `womb` | 関連会場IDのカンマ区切り。会場詳細の Stories と記事詳細の導線に表示 |
 | (共通メタ §1.6) | | EVENTSと同様、camelCaseに統一 |
 
 - **VIEWSカラムは廃止**(手入力の閲覧数は維持不能。必要ならアナリティクスから取得)。
@@ -523,7 +523,7 @@ LINEUPS:   &gid=580984930
 - [ ] DATE / date / PUBLISHAT を DATE に一本化し、公開日を入力(現状published記事に日付なし)
 - [ ] author / AUTHORID を AUTHOR_ID に一本化(AUTHORSシートのIDと紐づけ)
 - [ ] category → CATEGORY 改名+プルダウン化
-- [ ] RELATED_FESTIVALS / RELATED_ARTISTS / RELATED_VENUES カラム新設(Transcendence記事に `transcendence` を設定)
+- [x] ARTICLES の `artistIds` / `venueIds` で関連アーティスト・会場を明示指定（`festivalId` は既存の単一指定を維持）
 - [ ] VIEWSカラム廃止
 - [ ] body内のDrive直リンク画像(`lh3.googleusercontent.com`)を `images/articles/` へ移設
 - [ ] 記事IDのslug化に合わせて BODY_HISTORY.articleId を一括置換(履歴の孤児化防止)
