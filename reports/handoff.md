@@ -15266,3 +15266,36 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 
 - マージ後、記事 `feature-yuta`（下書き）を新書式に書き換える場合は CMS のプレビューでエラーが出ないことを確認してから公開。
+
+## 2026-11-13 インタビュー用ショートコード4種 本番反映（PR #29）
+
+### 実施
+
+- PR #29 を main へマージ（4460ec1d6）。Deploy LP to GitHub Pages: success。Publish pipeline を手動で実行（run 43344961907）: success。
+
+### コミット
+
+- 4460ec1d6 Merge pull request #29（中身は上の「インタビュー記事用ショートコード」エントリと同じ）。
+
+### 検証
+
+- push 時の pre-push で `bash scripts/preflight.sh` 全79件成功（前日は Mac のスリープと高負荷で時間切れが続いた。電源接続・caffeinate で解消。変更起因の失敗は無し）。
+- 本番 https://techno-japan.media/cms.html?cb=乱数 : cms.js?v=204 / cms.css?v=54 / article-shortcodes.js?v=11 を読み込むことを確認。detail.css?v=95 に tj-timeline あり。
+- 本番 CMS を headless Chrome（760px、ダミートークン、GAS など外部への通信は遮断、本番データへの書き込みなし）で開き、`.ar-prev-body` で profile / q / quote / timeline を描画: 見た目正常、線と罫線の色あり、`R&amp;D;Records` は値に残る、`2021.07`・`2020〜2021` も正常。不正書式「;」無しで日本語のエラー文。
+
+### 変更したパターン
+
+- なし（マージと本番確認のみ）。
+
+### 未確認の類似パターン
+
+- 認証済み CMS で実際に保存→Publish Now を押す確認: **未確認**（ユーザー操作。記事 `feature-yuta` を保存・公開するときに合わせて確認する）。
+- 本番の公開記事ページでの表示: 新4種を使った公開記事がまだ無いため **未確認**（`feature-yuta` は下書き）。
+
+### 次の担当への注意・判断待ち
+
+- ユーザーへ CMS の Cmd+Shift+R を案内済み。
+- 2026-11-13 ユーザーの承認を得て、本番 ARTICLES 行25 `feature-yuta` の body に `[[q|…]]` を5本追加（ORIGIN / PSYCHEDELIC / INTUITION / LDG / SPECTACLE の各 quote の直前。文言はユーザー承認済み）。手順は get_sheet 全列→控えと一致確認→全列＋body で update_row（date は fmtDate）→読み直しで変化は body と lastEditedAt のみ、artistids=yuta・status=draft 維持を確認。変換で questions 6 / quotes 14 / 残り [[ 0。
+- 同日 10:58、ユーザーの Publish Now で `cms: publish data.js`（560c6569e）が届き、Publish pipeline も success。ただし `feature-yuta` は 10:58 の保存後もシート上 status=draft のままだったため、記事ページは生成されていない（/articles/feature-yuta.html は 404）。アーティストページ `artists/yuta.html` はこの Publish で新規生成された。記事の公開はユーザーが状態を「公開」にして保存→Publish Now をやり直す。
+- 注意: Publish Now のコミットは GAS 経由で、押してから main に現れるまで数分かかる（押した直後に「届いていない」と判断しないこと）。
+- `feature-yuta` を保存するとき、関連アーティストを選んで保存→読み直しで `artistids` が残るかも合わせて確認（前回からの持ち越し）。
