@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-10-28T04:56:33.831Z",
-  "count": 134,
+  "_generatedAt": "2026-11-13T01:27:08.513Z",
+  "count": 135,
   "items": [
     {
       "ID": "dj-nobu",
@@ -2067,6 +2067,23 @@
       "metaDescription": "東京を拠点にDJ、ライブ、作曲、サウンドデザインを横断するMARS89。Contact Tokyoでのオープン・トゥ・ラストやブリストル、ベルリン、台北、ソウルでのプレイ、Noods Radioのレジデント、インダストリアルからUKダブステップまで独自の音世界を紹介する。",
       "name_en": "MARS89",
       "bio_en": "A Tokyo artist working across DJing, live performance, composition and sound design. He has played open to last at Contact Tokyo, taken sets to Bristol, Berlin, Warsaw, Taipei, Seoul and Shanghai, and holds a residency on Bristol's Noods Radio. The sound pulls from early industrial, new wave, UK dubstep and Bristol bass culture, alongside techno, ambient and a filmic sense of atmosphere.",
+      "imagePosition": "center top"
+    },
+    {
+      "ID": "yuta",
+      "NAME": "YUTA",
+      "CITY": "TOKYO",
+      "COUNTRY": "JAPAN",
+      "GENRE": "TECHNO",
+      "IMAGE": "images/artists/yuta.webp",
+      "BIO": "YUTAは、東京を拠点とするDJ／プロデューサー。2004年にDJデビューし、90年代のゴアトランスに傾倒。MATSURI DIGITALの一員として活動したのち、2015年にテクノへ移行した。2016年にLiquid Drop Grooveを立ち上げ、イベントとレーベルの両輪で、サイケデリックグルーヴを軸にしたテクノを発信している。NESSとの共同レーベルChronoscope、野外フェスティバルEDEN、AVショーSPECTACLEも手がける。フロアの空気を読み、その場でセットを組み立てる。",
+      "INSTAGRAM": "https://www.instagram.com/yuta_ldg/",
+      "SOUNDCLOUD": "https://soundcloud.com/liquiddropgroove",
+      "BANDCAMP": "https://liquiddropgroove.bandcamp.com/",
+      "STATUS": "published",
+      "metaDescription": "東京を拠点に活動するDJ／プロデューサーYUTA。90年代ゴアトランスからテクノへ転身し、2016年にLiquid Drop Groove を始動。サイケデリックグルーヴを軸にしたレーベル運営やフェスEDENまで、その歩みと現在地を紹介する。",
+      "name_en": "YUTA",
+      "bio_en": "YUTA is a Tokyo-based DJ and producer. He made his DJ debut in 2004, immersing himself in the Goa trance of the '90s. After a stint as part of MATSURI DIGITAL, he shifted toward techno in 2015. In 2016 he launched Liquid Drop Groove, pushing techno built around psychedelic grooves across two fronts: the party and the label. He also runs Chronoscope, a label co-founded with NESS, the outdoor festival EDEN, and the AV show SPECTACLE. He reads the air of the floor, building his sets on the spot.",
       "imagePosition": "center top"
     }
   ]
