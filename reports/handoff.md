@@ -15266,3 +15266,67 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 
 - マージ後、記事 `feature-yuta`（下書き）を新書式に書き換える場合は CMS のプレビューでエラーが出ないことを確認してから公開。
+
+## 2026-11-13 インタビュー用ショートコード4種 本番反映（PR #29）
+
+### 実施
+
+- PR #29 を main へマージ（4460ec1d6）。Deploy LP to GitHub Pages: success。Publish pipeline を手動で実行（run 43344961907）: success。
+
+### コミット
+
+- 4460ec1d6 Merge pull request #29（中身は上の「インタビュー記事用ショートコード」エントリと同じ）。
+
+### 検証
+
+- push 時の pre-push で `bash scripts/preflight.sh` 全79件成功（前日は Mac のスリープと高負荷で時間切れが続いた。電源接続・caffeinate で解消。変更起因の失敗は無し）。
+- 本番 https://techno-japan.media/cms.html?cb=乱数 : cms.js?v=204 / cms.css?v=54 / article-shortcodes.js?v=11 を読み込むことを確認。detail.css?v=95 に tj-timeline あり。
+- 本番 CMS を headless Chrome（760px、ダミートークン、GAS など外部への通信は遮断、本番データへの書き込みなし）で開き、`.ar-prev-body` で profile / q / quote / timeline を描画: 見た目正常、線と罫線の色あり、`R&amp;D;Records` は値に残る、`2021.07`・`2020〜2021` も正常。不正書式「;」無しで日本語のエラー文。
+
+### 変更したパターン
+
+- なし（マージと本番確認のみ）。
+
+### 未確認の類似パターン
+
+- 認証済み CMS で実際に保存→Publish Now を押す確認: **未確認**（ユーザー操作。記事 `feature-yuta` を保存・公開するときに合わせて確認する）。
+- 本番の公開記事ページでの表示: 新4種を使った公開記事がまだ無いため **未確認**（`feature-yuta` は下書き）。
+
+### 次の担当への注意・判断待ち
+
+- ユーザーへ CMS の Cmd+Shift+R を案内済み。
+- 2026-11-13 ユーザーの承認を得て、本番 ARTICLES 行25 `feature-yuta` の body に `[[q|…]]` を5本追加（ORIGIN / PSYCHEDELIC / INTUITION / LDG / SPECTACLE の各 quote の直前。文言はユーザー承認済み）。手順は get_sheet 全列→控えと一致確認→全列＋body で update_row（date は fmtDate）→読み直しで変化は body と lastEditedAt のみ、artistids=yuta・status=draft 維持を確認。変換で questions 6 / quotes 14 / 残り [[ 0。
+- 同日 10:58、ユーザーの Publish Now で `cms: publish data.js`（560c6569e）が届き、Publish pipeline も success。ただし `feature-yuta` は 10:58 の保存後もシート上 status=draft のままだったため、記事ページは生成されていない（/articles/feature-yuta.html は 404）。アーティストページ `artists/yuta.html` はこの Publish で新規生成された。記事の公開はユーザーが状態を「公開」にして保存→Publish Now をやり直す。
+- 注意: Publish Now のコミットは GAS 経由で、押してから main に現れるまで数分かかる（押した直後に「届いていない」と判断しないこと）。
+- `feature-yuta` を保存するとき、関連アーティストを選んで保存→読み直しで `artistids` が残るかも合わせて確認（前回からの持ち越し）。
+
+## 2026-11-13 記事編集画面の Status / Tags 欄の重複を解消
+
+### 実施
+
+- 記事フォームに `id="ar-status"` と `id="ar-tags"` が2つずつあった（フォーム本体と「📤 PUBLISHING & SEO」）。保存されるのはフォーム本体だけで、PUBLISHING 側の Status を「✅ Published」にしても draft のまま保存されていた（本番 CMS で送信内容を差し替えて再現。`feature-yuta` の公開が2回空振りした原因）。
+- 記事に限り PUBLISHING & SEO から Status / Tags を外し、「公開状態（Status）とタグは、上のフォームの Status / Tags 欄で設定します。」の注記を出す。`get/set/clearPubFields('article')` は status / tags に触れない。新規記事の Status 既定 draft を resetForm で明示（以前は resetForm→clearPubFields の順序依存）。
+- 記事の Status は Published / Draft の2択に固定。PUBLISHING 側にあった In Review / Scheduled は、ビルドが `status !== 'draft'` を公開扱いにするため選ぶと即公開になる状態だった。
+- cms.js?v=205。`scripts/check_cms_article_state.py` に重複 ID・分岐・リセットの検査を追加。
+
+### コミット
+
+- ブランチ `fix/article-status-duplicate`（PR 参照）。
+
+### 検証
+
+- local CMS（headless Chrome、ダミートークン、GAS 送信は差し替えて送らない）: 文書全体で重複 ID 0、`#ar-status` / `#ar-tags` 各1、注記あり、他セクションの `v/f/a/e-status` は残存。新規既定 draft・タグ空。draft 行を開く→published にして保存→送信 status=published・tags 維持。published 行→draft で保存→送信 draft。
+- `bash scripts/preflight.sh`: push 時の pre-push で全件実行。
+
+### 変更したパターン
+
+- 記事フォームの PUBLISHING & SEO の Status / Tags（2箇所）と、それを読む get/set/clearPubFields の3関数。
+
+### 未確認の類似パターン
+
+- 他セクション（venue / festival / artist / event）: フォーム本体に status / tags が無く重複なし（文書全体の重複 ID 0 で確認済み・0件）。ただし他セクションの PUBLISHING の Status にも In Review / Scheduled があり、ビルドは draft 以外を公開扱いにする（未変更。予約公開の設計時に合わせて見直す）。
+- 本番 CMS（認証済み）で実際に Published にして保存→Publish: **未確認**（ユーザーが `feature-yuta` を公開するときに確認する）。
+
+### 次の担当への注意・判断待ち
+
+- 予約公開はユーザーが今後実装したい（2026-11-13）。現状 Publish At はシートに保存されるが RSS の日付に使われるだけで、日時まで隠す処理も定時の再生成も無い。設計時は publishAt による除外を一か所に寄せ、cron で Publish pipeline を回す。
