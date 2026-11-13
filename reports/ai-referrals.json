@@ -1,27 +1,27 @@
 {
-  "generatedAt": "2026-11-12T23:43:06.086Z",
+  "generatedAt": "2026-11-13T23:50:32.676Z",
   "propertyId": "535755449",
   "periods": {
     "current": {
-      "startDate": "2026-10-17",
-      "endDate": "2026-11-13",
+      "startDate": "2026-10-18",
+      "endDate": "2026-11-14",
       "label": "直近28日"
     },
     "previous": {
-      "startDate": "2026-09-19",
-      "endDate": "2026-10-16",
+      "startDate": "2026-09-20",
+      "endDate": "2026-10-17",
       "label": "前の28日"
     }
   },
   "current": {
-    "sessions": 100,
-    "totalUsers": 99,
-    "share": 0.04128819157720892,
+    "sessions": 101,
+    "totalUsers": 100,
+    "share": 0.04046474358974359,
     "bySource": [
       {
         "source": "chatgpt.com",
-        "sessions": 96,
-        "totalUsers": 95
+        "sessions": 97,
+        "totalUsers": 96
       },
       {
         "source": "gemini.google.com",
@@ -42,13 +42,13 @@
       },
       {
         "landingPage": "/en/festivals/labyrinth.html",
-        "sessions": 8,
-        "totalUsers": 8
+        "sessions": 10,
+        "totalUsers": 10
       },
       {
         "landingPage": "/articles/japan-festival-2026-september.html",
-        "sessions": 6,
-        "totalUsers": 6
+        "sessions": 5,
+        "totalUsers": 5
       },
       {
         "landingPage": "/en/articles/denki-bodhisattva-2026-info.html",
@@ -131,8 +131,8 @@
         "totalUsers": 1
       }
     ],
-    "allSessions": 2422,
-    "allTotalUsers": 2105
+    "allSessions": 2496,
+    "allTotalUsers": 2155
   },
   "previous": {
     "sessions": 0,
