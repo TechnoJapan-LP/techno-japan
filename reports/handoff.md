@@ -15221,3 +15221,48 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 - 紐づけは Publish Now 後に反映。インタビュー記事はオーナーが CMS で作成予定（「関連アーティスト」で選ぶ）。
 - `festivalId` の複数化は今回の範囲外。
+
+
+## 2026-11-12 / インタビュー記事用ショートコード4種（quote / q / timeline / profile）— ブランチ feat/interview-shortcodes
+
+設計 Claude / 実装 Codex（設計書＋修正指示3回）/ レビュー・検証 Claude。**main には入れていない（PR）。**
+
+### 実施
+
+- `LP/article-shortcodes.js`: `[[quote|本文|話者]]` `[[q|質問]]` `[[timeline|年;出来事|…]]` `[[profile|名前|項目;値|…]]` を追加。既存と同じ `renderArticleShortcodes` 内で変換（ページ生成・CMS プレビュー・CMS の公開前検査が共通で使う）。
+  - `<p>` 単独段落（属性付き `<p>` も可）だけを `<p>` ごと置き換える。文中に混ざったものは throw。
+  - `;` は最初の1つで分割。分割の前にエンティティを復号（`R&amp;D;値` を誤分割しない）。出力は全て `escapeHtml`。
+  - 戻り値に `quotes` `questions` `timelines` `profiles` の件数。
+- `LP/detail.css`（記事ページ）と `LP/cms.css`（エディタ内プレビュー。common.css を読まないので色は rgba 直書き）に見た目。スマホ用 @media は通常ルールの後ろ。
+- `LP/article-fx.js`: スクロール演出の対象に `.tj-quote` `.tj-timeline` `.tj-profile`。
+- `LP/cms.js`: 使える機能一覧に4行、英語版の注記、「📄 テンプレ」のインタビュー雛形を新構成に。記事プレビューの detail.css / article-fx.js の版を追随。
+- `docs/writing/ARTICLE_BODY_SPEC_FOR_AI.md` / `ARTICLE_BODY_FEATURES.md`: 4節とインタビュー記事の構成。META の `RELATED_ARTISTS` を実装済みの `artistIds` / `venueIds` に訂正。
+- `scripts/check_article_shortcodes.mjs`: 正常系・境界値・不正書式のテスト追加。
+- 使い方の説明（CMS の「？ 使い方」= `ARTICLE_BODY_HELP` と `docs/writing/ARTICLE_BODY_FEATURES.md`、同文）: 4種の説明を詳しくし「インタビュー記事の組み立て」を追加、「ブロックの注意」に公開が止まる条件、§4 を「サイト内リンク・関連付け」にして関連フェス／関連アーティスト・関連会場の欄の使い方を追加。local CMS で「？ 使い方」を開き表示を確認。
+- ?v: DETAIL_CSS_VERSION 95 / ARTICLE_FX_JS_VERSION 16 / article-shortcodes.js 11 / cms.css 54 / cms.js 203。
+
+### コミット
+
+- ブランチ `feat/interview-shortcodes` のコミット（PR 参照）。
+
+### 検証
+
+- テスト記事（本番に出さない。worktree の LP に一時生成し、確認後に削除）: 4種の正常系、quote 話者なし、timeline 2/12項目・`2021.07`・`2020〜2021`、profile 0/8項目、全角｜・`&amp;`・`<b>`・長い日本語・長い英単語、既存 pullquote / event / calendar / blockquote。
+- headless Chrome（CDP）375px dpr2 / 1280px、JA・EN: 横はみ出し 0（scrollWidth=幅、各ブロックの scrollWidth も超過なし）、JS 例外 0、Q は 17px（h2 は 22.5 / 34px）で下線・::after なし。
+- 初回確認で見つけて直したもの: スマホ用ルールが通常ルールより前にあり無効だった / 年表の線が項目ごとに途切れた（`.article-body li` の margin 8px が効いていた）/ 項目0個の profile の余白 / cms.css で未定義の --text-a20・--text-a12。
+- CMS（local、ダミートークン、外部通信遮断）: `.ar-prev-body` で同じ見た目、線・罫線の色が出ること、不正書式のエラー文を確認。
+- `bash scripts/preflight.sh`: push 時の pre-push で全件実行。
+
+### 変更したパターン
+
+- ショートコードの追加箇所: 正規表現・render 関数・`renderArticleShortcodes` の変換・件数・API/export・detail.css・cms.css・article-fx の対象・CMS の案内・書式仕様（10箇所）。
+
+### 未確認の類似パターン
+
+- 本番 CMS（認証済み）での表示と Publish: **未確認**（main へのマージ後に、Publish pipeline を流し、CMS を Cmd+Shift+R で開いて確認する）。
+- 既存 pullquote の「文中でも変換される」「`|` が多いと黙って切り捨てる」挙動: 確認済み・変更していない（新4種だけ厳しくした）。
+- ライトモード: サイトに存在しない（common.css / detail.css に prefers-color-scheme / data-theme なし）。確認済み・該当なし。
+
+### 次の担当への注意・判断待ち
+
+- マージ後、記事 `feature-yuta`（下書き）を新書式に書き換える場合は CMS のプレビューでエラーが出ないことを確認してから公開。

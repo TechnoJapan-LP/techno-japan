@@ -1854,7 +1854,7 @@ function previewRenderBody_(body){
 function writeArticleSimplePreview_(win, title, body){
   const safeBody = String(body || '').replace(/<script/gi, '&lt;script');
   win.document.open();
-      win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><link rel="stylesheet" href="/common.css?v=59"><link rel="stylesheet" href="/detail.css?v=94"><link rel="stylesheet" href="/article-fx.css?v=22"><style>/* フォールバックでは common.js を読まないためネイティブカーソルに戻す */*{cursor:auto !important}a,button,[role="button"],summary{cursor:pointer !important}</style></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${esc(title)}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=15"><\/script></body></html>`);
+      win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><link rel="stylesheet" href="/common.css?v=59"><link rel="stylesheet" href="/detail.css?v=95"><link rel="stylesheet" href="/article-fx.css?v=22"><style>/* フォールバックでは common.js を読まないためネイティブカーソルに戻す */*{cursor:auto !important}a,button,[role="button"],summary{cursor:pointer !important}</style></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${esc(title)}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=16"><\/script></body></html>`);
   win.document.close();
 }
 async function openArticleGeneratedPreview(){
@@ -1971,12 +1971,11 @@ const ARTICLE_TEMPLATES = {
     '<h2>クラウドとカルチャー</h2><p>[客層、雰囲気、コミュニティとしての空気感]</p><p><br></p>' +
     '<h2>総括</h2><p>[このイベントがシーンにとって持つ意味。次回への期待]</p>' },
   interview: { label: '🎤 インタビュー', category: 'INTERVIEW', html:
-    '<p>[アーティスト紹介 — 経歴・活動・今回話を聞く理由を2〜3文で]</p><p><br></p>' +
-    '<h4>—— まず、最近の活動について聞かせてください。</h4><p>[回答]</p><p><br></p>' +
-    '<h4>—— [質問2]</h4><p>[回答]</p><p><br></p>' +
-    '<h4>—— [質問3]</h4><p>[回答]</p><p><br></p>' +
-    '<h4>—— 最後に、今後の予定を教えてください。</h4><p>[回答]</p><p><br></p>' +
-    '<p><em>[締め — ライブ情報やリリース情報へのリンク]</em></p>' },
+    '<p>[リード — 経歴・活動・今回話を聞く理由を2〜3文で]</p>' +
+    '<p>[[profile|名前|拠点;都市|レーベル;名前]]</p><p><br></p>' +
+    '<h2>[章タイトル]</h2><p>[[q|質問]]</p><p>[回答]</p><p>[[quote|印象に残った発言|名前]]</p><p><br></p>' +
+    '<h2>[次の章]</h2><p>[[q|質問]]</p><p>[回答]</p><p>[[timeline|年;出来事|年;出来事]]</p><p><br></p>' +
+    '<h2>INFORMATION</h2><p>[ライブ情報やリリース情報]</p>' },
   news: { label: '⚡ ニュース', category: 'NEWS', html:
     '<p>[リード文 — 何が・いつ・どこで。1〜2文で核心を]</p><p><br></p>' +
     '<p>[詳細 — 背景、ラインナップ、注目ポイント]</p><p><br></p>' +
@@ -2469,12 +2468,19 @@ const ARTICLE_BODY_HELP = [
     { name: '開催カレンダー', how: '「📅 カレンダーを挿入」→ [[calendar]]（[[calendar|2026-12〜2027-02]] で月を絞れる）', note: 'その記事のイベントカードを月ごとに自動で一覧化。カードが0件だとエラー', action: 'insertArticleCalendar' },
     { name: 'アーティストカード', how: '「＠ ID」→ アーティストを検索 → 行の右の「▣ カード」→ [[artist-card:dj-nobu]]（|一言 を足せる）', note: '写真・名前・ジャンル・拠点・経歴の冒頭・SNS。中身はスプレッドシート ARTISTS から。一言を書くと経歴の代わりに出る', action: 'toggleEntityLinkMenu' },
     { name: 'プルクオート', how: '文を選択して「❝ プルクオート」→ [[pullquote|本文|出典]]', note: '本文の一文を中央・大きめ・上下赤線で見せる。出典は任意。自分の本文を抜き出すときに使う（他人の言葉は「引用」）', action: 'openArticlePullquoteForm' },
+    { name: 'インタビュー発言', how: '[[quote|発言本文|話者名]]（話者名は省略できる）', note: 'インタビューの発言を、細い左線付きの軽い見た目で見せる。本数の制限なし。「引用」ボタン（blockquote）は使わない。発言を大きく見せたいときだけプルクオート', action: null },
+    { name: 'インタビュー質問', how: '[[q|質問文]]', note: '先頭に赤い「Q」が付く。回答は直後の通常の段落か [[quote|…]] で書く。見出しではないので、目次や見出しの装飾には入らない。頭に「——」「Q.」は書かない', action: null },
+    { name: 'インタビュー年表', how: '[[timeline|2004;DJデビュー|2016;レーベル設立]]', note: '「年;出来事」を | で並べる。最初の ; で年と出来事に分かれる。年は 2021.07 や 2020〜2021 も書ける。2〜12項目が目安', action: null },
+    { name: 'プロフィール', how: '[[profile|名前|拠点;Tokyo|レーベル;名前]]', note: 'インタビューの冒頭（リードの直後）に1記事1個。「項目;値」は0〜8個が目安。確認できない項目は書かない', action: null },
+    { name: 'インタビュー記事の組み立て', how: 'リード → [[profile|…]] → 各章（H2 → [[q|…]] → 回答の段落 / [[quote|…]]）→ 必要な章に [[timeline|…]] → H2「INFORMATION」', note: '「📄 テンプレ」のインタビューがこの形になっている', action: null },
     { name: '折りたたみ', how: '「▾ 折りたたみ」→ [[details|見出し]] … [[/details]]', note: '見出しを押すと開く補足。中に段落・リスト・画像・他のブロックを入れられる。入れ子は不可。閉じ忘れは公開が止まる', action: 'openArticleDetailsForm' },
-    { name: 'ブロックの注意', how: '', note: 'ブロックは JS 不要の静的 HTML になる。存在しない ID を書くと公開（ビルド）が止まるので、下書きのうちにプレビューで確かめる。', action: null }
+    { name: 'ブロックの注意', how: '', note: 'ブロックは JS 不要の静的 HTML になる。存在しない ID を書くと公開（ビルド）が止まるので、下書きのうちにプレビューで確かめる。インタビュー用の4つ（quote / q / timeline / profile）は単独の段落に1つずつ書く。文の途中に混ぜる・値が空・; が無い・半角 | が混ざる と公開が止まる。値に半角 | と ] は書けない（全角 ｜ は書ける）', action: null }
   ]},
-  { title: '4. サイト内リンク', items: [
+  { title: '4. サイト内リンク・関連付け', items: [
     { name: 'フェス・アーティスト・会場・記事へリンク', how: '「＠ ID」または本文で @ を打つ → 名前で検索', note: '文中に名前入りのリンクが入る', action: 'toggleEntityLinkMenu' },
-    { name: 'アーティスト名の自動リンク', how: '何もしない', note: '公開時に、本文中のアーティスト名（ARTISTS に登録済み、3文字以上）が自動にアーティストページへリンクされる。誤爆しやすい一般語は除外リストあり', action: null }
+    { name: 'アーティスト名の自動リンク', how: '何もしない', note: '公開時に、本文中のアーティスト名（ARTISTS に登録済み、3文字以上）が自動にアーティストページへリンクされる。誤爆しやすい一般語は除外リストあり', action: null },
+    { name: '関連フェス', how: '記事編集の「関連フェスティバル」でフェスを1つ選ぶ', note: 'そのフェスの詳細ページの Stories に記事が出る。記事ページにもフェスの情報欄が出る。反映は Publish 後', action: null },
+    { name: '関連アーティスト・関連会場', how: '記事編集の「関連アーティスト（複数可）」「関連会場（複数可）」で名前を検索して選ぶ（× で外す）', note: '選んだアーティスト・会場の詳細ページの Stories の先頭に記事が出る。記事ページには本文の後に「この記事に登場する」としてカードが出る。インタビュー記事では、話を聞いた人を必ず選ぶ。反映は Publish 後', action: null }
   ]},
   { title: '5. 書くのを助ける機能', items: [
     { name: '雛形', how: '「📄 テンプレ」: イベントレポート / インタビュー / ニュース / 週間まとめ / フェスまとめ / コラム', note: '', action: 'toggleTemplateMenu' },
@@ -2488,7 +2494,7 @@ const ARTICLE_BODY_HELP = [
     { name: '見出し候補・翻訳', how: 'AI でタイトル案、各欄の翻訳、本文全体の英訳', note: '', action: null }
   ]},
   { title: '6. 英語版', items: [
-    { name: '英語本文・タイトル・要約', how: '「🌐 ENGLISH VERSION」に英語の本文・タイトル・要約を入れると /en/articles/... に英語ページが出る', note: 'ブロック（[[event]] [[artist-card]] [[pullquote]]）は英語本文でも同じ書き方で、見出し語（LINEUP / ARTIST PAGE 等）とアーティストの経歴が英語になる。英語本文が無い記事は、英語ページも日本語本文のまま。', action: null }
+    { name: '英語本文・タイトル・要約', how: '「🌐 ENGLISH VERSION」に英語の本文・タイトル・要約を入れると /en/articles/... に英語ページが出る', note: 'ブロック（[[event]] [[artist-card]] [[pullquote]] [[quote]] [[q]] [[timeline]] [[profile]]）は英語本文でも同じ書き方で、見出し語（LINEUP / ARTIST PAGE 等）とアーティストの経歴が英語になる。英語本文が無い記事は、英語ページも日本語本文のまま。', action: null }
   ]},
   { title: '7. 公開時に自動で起きること（本文から作られるもの）', items: [
     { name: '要約', how: 'EXCERPT が空なら本文の冒頭 160 字が検索結果用の説明文になる', note: '', action: null },

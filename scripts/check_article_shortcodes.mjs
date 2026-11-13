@@ -147,4 +147,46 @@ assert.throws(() => renderArticleShortcodes('[[details|A]]x'), /閉じ忘れ/);
 assert.throws(() => renderArticleShortcodes('[[details|A]][[details|B]]x[[/details]][[/details]]'), /入れ子/);
 assert.throws(() => renderArticleShortcodes('[[details|]]x[[/details]]'), /見出しが空/);
 
+// インタビュー用ショートコード（JA/EN、HTMLエスケープ、単独段落、details内）
+for (const lang of ['ja', 'en']) {
+  const blocks = renderArticleShortcodes(
+    '<p>[[quote|私にとってDJは一つの作品です|YUTA]]</p><p>[[q|自身のサウンドを心象として表すなら何か。]]</p>' +
+    '<p>[[timeline|2004;東京でDJデビュー|2021.07;R&amp;D;活動を拡大|2020〜2021;海外公演]]</p>' +
+    '<p>[[profile|YUTA|拠点;Tokyo|レーベル;Liquid Drop Groove]]</p>', { lang }
+  );
+  assert.match(blocks.html, /class="tj-quote"/);
+  assert.match(blocks.html, /class="tj-q"/);
+  assert.match(blocks.html, /R&amp;D;活動を拡大/);
+  assert.match(blocks.html, /class="tj-timeline"/);
+  assert.match(blocks.html, /class="tj-profile"/);
+  assert.deepEqual({ quotes: blocks.quotes, questions: blocks.questions, timelines: blocks.timelines, profiles: blocks.profiles }, { quotes: 1, questions: 1, timelines: 1, profiles: 1 });
+}
+const quoteWithoutSpeaker = renderArticleShortcodes('<p>[[quote|本文]]</p>');
+assert.doesNotMatch(quoteWithoutSpeaker.html, /tj-quote-speaker/);
+assert.match(renderArticleShortcodes('<p>[[q|質問]]</p>').html, /tj-q-text/);
+assert.equal((renderArticleShortcodes(`<p>[[timeline|${Array.from({ length: 12 }, (_, i) => `${2000 + i};出来事${i + 1}`).join('|')}]]</p>`).html.match(/tj-timeline-item/g) || []).length, 12);
+assert.match(renderArticleShortcodes('<p class="x">[[q|属性付き質問]]</p>').html, /tj-q-text/);
+assert.match(renderArticleShortcodes('<p>[[profile|名前]]</p>').html, /tj-profile-name/);
+assert.doesNotMatch(renderArticleShortcodes('<p>[[profile|名前]]</p>').html, /tj-profile-list/);
+assert.equal((renderArticleShortcodes(`<p>[[profile|名前${Array.from({ length: 8 }, (_, i) => `|項目${i + 1};値${i + 1}`).join('')}]]</p>`).html.match(/tj-profile-row/g) || []).length, 8);
+assert.match(renderArticleShortcodes('<p>[[quote|&lt;b&gt;x&lt;/b&gt;]]</p>').html, /&lt;b&gt;x&lt;\/b&gt;/);
+assert.match(renderArticleShortcodes('<p>[[q|長い英単語supercalifragilisticexpialidocious]]</p>').html, /supercalifragilistic/);
+assert.match(renderArticleShortcodes('<p>[[q|質問]]</p><p>[[quote|発言]]</p>').html, /tj-q[\s\S]*tj-quote/);
+assert.match(renderArticleShortcodes('<p>[[details|補足]]</p><p>[[quote|詳細内の発言]]</p><p>[[/details]]</p>').html, /tj-details-body[\s\S]*tj-quote/);
+assert.doesNotMatch(renderArticleShortcodes('<p>[[quote|発言]]</p>').html, /<p>\s*<(figure|ol|aside)/);
+assert.throws(() => renderArticleShortcodes('<p>前置き [[quote|発言]]</p>'), /quoteは1行・1段落/);
+assert.throws(() => renderArticleShortcodes('<p>[[quote|]]</p>'), /quoteの本文が空/);
+assert.throws(() => renderArticleShortcodes('<p>[[quote|本文|話者|余計]]</p>'), /quoteの項目が多すぎ/);
+assert.throws(() => renderArticleShortcodes('<p>[[q|]]</p>'), /qの質問文が空/);
+assert.throws(() => renderArticleShortcodes('<p>[[q|質問|余計]]</p>'), /qの項目が多すぎ/);
+assert.throws(() => renderArticleShortcodes('<p>[[timeline]]</p>'), /timeline/);
+assert.throws(() => renderArticleShortcodes('<p>[[timeline|2004]]</p>'), /「;」がありません/);
+assert.throws(() => renderArticleShortcodes('<p>[[timeline|;出来事]]</p>'), /timelineの年が空/);
+assert.throws(() => renderArticleShortcodes('<p>[[timeline|2004;]]</p>'), /timelineの出来事が空/);
+assert.throws(() => renderArticleShortcodes('<p>[[profile|]]</p>'), /profileの名前が空/);
+assert.throws(() => renderArticleShortcodes('<p>[[profile|名前|項目]]</p>'), /「;」がありません/);
+assert.throws(() => renderArticleShortcodes('<p>[[profile|名前|;値]]</p>'), /profileの項目名が空/);
+assert.throws(() => renderArticleShortcodes('<p>[[profile|名前|項目;]]</p>'), /profileの値が空/);
+assert.throws(() => renderArticleShortcodes('文章 [[q|質問]] の途中'), /qは1行・1段落/);
+
 console.log('article shortcodes: 72 assertions passed');
