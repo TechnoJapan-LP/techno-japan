@@ -3758,8 +3758,9 @@ function buildPublishingSection(section){
     <div class="form-group full">${enSection}
       <div class="pub-section">
         <h3>📤 PUBLISHING & SEO</h3>
+        ${isArticle ? '<div class="label-hint">公開状態（Status）とタグは、上のフォームの Status / Tags 欄で設定します。</div>' : ''}
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <div class="form-group">
+          ${isArticle ? `<div class="form-group"><label>Author</label><select id="${p}-authorId" style="width:100%"><option value="">— None —</option></select></div>` : `<div class="form-group">
             <label>Status</label>
             <select id="${p}-status" style="width:100%">
               <option value="draft">📝 Draft</option>
@@ -3767,8 +3768,8 @@ function buildPublishingSection(section){
               <option value="published" selected>✅ Published</option>
               <option value="scheduled">⏰ Scheduled</option>
             </select>
-          </div>
-          ${isArticle ? `<div class="form-group"><label>Author</label><select id="${p}-authorId" style="width:100%"><option value="">— None —</option></select></div>` : `<div class="form-group"><label>Featured</label><select id="${p}-featuredFlag" style="width:100%"><option value="false">No</option><option value="true">⭐ Yes</option></select></div>`}
+          </div>`}
+          ${isArticle ? '' : `<div class="form-group"><label>Featured</label><select id="${p}-featuredFlag" style="width:100%"><option value="false">No</option><option value="true">⭐ Yes</option></select></div>`}
         </div>
         ${isArticle ? `<div class="form-group"><label>Publish At (予約公開)</label><input type="datetime-local" id="${p}-publishAt" style="width:100%"></div>` : ''}
         <div class="form-group">
@@ -3781,7 +3782,7 @@ function buildPublishingSection(section){
           <div class="char-count" id="${p}-metaDescription-count">0 / 160</div>
           ${isArticle ? `<button class="btn btn-green btn-sm" style="margin-top:6px" onclick="aiSummarize('meta')">✨ AI Meta 生成</button>` : `<button class="btn btn-green btn-sm" style="margin-top:6px" onclick="aiMetaGenerate('${p}','${section}')">✨ ${descLabel}から生成</button>`}
         </div>
-        <div class="form-group">
+        ${isArticle ? '' : `<div class="form-group">
           <label>Tags <span class="label-hint">(Enter または , で追加)</span>
             <button class="btn btn-sm" style="margin-left:8px;padding:2px 8px;font-size:.6rem" onclick="suggestTags('${p}','${section}')">＋ ジャンル/都市から候補追加</button>
           </label>
@@ -3789,7 +3790,7 @@ function buildPublishingSection(section){
             <input type="text" id="${p}-tags-input" placeholder="Add tag..." onkeydown="handleTagKey(event,'${p}')">
           </div>
           <input type="hidden" id="${p}-tags" value="">
-        </div>
+        </div>`}
         <div class="form-group">
           <label>Editor Notes <span class="label-hint">(チーム内メモ・公開されません)</span></label>
           <textarea id="${p}-editorNotes" rows="2" placeholder="例: 画像差し替え予定 / 〇〇さんに確認" style="width:100%"></textarea>
@@ -3857,14 +3858,16 @@ function getPubFields(section){
   const p = PUB_PREFIXES[section];
   if(!p) return {};
   const fields = {
-    status: g(p+'-status') || 'draft',
     ogImage: g(p+'-ogImage'),
     metaDescription: g(p+'-metaDescription'),
-    tags: g(p+'-tags'),
     editorNotes: g(p+'-editorNotes'),
     lastEditedAt: new Date().toISOString(),
     lastEditedBy: 'editor'  // future: multi-user支援時に拡張
   };
+  if(section !== 'article'){
+    fields.status = g(p+'-status') || 'draft';
+    fields.tags = g(p+'-tags');
+  }
   if(section === 'article'){
     fields.publishAt = g(p+'-publishAt');
     fields.authorId = g(p+'-authorId');
@@ -3880,11 +3883,13 @@ function getPubFields(section){
 function setPubFields(section, row){
   const p = PUB_PREFIXES[section];
   if(!p) return;
-  setVal(p+'-status', row.status || 'published');
   setVal(p+'-ogImage', row.ogImage || '');
   setVal(p+'-metaDescription', row.metaDescription || '');
   setVal(p+'-editorNotes', row.editorNotes || '');
-  setTagsValue(p, row.tags || '');
+  if(section !== 'article'){
+    setVal(p+'-status', row.status || 'published');
+    setTagsValue(p, row.tags || '');
+  }
   // Multi-language fields（記事は本文フォーム内の ar-title_en / ar-excerpt_en を使うためスキップ）
   if(section !== 'article'){
     const descField = section === 'artist' ? 'bio' : 'desc';
@@ -3911,12 +3916,14 @@ function clearPubFields(section){
   // 新規フォームの初期値は draft（DATA_SCHEMA §1.4）。
   // 登録しただけでは公開せず、内容を確認してから明示的に published へ変える運用。
   // 編集時は setPubFields() が既存の値を読むので、既存行の STATUS は変わらない。
-  setVal(p+'-status', 'draft');
   setVal(p+'-ogImage', '');
   setVal(p+'-metaDescription', '');
   setVal(p+'-editorNotes', '');
-  tagState[p] = [];
-  renderTags(p);
+  if(section !== 'article'){
+    setVal(p+'-status', 'draft');
+    tagState[p] = [];
+    renderTags(p);
+  }
   if(section === 'article'){
     setVal(p+'-publishAt', '');
     setVal(p+'-authorId', '');
@@ -8410,7 +8417,7 @@ function resetForm(section){
   if(section==='festival'){document.getElementById('f-type').value='festival';document.querySelectorAll('#f-genre .chip').forEach(c=>c.classList.remove('selected'));document.querySelectorAll('#f-gradientPresets .gradient-swatch').forEach(s=>s.classList.remove('selected'));lineups.f=[];renderLineupTags('f');editions.length=0;renderEditions();document.getElementById('lineup-fetch-status').style.display='none';document.getElementById('gradient-preview').style.display='none';document.getElementById('bulk-lineup-wrap').style.display='none'}
   if(section==='festival') { setFestivalDateEditingMode(false); setSoundGalleryAvailability('festival',false); }
   if(section==='event'){lineups.e=[];renderLineupTags('e')}
-  if(section==='article'){document.getElementById('ar-category').value='REPORT';document.getElementById('ar-featured').value='false';document.getElementById('ar-status').value='published';document.getElementById('ar-author').value='TECHNO JAPAN 編集部';entityPickerRender('artist');entityPickerRender('venue');setArticleBody('')}
+  if(section==='article'){document.getElementById('ar-category').value='REPORT';document.getElementById('ar-featured').value='false';document.getElementById('ar-status').value='draft';document.getElementById('ar-author').value='TECHNO JAPAN 編集部';entityPickerRender('artist');entityPickerRender('venue');setArticleBody('')}
   // Publishing fields をクリア（author以外）
   if(section !== 'author') clearPubFields(section);
   // author には出力ボックスが無い（無い場合に落ちると保存フローが途中で死ぬ）

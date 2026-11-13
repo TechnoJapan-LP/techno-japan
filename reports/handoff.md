@@ -15299,3 +15299,34 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 同日 10:58、ユーザーの Publish Now で `cms: publish data.js`（560c6569e）が届き、Publish pipeline も success。ただし `feature-yuta` は 10:58 の保存後もシート上 status=draft のままだったため、記事ページは生成されていない（/articles/feature-yuta.html は 404）。アーティストページ `artists/yuta.html` はこの Publish で新規生成された。記事の公開はユーザーが状態を「公開」にして保存→Publish Now をやり直す。
 - 注意: Publish Now のコミットは GAS 経由で、押してから main に現れるまで数分かかる（押した直後に「届いていない」と判断しないこと）。
 - `feature-yuta` を保存するとき、関連アーティストを選んで保存→読み直しで `artistids` が残るかも合わせて確認（前回からの持ち越し）。
+
+## 2026-11-13 記事編集画面の Status / Tags 欄の重複を解消
+
+### 実施
+
+- 記事フォームに `id="ar-status"` と `id="ar-tags"` が2つずつあった（フォーム本体と「📤 PUBLISHING & SEO」）。保存されるのはフォーム本体だけで、PUBLISHING 側の Status を「✅ Published」にしても draft のまま保存されていた（本番 CMS で送信内容を差し替えて再現。`feature-yuta` の公開が2回空振りした原因）。
+- 記事に限り PUBLISHING & SEO から Status / Tags を外し、「公開状態（Status）とタグは、上のフォームの Status / Tags 欄で設定します。」の注記を出す。`get/set/clearPubFields('article')` は status / tags に触れない。新規記事の Status 既定 draft を resetForm で明示（以前は resetForm→clearPubFields の順序依存）。
+- 記事の Status は Published / Draft の2択に固定。PUBLISHING 側にあった In Review / Scheduled は、ビルドが `status !== 'draft'` を公開扱いにするため選ぶと即公開になる状態だった。
+- cms.js?v=205。`scripts/check_cms_article_state.py` に重複 ID・分岐・リセットの検査を追加。
+
+### コミット
+
+- ブランチ `fix/article-status-duplicate`（PR 参照）。
+
+### 検証
+
+- local CMS（headless Chrome、ダミートークン、GAS 送信は差し替えて送らない）: 文書全体で重複 ID 0、`#ar-status` / `#ar-tags` 各1、注記あり、他セクションの `v/f/a/e-status` は残存。新規既定 draft・タグ空。draft 行を開く→published にして保存→送信 status=published・tags 維持。published 行→draft で保存→送信 draft。
+- `bash scripts/preflight.sh`: push 時の pre-push で全件実行。
+
+### 変更したパターン
+
+- 記事フォームの PUBLISHING & SEO の Status / Tags（2箇所）と、それを読む get/set/clearPubFields の3関数。
+
+### 未確認の類似パターン
+
+- 他セクション（venue / festival / artist / event）: フォーム本体に status / tags が無く重複なし（文書全体の重複 ID 0 で確認済み・0件）。ただし他セクションの PUBLISHING の Status にも In Review / Scheduled があり、ビルドは draft 以外を公開扱いにする（未変更。予約公開の設計時に合わせて見直す）。
+- 本番 CMS（認証済み）で実際に Published にして保存→Publish: **未確認**（ユーザーが `feature-yuta` を公開するときに確認する）。
+
+### 次の担当への注意・判断待ち
+
+- 予約公開はユーザーが今後実装したい（2026-11-13）。現状 Publish At はシートに保存されるが RSS の日付に使われるだけで、日時まで隠す処理も定時の再生成も無い。設計時は publishAt による除外を一か所に寄せ、cron で Publish pipeline を回す。
