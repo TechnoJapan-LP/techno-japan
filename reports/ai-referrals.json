@@ -1,27 +1,27 @@
 {
-  "generatedAt": "2026-11-13T23:50:32.676Z",
+  "generatedAt": "2026-11-14T22:36:37.572Z",
   "propertyId": "535755449",
   "periods": {
     "current": {
-      "startDate": "2026-10-18",
-      "endDate": "2026-11-14",
+      "startDate": "2026-10-19",
+      "endDate": "2026-11-15",
       "label": "直近28日"
     },
     "previous": {
-      "startDate": "2026-09-20",
-      "endDate": "2026-10-17",
+      "startDate": "2026-09-21",
+      "endDate": "2026-10-18",
       "label": "前の28日"
     }
   },
   "current": {
-    "sessions": 101,
-    "totalUsers": 100,
-    "share": 0.04046474358974359,
+    "sessions": 100,
+    "totalUsers": 98,
+    "share": 0.039077764751856196,
     "bySource": [
       {
         "source": "chatgpt.com",
-        "sessions": 97,
-        "totalUsers": 96
+        "sessions": 96,
+        "totalUsers": 94
       },
       {
         "source": "gemini.google.com",
@@ -43,12 +43,7 @@
       {
         "landingPage": "/en/festivals/labyrinth.html",
         "sessions": 10,
-        "totalUsers": 10
-      },
-      {
-        "landingPage": "/articles/japan-festival-2026-september.html",
-        "sessions": 5,
-        "totalUsers": 5
+        "totalUsers": 9
       },
       {
         "landingPage": "/en/articles/denki-bodhisattva-2026-info.html",
@@ -59,6 +54,11 @@
         "landingPage": "/festivals/festival-de-frue.html",
         "sessions": 5,
         "totalUsers": 5
+      },
+      {
+        "landingPage": "/articles/japan-festival-2026-september.html",
+        "sessions": 4,
+        "totalUsers": 4
       },
       {
         "landingPage": "/en/articles/asia-festival-2026-second.html",
@@ -131,8 +131,8 @@
         "totalUsers": 1
       }
     ],
-    "allSessions": 2496,
-    "allTotalUsers": 2155
+    "allSessions": 2559,
+    "allTotalUsers": 2204
   },
   "previous": {
     "sessions": 0,
@@ -227,6 +227,11 @@
         "totalUsers": 0
       },
       {
+        "landingPage": "/en/articles/japan-festival-2026-november.html",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
         "landingPage": "/en/articles/japan-festival-2026-october.html",
         "sessions": 0,
         "totalUsers": 0
@@ -243,11 +248,6 @@
       },
       {
         "landingPage": "/en/articles/rebirth-2026-info.html",
-        "sessions": 0,
-        "totalUsers": 0
-      },
-      {
-        "landingPage": "/en/articles/sawagi-festival-2026-info.html",
         "sessions": 0,
         "totalUsers": 0
       }
