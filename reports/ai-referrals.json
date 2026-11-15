@@ -1,27 +1,27 @@
 {
-  "generatedAt": "2026-11-14T22:36:37.572Z",
+  "generatedAt": "2026-11-15T23:08:33.026Z",
   "propertyId": "535755449",
   "periods": {
     "current": {
-      "startDate": "2026-10-19",
-      "endDate": "2026-11-15",
+      "startDate": "2026-10-20",
+      "endDate": "2026-11-16",
       "label": "直近28日"
     },
     "previous": {
-      "startDate": "2026-09-21",
-      "endDate": "2026-10-18",
+      "startDate": "2026-09-22",
+      "endDate": "2026-10-19",
       "label": "前の28日"
     }
   },
   "current": {
-    "sessions": 100,
-    "totalUsers": 98,
-    "share": 0.039077764751856196,
+    "sessions": 102,
+    "totalUsers": 99,
+    "share": 0.039968652037617555,
     "bySource": [
       {
         "source": "chatgpt.com",
-        "sessions": 96,
-        "totalUsers": 94
+        "sessions": 98,
+        "totalUsers": 95
       },
       {
         "source": "gemini.google.com",
@@ -36,14 +36,14 @@
         "totalUsers": 13
       },
       {
+        "landingPage": "/en/festivals/labyrinth.html",
+        "sessions": 11,
+        "totalUsers": 9
+      },
+      {
         "landingPage": "/en/articles/topia-2026-info.html",
         "sessions": 10,
         "totalUsers": 10
-      },
-      {
-        "landingPage": "/en/festivals/labyrinth.html",
-        "sessions": 10,
-        "totalUsers": 9
       },
       {
         "landingPage": "/en/articles/denki-bodhisattva-2026-info.html",
@@ -131,8 +131,8 @@
         "totalUsers": 1
       }
     ],
-    "allSessions": 2559,
-    "allTotalUsers": 2204
+    "allSessions": 2552,
+    "allTotalUsers": 2184
   },
   "previous": {
     "sessions": 0,
