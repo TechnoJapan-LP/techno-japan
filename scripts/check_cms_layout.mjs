@@ -179,6 +179,31 @@ window.addEventListener('load',()=>setTimeout(async()=>{
   };
   eventDialog?.remove();
   toggleFocusMode();
+  // インタビュー用5フォームも、入力欄同士・操作ボタンとの重なりを実測する。
+  out.インタビューフォーム={};
+  const interviewForms=[
+    ['sub','openSubheadForm'],
+    ['profile','openInterviewProfileForm'],['timeline','openInterviewTimelineForm'],
+    ['quote','openInterviewQuoteForm'],['question','openInterviewQuestionForm']
+  ];
+  for(const [kind, opener] of interviewForms){
+    try{
+      window[opener]();
+      const dialog=document.querySelector('#ar-interview-'+kind+'-dialog');
+      const elements=[...dialog.querySelectorAll('input,textarea,button')].filter(e=>getComputedStyle(e).display!=='none');
+      const rects=elements.map(e=>({el:e,r:e.getBoundingClientRect()}));
+      const overlap=[];
+      for(let i=0;i<rects.length;i++) for(let j=i+1;j<rects.length;j++){
+        const a=rects[i].r,b=rects[j].r;
+        if(a.width&&a.height&&b.width&&b.height&&a.left<b.right&&b.left<a.right&&a.top<b.bottom&&b.top<a.bottom) overlap.push([elements[i].id||elements[i].className,elements[j].id||elements[j].className]);
+      }
+      out.インタビューフォーム[kind]={visible:!!dialog&&dialog.getBoundingClientRect().width>0,overlap};
+    }catch(e){
+      out.インタビューフォーム[kind]={error:String(e).slice(0,240)};
+    }finally{
+      document.querySelector('#ar-interview-'+kind+'-dialog')?.remove();
+    }
+  }
   // 別ウィンドウの本番表示プレビューにも短コードが変換されること。
   let generatedPreview='';
   const originalOpen=window.open;
@@ -217,6 +242,35 @@ window.addEventListener('load',()=>setTimeout(async()=>{
   out.重なり={};
   for(const [a,b] of pairs){const A=out[a],B=out[b];
     if(A&&B&&A.h&&B.h) out.重なり[a+'×'+b] = !(A.bottom<=B.top||B.bottom<=A.top);}
+  // VISUAL のショートコード挿入が、SmartBreak の空行を含む更新・選択置換・空行挿入・H2 行末で
+  // 空段落や空見出しを増やさないこと。HTML から読み込んで SmartBreak の状態も再現する。
+  try{
+    const shortcodeProbeQ=window.initArticleEditor && window.initArticleEditor();
+    if(!shortcodeProbeQ) throw new Error('本文 Quill を初期化できません');
+    const shortcodeRaw='[[q|x]]';
+    window.setArticleBody('<p>a</p><p>'+shortcodeRaw+'</p><p>b</p>');
+    window.insertArticleShortcode('[[q|y]]',{range:{index:2,length:7},silent:true});
+    const afterUpdate=shortcodeProbeQ.root.innerHTML;
+    window.setArticleBody('<p>a</p><p>選択する段落</p><p>b</p>');
+    window.insertArticleShortcode('[[quote|発言]]',{range:{index:2,length:'選択する段落'.length},silent:true});
+    const afterSelection=shortcodeProbeQ.root.innerHTML;
+    window.setArticleBody('<p>a</p><p><br></p><p>b</p>');
+    shortcodeProbeQ.setSelection(2,0,'silent');
+    window.insertArticleShortcode('[[q|y]]',{silent:true});
+    const afterEmpty=shortcodeProbeQ.root.innerHTML;
+    window.setArticleBody('<h2>ORIGIN</h2><p>b</p>');
+    shortcodeProbeQ.setSelection(shortcodeProbeQ.getText().indexOf(String.fromCharCode(10)),0,'silent');
+    window.insertArticleShortcode('[[sub|副題]]',{silent:true});
+    const afterH2=shortcodeProbeQ.root.innerHTML;
+    out.ショートコード挿入検査={
+      更新:afterUpdate, 更新期待値:afterUpdate==='<p>a</p><p>[[q|y]]</p><p>b</p>',
+      選択置換:afterSelection, 選択置換期待値:afterSelection==='<p>a</p><p>[[quote|発言]]</p><p>b</p>',
+      空行挿入:afterEmpty, 空行挿入期待値:afterEmpty==='<p>a</p><p>[[q|y]]</p><p>b</p>',
+      H2行末:afterH2, H2行末期待値:afterH2==='<h2>ORIGIN</h2><p>[[sub|副題]]</p><p>b</p>'
+    };
+  }catch(e){
+    out.ショートコード挿入検査={error:String(e).slice(0,240)};
+  }
  }catch(e){out.error=String(e).slice(0,120);}
  document.body.setAttribute('data-o',JSON.stringify(out));
 },5000));
@@ -264,6 +318,10 @@ if(d.イベントカード操作 && (d.イベントカード操作.officialLinkP
 if(d.イベント見出し着地 && !d.イベント見出し着地.見出し基準) failures.push('カレンダーリンクがカード直上の見出しへスクロールしない');
 if(d.集中モードからプレビュー表示 && (!d.集中モードからプレビュー表示.focus || !d.集中モードからプレビュー表示.preview || !d.集中モードからプレビュー表示.eventVisible)) failures.push('集中モード開始後にプレビューを表示できない');
 if(d.集中モードのイベント入力 && (!d.集中モードのイベント入力.visible || Number(d.集中モードのイベント入力.zIndex)<=2000 || !d.集中モードのイベント入力.boxVisible)) failures.push('集中モードのイベント入力ダイアログが前面に出ない');
+const shortcodeCheck=d.ショートコード挿入検査;
+if(shortcodeCheck?.error) failures.push(`VISUAL のショートコード挿入検査で例外: ${shortcodeCheck.error}`);
+else if(shortcodeCheck && (!shortcodeCheck.更新期待値 || !shortcodeCheck.選択置換期待値 || !shortcodeCheck.空行挿入期待値 || !shortcodeCheck.H2行末期待値)) failures.push(`VISUAL のショートコード挿入結果が期待値と違う: 更新=${shortcodeCheck.更新} / 選択置換=${shortcodeCheck.選択置換} / 空行挿入=${shortcodeCheck.空行挿入} / H2行末=${shortcodeCheck.H2行末}`);
+for(const [kind,form] of Object.entries(d.インタビューフォーム||{})) if(!form.visible) failures.push(`${kind}フォームが表示されない`); else if(form.overlap.length) failures.push(`${kind}フォームの入力欄が重なっている: ${JSON.stringify(form.overlap)}`);
 if(d.本番表示プレビュー && (!d.本番表示プレビュー.event || !d.本番表示プレビュー.calendar || !d.本番表示プレビュー.lineup || !d.本番表示プレビュー.detailInner || !d.本番表示プレビュー.productionCssVersion)) failures.push('本番表示プレビューにイベントカード / カレンダー / 出演者 / 本番CSSが反映されない');
 if(d.本番表示プレビュー && !d.本番表示プレビュー.template) failures.push('本番表示プレビューが記事ページを型にしていない');
 if(d.本番表示プレビュー && d.本番表示プレビュー.productionCssVersion !== DETAIL_CSS_VERSION) failures.push(`本番表示プレビューのdetail.css版が不一致（期待 ${DETAIL_CSS_VERSION} / 実値 ${d.本番表示プレビュー.productionCssVersion || 'なし'}）`);

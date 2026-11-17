@@ -320,6 +320,13 @@ function renderQuestion(text, lang = 'en') {
   return `<p class="tj-q"><span class="tj-q-mark">Q</span><span class="tj-q-text">${escapeHtml(fields[0])}</span></p>`;
 }
 
+function renderSubhead(text, lang = 'en') {
+  const fields = String(text ?? '').split('|').map((value) => value.trim());
+  if (!fields[0]) throw new Error('subの本文が空です');
+  if (fields.length > 1) throw new Error('subの項目が多すぎます（本文のみ）');
+  return `<p class="tj-subhead">${escapeHtml(fields[0])}</p>`;
+}
+
 function parseTimelineFields(fields) {
   const values = String(fields ?? '').split('|').map((value) => value.trim());
   if (!values.length || (values.length === 1 && !values[0])) throw new Error('timelineの項目がありません');
@@ -451,18 +458,32 @@ function renderArticleShortcodes(source, { lang = 'en', festivalIds, festivalDat
     const [quote, source = ''] = fields.split('|');
     return renderPullquote(quote, source, lang);
   });
-  const blockCounts = { quotes: 0, questions: 0, timelines: 0, profiles: 0 };
-  html = html.replace(/<p(?:\s[^>]*)?>\s*(\[\[(quote|q|timeline|profile)\|[^\]]*\]\])\s*<\/p>/g, (_, shortcode, type) => {
-    const match = /^\[\[(quote|q|timeline|profile)\|([^\]]*)\]\]$/.exec(shortcode);
+  // Quill で装飾を付けたブロックも、ショートコードだけの段落なら正規化する。
+  // 許可するタグを限定し、本文が混ざる段落は従来どおりエラーにする。
+  html = html.replace(/<p(?:\s[^>]*)?>([\s\S]*?)<\/p>/gi, (paragraph, inner) => {
+    const plain = inner
+      .replace(/<\/?(?:span|strong|em|b|i|u|s)(?:\s[^>]*)?>/gi, '')
+      .replace(/<br\s*\/?>(?:\s*)/gi, '')
+      .trim();
+    if (/^\[\[(quote|q|timeline|profile|sub)\|[^\]]*\]\]$/.test(plain)) {
+      return `<p>${plain}</p>`;
+    }
+    return paragraph;
+  });
+  const blockCounts = { quotes: 0, questions: 0, timelines: 0, profiles: 0, subheads: 0 };
+  html = html.replace(/<p(?:\s[^>]*)?>\s*(\[\[(quote|q|timeline|profile|sub)\|[^\]]*\]\])\s*<\/p>/g, (_, shortcode, type) => {
+    const match = /^\[\[(quote|q|timeline|profile|sub)\|([^\]]*)\]\]$/.exec(shortcode);
     const fields = match[2];
-    blockCounts[type === 'quote' ? 'quotes' : type === 'q' ? 'questions' : `${type}s`] += 1;
+    const countKey = { quote: 'quotes', q: 'questions', timeline: 'timelines', profile: 'profiles', sub: 'subheads' }[type];
+    blockCounts[countKey] += 1;
     if (type === 'quote') return renderQuote(fields, '', lang);
     if (type === 'q') return renderQuestion(fields, lang);
     if (type === 'timeline') return renderTimeline(fields, lang);
-    return renderProfile(fields, lang);
+    if (type === 'profile') return renderProfile(fields, lang);
+    return renderSubhead(fields, lang);
   });
-  if (/\[\[(quote|q|timeline|profile)(?:\||\]\])/.test(html)) {
-    const type = html.match(/\[\[(quote|q|timeline|profile)/)?.[1] || 'shortcode';
+  if (/\[\[(quote|q|timeline|profile|sub)(?:\||\]\])/.test(html)) {
+    const type = html.match(/\[\[(quote|q|timeline|profile|sub)/)?.[1] || 'shortcode';
     throw new Error(`${type}は1行・1段落で書いてください: [[${type}|…]]`);
   }
   // CMSのQuillは短いコードを<p>[[event|...]]</p>として保存する。
@@ -476,6 +497,6 @@ function renderArticleShortcodes(source, { lang = 'en', festivalIds, festivalDat
   return { html, events, calendars: calendarMatches.length, artistCards, pullquotes: pullquotes.length, details, ...blockCounts };
 }
 
-const API = { parseEventFields, parseEvents, renderEvent, renderArtistCard, renderPullquote, renderQuote, renderQuestion, renderTimeline, renderProfile, renderDetails, renderCalendar, renderArticleShortcodes, autolinkArtists, safeUrl };
+const API = { parseEventFields, parseEvents, parseTimelineFields, parseProfileFields, renderEvent, renderArtistCard, renderPullquote, renderQuote, renderQuestion, renderSubhead, renderTimeline, renderProfile, renderDetails, renderCalendar, renderArticleShortcodes, autolinkArtists, safeUrl };
 globalThis.TJArticleShortcodes = API;
-export { parseEventFields, parseEvents, parseMonthFilter, renderEvent, renderArtistCard, renderPullquote, renderQuote, renderQuestion, renderTimeline, renderProfile, renderDetails, renderCalendar, renderArticleShortcodes, autolinkArtists, safeUrl };
+export { parseEventFields, parseEvents, parseMonthFilter, parseTimelineFields, parseProfileFields, renderEvent, renderArtistCard, renderPullquote, renderQuote, renderQuestion, renderSubhead, renderTimeline, renderProfile, renderDetails, renderCalendar, renderArticleShortcodes, autolinkArtists, safeUrl };

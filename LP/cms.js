@@ -1450,7 +1450,9 @@ function initArticleEditor(){
         if (prev === '@' || prev === '＠') toggleEntityLinkMenu(sel.index - 1);
       }
     }
+    updateInterviewEditButton();
   });
+  articleQuill.on('selection-change', () => updateInterviewEditButton());
   // HTML source で編集 → 同様に debounce
   document.getElementById('ar-body-source').addEventListener('input', () => {
     markFormDirty();
@@ -1854,7 +1856,7 @@ function previewRenderBody_(body){
 function writeArticleSimplePreview_(win, title, body){
   const safeBody = String(body || '').replace(/<script/gi, '&lt;script');
   win.document.open();
-      win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><link rel="stylesheet" href="/common.css?v=59"><link rel="stylesheet" href="/detail.css?v=95"><link rel="stylesheet" href="/article-fx.css?v=22"><style>/* フォールバックでは common.js を読まないためネイティブカーソルに戻す */*{cursor:auto !important}a,button,[role="button"],summary{cursor:pointer !important}</style></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${esc(title)}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=16"><\/script></body></html>`);
+      win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><link rel="stylesheet" href="/common.css?v=59"><link rel="stylesheet" href="/detail.css?v=96"><link rel="stylesheet" href="/article-fx.css?v=22"><style>/* フォールバックでは common.js を読まないためネイティブカーソルに戻す */*{cursor:auto !important}a,button,[role="button"],summary{cursor:pointer !important}</style></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${esc(title)}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=16"><\/script></body></html>`);
   win.document.close();
 }
 async function openArticleGeneratedPreview(){
@@ -1973,8 +1975,8 @@ const ARTICLE_TEMPLATES = {
   interview: { label: '🎤 インタビュー', category: 'INTERVIEW', html:
     '<p>[リード — 経歴・活動・今回話を聞く理由を2〜3文で]</p>' +
     '<p>[[profile|名前|拠点;都市|レーベル;名前]]</p><p><br></p>' +
-    '<h2>[章タイトル]</h2><p>[[q|質問]]</p><p>[回答]</p><p>[[quote|印象に残った発言|名前]]</p><p><br></p>' +
-    '<h2>[次の章]</h2><p>[[q|質問]]</p><p>[回答]</p><p>[[timeline|年;出来事|年;出来事]]</p><p><br></p>' +
+    '<h2>[章タイトル]</h2><p>[[sub|副題をここに]]</p><p>[[q|質問]]</p><p>[回答]</p><p>[[quote|印象に残った発言|名前]]</p><p><br></p>' +
+    '<h2>[次の章]</h2><p>[[sub|副題をここに]]</p><p>[[q|質問]]</p><p>[回答]</p><p>[[timeline|年;出来事|年;出来事]]</p><p><br></p>' +
     '<h2>INFORMATION</h2><p>[ライブ情報やリリース情報]</p>' },
   news: { label: '⚡ ニュース', category: 'NEWS', html:
     '<p>[リード文 — 何が・いつ・どこで。1〜2文で核心を]</p><p><br></p>' +
@@ -2012,6 +2014,31 @@ function toggleTemplateMenu(){
   btn.parentElement.style.position = 'relative';
   btn.insertAdjacentElement('afterend', menu);
   const close = (e) => { if (!menu.contains(e.target) && e.target !== btn){ menu.remove(); document.removeEventListener('click', close, true); } };
+  setTimeout(() => document.addEventListener('click', close, true), 0);
+}
+
+function toggleInterviewBlockMenu(){
+  let menu = document.getElementById('ar-interview-menu');
+  if (menu){ menu.remove(); return; }
+  const btn = document.getElementById('ar-interview-toggle');
+  if (!btn) return;
+  menu = document.createElement('div');
+  menu.id = 'ar-interview-menu';
+  menu.className = 'ar-template-menu ar-interview-menu';
+  menu.innerHTML = [
+    ['見出しの副題', 'openSubheadForm()'],
+    ['プロフィール', 'openInterviewProfileForm()'],
+    ['年表', 'openInterviewTimelineForm()'],
+    ['発言（選んだ段落を発言に）', 'openInterviewQuoteForm()'],
+    ['質問', 'openInterviewQuestionForm()']
+  ].map(([label, action]) => `<button type="button" onclick="${action};document.getElementById('ar-interview-menu')?.remove()">${label}</button>`).join('');
+  btn.parentElement.style.position = 'relative';
+  btn.insertAdjacentElement('afterend', menu);
+  const close = event => {
+    if (!menu.contains(event.target) && event.target !== btn){
+      menu.remove(); document.removeEventListener('click', close, true);
+    }
+  };
   setTimeout(() => document.addEventListener('click', close, true), 0);
 }
 
@@ -2411,7 +2438,7 @@ function insertEntityShortcode(type, id, name){
   toast(label + ' へのリンクを挿入しました', 'success');
 }
 
-function insertArticleShortcode(text){
+function insertArticleShortcode(text, options = {}){
   const value = String(text || '').trim();
   if (!value) return;
   const insertion = value + '\n';
@@ -2429,12 +2456,61 @@ function insertArticleShortcode(text){
   const q = initArticleEditor();
   if (!q) return;
   preserveArticleScroll(() => {
-    const range = q.getSelection(true) || { index: q.getLength() };
-    q.insertText(range.index, insertion, 'user');
-    q.setSelection(range.index + insertion.length, 0, 'silent');
+    let range = options.range || q.getSelection(true) || { index: q.getLength(), length: 0 };
+    if (range.length) {
+      q.deleteText(range.index, range.length, 'user');
+      range = { index: range.index, length: 0 };
+    }
+    let index = range.index;
+    const [line, offset] = q.getLine(index) || [null, 0];
+    const lineStart = line ? index - offset : index;
+    const lineLength = line?.length?.() || 1;
+    const lineText = line?.domNode?.textContent || '';
+    const lineHasEmbed = !!line?.domNode?.querySelector?.('img,video,iframe,object,embed,[data-embed]');
+    const lineIsEmpty = !!line && !lineText.trim() && !lineHasEmbed;
+    const lineIsStart = line && offset === 0;
+    const trailingPlaceholder = line?.domNode?.lastElementChild?.tagName === 'BR' && offset >= lineLength - 2;
+    const lineIsEnd = line && (offset === lineLength - 1 || trailingPlaceholder);
+    let valueStart = index;
+    let valueInsertion = insertion;
+    let cursorIndex = index + insertion.length;
+    if (lineIsEmpty) {
+      // deleteText で既存行が空になった更新時も、改行を追加しない。
+      q.deleteText(lineStart, Math.max(0, lineLength - 1), 'user');
+      index = lineStart;
+      valueStart = lineStart;
+      valueInsertion = value;
+      cursorIndex = valueStart + value.length + 1;
+    } else if (lineIsStart) {
+      valueInsertion = value + '\n';
+      cursorIndex = index + valueInsertion.length;
+    } else if (lineIsEnd) {
+      valueInsertion = '\n' + value;
+      valueStart = index + 1;
+      cursorIndex = valueStart + value.length + 1;
+    } else {
+      valueInsertion = '\n' + value + '\n';
+      valueStart = index + 1;
+      cursorIndex = valueStart + value.length + 1;
+    }
+    q.insertText(index, valueInsertion, {}, 'user');
+    // SmartBreak が残っている場合、value の後ろから行末の改行までを掃除する。
+    // details のような複数行 value では、最後の value 行を対象にする。
+    const finalValueIndex = valueStart + Math.max(0, value.length - 1);
+    const [finalLine, finalOffset] = q.getLine(finalValueIndex) || [null, 0];
+    if (finalLine) {
+      const finalLineStart = finalValueIndex - finalOffset;
+      const lastBreak = value.lastIndexOf('\n');
+      const finalSegmentLength = value.length - lastBreak - 1;
+      const extra = finalLine.length() - finalSegmentLength - 1;
+      if (extra > 0) q.deleteText(finalLineStart + finalSegmentLength, extra, 'user');
+    }
+    q.removeFormat(valueStart, value.length, 'user');
+    q.formatLine(valueStart, Math.max(value.length, 1), { header: false, list: false, blockquote: false, align: false }, 'user');
+    q.setSelection(Math.min(cursorIndex, q.getLength()), 0, 'silent');
     scheduleArticleEditorSync('quill');
   });
-  toast('本文にショートコードを挿入しました', 'success');
+  if (!options.silent) toast('本文にショートコードを挿入しました', 'success');
 }
 
 function insertArticleCalendar(){
@@ -2468,13 +2544,14 @@ const ARTICLE_BODY_HELP = [
     { name: '開催カレンダー', how: '「📅 カレンダーを挿入」→ [[calendar]]（[[calendar|2026-12〜2027-02]] で月を絞れる）', note: 'その記事のイベントカードを月ごとに自動で一覧化。カードが0件だとエラー', action: 'insertArticleCalendar' },
     { name: 'アーティストカード', how: '「＠ ID」→ アーティストを検索 → 行の右の「▣ カード」→ [[artist-card:dj-nobu]]（|一言 を足せる）', note: '写真・名前・ジャンル・拠点・経歴の冒頭・SNS。中身はスプレッドシート ARTISTS から。一言を書くと経歴の代わりに出る', action: 'toggleEntityLinkMenu' },
     { name: 'プルクオート', how: '文を選択して「❝ プルクオート」→ [[pullquote|本文|出典]]', note: '本文の一文を中央・大きめ・上下赤線で見せる。出典は任意。自分の本文を抜き出すときに使う（他人の言葉は「引用」）', action: 'openArticlePullquoteForm' },
-    { name: 'インタビュー発言', how: '[[quote|発言本文|話者名]]（話者名は省略できる）', note: 'インタビューの発言を、細い左線付きの軽い見た目で見せる。本数の制限なし。「引用」ボタン（blockquote）は使わない。発言を大きく見せたいときだけプルクオート', action: null },
-    { name: 'インタビュー質問', how: '[[q|質問文]]', note: '先頭に赤い「Q」が付く。回答は直後の通常の段落か [[quote|…]] で書く。見出しではないので、目次や見出しの装飾には入らない。頭に「——」「Q.」は書かない', action: null },
-    { name: 'インタビュー年表', how: '[[timeline|2004;DJデビュー|2016;レーベル設立]]', note: '「年;出来事」を | で並べる。最初の ; で年と出来事に分かれる。年は 2021.07 や 2020〜2021 も書ける。2〜12項目が目安', action: null },
-    { name: 'プロフィール', how: '[[profile|名前|拠点;Tokyo|レーベル;名前]]', note: 'インタビューの冒頭（リードの直後）に1記事1個。「項目;値」は0〜8個が目安。確認できない項目は書かない', action: null },
-    { name: 'インタビュー記事の組み立て', how: 'リード → [[profile|…]] → 各章（H2 → [[q|…]] → 回答の段落 / [[quote|…]]）→ 必要な章に [[timeline|…]] → H2「INFORMATION」', note: '「📄 テンプレ」のインタビューがこの形になっている', action: null },
+    { name: '見出しの副題', how: '🎤 インタビュー → 見出しの副題 → [[sub|副題]]', note: 'H2 の直後に置く。見出しではないので目次に入らない。1つの H2 に1つまで', action: 'openSubheadForm' },
+    { name: 'インタビュー発言', how: '🎤 インタビュー → 発言（選んだ段落を発言に）', note: 'インタビューの発言を、細い左線付きの軽い見た目で見せる。本数の制限なし。「引用」ボタン（blockquote）は使わない。挿入済みの行をクリックすると ✎ フォームで編集', action: 'openInterviewQuoteForm' },
+    { name: 'インタビュー質問', how: '🎤 インタビュー → 質問', note: '先頭に赤い「Q」が付く。回答は直後の通常の段落か [[quote|…]] で書く。見出しではないので、目次や見出しの装飾には入らない。挿入済みの行をクリックすると ✎ フォームで編集', action: 'openInterviewQuestionForm' },
+    { name: 'インタビュー年表', how: '🎤 インタビュー → 年表', note: '「年;出来事」を | で並べる。最初の ; で年と出来事に分かれる。年は 2021.07 や 2020〜2021 も書ける。挿入済みの行をクリックすると ✎ フォームで編集', action: 'openInterviewTimelineForm' },
+    { name: 'プロフィール', how: '🎤 インタビュー → プロフィール', note: 'インタビューの冒頭（リードの直後）に1記事1個。「項目;値」は0〜8個が目安。挿入済みの行をクリックすると ✎ フォームで編集', action: 'openInterviewProfileForm' },
+    { name: 'インタビュー記事の組み立て', how: 'リード → [[profile|…]] → 各章（H2 → [[sub|…]] → [[q|…]] → 回答の段落 / [[quote|…]]）→ 必要な章に [[timeline|…]] → H2「INFORMATION」', note: '「📄 テンプレ」のインタビューがこの形になっている', action: null },
     { name: '折りたたみ', how: '「▾ 折りたたみ」→ [[details|見出し]] … [[/details]]', note: '見出しを押すと開く補足。中に段落・リスト・画像・他のブロックを入れられる。入れ子は不可。閉じ忘れは公開が止まる', action: 'openArticleDetailsForm' },
-    { name: 'ブロックの注意', how: '', note: 'ブロックは JS 不要の静的 HTML になる。存在しない ID を書くと公開（ビルド）が止まるので、下書きのうちにプレビューで確かめる。インタビュー用の4つ（quote / q / timeline / profile）は単独の段落に1つずつ書く。文の途中に混ぜる・値が空・; が無い・半角 | が混ざる と公開が止まる。値に半角 | と ] は書けない（全角 ｜ は書ける）', action: null }
+    { name: 'ブロックの注意', how: '', note: 'ブロックは JS 不要の静的 HTML になる。存在しない ID を書くと公開（ビルド）が止まるので、下書きのうちにプレビューで確かめる。インタビュー用の5つ（sub / quote / q / timeline / profile）は単独の段落に1つずつ書く。挿入済みの行をクリックすると ✎ フォームで編集。文の途中に混ぜる・値が空・; が無い・半角 | が混ざる と公開が止まる。値に半角 | と ] は書けない（全角 ｜ は書ける）', action: null }
   ]},
   { title: '4. サイト内リンク・関連付け', items: [
     { name: 'フェス・アーティスト・会場・記事へリンク', how: '「＠ ID」または本文で @ を打つ → 名前で検索', note: '文中に名前入りのリンクが入る', action: 'toggleEntityLinkMenu' },
@@ -2494,7 +2571,7 @@ const ARTICLE_BODY_HELP = [
     { name: '見出し候補・翻訳', how: 'AI でタイトル案、各欄の翻訳、本文全体の英訳', note: '', action: null }
   ]},
   { title: '6. 英語版', items: [
-    { name: '英語本文・タイトル・要約', how: '「🌐 ENGLISH VERSION」に英語の本文・タイトル・要約を入れると /en/articles/... に英語ページが出る', note: 'ブロック（[[event]] [[artist-card]] [[pullquote]] [[quote]] [[q]] [[timeline]] [[profile]]）は英語本文でも同じ書き方で、見出し語（LINEUP / ARTIST PAGE 等）とアーティストの経歴が英語になる。英語本文が無い記事は、英語ページも日本語本文のまま。', action: null }
+    { name: '英語本文・タイトル・要約', how: '「🌐 ENGLISH VERSION」に英語の本文・タイトル・要約を入れると /en/articles/... に英語ページが出る', note: 'ブロック（[[event]] [[artist-card]] [[pullquote]] [[sub]] [[quote]] [[q]] [[timeline]] [[profile]]）は英語本文でも同じ書き方で、見出し語（LINEUP / ARTIST PAGE 等）とアーティストの経歴が英語になる。英語本文が無い記事は、英語ページも日本語本文のまま。', action: null }
   ]},
   { title: '7. 公開時に自動で起きること（本文から作られるもの）', items: [
     { name: '要約', how: 'EXCERPT が空なら本文の冒頭 160 字が検索結果用の説明文になる', note: '', action: null },
@@ -2654,15 +2731,168 @@ function openArticlePullquoteForm(){
   overlay.addEventListener('click', (event) => { if (event.target === overlay) close(); });
   document.addEventListener('keydown', onEsc, true);
   overlay.querySelector('#ar-pullquote-insert').addEventListener('click', () => {
-    const normalize = (value) => String(value || '').replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').replace(/\|/g, '｜').replace(/\]/g, '］').trim();
-    const text = normalize(overlay.querySelector('#ar-pullquote-text').value);
-    const source = normalize(overlay.querySelector('#ar-pullquote-source').value);
+    const text = normalizeShortcodeValue(overlay.querySelector('#ar-pullquote-text').value);
+    const source = normalizeShortcodeValue(overlay.querySelector('#ar-pullquote-source').value);
     if (!text) return toast('本文を入力してください', 'warning');
     insertArticleShortcode('[[pullquote|' + text + (source ? '|' + source : '') + ']]');
     toast('プルクオートを挿入しました', 'success');
     close();
   });
   overlay.querySelector('#ar-pullquote-text').focus();
+}
+
+function normalizeShortcodeValue(value){
+  return String(value || '').replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').replace(/\|/g, '｜').replace(/\]/g, '］').trim();
+}
+
+function interviewFormSelection(){
+  const wrap = document.getElementById('ar-editor-wrap');
+  if (wrap?.classList.contains('source-mode')) return { q: null, range: null, selected: '' };
+  const q = initArticleEditor();
+  const range = q?.getSelection() || null;
+  return { q, range: range ? { index: range.index, length: range.length } : null, selected: range?.length ? q.getText(range.index, range.length).trim() : '' };
+}
+
+function openInterviewBlockForm(kind, existing){
+  const selection = interviewFormSelection();
+  const api = globalThis.TJArticleShortcodes;
+  const isEdit = !!existing;
+  let rows = [];
+  let name = '';
+  let text = '';
+  let speaker = '';
+  if (kind === 'profile' && existing) {
+    try { const parsed = api?.parseProfileFields(existing.fields); name = parsed.name; rows = parsed.items.map(item => [item.label, item.value]); }
+    catch (_) { const parts = String(existing.fields || '').split('|'); name = parts.shift() || ''; rows = parts.map(item => item.split(';')); }
+  } else if (kind === 'timeline' && existing) {
+    try { rows = api?.parseTimelineFields(existing.fields).map(item => [item.year, item.event]) || []; }
+    catch (_) { rows = String(existing.fields || '').split('|').filter(Boolean).map(item => item.split(';')); }
+  } else if (kind === 'quote' && existing) {
+    const fields = String(existing.fields || '').split('|'); text = fields.shift() || ''; speaker = fields.join('|');
+  } else if ((kind === 'question' || kind === 'sub') && existing) {
+    text = String(existing.fields || '');
+  }
+  if ((kind === 'profile' || kind === 'timeline') && !rows.length) rows = [['', ''], ['', ''], ['', '']];
+  if (!isEdit && (kind === 'quote' || kind === 'question' || kind === 'sub') && selection.selected) text = selection.selected;
+  const id = `ar-interview-${kind}-dialog`;
+  document.getElementById(id)?.remove();
+  const labels = { profile: 'プロフィール', timeline: '年表', quote: '発言', question: '質問', sub: '見出しの副題' };
+  const overlay = document.createElement('div');
+  overlay.id = id; overlay.className = 'dialog-overlay show'; overlay.style.zIndex = '2100';
+  const rowMarkup = kind === 'profile'
+    ? `<div class="ar-interview-row-head" aria-hidden="true"><span>項目</span><span>値</span><span></span></div><div class="ar-interview-rows" id="ar-interview-rows"></div><button type="button" class="btn btn-sm ar-interview-add" id="ar-interview-add">＋ 行を足す</button>`
+    : kind === 'timeline'
+      ? `<div class="ar-interview-row-head" aria-hidden="true"><span>年</span><span>出来事</span><span></span></div><div class="ar-interview-rows" id="ar-interview-rows"></div><button type="button" class="btn btn-sm ar-interview-add" id="ar-interview-add">＋ 行を足す</button>`
+      : kind === 'sub'
+        ? `<div class="form-group"><label>副題 *</label><input id="ar-interview-text" type="text" placeholder="トランスからテクノへ。" value="${esc(text)}"></div>`
+        : `<div class="form-group"><label>${kind === 'quote' ? '本文' : '質問文'} *</label><textarea id="ar-interview-text" rows="${kind === 'quote' ? 4 : 2}" placeholder="${kind === 'quote' ? '発言本文' : '質問文'}">${esc(text)}</textarea></div>${kind === 'quote' ? '<div class="form-group"><label>話者（任意）</label><input id="ar-interview-speaker" type="text" placeholder="YUTA" value="'+esc(speaker)+'"></div>' : ''}`;
+  overlay.innerHTML = `<div class="dialog-box ar-interview-dialog-box"><h3>🎤 ${labels[kind]}</h3><p class="label-hint">${isEdit ? '本文のこの行をフォームで編集します。' : '入力内容を本文に挿入します。'}</p><div class="form-grid ar-interview-form-grid">${kind === 'profile' ? '<div class="form-group"><label>名前 *</label><input id="ar-interview-name" type="text" placeholder="アーティスト名" value="'+esc(name)+'"></div>' : ''}${kind === 'timeline' ? '' : ''}${rowMarkup}</div><div class="ar-block-preview ar-prev-body article-body" id="ar-interview-preview"></div><div class="btn-row" style="justify-content:flex-end;margin-top:14px"><button type="button" class="btn" id="ar-interview-cancel">キャンセル</button><button type="button" class="btn btn-accent" id="ar-interview-submit">${isEdit ? '更新' : '本文に挿入'}</button></div></div>`;
+  document.body.appendChild(overlay);
+
+  const rowsEl = overlay.querySelector('#ar-interview-rows');
+  const renderRows = () => {
+    if (!rowsEl) return;
+    rowsEl.innerHTML = rows.map((row, index) => `<div class="ar-interview-row" data-index="${index}"><input data-field="first" type="text" placeholder="${kind === 'timeline' ? '2004 / 2021.07' : '項目'}" value="${esc(row[0] || '')}"><input data-field="second" type="text" placeholder="${kind === 'timeline' ? '出来事' : '値'}" value="${esc(row[1] || '')}"><button type="button" class="btn btn-sm ar-interview-remove" title="行を削除">✕</button>${kind === 'timeline' ? '<button type="button" class="btn btn-sm ar-interview-up" title="上へ">↑</button><button type="button" class="btn btn-sm ar-interview-down" title="下へ">↓</button>' : ''}</div>`).join('');
+    rowsEl.querySelectorAll('.ar-interview-row').forEach(rowEl => rowEl.querySelectorAll('input').forEach(input => input.addEventListener('input', () => { const i = Number(rowEl.dataset.index); rows[i][input.dataset.field === 'first' ? 0 : 1] = input.value; updatePreview(); })));
+    rowsEl.querySelectorAll('.ar-interview-remove').forEach(button => button.addEventListener('click', () => { rows.splice(Number(button.closest('.ar-interview-row').dataset.index), 1); renderRows(); updatePreview(); }));
+    rowsEl.querySelectorAll('.ar-interview-up').forEach(button => button.addEventListener('click', () => { const i = Number(button.closest('.ar-interview-row').dataset.index); if (i) [rows[i - 1], rows[i]] = [rows[i], rows[i - 1]]; renderRows(); updatePreview(); }));
+    rowsEl.querySelectorAll('.ar-interview-down').forEach(button => button.addEventListener('click', () => { const i = Number(button.closest('.ar-interview-row').dataset.index); if (i < rows.length - 1) [rows[i], rows[i + 1]] = [rows[i + 1], rows[i]]; renderRows(); updatePreview(); }));
+  };
+  const close = () => { overlay.remove(); document.removeEventListener('keydown', onEsc, true); };
+  const onEsc = event => { if (event.key === 'Escape') close(); };
+  const preview = overlay.querySelector('#ar-interview-preview');
+  const updatePreview = () => {
+    if (!api) { preview.innerHTML = '<p class="ar-preview-loading">プレビューは読み込み中</p>'; return; }
+    try {
+      let fields;
+      if (kind === 'profile') fields = [normalizeShortcodeValue(overlay.querySelector('#ar-interview-name').value), ...rows.filter(row => row[0] || row[1]).map(row => `${normalizeShortcodeValue(row[0]).replace(/;/g, '；')};${normalizeShortcodeValue(row[1])}`)].join('|');
+      else if (kind === 'timeline') fields = rows.filter(row => row[0] || row[1]).map(row => `${normalizeShortcodeValue(row[0]).replace(/;/g, '；')};${normalizeShortcodeValue(row[1])}`).join('|');
+      else if (kind === 'quote') fields = normalizeShortcodeValue(overlay.querySelector('#ar-interview-text').value) + (normalizeShortcodeValue(overlay.querySelector('#ar-interview-speaker').value) ? '|' + normalizeShortcodeValue(overlay.querySelector('#ar-interview-speaker').value) : '');
+      else fields = normalizeShortcodeValue(overlay.querySelector('#ar-interview-text').value);
+      const renderer = { profile: 'renderProfile', timeline: 'renderTimeline', quote: 'renderQuote', question: 'renderQuestion', sub: 'renderSubhead' }[kind];
+      preview.innerHTML = api[renderer](fields);
+      preview.classList.remove('ar-preview-error');
+    } catch (error) { preview.textContent = error.message || String(error); preview.classList.add('ar-preview-error'); }
+  };
+  if (rowsEl) renderRows();
+  overlay.querySelector('#ar-interview-add')?.addEventListener('click', () => { rows.push(['', '']); renderRows(); updatePreview(); });
+  overlay.querySelectorAll('textarea, input').forEach(input => input.addEventListener('input', updatePreview));
+  overlay.querySelector('#ar-interview-cancel').addEventListener('click', close);
+  overlay.addEventListener('click', event => { if (event.target === overlay) close(); });
+  document.addEventListener('keydown', onEsc, true);
+  overlay.querySelector('#ar-interview-submit').addEventListener('click', () => {
+    try {
+      let shortcode;
+      if (kind === 'profile') {
+        const cleanName = normalizeShortcodeValue(overlay.querySelector('#ar-interview-name').value);
+        if (!cleanName) throw new Error('名前を入力してください');
+        const valid = rows.filter(row => row[0] || row[1]);
+        valid.forEach((row, i) => { row[0] = normalizeShortcodeValue(row[0]).replace(/;/g, '；'); row[1] = normalizeShortcodeValue(row[1]); if (!row[0]) throw new Error(`${i + 1}行目の項目が空です`); if (!row[1]) throw new Error(`${i + 1}行目の値が空です`); });
+        shortcode = `[[profile|${cleanName}|${valid.map(row => `${row[0]};${row[1]}`).join('|')}]]`.replace('|]]', ']]');
+      } else if (kind === 'timeline') {
+        const valid = rows.filter(row => row[0] || row[1]);
+        if (!valid.length) throw new Error('年表は1行以上入力してください');
+        valid.forEach((row, i) => { row[0] = normalizeShortcodeValue(row[0]).replace(/;/g, '；'); row[1] = normalizeShortcodeValue(row[1]); if (!row[0]) throw new Error(`${i + 1}行目の年が空です`); if (!row[1]) throw new Error(`${i + 1}行目の出来事が空です`); });
+        shortcode = `[[timeline|${valid.map(row => `${row[0]};${row[1]}`).join('|')}]]`;
+      } else {
+        const cleanText = normalizeShortcodeValue(overlay.querySelector('#ar-interview-text').value);
+        if (!cleanText) throw new Error(kind === 'quote' ? '本文を入力してください' : kind === 'sub' ? '副題を入力してください' : '質問文を入力してください');
+        shortcode = kind === 'quote' ? `[[quote|${cleanText}${normalizeShortcodeValue(overlay.querySelector('#ar-interview-speaker').value) ? '|' + normalizeShortcodeValue(overlay.querySelector('#ar-interview-speaker').value) : ''}]]` : kind === 'sub' ? `[[sub|${cleanText}]]` : `[[q|${cleanText}]]`;
+      }
+      if (isEdit) {
+        const q = initArticleEditor();
+        const current = q?.getText(existing.lineIndex, existing.original.length).trim();
+        if (current !== existing.expected) return toast('本文が変わったので、もう一度開いてください', 'warning');
+        insertArticleShortcode(shortcode, { range: { index: existing.lineIndex, length: existing.original.length }, silent: true });
+      } else insertArticleShortcode(shortcode, { range: selection.range || undefined });
+      toast(isEdit ? 'ブロックを更新しました' : '本文にショートコードを挿入しました', 'success'); close();
+    } catch (error) { toast(error.message || String(error), 'error'); }
+  });
+  updatePreview();
+  (overlay.querySelector('textarea, input'))?.focus();
+}
+
+function openInterviewProfileForm(existing){ openInterviewBlockForm('profile', existing); }
+function openInterviewTimelineForm(existing){ openInterviewBlockForm('timeline', existing); }
+function openInterviewQuoteForm(existing){ openInterviewBlockForm('quote', existing); }
+function openInterviewQuestionForm(existing){ openInterviewBlockForm('question', existing); }
+function openSubheadForm(existing){ openInterviewBlockForm('sub', existing); }
+
+function updateInterviewEditButton(){
+  const wrap = document.getElementById('ar-editor-wrap');
+  const q = articleQuill;
+  if (!wrap || !q) return;
+  let button = document.getElementById('ar-interview-edit-button');
+  if (wrap.classList.contains('source-mode')) { if (button) button.hidden = true; return; }
+  const range = q.getSelection();
+  const lineInfo = range ? q.getLine(range.index) : null;
+  const line = lineInfo?.[0];
+  const offset = lineInfo?.[1] || 0;
+  const lineStart = line ? range.index - offset : 0;
+  const lineText = line ? q.getText(lineStart, line.length()).replace(/\n$/, '') : '';
+  const raw = lineText.trim();
+  const match = /^\[\[(profile|timeline|quote|q|sub)\|([^\]]*)\]\]$/.exec(raw);
+  if (!match) { if (button) button.hidden = true; return; }
+  if (!button) {
+    button = document.createElement('button'); button.type = 'button'; button.id = 'ar-interview-edit-button'; button.className = 'ar-interview-edit-button';
+    button.textContent = '✎ フォームで編集'; wrap.appendChild(button);
+  }
+  const bounds = q.getBounds(lineStart);
+  const editorRect = q.container.getBoundingClientRect();
+  const wrapRect = wrap.getBoundingClientRect();
+  button.hidden = false;
+  const visibleRight = Math.min(editorRect.right, window.innerWidth);
+  const buttonLeft = visibleRight - wrapRect.left - button.offsetWidth - 8;
+  button.style.left = `${Math.max(8, buttonLeft)}px`;
+  button.style.top = `${Math.max(8, editorRect.top - wrapRect.top + bounds.top - 4)}px`;
+  button.onclick = () => {
+    const existing = { fields: match[2], lineIndex: lineStart, original: lineText, expected: raw };
+    if (match[1] === 'profile') openInterviewProfileForm(existing);
+    else if (match[1] === 'timeline') openInterviewTimelineForm(existing);
+    else if (match[1] === 'quote') openInterviewQuoteForm(existing);
+    else if (match[1] === 'sub') openSubheadForm(existing);
+    else openInterviewQuestionForm(existing);
+  };
 }
 
 function openArticleDetailsForm(){
@@ -2699,8 +2929,7 @@ function openArticleDetailsForm(){
   overlay.addEventListener('click', (event) => { if (event.target === overlay) close(); });
   document.addEventListener('keydown', onEsc, true);
   overlay.querySelector('#ar-details-insert').addEventListener('click', () => {
-    const normalize = (value) => String(value || '').replace(/[\r\n]+/g, ' ').replace(/\s+/g, ' ').replace(/\|/g, '｜').replace(/\]/g, '］').trim();
-    const summary = normalize(overlay.querySelector('#ar-details-summary').value);
+    const summary = normalizeShortcodeValue(overlay.querySelector('#ar-details-summary').value);
     if (!summary) return toast('見出しを入力してください', 'warning');
     const shortcode = initialText ? `[[details|${summary}]]\n${initialText}\n[[/details]]` : `[[details|${summary}]]\n（ここに中身を書く）\n[[/details]]`;
     if (!sourceMode && q && range?.length) {

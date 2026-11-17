@@ -15330,3 +15330,50 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 
 - 予約公開はユーザーが今後実装したい（2026-11-13）。現状 Publish At はシートに保存されるが RSS の日付に使われるだけで、日時まで隠す処理も定時の再生成も無い。設計時は publishAt による除外を一か所に寄せ、cron で Publish pipeline を回す。
+
+## 2026-11-18 CMS 記事本文: インタビュー用ブロックのフォーム入力＋見出しの副題 `[[sub]]`
+
+### 実施
+
+- 本文エディタに「🎤 インタビュー ▾」を追加。見出しの副題 / プロフィール / 年表 / 発言 / 質問の5フォーム（行の追加・削除・年表の並べ替え、フォーム内ライブプレビュー）。発言・質問・副題は、選択した段落を取り込んで置き換えられる。
+- 挿入済みの `[[sub|profile|timeline|quote|q|…]]` 行にカーソルを置くと「✎ フォームで編集」が出て、値入りのフォームで更新できる。
+- `insertArticleShortcode`（VISUAL）を修正し、挿入物が必ず「単独の段落・書式なし」になるようにした（行の途中・行末・見出し行・空行・選択置換のどれでも）。event / pullquote / details / calendar の挿入にも効く。
+- 新ブロック `[[sub|副題]]` → `<p class="tj-subhead">`（H2 直下に詰めて、本文より少し大きい明るいグレー）。斜体段落の自動判定はしない（過去記事の見た目を変えないため）。
+- 公開側の許容: quote / q / timeline / profile / sub が `span` `strong` `em` `b` `i` `u` `s` や末尾 `<br>` だけで包まれていても変換する（YUTA 記事で `<span style="color:…">[[profile|…]]</span>` が「1行・1段落で書いてください」エラーになった件）。文章が混ざる段落は従来どおりエラー。
+- 実装は Codex（設計書: 会話内）。設計・レビュー・実ブラウザ検証・git は Claude。
+
+### コミット
+
+- 本エントリと同じコミット（push はユーザーの起床後。2026-11-18 夜「push 手前まで進めて」の指示）。
+
+### 検証
+
+- `bash scripts/preflight.sh`: 全79件成功（コミット前、9ec2ab1dc 取り込み前の状態で実行）。取り込み後に再実行した結果は下の「次の担当への注意」。
+- 実ブラウザ（headless Chrome 実クリック・CDP、ローカル配信・GAS 通信は遮断、認証は検査用に素通し）: `http://127.0.0.1:8792/cms.html`、幅 1280px と 390px（mobile エミュレーション）。
+  - メニュー → 各フォーム → 入力 → フォーム内プレビュー → 挿入 → `ar-body` が `<p>[[…]]</p>` 単独段落、を5種すべて確認。
+  - 段落の途中に挿入 → 段落が分かれて単独段落になる。H2 行末に副題 → H2 は残り空見出しが出ない。段落を選択して「発言」→ 段落が置き換わる。
+  - 行を実クリック →「✎ フォームで編集」→ 値入りで開く → 更新 → 置き換わり、空段落が増えない（1280 / 390 とも）。
+  - 色付き span の profile を含む本文で、横のプレビューがエラー無しで全ブロックを描画。他の本文が消えないこと。JS 例外 0。
+  - 既存の details（段落途中）・calendar（空行）・event（行頭）の挿入結果を確認。
+- 本番同等ページ（build-detail-pages の draft-preview をスクラッチで実行、リポジトリ非変更）: YUTA 記事本文（`[[sub]]` 4か所・色付き span の profile）を PC 1280 / スマホ 390 で描画し、副題と profile の表示・横はみ出しなしを確認。
+- `node scripts/check_cms_layout.mjs` に追加した検査（5フォームの重なり、SmartBreak 空段落を含む挿入4ケースの innerHTML 完全一致）が実際に値を返して緑であることを確認。
+
+### 変更したパターン
+
+- `LP/article-shortcodes.js`: 単独段落ブロックの装飾タグ正規化、`sub` 追加、`parseProfileFields` / `parseTimelineFields` / `renderSubhead` を export。
+- `LP/cms.js`: インタビューメニュー・5フォーム・編集ボタン・`insertArticleShortcode` の段落化（SmartBreak の空行は DOM の中身で判定）・`normalizeShortcodeValue` 共通化・使い方一覧・インタビュー雛形。
+- `LP/cms.html`（ボタン、cms.css 55 / article-shortcodes.js 12 / cms.js 206）、`LP/cms.css`、`LP/detail.css`（`.tj-subhead`、`DETAIL_CSS_VERSION` 95→96、詳細ページ546件の参照を 96 に）。
+- `scripts/check_article_shortcodes.mjs`、`scripts/check_cms_layout.mjs`、`docs/writing/ARTICLE_BODY_FEATURES.md`、`docs/writing/ARTICLE_BODY_SPEC_FOR_AI.md`。
+
+### 未確認の類似パターン
+
+- **実機未確認**: Publish pipeline の実行と、本番 CMS（`cms.html?cb=<乱数>`）での操作確認。push 後に行う（AGENTS.md「Publish の経路を触ったら」）。
+- 認証済み本番 CMS での保存→再表示: **未確認**（本番データに書き込まないため。push 後に読み取りと下書きプレビューで確認する）。
+- スマホ幅の CMS 本文エディタは、今回の変更前から画面右へはみ出している（390px で editor が 76〜689px）。今回は「✎」ボタンを画面内に収める対応のみ。エディタのはみ出し自体は**未対応**。
+- リスト・引用の末尾に挿入したときに最後に残る `<p><br></p>` は、Quill が読み込み直後から付ける既存の挙動（今回の変更とは無関係、確認済み）。
+- 英語本文（body_en）での `[[sub]]` 表示: 生成コードは同じ関数を通るが、実ページでは**未確認**。
+
+### 次の担当への注意・判断待ち
+
+- push 後に必ず: `gh workflow run "Publish pipeline"` → success 確認 → 本番 CMS を `?cb=乱数` で開きフォーム挿入とプレビューを確認 → ユーザーに Cmd+Shift+R を案内。
+- 生成物は ?v の置換のみコミットした。9ec2ab1dc（Asia Music Event 記事の Publish）で生じる生成物（記事ページ・関連記事・ハブ）は、手元では本文画像が Drive URL のまま生成されるため含めていない。デプロイ時の同期で生成される。

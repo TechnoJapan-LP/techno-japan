@@ -1,6 +1,9 @@
 import assert from 'node:assert/strict';
 import {
   parseEventFields,
+  parseProfileFields,
+  parseTimelineFields,
+  renderSubhead,
   renderArticleShortcodes,
   safeUrl,
 } from '../LP/article-shortcodes.js';
@@ -188,5 +191,21 @@ assert.throws(() => renderArticleShortcodes('<p>[[profile|名前|項目]]</p>'),
 assert.throws(() => renderArticleShortcodes('<p>[[profile|名前|;値]]</p>'), /profileの項目名が空/);
 assert.throws(() => renderArticleShortcodes('<p>[[profile|名前|項目;]]</p>'), /profileの値が空/);
 assert.throws(() => renderArticleShortcodes('文章 [[q|質問]] の途中'), /qは1行・1段落/);
+assert.match(renderArticleShortcodes('<p><span style="color: rgba(240, 237, 232, 0.85);">[[profile|YUTA|DJデビュー;2004年]]</span></p>').html, /tj-profile/);
+assert.match(renderArticleShortcodes('<p><strong>[[q|質問]]</strong><br></p>').html, /tj-q/);
+assert.match(renderArticleShortcodes('<p><span style="color:red"><em>[[quote|本文|話者]]</em></span></p>').html, /tj-quote/);
+assert.throws(() => renderArticleShortcodes('<p>本文。<span>[[profile|A]]</span></p>'), /profileは1行・1段落/);
+assert.match(renderArticleShortcodes('<p>[[timeline|2004;A]]</p><p>文</p>').html, /tj-timeline/);
+assert.deepEqual(parseProfileFields('YUTA|拠点;Tokyo'), { name: 'YUTA', items: [{ label: '拠点', value: 'Tokyo' }] });
+assert.deepEqual(parseTimelineFields('2004;DJデビュー'), [{ year: '2004', event: 'DJデビュー' }]);
+const subhead = renderArticleShortcodes('<h2>ORIGIN</h2><p>[[sub|トランスからテクノへ。]]</p>');
+assert.match(subhead.html, /<p class="tj-subhead">トランスからテクノへ。<\/p>/);
+assert.equal(subhead.subheads, 1);
+assert.match(renderArticleShortcodes('<p><em>[[sub|A]]</em></p>').html, /class="tj-subhead"/);
+assert.equal(renderArticleShortcodes('<p>[[subscribe|A]]</p>').html, '<p>[[subscribe|A]]</p>');
+assert.throws(() => renderArticleShortcodes('<p>文[[sub|A]]</p>'), /subは1行・1段落/);
+assert.throws(() => renderArticleShortcodes('<p>[[sub|]]</p>'), /subの本文が空/);
+assert.throws(() => renderArticleShortcodes('<p>[[sub|A|B]]</p>'), /subの項目が多すぎ/);
+assert.match(renderSubhead('A & B'), /A &amp; B/);
 
-console.log('article shortcodes: 72 assertions passed');
+console.log('article shortcodes: assertions passed');
