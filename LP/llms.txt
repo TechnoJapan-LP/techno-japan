@@ -1,7 +1,7 @@
 # TECHNO JAPAN
 
 > 日本のテクノ / ハウスの独立メディア。フェスティバル92件・
-> アーティスト135名・会場22件・記事23本を日英で掲載し、
+> アーティスト135名・会場22件・記事24本を日英で掲載し、
 > 開催日・場所・出演者を構造化データ（schema.org）付きで公開している。
 
 ## 今後の開催予定（6件）
@@ -24,6 +24,7 @@
 
 ## 最新記事
 
+- 2026-11-18: [Asia Music Event | アジアの電子音楽シーンをつなぐ国際カンファレンスが、香港で初開催](https://techno-japan.media/articles/asia-music-event-2026-news.html) — 電子音楽の業界とシーンのための国際カンファレンスAsia Music Eventが、11月26日と27日に香港で初開催。100人超のスピーカーと50以上のセッション、最終夜のクロージングパーティまでを紹介する。 / [EN](https://techno-japan.media/en/articles/asia-music-event-2026-news.html)
 - 2026-10-31: [MUTEK.JP 2026 | 11回目のMUTEK.JPは、高輪ゲートウェイシティのMoN Takanawaへ](https://techno-japan.media/articles/mutek-jp-2026-info.html) — 電子音楽とデジタルクリエイティビティの祭典MUTEK.JPが、11回目の今年、高輪ゲートウェイシティのMoN Takanawaへ。A/VisionsとPlayの2プログラムに20組、最終日はRichie HawtinとAli DemirelによるPLASTIKMANの新作が世界初披露。 / [EN](https://techno-japan.media/en/articles/mutek-jp-2026-info.html)
 - 2026-10-30: [【2026年11月】 | 日本の音楽フェスティバル&レイヴまとめ](https://techno-japan.media/articles/japan-festival-2026-november.html) — 野外シーズンが終盤に差しかかる11月。森のキャンプ場、駅前の路上、工場、橋の下、沖縄のビーチまで、場所の幅はむしろ広がる。東京から愛知、長野、宮古島、石垣島まで、秋から冬へ移る月に体験すべき9の現場をピックアップ。 / [EN](https://techno-japan.media/en/articles/japan-festival-2026-november.html)
 - 2026-10-21: [電気菩薩 | 頭上を飛行機が行き交う成田の木の根ペンションで、24時間のハロウィン・レイヴ](https://techno-japan.media/articles/denki-bodhisattva-2026-info.html) — 2021年に東京で始まったパーティーコレクティブが、2年ぶりの野外へ。成田空港建設への反対運動の拠点だった木の根ペンションで、テーマ「中華ホラー」のハロウィン・レイヴが24時間続く。DJ MARIA.ら国内外22組が出演。 / [EN](https://techno-japan.media/en/articles/denki-bodhisattva-2026-info.html)
@@ -43,7 +44,6 @@
 - 2026-08-27: [FOREST SOUND CAMP | 東京の森で夜通し踊る キャンプ型レイヴ が9月開催](https://techno-japan.media/articles/forest-sound-camp-info.html) — 東京の西端、日の出町の森で昼から翌日の昼まで丸一日踊り続けるキャンプ型レイヴが9月に開催。Stones TaroやTeklifeのJackieら20組超が、VOID Acousticsの音とともに森林と音楽の共存という実験に挑む。 / [EN](https://techno-japan.media/en/articles/forest-sound-camp-info.html)
 - 2026-08-22: [【2026年下半期】 | アジアの音楽フェスティバル&レイヴまとめ](https://techno-japan.media/articles/asia-festival-2026-second.html) — 夏の終わりから年末まで、アジアの野外シーンは止まらない。ソウル近郊の山でのキャンプイン、ウランバートルの巨大レイヴ、ヒマラヤ高地の初開催ギャザリング、バリのエコファーム、そして香港の10周年まで、日本から数時間で届く14のフロアを厳選して紹介する。 / [EN](https://techno-japan.media/en/articles/asia-festival-2026-second.html)
 - 2026-08-17: [Snow Machine 2027 | 長野白馬で開催 出演者とステージ構成を解説](https://techno-japan.media/articles/snow-mashine-2027-info.html) — 昼はゲレンデ、夜はアリーナ、深夜は村のバーへ。白馬バレー全域を舞台に、Patrick ToppingやRisa Taniguchiらが集うウィンターフェスSnow Machineが2027年3月に上陸する。滑って踊るだけの5日間が始まる。 / [EN](https://techno-japan.media/en/articles/snow-mashine-2027-info.html)
-- 2026-08-13: [BON DISCO | 兵庫・三田の森で26時間 DIYパーティが13年目の夏へ](https://techno-japan.media/articles/bondisco-2026-info.html) — 兵庫県三田市の森を舞台に、正午から翌日午後まで踊り続けるDIYパーティBON DISCOが13年目の夏を迎える。全国から集まる40組近いアーティストと2つのフロア、そしてプールで身体を冷やしてまた音へ戻る、真夏だけの過ごし方がここにある。 / [EN](https://techno-japan.media/en/articles/bondisco-2026-info.html)
 
 ## 機械可読データ
 
