@@ -1,39 +1,39 @@
 {
-  "generatedAt": "2026-11-15T23:08:31.400Z",
+  "generatedAt": "2026-11-17T01:55:07.012Z",
   "days": 30,
   "source": "ga4",
   "items": [
     {
       "id": "topia-2026-info",
-      "views": 310
+      "views": 284
     },
     {
       "id": "japan-festival-2026-october",
-      "views": 252
+      "views": 256
     },
     {
       "id": "denki-bodhisattva-2026-info",
-      "views": 178
+      "views": 179
+    },
+    {
+      "id": "japan-festival-2026-november",
+      "views": 112
     },
     {
       "id": "sawagi-festival-2026-info",
       "views": 112
     },
     {
-      "id": "japan-festival-2026-november",
-      "views": 110
-    },
-    {
       "id": "mutek-jp-2026-info",
-      "views": 70
+      "views": 71
     },
     {
       "id": "labyrinth-2026-info",
-      "views": 57
+      "views": 49
     },
     {
       "id": "intergalactic-2026-info",
-      "views": 33
+      "views": 23
     },
     {
       "id": "asia-festival-2026-second",
@@ -41,7 +41,7 @@
     },
     {
       "id": "forest-sound-camp-info",
-      "views": 19
+      "views": 18
     },
     {
       "id": "snow-mashine-2027-info",
@@ -49,11 +49,11 @@
     },
     {
       "id": "otsukimi-2026-info",
-      "views": 13
+      "views": 12
     },
     {
       "id": "odyssey-2026-info",
-      "views": 12
+      "views": 10
     },
     {
       "id": "treak-2026-info",
@@ -64,7 +64,7 @@
       "views": 5
     },
     {
-      "id": "ondoland1012-2026-info",
+      "id": "loa-lost-paradise-2026-info",
       "views": 5
     },
     {
@@ -72,7 +72,11 @@
       "views": 5
     },
     {
-      "id": "loa-lost-paradise-2026-info",
+      "id": "ondoland1012-2026-info",
+      "views": 4
+    },
+    {
+      "id": "transcendence-2025-report",
       "views": 4
     },
     {
@@ -80,7 +84,7 @@
       "views": 3
     },
     {
-      "id": "transcendence-2025-report",
+      "id": "synapse-2026-info",
       "views": 3
     },
     {
@@ -89,10 +93,6 @@
     },
     {
       "id": "bondisco-2026-info",
-      "views": 1
-    },
-    {
-      "id": "synapse-2026-info",
       "views": 1
     }
   ]

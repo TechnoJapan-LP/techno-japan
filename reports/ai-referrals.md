@@ -1,17 +1,17 @@
 # AI経由の流入
 
-取得日時: 2026-11-15T23:08:33.026Z
+取得日時: 2026-11-17T01:55:09.146Z
 
 | 期間 | AIセッション | 全体セッション | AI割合 |
 |---|---:|---:|---:|
-| 直近28日（2026-10-20〜2026-11-16） | 102 | 2552 | 4.00% |
-| 前の28日（2026-09-22〜2026-10-19） | 0 | 0 | 0.00% |
+| 直近28日（2026-10-21〜2026-11-17） | 101 | 2607 | 3.87% |
+| 前の28日（2026-09-23〜2026-10-20） | 0 | 0 | 0.00% |
 
 ## 直近28日：参照元別
 
 | 参照元 | セッション | ユーザー |
 |---|---:|---:|
-| chatgpt.com | 98 | 95 |
+| chatgpt.com | 97 | 94 |
 | gemini.google.com | 4 | 4 |
 
 ### 直近28日：ランディングページ上位20
@@ -23,7 +23,6 @@
 | /en/articles/topia-2026-info.html | 10 | 10 |
 | /en/articles/denki-bodhisattva-2026-info.html | 5 | 5 |
 | /festivals/festival-de-frue.html | 5 | 5 |
-| /articles/japan-festival-2026-september.html | 4 | 4 |
 | /en/articles/asia-festival-2026-second.html | 4 | 4 |
 | /en/festivals/lost-find.html | 4 | 4 |
 | /en/index.html | 4 | 3 |
@@ -34,10 +33,11 @@
 | /articles/otsukimi-2026-info.html | 2 | 2 |
 | /en/ | 2 | 2 |
 | /en/articles/forest-sound-camp-info.html | 2 | 2 |
+| /en/articles/japan-festival-2026-november.html | 2 | 2 |
 | /en/articles/sawagi-festival-2026-info.html | 2 | 2 |
 | /en/festivals/rural.html | 2 | 2 |
+| /festivals/raptvana.html | 2 | 2 |
 | (not set) | 1 | 1 |
-| /articles/denki-bodhisattva-2026-info.html | 1 | 1 |
 
 ## 前の28日：参照元別
 
