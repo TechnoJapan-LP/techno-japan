@@ -15377,3 +15377,40 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 - push 後に必ず: `gh workflow run "Publish pipeline"` → success 確認 → 本番 CMS を `?cb=乱数` で開きフォーム挿入とプレビューを確認 → ユーザーに Cmd+Shift+R を案内。
 - 生成物は ?v の置換のみコミットした。9ec2ab1dc（Asia Music Event 記事の Publish）で生じる生成物（記事ページ・関連記事・ハブ）は、手元では本文画像が Drive URL のまま生成されるため含めていない。デプロイ時の同期で生成される。
+
+## 2026-11-18 記事の「2枚セット」画像: 間隔を詰め、画像を切らない
+
+### 実施
+
+- `.fx-image-pair` の上下余白 56→40px。セットが続くときの間 56→24px（767px 以下は 28px）。CMS 本文プレビュー（`.preview-image-pair`）も同じ考え方に。
+- 2枚セットの画像はパララックス（`scale(1.11)` ＋ `translateY ±5%`）の対象外にし、`transform:none`。1枚画像・ヒーローの演出は変えていない。
+- 版番号: `ARTICLE_FX_JS_VERSION` 16→17 / `ARTICLE_FX_CSS_VERSION` 22→23（cms.js の簡易プレビューも同値）。生成ページは build-detail-pages で再生成（差分は ?v のみ）。
+- きっかけ: Asia Music Event 記事（登壇者一覧の縦長画像4枚＝2セット）で「セットの間が空く」「ロゴ・見出しの上端が欠ける」。ユーザーが変更前後の比較画像を見て承認。
+- 実装は Codex、検証・git は Claude。
+
+### コミット
+
+- 本エントリと同じコミット。
+
+### 検証
+
+- 手元で本番と同じ手順で生成した `/articles/asia-music-event-2026-news.html` を headless Chrome で描画（`http://127.0.0.1:8793/…`、幅 1280 / 768 / 390）。
+  - セット間（1組目キャプション下端 → 2組目の画像上端）: 変更前 56px → 1280: 24px / 768: 24px / 390: 28px。
+  - 画像の切れ（画像の高さ − 枠の高さ）: 変更前 48px（1280）/ 54px（390）→ すべて 0px。スマホの画面写真でロゴ・見出し・枠まで見えることを目視。
+  - 1枚画像の inline transform は `translateY(…) scale(1.11)` のまま（演出は維持）。
+- 変更前の測定で、セット間はどの幅（390〜1680px）でも 56px、CMS「本番表示」プレビューでも 56px。ユーザーのスクリーンショットで広く見えたのは、表示時の clip-path 演出（枠が下から現れる）の途中だった可能性が高い（未断定）。
+- `python3 scripts/check_asset_versions.py`: 正常。`bash scripts/preflight.sh` は push 時の pre-push で全件実行。
+
+### 変更したパターン
+
+- `LP/article-fx.css`（.fx-image-pair の余白と transform）、`LP/article-fx.js`（パララックス対象からペアを除外）、`LP/cms.css`（.preview-image-pair の余白）、`LP/cms.js`（簡易プレビューの ?v）、`scripts/build-detail-pages.mjs`（版定数）、生成記事ページの ?v。
+
+### 未確認の類似パターン
+
+- data-crop（16:10 等）付きの画像が2枚セットにある記事: transform を外したことで object-fit の見え方が変わる可能性。現存記事での該当は**未確認**。
+- 2枚セットの中で縦横比が違う2枚を並べた場合の高さのそろい方: 今回変更していない（grid のまま）。
+- 本番デプロイ後の実ページでの確認: push 後に行う。
+
+### 次の担当への注意・判断待ち
+
+- Publish pipeline の「Ensure referenced images exist」は Sync Drive Images を最大10分しか待たないが、Sync は直近で 11〜13分かかる。2026-11-18 に Asia Music Event の Publish がこれで失敗した（rerun は古いコミットを使うため再び失敗。`gh workflow run "Publish pipeline"` で最新から流す必要あり）。待ち時間の延長を提案中（未実装）。

@@ -195,7 +195,7 @@
     state.io = io;
 
     /* ---------- 4. パララックス（画像内部のみ transform） ---------- */
-    var pxFrames = [].slice.call(document.querySelectorAll('.fx-frame'));
+    var pxFrames = [].slice.call(document.querySelectorAll('.fx-frame')).filter(function(f){ return !f.closest('.fx-image-pair'); });
     var heroImg = hero ? hero.querySelector('img') : null;
     if (hero) requestAnimationFrame(function(){ hero.classList.add('fx-on'); }); // ヒーローは即リビール
     var ticking = false;
