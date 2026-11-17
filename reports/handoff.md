@@ -15414,3 +15414,33 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 
 - Publish pipeline の「Ensure referenced images exist」は Sync Drive Images を最大10分しか待たないが、Sync は直近で 11〜13分かかる。2026-11-18 に Asia Music Event の Publish がこれで失敗した（rerun は古いコミットを使うため再び失敗。`gh workflow run "Publish pipeline"` で最新から流す必要あり）。待ち時間の延長を提案中（未実装）。
+
+## 2026-11-18 公開後の確認（インタビューブロック / 2枚セット / Asia Music Event のフィード）
+
+### 実施
+
+- 4コミットを push（40b881e4a インタビューブロック＋副題 / ab6e754d1 2枚セット / 4e6e92950 フィード反映 / ff58fb8e4 cms の ?v）。pre-push の `bash scripts/preflight.sh` は全79件成功。
+- `gh workflow run "Publish pipeline"`（run 44152889794）: success。続く Deploy: success。
+
+### コミット
+
+- 本エントリのコミット（docs のみ）。
+
+### 検証
+
+- 本番配信ファイルとリポジトリのハッシュ一致: cms.js / cms.css / cms.html / article-shortcodes.js / article-fx.js / article-fx.css / detail.css（7件すべて一致）。本番 cms.html は `cms.css?v=56` `cms.js?v=207` `article-shortcodes.js?v=12`。
+- 本番 `https://techno-japan.media/articles/asia-music-event-2026-news.html`（headless Chrome、1280 / 768 / 390）: 2枚セットの間 24 / 24 / 28px、画像の切れ 0px。1枚画像は `translateY(…) scale(1.11)` のまま。
+- 本番 articles.xml / rss.xml に asia-music-event-2026-news が載ったことを確認。
+
+### 変更したパターン
+
+- なし（確認のみ）。
+
+### 未確認の類似パターン
+
+- **認証済みの本番 CMS での操作（フォーム挿入→保存→再表示）: 未確認。** 本番データへ書き込まないため。配信ファイルはローカルで実クリック検証したものと同一。ユーザーに Cmd+Shift+R 後の確認を依頼済み。
+
+### 次の担当への注意・判断待ち
+
+- Publish pipeline の画像同期待ち（10分）が Sync Drive Images の実測（11〜13分）より短い問題は未対応。延長するかはユーザー判断待ち。
+- autostash の `stash@{0}` は、2026-11-18 の pull 時に作られたもの（生成物＋別セッションの docs/REDESIGN_SPEC.md・docs/design-mock の変更。docs の変更は作業ツリーに反映済みで内容一致を確認）。不要なら削除してよいが、別セッションの持ち主に確認してから。
