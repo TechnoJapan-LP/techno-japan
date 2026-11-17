@@ -5,8 +5,8 @@
     <link>https://techno-japan.media</link>
     <description>Japan&apos;s underground techno and house music media platform.</description>
     <language>ja-JP</language>
-    <lastBuildDate>Sat, 07 Nov 2026 18:35:57 +0900</lastBuildDate>
-    <!-- items-hash: a4f0c2e639804acb73b87e9a9395816da59cf69cdc34ffb666fd1f72308a7f5b -->
+    <lastBuildDate>Wed, 18 Nov 2026 03:10:37 +0900</lastBuildDate>
+    <!-- items-hash: f29595f0c022d31fa2fce177efbc102d008466a0ec736f81c2acb4b8c52f9d1a -->
     <atom:link href="https://techno-japan.media/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
       <title>GROW THE CULTURE OPEN AIR</title>
@@ -382,6 +382,14 @@
       <guid isPermaLink="true">https://techno-japan.media/articles/mutek-jp-2026-info.html</guid>
       <pubDate>Sat, 31 Oct 2026 00:00:00 +0900</pubDate>
       <category>FESTIVAL&amp;RAVE</category>
+      <description></description>
+    </item>
+    <item>
+      <title>Asia Music Event | アジアの電子音楽シーンをつなぐ国際カンファレンスが、香港で初開催</title>
+      <link>https://techno-japan.media/articles/asia-music-event-2026-news.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/articles/asia-music-event-2026-news.html</guid>
+      <pubDate>Wed, 18 Nov 2026 00:00:00 +0900</pubDate>
+      <category>NEWS</category>
       <description></description>
     </item>
   </channel>
