@@ -6414,6 +6414,40 @@ VENUESは画像を表示する場合のLCP対策を別途行い、再計測し�
 ### 未確認の類似パターン
 - なし。
 
+## 2026-11-18 日次バックアップを非公開リポジトリへ移行
+
+### 実施
+
+- `.github/workflows/backup-data.yml` の権限を `contents: read` に変更し、Checkout 先を `TechnoJapan-LP/techno-japan-backups` に変更。
+- 公開リポジトリの `.gitignore` に `backups/` を追加。
+- `docs/DATA_SCHEMA.md` のバックアップ確認先を非公開リポジトリへ変更。
+- 既存の Python による取得・検査・30日削除・`latest.json` 処理は変更なし。
+
+### コミット
+
+- 未実施（依頼どおり commit / push なし）。
+
+### 検証
+
+- ワークフローの構造チェック（権限、非公開リポジトリ、トークン、既存 Python 処理）成功。
+- `rg` / `git grep` で `backups/` の参照を確認。別の実行スクリプトは確認されず、旧パスを含む過去文書は修正せず報告対象とした。
+- 未確認: GitHub Actions 上での実行、非公開リポジトリへの実 push、実際のバックアップ生成。
+
+### 変更したパターン
+
+- バックアップワークフローの権限と Checkout 先。
+- 公開リポジトリの `backups/` 除外。
+- データスキーマのバックアップ確認先。
+
+### 未確認の類似パターン
+
+- `PROJECT_SUMMARY.md`、`HANDOFF.md`、`AUDIT_TECHNO_JAPAN.md`、`reports/handoff.md` に残る過去の `backups/` 記述は、過去記録のため未修正・報告のみ。
+- 確認済み・追加のスクリプト参照 0件。
+
+### 次の担当への注意・判断待ち
+
+- GitHub Actions の実行には `TechnoJapan-LP/techno-japan-backups` への書き込み可能な `GH_TOKEN` が必要。今回の作業では workflow 実行・commit・push を行っていない。
+
 ### 次の担当への注意・判断待ち
 - 作業ツリーに LP/ 配下の生成物差分（preflight のビルド副産物。8/30 終了フェスが
   関連欄から外れる日付由来の正常な変化）が未コミットで残っている。毎日の
@@ -15612,3 +15646,28 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - なし。
+
+## 2026-11-18 スプレッドシートの毎日バックアップを非公開リポジトリへ移した
+
+### 実施
+- 公開リポジトリの `backups/*.json` に未公開の下書き（latest.json 時点で VENUES 50・ARTISTS 38・ARTICLES 1・FESTIVALS 1）が毎日コミットされていた（全体監査で発見）。
+- 非公開リポジトリ `TechnoJapan-LP/techno-japan-backups` を作成し、既存32ファイルを投入。`backup-data.yml` はそちらをチェックアウトして書き込む（このリポジトリは `contents: read`）。取得・検査・30日削除の Python は無変更。
+- このリポジトリから `backups/` を外し `.gitignore` に追加。`docs/DATA_SCHEMA.md:180` の確かめ方を更新。実装 Codex。
+- 過去の履歴（2026-07-10〜、132コミット）は書き換えない（ユーザー判断）。
+
+### コミット
+- 65295781e と、このエントリを含むコミット。
+
+### 検証
+- ブランチ fix/backup-private で `gh workflow run backup-data.yml --ref fix/backup-private` → run 44313628102 success。非公開リポジトリに `backup: spreadsheet data 2026-11-18` のコミットが増えたことを API で確認。
+- 推送時の pre-push で preflight 全件。
+
+### 変更したパターン
+- backup-data.yml の保存先と権限、.gitignore、DATA_SCHEMA の参照1か所。
+
+### 未確認の類似パターン
+- `PROJECT_SUMMARY.md` / `HANDOFF.md` / `AUDIT_TECHNO_JAPAN.md` / 過去の handoff に旧パス `backups/` の記述が残る（過去記録なので未変更）。
+- GH_TOKEN の有効期限が切れると非公開リポジトリへの push が失敗する（従来も同じトークン）。
+
+### 次の担当への注意・判断待ち
+- 復元時は非公開リポジトリを clone して `backups/latest.json` を使う。
