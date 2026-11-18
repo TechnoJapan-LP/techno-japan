@@ -1,22 +1,22 @@
 {
-  "generatedAt": "2026-11-17T01:55:09.146Z",
+  "generatedAt": "2026-11-18T01:02:44.450Z",
   "propertyId": "535755449",
   "periods": {
     "current": {
-      "startDate": "2026-10-21",
-      "endDate": "2026-11-17",
+      "startDate": "2026-10-22",
+      "endDate": "2026-11-18",
       "label": "直近28日"
     },
     "previous": {
-      "startDate": "2026-09-23",
-      "endDate": "2026-10-20",
+      "startDate": "2026-09-24",
+      "endDate": "2026-10-21",
       "label": "前の28日"
     }
   },
   "current": {
     "sessions": 101,
     "totalUsers": 98,
-    "share": 0.03874184886843115,
+    "share": 0.03761638733705773,
     "bySource": [
       {
         "source": "chatgpt.com",
@@ -56,11 +56,6 @@
         "totalUsers": 5
       },
       {
-        "landingPage": "/en/articles/asia-festival-2026-second.html",
-        "sessions": 4,
-        "totalUsers": 4
-      },
-      {
         "landingPage": "/en/festivals/lost-find.html",
         "sessions": 4,
         "totalUsers": 4
@@ -68,6 +63,11 @@
       {
         "landingPage": "/en/index.html",
         "sessions": 4,
+        "totalUsers": 3
+      },
+      {
+        "landingPage": "/en/articles/asia-festival-2026-second.html",
+        "sessions": 3,
         "totalUsers": 3
       },
       {
@@ -131,8 +131,8 @@
         "totalUsers": 1
       }
     ],
-    "allSessions": 2607,
-    "allTotalUsers": 2226
+    "allSessions": 2685,
+    "allTotalUsers": 2278
   },
   "previous": {
     "sessions": 0,
@@ -173,6 +173,11 @@
       },
       {
         "landingPage": "/articles/japan-festival-2026-september.html",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
+        "landingPage": "/articles/mutek-jp-2026-info.html",
         "sessions": 0,
         "totalUsers": 0
       },
@@ -243,11 +248,6 @@
       },
       {
         "landingPage": "/en/articles/odyssey-2026-info.html",
-        "sessions": 0,
-        "totalUsers": 0
-      },
-      {
-        "landingPage": "/en/articles/rebirth-2026-info.html",
         "sessions": 0,
         "totalUsers": 0
       }

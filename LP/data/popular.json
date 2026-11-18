@@ -1,43 +1,43 @@
 {
-  "generatedAt": "2026-11-17T01:55:07.012Z",
+  "generatedAt": "2026-11-18T01:02:42.388Z",
   "days": 30,
   "source": "ga4",
   "items": [
     {
-      "id": "topia-2026-info",
-      "views": 284
+      "id": "japan-festival-2026-october",
+      "views": 251
     },
     {
-      "id": "japan-festival-2026-october",
-      "views": 256
+      "id": "topia-2026-info",
+      "views": 225
     },
     {
       "id": "denki-bodhisattva-2026-info",
-      "views": 179
+      "views": 181
     },
     {
       "id": "japan-festival-2026-november",
-      "views": 112
+      "views": 117
     },
     {
       "id": "sawagi-festival-2026-info",
-      "views": 112
+      "views": 113
     },
     {
       "id": "mutek-jp-2026-info",
-      "views": 71
+      "views": 73
     },
     {
       "id": "labyrinth-2026-info",
-      "views": 49
+      "views": 51
     },
     {
       "id": "intergalactic-2026-info",
-      "views": 23
+      "views": 24
     },
     {
       "id": "asia-festival-2026-second",
-      "views": 21
+      "views": 22
     },
     {
       "id": "forest-sound-camp-info",
@@ -45,7 +45,7 @@
     },
     {
       "id": "snow-mashine-2027-info",
-      "views": 16
+      "views": 17
     },
     {
       "id": "otsukimi-2026-info",
@@ -53,11 +53,15 @@
     },
     {
       "id": "odyssey-2026-info",
-      "views": 10
+      "views": 11
+    },
+    {
+      "id": "rebirth-2026-info",
+      "views": 6
     },
     {
       "id": "treak-2026-info",
-      "views": 10
+      "views": 6
     },
     {
       "id": "japan-festival-2026-september",
@@ -68,16 +72,12 @@
       "views": 5
     },
     {
-      "id": "rebirth-2026-info",
-      "views": 5
+      "id": "transcendence-2025-report",
+      "views": 4
     },
     {
       "id": "ondoland1012-2026-info",
-      "views": 4
-    },
-    {
-      "id": "transcendence-2025-report",
-      "views": 4
+      "views": 3
     },
     {
       "id": "post-20251120",
@@ -88,11 +88,11 @@
       "views": 3
     },
     {
-      "id": "shifumiz-2026-info",
-      "views": 2
+      "id": "bondisco-2026-info",
+      "views": 1
     },
     {
-      "id": "bondisco-2026-info",
+      "id": "shifumiz-2026-info",
       "views": 1
     }
   ]

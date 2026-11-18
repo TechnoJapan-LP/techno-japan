@@ -1,11 +1,11 @@
 # AI経由の流入
 
-取得日時: 2026-11-17T01:55:09.146Z
+取得日時: 2026-11-18T01:02:44.450Z
 
 | 期間 | AIセッション | 全体セッション | AI割合 |
 |---|---:|---:|---:|
-| 直近28日（2026-10-21〜2026-11-17） | 101 | 2607 | 3.87% |
-| 前の28日（2026-09-23〜2026-10-20） | 0 | 0 | 0.00% |
+| 直近28日（2026-10-22〜2026-11-18） | 101 | 2685 | 3.76% |
+| 前の28日（2026-09-24〜2026-10-21） | 0 | 0 | 0.00% |
 
 ## 直近28日：参照元別
 
@@ -23,9 +23,9 @@
 | /en/articles/topia-2026-info.html | 10 | 10 |
 | /en/articles/denki-bodhisattva-2026-info.html | 5 | 5 |
 | /festivals/festival-de-frue.html | 5 | 5 |
-| /en/articles/asia-festival-2026-second.html | 4 | 4 |
 | /en/festivals/lost-find.html | 4 | 4 |
 | /en/index.html | 4 | 3 |
+| /en/articles/asia-festival-2026-second.html | 3 | 3 |
 | /en/articles/intergalactic-2026-info.html | 3 | 3 |
 | /en/articles/japan-festival-2026-october.html | 3 | 3 |
 | /en/venues.html?area=OSAKA | 3 | 3 |
@@ -55,6 +55,7 @@
 | /articles/denki-bodhisattva-2026-info.html | 0 | 0 |
 | /articles/forest-sound-camp-info.html | 0 | 0 |
 | /articles/japan-festival-2026-september.html | 0 | 0 |
+| /articles/mutek-jp-2026-info.html | 0 | 0 |
 | /articles/otsukimi-2026-info.html | 0 | 0 |
 | /articles/rebirth-2026-info.html | 0 | 0 |
 | /articles/synapse-2026-info.html | 0 | 0 |
@@ -69,4 +70,3 @@
 | /en/articles/japan-festival-2026-october.html | 0 | 0 |
 | /en/articles/japan-festival-2026-september.html | 0 | 0 |
 | /en/articles/odyssey-2026-info.html | 0 | 0 |
-| /en/articles/rebirth-2026-info.html | 0 | 0 |
