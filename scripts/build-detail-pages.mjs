@@ -297,17 +297,17 @@ const esc = (s) => String(s ?? '')
    「入力元が1つで信頼できる」という前提はフォーム投稿や取り込みが増えれば崩れる。
    HTML として解釈させる値と同じく、出所を問わず通す。AUDIT §9-44。
 
-   相対パスは自前で組み立てたものなのでそのまま通す。 */
+   相対パスは自前で組み立てたものなのでそのまま通す。
+   3か所（build-detail-pages.mjs / app/app.js / cms.js）で同じ規則。片方だけ直さない。 */
 const SAFE_URL_SCHEMES = new Set(['http:', 'https:', 'mailto:', 'tel:']);
 function safeUrl(value) {
   const v = String(value ?? '').trim();
   if (!v) return '';
-  // スキームを持たない（= 相対 / ルート相対 / フラグメント）ものは自前の組み立て。
-  if (/^(?:\/|#|\.)/.test(v)) return v;
-  if (!/^[a-z][a-z0-9+.-]*:/i.test(v)) return v;
+  let protocol;
   try {
-    if (SAFE_URL_SCHEMES.has(new URL(v).protocol)) return v;
+    protocol = new URL(v, 'https://techno-japan.media/').protocol;
   } catch { /* 壊れたURLは落とす */ }
+  if (SAFE_URL_SCHEMES.has(protocol)) return v;
   console.warn(`  ⚠ 危険なスキームの URL を除去: ${v.slice(0, 80)}`);
   return '';
 }

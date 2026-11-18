@@ -15735,3 +15735,32 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - GA4 管理画面で `sign_up` / `generate_lead` をキーイベントに指定するかはユーザー判断。
+
+## 2026-11-18 CMS の埋め込み対策と、URL 検査（safeUrl）の抜けを3か所で修正（全体監査 Top5 の4）
+
+### 実施
+- `cms.html`: 他サイトの iframe に入れられたら表示しない（`html{display:none}` を先に置き、最上位で開いたときだけ外す古典的な対策）。GitHub Pages ではヘッダー（X-Frame-Options / frame-ancestors）を付けられないため。
+- `cms.js`: プレビューのリンク8か所（会場・アーティスト・フェス）を `cmsSafeUrl` に通し、http(s) 以外はリンク自体を出さない。`rel="noopener noreferrer"` を付与。cms.js?v=210。
+- **safeUrl の抜け**: `build-detail-pages.mjs` / `app/app.js` / `cms.js` の3実装とも「先頭が scheme: の形か」を正規表現で見ていたため、`java\tscript:` `java\nscript:` `\u0001javascript:` が素通りしていた（ブラウザはこれらを javascript: と解釈する）。`new URL(v, 基準URL).protocol` で判定するよう3か所そろえて変更。許可スキームは各実装の現状維持（build: http/https/mailto/tel、cms: http/https）。app/sw.js を tjapp-v1.4.1 に。実装 Codex（別 worktree）。
+
+### コミット
+- このエントリを含むコミット。
+
+### 検証
+- 3実装を node で取り出し11ケースを判定: http(s)・相対・# は通過、javascript:/大文字/タブ・改行・制御文字入り/data:/vbscript: は3実装とも遮断。mailto は build と app のみ通過（現状どおり）。
+- `node scripts/build-detail-pages.mjs` で再生成し、生成物の差分 0（実データに危険な URL は無かった）。
+- headless Chrome で、check_cms_layout.mjs と同じ方式（配信時に checkAuth を素通し・GAS 通信を握る。LP は変更しない）で cms.html を開き、変更前（main）と変更後を比較:
+  - プレビューに危険 URL を入力 → 変更前は `javascript:`・`data:`・`\u0001javascript:` のリンクが出ていた、変更後は出ない。正常な URL は rel 付きで出る。renderVenuePreview / renderArtistPreview / renderFestivalPreview / artistPreviewLinkHtml_ とも例外 0。
+  - 最上位で開く: 表示される（display:block）。
+  - 別オリジン（localhost⇔127.0.0.1）の iframe に入れる: 変更前 display:block、変更後 display:none。Chrome はユーザー操作なしの top 遷移を止めるが、非表示のままなので押させられない。
+- Publish pipeline の実行と、本番 CMS の強制リロード後の確認は、push 後に行う（下に追記）。
+
+### 変更したパターン
+- cms.html の埋め込み対策、cms.js のプレビューリンク、safeUrl 3実装の判定方法。
+
+### 未確認の類似パターン
+- cms.js のプレビュー以外で外部 URL を href に出す箇所は grep 済みで対象外（記事本文のリンクは別処理）。
+- 公開ページ側の埋め込み対策（cms 以外）は行っていない（必要性が低い）。
+
+### 次の担当への注意・判断待ち
+- safeUrl は3か所（build-detail-pages.mjs / app/app.js / cms.js）。規則を変えるときは3つとも。

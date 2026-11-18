@@ -11,12 +11,14 @@ const $ = sel => document.querySelector(sel);
 /* href に入れる URL のスキーム検証。esc() は属性からの脱出は防ぐが
    `javascript:` はそのまま残りクリックで実行される。値はスプレッドシート由来で
    現時点は信頼できるが、出所を問わず通す方針。scripts/build-detail-pages.mjs の
-   safeUrl() と同じ規則（片方だけ直さないこと）。AUDIT §9-44。 */
+   safeUrl() と同じ規則。3か所（build-detail-pages.mjs / app/app.js / cms.js）で
+   同じ規則。片方だけ直さないこと。AUDIT §9-44。 */
 const safeUrl = v => {
   const s = String(v ?? '').trim();
   if (!s) return '';
-  if (/^(?:\/|#|\.)/.test(s)) return s;
-  try { return /^(?:https?|mailto|tel):$/.test(new URL(s).protocol) ? s : ''; } catch { return ''; }
+  let protocol;
+  try { protocol = new URL(s, 'https://techno-japan.media/').protocol; } catch { return ''; }
+  return new Set(['http:', 'https:', 'mailto:', 'tel:']).has(protocol) ? s : '';
 };
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
