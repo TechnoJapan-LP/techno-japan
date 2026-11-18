@@ -155,6 +155,10 @@
         },
         body: JSON.stringify(formSubmitPayload())
       }).catch(() => {});
+      window.tjTrack?.('generate_lead', {
+        form_id: 'submit',
+        language: document.documentElement.lang
+      });
       receive();
     } catch {
       document.getElementById('apply-error').hidden = false;

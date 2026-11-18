@@ -76,11 +76,12 @@ const ARTICLE_FX_CSS_VERSION = 23;
 
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
-const COMMON_JS_VERSION = 22;   // 2026-10-27 synchronous initial cursor ring position
+const COMMON_JS_VERSION = 23;   // 2026-11-18 newsletter/share GA4 events
 const COMMON_CSS_VERSION = 60;   // 2026-11-18 touch target floors
 const DATA_HUB_VERSION = 11;
-const SEARCH_JS_VERSION = 10;
-const LANG_TOGGLE_VERSION = 3;
+const SEARCH_JS_VERSION = 11;
+const LANG_TOGGLE_VERSION = 4;
+const SUBMIT_FORM_VERSION = 4;
 const MAGAZINE_JS_VERSION = 8;   // 2026-10-28 preferred source link in newsletter blocks
 const FAVORITES_JS_VERSION = 5;
 const MAP_TILES_JS_VERSION = 2;
@@ -1246,7 +1247,8 @@ function normalizeStaticChrome(fileName, lang) {
   next = next.replace(/(<\/footer>)(?:\r?\n[ \t]*){2,}(?=<script\b)/g, '$1\n');
   next = next.replace(/href="(?:\.\/|\/)?common\.css\?v=\d+"/g, `href="/common.css?v=${COMMON_CSS_VERSION}"`)
     .replace(/(?:src|href)="(?:\.\/)?common\.js\?v=\d+"/g, (m) => m.replace(/"[^"/]*common\.js/, `"/common.js`).replace(/\?v=\d+/, `?v=${COMMON_JS_VERSION}`))
-    .replace(/src="(?:\.\/|\/)?magazine\.js\?v=\d+"/g, `src="/magazine.js?v=${MAGAZINE_JS_VERSION}"`);
+    .replace(/src="(?:\.\/|\/)?magazine\.js\?v=\d+"/g, `src="/magazine.js?v=${MAGAZINE_JS_VERSION}"`)
+    .replace(/src="(?:\.\/|\/)?submit-form\.js\?v=\d+"/g, `src="/submit-form.js?v=${SUBMIT_FORM_VERSION}"`);
   next = next.replace(/((?:src|href)=")(?!\/|https?:|#|data:)([^"\s]+\.(?:js|css)(?:\?v=\d+)?)(")/g, '$1/$2$3');
   // 旧版の累積分も含め、手書きページの連続空行は最大2行に揃える。
   next = next.replace(/(?:\r?\n[ \t]*){3,}/g, '\n\n');
@@ -1259,6 +1261,23 @@ const GA = `<script>
   // ボット（headless / Lighthouse / 自動操作）は計測しない。
   // 2026-09-28 の GA4 では Direct 75%・Chrome の 90% が非エンゲージで、
   // 0秒滞在のページ8本が lighthouse.yml の URL と一致していた（自分たちの検査を利用者として数えていた）。
+  if (location.hostname !== 'techno-japan.media') return;
+  if (navigator.webdriver || /HeadlessChrome|Chrome-Lighthouse|Lighthouse|Speed Insights|PTST|GTmetrix|TJAudit/i.test(navigator.userAgent)) return;
+  var s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://www.googletagmanager.com/gtag/js?id=G-4MHCNR7D26';
+  document.head.appendChild(s);
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function(){ dataLayer.push(arguments); };
+  gtag('js', new Date());
+  gtag('config', 'G-4MHCNR7D26');
+})();
+</script>`;
+
+const STATIC_GA = `<!-- Google Analytics 4 -->
+<script>
+(function(){
+  // ボット（headless / Lighthouse / 自動操作）は計測しない。
   if (location.hostname !== 'techno-japan.media') return;
   if (navigator.webdriver || /HeadlessChrome|Chrome-Lighthouse|Lighthouse|Speed Insights|PTST|GTmetrix|TJAudit/i.test(navigator.userAgent)) return;
   var s = document.createElement('script');
@@ -4081,6 +4100,10 @@ function fixJaHub(fileName) {
 
   s = s.replace(/<html lang="[^"]*"/, '<html lang="ja"');
   s = s.replace(/(<meta http-equiv="Content-Security-Policy" content=")[^"]*/, `$1${fileName === 'submit.html' ? APPLY_CSP : CSP}`);
+
+  if ((fileName === 'submit.html' || fileName === 'writers.html') && !s.includes("G-4MHCNR7D26")) {
+    s = s.replace('</head>', `${STATIC_GA}\n</head>`);
+  }
 
   if (USE_BUTTONDOWN && (fileName === 'index.html' || fileName === 'news.html')) {
     s = s.replace(/(<section class="newsletter"[\s\S]*?<form class="newsletter-form")[^>]*>[\s\S]*?<\/form>([\s\S]*?<\/section>)/,

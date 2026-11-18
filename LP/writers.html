@@ -89,6 +89,22 @@ body{overflow-x:hidden}
 @media(max-width:900px){.writer-wrap{padding:0 16px}.writer-head-grid,.writer-section-grid,.writer-form{grid-template-columns:1fr}.writer-actions{justify-self:start}.writer-sec h2{font-size:56px}.writer-field.full,.writer-submit{grid-column:auto}.writer-page h1{font-size:88px}}
 @media(max-width:560px){.writer-page h1{font-size:64px}.writer-lead{font-size:17px}.writer-section{padding-top:72px}.writer-form{gap:24px}.writer-actions{width:100%}.writer-actions .btn,.writer-actions .btn2{width:100%}.writer-submit{width:100%;min-height:48px}}
 </style>
+<!-- Google Analytics 4 -->
+<script>
+(function(){
+  // ボット（headless / Lighthouse / 自動操作）は計測しない。
+  if (location.hostname !== 'techno-japan.media') return;
+  if (navigator.webdriver || /HeadlessChrome|Chrome-Lighthouse|Lighthouse|Speed Insights|PTST|GTmetrix|TJAudit/i.test(navigator.userAgent)) return;
+  var s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://www.googletagmanager.com/gtag/js?id=G-4MHCNR7D26';
+  document.head.appendChild(s);
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function(){ dataLayer.push(arguments); };
+  gtag('js', new Date());
+  gtag('config', 'G-4MHCNR7D26');
+})();
+</script>
 </head>
 <body>
 <a href="#main-content" class="skip-to-content">Skip to content</a>
@@ -227,10 +243,10 @@ body{overflow-x:hidden}
 </footer>
 <!-- tj:footer:end -->
 
-<script src="/common.js?v=22" defer></script>
+<script src="/common.js?v=23" defer></script>
 <script src="/localize.js?v=16"></script>
 <script src="/data-hub.js?v=11"></script>
-<script src="/search.js?v=10" defer></script>
+<script src="/search.js?v=11" defer></script>
 <script>
   (() => {
     const authors = new Map();
