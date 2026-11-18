@@ -565,9 +565,11 @@ function renderVenuePreview(){
   const gallery=getGalleryPaths();
   const tagsHtml=genres.map(g=>`<span class="pv-tag">${esc(g)}</span>`).join('');
   const featuresHtml=features.map(f=>`<span class="pv-tag">${esc(f)}</span>`).join('');
+  const safeWebsite=cmsSafeUrl(url);
+  const safeInstagram=cmsSafeUrl(instagram);
   const linksHtml=[
-    url?`<a href="${esc(url)}" class="pv-link" target="_blank">OFFICIAL SITE →</a>`:'',
-    instagram?`<a href="${esc(instagram)}" class="pv-link" target="_blank">INSTAGRAM →</a>`:''
+    safeWebsite?`<a href="${esc(safeWebsite)}" class="pv-link" target="_blank" rel="noopener noreferrer">OFFICIAL SITE →</a>`:'',
+    safeInstagram?`<a href="${esc(safeInstagram)}" class="pv-link" target="_blank" rel="noopener noreferrer">INSTAGRAM →</a>`:''
   ].join('');
   document.getElementById('preview-content').innerHTML=`
     <div class="pv-hero">
@@ -603,11 +605,15 @@ function renderArtistPreview(){
   const imageUrl=g('a-imageUrl');
   const pvImg=document.querySelector('#preview-a-image img');
   const imgSrc=resolveImgSrc(imagePath,imageUrl,pvImg);
+  const safeWebsite=cmsSafeUrl(website);
+  const safeInstagram=cmsSafeUrl(instagram);
+  const safeSoundcloud=cmsSafeUrl(soundcloud);
+  const safeBandcamp=cmsSafeUrl(bandcamp);
   const linksHtml=[
-    website?`<a href="${esc(website)}" class="pv-link" target="_blank">WEBSITE →</a>`:'',
-    instagram?`<a href="${esc(instagram)}" class="pv-link" target="_blank">INSTAGRAM →</a>`:'',
-    soundcloud?`<a href="${esc(soundcloud)}" class="pv-link" target="_blank">SOUNDCLOUD →</a>`:'',
-    bandcamp?`<a href="${esc(bandcamp)}" class="pv-link" target="_blank">BANDCAMP →</a>`:''
+    safeWebsite?`<a href="${esc(safeWebsite)}" class="pv-link" target="_blank" rel="noopener noreferrer">WEBSITE →</a>`:'',
+    safeInstagram?`<a href="${esc(safeInstagram)}" class="pv-link" target="_blank" rel="noopener noreferrer">INSTAGRAM →</a>`:'',
+    safeSoundcloud?`<a href="${esc(safeSoundcloud)}" class="pv-link" target="_blank" rel="noopener noreferrer">SOUNDCLOUD →</a>`:'',
+    safeBandcamp?`<a href="${esc(safeBandcamp)}" class="pv-link" target="_blank" rel="noopener noreferrer">BANDCAMP →</a>`:''
   ].filter(Boolean).join('');
   document.getElementById('preview-content').innerHTML=`
     <div class="artist-preview-template-note">本番テンプレートを読めなかったため簡易表示</div>
@@ -653,7 +659,7 @@ function artistPreviewImageSrc_(){
 function artistPreviewLinkHtml_(){
   return [
     ['instagram','a-instagram'],['soundcloud','a-soundcloud'],['bandcamp','a-bandcamp'],['website','a-website']
-  ].map(([label,id])=>{ const value=artistPreviewValue_(id); return value ? `<a class="detail-link" href="${esc(value)}" target="_blank" rel="noopener">${label.toUpperCase()}</a>` : ''; }).join('');
+  ].map(([label,id])=>{ const value=cmsSafeUrl(artistPreviewValue_(id)); return value ? `<a class="detail-link" href="${esc(value)}" target="_blank" rel="noopener noreferrer">${label.toUpperCase()}</a>` : ''; }).join('');
 }
 function artistPreviewMarkup_(){
   const name=artistPreviewValue_('a-name')||'ARTIST NAME';
@@ -785,8 +791,10 @@ function renderFestivalPreview(){
   const imgHtml=imgSrc?`<img src="${esc(imgSrc)}" onerror="this.style.display='none'">`:'';
   const flyerHtml=flyerSrc?`<img src="${esc(flyerSrc)}" onerror="this.style.display='none'">`:
     '<div class="pv-flyer-placeholder">FLYER IMAGE</div>';
-  const urlHtml=url?`<a href="${esc(url)}" class="pv-link" target="_blank">OFFICIAL SITE →</a>`:'';
-  const ticketHtml=ticketUrl?`<a href="${esc(ticketUrl)}" class="pv-link" target="_blank">TICKETS →</a>`:'';
+  const safeUrl=cmsSafeUrl(url);
+  const safeTicketUrl=cmsSafeUrl(ticketUrl);
+  const urlHtml=safeUrl?`<a href="${esc(safeUrl)}" class="pv-link" target="_blank" rel="noopener noreferrer">OFFICIAL SITE →</a>`:'';
+  const ticketHtml=safeTicketUrl?`<a href="${esc(safeTicketUrl)}" class="pv-link" target="_blank" rel="noopener noreferrer">TICKETS →</a>`:'';
   const tagsHtml=genres.map(g=>`<span class="pv-tag">${esc(g)}</span>`).join('');
   const lineupHtml=lineup.map(a=>`<span class="pv-lineup-item">${esc(a)}</span>`).join('');
   const locStr=[locationJa||location,city].filter(Boolean).join(' — ');
@@ -8670,6 +8678,18 @@ function resetForm(section){
 function g(id){return document.getElementById(id).value.trim()}
 function setVal(id,v){document.getElementById(id).value=v||''}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+/* プレビューリンクの URL 規則は scripts/build-detail-pages.mjs の safeUrl() と
+   LP/app/app.js の safeUrl() と同じ。3か所（build-detail-pages.mjs / app/app.js / cms.js）で
+   同じ規則。片方だけ直さないこと。http(s) と相対パス
+   だけを許可し、javascript: / data: / vbscript: などは空文字にしてリンクを出さない。 */
+function cmsSafeUrl(value){
+  const v=String(value??'').trim();
+  if(!v) return '';
+  let protocol;
+  try { protocol = new URL(v, 'https://techno-japan.media/').protocol; }
+  catch(e) { return ''; }
+  return new Set(['http:', 'https:']).has(protocol) ? v : '';
+}
 function escDesc(s){return(s||'').replace(/"/g,'\\"').replace(/\n/g,' ')}
 function cleanLineup(arr){return arr.map(a=>a.startsWith('?')?a.substring(1):a)}
 function toast(msg,type){const t=document.getElementById('toast');t.textContent=msg;t.className='toast '+type+' show';clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),3000)}

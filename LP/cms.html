@@ -31,6 +31,14 @@
      ここに techno-japan.media を足すと、ローカルCMSの Publish Now が本物になる。
      足す前に §9-95 を読むこと。 -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://nominatim.openstreetmap.org; form-action 'self' https://buttondown.com; frame-src 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+<style id="tj-antiframe">html{display:none !important}</style>
+<script>
+if (window.self === window.top) {
+  var s = document.getElementById('tj-antiframe'); if (s) s.parentNode.removeChild(s);
+} else {
+  try { window.top.location = window.self.location.href; } catch (e) {}
+}
+</script>
 
 <link rel="icon" href="/favicon.ico?v=2" sizes="32x32">
 <link rel="icon" type="image/png" href="/images/favicon-192.png?v=2" sizes="192x192">
@@ -621,6 +629,6 @@
 </div>
 
 <script type="module" src="article-shortcodes.js?v=12"></script>
-<script src="cms.js?v=209" defer></script>
+<script src="cms.js?v=210" defer></script>
 </body>
 </html>
