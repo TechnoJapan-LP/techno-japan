@@ -68,6 +68,7 @@ kill_headless_children() {
 
 cleanup() {
   kill_headless_children
+  bash scripts/clean_headless_profiles.sh || true
   if [ "$(cat "$LOCK_PID" 2>/dev/null || true)" = "$$" ]; then
     rm -f "$LOCK_PID"
     rmdir "$LOCK_ROOT" 2>/dev/null || true

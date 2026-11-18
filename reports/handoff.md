@@ -15588,3 +15588,27 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 - 帯の大きさや明るさの微調整は top-phase2.css の `.top2-marquee-track` 1行で行える。変えたら ?v を上げる。
 - Lexend Exa は帯専用。他の場所に広げる場合は weight 300 しか置いていないことに注意。
+
+## 2026-11-18 headless Chrome の一時プロファイルを preflight 終了時に自動で掃除
+
+### 実施
+- `--user-data-dir` を渡さない headless Chrome は `~/Library/{Application Support,Caches}/Google/Chrome-headless/scoped_dir*` を起動ごとに作り、kill で終わるため残っていた。3か月で約7,000個・41GB（手動削除済み）。
+- `scripts/clean_headless_profiles.sh` を新設し、`preflight.sh` の `cleanup()`（EXIT trap）から呼ぶ。headless が動いていなければ全削除、動いていれば60分以上前のものだけ削除。`--dry-run` あり。失敗しても preflight は落とさない。
+- 各テストの起動引数は変えていない（`check_hub_pages.py:500` 等に「--user-data-dir を渡すと macOS で戻らない」実測コメントがあるため）。実装 Codex。
+
+### コミット
+- このエントリを含むコミット。
+
+### 検証
+- /bin/bash 3.2 で dry-run・実削除・`scoped_dir` 以外は残すこと・headless 起動中は新しいものを残し60分超だけ消すことを確認。初版は bash 3.2 の空配列で `unbound variable` になり1件も消せていなかった（修正済み）。
+- `bash scripts/preflight.sh` 全79件成功。終了時に46件削除、残り0件。
+
+### 変更したパターン
+- preflight の後片付けに一時プロファイル掃除を追加（scripts/preflight.sh の cleanup のみ）。
+
+### 未確認の類似パターン
+- preflight を通さずに単体で回す検査や、セッション中の手動 headless 実行の分は、次の preflight まで残る（60分ルールで並行実行中のものは守る）。
+- CI（Linux）は対象ディレクトリが無く何もしない。確認済み・影響0件。
+
+### 次の担当への注意・判断待ち
+- なし。
