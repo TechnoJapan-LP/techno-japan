@@ -15517,3 +15517,36 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 
 - CMS は Cmd+Shift+R で強制再読み込みしてから使う。
+
+## 2026-11-18 スマホ幅で CMS の記事フォームが画面からはみ出す問題
+
+### 実施
+
+- 原因: 本文エディタ上のボタン列 `.ar-editor-tabs` が折り返さず、その最小幅（613px）で `.form-grid` の `1fr`（= minmax(auto,1fr)）列が押し広げられていた。`flex-wrap:wrap` を付け、`.form-grid` の列を `minmax(0,1fr)`（PC は `repeat(2,minmax(0,1fr))`）にした。
+- 同じ画面で見つけた以前からの不具合: 768px 以下でサイドバーが 60px に縮んでも、Publish Now などの操作ボタンの文字が縮まず本文の上に重なっていた。この幅ではボタンを絵文字だけにした（`overflow:hidden`＋`word-spacing:80px` でラベルを枠外へ。読み上げ用の文字は残る）。同期状態・ゴミ箱件数の小さな文字はこの幅で非表示。
+- `?v`: cms.css 58。
+
+### コミット
+
+- このエントリと同じコミット。
+
+### 検証
+
+- headless Chrome（CMS ローカル配信・認証素通し、CDP でモバイル模擬、dpr2）:
+  - 390px: 記事フォームの列 613px → 298px（変更前は form-article だけが 613、他5フォームは 298 で変化なし）。`document.documentElement.scrollWidth` 390。スクショでボタン列が4行に折り返し、エディタ・画像が画面内に収まることを確認。
+  - 390px: サイドバーの操作ボタン11個が絵文字のみで、本文への重なりなし（スクショで確認）。
+  - 1280px: 6フォームとも列 478px×2 で変更前と同一、はみ出す要素 0件。
+- `node scripts/check_cms_layout.mjs` 成功、`python3 scripts/check_asset_versions.py` 成功。
+- 未確認: 実機 iPhone Safari。
+
+### 変更したパターン
+
+- `LP/cms.css` の `.form-grid`（PC・768px以下）、`.ar-editor-tabs`、768px以下の `.sidebar` / `.sidebar .btn` / `#image-sync-status` / `#trash-count` / `#recent-items`。
+
+### 未確認の類似パターン
+
+- 他の flex のボタン列で折り返さないもの: 6フォームを 390px で全要素走査し、フォーム列からはみ出す要素は 0件（確認済み）。プレビュー・ダイアログ類は走査対象外（未確認）。
+
+### 次の担当への注意・判断待ち
+
+- スマホ幅のサイドバーはアイコンのみになったため、ボタンの意味は絵文字で判断する形。ラベルが必要ならタップで開くメニュー化を検討。
