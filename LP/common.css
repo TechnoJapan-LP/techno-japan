@@ -1144,6 +1144,10 @@ body > div:not(.tj-bg):not(.cursor-dot):not(.cursor-ring):not(.nav-overlay) {
    本文中のリンク（.entity-link 等）は行の中に収まる必要があるため対象外。
    ============================================================ */
 @media (pointer: coarse) {
+  .chip,
+  .artists-chip-row .chip {
+    min-height: 44px;
+  }
   .section-cta,
   .back-link,
   .detail-back,

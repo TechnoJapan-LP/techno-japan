@@ -1514,6 +1514,11 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   min-height: 36px;
   padding: 10px 14px;
 }
+@media (pointer: coarse) {
+  .festival-design-v2 .festival-overview-copy .festival-description-inline .lang-btn {
+    min-height: 48px;
+  }
+}
 .festival-design-v2 .festival-flyer-wrap { max-width: 720px; }
 .festival-design-v2 .detail-flyer-col { width: 100%; }
 .festival-design-v2 .festival-overview-label { margin-bottom: 12px; }

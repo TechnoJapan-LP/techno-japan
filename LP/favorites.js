@@ -120,8 +120,12 @@
       @media (prefers-reduced-motion: reduce) { .tj-fav-nav.fav-pop svg, .tj-fav-heart.active svg { animation: none; } }
       /* タッチデバイスは44pxのタップターゲット */
       @media (pointer: coarse) {
-        .tj-fav-heart { width: 44px; height: 44px; }
+        .tj-fav-heart { position: relative; width: 44px; height: 44px; }
         .tj-fav-heart.sm { width: 40px; height: 40px; }
+        .tj-fav-heart::after {
+          content: ""; position: absolute; left: 50%; top: 50%;
+          width: 48px; height: 48px; transform: translate(-50%, -50%);
+        }
       }
     `;
     document.head.appendChild(style);

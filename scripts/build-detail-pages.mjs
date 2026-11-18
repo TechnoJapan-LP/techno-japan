@@ -59,7 +59,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 96;
+const DETAIL_CSS_VERSION = 97;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -77,12 +77,12 @@ const ARTICLE_FX_CSS_VERSION = 23;
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
 const COMMON_JS_VERSION = 22;   // 2026-10-27 synchronous initial cursor ring position
-const COMMON_CSS_VERSION = 59;   // 2026-10-30 safe-area header geometry
+const COMMON_CSS_VERSION = 60;   // 2026-11-18 touch target floors
 const DATA_HUB_VERSION = 11;
 const SEARCH_JS_VERSION = 10;
 const LANG_TOGGLE_VERSION = 3;
 const MAGAZINE_JS_VERSION = 8;   // 2026-10-28 preferred source link in newsletter blocks
-const FAVORITES_JS_VERSION = 4;
+const FAVORITES_JS_VERSION = 5;
 const MAP_TILES_JS_VERSION = 2;
 const FESTIVAL_MAP_JS_VERSION = 2;
 const EDITIONS_PATH = path.join(LP_DIR, 'data', 'editions.json');
@@ -2858,7 +2858,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, allArt
   const editionLocation = currentEdition ? editionLocationName(currentEdition, lang) : '';
   const metaLead = ended && editionDate && editionLocation
     ? (lang === 'en'
-        ? `${name} has been held in ${pref || 'Japan'}. The latest edition was held in ${editionDate} at ${editionLocation}. `
+        ? `${name} has been held in ${pref || 'Japan'}. The latest edition took place on ${editionDate} at ${editionLocation}. `
         : `${seoName}は${pref || '日本'}で開催されてきた${festivalTypeJa}。直近は${editionDate}に${editionLocation}で開催。`)
     : editionDate && editionLocation
     ? (lang === 'en'
@@ -3417,9 +3417,17 @@ function venuePage(v, lang = 'ja', allFestivals = [], editionsByFestival = new M
     : `${name}${place ? '（' + place + '）' : ''}の基本情報。日本のアンダーグラウンド・ダンスミュージックのクラブ／ヴェニュー。`);
   const accessText = lang === 'en' ? (v.access_en || v.access) : v.access;
   const hoursText = lang === 'en' ? (v.hours_en || v.hours) : v.hours;
+  const stop = lang === 'en' ? '. ' : '。';
+  const sentence = (text) => {
+    const value = String(text || '').trim();
+    if (!value) return '';
+    if (lang === 'en' && /[.!?]$/.test(value)) return `${value} `;
+    if (lang === 'ja' && /[。！？]$/.test(value)) return value;
+    return `${value}${stop}`;
+  };
   const descLead = accessText
-    ? `${accessText}。${hoursText ? `${lang === 'en' ? 'Hours' : '営業時間'}: ${hoursText}。` : ''}`
-    : `${hoursText ? `${lang === 'en' ? 'Hours' : '営業時間'}: ${hoursText}。` : ''}`;
+    ? `${sentence(accessText)}${hoursText ? `${lang === 'en' ? 'Hours' : '営業時間'}: ${sentence(hoursText)}` : ''}`
+    : `${hoursText ? `${lang === 'en' ? 'Hours' : '営業時間'}: ${sentence(hoursText)}` : ''}`;
   const desc = truncate(`${descLead}${bodyDesc || (lang === 'en'
     ? `${name} — club / venue guide. Japan's underground dance music.`
     : `${name}の基本情報。日本のアンダーグラウンド・ダンスミュージックの会場。`)}`, 160);

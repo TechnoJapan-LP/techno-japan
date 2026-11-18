@@ -15671,3 +15671,36 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - 復元時は非公開リポジトリを clone して `backups/latest.json` を使う。
+
+## 2026-11-18 タッチ端末のタップ領域不足と、英語会場ページの「。」を修正（全体監査 Top5 の2・5）
+
+### 実施
+- フェス詳細の説明文の言語ボタン: `detail.css` の 36px 指定が common.css の pointer:coarse 48px を詳細度で潰していた → 同じセレクタで coarse 時 48px。
+- お気に入りのハート: 見た目は変えず、coarse 時だけ `::after` で 48px の当たり判定（favorites.js の注入 CSS）。
+- 絞り込み `.chip` / `.artists-chip-row .chip`: coarse 時 44px（`.filter-pill` / `.vm-pill` と同じ値）。
+- 英語会場ページの description に混ざっていた「。」を「. 」に（`venuePage` の descLead、既に句読点で終わる文は二重にしない）。英語フェスの meta「was held in」→「took place on」。
+- 詳細ページ再生成。detail.css 97 / common.css 60 / favorites.js 5 / artists-phase3.css 15。実装 Codex（別 worktree）。
+
+### コミット
+- このエントリを含むコミット。
+
+### 検証
+- headless Chrome＋CDP（390×844・dpr3・mobile・touch 模擬で pointer:coarse=true を確認）で、変更前（main の LP）と変更後を同じスクリプトで比較:
+  - 言語ボタン 45×36 → 45×48（/festivals/99flags.html）
+  - チップ 32px → 44px（/artists.html・/en/artists.html）、36px → 44px（/festivals.html）
+  - ハート: 外側1.5〜3px を elementFromPoint で叩き、変更前は背景画像、変更後はハート自身に当たる（40px のものは3px、44px のヒーローは1.5px で確認。44px は ::after 48px なので各辺2px しか広がらない）
+  - PC（1280px・touch なし）は変更前後で全サイズ同一、横はみ出し 0。
+- en/venues/*.html の「。」は日本語本文（言語切替の hidden 側）だけに残ることを確認。
+- preflight は push 時の pre-push で全件。
+
+### 変更したパターン
+- pointer:coarse のタップ領域（lang-btn / chip / tj-fav-heart）。
+- venue の description 組み立て、festival の英文 meta。
+
+### 未確認の類似パターン
+- 監査で挙がった 24px 未満の文中リンク（TOP の「Festival index →」、ABOUT の summary、Leaflet 帰属リンク）は未対応。
+- 実機 iPhone での確認は未実施（CDP のタッチ模擬で代替）。
+- おすすめ欄の非表示パネル内のハートは押せない状態なので対象外。
+
+### 次の担当への注意・判断待ち
+- 2026-11-18、Codex が worktree で preflight を並行実行し、main の push 時 preflight が2件（検索モーダル・見出し折り返し）落ちた。**preflight を同時に2本走らせないこと**（ポートと headless が衝突する）。

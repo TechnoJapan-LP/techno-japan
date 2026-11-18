@@ -64,6 +64,9 @@ html.tj-artists-hydrating .ssr-link-list {
   gap: 8px;
 }
 .artists-chip-row .chip { min-height: 32px; padding: 0 12px; }
+@media (pointer: coarse) {
+  .artists-chip-row .chip { min-height: 44px; }
+}
 #artists-genre-chips {
   padding-top: 10px;
   flex-wrap: nowrap;
