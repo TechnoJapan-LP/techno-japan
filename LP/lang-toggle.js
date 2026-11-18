@@ -38,6 +38,10 @@
           var lang = this.getAttribute('data-lang');
           try { localStorage.setItem(KEY, lang); } catch (e) {}
           for (var m = 0; m < groups.length; m++) if (has(groups[m], lang)) apply(groups[m], lang);
+          window.tjTrack?.('description_language', {
+            language: lang,
+            page_type: document.body.classList.contains('article-page') ? 'article' : 'detail'
+          });
         });
       }
     })(groups[k]);

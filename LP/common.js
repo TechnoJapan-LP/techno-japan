@@ -254,7 +254,36 @@
       });
     }, true);
 
-    /* 4) 記事の読了（本当に最後まで読まれた記事はどれか）
+    /* 4) ニュースレター登録。フォームは magazine.js が後から挿入するため委譲する。 */
+    document.addEventListener('submit', function (e) {
+      var form = e.target;
+      if (!form.matches || !form.matches('.newsletter-form')) return;
+      var honeypot = form.querySelector('input[name="_honey"], input[name="website"]');
+      if (honeypot && honeypot.value.trim()) return;
+      track('sign_up', {
+        method: 'newsletter',
+        language: document.documentElement.lang
+      });
+    }, true);
+
+    /* 5) 記事共有（既存の outbound_click はそのまま併送する）。 */
+    document.addEventListener('click', function (e) {
+      var button = e.target.closest && e.target.closest('.article-share .share-btn, .article-share-btn');
+      if (!button) return;
+      var href = button.getAttribute('href') || '';
+      var label = button.getAttribute('aria-label') || '';
+      var method = button.classList.contains('share-copy-btn') ? 'copy_link'
+        : /facebook/i.test(href + label) ? 'facebook'
+        : /line/i.test(href + label) ? 'line'
+        : /twitter|x\.com/i.test(href + label) ? 'x' : 'share';
+      track('share', {
+        method: method,
+        content_type: 'article',
+        item_id: location.pathname
+      });
+    }, true);
+
+    /* 6) 記事の読了（本当に最後まで読まれた記事はどれか）
           記事本文がある時だけ、末尾が一度でも見えたら1回送る。 */
     var body = document.querySelector('.article-body');
     if (body && 'IntersectionObserver' in window) {

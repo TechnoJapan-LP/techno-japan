@@ -15704,3 +15704,34 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - 2026-11-18、Codex が worktree で preflight を並行実行し、main の push 時 preflight が2件（検索モーダル・見出し折り返し）落ちた。**preflight を同時に2本走らせないこと**（ポートと headless が衝突する）。
+
+## 2026-11-18 応募・寄稿ページの GA4 と、未計測だった行動イベントを追加（全体監査 Top5 の3）
+
+### 実施
+- `submit.html` / `writers.html`（JA・EN）に GA4 snippet が無かった → about.html と同じ本番ホスト限定・ボット除外つき snippet を生成時に入れる（`build-detail-pages.mjs` の STATIC_GA）。意図的に外した記録は無し（grep 確認）。
+- 追加イベント（すべて `window.tjTrack` 経由）:
+  - `sign_up`（メルマガ送信。honeypot `_honey` / `website` に値があれば送らない）— common.js 委譲
+  - `generate_lead`（応募フォーム送信成功時のみ）— submit-form.js
+  - `search`（2文字以上・入力停止 1000ms・同語抑止・Try チップ含む）— search.js
+  - `share`（method = x / facebook / line / copy_link。既存 outbound_click は併送のまま）— common.js 委譲
+  - `description_language`（説明文の日英切替）— lang-toggle.js
+- 版数: common.js 23 / search.js 11 / lang-toggle.js 4 / submit-form.js 4。実装 Codex（別 worktree）。
+
+### コミット
+- このエントリを含むコミット。
+
+### 検証
+- headless Chrome（gtag を記録用スタブに差し替え、外部 fetch はスタブで成功を返し、フォーム送信と SNS 遷移は止めた）で、変更前（main）と変更後を同じスクリプトで比較:
+  - 変更前: 5種とも 0件、4ページの GA snippet 0。
+  - 変更後: sign_up 1（honeypot 入力後の再送信では増えない）、search は「labyrinth」1件のみ（1文字は送らず、連続入力は1回、同語の再入力は送らない）、share は x / facebook / line / copy_link の4件、description_language 1、generate_lead 1（エラー表示なし）、GA snippet 4ページとも有り。JS 例外 0。
+- 本番での GA4 受信（リアルタイム）は未確認。GA4 側でパラメータ（form_id / page_type 等）のカスタム定義は未登録。
+
+### 変更したパターン
+- GA4 snippet の対象ページ、行動イベント5種。
+
+### 未確認の類似パターン
+- 寄稿募集（writers）ページにはフォームが無く、generate_lead は応募ページのみ。確認済み。
+- favorites・map など他の操作の計測は対象外。
+
+### 次の担当への注意・判断待ち
+- GA4 管理画面で `sign_up` / `generate_lead` をキーイベントに指定するかはユーザー判断。
