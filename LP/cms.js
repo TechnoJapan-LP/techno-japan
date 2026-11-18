@@ -1220,7 +1220,13 @@ function pairSelectedArticleImage(){
     images.filter(item => item.dataset.pairId === pairId).forEach(item => {
       delete item.dataset.pairId;
       const host = item.closest('p');
-      if (host) { host.style.removeProperty('width'); host.style.removeProperty('display'); host.style.removeProperty('margin-left'); host.style.removeProperty('margin-right'); }
+      if (host) {
+        host.style.removeProperty('width');
+        host.style.removeProperty('display');
+        host.style.removeProperty('vertical-align');
+        host.style.removeProperty('margin-left');
+        host.style.removeProperty('margin-right');
+      }
     });
     markFormDirty();
     scheduleArticleEditorSync('quill');
@@ -1235,7 +1241,12 @@ function pairSelectedArticleImage(){
   next.dataset.pairId = pairId;
   [img, next].forEach(item => {
     const host = item.closest('p');
-    if (host) { host.style.display = 'inline-block'; host.style.verticalAlign = 'top'; host.style.width = 'calc(50% - 8px)'; host.style.marginRight = item === img ? '12px' : '0'; }
+    if (host) {
+      host.style.removeProperty('display');
+      host.style.removeProperty('vertical-align');
+      host.style.removeProperty('width');
+      host.style.removeProperty('margin-right');
+    }
   });
   setArticleImageToolsEnabled(true);
   markFormDirty();
@@ -1305,9 +1316,9 @@ function previewArticleImageLayout(){
   articleSelectedImage.dataset.layout = layout;
   const host = articleSelectedImage.closest('p');
   if (host) {
-    host.style.width = ['left','right'].includes(layout) ? '66.6667%' : (layout === 'compact' ? '62%' : '100%');
-    host.style.marginLeft = layout === 'right' ? 'auto' : '0';
-    host.style.marginRight = layout === 'left' ? 'auto' : '0';
+    host.style.removeProperty('width');
+    host.style.removeProperty('margin-left');
+    host.style.removeProperty('margin-right');
   }
   if (crop === 'none') delete articleSelectedImage.dataset.crop;
   else articleSelectedImage.dataset.crop = crop;

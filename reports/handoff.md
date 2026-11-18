@@ -15477,3 +15477,43 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 
 - 上のエントリの「画像同期待ちは未対応」はこのエントリで対応済み。
+
+## 2026-11-18 CMS 本文 VISUAL エディタの画像を本番と同じ大きさで見せる
+
+### 実施
+
+- ユーザー要望「BODY画像のVISUAL部分では…なるべく本番と同じ大きさの表示にできるといい」への対応。
+- `LP/cms.css`: VISUAL の本文列を本番と同じ 720px に（`.ql-editor` の左右 padding `--tj-ed-gutter`）。画像は data-layout ごとに本番の値: 中央・標準=列幅 / 小さめ=70% / 左右寄せ=46% float / 全幅=列より左右最大160pxずつ広く（`#ar-body-editor{container-type:inline-size}` の `100cqw` 基準。エディタ外には出ない）/ 2枚セット=50%ずつ・間隔16px / 700px以下は全画像幅100%・2枚セット縦積み。トリミング（data-crop）は高さ固定360pxをやめ、本番と同じく幅×比率で高さを決める。
+- 2枚セットの間隔が以前から 0px だった（`#ar-body-editor .ql-editor p{margin}` の詳細度で margin-right が消えていた）のも修正。
+- `LP/cms.js`: `previewArticleImageLayout()` / `pairSelectedArticleImage()` が親 `<p>` に inline の幅（左右 66.7%・小さめ 62% など本番と違う値）を書いていたのをやめ、CSS に任せる（既存の inline は removeProperty）。保存される本文の属性は変更なし。
+- `?v`: cms.css 57 / cms.js 208。
+
+### コミット
+
+- このエントリと同じコミット。
+
+### 検証
+
+- headless Chrome（ローカル配信・認証素通し・GAS 擬似応答、scripts/check_cms_layout.mjs と同じ方式）で記事フォームに各レイアウトの画像を入れて実測（変更前 → 変更後、1440px）:
+  - 本文列 1094 → 720 / 中央・標準 900（原寸どまり）→ 720 / 小さめ 900 → 504 / 左右 503 → 331 / 全幅 900 → 1040 / 2枚セット 539×2・間隔0 → 352×2・間隔16。本番の値（720 / 504 / 331 / 列より広い / 352×2・16）と一致。
+  - 1280px: 全幅 948（エディタ左端から15px内側、はみ出しなし）。集中モード 1440px: 本文 720・全幅 788。390px: 全画像 100%・2枚セット縦積み。
+  - トリミング: 16:10 → 720×450、1:1（小さめ）→ 504×504、4:3（全幅）→ 1040×780。
+  - 操作: 画像クリックで選択 → レイアウト select を left/compact/full/right に変更 → そのたびに幅が 331/504/948/331、親 `<p>` の style 属性は null。「画像に適用」→ 2枚セット化 → `getArticleBodyForSave()` に `<p style=` 0件・data-layout と data-pair-id は保持 → `setArticleBody()` で読み直して同じ幅。
+  - 目視: 左右寄せ・全幅・2枚セットのスクショで本番相当の見た目を確認。
+- `node scripts/check_cms_layout.mjs`: 成功。`python3 scripts/check_asset_versions.py`: 成功。
+- 未確認: 認証済みの本番 CMS での保存→再読込（本番データに書き込まない決まりのため）。
+
+### 変更したパターン
+
+- `LP/cms.css` の VISUAL 本文列・画像レイアウト5種・2枚セット・トリミング・700px以下。
+- `LP/cms.js` の表示用 inline style 2か所。
+
+### 未確認の類似パターン
+
+- 同じ inline 幅の書き込み: cms.js 内で `host.style.width` を grep し、上の2関数以外 0件（確認済み）。
+- CMS の「本番表示」プレビュー（`.ar-prev-body`）は本番の CSS をそのまま読むため対象外。
+- スマホ幅で CMS のエディタ枠自体が画面より広い（390px 幅で枠 611px）問題は今回の変更前からあり、未対応（次の作業）。
+
+### 次の担当への注意・判断待ち
+
+- CMS は Cmd+Shift+R で強制再読み込みしてから使う。
