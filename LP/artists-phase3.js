@@ -29,6 +29,13 @@
     var nav = document.querySelector('body > nav');
     return nav ? nav.getBoundingClientRect().height : 64;
   }
+  function updateToolbarStuck() {
+    if (!toolbar) return;
+    var top = parseFloat(getComputedStyle(toolbar).top);
+    if (!Number.isFinite(top)) top = 0;
+    toolbar.classList.toggle('is-stuck', window.scrollY > 0
+      && toolbar.getBoundingClientRect().top <= top + 1);
+  }
   var genreChipRow = document.getElementById('artists-genre-chips');
   var genreOrder = ['ALL', 'TECHNO', 'HOUSE', 'MINIMAL', 'EXPERIMENTAL', 'AMBIENT', 'ELECTRONIC', 'LIVE'];
   var stateKey = 'tj:artist-hub-state:v1';
@@ -206,6 +213,7 @@
     if (toolbarScrollFrame) return;
     toolbarScrollFrame = requestAnimationFrame(function () {
       toolbarScrollFrame = 0;
+      updateToolbarStuck();
       var y = window.scrollY;
       if (toolbarMustStayVisible()) {
         showToolbar();
@@ -325,7 +333,9 @@
   window.addEventListener('pageshow', restoreState);
   toolbar.addEventListener('focusin', showToolbar);
   window.addEventListener('scroll', updateToolbarVisibility, { passive: true });
+  window.addEventListener('resize', updateToolbarVisibility);
   mobileQuery.addEventListener?.('change', updateToolbarVisibility);
+  updateToolbarStuck();
   syncToolbarHeight();
   try { render(); } finally { document.documentElement.classList.remove('tj-artists-hydrating'); }
 }());

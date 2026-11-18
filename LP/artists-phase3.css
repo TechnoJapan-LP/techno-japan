@@ -25,12 +25,17 @@ html.tj-artists-hydrating .ssr-link-list {
   position: sticky;
   top: var(--tj-nav-height, 64px);
   z-index: 20;
-  background: var(--bg);
+  background: transparent;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
   padding-top: 14px;
   padding-bottom: 14px;
-  transition: transform .22s ease;
+  transition: transform .22s ease, background-color .2s ease;
+}
+#artists-toolbar.is-stuck {
+  background: var(--bg-a85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 #artists-toolbar.is-hidden { transform: translateY(-100%); }
 @media (prefers-reduced-motion: reduce) {

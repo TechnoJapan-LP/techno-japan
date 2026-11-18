@@ -29,6 +29,13 @@
     var nav = document.querySelector('body > nav');
     return nav ? nav.getBoundingClientRect().height : 64;
   }
+  function updateToolbarStuck() {
+    if (!toolbar) return;
+    var top = parseFloat(getComputedStyle(toolbar).top);
+    if (!Number.isFinite(top)) top = 0;
+    toolbar.classList.toggle('is-stuck', window.scrollY > 0
+      && toolbar.getBoundingClientRect().top <= top + 1);
+  }
   // TOKYO はユーザー指定の大きな区分だけを出す。
   // 区分を増やすときはここへ足し、会場データの AREA 自体は変更しない。
   var TOKYO_SUBAREA_GROUPS = [
@@ -98,6 +105,7 @@
     if (toolbarScrollFrame) return;
     toolbarScrollFrame = requestAnimationFrame(function () {
       toolbarScrollFrame = 0;
+      updateToolbarStuck();
       var y = window.scrollY;
       if (toolbarMustStayVisible()) {
         showToolbar();
@@ -425,7 +433,9 @@
   mobileQuery.addEventListener?.('change', updateMapVisibility);
   toolbar.addEventListener('focusin', showToolbar);
   window.addEventListener('scroll', updateToolbarVisibility, { passive: true });
+  window.addEventListener('resize', updateToolbarVisibility);
   mobileQuery.addEventListener?.('change', updateToolbarVisibility);
+  updateToolbarStuck();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(scheduleMapTopAlignment);
   window.addEventListener('pageshow', restoreState);
   updateMapVisibility();

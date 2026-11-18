@@ -56,7 +56,7 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 32   # 画像同期の待ち（最大12分）を含む
+    timeout-minutes: 47   # 画像同期の待ち（起動2分＋完了25分）を含む
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -112,12 +112,16 @@ jobs:
             echo "::error::Sync Drive Images を起動できませんでした。手動で実行してから再試行してください"
             exit 1
           fi
-          # 完了を待つ（最大10分）
-          for _ in $(seq 1 60); do
+          # 完了を待つ（最大25分。実測11〜13分（2026-11））
+          for _ in $(seq 1 150); do
             status=$(gh run view "$run_id" --json status --jq .status)
             [ "$status" = "completed" ] && break
             sleep 10
           done
+          if [ "$status" != "completed" ]; then
+            echo "::error::Sync Drive Images が25分で終わりませんでした（run $run_id）。完了後に Publish pipeline を再実行してください"
+            exit 1
+          fi
           conclusion=$(gh run view "$run_id" --json conclusion --jq .conclusion)
           echo "Sync Drive Images: $conclusion"
           if [ "$conclusion" != "success" ]; then

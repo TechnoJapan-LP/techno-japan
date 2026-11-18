@@ -14,6 +14,24 @@
   var extra = {};
   var params = new URLSearchParams(location.search);
   var seasonParam = params.get('season');
+  var mainFilters = root.querySelector('.phase3-main-filters');
+  var filtersScrollFrame = 0;
+
+  function updateMainFiltersStuck() {
+    if (!mainFilters) return;
+    var top = parseFloat(getComputedStyle(mainFilters).top);
+    if (!Number.isFinite(top)) top = 0;
+    mainFilters.classList.toggle('is-stuck', window.scrollY > 0
+      && mainFilters.getBoundingClientRect().top <= top + 1);
+  }
+
+  function scheduleMainFiltersStuck() {
+    if (filtersScrollFrame) return;
+    filtersScrollFrame = requestAnimationFrame(function () {
+      filtersScrollFrame = 0;
+      updateMainFiltersStuck();
+    });
+  }
 
   try {
     extra = JSON.parse(document.getElementById('festival-hub-extra')?.textContent || '{}');
@@ -166,6 +184,9 @@
     var link = event.target.closest('[data-festival-detail-link]');
     if (link) sessionStorage.setItem('tj:festival-hub-state:v1', JSON.stringify({ url: location.href, scrollY: scrollY, savedAt: Date.now() }));
   });
+  window.addEventListener('scroll', scheduleMainFiltersStuck, { passive: true });
+  window.addEventListener('resize', scheduleMainFiltersStuck);
+  updateMainFiltersStuck();
   render();
   root.querySelector('.ssr-link-list')?.remove();
   document.documentElement.classList.add('tj-festivals-rendered');

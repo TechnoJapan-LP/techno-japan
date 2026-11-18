@@ -15444,3 +15444,36 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 - Publish pipeline の画像同期待ち（10分）が Sync Drive Images の実測（11〜13分）より短い問題は未対応。延長するかはユーザー判断待ち。
 - autostash の `stash@{0}` は、2026-11-18 の pull 時に作られたもの（生成物＋別セッションの docs/REDESIGN_SPEC.md・docs/design-mock の変更。docs の変更は作業ツリーに反映済みで内容一致を確認）。不要なら削除してよいが、別セッションの持ち主に確認してから。
+
+## 2026-11-18 一覧ページの絞り込み欄の黒帯／Publish の画像同期待ちの延長
+
+### 実施
+
+- **絞り込み欄の黒帯**（ユーザー指摘: フェス・アーティスト・会場の絞り込み部分だけ背景が黒く目立つ）。原因は sticky 用の塗り `background: var(--bg)` が、固定背景レイヤー `.tj-bg`（grain・グリッド・赤いグロー）を隠していたこと。既定を `transparent` にし、ナビの下に貼り付いている間だけ `is-stuck`（`var(--bg-a85)`＋`blur(12px)`）を付けるようにした。判定は各ハブ JS で scroll/resize/初期表示（rAF で間引き）。artists/venues の既存 `is-hidden`（下スクロールで隠す）とは独立。
+- **Publish pipeline の画像同期待ち**: 10分 → 25分（10秒×150回）。25分で終わらない場合は専用のエラーを出す。ジョブ上限 32 → 47分。根拠は Sync Drive Images 直近15回の実測（success は 11〜13分）。2026-11-17 に待ち切れず Publish が失敗していた。
+
+### コミット
+
+- このエントリと同じコミット（下記の検証後に push）。
+
+### 検証
+
+- headless Chrome（ローカル配信 LP/、dpr2、1280px と 390px は CDP でモバイル模擬）で festivals / artists / venues.html を、先頭 → 1400px スクロール → 先頭 の順に計測:
+  - 先頭: 全6通りで `background: rgba(0,0,0,0)`・`is-stuck` 無し。スクショで grain・グリッド・赤いグローが絞り込み欄の下まで連続していることを目視確認。
+  - スクロール後: 全6通りで `top=64`・`is-stuck`・`rgba(8,8,8,.85)`・`blur(12px)`。スクショで下のカードが透けず読めないことを確認。
+  - 先頭へ戻す: 全6通りで透明に戻る。
+- `python3 scripts/check_asset_versions.py`: 成功。workflow は PyYAML で構文確認。
+- 実機未確認: EN ハブ（同じ CSS/JS・?v は JA と同値に更新）、iPhone Safari での `backdrop-filter`。Publish の待ち延長は次に画像同期が必要な Publish で実地確認になる。
+
+### 変更したパターン
+
+- `LP/festivals-phase3.css/js`・`LP/artists-phase3.css/js`・`LP/venues-phase3.css/js`（背景と貼り付き判定）、JA/EN のハブ6枚の `?v`。
+- `.github/workflows/publish-pipeline.yml`（画像同期待ち・timeout-minutes）。
+
+### 未確認の類似パターン
+
+- sticky で塗りを持つ他の要素: TOP の `.top2-marquee`（帯として意図的に塗っている見た目なので変更せず）。`news-phase3.css` の `.news-filter` は塗り無し・非 sticky で該当なし。`artists-featured-panel::after` は暗転用で該当なし。確認済み・対象0件。
+
+### 次の担当への注意・判断待ち
+
+- 上のエントリの「画像同期待ちは未対応」はこのエントリで対応済み。

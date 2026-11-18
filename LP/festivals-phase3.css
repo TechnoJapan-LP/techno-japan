@@ -21,13 +21,19 @@
   align-items: center;
   gap: 16px;
   padding-top: 18px;
-  background: var(--bg);
+  background: transparent;
 }
 .festivals-phase3 .phase3-main-filters {
   position: sticky;
   top: var(--tj-nav-height, 64px);
   z-index: 32;
   flex-wrap: nowrap;
+  transition: background-color .2s ease;
+}
+.festivals-phase3 .phase3-main-filters.is-stuck {
+  background: var(--bg-a85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 .festivals-phase3 .phase3-type-filters {
   justify-content: flex-start;
@@ -301,4 +307,7 @@ html.tj-festivals-hydrating:not(.tj-festivals-rendered) #festival-phase3-results
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 32px 16px;
   }
+}
+@media (prefers-reduced-motion: reduce) {
+  .festivals-phase3 .phase3-main-filters { transition: none; }
 }
