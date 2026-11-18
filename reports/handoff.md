@@ -15550,3 +15550,41 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 
 - スマホ幅のサイドバーはアイコンのみになったため、ボタンの意味は絵文字で判断する形。ラベルが必要ならタップで開くメニュー化を検討。
+
+## 2026-11-18 TOP の流れる帯を細く・ロゴ系の書体に（案B）
+
+### 実施
+
+- TOP（JA/EN）の流れる帯 `.top2-marquee` を「控えめ・ロゴに近い書体」に変更。ユーザーが2案（A: Space Mono のまま控えめ／B: Lexend Exa 細字）の比較画像から B を選択。
+- 帯の高さ 37px → 27px、文字 Space Mono 10px → Lexend Exa 300 の 9px、字間 .2em → .32em、文字色の不透明度 .85 → .55、上下の線 `--text-a14` → rgba(240,237,232,.08)。スマホ（≤760px）も 9px。
+- Lexend Exa（OFL、Google Fonts v35 の latin サブセット・weight 300 のみ、15,120B）を `LP/fonts/lexend-exa-v35-latin-300.woff2` に自前配信。@font-face は TOP しか読まない `top-phase2.css` に置き、他ページの重さは変えない。
+- `top-phase2.css` ?v=14 → 15（index.html / en/index.html）。
+
+### コミット
+
+- 本エントリと同じコミット（fix(top): 流れる帯を細く、ロゴに近い書体に）
+
+### 検証
+
+- ローカル配信の LP を headless Chrome（dpr 2、スマホは CDP Emulation で mobile:true）で開いて実測。`/` と `/en/`、1440px と 390px の4通り:
+  - 帯の高さ 27px、上端 64px（ナビ直下）、font-family 先頭 "Lexend Exa"、9px、ls 2.88px、padding 7px 0、色 rgba(240,237,232,.55)。4通りとも同じ。
+  - `document.fonts.check('300 9px "Lexend Exa"')` = true、FontFace の status = loaded。
+  - `performance.getEntriesByType('resource')` で Lexend の読み込みは woff2 1本だけ（15,420B 転送）。
+  - スクリーンショットを目で確認。ロゴと同系統の横長書体で流れていて、変更前のようにナビより目立つことはない。
+- 変更前の本番（37px / Space Mono 10px / .85）と案A・案B の比較画像を同じ方法で撮影済み（scratchpad の mq/cmp-pc.png・cmp-sp.png）。
+- `bash scripts/preflight.sh`: pre-push フックで実行（結果はコミットログ参照）。
+
+### 変更したパターン
+
+- `.top2-marquee` の線の色、`.top2-marquee-track` の font・padding・字間・色（top-phase2.css。common.css の元の定義は上書きで残っている）。
+- `@media (max-width:760px)` 内の `.top2-marquee-track{font-size}`。
+
+### 未確認の類似パターン
+
+- 帯 `.top2-marquee` は TOP 専用（index.html / en/index.html の2枚のみ）。他ページへの使用は grep で確認済み・0件。
+- 実機の iPhone Safari での見え方は未確認（フォントは woff2・font-display:swap なので、読み込み前は Space Mono で表示される）。
+
+### 次の担当への注意・判断待ち
+
+- 帯の大きさや明るさの微調整は top-phase2.css の `.top2-marquee-track` 1行で行える。変えたら ?v を上げる。
+- Lexend Exa は帯専用。他の場所に広げる場合は weight 300 しか置いていないことに注意。
