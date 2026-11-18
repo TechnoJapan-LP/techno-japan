@@ -15794,3 +15794,26 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - なし。
+
+## 2026-11-19 本日の CMS 変更（cms.js v=209→210）の公開後確認
+
+### 実施
+- AGENTS.md「Publish の経路を触ったら」に従い、cms.js / cms.html の変更（本番表示プレビューの CSS 版数、埋め込み対策、cmsSafeUrl）の公開後確認を行った。
+
+### コミット
+- このエントリを含むコミット。
+
+### 検証
+- Deploy（9928f779f）success。本番で `cms.html?cb=乱数` が `cms.js?v=210` と `#tj-antiframe` を配信、cms.js に `cmsSafeUrl` があることを curl で確認。
+- `gh workflow run "Publish pipeline"` → run 44350124149 success。データが公開中と同一のため `cms: publish data.js` コミットは増えていない（同一内容は送らない設計どおり）。
+- 本番 CMS を headless Chrome で開き（パスワード入力はキャンセル。ログイン・データ操作なし）: 最上位では表示、`cmsSafeUrl` 定義済み、別オリジンの iframe 内では display:none。例外は認証キャンセルによる auth-failed のみ。
+- プレビュー関数の実行確認はローカルで認証素通し方式により実施済み（上の CMS 安全対策エントリ）。
+
+### 変更したパターン
+- なし（確認のみ）。
+
+### 未確認の類似パターン
+- **ログインした状態での本番 CMS 操作（プレビュー表示・保存・Publish Now）は未確認。** ユーザーが次に CMS を使うときに Cmd+Shift+R で強制リロードし、プレビューのリンクが従来どおり出ることを確認してほしい。
+
+### 次の担当への注意・判断待ち
+- CMS を開いている人は Cmd+Shift+R（cms.html は max-age=600 でキャッシュされる）。
