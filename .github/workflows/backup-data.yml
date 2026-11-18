@@ -1,12 +1,14 @@
 name: Backup Spreadsheet Data
 
+# 下書きを含むバックアップが公開リポジトリに出ていたため、2026-11-18 に非公開リポジトリへ移行。
+# このワークフローの作業先と保存先は techno-japan-backups。
 on:
   schedule:
     - cron: '0 2 * * *'  # 毎日 11:00 JST (02:00 UTC)
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: backup-data
@@ -17,9 +19,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Checkout repository
+      - name: Checkout backup repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
+          repository: TechnoJapan-LP/techno-japan-backups
           token: ${{ secrets.GH_TOKEN }}
 
       - name: Backup data from Google Sheets via GAS

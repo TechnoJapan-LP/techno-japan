@@ -177,7 +177,7 @@ ID 規約違反7件の是正(§1.1)ではリダイレクトを設けたが、そ
 > 実在するタブは **VENUES / FESTIVALS / ARTISTS / EVENTS / ARTICLES の5つだけ**。
 > EDITIONS / LINEUPS のタブは存在し、公開CSVの入力元として接続済み（EDITIONS gid
 > `1765363054`、LINEUPS gid `580984930`）。AUTHORS / BODY_HISTORY は別管理。
-> 確かめ方: `backups/latest.json` のトップレベルキーを見る。
+> 確かめ方: 非公開リポジトリ `TechnoJapan-LP/techno-japan-backups` の `backups/latest.json` のトップレベルキーを見る。
 
 現在は「1フェス=1行」で、ブランド情報と開催回情報が同じ行に存在する。列構成は次のとおり。
 

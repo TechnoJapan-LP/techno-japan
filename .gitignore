@@ -24,3 +24,6 @@ validation-report.txt
 # 拾われないよう、フォルダごと除外する（2026-08-19 / DB移行 Step 2）。
 data/migration/
 .scratch/
+
+# 非公開バックアップリポジトリへ移行したため、公開リポジトリには保存しない。
+backups/
