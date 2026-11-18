@@ -41,7 +41,7 @@
       + esc(a.category || 'STORY') + ' · ' + dateText(a.date) + '</span><h3>' + esc(t.h1) + '</h3>'
       + (t.h2 ? '<p>' + esc(t.h2) + '</p>' : '') + '</a>';
   }
-  function articleMeta(a) { var t = title(a); return '<div class="top2-meta"><span class="pill">' + esc(a.category || 'STORY') + '</span> ' + dateText(a.date) + (a.readTime ? ' · ' + esc(a.readTime) + ' min' : '') + '</div><h1>' + esc(t.h1) + '</h1>' + (t.h2 ? '<h2>' + esc(t.h2) + '</h2>' : ''); }
+  function articleMeta(a) { var t = title(a); return '<div class="top2-meta"><span class="pill">' + esc(a.category || 'STORY') + '</span> ' + dateText(a.date) + (a.readTime ? ' · ' + esc(a.readTime) + ' min' : '') + '</div><h2 class="top2-panel-title">' + esc(t.h1) + '</h2>' + (t.h2 ? '<p class="top2-panel-sub">' + esc(t.h2) + '</p>' : ''); }
   var future = articles.filter(function (a) { return a.featured === true || String(a.featured).toLowerCase() === 'true'; }).slice(0, 2); if (future.length < 2) future = future.concat(articles.filter(function (a) { return String(a.category || '').toUpperCase() === 'GUIDE' && future.indexOf(a) < 0; }).slice(0, 2 - future.length));
   var futureIds = new Set(future.map(function (a) { return a.id; }));
   var leads = articles.filter(function (a) { return !futureIds.has(a.id); }).slice(0, 4);
