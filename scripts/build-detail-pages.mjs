@@ -1252,6 +1252,10 @@ function normalizeStaticChrome(fileName, lang) {
   next = next.replace(/((?:src|href)=")(?!\/|https?:|#|data:)([^"\s]+\.(?:js|css)(?:\?v=\d+)?)(")/g, '$1/$2$3');
   // 旧版の累積分も含め、手書きページの連続空行は最大2行に揃える。
   next = next.replace(/(?:\r?\n[ \t]*){3,}/g, '\n\n');
+  const appleCapable = '<meta name="apple-mobile-web-app-capable" content="yes">';
+  if (next.includes(appleCapable) && !next.includes('<meta name="mobile-web-app-capable" content="yes">')) {
+    next = next.replace(appleCapable, `${appleCapable}\n<meta name="mobile-web-app-capable" content="yes">`);
+  }
   if (next !== before) fs.writeFileSync(file, next);
   return next !== before;
 }
@@ -3743,6 +3747,9 @@ const EN_HUB_TEXT = [
 ];
 
 const EN_PAGE_TEXT = {
+  'index.html': [
+    ['TECHNO JAPAN — 日本のテクノ・アンダーグラウンド音楽フェスとクラブのメディア', "TECHNO JAPAN — Japan's techno and underground music festivals, artists and clubs"],
+  ],
   'news.html': [
     ['並べ替え', 'Sort'],
   ],
@@ -4286,7 +4293,6 @@ function buildAiSurface({ pubFests, editionsByFestival, pubVenues, pubArtists, p
     `- [Artists](${BASE}/artists.html)`,
     `- [Venues](${BASE}/venues.html)`,
     `- [News](${BASE}/news.html)`,
-    `- [Club Map](${BASE}/map.html)`,
     `- [English](${BASE}/en/)`,
     '',
     '## 最新記事',

@@ -15764,3 +15764,33 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - safeUrl は3か所（build-detail-pages.mjs / app/app.js / cms.js）。規則を変えるときは3つとも。
+
+
+## 2026-11-18 トップ・フェス一覧の h1 を静的にし、小さな HTML 不備3件を修正（全体監査 §4）
+
+### 実施
+- /festivals.html（JA・EN）: h1「Festivals」を HTML に直接書き、festivals-phase3.js は `.phase3-meta`（件数・更新日）だけを書き換える。
+- トップ（/・/en/）: 初期 HTML に h1 が無く、JS がリード4枚それぞれに h1 を作っていた（h1 が4つ）。→ 画面に出さない h1 を1つ置き（JA は日本語のみ、EN は `EN_PAGE_TEXT['index.html']` の対訳で英語のみ）、スライド見出しは `h2.top2-panel-title`、副題は `p.top2-panel-sub` に。旧 `.top2-panel h1/h2` ルールは削除。
+- `llms.txt` から noindex の Club Map を外した（生成元 build-detail-pages.mjs）。
+- `map.html` で二重だった X-Content-Type-Options / referrer / Permissions-Policy を1組に。
+- `apple-mobile-web-app-capable` を持つページに `mobile-web-app-capable` を併記（非推奨警告の解消）。
+- top-phase2.css 17 / top-phase2.js 13 / festivals-phase3.js 13。実装 Codex（別 worktree）。
+
+### コミット
+- このエントリを含むコミット。
+
+### 検証
+- headless Chrome で変更前（main）と変更後を、スマホ（390・dpr3・touch）と PC（1280）、JA・EN で比較し、スライド見出し・副題・フェスの h1 の計算後スタイル（書体・大きさ・太さ・行間・大文字化・余白・色・位置と大きさ）が**完全一致**、横はみ出しなし。
+  - 初回の実装では旧 `.top2-panel h2`（詳細度が高い）が新しい見出しに勝ち、見出しが副題の書体（16px）になっていた。比較で発見し修正済み。
+- h1: トップは1つ（非表示）、/en/ は英語のみ、/festivals.html は「Festivals」1つ。件数表示（6 upcoming · 92 indexed · Updated 2026.11.13）は変更前と同一。
+- JA/EN ハブ行数一致（Codex 報告＋再生成）。preflight は push 時の pre-push で全件。
+
+### 変更したパターン
+- ハブの h1 を静的に持つ（news/artists/venues と同じ形に揃えた）、トップのリード見出しの要素。
+
+### 未確認の類似パターン
+- 見出しの段飛ばし（h2→h4）が記事10ページ・/en/ 13ページにある（監査で検出、未対応）。
+- 実機 iPhone での見た目は未確認（計算後スタイルの一致で代替）。
+
+### 次の担当への注意・判断待ち
+- なし。

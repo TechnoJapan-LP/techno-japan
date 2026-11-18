@@ -177,7 +177,7 @@
     syncUrl();
     render();
   });
-  root.querySelector('#festival-phase3-head').innerHTML = '<h1 class="disp pagehead">Festivals</h1><div class="phase3-meta"><span class="mono red">'
+  root.querySelector('#festival-phase3-head .phase3-meta').innerHTML = '<span class="mono red">'
     + festivals.filter(isUpcoming).length + ' upcoming · ' + festivals.length + ' indexed</span><span class="mono">'
     + (extra.updated ? 'Updated ' + extra.updated.replace(/-/g, '.') : '') + '</span></div>';
   root.addEventListener('click', function (event) {

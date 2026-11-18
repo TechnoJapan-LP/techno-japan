@@ -19,7 +19,6 @@
 - [Artists](https://techno-japan.media/artists.html)
 - [Venues](https://techno-japan.media/venues.html)
 - [News](https://techno-japan.media/news.html)
-- [Club Map](https://techno-japan.media/map.html)
 - [English](https://techno-japan.media/en/)
 
 ## 最新記事
