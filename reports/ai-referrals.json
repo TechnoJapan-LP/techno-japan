@@ -1,27 +1,27 @@
 {
-  "generatedAt": "2026-11-18T01:02:44.450Z",
+  "generatedAt": "2026-11-19T00:40:20.011Z",
   "propertyId": "535755449",
   "periods": {
     "current": {
-      "startDate": "2026-10-22",
-      "endDate": "2026-11-18",
+      "startDate": "2026-10-23",
+      "endDate": "2026-11-19",
       "label": "直近28日"
     },
     "previous": {
-      "startDate": "2026-09-24",
-      "endDate": "2026-10-21",
+      "startDate": "2026-09-25",
+      "endDate": "2026-10-22",
       "label": "前の28日"
     }
   },
   "current": {
-    "sessions": 101,
-    "totalUsers": 98,
-    "share": 0.03761638733705773,
+    "sessions": 99,
+    "totalUsers": 96,
+    "share": 0.03707865168539326,
     "bySource": [
       {
         "source": "chatgpt.com",
-        "sessions": 97,
-        "totalUsers": 94
+        "sessions": 95,
+        "totalUsers": 92
       },
       {
         "source": "gemini.google.com",
@@ -36,22 +36,17 @@
         "totalUsers": 13
       },
       {
+        "landingPage": "/en/articles/topia-2026-info.html",
+        "sessions": 11,
+        "totalUsers": 11
+      },
+      {
         "landingPage": "/en/festivals/labyrinth.html",
         "sessions": 11,
         "totalUsers": 9
       },
       {
-        "landingPage": "/en/articles/topia-2026-info.html",
-        "sessions": 10,
-        "totalUsers": 10
-      },
-      {
         "landingPage": "/en/articles/denki-bodhisattva-2026-info.html",
-        "sessions": 5,
-        "totalUsers": 5
-      },
-      {
-        "landingPage": "/festivals/festival-de-frue.html",
         "sessions": 5,
         "totalUsers": 5
       },
@@ -64,6 +59,11 @@
         "landingPage": "/en/index.html",
         "sessions": 4,
         "totalUsers": 3
+      },
+      {
+        "landingPage": "/festivals/festival-de-frue.html",
+        "sessions": 4,
+        "totalUsers": 4
       },
       {
         "landingPage": "/en/articles/asia-festival-2026-second.html",
@@ -86,6 +86,11 @@
         "totalUsers": 3
       },
       {
+        "landingPage": "/festivals/raptvana.html",
+        "sessions": 3,
+        "totalUsers": 3
+      },
+      {
         "landingPage": "/index.html",
         "sessions": 3,
         "totalUsers": 3
@@ -97,11 +102,6 @@
       },
       {
         "landingPage": "/en/",
-        "sessions": 2,
-        "totalUsers": 2
-      },
-      {
-        "landingPage": "/en/articles/forest-sound-camp-info.html",
         "sessions": 2,
         "totalUsers": 2
       },
@@ -121,18 +121,18 @@
         "totalUsers": 2
       },
       {
-        "landingPage": "/festivals/raptvana.html",
-        "sessions": 2,
-        "totalUsers": 2
+        "landingPage": "(not set)",
+        "sessions": 1,
+        "totalUsers": 1
       },
       {
-        "landingPage": "(not set)",
+        "landingPage": "/articles/denki-bodhisattva-2026-info.html",
         "sessions": 1,
         "totalUsers": 1
       }
     ],
-    "allSessions": 2685,
-    "allTotalUsers": 2278
+    "allSessions": 2670,
+    "allTotalUsers": 2253
   },
   "previous": {
     "sessions": 0,
@@ -167,7 +167,7 @@
         "totalUsers": 0
       },
       {
-        "landingPage": "/articles/forest-sound-camp-info.html",
+        "landingPage": "/articles/japan-festival-2026-november.html",
         "sessions": 0,
         "totalUsers": 0
       },
@@ -242,12 +242,12 @@
         "totalUsers": 0
       },
       {
-        "landingPage": "/en/articles/japan-festival-2026-september.html",
+        "landingPage": "/en/articles/odyssey-2026-info.html",
         "sessions": 0,
         "totalUsers": 0
       },
       {
-        "landingPage": "/en/articles/odyssey-2026-info.html",
+        "landingPage": "/en/articles/rebirth-2026-info.html",
         "sessions": 0,
         "totalUsers": 0
       }

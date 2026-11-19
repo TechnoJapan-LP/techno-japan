@@ -1,23 +1,23 @@
 {
-  "generatedAt": "2026-11-18T01:02:42.388Z",
+  "generatedAt": "2026-11-19T00:40:18.051Z",
   "days": 30,
   "source": "ga4",
   "items": [
     {
       "id": "japan-festival-2026-october",
-      "views": 251
+      "views": 241
     },
     {
       "id": "topia-2026-info",
-      "views": 225
+      "views": 196
     },
     {
       "id": "denki-bodhisattva-2026-info",
-      "views": 181
+      "views": 186
     },
     {
       "id": "japan-festival-2026-november",
-      "views": 117
+      "views": 119
     },
     {
       "id": "sawagi-festival-2026-info",
@@ -25,19 +25,19 @@
     },
     {
       "id": "mutek-jp-2026-info",
-      "views": 73
+      "views": 80
     },
     {
       "id": "labyrinth-2026-info",
-      "views": 51
+      "views": 49
     },
     {
       "id": "intergalactic-2026-info",
-      "views": 24
+      "views": 23
     },
     {
       "id": "asia-festival-2026-second",
-      "views": 22
+      "views": 21
     },
     {
       "id": "forest-sound-camp-info",
@@ -49,14 +49,18 @@
     },
     {
       "id": "otsukimi-2026-info",
-      "views": 12
+      "views": 13
     },
     {
       "id": "odyssey-2026-info",
-      "views": 11
+      "views": 12
     },
     {
       "id": "rebirth-2026-info",
+      "views": 7
+    },
+    {
+      "id": "loa-lost-paradise-2026-info",
       "views": 6
     },
     {
@@ -68,8 +72,8 @@
       "views": 5
     },
     {
-      "id": "loa-lost-paradise-2026-info",
-      "views": 5
+      "id": "asia-music-event-2026-news",
+      "views": 4
     },
     {
       "id": "transcendence-2025-report",
