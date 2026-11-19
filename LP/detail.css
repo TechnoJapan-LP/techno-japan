@@ -212,31 +212,7 @@
   font-weight: 300; line-height: 1.75; color: var(--text-a90);
 }
 
-.detail-facts { margin: 40px 0; border-top: 1px solid var(--text-a10); }
-.detail-facts > div {
-  display: flex; gap: 24px; padding: 14px 0;
-  border-bottom: 1px solid var(--text-a08);
-}
-.detail-facts dt {
-  font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.15em;
-  text-transform: uppercase; opacity: 0.62; min-width: 120px; flex-shrink: 0;
-}
-.detail-facts dd { font-family: var(--font-body); font-weight: 300; font-size: 15px; color: var(--text-a90); }
-.detail-facts dd a { color: var(--accent); border-bottom: 1px solid var(--accent-a30); word-break: break-all; }
-.detail-facts dd a.google-map-link { white-space: nowrap; }
-.venue-related { margin-top: 56px; }
-.venue-related .related-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin-top: 20px; }
-.venue-related .related-card { display: block; color: inherit; text-decoration: none; }
-.venue-related .related-card-img { aspect-ratio: 4 / 3; overflow: hidden; background: var(--text-a04); }
-.venue-related .related-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.venue-related .related-card-info { padding: 12px 0; }
-.venue-related .related-card-date, .venue-related .related-card-loc { font-family: var(--font-mono); font-size: 10px; opacity: .65; }
-.venue-related .related-card-name { margin-top: 6px; font-size: 16px; }
 .detail-section-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin: 40px 0 -24px; }
-.detail-good-to-know { margin: 40px 0; padding: 22px 0; border-top: 1px solid var(--text-a10); border-bottom: 1px solid var(--text-a10); }
-.detail-good-to-know .detail-section-label { margin: 0 0 14px; }
-.detail-good-to-know-items { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text); }
-.detail-good-to-know p { margin: 12px 0 0; font-family: var(--font-body); font-size: 12px; opacity: .55; }
 
 .detail-page h2 {
   font-family: var(--font-display); font-size: clamp(22px, 3vw, 30px);
@@ -276,7 +252,6 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   padding-bottom: 0;
   box-sizing: border-box;
 }
-.festival-social-links { display: flex; gap: 10px; }
 .festival-social-link {
   display: inline-flex;
   align-items: center;
@@ -316,8 +291,6 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   .article-detail-inner, .detail-inner { padding: 0 24px; }
   .article-detail .article-back { padding: 10px 0; margin-bottom: 20px; }
   .article-hero-img, .detail-hero { margin-left: -24px; margin-right: -24px; }
-  .detail-facts > div { flex-direction: column; gap: 6px; }
-  .venue-related .related-grid { grid-template-columns: 1fr; }
   .article-excerpt, .article-body { max-width: none; text-wrap: wrap; }
 }
 
@@ -645,6 +618,16 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   .detail-chip { padding: 11px 16px; }
   .detail-links a { padding: 13px 18px; }
   .nav-lang a { padding: 12px 6px; margin: -12px 0; }
+  .fact a.mono.red { position: relative; }
+  .fact a.mono.red::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 44px;
+    transform: translateY(-50%);
+  }
 }
 
 /* ==========================================================
@@ -1354,7 +1337,6 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   opacity: .9;
 }
 .festival-design-v2 .detail-section-label { margin-bottom: 16px; }
-.festival-design-v2 .detail-good-to-know .detail-section-label { margin: 0 0 14px; }
 .festival-design-v2 .festival-content { padding-top: 32px; }
 .festival-design-v2 .facts {
   display: grid;

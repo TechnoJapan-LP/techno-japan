@@ -5,7 +5,7 @@
    必ずここを上げること。activate で VERSION 前方一致しないキャッシュを消すので、
    上げない限り既存ユーザーには古いシェルが出続ける。
    本体サイトの ?v= 方式（AUDIT §9-11 / §9-36）と目的は同じで、手段が違うだけ。 */
-const VERSION = 'tjapp-v1.4.1';
+const VERSION = 'tjapp-v1.4.2';
 const SHELL_CACHE = VERSION + '-shell';
 const DATA_CACHE = VERSION + '-data';
 const IMG_CACHE = VERSION + '-img';

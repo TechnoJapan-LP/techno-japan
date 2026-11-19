@@ -62,7 +62,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/common.css?v=60">
+<link rel="stylesheet" href="/common.css?v=61">
 <style>
 *, *::before, *::after {
   box-sizing: border-box;
@@ -184,6 +184,20 @@ body {
 }
 .about-statement details[open] summary {
   color: var(--accent);
+}
+@media (pointer: coarse) {
+  .about-statement summary {
+    position: relative;
+  }
+  .about-statement summary::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 44px;
+    transform: translateY(-50%);
+  }
 }
 .about-statement .body {
   max-width: 640px;

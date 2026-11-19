@@ -59,7 +59,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 97;
+const DETAIL_CSS_VERSION = 98;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -77,7 +77,7 @@ const ARTICLE_FX_CSS_VERSION = 23;
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
 const COMMON_JS_VERSION = 23;   // 2026-11-18 newsletter/share GA4 events
-const COMMON_CSS_VERSION = 60;   // 2026-11-18 touch target floors
+const COMMON_CSS_VERSION = 61;   // 2026-11-19 remove unused selectors
 const DATA_HUB_VERSION = 11;
 const SEARCH_JS_VERSION = 11;
 const LANG_TOGGLE_VERSION = 4;

@@ -42,11 +42,6 @@
 .festivals-phase3 .phase3-filter-stack {
   display: contents;
 }
-.festivals-phase3 .phase3-filter-groups {
-  display: flex;
-  gap: 24px;
-  flex-wrap: wrap;
-}
 .festivals-phase3 .phase3-filter-group {
   display: flex;
   gap: 8px;
@@ -187,10 +182,6 @@
 .festivals-phase3 .phase3-empty {
   padding: 64px 0;
   text-align: center;
-}
-.festivals-phase3 .phase3-heart .tj-fav-button {
-  width: 28px;
-  height: 28px;
 }
 .tj-festivals-hydrating .ssr-link-list { display: none; }
 html.tj-festivals-hydrating:not(.tj-festivals-rendered) #festival-phase3-head {

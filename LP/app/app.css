@@ -94,7 +94,6 @@ button { font-family: inherit; color: inherit; background: none; border: none; c
 /* ---------- lineup ---------- */
 .fest-head { margin-bottom: 14px; }
 .day-label { font-size: 9px; letter-spacing: 0.25em; opacity: 0.35; text-transform: uppercase; margin: 24px 0 8px; }
-.stage-label { font-size: 9px; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin: 14px 0 6px; opacity: 0.85; }
 .act-row {
   display: flex; align-items: center; gap: 12px;
   padding: 12px 4px; border-bottom: 1px solid var(--border);

@@ -15817,3 +15817,30 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - CMS を開いている人は Cmd+Shift+R（cms.html は max-age=600 でキャッシュされる）。
+
+## 2026-11-19 未使用 CSS の削除・小さいリンクの押せる範囲・ブランチ整理
+
+### 実施
+- 未使用 CSS を削除: common.css（`discover-*` `nav-dropdown*` `guide-*` `month-nav` `year-toggle` `sort-tab` `cta-btn`）、detail.css（`detail-good-to-know*` `detail-facts` `festival-social-links` `google-map-link` `venue-related`）、cms.css（`insta-info` `insta-preview` `remove-edition`）、`top2-btn` `phase3-filter-groups` `tj-fav-button` `stage-label`（app.css）。未参照の `LP/images/logo.png` を削除。
+- タッチ端末（pointer:coarse）のみ、透明な `::after` で押せる範囲を 44px に: TOP の「Festival index →」等・↻ Shuffle・All artists/venues →、ABOUT の「続きを読む」（JA/EN）、フェス詳細の「Map ↗」。
+- 版数: common.css 61 / detail.css 98 / cms.css 59 / top-phase2.css 18 / festivals-phase3.css 14 / image-dimensions.js 117 / app/sw.js `tjapp-v1.4.2`（app.css 変更のため）。
+- 取り込み済みブランチを整理（手元46本、GitHub 3本を `gh api -X DELETE` で削除）。未取り込みの `design/card-breaks` と dependabot PR #25 は残した。
+
+### コミット
+- このエントリを含むコミット（chore: 未使用 CSS の削除と小さいリンクの押せる範囲）
+
+### 検証
+- headless Chrome（PC 1280×900 / スマホ 390×844 dpr3 タッチ模擬）で 16 ページ（/、/en/、4ハブ、about JA/EN、フェス詳細 JA/EN、アーティスト・会場・記事詳細、submit、map、search）の全要素の計算後スタイルを変更前（main）と変更後で比較。差は対象リンクの `position:relative` のみ。他の差は読み込みタイミングの揺れで、再実行で消える／移動することを確認。
+- 押せる範囲（中心から縦に連続して当たる高さ）: 15〜23px → 43px（スマホ）。PC は不変。広げた範囲が他のリンク・ボタンにかぶらないことを確認（0件）。
+- 削除したクラス名を LP/ scripts/ .github/ で全文検索し、残る参照は複合セレクタの他方のみで、そのルールは残っていることを確認。
+- 実機 iPhone では未確認（タッチ模擬で代替）。
+
+### 変更したパターン
+- 未使用セレクタの削除（上記）、`@media (pointer:coarse)` の透明 `::after` による押せる範囲の拡張（前回のハートと同じ方式）。
+
+### 未確認の類似パターン
+- Leaflet の帰属表示リンク（15px）は文中リンクの例外・法的表示として対象外。記事 `.entity-link` も common.css の注記どおり対象外。
+- 見出しの段飛ばし（記事 10・EN 13 ページ）は記事本文（CMS のデータ）側の `####` / `###` が原因。直すには本文データの修正が必要なので未対応（判断待ち）。
+
+### 次の担当への注意・判断待ち
+- 未参照の記事画像 223件（約102MB）の削除は Drive 側も消す必要があり判断待ち。GENRE の表記ゆれは報告のみ。
