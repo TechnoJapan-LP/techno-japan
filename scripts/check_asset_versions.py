@@ -308,6 +308,7 @@ def main():
     CONST_ASSETS = {
         "COMMON_CSS_VERSION": "common.css",
         "COMMON_JS_VERSION": "common.js",
+        "DETAIL_JS_VERSION": "detail.js",
         "LANG_TOGGLE_VERSION": "lang-toggle.js",
         "ARTICLE_FX_CSS_VERSION": "article-fx.css",
         "ARTICLE_FX_JS_VERSION": "article-fx.js",

@@ -15881,7 +15881,9 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - `scripts/build-detail-pages.mjs` で詳細ページを再生成（生成ページの更新・削除なし）。
 
 ### コミット
-- 未コミット（ユーザー指定により commit / push は実施しない）。
+- perf: 詳細ページの共通部分を detail.js と common.css にまとめる（このエントリを含むコミット）
+- chore: 使われていないスクリプト 6 本を削除
+- PR #25（GitHub Actions 6件の更新）をローカルで main に取り込み
 
 ### 検証
 - `node --check`（cms.js / artists-phase3.js / build-detail-pages.mjs / fetch-data.mjs）成功。
@@ -15957,3 +15959,50 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - ユーザーに Cmd+Shift+R 後の Publish Now を依頼（アーティスト GENRE 67 行の反映待ち）。
+
+## 2026-11-19 詳細ページ共通部分の外部化とサービスアカウント鍵の参照先変更
+
+### 実施
+- `scripts/update_festivals.py` の鍵を `TJ_SHEETS_SA_KEY_FILE` 優先、未設定時は `~/.config/techno-japan/techno-japan-493408-4b24cbadf5ec.json` に変更。鍵が無い場合の明示的エラーを追加。
+- `.gitignore` に `*service-account*.json`、`*-sa-key*.json`、`.config/` を追加。既存の追跡鍵ファイルは `git ls-files | grep` で確認済み・0件。
+- `@font-face` 6本を `LP/common.css` 先頭へ移し、`common.css` を読む HTML 568枚からインライン定義を除去。フォント preload は維持。
+- `LP/detail.js?v=1` を新設し、詳細ページのハブ戻り、URLコピー、フェスのタブ、フェスのお気に入り処理を移設。GA計測は計測開始遅延を避けるためインラインに残した。
+- `COMMON_CSS_VERSION` を 61→62、CMS記事プレビューも `common.css?v=62` に更新。生成元へ `DETAIL_JS_VERSION=1` と検査対象を追加。
+- `node scripts/build-detail-pages.mjs` で JA/EN 詳細ページを再生成（フェス92、アーティスト135、会場22、記事24の各言語、計546枚に detail.js）。
+
+### コミット
+- perf: 詳細ページの共通部分を detail.js と common.css にまとめる（このエントリを含むコミット）
+- chore: 使われていないスクリプト 6 本を削除
+- PR #25（GitHub Actions 6件の更新）をローカルで main に取り込み
+
+### 検証
+- `node --check scripts/build-detail-pages.mjs`、`LP/detail.js`、`LP/cms.js` 成功。
+- `python3 scripts/check_asset_versions.py --no-diff` 成功。`git diff --check`、`node scripts/check_cms_article_generated_preview.mjs`、`node scripts/check_data_hub.mjs` 成功。
+- JA/EN ハブ5枚の行数一致を確認（index 269/269、news 223/223、festivals 321/321、artists 381/381、venues 252/252）。
+- `audit_spa_vs_static.py --after` は通常のa遷移・preventDefault無し・静的詳細全件を確認したが、既存コンテンツ項目数比較（editions、lineup、official_link、related_pages、artist appearances）で失敗。今回の共通アセット移設とは無関係の既存データ比較結果として未解決。
+- （Claude）headless Chrome で変更前（main）と変更後を同じ方法で比較:
+  - 計算後スタイル: 16ページ×PC(1280)/スマホ(390・dpr3・タッチ)で差 0（venues 0.4px・bonobo の要素数は読み込みタイミングの揺れで、以前から出るもの）。
+  - フォント: Bebas Neue / DM Sans / Space Mono とも読み込み完了（前後同じ）。
+  - 動作: フェスのタブ（初期 overview・クリックで lineup＋#lineup・#editions で開くと editions）、Save（Save→Saved→Save）、URL コピー（copied 表示・コピー内容）、ハブ→詳細→戻るリンク（history.back で /artists.html）すべて前後同一。
+  - レイアウトのずれ（CLS）と初回描画（FCP）: スマホ・回線 1.6Mbps/150ms・CPU 4倍遅で 5ページ×2回。CLS 0〜0.007・FCP 2.7〜2.9 秒で前後同等（ずれはフォント差し替え由来で以前からのもの）。タブの後実行によるずれは無し。
+  - 圧縮後（gzip）の1ページ: フェス 10,455→8,941B（−1.5KB）、アーティスト −0.6KB、会場 −0.6KB、記事 −0.7KB。初回だけ detail.js 1.5KB と common.css +0.3KB が増えるので、詳細ページ2〜3枚目以降で得になる。
+  - cms.js（プレビュー用 common.css の版）を変えたので `cms.js?v=214`。
+- 使われていないスクリプト 6 本を削除: measure_list_visuals.py / check_list_visual_interactions.py（互いにだけ参照）、verify_editions_sheet.mjs（参照なし）、update_festivals.py / .sh（2026-07 の旧ツール。crontab・LaunchAgents に登録なしを確認）、audit_festivals_completeness.py（2026-08 の一回限りの監査）。残した: check_paste_tsv.mjs（会場データの手順で使う）、migrate-phase0.gs（移行の記録）。update_festivals.py の鍵参照の変更は削除により不要になった。
+- サービスアカウント鍵は `~/.config/techno-japan/`（600）へ移動済み。リポジトリ内のスクリプトで鍵ファイルを読むものは無くなった。
+- PR #25: 主な変更は Node 24 化。deploy-pages v4→v5 / configure-pages v5→v6 / setup-python v5→v7（削除された `pip-install` 入力は未使用）/ checkout・setup-node v7。GitHub 上の検査は成功。
+
+### 変更したパターン
+- 詳細ページ生成テンプレートのインライン共通JS（ハブ戻り、コピー、フェスタブ、お気に入り）→ `LP/detail.js`。
+- 共通フォント定義の詳細HTMLインライン `<style>` → `LP/common.css`。
+- Sheetsサービスアカウント鍵の固定リポジトリ内パス → 環境変数／ユーザー設定ディレクトリ。
+- `common.css` と `detail.js` のキャッシュ版数および版数検査。
+
+### 未確認の類似パターン
+- `LP/cms.html` は `common.css` を読まず、CMS専用のGoogle Fonts参照を維持（確認済み・変更なし）。
+- `reports/phase5-preview` は生成前提の公開HTMLではないため、共通フォント移設対象外（確認済み・変更なし）。
+- 見た目・動作・通信量は実ブラウザ未確認。
+
+### 次の担当への注意・判断待ち
+- push 後、Deploy LP と Publish pipeline が新しい Actions で成功することを確認する（PR #25）。
+- 直前のエントリ「Publish 前の差分確認」は、2026-11-19 にユーザーが本番で Publish し成功（`cms: publish data.js` 7745e92、ARTISTS 変更 67 / genre 67 の表示どおり）。**実機確認済み**。
+- `audit_spa_vs_static.py --after` の既存コンテンツ項目数減少は、今回の差分と切り分けたうえで別途データ／監査基準を確認すること。

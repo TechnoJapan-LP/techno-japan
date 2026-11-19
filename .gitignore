@@ -2,6 +2,9 @@
 *credentials*.json
 techno-japan-*-*.json
 scripts/techno-japan-*.json
+*service-account*.json
+*-sa-key*.json
+.config/
 
 # Logs
 *.log

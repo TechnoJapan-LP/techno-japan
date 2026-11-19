@@ -77,7 +77,8 @@ const ARTICLE_FX_CSS_VERSION = 23;
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
 const COMMON_JS_VERSION = 23;   // 2026-11-18 newsletter/share GA4 events
-const COMMON_CSS_VERSION = 61;   // 2026-11-19 remove unused selectors
+const COMMON_CSS_VERSION = 62;   // 2026-11-19 move shared font faces to common.css
+const DETAIL_JS_VERSION = 1;     // 2026-11-19 shared detail-page behavior
 const DATA_HUB_VERSION = 11;
 const SEARCH_JS_VERSION = 11;
 const LANG_TOGGLE_VERSION = 4;
@@ -873,36 +874,8 @@ function ratioAttr(r) {
 // 説明文トグルを持つページ（festival/venue/artist）に読み込むスクリプト。
 // .bilingual が無いページでは no-op なので副作用なし。
 const LANG_TOGGLE_SCRIPT = `\n<script src="/lang-toggle.js?v=${LANG_TOGGLE_VERSION}" defer></script>`;
-const FESTIVAL_HUB_BACK_SCRIPT = `
-<script>
-function bindFestivalHubBackLinks() {
-  document.querySelectorAll('[data-festival-hub-back]').forEach((link) => {
-    link.addEventListener('click', (event) => {
-      try {
-        const referrer = new URL(document.referrer);
-        if (referrer.origin === window.location.origin && referrer.pathname === link.dataset.festivalHubBack) {
-          event.preventDefault();
-          history.back();
-        }
-      } catch (_) {}
-    });
-  });
-}
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', bindFestivalHubBackLinks, { once: true });
-} else {
-  bindFestivalHubBackLinks();
-}
-</script>`;
-const ARTIST_HUB_BACK_SCRIPT = FESTIVAL_HUB_BACK_SCRIPT
-  .replaceAll('Festival', 'Artist')
-  .replaceAll('festival', 'artist');
-const VENUE_HUB_BACK_SCRIPT = FESTIVAL_HUB_BACK_SCRIPT
-  .replaceAll('Festival', 'Venue')
-  .replaceAll('festival', 'venue');
-const ARTICLE_HUB_BACK_SCRIPT = FESTIVAL_HUB_BACK_SCRIPT
-  .replaceAll('Festival', 'Article')
-  .replaceAll('festival', 'article');
+const DETAIL_SCRIPT = `
+<script src="/detail.js?v=${DETAIL_JS_VERSION}" defer></script>`;
 // 説明文（desc/bio）をバイリンガル表示する。ja=日本語スロット, en=英語スロット。
 // 両方あるときだけ言語トグルを出し、pageLang をデフォルト表示にする（SEO: 既定言語を
 // 可視・もう一方は lang 属性付きで hidden → 言語シグナルを濁さない）。片方だけなら従来通り。
@@ -1090,14 +1063,7 @@ const FONT_HEAD = `<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
 <link rel="preload" as="font" type="font/woff2" href="/fonts/dm-sans-v17-latin.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="/fonts/bebas-neue-v16-latin.woff2" crossorigin>
-<style>
-@font-face{font-family:'Bebas Neue';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/bebas-neue-v16-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
-@font-face{font-family:'Bebas Neue';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/bebas-neue-v16-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:'DM Sans';font-style:normal;font-weight:200 500;font-display:swap;src:url('/fonts/dm-sans-v17-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
-@font-face{font-family:'DM Sans';font-style:normal;font-weight:200 500;font-display:swap;src:url('/fonts/dm-sans-v17-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/space-mono-v17-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
-@font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/fonts/space-mono-v17-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-</style>`;
+`;
 
 /* 詳細ページの nav。EN ページでは EN 版が実在するリンク先だけ /en/ へ向ける。
    EN_PAGES に無いものは JA のままにして 404 を作らない。
@@ -1359,7 +1325,7 @@ ${body}
 ${footerHtml(lang)}
 ${GA}
 <script src="/common.js?v=${COMMON_JS_VERSION}" defer></script>
-<script src="/search.js?v=${SEARCH_JS_VERSION}" defer data-hub-src="/data-hub.js?v=${DATA_HUB_VERSION}"></script>${extraScripts}
+<script src="/search.js?v=${SEARCH_JS_VERSION}" defer data-hub-src="/data-hub.js?v=${DATA_HUB_VERSION}"></script>${extraScripts}${DETAIL_SCRIPT}
 </body>
 </html>
 `;
@@ -1936,7 +1902,7 @@ ${festivalAside ? `        ${festivalAside}\n` : ''}${articleOverview ? `       
   </div>
 </article>`;
 
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'articles'] : ['articles']), `${a.id}.html`), html: page({ title, desc, canonical, image, jsonLd: [jsonLd, ORG_JSONLD, breadcrumbLd('NEWS', '/news.html', L.title, canonical), ...eventJsonLd], body, lang, altHref, currentKey: 'news', backgroundLayer: true, extraScripts: `\n<link rel="stylesheet" href="/article-fx.css?v=${ARTICLE_FX_CSS_VERSION}">\n<script src="/article-fx.js?v=${ARTICLE_FX_JS_VERSION}" defer></script>` + ARTICLE_HUB_BACK_SCRIPT + FESTIVAL_SHARE_SCRIPT }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'articles'] : ['articles']), `${a.id}.html`), html: page({ title, desc, canonical, image, jsonLd: [jsonLd, ORG_JSONLD, breadcrumbLd('NEWS', '/news.html', L.title, canonical), ...eventJsonLd], body, lang, altHref, currentKey: 'news', backgroundLayer: true, extraScripts: `\n<link rel="stylesheet" href="/article-fx.css?v=${ARTICLE_FX_CSS_VERSION}">\n<script src="/article-fx.js?v=${ARTICLE_FX_JS_VERSION}" defer></script>` }) };
 }
 
 /* ---------- フェスティバルページ ---------- */
@@ -2544,18 +2510,6 @@ function festivalShareButtons(name, canonical, lang) {
     </div>`;
 }
 
-const FESTIVAL_SHARE_SCRIPT = `
-<script>
-document.querySelectorAll('.share-copy-btn').forEach(function(button) {
-  button.addEventListener('click', function() {
-    navigator.clipboard.writeText(button.dataset.copyUrl).then(function() {
-      button.classList.add('copied');
-      window.setTimeout(function() { button.classList.remove('copied'); }, 1500);
-    });
-  });
-});
-</script>`;
-
 function festivalHeroDateHtml(edition, lang = 'ja', ended = false) {
   const start = String(edition?.DATE_START || '');
   const end = String(edition?.DATE_END || '');
@@ -2594,54 +2548,6 @@ function festivalShortDateText(edition, lang = 'ja') {
   if (startMonth === endMonth) return `${formatMonth(startMonth)}.${startDay}–${endDay}`;
   return `${formatMonth(startMonth)}.${startDay}–${formatMonth(endMonth)}.${endDay}`;
 }
-
-const FESTIVAL_TABS_SCRIPT = `
-<script>
-(function() {
-  'use strict';
-  var root = document.querySelector('.festival-detail-page');
-  if (!root) return;
-  var buttons = Array.prototype.slice.call(root.querySelectorAll('[data-festival-tab]'));
-  var panels = Array.prototype.slice.call(root.querySelectorAll('[data-festival-panel]'));
-  var valid = buttons.map(function(button) { return button.getAttribute('data-festival-tab'); });
-  if (!buttons.length || !panels.length) return;
-  function apply(tab, writeHash) {
-    if (valid.indexOf(tab) < 0) tab = 'overview';
-    root.classList.add('festival-tabs-ready');
-    buttons.forEach(function(button) {
-      var selected = button.getAttribute('data-festival-tab') === tab;
-      button.setAttribute('aria-selected', selected ? 'true' : 'false');
-      button.setAttribute('tabindex', selected ? '0' : '-1');
-      button.classList.toggle('is-active', selected);
-    });
-    panels.forEach(function(panel) {
-      var active = panel.getAttribute('data-festival-panel') === tab;
-      panel.classList.toggle('is-active', active);
-      panel.setAttribute('aria-hidden', active ? 'false' : 'true');
-    });
-    if (writeHash && window.history && window.history.replaceState) {
-      window.history.replaceState(null, '', tab === 'overview' ? window.location.pathname + window.location.search : '#' + tab);
-    }
-    if (writeHash && tab !== 'overview') {
-      document.dispatchEvent(new CustomEvent('tj:festival-section', { detail: { section: tab } }));
-    }
-  }
-  buttons.forEach(function(button) {
-    button.addEventListener('click', function() { apply(button.getAttribute('data-festival-tab'), true); });
-    button.addEventListener('keydown', function(event) {
-      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
-      event.preventDefault();
-      var current = buttons.indexOf(button);
-      var offset = event.key === 'ArrowRight' ? 1 : -1;
-      var next = buttons[(current + offset + buttons.length) % buttons.length];
-      next.focus();
-      apply(next.getAttribute('data-festival-tab'), true);
-    });
-  });
-  window.addEventListener('hashchange', function() { apply(window.location.hash.slice(1), false); });
-  apply(window.location.hash.slice(1), false);
-})();
-</script>`;
 
 function festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, allArtistsById, lang, name, canonical, summary, faqItems, relatedHtml, relatedArticles, lineupEdition, ended, endedNotice, allFestivals, editionsByFestival, modified }) {
   const prefix = lang === 'en' ? '/en' : '';
@@ -3007,7 +2913,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, allArt
       acceptedAnswer: { '@type': 'Answer', text: item.answer },
     })),
   } : null;
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'festivals'] : ['festivals']), `${f.id}.html`), html: page({ title, desc: metaDesc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('FESTIVALS', '/festivals.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, currentKey: 'festivals', extraScripts: LANG_TOGGLE_SCRIPT + FESTIVAL_HUB_BACK_SCRIPT + FESTIVAL_SHARE_SCRIPT + FESTIVAL_TABS_SCRIPT + `\n<script src="/magazine.js?v=${MAGAZINE_JS_VERSION}"></script>\n<script src="/favorites.js?v=${FAVORITES_JS_VERSION}"></script>\n<script>\n(function() {\n  var buttons = document.querySelectorAll('[data-festival-save]');\n  var mounts = document.querySelectorAll('[data-festival-fav]');\n  var update = function() {\n    buttons.forEach(function(button) {\n      var id = button.getAttribute('data-festival-save');\n      var saved = window.tjFav && window.tjFav.has('festival', id);\n      button.textContent = saved ? 'Saved' : 'Save';\n      button.setAttribute('aria-pressed', saved ? 'true' : 'false');\n    });\n    mounts.forEach(function(mount) {\n      var id = mount.getAttribute('data-festival-fav');\n      var saved = window.tjFav && window.tjFav.has('festival', id);\n      var heart = mount.querySelector('.tj-fav-heart');\n      if (heart) heart.classList.toggle('active', saved);\n    });\n  };\n  mounts.forEach(function(mount) {\n    var id = mount.getAttribute('data-festival-fav');\n    if (window.tjFav) window.tjFav.attachHeart(mount, 'festival', id);\n  });\n  buttons.forEach(function(button) {\n    var id = button.getAttribute('data-festival-save');\n    button.addEventListener('click', function() {\n      if (window.tjFav) window.tjFav.toggle('festival', id);\n      update();\n    });\n  });\n  document.addEventListener('tj-fav-change', update);\n  update();\n})();\n</script>`, backgroundLayer: true }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'festivals'] : ['festivals']), `${f.id}.html`), html: page({ title, desc: metaDesc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('FESTIVALS', '/festivals.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, currentKey: 'festivals', extraScripts: LANG_TOGGLE_SCRIPT + `\n<script src="/magazine.js?v=${MAGAZINE_JS_VERSION}"></script>\n<script src="/favorites.js?v=${FAVORITES_JS_VERSION}"></script>`, backgroundLayer: true }) };
 }
 
 /* ---------- アーティストページ ---------- */
@@ -3258,7 +3164,7 @@ function artistPage(a, artistsById, lang = 'ja', artistAppearances = new Map(), 
 </article>`;
 
   const thin = !stripTags(a.bio) && !stripTags(a.bio_en);
-  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'artists'] : ['artists']), `${a.id}.html`), html: page({ title, desc, canonical, image, ogType: 'profile', jsonLd: [jsonLd, breadcrumbLd('ARTISTS', '/artists.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, currentKey: 'artists', robots: thin ? 'noindex,follow' : 'max-image-preview:large', extraScripts: LANG_TOGGLE_SCRIPT + ARTIST_HUB_BACK_SCRIPT, backgroundLayer: true }) };
+  return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'artists'] : ['artists']), `${a.id}.html`), html: page({ title, desc, canonical, image, ogType: 'profile', jsonLd: [jsonLd, breadcrumbLd('ARTISTS', '/artists.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, currentKey: 'artists', robots: thin ? 'noindex,follow' : 'max-image-preview:large', extraScripts: LANG_TOGGLE_SCRIPT, backgroundLayer: true }) };
 }
 
 /* Instagram の URL から表示用の @ハンドルを取り出す。
@@ -3650,7 +3556,7 @@ function venuePage(v, lang = 'ja', allFestivals = [], editionsByFestival = new M
   </div>
 </article>`;
 
-  const html = page({ title, desc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('VENUES', '/venues.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, currentKey: 'venues', extraScripts: LANG_TOGGLE_SCRIPT + VENUE_HUB_BACK_SCRIPT + (eventsHtml ? VENUE_EVENTS_SCRIPT : ''), backgroundLayer: true })
+  const html = page({ title, desc, canonical, image, ogType: 'website', jsonLd: [jsonLd, breadcrumbLd('VENUES', '/venues.html', name, canonical), ...(faqLd ? [faqLd] : [])], body, lang, altHref, currentKey: 'venues', extraScripts: LANG_TOGGLE_SCRIPT + (eventsHtml ? VENUE_EVENTS_SCRIPT : ''), backgroundLayer: true })
     .replace(/[ \t]+$/gm, '');
   return { file: path.join(LP_DIR, ...(lang === 'en' ? ['en', 'venues'] : ['venues']), `${v.id}.html`), html };
 }
