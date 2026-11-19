@@ -16042,3 +16042,31 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - CMS のプレビューは本文を詰めずに表示する（data-hl 無しなので見た目は従来どおり）。公開ページだけが詰めた段になる。
 - 新しく書く記事で段を飛ばしても生成時に自動で詰まる。class 付き見出し（ウィジェット）の段飛びは詰めずに残し、`check_article_heading_order.py` が失敗する。
 - CMS は cms.js?v=215。ユーザーに Cmd+Shift+R を依頼すること。
+
+## 2026-11-19 SPA廃止後の監査（audit_spa_vs_static.py --after）の誤集計を修正
+
+### 実施
+- `--after` の失敗（editions 86→51、lineup 130→0、official_link 13→0、related_pages 71→0、artist appearances 75→0、venue related_pages 21→0）を調査。**中身の減少ではなく、2026-10-27 のデザイン v2 で見出し名・クラス名が変わり、検査が空の章を数えていた**ことを実測で確認（LINE UP→Lineup、開催ヒストリー→Editions、OFFICIAL 文字列→`.festival-official-link`、他のフェス→More festivals、出演フェス→Appearances、他のヴェニュー→Nearby · 都市名）。
+- Codex が `scripts/audit_spa_vs_static.py` を修正: v2 の見出し・クラスを優先し旧形式を予備に残す。セクションごとの必須見出し（festival: lineup/editions/related、artist: appearances、venue: related）が全ページで1回も無ければ「探し先が見つからない（見出し名の変更を疑う）」で失敗させる。基準 `reports/spa-vs-static.before.csv` は不変。
+- あわせて TOP オープニングの設計記録（REDESIGN_SPEC §2.0・モック・素材）を docs としてコミット（fb0f6894d）。
+
+### コミット
+- fb0f6894d docs: TOP オープニングの設計を記録
+- fix(audit): SPA廃止後の監査を v2 の見出しに追従（このエントリを含むコミット）
+
+### 検証
+- `python3 -m py_compile` 成功。`python3 scripts/audit_spa_vs_static.py --after` exit 0: editions 118 / lineup 1140 / official_link 40 / related_pages 92（festival）、appearances 254、venue related_pages 22。past_lineup は Editions 章を見るようになり 0→433。
+- わざと壊す確認（Claude）: メモリ上でフェス92ページの `<h2 class="disp">Lineup</h2>` を `LINEUP_X` に置換 → 「探し先が見つからない: lineup」と「lineup 130→0」で exit 1。ファイルは書き換えていない。
+- Codex に頼んだ `--self-test` オプションは実装されなかった（上の確認を Claude が手で実施）。
+- 生成物・本番ページへの変更は無し（検査スクリプトのみ）。preflight は push 時に実行。
+
+### 変更したパターン
+- 静的詳細の特徴量抽出で見出し名に依存する6箇所（festival lineup / editions / official_link / related、artist appearances、venue related）。
+- 必須見出しの存在チェック（黙って0件になる誤集計の検知）。
+
+### 未確認の類似パターン
+- この監査は preflight に入っていないため、今後も見出し変更で黙ってずれうる。preflight へ入れるかは判断待ち（静的側だけなら Chrome 不要で数秒）。
+- 他の検査スクリプトで旧見出しを探しているもの: `check_regressions.py:277/294` は旧見出しに加え v2 の目印（`data-festival-panel="lineup"` / `artist-upcoming`）でも判定しており問題なし。`fetch-data.mjs` / `build-detail-pages.mjs` の該当はコメントと生成側で検査ではない。確認済み・0件。
+
+### 次の担当への注意・判断待ち
+- 監査を preflight に組み込むかどうか（ユーザー判断）。

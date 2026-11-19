@@ -161,6 +161,15 @@ def heading_chunk_contains(html, substr):
     return ""
 
 
+def heading_exists(html, label, contains=False):
+    """h2 の表示テキストで見出しの存在を調べる。"""
+    for m in re.finditer(r'<h2\b[^>]*>([\s\S]*?)</h2>', html, re.I):
+        text = re.sub(r'<[^>]+>', '', m.group(1)).strip()
+        if (label in text) if contains else text.startswith(label):
+            return True
+    return False
+
+
 def count_class(html, cls):
     return len(re.findall(r'class="(?:[^"]*\s)?' + re.escape(cls) + r'(?=[\s"])', html))
 
@@ -170,15 +179,18 @@ def count_class(html, cls):
 def festival_features(spa, static):
     """SPA 側と静的側それぞれから同じ意味の特徴量を取る。マークアップは
     別実装なので、側ごとに別のセレクタを使う（同じ数字の意味は揃える）。"""
-    st_lineup = heading_chunk(static, "LINE UP")
+    # 2026-10-27 の v2 で見出しが変わり、0件と誤集計していた（2026-11-19 修正）。
+    st_lineup = heading_chunk(static, "Lineup") or heading_chunk(static, "LINE UP")
     # V2 は単一開催回を冗長な表にせず、ヒーローの <time> で表示する。
     # 複数開催回は従来どおりタイムライン表の行を数える。
-    st_ed = heading_chunk(static, "開催ヒストリー")
+    st_ed = heading_chunk(static, "Editions") or heading_chunk(static, "開催ヒストリー")
     return {
         "lineup": (count_class(spa, "detail-lineup-item"), count_class(st_lineup, "lineup-item")),
         "editions": (
             count_class(spa, "edition-row"),
-            count_class(st_ed, "edition-date") or count_class(static, "detail-date"),
+            count_class(st_ed, "festival-edition-row")
+            or count_class(st_ed, "edition-date")
+            or count_class(static, "detail-date"),
         ),
         # 開催ヒストリー内の過去ラインナップ。静的にしか無い（festival-lineups）。
         "past_lineup": (count_class(spa, "edition-artist"),
@@ -196,22 +208,25 @@ def festival_features(spa, static):
         ),
         "instagram": (spa.count("instagram.com"), static.count("instagram.com")),
         "official_link": (len(re.findall(r'class="[^"]*detail-official', spa)),
-                          len(re.findall(r'OFFICIAL SITE|OFFICIAL', static))),
+                          count_class(static, "festival-official-link")
+                          or len(re.findall(r'OFFICIAL SITE|OFFICIAL', static))),
         "artist_links": (len(re.findall(r'href="artists\.html#artist/', spa)),
                          len(re.findall(r'href="/?artists/[^"]+\.html"', static))),
         # 旧SPAは buildRelatedFestivals() が実行時に related-card を生成する。
         # ここを0固定にして「SPAには回遊が無い」と誤判定していたため、描画DOMを実測する。
         "related": (count_class(spa, "related-card"),
-                    count_class(heading_chunk_contains(static, "他のフェス"), "lineup-item")
+                    count_class(heading_chunk(static, "More festivals"), "related-card")
+                    or count_class(heading_chunk_contains(static, "他のフェス"), "lineup-item")
                     or count_class(heading_chunk(static, "RELATED FESTIVALS"), "related-card")),
     }
 
 
 def artist_features(spa, static):
+    st_appearances = heading_chunk(static, "Appearances") or heading_chunk(static, "出演フェス")
     return {
         "appearances": (len(re.findall(r'href="festivals\.html#festival/', spa)),
                         len(re.findall(r'href="/?festivals/[^"]+\.html"',
-                                       heading_chunk(static, "出演フェス")))),
+                                       st_appearances))),
         # 本文の有無は専用マーカーで見る。コンテナ全体の文字数で判定すると
         # 名前・リンク等の定型テキストを本文と誤認する（SPA が全件 bio あり扱いになった）。
         "bio": (1 if re.search(r'class="[^"]*artist-detail-bio[^"]*"[^>]*>\s*\S', spa) else 0,
@@ -223,6 +238,7 @@ def artist_features(spa, static):
 
 
 def venue_features(spa, static):
+    st_nearby = heading_chunk(static, "Nearby") or heading_chunk_contains(static, "他のヴェニュー")
     return {
         "instagram": (spa.count("instagram.com"), static.count("instagram.com")),
         "desc": (1 if re.search(r'class="[^"]*venue-detail-bio[^"]*"[^>]*>\s*\S', spa) else 0,
@@ -230,7 +246,9 @@ def venue_features(spa, static):
         "festival_links": (len(re.findall(r'href="festivals\.html#festival/', spa)),
                            len(re.findall(r'href="/?festivals/[^"]+\.html"', static))),
         # 「〇〇の他のヴェニュー」回遊ブロック。
-        "related": (0, count_class(heading_chunk_contains(static, "他のヴェニュー"), "lineup-item")),
+        "related": (0, count_class(st_nearby, "venue-nearby-card")
+                    or len(re.findall(r'href="/?venues/[^\"]+\.html"', st_nearby))
+                    or count_class(st_nearby, "lineup-item")),
     }
 
 
@@ -244,11 +262,21 @@ def article_features(spa, static):
 
 SECTIONS = {
     "festival": dict(hub="festivals.html", hash="festival/", container="festival-detail",
-                     dir="festivals", key="FESTIVALS", feat=festival_features),
+                     dir="festivals", key="FESTIVALS", feat=festival_features,
+                     required_headings=[("Lineup", False, "lineup"),
+                                        ("LINE UP", False, "lineup"),
+                                        ("Editions", False, "editions"),
+                                        ("開催ヒストリー", False, "editions"),
+                                        ("More festivals", False, "related"),
+                                        ("RELATED FESTIVALS", False, "related")]),
     "artist":   dict(hub="artists.html", hash="artist/", container="artist-detail",
-                     dir="artists", key="ARTISTS", feat=artist_features),
+                     dir="artists", key="ARTISTS", feat=artist_features,
+                     required_headings=[("Appearances", False, "appearances"),
+                                        ("出演フェス", False, "appearances")]),
     "venue":    dict(hub="venues.html", hash="venue/", container="venue-detail",
-                     dir="venues", key="VENUES", feat=venue_features),
+                     dir="venues", key="VENUES", feat=venue_features,
+                     required_headings=[("Nearby", False, "related"),
+                                        ("他のヴェニュー", True, "related")]),
     "article":  dict(hub="news.html", hash="article/", container="article-detail",
                      dir="articles", key="ARTICLES", feat=article_features),
 }
@@ -365,21 +393,34 @@ def check_after(sections, data):
         # 3) 静的詳細ページの到達性
         missing_pages = []
         stat_sum, stat_presence, seen = {}, {}, 0
+        heading_seen = {name: False for _, _, name in cfg.get("required_headings", [])}
         for it in items:
             feats, ok = static_only_features(section, it, cfg)
             if not ok:
                 missing_pages.append(it.get("id"))
                 continue
             seen += 1
+            static_path = LP / cfg["dir"] / f'{it.get("id")}.html'
+            page_html = strip_scripts(static_path.read_text(encoding="utf-8", errors="replace"))
+            for label, contains, name in cfg.get("required_headings", []):
+                if heading_exists(page_html, label, contains):
+                    heading_seen[name] = True
             for k, v in feats.items():
                 stat_sum[k] = stat_sum.get(k, 0) + v
                 stat_presence[k] = stat_presence.get(k, 0) + (1 if v else 0)
         checks.append((f"静的詳細ページが全件ある（{len(items)}件）", not missing_pages, len(missing_pages)))
+        for name, found in heading_seen.items():
+            checks.append((f"必須の探し先見出しが存在する: {name}",
+                           found, 1 if found else 0))
 
         for label, ok, got in checks:
             lines.append(f"- {'✅' if ok else '❌'} {label}" + ("" if ok else f" → {got}"))
             if not ok:
-                failures.append(f"{section}: {label}（実測 {got}）")
+                if label.startswith("必須の探し先見出しが存在する: "):
+                    name = label.split(": ", 1)[1]
+                    failures.append(f"{section}: 探し先が見つからない（見出し名の変更を疑う）: {name}")
+                else:
+                    failures.append(f"{section}: {label}（実測 {got}）")
         if missing_pages:
             lines.append(f"  - 欠けているページ: {', '.join(missing_pages[:10])}")
 
