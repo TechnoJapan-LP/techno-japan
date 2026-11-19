@@ -73,8 +73,8 @@ const DETAIL_CSS_VERSION = 100;
    落ちる場所と直す場所がずれていて原因に辿り着けなかった。AUDIT §9-58。
 
    article-fx.js / article-fx.css を変更したら、ここを上げる。 */
-const ARTICLE_FX_JS_VERSION = 17;
-const ARTICLE_FX_CSS_VERSION = 24;
+const ARTICLE_FX_JS_VERSION = 18;
+const ARTICLE_FX_CSS_VERSION = 25;
 
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */

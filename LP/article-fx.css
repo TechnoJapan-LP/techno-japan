@@ -41,6 +41,7 @@ figure.fx-img .fx-fig { display: flex; align-items: center; gap: 10px; margin-to
 figure.fx-img .fx-fig::after { content: ''; flex: 1; height: 1px; background: var(--text-a14); }
 figure.fx-img .fx-fig::before { content: ''; width: 6px; height: 6px; background: var(--accent); }
 .fx-image-pair { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); grid-template-rows:1fr; grid-auto-flow:column; width:133.3333%; margin-left:-16.6667%; gap:16px; margin-top:40px; margin-bottom:40px; }
+.fx-image-trio { grid-template-columns:repeat(3,minmax(0,1fr)); }
 .fx-image-pair:has(+ .fx-image-pair) { margin-bottom:0; }
 .fx-image-pair + .fx-image-pair { margin-top:24px; }
 .fx-image-pair figure.fx-img img { transform:none!important; }
@@ -73,6 +74,10 @@ figure.fx-img.fx-reveal.fx-on .fx-fig { opacity: 1; }
   /* 2枚セットのレイアウトは pair 側の指定を優先する。 */
   .article-body .fx-image-pair p:has(> figure.fx-img[data-layout="left"]),
   .article-body .fx-image-pair p:has(> figure.fx-img[data-layout="right"]) { display: block; }
+}
+@media (min-width: 900px) {
+  /* 自動リズムの4枚目はfullの位置番号よりcompactを優先する。 */
+  figure.fx-img.fx-compact { width:70% !important; margin-left:auto; margin-right:auto; }
 }
 @media (max-width: 899px) {
   figure.fx-img.fx-left,

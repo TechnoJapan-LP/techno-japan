@@ -48,7 +48,7 @@ if (window.self === window.top) {
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/vendor/leaflet-1.9.4/leaflet.css?v=2">
 <script src="/vendor/leaflet-1.9.4/leaflet.js?v=2"></script>
-<link rel="stylesheet" href="cms.css?v=62">
+<link rel="stylesheet" href="cms.css?v=63">
 <link rel="stylesheet" href="/vendor/quill-1.3.7/quill.snow.css?v=1">
 <script src="/vendor/quill-1.3.7/quill.min.js?v=2"></script>
 </head>
@@ -525,9 +525,10 @@ if (window.self === window.top) {
         <div class="article-image-layout-tools" id="ar-image-layout-tools">
           <span class="label-hint" id="ar-image-layout-hint">本文中の画像をクリックしてレイアウトを設定</span>
           <select id="ar-image-layout" aria-label="画像のレイアウト" disabled>
-            <option value="contained">中央・標準</option><option value="left">左寄せ（文字回り込み）</option>
+            <option value="">自動（おまかせ配置）</option><option value="contained">中央・標準</option><option value="left">左寄せ（文字回り込み）</option>
             <option value="right">右寄せ（文字回り込み）</option><option value="full">全幅（横長の写真向け）</option><option value="compact">小さめ</option>
           </select>
+          <span class="label-hint">自動は本番で全幅・右・左・小さめが順に入れ替わります。固定したいときは中央・標準などを選んでください</span>
           <select id="ar-image-crop" aria-label="画像のトリミング比率" disabled>
             <option value="none">トリミングなし</option><option value="16:10">トリミング 16:10</option>
             <option value="4:3">トリミング 4:3</option><option value="1:1">トリミング 1:1</option>
@@ -536,6 +537,7 @@ if (window.self === window.top) {
           <label class="article-crop-control">左右 <input id="ar-image-x" type="range" min="0" max="100" step="1" value="50" disabled></label>
           <label class="article-crop-control">上下 <input id="ar-image-y" type="range" min="0" max="100" step="1" value="50" disabled></label>
           <button type="button" class="btn btn-sm" id="ar-image-pair" disabled>2枚セット（50:50）</button>
+          <button type="button" class="btn btn-sm" id="ar-image-trio" disabled>3枚セット（3列）</button>
           <button type="button" class="btn btn-sm" id="ar-image-layout-apply" disabled>画像に適用</button>
           <!-- 画像の説明文（alt）。2026-08-15 追加。
 
@@ -629,6 +631,6 @@ if (window.self === window.top) {
 </div>
 
 <script type="module" src="article-shortcodes.js?v=12"></script>
-<script src="cms.js?v=217" defer></script>
+<script src="cms.js?v=218" defer></script>
 </body>
 </html>

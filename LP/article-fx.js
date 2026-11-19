@@ -75,6 +75,7 @@
       if (img.dataset.x) fig.dataset.x = img.dataset.x;
       if (img.dataset.y) fig.dataset.y = img.dataset.y;
       if (img.dataset.pairId) fig.dataset.pairId = img.dataset.pairId;
+      if (img.dataset.pairSize) fig.dataset.pairSize = img.dataset.pairSize;
       if (img.dataset.zoom) fig.style.setProperty('--crop-zoom', img.dataset.zoom);
       if (img.dataset.x) fig.style.setProperty('--crop-x', img.dataset.x + '%');
       if (img.dataset.y) fig.style.setProperty('--crop-y', img.dataset.y + '%');
@@ -114,9 +115,10 @@
     });
     Object.keys(pairGroups).forEach(function(id){
       var figs = pairGroups[id];
-      if (figs.length !== 2) return;
+      var pairSize = figs[0].dataset.pairSize === '3' ? 3 : 2;
+      if (figs.length !== pairSize) return;
       var pair = document.createElement('div');
-      pair.className = 'fx-image-pair';
+      pair.className = 'fx-image-pair' + (pairSize === 3 ? ' fx-image-trio' : '');
       figs[0].parentNode.insertBefore(pair, figs[0]);
       figs.forEach(function(fig){ pair.appendChild(fig); });
     });

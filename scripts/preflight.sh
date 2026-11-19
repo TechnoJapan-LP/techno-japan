@@ -222,6 +222,7 @@ else
   run_timeout 600 "EN画面の可視日本語"       node scripts/check_en_visible_japanese.mjs
   run "CMS フォームの重なり"            node scripts/check_cms_layout.mjs
   run "CMS 集中モード"                  node scripts/check_cms_focus_mode.mjs
+  run "CMS 記事画像レイアウト"           node scripts/check_cms_image_layouts.mjs
   run "VENUES 種別フィルタ"              node scripts/check_venue_type_filters.mjs
 run "VENUES 詳細ページ"                 node scripts/check_venue_details.mjs
 run "VENUES CMSエクスポート"             python3 scripts/check_venue_export_cms.py

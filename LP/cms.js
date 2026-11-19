@@ -1246,31 +1246,37 @@ async function generateEnglishBodyAlts() {
 function setArticleImageToolsEnabled(enabled){
   const wrap = document.getElementById('ar-editor-wrap');
   if (wrap) wrap.classList.toggle('image-selected', !!enabled);
-  ['ar-image-layout','ar-image-crop','ar-image-zoom','ar-image-x','ar-image-y','ar-image-pair','ar-image-layout-apply','ar-image-alt'].forEach(id => {
+  ['ar-image-layout','ar-image-crop','ar-image-zoom','ar-image-x','ar-image-y','ar-image-pair','ar-image-trio','ar-image-layout-apply','ar-image-alt'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.disabled = !enabled;
   });
   const hint = document.getElementById('ar-image-layout-hint');
   if (hint) {
-    const layout = enabled ? (document.getElementById('ar-image-layout')?.value || articleSelectedImage?.dataset.layout) : '';
+    const layout = enabled ? (document.getElementById('ar-image-layout')?.value ?? articleSelectedImage?.dataset.layout ?? '') : '';
     hint.textContent = enabled && (layout === 'left' || layout === 'right')
       ? '画像の横に書く文字は、画像のすぐ後ろに改行せずに入力。Enterで画像の下へ'
       : (enabled ? '選択中の画像' : '本文中の画像をクリックしてレイアウトを設定');
   }
   const pair = document.getElementById('ar-image-pair');
-  if (pair) pair.textContent = articleSelectedImage?.dataset.pairId ? '2枚セットを解除' : '2枚セット（50:50）';
+  const pairId = articleSelectedImage?.dataset.pairId;
+  const pairSize = articleSelectedImage?.dataset.pairSize;
+  if (pair) pair.textContent = pairId ? 'セットを解除' : '2枚セット（50:50）';
+  const trio = document.getElementById('ar-image-trio');
+  if (trio) trio.textContent = pairId ? 'セットを解除' : '3枚セット（3列）';
 }
 
-function pairSelectedArticleImage(){
+function setArticleImagePair(size){
   const img = articleSelectedImage;
   if (!img || !articleQuill) return;
   const images = Array.from(articleQuill.root.querySelectorAll('img'));
   const index = images.indexOf(img);
-  const next = index >= 0 ? images[index + 1] : null;
+  const members = images.slice(index, index + size);
   if (img.dataset.pairId) {
     const pairId = img.dataset.pairId;
     images.filter(item => item.dataset.pairId === pairId).forEach(item => {
       delete item.dataset.pairId;
+      delete item.dataset.pairSize;
+      formatArticleImageBlot(item, {'data-pair-id': false, 'data-pair-size': false});
       const host = item.closest('p');
       if (host) {
         host.style.removeProperty('width');
@@ -1284,14 +1290,17 @@ function pairSelectedArticleImage(){
     scheduleArticleEditorSync('quill');
     updateArticlePreview(articleQuill.root.innerHTML, true);
     setArticleImageToolsEnabled(true);
-    toast('2枚セットを解除しました', 'success');
+    toast('画像セットを解除しました', 'success');
     return;
   }
-  if (!next) { toast('隣に画像がないため、2枚セットにできません', 'warning'); return; }
-  const pairId = img.dataset.pairId || next.dataset.pairId || `pair-${Date.now()}`;
-  img.dataset.pairId = pairId;
-  next.dataset.pairId = pairId;
-  [img, next].forEach(item => {
+  if (members.length !== size || members.some(item => item.closest('p')?.textContent.trim())) {
+    toast(`後ろに画像が${size - 1}枚必要です`, 'warning'); return;
+  }
+  const pairId = `pair-${Date.now()}`;
+  members.forEach(item => {
+    item.dataset.pairId = pairId;
+    if (size === 3) item.dataset.pairSize = '3'; else delete item.dataset.pairSize;
+    formatArticleImageBlot(item, {'data-pair-id': pairId, 'data-pair-size': size === 3 ? '3' : false});
     const host = item.closest('p');
     if (host) {
       host.style.removeProperty('display');
@@ -1304,8 +1313,10 @@ function pairSelectedArticleImage(){
   markFormDirty();
   scheduleArticleEditorSync('quill');
   updateArticlePreview(articleQuill?.root?.innerHTML || '', true);
-  toast('隣の画像と2枚セットにしました', 'success');
+  toast(size === 3 ? '3枚セットにしました' : '隣の画像と2枚セットにしました', 'success');
 }
+function pairSelectedArticleImage(){ setArticleImagePair(2); }
+function trioSelectedArticleImage(){ setArticleImagePair(3); }
 
 function selectArticleImage(img){
   if (articleSelectedImage) articleSelectedImage.classList.remove('tj-image-selected');
@@ -1318,7 +1329,7 @@ function selectArticleImage(img){
   const zoom = document.getElementById('ar-image-zoom');
   const x = document.getElementById('ar-image-x');
   const y = document.getElementById('ar-image-y');
-  if (layout) layout.value = img.dataset.layout || 'contained';
+  if (layout) layout.value = img.dataset.layout || '';
   setArticleImageToolsEnabled(true);
   if (crop) crop.value = img.dataset.crop || 'none';
   if (zoom) zoom.value = img.dataset.zoom || '1';
@@ -1330,14 +1341,22 @@ function selectArticleImage(img){
   if (alt) alt.value = img.getAttribute('alt') || '';
 }
 
+function formatArticleImageBlot(img, formats){
+  if (!articleQuill || !img) return;
+  const blot = Quill.find(img);
+  if (!blot) return;
+  const index = articleQuill.getIndex(blot);
+  articleQuill.formatText(index, 1, formats, 'user');
+}
+
 function applyArticleImageLayout(){
   if (!articleSelectedImage) return;
-  const layout = document.getElementById('ar-image-layout')?.value || 'contained';
+  const layout = document.getElementById('ar-image-layout')?.value || '';
   const crop = document.getElementById('ar-image-crop')?.value || 'none';
   const zoom = document.getElementById('ar-image-zoom')?.value || '1';
   const x = document.getElementById('ar-image-x')?.value || '50';
   const y = document.getElementById('ar-image-y')?.value || '50';
-  articleSelectedImage.dataset.layout = layout;
+  if (layout) articleSelectedImage.dataset.layout = layout; else delete articleSelectedImage.dataset.layout;
   if (crop === 'none') delete articleSelectedImage.dataset.crop;
   else articleSelectedImage.dataset.crop = crop;
   articleSelectedImage.dataset.zoom = zoom;
@@ -1351,6 +1370,12 @@ function applyArticleImageLayout(){
      「意図的に空」を明示する必要がある（AUDIT §9-92）。 */
   const altInput = document.getElementById('ar-image-alt');
   if (altInput) articleSelectedImage.setAttribute('alt', altInput.value.trim());
+  formatArticleImageBlot(articleSelectedImage, {
+    'data-layout': layout || false,
+    'data-crop': crop === 'none' ? false : crop,
+    'data-zoom': zoom, 'data-x': x, 'data-y': y,
+    alt: altInput ? altInput.value.trim() : (articleSelectedImage.getAttribute('alt') || '')
+  });
   markFormDirty();
   scheduleArticleEditorSync('quill');
   updateArticlePreview(articleQuill?.root?.innerHTML || '', true);
@@ -1360,12 +1385,12 @@ function applyArticleImageLayout(){
 // 設定を選んだ瞬間に本文内へプレビューする（保存は「画像に適用」で確定）
 function previewArticleImageLayout(){
   if (!articleSelectedImage) return;
-  const layout = document.getElementById('ar-image-layout')?.value || 'contained';
+  const layout = document.getElementById('ar-image-layout')?.value || '';
   const crop = document.getElementById('ar-image-crop')?.value || 'none';
   const zoom = document.getElementById('ar-image-zoom')?.value || '1';
   const x = document.getElementById('ar-image-x')?.value || '50';
   const y = document.getElementById('ar-image-y')?.value || '50';
-  articleSelectedImage.dataset.layout = layout;
+  if (layout) articleSelectedImage.dataset.layout = layout; else delete articleSelectedImage.dataset.layout;
   const host = articleSelectedImage.closest('p');
   if (host) {
     host.style.removeProperty('width');
@@ -1380,6 +1405,11 @@ function previewArticleImageLayout(){
   articleSelectedImage.style.setProperty('--crop-zoom', zoom);
   articleSelectedImage.style.setProperty('--crop-x', `${x}%`);
   articleSelectedImage.style.setProperty('--crop-y', `${y}%`);
+  formatArticleImageBlot(articleSelectedImage, {
+    'data-layout': layout || false,
+    'data-crop': crop === 'none' ? false : crop,
+    'data-zoom': zoom, 'data-x': x, 'data-y': y
+  });
   updateArticlePreview(articleQuill?.root?.innerHTML || '', true);
 }
 
@@ -1403,9 +1433,45 @@ function articleImageHandler(){
 
 function insertImageAtCursor(url){
   if (!articleQuill) return;
-  const range = articleQuill.getSelection(true) || { index: articleQuill.getLength() };
-  articleQuill.insertEmbed(range.index, 'image', url, 'user');
-  articleQuill.setSelection(range.index + 1);
+  const range = articleQuill.getSelection(true) || { index: articleQuill.getLength() - 1 };
+  const index = Math.max(0, Math.min(range.index, articleQuill.getLength() - 1));
+  const beforeImages = new Set(articleQuill.root.querySelectorAll('img'));
+  const [line, offset] = articleQuill.getLine(index) || [null, 0];
+  const lineLength = line ? line.length() : 1;
+  const lineHasImage = !!line?.domNode.querySelector('img');
+  const lineHasText = !!line?.domNode.textContent.trim();
+  const lineHasContent = lineHasImage || lineHasText;
+  let insertIndex = index;
+
+  if (!lineHasContent) {
+    // <p><br></p> はそのまま画像行へ置き換える。既存の改行は残す。
+    insertIndex = index;
+  } else if (offset === 0) {
+    // 行頭は、既存行の前に画像行を作る。
+    articleQuill.insertEmbed(insertIndex, 'image', url, 'user');
+    articleQuill.insertText(insertIndex + 1, '\n', 'user');
+  } else if (offset >= lineLength - 1) {
+    // 行末は、既存行を閉じてから画像行を追加する。
+    articleQuill.insertText(insertIndex, '\n', 'user');
+    insertIndex += 1;
+    articleQuill.insertEmbed(insertIndex, 'image', url, 'user');
+  } else {
+    // 行の途中は「前の文章 / 画像 / 後ろの文章」に3分割する。
+    articleQuill.insertText(insertIndex, '\n', 'user');
+    insertIndex += 1;
+    articleQuill.insertEmbed(insertIndex, 'image', url, 'user');
+    articleQuill.insertText(insertIndex + 1, '\n', 'user');
+  }
+  if (!lineHasContent) articleQuill.insertEmbed(insertIndex, 'image', url, 'user');
+
+  // 同じsrcの既存画像があっても、挿入前後のDOMノード差分で新画像を特定する。
+  const inserted = Array.from(articleQuill.root.querySelectorAll('img'))
+    .find(img => !beforeImages.has(img) && img.getAttribute('src') === url);
+  if (!inserted) return;
+  formatArticleImageBlot(inserted, {'data-layout': 'contained'});
+  const insertedBlot = Quill.find(inserted);
+  const nextIndex = insertedBlot ? articleQuill.getIndex(insertedBlot) + 1 : insertIndex + 1;
+  articleQuill.setSelection(nextIndex, 0, 'silent');
 }
 
 window.articleImageUploading = false;
@@ -1431,6 +1497,33 @@ function initArticleEditor(){
   const TjFont = Quill.import('formats/font');
   TjFont.whitelist = ['bebas', 'mono', 'serif', 'condensed'];
   Quill.register(TjFont, true);
+
+  // Quill標準のimage blotはdata-*をDeltaに含めないため、記事画像の設定を
+  // undo/redo・コピー＆ペースト・再読み込みで保持できるblotに置き換える。
+  if (!Quill.__tjArticleImage) {
+    const BaseImage = Quill.import('formats/image');
+    const imageAttrs = ['data-layout','data-crop','data-pair-id','data-pair-size','data-zoom','data-x','data-y','alt','width','height'];
+    class TjArticleImage extends BaseImage {
+      static formats(node) {
+        return imageAttrs.reduce((out, attr) => {
+          if (node.hasAttribute(attr)) out[attr] = node.getAttribute(attr) || '';
+          return out;
+        }, {});
+      }
+      format(name, value) {
+        if (imageAttrs.includes(name)) {
+          if (value === false || value == null || value === '') this.domNode.removeAttribute(name);
+          else this.domNode.setAttribute(name, value);
+          return;
+        }
+        super.format(name, value);
+      }
+    }
+    TjArticleImage.blotName = 'image';
+    TjArticleImage.tagName = 'IMG';
+    Quill.register(TjArticleImage, true);
+    Quill.__tjArticleImage = true;
+  }
 
   // ソフト改行(<br>)を Shift+Enter で入れられるようにする。通常の Enter は段落(<p>)のまま。
   // Quill 1.x の Break blot は既定では insertEmbed で挿入できないため、挿入可能な
@@ -1482,6 +1575,7 @@ function initArticleEditor(){
   document.getElementById('ar-image-x')?.addEventListener('input', previewArticleImageLayout);
   document.getElementById('ar-image-y')?.addEventListener('input', previewArticleImageLayout);
   document.getElementById('ar-image-pair')?.addEventListener('click', pairSelectedArticleImage);
+  document.getElementById('ar-image-trio')?.addEventListener('click', trioSelectedArticleImage);
   // Shift+Enter = ソフト改行(<br>)。既定の Enter(段落)より先に評価させるため unshift。
   const enterBindings = articleQuill.keyboard.bindings[13] || (articleQuill.keyboard.bindings[13] = []);
   enterBindings.unshift({
@@ -1858,6 +1952,7 @@ function updateArticlePreview(html, force){
       el.innerHTML = entityHtml;
     }
   }
+  renderArticleFxPreview(el);
   bindArticlePreviewInteractions(el);
   const focusContent = document.getElementById('ar-focus-preview-content');
   if (focusContent) {
@@ -1870,22 +1965,27 @@ function updateArticlePreview(html, force){
 // 本番記事ページと同じ画像レイアウトをCMSプレビューへ反映する
 function renderArticleFxPreview(root){
   const images = Array.from(root.querySelectorAll('img'));
-  images.forEach((img, index) => {
+  let figIndex = 0;
+  images.forEach((img) => {
     if (img.closest('.preview-fx-img')) return;
-    // 既存記事の旧形式画像は元のHTML構造を保つ。
-    // レイアウト指定がある画像だけ新しいfigure変換を行う。
-    const hasLayoutData = img.dataset.layout || img.dataset.crop || img.dataset.pairId || img.dataset.zoom || img.dataset.x || img.dataset.y;
-    if (!hasLayoutData) { img.loading = 'eager'; return; }
+    if (img.closest('.tj-event, .tj-artist-card')) return;
+    figIndex++;
     const originalSrc = img.getAttribute('src');
     const originalAlt = img.getAttribute('alt') || '';
     // スクロール領域内のプレビューでも既存画像を確実に表示する
     img.loading = 'eager';
     const p = img.closest('p');
+    const requested = img.dataset.layout;
+    const rhythm = ['contained','left','right','full','compact'].includes(requested)
+      ? (requested === 'contained' ? 'preview-fx-contained' : `preview-fx-${requested}`)
+      : (figIndex % 3 === 1 ? 'preview-fx-full preview-fx-bleed' : figIndex % 3 === 2 ? 'preview-fx-right' : 'preview-fx-left');
+    const autoCompact = !requested && figIndex % 4 === 0 ? ' preview-fx-compact' : '';
     const fig = document.createElement('figure');
-    fig.className = 'preview-fx-img ' + ({left:'preview-fx-left', right:'preview-fx-right', full:'preview-fx-full preview-fx-bleed', compact:'preview-fx-compact'}[img.dataset.layout] || '');
-    if (img.dataset.layout) fig.dataset.layout = img.dataset.layout;
+    fig.className = `preview-fx-img ${rhythm}${autoCompact}`;
+    if (requested) fig.dataset.layout = requested;
     if (img.dataset.crop && img.dataset.crop !== 'none') fig.dataset.crop = img.dataset.crop;
     if (img.dataset.pairId) fig.dataset.pairId = img.dataset.pairId;
+    if (img.dataset.pairSize) fig.dataset.pairSize = img.dataset.pairSize;
     fig.style.setProperty('--crop-x', (img.dataset.x || '50') + '%');
     fig.style.setProperty('--crop-y', (img.dataset.y || '50') + '%');
     fig.style.setProperty('--crop-zoom', img.dataset.zoom || '1');
@@ -1900,11 +2000,27 @@ function renderArticleFxPreview(root){
     img.loading = 'eager';
     img.style.display = 'block';
     img.style.visibility = 'visible';
-    fig.appendChild(document.createElement('figcaption'));
+    const caption = document.createElement('figcaption');
+    caption.className = 'preview-fx-fig';
+    caption.textContent = originalAlt || `FIG.${String(figIndex).padStart(2, '0')}`;
+    fig.appendChild(caption);
+    const classify = () => {
+      if (requested || img.dataset.crop || !img.naturalWidth || !img.naturalHeight) return;
+      if (img.naturalWidth >= img.naturalHeight * 1.9) fig.classList.add('preview-fx-bleed');
+      else if (img.naturalHeight > img.naturalWidth * 1.15) fig.classList.add('preview-fx-portrait');
+    };
+    if (img.complete) classify(); else img.addEventListener('load', classify, {once:true});
   });
   const pairs = {};
   root.querySelectorAll('.preview-fx-img[data-pair-id]').forEach(fig => (pairs[fig.dataset.pairId] || (pairs[fig.dataset.pairId] = [])).push(fig));
-  Object.values(pairs).forEach(figs => { if (figs.length !== 2) return; const pair = document.createElement('div'); pair.className = 'preview-image-pair'; figs[0].parentNode.insertBefore(pair, figs[0]); figs.forEach(fig => pair.appendChild(fig)); });
+  Object.values(pairs).forEach(figs => {
+    const size = figs[0].dataset.pairSize === '3' ? 3 : 2;
+    if (figs.length !== size) return;
+    const pair = document.createElement('div');
+    pair.className = `preview-image-pair${size === 3 ? ' preview-image-trio' : ''}`;
+    figs[0].parentNode.insertBefore(pair, figs[0]);
+    figs.forEach(fig => pair.appendChild(fig));
+  });
 }
 
 function toggleArticlePreview(){
@@ -2016,7 +2132,7 @@ function previewRenderBody_(body){
 function writeArticleSimplePreview_(win, title, body){
   const safeBody = String(body || '').replace(/<script/gi, '&lt;script');
   win.document.open();
-      win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><link rel="stylesheet" href="/common.css?v=62"><link rel="stylesheet" href="/detail.css?v=100"><link rel="stylesheet" href="/article-fx.css?v=24"><style>/* フォールバックでは common.js を読まないためネイティブカーソルに戻す */*{cursor:auto !important}a,button,[role="button"],summary{cursor:pointer !important}</style></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${esc(title)}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=17"><\/script></body></html>`);
+      win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><link rel="stylesheet" href="/common.css?v=62"><link rel="stylesheet" href="/detail.css?v=100"><link rel="stylesheet" href="/article-fx.css?v=25"><style>/* フォールバックでは common.js を読まないためネイティブカーソルに戻す */*{cursor:auto !important}a,button,[role="button"],summary{cursor:pointer !important}</style></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${esc(title)}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=18"><\/script></body></html>`);
   win.document.close();
 }
 async function openArticleGeneratedPreview(){
@@ -3225,13 +3341,16 @@ function restoreArticleImageAttributes(root, sourceHtml){
   source.innerHTML = sourceHtml;
   const sourceImages = Array.from(source.querySelectorAll('img'));
   const targetImages = Array.from(root.querySelectorAll('img'));
-  const attrs = ['data-layout','data-crop','data-pair-id','data-zoom','data-x','data-y','alt'];
-  targetImages.forEach((img, index) => {
-    const sourceImage = sourceImages[index];
+  const attrs = ['data-layout','data-crop','data-pair-id','data-pair-size','data-zoom','data-x','data-y','alt'];
+  const seen = new Map();
+  targetImages.forEach((img) => {
+    const src = img.getAttribute('src') || '';
+    const occurrence = seen.get(src) || 0;
+    seen.set(src, occurrence + 1);
+    const sourceImage = sourceImages.filter(item => (item.getAttribute('src') || '') === src)[occurrence];
     if (!sourceImage) return;
     attrs.forEach(attr => {
-      if (sourceImage.hasAttribute(attr)) img.setAttribute(attr, sourceImage.getAttribute(attr) || '');
-      else img.removeAttribute(attr);
+      if (!img.hasAttribute(attr) && sourceImage.hasAttribute(attr)) img.setAttribute(attr, sourceImage.getAttribute(attr) || '');
     });
   });
 }
@@ -3259,6 +3378,7 @@ function setArticleBody(html){
       }
     }
     restoreArticleImageAttributes(q.root, v);
+    q.history.clear();
     // ar-body を Quill が解釈した正規化後 HTML で再同期
     document.getElementById('ar-body').value = q.root.innerHTML;
   }
@@ -3290,7 +3410,9 @@ function switchArticleEditor(mode){
         catch(e){ articleQuill.setContents(articleQuill.clipboard.convert(src), 'silent'); }
       }
       restoreArticleImageAttributes(articleQuill.root, src);
+      articleQuill.history.clear();
     }
+    updateArticlePreview(src, true);
     document.getElementById('ar-body').value = src;
     wrap.classList.remove('source-mode');
     visualTab.classList.add('active');

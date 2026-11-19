@@ -89,9 +89,22 @@ const injectImages = `
     images[0].dataset.pairId = 'article-image-fit-check';
     images[1].dataset.pairId = 'article-image-fit-check';
     images[2].dataset.layout = 'full';
+    const src = images[0].getAttribute('src');
+
+    const trio = document.createElement('div');
+    trio.id = 'article-image-trio-fixture';
+    for (let i = 0; i < 3; i++) {
+      const p = document.createElement('p');
+      const img = document.createElement('img');
+      img.src = src;
+      img.dataset.pairId = 'article-image-trio-check';
+      img.dataset.pairSize = '3';
+      p.appendChild(img);
+      trio.appendChild(p);
+    }
+    body.appendChild(trio);
 
     // 明示左右寄せの回り込み規則を、article-fx.js 実行前に本文へ追加する。
-    const src = images[0].getAttribute('src');
     const a = document.createElement('p');
     const aImg = document.createElement('img');
     aImg.id = 'article-image-wrap-a-img';
@@ -185,6 +198,7 @@ try {
         const body = document.querySelector('.article-body').getBoundingClientRect();
         const sidebar = document.querySelector('.article-sidebar')?.getBoundingClientRect() || null;
         const pair = document.querySelector('.fx-image-pair');
+        const trio = document.querySelector('.fx-image-trio');
         const aImg = document.getElementById('article-image-wrap-a-img');
         const bImg = document.getElementById('article-image-wrap-b-img');
         const aFig = aImg?.closest('figure.fx-img');
@@ -223,6 +237,12 @@ try {
             pairFigures.forEach(fig => inside(fig, 'pair figure outside article-body'));
             const pairRects = pairFigures.map(rect);
             if (pairFigures.length !== 2 || Math.abs(pairRects[0].top - pairRects[1].top) > 2 || Math.abs(pairRects[0].left - pairRects[1].left) < 10) errors.push({ reason: 'pair not side by side', element: '.fx-image-pair', rect: rect(pair), figures: pairFigures.map(bounds) });
+          }
+          if (!trio) errors.push({ reason: 'missing trio', element: '.fx-image-trio' });
+          else {
+            const trioFigures = [...trio.querySelectorAll(':scope > figure.fx-img')];
+            const trioRects = trioFigures.map(rect);
+            if (trioFigures.length !== 3 || trioRects.some(item => Math.abs(item.top - trioRects[0].top) > 2) || trioRects.some(item => Math.abs(item.width - trioRects[0].width) > 2)) errors.push({ reason: 'trio not side by side/equal', element: '.fx-image-trio', figures: trioFigures.map(bounds) });
           }
         } else {
           const phoneItems = [...document.querySelectorAll('.fx-image-pair > figure.fx-img, figure.fx-img.fx-bleed')];
