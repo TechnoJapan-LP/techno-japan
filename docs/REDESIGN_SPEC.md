@@ -60,6 +60,45 @@
 
 ## 2. ページ別仕様
 
+## 2.0 TOP オープニング（ローダー）— t-magazine.com と同じ構成の Techno Japan 版
+
+モック：`docs/design-mock/Main.dc.html` の `.intro` ブロック（HTML）、`/* ===== INTRO` 以下の CSS、`intro()` / `endIntro()`（JS）。
+素材：`docs/design-mock/img/mark-left.png` `mark-right.png`（シンボルの左右パーツ・白）、`wordmark-text.png`（文字だけのワードマーク・白）、`mark-full.png`（シンボル全体・白、予備）。
+
+### 表示条件
+- TOP（`index.html`）のみ。**同じブラウザセッションで1回だけ**（`sessionStorage.setItem('tj-intro','1')`、あれば再生しない）
+- `prefers-reduced-motion: reduce` の場合は再生しない
+- 再生中は `html{overflow:hidden}` でスクロールを止め、ページ上部に固定。右下に `Skip`（1.5秒後に表示）で即終了
+- ローダーは `position:fixed; inset:0; z-index:200; background:#080808`。終了時は要素ごと削除
+
+### タイムライン（合計 5.0 秒。元は t-mag の 6 秒を 5/6 に縮めたもの）
+| 時間 | 要素 | 動き |
+|---|---|---|
+| 0.08–0.98s | シンボル左右パーツ（132px 幅、スマホ 96px） | 左パーツは −56px から、右パーツは +56px から中央へ滑り込み、組み合わさる。`cubic-bezier(.22,.61,.36,1)` |
+| 1.0–1.6s | ワードマーク（高さ 13px、スマホ 10px、シンボルの 22px 下） | 6px 下からフェードイン |
+| 0–3.33s | 上のマーキー（バー1 の中央） | `translateX(100vw)` → 0（右から）。`cubic-bezier(.76,0,.24,1)`＝power4.inOut |
+| 0–3.33s | 下のマーキー（バー5 の中央） | `translateX(-100vw)` → 0（左から）。同イージング |
+| 0.83 / 1.125 / 0.92 / 1.25 / 1.04s | グレーのバー ×5（`#1a1a1a`、画面を縦 5 等分） | `clip-path` で左→右に開く（0 幅 → 全幅）、各 0.83s、**ランダム順**（上記の固定値で可） |
+| 3.33–3.83s | ロゴ（シンボル＋文字）と両マーキー | **点滅**：`steps(1)` で 0 → 1 → 0 → 1 → 0 → 1（0.1s 間隔、gsap の `opacity:0, repeat:4, yoyo:true, duration:.1` と同じ） |
+| 3.33–6.67s | 両マーキー | 来た方向と逆へ `translateX(±100vw)`（終了前に画面外へ） |
+| 4.17–4.59s | ロゴ | `scale(1)` → `scale(0)`（中心へ縮んで消える） |
+| 4.17 / 4.5 / 4.29 / 4.58 / 4.42s | グレーのバー ×5 | `clip-path` で右端へ閉じる（全幅 → 右端 0 幅）、各 0.83s、ランダム順 |
+| 5.0s | ローダー削除 | ヘッダー・マーキー・リードカルーセルを **1秒でフェードイン**（`ease-in-out`）。ヒーローのズーム／見出しの立ち上がりアニメーションは**ここから開始**（ローダー中は `animation-play-state:paused`） |
+
+マーキーの文言（等幅 10px、`letter-spacing:.2em`、uppercase、白 85%）：
+`TECHNO · HOUSE · JAPAN · UNDERGROUND · CLUBS · FESTIVALS · CULTURE · RAVES · ARTISTS · VENUES · NIGHTS · OPEN-AIR · SCENE · BILINGUAL ·`（2回繰り返して途切れないように）
+
+### 実装メモ
+- モックは **CSS keyframes のみ**で実装（GSAP 不要）。`clip-path` の polygon は `polygon(0 0,0 0,0 100%,0 100%)` → `polygon(0 0,100% 0,100% 100%,0 100%)` → `polygon(100% 0,100% 0,100% 100%,100% 100%)`
+- 「消える」側のアニメーションは `animation-fill-mode: forwards`（`both` にすると再生前から透明になるバグが出る）
+- 点滅は `steps(1,end)` で、フェードではなく瞬間的に ON/OFF
+- ローダーの DOM は `index.html` の `<body>` 直下の先頭に置き、CSS はクリティカル（インライン）で読み込む。画像 3 枚（左右パーツ・文字ワードマーク）は `<link rel="preload">`
+- 本番の既存ロゴ素材（`images/logo-*.svg` 等）があれば、PNG ではなく SVG を使ってよい（白・透過）
+
+### 本番への反映（2026-10-29 `e9c1019f3`、10-30 `be2403367`）
+- 本番は `LP/index.html`（素材は `LP/images/intro/`）。モックより大きくしてある：シンボル 168px（スマホ 120px）、文字 16px（スマホ 12px）、間隔 26px、左右パーツの滑り込み ±72px
+- 再生中のスクロール止めは `html{overflow:hidden}` ではなく、wheel / touchmove / キー操作をリスナーで止める（overflow を切り替えると iPhone で終了後に sticky が全滅したため）。検査は `scripts/check_top_intro.mjs`
+
 ### 2.1 TOP（Main.dc.html）
 1. 固定ヘッダー → **マーキー**（Bebas 18px、40s linear、`position:sticky; top:64px; z-index:49`、黒背景）
 2. **リードカルーセル**（最新 4 記事、スクロール固定）
@@ -194,7 +233,7 @@ Google フォーム側の設問を増減した時はこの表を更新する。�
 | # | 内容 | 完了条件 |
 |---|---|---|
 | 1 | 共通部品：デザイントークン（CSS 変数）、固定ヘッダー、動く背景、フッター、検索オーバーレイ、スマホメニュー（JA/EN） | 全ページで同じヘッダー／メニュー／検索が動く |
-| 2 | TOP | カルーセル・FUTURE・UPCOMING・Stories・Festival Index・Playing soon・Newsletter |
+| 2 | TOP | オープニング（§2.0）・カルーセル・FUTURE・UPCOMING・Stories・Festival Index・Playing soon・Newsletter |
 | 3 | 一覧：NEWS / FESTIVALS / ARTISTS / VENUES | フィルタ、Grid/List、FEATURED カルーセル、Leaflet マップ連動 |
 | 4 | 詳細：NEWS / FESTIVAL / ARTIST / VENUE | 読了バー、h2 赤線、サイドカラム、画像 data-layout、Overview、Facts（Hours / Features）、ギャラリー分岐 |
 | 5 | ABOUT / APPLY / WRITER ＋ Google フォーム直接送信 | 3 ページの表示とフォーム送信 |

@@ -57,6 +57,42 @@ a:hover .img img{transform:scale(1.04)}
 .btn2{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:56px;padding:0 48px;border:1px solid rgba(240,237,232,.3);color:#f0ede8;background:transparent;font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.25em;text-transform:uppercase;transition:border-color .25s ease,color .25s ease}
 .btn2:hover{border-color:var(--accent);color:var(--accent)}
 /* sticky header: stays pinned while the page (and the lead carousel) scrolls beneath it */
+/* ===== INTRO — same timeline as t-magazine.com's loader (GSAP → CSS) =====
+   t-mag's 6s timeline scaled to 5s: 0–0.9 symbol halves interlock · 1.0 wordmark · 0–3.3 marquees slide in (top from right, bottom from left)
+   0.8–2.1 grey bars wipe in (clip-path, random order) · 3.3–3.8 logo+marquees blink 5× (0.1s) · 3.3–6.7 marquees slide out
+   4.2–4.6 logo scales to 0 · 4.2–5.4 bars collapse to the right (random order) · 5.0 loader gone, header+content fade in 1s */
+.intro{position:fixed;inset:0;z-index:200;background:#080808;overflow:hidden;display:flex;flex-direction:column;pointer-events:none}
+.intro-bar{position:relative;flex:1 1 0;background:#1a1a1a;clip-path:polygon(0 0,0 0,0 100%,0 100%);animation:barIn .83s cubic-bezier(.76,0,.24,1) both,barOut .83s cubic-bezier(.76,0,.24,1) both}
+.intro-bar.b1{animation-delay:830ms,4170ms}.intro-bar.b2{animation-delay:1125ms,4500ms}.intro-bar.b3{animation-delay:920ms,4290ms}.intro-bar.b4{animation-delay:1250ms,4580ms}.intro-bar.b5{animation-delay:1040ms,4420ms}
+@keyframes barIn{from{clip-path:polygon(0 0,0 0,0 100%,0 100%)}to{clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}}
+@keyframes barOut{from{clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}to{clip-path:polygon(100% 0,100% 0,100% 100%,100% 100%)}}
+.intro-logo{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:22px;animation:blink .5s steps(1,end) 3330ms forwards,logoShrink .42s cubic-bezier(.2,.6,.3,1) 4170ms forwards}
+.intro-mark{position:relative;width:132px;aspect-ratio:651/339}
+.intro-mark .half{position:absolute;inset:0;width:100%;height:100%;opacity:0}
+.intro-mark .l{animation:halfL .9s cubic-bezier(.22,.61,.36,1) 80ms both}
+.intro-mark .r{animation:halfR .9s cubic-bezier(.22,.61,.36,1) 80ms both}
+@keyframes halfL{from{opacity:0;transform:translateX(-56px)}60%{opacity:1}to{opacity:1;transform:translateX(0)}}
+@keyframes halfR{from{opacity:0;transform:translateX(56px)}60%{opacity:1}to{opacity:1;transform:translateX(0)}}
+.intro-word{height:13px;width:auto;opacity:0;animation:wordIn .6s ease 1000ms both}
+@keyframes wordIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+/* gsap: opacity 0, repeat 4, yoyo, 0.1s → off/on/off/on/off then back on */
+@keyframes blink{0%{opacity:0}20%{opacity:1}40%{opacity:0}60%{opacity:1}80%{opacity:0}100%{opacity:1}}
+@keyframes logoShrink{from{transform:translate(-50%,-50%) scale(1)}to{transform:translate(-50%,-50%) scale(0)}}
+.intro-mq{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);display:flex;white-space:nowrap;overflow:hidden;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(240,237,232,.85);animation:blink .5s steps(1,end) 3330ms forwards}
+.intro-mq span{display:inline-block;padding-right:40px}
+.intro-mq.top span{animation:mqInR 3.33s cubic-bezier(.76,0,.24,1) both,mqOutR 3.33s cubic-bezier(.76,0,.24,1) 3330ms both}
+.intro-mq.bot span{animation:mqInL 3.33s cubic-bezier(.76,0,.24,1) both,mqOutL 3.33s cubic-bezier(.76,0,.24,1) 3330ms both}
+@keyframes mqInR{from{transform:translateX(100vw)}to{transform:translateX(0)}}
+@keyframes mqOutR{from{transform:translateX(0)}to{transform:translateX(100vw)}}
+@keyframes mqInL{from{transform:translateX(-100vw)}to{transform:translateX(0)}}
+@keyframes mqOutL{from{transform:translateX(0)}to{transform:translateX(-100vw)}}
+.intro-skip{position:absolute;right:20px;bottom:40px;pointer-events:auto;background:none;border:1px solid rgba(240,237,232,.25);color:rgba(240,237,232,.7);padding:10px 14px;cursor:pointer;opacity:0;animation:fadeIn .4s ease 1500ms both}
+/* page waits under the intro: hero animations start when the intro ends, header/marquee rise in */
+.tj.pre .hero img,.tj.pre .hero .ov > div > *,.tj.pre .marquee .track,.tj.pre .fest.on .d{animation-play-state:paused}
+.tj.pre .hdr,.tj.pre .marquee,.tj.pre .car{opacity:0}
+.tj.post .hdr,.tj.post .marquee,.tj.post .car{transition:opacity 1s ease-in-out}
+@media (max-width:900px){.intro-mark{width:96px}.intro-word{height:10px}.intro-skip{bottom:28px;right:16px}}
+@media (prefers-reduced-motion:reduce){.intro{display:none}}
 .hdr{position:sticky;top:0;z-index:40;background:rgba(8,8,8,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(240,237,232,.08)}
 .car-sticky{top:0}
 /* ===== FX A: basic set ===== */
@@ -135,9 +171,25 @@ a:hover .img img{transform:scale(1.04)}
 </style>
 </helmet>
 
-<div class="tj" style="--accent:{{accent}};display:flex;flex-direction:column;min-height:100%">
+<div class="tj {{phase}}" style="--accent:{{accent}};display:flex;flex-direction:column;min-height:100%">
   <div class="tjbg" aria-hidden="true"><i></i></div>
   <div class="glow" aria-hidden="true"></div>
+
+  <!-- INTRO (T-mag style): black → wordmark → grey bars wipe in → marquee strips + logo pulse → black bars wipe → page reveals -->
+  <sc-if value="{{introOn}}" hint-placeholder-val="{{ false }}">
+  <div class="intro" aria-hidden="true">
+    <div class="intro-bar b1"><div class="intro-mq top"><span>{{introMq}}</span><span>{{introMq}}</span></div></div>
+    <div class="intro-bar b2"></div>
+    <div class="intro-bar b3"></div>
+    <div class="intro-bar b4"></div>
+    <div class="intro-bar b5"><div class="intro-mq bot"><span>{{introMq}}</span><span>{{introMq}}</span></div></div>
+    <div class="intro-logo">
+      <div class="intro-mark"><img class="half l" src="img/mark-left.png" alt=""><img class="half r" src="img/mark-right.png" alt=""></div>
+      <img class="intro-word" src="img/wordmark-text.png" alt="Techno Japan">
+    </div>
+    <button class="intro-skip mono" onClick="{{skipIntro}}">Skip</button>
+  </div>
+  </sc-if>
 
   <!-- NAV -->
   <header class="hdr">
@@ -312,9 +364,22 @@ a:hover .img img{transform:scale(1.04)}
 <script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#ff2d2d","options":["#ff2d2d","#a82f31","#f0ede8"]},"$preview":{"width":1440,"height":5400}}'>
 class Component extends DCLogic {
   constructor(p){ super(p); this.state = { fest: 'all', seed: Math.random(), carK: 0, data: (typeof window !== 'undefined' && window.TJ_DATA) || null }; }
-  componentDidMount(){ if(!this.state.data){ fetch('./tj-data.json').then(r=>r.json()).then(d=>this.setState({data:d})).catch(()=>{}); } this.observe(); this.carousel(); }
+  componentDidMount(){ if(!this.state.data){ fetch('./tj-data.json').then(r=>r.json()).then(d=>this.setState({data:d})).catch(()=>{}); } this.observe(); this.carousel(); this.intro(); }
+  intro(){
+    // once per browser session on the live site (sessionStorage 'tj-intro'); the mock plays it on every open so it can be reviewed
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduce){ this.endIntro(); return; }
+    this.setState({introOn:true, phase:'pre'});
+    try { window.scrollTo(0,0); document.documentElement.style.overflow='hidden'; } catch(e){}
+    this.introT = setTimeout(() => this.endIntro(), 5000);
+  }
+  endIntro(){
+    if(this.introT) clearTimeout(this.introT);
+    try { document.documentElement.style.overflow=''; } catch(e){}
+    this.setState({introOn:false, phase:'post'});
+  }
   componentDidUpdate(){ this.observe(); }
-  componentWillUnmount(){ if(this.io) this.io.disconnect(); if(this.onScroll) window.removeEventListener('scroll', this.onScroll); }
+  componentWillUnmount(){ if(this.io) this.io.disconnect(); if(this.onScroll) window.removeEventListener('scroll', this.onScroll); if(this.introT) clearTimeout(this.introT); try { document.documentElement.style.overflow=''; } catch(e){} }
   carousel(){
     // Scroll progress through the pinned section → target position (0..N-1). The track eases toward it every
     // frame (lerp), so the motion is continuous and silky rather than stepped; a light dwell keeps each story
@@ -378,6 +443,8 @@ class Component extends DCLogic {
     const rest = arts.slice(4).filter(a => !futureIds.has(a.id));
     return {
       accent: this.props.accent ?? '#ff2d2d',
+      introOn: !!this.state.introOn, phase: this.state.phase || '', skipIntro: () => this.endIntro(),
+      introMq: 'Techno · House · Japan · Underground · Clubs · Festivals · Culture · Raves · Artists · Venues · Nights · Open-air · Scene · Bilingual · ',
       searchOpen: !!this.state.searchOpen, openSearch: () => this.setState({searchOpen: true}), closeSearch: () => this.setState({searchOpen: false}),
       menuOpen: !!this.state.menuOpen, openMenu: () => this.setState({menuOpen: true}), closeMenu: () => this.setState({menuOpen: false}), menuSearch: () => this.setState({menuOpen: false, searchOpen: true}),
       leads, trackStyle: 'transform:translate3d(0,0,0)', carIdx: String(carIdx + 1).padStart(2,'0'),
