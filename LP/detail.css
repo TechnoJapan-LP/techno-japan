@@ -30,11 +30,11 @@
 .article-body p { margin-bottom: 1.6em; }
 /* 日本語見出しの折り返し位置は、生成時にBudouXの<wbr>として埋め込む。 */
 /* スマホで読点・句点のまとまりが1行に入るよう6vw（390pxで約15文字）。7.5vwでは塊の途中で折れて行が増えた（2026-11-03実測186→149行）。 */
-.article-body h2 { clear: both; font-family: var(--font-display); font-size: clamp(21px, 6vw, 34px); text-transform: uppercase; line-height: 1.1; margin: 2.8em 0 1em; color: var(--text); text-wrap: balance; word-break: keep-all; overflow-wrap: anywhere; }
+.article-body h2:not(:where([data-hl])), .article-body :is(h2,h3,h4):where([data-hl="2"]) { clear: both; font-family: var(--font-display); font-size: clamp(21px, 6vw, 34px); text-transform: uppercase; line-height: 1.1; margin: 2.8em 0 1em; color: var(--text); text-wrap: balance; word-break: keep-all; overflow-wrap: anywhere; }
 .article-body .tj-subhead { margin: 1.6em 0; font-size: clamp(16px, 4.2vw, 19px); font-weight: 350; line-height: 1.6; color: rgba(var(--text-rgb), .78); text-wrap: balance; overflow-wrap: anywhere; }
-.article-body h2 + .tj-subhead { margin-top: -.4em; margin-bottom: 1.6em; }
-.article-body h3 { clear: both; font-family: var(--font-mono); font-weight: 400; font-size: 13px; line-height: 1.45; letter-spacing: .12em; margin: 2.4em 0 .75em; color: var(--accent); text-transform: uppercase; text-wrap: balance; word-break: keep-all; overflow-wrap: anywhere; }
-.article-body h4 { clear: both; font-family: var(--font-display); font-size: 24px; line-height: .95; margin: 2.5em 0 .75em; color: var(--text); text-wrap: balance; }
+.article-body h2:not(:where([data-hl])) + .tj-subhead, .article-body :is(h2,h3,h4):where([data-hl="2"]) + .tj-subhead { margin-top: -.4em; margin-bottom: 1.6em; }
+.article-body h3:not(:where([data-hl])), .article-body :is(h2,h3,h4):where([data-hl="3"]) { clear: both; font-family: var(--font-mono); font-weight: 400; font-size: 13px; line-height: 1.45; letter-spacing: .12em; margin: 2.4em 0 .75em; color: var(--accent); text-transform: uppercase; text-wrap: balance; word-break: keep-all; overflow-wrap: anywhere; }
+.article-body h4:not(:where([data-hl])), .article-body :is(h2,h3,h4):where([data-hl="4"]) { clear: both; font-family: var(--font-display); font-size: 24px; line-height: .95; margin: 2.5em 0 .75em; color: var(--text); text-wrap: balance; }
 .article-body ul, .article-body ol { margin: 0 0 24px 24px; padding: 0; }
 .article-body li { margin-bottom: 8px; }
 .article-body a { color: var(--text); border-bottom: 1px solid var(--text-a30); transition: border-color 0.2s ease; }
@@ -144,7 +144,7 @@
   border-bottom: 1px solid var(--text-a12);
 }
 .article-body .tj-cal-month + .tj-cal-month { border-top: 1px solid var(--text-a08); }
-.article-body .tj-cal-month h3 {
+.article-body .tj-cal-month h3:not(:where([data-hl])), .article-body .tj-cal-month :is(h2,h3,h4):where([data-hl="3"]) {
   margin: 0; padding: 18px 0 12px;
   font-family: var(--font-mono); font-size: 10px; letter-spacing: .18em; font-weight: normal; /* h3の基底太さを打ち消す */
   text-transform: uppercase; color: var(--accent);
@@ -330,7 +330,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 /* 句読点のまとまりは長さに関係なく塊にする（見出し全種で同じ規則）。
    長さの上限で分けていた頃は、上限を超えたまとまりが前の行に流れ込み「…、夏の / 週末を…」と折れた（2026-11-03 実測 10本→1本）。 */
 .article-hero-overlay h1 .tj-clause, .article-detail h1 .tj-clause,
-.article-body h2 .tj-clause, .article-body h3 .tj-clause, .article-title-sub .tj-clause {
+.article-body h2:not(:where([data-hl])) .tj-clause, .article-body h3:not(:where([data-hl])) .tj-clause, .article-body :is(h2,h3,h4):where([data-hl="2"],[data-hl="3"]) .tj-clause, .article-title-sub .tj-clause {
   display: inline-block; max-width: 100%;
 }
 .article-chips { display: flex; gap: 10px; margin-bottom: 14px; }
@@ -466,9 +466,9 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   .article-tag, .related-story-meta, .article-detail .related-card-date,
   .article-detail .related-card-loc { font-size: 10.5px; }
   .article-body { font-size: 16px; line-height: 1.9; }
-  .article-body h2 { margin-top: 2.4em; }
+  .article-body h2:not(:where([data-hl])), .article-body :is(h2,h3,h4):where([data-hl="2"]) { margin-top: 2.4em; }
   .article-body .tj-subhead { margin: 1.5em 0; }
-  .article-body h2 + .tj-subhead { margin-top: -.35em; margin-bottom: 1.6em; }
+  .article-body h2:not(:where([data-hl])) + .tj-subhead, .article-body :is(h2,h3,h4):where([data-hl="2"]) + .tj-subhead { margin-top: -.35em; margin-bottom: 1.6em; }
   .article-body img { margin-block: 2.2em; }
   /* ----- スマホのメタ情報は「1行の署名」に畳む -----
      3段に折り返すスペック表は高さ216pxあり、393x852 の実機相当で本文1行目を
@@ -2033,9 +2033,9 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
 .article-overview-source { margin: 16px 0 0; color: var(--text-a40); font-size: 9px; letter-spacing: .08em; }
 .article-sidebar-back { display: block; color: var(--text-a62); }
 /* スマホで読点・句点のまとまりが1行に入るよう6vw（390pxで約15文字）。7.5vwでは塊の途中で折れて行が増えた（2026-11-03実測186→149行）。 */
-.article-body h2 { clear: both; font-size: clamp(21px, 6vw, 34px); line-height: 1.1; }
-.article-body h3 { clear: both; font: 400 13px/1.45 var(--font-mono); letter-spacing: .12em; color: var(--accent); text-transform: uppercase; }
-.article-body h4 { clear: both; font: 400 24px/.95 var(--font-display); }
+.article-body h2:not(:where([data-hl])), .article-body :is(h2,h3,h4):where([data-hl="2"]) { clear: both; font-size: clamp(21px, 6vw, 34px); line-height: 1.1; }
+.article-body h3:not(:where([data-hl])), .article-body :is(h2,h3,h4):where([data-hl="3"]) { clear: both; font: 400 13px/1.45 var(--font-mono); letter-spacing: .12em; color: var(--accent); text-transform: uppercase; }
+.article-body h4:not(:where([data-hl])), .article-body :is(h2,h3,h4):where([data-hl="4"]) { clear: both; font: 400 24px/.95 var(--font-display); }
 .article-body blockquote { clear: both; border-left: 2px solid var(--accent); padding: 8px 0 8px 24px; margin: 32px 0; font-style: italic; text-align: left; }
 .article-body blockquote::before, .article-body blockquote::after { display: none; }
 .article-body .info { clear: both; border-top: 1px solid var(--text-a12); border-bottom: 1px solid var(--text-a12); padding: 16px 0; font-family: var(--font-mono); font-size: .85em; }
@@ -2094,7 +2094,7 @@ a.lineup-item:hover { border-color: var(--accent); color: var(--accent); opacity
   .article-detail .related-festivals-track .related-card { flex: 0 0 240px; scroll-snap-align: start; }
   .article-detail .related-card-name { font-size: 24px; }
   .article-detail .article-body { font-size: 16px; line-height: 1.9; }
-  .article-detail .article-body h2 { margin-top: 2.4em; }
+  .article-detail .article-body h2:not(:where([data-hl])), .article-detail .article-body :is(h2,h3,h4):where([data-hl="2"]) { margin-top: 2.4em; }
 }
 
 @media (max-width: 600px) {

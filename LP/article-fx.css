@@ -12,9 +12,9 @@
 .fx-reveal.fx-on { opacity: 1; transform: none; }
 
 /* h2: リビール時にアクセントのアンダーラインが左から掃引 */
-.article-body h2 { position: relative; padding-bottom: 10px; }
-.article-body h2::after { content: ''; position: absolute; left: 0; bottom: 0; height: 2px; width: 100%; background: var(--accent); transform: scaleX(0); transform-origin: 0 50%; transition: transform .7s cubic-bezier(.22,.61,.36,1) .25s; }
-.article-body h2.fx-on::after { transform: scaleX(1); }
+.article-body h2:not(:where([data-hl])), .article-body :is(h2,h3,h4):where([data-hl="2"]) { position: relative; padding-bottom: 10px; }
+.article-body h2:not(:where([data-hl]))::after, .article-body :is(h2,h3,h4):where([data-hl="2"])::after { content: ''; position: absolute; left: 0; bottom: 0; height: 2px; width: 100%; background: var(--accent); transform: scaleX(0); transform-origin: 0 50%; transition: transform .7s cubic-bezier(.22,.61,.36,1) .25s; }
+.article-body h2:not(:where([data-hl])).fx-on::after, .article-body :is(h2,h3,h4):where([data-hl="2"]).fx-on::after { transform: scaleX(1); }
 
 /* blockquote: アクセントボーダーが上から伸びる */
 .article-body blockquote { position: relative; border-left-color: transparent; }
@@ -172,6 +172,6 @@ figure.fx-img.fx-portrait img { max-height: 82vh; object-fit: cover; }
 
 /* reduced-motion: 全演出停止（fx-onは即付与される） */
 @media (prefers-reduced-motion: reduce) {
-  .fx-reveal, figure.fx-img.fx-reveal .fx-frame, .article-body h2::after, .article-body blockquote::before, .article-hero.fx-hero img { transition: none !important; }
+  .fx-reveal, figure.fx-img.fx-reveal .fx-frame, .article-body h2:not(:where([data-hl]))::after, .article-body :is(h2,h3,h4):where([data-hl="2"])::after, .article-body blockquote::before, .article-hero.fx-hero img { transition: none !important; }
   figure.fx-img img, .article-hero.fx-hero img { transform: none !important; }
 }

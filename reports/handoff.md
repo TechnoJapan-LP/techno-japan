@@ -16006,3 +16006,39 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - push 後、Deploy LP と Publish pipeline が新しい Actions で成功することを確認する（PR #25）。
 - 直前のエントリ「Publish 前の差分確認」は、2026-11-19 にユーザーが本番で Publish し成功（`cms: publish data.js` 7745e92、ARTISTS 変更 67 / genre 67 の表示どおり）。**実機確認済み**。
 - `audit_spa_vs_static.py --after` の既存コンテンツ項目数減少は、今回の差分と切り分けたうえで別途データ／監査基準を確認すること。
+
+## 2026-11-19 記事本文の見出し段飛びを生成時に正規化
+
+### 実施
+- `addHeadingPhraseBreaks` の直後に、本文 h1〜h6 をページ h1 起点で1段ずつ詰める `normalizeArticleHeadingLevels` を追加。変更見出しは `data-hl` に元の段を保持し、class付き見出しはタグを変更せず流れだけに含める。
+- `LP/detail.css` / `LP/article-fx.css` を元の見た目の段に対応させ、detail.css=100、article-fx.css=24へ更新。`.tj-cal-month` の月見出しも同方式に対応（LP/cms.css も同じ規則なので合わせて cms.css?v=61）。CMS 記事プレビューの読み込み版数（detail 100 / article-fx 24）を合わせ、cms.js?v=215。
+- `scripts/check_article_heading_order.py` と `scripts/test_article_heading_levels.mjs` を追加し、preflightへ登録。
+- `node scripts/build-detail-pages.mjs` で再生成。
+
+### コミット
+- このエントリと同じコミット（fix: 記事本文の見出し段飛びを生成時に詰める）。
+
+### 検証
+- `node scripts/test_article_heading_levels.mjs` 成功。h2→h4、h3始まり、h4→h2→h4、class付き見出し、無変更、ネスト時無変更を確認。
+- `python3 scripts/check_article_heading_order.py --self-test` 成功。わざと壊した h2→h4 を印字して失敗検知することを確認。
+- `python3 scripts/check_article_heading_order.py` 成功（JA/EN 49ページ）。
+- `python3 scripts/check_asset_versions.py` 成功、`git diff --check`、`node --check scripts/build-detail-pages.mjs` 成功。
+- JA/ENハブ5枚の行数一致を確認（index 268/268、festivals 320/320、artists 380/380、venues 251/251、news 222/222）。
+- 生成後のHTML差分は、?vを除けば記事JA10/EN13ページのみ。非記事の本文差分は0件。
+- Claude が headless Chrome（CDP）で変更前（main）と変更後を比較: 段飛びのあった記事 23ページ＋対照2ページ、PC 1280px / スマホ 390px(dpr3, タッチ)。本文の見出し全241個の計算後スタイル・::after（下線演出）・高さ・直後要素の余白、本文と文書の高さ → **差は0**（タグ名だけが変わった）。初回はカレンダー月見出し（.tj-cal-month）で 10px→13px のずれを検出し、修正後に再測定して0。
+- 記事以外も含む16ページ×PC/スマホの全要素スタイル比較 → 差は見出しのタグ名1件のみ（acid-pauli のスマホで検索パネル生成のタイミング差が1回出たが、再測定で0）。
+- 本番 preflight は push 時に全件実行。
+
+### 変更したパターン
+- 記事本文の段飛び見出し 25件（JA10件・EN15件）を正規化。元の段と新しい段、見出し文は作業ログに全件出力済み。class付きで正規化を阻止した段飛びは0件。
+- 見出しの元段をCSSへ渡す `data-hl` と、h2/h3/h4・疑似要素・レスポンシブ規則・`.tj-subhead`・`.tj-clause` の見た目対応。
+
+### 未確認の類似パターン
+- `LP/article-fx.js` の h2/h3/h4 リビール対象は変更不要と確認済み。その他 JS の見た目段依存は該当なし。
+- h5/h6専用の既存記事見た目規則は確認済み・0件。
+- class付き見出しの段飛びは生成データ上0件。
+
+### 次の担当への注意・判断待ち
+- CMS のプレビューは本文を詰めずに表示する（data-hl 無しなので見た目は従来どおり）。公開ページだけが詰めた段になる。
+- 新しく書く記事で段を飛ばしても生成時に自動で詰まる。class 付き見出し（ウィジェット）の段飛びは詰めずに残し、`check_article_heading_order.py` が失敗する。
+- CMS は cms.js?v=215。ユーザーに Cmd+Shift+R を依頼すること。

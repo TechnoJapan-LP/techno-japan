@@ -31,6 +31,7 @@ import { articleRefIds, prioritizeEntityArticles } from './lib/article-entity-li
 import { loadArticleImageMap, replaceMappedArticleImages } from './lib/article-body-images.mjs';
 import { contentHash, contentRow } from './lib/content-dates.mjs';
 import { resolveLineupArtist } from './lib/lineup-artist.mjs';
+import { normalizeArticleHeadingLevels } from './lib/article-heading-levels.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const LP_DIR = path.join(__dirname, '..', 'LP');
@@ -59,7 +60,7 @@ const DATA_PATH = path.join(LP_DIR, 'data.js');
    次に共通ルールを触ったときは 226ページに新CSSが届かない。
    呼び出し側で上書きできる引数にしておくと同じことが起きるので定数にする。
    CSS を変更したら、ここを上げて全詳細ページを再生成する。AUDIT §9-44。 */
-const DETAIL_CSS_VERSION = 98;
+const DETAIL_CSS_VERSION = 100;
 
 /* 記事ページの演出アセット。**べた書きしないこと。**
 
@@ -72,7 +73,7 @@ const DETAIL_CSS_VERSION = 98;
 
    article-fx.js / article-fx.css を変更したら、ここを上げる。 */
 const ARTICLE_FX_JS_VERSION = 17;
-const ARTICLE_FX_CSS_VERSION = 23;
+const ARTICLE_FX_CSS_VERSION = 24;
 
 /* 全ページ共通アセットの版。ここも同じ理由でべた書きしない
    （変更しても次のビルドで戻り、直したつもりが直らない）。 */
@@ -108,6 +109,7 @@ const CONTENT_DATES_PATH = path.join(LP_DIR, 'data', 'content-dates.json');
 let CONTENT_DATES = {};
 let CONTENT_DATE_UPDATES = {};
 const CONTENT_SNAPSHOTS = new Map();
+const ARTICLE_HEADING_REPORTS = [];
 
 /* 最終更新日は、ページに出るデータのハッシュを台帳で追跡する。 */
 function loadContentDates() {
@@ -1871,7 +1873,9 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
     : '';
   // 自動リンクを先に適用し、カードHTMLはその後に生成する（二重リンク防止）。
   const linkedBody = autolinkArtists(L.body || '', artists);
-  const renderedBody = addLocalImageSrcset(addDriveImageSrcset(addHtmlImageDimensions(addHeadingPhraseBreaks(replaceMappedArticleImages(resolveEntities(linkedBody, lang), ARTICLE_IMAGE_MAP, path.join(__dirname, '..'))))));
+  const headingReport = { page: `${lang === 'en' ? 'en/' : ''}articles/${a.id}.html`, changes: [], classSkips: [] };
+  ARTICLE_HEADING_REPORTS.push(headingReport);
+  const renderedBody = addLocalImageSrcset(addDriveImageSrcset(addHtmlImageDimensions(normalizeArticleHeadingLevels(addHeadingPhraseBreaks(replaceMappedArticleImages(resolveEntities(linkedBody, lang), ARTICLE_IMAGE_MAP, path.join(__dirname, '..'))), headingReport))));
   const body = `<article class="article-detail">
   <div class="article-detail-inner">
     ${heroBlock}
@@ -4534,6 +4538,11 @@ ${FAVICON_TAGS}
     total += v.total; written += v.written; removed += v.removed;
   }
   console.log(`  total: ${total} pages — ${written} written, ${removed} removed`);
+  const headingChanges = ARTICLE_HEADING_REPORTS.flatMap((report) => report.changes.map((change) => ({ ...change, page: report.page })));
+  const headingClassSkips = ARTICLE_HEADING_REPORTS.flatMap((report) => report.classSkips.map((skip) => ({ ...skip, page: report.page })));
+  console.log(`Article heading normalization: ${headingChanges.length} changed, ${headingClassSkips.length} class付き段飛びを未変更`);
+  for (const change of headingChanges) console.log(`  - ${change.page}: h${change.originalLevel} → h${change.normalizedLevel}: ${change.text}`);
+  for (const skip of headingClassSkips) console.log(`  - class付きのため未変更 ${skip.page}: h${skip.originalLevel} → h${skip.normalizedLevel}: ${skip.text}`);
   if (rewrittenEditionFlyers.size) {
     // シートの拡張子が原本(jpg等)のまま。表示は webp で通しているが、
     // シート側の拡張子を直せば、この読み替えは不要になる。
@@ -4554,4 +4563,4 @@ ${FAVICON_TAGS}
   }
 }
 
-main();
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();

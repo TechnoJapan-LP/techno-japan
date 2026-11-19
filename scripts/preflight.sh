@@ -136,6 +136,8 @@ run "フェスの国コード"                  node scripts/check_country.mjs
 run "詳細ページを生成できる"            node scripts/build-detail-pages.mjs
 run "ビルドの冪等性"                    node scripts/check_build_idempotent.mjs
 run "記事見出しのphrase breaks"          node scripts/test_phrase_breaks.mjs
+run "記事見出しレベル正規化"              node scripts/test_article_heading_levels.mjs
+run "記事見出しの順序"                    python3 scripts/check_article_heading_order.py
 run "回帰のしきい値"                    python3 scripts/check_regressions.py
 run "LINEUPの表示数がソースと一致"      node scripts/check_festival_lineup_render.mjs
 run "記事データの整合性"                node scripts/check_article_data_integrity.mjs
