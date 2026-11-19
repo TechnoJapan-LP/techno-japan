@@ -16065,8 +16065,8 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 必須見出しの存在チェック（黙って0件になる誤集計の検知）。
 
 ### 未確認の類似パターン
-- この監査は preflight に入っていないため、今後も見出し変更で黙ってずれうる。preflight へ入れるかは判断待ち（静的側だけなら Chrome 不要で数秒）。
+- この監査は preflight に入っていなかった → ユーザー承認（2026-11-19）で `scripts/preflight.sh` の「回帰のしきい値」の直後に追加（約1秒、--fast でも実行）。`preflight.sh --fast` で 60件成功・5件省略、新しい検査も成功。
 - 他の検査スクリプトで旧見出しを探しているもの: `check_regressions.py:277/294` は旧見出しに加え v2 の目印（`data-festival-panel="lineup"` / `artist-upcoming`）でも判定しており問題なし。`fetch-data.mjs` / `build-detail-pages.mjs` の該当はコメントと生成側で検査ではない。確認済み・0件。
 
 ### 次の担当への注意・判断待ち
-- 監査を preflight に組み込むかどうか（ユーザー判断）。
+- 判断待ちなし。見出し名を変えるデザイン変更をしたら、この監査が「探し先が見つからない」で止まるので `audit_spa_vs_static.py` の見出し候補を足すこと。

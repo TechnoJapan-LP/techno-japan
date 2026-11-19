@@ -139,6 +139,7 @@ run "記事見出しのphrase breaks"          node scripts/test_phrase_breaks.m
 run "記事見出しレベル正規化"              node scripts/test_article_heading_levels.mjs
 run "記事見出しの順序"                    python3 scripts/check_article_heading_order.py
 run "回帰のしきい値"                    python3 scripts/check_regressions.py
+run "詳細ページの内容がSPA廃止前から減っていない" python3 scripts/audit_spa_vs_static.py --after
 run "LINEUPの表示数がソースと一致"      node scripts/check_festival_lineup_render.mjs
 run "記事データの整合性"                node scripts/check_article_data_integrity.mjs
 run "記事本文画像の対応表と置換"        node scripts/check_article_body_images.mjs
