@@ -28,6 +28,7 @@
  */
 
 import fs from 'node:fs';
+import { buildNow, isArticleLive } from './article-visibility.mjs';
 import path from 'node:path';
 import vm from 'node:vm';
 import { contentHash, contentRow } from './lib/content-dates.mjs';
@@ -84,7 +85,7 @@ function loadPublishedArticles() {
   const context = {};
   vm.createContext(context);
   new vm.Script(fs.readFileSync(path.join(LP, 'data.js'), 'utf8') + '\n;globalThis.__articles = ARTICLES;').runInContext(context);
-  return (context.__articles || []).filter((a) => a && a.id && a.status !== 'draft');
+  return (context.__articles || []).filter((a) => a && a.id && isArticleLive(a, buildNow()));
 }
 
 function loadPublishedFestivals() {

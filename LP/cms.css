@@ -280,6 +280,11 @@ label .req-star{color:var(--accent);margin-left:4px}
 .article-image-layout-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0;padding:8px 10px;border:1px solid var(--border);background:var(--bg3);font-size:.7rem}
 .article-image-layout-tools select{background:var(--bg2);border:1px solid var(--border);color:var(--text);padding:5px 8px;font-size:.72rem}
 .article-image-layout-tools[hidden]{display:none}
+.ar-editor-wrap.focus-mode:not(.image-selected) .article-image-layout-tools{display:none}
+.ar-editor-wrap.focus-mode.image-selected .article-image-layout-tools{
+  position:sticky;bottom:0;z-index:6;background:var(--bg2);border-color:var(--border);
+  box-shadow:0 -8px 18px rgba(0,0,0,.18);margin:8px 0 0;
+}
 .article-image-layout-tools select:disabled,.article-image-layout-tools button:disabled{opacity:.45;cursor:not-allowed}
 .article-crop-control{display:inline-flex;align-items:center;gap:4px;color:var(--text3);white-space:nowrap}
 .article-crop-control input[type=range]{width:76px;accent-color:var(--accent)}
@@ -416,14 +421,14 @@ label .req-star{color:var(--accent);margin-left:4px}
 .ar-word-count strong{color:var(--text2);font-weight:normal}
 
 /* ---------- 集中執筆モード（フルスクリーン執筆） ---------- */
-.ar-editor-wrap.focus-mode{position:fixed;inset:0;z-index:2000;background:var(--bg);padding:20px clamp(16px,8vw,120px) 0;display:flex;flex-direction:column;overflow-y:auto}
-.ar-editor-wrap.focus-mode .ar-editor-tabs{max-width:820px;margin:0 auto 10px;width:100%}
-.ar-editor-wrap.focus-mode #ar-body-editor{max-width:820px;margin:0 auto;width:100%;flex:1;display:flex;flex-direction:column;min-height:60vh}
+.ar-editor-wrap.focus-mode{position:fixed;inset:0;z-index:2000;background:var(--bg);padding:20px;display:flex;flex-direction:column;overflow-y:auto}
+.ar-editor-wrap.focus-mode .ar-editor-tabs{max-width:1080px;margin:0 auto 10px;width:100%}
+.ar-editor-wrap.focus-mode #ar-body-editor{max-width:1080px;margin:0 auto;width:100%;flex:1;display:flex;flex-direction:column;min-height:60vh}
 .ar-editor-wrap.focus-mode #ar-body-editor .ql-toolbar{position:sticky;top:0;z-index:5}
 .ar-editor-wrap.focus-mode #ar-body-editor .ql-container{flex:1;font-size:17px;line-height:1.95}
 /* 内側の min-height は枠の縮みに追従せずはみ出すため、最低高さを枠側へ移す（2026-11-19） */
 .ar-editor-wrap.focus-mode #ar-body-editor .ql-editor{min-height:0;padding:28px var(--tj-ed-gutter) 40vh}
-.ar-editor-wrap.focus-mode #ar-body-source{max-width:820px;margin:0 auto;width:100%;flex:1;min-height:70vh}
+.ar-editor-wrap.focus-mode #ar-body-source{max-width:1080px;margin:0 auto;width:100%;flex:1;min-height:70vh}
 .ar-editor-wrap.focus-mode .ar-word-count{position:fixed;bottom:12px;right:20px;background:var(--bg2);padding:5px 12px;border-radius:4px;border:1px solid var(--border);margin:0}
 body.ar-focus-open{overflow:hidden}
 /* 集中モードでは、ユーザーが明示的にONにした時だけプレビューを固定表示する */
@@ -447,10 +452,11 @@ body.ar-focus-open .ar-editor-wrap.focus-mode{right:0;width:100%;}
 body.ar-focus-open .ar-editor-wrap.focus-mode.preview-mode{right:50vw;inset-right:auto;width:50vw}
 body.ar-focus-open .ar-editor-wrap.focus-mode:not(.preview-mode) .ar-editor-tabs,
 body.ar-focus-open .ar-editor-wrap.focus-mode:not(.preview-mode) #ar-body-editor,
-body.ar-focus-open .ar-editor-wrap.focus-mode:not(.preview-mode) #ar-body-source{max-width:820px}
+body.ar-focus-open .ar-editor-wrap.focus-mode:not(.preview-mode) #ar-body-source{max-width:1080px}
 body.ar-focus-open .ar-editor-wrap.focus-mode.preview-mode .ar-editor-tabs,
 body.ar-focus-open .ar-editor-wrap.focus-mode.preview-mode #ar-body-editor,
 body.ar-focus-open .ar-editor-wrap.focus-mode.preview-mode #ar-body-source{max-width:none}
+body.ar-focus-open .ar-editor-wrap.focus-mode.preview-mode{padding-left:20px;padding-right:20px}
 #ar-focus-preview{display:none}
 /* 旧い集中モード専用枠は使わず、通常プレビューを1枚だけ表示する */
 body.ar-focus-open #ar-focus-preview{display:none !important}
@@ -460,7 +466,7 @@ body.ar-focus-open #ar-focus-preview{display:none !important}
    この組み合わせを明示してVisual本文との重なりを防ぐ。 */
 .ar-editor-wrap.focus-mode.source-mode #ar-body-editor,
 .ar-editor-wrap.focus-mode.source-mode .article-image-layout-tools{display:none !important}
-.ar-editor-wrap.focus-mode.source-mode #ar-body-source{display:block !important;max-width:820px;box-sizing:border-box}
+.ar-editor-wrap.focus-mode.source-mode #ar-body-source{display:block !important;max-width:1080px;box-sizing:border-box}
 
 /* Quill はツールバーを #ar-body-editor の「兄弟」として挿入するため、
    #ar-body-editor .ql-toolbar 系の既存ルールは当たらない。兄弟セレクタで再定義。 */
@@ -470,7 +476,7 @@ body.ar-focus-open #ar-focus-preview{display:none !important}
 .ar-editor-wrap > .ql-toolbar .ql-picker-label{color:var(--text2)}
 .ar-editor-wrap > .ql-toolbar .ql-active .ql-stroke{stroke:var(--accent)}
 .ar-editor-wrap > .ql-toolbar .ql-active .ql-fill{fill:var(--accent)}
-.ar-editor-wrap.focus-mode > .ql-toolbar{max-width:820px;margin:0 auto;width:100%;position:sticky;top:0;z-index:5}
+.ar-editor-wrap.focus-mode > .ql-toolbar{max-width:1080px;margin:0 auto;width:100%;position:sticky;top:0;z-index:5}
 
 /* ---------- リストのサムネイル ---------- */
 .thumb-cell{width:64px;padding:4px 8px !important}
@@ -586,6 +592,9 @@ body.ar-focus-open #ar-focus-preview{display:none !important}
   color: rgba(240,237,232,0.85);
   --tj-ed-gutter: max(15px, calc((100% - 720px) / 2));
   padding: 24px var(--tj-ed-gutter);
+}
+body.ar-focus-open .ar-editor-wrap.focus-mode #ar-body-editor .ql-editor{
+  --tj-ed-gutter:max(20px, calc((100% - 960px) / 2));
 }
 #ar-body-editor .ql-editor p{ margin: 0 0 24px; }
 #ar-body-editor .ql-editor p:has(> img[data-pair-id]){display:inline-block;vertical-align:top;width:calc(50% - 8px);margin-right:16px}

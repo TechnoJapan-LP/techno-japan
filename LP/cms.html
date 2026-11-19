@@ -48,7 +48,7 @@ if (window.self === window.top) {
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@200;300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/vendor/leaflet-1.9.4/leaflet.css?v=2">
 <script src="/vendor/leaflet-1.9.4/leaflet.js?v=2"></script>
-<link rel="stylesheet" href="cms.css?v=61">
+<link rel="stylesheet" href="cms.css?v=62">
 <link rel="stylesheet" href="/vendor/quill-1.3.7/quill.snow.css?v=1">
 <script src="/vendor/quill-1.3.7/quill.min.js?v=2"></script>
 </head>
@@ -458,7 +458,7 @@ if (window.self === window.top) {
       <div class="form-group"><label>Read Time (min) <span class="label-hint">空欄なら本文から自動計算</span></label><input type="number" id="ar-readTime" placeholder="auto"></div>
       <div class="form-group"><label>Views</label><input type="number" id="ar-views" placeholder="e.g. 1200"></div>
       <div class="form-group"><label>Featured</label><select id="ar-featured"><option value="false">No</option><option value="true">Yes</option></select></div>
-      <div class="form-group"><label>Status</label><select id="ar-status"><option value="published">Published</option><option value="draft">Draft</option></select></div>
+      <div class="form-group"><label>Status</label><select id="ar-status"><option value="published">Published</option><option value="draft">Draft</option><option value="scheduled">Scheduled（予約公開）</option></select><div class="label-hint">Scheduled: 下の Publish At（日本時間）を過ぎると自動で公開（最大30分ほど遅れることがあります）。Publish Now は今まで通り押してください</div></div>
       <div class="form-group full"><label>Tags (comma-separated)</label><input type="text" id="ar-tags" placeholder="e.g. tokyo, clubs, guide"></div>
       <div class="form-group full"><label>関連フェスティバル <span class="label-hint">選ぶとそのフェス詳細ページに記事が表示される</span></label>
         <div class="fest-picker" id="ar-festivalId-picker">
@@ -629,6 +629,6 @@ if (window.self === window.top) {
 </div>
 
 <script type="module" src="article-shortcodes.js?v=12"></script>
-<script src="cms.js?v=215" defer></script>
+<script src="cms.js?v=217" defer></script>
 </body>
 </html>

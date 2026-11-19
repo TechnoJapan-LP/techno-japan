@@ -199,6 +199,39 @@ const GRADIENT_PRESETS = [
 const SHEET_MAP = { venue:'VENUES', festival:'FESTIVALS', artist:'ARTISTS', event:'EVENTS', article:'ARTICLES', author:'AUTHORS' };
 const PREFIX_MAP = { venue:'v', festival:'f', artist:'a', event:'e', article:'ar' };
 
+/* Article visibility is intentionally duplicated in scripts/article-visibility.mjs,
+   scripts/article_visibility.py, and this browser runtime. They own separate
+   publish-path stages; keep the rule identical or pages, feeds, and hubs diverge. */
+function normalizePublishAt(value){
+  if(value instanceof Date){ if(isNaN(value.getTime())) return ''; }
+  else if(value == null || !String(value).trim()) return '';
+  let date;
+  if(value instanceof Date) date = new Date(value.getTime());
+  else {
+    const raw=String(value).trim();
+    const local=/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2})?$/.test(raw);
+    const day=/^\d{4}-\d{2}-\d{2}$/.test(raw);
+    const iso=/^\d{4}-\d{2}-\d{2}T/.test(raw) && (/Z$|[+-]\d{2}:?\d{2}$/.test(raw));
+    if(day) date=new Date(raw+'T00:00:00+09:00');
+    else if(local) date=new Date(raw+(raw.length===16?':00':'')+'+09:00');
+    else if(iso || /GMT[+-]\d{4}/.test(raw)) date=new Date(raw);
+    else return '';
+  }
+  if(isNaN(date.getTime())) return '';
+  const p=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(date);
+  const v=Object.fromEntries(p.filter(x=>x.type!=='literal').map(x=>[x.type,x.value]));
+  return `${v.year}-${v.month}-${v.day}T${v.hour}:${v.minute}:00+09:00`;
+}
+function parsePublishAtCms(value){ const normalized=normalizePublishAt(value); return normalized ? new Date(normalized) : null; }
+function buildNowCms(){ return new Date(); }
+function isArticleLiveCms(article, now=buildNowCms()){
+  const status=String(article?.status||'').trim().toLowerCase();
+  if(status==='draft') return false;
+  if(status!=='scheduled') return true;
+  const at=parsePublishAtCms(article?.publishAt);
+  return !!(at && at.getTime()<=now.getTime());
+}
+
 /* ==============================================================
    STATE
    ============================================================== */
@@ -1069,6 +1102,7 @@ function saveArticleDraft(){
       readTime: g('ar-readTime'), views: g('ar-views'),
       featured: document.getElementById('ar-featured')?.value || 'false',
       status: g('ar-status'), excerpt: g('ar-excerpt'),
+      publishAt: g('ar-publishAt'),
       body: getArticleBodyForSave(), tags: g('ar-tags'),
       editingRow: editState.article ? editState.article._row : null,
       savedAt: Date.now()
@@ -1210,6 +1244,8 @@ async function generateEnglishBodyAlts() {
 }
 
 function setArticleImageToolsEnabled(enabled){
+  const wrap = document.getElementById('ar-editor-wrap');
+  if (wrap) wrap.classList.toggle('image-selected', !!enabled);
   ['ar-image-layout','ar-image-crop','ar-image-zoom','ar-image-x','ar-image-y','ar-image-pair','ar-image-layout-apply','ar-image-alt'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.disabled = !enabled;
@@ -1465,6 +1501,7 @@ function initArticleEditor(){
   // Visual で編集 → 同期処理は debounce（毎キーストロークでの
   // innerHTML シリアライズ + プレビュー再描画が入力ラグの原因だった）
   articleQuill.on('text-change', (delta, oldDelta, source) => {
+    if (articleSelectedImage && !articleQuill.root.contains(articleSelectedImage)) selectArticleImage(null);
     if (source === 'user') articleQuillUserEdited = true;
     markFormDirty();                 // 軽いフラグだけ即時
     scheduleArticleEditorSync('quill');
@@ -1647,6 +1684,101 @@ function bindArticlePreviewInteractions(root){
     setTimeout(() => target.removeAttribute('data-preview-target'), 900);
   });
 }
+
+let articlePreviewSync = { pairs: [], left: null, right: null, raf: 0, bound: false };
+function articlePreviewMarkerPosition(el, scroller){
+  const er = el.getBoundingClientRect();
+  const sr = scroller.getBoundingClientRect();
+  return er.top - sr.top + scroller.scrollTop;
+}
+function articlePreviewLeftScroller(){
+  const wrap = document.getElementById('ar-editor-wrap');
+  const editor = wrap?.querySelector('#ar-body-editor .ql-editor');
+  if (editor && editor.scrollHeight > editor.clientHeight + 1 && /auto|scroll/.test(getComputedStyle(editor).overflowY)) return editor;
+  return wrap;
+}
+function articlePreviewImageKey(img){
+  const raw = String(img.getAttribute('src') || '').split(/[?#]/, 1)[0];
+  try { return decodeURIComponent(raw).split('/').pop().toLowerCase(); }
+  catch (_) { return raw.split('/').pop().toLowerCase(); }
+}
+function articlePreviewBuildSyncPairs(){
+  const wrap = document.getElementById('ar-editor-wrap');
+  const right = document.querySelector('.ar-preview');
+  const left = articlePreviewLeftScroller();
+  const editor = wrap?.querySelector('#ar-body-editor .ql-editor');
+  const preview = document.getElementById('ar-preview-content');
+  if (!left || !right || !editor || !preview) { articlePreviewSync.pairs = []; return; }
+  const leftHeadings = [...editor.querySelectorAll('h2,h3,h4')];
+  const rightHeadings = [...preview.querySelectorAll('h2,h3,h4')];
+  const leftImages = [...editor.querySelectorAll('img')];
+  const rightImages = [...preview.querySelectorAll('img')];
+  const pairs = [];
+  const usedHeadings = new Set();
+  leftHeadings.forEach((node, index) => {
+    const text = node.textContent.trim();
+    const match = rightHeadings.find((candidate, candidateIndex) => !usedHeadings.has(candidateIndex) && candidate.textContent.trim() === text)
+      || rightHeadings.find((candidate, candidateIndex) => !usedHeadings.has(candidateIndex) && candidateIndex === index);
+    if (match) { usedHeadings.add(rightHeadings.indexOf(match)); pairs.push([node, match]); }
+  });
+  const usedImages = new Set();
+  leftImages.forEach((node, index) => {
+    const key = articlePreviewImageKey(node);
+    const match = rightImages.find((candidate, candidateIndex) => !usedImages.has(candidateIndex) && key && articlePreviewImageKey(candidate) === key)
+      || rightImages.find((candidate, candidateIndex) => !usedImages.has(candidateIndex) && candidateIndex === index);
+    if (match) { usedImages.add(rightImages.indexOf(match)); pairs.push([node, match]); }
+  });
+  const measured = pairs.map(([a, b]) => ({
+    left: articlePreviewMarkerPosition(a, left), right: articlePreviewMarkerPosition(b, right)
+  })).sort((a, b) => a.left - b.left);
+  const maxLeft = Math.max(0, left.scrollHeight - left.clientHeight);
+  const maxRight = Math.max(0, right.scrollHeight - right.clientHeight);
+  const all = [{left:0, right:0}, ...measured, {left:maxLeft, right:maxRight}];
+  const monotonic = [];
+  all.forEach(pair => {
+    const prev = monotonic[monotonic.length - 1];
+    if (!prev || (pair.left > prev.left && pair.right > prev.right) || (pair.left === 0 && pair.right === 0)) monotonic.push(pair);
+  });
+  articlePreviewSync = {...articlePreviewSync, pairs: monotonic, left, right};
+}
+function articlePreviewSyncAt(leftScrollTop){
+  const {pairs, right} = articlePreviewSync;
+  if (!right || pairs.length < 2) return;
+  const left = articlePreviewSync.left;
+  const baseline = leftScrollTop + left.clientHeight / 3;
+  let a = pairs[0], b = pairs[pairs.length - 1];
+  for (let i = 1; i < pairs.length; i++) {
+    if (baseline <= pairs[i].left) { a = pairs[i - 1]; b = pairs[i]; break; }
+  }
+  const span = b.left - a.left;
+  const mapped = span > 0 ? a.right + (baseline - a.left) * (b.right - a.right) / span : a.right;
+  right.scrollTop = Math.max(0, Math.min(right.scrollHeight - right.clientHeight, mapped - right.clientHeight / 3));
+}
+function articlePreviewScheduleSync(rebuild = false){
+  if (rebuild) articlePreviewBuildSyncPairs();
+  if (!articlePreviewSync.left || !articlePreviewSync.right) return;
+  if (articlePreviewSync.raf) return;
+  articlePreviewSync.raf = requestAnimationFrame(() => {
+    articlePreviewSync.raf = 0;
+    articlePreviewSyncAt(articlePreviewSync.left.scrollTop);
+  });
+}
+function setupArticlePreviewScrollSync(){
+  if (articlePreviewSync.bound) return;
+  articlePreviewSync.bound = true;
+  const wrap = document.getElementById('ar-editor-wrap');
+  const editor = wrap?.querySelector('#ar-body-editor .ql-editor');
+  wrap?.addEventListener('scroll', () => articlePreviewScheduleSync(), {passive:true});
+  editor?.addEventListener('scroll', () => articlePreviewScheduleSync(), {passive:true});
+  window.addEventListener('resize', () => articlePreviewScheduleSync(true));
+}
+function refreshArticlePreviewScrollSync(){
+  setupArticlePreviewScrollSync();
+  articlePreviewBuildSyncPairs();
+  const preview = document.getElementById('ar-preview-content');
+  preview?.querySelectorAll('img').forEach(img => img.addEventListener('load', () => articlePreviewScheduleSync(true), {once:true}));
+  articlePreviewScheduleSync();
+}
 function buildArticleFestivalData(festivalRows){
   const artists = (readSheetCache('artist') || ARTIST_DB || []);
   const names = new Map(artists.map(a => [String(a.id), a.name || a.id]));
@@ -1732,6 +1864,7 @@ function updateArticlePreview(html, force){
     focusContent.innerHTML = el.innerHTML;
     bindArticlePreviewInteractions(focusContent);
   }
+  refreshArticlePreviewScrollSync();
 }
 
 // 本番記事ページと同じ画像レイアウトをCMSプレビューへ反映する
@@ -1806,7 +1939,7 @@ function toggleArticlePreview(){
     // 開いた瞬間に最新HTMLで更新し、画面外で気付かれないようスクロールして見せる
     updateArticlePreview(articleQuill?.root?.innerHTML || document.getElementById('ar-body').value, true);
     const prev = document.querySelector('.ar-preview');
-    if (prev) requestAnimationFrame(() => prev.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+    if (prev) requestAnimationFrame(() => { refreshArticlePreviewScrollSync(); prev.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); });
   }
 }
 
@@ -3010,7 +3143,7 @@ function toggleFocusMode(){
       focusPreview.style.position = 'fixed';
       focusPreview.style.top = '16px';
       focusPreview.style.right = '16px';
-      focusPreview.style.width = '42vw';
+      focusPreview.style.width = '50vw';
       focusPreview.style.height = 'calc(100vh - 32px)';
       focusPreview.style.maxHeight = 'none';
       focusPreview.style.zIndex = '2001';
@@ -3053,6 +3186,10 @@ function toggleFocusMode(){
 }
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape'){
+    if (articleSelectedImage) {
+      selectArticleImage(null);
+      return;
+    }
     const w = document.getElementById('ar-editor-wrap');
     if (w && w.classList.contains('focus-mode')){
       toggleFocusMode();
@@ -4025,7 +4162,7 @@ function buildPublishingSection(section){
               <option value="scheduled">⏰ Scheduled</option>
             </select>
           </div>`}
-          ${isArticle ? '' : `<div class="form-group"><label>Featured</label><select id="${p}-featuredFlag" style="width:100%"><option value="false">No</option><option value="true">⭐ Yes</option></select></div>`}
+          ${isArticle ? `<div class="label-hint" style="margin-top:-4px;margin-bottom:8px">Scheduled: 下の Publish At（日本時間）を過ぎると自動で公開（最大30分ほど遅れることがあります）。Publish Now は今まで通り押してください</div>` : `<div class="form-group"><label>Featured</label><select id="${p}-featuredFlag" style="width:100%"><option value="false">No</option><option value="true">⭐ Yes</option></select></div>`}
         </div>
         ${isArticle ? `<div class="form-group"><label>Publish At (予約公開)</label><input type="datetime-local" id="${p}-publishAt" style="width:100%"></div>` : ''}
         <div class="form-group">
@@ -4153,7 +4290,7 @@ function setPubFields(section, row){
     setVal(p+'-nameEn', row.name_en || '');
   }
   if(section === 'article'){
-    setVal(p+'-publishAt', row.publishAt || '');
+    setVal(p+'-publishAt', normalizePublishAt(row.publishAt).slice(0,16));
     setVal(p+'-authorId', row.authorId || '');
   }
   updateCharCount(p+'-metaDescription', 160);
@@ -4472,6 +4609,7 @@ function findSimilarIds(section, id){
 }
 function validateBeforeSave(section, payload){
   const errors = [];
+  if(section === 'article' && payload.__articleVisibilityError) errors.push(payload.__articleVisibilityError);
   // URL系フィールドをチェック
   const urlFields = ['url','ticketUrl','instagram','soundcloud','bandcamp','website','link','image','flyer'];
   urlFields.forEach(f => {
@@ -4556,6 +4694,17 @@ function validateBeforeSave(section, payload){
     });
   }
   return errors;
+}
+
+function prepareArticlePayload_(payload){
+  const status=String(payload.status||'').trim().toLowerCase();
+  const normalized=normalizePublishAt(payload.publishAt);
+  payload.publishAt=normalized;
+  if(status==='scheduled' && !normalized){
+    payload.__articleVisibilityError='予約公開には Publish At（日本時間）が必要です';
+    return;
+  }
+  if(status==='scheduled' && !String(payload.date||'').trim()) payload.date=normalized.slice(0,10);
 }
 
 // LOCATION は英語・ローマ字、location_ja は日本語という入力規約の明らかな逆転。
@@ -5195,7 +5344,9 @@ function renderList(section, rows){
     }
     if(showStatus){
       const status=String(r.status||'published').toLowerCase();
-      const statusBadge='<span class="status-pill status-'+esc(status)+'">'+esc(status)+'</span>';
+      const scheduledAt=status==='scheduled' ? normalizePublishAt(r.publishAt) : '';
+      const scheduledLabel=scheduledAt ? ' 予約 '+scheduledAt.slice(5,16).replace('T',' ') : '';
+      const statusBadge='<span class="status-pill status-'+esc(status)+'">'+esc(status)+esc(scheduledLabel)+'</span>';
       const comp=computeCompleteness(section, r);
       const compHtml=completenessBarHtml(comp.score);
       const noteIcon=r.editorNotes?' 📝':'';
@@ -5848,11 +5999,13 @@ function saveEdit(section){
   }
   // Publishing fields をマージ（author以外）
   if(section !== 'author') Object.assign(payload, getPubFields(section));
+  if(section === 'article') prepareArticlePayload_(payload);
 
   // 新規登録だけでなく既存Festivalの編集も同じ入口検査を通す。
   // 保存後にEDITIONSや座標の不正が発覚すると、Publish時まで気づけないため。
   const saveErrors = validateBeforeSave(section, payload);
-  if (saveErrors.length) return toast(saveErrors[0], 'error');
+  if (saveErrors.length) return section === 'article' ? aiFail('記事保存', saveErrors[0]) : toast(saveErrors[0], 'error');
+  delete payload.__articleVisibilityError;
 
   if(section === 'festival'){
     const warning=locationLanguageWarning(payload);
@@ -6526,7 +6679,9 @@ async function bulkSaveRow(section, row, changes){
     if(!isArticleDate){
       throw new Error('日付型の列 '+key+' があるため一括保存を中止しました');
     }
-    payload[key] = fmtDate(payload[key]);
+    payload[key] = sheet === 'ARTICLES' && key.toLowerCase() === 'publishat'
+      ? normalizePublishAt(payload[key]).slice(0,16)
+      : fmtDate(payload[key]);
   });
 
   // 明示的な変更値は、日付型セルの正規化後に重ねてそのまま使う。
@@ -7095,11 +7250,13 @@ function submitToSheet(section){
   }
   // Publishing fields をマージ（author以外）
   if(section !== 'author') Object.assign(payload, getPubFields(section));
+  if(section === 'article') prepareArticlePayload_(payload);
   // バリデーション
   const errors = validateBeforeSave(section, payload);
   if(errors.length){
-    return toast(errors[0], 'error');
+    return section === 'article' ? aiFail('記事保存', errors[0]) : toast(errors[0], 'error');
   }
+  delete payload.__articleVisibilityError;
   if(section === 'festival'){
     const warning=locationLanguageWarning(payload);
     if(warning && !confirm('⚠️ '+warning)) return;
@@ -7797,7 +7954,7 @@ function buildHubDataJs(d){
   const lite = Object.assign({}, d, {
     FESTIVALS: omit(d.FESTIVALS, ['desc', 'desc_en', 'editions', 'sound']),
     VENUES: omit(d.VENUES, ['gallery']),
-    ARTICLES: omit(d.ARTICLES, ['body', 'body_en']),
+    ARTICLES: omit((d.ARTICLES || []).filter((article) => isArticleLiveCms(article)), ['body', 'body_en']),
   });
   const hubHeader = `/* ==========================================================
    TECHNO JAPAN — HUB DATA
@@ -8514,8 +8671,18 @@ function buildVenuesJs(rows){
   return 'const VENUES = [\n'+items.join('\n')+'\n];';
 }
 function buildArticlesJs(rows){
-  // Filter out drafts
-  const published = rows.filter(r => !r.status || r.status === 'published');
+  // data.js retains empty/published rows and valid scheduled rows. Other
+  // workflow states (review, archived, etc.) are not public data.js rows.
+  const published = rows.filter(r => {
+    const status=String(r.status||'').trim().toLowerCase();
+    if(status==='' || status==='published') return true;
+    if(status==='scheduled'){
+      const normalized=normalizePublishAt(r.publishAt);
+      if(!normalized) console.warn('scheduled記事のpublishAtが不正: '+(r.id||''));
+      return !!normalized;
+    }
+    return false;
+  });
   const items = published.map(r => {
     const l = [];
     l.push('  {');
@@ -8535,6 +8702,8 @@ function buildArticlesJs(rows){
     }
     if(r.category) l.push('    category: "'+q(r.category)+'",');
     if(r.date) l.push('    date: "'+q(fmtDate(r.date))+'",');
+    const normalizedPublishAt=normalizePublishAt(r.publishAt);
+    if(normalizedPublishAt) l.push('    publishAt: "'+q(normalizedPublishAt)+'",');
     /* シートの列は UPDATED_AT。GAS は小文字化した updated_at で返し、
        camelCase 版（updatedAt）は作らない（2026-09-14 実測）。
        data.js の中では updatedAt に統一する。 */
@@ -8676,6 +8845,10 @@ function submitArticle(){
     status:g('ar-status'),tags:g('ar-tags')
   };
   if(!d.id||!d.title)return toast('ID and Title required','error');
+  const normalizedPublishAt=normalizePublishAt(g('ar-publishAt'));
+  if(String(d.status||'').trim().toLowerCase()==='scheduled' && !normalizedPublishAt){
+    return aiFail('記事保存','予約公開には Publish At（日本時間）が必要です');
+  }
   const escSingle = s => (s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
   const tagsArr = (d.tags||'').split(',').map(t=>t.trim()).filter(Boolean);
   const lines=[
@@ -8694,6 +8867,7 @@ function submitArticle(){
     `    views: ${d.views||0},`,
     `    readTime: ${d.readTime||5},`,
     `    tags: ${JSON.stringify(tagsArr)},`,
+    ...(normalizedPublishAt ? [`    publishAt: '${normalizedPublishAt}',`] : []),
     `    status: '${d.status||'published'}',`,
     `  },`
   );

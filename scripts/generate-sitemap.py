@@ -17,6 +17,9 @@ from datetime import date, datetime, timedelta, timezone
 from urllib.parse import quote
 from xml.sax.saxutils import escape
 
+sys.path.insert(0, os.path.dirname(__file__))
+from article_visibility import build_now, is_article_live
+
 BASE_URL = "https://techno-japan.media"
 LP_DIR = os.path.join(os.path.dirname(__file__), "..", "LP")
 OUT_PATH = os.path.join(LP_DIR, "sitemap.xml")
@@ -93,7 +96,7 @@ def extract_article_blocks(data):
 
 def parse_article_block(block):
     out = {}
-    for key in ("id", "title", "date", "publishedAt", "updatedAt", "status"):
+    for key in ("id", "title", "date", "publishedAt", "publishAt", "updatedAt", "status"):
         m = re.search(rf'{key}:\s*["\']([^"\']*)["\']', block)
         if m:
             out[key] = m.group(1)
@@ -101,7 +104,7 @@ def parse_article_block(block):
 
 
 def article_publication_date(article):
-    value = article.get("publishedAt") or article.get("date")
+    value = article.get("publishedAt") or article.get("publishAt") or article.get("date")
     if not value:
         return None
     if re.fullmatch(r"\d{4}-\d{2}-\d{2}", value):
@@ -200,6 +203,7 @@ def main():
         data = f.read()
 
     today = date.today().isoformat()
+    build_now_value = build_now()
     urls = []
     repo = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     shallow = is_shallow_repository(repo)
@@ -288,7 +292,7 @@ def main():
     published_author_names = set()
     for block in article_blocks:
         article = parse_article_block(block)
-        if article.get("status") != "draft":
+        if is_article_live(article, build_now_value):
             author = re.search(r'author:\s*["\']([^"\']*)["\']', block)
             if author and author.group(1).strip():
                 published_author_names.add(author.group(1).strip().casefold())
@@ -337,9 +341,9 @@ def main():
     for f in sorted(glob.glob(os.path.join(article_root, "*.html"))):
         with open(f, "r", encoding="utf-8", errors="replace") as html_file:
             html = html_file.read()
-        if is_noindex_page(html):
-            continue
         aid = os.path.splitext(os.path.basename(f))[0]
+        if is_noindex_page(html) or aid not in article_data or not is_article_live(article_data[aid], build_now_value):
+            continue
         article_ids.append(aid)
         article_lastmod = record_date(article_data.get(aid, {}), "updatedAt", "date")
         urls.append({
@@ -377,11 +381,11 @@ def main():
     # Google News sitemap は直近48時間の記事だけを受け付けるため、古い記事は含めない。
     news_path = os.path.join(LP_DIR, "sitemap-news.xml")
     news_articles = []
-    now = datetime.now(timezone.utc)
+    now = build_now_value.astimezone(timezone.utc)
     for block in extract_article_blocks(data):
         article = parse_article_block(block)
         publication_date = article_publication_date(article)
-        if (article.get("status") == "published" and article.get("id") and
+        if (is_article_live(article, build_now_value) and article.get("id") and
                 article.get("title") and publication_date and
                 now - timedelta(hours=48) <= publication_date.astimezone(timezone.utc) <= now):
             news_articles.append((publication_date, article))

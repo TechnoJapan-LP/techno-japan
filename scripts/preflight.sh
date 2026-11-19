@@ -142,6 +142,8 @@ run "回帰のしきい値"                    python3 scripts/check_regressions
 run "詳細ページの内容がSPA廃止前から減っていない" python3 scripts/audit_spa_vs_static.py --after
 run "LINEUPの表示数がソースと一致"      node scripts/check_festival_lineup_render.mjs
 run "記事データの整合性"                node scripts/check_article_data_integrity.mjs
+run "記事公開条件（Node/Python/CMS）"      node scripts/test_article_visibility.mjs
+run "予約公開起動判定"                    node scripts/test_scheduled_publish.mjs
 run "記事本文画像の対応表と置換"        node scripts/check_article_body_images.mjs
 run "記事イベントショートコード"        node scripts/check_article_shortcodes.mjs
 run "記事の自動リンクと更新日"            node scripts/check_article_links.mjs
@@ -219,6 +221,7 @@ else
   run_timeout 600 "読み込み中のずれ（CLS）"       node scripts/check_hub_cls.mjs
   run_timeout 600 "EN画面の可視日本語"       node scripts/check_en_visible_japanese.mjs
   run "CMS フォームの重なり"            node scripts/check_cms_layout.mjs
+  run "CMS 集中モード"                  node scripts/check_cms_focus_mode.mjs
   run "VENUES 種別フィルタ"              node scripts/check_venue_type_filters.mjs
 run "VENUES 詳細ページ"                 node scripts/check_venue_details.mjs
 run "VENUES CMSエクスポート"             python3 scripts/check_venue_export_cms.py

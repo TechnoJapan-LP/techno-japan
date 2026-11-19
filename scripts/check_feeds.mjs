@@ -3,6 +3,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
+import { buildNow, isArticleLive } from './article-visibility.mjs';
 
 const root = path.join(process.cwd(), 'LP');
 const errors = [];
@@ -107,7 +108,7 @@ function checkArticleMetadata(file, html) {
 }
 
 const articles = loadArticles();
-const published = articles.filter((article) => article?.status === 'published' && article.id);
+const published = articles.filter((article) => isArticleLive(article, buildNow()) && article.id);
 const rss = checkXml(path.join(root, 'articles.xml'), 'articles.xml');
 const rssItems = [...rss.matchAll(/<item>([\s\S]*?)<\/item>/g)].map((match) => match[1]);
 if (rss && rssItems.length !== Math.min(published.length, 20)) {
@@ -137,14 +138,14 @@ if (newsSitemap && !newsSitemap.includes('xmlns:news="http://www.google.com/sche
   fail('sitemap-news.xml に news 名前空間がない');
 }
 const parseDate = (article) => {
-  const value = article.publishedAt || article.date;
+  const value = article.publishedAt || article.publishAt || article.date;
   if (!value) return NaN;
   return /^\d{4}-\d{2}-\d{2}$/.test(value) ? Date.parse(`${value}T00:00:00+09:00`) : Date.parse(value);
 };
 export function checkNewsSitemap(newsXml, articlesForLookup, now = Date.now()) {
   const errors = [];
   const warnings = [];
-  const publishedArticles = articlesForLookup.filter((article) => article?.status === 'published' && article.id);
+  const publishedArticles = articlesForLookup.filter((article) => isArticleLive(article, buildNow()) && article.id);
   const expectedNews = new Set(publishedArticles.filter((article) => {
     const time = parseDate(article);
     return Number.isFinite(time) && time <= now && now - time <= 48 * 60 * 60 * 1000;
@@ -152,7 +153,7 @@ export function checkNewsSitemap(newsXml, articlesForLookup, now = Date.now()) {
   const actualNews = new Set([...newsXml.matchAll(/<loc>https:\/\/techno-japan\.media\/articles\/([^<]+)\.html<\/loc>/g)].map((m) => m[1]));
   for (const id of actualNews) {
     const article = articlesForLookup.find((item) => item?.id === id);
-    if (!article || article.status !== 'published') {
+    if (!article || !isArticleLive(article, buildNow())) {
       errors.push(`sitemap-news.xml に非公開または存在しない記事: ${id}`);
       continue;
     }

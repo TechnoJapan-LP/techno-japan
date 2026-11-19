@@ -2,6 +2,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import vm from 'node:vm';
+import { buildNow, isArticleLive } from './article-visibility.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dataPath = path.join(root, 'LP', 'data.js');
@@ -27,7 +29,10 @@ const fail = (message) => { throw new Error(message); };
 const read = (file) => fs.readFileSync(file, 'utf8');
 const evaluate = (source, label) => {
   try {
-    return new Function(source + '\nreturn {FESTIVALS, ARTISTS, VENUES, ARTICLES, EVENTS};')();
+    const context = {};
+    vm.createContext(context);
+    new vm.Script(`${source}\n;globalThis.__data = {FESTIVALS, ARTISTS, VENUES, ARTICLES, EVENTS};`).runInContext(context);
+    return context.__data;
   } catch (error) {
     fail(`${label} を評価できません: ${error.message}`);
   }
@@ -41,13 +46,15 @@ const ids = (rows, name) => rows.map((row, index) => {
 if (!fs.existsSync(hubPath)) fail('LP/data-hub.js がありません');
 const data = evaluate(read(dataPath), 'LP/data.js');
 const hub = evaluate(read(hubPath), 'LP/data-hub.js');
-console.log('✅ data-hub.js は new Function で評価できます');
+const now = buildNow();
+console.log('✅ data-hub.js は vm で評価できます');
 
 // build-detail-pages.mjs の保険生成と同じ規約で、data.js から期待値を組み立てる。
 // 実ファイルを退避・復元するテストではなく、生成関数の入力と出力の対応を検証する。
 const expectedHub = {};
 for (const name of DATASETS) {
-  expectedHub[name] = (data[name] || []).map((row) => Object.fromEntries(Object.entries(row).filter(([key]) => {
+    const sourceRows = name === 'ARTICLES' ? (data[name] || []).filter((row) => isArticleLive(row, now)) : (data[name] || []);
+    expectedHub[name] = sourceRows.map((row) => Object.fromEntries(Object.entries(row).filter(([key]) => {
     if (name === 'ARTICLES') return key !== 'body' && key !== 'body_en';
     if (name === 'FESTIVALS') return key !== 'desc' && key !== 'desc_en' && key !== 'editions' && key !== 'sound';
     if (name === 'VENUES') return key !== 'gallery';
@@ -65,10 +72,11 @@ console.log('✅ data.js から保険生成した data-hub.js と一致');
 
 for (const name of DATASETS) {
   if (!Array.isArray(data[name]) || !Array.isArray(hub[name])) fail(`${name} が配列ではありません`);
-  if (data[name].length !== hub[name].length) {
-    fail(`${name} の件数が不一致: data.js=${data[name].length}, data-hub.js=${hub[name].length}`);
+  const expectedCount = (expectedHub[name] || []).length;
+  if (expectedCount !== hub[name].length) {
+    fail(`${name} の件数が不一致: 期待=${expectedCount}, data-hub.js=${hub[name].length}`);
   }
-  const dataIds = ids(data[name], name);
+  const dataIds = ids(expectedHub[name] || [], name);
   const hubIds = ids(hub[name], `hub ${name}`);
   if (JSON.stringify(dataIds) !== JSON.stringify(hubIds)) {
     fail(`${name} の id 集合または並び順が不一致です`);

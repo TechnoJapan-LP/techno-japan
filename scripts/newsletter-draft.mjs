@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
 import { spawnSync } from 'node:child_process';
+import { buildNow, isArticleLive } from './article-visibility.mjs';
 
 const ROOT = path.resolve(new URL('..', import.meta.url).pathname);
 const BASE = 'https://techno-japan.media';
@@ -104,9 +105,10 @@ function artistRows(data, targetMonth) {
 }
 function articleRows(data, targetMonth, createdDate) {
   const previous = shiftMonth(targetMonth, -1);
+  const now = buildNow();
   return data.articles.filter((article) => {
     const date = String(article.date || '').split('/')[0];
-    return date >= `${previous}-01` && date <= createdDate && String(article.status || '').toLowerCase() !== 'draft';
+    return date >= `${previous}-01` && date <= createdDate && isArticleLive(article, now);
   }).sort((a, b) => String(b.date).localeCompare(String(a.date)));
 }
 function selectedFestivalRows(data, targetMonth, picks) {

@@ -37,6 +37,9 @@ import threading
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from article_visibility import build_now, is_article_live
+
 ROOT = Path(__file__).resolve().parent.parent
 LP = ROOT / "LP"
 REPORTS = ROOT / "reports"
@@ -282,6 +285,10 @@ SECTIONS = {
 }
 
 
+def visible_items(section, items):
+    return [item for item in items if section != "article" or is_article_live(item, build_now())]
+
+
 def load_data():
     """data.js を node で読んで各配列を JSON で受け取る。const 宣言は
     globalThis に載らないので、明示的に集めて出力させる。"""
@@ -370,7 +377,7 @@ def check_after(sections, data):
     for section in sections:
         cfg = SECTIONS[section]
         hub = (LP / cfg["hub"]).read_text(encoding="utf-8", errors="replace")
-        items = data.get(cfg["key"], [])
+        items = visible_items(section, data.get(cfg["key"], []))
         lines = [f"## {section}", ""]
 
         # 1) SPA 詳細ビューの残骸
@@ -482,7 +489,7 @@ def main():
         for section, cfg in SECTIONS.items():
             if args.section and section != args.section:
                 continue
-            items = data.get(cfg["key"], [])
+            items = visible_items(section, data.get(cfg["key"], []))
             if args.limit:
                 items = items[:args.limit]
             print(f"  {section}: {len(items)}件 を計測中…", flush=True)

@@ -1,0 +1,12 @@
+[
+  {"name":"draft","article":{"status":"draft"},"now":"2026-11-25T00:00:00Z","live":false},
+  {"name":"published","article":{"status":"published"},"now":"2026-11-25T00:00:00Z","live":true},
+  {"name":"empty status","article":{"status":""},"now":"2026-11-25T00:00:00Z","live":true},
+  {"name":"scheduled future","article":{"status":"scheduled","publishAt":"2026-11-25T10:00:00+09:00"},"now":"2026-11-25T00:00:00Z","live":false},
+  {"name":"scheduled past","article":{"status":"scheduled","publishAt":"2026-11-25T09:00:00+09:00"},"now":"2026-11-25T01:00:00Z","live":true},
+  {"name":"scheduled empty","article":{"status":"scheduled","publishAt":""},"now":"2026-11-25T00:00:00Z","live":false},
+  {"name":"scheduled invalid","article":{"status":"scheduled","publishAt":"not-a-date"},"now":"2026-11-25T00:00:00Z","live":false},
+  {"name":"local JST due","article":{"status":"scheduled","publishAt":"2026-11-25T09:00"},"now":"2026-11-25T00:00:00Z","live":true},
+  {"name":"local JST past","article":{"status":"scheduled","publishAt":"2026-11-25T09:00"},"now":"2026-11-24T23:59:00Z","live":false},
+  {"name":"date only","article":{"status":"scheduled","publishAt":"2026-11-25"},"now":"2026-11-24T14:59:00Z","live":false}
+]

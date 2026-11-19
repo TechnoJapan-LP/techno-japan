@@ -51,6 +51,9 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Set build clock
+        run: echo "TJ_BUILD_NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_ENV"
+
       - name: Install PyYAML
         run: python3 -m pip install --quiet --disable-pip-version-check pyyaml
 

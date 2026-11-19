@@ -12,6 +12,9 @@ import json
 from datetime import datetime, date, timezone, timedelta
 from email.utils import format_datetime
 
+sys.path.insert(0, os.path.dirname(__file__))
+from article_visibility import build_now, is_article_live
+
 BASE_URL = "https://techno-japan.media"
 LP_DIR = os.path.join(os.path.dirname(__file__), "..", "LP")
 OUT_PATH = os.path.join(LP_DIR, "rss.xml")
@@ -149,6 +152,7 @@ def main():
         data = f.read()
 
     items = []
+    build_now_value = build_now()
     editions_by_festival = {}
     if os.path.exists(EDITIONS_PATH):
         with open(EDITIONS_PATH, encoding="utf-8") as editions_file:
@@ -194,6 +198,8 @@ def main():
         a = parse_block(block)
         if not a.get("id") or not (a.get("title") or a.get("name")):
             continue
+        if not is_article_live(a, build_now_value):
+            continue
         title = strip_title_markdown(a.get("title") or a.get("name"))
         link = f"{BASE_URL}/articles/{a['id']}.html"
         pub_str = a.get("publishedAt") or a.get("publishAt")
@@ -208,7 +214,7 @@ def main():
             "pubDate": to_rfc822(pub),
             "category": a.get("category", "Article"),
         })
-        if a.get("status") == "published":
+        if is_article_live(a, build_now_value):
             articles.append(a)
 
     # Build RSS

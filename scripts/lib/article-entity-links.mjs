@@ -1,3 +1,5 @@
+import { isArticleLive } from "../article-visibility.mjs";
+
 const ENTITY_ID_RE = /^[a-z0-9-]+$/;
 
 export function articleRefIds(article, field) {
@@ -17,9 +19,7 @@ export function articleEntityRefWarnings(articlesBlock, entityBlock, fieldName) 
 
 export function prioritizeEntityArticles(articles, entityId, field, automaticMatch, max = 3) {
   const id = String(entityId || '').trim().toLowerCase();
-  const published = (articles || []).filter((article) => (
-    article && String(article.status || '').toLowerCase() !== 'draft'
-  ));
+  const published = (articles || []).filter((article) => article && isArticleLive(article));
   const explicit = published.filter((article) => articleRefIds(article, field).includes(id));
   const automatic = published.filter((article) => !explicit.includes(article) && automaticMatch(article));
   return [...explicit, ...automatic].slice(0, max);

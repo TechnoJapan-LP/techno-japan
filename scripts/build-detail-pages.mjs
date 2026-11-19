@@ -32,6 +32,7 @@ import { loadArticleImageMap, replaceMappedArticleImages } from './lib/article-b
 import { contentHash, contentRow } from './lib/content-dates.mjs';
 import { resolveLineupArtist } from './lib/lineup-artist.mjs';
 import { normalizeArticleHeadingLevels } from './lib/article-heading-levels.mjs';
+import { buildNow, isArticleLive, parsePublishAt } from './article-visibility.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const LP_DIR = path.join(__dirname, '..', 'LP');
@@ -1452,7 +1453,7 @@ function authorMatches(articleName, authorName) {
 }
 
 function buildAuthorIndex(authors, articles) {
-  const published = (articles || []).filter((article) => article && String(article.status || '').toLowerCase() !== 'draft');
+  const published = (articles || []).filter((article) => article && isArticleLive(article));
   return new Map((authors || []).filter((author) => author?.id && author?.name).map((author) => {
     const stories = published.filter((article) => authorMatches(article.author, author.name))
       .sort((a, b) => String(b.publishedAt || b.date || '').localeCompare(String(a.publishedAt || a.date || '')));
@@ -1813,7 +1814,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
 
   const articleDateKey = (item) => String(item.publishedAt || item.date || '').trim();
   const publishedArticles = (articles || [])
-    .filter((item) => item && item.status === 'published' && item.id && item.id !== a.id)
+    .filter((item) => item && isArticleLive(item) && item.id && item.id !== a.id)
     .sort((x, y) => articleDateKey(y).localeCompare(articleDateKey(x)));
   const relatedArticles = [];
   const addRelated = (items) => {
@@ -2722,7 +2723,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, allArt
   const image = absUrl(f.image || f.flyer);
 
   // このフェスに紐づく記事（ARTICLES.festivalId で関連付け）
-  const related = (articles || []).filter((a) => a.festivalId === f.id && a.status !== 'draft');
+  const related = (articles || []).filter((a) => a.festivalId === f.id && isArticleLive(a));
   const relatedHtml = related.length
     ? relatedStoryCardsHtml(related, lang, { forceEnglishPath: true, compactDate: true, wide: true, heading: 'Stories', clauseBreakSub: true })
     : '';
@@ -4245,6 +4246,21 @@ function main() {
   const data = loadData();
   const AUTHORS = loadOptionalItems(AUTHORS_PATH, 'authors.json');
   data.AUTHORS = AUTHORS;
+  const now = buildNow();
+  // Freeze the clock for every downstream helper in this pipeline.
+  if (!process.env.TJ_BUILD_NOW) process.env.TJ_BUILD_NOW = now.toISOString();
+  const sourceArticles = Array.isArray(data.ARTICLES) ? data.ARTICLES : [];
+  // Validate scheduled articles before filtering them so a future article cannot
+  // become invalid at the moment it is released.
+  validateArticleShortcodes({ ...data, ARTICLES: sourceArticles });
+  const invalidScheduled = sourceArticles.filter((article) => String(article?.status || '').trim().toLowerCase() === 'scheduled' && !parsePublishAt(article?.publishAt));
+  invalidScheduled.forEach((article) => console.warn(`⚠️ scheduled記事 ${article.id || '(no-id)'} の publishAt を解釈できません。非公開として扱います。`));
+  const pendingArticles = sourceArticles.filter((article) => String(article?.status || '').trim().toLowerCase() === 'scheduled' && parsePublishAt(article?.publishAt)?.getTime() > now.getTime());
+  if (pendingArticles.length) {
+    console.log(`予約中の記事: ${pendingArticles.length}件`);
+    pendingArticles.forEach((article) => console.log(`  - ${article.id || '(no-id)'}: ${article.publishAt}`));
+  }
+  data.ARTICLES = sourceArticles.filter((article) => isArticleLive(article, now));
   const { ARTISTS = [], FESTIVALS = [], VENUES = [], ARTICLES = [] } = data;
   console.log(`Hub data: ${writeHubDataJs(data) ? 'updated' : 'unchanged'}`);
   const EDITIONS = loadItems(EDITIONS_PATH, 'editions.json');
@@ -4284,6 +4300,8 @@ function main() {
   const festivalData = buildEventFestivalData({ festivals: FESTIVALS, editionsByFestival, lineupsByEdition, artists: ARTISTS });
   const artistData = buildArtistCardData(ARTISTS);
   const resolveEntities = makeEntityResolver({ ARTISTS, FESTIVALS, VENUES, ARTICLES }, festivalData, artistData);
+  // Re-check the actual public set so a live article cannot link to a future
+  // scheduled article whose page is intentionally absent.
   validateArticleShortcodes({ ARTISTS, FESTIVALS, VENUES, ARTICLES });
   const authorIndex = buildAuthorIndex(AUTHORS, ARTICLES);
 
@@ -4309,7 +4327,7 @@ function main() {
     return;
   }
 
-  const pubArticles = ARTICLES.filter(valid).filter((a) => a.status !== 'draft');
+  const pubArticles = ARTICLES.filter(valid).filter((a) => isArticleLive(a, now));
   const pubFests = FESTIVALS.filter(valid);
   const pubArtists = ARTISTS.filter(valid);
   const pubVenues = VENUES.filter(valid).filter((v) => v.name && v.city && v.city !== 'undefined');

@@ -234,10 +234,15 @@ window.addEventListener('load',()=>setTimeout(async()=>{
   out.モード切替={};
   for(const cls of ['focus-mode','source-mode','preview-mode']){
     wrap.classList.add(cls);
+    // 集中モードの画像ツールバーは、画像選択時だけ表示される仕様。
+    // 表示状態を測る focus-mode ケースでは選択中を明示し、未選択時の
+    // 非表示と混同して「枠内」を誤って通さない。
+    wrap.classList.toggle('image-selected', cls === 'focus-mode');
     const w=wrap.getBoundingClientRect(), tb=document.getElementById('ar-image-layout-tools').getBoundingClientRect();
     out.モード切替[cls]={枠高さ:Math.round(w.height),ツールバー枠内: tb.bottom<=w.bottom+2};
     wrap.classList.remove(cls);
   }
+  wrap.classList.remove('image-selected');
   const pairs=[['画像ツールバー','STATUS'],['画像ツールバー','AUTHOR'],['画像ツールバー','PUBLISH_AT']];
   out.重なり={};
   for(const [a,b] of pairs){const A=out[a],B=out[b];

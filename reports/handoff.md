@@ -16070,3 +16070,39 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - 判断待ちなし。見出し名を変えるデザイン変更をしたら、この監査が「探し先が見つからない」で止まるので `audit_spa_vs_static.py` の見出し候補を足すこと。
+
+## 2026-11-20 記事の予約公開（案A）と CMS 集中モードの改善
+
+### 実施
+- **予約公開（ユーザーが案A を選択: 予約記事も data.js に入れ、公開時刻まではサイトに出さない。リポジトリ公開のため data.js を直接読めば本文は見える点は承知済み）**
+  - 公開条件を `scripts/article-visibility.mjs` / `scripts/article_visibility.py` / `LP/cms.js`（`isArticleLiveCms`）の3箇所に同一規則で実装（draft→非公開、scheduled→publishAt ≦ NOW で公開、それ以外→公開）。NOW は `TJ_BUILD_NOW`（3 workflow で1回だけ設定）。publishAt の正規形は `YYYY-MM-DDTHH:MM:00+09:00`。
+  - build-detail-pages は読み込み直後に ARTICLES を1回だけ絞る（data-hub.js・詳細・関連記事・STORIES・JSON-LD すべてに効く）。検証（ショートコード等）は予約中の記事も対象。RSS・sitemap・Google News sitemap・newsletter・各検査を同じ規則に。
+  - CMS: 記事 Status に Scheduled、Publish At 必須（無ければ消えないパネルで停止）、DATE 空なら publishAt の日付、一覧に「予約 MM-DD HH:MM」。data.js へは 空/published/有効な scheduled だけ（archived 等は従来どおり出さない）、data-hub.js からは未来の予約を除く。一括保存で publishAt の時刻が消えていた経路も修正。
+  - `.github/workflows/scheduled-publish.yml`（15分ごと）＋ `scripts/scheduled-publish-check.mjs`: 公開時刻を迎えた予約記事（7日以内）があり、その時刻以降に Publish pipeline の run が1本も無ければ1回だけ起動。失敗 run があっても再起動しない（失敗の繰り返し防止）。
+- **CMS 集中モード（ユーザー要望 2026-11-20）**: 画像設定欄は画像選択時だけ下端に sticky 表示（Esc は選択中なら選択解除だけ）、プレビューが左のスクロールに追従（見出し・画像を目印に区分線形補間）、入力幅を拡大（集中モードのみ。通常モードは本番と同じ 720px のまま）。
+- `cms.js?v=217`、`cms.css?v=62`。
+
+### コミット
+- feat: 記事の予約公開と CMS 集中モードの改善（このエントリを含むコミット）
+
+### 検証
+- テスト: `test_article_visibility.mjs`（Node/Python/CMS 10ケース一致）、`test_scheduled_publish.mjs`（5ケース）、`check_data_hub.mjs`、`check_cms_layout.mjs`、新規 `check_cms_focus_mode.mjs` 成功。
+- Claude の実測（別作業ツリー、data.js に CMS と同じ書式で予約記事1本を追加、publishAt=2026-11-25T09:00 JST）:
+  - TJ_BUILD_NOW=8:59 JST: 記事ページ JA/EN・data-hub.js・rss.xml・sitemap.xml・sitemap-news.xml・フェス詳細の STORIES・TOP のどこにも出ない。
+  - 9:01 JST: 上の全部にそろって出る。
+  - レビューで見つけて直した不具合: sitemap の記事ループで変数を代入前に参照（初回 NameError）、article-entity-links の import 漏れ、CMS が archived 等も公開する規則の緩み、news sitemap だけ実時刻を使用。
+  - 起動判定（--dry-run）: 時刻前→待機、時刻後 run 無し→起動、時刻後 run あり→待機。本物の run 一覧＋現在の data.js →待機。
+- CMS 集中モード（headless Chrome 1440×900、配信時に認証だけ素通し・GAS 通信を握る）: 本文の文字幅 プレビューなし 708→952px、あり 445→624px。左を見出しまでスクロールすると右の同じ見出しとの差 0〜46px（変更前は右が動かず scrollTop 0）。画像未選択で設定欄非表示→クリックで表示（sticky）→select 操作中も表示→Esc で非表示・集中モード継続。`check_cms_focus_mode.mjs` を変更前の CMS に当てると失敗することを確認。
+- 本番の Publish pipeline 実行・本番 CMS での操作: push 後に実施（下記）。
+
+### 変更したパターン
+- 記事の公開条件（3実装）、publishAt の正規化、data-hub / RSS / sitemap / news sitemap / 関連記事 / JSON-LD / リンク検査 / newsletter の採用条件、CMS の保存4経路と data.js・data-hub.js の出力、3 workflow の TJ_BUILD_NOW、予約起動 cron、集中モードの CSS/JS。
+
+### 未確認の類似パターン
+- `check_titles.mjs` / `check_article_data_integrity.mjs` は data.js 全件の品質検査で、予約記事も検査対象に残す（確認済み・変更なし）。`generate-sitemap.js` は呼び出し元なし（確認済み・変更なし）。画像系（sync-article-body-images / build-image-derivatives）は予約記事の画像も事前に用意する必要があるため絞らない（確認済み・変更なし）。
+- 公開時刻を未来へ戻した記事の既存詳細ページは、既存の writeAll の掃除で draft と同じく削除される（新ロジックなし）。
+- 本番シートの publishAt セルを Google Sheets が日付型に変換するかは未確認（CMS は Date.toString 形式・ISO・datetime-local のどれでも正規化する）。最初の予約記事の保存後に get_sheet で読み直して確かめること。
+
+### 次の担当への注意・判断待ち
+- 予約記事の運用: Status=Scheduled、Publish At（日本時間）を入れて保存 → **Publish Now を押す**（押さないと data.js に入らない）。公開は時刻の後の最初の cron（15分ごと、GitHub 側で遅れることあり）＋ Publish pipeline（約15分）なので、最大30分ほど遅れる。
+- 3つの実装（article-visibility.mjs / article_visibility.py / cms.js）は片方だけ直さない。`test_article_visibility.mjs` が同じ表で3つを突き合わせる。

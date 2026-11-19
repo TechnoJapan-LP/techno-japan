@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
+import { buildNow, isArticleLive } from './article-visibility.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
 const cmsSource = fs.readFileSync(path.join(root, 'LP/cms.js'), 'utf8');
@@ -15,7 +16,7 @@ const derivativesMatch = derivativesSource.match(/window\.TJ_IMAGE_DERIVATIVES\s
 let derivatives = {};
 try { derivatives = derivativesMatch ? JSON.parse(derivativesMatch[1]) : {}; } catch { derivatives = {}; }
 const artistIds = new Set(ARTISTS.map((artist) => String(artist.id || '').trim()).filter(Boolean));
-const liveArticles = ARTICLES.filter((article) => String(article.status || '').toLowerCase() !== 'draft');
+const liveArticles = ARTICLES.filter((article) => isArticleLive(article, buildNow()));
 const files = liveArticles.flatMap((article) => [
   { article, lang: 'ja', file: path.join(root, 'LP/articles', `${article.id}.html`) },
   { article, lang: 'en', file: path.join(root, 'LP/en/articles', `${article.id}.html`) },
