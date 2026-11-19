@@ -39,6 +39,7 @@ const CMS_PATH = path.join(ROOT, 'LP', 'cms.js');
 
 const BRIDGE = `;globalThis.__T = {
   publishSanityCheck,
+  publishContentDiff_,
   publishPayloadSummary,
   buildVenuesJs,
   fetchPublishedDataJs,
@@ -449,6 +450,31 @@ const c = makeCtx();
    最後の砦を「実際に送る中身そのもの」に置く。 */
 {
   console.log('\n送信前の要約');
+
+  console.log('公開中 data.js と今回の data.js の内容差分');
+  const diffBase = [
+    'const FESTIVALS = [];', 'const ARTISTS = [',
+    '  {', '    id: "a",', '    name: "A",', '    genre: ["house"],', '  },',
+    '  {', '    id: "b",', '    name: "B",', '    genre: ["techno"],', '  },',
+    '];', 'const VENUES = [];',
+    'const ARTICLES = [', '  {', '    id: "article",', '    body: `本文', '    foo: これは本文です', '`,', '    title: "記事",', '  },', '];',
+    'const EVENTS = [];',
+  ].join('\n');
+  const diffChanged = diffBase.replace('genre: ["house"]', 'genre: ["disco"]')
+    .replace('genre: ["techno"]', 'genre: ["ambient"]');
+  const contentDiff = c.__T.publishContentDiff_(diffBase, diffChanged);
+  check('GENREだけの変更を ARTISTS の変更として表示する',
+    /ARTISTS: 追加 0 \/ 削除 0 \/ 変更 2/.test(contentDiff) && /変更された項目: genre 2/.test(contentDiff), contentDiff);
+  const diffAddedRemoved = diffBase.replace('  {\n    id: "b",\n    name: "B",\n    genre: ["techno"],\n  },\n', '')
+    + '\nconst ignored = 1;';
+  const removedDiff = c.__T.publishContentDiff_(diffBase, diffAddedRemoved);
+  check('要素の削除を表示する', /ARTISTS: 追加 0 \/ 削除 1 \/ 変更 0/.test(removedDiff), removedDiff);
+  const diffBody = diffBase.replace('    body: `本文', '    body: `変更本文').replace('title: "記事"', 'title: "変更記事"');
+  const bodyDiff = c.__T.publishContentDiff_(diffBase, diffBody);
+  check('テンプレート本文内のインデント行を項目と誤認しない',
+    /ARTICLES: 追加 0 \/ 削除 0 \/ 変更 1/.test(bodyDiff)
+      && /変更された項目: body 1/.test(bodyDiff)
+      && !/foo/.test(bodyDiff), bodyDiff);
 
   const DATA = [
     'const FESTIVALS = [',

@@ -15932,3 +15932,28 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - アーティスト GENRE の本番データ（67 行）の書き換えは、このコードの公開後に CMS 画面から行う（手順は memory の production-data-safe-edit）。
+
+## 2026-11-19 Publish 前の差分確認が内容の変更を数えず「変更はありません」と出ていた
+
+### 実施
+- ユーザー報告「Publish Now を押したらキャンセルされた」。GitHub 側に実行・コミットなし → CMS の確認画面で止まっていた。
+- 原因: `publishSnapshot` は各行の id / name / status / date / lineup 件数しか控えず、`publishDiffSummary` はその localStorage の控えと比べていた。アーティスト 67 行の GENRE 変更が「前回Publishからデータ上の変更はありません。」と表示され、ユーザーはキャンセルした（正しい判断）。
+- 修正: 差分を **公開中の data.js と今回の data.js の文字列どうし**で求める `publishContentDiff_` に置き換え（項目単位で、追加・削除・変更と変更された項目名を表示）。確認画面は差分と「これから公開する内容」を1つにまとめた。旧スナップショット（`tj_publish_snapshot*`）は削除。件数の控え `tj_publish_counts` は確認 OK の後に保存（キャンセル時は保存しない）。`cms.js?v=213`。
+
+### コミット
+- このエントリを含むコミット（fix(cms): Publish 前の差分確認を公開中の data.js との比較にする）
+
+### 検証
+- 本番 CMS（ログイン済み、送信はしない）で実データに新関数を当てた: 「ARTISTS: 追加 0 / 削除 0 / 変更 67 … 変更された項目: genre 67」。公開中どうし・今回どうしは「変更はありません」。
+- ローカル CMS（認証素通し・GAS 擬似）で publishDataJs を通しで実行し、確認画面でキャンセル: 表示は差分＋公開内容の1画面、送信なし、`tj_publish_counts` 未保存、例外 0。
+- `scripts/check_cms_publish_guard.mjs` に GENRE 変更・追加削除・本文内のインデント行の誤検出防止を追加（44件成功）。
+- 本番での実際の Publish は、ユーザーが押す（**実機未確認**）。
+
+### 変更したパターン
+- Publish 前の差分の求め方（localStorage の控え → 公開中の data.js との比較）。
+
+### 未確認の類似パターン
+- `publishSanityCheck` の「件数が半分以下に減った」検査は引き続き localStorage の件数控えを使う（端末ごと）。件数は公開中の data.js からも数えられるが今回は未変更。
+
+### 次の担当への注意・判断待ち
+- ユーザーに Cmd+Shift+R 後の Publish Now を依頼（アーティスト GENRE 67 行の反映待ち）。

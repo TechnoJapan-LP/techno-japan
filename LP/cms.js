@@ -8025,36 +8025,98 @@ function publishSanityCheck(d){
   return {ok:true, counts};
 }
 
-/* Publish前の差分確認。件数だけでは、1件のdraft化や日程変更を見落とすため、
-   前回Publish時の軽量スナップショット（ID・状態・日付・LINEUP件数）と比較する。 */
-function publishSnapshot(d){
-  const rows = (key, idKey='ID') => (d[key] || []).map(r => {
-    const id = String(r[idKey] ?? r.id ?? '').trim();
-    return {id, name:String(r.NAME ?? r.name ?? r.TITLE ?? r.title ?? id), status:String(r.STATUS ?? r.status ?? ''), date:String(r.DATE ?? r.date ?? ''), lineup:String(r.LINEUP ?? r.lineup ?? '').split(',').map(x=>x.trim()).filter(Boolean).length};
-  }).filter(r => r.id);
-  const editions = (d.EDITIONS || []).map(r => ({id:String(r.EDITION_ID || '').trim(), name:String(r.FESTIVAL_ID || ''), status:String(r.STATUS || ''), date:String(r.DATE_START || '')})).filter(r => r.id);
-  const lineupCounts = new Map();
-  (d.LINEUPS || []).forEach(r => { const id=String(r.EDITION_ID || '').trim(); if(id) lineupCounts.set(id, (lineupCounts.get(id)||0)+1); });
-  editions.forEach(r => { r.lineup = lineupCounts.get(r.id) || 0; });
-  return { FESTIVALS:rows('FESTIVALS'), ARTISTS:rows('ARTISTS'), VENUES:rows('VENUES'), ARTICLES:rows('ARTICLES'), EDITIONS:editions };
-}
-function publishDiffSummary(d){
-  let prev = null;
-  try { prev = JSON.parse(localStorage.getItem('tj_publish_snapshot') || 'null'); } catch (_) {}
-  if (!prev) return '前回Publishの詳細スナップショットがありません（今回のPublish後から比較を開始します）。';
-  const current = publishSnapshot(d), lines = [];
-  for (const key of ['FESTIVALS','ARTISTS','VENUES','ARTICLES','EDITIONS']) {
-    const before = new Map((prev[key] || []).map(x => [x.id, x]));
-    const after = new Map((current[key] || []).map(x => [x.id, x]));
-    const added = [...after.keys()].filter(id => !before.has(id));
-    const removed = [...before.keys()].filter(id => !after.has(id));
-    const changed = [...after.keys()].filter(id => before.has(id) && JSON.stringify(before.get(id)) !== JSON.stringify(after.get(id)));
-    if (added.length || removed.length || changed.length) {
-      lines.push(key + ': 追加 ' + added.length + ' / 削除 ' + removed.length + ' / 変更 ' + changed.length);
-      [...added.slice(0,4).map(id => '+ ' + id), ...removed.slice(0,4).map(id => '- ' + id), ...changed.slice(0,6).map(id => '↻ ' + id)].forEach(x => lines.push('  ' + x));
+/* 公開中の data.js と今回生成する data.js の内容を比較する。
+   正規表現だけで配列を切ると、記事本文のテンプレート文字列内にある
+   `    foo: ` を項目と誤認するため、文字列と括弧の深度を追跡する。 */
+function publishContentDiff_(liveText, newText){
+  const sections = ['FESTIVALS','ARTISTS','VENUES','ARTICLES','EVENTS'];
+  const maskStrings = (text) => {
+    let out = '', quote = '', escaped = false, lineComment = false, blockComment = false;
+    for(let i=0;i<text.length;i++){
+      const c=text[i], n=text[i+1];
+      if(lineComment){ out += c === '\n' ? '\n' : ' '; if(c === '\n') lineComment=false; continue; }
+      if(blockComment){ out += c === '\n' ? '\n' : ' '; if(c==='*'&&n==='/'){ out+=' '; i++; blockComment=false; } continue; }
+      if(quote){
+        out += c === '\n' ? '\n' : ' ';
+        if(escaped) escaped=false; else if(c==='\\') escaped=true; else if(c===quote) quote='';
+        continue;
+      }
+      if(c==='/'&&n==='/'){ out+='  '; i++; lineComment=true; continue; }
+      if(c==='/'&&n==='*'){ out+='  '; i++; blockComment=true; continue; }
+      if(c==='"'||c==="'"||c==='`'){ out+=' '; quote=c; continue; }
+      out += c;
     }
-  }
-  return lines.length ? lines.join('\n') : '前回Publishからデータ上の変更はありません。';
+    return out;
+  };
+  const arrayBody = (text, name) => {
+    const start = text.indexOf('const '+name+' = [');
+    if(start < 0) throw new Error('const '+name+' = [ がありません');
+    const open = text.indexOf('[', start), masked = maskStrings(text);
+    let depth=0;
+    for(let i=open;i<masked.length;i++){
+      if(masked[i]==='[') depth++;
+      else if(masked[i]===']' && --depth===0) return text.slice(open+1,i);
+    }
+    throw new Error('配列の終端 ] がありません');
+  };
+  const objects = (body) => {
+    const masked=maskStrings(body), result=[]; let brace=0, begin=-1;
+    for(let i=0;i<masked.length;i++){
+      if(masked[i]==='{'){ if(brace===0) begin=i; brace++; }
+      else if(masked[i]==='}'){
+        brace--;
+        if(brace<0) throw new Error('オブジェクトの括弧が不正です');
+        if(brace===0) result.push(body.slice(begin,i+1));
+      }
+    }
+    if(brace!==0) throw new Error('オブジェクトの括弧が閉じていません');
+    return result;
+  };
+  const parseSection = (text, name) => {
+    const body=arrayBody(text,name), items=objects(body), parsed=[];
+    items.forEach((item,index)=>{
+      const masked=maskStrings(item), fields=new Map();
+      const starts=[]; let m;
+      const re=/^    ([A-Za-z_$][\w$]*):[ \t]*/gm;
+      while((m=re.exec(masked))) starts.push({key:m[1], start:m.index});
+      starts.forEach((field,i)=>{
+        const colon=item.indexOf(':', field.start);
+        let value=item.slice(colon+1, i+1<starts.length?starts[i+1].start:item.length).trim();
+        value=value.replace(/,\s*$/,'').trim();
+        fields.set(field.key,value);
+      });
+      const id=fields.get('id');
+      parsed.push({ id: id ? id.replace(/^"|"$/g,'') : '#'+(index+1), fields });
+    });
+    return parsed;
+  };
+  const parseAll = (text) => Object.fromEntries(sections.map(name=>[name,parseSection(text,name)]));
+  let live, next;
+  try { live=parseAll(String(liveText||'')); } catch(e) { return '公開中の data.js の差分を確認できませんでした: '+e.message; }
+  try { next=parseAll(String(newText||'')); } catch(e) { return '今回の data.js の差分を確認できませんでした: '+e.message; }
+  const lines=[];
+  sections.forEach(name=>{
+    const before=new Map(live[name].map(x=>[x.id,x])), after=new Map(next[name].map(x=>[x.id,x]));
+    const added=[...after.keys()].filter(id=>!before.has(id));
+    const removed=[...before.keys()].filter(id=>!after.has(id));
+    const changed=[]; const fieldCounts=new Map();
+    [...after.keys()].forEach(id=>{
+      if(!before.has(id)) return;
+      const a=before.get(id).fields, b=after.get(id).fields;
+      const keys=new Set([...a.keys(),...b.keys()]);
+      const fields=[...keys].filter(key=>a.get(key)!==b.get(key));
+      if(fields.length){ changed.push(id); fields.forEach(key=>fieldCounts.set(key,(fieldCounts.get(key)||0)+1)); }
+    });
+    if(!added.length&&!removed.length&&!changed.length) return;
+    lines.push(name+': 追加 '+added.length+' / 削除 '+removed.length+' / 変更 '+changed.length);
+    added.slice(0,6).forEach(id=>lines.push('  + '+id));
+    removed.slice(0,6).forEach(id=>lines.push('  - '+id));
+    changed.slice(0,6).forEach(id=>lines.push('  ↻ '+id));
+    const rest=changed.length-6; if(rest>0) lines.push('  …ほか '+rest+' 件');
+    const fields=[...fieldCounts.entries()].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]));
+    if(fields.length) lines.push('  変更された項目: '+fields.map(([key,count])=>key+' '+count).join(' / '));
+  });
+  return lines.length ? lines.join('\n') : '公開中からデータ上の変更はありません。';
 }
 
 function exportDataJs(){
@@ -8190,10 +8252,6 @@ function publishDataJs(opts){
     .then(d=>{
     const sane = publishSanityCheck(d);
     if(!sane.ok) throw new Error(sane.message);
-    const diff = publishDiffSummary(d);
-    if(!confirm('Publish前の差分確認\n\n'+diff+'\n\nこの内容で公開しますか?')) throw new Error('Publishをキャンセルしました');
-    try { localStorage.setItem('tj_publish_counts', JSON.stringify(sane.counts)); } catch(_){}
-    try { localStorage.setItem('tj_publish_snapshot_pending', JSON.stringify(publishSnapshot(d))); } catch(_){}
     const content = buildFullDataJs(d);
     const hubContent = buildHubDataJs(d);
     if (btn) btn.innerHTML = 'Checking...';
@@ -8205,9 +8263,11 @@ function publishDataJs(opts){
           + '\n\nシートの編集が保存されているか、CMS を再読み込みしてから'
           + 'もう一度お試しください。');
       }
-      if (!confirm(publishPayloadSummary(content) + '\n\nこの内容で公開しますか?')) {
+      const diff = publishContentDiff_(live, content);
+      if (!confirm('Publish前の差分確認\n\n'+diff+'\n\n'+publishPayloadSummary(content)+'\n\nこの内容で公開しますか?')) {
         throw new Error('Publishをキャンセルしました');
       }
+      try { localStorage.setItem('tj_publish_counts', JSON.stringify(sane.counts)); } catch(_){}
       if (btn) btn.innerHTML = 'Pushing to GitHub...';
       toast('Pushing to GitHub...','info');
       return gasPostJson_({
@@ -8224,10 +8284,6 @@ function publishDataJs(opts){
     if (r.status === 'ok' || r.success) {
       const sha = (r.sha || '').slice(0,7);
       toast('🚀 Published! ('+sha+') — 数分後に本番反映', 'success');
-      try {
-        const pending = localStorage.getItem('tj_publish_snapshot_pending');
-        if (pending) { localStorage.setItem('tj_publish_snapshot', pending); localStorage.removeItem('tj_publish_snapshot_pending'); }
-      } catch (_) {}
       if (r.commitUrl) {
         // 通知トーストから commit を開けるようコンソールに出力
         console.log('Commit URL:', r.commitUrl);
