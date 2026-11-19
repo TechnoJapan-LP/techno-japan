@@ -15904,3 +15904,31 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 - 本番シートの `DnB`→`DRUM & BASS`、`TRANCE`→`PSYCHEDELIC`、`BAND`→`LIVE` のデータ更新は未実施。別作業で行う。
 - CMS 変更を本番で使う前に `cms.html?cb=乱数` を強制リロードし、保存・プレビュー・Publish 経路を実機で確認すること。
+
+## 2026-11-19 使われていない記事画像の削除（Drive・リポジトリ）とジャンル対応の検証
+
+### 実施
+- 監査で「未参照」とした記事画像 212 件を再分類（サイト・生成物・CMS・非公開バックアップの全シート〔下書き含む〕・Drive ID で照合）。
+  - **168 件（約50MB）は削除不可**: リポジトリの名前では参照が無いが、Drive の同じファイルが記事本文から **Drive ID（lh3 の URL）で参照されている**原本。Drive から消すと記事の画像取得が壊れ、リポジトリだけ消しても Sync Drive Images が2時間ごとに戻す。
+  - 44 件は Drive ID も含め参照なし。うち 2026-11 に上げた 7 件（`feature-yuta-*`、`asia-music-event-2026-news-*`、`mutek-jp-2026-info-*`）は執筆中の可能性があるため残した。
+  - **37 件を削除**: Drive はゴミ箱へ（1件ずつ名前・種類を確かめてから。30日は復元可）。リポジトリからは原本 37・縮小版 149（計約18MB）。`image-derivatives.js?v=82` / `image-dimensions.js?v=119`。一覧から消えたのは削除した 186 件だけ（照合済み）。
+- アーティスト GENRE の読み取り側対応（直前のコミット）を検証。
+
+### コミット
+- feat(genre): アーティストの GENRE を「 · 」区切りでも読めるように…（2e8ce7d6d）
+- このエントリを含むコミット（chore(images): 使われていない記事画像 37 件と縮小版を削除）
+
+### 検証
+- ジャンル: 本番データを変換案どおり（67 行）に置き換えた data.js で、headless Chrome（1280×900）により /artists.html・/en/artists.html を変更前（main・旧データ）と比較。カードの表記差は DnB→DRUM & BASS、TRANCE→PSYCHEDELIC、BAND→LIVE の 10 件のみ（他の 1 件差はおすすめ枠のランダム）。全ジャンルの絞り込みで件数と中身が一致（DnB 8→DRUM & BASS 8、LIVE 23→24、TRANCE 2→PSYCHEDELIC 2）。`?genre=DRUM+%26+BASS` で動作。例外 0。
+- 詳細ページ: 同じ data.js で再生成し、表示の差は上記の別名置換のみ、他は dateModified だけ（データが変わるため正常）。確認後に data.js と生成物は元に戻した。
+- CMS（ローカル・認証素通し）: `normalizeArtistGenre_` が `techno/ house,DnB`→`TECHNO · HOUSE · DNB` 等に揃え、プレビューは「TECHNO」「DRUM & BASS」を別のタグで表示。例外 0。
+- 本番 CMS での保存の実操作は未確認（**実機未確認**）。
+
+### 変更したパターン
+- 未参照画像の削除（Drive ゴミ箱＋リポジトリ）。
+
+### 未確認の類似パターン
+- 168 件の「Drive ID で使われている原本」がリポジトリに重複して入っている（約50MB＋縮小版）。Sync が記事フォルダの原本を全部取ってくるため。Sync を「記事本文から ID で使われるものは取らない」に変えれば減らせるが未対応（判断待ち）。
+
+### 次の担当への注意・判断待ち
+- アーティスト GENRE の本番データ（67 行）の書き換えは、このコードの公開後に CMS 画面から行う（手順は memory の production-data-safe-edit）。
