@@ -155,7 +155,15 @@ async function gasPostJson_(body, retry = true){
 
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbxhJ6rtGoAirNyV5TtBvzWHNOT8RuB0nfDjwglmdu8ClhpWZ-OXSbMM4UyFE_7ZsV-Lpg/exec';
 const GMAPS_KEY = 'AIzaSyDBCrbSFx5rnKZIl3cEP8AO87QdeRDZr1Q';
-const GENRES = ['TECHNO','HOUSE','MINIMAL','AMBIENT','BASS','LIVE','OTHERS'];
+const GENRES = ['TECHNO','HOUSE','MINIMAL','AMBIENT','BASS','LIVE','OTHERS','DRUM & BASS','DUBSTEP','HIPHOP'];
+
+function normalizeArtistGenre_(value){
+  const seen = new Set();
+  return String(value || '').split(/[\/·,、・]+/)
+    .map(part => part.trim().toUpperCase())
+    .filter(part => part && !seen.has(part) && seen.add(part))
+    .join(' · ');
+}
 /* Artist DB — will be enriched from GAS on first load */
 let ARTIST_DB = [
   {id:'dj-nobu',name:'DJ NOBU'},{id:'wata-igarashi',name:'WATA IGARASHI'},
@@ -622,7 +630,7 @@ function renderArtistPreview(){
       <div class="pv-hero-info">
         <div class="pv-date">${esc([city,country].filter(Boolean).join(' · '))}</div>
         <div class="pv-name">${esc(name)}</div>
-        ${genre?'<div class="pv-tags"><span class="pv-tag">'+esc(genre)+'</span></div>':''}
+        ${genre?'<div class="pv-tags">'+genre.split(/[\/·,、・]+/).map(value=>String(value).trim()).filter(Boolean).map(value=>'<span class="pv-tag">'+esc(value)+'</span>').join('')+'</div>':''}
         ${bio?'<div class="pv-desc">'+esc(bio)+'</div>':'<div class="pv-empty" style="margin-bottom:28px">No bio</div>'}
         <div class="pv-links">${linksHtml}</div>
       </div>
@@ -649,7 +657,7 @@ function artistPreviewBilingualBody_(ja, en){
   return only ? `<div class="detail-body"><p lang="${jaT?'ja':'en'}">${esc(only)}</p></div>` : '';
 }
 function artistPreviewGenreHtml_(value){
-  return (Array.isArray(value) ? value : String(value||'').split('/').filter(Boolean))
+  return (Array.isArray(value) ? value : String(value||'').split(/[\/·,、・]+/).filter(Boolean))
     .map(g=>`<span class="detail-chip">${esc(String(g).trim())}</span>`).join('');
 }
 function artistPreviewImageSrc_(){
@@ -5816,7 +5824,7 @@ function saveEdit(section){
   }
   else if(section==='artist'){
     Object.assign(payload,{id:g('a-id'),name:g('a-name'),city:g('a-city'),country:g('a-country'),
-      genre:g('a-genre'),image:g('a-image'),imagePosition:g('a-imagePosition'),bio:g('a-bio'),
+      genre:normalizeArtistGenre_(g('a-genre')),image:g('a-image'),imagePosition:g('a-imagePosition'),bio:g('a-bio'),
       instagram:g('a-instagram'),soundcloud:g('a-soundcloud'),
       bandcamp:g('a-bandcamp'),website:g('a-website')});
   }
@@ -7058,7 +7066,7 @@ function submitToSheet(section){
   }
   else if(section==='artist'){
     payload={action:'add_artist',id:g('a-id'),name:g('a-name'),city:g('a-city'),country:g('a-country'),
-      genre:g('a-genre'),image:g('a-image'),imagePosition:g('a-imagePosition'),bio:g('a-bio'),
+      genre:normalizeArtistGenre_(g('a-genre')),image:g('a-image'),imagePosition:g('a-imagePosition'),bio:g('a-bio'),
       instagram:g('a-instagram'),soundcloud:g('a-soundcloud'),bandcamp:g('a-bandcamp'),website:g('a-website')};
     if(!payload.id||!payload.name)return toast('ID and Name required','error');
   }
@@ -7726,7 +7734,7 @@ function suggestTags(p, section){
   if(section === 'venue' || section === 'festival'){
     cands = getSelectedGenres(p+'-genre').concat([g(p+'-city'), g(p+'-type')]);
   } else if(section === 'artist'){
-    cands = (g('a-genre')||'').split(/[\/,、・]+/).concat([g('a-city'), g('a-country')]);
+    cands = (g('a-genre')||'').split(/[\/·,、・]+/).concat([g('a-city'), g('a-country')]);
   } else if(section === 'event'){
     cands = [g('e-city'), g('e-venue')];
   } else if(section === 'article'){

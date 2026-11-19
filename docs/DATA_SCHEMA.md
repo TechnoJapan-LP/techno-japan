@@ -34,7 +34,8 @@
 
 ### 1.3 GENRE
 
-- 正規リスト: `TECHNO / HOUSE / MINIMAL / BASS / AMBIENT / EXPERIMENTAL / ELECTRONIC / PSYCHEDELIC / DISCO / LIVE / MIX / OTHERS`
+- 正規リスト: `TECHNO / HOUSE / MINIMAL / BASS / AMBIENT / EXPERIMENTAL / ELECTRONIC / PSYCHEDELIC / DISCO / LIVE / MIX / OTHERS / DRUM & BASS / DUBSTEP / HIPHOP`
+- `DRUM & BASS` / `DUBSTEP` / `HIPHOP` は 2026-11-19 追加。`DnB`→`DRUM & BASS`、`TRANCE`→`PSYCHEDELIC`、`BAND`→`LIVE` に統一する。
 - 区切りは半角スペース挟み中黒 **「 · 」** に統一(現状はカンマと中黒が混在 → 移行時に統一)。
 - 正規リスト外の値はビルド時に警告。
 

@@ -328,7 +328,7 @@ if (window.self === window.top) {
       <div class="form-group"><label>Name</label><input type="text" id="a-name" placeholder="e.g. DJ NOBU"></div>
       <div class="form-group"><label>City</label><input type="text" id="a-city" placeholder="e.g. TOKYO"></div>
       <div class="form-group"><label>Country</label><input type="text" id="a-country" placeholder="e.g. JAPAN"></div>
-      <div class="form-group"><label>Genre</label><input type="text" id="a-genre" placeholder="e.g. TECHNO / HOUSE"></div>
+      <div class="form-group"><label>Genre</label><input type="text" id="a-genre" placeholder="e.g. TECHNO · HOUSE"></div>
       <div class="form-group"><label>Image Path</label><input type="text" id="a-image" placeholder="auto-filled" readonly></div>
       <div class="form-group full"><label>Image from URL</label><div class="input-row"><input type="url" id="a-imageUrl" placeholder="画像の直接URL（公式サイト等から）"><button class="btn btn-sm btn-accent" onclick="uploadFromUrl('a','artist','a-image','a-imageUrl','preview-a-image')">UPLOAD</button></div><div class="img-preview" id="preview-a-image"></div></div>
       <div class="form-group full upload-fallback"><label>または手動アップロード <span class="label-hint">max 5MB</span></label><div class="upload-area" onclick="this.querySelector('input').click()"><span class="icon">&#8679;</span><span>Upload Image</span><input type="file" accept="image/*" onchange="uploadImage(this,'artist','a')"></div></div>
@@ -629,6 +629,6 @@ if (window.self === window.top) {
 </div>
 
 <script type="module" src="article-shortcodes.js?v=12"></script>
-<script src="cms.js?v=211" defer></script>
+<script src="cms.js?v=212" defer></script>
 </body>
 </html>

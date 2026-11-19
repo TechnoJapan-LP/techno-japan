@@ -15871,3 +15871,36 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - ユーザーに CMS の Cmd+Shift+R（強制リロード）を依頼すること。
+
+## 2026-11-19 アーティスト GENRE 区切り・正規リストの読み取り対応
+
+### 実施
+- アーティスト GENRE の読み取りを `/`・`·`・`,`（CMS は既存の `、`・`・` も含む）に対応。
+- CMS 保存時に `normalizeArtistGenre_` で trim・大文字化・重複除去し、`' · '` 区切りへ正規化。
+- 正規リストへ `DRUM & BASS` / `DUBSTEP` / `HIPHOP` を追加。CMS の `?v=212`、アーティストハブの `artists-phase3.js?v=13` へ更新。
+- `scripts/build-detail-pages.mjs` で詳細ページを再生成（生成ページの更新・削除なし）。
+
+### コミット
+- 未コミット（ユーザー指定により commit / push は実施しない）。
+
+### 検証
+- `node --check`（cms.js / artists-phase3.js / build-detail-pages.mjs / fetch-data.mjs）成功。
+- `python3 scripts/check_asset_versions.py` 成功、`node scripts/check_cms_article_generated_preview.mjs` 成功、`git diff --check` 成功。
+- JA/EN ハブ5枚の行数一致を確認（index 277/277、festivals 328/328、artists 388/388、venues 259/259、news 230/230）。
+- `bash scripts/preflight.sh`、headless Chrome、Publish pipeline、実ブラウザ操作はユーザー指定により未実施。
+
+### 変更したパターン
+- `LP/artists-phase3.js` のアーティストフィルタ分割と genreOrder。
+- `scripts/build-detail-pages.mjs` の artistGenres 分割。
+- `LP/cms.js` の normalizeArtistGenre_、保存2経路、旧プレビュー、新プレビュー、タグ候補分割、GENRES。
+- `docs/DATA_SCHEMA.md` と `scripts/fetch-data.mjs` の正規リスト。
+- `LP/cms.html` / `LP/artists.html` / `LP/en/artists.html` の placeholder・キャッシュ版数。
+
+### 未確認の類似パターン
+- `top-phase2.js` と `article-shortcodes.js` は genre 文字列をそのまま表示する経路のため対象外（確認済み・変更なし）。
+- フェス・会場の配列 GENRE 分割は対象外（確認済み・変更なし）。
+- `&` はハブの `esc()`、CMS プレビューの `esc()`、URL の `URLSearchParams` 経由で扱われることを静的確認。実ブラウザ操作は未確認。
+
+### 次の担当への注意・判断待ち
+- 本番シートの `DnB`→`DRUM & BASS`、`TRANCE`→`PSYCHEDELIC`、`BAND`→`LIVE` のデータ更新は未実施。別作業で行う。
+- CMS 変更を本番で使う前に `cms.html?cb=乱数` を強制リロードし、保存・プレビュー・Publish 経路を実機で確認すること。

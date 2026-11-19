@@ -37,11 +37,11 @@
       && toolbar.getBoundingClientRect().top <= top + 1);
   }
   var genreChipRow = document.getElementById('artists-genre-chips');
-  var genreOrder = ['ALL', 'TECHNO', 'HOUSE', 'MINIMAL', 'EXPERIMENTAL', 'AMBIENT', 'ELECTRONIC', 'LIVE'];
+  var genreOrder = ['ALL', 'TECHNO', 'HOUSE', 'MINIMAL', 'EXPERIMENTAL', 'AMBIENT', 'ELECTRONIC', 'LIVE', 'DRUM & BASS', 'DUBSTEP', 'HIPHOP'];
   var stateKey = 'tj:artist-hub-state:v1';
 
   function genresOf(artist) {
-    return (Array.isArray(artist.genre) ? artist.genre : String(artist.genre || '').split(/\s*\/\s*/))
+    return (Array.isArray(artist.genre) ? artist.genre : String(artist.genre || '').split(/[\/·,]/))
       .map(function (value) { return String(value).trim().toUpperCase(); }).filter(Boolean);
   }
   function placeOf(artist) { return [artist.city, artist.country].filter(Boolean).join(' · '); }

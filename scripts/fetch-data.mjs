@@ -72,7 +72,7 @@ const GENRE_ALLOWED = new Set([
   'TECHNO', 'HOUSE', 'MINIMAL', 'AMBIENT', 'DISCO', 'ELECTRO',
   'BASS', 'DUB', 'EXPERIMENTAL', 'LIVE', 'BREAKBEAT', 'TRANCE',
   'PSYTRANCE', 'PSYCHEDELIC', 'HARDCORE', 'DOWNTEMPO', 'LEFTFIELD',
-  'MIX', 'OTHERS',
+  'MIX', 'OTHERS', 'DRUM & BASS', 'DUBSTEP', 'HIPHOP',
 ]);
 
 // ---------- RFC 4180 準拠の最小 CSV パーサ（依存ゼロ）----------

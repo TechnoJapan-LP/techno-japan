@@ -3024,7 +3024,7 @@ const artistMemberIds = (artist) => {
 };
 
 function artistGenres(artist) {
-  const values = Array.isArray(artist?.genre) ? artist.genre : String(artist?.genre || '').split(/[\/,]/);
+  const values = Array.isArray(artist?.genre) ? artist.genre : String(artist?.genre || '').split(/[\/·,]/);
   return values.map((genre) => String(genre).trim()).filter(Boolean);
 }
 
