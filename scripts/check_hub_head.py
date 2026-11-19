@@ -8,6 +8,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parent.parent
+COMMON_CSS = (ROOT / 'LP' / 'common.css').read_text(encoding='utf-8')
+COMMON_FONT_FAMILIES = ('Bebas Neue', 'DM Sans', 'Space Mono')
 PAGES = [
     'index.html', 'news.html', 'festivals.html', 'artists.html', 'venues.html', 'about.html',
     'en/index.html', 'en/news.html', 'en/festivals.html', 'en/artists.html', 'en/venues.html', 'en/about.html',
@@ -35,6 +37,17 @@ def jsonld_types(head):
     return types
 
 
+def common_css_has_fonts():
+    return all(
+        re.search(
+            rf'@font-face\s*{{[^}}]*font-family\s*:\s*["\']{re.escape(family)}["\']',
+            COMMON_CSS,
+            re.I,
+        )
+        for family in COMMON_FONT_FAMILIES
+    )
+
+
 def check_page(relative):
     path = ROOT / 'LP' / relative
     html = path.read_text(encoding='utf-8')
@@ -50,7 +63,13 @@ def check_page(relative):
         'twitter:card': bool(re.search(r'<meta[^>]+name="twitter:card"', head, re.I)),
         'manifest': bool(re.search(r'<link[^>]+rel="manifest"', head, re.I)),
         'X-Content-Type-Options': 'X-Content-Type-Options' in head,
-        '@font-face': bool(re.search(r'<style>[\s\S]*@font-face', head, re.I)),
+        '@font-face': (
+            bool(re.search(r'<style>[\s\S]*@font-face', head, re.I))
+            or (
+                bool(re.search(r'<link\b[^>]*href="/common\.css\?v=[^"]*"[^>]*>', head, re.I))
+                and common_css_has_fonts()
+            )
+        ),
         'Noto Sans JP': 'fonts.googleapis.com/css2?family=Noto+Sans+JP' in head,
     }
     errors = [name for name, ok in required.items() if not ok]
