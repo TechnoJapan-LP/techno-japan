@@ -147,6 +147,7 @@ run "予約公開起動判定"                    node scripts/test_scheduled_pu
 run "記事本文画像の対応表と置換"        node scripts/check_article_body_images.mjs
 run "記事イベントショートコード"        node scripts/check_article_shortcodes.mjs
 run "記事の自動リンクと更新日"            node scripts/check_article_links.mjs
+run "記事の開催回と出演者の自動紐づけ"    node scripts/test_article_edition.mjs
 run "記事とアーティスト・会場の明示リンク" node scripts/check_article_entity_links.mjs
 run "内部リンクが生きている"            python3 scripts/check_internal_links.py
 run "日本語・英語トップURL"              python3 scripts/check_top_links.py

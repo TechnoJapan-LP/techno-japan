@@ -26,7 +26,8 @@ import { fileURLToPath } from 'node:url';
 import { imageSizeAttrs } from './lib/image-size.mjs';
 import { addHeadingPhraseBreaks, clauseBreaks } from './lib/phrase-breaks.mjs';
 import { autolinkArtists, parseEvents, renderArticleShortcodes } from '../LP/article-shortcodes.js';
-import { articleMatchesArtist } from './lib/artist-page-utils.mjs';
+import { articleMatchesArtist, artistNameMatches } from './lib/artist-page-utils.mjs';
+import { articleEditionFor } from './lib/article-edition.mjs';
 import { articleRefIds, prioritizeEntityArticles } from './lib/article-entity-links.mjs';
 import { loadArticleImageMap, replaceMappedArticleImages } from './lib/article-body-images.mjs';
 import { contentHash, contentRow } from './lib/content-dates.mjs';
@@ -1678,8 +1679,12 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   const relatedFestival = festivalId
     ? (festivals || []).find((f) => String(f.id) === festivalId && isPublishedFestival(f))
     : null;
-  const relatedYear = latestEdition(editionsByFestival.get(festivalId) || [])?.EDITION?.match(/^\d{4}/)?.[0]
-    || latestEdition(editionsByFestival.get(festivalId) || [])?.DATE_START?.match(/^\d{4}/)?.[0]
+  const selectedEdition = relatedFestival ? articleEditionFor(a, festivalId, editionsByFestival.get(festivalId) || []) : null;
+  const hasIdYear = /(?:^|[^0-9])20\d{2}(?![0-9])/.test(String(a.id || ''));
+  const hasArticleDate = Boolean(String(a.date || '').trim() || String(a.publishAt || '').trim());
+  const relatedEdition = relatedFestival && (selectedEdition || (!hasIdYear && !hasArticleDate ? latestEdition(editionsByFestival.get(festivalId) || []) : null));
+  const relatedYear = relatedEdition?.EDITION?.match(/^\d{4}/)?.[0]
+    || relatedEdition?.DATE_START?.match(/^\d{4}/)?.[0]
     || '';
   const title = lang === 'en'
     ? articleSeoTitle(L.title, relatedFestival ? (relatedFestival.name_en || relatedFestival.name) : '', relatedYear)
@@ -1687,7 +1692,33 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   const relatedFestivalPath = relatedFestival
     ? path.join(LP_DIR, 'festivals', `${relatedFestival.id}.html`)
     : '';
-  const linkedArtists = (artists || []).filter((artist) => articleRefIds(a, 'artistIds').includes(String(artist.id || '').toLowerCase()) && String(artist.status || '').toLowerCase() !== 'draft');
+  const manualArtistIds = articleRefIds(a, 'artistIds');
+  const manualArtists = manualArtistIds
+    .map((id) => (artists || []).find((artist) => String(artist.id || '').toLowerCase() === id))
+    .filter((artist) => artist && String(artist.status || '').toLowerCase() !== 'draft');
+  const publicArtistsById = new Map((artists || []).map((artist) => [String(artist.id || ''), artist]));
+  const allArtistsById = new Map((allArtists || []).map((artist) => [String(artist.ID || artist.id || '').trim(), artist]).filter(([id]) => id));
+  const articleText = [a.title, a.title_en, a.excerpt, a.excerpt_en, a.body, a.body_en]
+    .filter(Boolean).map((value) => stripTags(value)).join('\n');
+  const automaticArtists = relatedFestival && selectedEdition
+    ? (lineupsByEdition.get(String(selectedEdition.EDITION_ID || '')) || [])
+      .filter((row) => !isCompositeLineup(row) && String(row.STATUS || '').toLowerCase() !== 'draft')
+      .map((row, index) => {
+        const resolved = resolveLineupArtist(row, publicArtistsById, allArtistsById);
+        if (resolved.status !== 'published' || !resolved.artist) return null;
+        const artist = resolved.artist;
+        const names = [artist.name, artist.name_en].filter(Boolean);
+        if (!names.some((name) => artistNameMatches(articleText, name))) return null;
+        const positions = names.map((name) => {
+          const position = articleText.toLocaleLowerCase().indexOf(String(name).toLocaleLowerCase());
+          return position < 0 ? Number.MAX_SAFE_INTEGER : position;
+        });
+        return { artist, index, position: Math.min(...positions) };
+      }).filter(Boolean)
+      .sort((left, right) => left.position - right.position || left.index - right.index)
+      .map(({ artist }) => artist)
+    : [];
+  const linkedArtists = [...manualArtists, ...automaticArtists.filter((artist) => !manualArtists.some((manual) => String(manual.id) === String(artist.id)))];
   const linkedVenues = (venues || []).filter((venue) => articleRefIds(a, 'venueIds').includes(String(venue.id || '').toLowerCase()) && String(venue.status || '').toLowerCase() !== 'draft');
   const about = relatedFestival && fs.existsSync(relatedFestivalPath)
     ? [{ '@id': `${BASE}/festivals/${encodeURIComponent(relatedFestival.id)}.html#festival` }]
@@ -1698,7 +1729,6 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
   }));
   const articleImages = articleImageVariants(a.image, a.imagePosition);
   const isOrganizationAuthor = authorView.isOrganization;
-  const relatedEdition = relatedFestival ? latestEdition(editionsByFestival.get(festivalId) || []) : null;
   const articleOverview = articleOverviewHtml(relatedFestival, relatedEdition, lineupsByEdition, artists, allArtists, lang);
 
   const jsonLd = {
@@ -3133,7 +3163,13 @@ function artistPage(a, artistsById, lang = 'ja', artistAppearances = new Map(), 
   const faqHtml = faqItems.length ? festivalFaqDetailsHtml(faqItems, lang, true) : '';
   const faqLd = faqJsonLd(faqItems);
   const artistFestivalIds = appearances.map(({ festival }) => festival.id);
-  const artistArticles = prioritizeEntityArticles(articles, a.id, 'artistIds', (article) => articleMatchesArtist(article, a, { artistFestivalIds, festivals: XLINK.fests }));
+  const artistEditionIds = appearances.map(({ edition }) => edition.EDITION_ID).filter(Boolean);
+  const artistArticles = prioritizeEntityArticles(articles, a.id, 'artistIds', (article) => articleMatchesArtist(article, a, {
+    artistFestivalIds,
+    artistEditionIds,
+    festivals: XLINK.fests,
+    editionsByFestival,
+  }));
   const articlesHtml = artistArticles.length
     ? `<section class="artist-stories">
       <div class="festival-section-heading"><h2 class="disp">Stories</h2><a class="mono" href="${prefix}/news.html">All stories →</a></div>

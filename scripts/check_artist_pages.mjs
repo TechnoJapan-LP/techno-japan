@@ -89,12 +89,18 @@ if (!artistNameMatches('YAMA at a festival', 'YAMA') || artistNameMatches('Yaman
 if (!artistNameMatches('NOCO live set', 'NOCO') || artistNameMatches('Nocoffee release', 'NOCO')) failures.push('NOCO boundary test failed');
 if (artistNameMatches('So live set', 'So')) failures.push('short-name test failed');
 if (!articleMatchesArtist({ body: '<a href="/artists/yama.html">YAMA</a>' }, yama)) failures.push('artist link match test failed');
-if (!articleMatchesArtist({ festivalId: 'topia', body: 'NOCO live at the club' }, noco, { artistFestivalIds: ['topia'], festivals: [topia] })) failures.push('artist contextual name match test failed');
+if (!articleMatchesArtist({ id: 'topia-2026-info', festivalId: 'topia', body: 'NOCO live at the club' }, noco, {
+  artistFestivalIds: ['topia'], artistEditionIds: ['topia-2026'], festivals: [topia],
+  editionsByFestival: new Map([['topia', [{ EDITION_ID: 'topia-2026', EDITION: '2026', DATE_START: '2026-10-01' }]]]),
+})) failures.push('artist contextual name match test failed');
 if (articleMatchesArtist({ body: 'Nocoffee live at the club' }, noco)) failures.push('artist false-positive test failed');
 if (!artistNameMatches('FUJI', 'FUJI') || !artistNameMatches('previously played Fuji Rock', 'FUJI')) failures.push('FUJI case-insensitive name test failed');
 if (articleMatchesArtist({ festivalId: 'topia', body: 'FUJI' }, fuji, { artistFestivalIds: [], festivals: [topia] })) failures.push('FUJI/TOPIA contextual false-positive test failed');
 if (articleMatchesArtist({ festivalId: 'topia', body: 'Camp Ground' }, ground, { artistFestivalIds: ['other'], festivals: [topia] })) failures.push('Ground/Camp Ground contextual false-positive test failed');
-if (!articleMatchesArtist({ festivalId: 'topia', body: 'OCCA' }, occa, { artistFestivalIds: ['topia'], festivals: [topia] })) failures.push('OCCA contextual match test failed');
+if (!articleMatchesArtist({ id: 'topia-2026-info', festivalId: 'topia', body: 'OCCA' }, occa, {
+  artistFestivalIds: ['topia'], artistEditionIds: ['topia-2026'], festivals: [topia],
+  editionsByFestival: new Map([['topia', [{ EDITION_ID: 'topia-2026', EDITION: '2026', DATE_START: '2026-10-01' }]]]),
+})) failures.push('OCCA contextual match test failed');
 
 if (failures.length) {
   console.error(`❌ artist page checks: ${failures.length}`);

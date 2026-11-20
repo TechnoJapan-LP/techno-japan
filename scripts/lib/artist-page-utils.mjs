@@ -1,4 +1,5 @@
 import { articleRefIds } from './article-entity-links.mjs';
+import { articleEditionFor } from './article-edition.mjs';
 
 function escapeRegExp(value) {
   return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -25,7 +26,7 @@ function festivalRecordsFor(artistFestivalIds, festivals) {
   return (festivals || []).filter((festival) => ids.has(String(festival.id || '')));
 }
 
-export function articleMatchReason(article, artist, { artistFestivalIds = [], festivals = [] } = {}) {
+export function articleMatchReason(article, artist, { artistFestivalIds = [], artistEditionIds = [], festivals = [], editionsByFestival = new Map() } = {}) {
   if (!article || !artist) return null;
   const id = String(artist.id || '').trim();
   if (articleRefIds(article, 'artistIds').includes(id.toLowerCase())) return 'artist-id';
@@ -35,13 +36,18 @@ export function articleMatchReason(article, artist, { artistFestivalIds = [], fe
   const nameMatch = fields.some((value) => artistNameMatches(value.replace(/<[^>]*>/g, ' '), artist.name));
   if (!nameMatch) return null;
   const records = festivalRecordsFor(artistFestivalIds, festivals);
-  if (records.some((festival) => String(article.festivalId || '') === String(festival.id || ''))) return 'festival-id';
+  const artistEditions = new Set((artistEditionIds || []).map((id) => String(id).toLowerCase()));
+  const matchesEdition = (festival) => {
+    const edition = articleEditionFor(article, festival.id, editionsByFestival.get(String(festival.id)) || []);
+    return edition && artistEditions.has(String(edition.EDITION_ID || '').toLowerCase());
+  };
+  if (records.some((festival) => String(article.festivalId || '') === String(festival.id || '') && matchesEdition(festival))) return 'festival-id';
   for (const festival of records) {
     const festivalId = String(festival.id || '').trim();
     const festivalLink = festivalId && new RegExp(`(?:/en)?/festivals/${escapeRegExp(festivalId)}\\.html(?:["'#?]|$)`, 'i');
-    if (festivalLink && fields.some((value) => festivalLink.test(value))) return 'festival-link';
+    if (festivalLink && fields.some((value) => festivalLink.test(value)) && matchesEdition(festival)) return 'festival-link';
     const festivalName = String(festival.name || '').trim();
-    if (festivalName.length >= 4 && fields.some((value) => artistNameMatches(value.replace(/<[^>]*>/g, ' '), festivalName))) return 'festival-name';
+    if (festivalName.length >= 4 && fields.some((value) => artistNameMatches(value.replace(/<[^>]*>/g, ' '), festivalName)) && matchesEdition(festival)) return 'festival-name';
   }
   return null;
 }

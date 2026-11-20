@@ -16211,3 +16211,32 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - CMS の文言変更を含むため、push 後に Publish pipeline を手動実行し、ユーザーに Cmd+Shift+R を伝えること。
+
+## 2026-11-20 記事を「その年の開催回」に結びつけ、出演者を自動で紐づけ
+
+### 実施
+- ユーザー要望: 関連フェスを登録したら、その年の出演者が記事に自然に紐づく。2027 を登録しても 2026 の記事には 2027 の出演者が出ない。
+- 新規 `scripts/lib/article-edition.mjs` の `articleEditionFor`（Codex）: ①`editionId` 明示 ②記事 id の年（その年の開催回が無ければ null＝ハード制約）③title の年 ④publishAt/date に最も近い開催回（200日以内、同点は未来側）。latestEdition へは落とさない（年も日付も無い記事だけ従来どおり）。
+- 記事ページ: 開催概要・SEO タイトルの年を記事の開催回に（従来は常に最新回＝2027 登録で 2026 記事が 2027 を表示する潜在バグ）。「この記事に登場する」/ JSON-LD about = 手動 artistIds ＋ その開催回の出演者のうち本文に名前が出る人。
+- アーティストページ Stories（`articleMatchReason`）も開催回単位に揃えた。手動 artistIds と本文の /artists/ リンクは年に関係なく一致。
+- `scripts/test_article_edition.mjs` を preflight に追加。
+
+### コミット
+- このエントリを含むコミット
+
+### 検証
+- test_article_edition（年選択・日付選択・同年2回・明示・手動優先・2027 出演者が 2026 記事に出ない・id 年の開催回なし→null・200日超→null）、check_artist_pages、check_jsonld、check_asset_versions、git diff --check（Codex 実行・Claude 再実行で test_article_edition / check_artist_pages 成功）。
+- 実データ: 自動紐づけ 11 記事・計 49 人（rebirth 7、sawagi 11、labyrinth 7、otsukimi 7、synapse 6 等）。transcendence-2025-report は 2025 開催回がデータに無いため開催概要なし・自動0（従来は 2026 の開催概要を表示していた）。post-20251120 の開催概要が mutek-2026 → mutek-2025。
+- headless Chrome（ローカル配信）1440×900 / 390×900 dpr3 mobile: /articles/rebirth-2026-info.html（7枚）、/en/articles/sawagi-festival-2026-info.html（11枚、In this story）、/articles/transcendence-2025-report.html（セクション・開催概要なし）。画像欠け0、リンクはすべて /artists/、横スクロールなし。スクショ目視で崩れなし。
+
+### 変更したパターン
+- 記事↔開催回の決定（記事ページの開催概要・タイトル年・登場アーティスト、アーティストページ Stories）。
+
+### 未確認の類似パターン
+- フェス詳細ページの Stories／venue ページの記事選択は開催回を見ていない（フェス単位で正しいので対象外・確認済み）。
+- 新ルールで外れたリンク: topia-2026-info（本文「2025年には KEN ISHII や Mars89 も出演」）が ken-ishii / mars89 の Stories から外れた。必要なら記事の artistIds に手動追加（ユーザーに伝達済み）。
+- sawagi-festival-2026-info の本文に Qmico があるが 2026 LINEUPS に無い（データの入れ漏れの可能性。勝手に直さずユーザーに報告済み）。
+
+### 次の担当への注意・判断待ち
+- CMS で記事ごとに開催回を明示する列（editionId）は未作成。自動判定で足りない記事が出たら、ARTICLES シートに editionId 列＋CMS の選択欄を足す（コードは既に editionId を最優先で読む）。
+- 自動で出したくない人を外す仕組みは未作成（必要になったら artistExcludeIds 等）。
