@@ -115,18 +115,6 @@
     1920,
     2560
   ],
-  "images/articles/asia-music-event-2026-news-1794934822210.webp": [
-    1920,
-    2880
-  ],
-  "images/articles/asia-music-event-2026-news-1794934844031.webp": [
-    1920,
-    2560
-  ],
-  "images/articles/asia-music-event-2026-news-1794934935606.webp": [
-    1920,
-    2400
-  ],
   "images/articles/asia-music-event-2026-news-1794934999106.webp": [
     1080,
     1081
@@ -134,14 +122,6 @@
   "images/articles/asia-music-event-2026-news-1794935047192.webp": [
     500,
     500
-  ],
-  "images/articles/asia-music-event-2026-news-1794935100052.webp": [
-    1920,
-    2560
-  ],
-  "images/articles/asia-music-event-2026-news-1794935255272.webp": [
-    1600,
-    1066
   ],
   "images/articles/asia-music-event-2026-news-1794935291390.webp": [
     1600,
@@ -298,10 +278,6 @@
   "images/articles/denki-bodhisattva-2026-info.webp": [
     1179,
     781
-  ],
-  "images/articles/feature-yuta-1794932834595.webp": [
-    1920,
-    2880
   ],
   "images/articles/feature-yuta-1795102284026.webp": [
     1440,
@@ -862,10 +838,6 @@
   "images/articles/mutek-jp-2026-info-1793431360476.webp": [
     1920,
     1280
-  ],
-  "images/articles/mutek-jp-2026-info-1793696732201.webp": [
-    1440,
-    1440
   ],
   "images/articles/mutek-jp-2026-info-body01-fd6094fd.webp": [
     1920,
@@ -2655,54 +2627,6 @@
     1920,
     1441
   ],
-  "images/derivatives/card/articles/asia-music-event-2026-news-1794934822210--6bcfb690-lg.webp": [
-    640,
-    960
-  ],
-  "images/derivatives/card/articles/asia-music-event-2026-news-1794934822210--6bcfb690-md.webp": [
-    480,
-    720
-  ],
-  "images/derivatives/card/articles/asia-music-event-2026-news-1794934822210--6bcfb690-sm.webp": [
-    320,
-    480
-  ],
-  "images/derivatives/card/articles/asia-music-event-2026-news-1794934822210--6bcfb690-xs.webp": [
-    160,
-    240
-  ],
-  "images/derivatives/card/articles/asia-music-event-2026-news-1794934844031--e9a73c45-lg.webp": [
-    720,
-    960
-  ],
-  "images/derivatives/card/articles/asia-music-event-2026-news-1794934844031--e9a73c45-md.webp": [
-    540,
-    720
-  ],
-  "images/derivatives/card/articles/asia-music-event-2026-news-1794934844031--e9a73c45-sm.webp": [
-    360,
-    480
-  ],
-  "images/derivatives/card/articles/asia-music-event-2026-news-1794934844031--e9a73c45-xs.webp": [
-    180,
-    240
-  ],
-  "images/derivatives/card/articles/asia-music-event-2026-news-1794934935606--ee91a7f0-lg.webp": [
-    768,
-    960
-  ],
-  "images/derivatives/card/articles/asia-music-event-2026-news-1794934935606--ee91a7f0-md.webp": [
-    576,
-    720
-  ],
-  "images/derivatives/card/articles/asia-music-event-2026-news-1794934935606--ee91a7f0-sm.webp": [
-    384,
-    480
-  ],
-  "images/derivatives/card/articles/asia-music-event-2026-news-1794934935606--ee91a7f0-xs.webp": [
-    192,
-    240
-  ],
   "images/derivatives/card/articles/asia-music-event-2026-news-1794934999106--bd074d40-lg.webp": [
     959,
     960
@@ -2734,38 +2658,6 @@
   "images/derivatives/card/articles/asia-music-event-2026-news-1794935047192--e63920ae-xs.webp": [
     240,
     240
-  ],
-  "images/derivatives/card/articles/asia-music-event-2026-news-1794935100052--e9a73c45-lg.webp": [
-    720,
-    960
-  ],
-  "images/derivatives/card/articles/asia-music-event-2026-news-1794935100052--e9a73c45-md.webp": [
-    540,
-    720
-  ],
-  "images/derivatives/card/articles/asia-music-event-2026-news-1794935100052--e9a73c45-sm.webp": [
-    360,
-    480
-  ],
-  "images/derivatives/card/articles/asia-music-event-2026-news-1794935100052--e9a73c45-xs.webp": [
-    180,
-    240
-  ],
-  "images/derivatives/card/articles/asia-music-event-2026-news-1794935255272--6af49a06-lg.webp": [
-    960,
-    640
-  ],
-  "images/derivatives/card/articles/asia-music-event-2026-news-1794935255272--6af49a06-md.webp": [
-    720,
-    480
-  ],
-  "images/derivatives/card/articles/asia-music-event-2026-news-1794935255272--6af49a06-sm.webp": [
-    480,
-    320
-  ],
-  "images/derivatives/card/articles/asia-music-event-2026-news-1794935255272--6af49a06-xs.webp": [
-    240,
-    160
   ],
   "images/derivatives/card/articles/asia-music-event-2026-news-1794935291390--6af49a06-lg.webp": [
     960,
@@ -3265,22 +3157,6 @@
   ],
   "images/derivatives/card/articles/feature-yuta--e7a7369d-xs.webp": [
     240,
-    240
-  ],
-  "images/derivatives/card/articles/feature-yuta-1794932834595--94c15ba4-lg.webp": [
-    640,
-    960
-  ],
-  "images/derivatives/card/articles/feature-yuta-1794932834595--94c15ba4-md.webp": [
-    480,
-    720
-  ],
-  "images/derivatives/card/articles/feature-yuta-1794932834595--94c15ba4-sm.webp": [
-    320,
-    480
-  ],
-  "images/derivatives/card/articles/feature-yuta-1794932834595--94c15ba4-xs.webp": [
-    160,
     240
   ],
   "images/derivatives/card/articles/feature-yuta-1795102284026--845661af-lg.webp": [
@@ -5290,22 +5166,6 @@
   "images/derivatives/card/articles/mutek-jp-2026-info-1793431360476--f813ca37-xs.webp": [
     240,
     160
-  ],
-  "images/derivatives/card/articles/mutek-jp-2026-info-1793696732201--d98dc3b9-lg.webp": [
-    960,
-    960
-  ],
-  "images/derivatives/card/articles/mutek-jp-2026-info-1793696732201--d98dc3b9-md.webp": [
-    720,
-    720
-  ],
-  "images/derivatives/card/articles/mutek-jp-2026-info-1793696732201--d98dc3b9-sm.webp": [
-    480,
-    480
-  ],
-  "images/derivatives/card/articles/mutek-jp-2026-info-1793696732201--d98dc3b9-xs.webp": [
-    240,
-    240
   ],
   "images/derivatives/card/articles/mutek-jp-2026-info-body01-fd6094fd--ff0d6fb9-body-lg.webp": [
     1200,
