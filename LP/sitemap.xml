@@ -638,7 +638,7 @@
   </url>
   <url>
     <loc>https://techno-japan.media/festivals/resonance.html</loc>
-    <lastmod>2026-11-19</lastmod>
+    <lastmod>2026-11-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1700,6 +1700,12 @@
   </url>
   <url>
     <loc>https://techno-japan.media/en/articles/rebirth-2026-info.html</loc>
+    <lastmod>2026-11-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/en/articles/resonance-2026-info.html</loc>
     <lastmod>2026-11-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -2972,7 +2978,7 @@
   </url>
   <url>
     <loc>https://techno-japan.media/en/festivals/resonance.html</loc>
-    <lastmod>2026-11-19</lastmod>
+    <lastmod>2026-11-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -3351,6 +3357,12 @@
   <url>
     <loc>https://techno-japan.media/articles/rebirth-2026-info.html</loc>
     <lastmod>2026-09-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://techno-japan.media/articles/resonance-2026-info.html</loc>
+    <lastmod>2026-11-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

@@ -5,8 +5,8 @@
     <link>https://techno-japan.media</link>
     <description>Japan&apos;s underground techno and house music media platform.</description>
     <language>ja-JP</language>
-    <lastBuildDate>Fri, 20 Nov 2026 10:32:30 +0900</lastBuildDate>
-    <!-- items-hash: 965aa706bbd3d96788da8df8bda2da586417c32609aeeea26fff1e358a1a93c0 -->
+    <lastBuildDate>Fri, 20 Nov 2026 18:29:51 +0900</lastBuildDate>
+    <!-- items-hash: 0b41071a44dca14678cb0c79ae8ef7fdb3e726b44bd35daf46c8d27a412f8138 -->
     <atom:link href="https://techno-japan.media/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
       <title>Mutek</title>
@@ -414,6 +414,14 @@
       <guid isPermaLink="true">https://techno-japan.media/articles/asia-music-event-2026-news.html</guid>
       <pubDate>Wed, 18 Nov 2026 00:00:00 +0900</pubDate>
       <category>NEWS</category>
+      <description></description>
+    </item>
+    <item>
+      <title>Resonance | 川口・大泉工場の倉庫と庭で、電子音楽とウェルネス、アートを横断する24時間</title>
+      <link>https://techno-japan.media/articles/resonance-2026-info.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/articles/resonance-2026-info.html</guid>
+      <pubDate>Fri, 20 Nov 2026 16:00:00 +0900</pubDate>
+      <category>FESTIVAL&amp;RAVE</category>
       <description></description>
     </item>
   </channel>
