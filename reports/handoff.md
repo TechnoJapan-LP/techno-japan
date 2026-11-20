@@ -16188,3 +16188,26 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 - 「B: 本文画像 168 件の重複」はユーザーに「今は変えない（公開データ 700MB 前後になったら最小案で）」と提案済み。
 - 本番反映は push（preflight 全件）後。
+
+## 2026-11-20 予約公開が時刻に出なかった件の調査と、見回りの GAS 化
+
+### 実施
+- 初の予約記事 `resonance-2026-info`（publishAt 2026-11-20T16:00+09:00）が 18時過ぎも未公開。data.js の予約行は正しかった。原因は `scheduled-publish.yml` の cron（*/15）が GitHub 側で間引かれ、11-19 17:11Z〜11-20 09:23Z に schedule 実行が 2 回（23:33Z / 04:16Z）しか無かったこと。他の cron も同様（watchdog */30 は約6時間おき、Sync Drive Images 2時間おきは 6〜10時間おき）。
+- 応急: Claude が 09:23Z に Publish pipeline を手動起動（run 44710381423 success）。本番 techno-japan.media で記事 JA/EN 200、rss.xml・sitemap-news.xml・data-hub.js に掲載を確認。
+- 恒久（ユーザー選択: 1時間ごと）: GAS の時間主導トリガーが1時間ごとに `scheduled-publish.yml` を workflow_dispatch（Codex 実装 `scripts/gas-update/scheduled-publish-trigger.gs`、README に貼り方）。GAS は日付を解釈せず、判定・二重起動防止は既存の scheduled-publish-check.mjs に任せる。cron は予備として残す。CMS／DATA_SCHEMA の遅延表記を「最大でおよそ1時間＋6〜7分」に（cms.js?v=219）。
+
+### コミット
+- このエントリを含むコミット
+
+### 検証
+- .gs の構文（node --check、Codex）、git diff --check。コードレビュー済み（トークンを出力しない・204以外は throw で GAS の失敗メールに乗る・5xx/通信例外のみ1回再試行・setup は何度実行しても1本）。
+- **GAS への貼り付け・トリガー作成・初回実行は未実施（ユーザー作業待ち）。実機未確認。** 貼った後、Actions に workflow_dispatch の Scheduled publish check が1時間おきに並ぶことを確認すること。
+
+### 変更したパターン
+- 予約公開の起動元（GitHub cron → GAS 時間主導トリガー＋cron 予備）、遅延表記（cms.html / cms.js / DATA_SCHEMA）。
+
+### 未確認の類似パターン
+- 他の cron（Sync Drive Images・watchdog・backup・newsletter-draft 等）も間引かれているが、時刻保証が要らないので今回は対象外。newsletter-draft（毎月25日）は遅れても当日中なら可、未確認。
+
+### 次の担当への注意・判断待ち
+- CMS の文言変更を含むため、push 後に Publish pipeline を手動実行し、ユーザーに Cmd+Shift+R を伝えること。

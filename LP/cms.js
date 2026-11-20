@@ -4284,7 +4284,7 @@ function buildPublishingSection(section){
               <option value="scheduled">⏰ Scheduled</option>
             </select>
           </div>`}
-          ${isArticle ? `<div class="label-hint" style="margin-top:-4px;margin-bottom:8px">Scheduled: 下の Publish At（日本時間）を過ぎると自動で公開（最大30分ほど遅れることがあります）。Publish Now は今まで通り押してください</div>` : `<div class="form-group"><label>Featured</label><select id="${p}-featuredFlag" style="width:100%"><option value="false">No</option><option value="true">⭐ Yes</option></select></div>`}
+          ${isArticle ? `<div class="label-hint" style="margin-top:-4px;margin-bottom:8px">Scheduled: 下の Publish At（日本時間）を過ぎると自動で公開（最大でおよそ1時間＋Publish処理6〜7分遅れることがあります）。Publish Now は今まで通り押してください</div>` : `<div class="form-group"><label>Featured</label><select id="${p}-featuredFlag" style="width:100%"><option value="false">No</option><option value="true">⭐ Yes</option></select></div>`}
         </div>
         ${isArticle ? `<div class="form-group"><label>Publish At (予約公開)</label><input type="datetime-local" id="${p}-publishAt" style="width:100%"></div>` : ''}
         <div class="form-group">

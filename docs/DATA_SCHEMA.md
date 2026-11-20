@@ -364,7 +364,7 @@ ID 規約違反7件の是正(§1.1)ではリダイレクトを設けたが、そ
 | CATEGORY | `REPORT` / `COLUMN` / `INTERVIEW` / `NEWS` / `GUIDE` / `FESTIVAL&RAVE` | プルダウン(現`category`を改名・統一)。2026-09-10に6択へ統一（FESTIVAL/RAVE統合・EVENTS→GUIDE吸収・PARTY/CLUB廃止） |
 | DATE | `2026-05-20` | 公開日(ISO)。**現状のDATE/date/PUBLISHATの3重複を一本化** |
 | STATUS | `published` / `draft` / `scheduled` | `scheduled` は Publish At を過ぎた次回 Publish pipeline で公開。空欄など従来値は公開扱い |
-| publishAt | `2026-11-25T09:00:00+09:00` | 予約公開日時。日本時間の正規形。`scheduled` では必須で、日時前は生成ページ・ハブ・フィード・sitemapから除外 |
+| publishAt | `2026-11-25T09:00:00+09:00` | 予約公開日時。日本時間の正規形。`scheduled` では必須で、日時前は生成ページ・ハブ・フィード・sitemapから除外。見回りは1時間ごとのため、公開は最大でおよそ1時間＋Publish処理6〜7分遅れる |
 | AUTHOR_ID | `techno-japan` | AUTHORS参照(現`author`テキストと`AUTHORID`を一本化) |
 | IMAGE | `images/articles/transcendence-2026.webp` | ファイル名もslug準拠 |
 | cardRatio | `auto` / `4:5` / `1:1` / `3:2` / `16:9` / 空 | **トップページのカード**での画像表示比率。空欄なら従来の見た目のまま。`auto`は元画像の縦横比で切り抜かない |
@@ -386,7 +386,7 @@ ID 規約違反7件の是正(§1.1)ではリダイレクトを設けたが、そ
 - **VIEWSカラムは廃止**(手入力の閲覧数は維持不能。必要ならアナリティクスから取得)。
 - body内の画像は `images/articles/` 配下に統一。`lh3.googleusercontent.com` 等のDrive直リンクは権限・仕様変更で破損するため禁止。
 - 記事本文は日本語を正とし、英語版はTITLE_EN/EXCERPT_EN+(必要なら)body_enで管理。
-- 予約公開は CMS で STATUS=`scheduled` と publishAt（日本時間）を保存し、Publish Now で `data.js` に予約行を載せる。15分ごとの確認 workflow が公開時刻を過ぎた記事を検出して Publish pipeline を起動し、同じ NOW で詳細ページ・ハブ・関連記事・RSS・sitemapを生成する。publishAt を解釈できない予約記事は非公開のまま警告する。
+- 予約公開は CMS で STATUS=`scheduled` と publishAt（日本時間）を保存し、Publish Now で `data.js` に予約行を載せる。GASの時間主導トリガーが1時間ごとに確認 workflow を起動し、公開時刻を過ぎた記事を検出して Publish pipeline を起動する。公開は最大でおよそ1時間＋Publish処理6〜7分遅れる。同じ NOW で詳細ページ・ハブ・関連記事・RSS・sitemapを生成する。publishAt を解釈できない予約記事は非公開のまま警告する。
 
 ### 3.2 AUTHORS / BODY_HISTORY
 

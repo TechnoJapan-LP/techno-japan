@@ -458,7 +458,7 @@ if (window.self === window.top) {
       <div class="form-group"><label>Read Time (min) <span class="label-hint">空欄なら本文から自動計算</span></label><input type="number" id="ar-readTime" placeholder="auto"></div>
       <div class="form-group"><label>Views</label><input type="number" id="ar-views" placeholder="e.g. 1200"></div>
       <div class="form-group"><label>Featured</label><select id="ar-featured"><option value="false">No</option><option value="true">Yes</option></select></div>
-      <div class="form-group"><label>Status</label><select id="ar-status"><option value="published">Published</option><option value="draft">Draft</option><option value="scheduled">Scheduled（予約公開）</option></select><div class="label-hint">Scheduled: 下の Publish At（日本時間）を過ぎると自動で公開（最大30分ほど遅れることがあります）。Publish Now は今まで通り押してください</div></div>
+      <div class="form-group"><label>Status</label><select id="ar-status"><option value="published">Published</option><option value="draft">Draft</option><option value="scheduled">Scheduled（予約公開）</option></select><div class="label-hint">Scheduled: 下の Publish At（日本時間）を過ぎると自動で公開（最大でおよそ1時間＋Publish処理6〜7分遅れることがあります）。Publish Now は今まで通り押してください</div></div>
       <div class="form-group full"><label>Tags (comma-separated)</label><input type="text" id="ar-tags" placeholder="e.g. tokyo, clubs, guide"></div>
       <div class="form-group full"><label>関連フェスティバル <span class="label-hint">選ぶとそのフェス詳細ページに記事が表示される</span></label>
         <div class="fest-picker" id="ar-festivalId-picker">
@@ -631,6 +631,6 @@ if (window.self === window.top) {
 </div>
 
 <script type="module" src="article-shortcodes.js?v=12"></script>
-<script src="cms.js?v=218" defer></script>
+<script src="cms.js?v=219" defer></script>
 </body>
 </html>

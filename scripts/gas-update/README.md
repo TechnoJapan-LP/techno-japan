@@ -89,3 +89,17 @@ node scripts/check_gas_sync.mjs
 `trigger_image_sync` の分岐を追加する。GitHubトークンはコードへ書かず、Script Propertiesの
 `GITHUB_ACTIONS_TOKEN` に保存する。必要権限とデプロイ手順は同ファイルのコメント、および実装時の
 引き渡し手順に従う。
+
+## 予約公開の見回り（GASトリガー・2026-11-20）
+
+GitHub Actionsのcronは間引かれることがあるため、予約公開の確認 workflow をGASの時間主導トリガーから1時間ごとに起動する。GASはスプレッドシートを読まず、日付も解釈しない。公開時刻の判定と二重起動防止は、既存の `scripts/scheduled-publish-check.mjs` に任せる。公開は最大でおよそ1時間＋Publish処理6〜7分遅れることがある。
+
+1. Apps Scriptの「Techno Japan」プロジェクトを開く。
+2. 左の「ファイル」の「＋」→「スクリプト」を選び、名前を `scheduled-publish-trigger` にする。
+3. [`scheduled-publish-trigger.gs`](scheduled-publish-trigger.gs) の中身を全部貼り付けて保存する。
+4. 上部の関数選択で `setupScheduledPublishTrigger` を選び、「実行」を押す。
+5. 初回だけ承認ダイアログが出る。内容を確認して許可する。「このアプリは確認されていません」と出る場合は「詳細」→「安全ではないページに移動」を選び、続けて許可する。外部URL取得とトリガー管理の権限が必要。
+6. 左の時計アイコン「トリガー」を開き、`dispatchScheduledPublishCheck`・時間主導型・1時間おきのトリガーが1本だけあることを確認する。`setupScheduledPublishTrigger`を何度実行しても1本になる。
+7. 動作確認として関数 `dispatchScheduledPublishCheck` を1回「実行」し、エラーが出ないことを確認する。GitHubのActionsに「Scheduled publish check」が `workflow_dispatch` で増える。トリガーを止めるときは `removeScheduledPublishTrigger` を実行する。
+
+時間主導トリガーは保存済みの最新コードで動くため、ウェブアプリの再デプロイは不要。GitHubトークンは既存のScript Properties `GITHUB_ACTIONS_TOKEN` を使用し、コードへ貼り付けない。

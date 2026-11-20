@@ -1,3 +1,5 @@
+# 主たる起動はGASの1時間おきトリガー（scripts/gas-update/scheduled-publish-trigger.gs）。
+# GitHubのcronは間引かれるため、以下は予備として残す。
 name: Scheduled publish check
 
 on:
