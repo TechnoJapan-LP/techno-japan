@@ -16288,3 +16288,27 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - push 後: Publish pipeline を Claude が手動実行、ユーザーに Cmd+Shift+R、YUTA 記事の3枚セット作り直し（ALPHA 解除→共同レーベル画像の解除→ALPHA で3枚セット→保存→Publish Now）。
+
+## 2026-11-21 push 前 preflight の失敗3件を修正
+
+### 実施
+- 1回目の push で preflight 84/87（失敗3）→ push 中止（本番は不変）。
+  1. check_cms_ai_body: 新設の refreshArticleImageSetClasses が Node 模擬環境の root（querySelectorAll なし）で例外 → ガード追加。
+  2. check_cms_article_generated_preview: cms.js のフォールバックプレビューが article-fx.js?v=18 べた書き → 20。cms.js?v=223。
+  3. check_article_links: 入れ子検出の正規表現が `<aside class="tj-artist-card">` の "<a" に誤一致（今朝公開の feature-yuta のアーティストカードで発覚。origin/main の生成物でも同じく一致する検査側の誤検知）→ タグ判定を修正。
+- 修正は Codex。単独実行で4本（上記＋check_cms_image_layouts）exit 0、check_asset_versions 成功を Claude が確認。
+
+### コミット
+- このエントリを含むコミット
+
+### 検証
+- 上記。全件は push 時の preflight で確認。
+
+### 変更したパターン
+- cms.js の Node 模擬環境ガード、プレビューの版数、記事リンク検査の正規表現。
+
+### 未確認の類似パターン
+- cms.js 内のほかのべた書き版数（Codex に同時確認させた）。他の検査の `<a[^>]*>` 型の正規表現は未調査。
+
+### 次の担当への注意・判断待ち
+- なし（前エントリの push 後作業を参照）。

@@ -24,6 +24,9 @@ const files = liveArticles.flatMap((article) => [
 
 const failures = [];
 const check = (condition, message) => { if (!condition) failures.push(message); };
+const nestedAnchorPattern = /<a\b[^>]*>[^<]*<a\b/i;
+check(nestedAnchorPattern.test('<a href="/outer">outer <a href="/inner">inner</a>'), '入れ子aタグ検査のテストケースを検出できません');
+check(!nestedAnchorPattern.test('<aside class="tj-artist-card"><a href="/artist">artist</a></aside>'), '入れ子aタグ検査がaside内のaタグを誤検出しています');
 let totalLinks = 0;
 const isoDateTime = (value) => {
   const date = String(value || '').trim();
@@ -53,7 +56,7 @@ for (const { article, lang, file } of files) {
     check(artistIds.has(id), `${article.id}: artistリンク先がデータにありません (${id})`);
     check(fs.existsSync(path.join(root, 'LP/artists', `${id}.html`)), `${article.id}: artistリンク先ファイルがありません (${id})`);
   }
-  check(!/<a[^>]*>[^<]*<a\s/.test(html), `${article.id}: <a>の入れ子を検出しました`);
+  check(!nestedAnchorPattern.test(html), `${article.id}: <a>の入れ子を検出しました`);
   const articleBody = html.match(/<div class="article-body">([\s\S]*?)<\/div>/)?.[1] || '';
   check(!/\[\[[\s\S]*?<a\s+class="entity-link"[\s\S]*?\]\]/.test(articleBody), `${article.id}: shortcode内に自動リンクがあります`);
   const headingHasLink = [...articleBody.matchAll(/<h([1-6])[^>]*>([\s\S]*?)<\/h\1>/g)]

@@ -1285,7 +1285,7 @@ function articleImagesContinuous(prev, cur){
   return true;
 }
 function refreshArticleImageSetClasses(root = articleQuill?.root){
-  if (!root) return;
+  if (!root || typeof root.querySelectorAll !== 'function') return;
   root.querySelectorAll('.ar-img-set').forEach(block => block.classList.remove('ar-img-set','ar-img-set-2','ar-img-set-3','ar-img-set-first','ar-img-set-last'));
   const byId = new Map();
   root.querySelectorAll('img[data-pair-id]').forEach(img => {
@@ -1309,8 +1309,9 @@ function refreshArticleImageSetClasses(root = articleQuill?.root){
   });
 }
 function articleImagePairIssues(root = articleQuill?.root){
+  if (!root || typeof root.querySelectorAll !== 'function') return [];
   const byId = new Map();
-  root?.querySelectorAll('img[data-pair-id]').forEach(img => {
+  root.querySelectorAll('img[data-pair-id]').forEach(img => {
     const id = img.dataset.pairId;
     if (!byId.has(id)) byId.set(id, []);
     byId.get(id).push(img);
@@ -2224,7 +2225,7 @@ function previewRenderBody_(body){
 function writeArticleSimplePreview_(win, title, body){
   const safeBody = String(body || '').replace(/<script/gi, '&lt;script');
   win.document.open();
-      win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><link rel="stylesheet" href="/common.css?v=62"><link rel="stylesheet" href="/detail.css?v=100"><link rel="stylesheet" href="/article-fx.css?v=25"><style>/* フォールバックでは common.js を読まないためネイティブカーソルに戻す */*{cursor:auto !important}a,button,[role="button"],summary{cursor:pointer !important}</style></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${esc(title)}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=18"><\/script></body></html>`);
+      win.document.write(`<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><link rel="stylesheet" href="/common.css?v=62"><link rel="stylesheet" href="/detail.css?v=100"><link rel="stylesheet" href="/article-fx.css?v=25"><style>/* フォールバックでは common.js を読まないためネイティブカーソルに戻す */*{cursor:auto !important}a,button,[role="button"],summary{cursor:pointer !important}</style></head><body><main class="article-detail"><div class="article-detail-inner"><div class="article-meta-top"><span class="cat-pill">ARTICLE PREVIEW</span></div><h1>${esc(title)}</h1><div class="article-body">${safeBody}</div></div></main><script src="/article-fx.js?v=20"><\/script></body></html>`);
   win.document.close();
 }
 async function openArticleGeneratedPreview(){
