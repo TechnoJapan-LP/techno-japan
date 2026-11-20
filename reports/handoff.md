@@ -16265,3 +16265,26 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - **YUTA 記事のデータはまだ壊れたまま**（本番では3枚が縦に1枚ずつ）。ユーザーが CMS で ALPHA→「セットを解除」、共同レーベル画像→「セットを解除」、ALPHA→「3枚セット」→保存→Publish Now。CMS は Cmd+Shift+R が必要。
+
+## 2026-11-21 画像セット「連続」判定の回帰修正（同一段落内2枚・見出し内2枚目）
+
+### 実施
+- 直前のコミット（離れた同一 ID を束ねない）を全2枚セット記事で確認したところ、shifumiz-2026-info（2枚目の img が <h3> 内）で束ねなくなっていた。1回目の修正（本文直下ブロック同士の隣接）では、多くの記事の「同じ <p> に2枚」型（asia-music-event, rebirth, snow-mashine, ondoland, mutek-jp 等）が束ねられなくなる二次回帰（check_article_image_fit 1/8）。
+- 最終形（Codex）: 文書順で隣り合うメンバーの間を Range で調べ、空白以外の文字も他の画像等も無ければ「連続」。束ねる div は figs[0] の直前、figs[0] が見出し内ならその見出しの直前。article-fx.js・CMS プレビュー・CMS エディタのクラス付与・セット作成で同じ判定。article-fx.js?v=20、cms.js?v=222、cms.css?v=65。
+- check_cms_image_layouts に releaseTrioFromMiddle（3枚セットの2枚目で解除 → 3枚とも属性・クラス消去）を追加（Codex が一時的に2枚ケースへ置き換えていたため戻させた）。
+
+### コミット
+- このエントリを含むコミット
+
+### 検証
+- headless 1440: 2枚セットを持つ8記事すべてで束ね数が変更前と同じ（snow 2 / rebirth 2 / shifumiz 2 / ondoland 2 / sawagi 2 / denki 2,2 / mutek 2 / asia 2,2）。feature-yuta は束ね0・順序どおり。
+- check_article_image_fit 8/8（h3 内ケース追加）、check_cms_image_layouts exit 0（contiguousEditorSet / headingBlockSet / releaseFromMiddle / releaseTrioFromMiddle / separatedRejected / savedHtmlClean / repairNoMixed / warning すべて true）、check_cms_focus_mode、check_cms_layout、check_asset_versions 成功。build-detail-pages 再生成済み。
+
+### 変更したパターン
+- 画像セットの連続判定（本番・CMS プレビュー・CMS エディタ）。
+
+### 未確認の類似パターン
+- news.html の記事ビューでも article-fx を呼ぶが、同じ関数なので同挙動（個別には未確認）。
+
+### 次の担当への注意・判断待ち
+- push 後: Publish pipeline を Claude が手動実行、ユーザーに Cmd+Shift+R、YUTA 記事の3枚セット作り直し（ALPHA 解除→共同レーベル画像の解除→ALPHA で3枚セット→保存→Publish Now）。

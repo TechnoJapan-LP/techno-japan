@@ -296,9 +296,14 @@ label .req-star{color:var(--accent);margin-left:4px}
 .ql-editor img[data-position="bottom"]{object-position:center bottom}
 .ql-editor img[data-position="center"]{object-position:center center}
 .ql-editor img[data-x]{object-position:var(--crop-x,50%) var(--crop-y,50%);transform:scale(var(--crop-zoom,1))}
-.ql-editor p.ar-img-set{display:inline-block;vertical-align:top;width:calc(50% - 8px);margin-right:16px}
-.ql-editor p.ar-img-set-last{margin-right:0}
-.ql-editor p.ar-img-set-3{width:calc((100% - 32px) / 3);margin-right:16px}
+.ql-editor > .ar-img-set{display:inline-block;vertical-align:top;width:calc(50% - 8px);margin-right:16px}
+.ql-editor > .ar-img-set-last{margin-right:0}
+.ql-editor > .ar-img-set-3{width:calc((100% - 32px) / 3);margin-right:16px}
+.ql-editor > .ar-img-set-2:has(> img:nth-of-type(2)),.ql-editor > .ar-img-set-3:has(> img:nth-of-type(2)){width:100%;margin-right:0}
+.ql-editor > .ar-img-set-2:has(> img:nth-of-type(2)) > img{display:inline-block;width:calc(50% - 8px);margin-right:16px}
+.ql-editor > .ar-img-set-2:has(> img:nth-of-type(2)) > img:last-of-type{margin-right:0}
+.ql-editor > .ar-img-set-3:has(> img:nth-of-type(2)) > img{display:inline-block;width:calc((100% - 32px) / 3);margin-right:16px}
+.ql-editor > .ar-img-set-3:has(> img:nth-of-type(3)) > img:last-of-type{margin-right:0}
 .ar-editor-tabs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px}
 .ar-editor-tab{background:transparent;border:1px solid var(--border);color:var(--text3);padding:4px 12px;font-family:var(--font-mono);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border-radius:3px}
 .ar-help-sec summary{cursor:pointer;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;padding:10px 0;border-top:1px solid var(--border)}
@@ -599,9 +604,14 @@ body.ar-focus-open .ar-editor-wrap.focus-mode #ar-body-editor .ql-editor{
   --tj-ed-gutter:max(20px, calc((100% - 960px) / 2));
 }
 #ar-body-editor .ql-editor p{ margin: 0 0 24px; }
-#ar-body-editor .ql-editor p.ar-img-set{display:inline-block;vertical-align:top;width:calc(50% - 8px);margin-right:16px}
-#ar-body-editor .ql-editor p.ar-img-set-last{margin-right:0}
-#ar-body-editor .ql-editor p.ar-img-set-3{width:calc((100% - 32px) / 3);margin-right:16px}
+#ar-body-editor .ql-editor > .ar-img-set{display:inline-block;vertical-align:top;width:calc(50% - 8px);margin-right:16px}
+#ar-body-editor .ql-editor > .ar-img-set-last{margin-right:0}
+#ar-body-editor .ql-editor > .ar-img-set-3{width:calc((100% - 32px) / 3);margin-right:16px}
+#ar-body-editor .ql-editor > .ar-img-set-2:has(> img:nth-of-type(2)),#ar-body-editor .ql-editor > .ar-img-set-3:has(> img:nth-of-type(2)){width:100%;margin-right:0}
+#ar-body-editor .ql-editor > .ar-img-set-2:has(> img:nth-of-type(2)) > img{display:inline-block;width:calc(50% - 8px);margin-right:16px}
+#ar-body-editor .ql-editor > .ar-img-set-2:has(> img:nth-of-type(2)) > img:last-of-type{margin-right:0}
+#ar-body-editor .ql-editor > .ar-img-set-3:has(> img:nth-of-type(2)) > img{display:inline-block;width:calc((100% - 32px) / 3);margin-right:16px}
+#ar-body-editor .ql-editor > .ar-img-set-3:has(> img:nth-of-type(3)) > img:last-of-type{margin-right:0}
 #ar-body-editor .ql-editor p:last-child{ margin-bottom: 0; }
 #ar-body-editor .ql-editor h2{
   font-family:'Bebas Neue',sans-serif; font-size:clamp(24px,3vw,32px);
@@ -631,8 +641,8 @@ body.ar-focus-open .ar-editor-wrap.focus-mode #ar-body-editor .ql-editor{
   margin-left:calc(-1 * var(--tj-bleed));
   margin-right:calc(-1 * var(--tj-bleed));
 }
-#ar-body-editor .ql-editor p.ar-img-set > img{width:100%;margin:32px auto}
-#ar-body-editor .ql-editor p.ar-img-set > img[data-layout="full"]{width:100%;margin:32px auto}
+#ar-body-editor .ql-editor > .ar-img-set > img{width:100%;margin:32px auto}
+#ar-body-editor .ql-editor > .ar-img-set > img[data-layout="full"]{width:100%;margin:32px auto}
 @media(min-width:900px){
   #ar-body-editor .ql-editor p:not(.ar-img-set):has(> img[data-layout="left"]),
   #ar-body-editor .ql-editor p:not(.ar-img-set):has(> img[data-layout="right"]){display:flow-root}
@@ -643,9 +653,9 @@ body.ar-focus-open .ar-editor-wrap.focus-mode #ar-body-editor .ql-editor{
   #ar-body-editor .ql-editor img,
   #ar-body-editor .ql-editor img[data-layout="compact"],
   #ar-body-editor .ql-editor img[data-layout="full"]{float:none;width:100%;max-width:100%;margin:32px 0}
-  #ar-body-editor .ql-editor p.ar-img-set{display:block;width:100%;margin-right:0}
-  #ar-body-editor .ql-editor p.ar-img-set > img,
-  #ar-body-editor .ql-editor p.ar-img-set > img[data-layout="full"]{width:100%;margin:32px 0}
+  #ar-body-editor .ql-editor > .ar-img-set{display:block;width:100%;margin-right:0}
+  #ar-body-editor .ql-editor > .ar-img-set > img,
+  #ar-body-editor .ql-editor > .ar-img-set > img[data-layout="full"]{width:100%;margin:32px 0}
 }
 /* 引用も本番と同じ「誌面の大引用」で見せる */
 #ar-body-editor .ql-editor blockquote{

@@ -76,8 +76,15 @@ async function main(){
     const set=[...q.root.querySelectorAll('img')]; set[0].click(); document.getElementById('ar-image-trio').click(); await new Promise(r=>setTimeout(r,100));
     out.contiguousEditorSet=q.root.querySelectorAll('p.ar-img-set-3').length===3;
     await new Promise(r=>setTimeout(r,350)); out.savedHtmlClean=!document.getElementById('ar-body-source').value.includes('ar-img-set');
-    set[1].click(); document.getElementById('ar-image-trio').click(); await new Promise(r=>setTimeout(r,100));
-    out.releaseFromMiddle=set.every(img=>!img.dataset.pairId&&!img.dataset.pairSize)&&!q.root.querySelector('p.ar-img-set');
+    setArticleBody('<p><img src="'+src+'"></p><h3><img src="'+src+'"></h3>'); await new Promise(r=>setTimeout(r,200));
+    const headingSet=[...q.root.querySelectorAll('img')]; headingSet[0].click(); document.getElementById('ar-image-pair').click(); await new Promise(r=>setTimeout(r,150));
+    out.headingBlockSet=q.root.querySelectorAll('.ar-img-set-2').length===2 && preview.querySelector('.preview-image-pair')?.querySelectorAll('.preview-fx-img').length===2;
+    headingSet[1].click(); document.getElementById('ar-image-pair').click(); await new Promise(r=>setTimeout(r,100));
+    out.releaseFromMiddle=headingSet.every(img=>!img.dataset.pairId&&!img.dataset.pairSize)&&!q.root.querySelector('.ar-img-set');
+    setArticleBody('<p><img src="'+src+'"></p><p><img src="'+src+'"></p><p><img src="'+src+'"></p>'); await new Promise(r=>setTimeout(r,200));
+    const trioRelease=[...q.root.querySelectorAll('img')]; trioRelease[0].click(); document.getElementById('ar-image-trio').click(); await new Promise(r=>setTimeout(r,120));
+    trioRelease[1].click(); document.getElementById('ar-image-trio').click(); await new Promise(r=>setTimeout(r,120));
+    out.releaseTrioFromMiddle=trioRelease.every(img=>!img.dataset.pairId&&!img.dataset.pairSize)&&!q.root.querySelector('.ar-img-set');
     setArticleBody('<p><img src="'+src+'"></p><p><img src="'+src+'"></p><p><img src="'+src+'"></p><p><img src="'+src+'"></p>'); await new Promise(r=>setTimeout(r,150));
     const four=[...q.root.querySelectorAll('img')]; four[0].click(); document.getElementById('ar-image-pair').click(); await new Promise(r=>setTimeout(r,100)); four[2].click(); document.getElementById('ar-image-pair').click(); await new Promise(r=>setTimeout(r,100));
     const ids=four.map(img=>img.dataset.pairId); out.repairNoMixed=ids[0]&&ids[0]===ids[1]&&ids[2]&&ids[2]===ids[3]&&ids[0]!==ids[2];
@@ -85,7 +92,7 @@ async function main(){
     out.warning=!!document.getElementById('article-image-pair-warning')&&document.getElementById('article-image-pair-warning').textContent.includes('画像セットが崩れています');
     return out;
   })()`);
-  const errors=[]; if(Math.abs(data.crop11-1)>0.03) errors.push('1:1 crop比率'); if(Math.abs(data.crop1610-1.6)>0.03) errors.push('16:10 crop比率'); if(!(data.right?.right>=data.right?.bodyRight-8&&data.right?.left>data.right?.bodyRight-(data.right?.bodyRight-data.right?.left)*2)) errors.push('right寄せ'); for(const [name,item] of Object.entries(data.insertCases||{})) for(const key of ['newImage','contained','singleParagraph','originalText','existingAttrs','selectionAfterImage']) if(!item[key]) errors.push(`挿入位置 ${name}: ${key}`); if(!data.undoRedo?.same||data.undoRedo.attrs.some(x=>!x)) errors.push('undo/redo属性保持'); if(!data.undoLoad) errors.push('読み込み直後undo'); if(data.trio?.editor!==3||data.trio?.preview!==3) errors.push('3枚セット'); if(data.auto!=='') errors.push('自動レイアウト表示'); if(!data.separatedRejected||!data.contiguousEditorSet||!data.savedHtmlClean||!data.releaseFromMiddle||!data.repairNoMixed||!data.warning) errors.push('画像セットの連続性/解除/警告');
+  const errors=[]; if(Math.abs(data.crop11-1)>0.03) errors.push('1:1 crop比率'); if(Math.abs(data.crop1610-1.6)>0.03) errors.push('16:10 crop比率'); if(!(data.right?.right>=data.right?.bodyRight-8&&data.right?.left>data.right?.bodyRight-(data.right?.bodyRight-data.right?.left)*2)) errors.push('right寄せ'); for(const [name,item] of Object.entries(data.insertCases||{})) for(const key of ['newImage','contained','singleParagraph','originalText','existingAttrs','selectionAfterImage']) if(!item[key]) errors.push(`挿入位置 ${name}: ${key}`); if(!data.undoRedo?.same||data.undoRedo.attrs.some(x=>!x)) errors.push('undo/redo属性保持'); if(!data.undoLoad) errors.push('読み込み直後undo'); if(data.trio?.editor!==3||data.trio?.preview!==3) errors.push('3枚セット'); if(data.auto!=='') errors.push('自動レイアウト表示'); if(!data.separatedRejected||!data.contiguousEditorSet||!data.savedHtmlClean||!data.headingBlockSet||!data.releaseFromMiddle||!data.releaseTrioFromMiddle||!data.repairNoMixed||!data.warning) errors.push('画像セットの連続性/解除/警告');
   if(errors.length){console.error('CMS画像レイアウト検査失敗:',errors.join('、'));console.error(JSON.stringify(data,null,2));process.exitCode=1}else console.log(JSON.stringify(data,null,2)+'\n✅ CMS画像レイアウトを実ブラウザで検証しました');
 }
 try{await main()}catch(error){console.error(`✗ ${error.message||error}`);process.exitCode=1}finally{await cleanup()}

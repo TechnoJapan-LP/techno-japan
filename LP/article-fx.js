@@ -4,7 +4,7 @@
    レイアウトを動かさない（transform / clip-path のみ）= CLSゼロ。
    prefers-reduced-motion では演出を止め、プログレスバーだけ残す。
 
-   v3: window.articleFX() として再実行可能に。
+   v4: window.articleFX() として再実行可能に。
    - 静的 /articles/*.html では自動起動（従来どおり）
    - news.html の #article/... ビューでは描画後に articleFX() を呼ぶ
    - 横長画像は左右寄せを基本にし、極端に横長な画像だけ fx-bleed にする
@@ -109,6 +109,22 @@
 
     // 同じ pair-id の figure が本文中で連続しているときだけ、左右50:50の1セットにまとめる。
     // IDだけで集めて移動すると、離れた画像を本文先頭へ引き寄せてしまう。
+    function imagesAreContinuous(prev, cur){
+      if (!prev || !cur || prev === cur) return false;
+      var range = document.createRange();
+      range.setStartAfter(prev);
+      range.setEndBefore(cur);
+      var fragment = range.cloneContents();
+      var text = document.createTreeWalker(fragment, NodeFilter.SHOW_TEXT);
+      while (text.nextNode()) if (text.currentNode.nodeValue.trim()) return false;
+      var elements = fragment.querySelectorAll('*');
+      for (var i = 0; i < elements.length; i++) {
+        var element = elements[i];
+        if (element.matches('img, figure, iframe, video, audio, canvas, svg, object, embed')) return false;
+        if (!/^(P|DIV|H[1-6])$/.test(element.tagName) || element.textContent.trim() || element.querySelector('img, figure, iframe, video, audio, canvas, svg, object, embed')) return false;
+      }
+      return true;
+    }
     var pairGroups = {};
     Array.from(body.querySelectorAll('figure.fx-img[data-pair-id]')).forEach(function(fig){
       var id = fig.dataset.pairId;
@@ -118,12 +134,14 @@
       var figs = pairGroups[id];
       var pairSize = figs[0].dataset.pairSize === '3' ? 3 : 2;
       var contiguous = figs.length === pairSize && figs.every(function(fig, index){
-        return index === 0 || figs[index - 1].nextElementSibling === fig;
+        return index === 0 || imagesAreContinuous(figs[index - 1], fig);
       });
       if (!contiguous) return;
       var pair = document.createElement('div');
       pair.className = 'fx-image-pair' + (pairSize === 3 ? ' fx-image-trio' : '');
-      figs[0].parentNode.insertBefore(pair, figs[0]);
+      var firstParent = figs[0].parentNode;
+      var firstAnchor = /^H[1-6]$/.test(firstParent.tagName || '') ? firstParent : figs[0];
+      firstAnchor.parentNode.insertBefore(pair, firstAnchor);
       figs.forEach(function(fig){ pair.appendChild(fig); });
     });
 

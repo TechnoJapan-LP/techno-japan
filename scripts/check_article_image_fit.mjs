@@ -91,8 +91,6 @@ const injectImages = `
     images[2].dataset.layout = 'full';
     const src = images[0].getAttribute('src');
 
-    const trio = document.createElement('div');
-    trio.id = 'article-image-trio-fixture';
     for (let i = 0; i < 3; i++) {
       const p = document.createElement('p');
       const img = document.createElement('img');
@@ -100,19 +98,22 @@ const injectImages = `
       img.dataset.pairId = 'article-image-trio-check';
       img.dataset.pairSize = '3';
       p.appendChild(img);
-      trio.appendChild(p);
+      body.appendChild(p);
     }
-    body.appendChild(trio);
 
     // 同じIDでも本文で分断されている画像は、絶対にセット化・移動しない。
-    const split = document.createElement('div');
+    const split = document.createElement('p');
     split.id = 'article-image-split-fixture';
-    split.innerHTML = '<p><img src="' + src + '" data-pair-id="article-image-split-check" data-pair-size="2"></p><p>間に入る本文</p><p><img src="' + src + '" data-pair-id="article-image-split-check" data-pair-size="2"></p>';
-    body.appendChild(split);
-    const mismatch = document.createElement('div');
-    mismatch.id = 'article-image-mismatch-fixture';
-    mismatch.innerHTML = '<p><img src="' + src + '" data-pair-id="article-image-mismatch-check" data-pair-size="3"></p><p><img src="' + src + '" data-pair-id="article-image-mismatch-check" data-pair-size="3"></p>';
-    body.appendChild(mismatch);
+    split.innerHTML = '<img src="' + src + '" data-pair-id="article-image-split-check" data-pair-size="2">';
+    const splitMiddle = document.createElement('p'); splitMiddle.textContent = '間に入る本文';
+    const splitLast = document.createElement('p'); splitLast.innerHTML = '<img src="' + src + '" data-pair-id="article-image-split-check" data-pair-size="2">';
+    body.append(split, splitMiddle, splitLast);
+    const mismatch = document.createElement('p'); mismatch.innerHTML = '<img src="' + src + '" data-pair-id="article-image-mismatch-check" data-pair-size="3">';
+    const mismatchLast = document.createElement('p'); mismatchLast.innerHTML = '<img src="' + src + '" data-pair-id="article-image-mismatch-check" data-pair-size="3">';
+    body.append(mismatch, mismatchLast);
+    const headingFirst = document.createElement('p'); headingFirst.innerHTML = '<img src="' + src + '" data-pair-id="article-image-heading-check" data-pair-size="2">';
+    const headingLast = document.createElement('h3'); headingLast.innerHTML = '<img src="' + src + '" data-pair-id="article-image-heading-check" data-pair-size="2">';
+    body.append(headingFirst, headingLast);
 
     // 明示左右寄せの回り込み規則を、article-fx.js 実行前に本文へ追加する。
     const a = document.createElement('p');
@@ -209,7 +210,6 @@ try {
         const sidebar = document.querySelector('.article-sidebar')?.getBoundingClientRect() || null;
         const pair = document.querySelector('.fx-image-pair');
         const trio = document.querySelector('.fx-image-trio');
-        const split = document.getElementById('article-image-split-fixture');
         const aImg = document.getElementById('article-image-wrap-a-img');
         const bImg = document.getElementById('article-image-wrap-b-img');
         const aFig = aImg?.closest('figure.fx-img');
@@ -217,9 +217,9 @@ try {
         const aNext = document.getElementById('article-image-wrap-a-next');
         const bNext = document.getElementById('article-image-wrap-b-next');
         const figures = [...document.querySelectorAll('.article-body figure.fx-img')];
-        const splitFigures = [...(split?.querySelectorAll('figure.fx-img') || [])];
-        const mismatch = document.getElementById('article-image-mismatch-fixture');
-        const mismatchFigures = [...(mismatch?.querySelectorAll('figure.fx-img') || [])];
+        const splitFigures = [...document.querySelectorAll('figure.fx-img[data-pair-id="article-image-split-check"]')];
+        const mismatchFigures = [...document.querySelectorAll('figure.fx-img[data-pair-id="article-image-mismatch-check"]')];
+        const headingFigures = [...document.querySelectorAll('figure.fx-img[data-pair-id="article-image-heading-check"]')];
         const explicitFullFigures = figures.filter(fig =>
           fig.matches('figure.fx-img[data-layout="full"]') && !fig.closest('.fx-image-pair')
         );
@@ -284,6 +284,7 @@ try {
         if (document.documentElement.scrollWidth > viewport.width) errors.push({ reason: 'horizontal scroll', element: 'document', scrollWidth: document.documentElement.scrollWidth, viewport: viewport.width });
         if (splitFigures.length !== 2 || splitFigures.some(fig => fig.parentElement?.classList.contains('fx-image-pair'))) errors.push({ reason: 'split same-ID images were bundled or moved' });
         if (mismatchFigures.length !== 2 || mismatchFigures.some(fig => fig.parentElement?.classList.contains('fx-image-pair'))) errors.push({ reason: 'wrong-size same-ID images were bundled' });
+        if (headingFigures.length !== 2 || headingFigures.some(fig => !fig.parentElement?.classList.contains('fx-image-pair'))) errors.push({ reason: 'heading-contained image was not bundled' });
         return { errors, figureCount: figures.length, body: { left: body.left, right: body.right }, scrollWidth: document.documentElement.scrollWidth };
       })()`,
       returnByValue: true,
