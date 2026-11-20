@@ -359,6 +359,62 @@
     1920,
     1280
   ],
+  "images/articles/feature-yuta-1795167024223.webp": [
+    700,
+    700
+  ],
+  "images/articles/feature-yuta-1795167047447.webp": [
+    1200,
+    1200
+  ],
+  "images/articles/feature-yuta-1795167061884.webp": [
+    700,
+    700
+  ],
+  "images/articles/feature-yuta-body01-421bd442.webp": [
+    1280,
+    1920
+  ],
+  "images/articles/feature-yuta-body02-e9bfaf58.webp": [
+    1920,
+    1280
+  ],
+  "images/articles/feature-yuta-body03-66455f60.webp": [
+    1920,
+    1280
+  ],
+  "images/articles/feature-yuta-body04-18871c43.webp": [
+    1920,
+    1280
+  ],
+  "images/articles/feature-yuta-body05-a46a9a4a.webp": [
+    1440,
+    1440
+  ],
+  "images/articles/feature-yuta-body06-253f38dd.webp": [
+    700,
+    700
+  ],
+  "images/articles/feature-yuta-body07-5d3a8d92.webp": [
+    1200,
+    1200
+  ],
+  "images/articles/feature-yuta-body08-5d7c3437.webp": [
+    700,
+    700
+  ],
+  "images/articles/feature-yuta-body09-ecc6a22c.webp": [
+    1440,
+    1920
+  ],
+  "images/articles/feature-yuta-body10-3f236c2f.webp": [
+    1920,
+    1280
+  ],
+  "images/articles/feature-yuta-body11-e5c37957.webp": [
+    1920,
+    1280
+  ],
   "images/articles/feature-yuta.webp": [
     1077,
     1077
@@ -1202,6 +1258,34 @@
   "images/articles/resonance-2026-info-1795106635896.webp": [
     1920,
     2880
+  ],
+  "images/articles/resonance-2026-info-body01-97378f08.webp": [
+    1920,
+    1424
+  ],
+  "images/articles/resonance-2026-info-body02-a2f60980.webp": [
+    1280,
+    1920
+  ],
+  "images/articles/resonance-2026-info-body03-212d52b2.webp": [
+    1536,
+    1920
+  ],
+  "images/articles/resonance-2026-info-body04-1f776bdc.webp": [
+    1920,
+    1282
+  ],
+  "images/articles/resonance-2026-info-body05-da346334.webp": [
+    1920,
+    1280
+  ],
+  "images/articles/resonance-2026-info-body06-fdb75e91.webp": [
+    1280,
+    1920
+  ],
+  "images/articles/resonance-2026-info-body07-bc5b5836.webp": [
+    1280,
+    1920
   ],
   "images/articles/resonance-2026-info.webp": [
     1920,
@@ -3422,6 +3506,142 @@
   "images/derivatives/card/articles/feature-yuta-1795104465486--2a9cc57b-xs.webp": [
     240,
     160
+  ],
+  "images/derivatives/card/articles/feature-yuta-1795167024223--e7439c2b-lg.webp": [
+    700,
+    700
+  ],
+  "images/derivatives/card/articles/feature-yuta-1795167024223--e7439c2b-md.webp": [
+    700,
+    700
+  ],
+  "images/derivatives/card/articles/feature-yuta-1795167024223--e7439c2b-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/articles/feature-yuta-1795167024223--e7439c2b-xs.webp": [
+    240,
+    240
+  ],
+  "images/derivatives/card/articles/feature-yuta-1795167047447--5a7c3cd8-lg.webp": [
+    960,
+    960
+  ],
+  "images/derivatives/card/articles/feature-yuta-1795167047447--5a7c3cd8-md.webp": [
+    720,
+    720
+  ],
+  "images/derivatives/card/articles/feature-yuta-1795167047447--5a7c3cd8-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/articles/feature-yuta-1795167047447--5a7c3cd8-xs.webp": [
+    240,
+    240
+  ],
+  "images/derivatives/card/articles/feature-yuta-1795167061884--acd75d33-lg.webp": [
+    700,
+    700
+  ],
+  "images/derivatives/card/articles/feature-yuta-1795167061884--acd75d33-md.webp": [
+    700,
+    700
+  ],
+  "images/derivatives/card/articles/feature-yuta-1795167061884--acd75d33-sm.webp": [
+    480,
+    480
+  ],
+  "images/derivatives/card/articles/feature-yuta-1795167061884--acd75d33-xs.webp": [
+    240,
+    240
+  ],
+  "images/derivatives/card/articles/feature-yuta-body01-421bd442--9f1f1dbf-body-lg.webp": [
+    1200,
+    1800
+  ],
+  "images/derivatives/card/articles/feature-yuta-body01-421bd442--9f1f1dbf-body-md.webp": [
+    800,
+    1200
+  ],
+  "images/derivatives/card/articles/feature-yuta-body02-e9bfaf58--6e64a8ad-body-lg.webp": [
+    1200,
+    800
+  ],
+  "images/derivatives/card/articles/feature-yuta-body02-e9bfaf58--6e64a8ad-body-md.webp": [
+    800,
+    533
+  ],
+  "images/derivatives/card/articles/feature-yuta-body02-e9bfaf58--6e64a8ad-body-xl.webp": [
+    1440,
+    960
+  ],
+  "images/derivatives/card/articles/feature-yuta-body03-66455f60--bc8496a3-body-lg.webp": [
+    1200,
+    800
+  ],
+  "images/derivatives/card/articles/feature-yuta-body03-66455f60--bc8496a3-body-md.webp": [
+    800,
+    533
+  ],
+  "images/derivatives/card/articles/feature-yuta-body03-66455f60--bc8496a3-body-xl.webp": [
+    1440,
+    960
+  ],
+  "images/derivatives/card/articles/feature-yuta-body04-18871c43--b4739320-body-lg.webp": [
+    1200,
+    800
+  ],
+  "images/derivatives/card/articles/feature-yuta-body04-18871c43--b4739320-body-md.webp": [
+    800,
+    533
+  ],
+  "images/derivatives/card/articles/feature-yuta-body04-18871c43--b4739320-body-xl.webp": [
+    1440,
+    960
+  ],
+  "images/derivatives/card/articles/feature-yuta-body05-a46a9a4a--b4dbcf8f-body-lg.webp": [
+    1200,
+    1200
+  ],
+  "images/derivatives/card/articles/feature-yuta-body05-a46a9a4a--b4dbcf8f-body-md.webp": [
+    800,
+    800
+  ],
+  "images/derivatives/card/articles/feature-yuta-body07-5d3a8d92--01fcc987-body-md.webp": [
+    800,
+    800
+  ],
+  "images/derivatives/card/articles/feature-yuta-body09-ecc6a22c--05d3c9dc-body-lg.webp": [
+    1200,
+    1600
+  ],
+  "images/derivatives/card/articles/feature-yuta-body09-ecc6a22c--05d3c9dc-body-md.webp": [
+    800,
+    1067
+  ],
+  "images/derivatives/card/articles/feature-yuta-body10-3f236c2f--4ce37e41-body-lg.webp": [
+    1200,
+    800
+  ],
+  "images/derivatives/card/articles/feature-yuta-body10-3f236c2f--4ce37e41-body-md.webp": [
+    800,
+    533
+  ],
+  "images/derivatives/card/articles/feature-yuta-body10-3f236c2f--4ce37e41-body-xl.webp": [
+    1440,
+    960
+  ],
+  "images/derivatives/card/articles/feature-yuta-body11-e5c37957--a8bee2a7-body-lg.webp": [
+    1200,
+    800
+  ],
+  "images/derivatives/card/articles/feature-yuta-body11-e5c37957--a8bee2a7-body-md.webp": [
+    800,
+    533
+  ],
+  "images/derivatives/card/articles/feature-yuta-body11-e5c37957--a8bee2a7-body-xl.webp": [
+    1440,
+    960
   ],
   "images/derivatives/card/articles/forest-sound-camp-info--bab4ec11-fourThree-center.webp": [
     720,
@@ -6542,6 +6762,78 @@
   "images/derivatives/card/articles/resonance-2026-info-1795106635896--f0f62c2b-xs.webp": [
     160,
     240
+  ],
+  "images/derivatives/card/articles/resonance-2026-info-body01-97378f08--27ec28ff-body-lg.webp": [
+    1200,
+    890
+  ],
+  "images/derivatives/card/articles/resonance-2026-info-body01-97378f08--27ec28ff-body-md.webp": [
+    800,
+    593
+  ],
+  "images/derivatives/card/articles/resonance-2026-info-body01-97378f08--27ec28ff-body-xl.webp": [
+    1440,
+    1068
+  ],
+  "images/derivatives/card/articles/resonance-2026-info-body02-a2f60980--156bdfaa-body-lg.webp": [
+    1200,
+    1800
+  ],
+  "images/derivatives/card/articles/resonance-2026-info-body02-a2f60980--156bdfaa-body-md.webp": [
+    800,
+    1200
+  ],
+  "images/derivatives/card/articles/resonance-2026-info-body03-212d52b2--3c7b7c19-body-lg.webp": [
+    1200,
+    1500
+  ],
+  "images/derivatives/card/articles/resonance-2026-info-body03-212d52b2--3c7b7c19-body-md.webp": [
+    800,
+    1000
+  ],
+  "images/derivatives/card/articles/resonance-2026-info-body03-212d52b2--3c7b7c19-body-xl.webp": [
+    1440,
+    1800
+  ],
+  "images/derivatives/card/articles/resonance-2026-info-body04-1f776bdc--a36321c7-body-lg.webp": [
+    1200,
+    801
+  ],
+  "images/derivatives/card/articles/resonance-2026-info-body04-1f776bdc--a36321c7-body-md.webp": [
+    800,
+    534
+  ],
+  "images/derivatives/card/articles/resonance-2026-info-body04-1f776bdc--a36321c7-body-xl.webp": [
+    1440,
+    962
+  ],
+  "images/derivatives/card/articles/resonance-2026-info-body05-da346334--1e5edd61-body-lg.webp": [
+    1200,
+    800
+  ],
+  "images/derivatives/card/articles/resonance-2026-info-body05-da346334--1e5edd61-body-md.webp": [
+    800,
+    533
+  ],
+  "images/derivatives/card/articles/resonance-2026-info-body05-da346334--1e5edd61-body-xl.webp": [
+    1440,
+    960
+  ],
+  "images/derivatives/card/articles/resonance-2026-info-body06-fdb75e91--e77c58c9-body-lg.webp": [
+    1200,
+    1800
+  ],
+  "images/derivatives/card/articles/resonance-2026-info-body06-fdb75e91--e77c58c9-body-md.webp": [
+    800,
+    1200
+  ],
+  "images/derivatives/card/articles/resonance-2026-info-body07-bc5b5836--586c1cbe-body-lg.webp": [
+    1200,
+    1800
+  ],
+  "images/derivatives/card/articles/resonance-2026-info-body07-bc5b5836--586c1cbe-body-md.webp": [
+    800,
+    1200
   ],
   "images/derivatives/card/articles/sawagi-festival-2026-info--96f703c5-fourThree-center.webp": [
     1200,
