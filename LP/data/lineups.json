@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-11-13T01:27:08.513Z",
-  "count": 1573,
+  "_generatedAt": "2026-11-20T02:20:25.174Z",
+  "count": 1575,
   "items": [
     {
       "EDITION_ID": "waifu-2026",
@@ -8022,7 +8022,7 @@
     {
       "EDITION_ID": "resonance-2026",
       "ARTIST_ID": "lisa-mizuno",
-      "ACT_LABEL": "LISA MIZUNO",
+      "ACT_LABEL": "lisa-mizuno",
       "SET_TYPE": "dj",
       "SORT": "1"
     },
@@ -8423,6 +8423,19 @@
       "ACT_LABEL": "Velocity",
       "SET_TYPE": "dj",
       "SORT": "17"
+    },
+    {
+      "EDITION_ID": "resonance-2026",
+      "ARTIST_ID": "yuta",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "resonance-2026",
+      "ARTIST_ID": "zundokodisco",
+      "ACT_LABEL": "ZUNDOKODISCO",
+      "SET_TYPE": "dj",
+      "SORT": "8"
     },
     {
       "EDITION_ID": "nu-festival-2026",

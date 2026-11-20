@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-11-03T11:01:54.258Z",
+  "_generatedAt": "2026-11-20T02:20:25.174Z",
   "count": 92,
   "items": [
     {
@@ -1816,8 +1816,8 @@
       "URL": "https://oizumi-2026.resonance-lab.jp/",
       "TICKETURL": "https://ja.ra.co/events/2542714",
       "INSTAGRAM": "https://www.instagram.com/resonance.jpn/",
-      "LINEUP": "lisa-mizuno, LOIF, PERYL, Maryama Luiccioni, Fried Banana Shop, SAKURA",
-      "EDITIONS": "[{\"year\":\"2026\",\"edition\":\"\",\"date\":\"2026-11-22/2026-11-23\",\"location\":\"OKS KAWAGUCHI CAMPUS\",\"location_ja\":\"大泉工場\",\"address\":\"埼玉県川口市領家5丁目4-1\",\"lat\":\"35.7951\",\"lng\":\"139.7523\",\"ticketUrl\":\"https://ja.ra.co/events/2542714\",\"flyer\":\"images/festivals/resonance-flyer.webp\",\"status\":\"published\",\"lineup\":[\"lisa-mizuno\",\"LOIF\",\"PERYL\",\"Maryama Luiccioni\",\"Fried Banana Shop\",\"SAKURA\"]}]",
+      "LINEUP": "lisa-mizuno, LOIF, PERYL, Maryama Luiccioni, Fried Banana Shop, SAKURA, zundokodisco, Alminium, YUTA",
+      "EDITIONS": "[{\"_row\":118,\"_editionId\":\"resonance-2026\",\"year\":\"2026\",\"edition\":\"2\",\"date\":\"2026-11-22/2026-11-23\",\"location\":\"OKS KAWAGUCHI CAMPUS\",\"location_ja\":\"大泉工場\",\"pref\":\"\",\"venueId\":\"\",\"address\":\"埼玉県川口市領家5丁目4-1\",\"lat\":\"35.7951\",\"lng\":\"139.7523\",\"ticketUrl\":\"https://ja.ra.co/events/2542714\",\"flyer\":\"images/festivals/resonance-flyer.webp\",\"status\":\"published\",\"lineup\":[\"lisa-mizuno\",\"LOIF\",\"PERYL\",\"Maryama Luiccioni\",\"Fried Banana Shop\",\"SAKURA\",\"YUTA\",\"ZUNDOKODISCO\"]}]",
       "STATUS": "published",
       "metaDescription": "川口の工場地帯に現れる3,000坪の自然豊かな大泉工場OKS KAWAGUCHI CAMPUSで開催されるResonance。クラブカルチャー、インスタレーションアート、神経科学を横断し、音と身体が共鳴する知覚体験へ。鑑賞を超える特別な2日間。",
       "name_en": "Resonance",

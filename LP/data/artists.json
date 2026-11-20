@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-11-19T07:53:49.232Z",
-  "count": 135,
+  "_generatedAt": "2026-11-20T02:20:25.174Z",
+  "count": 136,
   "items": [
     {
       "ID": "dj-nobu",
@@ -2085,6 +2085,10 @@
       "name_en": "YUTA",
       "bio_en": "YUTA is a Tokyo-based DJ and producer. He made his DJ debut in 2004, immersing himself in the Goa trance of the '90s. After a stint as part of MATSURI DIGITAL, he shifted toward techno in 2015. In 2016 he launched Liquid Drop Groove, pushing techno built around psychedelic grooves across two fronts: the party and the label. He also runs Chronoscope, a label co-founded with NESS, the outdoor festival EDEN, and the AV show SPECTACLE. He reads the air of the floor, building his sets on the spot.",
       "imagePosition": "center top"
+    },
+    {
+      "ID": "zundokodisco",
+      "NAME": "ZUNDOKODISCO"
     }
   ]
 }

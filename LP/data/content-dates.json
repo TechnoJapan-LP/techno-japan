@@ -532,12 +532,16 @@
     "date": "2026-10-22"
   },
   "artist:yuta": {
-    "hash": "d78df4ccf8b45fb1c67b809d78e30f22198a92248eb931863378b39ff520a57f",
-    "date": "2026-11-13"
+    "hash": "4ffbf4f7e1a43e99d4960d9c518c2ad9891ab7b2a6d43398f13990f16f8cf44c",
+    "date": "2026-11-20"
   },
   "artist:zundoko-disco": {
     "hash": "8d00b5210627ca2f282943137ff2dbac3191b8fbcbc54d151f8bdf93891d77a1",
     "date": "2026-10-21"
+  },
+  "artist:zundokodisco": {
+    "hash": "f90df1047cee8f2b82b131da3a82cb00b7ed278cf9fe519c124335bb27d1fab7",
+    "date": "2026-11-20"
   },
   "festival:99flags": {
     "hash": "3975f8b5a328b365d5224d427943095a7cdbdc16946167afb8090f8662481d76",
@@ -816,8 +820,8 @@
     "date": "2026-10-15"
   },
   "festival:resonance": {
-    "hash": "f35ddc5efc7c9e68c87dbcf69469d42192987ddb4eda0e0da4101982ff581f4b",
-    "date": "2026-10-22"
+    "hash": "9f1cdadbd62fdb2e65bf0fa7be4e9d3ab7ea734b9639d6d4b618c9ca91e52619",
+    "date": "2026-11-20"
   },
   "festival:ringo-festival": {
     "hash": "5f28362db4bae3f6c562535def44edd18f93108f32dd3eae2c6ce21718e6e5dc",
