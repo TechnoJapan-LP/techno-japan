@@ -1,32 +1,32 @@
 {
-  "generatedAt": "2026-11-19T00:40:20.011Z",
+  "generatedAt": "2026-11-20T00:43:09.775Z",
   "propertyId": "535755449",
   "periods": {
     "current": {
-      "startDate": "2026-10-23",
-      "endDate": "2026-11-19",
+      "startDate": "2026-10-24",
+      "endDate": "2026-11-20",
       "label": "直近28日"
     },
     "previous": {
-      "startDate": "2026-09-25",
-      "endDate": "2026-10-22",
+      "startDate": "2026-09-26",
+      "endDate": "2026-10-23",
       "label": "前の28日"
     }
   },
   "current": {
-    "sessions": 99,
-    "totalUsers": 96,
-    "share": 0.03707865168539326,
+    "sessions": 96,
+    "totalUsers": 93,
+    "share": 0.03614457831325301,
     "bySource": [
       {
         "source": "chatgpt.com",
-        "sessions": 95,
-        "totalUsers": 92
+        "sessions": 91,
+        "totalUsers": 88
       },
       {
         "source": "gemini.google.com",
-        "sessions": 4,
-        "totalUsers": 4
+        "sessions": 5,
+        "totalUsers": 5
       }
     ],
     "topLandingPages": [
@@ -51,19 +51,9 @@
         "totalUsers": 5
       },
       {
-        "landingPage": "/en/festivals/lost-find.html",
-        "sessions": 4,
-        "totalUsers": 4
-      },
-      {
         "landingPage": "/en/index.html",
         "sessions": 4,
         "totalUsers": 3
-      },
-      {
-        "landingPage": "/festivals/festival-de-frue.html",
-        "sessions": 4,
-        "totalUsers": 4
       },
       {
         "landingPage": "/en/articles/asia-festival-2026-second.html",
@@ -81,7 +71,22 @@
         "totalUsers": 3
       },
       {
+        "landingPage": "/en/festivals/lost-find.html",
+        "sessions": 3,
+        "totalUsers": 3
+      },
+      {
+        "landingPage": "/en/festivals/rural.html",
+        "sessions": 3,
+        "totalUsers": 3
+      },
+      {
         "landingPage": "/en/venues.html?area=OSAKA",
+        "sessions": 3,
+        "totalUsers": 3
+      },
+      {
+        "landingPage": "/festivals/festival-de-frue.html",
         "sessions": 3,
         "totalUsers": 3
       },
@@ -94,11 +99,6 @@
         "landingPage": "/index.html",
         "sessions": 3,
         "totalUsers": 3
-      },
-      {
-        "landingPage": "/articles/otsukimi-2026-info.html",
-        "sessions": 2,
-        "totalUsers": 2
       },
       {
         "landingPage": "/en/",
@@ -116,23 +116,23 @@
         "totalUsers": 2
       },
       {
-        "landingPage": "/en/festivals/rural.html",
-        "sessions": 2,
-        "totalUsers": 2
-      },
-      {
-        "landingPage": "(not set)",
+        "landingPage": "/articles/denki-bodhisattva-2026-info.html",
         "sessions": 1,
         "totalUsers": 1
       },
       {
-        "landingPage": "/articles/denki-bodhisattva-2026-info.html",
+        "landingPage": "/articles/japan-festival-2026-november.html",
+        "sessions": 1,
+        "totalUsers": 1
+      },
+      {
+        "landingPage": "/articles/japan-festival-2026-october.html",
         "sessions": 1,
         "totalUsers": 1
       }
     ],
-    "allSessions": 2670,
-    "allTotalUsers": 2253
+    "allSessions": 2656,
+    "allTotalUsers": 2239
   },
   "previous": {
     "sessions": 0,
@@ -152,11 +152,6 @@
     ],
     "topLandingPages": [
       {
-        "landingPage": "(not set)",
-        "sessions": 0,
-        "totalUsers": 0
-      },
-      {
         "landingPage": "/",
         "sessions": 0,
         "totalUsers": 0
@@ -168,6 +163,11 @@
       },
       {
         "landingPage": "/articles/japan-festival-2026-november.html",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
+        "landingPage": "/articles/japan-festival-2026-october.html",
         "sessions": 0,
         "totalUsers": 0
       },
@@ -188,11 +188,6 @@
       },
       {
         "landingPage": "/articles/rebirth-2026-info.html",
-        "sessions": 0,
-        "totalUsers": 0
-      },
-      {
-        "landingPage": "/articles/synapse-2026-info.html",
         "sessions": 0,
         "totalUsers": 0
       },
@@ -248,6 +243,11 @@
       },
       {
         "landingPage": "/en/articles/rebirth-2026-info.html",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
+        "landingPage": "/en/articles/sawagi-festival-2026-info.html",
         "sessions": 0,
         "totalUsers": 0
       }
