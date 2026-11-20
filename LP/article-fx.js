@@ -4,7 +4,7 @@
    レイアウトを動かさない（transform / clip-path のみ）= CLSゼロ。
    prefers-reduced-motion では演出を止め、プログレスバーだけ残す。
 
-   v2: window.articleFX() として再実行可能に。
+   v3: window.articleFX() として再実行可能に。
    - 静的 /articles/*.html では自動起動（従来どおり）
    - news.html の #article/... ビューでは描画後に articleFX() を呼ぶ
    - 横長画像は左右寄せを基本にし、極端に横長な画像だけ fx-bleed にする
@@ -107,7 +107,8 @@
       if (img.complete && img.naturalWidth) classify(); else img.addEventListener('load', classify, { once:true });
     });
 
-    // 同じ pair-id の連続画像を左右50:50の1セットにまとめる
+    // 同じ pair-id の figure が本文中で連続しているときだけ、左右50:50の1セットにまとめる。
+    // IDだけで集めて移動すると、離れた画像を本文先頭へ引き寄せてしまう。
     var pairGroups = {};
     Array.from(body.querySelectorAll('figure.fx-img[data-pair-id]')).forEach(function(fig){
       var id = fig.dataset.pairId;
@@ -116,7 +117,10 @@
     Object.keys(pairGroups).forEach(function(id){
       var figs = pairGroups[id];
       var pairSize = figs[0].dataset.pairSize === '3' ? 3 : 2;
-      if (figs.length !== pairSize) return;
+      var contiguous = figs.length === pairSize && figs.every(function(fig, index){
+        return index === 0 || figs[index - 1].nextElementSibling === fig;
+      });
+      if (!contiguous) return;
       var pair = document.createElement('div');
       pair.className = 'fx-image-pair' + (pairSize === 3 ? ' fx-image-trio' : '');
       figs[0].parentNode.insertBefore(pair, figs[0]);

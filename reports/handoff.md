@@ -16240,3 +16240,28 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 - CMS で記事ごとに開催回を明示する列（editionId）は未作成。自動判定で足りない記事が出たら、ARTICLES シートに editionId 列＋CMS の選択欄を足す（コードは既に editionId を最優先で読む）。
 - 自動で出したくない人を外す仕組みは未作成（必要になったら artistExcludeIds 等）。
+
+## 2026-11-21 画像の2枚/3枚セットが本番で崩れる不具合（YUTA 記事）と GAS トリガー設置
+
+### 実施
+- ユーザー報告「YUTA の記事が BODY と本番で画像の配置がおかしい」。本番 data.js の feature-yuta で、ALPHA/DELTA/BETA の3枚の data-pair-id が3つとも異なり、BETA の ID が何段落も後ろの2枚と同じだった。エディタは「size=3 の段落が隣接」で3列表示（ID 不問）、本番 article-fx は ID ごとに束ね離れた画像を先頭へ移動 → 本番で後ろの2枚が BETA の横に引き寄せられていた。
+- 原因: `setArticleImagePair` が間に本文があっても後ろの画像をメンバーにしていた／解除で一部画像に属性が残り ID が混在し得た。
+- 修正（Codex）: セットは直後に連続する画像段落のみ／既存セットを含めるときは古いセットを丸ごと解除／解除は DOM と Quill blot の両方から除去／本番 article-fx.js と CMS プレビューは「同一 ID かつ連続」だけ束ね、画像を移動しない／エディタの並びは cms.js が付ける ar-img-set-* クラス基準（保存 HTML から除去）／壊れたセットは消えない注意表示。article-fx.js?v=19、cms.js?v=220、cms.css?v=64。
+- GAS: Claude in Chrome で appsscript.json の oauthScopes に `script.scriptapp` を追加・保存（他の行は不変）。setupScheduledPublishTrigger 実行 →「トリガーを 1 本作成」。OAuth 許可はユーザーが押した。dispatchScheduledPublishCheck を手動実行 → GitHub に workflow_dispatch の Scheduled publish check（run 44761981427 success、「待機」）。
+
+### コミット
+- このエントリを含むコミット
+
+### 検証
+- check_cms_image_layouts（間に文章→セット不可、連続3枚→セット、中央から解除で3枚とも属性消去、解除→再設定で ID 混在なし、保存 HTML にクラス残らず、壊れたセットで警告）、check_article_image_fit 8/8、check_cms_focus_mode、check_cms_layout、check_asset_versions 成功（Claude 実行）。
+- feature-yuta を生成し headless Chrome（1440 / 390 mobile）で表示: figure 11 枚が本文の順序どおり、束ね 0（ID がばらばらのため）、横スクロールなし。離れた画像の移動は解消。
+
+### 変更したパターン
+- 画像セットの作成・解除・表示（CMS エディタ／CMS プレビュー／本番 article-fx）。
+
+### 未確認の類似パターン
+- 他の記事で同じ壊れ方をしたセットがあるかは未調査（data.js を pair-id で集計すれば分かる）→ 次の担当で確認。
+- GAS の appsscript.json はリポジトリ管理外（scripts/gas-update に写しなし）。
+
+### 次の担当への注意・判断待ち
+- **YUTA 記事のデータはまだ壊れたまま**（本番では3枚が縦に1枚ずつ）。ユーザーが CMS で ALPHA→「セットを解除」、共同レーベル画像→「セットを解除」、ALPHA→「3枚セット」→保存→Publish Now。CMS は Cmd+Shift+R が必要。

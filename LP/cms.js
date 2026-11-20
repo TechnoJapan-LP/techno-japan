@@ -1265,18 +1265,100 @@ function setArticleImageToolsEnabled(enabled){
   if (trio) trio.textContent = pairId ? 'セットを解除' : '3枚セット（3列）';
 }
 
+function articleImageOnlyParagraph(p){
+  return p?.tagName === 'P' && !p.textContent.trim() && p.querySelectorAll('img').length === 1;
+}
+function articleEmptyParagraph(p){
+  return p?.tagName === 'P' && !p.textContent.trim() && p.querySelectorAll('img').length === 0;
+}
+function articleParagraphsContinuous(a, b){
+  let next = a?.nextElementSibling;
+  while (articleEmptyParagraph(next)) next = next.nextElementSibling;
+  return next === b;
+}
+function refreshArticleImageSetClasses(root = articleQuill?.root){
+  if (!root) return;
+  root.querySelectorAll('p.ar-img-set').forEach(p => p.classList.remove('ar-img-set','ar-img-set-2','ar-img-set-3','ar-img-set-first','ar-img-set-last'));
+  const byId = new Map();
+  root.querySelectorAll('p').forEach(p => {
+    const img = p.querySelector('img');
+    if (!articleImageOnlyParagraph(p) || !img?.dataset.pairId) return;
+    const id = img.dataset.pairId;
+    if (!byId.has(id)) byId.set(id, []);
+    byId.get(id).push(p);
+  });
+  byId.forEach((paragraphs, id) => {
+    const size = paragraphs[0].querySelector('img').dataset.pairSize === '3' ? 3 : 2;
+    if (paragraphs.length !== size) return;
+    const continuous = paragraphs.every((p, i) => i === 0 || articleParagraphsContinuous(paragraphs[i - 1], p));
+    if (!continuous) return;
+    paragraphs.forEach((p, i) => {
+      p.classList.add('ar-img-set', `ar-img-set-${size}`);
+      if (i === 0) p.classList.add('ar-img-set-first');
+      if (i === size - 1) p.classList.add('ar-img-set-last');
+    });
+  });
+}
+function articleImagePairIssues(root = articleQuill?.root){
+  const byId = new Map();
+  root?.querySelectorAll('img[data-pair-id]').forEach(img => {
+    const id = img.dataset.pairId;
+    if (!byId.has(id)) byId.set(id, []);
+    byId.get(id).push(img);
+  });
+  const issues = [];
+  byId.forEach((imgs, id) => {
+    const expected = imgs[0].dataset.pairSize === '3' ? 3 : 2;
+    const paragraphs = imgs.map(img => img.closest('p'));
+    const continuous = imgs.length === expected && paragraphs.every((p, i) => i === 0 || articleParagraphsContinuous(paragraphs[i - 1], p));
+    if (imgs.length !== expected || !continuous) issues.push({id, near: imgs[0]});
+  });
+  return issues;
+}
+function renderArticleImagePairWarning(){
+  const wrap = document.getElementById('ar-editor-wrap');
+  if (!wrap) return;
+  const issues = articleImagePairIssues();
+  let warning = document.getElementById('article-image-pair-warning');
+  if (!issues.length) { warning?.remove(); return; }
+  if (!warning) {
+    warning = document.createElement('div');
+    warning.id = 'article-image-pair-warning';
+    warning.style.cssText = 'margin:8px 0;padding:10px 12px;border:1px solid var(--yellow);color:var(--yellow);background:rgba(180,140,0,.12);font-size:.8rem;line-height:1.5';
+    wrap.prepend(warning);
+  }
+  warning.textContent = `画像セットが崩れています: ${issues[0].near?.alt ? `「${issues[0].near.alt}」` : '画像'}付近。画像を選んで「セットを解除」してから作り直してください`;
+}
+function clearArticleImagePair(pairId){
+  if (!pairId || !articleQuill) return;
+  articleQuill.root.querySelectorAll(`img[data-pair-id="${CSS.escape(pairId)}"]`).forEach(item => {
+    delete item.dataset.pairId;
+    delete item.dataset.pairSize;
+    formatArticleImageBlot(item, {'data-pair-id': false, 'data-pair-size': false});
+    item.closest('p')?.classList.remove('ar-img-set','ar-img-set-2','ar-img-set-3','ar-img-set-first','ar-img-set-last');
+    const host = item.closest('p');
+    if (host) ['width','display','vertical-align','margin-left','margin-right'].forEach(name => host.style.removeProperty(name));
+  });
+}
+
 function setArticleImagePair(size){
   const img = articleSelectedImage;
   if (!img || !articleQuill) return;
   const images = Array.from(articleQuill.root.querySelectorAll('img'));
   const index = images.indexOf(img);
-  const members = images.slice(index, index + size);
+  const host = img.closest('p');
+  const members = [img];
+  let cursor = host?.nextElementSibling;
+  while (members.length < size && cursor) {
+    if (articleEmptyParagraph(cursor)) { cursor = cursor.nextElementSibling; continue; }
+    if (!articleImageOnlyParagraph(cursor)) break;
+    members.push(cursor.querySelector('img'));
+    cursor = cursor.nextElementSibling;
+  }
   if (img.dataset.pairId) {
     const pairId = img.dataset.pairId;
+    clearArticleImagePair(pairId);
     images.filter(item => item.dataset.pairId === pairId).forEach(item => {
-      delete item.dataset.pairId;
-      delete item.dataset.pairSize;
-      formatArticleImageBlot(item, {'data-pair-id': false, 'data-pair-size': false});
       const host = item.closest('p');
       if (host) {
         host.style.removeProperty('width');
@@ -1289,13 +1371,16 @@ function setArticleImagePair(size){
     markFormDirty();
     scheduleArticleEditorSync('quill');
     updateArticlePreview(articleQuill.root.innerHTML, true);
+    refreshArticleImageSetClasses();
+    renderArticleImagePairWarning();
     setArticleImageToolsEnabled(true);
     toast('画像セットを解除しました', 'success');
     return;
   }
-  if (members.length !== size || members.some(item => item.closest('p')?.textContent.trim())) {
-    toast(`後ろに画像が${size - 1}枚必要です`, 'warning'); return;
+  if (members.length !== size) {
+    toast(`すぐ後ろに続けて画像が${size - 1}枚必要です（間に文章があるとセットにできません）`, 'warning'); return;
   }
+  new Set(members.map(item => item.dataset.pairId).filter(Boolean)).forEach(clearArticleImagePair);
   const pairId = `pair-${Date.now()}`;
   members.forEach(item => {
     item.dataset.pairId = pairId;
@@ -1313,6 +1398,8 @@ function setArticleImagePair(size){
   markFormDirty();
   scheduleArticleEditorSync('quill');
   updateArticlePreview(articleQuill?.root?.innerHTML || '', true);
+  refreshArticleImageSetClasses();
+  renderArticleImagePairWarning();
   toast(size === 3 ? '3枚セットにしました' : '隣の画像と2枚セットにしました', 'success');
 }
 function pairSelectedArticleImage(){ setArticleImagePair(2); }
@@ -1643,6 +1730,8 @@ function runArticleEditorSync(from){
     if (!html.trim() && articleLastLoadedBody.trim() && !articleQuillUserEdited) return;
     document.getElementById('ar-body-source').value = html;
   }
+  refreshArticleImageSetClasses();
+  renderArticleImagePairWarning();
   document.getElementById('ar-body').value = html;
   updateArticlePreview(html);
   maybeAutoFillReadTime();
@@ -2015,7 +2104,8 @@ function renderArticleFxPreview(root){
   root.querySelectorAll('.preview-fx-img[data-pair-id]').forEach(fig => (pairs[fig.dataset.pairId] || (pairs[fig.dataset.pairId] = [])).push(fig));
   Object.values(pairs).forEach(figs => {
     const size = figs[0].dataset.pairSize === '3' ? 3 : 2;
-    if (figs.length !== size) return;
+    const continuous = figs.length === size && figs.every((fig, i) => i === 0 || figs[i - 1].nextElementSibling === fig);
+    if (!continuous) return;
     const pair = document.createElement('div');
     pair.className = `preview-image-pair${size === 3 ? ' preview-image-trio' : ''}`;
     figs[0].parentNode.insertBefore(pair, figs[0]);
@@ -3328,6 +3418,9 @@ function normalizeArticleHtml(html){
   if (!html) return html;
   const d = document.createElement('div');
   d.innerHTML = html;
+  d.querySelectorAll('.ar-img-set, .ar-img-set-2, .ar-img-set-3, .ar-img-set-first, .ar-img-set-last').forEach(el => {
+    el.classList.remove('ar-img-set','ar-img-set-2','ar-img-set-3','ar-img-set-first','ar-img-set-last');
+  });
   d.querySelectorAll('a[href^="/"]').forEach(a => { a.removeAttribute('target'); a.removeAttribute('rel'); });
   return d.innerHTML;
 }
@@ -3381,6 +3474,8 @@ function setArticleBody(html){
     q.history.clear();
     // ar-body を Quill が解釈した正規化後 HTML で再同期
     document.getElementById('ar-body').value = q.root.innerHTML;
+    refreshArticleImageSetClasses();
+    renderArticleImagePairWarning();
   }
   updateArticlePreview(v);
 }
