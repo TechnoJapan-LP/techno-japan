@@ -16312,3 +16312,25 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - なし（前エントリの push 後作業を参照）。
+
+## 2026-11-21 公開後の確認（画像セット・年ごとの紐づけ・予約公開の見回り・画像7件削除）
+
+### 実施
+- push 2回目で preflight 全87件成功 → `ae82cefc4..c13238921`。Deploy 成功。
+- Publish pipeline を Claude が起動: 1本目（44780825630）は fetch-data で Google 側 `EDITIONS: HTTP 503`（一時障害）で失敗、直後の run 44780967515 が success。
+- 本番確認（techno-japan.media、cb 付き）: cms.html → cms.js?v=223 / cms.css?v=65、記事 → article-fx.js?v=20。rebirth-2026-info の「この記事に登場する」7枚、transcendence-2025-report は開催概要なし。削除した画像は 404、feature-yuta.webp は 200。Claude in Chrome で本番 feature-yuta を開き、束ね0・画像は本文順（後ろの2枚が引き寄せられない）を確認。
+
+### コミット
+- このエントリを含むコミット（docs）
+
+### 検証
+- 上記。本番 CMS（ログイン後）での画像セット作成・解除の実操作は**実機未確認**（ユーザーが YUTA 記事を直すときに確認）。
+
+### 変更したパターン
+- なし（確認のみ）。
+
+### 未確認の類似パターン
+- 確認済み・0件。
+
+### 次の担当への注意・判断待ち
+- YUTA 記事の3枚セット作り直しと Publish Now はユーザー作業待ち。済んだら本番で .fx-image-trio が1つ・3枚であることを確認する。
