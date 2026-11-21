@@ -235,6 +235,22 @@
     1920,
     1478
   ],
+  "images/articles/dei-fest-2026-info-body01-b669c09a.webp": [
+    1440,
+    1920
+  ],
+  "images/articles/dei-fest-2026-info-body02-e00ba0d2.webp": [
+    1536,
+    1920
+  ],
+  "images/articles/dei-fest-2026-info-body03-8ba15f80.webp": [
+    1000,
+    666
+  ],
+  "images/articles/dei-fest-2026-info-body04-cf4c1a4a.webp": [
+    1920,
+    1478
+  ],
   "images/articles/dei-fest-2026-info.webp": [
     1920,
     2560
@@ -383,13 +399,25 @@
     1920,
     2560
   ],
+  "images/articles/feature-yuta-body01-0f9d3557.webp": [
+    700,
+    700
+  ],
   "images/articles/feature-yuta-body01-421bd442.webp": [
     1280,
     1920
   ],
+  "images/articles/feature-yuta-body02-06d0b4bb.webp": [
+    1200,
+    1200
+  ],
   "images/articles/feature-yuta-body02-e9bfaf58.webp": [
     1920,
     1280
+  ],
+  "images/articles/feature-yuta-body03-0e4af745.webp": [
+    700,
+    700
   ],
   "images/articles/feature-yuta-body03-66455f60.webp": [
     1920,
@@ -398,6 +426,10 @@
   "images/articles/feature-yuta-body04-18871c43.webp": [
     1920,
     1280
+  ],
+  "images/articles/feature-yuta-body04-aa4fea55.webp": [
+    1440,
+    1920
   ],
   "images/articles/feature-yuta-body05-a46a9a4a.webp": [
     1440,
@@ -3055,6 +3087,42 @@
     240,
     185
   ],
+  "images/derivatives/card/articles/dei-fest-2026-info-body01-b669c09a--669b8cf7-body-lg.webp": [
+    1200,
+    1600
+  ],
+  "images/derivatives/card/articles/dei-fest-2026-info-body01-b669c09a--669b8cf7-body-md.webp": [
+    800,
+    1067
+  ],
+  "images/derivatives/card/articles/dei-fest-2026-info-body02-e00ba0d2--e252974d-body-lg.webp": [
+    1200,
+    1500
+  ],
+  "images/derivatives/card/articles/dei-fest-2026-info-body02-e00ba0d2--e252974d-body-md.webp": [
+    800,
+    1000
+  ],
+  "images/derivatives/card/articles/dei-fest-2026-info-body02-e00ba0d2--e252974d-body-xl.webp": [
+    1440,
+    1800
+  ],
+  "images/derivatives/card/articles/dei-fest-2026-info-body03-8ba15f80--758faa2b-body-md.webp": [
+    800,
+    533
+  ],
+  "images/derivatives/card/articles/dei-fest-2026-info-body04-cf4c1a4a--6b502751-body-lg.webp": [
+    1200,
+    924
+  ],
+  "images/derivatives/card/articles/dei-fest-2026-info-body04-cf4c1a4a--6b502751-body-md.webp": [
+    800,
+    616
+  ],
+  "images/derivatives/card/articles/dei-fest-2026-info-body04-cf4c1a4a--6b502751-body-xl.webp": [
+    1440,
+    1108
+  ],
   "images/derivatives/card/articles/denki-bodhisattva-2026-info--9ae927ac-fourThree-center.webp": [
     1179,
     884
@@ -3639,6 +3707,10 @@
     800,
     1200
   ],
+  "images/derivatives/card/articles/feature-yuta-body02-06d0b4bb--01fcc987-body-md.webp": [
+    800,
+    800
+  ],
   "images/derivatives/card/articles/feature-yuta-body02-e9bfaf58--6e64a8ad-body-lg.webp": [
     1200,
     800
@@ -3674,6 +3746,14 @@
   "images/derivatives/card/articles/feature-yuta-body04-18871c43--b4739320-body-xl.webp": [
     1440,
     960
+  ],
+  "images/derivatives/card/articles/feature-yuta-body04-aa4fea55--05d3c9dc-body-lg.webp": [
+    1200,
+    1600
+  ],
+  "images/derivatives/card/articles/feature-yuta-body04-aa4fea55--05d3c9dc-body-md.webp": [
+    800,
+    1067
   ],
   "images/derivatives/card/articles/feature-yuta-body05-a46a9a4a--b4dbcf8f-body-lg.webp": [
     1200,
