@@ -1,27 +1,27 @@
 {
-  "generatedAt": "2026-11-21T00:03:44.766Z",
+  "generatedAt": "2026-11-21T23:29:04.355Z",
   "propertyId": "535755449",
   "periods": {
     "current": {
-      "startDate": "2026-10-25",
-      "endDate": "2026-11-21",
+      "startDate": "2026-10-26",
+      "endDate": "2026-11-22",
       "label": "直近28日"
     },
     "previous": {
-      "startDate": "2026-09-27",
-      "endDate": "2026-10-24",
+      "startDate": "2026-09-28",
+      "endDate": "2026-10-25",
       "label": "前の28日"
     }
   },
   "current": {
-    "sessions": 96,
-    "totalUsers": 93,
-    "share": 0.03582089552238806,
+    "sessions": 95,
+    "totalUsers": 92,
+    "share": 0.035342261904761904,
     "bySource": [
       {
         "source": "chatgpt.com",
-        "sessions": 91,
-        "totalUsers": 88
+        "sessions": 90,
+        "totalUsers": 87
       },
       {
         "source": "gemini.google.com",
@@ -32,8 +32,8 @@
     "topLandingPages": [
       {
         "landingPage": "/",
-        "sessions": 13,
-        "totalUsers": 13
+        "sessions": 12,
+        "totalUsers": 12
       },
       {
         "landingPage": "/en/articles/topia-2026-info.html",
@@ -42,8 +42,8 @@
       },
       {
         "landingPage": "/en/festivals/labyrinth.html",
-        "sessions": 10,
-        "totalUsers": 8
+        "sessions": 8,
+        "totalUsers": 6
       },
       {
         "landingPage": "/en/articles/denki-bodhisattva-2026-info.html",
@@ -56,12 +56,22 @@
         "totalUsers": 3
       },
       {
+        "landingPage": "/festivals/raptvana.html",
+        "sessions": 4,
+        "totalUsers": 4
+      },
+      {
         "landingPage": "/en/articles/asia-festival-2026-second.html",
         "sessions": 3,
         "totalUsers": 3
       },
       {
         "landingPage": "/en/articles/intergalactic-2026-info.html",
+        "sessions": 3,
+        "totalUsers": 3
+      },
+      {
+        "landingPage": "/en/articles/japan-festival-2026-november.html",
         "sessions": 3,
         "totalUsers": 3
       },
@@ -91,22 +101,12 @@
         "totalUsers": 3
       },
       {
-        "landingPage": "/festivals/raptvana.html",
-        "sessions": 3,
-        "totalUsers": 3
-      },
-      {
         "landingPage": "/index.html",
         "sessions": 3,
         "totalUsers": 3
       },
       {
         "landingPage": "/en/",
-        "sessions": 2,
-        "totalUsers": 2
-      },
-      {
-        "landingPage": "/en/articles/japan-festival-2026-november.html",
         "sessions": 2,
         "totalUsers": 2
       },
@@ -131,8 +131,8 @@
         "totalUsers": 1
       }
     ],
-    "allSessions": 2680,
-    "allTotalUsers": 2249
+    "allSessions": 2688,
+    "allTotalUsers": 2254
   },
   "previous": {
     "sessions": 0,
@@ -187,11 +187,6 @@
         "totalUsers": 0
       },
       {
-        "landingPage": "/articles/rebirth-2026-info.html",
-        "sessions": 0,
-        "totalUsers": 0
-      },
-      {
         "landingPage": "/articles/transcendence-2025-report.html",
         "sessions": 0,
         "totalUsers": 0
@@ -208,6 +203,11 @@
       },
       {
         "landingPage": "/en/articles/asia-festival-2026-second.html",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
+        "landingPage": "/en/articles/asia-music-event-2026-news.html",
         "sessions": 0,
         "totalUsers": 0
       },

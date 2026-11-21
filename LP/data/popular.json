@@ -1,27 +1,27 @@
 {
-  "generatedAt": "2026-11-21T00:03:43.554Z",
+  "generatedAt": "2026-11-21T23:29:02.626Z",
   "days": 30,
   "source": "ga4",
   "items": [
     {
       "id": "japan-festival-2026-october",
-      "views": 226
+      "views": 225
     },
     {
       "id": "denki-bodhisattva-2026-info",
-      "views": 189
-    },
-    {
-      "id": "topia-2026-info",
-      "views": 146
+      "views": 177
     },
     {
       "id": "japan-festival-2026-november",
-      "views": 136
+      "views": 140
     },
     {
       "id": "mutek-jp-2026-info",
-      "views": 115
+      "views": 118
+    },
+    {
+      "id": "topia-2026-info",
+      "views": 118
     },
     {
       "id": "labyrinth-2026-info",
@@ -29,7 +29,11 @@
     },
     {
       "id": "sawagi-festival-2026-info",
-      "views": 42
+      "views": 39
+    },
+    {
+      "id": "resonance-2026-info",
+      "views": 27
     },
     {
       "id": "intergalactic-2026-info",
@@ -41,15 +45,19 @@
     },
     {
       "id": "forest-sound-camp-info",
-      "views": 17
-    },
-    {
-      "id": "snow-mashine-2027-info",
-      "views": 16
+      "views": 19
     },
     {
       "id": "otsukimi-2026-info",
       "views": 14
+    },
+    {
+      "id": "snow-mashine-2027-info",
+      "views": 14
+    },
+    {
+      "id": "feature-yuta",
+      "views": 12
     },
     {
       "id": "odyssey-2026-info",
@@ -57,7 +65,7 @@
     },
     {
       "id": "asia-music-event-2026-news",
-      "views": 9
+      "views": 11
     },
     {
       "id": "japan-festival-2026-september",
@@ -76,8 +84,8 @@
       "views": 6
     },
     {
-      "id": "feature-yuta",
-      "views": 5
+      "id": "dei-fest-2026-info",
+      "views": 4
     },
     {
       "id": "transcendence-2025-report",
@@ -92,19 +100,11 @@
       "views": 3
     },
     {
-      "id": "ondoland1012-2026-info",
-      "views": 2
-    },
-    {
-      "id": "resonance-2026-info",
-      "views": 2
-    },
-    {
       "id": "bondisco-2026-info",
       "views": 1
     },
     {
-      "id": "shifumiz-2026-info",
+      "id": "ondoland1012-2026-info",
       "views": 1
     }
   ]
