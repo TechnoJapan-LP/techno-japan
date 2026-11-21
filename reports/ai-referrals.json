@@ -1,22 +1,22 @@
 {
-  "generatedAt": "2026-11-20T00:43:09.775Z",
+  "generatedAt": "2026-11-21T00:03:44.766Z",
   "propertyId": "535755449",
   "periods": {
     "current": {
-      "startDate": "2026-10-24",
-      "endDate": "2026-11-20",
+      "startDate": "2026-10-25",
+      "endDate": "2026-11-21",
       "label": "直近28日"
     },
     "previous": {
-      "startDate": "2026-09-26",
-      "endDate": "2026-10-23",
+      "startDate": "2026-09-27",
+      "endDate": "2026-10-24",
       "label": "前の28日"
     }
   },
   "current": {
     "sessions": 96,
     "totalUsers": 93,
-    "share": 0.03614457831325301,
+    "share": 0.03582089552238806,
     "bySource": [
       {
         "source": "chatgpt.com",
@@ -37,13 +37,13 @@
       },
       {
         "landingPage": "/en/articles/topia-2026-info.html",
-        "sessions": 11,
-        "totalUsers": 11
+        "sessions": 12,
+        "totalUsers": 12
       },
       {
         "landingPage": "/en/festivals/labyrinth.html",
-        "sessions": 11,
-        "totalUsers": 9
+        "sessions": 10,
+        "totalUsers": 8
       },
       {
         "landingPage": "/en/articles/denki-bodhisattva-2026-info.html",
@@ -131,8 +131,8 @@
         "totalUsers": 1
       }
     ],
-    "allSessions": 2656,
-    "allTotalUsers": 2239
+    "allSessions": 2680,
+    "allTotalUsers": 2249
   },
   "previous": {
     "sessions": 0,
