@@ -5,9 +5,17 @@
     <link>https://techno-japan.media</link>
     <description>Japan&apos;s underground techno and house music media platform.</description>
     <language>ja-JP</language>
-    <lastBuildDate>Fri, 20 Nov 2026 18:29:51 +0900</lastBuildDate>
-    <!-- items-hash: 0b41071a44dca14678cb0c79ae8ef7fdb3e726b44bd35daf46c8d27a412f8138 -->
+    <lastBuildDate>Sat, 21 Nov 2026 15:27:48 +0900</lastBuildDate>
+    <!-- items-hash: e89487ad53aec557a6a3b60dec0c61cd41186c259333ce29c7bf36382e8bf405 -->
     <atom:link href="https://techno-japan.media/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>RAPTVANA</title>
+      <link>https://techno-japan.media/festivals/raptvana.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/raptvana.html</guid>
+      <pubDate>Sat, 21 Nov 2026 00:00:00 +0900</pubDate>
+      <category>Festival</category>
+      <description>NAGANO — RAPTVANAは、おおぐて湖キャンプ場内のモンゴル式ゲル「COSMOS」で開催する1回目の野外パーティ。湖畔のキャンプ場に、11月下旬の信州の冷え込みのなかでテクノの音が鳴る一夜になる。</description>
+    </item>
     <item>
       <title>Mutek</title>
       <link>https://techno-japan.media/festivals/mutek.html</link>
@@ -421,6 +429,14 @@
       <link>https://techno-japan.media/articles/resonance-2026-info.html</link>
       <guid isPermaLink="true">https://techno-japan.media/articles/resonance-2026-info.html</guid>
       <pubDate>Fri, 20 Nov 2026 16:00:00 +0900</pubDate>
+      <category>FESTIVAL&amp;RAVE</category>
+      <description></description>
+    </item>
+    <item>
+      <title>DEI FEST | 法政大学の多摩キャンパスが、入場無料のテクノレイヴになる</title>
+      <link>https://techno-japan.media/articles/dei-fest-2026-info.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/articles/dei-fest-2026-info.html</guid>
+      <pubDate>Sat, 21 Nov 2026 00:00:00 +0900</pubDate>
       <category>FESTIVAL&amp;RAVE</category>
       <description></description>
     </item>
