@@ -1,7 +1,7 @@
 {
   "source": "https://techno-japan.media/",
   "license": "データの出典として techno-japan.media へのリンクを求めます",
-  "count": 6,
+  "count": 4,
   "events": [
     {
       "name": "Mutek 2026",
@@ -17,32 +17,6 @@
         "AMBIENT",
         "LIVE",
         "OTHERS"
-      ]
-    },
-    {
-      "name": "橋の下世界音楽祭 2026",
-      "url": "https://techno-japan.media/festivals/soul-beat-asia.html",
-      "start": "2026-11-20",
-      "end": "2026-11-22",
-      "venue": "Toyota Obridge",
-      "lat": 35.0848,
-      "lng": 137.1656,
-      "genres": [
-        "LIVE"
-      ],
-      "tickets": "https://eplus.jp/sf/detail/4134150001?P6=001&P1=0402&P59=1"
-    },
-    {
-      "name": "RAPTVANA 2026",
-      "url": "https://techno-japan.media/festivals/raptvana.html",
-      "start": "2026-11-21",
-      "end": "2026-11-22",
-      "venue": "Oguteko Campsite",
-      "pref": "Nagano",
-      "lat": 35.4312,
-      "lng": 137.7842,
-      "genres": [
-        "TECHNO"
       ]
     },
     {
