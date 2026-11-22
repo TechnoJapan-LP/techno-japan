@@ -5,9 +5,17 @@
     <link>https://techno-japan.media</link>
     <description>Japan&apos;s underground techno and house music media platform.</description>
     <language>ja-JP</language>
-    <lastBuildDate>Sat, 21 Nov 2026 15:27:48 +0900</lastBuildDate>
-    <!-- items-hash: e89487ad53aec557a6a3b60dec0c61cd41186c259333ce29c7bf36382e8bf405 -->
+    <lastBuildDate>Sun, 22 Nov 2026 19:42:09 +0900</lastBuildDate>
+    <!-- items-hash: 1c2d24a7fd6009ff1c8d662f2425cd692e0d76477f62ac4bb3fa3f6098632107 -->
     <atom:link href="https://techno-japan.media/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Resonance</title>
+      <link>https://techno-japan.media/festivals/resonance.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/resonance.html</guid>
+      <pubDate>Sun, 22 Nov 2026 00:00:00 +0900</pubDate>
+      <category>Festival</category>
+      <description>Saitama — Resonanceは、ラテン語の resonare（響き返す）に由来し、その語源の通り、外界から受けた刺激が内面へと響き、新たな調和を生み出すプロセスそのものを芸術として表現することを理念としています。クラブカルチャー、インスタレーションアート、そして神経科学を横断するこの試みは、イベントを単に「鑑賞するもの」から「知覚そのものの体験」へと拡張します。川口の工場地帯に突如出現する、3,000坪を有する自然豊かな大泉工場「OKS KAWAGUCHI CAMPUS」の開放的な空間の中で、音と身体が共鳴する特別な2日間をお届けします。</description>
+    </item>
     <item>
       <title>RAPTVANA</title>
       <link>https://techno-japan.media/festivals/raptvana.html</link>
