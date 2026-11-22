@@ -1,46 +1,46 @@
 {
-  "generatedAt": "2026-11-21T23:29:02.626Z",
+  "generatedAt": "2026-11-22T23:40:36.352Z",
   "days": 30,
   "source": "ga4",
   "items": [
     {
       "id": "japan-festival-2026-october",
-      "views": 225
+      "views": 232
     },
     {
       "id": "denki-bodhisattva-2026-info",
-      "views": 177
+      "views": 166
     },
     {
       "id": "japan-festival-2026-november",
-      "views": 140
+      "views": 144
     },
     {
       "id": "mutek-jp-2026-info",
-      "views": 118
+      "views": 123
     },
     {
       "id": "topia-2026-info",
-      "views": 118
-    },
-    {
-      "id": "labyrinth-2026-info",
-      "views": 46
-    },
-    {
-      "id": "sawagi-festival-2026-info",
-      "views": 39
+      "views": 103
     },
     {
       "id": "resonance-2026-info",
-      "views": 27
+      "views": 50
     },
     {
-      "id": "intergalactic-2026-info",
-      "views": 22
+      "id": "labyrinth-2026-info",
+      "views": 47
+    },
+    {
+      "id": "sawagi-festival-2026-info",
+      "views": 35
     },
     {
       "id": "asia-festival-2026-second",
+      "views": 21
+    },
+    {
+      "id": "intergalactic-2026-info",
       "views": 20
     },
     {
@@ -48,16 +48,20 @@
       "views": 19
     },
     {
+      "id": "dei-fest-2026-info",
+      "views": 18
+    },
+    {
       "id": "otsukimi-2026-info",
-      "views": 14
+      "views": 15
     },
     {
       "id": "snow-mashine-2027-info",
-      "views": 14
+      "views": 15
     },
     {
       "id": "feature-yuta",
-      "views": 12
+      "views": 14
     },
     {
       "id": "odyssey-2026-info",
@@ -68,12 +72,12 @@
       "views": 11
     },
     {
-      "id": "japan-festival-2026-september",
-      "views": 7
+      "id": "treak-2026-info",
+      "views": 8
     },
     {
-      "id": "treak-2026-info",
-      "views": 7
+      "id": "japan-festival-2026-september",
+      "views": 6
     },
     {
       "id": "loa-lost-paradise-2026-info",
@@ -82,10 +86,6 @@
     {
       "id": "rebirth-2026-info",
       "views": 6
-    },
-    {
-      "id": "dei-fest-2026-info",
-      "views": 4
     },
     {
       "id": "transcendence-2025-report",
