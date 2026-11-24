@@ -4,10 +4,8 @@
 > アーティスト136名・会場22件・記事27本を日英で掲載し、
 > 開催日・場所・出演者を構造化データ（schema.org）付きで公開している。
 
-## 今後の開催予定（4件）
+## 今後の開催予定（2件）
 
-- 2026-11-20〜2026-11-23: [Mutek 2026](https://techno-japan.media/festivals/mutek.html) — MoN Takanawa
-- 2026-11-22〜2026-11-23: [Resonance 2026](https://techno-japan.media/festivals/resonance.html) — OKS KAWAGUCHI CAMPUS
 - 2026-11-28〜2026-11-29: [TAKARAJIMA 2026](https://techno-japan.media/festivals/takarajima-beach-cleaning-party.html) — Secret Location, Okinawa
 - 2027-03-02〜2027-03-07: [Snow Machine Japan 2027](https://techno-japan.media/festivals/snow-machine-japan.html) — HAKUBA VALLEY, Nagano
 

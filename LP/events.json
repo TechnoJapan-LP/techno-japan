@@ -1,34 +1,8 @@
 {
   "source": "https://techno-japan.media/",
   "license": "データの出典として techno-japan.media へのリンクを求めます",
-  "count": 4,
+  "count": 2,
   "events": [
-    {
-      "name": "Mutek 2026",
-      "url": "https://techno-japan.media/festivals/mutek.html",
-      "start": "2026-11-20",
-      "end": "2026-11-23",
-      "venue": "MoN Takanawa",
-      "lat": 35.6394,
-      "lng": 139.7417,
-      "genres": [
-        "TECHNO",
-        "HOUSE",
-        "AMBIENT",
-        "LIVE",
-        "OTHERS"
-      ]
-    },
-    {
-      "name": "Resonance 2026",
-      "url": "https://techno-japan.media/festivals/resonance.html",
-      "start": "2026-11-22",
-      "end": "2026-11-23",
-      "venue": "OKS KAWAGUCHI CAMPUS",
-      "lat": 35.7951,
-      "lng": 139.7523,
-      "tickets": "https://ja.ra.co/events/2542714"
-    },
     {
       "name": "TAKARAJIMA 2026",
       "url": "https://techno-japan.media/festivals/takarajima-beach-cleaning-party.html",
