@@ -411,7 +411,10 @@ hub_pages:
   festivals.html:
     container: festivals-phase3
     marker: phase3-card
-    min_markers: 5             # Upcoming の件数は季節で変わる。0 ではないことだけ確認する。
+    query: "?season=all"
+    # 初期表示は Upcoming のみで件数が季節で変わる（2026-11-23〜25 に 1〜3件となりデプロイが5回失敗）。
+    # JS の描画失敗を見るのが目的なので、季節に左右されない「すべて」で数える。
+    min_markers: 5             # 「すべて」で季節に左右されず、JS の描画失敗を検出する。
     min_container_bytes: 10000 # 実測値に対して、一覧が描画されたことを確認する余裕値
   artists.html:
     container: artists-grid
@@ -485,6 +488,9 @@ hub_pages:
   en/festivals.html:
     container: festivals-phase3
     marker: phase3-card
+    query: "?season=all"
+    # 初期表示は Upcoming のみで件数が季節で変わる（2026-11-23〜25 に 1〜3件となりデプロイが5回失敗）。
+    # JS の描画失敗を見るのが目的なので、季節に左右されない「すべて」で数える。
     ja_containers: [festivals-phase3]
     max_ja_chars: 27    # 2026-08-08 実測。日本語名のフェスが5件→6件に増えたぶん。
                         # 11,196 → 35 →（LOCATION 逆転修正で）21 → 27。
@@ -493,7 +499,7 @@ hub_pages:
                         # name_en は入力しない方針（AGENTS.md）なので、日本語名の
                         # フェスが増えれば増える。**コードの不具合ではない。**
                         # 減る方向（英語名のフェスが日本語で出る）は引き続き検出する。
-    min_markers: 5             # Upcoming の件数は季節で変わる。0 ではないことだけ確認する。
+    min_markers: 5             # 「すべて」で季節に左右されず、JS の描画失敗を検出する。
     min_container_bytes: 10000 # 実測値に対して、一覧が描画されたことを確認する余裕値
   en/artists.html:
     container: artists-grid

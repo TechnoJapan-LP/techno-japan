@@ -711,7 +711,8 @@ def main():
             failures.append(f"{path.relative_to(ROOT)}: cartocdn URL に ?key= がありません")
     try:
         for name, spec in pages.items():
-            dom, console = render(chrome, f"{base}/{name}", args.budget)
+            url = f"{base}/{name}{spec.get('query', '')}"
+            dom, console = render(chrome, url, args.budget)
             # DOM がほぼ空＝マシン過負荷による時間切れの典型（2026-08-19 実測:
             # 負荷平均30超の共有マシンで、毎回ランダムなページが空で返り、
             # 本物の故障と区別がつかず preflight が不安定になった）。
@@ -719,7 +720,7 @@ def main():
             # 本物の描画故障（JS エラーでカード0個）は DOM 自体は返るので
             # この再試行では救済されず、従来どおり検出される。
             if len(strip_style(dom)) < 2000:
-                dom, console = render(chrome, f"{base}/{name}", args.budget * 2)
+                dom, console = render(chrome, url, args.budget * 2)
             rendered[name] = dom
             uncaught = [
                 m.group(1).strip()

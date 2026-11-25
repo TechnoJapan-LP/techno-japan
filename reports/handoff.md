@@ -16334,3 +16334,28 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - YUTA 記事の3枚セット作り直しと Publish Now はユーザー作業待ち。済んだら本番で .fx-image-trio が1つ・3枚であることを確認する。
+
+## 2026-11-25 Deploy 連続失敗の修正（フェス一覧の検査が季節で落ちていた）
+
+### 実施
+- `Deploy LP to GitHub Pages` が 2026-11-23 11:46 から5回連続失敗（本番は 11-22 の版のまま止まっていた）。
+- 原因: `check_hub_pages.py` が festivals.html / en/festivals.html を初期表示（Upcoming のみ）で開き、`.phase3-card` を min 5 で数えていた。11月下旬は Upcoming が 3 → 1 件に減り、ページは正常なのに失敗扱いになった（コンテナ 5,195B < 10,000B も同じ理由）。
+- 修正（Codex）: hub_pages の spec に任意の `query` を追加し、festivals の JA/EN は `?season=all` で開いて数える。閾値（min 5 / 10,000B）はそのまま。
+
+### コミット
+- このエントリを含むコミット
+
+### 検証
+- `python3 scripts/check_hub_pages.py` 全ページ ✅。festivals.html 91枚・123,257B、en/festivals.html 91枚・124,358B・日本語残り 0字（上限27）。
+- `bash scripts/preflight.sh` を push 前に実行（結果は push 時の pre-push でも再確認）。
+- UI の変更は無し（検査スクリプトと閾値のみ）。
+
+### 変更したパターン
+- ハブ検査で「季節・日付で件数が変わる初期表示」を数えていた箇所 → festivals の1件。
+
+### 未確認の類似パターン
+- 他のハブ（news / index / venues / artists）は日付で件数が減る絞り込みを初期表示に持たないことを実測値で確認（news 11 / index 6 等、いずれも閾値以上）。日付依存の検査はほかに未調査。
+- min_markers 5 は「すべて」の実測 91 に対して低い。部分的な欠落も捕まえたいなら 60 前後へ上げる余地あり（今回は据え置き）。
+
+### 次の担当への注意・判断待ち
+- push 後、Deploy が success になったことを確認する。
