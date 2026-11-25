@@ -167,6 +167,7 @@ run "ハブ用データの整合"                  node scripts/check_data_hub.m
 run "LINEUP ACT_LABELの解決"             node scripts/check_lineup_label_resolution.mjs
 run "LINEUP 非公開アーティストの参照判定" node scripts/check_lineup_draft_refs.mjs
 run "EDITIONS欠落フェスの公開補完"        node scripts/check_fetch_data_editions.mjs
+run "次回開催の提案と反映（模擬GAS）"       node scripts/test_edition_proposals.mjs
 
 echo
 echo "▸ キャッシュと配信"

@@ -16382,3 +16382,35 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 - フェスのデータが 60件を下回る削除をした場合はこの検査が落ちる。意図した削除なら閾値を下げる。
 - 残っている stash 2件（`WIP on (no branch): 426428b49 base` / `autostash`）は今回より前のもので未確認・未処理。
+
+## 2026-11-26 国内フェスの次回開催: 提案→承認→反映（段階1）と初回巡回
+
+### 実施
+- 設計: `docs/design/NEXT_EDITION_UPDATE.md`（ユーザー決定: 承認は必ず挟む）。ハブの日程は FESTIVALS.DATE 由来なので、反映時は EDITIONS 追記＋FESTIVALS.DATE の全列保持更新の両方を行う。
+- 実装（Codex）: `scripts/editions/candidates.mjs`（候補抽出）、`scripts/editions/cms-edition-proposals.js`（CMS 画面で使う提案追記・承認済み反映）、`scripts/test_edition_proposals.mjs`（模擬GAS）、`data/edition-crawl/checked.json`、preflight へ追加。
+- Claude のレビューで3件修正させた: ①承認2件以上で2件目が1件目の新行を上書き（EDITIONS を1回しか読んでいなかった）②提案行の更新で `review_status`（小文字）と `REVIEW_STATUS` が同時に送られ値が衝突 ③日付セル化で読み戻し照合が誤判定。いずれも模擬GASで再現テストあり。
+- 本番シートに `EDITION_PROPOSALS` タブ（ユーザー作成）。見出し行の貼り付けで C1「EDITION DATE_START」・I1「ADDRESS LAT」が1セルに結合していたため、Claude が C1〜S1 を打ち直し（19列）。
+- 初回巡回（2026年3〜7月開催の31件、調査はサブエージェント3本＋Claude が公式ページを直接取得して裏取り）→ 提案3件を pending で追記:
+  - spring-love-harukaze-2027（3/27-28, high, 公式の出店募集告知）
+  - ala-2027（4/24-25, high, ala-jp.net の転送先 nutmeg.jp。会場未発表→承認時は前回会場を仮に引き継ぐ）
+  - rainbow-disco-club-2027（4/16-18, medium, 公式「RDC 2027」ページの駐車場利用日から。日程の一文は未掲載）
+  - 提案しなかった注記: transcendence（集約サイトのみ・同ページ内で日付が食い違い）、森、道、市場（公式が2027表記に切替済みだが日付未掲載）
+
+### コミット
+- このエントリを含むコミット
+
+### 検証
+- `node scripts/test_edition_proposals.mjs` 成功。
+- 本番: 提案3行を書き込み後に get_sheet で読み直し、19列の値が一致（日付は日付セル化されるが同値）。
+- 承認済みの反映（applyApproved）は**実機未確認**（承認待ち）。Publish も未実施。
+
+### 変更したパターン
+- 国内フェス候補抽出、EDITION_PROPOSALS への追記、承認済み提案の逐次反映（EDITIONS 追記＋FESTIVALS.DATE）。
+
+### 未確認の類似パターン
+- ★**GAS の get_sheet はキャッシュを返す**（2026-11-26 実測）。スプレッドシート画面で直接消した行・直した見出しが、1分以上たっても get_sheet に反映されなかった。同じシートへの update_row の後は最新になった。→ ユーザーが画面で REVIEW_STATUS を approved にしても applyApproved が古い pending を読む／EDITIONS の最終行を古く読む可能性がある。キャッシュの持続時間は未測定。apply の前に「承認が get_sheet に見えているか」を必ず確かめること。
+- 候補の残り59件（2025年以前・2026年8〜11月開催）は未巡回。
+
+### 次の担当への注意・判断待ち
+- ユーザーの承認待ち（EDITION_PROPOSALS の REVIEW_STATUS を approved / rejected）。承認後に applyApproved を dry-run → execute、その後ユーザーが Publish Now。
+- スニペットは CMS（`cms.html?cb=乱数`）で Claude in Chrome の javascript_tool に貼る。CSP のため eval / new Function は使えない。
