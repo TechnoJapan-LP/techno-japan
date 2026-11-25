@@ -16359,3 +16359,26 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - push 後、Deploy が success になったことを確認する。
+
+## 2026-11-25 フェス一覧の描画検査の閾値を実測に合わせて引き上げ ＋ 手元の片付け
+
+### 実施
+- `regression-thresholds.yml` の festivals.html / en/festivals.html（`?season=all` で検査）を min_markers 5 → 60、min_container_bytes 10,000 → 80,000 に変更（Codex）。全件表示の実測は 91枚・約123KB で、一部だけ欠ける描画不具合も捕まえられるようにした。
+- preflight が手元で作り直した生成物12ファイルと stash（preflight generated outputs 2026-11-25）は、origin/main（CI の `chore: sync generated LP before deploy`）と1ファイルずつ完全一致を確認してから破棄した。
+
+### コミット
+- このエントリを含むコミット
+
+### 検証
+- `python3 scripts/check_hub_pages.py`: festivals.html 91/60・123,257B/80,000B、en/festivals.html 91/60・124,358B/80,000B・日本語0字（上限27）で ✅。
+- 全件の preflight は pre-push フックで実行。
+
+### 変更したパターン
+- festivals の JA/EN 2エントリの閾値のみ。
+
+### 未確認の類似パターン
+- 他のハブ（artists / venues 等）の閾値は実測比で妥当（artists 133/70、venues 21/18）。今回は変更なし。
+
+### 次の担当への注意・判断待ち
+- フェスのデータが 60件を下回る削除をした場合はこの検査が落ちる。意図した削除なら閾値を下げる。
+- 残っている stash 2件（`WIP on (no branch): 426428b49 base` / `autostash`）は今回より前のもので未確認・未処理。
