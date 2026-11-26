@@ -16627,3 +16627,27 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 - 定期実行（Claude ルーチン）はユーザー確認後に作成する。
 - festival-fruezinho（shop.frue.jp に 2027 棚）と mori-michi-ichiba（公式見出しが 2027）は近く発表されそう。
+
+## 2026-11-26 次の年へ進めたフェスで、古い共通 LINEUP 列の出演者が「次回の出演予定」に出ていた件
+
+### 実施
+- 発覚: push 前の「EN画面の可視日本語」が連続で落ちた原因を追うと、ARTISTS の featured（`tjMagNextAppearances`）が data.js の `festival.lineup`（＝FESTIVALS の旧 LINEUP 列）と `festival.date` で「次の出演」を作っていた。日程を2027へ進めた ala / 春風 / transcendence / rural / ultra-japan は、旧列に2026の出演者が残り、2026の出演者が「2027出演予定」扱いになっていた（TSUTOMU は ALA 2026 出演者）。
+- ユーザー承認のうえ、本番 FESTIVALS の上記5行の lineup を空に（各行、変わった列は lineup のみを読み直しで確認）。旧列の名前はすべて LINEUPS の2026回に残っていることを確認済み（kyomi＝「鏡民」、ken-ishii / risa-taniguchi＝「KEN ISHII B2B RISA TANIGUCHI」）。
+- applyApproved（Codex）: 次の年へ進める時、旧 LINEUP 列の全員が既存回の LINEUPS に残っていれば同じ update_row で空にする。残っていない名前があれば何も書かずに止める（`blocked-legacy-lineup-missing`）。テスト4件追加。
+
+### コミット
+- このエントリを含むコミット
+
+### 検証
+- `node scripts/test_edition_proposals.mjs` 成功。
+- data.js への反映は次の Publish 後（**実機未確認**）。Publish 後に「EN画面の可視日本語」が通ること、ARTISTS の featured に2026出演者が出ないことを確認する。
+
+### 変更したパターン
+- 本番 FESTIVALS 5行の lineup。applyApproved の FESTIVALS 更新内容。
+
+### 未確認の類似パターン
+- CMS の手動「次回開催を作成」でも旧 LINEUP 列は残る（CMS 側は未対応）。
+- TOP の出演予定アーティスト（top-phase2.js）も同じ `tjMagNextAppearances` を使う → 同じ原因で影響していた。Publish 後にまとめて確認。
+
+### 次の担当への注意・判断待ち
+- RDC は旧列に2027第1弾（11組）が入っており、2027 の LINEUPS とも一致しているので触っていない。

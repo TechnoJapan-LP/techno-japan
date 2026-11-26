@@ -9,7 +9,7 @@ import './editions/cms-edition-proposals.js';
 import { authFetch, planPush } from './editions/push-proposals.mjs';
 const proposals = globalThis.TJEditionProposals;
 
-const headers = { EDITION_PROPOSALS:['PROPOSAL_ID','FESTIVAL_ID','EDITION','DATE_START','DATE_END','VENUE_CHANGED','LOCATION','LOCATION_JA','PREF','ADDRESS','LAT','LNG','SOURCE_URL','SOURCE_QUOTE','CONFIDENCE','REVIEW_STATUS','FOUND_AT','NOTES','APPLIED_AT'], EDITIONS:['EDITION_ID','FESTIVAL_ID','EDITION','DATE_START','DATE_END','LOCATION','LOCATION_JA','VENUE_ID','PREF','ADDRESS','LAT','LNG','TICKETURL','FLYER','STATUS'], FESTIVALS:['ID','DATE','name','desc','ticketurl','ticketUrl','flyer','lastEditedAt','lineup'], LINEUPS:['EDITION_ID','ARTIST_ID','ACT_LABEL','SET_TYPE','SORT'] };
+const headers = { EDITION_PROPOSALS:['PROPOSAL_ID','FESTIVAL_ID','EDITION','DATE_START','DATE_END','VENUE_CHANGED','LOCATION','LOCATION_JA','PREF','ADDRESS','LAT','LNG','SOURCE_URL','SOURCE_QUOTE','CONFIDENCE','REVIEW_STATUS','FOUND_AT','NOTES','APPLIED_AT'], EDITIONS:['EDITION_ID','FESTIVAL_ID','EDITION','DATE_START','DATE_END','LOCATION','LOCATION_JA','VENUE_ID','PREF','ADDRESS','LAT','LNG','TICKETURL','FLYER','STATUS'], FESTIVALS:['ID','DATE','name','desc','ticketurl','ticketUrl','flyer','lastEditedAt','lineup'], LINEUPS:['EDITION_ID','ARTIST_ID','ACT_LABEL','SET_TYPE','SORT'], ARTISTS:['ID','NAME'] };
 function fakeGas(initial, { mismatch = false, dateStrings = false, proposalDateCells = false } = {}) {
   const sheets = structuredClone(initial); const calls = [];
   const norm = (x) => String(x).toLowerCase(); const rows = (sheet) => sheets[sheet];
@@ -68,9 +68,19 @@ const proposal = {PROPOSAL_ID:'alpha-2027',FESTIVAL_ID:'alpha',EDITION:'2027',DA
   assert.match(fake.sheets.EDITION_PROPOSALS[0].notes, /legacy LINEUP only: move FESTIVALS\.LINEUP into LINEUPS for alpha-2026 before applying/);
 }
 {
-  const fake = fakeGas({EDITION_PROPOSALS:[{_row:3,...proposal,review_status:'approved'}],EDITIONS:[baseEdition],FESTIVALS:[{...baseFestival,lineup:'Old Artist'}],LINEUPS:[{_row:8,edition_id:'alpha-2026',artist_id:'old-artist',act_label:'Old Artist',set_type:'live',sort:1}]});
+  const fake = fakeGas({EDITION_PROPOSALS:[{_row:3,...proposal,review_status:'approved'}],EDITIONS:[baseEdition],FESTIVALS:[{...baseFestival,lineup:'Old Artist'}],LINEUPS:[{_row:8,edition_id:'alpha-2026',artist_id:'old-artist',act_label:'Old Artist',set_type:'live',sort:1}],ARTISTS:[]});
   const result = await proposals.applyApproved({fetch:fake.fetch,gasUrl:'https://gas',execute:true});
-  assert.match(result[0], /applied/);
+  assert.match(result[0], /applied/); assert.equal(fake.calls.find((x) => x.sheet === 'FESTIVALS').lineup, ''); assert.equal(fake.sheets.FESTIVALS[0].lineup || '', '');
+}
+{
+  const fake = fakeGas({EDITION_PROPOSALS:[{_row:3,...proposal,review_status:'approved'}],EDITIONS:[baseEdition],FESTIVALS:[{...baseFestival,lineup:'kenishii'}],LINEUPS:[{_row:8,edition_id:'alpha-2026',artist_id:'b2b',act_label:'KEN ISHII B2B RISA TANIGUCHI',set_type:'live',sort:1}],ARTISTS:[]});
+  const result = await proposals.applyApproved({fetch:fake.fetch,gasUrl:'https://gas',execute:true});
+  assert.match(result[0], /applied/); assert.equal(fake.calls.find((x) => x.sheet === 'FESTIVALS').lineup, '');
+}
+{
+  const fake = fakeGas({EDITION_PROPOSALS:[{_row:3,...proposal,review_status:'approved'}],EDITIONS:[baseEdition],FESTIVALS:[{...baseFestival,lineup:'Old Artist, Missing Artist'}],LINEUPS:[{_row:8,edition_id:'alpha-2026',artist_id:'old-artist',act_label:'Old Artist',set_type:'live',sort:1}],ARTISTS:[]});
+  await proposals.applyApproved({fetch:fake.fetch,gasUrl:'https://gas',execute:true});
+  assert.equal(fake.calls.filter((x) => x.sheet === 'EDITIONS' || x.sheet === 'FESTIVALS').length, 0); assert.equal(fake.sheets.EDITION_PROPOSALS[0].review_status, 'error'); assert.match(fake.sheets.EDITION_PROPOSALS[0].notes, /legacy LINEUP not preserved in LINEUPS: Missing Artist/);
 }
 {
   const fake = fakeGas({EDITION_PROPOSALS:[{_row:3,...proposal,review_status:'approved'}],EDITIONS:[baseEdition],FESTIVALS:[baseFestival],LINEUPS:[]});

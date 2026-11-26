@@ -84,7 +84,10 @@ checked.json の note には「どこを見たか」を残す（例: `festival-l
    LINEUPS には触らない。
 4. 読み直して、追加した行が送った値と一致し、既存行の数が変わっていないことを確認。
 5. FESTIVALS の該当行を**全列読み、DATE だけ** `DATE_START/DATE_END`（1日なら DATE_START）に変えて update_row。
-   大文字小文字違いの重複キーは両方送る。送った後に読み直し、変わった列が DATE（と lastEditedAt）だけか照合。
+   `LINEUP` が空でなければ、既存 EDITIONS の LINEUPS 行で全ての legacy 値が保持されていることを確認する。
+   全て保持されている場合だけ、FESTIVALS の既存 `LINEUP` 列（大文字小文字違いを含む）を空文字にする。
+   未対応の値があれば `legacy LINEUP not preserved in LINEUPS` で停止し、FESTIVALS は書き込まない。
+   大文字小文字違いの重複キーは両方送る。送った後に読み直し、変わった列が DATE・LINEUP（と lastEditedAt）だけか照合。
    ずれていたら止めて報告（AGENTS.md「本番データへの書き込み」）。
 6. 提案行を全列読み、REVIEW_STATUS=applied・APPLIED_AT を付けて update_row。
 7. 全件終わったら、ユーザーに Publish Now を押してもらい、`cms: publish data.js` と Publish pipeline の成功、

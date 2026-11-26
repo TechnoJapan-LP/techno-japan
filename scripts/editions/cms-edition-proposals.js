@@ -102,13 +102,32 @@
         if (!existing.length) throw new Error('festival has no existing edition');
         const latest = existing.slice().sort((a,b) => (latestStart(b) || '').localeCompare(latestStart(a) || ''))[0]; if (latestStart(latest) && start <= latestStart(latest)) throw new Error('date is not after latest edition');
         const hasLegacyLineup = !!s(val(festival,'lineup'));
-        const hasLineupsRow = lineups.some((row) => existing.some((edition) => s(val(row,'edition_id')) === s(val(edition,'EDITION_ID'))));
+        const existingLineups = lineups.filter((row) => existing.some((edition) => s(val(row,'edition_id')) === s(val(edition,'EDITION_ID'))));
+        const hasLineupsRow = existingLineups.length > 0;
         if (hasLegacyLineup && !hasLineupsRow) {
           plan.push({ proposalId:val(proposal,'PROPOSAL_ID'), action:'blocked-legacy-lineup', reason:`legacy LINEUP only: move FESTIVALS.LINEUP into LINEUPS for ${val(latest,'EDITION_ID')} before applying` });
           throw new Error(`legacy LINEUP only: move FESTIVALS.LINEUP into LINEUPS for ${val(latest,'EDITION_ID')} before applying`);
         }
+        let clearLegacyLineup = false;
+        if (hasLegacyLineup) {
+          const artists = await g.read('ARTISTS');
+          const normalizeLineup = (value) => String(value ?? '').normalize('NFKC').toLowerCase().replace(/[^a-z0-9ぁ-んァ-ヶ一-龠]/g, '');
+          const artistNames = new Map(artists.map((row) => [normalizeLineup(val(row,'id')), normalizeLineup(val(row,'name'))]).filter(([id]) => id));
+          const missing = s(val(festival,'lineup')).split(',').map((entry) => entry.trim()).filter(Boolean).filter((entry) => {
+            const normalizedEntry = normalizeLineup(entry); const entryArtistName = artistNames.get(normalizedEntry) || ''; if (!normalizedEntry) return false;
+            return !existingLineups.some((row) => {
+              const artistId = normalizeLineup(val(row,'artist_id')); const actLabel = normalizeLineup(val(row,'act_label')); const artistName = artistNames.get(artistId) || '';
+              return normalizedEntry === artistId || normalizedEntry === actLabel || normalizedEntry === artistName || (!!actLabel && actLabel.includes(normalizedEntry)) || (!!artistName && artistName === actLabel) || (!!entryArtistName && entryArtistName === actLabel);
+            });
+          });
+          if (missing.length) {
+            plan.push({ proposalId:val(proposal,'PROPOSAL_ID'), action:'blocked-legacy-lineup-missing', reason:`legacy LINEUP not preserved in LINEUPS: ${missing.join(', ')}` });
+            throw new Error(`legacy LINEUP not preserved in LINEUPS: ${missing.join(', ')}`);
+          }
+          clearLegacyLineup = true;
+        }
         const brandFlyer = s(val(festival, 'flyer')); const copyFlyer = !s(val(latest, 'flyer')) && !!brandFlyer;
-        plan.push({ proposalId:val(proposal,'PROPOSAL_ID'), action:copyFlyer ? 'copy-flyer-and-apply' : 'apply', flyer:copyFlyer ? { row:Number(latest._row), value:brandFlyer } : null });
+        plan.push({ proposalId:val(proposal,'PROPOSAL_ID'), action:copyFlyer ? 'copy-flyer-and-apply' : 'apply', flyer:copyFlyer ? { row:Number(latest._row), value:brandFlyer } : null, clearLegacyLineup });
         if (copyFlyer && options.execute) {
           const flyerPayload = lowerRowPayload(latest, {FLYER:brandFlyer});
           await g.write({action:'update_row',sheet:'EDITIONS',row:Number(latest._row),...flyerPayload});
@@ -120,7 +139,7 @@
         const changed = s(val(proposal,'VENUE_CHANGED')).toLowerCase() === 'yes'; const edition = { EDITION_ID:id, FESTIVAL_ID:val(proposal,'FESTIVAL_ID'), EDITION:val(proposal,'EDITION'), DATE_START:start, DATE_END:end, LOCATION:changed ? val(proposal,'LOCATION') : val(latest,'LOCATION'), LOCATION_JA:changed ? val(proposal,'LOCATION_JA') : val(latest,'LOCATION_JA'), VENUE_ID:changed ? '' : val(latest,'VENUE_ID'), PREF:changed ? val(proposal,'PREF') : val(latest,'PREF'), ADDRESS:changed ? val(proposal,'ADDRESS') : val(latest,'ADDRESS'), LAT:changed ? val(proposal,'LAT') : val(latest,'LAT'), LNG:changed ? val(proposal,'LNG') : val(latest,'LNG'), TICKETURL:'', FLYER:'', STATUS:'announced' };
         const newEditionRow = maxRow(editions) + 1;
         if (options.execute) { editionRowWritten = newEditionRow; await g.write({action:'update_row',sheet:'EDITIONS',row:newEditionRow,...edition}); const rows = await g.read('EDITIONS'); const saved = rows.find((row) => Number(row._row) === newEditionRow); if (!saved || Object.entries(edition).some(([name,value]) => !equal(val(saved,name),value,name))) throw new Error('EDITIONS read-back mismatch'); if (rows.length !== editions.length + 1) throw new Error('EDITIONS row count changed unexpectedly'); }
-        const original = clone(festival); const dateValue = start === end ? start : `${start}/${end}`; const festivalPayload = {...original}; for (const name of Object.keys(festivalPayload)) if (k(name) === 'date') festivalPayload[name] = dateValue; festivalPayload.DATE = dateValue;
+        const original = clone(festival); const dateValue = start === end ? start : `${start}/${end}`; const festivalPayload = {...original}; for (const name of Object.keys(festivalPayload)) if (k(name) === 'date') festivalPayload[name] = dateValue; festivalPayload.DATE = dateValue; if (clearLegacyLineup) for (const name of Object.keys(festivalPayload)) if (k(name) === 'lineup') festivalPayload[name] = '';
         if (options.execute) { await g.write({action:'update_row',sheet:'FESTIVALS',row:Number(festival._row),...festivalPayload}); const saved = (await g.read('FESTIVALS')).find((row) => Number(row._row) === Number(festival._row)); const ignored = new Set(['date','lasteditedat','lasteditedby']); const mismatches = Object.keys(original).filter((name) => !ignored.has(k(name)) && !equal(val(saved,name),festivalPayload[name],name)); if (mismatches.length) throw new Error(`FESTIVALS read-back mismatch: ${mismatches.join(', ')}`); }
         const applied = headerPayload(proposal, PH, {REVIEW_STATUS:'applied', APPLIED_AT:jstIso(now())}); if (options.execute) await g.write({action:'update_row',sheet:'EDITION_PROPOSALS',row:Number(proposal._row),...applied}); pushLog(log, `${id}: applied`);
       } catch (error) {
