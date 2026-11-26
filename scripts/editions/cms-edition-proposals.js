@@ -17,6 +17,17 @@
     return new Intl.DateTimeFormat('en-CA', { timeZone:'Asia/Tokyo', year:'numeric', month:'2-digit', day:'2-digit' }).format(date);
   }
   function clone(row) { return Object.fromEntries(Object.entries(row || {}).filter(([name]) => name !== '_row')); }
+  function lowerRowPayload(row, overrides = {}) {
+    const payload = {}; const seen = new Map();
+    for (const [name, value] of Object.entries(row || {})) {
+      if (name === '_row') continue;
+      const lower = k(name); const normalized = value ?? '';
+      if (seen.has(lower) && !equal(seen.get(lower), normalized, name)) throw new Error(`case-insensitive duplicate row key with conflicting values: ${name}`);
+      if (!seen.has(lower)) { seen.set(lower, normalized); payload[lower] = normalized; }
+    }
+    for (const [name, value] of Object.entries(overrides)) payload[k(name)] = value ?? '';
+    return payload;
+  }
   function maxRow(rows) { return Math.max(1, ...rows.map((row) => Number(row?._row) || 1)); }
   const dateFields = new Set(['date_start','date_end','found_at','date']);
   const numericFields = new Set(['lat','lng']);
@@ -74,14 +85,14 @@
   function latestStart(row) { return parseDate(val(row,'DATE_START')); }
   function reason(error) { return error instanceof Error ? error.message : String(error); }
   async function applyApproved(options = {}) {
-    const g = gas(options); const now = options.now || (() => new Date()); const log = []; const initialProposals = await g.read('EDITION_PROPOSALS');
+    const g = gas(options); const now = options.now || (() => new Date()); const log = []; const plan = []; const initialProposals = await g.read('EDITION_PROPOSALS');
     const selected = initialProposals.filter((row) => s(val(row,'REVIEW_STATUS')).toLowerCase() === 'approved' && (!options.only || options.only.includes(val(row,'PROPOSAL_ID'))));
     for (const selectedProposal of selected) {
       const festivals = await g.read('FESTIVALS'); const editions = await g.read('EDITIONS'); const currentProposals = await g.read('EDITION_PROPOSALS');
       const proposal = currentProposals.find((row) => Number(row._row) === Number(selectedProposal._row)) || currentProposals.find((row) => val(row,'PROPOSAL_ID') === val(selectedProposal,'PROPOSAL_ID'));
       if (!proposal) { pushLog(log, `${val(selectedProposal,'PROPOSAL_ID')}: error: proposal not found`); continue; }
       const id = editionId(proposal);
-      let editionRowWritten = null;
+      let editionRowWritten = null; let flyerRowWritten = null;
       try {
         const festival = festivals.find((row) => s(val(row,'id') ?? val(row,'ID')) === s(val(proposal,'FESTIVAL_ID'))); const existing = editions.filter((row) => s(val(row,'FESTIVAL_ID')) === s(val(proposal,'FESTIVAL_ID')));
         if (!festival) throw new Error('festival not found');
@@ -90,6 +101,16 @@
         const start = parseDate(val(proposal,'DATE_START')); const end = parseDate(val(proposal,'DATE_END')); if (!start || !end || start > end) throw new Error('invalid proposal dates');
         if (!existing.length) throw new Error('festival has no existing edition');
         const latest = existing.slice().sort((a,b) => (latestStart(b) || '').localeCompare(latestStart(a) || ''))[0]; if (latestStart(latest) && start <= latestStart(latest)) throw new Error('date is not after latest edition');
+        const brandFlyer = s(val(festival, 'flyer')); const copyFlyer = !s(val(latest, 'flyer')) && !!brandFlyer;
+        plan.push({ proposalId:val(proposal,'PROPOSAL_ID'), action:copyFlyer ? 'copy-flyer-and-apply' : 'apply', flyer:copyFlyer ? { row:Number(latest._row), value:brandFlyer } : null });
+        if (copyFlyer && options.execute) {
+          const flyerPayload = lowerRowPayload(latest, {FLYER:brandFlyer});
+          await g.write({action:'update_row',sheet:'EDITIONS',row:Number(latest._row),...flyerPayload});
+          const flyerRows = await g.read('EDITIONS'); const savedFlyer = flyerRows.find((row) => Number(row._row) === Number(latest._row));
+          const flyerMismatches = Object.keys({...latest, ...savedFlyer}).filter((name) => name !== '_row' && k(name) !== 'flyer' && !equal(val(savedFlyer,name), val(latest,name), name));
+          if (!savedFlyer || flyerMismatches.length || !equal(val(savedFlyer,'flyer'), brandFlyer, 'FLYER')) throw new Error(`EDITIONS flyer read-back mismatch${flyerMismatches.length ? `: ${flyerMismatches.join(', ')}` : ''}`);
+          flyerRowWritten = Number(latest._row); pushLog(log, `${id}: copied FESTIVALS.FLYER to EDITIONS row ${flyerRowWritten}`);
+        }
         const changed = s(val(proposal,'VENUE_CHANGED')).toLowerCase() === 'yes'; const edition = { EDITION_ID:id, FESTIVAL_ID:val(proposal,'FESTIVAL_ID'), EDITION:val(proposal,'EDITION'), DATE_START:start, DATE_END:end, LOCATION:changed ? val(proposal,'LOCATION') : val(latest,'LOCATION'), LOCATION_JA:changed ? val(proposal,'LOCATION_JA') : val(latest,'LOCATION_JA'), VENUE_ID:changed ? '' : val(latest,'VENUE_ID'), PREF:changed ? val(proposal,'PREF') : val(latest,'PREF'), ADDRESS:changed ? val(proposal,'ADDRESS') : val(latest,'ADDRESS'), LAT:changed ? val(proposal,'LAT') : val(latest,'LAT'), LNG:changed ? val(proposal,'LNG') : val(latest,'LNG'), TICKETURL:'', FLYER:'', STATUS:'announced' };
         const newEditionRow = maxRow(editions) + 1;
         if (options.execute) { editionRowWritten = newEditionRow; await g.write({action:'update_row',sheet:'EDITIONS',row:newEditionRow,...edition}); const rows = await g.read('EDITIONS'); const saved = rows.find((row) => Number(row._row) === newEditionRow); if (!saved || Object.entries(edition).some(([name,value]) => !equal(val(saved,name),value,name))) throw new Error('EDITIONS read-back mismatch'); if (rows.length !== editions.length + 1) throw new Error('EDITIONS row count changed unexpectedly'); }
@@ -97,12 +118,12 @@
         if (options.execute) { await g.write({action:'update_row',sheet:'FESTIVALS',row:Number(festival._row),...festivalPayload}); const saved = (await g.read('FESTIVALS')).find((row) => Number(row._row) === Number(festival._row)); const ignored = new Set(['date','lasteditedat','lasteditedby']); const mismatches = Object.keys(original).filter((name) => !ignored.has(k(name)) && !equal(val(saved,name),festivalPayload[name],name)); if (mismatches.length) throw new Error(`FESTIVALS read-back mismatch: ${mismatches.join(', ')}`); }
         const applied = headerPayload(proposal, PH, {REVIEW_STATUS:'applied', APPLIED_AT:jstIso(now())}); if (options.execute) await g.write({action:'update_row',sheet:'EDITION_PROPOSALS',row:Number(proposal._row),...applied}); pushLog(log, `${id}: applied`);
       } catch (error) {
-        const message = reason(error); if (options.execute) { const note = editionRowWritten ? `${message} / EDITIONS row ${editionRowWritten} already written` : message; const failed = headerPayload(proposal, PH, {REVIEW_STATUS:'error', NOTES:[s(val(proposal,'NOTES')),note].filter(Boolean).join(' / ')}); await g.write({action:'update_row',sheet:'EDITION_PROPOSALS',row:Number(proposal._row),...failed}); }
+        const message = reason(error); if (options.execute) { const written = [flyerRowWritten && `EDITIONS row ${flyerRowWritten} flyer updated`, editionRowWritten && `EDITIONS row ${editionRowWritten} already written`].filter(Boolean).join(' / '); const note = written ? `${message} / ${written}` : message; const failed = headerPayload(proposal, PH, {REVIEW_STATUS:'error', NOTES:[s(val(proposal,'NOTES')),note].filter(Boolean).join(' / ')}); await g.write({action:'update_row',sheet:'EDITION_PROPOSALS',row:Number(proposal._row),...failed}); }
         pushLog(log, `${id}: error: ${message}`); if (/read-back mismatch/.test(message)) throw error;
       }
     }
     if (typeof window !== 'undefined') window.__tjEditionLog = log;
-    return options.execute ? log : { plan:selected.map((row) => ({proposalId:val(row,'PROPOSAL_ID'),action:'apply'})), log };
+    return options.execute ? log : { plan, log };
   }
   return { appendProposals, applyApproved, parseDate };
 }));

@@ -8,7 +8,7 @@ import { findCandidates } from './editions/candidates.mjs';
 import './editions/cms-edition-proposals.js';
 const proposals = globalThis.TJEditionProposals;
 
-const headers = { EDITION_PROPOSALS:['PROPOSAL_ID','FESTIVAL_ID','EDITION','DATE_START','DATE_END','VENUE_CHANGED','LOCATION','LOCATION_JA','PREF','ADDRESS','LAT','LNG','SOURCE_URL','SOURCE_QUOTE','CONFIDENCE','REVIEW_STATUS','FOUND_AT','NOTES','APPLIED_AT'], EDITIONS:['EDITION_ID','FESTIVAL_ID','EDITION','DATE_START','DATE_END','LOCATION','LOCATION_JA','VENUE_ID','PREF','ADDRESS','LAT','LNG','TICKETURL','FLYER','STATUS'], FESTIVALS:['ID','DATE','name','desc','ticketurl','ticketUrl','lastEditedAt'] };
+const headers = { EDITION_PROPOSALS:['PROPOSAL_ID','FESTIVAL_ID','EDITION','DATE_START','DATE_END','VENUE_CHANGED','LOCATION','LOCATION_JA','PREF','ADDRESS','LAT','LNG','SOURCE_URL','SOURCE_QUOTE','CONFIDENCE','REVIEW_STATUS','FOUND_AT','NOTES','APPLIED_AT'], EDITIONS:['EDITION_ID','FESTIVAL_ID','EDITION','DATE_START','DATE_END','LOCATION','LOCATION_JA','VENUE_ID','PREF','ADDRESS','LAT','LNG','TICKETURL','FLYER','STATUS'], FESTIVALS:['ID','DATE','name','desc','ticketurl','ticketUrl','flyer','lastEditedAt'] };
 function fakeGas(initial, { mismatch = false, dateStrings = false, proposalDateCells = false } = {}) {
   const sheets = structuredClone(initial); const calls = [];
   const norm = (x) => String(x).toLowerCase(); const rows = (sheet) => sheets[sheet];
@@ -25,7 +25,7 @@ function fakeGas(initial, { mismatch = false, dateStrings = false, proposalDateC
   if (dateStrings) sheets.FESTIVALS[0].DATE = 'Sat Oct 10 2026 00:00:00 GMT+0900 (日本標準時)';
   return { fetch, calls, sheets };
 }
-const baseFestival = {_row:12, ID:'alpha', DATE:'2026-10-10', name:'Alpha', desc:'keep me', ticketurl:'old-a', ticketUrl:'old-a', lastEditedAt:'x'};
+const baseFestival = {_row:12, ID:'alpha', DATE:'2026-10-10', name:'Alpha', desc:'keep me', ticketurl:'old-a', ticketUrl:'old-a', flyer:'brand-flyer', lastEditedAt:'x'};
 const baseEdition = {_row:121, edition_id:'alpha-2026', festival_id:'alpha', edition:'2026', date_start:'2026-10-10', date_end:'2026-10-11', location:'Old Hall', location_ja:'旧会場', venue_id:'venue-old', pref:'Tokyo', address:'address', lat:'35', lng:'139', ticketurl:'old-ticket', flyer:'old-flyer', status:'ended'};
 const proposal = {PROPOSAL_ID:'alpha-2027',FESTIVAL_ID:'alpha',EDITION:'2027',DATE_START:'2027-10-10',DATE_END:'2027-10-11',VENUE_CHANGED:'no',LAT:'35.7530',LNG:'139.1230',SOURCE_URL:'https://example.test',SOURCE_QUOTE:'official date',CONFIDENCE:'high',FOUND_AT:'2026-11-26'};
 
@@ -41,8 +41,19 @@ const proposal = {PROPOSAL_ID:'alpha-2027',FESTIVAL_ID:'alpha',EDITION:'2027',DA
   const fake = fakeGas({EDITION_PROPOSALS:[{_row:3,...proposal,review_status:'approved'}],EDITIONS:[baseEdition],FESTIVALS:[baseFestival]});
   const result = await proposals.applyApproved({fetch:fake.fetch,gasUrl:'https://gas',execute:true,now:()=>new Date('2026-11-26T01:00:00Z')});
   assert.match(result[0], /applied/); const editionWrite = fake.calls.find((x) => x.sheet === 'EDITIONS'); assert.equal(editionWrite.row, 122); assert.equal(editionWrite.LOCATION, 'Old Hall'); assert.equal(editionWrite.TICKETURL, '');
+  assert.equal(fake.calls.some((x) => x.sheet === 'EDITIONS' && x.row === 121), false);
   const festWrite = fake.calls.find((x) => x.sheet === 'FESTIVALS'); assert.equal(festWrite.desc, 'keep me'); assert.equal(festWrite.ticketurl, 'old-a'); assert.equal(festWrite.ticketUrl, 'old-a'); assert.equal(festWrite.DATE, '2027-10-10/2027-10-11');
   const savedProposal = fake.sheets.EDITION_PROPOSALS[0]; assert.equal(savedProposal.review_status, 'applied'); assert.ok(savedProposal.applied_at);
+}
+{
+  const emptyLatest = {...baseEdition, flyer:''};
+  const fake = fakeGas({EDITION_PROPOSALS:[{_row:3,...proposal,review_status:'approved'}],EDITIONS:[emptyLatest],FESTIVALS:[baseFestival]});
+  const dry = await proposals.applyApproved({fetch:fake.fetch,gasUrl:'https://gas',execute:false});
+  assert.equal(dry.plan[0].action, 'copy-flyer-and-apply'); assert.equal(fake.calls.length, 0);
+  await proposals.applyApproved({fetch:fake.fetch,gasUrl:'https://gas',execute:true});
+  const copy = fake.calls.find((x) => x.sheet === 'EDITIONS' && x.row === 121); assert.equal(copy.flyer, 'brand-flyer');
+  assert.equal(fake.sheets.EDITIONS.find((row) => row._row === 121).flyer, 'brand-flyer');
+  assert.equal(fake.sheets.EDITIONS.find((row) => row._row === 122).flyer || '', '');
 }
 {
   const secondFestival = {...baseFestival, _row:13, ID:'beta', name:'Beta'};

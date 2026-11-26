@@ -34,6 +34,7 @@ import { contentHash, contentRow } from './lib/content-dates.mjs';
 import { resolveLineupArtist } from './lib/lineup-artist.mjs';
 import { normalizeArticleHeadingLevels } from './lib/article-heading-levels.mjs';
 import { buildNow, isArticleLive, parsePublishAt } from './article-visibility.mjs';
+import { pickFlyer as selectFlyer } from './pick-flyer.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const LP_DIR = path.join(__dirname, '..', 'LP');
@@ -732,7 +733,7 @@ function resolveImagePath(source) {
 }
 
 /* 開催回ごとのフライヤーを優先する。無ければフェス共通のものへ落とす。 */
-function pickFlyer(festival, edition) {
+function pickFlyer(festival, edition, editions = []) {
   const editionFlyer = String(edition?.FLYER || '').trim();
   if (editionFlyer) {
     const resolved = resolveImagePath(editionFlyer);
@@ -744,7 +745,7 @@ function pickFlyer(festival, edition) {
     }
     missingEditionFlyers.add(`${edition?.EDITION_ID || '?'}: ${editionFlyer}`);
   }
-  return { src: String(festival?.flyer || '').trim(), edition: '' };
+  return selectFlyer(festival, edition, editions, resolveImagePath);
 }
 
 /* 記事本文の Google Drive 画像を、端末に合った大きさで配る。
@@ -1795,7 +1796,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
             ...(eventAddress ? { address: eventAddress } : {}),
           },
       eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-      ...eventLdShared({ festival: eventFestival, edition: eventEdition, lang }),
+      ...eventLdShared({ festival: eventFestival, edition: eventEdition, editions: editionsByFestival.get(eventFestivalId) || [], lang }),
       eventStatus: editionStatusLd(eventEdition?.STATUS),
       ...(event.url ? { url: event.url } : {}),
       ...(eventFestivalId ? { sameAs: [`${BASE}/festivals/${eventFestivalId}.html`] } : {}),
@@ -2047,14 +2048,14 @@ function editionStatusLd(status) {
   return `https://schema.org/${value || 'EventScheduled'}`;
 }
 
-function eventLdShared({ festival, edition, lang }) {
+function eventLdShared({ festival, edition, editions = [], lang }) {
   if (!festival) return {};
   const festivalName = lang === 'en' ? (festival.name_en || festival.name) : festival.name;
   const officialUrl = safeUrl(festival.url);
   const ticketUrl = safeUrl(String(
     edition?.TICKETURL || festival.ticketUrl || festival.ticket_url || festival.tickets || '',
   ).trim());
-  const imageSource = String((pickFlyer(festival, edition).src || festival.image || '')).trim();
+  const imageSource = String((pickFlyer(festival, edition, editions).src || festival.image || '')).trim();
   const description = lang === 'en' ? (festival.desc_en || festival.desc) : (festival.desc || festival.desc_en);
   return {
     eventStatus: editionStatusLd(edition?.STATUS),
@@ -2068,7 +2069,7 @@ function eventLdShared({ festival, edition, lang }) {
 /* 開催回を参照するページ（フェス・アーティスト・会場）で共用する
    最小のイベントノード。開催回の実データが不足している場合は、
    検索エンジンに不完全な Event を渡さない。 */
-function editionEventLd({ festival, edition, lang, idSuffix = '#festival', includeUrl = true }) {
+function editionEventLd({ festival, edition, editions = [], lang, idSuffix = '#festival', includeUrl = true }) {
   const startDate = String(edition?.DATE_START || '');
   const locationAvailable = [
     edition?.LOCATION, edition?.LOCATION_JA, edition?.LOCATION_EN,
@@ -2084,7 +2085,7 @@ function editionEventLd({ festival, edition, lang, idSuffix = '#festival', inclu
     name: `${festivalName || ''} ${editionLabel(editionIdentifier(edition))}`.trim(),
     startDate,
     endDate: ISO_DATE.test(String(edition.DATE_END || '')) ? edition.DATE_END : startDate,
-    ...eventLdShared({ festival, edition, lang }),
+    ...eventLdShared({ festival, edition, editions, lang }),
     location: editionLocationLd(edition, lang),
     ...(includeUrl ? { url: `${BASE}${festivalPath}` } : {}),
   };
@@ -2626,7 +2627,7 @@ function festivalPageV2Body({ f, editions, lineupsByEdition, artistsById, allArt
   const lineupRows = currentEdition ? (lineupsByEdition.get(currentEdition.EDITION_ID) || []) : [];
   const lineupCount = lineupRows.length;
   const firstYear = editions.map((edition) => editionKeyParts(editionIdentifier(edition)).year).filter(Boolean).sort((a, b) => a - b)[0] || '';
-  const flyerPick = pickFlyer(f, currentEdition);
+  const flyerPick = pickFlyer(f, currentEdition, editions);
   const flyerAlt = flyerPick.edition ? `${name} ${flyerPick.edition} Flyer` : `${name} Flyer`;
   const flyer = flyerPick.src ? `<div class="detail-flyer-col">
         <div class="mono red festival-overview-label">Flyer</div>
@@ -2917,6 +2918,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, allArt
       ...editionEventLd({
         festival: f,
         edition: ed,
+        editions,
         lang,
         idSuffix: `#edition-${encodeURIComponent(ed.EDITION_ID)}`,
         includeUrl: false,
@@ -3047,7 +3049,7 @@ function artistPage(a, artistsById, lang = 'ja', artistAppearances = new Map(), 
     : [];
   const modified = contentDate('artist', a.id, CONTENT_SNAPSHOTS.get(`artist:${a.id}`));
   const performerIn = upcoming.slice(0, 6)
-    .map(({ festival, edition }) => editionEventLd({ festival, edition, lang }))
+    .map(({ festival, edition }) => editionEventLd({ festival, edition, editions: editionsByFestival.get(String(festival.id)) || [], lang }))
     .filter(Boolean);
 
   const jsonLd = {
@@ -3466,7 +3468,7 @@ function venuePage(v, lang = 'ja', allFestivals = [], editionsByFestival = new M
     || String(a.latest.DATE_START || '').localeCompare(String(b.latest.DATE_START || ''))).slice(0, 6);
   const modified = contentDate('venue', v.id, CONTENT_SNAPSHOTS.get(`venue:${v.id}`));
   const eventRefs = venueFestivals.filter((x) => x.upcoming).slice(0, 6)
-    .map(({ festival, latest }) => editionEventLd({ festival, edition: latest, lang }))
+    .map(({ festival, latest }) => editionEventLd({ festival, edition: latest, editions: editionsByFestival.get(String(festival.id)) || [], lang }))
     .filter(Boolean);
   const faqItems = venueFaqItems(v, name, venueFestivals, lang);
   const faqLd = faqJsonLd(faqItems);

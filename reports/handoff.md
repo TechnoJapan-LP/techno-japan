@@ -16444,3 +16444,60 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - ALA の会場は未発表（前回会場を仮に引き継ぎ）。発表されたら CMS で直す。RDC は日程の正式な一文がまだ無い（駐車場日程から）。
 - Instagram: TECHNO JAPAN はプロアカウント＋Facebook ページ連携済み（ユーザー回答）。次は Meta アプリ作成とトークン発行（Business Discovery で各フェスの投稿を読む・段階3）。
 - preflight は Mac がスリープすると一斉に TIMEOUT になる（2026-11-26 に3回。pmset log で 15分おきの DarkWake を確認）。push はユーザーが起きている時間に、`caffeinate -dims git push` で行う。
+
+## 2026-11-26 開催回フライヤーの所有判定と承認反映の保護
+
+### 実施
+- `scripts/pick-flyer.mjs` を追加し、同一フェスの別開催回がブランドフライヤーを所有している場合は、FLYER 空欄の開催回へブランド画像をフォールバックしないようにした。JA/EN 詳細生成と Event JSON-LD の両方へ開催回一覧を渡した。
+- `applyApproved` は、最新開催回の FLYER が空で FESTIVALS.FLYER がある場合、既存列を全て lower-case で再送して先にコピーし、読み戻し照合してから新規 EDITIONS 行を追加する。dry-run plan にもコピー予定を出す。
+- `scripts/test_pick_flyer.mjs` を追加し、`scripts/preflight.sh` に登録した。
+
+### コミット
+- 未コミット（ユーザー指示により git 操作は未実施）。
+
+### 検証
+- `node scripts/test_pick_flyer.mjs` ✅
+- `node scripts/test_edition_proposals.mjs` ✅
+- 変更ファイルの `node --check` ✅
+- `node scripts/build-detail-pages.mjs` ✅
+- `node scripts/check_image_delivery.mjs` ✅、`python3 scripts/check_asset_versions.py` ✅
+- 生成後にフライヤーブロックが抑止された ID: `snow-machine-japan`, `ala`, `rainbow-disco-club`, `spring-love-harukaze`。
+- 省略なし preflight は外部 Google 画像取得失敗で詳細ページ生成と冪等性が各240秒 timeout。その後の実行は手動中断したため、全件成功ではない。
+
+### 変更したパターン
+- ブランド FLYER の開催回所有判定（拡張子除去・実体解決を含む）。
+- 承認済み次回開催の既存 EDITIONS.FLYER コピー、全列 read-back 検証、dry-run 計画表示。
+
+### 未確認の類似パターン
+- 実ブラウザでの CMS 承認反映操作と Publish pipeline は未確認。
+
+### 次の担当への注意・判断待ち
+- 外部画像取得が可能な環境で `bash scripts/preflight.sh` を再実行し、timeout なしの全件成功を確認すること。push はその後に行う。
+
+## 2026-11-26 新しい年の開催回では去年のフライヤーを出さない
+
+### 実施
+- ユーザー要望: 翌年の回を足したら、去年のフライヤーは去年の EDITION に残し、新しい年は未入力（後で手動）。
+- 実測: 詳細ページは EDITIONS.FLYER が空だと FESTIVALS.flyer（フェス共通）へ落とすため、2027回に2026年のフライヤーが「今年のもの」として出ていた（春風・ALA・RDC、加えて手動で2027回を作っていた snow-machine-japan）。
+- 修正（Codex）: `scripts/pick-flyer.mjs` を新設。フェス共通 flyer への代替は「その flyer が別の開催回の FLYER と同じファイル（拡張子違いは同一視）でないとき」だけにした。JA/EN 詳細・JSON-LD（Event image は festival.image へ）で開催回一覧を渡す。
+- 反映処理 `applyApproved`: 新しい回を足す前に、直前の回の FLYER が空なら FESTIVALS.flyer を書き写す（全列保持・読み戻し照合）。dry-run の plan に `copy-flyer-and-apply` と行番号を出す。
+- 該当22件（flyer はフェス共通にだけあり、最新回の FLYER が空）は、次回の回を足すときに自動で去年の回へ書き写される。
+
+### コミット
+- このエントリを含むコミット
+
+### 検証
+- `node scripts/test_pick_flyer.mjs`（単一回は従来どおり／2026がフェス共通と同一→2027は無し／旧回が別フライヤーなら従来どおり）、`node scripts/test_edition_proposals.mjs`（書き写し・既にあれば触らない・新しい回は空のまま）成功。
+- `node scripts/build-detail-pages.mjs` でフライヤー欄が消えるのは snow-machine-japan / ala / rainbow-disco-club / spring-love-harukaze の4件のみ。アーティスト詳細の JSON-LD Event image が上記フェスで flyer → フェス画像に変わる差分（意図どおり）。
+- 「TOP オープニング」は直前の push の preflight で1回落ちたが、Codex の同時ビルドと重なったもの。単独実行で PASS。
+- 本番の見た目は push 後に確認する。
+
+### 変更したパターン
+- 詳細ページ・JSON-LD のフライヤー選択、承認済み反映時の前回 FLYER 書き写し。
+
+### 未確認の類似パターン
+- ハブのカード画像（`image || flyer`）はフェス画像優先で、image の無いフェスは共通 flyer を出す。今回は対象外（未確認・0件か未調査）。
+- CMS の「次回開催を作成」で手動で作った回も、表示側の修正で同じく去年のフライヤーを出さなくなる。CMS 側で前回 FLYER へ書き写す処理は入れていない。
+
+### 次の担当への注意・判断待ち
+- フライヤーの自動取得は Instagram Graph API（Business Discovery）接続後に「フライヤー候補の提案→承認→取り込み」として追加する方針（ユーザーへ説明済み）。
