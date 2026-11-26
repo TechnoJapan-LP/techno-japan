@@ -16651,3 +16651,24 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - RDC は旧列に2027第1弾（11組）が入っており、2027 の LINEUPS とも一致しているので触っていない。
+
+## 2026-11-26 自動巡回の本番接続（Actions 実行確認＋Claude ルーチン作成）
+
+### 実施
+- edition-proposals.yml を実行 → 1回目は Node 20 で UMD 読み込みに失敗（`appendProposals is not a function`、書き込み前）。vm で読む方式に直して再実行 → 成功（GAS ログイン・読み取り OK、0件追記、data を main へ取り込み 4ba1bdc9c、Issue なし）。
+- Claude ルーチン作成: trig_01LkEJELazF8mBxkVQkweYr7「国内フェス 次回開催の巡回（2週間ごと）」cron `0 0 1,15 * *`（毎月1日・15日 9:00 JST）、Opus 5.5、ツール Bash/Read/Write/Edit/Glob/Grep/WebSearch/WebFetch。初回 2026-12-01。
+
+### コミット
+- eefcd46ad（読み込み修正）、4ba1bdc9c（Actions による取り込み）、このエントリのコミット
+
+### 検証
+- Actions run 45834876223 success。ルーチンの実走は未確認（**初回 12/1 の結果を確認する**: edition-crawl への push 権限、提案ファイル、Issue）。
+
+### 変更したパターン
+- push-proposals.mjs の UMD 読み込み。
+
+### 未確認の類似パターン
+- ルーチンにはアカウントの全コネクタ（Gmail / Drive など）が付いている。巡回には不要（ユーザーに外すか確認中）。
+
+### 次の担当への注意・判断待ち
+- 12/1 の初回ルーチンの run log（RemoteTrigger list_runs / get_run_log）を確認する。
