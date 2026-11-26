@@ -1,7 +1,7 @@
 {
   "source": "https://techno-japan.media/",
   "license": "データの出典として techno-japan.media へのリンクを求めます",
-  "count": 5,
+  "count": 9,
   "events": [
     {
       "name": "TAKARAJIMA 2026",
@@ -74,6 +74,64 @@
       "genres": [
         "TECHNO",
         "AMBIENT"
+      ]
+    },
+    {
+      "name": "Transcendence 2027",
+      "url": "https://techno-japan.media/festivals/transcendence.html",
+      "start": "2027-05-08",
+      "end": "2027-05-10",
+      "venue": "Choujya no Mori",
+      "pref": "Nagano",
+      "lat": 36.0594,
+      "lng": 138.5611,
+      "genres": [
+        "TECHNO"
+      ]
+    },
+    {
+      "name": "Rural 2027",
+      "url": "https://techno-japan.media/festivals/rural.html",
+      "start": "2027-07-16",
+      "end": "2027-07-19",
+      "venue": "nowhere CAMP",
+      "lat": 37.602,
+      "lng": 140.1982,
+      "genres": [
+        "TECHNO",
+        "HOUSE",
+        "MINIMAL",
+        "AMBIENT"
+      ]
+    },
+    {
+      "name": "FUJI ROCK 2027",
+      "url": "https://techno-japan.media/festivals/fuji-rock.html",
+      "start": "2027-07-23",
+      "end": "2027-07-25",
+      "venue": "Naeba Ski Resort",
+      "pref": "Niigata",
+      "lat": 36.7919,
+      "lng": 138.7847,
+      "genres": [
+        "TECHNO",
+        "HOUSE",
+        "LIVE",
+        "OTHERS"
+      ]
+    },
+    {
+      "name": "Ultra Japan 2027",
+      "url": "https://techno-japan.media/festivals/ultra-japan.html",
+      "start": "2027-09-18",
+      "end": "2027-09-19",
+      "venue": "TOKYO ODAIBA ULTRA PARK",
+      "pref": "Tokyo",
+      "lat": 35.6264,
+      "lng": 139.7761,
+      "genres": [
+        "TECHNO",
+        "OTHERS"
       ]
     }
   ]

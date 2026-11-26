@@ -1,5 +1,5 @@
 {
-  "_generatedAt": "2026-11-26T09:47:40.230Z",
+  "_generatedAt": "2026-11-26T10:39:32.578Z",
   "count": 92,
   "items": [
     {
@@ -300,7 +300,7 @@
       "ID": "ultra-japan",
       "TYPE": "festival",
       "NAME": "Ultra Japan",
-      "DATE": "2026-09-19/2026-09-20",
+      "DATE": "2027-09-18/2027-09-19",
       "LOCATION": "TOKYO ODAIBA ULTRA PARK",
       "CITY": "Tokyo",
       "ADDRESS": "東京都江東区青海1丁目1",
@@ -625,7 +625,7 @@
       "ID": "fuji-rock",
       "TYPE": "festival",
       "NAME": "FUJI ROCK",
-      "DATE": "2026-07-24/2026-07-26",
+      "DATE": "2027-07-23/2027-07-25",
       "LOCATION": "Naeba Ski Resort",
       "CITY": "Niigata",
       "ADDRESS": "新潟県南魚沼郡湯沢町三国202",
@@ -648,7 +648,7 @@
       "ID": "rural",
       "TYPE": "festival",
       "NAME": "Rural",
-      "DATE": "2026-07-17/2026-07-20",
+      "DATE": "2027-07-16/2027-07-19",
       "LOCATION": "nowhere CAMP",
       "CITY": "Fukushima",
       "ADDRESS": "福島県耶麻郡猪苗代町大字蚕養字沼尻山甲2864",
@@ -1040,7 +1040,7 @@
       "ID": "transcendence",
       "TYPE": "rave",
       "NAME": "Transcendence",
-      "DATE": "2026-05-08/2026-05-10",
+      "DATE": "2027-05-08/2027-05-10",
       "LOCATION": "Choujya no Mori",
       "CITY": "Nagano",
       "ADDRESS": "長野県南佐久郡北相木村5616-6",

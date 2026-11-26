@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-11-26T09:47:40.230Z",
-  "count": 122,
+  "_generatedAt": "2026-11-26T10:39:32.578Z",
+  "count": 126,
   "items": [
     {
       "EDITION_ID": "99flags-2026",
@@ -918,6 +918,7 @@
       "LAT": "37.602",
       "LNG": "140.1982",
       "TICKETURL": "https://ruraljp.zaiko.io/e/rural2026",
+      "FLYER": "images/festivals/rural-flyer.webp",
       "STATUS": "announced"
     },
     {
@@ -1608,6 +1609,59 @@
       "LAT": "34.7896",
       "LNG": "139.0419",
       "STATUS": "finished"
+    },
+    {
+      "EDITION_ID": "ultra-japan-2027",
+      "FESTIVAL_ID": "ultra-japan",
+      "EDITION": "2027",
+      "DATE_START": "2027-09-18",
+      "DATE_END": "2027-09-19",
+      "LOCATION": "TOKYO ODAIBA ULTRA PARK",
+      "PREF": "Tokyo",
+      "ADDRESS": "東京都江東区青海1丁目1",
+      "LAT": "35.6264",
+      "LNG": "139.7761",
+      "STATUS": "announced"
+    },
+    {
+      "EDITION_ID": "rural-2027",
+      "FESTIVAL_ID": "rural",
+      "EDITION": "2027",
+      "DATE_START": "2027-07-16",
+      "DATE_END": "2027-07-19",
+      "LOCATION": "nowhere CAMP",
+      "ADDRESS": "福島県耶麻郡猪苗代町大字蚕養字沼尻山甲2864",
+      "LAT": "37.602",
+      "LNG": "140.1982",
+      "STATUS": "announced"
+    },
+    {
+      "EDITION_ID": "fuji-rock-2027",
+      "FESTIVAL_ID": "fuji-rock",
+      "EDITION": "2027",
+      "DATE_START": "2027-07-23",
+      "DATE_END": "2027-07-25",
+      "LOCATION": "Naeba Ski Resort",
+      "LOCATION_JA": "苗場スキー場",
+      "PREF": "Niigata",
+      "ADDRESS": "新潟県南魚沼郡湯沢町三国202",
+      "LAT": "36.7919",
+      "LNG": "138.7847",
+      "STATUS": "announced"
+    },
+    {
+      "EDITION_ID": "transcendence-2027",
+      "FESTIVAL_ID": "transcendence",
+      "EDITION": "2027",
+      "DATE_START": "2027-05-08",
+      "DATE_END": "2027-05-10",
+      "LOCATION": "Choujya no Mori",
+      "LOCATION_JA": "長者の森",
+      "PREF": "Nagano",
+      "ADDRESS": "長野県南佐久郡北相木村5616-6",
+      "LAT": "36.0594",
+      "LNG": "138.5611",
+      "STATUS": "announced"
     }
   ]
 }
