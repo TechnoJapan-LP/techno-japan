@@ -237,6 +237,8 @@ function isArticleLiveCms(article, now=buildNowCms()){
    ============================================================== */
 const lineups = { f:[], e:[] };
 const editions = [];
+// シート読込前の暫定開催回。読込中にユーザーが変更した値だけを判定するために使う。
+let editionsProvisionalSnapshot = new Map();
 let selectedEditionIndex = 0;
 let editionSheetRows = [];       // 編集中フェスの EDITIONS 行だけ（_row の対応付け用）
 let lineupSheetRows = [];
@@ -4148,8 +4150,10 @@ async function loadEditionsFromSheet(festivalId){
       const loaded={_row:row._row,_editionId:eid,_sheetRow:{...row},_lineupRows:lrRaw,year:row.EDITION||'',edition:'',date:[row.DATE_START,row.DATE_END].filter(Boolean).join('/'),location:row.LOCATION||'',location_ja:row.LOCATION_JA||'',pref:row.PREF||'',venueId:row.VENUE_ID||'',address:row.ADDRESS||'',lat:row.LAT||'',lng:row.LNG||'',ticketUrl:row.TICKETURL||'',flyer:row.FLYER||'',status:row.STATUS||'announced',lineup:lrRows};
       const pending=pendingByYear.get(String(loaded.year));
       if(pending){
+        const snapshot=editionsProvisionalSnapshot.get(String(loaded.year));
         ['date','location','location_ja','address','lat','lng','ticketUrl','flyer','status','lineup'].forEach(key=>{
-          if(pending[key] && (!loaded[key] || key==='flyer' || key==='lineup')) loaded[key]=pending[key];
+          const pendingChanged = !snapshot || JSON.stringify(pending[key]) !== JSON.stringify(snapshot[key]);
+          if(pendingChanged && pending[key] && (!loaded[key] || key==='flyer' || key==='lineup')) loaded[key]=pending[key];
         });
       }
       editions.push(loaded);
@@ -5789,6 +5793,7 @@ function editRow(section, rowNum){
     renderLineupTags('f');
     // EDITIONS（シートにはJSON文字列で保存されている）
     editions.length=0;
+    editionsProvisionalSnapshot = new Map();
     selectedEditionIndex=0;
     if(row.editions){
       try{
@@ -5806,6 +5811,9 @@ function editRow(section, rowNum){
       const currentYear=(String(row.date||'').match(/(20\d{2})/)||[])[1]||String(new Date().getFullYear());
       editions.push({year:currentYear,edition:'',date:row.date||'',location:row.location||'',location_ja:row.location_ja||'',address:row.address||'',lat:row.lat||'',lng:row.lng||'',ticketUrl:row.ticketUrl||'',flyer:row.flyer||'',status:row.status||'announced',lineup:(row.lineup||'').split(',').map(s=>s.trim()).filter(Boolean)});
     }
+    editionsProvisionalSnapshot = new Map(editions.map(ed => [
+      String(ed.year || ''), JSON.parse(JSON.stringify(ed))
+    ]));
     renderEditions();
     editionsLoadingPromise=loadEditionsFromSheet(row.id).finally(()=>{editionsLoadingPromise=null;});
     document.getElementById('lineup-fetch-status').style.display='none';
@@ -9120,7 +9128,7 @@ function resetForm(section){
   // プレビューをクリア
   document.querySelectorAll('.img-preview').forEach(p=>{p.style.display='none';p.innerHTML='';});
   if(section==='venue'){document.getElementById('v-type').value='club';document.querySelectorAll('#v-genre .chip').forEach(c=>c.classList.remove('selected'));setSelectedFeatures('v-features',[]);setGalleryValue([]);setSoundGalleryAvailability('venue',false);updateVenueSubtypeVisibility()}
-  if(section==='festival'){document.getElementById('f-type').value='festival';document.querySelectorAll('#f-genre .chip').forEach(c=>c.classList.remove('selected'));document.querySelectorAll('#f-gradientPresets .gradient-swatch').forEach(s=>s.classList.remove('selected'));lineups.f=[];renderLineupTags('f');editions.length=0;renderEditions();document.getElementById('lineup-fetch-status').style.display='none';document.getElementById('gradient-preview').style.display='none';document.getElementById('bulk-lineup-wrap').style.display='none'}
+  if(section==='festival'){document.getElementById('f-type').value='festival';document.querySelectorAll('#f-genre .chip').forEach(c=>c.classList.remove('selected'));document.querySelectorAll('#f-gradientPresets .gradient-swatch').forEach(s=>s.classList.remove('selected'));lineups.f=[];renderLineupTags('f');editions.length=0;editionsProvisionalSnapshot=new Map();renderEditions();document.getElementById('lineup-fetch-status').style.display='none';document.getElementById('gradient-preview').style.display='none';document.getElementById('bulk-lineup-wrap').style.display='none'}
   if(section==='festival') { setFestivalDateEditingMode(false); setSoundGalleryAvailability('festival',false); }
   if(section==='event'){lineups.e=[];renderLineupTags('e')}
   if(section==='article'){document.getElementById('ar-category').value='REPORT';document.getElementById('ar-featured').value='false';document.getElementById('ar-status').value='draft';document.getElementById('ar-author').value='TECHNO JAPAN 編集部';entityPickerRender('artist');entityPickerRender('venue');setArticleBody('')}

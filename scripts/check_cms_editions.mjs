@@ -51,6 +51,8 @@ const BRIDGE = `
   get editionSheetLoaded(){return editionSheetLoaded}, set editionSheetLoaded(v){editionSheetLoaded=v},
   get editionRowById(){return editionRowById}, set editionRowById(v){editionRowById=v},
   get editionSheetLoadError(){return editionSheetLoadError}, set editionSheetLoadError(v){editionSheetLoadError=v},
+  get listCache(){return listCache},
+  get editionsLoadingPromise(){return editionsLoadingPromise},
   duplicateEditionRows,
   editionKeyParts,
   editionLabel,
@@ -67,6 +69,8 @@ const BRIDGE = `
   syncNewFestivalAfterAdd,
   saveEdit,
   festivalEditionsForSave,
+  editRow,
+  loadEditionsFromSheet,
   get editState(){return editState},
 };`;
 const src = fs.readFileSync(CMS_PATH, 'utf8') + BRIDGE;
@@ -115,6 +119,77 @@ function makeCtx({ cityValue = 'Ibaraki' } = {}) {
 
 const results = [];
 const check = (name, pass, detail) => { results.push([name, pass, detail]); };
+
+// editRow() からシート読込完了までを通し、暫定値とユーザー編集を区別できるか確認する。
+async function loadFestivalForEditionMerge({ editions = '[]', sheetRows, lineupRows, editDuringLoad = null }) {
+  const c = makeCtx();
+  c.renderEditions = () => {};
+  c.toast = () => {};
+  c.updateLocationMap = () => {};
+  c.syncImagePos = () => {};
+  c.setFestivalDateEditingMode = () => {};
+  c.showCurrentImage = () => {};
+  c.document.querySelector = selector => selector === '.main' ? { scrollTo() {} } : null;
+  c.__T.listCache.festival = [{
+    _row: 1, id: 'x', name: 'X', date: '2027-04-16/2027-04-18',
+    flyer: 'images/festivals/x-flyer.jpg', lineup: 'a, b', editions
+  }];
+  let resolveFetch;
+  const fetchReady = new Promise(resolve => { resolveFetch = resolve; });
+  c.fetch = async url => {
+    const sheet = new URL(url).searchParams.get('sheet');
+    return fetchReady.then(() => ({json: async () => ({
+      status: 'ok', rows: sheet === 'EDITIONS' ? sheetRows : lineupRows
+    })}));
+  };
+  c.editRow('festival', 1);
+  if (editDuringLoad) editDuringLoad(c.__T.editions);
+  resolveFetch();
+  await c.__T.editionsLoadingPromise;
+  return c;
+}
+
+const editionRowsForMerge = [
+  { _row: 10, EDITION_ID: 'x-2026', FESTIVAL_ID: 'x', EDITION: '2026', DATE_START: '2026-04-16', DATE_END: '2026-04-18', FLYER: 'images/x-2026.jpg' },
+  { _row: 11, EDITION_ID: 'x-2027', FESTIVAL_ID: 'x', EDITION: '2027', DATE_START: '', DATE_END: '', FLYER: '' },
+];
+
+// ---- 0g) 暫定のFESTIVALS値で空のEDITIONS/LINEUPSを上書きしない ----------------
+{
+  const c = await loadFestivalForEditionMerge({
+    sheetRows: editionRowsForMerge,
+    lineupRows: [
+      { _row: 20, EDITION_ID: 'x-2026', SORT: 1, ACT_LABEL: 'Sheet Artist 1' },
+      { _row: 21, EDITION_ID: 'x-2026', SORT: 2, ACT_LABEL: 'Sheet Artist 2' },
+    ]
+  });
+  const y2026 = c.__T.editions.find(e => e.year === '2026');
+  const y2027 = c.__T.editions.find(e => e.year === '2027');
+  check('空の2027回へ暫定フライヤー・LINEUPを引き継がない', y2027?.flyer === '' && y2027?.lineup?.length === 0, JSON.stringify(y2027));
+  check('既存の2026回はシート値を保つ', y2026?.flyer === 'images/x-2026.jpg' && JSON.stringify(y2026?.lineup) === JSON.stringify(['Sheet Artist 1', 'Sheet Artist 2']), JSON.stringify(y2026));
+}
+
+// ---- 0h) JSONの古いLINEUPでシートのLINEUPを上書きしない -------------------
+{
+  const c = await loadFestivalForEditionMerge({
+    editions: JSON.stringify([{ year: '2026', date: '2026-04-16/2026-04-18', flyer: 'images/old.jpg', lineup: ['JSON Artist'] }]),
+    sheetRows: editionRowsForMerge,
+    lineupRows: [{ _row: 20, EDITION_ID: 'x-2026', SORT: 1, ACT_LABEL: 'Sheet Artist' }]
+  });
+  const y2026 = c.__T.editions.find(e => e.year === '2026');
+  check('古いJSONの2026回LINEUPよりシートを優先する', JSON.stringify(y2026?.lineup) === JSON.stringify(['Sheet Artist']), JSON.stringify(y2026?.lineup));
+}
+
+// ---- 0i) シート読込中に変更した値は暫定値と違うため保持する ---------------
+{
+  const c = await loadFestivalForEditionMerge({
+    sheetRows: editionRowsForMerge,
+    lineupRows: [],
+    editDuringLoad: editions => { editions.find(e => e.year === '2027').flyer = 'images/new.jpg'; }
+  });
+  const y2027 = c.__T.editions.find(e => e.year === '2027');
+  check('読込中に変更した2027回フライヤーを保持する', y2027?.flyer === 'images/new.jpg', JSON.stringify(y2027));
+}
 
 // ---- 0f) 保存成功後の処理は全セクションで例外にならず、フェス同期も実行する ----
 for (const section of ['venue', 'artist', 'article', 'festival']) {

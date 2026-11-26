@@ -16529,3 +16529,32 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - ユーザーが Publish Now → 春風の詳細で 2026 回に16組・2027 回は空、他6件の出演者表示が変わらないことを確認する。
+
+## 2026-11-26 CMS を開くだけで去年のフライヤー・出演者が新しい開催回へ入る不具合を修正＋RDC 2025 回を追加
+
+### 実施
+- 発覚（ユーザー報告）: RDC の2027年回に去年の出演者とフライヤーが入っていた。applyApproved が作った時点では FLYER・LINEUPS とも空（読み直しで確認済み）。その後の CMS 保存（13:06 / 15:11 JST）で入った。
+- 原因: `editRow` がシート読込前に FESTIVALS.editions（旧 JSON 列）から暫定の開催回を作り、JSON が空なら DATE の年（2027）の回をフェス本体の flyer / 旧 LINEUP 列で作る。`loadEditionsFromSheet` はその暫定値で flyer・lineup を**必ず上書き**し、空欄も埋めていた。保存するとそのまま EDITIONS / LINEUPS へ書かれる。CMS 画面内で本番に書かずに再現（JSON='[]' で 2027 回に旧 flyer と旧 LINEUP 11組が入る）。
+- 修正（Codex）: 暫定の開催回をスナップショットし、読込中に**ユーザーが変えた値だけ**を引き継ぐ。`cms.js?v=224`。`check_cms_editions.mjs` に3場面を追加（空 JSON / 古い JSON / 読込中の編集は残る）。
+- 本番データ（ユーザー承認）:
+  - EDITIONS 124行（rainbow-disco-club-2027）の FLYER を空に。読み直して変わった列は flyer だけ。
+  - EDITIONS 125行に rainbow-disco-club-2025 を追加（2025-04-18〜20、会場は2026回と同じ、STATUS=finished、FLYER 空）。出典: ZAIKO の公式チケットページ rdc2025。
+- 旧 LINEUP 列（antal, chaos-in-the-cbd, palms-trax ほか11組）は2025年の出演者だった。
+
+### コミット
+- このエントリを含むコミット
+
+### 検証
+- `node scripts/check_cms_editions.mjs` 47件・`node scripts/check_cms_lineup.mjs` 30件 成功。preflight は push 時に全件。
+- 本番 CMS での実機確認（強制リロード後に RDC を開き、2027回の flyer・出演者がシートどおりか）と Publish pipeline の実行は push 後に行う（**実機未確認**）。
+
+### 変更したパターン
+- CMS の開催回読込時のマージ（`loadEditionsFromSheet`）。
+
+### 未確認の類似パターン
+- 春風・ALA の2027回も同じ経路で汚れていないか → 確認する（未確認）。
+- 暫定にしか無い開催回（JSON にあってシートに無い年）は読込後に消える既存の挙動。今回は変えていない。
+
+### 次の担当への注意・判断待ち
+- rainbow-disco-club-2027 の LINEUPS 20行（1633〜1652行）は2026年と同じ顔ぶれ。2027年の出演者は公式未発表。ユーザーは「15:11 に2027年の出演者を登録した」と言っており、残すか消すか確認中。消していない。
+- 2025回の出演者（ZAIKO に掲載）は未登録。
