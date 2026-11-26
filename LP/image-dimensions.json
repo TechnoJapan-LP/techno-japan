@@ -12171,6 +12171,42 @@
     180,
     240
   ],
+  "images/derivatives/card/festivals/nippachi--2371e3eb-lg.webp": [
+    960,
+    640
+  ],
+  "images/derivatives/card/festivals/nippachi--2371e3eb-md.webp": [
+    720,
+    480
+  ],
+  "images/derivatives/card/festivals/nippachi--2371e3eb-sm.webp": [
+    480,
+    320
+  ],
+  "images/derivatives/card/festivals/nippachi--2371e3eb-xl.webp": [
+    1440,
+    960
+  ],
+  "images/derivatives/card/festivals/nippachi--2371e3eb-xs.webp": [
+    240,
+    160
+  ],
+  "images/derivatives/card/festivals/nippachi-flyer--491cfc2e-lg.webp": [
+    768,
+    960
+  ],
+  "images/derivatives/card/festivals/nippachi-flyer--491cfc2e-md.webp": [
+    576,
+    720
+  ],
+  "images/derivatives/card/festivals/nippachi-flyer--491cfc2e-sm.webp": [
+    384,
+    480
+  ],
+  "images/derivatives/card/festivals/nippachi-flyer--491cfc2e-xs.webp": [
+    192,
+    240
+  ],
   "images/derivatives/card/festivals/nu-festival--a722e0ae-lg.webp": [
     960,
     636
@@ -14192,6 +14228,14 @@
     1600
   ],
   "images/festivals/mutek.webp": [
+    1920,
+    1280
+  ],
+  "images/festivals/nippachi-flyer.webp": [
+    1008,
+    1260
+  ],
+  "images/festivals/nippachi.webp": [
     1920,
     1280
   ],
