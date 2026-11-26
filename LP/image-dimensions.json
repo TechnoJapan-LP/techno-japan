@@ -12531,6 +12531,22 @@
     240,
     160
   ],
+  "images/derivatives/card/festivals/rainbow-disco-club-2027-flyer--1174cd20-lg.webp": [
+    768,
+    960
+  ],
+  "images/derivatives/card/festivals/rainbow-disco-club-2027-flyer--1174cd20-md.webp": [
+    576,
+    720
+  ],
+  "images/derivatives/card/festivals/rainbow-disco-club-2027-flyer--1174cd20-sm.webp": [
+    384,
+    480
+  ],
+  "images/derivatives/card/festivals/rainbow-disco-club-2027-flyer--1174cd20-xs.webp": [
+    192,
+    240
+  ],
   "images/derivatives/card/festivals/rainbow-disco-club-flyer--f2707446-lg.webp": [
     768,
     960
@@ -14250,6 +14266,10 @@
   "images/festivals/prox.webp": [
     1388,
     1043
+  ],
+  "images/festivals/rainbow-disco-club-2027-flyer.webp": [
+    1000,
+    1250
   ],
   "images/festivals/rainbow-disco-club-flyer.webp": [
     1536,
