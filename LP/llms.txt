@@ -4,10 +4,13 @@
 > アーティスト136名・会場22件・記事27本を日英で掲載し、
 > 開催日・場所・出演者を構造化データ（schema.org）付きで公開している。
 
-## 今後の開催予定（2件）
+## 今後の開催予定（5件）
 
 - 2026-11-28〜2026-11-29: [TAKARAJIMA 2026](https://techno-japan.media/festivals/takarajima-beach-cleaning-party.html) — Secret Location, Okinawa
 - 2027-03-02〜2027-03-07: [Snow Machine Japan 2027](https://techno-japan.media/festivals/snow-machine-japan.html) — HAKUBA VALLEY, Nagano
+- 2027-03-27〜2027-03-28: [SPRING LOVE 春風 2027](https://techno-japan.media/festivals/spring-love-harukaze.html) — Yoyogi Event Plaza, Tokyo
+- 2027-04-16〜2027-04-18: [Rainbow Disco Club 2027](https://techno-japan.media/festivals/rainbow-disco-club.html) — Higashiizu Cross Country Course, Shizuoka
+- 2027-04-24〜2027-04-25: [ALA 2027](https://techno-japan.media/festivals/ala.html) — Toriki Tsuribori Cafe & Campground, Chiba
 
 ## 一覧
 

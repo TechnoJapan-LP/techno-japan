@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-10-30T16:23:28.742Z",
-  "count": 118,
+  "_generatedAt": "2026-11-26T03:01:40.621Z",
+  "count": 121,
   "items": [
     {
       "EDITION_ID": "99flags-2026",
@@ -1549,6 +1549,48 @@
       "ADDRESS": "長野県下伊那郡下條村睦沢7144",
       "LAT": "35.4312",
       "LNG": "137.7842",
+      "STATUS": "announced"
+    },
+    {
+      "EDITION_ID": "spring-love-harukaze-2027",
+      "FESTIVAL_ID": "spring-love-harukaze",
+      "EDITION": "2027",
+      "DATE_START": "2027-03-27",
+      "DATE_END": "2027-03-28",
+      "LOCATION": "Yoyogi Event Plaza",
+      "LOCATION_JA": "代々木公園イベント広場",
+      "PREF": "Tokyo",
+      "ADDRESS": "東京都渋谷区神南2-3",
+      "LAT": "35.6679403",
+      "LNG": "139.6968179",
+      "STATUS": "announced"
+    },
+    {
+      "EDITION_ID": "ala-2027",
+      "FESTIVAL_ID": "ala",
+      "EDITION": "2027",
+      "DATE_START": "2027-04-24",
+      "DATE_END": "2027-04-25",
+      "LOCATION": "Toriki Tsuribori Cafe & Campground",
+      "LOCATION_JA": "とり亀つりぼりキャンプ場",
+      "PREF": "Chiba",
+      "ADDRESS": "千葉県長生郡睦沢町大上1508",
+      "LAT": "35.34",
+      "LNG": "140.2818",
+      "STATUS": "announced"
+    },
+    {
+      "EDITION_ID": "rainbow-disco-club-2027",
+      "FESTIVAL_ID": "rainbow-disco-club",
+      "EDITION": "2027",
+      "DATE_START": "2027-04-16",
+      "DATE_END": "2027-04-18",
+      "LOCATION": "Higashiizu Cross Country Course",
+      "LOCATION_JA": "東伊豆クロスカントリーコース",
+      "PREF": "Shizuoka",
+      "ADDRESS": "静岡県賀茂郡東伊豆町稲取3348-19",
+      "LAT": "34.7896",
+      "LNG": "139.0419",
       "STATUS": "announced"
     }
   ]

@@ -1,7 +1,7 @@
 {
   "source": "https://techno-japan.media/",
   "license": "データの出典として techno-japan.media へのリンクを求めます",
-  "count": 2,
+  "count": 5,
   "events": [
     {
       "name": "TAKARAJIMA 2026",
@@ -29,6 +29,50 @@
         "HOUSE",
         "LIVE",
         "OTHERS"
+      ]
+    },
+    {
+      "name": "SPRING LOVE 春風 2027",
+      "url": "https://techno-japan.media/festivals/spring-love-harukaze.html",
+      "start": "2027-03-27",
+      "end": "2027-03-28",
+      "venue": "Yoyogi Event Plaza",
+      "pref": "Tokyo",
+      "lat": 35.6679403,
+      "lng": 139.6968179,
+      "genres": [
+        "TECHNO",
+        "HOUSE",
+        "LIVE",
+        "OTHERS"
+      ]
+    },
+    {
+      "name": "Rainbow Disco Club 2027",
+      "url": "https://techno-japan.media/festivals/rainbow-disco-club.html",
+      "start": "2027-04-16",
+      "end": "2027-04-18",
+      "venue": "Higashiizu Cross Country Course",
+      "pref": "Shizuoka",
+      "lat": 34.7896,
+      "lng": 139.0419,
+      "genres": [
+        "TECHNO",
+        "HOUSE"
+      ]
+    },
+    {
+      "name": "ALA 2027",
+      "url": "https://techno-japan.media/festivals/ala.html",
+      "start": "2027-04-24",
+      "end": "2027-04-25",
+      "venue": "Toriki Tsuribori Cafe & Campground",
+      "pref": "Chiba",
+      "lat": 35.34,
+      "lng": 140.2818,
+      "genres": [
+        "TECHNO",
+        "AMBIENT"
       ]
     }
   ]

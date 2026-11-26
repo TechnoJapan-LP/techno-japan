@@ -52,8 +52,8 @@
     "date": "2026-11-19"
   },
   "artist:calpiss": {
-    "hash": "831d82be5ef41f7c17f4384d0dd611bc0f0c8bc80e0b7ae7b1bf4fa0a6bdfc24",
-    "date": "2026-11-19"
+    "hash": "7c70f86aac38df9bc0b29be04c7c3440b3184ed5f7c16ea7d071b90c08b609d4",
+    "date": "2026-11-26"
   },
   "artist:captain-k": {
     "hash": "ca46b954f13c6b3b871a5788a4839244ab9066ccc14af61defcf1f6ec11a6b30",
@@ -100,8 +100,8 @@
     "date": "2026-11-19"
   },
   "artist:dj-krush": {
-    "hash": "20a37bdb3ba72609cf6db6fdb9282fc683e5ee8f8906e750b88ac51467a31de4",
-    "date": "2026-10-21"
+    "hash": "429884bb3d8d0f87a29c1b52efe30c696296ce98dc7c086c044b87578ddaf89b",
+    "date": "2026-11-26"
   },
   "artist:dj-kuri": {
     "hash": "37b9d38a4451fa2895eaafea10d76597246635a7a020aef49548d48c1661bff0",
@@ -280,8 +280,8 @@
     "date": "2026-10-20"
   },
   "artist:kikiorix": {
-    "hash": "38f2767c7e8b3fb25546071b9f3b3cf76be7acc5770c0ec9098a8eb921124245",
-    "date": "2026-11-19"
+    "hash": "0248457d32de225bd3d0af10f0f37c7c7fb65bc7b486533fc18999820ea69810",
+    "date": "2026-11-26"
   },
   "artist:kiko-dinucci": {
     "hash": "e69ca5cf37a51a851ea444145da6e2aba5ae270c736950b2f356e94586e2cc2f",
@@ -368,8 +368,8 @@
     "date": "2026-10-22"
   },
   "artist:occa": {
-    "hash": "d6a3a51e22f8be4089ccc7f72daa94b73dcc6dfdf219802a75f1b1595cb8c9b8",
-    "date": "2026-10-21"
+    "hash": "5ad8ee21c3afe81787c769c7371c001eaeb5ac80804a2ccc23b53f6901e79b81",
+    "date": "2026-11-26"
   },
   "artist:okadada": {
     "hash": "0e811369c51717d7ab3332acb38461de9f33abf615400a626c7226882b9f47f5",
@@ -464,8 +464,8 @@
     "date": "2026-11-19"
   },
   "artist:suimin": {
-    "hash": "58eb0679af9ac4ec86bb3d48c3f5c050e81cd5be5838bf86bbe73e89bc482df4",
-    "date": "2026-11-19"
+    "hash": "90b89f9071191c416ceacdffc0b5990e37c10b58873a6447b287fa6e259b6f89",
+    "date": "2026-11-26"
   },
   "artist:sunga": {
     "hash": "44a196ecfb3616a422315a53084c3c622cc1d57505744e49fb8b8d33171a8994",
@@ -512,8 +512,8 @@
     "date": "2026-11-19"
   },
   "artist:yamarchy": {
-    "hash": "c75fbee7f276a42420694657800c22306b87c94eb577e322ae602c4cf05daeae",
-    "date": "2026-11-19"
+    "hash": "ec4b50afaa66eaa3fba2d812e15e4331247916fe2c1aeeec9bdb78f169ffa3a5",
+    "date": "2026-11-26"
   },
   "artist:yellowuhuru": {
     "hash": "1a1e33ae0a5e263e0bef901a77969d122a3f218c89afc4a82735943c83d3934c",
@@ -536,8 +536,8 @@
     "date": "2026-11-20"
   },
   "artist:zundoko-disco": {
-    "hash": "8d00b5210627ca2f282943137ff2dbac3191b8fbcbc54d151f8bdf93891d77a1",
-    "date": "2026-10-21"
+    "hash": "ff572b2c3705988821d356a53dea2f61cd317023b60d64ef723dbbcf8feea964",
+    "date": "2026-11-26"
   },
   "artist:zundokodisco": {
     "hash": "f90df1047cee8f2b82b131da3a82cb00b7ed278cf9fe519c124335bb27d1fab7",
@@ -548,8 +548,8 @@
     "date": "2026-09-15"
   },
   "festival:ala": {
-    "hash": "624ce4c22e559f2edfd16f9c7faf3c1eceb055d90b90a78da05e7354e7a9e7d4",
-    "date": "2026-09-15"
+    "hash": "2cec24bd86c3c058e756c70c64fae1c654ae47540d1f3e8b7f85d23d4554a2b0",
+    "date": "2026-11-26"
   },
   "festival:annahme": {
     "hash": "8a15ea40530d8f11a27e6177a1de1a56a15e7b3d703ebfab4d599117d8fc36e5",
@@ -804,8 +804,8 @@
     "date": "2026-09-15"
   },
   "festival:rainbow-disco-club": {
-    "hash": "07be629adf22489627f02bd171f3af4e8a0220e9ccfda4032bfbbd3bca170c7e",
-    "date": "2026-09-15"
+    "hash": "b35e12627f9aff542dcf4cce0201a9e4e6e2d0e106558440fa87fe71629c84bd",
+    "date": "2026-11-26"
   },
   "festival:raptvana": {
     "hash": "0de0720317b17287e8fb966b7415df64016ed9f482c03597b5446c4c51942515",
@@ -856,8 +856,8 @@
     "date": "2026-10-22"
   },
   "festival:spring-love-harukaze": {
-    "hash": "80d26337304469806823336a8e1e96c6120bf691825528e100e23530262456dc",
-    "date": "2026-10-28"
+    "hash": "e51e435c63e893cbcd85bf470c2b4f5dd07ea857cbc38eb432df60bb924e0f8d",
+    "date": "2026-11-26"
   },
   "festival:sub-tide": {
     "hash": "14c9a87b09075243fa4bea90a3bfc99b739575b6f975207d7d19c782c2264764",
@@ -988,8 +988,8 @@
     "date": "2026-10-20"
   },
   "venue:vent": {
-    "hash": "72b3cc167049cac138027372abca4f5be9b90748f5d6e624239139da604a6eb4",
-    "date": "2026-10-20"
+    "hash": "484c48ec2d7e8bfcb9f44c8e720b50a2ddd98346771341da844052cafdc41944",
+    "date": "2026-11-26"
   },
   "venue:womb": {
     "hash": "5d2169ae4b638561a126cc642e18f5360e3d05ccd39b2556b341bd03edec5d49",
