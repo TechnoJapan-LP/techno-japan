@@ -16414,3 +16414,33 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 - ユーザーの承認待ち（EDITION_PROPOSALS の REVIEW_STATUS を approved / rejected）。承認後に applyApproved を dry-run → execute、その後ユーザーが Publish Now。
 - スニペットは CMS（`cms.html?cb=乱数`）で Claude in Chrome の javascript_tool に貼る。CSP のため eval / new Function は使えない。
+
+## 2026-11-26 次回開催の初回反映（承認3件 → EDITIONS 追記 → Publish → 本番確認）
+
+### 実施
+- ユーザーが EDITION_PROPOSALS の3件を approved に変更 → get_sheet で approved が見えることを確認してから、CMS（Claude in Chrome）で applyApproved を dry-run → 春風1件だけ execute → 結果確認 → 残り2件 execute。
+  - EDITIONS 122/123/124 行に spring-love-harukaze-2027 / ala-2027 / rainbow-disco-club-2027（STATUS announced、会場は前回から引き継ぎ、TICKETURL・FLYER 空）。EDITIONS 119 → 122 件。
+  - FESTIVALS の DATE を3件とも2027へ。列数は前後で同じ（30/28/27）、読み戻し照合で DATE 以外の変化なし。
+  - 提案3行は applied・APPLIED_AT 付き。
+- ユーザーが Publish Now → `cms: publish data.js`（3cd2d3a4f）→ Publish pipeline success（本番デプロイ込み）。
+- 直前の段階1コード push の Deploy は GitHub 側の一時障害（artifact metadata 取得失敗）で failure。内容は Publish pipeline のデプロイで本番に出ている。
+
+### コミット
+- このエントリを含むコミット（docs）
+
+### 検証
+- 本番（cb 付き）: festivals.html の UPCOMING カードが 1 → 4（Snow Machine / 春風 3.27–28 / RDC 4.16–18 / ALA 4.24–25）。
+- 詳細: rainbow-disco-club.html は DATE 4.16–18 2027・EDITIONS 2・JSON-LD startDate 2027-04-16 と 2026-04-17 の両方。en/festivals/ala.html に2027と前回会場。data-hub.js の date も3件とも2027。
+- 実ブラウザ（Claude in Chrome）、PC幅のみ。モバイル幅は未確認。
+
+### 変更したパターン
+- 本番データ: EDITIONS 3行追記、FESTIVALS 3行の DATE、EDITION_PROPOSALS 3行の状態。
+
+### 未確認の類似パターン
+- FESTIVALS の `editions` 列（JSON・CMS 保存時だけ書かれる旧控え。93件中67件のみ値あり、春風は `[]`）は更新していない。サイト表示は EDITIONS シートから作られるため影響なしと判断（build-detail-pages は editions.json を使用）。
+- 新しい回を足すと詳細ページ上部の LINEUP は最新回（2027・出演者なし）を数えるため「0 ARTISTS」になる（RDC で確認）。CMS で手動で次回を作ったときと同じ挙動。
+
+### 次の担当への注意・判断待ち
+- ALA の会場は未発表（前回会場を仮に引き継ぎ）。発表されたら CMS で直す。RDC は日程の正式な一文がまだ無い（駐車場日程から）。
+- Instagram: TECHNO JAPAN はプロアカウント＋Facebook ページ連携済み（ユーザー回答）。次は Meta アプリ作成とトークン発行（Business Discovery で各フェスの投稿を読む・段階3）。
+- preflight は Mac がスリープすると一斉に TIMEOUT になる（2026-11-26 に3回。pmset log で 15分おきの DarkWake を確認）。push はユーザーが起きている時間に、`caffeinate -dims git push` で行う。
