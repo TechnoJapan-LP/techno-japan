@@ -2467,7 +2467,6 @@ const FESTIVALS = [
     url: "https://ultrajapan.com/ja",
     ticketUrl: "https://ultrajapan.com/ja/tickets-2026",
     instagram: "https://www.instagram.com/ultrajapan/",
-    lineup: ["peggy-gou", "The Martinez Brothers", "sara-landry", "Lilly Palmer", "joris-voorn", "TRYM", "ken-ishii", "risa-taniguchi", "Mogwaa", "DJ co.kr", "JOMMY", "Katimi Ai", "ENUOH × MATSUNAMI"],
     editions: [
       { year: 2026, editionKey: "2026", date: "2026-09-19/2026-09-20", lineup: ["Peggy Gou", "The Martinez Brothers", "Sara Landry", "Lilly Palmer", "Joris Voorn", "TRYM", "KEN ISHII B2B RISA TANIGUCHI", "Mogwaa", "DJ co.kr", "JOMMY", "Katimi Ai", "ENUOH × MATSUNAMI"] },
     ],
@@ -2819,7 +2818,6 @@ const FESTIVALS = [
     desc_en: "Rural is built around a single idea: not a place where music is played, but an experience assembled slowly over time. Its stated aim is a peak experience. The site, nowhere CAMP, sits on the Numajiri plateau at the foot of Mount Adatara in Fukushima, surrounded by mountains and hot springs. 2026 marks the third edition held here. Thirty-one acts are booked. European selectors including Lena Willikens, Jane Fitz and Vladimir Ivkovic appear alongside Sunju Hargun, dj sniff, and Japanese-language projects such as Akuma no Numa and Kyomin. The programming brief is to connect European experimentalism, Asian sensibility and Japan's own regional scenes into one continuous flow, and the lineup reads exactly that way. A discounted ticket tier exists for residents of the Tohoku region.",
     ticketUrl: "https://ruraljp.zaiko.io/e/rural2026",
     instagram: "https://www.instagram.com/rural.jp/",
-    lineup: ["Al Wootton", "APEPA", "Atsushi Maeda", "Carpas Wiño Klint", "Chhabb", "DJ mew", "dj sniff", "Enantiomorphs", "Herbalistek", "Jane Fitz", "KAPI", "Kiss Nuka", "LAP", "Lena Willikens", "LEVOLANT", "MANISDRON", "MITAYO", "Nao", "NDRX", "RS Tangent", "SAMO", "SOUKI", "suimin", "Toner", "Volodymyr Gnatenko", "YAMA", "YAMARCHY", "YELLOWUHURU", "YuY", "kyomi", "Akuma No Numa"],
     editions: [
       { year: 2026, editionKey: "2026", date: "2026-07-17/2026-07-20", lineup: ["Al Wootton", "APEPA", "Atsushi Maeda", "Carpas Wiño Klint", "Chhabb", "DJ mew", "dj sniff", "Enantiomorphs", "Herbalistek", "Jane Fitz", "KAPI", "Kiss Nuka", "LAP", "Lena Willikens", "LEVOLANT", "MANISDRON", "MITAYO", "Nao", "NDRX", "RS Tangent", "SAMO", "SOUKI", "suimin", "Toner", "Volodymyr Gnatenko", "YAMA", "YAMARCHY", "YELLOWUHURU", "YuY", "Akuma No Numa", "Kyomi"] },
     ],
@@ -3190,7 +3188,6 @@ const FESTIVALS = [
     desc_en: "Transcendence delivers uncompromising techno programming in the mountainous terrain surrounding Nagano. The festival leverages Japan's natural acoustics and topography to create an immersive experience that bridges underground electronic music culture with the country's distinctive festival ecosystem. Its focus remains firmly on the music, drawing both domestic and international artists to perform in this unique alpine setting.",
     url: "https://transcendence-jp.com/",
     instagram: "https://www.instagram.com/transcendence.jp/",
-    lineup: ["DJ KURI", "DJ MARIA.", "DJ NOBU", "Garçon", "Kohra", "Paquita Gordon", "Takumi Inamoto", "Timnah", "upsammy", "YSK", "Yuzo Iwata", "Zitto B2B Zurkin"],
   },
   {
     id: "osukinidouzo",
@@ -3252,7 +3249,6 @@ const FESTIVALS = [
     url: "https://www.ala-jp.net/",
     ticketUrl: "https://alanutmeg.zaiko.io/e/alaairfest26",
     instagram: "https://www.instagram.com/ala_trippymusic/",
-    lineup: ["DJ MIKU", "DJ KENSEI", "DJ Yogurt", "HIDAI", "TAICHI KAWAHIRA", "TSUTOMU", "Qmico", "GA-SU", "free☆cinn.", "NUTMEG", "snipe1", "LiaRako"],
   },
   {
     id: "rainbow-disco-club",
@@ -3344,7 +3340,6 @@ const FESTIVALS = [
     name_en: "SPRING LOVE HARUKAZE",
     url: "https://harukaze.asia/",
     instagram: "https://www.instagram.com/harukaze_asia/",
-    lineup: ["HAPPY", "Inoue Ohana", "IORI", "Jun Inagawa", "Mari Sakurai", "OCCA", "Tomocomo", "YAMARCHY", "DJ KRUSH", "kikiorix", "DAIJIRO", "suimin", "CALPISS", "ZUNDOKO DISCO", "Tsuyoshi Suzuki", "FUNKY GONG"],
   },
   {
     id: "takarajima-beach-cleaning-party",
