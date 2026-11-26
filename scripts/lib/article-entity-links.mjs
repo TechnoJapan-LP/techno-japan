@@ -19,7 +19,8 @@ export function articleEntityRefWarnings(articlesBlock, entityBlock, fieldName) 
 
 export function prioritizeEntityArticles(articles, entityId, field, automaticMatch, max = 3) {
   const id = String(entityId || '').trim().toLowerCase();
-  const published = (articles || []).filter((article) => article && isArticleLive(article));
+  const published = (articles || []).filter((article) => article && isArticleLive(article)
+    && String(article.category || '').toUpperCase() !== 'NEWS');
   const explicit = published.filter((article) => articleRefIds(article, field).includes(id));
   const automatic = published.filter((article) => !explicit.includes(article) && automaticMatch(article));
   return [...explicit, ...automatic].slice(0, max);

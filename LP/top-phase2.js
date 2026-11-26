@@ -20,6 +20,7 @@
   // data-hub.js はトップレベル const を使うため、window のプロパティにはならない。
   // 同じ classic script の字句環境から直接読み、未読込時だけ空配列にする。
   var articles = (typeof ARTICLES !== 'undefined' ? ARTICLES : []).filter(function (a) { return a && a.id && String(a.status || '').toLowerCase() !== 'draft'; }).sort(function (a, b) { return String(b.date || '').localeCompare(String(a.date || '')); });
+  function isNews(a) { return String(a && a.category || '').toUpperCase() === 'NEWS'; }
   var festivals = (typeof FESTIVALS !== 'undefined' ? FESTIVALS : []).map(function (f) { return Object.assign({}, f, {_range: tjMagRange(f.date)}); }).filter(function (f) { return f._range; });
   var artists = typeof ARTISTS !== 'undefined' ? ARTISTS : [], venues = typeof VENUES !== 'undefined' ? VENUES : [], today = tjMagToday();
   var futureFestivals = festivals.filter(function (f) { return tjMagIsUpcoming(f._range, today); }).sort(function (a, b) { return a._range.start.localeCompare(b._range.start); });
@@ -42,10 +43,11 @@
       + (t.h2 ? '<p>' + esc(t.h2) + '</p>' : '') + '</a>';
   }
   function articleMeta(a) { var t = title(a); return '<div class="top2-meta"><span class="pill">' + esc(a.category || 'STORY') + '</span> ' + dateText(a.date) + (a.readTime ? ' · ' + esc(a.readTime) + ' min' : '') + '</div><h2 class="top2-panel-title">' + esc(t.h1) + '</h2>' + (t.h2 ? '<p class="top2-panel-sub">' + esc(t.h2) + '</p>' : ''); }
-  var future = articles.filter(function (a) { return a.featured === true || String(a.featured).toLowerCase() === 'true'; }).slice(0, 2); if (future.length < 2) future = future.concat(articles.filter(function (a) { return String(a.category || '').toUpperCase() === 'GUIDE' && future.indexOf(a) < 0; }).slice(0, 2 - future.length));
+  var nonNews = articles.filter(function (a) { return !isNews(a); });
+  var future = nonNews.filter(function (a) { return a.featured === true || String(a.featured).toLowerCase() === 'true'; }).slice(0, 2); if (future.length < 2) future = future.concat(nonNews.filter(function (a) { return String(a.category || '').toUpperCase() === 'GUIDE' && future.indexOf(a) < 0; }).slice(0, 2 - future.length));
   var futureIds = new Set(future.map(function (a) { return a.id; }));
   var leads = articles.filter(function (a) { return !futureIds.has(a.id); }).slice(0, 4);
-  var stories = articles.filter(function (a) { return !futureIds.has(a.id) && leads.indexOf(a) < 0; }).slice(0, 6);
+  var stories = nonNews.filter(function (a) { return !futureIds.has(a.id) && leads.indexOf(a) < 0; }).slice(0, 6);
   var leadTrack = document.getElementById('top2-lead-track');
   leadTrack.innerHTML = leads.map(function (a, i) {
     return '<a class="top2-panel" href="' + detailHref('articles', a.id) + '"><div class="top2-panel-photo">'
@@ -53,6 +55,15 @@
       + articleMeta(a) + '</div></a>';
   }).join('');
   document.querySelector('.top2-future-grid').innerHTML = future.map(function (a) { return articleCard(a, 'top2-future-card'); }).join('');
+  var newsSection = document.getElementById('top2-news');
+  var newsArticles = articles.filter(isNews).slice(0, 5);
+  var festivalById = new Map((typeof FESTIVALS !== 'undefined' ? FESTIVALS : []).map(function (f) { return [String(f.id), f]; }));
+  newsSection.hidden = newsArticles.length === 0;
+  document.getElementById('top2-news-list').innerHTML = newsArticles.map(function (a) {
+    var festival = festivalById.get(String(a.festivalId || '').trim());
+    var festivalName = festival ? loc(festival.name, '', festival.name_en) : '';
+    return '<li><a class="top2-news-row" href="' + detailHref('articles', a.id) + '"><time datetime="' + esc(a.date || '') + '">' + esc(dateText(a.date)) + '</time><span class="top2-news-title">' + esc(title(a).h1) + '</span>' + (festivalName ? '<span class="top2-news-festival">' + esc(festivalName) + '</span>' : '') + '</a></li>';
+  }).join('');
   document.querySelector('.top2-story-grid').innerHTML = stories.map(function (a) { return articleCard(a, 'top2-story-card'); }).join('');
   function festivalCard(f) {
     var type = String(f.type || 'festival').toLowerCase();

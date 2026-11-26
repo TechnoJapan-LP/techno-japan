@@ -16672,3 +16672,27 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - 12/1 の初回ルーチンの run log（RemoteTrigger list_runs / get_run_log）を確認する。
+
+## 2026-11-26 速報（NEWS）の表示ルール（段階1-①）
+
+### 実施
+- 設計: docs/design/NEWS_FLASH.md（ユーザー決定: 速報は TOP 先頭に期限なし／TOP 画像は既存のフェス素材／英語版も作る）。
+- 実装（Codex）: TOP に「News」枠（最新5本・0本なら非表示）、Future / Stories から NEWS を除外、news.html の ALL から NEWS を除外（NEWS タブのみ）、他ページの関連記事から NEWS を除外、スマホ表示、`scripts/check_news_flash.mjs`（fixture＋CDP 390px）を preflight に追加。
+- 既存の NEWS 記事は asia-music-event-2026-news の1本のみ → TOP の News 枠と NEWS タブに出るようになる。feature-yuta の関連記事が MUTEK 記事に差し替わった（生成物）。
+
+### コミット
+- このエントリを含むコミット
+
+### 検証
+- ローカル（http://localhost:8765）を Claude in Chrome で確認: TOP（JA/EN、PC幅 1316px）で News 枠が Stories の前・1行・リンク正しい、リード4本に NEWS が含まれる、Stories / Future に NEWS なし。news.html: ALL 12本で NEWS なし、NEWS タブ1本。
+- スマホ: Chrome の窓を縮められなかったため headless CDP（390×844 dpr3）で確認、タイトル幅 358px・横はみ出しなし。
+- 本番は push 後に確認する。
+
+### 変更したパターン
+- TOP / news ハブ JS・CSS、関連記事の候補、EN ハブ再生成。
+
+### 未確認の類似パターン
+- 検索ページ・タグページなど他の記事一覧に NEWS が出るか（未確認）。
+
+### 次の担当への注意・判断待ち
+- 段階1-②（CMS「速報を作る」・画像生成・GAS ai_news_draft）は別コミット。

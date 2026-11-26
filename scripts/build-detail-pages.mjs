@@ -1454,8 +1454,10 @@ function authorMatches(articleName, authorName) {
   return String(articleName || '').trim().toLocaleLowerCase() === String(authorName || '').trim().toLocaleLowerCase();
 }
 
+const isNewsArticle = (article) => String(article?.category || '').toUpperCase() === 'NEWS';
+
 function buildAuthorIndex(authors, articles) {
-  const published = (articles || []).filter((article) => article && isArticleLive(article));
+  const published = (articles || []).filter((article) => article && isArticleLive(article) && !isNewsArticle(article));
   return new Map((authors || []).filter((author) => author?.id && author?.name).map((author) => {
     const stories = published.filter((article) => authorMatches(article.author, author.name))
       .sort((a, b) => String(b.publishedAt || b.date || '').localeCompare(String(a.publishedAt || a.date || '')));
@@ -1845,7 +1847,7 @@ function articlePage(a, resolveEntities, lang = 'ja', festivals = [], editionsBy
 
   const articleDateKey = (item) => String(item.publishedAt || item.date || '').trim();
   const publishedArticles = (articles || [])
-    .filter((item) => item && isArticleLive(item) && item.id && item.id !== a.id)
+    .filter((item) => item && isArticleLive(item) && !isNewsArticle(item) && item.id && item.id !== a.id)
     .sort((x, y) => articleDateKey(y).localeCompare(articleDateKey(x)));
   const relatedArticles = [];
   const addRelated = (items) => {
@@ -2754,7 +2756,7 @@ function festivalPage(f, festivalEditions, lineupsByEdition, artistsById, allArt
   const image = absUrl(f.image || f.flyer);
 
   // このフェスに紐づく記事（ARTICLES.festivalId で関連付け）
-  const related = (articles || []).filter((a) => a.festivalId === f.id && isArticleLive(a));
+  const related = (articles || []).filter((a) => a.festivalId === f.id && isArticleLive(a) && !isNewsArticle(a));
   const relatedHtml = related.length
     ? relatedStoryCardsHtml(related, lang, { forceEnglishPath: true, compactDate: true, wide: true, heading: 'Stories', clauseBreakSub: true })
     : '';
@@ -3166,7 +3168,7 @@ function artistPage(a, artistsById, lang = 'ja', artistAppearances = new Map(), 
   const faqLd = faqJsonLd(faqItems);
   const artistFestivalIds = appearances.map(({ festival }) => festival.id);
   const artistEditionIds = appearances.map(({ edition }) => edition.EDITION_ID).filter(Boolean);
-  const artistArticles = prioritizeEntityArticles(articles, a.id, 'artistIds', (article) => articleMatchesArtist(article, a, {
+  const artistArticles = prioritizeEntityArticles(articles, a.id, 'artistIds', (article) => !isNewsArticle(article) && articleMatchesArtist(article, a, {
     artistFestivalIds,
     artistEditionIds,
     festivals: XLINK.fests,
@@ -3475,6 +3477,7 @@ function venuePage(v, lang = 'ja', allFestivals = [], editionsByFestival = new M
   if (modified) jsonLd.dateModified = modified;
   if (eventRefs.length) jsonLd.event = eventRefs;
   const venueArticles = prioritizeEntityArticles(articles, v.id, 'venueIds', (article) => {
+    if (isNewsArticle(article)) return false;
     if (!article || !venueNameForMatch) return false;
     return [article.title, article.title_en, article.body, article.body_en]
       .some((value) => stripTags(value || '').toLocaleLowerCase().includes(venueNameForMatch));
@@ -3901,8 +3904,8 @@ function enHubFromJa(html, page) {
   if (links) s = replaceHubLinksBlock(s, links.marker, links.html, `en/${page}`);
 
   // 内部リンク: EN 版があるページだけ /en/ へ。相対・絶対の両表記に対応する。
-  s = s.replace(/href="\/?((?:index|news|festivals|artists|venues|about|submit|writers|favorites)\.html)"/g,
-    (m, p) => (EN_PAGES.has(p) ? `href="/en/${p}"` : m));
+  s = s.replace(/href="\/?((?:index|news|festivals|artists|venues|about|submit|writers|favorites)\.html)(\?[^\"]*)?"/g,
+    (m, p, query = '') => (EN_PAGES.has(p) ? `href="/en/${p}${query}"` : m));
   // JA の正式なトップURLを EN 側の正式なトップURLへ変換する。
   // EN メニュー内の JA 切替だけは後でルートへ戻すため一時的な印を使う。
   s = s.replace(/href="\/"/g, 'href="/en/index.html"');

@@ -132,7 +132,9 @@
 
   function filteredArticles() {
     return [...published].sort(state.sort === 'popular' && popularity ? sortPopular : sortNewest).filter((article) => {
-      const categoryMatches = state.category === 'ALL' || String(article.category || '').toUpperCase() === state.category;
+      const categoryMatches = state.category === 'ALL'
+        ? String(article.category || '').toUpperCase() !== 'NEWS'
+        : String(article.category || '').toUpperCase() === state.category;
       const tagMatches = !state.tag || (Array.isArray(article.tags) && article.tags.some((tag) => String(tag).toLowerCase() === state.tag.toLowerCase()));
       return categoryMatches && tagMatches;
     });
