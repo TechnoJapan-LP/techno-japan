@@ -16558,3 +16558,39 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 ### 次の担当への注意・判断待ち
 - rainbow-disco-club-2027 の LINEUPS 20行（1633〜1652行）は2026年と同じ顔ぶれ。2027年の出演者は公式未発表。ユーザーは「15:11 に2027年の出演者を登録した」と言っており、残すか消すか確認中。消していない。
 - 2025回の出演者（ZAIKO に掲載）は未登録。
+
+## 2026-11-26 RDC 2025 回の出演者登録＋国内フェス残り59件の巡回
+
+### 実施
+- 本番 LINEUPS 1827〜1845 行に rainbow-disco-club-2025 の19組を追記（ユーザー依頼）。出典は ZAIKO 公式チケットページ rdc2025 の LINE-UP（VJ・照明5組は除外）。ARTIST_ID は登録済みの5組（antal / chaos-in-the-cbd / kikiorix / ouissam / palms-trax）のみ、残り14組と組み合わせ出演は ACT_LABEL だけ。live は Kuniyuki & Xiaolin・Soichi Terada、b2b は DJ Nobu b2b Batu。
+- 残り候補59件を巡回（調査はサブエージェント4本、結果は data/edition-crawl/checked.json）。候補は0件になった。
+  - 提案1件: ultra-japan-2027（2027-09-18〜19、high、公式サイトを Claude が直接確認）→ EDITION_PROPOSALS 5行目に pending。
+  - 休止: one-music-camp（2026→2027へ延期、日程未発表）、asagiri-jam（2026休止、2027で再会と告知・日程未発表）。
+  - 終了: gampeki（2025年が THE FINAL）。STATUS は変えていない。
+  - 実在を確認できない: one-park-riverfes、midnight-cult-rave。
+  - 既存データとの食い違い（未修正・要確認）: circus 2026 の日付（公式9/23、DB 9/22）、colors-presents-soundcamp 2026 の会場（公式 石狩湾新港、DB Secret Location）。
+
+### コミット
+- このエントリを含むコミット
+
+### 検証
+- LINEUPS を読み直し: 2025回19行、内容一致、重複なし（全1614行）。`node scripts/fetch-data.mjs --dry` エラー0。
+- EDITION_PROPOSALS を読み直し: 5行目が送った値と一致、既存3行（applied）は不変。
+- 本番サイト反映は Publish 待ち（**実機未確認**）。
+
+### 変更したパターン
+- 本番 LINEUPS 追記19行、EDITION_PROPOSALS 追記1行、checked.json 59件。
+
+### 未確認の類似パターン
+- 巡回は Web 検索と公式サイトのみ。Instagram だけで告知しているフェス（odyssey / otsukimi / detox / raptvana など）は未確認。
+
+### 次の担当への注意・判断待ち
+- ユーザー承認待ち: ultra-japan-2027。
+- rainbow-disco-club-2027 の LINEUPS 20行（2026と同じ顔ぶれ）は、ユーザーが「2027は手動で追加する」と回答。削除するかは明示の返事待ちで、残してある。
+
+### 追記（同日 Publish 後の本番確認）
+- ユーザーが CMS で RDC 2027 を手動修正（18:45）→ Publish Now（cms: publish 5ab5867d8）→ 画像同期（Publish の後に実行、61c2aefbf）→ 再デプロイ成功。
+- 本番 festivals/rainbow-disco-club.html: 開催ヒストリー 2027 / 2026 / 2025 の3回。2027 フライヤー（rainbow-disco-club-2027-flyer.webp）表示、画像は 200。
+- 公開データ lineups.json: rdc-2025 19 / rdc-2026 19 / rdc-2027 11、春風 2026 16 / 2027 0、移し替えた他6件も件数一致。→ 前エントリの「実機未確認」は解消。
+- ★訂正: FESTIVALS.LINEUP の11組（antal, ben-ufo, chaos-in-the-cbd ほか）は「2025年の出演者」ではなく、**RDC 2027 の第1弾発表**（ZAIKO rdc2027「出演 (A to Z)」と一致）。ユーザーが 15:11 にフェス共通の LINEUP 欄へ入れていたもの。巡回サブエージェントの「2027 出演者は未発表」も誤りだった。
+- EN 可視日本語の検査は、ARTISTS の featured が「出演予定あり」からランダムに3人選ぶため、出演予定の母集団に bio_en に「Spring Love 春風」を含むアーティストが入ると落ちる（今回3回連続）。基準は更新していない。
