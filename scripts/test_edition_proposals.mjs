@@ -5,9 +5,8 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { findCandidates } from './editions/candidates.mjs';
-import './editions/cms-edition-proposals.js';
-import { authFetch, planPush } from './editions/push-proposals.mjs';
-const proposals = globalThis.TJEditionProposals;
+import { authFetch, loadEditionProposals, planPush } from './editions/push-proposals.mjs';
+const proposals = loadEditionProposals();
 
 const headers = { EDITION_PROPOSALS:['PROPOSAL_ID','FESTIVAL_ID','EDITION','DATE_START','DATE_END','VENUE_CHANGED','LOCATION','LOCATION_JA','PREF','ADDRESS','LAT','LNG','SOURCE_URL','SOURCE_QUOTE','CONFIDENCE','REVIEW_STATUS','FOUND_AT','NOTES','APPLIED_AT'], EDITIONS:['EDITION_ID','FESTIVAL_ID','EDITION','DATE_START','DATE_END','LOCATION','LOCATION_JA','VENUE_ID','PREF','ADDRESS','LAT','LNG','TICKETURL','FLYER','STATUS'], FESTIVALS:['ID','DATE','name','desc','ticketurl','ticketUrl','flyer','lastEditedAt','lineup'], LINEUPS:['EDITION_ID','ARTIST_ID','ACT_LABEL','SET_TYPE','SORT'], ARTISTS:['ID','NAME'] };
 function fakeGas(initial, { mismatch = false, dateStrings = false, proposalDateCells = false } = {}) {

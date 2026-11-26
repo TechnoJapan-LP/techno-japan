@@ -1,10 +1,31 @@
 #!/usr/bin/env node
 import fs from 'node:fs';
-import { createRequire } from 'node:module';
+import vm from 'node:vm';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-const require = createRequire(import.meta.url);
-const { appendProposals } = require('./cms-edition-proposals.js');
+// package.json の type=module に左右されないよう、UMD を CommonJS 形式で評価する。
+export function loadEditionProposals() {
+  const filename = fileURLToPath(new URL('./cms-edition-proposals.js', import.meta.url));
+  const module = { exports: {} };
+  const context = {
+    module,
+    globalThis: {},
+    window: undefined,
+    Intl,
+    Date,
+    URL,
+    fetch: globalThis.fetch,
+    console,
+  };
+  vm.runInNewContext(fs.readFileSync(filename, 'utf8'), context, { filename });
+  const api = module.exports;
+  if (typeof api.appendProposals !== 'function' || typeof api.applyApproved !== 'function') {
+    throw new Error(`${filename}: UMD API の読み込みに失敗しました`);
+  }
+  return api;
+}
+
+const { appendProposals } = loadEditionProposals();
 
 export const GAS_URL = 'https://script.google.com/macros/s/AKfycbxhJ6rtGoAirNyV5TtBvzWHNOT8RuB0nfDjwglmdu8ClhpWZ-OXSbMM4UyFE_7ZsV-Lpg/exec';
 
