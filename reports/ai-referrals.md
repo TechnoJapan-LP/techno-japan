@@ -1,17 +1,17 @@
 # AI経由の流入
 
-取得日時: 2026-11-25T02:38:14.246Z
+取得日時: 2026-11-26T01:52:04.590Z
 
 | 期間 | AIセッション | 全体セッション | AI割合 |
 |---|---:|---:|---:|
-| 直近28日（2026-10-29〜2026-11-25） | 99 | 2708 | 3.66% |
-| 前の28日（2026-10-01〜2026-10-28） | 0 | 0 | 0.00% |
+| 直近28日（2026-10-30〜2026-11-26） | 100 | 2747 | 3.64% |
+| 前の28日（2026-10-02〜2026-10-29） | 0 | 0 | 0.00% |
 
 ## 直近28日：参照元別
 
 | 参照元 | セッション | ユーザー |
 |---|---:|---:|
-| chatgpt.com | 94 | 91 |
+| chatgpt.com | 95 | 92 |
 | gemini.google.com | 5 | 5 |
 
 ### 直近28日：ランディングページ上位20
@@ -36,8 +36,8 @@
 | /en/articles/sawagi-festival-2026-info.html | 2 | 2 |
 | /festivals/festival-de-frue.html | 2 | 2 |
 | (not set) | 1 | 1 |
+| /articles/dei-fest-2026-info.html | 1 | 1 |
 | /articles/denki-bodhisattva-2026-info.html | 1 | 1 |
-| /articles/japan-festival-2026-november.html | 1 | 1 |
 
 ## 前の28日：参照元別
 
@@ -52,6 +52,7 @@
 |---|---:|---:|
 | (not set) | 0 | 0 |
 | / | 0 | 0 |
+| /articles/dei-fest-2026-info.html | 0 | 0 |
 | /articles/denki-bodhisattva-2026-info.html | 0 | 0 |
 | /articles/japan-festival-2026-november.html | 0 | 0 |
 | /articles/japan-festival-2026-october.html | 0 | 0 |
@@ -69,4 +70,3 @@
 | /en/articles/japan-festival-2026-november.html | 0 | 0 |
 | /en/articles/japan-festival-2026-october.html | 0 | 0 |
 | /en/articles/odyssey-2026-info.html | 0 | 0 |
-| /en/articles/rebirth-2026-info.html | 0 | 0 |

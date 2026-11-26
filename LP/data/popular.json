@@ -1,18 +1,18 @@
 {
-  "generatedAt": "2026-11-25T02:38:12.052Z",
+  "generatedAt": "2026-11-26T01:52:02.050Z",
   "days": 30,
   "source": "ga4",
   "items": [
     {
       "id": "japan-festival-2026-october",
-      "views": 239
-    },
-    {
-      "id": "denki-bodhisattva-2026-info",
-      "views": 155
+      "views": 238
     },
     {
       "id": "japan-festival-2026-november",
+      "views": 153
+    },
+    {
+      "id": "denki-bodhisattva-2026-info",
       "views": 150
     },
     {
@@ -21,7 +21,7 @@
     },
     {
       "id": "topia-2026-info",
-      "views": 74
+      "views": 65
     },
     {
       "id": "resonance-2026-info",
@@ -32,15 +32,23 @@
       "views": 51
     },
     {
-      "id": "sawagi-festival-2026-info",
-      "views": 30
+      "id": "dei-fest-2026-info",
+      "views": 29
     },
     {
-      "id": "dei-fest-2026-info",
-      "views": 25
+      "id": "sawagi-festival-2026-info",
+      "views": 26
     },
     {
       "id": "intergalactic-2026-info",
+      "views": 21
+    },
+    {
+      "id": "asia-music-event-2026-news",
+      "views": 19
+    },
+    {
+      "id": "forest-sound-camp-info",
       "views": 19
     },
     {
@@ -48,16 +56,8 @@
       "views": 18
     },
     {
-      "id": "forest-sound-camp-info",
-      "views": 18
-    },
-    {
       "id": "snow-mashine-2027-info",
       "views": 16
-    },
-    {
-      "id": "asia-music-event-2026-news",
-      "views": 14
     },
     {
       "id": "feature-yuta",
@@ -69,27 +69,27 @@
     },
     {
       "id": "odyssey-2026-info",
-      "views": 12
-    },
-    {
-      "id": "treak-2026-info",
-      "views": 8
+      "views": 13
     },
     {
       "id": "japan-festival-2026-september",
-      "views": 6
+      "views": 7
     },
     {
-      "id": "loa-lost-paradise-2026-info",
-      "views": 5
+      "id": "treak-2026-info",
+      "views": 7
     },
     {
       "id": "rebirth-2026-info",
       "views": 5
     },
     {
-      "id": "transcendence-2025-report",
+      "id": "loa-lost-paradise-2026-info",
       "views": 4
+    },
+    {
+      "id": "ondoland1012-2026-info",
+      "views": 3
     },
     {
       "id": "post-20251120",
@@ -100,11 +100,11 @@
       "views": 3
     },
     {
-      "id": "bondisco-2026-info",
-      "views": 1
+      "id": "transcendence-2025-report",
+      "views": 3
     },
     {
-      "id": "ondoland1012-2026-info",
+      "id": "bondisco-2026-info",
       "views": 1
     }
   ]

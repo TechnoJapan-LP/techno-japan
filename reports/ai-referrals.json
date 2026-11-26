@@ -1,27 +1,27 @@
 {
-  "generatedAt": "2026-11-25T02:38:14.246Z",
+  "generatedAt": "2026-11-26T01:52:04.590Z",
   "propertyId": "535755449",
   "periods": {
     "current": {
-      "startDate": "2026-10-29",
-      "endDate": "2026-11-25",
+      "startDate": "2026-10-30",
+      "endDate": "2026-11-26",
       "label": "直近28日"
     },
     "previous": {
-      "startDate": "2026-10-01",
-      "endDate": "2026-10-28",
+      "startDate": "2026-10-02",
+      "endDate": "2026-10-29",
       "label": "前の28日"
     }
   },
   "current": {
-    "sessions": 99,
-    "totalUsers": 96,
-    "share": 0.03655834564254062,
+    "sessions": 100,
+    "totalUsers": 97,
+    "share": 0.03640334910811795,
     "bySource": [
       {
         "source": "chatgpt.com",
-        "sessions": 94,
-        "totalUsers": 91
+        "sessions": 95,
+        "totalUsers": 92
       },
       {
         "source": "gemini.google.com",
@@ -121,18 +121,18 @@
         "totalUsers": 1
       },
       {
-        "landingPage": "/articles/denki-bodhisattva-2026-info.html",
+        "landingPage": "/articles/dei-fest-2026-info.html",
         "sessions": 1,
         "totalUsers": 1
       },
       {
-        "landingPage": "/articles/japan-festival-2026-november.html",
+        "landingPage": "/articles/denki-bodhisattva-2026-info.html",
         "sessions": 1,
         "totalUsers": 1
       }
     ],
-    "allSessions": 2708,
-    "allTotalUsers": 2226
+    "allSessions": 2747,
+    "allTotalUsers": 2240
   },
   "previous": {
     "sessions": 0,
@@ -158,6 +158,11 @@
       },
       {
         "landingPage": "/",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
+        "landingPage": "/articles/dei-fest-2026-info.html",
         "sessions": 0,
         "totalUsers": 0
       },
@@ -243,11 +248,6 @@
       },
       {
         "landingPage": "/en/articles/odyssey-2026-info.html",
-        "sessions": 0,
-        "totalUsers": 0
-      },
-      {
-        "landingPage": "/en/articles/rebirth-2026-info.html",
         "sessions": 0,
         "totalUsers": 0
       }
