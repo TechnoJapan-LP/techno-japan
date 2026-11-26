@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-11-20T02:20:25.174Z",
-  "count": 136,
+  "_generatedAt": "2026-11-26T09:47:40.230Z",
+  "count": 143,
   "items": [
     {
       "ID": "dj-nobu",
@@ -2089,6 +2089,34 @@
     {
       "ID": "zundokodisco",
       "NAME": "ZUNDOKODISCO"
+    },
+    {
+      "ID": "chaos-in-the-cbd",
+      "NAME": "Chaos In The CBD"
+    },
+    {
+      "ID": "craig-richards",
+      "NAME": "Craig Richards"
+    },
+    {
+      "ID": "danilo-plessow",
+      "NAME": "Danilo Plessow"
+    },
+    {
+      "ID": "jeff-mills",
+      "NAME": "Jeff Mills"
+    },
+    {
+      "ID": "jyoty",
+      "NAME": "Jyoty"
+    },
+    {
+      "ID": "palms-trax",
+      "NAME": "Palms Trax"
+    },
+    {
+      "ID": "sofia-kourtesis",
+      "NAME": "Sofia Kourtesis"
     }
   ]
 }

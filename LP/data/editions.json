@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-11-26T03:01:40.621Z",
-  "count": 121,
+  "_generatedAt": "2026-11-26T09:47:40.230Z",
+  "count": 122,
   "items": [
     {
       "EDITION_ID": "99flags-2026",
@@ -1591,7 +1591,23 @@
       "ADDRESS": "静岡県賀茂郡東伊豆町稲取3348-19",
       "LAT": "34.7896",
       "LNG": "139.0419",
+      "TICKETURL": "https://rainbowdiscoclub.zaiko.io/ja/e/rdc2027",
+      "FLYER": "images/festivals/rainbow-disco-club-2027-flyer.jpg",
       "STATUS": "announced"
+    },
+    {
+      "EDITION_ID": "rainbow-disco-club-2025",
+      "FESTIVAL_ID": "rainbow-disco-club",
+      "EDITION": "2025",
+      "DATE_START": "2025-04-18",
+      "DATE_END": "2025-04-20",
+      "LOCATION": "Higashiizu Cross Country Course",
+      "LOCATION_JA": "東伊豆クロスカントリーコース",
+      "PREF": "Shizuoka",
+      "ADDRESS": "静岡県賀茂郡東伊豆町稲取3348-19",
+      "LAT": "34.7896",
+      "LNG": "139.0419",
+      "STATUS": "finished"
     }
   ]
 }

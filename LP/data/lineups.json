@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-11-26T03:01:40.621Z",
-  "count": 1575,
+  "_generatedAt": "2026-11-26T09:47:40.230Z",
+  "count": 1605,
   "items": [
     {
       "EDITION_ID": "waifu-2026",
@@ -143,18 +143,21 @@
     {
       "EDITION_ID": "rainbow-disco-club-2026",
       "ARTIST_ID": "ben-ufo",
+      "ACT_LABEL": "Ben UFO",
       "SET_TYPE": "dj",
       "SORT": "2"
     },
     {
       "EDITION_ID": "rainbow-disco-club-2026",
       "ARTIST_ID": "daphni",
+      "ACT_LABEL": "Daphni",
       "SET_TYPE": "dj",
       "SORT": "3"
     },
     {
       "EDITION_ID": "rainbow-disco-club-2026",
       "ARTIST_ID": "dj-maria",
+      "ACT_LABEL": "DJ MARIA.",
       "SET_TYPE": "dj",
       "SORT": "4"
     },
@@ -167,66 +170,77 @@
     {
       "EDITION_ID": "rainbow-disco-club-2026",
       "ARTIST_ID": "feline",
+      "ACT_LABEL": "Feline",
       "SET_TYPE": "dj",
       "SORT": "6"
     },
     {
       "EDITION_ID": "rainbow-disco-club-2026",
       "ARTIST_ID": "floating-points",
+      "ACT_LABEL": "Floating Points",
       "SET_TYPE": "dj",
       "SORT": "7"
     },
     {
       "EDITION_ID": "rainbow-disco-club-2026",
       "ARTIST_ID": "gerd-janson",
+      "ACT_LABEL": "Gerd Janson",
       "SET_TYPE": "dj",
       "SORT": "8"
     },
     {
       "EDITION_ID": "rainbow-disco-club-2026",
       "ARTIST_ID": "gonno",
+      "ACT_LABEL": "GONNO",
       "SET_TYPE": "dj",
       "SORT": "9"
     },
     {
       "EDITION_ID": "rainbow-disco-club-2026",
       "ARTIST_ID": "haai",
+      "ACT_LABEL": "HAAi",
       "SET_TYPE": "dj",
       "SORT": "10"
     },
     {
       "EDITION_ID": "rainbow-disco-club-2026",
       "ARTIST_ID": "helena-hauff",
+      "ACT_LABEL": "Helena Hauff",
       "SET_TYPE": "dj",
       "SORT": "11"
     },
     {
       "EDITION_ID": "rainbow-disco-club-2026",
       "ARTIST_ID": "jonathan-kusuma",
+      "ACT_LABEL": "Jonathan Kusuma",
       "SET_TYPE": "dj",
       "SORT": "12"
     },
     {
       "EDITION_ID": "rainbow-disco-club-2026",
       "ARTIST_ID": "jonny-rock",
+      "ACT_LABEL": "Jonny Rock",
       "SET_TYPE": "dj",
       "SORT": "13"
     },
     {
       "EDITION_ID": "rainbow-disco-club-2026",
       "ARTIST_ID": "kikiorix",
+      "ACT_LABEL": "Kikiorix",
       "SET_TYPE": "dj",
       "SORT": "14"
     },
     {
       "EDITION_ID": "rainbow-disco-club-2026",
       "ARTIST_ID": "mala",
+      "ACT_LABEL": "Mala",
       "SET_TYPE": "dj",
       "SORT": "15"
     },
     {
       "EDITION_ID": "rainbow-disco-club-2026",
       "ARTIST_ID": "nc4k",
+      "ACT_LABEL": "NC4K",
       "SET_TYPE": "dj",
       "SORT": "16"
     },
@@ -239,12 +253,14 @@
     {
       "EDITION_ID": "rainbow-disco-club-2026",
       "ARTIST_ID": "suze-ijo",
+      "ACT_LABEL": "Suze Ijó",
       "SET_TYPE": "dj",
       "SORT": "18"
     },
     {
       "EDITION_ID": "rainbow-disco-club-2026",
       "ARTIST_ID": "four-tet",
+      "ACT_LABEL": "Four Tet",
       "SET_TYPE": "dj",
       "SORT": "19"
     },
@@ -8438,6 +8454,179 @@
       "SORT": "8"
     },
     {
+      "EDITION_ID": "rainbow-disco-club-2027",
+      "ARTIST_ID": "antal",
+      "ACT_LABEL": "Antal",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "rainbow-disco-club-2027",
+      "ARTIST_ID": "ben-ufo",
+      "ACT_LABEL": "Ben UFO",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "rainbow-disco-club-2027",
+      "ARTIST_ID": "chaos-in-the-cbd",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "rainbow-disco-club-2027",
+      "ARTIST_ID": "craig-richards",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "rainbow-disco-club-2027",
+      "ACT_LABEL": "Danilo Plessow (MCDE)",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "rainbow-disco-club-2027",
+      "ARTIST_ID": "dj-masda",
+      "ACT_LABEL": "DJ Masda",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "rainbow-disco-club-2027",
+      "ARTIST_ID": "dj-nobu",
+      "ACT_LABEL": "DJ Nobu",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "rainbow-disco-club-2027",
+      "ARTIST_ID": "jeff-mills",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "rainbow-disco-club-2027",
+      "ARTIST_ID": "jyoty",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "rainbow-disco-club-2027",
+      "ARTIST_ID": "palms-trax",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "rainbow-disco-club-2027",
+      "ARTIST_ID": "sofia-kourtesis",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "spring-love-harukaze-2026",
+      "ACT_LABEL": "HAPPY",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "spring-love-harukaze-2026",
+      "ACT_LABEL": "Inoue Ohana",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "spring-love-harukaze-2026",
+      "ACT_LABEL": "IORI",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "spring-love-harukaze-2026",
+      "ACT_LABEL": "Jun Inagawa",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "spring-love-harukaze-2026",
+      "ACT_LABEL": "Mari Sakurai",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "spring-love-harukaze-2026",
+      "ARTIST_ID": "occa",
+      "ACT_LABEL": "OCCA",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "spring-love-harukaze-2026",
+      "ACT_LABEL": "Tomocomo",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "spring-love-harukaze-2026",
+      "ARTIST_ID": "yamarchy",
+      "ACT_LABEL": "YAMARCHY",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "spring-love-harukaze-2026",
+      "ARTIST_ID": "dj-krush",
+      "ACT_LABEL": "DJ KRUSH",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "spring-love-harukaze-2026",
+      "ARTIST_ID": "kikiorix",
+      "ACT_LABEL": "kikiorix",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "spring-love-harukaze-2026",
+      "ACT_LABEL": "DAIJIRO",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "spring-love-harukaze-2026",
+      "ARTIST_ID": "suimin",
+      "ACT_LABEL": "suimin",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "spring-love-harukaze-2026",
+      "ARTIST_ID": "calpiss",
+      "ACT_LABEL": "CALPISS",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "spring-love-harukaze-2026",
+      "ARTIST_ID": "zundoko-disco",
+      "ACT_LABEL": "ZUNDOKO DISCO",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "spring-love-harukaze-2026",
+      "ACT_LABEL": "Tsuyoshi Suzuki",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "spring-love-harukaze-2026",
+      "ACT_LABEL": "FUNKY GONG",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
       "EDITION_ID": "nu-festival-2026",
       "ACT_LABEL": "Shinichi Osawa",
       "SET_TYPE": "dj",
@@ -8482,6 +8671,7 @@
     {
       "EDITION_ID": "nu-festival-2026",
       "ARTIST_ID": "akie",
+      "ACT_LABEL": "akie",
       "SET_TYPE": "dj",
       "SORT": "8"
     },
@@ -8560,6 +8750,7 @@
     {
       "EDITION_ID": "nu-festival-2026",
       "ARTIST_ID": "dj-krush",
+      "ACT_LABEL": "dj-krush",
       "SET_TYPE": "dj",
       "SORT": "21"
     },
@@ -8620,12 +8811,14 @@
     {
       "EDITION_ID": "nu-festival-2026",
       "ARTIST_ID": "kotsu",
+      "ACT_LABEL": "kotsu",
       "SET_TYPE": "dj",
       "SORT": "31"
     },
     {
       "EDITION_ID": "nu-festival-2026",
       "ARTIST_ID": "kyomi",
+      "ACT_LABEL": "Kyomi",
       "SET_TYPE": "dj",
       "SORT": "32"
     },
@@ -8752,6 +8945,7 @@
     {
       "EDITION_ID": "nu-festival-2026",
       "ARTIST_ID": "sapphire-slows",
+      "ACT_LABEL": "Sapphire Slows",
       "SET_TYPE": "dj",
       "SORT": "53"
     },
@@ -8764,6 +8958,7 @@
     {
       "EDITION_ID": "nu-festival-2026",
       "ARTIST_ID": "shhhhh",
+      "ACT_LABEL": "Shhhhh",
       "SET_TYPE": "dj",
       "SORT": "55"
     },
@@ -8878,6 +9073,7 @@
     {
       "EDITION_ID": "etsuetsu-2026",
       "ARTIST_ID": "akiram-en",
+      "ACT_LABEL": "AKIRAM EN",
       "SET_TYPE": "dj",
       "SORT": "2"
     },
@@ -8908,6 +9104,7 @@
     {
       "EDITION_ID": "etsuetsu-2026",
       "ARTIST_ID": "calpiss",
+      "ACT_LABEL": "CALPISS",
       "SET_TYPE": "dj",
       "SORT": "7"
     },
@@ -8938,6 +9135,7 @@
     {
       "EDITION_ID": "etsuetsu-2026",
       "ARTIST_ID": "dj-yogurt",
+      "ACT_LABEL": "DJ Yogurt",
       "SET_TYPE": "dj",
       "SORT": "12"
     },
@@ -8956,6 +9154,7 @@
     {
       "EDITION_ID": "etsuetsu-2026",
       "ARTIST_ID": "ground",
+      "ACT_LABEL": "ground",
       "SET_TYPE": "dj",
       "SORT": "15"
     },
@@ -9052,6 +9251,7 @@
     {
       "EDITION_ID": "etsuetsu-2026",
       "ARTIST_ID": "dj-kensei",
+      "ACT_LABEL": "dj-kensei",
       "SET_TYPE": "dj",
       "SORT": "31"
     },
@@ -9088,12 +9288,14 @@
     {
       "EDITION_ID": "etsuetsu-2026",
       "ARTIST_ID": "suimin",
+      "ACT_LABEL": "suimin",
       "SET_TYPE": "dj",
       "SORT": "37"
     },
     {
       "EDITION_ID": "etsuetsu-2026",
       "ARTIST_ID": "sunga",
+      "ACT_LABEL": "sunga",
       "SET_TYPE": "dj",
       "SORT": "38"
     },
@@ -9154,12 +9356,14 @@
     {
       "EDITION_ID": "etsuetsu-2026",
       "ARTIST_ID": "yellowuhuru",
+      "ACT_LABEL": "YELLOWUHURU",
       "SET_TYPE": "dj",
       "SORT": "48"
     },
     {
       "EDITION_ID": "etsuetsu-2026",
       "ARTIST_ID": "you-forgot",
+      "ACT_LABEL": "You Forgot",
       "SET_TYPE": "dj",
       "SORT": "49"
     },
@@ -9274,12 +9478,14 @@
     {
       "EDITION_ID": "letus-music-camp-2026",
       "ARTIST_ID": "aoki-takamasa",
+      "ACT_LABEL": "AOKI takamasa",
       "SET_TYPE": "dj",
       "SORT": "1"
     },
     {
       "EDITION_ID": "letus-music-camp-2026",
       "ARTIST_ID": "daniel-bell",
+      "ACT_LABEL": "DANIEL BELL",
       "SET_TYPE": "dj",
       "SORT": "2"
     },
@@ -9310,6 +9516,7 @@
     {
       "EDITION_ID": "letus-music-camp-2026",
       "ARTIST_ID": "kohei",
+      "ACT_LABEL": "kohei",
       "SET_TYPE": "dj",
       "SORT": "7"
     },
@@ -9386,100 +9593,123 @@
       "SORT": "6"
     },
     {
-      "EDITION_ID": "spring-love-harukaze-2027",
-      "ACT_LABEL": "HAPPY",
+      "EDITION_ID": "rainbow-disco-club-2025",
+      "ARTIST_ID": "antal",
+      "ACT_LABEL": "Antal",
       "SET_TYPE": "dj",
       "SORT": "1"
     },
     {
-      "EDITION_ID": "spring-love-harukaze-2027",
-      "ACT_LABEL": "Inoue Ohana",
+      "EDITION_ID": "rainbow-disco-club-2025",
+      "ARTIST_ID": "chaos-in-the-cbd",
+      "ACT_LABEL": "Chaos In The CBD",
       "SET_TYPE": "dj",
       "SORT": "2"
     },
     {
-      "EDITION_ID": "spring-love-harukaze-2027",
-      "ACT_LABEL": "IORI",
+      "EDITION_ID": "rainbow-disco-club-2025",
+      "ACT_LABEL": "Dita & Gero",
       "SET_TYPE": "dj",
       "SORT": "3"
     },
     {
-      "EDITION_ID": "spring-love-harukaze-2027",
-      "ACT_LABEL": "Jun Inagawa",
+      "EDITION_ID": "rainbow-disco-club-2025",
+      "ACT_LABEL": "Eris Drew & Octo Octa",
       "SET_TYPE": "dj",
       "SORT": "4"
     },
     {
-      "EDITION_ID": "spring-love-harukaze-2027",
-      "ACT_LABEL": "Mari Sakurai",
+      "EDITION_ID": "rainbow-disco-club-2025",
+      "ACT_LABEL": "François K.",
       "SET_TYPE": "dj",
       "SORT": "5"
     },
     {
-      "EDITION_ID": "spring-love-harukaze-2027",
-      "ARTIST_ID": "occa",
+      "EDITION_ID": "rainbow-disco-club-2025",
+      "ACT_LABEL": "Gilles Peterson",
       "SET_TYPE": "dj",
       "SORT": "6"
     },
     {
-      "EDITION_ID": "spring-love-harukaze-2027",
-      "ACT_LABEL": "Tomocomo",
+      "EDITION_ID": "rainbow-disco-club-2025",
+      "ARTIST_ID": "kikiorix",
+      "ACT_LABEL": "Kikiorix",
       "SET_TYPE": "dj",
       "SORT": "7"
     },
     {
-      "EDITION_ID": "spring-love-harukaze-2027",
-      "ARTIST_ID": "yamarchy",
-      "SET_TYPE": "dj",
+      "EDITION_ID": "rainbow-disco-club-2025",
+      "ACT_LABEL": "Kuniyuki & Xiaolin",
+      "SET_TYPE": "live",
       "SORT": "8"
     },
     {
-      "EDITION_ID": "spring-love-harukaze-2027",
-      "ARTIST_ID": "dj-krush",
+      "EDITION_ID": "rainbow-disco-club-2025",
+      "ARTIST_ID": "ouissam",
+      "ACT_LABEL": "Ouissam",
       "SET_TYPE": "dj",
       "SORT": "9"
     },
     {
-      "EDITION_ID": "spring-love-harukaze-2027",
-      "ARTIST_ID": "kikiorix",
+      "EDITION_ID": "rainbow-disco-club-2025",
+      "ARTIST_ID": "palms-trax",
+      "ACT_LABEL": "Palms Trax",
       "SET_TYPE": "dj",
       "SORT": "10"
     },
     {
-      "EDITION_ID": "spring-love-harukaze-2027",
-      "ACT_LABEL": "DAIJIRO",
+      "EDITION_ID": "rainbow-disco-club-2025",
+      "ACT_LABEL": "Sisi",
       "SET_TYPE": "dj",
       "SORT": "11"
     },
     {
-      "EDITION_ID": "spring-love-harukaze-2027",
-      "ARTIST_ID": "suimin",
-      "SET_TYPE": "dj",
+      "EDITION_ID": "rainbow-disco-club-2025",
+      "ACT_LABEL": "Soichi Terada",
+      "SET_TYPE": "live",
       "SORT": "12"
     },
     {
-      "EDITION_ID": "spring-love-harukaze-2027",
-      "ARTIST_ID": "calpiss",
+      "EDITION_ID": "rainbow-disco-club-2025",
+      "ACT_LABEL": "Sound Metaphors DJs",
       "SET_TYPE": "dj",
       "SORT": "13"
     },
     {
-      "EDITION_ID": "spring-love-harukaze-2027",
-      "ARTIST_ID": "zundoko-disco",
-      "SET_TYPE": "dj",
+      "EDITION_ID": "rainbow-disco-club-2025",
+      "ACT_LABEL": "DJ Nobu b2b Batu",
+      "SET_TYPE": "b2b",
       "SORT": "14"
     },
     {
-      "EDITION_ID": "spring-love-harukaze-2027",
-      "ACT_LABEL": "Tsuyoshi Suzuki",
+      "EDITION_ID": "rainbow-disco-club-2025",
+      "ACT_LABEL": "Fullhouse",
       "SET_TYPE": "dj",
       "SORT": "15"
     },
     {
-      "EDITION_ID": "spring-love-harukaze-2027",
-      "ACT_LABEL": "FUNKY GONG",
+      "EDITION_ID": "rainbow-disco-club-2025",
+      "ACT_LABEL": "Kode9",
       "SET_TYPE": "dj",
       "SORT": "16"
+    },
+    {
+      "EDITION_ID": "rainbow-disco-club-2025",
+      "ACT_LABEL": "Logic1000",
+      "SET_TYPE": "dj",
+      "SORT": "17"
+    },
+    {
+      "EDITION_ID": "rainbow-disco-club-2025",
+      "ACT_LABEL": "Verraco",
+      "SET_TYPE": "dj",
+      "SORT": "18"
+    },
+    {
+      "EDITION_ID": "rainbow-disco-club-2025",
+      "ACT_LABEL": "Woody92",
+      "SET_TYPE": "dj",
+      "SORT": "19"
     }
   ]
 }
