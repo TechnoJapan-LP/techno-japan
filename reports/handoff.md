@@ -16501,3 +16501,31 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - フライヤーの自動取得は Instagram Graph API（Business Discovery）接続後に「フライヤー候補の提案→承認→取り込み」として追加する方針（ユーザーへ説明済み）。
+
+## 2026-11-26 出演者の旧 LINEUP 列を LINEUPS へ移し替え＋反映処理のガード
+
+### 実施
+- 発覚: 春風の出演者16組は FESTIVALS の旧 `LINEUP` 列にだけあり、fetch-data が「FESTIVALS.DATE と同じ年の回」へ導出する。初回反映で DATE を2027にしたため、2026年の出演者が spring-love-harukaze-2027 に付いて本番に出ていた（Claude の反映が原因）。
+- 同じ状態のフェス7件（fetch-data --dry の「LINEUP列の…へ導出しました」警告）を、ユーザー承認のうえ LINEUPS シートへ移し替え: spring-love-harukaze-2026 16 / nu-festival-2026 65 / festival-fruezinho-2026 7 / etsuetsu-2026 57 / link-open-air-2026 10 / letus-music-camp-2026 13 / ensou-2026 6（計174行、1653〜1826行に追記）。
+  - 行の中身は LP/data/lineups.json の導出結果（ARTIST_ID 解決済み）。ACT_LABEL には旧列の元の名前を入れた。旧列の人数・名前と全件一致を確認してから、春風1件→照合→残り6件。
+  - 旧 `LINEUP` 列は消していない（LINEUPS に行があれば fetch-data は導出しない）。
+- 反映処理のガード（Codex）: applyApproved で、旧 LINEUP 列に値があり LINEUPS にそのフェスの行が1行も無いときは、何も書かずに提案を error にする（dry-run は `blocked-legacy-lineup`）。設計書⑤に追記。
+
+### コミット
+- このエントリを含むコミット
+
+### 検証
+- 本番 LINEUPS を読み直し: 1421 → 1595 行、7件とも件数・ARTIST_ID・ACT_LABEL・SET_TYPE・SORT が計画と一致（不一致0）。
+- `node scripts/fetch-data.mjs --dry`: 「LINEUP列…導出しました」警告が0件、LINEUPS 1595 行。
+- `node scripts/test_edition_proposals.mjs`（ガードの3パターン）成功。
+- 本番サイトへの反映は Publish 待ち（**実機未確認**）。
+
+### 変更したパターン
+- 本番 LINEUPS に174行追記。applyApproved の旧 LINEUP 列ガード。
+
+### 未確認の類似パターン
+- ★ rainbow-disco-club-2027 の LINEUPS 20行（1633〜1652行、17組が2026と同じ＋Four Tet ほか）が、2026-11-26 13:06 JST の CMS 保存で追加されていた。ユーザーの意図した入力か、CMS 保存が前回の出演者を写したものかは**未確認**（ユーザーに確認中）。触っていない。
+- CMS の通常保存が旧 LINEUP 列へ書く経路は今回見ていない。
+
+### 次の担当への注意・判断待ち
+- ユーザーが Publish Now → 春風の詳細で 2026 回に16組・2027 回は空、他6件の出演者表示が変わらないことを確認する。

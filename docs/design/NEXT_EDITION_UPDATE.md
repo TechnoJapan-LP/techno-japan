@@ -62,6 +62,7 @@ CMS の手動保存も `syncFestivalDateToLatestEdition` で DATE と同年の�
    - EDITION_ID が EDITIONS に**既にある**（上書きしない。CMS の upsert とは逆に止める）
    - DATE_START/END が ISO でない、START > END、または前回より前
    - そのフェスに EDITIONS 行が1行も無い（引き継ぐ会場が無い）
+   - FESTIVALS.LINEUP が空でなく、そのフェスの既存 EDITIONS に対応する LINEUPS 行が無い（先に最新開催回へ LINEUPS を移す）
 3. EDITIONS に新しい行を `update_row`（row = 最終行+1。CMS の syncNewEditionRows と同じ追記方式）。
    値: EDITION_ID / FESTIVAL_ID / EDITION / DATE_START / DATE_END、会場系は最新の開催回から引き継ぐ
    （VENUE_CHANGED=yes なら提案の値）、TICKETURL・FLYER は空、STATUS=`announced`。

@@ -88,7 +88,7 @@
     const g = gas(options); const now = options.now || (() => new Date()); const log = []; const plan = []; const initialProposals = await g.read('EDITION_PROPOSALS');
     const selected = initialProposals.filter((row) => s(val(row,'REVIEW_STATUS')).toLowerCase() === 'approved' && (!options.only || options.only.includes(val(row,'PROPOSAL_ID'))));
     for (const selectedProposal of selected) {
-      const festivals = await g.read('FESTIVALS'); const editions = await g.read('EDITIONS'); const currentProposals = await g.read('EDITION_PROPOSALS');
+      const festivals = await g.read('FESTIVALS'); const editions = await g.read('EDITIONS'); const lineups = await g.read('LINEUPS'); const currentProposals = await g.read('EDITION_PROPOSALS');
       const proposal = currentProposals.find((row) => Number(row._row) === Number(selectedProposal._row)) || currentProposals.find((row) => val(row,'PROPOSAL_ID') === val(selectedProposal,'PROPOSAL_ID'));
       if (!proposal) { pushLog(log, `${val(selectedProposal,'PROPOSAL_ID')}: error: proposal not found`); continue; }
       const id = editionId(proposal);
@@ -101,6 +101,12 @@
         const start = parseDate(val(proposal,'DATE_START')); const end = parseDate(val(proposal,'DATE_END')); if (!start || !end || start > end) throw new Error('invalid proposal dates');
         if (!existing.length) throw new Error('festival has no existing edition');
         const latest = existing.slice().sort((a,b) => (latestStart(b) || '').localeCompare(latestStart(a) || ''))[0]; if (latestStart(latest) && start <= latestStart(latest)) throw new Error('date is not after latest edition');
+        const hasLegacyLineup = !!s(val(festival,'lineup'));
+        const hasLineupsRow = lineups.some((row) => existing.some((edition) => s(val(row,'edition_id')) === s(val(edition,'EDITION_ID'))));
+        if (hasLegacyLineup && !hasLineupsRow) {
+          plan.push({ proposalId:val(proposal,'PROPOSAL_ID'), action:'blocked-legacy-lineup', reason:`legacy LINEUP only: move FESTIVALS.LINEUP into LINEUPS for ${val(latest,'EDITION_ID')} before applying` });
+          throw new Error(`legacy LINEUP only: move FESTIVALS.LINEUP into LINEUPS for ${val(latest,'EDITION_ID')} before applying`);
+        }
         const brandFlyer = s(val(festival, 'flyer')); const copyFlyer = !s(val(latest, 'flyer')) && !!brandFlyer;
         plan.push({ proposalId:val(proposal,'PROPOSAL_ID'), action:copyFlyer ? 'copy-flyer-and-apply' : 'apply', flyer:copyFlyer ? { row:Number(latest._row), value:brandFlyer } : null });
         if (copyFlyer && options.execute) {

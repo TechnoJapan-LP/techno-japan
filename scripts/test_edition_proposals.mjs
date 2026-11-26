@@ -8,7 +8,7 @@ import { findCandidates } from './editions/candidates.mjs';
 import './editions/cms-edition-proposals.js';
 const proposals = globalThis.TJEditionProposals;
 
-const headers = { EDITION_PROPOSALS:['PROPOSAL_ID','FESTIVAL_ID','EDITION','DATE_START','DATE_END','VENUE_CHANGED','LOCATION','LOCATION_JA','PREF','ADDRESS','LAT','LNG','SOURCE_URL','SOURCE_QUOTE','CONFIDENCE','REVIEW_STATUS','FOUND_AT','NOTES','APPLIED_AT'], EDITIONS:['EDITION_ID','FESTIVAL_ID','EDITION','DATE_START','DATE_END','LOCATION','LOCATION_JA','VENUE_ID','PREF','ADDRESS','LAT','LNG','TICKETURL','FLYER','STATUS'], FESTIVALS:['ID','DATE','name','desc','ticketurl','ticketUrl','flyer','lastEditedAt'] };
+const headers = { EDITION_PROPOSALS:['PROPOSAL_ID','FESTIVAL_ID','EDITION','DATE_START','DATE_END','VENUE_CHANGED','LOCATION','LOCATION_JA','PREF','ADDRESS','LAT','LNG','SOURCE_URL','SOURCE_QUOTE','CONFIDENCE','REVIEW_STATUS','FOUND_AT','NOTES','APPLIED_AT'], EDITIONS:['EDITION_ID','FESTIVAL_ID','EDITION','DATE_START','DATE_END','LOCATION','LOCATION_JA','VENUE_ID','PREF','ADDRESS','LAT','LNG','TICKETURL','FLYER','STATUS'], FESTIVALS:['ID','DATE','name','desc','ticketurl','ticketUrl','flyer','lastEditedAt','lineup'], LINEUPS:['EDITION_ID','ARTIST_ID','ACT_LABEL','SET_TYPE','SORT'] };
 function fakeGas(initial, { mismatch = false, dateStrings = false, proposalDateCells = false } = {}) {
   const sheets = structuredClone(initial); const calls = [];
   const norm = (x) => String(x).toLowerCase(); const rows = (sheet) => sheets[sheet];
@@ -28,6 +28,28 @@ function fakeGas(initial, { mismatch = false, dateStrings = false, proposalDateC
 const baseFestival = {_row:12, ID:'alpha', DATE:'2026-10-10', name:'Alpha', desc:'keep me', ticketurl:'old-a', ticketUrl:'old-a', flyer:'brand-flyer', lastEditedAt:'x'};
 const baseEdition = {_row:121, edition_id:'alpha-2026', festival_id:'alpha', edition:'2026', date_start:'2026-10-10', date_end:'2026-10-11', location:'Old Hall', location_ja:'旧会場', venue_id:'venue-old', pref:'Tokyo', address:'address', lat:'35', lng:'139', ticketurl:'old-ticket', flyer:'old-flyer', status:'ended'};
 const proposal = {PROPOSAL_ID:'alpha-2027',FESTIVAL_ID:'alpha',EDITION:'2027',DATE_START:'2027-10-10',DATE_END:'2027-10-11',VENUE_CHANGED:'no',LAT:'35.7530',LNG:'139.1230',SOURCE_URL:'https://example.test',SOURCE_QUOTE:'official date',CONFIDENCE:'high',FOUND_AT:'2026-11-26'};
+
+{
+  const legacyFestival = {...baseFestival, lineup:'Old Artist'};
+  const dryFake = fakeGas({EDITION_PROPOSALS:[{_row:3,...proposal,review_status:'approved'}],EDITIONS:[baseEdition],FESTIVALS:[legacyFestival],LINEUPS:[]});
+  const dry = await proposals.applyApproved({fetch:dryFake.fetch,gasUrl:'https://gas',execute:false});
+  assert.equal(dry.plan[0].action, 'blocked-legacy-lineup');
+  const fake = fakeGas({EDITION_PROPOSALS:[{_row:3,...proposal,review_status:'approved'}],EDITIONS:[baseEdition],FESTIVALS:[legacyFestival],LINEUPS:[]});
+  await proposals.applyApproved({fetch:fake.fetch,gasUrl:'https://gas',execute:true});
+  assert.equal(fake.calls.filter((x) => x.sheet === 'EDITIONS' || x.sheet === 'FESTIVALS').length, 0);
+  assert.equal(fake.sheets.EDITION_PROPOSALS[0].review_status, 'error');
+  assert.match(fake.sheets.EDITION_PROPOSALS[0].notes, /legacy LINEUP only: move FESTIVALS\.LINEUP into LINEUPS for alpha-2026 before applying/);
+}
+{
+  const fake = fakeGas({EDITION_PROPOSALS:[{_row:3,...proposal,review_status:'approved'}],EDITIONS:[baseEdition],FESTIVALS:[{...baseFestival,lineup:'Old Artist'}],LINEUPS:[{_row:8,edition_id:'alpha-2026',artist_id:'old-artist',act_label:'Old Artist',set_type:'live',sort:1}]});
+  const result = await proposals.applyApproved({fetch:fake.fetch,gasUrl:'https://gas',execute:true});
+  assert.match(result[0], /applied/);
+}
+{
+  const fake = fakeGas({EDITION_PROPOSALS:[{_row:3,...proposal,review_status:'approved'}],EDITIONS:[baseEdition],FESTIVALS:[baseFestival],LINEUPS:[]});
+  const result = await proposals.applyApproved({fetch:fake.fetch,gasUrl:'https://gas',execute:true});
+  assert.match(result[0], /applied/);
+}
 
 {
   const fake = fakeGas({EDITION_PROPOSALS:[], EDITIONS:[{_row:5,edition_id:'x-2020',festival_id:'x'}], FESTIVALS:[]});
