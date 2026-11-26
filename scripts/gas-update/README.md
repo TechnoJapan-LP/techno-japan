@@ -1,5 +1,15 @@
 # GAS ハンドラ — add_article / add_artist（✅ 対応完了）
 
+## NEWS速報下書き（`ai_news_draft`）
+
+[`ai-news-draft.gs`](ai-news-draft.gs) をApps Scriptプロジェクトへ追加し、既存の `doPost` action dispatch に次の一行を追加する。
+
+```js
+if (data.action === 'ai_news_draft') return buildResponse(aiNewsDraft(data));
+```
+
+保存後は Deploy → Manage deployments → 対象デプロイの edit → New version → Deploy。再デプロイ後に Apps Script の開発者コンソールで [`snapshot.js`](snapshot.js) を実行し、出力JSONを [`live-snapshot.json`](live-snapshot.json) に保存して `node scripts/check_gas_sync.mjs` を実行する。`doPost` 本体がリポジトリにないため、dispatchの追加先はGAS実物の既存ルーターである。
+
 **2026-07-10 時点で、この更新は完了しています。追加作業は不要です。**
 
 ## 確認済みの状態

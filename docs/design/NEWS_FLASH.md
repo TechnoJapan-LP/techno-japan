@@ -85,3 +85,14 @@ CMS 側の検査（AI を信用しない）:
 - preflight 全件。TOP / NEWS ハブ（JA/EN・PC/スマホ）を実ブラウザで確認。
 - CMS は cms.js を触るので: 実際に CMS で速報を 1 本下書き→プレビュー→画像生成→保存（下書きのまま）→再表示まで確認し、
   `gh workflow run "Publish pipeline"` を自分で流す。CMS を変えたらユーザーに Cmd+Shift+R を伝える。
+
+## GAS の適用手順
+
+1. Apps Script の「Techno Japan」プロジェクトに `scripts/gas-update/ai-news-draft.gs` を新しいスクリプトファイルとして追加し、内容をすべて貼り付ける。
+2. `doPost` の既存 action dispatch に、次の1行を追加する。`data` は既存ルーターがJSONから取り出した入力を使う。
+   `if (data.action === 'ai_news_draft') return buildResponse(aiNewsDraft(data));`
+3. 保存後、Deploy → Manage deployments → 対象デプロイの edit → New version → Deploy で再デプロイする。保存だけでは本番のGAS実行環境は変わらない。
+4. 認証済みCMSで「⚡ 速報を作る」を開き、読み取りではなく下書き生成だけを実データで確認する。動作確認のために本番データへ書き込まない。
+5. GASへ貼り付け・再デプロイが完了した後、Apps Scriptエディタの開発者コンソールで `scripts/gas-update/snapshot.js` を実行し、出力を `scripts/gas-update/live-snapshot.json` に保存する。続けて `node scripts/check_gas_sync.mjs` を実行する。
+
+`ai_news_draft` の dispatch がこのリポジトリにない場合も、上記の貼り付け先と一行を手作業で追加する。Claude APIキーは既存の `ANTHROPIC_API_KEY` を使い、記事の保存やPublishはCMS利用者が内容を確認してから手動で行う。

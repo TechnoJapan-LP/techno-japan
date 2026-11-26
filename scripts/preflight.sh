@@ -229,6 +229,7 @@ else
   run "CMS 記事画像レイアウト"           node scripts/check_cms_image_layouts.mjs
   run "VENUES 種別フィルタ"              node scripts/check_venue_type_filters.mjs
 run "VENUES 詳細ページ"                 node scripts/check_venue_details.mjs
+run "NEWS速報の検証ヘルパー"            node scripts/check_news_flash_helpers.mjs
 run "VENUES CMSエクスポート"             python3 scripts/check_venue_export_cms.py
 run "ARTICLE本番表示プレビュー"          node scripts/check_cms_article_generated_preview.mjs
   run "記事シェアボタンの描画サイズ"          node scripts/check_article_share.mjs

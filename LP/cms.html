@@ -440,6 +440,28 @@ if (window.self === window.top) {
   <div class="tab-content" id="article-tab-form">
     <div class="edit-banner" id="article-edit-banner"><span>Editing: <strong id="article-edit-name"></strong></span><button class="btn btn-sm btn-yellow" onclick="saveEdit('article')">Save Changes</button><button class="btn btn-sm" onclick="cancelEdit('article')">Cancel</button></div>
     <div class="form-grid" id="form-article">
+      <div class="form-group full" id="news-flash-panel-wrap">
+        <details id="news-flash-panel">
+          <summary style="cursor:pointer;color:var(--accent);font-family:var(--font-mono);letter-spacing:.06em">⚡ 速報を作る</summary>
+          <div style="padding-top:12px">
+            <div id="news-flash-festival" class="label-hint" style="margin-bottom:10px">フェスを選択すると、ここに選択中のフェスが表示されます。</div>
+            <div class="form-group" style="margin:0 0 10px"><label>知らせの種類</label><select id="news-flash-kind"><option value="lineup">出演者発表</option><option value="dates">日程発表</option><option value="tickets">チケット発売</option><option value="other">その他</option></select></div>
+            <div class="form-group" style="margin:0 0 10px"><label>出典 URL（1行1件）</label><textarea id="news-flash-urls" rows="3" placeholder="https://example.com/source"></textarea></div>
+            <div class="form-group" style="margin:0 0 10px"><label>出典の本文</label><textarea id="news-flash-source" rows="8" placeholder="メルマガ本文、Instagramのキャプションなどを貼り付け"></textarea></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button type="button" class="btn btn-accent" onclick="createNewsFlashDraft()">下書きを作る</button>
+              <button type="button" class="btn btn-sm" onclick="generateNewsFlashImage()">TOP画像を作る</button>
+            </div>
+            <div id="news-flash-report" role="status" style="margin-top:10px;white-space:pre-wrap"></div>
+            <div id="news-flash-image-tools" hidden style="margin-top:14px">
+              <label>画像ラベル <select id="news-flash-image-label"><option value="auto">種別に合わせる</option><option value="LINEUP ANNOUNCED">LINEUP ANNOUNCED</option><option value="DATES ANNOUNCED">DATES ANNOUNCED</option><option value="TICKETS ON SALE">TICKETS ON SALE</option><option value="NEWS">NEWS</option></select></label>
+              <div style="margin-top:8px"><canvas id="news-flash-canvas" width="1600" height="900" style="display:block;width:100%;max-width:720px;height:auto;background:#111"></canvas></div>
+              <div id="news-flash-image-error" role="alert" style="color:var(--accent);margin-top:8px"></div>
+              <button type="button" class="btn btn-accent btn-sm" style="margin-top:8px" onclick="useNewsFlashImage()">画像を使う</button>
+            </div>
+          </div>
+        </details>
+      </div>
       <div class="form-group"><label>ID (URL slug)</label><input type="text" id="ar-id" placeholder="e.g. rdc-2026-preview"></div>
       <div class="form-group">
         <label>Title <span class="label-hint">本文書いてから ✨ で候補生成可</span></label>
@@ -631,6 +653,6 @@ if (window.self === window.top) {
 </div>
 
 <script type="module" src="article-shortcodes.js?v=12"></script>
-<script src="cms.js?v=224" defer></script>
+<script src="cms.js?v=225" defer></script>
 </body>
 </html>

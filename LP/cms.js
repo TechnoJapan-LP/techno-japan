@@ -2472,11 +2472,13 @@ function festPickerSelect(id, name){
   document.getElementById('ar-festivalId-search').value = '';
   document.getElementById('ar-festivalId-list').hidden = true;
   markFormDirty();
+  if (typeof newsFlashShowFestival_ === 'function') newsFlashShowFestival_();
 }
 function festPickerClear(){
   document.getElementById('ar-festivalId').value = '';
   document.getElementById('ar-festivalId-selected').hidden = true;
   markFormDirty();
+  if (typeof newsFlashShowFestival_ === 'function') newsFlashShowFestival_();
 }
 
 /* ---------- 記事イベントカード用フェス検索ピッカー ---------- */
@@ -4207,6 +4209,188 @@ function matchArtist(name){
   // （2026-09-13 報告）。曖昧なものは null を返し、未一致タグ（?名前）として
   // 候補ボタンから明示採用させる（§9-25 の教訓と同じ方針）。
   return null;
+}
+
+/* ==============================================================
+   NEWS FLASH — AI draft verification and TOP image
+   ============================================================== */
+function newsFlashNormalize_(value){
+  return String(value == null ? '' : value).normalize('NFKC').toLocaleLowerCase();
+}
+function newsFlashContains_(haystack, needle){
+  const n = String(needle || '');
+  return !!n && newsFlashNormalize_(haystack).includes(newsFlashNormalize_(n));
+}
+function newsFlashVerifyDraft_(draft, sourceText){
+  const source = String(sourceText || '');
+  const artists = Array.isArray(draft?.artists) ? draft.artists.map(String).filter(Boolean) : [];
+  const facts = Array.isArray(draft?.facts) ? draft.facts : [];
+  const artistResults = artists.map(name => ({name, ok:newsFlashContains_(source, name)}));
+  const factResults = facts.map(fact => ({
+    field:String(fact?.field || ''), value:String(fact?.value || ''), quote:String(fact?.quote || ''),
+    ok:newsFlashContains_(source, fact?.quote || '')
+  }));
+  return {
+    artists: artistResults.filter(x => x.ok).map(x => x.name),
+    rejectedArtists: artistResults.filter(x => !x.ok).map(x => x.name),
+    artistResults, facts: factResults,
+    rejectedFacts: factResults.filter(x => !x.ok)
+  };
+}
+function newsFlashSlug_(festivalId, kind, date){
+  const clean = value => String(value || '').toLowerCase().normalize('NFKC').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+  const day = String(date || '').replace(/[^0-9]/g,'').slice(0,8);
+  return [clean(festivalId), clean(kind), day].filter(Boolean).join('-');
+}
+function newsFlashEditionImage_(festival, editionRows){
+  const id = String(festival?.id || '').trim();
+  const rows = (Array.isArray(editionRows) ? editionRows : []).filter(row => {
+    const fid = row?.FESTIVAL_ID ?? row?.festival_id ?? row?.festivalId;
+    return !id || !fid || String(fid).trim() === id;
+  });
+  const latest = rows.sort((a,b) => {
+    const av = String(a?.DATE_START || a?.dateStart || a?.DATE || a?.date || a?.EDITION || a?.edition || '');
+    const bv = String(b?.DATE_START || b?.dateStart || b?.DATE || b?.date || b?.EDITION || b?.edition || '');
+    return bv.localeCompare(av);
+  }).find(row => String(row?.FLYER || row?.flyer || '').trim());
+  return String(latest?.FLYER || latest?.flyer || festival?.image || festival?.flyer || '').trim();
+}
+function newsFlashFestival_(){
+  const id = String(document.getElementById('ar-festivalId')?.value || '').trim();
+  const rows = readSheetCache('festival') || [];
+  const row = rows.find(x => String(x.id) === id) || (typeof FESTIVALS !== 'undefined' ? (FESTIVALS || []).find(x => String(x.id) === id) : null) || {};
+  let rowEditions = row.editions;
+  if (typeof rowEditions === 'string') { try { rowEditions = JSON.parse(rowEditions); } catch (_) { rowEditions = []; } }
+  const editionsForImage = (editionSheetRows || []).concat(Array.isArray(rowEditions) ? rowEditions : []);
+  const image = newsFlashEditionImage_(row, editionsForImage);
+  return {
+    id, name:row.name || row.name_ja || id, name_ja:row.name_ja || row.name || '',
+    date:row.date || '', location:row.location || '', location_ja:row.location_ja || '', city:row.city || '',
+    image:row.image || '', flyer:row.flyer || '', background:image, editions:editionsForImage
+  };
+}
+function newsFlashShowFestival_(){
+  const box = document.getElementById('news-flash-festival');
+  const festival = newsFlashFestival_();
+  if (box) box.textContent = festival.id ? '選択中: ' + festival.name + '（' + festival.id + '）' : 'フェスを選択すると、ここに選択中のフェスが表示されます。';
+  return festival;
+}
+function newsFlashBodyWithArtistLinks_(html, artistNames){
+  let body = String(html || '');
+  const names = [...new Set((artistNames || []).map(String).filter(Boolean))];
+  names.forEach(name => {
+    const id = matchArtist(name);
+    if (!id) return;
+    const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const re = new RegExp(escaped, 'g');
+    const parts = body.split(/(<[^>]+>)/g);
+    body = parts.map(part => {
+      if (part[0] === '<') return part;
+      return part.split(/(\[\[(?:artist|artist-card):[^\]]+\]\])/g)
+        .map(piece => /^\[\[(?:artist|artist-card):/.test(piece) ? piece : piece.replace(re, '[[artist:' + id + '|' + name + ']]'))
+        .join('');
+    }).join('');
+  });
+  return body;
+}
+function newsFlashSanitizeLineup_(body, rejectedArtists){
+  const bad = (rejectedArtists || []).map(newsFlashNormalize_).filter(Boolean);
+  if (!bad.length) return String(body || '');
+  return String(body || '').replace(/<li\b[^>]*>([\s\S]*?)<\/li>/gi, (whole, content) => {
+    const plain = newsFlashNormalize_(content.replace(/<[^>]+>/g,' '));
+    return bad.some(name => plain.includes(name)) ? '' : whole;
+  });
+}
+function newsFlashKindLabel_(kind){ return ({lineup:'LINEUP ANNOUNCED', dates:'DATES ANNOUNCED', tickets:'TICKETS ON SALE', other:'NEWS'})[kind] || 'NEWS'; }
+function newsFlashTodayJst_(){
+  const parts = new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tokyo',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());
+  const out = Object.fromEntries(parts.filter(x=>x.type !== 'literal').map(x=>[x.type,x.value]));
+  return out.year + '-' + out.month + '-' + out.day;
+}
+function newsFlashReport_(verification, warnings){
+  const el = document.getElementById('news-flash-report'); if (!el) return;
+  const lines = ['検証結果: ' + verification.artists.length + '組の出演者名、' + (verification.facts.length - verification.rejectedFacts.length) + '/' + verification.facts.length + '件の事実引用が出典本文に一致'];
+  if (verification.rejectedArtists.length) lines.push('⚠ 出典にない出演者名（本文の出演者一覧から除外）: ' + verification.rejectedArtists.join(', '));
+  if (verification.rejectedFacts.length) lines.push('⚠ 出典にない引用（要確認）: ' + verification.rejectedFacts.map(x => x.field || x.quote).join(', '));
+  if (warnings?.length) lines.push('AIの注意: ' + warnings.join(' / '));
+  el.textContent = lines.join('\n');
+  el.style.color = verification.rejectedArtists.length || verification.rejectedFacts.length ? 'var(--accent)' : 'var(--text2)';
+}
+async function createNewsFlashDraft(){
+  const festival = newsFlashShowFestival_();
+  const kind = document.getElementById('news-flash-kind')?.value || 'other';
+  const text = document.getElementById('news-flash-source')?.value || '';
+  if (!festival.id) return toast('先に関連フェスを選択してください','error');
+  if (!text.trim()) return toast('出典の本文を貼り付けてください','error');
+  const urls = (document.getElementById('news-flash-urls')?.value || '').split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+  const sources = [{url:urls[0] || '', text}].concat(urls.slice(1).map(url => ({url,text:''})));
+  const report = document.getElementById('news-flash-report'); if (report) report.textContent = '下書きを作成中…';
+  try {
+    const response = await gasPostJson_({action:'ai_news_draft', festival, kind, sources});
+    if (response.status !== 'ok' || !response.draft) return aiFail('速報下書きの生成', response.message || '下書きが返りませんでした');
+    const draft = response.draft;
+    const verification = newsFlashVerifyDraft_(draft, text);
+    newsFlashReport_(verification, draft.warnings);
+    const date = newsFlashTodayJst_();
+    const body = newsFlashBodyWithArtistLinks_(newsFlashSanitizeLineup_(draft.body, verification.rejectedArtists), verification.artists);
+    const bodyEn = newsFlashSanitizeLineup_(draft.body_en, verification.rejectedArtists);
+    setVal('ar-category','NEWS'); setVal('ar-festivalId',festival.id); festPickerSetValue(festival.id);
+    setVal('ar-title',draft.title); setVal('ar-title_en',draft.title_en); setVal('ar-excerpt',draft.excerpt); setVal('ar-excerpt_en',draft.excerpt_en);
+    setVal('ar-date',date); setArticleBody(body); setVal('ar-body_en',bodyEn);
+    if (!g('ar-id')) setVal('ar-id',newsFlashSlug_(festival.id,kind,date));
+    markFormDirty(); flushArticleEditorSync(); renderEnglishBodyAltEditor();
+    toast('速報の下書きをフォームへ入れました。確認してから手動で保存してください','success');
+  } catch (error) { aiFail('速報下書きの生成', error.message || error); }
+}
+function newsFlashImagePath_(path){
+  const value = String(path || '').trim();
+  if (!value) return '';
+  return /^https?:\/\//i.test(value) ? value : '/' + webp(value).replace(/^\/+/,'');
+}
+function newsFlashDrawImage_(festival, label){
+  const canvas=document.getElementById('news-flash-canvas'), error=document.getElementById('news-flash-image-error');
+  if (!canvas) return Promise.reject(new Error('画像プレビューが見つかりません'));
+  const ctx=canvas.getContext('2d'), image=new Image(), path=newsFlashImagePath_(festival.background || festival.image || festival.flyer);
+  if (!path) { if(error) error.textContent='背景画像がありません。フェスの最新回FLYER、image、flyerのいずれかを登録してください。'; return Promise.reject(new Error('背景画像がありません')); }
+  if(error) error.textContent='';
+  return new Promise((resolve,reject)=>{
+    image.onload=async()=>{
+    try {
+      const scale=Math.max(canvas.width/image.naturalWidth,canvas.height/image.naturalHeight), w=image.naturalWidth*scale, h=image.naturalHeight*scale;
+      ctx.drawImage(image,(canvas.width-w)/2,(canvas.height-h)/2,w,h);
+      const gradient=ctx.createLinearGradient(0,canvas.height*.38,0,canvas.height); gradient.addColorStop(0,'rgba(0,0,0,0)'); gradient.addColorStop(1,'rgba(0,0,0,.88)'); ctx.fillStyle=gradient; ctx.fillRect(0,0,canvas.width,canvas.height);
+      await (document.fonts?.ready || Promise.resolve());
+      ctx.fillStyle='#f04b45'; ctx.font='700 25px "Space Mono",monospace'; ctx.fillText(label,90,680);
+      ctx.fillStyle='#fff'; ctx.font='115px "Bebas Neue",sans-serif'; ctx.fillText(String(festival.name||festival.id).toUpperCase().slice(0,22),90,790);
+      ctx.fillStyle='rgba(255,255,255,.78)'; ctx.font='25px "DM Sans",sans-serif'; ctx.fillText([festival.date,festival.location || festival.city].filter(Boolean).join('  ·  ').slice(0,90),90,842);
+      resolve();
+    } catch(e) { if(error) error.textContent='画像の描画に失敗しました: '+e.message; reject(e); }
+    };
+    image.onerror=()=>{ if(error) error.textContent='背景画像を読み込めませんでした: '+path; reject(new Error('背景画像を読み込めませんでした')); };
+    image.src=path;
+  });
+}
+async function generateNewsFlashImage(){
+  const festival=newsFlashShowFestival_(); if(!festival.id) return toast('先に関連フェスを選択してください','error');
+  const kind=document.getElementById('news-flash-kind')?.value || 'other';
+  const labelSelect=document.getElementById('news-flash-image-label');
+  const label=labelSelect?.value === 'auto' ? newsFlashKindLabel_(kind) : labelSelect.value;
+  document.getElementById('news-flash-image-tools').hidden=false;
+  labelSelect?.addEventListener('change',()=>newsFlashDrawImage_(festival,labelSelect.value === 'auto' ? newsFlashKindLabel_(kind) : labelSelect.value),{once:false});
+  try { await newsFlashDrawImage_(festival,label); } catch (_) {}
+}
+async function useNewsFlashImage(){
+  const canvas=document.getElementById('news-flash-canvas'), error=document.getElementById('news-flash-image-error');
+  if (!canvas) return;
+  try {
+    const blob=await new Promise((resolve,reject)=>canvas.toBlob(x=>x?resolve(x):reject(new Error('WebP変換に失敗しました')),'image/webp',.9));
+    const file=new File([blob],'news-flash-'+Date.now()+'.webp',{type:'image/webp'});
+    uploadArticleImageFile(file);
+  } catch(e) { if(error) error.textContent='画像を使えませんでした: '+e.message; }
+}
+if (typeof window !== 'undefined') {
+  window.TJNewsFlash = {normalize:newsFlashNormalize_, contains:newsFlashContains_, verifyDraft:newsFlashVerifyDraft_, buildSlug:newsFlashSlug_, selectBackground:newsFlashEditionImage_};
+  if (typeof document !== 'undefined') document.addEventListener('input', event => { if (event.target?.id === 'ar-festivalId') newsFlashShowFestival_(); });
 }
 
 /* LINEUPS の人物照合は表記ではなく、ID・名前を同じ人物キーへ集約する。

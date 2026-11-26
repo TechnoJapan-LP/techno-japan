@@ -16696,3 +16696,33 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - 段階1-②（CMS「速報を作る」・画像生成・GAS ai_news_draft）は別コミット。
+
+## 2026-11-26 速報（NEWS）段階1-②〜④（CMS・画像・GAS）
+
+### 実施
+- `LP/cms.html` / `LP/cms.js`: 記事編集上部に「⚡ 速報を作る」パネルを追加。フェス、種別、出典URL・本文から `ai_news_draft` を呼び、NFKC・大小無視の出演者名／facts quote検証、検証レポート、NEWS項目・JST日付・slug候補・アーティストショートコードリンクをフォームへ反映。自動保存はしない。
+- 同パネルに既存フェス素材（最新 EDITIONS FLYER → FESTIVALS image → flyer）の1600×900 canvas画像生成、プレビュー、WebP化、既存 `uploadArticleImageFile` 経路を追加。画像エラーはパネル内に表示する。
+- `scripts/gas-update/ai-news-draft.gs`: `callClaude_` を使うJSON限定の下書き生成関数と、GAS `doPost` dispatch追加行を追加。GAS実物への貼り付け・再デプロイは未実施。
+- `scripts/check_news_flash_helpers.mjs`（VMテスト）を追加し、preflightから実行。`cms.js` の参照版を225へ更新。設計書とGAS READMEに適用手順を追記。
+
+### コミット
+- 未コミット（ユーザー指示によりコミットしない）。
+
+### 検証
+- 成功: `node scripts/check_news_flash_helpers.mjs`、`node scripts/check_cms_ai_body.mjs`、`python3 scripts/check_cms_article_state.py`、`node scripts/check_data_hub.mjs`、`node --check LP/cms.js`、GASファイルのVM構文評価、`git diff --check`。
+- `preflight --fast` は詳細ページ生成で長時間停止したため中断。既存CDP/画像レイアウト検査は `listen EPERM: operation not permitted 127.0.0.1`。実CMS操作、GAS貼り付け・再デプロイ、Publish pipelineは未確認。
+
+### 変更したパターン
+- CMS記事フォームの速報下書き・検証・アーティストリンク・canvas WebPアップロード、GAS Claude JSONハンドラ、cms.jsの`?v`、preflightテスト。
+
+### 未確認の類似パターン
+- `body_en` の英語アーティスト表記が日本語と異なる場合の自動リンクは未確認。
+- 実ブラウザでのフェス選択→下書き→プレビュー→画像生成→画像を使う→再表示は未確認。
+
+### 次の担当への注意・判断待ち
+- GASへ `ai-news-draft.gs` を貼り、`doPost`へ dispatchを追加して再デプロイ後、`snapshot.js`で指紋を更新する。CMS変更後は `Cmd+Shift+R` が必要。
+
+### 追記（Claude による GAS 適用）
+- 本番 GAS「Techno Japan」の コード.gs に `aiNewsDraft` を末尾追加、doPost の dispatch に `if (data.action === 'ai_news_draft') return buildResponse(aiNewsDraft(data));` を1行追加（実物の dispatch は `json_` ではなく `buildResponse`）。保存→既存デプロイ（CMS の GAS_URL と同じ ID）を新バージョンで更新: v64（追加）→ v65（英語本文でも出演者名を出典のまま、を指示に追加）。
+- 指紋: callClaude_ / aiTranslateV2_ / aiSummarize は live-snapshot.json と一致、関数の重複なし（新関数は指紋の対象外なので live-snapshot.json は更新不要）。
+- 本番 GAS に rural 2027 の要約文で ai_news_draft を1回送信 → status ok（約50秒）。JA/EN の下書き・facts・artists が返った。v64 では EN で「悪魔の沼」を Akuma no Numa にローマ字化していた → v65 で指示を追加。
