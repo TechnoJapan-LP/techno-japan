@@ -2109,6 +2109,34 @@ const ARTISTS = [
     id: "zundokodisco",
     name: "ZUNDOKODISCO",
   },
+  {
+    id: "chaos-in-the-cbd",
+    name: "Chaos In The CBD",
+  },
+  {
+    id: "craig-richards",
+    name: "Craig Richards",
+  },
+  {
+    id: "danilo-plessow",
+    name: "Danilo Plessow",
+  },
+  {
+    id: "jeff-mills",
+    name: "Jeff Mills",
+  },
+  {
+    id: "jyoty",
+    name: "Jyoty",
+  },
+  {
+    id: "palms-trax",
+    name: "Palms Trax",
+  },
+  {
+    id: "sofia-kourtesis",
+    name: "Sofia Kourtesis",
+  },
 ];
 
 const EVENTS = [
@@ -3233,6 +3261,7 @@ const FESTIVALS = [
     date: "2027-04-16/2027-04-18",
     location: "Higashiizu Cross Country Course",
     location_ja: "東伊豆クロスカントリーコース",
+    name_ja: "レインボーディスコ・クラブ",
     city: "Shizuoka",
     country: "JP",
     address: "静岡県賀茂郡東伊豆町稲取3348-19",
@@ -3245,8 +3274,14 @@ const FESTIVALS = [
     desc: "Rainbow Disco Clubは静岡県の東伊豆クロスカントリーコースで開催され、自然の地形をそのまま屋外のダンスフロアへと変えるフェスティバルだ。ハウスとテクノを軸としたプログラムに、日本ならではの美しい田園風景が組み合わさっているのが特徴。こぢんまりとした規模感と、海外勢と国内勢のバランスを丁寧に考え抜いたラインナップで知られている。",
     desc_en: "Rainbow Disco Club takes place at the Higashi-Izu Cross Country Course in Shizuoka, transforming the natural terrain into an outdoor dance floor. The festival combines house and techno programming with Japan's scenic countryside setting. Known for its intimate scale and carefully curated lineup that balances international and domestic acts.",
     url: "https://www.rainbowdiscoclub.com/",
+    ticketUrl: "https://rainbowdiscoclub.zaiko.io/ja/e/rdc2027",
     instagram: "https://www.instagram.com/rainbowdiscoclub/",
-    lineup: ["Antal", "Hunee", "Ben UFO", "Daphni", "DJ Maria.", "Dungeoneering", "Feline", "Floating Points", "Gerd Janson", "Gonno", "HAAi", "Helena Hauff", "Jonathan Kusuma", "Jonny Rock", "Kikiorix", "Mala", "NC4K", "Sisi b2b Ouissam b2b Yamarchy", "Suze Ijó", "Four Tet"],
+    lineup: ["antal", "ben-ufo", "chaos-in-the-cbd", "craig-richards", "danilo-plessow", "dj-masda", "dj-nobu", "jeff-mills", "jyoty", "palms-trax", "sofia-kourtesis"],
+    editions: [
+      { year: 2026, editionKey: "2026", date: "2026-04-17/2026-04-19", lineup: ["Antal & Hunee", "Ben UFO", "Daphni", "DJ MARIA.", "Dungeoneering (Albino Sound & Daigos)", "Feline", "Floating Points", "Gerd Janson", "Gonno", "HAAi", "Helena Hauff", "Jonathan Kusuma", "Jonny Rock", "Kikiorix", "Mala", "NC4K", "Sisi b2b Ouissam b2b Yamarchy", "Suze Ijó", "Four Tet"] },
+      { year: 2027, editionKey: "2027", date: "2027-04-16/2027-04-18", lineup: ["Antal", "Ben UFO", "Chaos In The CBD", "Craig Richards", "Danilo Plessow (MCDE)", "DJ Masda", "DJ Nobu", "Jeff Mills", "Jyoty", "Palms Trax", "Sofia Kourtesis"] },
+      { year: 2025, editionKey: "2025", date: "2025-04-18/2025-04-20", lineup: ["Antal", "Chaos In The CBD", "Dita & Gero", "Eris Drew & Octo Octa", "François K.", "Gilles Peterson", "Kikiorix", "Kuniyuki & Xiaolin", "Ouissam", "Palms Trax", "Sisi", "Soichi Terada", "Sound Metaphors DJs", "DJ Nobu b2b Batu", "Fullhouse", "Kode9", "Logic1000", "Verraco", "Woody92"] },
+    ],
   },
   {
     id: "waifu",
