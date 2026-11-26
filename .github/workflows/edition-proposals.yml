@@ -1,0 +1,124 @@
+name: Edition proposals
+
+on:
+  push:
+    branches: [edition-crawl]
+    paths: [data/edition-crawl/**]
+  workflow_dispatch:
+    inputs:
+      file:
+        description: '処理する proposals JSON（空欄なら edition-crawl の main 未取込分）'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: edition-proposals
+  cancel-in-progress: false
+
+jobs:
+  push-proposals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Fetch edition-crawl and copy data
+        run: |
+          git fetch origin edition-crawl
+          git checkout origin/edition-crawl -- data/edition-crawl
+
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: '20'
+
+      - name: Find proposal files
+        id: files
+        env:
+          INPUT_FILE: ${{ inputs.file }}
+          EVENT_BEFORE: ${{ github.event.before }}
+          EVENT_AFTER: ${{ github.event.after }}
+        run: |
+          : > /tmp/edition-proposal-files
+          if [ -n "$INPUT_FILE" ]; then
+            printf '%s\n' "$INPUT_FILE" > /tmp/edition-proposal-files
+          else
+            # push の差分を優先し、手動実行や再実行では main にまだ無い全件を拾う。
+            if [ -n "$EVENT_BEFORE" ] && [ "$EVENT_BEFORE" != "0000000000000000000000000000000000000000" ]; then
+              git diff --name-only "$EVENT_BEFORE" "$EVENT_AFTER" -- 'data/edition-crawl/proposals/*.json' >> /tmp/edition-proposal-files || true
+            fi
+            if [ ! -s /tmp/edition-proposal-files ]; then
+              git diff --name-only origin/main...origin/edition-crawl -- 'data/edition-crawl/proposals/*.json' >> /tmp/edition-proposal-files || true
+            fi
+            sort -u /tmp/edition-proposal-files -o /tmp/edition-proposal-files
+          fi
+          if [ ! -s /tmp/edition-proposal-files ]; then
+            echo '処理対象の提案ファイルがありません'
+          else
+            cat /tmp/edition-proposal-files
+          fi
+
+      - name: Push proposals to EDITION_PROPOSALS
+        env:
+          CMS_AUTH_HASH: ${{ secrets.CMS_AUTH_HASH }}
+        run: |
+          mkdir -p /tmp/edition-proposal-reports
+          n=0
+          while IFS= read -r file; do
+            [ -n "$file" ] || continue
+            n=$((n + 1))
+            node scripts/editions/push-proposals.mjs "$file" --execute --report "/tmp/edition-proposal-reports/$n.json"
+          done < /tmp/edition-proposal-files
+          if [ "$n" -eq 0 ]; then
+            printf '%s\n' '{"appended_ids":[],"results":[]}' > /tmp/edition-proposal-reports/empty.json
+          fi
+
+      - name: Commit crawl data to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/edition-crawl/
+          if git diff --staged --quiet; then
+            echo 'data/edition-crawl に変更はありません'
+          else
+            commit_date=$(date -u +%F)
+            git commit -m "data(editions): 次回開催の自動巡回 $commit_date [skip ci]"
+            for i in 1 2 3; do
+              if git push origin HEAD:main; then break; fi
+              if [ "$i" -eq 3 ]; then
+                echo 'main への push が3回失敗しました'
+                exit 1
+              fi
+              git pull --rebase --autostash origin main
+              sleep $((i * 5))
+            done
+          fi
+
+      - name: Notify appended proposals
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          report_json=$(find /tmp/edition-proposal-reports -name '*.json' -print0 | xargs -0 jq -s '{results: map(.results // []) | add, appended_ids: (map(.appended_ids // []) | add)}')
+          appended=$(printf '%s' "$report_json" | jq '.appended_ids | unique')
+          count=$(printf '%s' "$appended" | jq 'length')
+          if [ "$count" -eq 0 ]; then
+            echo '新たに追記された提案はありません'
+            exit 0
+          fi
+          date=$(date -u +%F)
+          {
+            echo '| 提案ID | 日程 | 確度 | 出典 | 結果 |'
+            echo '|---|---|---|---|---|'
+            printf '%s' "$report_json" | jq -r '.results[] | select(.result == "appended") | "| \(.proposal_id) | \(.date_start)–\(.date_end) | \(.confidence) | [source](\(.source_url)) | \(.result) |"'
+            echo
+            echo 'LP シートの EDITION_PROPOSALS で REVIEW_STATUS を approved にして、Claude に「承認したので反映して」と伝える'
+          } > /tmp/edition-proposal-issue.md
+          gh issue create --title "次回開催の提案 ${count}件（承認待ち）${date}" --body-file /tmp/edition-proposal-issue.md

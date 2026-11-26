@@ -48,6 +48,21 @@ CMS の手動保存も `syncFestivalDateToLatestEdition` で DATE と同年の�
 | NOTES | | 会場変更・名称変更・中止・休止などの注記 |
 | APPLIED_AT | | 反映日時（apply が書く） |
 
+### ② 調べるときの必須チェックリスト（2026-11-26 追加）
+
+初回の巡回は検索1〜2回で「no-news」にしていて、**発表済みの rural 2027（11/5 発表）を見落とした**。
+「軽く検索して出ない」は「未発表」ではない。フェスごとに次を**全部**見てから no-news にする。
+
+1. WebSearch（extended）で `"<名前>" 2027` / `<名前> 2027 開催決定`
+2. フェスティバルライフ（`festival-life.com` に限定して検索）— 国内フェスの告知が最も早く・確実に載る
+3. RA（`ra.co` / `ja.ra.co`）— イベントページ・主催者ページ・ニュース
+4. チケット: 前回のチケット URL から次回 URL を推測（`.../e/rural2026` → `rural2027`）＋ ZAIKO / e+ / Peatix / LivePocket / ぴあ / ローチケを検索
+5. 公式サイトのトップとお知らせ（次回・開催決定・休止・中止・ファイナル）
+6. Instagram は取得できない。検索結果の抜粋だけなら確度 medium
+
+checked.json の note には「どこを見たか」を残す（例: `festival-life/RA/ZAIKO/公式: 2027未掲載`）。
+秋（10〜11月）に終わったばかりのフェスは未発表が多いが、それでも 1〜3 は必ず見る。
+
 - 「来年の日程は未発表」は提案を書かない。調べた事実は `data/edition-crawl/checked.json`（リポジトリ）に
   `{festival_id: {checked_at, result: "no-news"|"proposed"|"ended"|"hiatus", note}}` で残す。本番シートを汚さない。
 - 中止・休止・終了の疑いは提案にせず、NOTES 付きで完了報告に書く（勝手に STATUS を変えない）。
@@ -81,6 +96,49 @@ CMS の手動保存も `syncFestivalDateToLatestEdition` で DATE と同年の�
 - LINEUPS・チケット URL・フライヤーの自動更新（日程の流れが安定してから）
 - 既存の開催回の書き換え（日程訂正は従来どおり CMS で手で）
 - Airtable への国内開催回の作成
+
+## 段階2.5: 2週間ごとの自動巡回
+
+段階1の調査と提案作成を、Claude のスケジュール実行から GitHub Actions へ渡す経路として自動化する。承認なしに本番データへ反映することはない。
+
+```
+Claude の定期巡回（2週間ごと）
+  → edition-crawl ブランチへ proposals/YYYY-MM-DD.json と checked.json を push
+  → edition-proposals.yml が main にデータを取り込み、GAS の EDITION_PROPOSALS へ pending で追記
+  → 追記があれば GitHub Issue で通知
+  → ユーザーがシートの REVIEW_STATUS を approved に変更
+  → Claude が承認済み提案を反映
+  → ユーザーが Publish Now を実行
+```
+
+提案ファイルは次の形にする。`proposals` が空配列でもよい。
+
+```json
+{
+  "generated_at": "2026-11-26T00:00:00+09:00",
+  "proposals": [{
+    "PROPOSAL_ID": "festival-2027",
+    "FESTIVAL_ID": "festival",
+    "EDITION": "2027",
+    "DATE_START": "2027-04-23",
+    "DATE_END": "2027-04-25",
+    "VENUE_CHANGED": "no",
+    "LOCATION": "",
+    "LOCATION_JA": "",
+    "PREF": "",
+    "ADDRESS": "",
+    "LAT": "",
+    "LNG": "",
+    "SOURCE_URL": "https://example.test/",
+    "SOURCE_QUOTE": "2027年4月23日から25日に開催",
+    "CONFIDENCE": "high",
+    "FOUND_AT": "2026-11-26",
+    "NOTES": ""
+  }]
+}
+```
+
+ワークフローは既存の提案 ID または開催回 ID を重複して書き込まず、`CONFIDENCE=low` の提案は検証・追記の対象から除外する。low の調査結果はシートへ絶対に書かない。調査が不完全だったフェスは `checked.json` から削除し、次回の巡回で再試行できるようにする。
 
 ## 段階2・3（参考）
 

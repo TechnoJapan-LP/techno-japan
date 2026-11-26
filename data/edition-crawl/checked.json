@@ -2,7 +2,7 @@
   "99flags": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式は2026/5/9-10のみ"
+    "note": "[festival-life/ra/official] 公式はMay 9,10 2026まで"
   },
   "ala": {
     "checked_at": "2026-11-26",
@@ -12,97 +12,87 @@
   "arch": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "検索で該当なし（IG未確認）"
+    "note": "[ra] ARCH 2026@小平の里キャンプ場。2027情報なし（festival-life・チケット未確認）"
   },
   "body-soul": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "検索で2025/2026回のみ"
-  },
-  "car-multimedia": {
-    "checked_at": "2026-11-26",
-    "result": "no-news",
-    "note": "検索で該当なし（IG未確認）"
+    "note": "[festival-life/ra/official] 公式は2026のまま。例年6月"
   },
   "dots": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式URL無し、検索で該当なし"
+    "note": "[festival-life/ra] 北海道の2027回なし（RAのDOTSは青山蜂の別イベント）"
   },
   "ensou": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "検索で該当なし（IG未確認）"
+    "note": "[ra/festival-life/zaiko/ticket] ZAIKO ensoufest2027は404"
   },
   "etsuetsu": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "検索で該当なし（IG未確認）"
+    "note": "[festival-life/ra/zaiko/ticket] Peatix etsuetsu2027は404"
   },
   "festival-fruezinho": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式は2026/6/13のみ（毎年夏至の頃と記載）"
+    "note": "[festival-life/ra/zaiko/ticket/official] 公式は2026/6/13まで。shop.frue.jpに「FESTIVAL FRUEZINHO 2027」棚が2026-11-24作成（商品0・日付なし）→近く発表、要再確認"
   },
   "fuji-rock": {
     "checked_at": "2026-11-26",
-    "result": "no-news",
-    "note": "公式は2026(7/24-26)のみ"
-  },
-  "halola-camp": {
-    "checked_at": "2026-11-26",
-    "result": "no-news",
-    "note": "公式URL無し、検索で該当なし"
+    "result": "proposed",
+    "note": "[festival-life/official] 2027/7/23-25 反映済み（medium）"
   },
   "japonism": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "検索で該当なし（IG未確認）"
+    "note": "[festival-life/ra/zaiko/ticket] 那須の2027回なし"
   },
   "letus-music-camp": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "検索で該当なし（IG未確認）"
+    "note": "[festival-life/ra/zaiko/ticket] ZAIKO letuscamp2027は404"
   },
   "link-open-air": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "検索で2026回のみ（IG未確認）"
+    "note": "[festival-life/ra/zaiko/ticket] CLUB PORTに2026ページのみ"
   },
   "matricaria": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式はMATRICARIA2026のみ"
+    "note": "[festival-life/ra/zaiko/ticket/official] 公式はMATRICARIA2026のみ"
   },
   "moment": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式はMOMENT 2026(7/3-5)のみ"
+    "note": "[official/festival-life/ra] 公式は2026（7/3-5）のみ"
   },
   "mori-michi-ichiba": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式が「森、道、市場2027」表記に切替。日付は未掲載（OGP画像にも無し）"
+    "note": "[festival-life/official] 公式見出しが森、道、市場2027に変わったが日程未発表。要再確認"
   },
   "nu-festival": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式は2026/6/26-28のみ"
+    "note": "[official/festival-life/ra] 2026初回のみ"
   },
   "orbit": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "検索で該当なし（IG未確認）"
+    "note": "[ra/zaiko/ticket] 2026回（7/11-12 前坂）まで。ZAIKO orbit2027は404"
   },
   "osukinidouzo": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "検索で該当なし（IG未確認）"
+    "note": "[ra/official] 2026は座架依橋で開催済み。2027告知なし（festival-life・チケット未確認）"
   },
   "paramount": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式はPARAMOUNT 2026のみ"
+    "note": "[festival-life/ra/official] 公式はPARAMOUNT 2026のまま"
   },
   "rainbow-disco-club": {
     "checked_at": "2026-11-26",
@@ -111,18 +101,18 @@
   },
   "rural": {
     "checked_at": "2026-11-26",
-    "result": "no-news",
-    "note": "検索で2026回のみ（IG未確認）"
+    "result": "proposed",
+    "note": "[festival-life/zaiko/ticket/official] 2027/7/16-19 反映済み（high）"
   },
   "samsara": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式URL無し、検索で該当なし"
+    "note": "[festival-life/ra] 同名の別イベントのみ。長野の2027回なし"
   },
   "signal": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "検索で該当なし（IG未確認）"
+    "note": "[festival-life/ra] 山梨の2027回なし。Xも2026まで"
   },
   "spring-love-harukaze": {
     "checked_at": "2026-11-26",
@@ -132,321 +122,261 @@
   "sub-tide": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式はJS描画で本文取得不可、/2027は404。検索で該当なし"
+    "note": "[official/ra/festival-life] /2027は404"
   },
   "technogaoka": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "検索で該当なし（IG未確認）"
+    "note": "[ra] 直近vol.17（2026/4/25）。vol.18/2027告知なし（festival-life・チケット未確認）"
   },
   "the-star-festival": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式は2026/5/16-17のみ。集約サイトに『Mid May 2027』のみ"
+    "note": "[festival-life/ra/zaiko/ticket/official] 公式は2026/5/16-17のみ"
   },
   "transcendence": {
     "checked_at": "2026-11-26",
-    "result": "no-news",
-    "note": "集約サイト(Techno Airlines)のみ2027掲載、同ページ内で5/7-9と5/8-10が食い違い。公式は未掲載→提案せず"
+    "result": "proposed",
+    "note": "[festival-life/ra/official] 2027/5/8-10 反映済み（high・公式）"
   },
   "waifu": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式サイトに日付なし。2027の告知なし"
-  },
-  "wormhole": {
-    "checked_at": "2026-11-26",
-    "result": "no-news",
-    "note": "三重での次回開催情報なし（WOMBのWORMHOLE FLOOR等は別物）"
+    "note": "[ra/official] 野外回は2025/9/13・2026/4/11。2027告知なし（festival-life・チケット未確認）"
   },
   "bonna-pot": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "2024年11月 西伊豆の記事のみ"
+    "note": "[festival-life/ra/zaiko/ticket] festival-lifeは2024回まで。2025/2026本編の形跡なし"
   },
   "lab": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "LAB vol.7等の情報なし"
+    "note": "[festival-life/ra/zaiko/ticket] LAB.vol.7等見つからず"
   },
   "axiom": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "2026情報なし"
+    "note": "[festival-life/ra/zaiko/ticket] フェス自体を特定できず"
   },
   "balance": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "mindgamesのZAIKOに2025版のみ。balance-2026ページは403で未確認"
+    "note": "[festival-life/ra/zaiko/ticket/official] 直近ZAIKO balance-2025。2026/2027告知なし"
   },
   "euphoria": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "2026情報なし（同名の別イベントのみ）"
+    "note": "[ra] 同定できず"
   },
   "one-music-camp": {
     "checked_at": "2026-11-26",
     "result": "hiatus",
-    "note": "公式2026/05/01告知で2026年は2027年へ延期。2027の日程は未発表"
-  },
-  "pure-rave": {
-    "checked_at": "2026-11-26",
-    "result": "no-news",
-    "note": "公式ページ見つからず。inboxの2026.07.18-20は出典なしで未採用"
+    "note": "[festival-life/official] 2026/05/01公式で2027へ延期。日程未発表"
   },
   "gampeki": {
     "checked_at": "2026-11-26",
     "result": "ended",
-    "note": "niewmediaで2025年9月20-21日がTHE FINALと明記。2025年で終了"
-  },
-  "delta-commit": {
-    "checked_at": "2026-11-26",
-    "result": "no-news",
-    "note": "2026情報なし"
+    "note": "[official] 公式タイトル「岩壁音楽祭 THE FINAL」。2025で終了"
   },
   "rare-groove": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "2026情報なし"
-  },
-  "ishinoko": {
-    "checked_at": "2026-11-26",
-    "result": "no-news",
-    "note": "公式に2026日程なし（再び開催予定のみ）"
-  },
-  "music": {
-    "checked_at": "2026-11-26",
-    "result": "no-news",
-    "note": "名前が一般的で特定できず"
+    "note": "[official] 2026/10/3-4 山梨シークレットキャンプ村の開催がまとめブログのみに掲載（low・未提案）。2027情報なし"
   },
   "asagiri-jam": {
     "checked_at": "2026-11-26",
     "result": "hiatus",
-    "note": "公式で2026年は休止、朝霧JAM 2027で再会と告知。2027日程・会場は未発表"
-  },
-  "dream-festival": {
-    "checked_at": "2026-11-26",
-    "result": "no-news",
-    "note": "2026開催も2027告知も見つからず。同名の別イベントのみ"
+    "note": "[festival-life/official] 2026休止、朝霧JAM 2027で再会と告知。日程未発表"
   },
   "one-park-riverfes": {
     "checked_at": "2026-11-26",
-    "result": "no-news",
-    "note": "該当情報なし（福井のONE PARK FESTIVALのみ）。実在未確認"
+    "result": "hiatus",
+    "note": "[festival-life/official] 公式2026.06.08で2026開催見送り。2027は検討中で日程未定"
   },
   "brightness": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "2025年10月25-26日 東扇島東公園まで確認。2026/2027告知なし（公式未取得）"
+    "note": "[festival-life/ra/official] 公式は2025版のまま。2026開催なし。RAに「2028へ向けた新章」"
   },
   "midnight-cult-rave": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "該当情報なし。実在未確認"
+    "note": "[ra/festival-life/official] 公式midnightcult.com/raveにRAVE 07（2025/11/1-2）のみ。08告知なし"
   },
   "mirrorball-village": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "RAに2025（11/1-3）・2023。2026/2027なし"
+    "note": "[ra] 2025/11/1-3 彼杵。2026/2027見つからず（festival-life・チケット未確認）"
   },
   "iyasaka-rave-festival": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "2026/2027のフェス告知なし（2026/2/21のクラブイベントのみ）"
+    "note": "[ra/festival-life] 直近2025/11/14-16 国頭村。2026沖縄開催見つからず"
   },
   "e-groove": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "2027告知なし。IG未取得"
+    "note": "[festival-life/ra] 2026/8/1のみ"
   },
   "hacha-mecha": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式はHACHA MECHA 2026のまま"
-  },
-  "loa-lost-paradise": {
-    "checked_at": "2026-11-26",
-    "result": "no-news",
-    "note": "2027情報なし（豪州の別フェスのみ）"
+    "note": "[official/festival-life/ra/zaiko/ticket] 全経路で2026（8/8）のみ。※DBの県Akitaは誤り？festival-lifeは群馬桐生"
   },
   "global-ark": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式は2026（8/21-23）とお礼のみ"
+    "note": "[official/festival-life/ra/zaiko/ticket] 公式は2026終了挨拶のみ"
   },
   "bondisco": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "2027告知なし"
+    "note": "[official/ra] 公式は2026（8/22-23）のみ"
   },
   "yamauto": {
     "checked_at": "2026-11-26",
-    "result": "no-news",
-    "note": "公式「山水人2026 無事におわりました」。2027日程なし"
-  },
-  "fabulous": {
-    "checked_at": "2026-11-26",
-    "result": "no-news",
-    "note": "情報なし。IG未取得"
-  },
-  "forest-sound-camp": {
-    "checked_at": "2026-11-26",
-    "result": "no-news",
-    "note": "RAに2026（9/5-6）。2027告知なし"
+    "result": "proposed",
+    "note": "[official/festival-life] 2026/8/22-30（EDITIONSに抜け）を提案。ユーザーは2027日程と誤認→pending保留。2027未発表"
   },
   "one-park-festival": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式は2026（9/5-6）のみ。2027日程なし"
+    "note": "[festival-life/ra/official] 公式は2026回まで"
   },
   "big-fun": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式サイトなしIGのみ。2027告知なし"
+    "note": "[festival-life/ra] 2026/9/6回まで"
   },
   "re-birth-festival": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式は2026（9/11-13）のみ。Rebirth 2027 4/9-11はオランダの別フェス"
+    "note": "[festival-life/ra/official] 公式は2026回のみ。オランダ同名は別物"
   },
   "ultra-japan": {
     "checked_at": "2026-11-26",
     "result": "proposed",
-    "note": "2027/9/18-19 を提案（high・公式サイト／e+先行、会場同じ）"
+    "note": "2027/9/18-19 反映済み（high）"
   },
   "colors-presents-soundcamp": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式は2026（9/20-22）のみ。※2026会場は公式で石狩湾新港、DBはSecret Location"
+    "note": "[festival-life/ra/official] 公式は2026回のまま"
   },
   "circus": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式は2026のみ。※公式の2026日付は9月23日、DBは9月22日。要確認"
+    "note": "[festival-life/ra/official] 公式はお台場2026/9/23・大阪2026/7/5のみ。※DBの2026日付は9/22"
   },
   "odyssey": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "IGのみ。2027告知なし"
+    "note": "[festival-life/ra] 2027情報なし。ZAIKO403"
   },
   "otsukimi": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "IGのみ。2027告知なし"
-  },
-  "detox": {
-    "checked_at": "2026-11-26",
-    "result": "no-news",
-    "note": "IGのみ。2027告知なし"
+    "note": "[festival-life/ra] X/festival-lifeとも2026回まで"
   },
   "ffkt": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式は2026伊豆白浜のみ。2027未告知"
+    "note": "[festival-life/ra/zaiko/ticket/official] 公式最新は2026/10/3来場御礼。ZAIKO ffkt2027は404"
   },
   "ringo-festival": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式は2026（9/26-27）のみ"
+    "note": "[festival-life/ra/official] 公式は2026回と開催報告まで。弘前のRINGO MUSIC FES.は別物"
   },
   "synapse-festival": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式404。2026（10/2-4）のみ"
+    "note": "[festival-life/ra/official] 公式404。2026回のみ"
   },
   "each-story": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式は2026のみ。2027未告知"
+    "note": "[festival-life/ra/zaiko/ticket/official] 全経路で2026（10/3-4）が最新"
   },
   "labyrinth": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式は2026リンクのみ"
+    "note": "[festival-life/ra/official] 告知なし。ZAIKO/RA主催者ページは403"
   },
   "treks": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式は2026（10/10-12）のみ"
+    "note": "[festival-life/ra/zaiko/ticket/official] 公式・RA・festival-lifeとも2026が最新。ZAIKO推測URL404"
   },
   "intergalactic": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "2026（10/16-18）まで。2027/5/15-16同会場は別イベント"
+    "note": "[ra/zaiko/ticket] 2026回まで。2027/5/15は別主催"
   },
   "annahme": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式annahme.jpは名称表示のみで日付なし。2027年の発表なし。"
+    "note": "[festival-life/ra/official] 公式は2026/10/17-18のみ。2027なし"
   },
   "lost-find": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式lostandfind.infoは2026.10.17-18回のみ掲載。2027年の発表なし。"
+    "note": "[festival-life/ra/official] 公式は2026/10/17-18のまま。2027なし"
   },
   "wonderfruit-kyoto": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "2026年10月の初回記事のみ（招待制・約100名）。京都での2027年開催の発表なし。"
+    "note": "[festival-life/ra/official] 公式は2026回のみ、next gatheringは登録案内のみ"
   },
   "sawagi-festival": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式は2026.10.23-25（SUTEKI VILLAGE CAMPING）のまま。2027年の発表なし。"
+    "note": "[festival-life/ra/zaiko/ticket/official] 公式は2026回のまま。ZAIKO 2027は404"
   },
   "topia": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "2027年の発表なし。RAでは2026年10月24-25日回は千葉外房エリアで初の屋内開催。"
-  },
-  "denki-bodhisattva": {
-    "checked_at": "2026-11-26",
-    "result": "no-news",
-    "note": "RAの最新は2026-10-31〜11-01の24H HALLOWEEN RAVE。2027年の発表なし。"
+    "note": "[ra/zaiko/ticket] Topia#5（2026/10/24-25 屋内）開催済み。2027なし"
   },
   "festival-de-frue": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式frue.jpは2026（10/31・11/1）のまま。2027年の日程なし。"
-  },
-  "parallel-world": {
-    "checked_at": "2026-11-26",
-    "result": "no-news",
-    "note": "同名の別イベントばかり。yamamotech主催回の2027年情報なし。"
+    "note": "[festival-life/ra/official] 全経路で2026が最新"
   },
   "grow-the-culture-open-air": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式は7-8 November 2026のみ。2027年の告知なし。"
+    "note": "[festival-life/ra/official] 公式に2027記載なし。RAの2026回に[FINAL]表記あり（意味不明・未断定）"
   },
   "prox": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式は2026年11月7日 DAN OISOのまま。2027年の発表なし。"
+    "note": "[official/festival-life/zaiko/ticket] 公式は2026/11/7のみ"
   },
   "sangenjaya-art-music-festival": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式は第3回2026年11月7日のまま。2027年の発表なし。"
+    "note": "[official/festival-life] 公式「また来年、三茶で」日付なし"
   },
   "mutek": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式はMUTEK.JP 2026（11/20-23 MoN Takanawa）のみ。2027年の日程なし。"
+    "note": "[festival-life/ra/official] 公式は2026 Edition 11のみ。2027日付なし"
   },
   "soul-beat-asia": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式2026.soulbeatasia.comは2026年11月20-22日。2027年・休止の記載なし。"
+    "note": "[official/festival-life] 公式は2026/11/20-22のみ"
   },
-  "raptvana": {
+  "snow-machine-japan": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式サイトなし・IG取得不可。2027年の発表は確認できず。"
+    "note": "[festival-life/ra/official] DB最新2027-03-02〜07が次回。2028発表なし"
   },
-  "resonance": {
+  "takarajima-beach-cleaning-party": {
     "checked_at": "2026-11-26",
     "result": "no-news",
-    "note": "公式は2026.11.22-23 大泉工場のみ。RAのResonance: First Orbit 2027は別団体。"
+    "note": "[ra] DBの回は2026-11-28で開催前。2027告知なし"
   }
 }

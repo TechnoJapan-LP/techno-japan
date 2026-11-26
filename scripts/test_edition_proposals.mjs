@@ -6,6 +6,7 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { findCandidates } from './editions/candidates.mjs';
 import './editions/cms-edition-proposals.js';
+import { authFetch, planPush } from './editions/push-proposals.mjs';
 const proposals = globalThis.TJEditionProposals;
 
 const headers = { EDITION_PROPOSALS:['PROPOSAL_ID','FESTIVAL_ID','EDITION','DATE_START','DATE_END','VENUE_CHANGED','LOCATION','LOCATION_JA','PREF','ADDRESS','LAT','LNG','SOURCE_URL','SOURCE_QUOTE','CONFIDENCE','REVIEW_STATUS','FOUND_AT','NOTES','APPLIED_AT'], EDITIONS:['EDITION_ID','FESTIVAL_ID','EDITION','DATE_START','DATE_END','LOCATION','LOCATION_JA','VENUE_ID','PREF','ADDRESS','LAT','LNG','TICKETURL','FLYER','STATUS'], FESTIVALS:['ID','DATE','name','desc','ticketurl','ticketUrl','flyer','lastEditedAt','lineup'], LINEUPS:['EDITION_ID','ARTIST_ID','ACT_LABEL','SET_TYPE','SORT'] };
@@ -28,6 +29,32 @@ function fakeGas(initial, { mismatch = false, dateStrings = false, proposalDateC
 const baseFestival = {_row:12, ID:'alpha', DATE:'2026-10-10', name:'Alpha', desc:'keep me', ticketurl:'old-a', ticketUrl:'old-a', flyer:'brand-flyer', lastEditedAt:'x'};
 const baseEdition = {_row:121, edition_id:'alpha-2026', festival_id:'alpha', edition:'2026', date_start:'2026-10-10', date_end:'2026-10-11', location:'Old Hall', location_ja:'旧会場', venue_id:'venue-old', pref:'Tokyo', address:'address', lat:'35', lng:'139', ticketurl:'old-ticket', flyer:'old-flyer', status:'ended'};
 const proposal = {PROPOSAL_ID:'alpha-2027',FESTIVAL_ID:'alpha',EDITION:'2027',DATE_START:'2027-10-10',DATE_END:'2027-10-11',VENUE_CHANGED:'no',LAT:'35.7530',LNG:'139.1230',SOURCE_URL:'https://example.test',SOURCE_QUOTE:'official date',CONFIDENCE:'high',FOUND_AT:'2026-11-26'};
+
+{
+  const calls = [];
+  const wrapped = authFetch(async (url, options) => { calls.push({url, options}); return {ok:true}; }, 'session-token');
+  await wrapped('https://gas.test/exec?action=get_sheet&sheet=EDITIONS');
+  await wrapped('https://gas.test/exec', {method:'POST', body:JSON.stringify({action:'update_row', sheet:'EDITIONS'})});
+  assert.equal(new URL(calls[0].url).searchParams.get('cmsAuth'), 'session-token');
+  assert.equal(JSON.parse(calls[1].options.body).cmsAuth, 'session-token');
+}
+
+{
+  const duplicateProposal = {_row:3, ...proposal, review_status:'pending'};
+  const duplicateEdition = {...baseEdition, _row:4, edition_id:'beta-2027', festival_id:'beta', edition:'2027'};
+  const low = {...proposal, PROPOSAL_ID:'low-2027', FESTIVAL_ID:'low', CONFIDENCE:'low'};
+  const fresh = {...proposal, PROPOSAL_ID:'gamma-2027', FESTIVAL_ID:'gamma'};
+  const fake = fakeGas({EDITION_PROPOSALS:[duplicateProposal], EDITIONS:[duplicateEdition], FESTIVALS:[]});
+  const result = await planPush([proposal, {...proposal, PROPOSAL_ID:'beta-2027', FESTIVAL_ID:'beta'}, low, fresh], {
+    read: async (sheet) => structuredClone(fake.sheets[sheet]),
+    append: (items) => proposals.appendProposals(items, {fetch:fake.fetch,gasUrl:'https://gas',execute:true}),
+  });
+  assert.deepEqual(result.results.filter((item) => item.result).map((item) => [item.id, item.result]), [
+    ['alpha-2027','skipped-exists'], ['beta-2027','skipped-exists'], ['low-2027','skipped-low'], ['gamma-2027','appended'],
+  ]);
+  assert.equal(fake.sheets.EDITION_PROPOSALS.at(-1).proposal_id, 'gamma-2027');
+  assert.equal(fake.sheets.EDITION_PROPOSALS.at(-1).review_status, 'pending');
+}
 
 {
   const legacyFestival = {...baseFestival, lineup:'Old Artist'};

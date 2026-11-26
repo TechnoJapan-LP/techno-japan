@@ -16594,3 +16594,36 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 公開データ lineups.json: rdc-2025 19 / rdc-2026 19 / rdc-2027 11、春風 2026 16 / 2027 0、移し替えた他6件も件数一致。→ 前エントリの「実機未確認」は解消。
 - ★訂正: FESTIVALS.LINEUP の11組（antal, ben-ufo, chaos-in-the-cbd ほか）は「2025年の出演者」ではなく、**RDC 2027 の第1弾発表**（ZAIKO rdc2027「出演 (A to Z)」と一致）。ユーザーが 15:11 にフェス共通の LINEUP 欄へ入れていたもの。巡回サブエージェントの「2027 出演者は未発表」も誤りだった。
 - EN 可視日本語の検査は、ARTISTS の featured が「出演予定あり」からランダムに3人選ぶため、出演予定の母集団に bio_en に「Spring Love 春風」を含むアーティストが入ると落ちる（今回3回連続）。基準は更新していない。
+
+## 2026-11-26 国内フェス全件の再巡回（チェックリスト化）＋4件反映＋2週間ごとの自動巡回の土台
+
+### 実施
+- ユーザー指摘で rural 2027（11/5 発表済み）の見落としが判明。初回巡回は検索1〜2回で no-news にしていた。
+  調べ方を `docs/design/NEXT_EDITION_UPDATE.md`「② 調べるときの必須チェックリスト」に固定（festival-life / RA / チケット URL 推測 / 公式）。
+- 国内88件を再巡回（サブエージェント6本）。途中でセッション全体の WebSearch 上限（200回）に達したため、festival-life の「2027」検索結果一覧をブラウザで総なめして補完。
+- 提案→ユーザー承認→本番反映（applyApproved、1件→照合→3件）:
+  - ultra-japan-2027（EDITIONS 126行）、rural-2027（127行。rural-2026 の空 FLYER へ共通フライヤーを移した）、fuji-rock-2027（128行、出典 festival-life・medium）、transcendence-2027（129行）。FESTIVALS.DATE も更新、重複0。
+  - ユーザーは状態欄に approved ではなく applied を選んでいた（実反映なし・APPLIED_AT 空を確認）→ approved に直してから反映。
+  - yamauto-2026（EDITIONS に抜けている開催済みの回）はユーザーが「2026の日程になっていた」と保留 → pending のまま。
+- checked.json: 72件更新。上限で調べきれなかった16件（wormhole / pure-rave / delta-commit / ishinoko / music / dream-festival / halola-camp / car-multimedia / loa-lost-paradise / fabulous / forest-sound-camp / detox / denki-bodhisattva / parallel-world / raptvana / resonance）は記録を消して次回の候補に戻した。
+- 自動巡回の土台（Codex）: `scripts/editions/push-proposals.mjs`（GAS ログイン→重複・low をスキップ→appendProposals→読み直し）、`.github/workflows/edition-proposals.yml`（edition-crawl ブランチの push で提案タブへ pending 追記→data を main へ取り込み→Issue で通知）、backup-data に EDITION_PROPOSALS を追加、テスト追加。
+
+### コミット
+- このエントリを含むコミット
+
+### 検証
+- 本番シートを読み直し: 4件の EDITIONS 行・FESTIVALS.DATE・提案の applied / APPLIED_AT が一致。rural-2026 の FLYER は共通フライヤーのみ変化。
+- `node scripts/test_edition_proposals.mjs` 成功。workflow は YAML 構文のみ確認。**GitHub 上での実行は未確認**（push 後に空の提案ファイルで1回流して確かめる）。
+- サイト反映は Publish 待ち（**実機未確認**）。
+
+### 変更したパターン
+- 本番 EDITIONS 4行追加・1行（rural-2026 FLYER）更新、FESTIVALS 4行の DATE、提案タブ5行。新 workflow / スクリプト / backup 対象。
+
+### 未確認の類似パターン
+- Instagram だけで告知するフェスは引き続き未確認（IG Graph API 待ち）。
+- rural-2026 の STATUS が announced のまま（終了済み）。未修正。
+- hacha-mecha の PREF が Akita になっている疑い（festival-life では群馬・桐生）。未修正。
+
+### 次の担当への注意・判断待ち
+- 定期実行（Claude ルーチン）はユーザー確認後に作成する。
+- festival-fruezinho（shop.frue.jp に 2027 棚）と mori-michi-ichiba（公式見出しが 2027）は近く発表されそう。
