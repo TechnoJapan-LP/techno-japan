@@ -1,32 +1,32 @@
 {
-  "generatedAt": "2026-11-26T01:52:04.590Z",
+  "generatedAt": "2026-11-27T01:49:38.915Z",
   "propertyId": "535755449",
   "periods": {
     "current": {
-      "startDate": "2026-10-30",
-      "endDate": "2026-11-26",
+      "startDate": "2026-10-31",
+      "endDate": "2026-11-27",
       "label": "直近28日"
     },
     "previous": {
-      "startDate": "2026-10-02",
-      "endDate": "2026-10-29",
+      "startDate": "2026-10-03",
+      "endDate": "2026-10-30",
       "label": "前の28日"
     }
   },
   "current": {
-    "sessions": 100,
-    "totalUsers": 97,
-    "share": 0.03640334910811795,
+    "sessions": 104,
+    "totalUsers": 101,
+    "share": 0.03691870784522542,
     "bySource": [
       {
         "source": "chatgpt.com",
-        "sessions": 95,
-        "totalUsers": 92
+        "sessions": 98,
+        "totalUsers": 95
       },
       {
         "source": "gemini.google.com",
-        "sessions": 5,
-        "totalUsers": 5
+        "sessions": 6,
+        "totalUsers": 6
       }
     ],
     "topLandingPages": [
@@ -81,11 +81,6 @@
         "totalUsers": 3
       },
       {
-        "landingPage": "/en/festivals/lost-find.html",
-        "sessions": 3,
-        "totalUsers": 3
-      },
-      {
         "landingPage": "/en/festivals/rural.html",
         "sessions": 3,
         "totalUsers": 3
@@ -101,12 +96,22 @@
         "totalUsers": 3
       },
       {
+        "landingPage": "/articles/feature-yuta.html",
+        "sessions": 2,
+        "totalUsers": 2
+      },
+      {
         "landingPage": "/en/",
         "sessions": 2,
         "totalUsers": 2
       },
       {
         "landingPage": "/en/articles/sawagi-festival-2026-info.html",
+        "sessions": 2,
+        "totalUsers": 2
+      },
+      {
+        "landingPage": "/en/festivals/lost-find.html",
         "sessions": 2,
         "totalUsers": 2
       },
@@ -124,15 +129,10 @@
         "landingPage": "/articles/dei-fest-2026-info.html",
         "sessions": 1,
         "totalUsers": 1
-      },
-      {
-        "landingPage": "/articles/denki-bodhisattva-2026-info.html",
-        "sessions": 1,
-        "totalUsers": 1
       }
     ],
-    "allSessions": 2747,
-    "allTotalUsers": 2240
+    "allSessions": 2817,
+    "allTotalUsers": 2285
   },
   "previous": {
     "sessions": 0,
@@ -172,6 +172,11 @@
         "totalUsers": 0
       },
       {
+        "landingPage": "/articles/feature-yuta.html",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
         "landingPage": "/articles/japan-festival-2026-november.html",
         "sessions": 0,
         "totalUsers": 0
@@ -202,6 +207,11 @@
         "totalUsers": 0
       },
       {
+        "landingPage": "/articles/treak-2026-info.html",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
         "landingPage": "/artists/powder.html",
         "sessions": 0,
         "totalUsers": 0
@@ -222,6 +232,11 @@
         "totalUsers": 0
       },
       {
+        "landingPage": "/en/articles/dei-fest-2026-info.html",
+        "sessions": 0,
+        "totalUsers": 0
+      },
+      {
         "landingPage": "/en/articles/denki-bodhisattva-2026-info.html",
         "sessions": 0,
         "totalUsers": 0
@@ -233,21 +248,6 @@
       },
       {
         "landingPage": "/en/articles/intergalactic-2026-info.html",
-        "sessions": 0,
-        "totalUsers": 0
-      },
-      {
-        "landingPage": "/en/articles/japan-festival-2026-november.html",
-        "sessions": 0,
-        "totalUsers": 0
-      },
-      {
-        "landingPage": "/en/articles/japan-festival-2026-october.html",
-        "sessions": 0,
-        "totalUsers": 0
-      },
-      {
-        "landingPage": "/en/articles/odyssey-2026-info.html",
         "sessions": 0,
         "totalUsers": 0
       }
