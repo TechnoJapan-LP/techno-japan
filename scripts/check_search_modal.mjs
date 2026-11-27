@@ -39,24 +39,30 @@ function freePort() {
   });
 }
 
-async function cdp(ws, method, params = {}) {
+async function cdp(ws, method, params = {}, page) {
   const id = ++cdp.nextId;
-  ws.send(JSON.stringify({ id, method, params }));
   return new Promise((resolve, reject) => {
+    const timeout = setTimeout(() => {
+      ws.removeEventListener('message', onMessage);
+      reject(new Error(`CDP ${method} timed out after 15s${page ? ` while checking ${page}` : ''}`));
+    }, 15000);
     const onMessage = (event) => {
-      const message = JSON.parse(event.data);
+      let message;
+      try { message = JSON.parse(event.data); } catch (error) { clearTimeout(timeout); ws.removeEventListener('message', onMessage); reject(error); return; }
       if (message.id !== id) return;
+      clearTimeout(timeout);
       ws.removeEventListener('message', onMessage);
       if (message.error) reject(new Error(JSON.stringify(message.error)));
       else resolve(message.result);
     };
     ws.addEventListener('message', onMessage);
+    ws.send(JSON.stringify({ id, method, params }));
   });
 }
 cdp.nextId = 0;
-async function waitForHeader(ws) {
+async function waitForHeader(ws, expectedUrl, page) {
   for (let i = 0; i < 100; i++) {
-    const ready = await cdp(ws, 'Runtime.evaluate', { expression: `document.readyState === 'complete' && !!document.querySelector('.nav-hamburger')`, returnByValue: true });
+    const ready = await cdp(ws, 'Runtime.evaluate', { expression: `(document.readyState !== 'loading' && location.href === ${JSON.stringify(expectedUrl)} && !!document.querySelector('.nav-hamburger'))`, returnByValue: true }, page);
     if (ready.result?.value) return true;
     await delay(100);
   }
@@ -85,21 +91,28 @@ try {
   await cdp(ws, 'Page.addScriptToEvaluateOnNewDocument', { source: skipTopIntro });
 
   for (const page of pages) {
-    await cdp(ws, 'Page.navigate', { url: `http://127.0.0.1:${port}${page}` });
-    await waitForHeader(ws);
+    console.log(`search_modal: checking ${page}`);
+    const url = `http://127.0.0.1:${port}${page}`;
+    await cdp(ws, 'Page.navigate', { url }, page);
+    let headerReady = await waitForHeader(ws, url, page);
+    if (!headerReady) {
+      await cdp(ws, 'Page.navigate', { url }, page);
+      headerReady = await waitForHeader(ws, url, page);
+    }
+    if (!headerReady) throw new Error(`${page}: header was not ready within 10s`);
     await delay(600);
     const lazyPage = /^\/(?:articles|festivals|artists|venues)\//.test(page);
     if (lazyPage) {
-      const resources = await cdp(ws, 'Runtime.evaluate', { expression: `performance.getEntriesByType('resource').some(e => /data-hub\.js(?:\?|$)/.test(e.name))`, returnByValue: true });
+      const resources = await cdp(ws, 'Runtime.evaluate', { expression: `performance.getEntriesByType('resource').some(e => /data-hub\.js(?:\?|$)/.test(e.name))`, returnByValue: true }, page);
       if (resources.result?.value) throw new Error(`${page}: data-hub.js loaded before search opened`);
     }
     const open = `(() => { const b=document.querySelector('.nav-hamburger'); if(!b) return {ok:false,reason:'hamburger missing'}; b.click(); const o=document.querySelector('.nav-overlay'),s=o&&o.querySelector(':scope > .nav-search-link'); if(!s) return {ok:false,reason:'search entry missing'}; s.click(); return {ok:true}; })()`;
-    const opened = await cdp(ws, 'Runtime.evaluate', { expression: open, returnByValue: true });
+    const opened = await cdp(ws, 'Runtime.evaluate', { expression: open, returnByValue: true }, page);
     if (!opened.result?.value?.ok) throw new Error(`${page}: ${opened.result?.value?.reason || 'menu did not open'}`);
     if (lazyPage) {
       let loaded = false;
       for (let i = 0; i < 50; i++) {
-        const globals = await cdp(ws, 'Runtime.evaluate', { expression: `typeof FESTIVALS !== 'undefined'`, returnByValue: true });
+        const globals = await cdp(ws, 'Runtime.evaluate', { expression: `typeof FESTIVALS !== 'undefined'`, returnByValue: true }, page);
         if (globals.result?.value) { loaded = true; break; }
         await delay(100);
       }
@@ -107,12 +120,12 @@ try {
     } else {
       await delay(350);
     }
-    const state = await cdp(ws, 'Runtime.evaluate', { expression: `(() => { const modal=document.querySelector('#global-search-modal'),input=document.querySelector('#gs-input'); if(!modal||!input) return {ok:false,reason:'search modal or input missing'}; const r=input.getBoundingClientRect(); const hit=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2); const hitOk=hit===input||!!hit?.closest('.gs-input-wrap'); const active=modal.classList.contains('active'); const focused=document.activeElement===input; return {ok:active&&hitOk&&focused,active,hitOk,focused}; })()`, returnByValue: true });
+    const state = await cdp(ws, 'Runtime.evaluate', { expression: `(() => { const modal=document.querySelector('#global-search-modal'),input=document.querySelector('#gs-input'); if(!modal||!input) return {ok:false,reason:'search modal or input missing'}; const r=input.getBoundingClientRect(); const hit=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2); const hitOk=hit===input||!!hit?.closest('.gs-input-wrap'); const active=modal.classList.contains('active'); const focused=document.activeElement===input; return {ok:active&&hitOk&&focused,active,hitOk,focused}; })()`, returnByValue: true }, page);
     const value = state.result?.value || {};
     if (!value.ok) throw new Error(`${page}: input hit=${value.hitOk} active=${value.active}`);
-    await cdp(ws, 'Input.insertText', { text: 'laby' });
+    await cdp(ws, 'Input.insertText', { text: 'laby' }, page);
     await delay(250);
-    const results = await cdp(ws, 'Runtime.evaluate', { expression: `document.querySelectorAll('.gs-result').length`, returnByValue: true });
+    const results = await cdp(ws, 'Runtime.evaluate', { expression: `document.querySelectorAll('.gs-result').length`, returnByValue: true }, page);
     if ((results.result?.value || 0) < 1) throw new Error(`${page}: no search results for laby`);
     console.log(`search_modal: ${page} ok`);
   }

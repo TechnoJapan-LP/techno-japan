@@ -21,14 +21,14 @@ function chromePath() {
 function freePort() {
   return new Promise((resolve, reject) => { const s = createServer(); s.once('error', reject); s.listen(0, '127.0.0.1', () => { const p = s.address().port; s.close(() => resolve(p)); }); });
 }
-async function cdp(ws, method, params = {}) {
-  const id = ++cdp.nextId; ws.send(JSON.stringify({ id, method, params }));
-  return new Promise((resolve, reject) => { const onMessage = event => { const msg = JSON.parse(event.data); if (msg.id !== id) return; ws.removeEventListener('message', onMessage); if (msg.error) reject(new Error(JSON.stringify(msg.error))); else resolve(msg.result); }; ws.addEventListener('message', onMessage); });
+async function cdp(ws, method, params = {}, page) {
+  const id = ++cdp.nextId;
+  return new Promise((resolve, reject) => { const timeout = setTimeout(() => { ws.removeEventListener('message', onMessage); reject(new Error(`CDP ${method} timed out after 15s${page ? ` while checking ${page}` : ''}`)); }, 15000); const onMessage = event => { let msg; try { msg = JSON.parse(event.data); } catch (error) { clearTimeout(timeout); ws.removeEventListener('message', onMessage); reject(error); return; } if (msg.id !== id) return; clearTimeout(timeout); ws.removeEventListener('message', onMessage); if (msg.error) reject(new Error(JSON.stringify(msg.error))); else resolve(msg.result); }; ws.addEventListener('message', onMessage); ws.send(JSON.stringify({ id, method, params })); });
 }
 cdp.nextId = 0;
-async function waitForHeader(ws) {
+async function waitForHeader(ws, expectedUrl, page) {
   for (let i = 0; i < 100; i++) {
-    const ready = await cdp(ws, 'Runtime.evaluate', { expression: `document.readyState === 'complete' && !!document.querySelector('body > nav') && !!document.querySelector('.nav-hamburger')`, returnByValue: true });
+    const ready = await cdp(ws, 'Runtime.evaluate', { expression: `(document.readyState !== 'loading' && location.href === ${JSON.stringify(expectedUrl)} && !!document.querySelector('body > nav') && !!document.querySelector('.nav-hamburger'))`, returnByValue: true }, page);
     if (ready.result?.value) return true;
     await delay(100);
   }
@@ -55,10 +55,17 @@ try {
     try { await cdp(ws, 'Emulation.setSafeAreaInsetsOverride', { insets: mode.insets }); } catch (error) { throw new Error(`setSafeAreaInsetsOverride が利用できません: ${error.message}`); }
     for (const page of pages) {
       consoleErrors.length = 0;
-      await cdp(ws, 'Page.navigate', { url: `http://127.0.0.1:${port}${page}` });
-      await waitForHeader(ws);
+      console.log(`safe_area_header: checking ${page}`);
+      const url = `http://127.0.0.1:${port}${page}`;
+      await cdp(ws, 'Page.navigate', { url }, page);
+      let headerReady = await waitForHeader(ws, url, page);
+      if (!headerReady) {
+        await cdp(ws, 'Page.navigate', { url }, page);
+        headerReady = await waitForHeader(ws, url, page);
+      }
+      if (!headerReady) throw new Error(`${page}: header was not ready within 10s`);
       await delay(700);
-      const result = await cdp(ws, 'Runtime.evaluate', { returnByValue: true, expression: `(() => { const r=e=>{const x=e?.getBoundingClientRect();return x?{top:x.top,bottom:x.bottom,height:x.height,left:x.left,right:x.right}:null}; const nav=document.querySelector('body > nav'), logo=document.querySelector('body > nav .logo img'), burger=document.querySelector('.nav-hamburger'), mq=document.querySelector('.top2-marquee'); return {nav:r(nav),logo:r(logo),burger:r(burger),mq:r(mq),scrollY:scrollY}; })()` });
+      const result = await cdp(ws, 'Runtime.evaluate', { returnByValue: true, expression: `(() => { const r=e=>{const x=e?.getBoundingClientRect();return x?{top:x.top,bottom:x.bottom,height:x.height,left:x.left,right:x.right}:null}; const nav=document.querySelector('body > nav'), logo=document.querySelector('body > nav .logo img'), burger=document.querySelector('.nav-hamburger'), mq=document.querySelector('.top2-marquee'); return {nav:r(nav),logo:r(logo),burger:r(burger),mq:r(mq),scrollY:scrollY}; })()` }, page);
       const v = result.result?.value || {};
       const failures = [];
       if (!v.nav || Math.abs(v.nav.top) > 1 || Math.abs(v.nav.height - (mode.name === 'safe' ? 126 : 64)) > 1) failures.push(`nav=${JSON.stringify(v.nav)}`);
@@ -66,7 +73,7 @@ try {
       if (mode.name === 'zero' && (!v.logo || Math.abs(v.logo.top - 25) > 1 || !v.burger || Math.abs(v.burger.top - 10) > 1)) failures.push(`zero-controls=${JSON.stringify({logo:v.logo,burger:v.burger})}`);
       if (page === '/' && (!v.mq || Math.abs(v.mq.top - v.nav.bottom) > 1)) failures.push(`marquee=${JSON.stringify(v.mq)}`);
       if (failures.length || consoleErrors.length) throw new Error(`${mode.name} ${page}: ${failures.concat(consoleErrors.map(e => `console:${e}`)).join('; ')}`);
-      if (page === '/') { await cdp(ws, 'Runtime.evaluate', { expression: 'scrollTo(0,300)' }); await delay(150); const after = await cdp(ws, 'Runtime.evaluate', { returnByValue: true, expression: 'document.querySelector(".top2-marquee")?.getBoundingClientRect().top' }); const expected = mode.name === 'safe' ? 126 : 64; if (Math.abs((after.result?.value ?? NaN) - expected) > 1) throw new Error(`${mode.name} ${page}: marquee after scroll=${after.result?.value}`); }
+      if (page === '/') { await cdp(ws, 'Runtime.evaluate', { expression: 'scrollTo(0,300)' }, page); await delay(150); const after = await cdp(ws, 'Runtime.evaluate', { returnByValue: true, expression: 'document.querySelector(".top2-marquee")?.getBoundingClientRect().top' }, page); const expected = mode.name === 'safe' ? 126 : 64; if (Math.abs((after.result?.value ?? NaN) - expected) > 1) throw new Error(`${mode.name} ${page}: marquee after scroll=${after.result?.value}`); }
       console.log(`safe_area_header: ${mode.name} ${page} ok`);
     }
   }
