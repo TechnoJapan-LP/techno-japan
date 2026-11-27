@@ -26,6 +26,14 @@ async function cdp(ws, method, params = {}) {
   return new Promise((resolve, reject) => { const onMessage = event => { const msg = JSON.parse(event.data); if (msg.id !== id) return; ws.removeEventListener('message', onMessage); if (msg.error) reject(new Error(JSON.stringify(msg.error))); else resolve(msg.result); }; ws.addEventListener('message', onMessage); });
 }
 cdp.nextId = 0;
+async function waitForHeader(ws) {
+  for (let i = 0; i < 100; i++) {
+    const ready = await cdp(ws, 'Runtime.evaluate', { expression: `document.readyState === 'complete' && !!document.querySelector('body > nav') && !!document.querySelector('.nav-hamburger')`, returnByValue: true });
+    if (ready.result?.value) return true;
+    await delay(100);
+  }
+  return false;
+}
 const skipTopIntro = `try { if (location.pathname === '/' || location.pathname === '/index.html' || location.pathname === '/en/' || location.pathname === '/en/index.html') sessionStorage.setItem('tj-intro', '1'); } catch (e) {}`;
 
 const port = await freePort();
@@ -48,6 +56,7 @@ try {
     for (const page of pages) {
       consoleErrors.length = 0;
       await cdp(ws, 'Page.navigate', { url: `http://127.0.0.1:${port}${page}` });
+      await waitForHeader(ws);
       await delay(700);
       const result = await cdp(ws, 'Runtime.evaluate', { returnByValue: true, expression: `(() => { const r=e=>{const x=e?.getBoundingClientRect();return x?{top:x.top,bottom:x.bottom,height:x.height,left:x.left,right:x.right}:null}; const nav=document.querySelector('body > nav'), logo=document.querySelector('body > nav .logo img'), burger=document.querySelector('.nav-hamburger'), mq=document.querySelector('.top2-marquee'); return {nav:r(nav),logo:r(logo),burger:r(burger),mq:r(mq),scrollY:scrollY}; })()` });
       const v = result.result?.value || {};

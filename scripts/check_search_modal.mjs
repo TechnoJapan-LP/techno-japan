@@ -54,6 +54,14 @@ async function cdp(ws, method, params = {}) {
   });
 }
 cdp.nextId = 0;
+async function waitForHeader(ws) {
+  for (let i = 0; i < 100; i++) {
+    const ready = await cdp(ws, 'Runtime.evaluate', { expression: `document.readyState === 'complete' && !!document.querySelector('.nav-hamburger')`, returnByValue: true });
+    if (ready.result?.value) return true;
+    await delay(100);
+  }
+  return false;
+}
 const skipTopIntro = `try { if (location.pathname === '/' || location.pathname === '/index.html' || location.pathname === '/en/' || location.pathname === '/en/index.html') sessionStorage.setItem('tj-intro', '1'); } catch (e) {}`;
 
 const port = await freePort();
@@ -78,6 +86,7 @@ try {
 
   for (const page of pages) {
     await cdp(ws, 'Page.navigate', { url: `http://127.0.0.1:${port}${page}` });
+    await waitForHeader(ws);
     await delay(600);
     const lazyPage = /^\/(?:articles|festivals|artists|venues)\//.test(page);
     if (lazyPage) {
