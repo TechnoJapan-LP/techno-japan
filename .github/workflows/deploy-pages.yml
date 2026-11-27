@@ -121,3 +121,18 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+
+      # 段階1の並行配信。本番は GitHub Pages のまま。Secrets 未登録なら何もしない。
+      # 失敗しても本番配信は止めない。詳細: docs/design/CLOUDFLARE_MIGRATION.md
+      - name: Deploy to Cloudflare (parallel, stage 1)
+        continue-on-error: true
+        timeout-minutes: 10
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "CLOUDFLARE_API_TOKEN が未登録のため、Cloudflare への並行配信をスキップします"
+            exit 0
+          fi
+          npx --yes wrangler@4.20.0 deploy

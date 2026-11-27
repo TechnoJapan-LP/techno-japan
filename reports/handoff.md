@@ -16767,3 +16767,24 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 保存なし。フォーム・localStorage 下書きを空にし、STATUS を published に戻して LIST へ。「画像を使う」は未確認のまま（Drive への書き込みになるため）。
 - preflight で落ちた3件はいずれも速報の変更と無関係: EN 可視日本語は ondoland 記事の「食品まつり」の区切りが変わっただけ（基準更新）、検索モーダル・safe-area は '/' の読み込み前に評価していたタイミング依存（読み込み待ちと再読込を追加）。
 - Publish pipeline: 2026-11-27 ユーザーの Publish Now（run 45946958526）success。nippachi の詳細ページ 200。
+
+## 2026-11-28 Cloudflare 移行 段階1の準備
+
+### 実施
+- 計画書 `docs/design/CLOUDFLARE_MIGRATION.md` を作成。方式は Workers の静的配信（`html_handling: "none"`）。Pages は `.html` を外した URL へ転送して canonical・sitemap と食い違うため使わない。
+- `wrangler.jsonc` を追加。`deploy-pages.yml` / `publish-pipeline.yml` の最後に「Cloudflare へも配る」手順を追加（Secrets `CLOUDFLARE_API_TOKEN` 未登録なら何もしない、`continue-on-error`、GitHub Pages の配信は従来どおり）。
+
+### コミット
+- このエントリと同じコミット。
+
+### 検証
+- 2 本の workflow の YAML 解析、既存の workflow 検査、preflight（push 時）。Secrets 未登録のため Cloudflare への実配信は**未確認**。actionlint は手元に無く未実行。
+
+### 変更したパターン
+- デプロイ 2 経路の末尾に同じ並行配信ステップ。wrangler は 4.20.0 に固定。
+
+### 未確認の類似パターン
+- 配信している workflow は上の 2 本だけ（`grep deploy-pages@` で確認済み・他 0 件）。
+
+### 次の担当への注意・判断待ち
+- 段階0（Cloudflare アカウント・API トークン・GitHub Secrets・今の DNS レコード一覧の控え）はユーザー作業。登録後の最初のデプロイで workers.dev に出るかを確認し、計画書の段階2へ。

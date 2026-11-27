@@ -1,0 +1,10 @@
+{
+  "name": "techno-japan",
+  "compatibility_date": "2025-06-01",
+  "assets": {
+    "directory": "./LP",
+    // .html URLを維持するため。Pagesは.htmlを外したURLへ変換する。
+    "html_handling": "none",
+    "not_found_handling": "404-page"
+  }
+}
