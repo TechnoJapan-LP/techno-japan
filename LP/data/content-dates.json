@@ -87,6 +87,10 @@
     "hash": "c67c31415c54eb92ab41cf05ca35520b97ffebe80d9a61628778fbad183c7e6e",
     "date": "2026-11-26"
   },
+  "artist:daito-manabe": {
+    "hash": "81710b87c294c3526924d80a4993d91a02ab0a51d4c8740758474fafa52d16c5",
+    "date": "2026-11-27"
+  },
   "artist:daniel-bell": {
     "hash": "a11e6ace642fcb16bed5c434cc4c272e3b43a16c6ae0b6197e7d2cc48c57c37c",
     "date": "2026-11-19"
@@ -358,6 +362,10 @@
   "artist:mayudepth": {
     "hash": "d3f174dc2a9281ec02e7d59784ea426d82a29a5f1acc33aa9baf3774c03c54a3",
     "date": "2026-10-21"
+  },
+  "artist:meitei": {
+    "hash": "2457dd5b4173513ff41d583c3c2919f4cbca3dffe846d56ca96045da526abb6b",
+    "date": "2026-11-27"
   },
   "artist:mimu": {
     "hash": "0e8c48c6257c428893dcca8b8114052047a334edeb7eaec64312ec9d8527b7c7",
@@ -780,12 +788,16 @@
     "date": "2026-09-15"
   },
   "festival:mutek": {
-    "hash": "5e47b045a4b1bdde66cb030234b84cfc5e51e334d8d0e806172af1af076fb5ef",
-    "date": "2026-10-31"
+    "hash": "04805312e2d61e10d3e6d418f509f17df9a093354d8c8cefe4fdc57b0992d57b",
+    "date": "2026-11-27"
+  },
+  "festival:nippachi": {
+    "hash": "eacf783d1d0d82b3e814552fd68353afcb8a6652487f67c6ba268b745ac1e2b2",
+    "date": "2026-11-27"
   },
   "festival:nu-festival": {
-    "hash": "b0689bb9c2858aae5a0423a6201874dcb1baf2508d8098075c076871dc6f0283",
-    "date": "2026-11-26"
+    "hash": "2c9ba84a06c60c1079757466c3c34961106755353cc7162cd8d3edff17551b4f",
+    "date": "2026-11-27"
   },
   "festival:odyssey": {
     "hash": "95f6b047cc254f71f4d498e8626efbdba60c24eb5ca4f9eebd49e640b9dc473d",

@@ -1,7 +1,7 @@
 {
   "source": "https://techno-japan.media/",
   "license": "データの出典として techno-japan.media へのリンクを求めます",
-  "count": 9,
+  "count": 10,
   "events": [
     {
       "name": "TAKARAJIMA 2026",
@@ -14,6 +14,23 @@
         "TECHNO",
         "HOUSE"
       ]
+    },
+    {
+      "name": "Nippachi Festival 2026",
+      "url": "https://techno-japan.media/festivals/nippachi.html",
+      "start": "2026-12-12",
+      "end": "2026-12-12",
+      "venue": "Kanda Shrine",
+      "pref": "Tokyo",
+      "lat": 35.7019,
+      "lng": 139.7673,
+      "genres": [
+        "TECHNO",
+        "HOUSE",
+        "AMBIENT",
+        "LIVE"
+      ],
+      "tickets": "https://buy.stripe.com/14A00lecH6XY5VmenjenS05"
     },
     {
       "name": "Snow Machine Japan 2027",

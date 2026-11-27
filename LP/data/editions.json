@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-11-26T10:39:32.578Z",
-  "count": 126,
+  "_generatedAt": "2026-11-27T05:38:24.221Z",
+  "count": 127,
   "items": [
     {
       "EDITION_ID": "99flags-2026",
@@ -1662,6 +1662,22 @@
       "LAT": "36.0594",
       "LNG": "138.5611",
       "STATUS": "announced"
+    },
+    {
+      "EDITION_ID": "nippachi-2026",
+      "FESTIVAL_ID": "nippachi",
+      "EDITION": "2026",
+      "DATE_START": "2026-12-12",
+      "DATE_END": "2026-12-12",
+      "LOCATION": "Kanda Shrine",
+      "LOCATION_JA": "神田明神文化交流館",
+      "PREF": "Tokyo",
+      "ADDRESS": "東京都千代田区外神田2丁目16-2",
+      "LAT": "35.7019",
+      "LNG": "139.7673",
+      "TICKETURL": "https://buy.stripe.com/14A00lecH6XY5VmenjenS05",
+      "FLYER": "images/festivals/nippachi-flyer.jpg",
+      "STATUS": "published"
     }
   ]
 }

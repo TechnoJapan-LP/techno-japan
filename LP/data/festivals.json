@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-11-26T12:18:45.102Z",
-  "count": 92,
+  "_generatedAt": "2026-11-27T05:38:24.221Z",
+  "count": 93,
   "items": [
     {
       "ID": "snow-machine-japan",
@@ -1847,6 +1847,33 @@
       "location_ja": "おおぐで湖キャンプ場",
       "COUNTRY": "JP",
       "name_ja": "ラプドヴァーナ"
+    },
+    {
+      "ID": "nippachi",
+      "TYPE": "festival",
+      "NAME": "Nippachi Festival",
+      "DATE": "2026-12-12/2026-12-12",
+      "LOCATION": "Kanda Shrine",
+      "CITY": "Tokyo",
+      "ADDRESS": "東京都千代田区外神田2丁目16-2",
+      "LAT": "35.7019",
+      "LNG": "139.7673",
+      "IMAGE": "images/festivals/nippachi.webp",
+      "FLYER": "images/festivals/nippachi-flyer.jpg",
+      "GENRE": "TECHNO, HOUSE, AMBIENT, LIVE",
+      "DESC": "「ニッパチ祭」は、音楽やアートを通じて、人生を豊かにする時間をつくることを目指すイベント。日本の祭に息づく、日常とは異なる特別な瞬間「ハレ」の感覚から着想を得て、その空間と多様な表現を掛け合わせる体験を重ねている。メディアアート、電子音楽、民謡、DJまで、ジャンルを横断するアーティストが出演し、ライブ、リスニング、DJの複数のステージで一日限りの「ハレの日」をつくる。入場チケットに付くCheer Ticketsで、観客が応援したいアーティストを直接支援できる。",
+      "URL": "https://www.nippachifactory.jp/events/nippachifest2026",
+      "TICKETURL": "https://buy.stripe.com/14A00lecH6XY5VmenjenS05",
+      "INSTAGRAM": "https://www.instagram.com/nippachifest/",
+      "LINEUP": "daito-manabe, meitei, Maywa Denki, MINYO CRUSADERS, VenueVincent, Aurora Green (Dayzero & Itti), HAIOKA, Inqapool, Momose Yasunaga, Piotr Kaliński × Hiroki Chiba, CHAM+i, DJ Strawberry, RINALUCKY, Velocity, Zusan, Aya, DJ Cancel, Masashi Kikuchi",
+      "EDITIONS": "[{\"year\":\"2026\",\"edition\":\"\",\"date\":\"2026-12-12/2026-12-12\",\"location\":\"Kanda Shrine\",\"location_ja\":\"神田明神文化交流館\",\"pref\":\"Tokyo\",\"venueId\":\"\",\"address\":\"東京都千代田区外神田2丁目16-2\",\"lat\":\"35.7019\",\"lng\":\"139.7673\",\"ticketUrl\":\"https://buy.stripe.com/14A00lecH6XY5VmenjenS05\",\"flyer\":\"images/festivals/nippachi-flyer.jpg\",\"status\":\"published\",\"lineup\":[\"daito-manabe\",\"meitei\",\"?Maywa Denki\",\"?MINYO CRUSADERS\",\"?VenueVincent\",\"?Aurora Green (Dayzero & Itti)\",\"?HAIOKA\",\"?Inqapool\",\"?Momose Yasunaga\",\"?Piotr Kaliński × Hiroki Chiba\",\"?CHAM+i\",\"?DJ Strawberry\",\"?RINALUCKY\",\"?Velocity\",\"?Zusan\",\"?Aya\",\"?DJ Cancel\",\"?Masashi Kikuchi\"]}]",
+      "STATUS": "published",
+      "metaDescription": "音楽とアートで日常を離れた特別な時間を生み出すニッパチ祭。メディアアート、電子音楽、民謡、DJとジャンルを超えたアーティストがライブ、リスニング、DJの複数ステージに集結し、一日限りのハレの日を作り上げる。Cheer Ticketsで観客が推しのアーティストを直接支援できる仕組みも注目。",
+      "name_en": "Nippachi Festival",
+      "DESC_EN": "\"Nippachi Matsuri\" is an event that aims to create time that enriches life through music and art. Taking inspiration from the sense of \"hare\" — those special moments set apart from the everyday that live on in Japanese festivals — it has built up a body of experiences that cross that space with diverse forms of expression. Artists spanning genres from media art and electronic music to folk song and DJing take the stage, with live, listening, and DJ stages combining to create a one-day-only \"hare no hi.\" Cheer Tickets, included with admission, let audience members directly support the artists they want to champion.",
+      "location_ja": "神田明神文化交流館",
+      "COUNTRY": "JP",
+      "name_ja": "ニッパチ祭"
     }
   ]
 }

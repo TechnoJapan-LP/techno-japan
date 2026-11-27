@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-11-26T09:47:40.230Z",
-  "count": 1605,
+  "_generatedAt": "2026-11-27T05:38:24.221Z",
+  "count": 1623,
   "items": [
     {
       "EDITION_ID": "waifu-2026",
@@ -1666,7 +1666,7 @@
     },
     {
       "EDITION_ID": "mutek-2025",
-      "ACT_LABEL": "Daito Manabe",
+      "ARTIST_ID": "daito-manabe",
       "SET_TYPE": "dj",
       "SORT": "2"
     },
@@ -8646,7 +8646,7 @@
     },
     {
       "EDITION_ID": "nu-festival-2026",
-      "ACT_LABEL": "Meitei",
+      "ARTIST_ID": "meitei",
       "SET_TYPE": "dj",
       "SORT": "4"
     },
@@ -8731,7 +8731,7 @@
     },
     {
       "EDITION_ID": "nu-festival-2026",
-      "ACT_LABEL": "DAITO MANABE",
+      "ARTIST_ID": "daito-manabe",
       "SET_TYPE": "dj",
       "SORT": "18"
     },
@@ -8830,7 +8830,7 @@
     },
     {
       "EDITION_ID": "nu-festival-2026",
-      "ACT_LABEL": "MEITEI",
+      "ARTIST_ID": "meitei",
       "SET_TYPE": "dj",
       "SORT": "34"
     },
@@ -9710,6 +9710,116 @@
       "ACT_LABEL": "Woody92",
       "SET_TYPE": "dj",
       "SORT": "19"
+    },
+    {
+      "EDITION_ID": "nippachi-2026",
+      "ARTIST_ID": "daito-manabe",
+      "ACT_LABEL": "Daito Manabe",
+      "SET_TYPE": "dj",
+      "SORT": "1"
+    },
+    {
+      "EDITION_ID": "nippachi-2026",
+      "ARTIST_ID": "meitei",
+      "ACT_LABEL": "MEITEI",
+      "SET_TYPE": "dj",
+      "SORT": "2"
+    },
+    {
+      "EDITION_ID": "nippachi-2026",
+      "ACT_LABEL": "?Maywa Denki",
+      "SET_TYPE": "dj",
+      "SORT": "3"
+    },
+    {
+      "EDITION_ID": "nippachi-2026",
+      "ACT_LABEL": "?MINYO CRUSADERS",
+      "SET_TYPE": "dj",
+      "SORT": "4"
+    },
+    {
+      "EDITION_ID": "nippachi-2026",
+      "ACT_LABEL": "?VenueVincent",
+      "SET_TYPE": "dj",
+      "SORT": "5"
+    },
+    {
+      "EDITION_ID": "nippachi-2026",
+      "ACT_LABEL": "?Aurora Green (Dayzero & Itti)",
+      "SET_TYPE": "dj",
+      "SORT": "6"
+    },
+    {
+      "EDITION_ID": "nippachi-2026",
+      "ACT_LABEL": "?HAIOKA",
+      "SET_TYPE": "dj",
+      "SORT": "7"
+    },
+    {
+      "EDITION_ID": "nippachi-2026",
+      "ACT_LABEL": "?Inqapool",
+      "SET_TYPE": "dj",
+      "SORT": "8"
+    },
+    {
+      "EDITION_ID": "nippachi-2026",
+      "ACT_LABEL": "?Momose Yasunaga",
+      "SET_TYPE": "dj",
+      "SORT": "9"
+    },
+    {
+      "EDITION_ID": "nippachi-2026",
+      "ACT_LABEL": "?Piotr Kaliński × Hiroki Chiba",
+      "SET_TYPE": "dj",
+      "SORT": "10"
+    },
+    {
+      "EDITION_ID": "nippachi-2026",
+      "ACT_LABEL": "?CHAM+i",
+      "SET_TYPE": "dj",
+      "SORT": "11"
+    },
+    {
+      "EDITION_ID": "nippachi-2026",
+      "ACT_LABEL": "?DJ Strawberry",
+      "SET_TYPE": "dj",
+      "SORT": "12"
+    },
+    {
+      "EDITION_ID": "nippachi-2026",
+      "ACT_LABEL": "?RINALUCKY",
+      "SET_TYPE": "dj",
+      "SORT": "13"
+    },
+    {
+      "EDITION_ID": "nippachi-2026",
+      "ACT_LABEL": "?Velocity",
+      "SET_TYPE": "dj",
+      "SORT": "14"
+    },
+    {
+      "EDITION_ID": "nippachi-2026",
+      "ACT_LABEL": "?Zusan",
+      "SET_TYPE": "dj",
+      "SORT": "15"
+    },
+    {
+      "EDITION_ID": "nippachi-2026",
+      "ACT_LABEL": "?Aya",
+      "SET_TYPE": "dj",
+      "SORT": "16"
+    },
+    {
+      "EDITION_ID": "nippachi-2026",
+      "ACT_LABEL": "?DJ Cancel",
+      "SET_TYPE": "dj",
+      "SORT": "17"
+    },
+    {
+      "EDITION_ID": "nippachi-2026",
+      "ACT_LABEL": "?Masashi Kikuchi",
+      "SET_TYPE": "dj",
+      "SORT": "18"
     }
   ]
 }

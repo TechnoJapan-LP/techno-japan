@@ -1,6 +1,6 @@
 {
-  "_generatedAt": "2026-11-26T09:47:40.230Z",
-  "count": 143,
+  "_generatedAt": "2026-11-27T05:38:24.221Z",
+  "count": 145,
   "items": [
     {
       "ID": "dj-nobu",
@@ -2117,6 +2117,14 @@
     {
       "ID": "sofia-kourtesis",
       "NAME": "Sofia Kourtesis"
+    },
+    {
+      "ID": "daito-manabe",
+      "NAME": "Daito Manabe"
+    },
+    {
+      "ID": "meitei",
+      "NAME": "MEITEI"
     }
   ]
 }
