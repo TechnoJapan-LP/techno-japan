@@ -4217,6 +4217,17 @@ function matchArtist(name){
 function newsFlashNormalize_(value){
   return String(value == null ? '' : value).normalize('NFKC').toLocaleLowerCase();
 }
+function newsFlashFormatDate_(value){
+  const original = String(value == null ? '' : value).trim();
+  if (!original) return '';
+  const dates = original.split(/\s*\/\s*/);
+  if (dates.length > 2 || dates.some(date => !/^\d{4}-\d{2}-\d{2}$/.test(date))) return original;
+  const [start, end = dates[0]] = dates;
+  const format = date => date.replace(/^(\d{4})-(\d{2})-(\d{2})$/, '$1.$2.$3');
+  if (start === end) return format(start);
+  if (start.slice(0, 4) === end.slice(0, 4)) return format(start) + ' – ' + end.slice(5).replace('-', '.');
+  return format(start) + ' – ' + format(end);
+}
 function newsFlashContains_(haystack, needle){
   const n = String(needle || '');
   return !!n && newsFlashNormalize_(haystack).includes(newsFlashNormalize_(n));
@@ -4337,9 +4348,10 @@ async function createNewsFlashDraft(){
     setVal('ar-category','NEWS'); setVal('ar-festivalId',festival.id); festPickerSetValue(festival.id);
     setVal('ar-title',draft.title); setVal('ar-title_en',draft.title_en); setVal('ar-excerpt',draft.excerpt); setVal('ar-excerpt_en',draft.excerpt_en);
     setVal('ar-date',date); setArticleBody(body); setVal('ar-body_en',bodyEn);
+    setVal('ar-status','draft');
     if (!g('ar-id')) setVal('ar-id',newsFlashSlug_(festival.id,kind,date));
     markFormDirty(); flushArticleEditorSync(); renderEnglishBodyAltEditor();
-    toast('速報の下書きをフォームへ入れました。確認してから手動で保存してください','success');
+    toast('速報の下書きをフォームへ入れました（STATUS は Draft）。確認してから手動で保存してください','success');
   } catch (error) { aiFail('速報下書きの生成', error.message || error); }
 }
 function newsFlashImagePath_(path){
@@ -4362,7 +4374,7 @@ function newsFlashDrawImage_(festival, label){
       await (document.fonts?.ready || Promise.resolve());
       ctx.fillStyle='#f04b45'; ctx.font='700 25px "Space Mono",monospace'; ctx.fillText(label,90,680);
       ctx.fillStyle='#fff'; ctx.font='115px "Bebas Neue",sans-serif'; ctx.fillText(String(festival.name||festival.id).toUpperCase().slice(0,22),90,790);
-      ctx.fillStyle='rgba(255,255,255,.78)'; ctx.font='25px "DM Sans",sans-serif'; ctx.fillText([festival.date,festival.location || festival.city].filter(Boolean).join('  ·  ').slice(0,90),90,842);
+      ctx.fillStyle='rgba(255,255,255,.78)'; ctx.font='25px "DM Sans",sans-serif'; ctx.fillText([newsFlashFormatDate_(festival.date),festival.location || festival.city].filter(Boolean).join('  ·  ').slice(0,90),90,842);
       resolve();
     } catch(e) { if(error) error.textContent='画像の描画に失敗しました: '+e.message; reject(e); }
     };
@@ -4389,7 +4401,7 @@ async function useNewsFlashImage(){
   } catch(e) { if(error) error.textContent='画像を使えませんでした: '+e.message; }
 }
 if (typeof window !== 'undefined') {
-  window.TJNewsFlash = {normalize:newsFlashNormalize_, contains:newsFlashContains_, verifyDraft:newsFlashVerifyDraft_, buildSlug:newsFlashSlug_, selectBackground:newsFlashEditionImage_};
+  window.TJNewsFlash = {normalize:newsFlashNormalize_, contains:newsFlashContains_, verifyDraft:newsFlashVerifyDraft_, buildSlug:newsFlashSlug_, selectBackground:newsFlashEditionImage_, formatDate:newsFlashFormatDate_};
   if (typeof document !== 'undefined') document.addEventListener('input', event => { if (event.target?.id === 'ar-festivalId') newsFlashShowFestival_(); });
 }
 

@@ -16736,3 +16736,26 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 固まった件: 2回とも CMS のログイン期限切れで、パスワード入力の小窓（prompt）が開いていたのが原因。速報のコードの不具合ではない。ユーザーがパスワードを入力して解消。
 - `gh workflow run "Publish pipeline"`（run 45930213550）は失敗。原因は今回の変更ではなく、2026-11-26 21:56 にシートへ追加された `nippachi`（Nippachi Festival）が、最後の Publish（21:18）より後のため data.js に無く、手動実行は古い data.js と新しい editions.json で組み立てるため「FESTIVAL_ID 参照切れ」で止まる。ユーザーの Publish Now 後に再確認する（**実機未確認**）。
 - 気づいた点（未対応・判断待ち）: 新規記事の STATUS の初期値が Published のため、速報の下書きをそのまま保存すると即公開になる。画像の日程表記が `2027-07-16/2027-07-19` と生の形。
+
+## 2026-11-27 速報フォームのSTATUS・日付表記
+
+### 実施
+- `createNewsFlashDraft` がフォーム反映後に `STATUS=Draft` を設定し、成功トーストで明示するよう変更。
+- NEWS flash画像の日付を `newsFlashFormatDate_` で表示用に整形し、`TJNewsFlash.formatDate` として公開。
+- ヘルパーVMテストに5ケースを追加し、`cms.js?v=226` へ更新。
+
+### コミット
+- 未コミット（ユーザー指示によりコミットしない）。
+
+### 検証
+- 成功: `node --check LP/cms.js`、`node scripts/check_news_flash_helpers.mjs`、`git diff --check`。
+- 実ブラウザ操作・Publish pipelineは未確認（今回の依頼では実行していない）。
+
+### 変更したパターン
+- NEWS flash下書きフォームのSTATUS設定、画像日付の単日・同年範囲・年跨ぎ範囲表示、ヘルパーVMテスト、CMSキャッシュバージョン。
+
+### 未確認の類似パターン
+- 確認済み・0件（指定された日付入力パターン以外の実CMS描画は未確認）。
+
+### 次の担当への注意・判断待ち
+- CMSを確認する場合は `cms.html?cb=<乱数>` で開き、変更後の `cms.js?v=226` を読み込む。公開前には実ブラウザ確認と `bash scripts/preflight.sh` を実施する。

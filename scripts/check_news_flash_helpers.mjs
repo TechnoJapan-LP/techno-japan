@@ -23,4 +23,9 @@ assert.equal(api.buildSlug('Rural Fest', 'lineup', '2027-05-03'), 'rural-fest-li
 assert.equal(api.selectBackground({id:'rural', image:'images/festival.webp', flyer:'images/old.webp'}, [{FESTIVAL_ID:'rural',EDITION:'2026',FLYER:'images/2026.webp'},{FESTIVAL_ID:'rural',EDITION:'2027',FLYER:'images/2027.webp'}]), 'images/2027.webp');
 assert.equal(api.selectBackground({id:'rural', image:'images/festival.webp', flyer:'images/old.webp'}, []), 'images/festival.webp');
 assert.equal(api.selectBackground({id:'rural', flyer:'images/old.webp'}, []), 'images/old.webp');
+assert.equal(api.formatDate('2027-07-16/2027-07-19'), '2027.07.16 – 07.19');
+assert.equal(api.formatDate('2027-07-16'), '2027.07.16');
+assert.equal(api.formatDate('2026-12-31/2027-01-02'), '2026.12.31 – 2027.01.02');
+assert.equal(api.formatDate(' not-a-date '), 'not-a-date');
+assert.equal(api.formatDate(''), '');
 console.log('✅ NEWS_FLASH verification helpers');
