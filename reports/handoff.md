@@ -16726,3 +16726,13 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 - 本番 GAS「Techno Japan」の コード.gs に `aiNewsDraft` を末尾追加、doPost の dispatch に `if (data.action === 'ai_news_draft') return buildResponse(aiNewsDraft(data));` を1行追加（実物の dispatch は `json_` ではなく `buildResponse`）。保存→既存デプロイ（CMS の GAS_URL と同じ ID）を新バージョンで更新: v64（追加）→ v65（英語本文でも出演者名を出典のまま、を指示に追加）。
 - 指紋: callClaude_ / aiTranslateV2_ / aiSummarize は live-snapshot.json と一致、関数の重複なし（新関数は指紋の対象外なので live-snapshot.json は更新不要）。
 - 本番 GAS に rural 2027 の要約文で ai_news_draft を1回送信 → status ok（約50秒）。JA/EN の下書き・facts・artists が返った。v64 では EN で「悪魔の沼」を Akuma no Numa にローマ字化していた → v65 で指示を追加。
+
+### 追記（2026-11-27 本番 CMS での実機確認）
+- URL: https://techno-japan.media/cms.html?cb=55120（cms.js?v=225）、PC幅 1400。ARTICLE → NEW →「⚡ 速報を作る」。
+- 操作: 関連フェス rural、種別 dates、出典 URL と仮の本文（日程・会場・出演者2組・チケット発売日）を入れて「下書きを作る」。
+- 結果: 約43秒でフォームに反映。category=News、festivalId=rural（ピッカー表示も Rural）、id=rural-dates-20261127、date=2026/11/27、title/excerpt/body と EN 3項目すべて入った。検証表示「2組の出演者名、4/4件の事実引用が一致」。登録済みの DJ Nobu だけ `[[artist:dj-nobu|DJ Nobu]]` にリンク、Ben Klock（未登録）は文字のまま。AI が「出典の会場が DB の会場（nowhere CAMP）と違う」と warnings に出した（仮の本文なので正しい指摘）。
+- 画像: 「種別に合わせる」で生成 → 背景 images/festivals/rural.webp、DATES ANNOUNCED / RURAL / 日程・会場の文字組み、1600×900 で例外なし。
+- 保存はしていない。「画像を使う」（Drive へのアップロード）は本番データへの書き込みになるので押していない（**未確認**）。終了時にフォーム・自動保存の下書き（localStorage）を空にした。
+- 固まった件: 2回とも CMS のログイン期限切れで、パスワード入力の小窓（prompt）が開いていたのが原因。速報のコードの不具合ではない。ユーザーがパスワードを入力して解消。
+- `gh workflow run "Publish pipeline"`（run 45930213550）は失敗。原因は今回の変更ではなく、2026-11-26 21:56 にシートへ追加された `nippachi`（Nippachi Festival）が、最後の Publish（21:18）より後のため data.js に無く、手動実行は古い data.js と新しい editions.json で組み立てるため「FESTIVAL_ID 参照切れ」で止まる。ユーザーの Publish Now 後に再確認する（**実機未確認**）。
+- 気づいた点（未対応・判断待ち）: 新規記事の STATUS の初期値が Published のため、速報の下書きをそのまま保存すると即公開になる。画像の日程表記が `2027-07-16/2027-07-19` と生の形。
