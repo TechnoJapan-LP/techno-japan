@@ -2137,6 +2137,14 @@ const ARTISTS = [
     id: "sofia-kourtesis",
     name: "Sofia Kourtesis",
   },
+  {
+    id: "daito-manabe",
+    name: "Daito Manabe",
+  },
+  {
+    id: "meitei",
+    name: "MEITEI",
+  },
 ];
 
 const EVENTS = [
@@ -3980,6 +3988,33 @@ const FESTIVALS = [
     lineup: ["dj-miku", "Holdyourcat", "Rochus", "TENTEN", "rik", "salt"],
     editions: [
       { year: 2026, editionKey: "2026", date: "2026-11-21/2026-11-22", lineup: ["MIKU", "Holdyourcat", "Rochus", "TENTEN", "rik", "salt"] },
+    ],
+  },
+  {
+    id: "nippachi",
+    type: "festival",
+    name: "Nippachi Festival",
+    date: "2026-12-12/2026-12-12",
+    location: "Kanda Shrine",
+    location_ja: "神田明神文化交流館",
+    name_ja: "ニッパチ祭",
+    city: "Tokyo",
+    country: "JP",
+    address: "東京都千代田区外神田2丁目16-2",
+    lat: 35.7019,
+    lng: 139.7673,
+    image: "images/festivals/nippachi.webp",
+    flyer: "images/festivals/nippachi-flyer.webp",
+    genre: ["TECHNO", "HOUSE", "AMBIENT", "LIVE"],
+    desc: "「ニッパチ祭」は、音楽やアートを通じて、人生を豊かにする時間をつくることを目指すイベント。日本の祭に息づく、日常とは異なる特別な瞬間「ハレ」の感覚から着想を得て、その空間と多様な表現を掛け合わせる体験を重ねている。メディアアート、電子音楽、民謡、DJまで、ジャンルを横断するアーティストが出演し、ライブ、リスニング、DJの複数のステージで一日限りの「ハレの日」をつくる。入場チケットに付くCheer Ticketsで、観客が応援したいアーティストを直接支援できる。",
+    desc_en: "\"Nippachi Matsuri\" is an event that aims to create time that enriches life through music and art. Taking inspiration from the sense of \"hare\" — those special moments set apart from the everyday that live on in Japanese festivals — it has built up a body of experiences that cross that space with diverse forms of expression. Artists spanning genres from media art and electronic music to folk song and DJing take the stage, with live, listening, and DJ stages combining to create a one-day-only \"hare no hi.\" Cheer Tickets, included with admission, let audience members directly support the artists they want to champion.",
+    name_en: "Nippachi Festival",
+    url: "https://www.nippachifactory.jp/events/nippachifest2026",
+    ticketUrl: "https://buy.stripe.com/14A00lecH6XY5VmenjenS05",
+    instagram: "https://www.instagram.com/nippachifest/",
+    lineup: ["daito-manabe", "meitei", "Maywa Denki", "MINYO CRUSADERS", "VenueVincent", "Aurora Green (Dayzero & Itti)", "HAIOKA", "Inqapool", "Momose Yasunaga", "Piotr Kaliński × Hiroki Chiba", "CHAM+i", "DJ Strawberry", "RINALUCKY", "Velocity", "Zusan", "Aya", "DJ Cancel", "Masashi Kikuchi"],
+    editions: [
+      { year: 2026, editionKey: "2026", date: "2026-12-12/2026-12-12", lineup: ["daito-manabe", "meitei", "?Maywa Denki", "?MINYO CRUSADERS", "?VenueVincent", "?Aurora Green (Dayzero & Itti)", "?HAIOKA", "?Inqapool", "?Momose Yasunaga", "?Piotr Kaliński × Hiroki Chiba", "?CHAM+i", "?DJ Strawberry", "?RINALUCKY", "?Velocity", "?Zusan", "?Aya", "?DJ Cancel", "?Masashi Kikuchi"] },
     ],
   },
 ];
