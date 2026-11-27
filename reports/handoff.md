@@ -16759,3 +16759,11 @@ CSV と JSON の行数一致（111 行）を確認。`bash scripts/preflight.sh`
 
 ### 次の担当への注意・判断待ち
 - CMSを確認する場合は `cms.html?cb=<乱数>` で開き、変更後の `cms.js?v=226` を読み込む。公開前には実ブラウザ確認と `bash scripts/preflight.sh` を実施する。
+
+### 追記（2026-11-28 STATUS=Draft・日程表記を本番 CMS で確認）
+- コミット: 478540488（Draft・日程表記）、4604ce289 / 47c5b4463（preflight の EN 可視日本語の基準更新、検索モーダル・safe-area 検査の読み込み待ち・CDP 時間上限）。deploy-pages success、本番 cms.html は cms.js?v=226。
+- URL: https://techno-japan.media/cms.html?cb=82641、PC幅。ARTICLE → NEW（初期 STATUS=published）→ 速報パネルで rural・dates・仮の出典本文 →「下書きを作る」約44秒 → STATUS=draft、category=NEWS、検証 2組・4/4 一致。
+- 画像生成: 日程が `2027.07.16 – 07.19 · nowhere CAMP` と表示。例外なし。
+- 保存なし。フォーム・localStorage 下書きを空にし、STATUS を published に戻して LIST へ。「画像を使う」は未確認のまま（Drive への書き込みになるため）。
+- preflight で落ちた3件はいずれも速報の変更と無関係: EN 可視日本語は ondoland 記事の「食品まつり」の区切りが変わっただけ（基準更新）、検索モーダル・safe-area は '/' の読み込み前に評価していたタイミング依存（読み込み待ちと再読込を追加）。
+- Publish pipeline: 2026-11-27 ユーザーの Publish Now（run 45946958526）success。nippachi の詳細ページ 200。
