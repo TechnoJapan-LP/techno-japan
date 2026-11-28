@@ -1,11 +1,11 @@
 # AI経由の流入
 
-取得日時: 2026-11-27T01:49:38.915Z
+取得日時: 2026-11-28T01:31:33.002Z
 
 | 期間 | AIセッション | 全体セッション | AI割合 |
 |---|---:|---:|---:|
-| 直近28日（2026-10-31〜2026-11-27） | 104 | 2817 | 3.69% |
-| 前の28日（2026-10-03〜2026-10-30） | 0 | 0 | 0.00% |
+| 直近28日（2026-11-01〜2026-11-28） | 104 | 2920 | 3.56% |
+| 前の28日（2026-10-04〜2026-10-31） | 0 | 0 | 0.00% |
 
 ## 直近28日：参照元別
 
@@ -24,20 +24,20 @@
 | /festivals/raptvana.html | 6 | 6 |
 | /en/articles/denki-bodhisattva-2026-info.html | 5 | 5 |
 | /en/articles/asia-festival-2026-second.html | 4 | 4 |
+| /en/articles/japan-festival-2026-november.html | 4 | 4 |
 | /en/index.html | 4 | 3 |
 | /en/articles/intergalactic-2026-info.html | 3 | 3 |
-| /en/articles/japan-festival-2026-november.html | 3 | 3 |
-| /en/articles/japan-festival-2026-october.html | 3 | 3 |
 | /en/festivals/rural.html | 3 | 3 |
 | /en/venues.html?area=OSAKA | 3 | 3 |
 | /index.html | 3 | 3 |
+| /articles/dei-fest-2026-info.html | 2 | 2 |
 | /articles/feature-yuta.html | 2 | 2 |
 | /en/ | 2 | 2 |
+| /en/articles/japan-festival-2026-october.html | 2 | 2 |
 | /en/articles/sawagi-festival-2026-info.html | 2 | 2 |
 | /en/festivals/lost-find.html | 2 | 2 |
-| /festivals/festival-de-frue.html | 2 | 2 |
 | (not set) | 1 | 1 |
-| /articles/dei-fest-2026-info.html | 1 | 1 |
+| /articles/denki-bodhisattva-2026-info.html | 1 | 1 |
 
 ## 前の28日：参照元別
 

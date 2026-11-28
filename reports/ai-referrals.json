@@ -1,22 +1,22 @@
 {
-  "generatedAt": "2026-11-27T01:49:38.915Z",
+  "generatedAt": "2026-11-28T01:31:33.002Z",
   "propertyId": "535755449",
   "periods": {
     "current": {
-      "startDate": "2026-10-31",
-      "endDate": "2026-11-27",
+      "startDate": "2026-11-01",
+      "endDate": "2026-11-28",
       "label": "直近28日"
     },
     "previous": {
-      "startDate": "2026-10-03",
-      "endDate": "2026-10-30",
+      "startDate": "2026-10-04",
+      "endDate": "2026-10-31",
       "label": "前の28日"
     }
   },
   "current": {
     "sessions": 104,
     "totalUsers": 101,
-    "share": 0.03691870784522542,
+    "share": 0.03561643835616438,
     "bySource": [
       {
         "source": "chatgpt.com",
@@ -61,22 +61,17 @@
         "totalUsers": 4
       },
       {
+        "landingPage": "/en/articles/japan-festival-2026-november.html",
+        "sessions": 4,
+        "totalUsers": 4
+      },
+      {
         "landingPage": "/en/index.html",
         "sessions": 4,
         "totalUsers": 3
       },
       {
         "landingPage": "/en/articles/intergalactic-2026-info.html",
-        "sessions": 3,
-        "totalUsers": 3
-      },
-      {
-        "landingPage": "/en/articles/japan-festival-2026-november.html",
-        "sessions": 3,
-        "totalUsers": 3
-      },
-      {
-        "landingPage": "/en/articles/japan-festival-2026-october.html",
         "sessions": 3,
         "totalUsers": 3
       },
@@ -96,12 +91,22 @@
         "totalUsers": 3
       },
       {
+        "landingPage": "/articles/dei-fest-2026-info.html",
+        "sessions": 2,
+        "totalUsers": 2
+      },
+      {
         "landingPage": "/articles/feature-yuta.html",
         "sessions": 2,
         "totalUsers": 2
       },
       {
         "landingPage": "/en/",
+        "sessions": 2,
+        "totalUsers": 2
+      },
+      {
+        "landingPage": "/en/articles/japan-festival-2026-october.html",
         "sessions": 2,
         "totalUsers": 2
       },
@@ -116,23 +121,18 @@
         "totalUsers": 2
       },
       {
-        "landingPage": "/festivals/festival-de-frue.html",
-        "sessions": 2,
-        "totalUsers": 2
-      },
-      {
         "landingPage": "(not set)",
         "sessions": 1,
         "totalUsers": 1
       },
       {
-        "landingPage": "/articles/dei-fest-2026-info.html",
+        "landingPage": "/articles/denki-bodhisattva-2026-info.html",
         "sessions": 1,
         "totalUsers": 1
       }
     ],
-    "allSessions": 2817,
-    "allTotalUsers": 2285
+    "allSessions": 2920,
+    "allTotalUsers": 2333
   },
   "previous": {
     "sessions": 0,
