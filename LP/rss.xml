@@ -5,9 +5,17 @@
     <link>https://techno-japan.media</link>
     <description>Japan&apos;s underground techno and house music media platform.</description>
     <language>ja-JP</language>
-    <lastBuildDate>Fri, 27 Nov 2026 14:44:27 +0900</lastBuildDate>
-    <!-- items-hash: 54a2fd7c02894410e2e9078a78d05697bdc56d145072d40cb0dcf7c44dfe2dd4 -->
+    <lastBuildDate>Sat, 28 Nov 2026 20:20:44 +0900</lastBuildDate>
+    <!-- items-hash: 18d2fd130a7380d8a77d16deda21f5d2826e36a7098c0d0befa3416366ba39c7 -->
     <atom:link href="https://techno-japan.media/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>TAKARAJIMA</title>
+      <link>https://techno-japan.media/festivals/takarajima-beach-cleaning-party.html</link>
+      <guid isPermaLink="true">https://techno-japan.media/festivals/takarajima-beach-cleaning-party.html</guid>
+      <pubDate>Sat, 28 Nov 2026 00:00:00 +0900</pubDate>
+      <category>Festival</category>
+      <description>Okinawa — TAKARAJIMAは、沖縄の海岸線を舞台に環境保護活動とエレクトロニック・ミュージックのプログラミングを融合させたフェスティバルだ。ビーチクリーン活動とDJセットを一体化させ、海洋保全をテーマにしながらアンダーグラウンド・ダンス・ミュージックを紹介するというユニークなフォーマットを生み出している。参加者は複数日にわたるプログラムを通じて、生態系の再生と音楽の祭典の両方に関わることになる。</description>
+    </item>
     <item>
       <title>Resonance</title>
       <link>https://techno-japan.media/festivals/resonance.html</link>
